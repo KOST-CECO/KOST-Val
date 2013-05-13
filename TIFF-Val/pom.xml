@@ -1,0 +1,331 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>ch.bedag.bsd.a6z.sipvalidator</groupId>
+	<artifactId>sipvalidator</artifactId>
+	<packaging>jar</packaging>
+	<version>1.0.0-SNAPSHOT</version>
+	<name>SipValidator</name>
+	<description>Submission Information Package Validator</description>
+	<organization>
+		<name>Bedag Informatik AG</name>
+		<url>http://www.bedag.ch</url>
+	</organization>
+	<parent>
+		<groupId>ch.bedag.bsd</groupId>
+		<artifactId>BSDMasterPom</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+
+	<dependencies>
+		<!--
+			<dependency> <groupId>ch.bedag.bsd.a99</groupId>
+			<artifactId>A99Common</artifactId> <version>1.1.0</version>
+			</dependency>
+		-->
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.1.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.12</version>
+		</dependency>
+
+		<dependency>
+			<groupId>edu.harvard.hul.ois.jhove</groupId>
+			<artifactId>jhove</artifactId>
+			<version>1.5</version>
+		</dependency>
+
+		<dependency>
+			<groupId>edu.harvard.hul.ois.jhove.handler.audit</groupId>
+			<artifactId>jhove-handler</artifactId>
+			<version>1.5</version>
+		</dependency>
+
+		<dependency>
+			<groupId>edu.harvard.hul.ois.jhove.module</groupId>
+			<artifactId>jhove-module</artifactId>
+			<version>1.5</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>3.0.0.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>3.0.0.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+			<version>3.0.0.RELEASE</version>
+			<!--<scope>compile</scope>-->
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>3.0.0.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aop</artifactId>
+			<version>3.0.0.RELEASE</version>
+		</dependency>
+
+		<dependency>
+			<groupId>pdftronamanager</groupId>
+			<artifactId>pdftron</artifactId>
+			<version>0.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.4</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>apache-xalan</groupId>
+			<artifactId>xalan</artifactId>
+			<version>j_2.7.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-configuration</groupId>
+			<artifactId>commons-configuration</artifactId>
+			<version>1.6</version>
+		</dependency>
+
+		<dependency>
+			<groupId>droid-core</groupId>
+			<artifactId>droid-core</artifactId>
+			<version>5.0.3</version>
+		</dependency>
+		<dependency>
+			<groupId>droid-core-interfaces</groupId>
+			<artifactId>droid-interfaces</artifactId>
+			<version>5.0.3</version>
+		</dependency>
+		<dependency>
+			<groupId>droid-export</groupId>
+			<artifactId>droid-export</artifactId>
+			<version>5.0.3</version>
+		</dependency>
+		<dependency>
+			<groupId>droid-export-interfaces</groupId>
+			<artifactId>droid-export-interfaces</artifactId>
+			<version>5.0.3</version>
+		</dependency>
+		<dependency>
+			<groupId>droid-help</groupId>
+			<artifactId>droid-help</artifactId>
+			<version>5.0.3</version>
+		</dependency>
+		<dependency>
+			<groupId>droid-report</groupId>
+			<artifactId>droid-report</artifactId>
+			<version>5.0.3</version>
+		</dependency>
+		<dependency>
+			<groupId>droid-report-interfaces</groupId>
+			<artifactId>droid-report-interfaces</artifactId>
+			<version>5.0.3</version>
+		</dependency>
+		<dependency>
+			<groupId>droid-results</groupId>
+			<artifactId>droid-results</artifactId>
+			<version>5.0.3</version>
+		</dependency>
+		
+		<dependency>
+		  <groupId>org.mockito</groupId>
+		  <artifactId>mockito-all</artifactId>
+		  <version>1.8.5</version>
+		</dependency>
+
+		<dependency>
+		  <groupId>commons-io</groupId>
+		  <artifactId>commons-io</artifactId>
+		  <version>2.0</version>
+		</dependency>
+		
+		<dependency>
+		  <groupId>net.sf.opencsv</groupId>
+		  <artifactId>opencsv</artifactId>
+		  <version>2.1</version>
+		</dependency>
+		
+		<dependency>
+		  <groupId>zip64</groupId>
+		  <artifactId>zip64</artifactId>
+		  <version>1.0</version>
+		</dependency>
+		
+		<dependency>
+		  <groupId>zip64file</groupId>
+		  <artifactId>zip64file</artifactId>
+		  <version>1.0</version>
+		</dependency>
+		
+
+		<dependency>
+		  <groupId>de.schlichtherle</groupId>
+		  <artifactId>truezip</artifactId>
+		  <version>6.8.1</version>
+		</dependency>
+		
+	</dependencies>
+
+	<build>
+		<!--  
+		<plugins>
+
+		</plugins>
+		-->
+
+		<!--
+			<finalName>singlejar</finalName> <plugins> <plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-assembly-plugin</artifactId> <executions>
+			<execution> <id>package-jar-with-dependencies</id>
+			<phase>package</phase> <goals> <goal>single</goal> </goals>
+			<configuration> <appendAssemblyId>false</appendAssemblyId>
+			<descriptorRefs> <descriptorRef>jar-with-dependencies</descriptorRef>
+			</descriptorRefs> <archive> <manifest>
+			<mainClass>ch.bedag.a6z.sipvalidator.SipValidator</mainClass>
+			</manifest> </archive> </configuration> </execution> </executions>
+			</plugin> <plugin> <groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-jar-plugin</artifactId> <configuration> <archive>
+			<manifest>
+			<mainClass>ch.bedag.a6z.sipvalidator.SipValidator</mainClass>
+			<addClasspath>true</addClasspath>
+			<classpathPrefix>lib</classpathPrefix> </manifest> </archive>
+			</configuration> </plugin> <plugin>
+			<artifactId>maven-assembly-plugin</artifactId> <configuration>
+			<descriptors> <descriptor>dist.xml</descriptor> </descriptors>
+			<archive> <manifest>
+			<mainClass>ch.bedag.a6z.sipvalidator.SipValidator</mainClass>
+			<addClasspath>true</addClasspath>
+			<classpathPrefix>lib</classpathPrefix> </manifest> </archive>
+			</configuration> <executions> <execution> <phase>package</phase>
+			<goals> <goal>attached</goal> </goals> </execution> </executions>
+			</plugin>
+		-->
+
+		<finalName>SipValidator</finalName>
+
+		<plugins>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<!--
+					<executions> <execution> <phase>test</phase> </execution>
+					</executions>
+				-->
+				<configuration>
+					<!--
+						TODO: der PdftronTestCase benötigt den Pfad zu den DLLs im
+						java.library.path ABER: dies funktioniert nur lokal, nicht aber
+						auf dem Hudson, da Hudson auf Linux läuft. Deshalb wird dieser
+						Test Case ausgeschlossen, er kann immer noch via JUnit
+						Konfiguration gestartet werden.
+					-->
+					<argLine>-Djava.library.path=src/test/resources</argLine>
+					<excludes>
+						<exclude>**/PdftronTestCase.java</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>ch.bedag.a6z.sipvalidator.SipValidator</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>1.2</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<artifactSet>
+								<includes>
+									<include>commons-logging:commons-logging</include>
+									<include>log4j:log4j</include>
+									<include>edu.harvard.hul.ois.jhove:jhove</include>
+									<include>edu.harvard.hul.ois.jhove.handler.audit:jhove-handler</include>
+									<include>edu.harvard.hul.ois.jhove.module:jhove-module</include>
+									<include>org.springframework:spring-core</include>
+									<include>org.springframework:spring-orm</include>
+									<include>org.springframework.security:spring-security-core</include>
+									<include>org.springframework:spring-context</include>
+									<include>org.springframework:spring-test</include>
+									<include>org.springframework:spring-aop</include>
+									<include>org.springframework:spring-beans</include>
+									<include>org.springframework:spring-jdbc</include>
+									<include>org.springframework:spring-tx</include>
+									<include>org.springframework:spring-expression</include>
+									<include>org.springframework:spring-asm</include>
+									<!--
+										<include>org.aspectj:aspectjrt</include>
+										<include>org.aspectj:aspectjweaver</include>
+									-->
+									<include>pdftronamanager:pdftron</include>
+									<include>apache-xalan:xalan</include>
+									<include>commons-configuration:commons-configuration</include>
+									<include>commons-collections:commons-collections</include>
+									<include>commons-lang:commons-lang</include>
+									<include>commons-digester:commons-digester</include>
+<!--									<include>commons-beanutils:commons-beanutils</include>-->
+<!--									<include>commons-beanutils:commons-beanutils-core</include>-->
+									<include>droid-core:droid-core</include>
+									<include>droid-core-interfaces:droid-core-interfaces</include>
+									<include>droid-export:droid-export</include>
+									<include>droid-export-interfaces:droid-export-interfaces</include>
+									<include>droid-help:droid-help</include>
+									<include>droid-report:droid-report</include>
+									<include>droid-report-interfaces:droid-report-interfaces</include>
+									<include>droid-results:droid-results</include>
+									<include>zip64:zip64</include>
+									<include>zip64file:zip64file</include>
+									<include>apache-xalan:xalan</include>
+									<include>apache-xerces:xercesImpl</include>
+									<include>apache-xerces:xml-apis</include>
+								</includes>
+							</artifactSet>
+							<transformers>
+								<transformer
+									implementation="org.apache.maven.plugins.shade.resource.ComponentsXmlResourceTransformer" />
+							</transformers>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+	</build>
+
+</project>

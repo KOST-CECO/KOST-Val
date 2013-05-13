@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
+
+	<!-- Common Services -->
+
+	<bean id="textResourceService"
+		class="ch.kostceco.tools.tiffval.service.impl.TextResourceServiceImpl">
+	</bean>
+
+	<bean id="configurationService"
+		class="ch.kostceco.tools.tiffval.service.impl.ConfigurationServiceImpl">
+		<property name="textResourceService" ref="textResourceService" />
+	</bean>
+
+	<bean id="messageService"
+		class="ch.kostceco.tools.tiffval.service.impl.MessageServiceImpl">
+	</bean>
+
+	<bean id="pdftronService"
+		class="ch.kostceco.tools.tiffval.service.impl.PdftronServiceImpl">
+	</bean>
+
+	<bean id="siardValService"
+		class="ch.kostceco.tools.tiffval.service.impl.SiardValServiceImpl">
+	</bean>
+
+	<bean id="jhoveService"
+		class="ch.kostceco.tools.tiffval.service.impl.JhoveServiceImpl">
+		<property name="configurationService" ref="configurationService" />
+	</bean>
+
+	<!-- Validation Services -->
+	<bean id="validation1aZipModule" class="ch.kostceco.tools.tiffval.validation.module1.impl.Validation1aZipModuleImpl">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="messageService" ref="messageService" />
+	</bean>
+	<bean id="validation1bFolderStructureModule" class="ch.kostceco.tools.tiffval.validation.module1.impl.Validation1bFolderStructureModuleImpl">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="messageService" ref="messageService" />
+	</bean>
+	<bean id="validation1cNamingModule" class="ch.kostceco.tools.tiffval.validation.module1.impl.Validation1cNamingModuleImpl">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="configurationService" ref="configurationService" />
+		<property name="messageService" ref="messageService" />
+	</bean>
+	<bean id="validation1dMetadataModule" class="ch.kostceco.tools.tiffval.validation.module1.impl.Validation1dMetadataModuleImpl">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="configurationService" ref="configurationService" />
+		<property name="messageService" ref="messageService" />
+	</bean>
+	<bean id="validation1eSipTypeModule" class="ch.kostceco.tools.tiffval.validation.module1.impl.Validation1eSipTypeModuleImpl">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="messageService" ref="messageService" />
+	</bean>
+	<bean id="validation1fPrimaryDataModule" class="ch.kostceco.tools.tiffval.validation.module1.impl.Validation1fPrimaryDataModuleImpl">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="messageService" ref="messageService" />
+	</bean>
+	
+	<bean id="validation2aFileIntegrityModule" class="ch.kostceco.tools.tiffval.validation.module2.impl.Validation2aFileIntegrityModuleImpl">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="messageService" ref="messageService" />
+	</bean>
+	<bean id="validation2bChecksumModule" class="ch.kostceco.tools.tiffval.validation.module2.impl.Validation2bChecksumModuleImpl">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="messageService" ref="messageService" />
+	</bean>
+	<bean id="validation2cSurplusFilesModule" class="ch.kostceco.tools.tiffval.validation.module2.impl.Validation2cSurplusFilesModuleImpl">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="messageService" ref="messageService" />
+	</bean>
+	<bean id="validation2dGeverFileIntegrityModule" class="ch.kostceco.tools.tiffval.validation.module2.impl.Validation2dGeverFileIntegrityModuleImpl">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="messageService" ref="messageService" />
+	</bean>
+	
+	<bean id="validation3aFormatRecognitionModule" class="ch.kostceco.tools.tiffval.validation.module3.impl.Validation3aFormatRecognitionModuleImpl">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="configurationService" ref="configurationService" />
+		<property name="messageService" ref="messageService" />
+	</bean>
+	<bean id="validation3bUnspecifiedFormatModule" class="ch.kostceco.tools.tiffval.validation.module3.impl.Validation3bUnspecifiedFormatModuleImpl">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="configurationService" ref="configurationService" />
+		<property name="messageService" ref="messageService" />
+	</bean>
+	<bean id="validation3cFormatValidationModule" class="ch.kostceco.tools.tiffval.validation.module3.impl.Validation3cFormatValidationModuleImpl">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="messageService" ref="messageService" />
+		<property name="pdftronService" ref="pdftronService" />
+		<property name="siardValService" ref="siardValService" />
+		<property name="jhoveService" ref="jhoveService" />
+		<property name="configurationService" ref="configurationService" />
+	</bean>
+	<bean id="validation3dPeriodModule" class="ch.kostceco.tools.tiffval.validation.module3.impl.Validation3dPeriodModuleImpl">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="messageService" ref="messageService" />
+	</bean>
+
+	<!--  TODO: könnte es eventuell reichen, den Text Service der gemeinsamen Superklasse aller ModuleImpl zu injecten, so dass
+				nicht jeder Impl einzeln die Property mitgegeben werden müsste?
+				
+	<bean id="validationmoduleimpl" class="ch.kostceco.tools.tiffval.validation.ValidationModuleImpl">
+		<property name="textResourceService" ref="textResourceService" />
+	</bean>
+	-->
+	
+	<bean id="TIFFVal" class="ch.kostceco.tools.tiffval.TIFFVal">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="configurationService" ref="configurationService" />
+	</bean>
+
+	<bean id="logconfigurator" class="ch.kostceco.tools.tiffval.logging.LogConfigurator">
+		<property name="textResourceService" ref="textResourceService" />
+	</bean>
+
+	<!--  
+	<bean id="decompress" class="ch.kostceco.tools.tiffval.util.Decompress">
+		<property name="textResourceService" ref="textResourceService" />
+	</bean>
+	-->
+	
+	<bean id="controller" class="ch.kostceco.tools.tiffval.controller.Controller">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="validation1aZipModule" ref="validation1aZipModule" />
+		<property name="validation1bFolderStructureModule" ref="validation1bFolderStructureModule" />
+		<property name="validation1cNamingModule" ref="validation1cNamingModule" />
+		<property name="validation1dMetadataModule" ref="validation1dMetadataModule" />
+		<property name="validation1eSipTypeModule" ref="validation1eSipTypeModule" />
+		<property name="validation1fPrimaryDataModule" ref="validation1fPrimaryDataModule" />
+		<property name="validation2aFileIntegrityModule" ref="validation2aFileIntegrityModule" />
+		<property name="validation2bChecksumModule" ref="validation2bChecksumModule" />
+		<property name="validation2cSurplusFilesModule" ref="validation2cSurplusFilesModule" />
+		<property name="validation2dGeverFileIntegrityModule" ref="validation2dGeverFileIntegrityModule" />
+		<property name="validation3aFormatRecognitionModule" ref="validation3aFormatRecognitionModule" />
+		<property name="validation3bUnspecifiedFormatModule" ref="validation3bUnspecifiedFormatModule" />
+		<property name="validation3cFormatValidationModule" ref="validation3cFormatValidationModule" />
+		<property name="validation3dPeriodModule" ref="validation3dPeriodModule" />
+	</bean>
+
+</beans>

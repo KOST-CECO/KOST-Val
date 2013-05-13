@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<!-- log4j Konfiguration TIFF-Validator -->
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+	
+	
+	<!--  Ein File Appender namens tiffvalidation.log wird programmatisch erzeugt.	-->
+    
+    <!-- 
+		Konfiguration der Konsolenausgabe (System.out) 
+	-->
+	<appender name="out" class="org.apache.log4j.ConsoleAppender">
+		<param name="Target" value="System.out" />
+		<!-- Formatierung der Konsolenausgabe -->
+		<!--  
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern"
+				value="%d [%t] %c%n%-5p: [%x] %m%n" />
+		</layout>
+		-->
+		<layout class="ch.kostceco.tools.tiffval.logging.MessageOnlyLayout">
+		</layout>
+		
+		<!-- Level DEBUG bis INFO werden ausgegeben -->
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="LevelMin" value="INFO" />
+			<param name="LevelMax" value="INFO" />
+			<param name="AcceptOnMatch" value="true" />
+		</filter>
+	</appender>
+
+	<!-- 
+		Konfiguration der Konsolenausgabe (System.err) 
+	-->
+	<appender name="err" class="org.apache.log4j.ConsoleAppender">
+		<param name="Target" value="System.err" />
+		<!-- Formatierung der Konsolenausgabe -->
+		<!--  
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern"
+				value="%d [%t] %c%n%-5p: [%x] %m%n" />
+		</layout>
+		-->
+		<layout class="ch.kostceco.tools.tiffval.logging.MessageOnlyLayout">
+		</layout>
+		<!-- Level WARN bis FATAL werden ausgegeben -->
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="LevelMin" value="WARN" />
+			<param name="LevelMax" value="WARN" />
+			<param name="AcceptOnMatch" value="true" />
+		</filter>
+	</appender>
+
+	
+	<logger name="org.apache">
+		<level value="INFO" />
+	</logger>
+
+    <logger name="org.springframework">
+        <level value="FATAL"/>
+    </logger>
+    
+    <!-- Aus der Droid Library heraus wird diese Zeile geloggt: Signature file V35 has been checked
+         Dies scheint mit System.out zu geschehen und lässt sich auch mit diesem Logger nicht beeinflussen.
+         Er ist aber trotzdem nötig, weil besagte Zeile auch noch über den normalen Logger geloggt wird und
+         somit zweimal erscheinen würde. -->	
+    <logger name="uk.gov.nationalarchives.droid.core.signature.droid4">
+        <level value="FATAL"/>
+    </logger>
+    	
+    	
+	<!-- 
+		Root Logger.
+		Es wird ab Level DEBUG geloggt.
+		Output ist die Konsole.
+	-->
+	<root>
+		<level value="DEBUG" />
+		<appender-ref ref="out" />
+		<appender-ref ref="err" />
+<!--		<appender-ref ref="logfile" />-->
+	</root>
+
+</log4j:configuration>
