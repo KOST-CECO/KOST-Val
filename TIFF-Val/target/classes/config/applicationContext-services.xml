@@ -41,15 +41,7 @@
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="messageService" ref="messageService" />
 	</bean>
-	<bean id="validation1bFolderStructureModule" class="ch.kostceco.tools.tiffval.validation.module1.impl.Validation1bFolderStructureModuleImpl">
-		<property name="textResourceService" ref="textResourceService" />
-		<property name="messageService" ref="messageService" />
-	</bean>
-	<bean id="validation1cNamingModule" class="ch.kostceco.tools.tiffval.validation.module1.impl.Validation1cNamingModuleImpl">
-		<property name="textResourceService" ref="textResourceService" />
-		<property name="configurationService" ref="configurationService" />
-		<property name="messageService" ref="messageService" />
-	</bean>
+
 	<bean id="validation1dMetadataModule" class="ch.kostceco.tools.tiffval.validation.module1.impl.Validation1dMetadataModuleImpl">
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="configurationService" ref="configurationService" />
@@ -57,16 +49,7 @@
 	</bean>
 
 	
-	<bean id="validation3aFormatRecognitionModule" class="ch.kostceco.tools.tiffval.validation.module3.impl.Validation3aFormatRecognitionModuleImpl">
-		<property name="textResourceService" ref="textResourceService" />
-		<property name="configurationService" ref="configurationService" />
-		<property name="messageService" ref="messageService" />
-	</bean>
-	<bean id="validation3bUnspecifiedFormatModule" class="ch.kostceco.tools.tiffval.validation.module3.impl.Validation3bUnspecifiedFormatModuleImpl">
-		<property name="textResourceService" ref="textResourceService" />
-		<property name="configurationService" ref="configurationService" />
-		<property name="messageService" ref="messageService" />
-	</bean>
+
 	<bean id="validation3cFormatValidationModule" class="ch.kostceco.tools.tiffval.validation.module3.impl.Validation3cFormatValidationModuleImpl">
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="messageService" ref="messageService" />
@@ -102,11 +85,7 @@
 	<bean id="controller" class="ch.kostceco.tools.tiffval.controller.Controller">
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="validation1aZipModule" ref="validation1aZipModule" />
-		<property name="validation1bFolderStructureModule" ref="validation1bFolderStructureModule" />
-		<property name="validation1cNamingModule" ref="validation1cNamingModule" />
 		<property name="validation1dMetadataModule" ref="validation1dMetadataModule" />
-		<property name="validation3aFormatRecognitionModule" ref="validation3aFormatRecognitionModule" />
-		<property name="validation3bUnspecifiedFormatModule" ref="validation3bUnspecifiedFormatModule" />
 		<property name="validation3cFormatValidationModule" ref="validation3cFormatValidationModule" />
 	</bean>
 
