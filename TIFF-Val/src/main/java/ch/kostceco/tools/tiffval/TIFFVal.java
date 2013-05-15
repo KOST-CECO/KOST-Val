@@ -358,15 +358,6 @@ public class TIFFVal implements MessageConstants
 				ok = ok && ok3c;
 			}
 
-			if ( args.length > 2 && args[2].equals( "+3d" ) ) {
-				boolean ok3d = controller.execute3d( sipDatei );
-				ok = ok && ok3d;
-			}
-
-			if ( args.length > 3 && args[3].equals( "+3d" ) ) {
-				boolean ok3d = controller.execute3d( sipDatei );
-				ok = ok && ok3d;
-			}
 
 		}
 

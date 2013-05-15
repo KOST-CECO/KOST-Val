@@ -24,16 +24,9 @@ import ch.kostceco.tools.tiffval.exception.module1.Validation1aZipException;
 import ch.kostceco.tools.tiffval.exception.module1.Validation1bFolderStructureException;
 import ch.kostceco.tools.tiffval.exception.module1.Validation1cNamingException;
 import ch.kostceco.tools.tiffval.exception.module1.Validation1dMetadataException;
-import ch.kostceco.tools.tiffval.exception.module1.Validation1eSipTypeException;
-import ch.kostceco.tools.tiffval.exception.module1.Validation1fPrimaryDataException;
-import ch.kostceco.tools.tiffval.exception.module2.Validation2aFileIntegrityException;
-import ch.kostceco.tools.tiffval.exception.module2.Validation2bChecksumException;
-import ch.kostceco.tools.tiffval.exception.module2.Validation2cSurplusFilesException;
-import ch.kostceco.tools.tiffval.exception.module2.Validation2dGeverFileIntegrityException;
 import ch.kostceco.tools.tiffval.exception.module3.Validation3aFormatRecognitionException;
 import ch.kostceco.tools.tiffval.exception.module3.Validation3bUnspecifiedFormatException;
 import ch.kostceco.tools.tiffval.exception.module3.Validation3cFormatValidationException;
-import ch.kostceco.tools.tiffval.exception.module3.Validation3dPeriodException;
 import ch.kostceco.tools.tiffval.logging.Logger;
 import ch.kostceco.tools.tiffval.logging.MessageConstants;
 import ch.kostceco.tools.tiffval.service.TextResourceService;
@@ -41,16 +34,9 @@ import ch.kostceco.tools.tiffval.validation.module1.Validation1aZipModule;
 import ch.kostceco.tools.tiffval.validation.module1.Validation1bFolderStructureModule;
 import ch.kostceco.tools.tiffval.validation.module1.Validation1cNamingModule;
 import ch.kostceco.tools.tiffval.validation.module1.Validation1dMetadataModule;
-import ch.kostceco.tools.tiffval.validation.module1.Validation1eSipTypeModule;
-import ch.kostceco.tools.tiffval.validation.module1.Validation1fPrimaryDataModule;
-import ch.kostceco.tools.tiffval.validation.module2.Validation2aFileIntegrityModule;
-import ch.kostceco.tools.tiffval.validation.module2.Validation2bChecksumModule;
-import ch.kostceco.tools.tiffval.validation.module2.Validation2cSurplusFilesModule;
-import ch.kostceco.tools.tiffval.validation.module2.Validation2dGeverFileIntegrityModule;
 import ch.kostceco.tools.tiffval.validation.module3.Validation3aFormatRecognitionModule;
 import ch.kostceco.tools.tiffval.validation.module3.Validation3bUnspecifiedFormatModule;
 import ch.kostceco.tools.tiffval.validation.module3.Validation3cFormatValidationModule;
-import ch.kostceco.tools.tiffval.validation.module3.Validation3dPeriodModule;
 
 /**
  * Der Controller ruft die benötigten Module zur Validierung des SIP-Archivs in
@@ -75,25 +61,13 @@ public class Controller implements MessageConstants
 
 	private Validation1dMetadataModule				validation1dMetadataModule;
 
-	private Validation1eSipTypeModule				validation1eSipTypeModule;
-
-	private Validation1fPrimaryDataModule			validation1fPrimaryDataModule;
-
-	private Validation2aFileIntegrityModule			validation2aFileIntegrityModule;
-
-	private Validation2bChecksumModule				validation2bChecksumModule;
-
-	private Validation2cSurplusFilesModule			validation2cSurplusFilesModule;
-
-	private Validation2dGeverFileIntegrityModule	validation2dGeverFileIntegrityModule;
-
 	private Validation3aFormatRecognitionModule		validation3aFormatRecognitionModule;
 
 	private Validation3bUnspecifiedFormatModule		validation3bUnspecifiedFormatModule;
 
 	private Validation3cFormatValidationModule		validation3cFormatValidationModule;
 
-	private Validation3dPeriodModule				validation3dPeriodModule;
+	
 
 	private TextResourceService						textResourceService;
 
@@ -141,72 +115,6 @@ public class Controller implements MessageConstants
 		this.validation1dMetadataModule = validation1dMetadataModule;
 	}
 
-	public Validation1eSipTypeModule getValidation1eSipTypeModule()
-	{
-		return validation1eSipTypeModule;
-	}
-
-	public void setValidation1eSipTypeModule(
-			Validation1eSipTypeModule validation1eSipTypeModule )
-	{
-		this.validation1eSipTypeModule = validation1eSipTypeModule;
-	}
-
-	public Validation1fPrimaryDataModule getValidation1fPrimaryDataModule()
-	{
-		return validation1fPrimaryDataModule;
-	}
-
-	public void setValidation1fPrimaryDataModule(
-			Validation1fPrimaryDataModule validation1fPrimaryDataModule )
-	{
-		this.validation1fPrimaryDataModule = validation1fPrimaryDataModule;
-	}
-
-	public Validation2aFileIntegrityModule getValidation2aFileIntegrityModule()
-	{
-		return validation2aFileIntegrityModule;
-	}
-
-	public void setValidation2aFileIntegrityModule(
-			Validation2aFileIntegrityModule validation2aFileIntegrityModule )
-	{
-		this.validation2aFileIntegrityModule = validation2aFileIntegrityModule;
-	}
-
-	public Validation2bChecksumModule getValidation2bChecksumModule()
-	{
-		return validation2bChecksumModule;
-	}
-
-	public void setValidation2bChecksumModule(
-			Validation2bChecksumModule validation2bChecksumModule )
-	{
-		this.validation2bChecksumModule = validation2bChecksumModule;
-	}
-
-	public Validation2cSurplusFilesModule getValidation2cSurplusFilesModule()
-	{
-		return validation2cSurplusFilesModule;
-	}
-
-	public void setValidation2cSurplusFilesModule(
-			Validation2cSurplusFilesModule validation2cSurplusFilesModule )
-	{
-		this.validation2cSurplusFilesModule = validation2cSurplusFilesModule;
-	}
-
-	public Validation2dGeverFileIntegrityModule getValidation2dGeverFileIntegrityModule()
-	{
-		return validation2dGeverFileIntegrityModule;
-	}
-
-	public void setValidation2dGeverFileIntegrityModule(
-			Validation2dGeverFileIntegrityModule validation2dGeverFileIntegrityModule )
-	{
-		this.validation2dGeverFileIntegrityModule = validation2dGeverFileIntegrityModule;
-	}
-
 	public Validation3aFormatRecognitionModule getValidation3aFormatRecognitionModule()
 	{
 		return validation3aFormatRecognitionModule;
@@ -240,16 +148,6 @@ public class Controller implements MessageConstants
 		this.validation3cFormatValidationModule = validation3cFormatValidationModule;
 	}
 
-	public Validation3dPeriodModule getValidation3dPeriodModule()
-	{
-		return validation3dPeriodModule;
-	}
-
-	public void setValidation3dPeriodModule(
-			Validation3dPeriodModule validation3dPeriodModule )
-	{
-		this.validation3dPeriodModule = validation3dPeriodModule;
-	}
 
 	public TextResourceService getTextResourceService()
 	{
@@ -405,193 +303,8 @@ public class Controller implements MessageConstants
 	{
 		boolean valid = true;
 
-		// Validation Step Ae
-		try {
-			if ( this.getValidation1eSipTypeModule().validate( sipDatei ) ) {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_VALID,
-						getTextResourceService().getText( MESSAGE_MODULE_Ae ) ) );
-				this.getValidation1eSipTypeModule().getMessageService().print();
-			} else {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_INVALID,
-						getTextResourceService().getText( MESSAGE_MODULE_Ae ) )
-						+ getTextResourceService().getText(
-								MESSAGE_STEPERGEBNIS_Ae ) );
-				this.getValidation1eSipTypeModule().getMessageService().print();
-				valid = false;
-			}
-		} catch ( Validation1eSipTypeException e ) {
-			LOGGER.logInfo( getTextResourceService().getText(
-					MESSAGE_MODULE_INVALID_2ARGS,
-					getTextResourceService().getText( MESSAGE_MODULE_Ae ),
-					e.getMessage() ) );
-			this.getValidation1eSipTypeModule().getMessageService().print();
-			valid = false;
-		} catch ( Exception e ) {
-			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
-			LOGGER.logError( e.getMessage() );
-			return false;
-		}
 
-		// Validation Step Af
-		try {
-			if ( this.getValidation1fPrimaryDataModule().validate( sipDatei ) ) {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_VALID,
-						getTextResourceService().getText( MESSAGE_MODULE_Af ) ) );
-				this.getValidation1fPrimaryDataModule().getMessageService()
-						.print();
-			} else {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_INVALID,
-						getTextResourceService().getText( MESSAGE_MODULE_Af ) )
-						+ getTextResourceService().getText(
-								MESSAGE_STEPERGEBNIS_Af ) );
-				this.getValidation1fPrimaryDataModule().getMessageService()
-						.print();
-				valid = false;
-			}
-		} catch ( Validation1fPrimaryDataException e ) {
-			LOGGER.logInfo( getTextResourceService().getText(
-					MESSAGE_MODULE_INVALID_2ARGS,
-					getTextResourceService().getText( MESSAGE_MODULE_Ab ),
-					e.getMessage() ) );
-			this.getValidation1fPrimaryDataModule().getMessageService().print();
-			valid = false;
-		} catch ( Exception e ) {
-			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
-			LOGGER.logError( e.getMessage() );
-			return false;
-		}
 
-		// Validation Step Ba
-		try {
-			if ( this.getValidation2aFileIntegrityModule().validate( sipDatei ) ) {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_VALID,
-						getTextResourceService().getText( MESSAGE_MODULE_Ba ) ) );
-				this.getValidation2aFileIntegrityModule().getMessageService()
-						.print();
-			} else {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_INVALID,
-						getTextResourceService().getText( MESSAGE_MODULE_Ba ) )
-						+ getTextResourceService().getText(
-								MESSAGE_STEPERGEBNIS_Ba ) );
-				this.getValidation2aFileIntegrityModule().getMessageService()
-						.print();
-				valid = false;
-			}
-		} catch ( Validation2aFileIntegrityException e ) {
-			LOGGER.logInfo( getTextResourceService().getText(
-					MESSAGE_MODULE_INVALID_2ARGS,
-					getTextResourceService().getText( MESSAGE_MODULE_Ba ),
-					e.getMessage() ) );
-			this.getValidation2aFileIntegrityModule().getMessageService()
-					.print();
-			valid = false;
-		} catch ( Exception e ) {
-			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
-			LOGGER.logError( e.getMessage() );
-			return false;
-		}
-
-		// Validation Step Bb
-		try {
-			if ( this.getValidation2bChecksumModule().validate( sipDatei ) ) {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_VALID,
-						getTextResourceService().getText( MESSAGE_MODULE_Bb ) ) );
-				this.getValidation2bChecksumModule().getMessageService()
-						.print();
-			} else {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_INVALID,
-						getTextResourceService().getText( MESSAGE_MODULE_Bb ) )
-						+ getTextResourceService().getText(
-								MESSAGE_STEPERGEBNIS_Bb ) );
-				this.getValidation2bChecksumModule().getMessageService()
-						.print();
-				valid = false;
-			}
-		} catch ( Validation2bChecksumException e ) {
-			LOGGER.logInfo( getTextResourceService().getText(
-					MESSAGE_MODULE_INVALID_2ARGS,
-					getTextResourceService().getText( MESSAGE_MODULE_Bb ),
-					e.getMessage() ) );
-			this.getValidation2bChecksumModule().getMessageService().print();
-			valid = false;
-		} catch ( Exception e ) {
-			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
-			LOGGER.logError( e.getMessage() );
-			return false;
-		}
-
-		// Validation Step Bc
-		try {
-			if ( this.getValidation2cSurplusFilesModule().validate( sipDatei ) ) {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_VALID,
-						getTextResourceService().getText( MESSAGE_MODULE_Bc ) ) );
-				this.getValidation2cSurplusFilesModule().getMessageService()
-						.print();
-			} else {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_INVALID,
-						getTextResourceService().getText( MESSAGE_MODULE_Bc ) )
-						+ getTextResourceService().getText(
-								MESSAGE_STEPERGEBNIS_Bc ) );
-				this.getValidation2cSurplusFilesModule().getMessageService()
-						.print();
-				valid = false;
-			}
-		} catch ( Validation2cSurplusFilesException e ) {
-			LOGGER.logInfo( getTextResourceService().getText(
-					MESSAGE_MODULE_INVALID_2ARGS,
-					getTextResourceService().getText( MESSAGE_MODULE_Bc ),
-					e.getMessage() ) );
-			this.getValidation2cSurplusFilesModule().getMessageService()
-					.print();
-			valid = false;
-		} catch ( Exception e ) {
-			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
-			LOGGER.logError( e.getMessage() );
-			return false;
-		}
-
-		// Validation Step Bd
-		try {
-			if ( this.getValidation2dGeverFileIntegrityModule().validate(
-					sipDatei ) ) {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_VALID,
-						getTextResourceService().getText( MESSAGE_MODULE_Bd ) ) );
-				this.getValidation2dGeverFileIntegrityModule()
-						.getMessageService().print();
-			} else {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_INVALID,
-						getTextResourceService().getText( MESSAGE_MODULE_Bd ) )
-						+ getTextResourceService().getText(
-								MESSAGE_STEPERGEBNIS_Bd ) );
-				this.getValidation2dGeverFileIntegrityModule()
-						.getMessageService().print();
-				valid = false;
-			}
-		} catch ( Validation2dGeverFileIntegrityException e ) {
-			LOGGER.logInfo( getTextResourceService().getText(
-					MESSAGE_MODULE_INVALID_2ARGS,
-					getTextResourceService().getText( MESSAGE_MODULE_Bd ),
-					e.getMessage() ) );
-			this.getValidation2dGeverFileIntegrityModule().getMessageService()
-					.print();
-			valid = false;
-		} catch ( Exception e ) {
-			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
-			LOGGER.logError( e.getMessage() );
-			return false;
-		}
 
 		// Validation Step Ca
 		try {
@@ -705,42 +418,5 @@ public class Controller implements MessageConstants
 
 	}
 
-	public boolean execute3d( File sipDatei )
-	{
-		boolean valid = true;
-
-		// Validation Step 3d
-		try {
-			if ( this.getValidation3dPeriodModule().validate( sipDatei ) ) {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_VALID,
-						getTextResourceService().getText( MESSAGE_MODULE_Cd ) ) );
-				this.getValidation3dPeriodModule().getMessageService().print();
-			} else {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_INVALID,
-						getTextResourceService().getText( MESSAGE_MODULE_Cd ) )
-						+ getTextResourceService().getText(
-								MESSAGE_STEPERGEBNIS_Cd ) );
-				this.getValidation3dPeriodModule().getMessageService().print();
-				valid = false;
-			}
-
-		} catch ( Validation3dPeriodException e ) {
-			LOGGER.logInfo( getTextResourceService().getText(
-					MESSAGE_MODULE_INVALID_2ARGS,
-					getTextResourceService().getText( MESSAGE_MODULE_Cd ),
-					e.getMessage() ) );
-			this.getValidation3dPeriodModule().getMessageService().print();
-			return false;
-		} catch ( Exception e ) {
-			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
-			LOGGER.logError( e.getMessage() );
-			return false;
-		}
-
-		return valid;
-
-	}
 
 }
