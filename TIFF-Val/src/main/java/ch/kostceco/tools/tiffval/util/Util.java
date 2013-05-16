@@ -30,7 +30,7 @@ import java.util.Map;
  * the console with System.out This Utility can switch this on and off. - Java
  * cannot delete directories that are not empty. Here's a method to do that.
  * 
- * @author razm Daniel Ludin, Bedag AG @version 0.2.0
+ * @author Rc Claire Röthlisberger, KOST-CECO
  */
 
 public class Util

@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author razm Daniel Ludin, Bedag AG @version 0.2.0 Mit dieser Klasse werden
+ * @author Rc Claire Röthlisberger, KOST-CECO Mit dieser Klasse werden
  *         die Error Codes, welche von Pdftron generiert werden, übersetzt. Bsp:
  *         <Error Code="e_PDFA173"
  *         Message="The value of Length does not match the number of bytes" ...

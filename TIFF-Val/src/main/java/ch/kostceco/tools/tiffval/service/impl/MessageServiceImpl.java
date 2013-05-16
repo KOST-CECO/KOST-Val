@@ -28,7 +28,7 @@ import ch.kostceco.tools.tiffval.service.MessageService;
 public class MessageServiceImpl implements MessageService
 {
 	/**
-	 * @author razm Daniel Ludin, Bedag AG @version 0.2.0
+	 * @author Rc Claire Röthlisberger, KOST-CECO
 	 */
 
 	private static final Logger	LOGGER	= new Logger( MessageServiceImpl.class );

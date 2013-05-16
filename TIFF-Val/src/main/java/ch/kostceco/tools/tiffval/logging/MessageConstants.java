@@ -21,7 +21,7 @@ package ch.kostceco.tools.tiffval.logging;
 /**
  * Interface für den Zugriff auf Resourcen aus dem ResourceBundle.
  * 
- * @author razm Daniel Ludin, Bedag AG @version 0.2.0
+ * @author Rc Claire Röthlisberger, KOST-CECO
  */
 public interface MessageConstants
 {
@@ -63,34 +63,12 @@ public interface MessageConstants
 	String	MESSAGE_MODULE_INVALID_2ARGS					= "message.module.invalid.2args";
 
 	String	MESSAGE_MODULE_Aa								= "message.module.aa";
-	String	MESSAGE_MODULE_Ab								= "message.module.ab";
-	String	MESSAGE_MODULE_Ac								= "message.module.ac";
 	String	MESSAGE_MODULE_Ad								= "message.module.ad";
-	String	MESSAGE_MODULE_Ae								= "message.module.ae";
-	String	MESSAGE_MODULE_Af								= "message.module.af";
-	String	MESSAGE_MODULE_Ba								= "message.module.ba";
-	String	MESSAGE_MODULE_Bb								= "message.module.bb";
-	String	MESSAGE_MODULE_Bc								= "message.module.bc";
-	String	MESSAGE_MODULE_Bd								= "message.module.bd";
-	String	MESSAGE_MODULE_Ca								= "message.module.ca";
-	String	MESSAGE_MODULE_Cb								= "message.module.cb";
 	String	MESSAGE_MODULE_Cc								= "message.module.cc";
-	String	MESSAGE_MODULE_Cd								= "message.module.cd";
 
 	String	MESSAGE_STEPERGEBNIS_Aa							= "message.stepergebnis.aa";
-	String	MESSAGE_STEPERGEBNIS_Ab							= "message.stepergebnis.ab";
-	String	MESSAGE_STEPERGEBNIS_Ac							= "message.stepergebnis.ac";
 	String	MESSAGE_STEPERGEBNIS_Ad							= "message.stepergebnis.ad";
-	String	MESSAGE_STEPERGEBNIS_Ae							= "message.stepergebnis.ae";
-	String	MESSAGE_STEPERGEBNIS_Af							= "message.stepergebnis.af";
-	String	MESSAGE_STEPERGEBNIS_Ba							= "message.stepergebnis.ba";
-	String	MESSAGE_STEPERGEBNIS_Bb							= "message.stepergebnis.bb";
-	String	MESSAGE_STEPERGEBNIS_Bc							= "message.stepergebnis.bc";
-	String	MESSAGE_STEPERGEBNIS_Bd							= "message.stepergebnis.bd";
-	String	MESSAGE_STEPERGEBNIS_Ca							= "message.stepergebnis.ca";
-	String	MESSAGE_STEPERGEBNIS_Cb							= "message.stepergebnis.cb";
 	String	MESSAGE_STEPERGEBNIS_Cc							= "message.stepergebnis.cc";
-	String	MESSAGE_STEPERGEBNIS_Cd							= "message.stepergebnis.cd";
 
 	String	MESSAGE_DASHES									= "message.dashes";
 	String	MESSAGE_INDENT									= "message.indent";
@@ -105,52 +83,13 @@ public interface MessageConstants
 
 	String	ERROR_UNKNOWN									= "error.unknown";
 
-	// Modul 1 Meldungen
+	// Modul 1a Meldungen
 	String	ERROR_MODULE_A_INCORRECTFILEENDING				= "error.module.a.incorrectfileending";
-
-	// Modul 1c Meldungen
-	String	MESSAGE_MODULE_AC_NOTALLOWEDFILE				= "message.module.ac.notallowedfile";
-	String	MESSAGE_MODULE_AC_NOTALLOWEDV					= "message.module.ac.notallowedv";
-	String	MESSAGE_MODULE_AC_VERSION						= "message.module.ac.version";
-	String	MESSAGE_MODULE_AC_MISSINGFILE					= "message.module.ac.missingfile";
-	String	MESSAGE_MODULE_AC_PATHTOOLONG					= "message.module.ac.pathtoolong";
-	String	MESSAGE_MODULE_AC_FILENAMETOOLONG				= "message.module.ac.filenametoolong";
-	String	MESSAGE_MODULE_AC_INVALIDCHARACTERS				= "message.module.ac.invalidcharacters";
-	String	MESSAGE_MODULE_AC_INVALIDREGEX					= "message.module.ac.invalidregex";
-	String	MESSAGE_MODULE_AC_INVALIDFILENAME				= "message.module.ac.invalidfilename";
 
 	// Modul 1d Meldungen
 	String	ERROR_MODULE_AD_WRONGNUMBEROFXSDS				= "error.module.ad.wrongnumberofxsds";
 	String	ERROR_MODULE_AD_CONTENTB4HEADER					= "error.module.ad.contentB4header";
 	String	ERROR_MODULE_AD_METADATA_ERRORS					= "error.module.ad.metadata.errors";
-
-	// Modul 1e Meldungen
-	String	ERROR_MODULE_AE_NOMETADATAFOUND					= "error.module.ae.nometadatafound";
-	String	MESSAGE_MODULE_AE_ABLIEFERUNGSTYPFILE			= "message.module.ae.ablieferungstypfile";
-	String	MESSAGE_MODULE_AE_ABLIEFERUNGSTYPGEVER			= "message.module.ae.ablieferungstypgever";
-	String	ERROR_MODULE_AE_ABLIEFERUNGSTYPUNDEFINED		= "error.module.ae.ablieferungstypundefined";
-
-	// Modul 1f Meldungen
-	String	MESSAGE_MODULE_AF_GEVERSIPWITHOUTPRIMARYDATA	= "message.module.af.geversipwithoutprimarydata";
-	String	ERROR_MODULE_AF_FILESIPWITHOUTPRIMARYDATA		= "error.module.af.filesipwithoutprimarydata";
-
-	// Modul 2a Meldungen
-	String	MESSAGE_MODULE_BA_FILEMISSING					= "message.module.ba.filemissing";
-
-	// Modul 2b Meldungen
-	String	ERROR_MODULE_BB_CANNOTPROCESSMD5				= "error.module.bb.cannotprocessmd5";
-	String	ERROR_MODULE_BB_CANNOTCLOSESTREAMMD5			= "error.module.bb.cannotclosestreammd5";
-	String	MESSAGE_MODULE_Bb_WRONGMD5						= "error.module.bb.wrongmd5";
-
-	// Modul 2c Meldungen
-	String	MESSAGE_MODULE_BC_FILEMISSING					= "message.module.bc.filemissing";
-	String	MESSAGE_MODULE_BC_FILEMISSINGO					= "message.module.bc.filemissingo";
-
-	// Modul 2d Meldungen
-	String	MESSAGE_MODULE_BD_MISSINGINABLIEFERUNG			= "message.module.bd.missinginablieferung";
-
-	// Modul 3a Meldungen
-	String	MESSAGE_MODULE_CA_FILES							= "message.module.ca.files";
 
 	// Modul 3c Meldungen
 	String	MESSAGE_MODULE_CC_CANNOTWRITEJHOVEREPORT		= "message.module.cc.cannotwritejhovereport";
@@ -168,15 +107,4 @@ public interface MessageConstants
 	String	MESSAGE_MODULE_CC_ERRORS_IN_I					= "message.module.cc.errors.in.i";
 	String	MESSAGE_MODULE_CC_ERRORS_IN_J					= "message.module.cc.errors.in.j";
 	String	MESSAGE_MODULE_CC_NOJHOVEVAL					= "message.module.cc.nojhoveval";
-
-	// Modul 3d Meldungen
-	String	ERROR_MODULE_CD_DATUM_ENTSTEHUNG_IN_FUTURE		= "error.module.cd.datum.entstehung.in.future";
-	String	ERROR_MODULE_CD_DATUM_IN_FUTURE					= "error.module.cd.datum.in.future";
-
-	String	ERROR_MODULE_CD_INVALID_ABLIEFERUNG_RANGE		= "error.module.cd.invalid.ablieferung.range";
-	String	ERROR_MODULE_CD_INVALID_DOSSIER_RANGE_CA		= "error.module.cd.invalid.dossier.range.ca";
-	String	ERROR_MODULE_CD_INVALID_DOSSIER_RANGE_CA_ABL	= "error.module.cd.invalid.dossier.range.ca.abl";
-	String	ERROR_MODULE_CD_INVALID_DOKUMENT_RANGE_CA		= "error.module.cd.invalid.dokument.range.ca";
-	String	MESSAGE_MODULE_CD_NUMBER_OF_CONTENT_FILES		= "message.module.cd.numberofcontentfiles";
-	String	ERROR_MODULE_CD_UNPARSEABLE_DATE				= "error.module.cd.unparseable.date";
 }

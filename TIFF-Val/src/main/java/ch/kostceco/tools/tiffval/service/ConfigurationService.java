@@ -29,7 +29,7 @@ import ch.kostceco.tools.tiffval.service.vo.ValidatedFormat;
 /**
  * Service Interface für die Konfigurationsdatei.
  * 
- * @author razm Daniel Ludin, Bedag AG @version 0.2.0
+ * @author Rc Claire Röthlisberger, KOST-CECO
  */
 public interface ConfigurationService extends Service
 {
@@ -41,29 +41,6 @@ public interface ConfigurationService extends Service
 	 */
 	Map<String, String> getAllowedPuids();
 
-	/**
-	 * Gibt die Maximal erlaubte Länge eines Pfades in der SIP-Datei aus.
-	 * 
-	 * @return Maximal erlaubte Länge eines Pfades in der SIP-Datei
-	 */
-	Integer getMaximumPathLength();
-
-	/**
-	 * Gibt die Maximal erlaubte Länge eines Files oder Orners in der SIP-Datei
-	 * aus.
-	 * 
-	 * @return Maximal erlaubte Länge eines Files oder Orners in der SIP-Datei
-	 */
-	Integer getMaximumFileLength();
-
-	/**
-	 * Neu soll die Einschränkung des SIP-Namen konfigurierbar sein ->
-	 * getAllowedSipName.
-	 * 
-	 * @author Rc Claire Röthlisberger-Jourdan, KOST-CECO, @version 0.9.1, date
-	 *         16.05.2011
-	 */
-	String getAllowedSipName();
 
 	/**
 	 * Gibt den Namen des DROID Signature Files zurück. Die Signaturen werden
@@ -127,11 +104,4 @@ public interface ConfigurationService extends Service
 	 */
 	List<ValidatedFormat> getValidatedFormats();
 	
-	/**
-	 * Gibt aus ob die BAR Version 1 und 4= eCH Version 1 erlaubt ist oder nicht.
-	 * 
-	 * @return 1 wenn erlaubt respektive 0 wenn nicht erlaubt
-	 */
-	Integer getAllowedVersionBar1();
-	Integer getAllowedVersionBar4Ech1();
 }

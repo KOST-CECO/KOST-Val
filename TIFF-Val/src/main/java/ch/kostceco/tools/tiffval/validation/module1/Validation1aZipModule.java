@@ -27,7 +27,7 @@ import ch.kostceco.tools.tiffval.validation.ValidationModule;
  * Validierungsschritt 1a Ist das SIP eine korrekte, unkomprimierte ZIP / ZIP64
  * Datei (wenn komprimiert, mit welchem Algorithmus)?
  * 
- * @author razm Daniel Ludin, Bedag AG @version 0.2.0 Daniel Ludin, Bedag AG
+ * @author Rc Claire Röthlisberger, KOST-CECO Daniel Ludin, Bedag AG
  */
 
 public interface Validation1aZipModule extends ValidationModule

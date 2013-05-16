@@ -59,7 +59,7 @@ import ch.kostceco.tools.tiffval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.tiffval.validation.module3.Validation3cFormatValidationModule;
 
 /**
- * @author razm Daniel Ludin, Bedag AG @version 0.2.0
+ * @author Rc Claire Röthlisberger, KOST-CECO
  */
 
 public class Validation3cFormatValidationModuleImpl extends
@@ -196,9 +196,7 @@ public class Validation3cFormatValidationModuleImpl extends
 				getTextResourceService().getText( MESSAGE_MODULE_Cc )
 						+ getTextResourceService().getText( MESSAGE_DASHES )
 						+ String.valueOf( countContentFiles )
-						+ " "
-						+ getTextResourceService().getText(
-								MESSAGE_MODULE_CD_NUMBER_OF_CONTENT_FILES ) );
+						 );
 
 		List<String> filesToProcessWithJhove = new ArrayList<String>();
 		List<String> filesToProcessWithPdftron = new ArrayList<String>();

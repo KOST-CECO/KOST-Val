@@ -19,7 +19,7 @@ Boston, MA 02110-1301 USA or see <http://www.gnu.org/licenses/>.
 package ch.kostceco.tools.tiffval.exception;
 
 /**
- * @author razm Daniel Ludin, Bedag AG @version 0.2.0
+ * @author Rc Claire Röthlisberger, KOST-CECO
  */
 
 public class SystemException extends Exception

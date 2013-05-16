@@ -19,7 +19,7 @@ package ch.kostceco.tools.tiffval.exception;
 /**
  * Superklasse aller Applikations-Exceptions
  * 
- * @author razm Daniel Ludin, Bedag AG @version 0.2.0
+ * @author Rc Claire Röthlisberger, KOST-CECO
  */
 
 public class TIFFValException extends Exception

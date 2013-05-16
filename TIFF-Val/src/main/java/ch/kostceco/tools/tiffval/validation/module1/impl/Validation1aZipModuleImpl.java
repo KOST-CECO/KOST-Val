@@ -29,7 +29,7 @@ import ch.kostceco.tools.tiffval.validation.module1.Validation1aZipModule;
 import ch.enterag.utils.zip.Zip64File;
 
 /**
- * @author razm Daniel Ludin, Bedag AG @version 0.2.0
+ * @author Rc Claire Röthlisberger, KOST-CECO
  */
 public class Validation1aZipModuleImpl extends ValidationModuleImpl implements
 		Validation1aZipModule

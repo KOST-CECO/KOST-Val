@@ -29,7 +29,7 @@ import ch.kostceco.tools.tiffval.util.Util;
 /**
  * Dieser Service stellt die Schnittstelle zur Pdftron Software dar.
  * 
- * @author razm Daniel Ludin, Bedag AG @version 0.2.0
+ * @author Rc Claire Röthlisberger, KOST-CECO
  */
 public class PdftronServiceImpl implements PdftronService
 {

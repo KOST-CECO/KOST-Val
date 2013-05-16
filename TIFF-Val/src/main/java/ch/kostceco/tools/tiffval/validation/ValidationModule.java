@@ -28,7 +28,7 @@ import ch.kostceco.tools.tiffval.service.Service;
  * Dies ist das Interface für alle Validierungs-Module und vereinigt alle
  * Funktionalitäten, die den jeweiligen Modulen gemeinsam sind.
  * 
- * @author razm Daniel Ludin, Bedag AG @version 0.2.0
+ * @author Rc Claire Röthlisberger, KOST-CECO
  */
 
 public interface ValidationModule extends Service

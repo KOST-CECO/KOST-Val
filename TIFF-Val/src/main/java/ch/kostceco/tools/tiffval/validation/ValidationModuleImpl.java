@@ -22,7 +22,7 @@ import ch.kostceco.tools.tiffval.service.MessageService;
 import ch.kostceco.tools.tiffval.service.TextResourceService;
 
 /**
- * @author razm Daniel Ludin, Bedag AG @version 0.2.0
+ * @author Rc Claire Röthlisberger, KOST-CECO
  */
 
 public abstract class ValidationModuleImpl

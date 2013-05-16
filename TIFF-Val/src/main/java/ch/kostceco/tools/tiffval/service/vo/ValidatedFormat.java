@@ -22,7 +22,7 @@ package ch.kostceco.tools.tiffval.service.vo;
  * Ein Value Object, das die "validatedformat" Elemente aus der
  * Konfigurationsdatei einkapselt.
  * 
- * @author razm Daniel Ludin, Bedag AG @version 0.2.0
+ * @author Rc Claire Röthlisberger, KOST-CECO
  */
 public class ValidatedFormat
 {

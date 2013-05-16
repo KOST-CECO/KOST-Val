@@ -25,7 +25,7 @@ import ch.kostceco.tools.tiffval.exception.SystemException;
 /**
  * Service Interface für Jhove.
  * 
- * @author razm Daniel Ludin, Bedag AG @version 0.2.0
+ * @author Rc Claire Röthlisberger, KOST-CECO
  */
 public interface JhoveService extends Service
 {

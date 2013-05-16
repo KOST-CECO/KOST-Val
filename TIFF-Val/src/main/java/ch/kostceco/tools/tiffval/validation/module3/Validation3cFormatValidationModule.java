@@ -31,7 +31,7 @@ import ch.kostceco.tools.tiffval.validation.ValidationModule;
  * Referenzierung in Log-Datei zu den allfälligen zusätzlich generierten
  * Logdateien der eingesetzten Programme.
  * 
- * @author razm Daniel Ludin, Bedag AG @version 0.2.0
+ * @author Rc Claire Röthlisberger, KOST-CECO
  */
 
 public interface Validation3cFormatValidationModule extends ValidationModule

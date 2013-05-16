@@ -37,7 +37,7 @@ import ch.kostceco.tools.tiffval.validation.module3.Validation3cFormatValidation
  * Die Validierungs-Module werden mittels Spring-Dependency-Injection
  * eingebunden.
  * 
- * @author razm Daniel Ludin, Bedag AG @version 0.2.0
+ * @author Rc Claire Röthlisberger, KOST-CECO
  */
 public class Controller implements MessageConstants
 {

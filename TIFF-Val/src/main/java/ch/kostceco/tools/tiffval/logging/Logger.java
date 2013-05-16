@@ -26,7 +26,7 @@ import org.apache.log4j.NDC;
  * Logging Klasse. Sämtliche Log Aufrufe werden an Jakarta Commons Logging
  * delegiert, welches diese wiederum an Log4j delegiert.
  * 
- * @author razm Daniel Ludin, Bedag AG @version 0.2.0
+ * @author Rc Claire Röthlisberger, KOST-CECO
  */
 public class Logger
 {

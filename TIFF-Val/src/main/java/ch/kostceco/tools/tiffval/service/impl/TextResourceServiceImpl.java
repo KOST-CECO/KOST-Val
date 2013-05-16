@@ -27,7 +27,7 @@ import ch.kostceco.tools.tiffval.service.TextResourceService;
 /**
  * Dieser Service managt die Zugriffe auf die Resource Bundles.
  * 
- * @author razm Daniel Ludin, Bedag AG @version 0.2.0
+ * @author Rc Claire Röthlisberger, KOST-CECO
  */
 public class TextResourceServiceImpl implements TextResourceService
 {

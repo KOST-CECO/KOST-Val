@@ -51,7 +51,7 @@ import ch.enterag.utils.zip.FileEntry;
 import ch.enterag.utils.zip.Zip64File;
 
 /**
- * @author razm Daniel Ludin, Bedag AG @version 0.2.0
+ * @author Rc Claire Röthlisberger, KOST-CECO
  */
 
 public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
@@ -235,8 +235,7 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 						getTextResourceService().getText( MESSAGE_MODULE_Ad )
 								+ getTextResourceService().getText(
 										MESSAGE_DASHES )
-								+ getTextResourceService().getText(
-										ERROR_MODULE_AE_NOMETADATAFOUND ) );
+								 );
 
 				System.out
 						.print( "\r                                                                                                                                     " );

@@ -25,7 +25,7 @@ import org.apache.log4j.spi.LoggingEvent;
  * Erzeugt ein vollkommen "nacktes" Layout, welches nichts als die eigentliche
  * Message enthält.
  * 
- * @author razm Daniel Ludin, Bedag AG @version 0.2.0
+ * @author Rc Claire Röthlisberger, KOST-CECO
  */
 public class MessageOnlyLayout extends SimpleLayout
 {

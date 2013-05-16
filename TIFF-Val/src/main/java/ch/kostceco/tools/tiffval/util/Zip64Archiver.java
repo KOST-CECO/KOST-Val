@@ -30,7 +30,7 @@ import ch.enterag.utils.zip.FileEntry;
 import ch.enterag.utils.zip.Zip64File;
 
 /**
- * @author razm Daniel Ludin, Bedag AG @version 0.2.0 Diese Klasse benutzt die
+ * @author Rc Claire Röthlisberger, KOST-CECO Diese Klasse benutzt die
  *         Zip64File Library zum Komprimieren und Archivieren von Dateien,
  *         welche grösser als 4 G sein können. Es gibt momentan keine andere
  *         Software ausser pkzip, welche ein kommerzielles Produkt ist, die dazu

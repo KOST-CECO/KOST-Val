@@ -27,7 +27,7 @@ import ch.kostceco.tools.tiffval.validation.ValidationModule;
  * Validierungsschritt 1d Entspricht metadata.xml den Schemadateien in
  * /header/xsd? Allfällige XML Fehler werden angezeigt.
  * 
- * @author razm Daniel Ludin, Bedag AG @version 0.2.0
+ * @author Rc Claire Röthlisberger, KOST-CECO
  */
 
 public interface Validation1dMetadataModule extends ValidationModule

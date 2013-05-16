@@ -34,7 +34,7 @@ import ch.kostceco.tools.tiffval.util.Zip64Archiver;
  * Dies ist die Starter-Klasse, verantwortlich für das Initialisieren des
  * Controllers, des Loggings und das Parsen der Start-Parameter.
  * 
- * @author razm Daniel Ludin, Bedag AG @version 0.2.0
+ * @author Rc Claire Röthlisberger, KOST-CECO
  */
 public class TIFFVal implements MessageConstants
 {
