@@ -139,54 +139,6 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		return null;
 	}
 
-	@Override
-	public String getPathToPdftronExe()
-	{
-		Object prop = getConfig().getProperty( "pathtopdftronexe" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		return null;
-	}
-
-	@Override
-	public String getPathToPdftronOutputFolder()
-	{
-		Object prop = getConfig().getProperty( "pathtopdftronoutput" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		return null;
-	}
-
-	@Override
-	public String getPathToSiardValJar()
-	{
-		Object prop = getConfig().getProperty( "pathtosiardvaljar" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		return null;
-	}
-
-	@Override
-	public String getPathToSiardValOutputFolder()
-	{
-		Object prop = getConfig().getProperty( "pathtosiardvaloutput" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		return null;
-	}
-
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<ValidatedFormat> getValidatedFormats()

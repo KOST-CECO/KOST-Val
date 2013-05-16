@@ -48,41 +48,14 @@ public interface ConfigurationService extends Service
 	 * werden. Daher der konfigurierbare Name.
 	 * 
 	 * @return Namen des DROID Signature Files
-	 * @author Rc Claire Röthlisberger-Jourdan, KOST-CECO, @version 0.2.1, date
-	 *         28.03.2011
 	 */
 	String getPathToDroidSignatureFile();
 
 	String getPathOfDroidSignatureFile() throws MalformedURLException;
 
 	/**
-	 * Gibt den Pfad zum Pdftron Exe zurück.
-	 * 
-	 * @return Pfad zum Pdftron Exe
+	 * Diverse Angaben zu Jhove
 	 */
-	String getPathToPdftronExe();
-
-	/**
-	 * Gibt den Pfad zum Output Folder des Pdftron zurück.
-	 * 
-	 * @return Pfad zum Output Folder des Pdftron
-	 */
-	String getPathToPdftronOutputFolder();
-
-	/**
-	 * Gibt den Pfad zum Siard-Val Exe zurück.
-	 * 
-	 * @return Pfad zum Siard-Val Exe
-	 */
-	String getPathToSiardValJar();
-
-	/**
-	 * Gibt den Pfad zum Output Folder des Siard-Val zurück.
-	 * 
-	 * @return Pfad zum Output Folder des Siard-Val
-	 */
-	String getPathToSiardValOutputFolder();
-
 	String getPathToJhoveJar();
 
 	String getPathToJhoveOutput();

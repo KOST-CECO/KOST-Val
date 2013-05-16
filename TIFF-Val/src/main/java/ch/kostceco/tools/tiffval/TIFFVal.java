@@ -90,44 +90,21 @@ public class TIFFVal implements MessageConstants
 
 		TIFFVal TIFFVal = (TIFFVal) context
 				.getBean( "TIFFVal" );
-		System.out.print( TIFFVal.getTextResourceService().getText(
-				MESSAGE_WAIT ) );
-		System.out.flush();
 
 		// Ist die Anzahl Parameter (2) korrekt?
 		if ( args.length < 2 ) {
-			System.out
-					.print( "\r                                                                                                  " );
-			System.out.flush();
-			System.out.print( "\r" );
-			System.out.flush();
 			LOGGER.logInfo( TIFFVal.getTextResourceService().getText(
 					ERROR_PARAMETER_USAGE ) );
 			System.exit( 1 );
 		}
 
 		File sipDatei = new File( args[0] );
-		System.out
-				.print( "\r                                                                                                  " );
-		System.out.flush();
-		System.out.print( "\r" );
-		System.out.flush();
-
 		LOGGER.logInfo( TIFFVal.getTextResourceService().getText(
 				MESSAGE_tiffvalIDATION, sipDatei.getName() ) );
-		System.out.print( TIFFVal.getTextResourceService().getText(
-				MESSAGE_WAIT ) );
-		System.out.flush();
 
 		// die Anwendung muss mindestens unter Java 6 laufen
 		String javaRuntimeVersion = System.getProperty( "java.vm.version" );
 		if ( javaRuntimeVersion.compareTo( "1.6.0" ) < 0 ) {
-			System.out
-					.print( "\r                                                                                                  " );
-			System.out.flush();
-			System.out.print( "\r" );
-			System.out.flush();
-
 			LOGGER.logInfo( TIFFVal.getTextResourceService().getText(
 					ERROR_WRONG_JRE ) );
 			LOGGER.logInfo( TIFFVal.getTextResourceService().getText(
@@ -143,12 +120,6 @@ public class TIFFVal implements MessageConstants
 
 		// Im Logverzeichnis besteht kein Schreibrecht
 		if ( !directoryOfLogfile.canWrite() ) {
-			System.out
-					.print( "\r                                                                                                  " );
-			System.out.flush();
-			System.out.print( "\r" );
-			System.out.flush();
-
 			LOGGER.logInfo( TIFFVal.getTextResourceService().getText(
 					ERROR_LOGDIRECTORY_NOTWRITABLE, directoryOfLogfile ) );
 			LOGGER.logInfo( TIFFVal.getTextResourceService().getText(
@@ -157,12 +128,6 @@ public class TIFFVal implements MessageConstants
 		}
 
 		if ( !directoryOfLogfile.isDirectory() ) {
-			System.out
-					.print( "\r                                                                                                  " );
-			System.out.flush();
-			System.out.print( "\r" );
-			System.out.flush();
-
 			LOGGER.logInfo( TIFFVal.getTextResourceService().getText(
 					ERROR_LOGDIRECTORY_NODIRECTORY ) );
 			LOGGER.logInfo( TIFFVal.getTextResourceService().getText(
@@ -187,12 +152,6 @@ public class TIFFVal implements MessageConstants
 
 		// Im workverzeichnis besteht kein Schreibrecht
 		if ( !tmpDir.canWrite() ) {
-			System.out
-					.print( "\r                                                                                                  " );
-			System.out.flush();
-			System.out.print( "\r" );
-			System.out.flush();
-
 			LOGGER.logInfo( TIFFVal.getTextResourceService().getText(
 					ERROR_WORKDIRECTORY_NOTWRITABLE, tmpDir ) );
 			LOGGER.logInfo( TIFFVal.getTextResourceService().getText(
@@ -202,12 +161,6 @@ public class TIFFVal implements MessageConstants
 
 		// Ueberprüfung des 1. Parameters (SIP-Datei): existiert die Datei?
 		if ( !sipDatei.exists() ) {
-			System.out
-					.print( "\r                                                                                                  " );
-			System.out.flush();
-			System.out.print( "\r" );
-			System.out.flush();
-
 			LOGGER.logInfo( TIFFVal.getTextResourceService().getText(
 					ERROR_SIPFILE_FILENOTEXISTING ) );
 			LOGGER.logInfo( TIFFVal.getTextResourceService().getText(
@@ -240,12 +193,6 @@ public class TIFFVal implements MessageConstants
 				sipDatei = targetFile;
 
 			} catch ( Exception e ) {
-				System.out
-						.print( "\r                                                                                                  " );
-				System.out.flush();
-				System.out.print( "\r" );
-				System.out.flush();
-
 				LOGGER.logInfo( TIFFVal.getTextResourceService().getText(
 						ERROR_CANNOTCREATEZIP ) );
 				System.exit( 1 );
@@ -263,12 +210,6 @@ public class TIFFVal implements MessageConstants
 		// Ueberprüfung der optionalen Parameter (3. und 4.)
 		if ( args.length == 3
 				&& !(args[2].equals( "+3c" ) || args[2].equals( "+3d" )) ) {
-			System.out
-					.print( "\r                                                                                                  " );
-			System.out.flush();
-			System.out.print( "\r" );
-			System.out.flush();
-
 			LOGGER.logInfo( TIFFVal.getTextResourceService().getText(
 					ERROR_PARAMETER_OPTIONAL_1 ) );
 			System.exit( 1 );
@@ -276,12 +217,6 @@ public class TIFFVal implements MessageConstants
 
 		if ( args.length == 4
 				&& !(args[2].equals( "+3c" ) && args[3].equals( "+3d" )) ) {
-			System.out
-					.print( "\r                                                             " );
-			System.out.flush();
-			System.out.print( "\r" );
-			System.out.flush();
-
 			LOGGER.logInfo( TIFFVal.getTextResourceService().getText(
 					ERROR_PARAMETER_OPTIONAL_2 ) );
 			System.exit( 1 );
@@ -295,11 +230,6 @@ public class TIFFVal implements MessageConstants
 			File fJhoveApp = new File( jhoveApp );
 			if ( !fJhoveApp.exists()
 					|| !fJhoveApp.getName().equals( "JhoveApp.jar" ) ) {
-				System.out
-						.print( "\r                                                                                                  " );
-				System.out.flush();
-				System.out.print( "\r" );
-				System.out.flush();
 
 				LOGGER.logInfo( TIFFVal.getTextResourceService().getText(
 						ERROR_JHOVEAPP_MISSING ) );
@@ -313,11 +243,6 @@ public class TIFFVal implements MessageConstants
 			File fJhoveConf = new File( jhoveConf );
 			if ( !fJhoveConf.exists()
 					|| !fJhoveConf.getName().equals( "jhove.conf" ) ) {
-				System.out
-						.print( "\r                                                                                                  " );
-				System.out.flush();
-				System.out.print( "\r" );
-				System.out.flush();
 
 				LOGGER.logInfo( TIFFVal.getTextResourceService().getText(
 						ERROR_JHOVECONF_MISSING ) );
@@ -330,12 +255,6 @@ public class TIFFVal implements MessageConstants
 				.getBean( "logconfigurator" );
 		String logFileName = logConfigurator.configure(
 				directoryOfLogfile.getAbsolutePath(), sipDatei.getName() );
-
-		System.out
-				.print( "\r                                                                                                  " );
-		System.out.flush();
-		System.out.print( "\r" );
-		System.out.flush();
 
 		LOGGER.logError( TIFFVal.getTextResourceService().getText(
 				MESSAGE_tiffvalIDATION, sipDatei.getName() ) );
@@ -378,16 +297,6 @@ public class TIFFVal implements MessageConstants
 		if ( Util.getPathToReportJHove() != null ) {
 			LOGGER.logInfo( TIFFVal.getTextResourceService().getText(
 					MESSAGE_FOOTER_REPORTJHOVE, Util.getPathToReportJHove() ) );
-		}
-		if ( Util.getPathToReportPdftron() != null ) {
-			LOGGER.logInfo( TIFFVal.getTextResourceService()
-					.getText( MESSAGE_FOOTER_REPORTPDFTRON,
-							Util.getPathToReportPdftron() ) );
-		}
-		if ( Util.getPathToReportSiardVal() != null ) {
-			LOGGER.logInfo( TIFFVal.getTextResourceService().getText(
-					MESSAGE_FOOTER_REPORTSIARDVAL,
-					Util.getPathToReportSiardVal() ) );
 		}
 
 		LOGGER.logInfo( "" );

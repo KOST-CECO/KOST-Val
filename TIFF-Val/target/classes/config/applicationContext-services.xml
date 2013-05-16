@@ -23,14 +23,6 @@
 		class="ch.kostceco.tools.tiffval.service.impl.MessageServiceImpl">
 	</bean>
 
-	<bean id="pdftronService"
-		class="ch.kostceco.tools.tiffval.service.impl.PdftronServiceImpl">
-	</bean>
-
-	<bean id="siardValService"
-		class="ch.kostceco.tools.tiffval.service.impl.SiardValServiceImpl">
-	</bean>
-
 	<bean id="jhoveService"
 		class="ch.kostceco.tools.tiffval.service.impl.JhoveServiceImpl">
 		<property name="configurationService" ref="configurationService" />
@@ -53,8 +45,6 @@
 	<bean id="validation3cFormatValidationModule" class="ch.kostceco.tools.tiffval.validation.module3.impl.Validation3cFormatValidationModuleImpl">
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="messageService" ref="messageService" />
-		<property name="pdftronService" ref="pdftronService" />
-		<property name="siardValService" ref="siardValService" />
 		<property name="jhoveService" ref="jhoveService" />
 		<property name="configurationService" ref="configurationService" />
 	</bean>
