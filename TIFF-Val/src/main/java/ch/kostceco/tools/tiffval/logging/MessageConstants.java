@@ -57,12 +57,11 @@ public interface MessageConstants
 	String	MESSAGE_MODULE_INVALID							= "message.module.invalid";
 	String	MESSAGE_MODULE_INVALID_2ARGS					= "message.module.invalid.2args";
 
-	String	MESSAGE_MODULE_Aa								= "message.module.aa";
-	String	MESSAGE_MODULE_Cc								= "message.module.cc";
+	String	MESSAGE_MODULE_A								= "message.module.a";
+	String	MESSAGE_MODULE_B								= "message.module.b";
 
-	String	MESSAGE_STEPERGEBNIS_Aa							= "message.stepergebnis.aa";
-	String	MESSAGE_STEPERGEBNIS_Ad							= "message.stepergebnis.ad";
-	String	MESSAGE_STEPERGEBNIS_Cc							= "message.stepergebnis.cc";
+	String	MESSAGE_STEPERGEBNIS_A							= "message.stepergebnis.a";
+	String	MESSAGE_STEPERGEBNIS_B							= "message.stepergebnis.b";
 
 	String	MESSAGE_DASHES									= "message.dashes";
 	String	MESSAGE_INDENT									= "message.indent";
@@ -73,20 +72,13 @@ public interface MessageConstants
 	String	MESSAGE_CONFIGURATION_ERROR_3					= "message.configuration.error.3";
 	String	MESSAGE_CONFIGURATION_ERROR_NO_SIGNATURE		= "message.configuration.error.no.signature";
 
-	String	ERROR_CANNOT_INITIALIZE_DROID					= "error.cannot.initialize.droid";
 
 	String	ERROR_UNKNOWN									= "error.unknown";
 
-	// Modul 1a Meldungen
+	// Modul A Meldungen
 	String	ERROR_MODULE_A_INCORRECTFILEENDING				= "error.module.a.incorrectfileending";
 
-	// Modul 1d Meldungen
-	String	ERROR_MODULE_AD_WRONGNUMBEROFXSDS				= "error.module.ad.wrongnumberofxsds";
-	String	ERROR_MODULE_AD_CONTENTB4HEADER					= "error.module.ad.contentB4header";
-	String	ERROR_MODULE_AD_METADATA_ERRORS					= "error.module.ad.metadata.errors";
-
-	// Modul 3c Meldungen
-	String	MESSAGE_MODULE_CC_CANNOTWRITEJHOVEREPORT		= "message.module.cc.cannotwritejhovereport";
-	String	MESSAGE_MODULE_CC_INVALID						= "message.module.cc.invalid";
-	String	MESSAGE_MODULE_CC_NOJHOVEVAL					= "message.module.cc.nojhoveval";
+	// Modul B Meldungen
+	String	MESSAGE_MODULE_B_CANNOTWRITEJHOVEREPORT		= "message.module.b.cannotwritejhovereport";
+	String	MESSAGE_MODULE_B_NOJHOVEVAL					= "message.module.b.nojhoveval";
 }

@@ -20,13 +20,13 @@ package ch.kostceco.tools.tiffval.controller;
 
 import java.io.File;
 
-import ch.kostceco.tools.tiffval.exception.module1.Validation1aZipException;
-import ch.kostceco.tools.tiffval.exception.module3.Validation3cFormatValidationException;
+import ch.kostceco.tools.tiffval.exception.module1.ValidationArecognitionException;
+import ch.kostceco.tools.tiffval.exception.module3.ValidationBjhoveValidationException;
 import ch.kostceco.tools.tiffval.logging.Logger;
 import ch.kostceco.tools.tiffval.logging.MessageConstants;
 import ch.kostceco.tools.tiffval.service.TextResourceService;
-import ch.kostceco.tools.tiffval.validation.module1.Validation1aZipModule;
-import ch.kostceco.tools.tiffval.validation.module3.Validation3cFormatValidationModule;
+import ch.kostceco.tools.tiffval.validation.module1.ValidationArecognitionModule;
+import ch.kostceco.tools.tiffval.validation.module2.ValidationBjhoveValidationModule;
 
 /**
  * Der Controller ruft die benötigten Module zur Validierung des SIP-Archivs in
@@ -43,36 +43,31 @@ public class Controller implements MessageConstants
 	private static final Logger						LOGGER	= new Logger(
 																	Controller.class );
 
-	private Validation1aZipModule					validation1aZipModule;
-
-//	private Validation1dMetadataModule				validation1dMetadataModule;
-
-	private Validation3cFormatValidationModule		validation3cFormatValidationModule;
-
-	
+	private ValidationArecognitionModule					validationArecognitionModule;
+	private ValidationBjhoveValidationModule		validationBjhoveValidationModule;
 
 	private TextResourceService						textResourceService;
 
-	public Validation1aZipModule getValidation1aZipModule()
+	public ValidationArecognitionModule getValidationArecognitionModule()
 	{
-		return validation1aZipModule;
+		return validationArecognitionModule;
 	}
 
-	public void setValidation1aZipModule(
-			Validation1aZipModule validation1aZipModule )
+	public void setValidationArecognitionModule(
+			ValidationArecognitionModule validationArecognitionModule )
 	{
-		this.validation1aZipModule = validation1aZipModule;
+		this.validationArecognitionModule = validationArecognitionModule;
 	}
 
-	public Validation3cFormatValidationModule getValidation3cFormatValidationModule()
+	public ValidationBjhoveValidationModule getValidationBjhoveValidationModule()
 	{
-		return validation3cFormatValidationModule;
+		return validationBjhoveValidationModule;
 	}
 
-	public void setValidation3cFormatValidationModule(
-			Validation3cFormatValidationModule validation3cFormatValidationModule )
+	public void setValidationBjhoveValidationModule(
+			ValidationBjhoveValidationModule validationBjhoveValidationModule )
 	{
-		this.validation3cFormatValidationModule = validation3cFormatValidationModule;
+		this.validationBjhoveValidationModule = validationBjhoveValidationModule;
 	}
 
 
@@ -92,29 +87,29 @@ public class Controller implements MessageConstants
 
 		// Validation Step Aa
 		try {
-			if ( this.getValidation1aZipModule().validate( tiffDatei ) ) {
+			if ( this.getValidationArecognitionModule().validate( tiffDatei ) ) {
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_MODULE_VALID,
-						getTextResourceService().getText( MESSAGE_MODULE_Aa ) ) );
-				this.getValidation1aZipModule().getMessageService().print();
+						getTextResourceService().getText( MESSAGE_MODULE_A ) ) );
+				this.getValidationArecognitionModule().getMessageService().print();
 			} else {
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_MODULE_INVALID,
-						getTextResourceService().getText( MESSAGE_MODULE_Aa ) )
+						getTextResourceService().getText( MESSAGE_MODULE_A ) )
 						+ getTextResourceService().getText(
-								MESSAGE_STEPERGEBNIS_Aa ) );
+								MESSAGE_STEPERGEBNIS_A ) );
 				// Ein negatives Validierungsresultat in diesem Schritt führt
 				// zum Abbruch der weiteren Verarbeitung
-				this.getValidation1aZipModule().getMessageService().print();
+				this.getValidationArecognitionModule().getMessageService().print();
 				return false;
 			}
 
-		} catch ( Validation1aZipException e ) {
+		} catch ( ValidationArecognitionException e ) {
 			LOGGER.logInfo( getTextResourceService().getText(
 					MESSAGE_MODULE_INVALID_2ARGS,
-					getTextResourceService().getText( MESSAGE_MODULE_Aa ),
+					getTextResourceService().getText( MESSAGE_MODULE_A ),
 					e.getMessage() ) );
-			this.getValidation1aZipModule().getMessageService().print();
+			this.getValidationArecognitionModule().getMessageService().print();
 			return false;
 
 		} catch ( Exception e ) {
@@ -129,40 +124,32 @@ public class Controller implements MessageConstants
 	public boolean executeOptional( File tiffDatei )
 	{
 		boolean valid = true;
-
-		return valid;
-	}
-
-	public boolean execute3c( File tiffDatei )
-	{
-		boolean valid = true;
-
 		// Validation Step 3c
 		try {
-			if ( this.getValidation3cFormatValidationModule().validate(
+			if ( this.getValidationBjhoveValidationModule().validate(
 					tiffDatei ) ) {
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_MODULE_VALID,
-						getTextResourceService().getText( MESSAGE_MODULE_Cc ) ) );
-				this.getValidation3cFormatValidationModule()
+						getTextResourceService().getText( MESSAGE_MODULE_B ) ) );
+				this.getValidationBjhoveValidationModule()
 						.getMessageService().print();
 			} else {
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_MODULE_INVALID,
-						getTextResourceService().getText( MESSAGE_MODULE_Cc ) )
+						getTextResourceService().getText( MESSAGE_MODULE_B ) )
 						+ getTextResourceService().getText(
-								MESSAGE_STEPERGEBNIS_Cc ) );
-				this.getValidation3cFormatValidationModule()
+								MESSAGE_STEPERGEBNIS_B ) );
+				this.getValidationBjhoveValidationModule()
 						.getMessageService().print();
 				valid = false;
 			}
 
-		} catch ( Validation3cFormatValidationException e ) {
+		} catch ( ValidationBjhoveValidationException e ) {
 			LOGGER.logInfo( getTextResourceService().getText(
 					MESSAGE_MODULE_INVALID_2ARGS,
-					getTextResourceService().getText( MESSAGE_MODULE_Cc ),
+					getTextResourceService().getText( MESSAGE_MODULE_B ),
 					e.getMessage() ) );
-			this.getValidation3cFormatValidationModule().getMessageService()
+			this.getValidationBjhoveValidationModule().getMessageService()
 					.print();
 			return false;
 		} catch ( Exception e ) {
@@ -172,8 +159,5 @@ public class Controller implements MessageConstants
 		}
 
 		return valid;
-
 	}
-
-
 }

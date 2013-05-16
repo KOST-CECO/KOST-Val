@@ -16,25 +16,19 @@ if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth F
 Boston, MA 02110-1301 USA or see <http://www.gnu.org/licenses/>.
 ==============================================================================================*/
 
-package ch.kostceco.tools.tiffval.exception.module3;
+package ch.kostceco.tools.tiffval.exception.module1;
 
 import ch.kostceco.tools.tiffval.exception.TIFFValException;
 
-public class Validation3cFormatValidationException extends
-		TIFFValException
+public class ValidationArecognitionException extends TIFFValException
 {
 
 	/**
 	 * @author Rc Claire Röthlisberger, KOST-CECO
 	 */
-	private static final long	serialVersionUID	= -2554852466330221247L;
+	private static final long	serialVersionUID	= -8816841335398903517L;
 
-	public Validation3cFormatValidationException()
-	{
-		super();
-	}
-
-	public Validation3cFormatValidationException( String message )
+	public ValidationArecognitionException( String message )
 	{
 		super( message );
 	}

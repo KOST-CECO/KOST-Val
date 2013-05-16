@@ -15,7 +15,7 @@ if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth F
 Boston, MA 02110-1301 USA or see <http://www.gnu.org/licenses/>.
 ==============================================================================================*/
 
-package ch.kostceco.tools.tiffval.validation.module3.impl;
+package ch.kostceco.tools.tiffval.validation.module2.impl;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -34,20 +34,20 @@ import java.util.Set;
 import ch.enterag.utils.zip.EntryInputStream;
 import ch.enterag.utils.zip.FileEntry;
 import ch.enterag.utils.zip.Zip64File;
-import ch.kostceco.tools.tiffval.exception.module3.Validation3cFormatValidationException;
+import ch.kostceco.tools.tiffval.exception.module3.ValidationBjhoveValidationException;
 import ch.kostceco.tools.tiffval.service.ConfigurationService;
 import ch.kostceco.tools.tiffval.service.JhoveService;
 import ch.kostceco.tools.tiffval.service.vo.ValidatedFormat;
 import ch.kostceco.tools.tiffval.util.Util;
 import ch.kostceco.tools.tiffval.validation.ValidationModuleImpl;
-import ch.kostceco.tools.tiffval.validation.module3.Validation3cFormatValidationModule;
+import ch.kostceco.tools.tiffval.validation.module2.ValidationBjhoveValidationModule;
 
 /**
  * @author Rc Claire Röthlisberger, KOST-CECO
  */
 
-public class Validation3cFormatValidationModuleImpl extends
-		ValidationModuleImpl implements Validation3cFormatValidationModule
+public class ValidationBjhoveValidationModuleImpl extends
+		ValidationModuleImpl implements ValidationBjhoveValidationModule
 {
 
 	private ConfigurationService	configurationService;
@@ -78,7 +78,7 @@ public class Validation3cFormatValidationModuleImpl extends
 
 	@Override
 	public boolean validate( File tiffDatei )
-			throws Validation3cFormatValidationException
+			throws ValidationBjhoveValidationException
 	{
 
 		boolean isValid = true;
@@ -99,7 +99,7 @@ public class Validation3cFormatValidationModuleImpl extends
 				.getPathToDroidSignatureFile();
 		if ( nameOfSignature == null ) {
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_Cc )
+					getTextResourceService().getText( MESSAGE_MODULE_B )
 							+ getTextResourceService().getText( MESSAGE_DASHES )
 							+ getTextResourceService().getText(
 									MESSAGE_CONFIGURATION_ERROR_NO_SIGNATURE ) );
@@ -143,7 +143,7 @@ public class Validation3cFormatValidationModuleImpl extends
 			zipfile.close();
 		} catch ( Exception e ) {
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_Cc )
+					getTextResourceService().getText( MESSAGE_MODULE_B )
 							+ getTextResourceService().getText( MESSAGE_DASHES )
 							+ e.getMessage() );
 			return false;
@@ -179,15 +179,7 @@ public class Validation3cFormatValidationModuleImpl extends
 		for ( Iterator<String> iterator = fileKeys.iterator(); iterator
 				.hasNext(); ) {
 			String fileKey = iterator.next();
-			boolean selected = false;
-
-			selected = true;
-
-			// die PUID des SIP-Files wurde in der Liste der zu validierenden
-			// Formate (gemäss Konfigurationsdatei) gefunden
-			if ( selected ) {
 				filesToProcessWithJhove.add( fileKey );
-			}
 		}
 
 		// alt: alle Files, die mit JHove verarbeitet werden, bulk-mässig an die
@@ -223,7 +215,7 @@ public class Validation3cFormatValidationModuleImpl extends
 		StringBuffer concatenatedOutputs = new StringBuffer();
 
 		String pathToJhoveJar = getConfigurationService().getPathToJhoveJar();
-		// Informationen zum Jhove-Jogverzeichnis holen
+		// Informationen zum Jhove-Logverzeichnis holen
 		String pathToJhoveOutput = getConfigurationService()
 				.getPathToJhoveOutput();
 
@@ -296,26 +288,23 @@ public class Validation3cFormatValidationModuleImpl extends
 						}
 					}
 					in.close();
-
 				} catch ( Exception e ) {
 					getMessageService().logError(
 							getTextResourceService()
-									.getText( MESSAGE_MODULE_Cc )
+									.getText( MESSAGE_MODULE_B )
 									+ getTextResourceService().getText(
 											MESSAGE_DASHES ) + e.getMessage() );
 					return false;
 				}
-
 			} else {
 				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_Cc )
+						getTextResourceService().getText( MESSAGE_MODULE_B )
 								+ getTextResourceService().getText(
 										MESSAGE_DASHES )
 								+ getTextResourceService().getText(
-										MESSAGE_MODULE_CC_NOJHOVEVAL )
+										MESSAGE_MODULE_B_NOJHOVEVAL )
 								+ extension );
 			}
-
 		}
 
 		// die im StringBuffer konkatinierten Outputs der einzelnen
@@ -333,36 +322,15 @@ public class Validation3cFormatValidationModuleImpl extends
 				getMessageService()
 						.logError(
 								getTextResourceService().getText(
-										MESSAGE_MODULE_Cc )
+										MESSAGE_MODULE_B )
 										+ getTextResourceService().getText(
 												MESSAGE_DASHES )
 										+ getTextResourceService()
 												.getText(
-														MESSAGE_MODULE_CC_CANNOTWRITEJHOVEREPORT ) );
+														MESSAGE_MODULE_B_CANNOTWRITEJHOVEREPORT ) );
 				return false;
 			}
 		}
-
-		Set<String> validKeys = countPerExtensionValid.keySet();
-		for ( String validKey : validKeys ) {
-			Integer valid = countPerExtensionValid.get( validKey );
-			if ( valid == null ) {
-				valid = new Integer( 0 );
-			}
-			Integer invalid = countPerExtensionInvalid.get( validKey );
-			if ( invalid == null ) {
-				invalid = new Integer( 0 );
-			}
-
-			String msg = validKey + " Valid = " + valid.toString()
-					+ ", Invalid = " + invalid.toString();
-
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_Cc )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
-							+ msg );
-		}
-
 		return isValid;
 	}
 

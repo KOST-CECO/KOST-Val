@@ -16,21 +16,28 @@ if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth F
 Boston, MA 02110-1301 USA or see <http://www.gnu.org/licenses/>.
 ==============================================================================================*/
 
-package ch.kostceco.tools.tiffval.exception.module1;
+package ch.kostceco.tools.tiffval.validation.module2;
 
-import ch.kostceco.tools.tiffval.exception.TIFFValException;
+import java.io.File;
 
-public class Validation1aZipException extends TIFFValException
+import ch.kostceco.tools.tiffval.exception.module3.ValidationBjhoveValidationException;
+import ch.kostceco.tools.tiffval.validation.ValidationModule;
+
+/**
+ * Validierungsschritt 3c (einschaltbar) Formatvalidierung, mit JHOVE oder einer
+ * ähnlichen Lösung sowie mit einem externem PDF/A-Validator (z.B. PDF/A Manager
+ * von PDFTRON) aller nach Dateiformat ausgewählten Dateien in /content
+ * (konfigurierbare Liste von den zu validierenden Dateiformaten).
+ * Referenzierung in Log-Datei zu den allfälligen zusätzlich generierten
+ * Logdateien der eingesetzten Programme.
+ * 
+ * @author Rc Claire Röthlisberger, KOST-CECO
+ */
+
+public interface ValidationBjhoveValidationModule extends ValidationModule
 {
 
-	/**
-	 * @author Rc Claire Röthlisberger, KOST-CECO
-	 */
-	private static final long	serialVersionUID	= -8816841335398903517L;
-
-	public Validation1aZipException( String message )
-	{
-		super( message );
-	}
+	public boolean validate( File tiffDatei )
+			throws ValidationBjhoveValidationException;
 
 }

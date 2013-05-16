@@ -66,14 +66,8 @@ public class TIFFVal implements MessageConstants
 	}
 
 	/**
-	 * Die Minimaleingabe besteht aus Parameter 1: Pfad zum SIP-File Parameter
+	 * Die Minimaleingabe besteht aus Parameter 1: Pfad zum TIFF-File Parameter
 	 * 2: Pfad zum Logging-Verzeichnis
-	 * 
-	 * Optional: Parameter 3: die optionalen Validierungsschritte (+3c oder +3d)
-	 * Parameter 4: die optionalen Validierungsschritte (+3d)
-	 * 
-	 * Beispiel: java -jar C:\ludin\A6Z-TIFF-Validator\SIP-Beispiele
-	 * etc\1.1.1.a)_SIP_20101018_RIS_4.zip C:\ludin\TIFFVal-logs +3d
 	 * 
 	 * @param args
 	 */
@@ -168,6 +162,7 @@ public class TIFFVal implements MessageConstants
 			System.exit( 1 );
 		}
 
+		// TODO: Umschreiben auf nur eine TIFF-Datei
 		// Ueberprüfung des 1. Parameters (SIP-Datei): ist die Datei ein
 		// Verzeichnis?
 		// Wenn ja, wird im work-Verzeichnis eine Zip-Datei daraus erstellt,
@@ -208,7 +203,7 @@ public class TIFFVal implements MessageConstants
 		}
 
 		// Ueberprüfung der optionalen Parameter (3. und 4.)
-		if ( args.length == 3
+/*		if ( args.length == 3
 				&& !(args[2].equals( "+3c" ) || args[2].equals( "+3d" )) ) {
 			LOGGER.logInfo( TIFFVal.getTextResourceService().getText(
 					ERROR_PARAMETER_OPTIONAL_1 ) );
@@ -220,9 +215,10 @@ public class TIFFVal implements MessageConstants
 			LOGGER.logInfo( TIFFVal.getTextResourceService().getText(
 					ERROR_PARAMETER_OPTIONAL_2 ) );
 			System.exit( 1 );
-		}
+		}*/
 
-		if ( args.length > 2 && args[2].equals( "+3c" ) ) {
+		// Initialisierung Modul B (JHove-Validierung)
+//		if ( args.length > 2 && args[2].equals( "+3c" ) ) {
 			// überprüfen der Konfiguration: existiert die JHoveApp.jar am
 			// angebenen Ort?
 			String jhoveApp = TIFFVal.getConfigurationService()
@@ -248,7 +244,7 @@ public class TIFFVal implements MessageConstants
 						ERROR_JHOVECONF_MISSING ) );
 				System.exit( 1 );
 			}
-		}
+//		}
 
 		// Konfiguration des Loggings, ein File Logger wird zusätzlich erstellt
 		LogConfigurator logConfigurator = (LogConfigurator) context
@@ -271,11 +267,6 @@ public class TIFFVal implements MessageConstants
 
 			ok = controller.executeOptional( tiffDatei );
 
-			// Ausführen der beiden optionalen Schritte
-			if ( args.length > 2 && args[2].equals( "+3c" ) ) {
-				boolean ok3c = controller.execute3c( tiffDatei );
-				ok = ok && ok3c;
-			}
 
 
 		}

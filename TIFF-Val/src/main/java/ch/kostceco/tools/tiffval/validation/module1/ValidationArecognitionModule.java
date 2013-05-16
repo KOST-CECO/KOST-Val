@@ -20,7 +20,7 @@ package ch.kostceco.tools.tiffval.validation.module1;
 
 import java.io.File;
 
-import ch.kostceco.tools.tiffval.exception.module1.Validation1aZipException;
+import ch.kostceco.tools.tiffval.exception.module1.ValidationArecognitionException;
 import ch.kostceco.tools.tiffval.validation.ValidationModule;
 
 /**
@@ -30,9 +30,9 @@ import ch.kostceco.tools.tiffval.validation.ValidationModule;
  * @author Rc Claire Röthlisberger, KOST-CECO Daniel Ludin, Bedag AG
  */
 
-public interface Validation1aZipModule extends ValidationModule
+public interface ValidationArecognitionModule extends ValidationModule
 {
 
-	public boolean validate( File tiffDatei ) throws Validation1aZipException;
+	public boolean validate( File tiffDatei ) throws ValidationArecognitionException;
 
 }

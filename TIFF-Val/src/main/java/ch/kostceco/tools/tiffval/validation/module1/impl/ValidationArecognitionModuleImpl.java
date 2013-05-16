@@ -23,9 +23,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.Arrays;
 
-import ch.kostceco.tools.tiffval.exception.module1.Validation1aZipException;
+import ch.kostceco.tools.tiffval.exception.module1.ValidationArecognitionException;
 import ch.kostceco.tools.tiffval.validation.ValidationModuleImpl;
-import ch.kostceco.tools.tiffval.validation.module1.Validation1aZipModule;
+import ch.kostceco.tools.tiffval.validation.module1.ValidationArecognitionModule;
 import ch.enterag.utils.zip.Zip64File;
 
 /**
@@ -36,12 +36,12 @@ import ch.enterag.utils.zip.Zip64File;
  * 
  * @author Rc Claire Röthlisberger, KOST-CECO
  */
-public class Validation1aZipModuleImpl extends ValidationModuleImpl implements
-		Validation1aZipModule
+public class ValidationArecognitionModuleImpl extends ValidationModuleImpl implements
+		ValidationArecognitionModule
 {
 
 	@Override
-	public boolean validate( File tiffDatei ) throws Validation1aZipException
+	public boolean validate( File tiffDatei ) throws ValidationArecognitionException
 	{
 
 		boolean valid = false;
@@ -86,7 +86,7 @@ public class Validation1aZipModuleImpl extends ValidationModuleImpl implements
 				}
 			} catch ( Exception e ) {
 				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_Aa )
+						getTextResourceService().getText( MESSAGE_MODULE_A )
 								+ getTextResourceService().getText(
 										MESSAGE_DASHES ) + e.getMessage() );
 				return false;
@@ -99,7 +99,7 @@ public class Validation1aZipModuleImpl extends ValidationModuleImpl implements
 				|| valid == false ) {
 
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_Aa )
+					getTextResourceService().getText( MESSAGE_MODULE_A )
 							+ getTextResourceService().getText( MESSAGE_DASHES )
 							+ getTextResourceService().getText(
 									ERROR_MODULE_A_INCORRECTFILEENDING ) );
@@ -117,7 +117,7 @@ public class Validation1aZipModuleImpl extends ValidationModuleImpl implements
 
 		} catch ( Exception e ) {
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_Aa )
+					getTextResourceService().getText( MESSAGE_MODULE_A )
 							+ getTextResourceService().getText( MESSAGE_DASHES )
 							+ e.getMessage() );
 

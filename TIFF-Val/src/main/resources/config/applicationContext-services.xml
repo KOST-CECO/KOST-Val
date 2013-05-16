@@ -29,12 +29,12 @@
 	</bean>
 
 	<!-- Validation Services -->
-	<bean id="validation1aZipModule" class="ch.kostceco.tools.tiffval.validation.module1.impl.Validation1aZipModuleImpl">
+	<bean id="validationArecognitionModule" class="ch.kostceco.tools.tiffval.validation.module1.impl.ValidationArecognitionModuleImpl">
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="messageService" ref="messageService" />
 	</bean>
 
-	<bean id="validation3cFormatValidationModule" class="ch.kostceco.tools.tiffval.validation.module3.impl.Validation3cFormatValidationModuleImpl">
+	<bean id="validationBjhoveValidationModule" class="ch.kostceco.tools.tiffval.validation.module2.impl.ValidationBjhoveValidationModuleImpl">
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="messageService" ref="messageService" />
 		<property name="jhoveService" ref="jhoveService" />
@@ -52,8 +52,8 @@
 
 	<bean id="controller" class="ch.kostceco.tools.tiffval.controller.Controller">
 		<property name="textResourceService" ref="textResourceService" />
-		<property name="validation1aZipModule" ref="validation1aZipModule" />
-		<property name="validation3cFormatValidationModule" ref="validation3cFormatValidationModule" />
+		<property name="validationArecognitionModule" ref="validationArecognitionModule" />
+		<property name="validationBjhoveValidationModule" ref="validationBjhoveValidationModule" />
 	</bean>
 
 </beans>
