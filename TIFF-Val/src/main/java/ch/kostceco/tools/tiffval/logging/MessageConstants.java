@@ -58,7 +58,6 @@ public interface MessageConstants
 	String	MESSAGE_MODULE_INVALID_2ARGS					= "message.module.invalid.2args";
 
 	String	MESSAGE_MODULE_Aa								= "message.module.aa";
-	String	MESSAGE_MODULE_Ad								= "message.module.ad";
 	String	MESSAGE_MODULE_Cc								= "message.module.cc";
 
 	String	MESSAGE_STEPERGEBNIS_Aa							= "message.stepergebnis.aa";

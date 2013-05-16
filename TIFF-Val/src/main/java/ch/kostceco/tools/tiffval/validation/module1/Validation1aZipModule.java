@@ -33,6 +33,6 @@ import ch.kostceco.tools.tiffval.validation.ValidationModule;
 public interface Validation1aZipModule extends ValidationModule
 {
 
-	public boolean validate( File sipDatei ) throws Validation1aZipException;
+	public boolean validate( File tiffDatei ) throws Validation1aZipException;
 
 }

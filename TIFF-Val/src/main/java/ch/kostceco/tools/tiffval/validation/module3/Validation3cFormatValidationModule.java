@@ -37,7 +37,7 @@ import ch.kostceco.tools.tiffval.validation.ValidationModule;
 public interface Validation3cFormatValidationModule extends ValidationModule
 {
 
-	public boolean validate( File sipDatei )
+	public boolean validate( File tiffDatei )
 			throws Validation3cFormatValidationException;
 
 }

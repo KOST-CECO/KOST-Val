@@ -29,6 +29,11 @@ import ch.kostceco.tools.tiffval.validation.module1.Validation1aZipModule;
 import ch.enterag.utils.zip.Zip64File;
 
 /**
+ * Validierungsschritt A (Erkennung) Ist es eine TIFF-Datei? valid
+ * --> Extension: tiff / tif valid --> beginnt mit II*. [49492A00] oder mit MM.* [4D4D002A]
+ * ==> Bei dem Modul A wird die Validierung abgebrochen, sollte das Resulat invalid
+ * sein!
+ * 
  * @author Rc Claire Röthlisberger, KOST-CECO
  */
 public class Validation1aZipModuleImpl extends ValidationModuleImpl implements
@@ -36,19 +41,19 @@ public class Validation1aZipModuleImpl extends ValidationModuleImpl implements
 {
 
 	@Override
-	public boolean validate( File sipDatei ) throws Validation1aZipException
+	public boolean validate( File tiffDatei ) throws Validation1aZipException
 	{
 
 		boolean valid = false;
 
-		// Eine ZIP Datei muss mit PK.. beginnen
-		if ( (sipDatei.getAbsolutePath().toLowerCase().endsWith( ".zip" ) || sipDatei
+		// Eine TIFF Datei muss entweder mit II*. [49492A00] oder mit MM.* [4D4D002A] beginnen
+		if ( (tiffDatei.getAbsolutePath().toLowerCase().endsWith( ".zip" ) || tiffDatei
 				.getAbsolutePath().toLowerCase().endsWith( ".zip64" )) ) {
 
 			FileReader fr = null;
 
 			try {
-				fr = new FileReader( sipDatei );
+				fr = new FileReader( tiffDatei );
 				BufferedReader read = new BufferedReader( fr );
 
 				// Hex 03 in Char umwandeln
@@ -89,7 +94,7 @@ public class Validation1aZipModuleImpl extends ValidationModuleImpl implements
 		}
 
 		// wenn die Datei kein Directory ist, muss sie mit zip oder zip64 enden
-		if ( (!(sipDatei.getAbsolutePath().toLowerCase().endsWith( ".zip" ) || sipDatei
+		if ( (!(tiffDatei.getAbsolutePath().toLowerCase().endsWith( ".zip" ) || tiffDatei
 				.getAbsolutePath().toLowerCase().endsWith( ".zip64" )))
 				|| valid == false ) {
 
@@ -106,7 +111,7 @@ public class Validation1aZipModuleImpl extends ValidationModuleImpl implements
 
 		try {
 			// Versuche das ZIP file zu öffnen
-			zf = new Zip64File( sipDatei );
+			zf = new Zip64File( tiffDatei );
 			// und wenn es klappt, gleich wieder schliessen
 			zf.close();
 

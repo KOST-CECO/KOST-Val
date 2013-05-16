@@ -98,9 +98,9 @@ public class TIFFVal implements MessageConstants
 			System.exit( 1 );
 		}
 
-		File sipDatei = new File( args[0] );
+		File tiffDatei = new File( args[0] );
 		LOGGER.logInfo( TIFFVal.getTextResourceService().getText(
-				MESSAGE_tiffvalIDATION, sipDatei.getName() ) );
+				MESSAGE_tiffvalIDATION, tiffDatei.getName() ) );
 
 		// die Anwendung muss mindestens unter Java 6 laufen
 		String javaRuntimeVersion = System.getProperty( "java.vm.version" );
@@ -160,7 +160,7 @@ public class TIFFVal implements MessageConstants
 		}
 
 		// Ueberprüfung des 1. Parameters (SIP-Datei): existiert die Datei?
-		if ( !sipDatei.exists() ) {
+		if ( !tiffDatei.exists() ) {
 			LOGGER.logInfo( TIFFVal.getTextResourceService().getText(
 					ERROR_SIPFILE_FILENOTEXISTING ) );
 			LOGGER.logInfo( TIFFVal.getTextResourceService().getText(
@@ -179,18 +179,18 @@ public class TIFFVal implements MessageConstants
 		// Zip-File handelt.
 		// Informationen zum Arbeitsverzeichnis holen
 
-		String originalSipName = sipDatei.getAbsolutePath();
-		if ( sipDatei.isDirectory() ) {
+		String originalSipName = tiffDatei.getAbsolutePath();
+		if ( tiffDatei.isDirectory() ) {
 			if ( tmpDir.exists() ) {
 				Util.deleteDir( tmpDir );
 			}
 			tmpDir.mkdir();
 
 			try {
-				File targetFile = new File( pathToWorkDir, sipDatei.getName()
+				File targetFile = new File( pathToWorkDir, tiffDatei.getName()
 						+ ".zip" );
-				Zip64Archiver.archivate( sipDatei, targetFile );
-				sipDatei = targetFile;
+				Zip64Archiver.archivate( tiffDatei, targetFile );
+				tiffDatei = targetFile;
 
 			} catch ( Exception e ) {
 				LOGGER.logInfo( TIFFVal.getTextResourceService().getText(
@@ -254,13 +254,13 @@ public class TIFFVal implements MessageConstants
 		LogConfigurator logConfigurator = (LogConfigurator) context
 				.getBean( "logconfigurator" );
 		String logFileName = logConfigurator.configure(
-				directoryOfLogfile.getAbsolutePath(), sipDatei.getName() );
+				directoryOfLogfile.getAbsolutePath(), tiffDatei.getName() );
 
 		LOGGER.logError( TIFFVal.getTextResourceService().getText(
-				MESSAGE_tiffvalIDATION, sipDatei.getName() ) );
+				MESSAGE_tiffvalIDATION, tiffDatei.getName() ) );
 
 		Controller controller = (Controller) context.getBean( "controller" );
-		boolean okMandatory = controller.executeMandatory( sipDatei );
+		boolean okMandatory = controller.executeMandatory( tiffDatei );
 		boolean ok = false;
 
 		// die Validierungen 1a - 1d sind obligatorisch, wenn sie bestanden
@@ -269,11 +269,11 @@ public class TIFFVal implements MessageConstants
 		// ausgeführt werden.
 		if ( okMandatory ) {
 
-			ok = controller.executeOptional( sipDatei );
+			ok = controller.executeOptional( tiffDatei );
 
 			// Ausführen der beiden optionalen Schritte
 			if ( args.length > 2 && args[2].equals( "+3c" ) ) {
-				boolean ok3c = controller.execute3c( sipDatei );
+				boolean ok3c = controller.execute3c( tiffDatei );
 				ok = ok && ok3c;
 			}
 
@@ -285,10 +285,10 @@ public class TIFFVal implements MessageConstants
 		LOGGER.logInfo( "" );
 		if ( ok ) {
 			LOGGER.logInfo( TIFFVal.getTextResourceService().getText(
-					MESSAGE_TOTAL_VALID, sipDatei.getAbsolutePath() ) );
+					MESSAGE_TOTAL_VALID, tiffDatei.getAbsolutePath() ) );
 		} else {
 			LOGGER.logInfo( TIFFVal.getTextResourceService().getText(
-					MESSAGE_TOTAL_INVALID, sipDatei.getAbsolutePath() ) );
+					MESSAGE_TOTAL_INVALID, tiffDatei.getAbsolutePath() ) );
 		}
 		LOGGER.logInfo( "" );
 

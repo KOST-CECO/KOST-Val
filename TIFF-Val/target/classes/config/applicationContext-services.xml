@@ -34,14 +34,6 @@
 		<property name="messageService" ref="messageService" />
 	</bean>
 
-	<bean id="validation1dMetadataModule" class="ch.kostceco.tools.tiffval.validation.module1.impl.Validation1dMetadataModuleImpl">
-		<property name="textResourceService" ref="textResourceService" />
-		<property name="configurationService" ref="configurationService" />
-		<property name="messageService" ref="messageService" />
-	</bean>
-
-	
-
 	<bean id="validation3cFormatValidationModule" class="ch.kostceco.tools.tiffval.validation.module3.impl.Validation3cFormatValidationModuleImpl">
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="messageService" ref="messageService" />
@@ -49,14 +41,6 @@
 		<property name="configurationService" ref="configurationService" />
 	</bean>
 
-	<!--  TODO: könnte es eventuell reichen, den Text Service der gemeinsamen Superklasse aller ModuleImpl zu injecten, so dass
-				nicht jeder Impl einzeln die Property mitgegeben werden müsste?
-				
-	<bean id="validationmoduleimpl" class="ch.kostceco.tools.tiffval.validation.ValidationModuleImpl">
-		<property name="textResourceService" ref="textResourceService" />
-	</bean>
-	-->
-	
 	<bean id="TIFFVal" class="ch.kostceco.tools.tiffval.TIFFVal">
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="configurationService" ref="configurationService" />
@@ -66,16 +50,9 @@
 		<property name="textResourceService" ref="textResourceService" />
 	</bean>
 
-	<!--  
-	<bean id="decompress" class="ch.kostceco.tools.tiffval.util.Decompress">
-		<property name="textResourceService" ref="textResourceService" />
-	</bean>
-	-->
-	
 	<bean id="controller" class="ch.kostceco.tools.tiffval.controller.Controller">
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="validation1aZipModule" ref="validation1aZipModule" />
-		<property name="validation1dMetadataModule" ref="validation1dMetadataModule" />
 		<property name="validation3cFormatValidationModule" ref="validation3cFormatValidationModule" />
 	</bean>
 

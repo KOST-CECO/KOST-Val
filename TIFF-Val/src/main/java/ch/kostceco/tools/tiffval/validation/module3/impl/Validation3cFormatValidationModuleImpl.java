@@ -2,17 +2,16 @@
 The TIFF-Val application is used for validate Submission Information Package (SIP).
 Copyright (C) 2013 Claire Röthlisberger (KOST-CECO)
 -----------------------------------------------------------------------------------------------
-TIFF-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
-This application is free software: you can redistribute it and/or modify it under the 
-terms of the GNU General Public License as published by the Free Software Foundation, 
-either version 3 of the License, or (at your option) any later version. 
- 
+TIFF-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO.
+This application is free software: you can redistribute it and/or modify it under the
+terms of the GNU General Public License as published by the Free Software Foundation,
+either version 3 of the License, or (at your option) any later version.
 
-This application is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
-without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+This application is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 See the follow GNU General Public License for more details.
-You should have received a copy of the GNU General Public License along with this program; 
-if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+You should have received a copy of the GNU General Public License along with this program;
+if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 Boston, MA 02110-1301 USA or see <http://www.gnu.org/licenses/>.
 ==============================================================================================*/
 
@@ -21,6 +20,7 @@ package ch.kostceco.tools.tiffval.validation.module3.impl;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -31,11 +31,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import uk.gov.nationalarchives.droid.core.signature.droid4.Droid;
-import uk.gov.nationalarchives.droid.core.signature.droid4.FileFormatHit;
-import uk.gov.nationalarchives.droid.core.signature.droid4.IdentificationFile;
-import uk.gov.nationalarchives.droid.core.signature.droid4.signaturefile.FileFormat;
-import ch.kostceco.tools.tiffval.enums.PronomUniqueIdEnum;
+import ch.enterag.utils.zip.EntryInputStream;
+import ch.enterag.utils.zip.FileEntry;
+import ch.enterag.utils.zip.Zip64File;
 import ch.kostceco.tools.tiffval.exception.module3.Validation3cFormatValidationException;
 import ch.kostceco.tools.tiffval.service.ConfigurationService;
 import ch.kostceco.tools.tiffval.service.JhoveService;
@@ -79,7 +77,7 @@ public class Validation3cFormatValidationModuleImpl extends
 	}
 
 	@Override
-	public boolean validate( File sipDatei )
+	public boolean validate( File tiffDatei )
 			throws Validation3cFormatValidationException
 	{
 
@@ -108,28 +106,49 @@ public class Validation3cFormatValidationModuleImpl extends
 			return false;
 		}
 
-		Droid droid = null;
-		try {
-			Util.switchOffConsole();
-			droid = new Droid();
+		// Arbeitsverzeichnis zum Entpacken des Archivs erstellen
+		String pathToWorkDir0 = getConfigurationService().getPathToWorkDir();
+		File tmpDir = new File( pathToWorkDir0 );
+		if ( !tmpDir.exists() ) {
+			tmpDir.mkdir();
+		}
 
-			String pathOfDroidConfig = getConfigurationService()
-					.getPathOfDroidSignatureFile();
-			droid.readSignatureFile( pathOfDroidConfig );
+		String toplevelDir = tiffDatei.getName();
+		int lastDotIdx = toplevelDir.lastIndexOf( "." );
+		toplevelDir = toplevelDir.substring( 0, lastDotIdx );
+
+		try {
+			Zip64File zipfile = new Zip64File( tiffDatei );
+			List<FileEntry> fileEntryList = zipfile.getListFileEntries();
+			for ( FileEntry fileEntry : fileEntryList ) {
+				if ( !fileEntry.isDirectory() ) {
+					byte[] buffer = new byte[8192];
+					// Write the file to the original position in the fs.
+					EntryInputStream eis = zipfile
+							.openEntryInputStream( fileEntry.getName() );
+					File newFile = new File( tmpDir, fileEntry.getName() );
+					File parent = newFile.getParentFile();
+					if ( !parent.exists() ) {
+						parent.mkdirs();
+					}
+					FileOutputStream fos = new FileOutputStream( newFile );
+					for ( int iRead = eis.read( buffer ); iRead >= 0; iRead = eis
+							.read( buffer ) ) {
+						fos.write( buffer, 0, iRead );
+					}
+					eis.close();
+					fos.close();
+				}
+			}
+			zipfile.close();
 		} catch ( Exception e ) {
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_MODULE_Cc )
 							+ getTextResourceService().getText( MESSAGE_DASHES )
-							+ getTextResourceService().getText(
-									ERROR_CANNOT_INITIALIZE_DROID ) );
+							+ e.getMessage() );
 			return false;
-		} finally {
-			Util.switchOnConsole();
 		}
 
-		// Die Archivdatei wurde bereits vom Schritt 1d in das
-		// Arbeitsverzeichnis entpackt
-		int countContentFiles = 0;
 		String pathToWorkDir = getConfigurationService().getPathToWorkDir();
 		/*
 		 * Nicht vergessen in
@@ -145,68 +164,29 @@ public class Validation3cFormatValidationModuleImpl extends
 			String entryName = iterator.next();
 			File newFile = fileMap.get( entryName );
 
-			if ( !newFile.isDirectory()
-					&& newFile.getAbsolutePath().contains( "\\content\\" ) ) {
+			if ( !newFile.isDirectory() ) {
 				filesInSipFile.put( newFile.getAbsolutePath(), newFile );
-				countContentFiles++;
 			}
 		}
 
-		getMessageService().logError(
-				getTextResourceService().getText( MESSAGE_MODULE_Cc )
-						+ getTextResourceService().getText( MESSAGE_DASHES )
-						+ String.valueOf( countContentFiles )
-						 );
 
 		List<String> filesToProcessWithJhove = new ArrayList<String>();
-		List<String> filesToProcessWithPdftron = new ArrayList<String>();
-		List<String> filesToProcessWithSiardVal = new ArrayList<String>();
+		// List<String> filesToProcessWithPdftron = new ArrayList<String>();
+		// List<String> filesToProcessWithSiardVal = new ArrayList<String>();
 
 		Set<String> fileKeys = filesInSipFile.keySet();
 
 		for ( Iterator<String> iterator = fileKeys.iterator(); iterator
 				.hasNext(); ) {
 			String fileKey = iterator.next();
-			File file = filesInSipFile.get( fileKey );
-
-			// eine der PUIDs des archivierten Files muss in der Konfiguration
-			// als validatedformat vorkommen,
-			// diese Konfiguration bestimmt, ob ein File selektiert wird zur
-			// Format-Validierung mit JHOVE, Pdftron oder SIARD-Val
 			boolean selected = false;
-			ValidatedFormat value = null;
 
-			IdentificationFile ifile = droid.identify( file.getAbsolutePath() );
-
-			for ( int x = 0; x < ifile.getNumHits(); x++ ) {
-				FileFormatHit ffh = ifile.getHit( x );
-				FileFormat ff = ffh.getFileFormat();
-				String puid = ff.getPUID();
-
-				value = mapValidatedFormats.get( puid );
-
-				if ( value != null ) {
-					selected = true;
-					break;
-				}
-			}
+			selected = true;
 
 			// die PUID des SIP-Files wurde in der Liste der zu validierenden
 			// Formate (gemäss Konfigurationsdatei) gefunden
 			if ( selected ) {
-				// in der Konfiguration wird bestimmt, welcher PUID-Typ mit
-				// welchem Validator (JHOVE, Pdftron oder SIARD-Val)
-				// untersucht wird
-				if ( value.getValidator().equals(
-						PronomUniqueIdEnum.PDFTRON.name() ) ) {
-					filesToProcessWithPdftron.add( fileKey );
-				} else if ( value.getValidator().equals(
-						PronomUniqueIdEnum.JHOVE.name() ) ) {
-					filesToProcessWithJhove.add( fileKey );
-				} else if ( value.getValidator().equals(
-						PronomUniqueIdEnum.SIARDVAL.name() ) ) {
-					filesToProcessWithSiardVal.add( fileKey );
-				}
+				filesToProcessWithJhove.add( fileKey );
 			}
 		}
 
@@ -264,23 +244,12 @@ public class Validation3cFormatValidationModuleImpl extends
 
 			StringBuffer pathsJhove = extensionsMap.get( extMapKey );
 			String extension = extMapKey;
-			if ( extension.equals( "gif" ) || extension.equals( "html" )
-					|| extension.equals( "htm" ) || extension.equals( "jpg" )
-					|| extension.equals( "jpeg" ) || extension.equals( "jpe" )
-					|| extension.equals( "jfif" ) || extension.equals( "jfi" )
-					|| extension.equals( "jif" ) || extension.equals( "jls" )
-					|| extension.equals( "spf" ) || extension.equals( "jp2" )
-					|| extension.equals( "jpg2" ) || extension.equals( "j2c" )
-					|| extension.equals( "jpf" ) || extension.equals( "jpx" )
-					|| extension.equals( "pdf" ) || extension.equals( "tif" )
-					|| extension.equals( "tiff" ) || extension.equals( "tfx" )
-					|| extension.equals( "wav" ) || extension.equals( "wave" )
-					|| extension.equals( "bwf" ) || extension.equals( "xml" )
-					|| extension.equals( "xsd" ) ) {
+			if ( extension.equals( "tif" ) || extension.equals( "tiff" )
+					|| extension.equals( "tfx" ) ) {
 				try {
 					jhoveReport = getJhoveService().executeJhove(
 							pathToJhoveJar, pathsJhove.toString(),
-							pathToJhoveOutput, sipDatei.getName(), extMapKey );
+							pathToJhoveOutput, tiffDatei.getName(), extMapKey );
 
 					BufferedReader in = new BufferedReader( new FileReader(
 							jhoveReport ) );

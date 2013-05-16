@@ -21,13 +21,11 @@ package ch.kostceco.tools.tiffval.controller;
 import java.io.File;
 
 import ch.kostceco.tools.tiffval.exception.module1.Validation1aZipException;
-import ch.kostceco.tools.tiffval.exception.module1.Validation1dMetadataException;
 import ch.kostceco.tools.tiffval.exception.module3.Validation3cFormatValidationException;
 import ch.kostceco.tools.tiffval.logging.Logger;
 import ch.kostceco.tools.tiffval.logging.MessageConstants;
 import ch.kostceco.tools.tiffval.service.TextResourceService;
 import ch.kostceco.tools.tiffval.validation.module1.Validation1aZipModule;
-import ch.kostceco.tools.tiffval.validation.module1.Validation1dMetadataModule;
 import ch.kostceco.tools.tiffval.validation.module3.Validation3cFormatValidationModule;
 
 /**
@@ -47,7 +45,7 @@ public class Controller implements MessageConstants
 
 	private Validation1aZipModule					validation1aZipModule;
 
-	private Validation1dMetadataModule				validation1dMetadataModule;
+//	private Validation1dMetadataModule				validation1dMetadataModule;
 
 	private Validation3cFormatValidationModule		validation3cFormatValidationModule;
 
@@ -64,17 +62,6 @@ public class Controller implements MessageConstants
 			Validation1aZipModule validation1aZipModule )
 	{
 		this.validation1aZipModule = validation1aZipModule;
-	}
-
-	public Validation1dMetadataModule getValidation1dMetadataModule()
-	{
-		return validation1dMetadataModule;
-	}
-
-	public void setValidation1dMetadataModule(
-			Validation1dMetadataModule validation1dMetadataModule )
-	{
-		this.validation1dMetadataModule = validation1dMetadataModule;
 	}
 
 	public Validation3cFormatValidationModule getValidation3cFormatValidationModule()
@@ -99,13 +86,13 @@ public class Controller implements MessageConstants
 		this.textResourceService = textResourceService;
 	}
 
-	public boolean executeMandatory( File sipDatei )
+	public boolean executeMandatory( File tiffDatei )
 	{
 		boolean valid = true;
 
 		// Validation Step Aa
 		try {
-			if ( this.getValidation1aZipModule().validate( sipDatei ) ) {
+			if ( this.getValidation1aZipModule().validate( tiffDatei ) ) {
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_MODULE_VALID,
 						getTextResourceService().getText( MESSAGE_MODULE_Aa ) ) );
@@ -135,60 +122,25 @@ public class Controller implements MessageConstants
 			LOGGER.logError( e.getMessage() );
 			return false;
 		}
-
-
-		// Validation Step Ad
-		try {
-			if ( this.getValidation1dMetadataModule().validate( sipDatei ) ) {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_VALID,
-						getTextResourceService().getText( MESSAGE_MODULE_Ad ) ) );
-				this.getValidation1dMetadataModule().getMessageService()
-						.print();
-			} else {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_INVALID,
-						getTextResourceService().getText( MESSAGE_MODULE_Ad ) )
-						+ getTextResourceService().getText(
-								MESSAGE_STEPERGEBNIS_Ad ) );
-				this.getValidation1dMetadataModule().getMessageService()
-						.print();
-				// Ein negatives Validierungsresultat in diesem Schritt führt
-				// zum Abbruch der weiteren Verarbeitung
-				return false;
-			}
-		} catch ( Validation1dMetadataException e ) {
-			LOGGER.logInfo( getTextResourceService().getText(
-					MESSAGE_MODULE_INVALID_2ARGS,
-					getTextResourceService().getText( MESSAGE_MODULE_Ad ),
-					e.getMessage() ) );
-			this.getValidation1dMetadataModule().getMessageService().print();
-			return false;
-		} catch ( Exception e ) {
-			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
-			LOGGER.logError( e.getMessage() );
-			return false;
-		}
-
 		return valid;
 
 	}
 
-	public boolean executeOptional( File sipDatei )
+	public boolean executeOptional( File tiffDatei )
 	{
 		boolean valid = true;
 
 		return valid;
 	}
 
-	public boolean execute3c( File sipDatei )
+	public boolean execute3c( File tiffDatei )
 	{
 		boolean valid = true;
 
 		// Validation Step 3c
 		try {
 			if ( this.getValidation3cFormatValidationModule().validate(
-					sipDatei ) ) {
+					tiffDatei ) ) {
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_MODULE_VALID,
 						getTextResourceService().getText( MESSAGE_MODULE_Cc ) ) );

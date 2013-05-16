@@ -34,7 +34,7 @@ import ch.kostceco.tools.tiffval.service.Service;
 public interface ValidationModule extends Service
 {
 
-	public boolean validate( File sipDatei ) throws TIFFValException;
+	public boolean validate( File tiffDatei ) throws TIFFValException;
 
 	public MessageService getMessageService();
 

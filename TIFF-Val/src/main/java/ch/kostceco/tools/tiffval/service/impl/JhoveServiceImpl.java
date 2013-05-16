@@ -68,33 +68,12 @@ public class JhoveServiceImpl implements JhoveService
 
 		// das passende Modul zur jeweiligen File-Extension auswählen
 
-		if ( extension.equals( "gif" ) ) {
-			command.append( "-m gif-hul " );
-		} else if ( extension.equals( "html" ) || extension.equals( "htm" ) ) {
-			command.append( "-m html-hul " );
-		} else if ( extension.equals( "jpg" ) || extension.equals( "jpeg" )
-				|| extension.equals( "jpe" ) || extension.equals( "jfif" )
-				|| extension.equals( "jfi" ) || extension.equals( "jif" )
-				|| extension.equals( "jls" ) || extension.equals( "spf" ) ) {
-			command.append( "-m jpeg-hul " );
-		} else if ( extension.equals( "jp2" ) || extension.equals( "jpg2" )
-				|| extension.equals( "j2c" ) || extension.equals( "jpf" )
-				|| extension.equals( "jpx" ) ) {
-			command.append( "-m jpeg2000-hul " );
-		} else if ( extension.equals( "pdf" ) ) {
-			command.append( "-m pdf-hul " );
-		} else if ( extension.equals( "tif" ) || extension.equals( "tiff" )
+/*		if ( extension.equals( "tif" ) || extension.equals( "tiff" )
 				|| extension.equals( "tfx" ) ) {
 			command.append( "-m tiff-hul " );
-		} else if ( extension.equals( "wav" ) || extension.equals( "wave" )
-				|| extension.equals( "bwf" ) ) {
-			command.append( "-m wave-hul " );
-		} else if ( extension.equals( "xml" ) || extension.equals( "xsd" ) ) {
-			command.append( "-m xml-hul " );
-		} else {
-			// wird in "Validation3cFormatValidationModuleImpl.java" abgefangen
-		}
+		}*/
 
+		command.append( "-m tiff-hul " );
 		command.append( " -c " );
 		command.append( "\"" );
 		command.append( jhoveConfig );
