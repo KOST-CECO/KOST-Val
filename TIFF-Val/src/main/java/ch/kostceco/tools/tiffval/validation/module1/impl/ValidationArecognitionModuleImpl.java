@@ -1,13 +1,11 @@
 /*== TIFF-Val ==================================================================================
-The TIFF-Val application is used for validate Submission Information Package (SIP).
+The TIFF-Val application is used for validate Tagged Image File Format (TIFF).
 Copyright (C) 2013 Claire Röthlisberger (KOST-CECO)
 -----------------------------------------------------------------------------------------------
 TIFF-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
 terms of the GNU General Public License as published by the Free Software Foundation, 
 either version 3 of the License, or (at your option) any later version. 
- 
-
 This application is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
 without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
 See the follow GNU General Public License for more details.
@@ -26,29 +24,37 @@ import java.util.Arrays;
 import ch.kostceco.tools.tiffval.exception.module1.ValidationArecognitionException;
 import ch.kostceco.tools.tiffval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.tiffval.validation.module1.ValidationArecognitionModule;
-import ch.enterag.utils.zip.Zip64File;
 
 /**
- * Validierungsschritt A (Erkennung) Ist es eine TIFF-Datei? valid
- * --> Extension: tiff / tif valid --> beginnt mit II*. [49492A00] oder mit MM.* [4D4D002A]
- * ==> Bei dem Modul A wird die Validierung abgebrochen, sollte das Resulat invalid
- * sein!
+ * Validierungsschritt A (Erkennung) Ist es eine TIFF-Datei? valid -->
+ * Extension: tiff / tif / tfx valid --> beginnt mit II*. [49492A00] oder mit
+ * MM.* [4D4D002A] ==> Bei dem Modul A wird die Validierung abgebrochen, sollte
+ * das Resulat invalid sein!
  * 
  * @author Rc Claire Röthlisberger, KOST-CECO
  */
-public class ValidationArecognitionModuleImpl extends ValidationModuleImpl implements
-		ValidationArecognitionModule
+public class ValidationArecognitionModuleImpl extends ValidationModuleImpl
+		implements ValidationArecognitionModule
 {
 
 	@Override
-	public boolean validate( File tiffDatei ) throws ValidationArecognitionException
+	public boolean validate( File tiffDatei )
+			throws ValidationArecognitionException
 	{
+		// Eine TIFF Datei (.tiff / .tif / .tfx) muss entweder mit II*.
+		// [49492A00] oder mit MM.* [4D4D002A] beginnen
 
-		boolean valid = false;
-
-		// Eine TIFF Datei muss entweder mit II*. [49492A00] oder mit MM.* [4D4D002A] beginnen
-		if ( (tiffDatei.getAbsolutePath().toLowerCase().endsWith( ".zip" ) || tiffDatei
-				.getAbsolutePath().toLowerCase().endsWith( ".zip64" )) ) {
+		if ( tiffDatei.isDirectory() ) {
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_MODULE_A )
+							+ getTextResourceService().getText( MESSAGE_DASHES )
+							+ getTextResourceService().getText(
+									ERROR_MODULE_A_ISDIRECTORY ) );
+			return false;
+		} else if ( (tiffDatei.getAbsolutePath().toLowerCase()
+				.endsWith( ".tiff" )
+				|| tiffDatei.getAbsolutePath().toLowerCase().endsWith( ".tif" ) || tiffDatei
+				.getAbsolutePath().toLowerCase().endsWith( ".tfx" )) ) {
 
 			FileReader fr = null;
 
@@ -56,12 +62,20 @@ public class ValidationArecognitionModuleImpl extends ValidationModuleImpl imple
 				fr = new FileReader( tiffDatei );
 				BufferedReader read = new BufferedReader( fr );
 
-				// Hex 03 in Char umwandeln
-				String str3 = "03";
+				// Hex 49 in Char umwandeln
+				String str1 = "49";
+				int i1 = Integer.parseInt( str1, 16 );
+				char c1 = (char) i1;
+				// Hex 4D in Char umwandeln
+				String str2 = "4D";
+				int i2 = Integer.parseInt( str2, 16 );
+				char c2 = (char) i2;
+				// Hex 2A in Char umwandeln
+				String str3 = "2A";
 				int i3 = Integer.parseInt( str3, 16 );
 				char c3 = (char) i3;
-				// Hex 04 in Char umwandeln
-				String str4 = "04";
+				// Hex 00 in Char umwandeln
+				String str4 = "00";
 				int i4 = Integer.parseInt( str4, 16 );
 				char c4 = (char) i4;
 
@@ -74,57 +88,46 @@ public class ValidationArecognitionModuleImpl extends ValidationModuleImpl imple
 					;
 
 				// die beiden charArrays (soll und ist) mit einander
-				// vergleichen
+				// vergleichen IST = c1c1c3c4 /c2c2c4c3
 				char[] charArray1 = buffer;
-				char[] charArray2 = new char[] { 'P', 'K', c3, c4 };
+				char[] charArray2 = new char[] { c1, c1, c3, c4 };
+				char[] charArray3 = new char[] { c2, c2, c4, c3 };
 
 				if ( Arrays.equals( charArray1, charArray2 ) ) {
-					// höchstwahrscheinlich ein ZIP da es mit
-					// 504B0304 respektive
-					// PK.. beginnt
-					valid = true;
+					// höchstwahrscheinlich ein TIFF da es mit
+					// 49492A00 respektive II*. beginnt
+					// valid = true;
+				} else if ( Arrays.equals( charArray1, charArray3 ) ) {
+					// höchstwahrscheinlich ein TIFF da es mit
+					// 4D4D002A respektive MM.* beginnt
+					// valid = true;
+				} else {
+					getMessageService().logError(
+							getTextResourceService().getText( MESSAGE_MODULE_A )
+									+ getTextResourceService().getText(
+											MESSAGE_DASHES )
+									+ getTextResourceService().getText(
+											ERROR_MODULE_A_INCORRECTFILE ) );
+					return false;
 				}
 			} catch ( Exception e ) {
 				getMessageService().logError(
 						getTextResourceService().getText( MESSAGE_MODULE_A )
 								+ getTextResourceService().getText(
-										MESSAGE_DASHES ) + e.getMessage() );
+										MESSAGE_DASHES )
+								+ getTextResourceService().getText(
+										ERROR_MODULE_A_INCORRECTFILE ) );
 				return false;
 			}
-		}
-
-		// wenn die Datei kein Directory ist, muss sie mit zip oder zip64 enden
-		if ( (!(tiffDatei.getAbsolutePath().toLowerCase().endsWith( ".zip" ) || tiffDatei
-				.getAbsolutePath().toLowerCase().endsWith( ".zip64" )))
-				|| valid == false ) {
-
+		} else {
+			// die Datei endet nicht mit tiff, tif oder tfx -> Fehler
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_MODULE_A )
 							+ getTextResourceService().getText( MESSAGE_DASHES )
 							+ getTextResourceService().getText(
 									ERROR_MODULE_A_INCORRECTFILEENDING ) );
-
 			return false;
 		}
-
-		Zip64File zf = null;
-
-		try {
-			// Versuche das ZIP file zu öffnen
-			zf = new Zip64File( tiffDatei );
-			// und wenn es klappt, gleich wieder schliessen
-			zf.close();
-
-		} catch ( Exception e ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_A )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
-							+ e.getMessage() );
-
-			return false;
-		}
-
 		return true;
-
 	}
 }

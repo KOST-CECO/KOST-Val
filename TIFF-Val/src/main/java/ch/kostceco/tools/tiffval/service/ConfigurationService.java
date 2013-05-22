@@ -1,13 +1,11 @@
 /*== TIFF-Val ==================================================================================
-The TIFF-Val application is used for validate Submission Information Package (SIP).
+The TIFF-Val application is used for validate Tagged Image File Format (TIFF).
 Copyright (C) 2013 Claire Röthlisberger (KOST-CECO)
 -----------------------------------------------------------------------------------------------
 TIFF-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
 terms of the GNU General Public License as published by the Free Software Foundation, 
 either version 3 of the License, or (at your option) any later version. 
- 
-
 This application is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
 without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
 See the follow GNU General Public License for more details.
@@ -35,9 +33,9 @@ public interface ConfigurationService extends Service
 {
 
 	/**
-	 * Gibt eine Liste mit den PUIDs aus, welche im SIP vorkommen dürfen.
+	 * Gibt eine Liste mit den PUIDs aus, welche im TIFF vorkommen dürfen.
 	 * 
-	 * @return Liste mit den PUIDs aus, welche im SIP vorkommen dürfen.
+	 * @return Liste mit den PUIDs aus, welche im TIFF vorkommen dürfen.
 	 */
 	Map<String, String> getAllowedPuids();
 

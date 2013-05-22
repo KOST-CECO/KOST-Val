@@ -1,13 +1,11 @@
 /*== TIFF-Val ==================================================================================
-The TIFF-Val application is used for validate Submission Information Package (SIP).
+The TIFF-Val application is used for validate Tagged Image File Format (TIFF).
 Copyright (C) 2013 Claire Röthlisberger (KOST-CECO)
 -----------------------------------------------------------------------------------------------
 TIFF-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
 terms of the GNU General Public License as published by the Free Software Foundation, 
 either version 3 of the License, or (at your option) any later version. 
- 
-
 This application is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
 without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
 See the follow GNU General Public License for more details.
@@ -39,15 +37,12 @@ public interface JhoveService extends Service
 	 *            Pfad(e) zu den Input-Files, mit Blanks separiert
 	 * @param pathToOutput
 	 *            Pfad zum Output-File
-	 * @param nameOfSip
-	 *            Name des Original-SIP-Input Files
-	 * @param extension
-	 *            die Extension der Input Files
+	 * @param nameOfTiff
+	 *            Name des Original-TIFF-Input Files
 	 * @return Name des Output Files (der pathToOutput wurde eventuell
 	 *         umbenannt)
 	 * @throws SystemException
 	 */
 	public File executeJhove( String pathToJhoveJar, String pathToInputFile,
-			String pathToOutput, String nameOfSip, String extension )
-			throws SystemException;
+			String pathToOutput, String nameOfTiff ) throws SystemException;
 }

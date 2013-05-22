@@ -1,6 +1,6 @@
 /*== TIFF-Val ==================================================================================
-The TIFF-Val v0.0.1 application is used for validate TIFF files.
-Copyright (C) 2011-2013 Claire Röthlisberger (KOST-CECO)
+The TIFF-Val v0.0.1 application is used for validate Tagged Image File Format (TIFF).
+Copyright (C) 2013 Claire Röthlisberger (KOST-CECO)
 -----------------------------------------------------------------------------------------------
 TIFF-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -66,8 +66,8 @@ public class TIFFVal implements MessageConstants
 	}
 
 	/**
-	 * Die Minimaleingabe besteht aus Parameter 1: Pfad zum TIFF-File Parameter
-	 * 2: Pfad zum Logging-Verzeichnis
+	 * Die Eingabe besteht aus Parameter 1: Pfad zum TIFF-File Parameter 2: Pfad
+	 * zum Logging-Verzeichnis
 	 * 
 	 * @param args
 	 */
@@ -82,8 +82,7 @@ public class TIFFVal implements MessageConstants
 		// ValidationModuleImpl validationModuleImpl = (ValidationModuleImpl)
 		// context.getBean("validationmoduleimpl");
 
-		TIFFVal TIFFVal = (TIFFVal) context
-				.getBean( "TIFFVal" );
+		TIFFVal TIFFVal = (TIFFVal) context.getBean( "TIFFVal" );
 
 		// Ist die Anzahl Parameter (2) korrekt?
 		if ( args.length < 2 ) {
@@ -153,46 +152,20 @@ public class TIFFVal implements MessageConstants
 			System.exit( 1 );
 		}
 
-		// Ueberprüfung des 1. Parameters (SIP-Datei): existiert die Datei?
+		// Ueberprüfung des 1. Parameters (TIFF-Datei): existiert die Datei?
 		if ( !tiffDatei.exists() ) {
 			LOGGER.logInfo( TIFFVal.getTextResourceService().getText(
-					ERROR_SIPFILE_FILENOTEXISTING ) );
+					ERROR_TIFFFILE_FILENOTEXISTING ) );
 			LOGGER.logInfo( TIFFVal.getTextResourceService().getText(
 					MESSAGE_VALIDATION_INTERRUPTED ) );
 			System.exit( 1 );
 		}
 
-		// TODO: Umschreiben auf nur eine TIFF-Datei
-		// Ueberprüfung des 1. Parameters (SIP-Datei): ist die Datei ein
-		// Verzeichnis?
-		// Wenn ja, wird im work-Verzeichnis eine Zip-Datei daraus erstellt,
-		// damit die weiteren
-		// Validierungen Gebrauch von der java.util.zip API machen können, und
-		// somit die zu Validierenden
-		// Archive gleichartig behandelt werden können, egal ob es sich um eine
-		// Verzeichnisstruktur oder ein
-		// Zip-File handelt.
 		// Informationen zum Arbeitsverzeichnis holen
 
-		String originalSipName = tiffDatei.getAbsolutePath();
+		String originalTiffName = tiffDatei.getAbsolutePath();
 		if ( tiffDatei.isDirectory() ) {
-			if ( tmpDir.exists() ) {
-				Util.deleteDir( tmpDir );
-			}
-			tmpDir.mkdir();
-
-			try {
-				File targetFile = new File( pathToWorkDir, tiffDatei.getName()
-						+ ".zip" );
-				Zip64Archiver.archivate( tiffDatei, targetFile );
-				tiffDatei = targetFile;
-
-			} catch ( Exception e ) {
-				LOGGER.logInfo( TIFFVal.getTextResourceService().getText(
-						ERROR_CANNOTCREATEZIP ) );
-				System.exit( 1 );
-			}
-
+			// Wird im Modul A kontrolliert
 		} else {
 			// Löschen des Arbeitsverzeichnisses, falls eines angelegt wurde
 			File workDir = new File( pathToWorkDir );
@@ -202,49 +175,31 @@ public class TIFFVal implements MessageConstants
 			workDir.mkdir();
 		}
 
-		// Ueberprüfung der optionalen Parameter (3. und 4.)
-/*		if ( args.length == 3
-				&& !(args[2].equals( "+3c" ) || args[2].equals( "+3d" )) ) {
+		// Initialisierung Modul B (JHove-Validierung)
+		// überprüfen der Konfiguration: existiert die JHoveApp.jar am
+		// angebenen Ort?
+		String jhoveApp = TIFFVal.getConfigurationService().getPathToJhoveJar();
+		File fJhoveApp = new File( jhoveApp );
+		if ( !fJhoveApp.exists()
+				|| !fJhoveApp.getName().equals( "JhoveApp.jar" ) ) {
+
 			LOGGER.logInfo( TIFFVal.getTextResourceService().getText(
-					ERROR_PARAMETER_OPTIONAL_1 ) );
+					ERROR_JHOVEAPP_MISSING ) );
 			System.exit( 1 );
 		}
 
-		if ( args.length == 4
-				&& !(args[2].equals( "+3c" ) && args[3].equals( "+3d" )) ) {
+		// überprüfen der Konfiguration: existiert die jhove.conf am
+		// angebenen Ort?
+		String jhoveConf = TIFFVal.getConfigurationService()
+				.getPathToJhoveConfiguration();
+		File fJhoveConf = new File( jhoveConf );
+		if ( !fJhoveConf.exists()
+				|| !fJhoveConf.getName().equals( "jhove.conf" ) ) {
+
 			LOGGER.logInfo( TIFFVal.getTextResourceService().getText(
-					ERROR_PARAMETER_OPTIONAL_2 ) );
+					ERROR_JHOVECONF_MISSING ) );
 			System.exit( 1 );
-		}*/
-
-		// Initialisierung Modul B (JHove-Validierung)
-//		if ( args.length > 2 && args[2].equals( "+3c" ) ) {
-			// überprüfen der Konfiguration: existiert die JHoveApp.jar am
-			// angebenen Ort?
-			String jhoveApp = TIFFVal.getConfigurationService()
-					.getPathToJhoveJar();
-			File fJhoveApp = new File( jhoveApp );
-			if ( !fJhoveApp.exists()
-					|| !fJhoveApp.getName().equals( "JhoveApp.jar" ) ) {
-
-				LOGGER.logInfo( TIFFVal.getTextResourceService().getText(
-						ERROR_JHOVEAPP_MISSING ) );
-				System.exit( 1 );
-			}
-
-			// überprüfen der Konfiguration: existiert die jhove.conf am
-			// angebenen Ort?
-			String jhoveConf = TIFFVal.getConfigurationService()
-					.getPathToJhoveConfiguration();
-			File fJhoveConf = new File( jhoveConf );
-			if ( !fJhoveConf.exists()
-					|| !fJhoveConf.getName().equals( "jhove.conf" ) ) {
-
-				LOGGER.logInfo( TIFFVal.getTextResourceService().getText(
-						ERROR_JHOVECONF_MISSING ) );
-				System.exit( 1 );
-			}
-//		}
+		}
 
 		// Konfiguration des Loggings, ein File Logger wird zusätzlich erstellt
 		LogConfigurator logConfigurator = (LogConfigurator) context
@@ -259,16 +214,12 @@ public class TIFFVal implements MessageConstants
 		boolean okMandatory = controller.executeMandatory( tiffDatei );
 		boolean ok = false;
 
-		// die Validierungen 1a - 1d sind obligatorisch, wenn sie bestanden
+		// die Validierungen A sind obligatorisch, wenn sie bestanden
 		// wurden, können die restlichen
 		// Validierungen, welche nicht zum Abbruch der Applikation führen,
 		// ausgeführt werden.
 		if ( okMandatory ) {
-
 			ok = controller.executeOptional( tiffDatei );
-
-
-
 		}
 
 		ok = (ok && okMandatory);
@@ -283,7 +234,7 @@ public class TIFFVal implements MessageConstants
 		}
 		LOGGER.logInfo( "" );
 
-		// Ausgabe der Pfade zu den Jhove/Pdftron & Co. Reports, falls welche
+		// Ausgabe der Pfade zu den Jhove Reports, falls welche
 		// generiert wurden
 		if ( Util.getPathToReportJHove() != null ) {
 			LOGGER.logInfo( TIFFVal.getTextResourceService().getText(
@@ -292,7 +243,7 @@ public class TIFFVal implements MessageConstants
 
 		LOGGER.logInfo( "" );
 		LOGGER.logInfo( TIFFVal.getTextResourceService().getText(
-				MESSAGE_FOOTER_SIP, originalSipName ) );
+				MESSAGE_FOOTER_TIFF, originalTiffName ) );
 		LOGGER.logInfo( TIFFVal.getTextResourceService().getText(
 				MESSAGE_FOOTER_LOG, logFileName ) );
 		LOGGER.logInfo( "" );

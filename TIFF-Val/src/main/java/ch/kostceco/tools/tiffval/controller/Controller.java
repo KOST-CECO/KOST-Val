@@ -1,13 +1,11 @@
 /*== TIFF-Val ==================================================================================
-The TIFF-Val application is used for validate Submission Information Package (SIP).
+The TIFF-Val application is used for validate Tagged Image File Format (TIFF).
 Copyright (C) 2013 Claire Röthlisberger (KOST-CECO)
 -----------------------------------------------------------------------------------------------
 TIFF-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
 terms of the GNU General Public License as published by the Free Software Foundation, 
 either version 3 of the License, or (at your option) any later version. 
- 
-
 This application is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
 without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
 See the follow GNU General Public License for more details.
@@ -29,7 +27,7 @@ import ch.kostceco.tools.tiffval.validation.module1.ValidationArecognitionModule
 import ch.kostceco.tools.tiffval.validation.module2.ValidationBjhoveValidationModule;
 
 /**
- * Der Controller ruft die benötigten Module zur Validierung des SIP-Archivs in
+ * Der Controller ruft die benötigten Module zur Validierung des TIFF-Archivs in
  * der benötigten Reihenfolge auf.
  * 
  * Die Validierungs-Module werden mittels Spring-Dependency-Injection
@@ -40,13 +38,13 @@ import ch.kostceco.tools.tiffval.validation.module2.ValidationBjhoveValidationMo
 public class Controller implements MessageConstants
 {
 
-	private static final Logger						LOGGER	= new Logger(
-																	Controller.class );
+	private static final Logger					LOGGER	= new Logger(
+																Controller.class );
 
-	private ValidationArecognitionModule					validationArecognitionModule;
-	private ValidationBjhoveValidationModule		validationBjhoveValidationModule;
+	private ValidationArecognitionModule		validationArecognitionModule;
+	private ValidationBjhoveValidationModule	validationBjhoveValidationModule;
 
-	private TextResourceService						textResourceService;
+	private TextResourceService					textResourceService;
 
 	public ValidationArecognitionModule getValidationArecognitionModule()
 	{
@@ -70,7 +68,6 @@ public class Controller implements MessageConstants
 		this.validationBjhoveValidationModule = validationBjhoveValidationModule;
 	}
 
-
 	public TextResourceService getTextResourceService()
 	{
 		return textResourceService;
@@ -91,7 +88,8 @@ public class Controller implements MessageConstants
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_MODULE_VALID,
 						getTextResourceService().getText( MESSAGE_MODULE_A ) ) );
-				this.getValidationArecognitionModule().getMessageService().print();
+				this.getValidationArecognitionModule().getMessageService()
+						.print();
 			} else {
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_MODULE_INVALID,
@@ -100,7 +98,8 @@ public class Controller implements MessageConstants
 								MESSAGE_STEPERGEBNIS_A ) );
 				// Ein negatives Validierungsresultat in diesem Schritt führt
 				// zum Abbruch der weiteren Verarbeitung
-				this.getValidationArecognitionModule().getMessageService().print();
+				this.getValidationArecognitionModule().getMessageService()
+						.print();
 				return false;
 			}
 
@@ -126,21 +125,21 @@ public class Controller implements MessageConstants
 		boolean valid = true;
 		// Validation Step 3c
 		try {
-			if ( this.getValidationBjhoveValidationModule().validate(
-					tiffDatei ) ) {
+			if ( this.getValidationBjhoveValidationModule()
+					.validate( tiffDatei ) ) {
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_MODULE_VALID,
 						getTextResourceService().getText( MESSAGE_MODULE_B ) ) );
-				this.getValidationBjhoveValidationModule()
-						.getMessageService().print();
+				this.getValidationBjhoveValidationModule().getMessageService()
+						.print();
 			} else {
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_MODULE_INVALID,
 						getTextResourceService().getText( MESSAGE_MODULE_B ) )
 						+ getTextResourceService().getText(
 								MESSAGE_STEPERGEBNIS_B ) );
-				this.getValidationBjhoveValidationModule()
-						.getMessageService().print();
+				this.getValidationBjhoveValidationModule().getMessageService()
+						.print();
 				valid = false;
 			}
 

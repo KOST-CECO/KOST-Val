@@ -1,13 +1,11 @@
 /*== TIFF-Val ==================================================================================
-The TIFF-Val application is used for validate Submission Information Package (SIP).
+The TIFF-Val application is used for validate Tagged Image File Format (TIFF).
 Copyright (C) 2013 Claire Röthlisberger (KOST-CECO)
 -----------------------------------------------------------------------------------------------
 TIFF-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
 terms of the GNU General Public License as published by the Free Software Foundation, 
 either version 3 of the License, or (at your option) any later version. 
- 
-
 This application is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
 without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
 See the follow GNU General Public License for more details.
@@ -54,11 +52,10 @@ public class JhoveServiceImpl implements JhoveService
 
 	@Override
 	public File executeJhove( String pathToJhoveJar, String pathToInputFile,
-			String pathToOutput, String nameOfSip, String extension )
-			throws SystemException
+			String pathToOutput, String nameOfTiff ) throws SystemException
 	{
 
-		File newReport = new File( pathToOutput, nameOfSip + ".jhove-log.txt" );
+		File newReport = new File( pathToOutput, nameOfTiff + ".jhove-log.txt" );
 
 		File jhoveJar = new File( pathToJhoveJar ); // Pfad zum Programm JHove
 		StringBuffer command = new StringBuffer( "java -jar " + jhoveJar + " " );
@@ -68,10 +65,10 @@ public class JhoveServiceImpl implements JhoveService
 
 		// das passende Modul zur jeweiligen File-Extension auswählen
 
-/*		if ( extension.equals( "tif" ) || extension.equals( "tiff" )
-				|| extension.equals( "tfx" ) ) {
-			command.append( "-m tiff-hul " );
-		}*/
+		/*
+		 * if ( extension.equals( "tif" ) || extension.equals( "tiff" ) ||
+		 * extension.equals( "tfx" ) ) { command.append( "-m tiff-hul " ); }
+		 */
 
 		command.append( "-m tiff-hul " );
 		command.append( " -c " );

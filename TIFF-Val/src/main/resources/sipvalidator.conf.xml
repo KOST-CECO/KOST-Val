@@ -2,7 +2,7 @@
 <configuration>
 	<allowedlengthofpaths>179</allowedlengthofpaths>
 	<allowedlengthoffiles>40</allowedlengthoffiles>
-	<allowedsipname>SIP_[1-2][0-9]{3}[0-1][0-9][0-3][0-9]_\\w{3}</allowedsipname>
+	<allowedsipname>TIFF_[1-2][0-9]{3}[0-1][0-9][0-3][0-9]_\\w{3}</allowedsipname>
 	<pathtopdftronexe>Drittapplikationen\pdfa\pdfa.exe</pathtopdftronexe>
 	<pathtopdftronoutput>logs\pdftron</pathtopdftronoutput>
 	<pathtojhovejar>Drittapplikationen\jhove\bin\JhoveApp.jar</pathtojhovejar>
