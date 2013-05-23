@@ -22,15 +22,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 import ch.kostceco.tools.tiffval.exception.module2.ValidationBjhoveValidationException;
 import ch.kostceco.tools.tiffval.service.ConfigurationService;
 import ch.kostceco.tools.tiffval.service.JhoveService;
-import ch.kostceco.tools.tiffval.service.vo.ValidatedFormat;
 import ch.kostceco.tools.tiffval.util.Util;
 import ch.kostceco.tools.tiffval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.tiffval.validation.module2.ValidationBjhoveValidationModule;
@@ -78,23 +73,6 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 	{
 
 		boolean isValid = true;
-
-/*		Map<String, ValidatedFormat> mapValidatedFormats = new HashMap<String, ValidatedFormat>();
-		List<ValidatedFormat> validatedFormats = getConfigurationService()
-				.getValidatedFormats();
-		for ( Iterator<ValidatedFormat> iterator = validatedFormats.iterator(); iterator
-				.hasNext(); ) {
-			ValidatedFormat validatedFormat = iterator.next();
-			mapValidatedFormats.put( validatedFormat.getPronomUniqueId(),
-					validatedFormat );
-		}*/
-
-		// Arbeitsverzeichnis zum Entpacken des Archivs erstellen
-		String pathToWorkDir0 = getConfigurationService().getPathToWorkDir();
-		File tmpDir = new File( pathToWorkDir0 );
-		if ( !tmpDir.exists() ) {
-			tmpDir.mkdir();
-		}
 
 		String toplevelDir = tiffDatei.getName();
 		int lastDotIdx = toplevelDir.lastIndexOf( "." );

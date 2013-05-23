@@ -16,14 +16,6 @@ Boston, MA 02110-1301 USA or see <http://www.gnu.org/licenses/>.
 
 package ch.kostceco.tools.tiffval.service;
 
-import java.net.MalformedURLException;
-import java.util.List;
-import java.util.Map;
-
-//import org.apache.tools.ant.util.regexp.Regexp;
-
-import ch.kostceco.tools.tiffval.service.vo.ValidatedFormat;
-
 /**
  * Service Interface für die Konfigurationsdatei.
  * 

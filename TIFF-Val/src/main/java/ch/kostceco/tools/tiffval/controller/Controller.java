@@ -20,7 +20,6 @@ import java.io.File;
 
 import ch.kostceco.tools.tiffval.exception.module1.ValidationArecognitionException;
 import ch.kostceco.tools.tiffval.exception.module2.ValidationBjhoveValidationException;
-import ch.kostceco.tools.tiffval.exception.module2.ValidationCcompressionValidationException;
 import ch.kostceco.tools.tiffval.logging.Logger;
 import ch.kostceco.tools.tiffval.logging.MessageConstants;
 import ch.kostceco.tools.tiffval.service.TextResourceService;

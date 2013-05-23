@@ -5,31 +5,32 @@
 	<pathtojhoveoutput>logs\jhove</pathtojhoveoutput>
 	<pathtoworkdir>work_TIFF-Val</pathtoworkdir>
 	
-	<allowedcompressions>
-		<allowedcompression>	<tag>uncompressed</tag>	<comment>1 (Baseline)</comment>		</allowedcompression>
-		<allowedcompression>	<tag>CCITT 1D</tag>	<comment>2 (Baseline)</comment>		</allowedcompression>
-		<allowedcompression>	<tag>CCITT Group 3</tag>	<comment>3</comment>	</allowedcompression>
-		<allowedcompression>	<tag>CCITT Group 4</tag>	<comment>4</comment>	</allowedcompression>
-		<allowedcompression>	<tag>LZW</tag>	<comment>5</comment>	</allowedcompression>
-		<allowedcompression>	<tag>PackBits</tag>	<comment>32773 (Baseline)</comment>	</allowedcompression>
-	</allowedcompressions>
-	
-	<allowedphotointers>
-		<allowedphotointer>	<tag>white is zero</tag>	<comment>0 (Baseline)</comment>		</allowedphotointer>
-		<allowedphotointer>	<tag>black is zero</tag>	<comment>1 (Baseline)</comment>		</allowedphotointer>
-		<allowedphotointer>	<tag>RGB</tag>	<comment>2 (Baseline)</comment>	</allowedphotointer>
-		<allowedphotointer>	<tag>Palette</tag>	<comment>3 (Baseline)</comment>	</allowedphotointer>
-	</allowedphotointers>
+	<allowedcompression1>uncompressed</allowedcompression1>		<!--0 / uncompressed-->
+	<allowedcompression2>CCITT 1D</allowedcompression2>			<!--0 / CCITT 1D-->
+	<allowedcompression3>CCITT Group 3</allowedcompression3>	<!--0 / CCITT Group 3-->
+	<allowedcompression4>CCITT Group 4</allowedcompression4>	<!--0 / CCITT Group 4-->
+	<allowedcompression5>LZW</allowedcompression5>				<!--0 / LZW-->
+	<allowedcompression7>0</allowedcompression7>				<!--0 / ISO JPEG-->
+	<allowedcompression8>0</allowedcompression8>				<!--0 / Deflate-->
+	<allowedcompression32773>PackBits</allowedcompression32773>	<!--0 / PackBits-->
 
-	<allowedbitspersamples>
-		<allowedbitspersample>	<bps>1</bps>	</allowedbitspersample>
-		<allowedbitspersample>	<bps>4</bps>	</allowedbitspersample>
-		<allowedbitspersample>	<bps>8</bps>	</allowedbitspersample>
-		<allowedbitspersample>	<bps>8, 8, 8</bps>	</allowedbitspersample>
-	</allowedbitspersamples>
+	<allowedphotointer0>white is zero</allowedphotointer0>		<!--0 / white is zero-->
+	<allowedphotointer1>black is zero</allowedphotointer1>		<!--0 / black is zero-->
+	<allowedphotointer2>RGB</allowedphotointer2>				<!--0 / RGB-->
+	<allowedphotointer3>Palette</allowedphotointer3>			<!--0 / Palette-->
+
+	<allowedbitspersample1>1</allowedbitspersample1>					<!--0 / 1-->
+	<allowedbitspersample4>4</allowedbitspersample4>					<!--0 / 4-->
+	<allowedbitspersample8>8</allowedbitspersample8>					<!--0 / 8-->
+	<allowedbitspersample888>8, 8, 8</allowedbitspersample888>			<!--0 / 8, 8, 8-->
+	<allowedbitspersample8888>8, 8, 8, 8</allowedbitspersample8888>		<!--0 / 8, 8, 8, 8-->
+	<allowedbitspersample16>0</allowedbitspersample16>					<!--0 / 16-->
+	<allowedbitspersample161616>0</allowedbitspersample161616>			<!--0 / 16, 16, 16-->
+	<allowedbitspersample64>0</allowedbitspersample64>					<!--0 / 64-->
+	<allowedbitspersample646464>0</allowedbitspersample646464>			<!--0 / 64, 64, 64-->
 	
-	<allowedmultipage>1</allowedmultipage>
+	<allowedmultipage>1</allowedmultipage>			<!--0 / 1-->
 	
-	<allowedtiles>1</allowedtiles>
+	<allowedtiles>1</allowedtiles>					<!--0 / 1-->
 	
 </configuration>

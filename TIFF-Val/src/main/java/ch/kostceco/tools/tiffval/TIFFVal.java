@@ -28,7 +28,6 @@ import ch.kostceco.tools.tiffval.logging.MessageConstants;
 import ch.kostceco.tools.tiffval.service.ConfigurationService;
 import ch.kostceco.tools.tiffval.service.TextResourceService;
 import ch.kostceco.tools.tiffval.util.Util;
-import ch.kostceco.tools.tiffval.util.Zip64Archiver;
 
 /**
  * Dies ist die Starter-Klasse, verantwortlich für das Initialisieren des
@@ -128,30 +127,6 @@ public class TIFFVal implements MessageConstants
 			System.exit( 1 );
 		}
 
-		// Informationen zum Arbeitsverzeichnis holen
-		String pathToWorkDir = TIFFVal.getConfigurationService()
-				.getPathToWorkDir();
-		/*
-		 * Nicht vergessen in
-		 * "src/main/resources/config/applicationContext-services.xml" beim
-		 * entsprechenden Modul die property anzugeben: <property
-		 * name="configurationService" ref="configurationService" />
-		 */
-
-		File tmpDir = new File( pathToWorkDir );
-		if ( !tmpDir.exists() ) {
-			tmpDir.mkdir();
-		}
-
-		// Im workverzeichnis besteht kein Schreibrecht
-		if ( !tmpDir.canWrite() ) {
-			LOGGER.logInfo( TIFFVal.getTextResourceService().getText(
-					ERROR_WORKDIRECTORY_NOTWRITABLE, tmpDir ) );
-			LOGGER.logInfo( TIFFVal.getTextResourceService().getText(
-					MESSAGE_VALIDATION_INTERRUPTED ) );
-			System.exit( 1 );
-		}
-
 		// Ueberprüfung des 1. Parameters (TIFF-Datei): existiert die Datei?
 		if ( !tiffDatei.exists() ) {
 			LOGGER.logInfo( TIFFVal.getTextResourceService().getText(
@@ -161,19 +136,7 @@ public class TIFFVal implements MessageConstants
 			System.exit( 1 );
 		}
 
-		// Informationen zum Arbeitsverzeichnis holen
-
 		String originalTiffName = tiffDatei.getAbsolutePath();
-		if ( tiffDatei.isDirectory() ) {
-			// Wird im Modul A kontrolliert
-		} else {
-			// Löschen des Arbeitsverzeichnisses, falls eines angelegt wurde
-			File workDir = new File( pathToWorkDir );
-			if ( workDir.exists() ) {
-				Util.deleteDir( workDir );
-			}
-			workDir.mkdir();
-		}
 
 		// Initialisierung Modul B (JHove-Validierung)
 		// überprüfen der Konfiguration: existiert die JHoveApp.jar am
@@ -256,28 +219,10 @@ public class TIFFVal implements MessageConstants
 					MESSAGE_VALIDATION_INTERRUPTED ) );
 		}
 
-		// Löschen des Arbeitsverzeichnisses, falls eines angelegt wurde
-
-		File workDir = new File( pathToWorkDir );
-		if ( workDir.exists() ) {
-			Util.deleteDir( workDir );
-		}
 		if ( ok ) {
 			System.exit( 0 );
-			// Löschen des Arbeitsverzeichnisses, falls eines angelegt wurde
-			if ( workDir.exists() ) {
-				Util.deleteDir( workDir );
-			}
-
 		} else {
 			System.exit( 2 );
-			// Löschen des Arbeitsverzeichnisses, falls eines angelegt wurde
-			if ( workDir.exists() ) {
-				Util.deleteDir( workDir );
-			}
-			if ( workDir.exists() ) {
-				Util.deleteDir( workDir );
-			}
 		}
 
 	}
