@@ -18,7 +18,7 @@ package ch.kostceco.tools.tiffval.validation.module2;
 
 import java.io.File;
 
-import ch.kostceco.tools.tiffval.exception.module3.ValidationBjhoveValidationException;
+import ch.kostceco.tools.tiffval.exception.module2.ValidationBjhoveValidationException;
 import ch.kostceco.tools.tiffval.validation.ValidationModule;
 
 /**

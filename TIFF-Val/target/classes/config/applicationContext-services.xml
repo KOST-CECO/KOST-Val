@@ -41,6 +41,12 @@
 		<property name="configurationService" ref="configurationService" />
 	</bean>
 
+	<bean id="validationCcompressionValidationModule" class="ch.kostceco.tools.tiffval.validation.module2.impl.ValidationCcompressionValidationModuleImpl">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="messageService" ref="messageService" />
+		<property name="configurationService" ref="configurationService" />
+	</bean>
+
 	<bean id="TIFFVal" class="ch.kostceco.tools.tiffval.TIFFVal">
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="configurationService" ref="configurationService" />
@@ -54,6 +60,7 @@
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="validationArecognitionModule" ref="validationArecognitionModule" />
 		<property name="validationBjhoveValidationModule" ref="validationBjhoveValidationModule" />
+		<property name="validationCcompressionValidationModule" ref="validationCcompressionValidationModule" />
 	</bean>
 
 </beans>

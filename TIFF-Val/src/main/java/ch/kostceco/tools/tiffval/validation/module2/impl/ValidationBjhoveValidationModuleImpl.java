@@ -27,7 +27,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import ch.kostceco.tools.tiffval.exception.module3.ValidationBjhoveValidationException;
+import ch.kostceco.tools.tiffval.exception.module2.ValidationBjhoveValidationException;
 import ch.kostceco.tools.tiffval.service.ConfigurationService;
 import ch.kostceco.tools.tiffval.service.JhoveService;
 import ch.kostceco.tools.tiffval.service.vo.ValidatedFormat;

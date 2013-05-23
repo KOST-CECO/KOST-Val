@@ -54,10 +54,12 @@ public interface MessageConstants
 
 	String	MESSAGE_MODULE_A							= "message.module.a";
 	String	MESSAGE_MODULE_B							= "message.module.b";
-
+	String	MESSAGE_MODULE_C							= "message.module.c";
+	
 	String	MESSAGE_STEPERGEBNIS_A						= "message.stepergebnis.a";
 	String	MESSAGE_STEPERGEBNIS_B						= "message.stepergebnis.b";
-
+	String	MESSAGE_STEPERGEBNIS_C						= "message.stepergebnis.c";
+	
 	String	MESSAGE_DASHES								= "message.dashes";
 
 	String	MESSAGE_CONFIGURATION_ERROR_1				= "message.configuration.error.1";
@@ -74,4 +76,8 @@ public interface MessageConstants
 	// Modul B Meldungen
 	String	MESSAGE_MODULE_B_CANNOTWRITEJHOVEREPORT		= "message.module.b.cannotwritejhovereport";
 	String	MESSAGE_MODULE_B_JHOVEINVALID				= "message.module.b.jhoveinvalid";
+	
+	// Modul C-G Meldungen
+	String 	MESSAGE_MODULE_CG_CANNOTFINDJHOVEREPORT		= "message.module.cg.cannotfindjhovereport";
+	String	MESSAGE_MODULE_CG_INVALID					= "message.module.cg.invalid";
 }

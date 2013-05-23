@@ -19,12 +19,14 @@ package ch.kostceco.tools.tiffval.controller;
 import java.io.File;
 
 import ch.kostceco.tools.tiffval.exception.module1.ValidationArecognitionException;
-import ch.kostceco.tools.tiffval.exception.module3.ValidationBjhoveValidationException;
+import ch.kostceco.tools.tiffval.exception.module2.ValidationBjhoveValidationException;
+import ch.kostceco.tools.tiffval.exception.module2.ValidationCcompressionValidationException;
 import ch.kostceco.tools.tiffval.logging.Logger;
 import ch.kostceco.tools.tiffval.logging.MessageConstants;
 import ch.kostceco.tools.tiffval.service.TextResourceService;
 import ch.kostceco.tools.tiffval.validation.module1.ValidationArecognitionModule;
 import ch.kostceco.tools.tiffval.validation.module2.ValidationBjhoveValidationModule;
+import ch.kostceco.tools.tiffval.validation.module2.ValidationCcompressionValidationModule;
 
 /**
  * Der Controller ruft die benötigten Module zur Validierung des TIFF-Archivs in
@@ -43,7 +45,8 @@ public class Controller implements MessageConstants
 
 	private ValidationArecognitionModule		validationArecognitionModule;
 	private ValidationBjhoveValidationModule	validationBjhoveValidationModule;
-
+	private ValidationCcompressionValidationModule	validationCcompressionValidationModule;
+	
 	private TextResourceService					textResourceService;
 
 	public ValidationArecognitionModule getValidationArecognitionModule()
@@ -67,6 +70,18 @@ public class Controller implements MessageConstants
 	{
 		this.validationBjhoveValidationModule = validationBjhoveValidationModule;
 	}
+	
+	public ValidationCcompressionValidationModule getValidationCcompressionValidationModule()
+	{
+		return validationCcompressionValidationModule;
+	}
+
+	public void setValidationCcompressionValidationModule(
+			ValidationCcompressionValidationModule validationCcompressionValidationModule )
+	{
+		this.validationCcompressionValidationModule = validationCcompressionValidationModule;
+	}
+
 
 	public TextResourceService getTextResourceService()
 	{
@@ -82,7 +97,7 @@ public class Controller implements MessageConstants
 	{
 		boolean valid = true;
 
-		// Validation Step Aa
+		// Validation Step A
 		try {
 			if ( this.getValidationArecognitionModule().validate( tiffDatei ) ) {
 				LOGGER.logInfo( getTextResourceService().getText(
@@ -123,7 +138,7 @@ public class Controller implements MessageConstants
 	public boolean executeOptional( File tiffDatei )
 	{
 		boolean valid = true;
-		// Validation Step 3c
+		// Validation Step B
 		try {
 			if ( this.getValidationBjhoveValidationModule()
 					.validate( tiffDatei ) ) {
@@ -156,6 +171,41 @@ public class Controller implements MessageConstants
 			LOGGER.logError( e.getMessage() );
 			return false;
 		}
+		
+		// Validation Step C
+		try {
+			if ( this.getValidationCcompressionValidationModule()
+					.validate( tiffDatei ) ) {
+				LOGGER.logInfo( getTextResourceService().getText(
+						MESSAGE_MODULE_VALID,
+						getTextResourceService().getText( MESSAGE_MODULE_C ) ) );
+				this.getValidationCcompressionValidationModule().getMessageService()
+						.print();
+			} else {
+				LOGGER.logInfo( getTextResourceService().getText(
+						MESSAGE_MODULE_INVALID,
+						getTextResourceService().getText( MESSAGE_MODULE_C ) )
+						+ getTextResourceService().getText(
+								MESSAGE_STEPERGEBNIS_C ) );
+				this.getValidationBjhoveValidationModule().getMessageService()
+						.print();
+				valid = false;
+			}
+
+/*		} catch ( ValidationCcompressionValidationException e ) {
+			LOGGER.logInfo( getTextResourceService().getText(
+					MESSAGE_MODULE_INVALID_2ARGS,
+					getTextResourceService().getText( MESSAGE_MODULE_C ),
+					e.getMessage() ) );
+			this.getValidationCcompressionValidationModule().getMessageService()
+					.print();
+			return false;*/
+		} catch ( Exception e ) {
+			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
+			LOGGER.logError( e.getMessage() );
+			return false;
+		}
+
 
 		return valid;
 	}

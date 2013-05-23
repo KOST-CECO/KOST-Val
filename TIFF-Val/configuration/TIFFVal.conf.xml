@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<configuration>
+	<pathtojhovejar>Drittapplikationen\jhove\bin\JhoveApp.jar</pathtojhovejar>
+	<pathtojhoveconfig>Drittapplikationen\jhove\conf\jhove.conf</pathtojhoveconfig>
+	<pathtojhoveoutput>logs\jhove</pathtojhoveoutput>
+	<pathtoworkdir>work_TIFF-Val</pathtoworkdir>
+	
+	<allowedcompressions>
+		<allowedcompression>	<tag>uncompressed</tag>	<comment>1 (Baseline)</comment>		</allowedcompression>
+		<allowedcompression>	<tag>CCITT 1D</tag>	<comment>2 (Baseline)</comment>		</allowedcompression>
+		<allowedcompression>	<tag>CCITT Group 3</tag>	<comment>3</comment>	</allowedcompression>
+		<allowedcompression>	<tag>CCITT Group 4</tag>	<comment>4</comment>	</allowedcompression>
+		<allowedcompression>	<tag>LZW</tag>	<comment>5</comment>	</allowedcompression>
+		<allowedcompression>	<tag>PackBits</tag>	<comment>32773 (Baseline)</comment>	</allowedcompression>
+	</allowedcompressions>
+	
+	<allowedphotointers>
+		<allowedphotointer>	<tag>white is zero</tag>	<comment>0 (Baseline)</comment>		</allowedphotointer>
+		<allowedphotointer>	<tag>black is zero</tag>	<comment>1 (Baseline)</comment>		</allowedphotointer>
+		<allowedphotointer>	<tag>RGB</tag>	<comment>2 (Baseline)</comment>	</allowedphotointer>
+		<allowedphotointer>	<tag>Palette</tag>	<comment>3 (Baseline)</comment>	</allowedphotointer>
+	</allowedphotointers>
+
+	<allowedbitspersamples>
+		<allowedbitspersample>	<bps>1</bps>	</allowedbitspersample>
+		<allowedbitspersample>	<bps>4</bps>	</allowedbitspersample>
+		<allowedbitspersample>	<bps>8</bps>	</allowedbitspersample>
+		<allowedbitspersample>	<bps>8, 8, 8</bps>	</allowedbitspersample>
+	</allowedbitspersamples>
+	
+	<allowedmultipage>1</allowedmultipage>
+	
+	<allowedtiles>1</allowedtiles>
+	
+</configuration>

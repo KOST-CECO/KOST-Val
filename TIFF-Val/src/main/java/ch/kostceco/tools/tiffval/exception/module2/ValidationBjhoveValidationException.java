@@ -14,7 +14,7 @@ if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth F
 Boston, MA 02110-1301 USA or see <http://www.gnu.org/licenses/>.
 ==============================================================================================*/
 
-package ch.kostceco.tools.tiffval.exception.module3;
+package ch.kostceco.tools.tiffval.exception.module2;
 
 import ch.kostceco.tools.tiffval.exception.TIFFValException;
 
