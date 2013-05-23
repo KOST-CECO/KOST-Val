@@ -33,23 +33,18 @@ public interface ConfigurationService extends Service
 {
 
 	/**
-	 * Gibt eine Liste mit den PUIDs aus, welche im TIFF vorkommen dürfen.
+	 * Gibt die Komprimierung aus, welche im TIFF vorkommen dürfen.
 	 * 
-	 * @return Liste mit den PUIDs aus, welche im TIFF vorkommen dürfen.
+	 * @return Name der Komprimierung, welche im TIFF vorkommen dürfen.
 	 */
-	Map<String, String> getAllowedPuids();
-
-
-	/**
-	 * Gibt den Namen des DROID Signature Files zurück. Die Signaturen werden
-	 * laufend aktualisiert und müssen deshalb von Zeit zu Zeit ausgetauscht
-	 * werden. Daher der konfigurierbare Name.
-	 * 
-	 * @return Namen des DROID Signature Files
-	 */
-	String getPathToDroidSignatureFile();
-
-	String getPathOfDroidSignatureFile() throws MalformedURLException;
+	String getAllowedCompression1();
+	String getAllowedCompression2();
+	String getAllowedCompression3();
+	String getAllowedCompression4();
+	String getAllowedCompression5();
+	String getAllowedCompression7();
+	String getAllowedCompression8();
+	String getAllowedCompression32773();
 
 	/**
 	 * Diverse Angaben zu Jhove
@@ -67,12 +62,5 @@ public interface ConfigurationService extends Service
 	 * @return Pfad des Arbeitsverzeichnisses
 	 */
 	String getPathToWorkDir();
-
-	/**
-	 * Gibt eine Liste mit den zu validierenden Formaten zurück.
-	 * 
-	 * @return Liste mit den zu validierenden Formaten
-	 */
-	List<ValidatedFormat> getValidatedFormats();
 	
 }

@@ -79,7 +79,7 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 
 		boolean isValid = true;
 
-		Map<String, ValidatedFormat> mapValidatedFormats = new HashMap<String, ValidatedFormat>();
+/*		Map<String, ValidatedFormat> mapValidatedFormats = new HashMap<String, ValidatedFormat>();
 		List<ValidatedFormat> validatedFormats = getConfigurationService()
 				.getValidatedFormats();
 		for ( Iterator<ValidatedFormat> iterator = validatedFormats.iterator(); iterator
@@ -87,7 +87,7 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 			ValidatedFormat validatedFormat = iterator.next();
 			mapValidatedFormats.put( validatedFormat.getPronomUniqueId(),
 					validatedFormat );
-		}
+		}*/
 
 		// Arbeitsverzeichnis zum Entpacken des Archivs erstellen
 		String pathToWorkDir0 = getConfigurationService().getPathToWorkDir();

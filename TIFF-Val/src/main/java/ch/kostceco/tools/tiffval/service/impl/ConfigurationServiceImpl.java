@@ -53,26 +53,6 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		this.textResourceService = textResourceService;
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public Map<String, String> getAllowedPuids()
-	{
-
-		Map<String, String> result = new HashMap<String, String>();
-
-		List<HierarchicalConfiguration> fields = getConfig().configurationsAt(
-				"allowedformats.allowedformat" );
-		for ( Iterator<HierarchicalConfiguration> it = fields.iterator(); it
-				.hasNext(); ) {
-			HierarchicalConfiguration sub = it.next();
-			// sub contains now all data about a single field
-			String fieldPuid = sub.getString( "puid" );
-			String fieldExt = sub.getString( "extension" );
-			result.put( fieldPuid, fieldExt );
-		}
-		return result;
-	}
-
 	private XMLConfiguration getConfig()
 	{
 		if ( this.config == null ) {
@@ -113,22 +93,9 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	}
 
 	@Override
-	public String getPathOfDroidSignatureFile() throws MalformedURLException
+	public String getAllowedCompression1() 
 	{
-
-		String pathSignature = getPathToDroidSignatureFile();
-
-		File fileSigfile = new File( pathSignature );
-		URL urlSigfile = fileSigfile.toURI().toURL();
-		String result = urlSigfile.getFile();
-
-		return result;
-	}
-
-	@Override
-	public String getPathToDroidSignatureFile()
-	{
-		Object prop = getConfig().getProperty( "pathtodroidsignature" );
+		Object prop = getConfig().getProperty( "allowedcompression1" );
 
 		if ( prop instanceof String ) {
 			String value = (String) prop;
@@ -137,29 +104,88 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public List<ValidatedFormat> getValidatedFormats()
+	public String getAllowedCompression2() 
 	{
+		Object prop = getConfig().getProperty( "allowedcompression2" );
 
-		List<ValidatedFormat> result = new ArrayList<ValidatedFormat>();
-
-		List<HierarchicalConfiguration> fields = getConfig().configurationsAt(
-				"validatedformats.validatedformat" );
-		for ( Iterator<HierarchicalConfiguration> it = fields.iterator(); it
-				.hasNext(); ) {
-			HierarchicalConfiguration sub = it.next();
-			String pronomuniqueid = sub.getString( "pronomuniqueid" );
-			String validator = sub.getString( "validator" );
-			String extension = sub.getString( "extension" );
-			String description = sub.getString( "description" );
-
-			result.add( new ValidatedFormat( pronomuniqueid, validator,
-					extension, description ) );
-
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
 		}
+		return null;
+	}
 
-		return result;
+	@Override
+	public String getAllowedCompression3() 
+	{
+		Object prop = getConfig().getProperty( "allowedcompression3" );
+
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
+	@Override
+	public String getAllowedCompression4() 
+	{
+		Object prop = getConfig().getProperty( "allowedcompression4" );
+
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
+	@Override
+	public String getAllowedCompression5() 
+	{
+		Object prop = getConfig().getProperty( "allowedcompression5" );
+
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
+	@Override
+	public String getAllowedCompression7() 
+	{
+		Object prop = getConfig().getProperty( "allowedcompression7" );
+
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
+	@Override
+	public String getAllowedCompression8() 
+	{
+		Object prop = getConfig().getProperty( "allowedcompression8" );
+
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
+	@Override
+	public String getAllowedCompression32773() 
+	{
+		Object prop = getConfig().getProperty( "allowedcompression32773" );
+
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
 	}
 
 	@Override

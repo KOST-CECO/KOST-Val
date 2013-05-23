@@ -25,14 +25,14 @@ import ch.kostceco.tools.tiffval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.tiffval.validation.module2.ValidationCcompressionValidationModule;
 
 /**
- * Validierungsschritt C (Komprimierung-Validierung) Ist die TIFF-Datei gemäss Konfigurationsdatei
- * valid? 
+ * Validierungsschritt C (Komprimierung-Validierung) Ist die TIFF-Datei gemäss
+ * Konfigurationsdatei valid?
  * 
  * @author Rc Claire Röthlisberger, KOST-CECO
  */
 
-public class ValidationCcompressionValidationModuleImpl extends ValidationModuleImpl
-		implements ValidationCcompressionValidationModule
+public class ValidationCcompressionValidationModuleImpl extends
+		ValidationModuleImpl implements ValidationCcompressionValidationModule
 {
 
 	private ConfigurationService	configurationService;
@@ -52,7 +52,6 @@ public class ValidationCcompressionValidationModuleImpl extends ValidationModule
 
 	@Override
 	public boolean validate( File tiffDatei )
-			/*throws ValidationCcompressionValidationException*/
 	{
 
 		boolean isValid = true;
@@ -60,7 +59,8 @@ public class ValidationCcompressionValidationModuleImpl extends ValidationModule
 		// Informationen zum Jhove-Logverzeichnis holen
 		String pathToJhoveOutput = getConfigurationService()
 				.getPathToJhoveOutput();
-		File jhoveReport = new File( pathToJhoveOutput, tiffDatei.getName() + ".jhove-log.txt" );
+		File jhoveReport = new File( pathToJhoveOutput, tiffDatei.getName()
+				+ ".jhove-log.txt" );
 
 		/*
 		 * Nicht vergessen in
@@ -69,20 +69,35 @@ public class ValidationCcompressionValidationModuleImpl extends ValidationModule
 		 * name="configurationService" ref="configurationService" />
 		 */
 
-		
-		
-		
+		String com1 = getConfigurationService().getAllowedCompression1();
+		String com2 = getConfigurationService().getAllowedCompression2();
+		String com3 = getConfigurationService().getAllowedCompression3();
+		String com4 = getConfigurationService().getAllowedCompression4();
+		String com5 = getConfigurationService().getAllowedCompression5();
+		String com7 = getConfigurationService().getAllowedCompression7();
+		String com8 = getConfigurationService().getAllowedCompression8();
+		String com32773 = getConfigurationService()
+				.getAllowedCompression32773();
+
+		Integer jhoveio = 0;
+
 		try {
 			BufferedReader in = new BufferedReader(
 					new FileReader( jhoveReport ) );
 			String line;
 			while ( (line = in.readLine()) != null ) {
 
-				// TODO: Konfigurierbar machen
-				// die Status-Zeile enthält diese Zeile:
-				// CompressionScheme: gefolgt von einem Freitext der Komprimierungsart
+				// die CompressionScheme-Zeile enthält einer dieser Freitexte
+				// der Komprimierungsart
 				if ( line.contains( "CompressionScheme" ) ) {
-					if ( !line.contains( "uncompressed" ) ) {
+					jhoveio = 1;
+					if ( line.contains( com1 ) || line.contains( com2 )
+							|| line.contains( com3 ) || line.contains( com4 )
+							|| line.contains( com5 ) || line.contains( com7 )
+							|| line.contains( com8 )
+							|| line.contains( com32773 ) ) {
+						// Valider Status
+					} else {
 						// Invalider Status
 						isValid = false;
 						getMessageService()
@@ -94,16 +109,29 @@ public class ValidationCcompressionValidationModuleImpl extends ValidationModule
 																MESSAGE_DASHES )
 												+ getTextResourceService()
 														.getText(
-																MESSAGE_MODULE_CG_INVALID, line ) );
+																MESSAGE_MODULE_CG_INVALID,
+																line ) );
 					}
 				}
+			}
+			if ( jhoveio == 0 ) {
+				// Invalider Status
+				isValid = false;
+				getMessageService().logError(
+						getTextResourceService().getText( MESSAGE_MODULE_C )
+								+ getTextResourceService().getText(
+										MESSAGE_DASHES )
+								+ getTextResourceService().getText(
+										MESSAGE_MODULE_CG_JHOVENIO ) );
+
 			}
 			in.close();
 		} catch ( Exception e ) {
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_MODULE_C )
 							+ getTextResourceService().getText( MESSAGE_DASHES )
-							+ getTextResourceService().getText( MESSAGE_MODULE_CG_CANNOTFINDJHOVEREPORT ) );
+							+ getTextResourceService().getText(
+									MESSAGE_MODULE_CG_CANNOTFINDJHOVEREPORT ) );
 			return false;
 		}
 		return isValid;
