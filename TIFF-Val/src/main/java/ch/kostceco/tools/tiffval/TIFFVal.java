@@ -1,5 +1,5 @@
 /*== TIFF-Val ==================================================================================
-The TIFF-Val v0.0.1 application is used for validate Tagged Image File Format (TIFF).
+The TIFF-Val v0.9.0 application is used for validate Tagged Image File Format (TIFF).
 Copyright (C) 2013 Claire Röthlisberger (KOST-CECO)
 -----------------------------------------------------------------------------------------------
 TIFF-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
