@@ -18,20 +18,20 @@ package ch.kostceco.tools.tiffval.validation.module2;
 
 import java.io.File;
 
-import ch.kostceco.tools.tiffval.exception.module2.ValidationCcompressionValidationException;
+import ch.kostceco.tools.tiffval.exception.module2.ValidationDphotointerValidationException;
 import ch.kostceco.tools.tiffval.validation.ValidationModule;
 
 /**
- * Validierungsschritt C (Komprimierung-Validierung) Ist die TIFF-Datei gemäss
+ * Validierungsschritt D (Farbraum-Validierung) Ist die TIFF-Datei gemäss
  * Konfigurationsdatei valid?
  * 
  * @author Rc Claire Röthlisberger, KOST-CECO
  */
 
-public interface ValidationCcompressionValidationModule extends ValidationModule
+public interface ValidationDphotointerValidationModule extends ValidationModule
 {
 
 	public boolean validate( File tiffDatei )
-			throws ValidationCcompressionValidationException;
+			throws ValidationDphotointerValidationException;
 
 }

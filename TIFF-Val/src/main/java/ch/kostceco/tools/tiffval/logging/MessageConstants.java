@@ -55,10 +55,18 @@ public interface MessageConstants
 	String	MESSAGE_MODULE_A							= "message.module.a";
 	String	MESSAGE_MODULE_B							= "message.module.b";
 	String	MESSAGE_MODULE_C							= "message.module.c";
+	String	MESSAGE_MODULE_D							= "message.module.d";
+	String	MESSAGE_MODULE_E							= "message.module.e";
+	String	MESSAGE_MODULE_F							= "message.module.f";
+	String	MESSAGE_MODULE_G							= "message.module.g";
 	
 	String	MESSAGE_STEPERGEBNIS_A						= "message.stepergebnis.a";
 	String	MESSAGE_STEPERGEBNIS_B						= "message.stepergebnis.b";
 	String	MESSAGE_STEPERGEBNIS_C						= "message.stepergebnis.c";
+	String	MESSAGE_STEPERGEBNIS_D						= "message.stepergebnis.d";
+	String	MESSAGE_STEPERGEBNIS_E						= "message.stepergebnis.e";
+	String	MESSAGE_STEPERGEBNIS_F						= "message.stepergebnis.f";
+	String	MESSAGE_STEPERGEBNIS_G						= "message.stepergebnis.g";
 	
 	String	MESSAGE_DASHES								= "message.dashes";
 

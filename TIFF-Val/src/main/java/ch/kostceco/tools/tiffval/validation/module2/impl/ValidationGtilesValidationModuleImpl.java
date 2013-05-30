@@ -22,17 +22,17 @@ import java.io.FileReader;
 
 import ch.kostceco.tools.tiffval.service.ConfigurationService;
 import ch.kostceco.tools.tiffval.validation.ValidationModuleImpl;
-import ch.kostceco.tools.tiffval.validation.module2.ValidationCcompressionValidationModule;
+import ch.kostceco.tools.tiffval.validation.module2.ValidationGtilesValidationModule;
 
 /**
- * Validierungsschritt C (Komprimierung-Validierung) Ist die TIFF-Datei gemäss
+ * Validierungsschritt G (Kacheln-Validierung) Ist die TIFF-Datei gemäss
  * Konfigurationsdatei valid?
  * 
  * @author Rc Claire Röthlisberger, KOST-CECO
  */
 
-public class ValidationCcompressionValidationModuleImpl extends
-		ValidationModuleImpl implements ValidationCcompressionValidationModule
+public class ValidationGtilesValidationModuleImpl extends
+		ValidationModuleImpl implements ValidationGtilesValidationModule
 {
 
 	private ConfigurationService	configurationService;
@@ -69,15 +69,7 @@ public class ValidationCcompressionValidationModuleImpl extends
 		 * name="configurationService" ref="configurationService" />
 		 */
 
-		String com1 = getConfigurationService().getAllowedCompression1();
-		String com2 = getConfigurationService().getAllowedCompression2();
-		String com3 = getConfigurationService().getAllowedCompression3();
-		String com4 = getConfigurationService().getAllowedCompression4();
-		String com5 = getConfigurationService().getAllowedCompression5();
-		String com7 = getConfigurationService().getAllowedCompression7();
-		String com8 = getConfigurationService().getAllowedCompression8();
-		String com32773 = getConfigurationService()
-				.getAllowedCompression32773();
+		String tiles = getConfigurationService().getAllowedTiles();
 
 		Integer jhoveio = 0;
 
@@ -87,25 +79,21 @@ public class ValidationCcompressionValidationModuleImpl extends
 			String line;
 			while ( (line = in.readLine()) != null ) {
 
-				// die CompressionScheme-Zeile enthält einer dieser Freitexte
-				// der Komprimierungsart
-				if ( line.contains( "CompressionScheme" ) ) {
+				// die StripOffsets- oder TileOffsets-Zeile gibt Auskunft über  
+				// die Aufteilungsart
+				if ( line.contains( "StripOffsets" )|| line.contains( "TileOffsets" ) ) {
 					jhoveio = 1;
-					if ( line.contains( com1 ) && !line.contains( "PK" ) ) {
-						// Valider Status
-					} else if ( line.contains( com2 )
-							|| line.contains( com3 ) || line.contains( com4 )
-							|| line.contains( com5 ) || line.contains( com7 )
-							|| line.contains( com8 )
-							|| line.contains( com32773 ) ) {
-						// Valider Status
+					if ( line.contains( "StripOffsets" ) ) {
+						// Valider Status (Streifen sind immer erlaubt)
+					} else if ( tiles.contains ("1")) {
+						// Valider Status (Kacheln sind  erlaubt)
 					} else {
-						// Invalider Status
+						// Invalider Status (Kacheln sind nicht erlaubt)
 						isValid = false;
 						getMessageService()
 								.logError(
 										getTextResourceService().getText(
-												MESSAGE_MODULE_C )
+												MESSAGE_MODULE_G )
 												+ getTextResourceService()
 														.getText(
 																MESSAGE_DASHES )
@@ -120,7 +108,7 @@ public class ValidationCcompressionValidationModuleImpl extends
 				// Invalider Status
 				isValid = false;
 				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_C )
+						getTextResourceService().getText( MESSAGE_MODULE_G )
 								+ getTextResourceService().getText(
 										MESSAGE_DASHES )
 								+ getTextResourceService().getText(
@@ -130,7 +118,7 @@ public class ValidationCcompressionValidationModuleImpl extends
 			in.close();
 		} catch ( Exception e ) {
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_C )
+					getTextResourceService().getText( MESSAGE_MODULE_G )
 							+ getTextResourceService().getText( MESSAGE_DASHES )
 							+ getTextResourceService().getText(
 									MESSAGE_MODULE_CG_CANNOTFINDJHOVEREPORT ) );

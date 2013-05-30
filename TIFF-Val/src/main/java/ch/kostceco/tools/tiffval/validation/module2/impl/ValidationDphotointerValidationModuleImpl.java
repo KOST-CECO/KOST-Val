@@ -22,17 +22,17 @@ import java.io.FileReader;
 
 import ch.kostceco.tools.tiffval.service.ConfigurationService;
 import ch.kostceco.tools.tiffval.validation.ValidationModuleImpl;
-import ch.kostceco.tools.tiffval.validation.module2.ValidationCcompressionValidationModule;
+import ch.kostceco.tools.tiffval.validation.module2.ValidationDphotointerValidationModule;
 
 /**
- * Validierungsschritt C (Komprimierung-Validierung) Ist die TIFF-Datei gemäss
+ * Validierungsschritt D (Farbraum-Validierung) Ist die TIFF-Datei gemäss
  * Konfigurationsdatei valid?
  * 
  * @author Rc Claire Röthlisberger, KOST-CECO
  */
 
-public class ValidationCcompressionValidationModuleImpl extends
-		ValidationModuleImpl implements ValidationCcompressionValidationModule
+public class ValidationDphotointerValidationModuleImpl extends
+		ValidationModuleImpl implements ValidationDphotointerValidationModule
 {
 
 	private ConfigurationService	configurationService;
@@ -69,15 +69,14 @@ public class ValidationCcompressionValidationModuleImpl extends
 		 * name="configurationService" ref="configurationService" />
 		 */
 
-		String com1 = getConfigurationService().getAllowedCompression1();
-		String com2 = getConfigurationService().getAllowedCompression2();
-		String com3 = getConfigurationService().getAllowedCompression3();
-		String com4 = getConfigurationService().getAllowedCompression4();
-		String com5 = getConfigurationService().getAllowedCompression5();
-		String com7 = getConfigurationService().getAllowedCompression7();
-		String com8 = getConfigurationService().getAllowedCompression8();
-		String com32773 = getConfigurationService()
-				.getAllowedCompression32773();
+		String pi0 = getConfigurationService().getAllowedPhotointer0();
+		String pi1 = getConfigurationService().getAllowedPhotointer1();
+		String pi2 = getConfigurationService().getAllowedPhotointer2();
+		String pi3 = getConfigurationService().getAllowedPhotointer3();
+		String pi4 = getConfigurationService().getAllowedPhotointer4();
+		String pi5 = getConfigurationService().getAllowedPhotointer5();
+		String pi6 = getConfigurationService().getAllowedPhotointer6();
+		String pi8 = getConfigurationService().getAllowedPhotointer8();
 
 		Integer jhoveio = 0;
 
@@ -87,17 +86,14 @@ public class ValidationCcompressionValidationModuleImpl extends
 			String line;
 			while ( (line = in.readLine()) != null ) {
 
-				// die CompressionScheme-Zeile enthält einer dieser Freitexte
-				// der Komprimierungsart
-				if ( line.contains( "CompressionScheme" ) ) {
+				// die ColorSpace-Zeile enthält einer dieser Freitexte
+				// der Farbraumart
+				if ( line.contains( "ColorSpace" ) ) {
 					jhoveio = 1;
-					if ( line.contains( com1 ) && !line.contains( "PK" ) ) {
-						// Valider Status
-					} else if ( line.contains( com2 )
-							|| line.contains( com3 ) || line.contains( com4 )
-							|| line.contains( com5 ) || line.contains( com7 )
-							|| line.contains( com8 )
-							|| line.contains( com32773 ) ) {
+					if ( line.contains( pi0 ) || line.contains( pi1 ) || line.contains( pi2 )
+							|| line.contains( pi3 ) || line.contains( pi4 )
+							|| line.contains( pi5 ) || line.contains( pi6 )
+							|| line.contains( pi8 ) ) {
 						// Valider Status
 					} else {
 						// Invalider Status
@@ -105,7 +101,7 @@ public class ValidationCcompressionValidationModuleImpl extends
 						getMessageService()
 								.logError(
 										getTextResourceService().getText(
-												MESSAGE_MODULE_C )
+												MESSAGE_MODULE_D )
 												+ getTextResourceService()
 														.getText(
 																MESSAGE_DASHES )
@@ -120,7 +116,7 @@ public class ValidationCcompressionValidationModuleImpl extends
 				// Invalider Status
 				isValid = false;
 				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_C )
+						getTextResourceService().getText( MESSAGE_MODULE_D )
 								+ getTextResourceService().getText(
 										MESSAGE_DASHES )
 								+ getTextResourceService().getText(
@@ -130,7 +126,7 @@ public class ValidationCcompressionValidationModuleImpl extends
 			in.close();
 		} catch ( Exception e ) {
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_C )
+					getTextResourceService().getText( MESSAGE_MODULE_D )
 							+ getTextResourceService().getText( MESSAGE_DASHES )
 							+ getTextResourceService().getText(
 									MESSAGE_MODULE_CG_CANNOTFINDJHOVEREPORT ) );

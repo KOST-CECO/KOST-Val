@@ -18,16 +18,16 @@
 	<allowedphotointer1>black is zero</allowedphotointer1>		<!--0 / black is zero-->
 	<allowedphotointer2>RGB</allowedphotointer2>				<!--0 / RGB-->
 	<allowedphotointer3>Palette</allowedphotointer3>			<!--0 / Palette-->
+	<allowedphotointer4>0</allowedphotointer4>					<!--0 / Transparency mask-->
+	<allowedphotointer5>0</allowedphotointer5>					<!--0 / CMYK-->
+	<allowedphotointer6>0</allowedphotointer6>					<!--0 / YCbCr-->
+	<allowedphotointer8>0</allowedphotointer8>					<!--0 / CIE L*a*b*-->
 
 	<allowedbitspersample1>1</allowedbitspersample1>					<!--0 / 1-->
 	<allowedbitspersample4>4</allowedbitspersample4>					<!--0 / 4-->
 	<allowedbitspersample8>8</allowedbitspersample8>					<!--0 / 8-->
-	<allowedbitspersample888>8, 8, 8</allowedbitspersample888>			<!--0 / 8, 8, 8-->
-	<allowedbitspersample8888>8, 8, 8, 8</allowedbitspersample8888>		<!--0 / 8, 8, 8, 8-->
 	<allowedbitspersample16>0</allowedbitspersample16>					<!--0 / 16-->
-	<allowedbitspersample161616>0</allowedbitspersample161616>			<!--0 / 16, 16, 16-->
 	<allowedbitspersample64>0</allowedbitspersample64>					<!--0 / 64-->
-	<allowedbitspersample646464>0</allowedbitspersample646464>			<!--0 / 64, 64, 64-->
 	
 	<allowedmultipage>1</allowedmultipage>			<!--0 / 1-->
 	

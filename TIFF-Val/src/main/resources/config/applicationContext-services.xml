@@ -47,6 +47,30 @@
 		<property name="configurationService" ref="configurationService" />
 	</bean>
 
+	<bean id="validationDphotointerValidationModule" class="ch.kostceco.tools.tiffval.validation.module2.impl.ValidationDphotointerValidationModuleImpl">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="messageService" ref="messageService" />
+		<property name="configurationService" ref="configurationService" />
+	</bean>
+
+	<bean id="validationEbitspersampleValidationModule" class="ch.kostceco.tools.tiffval.validation.module2.impl.ValidationEbitspersampleValidationModuleImpl">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="messageService" ref="messageService" />
+		<property name="configurationService" ref="configurationService" />
+	</bean>
+
+	<bean id="validationFmultipageValidationModule" class="ch.kostceco.tools.tiffval.validation.module2.impl.ValidationFmultipageValidationModuleImpl">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="messageService" ref="messageService" />
+		<property name="configurationService" ref="configurationService" />
+	</bean>
+
+	<bean id="validationGtilesValidationModule" class="ch.kostceco.tools.tiffval.validation.module2.impl.ValidationGtilesValidationModuleImpl">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="messageService" ref="messageService" />
+		<property name="configurationService" ref="configurationService" />
+	</bean>
+
 	<bean id="TIFFVal" class="ch.kostceco.tools.tiffval.TIFFVal">
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="configurationService" ref="configurationService" />
@@ -61,6 +85,10 @@
 		<property name="validationArecognitionModule" ref="validationArecognitionModule" />
 		<property name="validationBjhoveValidationModule" ref="validationBjhoveValidationModule" />
 		<property name="validationCcompressionValidationModule" ref="validationCcompressionValidationModule" />
+		<property name="validationDphotointerValidationModule" ref="validationDphotointerValidationModule" />
+		<property name="validationEbitspersampleValidationModule" ref="validationEbitspersampleValidationModule" />
+		<property name="validationFmultipageValidationModule" ref="validationFmultipageValidationModule" />
+		<property name="validationGtilesValidationModule" ref="validationGtilesValidationModule" />
 	</bean>
 
 </beans>

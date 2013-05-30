@@ -20,12 +20,21 @@ import java.io.File;
 
 import ch.kostceco.tools.tiffval.exception.module1.ValidationArecognitionException;
 import ch.kostceco.tools.tiffval.exception.module2.ValidationBjhoveValidationException;
+import ch.kostceco.tools.tiffval.exception.module2.ValidationCcompressionValidationException;
+import ch.kostceco.tools.tiffval.exception.module2.ValidationDphotointerValidationException;
+import ch.kostceco.tools.tiffval.exception.module2.ValidationEbitspersampleValidationException;
+import ch.kostceco.tools.tiffval.exception.module2.ValidationFmultipageValidationException;
+import ch.kostceco.tools.tiffval.exception.module2.ValidationGtilesValidationException;
 import ch.kostceco.tools.tiffval.logging.Logger;
 import ch.kostceco.tools.tiffval.logging.MessageConstants;
 import ch.kostceco.tools.tiffval.service.TextResourceService;
 import ch.kostceco.tools.tiffval.validation.module1.ValidationArecognitionModule;
 import ch.kostceco.tools.tiffval.validation.module2.ValidationBjhoveValidationModule;
 import ch.kostceco.tools.tiffval.validation.module2.ValidationCcompressionValidationModule;
+import ch.kostceco.tools.tiffval.validation.module2.ValidationDphotointerValidationModule;
+import ch.kostceco.tools.tiffval.validation.module2.ValidationEbitspersampleValidationModule;
+import ch.kostceco.tools.tiffval.validation.module2.ValidationFmultipageValidationModule;
+import ch.kostceco.tools.tiffval.validation.module2.ValidationGtilesValidationModule;
 
 /**
  * Der Controller ruft die benötigten Module zur Validierung des TIFF-Archivs in
@@ -45,6 +54,10 @@ public class Controller implements MessageConstants
 	private ValidationArecognitionModule		validationArecognitionModule;
 	private ValidationBjhoveValidationModule	validationBjhoveValidationModule;
 	private ValidationCcompressionValidationModule	validationCcompressionValidationModule;
+	private ValidationDphotointerValidationModule	validationDphotointerValidationModule;
+	private ValidationEbitspersampleValidationModule	validationEbitspersampleValidationModule;
+	private ValidationFmultipageValidationModule	validationFmultipageValidationModule;
+	private ValidationGtilesValidationModule	validationGtilesValidationModule;
 	
 	private TextResourceService					textResourceService;
 
@@ -52,7 +65,6 @@ public class Controller implements MessageConstants
 	{
 		return validationArecognitionModule;
 	}
-
 	public void setValidationArecognitionModule(
 			ValidationArecognitionModule validationArecognitionModule )
 	{
@@ -63,7 +75,6 @@ public class Controller implements MessageConstants
 	{
 		return validationBjhoveValidationModule;
 	}
-
 	public void setValidationBjhoveValidationModule(
 			ValidationBjhoveValidationModule validationBjhoveValidationModule )
 	{
@@ -74,11 +85,50 @@ public class Controller implements MessageConstants
 	{
 		return validationCcompressionValidationModule;
 	}
-
 	public void setValidationCcompressionValidationModule(
 			ValidationCcompressionValidationModule validationCcompressionValidationModule )
 	{
 		this.validationCcompressionValidationModule = validationCcompressionValidationModule;
+	}
+
+	public ValidationDphotointerValidationModule getValidationDphotointerValidationModule()
+	{
+		return validationDphotointerValidationModule;
+	}
+	public void setValidationDphotointerValidationModule(
+			ValidationDphotointerValidationModule validationDphotointerValidationModule )
+	{
+		this.validationDphotointerValidationModule = validationDphotointerValidationModule;
+	}
+
+	public ValidationEbitspersampleValidationModule getValidationEbitspersampleValidationModule()
+	{
+		return validationEbitspersampleValidationModule;
+	}
+	public void setValidationEbitspersampleValidationModule(
+			ValidationEbitspersampleValidationModule validationEbitspersampleValidationModule )
+	{
+		this.validationEbitspersampleValidationModule = validationEbitspersampleValidationModule;
+	}
+
+	public ValidationFmultipageValidationModule getValidationFmultipageValidationModule()
+	{
+		return validationFmultipageValidationModule;
+	}
+	public void setValidationFmultipageValidationModule(
+			ValidationFmultipageValidationModule validationFmultipageValidationModule )
+	{
+		this.validationFmultipageValidationModule = validationFmultipageValidationModule;
+	}
+
+	public ValidationGtilesValidationModule getValidationGtilesValidationModule()
+	{
+		return validationGtilesValidationModule;
+	}
+	public void setValidationGtilesValidationModule(
+			ValidationGtilesValidationModule validationGtilesValidationModule )
+	{
+		this.validationGtilesValidationModule = validationGtilesValidationModule;
 	}
 
 
@@ -186,19 +236,155 @@ public class Controller implements MessageConstants
 						getTextResourceService().getText( MESSAGE_MODULE_C ) )
 						+ getTextResourceService().getText(
 								MESSAGE_STEPERGEBNIS_C ) );
-				this.getValidationBjhoveValidationModule().getMessageService()
+				this.getValidationCcompressionValidationModule().getMessageService()
 						.print();
 				valid = false;
 			}
 
-/*		} catch ( ValidationCcompressionValidationException e ) {
+		} catch ( ValidationCcompressionValidationException e ) {
 			LOGGER.logInfo( getTextResourceService().getText(
 					MESSAGE_MODULE_INVALID_2ARGS,
 					getTextResourceService().getText( MESSAGE_MODULE_C ),
 					e.getMessage() ) );
 			this.getValidationCcompressionValidationModule().getMessageService()
 					.print();
-			return false;*/
+			return false;
+		} catch ( Exception e ) {
+			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
+			LOGGER.logError( e.getMessage() );
+			return false;
+		}
+
+		// Validation Step D
+		try {
+			if ( this.getValidationDphotointerValidationModule()
+					.validate( tiffDatei ) ) {
+				LOGGER.logInfo( getTextResourceService().getText(
+						MESSAGE_MODULE_VALID,
+						getTextResourceService().getText( MESSAGE_MODULE_D ) ) );
+				this.getValidationDphotointerValidationModule().getMessageService()
+						.print();
+			} else {
+				LOGGER.logInfo( getTextResourceService().getText(
+						MESSAGE_MODULE_INVALID,
+						getTextResourceService().getText( MESSAGE_MODULE_D ) )
+						+ getTextResourceService().getText(
+								MESSAGE_STEPERGEBNIS_D ) );
+				this.getValidationDphotointerValidationModule().getMessageService()
+						.print();
+				valid = false;
+			}
+
+		} catch ( ValidationDphotointerValidationException e ) {
+			LOGGER.logInfo( getTextResourceService().getText(
+					MESSAGE_MODULE_INVALID_2ARGS,
+					getTextResourceService().getText( MESSAGE_MODULE_D ),
+					e.getMessage() ) );
+			this.getValidationDphotointerValidationModule().getMessageService()
+					.print();
+			return false;
+		} catch ( Exception e ) {
+			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
+			LOGGER.logError( e.getMessage() );
+			return false;
+		}
+
+		// Validation Step E
+		try {
+			if ( this.getValidationEbitspersampleValidationModule()
+					.validate( tiffDatei ) ) {
+				LOGGER.logInfo( getTextResourceService().getText(
+						MESSAGE_MODULE_VALID,
+						getTextResourceService().getText( MESSAGE_MODULE_E ) ) );
+				this.getValidationEbitspersampleValidationModule().getMessageService()
+						.print();
+			} else {
+				LOGGER.logInfo( getTextResourceService().getText(
+						MESSAGE_MODULE_INVALID,
+						getTextResourceService().getText( MESSAGE_MODULE_E ) )
+						+ getTextResourceService().getText(
+								MESSAGE_STEPERGEBNIS_E ) );
+				this.getValidationEbitspersampleValidationModule().getMessageService()
+						.print();
+				valid = false;
+			}
+
+		} catch ( ValidationEbitspersampleValidationException e ) {
+			LOGGER.logInfo( getTextResourceService().getText(
+					MESSAGE_MODULE_INVALID_2ARGS,
+					getTextResourceService().getText( MESSAGE_MODULE_E ),
+					e.getMessage() ) );
+			this.getValidationEbitspersampleValidationModule().getMessageService()
+					.print();
+			return false;
+		} catch ( Exception e ) {
+			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
+			LOGGER.logError( e.getMessage() );
+			return false;
+		}
+
+		// Validation Step F
+		try {
+			if ( this.getValidationFmultipageValidationModule()
+					.validate( tiffDatei ) ) {
+				LOGGER.logInfo( getTextResourceService().getText(
+						MESSAGE_MODULE_VALID,
+						getTextResourceService().getText( MESSAGE_MODULE_F ) ) );
+				this.getValidationFmultipageValidationModule().getMessageService()
+						.print();
+			} else {
+				LOGGER.logInfo( getTextResourceService().getText(
+						MESSAGE_MODULE_INVALID,
+						getTextResourceService().getText( MESSAGE_MODULE_F ) )
+						+ getTextResourceService().getText(
+								MESSAGE_STEPERGEBNIS_F ) );
+				this.getValidationFmultipageValidationModule().getMessageService()
+						.print();
+				valid = false;
+			}
+
+		} catch ( ValidationFmultipageValidationException e ) {
+			LOGGER.logInfo( getTextResourceService().getText(
+					MESSAGE_MODULE_INVALID_2ARGS,
+					getTextResourceService().getText( MESSAGE_MODULE_F ),
+					e.getMessage() ) );
+			this.getValidationFmultipageValidationModule().getMessageService()
+					.print();
+			return false;
+		} catch ( Exception e ) {
+			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
+			LOGGER.logError( e.getMessage() );
+			return false;
+		}
+
+		// Validation Step G
+		try {
+			if ( this.getValidationGtilesValidationModule()
+					.validate( tiffDatei ) ) {
+				LOGGER.logInfo( getTextResourceService().getText(
+						MESSAGE_MODULE_VALID,
+						getTextResourceService().getText( MESSAGE_MODULE_G ) ) );
+				this.getValidationGtilesValidationModule().getMessageService()
+						.print();
+			} else {
+				LOGGER.logInfo( getTextResourceService().getText(
+						MESSAGE_MODULE_INVALID,
+						getTextResourceService().getText( MESSAGE_MODULE_G ) )
+						+ getTextResourceService().getText(
+								MESSAGE_STEPERGEBNIS_G ) );
+				this.getValidationGtilesValidationModule().getMessageService()
+						.print();
+				valid = false;
+			}
+
+		} catch ( ValidationGtilesValidationException e ) {
+			LOGGER.logInfo( getTextResourceService().getText(
+					MESSAGE_MODULE_INVALID_2ARGS,
+					getTextResourceService().getText( MESSAGE_MODULE_G ),
+					e.getMessage() ) );
+			this.getValidationGtilesValidationModule().getMessageService()
+					.print();
+			return false;
 		} catch ( Exception e ) {
 			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
 			LOGGER.logError( e.getMessage() );

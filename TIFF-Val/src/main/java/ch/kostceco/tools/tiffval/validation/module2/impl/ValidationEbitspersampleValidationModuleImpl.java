@@ -22,17 +22,18 @@ import java.io.FileReader;
 
 import ch.kostceco.tools.tiffval.service.ConfigurationService;
 import ch.kostceco.tools.tiffval.validation.ValidationModuleImpl;
-import ch.kostceco.tools.tiffval.validation.module2.ValidationCcompressionValidationModule;
+import ch.kostceco.tools.tiffval.validation.module2.ValidationEbitspersampleValidationModule;
 
 /**
- * Validierungsschritt C (Komprimierung-Validierung) Ist die TIFF-Datei gemäss
+ * Validierungsschritt E (BitsPerSample-Validierung) Ist die TIFF-Datei gemäss
  * Konfigurationsdatei valid?
  * 
  * @author Rc Claire Röthlisberger, KOST-CECO
  */
 
-public class ValidationCcompressionValidationModuleImpl extends
-		ValidationModuleImpl implements ValidationCcompressionValidationModule
+public class ValidationEbitspersampleValidationModuleImpl extends
+		ValidationModuleImpl implements
+		ValidationEbitspersampleValidationModule
 {
 
 	private ConfigurationService	configurationService;
@@ -69,15 +70,11 @@ public class ValidationCcompressionValidationModuleImpl extends
 		 * name="configurationService" ref="configurationService" />
 		 */
 
-		String com1 = getConfigurationService().getAllowedCompression1();
-		String com2 = getConfigurationService().getAllowedCompression2();
-		String com3 = getConfigurationService().getAllowedCompression3();
-		String com4 = getConfigurationService().getAllowedCompression4();
-		String com5 = getConfigurationService().getAllowedCompression5();
-		String com7 = getConfigurationService().getAllowedCompression7();
-		String com8 = getConfigurationService().getAllowedCompression8();
-		String com32773 = getConfigurationService()
-				.getAllowedCompression32773();
+		String bps1 = getConfigurationService().getAllowedBitspersample1();
+		String bps4 = getConfigurationService().getAllowedBitspersample4();
+		String bps8 = getConfigurationService().getAllowedBitspersample8();
+		String bps16 = getConfigurationService().getAllowedBitspersample16();
+		String bps64 = getConfigurationService().getAllowedBitspersample64();
 
 		Integer jhoveio = 0;
 
@@ -87,32 +84,79 @@ public class ValidationCcompressionValidationModuleImpl extends
 			String line;
 			while ( (line = in.readLine()) != null ) {
 
-				// die CompressionScheme-Zeile enthält einer dieser Freitexte
-				// der Komprimierungsart
-				if ( line.contains( "CompressionScheme" ) ) {
+				// die BitsPerSample-Zeile enthält einer dieser Freitexte
+				// der BitsPerSampleart
+				if ( line.contains( "BitsPerSample" ) ) {
 					jhoveio = 1;
-					if ( line.contains( com1 ) && !line.contains( "PK" ) ) {
-						// Valider Status
-					} else if ( line.contains( com2 )
-							|| line.contains( com3 ) || line.contains( com4 )
-							|| line.contains( com5 ) || line.contains( com7 )
-							|| line.contains( com8 )
-							|| line.contains( com32773 ) ) {
-						// Valider Status
+					if ( line.contains( "64" ) ) {
+						// Status 64
+						if ( !line.contains( bps64 ) ) {
+							// Invalider Status
+							isValid = false;
+							getMessageService().logError(
+									getTextResourceService().getText( MESSAGE_MODULE_E )
+											+ getTextResourceService().getText(
+													MESSAGE_DASHES )
+											+ getTextResourceService().getText(
+													MESSAGE_MODULE_CG_INVALID, line ) );
+						}
+					} else if ( line.contains( "16" ) ) {
+						// Status 16
+						if ( !line.contains( bps16 ) ) {
+							// Invalider Status
+							isValid = false;
+							getMessageService().logError(
+									getTextResourceService().getText( MESSAGE_MODULE_E )
+											+ getTextResourceService().getText(
+													MESSAGE_DASHES )
+											+ getTextResourceService().getText(
+													MESSAGE_MODULE_CG_INVALID, line ) );
+						}
+					} else if ( line.contains( "8" ) ) {
+						// Status 8
+						if ( !line.contains( bps8 ) ) {
+							// Invalider Status
+							isValid = false;
+							getMessageService().logError(
+									getTextResourceService().getText( MESSAGE_MODULE_E )
+											+ getTextResourceService().getText(
+													MESSAGE_DASHES )
+											+ getTextResourceService().getText(
+													MESSAGE_MODULE_CG_INVALID, line ) );
+						}
+					} else if ( line.contains( "4" ) ) {
+						// Status 4
+						if ( !line.contains( bps4 ) ) {
+							// Invalider Status
+							isValid = false;
+							getMessageService().logError(
+									getTextResourceService().getText( MESSAGE_MODULE_E )
+											+ getTextResourceService().getText(
+													MESSAGE_DASHES )
+											+ getTextResourceService().getText(
+													MESSAGE_MODULE_CG_INVALID, line ) );
+						}
+					} else if ( line.contains( "1" ) ) {
+						// Status 1
+						if ( !line.contains( bps1 ) ) {
+							// Invalider Status
+							isValid = false;
+							getMessageService().logError(
+									getTextResourceService().getText( MESSAGE_MODULE_E )
+											+ getTextResourceService().getText(
+													MESSAGE_DASHES )
+											+ getTextResourceService().getText(
+													MESSAGE_MODULE_CG_INVALID, line ) );
+						}
 					} else {
 						// Invalider Status
 						isValid = false;
-						getMessageService()
-								.logError(
-										getTextResourceService().getText(
-												MESSAGE_MODULE_C )
-												+ getTextResourceService()
-														.getText(
-																MESSAGE_DASHES )
-												+ getTextResourceService()
-														.getText(
-																MESSAGE_MODULE_CG_INVALID,
-																line ) );
+						getMessageService().logError(
+								getTextResourceService().getText( MESSAGE_MODULE_E )
+										+ getTextResourceService().getText(
+												MESSAGE_DASHES )
+										+ getTextResourceService().getText(
+												MESSAGE_MODULE_CG_INVALID, line ) );
 					}
 				}
 			}
@@ -120,7 +164,7 @@ public class ValidationCcompressionValidationModuleImpl extends
 				// Invalider Status
 				isValid = false;
 				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_C )
+						getTextResourceService().getText( MESSAGE_MODULE_E )
 								+ getTextResourceService().getText(
 										MESSAGE_DASHES )
 								+ getTextResourceService().getText(
@@ -130,7 +174,7 @@ public class ValidationCcompressionValidationModuleImpl extends
 			in.close();
 		} catch ( Exception e ) {
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_C )
+					getTextResourceService().getText( MESSAGE_MODULE_E )
 							+ getTextResourceService().getText( MESSAGE_DASHES )
 							+ getTextResourceService().getText(
 									MESSAGE_MODULE_CG_CANNOTFINDJHOVEREPORT ) );

@@ -39,6 +39,49 @@ public interface ConfigurationService extends Service
 	String getAllowedCompression32773();
 
 	/**
+	 * Gibt die Farbraum aus, welche im TIFF vorkommen dürfen.
+	 * 
+	 * @return Name der Farbraum, welche im TIFF vorkommen dürfen.
+	 */
+	String getAllowedPhotointer0();
+	String getAllowedPhotointer1();
+	String getAllowedPhotointer2();
+	String getAllowedPhotointer3();
+	String getAllowedPhotointer4();
+	String getAllowedPhotointer5();
+	String getAllowedPhotointer6();
+	String getAllowedPhotointer8();
+
+	/**
+	 * Gibt die BitsPerSample aus, welche im TIFF vorkommen dürfen.
+	 * 
+	 * @return Name der BitsPerSample, welche im TIFF vorkommen dürfen.
+	 */
+	String getAllowedBitspersample1();
+	String getAllowedBitspersample4();
+	String getAllowedBitspersample8();
+	String getAllowedBitspersample888();
+	String getAllowedBitspersample8888();
+	String getAllowedBitspersample16();
+	String getAllowedBitspersample161616();
+	String getAllowedBitspersample64();
+	String getAllowedBitspersample646464();
+
+	/**
+	 * Gibt an ob Multipage im TIFF vorkommen dürfen.
+	 * 
+	 * @return Name der Multipage, welche im TIFF vorkommen dürfen.
+	 */
+	String getAllowedMultipage();
+
+	/**
+	 * Gibt an ob Tiles im TIFF vorkommen dürfen.
+	 * 
+	 * @return Name der Tiles, welche im TIFF vorkommen dürfen.
+	 */
+	String getAllowedTiles();
+
+	/**
 	 * Diverse Angaben zu Jhove
 	 */
 	String getPathToJhoveJar();
