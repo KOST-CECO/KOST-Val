@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<configuration>
+	<pathtojhovejar>Drittapplikationen\jhove\bin\JhoveApp.jar</pathtojhovejar>
+	<pathtojhoveconfig>Drittapplikationen\jhove\conf\jhove.conf</pathtojhoveconfig>
+	<pathtojhoveoutput>logs\jhove</pathtojhoveoutput>
+	<pathtoworkdir>work_TIFF-Val</pathtoworkdir>
+	
+	<allowedcompression1>uncompressed</allowedcompression1>		<!--0 / uncompressed-->
+	<allowedcompression2>CCITT 1D</allowedcompression2>			<!--0 / CCITT 1D-->
+	<allowedcompression3>CCITT Group 3</allowedcompression3>	<!--0 / CCITT Group 3-->
+	<allowedcompression4>CCITT Group 4</allowedcompression4>	<!--0 / CCITT Group 4-->
+	<allowedcompression5>LZW</allowedcompression5>				<!--0 / LZW-->
+	<allowedcompression7>0</allowedcompression7>				<!--0 / ISO JPEG-->
+	<allowedcompression8>0</allowedcompression8>				<!--0 / Deflate-->
+	<allowedcompression32773>PackBits</allowedcompression32773>	<!--0 / PackBits-->
+
+	<allowedphotointer0>white is zero</allowedphotointer0>		<!--0 / white is zero-->
+	<allowedphotointer1>black is zero</allowedphotointer1>		<!--0 / black is zero-->
+	<allowedphotointer2>RGB</allowedphotointer2>				<!--0 / RGB-->
+	<allowedphotointer3>Palette</allowedphotointer3>			<!--0 / Palette-->
+	<allowedphotointer4>0</allowedphotointer4>					<!--0 / Transparency mask-->
+	<allowedphotointer5>0</allowedphotointer5>					<!--0 / CMYK-->
+	<allowedphotointer6>0</allowedphotointer6>					<!--0 / YCbCr-->
+	<allowedphotointer8>0</allowedphotointer8>					<!--0 / CIE L*a*b*-->
+
+	<allowedbitspersample1>1</allowedbitspersample1>					<!--0 / 1-->
+	<allowedbitspersample4>4</allowedbitspersample4>					<!--0 / 4-->
+	<allowedbitspersample8>8</allowedbitspersample8>					<!--0 / 8-->
+	<allowedbitspersample16>0</allowedbitspersample16>					<!--0 / 16-->
+	<allowedbitspersample64>0</allowedbitspersample64>					<!--0 / 64-->
+	
+	<allowedmultipage>1</allowedmultipage>			<!--0 / 1-->
+	
+	<allowedtiles>1</allowedtiles>					<!--0 / 1-->
+	
+</configuration>
