@@ -6,52 +6,28 @@
 	<classpathentry kind="src" path="src/main/resources"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="con" path="org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/ant-1.8.1.jar" sourcepath="external-sources/apache-ant-1.8.1"/>
-	<classpathentry kind="lib" path="lib/ant-launcher-1.8.1.jar" sourcepath="external-sources/apache-ant-1.8.1"/>
-	<classpathentry kind="lib" path="lib/aopalliance-1.0.jar" sourcepath="external-sources/aopalliance-1.0-sources.jar"/>
-	<classpathentry kind="lib" path="lib/aspectjrt-1.6.5.jar" sourcepath="external-sources/aspectjrt-1.6.5-sources.jar"/>
-	<classpathentry kind="lib" path="lib/aspectjweaver-1.6.5.jar" sourcepath="external-sources/aspectjweaver-1.6.5-sources.jar"/>
-	<classpathentry kind="lib" path="lib/bcprov-jdk14-1.45.jar" sourcepath="external-sources/bcprov-jdk14-1.45-sources.jar"/>
-	<classpathentry kind="lib" path="lib/commons-beanutils-1.7.0.jar" sourcepath="external-sources/commons-beanutils-1.7.0-sources.jar"/>
-	<classpathentry kind="lib" path="lib/commons-beanutils-core-1.8.0.jar" sourcepath="external-sources/commons-beanutils-1.7.0-sources.jar"/>
-	<classpathentry kind="lib" path="lib/commons-collections-3.2.1.jar" sourcepath="external-sources/commons-collections-3.2.1-sources.jar"/>
 	<classpathentry kind="lib" path="lib/commons-configuration-1.6.jar" sourcepath="external-sources/commons-configuration-1.6-sources.jar"/>
-	<classpathentry kind="lib" path="lib/commons-digester-1.8.jar" sourcepath="external-sources/commons-digester-1.8-sources.jar"/>
-	<classpathentry kind="lib" path="lib/commons-io-2.0.jar" sourcepath="external-sources/commons-io-2.0-sources.jar"/>
-	<classpathentry kind="lib" path="lib/commons-lang-2.4.jar" sourcepath="external-sources/commons-lang-2.4-sources.jar"/>
-	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar" sourcepath="external-sources/commons-logging-1.1.1-sources.jar"/>
-	<classpathentry kind="lib" path="lib/droid-core-5.0.3.jar" sourcepath="external-sources/droid-core-5.0.3"/>
-	<classpathentry kind="lib" path="lib/droid-export-5.0.3.jar" sourcepath="external-sources/droid-export-5.0.3"/>
-	<classpathentry kind="lib" path="lib/droid-export-interfaces-5.0.3.jar" sourcepath="external-sources/droid-export-interfaces-5.0.3"/>
-	<classpathentry kind="lib" path="lib/droid-help-5.0.3.jar"/>
-	<classpathentry kind="lib" path="lib/droid-interfaces-5.0.3.jar" sourcepath="external-sources/droid-core-interfaces-5.0.3"/>
-	<classpathentry kind="lib" path="lib/droid-report-5.0.3.jar" sourcepath="external-sources/droid-report-5.0.3"/>
-	<classpathentry kind="lib" path="lib/droid-report-interfaces-5.0.3.jar" sourcepath="external-sources/droid-report-interfaces-5.0.3"/>
-	<classpathentry kind="lib" path="lib/droid-results-5.0.3.jar" sourcepath="external-sources/droid-results-5.0.3"/>
 	<classpathentry kind="lib" path="lib/jhove-1.5.jar" sourcepath="external-sources/jhove-1.5-sources"/>
 	<classpathentry kind="lib" path="lib/jhove-handler-1.5.jar" sourcepath="external-sources/jhove-1.5-sources"/>
 	<classpathentry kind="lib" path="lib/jhove-module-1.5.jar" sourcepath="external-sources/jhove-1.5-sources"/>
-	<classpathentry kind="lib" path="lib/junit-4.4.jar" sourcepath="external-sources/junit-4.4-sources.jar"/>
 	<classpathentry kind="lib" path="lib/log4j-1.2.12.jar" sourcepath="external-sources/log4j-1.2.12"/>
-	<classpathentry kind="lib" path="lib/mockito-all-1.8.5.jar" sourcepath="external-sources/mockito-all-1.8.5-sources.jar"/>
-	<classpathentry kind="lib" path="lib/opencsv-2.1.jar" sourcepath="external-sources/opencsv-2.1-sources.jar"/>
-	<classpathentry kind="lib" path="lib/pdftron-0.0.jar"/>
-	<classpathentry kind="lib" path="lib/spring-aop-3.0.0.RELEASE.jar" sourcepath="external-sources/spring-aop-3.0.0.RELEASE-sources.jar"/>
-	<classpathentry kind="lib" path="lib/spring-asm-3.0.0.RELEASE.jar"/>
-	<classpathentry kind="lib" path="lib/spring-beans-3.0.0.RELEASE.jar" sourcepath="external-sources/spring-beans-3.0.0.RELEASE-sources.jar"/>
 	<classpathentry kind="lib" path="lib/spring-context-3.0.0.RELEASE.jar" sourcepath="external-sources/spring-context-3.0.0.RELEASE-sources.jar"/>
-	<classpathentry kind="lib" path="lib/spring-core-3.0.0.RELEASE.jar" sourcepath="external-sources/spring-core-3.0.0.RELEASE-sources.jar"/>
-	<classpathentry kind="lib" path="lib/spring-expression-3.0.0.RELEASE.jar" sourcepath="external-sources/spring-expression-3.0.0.RELEASE-sources.jar"/>
-	<classpathentry kind="lib" path="lib/spring-jdbc-3.0.0.RELEASE.jar" sourcepath="external-sources/spring-jdbc-3.0.0.RELEASE-sources.jar"/>
-	<classpathentry kind="lib" path="lib/spring-orm-3.0.0.RELEASE.jar" sourcepath="external-sources/spring-orm-3.0.0.RELEASE-sources.jar"/>
-	<classpathentry kind="lib" path="lib/spring-security-core-3.0.0.RELEASE.jar" sourcepath="external-sources/spring-security-core-3.0.0.RELEASE-sources.jar"/>
-	<classpathentry kind="lib" path="lib/spring-test-3.0.0.RELEASE.jar" sourcepath="external-sources/spring-test-3.0.0.RELEASE-sources.jar"/>
-	<classpathentry kind="lib" path="lib/spring-tx-3.0.0.RELEASE.jar" sourcepath="external-sources/spring-tx-3.0.0.RELEASE-sources.jar"/>
-	<classpathentry kind="lib" path="lib/truezip-6.8.1.jar" sourcepath="external-sources/truezip-6.8.1-sources.jar"/>
-	<classpathentry kind="lib" path="lib/xalan-j_2.7.0.jar" sourcepath="external-sources/xalan-2.7.0-sources.jar"/>
-	<classpathentry kind="lib" path="lib/xercesImpl-2.7.1.jar" sourcepath="external-sources/xercesImpl-2.7.1-sources.jar"/>
-	<classpathentry kind="lib" path="lib/xml-apis-2.7.1.jar"/>
-	<classpathentry kind="lib" path="lib/zip64-1.0.jar" sourcepath="external-sources/zip64-sources.jar"/>
-	<classpathentry kind="lib" path="lib/zip64file-1.0.jar" sourcepath="external-sources/Zip64File-sources.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-lang-2.4.jar"/>
+	<classpathentry kind="lib" path="lib/spring-beans-3.0.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring-core-3.0.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring-asm-3.0.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring-aop-3.0.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring-expression-3.0.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring-jdbc-3.0.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring-orm-3.0.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring-security-core-3.0.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring-test-3.0.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring-tx-3.0.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/commons-beanutils-1.7.0.jar"/>
+	<classpathentry kind="lib" path="lib/commons-beanutils-core-1.8.0.jar"/>
+	<classpathentry kind="lib" path="lib/commons-collections-3.2.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-digester-1.8.jar"/>
+	<classpathentry kind="lib" path="lib/commons-io-2.0.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

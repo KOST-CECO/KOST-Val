@@ -25,7 +25,7 @@ import ch.kostceco.tools.tiffval.validation.ValidationModule;
  * Validierungsschritt 1a Ist das TIFF eine korrekte, unkomprimierte ZIP / ZIP64
  * Datei (wenn komprimiert, mit welchem Algorithmus)?
  * 
- * @author Rc Claire Röthlisberger, KOST-CECO Daniel Ludin, Bedag AG
+ * @author Rc Claire Röthlisberger, KOST-CECO
  */
 
 public interface ValidationArecognitionModule extends ValidationModule
