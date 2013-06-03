@@ -277,6 +277,17 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		return null;
 	}
 	@Override
+	public String getAllowedBitspersample2() 
+	{
+		Object prop = getConfig().getProperty( "allowedbitspersample2" );
+
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+	@Override
 	public String getAllowedBitspersample4() 
 	{
 		Object prop = getConfig().getProperty( "allowedbitspersample4" );
@@ -299,28 +310,6 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		return null;
 	}
 	@Override
-	public String getAllowedBitspersample888() 
-	{
-		Object prop = getConfig().getProperty( "allowedbitspersample888" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		return null;
-	}
-	@Override
-	public String getAllowedBitspersample8888() 
-	{
-		Object prop = getConfig().getProperty( "allowedbitspersample8888" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		return null;
-	}
-	@Override
 	public String getAllowedBitspersample16() 
 	{
 		Object prop = getConfig().getProperty( "allowedbitspersample16" );
@@ -332,9 +321,9 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		return null;
 	}
 	@Override
-	public String getAllowedBitspersample161616() 
+	public String getAllowedBitspersample32() 
 	{
-		Object prop = getConfig().getProperty( "allowedbitspersample161616" );
+		Object prop = getConfig().getProperty( "allowedbitspersample32" );
 
 		if ( prop instanceof String ) {
 			String value = (String) prop;
@@ -346,17 +335,6 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	public String getAllowedBitspersample64() 
 	{
 		Object prop = getConfig().getProperty( "allowedbitspersample64" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		return null;
-	}
-	@Override
-	public String getAllowedBitspersample646464() 
-	{
-		Object prop = getConfig().getProperty( "allowedbitspersample646464" );
 
 		if ( prop instanceof String ) {
 			String value = (String) prop;

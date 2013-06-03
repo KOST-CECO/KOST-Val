@@ -58,14 +58,12 @@ public interface ConfigurationService extends Service
 	 * @return Name der BitsPerSample, welche im TIFF vorkommen dürfen.
 	 */
 	String getAllowedBitspersample1();
+	String getAllowedBitspersample2();
 	String getAllowedBitspersample4();
 	String getAllowedBitspersample8();
-	String getAllowedBitspersample888();
-	String getAllowedBitspersample8888();
 	String getAllowedBitspersample16();
-	String getAllowedBitspersample161616();
+	String getAllowedBitspersample32();
 	String getAllowedBitspersample64();
-	String getAllowedBitspersample646464();
 
 	/**
 	 * Gibt an ob Multipage im TIFF vorkommen dürfen.

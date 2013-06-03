@@ -23,14 +23,16 @@
 	<allowedphotointer6>0</allowedphotointer6>					<!--0 / YCbCr-->
 	<allowedphotointer8>0</allowedphotointer8>					<!--0 / CIE L*a*b*-->
 
-	<allowedbitspersample1>1</allowedbitspersample1>					<!--0 / 1-->
-	<allowedbitspersample4>4</allowedbitspersample4>					<!--0 / 4-->
-	<allowedbitspersample8>8</allowedbitspersample8>					<!--0 / 8-->
-	<allowedbitspersample16>0</allowedbitspersample16>					<!--0 / 16-->
-	<allowedbitspersample64>0</allowedbitspersample64>					<!--0 / 64-->
+	<allowedbitspersample1>1</allowedbitspersample1>			<!--0 / 1-->
+	<allowedbitspersample2>0</allowedbitspersample2>			<!--0 / 2-->
+	<allowedbitspersample4>4</allowedbitspersample4>			<!--0 / 4-->
+	<allowedbitspersample8>8</allowedbitspersample8>			<!--0 / 8-->
+	<allowedbitspersample16>0</allowedbitspersample16>			<!--0 / 16-->
+	<allowedbitspersample32>0</allowedbitspersample32>			<!--0 / 32-->
+	<allowedbitspersample64>0</allowedbitspersample64>			<!--0 / 64-->
 	
-	<allowedmultipage>1</allowedmultipage>			<!--0 / 1-->
+	<allowedmultipage>1</allowedmultipage>						<!--0 / 1-->
 	
-	<allowedtiles>1</allowedtiles>					<!--0 / 1-->
+	<allowedtiles>1</allowedtiles>								<!--0 / 1-->
 	
 </configuration>

@@ -71,9 +71,11 @@ public class ValidationEbitspersampleValidationModuleImpl extends
 		 */
 
 		String bps1 = getConfigurationService().getAllowedBitspersample1();
+		String bps2 = getConfigurationService().getAllowedBitspersample2();
 		String bps4 = getConfigurationService().getAllowedBitspersample4();
 		String bps8 = getConfigurationService().getAllowedBitspersample8();
 		String bps16 = getConfigurationService().getAllowedBitspersample16();
+		String bps32 = getConfigurationService().getAllowedBitspersample32();
 		String bps64 = getConfigurationService().getAllowedBitspersample64();
 
 		Integer jhoveio = 0;
@@ -88,17 +90,86 @@ public class ValidationEbitspersampleValidationModuleImpl extends
 				// der BitsPerSampleart
 				if ( line.contains( "BitsPerSample" ) ) {
 					jhoveio = 1;
-					if ( line.contains( "64" ) ) {
+					if ( line.contains( "5" ) || line.contains( "7" )
+							|| line.contains( "9" ) || line.contains( "10" )
+							|| line.contains( "11" ) || line.contains( "12" )
+							|| line.contains( "14" ) || line.contains( "18" )
+							|| line.contains( "20" ) || line.contains( "21" )
+							|| line.contains( "22" ) || line.contains( "24" )
+							|| line.contains( "26" ) || line.contains( "28" ) ) {
+						// Invalider Status
+						isValid = false;
+						getMessageService()
+								.logError(
+										getTextResourceService().getText(
+												MESSAGE_MODULE_E )
+												+ getTextResourceService()
+														.getText(
+																MESSAGE_DASHES )
+												+ getTextResourceService()
+														.getText(
+																MESSAGE_MODULE_CG_INVALID,
+																line ) );
+					} else if ( line.contains( "40" ) || line.contains( "41" )
+							|| line.contains( "42" ) || line.contains( "44" )
+							|| line.contains( "46" ) || line.contains( "48" )
+							|| line.contains( "80" ) || line.contains( "81" )
+							|| line.contains( "82" ) || line.contains( "84" )
+							|| line.contains( "86" ) || line.contains( "88" ) ) {
+						// Invalider Status
+						isValid = false;
+						getMessageService()
+								.logError(
+										getTextResourceService().getText(
+												MESSAGE_MODULE_E )
+												+ getTextResourceService()
+														.getText(
+																MESSAGE_DASHES )
+												+ getTextResourceService()
+														.getText(
+																MESSAGE_MODULE_CG_INVALID,
+																line ) );
+					} else if ( line.contains( "3" ) && !line.contains( "32" ) ) {
+						// Invalider Status
+						isValid = false;
+						getMessageService()
+								.logError(
+										getTextResourceService().getText(
+												MESSAGE_MODULE_E )
+												+ getTextResourceService()
+														.getText(
+																MESSAGE_DASHES )
+												+ getTextResourceService()
+														.getText(
+																MESSAGE_MODULE_CG_INVALID,
+																line ) );
+					} else if ( line.contains( "64" ) ) {
 						// Status 64
 						if ( !line.contains( bps64 ) ) {
 							// Invalider Status
 							isValid = false;
 							getMessageService().logError(
-									getTextResourceService().getText( MESSAGE_MODULE_E )
+									getTextResourceService().getText(
+											MESSAGE_MODULE_E )
 											+ getTextResourceService().getText(
 													MESSAGE_DASHES )
 											+ getTextResourceService().getText(
-													MESSAGE_MODULE_CG_INVALID, line ) );
+													MESSAGE_MODULE_CG_INVALID,
+													line ) );
+						}
+					} else if ( line.contains( "32" ) ) {
+						// Status 32
+						if ( !line.contains( bps32 ) ) {
+							// Invalider Status
+							isValid = false;
+							getMessageService().logError(
+									getTextResourceService().getText(
+											MESSAGE_MODULE_E )
+											+ getTextResourceService().getText(
+													MESSAGE_DASHES )
+											+ getTextResourceService().getText(
+													MESSAGE_MODULE_CG_INVALID,
+													line ) );
 						}
 					} else if ( line.contains( "16" ) ) {
 						// Status 16
@@ -106,11 +177,13 @@ public class ValidationEbitspersampleValidationModuleImpl extends
 							// Invalider Status
 							isValid = false;
 							getMessageService().logError(
-									getTextResourceService().getText( MESSAGE_MODULE_E )
+									getTextResourceService().getText(
+											MESSAGE_MODULE_E )
 											+ getTextResourceService().getText(
 													MESSAGE_DASHES )
 											+ getTextResourceService().getText(
-													MESSAGE_MODULE_CG_INVALID, line ) );
+													MESSAGE_MODULE_CG_INVALID,
+													line ) );
 						}
 					} else if ( line.contains( "8" ) ) {
 						// Status 8
@@ -118,11 +191,13 @@ public class ValidationEbitspersampleValidationModuleImpl extends
 							// Invalider Status
 							isValid = false;
 							getMessageService().logError(
-									getTextResourceService().getText( MESSAGE_MODULE_E )
+									getTextResourceService().getText(
+											MESSAGE_MODULE_E )
 											+ getTextResourceService().getText(
 													MESSAGE_DASHES )
 											+ getTextResourceService().getText(
-													MESSAGE_MODULE_CG_INVALID, line ) );
+													MESSAGE_MODULE_CG_INVALID,
+													line ) );
 						}
 					} else if ( line.contains( "4" ) ) {
 						// Status 4
@@ -130,11 +205,27 @@ public class ValidationEbitspersampleValidationModuleImpl extends
 							// Invalider Status
 							isValid = false;
 							getMessageService().logError(
-									getTextResourceService().getText( MESSAGE_MODULE_E )
+									getTextResourceService().getText(
+											MESSAGE_MODULE_E )
 											+ getTextResourceService().getText(
 													MESSAGE_DASHES )
 											+ getTextResourceService().getText(
-													MESSAGE_MODULE_CG_INVALID, line ) );
+													MESSAGE_MODULE_CG_INVALID,
+													line ) );
+						}
+					} else if ( line.contains( "2" ) ) {
+						// Status 2
+						if ( !line.contains( bps2 ) ) {
+							// Invalider Status
+							isValid = false;
+							getMessageService().logError(
+									getTextResourceService().getText(
+											MESSAGE_MODULE_E )
+											+ getTextResourceService().getText(
+													MESSAGE_DASHES )
+											+ getTextResourceService().getText(
+													MESSAGE_MODULE_CG_INVALID,
+													line ) );
 						}
 					} else if ( line.contains( "1" ) ) {
 						// Status 1
@@ -142,21 +233,28 @@ public class ValidationEbitspersampleValidationModuleImpl extends
 							// Invalider Status
 							isValid = false;
 							getMessageService().logError(
-									getTextResourceService().getText( MESSAGE_MODULE_E )
+									getTextResourceService().getText(
+											MESSAGE_MODULE_E )
 											+ getTextResourceService().getText(
 													MESSAGE_DASHES )
 											+ getTextResourceService().getText(
-													MESSAGE_MODULE_CG_INVALID, line ) );
+													MESSAGE_MODULE_CG_INVALID,
+													line ) );
 						}
 					} else {
 						// Invalider Status
 						isValid = false;
-						getMessageService().logError(
-								getTextResourceService().getText( MESSAGE_MODULE_E )
-										+ getTextResourceService().getText(
-												MESSAGE_DASHES )
-										+ getTextResourceService().getText(
-												MESSAGE_MODULE_CG_INVALID, line ) );
+						getMessageService()
+								.logError(
+										getTextResourceService().getText(
+												MESSAGE_MODULE_E )
+												+ getTextResourceService()
+														.getText(
+																MESSAGE_DASHES )
+												+ getTextResourceService()
+														.getText(
+																MESSAGE_MODULE_CG_INVALID,
+																line ) );
 					}
 				}
 			}
