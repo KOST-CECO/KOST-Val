@@ -370,18 +370,6 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	}
 
 	@Override
-	public String getPathToWorkDir()
-	{
-		Object prop = getConfig().getProperty( "pathtoworkdir" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		return null;
-	}
-
-	@Override
 	public String getPathToJhoveJar()
 	{
 		Object prop = getConfig().getProperty( "pathtojhovejar" );

@@ -88,12 +88,4 @@ public interface ConfigurationService extends Service
 
 	String getPathToJhoveConfiguration();
 
-	/**
-	 * Gibt den Pfad des Arbeitsverzeichnisses zurück. Dieses Verzeichnis wird
-	 * z.B. zum Entpacken des .zip-Files verwendet.
-	 * 
-	 * @return Pfad des Arbeitsverzeichnisses
-	 */
-	String getPathToWorkDir();
-	
 }

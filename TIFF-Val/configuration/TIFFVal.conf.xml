@@ -3,13 +3,12 @@
 	<pathtojhovejar>Drittapplikationen\jhove\bin\JhoveApp.jar</pathtojhovejar>
 	<pathtojhoveconfig>Drittapplikationen\jhove\conf\jhove.conf</pathtojhoveconfig>
 	<pathtojhoveoutput>logs\jhove</pathtojhoveoutput>
-	<pathtoworkdir>work_TIFF-Val</pathtoworkdir>
 	
 	<allowedcompression1>uncompressed</allowedcompression1>		<!--0 / uncompressed-->
 	<allowedcompression2>CCITT 1D</allowedcompression2>			<!--0 / CCITT 1D-->
-	<allowedcompression3>CCITT Group 3</allowedcompression3>	<!--0 / CCITT Group 3-->
-	<allowedcompression4>CCITT Group 4</allowedcompression4>	<!--0 / CCITT Group 4-->
-	<allowedcompression5>LZW</allowedcompression5>				<!--0 / LZW-->
+	<allowedcompression3>0</allowedcompression3>				<!--0 / CCITT Group 3-->
+	<allowedcompression4>0</allowedcompression4>				<!--0 / CCITT Group 4-->
+	<allowedcompression5>0</allowedcompression5>				<!--0 / LZW-->
 	<allowedcompression7>0</allowedcompression7>				<!--0 / ISO JPEG-->
 	<allowedcompression8>0</allowedcompression8>				<!--0 / Deflate-->
 	<allowedcompression32773>PackBits</allowedcompression32773>	<!--0 / PackBits-->
@@ -31,8 +30,8 @@
 	<allowedbitspersample32>0</allowedbitspersample32>			<!--0 / 32-->
 	<allowedbitspersample64>0</allowedbitspersample64>			<!--0 / 64-->
 	
-	<allowedmultipage>1</allowedmultipage>						<!--0 / 1-->
+	<allowedmultipage>0</allowedmultipage>						<!--0 / 1-->
 	
-	<allowedtiles>1</allowedtiles>								<!--0 / 1-->
+	<allowedtiles>0</allowedtiles>								<!--0 / 1-->
 	
 </configuration>
