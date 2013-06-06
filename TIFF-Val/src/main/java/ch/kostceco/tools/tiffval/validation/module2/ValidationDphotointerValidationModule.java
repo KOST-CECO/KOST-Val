@@ -31,7 +31,7 @@ import ch.kostceco.tools.tiffval.validation.ValidationModule;
 public interface ValidationDphotointerValidationModule extends ValidationModule
 {
 
-	public boolean validate( File tiffDatei )
+	public boolean validate( File tiffDatei, File directoryOfLogfile )
 			throws ValidationDphotointerValidationException;
 
 }

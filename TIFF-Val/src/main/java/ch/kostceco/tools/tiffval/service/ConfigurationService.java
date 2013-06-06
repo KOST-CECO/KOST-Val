@@ -84,8 +84,6 @@ public interface ConfigurationService extends Service
 	 */
 	String getPathToJhoveJar();
 
-	String getPathToJhoveOutput();
-
 	String getPathToJhoveConfiguration();
 
 }

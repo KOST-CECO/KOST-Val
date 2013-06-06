@@ -68,7 +68,7 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 	}
 
 	@Override
-	public boolean validate( File tiffDatei )
+	public boolean validate( File tiffDatei, File directoryOfLogfile )
 			throws ValidationBjhoveValidationException
 	{
 
@@ -82,16 +82,15 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 		File jhoveReport = null;
 		StringBuffer concatenatedOutputs = new StringBuffer();
 		String pathToJhoveJar = getConfigurationService().getPathToJhoveJar();
-		// Informationen zum Jhove-Logverzeichnis holen
-		String pathToJhoveOutput = getConfigurationService()
-				.getPathToJhoveOutput();
-
 		/*
 		 * Nicht vergessen in
 		 * "src/main/resources/config/applicationContext-services.xml" beim
 		 * entsprechenden Modul die property anzugeben: <property
 		 * name="configurationService" ref="configurationService" />
 		 */
+
+		// Informationen zum Jhove-Logverzeichnis holen
+		String pathToJhoveOutput = directoryOfLogfile.getAbsolutePath();
 
 		File jhoveDir = new File( pathToJhoveOutput );
 		if ( !jhoveDir.exists() ) {

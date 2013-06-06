@@ -142,13 +142,13 @@ public class Controller implements MessageConstants
 		this.textResourceService = textResourceService;
 	}
 
-	public boolean executeMandatory( File tiffDatei )
+	public boolean executeMandatory( File tiffDatei , File directoryOfLogfile)
 	{
 		boolean valid = true;
 
 		// Validation Step A
 		try {
-			if ( this.getValidationArecognitionModule().validate( tiffDatei ) ) {
+			if ( this.getValidationArecognitionModule().validate( tiffDatei, directoryOfLogfile ) ) {
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_MODULE_VALID,
 						getTextResourceService().getText( MESSAGE_MODULE_A ) ) );
@@ -184,13 +184,13 @@ public class Controller implements MessageConstants
 
 	}
 
-	public boolean executeOptional( File tiffDatei )
+	public boolean executeOptional( File tiffDatei, File directoryOfLogfile )
 	{
 		boolean valid = true;
 		// Validation Step B
 		try {
 			if ( this.getValidationBjhoveValidationModule()
-					.validate( tiffDatei ) ) {
+					.validate( tiffDatei,  directoryOfLogfile ) ) {
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_MODULE_VALID,
 						getTextResourceService().getText( MESSAGE_MODULE_B ) ) );
@@ -224,7 +224,7 @@ public class Controller implements MessageConstants
 		// Validation Step C
 		try {
 			if ( this.getValidationCcompressionValidationModule()
-					.validate( tiffDatei ) ) {
+					.validate( tiffDatei,  directoryOfLogfile ) ) {
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_MODULE_VALID,
 						getTextResourceService().getText( MESSAGE_MODULE_C ) ) );
@@ -258,7 +258,7 @@ public class Controller implements MessageConstants
 		// Validation Step D
 		try {
 			if ( this.getValidationDphotointerValidationModule()
-					.validate( tiffDatei ) ) {
+					.validate( tiffDatei,  directoryOfLogfile ) ) {
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_MODULE_VALID,
 						getTextResourceService().getText( MESSAGE_MODULE_D ) ) );
@@ -292,7 +292,7 @@ public class Controller implements MessageConstants
 		// Validation Step E
 		try {
 			if ( this.getValidationEbitspersampleValidationModule()
-					.validate( tiffDatei ) ) {
+					.validate( tiffDatei,  directoryOfLogfile ) ) {
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_MODULE_VALID,
 						getTextResourceService().getText( MESSAGE_MODULE_E ) ) );
@@ -326,7 +326,7 @@ public class Controller implements MessageConstants
 		// Validation Step F
 		try {
 			if ( this.getValidationFmultipageValidationModule()
-					.validate( tiffDatei ) ) {
+					.validate( tiffDatei,  directoryOfLogfile ) ) {
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_MODULE_VALID,
 						getTextResourceService().getText( MESSAGE_MODULE_F ) ) );
@@ -360,7 +360,7 @@ public class Controller implements MessageConstants
 		// Validation Step G
 		try {
 			if ( this.getValidationGtilesValidationModule()
-					.validate( tiffDatei ) ) {
+					.validate( tiffDatei,  directoryOfLogfile ) ) {
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_MODULE_VALID,
 						getTextResourceService().getText( MESSAGE_MODULE_G ) ) );

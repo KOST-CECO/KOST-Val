@@ -108,7 +108,7 @@ public class TIFFVal implements MessageConstants
 		File directoryOfLogfile = new File( args[1] );
 		if ( !directoryOfLogfile.exists() ) {
 			directoryOfLogfile.mkdir();
-		}
+		} 
 
 		// Im Logverzeichnis besteht kein Schreibrecht
 		if ( !directoryOfLogfile.canWrite() ) {
@@ -174,7 +174,7 @@ public class TIFFVal implements MessageConstants
 				MESSAGE_tiffvalIDATION, tiffDatei.getName() ) );
 
 		Controller controller = (Controller) context.getBean( "controller" );
-		boolean okMandatory = controller.executeMandatory( tiffDatei );
+		boolean okMandatory = controller.executeMandatory( tiffDatei,  directoryOfLogfile );
 		boolean ok = false;
 
 		// die Validierungen A sind obligatorisch, wenn sie bestanden
@@ -182,7 +182,7 @@ public class TIFFVal implements MessageConstants
 		// Validierungen, welche nicht zum Abbruch der Applikation führen,
 		// ausgeführt werden.
 		if ( okMandatory ) {
-			ok = controller.executeOptional( tiffDatei );
+			ok = controller.executeOptional( tiffDatei,  directoryOfLogfile );
 		}
 
 		ok = (ok && okMandatory);

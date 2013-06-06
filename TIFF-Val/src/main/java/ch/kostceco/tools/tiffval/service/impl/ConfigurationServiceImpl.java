@@ -382,18 +382,6 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	}
 
 	@Override
-	public String getPathToJhoveOutput()
-	{
-		Object prop = getConfig().getProperty( "pathtojhoveoutput" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		return null;
-	}
-
-	@Override
 	public String getPathToJhoveConfiguration()
 	{
 		Object prop = getConfig().getProperty( "pathtojhoveconfig" );

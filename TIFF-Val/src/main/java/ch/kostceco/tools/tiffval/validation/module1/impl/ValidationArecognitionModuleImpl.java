@@ -38,7 +38,7 @@ public class ValidationArecognitionModuleImpl extends ValidationModuleImpl
 {
 
 	@Override
-	public boolean validate( File tiffDatei )
+	public boolean validate( File tiffDatei, File directoryOfLogfile )
 			throws ValidationArecognitionException
 	{
 		// Eine TIFF Datei (.tiff / .tif / .tfx) muss entweder mit II*.
