@@ -131,7 +131,7 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 																MESSAGE_DASHES )
 												+ getTextResourceService()
 														.getText(
-																MESSAGE_MODULE_B_JHOVEINVALID ) );
+																MESSAGE_MODULE_B_JHOVEINVALID, line ) );
 					}
 				}
 			}
