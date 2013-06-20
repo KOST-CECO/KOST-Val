@@ -52,9 +52,8 @@ public class ValidationArecognitionModuleImpl extends ValidationModuleImpl
 									ERROR_MODULE_A_ISDIRECTORY ) );
 			return false;
 		} else if ( (tiffDatei.getAbsolutePath().toLowerCase()
-				.endsWith( ".tiff" )
-				|| tiffDatei.getAbsolutePath().toLowerCase().endsWith( ".tif" ) || tiffDatei
-				.getAbsolutePath().toLowerCase().endsWith( ".tfx" )) ) {
+				.endsWith( ".tiff" ) || tiffDatei.getAbsolutePath()
+				.toLowerCase().endsWith( ".tif" )) ) {
 
 			FileReader fr = null;
 
@@ -120,7 +119,7 @@ public class ValidationArecognitionModuleImpl extends ValidationModuleImpl
 				return false;
 			}
 		} else {
-			// die Datei endet nicht mit tiff, tif oder tfx -> Fehler
+			// die Datei endet nicht mit tiff oder tif -> Fehler
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_MODULE_A )
 							+ getTextResourceService().getText( MESSAGE_DASHES )
