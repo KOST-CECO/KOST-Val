@@ -87,7 +87,7 @@ public class ValidationEbitspersampleValidationModuleImpl extends
 
 				// die BitsPerSample-Zeile enthält einer dieser Freitexte
 				// der BitsPerSampleart
-				if ( line.contains( "BitsPerSample" ) ) {
+				if ( line.contains( "BitsPerSample:" ) ) {
 					jhoveio = 1;
 					if ( line.contains( "5" ) || line.contains( "7" )
 							|| line.contains( "9" ) || line.contains( "10" )

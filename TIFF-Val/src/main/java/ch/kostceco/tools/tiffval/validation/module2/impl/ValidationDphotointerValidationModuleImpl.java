@@ -87,7 +87,7 @@ public class ValidationDphotointerValidationModuleImpl extends
 
 				// die ColorSpace-Zeile enthält einer dieser Freitexte
 				// der Farbraumart
-				if ( line.contains( "ColorSpace" ) ) {
+				if ( line.contains( "ColorSpace:" ) ) {
 					jhoveio = 1;
 					if ( line.contains( pi0 ) || line.contains( pi1 ) || line.contains( pi2 )
 							|| line.contains( pi3 ) || line.contains( pi4 )

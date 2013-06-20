@@ -80,9 +80,9 @@ public class ValidationGtilesValidationModuleImpl extends
 
 				// die StripOffsets- oder TileOffsets-Zeile gibt Auskunft über  
 				// die Aufteilungsart
-				if ( line.contains( "StripOffsets" )|| line.contains( "TileOffsets" ) ) {
+				if ( line.contains( "StripOffsets:" )|| line.contains( "TileOffsets:" ) ) {
 					jhoveio = 1;
-					if ( line.contains( "StripOffsets" ) ) {
+					if ( line.contains( "StripOffsets:" ) ) {
 						// Valider Status (Streifen sind immer erlaubt)
 					} else if ( tiles.contains ("1")) {
 						// Valider Status (Kacheln sind  erlaubt)

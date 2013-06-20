@@ -88,7 +88,7 @@ public class ValidationCcompressionValidationModuleImpl extends
 
 				// die CompressionScheme-Zeile enthält einer dieser Freitexte
 				// der Komprimierungsart
-				if ( line.contains( "CompressionScheme" ) ) {
+				if ( line.contains( "CompressionScheme:" ) ) {
 					jhoveio = 1;
 					if ( line.contains( com1 ) && !line.contains( "PK" ) ) {
 						// Valider Status
