@@ -81,8 +81,10 @@ public class JhoveServiceImpl implements JhoveService
 		command.append( newReport.getAbsolutePath() );
 		command.append( "\"" );
 		command.append( " " );
+		command.append( "\"" );
 		command.append( pathToInputFile );
-
+		command.append( "\"" );
+		
 		try {
 
 			Runtime rt = Runtime.getRuntime();
