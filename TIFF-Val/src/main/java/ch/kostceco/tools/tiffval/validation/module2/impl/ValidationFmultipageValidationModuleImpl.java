@@ -81,8 +81,8 @@ public class ValidationFmultipageValidationModuleImpl extends
 			String line;
 			while ( (line = in.readLine()) != null ) {
 
-				// die Number-Zeile enthält die Anzahl Seiten
-				if ( line.contains( "IFD:" ) ) {
+				// Number und IFD: enthalten auch Exif Einträge. Ensprechend muss "Type: TIFF" gezählt werden
+				if ( line.contains( "Type: TIFF" ) ) {
 					jhoveio = 1;
 					ifdCount = ifdCount + 1;
 				}

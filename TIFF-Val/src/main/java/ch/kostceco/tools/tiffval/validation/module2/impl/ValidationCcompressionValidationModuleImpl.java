@@ -79,39 +79,49 @@ public class ValidationCcompressionValidationModuleImpl extends
 				.getAllowedCompression32773();
 
 		Integer jhoveio = 0;
+		Integer typetiff = 0;
 
 		try {
 			BufferedReader in = new BufferedReader(
 					new FileReader( jhoveReport ) );
 			String line;
 			while ( (line = in.readLine()) != null ) {
-
-				// die CompressionScheme-Zeile enthält einer dieser Freitexte
-				// der Komprimierungsart
-				if ( line.contains( "CompressionScheme:" ) ) {
-					jhoveio = 1;
-					if ( line.contains( com1 ) && !line.contains( "PK" ) ) {
-						// Valider Status
-					} else if ( line.contains( com2 )
-							|| line.contains( com3 ) || line.contains( com4 )
-							|| line.contains( com5 ) || line.contains( com7 )
-							|| line.contains( com8 )
-							|| line.contains( com32773 ) ) {
-						// Valider Status
-					} else {
-						// Invalider Status
-						isValid = false;
-						getMessageService()
-								.logError(
-										getTextResourceService().getText(
-												MESSAGE_MODULE_C )
-												+ getTextResourceService()
-														.getText(
-																MESSAGE_DASHES )
-												+ getTextResourceService()
-														.getText(
-																MESSAGE_MODULE_CG_INVALID,
-																line ) );
+				if ( line.contains( "Type: TIFF" ) ) {
+					typetiff = 1;
+					// TIFF-IFD
+				} else if ( line.contains( "Type: Exif" ) ) {
+					typetiff = 0;
+					// Exif-IFD
+				}
+				if ( typetiff == 1 ) {
+					// zu analysierende TIFF-IFD-Zeile
+					// die CompressionScheme-Zeile enthält einer dieser
+					// Freitexte
+					// der Komprimierungsart
+					if ( line.contains( "CompressionScheme:" ) ) {
+						jhoveio = 1;
+						if ( line.contains( com1 ) && !line.contains( "PK" ) ) {
+							// Valider Status
+						} else if ( line.contains( com2 )
+								|| line.contains( com3 )
+								|| line.contains( com4 )
+								|| line.contains( com5 )
+								|| line.contains( com7 )
+								|| line.contains( com8 )
+								|| line.contains( com32773 ) ) {
+							// Valider Status
+						} else {
+							// Invalider Status
+							isValid = false;
+							getMessageService().logError(
+									getTextResourceService().getText(
+											MESSAGE_MODULE_C )
+											+ getTextResourceService().getText(
+													MESSAGE_DASHES )
+											+ getTextResourceService().getText(
+													MESSAGE_MODULE_CG_INVALID,
+													line ) );
+						}
 					}
 				}
 			}

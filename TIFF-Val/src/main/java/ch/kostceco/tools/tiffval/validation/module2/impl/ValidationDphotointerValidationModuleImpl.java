@@ -78,36 +78,44 @@ public class ValidationDphotointerValidationModuleImpl extends
 		String pi8 = getConfigurationService().getAllowedPhotointer8();
 
 		Integer jhoveio = 0;
+		Integer typetiff = 0;
 
 		try {
 			BufferedReader in = new BufferedReader(
 					new FileReader( jhoveReport ) );
 			String line;
 			while ( (line = in.readLine()) != null ) {
+				if ( line.contains( "Type: TIFF" ) ) {
+					typetiff = 1;
+					// TIFF-IFD
+				} else if ( line.contains( "Type: Exif" ) ) {
+					typetiff = 0;
+					// Exif-IFD
+				}
+				if ( typetiff == 1 ) {
+					// zu analysierende TIFF-IFD-Zeile
 
-				// die ColorSpace-Zeile enthält einer dieser Freitexte
-				// der Farbraumart
-				if ( line.contains( "ColorSpace:" ) ) {
-					jhoveio = 1;
-					if ( line.contains( pi0 ) || line.contains( pi1 ) || line.contains( pi2 )
-							|| line.contains( pi3 ) || line.contains( pi4 )
-							|| line.contains( pi5 ) || line.contains( pi6 )
-							|| line.contains( pi8 ) ) {
-						// Valider Status
-					} else {
-						// Invalider Status
-						isValid = false;
-						getMessageService()
-								.logError(
-										getTextResourceService().getText(
-												MESSAGE_MODULE_D )
-												+ getTextResourceService()
-														.getText(
-																MESSAGE_DASHES )
-												+ getTextResourceService()
-														.getText(
-																MESSAGE_MODULE_CG_INVALID,
-																line ) );
+					// die ColorSpace-Zeile enthält einer dieser Freitexte
+					// der Farbraumart
+					if ( line.contains( "ColorSpace:" ) ) {
+						jhoveio = 1;
+						if ( line.contains( pi0 ) || line.contains( pi1 )
+								|| line.contains( pi2 ) || line.contains( pi3 )
+								|| line.contains( pi4 ) || line.contains( pi5 )
+								|| line.contains( pi6 ) || line.contains( pi8 ) ) {
+							// Valider Status
+						} else {
+							// Invalider Status
+							isValid = false;
+							getMessageService().logError(
+									getTextResourceService().getText(
+											MESSAGE_MODULE_D )
+											+ getTextResourceService().getText(
+													MESSAGE_DASHES )
+											+ getTextResourceService().getText(
+													MESSAGE_MODULE_CG_INVALID,
+													line ) );
+						}
 					}
 				}
 			}

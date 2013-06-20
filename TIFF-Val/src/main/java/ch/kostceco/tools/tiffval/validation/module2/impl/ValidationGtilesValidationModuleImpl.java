@@ -31,8 +31,8 @@ import ch.kostceco.tools.tiffval.validation.module2.ValidationGtilesValidationMo
  * @author Rc Claire Röthlisberger, KOST-CECO
  */
 
-public class ValidationGtilesValidationModuleImpl extends
-		ValidationModuleImpl implements ValidationGtilesValidationModule
+public class ValidationGtilesValidationModuleImpl extends ValidationModuleImpl
+		implements ValidationGtilesValidationModule
 {
 
 	private ConfigurationService	configurationService;
@@ -71,6 +71,7 @@ public class ValidationGtilesValidationModuleImpl extends
 		String tiles = getConfigurationService().getAllowedTiles();
 
 		Integer jhoveio = 0;
+		Integer typetiff = 0;
 
 		try {
 			BufferedReader in = new BufferedReader(
@@ -78,28 +79,37 @@ public class ValidationGtilesValidationModuleImpl extends
 			String line;
 			while ( (line = in.readLine()) != null ) {
 
-				// die StripOffsets- oder TileOffsets-Zeile gibt Auskunft über  
-				// die Aufteilungsart
-				if ( line.contains( "StripOffsets:" )|| line.contains( "TileOffsets:" ) ) {
-					jhoveio = 1;
-					if ( line.contains( "StripOffsets:" ) ) {
-						// Valider Status (Streifen sind immer erlaubt)
-					} else if ( tiles.contains ("1")) {
-						// Valider Status (Kacheln sind  erlaubt)
-					} else {
-						// Invalider Status (Kacheln sind nicht erlaubt)
-						isValid = false;
-						getMessageService()
-								.logError(
-										getTextResourceService().getText(
-												MESSAGE_MODULE_G )
-												+ getTextResourceService()
-														.getText(
-																MESSAGE_DASHES )
-												+ getTextResourceService()
-														.getText(
-																MESSAGE_MODULE_CG_INVALID,
-																line ) );
+				if ( line.contains( "Type: TIFF" ) ) {
+					typetiff = 1;
+					// TIFF-IFD
+				} else if ( line.contains( "Type: Exif" ) ) {
+					typetiff = 0;
+					// Exif-IFD
+				}
+				if ( typetiff == 1 ) {
+					// zu analysierende TIFF-IFD-Zeile
+					// die StripOffsets- oder TileOffsets-Zeile gibt Auskunft
+					// über
+					// die Aufteilungsart
+					if ( line.contains( "StripOffsets:" )
+							|| line.contains( "TileOffsets:" ) ) {
+						jhoveio = 1;
+						if ( line.contains( "StripOffsets:" ) ) {
+							// Valider Status (Streifen sind immer erlaubt)
+						} else if ( tiles.contains( "1" ) ) {
+							// Valider Status (Kacheln sind erlaubt)
+						} else {
+							// Invalider Status (Kacheln sind nicht erlaubt)
+							isValid = false;
+							getMessageService().logError(
+									getTextResourceService().getText(
+											MESSAGE_MODULE_G )
+											+ getTextResourceService().getText(
+													MESSAGE_DASHES )
+											+ getTextResourceService().getText(
+													MESSAGE_MODULE_CG_INVALID,
+													line ) );
+						}
 					}
 				}
 			}

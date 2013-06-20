@@ -78,73 +78,209 @@ public class ValidationEbitspersampleValidationModuleImpl extends
 		String bps64 = getConfigurationService().getAllowedBitspersample64();
 
 		Integer jhoveio = 0;
+		Integer typetiff = 0;
 
 		try {
 			BufferedReader in = new BufferedReader(
 					new FileReader( jhoveReport ) );
 			String line;
 			while ( (line = in.readLine()) != null ) {
-
-				// die BitsPerSample-Zeile enthält einer dieser Freitexte
-				// der BitsPerSampleart
-				if ( line.contains( "BitsPerSample:" ) ) {
-					jhoveio = 1;
-					if ( line.contains( "5" ) || line.contains( "7" )
-							|| line.contains( "9" ) || line.contains( "10" )
-							|| line.contains( "11" ) || line.contains( "12" )
-							|| line.contains( "14" ) || line.contains( "18" )
-							|| line.contains( "20" ) || line.contains( "21" )
-							|| line.contains( "22" ) || line.contains( "24" )
-							|| line.contains( "26" ) || line.contains( "28" ) ) {
-						// Invalider Status
-						isValid = false;
-						getMessageService()
-								.logError(
-										getTextResourceService().getText(
-												MESSAGE_MODULE_E )
-												+ getTextResourceService()
+				if ( line.contains( "Type: TIFF" ) ) {
+					typetiff = 1;
+					// TIFF-IFD
+				} else if ( line.contains( "Type: Exif" ) ) {
+					typetiff = 0;
+					// Exif-IFD
+				}
+				if ( typetiff == 1 ) {
+					// zu analysierende TIFF-IFD-Zeile
+					// die BitsPerSample-Zeile enthält einer dieser Freitexte
+					// der BitsPerSampleart
+					if ( line.contains( "BitsPerSample:" ) ) {
+						jhoveio = 1;
+						if ( line.contains( "5" ) || line.contains( "7" )
+								|| line.contains( "9" ) || line.contains( "10" )
+								|| line.contains( "11" )
+								|| line.contains( "12" )
+								|| line.contains( "14" )
+								|| line.contains( "18" )
+								|| line.contains( "20" )
+								|| line.contains( "21" )
+								|| line.contains( "22" )
+								|| line.contains( "24" )
+								|| line.contains( "26" )
+								|| line.contains( "28" ) ) {
+							// Invalider Status
+							isValid = false;
+							getMessageService().logError(
+									getTextResourceService().getText(
+											MESSAGE_MODULE_E )
+											+ getTextResourceService().getText(
+													MESSAGE_DASHES )
+											+ getTextResourceService().getText(
+													MESSAGE_MODULE_CG_INVALID,
+													line ) );
+						} else if ( line.contains( "40" )
+								|| line.contains( "41" )
+								|| line.contains( "42" )
+								|| line.contains( "44" )
+								|| line.contains( "46" )
+								|| line.contains( "48" )
+								|| line.contains( "80" )
+								|| line.contains( "81" )
+								|| line.contains( "82" )
+								|| line.contains( "84" )
+								|| line.contains( "86" )
+								|| line.contains( "88" ) ) {
+							// Invalider Status
+							isValid = false;
+							getMessageService().logError(
+									getTextResourceService().getText(
+											MESSAGE_MODULE_E )
+											+ getTextResourceService().getText(
+													MESSAGE_DASHES )
+											+ getTextResourceService().getText(
+													MESSAGE_MODULE_CG_INVALID,
+													line ) );
+						} else if ( line.contains( "3" )
+								&& !line.contains( "32" ) ) {
+							// Invalider Status
+							isValid = false;
+							getMessageService().logError(
+									getTextResourceService().getText(
+											MESSAGE_MODULE_E )
+											+ getTextResourceService().getText(
+													MESSAGE_DASHES )
+											+ getTextResourceService().getText(
+													MESSAGE_MODULE_CG_INVALID,
+													line ) );
+						} else if ( line.contains( "64" ) ) {
+							// Status 64
+							if ( !line.contains( bps64 ) ) {
+								// Invalider Status
+								isValid = false;
+								getMessageService()
+										.logError(
+												getTextResourceService()
 														.getText(
-																MESSAGE_DASHES )
-												+ getTextResourceService()
+																MESSAGE_MODULE_E )
+														+ getTextResourceService()
+																.getText(
+																		MESSAGE_DASHES )
+														+ getTextResourceService()
+																.getText(
+																		MESSAGE_MODULE_CG_INVALID,
+																		line ) );
+							}
+						} else if ( line.contains( "32" ) ) {
+							// Status 32
+							if ( !line.contains( bps32 ) ) {
+								// Invalider Status
+								isValid = false;
+								getMessageService()
+										.logError(
+												getTextResourceService()
 														.getText(
-																MESSAGE_MODULE_CG_INVALID,
-																line ) );
-					} else if ( line.contains( "40" ) || line.contains( "41" )
-							|| line.contains( "42" ) || line.contains( "44" )
-							|| line.contains( "46" ) || line.contains( "48" )
-							|| line.contains( "80" ) || line.contains( "81" )
-							|| line.contains( "82" ) || line.contains( "84" )
-							|| line.contains( "86" ) || line.contains( "88" ) ) {
-						// Invalider Status
-						isValid = false;
-						getMessageService()
-								.logError(
-										getTextResourceService().getText(
-												MESSAGE_MODULE_E )
-												+ getTextResourceService()
+																MESSAGE_MODULE_E )
+														+ getTextResourceService()
+																.getText(
+																		MESSAGE_DASHES )
+														+ getTextResourceService()
+																.getText(
+																		MESSAGE_MODULE_CG_INVALID,
+																		line ) );
+							}
+						} else if ( line.contains( "16" ) ) {
+							// Status 16
+							if ( !line.contains( bps16 ) ) {
+								// Invalider Status
+								isValid = false;
+								getMessageService()
+										.logError(
+												getTextResourceService()
 														.getText(
-																MESSAGE_DASHES )
-												+ getTextResourceService()
+																MESSAGE_MODULE_E )
+														+ getTextResourceService()
+																.getText(
+																		MESSAGE_DASHES )
+														+ getTextResourceService()
+																.getText(
+																		MESSAGE_MODULE_CG_INVALID,
+																		line ) );
+							}
+						} else if ( line.contains( "8" ) ) {
+							// Status 8
+							if ( !line.contains( bps8 ) ) {
+								// Invalider Status
+								isValid = false;
+								getMessageService()
+										.logError(
+												getTextResourceService()
 														.getText(
-																MESSAGE_MODULE_CG_INVALID,
-																line ) );
-					} else if ( line.contains( "3" ) && !line.contains( "32" ) ) {
-						// Invalider Status
-						isValid = false;
-						getMessageService()
-								.logError(
-										getTextResourceService().getText(
-												MESSAGE_MODULE_E )
-												+ getTextResourceService()
+																MESSAGE_MODULE_E )
+														+ getTextResourceService()
+																.getText(
+																		MESSAGE_DASHES )
+														+ getTextResourceService()
+																.getText(
+																		MESSAGE_MODULE_CG_INVALID,
+																		line ) );
+							}
+						} else if ( line.contains( "4" ) ) {
+							// Status 4
+							if ( !line.contains( bps4 ) ) {
+								// Invalider Status
+								isValid = false;
+								getMessageService()
+										.logError(
+												getTextResourceService()
 														.getText(
-																MESSAGE_DASHES )
-												+ getTextResourceService()
+																MESSAGE_MODULE_E )
+														+ getTextResourceService()
+																.getText(
+																		MESSAGE_DASHES )
+														+ getTextResourceService()
+																.getText(
+																		MESSAGE_MODULE_CG_INVALID,
+																		line ) );
+							}
+						} else if ( line.contains( "2" ) ) {
+							// Status 2
+							if ( !line.contains( bps2 ) ) {
+								// Invalider Status
+								isValid = false;
+								getMessageService()
+										.logError(
+												getTextResourceService()
 														.getText(
-																MESSAGE_MODULE_CG_INVALID,
-																line ) );
-					} else if ( line.contains( "64" ) ) {
-						// Status 64
-						if ( !line.contains( bps64 ) ) {
+																MESSAGE_MODULE_E )
+														+ getTextResourceService()
+																.getText(
+																		MESSAGE_DASHES )
+														+ getTextResourceService()
+																.getText(
+																		MESSAGE_MODULE_CG_INVALID,
+																		line ) );
+							}
+						} else if ( line.contains( "1" ) ) {
+							// Status 1
+							if ( !line.contains( bps1 ) ) {
+								// Invalider Status
+								isValid = false;
+								getMessageService()
+										.logError(
+												getTextResourceService()
+														.getText(
+																MESSAGE_MODULE_E )
+														+ getTextResourceService()
+																.getText(
+																		MESSAGE_DASHES )
+														+ getTextResourceService()
+																.getText(
+																		MESSAGE_MODULE_CG_INVALID,
+																		line ) );
+							}
+						} else {
 							// Invalider Status
 							isValid = false;
 							getMessageService().logError(
@@ -156,104 +292,6 @@ public class ValidationEbitspersampleValidationModuleImpl extends
 													MESSAGE_MODULE_CG_INVALID,
 													line ) );
 						}
-					} else if ( line.contains( "32" ) ) {
-						// Status 32
-						if ( !line.contains( bps32 ) ) {
-							// Invalider Status
-							isValid = false;
-							getMessageService().logError(
-									getTextResourceService().getText(
-											MESSAGE_MODULE_E )
-											+ getTextResourceService().getText(
-													MESSAGE_DASHES )
-											+ getTextResourceService().getText(
-													MESSAGE_MODULE_CG_INVALID,
-													line ) );
-						}
-					} else if ( line.contains( "16" ) ) {
-						// Status 16
-						if ( !line.contains( bps16 ) ) {
-							// Invalider Status
-							isValid = false;
-							getMessageService().logError(
-									getTextResourceService().getText(
-											MESSAGE_MODULE_E )
-											+ getTextResourceService().getText(
-													MESSAGE_DASHES )
-											+ getTextResourceService().getText(
-													MESSAGE_MODULE_CG_INVALID,
-													line ) );
-						}
-					} else if ( line.contains( "8" ) ) {
-						// Status 8
-						if ( !line.contains( bps8 ) ) {
-							// Invalider Status
-							isValid = false;
-							getMessageService().logError(
-									getTextResourceService().getText(
-											MESSAGE_MODULE_E )
-											+ getTextResourceService().getText(
-													MESSAGE_DASHES )
-											+ getTextResourceService().getText(
-													MESSAGE_MODULE_CG_INVALID,
-													line ) );
-						}
-					} else if ( line.contains( "4" ) ) {
-						// Status 4
-						if ( !line.contains( bps4 ) ) {
-							// Invalider Status
-							isValid = false;
-							getMessageService().logError(
-									getTextResourceService().getText(
-											MESSAGE_MODULE_E )
-											+ getTextResourceService().getText(
-													MESSAGE_DASHES )
-											+ getTextResourceService().getText(
-													MESSAGE_MODULE_CG_INVALID,
-													line ) );
-						}
-					} else if ( line.contains( "2" ) ) {
-						// Status 2
-						if ( !line.contains( bps2 ) ) {
-							// Invalider Status
-							isValid = false;
-							getMessageService().logError(
-									getTextResourceService().getText(
-											MESSAGE_MODULE_E )
-											+ getTextResourceService().getText(
-													MESSAGE_DASHES )
-											+ getTextResourceService().getText(
-													MESSAGE_MODULE_CG_INVALID,
-													line ) );
-						}
-					} else if ( line.contains( "1" ) ) {
-						// Status 1
-						if ( !line.contains( bps1 ) ) {
-							// Invalider Status
-							isValid = false;
-							getMessageService().logError(
-									getTextResourceService().getText(
-											MESSAGE_MODULE_E )
-											+ getTextResourceService().getText(
-													MESSAGE_DASHES )
-											+ getTextResourceService().getText(
-													MESSAGE_MODULE_CG_INVALID,
-													line ) );
-						}
-					} else {
-						// Invalider Status
-						isValid = false;
-						getMessageService()
-								.logError(
-										getTextResourceService().getText(
-												MESSAGE_MODULE_E )
-												+ getTextResourceService()
-														.getText(
-																MESSAGE_DASHES )
-												+ getTextResourceService()
-														.getText(
-																MESSAGE_MODULE_CG_INVALID,
-																line ) );
 					}
 				}
 			}
