@@ -122,17 +122,22 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 					if ( !line.contains( "Well-Formed and valid" ) ) {
 						// Invalider Status
 						isValid = false;
-						getMessageService()
-								.logError(
-										getTextResourceService().getText(
-												MESSAGE_MODULE_B )
-												+ getTextResourceService()
-														.getText(
-																MESSAGE_DASHES )
-												+ getTextResourceService()
-														.getText(
-																MESSAGE_MODULE_B_JHOVEINVALID, line ) );
+						getMessageService().logError(
+								getTextResourceService().getText(
+										MESSAGE_MODULE_B )
+										+ getTextResourceService().getText(
+												MESSAGE_DASHES )
+										+ getTextResourceService().getText(
+												MESSAGE_MODULE_B_JHOVEINVALID,
+												line ) );
 					}
+				}
+				if ( line.contains( "ErrorMessage:" ) ) {
+					// Linie mit der Fehlermeldung auch mitausgeben
+					getMessageService().logError(
+							getTextResourceService().getText( MESSAGE_MODULE_B )
+									+ getTextResourceService().getText(
+											MESSAGE_DASHES ) + line );
 				}
 			}
 			in.close();
