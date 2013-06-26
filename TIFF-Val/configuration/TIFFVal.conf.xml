@@ -33,4 +33,6 @@
 	
 	<allowedtiles>0</allowedtiles>								<!--0 / 1-->
 	
+	<allowedsize>0</allowedsize>								<!--0 / 1-->
+	
 </configuration>

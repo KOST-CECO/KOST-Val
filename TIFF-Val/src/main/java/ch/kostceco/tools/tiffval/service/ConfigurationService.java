@@ -80,6 +80,13 @@ public interface ConfigurationService extends Service
 	String getAllowedTiles();
 
 	/**
+	 * Gibt an ob Giga-TIFF vorkommen dürfen.
+	 * 
+	 * @return Wert 0/1 
+	 */
+	String getAllowedSize();
+
+	/**
 	 * Diverse Angaben zu Jhove
 	 */
 	String getPathToJhoveJar();

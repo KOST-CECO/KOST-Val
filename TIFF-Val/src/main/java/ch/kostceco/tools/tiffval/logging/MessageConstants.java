@@ -58,6 +58,7 @@ public interface MessageConstants
 	String	MESSAGE_MODULE_E							= "message.module.e";
 	String	MESSAGE_MODULE_F							= "message.module.f";
 	String	MESSAGE_MODULE_G							= "message.module.g";
+	String	MESSAGE_MODULE_H							= "message.module.h";
 	
 	String	MESSAGE_STEPERGEBNIS_A						= "message.stepergebnis.a";
 	String	MESSAGE_STEPERGEBNIS_B						= "message.stepergebnis.b";
@@ -66,6 +67,7 @@ public interface MessageConstants
 	String	MESSAGE_STEPERGEBNIS_E						= "message.stepergebnis.e";
 	String	MESSAGE_STEPERGEBNIS_F						= "message.stepergebnis.f";
 	String	MESSAGE_STEPERGEBNIS_G						= "message.stepergebnis.g";
+	String	MESSAGE_STEPERGEBNIS_H						= "message.stepergebnis.h";
 	
 	String	MESSAGE_DASHES								= "message.dashes";
 

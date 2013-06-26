@@ -369,6 +369,19 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		return null;
 	}
 
+	// AllowedSize
+	@Override
+	public String getAllowedSize() 
+	{
+		Object prop = getConfig().getProperty( "allowedsize" );
+
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
 	@Override
 	public String getPathToJhoveJar()
 	{

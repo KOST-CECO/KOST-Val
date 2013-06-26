@@ -25,6 +25,7 @@ import ch.kostceco.tools.tiffval.exception.module2.ValidationDphotointerValidati
 import ch.kostceco.tools.tiffval.exception.module2.ValidationEbitspersampleValidationException;
 import ch.kostceco.tools.tiffval.exception.module2.ValidationFmultipageValidationException;
 import ch.kostceco.tools.tiffval.exception.module2.ValidationGtilesValidationException;
+import ch.kostceco.tools.tiffval.exception.module2.ValidationHsizeValidationException;
 import ch.kostceco.tools.tiffval.logging.Logger;
 import ch.kostceco.tools.tiffval.logging.MessageConstants;
 import ch.kostceco.tools.tiffval.service.TextResourceService;
@@ -35,6 +36,7 @@ import ch.kostceco.tools.tiffval.validation.module2.ValidationDphotointerValidat
 import ch.kostceco.tools.tiffval.validation.module2.ValidationEbitspersampleValidationModule;
 import ch.kostceco.tools.tiffval.validation.module2.ValidationFmultipageValidationModule;
 import ch.kostceco.tools.tiffval.validation.module2.ValidationGtilesValidationModule;
+import ch.kostceco.tools.tiffval.validation.module2.ValidationHsizeValidationModule;
 
 /**
  * Der Controller ruft die benötigten Module zur Validierung des TIFF-Archivs in
@@ -48,23 +50,25 @@ import ch.kostceco.tools.tiffval.validation.module2.ValidationGtilesValidationMo
 public class Controller implements MessageConstants
 {
 
-	private static final Logger					LOGGER	= new Logger(
-																Controller.class );
+	private static final Logger							LOGGER	= new Logger(
+																		Controller.class );
 
-	private ValidationArecognitionModule		validationArecognitionModule;
-	private ValidationBjhoveValidationModule	validationBjhoveValidationModule;
-	private ValidationCcompressionValidationModule	validationCcompressionValidationModule;
-	private ValidationDphotointerValidationModule	validationDphotointerValidationModule;
+	private ValidationArecognitionModule				validationArecognitionModule;
+	private ValidationBjhoveValidationModule			validationBjhoveValidationModule;
+	private ValidationCcompressionValidationModule		validationCcompressionValidationModule;
+	private ValidationDphotointerValidationModule		validationDphotointerValidationModule;
 	private ValidationEbitspersampleValidationModule	validationEbitspersampleValidationModule;
-	private ValidationFmultipageValidationModule	validationFmultipageValidationModule;
-	private ValidationGtilesValidationModule	validationGtilesValidationModule;
-	
-	private TextResourceService					textResourceService;
+	private ValidationFmultipageValidationModule		validationFmultipageValidationModule;
+	private ValidationGtilesValidationModule			validationGtilesValidationModule;
+	private ValidationHsizeValidationModule				validationHsizeValidationModule;
+
+	private TextResourceService							textResourceService;
 
 	public ValidationArecognitionModule getValidationArecognitionModule()
 	{
 		return validationArecognitionModule;
 	}
+
 	public void setValidationArecognitionModule(
 			ValidationArecognitionModule validationArecognitionModule )
 	{
@@ -75,16 +79,18 @@ public class Controller implements MessageConstants
 	{
 		return validationBjhoveValidationModule;
 	}
+
 	public void setValidationBjhoveValidationModule(
 			ValidationBjhoveValidationModule validationBjhoveValidationModule )
 	{
 		this.validationBjhoveValidationModule = validationBjhoveValidationModule;
 	}
-	
+
 	public ValidationCcompressionValidationModule getValidationCcompressionValidationModule()
 	{
 		return validationCcompressionValidationModule;
 	}
+
 	public void setValidationCcompressionValidationModule(
 			ValidationCcompressionValidationModule validationCcompressionValidationModule )
 	{
@@ -95,6 +101,7 @@ public class Controller implements MessageConstants
 	{
 		return validationDphotointerValidationModule;
 	}
+
 	public void setValidationDphotointerValidationModule(
 			ValidationDphotointerValidationModule validationDphotointerValidationModule )
 	{
@@ -105,6 +112,7 @@ public class Controller implements MessageConstants
 	{
 		return validationEbitspersampleValidationModule;
 	}
+
 	public void setValidationEbitspersampleValidationModule(
 			ValidationEbitspersampleValidationModule validationEbitspersampleValidationModule )
 	{
@@ -115,6 +123,7 @@ public class Controller implements MessageConstants
 	{
 		return validationFmultipageValidationModule;
 	}
+
 	public void setValidationFmultipageValidationModule(
 			ValidationFmultipageValidationModule validationFmultipageValidationModule )
 	{
@@ -125,12 +134,23 @@ public class Controller implements MessageConstants
 	{
 		return validationGtilesValidationModule;
 	}
+
 	public void setValidationGtilesValidationModule(
 			ValidationGtilesValidationModule validationGtilesValidationModule )
 	{
 		this.validationGtilesValidationModule = validationGtilesValidationModule;
 	}
 
+	public ValidationHsizeValidationModule getValidationHsizeValidationModule()
+	{
+		return validationHsizeValidationModule;
+	}
+
+	public void setValidationHsizeValidationModule(
+			ValidationHsizeValidationModule validationHsizeValidationModule )
+	{
+		this.validationHsizeValidationModule = validationHsizeValidationModule;
+	}
 
 	public TextResourceService getTextResourceService()
 	{
@@ -142,13 +162,14 @@ public class Controller implements MessageConstants
 		this.textResourceService = textResourceService;
 	}
 
-	public boolean executeMandatory( File tiffDatei , File directoryOfLogfile)
+	public boolean executeMandatory( File tiffDatei, File directoryOfLogfile )
 	{
 		boolean valid = true;
 
 		// Validation Step A
 		try {
-			if ( this.getValidationArecognitionModule().validate( tiffDatei, directoryOfLogfile ) ) {
+			if ( this.getValidationArecognitionModule().validate( tiffDatei,
+					directoryOfLogfile ) ) {
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_MODULE_VALID,
 						getTextResourceService().getText( MESSAGE_MODULE_A ) ) );
@@ -189,8 +210,8 @@ public class Controller implements MessageConstants
 		boolean valid = true;
 		// Validation Step B
 		try {
-			if ( this.getValidationBjhoveValidationModule()
-					.validate( tiffDatei,  directoryOfLogfile ) ) {
+			if ( this.getValidationBjhoveValidationModule().validate(
+					tiffDatei, directoryOfLogfile ) ) {
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_MODULE_VALID,
 						getTextResourceService().getText( MESSAGE_MODULE_B ) ) );
@@ -220,24 +241,24 @@ public class Controller implements MessageConstants
 			LOGGER.logError( e.getMessage() );
 			return false;
 		}
-		
+
 		// Validation Step C
 		try {
-			if ( this.getValidationCcompressionValidationModule()
-					.validate( tiffDatei,  directoryOfLogfile ) ) {
+			if ( this.getValidationCcompressionValidationModule().validate(
+					tiffDatei, directoryOfLogfile ) ) {
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_MODULE_VALID,
 						getTextResourceService().getText( MESSAGE_MODULE_C ) ) );
-				this.getValidationCcompressionValidationModule().getMessageService()
-						.print();
+				this.getValidationCcompressionValidationModule()
+						.getMessageService().print();
 			} else {
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_MODULE_INVALID,
 						getTextResourceService().getText( MESSAGE_MODULE_C ) )
 						+ getTextResourceService().getText(
 								MESSAGE_STEPERGEBNIS_C ) );
-				this.getValidationCcompressionValidationModule().getMessageService()
-						.print();
+				this.getValidationCcompressionValidationModule()
+						.getMessageService().print();
 				valid = false;
 			}
 
@@ -246,8 +267,8 @@ public class Controller implements MessageConstants
 					MESSAGE_MODULE_INVALID_2ARGS,
 					getTextResourceService().getText( MESSAGE_MODULE_C ),
 					e.getMessage() ) );
-			this.getValidationCcompressionValidationModule().getMessageService()
-					.print();
+			this.getValidationCcompressionValidationModule()
+					.getMessageService().print();
 			return false;
 		} catch ( Exception e ) {
 			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
@@ -257,21 +278,21 @@ public class Controller implements MessageConstants
 
 		// Validation Step D
 		try {
-			if ( this.getValidationDphotointerValidationModule()
-					.validate( tiffDatei,  directoryOfLogfile ) ) {
+			if ( this.getValidationDphotointerValidationModule().validate(
+					tiffDatei, directoryOfLogfile ) ) {
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_MODULE_VALID,
 						getTextResourceService().getText( MESSAGE_MODULE_D ) ) );
-				this.getValidationDphotointerValidationModule().getMessageService()
-						.print();
+				this.getValidationDphotointerValidationModule()
+						.getMessageService().print();
 			} else {
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_MODULE_INVALID,
 						getTextResourceService().getText( MESSAGE_MODULE_D ) )
 						+ getTextResourceService().getText(
 								MESSAGE_STEPERGEBNIS_D ) );
-				this.getValidationDphotointerValidationModule().getMessageService()
-						.print();
+				this.getValidationDphotointerValidationModule()
+						.getMessageService().print();
 				valid = false;
 			}
 
@@ -291,21 +312,21 @@ public class Controller implements MessageConstants
 
 		// Validation Step E
 		try {
-			if ( this.getValidationEbitspersampleValidationModule()
-					.validate( tiffDatei,  directoryOfLogfile ) ) {
+			if ( this.getValidationEbitspersampleValidationModule().validate(
+					tiffDatei, directoryOfLogfile ) ) {
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_MODULE_VALID,
 						getTextResourceService().getText( MESSAGE_MODULE_E ) ) );
-				this.getValidationEbitspersampleValidationModule().getMessageService()
-						.print();
+				this.getValidationEbitspersampleValidationModule()
+						.getMessageService().print();
 			} else {
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_MODULE_INVALID,
 						getTextResourceService().getText( MESSAGE_MODULE_E ) )
 						+ getTextResourceService().getText(
 								MESSAGE_STEPERGEBNIS_E ) );
-				this.getValidationEbitspersampleValidationModule().getMessageService()
-						.print();
+				this.getValidationEbitspersampleValidationModule()
+						.getMessageService().print();
 				valid = false;
 			}
 
@@ -314,8 +335,8 @@ public class Controller implements MessageConstants
 					MESSAGE_MODULE_INVALID_2ARGS,
 					getTextResourceService().getText( MESSAGE_MODULE_E ),
 					e.getMessage() ) );
-			this.getValidationEbitspersampleValidationModule().getMessageService()
-					.print();
+			this.getValidationEbitspersampleValidationModule()
+					.getMessageService().print();
 			return false;
 		} catch ( Exception e ) {
 			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
@@ -325,21 +346,21 @@ public class Controller implements MessageConstants
 
 		// Validation Step F
 		try {
-			if ( this.getValidationFmultipageValidationModule()
-					.validate( tiffDatei,  directoryOfLogfile ) ) {
+			if ( this.getValidationFmultipageValidationModule().validate(
+					tiffDatei, directoryOfLogfile ) ) {
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_MODULE_VALID,
 						getTextResourceService().getText( MESSAGE_MODULE_F ) ) );
-				this.getValidationFmultipageValidationModule().getMessageService()
-						.print();
+				this.getValidationFmultipageValidationModule()
+						.getMessageService().print();
 			} else {
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_MODULE_INVALID,
 						getTextResourceService().getText( MESSAGE_MODULE_F ) )
 						+ getTextResourceService().getText(
 								MESSAGE_STEPERGEBNIS_F ) );
-				this.getValidationFmultipageValidationModule().getMessageService()
-						.print();
+				this.getValidationFmultipageValidationModule()
+						.getMessageService().print();
 				valid = false;
 			}
 
@@ -359,8 +380,8 @@ public class Controller implements MessageConstants
 
 		// Validation Step G
 		try {
-			if ( this.getValidationGtilesValidationModule()
-					.validate( tiffDatei,  directoryOfLogfile ) ) {
+			if ( this.getValidationGtilesValidationModule().validate(
+					tiffDatei, directoryOfLogfile ) ) {
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_MODULE_VALID,
 						getTextResourceService().getText( MESSAGE_MODULE_G ) ) );
@@ -391,6 +412,39 @@ public class Controller implements MessageConstants
 			return false;
 		}
 
+		// Validation Step H
+		try {
+			if ( this.getValidationHsizeValidationModule().validate(
+					tiffDatei, directoryOfLogfile ) ) {
+				LOGGER.logInfo( getTextResourceService().getText(
+						MESSAGE_MODULE_VALID,
+						getTextResourceService().getText( MESSAGE_MODULE_H ) ) );
+				this.getValidationHsizeValidationModule().getMessageService()
+						.print();
+			} else {
+				LOGGER.logInfo( getTextResourceService().getText(
+						MESSAGE_MODULE_INVALID,
+						getTextResourceService().getText( MESSAGE_MODULE_H ) )
+						+ getTextResourceService().getText(
+								MESSAGE_STEPERGEBNIS_H ) );
+				this.getValidationHsizeValidationModule().getMessageService()
+						.print();
+				valid = false;
+			}
+
+		} catch ( ValidationHsizeValidationException e ) {
+			LOGGER.logInfo( getTextResourceService().getText(
+					MESSAGE_MODULE_INVALID_2ARGS,
+					getTextResourceService().getText( MESSAGE_MODULE_H ),
+					e.getMessage() ) );
+			this.getValidationHsizeValidationModule().getMessageService()
+					.print();
+			return false;
+		} catch ( Exception e ) {
+			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
+			LOGGER.logError( e.getMessage() );
+			return false;
+		}
 
 		return valid;
 	}
