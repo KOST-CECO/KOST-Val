@@ -18,8 +18,7 @@ package ch.kostceco.tools.tiffval.exception.module2;
 
 import ch.kostceco.tools.tiffval.exception.TIFFValException;
 
-public class ValidationGtilesValidationException extends
-		TIFFValException
+public class ValidationGtilesValidationException extends TIFFValException
 {
 
 	/**

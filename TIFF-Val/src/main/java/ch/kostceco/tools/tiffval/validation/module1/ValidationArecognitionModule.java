@@ -31,6 +31,7 @@ import ch.kostceco.tools.tiffval.validation.ValidationModule;
 public interface ValidationArecognitionModule extends ValidationModule
 {
 
-	public boolean validate( File tiffDatei, File directoryOfLogfile ) throws ValidationArecognitionException;
+	public boolean validate( File tiffDatei, File directoryOfLogfile )
+			throws ValidationArecognitionException;
 
 }

@@ -84,9 +84,9 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		return config;
 	}
 
-// AllowedCompression
+	// AllowedCompression
 	@Override
-	public String getAllowedCompression1() 
+	public String getAllowedCompression1()
 	{
 		Object prop = getConfig().getProperty( "allowedcompression1" );
 
@@ -96,8 +96,9 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		}
 		return null;
 	}
+
 	@Override
-	public String getAllowedCompression2() 
+	public String getAllowedCompression2()
 	{
 		Object prop = getConfig().getProperty( "allowedcompression2" );
 
@@ -107,8 +108,9 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		}
 		return null;
 	}
+
 	@Override
-	public String getAllowedCompression3() 
+	public String getAllowedCompression3()
 	{
 		Object prop = getConfig().getProperty( "allowedcompression3" );
 
@@ -118,8 +120,9 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		}
 		return null;
 	}
+
 	@Override
-	public String getAllowedCompression4() 
+	public String getAllowedCompression4()
 	{
 		Object prop = getConfig().getProperty( "allowedcompression4" );
 
@@ -129,8 +132,9 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		}
 		return null;
 	}
+
 	@Override
-	public String getAllowedCompression5() 
+	public String getAllowedCompression5()
 	{
 		Object prop = getConfig().getProperty( "allowedcompression5" );
 
@@ -140,8 +144,9 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		}
 		return null;
 	}
+
 	@Override
-	public String getAllowedCompression7() 
+	public String getAllowedCompression7()
 	{
 		Object prop = getConfig().getProperty( "allowedcompression7" );
 
@@ -151,8 +156,9 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		}
 		return null;
 	}
+
 	@Override
-	public String getAllowedCompression8() 
+	public String getAllowedCompression8()
 	{
 		Object prop = getConfig().getProperty( "allowedcompression8" );
 
@@ -162,8 +168,9 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		}
 		return null;
 	}
+
 	@Override
-	public String getAllowedCompression32773() 
+	public String getAllowedCompression32773()
 	{
 		Object prop = getConfig().getProperty( "allowedcompression32773" );
 
@@ -176,7 +183,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 
 	// AllowedPhotointer
 	@Override
-	public String getAllowedPhotointer0() 
+	public String getAllowedPhotointer0()
 	{
 		Object prop = getConfig().getProperty( "allowedphotointer0" );
 
@@ -186,8 +193,9 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		}
 		return null;
 	}
+
 	@Override
-	public String getAllowedPhotointer1() 
+	public String getAllowedPhotointer1()
 	{
 		Object prop = getConfig().getProperty( "allowedphotointer1" );
 
@@ -197,8 +205,9 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		}
 		return null;
 	}
+
 	@Override
-	public String getAllowedPhotointer2() 
+	public String getAllowedPhotointer2()
 	{
 		Object prop = getConfig().getProperty( "allowedphotointer2" );
 
@@ -208,8 +217,9 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		}
 		return null;
 	}
+
 	@Override
-	public String getAllowedPhotointer3() 
+	public String getAllowedPhotointer3()
 	{
 		Object prop = getConfig().getProperty( "allowedphotointer3" );
 
@@ -219,8 +229,9 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		}
 		return null;
 	}
+
 	@Override
-	public String getAllowedPhotointer4() 
+	public String getAllowedPhotointer4()
 	{
 		Object prop = getConfig().getProperty( "allowedphotointer4" );
 
@@ -230,8 +241,9 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		}
 		return null;
 	}
+
 	@Override
-	public String getAllowedPhotointer5() 
+	public String getAllowedPhotointer5()
 	{
 		Object prop = getConfig().getProperty( "allowedphotointer5" );
 
@@ -241,8 +253,9 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		}
 		return null;
 	}
+
 	@Override
-	public String getAllowedPhotointer6() 
+	public String getAllowedPhotointer6()
 	{
 		Object prop = getConfig().getProperty( "allowedphotointer6" );
 
@@ -252,8 +265,9 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		}
 		return null;
 	}
+
 	@Override
-	public String getAllowedPhotointer8() 
+	public String getAllowedPhotointer8()
 	{
 		Object prop = getConfig().getProperty( "allowedphotointer8" );
 
@@ -266,7 +280,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 
 	// AllowedBitspersample
 	@Override
-	public String getAllowedBitspersample1() 
+	public String getAllowedBitspersample1()
 	{
 		Object prop = getConfig().getProperty( "allowedbitspersample1" );
 
@@ -276,8 +290,9 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		}
 		return null;
 	}
+
 	@Override
-	public String getAllowedBitspersample2() 
+	public String getAllowedBitspersample2()
 	{
 		Object prop = getConfig().getProperty( "allowedbitspersample2" );
 
@@ -287,8 +302,9 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		}
 		return null;
 	}
+
 	@Override
-	public String getAllowedBitspersample4() 
+	public String getAllowedBitspersample4()
 	{
 		Object prop = getConfig().getProperty( "allowedbitspersample4" );
 
@@ -298,8 +314,9 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		}
 		return null;
 	}
+
 	@Override
-	public String getAllowedBitspersample8() 
+	public String getAllowedBitspersample8()
 	{
 		Object prop = getConfig().getProperty( "allowedbitspersample8" );
 
@@ -309,8 +326,9 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		}
 		return null;
 	}
+
 	@Override
-	public String getAllowedBitspersample16() 
+	public String getAllowedBitspersample16()
 	{
 		Object prop = getConfig().getProperty( "allowedbitspersample16" );
 
@@ -320,8 +338,9 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		}
 		return null;
 	}
+
 	@Override
-	public String getAllowedBitspersample32() 
+	public String getAllowedBitspersample32()
 	{
 		Object prop = getConfig().getProperty( "allowedbitspersample32" );
 
@@ -331,8 +350,9 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		}
 		return null;
 	}
+
 	@Override
-	public String getAllowedBitspersample64() 
+	public String getAllowedBitspersample64()
 	{
 		Object prop = getConfig().getProperty( "allowedbitspersample64" );
 
@@ -342,10 +362,10 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		}
 		return null;
 	}
-	
+
 	// AllowedMultipage
 	@Override
-	public String getAllowedMultipage() 
+	public String getAllowedMultipage()
 	{
 		Object prop = getConfig().getProperty( "allowedmultipage" );
 
@@ -358,7 +378,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 
 	// AllowedTiles
 	@Override
-	public String getAllowedTiles() 
+	public String getAllowedTiles()
 	{
 		Object prop = getConfig().getProperty( "allowedtiles" );
 
@@ -371,7 +391,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 
 	// AllowedSize
 	@Override
-	public String getAllowedSize() 
+	public String getAllowedSize()
 	{
 		Object prop = getConfig().getProperty( "allowedsize" );
 

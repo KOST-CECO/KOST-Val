@@ -121,7 +121,7 @@ public class ValidationGtilesValidationModuleImpl extends ValidationModuleImpl
 				isValid = false;
 				if ( jhove15 == 0 ) {
 					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_MODULE_C )
+							getTextResourceService().getText( MESSAGE_MODULE_G )
 									+ getTextResourceService().getText(
 											MESSAGE_DASHES )
 									+ getTextResourceService().getText(

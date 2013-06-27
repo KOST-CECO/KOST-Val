@@ -25,70 +25,70 @@ public interface MessageConstants
 {
 
 	// Initialisierung und Parameter-Ueberpruefung
-	String	ERROR_PARAMETER_USAGE						= "error.parameter.usage";
-	String	ERROR_LOGDIRECTORY_NODIRECTORY				= "error.logdirectory.nodirectory";
-	String	ERROR_LOGDIRECTORY_NOTWRITABLE				= "error.logdirectory.notwritable";
-	String	ERROR_TIFFFILE_FILENOTEXISTING				= "error.tifffile.filenotexisting";
-	String	ERROR_LOGGING_NOFILEAPPENDER				= "error.logging.nofileappender";
-	String	ERROR_JHOVEAPP_MISSING						= "error.jhoveapp.missing";
-	String	ERROR_JHOVECONF_MISSING						= "error.jhoveconf.missing";
+	String	ERROR_PARAMETER_USAGE					= "error.parameter.usage";
+	String	ERROR_LOGDIRECTORY_NODIRECTORY			= "error.logdirectory.nodirectory";
+	String	ERROR_LOGDIRECTORY_NOTWRITABLE			= "error.logdirectory.notwritable";
+	String	ERROR_TIFFFILE_FILENOTEXISTING			= "error.tifffile.filenotexisting";
+	String	ERROR_LOGGING_NOFILEAPPENDER			= "error.logging.nofileappender";
+	String	ERROR_JHOVEAPP_MISSING					= "error.jhoveapp.missing";
+	String	ERROR_JHOVECONF_MISSING					= "error.jhoveconf.missing";
 
-	String	ERROR_WRONG_JRE								= "error.wrong.jdk";
+	String	ERROR_WRONG_JRE							= "error.wrong.jdk";
 
-	String	MESSAGE_TOTAL_VALID							= "message.total.valid";
-	String	MESSAGE_TOTAL_INVALID						= "message.total.invalid";
+	String	MESSAGE_TOTAL_VALID						= "message.total.valid";
+	String	MESSAGE_TOTAL_INVALID					= "message.total.invalid";
 
-	String	MESSAGE_FOOTER_LOG							= "message.footer.log";
-	String	MESSAGE_FOOTER_TIFF							= "message.footer.tiff";
+	String	MESSAGE_FOOTER_LOG						= "message.footer.log";
+	String	MESSAGE_FOOTER_TIFF						= "message.footer.tiff";
 
-	String	MESSAGE_FOOTER_REPORTJHOVE					= "message.footer.reportjhove";
+	String	MESSAGE_FOOTER_REPORTJHOVE				= "message.footer.reportjhove";
 
 	// Globale Meldungen
-	String	MESSAGE_tiffvalIDATION						= "message.tiffvalidation";
-	String	MESSAGE_VALIDATION_INTERRUPTED				= "message.validation.interrupted";
-	String	MESSAGE_VALIDATION_FINISHED					= "message.validation.finished";
-	String	MESSAGE_MODULE_VALID						= "message.module.valid";
-	String	MESSAGE_MODULE_INVALID						= "message.module.invalid";
-	String	MESSAGE_MODULE_INVALID_2ARGS				= "message.module.invalid.2args";
+	String	MESSAGE_tiffvalIDATION					= "message.tiffvalidation";
+	String	MESSAGE_VALIDATION_INTERRUPTED			= "message.validation.interrupted";
+	String	MESSAGE_VALIDATION_FINISHED				= "message.validation.finished";
+	String	MESSAGE_MODULE_VALID					= "message.module.valid";
+	String	MESSAGE_MODULE_INVALID					= "message.module.invalid";
+	String	MESSAGE_MODULE_INVALID_2ARGS			= "message.module.invalid.2args";
 
-	String	MESSAGE_MODULE_A							= "message.module.a";
-	String	MESSAGE_MODULE_B							= "message.module.b";
-	String	MESSAGE_MODULE_C							= "message.module.c";
-	String	MESSAGE_MODULE_D							= "message.module.d";
-	String	MESSAGE_MODULE_E							= "message.module.e";
-	String	MESSAGE_MODULE_F							= "message.module.f";
-	String	MESSAGE_MODULE_G							= "message.module.g";
-	String	MESSAGE_MODULE_H							= "message.module.h";
-	
-	String	MESSAGE_STEPERGEBNIS_A						= "message.stepergebnis.a";
-	String	MESSAGE_STEPERGEBNIS_B						= "message.stepergebnis.b";
-	String	MESSAGE_STEPERGEBNIS_C						= "message.stepergebnis.c";
-	String	MESSAGE_STEPERGEBNIS_D						= "message.stepergebnis.d";
-	String	MESSAGE_STEPERGEBNIS_E						= "message.stepergebnis.e";
-	String	MESSAGE_STEPERGEBNIS_F						= "message.stepergebnis.f";
-	String	MESSAGE_STEPERGEBNIS_G						= "message.stepergebnis.g";
-	String	MESSAGE_STEPERGEBNIS_H						= "message.stepergebnis.h";
-	
-	String	MESSAGE_DASHES								= "message.dashes";
+	String	MESSAGE_MODULE_A						= "message.module.a";
+	String	MESSAGE_MODULE_B						= "message.module.b";
+	String	MESSAGE_MODULE_C						= "message.module.c";
+	String	MESSAGE_MODULE_D						= "message.module.d";
+	String	MESSAGE_MODULE_E						= "message.module.e";
+	String	MESSAGE_MODULE_F						= "message.module.f";
+	String	MESSAGE_MODULE_G						= "message.module.g";
+	String	MESSAGE_MODULE_H						= "message.module.h";
 
-	String	MESSAGE_CONFIGURATION_ERROR_1				= "message.configuration.error.1";
-	String	MESSAGE_CONFIGURATION_ERROR_2				= "message.configuration.error.2";
-	String	MESSAGE_CONFIGURATION_ERROR_3				= "message.configuration.error.3";
+	String	MESSAGE_STEPERGEBNIS_A					= "message.stepergebnis.a";
+	String	MESSAGE_STEPERGEBNIS_B					= "message.stepergebnis.b";
+	String	MESSAGE_STEPERGEBNIS_C					= "message.stepergebnis.c";
+	String	MESSAGE_STEPERGEBNIS_D					= "message.stepergebnis.d";
+	String	MESSAGE_STEPERGEBNIS_E					= "message.stepergebnis.e";
+	String	MESSAGE_STEPERGEBNIS_F					= "message.stepergebnis.f";
+	String	MESSAGE_STEPERGEBNIS_G					= "message.stepergebnis.g";
+	String	MESSAGE_STEPERGEBNIS_H					= "message.stepergebnis.h";
 
-	String	ERROR_UNKNOWN								= "error.unknown";
+	String	MESSAGE_DASHES							= "message.dashes";
+
+	String	MESSAGE_CONFIGURATION_ERROR_1			= "message.configuration.error.1";
+	String	MESSAGE_CONFIGURATION_ERROR_2			= "message.configuration.error.2";
+	String	MESSAGE_CONFIGURATION_ERROR_3			= "message.configuration.error.3";
+
+	String	ERROR_UNKNOWN							= "error.unknown";
 
 	// Modul A Meldungen
-	String	ERROR_MODULE_A_INCORRECTFILEENDING			= "error.module.a.incorrectfileending";
-	String	ERROR_MODULE_A_INCORRECTFILE				= "error.module.a.incorrectfile";
-	String	ERROR_MODULE_A_ISDIRECTORY					= "error.module.a.isdirectory";
+	String	ERROR_MODULE_A_INCORRECTFILEENDING		= "error.module.a.incorrectfileending";
+	String	ERROR_MODULE_A_INCORRECTFILE			= "error.module.a.incorrectfile";
+	String	ERROR_MODULE_A_ISDIRECTORY				= "error.module.a.isdirectory";
 
 	// Modul B Meldungen
-	String	MESSAGE_MODULE_B_CANNOTWRITEJHOVEREPORT		= "message.module.b.cannotwritejhovereport";
-	String	MESSAGE_MODULE_B_JHOVEINVALID				= "message.module.b.jhoveinvalid";
-	
+	String	MESSAGE_MODULE_B_CANNOTWRITEJHOVEREPORT	= "message.module.b.cannotwritejhovereport";
+	String	MESSAGE_MODULE_B_JHOVEINVALID			= "message.module.b.jhoveinvalid";
+
 	// Modul C-G Meldungen
-	String 	MESSAGE_MODULE_CG_CANNOTFINDJHOVEREPORT		= "message.module.cg.cannotfindjhovereport";
-	String	MESSAGE_MODULE_CG_INVALID					= "message.module.cg.invalid";
-	String	MESSAGE_MODULE_CG_JHOVENIO					= "message.module.cg.jhovenio";
-	String	MESSAGE_MODULE_CG_JHOVEN15					= "message.module.cg.jhoven15";
+	String	MESSAGE_MODULE_CG_CANNOTFINDJHOVEREPORT	= "message.module.cg.cannotfindjhovereport";
+	String	MESSAGE_MODULE_CG_INVALID				= "message.module.cg.invalid";
+	String	MESSAGE_MODULE_CG_JHOVENIO				= "message.module.cg.jhovenio";
+	String	MESSAGE_MODULE_CG_JHOVEN15				= "message.module.cg.jhoven15";
 }

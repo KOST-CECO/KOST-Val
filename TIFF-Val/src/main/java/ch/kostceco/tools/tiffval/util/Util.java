@@ -35,8 +35,6 @@ public class Util
 {
 
 	static String				pathToReportJHove;
-	static String				pathToReportPdftron;
-	static String				pathToReportSiardVal;
 
 	static PrintStream			original;
 	static String				originalPath;
@@ -50,26 +48,6 @@ public class Util
 	public static void setPathToReportJHove( String pathToReportJHove )
 	{
 		Util.pathToReportJHove = pathToReportJHove;
-	}
-
-	public static String getPathToReportPdftron()
-	{
-		return pathToReportPdftron;
-	}
-
-	public static void setPathToReportPdftron( String pathToReportPdftron )
-	{
-		Util.pathToReportPdftron = pathToReportPdftron;
-	}
-
-	public static String getPathToReportSiardVal()
-	{
-		return pathToReportSiardVal;
-	}
-
-	public static void setPathToReportSiardVal( String pathToReportSiardVal )
-	{
-		Util.pathToReportSiardVal = pathToReportSiardVal;
 	}
 
 	/**

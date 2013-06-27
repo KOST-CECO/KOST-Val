@@ -30,12 +30,19 @@ public interface ConfigurationService extends Service
 	 * @return Name der Komprimierung, welche im TIFF vorkommen dürfen.
 	 */
 	String getAllowedCompression1();
+
 	String getAllowedCompression2();
+
 	String getAllowedCompression3();
+
 	String getAllowedCompression4();
+
 	String getAllowedCompression5();
+
 	String getAllowedCompression7();
+
 	String getAllowedCompression8();
+
 	String getAllowedCompression32773();
 
 	/**
@@ -44,12 +51,19 @@ public interface ConfigurationService extends Service
 	 * @return Name der Farbraum, welche im TIFF vorkommen dürfen.
 	 */
 	String getAllowedPhotointer0();
+
 	String getAllowedPhotointer1();
+
 	String getAllowedPhotointer2();
+
 	String getAllowedPhotointer3();
+
 	String getAllowedPhotointer4();
+
 	String getAllowedPhotointer5();
+
 	String getAllowedPhotointer6();
+
 	String getAllowedPhotointer8();
 
 	/**
@@ -58,11 +72,17 @@ public interface ConfigurationService extends Service
 	 * @return Name der BitsPerSample, welche im TIFF vorkommen dürfen.
 	 */
 	String getAllowedBitspersample1();
+
 	String getAllowedBitspersample2();
+
 	String getAllowedBitspersample4();
+
 	String getAllowedBitspersample8();
+
 	String getAllowedBitspersample16();
+
 	String getAllowedBitspersample32();
+
 	String getAllowedBitspersample64();
 
 	/**
@@ -82,9 +102,9 @@ public interface ConfigurationService extends Service
 	/**
 	 * Gibt an ob Giga-TIFF vorkommen dürfen.
 	 * 
-	 * @return Wert 0/1 
+	 * @return Wert 0/1
 	 */
-	String getAllowedSize();
+	String getAllowedSize ();
 
 	/**
 	 * Diverse Angaben zu Jhove

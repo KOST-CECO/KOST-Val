@@ -1,5 +1,5 @@
 /*== TIFF-Val ==================================================================================
-The TIFF-Val v1.0.1 application is used for validate Tagged Image File Format (TIFF).
+The TIFF-Val v1.1.0 application is used for validate Tagged Image File Format (TIFF).
 Copyright (C) 2013 Claire Röthlisberger (KOST-CECO)
 -----------------------------------------------------------------------------------------------
 TIFF-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
@@ -108,7 +108,7 @@ public class TIFFVal implements MessageConstants
 		File directoryOfLogfile = new File( args[1] );
 		if ( !directoryOfLogfile.exists() ) {
 			directoryOfLogfile.mkdir();
-		} 
+		}
 
 		// Im Logverzeichnis besteht kein Schreibrecht
 		if ( !directoryOfLogfile.canWrite() ) {
@@ -174,7 +174,8 @@ public class TIFFVal implements MessageConstants
 				MESSAGE_tiffvalIDATION, tiffDatei.getName() ) );
 
 		Controller controller = (Controller) context.getBean( "controller" );
-		boolean okMandatory = controller.executeMandatory( tiffDatei,  directoryOfLogfile );
+		boolean okMandatory = controller.executeMandatory( tiffDatei,
+				directoryOfLogfile );
 		boolean ok = false;
 
 		// die Validierungen A sind obligatorisch, wenn sie bestanden
@@ -182,7 +183,7 @@ public class TIFFVal implements MessageConstants
 		// Validierungen, welche nicht zum Abbruch der Applikation führen,
 		// ausgeführt werden.
 		if ( okMandatory ) {
-			ok = controller.executeOptional( tiffDatei,  directoryOfLogfile );
+			ok = controller.executeOptional( tiffDatei, directoryOfLogfile );
 		}
 
 		ok = (ok && okMandatory);

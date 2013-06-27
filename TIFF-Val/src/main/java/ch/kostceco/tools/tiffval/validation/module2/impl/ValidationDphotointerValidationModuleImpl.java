@@ -128,7 +128,7 @@ public class ValidationDphotointerValidationModuleImpl extends
 				isValid = false;
 				if ( jhove15 == 0 ) {
 					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_MODULE_C )
+							getTextResourceService().getText( MESSAGE_MODULE_D )
 									+ getTextResourceService().getText(
 											MESSAGE_DASHES )
 									+ getTextResourceService().getText(

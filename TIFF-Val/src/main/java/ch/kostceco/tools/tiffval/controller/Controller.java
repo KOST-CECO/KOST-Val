@@ -414,8 +414,8 @@ public class Controller implements MessageConstants
 
 		// Validation Step H
 		try {
-			if ( this.getValidationHsizeValidationModule().validate(
-					tiffDatei, directoryOfLogfile ) ) {
+			if ( this.getValidationHsizeValidationModule().validate( tiffDatei,
+					directoryOfLogfile ) ) {
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_MODULE_VALID,
 						getTextResourceService().getText( MESSAGE_MODULE_H ) ) );

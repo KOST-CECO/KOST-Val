@@ -35,7 +35,7 @@ import ch.kostceco.tools.tiffval.validation.ValidationModule;
 public interface ValidationBjhoveValidationModule extends ValidationModule
 {
 
-	public boolean validate( File tiffDatei, File directoryOfLogfile)
+	public boolean validate( File tiffDatei, File directoryOfLogfile )
 			throws ValidationBjhoveValidationException;
 
 }

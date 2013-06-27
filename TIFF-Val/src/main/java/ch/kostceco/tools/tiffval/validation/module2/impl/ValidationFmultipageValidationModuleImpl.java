@@ -81,7 +81,8 @@ public class ValidationFmultipageValidationModuleImpl extends
 			String line;
 			while ( (line = in.readLine()) != null ) {
 
-				// Number und IFD: enthalten auch Exif Einträge. Ensprechend muss "Type: TIFF" gezählt werden
+				// Number und IFD: enthalten auch Exif Einträge. Ensprechend
+				// muss "Type: TIFF" gezählt werden
 				if ( line.contains( "Type: TIFF" ) ) {
 					jhoveio = 1;
 					ifdCount = ifdCount + 1;
@@ -101,9 +102,9 @@ public class ValidationFmultipageValidationModuleImpl extends
 				// Valider Status (nur eine Seite)
 			} else {
 				// Multipagetiff
-				if ( mp.contains( "1" )) {
+				if ( mp.contains( "1" ) ) {
 					// Valider Status (Multipage erlaubt)
-				}else{
+				} else {
 					// Invalider Status
 					ifdMsg = ("\"" + ifdCount + " Seiten\"");
 					isValid = false;
@@ -111,13 +112,11 @@ public class ValidationFmultipageValidationModuleImpl extends
 							.logError(
 									getTextResourceService().getText(
 											MESSAGE_MODULE_F )
-											+ getTextResourceService()
-													.getText(
-															MESSAGE_DASHES )
-											+ getTextResourceService()
-													.getText(
-															MESSAGE_MODULE_CG_INVALID,
-															ifdMsg ) );
+											+ getTextResourceService().getText(
+													MESSAGE_DASHES )
+											+ getTextResourceService().getText(
+													MESSAGE_MODULE_CG_INVALID,
+													ifdMsg ) );
 				}
 			}
 			in.close();

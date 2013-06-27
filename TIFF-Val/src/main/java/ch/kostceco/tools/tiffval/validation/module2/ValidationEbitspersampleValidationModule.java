@@ -28,7 +28,8 @@ import ch.kostceco.tools.tiffval.validation.ValidationModule;
  * @author Rc Claire Röthlisberger, KOST-CECO
  */
 
-public interface ValidationEbitspersampleValidationModule extends ValidationModule
+public interface ValidationEbitspersampleValidationModule extends
+		ValidationModule
 {
 
 	public boolean validate( File tiffDatei, File directoryOfLogfile )
