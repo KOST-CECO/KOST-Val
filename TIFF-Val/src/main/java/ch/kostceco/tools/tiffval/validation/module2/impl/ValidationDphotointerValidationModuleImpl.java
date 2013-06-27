@@ -79,12 +79,16 @@ public class ValidationDphotointerValidationModuleImpl extends
 
 		Integer jhoveio = 0;
 		Integer typetiff = 0;
+		Integer jhove15 = 0;
 
 		try {
 			BufferedReader in = new BufferedReader(
 					new FileReader( jhoveReport ) );
 			String line;
 			while ( (line = in.readLine()) != null ) {
+				if ( line.contains( "Jhove (Rel. 1.5," ) ) {
+					jhove15 = 1;
+				}
 				if ( line.contains( "Type: TIFF" ) ) {
 					typetiff = 1;
 					// TIFF-IFD
@@ -122,13 +126,22 @@ public class ValidationDphotointerValidationModuleImpl extends
 			if ( jhoveio == 0 ) {
 				// Invalider Status
 				isValid = false;
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_D )
-								+ getTextResourceService().getText(
-										MESSAGE_DASHES )
-								+ getTextResourceService().getText(
-										MESSAGE_MODULE_CG_JHOVENIO ) );
-
+				if ( jhove15 == 0 ) {
+					getMessageService().logError(
+							getTextResourceService().getText( MESSAGE_MODULE_C )
+									+ getTextResourceService().getText(
+											MESSAGE_DASHES )
+									+ getTextResourceService().getText(
+											MESSAGE_MODULE_CG_JHOVEN15 ) );
+				} else {
+					isValid = false;
+					getMessageService().logError(
+							getTextResourceService().getText( MESSAGE_MODULE_D )
+									+ getTextResourceService().getText(
+											MESSAGE_DASHES )
+									+ getTextResourceService().getText(
+											MESSAGE_MODULE_CG_JHOVENIO ) );
+				}
 			}
 			in.close();
 		} catch ( Exception e ) {

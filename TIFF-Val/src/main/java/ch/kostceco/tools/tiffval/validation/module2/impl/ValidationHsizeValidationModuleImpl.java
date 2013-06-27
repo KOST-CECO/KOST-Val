@@ -71,20 +71,24 @@ public class ValidationHsizeValidationModuleImpl extends ValidationModuleImpl
 		String size = getConfigurationService().getAllowedSize();
 
 		Integer jhoveio = 0;
-		
+		Integer jhove15 = 0;
+
 		try {
 			BufferedReader in = new BufferedReader(
 					new FileReader( jhoveReport ) );
 			String line;
 			while ( (line = in.readLine()) != null ) {
-
+				if ( line.contains( "Jhove (Rel. 1.5," ) ) {
+					jhove15 = 1;
+				}
 				if ( line.contains( "Size:" ) ) {
 					jhoveio = 1;
-					Integer intSize =line.toCharArray().length;
-					if ( size=="1" ) {
+					Integer intSize = line.toCharArray().length;
+					if ( size == "1" ) {
 						// Valider Status (Giga-Tiffs sind erlaubt)
 					} else if ( intSize > 17 ) {
-						// Invalider Status (Giga-Tiffs sind nicht erlaubt und zuviele Stellen)
+						// Invalider Status (Giga-Tiffs sind nicht erlaubt und
+						// zuviele Stellen)
 						isValid = false;
 						getMessageService()
 								.logError(
@@ -104,13 +108,22 @@ public class ValidationHsizeValidationModuleImpl extends ValidationModuleImpl
 			if ( jhoveio == 0 ) {
 				// Invalider Status
 				isValid = false;
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_H )
-								+ getTextResourceService().getText(
-										MESSAGE_DASHES )
-								+ getTextResourceService().getText(
-										MESSAGE_MODULE_CG_JHOVENIO ) );
-
+				if ( jhove15 == 0 ) {
+					getMessageService().logError(
+							getTextResourceService().getText( MESSAGE_MODULE_C )
+									+ getTextResourceService().getText(
+											MESSAGE_DASHES )
+									+ getTextResourceService().getText(
+											MESSAGE_MODULE_CG_JHOVEN15 ) );
+				} else {
+					isValid = false;
+					getMessageService().logError(
+							getTextResourceService().getText( MESSAGE_MODULE_H )
+									+ getTextResourceService().getText(
+											MESSAGE_DASHES )
+									+ getTextResourceService().getText(
+											MESSAGE_MODULE_CG_JHOVENIO ) );
+				}
 			}
 			in.close();
 		} catch ( Exception e ) {

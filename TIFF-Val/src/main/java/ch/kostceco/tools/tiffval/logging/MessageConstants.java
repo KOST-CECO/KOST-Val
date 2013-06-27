@@ -90,4 +90,5 @@ public interface MessageConstants
 	String 	MESSAGE_MODULE_CG_CANNOTFINDJHOVEREPORT		= "message.module.cg.cannotfindjhovereport";
 	String	MESSAGE_MODULE_CG_INVALID					= "message.module.cg.invalid";
 	String	MESSAGE_MODULE_CG_JHOVENIO					= "message.module.cg.jhovenio";
+	String	MESSAGE_MODULE_CG_JHOVEN15					= "message.module.cg.jhoven15";
 }
