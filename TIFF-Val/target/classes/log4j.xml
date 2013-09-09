@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
 
-<!-- log4j Konfiguration TIFF-Validator -->
+<!-- log4j Konfiguration KOST-Validator -->
 
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
 	
 	
-	<!--  Ein File Appender namens tiffvalidation.log wird programmatisch erzeugt.	-->
+	<!--  Ein File Appender namens kostvalidation.log wird programmatisch erzeugt.	-->
     
     <!-- 
 		Konfiguration der Konsolenausgabe (System.out) 
@@ -20,7 +20,7 @@
 				value="%d [%t] %c%n%-5p: [%x] %m%n" />
 		</layout>
 		-->
-		<layout class="ch.kostceco.tools.tiffval.logging.MessageOnlyLayout">
+		<layout class="ch.kostceco.tools.kostval.logging.MessageOnlyLayout">
 		</layout>
 		
 		<!-- Level DEBUG bis INFO werden ausgegeben -->
@@ -43,7 +43,7 @@
 				value="%d [%t] %c%n%-5p: [%x] %m%n" />
 		</layout>
 		-->
-		<layout class="ch.kostceco.tools.tiffval.logging.MessageOnlyLayout">
+		<layout class="ch.kostceco.tools.kostval.logging.MessageOnlyLayout">
 		</layout>
 		<!-- Level WARN bis FATAL werden ausgegeben -->
 		<filter class="org.apache.log4j.varia.LevelRangeFilter">
