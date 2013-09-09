@@ -14,27 +14,24 @@ if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth F
 Boston, MA 02110-1301 USA or see <http://www.gnu.org/licenses/>.
 ==============================================================================================*/
 
-package ch.kostceco.tools.kostval.exception.module2;
+package ch.kostceco.tools.kostval.validation.moduletiff1;
 
-import ch.kostceco.tools.kostval.exception.KOSTValException;
+import java.io.File;
 
-public class ValidationHsizeValidationException extends
-KOSTValException
+import ch.kostceco.tools.kostval.exception.moduletiff1.ValidationArecognitionException;
+import ch.kostceco.tools.kostval.validation.ValidationModule;
+
+/**
+ * Validierungsschritt 1a Ist das TIFF eine korrekte, unkomprimierte ZIP / ZIP64
+ * Datei (wenn komprimiert, mit welchem Algorithmus)?
+ * 
+ * @author Rc Claire Röthlisberger, KOST-CECO
+ */
+
+public interface ValidationArecognitionModule extends ValidationModule
 {
 
-	/**
-	 * @author Rc Claire Röthlisberger, KOST-CECO
-	 */
-	private static final long	serialVersionUID	= -2554852466330221247L;
-
-	public ValidationHsizeValidationException()
-	{
-		super();
-	}
-
-	public ValidationHsizeValidationException( String message )
-	{
-		super( message );
-	}
+	public boolean validate( File tiffDatei, File directoryOfLogfile )
+			throws ValidationArecognitionException;
 
 }

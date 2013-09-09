@@ -14,25 +14,26 @@ if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth F
 Boston, MA 02110-1301 USA or see <http://www.gnu.org/licenses/>.
 ==============================================================================================*/
 
-package ch.kostceco.tools.kostval.validation.module2;
+package ch.kostceco.tools.kostval.exception.moduletiff2;
 
-import java.io.File;
+import ch.kostceco.tools.kostval.exception.KOSTValException;
 
-import ch.kostceco.tools.kostval.exception.module2.ValidationCcompressionValidationException;
-import ch.kostceco.tools.kostval.validation.ValidationModule;
-
-/**
- * Validierungsschritt C (Komprimierung-Validierung) Ist die TIFF-Datei gemäss
- * Konfigurationsdatei valid?
- * 
- * @author Rc Claire Röthlisberger, KOST-CECO
- */
-
-public interface ValidationCcompressionValidationModule extends
-		ValidationModule
+public class ValidationGtilesValidationException extends KOSTValException
 {
 
-	public boolean validate( File tiffDatei, File directoryOfLogfile )
-			throws ValidationCcompressionValidationException;
+	/**
+	 * @author Rc Claire Röthlisberger, KOST-CECO
+	 */
+	private static final long	serialVersionUID	= -2554852466330221247L;
+
+	public ValidationGtilesValidationException()
+	{
+		super();
+	}
+
+	public ValidationGtilesValidationException( String message )
+	{
+		super( message );
+	}
 
 }

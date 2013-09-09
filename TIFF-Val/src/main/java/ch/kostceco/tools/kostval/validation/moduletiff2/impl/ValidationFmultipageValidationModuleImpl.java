@@ -14,7 +14,7 @@ if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth F
 Boston, MA 02110-1301 USA or see <http://www.gnu.org/licenses/>.
 ==============================================================================================*/
 
-package ch.kostceco.tools.kostval.validation.module2.impl;
+package ch.kostceco.tools.kostval.validation.moduletiff2.impl;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -22,17 +22,17 @@ import java.io.FileReader;
 
 import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
-import ch.kostceco.tools.kostval.validation.module2.ValidationCcompressionValidationModule;
+import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationFmultipageValidationModule;
 
 /**
- * Validierungsschritt C (Komprimierung-Validierung) Ist die TIFF-Datei gemäss
+ * Validierungsschritt F (Multipage-Validierung) Ist die TIFF-Datei gemäss
  * Konfigurationsdatei valid?
  * 
  * @author Rc Claire Röthlisberger, KOST-CECO
  */
 
-public class ValidationCcompressionValidationModuleImpl extends
-		ValidationModuleImpl implements ValidationCcompressionValidationModule
+public class ValidationFmultipageValidationModuleImpl extends
+		ValidationModuleImpl implements ValidationFmultipageValidationModule
 {
 
 	private ConfigurationService	configurationService;
@@ -68,90 +68,61 @@ public class ValidationCcompressionValidationModuleImpl extends
 		 * name="configurationService" ref="configurationService" />
 		 */
 
-		String com1 = getConfigurationService().getAllowedCompression1();
-		String com2 = getConfigurationService().getAllowedCompression2();
-		String com3 = getConfigurationService().getAllowedCompression3();
-		String com4 = getConfigurationService().getAllowedCompression4();
-		String com5 = getConfigurationService().getAllowedCompression5();
-		String com7 = getConfigurationService().getAllowedCompression7();
-		String com8 = getConfigurationService().getAllowedCompression8();
-		String com32773 = getConfigurationService()
-				.getAllowedCompression32773();
+		String mp = getConfigurationService().getAllowedMultipage();
+		// 0=Singelpage / 1=Multipage
 
 		Integer jhoveio = 0;
-		Integer jhove15 = 0;
-		Integer typetiff = 0;
+		Integer ifdCount = 0;
+		String ifdMsg;
 
 		try {
 			BufferedReader in = new BufferedReader(
 					new FileReader( jhoveReport ) );
 			String line;
 			while ( (line = in.readLine()) != null ) {
-				if ( line.contains( "Jhove (Rel. 1.5," ) ) {
-					jhove15 = 1;
-				}
+
+				// Number und IFD: enthalten auch Exif Einträge. Ensprechend
+				// muss "Type: TIFF" gezählt werden
 				if ( line.contains( "Type: TIFF" ) ) {
-					typetiff = 1;
-					// TIFF-IFD
-				} else if ( line.contains( "Type: Exif" ) ) {
-					typetiff = 0;
-					// Exif-IFD
-				}
-				if ( typetiff == 1 ) {
-					// zu analysierende TIFF-IFD-Zeile
-					// die CompressionScheme-Zeile enthält einer dieser
-					// Freitexte
-					// der Komprimierungsart
-					if ( line.contains( "CompressionScheme:" ) ) {
-						jhoveio = 1;
-						if ( line.contains( com1 ) && !line.contains( "PK" ) ) {
-							// Valider Status
-						} else if ( line.contains( com2 )
-								|| line.contains( com3 )
-								|| line.contains( com4 )
-								|| line.contains( com5 )
-								|| line.contains( com7 )
-								|| line.contains( com8 )
-								|| line.contains( com32773 ) ) {
-							// Valider Status
-						} else {
-							// Invalider Status
-							isValid = false;
-							getMessageService().logError(
-									getTextResourceService().getText(
-											MESSAGE_MODULE_C )
-											+ getTextResourceService().getText(
-													MESSAGE_DASHES )
-											+ getTextResourceService().getText(
-													MESSAGE_MODULE_CG_INVALID,
-													line ) );
-						}
-					}
+					jhoveio = 1;
+					ifdCount = ifdCount + 1;
 				}
 			}
 			if ( jhoveio == 0 ) {
 				// Invalider Status
 				isValid = false;
-				if ( jhove15 == 0 ) {
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_MODULE_C )
-									+ getTextResourceService().getText(
-											MESSAGE_DASHES )
-									+ getTextResourceService().getText(
-											MESSAGE_MODULE_CG_JHOVEN15 ) );
+				getMessageService().logError(
+						getTextResourceService().getText( MESSAGE_MODULE_F )
+								+ getTextResourceService().getText(
+										MESSAGE_DASHES )
+								+ getTextResourceService().getText(
+										MESSAGE_MODULE_CG_JHOVENIO ) );
+			}
+			if ( ifdCount == 1 ) {
+				// Valider Status (nur eine Seite)
+			} else {
+				// Multipagetiff
+				if ( mp.contains( "1" ) ) {
+					// Valider Status (Multipage erlaubt)
 				} else {
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_MODULE_C )
-									+ getTextResourceService().getText(
-											MESSAGE_DASHES )
-									+ getTextResourceService().getText(
-											MESSAGE_MODULE_CG_JHOVENIO ) );
+					// Invalider Status
+					ifdMsg = ("\"" + ifdCount + " Seiten\"");
+					isValid = false;
+					getMessageService()
+							.logError(
+									getTextResourceService().getText(
+											MESSAGE_MODULE_F )
+											+ getTextResourceService().getText(
+													MESSAGE_DASHES )
+											+ getTextResourceService().getText(
+													MESSAGE_MODULE_CG_INVALID,
+													ifdMsg ) );
 				}
 			}
 			in.close();
 		} catch ( Exception e ) {
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_C )
+					getTextResourceService().getText( MESSAGE_MODULE_F )
 							+ getTextResourceService().getText( MESSAGE_DASHES )
 							+ getTextResourceService().getText(
 									MESSAGE_MODULE_CG_CANNOTFINDJHOVEREPORT ) );

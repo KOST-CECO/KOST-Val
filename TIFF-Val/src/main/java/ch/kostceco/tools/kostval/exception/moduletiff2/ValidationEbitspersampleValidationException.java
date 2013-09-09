@@ -14,28 +14,27 @@ if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth F
 Boston, MA 02110-1301 USA or see <http://www.gnu.org/licenses/>.
 ==============================================================================================*/
 
-package ch.kostceco.tools.kostval.validation.module2;
+package ch.kostceco.tools.kostval.exception.moduletiff2;
 
-import java.io.File;
+import ch.kostceco.tools.kostval.exception.KOSTValException;
 
-import ch.kostceco.tools.kostval.exception.module2.ValidationBjhoveValidationException;
-import ch.kostceco.tools.kostval.validation.ValidationModule;
-
-/**
- * Validierungsschritt 3c (einschaltbar) Formatvalidierung, mit JHOVE oder einer
- * ähnlichen Lösung sowie mit einem externem PDF/A-Validator (z.B. PDF/A Manager
- * von PDFTRON) aller nach Dateiformat ausgewählten Dateien in /content
- * (konfigurierbare Liste von den zu validierenden Dateiformaten).
- * Referenzierung in Log-Datei zu den allfälligen zusätzlich generierten
- * Logdateien der eingesetzten Programme.
- * 
- * @author Rc Claire Röthlisberger, KOST-CECO
- */
-
-public interface ValidationBjhoveValidationModule extends ValidationModule
+public class ValidationEbitspersampleValidationException extends
+KOSTValException
 {
 
-	public boolean validate( File tiffDatei, File directoryOfLogfile )
-			throws ValidationBjhoveValidationException;
+	/**
+	 * @author Rc Claire Röthlisberger, KOST-CECO
+	 */
+	private static final long	serialVersionUID	= -2554852466330221247L;
+
+	public ValidationEbitspersampleValidationException()
+	{
+		super();
+	}
+
+	public ValidationEbitspersampleValidationException( String message )
+	{
+		super( message );
+	}
 
 }

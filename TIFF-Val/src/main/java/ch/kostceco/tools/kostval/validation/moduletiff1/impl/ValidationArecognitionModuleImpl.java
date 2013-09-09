@@ -14,16 +14,16 @@ if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth F
 Boston, MA 02110-1301 USA or see <http://www.gnu.org/licenses/>.
 ==============================================================================================*/
 
-package ch.kostceco.tools.kostval.validation.module1.impl;
+package ch.kostceco.tools.kostval.validation.moduletiff1.impl;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.Arrays;
 
-import ch.kostceco.tools.kostval.exception.module1.ValidationArecognitionException;
+import ch.kostceco.tools.kostval.exception.moduletiff1.ValidationArecognitionException;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
-import ch.kostceco.tools.kostval.validation.module1.ValidationArecognitionModule;
+import ch.kostceco.tools.kostval.validation.moduletiff1.ValidationArecognitionModule;
 
 /**
  * Validierungsschritt A (Erkennung) Ist es eine TIFF-Datei? valid -->

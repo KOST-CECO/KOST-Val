@@ -14,7 +14,7 @@ if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth F
 Boston, MA 02110-1301 USA or see <http://www.gnu.org/licenses/>.
 ==============================================================================================*/
 
-package ch.kostceco.tools.kostval.validation.module2.impl;
+package ch.kostceco.tools.kostval.validation.moduletiff2.impl;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -22,17 +22,17 @@ import java.io.FileReader;
 
 import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
-import ch.kostceco.tools.kostval.validation.module2.ValidationDphotointerValidationModule;
+import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationGtilesValidationModule;
 
 /**
- * Validierungsschritt D (Farbraum-Validierung) Ist die TIFF-Datei gemäss
+ * Validierungsschritt G (Kacheln-Validierung) Ist die TIFF-Datei gemäss
  * Konfigurationsdatei valid?
  * 
  * @author Rc Claire Röthlisberger, KOST-CECO
  */
 
-public class ValidationDphotointerValidationModuleImpl extends
-		ValidationModuleImpl implements ValidationDphotointerValidationModule
+public class ValidationGtilesValidationModuleImpl extends ValidationModuleImpl
+		implements ValidationGtilesValidationModule
 {
 
 	private ConfigurationService	configurationService;
@@ -68,14 +68,7 @@ public class ValidationDphotointerValidationModuleImpl extends
 		 * name="configurationService" ref="configurationService" />
 		 */
 
-		String pi0 = getConfigurationService().getAllowedPhotointer0();
-		String pi1 = getConfigurationService().getAllowedPhotointer1();
-		String pi2 = getConfigurationService().getAllowedPhotointer2();
-		String pi3 = getConfigurationService().getAllowedPhotointer3();
-		String pi4 = getConfigurationService().getAllowedPhotointer4();
-		String pi5 = getConfigurationService().getAllowedPhotointer5();
-		String pi6 = getConfigurationService().getAllowedPhotointer6();
-		String pi8 = getConfigurationService().getAllowedPhotointer8();
+		String tiles = getConfigurationService().getAllowedTiles();
 
 		Integer jhoveio = 0;
 		Integer typetiff = 0;
@@ -98,22 +91,22 @@ public class ValidationDphotointerValidationModuleImpl extends
 				}
 				if ( typetiff == 1 ) {
 					// zu analysierende TIFF-IFD-Zeile
-
-					// die ColorSpace-Zeile enthält einer dieser Freitexte
-					// der Farbraumart
-					if ( line.contains( "ColorSpace:" ) ) {
+					// die StripOffsets- oder TileOffsets-Zeile gibt Auskunft
+					// über
+					// die Aufteilungsart
+					if ( line.contains( "StripOffsets:" )
+							|| line.contains( "TileOffsets:" ) ) {
 						jhoveio = 1;
-						if ( line.contains( pi0 ) || line.contains( pi1 )
-								|| line.contains( pi2 ) || line.contains( pi3 )
-								|| line.contains( pi4 ) || line.contains( pi5 )
-								|| line.contains( pi6 ) || line.contains( pi8 ) ) {
-							// Valider Status
+						if ( line.contains( "StripOffsets:" ) ) {
+							// Valider Status (Streifen sind immer erlaubt)
+						} else if ( tiles.contains( "1" ) ) {
+							// Valider Status (Kacheln sind erlaubt)
 						} else {
-							// Invalider Status
+							// Invalider Status (Kacheln sind nicht erlaubt)
 							isValid = false;
 							getMessageService().logError(
 									getTextResourceService().getText(
-											MESSAGE_MODULE_D )
+											MESSAGE_MODULE_G )
 											+ getTextResourceService().getText(
 													MESSAGE_DASHES )
 											+ getTextResourceService().getText(
@@ -128,7 +121,7 @@ public class ValidationDphotointerValidationModuleImpl extends
 				isValid = false;
 				if ( jhove15 == 0 ) {
 					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_MODULE_D )
+							getTextResourceService().getText( MESSAGE_MODULE_G )
 									+ getTextResourceService().getText(
 											MESSAGE_DASHES )
 									+ getTextResourceService().getText(
@@ -136,7 +129,7 @@ public class ValidationDphotointerValidationModuleImpl extends
 				} else {
 					isValid = false;
 					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_MODULE_D )
+							getTextResourceService().getText( MESSAGE_MODULE_G )
 									+ getTextResourceService().getText(
 											MESSAGE_DASHES )
 									+ getTextResourceService().getText(
@@ -146,7 +139,7 @@ public class ValidationDphotointerValidationModuleImpl extends
 			in.close();
 		} catch ( Exception e ) {
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_D )
+					getTextResourceService().getText( MESSAGE_MODULE_G )
 							+ getTextResourceService().getText( MESSAGE_DASHES )
 							+ getTextResourceService().getText(
 									MESSAGE_MODULE_CG_CANNOTFINDJHOVEREPORT ) );

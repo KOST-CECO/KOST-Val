@@ -14,7 +14,7 @@ if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth F
 Boston, MA 02110-1301 USA or see <http://www.gnu.org/licenses/>.
 ==============================================================================================*/
 
-package ch.kostceco.tools.kostval.validation.module2.impl;
+package ch.kostceco.tools.kostval.validation.moduletiff2.impl;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -22,17 +22,17 @@ import java.io.FileReader;
 
 import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
-import ch.kostceco.tools.kostval.validation.module2.ValidationFmultipageValidationModule;
+import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationDphotointerValidationModule;
 
 /**
- * Validierungsschritt F (Multipage-Validierung) Ist die TIFF-Datei gemäss
+ * Validierungsschritt D (Farbraum-Validierung) Ist die TIFF-Datei gemäss
  * Konfigurationsdatei valid?
  * 
  * @author Rc Claire Röthlisberger, KOST-CECO
  */
 
-public class ValidationFmultipageValidationModuleImpl extends
-		ValidationModuleImpl implements ValidationFmultipageValidationModule
+public class ValidationDphotointerValidationModuleImpl extends
+		ValidationModuleImpl implements ValidationDphotointerValidationModule
 {
 
 	private ConfigurationService	configurationService;
@@ -68,61 +68,85 @@ public class ValidationFmultipageValidationModuleImpl extends
 		 * name="configurationService" ref="configurationService" />
 		 */
 
-		String mp = getConfigurationService().getAllowedMultipage();
-		// 0=Singelpage / 1=Multipage
+		String pi0 = getConfigurationService().getAllowedPhotointer0();
+		String pi1 = getConfigurationService().getAllowedPhotointer1();
+		String pi2 = getConfigurationService().getAllowedPhotointer2();
+		String pi3 = getConfigurationService().getAllowedPhotointer3();
+		String pi4 = getConfigurationService().getAllowedPhotointer4();
+		String pi5 = getConfigurationService().getAllowedPhotointer5();
+		String pi6 = getConfigurationService().getAllowedPhotointer6();
+		String pi8 = getConfigurationService().getAllowedPhotointer8();
 
 		Integer jhoveio = 0;
-		Integer ifdCount = 0;
-		String ifdMsg;
+		Integer typetiff = 0;
+		Integer jhove15 = 0;
 
 		try {
 			BufferedReader in = new BufferedReader(
 					new FileReader( jhoveReport ) );
 			String line;
 			while ( (line = in.readLine()) != null ) {
-
-				// Number und IFD: enthalten auch Exif Einträge. Ensprechend
-				// muss "Type: TIFF" gezählt werden
+				if ( line.contains( "Jhove (Rel. 1.5," ) ) {
+					jhove15 = 1;
+				}
 				if ( line.contains( "Type: TIFF" ) ) {
-					jhoveio = 1;
-					ifdCount = ifdCount + 1;
+					typetiff = 1;
+					// TIFF-IFD
+				} else if ( line.contains( "Type: Exif" ) ) {
+					typetiff = 0;
+					// Exif-IFD
+				}
+				if ( typetiff == 1 ) {
+					// zu analysierende TIFF-IFD-Zeile
+
+					// die ColorSpace-Zeile enthält einer dieser Freitexte
+					// der Farbraumart
+					if ( line.contains( "ColorSpace:" ) ) {
+						jhoveio = 1;
+						if ( line.contains( pi0 ) || line.contains( pi1 )
+								|| line.contains( pi2 ) || line.contains( pi3 )
+								|| line.contains( pi4 ) || line.contains( pi5 )
+								|| line.contains( pi6 ) || line.contains( pi8 ) ) {
+							// Valider Status
+						} else {
+							// Invalider Status
+							isValid = false;
+							getMessageService().logError(
+									getTextResourceService().getText(
+											MESSAGE_MODULE_D )
+											+ getTextResourceService().getText(
+													MESSAGE_DASHES )
+											+ getTextResourceService().getText(
+													MESSAGE_MODULE_CG_INVALID,
+													line ) );
+						}
+					}
 				}
 			}
 			if ( jhoveio == 0 ) {
 				// Invalider Status
 				isValid = false;
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_F )
-								+ getTextResourceService().getText(
-										MESSAGE_DASHES )
-								+ getTextResourceService().getText(
-										MESSAGE_MODULE_CG_JHOVENIO ) );
-			}
-			if ( ifdCount == 1 ) {
-				// Valider Status (nur eine Seite)
-			} else {
-				// Multipagetiff
-				if ( mp.contains( "1" ) ) {
-					// Valider Status (Multipage erlaubt)
+				if ( jhove15 == 0 ) {
+					getMessageService().logError(
+							getTextResourceService().getText( MESSAGE_MODULE_D )
+									+ getTextResourceService().getText(
+											MESSAGE_DASHES )
+									+ getTextResourceService().getText(
+											MESSAGE_MODULE_CG_JHOVEN15 ) );
 				} else {
-					// Invalider Status
-					ifdMsg = ("\"" + ifdCount + " Seiten\"");
 					isValid = false;
-					getMessageService()
-							.logError(
-									getTextResourceService().getText(
-											MESSAGE_MODULE_F )
-											+ getTextResourceService().getText(
-													MESSAGE_DASHES )
-											+ getTextResourceService().getText(
-													MESSAGE_MODULE_CG_INVALID,
-													ifdMsg ) );
+					getMessageService().logError(
+							getTextResourceService().getText( MESSAGE_MODULE_D )
+									+ getTextResourceService().getText(
+											MESSAGE_DASHES )
+									+ getTextResourceService().getText(
+											MESSAGE_MODULE_CG_JHOVENIO ) );
 				}
 			}
 			in.close();
 		} catch ( Exception e ) {
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_F )
+					getTextResourceService().getText( MESSAGE_MODULE_D )
 							+ getTextResourceService().getText( MESSAGE_DASHES )
 							+ getTextResourceService().getText(
 									MESSAGE_MODULE_CG_CANNOTFINDJHOVEREPORT ) );

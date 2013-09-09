@@ -14,7 +14,7 @@ if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth F
 Boston, MA 02110-1301 USA or see <http://www.gnu.org/licenses/>.
 ==============================================================================================*/
 
-package ch.kostceco.tools.kostval.validation.module2.impl;
+package ch.kostceco.tools.kostval.validation.moduletiff2.impl;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -22,7 +22,7 @@ import java.io.FileReader;
 
 import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
-import ch.kostceco.tools.kostval.validation.module2.ValidationHsizeValidationModule;
+import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationHsizeValidationModule;
 
 /**
  * Validierungsschritt H (Groessen-Validierung) Ist die TIFF-Datei gemäss

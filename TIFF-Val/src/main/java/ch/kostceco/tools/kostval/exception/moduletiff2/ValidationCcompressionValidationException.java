@@ -14,12 +14,11 @@ if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth F
 Boston, MA 02110-1301 USA or see <http://www.gnu.org/licenses/>.
 ==============================================================================================*/
 
-package ch.kostceco.tools.kostval.exception.module2;
+package ch.kostceco.tools.kostval.exception.moduletiff2;
 
 import ch.kostceco.tools.kostval.exception.KOSTValException;
 
-public class ValidationEbitspersampleValidationException extends
-KOSTValException
+public class ValidationCcompressionValidationException extends KOSTValException
 {
 
 	/**
@@ -27,12 +26,12 @@ KOSTValException
 	 */
 	private static final long	serialVersionUID	= -2554852466330221247L;
 
-	public ValidationEbitspersampleValidationException()
+	public ValidationCcompressionValidationException()
 	{
 		super();
 	}
 
-	public ValidationEbitspersampleValidationException( String message )
+	public ValidationCcompressionValidationException( String message )
 	{
 		super( message );
 	}

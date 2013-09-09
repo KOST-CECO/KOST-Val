@@ -18,25 +18,25 @@ package ch.kostceco.tools.kostval.controller;
 
 import java.io.File;
 
-import ch.kostceco.tools.kostval.exception.module1.ValidationArecognitionException;
-import ch.kostceco.tools.kostval.exception.module2.ValidationBjhoveValidationException;
-import ch.kostceco.tools.kostval.exception.module2.ValidationCcompressionValidationException;
-import ch.kostceco.tools.kostval.exception.module2.ValidationDphotointerValidationException;
-import ch.kostceco.tools.kostval.exception.module2.ValidationEbitspersampleValidationException;
-import ch.kostceco.tools.kostval.exception.module2.ValidationFmultipageValidationException;
-import ch.kostceco.tools.kostval.exception.module2.ValidationGtilesValidationException;
-import ch.kostceco.tools.kostval.exception.module2.ValidationHsizeValidationException;
+import ch.kostceco.tools.kostval.exception.moduletiff1.ValidationArecognitionException;
+import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationBjhoveValidationException;
+import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationCcompressionValidationException;
+import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationDphotointerValidationException;
+import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationEbitspersampleValidationException;
+import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationFmultipageValidationException;
+import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationGtilesValidationException;
+import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationHsizeValidationException;
 import ch.kostceco.tools.kostval.logging.Logger;
 import ch.kostceco.tools.kostval.logging.MessageConstants;
 import ch.kostceco.tools.kostval.service.TextResourceService;
-import ch.kostceco.tools.kostval.validation.module1.ValidationArecognitionModule;
-import ch.kostceco.tools.kostval.validation.module2.ValidationBjhoveValidationModule;
-import ch.kostceco.tools.kostval.validation.module2.ValidationCcompressionValidationModule;
-import ch.kostceco.tools.kostval.validation.module2.ValidationDphotointerValidationModule;
-import ch.kostceco.tools.kostval.validation.module2.ValidationEbitspersampleValidationModule;
-import ch.kostceco.tools.kostval.validation.module2.ValidationFmultipageValidationModule;
-import ch.kostceco.tools.kostval.validation.module2.ValidationGtilesValidationModule;
-import ch.kostceco.tools.kostval.validation.module2.ValidationHsizeValidationModule;
+import ch.kostceco.tools.kostval.validation.moduletiff1.ValidationArecognitionModule;
+import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationBjhoveValidationModule;
+import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationCcompressionValidationModule;
+import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationDphotointerValidationModule;
+import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationEbitspersampleValidationModule;
+import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationFmultipageValidationModule;
+import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationGtilesValidationModule;
+import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationHsizeValidationModule;
 
 /**
  * Der Controller ruft die benötigten Module zur Validierung des TIFF-Archivs in

@@ -29,49 +29,49 @@
 	</bean>
 
 	<!-- Validation Services -->
-	<bean id="validationArecognitionModule" class="ch.kostceco.tools.kostval.validation.module1.impl.ValidationArecognitionModuleImpl">
+	<bean id="validationArecognitionModule" class="ch.kostceco.tools.kostval.validation.moduletiff1.impl.ValidationArecognitionModuleImpl">
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="messageService" ref="messageService" />
 	</bean>
 
-	<bean id="validationBjhoveValidationModule" class="ch.kostceco.tools.kostval.validation.module2.impl.ValidationBjhoveValidationModuleImpl">
+	<bean id="validationBjhoveValidationModule" class="ch.kostceco.tools.kostval.validation.moduletiff2.impl.ValidationBjhoveValidationModuleImpl">
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="messageService" ref="messageService" />
 		<property name="jhoveService" ref="jhoveService" />
 		<property name="configurationService" ref="configurationService" />
 	</bean>
 
-	<bean id="validationCcompressionValidationModule" class="ch.kostceco.tools.kostval.validation.module2.impl.ValidationCcompressionValidationModuleImpl">
+	<bean id="validationCcompressionValidationModule" class="ch.kostceco.tools.kostval.validation.moduletiff2.impl.ValidationCcompressionValidationModuleImpl">
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="messageService" ref="messageService" />
 		<property name="configurationService" ref="configurationService" />
 	</bean>
 
-	<bean id="validationDphotointerValidationModule" class="ch.kostceco.tools.kostval.validation.module2.impl.ValidationDphotointerValidationModuleImpl">
+	<bean id="validationDphotointerValidationModule" class="ch.kostceco.tools.kostval.validation.moduletiff2.impl.ValidationDphotointerValidationModuleImpl">
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="messageService" ref="messageService" />
 		<property name="configurationService" ref="configurationService" />
 	</bean>
 
-	<bean id="validationEbitspersampleValidationModule" class="ch.kostceco.tools.kostval.validation.module2.impl.ValidationEbitspersampleValidationModuleImpl">
+	<bean id="validationEbitspersampleValidationModule" class="ch.kostceco.tools.kostval.validation.moduletiff2.impl.ValidationEbitspersampleValidationModuleImpl">
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="messageService" ref="messageService" />
 		<property name="configurationService" ref="configurationService" />
 	</bean>
 
-	<bean id="validationFmultipageValidationModule" class="ch.kostceco.tools.kostval.validation.module2.impl.ValidationFmultipageValidationModuleImpl">
+	<bean id="validationFmultipageValidationModule" class="ch.kostceco.tools.kostval.validation.moduletiff2.impl.ValidationFmultipageValidationModuleImpl">
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="messageService" ref="messageService" />
 		<property name="configurationService" ref="configurationService" />
 	</bean>
 
-	<bean id="validationGtilesValidationModule" class="ch.kostceco.tools.kostval.validation.module2.impl.ValidationGtilesValidationModuleImpl">
+	<bean id="validationGtilesValidationModule" class="ch.kostceco.tools.kostval.validation.moduletiff2.impl.ValidationGtilesValidationModuleImpl">
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="messageService" ref="messageService" />
 		<property name="configurationService" ref="configurationService" />
 	</bean>
 
-	<bean id="validationHsizeValidationModule" class="ch.kostceco.tools.kostval.validation.module2.impl.ValidationHsizeValidationModuleImpl">
+	<bean id="validationHsizeValidationModule" class="ch.kostceco.tools.kostval.validation.moduletiff2.impl.ValidationHsizeValidationModuleImpl">
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="messageService" ref="messageService" />
 		<property name="configurationService" ref="configurationService" />

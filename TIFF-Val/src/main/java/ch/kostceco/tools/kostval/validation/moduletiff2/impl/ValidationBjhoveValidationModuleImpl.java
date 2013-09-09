@@ -14,7 +14,7 @@ if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth F
 Boston, MA 02110-1301 USA or see <http://www.gnu.org/licenses/>.
 ==============================================================================================*/
 
-package ch.kostceco.tools.kostval.validation.module2.impl;
+package ch.kostceco.tools.kostval.validation.moduletiff2.impl;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -23,12 +23,12 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import ch.kostceco.tools.kostval.exception.module2.ValidationBjhoveValidationException;
+import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationBjhoveValidationException;
 import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.service.JhoveService;
 import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
-import ch.kostceco.tools.kostval.validation.module2.ValidationBjhoveValidationModule;
+import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationBjhoveValidationModule;
 
 /**
  * Validierungsschritt B (Jhove-Validierung) Ist die TIFF-Datei gemäss Jhove
