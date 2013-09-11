@@ -1,6 +1,7 @@
 /*== KOST-Val ==================================================================================
-The KOST-Val application is used for validate SIP, TIFF-Files and SIARD-Files.
-Copyright (C) 2013 Claire Röthlisberger (KOST-CECO)
+The KOST-Val application is used for validate TIFF and SIARD-Files. 
+Copyright (C) 2012-2013 Claire Röthlisberger (KOST-CECO), Christian Eugster, Olivier Debenath, 
+Peter Schneider (Staatsarchiv Aargau)
 -----------------------------------------------------------------------------------------------
 KOST-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -47,11 +48,11 @@ import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationHsizeValidatio
  * 
  * @author Rc Claire Röthlisberger, KOST-CECO
  */
-public class Controller implements MessageConstants
+public class Controllertiff implements MessageConstants
 {
 
 	private static final Logger							LOGGER	= new Logger(
-																		Controller.class );
+																		Controllertiff.class );
 
 	private ValidationArecognitionModule				validationArecognitionModule;
 	private ValidationBjhoveValidationModule			validationBjhoveValidationModule;

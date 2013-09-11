@@ -1,6 +1,7 @@
 /*== KOST-Val ==================================================================================
-The KOST-Val application is used for validate SIP, TIFF-Files and SIARD-Files.
-Copyright (C) 2013 Claire Röthlisberger (KOST-CECO)
+The KOST-Val application is used for validate TIFF and SIARD-Files. 
+Copyright (C) 2012-2013 Claire Röthlisberger (KOST-CECO), Christian Eugster, Olivier Debenath, 
+Peter Schneider (Staatsarchiv Aargau)
 -----------------------------------------------------------------------------------------------
 KOST-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -104,7 +105,7 @@ public interface ConfigurationService extends Service
 	 * 
 	 * @return Wert 0/1
 	 */
-	String getAllowedSize ();
+	String getAllowedSize();
 
 	/**
 	 * Diverse Angaben zu Jhove
@@ -112,5 +113,25 @@ public interface ConfigurationService extends Service
 	String getPathToJhoveJar();
 
 	String getPathToJhoveConfiguration();
+
+	/**
+	 * Gibt den Pfad des Arbeitsverzeichnisses zurück. Dieses Verzeichnis wird
+	 * z.B. zum Entpacken des .zip-Files verwendet.
+	 * 
+	 * @return Pfad des Arbeitsverzeichnisses
+	 */
+	String getPathToWorkDir();
+
+	/**
+	 * Gibt die Grenze der Anzahl Zeilen pro Tabelle zurück. Grenze der zu
+	 * validierenden XML-Tabelle im Modul H. Diese Grenze wird nur verwendet,
+	 * sollte die dazugehörende XSD-Datei die genaue Anzahl Datenzeilen der
+	 * XML-Tabelle enthalten. Sind mehr Datenzeilen in der Tabelle enthal-ten
+	 * als in der Konfigurationsdatei eingegrenzt, wird diese einzelnen Tabelle
+	 * nicht vali-diert, damit einen entsprechenden Out-of-Memory-Fehler
+	 * verhindert werden kann und die restlichen Tabellen und Module validiert
+	 * werden können.
+	 */
+	int getTableRowsLimit();
 
 }

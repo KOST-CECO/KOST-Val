@@ -1,6 +1,7 @@
 /*== KOST-Val ==================================================================================
-The KOST-Val v1.1.0 application is used for validate SIP, TIFF-Files and SIARD-Files.
-Copyright (C) 2013 Claire Röthlisberger (KOST-CECO)
+The KOST-Val application is used for validate TIFF and SIARD-Files. 
+Copyright (C) 2012-2013 Claire Röthlisberger (KOST-CECO), Christian Eugster, Olivier Debenath, 
+Peter Schneider (Staatsarchiv Aargau)
 -----------------------------------------------------------------------------------------------
 KOST-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -21,7 +22,7 @@ import java.io.File;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import ch.kostceco.tools.kostval.controller.Controller;
+import ch.kostceco.tools.kostval.controller.Controllertiff;
 import ch.kostceco.tools.kostval.logging.LogConfigurator;
 import ch.kostceco.tools.kostval.logging.Logger;
 import ch.kostceco.tools.kostval.logging.MessageConstants;
@@ -173,7 +174,7 @@ public class KOSTVal implements MessageConstants
 		LOGGER.logError( kostval.getTextResourceService().getText(
 				MESSAGE_kostvalIDATION, tiffDatei.getName() ) );
 
-		Controller controller = (Controller) context.getBean( "controller" );
+		Controllertiff controller = (Controllertiff) context.getBean( "controller" );
 		boolean okMandatory = controller.executeMandatory( tiffDatei,
 				directoryOfLogfile );
 		boolean ok = false;

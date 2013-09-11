@@ -1,6 +1,7 @@
 /*== KOST-Val ==================================================================================
-The KOST-Val application is used for validate SIP, TIFF-Files and SIARD-Files.
-Copyright (C) 2013 Claire Röthlisberger (KOST-CECO)
+The KOST-Val application is used for validate TIFF and SIARD-Files. 
+Copyright (C) 2012-2013 Claire Röthlisberger (KOST-CECO), Christian Eugster, Olivier Debenath, 
+Peter Schneider (Staatsarchiv Aargau)
 -----------------------------------------------------------------------------------------------
 KOST-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
@@ -425,4 +426,49 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		}
 		return null;
 	}
+	
+	@Override
+	public String getPathToWorkDir()
+	{
+		/**
+		 * Gibt den Pfad des Arbeitsverzeichnisses zurück. Dieses Verzeichnis
+		 * wird zum Entpacken des .zip-Files verwendet.
+		 * 
+		 * @return Pfad des Arbeitsverzeichnisses
+		 */
+		Object prop = getConfig().getProperty( "pathtoworkdir" );
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
+	@Override
+	public int getTableRowsLimit()
+	{
+		/**
+		 * Gibt die maximale Anzahl von Rows zurück. Dieser Wert wird in Modul H
+		 * verwendet. Module H validiert die table.xml Dateien gegen ihre
+		 * table.xsd Schemas. Wenn ein Schema <xs:element name="row"
+		 * type="rowType" minOccurs="0" maxOccurs="unbounded"/> in minOccurs
+		 * oder maxOccurs hohe Zahlenwerte enthält, führt die Validierung zu
+		 * einem java.lang.OutOfMemoryError. Da dieser Error nicht aufgefangen
+		 * werden kann, werden vor der Validierung die Rows der Tabelle gezählt.
+		 * Die ermittelte Zahl darf nicht über dem hier zurückgegebenen Wert
+		 * liegen.
+
+		 */
+		int value = 20000;
+		Object prop = getConfig().getProperty( "table-rows-limit" );
+		if ( prop != null ) {
+			try {
+				value = Integer.valueOf( prop.toString() ).intValue();
+			} catch ( NumberFormatException e ) {
+				// Do nothing
+			}
+		}
+		return value;
+	}
+
 }
