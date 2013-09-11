@@ -42,20 +42,20 @@ public class ValidationBprimaryStructureModuleImpl extends ValidationModuleImpl
 {
 
 	@Override
-	public boolean validate( File siardDatei )
+	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws ValidationBprimaryStructureException
 	{
 
 		Integer bExistsHeaderFolder = 0;
 		Integer bExistsContentFolder = 0;
 
-		String toplevelDir = siardDatei.getName();
+		String toplevelDir = valDatei.getName();
 		int lastDotIdx = toplevelDir.lastIndexOf( "." );
 		toplevelDir = toplevelDir.substring( 0, lastDotIdx );
 
 		try {
 
-			Zip64File zipfile = new Zip64File( siardDatei );
+			Zip64File zipfile = new Zip64File( valDatei );
 			List<FileEntry> fileEntryList = zipfile.getListFileEntries();
 			for ( FileEntry fileEntry : fileEntryList ) {
 

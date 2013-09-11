@@ -33,7 +33,7 @@ import ch.kostceco.tools.kostval.service.Service;
 public interface ValidationModule extends Service
 {
 
-	public boolean validate( File tiffDatei, File directoryOfLogfile )
+	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws KOSTValException;
 
 	public MessageService getMessageService();

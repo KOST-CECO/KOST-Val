@@ -36,7 +36,7 @@ import ch.kostceco.tools.kostval.validation.bean.ValidationContext;
 
 public interface ValidationEcolumnModule extends ValidationModule
 {
-	public boolean validate( File siardDatei )
+	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws ValidationEcolumnException;
 
 	public boolean prepareValidation( ValidationContext validationContext )

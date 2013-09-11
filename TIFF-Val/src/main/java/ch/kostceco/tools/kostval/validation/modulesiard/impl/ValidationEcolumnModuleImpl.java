@@ -111,7 +111,7 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 	 *                if the representation of the columns is invalid
 	 */
 	@Override
-	public boolean validate( File siardDatei )
+	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws ValidationEcolumnException
 	{
 		// All over validation flag
@@ -119,7 +119,7 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 		// Important validation flag
 		boolean congruentColumnCount = false;
 		ValidationContext validationContext = new ValidationContext();
-		validationContext.setSiardArchive( siardDatei );
+		validationContext.setSiardArchive( valDatei );
 		validationContext.setConfigurationService( this
 				.getConfigurationService() );
 		this.setValidationContext( validationContext );

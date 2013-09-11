@@ -36,7 +36,7 @@ import ch.kostceco.tools.kostval.validation.ValidationModule;
 public interface ValidationBprimaryStructureModule extends ValidationModule
 {
 
-	public boolean validate( File siardDatei )
+	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws ValidationBprimaryStructureException;
 
 }

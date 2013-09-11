@@ -52,14 +52,14 @@ public class ValidationDphotointerValidationModuleImpl extends
 	}
 
 	@Override
-	public boolean validate( File tiffDatei, File directoryOfLogfile )
+	public boolean validate( File valDatei, File directoryOfLogfile )
 	{
 
 		boolean isValid = true;
 
 		// Informationen zum Jhove-Logverzeichnis holen
 		String pathToJhoveOutput = directoryOfLogfile.getAbsolutePath();
-		File jhoveReport = new File( pathToJhoveOutput, tiffDatei.getName()
+		File jhoveReport = new File( pathToJhoveOutput, valDatei.getName()
 				+ ".jhove-log.txt" );
 
 		/*

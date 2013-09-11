@@ -163,13 +163,13 @@ public class Controllertiff implements MessageConstants
 		this.textResourceService = textResourceService;
 	}
 
-	public boolean executeMandatory( File tiffDatei, File directoryOfLogfile )
+	public boolean executeMandatory( File valDatei, File directoryOfLogfile )
 	{
 		boolean valid = true;
 
 		// Validation Step A
 		try {
-			if ( this.getValidationArecognitionModule().validate( tiffDatei,
+			if ( this.getValidationArecognitionModule().validate( valDatei,
 					directoryOfLogfile ) ) {
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_MODULE_VALID,
@@ -181,7 +181,7 @@ public class Controllertiff implements MessageConstants
 						MESSAGE_MODULE_INVALID,
 						getTextResourceService().getText( MESSAGE_MODULE_A ) )
 						+ getTextResourceService().getText(
-								MESSAGE_STEPERGEBNIS_A ) );
+								MESSAGE_STEPERGEBNIS_A_TIFF ) );
 				// Ein negatives Validierungsresultat in diesem Schritt führt
 				// zum Abbruch der weiteren Verarbeitung
 				this.getValidationArecognitionModule().getMessageService()
@@ -206,13 +206,13 @@ public class Controllertiff implements MessageConstants
 
 	}
 
-	public boolean executeOptional( File tiffDatei, File directoryOfLogfile )
+	public boolean executeOptional( File valDatei, File directoryOfLogfile )
 	{
 		boolean valid = true;
 		// Validation Step B
 		try {
 			if ( this.getValidationBjhoveValidationModule().validate(
-					tiffDatei, directoryOfLogfile ) ) {
+					valDatei, directoryOfLogfile ) ) {
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_MODULE_VALID,
 						getTextResourceService().getText( MESSAGE_MODULE_B ) ) );
@@ -223,7 +223,7 @@ public class Controllertiff implements MessageConstants
 						MESSAGE_MODULE_INVALID,
 						getTextResourceService().getText( MESSAGE_MODULE_B ) )
 						+ getTextResourceService().getText(
-								MESSAGE_STEPERGEBNIS_B ) );
+								MESSAGE_STEPERGEBNIS_B_TIFF ) );
 				this.getValidationBjhoveValidationModule().getMessageService()
 						.print();
 				valid = false;
@@ -246,7 +246,7 @@ public class Controllertiff implements MessageConstants
 		// Validation Step C
 		try {
 			if ( this.getValidationCcompressionValidationModule().validate(
-					tiffDatei, directoryOfLogfile ) ) {
+					valDatei, directoryOfLogfile ) ) {
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_MODULE_VALID,
 						getTextResourceService().getText( MESSAGE_MODULE_C ) ) );
@@ -257,7 +257,7 @@ public class Controllertiff implements MessageConstants
 						MESSAGE_MODULE_INVALID,
 						getTextResourceService().getText( MESSAGE_MODULE_C ) )
 						+ getTextResourceService().getText(
-								MESSAGE_STEPERGEBNIS_C ) );
+								MESSAGE_STEPERGEBNIS_C_TIFF ) );
 				this.getValidationCcompressionValidationModule()
 						.getMessageService().print();
 				valid = false;
@@ -280,7 +280,7 @@ public class Controllertiff implements MessageConstants
 		// Validation Step D
 		try {
 			if ( this.getValidationDphotointerValidationModule().validate(
-					tiffDatei, directoryOfLogfile ) ) {
+					valDatei, directoryOfLogfile ) ) {
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_MODULE_VALID,
 						getTextResourceService().getText( MESSAGE_MODULE_D ) ) );
@@ -291,7 +291,7 @@ public class Controllertiff implements MessageConstants
 						MESSAGE_MODULE_INVALID,
 						getTextResourceService().getText( MESSAGE_MODULE_D ) )
 						+ getTextResourceService().getText(
-								MESSAGE_STEPERGEBNIS_D ) );
+								MESSAGE_STEPERGEBNIS_D_TIFF ) );
 				this.getValidationDphotointerValidationModule()
 						.getMessageService().print();
 				valid = false;
@@ -314,7 +314,7 @@ public class Controllertiff implements MessageConstants
 		// Validation Step E
 		try {
 			if ( this.getValidationEbitspersampleValidationModule().validate(
-					tiffDatei, directoryOfLogfile ) ) {
+					valDatei, directoryOfLogfile ) ) {
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_MODULE_VALID,
 						getTextResourceService().getText( MESSAGE_MODULE_E ) ) );
@@ -325,7 +325,7 @@ public class Controllertiff implements MessageConstants
 						MESSAGE_MODULE_INVALID,
 						getTextResourceService().getText( MESSAGE_MODULE_E ) )
 						+ getTextResourceService().getText(
-								MESSAGE_STEPERGEBNIS_E ) );
+								MESSAGE_STEPERGEBNIS_E_TIFF ) );
 				this.getValidationEbitspersampleValidationModule()
 						.getMessageService().print();
 				valid = false;
@@ -348,7 +348,7 @@ public class Controllertiff implements MessageConstants
 		// Validation Step F
 		try {
 			if ( this.getValidationFmultipageValidationModule().validate(
-					tiffDatei, directoryOfLogfile ) ) {
+					valDatei, directoryOfLogfile ) ) {
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_MODULE_VALID,
 						getTextResourceService().getText( MESSAGE_MODULE_F ) ) );
@@ -359,7 +359,7 @@ public class Controllertiff implements MessageConstants
 						MESSAGE_MODULE_INVALID,
 						getTextResourceService().getText( MESSAGE_MODULE_F ) )
 						+ getTextResourceService().getText(
-								MESSAGE_STEPERGEBNIS_F ) );
+								MESSAGE_STEPERGEBNIS_F_TIFF ) );
 				this.getValidationFmultipageValidationModule()
 						.getMessageService().print();
 				valid = false;
@@ -382,7 +382,7 @@ public class Controllertiff implements MessageConstants
 		// Validation Step G
 		try {
 			if ( this.getValidationGtilesValidationModule().validate(
-					tiffDatei, directoryOfLogfile ) ) {
+					valDatei, directoryOfLogfile ) ) {
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_MODULE_VALID,
 						getTextResourceService().getText( MESSAGE_MODULE_G ) ) );
@@ -393,7 +393,7 @@ public class Controllertiff implements MessageConstants
 						MESSAGE_MODULE_INVALID,
 						getTextResourceService().getText( MESSAGE_MODULE_G ) )
 						+ getTextResourceService().getText(
-								MESSAGE_STEPERGEBNIS_G ) );
+								MESSAGE_STEPERGEBNIS_G_TIFF ) );
 				this.getValidationGtilesValidationModule().getMessageService()
 						.print();
 				valid = false;
@@ -415,7 +415,7 @@ public class Controllertiff implements MessageConstants
 
 		// Validation Step H
 		try {
-			if ( this.getValidationHsizeValidationModule().validate( tiffDatei,
+			if ( this.getValidationHsizeValidationModule().validate( valDatei,
 					directoryOfLogfile ) ) {
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_MODULE_VALID,
@@ -427,7 +427,7 @@ public class Controllertiff implements MessageConstants
 						MESSAGE_MODULE_INVALID,
 						getTextResourceService().getText( MESSAGE_MODULE_H ) )
 						+ getTextResourceService().getText(
-								MESSAGE_STEPERGEBNIS_H ) );
+								MESSAGE_STEPERGEBNIS_H_TIFF ) );
 				this.getValidationHsizeValidationModule().getMessageService()
 						.print();
 				valid = false;

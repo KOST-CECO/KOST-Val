@@ -33,7 +33,7 @@ import ch.kostceco.tools.kostval.validation.ValidationModule;
 public interface ValidationJsurplusFilesModule extends ValidationModule
 {
 
-	public boolean validate( File siardDatei )
+	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws ValidationJsurplusFilesException;
 
 }

@@ -52,13 +52,13 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements
 	}
 
 	@Override
-	public boolean validate( File siardDatei ) throws ValidationAzipException
+	public boolean validate( File valDatei, File directoryOfLogfile ) throws ValidationAzipException
 	{
 
 		boolean valid = false;
 
 		// die Datei darf kein Directory sein
-		if ( siardDatei.isDirectory() ) {
+		if ( valDatei.isDirectory() ) {
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_MODULE_A )
 							+ getTextResourceService().getText( MESSAGE_DASHES )
@@ -71,7 +71,7 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements
 		// Die Datei muss mit PK.. beginnen
 		FileReader fr = null;
 		try {
-			fr = new FileReader( siardDatei );
+			fr = new FileReader( valDatei );
 			BufferedReader read = new BufferedReader( fr );
 
 			// Hex 03 in Char umwandeln
@@ -124,7 +124,7 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements
 		try {
 			Integer compressed = 0;
 			// Versuche das ZIP file zu öffnen
-			zf = new Zip64File( siardDatei );
+			zf = new Zip64File( valDatei );
 			// auslesen der Komprimierungsmethode aus allen
 			// FileEntries der
 			// zip(64)-Datei

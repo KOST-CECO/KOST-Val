@@ -33,6 +33,6 @@ import ch.kostceco.tools.kostval.validation.ValidationModule;
 public interface ValidationGtableModule extends ValidationModule
 {
 
-	public boolean validate( File siardDatei ) throws ValidationGtableException;
+	public boolean validate( File valDatei, File directoryOfLogfile ) throws ValidationGtableException;
 
 }

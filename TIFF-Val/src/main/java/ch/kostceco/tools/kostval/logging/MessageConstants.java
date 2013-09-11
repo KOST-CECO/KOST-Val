@@ -26,132 +26,92 @@ public interface MessageConstants
 {
 
 	// Initialisierung und Parameter-Ueberpruefung
-	String	ERROR_PARAMETER_USAGE					= "error.parameter.usage";
-	String	ERROR_LOGDIRECTORY_NODIRECTORY			= "error.logdirectory.nodirectory";
-	String	ERROR_LOGDIRECTORY_NOTWRITABLE			= "error.logdirectory.notwritable";
-	String	ERROR_TIFFFILE_FILENOTEXISTING			= "error.tifffile.filenotexisting";
-	String	ERROR_LOGGING_NOFILEAPPENDER			= "error.logging.nofileappender";
-	String	ERROR_JHOVEAPP_MISSING					= "error.jhoveapp.missing";
-	String	ERROR_JHOVECONF_MISSING					= "error.jhoveconf.missing";
+	String	ERROR_PARAMETER_USAGE							= "error.parameter.usage";
+	String	ERROR_LOGDIRECTORY_NODIRECTORY					= "error.logdirectory.nodirectory";
+	String	ERROR_LOGDIRECTORY_NOTWRITABLE					= "error.logdirectory.notwritable";
+	String	ERROR_WORKDIRECTORY_NOTWRITABLE					= "error.workdirectory.notwritable";
+	String	ERROR_TIFFFILE_FILENOTEXISTING					= "error.tifffile.filenotexisting";
+	String	ERROR_LOGGING_NOFILEAPPENDER					= "error.logging.nofileappender";
+	String	ERROR_JHOVEAPP_MISSING							= "error.jhoveapp.missing";
+	String	ERROR_JHOVECONF_MISSING							= "error.jhoveconf.missing";
+	String	ERROR_INCORRECTFILEENDING						= "error.incorrectfileending";
 
-	String	ERROR_WRONG_JRE							= "error.wrong.jdk";
+	String	ERROR_WRONG_JRE									= "error.wrong.jdk";
 
-	String	MESSAGE_TOTAL_VALID						= "message.total.valid";
-	String	MESSAGE_TOTAL_INVALID					= "message.total.invalid";
+	String	MESSAGE_TOTAL_VALID								= "message.total.valid";
+	String	MESSAGE_TOTAL_INVALID							= "message.total.invalid";
 
-	String	MESSAGE_FOOTER_LOG						= "message.footer.log";
-	String	MESSAGE_FOOTER_TIFF						= "message.footer.tiff";
-
-	String	MESSAGE_FOOTER_REPORTJHOVE				= "message.footer.reportjhove";
+	String	MESSAGE_FOOTER_LOG								= "message.footer.log";
+	String	MESSAGE_FOOTER_TIFF								= "message.footer.tiff";
+	String	MESSAGE_FOOTER_SIARD							= "message.footer.siard";
+	String	MESSAGE_FOOTER_REPORTJHOVE						= "message.footer.reportjhove";
 
 	// Globale Meldungen
-	String	MESSAGE_kostvalIDATION					= "message.kostvalidation";
-	String	MESSAGE_VALIDATION_INTERRUPTED			= "message.validation.interrupted";
-	String	MESSAGE_VALIDATION_FINISHED				= "message.validation.finished";
-	String	MESSAGE_MODULE_VALID					= "message.module.valid";
-	String	MESSAGE_MODULE_INVALID					= "message.module.invalid";
-	String	MESSAGE_MODULE_INVALID_2ARGS			= "message.module.invalid.2args";
+	String	MESSAGE_KOSTVALIDATION							= "message.kostvalidation";
+	String	MESSAGE_TIFFVALIDATION							= "message.tiffvalidation";
+	String	MESSAGE_SIARDVALIDATION							= "message.siardvalidation";
+	String	MESSAGE_VALIDATION_INTERRUPTED					= "message.validation.interrupted";
+	String	MESSAGE_VALIDATION_FINISHED						= "message.validation.finished";
+	String	MESSAGE_MODULE_VALID							= "message.module.valid";
+	String	MESSAGE_MODULE_INVALID							= "message.module.invalid";
+	String	MESSAGE_MODULE_INVALID_2ARGS					= "message.module.invalid.2args";
 
-	String	MESSAGE_MODULE_A						= "message.module.a";
-	String	MESSAGE_MODULE_B						= "message.module.b";
-	String	MESSAGE_MODULE_C						= "message.module.c";
-	String	MESSAGE_MODULE_D						= "message.module.d";
-	String	MESSAGE_MODULE_E						= "message.module.e";
-	String	MESSAGE_MODULE_F						= "message.module.f";
-	String	MESSAGE_MODULE_G						= "message.module.g";
-	String	MESSAGE_MODULE_H						= "message.module.h";
+	String	MESSAGE_MODULE_A								= "message.module.a";
+	String	MESSAGE_MODULE_B								= "message.module.b";
+	String	MESSAGE_MODULE_C								= "message.module.c";
+	String	MESSAGE_MODULE_D								= "message.module.d";
+	String	MESSAGE_MODULE_E								= "message.module.e";
+	String	MESSAGE_MODULE_F								= "message.module.f";
+	String	MESSAGE_MODULE_G								= "message.module.g";
+	String	MESSAGE_MODULE_H								= "message.module.h";
+	String	MESSAGE_MODULE_I								= "message.module.i";
+	String	MESSAGE_MODULE_J								= "message.module.j";
 
-	String	MESSAGE_STEPERGEBNIS_A					= "message.stepergebnis.a";
-	String	MESSAGE_STEPERGEBNIS_B					= "message.stepergebnis.b";
-	String	MESSAGE_STEPERGEBNIS_C					= "message.stepergebnis.c";
-	String	MESSAGE_STEPERGEBNIS_D					= "message.stepergebnis.d";
-	String	MESSAGE_STEPERGEBNIS_E					= "message.stepergebnis.e";
-	String	MESSAGE_STEPERGEBNIS_F					= "message.stepergebnis.f";
-	String	MESSAGE_STEPERGEBNIS_G					= "message.stepergebnis.g";
-	String	MESSAGE_STEPERGEBNIS_H					= "message.stepergebnis.h";
+	String	MESSAGE_STEPERGEBNIS_A_TIFF						= "message.stepergebnis.a.tiff";
+	String	MESSAGE_STEPERGEBNIS_B_TIFF						= "message.stepergebnis.b.tiff";
+	String	MESSAGE_STEPERGEBNIS_C_TIFF						= "message.stepergebnis.c.tiff";
+	String	MESSAGE_STEPERGEBNIS_D_TIFF						= "message.stepergebnis.d.tiff";
+	String	MESSAGE_STEPERGEBNIS_E_TIFF						= "message.stepergebnis.e.tiff";
+	String	MESSAGE_STEPERGEBNIS_F_TIFF						= "message.stepergebnis.f.tiff";
+	String	MESSAGE_STEPERGEBNIS_G_TIFF						= "message.stepergebnis.g.tiff";
+	String	MESSAGE_STEPERGEBNIS_H_TIFF						= "message.stepergebnis.h.tiff";
 
-	String	MESSAGE_DASHES							= "message.dashes";
+	String	MESSAGE_STEPERGEBNIS_A_SIARD					= "message.stepergebnis.a.siard";
+	String	MESSAGE_STEPERGEBNIS_B_SIARD					= "message.stepergebnis.b.siard";
+	String	MESSAGE_STEPERGEBNIS_C_SIARD					= "message.stepergebnis.c.siard";
+	String	MESSAGE_STEPERGEBNIS_D_SIARD					= "message.stepergebnis.d.siard";
+	String	MESSAGE_STEPERGEBNIS_E_SIARD					= "message.stepergebnis.e.siard";
+	String	MESSAGE_STEPERGEBNIS_F_SIARD					= "message.stepergebnis.f.siard";
+	String	MESSAGE_STEPERGEBNIS_G_SIARD					= "message.stepergebnis.g.siard";
+	String	MESSAGE_STEPERGEBNIS_H_SIARD					= "message.stepergebnis.h.siard";
+	String	MESSAGE_STEPERGEBNIS_I_SIARD					= "message.stepergebnis.i.siard";
+	String	MESSAGE_STEPERGEBNIS_J_SIARD					= "message.stepergebnis.j.siard";
 
-	String	MESSAGE_CONFIGURATION_ERROR_1			= "message.configuration.error.1";
-	String	MESSAGE_CONFIGURATION_ERROR_2			= "message.configuration.error.2";
-	String	MESSAGE_CONFIGURATION_ERROR_3			= "message.configuration.error.3";
+	String	MESSAGE_DASHES									= "message.dashes";
 
-	String	ERROR_UNKNOWN							= "error.unknown";
+	String	MESSAGE_CONFIGURATION_ERROR_1					= "message.configuration.error.1";
+	String	MESSAGE_CONFIGURATION_ERROR_2					= "message.configuration.error.2";
+	String	MESSAGE_CONFIGURATION_ERROR_3					= "message.configuration.error.3";
 
+	String	ERROR_UNKNOWN									= "error.unknown";
+
+	// *************TIFF-Meldungen*************************************************************************
 	// Modul A Meldungen
-	String	ERROR_MODULE_A_INCORRECTFILEENDING		= "error.module.a.incorrectfileending";
-	String	ERROR_MODULE_A_INCORRECTFILE			= "error.module.a.incorrectfile";
-	String	ERROR_MODULE_A_ISDIRECTORY				= "error.module.a.isdirectory";
+	String	ERROR_MODULE_A_INCORRECTFILEENDING				= "error.module.a.incorrectfileending";
+	String	ERROR_MODULE_A_INCORRECTFILE					= "error.module.a.incorrectfile";
+	String	ERROR_MODULE_A_ISDIRECTORY						= "error.module.a.isdirectory";
 
 	// Modul B Meldungen
-	String	MESSAGE_MODULE_B_CANNOTWRITEJHOVEREPORT	= "message.module.b.cannotwritejhovereport";
-	String	MESSAGE_MODULE_B_JHOVEINVALID			= "message.module.b.jhoveinvalid";
+	String	MESSAGE_MODULE_B_CANNOTWRITEJHOVEREPORT			= "message.module.b.cannotwritejhovereport";
+	String	MESSAGE_MODULE_B_JHOVEINVALID					= "message.module.b.jhoveinvalid";
 
 	// Modul C-G Meldungen
-	String	MESSAGE_MODULE_CG_CANNOTFINDJHOVEREPORT	= "message.module.cg.cannotfindjhovereport";
-	String	MESSAGE_MODULE_CG_INVALID				= "message.module.cg.invalid";
-	String	MESSAGE_MODULE_CG_JHOVENIO				= "message.module.cg.jhovenio";
-	String	MESSAGE_MODULE_CG_JHOVEN15				= "message.module.cg.jhoven15";
-	
-// *************SIARD-Meldungen*************************************************************************
-	// Initialisierung und Parameter-Ueberpruefung
-//	String	ERROR_PARAMETER_USAGE							= "error.parameter.usage";
-//	String	ERROR_LOGDIRECTORY_NODIRECTORY					= "error.logdirectory.nodirectory";
-//	String	ERROR_LOGDIRECTORY_NOTWRITABLE					= "error.logdirectory.notwritable";
-	String	ERROR_WORKDIRECTORY_NOTWRITABLE					= "error.workdirectory.notwritable";
-	String	ERROR_SIARDFILE_FILENOTEXISTING					= "error.siardfile.filenotexisting";
-//	String	ERROR_LOGGING_NOFILEAPPENDER					= "error.logging.nofileappender";
+	String	MESSAGE_MODULE_CG_CANNOTFINDJHOVEREPORT			= "message.module.cg.cannotfindjhovereport";
+	String	MESSAGE_MODULE_CG_INVALID						= "message.module.cg.invalid";
+	String	MESSAGE_MODULE_CG_JHOVENIO						= "message.module.cg.jhovenio";
+	String	MESSAGE_MODULE_CG_JHOVEN15						= "message.module.cg.jhoven15";
 
-//	String	ERROR_WRONG_JRE									= "error.wrong.jdk";
-
-//	String	MESSAGE_TOTAL_VALID								= "message.total.valid";
-//	String	MESSAGE_TOTAL_INVALID							= "message.total.invalid";
-
-//	String	MESSAGE_FOOTER_LOG								= "message.footer.log";
-	String	MESSAGE_FOOTER_SIARD							= "message.footer.siard";
-
-	// Globale Meldungen
-//	String	MESSAGE_kostvalIDATION							= "message.kostvalidation";
-//	String	MESSAGE_VALIDATION_INTERRUPTED					= "message.validation.interrupted";
-//	String	MESSAGE_VALIDATION_FINISHED						= "message.validation.finished";
-//	String	MESSAGE_MODULE_VALID							= "message.module.valid";
-//	String	MESSAGE_MODULE_INVALID							= "message.module.invalid";
-//	String	MESSAGE_MODULE_INVALID_2ARGS					= "message.module.invalid.2args";
-
-	String	MESSAGE_MODULE_A_SIARD								= "message.module.a.siard";
-	String	MESSAGE_MODULE_B_SIARD								= "message.module.b.siard";
-	String	MESSAGE_MODULE_C_SIARD								= "message.module.c.siard";
-	String	MESSAGE_MODULE_D_SIARD								= "message.module.d.siard";
-	String	MESSAGE_MODULE_E_SIARD								= "message.module.e.siard";
-	String	MESSAGE_MODULE_F_SIARD								= "message.module.f.siard";
-	String	MESSAGE_MODULE_G_SIARD								= "message.module.g.siard";
-	String	MESSAGE_MODULE_H_SIARD								= "message.module.h.siard";
-	String	MESSAGE_MODULE_I_SIARD								= "message.module.i.siard";
-	String	MESSAGE_MODULE_J_SIARD								= "message.module.j.siard";
-	String	MESSAGE_MODULE_K_SIARD								= "message.module.k.siard";
-	String	MESSAGE_MODULE_L_SIARD								= "message.module.l.siard";
-
-	String	MESSAGE_STEPERGEBNIS_A_SIARD							= "message.stepergebnis.a.siard";
-	String	MESSAGE_STEPERGEBNIS_B_SIARD							= "message.stepergebnis.b.siard";
-	String	MESSAGE_STEPERGEBNIS_C_SIARD							= "message.stepergebnis.c.siard";
-	String	MESSAGE_STEPERGEBNIS_D_SIARD							= "message.stepergebnis.d.siard";
-	String	MESSAGE_STEPERGEBNIS_E_SIARD							= "message.stepergebnis.e.siard";
-	String	MESSAGE_STEPERGEBNIS_F_SIARD							= "message.stepergebnis.f.siard";
-	String	MESSAGE_STEPERGEBNIS_G_SIARD							= "message.stepergebnis.g.siard";
-	String	MESSAGE_STEPERGEBNIS_H_SIARD							= "message.stepergebnis.h.siard";
-	String	MESSAGE_STEPERGEBNIS_I_SIARD							= "message.stepergebnis.i.siard";
-	String	MESSAGE_STEPERGEBNIS_J_SIARD							= "message.stepergebnis.j.siard";
-	String	MESSAGE_STEPERGEBNIS_K_SIARD							= "message.stepergebnis.k.siard";
-	String	MESSAGE_STEPERGEBNIS_L_SIARD							= "message.stepergebnis.l.siard";
-
-//	String	MESSAGE_DASHES									= "message.dashes";
-
-//	String	MESSAGE_CONFIGURATION_ERROR_1					= "message.configuration.error.1";
-//	String	MESSAGE_CONFIGURATION_ERROR_2					= "message.configuration.error.2";
-//	String	MESSAGE_CONFIGURATION_ERROR_3					= "message.configuration.error.3";
-
-//	String	ERROR_UNKNOWN									= "error.unknown";
-
+	// *************SIARD-Meldungen*************************************************************************
 	// Modul A Meldungen
 	String	ERROR_MODULE_A_NOFILE							= "error.module.a.nofile";
 	String	ERROR_MODULE_A_INCORRECTFILEENDING_SIARD		= "error.module.a.incorrectfileending.siard";

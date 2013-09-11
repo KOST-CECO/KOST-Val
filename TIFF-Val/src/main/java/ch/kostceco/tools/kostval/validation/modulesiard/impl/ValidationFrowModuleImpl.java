@@ -110,12 +110,12 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements
 	 *                if the representation of the columns is invalid
 	 */
 	@Override
-	public boolean validate( File siardDatei ) throws ValidationFrowException
+	public boolean validate( File valDatei, File directoryOfLogfile ) throws ValidationFrowException
 	{
 		// All over validation flag
 		boolean valid = true;
 		ValidationContext validationContext = new ValidationContext();
-		validationContext.setSiardArchive( siardDatei );
+		validationContext.setSiardArchive( valDatei );
 		validationContext.setConfigurationService( this
 				.getConfigurationService() );
 		this.setValidationContext( validationContext );

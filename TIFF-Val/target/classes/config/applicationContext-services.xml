@@ -33,48 +33,89 @@
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="messageService" ref="messageService" />
 	</bean>
-
 	<bean id="validationBjhoveValidationModule" class="ch.kostceco.tools.kostval.validation.moduletiff2.impl.ValidationBjhoveValidationModuleImpl">
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="messageService" ref="messageService" />
 		<property name="jhoveService" ref="jhoveService" />
 		<property name="configurationService" ref="configurationService" />
 	</bean>
-
 	<bean id="validationCcompressionValidationModule" class="ch.kostceco.tools.kostval.validation.moduletiff2.impl.ValidationCcompressionValidationModuleImpl">
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="messageService" ref="messageService" />
 		<property name="configurationService" ref="configurationService" />
 	</bean>
-
 	<bean id="validationDphotointerValidationModule" class="ch.kostceco.tools.kostval.validation.moduletiff2.impl.ValidationDphotointerValidationModuleImpl">
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="messageService" ref="messageService" />
 		<property name="configurationService" ref="configurationService" />
 	</bean>
-
 	<bean id="validationEbitspersampleValidationModule" class="ch.kostceco.tools.kostval.validation.moduletiff2.impl.ValidationEbitspersampleValidationModuleImpl">
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="messageService" ref="messageService" />
 		<property name="configurationService" ref="configurationService" />
 	</bean>
-
 	<bean id="validationFmultipageValidationModule" class="ch.kostceco.tools.kostval.validation.moduletiff2.impl.ValidationFmultipageValidationModuleImpl">
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="messageService" ref="messageService" />
 		<property name="configurationService" ref="configurationService" />
 	</bean>
-
 	<bean id="validationGtilesValidationModule" class="ch.kostceco.tools.kostval.validation.moduletiff2.impl.ValidationGtilesValidationModuleImpl">
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="messageService" ref="messageService" />
 		<property name="configurationService" ref="configurationService" />
 	</bean>
-
 	<bean id="validationHsizeValidationModule" class="ch.kostceco.tools.kostval.validation.moduletiff2.impl.ValidationHsizeValidationModuleImpl">
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="messageService" ref="messageService" />
 		<property name="configurationService" ref="configurationService" />
+	</bean>
+	
+	<bean id="validationAzipModule" class="ch.kostceco.tools.kostval.validation.modulesiard.impl.ValidationAzipModuleImpl">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="messageService" ref="messageService" />
+	</bean>
+	<bean id="validationBprimaryStructureModule" class="ch.kostceco.tools.kostval.validation.modulesiard.impl.ValidationBprimaryStructureModuleImpl">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="messageService" ref="messageService" />
+	</bean>
+	<bean id="validationCheaderModule" class="ch.kostceco.tools.kostval.validation.modulesiard.impl.ValidationCheaderModuleImpl">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="messageService" ref="messageService" />
+		<property name="configurationService" ref="configurationService" />
+	</bean> 
+	<bean id="validationDstructureModule" class="ch.kostceco.tools.kostval.validation.modulesiard.impl.ValidationDstructureModuleImpl">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="messageService" ref="messageService" />
+        <property name="configurationService" ref="configurationService" />
+	</bean>
+    <bean id="validationEcolumnModule" class="ch.kostceco.tools.kostval.validation.modulesiard.impl.ValidationEcolumnModuleImpl">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="messageService" ref="messageService" />
+		<property name="configurationService" ref="configurationService" />
+	</bean> 
+	<bean id="validationFrowModule" class="ch.kostceco.tools.kostval.validation.modulesiard.impl.ValidationFrowModuleImpl">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="messageService" ref="messageService" />
+		<property name="configurationService" ref="configurationService" />
+	</bean>
+	<bean id="validationGtableModule" class="ch.kostceco.tools.kostval.validation.modulesiard.impl.ValidationGtableModuleImpl">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="messageService" ref="messageService" />
+		<property name="configurationService" ref="configurationService" />
+	</bean> 
+	<bean id="validationHcontentModule" class="ch.kostceco.tools.kostval.validation.modulesiard.impl.ValidationHcontentModuleImpl">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="messageService" ref="messageService" />
+        <property name="configurationService" ref="configurationService" />
+	</bean>
+	<bean id="validationIrecognitionModule" class="ch.kostceco.tools.kostval.validation.modulesiard.impl.ValidationIrecognitionModuleImpl">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="messageService" ref="messageService" />
+	</bean>
+	<bean id="validationJsurplusFilesModule" class="ch.kostceco.tools.kostval.validation.modulesiard.impl.ValidationJsurplusFilesModuleImpl">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="messageService" ref="messageService" />
+        <property name="configurationService" ref="configurationService" />
 	</bean>
 
 	<bean id="kostval" class="ch.kostceco.tools.kostval.KOSTVal">
@@ -86,7 +127,7 @@
 		<property name="textResourceService" ref="textResourceService" />
 	</bean>
 
-	<bean id="controller" class="ch.kostceco.tools.kostval.controller.Controller">
+	<bean id="controllertiff" class="ch.kostceco.tools.kostval.controller.Controllertiff">
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="validationArecognitionModule" ref="validationArecognitionModule" />
 		<property name="validationBjhoveValidationModule" ref="validationBjhoveValidationModule" />
@@ -97,5 +138,19 @@
 		<property name="validationGtilesValidationModule" ref="validationGtilesValidationModule" />
 		<property name="validationHsizeValidationModule" ref="validationHsizeValidationModule" />
 	</bean>
+	
+	<bean id="controllersiard" class="ch.kostceco.tools.kostval.controller.Controllersiard">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="validationAzipModule" ref="validationAzipModule" />
+		<property name="validationBprimaryStructureModule" ref="validationBprimaryStructureModule" />
+		<property name="validationCheaderModule" ref="validationCheaderModule" /> 
+		<property name="validationDstructureModule" ref="validationDstructureModule" />
+		<property name="validationEcolumnModule" ref="validationEcolumnModule" />
+		<property name="validationFrowModule" ref="validationFrowModule" />
+		<property name="validationGtableModule" ref="validationGtableModule" /> 
+		<property name="validationHcontentModule" ref="validationHcontentModule" />
+		<property name="validationIrecognitionModule" ref="validationIrecognitionModule" />
+		<property name="validationJsurplusFilesModule" ref="validationJsurplusFilesModule" />
+	</bean> 
 
 </beans>

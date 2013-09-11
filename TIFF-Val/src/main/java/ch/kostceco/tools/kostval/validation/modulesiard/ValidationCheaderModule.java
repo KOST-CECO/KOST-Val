@@ -35,7 +35,7 @@ import ch.kostceco.tools.kostval.validation.ValidationModule;
 public interface ValidationCheaderModule extends ValidationModule
 {
 
-	public boolean validate( File siardDatei )
+	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws ValidationCheaderException;
 
 }

@@ -35,6 +35,6 @@ import ch.kostceco.tools.kostval.validation.ValidationModule;
 public interface ValidationAzipModule extends ValidationModule
 {
 
-	public boolean validate( File siardDatei ) throws ValidationAzipException;
+	public boolean validate( File valDatei, File directoryOfLogfile ) throws ValidationAzipException;
 
 }

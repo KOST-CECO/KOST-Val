@@ -39,27 +39,27 @@ public class ValidationArecognitionModuleImpl extends ValidationModuleImpl
 {
 
 	@Override
-	public boolean validate( File tiffDatei, File directoryOfLogfile )
+	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws ValidationArecognitionException
 	{
 		// Eine TIFF Datei (.tiff / .tif / .tfx) muss entweder mit II*.
 		// [49492A00] oder mit MM.* [4D4D002A] beginnen
 
-		if ( tiffDatei.isDirectory() ) {
+		if ( valDatei.isDirectory() ) {
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_MODULE_A )
 							+ getTextResourceService().getText( MESSAGE_DASHES )
 							+ getTextResourceService().getText(
 									ERROR_MODULE_A_ISDIRECTORY ) );
 			return false;
-		} else if ( (tiffDatei.getAbsolutePath().toLowerCase()
-				.endsWith( ".tiff" ) || tiffDatei.getAbsolutePath()
+		} else if ( (valDatei.getAbsolutePath().toLowerCase()
+				.endsWith( ".tiff" ) || valDatei.getAbsolutePath()
 				.toLowerCase().endsWith( ".tif" )) ) {
 
 			FileReader fr = null;
 
 			try {
-				fr = new FileReader( tiffDatei );
+				fr = new FileReader( valDatei );
 				BufferedReader read = new BufferedReader( fr );
 
 				// Hex 49 in Char umwandeln

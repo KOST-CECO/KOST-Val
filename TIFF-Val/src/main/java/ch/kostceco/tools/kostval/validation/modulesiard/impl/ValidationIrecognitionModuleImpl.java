@@ -36,14 +36,14 @@ public class ValidationIrecognitionModuleImpl extends ValidationModuleImpl
 {
 
 	@Override
-	public boolean validate( File siardDatei )
+	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws ValidationIrecognitionException
 	{
 
 		/**
 		 * Validierung ob die Extension .siard lautet
 		 */
-		if ( !siardDatei.getAbsolutePath().toLowerCase().endsWith( ".siard" ) ) {
+		if ( !valDatei.getAbsolutePath().toLowerCase().endsWith( ".siard" ) ) {
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_MODULE_I )
 							+ getTextResourceService().getText( MESSAGE_DASHES )

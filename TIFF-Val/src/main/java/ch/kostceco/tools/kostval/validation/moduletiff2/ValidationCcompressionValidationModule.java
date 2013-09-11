@@ -33,7 +33,7 @@ public interface ValidationCcompressionValidationModule extends
 		ValidationModule
 {
 
-	public boolean validate( File tiffDatei, File directoryOfLogfile )
+	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws ValidationCcompressionValidationException;
 
 }

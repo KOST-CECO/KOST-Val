@@ -69,17 +69,17 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 	}
 
 	@Override
-	public boolean validate( File tiffDatei, File directoryOfLogfile )
+	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws ValidationBjhoveValidationException
 	{
 
 		boolean isValid = true;
 
-		String toplevelDir = tiffDatei.getName();
+		String toplevelDir = valDatei.getName();
 		int lastDotIdx = toplevelDir.lastIndexOf( "." );
 		toplevelDir = toplevelDir.substring( 0, lastDotIdx );
 
-		// Vorbereitungen: tiffDatei an die JHove Applikation übergeben
+		// Vorbereitungen: valDatei an die JHove Applikation übergeben
 		File jhoveReport = null;
 		StringBuffer concatenatedOutputs = new StringBuffer();
 		String pathToJhoveJar = getConfigurationService().getPathToJhoveJar();
@@ -99,12 +99,12 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 		}
 
 		try {
-			String tiffDateiStr = tiffDatei.getAbsolutePath();
-			// pathsJhove = path to InputFile = path to tiffDatei
-			StringBuffer pathsJhove = new StringBuffer( tiffDateiStr );
+			String valDateiStr = valDatei.getAbsolutePath();
+			// pathsJhove = path to InputFile = path to valDatei
+			StringBuffer pathsJhove = new StringBuffer( valDateiStr );
 			jhoveReport = getJhoveService().executeJhove( pathToJhoveJar,
 					pathsJhove.toString(), pathToJhoveOutput,
-					tiffDatei.getName() );
+					valDatei.getName() );
 
 			BufferedReader in = new BufferedReader(
 					new FileReader( jhoveReport ) );

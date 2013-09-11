@@ -39,7 +39,7 @@ import ch.kostceco.tools.kostval.validation.bean.ValidationContext;
 public interface ValidationFrowModule extends ValidationModule
 {
 
-	public boolean validate( File siardDatei )
+	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws ValidationFrowException;
 
 	public boolean prepareValidation( ValidationContext validationContext )

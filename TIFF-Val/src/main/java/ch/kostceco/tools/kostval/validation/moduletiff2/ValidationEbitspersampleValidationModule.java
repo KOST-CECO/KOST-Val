@@ -33,7 +33,7 @@ public interface ValidationEbitspersampleValidationModule extends
 		ValidationModule
 {
 
-	public boolean validate( File tiffDatei, File directoryOfLogfile )
+	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws ValidationEbitspersampleValidationException;
 
 }

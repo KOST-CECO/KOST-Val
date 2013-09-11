@@ -59,7 +59,7 @@ public class ValidationGtableModuleImpl extends ValidationModuleImpl implements
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public boolean validate( File siardDatei ) throws ValidationGtableException
+	public boolean validate( File valDatei, File directoryOfLogfile ) throws ValidationGtableException
 	{
 		boolean valid = true;
 		try {

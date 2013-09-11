@@ -65,7 +65,7 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 	}
 
 	@Override
-	public boolean validate( File siardDatei )
+	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws ValidationCheaderException
 	{
 
@@ -74,7 +74,7 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 		FileEntry metadataxsd = null;
 
 		try {
-			Zip64File zipfile = new Zip64File( siardDatei );
+			Zip64File zipfile = new Zip64File( valDatei );
 			List<FileEntry> fileEntryList = zipfile.getListFileEntries();
 			for ( FileEntry fileEntry : fileEntryList ) {
 				if ( fileEntry.getName().equals( "header/" + METADATA ) ) {
@@ -115,7 +115,7 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 		// Validierung metadata.xml mit metadata.xsd
 		File xmlToValidate = null;
 		File xsdToValidate = null;
-		String toplevelDir = siardDatei.getName();
+		String toplevelDir = valDatei.getName();
 		int lastDotIdx = toplevelDir.lastIndexOf( "." );
 		toplevelDir = toplevelDir.substring( 0, lastDotIdx );
 
@@ -143,7 +143,7 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 			// gleich die ganze Zip-Datei,
 			// weil auch spätere Validierungen nur mit den extrahierten Files
 			// arbeiten können.
-			Zip64File zipfile = new Zip64File( siardDatei );
+			Zip64File zipfile = new Zip64File( valDatei );
 			List<FileEntry> fileEntryList = zipfile.getListFileEntries();
 			for ( FileEntry fileEntry : fileEntryList ) {
 				if ( !fileEntry.isDirectory() ) {

@@ -78,7 +78,7 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 	}
 
 	@Override
-	public boolean validate( File siardDatei )
+	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws ValidationHcontentException
 	{
 		boolean valid = true;
@@ -135,7 +135,7 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 									.toString() );
 							if ( verifyRowCount( tableXml, tableXsd ) ) {
 
-								valid = validate( tableXml, tableXsd ) && valid;
+								valid = validate1( tableXml, tableXsd ) && valid;
 							}
 						}
 					}
@@ -164,7 +164,7 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 		return valid;
 	}
 
-	private boolean validate( File xmlFile, File schemaLocation )
+	private boolean validate1( File xmlFile, File schemaLocation )
 			throws SAXException, IOException
 	{
 		SchemaFactory factory = SchemaFactory

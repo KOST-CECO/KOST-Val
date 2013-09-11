@@ -70,7 +70,7 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 	}
 
 	@Override
-	public boolean validate( File siardDatei )
+	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws ValidationJsurplusFilesException
 	{
 		boolean valid = true;

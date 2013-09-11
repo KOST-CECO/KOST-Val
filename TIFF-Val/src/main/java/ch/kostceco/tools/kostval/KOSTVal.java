@@ -23,6 +23,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import ch.kostceco.tools.kostval.controller.Controllertiff;
+import ch.kostceco.tools.kostval.controller.Controllersiard;
 import ch.kostceco.tools.kostval.logging.LogConfigurator;
 import ch.kostceco.tools.kostval.logging.Logger;
 import ch.kostceco.tools.kostval.logging.MessageConstants;
@@ -66,7 +67,7 @@ public class KOSTVal implements MessageConstants
 	}
 
 	/**
-	 * Die Eingabe besteht aus Parameter 1: Pfad zum TIFF-File Parameter 2: Pfad
+	 * Die Eingabe besteht aus Parameter 1: Pfad zur Val-File Parameter 2: Pfad
 	 * zum Logging-Verzeichnis
 	 * 
 	 * @param args
@@ -91,9 +92,9 @@ public class KOSTVal implements MessageConstants
 			System.exit( 1 );
 		}
 
-		File tiffDatei = new File( args[0] );
+		File valDatei = new File( args[0] );
 		LOGGER.logInfo( kostval.getTextResourceService().getText(
-				MESSAGE_kostvalIDATION, tiffDatei.getName() ) );
+				MESSAGE_KOSTVALIDATION ) );
 
 		// die Anwendung muss mindestens unter Java 6 laufen
 		String javaRuntimeVersion = System.getProperty( "java.vm.version" );
@@ -127,9 +128,38 @@ public class KOSTVal implements MessageConstants
 					MESSAGE_VALIDATION_INTERRUPTED ) );
 			System.exit( 1 );
 		}
+		
+		// Informationen zum Arbeitsverzeichnis holen
+		String pathToWorkDir = kostval.getConfigurationService()
+				.getPathToWorkDir();
+		/*
+		 * Nicht vergessen in
+		 * "src/main/resources/config/applicationContext-services.xml" beim
+		 * entsprechenden Modul die property anzugeben: <property
+		 * name="configurationService" ref="configurationService" />
+		 */
 
-		// Ueberprüfung des 1. Parameters (TIFF-Datei): existiert die Datei?
-		if ( !tiffDatei.exists() ) {
+		File tmpDir = new File( pathToWorkDir );
+		
+		// bestehendes Workverzeichnis ggf. löschen und wieder anlegen
+		if ( tmpDir.exists() ) {
+			Util.deleteDir( tmpDir );
+		}
+		if ( !tmpDir.exists() ) {
+			tmpDir.mkdir();
+		}
+
+		// Im workverzeichnis besteht kein Schreibrecht
+		if ( !tmpDir.canWrite() ) {
+			LOGGER.logInfo( kostval.getTextResourceService().getText(
+					ERROR_WORKDIRECTORY_NOTWRITABLE, tmpDir ) );
+			LOGGER.logInfo( kostval.getTextResourceService().getText(
+					MESSAGE_VALIDATION_INTERRUPTED ) );
+			System.exit( 1 );
+		}
+
+		// Ueberprüfung des 1. Parameters (Val-Datei): existiert die Datei?
+		if ( !valDatei.exists() ) {
 			LOGGER.logInfo( kostval.getTextResourceService().getText(
 					ERROR_TIFFFILE_FILENOTEXISTING ) );
 			LOGGER.logInfo( kostval.getTextResourceService().getText(
@@ -137,9 +167,9 @@ public class KOSTVal implements MessageConstants
 			System.exit( 1 );
 		}
 
-		String originalTiffName = tiffDatei.getAbsolutePath();
+		String originalValName = valDatei.getAbsolutePath();
 
-		// Initialisierung Modul B (JHove-Validierung)
+		// Initialisierung TIFF-Modul B (JHove-Validierung)
 		// überprüfen der Konfiguration: existiert die JHoveApp.jar am
 		// angebenen Ort?
 		String jhoveApp = kostval.getConfigurationService().getPathToJhoveJar();
@@ -169,64 +199,141 @@ public class KOSTVal implements MessageConstants
 		LogConfigurator logConfigurator = (LogConfigurator) context
 				.getBean( "logconfigurator" );
 		String logFileName = logConfigurator.configure(
-				directoryOfLogfile.getAbsolutePath(), tiffDatei.getName() );
+				directoryOfLogfile.getAbsolutePath(), valDatei.getName() );
 
 		LOGGER.logError( kostval.getTextResourceService().getText(
-				MESSAGE_kostvalIDATION, tiffDatei.getName() ) );
-
-		Controllertiff controller = (Controllertiff) context.getBean( "controller" );
-		boolean okMandatory = controller.executeMandatory( tiffDatei,
-				directoryOfLogfile );
-		boolean ok = false;
-
-		// die Validierungen A sind obligatorisch, wenn sie bestanden
-		// wurden, können die restlichen
-		// Validierungen, welche nicht zum Abbruch der Applikation führen,
-		// ausgeführt werden.
-		if ( okMandatory ) {
-			ok = controller.executeOptional( tiffDatei, directoryOfLogfile );
-		}
-
-		ok = (ok && okMandatory);
-
-		LOGGER.logInfo( "" );
-		if ( ok ) {
+				MESSAGE_KOSTVALIDATION) );
+		
+		if ( (valDatei.getAbsolutePath().toLowerCase()
+				.endsWith( ".tiff" ) || valDatei.getAbsolutePath()
+				.toLowerCase().endsWith( ".tif" )) ) {
 			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					MESSAGE_TOTAL_VALID, tiffDatei.getAbsolutePath() ) );
+					MESSAGE_TIFFVALIDATION, valDatei.getName() ) );
+			Controllertiff controller1 = (Controllertiff) context.getBean( "controllertiff" );
+			boolean okMandatory = controller1.executeMandatory( valDatei,
+					directoryOfLogfile );
+			boolean ok = false;
+
+			// die Validierungen A sind obligatorisch, wenn sie bestanden
+			// wurden, können die restlichen
+			// Validierungen, welche nicht zum Abbruch der Applikation führen,
+			// ausgeführt werden.
+			if ( okMandatory ) {
+				ok = controller1.executeOptional( valDatei, directoryOfLogfile );
+			}
+
+			ok = (ok && okMandatory);
+
+			LOGGER.logInfo( "" );
+			if ( ok ) {
+				LOGGER.logInfo( kostval.getTextResourceService().getText(
+						MESSAGE_TOTAL_VALID, valDatei.getAbsolutePath() ) );
+			} else {
+				LOGGER.logInfo( kostval.getTextResourceService().getText(
+						MESSAGE_TOTAL_INVALID, valDatei.getAbsolutePath() ) );
+			}
+			LOGGER.logInfo( "" );
+
+			// Ausgabe der Pfade zu den Jhove Reports, falls welche
+			// generiert wurden
+			if ( Util.getPathToReportJHove() != null ) {
+				LOGGER.logInfo( kostval.getTextResourceService().getText(
+						MESSAGE_FOOTER_REPORTJHOVE, Util.getPathToReportJHove() ) );
+			}
+
+			LOGGER.logInfo( "" );
+			LOGGER.logInfo( kostval.getTextResourceService().getText(
+					MESSAGE_FOOTER_TIFF, originalValName ) );
+			LOGGER.logInfo( kostval.getTextResourceService().getText(
+					MESSAGE_FOOTER_LOG, logFileName ) );
+			LOGGER.logInfo( "" );
+
+			if ( okMandatory ) {
+				LOGGER.logInfo( kostval.getTextResourceService().getText(
+						MESSAGE_VALIDATION_FINISHED ) );
+			} else {
+				LOGGER.logInfo( kostval.getTextResourceService().getText(
+						MESSAGE_VALIDATION_INTERRUPTED ) );
+			}
+
+			if ( ok ) {
+				System.exit( 0 );
+			} else {
+				System.exit( 2 );
+			}
+
+		} else if ( (valDatei.getAbsolutePath().toLowerCase()
+				.endsWith( ".siard" )) ) {
+			LOGGER.logInfo( kostval.getTextResourceService().getText(
+					MESSAGE_SIARDVALIDATION, valDatei.getName() ) );
+			Controllersiard controller2 = (Controllersiard) context.getBean( "controllersiard" );
+			boolean okMandatory = controller2.executeMandatory( valDatei, directoryOfLogfile );
+			boolean ok = false;
+
+			// die Validierungen A-D sind obligatorisch, wenn sie bestanden wurden,
+			// können die restlichen
+			// Validierungen, welche nicht zum Abbruch der Applikation führen,
+			// ausgeführt werden.
+			if ( okMandatory ) {
+
+				ok = controller2.executeOptional( valDatei, directoryOfLogfile );
+
+				// Ausführen der optionalen Schritte
+
+			}
+
+			ok = (ok && okMandatory);
+
+			LOGGER.logInfo( "" );
+			if ( ok ) {
+				LOGGER.logInfo( kostval.getTextResourceService().getText(
+						MESSAGE_TOTAL_VALID, valDatei.getAbsolutePath() ) );
+			} else {
+				LOGGER.logInfo( kostval.getTextResourceService().getText(
+						MESSAGE_TOTAL_INVALID, valDatei.getAbsolutePath() ) );
+			}
+			LOGGER.logInfo( "" );
+
+			LOGGER.logInfo( "" );
+			LOGGER.logInfo( kostval.getTextResourceService().getText(
+					MESSAGE_FOOTER_SIARD, originalValName ) );
+			LOGGER.logInfo( kostval.getTextResourceService().getText(
+					MESSAGE_FOOTER_LOG, logFileName ) );
+			LOGGER.logInfo( "" );
+
+			if ( okMandatory ) {
+				LOGGER.logInfo( kostval.getTextResourceService().getText(
+						MESSAGE_VALIDATION_FINISHED ) );
+			} else {
+				LOGGER.logInfo( kostval.getTextResourceService().getText(
+						MESSAGE_VALIDATION_INTERRUPTED ) );
+			}
+
+			// Löschen des Arbeitsverzeichnisses, falls eines angelegt wurde
+			if ( tmpDir.exists() ) {
+				Util.deleteDir( tmpDir );
+			}
+			if ( ok ) {
+				System.exit( 0 );
+				// Löschen des Arbeitsverzeichnisses, falls eines angelegt wurde
+				if ( tmpDir.exists() ) {
+					Util.deleteDir( tmpDir );
+				}
+			} else {
+				System.exit( 2 );
+				// Löschen des Arbeitsverzeichnisses, falls eines angelegt wurde
+				if ( tmpDir.exists() ) {
+					Util.deleteDir( tmpDir );
+				}
+			}
+
 		} else {
 			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					MESSAGE_TOTAL_INVALID, tiffDatei.getAbsolutePath() ) );
-		}
-		LOGGER.logInfo( "" );
-
-		// Ausgabe der Pfade zu den Jhove Reports, falls welche
-		// generiert wurden
-		if ( Util.getPathToReportJHove() != null ) {
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					MESSAGE_FOOTER_REPORTJHOVE, Util.getPathToReportJHove() ) );
-		}
-
-		LOGGER.logInfo( "" );
-		LOGGER.logInfo( kostval.getTextResourceService().getText(
-				MESSAGE_FOOTER_TIFF, originalTiffName ) );
-		LOGGER.logInfo( kostval.getTextResourceService().getText(
-				MESSAGE_FOOTER_LOG, logFileName ) );
-		LOGGER.logInfo( "" );
-
-		if ( okMandatory ) {
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					MESSAGE_VALIDATION_FINISHED ) );
-		} else {
+					ERROR_INCORRECTFILEENDING ) );
 			LOGGER.logInfo( kostval.getTextResourceService().getText(
 					MESSAGE_VALIDATION_INTERRUPTED ) );
+			System.exit( 1 );
 		}
-
-		if ( ok ) {
-			System.exit( 0 );
-		} else {
-			System.exit( 2 );
-		}
-
 	}
 
 }
