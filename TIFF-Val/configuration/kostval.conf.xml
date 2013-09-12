@@ -2,6 +2,8 @@
 <configuration>
 	<pathtojhovejar>Drittapplikationen\jhove\bin\JhoveApp.jar</pathtojhovejar>
 	<pathtojhoveconfig>Drittapplikationen\jhove\conf\jhove.conf</pathtojhoveconfig>
+	<pathtoworkdir>work_SIARD</pathtoworkdir>
+	<table-rows-limit>20000</table-rows-limit>
 	
 	<allowedcompression1>uncompressed</allowedcompression1>		<!--0 / uncompressed-->
 	<allowedcompression2>CCITT 1D</allowedcompression2>			<!--0 / CCITT 1D-->
