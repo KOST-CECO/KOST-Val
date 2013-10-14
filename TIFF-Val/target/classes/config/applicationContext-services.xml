@@ -23,10 +23,6 @@
 		class="ch.kostceco.tools.kostval.service.impl.MessageServiceImpl">
 	</bean>
 
-	<bean id="jhoveService"
-		class="ch.kostceco.tools.kostval.service.impl.JhoveServiceImpl">
-		<property name="configurationService" ref="configurationService" />
-	</bean>
 
 	<!-- Validation Services -->
 	<bean id="validationArecognitionModule" class="ch.kostceco.tools.kostval.validation.moduletiff1.impl.ValidationArecognitionModuleImpl">
@@ -36,7 +32,6 @@
 	<bean id="validationBjhoveValidationModule" class="ch.kostceco.tools.kostval.validation.moduletiff2.impl.ValidationBjhoveValidationModuleImpl">
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="messageService" ref="messageService" />
-		<property name="jhoveService" ref="jhoveService" />
 		<property name="configurationService" ref="configurationService" />
 	</bean>
 	<bean id="validationCcompressionValidationModule" class="ch.kostceco.tools.kostval.validation.moduletiff2.impl.ValidationCcompressionValidationModuleImpl">

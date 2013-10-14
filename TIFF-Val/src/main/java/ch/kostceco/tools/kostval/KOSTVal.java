@@ -1,5 +1,5 @@
 /*== KOST-Val ==================================================================================
-The KOST-Val v0.9.0 application is used for validate TIFF and SIARD-Files. 
+The KOST-Val v0.9.1 application is used for validate TIFF and SIARD-Files. 
 Copyright (C) 2012-2013 Claire Röthlisberger (KOST-CECO), Christian Eugster, Olivier Debenath, 
 Peter Schneider (Staatsarchiv Aargau)
 -----------------------------------------------------------------------------------------------
@@ -170,18 +170,6 @@ public class KOSTVal implements MessageConstants
 		String originalValName = valDatei.getAbsolutePath();
 
 		// Initialisierung TIFF-Modul B (JHove-Validierung)
-		// überprüfen der Konfiguration: existiert die JHoveApp.jar am
-		// angebenen Ort?
-		String jhoveApp = kostval.getConfigurationService().getPathToJhoveJar();
-		File fJhoveApp = new File( jhoveApp );
-		if ( !fJhoveApp.exists()
-				|| !fJhoveApp.getName().equals( "JhoveApp.jar" ) ) {
-
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					ERROR_JHOVEAPP_MISSING ) );
-			System.exit( 1 );
-		}
-
 		// überprüfen der Konfiguration: existiert die jhove.conf am
 		// angebenen Ort?
 		String jhoveConf = kostval.getConfigurationService()

@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <configuration>
-	<pathtojhovejar>Drittapplikationen\jhove\bin\JhoveApp.jar</pathtojhovejar>
-	<pathtojhoveconfig>Drittapplikationen\jhove\conf\jhove.conf</pathtojhoveconfig>
-	<pathtoworkdir>work_SIARD</pathtoworkdir>
+	<pathtojhoveconfig>C:\Software\KOST-Tools\KOST-Val\configuration\jhove.conf</pathtojhoveconfig>
+	<pathtoworkdir>work_KOST-Val</pathtoworkdir>
+	
 	<table-rows-limit>20000</table-rows-limit>
 	
 	<allowedcompression1>uncompressed</allowedcompression1>		<!--0 / uncompressed-->
@@ -34,7 +34,7 @@
 	<allowedmultipage>1</allowedmultipage>						<!--0 / 1-->
 	
 	<allowedtiles>0</allowedtiles>								<!--0 / 1-->
-	
+
 	<allowedsize>0</allowedsize>								<!--0 / 1-->
 	
 </configuration>

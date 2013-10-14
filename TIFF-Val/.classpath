@@ -7,9 +7,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="con" path="org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/commons-configuration-1.6.jar" sourcepath="external-sources/commons-configuration-1.6-sources.jar"/>
-	<classpathentry kind="lib" path="lib/jhove-1.5.jar" sourcepath="external-sources/jhove-1.5-sources"/>
-	<classpathentry kind="lib" path="lib/jhove-handler-1.5.jar" sourcepath="external-sources/jhove-1.5-sources"/>
-	<classpathentry kind="lib" path="lib/jhove-module-1.5.jar" sourcepath="external-sources/jhove-1.5-sources"/>
 	<classpathentry kind="lib" path="lib/log4j-1.2.12.jar" sourcepath="external-sources/log4j-1.2.12"/>
 	<classpathentry kind="lib" path="lib/spring-context-3.0.0.RELEASE.jar" sourcepath="external-sources/spring-context-3.0.0.RELEASE-sources.jar"/>
 	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
@@ -35,5 +32,6 @@
 	<classpathentry kind="lib" path="lib/junit-4.4.jar"/>
 	<classpathentry kind="lib" path="lib/jdom-2.0.0.jar"/>
 	<classpathentry kind="lib" path="lib/zip64-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/JhoveApp-1.5.jar" sourcepath="external-sources/jhove-1.5-sources"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

@@ -32,7 +32,6 @@ public interface MessageConstants
 	String	ERROR_WORKDIRECTORY_NOTWRITABLE					= "error.workdirectory.notwritable";
 	String	ERROR_TIFFFILE_FILENOTEXISTING					= "error.tifffile.filenotexisting";
 	String	ERROR_LOGGING_NOFILEAPPENDER					= "error.logging.nofileappender";
-	String	ERROR_JHOVEAPP_MISSING							= "error.jhoveapp.missing";
 	String	ERROR_JHOVECONF_MISSING							= "error.jhoveconf.missing";
 	String	ERROR_INCORRECTFILEENDING						= "error.incorrectfileending";
 

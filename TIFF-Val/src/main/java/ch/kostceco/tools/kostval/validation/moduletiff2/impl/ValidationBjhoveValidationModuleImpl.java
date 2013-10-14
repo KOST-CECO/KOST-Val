@@ -26,10 +26,11 @@ import java.io.IOException;
 
 import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationBjhoveValidationException;
 import ch.kostceco.tools.kostval.service.ConfigurationService;
-import ch.kostceco.tools.kostval.service.JhoveService;
 import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationBjhoveValidationModule;
+
+import edu.harvard.hul.ois.jhove.*;
 
 /**
  * Validierungsschritt B (Jhove-Validierung) Ist die TIFF-Datei gemäss Jhove
@@ -43,7 +44,6 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 {
 
 	private ConfigurationService	configurationService;
-	private JhoveService			jhoveService;
 
 	public static String			NEWLINE	= System.getProperty( "line.separator" );
 
@@ -56,16 +56,6 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 			ConfigurationService configurationService )
 	{
 		this.configurationService = configurationService;
-	}
-
-	public void setJhoveService( JhoveService jhoveService )
-	{
-		this.jhoveService = jhoveService;
-	}
-
-	public JhoveService getJhoveService()
-	{
-		return jhoveService;
 	}
 
 	@Override
@@ -82,7 +72,10 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 		// Vorbereitungen: valDatei an die JHove Applikation übergeben
 		File jhoveReport = null;
 		StringBuffer concatenatedOutputs = new StringBuffer();
-		String pathToJhoveJar = getConfigurationService().getPathToJhoveJar();
+		String pathToJhoveConfig = getConfigurationService()
+				.getPathToJhoveConfiguration();
+		String pathToWorkDir = getConfigurationService().getPathToWorkDir();
+
 		/*
 		 * Nicht vergessen in
 		 * "src/main/resources/config/applicationContext-services.xml" beim
@@ -98,14 +91,46 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 			jhoveDir.mkdir();
 		}
 
+		// Jhove direkt ansprechen
 		try {
-			String valDateiStr = valDatei.getAbsolutePath();
-			// pathsJhove = path to InputFile = path to valDatei
-			StringBuffer pathsJhove = new StringBuffer( valDateiStr );
-			jhoveReport = getJhoveService().executeJhove( pathToJhoveJar,
-					pathsJhove.toString(), pathToJhoveOutput,
-					valDatei.getName() );
+			JhoveBase je = new JhoveBase();
+			String NAME = new String( "Jhove" );
+			String RELEASE = new String( "1.5" );
+			int[] DATE = new int[] { 2009, 12, 19 };
+			String USAGE = new String( "no usage" );
+			String RIGHTS = new String( "LGPL v2.1" );
+			App app = new App( NAME, RELEASE, DATE, USAGE, RIGHTS );
+			OutputHandler handler = je.getHandler( "XML" );
 
+			Module module = null; // check all modules => null oder TIFF => ???
+			String logLevel = null;
+			je.setLogLevel( logLevel );
+			String saxClass = null;
+			String configFile = pathToJhoveConfig;
+			je.init( configFile, saxClass );
+
+			je.setEncoding( "utf-8" );
+			je.setTempDirectory( pathToWorkDir + "/temp" );
+			je.setBufferSize( 4096 );
+			je.setChecksumFlag( false );
+			je.setShowRawFlag( false );
+			je.setSignatureFlag( false );
+			try {
+				File newReport = new File( pathToJhoveOutput,
+						valDatei.getName() + ".jhove-log.txt" );
+				String outputFile = newReport.getAbsolutePath();
+				String[] dirFileOrUri = { valDatei.getAbsolutePath() };
+				je.dispatch( app, module, null, handler, outputFile,
+						dirFileOrUri );
+				jhoveReport = newReport;
+			} catch ( Exception e ) {
+				e.printStackTrace();
+			}
+		} catch ( Exception e ) {
+			e.printStackTrace();
+		}
+
+		try {
 			BufferedReader in = new BufferedReader(
 					new FileReader( jhoveReport ) );
 			String line;
@@ -175,5 +200,4 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 		}
 		return isValid;
 	}
-
 }
