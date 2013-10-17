@@ -1,5 +1,5 @@
 /*== KOST-Val ==================================================================================
-The KOST-Val v0.9.1 application is used for validate TIFF and SIARD-Files. 
+The KOST-Val v1.0.0 application is used for validate TIFF, SIARD, and PDF/A-Files. 
 Copyright (C) 2012-2013 Claire Röthlisberger (KOST-CECO), Christian Eugster, Olivier Debenath, 
 Peter Schneider (Staatsarchiv Aargau)
 -----------------------------------------------------------------------------------------------
@@ -24,6 +24,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import ch.kostceco.tools.kostval.controller.Controllertiff;
 import ch.kostceco.tools.kostval.controller.Controllersiard;
+import ch.kostceco.tools.kostval.controller.Controllerpdfa;
 import ch.kostceco.tools.kostval.logging.LogConfigurator;
 import ch.kostceco.tools.kostval.logging.Logger;
 import ch.kostceco.tools.kostval.logging.MessageConstants;
@@ -128,7 +129,7 @@ public class KOSTVal implements MessageConstants
 					MESSAGE_VALIDATION_INTERRUPTED ) );
 			System.exit( 1 );
 		}
-		
+
 		// Informationen zum Arbeitsverzeichnis holen
 		String pathToWorkDir = kostval.getConfigurationService()
 				.getPathToWorkDir();
@@ -140,7 +141,7 @@ public class KOSTVal implements MessageConstants
 		 */
 
 		File tmpDir = new File( pathToWorkDir );
-		
+
 		// bestehendes Workverzeichnis ggf. löschen und wieder anlegen
 		if ( tmpDir.exists() ) {
 			Util.deleteDir( tmpDir );
@@ -190,14 +191,14 @@ public class KOSTVal implements MessageConstants
 				directoryOfLogfile.getAbsolutePath(), valDatei.getName() );
 
 		LOGGER.logError( kostval.getTextResourceService().getText(
-				MESSAGE_KOSTVALIDATION) );
-		
-		if ( (valDatei.getAbsolutePath().toLowerCase()
-				.endsWith( ".tiff" ) || valDatei.getAbsolutePath()
-				.toLowerCase().endsWith( ".tif" )) ) {
+				MESSAGE_KOSTVALIDATION ) );
+
+		if ( (valDatei.getAbsolutePath().toLowerCase().endsWith( ".tiff" ) || valDatei
+				.getAbsolutePath().toLowerCase().endsWith( ".tif" )) ) {
 			LOGGER.logInfo( kostval.getTextResourceService().getText(
 					MESSAGE_TIFFVALIDATION, valDatei.getName() ) );
-			Controllertiff controller1 = (Controllertiff) context.getBean( "controllertiff" );
+			Controllertiff controller1 = (Controllertiff) context
+					.getBean( "controllertiff" );
 			boolean okMandatory = controller1.executeMandatory( valDatei,
 					directoryOfLogfile );
 			boolean ok = false;
@@ -225,8 +226,9 @@ public class KOSTVal implements MessageConstants
 			// Ausgabe der Pfade zu den Jhove Reports, falls welche
 			// generiert wurden
 			if ( Util.getPathToReportJHove() != null ) {
-				LOGGER.logInfo( kostval.getTextResourceService().getText(
-						MESSAGE_FOOTER_REPORTJHOVE, Util.getPathToReportJHove() ) );
+				LOGGER.logInfo( kostval.getTextResourceService()
+						.getText( MESSAGE_FOOTER_REPORTJHOVE,
+								Util.getPathToReportJHove() ) );
 			}
 
 			LOGGER.logInfo( "" );
@@ -254,20 +256,82 @@ public class KOSTVal implements MessageConstants
 				.endsWith( ".siard" )) ) {
 			LOGGER.logInfo( kostval.getTextResourceService().getText(
 					MESSAGE_SIARDVALIDATION, valDatei.getName() ) );
-			Controllersiard controller2 = (Controllersiard) context.getBean( "controllersiard" );
-			boolean okMandatory = controller2.executeMandatory( valDatei, directoryOfLogfile );
+			Controllersiard controller2 = (Controllersiard) context
+					.getBean( "controllersiard" );
+			boolean okMandatory = controller2.executeMandatory( valDatei,
+					directoryOfLogfile );
 			boolean ok = false;
 
-			// die Validierungen A-D sind obligatorisch, wenn sie bestanden wurden,
+			// die Validierungen A-D sind obligatorisch, wenn sie bestanden
+			// wurden,
 			// können die restlichen
 			// Validierungen, welche nicht zum Abbruch der Applikation führen,
 			// ausgeführt werden.
 			if ( okMandatory ) {
-
 				ok = controller2.executeOptional( valDatei, directoryOfLogfile );
-
 				// Ausführen der optionalen Schritte
+			}
 
+			ok = (ok && okMandatory);
+
+			LOGGER.logInfo( "" );
+			if ( ok ) {
+				LOGGER.logInfo( kostval.getTextResourceService().getText(
+						MESSAGE_TOTAL_VALID, valDatei.getAbsolutePath() ) );
+			} else {
+				LOGGER.logInfo( kostval.getTextResourceService().getText(
+						MESSAGE_TOTAL_INVALID, valDatei.getAbsolutePath() ) );
+			}
+			LOGGER.logInfo( "" );
+			LOGGER.logInfo( kostval.getTextResourceService().getText(
+					MESSAGE_FOOTER_SIARD, originalValName ) );
+			LOGGER.logInfo( kostval.getTextResourceService().getText(
+					MESSAGE_FOOTER_LOG, logFileName ) );
+			LOGGER.logInfo( "" );
+
+			if ( okMandatory ) {
+				LOGGER.logInfo( kostval.getTextResourceService().getText(
+						MESSAGE_VALIDATION_FINISHED ) );
+			} else {
+				LOGGER.logInfo( kostval.getTextResourceService().getText(
+						MESSAGE_VALIDATION_INTERRUPTED ) );
+			}
+
+			// Löschen des Arbeitsverzeichnisses, falls eines angelegt wurde
+			if ( tmpDir.exists() ) {
+				Util.deleteDir( tmpDir );
+			}
+			if ( ok ) {
+				System.exit( 0 );
+				// Löschen des Arbeitsverzeichnisses, falls eines angelegt wurde
+				if ( tmpDir.exists() ) {
+					Util.deleteDir( tmpDir );
+				}
+			} else {
+				System.exit( 2 );
+				// Löschen des Arbeitsverzeichnisses, falls eines angelegt wurde
+				if ( tmpDir.exists() ) {
+					Util.deleteDir( tmpDir );
+				}
+			}
+
+		} else if ( (valDatei.getAbsolutePath().toLowerCase().endsWith( ".pdf" ) || valDatei
+				.getAbsolutePath().toLowerCase().endsWith( ".pdfa" )) ) {
+			LOGGER.logInfo( kostval.getTextResourceService().getText(
+					MESSAGE_PDFAVALIDATION, valDatei.getName() ) );
+			Controllerpdfa controller3 = (Controllerpdfa) context
+					.getBean( "controllerpdfa" );
+			boolean okMandatory = controller3.executeMandatory( valDatei,
+					directoryOfLogfile );
+			boolean ok = false;
+
+			// die Validierung A ist obligatorisch, wenn sie bestanden
+			// wurden, können die restlichen
+			// Validierungen, welche nicht zum Abbruch der Applikation führen,
+			// ausgeführt werden.
+			if ( okMandatory ) {
+				ok = controller3.executeOptional( valDatei, directoryOfLogfile );
+				// Ausführen der optionalen Schritte
 			}
 
 			ok = (ok && okMandatory);
@@ -282,9 +346,17 @@ public class KOSTVal implements MessageConstants
 			}
 			LOGGER.logInfo( "" );
 
+			// Ausgabe der Pfade zu den Pdftron Reports, falls welche
+			// generiert wurden
+			if ( Util.getPathToReportPdftron() != null ) {
+				LOGGER.logInfo( kostval.getTextResourceService().getText(
+						MESSAGE_FOOTER_REPORTPDFTRON,
+						Util.getPathToReportPdftron() ) );
+			}
+
 			LOGGER.logInfo( "" );
 			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					MESSAGE_FOOTER_SIARD, originalValName ) );
+					MESSAGE_FOOTER_PDFA, originalValName ) );
 			LOGGER.logInfo( kostval.getTextResourceService().getText(
 					MESSAGE_FOOTER_LOG, logFileName ) );
 			LOGGER.logInfo( "" );

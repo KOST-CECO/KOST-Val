@@ -1,5 +1,5 @@
 /*== KOST-Val ==================================================================================
-The KOST-Val application is used for validate TIFF and SIARD-Files. 
+The KOST-Val application is used for validate TIFF, SIARD, and PDF/A-Files. 
 Copyright (C) 2012-2013 Claire Röthlisberger (KOST-CECO), Christian Eugster, Olivier Debenath, 
 Peter Schneider (Staatsarchiv Aargau)
 -----------------------------------------------------------------------------------------------
@@ -24,6 +24,8 @@ import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import ch.kostceco.tools.kostval.util.Util;
+
 /**
  * - Some of the third party libraries we use in this project write stuff into
  * the console with System.out This Utility can switch this on and off. - Java
@@ -36,6 +38,7 @@ public class Util
 {
 
 	static String				pathToReportJHove;
+	static String				pathToReportPdftron;
 
 	static PrintStream			original;
 	static String				originalPath;
@@ -49,6 +52,16 @@ public class Util
 	public static void setPathToReportJHove( String pathToReportJHove )
 	{
 		Util.pathToReportJHove = pathToReportJHove;
+	}
+
+	public static String getPathToReportPdftron()
+	{
+		return pathToReportPdftron;
+	}
+
+	public static void setPathToReportPdftron( String pathToReportPdftron )
+	{
+		Util.pathToReportPdftron = pathToReportPdftron;
 	}
 
 	/**

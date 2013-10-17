@@ -1,5 +1,5 @@
 /*== KOST-Val ==================================================================================
-The KOST-Val application is used for validate TIFF and SIARD-Files. 
+The KOST-Val application is used for validate TIFF, SIARD, and PDF/A-Files. 
 Copyright (C) 2012-2013 Claire Röthlisberger (KOST-CECO), Christian Eugster, Olivier Debenath, 
 Peter Schneider (Staatsarchiv Aargau)
 -----------------------------------------------------------------------------------------------
@@ -426,7 +426,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		}
 		return null;
 	}
-	
+
 	@Override
 	public String getPathToWorkDir()
 	{
@@ -457,7 +457,6 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		 * werden kann, werden vor der Validierung die Rows der Tabelle gezählt.
 		 * Die ermittelte Zahl darf nicht über dem hier zurückgegebenen Wert
 		 * liegen.
-
 		 */
 		int value = 20000;
 		Object prop = getConfig().getProperty( "table-rows-limit" );
@@ -469,6 +468,18 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			}
 		}
 		return value;
+	}
+
+	@Override
+	public String getPathToPdftronExe()
+	{
+		Object prop = getConfig().getProperty( "pathtopdftronexe" );
+
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
 	}
 
 }

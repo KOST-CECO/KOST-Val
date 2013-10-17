@@ -1,5 +1,5 @@
 /*== KOST-Val ==================================================================================
-The KOST-Val application is used for validate TIFF and SIARD-Files. 
+The KOST-Val application is used for validate TIFF, SIARD, and PDF/A-Files. 
 Copyright (C) 2012-2013 Claire Röthlisberger (KOST-CECO), Christian Eugster, Olivier Debenath, 
 Peter Schneider (Staatsarchiv Aargau)
 -----------------------------------------------------------------------------------------------
@@ -43,12 +43,15 @@ public interface MessageConstants
 	String	MESSAGE_FOOTER_LOG								= "message.footer.log";
 	String	MESSAGE_FOOTER_TIFF								= "message.footer.tiff";
 	String	MESSAGE_FOOTER_SIARD							= "message.footer.siard";
+	String	MESSAGE_FOOTER_PDFA								= "message.footer.pdfa";
 	String	MESSAGE_FOOTER_REPORTJHOVE						= "message.footer.reportjhove";
+	String	MESSAGE_FOOTER_REPORTPDFTRON					= "message.footer.reportpdftron";
 
 	// Globale Meldungen
 	String	MESSAGE_KOSTVALIDATION							= "message.kostvalidation";
 	String	MESSAGE_TIFFVALIDATION							= "message.tiffvalidation";
 	String	MESSAGE_SIARDVALIDATION							= "message.siardvalidation";
+	String	MESSAGE_PDFAVALIDATION							= "message.pdfavalidation";
 	String	MESSAGE_VALIDATION_INTERRUPTED					= "message.validation.interrupted";
 	String	MESSAGE_VALIDATION_FINISHED						= "message.validation.finished";
 	String	MESSAGE_MODULE_VALID							= "message.module.valid";
@@ -85,6 +88,17 @@ public interface MessageConstants
 	String	MESSAGE_STEPERGEBNIS_H_SIARD					= "message.stepergebnis.h.siard";
 	String	MESSAGE_STEPERGEBNIS_I_SIARD					= "message.stepergebnis.i.siard";
 	String	MESSAGE_STEPERGEBNIS_J_SIARD					= "message.stepergebnis.j.siard";
+
+	String	MESSAGE_STEPERGEBNIS_A_PDFA						= "message.stepergebnis.a.pdfa";
+	String	MESSAGE_STEPERGEBNIS_B_PDFA						= "message.stepergebnis.b.pdfa";
+	String	MESSAGE_STEPERGEBNIS_C_PDFA						= "message.stepergebnis.c.pdfa";
+	String	MESSAGE_STEPERGEBNIS_D_PDFA						= "message.stepergebnis.d.pdfa";
+	String	MESSAGE_STEPERGEBNIS_E_PDFA						= "message.stepergebnis.e.pdfa";
+	String	MESSAGE_STEPERGEBNIS_F_PDFA						= "message.stepergebnis.f.pdfa";
+	String	MESSAGE_STEPERGEBNIS_G_PDFA						= "message.stepergebnis.g.pdfa";
+	String	MESSAGE_STEPERGEBNIS_H_PDFA						= "message.stepergebnis.h.pdfa";
+	String	MESSAGE_STEPERGEBNIS_I_PDFA						= "message.stepergebnis.i.pdfa";
+	String	MESSAGE_STEPERGEBNIS_J_PDFA						= "message.stepergebnis.j.pdfa";
 
 	String	MESSAGE_DASHES									= "message.dashes";
 
@@ -169,5 +183,14 @@ public interface MessageConstants
 	String	MESSAGE_MODULE_J_INVALID_FOLDER					= "message.module.j.invalid.folder";
 	String	MESSAGE_MODULE_J_INVALID_FILE					= "message.module.j.invalid.file";
 	String	MESSAGE_MODULE_J_INVALID_ENTRY					= "message.module.j.invalid.entry";
+
+	// *************PDFA-Meldungen*************************************************************************
+	// Modul A Meldungen
+	String	ERROR_MODULE_A_PDFA_INCORRECTFILEENDING			= "error.module.a.pdfa.incorrectfileending";
+	String	ERROR_MODULE_A_PDFA_INCORRECTFILE				= "error.module.a.pdfa.incorrectfile";
+	String	ERROR_MODULE_A_PDFA_ISDIRECTORY					= "error.module.a.pdfa.isdirectory";
+	String	ERROR_MODULE_A_PDFA_SERVICEFAILED				= "error.module.a.pdfa.servicefailed";
+
+	String	ERROR_MODULE_AJ_PDFA_ERRORMESSAGE				= "error.module.aj.pdfa.errormessage";
 
 }

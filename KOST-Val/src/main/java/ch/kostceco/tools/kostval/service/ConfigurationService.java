@@ -1,5 +1,5 @@
 /*== KOST-Val ==================================================================================
-The KOST-Val application is used for validate TIFF and SIARD-Files. 
+The KOST-Val application is used for validate TIFF, SIARD, and PDF/A-Files. 
 Copyright (C) 2012-2013 Claire Röthlisberger (KOST-CECO), Christian Eugster, Olivier Debenath, 
 Peter Schneider (Staatsarchiv Aargau)
 -----------------------------------------------------------------------------------------------
@@ -133,5 +133,12 @@ public interface ConfigurationService extends Service
 	 * werden können.
 	 */
 	int getTableRowsLimit();
+
+	/**
+	 * Gibt den Pfad zum Pdftron Exe zurück.
+	 * 
+	 * @return Pfad zum Pdftron Exe
+	 */
+	String getPathToPdftronExe();
 
 }

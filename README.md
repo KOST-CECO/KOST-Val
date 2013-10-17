@@ -1,7 +1,7 @@
 KOST-Val
 ========
 
-The KOST-Val application is used for validate TIFF and SIARD-Files.
+The KOST-Val application is used for validate TIFF, SIARD and PDF/A-1b-Files.
 
 KOST-Val, Copyright (C) 2012-2013 Claire Roethlisberger (KOST-CECO), 
 Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau)
