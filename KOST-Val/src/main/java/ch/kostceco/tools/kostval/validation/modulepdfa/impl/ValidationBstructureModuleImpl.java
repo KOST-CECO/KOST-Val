@@ -18,11 +18,8 @@ Boston, MA 02110-1301 USA or see <http://www.gnu.org/licenses/>.
 package ch.kostceco.tools.kostval.validation.modulepdfa.impl;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
-import java.util.Arrays;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -32,10 +29,8 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import ch.kostceco.tools.kostval.exception.SystemException;
 import ch.kostceco.tools.kostval.exception.modulepdfa.ValidationBstructureException;
 import ch.kostceco.tools.kostval.service.ConfigurationService;
-import ch.kostceco.tools.kostval.util.StreamGobbler;
 import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulepdfa.ValidationBstructureModule;

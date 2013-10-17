@@ -310,6 +310,7 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private class CountRowsHandler extends DefaultHandler
 	{
 		private int	rows	= 0;

@@ -4,11 +4,12 @@
 	<classpathentry kind="src" path="src/test/resources"/>
 	<classpathentry kind="src" path="src/test/java"/>
 	<classpathentry kind="src" path="src/main/resources"/>
-	<classpathentry excluding="src/main/java/|src/test/resources/|src/test/java/|src/main/resources/" kind="src" path=""/>
+	<classpathentry excluding="src/main/java/|src/test/resources/|src/test/java/|src/main/resources/|src/" kind="src" path=""/>
+	<classpathentry excluding="main/java/|test/resources/|test/java/|main/resources/" kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="con" path="org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/commons-configuration-1.6.jar" sourcepath="external-sources/commons-configuration-1.6-sources.jar"/>
-	<classpathentry kind="lib" path="lib/log4j-1.2.12.jar" sourcepath="external-sources/log4j-1.2.12"/>
+	<classpathentry kind="lib" path="lib/log4j-1.2.12.jar"/>
 	<classpathentry kind="lib" path="lib/spring-context-3.0.0.RELEASE.jar" sourcepath="external-sources/spring-context-3.0.0.RELEASE-sources.jar"/>
 	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-lang-2.4.jar"/>

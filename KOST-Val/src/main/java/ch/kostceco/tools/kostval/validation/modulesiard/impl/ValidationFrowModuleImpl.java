@@ -533,6 +533,7 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements
 	}
 
 	/* Trimming the search terms for column type validation */
+	@SuppressWarnings("unused")
 	private String trimLeftSideType( String leftside, String delimiter )
 			throws Exception
 	{
