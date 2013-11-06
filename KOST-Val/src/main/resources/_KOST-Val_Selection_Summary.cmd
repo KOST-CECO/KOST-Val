@@ -26,6 +26,15 @@ DEL %TEMP%\~input.vbs
 ENDLOCAL & SET _input=%_string%
 SET DATEIEN=%_input%
 
+REM VBS script mit einem Echo Msgbox statement:
+set M=%temp%\MsgBox.vbs 
+>%M% echo WScript.Quit MsgBox("Voulez-vous recevoir les rapports originaux?",vbYesNo + vbDefaultButton2,"Verbose?") 
+%M% 
+if %errorlevel%==6 ( 
+   REM Verbose-Mode gewählt 
+   SET Option=-v
+)
+
 @echo off
 REM Ordner "logs" anlegen
 MKDIR logs\%LogOrdner%
@@ -47,25 +56,27 @@ REM i=invalid=Datei Invalid -> errorlevel=2
 
 ECHO.
 ECHO Commande pour KOST-Val: 
-ECHO Java-lien   -jar   kostval.jar-lien  %DATEIEN%  logs\%LogOrdner%
+ECHO Java-lien   -jar   kostval.jar-lien  %DATEIEN%  logs\%LogOrdner% %Option%
 ECHO.
 ECHO ========================== D E M A R R A G E ==========================  
 ECHO.
 IF exist "%DATEIEN%\" (
     REM It's a directory
     REM --- FOR Schleife für die Validierung aller TIFF- & SIARD-Dateien inkl.Unterordner --- 
-    FOR /R "%DATEIEN%" %%J In (*.tif *.siard) DO (
-    SET Datei=%%J
-    ECHO.
-    Drittapplikationen\jre6\bin\java.exe -jar KOST-Val\kostval.jar "%%J" "logs\%LogOrdner%"
-    CALL :sub_ord "Datei" "LogOrdner"
-    ECHO.
-    ECHO --------------------
+    FOR /R "%DATEIEN%" %%J In (*.tif *.siard *.pdf) DO (
+        SET Datei=%%J
+        ECHO.
+        Drittapplikationen\jre6\bin\java.exe -jar KOST-Val\kostval.jar "%%J" "logs\%LogOrdner%" %Option%
+        CALL :sub_ord "Datei" "LogOrdner"
+        ECHO.
+        ECHO --------------------
+        REM mit ping -n 1 > eine Sekunde warten
+        ping -n 1 127.0.0.1 > NUL
     )
 ) ELSE (
     REM It's a file
     REM --- Fals eine Datei eingeben wurde
-    Drittapplikationen\jre6\bin\java.exe -jar KOST-Val\kostval.jar "%DATEIEN%" "logs\%LogOrdner%"
+    Drittapplikationen\jre6\bin\java.exe -jar KOST-Val\kostval.jar "%DATEIEN%" "logs\%LogOrdner%" %Option%
     SET Datei=%DATEIEN%
     CALL :sub_ord "Datei" "LogOrdner"
 )

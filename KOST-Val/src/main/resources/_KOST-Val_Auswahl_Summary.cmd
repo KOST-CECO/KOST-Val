@@ -26,6 +26,15 @@ DEL %TEMP%\~input.vbs
 ENDLOCAL & SET _input=%_string%
 SET DATEIEN=%_input%
 
+REM VBS script mit einem Echo Msgbox statement:
+set M=%temp%\MsgBox.vbs 
+>%M% echo WScript.Quit MsgBox("Wollen Sie die Originalreports erhalten?",vbYesNo + vbDefaultButton2,"Verbose?") 
+%M% 
+if %errorlevel%==6 ( 
+   REM Verbose-Mode gewählt 
+   SET Option=-v
+)
+
 @echo off
 REM Ordner "logs" anlegen
 MKDIR logs\"%LogOrdner%"
@@ -33,7 +42,7 @@ MKDIR logs\"%LogOrdner%"
 ECHO Validierungsdatum: %date% >> logs\"%LogOrdner%"\_KOST-Val-Summary.log
 ECHO Start der Validierung: %time% >> logs\"%LogOrdner%"\_KOST-Val-Summary.log
 ECHO. >> logs\"%LogOrdner%"\_KOST-Val-Summary.log
-ECHO =========================== T I F F - V A L ===========================  >> logs\"%LogOrdner%"\_KOST-Val-Summary.log
+ECHO =========================== K O S T - V A L ===========================  >> logs\"%LogOrdner%"\_KOST-Val-Summary.log
 ECHO. >> logs\"%LogOrdner%"\_KOST-Val-Summary.log
 
 
@@ -47,25 +56,27 @@ REM i=invalid=Datei Invalid -> errorlevel=2
 
 ECHO.
 ECHO Aufbau KOST-Val Befehl: 
-ECHO Java-Pfad  -jar  kostval.jar-Pfad  %DATEIEN%  logs\%LogOrdner%
+ECHO Java-Pfad  -jar  kostval.jar-Pfad  %DATEIEN%  logs\%LogOrdner% %Option%
 ECHO.
 ECHO ============================== S T A R T ==============================   
 ECHO.
 IF exist "%DATEIEN%\" (
     REM It's a directory
     REM --- FOR Schleife für die Validierung aller TIFF- & SIARD-Dateien inkl.Unterordner --- 
-    FOR /R "%DATEIEN%" %%J In (*.tif *.siard) DO (
-    SET Datei=%%J
-    ECHO.
-    Drittapplikationen\jre6\bin\java.exe -jar KOST-Val\kostval.jar "%%J" "logs\%LogOrdner%"
-    CALL :sub_ord "Datei" "LogOrdner"
-    ECHO.
-    ECHO --------------------
+    FOR /R "%DATEIEN%" %%J In (*.tif *.siard *.pdf) DO (
+        SET Datei=%%J
+        ECHO.
+        Drittapplikationen\jre6\bin\java.exe -jar KOST-Val\kostval.jar "%%J" "logs\%LogOrdner%" %Option%
+        CALL :sub_ord "Datei" "LogOrdner"
+        ECHO.
+        ECHO --------------------
+        REM mit ping -n 1 > eine Sekunde warten
+        ping -n 1 127.0.0.1 > NUL
     )
 ) ELSE (
     REM It's a file
     REM --- Fals eine Datei eingeben wurde
-    Drittapplikationen\jre6\bin\java.exe -jar KOST-Val\kostval.jar "%DATEIEN%" "logs\%LogOrdner%"
+    Drittapplikationen\jre6\bin\java.exe -jar KOST-Val\kostval.jar "%DATEIEN%" "logs\%LogOrdner%" %Option%
     SET Datei=%DATEIEN%
     CALL :sub_ord "Datei" "LogOrdner"
 )

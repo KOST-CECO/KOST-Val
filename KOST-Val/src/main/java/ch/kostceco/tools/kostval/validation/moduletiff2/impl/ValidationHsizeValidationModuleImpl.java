@@ -85,7 +85,7 @@ public class ValidationHsizeValidationModuleImpl extends ValidationModuleImpl
 				if ( line.contains( "Size:" ) ) {
 					jhoveio = 1;
 					Integer intSize = line.toCharArray().length;
-					if ( size.contains( "1" )) {
+					if ( size.contains( "1" ) ) {
 						// Valider Status (Giga-Tiffs sind erlaubt)
 					} else if ( intSize > 17 ) {
 						// Invalider Status (Giga-Tiffs sind nicht erlaubt und
@@ -127,6 +127,7 @@ public class ValidationHsizeValidationModuleImpl extends ValidationModuleImpl
 				}
 			}
 			in.close();
+			
 		} catch ( Exception e ) {
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_MODULE_H )

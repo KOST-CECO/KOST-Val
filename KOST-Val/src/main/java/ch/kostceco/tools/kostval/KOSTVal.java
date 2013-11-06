@@ -1,5 +1,5 @@
 /*== KOST-Val ==================================================================================
-The KOST-Val v1.0.0 application is used for validate TIFF, SIARD, and PDF/A-Files. 
+The KOST-Val v1.0.1 application is used for validate TIFF, SIARD, and PDF/A-Files. 
 Copyright (C) 2012-2013 Claire Röthlisberger (KOST-CECO), Christian Eugster, Olivier Debenath, 
 Peter Schneider (Staatsarchiv Aargau)
 -----------------------------------------------------------------------------------------------
@@ -146,6 +146,10 @@ public class KOSTVal implements MessageConstants
 		if ( tmpDir.exists() ) {
 			Util.deleteDir( tmpDir );
 		}
+		if ( tmpDir.exists() ) {
+			Util.deleteDir( tmpDir );
+		}
+
 		if ( !tmpDir.exists() ) {
 			tmpDir.mkdir();
 		}
@@ -156,6 +160,14 @@ public class KOSTVal implements MessageConstants
 					ERROR_WORKDIRECTORY_NOTWRITABLE, tmpDir ) );
 			LOGGER.logInfo( kostval.getTextResourceService().getText(
 					MESSAGE_VALIDATION_INTERRUPTED ) );
+			System.exit( 1 );
+		}
+
+		// Ueberprüfung des optionalen Parameters (3 -v --> im Verbose-mode
+		// werden die originalen Logs nicht gelöscht (PDFTron, Jhove & Co.)
+		if ( args.length == 3 && !(args[2].equals( "-v" )) ) {
+			LOGGER.logInfo( kostval.getTextResourceService().getText(
+					ERROR_PARAMETER_OPTIONAL_1 ) );
 			System.exit( 1 );
 		}
 
@@ -224,14 +236,22 @@ public class KOSTVal implements MessageConstants
 			LOGGER.logInfo( "" );
 
 			// Ausgabe der Pfade zu den Jhove Reports, falls welche
-			// generiert wurden
-			if ( Util.getPathToReportJHove() != null ) {
-				LOGGER.logInfo( kostval.getTextResourceService()
-						.getText( MESSAGE_FOOTER_REPORTJHOVE,
-								Util.getPathToReportJHove() ) );
+			// generiert wurden (-v) oder Jhove Report löschen
+			File jhoveReport = new File( directoryOfLogfile, valDatei.getName()
+					+ ".jhove-log.txt" );
+
+			if ( jhoveReport.exists() ) {
+				if ( args.length == 3 ) {
+					LOGGER.logInfo( kostval.getTextResourceService().getText(
+							MESSAGE_FOOTER_REPORTJHOVE,
+							Util.getPathToReportJHove() ) );
+					LOGGER.logInfo( "" );
+				} else {
+					// kein optionaler Parameter --> Jhove-Report loeschen!
+					jhoveReport.delete();
+				}
 			}
 
-			LOGGER.logInfo( "" );
 			LOGGER.logInfo( kostval.getTextResourceService().getText(
 					MESSAGE_FOOTER_TIFF, originalValName ) );
 			LOGGER.logInfo( kostval.getTextResourceService().getText(
@@ -347,14 +367,25 @@ public class KOSTVal implements MessageConstants
 			LOGGER.logInfo( "" );
 
 			// Ausgabe der Pfade zu den Pdftron Reports, falls welche
-			// generiert wurden
-			if ( Util.getPathToReportPdftron() != null ) {
-				LOGGER.logInfo( kostval.getTextResourceService().getText(
-						MESSAGE_FOOTER_REPORTPDFTRON,
-						Util.getPathToReportPdftron() ) );
+			// generiert wurden (-v) oder Pdftron Reports löschen
+			File pdftronReport = new File( directoryOfLogfile,
+					valDatei.getName() + ".pdftron-log.xml" );
+			File pdftronXsl = new File( directoryOfLogfile,
+					"report.xsl" );
+
+			if ( pdftronReport.exists() ) {
+				if ( args.length == 3 ) {
+					LOGGER.logInfo( kostval.getTextResourceService().getText(
+							MESSAGE_FOOTER_REPORTPDFTRON,
+							Util.getPathToReportPdftron() ) );
+					LOGGER.logInfo( "" );
+				} else {
+					// kein optionaler Parameter --> PDFTron-Report loeschen!
+					pdftronReport.delete();
+					pdftronXsl.delete();
+				}
 			}
 
-			LOGGER.logInfo( "" );
 			LOGGER.logInfo( kostval.getTextResourceService().getText(
 					MESSAGE_FOOTER_PDFA, originalValName ) );
 			LOGGER.logInfo( kostval.getTextResourceService().getText(
@@ -395,5 +426,4 @@ public class KOSTVal implements MessageConstants
 			System.exit( 1 );
 		}
 	}
-
 }

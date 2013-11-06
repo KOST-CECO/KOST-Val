@@ -20,9 +20,13 @@ package ch.kostceco.tools.kostval.validation.moduletiff2.impl;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationBjhoveValidationException;
 import ch.kostceco.tools.kostval.service.ConfigurationService;
@@ -84,7 +88,8 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 		 */
 
 		// Informationen zum Jhove-Logverzeichnis holen
-		String pathToJhoveOutput = directoryOfLogfile.getAbsolutePath();
+		String pathToJhoveOutput = pathToWorkDir;
+		String pathToJhoveOutput2 = directoryOfLogfile.getAbsolutePath();
 
 		File jhoveDir = new File( pathToJhoveOutput );
 		if ( !jhoveDir.exists() ) {
@@ -124,6 +129,32 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 						dirFileOrUri );
 				jhoveReport = newReport;
 			} catch ( Exception e ) {
+				e.printStackTrace();
+			}
+
+			// Jhove schreibt ins Work-Verzeichnis, damit danach eine Kopie ins
+			// Log-Verzeichnis abgelegt werden kann, welche auch gelöscht werden
+			// kann.
+			File jhoveLog = new File( pathToJhoveOutput2, valDatei.getName()
+					+ ".jhove-log.txt" );
+			InputStream inStream = null;
+			OutputStream outStream = null;
+
+			try {
+				File afile = jhoveReport;
+				File bfile = jhoveLog;
+				inStream = new FileInputStream( afile );
+				outStream = new FileOutputStream( bfile );
+				byte[] buffer = new byte[1024];
+				int length;
+				// copy the file content in bytes
+				while ( (length = inStream.read( buffer )) > 0 ) {
+					outStream.write( buffer, 0, length );
+				}
+				inStream.close();
+				outStream.close();
+
+			} catch ( IOException e ) {
 				e.printStackTrace();
 			}
 		} catch ( Exception e ) {

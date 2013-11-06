@@ -110,6 +110,8 @@ public class ValidationArecognitionModuleImpl extends ValidationModuleImpl
 											ERROR_MODULE_A_INCORRECTFILE ) );
 					return false;
 				}
+			fr.close();
+			read.close();
 			} catch ( Exception e ) {
 				getMessageService().logError(
 						getTextResourceService().getText( MESSAGE_MODULE_A )

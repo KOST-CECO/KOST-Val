@@ -3,7 +3,7 @@
 	<pathtojhoveconfig>C:\Software\KOST-Tools\KOST-Val\configuration\jhove.conf</pathtojhoveconfig>
 	<pathtoworkdir>work_KOST-Val</pathtoworkdir>
 	<pathtopdftronexe>Drittapplikationen\pdfa\pdfa.exe</pathtopdftronexe>
-		
+	
 	<table-rows-limit>20000</table-rows-limit>
 	
 	<allowedcompression1>uncompressed</allowedcompression1>		<!--0 / uncompressed-->
