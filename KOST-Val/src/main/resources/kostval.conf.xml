@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <configuration>
-	<pathtojhoveconfig>C:\Software\KOST-Tools\KOST-Val\configuration\jhove.conf</pathtojhoveconfig>
+	<pathtojhoveconfig>KOST-Val\configuration\jhove.conf</pathtojhoveconfig>
 	<pathtoworkdir>work_KOST-Val</pathtoworkdir>
 	<pathtopdftronexe>Drittapplikationen\pdfa\pdfa.exe</pathtopdftronexe>
 	

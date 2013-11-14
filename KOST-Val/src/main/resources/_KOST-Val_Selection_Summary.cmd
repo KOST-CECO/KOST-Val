@@ -11,6 +11,14 @@ FOR /f "delims=/" %%G IN ('cscript //nologo %TEMP%\~input.vbs') DO set _string=%
 REM VBS-Datei löschen und Input speichern
 DEL %TEMP%\~input.vbs
 ENDLOCAL & SET _input=%_string%
+
+REM Wenn Abbrechen gewählt wird Abgebrochen und ansonsten weitergefahren
+IF "%_input%" == "" (
+	echo Rompre...
+	PAUSE
+	EXIT /B
+) 
+
 SET LogOrdner=%_input%
 
 SET _prompt=%1
@@ -24,6 +32,14 @@ FOR /f "delims=/" %%G IN ('cscript //nologo %TEMP%\~input.vbs') DO set _string=%
 REM VBS-Datei löschen und Input speichern
 DEL %TEMP%\~input.vbs
 ENDLOCAL & SET _input=%_string%
+
+REM Wenn Abbrechen gewählt wird Abgebrochen und ansonsten weitergefahren
+IF "%_input%" == "" (
+	echo Rompre...
+	PAUSE
+	EXIT /B
+) 
+
 SET DATEIEN=%_input%
 
 REM VBS script mit einem Echo Msgbox statement:

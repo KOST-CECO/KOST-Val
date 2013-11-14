@@ -74,7 +74,7 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 		// Start mit der Erkennung
 		boolean valid = false;
 
-		// Eine PDF Datei (.tiff / .tif / .tfx) muss mit %PDF [25504446]
+		// Eine PDF Datei (.pdf / .pdfa) muss mit %PDF [25504446]
 		// beginnen
 		if ( valDatei.isDirectory() ) {
 			getMessageService().logError(
@@ -124,7 +124,7 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 
 				if ( Arrays.equals( charArray1, charArray2 ) ) {
 					// höchstwahrscheinlich ein PDF da es mit
-					// 25504446 respektive &PDF beginnt
+					// 25504446 respektive %PDF beginnt
 					valid = true;
 				} else {
 					getMessageService()
@@ -161,23 +161,36 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 		boolean isValid = true;
 		boolean erkennung = false;
 
+		// Initialisierung PDFTron
+		// überprüfen der Angaben: existiert die PdftronExe am
+		// angebenen Ort?
+		String pathToPdftronExe = getConfigurationService()
+		.getPathToPdftronExe();
+		/*
+		 * Nicht vergessen in
+		 * "src/main/resources/config/applicationContext-services.xml" beim
+		 * entsprechenden Modul die property anzugeben: <property
+		 * name="configurationService" ref="configurationService" />
+		 */
+
+		File fPdftronExe = new File( pathToPdftronExe );
+		if ( !fPdftronExe.exists()
+				|| !fPdftronExe.getName().equals( "pdfa.exe" ) ) {
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_MODULE_A )
+							+ getTextResourceService().getText( MESSAGE_DASHES )
+							+ getTextResourceService().getText(
+									ERROR_PDFTRON_MISSING ) );
+			valid = false;
+			return false;
+		}
+
+		
 		// PDF-Datei an Pdftron übergeben wenn die Erkennung erfolgreich
 		erkennung = valid;
 		if ( erkennung = true ) {
-			String pathToPdftronExe = getConfigurationService()
-					.getPathToPdftronExe();
-
-			// getPdftronService().setPathToPdftronExe( pathToPdftronExe );
-
 			// Informationen zum PDFTRON-Logverzeichnis holen
 			String pathToPdftronOutput = directoryOfLogfile.getAbsolutePath();
-
-			/*
-			 * Nicht vergessen in
-			 * "src/main/resources/config/applicationContext-services.xml" beim
-			 * entsprechenden Modul die property anzugeben: <property
-			 * name="configurationService" ref="configurationService" />
-			 */
 
 			File pdftronDir = new File( pathToPdftronOutput );
 			if ( !pdftronDir.exists() ) {

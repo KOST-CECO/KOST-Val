@@ -11,25 +11,41 @@ FOR /f "delims=/" %%G IN ('cscript //nologo %TEMP%\~input.vbs') DO set _string=%
 REM VBS-Datei löschen und Input speichern
 DEL %TEMP%\~input.vbs
 ENDLOCAL & SET _input=%_string%
+
+REM Wenn Abbrechen gewählt wird Abgebrochen und ansonsten weitergefahren
+IF "%_input%" == "" (
+	echo Abbbrechen...
+	PAUSE
+	EXIT /B
+) 
+
 SET LogOrdner=%_input%
-
 SET _prompt=%1
-
+	
 REM VBS script mit einem Echo Inputbox statement:
 ECHO Wscript.Echo Inputbox("Bitte geben Sie den Pfad zum Ordner mit den zu validierenden Dateien oder die einzelne Datei an:%_prompt%","Pfad", "C:\TEMP\TIFF")>%TEMP%\~input.vbs
-
 REM vbScript ausführen und output speichern
 FOR /f "delims=/" %%G IN ('cscript //nologo %TEMP%\~input.vbs') DO set _string=%%G
 
 REM VBS-Datei löschen und Input speichern
 DEL %TEMP%\~input.vbs
 ENDLOCAL & SET _input=%_string%
+
+REM Wenn Abbrechen gewählt wird Abgebrochen und ansonsten weitergefahren
+IF "%_input%" == "" (
+	echo Abbbrechen...
+	PAUSE
+	EXIT /B
+) 
+
 SET DATEIEN=%_input%
+
 
 REM VBS script mit einem Echo Msgbox statement:
 set M=%temp%\MsgBox.vbs 
 >%M% echo WScript.Quit MsgBox("Wollen Sie die Originalreports erhalten?",vbYesNo + vbDefaultButton2,"Verbose?") 
 %M% 
+
 if %errorlevel%==6 ( 
    REM Verbose-Mode gewählt 
    SET Option=-v

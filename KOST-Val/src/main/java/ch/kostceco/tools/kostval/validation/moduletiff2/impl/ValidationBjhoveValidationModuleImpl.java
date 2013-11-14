@@ -229,6 +229,11 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 				return false;
 			}
 		}
+		// bestehendes Workverzeichnis löschen 
+		if ( jhoveDir.exists() ) {
+			Util.deleteDir( jhoveDir );
+		}
+
 		return isValid;
 	}
 }

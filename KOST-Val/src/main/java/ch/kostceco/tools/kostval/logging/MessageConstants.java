@@ -191,6 +191,7 @@ public interface MessageConstants
 	String	ERROR_MODULE_A_PDFA_INCORRECTFILE				= "error.module.a.pdfa.incorrectfile";
 	String	ERROR_MODULE_A_PDFA_ISDIRECTORY					= "error.module.a.pdfa.isdirectory";
 	String	ERROR_MODULE_A_PDFA_SERVICEFAILED				= "error.module.a.pdfa.servicefailed";
+	String	ERROR_PDFTRON_MISSING							= "error.pdftron.missing";
 
 	String	ERROR_MODULE_AJ_PDFA_ERRORMESSAGE				= "error.module.aj.pdfa.errormessage";
 

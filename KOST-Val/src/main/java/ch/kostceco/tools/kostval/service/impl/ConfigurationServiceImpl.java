@@ -67,12 +67,6 @@ public class ConfigurationServiceImpl implements ConfigurationService
 				config = new XMLConfiguration( path );
 
 			} catch ( ConfigurationException e ) {
-				System.out
-						.print( "\r                                                                                                                                     " );
-				System.out.flush();
-				System.out.print( "\r" );
-				System.out.flush();
-
 				LOGGER.logInfo( getTextResourceService().getText(
 						MESSAGE_CONFIGURATION_ERROR_1 ) );
 				LOGGER.logInfo( getTextResourceService().getText(
@@ -404,22 +398,12 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	}
 
 	@Override
-	public String getPathToJhoveJar()
-	{
-		Object prop = getConfig().getProperty( "pathtojhovejar" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		return null;
-	}
-
-	@Override
 	public String getPathToJhoveConfiguration()
 	{
+		/**
+		 * Gibt den Pfad des jhove.conf zurück. 
+		 */
 		Object prop = getConfig().getProperty( "pathtojhoveconfig" );
-
 		if ( prop instanceof String ) {
 			String value = (String) prop;
 			return value;

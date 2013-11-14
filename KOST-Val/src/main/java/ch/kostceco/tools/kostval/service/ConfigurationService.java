@@ -108,10 +108,8 @@ public interface ConfigurationService extends Service
 	String getAllowedSize();
 
 	/**
-	 * Diverse Angaben zu Jhove
+	 * Pfad zu Jhove Configuration
 	 */
-	String getPathToJhoveJar();
-
 	String getPathToJhoveConfiguration();
 
 	/**

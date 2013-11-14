@@ -1,5 +1,5 @@
 /*== KOST-Val ==================================================================================
-The KOST-Val v1.0.1 application is used for validate TIFF, SIARD, and PDF/A-Files. 
+The KOST-Val v1.0.2 application is used for validate TIFF, SIARD, and PDF/A-Files. 
 Copyright (C) 2012-2013 Claire Röthlisberger (KOST-CECO), Christian Eugster, Olivier Debenath, 
 Peter Schneider (Staatsarchiv Aargau)
 -----------------------------------------------------------------------------------------------
@@ -97,6 +97,26 @@ public class KOSTVal implements MessageConstants
 		LOGGER.logInfo( kostval.getTextResourceService().getText(
 				MESSAGE_KOSTVALIDATION ) );
 
+		// Informationen zum Arbeitsverzeichnis holen
+		String pathToWorkDir = kostval.getConfigurationService()
+				.getPathToWorkDir();
+		/*
+		 * Nicht vergessen in
+		 * "src/main/resources/config/applicationContext-services.xml" beim
+		 * entsprechenden Modul die property anzugeben: <property
+		 * name="configurationService" ref="configurationService" />
+		 */
+
+		File tmpDir = new File( pathToWorkDir );
+
+		// bestehendes Workverzeichnis ggf. löschen 
+		if ( tmpDir.exists() ) {
+			Util.deleteDir( tmpDir );
+		}
+		if ( tmpDir.exists() ) {
+			Util.deleteDir( tmpDir );
+		}
+
 		// die Anwendung muss mindestens unter Java 6 laufen
 		String javaRuntimeVersion = System.getProperty( "java.vm.version" );
 		if ( javaRuntimeVersion.compareTo( "1.6.0" ) < 0 ) {
@@ -129,18 +149,6 @@ public class KOSTVal implements MessageConstants
 					MESSAGE_VALIDATION_INTERRUPTED ) );
 			System.exit( 1 );
 		}
-
-		// Informationen zum Arbeitsverzeichnis holen
-		String pathToWorkDir = kostval.getConfigurationService()
-				.getPathToWorkDir();
-		/*
-		 * Nicht vergessen in
-		 * "src/main/resources/config/applicationContext-services.xml" beim
-		 * entsprechenden Modul die property anzugeben: <property
-		 * name="configurationService" ref="configurationService" />
-		 */
-
-		File tmpDir = new File( pathToWorkDir );
 
 		// bestehendes Workverzeichnis ggf. löschen und wieder anlegen
 		if ( tmpDir.exists() ) {
