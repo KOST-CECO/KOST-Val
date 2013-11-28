@@ -165,7 +165,13 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 		// überprüfen der Angaben: existiert die PdftronExe am
 		// angebenen Ort?
 		String pathToPdftronExe = getConfigurationService()
-		.getPathToPdftronExe();
+				.getPathToPdftronExe();
+		String pdfa1 = getConfigurationService().pdfa1();
+		String pdfa2 = getConfigurationService().pdfa2();
+
+		Integer pdfaVer1 = 0;
+		Integer pdfaVer2 = 0;
+
 		/*
 		 * Nicht vergessen in
 		 * "src/main/resources/config/applicationContext-services.xml" beim
@@ -185,7 +191,44 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 			return false;
 		}
 
-		
+		pathToPdftronExe = "\"" + pathToPdftronExe + "\"";
+		/*
+		 * Neu soll die Validierung mit PDFTron konfigurier bar sein Mögliche
+		 * Werte 1A, 1B und no sowie 2A, 2B, 2U und no Da Archive beide
+		 * Versionen erlauben können sind es 2 config einträge Es gibt mehre
+		 * Möglichkeiten das PDF in der gewünschten Version zu testen -
+		 * Unterscheidung anhand DROID --> braucht viel Zeit auch mit
+		 * KaD_Signaturefile - Unterscheidung anhand PDF/A-Eintrag wie Droid
+		 * aber selber programmiert --> ist viel schneller
+		 */
+		if ( pdfa2.equals( "2A" ) || pdfa2.equals( "2B" )
+				|| pdfa2.equals( "2U" ) ) {
+			// gültiger Konfigurationseintrag und V2 erlaubt
+			pdfaVer2 = 2;
+		} else {
+			// v2 nicht erlaubt oder falscher eintrag
+			pdfa2 = "no";
+		}
+		if ( pdfa1.equals( "1A" ) || pdfa1.equals( "1B" ) || pdfa1.equals( "A" )
+				|| pdfa1.equals( "B" ) ) {
+			// gültiger Konfigurationseintrag und V1 erlaubt
+			pdfaVer1 = 1;
+		} else {
+			// v1 nicht erlaubt oder falscher eintrag
+			pdfa1 = "no";
+		}
+		if ( pdfa1 == "no" && pdfa2 == "no" ) {
+			// keine Validierung möglich
+			// die Datei endet nicht mit pdf oder pdfa -> Fehler
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_MODULE_A )
+							+ getTextResourceService().getText( MESSAGE_DASHES )
+							+ getTextResourceService().getText(
+									ERROR_MODULE_A_PDFA_NOCONFIG ) );
+			valid = false;
+			return false;
+		}
+
 		// PDF-Datei an Pdftron übergeben wenn die Erkennung erfolgreich
 		erkennung = valid;
 		if ( erkennung = true ) {
@@ -200,20 +243,54 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 			try {
 				// Start PDFTRON direkt auszulösen
 				File report;
+				String level = "no";
+				// Richtiges Level definieren
+				if ( pdfaVer1 != 1 ) {
+					// Level 1 nicht erlaubt --> Level 2
+					level = pdfa2;
+				} else if ( pdfaVer2 != 2 ) {
+					// Level 2 nicht erlaubt --> Level 1
+					level = pdfa1;
+				} else {
+					// Beide sind möglich --> Level je nach File auswählen
+					pdfaVer1 = 0;
+					pdfaVer2 = 0;
+					BufferedReader in = new BufferedReader( new FileReader(
+							valDatei ) );
+					String line;
+					while ( (line = in.readLine()) != null ) {
+						if ( line.contains( "pdfaid:part" )
+								&& line.contains( "1" ) ) {
+							// PDFA-Version = 1
+							level = pdfa1;
+							pdfaVer1 = 1;
+						}
+						if ( line.contains( "pdfaid:part" )
+								&& line.contains( "2" ) ) {
+							// PDFA-Version = 2
+							level = pdfa2;
+							pdfaVer2 = 2;
+						}
+					}
+					if ( pdfaVer1 == 0 && pdfaVer2 == 0 ) {
+						// der Part wurde nicht gefunden --> Level 1
+						level = pdfa1;
+					}
+				}
+
 				// Pfad zum Programm Pdftron
 				File pdftronExe = new File( pathToPdftronExe );
 				File output = new File( pathToPdftronOutput );
 				StringBuffer command = new StringBuffer( pdftronExe + " " );
-
-				// TODO: Version und Conformancelevel je nach config
-
-				command.append( "-l B " );
-				command.append( "-o " );
+				command.append( "-l " + level );
+				command.append( " -o " );
 				command.append( "\"" );
 				command.append( output.getAbsolutePath() );
 				command.append( "\"" );
 				command.append( " " );
+				command.append( "\"" );
 				command.append( valDatei.getAbsolutePath() );
+				command.append( "\"" );
 
 				try {
 					Runtime rt = Runtime.getRuntime();
@@ -303,8 +380,9 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 					// Invalide PDFA-Datei
 
 					// aus dem Output von Pdftron die Fehlercodes extrahieren
-					// und
-					// übersetzen
+					// und übersetzen
+
+					String errorDigit = "Fehler";
 
 					NodeList nodeLst = doc.getElementsByTagName( "Error" );
 					// Bsp. für einen Error Code: <Error Code="e_PDFA173"
@@ -316,7 +394,7 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 						String errorCode = errorNode.getNodeValue();
 						Node errorNodeM = nodeMap.getNamedItem( "Message" );
 						String errorMessage = errorNodeM.getNodeValue();
-						String errorDigit = errorCode.substring( 6, 7 );
+						errorDigit = errorCode.substring( 6, 7 );
 
 						// der Error Code kann auch "Unknown" sein, dieser wird
 						// in
@@ -348,6 +426,19 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 																	errorMessage ) );
 
 						}
+					}
+					if ( errorDigit.equals( "Fehler" ) ) {
+						// Fehler bei der Initialisierung
+						// Passierte bei einem Leerschlag im Namen
+						isValid = false;
+						getMessageService().logError(
+								getTextResourceService().getText(
+										MESSAGE_MODULE_A )
+										+ getTextResourceService().getText(
+												MESSAGE_DASHES )
+										+ getTextResourceService().getText(
+												ERROR_MODULE_A_PDFA_INIT ) );
+						return false;
 					}
 				}
 			} catch ( Exception e ) {

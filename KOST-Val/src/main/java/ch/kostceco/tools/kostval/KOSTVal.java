@@ -1,5 +1,5 @@
 /*== KOST-Val ==================================================================================
-The KOST-Val v1.0.2 application is used for validate TIFF, SIARD, and PDF/A-Files. 
+The KOST-Val v1.0.3 application is used for validate TIFF, SIARD, and PDF/A-Files. 
 Copyright (C) 2012-2013 Claire Röthlisberger (KOST-CECO), Christian Eugster, Olivier Debenath, 
 Peter Schneider (Staatsarchiv Aargau)
 -----------------------------------------------------------------------------------------------
@@ -109,7 +109,7 @@ public class KOSTVal implements MessageConstants
 
 		File tmpDir = new File( pathToWorkDir );
 
-		// bestehendes Workverzeichnis ggf. löschen 
+		// bestehendes Workverzeichnis ggf. löschen
 		if ( tmpDir.exists() ) {
 			Util.deleteDir( tmpDir );
 		}
@@ -378,8 +378,7 @@ public class KOSTVal implements MessageConstants
 			// generiert wurden (-v) oder Pdftron Reports löschen
 			File pdftronReport = new File( directoryOfLogfile,
 					valDatei.getName() + ".pdftron-log.xml" );
-			File pdftronXsl = new File( directoryOfLogfile,
-					"report.xsl" );
+			File pdftronXsl = new File( directoryOfLogfile, "report.xsl" );
 
 			if ( pdftronReport.exists() ) {
 				if ( args.length == 3 ) {

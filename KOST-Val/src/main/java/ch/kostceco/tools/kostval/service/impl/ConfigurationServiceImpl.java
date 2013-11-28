@@ -401,7 +401,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	public String getPathToJhoveConfiguration()
 	{
 		/**
-		 * Gibt den Pfad des jhove.conf zurück. 
+		 * Gibt den Pfad des jhove.conf zurück.
 		 */
 		Object prop = getConfig().getProperty( "pathtojhoveconfig" );
 		if ( prop instanceof String ) {
@@ -452,6 +452,32 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			}
 		}
 		return value;
+	}
+
+	// PDF/A-1
+	@Override
+	public String pdfa1()
+	{
+		Object prop = getConfig().getProperty( "pdfa1" );
+
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
+	// PDF/A-2
+	@Override
+	public String pdfa2()
+	{
+		Object prop = getConfig().getProperty( "pdfa2" );
+
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
 	}
 
 	@Override

@@ -133,6 +133,18 @@ public interface ConfigurationService extends Service
 	int getTableRowsLimit();
 
 	/**
+	 * Gibt an welche Konformität mindestens erreicht werden muss 1a oder 1b
+	 * oder no
+	 */
+	String pdfa1();
+
+	/**
+	 * Gibt an welche Konformität mindestens erreicht werden muss 2a oder 2b
+	 * oder 2u oder no
+	 */
+	String pdfa2();
+
+	/**
 	 * Gibt den Pfad zum Pdftron Exe zurück.
 	 * 
 	 * @return Pfad zum Pdftron Exe
