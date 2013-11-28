@@ -4,8 +4,14 @@
 	<pathtoworkdir>work_KOST-Val</pathtoworkdir>
 	<pathtopdftronexe>Drittapplikationen\pdfa\pdfa.exe</pathtopdftronexe>
 	
+<!--PDF/A-Konfiguration-->	
+	<pdfa1>1B</pdfa1>											<!--1A / 1B / no-->
+	<pdfa2>2B</pdfa2>											<!--2A / 2B / 2U / no-->
+	
+<!--SIARD-Konfiguration-->	
 	<table-rows-limit>20000</table-rows-limit>
 	
+<!--TIFF-Konfiguration-->	
 	<allowedcompression1>uncompressed</allowedcompression1>		<!--0 / uncompressed-->
 	<allowedcompression2>CCITT 1D</allowedcompression2>			<!--0 / CCITT 1D-->
 	<allowedcompression3>CCITT Group 3</allowedcompression3>	<!--0 / CCITT Group 3-->
