@@ -1,5 +1,5 @@
 /*== KOST-Val ==================================================================================
-The KOST-Val v1.0.3 application is used for validate TIFF, SIARD, and PDF/A-Files. 
+The KOST-Val v1.0.4 application is used for validate TIFF, SIARD, and PDF/A-Files. 
 Copyright (C) 2012-2013 Claire Röthlisberger (KOST-CECO), Christian Eugster, Olivier Debenath, 
 Peter Schneider (Staatsarchiv Aargau)
 -----------------------------------------------------------------------------------------------
@@ -75,7 +75,6 @@ public class KOSTVal implements MessageConstants
 	 */
 	public static void main( String[] args )
 	{
-
 		ApplicationContext context = new ClassPathXmlApplicationContext(
 				"classpath:config/applicationContext.xml" );
 
@@ -90,12 +89,23 @@ public class KOSTVal implements MessageConstants
 		if ( args.length < 2 ) {
 			LOGGER.logInfo( kostval.getTextResourceService().getText(
 					ERROR_PARAMETER_USAGE ) );
+			LOGGER.logInfo( kostval.getTextResourceService().getText(
+					MESSAGE_VALIDATION_INTERRUPTED ) );
 			System.exit( 1 );
 		}
 
 		File valDatei = new File( args[0] );
 		LOGGER.logInfo( kostval.getTextResourceService().getText(
 				MESSAGE_KOSTVALIDATION ) );
+
+		// Ueberprüfung des 1. Parameters (Val-Datei): existiert die Datei?
+		if ( !valDatei.exists() ) {
+			LOGGER.logInfo( kostval.getTextResourceService().getText(
+					ERROR_VALFILE_FILENOTEXISTING ) );
+			LOGGER.logInfo( kostval.getTextResourceService().getText(
+					MESSAGE_VALIDATION_INTERRUPTED ) );
+			System.exit( 1 );
+		}
 
 		// Informationen zum Arbeitsverzeichnis holen
 		String pathToWorkDir = kostval.getConfigurationService()
@@ -176,17 +186,19 @@ public class KOSTVal implements MessageConstants
 		if ( args.length == 3 && !(args[2].equals( "-v" )) ) {
 			LOGGER.logInfo( kostval.getTextResourceService().getText(
 					ERROR_PARAMETER_OPTIONAL_1 ) );
-			System.exit( 1 );
-		}
-
-		// Ueberprüfung des 1. Parameters (Val-Datei): existiert die Datei?
-		if ( !valDatei.exists() ) {
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					ERROR_TIFFFILE_FILENOTEXISTING ) );
 			LOGGER.logInfo( kostval.getTextResourceService().getText(
 					MESSAGE_VALIDATION_INTERRUPTED ) );
 			System.exit( 1 );
 		}
+
+		// Ueberprüfung des 1. Parameters (Val-Datei): existiert die Datei?
+/*		if ( !valDatei.exists() ) {
+			LOGGER.logInfo( kostval.getTextResourceService().getText(
+					ERROR_VALFILE_FILENOTEXISTING ) );
+			LOGGER.logInfo( kostval.getTextResourceService().getText(
+					MESSAGE_VALIDATION_INTERRUPTED ) );
+			System.exit( 1 );
+		}*/
 
 		String originalValName = valDatei.getAbsolutePath();
 
@@ -201,6 +213,8 @@ public class KOSTVal implements MessageConstants
 
 			LOGGER.logInfo( kostval.getTextResourceService().getText(
 					ERROR_JHOVECONF_MISSING ) );
+			LOGGER.logInfo( kostval.getTextResourceService().getText(
+					MESSAGE_VALIDATION_INTERRUPTED ) );
 			System.exit( 1 );
 		}
 
@@ -225,7 +239,8 @@ public class KOSTVal implements MessageConstants
 
 			// die Validierungen A sind obligatorisch, wenn sie bestanden
 			// wurden, können die restlichen
-			// Validierungen, welche nicht zum Abbruch der Applikation führen,
+			// Validierungen, welche nicht zum Abbruch der Applikation
+			// führen,
 			// ausgeführt werden.
 			if ( okMandatory ) {
 				ok = controller1.executeOptional( valDatei, directoryOfLogfile );
@@ -293,7 +308,8 @@ public class KOSTVal implements MessageConstants
 			// die Validierungen A-D sind obligatorisch, wenn sie bestanden
 			// wurden,
 			// können die restlichen
-			// Validierungen, welche nicht zum Abbruch der Applikation führen,
+			// Validierungen, welche nicht zum Abbruch der Applikation
+			// führen,
 			// ausgeführt werden.
 			if ( okMandatory ) {
 				ok = controller2.executeOptional( valDatei, directoryOfLogfile );
@@ -331,13 +347,15 @@ public class KOSTVal implements MessageConstants
 			}
 			if ( ok ) {
 				System.exit( 0 );
-				// Löschen des Arbeitsverzeichnisses, falls eines angelegt wurde
+				// Löschen des Arbeitsverzeichnisses, falls eines angelegt
+				// wurde
 				if ( tmpDir.exists() ) {
 					Util.deleteDir( tmpDir );
 				}
 			} else {
 				System.exit( 2 );
-				// Löschen des Arbeitsverzeichnisses, falls eines angelegt wurde
+				// Löschen des Arbeitsverzeichnisses, falls eines angelegt
+				// wurde
 				if ( tmpDir.exists() ) {
 					Util.deleteDir( tmpDir );
 				}
@@ -355,7 +373,8 @@ public class KOSTVal implements MessageConstants
 
 			// die Validierung A ist obligatorisch, wenn sie bestanden
 			// wurden, können die restlichen
-			// Validierungen, welche nicht zum Abbruch der Applikation führen,
+			// Validierungen, welche nicht zum Abbruch der Applikation
+			// führen,
 			// ausgeführt werden.
 			if ( okMandatory ) {
 				ok = controller3.executeOptional( valDatei, directoryOfLogfile );
@@ -387,7 +406,8 @@ public class KOSTVal implements MessageConstants
 							Util.getPathToReportPdftron() ) );
 					LOGGER.logInfo( "" );
 				} else {
-					// kein optionaler Parameter --> PDFTron-Report loeschen!
+					// kein optionaler Parameter --> PDFTron-Report
+					// loeschen!
 					pdftronReport.delete();
 					pdftronXsl.delete();
 				}
@@ -413,13 +433,15 @@ public class KOSTVal implements MessageConstants
 			}
 			if ( ok ) {
 				System.exit( 0 );
-				// Löschen des Arbeitsverzeichnisses, falls eines angelegt wurde
+				// Löschen des Arbeitsverzeichnisses, falls eines angelegt
+				// wurde
 				if ( tmpDir.exists() ) {
 					Util.deleteDir( tmpDir );
 				}
 			} else {
 				System.exit( 2 );
-				// Löschen des Arbeitsverzeichnisses, falls eines angelegt wurde
+				// Löschen des Arbeitsverzeichnisses, falls eines angelegt
+				// wurde
 				if ( tmpDir.exists() ) {
 					Util.deleteDir( tmpDir );
 				}

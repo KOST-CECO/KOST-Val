@@ -93,8 +93,7 @@ IF exist "%DATEIEN%\" (
     REM It's a file
     REM --- Fals eine Datei eingeben wurde
     Drittapplikationen\jre6\bin\java.exe -jar KOST-Val\kostval.jar "%DATEIEN%" "logs\%LogOrdner%" %Option%
-    SET Datei=%DATEIEN%
-    CALL :sub_ord "Datei" "LogOrdner"
+    CALL :sub_ord_d "DATEIEN" "LogOrdner"
 )
 ECHO.
 ECHO. >> logs\"%LogOrdner%"\_KOST-Val-Summary.log
@@ -127,6 +126,24 @@ REM muss via "CALL :sub_ord" erfolgen weil dies in FOR nicht funktioniert
    ECHO INVALIDE: %Datei% >> logs\"%LogOrdner%"\_KOST-Val-Summary.log
   ) ELSE (
    set /a h+=1
+   ECHO ERROR: %Datei% >> logs\"%LogOrdner%"\_KOST-Val-Summary.log
+  )
+ )
+ GOTO :eof
+
+REM muss via "CALL :sub_ord" erfolgen weil dies in FOR nicht funktioniert
+:sub_ord_d
+ ECHO return code %errorlevel%
+ IF %errorlevel% == 0 (
+  set /a g+=1
+  ECHO Valide: %DATEIEN% >> logs\"%LogOrdner%"\_KOST-Val-Summary.log
+ ) ELSE (
+  IF %errorlevel% == 2 (
+   set /a i+=1
+   ECHO INVALIDE: %DATEIEN% >> logs\"%LogOrdner%"\_KOST-Val-Summary.log
+  ) ELSE (
+   set /a h+=1
+   ECHO ERROR: %DATEIEN% >> logs\"%LogOrdner%"\_KOST-Val-Summary.log
   )
  )
  GOTO :eof

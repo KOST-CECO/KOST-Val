@@ -30,7 +30,7 @@ public interface MessageConstants
 	String	ERROR_LOGDIRECTORY_NODIRECTORY					= "error.logdirectory.nodirectory";
 	String	ERROR_LOGDIRECTORY_NOTWRITABLE					= "error.logdirectory.notwritable";
 	String	ERROR_WORKDIRECTORY_NOTWRITABLE					= "error.workdirectory.notwritable";
-	String	ERROR_TIFFFILE_FILENOTEXISTING					= "error.tifffile.filenotexisting";
+	String	ERROR_VALFILE_FILENOTEXISTING					= "error.valfile.filenotexisting";
 	String	ERROR_LOGGING_NOFILEAPPENDER					= "error.logging.nofileappender";
 	String	ERROR_JHOVECONF_MISSING							= "error.jhoveconf.missing";
 	String	ERROR_PARAMETER_OPTIONAL_1						= "error.parameter.optional.1";
