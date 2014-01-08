@@ -98,17 +98,20 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 
 		// Jhove direkt ansprechen
 		try {
-			JhoveBase je = new JhoveBase();
 			String NAME = new String( "Jhove" );
 			String RELEASE = new String( "1.5" );
 			int[] DATE = new int[] { 2009, 12, 19 };
 			String USAGE = new String( "no usage" );
 			String RIGHTS = new String( "LGPL v2.1" );
 			App app = new App( NAME, RELEASE, DATE, USAGE, RIGHTS );
+			JhoveBase je = new JhoveBase();
 			OutputHandler handler = je.getHandler( "XML" );
 
-			Module module = null; // check all modules => null oder TIFF => ???
-			String logLevel = null;
+			// check all modules => null oder je.getModule( "TIFF" );
+			Module module = je.getModule( "TIFF" );
+			String logLevel = null; // null = SEVERE, WARNING, INFO, FINE,
+									// FINEST
+			// Ausgabe in Konsole --> kein Einfluss auf Report
 			je.setLogLevel( logLevel );
 			String saxClass = null;
 			String configFile = pathToJhoveConfig;
@@ -170,6 +173,26 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 				concatenatedOutputs.append( line );
 				concatenatedOutputs.append( NEWLINE );
 
+				// selten wird das Format von Jhove nicht als TIFF erkannt
+				// Invalid wenn Format nicht TIFF ist
+				if ( line.contains( " Format:" ) ) {
+					if ( !line.contains( "TIFF" ) ) {
+						// Invalider Status
+						isValid = false;
+						getMessageService()
+								.logError(
+										getTextResourceService().getText(
+												MESSAGE_MODULE_B )
+												+ getTextResourceService()
+														.getText(
+																MESSAGE_DASHES )
+												+ getTextResourceService()
+														.getText(
+																MESSAGE_MODULE_B_JHOVEINVALIDFORMAT,
+																line ) );
+					}
+				}
+
 				// die Status-Zeile enthält diese Möglichkeiten:
 				// Valider Status: "Well-Formed and valid"
 				// Invalider Status: "Not well-formed" oder
@@ -229,7 +252,7 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 				return false;
 			}
 		}
-		// bestehendes Workverzeichnis löschen 
+		// bestehendes Workverzeichnis löschen
 		if ( jhoveDir.exists() ) {
 			Util.deleteDir( jhoveDir );
 		}

@@ -118,6 +118,7 @@ public interface MessageConstants
 	// Modul B Meldungen
 	String	MESSAGE_MODULE_B_CANNOTWRITEJHOVEREPORT			= "message.module.b.cannotwritejhovereport";
 	String	MESSAGE_MODULE_B_JHOVEINVALID					= "message.module.b.jhoveinvalid";
+	String	MESSAGE_MODULE_B_JHOVEINVALIDFORMAT				= "message.module.b.jhoveinvalidformat";
 
 	// Modul C-G Meldungen
 	String	MESSAGE_MODULE_CG_CANNOTFINDJHOVEREPORT			= "message.module.cg.cannotfindjhovereport";
