@@ -79,317 +79,16 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		return config;
 	}
 
-	// AllowedCompression
 	@Override
-	public String getAllowedCompression1()
+	public String getPathToWorkDir()
 	{
-		Object prop = getConfig().getProperty( "allowedcompression1" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		return null;
-	}
-
-	@Override
-	public String getAllowedCompression2()
-	{
-		Object prop = getConfig().getProperty( "allowedcompression2" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		return null;
-	}
-
-	@Override
-	public String getAllowedCompression3()
-	{
-		Object prop = getConfig().getProperty( "allowedcompression3" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		return null;
-	}
-
-	@Override
-	public String getAllowedCompression4()
-	{
-		Object prop = getConfig().getProperty( "allowedcompression4" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		return null;
-	}
-
-	@Override
-	public String getAllowedCompression5()
-	{
-		Object prop = getConfig().getProperty( "allowedcompression5" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		return null;
-	}
-
-	@Override
-	public String getAllowedCompression7()
-	{
-		Object prop = getConfig().getProperty( "allowedcompression7" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		return null;
-	}
-
-	@Override
-	public String getAllowedCompression8()
-	{
-		Object prop = getConfig().getProperty( "allowedcompression8" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		return null;
-	}
-
-	@Override
-	public String getAllowedCompression32773()
-	{
-		Object prop = getConfig().getProperty( "allowedcompression32773" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		return null;
-	}
-
-	// AllowedPhotointer
-	@Override
-	public String getAllowedPhotointer0()
-	{
-		Object prop = getConfig().getProperty( "allowedphotointer0" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		return null;
-	}
-
-	@Override
-	public String getAllowedPhotointer1()
-	{
-		Object prop = getConfig().getProperty( "allowedphotointer1" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		return null;
-	}
-
-	@Override
-	public String getAllowedPhotointer2()
-	{
-		Object prop = getConfig().getProperty( "allowedphotointer2" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		return null;
-	}
-
-	@Override
-	public String getAllowedPhotointer3()
-	{
-		Object prop = getConfig().getProperty( "allowedphotointer3" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		return null;
-	}
-
-	@Override
-	public String getAllowedPhotointer4()
-	{
-		Object prop = getConfig().getProperty( "allowedphotointer4" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		return null;
-	}
-
-	@Override
-	public String getAllowedPhotointer5()
-	{
-		Object prop = getConfig().getProperty( "allowedphotointer5" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		return null;
-	}
-
-	@Override
-	public String getAllowedPhotointer6()
-	{
-		Object prop = getConfig().getProperty( "allowedphotointer6" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		return null;
-	}
-
-	@Override
-	public String getAllowedPhotointer8()
-	{
-		Object prop = getConfig().getProperty( "allowedphotointer8" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		return null;
-	}
-
-	// AllowedBitspersample
-	@Override
-	public String getAllowedBitspersample1()
-	{
-		Object prop = getConfig().getProperty( "allowedbitspersample1" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		return null;
-	}
-
-	@Override
-	public String getAllowedBitspersample2()
-	{
-		Object prop = getConfig().getProperty( "allowedbitspersample2" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		return null;
-	}
-
-	@Override
-	public String getAllowedBitspersample4()
-	{
-		Object prop = getConfig().getProperty( "allowedbitspersample4" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		return null;
-	}
-
-	@Override
-	public String getAllowedBitspersample8()
-	{
-		Object prop = getConfig().getProperty( "allowedbitspersample8" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		return null;
-	}
-
-	@Override
-	public String getAllowedBitspersample16()
-	{
-		Object prop = getConfig().getProperty( "allowedbitspersample16" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		return null;
-	}
-
-	@Override
-	public String getAllowedBitspersample32()
-	{
-		Object prop = getConfig().getProperty( "allowedbitspersample32" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		return null;
-	}
-
-	@Override
-	public String getAllowedBitspersample64()
-	{
-		Object prop = getConfig().getProperty( "allowedbitspersample64" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		return null;
-	}
-
-	// AllowedMultipage
-	@Override
-	public String getAllowedMultipage()
-	{
-		Object prop = getConfig().getProperty( "allowedmultipage" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		return null;
-	}
-
-	// AllowedTiles
-	@Override
-	public String getAllowedTiles()
-	{
-		Object prop = getConfig().getProperty( "allowedtiles" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		return null;
-	}
-
-	// AllowedSize
-	@Override
-	public String getAllowedSize()
-	{
-		Object prop = getConfig().getProperty( "allowedsize" );
-
+		/**
+		 * Gibt den Pfad des Arbeitsverzeichnisses zurück. Dieses Verzeichnis
+		 * wird zum Entpacken des .zip-Files verwendet.
+		 * 
+		 * @return Pfad des Arbeitsverzeichnisses
+		 */
+		Object prop = getConfig().getProperty( "pathtoworkdir" );
 		if ( prop instanceof String ) {
 			String value = (String) prop;
 			return value;
@@ -411,16 +110,12 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		return null;
 	}
 
+	/*--- PDF/A ---------------------------------------------------------------------*/
 	@Override
-	public String getPathToWorkDir()
+	public String getPathToPdftronExe()
 	{
-		/**
-		 * Gibt den Pfad des Arbeitsverzeichnisses zurück. Dieses Verzeichnis
-		 * wird zum Entpacken des .zip-Files verwendet.
-		 * 
-		 * @return Pfad des Arbeitsverzeichnisses
-		 */
-		Object prop = getConfig().getProperty( "pathtoworkdir" );
+		Object prop = getConfig().getProperty( "pdfa.pathtopdftronexe" );
+
 		if ( prop instanceof String ) {
 			String value = (String) prop;
 			return value;
@@ -428,6 +123,31 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		return null;
 	}
 
+	@Override
+	public String pdfa1()
+	{
+		Object prop = getConfig().getProperty( "pdfa.pdfa1" );
+
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
+	@Override
+	public String pdfa2()
+	{
+		Object prop = getConfig().getProperty( "pdfa.pdfa2" );
+
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
+	/*--- SIARD ---------------------------------------------------------------------*/
 	@Override
 	public int getTableRowsLimit()
 	{
@@ -443,7 +163,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		 * liegen.
 		 */
 		int value = 20000;
-		Object prop = getConfig().getProperty( "table-rows-limit" );
+		Object prop = getConfig().getProperty( "siard.table-rows-limit" );
 		if ( prop != null ) {
 			try {
 				value = Integer.valueOf( prop.toString() ).intValue();
@@ -454,25 +174,13 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		return value;
 	}
 
-	// PDF/A-1
+	/*--- TIFF ---------------------------------------------------------------------*/
+	// AllowedCompression
 	@Override
-	public String pdfa1()
+	public String getAllowedCompression1()
 	{
-		Object prop = getConfig().getProperty( "pdfa1" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		return null;
-	}
-
-	// PDF/A-2
-	@Override
-	public String pdfa2()
-	{
-		Object prop = getConfig().getProperty( "pdfa2" );
-
+		Object prop = getConfig().getProperty(
+				"tiff.allowedcompression.allowedcompression1" );
 		if ( prop instanceof String ) {
 			String value = (String) prop;
 			return value;
@@ -481,10 +189,10 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	}
 
 	@Override
-	public String getPathToPdftronExe()
+	public String getAllowedCompression2()
 	{
-		Object prop = getConfig().getProperty( "pathtopdftronexe" );
-
+		Object prop = getConfig().getProperty(
+				"tiff.allowedcompression.allowedcompression2" );
 		if ( prop instanceof String ) {
 			String value = (String) prop;
 			return value;
@@ -492,4 +200,295 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		return null;
 	}
 
+	@Override
+	public String getAllowedCompression3()
+	{
+		Object prop = getConfig().getProperty(
+				"tiff.allowedcompression.allowedcompression3" );
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
+	@Override
+	public String getAllowedCompression4()
+	{
+		Object prop = getConfig().getProperty(
+				"tiff.allowedcompression.allowedcompression4" );
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
+	@Override
+	public String getAllowedCompression5()
+	{
+		Object prop = getConfig().getProperty(
+				"tiff.allowedcompression.allowedcompression5" );
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
+	@Override
+	public String getAllowedCompression7()
+	{
+		Object prop = getConfig().getProperty(
+				"tiff.allowedcompression.allowedcompression7" );
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
+	@Override
+	public String getAllowedCompression8()
+	{
+		Object prop = getConfig().getProperty(
+				"tiff.allowedcompression.allowedcompression8" );
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
+	@Override
+	public String getAllowedCompression32773()
+	{
+		Object prop = getConfig().getProperty(
+				"tiff.allowedcompression.allowedcompression32773" );
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
+	// AllowedPhotointer
+	@Override
+	public String getAllowedPhotointer0()
+	{
+		Object prop = getConfig().getProperty(
+				"tiff.allowedphotointer.allowedphotointer0" );
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
+	@Override
+	public String getAllowedPhotointer1()
+	{
+		Object prop = getConfig().getProperty(
+				"tiff.allowedphotointer.allowedphotointer1" );
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
+	@Override
+	public String getAllowedPhotointer2()
+	{
+		Object prop = getConfig().getProperty(
+				"tiff.allowedphotointer.allowedphotointer2" );
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
+	@Override
+	public String getAllowedPhotointer3()
+	{
+		Object prop = getConfig().getProperty(
+				"tiff.allowedphotointer.allowedphotointer3" );
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
+	@Override
+	public String getAllowedPhotointer4()
+	{
+		Object prop = getConfig().getProperty(
+				"tiff.allowedphotointer.allowedphotointer4" );
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
+	@Override
+	public String getAllowedPhotointer5()
+	{
+		Object prop = getConfig().getProperty(
+				"tiff.allowedphotointer.allowedphotointer5" );
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
+	@Override
+	public String getAllowedPhotointer6()
+	{
+		Object prop = getConfig().getProperty(
+				"tiff.allowedphotointer.allowedphotointer6" );
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
+	@Override
+	public String getAllowedPhotointer8()
+	{
+		Object prop = getConfig().getProperty(
+				"tiff.allowedphotointer.allowedphotointer8" );
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
+	// AllowedBitspersample
+	@Override
+	public String getAllowedBitspersample1()
+	{
+		Object prop = getConfig().getProperty(
+				"tiff.allowedbitspersample.allowedbitspersample1" );
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
+	@Override
+	public String getAllowedBitspersample2()
+	{
+		Object prop = getConfig().getProperty(
+				"tiff.allowedbitspersample.allowedbitspersample2" );
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
+	@Override
+	public String getAllowedBitspersample4()
+	{
+		Object prop = getConfig().getProperty(
+				"tiff.allowedbitspersample.allowedbitspersample4" );
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
+	@Override
+	public String getAllowedBitspersample8()
+	{
+		Object prop = getConfig().getProperty(
+				"tiff.allowedbitspersample.allowedbitspersample8" );
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
+	@Override
+	public String getAllowedBitspersample16()
+	{
+		Object prop = getConfig().getProperty(
+				"tiff.allowedbitspersample.allowedbitspersample16" );
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
+	@Override
+	public String getAllowedBitspersample32()
+	{
+		Object prop = getConfig().getProperty(
+				"tiff.allowedbitspersample.allowedbitspersample32" );
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
+	@Override
+	public String getAllowedBitspersample64()
+	{
+		Object prop = getConfig().getProperty(
+				"tiff.allowedbitspersample.allowedbitspersample64" );
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
+	// AllowedMultipage
+	@Override
+	public String getAllowedMultipage()
+	{
+		Object prop = getConfig().getProperty(
+				"tiff.allowedother.allowedmultipage" );
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
+	// AllowedTiles
+	@Override
+	public String getAllowedTiles()
+	{
+		Object prop = getConfig()
+				.getProperty( "tiff.allowedother.allowedtiles" );
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
+	// AllowedSize
+	@Override
+	public String getAllowedSize()
+	{
+		Object prop = getConfig().getProperty( "tiff.allowedother.allowedsize" );
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
 }
