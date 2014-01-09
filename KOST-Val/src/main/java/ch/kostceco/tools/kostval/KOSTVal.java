@@ -68,8 +68,8 @@ public class KOSTVal implements MessageConstants
 	}
 
 	/**
-	 * Die Eingabe besteht aus Parameter 1: Pfad zur Val-File Parameter 2: Pfad
-	 * zum Logging-Verzeichnis
+	 * Die Eingabe besteht aus 3 oder 4 Parameter: [0] Validierungstyp [1] Pfad
+	 * zum Logging-Verzeichnis [2] Pfad zur Val-File [3] option: Verbose
 	 * 
 	 * @param args
 	 */
@@ -85,8 +85,8 @@ public class KOSTVal implements MessageConstants
 
 		KOSTVal kostval = (KOSTVal) context.getBean( "kostval" );
 
-		// Ist die Anzahl Parameter (2) korrekt?
-		if ( args.length < 2 ) {
+		// Ist die Anzahl Parameter (mind. 3) korrekt?
+		if ( args.length < 3 ) {
 			LOGGER.logInfo( kostval.getTextResourceService().getText(
 					ERROR_PARAMETER_USAGE ) );
 			LOGGER.logInfo( kostval.getTextResourceService().getText(
@@ -94,11 +94,11 @@ public class KOSTVal implements MessageConstants
 			System.exit( 1 );
 		}
 
-		File valDatei = new File( args[0] );
+		File valDatei = new File( args[2] );
 		LOGGER.logInfo( kostval.getTextResourceService().getText(
 				MESSAGE_KOSTVALIDATION ) );
 
-		// Ueberprüfung des 1. Parameters (Val-Datei): existiert die Datei?
+		// Ueberprüfung des Parameters (Val-Datei): existiert die Datei?
 		if ( !valDatei.exists() ) {
 			LOGGER.logInfo( kostval.getTextResourceService().getText(
 					ERROR_VALFILE_FILENOTEXISTING ) );
@@ -137,7 +137,7 @@ public class KOSTVal implements MessageConstants
 			System.exit( 1 );
 		}
 
-		// Ueberprüfung des 2. Parameters (Log-Verzeichnis)
+		// Ueberprüfung des Parameters (Log-Verzeichnis)
 		File directoryOfLogfile = new File( args[1] );
 		if ( !directoryOfLogfile.exists() ) {
 			directoryOfLogfile.mkdir();
@@ -183,22 +183,13 @@ public class KOSTVal implements MessageConstants
 
 		// Ueberprüfung des optionalen Parameters (3 -v --> im Verbose-mode
 		// werden die originalen Logs nicht gelöscht (PDFTron, Jhove & Co.)
-		if ( args.length == 3 && !(args[2].equals( "-v" )) ) {
+		if ( args.length > 3 && !(args[3].equals( "-v" )) ) {
 			LOGGER.logInfo( kostval.getTextResourceService().getText(
 					ERROR_PARAMETER_OPTIONAL_1 ) );
 			LOGGER.logInfo( kostval.getTextResourceService().getText(
 					MESSAGE_VALIDATION_INTERRUPTED ) );
 			System.exit( 1 );
 		}
-
-		// Ueberprüfung des 1. Parameters (Val-Datei): existiert die Datei?
-/*		if ( !valDatei.exists() ) {
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					ERROR_VALFILE_FILENOTEXISTING ) );
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					MESSAGE_VALIDATION_INTERRUPTED ) );
-			System.exit( 1 );
-		}*/
 
 		String originalValName = valDatei.getAbsolutePath();
 
@@ -227,229 +218,246 @@ public class KOSTVal implements MessageConstants
 		LOGGER.logError( kostval.getTextResourceService().getText(
 				MESSAGE_KOSTVALIDATION ) );
 
-		if ( (valDatei.getAbsolutePath().toLowerCase().endsWith( ".tiff" ) || valDatei
-				.getAbsolutePath().toLowerCase().endsWith( ".tif" )) ) {
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					MESSAGE_TIFFVALIDATION, valDatei.getName() ) );
-			Controllertiff controller1 = (Controllertiff) context
-					.getBean( "controllertiff" );
-			boolean okMandatory = controller1.executeMandatory( valDatei,
-					directoryOfLogfile );
-			boolean ok = false;
+		if ( args[0].equals( "--format" ) ) {
 
-			// die Validierungen A sind obligatorisch, wenn sie bestanden
-			// wurden, können die restlichen
-			// Validierungen, welche nicht zum Abbruch der Applikation
-			// führen,
-			// ausgeführt werden.
-			if ( okMandatory ) {
-				ok = controller1.executeOptional( valDatei, directoryOfLogfile );
-			}
-
-			ok = (ok && okMandatory);
-
-			LOGGER.logInfo( "" );
-			if ( ok ) {
+			if ( (valDatei.getAbsolutePath().toLowerCase().endsWith( ".tiff" ) || valDatei
+					.getAbsolutePath().toLowerCase().endsWith( ".tif" )) ) {
 				LOGGER.logInfo( kostval.getTextResourceService().getText(
-						MESSAGE_TOTAL_VALID, valDatei.getAbsolutePath() ) );
-			} else {
-				LOGGER.logInfo( kostval.getTextResourceService().getText(
-						MESSAGE_TOTAL_INVALID, valDatei.getAbsolutePath() ) );
-			}
-			LOGGER.logInfo( "" );
+						MESSAGE_TIFFVALIDATION, valDatei.getName() ) );
+				Controllertiff controller1 = (Controllertiff) context
+						.getBean( "controllertiff" );
+				boolean okMandatory = controller1.executeMandatory( valDatei,
+						directoryOfLogfile );
+				boolean ok = false;
 
-			// Ausgabe der Pfade zu den Jhove Reports, falls welche
-			// generiert wurden (-v) oder Jhove Report löschen
-			File jhoveReport = new File( directoryOfLogfile, valDatei.getName()
-					+ ".jhove-log.txt" );
+				// die Validierungen A sind obligatorisch, wenn sie bestanden
+				// wurden, können die restlichen
+				// Validierungen, welche nicht zum Abbruch der Applikation
+				// führen,
+				// ausgeführt werden.
+				if ( okMandatory ) {
+					ok = controller1.executeOptional( valDatei,
+							directoryOfLogfile );
+				}
 
-			if ( jhoveReport.exists() ) {
-				if ( args.length == 3 ) {
+				ok = (ok && okMandatory);
+
+				LOGGER.logInfo( "" );
+				if ( ok ) {
 					LOGGER.logInfo( kostval.getTextResourceService().getText(
-							MESSAGE_FOOTER_REPORTJHOVE,
-							Util.getPathToReportJHove() ) );
-					LOGGER.logInfo( "" );
+							MESSAGE_TOTAL_VALID, valDatei.getAbsolutePath() ) );
 				} else {
-					// kein optionaler Parameter --> Jhove-Report loeschen!
-					jhoveReport.delete();
-				}
-			}
-
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					MESSAGE_FOOTER_TIFF, originalValName ) );
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					MESSAGE_FOOTER_LOG, logFileName ) );
-			LOGGER.logInfo( "" );
-
-			if ( okMandatory ) {
-				LOGGER.logInfo( kostval.getTextResourceService().getText(
-						MESSAGE_VALIDATION_FINISHED ) );
-			} else {
-				LOGGER.logInfo( kostval.getTextResourceService().getText(
-						MESSAGE_VALIDATION_INTERRUPTED ) );
-			}
-
-			if ( ok ) {
-				System.exit( 0 );
-			} else {
-				System.exit( 2 );
-			}
-
-		} else if ( (valDatei.getAbsolutePath().toLowerCase()
-				.endsWith( ".siard" )) ) {
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					MESSAGE_SIARDVALIDATION, valDatei.getName() ) );
-			Controllersiard controller2 = (Controllersiard) context
-					.getBean( "controllersiard" );
-			boolean okMandatory = controller2.executeMandatory( valDatei,
-					directoryOfLogfile );
-			boolean ok = false;
-
-			// die Validierungen A-D sind obligatorisch, wenn sie bestanden
-			// wurden,
-			// können die restlichen
-			// Validierungen, welche nicht zum Abbruch der Applikation
-			// führen,
-			// ausgeführt werden.
-			if ( okMandatory ) {
-				ok = controller2.executeOptional( valDatei, directoryOfLogfile );
-				// Ausführen der optionalen Schritte
-			}
-
-			ok = (ok && okMandatory);
-
-			LOGGER.logInfo( "" );
-			if ( ok ) {
-				LOGGER.logInfo( kostval.getTextResourceService().getText(
-						MESSAGE_TOTAL_VALID, valDatei.getAbsolutePath() ) );
-			} else {
-				LOGGER.logInfo( kostval.getTextResourceService().getText(
-						MESSAGE_TOTAL_INVALID, valDatei.getAbsolutePath() ) );
-			}
-			LOGGER.logInfo( "" );
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					MESSAGE_FOOTER_SIARD, originalValName ) );
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					MESSAGE_FOOTER_LOG, logFileName ) );
-			LOGGER.logInfo( "" );
-
-			if ( okMandatory ) {
-				LOGGER.logInfo( kostval.getTextResourceService().getText(
-						MESSAGE_VALIDATION_FINISHED ) );
-			} else {
-				LOGGER.logInfo( kostval.getTextResourceService().getText(
-						MESSAGE_VALIDATION_INTERRUPTED ) );
-			}
-
-			// Löschen des Arbeitsverzeichnisses, falls eines angelegt wurde
-			if ( tmpDir.exists() ) {
-				Util.deleteDir( tmpDir );
-			}
-			if ( ok ) {
-				System.exit( 0 );
-				// Löschen des Arbeitsverzeichnisses, falls eines angelegt
-				// wurde
-				if ( tmpDir.exists() ) {
-					Util.deleteDir( tmpDir );
-				}
-			} else {
-				System.exit( 2 );
-				// Löschen des Arbeitsverzeichnisses, falls eines angelegt
-				// wurde
-				if ( tmpDir.exists() ) {
-					Util.deleteDir( tmpDir );
-				}
-			}
-
-		} else if ( (valDatei.getAbsolutePath().toLowerCase().endsWith( ".pdf" ) || valDatei
-				.getAbsolutePath().toLowerCase().endsWith( ".pdfa" )) ) {
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					MESSAGE_PDFAVALIDATION, valDatei.getName() ) );
-			Controllerpdfa controller3 = (Controllerpdfa) context
-					.getBean( "controllerpdfa" );
-			boolean okMandatory = controller3.executeMandatory( valDatei,
-					directoryOfLogfile );
-			boolean ok = false;
-
-			// die Validierung A ist obligatorisch, wenn sie bestanden
-			// wurden, können die restlichen
-			// Validierungen, welche nicht zum Abbruch der Applikation
-			// führen,
-			// ausgeführt werden.
-			if ( okMandatory ) {
-				ok = controller3.executeOptional( valDatei, directoryOfLogfile );
-				// Ausführen der optionalen Schritte
-			}
-
-			ok = (ok && okMandatory);
-
-			LOGGER.logInfo( "" );
-			if ( ok ) {
-				LOGGER.logInfo( kostval.getTextResourceService().getText(
-						MESSAGE_TOTAL_VALID, valDatei.getAbsolutePath() ) );
-			} else {
-				LOGGER.logInfo( kostval.getTextResourceService().getText(
-						MESSAGE_TOTAL_INVALID, valDatei.getAbsolutePath() ) );
-			}
-			LOGGER.logInfo( "" );
-
-			// Ausgabe der Pfade zu den Pdftron Reports, falls welche
-			// generiert wurden (-v) oder Pdftron Reports löschen
-			File pdftronReport = new File( directoryOfLogfile,
-					valDatei.getName() + ".pdftron-log.xml" );
-			File pdftronXsl = new File( directoryOfLogfile, "report.xsl" );
-
-			if ( pdftronReport.exists() ) {
-				if ( args.length == 3 ) {
 					LOGGER.logInfo( kostval.getTextResourceService().getText(
-							MESSAGE_FOOTER_REPORTPDFTRON,
-							Util.getPathToReportPdftron() ) );
-					LOGGER.logInfo( "" );
-				} else {
-					// kein optionaler Parameter --> PDFTron-Report
-					// loeschen!
-					pdftronReport.delete();
-					pdftronXsl.delete();
+							MESSAGE_TOTAL_INVALID, valDatei.getAbsolutePath() ) );
 				}
-			}
+				LOGGER.logInfo( "" );
 
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					MESSAGE_FOOTER_PDFA, originalValName ) );
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					MESSAGE_FOOTER_LOG, logFileName ) );
-			LOGGER.logInfo( "" );
+				// Ausgabe der Pfade zu den Jhove Reports, falls welche
+				// generiert wurden (-v) oder Jhove Report löschen
+				File jhoveReport = new File( directoryOfLogfile,
+						valDatei.getName() + ".jhove-log.txt" );
 
-			if ( okMandatory ) {
+				if ( jhoveReport.exists() ) {
+					if ( args.length == 4 ) {
+						LOGGER.logInfo( kostval.getTextResourceService()
+								.getText( MESSAGE_FOOTER_REPORTJHOVE,
+										Util.getPathToReportJHove() ) );
+						LOGGER.logInfo( "" );
+					} else {
+						// kein optionaler Parameter --> Jhove-Report loeschen!
+						jhoveReport.delete();
+					}
+				}
+
 				LOGGER.logInfo( kostval.getTextResourceService().getText(
-						MESSAGE_VALIDATION_FINISHED ) );
+						MESSAGE_FOOTER_TIFF, originalValName ) );
+				LOGGER.logInfo( kostval.getTextResourceService().getText(
+						MESSAGE_FOOTER_LOG, logFileName ) );
+				LOGGER.logInfo( "" );
+
+				if ( okMandatory ) {
+					LOGGER.logInfo( kostval.getTextResourceService().getText(
+							MESSAGE_VALIDATION_FINISHED ) );
+				} else {
+					LOGGER.logInfo( kostval.getTextResourceService().getText(
+							MESSAGE_VALIDATION_INTERRUPTED ) );
+				}
+
+				if ( ok ) {
+					System.exit( 0 );
+				} else {
+					System.exit( 2 );
+				}
+
+			} else if ( (valDatei.getAbsolutePath().toLowerCase()
+					.endsWith( ".siard" )) ) {
+				LOGGER.logInfo( kostval.getTextResourceService().getText(
+						MESSAGE_SIARDVALIDATION, valDatei.getName() ) );
+				Controllersiard controller2 = (Controllersiard) context
+						.getBean( "controllersiard" );
+				boolean okMandatory = controller2.executeMandatory( valDatei,
+						directoryOfLogfile );
+				boolean ok = false;
+
+				// die Validierungen A-D sind obligatorisch, wenn sie bestanden
+				// wurden,
+				// können die restlichen
+				// Validierungen, welche nicht zum Abbruch der Applikation
+				// führen,
+				// ausgeführt werden.
+				if ( okMandatory ) {
+					ok = controller2.executeOptional( valDatei,
+							directoryOfLogfile );
+					// Ausführen der optionalen Schritte
+				}
+
+				ok = (ok && okMandatory);
+
+				LOGGER.logInfo( "" );
+				if ( ok ) {
+					LOGGER.logInfo( kostval.getTextResourceService().getText(
+							MESSAGE_TOTAL_VALID, valDatei.getAbsolutePath() ) );
+				} else {
+					LOGGER.logInfo( kostval.getTextResourceService().getText(
+							MESSAGE_TOTAL_INVALID, valDatei.getAbsolutePath() ) );
+				}
+				LOGGER.logInfo( "" );
+				LOGGER.logInfo( kostval.getTextResourceService().getText(
+						MESSAGE_FOOTER_SIARD, originalValName ) );
+				LOGGER.logInfo( kostval.getTextResourceService().getText(
+						MESSAGE_FOOTER_LOG, logFileName ) );
+				LOGGER.logInfo( "" );
+
+				if ( okMandatory ) {
+					LOGGER.logInfo( kostval.getTextResourceService().getText(
+							MESSAGE_VALIDATION_FINISHED ) );
+				} else {
+					LOGGER.logInfo( kostval.getTextResourceService().getText(
+							MESSAGE_VALIDATION_INTERRUPTED ) );
+				}
+
+				// Löschen des Arbeitsverzeichnisses, falls eines angelegt wurde
+				if ( tmpDir.exists() ) {
+					Util.deleteDir( tmpDir );
+				}
+				if ( ok ) {
+					System.exit( 0 );
+					// Löschen des Arbeitsverzeichnisses, falls eines angelegt
+					// wurde
+					if ( tmpDir.exists() ) {
+						Util.deleteDir( tmpDir );
+					}
+				} else {
+					System.exit( 2 );
+					// Löschen des Arbeitsverzeichnisses, falls eines angelegt
+					// wurde
+					if ( tmpDir.exists() ) {
+						Util.deleteDir( tmpDir );
+					}
+				}
+
+			} else if ( (valDatei.getAbsolutePath().toLowerCase()
+					.endsWith( ".pdf" ) || valDatei.getAbsolutePath()
+					.toLowerCase().endsWith( ".pdfa" )) ) {
+				LOGGER.logInfo( kostval.getTextResourceService().getText(
+						MESSAGE_PDFAVALIDATION, valDatei.getName() ) );
+				Controllerpdfa controller3 = (Controllerpdfa) context
+						.getBean( "controllerpdfa" );
+				boolean okMandatory = controller3.executeMandatory( valDatei,
+						directoryOfLogfile );
+				boolean ok = false;
+
+				// die Validierung A ist obligatorisch, wenn sie bestanden
+				// wurden, können die restlichen
+				// Validierungen, welche nicht zum Abbruch der Applikation
+				// führen,
+				// ausgeführt werden.
+				if ( okMandatory ) {
+					ok = controller3.executeOptional( valDatei,
+							directoryOfLogfile );
+					// Ausführen der optionalen Schritte
+				}
+
+				ok = (ok && okMandatory);
+
+				LOGGER.logInfo( "" );
+				if ( ok ) {
+					LOGGER.logInfo( kostval.getTextResourceService().getText(
+							MESSAGE_TOTAL_VALID, valDatei.getAbsolutePath() ) );
+				} else {
+					LOGGER.logInfo( kostval.getTextResourceService().getText(
+							MESSAGE_TOTAL_INVALID, valDatei.getAbsolutePath() ) );
+				}
+				LOGGER.logInfo( "" );
+
+				// Ausgabe der Pfade zu den Pdftron Reports, falls welche
+				// generiert wurden (-v) oder Pdftron Reports löschen
+				File pdftronReport = new File( directoryOfLogfile,
+						valDatei.getName() + ".pdftron-log.xml" );
+				File pdftronXsl = new File( directoryOfLogfile, "report.xsl" );
+
+				if ( pdftronReport.exists() ) {
+					if ( args.length == 4 ) {
+						LOGGER.logInfo( kostval.getTextResourceService()
+								.getText( MESSAGE_FOOTER_REPORTPDFTRON,
+										Util.getPathToReportPdftron() ) );
+						LOGGER.logInfo( "" );
+					} else {
+						// kein optionaler Parameter --> PDFTron-Report
+						// loeschen!
+						pdftronReport.delete();
+						pdftronXsl.delete();
+					}
+				}
+
+				LOGGER.logInfo( kostval.getTextResourceService().getText(
+						MESSAGE_FOOTER_PDFA, originalValName ) );
+				LOGGER.logInfo( kostval.getTextResourceService().getText(
+						MESSAGE_FOOTER_LOG, logFileName ) );
+				LOGGER.logInfo( "" );
+
+				if ( okMandatory ) {
+					LOGGER.logInfo( kostval.getTextResourceService().getText(
+							MESSAGE_VALIDATION_FINISHED ) );
+				} else {
+					LOGGER.logInfo( kostval.getTextResourceService().getText(
+							MESSAGE_VALIDATION_INTERRUPTED ) );
+				}
+
+				// Löschen des Arbeitsverzeichnisses, falls eines angelegt wurde
+				if ( tmpDir.exists() ) {
+					Util.deleteDir( tmpDir );
+				}
+				if ( ok ) {
+					System.exit( 0 );
+					// Löschen des Arbeitsverzeichnisses, falls eines angelegt
+					// wurde
+					if ( tmpDir.exists() ) {
+						Util.deleteDir( tmpDir );
+					}
+				} else {
+					System.exit( 2 );
+					// Löschen des Arbeitsverzeichnisses, falls eines angelegt
+					// wurde
+					if ( tmpDir.exists() ) {
+						Util.deleteDir( tmpDir );
+					}
+				}
+
 			} else {
+				LOGGER.logInfo( kostval.getTextResourceService().getText(
+						ERROR_INCORRECTFILEENDING ) );
 				LOGGER.logInfo( kostval.getTextResourceService().getText(
 						MESSAGE_VALIDATION_INTERRUPTED ) );
+				System.exit( 1 );
 			}
-
-			// Löschen des Arbeitsverzeichnisses, falls eines angelegt wurde
-			if ( tmpDir.exists() ) {
-				Util.deleteDir( tmpDir );
-			}
-			if ( ok ) {
-				System.exit( 0 );
-				// Löschen des Arbeitsverzeichnisses, falls eines angelegt
-				// wurde
-				if ( tmpDir.exists() ) {
-					Util.deleteDir( tmpDir );
-				}
-			} else {
-				System.exit( 2 );
-				// Löschen des Arbeitsverzeichnisses, falls eines angelegt
-				// wurde
-				if ( tmpDir.exists() ) {
-					Util.deleteDir( tmpDir );
-				}
-			}
-
+		} else if ( args[0].equals( "--sip" ) ) {
+			// TODO: SIP-Validierung
 		} else {
+			// Ueberprüfung des Parameters (Val-Typ): format / sip
+			// args[0] ist nicht "--format" oder "--sip" --> INVALIDE
 			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					ERROR_INCORRECTFILEENDING ) );
+					ERROR_PARAMETER_USAGE ) );
 			LOGGER.logInfo( kostval.getTextResourceService().getText(
 					MESSAGE_VALIDATION_INTERRUPTED ) );
 			System.exit( 1 );

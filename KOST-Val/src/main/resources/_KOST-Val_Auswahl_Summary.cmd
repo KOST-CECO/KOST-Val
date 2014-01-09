@@ -82,7 +82,7 @@ IF exist "%DATEIEN%\" (
     FOR /R "%DATEIEN%" %%J In (*.tif *.siard *.pdf) DO (
         SET Datei=%%J
         ECHO.
-        Drittapplikationen\jre6\bin\java.exe -jar KOST-Val\kostval.jar "%%J" "logs\%LogOrdner%" %Option%
+        java -jar KOST-Val\kostval.jar --format "logs\%LogOrdner%" "%%J" %Option%
         CALL :sub_ord "Datei" "LogOrdner"
         ECHO.
         ECHO --------------------
@@ -92,7 +92,7 @@ IF exist "%DATEIEN%\" (
 ) ELSE (
     REM It's a file
     REM --- Fals eine Datei eingeben wurde
-    Drittapplikationen\jre6\bin\java.exe -jar KOST-Val\kostval.jar "%DATEIEN%" "logs\%LogOrdner%" %Option%
+    java -jar KOST-Val\kostval.jar --format "logs\%LogOrdner%" "%DATEIEN%" %Option%
     CALL :sub_ord_d "DATEIEN" "LogOrdner"
 )
 ECHO.
