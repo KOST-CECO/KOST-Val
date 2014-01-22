@@ -219,7 +219,7 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 		}
 		if ( pdfa1 == "no" && pdfa2 == "no" ) {
 			// keine Validierung möglich
-			// die Datei endet nicht mit pdf oder pdfa -> Fehler
+			// keine PDFA-Versionen konfiguriert
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_MODULE_A )
 							+ getTextResourceService().getText( MESSAGE_DASHES )

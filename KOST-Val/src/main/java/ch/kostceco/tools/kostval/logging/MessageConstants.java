@@ -47,6 +47,7 @@ public interface MessageConstants
 	String	MESSAGE_FOOTER_PDFA								= "message.footer.pdfa";
 	String	MESSAGE_FOOTER_REPORTJHOVE						= "message.footer.reportjhove";
 	String	MESSAGE_FOOTER_REPORTPDFTRON					= "message.footer.reportpdftron";
+	String	MESSAGE_FOOTER_SUMMARY							= "message.footer.summary";
 
 	// Globale Meldungen
 	String	MESSAGE_KOSTVALIDATION							= "message.kostvalidation";

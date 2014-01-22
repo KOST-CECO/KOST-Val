@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.FileReader;
 
 import ch.kostceco.tools.kostval.service.ConfigurationService;
+import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationHsizeValidationModule;
 
@@ -136,6 +137,13 @@ public class ValidationHsizeValidationModuleImpl extends ValidationModuleImpl
 									MESSAGE_MODULE_CG_CANNOTFINDJHOVEREPORT ) );
 			return false;
 		}
-		return isValid;
+		String pathToWorkDir = getConfigurationService().getPathToWorkDir();
+		File newReport = new File( pathToWorkDir,
+				valDatei.getName() + ".jhove-log.txt" );
+		if ( newReport.exists() ) {
+			Util.deleteFile( newReport);
+		}
+
+return isValid;
 	}
 }

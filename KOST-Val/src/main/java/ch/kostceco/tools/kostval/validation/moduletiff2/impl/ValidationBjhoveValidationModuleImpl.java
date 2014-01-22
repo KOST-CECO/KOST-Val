@@ -90,6 +90,12 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 		// Informationen zum Jhove-Logverzeichnis holen
 		String pathToJhoveOutput = pathToWorkDir;
 		String pathToJhoveOutput2 = directoryOfLogfile.getAbsolutePath();
+		// Jhove schreibt ins Work-Verzeichnis, damit danach eine Kopie ins
+		// Log-Verzeichnis abgelegt werden kann, welche auch gelöscht werden
+		// kann.
+		File jhoveLog = new File( pathToJhoveOutput2, valDatei.getName()
+				+ ".jhove-log.txt" );
+
 
 		File jhoveDir = new File( pathToJhoveOutput );
 		if ( !jhoveDir.exists() ) {
@@ -135,11 +141,6 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 				e.printStackTrace();
 			}
 
-			// Jhove schreibt ins Work-Verzeichnis, damit danach eine Kopie ins
-			// Log-Verzeichnis abgelegt werden kann, welche auch gelöscht werden
-			// kann.
-			File jhoveLog = new File( pathToJhoveOutput2, valDatei.getName()
-					+ ".jhove-log.txt" );
 			InputStream inStream = null;
 			OutputStream outStream = null;
 
@@ -156,17 +157,20 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 				}
 				inStream.close();
 				outStream.close();
+				Util.deleteFile( jhoveReport);
 
 			} catch ( IOException e ) {
 				e.printStackTrace();
 			}
+			inStream.close();
+			outStream.close();
 		} catch ( Exception e ) {
 			e.printStackTrace();
 		}
 
 		try {
 			BufferedReader in = new BufferedReader(
-					new FileReader( jhoveReport ) );
+					new FileReader( jhoveLog ) );
 			String line;
 			while ( (line = in.readLine()) != null ) {
 
@@ -254,6 +258,7 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 		}
 		// bestehendes Workverzeichnis löschen
 		if ( jhoveDir.exists() ) {
+			Util.deleteFile( jhoveReport);
 			Util.deleteDir( jhoveDir );
 		}
 

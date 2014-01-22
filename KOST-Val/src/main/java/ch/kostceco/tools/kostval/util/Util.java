@@ -100,14 +100,32 @@ public class Util
 		if ( dir.isDirectory() ) {
 			String[] children = dir.list();
 			for ( int i = 0; i < children.length; i++ ) {
-				boolean success = deleteDir( new File( dir, children[i] ) );
+				boolean success = deleteFile( new File( dir, children[i] ) );
 				if ( !success ) {
-					return false;
+					//return false;
+					dir.deleteOnExit();
 				}
 			}
 		}
 		// The directory is now empty so delete it
 		return dir.delete();
+	}
+	public static boolean deleteFile( File file )
+	{
+		if ( file.isDirectory() ) {
+			String[] children = file.list();
+			for ( int i = 0; i < children.length; i++ ) {
+				boolean success = deleteFile( new File( file, children[i] ) );
+				if ( !success ) {
+					//return false;
+					file.deleteOnExit();
+				}
+			}
+		} 
+		if (!file.delete()){
+			file.deleteOnExit();
+		}
+		return file.delete();
 	}
 
 	public static Map<String, File> getFileMap( File dir,
