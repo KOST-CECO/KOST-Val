@@ -259,24 +259,54 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 							valDatei ) );
 					String line;
 					while ( (line = in.readLine()) != null ) {
-						if ( line.contains( "pdfaid:part" )
-								&& line.contains( "1" ) ) {
-							// PDFA-Version = 1
+						// häufige Partangaben:
+						// pdfaid:part>1< pdfaid:part='1' pdfaid:part="1"
+						if ( line.contains( "pdfaid:part" ) ) {
+							// pdfaid:part
+							if ( line.contains( "pdfaid:part>1<" ) ) {
+								level = pdfa1;
+								pdfaVer1 = 1;
+							} else if ( line.contains( "pdfaid:part='1'" ) ) {
+								level = pdfa1;
+								pdfaVer1 = 1;
+							} else if ( line.contains( "pdfaid:part=\"1\"" ) ) {
+								level = pdfa1;
+								pdfaVer1 = 1;
+							} else if ( line.contains( "pdfaid:part>2<" ) ) {
+								level = pdfa2;
+								pdfaVer2 = 2;
+							} else if ( line.contains( "pdfaid:part='2'" ) ) {
+								level = pdfa2;
+								pdfaVer2 = 2;
+							} else if ( line.contains( "pdfaid:part=\"2\"" ) ) {
+								level = pdfa2;
+								pdfaVer2 = 2;
+							} else if ( line.contains( "pdfaid:part" )
+									&& line.contains( "1" ) ) {
+								// PDFA-Version = 1
+								level = pdfa1;
+								pdfaVer1 = 1;
+							} else if ( line.contains( "pdfaid:part" )
+									&& line.contains( "2" ) ) {
+								// PDFA-Version = 2
+								level = pdfa2;
+								pdfaVer2 = 2;
+							}
+						}
+						if ( pdfaVer1 == 0 && pdfaVer2 == 0 ) {
+							// der Part wurde nicht gefunden --> Level 1
 							level = pdfa1;
-							pdfaVer1 = 1;
 						}
-						if ( line.contains( "pdfaid:part" )
-								&& line.contains( "2" ) ) {
-							// PDFA-Version = 2
-							level = pdfa2;
-							pdfaVer2 = 2;
-						}
-					}
-					if ( pdfaVer1 == 0 && pdfaVer2 == 0 ) {
-						// der Part wurde nicht gefunden --> Level 1
-						level = pdfa1;
 					}
 				}
+
+				// gibt den Part Nummber zurück nach welcher Validiert wird
+				getMessageService().logError(
+						getTextResourceService().getText( MESSAGE_MODULE_A )
+								+ getTextResourceService().getText(
+										MESSAGE_DASHES )
+								+ getTextResourceService().getText(
+										INFO_MODULE_A_PDFA_PART, level ) );
 
 				// Pfad zum Programm Pdftron
 				File pdftronExe = new File( pathToPdftronExe );

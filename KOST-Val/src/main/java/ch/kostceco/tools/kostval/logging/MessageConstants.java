@@ -196,6 +196,7 @@ public interface MessageConstants
 	String	ERROR_PDFTRON_MISSING							= "error.pdftron.missing";
 	String	ERROR_MODULE_A_PDFA_INIT						= "error.module.a.pdfa.init";
 	String	ERROR_MODULE_A_PDFA_NOCONFIG					= "error.module.a.pdfa.noconfig";
+	String	INFO_MODULE_A_PDFA_PART							= "info-module.a.pdfa.part";
 
 	String	ERROR_MODULE_AJ_PDFA_ERRORMESSAGE				= "error.module.aj.pdfa.errormessage";
 
