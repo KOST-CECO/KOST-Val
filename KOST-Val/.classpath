@@ -35,5 +35,13 @@
 	<classpathentry kind="lib" path="lib/jdom-2.0.0.jar"/>
 	<classpathentry kind="lib" path="lib/zip64-1.0.jar"/>
 	<classpathentry kind="lib" path="lib/JhoveApp-1.5.jar"/>
+	<classpathentry kind="lib" path="lib/droid-core-5.0.3.jar"/>
+	<classpathentry kind="lib" path="lib/droid-export-5.0.3.jar"/>
+	<classpathentry kind="lib" path="lib/droid-export-interfaces-5.0.3.jar"/>
+	<classpathentry kind="lib" path="lib/droid-help-5.0.3.jar"/>
+	<classpathentry kind="lib" path="lib/droid-interfaces-5.0.3.jar"/>
+	<classpathentry kind="lib" path="lib/droid-report-5.0.3.jar"/>
+	<classpathentry kind="lib" path="lib/droid-report-interfaces-5.0.3.jar"/>
+	<classpathentry kind="lib" path="lib/droid-results-5.0.3.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

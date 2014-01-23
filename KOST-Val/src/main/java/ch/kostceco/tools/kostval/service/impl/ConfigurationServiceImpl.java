@@ -1,12 +1,15 @@
 /*== KOST-Val ==================================================================================
-The KOST-Val application is used for validate TIFF, SIARD, and PDF/A-Files. 
-Copyright (C) 2012-2013 Claire Röthlisberger (KOST-CECO), Christian Eugster, Olivier Debenath, 
-Peter Schneider (Staatsarchiv Aargau)
+The KOST-Val application is used for validate TIFF, SIARD, PDF/A-Files and Submission 
+Information Package (SIP). 
+Copyright (C) 2012-2014 Claire Röthlisberger (KOST-CECO), Christian Eugster, Olivier Debenath, 
+Peter Schneider (Staatsarchiv Aargau), Daniel Ludin (BEDAG AG)
 -----------------------------------------------------------------------------------------------
 KOST-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
 terms of the GNU General Public License as published by the Free Software Foundation, 
 either version 3 of the License, or (at your option) any later version. 
+BEDAG AG and Daniel Ludin hereby disclaims all copyright interest in the program 
+SIP-Val v0.2.0 written by Daniel Ludin (BEDAG AG). Switzerland, 1 March 2011.
 This application is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
 without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
 See the follow GNU General Public License for more details.
@@ -19,9 +22,14 @@ package ch.kostceco.tools.kostval.service.impl;
 
 import java.io.File;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.XMLConfiguration;
+import org.apache.commons.configuration.HierarchicalConfiguration;
 
 import ch.kostceco.tools.kostval.KOSTVal;
 import ch.kostceco.tools.kostval.logging.Logger;
@@ -172,6 +180,104 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			}
 		}
 		return value;
+	}
+
+	/*--- SIP ---------------------------------------------------------------------*/
+	@SuppressWarnings("unchecked")
+	@Override
+	public Map<String, String> getAllowedPuids()
+	{
+		Map<String, String> result = new HashMap<String, String>();
+		List<HierarchicalConfiguration> fields = getConfig().configurationsAt(
+				"sip.allowedformats.allowedformat" );
+		for ( Iterator<HierarchicalConfiguration> it = fields.iterator(); it
+				.hasNext(); ) {
+			HierarchicalConfiguration sub = it.next();
+			// sub contains now all data about a single field
+			String fieldPuid = sub.getString( "puid" );
+			String fieldExt = sub.getString( "extension" );
+			result.put( fieldPuid, fieldExt );
+		}
+		return result;
+	}
+
+	@Override
+	public Integer getMaximumPathLength()
+	{
+		Object prop = getConfig().getProperty( "sip.allowedlengthofpaths" );
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			Integer intValue = new Integer( value );
+			return intValue;
+		}
+		return null;
+	}
+
+	@Override
+	public Integer getMaximumFileLength()
+	{
+		Object prop = getConfig().getProperty( "sip.allowedlengthoffiles" );
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			Integer intValue = new Integer( value );
+			return intValue;
+		}
+		return null;
+	}
+
+	@Override
+	public Integer getAllowedVersionBar1()
+	{
+		Object prop = getConfig().getProperty( "sip.allowedversionbar1" );
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			Integer intValue = new Integer( value );
+			return intValue;
+		}
+		return null;
+	}
+
+	@Override
+	public Integer getAllowedVersionBar4Ech1()
+	{
+		Object prop = getConfig().getProperty( "sip.allowedversionbar4ech1" );
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			Integer intValue = new Integer( value );
+			return intValue;
+		}
+		return null;
+	}
+
+	/**
+	 * Die Einschränkung des SIP-Namen ist konfigurierbar -> getAllowedSipName
+	 */
+	@Override
+	public String getAllowedSipName()
+	{
+		Object prop = getConfig().getProperty( "sip.allowedsipname" );
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		} else {
+			LOGGER.logError( getTextResourceService().getText(
+					MESSAGE_MODULE_Ac )
+					+ getTextResourceService().getText( MESSAGE_DASHES )
+					+ getTextResourceService().getText(
+							MESSAGE_MODULE_AC_INVALIDREGEX ) );
+		}
+		return null;
+	}
+
+	@Override
+	public String getPathToDroidSignatureFile()
+	{
+		Object prop = getConfig().getProperty( "sip.pathtodroidsignature" );
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
 	}
 
 	/*--- TIFF ---------------------------------------------------------------------*/

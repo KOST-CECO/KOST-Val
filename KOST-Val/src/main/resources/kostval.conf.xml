@@ -4,6 +4,9 @@
 	<pathtoworkdir>work_KOST-Val</pathtoworkdir>
 	
 <pdfa>
+	<!--no verwenden wenn pdfa nicht validiert werden soll, ansonsten yes-->
+	<pdfavalidation>yes</pdfavalidation>	
+	<!--Pfad zum PDF/A-Manager von PDFTron-->	
 	<pathtopdftronexe>Drittapplikationen\pdfa\pdfa.exe</pathtopdftronexe>
 	<!--Angeben welche Conformancelevel mindestens erreicht werden muss-->
 	<!--no verwenden wenn diese Version nicht erlaubt ist-->
@@ -12,11 +15,15 @@
 </pdfa>
 
 <siard>
+	<!--no verwenden wenn siard nicht validiert werden soll, ansonsten yes-->
+	<siardvalidation>yes</siardvalidation>	
 	<!--SIARD-Konfiguration-->	
 	<table-rows-limit>20000</table-rows-limit>
 </siard>
 	
 <tiff>
+	<!--no verwenden wenn tiff nicht validiert werden soll, ansonsten yes-->
+	<tiffvalidation>yes</tiffvalidation>	
 	<!--TIFF-Praezisierungen-->
 	<!--Wenn erlaubt "Text" einfuegen ansonsten "0"-->
 	<allowedcompression>
@@ -54,5 +61,24 @@
 		<allowedsize>0</allowedsize>								<!--0 / 1-->
 	</allowedother>
 </tiff>
-	
+
+<sip>
+	<allowedlengthofpaths>179</allowedlengthofpaths>
+	<allowedlengthoffiles>40</allowedlengthoffiles>
+	<allowedsipname>SIP_[1-2][0-9]{3}[0-1][0-9][0-3][0-9]_\\w{3}</allowedsipname>
+	<pathtoworkdir>work_SIP-Val</pathtoworkdir>
+	<pathtodroidsignature>KOST-Val\configuration\KaD_SignatureFile_V70.xml</pathtodroidsignature>
+	<allowedversionbar1>1</allowedversionbar1>
+	<allowedversionbar4ech1>1</allowedversionbar4ech1>
+	<allowedformats>
+		<allowedformat>	<puid>TXT</puid>	<extension>txt</extension>				<comment>Plain Text file</comment>			</allowedformat>
+		<allowedformat>	<puid>TIFF</puid>	<extension>tif, tiff</extension>		<comment>keine Versionen</comment>			</allowedformat>
+		<allowedformat>	<puid>JP2</puid>	<extension>jp2, jpg2, j2c</extension>	<comment>JPEG2000</comment>					</allowedformat>
+		<allowedformat>	<puid>PDFA1</puid>	<extension>pdf</extension>				<comment>Erkennung PDF/A-1</comment>		</allowedformat>
+		<allowedformat>	<puid>PDFA2</puid>	<extension>pdf</extension>				<comment>Erkennung PDF/A-2</comment>		</allowedformat>
+		<allowedformat>	<puid>WAVE</puid>	<extension>wav, wave</extension>		<comment>Waveform Audio</comment>			</allowedformat>
+		<allowedformat>	<puid>CSV</puid>	<extension>csv</extension>				<comment>Comma Separated Values</comment>	</allowedformat>
+		<allowedformat>	<puid>SIARD</puid>	<extension>siard</extension>			<comment>Erkennung SIARD</comment>			</allowedformat>
+	</allowedformats>
+</sip>	
 </configuration>

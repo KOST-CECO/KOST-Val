@@ -1,12 +1,15 @@
 /*== KOST-Val ==================================================================================
-The KOST-Val application is used for validate TIFF, SIARD, and PDF/A-Files. 
-Copyright (C) 2012-2013 Claire Röthlisberger (KOST-CECO), Christian Eugster, Olivier Debenath, 
-Peter Schneider (Staatsarchiv Aargau)
+The KOST-Val application is used for validate TIFF, SIARD, PDF/A-Files and Submission 
+Information Package (SIP). 
+Copyright (C) 2012-2014 Claire Röthlisberger (KOST-CECO), Christian Eugster, Olivier Debenath, 
+Peter Schneider (Staatsarchiv Aargau), Daniel Ludin (BEDAG AG)
 -----------------------------------------------------------------------------------------------
 KOST-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
 This application is free software: you can redistribute it and/or modify it under the 
 terms of the GNU General Public License as published by the Free Software Foundation, 
 either version 3 of the License, or (at your option) any later version. 
+BEDAG AG and Daniel Ludin hereby disclaims all copyright interest in the program 
+SIP-Val v0.2.0 written by Daniel Ludin (BEDAG AG). Switzerland, 1 March 2011.
 This application is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
 without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
 See the follow GNU General Public License for more details.
@@ -135,7 +138,8 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 									.toString() );
 							if ( verifyRowCount( tableXml, tableXsd ) ) {
 
-								valid = validate1( tableXml, tableXsd ) && valid;
+								valid = validate1( tableXml, tableXsd )
+										&& valid;
 							}
 						}
 					}
@@ -181,9 +185,9 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 
 	/**
 	 * Verify the number of rows in the table. If table count >=
-	 * kostval.conf.xml.table-rows-limit, the xsd minOccurs and maxOccurs
-	 * values are extracted. If those values are numbers, then the validation is
-	 * not executed, because the risk of an OutOfMemoryError is given.
+	 * kostval.conf.xml.table-rows-limit, the xsd minOccurs and maxOccurs values
+	 * are extracted. If those values are numbers, then the validation is not
+	 * executed, because the risk of an OutOfMemoryError is given.
 	 * 
 	 * @param xmlFile
 	 * @param schemaLocation
