@@ -31,6 +31,11 @@ public interface ConfigurationService extends Service
 {
 
 	/**
+	 * Gibt an ob tiff validiert werden soll yes oder no
+	 */
+	String tiffValidation();
+
+	/**
 	 * Gibt die Komprimierung aus, welche im TIFF vorkommen dürfen.
 	 * 
 	 * @return Name der Komprimierung, welche im TIFF vorkommen dürfen.
@@ -126,6 +131,11 @@ public interface ConfigurationService extends Service
 	String getPathToWorkDir();
 
 	/**
+	 * Gibt an ob siard validiert werden soll yes oder no
+	 */
+	String siardValidation();
+
+	/**
 	 * Gibt die Grenze der Anzahl Zeilen pro Tabelle zurück. Grenze der zu
 	 * validierenden XML-Tabelle im Modul H. Diese Grenze wird nur verwendet,
 	 * sollte die dazugehörende XSD-Datei die genaue Anzahl Datenzeilen der
@@ -136,6 +146,11 @@ public interface ConfigurationService extends Service
 	 * werden können.
 	 */
 	int getTableRowsLimit();
+
+	/**
+	 * Gibt an ob pdfa validiert werden soll yes oder no
+	 */
+	String pdfaValidation();
 
 	/**
 	 * Gibt an welche Konformität mindestens erreicht werden muss 1a oder 1b

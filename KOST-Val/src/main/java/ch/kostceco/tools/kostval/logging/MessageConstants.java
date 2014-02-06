@@ -53,7 +53,11 @@ public interface MessageConstants
 	String	MESSAGE_FOOTER_SIP								= "message.footer.sip";
 	String	MESSAGE_FOOTER_REPORTJHOVE						= "message.footer.reportjhove";
 	String	MESSAGE_FOOTER_REPORTPDFTRON					= "message.footer.reportpdftron";
-	String	MESSAGE_FOOTER_SUMMARY							= "message.footer.summary";
+	String	MESSAGE_FOOTER_SUMMARY_1						= "message.footer.summary.1";
+	String	MESSAGE_FOOTER_SUMMARY_PDFA						= "message.footer.summary.pdfa";
+	String	MESSAGE_FOOTER_SUMMARY_SIARD					= "message.footer.summary.siard";
+	String	MESSAGE_FOOTER_SUMMARY_TIFF						= "message.footer.summary.tiff";
+	String	MESSAGE_FOOTER_SUMMARY_2						= "message.footer.summary.2";
 
 	// Globale Meldungen
 	String	MESSAGE_KOSTVALIDATION							= "message.kostvalidation";

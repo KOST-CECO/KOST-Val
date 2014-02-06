@@ -120,6 +120,18 @@ public class ConfigurationServiceImpl implements ConfigurationService
 
 	/*--- PDF/A ---------------------------------------------------------------------*/
 	@Override
+	public String pdfaValidation()
+	{
+		Object prop = getConfig().getProperty( "pdfa.pdfavalidation" );
+
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
+	@Override
 	public String getPathToPdftronExe()
 	{
 		Object prop = getConfig().getProperty( "pdfa.pathtopdftronexe" );
@@ -156,6 +168,18 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	}
 
 	/*--- SIARD ---------------------------------------------------------------------*/
+	@Override
+	public String siardValidation()
+	{
+		Object prop = getConfig().getProperty( "siard.siardvalidation" );
+
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
 	@Override
 	public int getTableRowsLimit()
 	{
@@ -281,6 +305,18 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	}
 
 	/*--- TIFF ---------------------------------------------------------------------*/
+	@Override
+	public String tiffValidation()
+	{
+		Object prop = getConfig().getProperty( "tiff.tiffvalidation" );
+
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
 	// AllowedCompression
 	@Override
 	public String getAllowedCompression1()
