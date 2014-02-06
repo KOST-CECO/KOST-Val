@@ -112,7 +112,7 @@ public class Validation3bUnspecifiedFormatModuleImpl extends
 
 		// Die Archivdatei wurde bereits vom Schritt 1d in das
 		// Arbeitsverzeichnis entpackt
-		String pathToWorkDir = getConfigurationService().getPathToWorkDir();
+		String pathToWorkDir = getConfigurationService().getPathToWorkDir() + "\\SIP-Validierung";
 		File workDir = new File( pathToWorkDir );
 		Map<String, File> fileMap = Util.getFileMap( workDir, false );
 		Set<String> fileMapKeys = fileMap.keySet();

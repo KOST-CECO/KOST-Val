@@ -110,6 +110,10 @@ public class Util
 				}
 			}
 		}
+		dir.delete();
+		if ( !dir.delete() ) {
+			dir.deleteOnExit();
+		}
 		// The directory is now empty so delete it
 		return dir.delete();
 	}
@@ -125,9 +129,11 @@ public class Util
 					file.deleteOnExit();
 				}
 			}
-		}
-		if ( !file.delete() ) {
-			file.deleteOnExit();
+		} else {
+			file.delete();
+			if ( !file.delete() ) {
+				file.deleteOnExit();
+			}
 		}
 		return file.delete();
 	}

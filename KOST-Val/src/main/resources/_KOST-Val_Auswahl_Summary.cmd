@@ -41,6 +41,20 @@ IF "%_input%" == "" (
 
 SET DATEIEN=%_input%
 
+REM Abfrage Formatvalidierung oder SIP-Validierung
+REM VBS script mit einem Echo Msgbox statement:
+set M=%temp%\MsgBox.vbs 
+>%M% echo WScript.Quit MsgBox("Wollen Sie nur eine Formatvalidierung durchführen?",vbYesNo + vbDefaultButton1,"Format- / SIP-Validierung?") 
+%M% 
+
+if %errorlevel%==6 ( 
+   REM Format-Mode gewählt 
+   SET Typ=--format
+) else (
+   REM SIP-Mode gewählt 
+   SET Typ=--sip
+)
+
 REM Abfrage Verbose oder nicht
 REM VBS script mit einem Echo Msgbox statement:
 set M=%temp%\MsgBox.vbs 
@@ -60,12 +74,12 @@ REM Nach den Abfragen kommt die eigentliche Ausführung...
 
 ECHO.
 ECHO Aufbau KOST-Val Befehl: 
-ECHO Java-Pfad  -jar  kostval.jar-Pfad  %DATEIEN%  logs\%LogOrdner% %Option%
+ECHO java  -jar  KOST-Val\kostval.jar  %Typ%  logs\%LogOrdner%  %DATEIEN%  %Option%
 ECHO.
 ECHO ============================== S T A R T ==============================   
 ECHO.
     REM Datei oder Ordner
-    java -jar KOST-Val\kostval.jar --format "logs\%LogOrdner%" "%DATEIEN%" %Option%
+    java -jar KOST-Val\kostval.jar %Typ% "logs\%LogOrdner%" "%DATEIEN%" %Option%
 ECHO ================================ E N D ================================   
 ECHO.
 PAUSE

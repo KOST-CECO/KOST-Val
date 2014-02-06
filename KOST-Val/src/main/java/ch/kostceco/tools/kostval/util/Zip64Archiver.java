@@ -23,10 +23,13 @@ package ch.kostceco.tools.kostval.util;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 import java.util.zip.ZipException;
 
+import ch.enterag.utils.zip.EntryInputStream;
 import ch.enterag.utils.zip.EntryOutputStream;
 import ch.enterag.utils.zip.FileEntry;
 import ch.enterag.utils.zip.Zip64File;
@@ -137,6 +140,56 @@ public class Zip64Archiver
 		Zip64Archiver.visitAllFiles( inputDir, zip64File, inputDir );
 
 		zip64File.close();
+	}
+
+	public static void unzip( File inputFile, File outDir )
+			throws FileNotFoundException, ZipException, IOException
+	{
+		Zip64File zipfile = new Zip64File( inputFile );
+
+		List<FileEntry> fileEntryList = zipfile.getListFileEntries();
+		for ( FileEntry fileEntry : fileEntryList ) {
+
+			if ( !fileEntry.isDirectory() ) {
+
+				byte[] buffer = new byte[8192];
+
+				// Write the file to the original position in the fs.
+				EntryInputStream eis = zipfile.openEntryInputStream( fileEntry
+						.getName() );
+
+				File newFile = new File( outDir, fileEntry.getName() );
+				File parent = newFile.getParentFile();
+				if ( !parent.exists() ) {
+					parent.mkdirs();
+				}
+
+				FileOutputStream fos = new FileOutputStream( newFile );
+				for ( int iRead = eis.read( buffer ); iRead >= 0; iRead = eis
+						.read( buffer ) ) {
+					fos.write( buffer, 0, iRead );
+				}
+				fos.close();
+				eis.close();
+			} else {
+				// Scheibe den Ordner wenn noch nicht vorhanden an den richtigen
+				// Ort respektive in den richtigen Ordner der ggf angelegt
+				// werden muss. Dies muss gemacht werden, damit auch leere
+				// Ordner geschrieben werden.
+				EntryInputStream eis = zipfile.openEntryInputStream( fileEntry
+						.getName() );
+				File newFolder = new File( outDir, fileEntry.getName() );
+				if ( !newFolder.exists() ) {
+					File parent = newFolder.getParentFile();
+					if ( !parent.exists() ) {
+						parent.mkdirs();
+					}
+					newFolder.mkdirs();
+				}
+				eis.close();
+			}
+		}
+		zipfile.close();
 	}
 
 }

@@ -217,13 +217,11 @@
 		<property name="configurationService" ref="configurationService" />
 		<property name="messageService" ref="messageService" />
 	</bean>
-<!--	<bean id="validation3cFormatValidationModule" class="ch.kostceco.tools.kostval.validation.modulesip3.impl.Validation3cFormatValidationModuleImpl">
+	<bean id="validation3cFormatValidationModule" class="ch.kostceco.tools.kostval.validation.modulesip3.impl.Validation3cFormatValidationModuleImpl">
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="messageService" ref="messageService" />
-		<property name="kostValService" ref="kostValService" />
-		<property name="jhoveService" ref="jhoveService" />
 		<property name="configurationService" ref="configurationService" />
-	</bean> -->
+	</bean> 
 	<bean id="validation3dPeriodModule" class="ch.kostceco.tools.kostval.validation.modulesip3.impl.Validation3dPeriodModuleImpl">
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="messageService" ref="messageService" />
@@ -292,7 +290,7 @@
 		<property name="validation2dGeverFileIntegrityModule" ref="validation2dGeverFileIntegrityModule" />
 		<property name="validation3aFormatRecognitionModule" ref="validation3aFormatRecognitionModule" />
 		<property name="validation3bUnspecifiedFormatModule" ref="validation3bUnspecifiedFormatModule" />
-<!--		<property name="validation3cFormatValidationModule" ref="validation3cFormatValidationModule" /> -->
+		<property name="validation3cFormatValidationModule" ref="validation3cFormatValidationModule" />
 		<property name="validation3dPeriodModule" ref="validation3dPeriodModule" />
 	</bean>
 

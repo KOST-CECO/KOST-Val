@@ -33,7 +33,7 @@ import ch.kostceco.tools.kostval.exception.modulesip2.Validation2cSurplusFilesEx
 import ch.kostceco.tools.kostval.exception.modulesip2.Validation2dGeverFileIntegrityException;
 import ch.kostceco.tools.kostval.exception.modulesip3.Validation3aFormatRecognitionException;
 import ch.kostceco.tools.kostval.exception.modulesip3.Validation3bUnspecifiedFormatException;
-//import ch.kostceco.tools.kostval.exception.modulesip3.Validation3cFormatValidationException;
+import ch.kostceco.tools.kostval.exception.modulesip3.Validation3cFormatValidationException;
 import ch.kostceco.tools.kostval.exception.modulesip3.Validation3dPeriodException;
 import ch.kostceco.tools.kostval.logging.Logger;
 import ch.kostceco.tools.kostval.logging.MessageConstants;
@@ -50,7 +50,7 @@ import ch.kostceco.tools.kostval.validation.modulesip2.Validation2cSurplusFilesM
 import ch.kostceco.tools.kostval.validation.modulesip2.Validation2dGeverFileIntegrityModule;
 import ch.kostceco.tools.kostval.validation.modulesip3.Validation3aFormatRecognitionModule;
 import ch.kostceco.tools.kostval.validation.modulesip3.Validation3bUnspecifiedFormatModule;
-//import ch.kostceco.tools.kostval.validation.modulesip3.Validation3cFormatValidationModule;
+import ch.kostceco.tools.kostval.validation.modulesip3.Validation3cFormatValidationModule;
 import ch.kostceco.tools.kostval.validation.modulesip3.Validation3dPeriodModule;
 
 /**
@@ -92,7 +92,7 @@ public class Controllersip implements MessageConstants
 
 	private Validation3bUnspecifiedFormatModule		validation3bUnspecifiedFormatModule;
 
-//	private Validation3cFormatValidationModule		validation3cFormatValidationModule;
+	private Validation3cFormatValidationModule		validation3cFormatValidationModule;
 
 	private Validation3dPeriodModule				validation3dPeriodModule;
 
@@ -230,7 +230,7 @@ public class Controllersip implements MessageConstants
 		this.validation3bUnspecifiedFormatModule = validation3bUnspecifiedFormatModule;
 	}
 
-/*	public Validation3cFormatValidationModule getValidation3cFormatValidationModule()
+	public Validation3cFormatValidationModule getValidation3cFormatValidationModule()
 	{
 		return validation3cFormatValidationModule;
 	}
@@ -239,7 +239,7 @@ public class Controllersip implements MessageConstants
 			Validation3cFormatValidationModule validation3cFormatValidationModule )
 	{
 		this.validation3cFormatValidationModule = validation3cFormatValidationModule;
-	}*/
+	}
 
 	public Validation3dPeriodModule getValidation3dPeriodModule()
 	{
@@ -668,7 +668,7 @@ public class Controllersip implements MessageConstants
 		}
 		
 		// Validation Step 3c
-/*		try {
+		try {
 			if ( this.getValidation3cFormatValidationModule().validate(
 					valDatei, directoryOfLogfile ) ) {
 				LOGGER.logInfo( getTextResourceService().getText(
@@ -698,7 +698,7 @@ public class Controllersip implements MessageConstants
 			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
 			LOGGER.logError( e.getMessage() );
 			return false;
-		}*/
+		}
 
 		// Validation Step 3d
 		try {

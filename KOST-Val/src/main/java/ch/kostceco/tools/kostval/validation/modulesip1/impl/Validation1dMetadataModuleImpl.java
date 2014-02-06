@@ -94,7 +94,7 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 		File xsdToValidate = null;
 
 		// Arbeitsverzeichnis zum Entpacken des Archivs erstellen
-		String pathToWorkDir = getConfigurationService().getPathToWorkDir();
+		String pathToWorkDir = getConfigurationService().getPathToWorkDir() + "\\SIP-Validierung";
 		File tmpDir = new File( pathToWorkDir );
 		if ( !tmpDir.exists() ) {
 			tmpDir.mkdir();
@@ -106,15 +106,12 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 
 		try {
 			// Das metadata.xml und seine xsd's müssen in das Filesystem
-			// extrahiert werden, weil bei
-			// bei Verwendung eines Inputstreams bei der Validierung ein Problem
-			// mit
-			// den xs:include Statements besteht, die includes können so nicht
-			// aufgelöst werden.
-			// Es werden hier jedoch nicht nur diese Files extrahiert, sondern
-			// gleich die ganze Zip-Datei,
-			// weil auch spätere Validierungen (3a - 3c) nur mit den
-			// extrahierten Files arbeiten können.
+			// extrahiert werden, weil bei bei Verwendung eines Inputstreams bei
+			// der Validierung ein Problem mit den xs:include Statements
+			// besteht, die includes können so nicht aufgelöst werden. Es werden
+			// hier jedoch nicht nur diese Files extrahiert, sondern gleich die
+			// ganze Zip-Datei, weil auch spätere Validierungen (3a - 3c) nur
+			// mit den extrahierten Files arbeiten können.
 			Zip64File zipfile = new Zip64File( valDatei );
 
 			List<FileEntry> fileEntryList = zipfile.getListFileEntries();

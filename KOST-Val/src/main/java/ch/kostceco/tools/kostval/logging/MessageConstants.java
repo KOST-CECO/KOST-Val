@@ -32,6 +32,7 @@ public interface MessageConstants
 	String	ERROR_PARAMETER_USAGE							= "error.parameter.usage";
 	String	ERROR_LOGDIRECTORY_NODIRECTORY					= "error.logdirectory.nodirectory";
 	String	ERROR_LOGDIRECTORY_NOTWRITABLE					= "error.logdirectory.notwritable";
+	String	ERROR_WORKDIRECTORY_NOTDELETABLE						= "error.workdirectory.notdeletable";
 	String	ERROR_WORKDIRECTORY_NOTWRITABLE					= "error.workdirectory.notwritable";
 	String	ERROR_VALFILE_FILENOTEXISTING					= "error.valfile.filenotexisting";
 	String	ERROR_LOGGING_NOFILEAPPENDER					= "error.logging.nofileappender";
@@ -291,11 +292,9 @@ public interface MessageConstants
 	String	MESSAGE_MODULE_CA_DROID							= "message.module.ca.droid";
 
 	// Modul 3c Meldungen
-	String	MESSAGE_MODULE_CC_CANNOTWRITEJHOVEREPORT		= "message.module.cc.cannotwritejhovereport";
-	String	MESSAGE_MODULE_CC_CANNOTWRITEKOSTVALREPORT		= "message.module.cc.cannotwritekostvalreport";
 	String	MESSAGE_MODULE_CC_INVALID						= "message.module.cc.invalid";
-	String	MESSAGE_MODULE_CC_NOJHOVEVAL					= "message.module.cc.nojhoveval";
 
+	
 	// Modul 3d Meldungen
 	String	ERROR_MODULE_CD_DATUM_ENTSTEHUNG_IN_FUTURE		= "error.module.cd.datum.entstehung.in.future";
 	String	ERROR_MODULE_CD_DATUM_IN_FUTURE					= "error.module.cd.datum.in.future";

@@ -1,5 +1,5 @@
 /*== KOST-Val ==================================================================================
-The KOST-Val v1.0.7 application is used for validate TIFF, SIARD, PDF/A-Files and Submission 
+The KOST-Val v1.1.0 application is used for validate TIFF, SIARD, PDF/A-Files and Submission 
 Information Package (SIP). 
 Copyright (C) 2012-2014 Claire Röthlisberger (KOST-CECO), Christian Eugster, Olivier Debenath, 
 Peter Schneider (Staatsarchiv Aargau), Daniel Ludin (BEDAG AG)
@@ -21,6 +21,7 @@ Boston, MA 02110-1301 USA or see <http://www.gnu.org/licenses/>.
 package ch.kostceco.tools.kostval;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -85,7 +86,7 @@ public class KOSTVal implements MessageConstants
 	{
 		ApplicationContext context = new ClassPathXmlApplicationContext(
 				"classpath:config/applicationContext.xml" );
-		
+
 		// Zeitstempel Start
 		java.util.Date nowStart = new java.util.Date();
 		java.text.SimpleDateFormat sdfStart = new java.text.SimpleDateFormat(
@@ -125,7 +126,7 @@ public class KOSTVal implements MessageConstants
 			Util.deleteDir( tmpDir );
 		}
 		if ( tmpDir.exists() ) {
-			Util.deleteDir( tmpDir );
+			tmpDir.delete();
 		}
 
 		// die Anwendung muss mindestens unter Java 6 laufen
@@ -166,7 +167,7 @@ public class KOSTVal implements MessageConstants
 			Util.deleteDir( tmpDir );
 		}
 		if ( tmpDir.exists() ) {
-			Util.deleteDir( tmpDir );
+			tmpDir.delete();
 		}
 
 		if ( !tmpDir.exists() ) {
@@ -217,15 +218,6 @@ public class KOSTVal implements MessageConstants
 		File logDatei = null;
 		logDatei = valDatei;
 
-		// Ueberprüfung des Parameters (Val-Datei): existiert die Datei?
-		if ( !valDatei.exists() ) {
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					ERROR_VALFILE_FILENOTEXISTING ) );
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					MESSAGE_VALIDATION_INTERRUPTED ) );
-			System.exit( 1 );
-		}
-
 		// Konfiguration des Loggings, ein File Logger wird
 		// zusätzlich erstellt
 		LogConfigurator logConfigurator = (LogConfigurator) context
@@ -234,6 +226,15 @@ public class KOSTVal implements MessageConstants
 				directoryOfLogfile.getAbsolutePath(), logDatei.getName() );
 		LOGGER.logInfo( kostval.getTextResourceService().getText(
 				MESSAGE_KOSTVALIDATION ) );
+
+		// Ueberprüfung des Parameters (Val-Datei): existiert die Datei?
+		if ( !valDatei.exists() ) {
+			LOGGER.logInfo( kostval.getTextResourceService().getText(
+					ERROR_VALFILE_FILENOTEXISTING ) );
+			LOGGER.logInfo( kostval.getTextResourceService().getText(
+					MESSAGE_VALIDATION_INTERRUPTED ) );
+			System.exit( 1 );
+		}
 
 		if ( args[0].equals( "--format" ) ) {
 
@@ -256,8 +257,6 @@ public class KOSTVal implements MessageConstants
 				// angelegt wurde
 				if ( tmpDir.exists() ) {
 					Util.deleteDir( tmpDir );
-				} else {
-					Util.deleteDir( tmpDir );
 				}
 				if ( valFile ) {
 					// Löschen des Arbeitsverzeichnisses, falls eines
@@ -265,12 +264,17 @@ public class KOSTVal implements MessageConstants
 					if ( tmpDir.exists() ) {
 						Util.deleteDir( tmpDir );
 					}
+					// Validierte Datei valide
+					System.exit( 0 );
 				} else {
 					// Löschen des Arbeitsverzeichnisses, falls eines
 					// angelegt wurde
 					if ( tmpDir.exists() ) {
 						Util.deleteDir( tmpDir );
 					}
+					// Fehler in Validierte Datei --> invalide
+					System.exit( 2 );
+
 				}
 			} else {
 				Map<String, File> fileMap = Util.getFileMap( valDatei, false );
@@ -367,18 +371,11 @@ public class KOSTVal implements MessageConstants
 							}
 
 						} else {
-							/*
-							 * LOGGER.logInfo(
-							 * kostval.getTextResourceService().getText(
-							 * ERROR_INCORRECTFILEENDING ) ); LOGGER.logInfo(
-							 * kostval.getTextResourceService().getText(
-							 * MESSAGE_VALIDATION_INTERRUPTED ) );
-							 */
 							countNio = countNio + 1;
 						}
 					}
 				}
-				// Zeitstempel Start
+				// Zeitstempel End
 				java.util.Date nowEnd = new java.util.Date();
 				java.text.SimpleDateFormat sdfEnd = new java.text.SimpleDateFormat(
 						"dd.MM.yyyy HH.mm.ss" );
@@ -392,15 +389,23 @@ public class KOSTVal implements MessageConstants
 				 * SIARD: Valid = countSiardIo{3} Invalid = countSiardNio{4} *
 				 * TIFF: Valid = countTiffIo{5} Invalid = countTiffNio{6} * *
 				 * Sonstige Dateien: countNio{7} (ohne Formatvalidierung)
-				 * Validierungszeitraum: ausgabeStart {8} - ausgabeEnd{9}
+				 * Gesamtergebnis: totalSummary{10} Validierungszeitraum:
+				 * ausgabeStart {8} - ausgabeEnd{9}
 				 * *************************************************************
 				 */
 				countSummaryNio = pdfaCountNio + siardCountNio + tiffCountNio;
+				String totalSummary = null;
+				if ( countSummaryNio == 0 ) {
+					totalSummary = "Valid";
+				} else {
+					totalSummary = "Invalid";
+				}
 
 				LOGGER.logInfo( kostval.getTextResourceService().getText(
 						MESSAGE_FOOTER_SUMMARY, count, pdfaCountIo,
 						pdfaCountNio, siardCountIo, siardCountNio, tiffCountIo,
-						tiffCountNio, countNio, ausgabeStart, ausgabeEnd ) );
+						tiffCountNio, countNio, ausgabeStart, ausgabeEnd,
+						totalSummary ) );
 
 				if ( countNio == count ) {
 					// keine Dateien Validiert
@@ -409,19 +414,190 @@ public class KOSTVal implements MessageConstants
 					LOGGER.logInfo( kostval.getTextResourceService().getText(
 							MESSAGE_VALIDATION_INTERRUPTED ) );
 
+					// bestehendes Workverzeichnis ggf. löschen
+					if ( tmpDir.exists() ) {
+						Util.deleteDir( tmpDir );
+					}
 					System.exit( 1 );
 				} else if ( countSummaryNio == 0 ) {
+					// bestehendes Workverzeichnis ggf. löschen
+					if ( tmpDir.exists() ) {
+						Util.deleteDir( tmpDir );
+					}
 					// alle Validierten Dateien valide
 					System.exit( 0 );
 				} else {
+					// bestehendes Workverzeichnis ggf. löschen
+					if ( tmpDir.exists() ) {
+						Util.deleteDir( tmpDir );
+					}
 					// Fehler in Validierten Dateien --> invalide
 					System.exit( 2 );
 				}
 			}
 		} else if ( args[0].equals( "--sip" ) ) {
-			// TODO: SIP-Validierung
+			// TODO: neues 1d
+			boolean validFormat = false;
+			File originalSipFile = valDatei;
+			File outputFile3c = null;
+			String fileName3c = null;
+			File tmpDirZip = null;
+
+			// zuerst eine Formatvalidierung über den Content
+			// dies ist analog aufgebaut wie --format
+			Integer countNio = 0;
+			Integer countSummaryNio = 0;
+			Integer count = 0;
+			Integer pdfaCountIo = 0;
+			Integer pdfaCountNio = 0;
+			Integer siardCountIo = 0;
+			Integer siardCountNio = 0;
+			Integer tiffCountIo = 0;
+			Integer tiffCountNio = 0;
+
+			if ( !valDatei.isDirectory() ) {
+				// geziptes SIP --> in temp dir entzipen
+				tmpDirZip = new File( tmpDir.getAbsolutePath() + "\\ZIP" );
+
+				try {
+					Zip64Archiver.unzip( valDatei, tmpDirZip );
+					valDatei = tmpDirZip;
+
+				} catch ( Exception e ) {
+					LOGGER.logInfo( kostval.getTextResourceService().getText(
+							ERROR_MODULE_AA_INCORRECTFILEENDING ) );
+				}
+			}
+			Map<String, File> fileMap = Util.getFileMap( valDatei, false );
+			Set<String> fileMapKeys = fileMap.keySet();
+			for ( Iterator<String> iterator = fileMapKeys.iterator(); iterator
+					.hasNext(); ) {
+				String entryName = iterator.next();
+				File newFile = fileMap.get( entryName );
+
+				if ( !newFile.isDirectory()
+						&& newFile.getAbsolutePath().contains( "\\content\\" ) ) {
+					valDatei = newFile;
+					count = count + 1;
+
+					if ( (valDatei.getAbsolutePath().toLowerCase()
+							.endsWith( ".tiff" ) || valDatei.getAbsolutePath()
+							.toLowerCase().endsWith( ".tif" )) ) {
+
+						boolean valFile = valFile( valDatei, logFileName,
+								directoryOfLogfile, verbose );
+
+						if ( valFile ) {
+							tiffCountIo = tiffCountIo + 1;
+						} else {
+							tiffCountNio = tiffCountNio + 1;
+						}
+
+					} else if ( (valDatei.getAbsolutePath().toLowerCase()
+							.endsWith( ".siard" )) ) {
+
+						boolean valFile = valFile( valDatei, logFileName,
+								directoryOfLogfile, verbose );
+
+						if ( valFile ) {
+							siardCountIo = siardCountIo + 1;
+						} else {
+							siardCountNio = siardCountNio + 1;
+						}
+
+					} else if ( (valDatei.getName().endsWith( ".pdf" ) || valDatei
+							.getName().endsWith( ".pdfa" )) ) {
+
+						boolean valFile = valFile( valDatei, logFileName,
+								directoryOfLogfile, verbose );
+
+						if ( valFile ) {
+							pdfaCountIo = pdfaCountIo + 1;
+						} else {
+							pdfaCountNio = pdfaCountNio + 1;
+						}
+
+					} else {
+						countNio = countNio + 1;
+					}
+					tmpDirZip = new File( tmpDir.getAbsolutePath() + "\\ZIP" );
+					if ( newFile.getAbsolutePath().contains(
+							tmpDirZip.getAbsolutePath() ) ) {
+						// newFile ist eine TempZip-Datei und kann gelöscht
+						// werden
+						try {
+							String cmdDel = "cmd /c ping -n 120 127.0.0.1 > NUL && del "
+									+ newFile.getAbsolutePath();
+							Runtime.getRuntime().exec( cmdDel );
+						} catch ( IOException e ) {
+							e.printStackTrace();
+							System.out
+									.println( newFile.getAbsolutePath()
+											+ " konnte auch nicht durch neue cmd geloescht werden. Bitte manuell loeschen." );
+
+						}
+					}
+				}
+			}
+			// Zeitstempel End
+			java.util.Date nowEnd = new java.util.Date();
+			java.text.SimpleDateFormat sdfEnd = new java.text.SimpleDateFormat(
+					"dd.MM.yyyy HH.mm.ss" );
+			String ausgabeEnd = sdfEnd.format( nowEnd );
+
+			/*
+			 * *************************************************************
+			 * * Zusammenfassung der Formatvalidierung *
+			 * ===================================== * Total: = count{0} * *
+			 * PDF/A: Valid = countPdfaIo{1} Invalid = countPdfaNio{2} * SIARD:
+			 * Valid = countSiardIo{3} Invalid = countSiardNio{4} * TIFF: Valid
+			 * = countTiffIo{5} Invalid = countTiffNio{6} * * Sonstige Dateien:
+			 * countNio{7} (ohne Formatvalidierung) Gesamtergebnis:
+			 * totalSummary{10} Validierungszeitraum: ausgabeStart {8} -
+			 * ausgabeEnd{9}
+			 * *************************************************************
+			 */
+			countSummaryNio = pdfaCountNio + siardCountNio + tiffCountNio;
+			String totalSummary = null;
+			if ( countSummaryNio == 0 ) {
+				totalSummary = "Valid";
+			} else {
+				totalSummary = "Invalid";
+			}
+
+			LOGGER.logInfo( kostval.getTextResourceService().getText(
+					MESSAGE_FOOTER_SUMMARY, count, pdfaCountIo, pdfaCountNio,
+					siardCountIo, siardCountNio, tiffCountIo, tiffCountNio,
+					countNio, ausgabeStart, ausgabeEnd, totalSummary ) );
+
+			if ( countNio == count ) {
+				// keine Dateien Validiert --> keine Invalide
+				validFormat = true;
+				fileName3c = "3c_Valide.txt";
+			} else if ( countSummaryNio == 0 ) {
+				// alle Validierten Dateien valide
+				validFormat = true;
+				fileName3c = "3c_Valide.txt";
+			} else {
+				// Fehler in Validierten Dateien --> invalide
+				validFormat = false;
+				fileName3c = "3c_Invalide.txt";
+			}
+			outputFile3c = new File( directoryOfLogfile + fileName3c );
+			try {
+				outputFile3c.createNewFile();
+			} catch ( IOException e ) {
+				e.printStackTrace();
+			}
+
+			// Start Normale SIP-Validierung mit auswertung Format-Val. im 3c
+
+			valDatei = originalSipFile;
 			LOGGER.logInfo( kostval.getTextResourceService().getText(
 					MESSAGE_SIPVALIDATION, valDatei.getName() ) );
+			File targetFile = new File( pathToWorkDir + "\\SIP-Validierung",
+					valDatei.getName() + ".zip" );
+			File tmpDirSip = new File( pathToWorkDir + "\\SIP-Validierung" );
 
 			// Ueberprüfung des 1. Parameters (SIP-Datei): ist die Datei ein
 			// Verzeichnis? Wenn ja, wird im work-Verzeichnis eine Zip-Datei
@@ -433,30 +609,27 @@ public class KOSTVal implements MessageConstants
 
 			String originalSipName = valDatei.getAbsolutePath();
 			if ( valDatei.isDirectory() ) {
-				if ( tmpDir.exists() ) {
-					Util.deleteDir( tmpDir );
+				if ( tmpDirSip.exists() ) {
+					Util.deleteDir( tmpDirSip );
 				}
-				tmpDir.mkdir();
+				tmpDirSip.mkdir();
 
 				try {
-					File targetFile = new File( pathToWorkDir,
-							valDatei.getName() + ".zip" );
 					Zip64Archiver.archivate( valDatei, targetFile );
 					valDatei = targetFile;
 
 				} catch ( Exception e ) {
-					LOGGER.logInfo( kostval.getTextResourceService()
-							.getText( ERROR_CANNOTCREATEZIP ) );
+					LOGGER.logInfo( kostval.getTextResourceService().getText(
+							ERROR_CANNOTCREATEZIP ) );
 					System.exit( 1 );
 				}
 
 			} else {
-				// Löschen des Arbeitsverzeichnisses, falls eines angelegt wurde
-				File workDir = new File( pathToWorkDir );
-				if ( workDir.exists() ) {
-					Util.deleteDir( workDir );
+				// Löschen des targetFile, falls eines angelegt wurde
+				if ( targetFile.exists() ) {
+					Util.deleteDir( targetFile );
 				}
-				workDir.mkdir();
+				targetFile.mkdir();
 			}
 			Controllersip controller = (Controllersip) context
 					.getBean( "controllersip" );
@@ -472,8 +645,8 @@ public class KOSTVal implements MessageConstants
 			if ( okMandatory ) {
 				ok = controller.executeOptional( valDatei, directoryOfLogfile );
 			}
-
-			ok = (ok && okMandatory);
+			// Formatvalidierung validFormat
+			ok = (ok && okMandatory && validFormat);
 
 			LOGGER.logInfo( "" );
 			if ( ok ) {
@@ -484,25 +657,9 @@ public class KOSTVal implements MessageConstants
 						MESSAGE_TOTAL_INVALID, valDatei.getAbsolutePath() ) );
 			}
 			LOGGER.logInfo( "" );
-
-// TODO: Pfad zu Formatvalidierungsteil
-			// Ausgabe der Pfade zu den Jhove/KOST-Val & Co. Reports, falls
-			// welche
-			// generiert wurden
-/*			if ( Util.getPathToReportJHove() != null ) {
-				LOGGER.logInfo( kostval.getTextResourceService()
-						.getText( MESSAGE_FOOTER_REPORTJHOVE,
-								Util.getPathToReportJHove() ) );
-			}
-			if ( Util.getPathToReportKostVal() != null ) {
-				LOGGER.logInfo( kostval.getTextResourceService().getText(
-						MESSAGE_FOOTER_REPORTKOSTVAL,
-						Util.getPathToReportKostVal() ) );
-			}*/
-
-			LOGGER.logInfo( "" );
 			LOGGER.logInfo( kostval.getTextResourceService().getText(
 					MESSAGE_FOOTER_SIP, originalSipName ) );
+
 			LOGGER.logInfo( kostval.getTextResourceService().getText(
 					MESSAGE_FOOTER_LOG, logFileName ) );
 			LOGGER.logInfo( "" );
@@ -515,30 +672,49 @@ public class KOSTVal implements MessageConstants
 						MESSAGE_VALIDATION_INTERRUPTED ) );
 			}
 
-			// Löschen des Arbeitsverzeichnisses, falls eines angelegt wurde
-
-			File workDir = new File( pathToWorkDir );
-			if ( workDir.exists() ) {
-				Util.deleteDir( workDir );
+			// Löschen des targetFile, falls eines angelegt wurde
+			if ( targetFile.exists() ) {
+				Util.deleteDir( targetFile );
+			}
+			// bestehendes Workverzeichnis ggf. löschen
+			if ( tmpDir.exists() ) {
+				Util.deleteDir( tmpDir );
 			}
 			if ( ok ) {
+				if ( tmpDir.exists() ) {
+					try {
+						String cmdDel = "rd " + tmpDir.getAbsolutePath()
+								+ " /s /q";
+						Runtime.getRuntime().exec( cmdDel );
+					} catch ( IOException e ) {
+						System.out.println( "" );
+						System.out.println( tmpDir.getAbsolutePath() );
+						System.out
+								.println( "... konnte nicht geloescht werden. Bitte manuell loeschen." );
+						System.out
+								.println( "... n`a pas pu etre supprime. S`il vous plait supprimer manuellement." );
+						System.out.println( "" );
+					}
+				}
 				System.exit( 0 );
-				// Löschen des Arbeitsverzeichnisses, falls eines angelegt wurde
-				if ( workDir.exists() ) {
-					Util.deleteDir( workDir );
-				}
-
 			} else {
+				if ( tmpDir.exists() ) {
+					try {
+						String cmdDel = "rd " + tmpDir.getAbsolutePath()
+								+ " /s /q";
+						Runtime.getRuntime().exec( cmdDel );
+					} catch ( IOException e ) {
+						System.out.println( "" );
+						System.out.println( tmpDir.getAbsolutePath() );
+						System.out
+								.println( "... konnte nicht geloescht werden. Bitte manuell loeschen." );
+						System.out
+								.println( "... n`a pas pu etre supprime. S`il vous plait supprimer manuellement." );
+						System.out.println( "" );
+					}
+				}
 				System.exit( 2 );
-				// Löschen des Arbeitsverzeichnisses, falls eines angelegt wurde
-				if ( workDir.exists() ) {
-					Util.deleteDir( workDir );
-				}
-				if ( workDir.exists() ) {
-					Util.deleteDir( workDir );
-				}
 			}
-
 		} else {
 			// Ueberprüfung des Parameters (Val-Typ): format / sip
 			// args[0] ist nicht "--format" oder "--sip" --> INVALIDE
@@ -546,17 +722,11 @@ public class KOSTVal implements MessageConstants
 					ERROR_PARAMETER_USAGE ) );
 			LOGGER.logInfo( kostval.getTextResourceService().getText(
 					MESSAGE_VALIDATION_INTERRUPTED ) );
+			if ( tmpDir.exists() ) {
+				Util.deleteDir( tmpDir );
+				tmpDir.deleteOnExit();
+			}
 			System.exit( 1 );
-		}
-		// bestehendes Workverzeichnis ggf. löschen
-		if ( tmpDir.exists() ) {
-			tmpDir.delete();
-			tmpDir.deleteOnExit();
-		}
-		// bestehendes Workverzeichnis ggf. löschen
-		if ( tmpDir.exists() ) {
-			tmpDir.delete();
-			tmpDir.deleteOnExit();
 		}
 	}
 

@@ -91,7 +91,8 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 		 */
 
 		// Informationen zum Jhove-Logverzeichnis holen
-		String pathToJhoveOutput = pathToWorkDir;
+		String pathToJhoveOutput = System.getProperty("java.io.tmpdir");
+		//String pathToJhoveOutput = pathToWorkDir;
 		String pathToJhoveOutput2 = directoryOfLogfile.getAbsolutePath();
 		// Jhove schreibt ins Work-Verzeichnis, damit danach eine Kopie ins
 		// Log-Verzeichnis abgelegt werden kann, welche auch gelöscht werden
@@ -160,12 +161,14 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 				inStream.close();
 				outStream.close();
 				Util.deleteFile( jhoveReport );
+				Util.deleteFile( afile );
 
 			} catch ( IOException e ) {
 				e.printStackTrace();
 			}
 			inStream.close();
 			outStream.close();
+			Util.deleteFile( jhoveReport );
 		} catch ( Exception e ) {
 			e.printStackTrace();
 		}
@@ -258,10 +261,15 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 			}
 		}
 		// bestehendes Workverzeichnis löschen
-		if ( jhoveDir.exists() ) {
+		if ( jhoveReport.exists() ) {
 			Util.deleteFile( jhoveReport );
-			Util.deleteDir( jhoveDir );
 		}
+		if ( jhoveReport.exists() ) {
+			jhoveReport.delete();
+		}
+		//if ( jhoveReport.exists() ) {
+			jhoveReport.deleteOnExit();
+		//}
 
 		return isValid;
 	}

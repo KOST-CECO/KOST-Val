@@ -1,0 +1,3397 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FFSignatureFile DateCreated="2013-08-28T10:17:01" Version="70" xmlns="http://www.nationalarchives.gov.uk/pronom/SignatureFile">
+    <InternalSignatureCollection>
+        <InternalSignature ID="9" Specificity="Specific">
+            <ByteSequence Reference="BOFoffset">
+                <SubSequence MinFragLength="0" Position="1"
+                    SubSeqMaxOffset="0" SubSeqMinOffset="0">
+                    <Sequence>49492A00</Sequence>
+                    <DefaultShift>5</DefaultShift>
+                    <Shift Byte="00">1</Shift>
+                    <Shift Byte="2A">2</Shift>
+                    <Shift Byte="49">3</Shift>
+                </SubSequence>
+            </ByteSequence>
+        </InternalSignature>
+        <InternalSignature ID="10" Specificity="Specific">
+            <ByteSequence Reference="BOFoffset">
+                <SubSequence MinFragLength="0" Position="1"
+                    SubSeqMaxOffset="0" SubSeqMinOffset="0">
+                    <Sequence>4D4D002A</Sequence>
+                    <DefaultShift>5</DefaultShift>
+                    <Shift Byte="00">2</Shift>
+                    <Shift Byte="2A">1</Shift>
+                    <Shift Byte="4D">3</Shift>
+                </SubSequence>
+            </ByteSequence>
+        </InternalSignature>
+        <InternalSignature ID="34" Specificity="Specific">
+            <ByteSequence Reference="BOFoffset">
+                <SubSequence MinFragLength="0" Position="1"
+                    SubSeqMaxOffset="3" SubSeqMinOffset="0">
+                    <Sequence>3C3F786D6C2076657273696F6E3D</Sequence>
+                    <DefaultShift>15</DefaultShift>
+                    <Shift Byte="20">9</Shift>
+                    <Shift Byte="3C">14</Shift>
+                    <Shift Byte="3D">1</Shift>
+                    <Shift Byte="3F">13</Shift>
+                    <Shift Byte="65">7</Shift>
+                    <Shift Byte="69">4</Shift>
+                    <Shift Byte="6C">10</Shift>
+                    <Shift Byte="6D">11</Shift>
+                    <Shift Byte="6E">2</Shift>
+                    <Shift Byte="6F">3</Shift>
+                    <Shift Byte="72">6</Shift>
+                    <Shift Byte="73">5</Shift>
+                    <Shift Byte="76">8</Shift>
+                    <Shift Byte="78">12</Shift>
+                    <RightFragment MaxOffset="0" MinOffset="0" Position="1">22</RightFragment>
+                    <RightFragment MaxOffset="0" MinOffset="0" Position="1">27</RightFragment>
+                    <RightFragment MaxOffset="0" MinOffset="0" Position="2">312E30</RightFragment>
+                    <RightFragment MaxOffset="0" MinOffset="0" Position="3">22</RightFragment>
+                    <RightFragment MaxOffset="0" MinOffset="0" Position="3">27</RightFragment>
+                </SubSequence>
+            </ByteSequence>
+        </InternalSignature>
+        <InternalSignature ID="50" Specificity="Specific">
+            <ByteSequence Endianness="Big-endian" Reference="BOFoffset">
+                <SubSequence MinFragLength="8" Position="1"
+                    SubSeqMaxOffset="0" SubSeqMinOffset="0">
+                    <Sequence>57415645666D7420</Sequence>
+                    <DefaultShift>9</DefaultShift>
+                    <Shift Byte="20">1</Shift>
+                    <Shift Byte="41">7</Shift>
+                    <Shift Byte="45">5</Shift>
+                    <Shift Byte="56">6</Shift>
+                    <Shift Byte="57">8</Shift>
+                    <Shift Byte="66">4</Shift>
+                    <Shift Byte="6D">3</Shift>
+                    <Shift Byte="74">2</Shift>
+                    <LeftFragment MaxOffset="4" MinOffset="4" Position="1">52494646</LeftFragment>
+                </SubSequence>
+            </ByteSequence>
+        </InternalSignature>
+        <InternalSignature ID="58" Specificity="Specific">
+            <ByteSequence Reference="BOFoffset">
+                <SubSequence MinFragLength="0" Position="1"
+                    SubSeqMaxOffset="0" SubSeqMinOffset="0">
+                    <Sequence>89504E470D0A1A0A0000000D49484452</Sequence>
+                    <DefaultShift>17</DefaultShift>
+                    <Shift Byte="00">6</Shift>
+                    <Shift Byte="0A">9</Shift>
+                    <Shift Byte="0D">5</Shift>
+                    <Shift Byte="1A">10</Shift>
+                    <Shift Byte="44">2</Shift>
+                    <Shift Byte="47">13</Shift>
+                    <Shift Byte="48">3</Shift>
+                    <Shift Byte="49">4</Shift>
+                    <Shift Byte="4E">14</Shift>
+                    <Shift Byte="50">15</Shift>
+                    <Shift Byte="52">1</Shift>
+                    <Shift Byte="89">16</Shift>
+                </SubSequence>
+            </ByteSequence>
+            <ByteSequence Reference="EOFoffset">
+                <SubSequence MinFragLength="0" Position="1"
+                    SubSeqMaxOffset="0" SubSeqMinOffset="0">
+                    <Sequence>0000000049454E44AE426082</Sequence>
+                    <DefaultShift>-13</DefaultShift>
+                    <Shift Byte="00">-1</Shift>
+                    <Shift Byte="42">-10</Shift>
+                    <Shift Byte="44">-8</Shift>
+                    <Shift Byte="45">-6</Shift>
+                    <Shift Byte="49">-5</Shift>
+                    <Shift Byte="4E">-7</Shift>
+                    <Shift Byte="60">-11</Shift>
+                    <Shift Byte="82">-12</Shift>
+                    <Shift Byte="AE">-9</Shift>
+                </SubSequence>
+            </ByteSequence>
+        </InternalSignature>
+        <InternalSignature ID="66" Specificity="Specific">
+            <ByteSequence Reference="BOFoffset">
+                <SubSequence MinFragLength="0" Position="1"
+                    SubSeqMaxOffset="0" SubSeqMinOffset="0">
+                    <Sequence>FFD8FF</Sequence>
+                    <DefaultShift>4</DefaultShift>
+                    <Shift Byte="D8">2</Shift>
+                    <Shift Byte="FF">1</Shift>
+                </SubSequence>
+            </ByteSequence>
+        </InternalSignature>
+        <InternalSignature ID="72" Specificity="Specific">
+            <ByteSequence Reference="BOFoffset">
+                <SubSequence MinFragLength="0" Position="1"
+                    SubSeqMaxOffset="0" SubSeqMinOffset="0">
+                    <Sequence>09000400</Sequence>
+                    <DefaultShift>5</DefaultShift>
+                    <Shift Byte="00">1</Shift>
+                    <Shift Byte="04">2</Shift>
+                    <Shift Byte="09">4</Shift>
+                    <RightFragment MaxOffset="2" MinOffset="2" Position="1">1000</RightFragment>
+                </SubSequence>
+            </ByteSequence>
+        </InternalSignature>
+        <InternalSignature ID="73" Specificity="Specific">
+            <ByteSequence Reference="BOFoffset">
+                <SubSequence MinFragLength="0" Position="1"
+                    SubSeqMaxOffset="0" SubSeqMinOffset="0">
+                    <Sequence>09020600</Sequence>
+                    <DefaultShift>5</DefaultShift>
+                    <Shift Byte="00">1</Shift>
+                    <Shift Byte="02">3</Shift>
+                    <Shift Byte="06">2</Shift>
+                    <Shift Byte="09">4</Shift>
+                    <RightFragment MaxOffset="2" MinOffset="2" Position="1">1000</RightFragment>
+                </SubSequence>
+            </ByteSequence>
+        </InternalSignature>
+        <InternalSignature ID="74" Specificity="Specific">
+            <ByteSequence Reference="BOFoffset">
+                <SubSequence MinFragLength="0" Position="1"
+                    SubSeqMaxOffset="0" SubSeqMinOffset="0">
+                    <Sequence>09040600</Sequence>
+                    <DefaultShift>5</DefaultShift>
+                    <Shift Byte="00">1</Shift>
+                    <Shift Byte="04">3</Shift>
+                    <Shift Byte="06">2</Shift>
+                    <Shift Byte="09">4</Shift>
+                    <RightFragment MaxOffset="2" MinOffset="2" Position="1">1000</RightFragment>
+                </SubSequence>
+            </ByteSequence>
+        </InternalSignature>
+        <InternalSignature ID="76" Specificity="Specific">
+            <ByteSequence Reference="BOFoffset">
+                <SubSequence MinFragLength="4" Position="1"
+                    SubSeqMaxOffset="8704" SubSeqMinOffset="512">
+                    <Sequence>00050500</Sequence>
+                    <DefaultShift>5</DefaultShift>
+                    <Shift Byte="00">1</Shift>
+                    <Shift Byte="05">2</Shift>
+                    <LeftFragment MaxOffset="2" MinOffset="2" Position="1">0908</LeftFragment>
+                </SubSequence>
+            </ByteSequence>
+        </InternalSignature>
+        <InternalSignature ID="78" Specificity="Generic">
+            <ByteSequence Reference="BOFoffset">
+                <SubSequence MinFragLength="4" Position="1"
+                    SubSeqMaxOffset="512" SubSeqMinOffset="512">
+                    <Sequence>00060500</Sequence>
+                    <DefaultShift>5</DefaultShift>
+                    <Shift Byte="00">1</Shift>
+                    <Shift Byte="05">2</Shift>
+                    <Shift Byte="06">3</Shift>
+                    <LeftFragment MaxOffset="2" MinOffset="2" Position="1">0908</LeftFragment>
+                </SubSequence>
+            </ByteSequence>
+        </InternalSignature>
+        <InternalSignature ID="123" Specificity="Specific">
+            <ByteSequence Reference="BOFoffset">
+                <SubSequence MinFragLength="0" Position="1"
+                    SubSeqMaxOffset="0" SubSeqMinOffset="0">
+                    <Sequence>25504446</Sequence>
+                    <DefaultShift>5</DefaultShift>
+                    <Shift Byte="25">4</Shift>
+                    <Shift Byte="44">2</Shift>
+                    <Shift Byte="46">1</Shift>
+                    <Shift Byte="50">3</Shift>
+                </SubSequence>
+            </ByteSequence>
+        </InternalSignature>
+        <InternalSignature ID="202" Specificity="Specific">
+            <ByteSequence Endianness="Little-endian" Reference="BOFoffset">
+                <SubSequence MinFragLength="30" Position="1"
+                    SubSeqMaxOffset="0" SubSeqMinOffset="0">
+                    <Sequence>6D696D65747970656170706C69636174696F6E2F766E642E6F617369732E6F70656E646F63756D656E742E</Sequence>
+                    <DefaultShift>44</DefaultShift>
+                    <Shift Byte="2E">1</Shift>
+                    <Shift Byte="2F">24</Shift>
+                    <Shift Byte="61">18</Shift>
+                    <Shift Byte="63">7</Shift>
+                    <Shift Byte="64">9</Shift>
+                    <Shift Byte="65">4</Shift>
+                    <Shift Byte="69">16</Shift>
+                    <Shift Byte="6C">32</Shift>
+                    <Shift Byte="6D">5</Shift>
+                    <Shift Byte="6E">3</Shift>
+                    <Shift Byte="6F">8</Shift>
+                    <Shift Byte="70">12</Shift>
+                    <Shift Byte="73">15</Shift>
+                    <Shift Byte="74">2</Shift>
+                    <Shift Byte="75">6</Shift>
+                    <Shift Byte="76">23</Shift>
+                    <Shift Byte="79">38</Shift>
+                    <LeftFragment MaxOffset="26" MinOffset="26" Position="1">504B0304</LeftFragment>
+                </SubSequence>
+                <SubSequence MinFragLength="0" Position="2" SubSeqMinOffset="0">
+                    <Sequence>6F66666963653A76657273696F6E3D22312E30</Sequence>
+                    <DefaultShift>20</DefaultShift>
+                    <Shift Byte="22">4</Shift>
+                    <Shift Byte="2E">2</Shift>
+                    <Shift Byte="30">1</Shift>
+                    <Shift Byte="31">3</Shift>
+                    <Shift Byte="3A">13</Shift>
+                    <Shift Byte="3D">5</Shift>
+                    <Shift Byte="63">15</Shift>
+                    <Shift Byte="65">11</Shift>
+                    <Shift Byte="66">17</Shift>
+                    <Shift Byte="69">8</Shift>
+                    <Shift Byte="6E">6</Shift>
+                    <Shift Byte="6F">7</Shift>
+                    <Shift Byte="72">10</Shift>
+                    <Shift Byte="73">9</Shift>
+                    <Shift Byte="76">12</Shift>
+                </SubSequence>
+            </ByteSequence>
+        </InternalSignature>
+        <InternalSignature ID="204" Specificity="Specific">
+            <ByteSequence Endianness="Little-endian" Reference="BOFoffset">
+                <SubSequence MinFragLength="30" Position="1"
+                    SubSeqMaxOffset="0" SubSeqMinOffset="0">
+                    <Sequence>6D696D65747970656170706C69636174696F6E2F766E642E6F617369732E6F70656E646F63756D656E742E7370726561647368656574</Sequence>
+                    <DefaultShift>55</DefaultShift>
+                    <Shift Byte="2E">12</Shift>
+                    <Shift Byte="2F">35</Shift>
+                    <Shift Byte="61">7</Shift>
+                    <Shift Byte="63">18</Shift>
+                    <Shift Byte="64">6</Shift>
+                    <Shift Byte="65">2</Shift>
+                    <Shift Byte="68">4</Shift>
+                    <Shift Byte="69">27</Shift>
+                    <Shift Byte="6C">43</Shift>
+                    <Shift Byte="6D">16</Shift>
+                    <Shift Byte="6E">14</Shift>
+                    <Shift Byte="6F">19</Shift>
+                    <Shift Byte="70">10</Shift>
+                    <Shift Byte="72">9</Shift>
+                    <Shift Byte="73">5</Shift>
+                    <Shift Byte="74">1</Shift>
+                    <Shift Byte="75">17</Shift>
+                    <Shift Byte="76">34</Shift>
+                    <Shift Byte="79">49</Shift>
+                    <LeftFragment MaxOffset="26" MinOffset="26" Position="1">504B0304</LeftFragment>
+                </SubSequence>
+            </ByteSequence>
+        </InternalSignature>
+        <InternalSignature ID="205" Specificity="Specific">
+            <ByteSequence Endianness="Little-endian" Reference="BOFoffset">
+                <SubSequence MinFragLength="30" Position="1"
+                    SubSeqMaxOffset="0" SubSeqMinOffset="0">
+                    <Sequence>6D696D65747970656170706C69636174696F6E2F766E642E6F617369732E6F70656E646F63756D656E742E70726573656E746174696F6E</Sequence>
+                    <DefaultShift>56</DefaultShift>
+                    <Shift Byte="2E">13</Shift>
+                    <Shift Byte="2F">36</Shift>
+                    <Shift Byte="61">5</Shift>
+                    <Shift Byte="63">19</Shift>
+                    <Shift Byte="64">21</Shift>
+                    <Shift Byte="65">8</Shift>
+                    <Shift Byte="69">3</Shift>
+                    <Shift Byte="6C">44</Shift>
+                    <Shift Byte="6D">17</Shift>
+                    <Shift Byte="6E">1</Shift>
+                    <Shift Byte="6F">2</Shift>
+                    <Shift Byte="70">12</Shift>
+                    <Shift Byte="72">11</Shift>
+                    <Shift Byte="73">9</Shift>
+                    <Shift Byte="74">4</Shift>
+                    <Shift Byte="75">18</Shift>
+                    <Shift Byte="76">35</Shift>
+                    <Shift Byte="79">50</Shift>
+                    <LeftFragment MaxOffset="26" MinOffset="26" Position="1">504B0304</LeftFragment>
+                </SubSequence>
+            </ByteSequence>
+        </InternalSignature>
+        <InternalSignature ID="251" Specificity="Specific">
+            <ByteSequence Endianness="Big-endian" Reference="BOFoffset">
+                <SubSequence MinFragLength="0" Position="1"
+                    SubSeqMaxOffset="0" SubSeqMinOffset="0">
+                    <Sequence>0000000C6A5020200D0A870A</Sequence>
+                    <DefaultShift>13</DefaultShift>
+                    <Shift Byte="00">10</Shift>
+                    <Shift Byte="0A">1</Shift>
+                    <Shift Byte="0C">9</Shift>
+                    <Shift Byte="0D">4</Shift>
+                    <Shift Byte="20">5</Shift>
+                    <Shift Byte="50">7</Shift>
+                    <Shift Byte="6A">8</Shift>
+                    <Shift Byte="87">2</Shift>
+                    <RightFragment MaxOffset="4" MinOffset="4" Position="1">667479706A7032</RightFragment>
+                </SubSequence>
+            </ByteSequence>
+        </InternalSignature>
+        <InternalSignature ID="264" Specificity="Specific">
+            <ByteSequence Reference="BOFoffset">
+                <SubSequence MinFragLength="0" Position="1"
+                    SubSeqMaxOffset="0" SubSeqMinOffset="0">
+                    <Sequence>25504446</Sequence>
+                    <DefaultShift>5</DefaultShift>
+                    <Shift Byte="25">4</Shift>
+                    <Shift Byte="44">2</Shift>
+                    <Shift Byte="46">1</Shift>
+                    <Shift Byte="50">3</Shift>
+                </SubSequence>
+            </ByteSequence>
+            <ByteSequence>
+                <SubSequence MinFragLength="14" Position="1" SubSeqMinOffset="0">
+                    <Sequence>687474703A2F2F7777772E6169696D2E6F72672F706466612F6E732F6964</Sequence>
+                    <DefaultShift>31</DefaultShift>
+                    <Shift Byte="2E">15</Shift>
+                    <Shift Byte="2F">3</Shift>
+                    <Shift Byte="3A">26</Shift>
+                    <Shift Byte="61">7</Shift>
+                    <Shift Byte="64">1</Shift>
+                    <Shift Byte="66">8</Shift>
+                    <Shift Byte="67">12</Shift>
+                    <Shift Byte="68">30</Shift>
+                    <Shift Byte="69">2</Shift>
+                    <Shift Byte="6D">16</Shift>
+                    <Shift Byte="6E">5</Shift>
+                    <Shift Byte="6F">14</Shift>
+                    <Shift Byte="70">10</Shift>
+                    <Shift Byte="72">13</Shift>
+                    <Shift Byte="73">4</Shift>
+                    <Shift Byte="74">28</Shift>
+                    <Shift Byte="77">21</Shift>
+                    <LeftFragment MaxOffset="0" MinOffset="0" Position="1">22</LeftFragment>
+                    <LeftFragment MaxOffset="0" MinOffset="0" Position="1">27</LeftFragment>
+                    <LeftFragment MaxOffset="0" MinOffset="0" Position="2">786D6C6E733A7064666169643D</LeftFragment>
+                    <RightFragment MaxOffset="80" MinOffset="0" Position="1">7064666169643A70617274</RightFragment>
+                    <RightFragment MaxOffset="0" MinOffset="0" Position="2">3D22</RightFragment>
+                    <RightFragment MaxOffset="0" MinOffset="0" Position="2">3D27</RightFragment>
+                    <RightFragment MaxOffset="0" MinOffset="0" Position="2">3E</RightFragment>
+                    <RightFragment MaxOffset="0" MinOffset="0" Position="3">31</RightFragment>
+                    <RightFragment MaxOffset="0" MinOffset="0" Position="4">22</RightFragment>
+                    <RightFragment MaxOffset="0" MinOffset="0" Position="4">27</RightFragment>
+                    <RightFragment MaxOffset="0" MinOffset="0" Position="4">3C2F7064666169643A706172743E</RightFragment>
+                </SubSequence>
+            </ByteSequence>
+        </InternalSignature>
+        <InternalSignature ID="266" Specificity="Specific">
+            <ByteSequence Endianness="Little-endian" Reference="EOFoffset">
+                <SubSequence MinFragLength="0" Position="1"
+                    SubSeqMaxOffset="1426" SubSeqMinOffset="36">
+                    <Sequence>000000</Sequence>
+                    <DefaultShift>-4</DefaultShift>
+                    <Shift Byte="00">-1</Shift>
+                    <LeftFragment MaxOffset="500" MinOffset="7" Position="1">FFFB[10:EB]</LeftFragment>
+                    <LeftFragment MaxOffset="1439" MinOffset="46" Position="2">FFFB[10:EB]</LeftFragment>
+                    <LeftFragment MaxOffset="1439" MinOffset="46" Position="3">FFFB[10:EB]</LeftFragment>
+                    <LeftFragment MaxOffset="1439" MinOffset="46" Position="4">FFFB[10:EB]</LeftFragment>
+                    <LeftFragment MaxOffset="1439" MinOffset="46" Position="5">FFFB[10:EB]</LeftFragment>
+                </SubSequence>
+            </ByteSequence>
+            <ByteSequence Endianness="Little-endian" Reference="BOFoffset">
+                <SubSequence MinFragLength="0" Position="1"
+                    SubSeqMaxOffset="0" SubSeqMinOffset="0">
+                    <Sequence>494433</Sequence>
+                    <DefaultShift>4</DefaultShift>
+                    <Shift Byte="33">1</Shift>
+                    <Shift Byte="44">2</Shift>
+                    <Shift Byte="49">3</Shift>
+                </SubSequence>
+            </ByteSequence>
+        </InternalSignature>
+        <InternalSignature ID="267" Specificity="Specific">
+            <ByteSequence Endianness="Little-endian" Reference="EOFoffset">
+                <SubSequence MinFragLength="0" Position="1"
+                    SubSeqMaxOffset="1426" SubSeqMinOffset="36">
+                    <Sequence>000000</Sequence>
+                    <DefaultShift>-4</DefaultShift>
+                    <Shift Byte="00">-1</Shift>
+                    <LeftFragment MaxOffset="500" MinOffset="7" Position="1">FFF3[10:EB]</LeftFragment>
+                    <LeftFragment MaxOffset="1439" MinOffset="46" Position="2">FFF3[10:EB]</LeftFragment>
+                    <LeftFragment MaxOffset="1439" MinOffset="46" Position="3">FFF3[10:EB]</LeftFragment>
+                    <LeftFragment MaxOffset="1439" MinOffset="46" Position="4">FFF3[10:EB]</LeftFragment>
+                    <LeftFragment MaxOffset="1439" MinOffset="46" Position="5">FFF3[10:EB]</LeftFragment>
+                </SubSequence>
+            </ByteSequence>
+            <ByteSequence Endianness="Little-endian" Reference="BOFoffset">
+                <SubSequence MinFragLength="0" Position="1"
+                    SubSeqMaxOffset="0" SubSeqMinOffset="0">
+                    <Sequence>494433</Sequence>
+                    <DefaultShift>4</DefaultShift>
+                    <Shift Byte="33">1</Shift>
+                    <Shift Byte="44">2</Shift>
+                    <Shift Byte="49">3</Shift>
+                </SubSequence>
+            </ByteSequence>
+        </InternalSignature>
+        <InternalSignature ID="268" Specificity="Specific">
+            <ByteSequence Endianness="Little-endian" Reference="EOFoffset">
+                <SubSequence MinFragLength="0" Position="1"
+                    SubSeqMaxOffset="1426" SubSeqMinOffset="36">
+                    <Sequence>000000</Sequence>
+                    <DefaultShift>-4</DefaultShift>
+                    <Shift Byte="00">-1</Shift>
+                    <LeftFragment MaxOffset="500" MinOffset="7" Position="1">FFFA[10:EB]</LeftFragment>
+                    <LeftFragment MaxOffset="1439" MinOffset="46" Position="2">FFFA[10:EB]</LeftFragment>
+                    <LeftFragment MaxOffset="1439" MinOffset="46" Position="3">FFFA[10:EB]</LeftFragment>
+                    <LeftFragment MaxOffset="1439" MinOffset="46" Position="4">FFFA[10:EB]</LeftFragment>
+                    <LeftFragment MaxOffset="1439" MinOffset="46" Position="5">FFFA[10:EB]</LeftFragment>
+                </SubSequence>
+            </ByteSequence>
+            <ByteSequence Endianness="Little-endian" Reference="BOFoffset">
+                <SubSequence MinFragLength="0" Position="1"
+                    SubSeqMaxOffset="0" SubSeqMinOffset="0">
+                    <Sequence>494433</Sequence>
+                    <DefaultShift>4</DefaultShift>
+                    <Shift Byte="33">1</Shift>
+                    <Shift Byte="44">2</Shift>
+                    <Shift Byte="49">3</Shift>
+                </SubSequence>
+            </ByteSequence>
+        </InternalSignature>
+        <InternalSignature ID="269" Specificity="Specific">
+            <ByteSequence Endianness="Little-endian" Reference="EOFoffset">
+                <SubSequence MinFragLength="0" Position="1"
+                    SubSeqMaxOffset="1426" SubSeqMinOffset="36">
+                    <Sequence>000000</Sequence>
+                    <DefaultShift>-4</DefaultShift>
+                    <Shift Byte="00">-1</Shift>
+                    <LeftFragment MaxOffset="500" MinOffset="7" Position="1">FFF2[10:EB]</LeftFragment>
+                    <LeftFragment MaxOffset="1439" MinOffset="46" Position="2">FFF2[10:EB]</LeftFragment>
+                    <LeftFragment MaxOffset="1439" MinOffset="46" Position="3">FFF2[10:EB]</LeftFragment>
+                    <LeftFragment MaxOffset="1439" MinOffset="46" Position="4">FFF2[10:EB]</LeftFragment>
+                    <LeftFragment MaxOffset="1439" MinOffset="46" Position="5">FFF2[10:EB]</LeftFragment>
+                </SubSequence>
+            </ByteSequence>
+            <ByteSequence Endianness="Little-endian" Reference="BOFoffset">
+                <SubSequence MinFragLength="0" Position="1"
+                    SubSeqMaxOffset="0" SubSeqMinOffset="0">
+                    <Sequence>494433</Sequence>
+                    <DefaultShift>4</DefaultShift>
+                    <Shift Byte="33">1</Shift>
+                    <Shift Byte="44">2</Shift>
+                    <Shift Byte="49">3</Shift>
+                </SubSequence>
+            </ByteSequence>
+        </InternalSignature>
+        <InternalSignature ID="278" Specificity="Specific">
+            <ByteSequence Endianness="Little-endian" Reference="BOFoffset">
+                <SubSequence MinFragLength="0" Position="1"
+                    SubSeqMaxOffset="4" SubSeqMinOffset="4">
+                    <Sequence>66747970</Sequence>
+                    <DefaultShift>5</DefaultShift>
+                    <Shift Byte="66">4</Shift>
+                    <Shift Byte="70">1</Shift>
+                    <Shift Byte="74">3</Shift>
+                    <Shift Byte="79">2</Shift>
+                    <RightFragment MaxOffset="64" MinOffset="0" Position="1">69736F32</RightFragment>
+                    <RightFragment MaxOffset="64" MinOffset="0" Position="1">69736F6D</RightFragment>
+                    <RightFragment MaxOffset="64" MinOffset="0" Position="1">6D703431</RightFragment>
+                    <RightFragment MaxOffset="64" MinOffset="0" Position="1">6D703432</RightFragment>
+                    <RightFragment MaxOffset="64" MinOffset="4" Position="2">636D6F76</RightFragment>
+                    <RightFragment MaxOffset="64" MinOffset="4" Position="2">6D646174</RightFragment>
+                    <RightFragment MaxOffset="64" MinOffset="4" Position="2">6D6F6F76</RightFragment>
+                </SubSequence>
+            </ByteSequence>
+        </InternalSignature>
+        <InternalSignature ID="279" Specificity="Specific">
+            <ByteSequence Endianness="Little-endian" Reference="BOFoffset">
+                <SubSequence MinFragLength="0" Position="1"
+                    SubSeqMaxOffset="0" SubSeqMinOffset="0">
+                    <Sequence>FFFB</Sequence>
+                    <DefaultShift>3</DefaultShift>
+                    <Shift Byte="FB">1</Shift>
+                    <Shift Byte="FF">2</Shift>
+                    <RightFragment MaxOffset="0" MinOffset="0" Position="1">[10:EB]</RightFragment>
+                    <RightFragment MaxOffset="1439" MinOffset="46" Position="2">FFFB[10:EB]</RightFragment>
+                    <RightFragment MaxOffset="1439" MinOffset="46" Position="3">FFFB[10:EB]</RightFragment>
+                    <RightFragment MaxOffset="1439" MinOffset="46" Position="4">FFFB[10:EB]</RightFragment>
+                    <RightFragment MaxOffset="1439" MinOffset="46" Position="5">FFFB[10:EB]</RightFragment>
+                    <RightFragment MaxOffset="1439" MinOffset="46" Position="6">FFFB[10:EB]</RightFragment>
+                    <RightFragment MaxOffset="1439" MinOffset="46" Position="7">FFFB[10:EB]</RightFragment>
+                    <RightFragment MaxOffset="1439" MinOffset="46" Position="8">FFFB[10:EB]</RightFragment>
+                </SubSequence>
+            </ByteSequence>
+        </InternalSignature>
+        <InternalSignature ID="280" Specificity="Specific">
+            <ByteSequence Endianness="Little-endian" Reference="BOFoffset">
+                <SubSequence MinFragLength="0" Position="1"
+                    SubSeqMaxOffset="0" SubSeqMinOffset="0">
+                    <Sequence>FFF3</Sequence>
+                    <DefaultShift>3</DefaultShift>
+                    <Shift Byte="F3">1</Shift>
+                    <Shift Byte="FF">2</Shift>
+                    <RightFragment MaxOffset="0" MinOffset="0" Position="1">[10:EB]</RightFragment>
+                    <RightFragment MaxOffset="1439" MinOffset="46" Position="2">FFF3[10:EB]</RightFragment>
+                    <RightFragment MaxOffset="1439" MinOffset="46" Position="3">FFF3[10:EB]</RightFragment>
+                    <RightFragment MaxOffset="1439" MinOffset="46" Position="4">FFF3[10:EB]</RightFragment>
+                    <RightFragment MaxOffset="1439" MinOffset="46" Position="5">FFF3[10:EB]</RightFragment>
+                    <RightFragment MaxOffset="1439" MinOffset="46" Position="6">FFF3[10:EB]</RightFragment>
+                    <RightFragment MaxOffset="1439" MinOffset="46" Position="7">FFF3[10:EB]</RightFragment>
+                    <RightFragment MaxOffset="1439" MinOffset="46" Position="8">FFF3[10:EB]</RightFragment>
+                </SubSequence>
+            </ByteSequence>
+        </InternalSignature>
+        <InternalSignature ID="281" Specificity="Specific">
+            <ByteSequence Endianness="Little-endian" Reference="BOFoffset">
+                <SubSequence MinFragLength="0" Position="1"
+                    SubSeqMaxOffset="0" SubSeqMinOffset="0">
+                    <Sequence>FFFA</Sequence>
+                    <DefaultShift>3</DefaultShift>
+                    <Shift Byte="FA">1</Shift>
+                    <Shift Byte="FF">2</Shift>
+                    <RightFragment MaxOffset="0" MinOffset="0" Position="1">[10:EB]</RightFragment>
+                    <RightFragment MaxOffset="1439" MinOffset="46" Position="2">FFFA[10:EB]</RightFragment>
+                    <RightFragment MaxOffset="1439" MinOffset="46" Position="3">FFFA[10:EB]</RightFragment>
+                    <RightFragment MaxOffset="1439" MinOffset="46" Position="4">FFFA[10:EB]</RightFragment>
+                    <RightFragment MaxOffset="1439" MinOffset="46" Position="5">FFFA[10:EB]</RightFragment>
+                    <RightFragment MaxOffset="1439" MinOffset="46" Position="6">FFFA[10:EB]</RightFragment>
+                    <RightFragment MaxOffset="1439" MinOffset="46" Position="7">FFFA[10:EB]</RightFragment>
+                    <RightFragment MaxOffset="1439" MinOffset="46" Position="8">FFFA[10:EB]</RightFragment>
+                </SubSequence>
+            </ByteSequence>
+        </InternalSignature>
+        <InternalSignature ID="282" Specificity="Specific">
+            <ByteSequence Endianness="Little-endian" Reference="BOFoffset">
+                <SubSequence MinFragLength="0" Position="1"
+                    SubSeqMaxOffset="0" SubSeqMinOffset="0">
+                    <Sequence>FFF2</Sequence>
+                    <DefaultShift>3</DefaultShift>
+                    <Shift Byte="F2">1</Shift>
+                    <Shift Byte="FF">2</Shift>
+                    <RightFragment MaxOffset="0" MinOffset="0" Position="1">[10:EB]</RightFragment>
+                    <RightFragment MaxOffset="1439" MinOffset="46" Position="2">FFF2[10:EB]</RightFragment>
+                    <RightFragment MaxOffset="1439" MinOffset="46" Position="3">FFF2[10:EB]</RightFragment>
+                    <RightFragment MaxOffset="1439" MinOffset="46" Position="4">FFF2[10:EB]</RightFragment>
+                    <RightFragment MaxOffset="1439" MinOffset="46" Position="5">FFF2[10:EB]</RightFragment>
+                    <RightFragment MaxOffset="1439" MinOffset="46" Position="6">FFF2[10:EB]</RightFragment>
+                    <RightFragment MaxOffset="1439" MinOffset="46" Position="7">FFF2[10:EB]</RightFragment>
+                    <RightFragment MaxOffset="1439" MinOffset="46" Position="8">FFF2[10:EB]</RightFragment>
+                </SubSequence>
+            </ByteSequence>
+        </InternalSignature>
+        <InternalSignature ID="292" Specificity="Specific">
+            <ByteSequence Reference="BOFoffset">
+                <SubSequence MinFragLength="0" Position="1"
+                    SubSeqMaxOffset="0" SubSeqMinOffset="0">
+                    <Sequence>504B0304</Sequence>
+                    <DefaultShift>5</DefaultShift>
+                    <Shift Byte="03">2</Shift>
+                    <Shift Byte="04">1</Shift>
+                    <Shift Byte="4B">3</Shift>
+                    <Shift Byte="50">4</Shift>
+                </SubSequence>
+            </ByteSequence>
+            <ByteSequence Reference="EOFoffset">
+                <SubSequence MinFragLength="0" Position="1"
+                    SubSeqMaxOffset="65531" SubSeqMinOffset="18">
+                    <Sequence>504B0506</Sequence>
+                    <DefaultShift>-5</DefaultShift>
+                    <Shift Byte="05">-3</Shift>
+                    <Shift Byte="06">-4</Shift>
+                    <Shift Byte="4B">-2</Shift>
+                    <Shift Byte="50">-1</Shift>
+                    <LeftFragment MaxOffset="65531" MinOffset="43" Position="1">504B01</LeftFragment>
+                </SubSequence>
+            </ByteSequence>
+            <ByteSequence>
+                <SubSequence MinFragLength="0" Position="1" SubSeqMinOffset="0">
+                    <Sequence>786D6C6E733D22687474703A2F2F7777772E6261722E61646D696E2E63682F786D6C6E732F73696172642F312E302F6D657461646174612E78736422</Sequence>
+                    <DefaultShift>61</DefaultShift>
+                    <Shift Byte="22">1</Shift>
+                    <Shift Byte="2E">5</Shift>
+                    <Shift Byte="2F">14</Shift>
+                    <Shift Byte="30">15</Shift>
+                    <Shift Byte="31">17</Shift>
+                    <Shift Byte="3A">49</Shift>
+                    <Shift Byte="3D">55</Shift>
+                    <Shift Byte="61">6</Shift>
+                    <Shift Byte="62">42</Shift>
+                    <Shift Byte="63">32</Shift>
+                    <Shift Byte="64">2</Shift>
+                    <Shift Byte="65">12</Shift>
+                    <Shift Byte="68">31</Shift>
+                    <Shift Byte="69">22</Shift>
+                    <Shift Byte="6C">27</Shift>
+                    <Shift Byte="6D">13</Shift>
+                    <Shift Byte="6E">26</Shift>
+                    <Shift Byte="70">50</Shift>
+                    <Shift Byte="72">20</Shift>
+                    <Shift Byte="73">3</Shift>
+                    <Shift Byte="74">7</Shift>
+                    <Shift Byte="77">44</Shift>
+                    <Shift Byte="78">4</Shift>
+                </SubSequence>
+            </ByteSequence>
+        </InternalSignature>
+        <InternalSignature ID="307" Specificity="Specific">
+            <ByteSequence Reference="BOFoffset">
+                <SubSequence MinFragLength="30" Position="1"
+                    SubSeqMaxOffset="0" SubSeqMinOffset="0">
+                    <Sequence>6D696D65747970656170706C69636174696F6E2F766E642E6F617369732E6F70656E646F63756D656E742E74657874</Sequence>
+                    <DefaultShift>48</DefaultShift>
+                    <Shift Byte="2E">5</Shift>
+                    <Shift Byte="2F">28</Shift>
+                    <Shift Byte="61">22</Shift>
+                    <Shift Byte="63">11</Shift>
+                    <Shift Byte="64">13</Shift>
+                    <Shift Byte="65">3</Shift>
+                    <Shift Byte="69">20</Shift>
+                    <Shift Byte="6C">36</Shift>
+                    <Shift Byte="6D">9</Shift>
+                    <Shift Byte="6E">7</Shift>
+                    <Shift Byte="6F">12</Shift>
+                    <Shift Byte="70">16</Shift>
+                    <Shift Byte="73">19</Shift>
+                    <Shift Byte="74">1</Shift>
+                    <Shift Byte="75">10</Shift>
+                    <Shift Byte="76">27</Shift>
+                    <Shift Byte="78">2</Shift>
+                    <Shift Byte="79">42</Shift>
+                    <LeftFragment MaxOffset="26" MinOffset="26" Position="1">504B0304</LeftFragment>
+                </SubSequence>
+            </ByteSequence>
+        </InternalSignature>
+        <InternalSignature ID="538" Specificity="Specific">
+            <ByteSequence Reference="BOFoffset">
+                <SubSequence MinFragLength="0" Position="1"
+                    SubSeqMaxOffset="3" SubSeqMinOffset="0">
+                    <Sequence>3C3F786D6C2076657273696F6E3D</Sequence>
+                    <DefaultShift>15</DefaultShift>
+                    <Shift Byte="20">9</Shift>
+                    <Shift Byte="3C">14</Shift>
+                    <Shift Byte="3D">1</Shift>
+                    <Shift Byte="3F">13</Shift>
+                    <Shift Byte="65">7</Shift>
+                    <Shift Byte="69">4</Shift>
+                    <Shift Byte="6C">10</Shift>
+                    <Shift Byte="6D">11</Shift>
+                    <Shift Byte="6E">2</Shift>
+                    <Shift Byte="6F">3</Shift>
+                    <Shift Byte="72">6</Shift>
+                    <Shift Byte="73">5</Shift>
+                    <Shift Byte="76">8</Shift>
+                    <Shift Byte="78">12</Shift>
+                    <RightFragment MaxOffset="0" MinOffset="0" Position="1">22</RightFragment>
+                    <RightFragment MaxOffset="0" MinOffset="0" Position="1">27</RightFragment>
+                    <RightFragment MaxOffset="0" MinOffset="0" Position="2">312E30</RightFragment>
+                    <RightFragment MaxOffset="0" MinOffset="0" Position="3">22</RightFragment>
+                    <RightFragment MaxOffset="0" MinOffset="0" Position="3">27</RightFragment>
+                </SubSequence>
+            </ByteSequence>
+            <ByteSequence Reference="EOFoffset">
+                <SubSequence MinFragLength="0" Position="1"
+                    SubSeqMaxOffset="2" SubSeqMinOffset="0">
+                    <Sequence>736368656D613E</Sequence>
+                    <DefaultShift>-8</DefaultShift>
+                    <Shift Byte="3E">-7</Shift>
+                    <Shift Byte="61">-6</Shift>
+                    <Shift Byte="63">-2</Shift>
+                    <Shift Byte="65">-4</Shift>
+                    <Shift Byte="68">-3</Shift>
+                    <Shift Byte="6D">-5</Shift>
+                    <Shift Byte="73">-1</Shift>
+                    <LeftFragment MaxOffset="0" MinOffset="0" Position="1">2F</LeftFragment>
+                    <LeftFragment MaxOffset="0" MinOffset="0" Position="1">2F78733A</LeftFragment>
+                    <LeftFragment MaxOffset="0" MinOffset="0" Position="1">2F7873643A</LeftFragment>
+                    <LeftFragment MaxOffset="0" MinOffset="0" Position="2">3C</LeftFragment>
+                </SubSequence>
+            </ByteSequence>
+        </InternalSignature>
+        <InternalSignature ID="655" Specificity="Specific">
+            <ByteSequence Reference="BOFoffset">
+                <SubSequence MinFragLength="0" Position="1"
+                    SubSeqMaxOffset="0" SubSeqMinOffset="0">
+                    <Sequence>000001BA</Sequence>
+                    <DefaultShift>5</DefaultShift>
+                    <Shift Byte="00">3</Shift>
+                    <Shift Byte="01">2</Shift>
+                    <Shift Byte="BA">1</Shift>
+                    <RightFragment MaxOffset="0" MinOffset="0" Position="1">[40:7F]</RightFragment>
+                    <RightFragment MaxOffset="11" MinOffset="7" Position="2">000001BB</RightFragment>
+                </SubSequence>
+            </ByteSequence>
+            <ByteSequence Reference="EOFoffset">
+                <SubSequence MinFragLength="0" Position="1"
+                    SubSeqMaxOffset="32" SubSeqMinOffset="0">
+                    <Sequence>000001B9</Sequence>
+                    <DefaultShift>-5</DefaultShift>
+                    <Shift Byte="00">-1</Shift>
+                    <Shift Byte="01">-3</Shift>
+                    <Shift Byte="B9">-4</Shift>
+                </SubSequence>
+            </ByteSequence>
+        </InternalSignature>
+        <InternalSignature ID="656" Specificity="Specific">
+            <ByteSequence Endianness="Little-endian" Reference="BOFoffset">
+                <SubSequence MinFragLength="4" Position="1"
+                    SubSeqMaxOffset="0" SubSeqMinOffset="0">
+                    <Sequence>12C601000400000001</Sequence>
+                    <DefaultShift>10</DefaultShift>
+                    <Shift Byte="00">2</Shift>
+                    <Shift Byte="01">1</Shift>
+                    <Shift Byte="04">5</Shift>
+                    <Shift Byte="12">9</Shift>
+                    <Shift Byte="C6">8</Shift>
+                    <LeftFragment MaxOffset="4080" MinOffset="0" Position="1">49492A00</LeftFragment>
+                </SubSequence>
+            </ByteSequence>
+        </InternalSignature>
+        <InternalSignature ID="657" Specificity="Specific">
+            <ByteSequence Endianness="Little-endian" Reference="BOFoffset">
+                <SubSequence MinFragLength="0" Position="1"
+                    SubSeqMaxOffset="0" SubSeqMinOffset="0">
+                    <Sequence>49492A00</Sequence>
+                    <DefaultShift>5</DefaultShift>
+                    <Shift Byte="00">1</Shift>
+                    <Shift Byte="2A">2</Shift>
+                    <Shift Byte="49">3</Shift>
+                </SubSequence>
+            </ByteSequence>
+            <ByteSequence Endianness="Little-endian" Reference="EOFoffset">
+                <SubSequence MinFragLength="0" Position="1"
+                    SubSeqMaxOffset="4084" SubSeqMinOffset="0">
+                    <Sequence>12C601000400000001</Sequence>
+                    <DefaultShift>-10</DefaultShift>
+                    <Shift Byte="00">-4</Shift>
+                    <Shift Byte="01">-3</Shift>
+                    <Shift Byte="04">-5</Shift>
+                    <Shift Byte="12">-1</Shift>
+                    <Shift Byte="C6">-2</Shift>
+                </SubSequence>
+            </ByteSequence>
+        </InternalSignature>
+        <InternalSignature ID="658" Specificity="Specific">
+            <ByteSequence Endianness="Big-endian" Reference="BOFoffset">
+                <SubSequence MinFragLength="4" Position="1"
+                    SubSeqMaxOffset="0" SubSeqMinOffset="0">
+                    <Sequence>C61200010000000401</Sequence>
+                    <DefaultShift>10</DefaultShift>
+                    <Shift Byte="00">3</Shift>
+                    <Shift Byte="01">1</Shift>
+                    <Shift Byte="04">2</Shift>
+                    <Shift Byte="12">8</Shift>
+                    <Shift Byte="C6">9</Shift>
+                    <LeftFragment MaxOffset="4080" MinOffset="0" Position="1">4D4D002A</LeftFragment>
+                </SubSequence>
+            </ByteSequence>
+        </InternalSignature>
+        <InternalSignature ID="659" Specificity="Specific">
+            <ByteSequence Endianness="Big-endian" Reference="BOFoffset">
+                <SubSequence MinFragLength="0" Position="1"
+                    SubSeqMaxOffset="0" SubSeqMinOffset="0">
+                    <Sequence>4D4D002A</Sequence>
+                    <DefaultShift>5</DefaultShift>
+                    <Shift Byte="00">2</Shift>
+                    <Shift Byte="2A">1</Shift>
+                    <Shift Byte="4D">3</Shift>
+                </SubSequence>
+            </ByteSequence>
+            <ByteSequence Endianness="Big-endian" Reference="EOFoffset">
+                <SubSequence MinFragLength="0" Position="1"
+                    SubSeqMaxOffset="4084" SubSeqMinOffset="0">
+                    <Sequence>C61200010000000401</Sequence>
+                    <DefaultShift>-10</DefaultShift>
+                    <Shift Byte="00">-3</Shift>
+                    <Shift Byte="01">-4</Shift>
+                    <Shift Byte="04">-8</Shift>
+                    <Shift Byte="12">-2</Shift>
+                    <Shift Byte="C6">-1</Shift>
+                </SubSequence>
+            </ByteSequence>
+        </InternalSignature>
+        <InternalSignature ID="720" Specificity="Specific">
+            <ByteSequence Reference="BOFoffset">
+                <SubSequence MinFragLength="0" Position="1"
+                    SubSeqMaxOffset="0" SubSeqMinOffset="0">
+                    <Sequence>0000000C6A5020200D0A870A</Sequence>
+                    <DefaultShift>13</DefaultShift>
+                    <Shift Byte="00">10</Shift>
+                    <Shift Byte="0A">1</Shift>
+                    <Shift Byte="0C">9</Shift>
+                    <Shift Byte="0D">4</Shift>
+                    <Shift Byte="20">5</Shift>
+                    <Shift Byte="50">7</Shift>
+                    <Shift Byte="6A">8</Shift>
+                    <Shift Byte="87">2</Shift>
+                    <RightFragment MaxOffset="4" MinOffset="4" Position="1">667479706A7078</RightFragment>
+                </SubSequence>
+            </ByteSequence>
+        </InternalSignature>
+        <InternalSignature ID="732" Specificity="Specific">
+            <ByteSequence Reference="BOFoffset">
+                <SubSequence MinFragLength="0" Position="1"
+                    SubSeqMaxOffset="0" SubSeqMinOffset="0">
+                    <Sequence>3C3F786D6C2076657273696F6E3D22312E3022</Sequence>
+                    <DefaultShift>20</DefaultShift>
+                    <Shift Byte="20">14</Shift>
+                    <Shift Byte="22">1</Shift>
+                    <Shift Byte="2E">3</Shift>
+                    <Shift Byte="30">2</Shift>
+                    <Shift Byte="31">4</Shift>
+                    <Shift Byte="3C">19</Shift>
+                    <Shift Byte="3D">6</Shift>
+                    <Shift Byte="3F">18</Shift>
+                    <Shift Byte="65">12</Shift>
+                    <Shift Byte="69">9</Shift>
+                    <Shift Byte="6C">15</Shift>
+                    <Shift Byte="6D">16</Shift>
+                    <Shift Byte="6E">7</Shift>
+                    <Shift Byte="6F">8</Shift>
+                    <Shift Byte="72">11</Shift>
+                    <Shift Byte="73">10</Shift>
+                    <Shift Byte="76">13</Shift>
+                    <Shift Byte="78">17</Shift>
+                </SubSequence>
+                <SubSequence MinFragLength="0" Position="2" SubSeqMinOffset="0">
+                    <Sequence>3C737667</Sequence>
+                    <DefaultShift>5</DefaultShift>
+                    <Shift Byte="3C">4</Shift>
+                    <Shift Byte="67">1</Shift>
+                    <Shift Byte="73">3</Shift>
+                    <Shift Byte="76">2</Shift>
+                </SubSequence>
+                <SubSequence MinFragLength="0" Position="3" SubSeqMinOffset="0">
+                    <Sequence>7376673E</Sequence>
+                    <DefaultShift>5</DefaultShift>
+                    <Shift Byte="3E">1</Shift>
+                    <Shift Byte="67">2</Shift>
+                    <Shift Byte="73">4</Shift>
+                    <Shift Byte="76">3</Shift>
+                </SubSequence>
+            </ByteSequence>
+        </InternalSignature>
+        <InternalSignature ID="750" Specificity="Specific">
+            <ByteSequence Reference="BOFoffset">
+                <SubSequence MinFragLength="0" Position="1"
+                    SubSeqMaxOffset="0" SubSeqMinOffset="0">
+                    <Sequence>25504446</Sequence>
+                    <DefaultShift>5</DefaultShift>
+                    <Shift Byte="25">4</Shift>
+                    <Shift Byte="44">2</Shift>
+                    <Shift Byte="46">1</Shift>
+                    <Shift Byte="50">3</Shift>
+                </SubSequence>
+            </ByteSequence>
+            <ByteSequence>
+                <SubSequence MinFragLength="14" Position="1" SubSeqMinOffset="0">
+                    <Sequence>687474703A2F2F7777772E6169696D2E6F72672F706466612F6E732F6964</Sequence>
+                    <DefaultShift>31</DefaultShift>
+                    <Shift Byte="2E">15</Shift>
+                    <Shift Byte="2F">3</Shift>
+                    <Shift Byte="3A">26</Shift>
+                    <Shift Byte="61">7</Shift>
+                    <Shift Byte="64">1</Shift>
+                    <Shift Byte="66">8</Shift>
+                    <Shift Byte="67">12</Shift>
+                    <Shift Byte="68">30</Shift>
+                    <Shift Byte="69">2</Shift>
+                    <Shift Byte="6D">16</Shift>
+                    <Shift Byte="6E">5</Shift>
+                    <Shift Byte="6F">14</Shift>
+                    <Shift Byte="70">10</Shift>
+                    <Shift Byte="72">13</Shift>
+                    <Shift Byte="73">4</Shift>
+                    <Shift Byte="74">28</Shift>
+                    <Shift Byte="77">21</Shift>
+                    <LeftFragment MaxOffset="0" MinOffset="0" Position="1">22</LeftFragment>
+                    <LeftFragment MaxOffset="0" MinOffset="0" Position="1">27</LeftFragment>
+                    <LeftFragment MaxOffset="0" MinOffset="0" Position="2">786D6C6E733A7064666169643D</LeftFragment>
+                    <RightFragment MaxOffset="80" MinOffset="0" Position="1">7064666169643A70617274</RightFragment>
+                    <RightFragment MaxOffset="0" MinOffset="0" Position="2">3D22</RightFragment>
+                    <RightFragment MaxOffset="0" MinOffset="0" Position="2">3D27</RightFragment>
+                    <RightFragment MaxOffset="0" MinOffset="0" Position="2">3E</RightFragment>
+                    <RightFragment MaxOffset="0" MinOffset="0" Position="3">32</RightFragment>
+                    <RightFragment MaxOffset="0" MinOffset="0" Position="4">22</RightFragment>
+                    <RightFragment MaxOffset="0" MinOffset="0" Position="4">27</RightFragment>
+                    <RightFragment MaxOffset="0" MinOffset="0" Position="4">3C2F7064666169643A706172743E</RightFragment>
+                </SubSequence>
+            </ByteSequence>
+        </InternalSignature>
+        <InternalSignature ID="753" Specificity="Specific">
+            <ByteSequence Reference="BOFoffset">
+                <SubSequence MinFragLength="0" Position="1"
+                    SubSeqMaxOffset="0" SubSeqMinOffset="0">
+                    <Sequence>25504446</Sequence>
+                    <DefaultShift>5</DefaultShift>
+                    <Shift Byte="25">4</Shift>
+                    <Shift Byte="44">2</Shift>
+                    <Shift Byte="46">1</Shift>
+                    <Shift Byte="50">3</Shift>
+                </SubSequence>
+            </ByteSequence>
+            <ByteSequence>
+                <SubSequence MinFragLength="14" Position="1" SubSeqMinOffset="0">
+                    <Sequence>687474703A2F2F7777772E6169696D2E6F72672F706466612F6E732F6964</Sequence>
+                    <DefaultShift>31</DefaultShift>
+                    <Shift Byte="2E">15</Shift>
+                    <Shift Byte="2F">3</Shift>
+                    <Shift Byte="3A">26</Shift>
+                    <Shift Byte="61">7</Shift>
+                    <Shift Byte="64">1</Shift>
+                    <Shift Byte="66">8</Shift>
+                    <Shift Byte="67">12</Shift>
+                    <Shift Byte="68">30</Shift>
+                    <Shift Byte="69">2</Shift>
+                    <Shift Byte="6D">16</Shift>
+                    <Shift Byte="6E">5</Shift>
+                    <Shift Byte="6F">14</Shift>
+                    <Shift Byte="70">10</Shift>
+                    <Shift Byte="72">13</Shift>
+                    <Shift Byte="73">4</Shift>
+                    <Shift Byte="74">28</Shift>
+                    <Shift Byte="77">21</Shift>
+                    <LeftFragment MaxOffset="0" MinOffset="0" Position="1">22</LeftFragment>
+                    <LeftFragment MaxOffset="0" MinOffset="0" Position="1">27</LeftFragment>
+                    <LeftFragment MaxOffset="0" MinOffset="0" Position="2">786D6C6E733A7064666169643D</LeftFragment>
+                    <RightFragment MaxOffset="80" MinOffset="0" Position="1">7064666169643A70617274</RightFragment>
+                    <RightFragment MaxOffset="0" MinOffset="0" Position="2">3D22</RightFragment>
+                    <RightFragment MaxOffset="0" MinOffset="0" Position="2">3D27</RightFragment>
+                    <RightFragment MaxOffset="0" MinOffset="0" Position="2">3E</RightFragment>
+                    <RightFragment MaxOffset="0" MinOffset="0" Position="3">33</RightFragment>
+                    <RightFragment MaxOffset="0" MinOffset="0" Position="4">22</RightFragment>
+                    <RightFragment MaxOffset="0" MinOffset="0" Position="4">27</RightFragment>
+                    <RightFragment MaxOffset="0" MinOffset="0" Position="4">3C2F7064666169643A706172743E</RightFragment>
+                </SubSequence>
+            </ByteSequence>
+        </InternalSignature>
+    </InternalSignatureCollection>
+    <FileFormatCollection>
+        <FileFormat ID="13" Name="Online Description Tool Format" PUID="x-fmt/3">
+            <Extension>odt</Extension>
+        </FileFormat>
+        <FileFormat ID="16" Name="FoxPro Database" PUID="x-fmt/6">
+            <Extension>dbf</Extension>
+        </FileFormat>
+        <FileFormat ID="18" Name="dBASE Database" PUID="x-fmt/8">
+            <Extension>dbf</Extension>
+        </FileFormat>
+        <FileFormat ID="28" Name="Write for Windows Document"
+            PUID="x-fmt/12">
+            <Extension>wri</Extension>
+        </FileFormat>
+        <FileFormat ID="40" MIMEType="text/plain"
+            Name="Tab-separated values" PUID="x-fmt/13">
+            <Extension>tsv</Extension>
+        </FileFormat>
+        <FileFormat ID="44" Name="Microsoft Excel Template"
+            PUID="x-fmt/17" Version="2000">
+            <Extension>xlt</Extension>
+        </FileFormat>
+        <FileFormat ID="45" MIMEType="text/csv"
+            Name="Comma Separated Values" PUID="CSV">
+            <Extension>csv</Extension>
+        </FileFormat>
+        <FileFormat ID="48" Name="Paint Shop Pro Image" PUID="x-fmt/19">
+            <Extension>3ds</Extension>
+        </FileFormat>
+        <FileFormat ID="49" MIMEType="application/postscript"
+            Name="Adobe Illustrator" PUID="x-fmt/20">
+            <Extension>ai</Extension>
+        </FileFormat>
+        <FileFormat ID="50" MIMEType="text/plain" Name="7-bit ANSI Text" PUID="x-fmt/21">
+            <Extension>ans</Extension>
+        </FileFormat>
+        <FileFormat ID="51" MIMEType="text/plain"
+            Name="7-bit ASCII Text" PUID="x-fmt/22">
+            <Extension>asc</Extension>
+        </FileFormat>
+        <FileFormat ID="52" Name="Microsoft Excel Backup" PUID="x-fmt/23">
+            <Extension>bak</Extension>
+            <Extension>xlk</Extension>
+        </FileFormat>
+        <FileFormat ID="53" Name="AutoCAD Block Attribute Template" PUID="x-fmt/24">
+            <Extension>blk</Extension>
+        </FileFormat>
+        <FileFormat ID="56" Name="AutoCAD Batch Plot File"
+            PUID="x-fmt/26" Version="1.0-R14">
+            <Extension>bp2</Extension>
+            <Extension>bpl</Extension>
+        </FileFormat>
+        <FileFormat ID="57" Name="AutoCAD Batch Plot File"
+            PUID="x-fmt/27" Version="2000-2005">
+            <Extension>bp3</Extension>
+        </FileFormat>
+        <FileFormat ID="59" Name="CALS Compressed Bitmap" PUID="x-fmt/28">
+            <Extension>cal</Extension>
+        </FileFormat>
+        <FileFormat ID="61" Name="CorelDraw Template" PUID="x-fmt/30">
+            <Extension>cdt</Extension>
+        </FileFormat>
+        <FileFormat ID="62" Name="CorelDraw Compressed Drawing" PUID="x-fmt/31">
+            <Extension>cdx</Extension>
+        </FileFormat>
+        <FileFormat ID="63" Name="Harvard Graphics Chart"
+            PUID="x-fmt/32" Version="3.0">
+            <Extension>ch3</Extension>
+        </FileFormat>
+        <FileFormat ID="64" Name="Corel R.A.V.E." PUID="x-fmt/33">
+            <Extension>clk</Extension>
+        </FileFormat>
+        <FileFormat ID="65" Name="Corel Presentation Exchange File"
+            PUID="x-fmt/34">
+            <Extension>cmx</Extension>
+        </FileFormat>
+        <FileFormat ID="67" Name="Corel CMX Compressed" PUID="x-fmt/36">
+            <Extension>cpx</Extension>
+        </FileFormat>
+        <FileFormat ID="68"
+            Name="AutoCAD Colour-Dependant Plot Style Table" PUID="x-fmt/37">
+            <Extension>ctb</Extension>
+        </FileFormat>
+        <FileFormat ID="69" Name="AutoCAD Custom Dictionary" PUID="x-fmt/38">
+            <Extension>cus</Extension>
+        </FileFormat>
+        <FileFormat ID="70" Name="AutoCAD dbConnect Query Set" PUID="x-fmt/39">
+            <Extension>dbq</Extension>
+        </FileFormat>
+        <FileFormat ID="71" Name="AutoCAD dbConnect Template Set" PUID="x-fmt/40">
+            <Extension>dbt</Extension>
+        </FileFormat>
+        <FileFormat ID="72" Name="Data Interchange Format" PUID="x-fmt/41">
+            <Extension>dif</Extension>
+        </FileFormat>
+        <FileFormat ID="73" Name="Wordperfect Secondary File"
+            PUID="x-fmt/42">
+            <Extension>doc</Extension>
+        </FileFormat>
+        <FileFormat ID="76" Name="Microsoft Word Template" PUID="x-fmt/45">
+            <Extension>dot</Extension>
+        </FileFormat>
+        <FileFormat ID="77" Name="Microsoft Excel ODBC Query" PUID="x-fmt/46">
+            <Extension>dqy</Extension>
+        </FileFormat>
+        <FileFormat ID="78" Name="Micrografx Draw / Designer" PUID="x-fmt/47">
+            <Extension>drw</Extension>
+        </FileFormat>
+        <FileFormat ID="79" Name="Visual Basic Macro" PUID="x-fmt/48">
+            <Extension>dvb</Extension>
+        </FileFormat>
+        <FileFormat ID="80"
+            MIMEType="application/dwf, application/x-dwf, drawing/x-dwf, image/vnd.dwf, image/x-dwf, model/vnd.dwf"
+            Name="AutoCAD Design Web Format" PUID="x-fmt/49" Version="6.0">
+            <Extension>dwf</Extension>
+        </FileFormat>
+        <FileFormat ID="82" Name="AutoCAD Drawing Standards File" PUID="x-fmt/50">
+            <Extension>dws</Extension>
+        </FileFormat>
+        <FileFormat ID="83" Name="AutoCAD Drawing Template" PUID="x-fmt/51">
+            <Extension>dwt</Extension>
+        </FileFormat>
+        <FileFormat ID="85"
+            Name="Drawing Interchange Format Style Extract" PUID="x-fmt/52">
+            <Extension>dxx</Extension>
+        </FileFormat>
+        <FileFormat ID="86" MIMEType="application/postscript"
+            Name="Encapsulated PostScript File Format" PUID="fmt/122">
+            <Extension>eps</Extension>
+            <Extension>epsf</Extension>
+            <HasPriorityOverFileFormatID>138</HasPriorityOverFileFormatID>
+            <HasPriorityOverFileFormatID>1073</HasPriorityOverFileFormatID>
+        </FileFormat>
+        <FileFormat ID="87" Name="Macromedia Freehand" PUID="x-fmt/53" Version="5">
+            <Extension>fh5</Extension>
+        </FileFormat>
+        <FileFormat ID="88" Name="AutoCAD Font Mapping Table" PUID="x-fmt/54">
+            <Extension>fmp</Extension>
+        </FileFormat>
+        <FileFormat ID="89" Name="Frame Vector Metafile" PUID="x-fmt/55">
+            <Extension>fmv</Extension>
+        </FileFormat>
+        <FileFormat ID="90" Name="Kodak FlashPix Image" PUID="x-fmt/56">
+            <Extension>fpx</Extension>
+        </FileFormat>
+        <FileFormat ID="91" Name="Ventura Publisher Vector Graphics" PUID="x-fmt/57">
+            <Extension>gem</Extension>
+        </FileFormat>
+        <FileFormat ID="95" Name="Microsoft Excel Web Query" PUID="x-fmt/58">
+            <Extension>iqy</Extension>
+        </FileFormat>
+        <FileFormat ID="100" Name="AutoCAD Last Saved Layer State" PUID="x-fmt/59">
+            <Extension>las</Extension>
+        </FileFormat>
+        <FileFormat ID="101" Name="AutoCAD Linetype Definition File" PUID="x-fmt/60">
+            <Extension>lin</Extension>
+        </FileFormat>
+        <FileFormat ID="102" Name="AutoCAD Landscape Library" PUID="x-fmt/61">
+            <Extension>lli</Extension>
+        </FileFormat>
+        <FileFormat ID="103" Name="Log File" PUID="x-fmt/62">
+            <Extension>log</Extension>
+        </FileFormat>
+        <FileFormat ID="104" Name="AutoLISP File" PUID="x-fmt/63">
+            <Extension>lsp</Extension>
+        </FileFormat>
+        <FileFormat ID="107" Name="Microsoft Access Database"
+            PUID="x-fmt/66">
+            <Extension>mdb</Extension>
+        </FileFormat>
+        <FileFormat ID="108" Name="Met Metafile" PUID="x-fmt/67">
+            <Extension>met</Extension>
+        </FileFormat>
+        <FileFormat ID="109" Name="AutoCAD Compiled Menu" PUID="x-fmt/68">
+            <Extension>mnc</Extension>
+        </FileFormat>
+        <FileFormat ID="110" Name="AutoLISP Menu Source File" PUID="x-fmt/69">
+            <Extension>mnl</Extension>
+        </FileFormat>
+        <FileFormat ID="111" Name="AutoCAD Menu Resource File" PUID="x-fmt/70">
+            <Extension>mnr</Extension>
+            <Extension>mnt</Extension>
+        </FileFormat>
+        <FileFormat ID="112" Name="AutoCAD Source Menu File" PUID="x-fmt/71">
+            <Extension>mns</Extension>
+        </FileFormat>
+        <FileFormat ID="114" Name="AutoCAD Template Menu File" PUID="x-fmt/72">
+            <Extension>mnu</Extension>
+        </FileFormat>
+        <FileFormat ID="115" Name="Microsoft Outlook Address Book" PUID="x-fmt/73">
+            <Extension>olk</Extension>
+        </FileFormat>
+        <FileFormat ID="116" Name="Microsoft Excel OLAP Query" PUID="x-fmt/74">
+            <Extension>oqy</Extension>
+        </FileFormat>
+        <FileFormat ID="117"
+            Name="Microsoft Outlook Personal Address Book" PUID="x-fmt/75">
+            <Extension>pab</Extension>
+        </FileFormat>
+        <FileFormat ID="118" Name="CorelDraw Pattern" PUID="x-fmt/76">
+            <Extension>pat</Extension>
+        </FileFormat>
+        <FileFormat ID="119" Name="AutoCAD Plot Configuration File"
+            PUID="x-fmt/77" Version="R14">
+            <Extension>pc2</Extension>
+        </FileFormat>
+        <FileFormat ID="120" Name="AutoCAD Plot Configuration File"
+            PUID="x-fmt/78" Version="2000">
+            <Extension>pc3</Extension>
+        </FileFormat>
+        <FileFormat ID="121" Name="AutoCAD Plot Configuration File"
+            PUID="x-fmt/79" Version="1.0-R13">
+            <Extension>pcp</Extension>
+        </FileFormat>
+        <FileFormat ID="122" MIMEType="image/x-pict"
+            Name="Macintosh PICT Image" PUID="x-fmt/80">
+            <Extension>pct</Extension>
+            <Extension>pic</Extension>
+            <Extension>pict</Extension>
+        </FileFormat>
+        <FileFormat ID="125" Name="Inkwriter/Notetaker Template" PUID="x-fmt/81">
+            <Extension>pdt</Extension>
+        </FileFormat>
+        <FileFormat ID="126" Name="Lotus 1-2-3 Chart" PUID="x-fmt/82">
+            <Extension>pic</Extension>
+        </FileFormat>
+        <FileFormat ID="127"
+            Name="Hewlett Packard Vector Graphic Plotter File" PUID="x-fmt/83">
+            <Extension>plt</Extension>
+        </FileFormat>
+        <FileFormat ID="129" Name="Microsoft Powerpoint Design Template" PUID="x-fmt/84">
+            <Extension>pot</Extension>
+        </FileFormat>
+        <FileFormat ID="130" Name="Picture Publisher Bitmap"
+            PUID="x-fmt/85" Version="5.0">
+            <Extension>pp5</Extension>
+        </FileFormat>
+        <FileFormat ID="131" Name="Microsoft Powerpoint Add-In" PUID="x-fmt/86">
+            <Extension>ppa</Extension>
+        </FileFormat>
+        <FileFormat ID="132" MIMEType="application/vnd.ms-powerpoint"
+            Name="Microsoft Powerpoint Show" PUID="x-fmt/87">
+            <Extension>pps</Extension>
+        </FileFormat>
+        <FileFormat ID="133" MIMEType="application/vnd.ms-powerpoint"
+            Name="Microsoft Powerpoint Presentation" PUID="x-fmt/88">
+            <Extension>ppt</Extension>
+        </FileFormat>
+        <FileFormat ID="136" Name="Freelance File" PUID="x-fmt/89" Version="1.0-2.1">
+            <Extension>pre</Extension>
+        </FileFormat>
+        <FileFormat ID="137" Name="Microsoft Print File" PUID="x-fmt/90">
+            <Extension>prn</Extension>
+        </FileFormat>
+        <FileFormat ID="138" MIMEType="application/postscript"
+            Name="Postscript" PUID="x-fmt/91">
+            <Extension>ps</Extension>
+            <HasPriorityOverFileFormatID>1073</HasPriorityOverFileFormatID>
+        </FileFormat>
+        <FileFormat ID="139"
+            MIMEType="com.adobe.photoshop-image, image/vnd.adobe.photoshop"
+            Name="Adobe Photoshop" PUID="x-fmt/92">
+            <Extension>psd</Extension>
+        </FileFormat>
+        <FileFormat ID="140" Name="Postscript Support File" PUID="x-fmt/93">
+            <Extension>psf</Extension>
+        </FileFormat>
+        <FileFormat ID="141" Name="Pocket Word Document" PUID="x-fmt/94">
+            <Extension>psw</Extension>
+            <Extension>pwd</Extension>
+        </FileFormat>
+        <FileFormat ID="143" Name="Inkwriter/Notetaker Document" PUID="x-fmt/95">
+            <Extension>pwi</Extension>
+        </FileFormat>
+        <FileFormat ID="144" Name="Pocket Word Template" PUID="x-fmt/96">
+            <Extension>pwt</Extension>
+        </FileFormat>
+        <FileFormat ID="145" Name="Microsoft Excel OLE DB Query" PUID="x-fmt/97">
+            <Extension>rqy</Extension>
+        </FileFormat>
+        <FileFormat ID="146" Name="AutoCAD ACIS Export File" PUID="x-fmt/98">
+            <Extension>sat</Extension>
+        </FileFormat>
+        <FileFormat ID="147" Name="Schedule+ Contacts" PUID="x-fmt/99">
+            <Extension>scd</Extension>
+        </FileFormat>
+        <FileFormat ID="148" Name="AutoCAD Script" PUID="x-fmt/100">
+            <Extension>scr</Extension>
+        </FileFormat>
+        <FileFormat ID="149" Name="Harvard Graphics Show"
+            PUID="x-fmt/101" Version="3.0">
+            <Extension>sh3</Extension>
+        </FileFormat>
+        <FileFormat ID="150" Name="3D Studio Shapes" PUID="x-fmt/102">
+            <Extension>shp</Extension>
+        </FileFormat>
+        <FileFormat ID="151" Name="AutoCAD Compiled Shape/Font File" PUID="x-fmt/103">
+            <Extension>shx</Extension>
+        </FileFormat>
+        <FileFormat ID="152" Name="AutoCAD Slide Library" PUID="x-fmt/104">
+            <Extension>slb</Extension>
+        </FileFormat>
+        <FileFormat ID="153"
+            MIMEType="application/sld, application/x-sld, image/x-sld"
+            Name="AutoCAD Slide" PUID="x-fmt/105">
+            <Extension>sld</Extension>
+        </FileFormat>
+        <FileFormat ID="154" Name="Microsoft Symbolic Link (SYLK) File" PUID="x-fmt/106">
+            <Extension>slk</Extension>
+        </FileFormat>
+        <FileFormat ID="155" Name="AutoCAD Named Plot Style Table" PUID="x-fmt/107">
+            <Extension>stb</Extension>
+        </FileFormat>
+        <FileFormat ID="156"
+            Name="STL (Standard Tessellation Language) ASCII" PUID="x-fmt/108">
+            <Extension>stl</Extension>
+        </FileFormat>
+        <FileFormat ID="158" MIMEType="image/svg+xml"
+            Name="Scalable Vector Graphics Compressed" PUID="x-fmt/109">
+            <Extension>svgz</Extension>
+        </FileFormat>
+        <FileFormat ID="163" MIMEType="text/plain"
+            Name="Plain Text File" PUID="TXT">
+            <Extension>txt</Extension>
+        </FileFormat>
+        <FileFormat ID="164"
+            Name="AutoCAD External Database Configuration File" PUID="x-fmt/112">
+            <Extension>udl</Extension>
+        </FileFormat>
+        <FileFormat ID="166"
+            MIMEType="application/vnd.lotus-1-2-3, application/x-123"
+            Name="Lotus 1-2-3 Worksheet" PUID="x-fmt/114" Version="2.0">
+            <Extension>wk1</Extension>
+            <Extension>wk2</Extension>
+        </FileFormat>
+        <FileFormat ID="167"
+            MIMEType="application/lotus123, application/vnd.lotus-1-2-3"
+            Name="Lotus 1-2-3 Worksheet" PUID="x-fmt/115" Version="3.0">
+            <Extension>wk3</Extension>
+        </FileFormat>
+        <FileFormat ID="168"
+            MIMEType="application/lotus123, application/vnd.lotus-1-2-3"
+            Name="Lotus 1-2-3 Worksheet" PUID="x-fmt/116" Version="4-5">
+            <Extension>wk4</Extension>
+        </FileFormat>
+        <FileFormat ID="169"
+            MIMEType="application/vnd.lotus-1-2-3, application/x-123"
+            Name="Lotus 1-2-3 Worksheet" PUID="x-fmt/117" Version="1.0">
+            <Extension>wks</Extension>
+        </FileFormat>
+        <FileFormat ID="170" Name="Microsoft Works Spreadsheet"
+            PUID="x-fmt/118">
+            <Extension>wks</Extension>
+        </FileFormat>
+        <FileFormat ID="171" Name="Windows Metafile Image" PUID="x-fmt/119">
+            <Extension>wmf</Extension>
+        </FileFormat>
+        <FileFormat ID="175" Name="Microsoft Works for Windows"
+            PUID="x-fmt/120" Version="4.0">
+            <Extension>wps</Extension>
+        </FileFormat>
+        <FileFormat ID="176" Name="Quattro Pro Spreadsheet"
+            PUID="x-fmt/121" Version="1-4">
+            <Extension>wkq</Extension>
+            <Extension>wq1</Extension>
+        </FileFormat>
+        <FileFormat ID="177" Name="Quattro Pro Spreadsheet"
+            PUID="x-fmt/122" Version="5">
+            <Extension>wkq</Extension>
+            <Extension>wq2</Extension>
+        </FileFormat>
+        <FileFormat ID="179" Name="Microsoft Excel Add-In" PUID="x-fmt/124">
+            <Extension>xla</Extension>
+            <Extension>xll</Extension>
+        </FileFormat>
+        <FileFormat ID="180" Name="Microsoft Excel Toolbar" PUID="x-fmt/125">
+            <Extension>xlb</Extension>
+        </FileFormat>
+        <FileFormat ID="182" Name="AutoCAD Xref Log" PUID="x-fmt/127">
+            <Extension>xlg</Extension>
+        </FileFormat>
+        <FileFormat ID="186" Name="Microsoft Excel Workspace" PUID="x-fmt/128">
+            <Extension>xlw</Extension>
+        </FileFormat>
+        <FileFormat ID="190" Name="Stationery for Mac OS X" PUID="x-fmt/131">
+            <Extension>doc</Extension>
+        </FileFormat>
+        <FileFormat ID="191" Name="Speller Custom Dictionary" PUID="x-fmt/132">
+            <Extension>dic</Extension>
+        </FileFormat>
+        <FileFormat ID="192" Name="Speller Exclude Dictionary" PUID="x-fmt/133">
+            <Extension>dic</Extension>
+        </FileFormat>
+        <FileFormat ID="193"
+            Name="AutoCAD Device-Independent Binary Plotter File" PUID="x-fmt/134">
+            <Extension>adi</Extension>
+        </FileFormat>
+        <FileFormat ID="195" MIMEType="audio/x-aiff"
+            Name="Audio Interchange File Format (compressed)" PUID="x-fmt/136">
+            <Extension>aifc</Extension>
+            <HasPriorityOverFileFormatID>221</HasPriorityOverFileFormatID>
+        </FileFormat>
+        <FileFormat ID="197" Name="Electronic Arts Music" PUID="x-fmt/137">
+            <Extension>asf</Extension>
+        </FileFormat>
+        <FileFormat ID="198" Name="Active Server Page" PUID="x-fmt/138">
+            <Extension>asp</Extension>
+        </FileFormat>
+        <FileFormat ID="199" MIMEType="audio/basic"
+            Name="NeXT/Sun sound" PUID="x-fmt/139">
+            <Extension>au</Extension>
+        </FileFormat>
+        <FileFormat ID="201" MIMEType="image/x-sgi-bw"
+            Name="Silicon Graphics Image" PUID="x-fmt/140">
+            <Extension>bw</Extension>
+            <Extension>rgb</Extension>
+        </FileFormat>
+        <FileFormat ID="202" Name="Calendar Creator Plus Data File" PUID="x-fmt/141">
+            <Extension>cce</Extension>
+        </FileFormat>
+        <FileFormat ID="203" MIMEType="image/cgm"
+            Name="Computer Graphics Metafile ASCII" PUID="x-fmt/142">
+            <Extension>cgm</Extension>
+        </FileFormat>
+        <FileFormat ID="204" Name="OS/2 Change Control File" PUID="x-fmt/143">
+            <Extension>cin</Extension>
+        </FileFormat>
+        <FileFormat ID="205" Name="Corel Photo-Paint Image" PUID="x-fmt/144">
+            <Extension>cpt</Extension>
+        </FileFormat>
+        <FileFormat ID="207" Name="Scitex Continuous Tone Bitmap" PUID="x-fmt/146">
+            <Extension>ct</Extension>
+        </FileFormat>
+        <FileFormat ID="209" Name="IBM DisplayWrite DCA Text File" PUID="x-fmt/148">
+            <Extension>dca</Extension>
+        </FileFormat>
+        <FileFormat ID="210" Name="Desktop Color Separation File" PUID="x-fmt/149">
+            <Extension>dcs</Extension>
+        </FileFormat>
+        <FileFormat ID="211"
+            Name="Visual FoxPro Database Container File" PUID="x-fmt/150">
+            <Extension>dcx</Extension>
+            <HasPriorityOverFileFormatID>1122</HasPriorityOverFileFormatID>
+        </FileFormat>
+        <FileFormat ID="213" Name="Micrografx Designer" PUID="x-fmt/151" Version="7.0">
+            <Extension>dsf</Extension>
+        </FileFormat>
+        <FileFormat ID="214" MIMEType="video/dv" Name="Digital Video" PUID="x-fmt/152">
+            <Extension>dv</Extension>
+        </FileFormat>
+        <FileFormat ID="215" MIMEType="image/x-emf"
+            Name="Microsoft Windows Enhanced Metafile" PUID="x-fmt/153">
+            <Extension>emf</Extension>
+        </FileFormat>
+        <FileFormat ID="216" Name="AutoDesk FLIC Animation" PUID="x-fmt/154">
+            <Extension>fli</Extension>
+        </FileFormat>
+        <FileFormat ID="218" Name="AutoCAD Film Roll" PUID="x-fmt/155">
+            <Extension>flm</Extension>
+        </FileFormat>
+        <FileFormat ID="219" Name="Ventura Publisher" PUID="x-fmt/156">
+            <Extension>gen</Extension>
+        </FileFormat>
+        <FileFormat ID="221" Name="Interchange File" PUID="x-fmt/157">
+            <Extension>iff</Extension>
+        </FileFormat>
+        <FileFormat ID="222" MIMEType="model/iges"
+            Name="Initial Graphics Exchange Specification (IGES)"
+            PUID="x-fmt/158" Version="5.x">
+            <Extension>iges</Extension>
+            <Extension>igs</Extension>
+        </FileFormat>
+        <FileFormat ID="223" Name="GEM Image" PUID="x-fmt/159">
+            <Extension>img</Extension>
+        </FileFormat>
+        <FileFormat ID="227" MIMEType="text/html"
+            Name="Java Servlet Page" PUID="x-fmt/160">
+            <Extension>jsp</Extension>
+        </FileFormat>
+        <FileFormat ID="228" Name="MacPaint Image" PUID="x-fmt/161">
+            <Extension>mac</Extension>
+        </FileFormat>
+        <FileFormat ID="229" MIMEType="application/vnd.mif"
+            Name="Adobe FrameMaker Interchange Format" PUID="x-fmt/162">
+            <Extension>mif</Extension>
+        </FileFormat>
+        <FileFormat ID="235" Name="NAP Metafile" PUID="x-fmt/163">
+            <Extension>nap</Extension>
+        </FileFormat>
+        <FileFormat ID="236" MIMEType="image/x-portable-bitmap"
+            Name="Portable Bitmap Image - ASCII" PUID="x-fmt/164">
+            <Extension>pbm</Extension>
+        </FileFormat>
+        <FileFormat ID="238" Name="PICS Animation" PUID="x-fmt/166">
+            <Extension>pcs</Extension>
+        </FileFormat>
+        <FileFormat ID="239" Name="Adobe PhotoDeluxe" PUID="x-fmt/167">
+            <Extension>pdd</Extension>
+        </FileFormat>
+        <FileFormat ID="240" Name="Broderbund Print Shop Deluxe" PUID="x-fmt/168">
+            <Extension>pdp</Extension>
+        </FileFormat>
+        <FileFormat ID="241" MIMEType="text/html" Name="PHP Script Page" PUID="x-fmt/169">
+            <Extension>php</Extension>
+        </FileFormat>
+        <FileFormat ID="242" Name="PC Paint Bitmap" PUID="x-fmt/170">
+            <Extension>pic</Extension>
+        </FileFormat>
+        <FileFormat ID="244" Name="Inset Systems Bitmap" PUID="x-fmt/171">
+            <Extension>pix</Extension>
+        </FileFormat>
+        <FileFormat ID="245" Name="Microsoft FoxPro Library" PUID="x-fmt/172">
+            <Extension>plb</Extension>
+        </FileFormat>
+        <FileFormat ID="246" Name="PageMaker Document" PUID="x-fmt/173" Version="5.0">
+            <Extension>pm5</Extension>
+        </FileFormat>
+        <FileFormat ID="247" Name="PageMaker Document" PUID="x-fmt/174" Version="6.0">
+            <Extension>pm6</Extension>
+        </FileFormat>
+        <FileFormat ID="248" Name="MacPaint Graphics" PUID="x-fmt/175">
+            <Extension>pnt</Extension>
+        </FileFormat>
+        <FileFormat ID="249" Name="Picture Publisher Bitmap"
+            PUID="x-fmt/176" Version="4">
+            <Extension>pp4</Extension>
+        </FileFormat>
+        <FileFormat ID="250" Name="Microsoft PowerPoint Graphics File" PUID="x-fmt/177">
+            <Extension>ppi</Extension>
+        </FileFormat>
+        <FileFormat ID="252"
+            Name="Microsoft Visual Modeller Petal file (ASCII)" PUID="x-fmt/179">
+            <Extension>ptl</Extension>
+        </FileFormat>
+        <FileFormat ID="253" Name="Instalit Script" PUID="x-fmt/180">
+            <Extension>pvd</Extension>
+        </FileFormat>
+        <FileFormat ID="254" Name="PageMaker Document" PUID="x-fmt/181" Version="6.5">
+            <Extension>p65</Extension>
+        </FileFormat>
+        <FileFormat ID="255" Name="Quark Xpress Data File" PUID="x-fmt/182">
+            <Extension>qcd</Extension>
+            <Extension>qxd</Extension>
+            <Extension>qxl</Extension>
+            <Extension>qxp</Extension>
+            <Extension>qxt</Extension>
+        </FileFormat>
+        <FileFormat ID="256"
+            MIMEType="audio/vnd.rn-realaudio, audio/x-pn-realaudio"
+            Name="RealAudio Metafile" PUID="x-fmt/183">
+            <Extension>ram</Extension>
+        </FileFormat>
+        <FileFormat ID="257" MIMEType="image/x-sun-raster"
+            Name="Sun Raster Image" PUID="x-fmt/184">
+            <Extension>ras</Extension>
+        </FileFormat>
+        <FileFormat ID="258" Name="Raw Bitmap" PUID="x-fmt/185">
+            <Extension>raw</Extension>
+        </FileFormat>
+        <FileFormat ID="259" Name="Silicon Graphics RGB File" PUID="x-fmt/186"/>
+        <FileFormat ID="260"
+            Name="Fractal Design Painter RIFF Bitmap Graphics" PUID="x-fmt/187">
+            <Extension>rif</Extension>
+        </FileFormat>
+        <FileFormat ID="261"
+            Name="SDSC Image Tool Wavefront Raster Image" PUID="x-fmt/188">
+            <Extension>rla</Extension>
+        </FileFormat>
+        <FileFormat ID="262"
+            Name="SDSC Image Tool Run-Length Encoded Bitmap" PUID="x-fmt/189">
+            <Extension>rle</Extension>
+        </FileFormat>
+        <FileFormat ID="263" MIMEType="application/vnd.rn-realmedia"
+            Name="RealMedia" PUID="x-fmt/190">
+            <Extension>rm</Extension>
+        </FileFormat>
+        <FileFormat ID="264" MIMEType="application/vnd.lotus-wordpro"
+            Name="AMI Professional Document" PUID="x-fmt/191">
+            <Extension>sam</Extension>
+        </FileFormat>
+        <FileFormat ID="265" Name="SAS for MS-DOS Catalog" PUID="x-fmt/192">
+            <Extension>sct</Extension>
+        </FileFormat>
+        <FileFormat ID="266" Name="Unisys (Sperry) System Data File" PUID="x-fmt/193">
+            <Extension>sdf</Extension>
+        </FileFormat>
+        <FileFormat ID="268" MIMEType="text/sgml"
+            Name="Standard Generalized Markup Language" PUID="x-fmt/195">
+            <Extension>sgml</Extension>
+        </FileFormat>
+        <FileFormat ID="271" Name="DataFlex Query Tag Name" PUID="x-fmt/197">
+            <Extension>tag</Extension>
+        </FileFormat>
+        <FileFormat ID="272" Name="Pagemaker TableEditor Graphics" PUID="x-fmt/198">
+            <Extension>tbl</Extension>
+        </FileFormat>
+        <FileFormat ID="273"
+            Name="Turbo Debugger Keystroke Recording File" PUID="x-fmt/199">
+            <Extension>tdk</Extension>
+        </FileFormat>
+        <FileFormat ID="274" Name="PageMaker Time Stamp File"
+            PUID="x-fmt/200" Version="4.0">
+            <Extension>tym</Extension>
+        </FileFormat>
+        <FileFormat ID="275" Name="CCITT G.711 Audio" PUID="x-fmt/201">
+            <Extension>ulaw</Extension>
+        </FileFormat>
+        <FileFormat ID="279" Name="Corel Wavelet Compressed Bitmap" PUID="x-fmt/202">
+            <Extension>wi</Extension>
+        </FileFormat>
+        <FileFormat ID="284" Name="Microsoft Word for Windows Macro" PUID="x-fmt/204">
+            <Extension>wpm</Extension>
+        </FileFormat>
+        <FileFormat ID="286" Name="WordStar"
+            PUID="x-fmt/206">
+            <Extension>ws</Extension>
+            <Extension>wsd</Extension>
+            <Extension>wsw</Extension>
+        </FileFormat>
+        <FileFormat ID="289" MIMEType="image/x-xpixmap"
+            Name="X-Windows Pixmap Image" PUID="x-fmt/208" Version="X10">
+            <Extension>xpm</Extension>
+        </FileFormat>
+        <FileFormat ID="290" Name="SDSC Image Tool X Window Dump Format" PUID="x-fmt/209">
+            <Extension>xwd</Extension>
+        </FileFormat>
+        <FileFormat ID="291" Name="XYWrite Document" PUID="x-fmt/210">
+            <Extension>xy</Extension>
+        </FileFormat>
+        <FileFormat ID="292" Name="XYWrite Document" PUID="x-fmt/211" Version="III">
+            <Extension>xy3</Extension>
+        </FileFormat>
+        <FileFormat ID="300" Name="Quicken Data File" PUID="x-fmt/213">
+            <Extension>abd</Extension>
+            <Extension>qdf</Extension>
+            <Extension>qel</Extension>
+        </FileFormat>
+        <FileFormat ID="302" Name="Windows Paint" PUID="x-fmt/214" Version="3.x">
+            <Extension>msp</Extension>
+        </FileFormat>
+        <FileFormat ID="304" Name="GEM Metafile Format" PUID="x-fmt/215">
+            <Extension>gem</Extension>
+        </FileFormat>
+        <FileFormat ID="306"
+            Name="Microsoft Powerpoint Packaged Presentation" PUID="x-fmt/216">
+            <Extension>ppz</Extension>
+        </FileFormat>
+        <FileFormat ID="308" Name="Adobe ACD" PUID="x-fmt/217">
+            <Extension>acd</Extension>
+        </FileFormat>
+        <FileFormat ID="309" Name="ESRI Arc/Info Binary Grid" PUID="x-fmt/218">
+            <Extension>adf</Extension>
+        </FileFormat>
+        <FileFormat ID="310" MIMEType="application/x-internet-archive"
+            Name="Internet Archive" PUID="x-fmt/219">
+            <Extension>arc</Extension>
+            <HasPriorityOverFileFormatID>639</HasPriorityOverFileFormatID>
+            <HasPriorityOverFileFormatID>643</HasPriorityOverFileFormatID>
+        </FileFormat>
+        <FileFormat ID="311" Name="Applixware Spreadsheet" PUID="x-fmt/220">
+            <Extension>as</Extension>
+        </FileFormat>
+        <FileFormat ID="313" Name="MapBrowser/MapWriter Vector Map Data" PUID="x-fmt/221">
+            <Extension>cbd</Extension>
+        </FileFormat>
+        <FileFormat ID="314" MIMEType="application/x-cdf"
+            Name="CD Audio" PUID="x-fmt/222">
+            <Extension>cda</Extension>
+        </FileFormat>
+        <FileFormat ID="315" Name="Autodesk Animator CEL File Format" PUID="x-fmt/223">
+            <Extension>cel</Extension>
+        </FileFormat>
+        <FileFormat ID="316" MIMEType="text/css"
+            Name="Cascading Style Sheet" PUID="x-fmt/224">
+            <Extension>css</Extension>
+        </FileFormat>
+        <FileFormat ID="318" Name="ESRI Arc/Info Export File" PUID="x-fmt/226">
+            <Extension>e00</Extension>
+            <Extension>x00</Extension>
+        </FileFormat>
+        <FileFormat ID="319" MIMEType="application/gml+xml"
+            Name="Geography Markup Language" PUID="x-fmt/227">
+            <Extension>gml</Extension>
+        </FileFormat>
+        <FileFormat ID="320" Name="Applixware Bitmap" PUID="x-fmt/228">
+            <Extension>im</Extension>
+        </FileFormat>
+        <FileFormat ID="321" Name="Intergraph Raster Image" PUID="x-fmt/229">
+            <Extension>ing</Extension>
+        </FileFormat>
+        <FileFormat ID="322" MIMEType="audio/midi" Name="MIDI Audio" PUID="x-fmt/230">
+            <Extension>mid</Extension>
+        </FileFormat>
+        <FileFormat ID="323" Name="ESRI MapInfo Export File" PUID="x-fmt/231">
+            <Extension>mif</Extension>
+        </FileFormat>
+        <FileFormat ID="324" MIMEType="application/x-project"
+            Name="Microsoft Project Export File" PUID="x-fmt/232">
+            <Extension>mpx</Extension>
+        </FileFormat>
+        <FileFormat ID="325" Name="Paint Shop Pro Image"
+            PUID="x-fmt/233">
+            <Extension>psp</Extension>
+        </FileFormat>
+        <FileFormat ID="328" Name="ESRI Arc/View ShapeFile" PUID="x-fmt/235">
+            <Extension>shp</Extension>
+        </FileFormat>
+        <FileFormat ID="359" MIMEType="application/vnd.ms-project"
+            Name="Microsoft Project" PUID="x-fmt/243">
+            <Extension>mpp</Extension>
+        </FileFormat>
+        <FileFormat ID="364"
+            Name="Microsoft Outlook Personal Folders (ANSI)"
+            PUID="x-fmt/248" Version="1997-2002">
+            <Extension>pst</Extension>
+        </FileFormat>
+        <FileFormat ID="365"
+            Name="Microsoft Outlook Personal Folders (Unicode)"
+            PUID="x-fmt/249" Version="2003-2007">
+            <Extension>pst</Extension>
+        </FileFormat>
+        <FileFormat ID="370" Name="Microsoft Publisher" PUID="x-fmt/252">
+            <Extension>pub</Extension>
+        </FileFormat>
+        <FileFormat ID="382" MIMEType="application/zip"
+            Name="ZIP Format" PUID="x-fmt/263">
+            <Extension>zip</Extension>
+        </FileFormat>
+        <FileFormat ID="384" MIMEType="application/x-rar-compressed"
+            Name="RAR Archive" PUID="x-fmt/264" Version="2.0">
+            <Extension>rar</Extension>
+        </FileFormat>
+        <FileFormat ID="385" MIMEType="application/x-tar"
+            Name="Tape Archive Format" PUID="x-fmt/265">
+            <Extension>tar</Extension>
+        </FileFormat>
+        <FileFormat ID="386" MIMEType="application/x-gzip"
+            Name="GZIP Format" PUID="x-fmt/266">
+            <Extension>gz</Extension>
+            <Extension>z</Extension>
+        </FileFormat>
+        <FileFormat ID="387" Name="BZIP Compressed Archive" PUID="x-fmt/267">
+            <Extension>bz</Extension>
+        </FileFormat>
+        <FileFormat ID="388" MIMEType="application/x-bzip2"
+            Name="BZIP2 Compressed Archive" PUID="x-fmt/268">
+            <Extension>bz2</Extension>
+        </FileFormat>
+        <FileFormat ID="389" Name="ZOO Compressed Archive" PUID="x-fmt/269">
+            <Extension>zoo</Extension>
+        </FileFormat>
+        <FileFormat ID="402" MIMEType="image/bmp" Name="OS/2 Bitmap"
+            PUID="x-fmt/270" Version="2.0">
+            <Extension>bmp</Extension>
+        </FileFormat>
+        <FileFormat ID="422" MIMEType="video/vnd.rn-realvideo"
+            Name="Real Video" PUID="x-fmt/277">
+            <Extension>rv</Extension>
+        </FileFormat>
+        <FileFormat ID="424" MIMEType="audio/vnd.rn-realaudio"
+            Name="RealAudio" PUID="x-fmt/278" Version="3">
+            <Extension>ra</Extension>
+        </FileFormat>
+        <FileFormat ID="425" MIMEType="audio/mpeg"
+            Name="MPEG 1/2 Audio Layer 3 Streaming" PUID="x-fmt/279">
+            <Extension>m3u</Extension>
+        </FileFormat>
+        <FileFormat ID="429" MIMEType="application/xml"
+            Name="XML Schema Definition" PUID="XSD">
+            <InternalSignatureID>538</InternalSignatureID>
+            <Extension>xsd</Extension>
+            <HasPriorityOverFileFormatID>319</HasPriorityOverFileFormatID>
+            <HasPriorityOverFileFormatID>638</HasPriorityOverFileFormatID>
+        </FileFormat>
+        <FileFormat ID="430" MIMEType="application/xml"
+            Name="Extensible Stylesheet Language" PUID="x-fmt/281">
+            <Extension>xsl</Extension>
+        </FileFormat>
+        <FileFormat ID="433" MIMEType="text/plain"
+            Name="8-bit ANSI Text" PUID="x-fmt/282">
+            <Extension>ans</Extension>
+        </FileFormat>
+        <FileFormat ID="434" MIMEType="text/plain"
+            Name="8-bit ASCII Text" PUID="x-fmt/283">
+            <Extension>asc</Extension>
+        </FileFormat>
+        <FileFormat ID="435"
+            Name="IBM DisplayWrite Final Form Text File" PUID="x-fmt/284">
+            <Extension>fft</Extension>
+        </FileFormat>
+        <FileFormat ID="436"
+            Name="IBM DisplayWrite Revisable Form Text File" PUID="x-fmt/285">
+            <Extension>rft</Extension>
+        </FileFormat>
+        <FileFormat ID="437" MIMEType="application/dec-dx."
+            Name="DEC Data Exchange File" PUID="x-fmt/286">
+            <Extension>dx</Extension>
+        </FileFormat>
+        <FileFormat ID="438" Name="DEC WPS Plus Document" PUID="x-fmt/287">
+            <Extension>wpl</Extension>
+        </FileFormat>
+        <FileFormat ID="441" Name="AMI Draw Vector Image" PUID="x-fmt/290">
+            <Extension>sdw</Extension>
+        </FileFormat>
+        <FileFormat ID="446" Name="Hewlett Packard Graphics Language" PUID="x-fmt/293">
+            <Extension>hpgl</Extension>
+        </FileFormat>
+        <FileFormat ID="452" MIMEType="image/x-xbitmap"
+            Name="X-Windows Bitmap Image" PUID="x-fmt/299">
+            <Extension>xbm</Extension>
+        </FileFormat>
+        <FileFormat ID="453" MIMEType="image/x-xwindowdump"
+            Name="X-Windows Screen Dump File" PUID="x-fmt/300" Version="X10">
+            <Extension>xdm</Extension>
+            <Extension>xwd</Extension>
+        </FileFormat>
+        <FileFormat ID="455" Name="ACBM Graphics" PUID="x-fmt/301">
+            <Extension>acb</Extension>
+        </FileFormat>
+        <FileFormat ID="457" Name="Aldus Freehand Drawing"
+            PUID="x-fmt/303" Version="3">
+            <Extension>fh3</Extension>
+        </FileFormat>
+        <FileFormat ID="458" Name="Aldus Freehand Drawing"
+            PUID="x-fmt/304" Version="4">
+            <Extension>fh4</Extension>
+        </FileFormat>
+        <FileFormat ID="463" Name="Apple Sound" PUID="x-fmt/305">
+            <Extension>afc</Extension>
+        </FileFormat>
+        <FileFormat ID="464" Name="AutoSketch Drawing" PUID="x-fmt/306">
+            <Extension>skf</Extension>
+        </FileFormat>
+        <FileFormat ID="465"
+            Name="Paradox Database Memo Field (Binary Large Object)" PUID="x-fmt/307">
+            <Extension>dbq</Extension>
+            <Extension>mb</Extension>
+        </FileFormat>
+        <FileFormat ID="466" Name="Btrieve Database" PUID="x-fmt/308" Version="5.1">
+            <Extension>btr</Extension>
+        </FileFormat>
+        <FileFormat ID="467" Name="ChiWriter Document" PUID="x-fmt/309">
+            <Extension>chi</Extension>
+        </FileFormat>
+        <FileFormat ID="468" Name="Corel Chart" PUID="x-fmt/310">
+            <Extension>cch</Extension>
+        </FileFormat>
+        <FileFormat ID="469" Name="dBASE Text Memo" PUID="x-fmt/311">
+            <Extension>dbt</Extension>
+        </FileFormat>
+        <FileFormat ID="470" Name="DesignCAD Drawing" PUID="x-fmt/312">
+            <Extension>dc</Extension>
+            <Extension>dc2</Extension>
+        </FileFormat>
+        <FileFormat ID="472" Name="DesignCAD for Windows Drawing" PUID="x-fmt/313">
+            <Extension>dw2</Extension>
+        </FileFormat>
+        <FileFormat ID="473" Name="Digital Terrain Elevation Data" PUID="x-fmt/314">
+            <Extension>avg</Extension>
+            <Extension>dt0</Extension>
+            <Extension>dt1</Extension>
+            <Extension>dt2</Extension>
+            <Extension>dted</Extension>
+            <Extension>max</Extension>
+            <Extension>min</Extension>
+        </FileFormat>
+        <FileFormat ID="474" Name="Document Type Definition" PUID="x-fmt/315">
+            <Extension>dtd</Extension>
+        </FileFormat>
+        <FileFormat ID="475" Name="Dr Halo Bitmap" PUID="x-fmt/316">
+            <Extension>cut</Extension>
+        </FileFormat>
+        <FileFormat ID="476" Name="ESRI Arc/View Project"
+            PUID="x-fmt/317" Version="2.x">
+            <Extension>apr</Extension>
+        </FileFormat>
+        <FileFormat ID="477" MIMEType="application/x-filemaker"
+            Name="FileMaker Pro Database" PUID="x-fmt/318">
+            <Extension>fm</Extension>
+            <Extension>fmp</Extension>
+            <Extension>fp</Extension>
+            <Extension>fp3</Extension>
+            <Extension>fp5</Extension>
+        </FileFormat>
+        <FileFormat ID="482" Name="Fractal Image" PUID="x-fmt/320">
+            <Extension>fif</Extension>
+        </FileFormat>
+        <FileFormat ID="483" Name="Framework Database" PUID="x-fmt/321">
+            <Extension>fw</Extension>
+            <Extension>fw2</Extension>
+            <Extension>fw3</Extension>
+            <Extension>fw4</Extension>
+        </FileFormat>
+        <FileFormat ID="487" Name="Harvard Graphics Presentation"
+            PUID="x-fmt/324" Version="2.0">
+            <Extension>shw</Extension>
+        </FileFormat>
+        <FileFormat ID="488" Name="Harvard Graphics Vector Graphics"
+            PUID="x-fmt/325" Version="2.0">
+            <Extension>cht</Extension>
+        </FileFormat>
+        <FileFormat ID="489"
+            Name="Hewlett Packard AdvanceWrite Text File" PUID="x-fmt/326">
+            <Extension>aw</Extension>
+        </FileFormat>
+        <FileFormat ID="490" Name="IntelliDraw Vector Graphics" PUID="x-fmt/327">
+            <Extension>idw</Extension>
+        </FileFormat>
+        <FileFormat ID="491" Name="InterBase Database" PUID="x-fmt/328">
+            <Extension>gdb</Extension>
+        </FileFormat>
+        <FileFormat ID="492" Name="Interleaf Document" PUID="x-fmt/329">
+            <Extension>doc</Extension>
+        </FileFormat>
+        <FileFormat ID="493" Name="JustWrite Text Document" PUID="x-fmt/330">
+            <Extension>jw</Extension>
+        </FileFormat>
+        <FileFormat ID="494"
+            Name="Lotus 1-2-3 Spreadsheet Formatting File"
+            PUID="x-fmt/331" Version="2.3-2.4">
+            <Extension>fm1</Extension>
+            <Extension>fmt</Extension>
+        </FileFormat>
+        <FileFormat ID="495"
+            Name="Lotus 1-2-3 Spreadsheet Formatting File"
+            PUID="x-fmt/332" Version="3.0">
+            <Extension>fm3</Extension>
+        </FileFormat>
+        <FileFormat ID="496" MIMEType="vnd.lotus-approach"
+            Name="Lotus Approach View File" PUID="x-fmt/333" Version="97">
+            <Extension>apr</Extension>
+        </FileFormat>
+        <FileFormat ID="497" MIMEType="application/vnd.lotus-approach"
+            Name="Lotus Approach View File" PUID="x-fmt/334">
+            <Extension>apt</Extension>
+        </FileFormat>
+        <FileFormat ID="498" MIMEType="application/vnd.lotus-freelance"
+            Name="Lotus Freelance Smartmaster Graphics" PUID="x-fmt/335">
+            <Extension>mas</Extension>
+        </FileFormat>
+        <FileFormat ID="499" MIMEType="application/vnd.lotus-notes"
+            Name="Lotus Notes Database" PUID="x-fmt/336" Version="2">
+            <Extension>ns2</Extension>
+            <Extension>nsf</Extension>
+        </FileFormat>
+        <FileFormat ID="500" MIMEType="application/vnd.lotus-notes"
+            Name="Lotus Notes Database" PUID="x-fmt/337" Version="3">
+            <Extension>ns3</Extension>
+            <Extension>nsf</Extension>
+        </FileFormat>
+        <FileFormat ID="501" MIMEType="application/vnd.lotus-notes"
+            Name="Lotus Notes Database" PUID="x-fmt/338" Version="4">
+            <Extension>ns4</Extension>
+            <Extension>nsf</Extension>
+        </FileFormat>
+        <FileFormat ID="503" Name="Lotus Notes File" PUID="x-fmt/339">
+            <Extension>box</Extension>
+        </FileFormat>
+        <FileFormat ID="504"
+            MIMEType="application/lwp, application/vnd.lotus-wordpro"
+            Name="Lotus WordPro Document" PUID="x-fmt/340">
+            <Extension>lwp</Extension>
+        </FileFormat>
+        <FileFormat ID="506" Name="Microsoft FoxPro Memo" PUID="x-fmt/342">
+            <Extension>fpt</Extension>
+            <Extension>frt</Extension>
+            <Extension>pjt</Extension>
+            <Extension>vct</Extension>
+        </FileFormat>
+        <FileFormat ID="507" Name="Microsoft Visual FoxPro Table" PUID="x-fmt/343">
+            <Extension>dbx</Extension>
+        </FileFormat>
+        <FileFormat ID="508" Name="Microsoft Works Database" PUID="x-fmt/344">
+            <Extension>bdb</Extension>
+        </FileFormat>
+        <FileFormat ID="509" Name="Microsoft Works Document" PUID="x-fmt/345">
+            <Extension>bps</Extension>
+        </FileFormat>
+        <FileFormat ID="510" Name="Microstation CAD Drawing"
+            PUID="x-fmt/346" Version="95">
+            <Extension>dgn</Extension>
+        </FileFormat>
+        <FileFormat ID="511" Name="MultiMate Text File" PUID="x-fmt/347" Version="4.x">
+            <Extension>dox</Extension>
+        </FileFormat>
+        <FileFormat ID="512" MIMEType="image/x-dcx"
+            Name="Multipage Zsoft Paintbrush Bitmap Graphics" PUID="x-fmt/348">
+            <Extension>dcx</Extension>
+        </FileFormat>
+        <FileFormat ID="513" Name="Nota Bene Text File" PUID="x-fmt/349">
+            <Extension>nb</Extension>
+        </FileFormat>
+        <FileFormat ID="514" Name="OmniPage Pro Document" PUID="x-fmt/350">
+            <Extension>met</Extension>
+        </FileFormat>
+        <FileFormat ID="515" Name="PageMaker Document" PUID="x-fmt/351" Version="3.0">
+            <Extension>pm3</Extension>
+        </FileFormat>
+        <FileFormat ID="516" Name="PageMaker Document" PUID="x-fmt/352" Version="4.0">
+            <Extension>pm4</Extension>
+        </FileFormat>
+        <FileFormat ID="518" Name="Professional Write Text File" PUID="x-fmt/353">
+            <Extension>pw</Extension>
+        </FileFormat>
+        <FileFormat ID="520" Name="SAP Document" PUID="x-fmt/354">
+            <Extension>ali</Extension>
+        </FileFormat>
+        <FileFormat ID="521" Name="SAS Data File" PUID="x-fmt/355">
+            <Extension>ssd</Extension>
+        </FileFormat>
+        <FileFormat ID="522" Name="SAS for MS-DOS Database" PUID="x-fmt/356">
+            <Extension>ssd</Extension>
+        </FileFormat>
+        <FileFormat ID="523" Name="Scanstudio 16-Colour Bitmap" PUID="x-fmt/357">
+            <Extension>adc</Extension>
+        </FileFormat>
+        <FileFormat ID="525" Name="StarOffice Calc" PUID="x-fmt/359" Version="5.1">
+            <Extension>sdc</Extension>
+        </FileFormat>
+        <FileFormat ID="526" Name="StarOffice Impress" PUID="x-fmt/360" Version="5.1">
+            <Extension>sdd</Extension>
+        </FileFormat>
+        <FileFormat ID="527" Name="StatGraphics Data File" PUID="x-fmt/361">
+            <Extension>aws</Extension>
+        </FileFormat>
+        <FileFormat ID="528" Name="StratGraphics Data File" PUID="x-fmt/362">
+            <Extension>asf</Extension>
+        </FileFormat>
+        <FileFormat ID="531" MIMEType="application/x-dvi"
+            Name="TeX Binary File" PUID="x-fmt/365">
+            <Extension>dvi</Extension>
+        </FileFormat>
+        <FileFormat ID="532" MIMEType="application/x-dvi"
+            Name="TeX/LaTeX Device Independent Document" PUID="fmt/160">
+            <Extension>dvi</Extension>
+        </FileFormat>
+        <FileFormat ID="533" Name="Truevision TGA Bitmap"
+            PUID="x-fmt/367" Version="1.0">
+            <Extension>afi</Extension>
+            <Extension>bpx</Extension>
+            <Extension>icb</Extension>
+            <Extension>tga</Extension>
+            <Extension>vda</Extension>
+            <Extension>vst</Extension>
+        </FileFormat>
+        <FileFormat ID="538" Name="VisiCalc Database" PUID="x-fmt/368">
+            <Extension>dif</Extension>
+        </FileFormat>
+        <FileFormat ID="539" Name="Vista Pro Graphics" PUID="x-fmt/369">
+            <Extension>dem</Extension>
+        </FileFormat>
+        <FileFormat ID="547" Name="XYWrite for Windows Document"
+            PUID="x-fmt/371" Version="4.0">
+            <Extension>xyw</Extension>
+        </FileFormat>
+        <FileFormat ID="548" Name="XYWrite Document" PUID="x-fmt/372" Version="III+">
+            <Extension>xyp</Extension>
+        </FileFormat>
+        <FileFormat ID="549" Name="XYWrite Document" PUID="x-fmt/373" Version="IV">
+            <Extension>xy4</Extension>
+        </FileFormat>
+        <FileFormat ID="554" Name="Paint Shop Pro Image"
+            PUID="x-fmt/376">
+            <Extension>pspimage</Extension>
+        </FileFormat>
+        <FileFormat ID="558" Name="dBASE for Windows database"
+            PUID="x-fmt/380">
+            <Extension>dbf</Extension>
+        </FileFormat>
+        <FileFormat ID="559" Name="Dia Graphics Format" PUID="x-fmt/381">
+            <Extension>dia</Extension>
+        </FileFormat>
+        <FileFormat ID="613" MIMEType="application/pdf"
+            Name="Acrobat PDF - Portable Document Format"
+            PUID="PDF">
+            <InternalSignatureID>123</InternalSignatureID>
+            <Extension>pdf</Extension>
+        </FileFormat>
+        <FileFormat ID="619" MIMEType="image/gif"
+            Name="Graphics Interchange Format" PUID="fmt/3">
+            <Extension>gif</Extension>
+        </FileFormat>
+        <FileFormat ID="621" Name="PCX" PUID="fmt/86">
+            <Extension>pcx</Extension>
+        </FileFormat>
+        <FileFormat ID="626" MIMEType="application/rtf, text/rtf"
+            Name="Rich Text Format" PUID="fmt/45">
+            <Extension>rtf</Extension>
+        </FileFormat>
+        <FileFormat ID="634" MIMEType="image/svg+xml"
+            Name="Scalable Vector Graphics" PUID="fmt/91">
+            <Extension>svg</Extension>
+        </FileFormat>
+        <FileFormat ID="638" MIMEType="text/xml"
+            Name="Extensible Markup Language" PUID="XML" Version="1.0">
+            <InternalSignatureID>34</InternalSignatureID>
+            <Extension>xml</Extension>
+            <HasPriorityOverFileFormatID>639</HasPriorityOverFileFormatID>
+            <HasPriorityOverFileFormatID>643</HasPriorityOverFileFormatID>
+        </FileFormat>
+        <FileFormat ID="639" MIMEType="text/html"
+            Name="Hypertext Markup Language" PUID="fmt/97">
+            <Extension>htm</Extension>
+            <Extension>html</Extension>
+        </FileFormat>
+        <FileFormat ID="643" MIMEType="application/xhtml+xml"
+            Name="Extensible Hypertext Markup Language" PUID="fmt/102">
+            <Extension>htm</Extension>
+            <Extension>html</Extension>
+        </FileFormat>
+        <FileFormat ID="646" MIMEType="application/x-shockwave-flash"
+            Name="Macromedia Flash" PUID="fmt/104">
+            <Extension>swf</Extension>
+        </FileFormat>
+        <FileFormat ID="653" MIMEType="video/x-flv"
+            Name="Macromedia FLV" PUID="x-fmt/382" Version="1">
+            <Extension>flv</Extension>
+        </FileFormat>
+        <FileFormat ID="654" MIMEType="audio/x-wav"
+            Name="Waveform Audio" PUID="WAVE">
+            <InternalSignatureID>50</InternalSignatureID>
+            <Extension>wav</Extension>
+        </FileFormat>
+        <FileFormat ID="655" MIMEType="video/x-msvideo"
+            Name="Audio/Video Interleaved Format" PUID="fmt/5">
+            <Extension>avi</Extension>
+        </FileFormat>
+        <FileFormat ID="657" MIMEType="application/fits, image/fits"
+            Name="Flexible Image Transport System" PUID="x-fmt/383">
+            <Extension>fits</Extension>
+        </FileFormat>
+        <FileFormat ID="658" MIMEType="video/quicktime" Name="Quicktime" PUID="x-fmt/384">
+            <Extension>mov</Extension>
+            <Extension>qtm</Extension>
+        </FileFormat>
+        <FileFormat ID="659" MIMEType="video/mpeg"
+            Name="MPEG-1 Video Format" PUID="x-fmt/385">
+            <Extension>mpeg</Extension>
+            <Extension>mpg</Extension>
+            <HasPriorityOverFileFormatID>1207</HasPriorityOverFileFormatID>
+        </FileFormat>
+        <FileFormat ID="660" MIMEType="video/mpeg"
+            Name="MPEG-2 Video Format" PUID="MPEG2">
+            <InternalSignatureID>655</InternalSignatureID>
+            <Extension>mpeg</Extension>
+            <Extension>mpg</Extension>
+            <HasPriorityOverFileFormatID>1207</HasPriorityOverFileFormatID>
+        </FileFormat>
+        <FileFormat ID="661" MIMEType="model/vrml"
+            Name="Virtual Reality Modeling Language" PUID="fmt/93" Version="1.0">
+            <Extension>wrl</Extension>
+        </FileFormat>
+        <FileFormat ID="662" MIMEType="model/vrml"
+            Name="Virtual Reality Modeling Language" PUID="fmt/94" Version="2.0">
+            <Extension>wrl</Extension>
+        </FileFormat>
+        <FileFormat ID="664" MIMEType="image/png"
+            Name="Portable Network Graphics" PUID="PNG">
+            <InternalSignatureID>58</InternalSignatureID>
+            <Extension>png</Extension>
+        </FileFormat>
+        <FileFormat ID="667" MIMEType="image/jpeg"
+            Name="JPEG File Interchange Format" PUID="JPEG">
+            <InternalSignatureID>66</InternalSignatureID>
+            <Extension>jpe</Extension>
+            <Extension>jpeg</Extension>
+            <Extension>jpg</Extension>
+        </FileFormat>
+        <FileFormat ID="678" MIMEType="application/vnd.ms-excel"
+            Name="Microsoft Excel (xls)" PUID="XLS">
+            <InternalSignatureID>72</InternalSignatureID>
+            <InternalSignatureID>73</InternalSignatureID>
+            <InternalSignatureID>74</InternalSignatureID>
+            <InternalSignatureID>76</InternalSignatureID>
+            <InternalSignatureID>78</InternalSignatureID>
+            <Extension>xls</Extension>
+            <Extension>xlw</Extension>
+        </FileFormat>
+        <FileFormat ID="686" MIMEType="image/jp2"
+            Name="JP2 (JPEG 2000 part 1)" PUID="JP2">
+            <InternalSignatureID>251</InternalSignatureID>
+            <Extension>jp2</Extension>
+        </FileFormat>
+        <FileFormat ID="687" MIMEType="audio/mpeg"
+            Name="MPEG 1/2 Audio Layer 3" PUID="MP3">
+            <InternalSignatureID>266</InternalSignatureID>
+            <InternalSignatureID>267</InternalSignatureID>
+            <InternalSignatureID>268</InternalSignatureID>
+            <InternalSignatureID>269</InternalSignatureID>
+            <InternalSignatureID>279</InternalSignatureID>
+            <InternalSignatureID>280</InternalSignatureID>
+            <InternalSignatureID>281</InternalSignatureID>
+            <InternalSignatureID>282</InternalSignatureID>
+            <Extension>mp3</Extension>
+        </FileFormat>
+        <FileFormat ID="691" MIMEType="application/vnd.ms-asf"
+            Name="Advanced Systems Format" PUID="fmt/131">
+            <Extension>asf</Extension>
+        </FileFormat>
+        <FileFormat ID="692" MIMEType="audio/x-ms-wma"
+            Name="Windows Media Audio" PUID="fmt/132">
+            <Extension>asf</Extension>
+            <Extension>wma</Extension>
+            <HasPriorityOverFileFormatID>691</HasPriorityOverFileFormatID>
+        </FileFormat>
+        <FileFormat ID="693" MIMEType="video/x-ms-wmv"
+            Name="Windows Media Video" PUID="fmt/133">
+            <Extension>asf</Extension>
+            <Extension>wmv</Extension>
+            <HasPriorityOverFileFormatID>691</HasPriorityOverFileFormatID>
+            <HasPriorityOverFileFormatID>692</HasPriorityOverFileFormatID>
+        </FileFormat>
+        <FileFormat ID="694" MIMEType="image/vnd.dwg"
+            Name="AutoCAD Drawing" PUID="fmt/21">
+            <Extension>dwg</Extension>
+        </FileFormat>
+        <FileFormat ID="710" MIMEType="image/vnd.dxf"
+            Name="Drawing Interchange File Format (ASCII)" PUID="fmt/64">
+            <Extension>dxf</Extension>
+            <HasPriorityOverFileFormatID>694</HasPriorityOverFileFormatID>
+        </FileFormat>
+        <FileFormat ID="727" MIMEType="image/bmp" Name="Windows Bitmap"
+            PUID="fmt/114" Version="1.0">
+            <Extension>bmp</Extension>
+            <Extension>ddb</Extension>
+			<Extension>dib</Extension>
+        </FileFormat>
+        <FileFormat ID="733" MIMEType="application/msword"
+            Name="Microsoft Word Document" PUID="fmt/37">
+            <Extension>doc</Extension>
+        </FileFormat>
+        <FileFormat ID="736" MIMEType="application/vnd.wordperfect"
+            Name="WordPerfect" PUID="x-fmt/393">
+            <Extension>wp</Extension>
+            <Extension>wpd</Extension>
+        </FileFormat>
+        <FileFormat ID="738" Name="WordPerfect Graphics Metafile"
+            PUID="x-fmt/395" Version="1.0">
+            <Extension>wpg</Extension>
+        </FileFormat>
+        <FileFormat ID="739" MIMEType="image/vnd.dxf"
+            Name="Drawing Interchange File Format (Binary)"
+            PUID="fmt/80">
+            <Extension>dxf</Extension>
+        </FileFormat>
+        <FileFormat ID="745" MIMEType="application/vnd.sun.xml.writer"
+            Name="OpenOffice Writer" PUID="fmt/128" Version="1.0">
+            <Extension>sxw</Extension>
+            <HasPriorityOverFileFormatID>382</HasPriorityOverFileFormatID>
+        </FileFormat>
+        <FileFormat ID="746" MIMEType="application/vnd.sun.xml.calc"
+            Name="OpenOffice Calc" PUID="fmt/129" Version="1.0">
+            <Extension>sxc</Extension>
+            <HasPriorityOverFileFormatID>382</HasPriorityOverFileFormatID>
+        </FileFormat>
+        <FileFormat ID="747" MIMEType="application/vnd.sun.xml.impress"
+            Name="OpenOffice Impress" PUID="fmt/130" Version="1.0">
+            <Extension>sxi</Extension>
+            <HasPriorityOverFileFormatID>382</HasPriorityOverFileFormatID>
+        </FileFormat>
+        <FileFormat ID="748" MIMEType="application/vnd.sun.xml.draw"
+            Name="OpenOffice Draw" PUID="fmt/127" Version="1.0">
+            <Extension>sxd</Extension>
+            <HasPriorityOverFileFormatID>382</HasPriorityOverFileFormatID>
+        </FileFormat>
+        <FileFormat ID="754"
+            MIMEType="application/vnd.stardivision.writer"
+            Name="StarOffice Writer" PUID="x-fmt/400" Version="5.1">
+            <Extension>sdw</Extension>
+        </FileFormat>
+        <FileFormat ID="755"
+            MIMEType="application/vnd.stardivision.draw"
+            Name="StarOffice Draw" PUID="x-fmt/401" Version="5.1">
+            <Extension>sda</Extension>
+        </FileFormat>
+        <FileFormat ID="756"
+            MIMEType="application/vnd.stardivision.draw"
+            Name="StarOffice Draw" PUID="x-fmt/402" Version="5.2">
+            <Extension>sda</Extension>
+        </FileFormat>
+        <FileFormat ID="757"
+            MIMEType="application/vnd.stardivision.writer"
+            Name="StarOffice Writer" PUID="x-fmt/403" Version="5.2">
+            <Extension>sdw</Extension>
+        </FileFormat>
+        <FileFormat ID="758"
+            MIMEType="application/vnd.stardivision.calc"
+            Name="StarOffice Calc" PUID="x-fmt/404" Version="5.2">
+            <Extension>sdc</Extension>
+        </FileFormat>
+        <FileFormat ID="759"
+            MIMEType="application/vnd.stardivision.impress"
+            Name="StarOffice Impress" PUID="x-fmt/405" Version="5.2">
+            <Extension>sdd</Extension>
+        </FileFormat>
+        <FileFormat ID="761" Name="Drawing Interchange Binary Format"
+            PUID="fmt/54" Version="1.0">
+            <Extension>dxb</Extension>
+        </FileFormat>
+        <FileFormat ID="768" MIMEType="text/xml"
+            Name="DROID Signature File Format" PUID="fmt/121" Version="1.0">
+            <Extension>xml</Extension>
+        </FileFormat>
+        <FileFormat ID="769" MIMEType="text/xml"
+            Name="DROID File Collection File Format" PUID="fmt/120" Version="1.0">
+            <Extension>xml</Extension>
+        </FileFormat>
+        <FileFormat ID="770" MIMEType="application/pdf"
+            Name="Acrobat PDF/A - Portable Document Format"
+            PUID="PDFA1" Version="1">
+            <InternalSignatureID>264</InternalSignatureID>
+            <Extension>pdf</Extension>
+            <HasPriorityOverFileFormatID>613</HasPriorityOverFileFormatID>
+        </FileFormat>
+        <FileFormat ID="774" Name="MS-DOS Executable" PUID="x-fmt/409">
+            <Extension>exe</Extension>
+        </FileFormat>
+        <FileFormat ID="775" Name="Windows New Executable" PUID="x-fmt/410">
+            <Extension>exe</Extension>
+        </FileFormat>
+        <FileFormat ID="776" MIMEType="application/octet-stream"
+            Name="Windows Portable Executable" PUID="x-fmt/411">
+            <Extension>dll</Extension>
+            <Extension>exe</Extension>
+            <Extension>sys</Extension>
+            <HasPriorityOverFileFormatID>775</HasPriorityOverFileFormatID>
+        </FileFormat>
+        <FileFormat ID="777" MIMEType="application/java-archive"
+            Name="Java Archive Format" PUID="x-fmt/412">
+            <Extension>jar</Extension>
+            <HasPriorityOverFileFormatID>382</HasPriorityOverFileFormatID>
+            <HasPriorityOverFileFormatID>643</HasPriorityOverFileFormatID>
+        </FileFormat>
+        <FileFormat ID="778" Name="OpenDocument Format" PUID="fmt/135" Version="1.0">
+            <InternalSignatureID>202</InternalSignatureID>
+            <HasPriorityOverFileFormatID>382</HasPriorityOverFileFormatID>
+            <HasPriorityOverFileFormatID>777</HasPriorityOverFileFormatID>
+        </FileFormat>
+        <FileFormat ID="779"
+            MIMEType="application/vnd.oasis.opendocument.text"
+            Name="OpenDocument Text" PUID="ODT">
+            <InternalSignatureID>307</InternalSignatureID>
+            <Extension>odt</Extension>
+            <Extension>ott</Extension>
+            <HasPriorityOverFileFormatID>778</HasPriorityOverFileFormatID>
+        </FileFormat>
+        <FileFormat ID="780"
+            MIMEType="application/vnd.oasis.opendocument.spreadsheet"
+            Name="OpenDocument Spreadsheet" PUID="ODS">
+            <InternalSignatureID>204</InternalSignatureID>
+            <Extension>ods</Extension>
+            <Extension>ots</Extension>
+            <HasPriorityOverFileFormatID>778</HasPriorityOverFileFormatID>
+        </FileFormat>
+        <FileFormat ID="781"
+            MIMEType="application/vnd.oasis.opendocument.presentation"
+            Name="OpenDocument Presentation" PUID="ODP">
+            <InternalSignatureID>205</InternalSignatureID>
+            <Extension>odp</Extension>
+            <Extension>otp</Extension>
+            <HasPriorityOverFileFormatID>778</HasPriorityOverFileFormatID>
+        </FileFormat>
+        <FileFormat ID="782"
+            MIMEType="application/vnd.oasis.opendocument.graphics"
+            Name="OpenDocument Graphics" PUID="fmt/139">
+            <Extension>odg</Extension>
+            <Extension>otg</Extension>
+            <HasPriorityOverFileFormatID>778</HasPriorityOverFileFormatID>
+        </FileFormat>
+        <FileFormat ID="783" Name="OpenDocument Database Format"
+            PUID="fmt/140">
+            <Extension>odb</Extension>
+            <HasPriorityOverFileFormatID>382</HasPriorityOverFileFormatID>
+            <HasPriorityOverFileFormatID>777</HasPriorityOverFileFormatID>
+            <HasPriorityOverFileFormatID>778</HasPriorityOverFileFormatID>
+        </FileFormat>
+        <FileFormat ID="793" Name="JPEG-LS" PUID="fmt/150">
+            <Extension>.jls</Extension>
+        </FileFormat>
+        <FileFormat ID="794" Name="JPX (JPEG 2000 part 2)" PUID="JPX">
+            <InternalSignatureID>720</InternalSignatureID>
+            <Extension>jpf</Extension>
+            <Extension>jpx</Extension>
+        </FileFormat>
+        <FileFormat ID="800" Name="Batch file (executable)" PUID="x-fmt/413">
+            <Extension>bat</Extension>
+        </FileFormat>
+        <FileFormat ID="801" Name="Windows Cabinet File" PUID="x-fmt/414">
+            <Extension>cab</Extension>
+        </FileFormat>
+        <FileFormat ID="802" Name="Java Compiled Object Code" PUID="x-fmt/415">
+            <Extension>class</Extension>
+        </FileFormat>
+        <FileFormat ID="803" Name="BinHex Binary Text" PUID="x-fmt/416">
+            <Extension>hqx</Extension>
+        </FileFormat>
+        <FileFormat ID="804" Name="HTML Extension File" PUID="x-fmt/417">
+            <Extension>htx</Extension>
+        </FileFormat>
+        <FileFormat ID="805"
+            MIMEType="image/vnd.microsoft.icon, image/x-icon"
+            Name="Icon file format" PUID="x-fmt/418">
+            <Extension>ico</Extension>
+        </FileFormat>
+        <FileFormat ID="806" Name="DVD data file and backup data file" PUID="x-fmt/419">
+            <Extension>bup</Extension>
+            <Extension>ifo</Extension>
+        </FileFormat>
+        <FileFormat ID="807" MIMEType="application/inf"
+            Name="Windows Setup File" PUID="x-fmt/420">
+            <Extension>inf</Extension>
+        </FileFormat>
+        <FileFormat ID="808" Name="Text Configuration file" PUID="x-fmt/421">
+            <Extension>ini</Extension>
+        </FileFormat>
+        <FileFormat ID="809" Name="Java language source code file" PUID="x-fmt/422">
+            <Extension>java</Extension>
+        </FileFormat>
+        <FileFormat ID="810" MIMEType="application/javascript"
+            Name="JavaScript file" PUID="x-fmt/423">
+            <Extension>js</Extension>
+        </FileFormat>
+        <FileFormat ID="811" Name="Deluxe Paint bitmap" PUID="x-fmt/424">
+            <Extension>lbm</Extension>
+        </FileFormat>
+        <FileFormat ID="812" Name="Generic Library File" PUID="x-fmt/425">
+            <Extension>lib</Extension>
+        </FileFormat>
+        <FileFormat ID="813" Name="License file" PUID="x-fmt/426">
+            <Extension>lic</Extension>
+        </FileFormat>
+        <FileFormat ID="814" Name="Acrobat Language definition file" PUID="x-fmt/427">
+            <Extension>lng</Extension>
+        </FileFormat>
+        <FileFormat ID="815" Name="Microsoft Windows Shortcut" PUID="x-fmt/428">
+            <Extension>lnk</Extension>
+        </FileFormat>
+        <FileFormat ID="820"
+            MIMEType="message/rfc822, multipart/related"
+            Name="Microsoft Web Archive" PUID="x-fmt/429">
+            <Extension>mht</Extension>
+            <Extension>mhtml</Extension>
+            <HasPriorityOverFileFormatID>1018</HasPriorityOverFileFormatID>
+        </FileFormat>
+        <FileFormat ID="822" Name="Microsoft Outlook Email Message"
+            PUID="x-fmt/430" Version="97-2003">
+            <Extension>msg</Extension>
+        </FileFormat>
+        <FileFormat ID="824" Name="EBCDIC-US" PUID="fmt/159">
+            <Extension>ebcdic</Extension>
+            <Extension>siard</Extension>
+        </FileFormat>
+        <FileFormat ID="827" Name="3DM" PUID="x-fmt/433">
+            <Extension>3dm</Extension>
+        </FileFormat>
+        <FileFormat ID="843" MIMEType="application/octet-stream"
+            Name="CATIA Model" PUID="x-fmt/436" Version="4">
+            <Extension>mod</Extension>
+            <Extension>model</Extension>
+        </FileFormat>
+        <FileFormat ID="848" MIMEType="application/octet-stream"
+            Name="CATIA Project" PUID="x-fmt/437" Version="4">
+            <Extension>project</Extension>
+        </FileFormat>
+        <FileFormat ID="849" MIMEType="application/octet-stream"
+            Name="CATIA" PUID="x-fmt/438" Version="5">
+            <Extension>catmaterial</Extension>
+        </FileFormat>
+        <FileFormat ID="851" MIMEType="application/octet-stream"
+            Name="CATIA Model (Part Description)" PUID="x-fmt/439" Version="5">
+            <Extension>catpart</Extension>
+        </FileFormat>
+        <FileFormat ID="852" MIMEType="application/octet-stream"
+            Name="CATIA Product Description" PUID="x-fmt/440" Version="5">
+            <Extension>catproduct</Extension>
+        </FileFormat>
+        <FileFormat ID="854" MIMEType="application/octet-stream"
+            Name="AutoCAD Database File Locking Information" PUID="x-fmt/441">
+            <Extension>dwl</Extension>
+        </FileFormat>
+        <FileFormat ID="856" MIMEType="application/octet-stream"
+            Name="form*Z Project File" PUID="x-fmt/442">
+            <Extension>fmz</Extension>
+        </FileFormat>
+        <FileFormat ID="857" MIMEType="application/octet-stream"
+            Name="Revit Family File" PUID="x-fmt/443">
+            <Extension>rfa</Extension>
+        </FileFormat>
+        <FileFormat ID="858" MIMEType="application/octet-stream"
+            Name="Revit Family Template" PUID="x-fmt/444">
+            <Extension>rft</Extension>
+        </FileFormat>
+        <FileFormat ID="859" MIMEType="application/octet-stream"
+            Name="Revit Template" PUID="x-fmt/445">
+            <Extension>rte</Extension>
+        </FileFormat>
+        <FileFormat ID="861" MIMEType="application/octet-stream"
+            Name="Revit External Group" PUID="x-fmt/446">
+            <Extension>rvg</Extension>
+        </FileFormat>
+        <FileFormat ID="862" MIMEType="application/octet-stream"
+            Name="Revit Project" PUID="x-fmt/447">
+            <Extension>rvt</Extension>
+        </FileFormat>
+        <FileFormat ID="863" MIMEType="application/octet-stream"
+            Name="Revit Workspace" PUID="x-fmt/448">
+            <Extension>rws</Extension>
+        </FileFormat>
+        <FileFormat ID="864" MIMEType="text/plain"
+            Name="Steel Detailing Neutral Format" PUID="x-fmt/449">
+            <Extension>sdn</Extension>
+        </FileFormat>
+        <FileFormat ID="865" MIMEType="application/octet-stream"
+            Name="Adobe InDesign Document" PUID="x-fmt/450">
+            <Extension>ind</Extension>
+            <Extension>indd</Extension>
+        </FileFormat>
+        <FileFormat ID="866" MIMEType="application/octet-stream"
+            Name="SketchUp Document" PUID="x-fmt/451">
+            <Extension>skb</Extension>
+            <Extension>skp</Extension>
+        </FileFormat>
+        <FileFormat ID="869" MIMEType="application/octet-stream"
+            Name="TrueType Font" PUID="x-fmt/453">
+            <Extension>ttf</Extension>
+        </FileFormat>
+        <FileFormat ID="870" MIMEType="text/plain"
+            Name="Microsoft Internet Shortcut" PUID="x-fmt/454">
+            <Extension>url</Extension>
+        </FileFormat>
+        <FileFormat ID="876"
+            Name="SIARD (Software-Independent Archiving of Relational Databases)"
+            PUID="SIARD" Version="1.0">
+            <InternalSignatureID>292</InternalSignatureID>
+            <Extension>siard</Extension>
+            <HasPriorityOverFileFormatID>382</HasPriorityOverFileFormatID>
+        </FileFormat>
+        <FileFormat ID="889" Name="Microsoft Multiplan" PUID="fmt/162" Version="4.0">
+            <Extension>mod</Extension>
+        </FileFormat>
+        <FileFormat ID="890"
+            Name="Microsoft Works Word Processor" PUID="fmt/163">
+            <Extension>wps</Extension>
+        </FileFormat>
+        <FileFormat ID="897" Name="Microsoft Works Database"
+            PUID="fmt/169">
+            <Extension>wdb</Extension>
+        </FileFormat>
+        <FileFormat ID="904" Name="PrimeOCR" PUID="fmt/183">
+            <Extension>pro</Extension>
+        </FileFormat>
+        <FileFormat ID="910" Name="Microsoft Office Open XML"
+            PUID="fmt/189" Version="2007 onwards">
+            <HasPriorityOverFileFormatID>382</HasPriorityOverFileFormatID>
+        </FileFormat>
+        <FileFormat ID="916" Name="Sony RAW Image File" PUID="fmt/191">
+            <Extension>arw</Extension>
+        </FileFormat>
+        <FileFormat ID="917" Name="Kodak Digital Camera Raw Image File" PUID="fmt/192">
+            <Extension>dcr</Extension>
+        </FileFormat>
+        <FileFormat ID="918"
+            Name="Digital Moving Picture Exchange Bitmap" PUID="fmt/193" Version="1.0">
+            <Extension>dpx</Extension>
+        </FileFormat>
+        <FileFormat ID="919"
+            Name="FileMaker Pro Ver. 7+ Database Document"
+            PUID="fmt/194" Version="7">
+            <Extension>fp7</Extension>
+        </FileFormat>
+        <FileFormat ID="920"
+            Name="ERDAS IMAGINE Gray-scale Bitmap Image" PUID="fmt/195">
+            <Extension>gis</Extension>
+        </FileFormat>
+        <FileFormat ID="922" Name="InstallShield Compiled Rules File" PUID="fmt/197">
+            <Extension>inx</Extension>
+        </FileFormat>
+        <FileFormat ID="923" MIMEType="audio/mpeg"
+            Name="MPEG Audio Stream, Layer II" PUID="fmt/198">
+            <Extension>mp2</Extension>
+            <Extension>mpa</Extension>
+            <Extension>mpw</Extension>
+        </FileFormat>
+        <FileFormat ID="924" Name="MPEG-4 Media File" PUID="MP4">
+            <InternalSignatureID>278</InternalSignatureID>
+            <Extension>f4a</Extension>
+            <Extension>f4v</Extension>
+            <Extension>m4a</Extension>
+            <Extension>m4v</Extension>
+            <Extension>mp4</Extension>
+        </FileFormat>
+        <FileFormat ID="925" Name="Material Exchange Format" PUID="fmt/200">
+            <Extension>mxf</Extension>
+        </FileFormat>
+        <FileFormat ID="926" Name="Mathematica Notebook" PUID="fmt/201">
+            <Extension>nb</Extension>
+        </FileFormat>
+        <FileFormat ID="927"
+            Name="Nikon Digital SLR Camera Raw Image File" PUID="fmt/202">
+            <Extension>nef</Extension>
+        </FileFormat>
+        <FileFormat ID="929" MIMEType="audio/ogg"
+            Name="Ogg Vorbis Codec Compressed Multimedia File" PUID="fmt/203">
+            <Extension>ogg</Extension>
+        </FileFormat>
+        <FileFormat ID="930" Name="RealVideo Clip" PUID="fmt/204">
+            <Extension>rv</Extension>
+        </FileFormat>
+        <FileFormat ID="931"
+            Name="Synchronized Multimedia Integration Language" PUID="fmt/205">
+            <Extension>smil</Extension>
+        </FileFormat>
+        <FileFormat ID="932" Name="Structured Query Language Data" PUID="fmt/206">
+            <Extension>sql</Extension>
+        </FileFormat>
+        <FileFormat ID="933" Name="Obsidium Project File" PUID="fmt/207">
+            <Extension>opf</Extension>
+        </FileFormat>
+        <FileFormat ID="934" Name="Binary File" PUID="fmt/208">
+            <Extension>bin</Extension>
+        </FileFormat>
+        <FileFormat ID="935" Name="Sound Designer II Audio File" PUID="fmt/209">
+            <Extension>sd2</Extension>
+        </FileFormat>
+        <FileFormat ID="936" Name="Statistica Report File" PUID="fmt/210">
+            <Extension>str</Extension>
+        </FileFormat>
+        <FileFormat ID="937" Name="Kodak Photo CD Image" PUID="fmt/211">
+            <Extension>pcd</Extension>
+        </FileFormat>
+        <FileFormat ID="938" Name="Information or Setup File" PUID="fmt/212">
+            <Extension>inf</Extension>
+        </FileFormat>
+        <FileFormat ID="939" Name="ScanIt Document" PUID="fmt/213">
+            <Extension>sid</Extension>
+        </FileFormat>
+        <FileFormat ID="940" MIMEType="application/vnd.ms-excel"
+            Name="Microsoft Excel for Windows" PUID="fmt/214" Version="2007 onwards">
+            <Extension>xlsx</Extension>
+        </FileFormat>
+        <FileFormat ID="941" MIMEType="application/vnd.ms-powerpoint"
+            Name="Microsoft Powerpoint for Windows" PUID="fmt/215" Version="2007 onwards">
+            <Extension>pptx</Extension>
+        </FileFormat>
+        <FileFormat ID="942" Name="Microsoft Visio for Windows"
+            PUID="fmt/216" Version="2007">
+            <Extension>vdx</Extension>
+        </FileFormat>
+        <FileFormat ID="945" Name="PaintShop Pro Browser Cache File" PUID="fmt/217">
+            <Extension>jbf</Extension>
+        </FileFormat>
+        <FileFormat ID="946" Name="Microsoft FrontPage" PUID="fmt/218">
+            <Extension>lck</Extension>
+        </FileFormat>
+        <FileFormat ID="967"
+            Name="Microsoft Office Binder File for Windows"
+            PUID="fmt/237">
+            <Extension>obd</Extension>
+        </FileFormat>
+        <FileFormat ID="968"
+            Name="Microsoft Office Binder Template for Windows"
+            PUID="fmt/238">
+            <Extension>obt</Extension>
+        </FileFormat>
+        <FileFormat ID="969"
+            Name="Microsoft Office Binder Wizard for Windows"
+            PUID="fmt/239">
+            <Extension>obz</Extension>
+        </FileFormat>
+        <FileFormat ID="973" Name="GPS eXchange Format" PUID="fmt/243">
+            <Extension>gpx</Extension>
+        </FileFormat>
+        <FileFormat ID="975" Name="Keyhole Markup Language" PUID="fmt/244">
+            <Extension>kml</Extension>
+            <Extension>kmz</Extension>
+        </FileFormat>
+        <FileFormat ID="977" Name="Structured Data Exchange Format" PUID="fmt/245">
+            <Extension/>
+        </FileFormat>
+        <FileFormat ID="993" MIMEType="image/vnd.djvu, image/x-djvu"
+            Name="DjVu File Format" PUID="fmt/255">
+            <Extension>djv</Extension>
+            <Extension>djvu</Extension>
+        </FileFormat>
+        <FileFormat ID="1013" Name="SPSS Output File (spv)" PUID="fmt/274">
+            <Extension>spv</Extension>
+        </FileFormat>
+        <FileFormat ID="1015" Name="Microsoft Access Database"
+            PUID="fmt/275" Version="2007">
+            <Extension>accdb</Extension>
+        </FileFormat>
+        <FileFormat ID="1017" Name="ESRI Arc/View Shapefile Index" PUID="fmt/277">
+            <Extension>shx</Extension>
+        </FileFormat>
+        <FileFormat ID="1018" MIMEType="message/rfc822"
+            Name="Internet Message Format" PUID="fmt/278">
+            <Extension>eml</Extension>
+        </FileFormat>
+        <FileFormat ID="1019" Name="FLAC (Free Lossless Audio Codec)"
+            PUID="fmt/279" Version="1.2.1">
+            <Extension>flac</Extension>
+        </FileFormat>
+        <FileFormat ID="1022"
+            MIMEType="application/netcdf, application/x-netcdf"
+            Name="netCDF-3 Classic" PUID="fmt/282">
+            <Extension>cdf</Extension>
+            <Extension>nc</Extension>
+        </FileFormat>
+        <FileFormat ID="1023"
+            MIMEType="application/netcdf, application/x-netcdf"
+            Name="netCDF-3 64-bit" PUID="fmt/283">
+            <Extension>cdf</Extension>
+            <Extension>nc</Extension>
+        </FileFormat>
+        <FileFormat ID="1024" Name="Gridded Binary" PUID="fmt/284">
+            <Extension>grb</Extension>
+            <Extension>wmo</Extension>
+        </FileFormat>
+        <FileFormat ID="1026" Name="HDF5" PUID="fmt/286">
+            <Extension>h5</Extension>
+            <Extension>hdf5</Extension>
+        </FileFormat>
+        <FileFormat ID="1029" Name="WARC" PUID="fmt/289">
+            <Extension>warc</Extension>
+            <HasPriorityOverFileFormatID>639</HasPriorityOverFileFormatID>
+            <HasPriorityOverFileFormatID>643</HasPriorityOverFileFormatID>
+        </FileFormat>
+        <FileFormat ID="1042" Name="Autodesk Animator Pro FLIC" PUID="fmt/298">
+            <Extension>flc</Extension>
+        </FileFormat>
+        <FileFormat ID="1043" Name="Autodesk Animator (FlicLib)" PUID="fmt/299">
+            <Extension>fli</Extension>
+        </FileFormat>
+        <FileFormat ID="1048" MIMEType="image/cgm; version=1"
+            Name="Computer Graphics Metafile (Binary)" PUID="fmt/303">
+            <Extension>cgm</Extension>
+        </FileFormat>
+        <FileFormat ID="1052" MIMEType="application/qif"
+            Name="Quicken Interchange Format" PUID="fmt/307">
+            <Extension>qif</Extension>
+        </FileFormat>
+        <FileFormat ID="1053" Name="Quicken Data Format" PUID="fmt/308">
+            <Extension>qdf</Extension>
+        </FileFormat>
+        <FileFormat ID="1054" MIMEType="application/x-ofx"
+            Name="Open Financial Exchange" PUID="fmt/309">
+            <Extension>ofx</Extension>
+            <Extension>qfx</Extension>
+        </FileFormat>
+        <FileFormat ID="1059" MIMEType="audio/prs.sid"
+            Name="Play SID Audio" PUID="fmt/314" Version="1">
+            <Extension>dxr</Extension>
+            <Extension>psid</Extension>
+        </FileFormat>
+        <FileFormat ID="1060" MIMEType="audio/prs.sid"
+            Name="Play SID Audio" PUID="fmt/315" Version="2">
+            <Extension>psid</Extension>
+            <Extension>sid</Extension>
+        </FileFormat>
+        <FileFormat ID="1061" MIMEType="audio/prs.sid"
+            Name="Real SID Audio" PUID="fmt/316">
+            <Extension>sid</Extension>
+        </FileFormat>
+        <FileFormat ID="1062" MIMEType="application/x-director"
+            Name="Macromedia Director" PUID="fmt/317">
+            <Extension>dir</Extension>
+            <Extension>dxr</Extension>
+        </FileFormat>
+        <FileFormat ID="1063" MIMEType="image/vnd.djvu, image/x-djvu"
+            Name="Secure DjVU" PUID="fmt/318">
+            <Extension>djv</Extension>
+            <Extension>djvu</Extension>
+        </FileFormat>
+        <FileFormat ID="1064" Name="ESRI Spatial Index File" PUID="fmt/319">
+            <Extension>sbn</Extension>
+            <Extension>sbx</Extension>
+        </FileFormat>
+        <FileFormat ID="1065"
+            Name="ESRI Shapefile Projection (Well-Known Text) Format" PUID="fmt/320">
+            <Extension>prj</Extension>
+        </FileFormat>
+        <FileFormat ID="1066" Name="ESRI Shapefile Header Index" PUID="fmt/321">
+            <Extension>aih</Extension>
+        </FileFormat>
+        <FileFormat ID="1067" Name="Portable Form File" PUID="fmt/322">
+            <Extension>pff</Extension>
+        </FileFormat>
+        <FileFormat ID="1068" MIMEType="audio/xm"
+            Name="Extended Module Audio File" PUID="fmt/323">
+            <Extension>xm</Extension>
+        </FileFormat>
+        <FileFormat ID="1069" MIMEType="application/x-endnote-style"
+            Name="EndNote Style File" PUID="fmt/324">
+            <Extension>ens</Extension>
+        </FileFormat>
+        <FileFormat ID="1070" Name="EndNote Library" PUID="fmt/325">
+            <Extension>enl</Extension>
+        </FileFormat>
+        <FileFormat ID="1071"
+            MIMEType="application/x-endnote-connect, application/x-endnote-connection"
+            Name="EndNote Connection File" PUID="fmt/326">
+            <Extension>enz</Extension>
+        </FileFormat>
+        <FileFormat ID="1072" Name="EndNote Filter File" PUID="fmt/327">
+            <Extension>enf</Extension>
+        </FileFormat>
+        <FileFormat ID="1073" MIMEType="application/x-endnote-refer"
+            Name="EndNote Import File" PUID="fmt/328">
+            <Extension>enr</Extension>
+            <Extension>enw</Extension>
+        </FileFormat>
+        <FileFormat ID="1074"
+            MIMEType="application/x-sh, application/x-shar"
+            Name="Shell Archive Format" PUID="fmt/329">
+            <Extension>shar</Extension>
+        </FileFormat>
+        <FileFormat ID="1075" Name="Peak Graphical Waveform File" PUID="fmt/330">
+            <Extension>pk</Extension>
+        </FileFormat>
+        <FileFormat ID="1076" Name="Autorun Configuration File" PUID="fmt/331">
+            <Extension>inf</Extension>
+        </FileFormat>
+        <FileFormat ID="1077" Name="ESRI Arc/View Project"
+            PUID="fmt/332" Version="3.x">
+            <Extension>apr</Extension>
+        </FileFormat>
+        <FileFormat ID="1078" Name="Chemical Markup Language" PUID="fmt/333">
+            <Extension>cml</Extension>
+        </FileFormat>
+        <FileFormat ID="1079"
+            Name="Crystallographic Information Framework" PUID="fmt/334">
+            <Extension>cif</Extension>
+        </FileFormat>
+        <FileFormat ID="1080" Name="Dreamweaver Lock File" PUID="fmt/335">
+            <Extension>lck</Extension>
+        </FileFormat>
+        <FileFormat ID="1081"
+            Name="Graphic Workshop for Windows Thumbnail File" PUID="fmt/336">
+            <Extension>thn</Extension>
+        </FileFormat>
+        <FileFormat ID="1082" MIMEType="video/mj2"
+            Name="MJ2 (Motion JPEG 2000)" PUID="MJ2">
+            <Extension>mj2</Extension>
+            <Extension>mjp2</Extension>
+        </FileFormat>
+        <FileFormat ID="1083"
+            Name="Interchange File Format Interleaved Bitmap" PUID="fmt/338">
+            <Extension>iff</Extension>
+            <Extension>lbm</Extension>
+            <HasPriorityOverFileFormatID>221</HasPriorityOverFileFormatID>
+        </FileFormat>
+        <FileFormat ID="1084"
+            Name="Interchange File Format 8-bit Sampled Voice" PUID="fmt/339">
+            <Extension>iff</Extension>
+            <HasPriorityOverFileFormatID>221</HasPriorityOverFileFormatID>
+        </FileFormat>
+        <FileFormat ID="1091"
+            Name="Microsoft Word for Macintosh Document" PUID="fmt/346">
+            <Extension>mcw</Extension>
+        </FileFormat>
+        <FileFormat ID="1092" MIMEType="audio/mpeg"
+            Name="MPEG 1/2 Audio Layer I" PUID="fmt/347">
+            <Extension>mp1</Extension>
+        </FileFormat>
+        <FileFormat ID="1095" Name="Paradox Database Table"
+            PUID="fmt/350">
+            <Extension>db</Extension>
+        </FileFormat>
+        <FileFormat ID="1099" MIMEType="image/tiff"
+            Name="Tagged Image File Format" PUID="TIFF">
+            <InternalSignatureID>9</InternalSignatureID>
+            <InternalSignatureID>10</InternalSignatureID>
+            <Extension>tif</Extension>
+            <Extension>tiff</Extension>
+        </FileFormat>
+        <FileFormat ID="1102" MIMEType="audio/amr"
+            Name="Adaptive Multi-Rate Audio" PUID="fmt/356">
+            <Extension>amr</Extension>
+        </FileFormat>
+        <FileFormat ID="1103" MIMEType="audio/3gpp, video/3gpp"
+            Name="3GPP Audio/Video File" PUID="fmt/357">
+            <Extension>3gp</Extension>
+            <Extension>3gpp</Extension>
+            <HasPriorityOverFileFormatID>924</HasPriorityOverFileFormatID>
+        </FileFormat>
+        <FileFormat ID="1104" Name="Internet Data Query File" PUID="fmt/358">
+            <Extension>idq</Extension>
+        </FileFormat>
+        <FileFormat ID="1105"
+            Name="Microsoft Front Page Binary Tree Index" PUID="fmt/359">
+            <Extension>btr</Extension>
+        </FileFormat>
+        <FileFormat ID="1107" Name="pulse EKKO data file" PUID="fmt/360">
+            <Extension>dt1</Extension>
+        </FileFormat>
+        <FileFormat ID="1108" Name="pulse EKKO header file" PUID="fmt/361">
+            <Extension>hd</Extension>
+        </FileFormat>
+        <FileFormat ID="1109" Name="GSSI SIR-10 RADAN data file" PUID="fmt/362">
+            <Extension>dzt</Extension>
+        </FileFormat>
+        <FileFormat ID="1110" Name="SEG Y Data Exchange Format"
+            PUID="fmt/363" Version="Generic">
+            <Extension>segy</Extension>
+        </FileFormat>
+        <FileFormat ID="1111"
+            Name="National Imagery Transmission Format" PUID="fmt/364">
+            <Extension>ntf</Extension>
+        </FileFormat>
+        <FileFormat ID="1114" Name="ESRI World File Format" PUID="fmt/367">
+            <Extension>bilw</Extension>
+            <Extension>blw</Extension>
+            <Extension>bpw</Extension>
+            <Extension>btw</Extension>
+            <Extension>jgw</Extension>
+            <Extension>jpgw</Extension>
+            <Extension>pgw</Extension>
+            <Extension>rasterw</Extension>
+            <Extension>tfw</Extension>
+            <Extension>tifw</Extension>
+        </FileFormat>
+        <FileFormat ID="1115" Name="ASPRS Lidar Data Exchange Format"
+            PUID="fmt/368">
+            <Extension>las</Extension>
+            <Extension>laz</Extension>
+        </FileFormat>
+        <FileFormat ID="1118" Name="Enhanced Compression Wavelet" PUID="fmt/371">
+            <Extension>ecw</Extension>
+        </FileFormat>
+        <FileFormat ID="1119"
+            Name="Earth Resource Satellite image header format" PUID="fmt/372">
+            <Extension>ers</Extension>
+        </FileFormat>
+        <FileFormat ID="1121"
+            Name="Microsoft Visual FoxPro Database Table File" PUID="fmt/374">
+            <Extension>dbf</Extension>
+        </FileFormat>
+        <FileFormat ID="1122" Name="FoxPro Compound Index File" PUID="fmt/375">
+            <Extension>cdx</Extension>
+        </FileFormat>
+        <FileFormat ID="1123" Name="FoxPro Report" PUID="fmt/376">
+            <Extension>frx</Extension>
+        </FileFormat>
+        <FileFormat ID="1124" Name="Microsoft Visual FoxPro Report" PUID="fmt/377">
+            <Extension>frx</Extension>
+            <HasPriorityOverFileFormatID>1121</HasPriorityOverFileFormatID>
+        </FileFormat>
+        <FileFormat ID="1125" MIMEType="chemical/x-cdx"
+            Name="Chemical Draw Exchange Format" PUID="fmt/378">
+            <Extension>cdx</Extension>
+        </FileFormat>
+        <FileFormat ID="1126"
+            Name="Microsoft Visual FoxPro Class Library" PUID="fmt/379">
+            <Extension>vcx</Extension>
+            <HasPriorityOverFileFormatID>1121</HasPriorityOverFileFormatID>
+        </FileFormat>
+        <FileFormat ID="1127" Name="Microsoft Visual FoxPro Project" PUID="fmt/380">
+            <Extension>pjx</Extension>
+            <HasPriorityOverFileFormatID>1121</HasPriorityOverFileFormatID>
+        </FileFormat>
+        <FileFormat ID="1128" Name="FoxPro Project" PUID="fmt/381">
+            <Extension>pjx</Extension>
+        </FileFormat>
+        <FileFormat ID="1129"
+            Name="Microsoft Visual FoxPro database container (table files)" PUID="fmt/382">
+            <Extension>dbc</Extension>
+            <HasPriorityOverFileFormatID>1121</HasPriorityOverFileFormatID>
+        </FileFormat>
+        <FileFormat ID="1131"
+            Name="Microsoft Visual FoxPro database container (memo files)" PUID="fmt/384">
+            <Extension>dct</Extension>
+            <HasPriorityOverFileFormatID>506</HasPriorityOverFileFormatID>
+        </FileFormat>
+        <FileFormat ID="1132"
+            Name="VICAR (Video Image Communication and Retrieval) Planetary File Format" PUID="fmt/383">
+            <Extension>img</Extension>
+            <Extension>vic</Extension>
+            <Extension>vicar</Extension>
+        </FileFormat>
+        <FileFormat ID="1133" MIMEType="image/x-win-bitmap"
+            Name="Microsoft Windows Cursor" PUID="fmt/385">
+            <Extension>cur</Extension>
+        </FileFormat>
+        <FileFormat ID="1134" Name="Microsoft Animated Cursor Format" PUID="fmt/386">
+            <Extension>ani</Extension>
+        </FileFormat>
+        <FileFormat ID="1135" MIMEType="text/x-vCalendar"
+            Name="VCalendar format" PUID="fmt/387">
+            <Extension>vcs</Extension>
+        </FileFormat>
+        <FileFormat ID="1136" MIMEType="text/calendar"
+            Name="Internet Calendar and Scheduling format" PUID="fmt/388">
+            <Extension>ics</Extension>
+        </FileFormat>
+        <FileFormat ID="1137" Name="Log ASCII Standard Format"
+            PUID="fmt/389" Version="1.2">
+            <Extension>las</Extension>
+        </FileFormat>
+        <FileFormat ID="1140"
+            Name="MrSID Image Format (Multi-resolution Seamless Image Database)" PUID="fmt/392">
+            <Extension>sid</Extension>
+        </FileFormat>
+        <FileFormat ID="1141" Name="Borland Reflex flat datafile" PUID="fmt/393">
+            <Extension>rxd</Extension>
+        </FileFormat>
+        <FileFormat ID="1142" Name="DS_store file (MAC)" PUID="fmt/394">
+            <Extension>ds_store</Extension>
+        </FileFormat>
+        <FileFormat ID="1143" Name="vCard" PUID="fmt/395">
+            <Extension>vcf</Extension>
+        </FileFormat>
+        <FileFormat ID="1144" Name="PocketMobi (Palm Resource) File" PUID="fmt/396">
+            <Extension>mobi</Extension>
+            <Extension>prc</Extension>
+        </FileFormat>
+        <FileFormat ID="1145" Name="Enigma Binary File (Finale)" PUID="fmt/397">
+            <Extension>mus</Extension>
+        </FileFormat>
+        <FileFormat ID="1146" Name="Enigma Transportable File (Finale)" PUID="fmt/398">
+            <Extension>etf</Extension>
+        </FileFormat>
+        <FileFormat ID="1147" Name="Stuffit Archive File" PUID="fmt/399">
+            <Extension>sitx</Extension>
+        </FileFormat>
+        <FileFormat ID="1148" Name="Macromedia FreeHand MX"
+            PUID="fmt/400" Version="11">
+            <Extension>fh11</Extension>
+        </FileFormat>
+        <FileFormat ID="1149" Name="X-Windows Screen Dump"
+            PUID="fmt/401" Version="X11">
+            <Extension>xdm</Extension>
+            <Extension>xwd</Extension>
+        </FileFormat>
+        <FileFormat ID="1150" Name="Truevision TGA Bitmap"
+            PUID="fmt/402" Version="2.0">
+            <Extension>icb</Extension>
+            <Extension>tga</Extension>
+            <Extension>vda</Extension>
+            <Extension>vst</Extension>
+            <HasPriorityOverFileFormatID>533</HasPriorityOverFileFormatID>
+        </FileFormat>
+        <FileFormat ID="1151" Name="SuperCalc Spreadsheet"
+            PUID="fmt/403">
+            <Extension>cal</Extension>
+        </FileFormat>
+        <FileFormat ID="1152" Name="RealAudio" PUID="fmt/404" Version="4">
+            <Extension>ra</Extension>
+        </FileFormat>
+        <FileFormat ID="1153" Name="Portable Any Map" PUID="fmt/405">
+            <Extension>pam</Extension>
+        </FileFormat>
+        <FileFormat ID="1154" Name="Portable Grey Map - Binary" PUID="fmt/406">
+            <Extension>pgm</Extension>
+            <Extension>pgmb</Extension>
+        </FileFormat>
+        <FileFormat ID="1155" Name="Portable Grey Map - ASCII" PUID="fmt/407">
+            <Extension>pgm</Extension>
+            <Extension>pgma</Extension>
+        </FileFormat>
+        <FileFormat ID="1156" Name="Portable Pixel Map" PUID="fmt/408">
+            <Extension>ppm</Extension>
+            <Extension>ppmb</Extension>
+        </FileFormat>
+        <FileFormat ID="1157" Name="Portable Bitmap Image - Binary" PUID="fmt/409">
+            <Extension>pbmb</Extension>
+            <Extension>pnm</Extension>
+        </FileFormat>
+        <FileFormat ID="1159" MIMEType="application/x-rar-compressed"
+            Name="RAR Archive" PUID="fmt/411" Version="2.9">
+            <Extension>rar</Extension>
+        </FileFormat>
+        <FileFormat ID="1160"
+            MIMEType="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            Name="Microsoft Word for Windows" PUID="fmt/412" Version="2007 onwards">
+            <Extension>docx</Extension>
+        </FileFormat>
+        <FileFormat ID="1191" Name="Scalable Vector Graphics"
+            PUID="SVG">
+            <InternalSignatureID>732</InternalSignatureID>
+            <Extension>svg</Extension>
+        </FileFormat>
+        <FileFormat ID="1192" Name="Audio Interchange File Format"
+            PUID="fmt/414" Version="1.2">
+            <Extension>aif</Extension>
+            <HasPriorityOverFileFormatID>221</HasPriorityOverFileFormatID>
+        </FileFormat>
+        <FileFormat ID="1194" Name="Cinema 4D" PUID="fmt/415" Version="4.x">
+            <Extension>c4d</Extension>
+            <HasPriorityOverFileFormatID>221</HasPriorityOverFileFormatID>
+        </FileFormat>
+        <FileFormat ID="1198" Name="Apple Core Audio Format"
+            PUID="fmt/416" Version="1.0">
+            <Extension>caf</Extension>
+        </FileFormat>
+        <FileFormat ID="1207" Name="Video Object File (MPEG-2 subset)" PUID="fmt/425">
+            <Extension>vob</Extension>
+        </FileFormat>
+        <FileFormat ID="1210" Name="Harris Matrix" PUID="fmt/426">
+            <Extension>hm</Extension>
+        </FileFormat>
+        <FileFormat ID="1223" MIMEType="image/tiff"
+            Name="Digital Negative Format (DNG)" PUID="DNG">
+            <InternalSignatureID>656</InternalSignatureID>
+            <InternalSignatureID>657</InternalSignatureID>
+            <InternalSignatureID>658</InternalSignatureID>
+            <InternalSignatureID>659</InternalSignatureID>
+            <Extension>dng</Extension>
+            <HasPriorityOverFileFormatID>1099</HasPriorityOverFileFormatID>
+        </FileFormat>
+        <FileFormat ID="1226" Name="BSDIFF" PUID="fmt/439" Version="4.0">
+            <Extension>bsdiff</Extension>
+        </FileFormat>
+        <FileFormat ID="1228"
+            Name="Windows Media Video 9 Advanced Profile (WVC1)"
+            PUID="fmt/441" Version="9 Advanced Profile (WVC1)">
+            <Extension>wmv</Extension>
+            <HasPriorityOverFileFormatID>691</HasPriorityOverFileFormatID>
+            <HasPriorityOverFileFormatID>692</HasPriorityOverFileFormatID>
+        </FileFormat>
+        <FileFormat ID="1229" MIMEType="application/vnd.visio"
+            Name="Microsoft Visio" PUID="fmt/442">
+            <Extension>vsd</Extension>
+        </FileFormat>
+        <FileFormat ID="1232"
+            MIMEType="application/vnd.ms-excel.sheet.macroEnabled.12"
+            Name="Microsoft Excel Macro-Enabled" PUID="fmt/445" Version="2007">
+            <Extension>xlsm</Extension>
+        </FileFormat>
+        <FileFormat ID="1233"
+            Name="Adobe Portable Document Catalog Index File"
+            PUID="fmt/446" Version="2.0">
+            <Extension>pdx</Extension>
+        </FileFormat>
+        <FileFormat ID="1234"
+            Name="Adobe Portable Document Catalog Index File"
+            PUID="fmt/447" Version="3.0">
+            <Extension>pdx</Extension>
+        </FileFormat>
+        <FileFormat ID="1235"
+            Name="Adobe Portable Document Catalog Index File"
+            PUID="fmt/448" Version="3.1">
+            <Extension>pdx</Extension>
+        </FileFormat>
+        <FileFormat ID="1236"
+            Name="Adobe Portable Document Catalog Index File"
+            PUID="fmt/449" Version="3.2">
+            <Extension>pdx</Extension>
+        </FileFormat>
+        <FileFormat ID="1237" Name="VectorWorks" PUID="fmt/450" Version="12.5">
+            <Extension>vwx</Extension>
+        </FileFormat>
+        <FileFormat ID="1238" Name="VectorWorks" PUID="fmt/451" Version="2009">
+            <Extension>vwx</Extension>
+        </FileFormat>
+        <FileFormat ID="1239" Name="Acrobat Catalog Cat File" PUID="fmt/452">
+            <Extension>cat</Extension>
+        </FileFormat>
+        <FileFormat ID="1240" Name="Verity Collection Stop List" PUID="fmt/453">
+            <Extension>stp</Extension>
+        </FileFormat>
+        <FileFormat ID="1241" Name="Verity Collection Index About File" PUID="fmt/454">
+            <Extension>abt</Extension>
+        </FileFormat>
+        <FileFormat ID="1242"
+            Name="Verity Collection Index Pending Transaction File" PUID="fmt/455">
+            <Extension>trn</Extension>
+        </FileFormat>
+        <FileFormat ID="1243"
+            Name="Verity Collection Index Style Policy" PUID="fmt/456">
+            <Extension>plc</Extension>
+        </FileFormat>
+        <FileFormat ID="1244"
+            Name="Verity Collection Document Dataset Descriptor Style Set" PUID="fmt/457">
+            <Extension>ddd</Extension>
+        </FileFormat>
+        <FileFormat ID="1245"
+            Name="Verity Collection Document Index Descriptor Style Set" PUID="fmt/458">
+            <Extension>did</Extension>
+        </FileFormat>
+        <FileFormat ID="1246"
+            Name="Verity Collection Word List Descriptor Style Set" PUID="fmt/459">
+            <Extension>wld</Extension>
+        </FileFormat>
+        <FileFormat ID="1247"
+            Name="Verity Collection Partition Definition Descriptor Style Set" PUID="fmt/460">
+            <Extension>pdd</Extension>
+        </FileFormat>
+        <FileFormat ID="1248"
+            Name="Verity Collection Index Descriptor File" PUID="fmt/461">
+            <Extension>ddd</Extension>
+            <Extension>did</Extension>
+            <Extension>pdd</Extension>
+            <Extension>wld</Extension>
+        </FileFormat>
+        <FileFormat ID="1249" Name="MS DOS Compression format" PUID="fmt/462">
+            <Extension/>
+        </FileFormat>
+        <FileFormat ID="1250" MIMEType="image/jpm"
+            Name="JPM (JPEG 2000 part 6)" PUID="fmt/463">
+            <Extension>jpm</Extension>
+        </FileFormat>
+        <FileFormat ID="1254" Name="CorelDraw Drawing" PUID="fmt/467">
+            <Extension>cdr</Extension>
+        </FileFormat>
+        <FileFormat ID="1255" Name="ISO Disk Image File" PUID="fmt/468">
+            <Extension>iso</Extension>
+        </FileFormat>
+        <FileFormat ID="1256"
+            Name="MS DOS Compression format (KWAJ variant)" PUID="fmt/469">
+        </FileFormat>
+        <FileFormat ID="1257" Name="Asymetrix Toolbook File" PUID="fmt/470">
+            <Extension>sbk</Extension>
+            <Extension>tbk</Extension>
+        </FileFormat>
+        <FileFormat ID="1259"
+            Name="Sony Digital Voice File/Sony Memory Stick Voice File" PUID="fmt/472">
+            <Extension>dvf</Extension>
+            <Extension>msv</Extension>
+        </FileFormat>
+        <FileFormat ID="1260" Name="Microsoft Office Owner File" PUID="fmt/473">
+            <Extension>doc</Extension>
+        </FileFormat>
+        <FileFormat ID="1261" Name="Windows Help File" PUID="fmt/474">
+            <Extension>hlp</Extension>
+        </FileFormat>
+        <FileFormat ID="1262"
+            Name="Microsoft Management Console Snap-in Control file" PUID="fmt/475">
+            <Extension>msc</Extension>
+        </FileFormat>
+        <FileFormat ID="1263"
+            Name="Acrobat PDF/A - Portable Document Format"
+            PUID="PDFA2" Version="2">
+            <InternalSignatureID>750</InternalSignatureID>
+            <Extension>pdf</Extension>
+            <HasPriorityOverFileFormatID>613</HasPriorityOverFileFormatID>
+        </FileFormat>
+        <FileFormat ID="1266"
+            Name="Acrobat PDF/A - Portable Document Format"
+            PUID="PDFA3" Version="3">
+            <InternalSignatureID>753</InternalSignatureID>
+            <Extension>pdf</Extension>
+            <HasPriorityOverFileFormatID>613</HasPriorityOverFileFormatID>
+        </FileFormat>
+        <FileFormat ID="1269" MIMEType="application/x-ibooks+zip"
+            Name="Apple iBook format" PUID="fmt/482">
+            <Extension>ibooks</Extension>
+            <HasPriorityOverFileFormatID>382</HasPriorityOverFileFormatID>
+        </FileFormat>
+        <FileFormat ID="1270" MIMEType="application/epub+zip"
+            Name="ePub format" PUID="fmt/483">
+            <Extension>epub</Extension>
+            <HasPriorityOverFileFormatID>382</HasPriorityOverFileFormatID>
+        </FileFormat>
+        <FileFormat ID="1271" Name="7Zip format" PUID="fmt/484">
+            <Extension>7z</Extension>
+        </FileFormat>
+        <FileFormat ID="1272" Name="Rocket Book eBook format" PUID="fmt/485">
+            <Extension>rb</Extension>
+        </FileFormat>
+        <FileFormat ID="1273"
+            Name="Macromedia (Adobe) Director Compressed Resource file" PUID="fmt/486">
+            <Extension>dcr</Extension>
+        </FileFormat>
+        <FileFormat ID="1274" Name="Macro Enabled Microsoft Powerpoint"
+            PUID="fmt/487" Version="2007 Onwards">
+            <Extension>pptm</Extension>
+        </FileFormat>
+        <FileFormat ID="1281" Name="Microsoft Office Encrypted Document"
+            PUID="fmt/494" Version="2007 Onwards">
+            <Extension>docx</Extension>
+            <Extension>pptx</Extension>
+            <Extension>xslx</Extension>
+        </FileFormat>
+        <FileFormat ID="1282" Name="ATCO-CIF" PUID="fmt/495">
+            <Extension>cif</Extension>
+        </FileFormat>
+        <FileFormat ID="1283" Name="TransXchange File Format" PUID="fmt/496">
+            <Extension>txc</Extension>
+        </FileFormat>
+        <FileFormat ID="1284" Name="Wireless Bitmap" PUID="fmt/497">
+            <Extension>wbmp</Extension>
+        </FileFormat>
+        <FileFormat ID="1285" Name="ActiveX License Package file" PUID="fmt/498">
+            <Extension>lpk</Extension>
+        </FileFormat>
+        <FileFormat ID="1286" Name="VivoActive" PUID="fmt/499">
+            <Extension>viv</Extension>
+        </FileFormat>
+        <FileFormat ID="1287"
+            Name="Internet Explorer for Mac cache file" PUID="fmt/500">
+            <Extension>waf</Extension>
+            <HasPriorityOverFileFormatID>639</HasPriorityOverFileFormatID>
+        </FileFormat>
+        <FileFormat ID="1291" Name="Standard Flowgram Format" PUID="fmt/504">
+            <Extension>sff</Extension>
+        </FileFormat>
+        <FileFormat ID="1292" MIMEType="application/x-shockwave-flash"
+            Name="Adobe Flash" PUID="fmt/505">
+            <Extension>swf</Extension>
+        </FileFormat>
+        <FileFormat ID="1295"
+            Name="Quarter Inch Cartridge Host Interchange Format" PUID="fmt/508">
+            <Extension>qic</Extension>
+        </FileFormat>
+        <FileFormat ID="1296" Name="Adobe PostScript Font Metrics file" PUID="fmt/509">
+            <Extension>pfm</Extension>
+        </FileFormat>
+        <FileFormat ID="1297" Name="PowerProject Teamplan" PUID="fmt/510">
+            <Extension>pdb</Extension>
+        </FileFormat>
+        <FileFormat ID="1298" Name="PowerProject" PUID="fmt/511">
+            <Extension>pp</Extension>
+        </FileFormat>
+        <FileFormat ID="1305" Name="Broad Band eBook" PUID="fmt/518" Version="LRF">
+            <Extension>lrf</Extension>
+        </FileFormat>
+        <FileFormat ID="1306" Name="Polynomial Texture Map" PUID="fmt/519">
+            <Extension>ptm</Extension>
+        </FileFormat>
+        <FileFormat ID="1307" Name="OpenType Font File" PUID="fmt/520">
+            <Extension>otf</Extension>
+        </FileFormat>
+        <FileFormat ID="1308"
+            Name="Adobe Multiple Master Metrics font file" PUID="fmt/521">
+            <Extension>mmm</Extension>
+        </FileFormat>
+        <FileFormat ID="1309" Name="Open Project File" PUID="fmt/522">
+            <Extension>pod</Extension>
+        </FileFormat>
+        <FileFormat ID="1310"
+            MIMEType="application/vnd.ms-word.document.macroEnabled.main+xml"
+            Name="Macro enabled Microsoft Word Document OOXML"
+            PUID="fmt/523" Version="2007 Onwards">
+            <Extension>docm</Extension>
+        </FileFormat>
+        <FileFormat ID="1311" Name="Microsoft Office Theme" PUID="fmt/524">
+            <Extension>thmx</Extension>
+            <HasPriorityOverFileFormatID>941</HasPriorityOverFileFormatID>
+        </FileFormat>
+        <FileFormat ID="1312" Name="Adobe Printer Font Binary" PUID="fmt/525">
+            <Extension>pfb</Extension>
+        </FileFormat>
+        <FileFormat ID="1313" Name="Adobe Font List" PUID="fmt/526">
+            <Extension>lst</Extension>
+        </FileFormat>
+        <FileFormat ID="1315" MIMEType="video/x-mng"
+            Name="Multiple-image Network Graphics" PUID="fmt/528">
+            <Extension>mng</Extension>
+        </FileFormat>
+        <FileFormat ID="1316" MIMEType="image/x-jng"
+            Name="JPEG Network Graphics" PUID="fmt/529">
+            <Extension>jng</Extension>
+        </FileFormat>
+        <FileFormat ID="1317" Name="eRuby HTML document" PUID="fmt/530">
+            <Extension>rhtm</Extension>
+            <Extension>rhtml</Extension>
+        </FileFormat>
+        <FileFormat ID="1320" MIMEType="application/vnd.framemaker"
+            Name="Adobe FrameMaker Document" PUID="fmt/533">
+            <Extension>fm</Extension>
+        </FileFormat>
+        <FileFormat ID="1327" Name="Cinema 4D" PUID="fmt/540" Version="5.x">
+            <Extension>c4d</Extension>
+        </FileFormat>
+        <FileFormat ID="1328"
+            Name="Digital Moving Picture Exchange Bitmap" PUID="fmt/541" Version="2.0">
+            <Extension>dpx</Extension>
+        </FileFormat>
+        <FileFormat ID="1331" Name="Macromedia FreeHand" PUID="fmt/544" Version="7">
+            <Extension>fh7</Extension>
+        </FileFormat>
+        <FileFormat ID="1333" Name="Macromedia FreeHand" PUID="fmt/545" Version="8">
+            <Extension>fh8</Extension>
+        </FileFormat>
+        <FileFormat ID="1334" Name="Macromedia FreeHand" PUID="fmt/546" Version="9">
+            <Extension>fh9</Extension>
+        </FileFormat>
+        <FileFormat ID="1335" Name="Macromedia FreeHand" PUID="fmt/547" Version="10">
+            <Extension>fh10</Extension>
+        </FileFormat>
+        <FileFormat ID="1341" MIMEType="application/vnd.ms-excel"
+            Name="Microsoft Excel Chart" PUID="fmt/553">
+            <Extension>xlc</Extension>
+        </FileFormat>
+        <FileFormat ID="1343" MIMEType="application/vnd.ms-excel"
+            Name="Microsoft Excel Macro" PUID="fmt/555">
+            <Extension>xla</Extension>
+            <Extension>xlm</Extension>
+        </FileFormat>
+        <FileFormat ID="1354" Name="WebP" PUID="fmt/566">
+            <Extension>webp</Extension>
+        </FileFormat>
+        <FileFormat ID="1357" Name="Matroska" PUID="fmt/569">
+            <Extension>mk3d</Extension>
+            <Extension>mka</Extension>
+            <Extension>mks</Extension>
+            <Extension>mkv</Extension>
+        </FileFormat>
+        <FileFormat ID="1358" Name="Extensible Metadata Platform Packet" PUID="fmt/570">
+            <Extension>xmp</Extension>
+        </FileFormat>
+        <FileFormat ID="1359" Name="Domino XML Document Export" PUID="fmt/571">
+            <Extension>dxl</Extension>
+        </FileFormat>
+        <FileFormat ID="1360" Name="Domino XML Database Export" PUID="fmt/572">
+            <Extension>dxl</Extension>
+        </FileFormat>
+        <FileFormat ID="1361" MIMEType="video/webm" Name="WebM" PUID="fmt/573">
+            <Extension>webm</Extension>
+        </FileFormat>
+        <FileFormat ID="1362"
+            Name="Digital Imaging and Communications in Medicine file format" PUID="fmt/574">
+            <Extension>dcm</Extension>
+        </FileFormat>
+        <FileFormat ID="1363" Name="GraphPad Prism" PUID="fmt/575" Version="1-3">
+            <Extension>pzm</Extension>
+        </FileFormat>
+        <FileFormat ID="1364" Name="GraphPad Prism" PUID="fmt/576" Version="4">
+            <Extension>pzf</Extension>
+        </FileFormat>
+        <FileFormat ID="1365" Name="Image Cytometry Standard"
+            PUID="fmt/577">
+            <Extension>ics</Extension>
+        </FileFormat>
+        <FileFormat ID="1367" Name="X3D" PUID="fmt/579">
+            <Extension>x3d</Extension>
+        </FileFormat>
+        <FileFormat ID="1371" Name="Vector Markup Language" PUID="fmt/583">
+            <Extension>vml</Extension>
+        </FileFormat>
+        <FileFormat ID="1372" Name="Windows Media Metafile" PUID="fmt/584">
+            <Extension>asx</Extension>
+            <Extension>wax</Extension>
+            <Extension>wmx</Extension>
+            <Extension>wvx</Extension>
+        </FileFormat>
+        <FileFormat ID="1373" Name="MPEG 2 Transport Stream" PUID="fmt/585">
+            <Extension>m2t</Extension>
+        </FileFormat>
+        <FileFormat ID="1374" Name="LifeTechnologies SDS" PUID="fmt/586">
+            <Extension>sds</Extension>
+        </FileFormat>
+        <FileFormat ID="1375" Name="LifeTechnologies ABIF" PUID="fmt/587">
+            <Extension>abif</Extension>
+        </FileFormat>
+    </FileFormatCollection>
+</FFSignatureFile>
