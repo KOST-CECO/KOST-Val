@@ -1,5 +1,5 @@
 /*== KOST-Val ==================================================================================
-The KOST-Val v1.1.1 application is used for validate TIFF, SIARD, PDF/A-Files and Submission 
+The KOST-Val v1.1.2 application is used for validate TIFF, SIARD, PDF/A-Files and Submission 
 Information Package (SIP). 
 Copyright (C) 2012-2014 Claire Röthlisberger (KOST-CECO), Christian Eugster, Olivier Debenath, 
 Peter Schneider (Staatsarchiv Aargau), Daniel Ludin (BEDAG AG)
@@ -82,6 +82,7 @@ public class KOSTVal implements MessageConstants
 	 * 
 	 * @param args
 	 */
+	@SuppressWarnings("unused")
 	public static void main( String[] args )
 	{
 		ApplicationContext context = new ClassPathXmlApplicationContext(
@@ -552,9 +553,10 @@ public class KOSTVal implements MessageConstants
 						// newFile ist eine TempZip-Datei und kann gelöscht
 						// werden
 						try {
-							String cmdDel = "cmd /c ping -n 120 127.0.0.1 > NUL && del "
-									+ newFile.getAbsolutePath();
-							Runtime.getRuntime().exec( cmdDel );
+							StringBuffer command = new StringBuffer( "cmd /c ping -n 120 127.0.0.1 > NUL && del "
+									+ newFile.getAbsolutePath() );
+							Runtime rt = Runtime.getRuntime();
+							Process proc = rt.exec( command.toString() );
 						} catch ( IOException e ) {
 							e.printStackTrace();
 							System.out
@@ -721,12 +723,14 @@ public class KOSTVal implements MessageConstants
 			if ( tmpDir.exists() ) {
 				Util.deleteDir( tmpDir );
 			}
+			StringBuffer command = new StringBuffer( "rd " + tmpDir.getAbsolutePath()
+					+ " /s /q" );
 			if ( ok ) {
 				if ( tmpDir.exists() ) {
+					
 					try {
-						String cmdDel = "rd " + tmpDir.getAbsolutePath()
-								+ " /s /q";
-						Runtime.getRuntime().exec( cmdDel );
+						Runtime rt = Runtime.getRuntime();
+						Process proc = rt.exec( command.toString() );
 					} catch ( IOException e ) {
 						System.out.println( "" );
 						System.out.println( tmpDir.getAbsolutePath() );
@@ -741,9 +745,8 @@ public class KOSTVal implements MessageConstants
 			} else {
 				if ( tmpDir.exists() ) {
 					try {
-						String cmdDel = "rd " + tmpDir.getAbsolutePath()
-								+ " /s /q";
-						Runtime.getRuntime().exec( cmdDel );
+						Runtime rt = Runtime.getRuntime();
+						Process proc = rt.exec( command.toString() );
 					} catch ( IOException e ) {
 						System.out.println( "" );
 						System.out.println( tmpDir.getAbsolutePath() );

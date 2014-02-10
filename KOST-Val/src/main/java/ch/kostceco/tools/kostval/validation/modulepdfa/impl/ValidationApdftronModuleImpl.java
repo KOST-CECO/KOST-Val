@@ -327,7 +327,9 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 
 				try {
 					Runtime rt = Runtime.getRuntime();
-					Process proc = rt.exec( command.toString() );
+					Process proc = rt.exec( command.toString().split( " " ) );
+					// .split(" ") ist notwendig wenn in einem Pfad ein
+					// Doppelleerschlag vorhanden ist!
 
 					// Fehleroutput holen
 					StreamGobbler errorGobbler = new StreamGobbler(
