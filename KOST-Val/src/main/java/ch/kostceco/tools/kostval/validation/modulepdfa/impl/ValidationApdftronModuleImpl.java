@@ -24,7 +24,11 @@ import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Arrays;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -236,9 +240,11 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 		erkennung = valid;
 		if ( erkennung = true ) {
 			// Informationen zum PDFTRON-Logverzeichnis holen
-			String pathToPdftronOutput = directoryOfLogfile.getAbsolutePath();
+			String pathToPdftronOutput = getConfigurationService().getPathToWorkDir();
 
 			File pdftronDir = new File( pathToPdftronOutput );
+			pathToPdftronOutput = pdftronDir.getAbsolutePath();
+
 			if ( !pdftronDir.exists() ) {
 				pdftronDir.mkdir();
 			}
@@ -371,6 +377,43 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 								"Der Report konnte nicht umbenannt werden." );
 					}
 					report = newReport;
+					
+					// report von Work-Dir ins log-Dir kopieren
+					// nötiger Umweg falls log-Dir Umlaute hat...
+					InputStream inStream = null;
+					OutputStream outStream = null;
+					
+					String pathToPdftronLog = directoryOfLogfile.getAbsolutePath();
+
+					File pdftronLog = new File( pathToPdftronLog,
+							valDatei.getName() + ".pdftron-log.xml" );
+
+					try {
+						File afile = report;
+						File bfile = pdftronLog;
+						inStream = new FileInputStream( afile );
+						outStream = new FileOutputStream( bfile );
+						byte[] buffer = new byte[1024];
+						int length;
+						// copy the file content in bytes
+						while ( (length = inStream.read( buffer )) > 0 ) {
+							outStream.write( buffer, 0, length );
+						}
+						inStream.close();
+						outStream.close();
+						Util.deleteFile( report );
+						Util.deleteFile( afile );
+
+					} catch ( IOException e ) {
+						e.printStackTrace();
+					}
+					inStream.close();
+					outStream.close();
+					Util.deleteFile( report );
+					
+					report = pdftronLog;
+
+
 
 				} catch ( Exception e ) {
 					getMessageService()

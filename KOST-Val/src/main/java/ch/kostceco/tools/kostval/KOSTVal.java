@@ -150,7 +150,16 @@ public class KOSTVal implements MessageConstants
 
 		// Ueberprüfung des Parameters (Log-Verzeichnis)
 		File directoryOfLogfile = new File( args[1] );
+		File directoryOfLogfileParent1 = directoryOfLogfile.getParentFile();
+		File directoryOfLogfileParent2 = directoryOfLogfileParent1.getParentFile();
+
 		if ( !directoryOfLogfile.exists() ) {
+			if ( !directoryOfLogfileParent1.exists() ) {
+				if ( !directoryOfLogfileParent2.exists() ) {
+					directoryOfLogfileParent2.mkdir();
+				}
+				directoryOfLogfileParent1.mkdir();
+			}
 			directoryOfLogfile.mkdir();
 		}
 
