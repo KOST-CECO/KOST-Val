@@ -131,6 +131,13 @@ public interface ConfigurationService extends Service
 	String getPathToWorkDir();
 
 	/**
+	 * Gibt den Pfad des Logverzeichnisses zurück. 
+	 * 
+	 * @return Pfad des Logverzeichnisses
+	 */
+	String getPathToLogfile();
+
+	/**
 	 * Gibt an ob siard validiert werden soll yes oder no
 	 */
 	String siardValidation();

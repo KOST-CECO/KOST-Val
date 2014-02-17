@@ -54,7 +54,7 @@ public class LogConfigurator implements MessageConstants
 	{
 
 		String logFileName = directoryOfLogfile + File.separator
-				+ nameOfLogfile + ".validationlog.log";
+				+ nameOfLogfile + ".kost-val.log";
 		// String logFileName = directoryOfLogfile + File.separator +
 		// "kostval-TEST.log";
 		Logger rootLogger = Logger.getRootLogger();

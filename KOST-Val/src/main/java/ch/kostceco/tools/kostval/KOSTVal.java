@@ -1,5 +1,5 @@
 /*== KOST-Val ==================================================================================
-The KOST-Val v1.1.2 application is used for validate TIFF, SIARD, PDF/A-Files and Submission 
+The KOST-Val v1.2.0 application is used for validate TIFF, SIARD, PDF/A-Files and Submission 
 Information Package (SIP). 
 Copyright (C) 2012-2014 Claire Röthlisberger (KOST-CECO), Christian Eugster, Olivier Debenath, 
 Peter Schneider (Staatsarchiv Aargau), Daniel Ludin (BEDAG AG)
@@ -77,8 +77,7 @@ public class KOSTVal implements MessageConstants
 	}
 
 	/**
-	 * Die Eingabe besteht aus 3 oder 4 Parameter: [0] Validierungstyp [1] Pfad
-	 * zum Logging-Verzeichnis [2] Pfad zur Val-File [3] option: Verbose
+	 * Die Eingabe besteht aus 2 oder 3 Parameter: [0] Validierungstyp [1] Pfad zur Val-File [2] option: Verbose
 	 * 
 	 * @param args
 	 */
@@ -101,8 +100,8 @@ public class KOSTVal implements MessageConstants
 
 		KOSTVal kostval = (KOSTVal) context.getBean( "kostval" );
 
-		// Ist die Anzahl Parameter (mind. 3) korrekt?
-		if ( args.length < 3 ) {
+		// Ist die Anzahl Parameter (mind. 2) korrekt?
+		if ( args.length < 2 ) {
 			LOGGER.logInfo( kostval.getTextResourceService().getText(
 					ERROR_PARAMETER_USAGE ) );
 			LOGGER.logInfo( kostval.getTextResourceService().getText(
@@ -149,15 +148,14 @@ public class KOSTVal implements MessageConstants
 		}
 
 		// Ueberprüfung des Parameters (Log-Verzeichnis)
-		File directoryOfLogfile = new File( args[1] );
+		String pathToLogfile = kostval.getConfigurationService()
+		.getPathToLogfile();
+
+		File directoryOfLogfile = new File( pathToLogfile );
 		File directoryOfLogfileParent1 = directoryOfLogfile.getParentFile();
-		File directoryOfLogfileParent2 = directoryOfLogfileParent1.getParentFile();
 
 		if ( !directoryOfLogfile.exists() ) {
 			if ( !directoryOfLogfileParent1.exists() ) {
-				if ( !directoryOfLogfileParent2.exists() ) {
-					directoryOfLogfileParent2.mkdir();
-				}
 				directoryOfLogfileParent1.mkdir();
 			}
 			directoryOfLogfile.mkdir();
@@ -201,11 +199,11 @@ public class KOSTVal implements MessageConstants
 			System.exit( 1 );
 		}
 
-		// Ueberprüfung des optionalen Parameters (3 -v --> im Verbose-mode
+		// Ueberprüfung des optionalen Parameters (2 -v --> im Verbose-mode
 		// werden die originalen Logs nicht gelöscht (PDFTron, Jhove & Co.)
 		boolean verbose = false;
-		if ( args.length > 3 ) {
-			if ( !(args[3].equals( "-v" )) ) {
+		if ( args.length > 2 ) {
+			if ( !(args[2].equals( "-v" )) ) {
 				LOGGER.logInfo( kostval.getTextResourceService().getText(
 						ERROR_PARAMETER_OPTIONAL_1 ) );
 				LOGGER.logInfo( kostval.getTextResourceService().getText(
@@ -232,7 +230,7 @@ public class KOSTVal implements MessageConstants
 			System.exit( 1 );
 		}
 
-		File valDatei = new File( args[2] );
+		File valDatei = new File( args[1] );
 		File logDatei = null;
 		logDatei = valDatei;
 

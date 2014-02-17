@@ -105,6 +105,22 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	}
 
 	@Override
+	public String getPathToLogfile()
+	{
+		/**
+		 * Gibt den Pfad des Logverzeichnisses zurück. 
+		 * 
+		 * @return Pfad des Logverzeichnisses
+		 */
+		Object prop = getConfig().getProperty( "pathtologfile" );
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
+	@Override
 	public String getPathToJhoveConfiguration()
 	{
 		/**
