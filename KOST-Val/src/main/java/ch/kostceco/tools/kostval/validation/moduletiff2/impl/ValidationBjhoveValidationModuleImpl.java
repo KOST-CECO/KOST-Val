@@ -24,12 +24,15 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 
 import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationBjhoveValidationException;
 import ch.kostceco.tools.kostval.service.ConfigurationService;
@@ -91,8 +94,9 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 		 */
 
 		// Informationen zum Jhove-Logverzeichnis holen
-		String pathToJhoveOutput = System.getProperty("java.io.tmpdir");
-		//String pathToJhoveOutput = pathToWorkDir;
+		// String pathToJhoveOutput = System.getProperty("java.io.tmpdir");
+		// String pathToJhoveOutput = pathToWorkDir;
+		String pathToJhoveOutput = directoryOfLogfile.getAbsolutePath();
 		String pathToJhoveOutput2 = directoryOfLogfile.getAbsolutePath();
 		// Jhove schreibt ins Work-Verzeichnis, damit danach eine Kopie ins
 		// Log-Verzeichnis abgelegt werden kann, welche auch gelöscht werden
@@ -105,7 +109,7 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 			jhoveDir.mkdir();
 		}
 
-		// Jhove direkt ansprechen
+		// Jhove direkt ansprechen via process
 		try {
 			String NAME = new String( "Jhove" );
 			String RELEASE = new String( "1.5" );
@@ -116,11 +120,8 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 			JhoveBase je = new JhoveBase();
 			OutputHandler handler = je.getHandler( "XML" );
 
-			// check all modules => null oder je.getModule( "TIFF" );
 			Module module = je.getModule( "TIFF" );
-			String logLevel = null; // null = SEVERE, WARNING, INFO, FINE,
-									// FINEST
-			// Ausgabe in Konsole --> kein Einfluss auf Report
+			String logLevel = null;
 			je.setLogLevel( logLevel );
 			String saxClass = null;
 			String configFile = pathToJhoveConfig;
@@ -135,10 +136,26 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 			try {
 				File newReport = new File( pathToJhoveOutput,
 						valDatei.getName() + ".jhove-log.txt" );
-				String outputFile = newReport.getAbsolutePath();
-				String[] dirFileOrUri = { valDatei.getAbsolutePath() };
-				je.dispatch( app, module, null, handler, outputFile,
-						dirFileOrUri );
+				newReport.getParentFile().mkdirs();
+				PrintWriter writer = null;
+				String dirFileOrUri = valDatei.getAbsolutePath();
+				try {
+					writer = new PrintWriter( newReport );
+					// Jhove Teil
+					//TODO: Leider funktioniert es nicht :-(
+					handler.setWriter( writer );
+					handler.setBase( je );
+					module.init( "" );
+					module.setDefaultParams( new ArrayList<String>() );
+					je.process( app, module, handler, dirFileOrUri );
+				} catch ( FileNotFoundException e ) {
+					e.printStackTrace();
+				} finally {
+					if ( writer != null ) {
+						writer.close();
+					}
+				}
+				writer.close();
 				jhoveReport = newReport;
 			} catch ( Exception e ) {
 				e.printStackTrace();
@@ -267,10 +284,11 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 		if ( jhoveReport.exists() ) {
 			jhoveReport.delete();
 		}
-		//if ( jhoveReport.exists() ) {
-			jhoveReport.deleteOnExit();
-		//}
+		// if ( jhoveReport.exists() ) {
+		jhoveReport.deleteOnExit();
+		// }
 
 		return isValid;
 	}
+
 }
