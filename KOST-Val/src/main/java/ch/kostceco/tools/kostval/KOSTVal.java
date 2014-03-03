@@ -1,5 +1,5 @@
 /*== KOST-Val ==================================================================================
-The KOST-Val v1.2.1 application is used for validate TIFF, SIARD, PDF/A-Files and Submission 
+The KOST-Val v1.2.2 application is used for validate TIFF, SIARD, PDF/A-Files and Submission 
 Information Package (SIP). 
 Copyright (C) 2012-2014 Claire Röthlisberger (KOST-CECO), Christian Eugster, Olivier Debenath, 
 Peter Schneider (Staatsarchiv Aargau), Daniel Ludin (BEDAG AG)
@@ -153,12 +153,8 @@ public class KOSTVal implements MessageConstants
 				.getPathToLogfile();
 
 		File directoryOfLogfile = new File( pathToLogfile );
-		File directoryOfLogfileParent1 = directoryOfLogfile.getParentFile();
 
 		if ( !directoryOfLogfile.exists() ) {
-			if ( !directoryOfLogfileParent1.exists() ) {
-				directoryOfLogfileParent1.mkdir();
-			}
 			directoryOfLogfile.mkdir();
 		}
 
@@ -842,7 +838,7 @@ public class KOSTVal implements MessageConstants
 				if ( verbose ) {
 					LOGGER.logInfo( kostval.getTextResourceService().getText(
 							MESSAGE_FOOTER_REPORTJHOVE,
-							Util.getPathToReportJHove() ) );
+							jhoveReport.getAbsolutePath() ) );
 					LOGGER.logInfo( "" );
 				} else {
 					// kein optionaler Parameter --> Jhove-Report loeschen!
@@ -951,7 +947,7 @@ public class KOSTVal implements MessageConstants
 				if ( verbose ) {
 					LOGGER.logInfo( kostval.getTextResourceService().getText(
 							MESSAGE_FOOTER_REPORTPDFTRON,
-							Util.getPathToReportPdftron() ) );
+							pdftronReport.getAbsolutePath() ) );
 					LOGGER.logInfo( "" );
 				} else {
 					// kein optionaler Parameter --> PDFTron-Report loeschen!

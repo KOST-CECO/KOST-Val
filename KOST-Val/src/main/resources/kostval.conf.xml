@@ -1,13 +1,14 @@
 <?xml version="1.0"?>
 <configuration>
-	<pathtojhoveconfig>KOST-Val\configuration\jhove.conf</pathtojhoveconfig>
-	<pathtoworkdir>work_KOST-Val</pathtoworkdir>
+	<pathtologfile>logs</pathtologfile>
+	<pathtoworkdir>temp_KOST-Val</pathtoworkdir>
+	<pathtojhoveconfig>configuration\jhove.conf</pathtojhoveconfig>
 	
 <pdfa>
 	<!--no verwenden wenn pdfa nicht validiert werden soll, ansonsten yes-->
-	<pdfavalidation>yes</pdfavalidation>	
+	<pdfavalidation>no</pdfavalidation>	
 	<!--Pfad zum PDF/A-Manager von PDFTron-->	
-	<pathtopdftronexe>Drittapplikationen\pdfa\pdfa.exe</pathtopdftronexe>
+	<pathtopdftronexe>C:\Software\pdfa\pdfa.exe</pathtopdftronexe>
 	<!--Angeben welche Conformancelevel mindestens erreicht werden muss-->
 	<!--no verwenden wenn diese Version nicht erlaubt ist-->
 	<pdfa1>1B</pdfa1>	<!--1A / 1B / no-->
@@ -66,19 +67,23 @@
 	<allowedlengthofpaths>179</allowedlengthofpaths>
 	<allowedlengthoffiles>40</allowedlengthoffiles>
 	<allowedsipname>SIP_[1-2][0-9]{3}[0-1][0-9][0-3][0-9]_\\w{3}</allowedsipname>
-	<pathtoworkdir>work_SIP-Val</pathtoworkdir>
-	<pathtodroidsignature>KOST-Val\configuration\KaD_SignatureFile_V70.xml</pathtodroidsignature>
-	<allowedversionbar1>1</allowedversionbar1>
-	<allowedversionbar4ech1>1</allowedversionbar4ech1>
+	<pathtodroidsignature>configuration\KaD_SignatureFile_V70.xml</pathtodroidsignature>
+	<allowedversionbar1>1</allowedversionbar1>						<!--0 / 1-->
+	<allowedversionbar4ech1>1</allowedversionbar4ech1>				<!--0 / 1-->
 	<allowedformats>
-		<allowedformat>	<puid>TXT</puid>	<extension>txt</extension>				<comment>Plain Text file</comment>			</allowedformat>
-		<allowedformat>	<puid>TIFF</puid>	<extension>tif, tiff</extension>		<comment>keine Versionen</comment>			</allowedformat>
-		<allowedformat>	<puid>JP2</puid>	<extension>jp2, jpg2, j2c</extension>	<comment>JPEG2000</comment>					</allowedformat>
-		<allowedformat>	<puid>PDFA1</puid>	<extension>pdf</extension>				<comment>Erkennung PDF/A-1</comment>		</allowedformat>
-		<allowedformat>	<puid>PDFA2</puid>	<extension>pdf</extension>				<comment>Erkennung PDF/A-2</comment>		</allowedformat>
-		<allowedformat>	<puid>WAVE</puid>	<extension>wav, wave</extension>		<comment>Waveform Audio</comment>			</allowedformat>
-		<allowedformat>	<puid>CSV</puid>	<extension>csv</extension>				<comment>Comma Separated Values</comment>	</allowedformat>
-		<allowedformat>	<puid>SIARD</puid>	<extension>siard</extension>			<comment>Erkennung SIARD</comment>			</allowedformat>
+		<allowedformat>	<puid>TXT</puid>	<extension>txt</extension>					<comment>Plain Text file</comment>			</allowedformat>
+		<allowedformat>	<puid>TIFF</puid>	<extension>tif, tiff</extension>			<comment>Tagged Image File Format</comment>	</allowedformat>
+		<allowedformat>	<puid>JP2</puid>	<extension>jp2, jpg2, j2c</extension>		<comment>JPEG2000</comment>					</allowedformat>
+		<allowedformat>	<puid>PDFA1</puid>	<extension>pdf</extension>					<comment>PDF/A-1</comment>					</allowedformat>
+		<allowedformat>	<puid>PDFA2</puid>	<extension>pdf</extension>					<comment>PDF/A-2</comment>					</allowedformat>
+		<allowedformat>	<puid>WAVE</puid>	<extension>wav, wave</extension>			<comment>Waveform Audio</comment>			</allowedformat>
+		<allowedformat>	<puid>CSV</puid>	<extension>csv</extension>					<comment>Comma Separated Values</comment>	</allowedformat>
+		<allowedformat>	<puid>SIARD</puid>	<extension>siard</extension>				<comment>SIARD</comment>					</allowedformat>
+	<!--<allowedformat>	<puid>XML</puid>	<extension>xml</extension>					<comment>Ext. Markup Language</comment>		</allowedformat>-->
+	<!--<allowedformat>	<puid>XSD</puid>	<extension>xsd</extension>					<comment>XML Schema Definition</comment>	</allowedformat>-->
+	<!--<allowedformat>	<puid>JPEG</puid>	<extension>jpeg, jpg, jpe</extension>		<comment>JPEG</comment>						</allowedformat>-->
+	<!--<allowedformat>	<puid>MP3</puid>	<extension>mp3</extension>					<comment>MPEG 1/2 Audio Layer 3</comment>	</allowedformat>-->
+	<!--<allowedformat>	<puid>MP4</puid>	<extension>mp4, m4v, m4a, f4v, f4a</extension>	<comment>MPEG-4 Media File</comment>	</allowedformat>-->
 	</allowedformats>
 </sip>	
 </configuration>
