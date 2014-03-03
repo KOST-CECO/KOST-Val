@@ -240,7 +240,8 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 		erkennung = valid;
 		if ( erkennung = true ) {
 			// Informationen zum PDFTRON-Logverzeichnis holen
-			String pathToPdftronOutput = getConfigurationService().getPathToWorkDir();
+			String pathToPdftronOutput = getConfigurationService()
+					.getPathToWorkDir();
 
 			File pdftronDir = new File( pathToPdftronOutput );
 			pathToPdftronOutput = pdftronDir.getAbsolutePath();
@@ -377,13 +378,14 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 								"Der Report konnte nicht umbenannt werden." );
 					}
 					report = newReport;
-					
+
 					// report von Work-Dir ins log-Dir kopieren
 					// nötiger Umweg falls log-Dir Umlaute hat...
 					InputStream inStream = null;
 					OutputStream outStream = null;
-					
-					String pathToPdftronLog = directoryOfLogfile.getAbsolutePath();
+
+					String pathToPdftronLog = directoryOfLogfile
+							.getAbsolutePath();
 
 					File pdftronLog = new File( pathToPdftronLog,
 							valDatei.getName() + ".pdftron-log.xml" );
@@ -410,10 +412,8 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 					inStream.close();
 					outStream.close();
 					Util.deleteFile( report );
-					
+
 					report = pdftronLog;
-
-
 
 				} catch ( Exception e ) {
 					getMessageService()
