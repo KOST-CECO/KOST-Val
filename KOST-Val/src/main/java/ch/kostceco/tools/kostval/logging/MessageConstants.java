@@ -249,6 +249,7 @@ public interface MessageConstants
 	// *************SIP-Meldungen*************************************************************************
 	// Modul 1 Meldungen
 	String	ERROR_MODULE_AA_INCORRECTFILEENDING				= "error.module.aa.incorrectfileending";
+	String	ERROR_MODULE_AA_CANNOTEXTRACTZIP				= "error.module.aa.cannotextractzip";
 
 	// Modul 1c Meldungen
 	String	MESSAGE_MODULE_AC_NOTALLOWEDFILE				= "message.module.ac.notallowedfile";

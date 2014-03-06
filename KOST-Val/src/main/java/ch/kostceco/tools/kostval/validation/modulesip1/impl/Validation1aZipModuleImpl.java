@@ -100,7 +100,7 @@ public class Validation1aZipModuleImpl extends ValidationModuleImpl implements
 					getTextResourceService().getText( MESSAGE_MODULE_Aa )
 							+ getTextResourceService().getText( MESSAGE_DASHES )
 							+ getTextResourceService().getText(
-									ERROR_MODULE_A_INCORRECTFILEENDING ) );
+									ERROR_MODULE_AA_INCORRECTFILEENDING ) );
 
 			return false;
 		}

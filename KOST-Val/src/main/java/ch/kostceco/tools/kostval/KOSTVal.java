@@ -20,8 +20,11 @@ Boston, MA 02110-1301 USA or see <http://www.gnu.org/licenses/>.
 
 package ch.kostceco.tools.kostval;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -491,17 +494,71 @@ public class KOSTVal implements MessageConstants
 			Integer tiffCountNio = 0;
 
 			if ( !valDatei.isDirectory() ) {
-				// geziptes SIP --> in temp dir entzipen
-				tmpDirZip = new File( tmpDir.getAbsolutePath() + "\\ZIP" );
+				Boolean zip = false;
+				// Eine ZIP Datei muss mit PK.. beginnen
+				if ( (valDatei.getAbsolutePath().toLowerCase().endsWith( ".zip" ) || valDatei
+						.getAbsolutePath().toLowerCase().endsWith( ".zip64" )) ) {
 
-				try {
-					Zip64Archiver.unzip( valDatei, tmpDirZip );
-					valDatei = tmpDirZip;
+					FileReader fr = null;
 
-				} catch ( Exception e ) {
-					LOGGER.logInfo( kostval.getTextResourceService().getText(
-							ERROR_MODULE_AA_INCORRECTFILEENDING ) );
+					try {
+						fr = new FileReader( valDatei );
+						BufferedReader read = new BufferedReader( fr );
+
+						// Hex 03 in Char umwandeln
+						String str3 = "03";
+						int i3 = Integer.parseInt( str3, 16 );
+						char c3 = (char) i3;
+						// Hex 04 in Char umwandeln
+						String str4 = "04";
+						int i4 = Integer.parseInt( str4, 16 );
+						char c4 = (char) i4;
+
+						// auslesen der ersten 4 Zeichen der Datei
+						int length;
+						int i;
+						char[] buffer = new char[4];
+						length = read.read( buffer );
+						for ( i = 0; i != length; i++ )
+							;
+
+						// die beiden charArrays (soll und ist) mit einander
+						// vergleichen
+						char[] charArray1 = buffer;
+						char[] charArray2 = new char[] { 'P', 'K', c3, c4 };
+
+						if ( Arrays.equals( charArray1, charArray2 ) ) {
+							// höchstwahrscheinlich ein ZIP da es mit
+							// 504B0304 respektive
+							// PK.. beginnt
+							zip = true;
+						}
+					} catch ( Exception e ) {
+						LOGGER.logInfo( e.getMessage() );
+					}
 				}
+
+				// wenn die Datei kein Directory ist, muss sie mit zip oder zip64 enden
+				if ( (!(valDatei.getAbsolutePath().toLowerCase().endsWith( ".zip" ) || valDatei
+						.getAbsolutePath().toLowerCase().endsWith( ".zip64" )))
+						|| zip == false ) {
+
+					LOGGER.logInfo(kostval.getTextResourceService().getText(
+											ERROR_MODULE_AA_INCORRECTFILEENDING ) );
+
+				} else {
+					// geziptes SIP --> in temp dir entzipen
+					tmpDirZip = new File( tmpDir.getAbsolutePath() + "\\ZIP" );
+					try {
+						Zip64Archiver.unzip( valDatei, tmpDirZip );
+						valDatei = tmpDirZip;
+
+					} catch ( Exception e ) {
+						LOGGER.logInfo( kostval.getTextResourceService()
+								.getText( ERROR_MODULE_AA_CANNOTEXTRACTZIP ) );
+					}
+				}
+				
 			}
 			Map<String, File> fileMap = Util.getFileMap( valDatei, false );
 			Set<String> fileMapKeys = fileMap.keySet();

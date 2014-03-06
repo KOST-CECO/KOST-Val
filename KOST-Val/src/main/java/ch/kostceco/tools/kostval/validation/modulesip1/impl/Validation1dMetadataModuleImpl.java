@@ -94,7 +94,8 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 		File xsdToValidate = null;
 
 		// Arbeitsverzeichnis zum Entpacken des Archivs erstellen
-		String pathToWorkDir = getConfigurationService().getPathToWorkDir() + "\\SIP-Validierung";
+		String pathToWorkDir = getConfigurationService().getPathToWorkDir()
+				+ "\\SIP-Validierung";
 		File tmpDir = new File( pathToWorkDir );
 		if ( !tmpDir.exists() ) {
 			tmpDir.mkdir();
@@ -375,7 +376,8 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 							+ getTextResourceService().getText( MESSAGE_DASHES )
 							+ getTextResourceService().getText(
 									ERROR_MODULE_AD_METADATA_ERRORS,
-									saxParseException.getLineNumber() ) );
+									saxParseException.getLineNumber(),
+									saxParseException.getMessage() ) );
 
 		}
 
@@ -389,7 +391,8 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 							+ getTextResourceService().getText( MESSAGE_DASHES )
 							+ getTextResourceService().getText(
 									ERROR_MODULE_AD_METADATA_ERRORS,
-									saxParseException.getLineNumber() ) );
+									saxParseException.getLineNumber(),
+									saxParseException.getMessage()  ) );
 		}
 
 		public void warning( SAXParseException exception ) throws SAXException
