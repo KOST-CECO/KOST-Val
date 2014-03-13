@@ -1,5 +1,5 @@
 /*== KOST-Val ==================================================================================
-The KOST-Val v1.2.3 application is used for validate TIFF, SIARD, PDF/A-Files and Submission 
+The KOST-Val v1.2.4 application is used for validate TIFF, SIARD, PDF/A-Files and Submission 
 Information Package (SIP). 
 Copyright (C) 2012-2014 Claire Röthlisberger (KOST-CECO), Christian Eugster, Olivier Debenath, 
 Peter Schneider (Staatsarchiv Aargau), Daniel Ludin (BEDAG AG)
@@ -103,6 +103,46 @@ public class KOSTVal implements MessageConstants
 		// context.getBean("validationmoduleimpl");
 
 		KOSTVal kostval = (KOSTVal) context.getBean( "kostval" );
+		
+		// Ueberprüfung des Parameters (Log-Verzeichnis)
+		String pathToLogfile = kostval.getConfigurationService()
+				.getPathToLogfile();
+
+		File directoryOfLogfile = new File( pathToLogfile );
+
+		if ( !directoryOfLogfile.exists() ) {
+			directoryOfLogfile.mkdir();
+		}
+
+		// Im Logverzeichnis besteht kein Schreibrecht
+		if ( !directoryOfLogfile.canWrite() ) {
+			LOGGER.logInfo( kostval.getTextResourceService().getText(
+					ERROR_LOGDIRECTORY_NOTWRITABLE, directoryOfLogfile ) );
+			LOGGER.logInfo( kostval.getTextResourceService().getText(
+					MESSAGE_VALIDATION_INTERRUPTED ) );
+			System.exit( 1 );
+		}
+
+		if ( !directoryOfLogfile.isDirectory() ) {
+			LOGGER.logInfo( kostval.getTextResourceService().getText(
+					ERROR_LOGDIRECTORY_NODIRECTORY ) );
+			LOGGER.logInfo( kostval.getTextResourceService().getText(
+					MESSAGE_VALIDATION_INTERRUPTED ) );
+			System.exit( 1 );
+		}
+		
+		File valDatei = new File( args[1] );
+		File logDatei = null;
+		logDatei = valDatei;
+
+		// Konfiguration des Loggings, ein File Logger wird
+		// zusätzlich erstellt
+		LogConfigurator logConfigurator = (LogConfigurator) context
+				.getBean( "logconfigurator" );
+		String logFileName = logConfigurator.configure(
+				directoryOfLogfile.getAbsolutePath(), logDatei.getName() );
+		LOGGER.logInfo( kostval.getTextResourceService().getText(
+				MESSAGE_KOSTVALIDATION ) );
 
 		// Ist die Anzahl Parameter (mind. 2) korrekt?
 		if ( args.length < 2 ) {
@@ -133,12 +173,15 @@ public class KOSTVal implements MessageConstants
 
 		File tmpDir = new File( pathToWorkDir );
 
-		// bestehendes Workverzeichnis ggf. löschen
+		// bestehendes Workverzeichnis Abbruch, da am Schluss das
+		// Workverzeichnis gelöscht wird und entsprechend bestehende Dateien
+		// gelöscht werden können
 		if ( tmpDir.exists() ) {
-			Util.deleteDir( tmpDir );
-		}
-		if ( tmpDir.exists() ) {
-			tmpDir.delete();
+			LOGGER.logInfo( kostval.getTextResourceService().getText(
+					ERROR_WORKDIRECTORY_EXISTS, pathToWorkDir ) );
+			LOGGER.logInfo( kostval.getTextResourceService().getText(
+					MESSAGE_VALIDATION_INTERRUPTED ) );
+			System.exit( 1 );
 		}
 
 		// die Anwendung muss mindestens unter Java 6 laufen
@@ -151,41 +194,7 @@ public class KOSTVal implements MessageConstants
 			System.exit( 1 );
 		}
 
-		// Ueberprüfung des Parameters (Log-Verzeichnis)
-		String pathToLogfile = kostval.getConfigurationService()
-				.getPathToLogfile();
-
-		File directoryOfLogfile = new File( pathToLogfile );
-
-		if ( !directoryOfLogfile.exists() ) {
-			directoryOfLogfile.mkdir();
-		}
-
-		// Im Logverzeichnis besteht kein Schreibrecht
-		if ( !directoryOfLogfile.canWrite() ) {
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					ERROR_LOGDIRECTORY_NOTWRITABLE, directoryOfLogfile ) );
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					MESSAGE_VALIDATION_INTERRUPTED ) );
-			System.exit( 1 );
-		}
-
-		if ( !directoryOfLogfile.isDirectory() ) {
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					ERROR_LOGDIRECTORY_NODIRECTORY ) );
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					MESSAGE_VALIDATION_INTERRUPTED ) );
-			System.exit( 1 );
-		}
-
-		// bestehendes Workverzeichnis ggf. löschen und wieder anlegen
-		if ( tmpDir.exists() ) {
-			Util.deleteDir( tmpDir );
-		}
-		if ( tmpDir.exists() ) {
-			tmpDir.delete();
-		}
-
+		// bestehendes Workverzeichnis wieder anlegen
 		if ( !tmpDir.exists() ) {
 			tmpDir.mkdir();
 		}
@@ -229,19 +238,6 @@ public class KOSTVal implements MessageConstants
 					MESSAGE_VALIDATION_INTERRUPTED ) );
 			System.exit( 1 );
 		}
-
-		File valDatei = new File( args[1] );
-		File logDatei = null;
-		logDatei = valDatei;
-
-		// Konfiguration des Loggings, ein File Logger wird
-		// zusätzlich erstellt
-		LogConfigurator logConfigurator = (LogConfigurator) context
-				.getBean( "logconfigurator" );
-		String logFileName = logConfigurator.configure(
-				directoryOfLogfile.getAbsolutePath(), logDatei.getName() );
-		LOGGER.logInfo( kostval.getTextResourceService().getText(
-				MESSAGE_KOSTVALIDATION ) );
 
 		// Ueberprüfung des Parameters (Val-Datei): existiert die Datei?
 		if ( !valDatei.exists() ) {
@@ -496,8 +492,9 @@ public class KOSTVal implements MessageConstants
 			if ( !valDatei.isDirectory() ) {
 				Boolean zip = false;
 				// Eine ZIP Datei muss mit PK.. beginnen
-				if ( (valDatei.getAbsolutePath().toLowerCase().endsWith( ".zip" ) || valDatei
-						.getAbsolutePath().toLowerCase().endsWith( ".zip64" )) ) {
+				if ( (valDatei.getAbsolutePath().toLowerCase()
+						.endsWith( ".zip" ) || valDatei.getAbsolutePath()
+						.toLowerCase().endsWith( ".zip64" )) ) {
 
 					FileReader fr = null;
 
@@ -538,13 +535,15 @@ public class KOSTVal implements MessageConstants
 					}
 				}
 
-				// wenn die Datei kein Directory ist, muss sie mit zip oder zip64 enden
-				if ( (!(valDatei.getAbsolutePath().toLowerCase().endsWith( ".zip" ) || valDatei
-						.getAbsolutePath().toLowerCase().endsWith( ".zip64" )))
+				// wenn die Datei kein Directory ist, muss sie mit zip oder
+				// zip64 enden
+				if ( (!(valDatei.getAbsolutePath().toLowerCase()
+						.endsWith( ".zip" ) || valDatei.getAbsolutePath()
+						.toLowerCase().endsWith( ".zip64" )))
 						|| zip == false ) {
 
-					LOGGER.logInfo(kostval.getTextResourceService().getText(
-											ERROR_MODULE_AA_INCORRECTFILEENDING ) );
+					LOGGER.logInfo( kostval.getTextResourceService().getText(
+							ERROR_MODULE_AA_INCORRECTFILEENDING ) );
 
 				} else {
 					// geziptes SIP --> in temp dir entzipen
@@ -558,7 +557,7 @@ public class KOSTVal implements MessageConstants
 								.getText( ERROR_MODULE_AA_CANNOTEXTRACTZIP ) );
 					}
 				}
-				
+
 			}
 			Map<String, File> fileMap = Util.getFileMap( valDatei, false );
 			Set<String> fileMapKeys = fileMap.keySet();
@@ -694,7 +693,8 @@ public class KOSTVal implements MessageConstants
 				validFormat = false;
 				fileName3c = "3c_Invalide.txt";
 			}
-			outputFile3c = new File( directoryOfLogfile + fileName3c );
+			// outputFile3c = new File( directoryOfLogfile + fileName3c );
+			outputFile3c = new File( pathToWorkDir + "\\" + fileName3c );
 			try {
 				outputFile3c.createNewFile();
 			} catch ( IOException e ) {
