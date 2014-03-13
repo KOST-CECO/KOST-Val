@@ -1,0 +1,38 @@
+[Config]
+Relative path=1
+Compilator.SaveAll=0
+Compilator.Capture=0
+Compilator.HideOutput=0
+DefaultDir=P:\KOST\Tools\simpleGUI\_KOST-Val_GUI
+DefaultCPIndex=4
+LogtoEnd=1
+DontOpen=0
+FileFormat=0
+[Project tree]
+KOSTval
+	+_workbench
+		KOSTval_de.nsi
+		langKOSTVal_de.nsh
+		langKOSTVal_fr.nsh
+		KOSTval.ini
+		getJavaHome.nsh
+		val.ico
+		make_KOSTval_de.bat
+		make_KOSTval_fr.bat
+		KOSTval_fr.script
+[Open project files]
+0=Neu1.txt
+1=KOSTval_fr.nsi
+2=KOSTval_fr.script
+[Selected Project Files]
+Main=KOSTval_de.nsi
+Selected=Neu1.txt
+[Neu1.txt]
+TopLine=1
+Caret=1,1
+[KOSTval_fr.nsi]
+TopLine=1
+Caret=55,29
+[KOSTval_fr.script]
+TopLine=1
+Caret=46,4

@@ -49,14 +49,9 @@ if %errorlevel%==6 (
 REM Nach den Abfragen kommt die eigentliche Ausführung...
 
 ECHO.
-ECHO Aufbau KOST-Val Befehl: 
-ECHO java  -jar  fr_kostval.jar  %Typ%  %DATEIEN%  %Option%
-ECHO.
-ECHO ============================== S T A R T ==============================   
-ECHO.
     REM Datei oder Ordner
-    java -Xmx512m -jar fr_kostval.jar %Typ% "%DATEIEN%" %Option%
-ECHO ================================ E N D ================================   
+    java -Xmx512m -jar kostval_fr.jar %Typ% "%DATEIEN%" %Option%
+ECHO ================================ F I N ================================   
 ECHO.
 PAUSE
 EXIT /B 

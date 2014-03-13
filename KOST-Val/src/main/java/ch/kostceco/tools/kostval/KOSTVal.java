@@ -1,5 +1,5 @@
 /*== KOST-Val ==================================================================================
-The KOST-Val v1.2.2 application is used for validate TIFF, SIARD, PDF/A-Files and Submission 
+The KOST-Val v1.2.3 application is used for validate TIFF, SIARD, PDF/A-Files and Submission 
 Information Package (SIP). 
 Copyright (C) 2012-2014 Claire Röthlisberger (KOST-CECO), Christian Eugster, Olivier Debenath, 
 Peter Schneider (Staatsarchiv Aargau), Daniel Ludin (BEDAG AG)

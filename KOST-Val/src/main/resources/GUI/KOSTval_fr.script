@@ -1,0 +1,4 @@
+s/KOST-Val_de/KOST-Val_fr/g
+s/langKOSTVal_de.nsh/langKOSTVal_fr.nsh/g
+s/kostval_de.jar/kostval_fr.jar/g
+s/KOST-Val_Anwendungshandbuch/KOST-Val_Guide_d_application/g
