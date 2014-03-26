@@ -14,25 +14,18 @@ KOSTval
 		KOSTval_de.nsi
 		langKOSTVal_de.nsh
 		langKOSTVal_fr.nsh
+		langKOSTVal_en.nsh
 		KOSTval.ini
 		getJavaHome.nsh
 		val.ico
-		make_KOSTval_de.bat
-		make_KOSTval_fr.bat
+		make_KOSTval.bat
 		KOSTval_fr.script
+		KOSTval_en.script
 [Open project files]
-0=Neu1.txt
-1=KOSTval_fr.nsi
-2=KOSTval_fr.script
+0=KOSTval_de.nsi
 [Selected Project Files]
 Main=KOSTval_de.nsi
-Selected=Neu1.txt
-[Neu1.txt]
+Selected=KOSTval_de.nsi
+[KOSTval_de.nsi]
 TopLine=1
-Caret=1,1
-[KOSTval_fr.nsi]
-TopLine=1
-Caret=55,29
-[KOSTval_fr.script]
-TopLine=1
-Caret=46,4
+Caret=22,2

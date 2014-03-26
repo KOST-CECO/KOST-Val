@@ -5,17 +5,10 @@ Alles ist in P:\KOST\Tools\simpleGUI\_KOST-Val_GUI
 .nsn	-	NullSoft Module (entweder lokal oder in NSIS\Include)
 
 
-KOSTval_de.exe erstellen:
+KOSTval.exe erstellen:
 -------------------------
-make_KOSTval_de.bat aufrufen
-oder
-1. makensisw.exe öffnen
-2. SIARDval.nsi hereinziehen
-3. Close
+make_KOSTval.bat aufrufen
 
-KOSTval_fr.exe erstellen:
--------------------------
-make_KOSTval_fr.bat aufrufen
 
 nicht beachten
 --------------

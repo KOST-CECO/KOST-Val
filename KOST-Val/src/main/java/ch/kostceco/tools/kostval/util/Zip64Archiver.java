@@ -20,14 +20,21 @@ Boston, MA 02110-1301 USA or see <http://www.gnu.org/licenses/>.
 
 package ch.kostceco.tools.kostval.util;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.List;
+import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
+import java.util.zip.ZipFile;
 
 import ch.enterag.utils.zip.EntryInputStream;
 import ch.enterag.utils.zip.EntryOutputStream;
@@ -37,12 +44,7 @@ import ch.enterag.utils.zip.Zip64File;
 /**
  * @author razm Daniel Ludin, Bedag AG @version 0.2.0 Diese Klasse benutzt die
  *         Zip64File Library zum Komprimieren und Archivieren von Dateien,
- *         welche grösser als 4 G sein können. Es gibt momentan keine andere
- *         Software ausser pkzip, welche ein kommerzielles Produkt ist, die dazu
- *         in der Lage wäre. Bspw. führt Izarc die Archivierung zwar durch, aber
- *         erzeugt fehlerhafte Metadaten, die das Dekomprimieren dann
- *         verunmöglichen. Uebrigens werden von IZArc auch die
- *         Zeichenkodierungen nicht richtig abgehandelt.
+ *         welche grösser als 4 G sein können.
  */
 
 public class Zip64Archiver
@@ -142,7 +144,100 @@ public class Zip64Archiver
 		zip64File.close();
 	}
 
-	public static void unzip( File inputFile, File outDir )
+	/**
+	 * Unzip it
+	 * 
+	 * @param zipFile
+	 *            path to input zip file
+	 * @param output
+	 *            path to zip file output folder
+	 */
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static void unzip( String inputZip, String destinationDirectory )
+			throws IOException
+	{
+		int BUFFER = 2048;
+		List zipFiles = new ArrayList();
+		File sourceZipFile = new File( inputZip );
+		File unzipDestinationDirectory = new File( destinationDirectory );
+		unzipDestinationDirectory.mkdir();
+
+		ZipFile zipFile;
+		// Open Zip file for reading
+		zipFile = new ZipFile( sourceZipFile, ZipFile.OPEN_READ );
+
+		// Create an enumeration of the entries in the zip file
+		Enumeration zipFileEntries = zipFile.entries();
+
+		// Process each entry
+		while ( zipFileEntries.hasMoreElements() ) {
+			// grab a zip file entry
+			ZipEntry entry = (ZipEntry) zipFileEntries.nextElement();
+
+			String currentEntry = entry.getName();
+
+			File destFile = new File( unzipDestinationDirectory, currentEntry );
+			// destFile = new File(unzipDestinationDirectory,
+			// destFile.getName());
+
+			if ( currentEntry.endsWith( ".zip" ) ) {
+				zipFiles.add( destFile.getAbsolutePath() );
+			}
+
+			// grab file's parent directory structure
+			File destinationParent = destFile.getParentFile();
+
+			// create the parent directory structure if needed
+			destinationParent.mkdirs();
+
+			try {
+				// extract file if not a directory
+				if ( !entry.isDirectory() ) {
+					BufferedInputStream is = new BufferedInputStream(
+							zipFile.getInputStream( entry ) );
+					int currentByte;
+					// establish buffer for writing file
+					byte data[] = new byte[BUFFER];
+
+					// write the current file to disk
+					FileOutputStream fos = new FileOutputStream( destFile );
+					BufferedOutputStream dest = new BufferedOutputStream( fos,
+							BUFFER );
+
+					// read and write until last byte is encountered
+					while ( (currentByte = is.read( data, 0, BUFFER )) != -1 ) {
+						dest.write( data, 0, currentByte );
+					}
+					dest.flush();
+					dest.close();
+					is.close();
+				}
+			} catch ( IOException ioe ) {
+				ioe.printStackTrace();
+			}
+		}
+		zipFile.close();
+
+		for ( Iterator iter = zipFiles.iterator(); iter.hasNext(); ) {
+			String zipName = (String) iter.next();
+			unzip( zipName,
+					destinationDirectory
+							+ File.separatorChar
+							+ zipName.substring( 0,
+									zipName.lastIndexOf( ".zip" ) ) );
+		}
+	}
+
+	/**
+	 * Unzip it (zip64)
+	 * 
+	 * @param zipFile
+	 *            input zip file
+	 * @param output
+	 *            zip file output folder
+	 */
+	public static void unzip64( File inputFile, File outDir )
 			throws FileNotFoundException, ZipException, IOException
 	{
 		Zip64File zipfile = new Zip64File( inputFile );

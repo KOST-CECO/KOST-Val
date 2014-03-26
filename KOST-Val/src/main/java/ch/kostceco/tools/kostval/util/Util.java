@@ -20,9 +20,13 @@ Boston, MA 02110-1301 USA or see <http://www.gnu.org/licenses/>.
 
 package ch.kostceco.tools.kostval.util;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,10 +34,6 @@ import java.util.Map;
 import ch.kostceco.tools.kostval.util.Util;
 
 /**
- * - Some of the third party libraries we use in this project write stuff into
- * the console with System.out This Utility can switch this on and off. - Java
- * cannot delete directories that are not empty. Here's a method to do that.
- * 
  * @author Rc Claire Röthlisberger, KOST-CECO
  */
 
@@ -181,6 +181,63 @@ public class Util
 						nurPrimaerDateien );
 			}
 		}
+	}
+
+	/**
+	 * Kopiert ein Verzeichnis.
+	 * 
+	 * @param quelle
+	 *            das zu kopierende Verzeichnis
+	 * @param ziel
+	 *            das Ziel-Verzeichnis
+	 */
+	public static void copyDir( File quelle, File ziel ) throws FileNotFoundException,
+			IOException
+	{
+
+		File[] files = quelle.listFiles();
+		File newFile = null; // in diesem Objekt wird für jedes File der
+								// Zielpfad gespeichert.
+		// 1. Der alte Zielpfad
+		// 2. Das systemspezifische Pfadtrennungszeichen
+		// 3. Der Name des aktuellen Ordners/der aktuellen Datei
+		ziel.mkdirs(); // erstellt alle benötigten Ordner
+		if ( files != null ) {
+			for ( int i = 0; i < files.length; i++ ) {
+				newFile = new File( ziel.getAbsolutePath()
+						+ System.getProperty( "file.separator" )
+						+ files[i].getName() );
+				if ( files[i].isDirectory() ) {
+					copyDir( files[i], newFile );
+				} else {
+					copyFile( files[i], newFile );
+				}
+			}
+		}
+	}
+
+	/**
+	 * Kopiert eine Datei.
+	 * 
+	 * @param file
+	 *            die zu kopierende Datei
+	 * @param ziel
+	 *            die Ziel-Datei
+	 */
+	public static void copyFile( File file, File ziel ) throws FileNotFoundException,
+			IOException
+	{
+
+		BufferedInputStream in = new BufferedInputStream( new FileInputStream(
+				file ) );
+		BufferedOutputStream out = new BufferedOutputStream(
+				new FileOutputStream( ziel, true ) );
+		int bytes = 0;
+		while ( (bytes = in.read()) != -1 ) { // Datei einlesen
+			out.write( bytes ); // Datei schreiben
+		}
+		in.close();
+		out.close();
 	}
 
 }

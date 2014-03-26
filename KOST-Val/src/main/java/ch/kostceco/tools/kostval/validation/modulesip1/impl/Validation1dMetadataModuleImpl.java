@@ -22,7 +22,6 @@ package ch.kostceco.tools.kostval.validation.modulesip1.impl;
 
 import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -75,7 +74,7 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 
 	final int	BUFFER	= 2048;
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked", "rawtypes"})
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws Validation1dMetadataException
@@ -90,12 +89,12 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 		Map<String, String> xsdsInZip = new HashMap<String, String>();
 		Map<String, String> xsdsInMetadata = new HashMap<String, String>();
 
-		File xmlToValidate = null;
-		File xsdToValidate = null;
+		//File xmlToValidate = null;
+		//File xsdToValidate = null;
 
 		// Arbeitsverzeichnis zum Entpacken des Archivs erstellen
 		String pathToWorkDir = getConfigurationService().getPathToWorkDir()
-				+ "\\SIP-Validierung";
+		+ "\\ZIP";
 		File tmpDir = new File( pathToWorkDir );
 		if ( !tmpDir.exists() ) {
 			tmpDir.mkdir();
@@ -117,12 +116,11 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 
 			List<FileEntry> fileEntryList = zipfile.getListFileEntries();
 			for ( FileEntry fileEntry : fileEntryList ) {
-
 				if ( fileEntry.getName().equals( "header/" + METADATA )
 						|| fileEntry.getName().equals(
-								toplevelDir + "/" + "header/" + METADATA ) ) {
-					metadataxml = fileEntry;
-				}
+						toplevelDir + "/" + "header/" + METADATA ) ) {
+						metadataxml = fileEntry;
+						}
 				if ( fileEntry.getName().startsWith( "header/xsd/" )
 						&& fileEntry.getName().endsWith( ".xsd" ) ) {
 					xsdsInZip.put( fileEntry.getName().split( "/" )[2],
@@ -133,43 +131,19 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 					xsdsInZip.put( fileEntry.getName().split( "/" )[3],
 							fileEntry.getName().split( "/" )[3] );
 				}
-
-				if ( !fileEntry.isDirectory() ) {
-
-					byte[] buffer = new byte[8192];
-
-					// Write the file to the original position in the fs.
-					EntryInputStream eis = zipfile
-							.openEntryInputStream( fileEntry.getName() );
-
-					File newFile = new File( tmpDir, fileEntry.getName() );
-					File parent = newFile.getParentFile();
-					if ( !parent.exists() ) {
-						parent.mkdirs();
-					}
-
-					FileOutputStream fos = new FileOutputStream( newFile );
-					for ( int iRead = eis.read( buffer ); iRead >= 0; iRead = eis
-							.read( buffer ) ) {
-						fos.write( buffer, 0, iRead );
-					}
-					eis.close();
-					fos.close();
-
-					if ( newFile.getName().endsWith( "metadata.xml" ) ) {
-						xmlToValidate = newFile;
-					}
-					if ( newFile.getName().endsWith( XSD_ARELDA ) ) {
-						xsdToValidate = newFile;
-					} else {
-						if ( newFile.getName().endsWith( "arelda.xsd" ) ) {
-							xsdToValidate = newFile;
-						}
-					}
-
-				}
+			}
+			
+			File workToplevelDir = new File (pathToWorkDir + "\\" + toplevelDir);
+			if ( !workToplevelDir.exists()) {
+				workToplevelDir = new File (pathToWorkDir );
+			}
+			File xmlToValidate = new File (workToplevelDir.getAbsolutePath() + "\\header\\metadata.xml");
+			File xsdToValidate = new File (workToplevelDir.getAbsolutePath() + "\\header\\xsd\\arelda_v3.13.2.xsd");
+			if ( !xsdToValidate.exists()) {
+				xsdToValidate = new File (workToplevelDir.getAbsolutePath() + "\\header\\xsd\\arelda.xsd");
 			}
 
+			
 			if ( xmlToValidate != null && xsdToValidate != null ) {
 
 				try {
@@ -221,7 +195,7 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 				}
 			}
 
-			if ( metadataxml == null ) {
+			if ( xmlToValidate == null ||  metadataxml == null ) {
 				getMessageService().logError(
 						getTextResourceService().getText( MESSAGE_MODULE_Ad )
 								+ getTextResourceService().getText(

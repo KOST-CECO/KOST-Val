@@ -5,7 +5,7 @@ Icon "val.ico"
 ; remove the text 'Nullsoft Install System vX.XX' from the installer window 
 BrandingText "Copyright © KOST/CECO"
 ; The file to write
-OutFile "KOST-Val_de.exe"
+OutFile "KOST-Val_fr.exe"
 ; The default installation directory
 ; InstallDir $DESKTOP
 InstallDir $EXEDIR
@@ -20,18 +20,18 @@ XPStyle on
 !include FileFunc.nsh
 !include LogicLib.nsh
 !include getJavaHome.nsh
-!include langKOSTVal_de.nsh
+!include langKOSTVal_fr.nsh
 !include nsDialogs.nsh
 !include "XML.nsh"
 
 ;--------------------------------
 !define INIFILE       "KOSTval.ini"
-!define KOSTHELP      "doc\KOST-Val_Anwendungshandbuch_*.pdf"
+!define KOSTHELP      "doc\KOST-Val_Guide_d_application_*.pdf"
 !define LOG           "logs"
 !define CONFIG        "kostval.conf.xml"
 !define CONFIGPATH    "configuration"
 !define BACKUP        "~backup"
-!define KOSTVAL       "kostval_de.jar"
+!define KOSTVAL       "kostval_fr.jar"
 !define JAVAPATH      "jre6"
 
 ;--------------------------------

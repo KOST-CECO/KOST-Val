@@ -1,5 +1,5 @@
 /*== KOST-Val ==================================================================================
-The KOST-Val v1.2.4 application is used for validate TIFF, SIARD, PDF/A-Files and Submission 
+The KOST-Val v1.2.5 application is used for validate TIFF, SIARD, PDF/A-Files and Submission 
 Information Package (SIP). 
 Copyright (C) 2012-2014 Claire Röthlisberger (KOST-CECO), Christian Eugster, Olivier Debenath, 
 Peter Schneider (Staatsarchiv Aargau), Daniel Ludin (BEDAG AG)
@@ -22,6 +22,7 @@ package ch.kostceco.tools.kostval;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
@@ -103,7 +104,7 @@ public class KOSTVal implements MessageConstants
 		// context.getBean("validationmoduleimpl");
 
 		KOSTVal kostval = (KOSTVal) context.getBean( "kostval" );
-		
+
 		// Ueberprüfung des Parameters (Log-Verzeichnis)
 		String pathToLogfile = kostval.getConfigurationService()
 				.getPathToLogfile();
@@ -130,7 +131,7 @@ public class KOSTVal implements MessageConstants
 					MESSAGE_VALIDATION_INTERRUPTED ) );
 			System.exit( 1 );
 		}
-		
+
 		File valDatei = new File( args[1] );
 		File logDatei = null;
 		logDatei = valDatei;
@@ -549,15 +550,48 @@ public class KOSTVal implements MessageConstants
 					// geziptes SIP --> in temp dir entzipen
 					tmpDirZip = new File( tmpDir.getAbsolutePath() + "\\ZIP" );
 					try {
-						Zip64Archiver.unzip( valDatei, tmpDirZip );
-						valDatei = tmpDirZip;
-
+						Zip64Archiver.unzip( valDatei.getAbsolutePath(),
+								tmpDirZip.getAbsolutePath() );
 					} catch ( Exception e ) {
-						LOGGER.logInfo( kostval.getTextResourceService()
-								.getText( ERROR_MODULE_AA_CANNOTEXTRACTZIP ) );
+						try {
+							Zip64Archiver.unzip64( valDatei, tmpDirZip );
+						} catch ( Exception e1 ) {
+							LOGGER.logInfo( kostval.getTextResourceService()
+									.getText( ERROR_MODULE_AA_CANNOTEXTRACTZIP ) );
+						}
 					}
+					valDatei = tmpDirZip;
 				}
+			} else {
+				// SIP ist ein Ordner
+				// Für 1d header in tempDir\ZIP\SIP-name\header kopieren
+				File headerOrig = new File( valDatei.getAbsolutePath()
+						+ "\\header" );
+				File zipCopy = new File( pathToWorkDir + "\\ZIP" );
+				zipCopy.mkdir();
+				File valCopy = new File( pathToWorkDir + "\\ZIP\\"
+						+ valDatei.getName() );
+				valCopy.mkdir();
+				File headerCopy = new File( pathToWorkDir + "\\ZIP\\"
+						+ valDatei.getName() + "\\header" );
+				headerCopy.mkdir();
+				if ( !headerCopy.exists() ) {
+					System.out.println( "Ordneranlegen fehlgeschlagen" );
+				}
+				File metadataXml = new File (headerCopy.getAbsolutePath() + "\\metadata.xml");
+				try {
+					Util.copyDir( headerOrig, headerCopy );
+					if ( !metadataXml.exists() ) {
+						System.out.println( "Metadata.xml anlegen fehlgeschlagen" );
+					}
 
+				} catch ( FileNotFoundException e ) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch ( IOException e ) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			Map<String, File> fileMap = Util.getFileMap( valDatei, false );
 			Set<String> fileMapKeys = fileMap.keySet();
@@ -614,7 +648,7 @@ public class KOSTVal implements MessageConstants
 					} else {
 						countNio = countNio + 1;
 					}
-					tmpDirZip = new File( tmpDir.getAbsolutePath() + "\\ZIP" );
+					/*tmpDirZip = new File( tmpDir.getAbsolutePath() + "\\ZIP" );
 					if ( newFile.getAbsolutePath().contains(
 							tmpDirZip.getAbsolutePath() ) ) {
 						// newFile ist eine TempZip-Datei und kann gelöscht
@@ -632,7 +666,7 @@ public class KOSTVal implements MessageConstants
 											+ " konnte auch nicht durch neue cmd geloescht werden. Bitte manuell loeschen." );
 
 						}
-					}
+					}*/
 				}
 			}
 			// Zeitstempel End
@@ -709,6 +743,7 @@ public class KOSTVal implements MessageConstants
 			File targetFile = new File( pathToWorkDir + "\\SIP-Validierung",
 					valDatei.getName() + ".zip" );
 			File tmpDirSip = new File( pathToWorkDir + "\\SIP-Validierung" );
+			tmpDirSip.mkdir();
 
 			// Ueberprüfung des 1. Parameters (SIP-Datei): ist die Datei ein
 			// Verzeichnis? Wenn ja, wird im work-Verzeichnis eine Zip-Datei
@@ -720,11 +755,6 @@ public class KOSTVal implements MessageConstants
 
 			String originalSipName = valDatei.getAbsolutePath();
 			if ( valDatei.isDirectory() ) {
-				if ( tmpDirSip.exists() ) {
-					Util.deleteDir( tmpDirSip );
-				}
-				tmpDirSip.mkdir();
-
 				try {
 					Zip64Archiver.archivate( valDatei, targetFile );
 					valDatei = targetFile;
@@ -735,13 +765,7 @@ public class KOSTVal implements MessageConstants
 					System.exit( 1 );
 				}
 
-			} else {
-				// Löschen des targetFile, falls eines angelegt wurde
-				if ( targetFile.exists() ) {
-					Util.deleteDir( targetFile );
-				}
-				targetFile.mkdir();
-			}
+			} 
 			Controllersip controller = (Controllersip) context
 					.getBean( "controllersip" );
 			boolean okMandatory = false;
@@ -783,10 +807,18 @@ public class KOSTVal implements MessageConstants
 						MESSAGE_VALIDATION_INTERRUPTED ) );
 			}
 
-			// Löschen des targetFile, falls eines angelegt wurde
+/*			// Löschen des targetFile, falls eines angelegt wurde
 			if ( targetFile.exists() ) {
 				Util.deleteDir( targetFile );
 			}
+			// bestehendes SIP-Workverzeichnis ggf. löschen
+			if ( tmpDirSip.exists() ) {
+				Util.deleteDir( tmpDirSip );
+			}
+			// bestehendes ZIP-Workverzeichnis ggf. löschen
+			if ( tmpDirZip.exists() ) {
+				Util.deleteDir( tmpDirZip );
+			}*/
 			// bestehendes Workverzeichnis ggf. löschen
 			if ( tmpDir.exists() ) {
 				Util.deleteDir( tmpDir );
