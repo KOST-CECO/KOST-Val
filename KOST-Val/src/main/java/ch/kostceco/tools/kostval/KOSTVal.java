@@ -648,25 +648,6 @@ public class KOSTVal implements MessageConstants
 					} else {
 						countNio = countNio + 1;
 					}
-					/*tmpDirZip = new File( tmpDir.getAbsolutePath() + "\\ZIP" );
-					if ( newFile.getAbsolutePath().contains(
-							tmpDirZip.getAbsolutePath() ) ) {
-						// newFile ist eine TempZip-Datei und kann gelöscht
-						// werden
-						try {
-							StringBuffer command = new StringBuffer(
-									"cmd /c ping -n 120 127.0.0.1 > NUL && del "
-											+ newFile.getAbsolutePath() );
-							Runtime rt = Runtime.getRuntime();
-							Process proc = rt.exec( command.toString() );
-						} catch ( IOException e ) {
-							e.printStackTrace();
-							System.out
-									.println( newFile.getAbsolutePath()
-											+ " konnte auch nicht durch neue cmd geloescht werden. Bitte manuell loeschen." );
-
-						}
-					}*/
 				}
 			}
 			// Zeitstempel End
@@ -714,11 +695,7 @@ public class KOSTVal implements MessageConstants
 					MESSAGE_FOOTER_SUMMARY_2, countNio, ausgabeStart,
 					ausgabeEnd, totalSummary ) );
 
-			if ( countNio == count ) {
-				// keine Dateien Validiert --> keine Invalide
-				validFormat = true;
-				fileName3c = "3c_Valide.txt";
-			} else if ( countSummaryNio == 0 ) {
+			if ( countSummaryNio == 0 ) {
 				// alle Validierten Dateien valide
 				validFormat = true;
 				fileName3c = "3c_Valide.txt";
