@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+           attributeFormDefault="unqualified">
+	  <xs:include schemaLocation="base.xsd"/>
+
+	  <xs:simpleType name="ablieferungsnummer">
+		    <xs:annotation>
+			      <xs:documentation>Die Ablieferungsnummer dient zur Identifizierung der Ablieferung im Bundesarchiv. Sie besteht aus dem Ablieferungsjahr und einer Laufnummer innerhalb dieses Jahres.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text1"/>
+	  </xs:simpleType>
+	
+	  <xs:simpleType name="ablieferungstyp">
+		    <xs:annotation>
+			      <xs:documentation>Angabe darüber, aus welcher Umgebung die Ablieferung stammt.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="xs:token">
+			      <xs:enumeration value="GEVER"/>
+			      <xs:enumeration value="FILES"/>
+		    </xs:restriction>
+	  </xs:simpleType>
+	
+	  <xs:simpleType name="angebotsnummer">
+		    <xs:annotation>
+			      <xs:documentation>Die vom BAR vergebene Nummer des Angebots, auf welches sich die Ablieferung stützt.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text1"/>
+	  </xs:simpleType>
+
+	  <xs:simpleType name="ablieferndeStelle">
+		    <xs:annotation>
+			      <xs:documentation>Organisationseinheit, welche die abzuliefernden Unterlagen aufbereitet (der Name wird ausgeschrieben, keine Abkürzung), und Name der Person, die für die Ablieferung zuständig ist.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text2"/>
+	  </xs:simpleType>
+	
+	  <xs:simpleType name="referenzBewertungsentscheid">
+		    <xs:annotation>
+			      <xs:documentation>Aktenzeichen Bewertungsentscheid(e) BAR, welches die Ablieferung betreffen.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text1"/>
+	  </xs:simpleType>
+	
+	  <xs:simpleType name="referenzSchutzfristenFormular">
+		    <xs:annotation>
+			      <xs:documentation>Aktenzeichen des Formulars „Meldung von Unterlagen mit besonderer Schutzfrist und öffentlich zugänglichen Unterlagen“, in dem die für die Ablieferung vereinbarten Schutzfristen festgehalten sind.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text1"/>
+	  </xs:simpleType>
+	
+	  <xs:simpleType name="schutzfristenkategorieAblieferung">
+		    <xs:annotation>
+			      <xs:documentation>Artikel des BGA, der die Schutzfrist festhält, die das Amt im Formular „Meldung von Unterlagen mit besonderer Schutzfrist und öffentlich zugänglichen Unterlagen“ gemeldet hat und vom BAR auf ihre formale Korrektheit und Vollständigkeit kontrolliert worden ist.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text1"/>
+	  </xs:simpleType>
+	
+	  <xs:simpleType name="schutzfristAblieferung">
+		    <xs:annotation>
+			      <xs:documentation>Dauer der Schutzfrist in Jahren, die das Amt im Formular „Meldung von Unterlagen mit besonderer Schutzfrist und öffentlich zugänglichen Unterlagen“ gemeldet hat und vom BAR auf ihre formale Korrektheit und Vollständigkeit kontrolliert worden ist.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="xs:nonNegativeInteger"/>
+	  </xs:simpleType>
+	
+	  <xs:simpleType name="ablieferungsteile">
+		    <xs:annotation>
+			      <xs:documentation>Angabe über den gesamten Inhalt der Ablieferung (sowohl der digitalen als auch der nicht digitalen Teile).</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text3"/>
+	  </xs:simpleType>
+	
+	  <xs:simpleType name="bemerkungAblieferung">
+		    <xs:annotation>
+			      <xs:documentation>Zusätzliche Informationen, welche die Ablieferung und ihre Entstehung betreffen. Wenn die Unterlagen in der Ablieferung aus einer periodisierten Registratur stammen, kann hier die Registraturperiode angegeben werden.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text4"/>
+	  </xs:simpleType>
+</xs:schema>

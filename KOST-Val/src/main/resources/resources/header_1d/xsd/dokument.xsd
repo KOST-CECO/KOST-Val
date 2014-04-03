@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified"
+           attributeFormDefault="unqualified">
+	  <xs:include schemaLocation="base.xsd"/>
+
+	  <xs:simpleType name="titelDokument">
+		    <xs:annotation>
+			      <xs:documentation>Kurze Beschreibung des im Dokument behandelten Gegenstandes.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text4"/>
+	  </xs:simpleType>
+
+	  <xs:simpleType name="idDokument">
+		    <xs:annotation>
+			      <xs:documentation>Paketweit eindeutige ID (Primärschlüssel).</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="xs:ID">
+			      <xs:minLength value="1"/>
+		    </xs:restriction>
+	  </xs:simpleType>
+
+	  <xs:simpleType name="autor">
+		    <xs:annotation>
+			      <xs:documentation>Verfasser eines Dokuments.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text4"/>
+	  </xs:simpleType>
+
+	  <xs:simpleType name="erscheinungsformDokument">
+		    <xs:annotation>
+			      <xs:documentation>Angabe, ob es sich beim Dokument zum Zeitpunkt der Ablieferung um ein digitales Dokument, oder um ein nicht-digitales Dokument handelt (Papier, audiovisuell). Ein Dokument kann nur einer der beiden Erscheinungsformen (entweder digital oder nicht-digital) zugewiesen werden. Dokumente, die vor der Ablieferung ins BAR aus einem digitalen und einem nicht-digitalen Teil bestanden, müssen als zwei getrennte Dokumente abgeliefert werden.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="xs:token">
+			      <xs:enumeration value="digital"/>
+			      <xs:enumeration value="nicht digital"/>
+		    </xs:restriction>
+	  </xs:simpleType>
+
+	  <xs:simpleType name="dokumenttyp">
+		    <xs:annotation>
+			      <xs:documentation>Aussehen des Dokuments, das zu erhalten ist.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text3"/>
+	  </xs:simpleType>
+
+	  <xs:simpleType name="anwendung">
+		    <xs:annotation>
+			      <xs:documentation>Kategorisierung des Dokuments in Bezug auf seinen Anwendungsbereich in der Verwaltungseinheit.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text2"/>
+	  </xs:simpleType>
+
+	  <xs:simpleType name="klassifizierungskategorieDokument">
+		    <xs:annotation>
+			      <xs:documentation>Grad, in dem das Dokument vor unberechtigter Einsicht geschützt werden muss. Referenz: Verordnung vom 10.12.1990 über die Klassifizierung und Behandlung von Informationen im zivilen Verwaltungsbereich ([SR 172.015]) und Verordnung vom 1.5.1990 über den Schutz militärischer Informationen ([SR 510.411]).</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text2"/>
+	  </xs:simpleType>
+	
+	  <xs:simpleType name="datenschutzDokument">
+		    <xs:annotation>
+			      <xs:documentation>Markierung, die angibt, ob das Dokument besonders schützenswerte Personendaten oder Persönlichkeitsprofile gemäss Datenschutzrecht Art 3.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="xs:boolean"/>
+	  </xs:simpleType>
+	
+	  <xs:simpleType name="oeffentlichkeitsstatusDokument">
+		    <xs:annotation>
+			      <xs:documentation>Angabe, ob das Dokument gemäss [BGÖ] öffentlich zugänglich ist oder nicht.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text2"/>
+	  </xs:simpleType>
+	
+	  <xs:simpleType name="oeffentlichkeitsstatusBegruendungDokument">
+		    <xs:annotation>
+			      <xs:documentation>Argumente gegen die öffentliche Zugänglichkeit gemäss [BGÖ]. Gemäss Entwurf [BGÖ] muss begründet werden, warum Unterlagen nicht öffentlich zugänglich gemacht werden können.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text4"/>
+	  </xs:simpleType>
+	
+	  <xs:simpleType name="sonstigeBestimmungenDokument">
+		    <xs:annotation>
+			      <xs:documentation>Angaben über sonstige rechtliche Auflagen, denen das Dokument unterstellt ist.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text4"/>
+	  </xs:simpleType>
+
+	  <xs:simpleType name="bemerkungDokument">
+		    <xs:annotation>
+			      <xs:documentation>Verschiedene Informationen, die in Zusammenhang mit dem Dokument, seiner Entstehung und allfälligen Veränderungen festgehalten werden müssen.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text4"/>
+	  </xs:simpleType>
+</xs:schema>

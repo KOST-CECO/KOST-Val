@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+           attributeFormDefault="unqualified">
+	  <xs:include schemaLocation="base.xsd"/>
+
+	  <xs:simpleType name="aktenbildnerName">
+		    <xs:annotation>
+			      <xs:documentation>Bezeichnung der Stelle, der Organisationseinheit oder der Person(en), welche die Unterlagen oder die Datensammlung erstellt oder geführt hat. Falls der Aktenbildner unbekannt ist, muss die Angabe "Aktenbildner unbekannt" eingetragen werden.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text2"/>
+	  </xs:simpleType>
+	
+	  <xs:simpleType name="systemName">
+		    <xs:annotation>
+			      <xs:documentation>Name des Informationssystems, aus dem die abgelieferten Daten (FILES), Dossiers und Dokumente (GEVER) stammen.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text3"/>
+	  </xs:simpleType>
+	
+	  <xs:simpleType name="systemBeschreibung">
+		    <xs:annotation>
+			      <xs:documentation>Knappe Beschreibung des Informationssystems, aus dem die abgelieferten Daten (FILES) stammen. Die Beschreibung gibt Auskunft über den Zweck (inkl. Angabe der gesetzlichen Grundlagen), die Architektur, die Entwicklung und über relevante Ergänzungen und Änderungen des Systems. Zudem können hier Angaben zur Datenerhebung und zu den Organisationseinheiten gemacht werden, die neben dem Aktenbildner das System verwenden.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text4"/>
+	  </xs:simpleType>
+	
+	  <xs:simpleType name="verwandteSysteme">
+		    <xs:annotation>
+			      <xs:documentation>Systeme, die mit dem beschriebenen System Daten ausgetauscht haben und damit Subsysteme, Parallelsysteme oder übergeordnete Systeme sind. Hier werden die Bezeichnungen der Systeme und die Art der Verwandtschaft eingetragen.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text4"/>
+	  </xs:simpleType>
+	
+	  <xs:simpleType name="archivierungsmodusLoeschvorschriften">
+		    <xs:annotation>
+			      <xs:documentation>Angaben darüber, auf welche Weise die Daten aus dem System archiviert werden, allfällige Löschvorschriften, Angaben darüber, welche Funktionalitäten des Originalsystems nicht archiviert werden konnten, und vereinbartes Intervall der Ablieferungen sind hier zu nennen.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text4"/>
+	  </xs:simpleType>
+	
+	  <xs:simpleType name="registratur">
+		    <xs:annotation>
+			      <xs:documentation>Name der Ablage, für welche das primäre Ordnungssystem verwendet wird und die einem Mandanten im System entspricht. Eine aktenbildende Stelle kann im Prinzip mehr als eine Registratur führen. Pro Registratur gibt es allerdings nur ein primäres Ordnungssystem.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text2"/>
+	  </xs:simpleType>
+	
+	  <xs:simpleType name="geschichteAktenbildner">
+		    <xs:annotation>
+			      <xs:documentation>Allgemeiner Überblick über die Geschichte des Aktenbildners und Angaben über Vorgänger und Nachfolgerorganisationen.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text4"/>
+	  </xs:simpleType>
+
+	  <xs:simpleType name="bemerkungProvenienz">
+		    <xs:annotation>
+			      <xs:documentation>Zusätzliche Informationen, die den Aktenbildner und die Herkunft der Unterlagen oder der Datensammlung betreffen.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text4"/>
+	  </xs:simpleType>
+</xs:schema>

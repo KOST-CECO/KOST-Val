@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified"
+           attributeFormDefault="unqualified">
+	  <xs:include schemaLocation="base.xsd"/>
+
+	  <xs:simpleType name="nummer">
+		    <xs:annotation>
+			      <xs:documentation>Eindeutige Identifikation und Ordnungsmerkmal der Ordnungssystemposition.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text1"/>
+	  </xs:simpleType>
+
+	  <xs:simpleType name="titelOrdnungssystemposition">
+		    <xs:annotation>
+			      <xs:documentation>Bezeichnung des Aufgabenbereichs, dem die Ordnungssystemposition zugewiesen ist.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text2"/>
+	  </xs:simpleType>
+
+	  <xs:simpleType name="idOrdnungssystemposition">
+		    <xs:annotation>
+			      <xs:documentation>Paketweit eindeutige ID (Primärschlüssel).</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="xs:ID"/>
+	  </xs:simpleType>
+
+	  <xs:simpleType name="federfuehrendeOrganisationseinheitOrdnungssystemposition">
+		    <xs:annotation>
+			      <xs:documentation>Bestimmung der für die Erledigung des Geschäftes zuständigen federführenden Organisationseinheit.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text2"/>
+	  </xs:simpleType>
+
+	  <xs:simpleType name="schutzfristenkategorieOrdnungssystemposition">
+		    <xs:annotation>
+			      <xs:documentation>Artikel des BGA, der die Schutzfrist festhält, die das Amt im Formular „Meldung von Unterlagen mit besonderer Schutzfrist und öffentlich zugänglichen Unterlagen“ gemeldet hat und vom BAR auf ihre formale Korrektheit und Vollständigkeit kontrolliert worden ist.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text1"/>
+	  </xs:simpleType>
+
+	  <xs:simpleType name="schutzfristOrdnungssystemposition">
+		    <xs:annotation>
+			      <xs:documentation>Dauer der Schutzfrist in Jahren, die das Amt im Formular „Meldung von Unterlagen mit besonderer Schutzfrist und öffentlich zugänglichen Unterlagen“ gemeldet hat und vom BAR auf ihre formale Korrektheit und Vollständigkeit kontrolliert worden ist.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="xs:nonNegativeInteger"/>
+	  </xs:simpleType>
+	
+	  <xs:simpleType name="schutzfristenBegruendungOrdnungssystemposition">
+		    <xs:annotation>
+			      <xs:documentation>Erläuterung der Begründung für eine verlängerte Schutzfrist für Unterlagen, die nach Personennamen erschlossen sind und schützenswerte Personendaten gemäss DSG enthalten (Art. 11 BGA), und für bestimmte Kategorien oder für einzelne Dossiers, die überwiegend schutzwürdige öffentliche oder private Interessen tangieren (Art. 12 Abs. 1 BGA und Art. 12 Abs. 2 BGA).</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text4"/>
+	  </xs:simpleType>
+
+	  <xs:simpleType name="klassifizierungskategorieOrdnungssystemposition">
+		    <xs:annotation>
+			      <xs:documentation>Grad, in dem alle der Ordnungssystemposition untergeordneten Objekte Dossier und Dokumente vor unberechtigter Einsicht geschützt werden müssen. Referenz: Verordnung vom 10.12.1990 über die Klassifizierung und Behandlung von Informationen im zivilen Verwaltungsbereich ([SR 172.015]) und Verordnung vom 1.5.1990 über den Schutz militärischer Informationen ([SR 510.411]).</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text2"/>
+	  </xs:simpleType>
+
+	  <xs:simpleType name="datenschutzOrdnungssystemposition">
+		    <xs:annotation>
+			      <xs:documentation>Markierung, die angibt, ob sich in den Unterlagen der Ordnungssystemposition solche mit besonders schützenswerten Personendaten oder Persönlichkeitsprofilen gemäss Datenschutzgesetz.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="xs:boolean"/>
+	  </xs:simpleType>
+
+	  <xs:simpleType name="oeffentlichkeitsstatusOrdnungssystemposition">
+		    <xs:annotation>
+			      <xs:documentation>Angabe, ob der Ordnungssystemposition untergeordnete Dossiers gemäss [BGÖ] schützenswerte Dokumente enthalten oder nicht.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text2"/>
+	  </xs:simpleType>
+
+	  <xs:simpleType name="oeffentlichkeitsstatusBegruendungOrdnungssystemposition">
+		    <xs:annotation>
+			      <xs:documentation>Argumente gegen die öffentliche Zugänglichkeit gemäss [BGÖ]. Gemäss Entwurf [BGÖ] muss begründet werden, warum Unterlagen nicht öffentlich zugänglich gemacht werden können.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text4"/>
+	  </xs:simpleType>
+
+	  <xs:simpleType name="sonstigeBestimmungenOrdnungssystemposition">
+		    <xs:annotation>
+			      <xs:documentation>Angaben über sonstige rechtliche Auflagen, denen die Ordnungssystemposition unterstellt ist. </xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text4"/>
+	  </xs:simpleType>
+</xs:schema>

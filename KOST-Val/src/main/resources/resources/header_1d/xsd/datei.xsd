@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+           attributeFormDefault="unqualified">
+	  <xs:include schemaLocation="base.xsd"/>
+
+	  <xs:simpleType name="nameDatei">
+		    <xs:annotation>
+			      <xs:documentation>Name der Datei, wie dieser im SIP/AIP/DIP erscheint (z.B. "p000001_Machbarkeitsanaly.pdf").</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text2"/>
+	  </xs:simpleType>
+
+	  <xs:simpleType name="physischerName">
+		    <xs:annotation>
+			      <xs:documentation>Name der Datei im Filesystem.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text1"/>
+	  </xs:simpleType>
+
+	  <xs:simpleType name="originalName">
+		    <xs:annotation>
+			      <xs:documentation>Name des Ordners oder der Datei, wie diese in der Originalstruktur (im GEVER-System, in der Dateiablage) beim Aktenbildner geheissen hat (z.B. "Arbeitspaket" oder "Bericht.doc").</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text4"/>
+	  </xs:simpleType>
+
+	
+	
+	
+	  <xs:simpleType name="idDatei">
+		    <xs:annotation>
+			      <xs:documentation>Paketweit eindeutige ID für die Datei (technischer Primärschlüssel). Diese ID wird aus dem Dokument heraus referenziert.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="xs:ID"/>
+	  </xs:simpleType>
+
+	  <xs:simpleType name="pruefalgorithmus">
+		    <xs:annotation>
+			      <xs:documentation>Bezeichnung des verwendeten Prüfalgorithmus.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="xs:token">
+			      <xs:enumeration value="MD5"/>
+			      <xs:enumeration value="SHA-1"/>
+			      <xs:enumeration value="SHA-256"/>
+			      <xs:enumeration value="SHA-512"/>
+		    </xs:restriction>
+	  </xs:simpleType>
+
+	  <xs:simpleType name="pruefsumme">
+		    <xs:annotation>
+			      <xs:documentation>Prüfsummenwert (abhängig vom verwendeten Prüfalgorithmus).</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text3"/>
+	  </xs:simpleType>
+
+	  <xs:simpleType name="eigenschaft">
+		    <xs:annotation>
+			      <xs:documentation>Generisches Attribut, welches im Zusammenhang mit Wert verwendet wird. Wird bspw. eine CSV-Datei abgeliefert, dann können mittels Attributpaar "eigenschaft" und "wert" Feld- und Zeilendelemiter, Texterkennungszeichen oder Spaltennamen angegeben werden.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text4"/>
+	  </xs:simpleType>
+
+</xs:schema>

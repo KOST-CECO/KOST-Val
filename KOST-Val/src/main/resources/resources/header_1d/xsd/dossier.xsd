@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified"
+           attributeFormDefault="unqualified">
+	  <xs:include schemaLocation="base.xsd"/>
+
+	  <xs:simpleType name="aktenzeichen">
+		    <xs:annotation>
+			      <xs:documentation>Identifikation und Ordnungsmerkmal des Dossiers. Das Aktenzeichen erlaubt es, das Dossier innerhalb eines bestimmten Ablagesystems einer eindeutigen Position (Rubrik) des OS zuzuordnen.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text2"/>
+	  </xs:simpleType>
+
+	  <xs:simpleType name="zusatzmerkmal">
+		    <xs:annotation>
+			      <xs:documentation>Angaben über zusätzliche Merkmale, welche das Dossier identifizieren. Hier kann z.B. die Bandnummer eines Dossiers vermerkt werden, als Unterscheidungs- und Reihungsmerkmal von Fortsetzungsdossiers mit demselben Dossier-Titel und mit demselben Aktenzeichen erfasst.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text2"/>
+	  </xs:simpleType>
+
+	  <xs:simpleType name="titelDossier">
+		    <xs:annotation>
+			      <xs:documentation>Bezeichnung des Dossiers.
+				GEVER: Kurzbeschreibung des Geschäftsfalls (bei Seriendossierbildung) oder des Sachbetreffs (bei Sachdossierbildung) zu welchem Dokumente im Dossier abgelegt werden. 
+				FILES: Kurzbeschreibung des Inhalts der Datensammlung und der Dokumentation (falls vorhanden)</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text4"/>
+	  </xs:simpleType>
+
+	  <xs:simpleType name="inhalt">
+		    <xs:annotation>
+			      <xs:documentation>Inhaltlicher Schwerpunkt der Datensammlung sofern dies nicht aus dem Feld "Titel" hervorgeht.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text4"/>
+	  </xs:simpleType>
+
+	  <xs:simpleType name="formInhalt">
+		    <xs:annotation>
+			      <xs:documentation>Angabe des Mediums (Fotos, Tondokumente, schriftliche Unterlagen usw.)</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text4"/>
+	  </xs:simpleType>
+
+	  <xs:simpleType name="umfang">
+		    <xs:annotation>
+			      <xs:documentation>Anzahl der Dateien des Dossiers und Umfang in MBytes zum Zeitpunkt der Ablieferung. Bei Datenbanken: Anzahl Datensätze der vorliegenden Datensammlung zum Zeitpunkt der Ablieferung. Als Datensatz gilt das Ensemble von Zeilen einer oder mehrerer miteinander verknüpften Tabellen (zentrale logische Einheit). Die Anzahl Datensätze ist zusammen mit der Bezeichnung der zentralen logischen Einheit zu nennen. Diese hängt vom Hauptfokus der Datensammlung ab. Bei Unklarheit muss mit einem Zusatztext erklärt werden, wie viele Datensätze welchen Typs vorliegen.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text4"/>
+	  </xs:simpleType>
+
+	  <xs:simpleType name="idDossier">
+		    <xs:annotation>
+			      <xs:documentation>Paketweit eindeutige ID. Sie wird im AIS im Modul Verzeichnungseinheiten auf Dossierstufe verzeichnet.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="xs:ID">
+			      <xs:minLength value="1"/>
+		    </xs:restriction>
+	  </xs:simpleType>
+
+	  <xs:simpleType name="erscheinungsformDossier">
+		    <xs:annotation>
+			      <xs:documentation>Angaben darüber, ob das Dossier digitale, nicht-digitale (Papier, audiovisuell) oder sowohl digitale als auch nicht-digitale Dokumente enthält.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="xs:token">
+			      <xs:enumeration value="keine Angabe"/>
+			      <xs:enumeration value="digital"/>
+			      <xs:enumeration value="nicht digital"/>
+			      <xs:enumeration value="gemischt"/>
+		    </xs:restriction>
+	  </xs:simpleType>
+
+	  <xs:simpleType name="federfuehrendeOrganisationseinheitDossier">
+		    <xs:annotation>
+			      <xs:documentation>Bestimmung der für die Erledigung des Geschäftes zuständigen federführenden Organisationseinheit.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text2"/>
+	  </xs:simpleType>
+	
+	  <xs:simpleType name="entstehungszeitraumAnmerkung">
+		    <xs:annotation>
+			      <xs:documentation>Zusätzliche Informationen, welche für die Ermittlung des Entstehungszeitraums relevant sind. Hier können Angaben über allfällige Löschungen und Mutationen an der Datensammlung eingetragen werden (für FILES relevant). Falls der Entstehungszeitraum geschätzt wurde, ist hier das Kriterium für die Schätzung zu nennen.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text4"/>
+	  </xs:simpleType>
+
+	  <xs:simpleType name="schutzfristenkategorieDossier">
+		    <xs:annotation>
+			      <xs:documentation>Artikel des BGA, der die Schutzfrist festhält, die das Amt im Formular „Meldung von Unterlagen mit besonderer Schutzfrist und öffentlich zugänglichen Unterlagen“ gemeldet hat und vom BAR auf ihre formale Korrektheit und Vollständigkeit kontrolliert worden ist.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text1"/>
+	  </xs:simpleType>
+	
+	  <xs:simpleType name="schutzfristDossier">
+		    <xs:annotation>
+			      <xs:documentation>Dauer der Schutzfrist in Jahren, die das Amt im Formular „Meldung von Unterlagen mit besonderer Schutzfrist und öffentlich zugänglichen Unterlagen“ gemeldet hat und vom BAR auf ihre formale Korrektheit und Vollständigkeit kontrolliert worden ist.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="xs:nonNegativeInteger"/>
+	  </xs:simpleType>
+	
+	  <xs:simpleType name="schutzfristenBegruendungDossier">
+		    <xs:annotation>
+			      <xs:documentation>Erläuterung der Begründung für eine verlängerte Schutzfrist für Unterlagen, die nach Personennamen erschlossen sind und schützenswerte Personendaten gemäss DSG enthalten (Art. 11 BGA), und für bestimmte Kategorien oder für einzelne Dossiers, die überwiegend schutzwürdige öffentliche oder private Interessen tangieren (Art. 12 Abs. 1 BGA und Art. 12 Abs. 2 BGA).</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text4"/>
+	  </xs:simpleType>
+
+	  <xs:simpleType name="klassifizierungskategorieDossier">
+		    <xs:annotation>
+			      <xs:documentation>Grad, in dem das Dossier und die enthaltenen Dokumente und Dateien vor unberechtigter Einsicht geschützt werden müssen. Referenz: Verordnung vom 10.12.1990 über die Klassifizierung und Behandlung von Informationen im zivilen Verwaltungsbereich ([SR 172.015]) und Verordnung vom 1.5.1990 über den Schutz militärischer Informationen ([SR 510.411]).</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text2"/>
+	  </xs:simpleType>
+	
+	  <xs:simpleType name="datenschutzDossier">
+		    <xs:annotation>
+			      <xs:documentation>Markierung, die angibt, ob sich in den Dokumenten des Dossiers besonders schützenswerten Personendaten oder Persönlichkeitsprofilen gemäss Datenschutzrecht.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="xs:boolean"/>
+	  </xs:simpleType>
+	
+	  <xs:simpleType name="oeffentlichkeitsstatusDossier">
+		    <xs:annotation>
+			      <xs:documentation>Angabe, ob das Dossier gemäss [BGÖ] schützenswerte Dokumente oder Dateien enthält oder nicht.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text2"/>
+	  </xs:simpleType>
+	
+	  <xs:simpleType name="oeffentlichkeitsstatusBegruendungDossier">
+		    <xs:annotation>
+			      <xs:documentation>Argumente gegen die öffentliche Zugänglichkeit gemäss [BGÖ]. Gemäss Entwurf [BGÖ] muss begründet werden, warum Unterlagen nicht öffentlich zugänglich gemacht werden können.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text4"/>
+	  </xs:simpleType>
+	
+	  <xs:simpleType name="sonstigeBestimmungenDossier">
+		    <xs:annotation>
+			      <xs:documentation>Angaben über sonstige rechtliche Auflagen, denen das Dossier unterstellt ist.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text4"/>
+	  </xs:simpleType>
+
+	  <xs:simpleType name="vorgang">
+		    <xs:annotation>
+			      <xs:documentation>Angaben über Tätigkeiten, die an Dokumenten des Dossiers durchgeführt wurden. Es können z.B. Angaben zu Tätigkeiten sein, die im Rahmen eines Auftragssubdossiers durchgeführt wurden.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text4"/>
+	  </xs:simpleType>
+
+	  <xs:simpleType name="bemerkungDossier">
+		    <xs:annotation>
+			      <xs:documentation>Zusätzliche Informationen, welche das Dossier oder die Datensammlung betreffen. Hier können nähere Angaben zur Sprache und zu speziellen technischen Anforderungen eingetragen werden, welche den Zugang der Daten einschränken könnten.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text4"/>
+	  </xs:simpleType>
+</xs:schema>

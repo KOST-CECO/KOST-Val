@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+           attributeFormDefault="unqualified">
+	  <xs:include schemaLocation="base.xsd"/>
+	
+	  <xs:simpleType name="nameOrdner">
+		    <xs:annotation>
+			      <xs:documentation>Das Inhaltsverzeichnis listet alle Dateien und Ordner des Pakets hierarchisch auf. Für die Ordner wird der Ordnername eingesetzt.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="xs:string"/>
+	  </xs:simpleType>
+
+	
+	
+	
+	  <xs:simpleType name="idOrdner">
+		    <xs:annotation>
+			      <xs:documentation>Paketweit eindeutige ID für den Ordner (technischer Primärschlüssel). Diese ID wird aus dem Dokument heraus referenziert.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="xs:ID"/>
+	  </xs:simpleType>
+</xs:schema>

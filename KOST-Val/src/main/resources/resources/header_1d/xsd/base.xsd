@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified"
+           attributeFormDefault="unqualified">
+
+    
+    
+  	<xs:complexType name="comparable" abstract="true"/>
+    
+    <xs:complexType name="historischerZeitpunkt">
+        <xs:sequence>
+            <xs:element name="ca" minOccurs="0" default="false" type="ca"/>
+            <xs:element name="datum" type="datumTypA"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="historischerZeitraum">
+    	
+
+        <xs:sequence>
+            <xs:element name="von" type="historischerZeitpunkt"/>
+            <xs:element name="bis" type="historischerZeitpunkt"/>
+        </xs:sequence>
+    </xs:complexType>
+
+ 	<xs:simpleType name="ca">
+		    <xs:annotation>
+			      <xs:documentation/>
+		    </xs:annotation>
+		    <xs:restriction base="xs:boolean"/>
+	  </xs:simpleType>
+	
+	  <xs:simpleType name="keineAngabe">
+		    <xs:annotation>
+			      <xs:documentation/>
+		    </xs:annotation>
+		    <xs:restriction base="xs:token">
+			      <xs:enumeration value="keine Angabe"/>
+		    </xs:restriction>
+	  </xs:simpleType>
+ 
+    <xs:simpleType name="datumTypA">
+		    <xs:annotation>
+			      <xs:documentation>Zeitpunkte: the following values are possible by date type 1 regular expression
+				historische Anwendung
+				31.01.2004
+				ca.31.01.2004
+				2004
+				ca.2004
+				keine Angabe
+			</xs:documentation>
+		    </xs:annotation>
+		    <xs:union memberTypes="xs:date xs:gYear keineAngabe"/>
+	  </xs:simpleType>
+
+    <xs:simpleType name="zeitpunkt">
+		    <xs:union memberTypes="datumTypB"/>
+    </xs:simpleType>
+
+    <xs:complexType name="zeitraum">
+    	
+
+        <xs:sequence>
+            <xs:element name="von" type="datumTypB"/>
+            <xs:element name="bis" type="datumTypB"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="datumTypB">
+		    <xs:annotation>
+			      <xs:documentation>Zeitpunkte: the following values are possible by date type 3 regular expression
+				technische Anwendung
+				Date Data Type (xs:date)
+				The date is specified in the following form "YYYY-MM-DD" where:
+				* YYYY indicates the year
+				* MM indicates the month
+				* DD indicates the day
+				Note: All components are required!
+				
+				DateTime Data Type (xs:dateTime)
+				The dateTime data type is used to specify a date and a time.
+				The dateTime is specified in the following form "YYYY-MM-DDThh:mm:ss" where:
+				* YYYY indicates the year
+				* MM indicates the month
+				* DD indicates the day
+				* T indicates the start of the required time section
+				* hh indicates the hour
+				* mm indicates the minute
+				* ss indicates the second
+				Note: All components are required!
+			</xs:documentation>
+		    </xs:annotation>
+		    <xs:union memberTypes="xs:date xs:dateTime"/>
+	  </xs:simpleType>
+
+	  <xs:simpleType name="notizDatum">
+		    <xs:annotation>
+			      <xs:documentation>Datum, an welchem die Notiz erfasst wurde. Datums-Tagengenauigkeit reicht (keine Std. und Sek.). Zwingendes Feld.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="datumTypB"/>
+	  </xs:simpleType>
+	
+	  <xs:simpleType name="notizErfasser">
+		    <xs:annotation>
+			      <xs:documentation>Benutzer, welcher die Notiz erfasst hat. Optionales Feld.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text1"/>
+	  </xs:simpleType>
+
+	  <xs:simpleType name="notizBeschreibung">
+		    <xs:annotation>
+			      <xs:documentation>Notiz i.e.S, d.h. Beschreibung. Zwingendes Feld.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text4"/>
+	  </xs:simpleType>
+	
+	  <xs:simpleType name="text1">
+		    <xs:restriction base="xs:string">
+			      <xs:maxLength value="100"/>
+		    </xs:restriction>
+	  </xs:simpleType>
+	
+	  <xs:simpleType name="text2">
+		    <xs:restriction base="xs:string">
+			      <xs:maxLength value="200"/>
+		    </xs:restriction>
+	  </xs:simpleType>
+	
+	  <xs:simpleType name="text3">
+		    <xs:restriction base="xs:string">
+			      <xs:maxLength value="1000"/>
+		    </xs:restriction>
+	  </xs:simpleType>
+	
+	  <xs:simpleType name="text4">
+		    <xs:restriction base="xs:string">
+		</xs:restriction>
+	  </xs:simpleType>
+	
+</xs:schema>

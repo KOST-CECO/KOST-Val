@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+           attributeFormDefault="unqualified">
+	  <xs:include schemaLocation="base.xsd"/>
+
+	  <xs:simpleType name="vorgangstyp">
+		    <xs:annotation>
+			      <xs:documentation>Klassifizierung des Vorgangs.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text1">
+		</xs:restriction>
+	  </xs:simpleType>
+	
+	  <xs:simpleType name="beschreibung">
+		    <xs:annotation>
+			      <xs:documentation>Nachweis und Resultat der durchgeführten Tätigkeit.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text4"/>
+	  </xs:simpleType>
+	
+	  <xs:simpleType name="bearbeiter">
+		    <xs:annotation>
+			      <xs:documentation>Name der Person, die den archivischen Vorgang durchgeführt hat.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text2"/>
+	  </xs:simpleType>
+
+	  <xs:simpleType name="referenzUebernahmedossier">
+		    <xs:annotation>
+			      <xs:documentation>Aktenzeichen des Übernahmedossiers in der GEVER Anwendung des Bundesarchiv.</xs:documentation>
+		    </xs:annotation>
+		    <xs:restriction base="text1"/>
+	  </xs:simpleType>
+</xs:schema>

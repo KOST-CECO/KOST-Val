@@ -92,13 +92,9 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 		//File xmlToValidate = null;
 		//File xsdToValidate = null;
 
-		// Arbeitsverzeichnis zum Entpacken des Archivs erstellen
+		// Arbeitsverzeichnis zum Entpackten SIP
 		String pathToWorkDir = getConfigurationService().getPathToWorkDir()
 		+ "\\ZIP";
-		File tmpDir = new File( pathToWorkDir );
-		if ( !tmpDir.exists() ) {
-			tmpDir.mkdir();
-		}
 
 		String toplevelDir = valDatei.getName();
 		int lastDotIdx = toplevelDir.lastIndexOf( "." );
@@ -138,14 +134,11 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 				workToplevelDir = new File (pathToWorkDir );
 			}
 			File xmlToValidate = new File (workToplevelDir.getAbsolutePath() + "\\header\\metadata.xml");
-			File xsdToValidate = new File (workToplevelDir.getAbsolutePath() + "\\header\\xsd\\arelda_v3.13.2.xsd");
-			if ( !xsdToValidate.exists()) {
-				xsdToValidate = new File (workToplevelDir.getAbsolutePath() + "\\header\\xsd\\arelda.xsd");
-			}
-
+			File xsdToValidateBar1 = new File (workToplevelDir.getAbsolutePath() + "\\header\\xsd\\arelda_v3.13.2.xsd");
+			File xsdToValidateEch1 = new File (workToplevelDir.getAbsolutePath() + "\\header\\xsd\\arelda.xsd");
 			
-			if ( xmlToValidate != null && xsdToValidate != null ) {
-
+			if ( xmlToValidate.exists() && xsdToValidateBar1.exists() ) {
+				// Schemavalidierung Nach Version BAR 1
 				try {
 					System.setProperty(
 							"javax.xml.parsers.DocumentBuilderFactory",
@@ -159,11 +152,113 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 							"http://www.w3.org/2001/XMLSchema" );
 					factory.setAttribute(
 							"http://java.sun.com/xml/jaxp/properties/schemaSource",
-							xsdToValidate.getAbsolutePath() );
+							xsdToValidateBar1.getAbsolutePath() );
 					DocumentBuilder builder = factory.newDocumentBuilder();
 					Validator handler = new Validator();
 					builder.setErrorHandler( handler );
 					builder.parse( xmlToValidate.getAbsolutePath() );
+					if ( handler.validationError == true ) {
+						return false;
+					}
+
+				} catch ( java.io.IOException ioe ) {
+					getMessageService().logError(
+							getTextResourceService()
+									.getText( MESSAGE_MODULE_Ad )
+									+ getTextResourceService().getText(
+											MESSAGE_DASHES )
+									+ "IOException "
+									+ ioe.getMessage() );
+				} catch ( SAXException e ) {
+					getMessageService().logError(
+							getTextResourceService()
+									.getText( MESSAGE_MODULE_Ad )
+									+ getTextResourceService().getText(
+											MESSAGE_DASHES )
+									+ "SAXException "
+									+ e.getMessage() );
+				} catch ( ParserConfigurationException e ) {
+					getMessageService().logError(
+							getTextResourceService()
+									.getText( MESSAGE_MODULE_Ad )
+									+ getTextResourceService().getText(
+											MESSAGE_DASHES )
+									+ "ParserConfigurationException "
+									+ e.getMessage() );
+				}
+			} else if ( xmlToValidate.exists() && xsdToValidateEch1.exists() ) {
+				// Schmavalidierung nach eCH Version 1 inkl Addendum in den Ressourcen
+				// Dies erfolgt mit einer Validierung übers Kreuz
+				try {
+					// xmlToValidate mit xsdToValidateEch1Add
+					File xsdToValidateEch1Add = new File ("resources\\header_1d\\xsd\\arelda.xsd");
+					System.setProperty(
+							"javax.xml.parsers.DocumentBuilderFactory",
+							"org.apache.xerces.jaxp.DocumentBuilderFactoryImpl" );
+					DocumentBuilderFactory factory = DocumentBuilderFactory
+							.newInstance();
+					factory.setNamespaceAware( true );
+					factory.setValidating( true );
+					factory.setAttribute(
+							"http://java.sun.com/xml/jaxp/properties/schemaLanguage",
+							"http://www.w3.org/2001/XMLSchema" );
+					factory.setAttribute(
+							"http://java.sun.com/xml/jaxp/properties/schemaSource",
+							xsdToValidateEch1Add.getAbsolutePath() );
+					DocumentBuilder builder = factory.newDocumentBuilder();
+					Validator handler = new Validator();
+					builder.setErrorHandler( handler );
+					builder.parse( xmlToValidate.getAbsolutePath() );
+					if ( handler.validationError == true ) {
+						return false;
+					}
+
+				} catch ( java.io.IOException ioe ) {
+					getMessageService().logError(
+							getTextResourceService()
+									.getText( MESSAGE_MODULE_Ad )
+									+ getTextResourceService().getText(
+											MESSAGE_DASHES )
+									+ "IOException "
+									+ ioe.getMessage() );
+				} catch ( SAXException e ) {
+					getMessageService().logError(
+							getTextResourceService()
+									.getText( MESSAGE_MODULE_Ad )
+									+ getTextResourceService().getText(
+											MESSAGE_DASHES )
+									+ "SAXException "
+									+ e.getMessage() );
+				} catch ( ParserConfigurationException e ) {
+					getMessageService().logError(
+							getTextResourceService()
+									.getText( MESSAGE_MODULE_Ad )
+									+ getTextResourceService().getText(
+											MESSAGE_DASHES )
+									+ "ParserConfigurationException "
+									+ e.getMessage() );
+				}
+			
+				try {
+					// xmlToValidateAdd mit xsdToValidateEch1
+					File xmlToValidateAdd = new File ("resources\\header_1d\\metadata.xml");
+					System.setProperty(
+							"javax.xml.parsers.DocumentBuilderFactory",
+							"org.apache.xerces.jaxp.DocumentBuilderFactoryImpl" );
+					DocumentBuilderFactory factory = DocumentBuilderFactory
+							.newInstance();
+					factory.setNamespaceAware( true );
+					factory.setValidating( true );
+					factory.setAttribute(
+							"http://java.sun.com/xml/jaxp/properties/schemaLanguage",
+							"http://www.w3.org/2001/XMLSchema" );
+					factory.setAttribute(
+							"http://java.sun.com/xml/jaxp/properties/schemaSource",
+							xsdToValidateEch1.getAbsolutePath() );
+					DocumentBuilder builder = factory.newDocumentBuilder();
+					Validator handler = new Validator();
+					builder.setErrorHandler( handler );
+					builder.parse( xmlToValidateAdd.getAbsolutePath() );
 					if ( handler.validationError == true ) {
 						return false;
 					}
