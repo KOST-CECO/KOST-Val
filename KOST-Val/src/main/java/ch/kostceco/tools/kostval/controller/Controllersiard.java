@@ -211,31 +211,19 @@ public class Controllersiard implements MessageConstants
 		try {
 			if ( this.getValidationAzipModule().validate( valDatei,
 					directoryOfLogfile ) ) {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_VALID,
-						getTextResourceService().getText( MESSAGE_MODULE_A ) ) );
 				this.getValidationAzipModule().getMessageService().print();
 			} else {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_INVALID,
-						getTextResourceService().getText( MESSAGE_MODULE_A ) )
-						+ getTextResourceService().getText(
-								MESSAGE_STEPERGEBNIS_A_SIARD ) );
 				// Ein negatives Validierungsresultat in diesem Schritt führt
 				// zum Abbruch der weiteren Verarbeitung
 				this.getValidationAzipModule().getMessageService().print();
 				return false;
 			}
 		} catch ( ValidationAzipException e ) {
-			LOGGER.logInfo( getTextResourceService().getText(
-					MESSAGE_MODULE_INVALID_2ARGS,
-					getTextResourceService().getText( MESSAGE_MODULE_A ),
-					e.getMessage() ) );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationAzipModule().getMessageService().print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
-			LOGGER.logError( e.getMessage() );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
@@ -243,17 +231,9 @@ public class Controllersiard implements MessageConstants
 		try {
 			if ( this.getValidationBprimaryStructureModule().validate(
 					valDatei, directoryOfLogfile ) ) {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_VALID,
-						getTextResourceService().getText( MESSAGE_MODULE_B ) ) );
 				this.getValidationBprimaryStructureModule().getMessageService()
 						.print();
 			} else {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_INVALID,
-						getTextResourceService().getText( MESSAGE_MODULE_B ) )
-						+ getTextResourceService().getText(
-								MESSAGE_STEPERGEBNIS_B_SIARD ) );
 				// Ein negatives Validierungsresultat in diesem Schritt führt
 				// zum Abbruch der weiteren Verarbeitung
 				this.getValidationBprimaryStructureModule().getMessageService()
@@ -261,16 +241,12 @@ public class Controllersiard implements MessageConstants
 				return false;
 			}
 		} catch ( ValidationBprimaryStructureException e ) {
-			LOGGER.logInfo( getTextResourceService().getText(
-					MESSAGE_MODULE_INVALID_2ARGS,
-					getTextResourceService().getText( MESSAGE_MODULE_B ),
-					e.getMessage() ) );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationBprimaryStructureModule().getMessageService()
 					.print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
-			LOGGER.logError( e.getMessage() );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
@@ -278,31 +254,19 @@ public class Controllersiard implements MessageConstants
 		try {
 			if ( this.getValidationCheaderModule().validate( valDatei,
 					directoryOfLogfile ) ) {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_VALID,
-						getTextResourceService().getText( MESSAGE_MODULE_C ) ) );
 				this.getValidationCheaderModule().getMessageService().print();
 			} else {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_INVALID,
-						getTextResourceService().getText( MESSAGE_MODULE_C ) )
-						+ getTextResourceService().getText(
-								MESSAGE_STEPERGEBNIS_C_SIARD ) );
 				this.getValidationCheaderModule().getMessageService().print();
 				// Ein negatives Validierungsresultat in diesem Schritt führt
 				// zum Abbruch der weiteren Verarbeitung
 				return false;
 			}
 		} catch ( ValidationCheaderException e ) {
-			LOGGER.logInfo( getTextResourceService().getText(
-					MESSAGE_MODULE_INVALID_2ARGS,
-					getTextResourceService().getText( MESSAGE_MODULE_C ),
-					e.getMessage() ) );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationCheaderModule().getMessageService().print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
-			LOGGER.logError( e.getMessage() );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
@@ -310,17 +274,9 @@ public class Controllersiard implements MessageConstants
 		try {
 			if ( this.getValidationDstructureModule().validate( valDatei,
 					directoryOfLogfile ) ) {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_VALID,
-						getTextResourceService().getText( MESSAGE_MODULE_D ) ) );
 				this.getValidationDstructureModule().getMessageService()
 						.print();
 			} else {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_INVALID,
-						getTextResourceService().getText( MESSAGE_MODULE_D ) )
-						+ getTextResourceService().getText(
-								MESSAGE_STEPERGEBNIS_D_SIARD ) );
 				this.getValidationDstructureModule().getMessageService()
 						.print();
 				// Ein negatives Validierungsresultat in diesem Schritt führt
@@ -328,15 +284,11 @@ public class Controllersiard implements MessageConstants
 				return false;
 			}
 		} catch ( ValidationDstructureException e ) {
-			LOGGER.logInfo( getTextResourceService().getText(
-					MESSAGE_MODULE_INVALID_2ARGS,
-					getTextResourceService().getText( MESSAGE_MODULE_D ),
-					e.getMessage() ) );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationDstructureModule().getMessageService().print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
-			LOGGER.logError( e.getMessage() );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
@@ -351,58 +303,32 @@ public class Controllersiard implements MessageConstants
 		try {
 			if ( this.getValidationEcolumnModule().validate( valDatei,
 					directoryOfLogfile ) ) {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_VALID,
-						getTextResourceService().getText( MESSAGE_MODULE_E ) ) );
 				this.getValidationEcolumnModule().getMessageService().print();
 			} else {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_INVALID,
-						getTextResourceService().getText( MESSAGE_MODULE_E ) )
-						+ getTextResourceService().getText(
-								MESSAGE_STEPERGEBNIS_E_SIARD ) );
 				this.getValidationEcolumnModule().getMessageService().print();
 				valid = false;
 			}
 		} catch ( ValidationEcolumnException e ) {
-			LOGGER.logInfo( getTextResourceService().getText(
-					MESSAGE_MODULE_INVALID_2ARGS,
-					getTextResourceService().getText( MESSAGE_MODULE_E ),
-					e.getMessage() ) );
-			this.getValidationEcolumnModule().getMessageService().print();
-			valid = false;
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 		} catch ( Exception e ) {
-			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
-			LOGGER.logError( e.getMessage() );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
 		try {
 			if ( this.getValidationFrowModule().validate( valDatei,
 					directoryOfLogfile ) ) {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_VALID,
-						getTextResourceService().getText( MESSAGE_MODULE_F ) ) );
 				this.getValidationFrowModule().getMessageService().print();
 			} else {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_INVALID,
-						getTextResourceService().getText( MESSAGE_MODULE_F ) )
-						+ getTextResourceService().getText(
-								MESSAGE_STEPERGEBNIS_F_SIARD ) );
 				this.getValidationFrowModule().getMessageService().print();
 				valid = false;
 			}
 		} catch ( ValidationFrowException e ) {
-			LOGGER.logInfo( getTextResourceService().getText(
-					MESSAGE_MODULE_INVALID_2ARGS,
-					getTextResourceService().getText( MESSAGE_MODULE_F ),
-					e.getMessage() ) );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationFrowModule().getMessageService().print();
 			valid = false;
 		} catch ( Exception e ) {
-			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
-			LOGGER.logError( e.getMessage() );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
@@ -410,29 +336,17 @@ public class Controllersiard implements MessageConstants
 		try {
 			if ( this.getValidationGtableModule().validate( valDatei,
 					directoryOfLogfile ) ) {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_VALID,
-						getTextResourceService().getText( MESSAGE_MODULE_G ) ) );
 				this.getValidationGtableModule().getMessageService().print();
 			} else {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_INVALID,
-						getTextResourceService().getText( MESSAGE_MODULE_G ) )
-						+ getTextResourceService().getText(
-								MESSAGE_STEPERGEBNIS_G_SIARD ) );
 				this.getValidationGtableModule().getMessageService().print();
 				valid = false;
 			}
 		} catch ( ValidationGtableException e ) {
-			LOGGER.logInfo( getTextResourceService().getText(
-					MESSAGE_MODULE_INVALID_2ARGS,
-					getTextResourceService().getText( MESSAGE_MODULE_G ),
-					e.getMessage() ) );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationGtableModule().getMessageService().print();
 			valid = false;
 		} catch ( Exception e ) {
-			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
-			LOGGER.logError( e.getMessage() );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
@@ -440,29 +354,17 @@ public class Controllersiard implements MessageConstants
 		try {
 			if ( this.getValidationHcontentModule().validate( valDatei,
 					directoryOfLogfile ) ) {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_VALID,
-						getTextResourceService().getText( MESSAGE_MODULE_H ) ) );
 				this.getValidationHcontentModule().getMessageService().print();
 			} else {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_INVALID,
-						getTextResourceService().getText( MESSAGE_MODULE_H ) )
-						+ getTextResourceService().getText(
-								MESSAGE_STEPERGEBNIS_H_SIARD ) );
 				this.getValidationHcontentModule().getMessageService().print();
 				valid = false;
 			}
 		} catch ( ValidationHcontentException e ) {
-			LOGGER.logInfo( getTextResourceService().getText(
-					MESSAGE_MODULE_INVALID_2ARGS,
-					getTextResourceService().getText( MESSAGE_MODULE_H ),
-					e.getMessage() ) );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationHcontentModule().getMessageService().print();
 			valid = false;
 		} catch ( Exception e ) {
-			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
-			LOGGER.logError( e.getMessage() );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
@@ -470,31 +372,19 @@ public class Controllersiard implements MessageConstants
 		try {
 			if ( this.getValidationIrecognitionModule().validate( valDatei,
 					directoryOfLogfile ) ) {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_VALID,
-						getTextResourceService().getText( MESSAGE_MODULE_I ) ) );
 				this.getValidationIrecognitionModule().getMessageService()
 						.print();
 			} else {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_INVALID,
-						getTextResourceService().getText( MESSAGE_MODULE_I ) )
-						+ getTextResourceService().getText(
-								MESSAGE_STEPERGEBNIS_I_SIARD ) );
 				this.getValidationIrecognitionModule().getMessageService()
 						.print();
 				valid = false;
 			}
 		} catch ( ValidationIrecognitionException e ) {
-			LOGGER.logInfo( getTextResourceService().getText(
-					MESSAGE_MODULE_INVALID_2ARGS,
-					getTextResourceService().getText( MESSAGE_MODULE_I ),
-					e.getMessage() ) );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationIrecognitionModule().getMessageService().print();
 			valid = false;
 		} catch ( Exception e ) {
-			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
-			LOGGER.logError( e.getMessage() );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
@@ -502,31 +392,19 @@ public class Controllersiard implements MessageConstants
 		try {
 			if ( this.getValidationJsurplusFilesModule().validate( valDatei,
 					directoryOfLogfile ) ) {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_VALID,
-						getTextResourceService().getText( MESSAGE_MODULE_J ) ) );
 				this.getValidationJsurplusFilesModule().getMessageService()
 						.print();
 			} else {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_INVALID,
-						getTextResourceService().getText( MESSAGE_MODULE_J ) )
-						+ getTextResourceService().getText(
-								MESSAGE_STEPERGEBNIS_J_SIARD ) );
 				this.getValidationJsurplusFilesModule().getMessageService()
 						.print();
 				valid = false;
 			}
 		} catch ( ValidationJsurplusFilesException e ) {
-			LOGGER.logInfo( getTextResourceService().getText(
-					MESSAGE_MODULE_INVALID_2ARGS,
-					getTextResourceService().getText( MESSAGE_MODULE_J ),
-					e.getMessage() ) );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationJsurplusFilesModule().getMessageService().print();
 			valid = false;
 		} catch ( Exception e ) {
-			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
-			LOGGER.logError( e.getMessage() );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 

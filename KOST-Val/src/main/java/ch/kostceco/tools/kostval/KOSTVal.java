@@ -285,13 +285,16 @@ public class KOSTVal implements MessageConstants
 				if ( tmpDir.exists() ) {
 					Util.deleteDir( tmpDir );
 				}
+
+				LOGGER.logError( kostval.getTextResourceService().getText(
+						MESSAGE_XML_LOGEND ) );
 				// Zeitstempel End
 				java.util.Date nowEnd = new java.util.Date();
 				java.text.SimpleDateFormat sdfEnd = new java.text.SimpleDateFormat(
 						"dd.MM.yyyy HH.mm.ss" );
 				String ausgabeEnd = sdfEnd.format( nowEnd );
 				ausgabeEnd = "<End>" + ausgabeEnd + "</End>";
-				Util.valEnd(ausgabeEnd, logFile );
+				Util.valEnd( ausgabeEnd, logFile );
 
 				if ( valFile ) {
 					// Löschen des Arbeitsverzeichnisses, falls eines
@@ -414,17 +417,19 @@ public class KOSTVal implements MessageConstants
 						}
 					}
 				}
-				
+
 				LOGGER.logError( kostval.getTextResourceService().getText(
 						MESSAGE_XML_FORMAT2 ) );
 
+				LOGGER.logError( kostval.getTextResourceService().getText(
+						MESSAGE_XML_LOGEND ) );
 				// Zeitstempel End
 				java.util.Date nowEnd = new java.util.Date();
 				java.text.SimpleDateFormat sdfEnd = new java.text.SimpleDateFormat(
 						"dd.MM.yyyy HH.mm.ss" );
 				String ausgabeEnd = sdfEnd.format( nowEnd );
 				ausgabeEnd = "<End>" + ausgabeEnd + "</End>";
-				Util.valEnd(ausgabeEnd, logFile );
+				Util.valEnd( ausgabeEnd, logFile );
 
 				if ( countNio == count ) {
 					// keine Dateien Validiert
@@ -648,8 +653,8 @@ public class KOSTVal implements MessageConstants
 			countSummaryNio = pdfaCountNio + siardCountNio + tiffCountNio;
 			countSummaryIo = pdfaCountIo + siardCountIo + tiffCountIo;
 			String summary3c = kostval.getTextResourceService().getText(
-					MESSAGE_XML_SUMMARY_3C, count, countSummaryIo,countSummaryNio, 
-					countNio);
+					MESSAGE_XML_SUMMARY_3C, count, countSummaryIo,
+					countSummaryNio, countNio );
 
 			LOGGER.logError( kostval.getTextResourceService().getText(
 					MESSAGE_XML_FORMAT2 ) );
@@ -742,24 +747,17 @@ public class KOSTVal implements MessageConstants
 				LOGGER.logInfo( kostval.getTextResourceService().getText(
 						MESSAGE_VALIDATION_INTERRUPTED ) );
 			}
-			
+
+			LOGGER.logError( kostval.getTextResourceService().getText(
+					MESSAGE_XML_LOGEND ) );
 			// Zeitstempel End
 			java.util.Date nowEnd = new java.util.Date();
 			java.text.SimpleDateFormat sdfEnd = new java.text.SimpleDateFormat(
 					"dd.MM.yyyy HH.mm.ss" );
 			String ausgabeEnd = sdfEnd.format( nowEnd );
 			ausgabeEnd = "<End>" + ausgabeEnd + "</End>";
-			Util.valEnd(ausgabeEnd, logFile );
+			Util.valEnd( ausgabeEnd, logFile );
 
-
-			/*
-			 * // Löschen des targetFile, falls eines angelegt wurde if (
-			 * targetFile.exists() ) { Util.deleteDir( targetFile ); } //
-			 * bestehendes SIP-Workverzeichnis ggf. löschen if (
-			 * tmpDirSip.exists() ) { Util.deleteDir( tmpDirSip ); } //
-			 * bestehendes ZIP-Workverzeichnis ggf. löschen if (
-			 * tmpDirZip.exists() ) { Util.deleteDir( tmpDirZip ); }
-			 */
 			// bestehendes Workverzeichnis ggf. löschen
 			if ( tmpDir.exists() ) {
 				Util.deleteDir( tmpDir );
@@ -833,7 +831,7 @@ public class KOSTVal implements MessageConstants
 
 		if ( (valDatei.getAbsolutePath().toLowerCase().endsWith( ".tiff" ) || valDatei
 				.getAbsolutePath().toLowerCase().endsWith( ".tif" )) ) {
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
+			LOGGER.logError( kostval.getTextResourceService().getText(
 					MESSAGE_XML_VALERGEBNIS ) );
 			LOGGER.logInfo( kostval.getTextResourceService().getText(
 					MESSAGE_XML_VALTYPE,
@@ -894,7 +892,7 @@ public class KOSTVal implements MessageConstants
 
 		} else if ( (valDatei.getAbsolutePath().toLowerCase()
 				.endsWith( ".siard" )) ) {
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
+			LOGGER.logError( kostval.getTextResourceService().getText(
 					MESSAGE_XML_VALERGEBNIS ) );
 			LOGGER.logInfo( kostval.getTextResourceService().getText(
 					MESSAGE_XML_VALTYPE,
@@ -926,19 +924,23 @@ public class KOSTVal implements MessageConstants
 						kostval.getTextResourceService().getText(
 								MESSAGE_XML_VALERGEBNIS_VALID ), logFile );
 				LOGGER.logInfo( kostval.getTextResourceService().getText(
-						MESSAGE_TOTAL_VALID, valDatei.getAbsolutePath() ) );
+						MESSAGE_XML_VALERGEBNIS_CLOSE )
+						+ kostval.getTextResourceService().getText(
+								MESSAGE_XML_VALERGEBNIS_VALID ) );
 			} else {
-				// Validierte Datei invalide
+				// Fehler in Validierte Datei --> invalide
 				Util.valElement(
 						kostval.getTextResourceService().getText(
 								MESSAGE_XML_VALERGEBNIS_INVALID ), logFile );
 				LOGGER.logInfo( kostval.getTextResourceService().getText(
-						MESSAGE_TOTAL_INVALID, valDatei.getAbsolutePath() ) );
+						MESSAGE_XML_VALERGEBNIS_CLOSE )
+						+ kostval.getTextResourceService().getText(
+								MESSAGE_XML_VALERGEBNIS_INVALID ) );
 			}
 
 		} else if ( (valDatei.getName().endsWith( ".pdf" ) || valDatei
 				.getName().endsWith( ".pdfa" )) ) {
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
+			LOGGER.logError( kostval.getTextResourceService().getText(
 					MESSAGE_XML_VALERGEBNIS ) );
 			LOGGER.logInfo( kostval.getTextResourceService().getText(
 					MESSAGE_XML_VALTYPE,

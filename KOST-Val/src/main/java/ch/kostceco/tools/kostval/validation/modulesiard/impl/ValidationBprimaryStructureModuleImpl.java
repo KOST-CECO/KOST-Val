@@ -75,17 +75,12 @@ public class ValidationBprimaryStructureModuleImpl extends ValidationModuleImpl
 						bExistsHeaderFolder = 1;
 					} else {
 						// keines der beiden validen Möglichkeiten -> Fehler
-						getMessageService()
-								.logError(
-										getTextResourceService().getText(
-												MESSAGE_MODULE_B )
-												+ getTextResourceService()
-														.getText(
-																MESSAGE_DASHES )
-												+ getTextResourceService()
-														.getText(
-																MESSAGE_MODULE_B_NOTALLOWEDFILE,
-																name ) );
+						getMessageService().logError(
+								getTextResourceService().getText(
+										MESSAGE_XML_MODUL_B_SIARD )
+										+ getTextResourceService().getText(
+												MESSAGE_XML_B_NOTALLOWEDFILE,
+												name ) );
 						// SIARD enthaelt ein File, das sich nicht dort befinden
 						// duerfte: {0}
 						return false;
@@ -95,28 +90,26 @@ public class ValidationBprimaryStructureModuleImpl extends ValidationModuleImpl
 			zipfile.close();
 			if ( bExistsContentFolder == 0 ) {
 				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_B )
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_B_SIARD )
 								+ getTextResourceService().getText(
-										MESSAGE_DASHES )
-								+ getTextResourceService().getText(
-										MESSAGE_MODULE_B_CONTENT ) );
+										MESSAGE_XML_B_CONTENT ) );
 				// SIARD enthaelt kein content-Ordner
 				return false;
 			}
 			if ( bExistsHeaderFolder == 0 ) {
 				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_B )
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_B_SIARD )
 								+ getTextResourceService().getText(
-										MESSAGE_DASHES )
-								+ getTextResourceService().getText(
-										MESSAGE_MODULE_B_HEADER ) );
+										MESSAGE_XML_B_HEADER ) );
 				// SIARD enthaelt kein header-Ordner
 				return false;
 			}
 		} catch ( Exception e ) {
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_B )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService()
+							.getText( MESSAGE_XML_MODUL_B_SIARD )
 							+ e.getMessage() );
 			return false;
 		}

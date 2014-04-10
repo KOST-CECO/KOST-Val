@@ -90,27 +90,25 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 			if ( metadataxml == null ) {
 				// keine metadata.xml = METADATA in der SIARD-Datei gefunden
 				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_C )
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_C_SIARD )
 								+ getTextResourceService().getText(
-										MESSAGE_DASHES )
-								+ getTextResourceService().getText(
-										MESSAGE_MODULE_C_NOMETADATAFOUND ) );
+										MESSAGE_XML_C_NOMETADATAFOUND ) );
 				return false;
 			}
 			if ( metadataxsd == null ) {
 				// keine metadata.xsd = XSD_METADATA in der SIARD-Datei gefunden
 				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_C )
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_C_SIARD )
 								+ getTextResourceService().getText(
-										MESSAGE_DASHES )
-								+ getTextResourceService().getText(
-										MESSAGE_MODULE_C_NOMETADATAXSD ) );
+										MESSAGE_XML_C_NOMETADATAXSD ) );
 				return false;
 			}
 		} catch ( Exception e ) {
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_C )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService()
+							.getText( MESSAGE_XML_MODUL_C_SIARD )
 							+ e.getMessage() + " xml und xsd" );
 			return false;
 		}
@@ -223,21 +221,18 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 					}
 				} catch ( java.io.IOException ioe ) {
 					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_MODULE_C )
-									+ getTextResourceService().getText(
-											MESSAGE_DASHES ) + "IOException "
-									+ ioe.getMessage() );
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_C_SIARD )
+									+ "IOException " + ioe.getMessage() );
 				} catch ( SAXException e ) {
 					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_MODULE_C )
-									+ getTextResourceService().getText(
-											MESSAGE_DASHES ) + "SAXException "
-									+ e.getMessage() );
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_C_SIARD )
+									+ "SAXException " + e.getMessage() );
 				} catch ( ParserConfigurationException e ) {
 					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_MODULE_C )
-									+ getTextResourceService().getText(
-											MESSAGE_DASHES )
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_C_SIARD )
 									+ "ParserConfigurationException "
 									+ e.getMessage() );
 				}
@@ -245,8 +240,8 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 			zipfile.close();
 		} catch ( Exception e ) {
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_C )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService()
+							.getText( MESSAGE_XML_MODUL_C_SIARD )
 							+ e.getMessage() );
 			return false;
 		}
@@ -263,10 +258,10 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 			validationError = true;
 			saxParseException = exception;
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_C )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService()
+							.getText( MESSAGE_XML_MODUL_C_SIARD )
 							+ getTextResourceService().getText(
-									MESSAGE_MODULE_C_METADATA_ERRORS,
+									MESSAGE_XML_C_METADATA_ERRORS,
 									saxParseException.getLineNumber(),
 									saxParseException.getColumnNumber(),
 									saxParseException.getMessage() ) );
@@ -278,10 +273,10 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 			validationError = true;
 			saxParseException = exception;
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_C )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService()
+							.getText( MESSAGE_XML_MODUL_C_SIARD )
 							+ getTextResourceService().getText(
-									MESSAGE_MODULE_C_METADATA_ERRORS,
+									MESSAGE_XML_C_METADATA_ERRORS,
 									saxParseException.getLineNumber(),
 									saxParseException.getColumnNumber(),
 									saxParseException.getMessage() ) );

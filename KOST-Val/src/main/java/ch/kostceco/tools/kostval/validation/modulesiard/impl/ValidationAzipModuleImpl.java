@@ -64,10 +64,10 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements
 		// die Datei darf kein Directory sein
 		if ( valDatei.isDirectory() ) {
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_A )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService()
+							.getText( MESSAGE_XML_MODUL_A_SIARD )
 							+ getTextResourceService().getText(
-									ERROR_MODULE_A_NOFILE ) );
+									ERROR_XML_A_NOFILE ) );
 			// Die zu validierende SIARD-Datei ist ein Ordner und keine
 			// ZIP-Datei.
 			return false;
@@ -108,18 +108,17 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements
 				valid = true;
 			} else {
 				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_A )
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_A_SIARD )
 								+ getTextResourceService().getText(
-										MESSAGE_DASHES )
-								+ getTextResourceService().getText(
-										ERROR_MODULE_A_INCORRECTFILEENDING ) );
+										ERROR_XML_A_INCORRECTFILEENDING_SIARD ) );
 				// Die SIARD-Datei ist kein ZIP.
 				return false;
 			}
 		} catch ( Exception e ) {
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_A )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService()
+							.getText( MESSAGE_XML_MODUL_A_SIARD )
 							+ e.getMessage() );
 			return false;
 		}
@@ -146,18 +145,17 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements
 				valid = true;
 			} else {
 				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_A )
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_A_SIARD )
 								+ getTextResourceService().getText(
-										MESSAGE_DASHES )
-								+ getTextResourceService().getText(
-										ERROR_MODULE_A_DEFLATED ) );
+										ERROR_XML_A_DEFLATED ) );
 				// Die SIARD-Datei ist komprimiert.
 				return false;
 			}
 		} catch ( Exception e ) {
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_A )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService()
+							.getText( MESSAGE_XML_MODUL_A_SIARD )
 							+ e.getMessage() );
 			return false;
 		}

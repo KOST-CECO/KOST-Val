@@ -148,20 +148,20 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 		} catch ( java.io.IOException ioe ) {
 			valid = false;
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_H )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService()
+							.getText( MESSAGE_XML_MODUL_H_SIARD )
 							+ "IOException " + ioe.getMessage() );
 		} catch ( JDOMException e ) {
 			valid = false;
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_H )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService()
+							.getText( MESSAGE_XML_MODUL_H_SIARD )
 							+ "JDOMException " + e.getMessage() );
 		} catch ( SAXException e ) {
 			valid = false;
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_H )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService()
+							.getText( MESSAGE_XML_MODUL_H_SIARD )
 							+ "SAXException " + e.getMessage() );
 		}
 
@@ -206,18 +206,16 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 			int limit = configurationService.getTableRowsLimit();
 			if ( range.max > limit ) {
 				getMessageService().logInfo(
-						getTextResourceService().getText( MESSAGE_MODULE_H )
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_H_SIARD )
 								+ getTextResourceService().getText(
-										MESSAGE_DASHES )
-								+ getTextResourceService().getText(
-										MESSAGE_MODULE_H_TABLE_NOT_VALIDATED1,
+										MESSAGE_XML_H_TABLE_NOT_VALIDATED1,
 										xmlFile.getName() ) );
 				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_H )
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_H_SIARD )
 								+ getTextResourceService().getText(
-										MESSAGE_DASHES )
-								+ getTextResourceService().getText(
-										MESSAGE_MODULE_H_TABLE_NOT_VALIDATED2,
+										MESSAGE_XML_H_TABLE_NOT_VALIDATED2,
 										range.max, limit,
 										schemaLocation.getName() ) );
 			}
@@ -298,10 +296,10 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 		private void logError( SAXParseException e )
 		{
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_H )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService()
+							.getText( MESSAGE_XML_MODUL_H_SIARD )
 							+ getTextResourceService().getText(
-									MESSAGE_MODULE_H_INVALID_ERROR,
+									MESSAGE_XML_H_INVALID_ERROR,
 									xmlFile.getName(),
 									schemaLocation.getName(),
 									e.getLineNumber(), e.getColumnNumber(),

@@ -138,16 +138,12 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 					.getValidationContext() );
 			if ( congruentColumnCount == false ) {
 				valid = false;
-				getMessageService()
-						.logError(
-								getTextResourceService().getText(
-										MESSAGE_MODULE_E )
-										+ getTextResourceService().getText(
-												MESSAGE_DASHES )
-										+ getTextResourceService()
-												.getText(
-														MESSAGE_MODULE_E_INVALID_ATTRIBUTE_COUNT,
-														this.getIncongruentColumnCount() ) );
+				getMessageService().logError(
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_E_SIARD )
+								+ getTextResourceService().getText(
+										MESSAGE_XML_E_INVALID_ATTRIBUTE_COUNT,
+										this.getIncongruentColumnCount() ) );
 				/*
 				 * getMessageService().logError(
 				 * getTextResourceService().getText(MESSAGE_MODULE_E) +
@@ -163,27 +159,21 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 				getMessageService()
 						.logError(
 								getTextResourceService().getText(
-										MESSAGE_MODULE_E )
-										+ getTextResourceService().getText(
-												MESSAGE_DASHES )
+										MESSAGE_XML_MODUL_E_SIARD )
 										+ getTextResourceService()
 												.getText(
-														MESSAGE_MODULE_E_INVALID_ATTRIBUTE_OCCURRENCE,
+														MESSAGE_XML_E_INVALID_ATTRIBUTE_OCCURRENCE,
 														this.getIncongruentColumnOccurrence() ) );
 			}
 			// Validates the type of table attributes in metadata.xml
 			if ( validateColumnType( this.getValidationContext() ) == false ) {
 				valid = false;
-				getMessageService()
-						.logError(
-								getTextResourceService().getText(
-										MESSAGE_MODULE_E )
-										+ getTextResourceService().getText(
-												MESSAGE_DASHES )
-										+ getTextResourceService()
-												.getText(
-														MESSAGE_MODULE_E_INVALID_ATTRIBUTE_TYPE,
-														this.getIncongruentColumnType() ) );
+				getMessageService().logError(
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_E_SIARD )
+								+ getTextResourceService().getText(
+										MESSAGE_XML_E_INVALID_ATTRIBUTE_TYPE,
+										this.getIncongruentColumnType() ) );
 			}
 			// Validates the sequence of table attributes in metadata.xml
 			/*
@@ -198,8 +188,8 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 		} catch ( Exception e ) {
 			valid = false;
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_E )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService()
+							.getText( MESSAGE_XML_MODUL_E_SIARD )
 							+ e.getMessage() );
 		}
 		return valid;
@@ -223,20 +213,20 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 		if ( propertiesLoaded == false ) {
 			prepared = false;
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_E )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService()
+							.getText( MESSAGE_XML_MODUL_E_SIARD )
 							+ getTextResourceService().getText(
-									MESSAGE_MODULE_E_PROPERTIES_ERROR ) );
+									MESSAGE_XML_E_PROPERTIES_ERROR ) );
 		}
 		// Initialize internal path configuration of the SIARD archive
 		boolean pathInitialized = initializePath( validationContext );
 		if ( pathInitialized == false ) {
 			prepared = false;
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_E )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService()
+							.getText( MESSAGE_XML_MODUL_E_SIARD )
 							+ getTextResourceService().getText(
-									MESSAGE_MODULE_E_PATH_ERROR ) );
+									MESSAGE_XML_E_PATH_ERROR ) );
 		}
 		// Extract the SIARD archive and distribute the content to the
 		// validation context
@@ -244,30 +234,30 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 		if ( siardArchiveExtracted == false ) {
 			prepared = false;
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_E )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService()
+							.getText( MESSAGE_XML_MODUL_E_SIARD )
 							+ getTextResourceService().getText(
-									MESSAGE_MODULE_E_EXTRACT_ERROR ) );
+									MESSAGE_XML_E_EXTRACT_ERROR ) );
 		}
 		// Pick the metadata.xml and load it to the validation context
 		boolean metadataXMLpicked = pickMetadataXML( validationContext );
 		if ( metadataXMLpicked == false ) {
 			prepared = false;
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_E )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService()
+							.getText( MESSAGE_XML_MODUL_E_SIARD )
 							+ getTextResourceService().getText(
-									MESSAGE_MODULE_E_METADATA_ACCESS_ERROR ) );
+									MESSAGE_XML_E_METADATA_ACCESS_ERROR ) );
 		}
 		// Prepare the XML configuration and store it to the validation context
 		boolean xmlAccessPrepared = prepareXMLAccess( validationContext );
 		if ( xmlAccessPrepared == false ) {
 			prepared = false;
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_E )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService()
+							.getText( MESSAGE_XML_MODUL_E_SIARD )
 							+ getTextResourceService().getText(
-									MESSAGE_MODULE_E_XML_ACCESS_ERROR ) );
+									MESSAGE_XML_E_XML_ACCESS_ERROR ) );
 		}
 		// Prepare the data to be validated such as metadata.xml and the
 		// according XML schemas
@@ -275,10 +265,10 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 		if ( validationDataPrepared == false ) {
 			prepared = false;
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_E )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService()
+							.getText( MESSAGE_XML_MODUL_E_SIARD )
 							+ getTextResourceService().getText(
-									MESSAGE_MODULE_E_PREVALIDATION_ERROR ) );
+									MESSAGE_XML_E_PREVALIDATION_ERROR ) );
 		}
 		return prepared;
 	}

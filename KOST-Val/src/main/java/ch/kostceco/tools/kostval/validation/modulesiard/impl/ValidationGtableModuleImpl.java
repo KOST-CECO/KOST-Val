@@ -145,11 +145,10 @@ public class ValidationGtableModuleImpl extends ValidationModuleImpl implements
 				if ( !hashSchemas.add( value ) ) {
 					valid = false;
 					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_MODULE_G )
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_G_SIARD )
 									+ getTextResourceService().getText(
-											MESSAGE_DASHES )
-									+ getTextResourceService().getText(
-											MESSAGE_MODULE_G_DUPLICATE_SCHEMA,
+											MESSAGE_XML_G_DUPLICATE_SCHEMA,
 											value ) );
 				}
 			HashSet hashTables = new HashSet(); // check for duplicate tables
@@ -157,11 +156,10 @@ public class ValidationGtableModuleImpl extends ValidationModuleImpl implements
 				if ( !hashTables.add( value ) ) {
 					valid = false;
 					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_MODULE_G )
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_G_SIARD )
 									+ getTextResourceService().getText(
-											MESSAGE_DASHES )
-									+ getTextResourceService().getText(
-											MESSAGE_MODULE_G_DUPLICATE_TABLE,
+											MESSAGE_XML_G_DUPLICATE_TABLE,
 											value ) );
 				}
 			HashSet hashColumns = new HashSet(); // check for duplicate columns
@@ -169,26 +167,25 @@ public class ValidationGtableModuleImpl extends ValidationModuleImpl implements
 				if ( !hashColumns.add( value ) ) {
 					valid = false;
 					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_MODULE_G )
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_G_SIARD )
 									+ getTextResourceService().getText(
-											MESSAGE_DASHES )
-									+ getTextResourceService().getText(
-											MESSAGE_MODULE_G_DUPLICATE_COLUMN,
+											MESSAGE_XML_G_DUPLICATE_COLUMN,
 											value ) );
 				}
 
 		} catch ( java.io.IOException ioe ) {
 			valid = false;
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_G )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService()
+							.getText( MESSAGE_XML_MODUL_G_SIARD )
 							+ "IOException " + ioe.getMessage() );
 
 		} catch ( JDOMException e ) {
 			valid = false;
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_G )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService()
+							.getText( MESSAGE_XML_MODUL_G_SIARD )
 							+ "JDOMException " + e.getMessage() );
 			return valid;
 		}

@@ -48,10 +48,10 @@ public class ValidationIrecognitionModuleImpl extends ValidationModuleImpl
 		 */
 		if ( !valDatei.getAbsolutePath().toLowerCase().endsWith( ".siard" ) ) {
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_I )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService()
+							.getText( MESSAGE_XML_MODUL_I_SIARD )
 							+ getTextResourceService().getText(
-									MESSAGE_MODULE_I_NOTALLOWEDEXT ) );
+									MESSAGE_XML_I_NOTALLOWEDEXT ) );
 			// Die SIARD-Datei wurde nicht als solche erkannt, weil sie keine
 			// .siard Extension hat.
 			return false;

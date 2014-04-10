@@ -111,26 +111,26 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 		} catch ( java.io.IOException e ) {
 			valid = false;
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_D )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService()
+							.getText( MESSAGE_XML_MODUL_J_SIARD )
 							+ "IOException " + e.getMessage() );
 		} catch ( XPathExpressionException e ) {
 			valid = false;
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_D )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService()
+							.getText( MESSAGE_XML_MODUL_J_SIARD )
 							+ "XPathExpressionException " + e.getMessage() );
 		} catch ( ParserConfigurationException e ) {
 			valid = false;
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_D )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService()
+							.getText( MESSAGE_XML_MODUL_J_SIARD )
 							+ "ParserConfigurationException " + e.getMessage() );
 		} catch ( SAXException e ) {
 			valid = false;
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_D )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService()
+							.getText( MESSAGE_XML_MODUL_J_SIARD )
 							+ "SAXException " + e.getMessage() );
 		}
 
@@ -150,34 +150,25 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 			File content = new File( schema.getParent() );
 			if ( schema.isFile() ) {
 				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_J )
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_J_SIARD )
 								+ getTextResourceService().getText(
-										MESSAGE_DASHES )
-								+ content.getName()
-								+ " "
-								+ getTextResourceService().getText(
-										MESSAGE_MODULE_J_INVALID_FILE ) + " "
-								+ schema.getName() + "." );
+										MESSAGE_XML_J_INVALID_FILE,
+										content.getName(), schema.getName() ) );
 			} else if ( schema.isDirectory() ) {
 				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_J )
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_J_SIARD )
 								+ getTextResourceService().getText(
-										MESSAGE_DASHES )
-								+ content.getName()
-								+ " "
-								+ getTextResourceService().getText(
-										MESSAGE_MODULE_J_INVALID_FOLDER ) + " "
-								+ schema.getName() + "." );
+										MESSAGE_XML_J_INVALID_FOLDER,
+										content.getName(), schema.getName() ) );
 			} else {
 				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_J )
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_J_SIARD )
 								+ getTextResourceService().getText(
-										MESSAGE_DASHES )
-								+ content.getName()
-								+ " "
-								+ getTextResourceService().getText(
-										MESSAGE_MODULE_J_INVALID_ENTRY ) + " "
-								+ schema.getName() + "." );
+										MESSAGE_XML_J_INVALID_ENTRY,
+										content.getName(), schema.getName() ) );
 			}
 		}
 		if ( valid ) {
@@ -202,33 +193,33 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 			File schema = new File( table.getParent() );
 			if ( table.isFile() ) {
 				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_J )
-								+ getTextResourceService().getText(
-										MESSAGE_DASHES )
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_J_SIARD )
 								+ schema.getName()
 								+ " "
 								+ getTextResourceService().getText(
-										MESSAGE_MODULE_J_INVALID_FILE ) + " "
+										MESSAGE_XML_J_INVALID_FILE )
+								+ " "
 								+ table.getName() + "." );
 			} else if ( table.isDirectory() ) {
 				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_J )
-								+ getTextResourceService().getText(
-										MESSAGE_DASHES )
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_J_SIARD )
 								+ schema.getName()
 								+ " "
 								+ getTextResourceService().getText(
-										MESSAGE_MODULE_J_INVALID_FOLDER ) + " "
+										MESSAGE_XML_J_INVALID_FOLDER )
+								+ " "
 								+ table.getName() + "." );
 			} else {
 				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_J )
-								+ getTextResourceService().getText(
-										MESSAGE_DASHES )
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_J_SIARD )
 								+ schema.getName()
 								+ " "
 								+ getTextResourceService().getText(
-										MESSAGE_MODULE_J_INVALID_ENTRY ) + " "
+										MESSAGE_XML_J_INVALID_ENTRY )
+								+ " "
 								+ table.getName() + "." );
 			}
 		}
@@ -264,33 +255,33 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 			File table = new File( file.getParent() );
 			if ( file.isFile() ) {
 				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_J )
-								+ getTextResourceService().getText(
-										MESSAGE_DASHES )
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_J_SIARD )
 								+ table.getName()
 								+ " "
 								+ getTextResourceService().getText(
-										MESSAGE_MODULE_J_INVALID_FILE ) + " "
+										MESSAGE_XML_J_INVALID_FILE )
+								+ " "
 								+ file.getName() + "." );
 			} else if ( file.isDirectory() ) {
 				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_J )
-								+ getTextResourceService().getText(
-										MESSAGE_DASHES )
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_J_SIARD )
 								+ table.getName()
 								+ " "
 								+ getTextResourceService().getText(
-										MESSAGE_MODULE_J_INVALID_FOLDER ) + " "
+										MESSAGE_XML_J_INVALID_FOLDER )
+								+ " "
 								+ file.getName() + "." );
 			} else {
 				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_J )
-								+ getTextResourceService().getText(
-										MESSAGE_DASHES )
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_J_SIARD )
 								+ table.getName()
 								+ " "
 								+ getTextResourceService().getText(
-										MESSAGE_MODULE_J_INVALID_ENTRY ) + " "
+										MESSAGE_XML_J_INVALID_ENTRY )
+								+ " "
 								+ file.getName() + "." );
 			}
 		}

@@ -208,15 +208,11 @@ public class Controllerpdfa implements MessageConstants
 				return false;
 			}
 		} catch ( ValidationApdftronException e ) {
-			LOGGER.logInfo( getTextResourceService().getText(
-					MESSAGE_MODULE_INVALID_2ARGS,
-					getTextResourceService().getText( MESSAGE_MODULE_A ),
-					e.getMessage() ) );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationApdftronModule().getMessageService().print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
-			LOGGER.logError( e.getMessage() );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 		return valid;
@@ -239,15 +235,11 @@ public class Controllerpdfa implements MessageConstants
 				valid = false;
 			}
 		} catch ( ValidationBstructureException e ) {
-			LOGGER.logInfo( getTextResourceService().getText(
-					MESSAGE_MODULE_INVALID_2ARGS,
-					getTextResourceService().getText( MESSAGE_MODULE_B ),
-					e.getMessage() ) );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationBstructureModule().getMessageService().print();
 			valid = false;
 		} catch ( Exception e ) {
-			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
-			LOGGER.logError( e.getMessage() );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			valid = false;
 		}
 
@@ -261,15 +253,11 @@ public class Controllerpdfa implements MessageConstants
 				valid = false;
 			}
 		} catch ( ValidationCgraphicsException e ) {
-			LOGGER.logInfo( getTextResourceService().getText(
-					MESSAGE_MODULE_INVALID_2ARGS,
-					getTextResourceService().getText( MESSAGE_MODULE_C ),
-					e.getMessage() ) );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationCgraphicsModule().getMessageService().print();
 			valid = false;
 		} catch ( Exception e ) {
-			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
-			LOGGER.logError( e.getMessage() );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			valid = false;
 		}
 
@@ -283,15 +271,11 @@ public class Controllerpdfa implements MessageConstants
 				valid = false;
 			}
 		} catch ( ValidationDfontsException e ) {
-			LOGGER.logInfo( getTextResourceService().getText(
-					MESSAGE_MODULE_INVALID_2ARGS,
-					getTextResourceService().getText( MESSAGE_MODULE_D ),
-					e.getMessage() ) );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationDfontsModule().getMessageService().print();
 			valid = false;
 		} catch ( Exception e ) {
-			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
-			LOGGER.logError( e.getMessage() );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			valid = false;
 		}
 
@@ -307,15 +291,11 @@ public class Controllerpdfa implements MessageConstants
 				valid = false;
 			}
 		} catch ( ValidationEtransparencyException e ) {
-			LOGGER.logInfo( getTextResourceService().getText(
-					MESSAGE_MODULE_INVALID_2ARGS,
-					getTextResourceService().getText( MESSAGE_MODULE_E ),
-					e.getMessage() ) );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationEtransparencyModule().getMessageService().print();
 			valid = false;
 		} catch ( Exception e ) {
-			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
-			LOGGER.logError( e.getMessage() );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			valid = false;
 		}
 
@@ -331,15 +311,11 @@ public class Controllerpdfa implements MessageConstants
 				valid = false;
 			}
 		} catch ( ValidationFannotationsException e ) {
-			LOGGER.logInfo( getTextResourceService().getText(
-					MESSAGE_MODULE_INVALID_2ARGS,
-					getTextResourceService().getText( MESSAGE_MODULE_F ),
-					e.getMessage() ) );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationFannotationsModule().getMessageService().print();
 			valid = false;
 		} catch ( Exception e ) {
-			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
-			LOGGER.logError( e.getMessage() );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			valid = false;
 		}
 
@@ -353,15 +329,11 @@ public class Controllerpdfa implements MessageConstants
 				valid = false;
 			}
 		} catch ( ValidationGactionsException e ) {
-			LOGGER.logInfo( getTextResourceService().getText(
-					MESSAGE_MODULE_INVALID_2ARGS,
-					getTextResourceService().getText( MESSAGE_MODULE_G ),
-					e.getMessage() ) );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationGactionsModule().getMessageService().print();
 			valid = false;
 		} catch ( Exception e ) {
-			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
-			LOGGER.logError( e.getMessage() );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			valid = false;
 		}
 
@@ -375,15 +347,11 @@ public class Controllerpdfa implements MessageConstants
 				valid = false;
 			}
 		} catch ( ValidationHmetadataException e ) {
-			LOGGER.logInfo( getTextResourceService().getText(
-					MESSAGE_MODULE_INVALID_2ARGS,
-					getTextResourceService().getText( MESSAGE_MODULE_H ),
-					e.getMessage() ) );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationHmetadataModule().getMessageService().print();
 			valid = false;
 		} catch ( Exception e ) {
-			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
-			LOGGER.logError( e.getMessage() );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			valid = false;
 		}
 
@@ -399,15 +367,11 @@ public class Controllerpdfa implements MessageConstants
 				valid = false;
 			}
 		} catch ( ValidationIaccessibleException e ) {
-			LOGGER.logInfo( getTextResourceService().getText(
-					MESSAGE_MODULE_INVALID_2ARGS,
-					getTextResourceService().getText( MESSAGE_MODULE_I ),
-					e.getMessage() ) );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationIaccessibleModule().getMessageService().print();
 			valid = false;
 		} catch ( Exception e ) {
-			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
-			LOGGER.logError( e.getMessage() );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			valid = false;
 		}
 
@@ -423,16 +387,12 @@ public class Controllerpdfa implements MessageConstants
 				valid = false;
 			}
 		} catch ( ValidationJinteractiveformsException e ) {
-			LOGGER.logInfo( getTextResourceService().getText(
-					MESSAGE_MODULE_INVALID_2ARGS,
-					getTextResourceService().getText( MESSAGE_MODULE_J ),
-					e.getMessage() ) );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationJinteractiveformsModule().getMessageService()
 					.print();
 			valid = false;
 		} catch ( Exception e ) {
-			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
-			LOGGER.logError( e.getMessage() );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			valid = false;
 		}
 

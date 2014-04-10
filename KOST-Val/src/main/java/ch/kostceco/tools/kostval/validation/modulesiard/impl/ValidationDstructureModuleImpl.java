@@ -98,14 +98,14 @@ public class ValidationDstructureModuleImpl extends ValidationModuleImpl
 		} catch ( java.io.IOException ioe ) {
 			valid = false;
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_D )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService()
+							.getText( MESSAGE_XML_MODUL_D_SIARD )
 							+ "IOException " + ioe.getMessage() );
 		} catch ( JDOMException e ) {
 			valid = false;
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_D )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService()
+							.getText( MESSAGE_XML_MODUL_D_SIARD )
 							+ "JDOMException " + e.getMessage() );
 		}
 
@@ -131,26 +131,19 @@ public class ValidationDstructureModuleImpl extends ValidationModuleImpl
 		} else {
 			valid = false;
 			if ( schemaPath.exists() ) {
-				getMessageService()
-						.logError(
-								getTextResourceService().getText(
-										MESSAGE_MODULE_D )
-										+ getTextResourceService().getText(
-												MESSAGE_DASHES )
-										+ getTextResourceService()
-												.getText(
-														"content"
-																+ " "
-																+ MESSAGE_MODULE_D_INVALID_FOLDER )
-										+ " " + schemaPath.getName() + " in " );
+				getMessageService().logError(
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_D_SIARD )
+								+ getTextResourceService().getText(
+										MESSAGE_XML_D_INVALID_FOLDER,
+										"content", schemaPath.getName() ) );
 			} else {
 				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_D )
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_D_SIARD )
 								+ getTextResourceService().getText(
-										MESSAGE_DASHES )
-								+ getTextResourceService().getText(
-										MESSAGE_MODULE_D_MISSING_FOLDER ) + " "
-								+ "content" + ": " + schemaPath.getName() );
+										MESSAGE_XML_D_MISSING_FOLDER,
+										"content", schemaPath.getName() ) );
 			}
 		}
 		return valid;
@@ -176,27 +169,21 @@ public class ValidationDstructureModuleImpl extends ValidationModuleImpl
 		} else {
 			valid = false;
 			if ( tablePath.exists() ) {
-				getMessageService()
-						.logError(
-								getTextResourceService().getText(
-										MESSAGE_MODULE_D )
-										+ getTextResourceService().getText(
-												MESSAGE_DASHES )
-										+ getTextResourceService()
-												.getText(
-														schemaPath.getName()
-																+ " "
-																+ MESSAGE_MODULE_D_INVALID_FOLDER )
-										+ " " + tablePath.getName() + " in " );
+				getMessageService().logError(
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_D_SIARD )
+								+ getTextResourceService().getText(
+										MESSAGE_XML_D_INVALID_FOLDER,
+										schemaPath.getName(),
+										tablePath.getName() ) );
 			} else {
 				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_D )
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_D_SIARD )
 								+ getTextResourceService().getText(
-										MESSAGE_DASHES )
-								+ getTextResourceService().getText(
-										MESSAGE_MODULE_D_MISSING_FOLDER ) + " "
-								+ schemaPath.getName() + ": "
-								+ tablePath.getName() );
+										MESSAGE_XML_D_MISSING_FOLDER,
+										schemaPath.getName(),
+										tablePath.getName() ) );
 			}
 		}
 		return valid;
@@ -208,26 +195,19 @@ public class ValidationDstructureModuleImpl extends ValidationModuleImpl
 		if ( !file.isFile() ) {
 			valid = false;
 			if ( file.exists() ) {
-				getMessageService()
-						.logError(
-								getTextResourceService().getText(
-										MESSAGE_MODULE_D )
-										+ getTextResourceService().getText(
-												MESSAGE_DASHES )
-										+ getTextResourceService()
-												.getText(
-														parent.getName()
-																+ " "
-																+ MESSAGE_MODULE_D_INVALID_FILE )
-										+ " " + file.getName() );
+				getMessageService().logError(
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_D_SIARD )
+								+ getTextResourceService().getText(
+										MESSAGE_XML_D_INVALID_FILE,
+										parent.getName(), file.getName() ) );
 			} else {
 				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_D )
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_D_SIARD )
 								+ getTextResourceService().getText(
-										MESSAGE_DASHES )
-								+ getTextResourceService().getText(
-										MESSAGE_MODULE_D_MISSING_FILE ) + " "
-								+ parent.getName() + ": " + file.getName() );
+										MESSAGE_XML_D_MISSING_FILE,
+										parent.getName(), file.getName() ) );
 			}
 		}
 		return valid;

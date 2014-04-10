@@ -185,16 +185,12 @@ public class Controllertiff implements MessageConstants
 			}
 
 		} catch ( ValidationArecognitionException e ) {
-			LOGGER.logInfo( getTextResourceService().getText(
-					MESSAGE_MODULE_INVALID_2ARGS,
-					getTextResourceService().getText( MESSAGE_MODULE_A ),
-					e.getMessage() ) );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationArecognitionModule().getMessageService().print();
 			return false;
 
 		} catch ( Exception e ) {
-			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
-			LOGGER.logError( getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage()) );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage()) );
 			return false;
 		}
 		return valid;
@@ -217,16 +213,12 @@ public class Controllertiff implements MessageConstants
 			}
 
 		} catch ( ValidationBjhoveValidationException e ) {
-			LOGGER.logInfo( getTextResourceService().getText(
-					MESSAGE_MODULE_INVALID_2ARGS,
-					getTextResourceService().getText( MESSAGE_MODULE_B ),
-					e.getMessage() ) );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationBjhoveValidationModule().getMessageService()
 					.print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
-			LOGGER.logError( getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage()) );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
@@ -243,16 +235,12 @@ public class Controllertiff implements MessageConstants
 			}
 
 		} catch ( ValidationCcompressionValidationException e ) {
-			LOGGER.logInfo( getTextResourceService().getText(
-					MESSAGE_MODULE_INVALID_2ARGS,
-					getTextResourceService().getText( MESSAGE_MODULE_C ),
-					e.getMessage() ) );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationCcompressionValidationModule()
 					.getMessageService().print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
-			LOGGER.logError( getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage()) );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
@@ -269,16 +257,12 @@ public class Controllertiff implements MessageConstants
 			}
 
 		} catch ( ValidationDphotointerValidationException e ) {
-			LOGGER.logInfo( getTextResourceService().getText(
-					MESSAGE_MODULE_INVALID_2ARGS,
-					getTextResourceService().getText( MESSAGE_MODULE_D ),
-					e.getMessage() ) );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationDphotointerValidationModule().getMessageService()
 					.print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
-			LOGGER.logError( getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage()) );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
@@ -295,16 +279,12 @@ public class Controllertiff implements MessageConstants
 			}
 
 		} catch ( ValidationEbitspersampleValidationException e ) {
-			LOGGER.logInfo( getTextResourceService().getText(
-					MESSAGE_MODULE_INVALID_2ARGS,
-					getTextResourceService().getText( MESSAGE_MODULE_E ),
-					e.getMessage() ) );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationEbitspersampleValidationModule()
 					.getMessageService().print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
-			LOGGER.logError( getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage()) );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
@@ -321,16 +301,12 @@ public class Controllertiff implements MessageConstants
 			}
 
 		} catch ( ValidationFmultipageValidationException e ) {
-			LOGGER.logInfo( getTextResourceService().getText(
-					MESSAGE_MODULE_INVALID_2ARGS,
-					getTextResourceService().getText( MESSAGE_MODULE_F ),
-					e.getMessage() ) );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationFmultipageValidationModule().getMessageService()
 					.print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
-			LOGGER.logError( getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage()) );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
@@ -347,16 +323,12 @@ public class Controllertiff implements MessageConstants
 			}
 
 		} catch ( ValidationGtilesValidationException e ) {
-			LOGGER.logInfo( getTextResourceService().getText(
-					MESSAGE_MODULE_INVALID_2ARGS,
-					getTextResourceService().getText( MESSAGE_MODULE_G ),
-					e.getMessage() ) );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationGtilesValidationModule().getMessageService()
 					.print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
-			LOGGER.logError( getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage()) );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
@@ -373,16 +345,12 @@ public class Controllertiff implements MessageConstants
 			}
 
 		} catch ( ValidationHsizeValidationException e ) {
-			LOGGER.logInfo( getTextResourceService().getText(
-					MESSAGE_MODULE_INVALID_2ARGS,
-					getTextResourceService().getText( MESSAGE_MODULE_H ),
-					e.getMessage() ) );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationHsizeValidationModule().getMessageService()
 					.print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
-			LOGGER.logError( getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage()) );
+			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 		return valid;

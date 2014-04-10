@@ -137,12 +137,10 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements
 				getMessageService()
 						.logError(
 								getTextResourceService().getText(
-										MESSAGE_MODULE_F )
-										+ getTextResourceService().getText(
-												MESSAGE_DASHES )
+										MESSAGE_XML_MODUL_F_SIARD )
 										+ getTextResourceService()
 												.getText(
-														MESSAGE_MODULE_F_INVALID_TABLE_XML_FILES,
+														MESSAGE_XML_F_INVALID_TABLE_XML_FILES,
 														this.getIncongruentTableXMLFiles() ) );
 			}
 			// Compares row information in metadata.xml and according table.xsd
@@ -152,19 +150,17 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements
 				getMessageService()
 						.logError(
 								getTextResourceService().getText(
-										MESSAGE_MODULE_F )
-										+ getTextResourceService().getText(
-												MESSAGE_DASHES )
+										MESSAGE_XML_MODUL_F_SIARD )
 										+ getTextResourceService()
 												.getText(
-														MESSAGE_MODULE_F_INVALID_TABLE_XSD_FILES,
+														MESSAGE_XML_F_INVALID_TABLE_XSD_FILES,
 														this.getIncongruentTableXSDFiles() ) );
 			}
 		} catch ( Exception e ) {
 			valid = false;
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_F )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService()
+							.getText( MESSAGE_XML_MODUL_F_SIARD )
 							+ e.getMessage() );
 		}
 		return valid;
@@ -188,20 +184,20 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements
 		if ( propertiesLoaded == false ) {
 			prepared = false;
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_F )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService()
+							.getText( MESSAGE_XML_MODUL_F_SIARD )
 							+ getTextResourceService().getText(
-									MESSAGE_MODULE_F_PROPERTIES_ERROR ) );
+									MESSAGE_XML_F_PROPERTIES_ERROR ) );
 		}
 		// Initialize internal path configuration of the SIARD archive
 		boolean pathInitialized = initializePath( validationContext );
 		if ( pathInitialized == false ) {
 			prepared = false;
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_F )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService()
+							.getText( MESSAGE_XML_MODUL_F_SIARD )
 							+ getTextResourceService().getText(
-									MESSAGE_MODULE_F_PATH_ERROR ) );
+									MESSAGE_XML_F_PATH_ERROR ) );
 		}
 		// Extract the SIARD archive and distribute the content to the
 		// validation context
@@ -209,20 +205,20 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements
 		if ( siardArchiveExtracted == false ) {
 			prepared = false;
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_E )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService()
+							.getText( MESSAGE_XML_MODUL_F_SIARD )
 							+ getTextResourceService().getText(
-									MESSAGE_MODULE_E_EXTRACT_ERROR ) );
+									MESSAGE_XML_E_EXTRACT_ERROR ) );
 		}
 		// Pick the metadata.xml and load it to the validation context
 		boolean metadataXMLpicked = pickMetadataXML( validationContext );
 		if ( metadataXMLpicked == false ) {
 			prepared = false;
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_E )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService()
+							.getText( MESSAGE_XML_MODUL_F_SIARD )
 							+ getTextResourceService().getText(
-									MESSAGE_MODULE_E_METADATA_ACCESS_ERROR ) );
+									MESSAGE_XML_E_METADATA_ACCESS_ERROR ) );
 		}
 		// Prepare the XML configuration and store it to the validation context
 
@@ -230,10 +226,10 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements
 		if ( xmlAccessPrepared == false ) {
 			prepared = false;
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_E )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService()
+							.getText( MESSAGE_XML_MODUL_F_SIARD )
 							+ getTextResourceService().getText(
-									MESSAGE_MODULE_E_XML_ACCESS_ERROR ) );
+									MESSAGE_XML_E_XML_ACCESS_ERROR ) );
 		}
 		// Prepare the data to be validated such as metadata.xml and the
 		// according XML schemas
@@ -241,10 +237,10 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements
 		if ( validationDataPrepared == false ) {
 			prepared = false;
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_E )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService()
+							.getText( MESSAGE_XML_MODUL_F_SIARD )
 							+ getTextResourceService().getText(
-									MESSAGE_MODULE_E_PREVALIDATION_ERROR ) );
+									MESSAGE_XML_E_PREVALIDATION_ERROR ) );
 		}
 		return prepared;
 	}

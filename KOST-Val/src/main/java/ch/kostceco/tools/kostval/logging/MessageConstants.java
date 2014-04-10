@@ -48,7 +48,6 @@ public interface MessageConstants
 	String	MESSAGE_TOTAL_INVALID							= "message.total.invalid";
 
 	String	MESSAGE_FOOTER_LOG								= "message.footer.log";
-	String	MESSAGE_FOOTER_SIARD							= "message.footer.siard";
 	String	MESSAGE_FOOTER_SIP								= "message.footer.sip";
 	String	MESSAGE_XML_SUMMARY_3C							= "message.xml.summary.3c";
 	String	MESSAGE_XML_VALFILE								= "message.xml.valfile";
@@ -66,6 +65,7 @@ public interface MessageConstants
 	String	MESSAGE_XML_VALTYPE								= "message.xml.valtype";
 	String	MESSAGE_XML_FORMAT1								= "message.xml.format1";
 	String	MESSAGE_XML_FORMAT2								= "message.xml.format2";
+	String	MESSAGE_XML_LOGEND								= "message.xml.logend";
 	String	MESSAGE_XML_SIP1								= "message.xml.sip1";
 	String	MESSAGE_XML_SIP2								= "message.xml.sip2";
 	String	MESSAGE_XML_VALERGEBNIS_VALID					= "message.xml.valergebnis.valid";
@@ -77,17 +77,6 @@ public interface MessageConstants
 	String	MESSAGE_MODULE_VALID							= "message.module.valid";
 	String	MESSAGE_MODULE_INVALID							= "message.module.invalid";
 	String	MESSAGE_MODULE_INVALID_2ARGS					= "message.module.invalid.2args";
-
-	String	MESSAGE_MODULE_A								= "message.module.a";
-	String	MESSAGE_MODULE_B								= "message.module.b";
-	String	MESSAGE_MODULE_C								= "message.module.c";
-	String	MESSAGE_MODULE_D								= "message.module.d";
-	String	MESSAGE_MODULE_E								= "message.module.e";
-	String	MESSAGE_MODULE_F								= "message.module.f";
-	String	MESSAGE_MODULE_G								= "message.module.g";
-	String	MESSAGE_MODULE_H								= "message.module.h";
-	String	MESSAGE_MODULE_I								= "message.module.i";
-	String	MESSAGE_MODULE_J								= "message.module.j";
 
 	String	MESSAGE_MODULE_Aa								= "message.module.aa";
 	String	MESSAGE_MODULE_Ab								= "message.module.ab";
@@ -113,16 +102,16 @@ public interface MessageConstants
 	String	MESSAGE_XML_MODUL_G_TIFF						= "message.xml.modul.g.tiff";
 	String	MESSAGE_XML_MODUL_H_TIFF						= "message.xml.modul.h.tiff";
 
-	String	MESSAGE_STEPERGEBNIS_A_SIARD					= "message.stepergebnis.a.siard";
-	String	MESSAGE_STEPERGEBNIS_B_SIARD					= "message.stepergebnis.b.siard";
-	String	MESSAGE_STEPERGEBNIS_C_SIARD					= "message.stepergebnis.c.siard";
-	String	MESSAGE_STEPERGEBNIS_D_SIARD					= "message.stepergebnis.d.siard";
-	String	MESSAGE_STEPERGEBNIS_E_SIARD					= "message.stepergebnis.e.siard";
-	String	MESSAGE_STEPERGEBNIS_F_SIARD					= "message.stepergebnis.f.siard";
-	String	MESSAGE_STEPERGEBNIS_G_SIARD					= "message.stepergebnis.g.siard";
-	String	MESSAGE_STEPERGEBNIS_H_SIARD					= "message.stepergebnis.h.siard";
-	String	MESSAGE_STEPERGEBNIS_I_SIARD					= "message.stepergebnis.i.siard";
-	String	MESSAGE_STEPERGEBNIS_J_SIARD					= "message.stepergebnis.j.siard";
+	String	MESSAGE_XML_MODUL_A_SIARD						= "message.xml.modul.a.siard";
+	String	MESSAGE_XML_MODUL_B_SIARD						= "message.xml.modul.b.siard";
+	String	MESSAGE_XML_MODUL_C_SIARD						= "message.xml.modul.c.siard";
+	String	MESSAGE_XML_MODUL_D_SIARD						= "message.xml.modul.d.siard";
+	String	MESSAGE_XML_MODUL_E_SIARD						= "message.xml.modul.e.siard";
+	String	MESSAGE_XML_MODUL_F_SIARD						= "message.xml.modul.f.siard";
+	String	MESSAGE_XML_MODUL_G_SIARD						= "message.xml.modul.g.siard";
+	String	MESSAGE_XML_MODUL_H_SIARD						= "message.xml.modul.h.siard";
+	String	MESSAGE_XML_MODUL_I_SIARD						= "message.xml.modul.i.siard";
+	String	MESSAGE_XML_MODUL_J_SIARD						= "message.xml.modul.j.siard";
 
 	String	MESSAGE_XML_MODUL_A_PDFA						= "message.xml.modul.a.pdfa";
 	String	MESSAGE_XML_MODUL_B_PDFA						= "message.xml.modul.b.pdfa";
@@ -162,96 +151,95 @@ public interface MessageConstants
 	String	ERROR_CANNOT_INITIALIZE_DROID					= "error.cannot.initialize.droid";
 
 	String	ERROR_UNKNOWN									= "error.unknown";
-	String	ERROR_XML_UNKNOWN									= "error.xml.unknown";
+	String	ERROR_XML_UNKNOWN								= "error.xml.unknown";
 
 	// *************TIFF-Meldungen*************************************************************************
 	// Modul A Meldungen
-	String	ERROR_XML_A_INCORRECTFILEENDING				= "error.xml.a.incorrectfileending";
-	String	ERROR_XML_A_INCORRECTFILE					= "error.xml.a.incorrectfile";
-	String	ERROR_XML_A_ISDIRECTORY						= "error.xml.a.isdirectory";
+	String	ERROR_XML_A_INCORRECTFILEENDING					= "error.xml.a.incorrectfileending";
+	String	ERROR_XML_A_INCORRECTFILE						= "error.xml.a.incorrectfile";
+	String	ERROR_XML_A_ISDIRECTORY							= "error.xml.a.isdirectory";
 
 	// Modul B Meldungen
 	String	MESSAGE_XML_B_CANNOTWRITEJHOVEREPORT			= "message.xml.b.cannotwritejhovereport";
-	String	MESSAGE_XML_B_JHOVEINVALID					= "message.xml.b.jhoveinvalid";
-	String	MESSAGE_XML_B_JHOVEMESSAGE				= "message.xml.b.jhovemessage";
+	String	MESSAGE_XML_B_JHOVEINVALID						= "message.xml.b.jhoveinvalid";
+	String	MESSAGE_XML_B_JHOVEMESSAGE						= "message.xml.b.jhovemessage";
 
 	// Modul C-G Meldungen
 	String	MESSAGE_XML_CG_CANNOTFINDJHOVEREPORT			= "message.xml.cg.cannotfindjhovereport";
-	String	MESSAGE_XML_CG_INVALID						= "message.xml.cg.invalid";
-	String	MESSAGE_XML_CG_JHOVENIO						= "message.xml.cg.jhovenio";
+	String	MESSAGE_XML_CG_INVALID							= "message.xml.cg.invalid";
+	String	MESSAGE_XML_CG_JHOVENIO							= "message.xml.cg.jhovenio";
 
 	// *************SIARD-Meldungen*************************************************************************
 	// Modul A Meldungen
-	String	ERROR_MODULE_A_INCORRECTFILEENDING				= "error.module.a.incorrectfileending";
-	String	ERROR_MODULE_A_NOFILE							= "error.module.a.nofile";
-	String	ERROR_MODULE_A_INCORRECTFILEENDING_SIARD		= "error.module.a.incorrectfileending.siard";
-	String	ERROR_MODULE_A_DEFLATED							= "error.module.a.deflated";
+	String	ERROR_XML_A_NOFILE								= "error.xml.a.nofile";
+	String	ERROR_XML_A_INCORRECTFILEENDING_SIARD			= "error.xml.a.incorrectfileending.siard";
+	String	ERROR_XML_A_DEFLATED							= "error.xml.a.deflated";
 
 	// Modul B Meldungen
-	String	MESSAGE_MODULE_B_NOTALLOWEDFILE					= "message.module.b.notallowedfile";
-	String	MESSAGE_MODULE_B_CONTENT						= "message.module.b.content";
-	String	MESSAGE_MODULE_B_HEADER							= "message.module.b.header";
+	String	MESSAGE_XML_B_NOTALLOWEDFILE					= "message.xml.b.notallowedfile";
+	String	MESSAGE_XML_B_CONTENT							= "message.xml.b.content";
+	String	MESSAGE_XML_B_HEADER							= "message.xml.b.header";
 
 	// Modul C Meldungen
-	String	MESSAGE_MODULE_C_NOMETADATAFOUND				= "message.module.c.nometadatafound";
-	String	MESSAGE_MODULE_C_NOMETADATAXSD					= "message.module.c.nometadataxsd";
-	String	MESSAGE_MODULE_C_METADATA_ERRORS				= "message.module.c.metadata.errors";
-	String	MESSAGE_MODULE_C_METADATA_ORIGERRORS			= "message.module.c.metadata.origerrors";
+	String	MESSAGE_XML_C_NOMETADATAFOUND					= "message.xml.c.nometadatafound";
+	String	MESSAGE_XML_C_NOMETADATAXSD						= "message.xml.c.nometadataxsd";
+	String	MESSAGE_XML_C_METADATA_ERRORS					= "message.xml.c.metadata.errors";
+	String	MESSAGE_XML_C_METADATA_ORIGERRORS				= "message.xml.c.metadata.origerrors";
 
 	// Modul D Meldungen
-	String	MESSAGE_MODULE_D_INVALID_FOLDER					= "message.module.d.invalid.folder";
-	String	MESSAGE_MODULE_D_MISSING_FOLDER					= "message.module.d.missing.folder";
-	String	MESSAGE_MODULE_D_INVALID_FILE					= "message.module.d.invalid.file";
-	String	MESSAGE_MODULE_D_MISSING_FILE					= "message.module.d.missing.file";
+	String	MESSAGE_XML_D_INVALID_FOLDER					= "message.xml.d.invalid.folder";
+	String	MESSAGE_XML_D_MISSING_FOLDER					= "message.xml.d.missing.folder";
+	String	MESSAGE_XML_D_INVALID_FILE						= "message.xml.d.invalid.file";
+	String	MESSAGE_XML_D_MISSING_FILE						= "message.xml.d.missing.file";
 
 	// Modul E Meldungen
-	String	MESSAGE_MODULE_E_PROPERTIES_ERROR				= "message.module.e.properties.error";
-	String	MESSAGE_MODULE_E_PATH_ERROR						= "message.module.e.path.error";
-	String	MESSAGE_MODULE_E_EXTRACT_ERROR					= "message.module.e.extract.error";
-	String	MESSAGE_MODULE_E_METADATA_ACCESS_ERROR			= "message.module.e.metadata.access.error";
-	String	MESSAGE_MODULE_E_XML_ACCESS_ERROR				= "message.module.e.xml.access.error";
-	String	MESSAGE_MODULE_E_PREVALIDATION_ERROR			= "message.module.e.prevalidation.error";
-	String	MESSAGE_MODULE_E_INVALID_ATTRIBUTE_COUNT		= "message.module.e.attribute.count.validation.failed";
-	String	MESSAGE_MODULE_E_INVALID_ATTRIBUTE_OCCURRENCE	= "message.module.e.attribute.occurrence.validation.failed";
-	String	MESSAGE_MODULE_E_INVALID_ATTRIBUTE_TYPE			= "message.module.e.attribute.type.validation.failed";
+	String	MESSAGE_XML_E_PROPERTIES_ERROR					= "message.xml.e.properties.error";
+	String	MESSAGE_XML_E_PATH_ERROR						= "message.xml.e.path.error";
+	String	MESSAGE_XML_E_EXTRACT_ERROR						= "message.xml.e.extract.error";
+	String	MESSAGE_XML_E_METADATA_ACCESS_ERROR				= "message.xml.e.metadata.access.error";
+	String	MESSAGE_XML_E_XML_ACCESS_ERROR					= "message.xml.e.xml.access.error";
+	String	MESSAGE_XML_E_PREVALIDATION_ERROR				= "message.xml.e.prevalidation.error";
+	String	MESSAGE_XML_E_INVALID_ATTRIBUTE_COUNT			= "message.xml.e.attribute.count.validation.failed";
+	String	MESSAGE_XML_E_INVALID_ATTRIBUTE_OCCURRENCE		= "message.xml.e.attribute.occurrence.validation.failed";
+	String	MESSAGE_XML_E_INVALID_ATTRIBUTE_TYPE			= "message.xml.e.attribute.type.validation.failed";
 
 	// Modul F Meldungen
-	String	MESSAGE_MODULE_F_PROPERTIES_ERROR				= "message.module.f.properties.error";
-	String	MESSAGE_MODULE_F_PATH_ERROR						= "message.module.f.path.error";
-	String	MESSAGE_MODULE_F_INVALID_TABLE_XML_FILES		= "message.module.f.invalid.table.xml.files";
-	String	MESSAGE_MODULE_F_INVALID_TABLE_XSD_FILES		= "message.module.f.invalid.table.xsd.files";
+	String	MESSAGE_XML_F_PROPERTIES_ERROR					= "message.xml.f.properties.error";
+	String	MESSAGE_XML_F_PATH_ERROR						= "message.xml.f.path.error";
+	String	MESSAGE_XML_F_INVALID_TABLE_XML_FILES			= "message.xml.f.invalid.table.xml.files";
+	String	MESSAGE_XML_F_INVALID_TABLE_XSD_FILES			= "message.xml.f.invalid.table.xsd.files";
 
 	// Modul G Meldungen
-	String	MESSAGE_MODULE_G_DUPLICATE_SCHEMA				= "message.module.g.duplicate.schema";
-	String	MESSAGE_MODULE_G_DUPLICATE_TABLE				= "message.module.g.duplicate.table";
-	String	MESSAGE_MODULE_G_DUPLICATE_COLUMN				= "message.module.g.duplicate.column";
+	String	MESSAGE_XML_G_DUPLICATE_SCHEMA				= "message.xml.g.duplicate.schema";
+	String	MESSAGE_XML_G_DUPLICATE_TABLE				= "message.xml.g.duplicate.table";
+	String	MESSAGE_XML_G_DUPLICATE_COLUMN				= "message.xml.g.duplicate.column";
 
 	// Modul H Meldungen
-	String	MESSAGE_MODULE_H_INVALID_FOLDER					= "message.module.h.invalid.folder";
-	String	MESSAGE_MODULE_H_INVALID_XML					= "message.module.h.invalid.xml";
-	String	MESSAGE_MODULE_H_INVALID_ERROR					= "message.module.h.invalid.error";
-	String	MESSAGE_MODULE_H_TABLE_NOT_VALIDATED1			= "message.module.h.table.not.validated1";
-	String	MESSAGE_MODULE_H_TABLE_NOT_VALIDATED2			= "message.module.h.table.not.validated2";
+	String	MESSAGE_XML_H_INVALID_FOLDER					= "message.xml.h.invalid.folder";
+	String	MESSAGE_XML_H_INVALID_XML					= "message.xml.h.invalid.xml";
+	String	MESSAGE_XML_H_INVALID_ERROR					= "message.xml.h.invalid.error";
+	String	MESSAGE_XML_H_TABLE_NOT_VALIDATED1			= "message.xml.h.table.not.validated1";
+	String	MESSAGE_XML_H_TABLE_NOT_VALIDATED2			= "message.xml.h.table.not.validated2";
 
 	// Modul I Meldungen
-	String	MESSAGE_MODULE_I_NOTALLOWEDEXT					= "message.module.i.notallowedext";
+	String	MESSAGE_XML_I_NOTALLOWEDEXT					= "message.xml.i.notallowedext";
 
 	// Modul J Meldungen
-	String	MESSAGE_MODULE_J_INVALID_FOLDER					= "message.module.j.invalid.folder";
-	String	MESSAGE_MODULE_J_INVALID_FILE					= "message.module.j.invalid.file";
-	String	MESSAGE_MODULE_J_INVALID_ENTRY					= "message.module.j.invalid.entry";
+	String	MESSAGE_XML_J_INVALID_FOLDER					= "message.xml.j.invalid.folder";
+	String	MESSAGE_XML_J_INVALID_FILE					= "message.xml.j.invalid.file";
+	String	MESSAGE_XML_J_INVALID_ENTRY					= "message.xml.j.invalid.entry";
 
 	// *************PDFA-Meldungen*************************************************************************
 	// Modul A Meldungen
 	String	ERROR_XML_A_PDFA_INCORRECTFILEENDING			= "error.xml.a.pdfa.incorrectfileending";
-	String	ERROR_XML_A_PDFA_INCORRECTFILE				= "error.xml.a.pdfa.incorrectfile";
+	String	ERROR_XML_A_PDFA_INCORRECTFILE					= "error.xml.a.pdfa.incorrectfile";
 	String	ERROR_XML_A_PDFA_ISDIRECTORY					= "error.xml.a.pdfa.isdirectory";
-	String	ERROR_XML_A_PDFA_SERVICEFAILED				= "error.xml.a.pdfa.servicefailed";
-	String	ERROR_XML_PDFTRON_MISSING							= "error.xml.pdftron.missing";
-	String	ERROR_XML_A_PDFA_INIT						= "error.xml.a.pdfa.init";
-	String	ERROR_XML_A_PDFA_NOCONFIG					= "error.xml.a.pdfa.noconfig";
+	String	ERROR_XML_A_PDFA_SERVICEFAILED					= "error.xml.a.pdfa.servicefailed";
+	String	ERROR_XML_PDFTRON_MISSING						= "error.xml.pdftron.missing";
+	String	ERROR_XML_A_PDFA_INIT							= "error.xml.a.pdfa.init";
+	String	ERROR_XML_A_PDFA_NOCONFIG						= "error.xml.a.pdfa.noconfig";
 
-	String	ERROR_XML_AJ_PDFA_ERRORMESSAGE				= "error.xml.aj.pdfa.errormessage";
+	String	ERROR_XML_AJ_PDFA_ERRORMESSAGE					= "error.xml.aj.pdfa.errormessage";
 
 	// *************SIP-Meldungen*************************************************************************
 	// Modul 1 Meldungen
@@ -306,7 +294,6 @@ public interface MessageConstants
 	// Modul 3c Meldungen
 	String	MESSAGE_MODULE_CC_INVALID						= "message.module.cc.invalid";
 
-	
 	// Modul 3d Meldungen
 	String	ERROR_MODULE_CD_DATUM_ENTSTEHUNG_IN_FUTURE		= "error.module.cd.datum.entstehung.in.future";
 	String	ERROR_MODULE_CD_DATUM_IN_FUTURE					= "error.module.cd.datum.in.future";
