@@ -155,13 +155,10 @@ public class ValidationGactionsModuleImpl extends ValidationModuleImpl
 							getMessageService()
 									.logError(
 											getTextResourceService().getText(
-													MESSAGE_MODULE_G )
+													MESSAGE_XML_MODUL_G_PDFA )
 													+ getTextResourceService()
 															.getText(
-																	MESSAGE_DASHES )
-													+ getTextResourceService()
-															.getText(
-																	ERROR_MODULE_AJ_PDFA_ERRORMESSAGE,
+																	ERROR_XML_AJ_PDFA_ERRORMESSAGE,
 																	errorMessage ) );
 
 						}
@@ -169,9 +166,7 @@ public class ValidationGactionsModuleImpl extends ValidationModuleImpl
 				}
 			} catch ( Exception e ) {
 				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_G )
-								+ getTextResourceService().getText(
-										MESSAGE_DASHES ) + e.getMessage() );
+						getTextResourceService().getText( MESSAGE_XML_MODUL_G_PDFA ) + e.getMessage() );
 				return false;
 			}
 		}

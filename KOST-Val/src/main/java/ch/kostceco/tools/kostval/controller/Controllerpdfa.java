@@ -202,16 +202,8 @@ public class Controllerpdfa implements MessageConstants
 		try {
 			if ( this.getValidationApdftronModule().validate( valDatei,
 					directoryOfLogfile ) ) {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_VALID,
-						getTextResourceService().getText( MESSAGE_MODULE_A ) ) );
 				this.getValidationApdftronModule().getMessageService().print();
 			} else {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_INVALID,
-						getTextResourceService().getText( MESSAGE_MODULE_A ) )
-						+ getTextResourceService().getText(
-								MESSAGE_STEPERGEBNIS_A_PDFA ) );
 				this.getValidationApdftronModule().getMessageService().print();
 				return false;
 			}
@@ -239,17 +231,9 @@ public class Controllerpdfa implements MessageConstants
 		try {
 			if ( this.getValidationBstructureModule().validate( valDatei,
 					directoryOfLogfile ) ) {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_VALID,
-						getTextResourceService().getText( MESSAGE_MODULE_B ) ) );
 				this.getValidationBstructureModule().getMessageService()
 						.print();
 			} else {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_INVALID,
-						getTextResourceService().getText( MESSAGE_MODULE_B ) )
-						+ getTextResourceService().getText(
-								MESSAGE_STEPERGEBNIS_B_PDFA ) );
 				this.getValidationBstructureModule().getMessageService()
 						.print();
 				valid = false;
@@ -271,16 +255,8 @@ public class Controllerpdfa implements MessageConstants
 		try {
 			if ( this.getValidationCgraphicsModule().validate( valDatei,
 					directoryOfLogfile ) ) {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_VALID,
-						getTextResourceService().getText( MESSAGE_MODULE_C ) ) );
 				this.getValidationCgraphicsModule().getMessageService().print();
 			} else {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_INVALID,
-						getTextResourceService().getText( MESSAGE_MODULE_C ) )
-						+ getTextResourceService().getText(
-								MESSAGE_STEPERGEBNIS_C_PDFA ) );
 				this.getValidationCgraphicsModule().getMessageService().print();
 				valid = false;
 			}
@@ -301,16 +277,8 @@ public class Controllerpdfa implements MessageConstants
 		try {
 			if ( this.getValidationDfontsModule().validate( valDatei,
 					directoryOfLogfile ) ) {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_VALID,
-						getTextResourceService().getText( MESSAGE_MODULE_D ) ) );
 				this.getValidationDfontsModule().getMessageService().print();
 			} else {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_INVALID,
-						getTextResourceService().getText( MESSAGE_MODULE_D ) )
-						+ getTextResourceService().getText(
-								MESSAGE_STEPERGEBNIS_D_PDFA ) );
 				this.getValidationDfontsModule().getMessageService().print();
 				valid = false;
 			}
@@ -331,17 +299,9 @@ public class Controllerpdfa implements MessageConstants
 		try {
 			if ( this.getValidationEtransparencyModule().validate( valDatei,
 					directoryOfLogfile ) ) {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_VALID,
-						getTextResourceService().getText( MESSAGE_MODULE_E ) ) );
 				this.getValidationEtransparencyModule().getMessageService()
 						.print();
 			} else {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_INVALID,
-						getTextResourceService().getText( MESSAGE_MODULE_E ) )
-						+ getTextResourceService().getText(
-								MESSAGE_STEPERGEBNIS_E_PDFA ) );
 				this.getValidationEtransparencyModule().getMessageService()
 						.print();
 				valid = false;
@@ -363,17 +323,9 @@ public class Controllerpdfa implements MessageConstants
 		try {
 			if ( this.getValidationFannotationsModule().validate( valDatei,
 					directoryOfLogfile ) ) {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_VALID,
-						getTextResourceService().getText( MESSAGE_MODULE_F ) ) );
 				this.getValidationFannotationsModule().getMessageService()
 						.print();
 			} else {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_INVALID,
-						getTextResourceService().getText( MESSAGE_MODULE_F ) )
-						+ getTextResourceService().getText(
-								MESSAGE_STEPERGEBNIS_F_PDFA ) );
 				this.getValidationFannotationsModule().getMessageService()
 						.print();
 				valid = false;
@@ -395,16 +347,8 @@ public class Controllerpdfa implements MessageConstants
 		try {
 			if ( this.getValidationGactionsModule().validate( valDatei,
 					directoryOfLogfile ) ) {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_VALID,
-						getTextResourceService().getText( MESSAGE_MODULE_G ) ) );
 				this.getValidationGactionsModule().getMessageService().print();
 			} else {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_INVALID,
-						getTextResourceService().getText( MESSAGE_MODULE_G ) )
-						+ getTextResourceService().getText(
-								MESSAGE_STEPERGEBNIS_G_PDFA ) );
 				this.getValidationGactionsModule().getMessageService().print();
 				valid = false;
 			}
@@ -425,16 +369,8 @@ public class Controllerpdfa implements MessageConstants
 		try {
 			if ( this.getValidationHmetadataModule().validate( valDatei,
 					directoryOfLogfile ) ) {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_VALID,
-						getTextResourceService().getText( MESSAGE_MODULE_H ) ) );
 				this.getValidationHmetadataModule().getMessageService().print();
 			} else {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_INVALID,
-						getTextResourceService().getText( MESSAGE_MODULE_H ) )
-						+ getTextResourceService().getText(
-								MESSAGE_STEPERGEBNIS_H_PDFA ) );
 				this.getValidationHmetadataModule().getMessageService().print();
 				valid = false;
 			}
@@ -455,17 +391,9 @@ public class Controllerpdfa implements MessageConstants
 		try {
 			if ( this.getValidationIaccessibleModule().validate( valDatei,
 					directoryOfLogfile ) ) {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_VALID,
-						getTextResourceService().getText( MESSAGE_MODULE_I ) ) );
 				this.getValidationIaccessibleModule().getMessageService()
 						.print();
 			} else {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_INVALID,
-						getTextResourceService().getText( MESSAGE_MODULE_I ) )
-						+ getTextResourceService().getText(
-								MESSAGE_STEPERGEBNIS_I_PDFA ) );
 				this.getValidationIaccessibleModule().getMessageService()
 						.print();
 				valid = false;
@@ -487,17 +415,9 @@ public class Controllerpdfa implements MessageConstants
 		try {
 			if ( this.getValidationJinteractiveformsModule().validate(
 					valDatei, directoryOfLogfile ) ) {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_VALID,
-						getTextResourceService().getText( MESSAGE_MODULE_J ) ) );
 				this.getValidationJinteractiveformsModule().getMessageService()
 						.print();
 			} else {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_INVALID,
-						getTextResourceService().getText( MESSAGE_MODULE_J ) )
-						+ getTextResourceService().getText(
-								MESSAGE_STEPERGEBNIS_J_PDFA ) );
 				this.getValidationJinteractiveformsModule().getMessageService()
 						.print();
 				valid = false;

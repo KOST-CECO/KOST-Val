@@ -155,13 +155,10 @@ public class ValidationHmetadataModuleImpl extends ValidationModuleImpl
 							getMessageService()
 									.logError(
 											getTextResourceService().getText(
-													MESSAGE_MODULE_H )
+													MESSAGE_XML_MODUL_H_PDFA )
 													+ getTextResourceService()
 															.getText(
-																	MESSAGE_DASHES )
-													+ getTextResourceService()
-															.getText(
-																	ERROR_MODULE_AJ_PDFA_ERRORMESSAGE,
+																	ERROR_XML_AJ_PDFA_ERRORMESSAGE,
 																	errorMessage ) );
 
 						}
@@ -169,9 +166,7 @@ public class ValidationHmetadataModuleImpl extends ValidationModuleImpl
 				}
 			} catch ( Exception e ) {
 				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_H )
-								+ getTextResourceService().getText(
-										MESSAGE_DASHES ) + e.getMessage() );
+						getTextResourceService().getText( MESSAGE_XML_MODUL_H_PDFA ) + e.getMessage() );
 				return false;
 			}
 		}

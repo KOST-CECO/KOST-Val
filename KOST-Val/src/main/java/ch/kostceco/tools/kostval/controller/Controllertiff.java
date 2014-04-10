@@ -170,23 +170,13 @@ public class Controllertiff implements MessageConstants
 	public boolean executeMandatory( File valDatei, File directoryOfLogfile )
 	{
 		boolean valid = true;
-/*		String logFileName = directoryOfLogfile.getAbsolutePath() + File.separator
-		+ valDatei.getName() + ".kost-val.log.xml";
-		File logFile = new File (logFileName);*/
-
 		// Validation Step A
 		try {
 			if ( this.getValidationArecognitionModule().validate( valDatei,
 					directoryOfLogfile ) ) {
-				// valid
-/*				Util.valElement( getTextResourceService().getText(
-						MESSAGE_XML_VALERGEBNIS_VALID), logFile );*/
 				this.getValidationArecognitionModule().getMessageService()
 						.print();
 			} else {
-				// invalid
-/*				Util.valElement( getTextResourceService().getText(
-						MESSAGE_XML_VALERGEBNIS_INVALID), logFile );*/
 				// Ein negatives Validierungsresultat in diesem Schritt führt
 				// zum Abbruch der weiteren Verarbeitung
 				this.getValidationArecognitionModule().getMessageService()
@@ -214,22 +204,13 @@ public class Controllertiff implements MessageConstants
 	public boolean executeOptional( File valDatei, File directoryOfLogfile )
 	{
 		boolean valid = true;
-/*		String logFileName = directoryOfLogfile.getAbsolutePath() + File.separator
-		+ valDatei.getName() + ".kost-val.log.xml";
-		File logFile = new File (logFileName);*/
 		// Validation Step B
 		try {
 			if ( this.getValidationBjhoveValidationModule().validate( valDatei,
 					directoryOfLogfile ) ) {
-				// valid
-/*				Util.valElement( getTextResourceService().getText(
-						MESSAGE_XML_VALERGEBNIS_VALID), logFile );*/
 				this.getValidationBjhoveValidationModule().getMessageService()
 						.print();
 			} else {
-				// invalid
-/*				Util.valElement( getTextResourceService().getText(
-						MESSAGE_XML_VALERGEBNIS_INVALID), logFile );*/
 				this.getValidationBjhoveValidationModule().getMessageService()
 						.print();
 				valid = false;
@@ -253,15 +234,9 @@ public class Controllertiff implements MessageConstants
 		try {
 			if ( this.getValidationCcompressionValidationModule().validate(
 					valDatei, directoryOfLogfile ) ) {
-				// valid
-/*				Util.valElement( getTextResourceService().getText(
-						MESSAGE_XML_VALERGEBNIS_VALID), logFile );*/
 				this.getValidationCcompressionValidationModule()
 						.getMessageService().print();
 			} else {
-				// invalid
-/*				Util.valElement( getTextResourceService().getText(
-						MESSAGE_XML_VALERGEBNIS_INVALID), logFile );*/
 				this.getValidationCcompressionValidationModule()
 						.getMessageService().print();
 				valid = false;
@@ -285,15 +260,9 @@ public class Controllertiff implements MessageConstants
 		try {
 			if ( this.getValidationDphotointerValidationModule().validate(
 					valDatei, directoryOfLogfile ) ) {
-				// valid
-/*				Util.valElement( getTextResourceService().getText(
-						MESSAGE_XML_VALERGEBNIS_VALID), logFile );*/
 				this.getValidationDphotointerValidationModule()
 						.getMessageService().print();
 			} else {
-				// invalid
-/*				Util.valElement( getTextResourceService().getText(
-						MESSAGE_XML_VALERGEBNIS_INVALID), logFile );*/
 				this.getValidationDphotointerValidationModule()
 						.getMessageService().print();
 				valid = false;
@@ -317,15 +286,9 @@ public class Controllertiff implements MessageConstants
 		try {
 			if ( this.getValidationEbitspersampleValidationModule().validate(
 					valDatei, directoryOfLogfile ) ) {
-				// valid
-/*				Util.valElement( getTextResourceService().getText(
-						MESSAGE_XML_VALERGEBNIS_VALID), logFile );*/
 				this.getValidationEbitspersampleValidationModule()
 						.getMessageService().print();
 			} else {
-				// invalid
-/*				Util.valElement( getTextResourceService().getText(
-						MESSAGE_XML_VALERGEBNIS_INVALID), logFile );*/
 				this.getValidationEbitspersampleValidationModule()
 						.getMessageService().print();
 				valid = false;
@@ -349,15 +312,9 @@ public class Controllertiff implements MessageConstants
 		try {
 			if ( this.getValidationFmultipageValidationModule().validate(
 					valDatei, directoryOfLogfile ) ) {
-				// valid
-/*				Util.valElement( getTextResourceService().getText(
-						MESSAGE_XML_VALERGEBNIS_VALID), logFile );*/
 				this.getValidationFmultipageValidationModule()
 						.getMessageService().print();
 			} else {
-				// invalid
-/*				Util.valElement( getTextResourceService().getText(
-						MESSAGE_XML_VALERGEBNIS_INVALID), logFile );*/
 				this.getValidationFmultipageValidationModule()
 						.getMessageService().print();
 				valid = false;
@@ -381,15 +338,9 @@ public class Controllertiff implements MessageConstants
 		try {
 			if ( this.getValidationGtilesValidationModule().validate( valDatei,
 					directoryOfLogfile ) ) {
-				// valid
-/*				Util.valElement( getTextResourceService().getText(
-						MESSAGE_XML_VALERGEBNIS_VALID), logFile );*/
 				this.getValidationGtilesValidationModule().getMessageService()
 						.print();
 			} else {
-				// invalid
-/*				Util.valElement( getTextResourceService().getText(
-						MESSAGE_XML_VALERGEBNIS_INVALID), logFile );*/
 				this.getValidationGtilesValidationModule().getMessageService()
 						.print();
 				valid = false;
@@ -413,15 +364,9 @@ public class Controllertiff implements MessageConstants
 		try {
 			if ( this.getValidationHsizeValidationModule().validate( valDatei,
 					directoryOfLogfile ) ) {
-				// valid
-/*				Util.valElement( getTextResourceService().getText(
-						MESSAGE_XML_VALERGEBNIS_VALID), logFile );*/
 				this.getValidationHsizeValidationModule().getMessageService()
 						.print();
 			} else {
-				// invalid
-/*				Util.valElement( getTextResourceService().getText(
-						MESSAGE_XML_VALERGEBNIS_INVALID), logFile );*/
 				this.getValidationHsizeValidationModule().getMessageService()
 						.print();
 				valid = false;

@@ -155,13 +155,10 @@ public class ValidationDfontsModuleImpl extends ValidationModuleImpl implements
 							getMessageService()
 									.logError(
 											getTextResourceService().getText(
-													MESSAGE_MODULE_D )
+													MESSAGE_XML_MODUL_D_PDFA )
 													+ getTextResourceService()
 															.getText(
-																	MESSAGE_DASHES )
-													+ getTextResourceService()
-															.getText(
-																	ERROR_MODULE_AJ_PDFA_ERRORMESSAGE,
+																	ERROR_XML_AJ_PDFA_ERRORMESSAGE,
 																	errorMessage ) );
 
 						}
@@ -169,9 +166,7 @@ public class ValidationDfontsModuleImpl extends ValidationModuleImpl implements
 				}
 			} catch ( Exception e ) {
 				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_D )
-								+ getTextResourceService().getText(
-										MESSAGE_DASHES ) + e.getMessage() );
+						getTextResourceService().getText( MESSAGE_XML_MODUL_D_PDFA ) + e.getMessage() );
 				return false;
 			}
 		}

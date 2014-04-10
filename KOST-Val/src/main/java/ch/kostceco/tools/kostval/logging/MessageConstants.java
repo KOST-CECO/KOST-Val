@@ -48,24 +48,15 @@ public interface MessageConstants
 	String	MESSAGE_TOTAL_INVALID							= "message.total.invalid";
 
 	String	MESSAGE_FOOTER_LOG								= "message.footer.log";
-	String	MESSAGE_FOOTER_TIFF								= "message.footer.tiff";
 	String	MESSAGE_FOOTER_SIARD							= "message.footer.siard";
-	String	MESSAGE_FOOTER_PDFA								= "message.footer.pdfa";
 	String	MESSAGE_FOOTER_SIP								= "message.footer.sip";
+	String	MESSAGE_XML_SUMMARY_3C							= "message.xml.summary.3c";
 	String	MESSAGE_XML_VALFILE								= "message.xml.valfile";
 	String	MESSAGE_XML_HEADER								= "message.xml.header";
 	String	MESSAGE_XML_START								= "message.xml.start";
 	String	MESSAGE_XML_END									= "message.xml.end";
-	String	MESSAGE_FOOTER_REPORTJHOVE						= "message.footer.reportjhove";
-	String	MESSAGE_FOOTER_REPORTPDFTRON					= "message.footer.reportpdftron";
-	String	MESSAGE_FOOTER_SUMMARY_1						= "message.footer.summary.1";
-	String	MESSAGE_FOOTER_SUMMARY_PDFA						= "message.footer.summary.pdfa";
-	String	MESSAGE_FOOTER_SUMMARY_SIARD					= "message.footer.summary.siard";
-	String	MESSAGE_FOOTER_SUMMARY_TIFF						= "message.footer.summary.tiff";
-	String	MESSAGE_FOOTER_SUMMARY_2						= "message.footer.summary.2";
 
 	// Globale Meldungen
-	String	MESSAGE_KOSTVALIDATION							= "message.kostvalidation";
 	String	MESSAGE_XML_INFO								= "message.xml.info";
 	String	MESSAGE_TIFFVALIDATION							= "message.tiffvalidation";
 	String	MESSAGE_SIARDVALIDATION							= "message.siardvalidation";
@@ -113,14 +104,6 @@ public interface MessageConstants
 	String	MESSAGE_MODULE_Cc								= "message.module.cc";
 	String	MESSAGE_MODULE_Cd								= "message.module.cd";
 
-/*	String	MESSAGE_STEPERGEBNIS_A_TIFF						= "message.stepergebnis.a.tiff";
-	String	MESSAGE_STEPERGEBNIS_B_TIFF						= "message.stepergebnis.b.tiff";
-	String	MESSAGE_STEPERGEBNIS_C_TIFF						= "message.stepergebnis.c.tiff";
-	String	MESSAGE_STEPERGEBNIS_D_TIFF						= "message.stepergebnis.d.tiff";
-	String	MESSAGE_STEPERGEBNIS_E_TIFF						= "message.stepergebnis.e.tiff";
-	String	MESSAGE_STEPERGEBNIS_F_TIFF						= "message.stepergebnis.f.tiff";
-	String	MESSAGE_STEPERGEBNIS_G_TIFF						= "message.stepergebnis.g.tiff";
-	String	MESSAGE_STEPERGEBNIS_H_TIFF						= "message.stepergebnis.h.tiff";*/
 	String	MESSAGE_XML_MODUL_A_TIFF						= "message.xml.modul.a.tiff";
 	String	MESSAGE_XML_MODUL_B_TIFF						= "message.xml.modul.b.tiff";
 	String	MESSAGE_XML_MODUL_C_TIFF						= "message.xml.modul.c.tiff";
@@ -141,16 +124,16 @@ public interface MessageConstants
 	String	MESSAGE_STEPERGEBNIS_I_SIARD					= "message.stepergebnis.i.siard";
 	String	MESSAGE_STEPERGEBNIS_J_SIARD					= "message.stepergebnis.j.siard";
 
-	String	MESSAGE_STEPERGEBNIS_A_PDFA						= "message.stepergebnis.a.pdfa";
-	String	MESSAGE_STEPERGEBNIS_B_PDFA						= "message.stepergebnis.b.pdfa";
-	String	MESSAGE_STEPERGEBNIS_C_PDFA						= "message.stepergebnis.c.pdfa";
-	String	MESSAGE_STEPERGEBNIS_D_PDFA						= "message.stepergebnis.d.pdfa";
-	String	MESSAGE_STEPERGEBNIS_E_PDFA						= "message.stepergebnis.e.pdfa";
-	String	MESSAGE_STEPERGEBNIS_F_PDFA						= "message.stepergebnis.f.pdfa";
-	String	MESSAGE_STEPERGEBNIS_G_PDFA						= "message.stepergebnis.g.pdfa";
-	String	MESSAGE_STEPERGEBNIS_H_PDFA						= "message.stepergebnis.h.pdfa";
-	String	MESSAGE_STEPERGEBNIS_I_PDFA						= "message.stepergebnis.i.pdfa";
-	String	MESSAGE_STEPERGEBNIS_J_PDFA						= "message.stepergebnis.j.pdfa";
+	String	MESSAGE_XML_MODUL_A_PDFA						= "message.xml.modul.a.pdfa";
+	String	MESSAGE_XML_MODUL_B_PDFA						= "message.xml.modul.b.pdfa";
+	String	MESSAGE_XML_MODUL_C_PDFA						= "message.xml.modul.c.pdfa";
+	String	MESSAGE_XML_MODUL_D_PDFA						= "message.xml.modul.d.pdfa";
+	String	MESSAGE_XML_MODUL_E_PDFA						= "message.xml.modul.e.pdfa";
+	String	MESSAGE_XML_MODUL_F_PDFA						= "message.xml.modul.f.pdfa";
+	String	MESSAGE_XML_MODUL_G_PDFA						= "message.xml.modul.g.pdfa";
+	String	MESSAGE_XML_MODUL_H_PDFA						= "message.xml.modul.h.pdfa";
+	String	MESSAGE_XML_MODUL_I_PDFA						= "message.xml.modul.i.pdfa";
+	String	MESSAGE_XML_MODUL_J_PDFA						= "message.xml.modul.j.pdfa";
 
 	String	MESSAGE_STEPERGEBNIS_Aa_SIP						= "message.stepergebnis.aa.sip";
 	String	MESSAGE_STEPERGEBNIS_Ab_SIP						= "message.stepergebnis.ab.sip";
@@ -183,22 +166,6 @@ public interface MessageConstants
 
 	// *************TIFF-Meldungen*************************************************************************
 	// Modul A Meldungen
-	String	ERROR_MODULE_A_INCORRECTFILEENDING				= "error.module.a.incorrectfileending";
-	/*	String	ERROR_MODULE_A_INCORRECTFILE					= "error.module.a.incorrectfile";
-	String	ERROR_MODULE_A_ISDIRECTORY						= "error.module.a.isdirectory";
-
-	// Modul B Meldungen
-	String	MESSAGE_MODULE_B_CANNOTWRITEJHOVEREPORT			= "message.module.b.cannotwritejhovereport";
-	String	MESSAGE_MODULE_B_JHOVEINVALID					= "message.module.b.jhoveinvalid";
-	String	MESSAGE_MODULE_B_JHOVEINVALIDFORMAT				= "message.module.b.jhoveinvalidformat";
-
-	// Modul C-G Meldungen
-	String	MESSAGE_MODULE_CG_CANNOTFINDJHOVEREPORT			= "message.module.cg.cannotfindjhovereport";
-	String	MESSAGE_MODULE_CG_INVALID						= "message.module.cg.invalid";
-	String	MESSAGE_MODULE_CG_JHOVENIO						= "message.module.cg.jhovenio";
-	String	MESSAGE_MODULE_CG_JHOVEN15						= "message.module.cg.jhoven15";*/
-
-	// Modul A Meldungen
 	String	ERROR_XML_A_INCORRECTFILEENDING				= "error.xml.a.incorrectfileending";
 	String	ERROR_XML_A_INCORRECTFILE					= "error.xml.a.incorrectfile";
 	String	ERROR_XML_A_ISDIRECTORY						= "error.xml.a.isdirectory";
@@ -215,6 +182,7 @@ public interface MessageConstants
 
 	// *************SIARD-Meldungen*************************************************************************
 	// Modul A Meldungen
+	String	ERROR_MODULE_A_INCORRECTFILEENDING				= "error.module.a.incorrectfileending";
 	String	ERROR_MODULE_A_NOFILE							= "error.module.a.nofile";
 	String	ERROR_MODULE_A_INCORRECTFILEENDING_SIARD		= "error.module.a.incorrectfileending.siard";
 	String	ERROR_MODULE_A_DEFLATED							= "error.module.a.deflated";
@@ -275,16 +243,15 @@ public interface MessageConstants
 
 	// *************PDFA-Meldungen*************************************************************************
 	// Modul A Meldungen
-	String	ERROR_MODULE_A_PDFA_INCORRECTFILEENDING			= "error.module.a.pdfa.incorrectfileending";
-	String	ERROR_MODULE_A_PDFA_INCORRECTFILE				= "error.module.a.pdfa.incorrectfile";
-	String	ERROR_MODULE_A_PDFA_ISDIRECTORY					= "error.module.a.pdfa.isdirectory";
-	String	ERROR_MODULE_A_PDFA_SERVICEFAILED				= "error.module.a.pdfa.servicefailed";
-	String	ERROR_PDFTRON_MISSING							= "error.pdftron.missing";
-	String	ERROR_MODULE_A_PDFA_INIT						= "error.module.a.pdfa.init";
-	String	ERROR_MODULE_A_PDFA_NOCONFIG					= "error.module.a.pdfa.noconfig";
-	String	INFO_MODULE_A_PDFA_PART							= "info-module.a.pdfa.part";
+	String	ERROR_XML_A_PDFA_INCORRECTFILEENDING			= "error.xml.a.pdfa.incorrectfileending";
+	String	ERROR_XML_A_PDFA_INCORRECTFILE				= "error.xml.a.pdfa.incorrectfile";
+	String	ERROR_XML_A_PDFA_ISDIRECTORY					= "error.xml.a.pdfa.isdirectory";
+	String	ERROR_XML_A_PDFA_SERVICEFAILED				= "error.xml.a.pdfa.servicefailed";
+	String	ERROR_XML_PDFTRON_MISSING							= "error.xml.pdftron.missing";
+	String	ERROR_XML_A_PDFA_INIT						= "error.xml.a.pdfa.init";
+	String	ERROR_XML_A_PDFA_NOCONFIG					= "error.xml.a.pdfa.noconfig";
 
-	String	ERROR_MODULE_AJ_PDFA_ERRORMESSAGE				= "error.module.aj.pdfa.errormessage";
+	String	ERROR_XML_AJ_PDFA_ERRORMESSAGE				= "error.xml.aj.pdfa.errormessage";
 
 	// *************SIP-Meldungen*************************************************************************
 	// Modul 1 Meldungen

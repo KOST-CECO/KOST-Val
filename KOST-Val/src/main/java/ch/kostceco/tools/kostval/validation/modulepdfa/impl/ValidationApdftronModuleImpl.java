@@ -85,10 +85,9 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 		// beginnen
 		if ( valDatei.isDirectory() ) {
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_A )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
 							+ getTextResourceService().getText(
-									ERROR_MODULE_A_PDFA_ISDIRECTORY ) );
+									ERROR_XML_A_PDFA_ISDIRECTORY ) );
 			return false;
 		} else if ( (valDatei.getAbsolutePath().toLowerCase().endsWith( ".pdf" ) || valDatei
 				.getAbsolutePath().toLowerCase().endsWith( ".pdfa" )) ) {
@@ -137,30 +136,26 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 					getMessageService()
 							.logError(
 									getTextResourceService().getText(
-											MESSAGE_MODULE_A )
-											+ getTextResourceService().getText(
-													MESSAGE_DASHES )
+											MESSAGE_XML_MODUL_A_PDFA )
 											+ getTextResourceService()
 													.getText(
-															ERROR_MODULE_A_PDFA_INCORRECTFILE ) );
+															ERROR_XML_A_PDFA_INCORRECTFILE ) );
 					return false;
 				}
 			} catch ( Exception e ) {
 				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_A )
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_A_PDFA )
 								+ getTextResourceService().getText(
-										MESSAGE_DASHES )
-								+ getTextResourceService().getText(
-										ERROR_MODULE_A_PDFA_INCORRECTFILE ) );
+										ERROR_XML_A_PDFA_INCORRECTFILE ) );
 				return false;
 			}
 		} else {
 			// die Datei endet nicht mit pdf oder pdfa -> Fehler
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_A )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
 							+ getTextResourceService().getText(
-									ERROR_MODULE_A_PDFA_INCORRECTFILEENDING ) );
+									ERROR_XML_A_PDFA_INCORRECTFILEENDING ) );
 			return false;
 		}
 		// Ende der Erkennung
@@ -190,10 +185,9 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 		if ( !fPdftronExe.exists()
 				|| !fPdftronExe.getName().equals( "pdfa.exe" ) ) {
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_A )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
 							+ getTextResourceService().getText(
-									ERROR_PDFTRON_MISSING ) );
+									ERROR_XML_PDFTRON_MISSING ) );
 			valid = false;
 			return false;
 		}
@@ -228,10 +222,9 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 			// keine Validierung möglich
 			// keine PDFA-Versionen konfiguriert
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_A )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
 							+ getTextResourceService().getText(
-									ERROR_MODULE_A_PDFA_NOCONFIG ) );
+									ERROR_XML_A_PDFA_NOCONFIG ) );
 			valid = false;
 			return false;
 		}
@@ -309,14 +302,6 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 						}
 					}
 				}
-
-				// gibt den Part Nummber zurück nach welcher Validiert wird
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_A )
-								+ getTextResourceService().getText(
-										MESSAGE_DASHES )
-								+ getTextResourceService().getText(
-										INFO_MODULE_A_PDFA_PART, level ) );
 
 				// Pfad zum Programm Pdftron
 				File pdftronExe = new File( pathToPdftronExe );
@@ -419,12 +404,10 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 					getMessageService()
 							.logError(
 									getTextResourceService().getText(
-											MESSAGE_MODULE_A )
-											+ getTextResourceService().getText(
-													MESSAGE_DASHES )
+											MESSAGE_XML_MODUL_A_PDFA )
 											+ getTextResourceService()
 													.getText(
-															ERROR_MODULE_A_PDFA_SERVICEFAILED ) );
+															ERROR_XML_A_PDFA_SERVICEFAILED ) );
 					return false;
 				}
 				// Ende PDFTRON direkt auszulösen
@@ -494,13 +477,10 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 							getMessageService()
 									.logError(
 											getTextResourceService().getText(
-													MESSAGE_MODULE_A )
+													MESSAGE_XML_MODUL_A_PDFA )
 													+ getTextResourceService()
 															.getText(
-																	MESSAGE_DASHES )
-													+ getTextResourceService()
-															.getText(
-																	ERROR_MODULE_AJ_PDFA_ERRORMESSAGE,
+																	ERROR_XML_AJ_PDFA_ERRORMESSAGE,
 																	errorMessage ) );
 
 						}
@@ -511,19 +491,17 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 						isValid = false;
 						getMessageService().logError(
 								getTextResourceService().getText(
-										MESSAGE_MODULE_A )
+										MESSAGE_XML_MODUL_A_PDFA )
 										+ getTextResourceService().getText(
-												MESSAGE_DASHES )
-										+ getTextResourceService().getText(
-												ERROR_MODULE_A_PDFA_INIT ) );
+												ERROR_XML_A_PDFA_INIT ) );
 						return false;
 					}
 				}
 			} catch ( Exception e ) {
 				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_A )
-								+ getTextResourceService().getText(
-										MESSAGE_DASHES ) + e.getMessage() );
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_A_PDFA )
+								+ e.getMessage() );
 				return false;
 			}
 		}
