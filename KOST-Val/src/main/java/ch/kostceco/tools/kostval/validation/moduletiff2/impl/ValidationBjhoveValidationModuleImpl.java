@@ -188,25 +188,17 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 				concatenatedOutputs.append( line );
 				concatenatedOutputs.append( NEWLINE );
 
-				// selten wird das Format von Jhove nicht als TIFF erkannt
-				// Invalid wenn Format nicht TIFF ist
-				if ( line.contains( " Format:" ) ) {
-					if ( !line.contains( "TIFF" ) ) {
-						// Invalider Status
-						isValid = false;
-						getMessageService()
-								.logError(
-										getTextResourceService().getText(
-												MESSAGE_MODULE_B )
-												+ getTextResourceService()
-														.getText(
-																MESSAGE_DASHES )
-												+ getTextResourceService()
-														.getText(
-																MESSAGE_MODULE_B_JHOVEINVALIDFORMAT,
-																line ) );
-					}
-				}
+				// TODO: Kann gelöscht werden, da das Modul fix definiert wird
+				// und keine erkennung mehr gemacht wird
+				/*
+				 * // selten wird das Format von Jhove nicht als TIFF erkannt //
+				 * Invalid wenn Format nicht TIFF ist if ( line.contains(
+				 * " Format:" ) ) { if ( !line.contains( "TIFF" ) ) { //
+				 * Invalider Status isValid = false; getMessageService()
+				 * .logError( getTextResourceService().getText(
+				 * MESSAGE_XML_MODUL_B_TIFF ) + getTextResourceService()
+				 * .getText( MESSAGE_MODULE_B_JHOVEINVALIDFORMAT, line ) ); } }
+				 */
 
 				// die Status-Zeile enthält diese Möglichkeiten:
 				// Valider Status: "Well-Formed and valid"
@@ -219,28 +211,27 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 						isValid = false;
 						getMessageService().logError(
 								getTextResourceService().getText(
-										MESSAGE_MODULE_B )
+										MESSAGE_XML_MODUL_B_TIFF )
 										+ getTextResourceService().getText(
-												MESSAGE_DASHES )
-										+ getTextResourceService().getText(
-												MESSAGE_MODULE_B_JHOVEINVALID,
+												MESSAGE_XML_B_JHOVEINVALID,
 												line ) );
 					}
 				}
 				if ( line.contains( "ErrorMessage:" ) ) {
 					// Linie mit der Fehlermeldung auch mitausgeben
 					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_MODULE_B )
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_B_TIFF )
 									+ getTextResourceService().getText(
-											MESSAGE_DASHES ) + line );
+											MESSAGE_XML_B_JHOVEMESSAGE, line ) );
 				}
 			}
 			in.close();
 		} catch ( Exception e ) {
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_B )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
-							+ e.getMessage() );
+					getTextResourceService().getText( MESSAGE_XML_MODUL_B_TIFF )
+							+ getTextResourceService().getText(
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
@@ -255,15 +246,11 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 				Util.setPathToReportJHove( jhoveReport.getAbsolutePath() );
 
 			} catch ( IOException e ) {
-				getMessageService()
-						.logError(
-								getTextResourceService().getText(
-										MESSAGE_MODULE_B )
-										+ getTextResourceService().getText(
-												MESSAGE_DASHES )
-										+ getTextResourceService()
-												.getText(
-														MESSAGE_MODULE_B_CANNOTWRITEJHOVEREPORT ) );
+				getMessageService().logError(
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_B_TIFF )
+								+ getTextResourceService().getText(
+										MESSAGE_XML_B_CANNOTWRITEJHOVEREPORT ) );
 				return false;
 			}
 		}

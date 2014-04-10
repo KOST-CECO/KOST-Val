@@ -96,11 +96,10 @@ public class ValidationFmultipageValidationModuleImpl extends
 				// Invalider Status
 				isValid = false;
 				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_F )
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_F_TIFF )
 								+ getTextResourceService().getText(
-										MESSAGE_DASHES )
-								+ getTextResourceService().getText(
-										MESSAGE_MODULE_CG_JHOVENIO ) );
+										MESSAGE_XML_CG_JHOVENIO, "F" ) );
 			}
 			if ( ifdCount == 1 ) {
 				// Valider Status (nur eine Seite)
@@ -112,24 +111,19 @@ public class ValidationFmultipageValidationModuleImpl extends
 					// Invalider Status
 					ifdMsg = ("\"" + ifdCount + " Seiten\"");
 					isValid = false;
-					getMessageService()
-							.logError(
-									getTextResourceService().getText(
-											MESSAGE_MODULE_F )
-											+ getTextResourceService().getText(
-													MESSAGE_DASHES )
-											+ getTextResourceService().getText(
-													MESSAGE_MODULE_CG_INVALID,
-													ifdMsg ) );
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_F_TIFF )
+									+ getTextResourceService().getText(
+											MESSAGE_XML_CG_INVALID, ifdMsg ) );
 				}
 			}
 			in.close();
 		} catch ( Exception e ) {
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_F )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService().getText( MESSAGE_XML_MODUL_F_TIFF )
 							+ getTextResourceService().getText(
-									MESSAGE_MODULE_CG_CANNOTFINDJHOVEREPORT ) );
+									MESSAGE_XML_CG_CANNOTFINDJHOVEREPORT ) );
 			return false;
 		}
 		return isValid;

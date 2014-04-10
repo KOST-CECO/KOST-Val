@@ -50,10 +50,9 @@ public class ValidationArecognitionModuleImpl extends ValidationModuleImpl
 
 		if ( valDatei.isDirectory() ) {
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_A )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService().getText( MESSAGE_XML_MODUL_A_TIFF )
 							+ getTextResourceService().getText(
-									ERROR_MODULE_A_ISDIRECTORY ) );
+									ERROR_XML_A_ISDIRECTORY ) );
 			return false;
 		} else if ( (valDatei.getAbsolutePath().toLowerCase()
 				.endsWith( ".tiff" ) || valDatei.getAbsolutePath()
@@ -106,31 +105,28 @@ public class ValidationArecognitionModuleImpl extends ValidationModuleImpl
 					// valid = true;
 				} else {
 					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_MODULE_A )
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_A_TIFF )
 									+ getTextResourceService().getText(
-											MESSAGE_DASHES )
-									+ getTextResourceService().getText(
-											ERROR_MODULE_A_INCORRECTFILE ) );
+											ERROR_XML_A_INCORRECTFILE ) );
 					return false;
 				}
 				fr.close();
 				read.close();
 			} catch ( Exception e ) {
 				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_A )
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_A_TIFF )
 								+ getTextResourceService().getText(
-										MESSAGE_DASHES )
-								+ getTextResourceService().getText(
-										ERROR_MODULE_A_INCORRECTFILE ) );
+										ERROR_XML_A_INCORRECTFILE ) );
 				return false;
 			}
 		} else {
 			// die Datei endet nicht mit tiff oder tif -> Fehler
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_A )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService().getText( MESSAGE_XML_MODUL_A_TIFF )
 							+ getTextResourceService().getText(
-									ERROR_MODULE_A_INCORRECTFILEENDING ) );
+									ERROR_XML_A_INCORRECTFILEENDING ) );
 			return false;
 		}
 		return true;

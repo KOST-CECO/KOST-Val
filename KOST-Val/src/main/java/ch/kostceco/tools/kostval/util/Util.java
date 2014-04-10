@@ -22,10 +22,13 @@ package ch.kostceco.tools.kostval.util;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.HashMap;
@@ -191,8 +194,8 @@ public class Util
 	 * @param ziel
 	 *            das Ziel-Verzeichnis
 	 */
-	public static void copyDir( File quelle, File ziel ) throws FileNotFoundException,
-			IOException
+	public static void copyDir( File quelle, File ziel )
+			throws FileNotFoundException, IOException
 	{
 
 		File[] files = quelle.listFiles();
@@ -224,8 +227,8 @@ public class Util
 	 * @param ziel
 	 *            die Ziel-Datei
 	 */
-	public static void copyFile( File file, File ziel ) throws FileNotFoundException,
-			IOException
+	public static void copyFile( File file, File ziel )
+			throws FileNotFoundException, IOException
 	{
 
 		BufferedInputStream in = new BufferedInputStream( new FileInputStream(
@@ -238,6 +241,57 @@ public class Util
 		}
 		in.close();
 		out.close();
+	}
+
+	/**
+	 * Ersetzt das XML-Element "ValErgebnis>" mit dem ergebnis (string) in dem
+	 * kost-val.log.xml (file)
+	 * 
+	 * @throws IOException
+	 */
+	public static void valElement( String string, File file )
+			throws IOException
+	{
+		try {
+			BufferedReader reader = new BufferedReader( new FileReader( file ) );
+			String line = "", oldtext = "";
+			while ( (line = reader.readLine()) != null ) {
+				oldtext += line + "\r\n";
+			}
+			reader.close();
+			String newtext = oldtext.replace( "ValErgebnis>", string );
+			newtext = newtext.replace( (char) 0, (char) 32 );
+			FileWriter writer = new FileWriter( file );
+			writer.write( newtext );
+			writer.close();
+		} catch ( IOException ioe ) {
+			ioe.printStackTrace();
+		}
+	}
+
+	/**
+	 * Ergänzt das XML-Element "<End></End>" mit dem ergebnis (string) in dem
+	 * kost-val.log.xml (file)
+	 * 
+	 * @throws IOException
+	 */
+	public static void valEnd( String string, File file ) throws IOException
+	{
+		try {
+			BufferedReader reader = new BufferedReader( new FileReader( file ) );
+			String line = "", oldtext = "";
+			while ( (line = reader.readLine()) != null ) {
+				oldtext += line + "\r\n";
+			}
+			reader.close();
+			String newtext = oldtext.replace( "<End></End>", string );
+			newtext = newtext.replace( (char) 0, (char) 32 );
+			FileWriter writer = new FileWriter( file );
+			writer.write( newtext );
+			writer.close();
+		} catch ( IOException ioe ) {
+			ioe.printStackTrace();
+		}
 	}
 
 }

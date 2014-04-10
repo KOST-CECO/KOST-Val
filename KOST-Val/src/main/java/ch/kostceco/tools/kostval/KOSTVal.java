@@ -85,9 +85,10 @@ public class KOSTVal implements MessageConstants
 	 * zur Val-File [2] option: Verbose
 	 * 
 	 * @param args
+	 * @throws IOException
 	 */
 	@SuppressWarnings("unused")
-	public static void main( String[] args )
+	public static void main( String[] args ) throws IOException
 	{
 		ApplicationContext context = new ClassPathXmlApplicationContext(
 				"classpath:config/applicationContext.xml" );
@@ -142,8 +143,15 @@ public class KOSTVal implements MessageConstants
 				.getBean( "logconfigurator" );
 		String logFileName = logConfigurator.configure(
 				directoryOfLogfile.getAbsolutePath(), logDatei.getName() );
+		File logFile = new File( logFileName );
 		LOGGER.logInfo( kostval.getTextResourceService().getText(
-				MESSAGE_KOSTVALIDATION ) );
+				MESSAGE_XML_HEADER ) );
+		LOGGER.logError( kostval.getTextResourceService().getText(
+				MESSAGE_XML_START, ausgabeStart ) );
+		LOGGER.logError( kostval.getTextResourceService().getText(
+				MESSAGE_XML_END ) );
+		LOGGER.logInfo( kostval.getTextResourceService().getText(
+				MESSAGE_XML_INFO ) );
 
 		// Ist die Anzahl Parameter (mind. 2) korrekt?
 		if ( args.length < 2 ) {
@@ -250,7 +258,8 @@ public class KOSTVal implements MessageConstants
 		}
 
 		if ( args[0].equals( "--format" ) ) {
-
+			LOGGER.logError( kostval.getTextResourceService().getText(
+					MESSAGE_XML_FORMAT1 ) );
 			Integer countNio = 0;
 			Integer countSummaryNio = 0;
 			Integer count = 0;
@@ -268,11 +277,22 @@ public class KOSTVal implements MessageConstants
 				boolean valFile = valFile( valDatei, logFileName,
 						directoryOfLogfile, verbose );
 
+				LOGGER.logError( kostval.getTextResourceService().getText(
+						MESSAGE_XML_FORMAT2 ) );
+
 				// Löschen des Arbeitsverzeichnisses, falls eines
 				// angelegt wurde
 				if ( tmpDir.exists() ) {
 					Util.deleteDir( tmpDir );
 				}
+				// Zeitstempel End
+				java.util.Date nowEnd = new java.util.Date();
+				java.text.SimpleDateFormat sdfEnd = new java.text.SimpleDateFormat(
+						"dd.MM.yyyy HH.mm.ss" );
+				String ausgabeEnd = sdfEnd.format( nowEnd );
+				ausgabeEnd = "<End>" + ausgabeEnd + "</End>";
+				Util.valEnd(ausgabeEnd, logFile );
+
 				if ( valFile ) {
 					// Löschen des Arbeitsverzeichnisses, falls eines
 					// angelegt wurde
@@ -394,11 +414,11 @@ public class KOSTVal implements MessageConstants
 						}
 					}
 				}
-				// Zeitstempel End
+/*				// Zeitstempel End
 				java.util.Date nowEnd = new java.util.Date();
 				java.text.SimpleDateFormat sdfEnd = new java.text.SimpleDateFormat(
 						"dd.MM.yyyy HH.mm.ss" );
-				String ausgabeEnd = sdfEnd.format( nowEnd );
+				String ausgabeEnd = sdfEnd.format( nowEnd );*/
 
 				/*
 				 * *************************************************************
@@ -412,7 +432,7 @@ public class KOSTVal implements MessageConstants
 				 * ausgabeStart {8} - ausgabeEnd{9}
 				 * *************************************************************
 				 */
-				countSummaryNio = pdfaCountNio + siardCountNio + tiffCountNio;
+/*				countSummaryNio = pdfaCountNio + siardCountNio + tiffCountNio;
 				String totalSummary = null;
 				if ( countSummaryNio == 0 ) {
 					totalSummary = "Valid";
@@ -439,7 +459,18 @@ public class KOSTVal implements MessageConstants
 				}
 				LOGGER.logInfo( kostval.getTextResourceService().getText(
 						MESSAGE_FOOTER_SUMMARY_2, countNio, ausgabeStart,
-						ausgabeEnd, totalSummary ) );
+						ausgabeEnd, totalSummary ) );*/
+				
+				LOGGER.logError( kostval.getTextResourceService().getText(
+						MESSAGE_XML_FORMAT2 ) );
+
+				// Zeitstempel End
+				java.util.Date nowEnd = new java.util.Date();
+				java.text.SimpleDateFormat sdfEnd = new java.text.SimpleDateFormat(
+						"dd.MM.yyyy HH.mm.ss" );
+				String ausgabeEnd = sdfEnd.format( nowEnd );
+				ausgabeEnd = "<End>" + ausgabeEnd + "</End>";
+				Util.valEnd(ausgabeEnd, logFile );
 
 				if ( countNio == count ) {
 					// keine Dateien Validiert
@@ -469,7 +500,13 @@ public class KOSTVal implements MessageConstants
 					System.exit( 2 );
 				}
 			}
+			LOGGER.logError( kostval.getTextResourceService().getText(
+					MESSAGE_XML_FORMAT2 ) );
+
 		} else if ( args[0].equals( "--sip" ) ) {
+			LOGGER.logError( kostval.getTextResourceService().getText(
+					MESSAGE_XML_SIP1 ) );
+
 			// TODO: Sipvalidierung
 			// --> erledigt --> nur Marker
 			boolean validFormat = false;
@@ -578,11 +615,13 @@ public class KOSTVal implements MessageConstants
 				if ( !headerCopy.exists() ) {
 					System.out.println( "Ordneranlegen fehlgeschlagen" );
 				}
-				File metadataXml = new File (headerCopy.getAbsolutePath() + "\\metadata.xml");
+				File metadataXml = new File( headerCopy.getAbsolutePath()
+						+ "\\metadata.xml" );
 				try {
 					Util.copyDir( headerOrig, headerCopy );
 					if ( !metadataXml.exists() ) {
-						System.out.println( "Metadata.xml anlegen fehlgeschlagen" );
+						System.out
+								.println( "Metadata.xml anlegen fehlgeschlagen" );
 					}
 
 				} catch ( FileNotFoundException e ) {
@@ -650,7 +689,7 @@ public class KOSTVal implements MessageConstants
 					}
 				}
 			}
-			// Zeitstempel End
+/*			// Zeitstempel End
 			java.util.Date nowEnd = new java.util.Date();
 			java.text.SimpleDateFormat sdfEnd = new java.text.SimpleDateFormat(
 					"dd.MM.yyyy HH.mm.ss" );
@@ -668,7 +707,7 @@ public class KOSTVal implements MessageConstants
 			 * ausgabeEnd{9}
 			 * *************************************************************
 			 */
-			countSummaryNio = pdfaCountNio + siardCountNio + tiffCountNio;
+/*			countSummaryNio = pdfaCountNio + siardCountNio + tiffCountNio;
 			String totalSummary = null;
 			if ( countSummaryNio == 0 ) {
 				totalSummary = "Valid";
@@ -693,7 +732,10 @@ public class KOSTVal implements MessageConstants
 			}
 			LOGGER.logInfo( kostval.getTextResourceService().getText(
 					MESSAGE_FOOTER_SUMMARY_2, countNio, ausgabeStart,
-					ausgabeEnd, totalSummary ) );
+					ausgabeEnd, totalSummary ) );*/
+
+			LOGGER.logError( kostval.getTextResourceService().getText(
+					MESSAGE_XML_FORMAT2 ) );
 
 			if ( countSummaryNio == 0 ) {
 				// alle Validierten Dateien valide
@@ -742,7 +784,7 @@ public class KOSTVal implements MessageConstants
 					System.exit( 1 );
 				}
 
-			} 
+			}
 			Controllersip controller = (Controllersip) context
 					.getBean( "controllersip" );
 			boolean okMandatory = false;
@@ -783,19 +825,24 @@ public class KOSTVal implements MessageConstants
 				LOGGER.logInfo( kostval.getTextResourceService().getText(
 						MESSAGE_VALIDATION_INTERRUPTED ) );
 			}
+			
+			// Zeitstempel End
+			java.util.Date nowEnd = new java.util.Date();
+			java.text.SimpleDateFormat sdfEnd = new java.text.SimpleDateFormat(
+					"dd.MM.yyyy HH.mm.ss" );
+			String ausgabeEnd = sdfEnd.format( nowEnd );
+			ausgabeEnd = "<End>" + ausgabeEnd + "</End>";
+			Util.valEnd(ausgabeEnd, logFile );
 
-/*			// Löschen des targetFile, falls eines angelegt wurde
-			if ( targetFile.exists() ) {
-				Util.deleteDir( targetFile );
-			}
-			// bestehendes SIP-Workverzeichnis ggf. löschen
-			if ( tmpDirSip.exists() ) {
-				Util.deleteDir( tmpDirSip );
-			}
-			// bestehendes ZIP-Workverzeichnis ggf. löschen
-			if ( tmpDirZip.exists() ) {
-				Util.deleteDir( tmpDirZip );
-			}*/
+
+			/*
+			 * // Löschen des targetFile, falls eines angelegt wurde if (
+			 * targetFile.exists() ) { Util.deleteDir( targetFile ); } //
+			 * bestehendes SIP-Workverzeichnis ggf. löschen if (
+			 * tmpDirSip.exists() ) { Util.deleteDir( tmpDirSip ); } //
+			 * bestehendes ZIP-Workverzeichnis ggf. löschen if (
+			 * tmpDirZip.exists() ) { Util.deleteDir( tmpDirZip ); }
+			 */
 			// bestehendes Workverzeichnis ggf. löschen
 			if ( tmpDir.exists() ) {
 				Util.deleteDir( tmpDir );
@@ -836,6 +883,9 @@ public class KOSTVal implements MessageConstants
 				}
 				System.exit( 2 );
 			}
+			LOGGER.logError( kostval.getTextResourceService().getText(
+					MESSAGE_XML_SIP2 ) );
+
 		} else {
 			// Ueberprüfung des Parameters (Val-Typ): format / sip
 			// args[0] ist nicht "--format" oder "--sip" --> INVALIDE
@@ -854,8 +904,9 @@ public class KOSTVal implements MessageConstants
 	// TODO: ValFile --> Formatvalidierung einer Datei
 	// --> erledigt --> nur Marker
 	private static boolean valFile( File valDatei, String logFileName,
-			File directoryOfLogfile, boolean verbose )
+			File directoryOfLogfile, boolean verbose ) throws IOException
 	{
+		File logFile = new File( logFileName );
 		ApplicationContext context = new ClassPathXmlApplicationContext(
 				"classpath:config/applicationContext.xml" );
 
@@ -865,9 +916,14 @@ public class KOSTVal implements MessageConstants
 
 		if ( (valDatei.getAbsolutePath().toLowerCase().endsWith( ".tiff" ) || valDatei
 				.getAbsolutePath().toLowerCase().endsWith( ".tif" )) ) {
-
 			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					MESSAGE_TIFFVALIDATION, valDatei.getName() ) );
+					MESSAGE_XML_VALERGEBNIS ) );
+			LOGGER.logInfo( kostval.getTextResourceService().getText(
+					MESSAGE_XML_VALTYPE,
+					kostval.getTextResourceService().getText(
+							MESSAGE_TIFFVALIDATION ) ) );
+			LOGGER.logInfo( kostval.getTextResourceService().getText(
+					MESSAGE_XML_VALFILE, originalValName ) );
 			Controllertiff controller1 = (Controllertiff) context
 					.getBean( "controllertiff" );
 			boolean okMandatory = controller1.executeMandatory( valDatei,
@@ -885,15 +941,27 @@ public class KOSTVal implements MessageConstants
 			ok = (ok && okMandatory);
 			valFile = ok;
 
-			LOGGER.logInfo( "" );
+			// LOGGER.logInfo( "" );
 			if ( ok ) {
+				// Validierte Datei valide
+				Util.valElement(
+						kostval.getTextResourceService().getText(
+								MESSAGE_XML_VALERGEBNIS_VALID ), logFile );
 				LOGGER.logInfo( kostval.getTextResourceService().getText(
-						MESSAGE_TOTAL_VALID, valDatei.getAbsolutePath() ) );
+						MESSAGE_XML_VALERGEBNIS_CLOSE )
+						+ kostval.getTextResourceService().getText(
+								MESSAGE_XML_VALERGEBNIS_VALID ) );
 			} else {
+				// Fehler in Validierte Datei --> invalide
+				Util.valElement(
+						kostval.getTextResourceService().getText(
+								MESSAGE_XML_VALERGEBNIS_INVALID ), logFile );
 				LOGGER.logInfo( kostval.getTextResourceService().getText(
-						MESSAGE_TOTAL_INVALID, valDatei.getAbsolutePath() ) );
+						MESSAGE_XML_VALERGEBNIS_CLOSE )
+						+ kostval.getTextResourceService().getText(
+								MESSAGE_XML_VALERGEBNIS_INVALID ) );
 			}
-			LOGGER.logInfo( "" );
+			// LOGGER.logInfo( "" );
 
 			// Ausgabe der Pfade zu den Jhove Reports, falls welche
 			// generiert wurden (-v) oder Jhove Report löschen
@@ -902,29 +970,29 @@ public class KOSTVal implements MessageConstants
 
 			if ( jhoveReport.exists() ) {
 				if ( verbose ) {
-					LOGGER.logInfo( kostval.getTextResourceService().getText(
-							MESSAGE_FOOTER_REPORTJHOVE,
-							jhoveReport.getAbsolutePath() ) );
-					LOGGER.logInfo( "" );
+					/*
+					 * LOGGER.logInfo( kostval.getTextResourceService().getText(
+					 * MESSAGE_FOOTER_REPORTJHOVE, jhoveReport.getAbsolutePath()
+					 * ) ); LOGGER.logInfo( "" );
+					 */
 				} else {
 					// kein optionaler Parameter --> Jhove-Report loeschen!
 					jhoveReport.delete();
 				}
 			}
 
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					MESSAGE_FOOTER_TIFF, originalValName ) );
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					MESSAGE_FOOTER_LOG, logFileName ) );
-			LOGGER.logInfo( "" );
-
-			if ( okMandatory ) {
-				LOGGER.logInfo( kostval.getTextResourceService().getText(
-						MESSAGE_VALIDATION_FINISHED ) );
-			} else {
-				LOGGER.logInfo( kostval.getTextResourceService().getText(
-						MESSAGE_VALIDATION_INTERRUPTED ) );
-			}
+			/*
+			 * LOGGER.logInfo( kostval.getTextResourceService().getText(
+			 * MESSAGE_FOOTER_TIFF, originalValName ) ); LOGGER.logInfo(
+			 * kostval.getTextResourceService().getText( MESSAGE_FOOTER_LOG,
+			 * logFileName ) ); LOGGER.logInfo( "" );
+			 * 
+			 * if ( okMandatory ) { LOGGER.logInfo(
+			 * kostval.getTextResourceService().getText(
+			 * MESSAGE_VALIDATION_FINISHED ) ); } else { LOGGER.logInfo(
+			 * kostval.getTextResourceService().getText(
+			 * MESSAGE_VALIDATION_INTERRUPTED ) ); }
+			 */
 
 		} else if ( (valDatei.getAbsolutePath().toLowerCase()
 				.endsWith( ".siard" )) ) {
@@ -948,28 +1016,35 @@ public class KOSTVal implements MessageConstants
 			ok = (ok && okMandatory);
 			valFile = ok;
 
-			LOGGER.logInfo( "" );
+			// LOGGER.logInfo( "" );
 			if ( ok ) {
+				// Validierte Datei valide
+				Util.valElement(
+						kostval.getTextResourceService().getText(
+								MESSAGE_XML_VALERGEBNIS_VALID ), logFile );
 				LOGGER.logInfo( kostval.getTextResourceService().getText(
 						MESSAGE_TOTAL_VALID, valDatei.getAbsolutePath() ) );
 			} else {
+				// Validierte Datei invalide
+				Util.valElement(
+						kostval.getTextResourceService().getText(
+								MESSAGE_XML_VALERGEBNIS_INVALID ), logFile );
 				LOGGER.logInfo( kostval.getTextResourceService().getText(
 						MESSAGE_TOTAL_INVALID, valDatei.getAbsolutePath() ) );
 			}
-			LOGGER.logInfo( "" );
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					MESSAGE_FOOTER_SIARD, originalValName ) );
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					MESSAGE_FOOTER_LOG, logFileName ) );
-			LOGGER.logInfo( "" );
-
-			if ( okMandatory ) {
-				LOGGER.logInfo( kostval.getTextResourceService().getText(
-						MESSAGE_VALIDATION_FINISHED ) );
-			} else {
-				LOGGER.logInfo( kostval.getTextResourceService().getText(
-						MESSAGE_VALIDATION_INTERRUPTED ) );
-			}
+			/*
+			 * LOGGER.logInfo( "" ); LOGGER.logInfo(
+			 * kostval.getTextResourceService().getText( MESSAGE_FOOTER_SIARD,
+			 * originalValName ) ); LOGGER.logInfo(
+			 * kostval.getTextResourceService().getText( MESSAGE_FOOTER_LOG,
+			 * logFileName ) ); LOGGER.logInfo( "" );
+			 * 
+			 * if ( okMandatory ) { LOGGER.logInfo(
+			 * kostval.getTextResourceService().getText(
+			 * MESSAGE_VALIDATION_FINISHED ) ); } else { LOGGER.logInfo(
+			 * kostval.getTextResourceService().getText(
+			 * MESSAGE_VALIDATION_INTERRUPTED ) ); }
+			 */
 
 		} else if ( (valDatei.getName().endsWith( ".pdf" ) || valDatei
 				.getName().endsWith( ".pdfa" )) ) {
@@ -995,9 +1070,17 @@ public class KOSTVal implements MessageConstants
 
 			LOGGER.logInfo( "" );
 			if ( ok ) {
+				// Validierte Datei valide
+				Util.valElement(
+						kostval.getTextResourceService().getText(
+								MESSAGE_XML_VALERGEBNIS_VALID ), logFile );
 				LOGGER.logInfo( kostval.getTextResourceService().getText(
 						MESSAGE_TOTAL_VALID, valDatei.getAbsolutePath() ) );
 			} else {
+				// Validierte Datei invalide
+				Util.valElement(
+						kostval.getTextResourceService().getText(
+								MESSAGE_XML_VALERGEBNIS_INVALID ), logFile );
 				LOGGER.logInfo( kostval.getTextResourceService().getText(
 						MESSAGE_TOTAL_INVALID, valDatei.getAbsolutePath() ) );
 			}
@@ -1011,10 +1094,12 @@ public class KOSTVal implements MessageConstants
 
 			if ( pdftronReport.exists() ) {
 				if ( verbose ) {
-					LOGGER.logInfo( kostval.getTextResourceService().getText(
-							MESSAGE_FOOTER_REPORTPDFTRON,
-							pdftronReport.getAbsolutePath() ) );
-					LOGGER.logInfo( "" );
+					/*
+					 * LOGGER.logInfo( kostval.getTextResourceService().getText(
+					 * MESSAGE_FOOTER_REPORTPDFTRON,
+					 * pdftronReport.getAbsolutePath() ) ); LOGGER.logInfo( ""
+					 * );
+					 */
 				} else {
 					// kein optionaler Parameter --> PDFTron-Report loeschen!
 					pdftronReport.delete();
@@ -1022,19 +1107,18 @@ public class KOSTVal implements MessageConstants
 				}
 			}
 
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					MESSAGE_FOOTER_PDFA, originalValName ) );
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					MESSAGE_FOOTER_LOG, logFileName ) );
-			LOGGER.logInfo( "" );
-
-			if ( okMandatory ) {
-				LOGGER.logInfo( kostval.getTextResourceService().getText(
-						MESSAGE_VALIDATION_FINISHED ) );
-			} else {
-				LOGGER.logInfo( kostval.getTextResourceService().getText(
-						MESSAGE_VALIDATION_INTERRUPTED ) );
-			}
+			/*
+			 * LOGGER.logInfo( kostval.getTextResourceService().getText(
+			 * MESSAGE_FOOTER_PDFA, originalValName ) ); LOGGER.logInfo(
+			 * kostval.getTextResourceService().getText( MESSAGE_FOOTER_LOG,
+			 * logFileName ) ); LOGGER.logInfo( "" );
+			 * 
+			 * if ( okMandatory ) { LOGGER.logInfo(
+			 * kostval.getTextResourceService().getText(
+			 * MESSAGE_VALIDATION_FINISHED ) ); } else { LOGGER.logInfo(
+			 * kostval.getTextResourceService().getText(
+			 * MESSAGE_VALIDATION_INTERRUPTED ) ); }
+			 */
 
 		} else {
 			LOGGER.logInfo( kostval.getTextResourceService().getText(

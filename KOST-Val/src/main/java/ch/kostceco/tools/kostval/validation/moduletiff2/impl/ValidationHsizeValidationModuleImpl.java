@@ -76,16 +76,16 @@ public class ValidationHsizeValidationModuleImpl extends ValidationModuleImpl
 		String size = getConfigurationService().getAllowedSize();
 
 		Integer jhoveio = 0;
-		Integer jhove15 = 0;
+		// TODO: kann gelöscht werden, da fix integriert Integer jhove15 = 0;
 
 		try {
 			BufferedReader in = new BufferedReader(
 					new FileReader( jhoveReport ) );
 			String line;
 			while ( (line = in.readLine()) != null ) {
-				if ( line.contains( "Jhove (Rel. 1.5," ) ) {
-					jhove15 = 1;
-				}
+				/*
+				 * if ( line.contains( "Jhove (Rel. 1.5," ) ) { jhove15 = 1; }
+				 */
 				if ( line.contains( "Size:" ) ) {
 					jhoveio = 1;
 					Integer intSize = line.toCharArray().length;
@@ -95,17 +95,11 @@ public class ValidationHsizeValidationModuleImpl extends ValidationModuleImpl
 						// Invalider Status (Giga-Tiffs sind nicht erlaubt und
 						// zuviele Stellen)
 						isValid = false;
-						getMessageService()
-								.logError(
-										getTextResourceService().getText(
-												MESSAGE_MODULE_H )
-												+ getTextResourceService()
-														.getText(
-																MESSAGE_DASHES )
-												+ getTextResourceService()
-														.getText(
-																MESSAGE_MODULE_CG_INVALID,
-																line ) );
+						getMessageService().logError(
+								getTextResourceService().getText(
+										MESSAGE_XML_MODUL_H_TIFF )
+										+ getTextResourceService().getText(
+												MESSAGE_XML_CG_INVALID, line ) );
 					}
 				}
 
@@ -113,31 +107,28 @@ public class ValidationHsizeValidationModuleImpl extends ValidationModuleImpl
 			if ( jhoveio == 0 ) {
 				// Invalider Status
 				isValid = false;
-				if ( jhove15 == 0 ) {
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_MODULE_H )
-									+ getTextResourceService().getText(
-											MESSAGE_DASHES )
-									+ getTextResourceService().getText(
-											MESSAGE_MODULE_CG_JHOVEN15 ) );
-				} else {
-					isValid = false;
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_MODULE_H )
-									+ getTextResourceService().getText(
-											MESSAGE_DASHES )
-									+ getTextResourceService().getText(
-											MESSAGE_MODULE_CG_JHOVENIO ) );
-				}
+				/*
+				 * if ( jhove15 == 0 ) { getMessageService().logError(
+				 * getTextResourceService().getText( MESSAGE_MODULE_H ) +
+				 * getTextResourceService().getText( MESSAGE_DASHES ) +
+				 * getTextResourceService().getText( MESSAGE_MODULE_CG_JHOVEN15
+				 * ) ); } else {
+				 */
+				isValid = false;
+				getMessageService().logError(
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_H_TIFF )
+								+ getTextResourceService().getText(
+										MESSAGE_XML_CG_JHOVENIO, "H" ) );
+				// }
 			}
 			in.close();
 
 		} catch ( Exception e ) {
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_H )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService().getText( MESSAGE_XML_MODUL_H_TIFF )
 							+ getTextResourceService().getText(
-									MESSAGE_MODULE_CG_CANNOTFINDJHOVEREPORT ) );
+									MESSAGE_XML_CG_CANNOTFINDJHOVEREPORT ) );
 			return false;
 		}
 		String pathToWorkDir = getConfigurationService().getPathToWorkDir();

@@ -52,6 +52,10 @@ public interface MessageConstants
 	String	MESSAGE_FOOTER_SIARD							= "message.footer.siard";
 	String	MESSAGE_FOOTER_PDFA								= "message.footer.pdfa";
 	String	MESSAGE_FOOTER_SIP								= "message.footer.sip";
+	String	MESSAGE_XML_VALFILE								= "message.xml.valfile";
+	String	MESSAGE_XML_HEADER								= "message.xml.header";
+	String	MESSAGE_XML_START								= "message.xml.start";
+	String	MESSAGE_XML_END									= "message.xml.end";
 	String	MESSAGE_FOOTER_REPORTJHOVE						= "message.footer.reportjhove";
 	String	MESSAGE_FOOTER_REPORTPDFTRON					= "message.footer.reportpdftron";
 	String	MESSAGE_FOOTER_SUMMARY_1						= "message.footer.summary.1";
@@ -62,10 +66,21 @@ public interface MessageConstants
 
 	// Globale Meldungen
 	String	MESSAGE_KOSTVALIDATION							= "message.kostvalidation";
+	String	MESSAGE_XML_INFO								= "message.xml.info";
 	String	MESSAGE_TIFFVALIDATION							= "message.tiffvalidation";
 	String	MESSAGE_SIARDVALIDATION							= "message.siardvalidation";
 	String	MESSAGE_PDFAVALIDATION							= "message.pdfavalidation";
 	String	MESSAGE_SIPVALIDATION							= "message.sipvalidation";
+	String	MESSAGE_XML_VALERGEBNIS							= "message.xml.valergebnis";
+	String	MESSAGE_XML_VALTYPE								= "message.xml.valtype";
+	String	MESSAGE_XML_FORMAT1								= "message.xml.format1";
+	String	MESSAGE_XML_FORMAT2								= "message.xml.format2";
+	String	MESSAGE_XML_SIP1								= "message.xml.sip1";
+	String	MESSAGE_XML_SIP2								= "message.xml.sip2";
+	String	MESSAGE_XML_VALERGEBNIS_VALID					= "message.xml.valergebnis.valid";
+	String	MESSAGE_XML_VALERGEBNIS_INVALID					= "message.xml.valergebnis.invalid";
+	String	MESSAGE_XML_VALERGEBNIS_CLOSE					= "message.xml.valergebnis.close";
+
 	String	MESSAGE_VALIDATION_INTERRUPTED					= "message.validation.interrupted";
 	String	MESSAGE_VALIDATION_FINISHED						= "message.validation.finished";
 	String	MESSAGE_MODULE_VALID							= "message.module.valid";
@@ -98,14 +113,22 @@ public interface MessageConstants
 	String	MESSAGE_MODULE_Cc								= "message.module.cc";
 	String	MESSAGE_MODULE_Cd								= "message.module.cd";
 
-	String	MESSAGE_STEPERGEBNIS_A_TIFF						= "message.stepergebnis.a.tiff";
+/*	String	MESSAGE_STEPERGEBNIS_A_TIFF						= "message.stepergebnis.a.tiff";
 	String	MESSAGE_STEPERGEBNIS_B_TIFF						= "message.stepergebnis.b.tiff";
 	String	MESSAGE_STEPERGEBNIS_C_TIFF						= "message.stepergebnis.c.tiff";
 	String	MESSAGE_STEPERGEBNIS_D_TIFF						= "message.stepergebnis.d.tiff";
 	String	MESSAGE_STEPERGEBNIS_E_TIFF						= "message.stepergebnis.e.tiff";
 	String	MESSAGE_STEPERGEBNIS_F_TIFF						= "message.stepergebnis.f.tiff";
 	String	MESSAGE_STEPERGEBNIS_G_TIFF						= "message.stepergebnis.g.tiff";
-	String	MESSAGE_STEPERGEBNIS_H_TIFF						= "message.stepergebnis.h.tiff";
+	String	MESSAGE_STEPERGEBNIS_H_TIFF						= "message.stepergebnis.h.tiff";*/
+	String	MESSAGE_XML_MODUL_A_TIFF						= "message.xml.modul.a.tiff";
+	String	MESSAGE_XML_MODUL_B_TIFF						= "message.xml.modul.b.tiff";
+	String	MESSAGE_XML_MODUL_C_TIFF						= "message.xml.modul.c.tiff";
+	String	MESSAGE_XML_MODUL_D_TIFF						= "message.xml.modul.d.tiff";
+	String	MESSAGE_XML_MODUL_E_TIFF						= "message.xml.modul.e.tiff";
+	String	MESSAGE_XML_MODUL_F_TIFF						= "message.xml.modul.f.tiff";
+	String	MESSAGE_XML_MODUL_G_TIFF						= "message.xml.modul.g.tiff";
+	String	MESSAGE_XML_MODUL_H_TIFF						= "message.xml.modul.h.tiff";
 
 	String	MESSAGE_STEPERGEBNIS_A_SIARD					= "message.stepergebnis.a.siard";
 	String	MESSAGE_STEPERGEBNIS_B_SIARD					= "message.stepergebnis.b.siard";
@@ -156,11 +179,12 @@ public interface MessageConstants
 	String	ERROR_CANNOT_INITIALIZE_DROID					= "error.cannot.initialize.droid";
 
 	String	ERROR_UNKNOWN									= "error.unknown";
+	String	ERROR_XML_UNKNOWN									= "error.xml.unknown";
 
 	// *************TIFF-Meldungen*************************************************************************
 	// Modul A Meldungen
 	String	ERROR_MODULE_A_INCORRECTFILEENDING				= "error.module.a.incorrectfileending";
-	String	ERROR_MODULE_A_INCORRECTFILE					= "error.module.a.incorrectfile";
+	/*	String	ERROR_MODULE_A_INCORRECTFILE					= "error.module.a.incorrectfile";
 	String	ERROR_MODULE_A_ISDIRECTORY						= "error.module.a.isdirectory";
 
 	// Modul B Meldungen
@@ -172,7 +196,22 @@ public interface MessageConstants
 	String	MESSAGE_MODULE_CG_CANNOTFINDJHOVEREPORT			= "message.module.cg.cannotfindjhovereport";
 	String	MESSAGE_MODULE_CG_INVALID						= "message.module.cg.invalid";
 	String	MESSAGE_MODULE_CG_JHOVENIO						= "message.module.cg.jhovenio";
-	String	MESSAGE_MODULE_CG_JHOVEN15						= "message.module.cg.jhoven15";
+	String	MESSAGE_MODULE_CG_JHOVEN15						= "message.module.cg.jhoven15";*/
+
+	// Modul A Meldungen
+	String	ERROR_XML_A_INCORRECTFILEENDING				= "error.xml.a.incorrectfileending";
+	String	ERROR_XML_A_INCORRECTFILE					= "error.xml.a.incorrectfile";
+	String	ERROR_XML_A_ISDIRECTORY						= "error.xml.a.isdirectory";
+
+	// Modul B Meldungen
+	String	MESSAGE_XML_B_CANNOTWRITEJHOVEREPORT			= "message.xml.b.cannotwritejhovereport";
+	String	MESSAGE_XML_B_JHOVEINVALID					= "message.xml.b.jhoveinvalid";
+	String	MESSAGE_XML_B_JHOVEMESSAGE				= "message.xml.b.jhovemessage";
+
+	// Modul C-G Meldungen
+	String	MESSAGE_XML_CG_CANNOTFINDJHOVEREPORT			= "message.xml.cg.cannotfindjhovereport";
+	String	MESSAGE_XML_CG_INVALID						= "message.xml.cg.invalid";
+	String	MESSAGE_XML_CG_JHOVENIO						= "message.xml.cg.jhovenio";
 
 	// *************SIARD-Meldungen*************************************************************************
 	// Modul A Meldungen

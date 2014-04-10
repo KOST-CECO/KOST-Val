@@ -33,6 +33,7 @@ import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationHsizeValidation
 import ch.kostceco.tools.kostval.logging.Logger;
 import ch.kostceco.tools.kostval.logging.MessageConstants;
 import ch.kostceco.tools.kostval.service.TextResourceService;
+//import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.moduletiff1.ValidationArecognitionModule;
 import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationBjhoveValidationModule;
 import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationCcompressionValidationModule;
@@ -169,22 +170,23 @@ public class Controllertiff implements MessageConstants
 	public boolean executeMandatory( File valDatei, File directoryOfLogfile )
 	{
 		boolean valid = true;
+/*		String logFileName = directoryOfLogfile.getAbsolutePath() + File.separator
+		+ valDatei.getName() + ".kost-val.log.xml";
+		File logFile = new File (logFileName);*/
 
 		// Validation Step A
 		try {
 			if ( this.getValidationArecognitionModule().validate( valDatei,
 					directoryOfLogfile ) ) {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_VALID,
-						getTextResourceService().getText( MESSAGE_MODULE_A ) ) );
+				// valid
+/*				Util.valElement( getTextResourceService().getText(
+						MESSAGE_XML_VALERGEBNIS_VALID), logFile );*/
 				this.getValidationArecognitionModule().getMessageService()
 						.print();
 			} else {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_INVALID,
-						getTextResourceService().getText( MESSAGE_MODULE_A ) )
-						+ getTextResourceService().getText(
-								MESSAGE_STEPERGEBNIS_A_TIFF ) );
+				// invalid
+/*				Util.valElement( getTextResourceService().getText(
+						MESSAGE_XML_VALERGEBNIS_INVALID), logFile );*/
 				// Ein negatives Validierungsresultat in diesem Schritt führt
 				// zum Abbruch der weiteren Verarbeitung
 				this.getValidationArecognitionModule().getMessageService()
@@ -202,7 +204,7 @@ public class Controllertiff implements MessageConstants
 
 		} catch ( Exception e ) {
 			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
-			LOGGER.logError( e.getMessage() );
+			LOGGER.logError( getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage()) );
 			return false;
 		}
 		return valid;
@@ -212,21 +214,22 @@ public class Controllertiff implements MessageConstants
 	public boolean executeOptional( File valDatei, File directoryOfLogfile )
 	{
 		boolean valid = true;
+/*		String logFileName = directoryOfLogfile.getAbsolutePath() + File.separator
+		+ valDatei.getName() + ".kost-val.log.xml";
+		File logFile = new File (logFileName);*/
 		// Validation Step B
 		try {
 			if ( this.getValidationBjhoveValidationModule().validate( valDatei,
 					directoryOfLogfile ) ) {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_VALID,
-						getTextResourceService().getText( MESSAGE_MODULE_B ) ) );
+				// valid
+/*				Util.valElement( getTextResourceService().getText(
+						MESSAGE_XML_VALERGEBNIS_VALID), logFile );*/
 				this.getValidationBjhoveValidationModule().getMessageService()
 						.print();
 			} else {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_INVALID,
-						getTextResourceService().getText( MESSAGE_MODULE_B ) )
-						+ getTextResourceService().getText(
-								MESSAGE_STEPERGEBNIS_B_TIFF ) );
+				// invalid
+/*				Util.valElement( getTextResourceService().getText(
+						MESSAGE_XML_VALERGEBNIS_INVALID), logFile );*/
 				this.getValidationBjhoveValidationModule().getMessageService()
 						.print();
 				valid = false;
@@ -242,7 +245,7 @@ public class Controllertiff implements MessageConstants
 			return false;
 		} catch ( Exception e ) {
 			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
-			LOGGER.logError( e.getMessage() );
+			LOGGER.logError( getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage()) );
 			return false;
 		}
 
@@ -250,17 +253,15 @@ public class Controllertiff implements MessageConstants
 		try {
 			if ( this.getValidationCcompressionValidationModule().validate(
 					valDatei, directoryOfLogfile ) ) {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_VALID,
-						getTextResourceService().getText( MESSAGE_MODULE_C ) ) );
+				// valid
+/*				Util.valElement( getTextResourceService().getText(
+						MESSAGE_XML_VALERGEBNIS_VALID), logFile );*/
 				this.getValidationCcompressionValidationModule()
 						.getMessageService().print();
 			} else {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_INVALID,
-						getTextResourceService().getText( MESSAGE_MODULE_C ) )
-						+ getTextResourceService().getText(
-								MESSAGE_STEPERGEBNIS_C_TIFF ) );
+				// invalid
+/*				Util.valElement( getTextResourceService().getText(
+						MESSAGE_XML_VALERGEBNIS_INVALID), logFile );*/
 				this.getValidationCcompressionValidationModule()
 						.getMessageService().print();
 				valid = false;
@@ -276,7 +277,7 @@ public class Controllertiff implements MessageConstants
 			return false;
 		} catch ( Exception e ) {
 			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
-			LOGGER.logError( e.getMessage() );
+			LOGGER.logError( getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage()) );
 			return false;
 		}
 
@@ -284,17 +285,15 @@ public class Controllertiff implements MessageConstants
 		try {
 			if ( this.getValidationDphotointerValidationModule().validate(
 					valDatei, directoryOfLogfile ) ) {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_VALID,
-						getTextResourceService().getText( MESSAGE_MODULE_D ) ) );
+				// valid
+/*				Util.valElement( getTextResourceService().getText(
+						MESSAGE_XML_VALERGEBNIS_VALID), logFile );*/
 				this.getValidationDphotointerValidationModule()
 						.getMessageService().print();
 			} else {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_INVALID,
-						getTextResourceService().getText( MESSAGE_MODULE_D ) )
-						+ getTextResourceService().getText(
-								MESSAGE_STEPERGEBNIS_D_TIFF ) );
+				// invalid
+/*				Util.valElement( getTextResourceService().getText(
+						MESSAGE_XML_VALERGEBNIS_INVALID), logFile );*/
 				this.getValidationDphotointerValidationModule()
 						.getMessageService().print();
 				valid = false;
@@ -310,7 +309,7 @@ public class Controllertiff implements MessageConstants
 			return false;
 		} catch ( Exception e ) {
 			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
-			LOGGER.logError( e.getMessage() );
+			LOGGER.logError( getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage()) );
 			return false;
 		}
 
@@ -318,17 +317,15 @@ public class Controllertiff implements MessageConstants
 		try {
 			if ( this.getValidationEbitspersampleValidationModule().validate(
 					valDatei, directoryOfLogfile ) ) {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_VALID,
-						getTextResourceService().getText( MESSAGE_MODULE_E ) ) );
+				// valid
+/*				Util.valElement( getTextResourceService().getText(
+						MESSAGE_XML_VALERGEBNIS_VALID), logFile );*/
 				this.getValidationEbitspersampleValidationModule()
 						.getMessageService().print();
 			} else {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_INVALID,
-						getTextResourceService().getText( MESSAGE_MODULE_E ) )
-						+ getTextResourceService().getText(
-								MESSAGE_STEPERGEBNIS_E_TIFF ) );
+				// invalid
+/*				Util.valElement( getTextResourceService().getText(
+						MESSAGE_XML_VALERGEBNIS_INVALID), logFile );*/
 				this.getValidationEbitspersampleValidationModule()
 						.getMessageService().print();
 				valid = false;
@@ -344,7 +341,7 @@ public class Controllertiff implements MessageConstants
 			return false;
 		} catch ( Exception e ) {
 			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
-			LOGGER.logError( e.getMessage() );
+			LOGGER.logError( getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage()) );
 			return false;
 		}
 
@@ -352,17 +349,15 @@ public class Controllertiff implements MessageConstants
 		try {
 			if ( this.getValidationFmultipageValidationModule().validate(
 					valDatei, directoryOfLogfile ) ) {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_VALID,
-						getTextResourceService().getText( MESSAGE_MODULE_F ) ) );
+				// valid
+/*				Util.valElement( getTextResourceService().getText(
+						MESSAGE_XML_VALERGEBNIS_VALID), logFile );*/
 				this.getValidationFmultipageValidationModule()
 						.getMessageService().print();
 			} else {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_INVALID,
-						getTextResourceService().getText( MESSAGE_MODULE_F ) )
-						+ getTextResourceService().getText(
-								MESSAGE_STEPERGEBNIS_F_TIFF ) );
+				// invalid
+/*				Util.valElement( getTextResourceService().getText(
+						MESSAGE_XML_VALERGEBNIS_INVALID), logFile );*/
 				this.getValidationFmultipageValidationModule()
 						.getMessageService().print();
 				valid = false;
@@ -378,7 +373,7 @@ public class Controllertiff implements MessageConstants
 			return false;
 		} catch ( Exception e ) {
 			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
-			LOGGER.logError( e.getMessage() );
+			LOGGER.logError( getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage()) );
 			return false;
 		}
 
@@ -386,17 +381,15 @@ public class Controllertiff implements MessageConstants
 		try {
 			if ( this.getValidationGtilesValidationModule().validate( valDatei,
 					directoryOfLogfile ) ) {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_VALID,
-						getTextResourceService().getText( MESSAGE_MODULE_G ) ) );
+				// valid
+/*				Util.valElement( getTextResourceService().getText(
+						MESSAGE_XML_VALERGEBNIS_VALID), logFile );*/
 				this.getValidationGtilesValidationModule().getMessageService()
 						.print();
 			} else {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_INVALID,
-						getTextResourceService().getText( MESSAGE_MODULE_G ) )
-						+ getTextResourceService().getText(
-								MESSAGE_STEPERGEBNIS_G_TIFF ) );
+				// invalid
+/*				Util.valElement( getTextResourceService().getText(
+						MESSAGE_XML_VALERGEBNIS_INVALID), logFile );*/
 				this.getValidationGtilesValidationModule().getMessageService()
 						.print();
 				valid = false;
@@ -412,7 +405,7 @@ public class Controllertiff implements MessageConstants
 			return false;
 		} catch ( Exception e ) {
 			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
-			LOGGER.logError( e.getMessage() );
+			LOGGER.logError( getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage()) );
 			return false;
 		}
 
@@ -420,17 +413,15 @@ public class Controllertiff implements MessageConstants
 		try {
 			if ( this.getValidationHsizeValidationModule().validate( valDatei,
 					directoryOfLogfile ) ) {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_VALID,
-						getTextResourceService().getText( MESSAGE_MODULE_H ) ) );
+				// valid
+/*				Util.valElement( getTextResourceService().getText(
+						MESSAGE_XML_VALERGEBNIS_VALID), logFile );*/
 				this.getValidationHsizeValidationModule().getMessageService()
 						.print();
 			} else {
-				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_MODULE_INVALID,
-						getTextResourceService().getText( MESSAGE_MODULE_H ) )
-						+ getTextResourceService().getText(
-								MESSAGE_STEPERGEBNIS_H_TIFF ) );
+				// invalid
+/*				Util.valElement( getTextResourceService().getText(
+						MESSAGE_XML_VALERGEBNIS_INVALID), logFile );*/
 				this.getValidationHsizeValidationModule().getMessageService()
 						.print();
 				valid = false;
@@ -446,10 +437,9 @@ public class Controllertiff implements MessageConstants
 			return false;
 		} catch ( Exception e ) {
 			LOGGER.logInfo( getTextResourceService().getText( ERROR_UNKNOWN ) );
-			LOGGER.logError( e.getMessage() );
+			LOGGER.logError( getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage()) );
 			return false;
 		}
-
 		return valid;
 	}
 }
