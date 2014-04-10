@@ -29,6 +29,7 @@ public interface MessageConstants
 {
 
 	// Initialisierung und Parameter-Ueberpruefung
+	String	ERROR_IOE										= "error.ioe";
 	String	ERROR_PARAMETER_USAGE							= "error.parameter.usage";
 	String	ERROR_LOGDIRECTORY_NODIRECTORY					= "error.logdirectory.nodirectory";
 	String	ERROR_LOGDIRECTORY_NOTWRITABLE					= "error.logdirectory.notwritable";
@@ -72,7 +73,6 @@ public interface MessageConstants
 	String	MESSAGE_XML_VALERGEBNIS_INVALID					= "message.xml.valergebnis.invalid";
 	String	MESSAGE_XML_VALERGEBNIS_CLOSE					= "message.xml.valergebnis.close";
 
-	String	MESSAGE_VALIDATION_INTERRUPTED					= "message.validation.interrupted";
 	String	MESSAGE_VALIDATION_FINISHED						= "message.validation.finished";
 	String	MESSAGE_MODULE_VALID							= "message.module.valid";
 	String	MESSAGE_MODULE_INVALID							= "message.module.invalid";

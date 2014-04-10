@@ -120,16 +120,12 @@ public class KOSTVal implements MessageConstants
 		if ( !directoryOfLogfile.canWrite() ) {
 			LOGGER.logInfo( kostval.getTextResourceService().getText(
 					ERROR_LOGDIRECTORY_NOTWRITABLE, directoryOfLogfile ) );
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					MESSAGE_VALIDATION_INTERRUPTED ) );
 			System.exit( 1 );
 		}
 
 		if ( !directoryOfLogfile.isDirectory() ) {
 			LOGGER.logInfo( kostval.getTextResourceService().getText(
 					ERROR_LOGDIRECTORY_NODIRECTORY ) );
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					MESSAGE_VALIDATION_INTERRUPTED ) );
 			System.exit( 1 );
 		}
 
@@ -156,9 +152,9 @@ public class KOSTVal implements MessageConstants
 		// Ist die Anzahl Parameter (mind. 2) korrekt?
 		if ( args.length < 2 ) {
 			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					ERROR_PARAMETER_USAGE ) );
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					MESSAGE_VALIDATION_INTERRUPTED ) );
+					ERROR_IOE,
+					kostval.getTextResourceService().getText(
+							ERROR_PARAMETER_USAGE ) ) );
 			System.exit( 1 );
 		}
 
@@ -187,19 +183,20 @@ public class KOSTVal implements MessageConstants
 		// gelöscht werden können
 		if ( tmpDir.exists() ) {
 			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					ERROR_WORKDIRECTORY_EXISTS, pathToWorkDir ) );
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					MESSAGE_VALIDATION_INTERRUPTED ) );
+					ERROR_IOE,
+					kostval.getTextResourceService().getText(
+							ERROR_WORKDIRECTORY_EXISTS, pathToWorkDir ) ) );
 			System.exit( 1 );
 		}
 
 		// die Anwendung muss mindestens unter Java 6 laufen
 		String javaRuntimeVersion = System.getProperty( "java.vm.version" );
 		if ( javaRuntimeVersion.compareTo( "1.6.0" ) < 0 ) {
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					ERROR_WRONG_JRE ) );
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					MESSAGE_VALIDATION_INTERRUPTED ) );
+			LOGGER.logInfo( kostval.getTextResourceService()
+					.getText(
+							ERROR_IOE,
+							kostval.getTextResourceService().getText(
+									ERROR_WRONG_JRE ) ) );
 			System.exit( 1 );
 		}
 
@@ -211,9 +208,9 @@ public class KOSTVal implements MessageConstants
 		// Im workverzeichnis besteht kein Schreibrecht
 		if ( !tmpDir.canWrite() ) {
 			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					ERROR_WORKDIRECTORY_NOTWRITABLE, tmpDir ) );
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					MESSAGE_VALIDATION_INTERRUPTED ) );
+					ERROR_IOE,
+					kostval.getTextResourceService().getText(
+							ERROR_WORKDIRECTORY_NOTWRITABLE, tmpDir ) ) );
 			System.exit( 1 );
 		}
 
@@ -223,9 +220,9 @@ public class KOSTVal implements MessageConstants
 		if ( args.length > 2 ) {
 			if ( !(args[2].equals( "-v" )) ) {
 				LOGGER.logInfo( kostval.getTextResourceService().getText(
-						ERROR_PARAMETER_OPTIONAL_1 ) );
-				LOGGER.logInfo( kostval.getTextResourceService().getText(
-						MESSAGE_VALIDATION_INTERRUPTED ) );
+						ERROR_IOE,
+						kostval.getTextResourceService().getText(
+								ERROR_PARAMETER_OPTIONAL_1 ) ) );
 				System.exit( 1 );
 			} else {
 				verbose = true;
@@ -242,18 +239,14 @@ public class KOSTVal implements MessageConstants
 				|| !fJhoveConf.getName().equals( "jhove.conf" ) ) {
 
 			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					ERROR_JHOVECONF_MISSING ) );
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					MESSAGE_VALIDATION_INTERRUPTED ) );
+					ERROR_IOE, kostval.getTextResourceService().getText(ERROR_JHOVECONF_MISSING ) ));
 			System.exit( 1 );
 		}
 
 		// Ueberprüfung des Parameters (Val-Datei): existiert die Datei?
 		if ( !valDatei.exists() ) {
 			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					ERROR_VALFILE_FILENOTEXISTING ) );
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					MESSAGE_VALIDATION_INTERRUPTED ) );
+					ERROR_IOE, kostval.getTextResourceService().getText(ERROR_VALFILE_FILENOTEXISTING )) );
 			System.exit( 1 );
 		}
 
@@ -433,11 +426,6 @@ public class KOSTVal implements MessageConstants
 
 				if ( countNio == count ) {
 					// keine Dateien Validiert
-					LOGGER.logInfo( kostval.getTextResourceService().getText(
-							ERROR_INCORRECTFILEENDING ) );
-					LOGGER.logInfo( kostval.getTextResourceService().getText(
-							MESSAGE_VALIDATION_INTERRUPTED ) );
-
 					// bestehendes Workverzeichnis ggf. löschen
 					if ( tmpDir.exists() ) {
 						Util.deleteDir( tmpDir );
@@ -740,13 +728,6 @@ public class KOSTVal implements MessageConstants
 					MESSAGE_FOOTER_LOG, logFileName ) );
 			LOGGER.logInfo( "" );
 
-			if ( okMandatory ) {
-				LOGGER.logInfo( kostval.getTextResourceService().getText(
-						MESSAGE_VALIDATION_FINISHED ) );
-			} else {
-				LOGGER.logInfo( kostval.getTextResourceService().getText(
-						MESSAGE_VALIDATION_INTERRUPTED ) );
-			}
 
 			LOGGER.logError( kostval.getTextResourceService().getText(
 					MESSAGE_XML_LOGEND ) );
@@ -805,9 +786,8 @@ public class KOSTVal implements MessageConstants
 			// Ueberprüfung des Parameters (Val-Typ): format / sip
 			// args[0] ist nicht "--format" oder "--sip" --> INVALIDE
 			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					ERROR_PARAMETER_USAGE ) );
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					MESSAGE_VALIDATION_INTERRUPTED ) );
+					ERROR_IOE,kostval.getTextResourceService().getText(
+					ERROR_PARAMETER_USAGE )) );
 			if ( tmpDir.exists() ) {
 				Util.deleteDir( tmpDir );
 				tmpDir.deleteOnExit();
@@ -1005,8 +985,6 @@ public class KOSTVal implements MessageConstants
 		} else {
 			LOGGER.logInfo( kostval.getTextResourceService().getText(
 					ERROR_INCORRECTFILEENDING ) );
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					MESSAGE_VALIDATION_INTERRUPTED ) );
 		}
 		return valFile;
 	}
