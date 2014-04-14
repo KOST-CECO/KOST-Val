@@ -110,7 +110,8 @@ public class ValidationBprimaryStructureModuleImpl extends ValidationModuleImpl
 			getMessageService().logError(
 					getTextResourceService()
 							.getText( MESSAGE_XML_MODUL_B_SIARD )
-							+ e.getMessage() );
+							+ getTextResourceService().getText(
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 		return true;

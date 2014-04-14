@@ -94,11 +94,10 @@ public class Validation1fPrimaryDataModuleImpl extends ValidationModuleImpl
 			// keine metadata.xml in der SIP-Datei gefunden
 			if ( metadataxml == null ) {
 				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_Af )
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_Af_SIP )
 								+ getTextResourceService().getText(
-										MESSAGE_DASHES )
-								+ getTextResourceService().getText(
-										ERROR_MODULE_AE_NOMETADATAFOUND ) );
+										ERROR_XML_AE_NOMETADATAFOUND ) );
 				return false;
 
 			}
@@ -124,12 +123,10 @@ public class Validation1fPrimaryDataModuleImpl extends ValidationModuleImpl
 					getMessageService()
 							.logError(
 									getTextResourceService().getText(
-											MESSAGE_MODULE_Af )
-											+ getTextResourceService().getText(
-													MESSAGE_DASHES )
+											MESSAGE_XML_MODUL_Af_SIP )
 											+ getTextResourceService()
 													.getText(
-															ERROR_MODULE_AE_ABLIEFERUNGSTYPUNDEFINED ) );
+															ERROR_XML_AE_ABLIEFERUNGSTYPUNDEFINED ) );
 					return false;
 				}
 
@@ -138,59 +135,45 @@ public class Validation1fPrimaryDataModuleImpl extends ValidationModuleImpl
 				} else {
 					if ( elementName.getAttribute( "xsi:type" ).equals(
 							"ablieferungGeverSIP" ) ) {
-						getMessageService()
-								.logError(
-										getTextResourceService().getText(
-												MESSAGE_MODULE_Af )
-												+ getTextResourceService()
-														.getText(
-																MESSAGE_DASHES )
-												+ getTextResourceService()
-														.getText(
-																MESSAGE_MODULE_AF_GEVERSIPWITHOUTPRIMARYDATA ) );
+						// GEVER-SIP ohne Primärdateien. Erlaubt => valid
 						return true;
 					} else if ( elementName.getAttribute( "xsi:type" ).equals(
 							"ablieferungFilesSIP" ) ) {
 						getMessageService()
 								.logError(
 										getTextResourceService().getText(
-												MESSAGE_MODULE_Af )
+												MESSAGE_XML_MODUL_Af_SIP )
 												+ getTextResourceService()
 														.getText(
-																MESSAGE_DASHES )
-												+ getTextResourceService()
-														.getText(
-																ERROR_MODULE_AF_FILESIPWITHOUTPRIMARYDATA ) );
+																ERROR_XML_AF_FILESIPWITHOUTPRIMARYDATA ) );
 						return false;
 					} else {
 						getMessageService()
 								.logError(
 										getTextResourceService().getText(
-												MESSAGE_MODULE_Af )
+												MESSAGE_XML_MODUL_Af_SIP )
 												+ getTextResourceService()
 														.getText(
-																MESSAGE_DASHES )
-												+ getTextResourceService()
-														.getText(
-																ERROR_MODULE_AE_ABLIEFERUNGSTYPUNDEFINED ) );
+																ERROR_XML_AE_ABLIEFERUNGSTYPUNDEFINED ) );
 						return false;
 					}
 				}
 
 			} catch ( Exception e ) {
 				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_Af )
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_Af_SIP )
 								+ getTextResourceService().getText(
-										MESSAGE_DASHES ) + e.getMessage() );
+										ERROR_XML_UNKNOWN, e.getMessage() ) );
 				return false;
 
 			}
 
 		} catch ( Exception e ) {
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_Af )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
-							+ e.getMessage() );
+					getTextResourceService().getText( MESSAGE_XML_MODUL_Af_SIP )
+							+ getTextResourceService().getText(
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 

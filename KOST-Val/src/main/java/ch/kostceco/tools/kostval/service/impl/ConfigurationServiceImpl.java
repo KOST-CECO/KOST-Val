@@ -76,11 +76,17 @@ public class ConfigurationServiceImpl implements ConfigurationService
 
 			} catch ( ConfigurationException e ) {
 				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_CONFIGURATION_ERROR_1 ) );
+						MESSAGE_XML_MODUL_Ca_SIP )
+						+ getTextResourceService().getText(
+								MESSAGE_XML_CONFIGURATION_ERROR_1 ) );
 				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_CONFIGURATION_ERROR_2 ) );
+						MESSAGE_XML_MODUL_Ca_SIP )
+						+ getTextResourceService().getText(
+								MESSAGE_XML_CONFIGURATION_ERROR_2 ) );
 				LOGGER.logInfo( getTextResourceService().getText(
-						MESSAGE_CONFIGURATION_ERROR_3 ) );
+						MESSAGE_XML_MODUL_Ca_SIP )
+						+ getTextResourceService().getText(
+								MESSAGE_XML_CONFIGURATION_ERROR_3 ) );
 				System.exit( 1 );
 			}
 		}
@@ -108,7 +114,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	public String getPathToLogfile()
 	{
 		/**
-		 * Gibt den Pfad des Logverzeichnisses zurück. 
+		 * Gibt den Pfad des Logverzeichnisses zurück.
 		 * 
 		 * @return Pfad des Logverzeichnisses
 		 */
@@ -301,10 +307,9 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			return value;
 		} else {
 			LOGGER.logError( getTextResourceService().getText(
-					MESSAGE_MODULE_Ac )
-					+ getTextResourceService().getText( MESSAGE_DASHES )
+					MESSAGE_XML_MODUL_Ac_SIP )
 					+ getTextResourceService().getText(
-							MESSAGE_MODULE_AC_INVALIDREGEX ) );
+							MESSAGE_XML_AC_INVALIDREGEX ) );
 		}
 		return null;
 	}

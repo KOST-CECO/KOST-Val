@@ -83,11 +83,35 @@ public class Validation1bFolderStructureModuleImpl extends ValidationModuleImpl
 
 		} catch ( Exception e ) {
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_Ab )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
-							+ e.getMessage() );
+					getTextResourceService().getText( MESSAGE_XML_MODUL_Aa_SIP )
+							+ getTextResourceService().getText(
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 
 			return false;
+
+		}
+		if ( bExistsContentFolder == false ) {
+
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_Ab_SIP )
+							+ getTextResourceService().getText(
+									ERROR_XML_AB_CONTENT ) );
+
+		}
+		if ( bExistsMetadataFile == false ) {
+
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_Ab_SIP )
+							+ getTextResourceService().getText(
+									ERROR_XML_AB_METADATA ) );
+
+		}
+		if ( bExistsXsdFolder == false ) {
+
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_Ab_SIP )
+							+ getTextResourceService().getText(
+									ERROR_XML_AB_XSD ) );
 
 		}
 

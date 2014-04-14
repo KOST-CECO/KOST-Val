@@ -1,5 +1,5 @@
 /*== KOST-Val ==================================================================================
-The KOST-Val v1.2.6 application is used for validate TIFF, SIARD, PDF/A-Files and Submission 
+The KOST-Val v1.2.7 application is used for validate TIFF, SIARD, PDF/A-Files and Submission 
 Information Package (SIP). 
 Copyright (C) 2012-2014 Claire Röthlisberger (KOST-CECO), Christian Eugster, Olivier Debenath, 
 Peter Schneider (Staatsarchiv Aargau), Daniel Ludin (BEDAG AG)
@@ -452,7 +452,7 @@ public class KOSTVal implements MessageConstants
 
 		} else if ( args[0].equals( "--sip" ) ) {
 			LOGGER.logError( kostval.getTextResourceService().getText(
-					MESSAGE_XML_SIP1 ) );
+					MESSAGE_XML_FORMAT1 ) );
 
 			// TODO: Sipvalidierung
 			// --> erledigt --> nur Marker
@@ -529,7 +529,7 @@ public class KOSTVal implements MessageConstants
 						|| zip == false ) {
 
 					LOGGER.logInfo( kostval.getTextResourceService().getText(
-							ERROR_MODULE_AA_INCORRECTFILEENDING ) );
+							ERROR_XML_AA_INCORRECTFILEENDING ) );
 
 				} else {
 					// geziptes SIP --> in temp dir entzipen
@@ -542,7 +542,7 @@ public class KOSTVal implements MessageConstants
 							Zip64Archiver.unzip64( valDatei, tmpDirZip );
 						} catch ( Exception e1 ) {
 							LOGGER.logInfo( kostval.getTextResourceService()
-									.getText( ERROR_MODULE_AA_CANNOTEXTRACTZIP ) );
+									.getText( ERROR_XML_AA_CANNOTEXTRACTZIP ) );
 						}
 					}
 					valDatei = tmpDirZip;
@@ -644,9 +644,6 @@ public class KOSTVal implements MessageConstants
 					MESSAGE_XML_SUMMARY_3C, count, countSummaryIo,
 					countSummaryNio, countNio );
 
-			LOGGER.logError( kostval.getTextResourceService().getText(
-					MESSAGE_XML_FORMAT2 ) );
-
 			if ( countSummaryNio == 0 ) {
 				// alle Validierten Dateien valide
 				validFormat = true;
@@ -663,12 +660,22 @@ public class KOSTVal implements MessageConstants
 			} catch ( IOException e ) {
 				e.printStackTrace();
 			}
+			LOGGER.logError( kostval.getTextResourceService().getText(
+					MESSAGE_XML_FORMAT2 ) );
 
 			// Start Normale SIP-Validierung mit auswertung Format-Val. im 3c
 
+			LOGGER.logError( kostval.getTextResourceService().getText(
+					MESSAGE_XML_SIP1 ) );
 			valDatei = originalSipFile;
+			LOGGER.logError( kostval.getTextResourceService().getText(
+					MESSAGE_XML_VALERGEBNIS ) );
 			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					MESSAGE_SIPVALIDATION, valDatei.getName() ) );
+					MESSAGE_XML_VALTYPE,
+					kostval.getTextResourceService().getText(
+							MESSAGE_SIPVALIDATION ) ) );
+			LOGGER.logInfo( kostval.getTextResourceService().getText(
+					MESSAGE_XML_VALFILE, valDatei.getAbsolutePath() ) );
 			File targetFile = new File( pathToWorkDir + "\\SIP-Validierung",
 					valDatei.getName() + ".zip" );
 			File tmpDirSip = new File( pathToWorkDir + "\\SIP-Validierung" );
@@ -711,23 +718,32 @@ public class KOSTVal implements MessageConstants
 			}
 			// Formatvalidierung validFormat
 			ok = (ok && okMandatory && validFormat);
-
-			LOGGER.logInfo( "" );
+			
 			if ( ok ) {
+				// Validiertes SIP valide
+				Util.valElement(
+						kostval.getTextResourceService().getText(
+								MESSAGE_XML_VALERGEBNIS_VALID ), logFile );
 				LOGGER.logInfo( kostval.getTextResourceService().getText(
-						MESSAGE_TOTAL_VALID, valDatei.getAbsolutePath() ) );
+						MESSAGE_XML_VALERGEBNIS_CLOSE )
+						+ kostval.getTextResourceService().getText(
+								MESSAGE_XML_VALERGEBNIS_VALID ) );
 			} else {
+				// Fehler im Validierten SIP --> invalide
+				Util.valElement(
+						kostval.getTextResourceService().getText(
+								MESSAGE_XML_VALERGEBNIS_INVALID ), logFile );
 				LOGGER.logInfo( kostval.getTextResourceService().getText(
-						MESSAGE_TOTAL_INVALID, valDatei.getAbsolutePath() ) );
+						MESSAGE_XML_VALERGEBNIS_CLOSE )
+						+ kostval.getTextResourceService().getText(
+								MESSAGE_XML_VALERGEBNIS_INVALID ) );
 			}
-			LOGGER.logInfo( "" );
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					MESSAGE_FOOTER_SIP, originalSipName ) );
+			
+			// ggf. Fehlermeldung 3c ergänzen
+//			Util.val3c(summary3c, logFile );
 
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					MESSAGE_FOOTER_LOG, logFileName ) );
-			LOGGER.logInfo( "" );
-
+			LOGGER.logError( kostval.getTextResourceService().getText(
+					MESSAGE_XML_SIP2 ) );
 
 			LOGGER.logError( kostval.getTextResourceService().getText(
 					MESSAGE_XML_LOGEND ) );
@@ -738,6 +754,7 @@ public class KOSTVal implements MessageConstants
 			String ausgabeEnd = sdfEnd.format( nowEnd );
 			ausgabeEnd = "<End>" + ausgabeEnd + "</End>";
 			Util.valEnd( ausgabeEnd, logFile );
+			Util.val3c(summary3c, logFile );
 
 			// bestehendes Workverzeichnis ggf. löschen
 			if ( tmpDir.exists() ) {

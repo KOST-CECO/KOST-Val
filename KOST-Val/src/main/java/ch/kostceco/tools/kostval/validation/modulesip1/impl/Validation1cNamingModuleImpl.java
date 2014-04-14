@@ -94,13 +94,10 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 						getMessageService()
 								.logError(
 										getTextResourceService().getText(
-												MESSAGE_MODULE_Ac )
+												MESSAGE_XML_MODUL_Ac_SIP )
 												+ getTextResourceService()
 														.getText(
-																MESSAGE_DASHES )
-												+ getTextResourceService()
-														.getText(
-																MESSAGE_MODULE_AC_INVALIDCHARACTERS,
+																MESSAGE_XML_AC_INVALIDCHARACTERS,
 																element ) );
 						return false;
 					}
@@ -111,9 +108,9 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 			}
 		} catch ( Exception e ) {
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_Ac )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
-							+ e.getMessage() );
+					getTextResourceService().getText( MESSAGE_XML_MODUL_Ac_SIP )
+							+ getTextResourceService().getText(
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 		}
 
 		// II.) Validierung des Formats des Dateinamen
@@ -125,10 +122,9 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 		boolean matchFound = matcher.find();
 		if ( !matchFound ) {
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_Ac )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService().getText( MESSAGE_XML_MODUL_Ac_SIP )
 							+ getTextResourceService().getText(
-									MESSAGE_MODULE_AC_INVALIDFILENAME ) );
+									MESSAGE_XML_AC_INVALIDFILENAME ) );
 			return false;
 		}
 
@@ -165,17 +161,12 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 					if ( !(name.endsWith( "header/metadata.xml" )
 							|| name.endsWith( "header/xsd/" ) || name
 							.endsWith( "header/" )) ) {
-						getMessageService()
-								.logError(
-										getTextResourceService().getText(
-												MESSAGE_MODULE_Ac )
-												+ getTextResourceService()
-														.getText(
-																MESSAGE_DASHES )
-												+ getTextResourceService()
-														.getText(
-																MESSAGE_MODULE_AC_NOTALLOWEDFILE,
-																name ) );
+						getMessageService().logError(
+								getTextResourceService().getText(
+										MESSAGE_XML_MODUL_Ac_SIP )
+										+ getTextResourceService().getText(
+												MESSAGE_XML_AC_NOTALLOWEDFILE,
+												name ) );
 
 						return false;
 
@@ -190,14 +181,14 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 						|| name.startsWith( toplevelDir + "/" + "content/" ) || name
 						.startsWith( toplevelDir + "/" + "header/" )) ) {
 
-					getMessageService().logError(
-							getTextResourceService()
-									.getText( MESSAGE_MODULE_Ac )
-									+ getTextResourceService().getText(
-											MESSAGE_DASHES )
-									+ getTextResourceService().getText(
-											MESSAGE_MODULE_AC_NOTALLOWEDFILE,
-											name ) );
+					getMessageService()
+							.logError(
+									getTextResourceService().getText(
+											MESSAGE_XML_MODUL_Ac_SIP )
+											+ getTextResourceService()
+													.getText(
+															MESSAGE_XML_AC_NOTALLOWEDFILE,
+															name ) );
 
 					return false;
 				}
@@ -211,9 +202,9 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 
 		} catch ( Exception e ) {
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_Ac )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
-							+ e.getMessage() );
+					getTextResourceService().getText( MESSAGE_XML_MODUL_Ac_SIP )
+							+ getTextResourceService().getText(
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 
 			return false;
 
@@ -245,15 +236,11 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 				if ( name.endsWith( XSD_ARELDA ) ) {
 					// dann handelt es sich um die Version BAR1
 					version = 1;
-					getMessageService()
-							.logError(
-									getTextResourceService().getText(
-											MESSAGE_MODULE_Ac )
-											+ getTextResourceService().getText(
-													MESSAGE_DASHES )
-											+ getTextResourceService().getText(
-													MESSAGE_MODULE_AC_VERSION,
-													version ) );
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_Ac_SIP )
+									+ getTextResourceService().getText(
+											MESSAGE_XML_AC_VERSION, version ) );
 					// Ausgabe der Version als Information
 					if ( allowedV1 == 1 ) {
 						allowedXsdFiles.put( "header/xsd/ablieferung.xsd",
@@ -288,11 +275,9 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 						// Version 1 ist nicht erlaubt
 						getMessageService().logError(
 								getTextResourceService().getText(
-										MESSAGE_MODULE_Ac )
+										MESSAGE_XML_MODUL_Ac_SIP )
 										+ getTextResourceService().getText(
-												MESSAGE_DASHES )
-										+ getTextResourceService().getText(
-												MESSAGE_MODULE_AC_NOTALLOWEDV,
+												MESSAGE_XML_AC_NOTALLOWEDV,
 												version ) );
 						valid = false;
 
@@ -301,15 +286,11 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 				if ( name.endsWith( "arelda.xsd" ) ) {
 					// dann handelt es sich um die Version BAR4 respektive eCH1
 					version = 4;
-					getMessageService()
-							.logError(
-									getTextResourceService().getText(
-											MESSAGE_MODULE_Ac )
-											+ getTextResourceService().getText(
-													MESSAGE_DASHES )
-											+ getTextResourceService().getText(
-													MESSAGE_MODULE_AC_VERSION,
-													version ) );
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_Ac_SIP )
+									+ getTextResourceService().getText(
+											MESSAGE_XML_AC_VERSION, version ) );
 					// Ausgabe der Version als Information
 
 					if ( allowedV4 == 1 ) {
@@ -348,11 +329,9 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 						// Version 4 ist nicht erlaubt
 						getMessageService().logError(
 								getTextResourceService().getText(
-										MESSAGE_MODULE_Ac )
+										MESSAGE_XML_MODUL_Ac_SIP )
 										+ getTextResourceService().getText(
-												MESSAGE_DASHES )
-										+ getTextResourceService().getText(
-												MESSAGE_MODULE_AC_NOTALLOWEDV,
+												MESSAGE_XML_AC_NOTALLOWEDV,
 												version ) );
 						valid = false;
 
@@ -386,13 +365,10 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 							getMessageService()
 									.logError(
 											getTextResourceService().getText(
-													MESSAGE_MODULE_Ac )
+													MESSAGE_XML_MODUL_Ac_SIP )
 													+ getTextResourceService()
 															.getText(
-																	MESSAGE_DASHES )
-													+ getTextResourceService()
-															.getText(
-																	MESSAGE_MODULE_AC_NOTALLOWEDFILE,
+																	MESSAGE_XML_AC_NOTALLOWEDFILE,
 																	name ) );
 							valid = false;
 						}
@@ -404,23 +380,22 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 				for ( Iterator<String> iterator = keys.iterator(); iterator
 						.hasNext(); ) {
 					String string = iterator.next();
-					getMessageService().logError(
-							getTextResourceService()
-									.getText( MESSAGE_MODULE_Ac )
-									+ getTextResourceService().getText(
-											MESSAGE_DASHES )
-									+ getTextResourceService().getText(
-											MESSAGE_MODULE_AC_MISSINGFILE,
-											string ) );
+					getMessageService()
+							.logError(
+									getTextResourceService().getText(
+											MESSAGE_XML_MODUL_Ac_SIP )
+											+ getTextResourceService().getText(
+													MESSAGE_XML_AC_MISSINGFILE,
+													string ) );
 					valid = false;
 				}
 			}
 
 		} catch ( Exception e ) {
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_Ac )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
-							+ e.getMessage() );
+					getTextResourceService().getText( MESSAGE_XML_MODUL_Ac_SIP )
+							+ getTextResourceService().getText(
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 
 			return false;
 		}
@@ -439,16 +414,11 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 				String name = valDatei.getName() + "/" + fileEntry.getName();
 
 				if ( name.length() > maxPathLength.intValue() ) {
-					getMessageService()
-							.logError(
-									getTextResourceService().getText(
-											MESSAGE_MODULE_Ac )
-											+ getTextResourceService().getText(
-													MESSAGE_DASHES )
-											+ getTextResourceService()
-													.getText(
-															MESSAGE_MODULE_AC_PATHTOOLONG,
-															name ) );
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_Ac_SIP )
+									+ getTextResourceService().getText(
+											MESSAGE_XML_AC_PATHTOOLONG, name ) );
 					valid = false;
 					break;
 				}
@@ -462,13 +432,10 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 							getMessageService()
 									.logError(
 											getTextResourceService().getText(
-													MESSAGE_MODULE_Ac )
+													MESSAGE_XML_MODUL_Ac_SIP )
 													+ getTextResourceService()
 															.getText(
-																	MESSAGE_DASHES )
-													+ getTextResourceService()
-															.getText(
-																	MESSAGE_MODULE_AC_FILENAMETOOLONG,
+																	MESSAGE_XML_AC_FILENAMETOOLONG,
 																	pathElement ) );
 							valid = false;
 						}
@@ -480,9 +447,9 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 
 		} catch ( Exception e ) {
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_Ac )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
-							+ e.getMessage() );
+					getTextResourceService().getText( MESSAGE_XML_MODUL_Ac_SIP )
+							+ getTextResourceService().getText(
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 
 			return false;
 

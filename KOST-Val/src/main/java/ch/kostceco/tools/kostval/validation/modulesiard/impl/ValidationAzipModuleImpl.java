@@ -107,11 +107,13 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements
 				// PK.. beginnt
 				valid = true;
 			} else {
-				getMessageService().logError(
-						getTextResourceService().getText(
-								MESSAGE_XML_MODUL_A_SIARD )
-								+ getTextResourceService().getText(
-										ERROR_XML_A_INCORRECTFILEENDING_SIARD ) );
+				getMessageService()
+						.logError(
+								getTextResourceService().getText(
+										MESSAGE_XML_MODUL_A_SIARD )
+										+ getTextResourceService()
+												.getText(
+														ERROR_XML_A_INCORRECTFILEENDING_SIARD ) );
 				// Die SIARD-Datei ist kein ZIP.
 				return false;
 			}
@@ -119,7 +121,8 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements
 			getMessageService().logError(
 					getTextResourceService()
 							.getText( MESSAGE_XML_MODUL_A_SIARD )
-							+ e.getMessage() );
+							+ getTextResourceService().getText(
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
@@ -156,7 +159,8 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements
 			getMessageService().logError(
 					getTextResourceService()
 							.getText( MESSAGE_XML_MODUL_A_SIARD )
-							+ e.getMessage() );
+							+ getTextResourceService().getText(
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 

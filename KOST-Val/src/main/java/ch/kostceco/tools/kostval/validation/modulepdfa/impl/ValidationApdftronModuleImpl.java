@@ -133,13 +133,11 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 					// 25504446 respektive %PDF beginnt
 					valid = true;
 				} else {
-					getMessageService()
-							.logError(
-									getTextResourceService().getText(
-											MESSAGE_XML_MODUL_A_PDFA )
-											+ getTextResourceService()
-													.getText(
-															ERROR_XML_A_PDFA_INCORRECTFILE ) );
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_A_PDFA )
+									+ getTextResourceService().getText(
+											ERROR_XML_A_PDFA_INCORRECTFILE ) );
 					return false;
 				}
 			} catch ( Exception e ) {
@@ -401,13 +399,11 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 					report = pdftronLog;
 
 				} catch ( Exception e ) {
-					getMessageService()
-							.logError(
-									getTextResourceService().getText(
-											MESSAGE_XML_MODUL_A_PDFA )
-											+ getTextResourceService()
-													.getText(
-															ERROR_XML_A_PDFA_SERVICEFAILED ) );
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_A_PDFA )
+									+ getTextResourceService().getText(
+											ERROR_XML_A_PDFA_SERVICEFAILED ) );
 					return false;
 				}
 				// Ende PDFTRON direkt auszulösen
@@ -501,7 +497,8 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 				getMessageService().logError(
 						getTextResourceService().getText(
 								MESSAGE_XML_MODUL_A_PDFA )
-								+ e.getMessage() );
+								+ getTextResourceService().getText(
+										ERROR_XML_UNKNOWN, e.getMessage() ) );
 				return false;
 			}
 		}

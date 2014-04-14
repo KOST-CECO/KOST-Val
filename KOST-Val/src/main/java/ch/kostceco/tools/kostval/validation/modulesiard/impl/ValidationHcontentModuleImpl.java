@@ -150,19 +150,25 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 			getMessageService().logError(
 					getTextResourceService()
 							.getText( MESSAGE_XML_MODUL_H_SIARD )
-							+ "IOException " + ioe.getMessage() );
+							+ getTextResourceService().getText(
+									ERROR_XML_UNKNOWN,
+									ioe.getMessage() + " (IOException)" ) );
 		} catch ( JDOMException e ) {
 			valid = false;
 			getMessageService().logError(
 					getTextResourceService()
 							.getText( MESSAGE_XML_MODUL_H_SIARD )
-							+ "JDOMException " + e.getMessage() );
+							+ getTextResourceService().getText(
+									ERROR_XML_UNKNOWN,
+									e.getMessage() + " (JDOMException)" ) );
 		} catch ( SAXException e ) {
 			valid = false;
 			getMessageService().logError(
 					getTextResourceService()
 							.getText( MESSAGE_XML_MODUL_H_SIARD )
-							+ "SAXException " + e.getMessage() );
+							+ getTextResourceService().getText(
+									ERROR_XML_UNKNOWN,
+									e.getMessage() + " (SAXException)" ) );
 		}
 
 		return valid;

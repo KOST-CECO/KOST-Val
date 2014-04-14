@@ -134,34 +134,31 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements
 			// files
 			if ( validateTableXMLFiles( this.getValidationContext() ) == false ) {
 				valid = false;
-				getMessageService()
-						.logError(
-								getTextResourceService().getText(
-										MESSAGE_XML_MODUL_F_SIARD )
-										+ getTextResourceService()
-												.getText(
-														MESSAGE_XML_F_INVALID_TABLE_XML_FILES,
-														this.getIncongruentTableXMLFiles() ) );
+				getMessageService().logError(
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_F_SIARD )
+								+ getTextResourceService().getText(
+										MESSAGE_XML_F_INVALID_TABLE_XML_FILES,
+										this.getIncongruentTableXMLFiles() ) );
 			}
 			// Compares row information in metadata.xml and according table.xsd
 			// files
 			if ( validateTableXSDFiles( this.getValidationContext() ) == false ) {
 				valid = false;
-				getMessageService()
-						.logError(
-								getTextResourceService().getText(
-										MESSAGE_XML_MODUL_F_SIARD )
-										+ getTextResourceService()
-												.getText(
-														MESSAGE_XML_F_INVALID_TABLE_XSD_FILES,
-														this.getIncongruentTableXSDFiles() ) );
+				getMessageService().logError(
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_F_SIARD )
+								+ getTextResourceService().getText(
+										MESSAGE_XML_F_INVALID_TABLE_XSD_FILES,
+										this.getIncongruentTableXSDFiles() ) );
 			}
 		} catch ( Exception e ) {
 			valid = false;
 			getMessageService().logError(
 					getTextResourceService()
 							.getText( MESSAGE_XML_MODUL_F_SIARD )
-							+ e.getMessage() );
+							+ getTextResourceService().getText(
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 		}
 		return valid;
 	}

@@ -168,7 +168,8 @@ public class ValidationBstructureModuleImpl extends ValidationModuleImpl
 				getMessageService().logError(
 						getTextResourceService().getText(
 								MESSAGE_XML_MODUL_B_PDFA )
-								+ e.getMessage() );
+								+ getTextResourceService().getText(
+										ERROR_XML_UNKNOWN, e.getMessage() ) );
 				return false;
 			}
 		}

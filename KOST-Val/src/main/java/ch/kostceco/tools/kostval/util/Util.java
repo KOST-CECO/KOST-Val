@@ -294,4 +294,29 @@ public class Util
 		}
 	}
 
+	/**
+	 * Verändert <Message>3c</Message></Error> mit dem ergebnis (string) in dem
+	 * kost-val.log.xml (file)
+	 * 
+	 * @throws IOException
+	 */
+	public static void val3c( String string, File file ) throws IOException
+	{
+		try {
+			BufferedReader reader = new BufferedReader( new FileReader( file ) );
+			String line = "", oldtext = "";
+			while ( (line = reader.readLine()) != null ) {
+				oldtext += line + "\r\n";
+			}
+			reader.close();
+			String newtext = oldtext.replace( "<Message>3c</Message></Error>", string );
+			newtext = newtext.replace( (char) 0, (char) 32 );
+			FileWriter writer = new FileWriter( file );
+			writer.write( newtext );
+			writer.close();
+		} catch ( IOException ioe ) {
+			ioe.printStackTrace();
+		}
+	}
+
 }

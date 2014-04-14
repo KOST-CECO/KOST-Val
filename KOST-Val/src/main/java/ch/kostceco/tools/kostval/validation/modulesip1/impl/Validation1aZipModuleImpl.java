@@ -84,9 +84,10 @@ public class Validation1aZipModuleImpl extends ValidationModuleImpl implements
 				}
 			} catch ( Exception e ) {
 				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_Aa )
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_Aa_SIP )
 								+ getTextResourceService().getText(
-										MESSAGE_DASHES ) + e.getMessage() );
+										ERROR_XML_UNKNOWN, e.getMessage() ) );
 				return false;
 			}
 		}
@@ -97,10 +98,9 @@ public class Validation1aZipModuleImpl extends ValidationModuleImpl implements
 				|| valid == false ) {
 
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_Aa )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService().getText( MESSAGE_XML_MODUL_Aa_SIP )
 							+ getTextResourceService().getText(
-									ERROR_MODULE_AA_INCORRECTFILEENDING ) );
+									ERROR_XML_AA_INCORRECTFILEENDING ) );
 
 			return false;
 		}
@@ -115,9 +115,9 @@ public class Validation1aZipModuleImpl extends ValidationModuleImpl implements
 
 		} catch ( Exception e ) {
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_Aa )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
-							+ e.getMessage() );
+					getTextResourceService().getText( MESSAGE_XML_MODUL_Aa_SIP )
+							+ getTextResourceService().getText(
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 
 			return false;
 		}

@@ -190,7 +190,8 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 			getMessageService().logError(
 					getTextResourceService()
 							.getText( MESSAGE_XML_MODUL_E_SIARD )
-							+ e.getMessage() );
+							+ getTextResourceService().getText(
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 		}
 		return valid;
 	}

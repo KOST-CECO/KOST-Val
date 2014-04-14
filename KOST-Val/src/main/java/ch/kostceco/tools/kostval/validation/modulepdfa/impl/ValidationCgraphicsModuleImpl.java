@@ -166,7 +166,10 @@ public class ValidationCgraphicsModuleImpl extends ValidationModuleImpl
 				}
 			} catch ( Exception e ) {
 				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_C_PDFA ) + e.getMessage() );
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_C_PDFA )
+								+ getTextResourceService().getText(
+										ERROR_XML_UNKNOWN, e.getMessage() ) );
 				return false;
 			}
 		}

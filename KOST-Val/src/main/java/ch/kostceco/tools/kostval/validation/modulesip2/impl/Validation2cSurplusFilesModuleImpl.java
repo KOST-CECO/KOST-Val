@@ -101,11 +101,10 @@ public class Validation2cSurplusFilesModuleImpl extends ValidationModuleImpl
 			// keine metadata.xml in der SIP-Datei gefunden
 			if ( metadataxml == null ) {
 				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_Bc )
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_Bc_SIP )
 								+ getTextResourceService().getText(
-										MESSAGE_DASHES )
-								+ getTextResourceService().getText(
-										ERROR_MODULE_AE_NOMETADATAFOUND ) );
+										ERROR_XML_AE_NOMETADATAFOUND ) );
 				return false;
 
 			}
@@ -176,9 +175,10 @@ public class Validation2cSurplusFilesModuleImpl extends ValidationModuleImpl
 				}
 			} catch ( Exception e ) {
 				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_Bc )
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_Bc_SIP )
 								+ getTextResourceService().getText(
-										MESSAGE_DASHES ) + e.getMessage() );
+										ERROR_XML_UNKNOWN, e.getMessage() ) );
 				return false;
 			}
 
@@ -197,13 +197,13 @@ public class Validation2cSurplusFilesModuleImpl extends ValidationModuleImpl
 					.hasNext(); ) {
 				String keySipfile = iterator.next();
 
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_Bc )
-								+ getTextResourceService().getText(
-										MESSAGE_DASHES )
-								+ getTextResourceService().getText(
-										MESSAGE_MODULE_BC_FILEMISSING,
-										keySipfile ) );
+				getMessageService()
+						.logError(
+								getTextResourceService().getText(
+										MESSAGE_XML_MODUL_Bc_SIP )
+										+ getTextResourceService().getText(
+												MESSAGE_XML_BC_FILEMISSING,
+												keySipfile ) );
 				valid = false;
 			}
 
@@ -275,9 +275,10 @@ public class Validation2cSurplusFilesModuleImpl extends ValidationModuleImpl
 				}
 			} catch ( Exception e ) {
 				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_Bc )
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_Bc_SIP )
 								+ getTextResourceService().getText(
-										MESSAGE_DASHES ) + e.getMessage() );
+										ERROR_XML_UNKNOWN, e.getMessage() ) );
 				return false;
 			}
 
@@ -297,11 +298,10 @@ public class Validation2cSurplusFilesModuleImpl extends ValidationModuleImpl
 				String keySipfileO = iterator.next();
 
 				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_Bc )
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_Bc_SIP )
 								+ getTextResourceService().getText(
-										MESSAGE_DASHES )
-								+ getTextResourceService().getText(
-										MESSAGE_MODULE_BC_FILEMISSINGO,
+										MESSAGE_XML_BC_FILEMISSINGO,
 										keySipfileO ) );
 				valid = false;
 			}
@@ -311,9 +311,9 @@ public class Validation2cSurplusFilesModuleImpl extends ValidationModuleImpl
 
 		} catch ( Exception e ) {
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_Bc )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
-							+ e.getMessage() );
+					getTextResourceService().getText( MESSAGE_XML_MODUL_Bc_SIP )
+							+ getTextResourceService().getText(
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 

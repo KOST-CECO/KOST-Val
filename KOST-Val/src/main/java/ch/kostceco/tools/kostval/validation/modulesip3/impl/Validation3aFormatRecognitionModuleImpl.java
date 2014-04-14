@@ -69,20 +69,18 @@ public class Validation3aFormatRecognitionModuleImpl extends
 				.getPathToDroidSignatureFile();
 		if ( nameOfSignature == null ) {
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_Ca )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
 							+ getTextResourceService().getText(
-									MESSAGE_CONFIGURATION_ERROR_NO_SIGNATURE ) );
+									MESSAGE_XML_CONFIGURATION_ERROR_NO_SIGNATURE ) );
 			return false;
 		}
 		// existiert die SignatureFile am angebenen Ort?
 		File fnameOfSignature = new File( nameOfSignature );
 		if ( !fnameOfSignature.exists() ) {
 			getMessageService().logInfo(
-					getTextResourceService().getText( MESSAGE_MODULE_Ca )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
 							+ getTextResourceService().getText(
-									MESSAGE_MODULE_CA_DROID ) );
+									MESSAGE_XML_CA_DROID ) );
 			return false;
 		}
 
@@ -99,10 +97,9 @@ public class Validation3aFormatRecognitionModuleImpl extends
 
 		} catch ( Exception e ) {
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_Ca )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
 							+ getTextResourceService().getText(
-									ERROR_CANNOT_INITIALIZE_DROID ) );
+									ERROR_XML_CANNOT_INITIALIZE_DROID ) );
 			return false;
 		} finally {
 			Util.switchOnConsole();
@@ -110,8 +107,15 @@ public class Validation3aFormatRecognitionModuleImpl extends
 
 		// Die Archivdatei wurde bereits vom Schritt 1d in das
 		// Arbeitsverzeichnis entpackt
-		String pathToWorkDir = getConfigurationService().getPathToWorkDir() + "\\ZIP";
+		String pathToWorkDir = getConfigurationService().getPathToWorkDir()
+				+ "\\ZIP"
+				+ valDatei.getName() + "\\content" ;
 		File workDir = new File( pathToWorkDir );
+		if ( !workDir.exists() ) {
+			pathToWorkDir= valDatei.getAbsolutePath() + "\\content" ;
+			workDir = new File( pathToWorkDir );
+		}
+
 		Map<String, File> fileMap = Util.getFileMap( workDir, true );
 		Set<String> fileMapKeys = fileMap.keySet();
 		for ( Iterator<String> iterator = fileMapKeys.iterator(); iterator
@@ -168,13 +172,10 @@ public class Validation3aFormatRecognitionModuleImpl extends
 			String keyExt = iterator.next();
 			Integer value = counterPuid.get( keyExt );
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_Ca )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
-							+ keyExt
-							+ " = "
-							+ value.toString()
+					getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
 							+ getTextResourceService().getText(
-									MESSAGE_MODULE_CA_FILES ) );
+									MESSAGE_XML_CA_FILES, keyExt,
+									value.toString() ) );
 			valid = false;
 		}
 		return valid;

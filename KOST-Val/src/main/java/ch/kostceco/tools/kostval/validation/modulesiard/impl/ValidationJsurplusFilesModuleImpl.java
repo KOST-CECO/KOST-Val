@@ -113,25 +113,37 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 			getMessageService().logError(
 					getTextResourceService()
 							.getText( MESSAGE_XML_MODUL_J_SIARD )
-							+ "IOException " + e.getMessage() );
+							+ getTextResourceService().getText(
+									ERROR_XML_UNKNOWN,
+									e.getMessage() + " (IOException)" ) );
 		} catch ( XPathExpressionException e ) {
 			valid = false;
 			getMessageService().logError(
 					getTextResourceService()
 							.getText( MESSAGE_XML_MODUL_J_SIARD )
-							+ "XPathExpressionException " + e.getMessage() );
+							+ getTextResourceService().getText(
+									ERROR_XML_UNKNOWN,
+									e.getMessage()
+											+ " (XPathExpressionException)" ) );
 		} catch ( ParserConfigurationException e ) {
 			valid = false;
-			getMessageService().logError(
-					getTextResourceService()
-							.getText( MESSAGE_XML_MODUL_J_SIARD )
-							+ "ParserConfigurationException " + e.getMessage() );
+			getMessageService()
+					.logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_J_SIARD )
+									+ getTextResourceService()
+											.getText(
+													ERROR_XML_UNKNOWN,
+													e.getMessage()
+															+ " (ParserConfigurationException)" ) );
 		} catch ( SAXException e ) {
 			valid = false;
 			getMessageService().logError(
 					getTextResourceService()
 							.getText( MESSAGE_XML_MODUL_J_SIARD )
-							+ "SAXException " + e.getMessage() );
+							+ getTextResourceService().getText(
+									ERROR_XML_UNKNOWN,
+									e.getMessage() + " (SAXException)" ) );
 		}
 
 		return valid;

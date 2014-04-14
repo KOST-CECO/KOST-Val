@@ -109,7 +109,9 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 			getMessageService().logError(
 					getTextResourceService()
 							.getText( MESSAGE_XML_MODUL_C_SIARD )
-							+ e.getMessage() + " xml und xsd" );
+							+ getTextResourceService().getText(
+									ERROR_XML_UNKNOWN,
+									e.getMessage() + " xml und xsd" ) );
 			return false;
 		}
 
@@ -220,21 +222,34 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 						return false;
 					}
 				} catch ( java.io.IOException ioe ) {
-					getMessageService().logError(
-							getTextResourceService().getText(
-									MESSAGE_XML_MODUL_C_SIARD )
-									+ "IOException " + ioe.getMessage() );
+					getMessageService()
+							.logError(
+									getTextResourceService().getText(
+											MESSAGE_XML_MODUL_C_SIARD )
+											+ getTextResourceService().getText(
+													ERROR_XML_UNKNOWN,
+													ioe.getMessage()
+															+ " (IOException)" ) );
 				} catch ( SAXException e ) {
-					getMessageService().logError(
-							getTextResourceService().getText(
-									MESSAGE_XML_MODUL_C_SIARD )
-									+ "SAXException " + e.getMessage() );
+					getMessageService()
+							.logError(
+									getTextResourceService().getText(
+											MESSAGE_XML_MODUL_C_SIARD )
+											+ getTextResourceService()
+													.getText(
+															ERROR_XML_UNKNOWN,
+															e.getMessage()
+																	+ " (SAXException)" ) );
 				} catch ( ParserConfigurationException e ) {
-					getMessageService().logError(
-							getTextResourceService().getText(
-									MESSAGE_XML_MODUL_C_SIARD )
-									+ "ParserConfigurationException "
-									+ e.getMessage() );
+					getMessageService()
+							.logError(
+									getTextResourceService().getText(
+											MESSAGE_XML_MODUL_C_SIARD )
+											+ getTextResourceService()
+													.getText(
+															ERROR_XML_UNKNOWN,
+															e.getMessage()
+																	+ " (ParserConfigurationException)" ) );
 				}
 			}
 			zipfile.close();
@@ -242,7 +257,8 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 			getMessageService().logError(
 					getTextResourceService()
 							.getText( MESSAGE_XML_MODUL_C_SIARD )
-							+ e.getMessage() );
+							+ getTextResourceService().getText(
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 		return true;

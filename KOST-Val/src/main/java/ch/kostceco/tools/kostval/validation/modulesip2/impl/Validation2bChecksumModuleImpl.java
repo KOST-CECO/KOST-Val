@@ -96,11 +96,10 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 			// keine metadata.xml in der SIP-Datei gefunden
 			if ( metadataxml == null ) {
 				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_Bb )
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_Bb_SIP )
 								+ getTextResourceService().getText(
-										MESSAGE_DASHES )
-								+ getTextResourceService().getText(
-										ERROR_MODULE_AE_NOMETADATAFOUND ) );
+										ERROR_XML_AE_NOMETADATAFOUND ) );
 				return false;
 			}
 
@@ -217,11 +216,9 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 
 							getMessageService().logError(
 									getTextResourceService().getText(
-											MESSAGE_MODULE_Bb )
+											MESSAGE_XML_MODUL_Bb_SIP )
 											+ getTextResourceService().getText(
-													MESSAGE_DASHES )
-											+ getTextResourceService().getText(
-													MESSAGE_MODULE_Bb_WRONGMD5,
+													MESSAGE_XML_Bb_WRONGMD5,
 													path ) );
 
 						} else {
@@ -270,13 +267,10 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 												.logError(
 														getTextResourceService()
 																.getText(
-																		MESSAGE_MODULE_Bb )
+																		MESSAGE_XML_MODUL_Bb_SIP )
 																+ getTextResourceService()
 																		.getText(
-																				MESSAGE_DASHES )
-																+ getTextResourceService()
-																		.getText(
-																				ERROR_MODULE_BB_CANNOTPROCESSMD5 ) );
+																				ERROR_XML_BB_CANNOTPROCESSMD5 ) );
 										return false;
 
 									} finally {
@@ -288,13 +282,10 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 													.logError(
 															getTextResourceService()
 																	.getText(
-																			MESSAGE_MODULE_Bb )
+																			MESSAGE_XML_MODUL_Bb_SIP )
 																	+ getTextResourceService()
 																			.getText(
-																					MESSAGE_DASHES )
-																	+ getTextResourceService()
-																			.getText(
-																					ERROR_MODULE_BB_CANNOTCLOSESTREAMMD5 ) );
+																					ERROR_XML_BB_CANNOTCLOSESTREAMMD5 ) );
 											return false;
 										}
 									}
@@ -316,11 +307,9 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 
 							getMessageService().logError(
 									getTextResourceService().getText(
-											MESSAGE_MODULE_Bb )
+											MESSAGE_XML_MODUL_Bb_SIP )
 											+ getTextResourceService().getText(
-													MESSAGE_DASHES )
-											+ getTextResourceService().getText(
-													MESSAGE_MODULE_Bb_WRONGMD5,
+													MESSAGE_XML_Bb_WRONGMD5,
 													path ) );
 
 						} else {
@@ -368,13 +357,10 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 												.logError(
 														getTextResourceService()
 																.getText(
-																		MESSAGE_MODULE_Bb )
+																		MESSAGE_XML_MODUL_Bb_SIP )
 																+ getTextResourceService()
 																		.getText(
-																				MESSAGE_DASHES )
-																+ getTextResourceService()
-																		.getText(
-																				ERROR_MODULE_BB_CANNOTPROCESSMD5 ) );
+																				ERROR_XML_BB_CANNOTPROCESSMD5 ) );
 										return false;
 
 									} finally {
@@ -386,13 +372,10 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 													.logError(
 															getTextResourceService()
 																	.getText(
-																			MESSAGE_MODULE_Bb )
+																			MESSAGE_XML_MODUL_Bb_SIP )
 																	+ getTextResourceService()
 																			.getText(
-																					MESSAGE_DASHES )
-																	+ getTextResourceService()
-																			.getText(
-																					ERROR_MODULE_BB_CANNOTCLOSESTREAMMD5 ) );
+																					ERROR_XML_BB_CANNOTCLOSESTREAMMD5 ) );
 											return false;
 										}
 									}
@@ -415,11 +398,9 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 
 							getMessageService().logError(
 									getTextResourceService().getText(
-											MESSAGE_MODULE_Bb )
+											MESSAGE_XML_MODUL_Bb_SIP )
 											+ getTextResourceService().getText(
-													MESSAGE_DASHES )
-											+ getTextResourceService().getText(
-													MESSAGE_MODULE_Bb_WRONGMD5,
+													MESSAGE_XML_Bb_WRONGMD5,
 													path ) );
 
 						} else {
@@ -468,13 +449,10 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 												.logError(
 														getTextResourceService()
 																.getText(
-																		MESSAGE_MODULE_Bb )
+																		MESSAGE_XML_MODUL_Bb_SIP )
 																+ getTextResourceService()
 																		.getText(
-																				MESSAGE_DASHES )
-																+ getTextResourceService()
-																		.getText(
-																				ERROR_MODULE_BB_CANNOTPROCESSMD5 ) );
+																				ERROR_XML_BB_CANNOTPROCESSMD5 ) );
 										return false;
 
 									} finally {
@@ -486,13 +464,10 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 													.logError(
 															getTextResourceService()
 																	.getText(
-																			MESSAGE_MODULE_Bb )
+																			MESSAGE_XML_MODUL_Bb_SIP )
 																	+ getTextResourceService()
 																			.getText(
-																					MESSAGE_DASHES )
-																	+ getTextResourceService()
-																			.getText(
-																					ERROR_MODULE_BB_CANNOTCLOSESTREAMMD5 ) );
+																					ERROR_XML_BB_CANNOTCLOSESTREAMMD5 ) );
 
 											return false;
 										}
@@ -516,11 +491,9 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 
 							getMessageService().logError(
 									getTextResourceService().getText(
-											MESSAGE_MODULE_Bb )
+											MESSAGE_XML_MODUL_Bb_SIP )
 											+ getTextResourceService().getText(
-													MESSAGE_DASHES )
-											+ getTextResourceService().getText(
-													MESSAGE_MODULE_Bb_WRONGMD5,
+													MESSAGE_XML_Bb_WRONGMD5,
 													path ) );
 
 						} else {
@@ -569,13 +542,10 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 												.logError(
 														getTextResourceService()
 																.getText(
-																		MESSAGE_MODULE_Bb )
+																		MESSAGE_XML_MODUL_Bb_SIP )
 																+ getTextResourceService()
 																		.getText(
-																				MESSAGE_DASHES )
-																+ getTextResourceService()
-																		.getText(
-																				ERROR_MODULE_BB_CANNOTPROCESSMD5 ) );
+																				ERROR_XML_BB_CANNOTPROCESSMD5 ) );
 										return false;
 
 									} finally {
@@ -587,13 +557,10 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 													.logError(
 															getTextResourceService()
 																	.getText(
-																			MESSAGE_MODULE_Bb )
+																			MESSAGE_XML_MODUL_Bb_SIP )
 																	+ getTextResourceService()
 																			.getText(
-																					MESSAGE_DASHES )
-																	+ getTextResourceService()
-																			.getText(
-																					ERROR_MODULE_BB_CANNOTCLOSESTREAMMD5 ) );
+																					ERROR_XML_BB_CANNOTCLOSESTREAMMD5 ) );
 											return false;
 										}
 									}
@@ -635,9 +602,10 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 
 			} catch ( Exception e ) {
 				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_Bb )
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_Bb_SIP )
 								+ getTextResourceService().getText(
-										MESSAGE_DASHES ) + e.getMessage() );
+										ERROR_XML_UNKNOWN, e.getMessage() ) );
 				return false;
 			}
 
@@ -660,11 +628,9 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 							.equalsIgnoreCase( pruefsummeMetadataMD5 ) ) {
 						getMessageService().logError(
 								getTextResourceService().getText(
-										MESSAGE_MODULE_Bb )
+										MESSAGE_XML_MODUL_Bb_SIP )
 										+ getTextResourceService().getText(
-												MESSAGE_DASHES )
-										+ getTextResourceService().getText(
-												MESSAGE_MODULE_Bb_WRONGMD5,
+												MESSAGE_XML_Bb_WRONGMD5,
 												keyMetadataMD5 ) );
 						valid = false;
 					}
@@ -689,11 +655,9 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 							.equalsIgnoreCase( pruefsummeMetadataSHA1 ) ) {
 						getMessageService().logError(
 								getTextResourceService().getText(
-										MESSAGE_MODULE_Bb )
+										MESSAGE_XML_MODUL_Bb_SIP )
 										+ getTextResourceService().getText(
-												MESSAGE_DASHES )
-										+ getTextResourceService().getText(
-												MESSAGE_MODULE_Bb_WRONGMD5,
+												MESSAGE_XML_Bb_WRONGMD5,
 												keyMetadataSHA1 ) );
 						valid = false;
 					}
@@ -718,11 +682,9 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 							.equalsIgnoreCase( pruefsummeMetadataSHA256 ) ) {
 						getMessageService().logError(
 								getTextResourceService().getText(
-										MESSAGE_MODULE_Bb )
+										MESSAGE_XML_MODUL_Bb_SIP )
 										+ getTextResourceService().getText(
-												MESSAGE_DASHES )
-										+ getTextResourceService().getText(
-												MESSAGE_MODULE_Bb_WRONGMD5,
+												MESSAGE_XML_Bb_WRONGMD5,
 												keyMetadataSHA256 ) );
 						valid = false;
 					}
@@ -734,9 +696,9 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 
 		} catch ( Exception e ) {
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_Bb )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
-							+ e.getMessage() + " (2b)" );
+					getTextResourceService().getText( MESSAGE_XML_MODUL_Bb_SIP )
+							+ getTextResourceService().getText(
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 		return valid;

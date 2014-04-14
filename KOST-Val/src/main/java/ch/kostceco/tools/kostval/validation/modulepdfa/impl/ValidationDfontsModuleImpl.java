@@ -166,7 +166,10 @@ public class ValidationDfontsModuleImpl extends ValidationModuleImpl implements
 				}
 			} catch ( Exception e ) {
 				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_D_PDFA ) + e.getMessage() );
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_D_PDFA )
+								+ getTextResourceService().getText(
+										ERROR_XML_UNKNOWN, e.getMessage() ) );
 				return false;
 			}
 		}
@@ -174,5 +177,4 @@ public class ValidationDfontsModuleImpl extends ValidationModuleImpl implements
 
 		return isValid;
 	}
-
 }

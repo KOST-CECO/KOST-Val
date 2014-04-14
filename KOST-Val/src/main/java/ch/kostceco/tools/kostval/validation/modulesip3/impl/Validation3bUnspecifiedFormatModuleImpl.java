@@ -70,10 +70,9 @@ public class Validation3bUnspecifiedFormatModuleImpl extends
 
 		if ( nameOfSignature == null ) {
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_Cb )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService().getText( MESSAGE_XML_MODUL_Cb_SIP )
 							+ getTextResourceService().getText(
-									MESSAGE_CONFIGURATION_ERROR_NO_SIGNATURE ) );
+									MESSAGE_XML_CONFIGURATION_ERROR_NO_SIGNATURE ) );
 			return false;
 		}
 
@@ -81,10 +80,9 @@ public class Validation3bUnspecifiedFormatModuleImpl extends
 		File fnameOfSignature = new File( nameOfSignature );
 		if ( !fnameOfSignature.exists() ) {
 			getMessageService().logInfo(
-					getTextResourceService().getText( MESSAGE_MODULE_Ca )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService().getText( MESSAGE_XML_MODUL_Cb_SIP )
 							+ getTextResourceService().getText(
-									MESSAGE_MODULE_CA_DROID ) );
+									MESSAGE_XML_CA_DROID ) );
 			return false;
 		}
 
@@ -101,10 +99,9 @@ public class Validation3bUnspecifiedFormatModuleImpl extends
 
 		} catch ( Exception e ) {
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_Cb )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService().getText( MESSAGE_XML_MODUL_Cb_SIP )
 							+ getTextResourceService().getText(
-									ERROR_CANNOT_INITIALIZE_DROID ) );
+									ERROR_XML_CANNOT_INITIALIZE_DROID ) );
 			return false;
 		} finally {
 			Util.switchOnConsole();
@@ -112,7 +109,8 @@ public class Validation3bUnspecifiedFormatModuleImpl extends
 
 		// Die Archivdatei wurde bereits vom Schritt 1d in das
 		// Arbeitsverzeichnis entpackt
-		String pathToWorkDir = getConfigurationService().getPathToWorkDir() + "\\ZIP";
+		String pathToWorkDir = getConfigurationService().getPathToWorkDir()
+				+ "\\ZIP";
 		File workDir = new File( pathToWorkDir );
 		Map<String, File> fileMap = Util.getFileMap( workDir, false );
 		Set<String> fileMapKeys = fileMap.keySet();
@@ -155,29 +153,26 @@ public class Validation3bUnspecifiedFormatModuleImpl extends
 						if ( ff.getVersion() == null ) {
 							getMessageService().logError(
 									getTextResourceService().getText(
-											MESSAGE_MODULE_Cb )
+											MESSAGE_XML_MODUL_Cb_SIP )
 											+ getTextResourceService().getText(
-													MESSAGE_DASHES )
-											+ fileKey
-											+ " ("
-											+ ff.getPUID()
-											+ " = "
-											+ ff.getExtension( x ) + ")" );
+													MESSAGE_XML_CB_FORMAT,
+													fileKey, ff.getPUID(),
+													ff.getExtension( x ) ) );
 							valid = false;
 
 						} else {
-							getMessageService().logError(
-									getTextResourceService().getText(
-											MESSAGE_MODULE_Cb )
-											+ getTextResourceService().getText(
-													MESSAGE_DASHES )
-											+ fileKey
-											+ " ("
-											+ ff.getPUID()
-											+ " = "
-											+ ff.getExtension( x )
-											+ " v"
-											+ ff.getVersion() + ")" );
+							getMessageService()
+									.logError(
+											getTextResourceService().getText(
+													MESSAGE_XML_MODUL_Cb_SIP )
+													+ getTextResourceService()
+															.getText(
+																	MESSAGE_XML_CB_FORMATVERSION,
+																	fileKey,
+																	ff.getPUID(),
+																	ff.getExtension( x ),
+																	ff.getVersion() ) );
+
 							valid = false;
 						}
 

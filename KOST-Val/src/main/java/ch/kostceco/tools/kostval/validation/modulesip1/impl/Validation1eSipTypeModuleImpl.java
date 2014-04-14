@@ -77,11 +77,10 @@ public class Validation1eSipTypeModuleImpl extends ValidationModuleImpl
 			// keine metadata.xml in der SIP-Datei gefunden
 			if ( metadataxml == null ) {
 				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_Ae )
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_Ae_SIP )
 								+ getTextResourceService().getText(
-										MESSAGE_DASHES )
-								+ getTextResourceService().getText(
-										ERROR_MODULE_AE_NOMETADATAFOUND ) );
+										ERROR_XML_AE_NOMETADATAFOUND ) );
 				return false;
 			}
 
@@ -103,56 +102,36 @@ public class Validation1eSipTypeModuleImpl extends ValidationModuleImpl
 					getMessageService()
 							.logError(
 									getTextResourceService().getText(
-											MESSAGE_MODULE_Ae )
-											+ getTextResourceService().getText(
-													MESSAGE_DASHES )
+											MESSAGE_XML_MODUL_Ae_SIP )
 											+ getTextResourceService()
 													.getText(
-															ERROR_MODULE_AE_ABLIEFERUNGSTYPUNDEFINED ) );
+															ERROR_XML_AE_ABLIEFERUNGSTYPUNDEFINED ) );
 					return false;
 				}
 
 				if ( elementName.getAttribute( "xsi:type" ).equals(
 						"ablieferungGeverSIP" ) ) {
-					getMessageService()
-							.logError(
-									getTextResourceService().getText(
-											MESSAGE_MODULE_Ae )
-											+ getTextResourceService().getText(
-													MESSAGE_DASHES )
-											+ getTextResourceService()
-													.getText(
-															MESSAGE_MODULE_AE_ABLIEFERUNGSTYPGEVER ) );
-
+					// GEVER-SIP
 				} else if ( elementName.getAttribute( "xsi:type" ).equals(
 						"ablieferungFilesSIP" ) ) {
-					getMessageService()
-							.logError(
-									getTextResourceService().getText(
-											MESSAGE_MODULE_Ae )
-											+ getTextResourceService().getText(
-													MESSAGE_DASHES )
-											+ getTextResourceService()
-													.getText(
-															MESSAGE_MODULE_AE_ABLIEFERUNGSTYPFILE ) );
+					// FILE-SIP
 				} else {
 					getMessageService()
 							.logError(
 									getTextResourceService().getText(
-											MESSAGE_MODULE_Ae )
-											+ getTextResourceService().getText(
-													MESSAGE_DASHES )
+											MESSAGE_XML_MODUL_Ae_SIP )
 											+ getTextResourceService()
 													.getText(
-															ERROR_MODULE_AE_ABLIEFERUNGSTYPUNDEFINED ) );
+															ERROR_XML_AE_ABLIEFERUNGSTYPUNDEFINED ) );
 					return false;
 				}
 
 			} catch ( Exception e ) {
 				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_Ae )
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_Ae_SIP )
 								+ getTextResourceService().getText(
-										MESSAGE_DASHES ) + e.getMessage() );
+										ERROR_XML_UNKNOWN, e.getMessage() ) );
 				return false;
 			}
 
@@ -161,8 +140,7 @@ public class Validation1eSipTypeModuleImpl extends ValidationModuleImpl
 
 		} catch ( Exception e ) {
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_Ae )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService().getText( MESSAGE_XML_MODUL_Ae_SIP )
 							+ e.toString() );
 			return false;
 

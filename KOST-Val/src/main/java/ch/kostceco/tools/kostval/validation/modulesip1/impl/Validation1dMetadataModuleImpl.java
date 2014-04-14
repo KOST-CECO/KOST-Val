@@ -74,7 +74,7 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 
 	final int	BUFFER	= 2048;
 
-	@SuppressWarnings({ "unchecked", "rawtypes"})
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws Validation1dMetadataException
@@ -89,12 +89,12 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 		Map<String, String> xsdsInZip = new HashMap<String, String>();
 		Map<String, String> xsdsInMetadata = new HashMap<String, String>();
 
-		//File xmlToValidate = null;
-		//File xsdToValidate = null;
+		// File xmlToValidate = null;
+		// File xsdToValidate = null;
 
 		// Arbeitsverzeichnis zum Entpackten SIP
 		String pathToWorkDir = getConfigurationService().getPathToWorkDir()
-		+ "\\ZIP";
+				+ "\\ZIP";
 
 		String toplevelDir = valDatei.getName();
 		int lastDotIdx = toplevelDir.lastIndexOf( "." );
@@ -104,19 +104,17 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 			// Das metadata.xml und seine xsd's müssen in das Filesystem
 			// extrahiert werden, weil bei bei Verwendung eines Inputstreams bei
 			// der Validierung ein Problem mit den xs:include Statements
-			// besteht, die includes können so nicht aufgelöst werden. Es werden
-			// hier jedoch nicht nur diese Files extrahiert, sondern gleich die
-			// ganze Zip-Datei, weil auch spätere Validierungen (3a - 3c) nur
-			// mit den extrahierten Files arbeiten können.
+			// besteht, die includes können so nicht aufgelöst werden. Dies
+			// wurde bereits vorgängig für die Formatvalidierung gemacht.
 			Zip64File zipfile = new Zip64File( valDatei );
 
 			List<FileEntry> fileEntryList = zipfile.getListFileEntries();
 			for ( FileEntry fileEntry : fileEntryList ) {
 				if ( fileEntry.getName().equals( "header/" + METADATA )
 						|| fileEntry.getName().equals(
-						toplevelDir + "/" + "header/" + METADATA ) ) {
-						metadataxml = fileEntry;
-						}
+								toplevelDir + "/" + "header/" + METADATA ) ) {
+					metadataxml = fileEntry;
+				}
 				if ( fileEntry.getName().startsWith( "header/xsd/" )
 						&& fileEntry.getName().endsWith( ".xsd" ) ) {
 					xsdsInZip.put( fileEntry.getName().split( "/" )[2],
@@ -128,15 +126,20 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 							fileEntry.getName().split( "/" )[3] );
 				}
 			}
-			
-			File workToplevelDir = new File (pathToWorkDir + "\\" + toplevelDir);
-			if ( !workToplevelDir.exists()) {
-				workToplevelDir = new File (pathToWorkDir );
+
+			File workToplevelDir = new File( pathToWorkDir + "\\" + toplevelDir );
+			if ( !workToplevelDir.exists() ) {
+				workToplevelDir = new File( pathToWorkDir );
 			}
-			File xmlToValidate = new File (workToplevelDir.getAbsolutePath() + "\\header\\metadata.xml");
-			File xsdToValidateBar1 = new File (workToplevelDir.getAbsolutePath() + "\\header\\xsd\\arelda_v3.13.2.xsd");
-			File xsdToValidateEch1 = new File (workToplevelDir.getAbsolutePath() + "\\header\\xsd\\arelda.xsd");
-			
+			File xmlToValidate = new File( workToplevelDir.getAbsolutePath()
+					+ "\\header\\metadata.xml" );
+			File xsdToValidateBar1 = new File(
+					workToplevelDir.getAbsolutePath()
+							+ "\\header\\xsd\\arelda_v3.13.2.xsd" );
+			File xsdToValidateEch1 = new File(
+					workToplevelDir.getAbsolutePath()
+							+ "\\header\\xsd\\arelda.xsd" );
+
 			if ( xmlToValidate.exists() && xsdToValidateBar1.exists() ) {
 				// Schemavalidierung Nach Version BAR 1
 				try {
@@ -162,36 +165,44 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 					}
 
 				} catch ( java.io.IOException ioe ) {
-					getMessageService().logError(
-							getTextResourceService()
-									.getText( MESSAGE_MODULE_Ad )
-									+ getTextResourceService().getText(
-											MESSAGE_DASHES )
-									+ "IOException "
-									+ ioe.getMessage() );
+					getMessageService()
+							.logError(
+									getTextResourceService().getText(
+											MESSAGE_XML_MODUL_Ad_SIP )
+											+ getTextResourceService().getText(
+													ERROR_XML_UNKNOWN,
+													ioe.getMessage()
+															+ " (IOException)" ) );
 				} catch ( SAXException e ) {
-					getMessageService().logError(
-							getTextResourceService()
-									.getText( MESSAGE_MODULE_Ad )
-									+ getTextResourceService().getText(
-											MESSAGE_DASHES )
-									+ "SAXException "
-									+ e.getMessage() );
+					getMessageService()
+							.logError(
+									getTextResourceService().getText(
+											MESSAGE_XML_MODUL_Ad_SIP )
+											+ getTextResourceService()
+													.getText(
+															ERROR_XML_UNKNOWN,
+															e.getMessage()
+																	+ " (SAXException)" ) );
 				} catch ( ParserConfigurationException e ) {
-					getMessageService().logError(
-							getTextResourceService()
-									.getText( MESSAGE_MODULE_Ad )
-									+ getTextResourceService().getText(
-											MESSAGE_DASHES )
-									+ "ParserConfigurationException "
-									+ e.getMessage() );
+					getMessageService()
+							.logError(
+									getTextResourceService().getText(
+											MESSAGE_XML_MODUL_Ad_SIP )
+
+											+ getTextResourceService()
+													.getText(
+															ERROR_XML_UNKNOWN,
+															e.getMessage()
+																	+ " (ParserConfigurationException)" ) );
 				}
 			} else if ( xmlToValidate.exists() && xsdToValidateEch1.exists() ) {
-				// Schmavalidierung nach eCH Version 1 inkl Addendum in den Ressourcen
+				// Schmavalidierung nach eCH Version 1 inkl Addendum in den
+				// Ressourcen
 				// Dies erfolgt mit einer Validierung übers Kreuz
 				try {
 					// xmlToValidate mit xsdToValidateEch1Add
-					File xsdToValidateEch1Add = new File ("resources\\header_1d\\xsd\\arelda.xsd");
+					File xsdToValidateEch1Add = new File(
+							"resources\\header_1d\\xsd\\arelda.xsd" );
 					System.setProperty(
 							"javax.xml.parsers.DocumentBuilderFactory",
 							"org.apache.xerces.jaxp.DocumentBuilderFactoryImpl" );
@@ -214,34 +225,41 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 					}
 
 				} catch ( java.io.IOException ioe ) {
-					getMessageService().logError(
-							getTextResourceService()
-									.getText( MESSAGE_MODULE_Ad )
-									+ getTextResourceService().getText(
-											MESSAGE_DASHES )
-									+ "IOException "
-									+ ioe.getMessage() );
+					getMessageService()
+							.logError(
+									getTextResourceService().getText(
+											MESSAGE_XML_MODUL_Ad_SIP )
+											+ getTextResourceService().getText(
+													ERROR_XML_UNKNOWN,
+													ioe.getMessage()
+															+ " (IOException)" ) );
 				} catch ( SAXException e ) {
-					getMessageService().logError(
-							getTextResourceService()
-									.getText( MESSAGE_MODULE_Ad )
-									+ getTextResourceService().getText(
-											MESSAGE_DASHES )
-									+ "SAXException "
-									+ e.getMessage() );
+					getMessageService()
+							.logError(
+									getTextResourceService().getText(
+											MESSAGE_XML_MODUL_Ad_SIP )
+											+ getTextResourceService()
+													.getText(
+															ERROR_XML_UNKNOWN,
+															e.getMessage()
+																	+ " (SAXException)" ) );
 				} catch ( ParserConfigurationException e ) {
-					getMessageService().logError(
-							getTextResourceService()
-									.getText( MESSAGE_MODULE_Ad )
-									+ getTextResourceService().getText(
-											MESSAGE_DASHES )
-									+ "ParserConfigurationException "
-									+ e.getMessage() );
+					getMessageService()
+							.logError(
+									getTextResourceService().getText(
+											MESSAGE_XML_MODUL_Ad_SIP )
+
+											+ getTextResourceService()
+													.getText(
+															ERROR_XML_UNKNOWN,
+															e.getMessage()
+																	+ " (ParserConfigurationException)" ) );
 				}
-			
+
 				try {
 					// xmlToValidateAdd mit xsdToValidateEch1
-					File xmlToValidateAdd = new File ("resources\\header_1d\\metadata.xml");
+					File xmlToValidateAdd = new File(
+							"resources\\header_1d\\metadata.xml" );
 					System.setProperty(
 							"javax.xml.parsers.DocumentBuilderFactory",
 							"org.apache.xerces.jaxp.DocumentBuilderFactoryImpl" );
@@ -264,39 +282,44 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 					}
 
 				} catch ( java.io.IOException ioe ) {
-					getMessageService().logError(
-							getTextResourceService()
-									.getText( MESSAGE_MODULE_Ad )
-									+ getTextResourceService().getText(
-											MESSAGE_DASHES )
-									+ "IOException "
-									+ ioe.getMessage() );
+					getMessageService()
+							.logError(
+									getTextResourceService().getText(
+											MESSAGE_XML_MODUL_Ad_SIP )
+											+ getTextResourceService().getText(
+													ERROR_XML_UNKNOWN,
+													ioe.getMessage()
+															+ " (IOException)" ) );
 				} catch ( SAXException e ) {
-					getMessageService().logError(
-							getTextResourceService()
-									.getText( MESSAGE_MODULE_Ad )
-									+ getTextResourceService().getText(
-											MESSAGE_DASHES )
-									+ "SAXException "
-									+ e.getMessage() );
+					getMessageService()
+							.logError(
+									getTextResourceService().getText(
+											MESSAGE_XML_MODUL_Ad_SIP )
+											+ getTextResourceService()
+													.getText(
+															ERROR_XML_UNKNOWN,
+															e.getMessage()
+																	+ " (SAXException)" ) );
 				} catch ( ParserConfigurationException e ) {
-					getMessageService().logError(
-							getTextResourceService()
-									.getText( MESSAGE_MODULE_Ad )
-									+ getTextResourceService().getText(
-											MESSAGE_DASHES )
-									+ "ParserConfigurationException "
-									+ e.getMessage() );
+					getMessageService()
+							.logError(
+									getTextResourceService().getText(
+											MESSAGE_XML_MODUL_Ad_SIP )
+
+											+ getTextResourceService()
+													.getText(
+															ERROR_XML_UNKNOWN,
+															e.getMessage()
+																	+ " (ParserConfigurationException)" ) );
 				}
 			}
 
-			if ( xmlToValidate == null ||  metadataxml == null ) {
+			if ( xmlToValidate == null || metadataxml == null ) {
 				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_Ad )
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_Ad_SIP )
 								+ getTextResourceService().getText(
-										MESSAGE_DASHES )
-								+ getTextResourceService().getText(
-										ERROR_MODULE_AE_NOMETADATAFOUND ) );
+										ERROR_XML_AE_NOMETADATAFOUND ) );
 				return false;
 			}
 
@@ -344,9 +367,10 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 			} catch ( Exception e ) {
 
 				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_Ad )
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_Ad_SIP )
 								+ getTextResourceService().getText(
-										MESSAGE_DASHES ) + e.getMessage() );
+										ERROR_XML_UNKNOWN, e.getMessage() ) );
 				return false;
 			}
 
@@ -361,24 +385,18 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 			if ( xsdsInZip.size() != xsdsInMetadata.size() ) {
 				if ( xsdsInMetadata.size() == 0 ) {
 					getMessageService().logError(
-							getTextResourceService()
-									.getText( MESSAGE_MODULE_Ad )
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_Ad_SIP )
 									+ getTextResourceService().getText(
-											MESSAGE_DASHES )
-									+ getTextResourceService().getText(
-											ERROR_MODULE_AD_CONTENTB4HEADER ) );
+											ERROR_XML_AD_CONTENTB4HEADER ) );
 					return false;
 
 				} else {
-					getMessageService()
-							.logError(
-									getTextResourceService().getText(
-											MESSAGE_MODULE_Ad )
-											+ getTextResourceService().getText(
-													MESSAGE_DASHES )
-											+ getTextResourceService()
-													.getText(
-															ERROR_MODULE_AD_WRONGNUMBEROFXSDS ) );
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_Ad_SIP )
+									+ getTextResourceService().getText(
+											ERROR_XML_AD_WRONGNUMBEROFXSDS ) );
 					return false;
 				}
 			} else {
@@ -394,36 +412,29 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 						getMessageService()
 								.logError(
 										getTextResourceService().getText(
-												MESSAGE_MODULE_Ad )
+												MESSAGE_XML_MODUL_Ad_SIP )
 												+ getTextResourceService()
 														.getText(
-																MESSAGE_DASHES )
-												+ getTextResourceService()
-														.getText(
-																ERROR_MODULE_AD_WRONGNUMBEROFXSDS ) );
+																ERROR_XML_AD_WRONGNUMBEROFXSDS ) );
 						return false;
 					}
 					xsdsInZipControl.remove( key );
 				}
 				if ( xsdsInZipControl.size() != 0 ) {
-					getMessageService()
-							.logError(
-									getTextResourceService().getText(
-											MESSAGE_MODULE_Ad )
-											+ getTextResourceService().getText(
-													MESSAGE_DASHES )
-											+ getTextResourceService()
-													.getText(
-															ERROR_MODULE_AD_WRONGNUMBEROFXSDS ) );
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_Ad_SIP )
+									+ getTextResourceService().getText(
+											ERROR_XML_AD_WRONGNUMBEROFXSDS ) );
 					return false;
 				}
 			}
 
 		} catch ( Exception e ) {
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_Ad )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
-							+ e.getMessage() );
+					getTextResourceService().getText( MESSAGE_XML_MODUL_Ad_SIP )
+							+ getTextResourceService().getText(
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 
 		}
@@ -441,10 +452,9 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 			validationError = true;
 			saxParseException = exception;
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_Ad )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService().getText( MESSAGE_XML_MODUL_Ad_SIP )
 							+ getTextResourceService().getText(
-									ERROR_MODULE_AD_METADATA_ERRORS,
+									ERROR_XML_AD_METADATA_ERRORS,
 									saxParseException.getLineNumber(),
 									saxParseException.getMessage() ) );
 
@@ -456,12 +466,11 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 			validationError = true;
 			saxParseException = exception;
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_Ad )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
+					getTextResourceService().getText( MESSAGE_XML_MODUL_Ad_SIP )
 							+ getTextResourceService().getText(
-									ERROR_MODULE_AD_METADATA_ERRORS,
+									ERROR_XML_AD_METADATA_ERRORS,
 									saxParseException.getLineNumber(),
-									saxParseException.getMessage()  ) );
+									saxParseException.getMessage() ) );
 		}
 
 		public void warning( SAXParseException exception ) throws SAXException

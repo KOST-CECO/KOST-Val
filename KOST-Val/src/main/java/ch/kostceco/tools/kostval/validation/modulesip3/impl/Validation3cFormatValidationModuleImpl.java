@@ -54,15 +54,14 @@ public class Validation3cFormatValidationModuleImpl extends
 
 		boolean isValid = true;
 		// Informationen zum Arbeitsverzeichnis holen
-		String pathToWorkDir = getConfigurationService()
-				.getPathToWorkDir();
+		String pathToWorkDir = getConfigurationService().getPathToWorkDir();
 		/*
 		 * Nicht vergessen in
 		 * "src/main/resources/config/applicationContext-services.xml" beim
 		 * entsprechenden Modul die property anzugeben: <property
 		 * name="configurationService" ref="configurationService" />
 		 */
-		
+
 		// Die Formatvalidierung des Contents erfolgte vor 1a
 
 		String fileName3cIo = "3c_Valide.txt";
@@ -78,12 +77,9 @@ public class Validation3cFormatValidationModuleImpl extends
 			Util.deleteDir( outputFile3cNio );
 			isValid = false;
 			getMessageService().logError(
-					getTextResourceService()
-							.getText( MESSAGE_MODULE_Cc )
+					getTextResourceService().getText( MESSAGE_XML_MODUL_Cc_SIP )
 							+ getTextResourceService().getText(
-									MESSAGE_DASHES )
-							+ getTextResourceService().getText(
-									MESSAGE_MODULE_CC_INVALID ) );
+									MESSAGE_XML_CC_INVALID ) );
 
 		}
 		return isValid;

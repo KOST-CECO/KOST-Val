@@ -83,11 +83,10 @@ public class Validation2dGeverFileIntegrityModuleImpl extends
 			// keine metadata.xml in der SIP-Datei gefunden
 			if ( metadataxml == null ) {
 				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_Bd )
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_Bd_SIP )
 								+ getTextResourceService().getText(
-										MESSAGE_DASHES )
-								+ getTextResourceService().getText(
-										ERROR_MODULE_AE_NOMETADATAFOUND ) );
+										ERROR_XML_AE_NOMETADATAFOUND ) );
 				return false;
 			}
 
@@ -110,12 +109,10 @@ public class Validation2dGeverFileIntegrityModuleImpl extends
 					getMessageService()
 							.logError(
 									getTextResourceService().getText(
-											MESSAGE_MODULE_Bd )
-											+ getTextResourceService().getText(
-													MESSAGE_DASHES )
+											MESSAGE_XML_MODUL_Bd_SIP )
 											+ getTextResourceService()
 													.getText(
-															ERROR_MODULE_AE_ABLIEFERUNGSTYPUNDEFINED ) );
+															ERROR_XML_AE_ABLIEFERUNGSTYPUNDEFINED ) );
 					return false;
 				}
 
@@ -190,32 +187,13 @@ public class Validation2dGeverFileIntegrityModuleImpl extends
 										.logError(
 												getTextResourceService()
 														.getText(
-																MESSAGE_MODULE_Bd )
+																MESSAGE_XML_MODUL_Bd_SIP )
 														+ getTextResourceService()
 																.getText(
-																		MESSAGE_DASHES )
-														+ getTextResourceService()
-																.getText(
-																		MESSAGE_MODULE_BD_MISSINGINABLIEFERUNG ) );
+																		MESSAGE_XML_BD_MISSINGINABLIEFERUNG,
+																		keyContent ) );
 								titlePrinted = true;
 							}
-							// Die folgende DateiRef ist vorhanden in
-							// metadata/paket/inhaltsverzeichnis/content
-							// aber nicht in
-							// metadata/paket/ablieferung/ordnungssystem
-							getMessageService()
-									.logError(
-											getTextResourceService().getText(
-													MESSAGE_MODULE_Bd )
-													+ getTextResourceService()
-															.getText(
-																	MESSAGE_INDENT )
-													+ keyContent
-													+ getTextResourceService()
-															.getText(
-																	MESSAGE_SLASH )
-													+ dateiRefContent
-															.get( keyContent ) );
 							valid = false;
 						}
 					}
@@ -228,29 +206,19 @@ public class Validation2dGeverFileIntegrityModuleImpl extends
 						// metadata/paket/ablieferung/ordnungssystem,
 						// aber nicht in
 						// metadata/paket/inhaltsverzeichnis/content
-						getMessageService().logError(
-								getTextResourceService().getText(
-										MESSAGE_MODULE_Bd )
-										+ getTextResourceService().getText(
-												MESSAGE_INDENT )
-										+ keyOrd
-										+ getTextResourceService().getText(
-												MESSAGE_SLASH )
-										+ dateiRefOrdnungssystem.get( keyOrd ) );
+						getMessageService()
+								.logError(
+										getTextResourceService().getText(
+												MESSAGE_XML_MODUL_Bd_SIP )
+												+ getTextResourceService()
+														.getText(
+																MESSAGE_XML_BD_MISSINGINABLIEFERUNG,
+																keyOrd ) );
 						valid = false;
 					}
 
 				} else if ( elementName.getAttribute( "xsi:type" ).equals(
 						"ablieferungFilesSIP" ) ) {
-					getMessageService()
-							.logError(
-									getTextResourceService().getText(
-											MESSAGE_MODULE_Bd )
-											+ getTextResourceService().getText(
-													MESSAGE_DASHES )
-											+ getTextResourceService()
-													.getText(
-															MESSAGE_MODULE_AE_ABLIEFERUNGSTYPFILE ) );
 					// im Falle Ablieferungstyp FILE macht die Validierung
 					// nichts
 					valid = true;
@@ -259,20 +227,19 @@ public class Validation2dGeverFileIntegrityModuleImpl extends
 					getMessageService()
 							.logError(
 									getTextResourceService().getText(
-											MESSAGE_MODULE_Bd )
-											+ getTextResourceService().getText(
-													MESSAGE_DASHES )
+											MESSAGE_XML_MODUL_Bd_SIP )
 											+ getTextResourceService()
 													.getText(
-															ERROR_MODULE_AE_ABLIEFERUNGSTYPUNDEFINED ) );
+															ERROR_XML_AE_ABLIEFERUNGSTYPUNDEFINED ) );
 					return false;
 				}
 
 			} catch ( Exception e ) {
 				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_Bd )
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_Bd_SIP )
 								+ getTextResourceService().getText(
-										MESSAGE_DASHES ) + e.getMessage() );
+										ERROR_XML_UNKNOWN, e.getMessage() ) );
 				return false;
 			}
 
@@ -281,9 +248,9 @@ public class Validation2dGeverFileIntegrityModuleImpl extends
 
 		} catch ( Exception e ) {
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_Bd )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
-							+ e.getMessage() );
+					getTextResourceService().getText( MESSAGE_XML_MODUL_Bd_SIP )
+							+ getTextResourceService().getText(
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 

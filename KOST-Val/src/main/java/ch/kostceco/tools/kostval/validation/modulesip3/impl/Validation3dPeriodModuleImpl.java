@@ -87,11 +87,10 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 			// keine metadata.xml in der SIP-Datei gefunden
 			if ( metadataxml == null ) {
 				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_Cd )
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_Cd_SIP )
 								+ getTextResourceService().getText(
-										MESSAGE_DASHES )
-								+ getTextResourceService().getText(
-										ERROR_MODULE_AE_NOMETADATAFOUND ) );
+										ERROR_XML_AE_NOMETADATAFOUND ) );
 				return false;
 			}
 
@@ -158,13 +157,10 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 						getMessageService()
 								.logError(
 										getTextResourceService().getText(
-												MESSAGE_MODULE_Cd )
+												MESSAGE_XML_MODUL_Cd_SIP )
 												+ getTextResourceService()
 														.getText(
-																MESSAGE_DASHES )
-												+ getTextResourceService()
-														.getText(
-																ERROR_MODULE_CD_UNPARSEABLE_DATE ) );
+																ERROR_XML_CD_UNPARSEABLE_DATE ) );
 						return false;
 					}
 
@@ -187,13 +183,10 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 							getMessageService()
 									.logError(
 											getTextResourceService().getText(
-													MESSAGE_MODULE_Cd )
+													MESSAGE_XML_MODUL_Cd_SIP )
 													+ getTextResourceService()
 															.getText(
-																	MESSAGE_DASHES )
-													+ getTextResourceService()
-															.getText(
-																	ERROR_MODULE_CD_UNPARSEABLE_DATE ) );
+																	ERROR_XML_CD_UNPARSEABLE_DATE ) );
 							return false;
 						}
 
@@ -235,13 +228,10 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 							getMessageService()
 									.logError(
 											getTextResourceService().getText(
-													MESSAGE_MODULE_Cd )
+													MESSAGE_XML_MODUL_Cd_SIP )
 													+ getTextResourceService()
 															.getText(
-																	MESSAGE_DASHES )
-													+ getTextResourceService()
-															.getText(
-																	ERROR_MODULE_CD_DATUM_IN_FUTURE,
+																	ERROR_XML_CD_DATUM_IN_FUTURE,
 																	datumVon ) );
 						}
 
@@ -263,13 +253,10 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 							getMessageService()
 									.logError(
 											getTextResourceService().getText(
-													MESSAGE_MODULE_Cd )
+													MESSAGE_XML_MODUL_Cd_SIP )
 													+ getTextResourceService()
 															.getText(
-																	MESSAGE_DASHES )
-													+ getTextResourceService()
-															.getText(
-																	ERROR_MODULE_CD_DATUM_IN_FUTURE,
+																	ERROR_XML_CD_DATUM_IN_FUTURE,
 																	datumBis ) );
 						}
 
@@ -300,13 +287,10 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 							getMessageService()
 									.logError(
 											getTextResourceService().getText(
-													MESSAGE_MODULE_Cd )
+													MESSAGE_XML_MODUL_Cd_SIP )
 													+ getTextResourceService()
 															.getText(
-																	MESSAGE_DASHES )
-													+ getTextResourceService()
-															.getText(
-																	ERROR_MODULE_CD_INVALID_ABLIEFERUNG_RANGE,
+																	ERROR_XML_CD_INVALID_ABLIEFERUNG_RANGE,
 																	(Object[]) params ) );
 
 							// 3d wird auf invalid gesetzt
@@ -317,7 +301,8 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 
 						// Das elementAblDatumBis existiert nicht
 						// Dies bedeutet, dass dieser Schritt noch immer Valid
-						// sein könnte, da der Entstehungszeitraum auf der Stufe
+						// sein könnte, da der Entstehungszeitraum auf der
+						// Stufe
 						// Ablieferung optional ist.
 						// Es Soll kein Fehler ausgegeben werden sondern nur der
 						// Marker dateAblieferungUsable = false (unbrauchbar)
@@ -460,13 +445,10 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 							getMessageService()
 									.logError(
 											getTextResourceService().getText(
-													MESSAGE_MODULE_Cd )
+													MESSAGE_XML_MODUL_Cd_SIP )
 													+ getTextResourceService()
 															.getText(
-																	MESSAGE_DASHES )
-													+ getTextResourceService()
-															.getText(
-																	ERROR_MODULE_CD_UNPARSEABLE_DATE ) );
+																	ERROR_XML_CD_UNPARSEABLE_DATE ) );
 							return false;
 						}
 
@@ -485,13 +467,10 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 							getMessageService()
 									.logError(
 											getTextResourceService().getText(
-													MESSAGE_MODULE_Cd )
+													MESSAGE_XML_MODUL_Cd_SIP )
 													+ getTextResourceService()
 															.getText(
-																	MESSAGE_DASHES )
-													+ getTextResourceService()
-															.getText(
-																	ERROR_MODULE_CD_UNPARSEABLE_DATE ) );
+																	ERROR_XML_CD_UNPARSEABLE_DATE ) );
 							return false;
 						}
 
@@ -499,7 +478,8 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 						// übernommen
 						calDossierBis.setTime( date );
 
-						// der String datumVonDos respektive datumBisDos enthält
+						// der String datumVonDos respektive datumBisDos
+						// enthält
 						// die reelle Eingabe des Entstehungszeitraums Von und
 						// Bis und
 						// wird für den allfälligen Fehlerlog benötigt
@@ -537,13 +517,10 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 							getMessageService()
 									.logError(
 											getTextResourceService().getText(
-													MESSAGE_MODULE_Cd )
+													MESSAGE_XML_MODUL_Cd_SIP )
 													+ getTextResourceService()
 															.getText(
-																	MESSAGE_DASHES )
-													+ getTextResourceService()
-															.getText(
-																	ERROR_MODULE_CD_DATUM_IN_FUTURE,
+																	ERROR_XML_CD_DATUM_IN_FUTURE,
 																	datumVonDos ) );
 						}
 
@@ -565,20 +542,17 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 							getMessageService()
 									.logError(
 											getTextResourceService().getText(
-													MESSAGE_MODULE_Cd )
+													MESSAGE_XML_MODUL_Cd_SIP )
 													+ getTextResourceService()
 															.getText(
-																	MESSAGE_DASHES )
-													+ getTextResourceService()
-															.getText(
-																	ERROR_MODULE_CD_DATUM_IN_FUTURE,
+																	ERROR_XML_CD_DATUM_IN_FUTURE,
 																	datumBisDos ) );
 						}
 
 						// falls das Dossier-Datum "Bis" vor dem Datum "Von"
 						// liegt, gehen wir davon aus,
 						// das eine Verwechslung vorliegt, d.h. wir geben den
-						// Fehler aus, Schritt 3d ist invalid und für die
+						// Fehler aus, Schritt 3d ist invalid und f�r die
 						// weiterverarbeitung
 						// tauschen die calDaten gegeneinander aus.
 						if ( calDossierBis.before( calDossierVon ) ) {
@@ -591,7 +565,7 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 							String dossierId = dossierElement
 									.getAttribute( "id" );
 
-							// Zusammenstellung der parameter die für den
+							// Zusammenstellung der parameter die f�r den
 							// logreport gebraucht werden (die reellen Daten)
 							String[] params = new String[5];
 							params[0] = dossierId;
@@ -608,13 +582,10 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 							getMessageService()
 									.logError(
 											getTextResourceService().getText(
-													MESSAGE_MODULE_Cd )
+													MESSAGE_XML_MODUL_Cd_SIP )
 													+ getTextResourceService()
 															.getText(
-																	MESSAGE_DASHES )
-													+ getTextResourceService()
-															.getText(
-																	ERROR_MODULE_CD_INVALID_DOSSIER_RANGE_CA,
+																	ERROR_XML_CD_INVALID_DOSSIER_RANGE_CA,
 																	(Object[]) params ) );
 
 							// 3d wird auf invalid gesetzt
@@ -683,13 +654,10 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 										.logError(
 												getTextResourceService()
 														.getText(
-																MESSAGE_MODULE_Cd )
+																MESSAGE_XML_MODUL_Cd_SIP )
 														+ getTextResourceService()
 																.getText(
-																		MESSAGE_DASHES )
-														+ getTextResourceService()
-																.getText(
-																		ERROR_MODULE_CD_INVALID_DOSSIER_RANGE_CA_ABL,
+																		ERROR_XML_CD_INVALID_DOSSIER_RANGE_CA_ABL,
 																		(Object[]) params ) );
 
 								dossierRangeOk = false;
@@ -703,7 +671,8 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 					if ( !dossierRangeOk ) {
 						// kein gültiger Dossierzeitraum vorhanden
 						if ( dateAblieferungUseable ) {
-							// wir haben keinen gültigen Dossierzeitraum, jedoch
+							// wir haben keinen gültigen Dossierzeitraum,
+							// jedoch
 							// Ablieferungszeitraum und verwenden
 							// diesen als Validierungszeitraum für
 							// untergeordnete Dokumente
@@ -862,13 +831,10 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 													.logError(
 															getTextResourceService()
 																	.getText(
-																			MESSAGE_MODULE_Cd )
+																			MESSAGE_XML_MODUL_Cd_SIP )
 																	+ getTextResourceService()
 																			.getText(
-																					MESSAGE_DASHES )
-																	+ getTextResourceService()
-																			.getText(
-																					ERROR_MODULE_CD_UNPARSEABLE_DATE ) );
+																					ERROR_XML_CD_UNPARSEABLE_DATE ) );
 											return false;
 										}
 
@@ -901,13 +867,10 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 													.logError(
 															getTextResourceService()
 																	.getText(
-																			MESSAGE_MODULE_Cd )
+																			MESSAGE_XML_MODUL_Cd_SIP )
 																	+ getTextResourceService()
 																			.getText(
-																					MESSAGE_DASHES )
-																	+ getTextResourceService()
-																			.getText(
-																					ERROR_MODULE_CD_UNPARSEABLE_DATE ) );
+																					ERROR_XML_CD_UNPARSEABLE_DATE ) );
 											return false;
 										}
 									}
@@ -950,13 +913,10 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 												.logError(
 														getTextResourceService()
 																.getText(
-																		MESSAGE_MODULE_Cd )
+																		MESSAGE_XML_MODUL_Cd_SIP )
 																+ getTextResourceService()
 																		.getText(
-																				MESSAGE_DASHES )
-																+ getTextResourceService()
-																		.getText(
-																				ERROR_MODULE_CD_DATUM_ENTSTEHUNG_IN_FUTURE,
+																				ERROR_XML_CD_DATUM_ENTSTEHUNG_IN_FUTURE,
 																				(Object[]) params ) );
 									}
 
@@ -986,13 +946,10 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 												.logError(
 														getTextResourceService()
 																.getText(
-																		MESSAGE_MODULE_Cd )
+																		MESSAGE_XML_MODUL_Cd_SIP )
 																+ getTextResourceService()
 																		.getText(
-																				MESSAGE_DASHES )
-																+ getTextResourceService()
-																		.getText(
-																				ERROR_MODULE_CD_DATUM_ENTSTEHUNG_IN_FUTURE,
+																				ERROR_XML_CD_DATUM_ENTSTEHUNG_IN_FUTURE,
 																				(Object[]) params ) );
 									}
 
@@ -1029,20 +986,18 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 												.logError(
 														getTextResourceService()
 																.getText(
-																		MESSAGE_MODULE_Cd )
+																		MESSAGE_XML_MODUL_Cd_SIP )
 																+ getTextResourceService()
 																		.getText(
-																				MESSAGE_DASHES )
-																+ getTextResourceService()
-																		.getText(
-																				ERROR_MODULE_CD_INVALID_DOSSIER_RANGE_CA,
+																				ERROR_XML_CD_INVALID_DOSSIER_RANGE_CA,
 																				(Object[]) params ) );
 
 										// 3d wird auf invalid gesetzt
 										valid = false;
 									}
 
-									// Validierung der Zeiträume gegenüber jener
+									// Validierung der Zeiträume gegenüber
+									// jener
 									// der Dossier
 									// ---------------------------------------------------------
 
@@ -1103,13 +1058,10 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 													.logError(
 															getTextResourceService()
 																	.getText(
-																			MESSAGE_MODULE_Cd )
+																			MESSAGE_XML_MODUL_Cd_SIP )
 																	+ getTextResourceService()
 																			.getText(
-																					MESSAGE_DASHES )
-																	+ getTextResourceService()
-																			.getText(
-																					ERROR_MODULE_CD_INVALID_DOKUMENT_RANGE_CA,
+																					ERROR_XML_CD_INVALID_DOKUMENT_RANGE_CA,
 																					(Object[]) params ) );
 
 											// 3d wird auf invalid gesetzt
@@ -1131,16 +1083,17 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 
 			} catch ( Exception e ) {
 				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_MODULE_Cd )
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_Cd_SIP )
 								+ getTextResourceService().getText(
-										MESSAGE_DASHES ) + e.getMessage() );
+										ERROR_XML_UNKNOWN, e.getMessage() ) );
 				return false;
 			}
 		} catch ( Exception e ) {
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_MODULE_Cd )
-							+ getTextResourceService().getText( MESSAGE_DASHES )
-							+ e.getMessage() );
+					getTextResourceService().getText( MESSAGE_XML_MODUL_Cd_SIP )
+							+ getTextResourceService().getText(
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 

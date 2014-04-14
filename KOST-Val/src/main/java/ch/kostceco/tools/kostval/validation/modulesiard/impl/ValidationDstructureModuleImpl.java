@@ -100,13 +100,17 @@ public class ValidationDstructureModuleImpl extends ValidationModuleImpl
 			getMessageService().logError(
 					getTextResourceService()
 							.getText( MESSAGE_XML_MODUL_D_SIARD )
-							+ "IOException " + ioe.getMessage() );
+							+ getTextResourceService().getText(
+									ERROR_XML_UNKNOWN,
+									ioe.getMessage() + " (IOException)" ) );
 		} catch ( JDOMException e ) {
 			valid = false;
 			getMessageService().logError(
 					getTextResourceService()
 							.getText( MESSAGE_XML_MODUL_D_SIARD )
-							+ "JDOMException " + e.getMessage() );
+							+ getTextResourceService().getText(
+									ERROR_XML_UNKNOWN,
+									e.getMessage() + " (JDOMException)" ) );
 		}
 
 		return valid;
