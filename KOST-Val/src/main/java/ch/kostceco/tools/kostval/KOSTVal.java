@@ -1,5 +1,5 @@
 /*== KOST-Val ==================================================================================
-The KOST-Val v1.2.7 application is used for validate TIFF, SIARD, PDF/A-Files and Submission 
+The KOST-Val v1.3.0 application is used for validate TIFF, SIARD, PDF/A-Files and Submission 
 Information Package (SIP). 
 Copyright (C) 2012-2014 Claire Röthlisberger (KOST-CECO), Christian Eugster, Olivier Debenath, 
 Peter Schneider (Staatsarchiv Aargau), Daniel Ludin (BEDAG AG)
@@ -149,6 +149,13 @@ public class KOSTVal implements MessageConstants
 		LOGGER.logInfo( kostval.getTextResourceService().getText(
 				MESSAGE_XML_INFO ) );
 
+		File xslOrig = new File( "resources\\kost-val.xsl" );
+		File xslCopy = new File( directoryOfLogfile.getAbsolutePath()
+				+ "\\kost-val.xsl" );
+		if ( !xslCopy.exists() ) {
+			Util.copyFile( xslOrig, xslCopy );
+		}
+
 		// Ist die Anzahl Parameter (mind. 2) korrekt?
 		if ( args.length < 2 ) {
 			LOGGER.logInfo( kostval.getTextResourceService().getText(
@@ -239,14 +246,18 @@ public class KOSTVal implements MessageConstants
 				|| !fJhoveConf.getName().equals( "jhove.conf" ) ) {
 
 			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					ERROR_IOE, kostval.getTextResourceService().getText(ERROR_JHOVECONF_MISSING ) ));
+					ERROR_IOE,
+					kostval.getTextResourceService().getText(
+							ERROR_JHOVECONF_MISSING ) ) );
 			System.exit( 1 );
 		}
 
 		// Ueberprüfung des Parameters (Val-Datei): existiert die Datei?
 		if ( !valDatei.exists() ) {
 			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					ERROR_IOE, kostval.getTextResourceService().getText(ERROR_VALFILE_FILENOTEXISTING )) );
+					ERROR_IOE,
+					kostval.getTextResourceService().getText(
+							ERROR_VALFILE_FILENOTEXISTING ) ) );
 			System.exit( 1 );
 		}
 
@@ -288,6 +299,7 @@ public class KOSTVal implements MessageConstants
 				String ausgabeEnd = sdfEnd.format( nowEnd );
 				ausgabeEnd = "<End>" + ausgabeEnd + "</End>";
 				Util.valEnd( ausgabeEnd, logFile );
+				Util.amp( logFile );
 
 				if ( valFile ) {
 					// Löschen des Arbeitsverzeichnisses, falls eines
@@ -423,6 +435,7 @@ public class KOSTVal implements MessageConstants
 				String ausgabeEnd = sdfEnd.format( nowEnd );
 				ausgabeEnd = "<End>" + ausgabeEnd + "</End>";
 				Util.valEnd( ausgabeEnd, logFile );
+				Util.amp( logFile );
 
 				if ( countNio == count ) {
 					// keine Dateien Validiert
@@ -517,7 +530,9 @@ public class KOSTVal implements MessageConstants
 							zip = true;
 						}
 					} catch ( Exception e ) {
-						LOGGER.logInfo( e.getMessage() );
+						LOGGER.logInfo( "<Error>"
+								+ kostval.getTextResourceService().getText(
+										ERROR_XML_UNKNOWN, e.getMessage() ) );
 					}
 				}
 
@@ -549,36 +564,37 @@ public class KOSTVal implements MessageConstants
 				}
 			} else {
 				// SIP ist ein Ordner
-				// Für 1d header in tempDir\ZIP\SIP-name\header kopieren
+				// Für 1d und 3a&3b SIP in tempDir\ZIP\SIP-name kopieren
+				File contentOrig = new File( valDatei.getAbsolutePath()
+						+ "\\content" );
 				File headerOrig = new File( valDatei.getAbsolutePath()
 						+ "\\header" );
 				File zipCopy = new File( pathToWorkDir + "\\ZIP" );
 				zipCopy.mkdir();
-				File valCopy = new File( pathToWorkDir + "\\ZIP\\"
-						+ valDatei.getName() );
-				valCopy.mkdir();
-				File headerCopy = new File( pathToWorkDir + "\\ZIP\\"
-						+ valDatei.getName() + "\\header" );
+				File contentCopy = new File( pathToWorkDir + "\\ZIP\\content" );
+				contentCopy.mkdir();
+				File headerCopy = new File( pathToWorkDir + "\\ZIP\\header" );
 				headerCopy.mkdir();
-				if ( !headerCopy.exists() ) {
-					System.out.println( "Ordneranlegen fehlgeschlagen" );
-				}
 				File metadataXml = new File( headerCopy.getAbsolutePath()
 						+ "\\metadata.xml" );
-				try {
-					Util.copyDir( headerOrig, headerCopy );
-					if ( !metadataXml.exists() ) {
-						System.out
-								.println( "Metadata.xml anlegen fehlgeschlagen" );
-					}
 
+				try {
+					Util.copyDir( contentOrig, contentCopy );
+					Util.copyDir( headerOrig, headerCopy );
 				} catch ( FileNotFoundException e ) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					LOGGER.logInfo( "<Error>"
+							+ kostval
+									.getTextResourceService()
+									.getText(
+											ERROR_XML_UNKNOWN,
+											e.getMessage()
+													+ " (FileNotFoundException)" ) );
 				} catch ( IOException e ) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					LOGGER.logInfo( "<Error>"
+							+ kostval.getTextResourceService().getText(
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 				}
+
 			}
 			Map<String, File> fileMap = Util.getFileMap( valDatei, false );
 			Set<String> fileMapKeys = fileMap.keySet();
@@ -609,6 +625,16 @@ public class KOSTVal implements MessageConstants
 					} else if ( (valDatei.getAbsolutePath().toLowerCase()
 							.endsWith( ".siard" ))
 							&& siardValidation.equals( "yes" ) ) {
+						
+						// Arbeitsverzeichnis zum Entpacken des Archivs erstellen
+						String pathToWorkDirSiard = kostval.getConfigurationService().getPathToWorkDir();
+						File tmpDirSiard = new File( pathToWorkDirSiard + "\\SIARD" );
+						if ( tmpDirSiard.exists() ) {
+							Util.deleteDir( tmpDirSiard );
+						}
+						if ( !tmpDirSiard.exists() ) {
+							tmpDirSiard.mkdir();
+						}
 
 						boolean valFile = valFile( valDatei, logFileName,
 								directoryOfLogfile, verbose );
@@ -718,7 +744,7 @@ public class KOSTVal implements MessageConstants
 			}
 			// Formatvalidierung validFormat
 			ok = (ok && okMandatory && validFormat);
-			
+
 			if ( ok ) {
 				// Validiertes SIP valide
 				Util.valElement(
@@ -738,9 +764,9 @@ public class KOSTVal implements MessageConstants
 						+ kostval.getTextResourceService().getText(
 								MESSAGE_XML_VALERGEBNIS_INVALID ) );
 			}
-			
+
 			// ggf. Fehlermeldung 3c ergänzen
-//			Util.val3c(summary3c, logFile );
+			// Util.val3c(summary3c, logFile );
 
 			LOGGER.logError( kostval.getTextResourceService().getText(
 					MESSAGE_XML_SIP2 ) );
@@ -754,7 +780,8 @@ public class KOSTVal implements MessageConstants
 			String ausgabeEnd = sdfEnd.format( nowEnd );
 			ausgabeEnd = "<End>" + ausgabeEnd + "</End>";
 			Util.valEnd( ausgabeEnd, logFile );
-			Util.val3c(summary3c, logFile );
+			Util.val3c( summary3c, logFile );
+			Util.amp( logFile );
 
 			// bestehendes Workverzeichnis ggf. löschen
 			if ( tmpDir.exists() ) {
@@ -803,8 +830,9 @@ public class KOSTVal implements MessageConstants
 			// Ueberprüfung des Parameters (Val-Typ): format / sip
 			// args[0] ist nicht "--format" oder "--sip" --> INVALIDE
 			LOGGER.logInfo( kostval.getTextResourceService().getText(
-					ERROR_IOE,kostval.getTextResourceService().getText(
-					ERROR_PARAMETER_USAGE )) );
+					ERROR_IOE,
+					kostval.getTextResourceService().getText(
+							ERROR_PARAMETER_USAGE ) ) );
 			if ( tmpDir.exists() ) {
 				Util.deleteDir( tmpDir );
 				tmpDir.deleteOnExit();

@@ -236,12 +236,6 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 				if ( name.endsWith( XSD_ARELDA ) ) {
 					// dann handelt es sich um die Version BAR1
 					version = 1;
-					getMessageService().logError(
-							getTextResourceService().getText(
-									MESSAGE_XML_MODUL_Ac_SIP )
-									+ getTextResourceService().getText(
-											MESSAGE_XML_AC_VERSION, version ) );
-					// Ausgabe der Version als Information
 					if ( allowedV1 == 1 ) {
 						allowedXsdFiles.put( "header/xsd/ablieferung.xsd",
 								"header/xsd/ablieferung.xsd/" );
@@ -286,13 +280,6 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 				if ( name.endsWith( "arelda.xsd" ) ) {
 					// dann handelt es sich um die Version BAR4 respektive eCH1
 					version = 4;
-					getMessageService().logError(
-							getTextResourceService().getText(
-									MESSAGE_XML_MODUL_Ac_SIP )
-									+ getTextResourceService().getText(
-											MESSAGE_XML_AC_VERSION, version ) );
-					// Ausgabe der Version als Information
-
 					if ( allowedV4 == 1 ) {
 
 						allowedXsdFiles.put( "header/xsd/ablieferung.xsd",

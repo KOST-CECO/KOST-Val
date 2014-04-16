@@ -319,4 +319,28 @@ public class Util
 		}
 	}
 
+	/**
+	 * Verändert & mit &amp;
+	 * 
+	 * @throws IOException
+	 */
+	public static void amp( File file ) throws IOException
+	{
+		try {
+			BufferedReader reader = new BufferedReader( new FileReader( file ) );
+			String line = "", oldtext = "";
+			while ( (line = reader.readLine()) != null ) {
+				oldtext += line + "\r\n";
+			}
+			reader.close();
+			String newtext = oldtext.replace( "&", "&amp;" );
+			newtext = newtext.replace( (char) 0, (char) 32 );
+			FileWriter writer = new FileWriter( file );
+			writer.write( newtext );
+			writer.close();
+		} catch ( IOException ioe ) {
+			ioe.printStackTrace();
+		}
+	}
+
 }

@@ -34,6 +34,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationCheaderException;
+import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationCheaderModule;
 import ch.enterag.utils.zip.EntryInputStream;
@@ -123,15 +124,18 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 		toplevelDir = toplevelDir.substring( 0, lastDotIdx );
 
 		try {
-			// Arbeitsverzeichnis zum Entpacken des Archivs erstellen
-			String pathToWorkDir = getConfigurationService().getPathToWorkDir();
 			/*
 			 * Nicht vergessen in
 			 * "src/main/resources/config/applicationContext-services.xml" beim
 			 * entsprechenden Modul die property anzugeben: <property
 			 * name="configurationService" ref="configurationService" />
 			 */
-			File tmpDir = new File( pathToWorkDir );
+			// Arbeitsverzeichnis zum Entpacken des Archivs erstellen
+			String pathToWorkDir = getConfigurationService().getPathToWorkDir();
+			File tmpDir = new File( pathToWorkDir + "\\SIARD" );
+			if ( tmpDir.exists() ) {
+				Util.deleteDir( tmpDir );
+			}
 			if ( !tmpDir.exists() ) {
 				tmpDir.mkdir();
 			}

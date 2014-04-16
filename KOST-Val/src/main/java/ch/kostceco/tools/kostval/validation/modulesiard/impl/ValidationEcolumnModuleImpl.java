@@ -123,8 +123,7 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 		boolean congruentColumnCount = false;
 		ValidationContext validationContext = new ValidationContext();
 		validationContext.setSiardArchive( valDatei );
-		validationContext.setConfigurationService( this
-				.getConfigurationService() );
+		validationContext.setConfigurationService( this.getConfigurationService() );
 		this.setValidationContext( validationContext );
 		try {
 			// Initialize the validation context

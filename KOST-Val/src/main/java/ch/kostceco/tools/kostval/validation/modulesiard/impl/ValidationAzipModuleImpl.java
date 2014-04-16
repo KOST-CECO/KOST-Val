@@ -26,7 +26,6 @@ import java.io.FileReader;
 import java.util.Arrays;
 import java.util.List;
 
-import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationAzipException;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationAzipModule;
@@ -46,13 +45,6 @@ import ch.enterag.utils.zip.FileEntry;
 public class ValidationAzipModuleImpl extends ValidationModuleImpl implements
 		ValidationAzipModule
 {
-
-	private ConfigurationService	configurationService;
-
-	public ConfigurationService getConfigurationService()
-	{
-		return configurationService;
-	}
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile )

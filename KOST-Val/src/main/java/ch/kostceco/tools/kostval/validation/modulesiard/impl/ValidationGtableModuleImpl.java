@@ -73,6 +73,7 @@ public class ValidationGtableModuleImpl extends ValidationModuleImpl implements
 			 */
 
 			String pathToWorkDir = getConfigurationService().getPathToWorkDir();
+			pathToWorkDir = pathToWorkDir + "\\SIARD";
 			/*
 			 * Nicht vergessen in
 			 * "src/main/resources/config/applicationContext-services.xml" beim

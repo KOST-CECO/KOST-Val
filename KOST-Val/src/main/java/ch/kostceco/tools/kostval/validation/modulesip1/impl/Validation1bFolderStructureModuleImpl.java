@@ -83,7 +83,7 @@ public class Validation1bFolderStructureModuleImpl extends ValidationModuleImpl
 
 		} catch ( Exception e ) {
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_Aa_SIP )
+					getTextResourceService().getText( MESSAGE_XML_MODUL_Ab_SIP )
 							+ getTextResourceService().getText(
 									ERROR_XML_UNKNOWN, e.getMessage() ) );
 

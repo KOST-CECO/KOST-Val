@@ -23,7 +23,6 @@ package ch.kostceco.tools.kostval.validation.modulesiard.impl;
 import java.io.File;
 
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationIrecognitionException;
-//import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationIrecognitionModule;
 

@@ -222,7 +222,6 @@ public interface MessageConstants
 	// Modul 1c Meldungen
 	String	MESSAGE_XML_AC_NOTALLOWEDFILE				= "message.xml.ac.notallowedfile";
 	String	MESSAGE_XML_AC_NOTALLOWEDV					= "message.xml.ac.notallowedv";
-	String	MESSAGE_XML_AC_VERSION						= "message.xml.ac.version";
 	String	MESSAGE_XML_AC_MISSINGFILE					= "message.xml.ac.missingfile";
 	String	MESSAGE_XML_AC_PATHTOOLONG					= "message.xml.ac.pathtoolong";
 	String	MESSAGE_XML_AC_FILENAMETOOLONG				= "message.xml.ac.filenametoolong";
@@ -263,7 +262,6 @@ public interface MessageConstants
 
 	// Modul 3b Meldungen
 	String	MESSAGE_XML_CB_FORMAT						= "message.xml.cb.format";
-	String	MESSAGE_XML_CB_FORMATVERSION				= "message.xml.cb.formatversion";
 
 	// Modul 3c Meldungen
 	String	MESSAGE_XML_CC_INVALID						= "message.xml.cc.invalid";

@@ -278,14 +278,16 @@ public class Controllersip implements MessageConstants
 				return false;
 			}
 		} catch ( Validation1aZipException e ) {
-			LOGGER.logError( "<Error>"
+			LOGGER.logError( getTextResourceService().getText(
+					MESSAGE_XML_MODUL_Aa_SIP )
 					+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
 							e.getMessage() ) );
 			this.getValidation1aZipModule().getMessageService().print();
 			return false;
 
 		} catch ( Exception e ) {
-			LOGGER.logError( "<Error>"
+			LOGGER.logError( getTextResourceService().getText(
+					MESSAGE_XML_MODUL_Aa_SIP )
 					+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
 							e.getMessage() ) );
 			return false;
@@ -305,14 +307,16 @@ public class Controllersip implements MessageConstants
 				return false;
 			}
 		} catch ( Validation1bFolderStructureException e ) {
-			LOGGER.logError( "<Error>"
+			LOGGER.logError( getTextResourceService().getText(
+					MESSAGE_XML_MODUL_Ab_SIP )
 					+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
 							e.getMessage() ) );
 			this.getValidation1bFolderStructureModule().getMessageService()
 					.print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logError( "<Error>"
+			LOGGER.logError( getTextResourceService().getText(
+					MESSAGE_XML_MODUL_Ab_SIP )
 					+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
 							e.getMessage() ) );
 			return false;
@@ -330,13 +334,15 @@ public class Controllersip implements MessageConstants
 				return false;
 			}
 		} catch ( Validation1cNamingException e ) {
-			LOGGER.logError( "<Error>"
+			LOGGER.logError( getTextResourceService().getText(
+					MESSAGE_XML_MODUL_Ac_SIP )
 					+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
 							e.getMessage() ) );
 			this.getValidation1cNamingModule().getMessageService().print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logError( "<Error>"
+			LOGGER.logError( getTextResourceService().getText(
+					MESSAGE_XML_MODUL_Ac_SIP )
 					+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
 							e.getMessage() ) );
 			return false;
@@ -356,13 +362,15 @@ public class Controllersip implements MessageConstants
 				return false;
 			}
 		} catch ( Validation1dMetadataException e ) {
-			LOGGER.logError( "<Error>"
+			LOGGER.logError( getTextResourceService().getText(
+					MESSAGE_XML_MODUL_Ad_SIP )
 					+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
 							e.getMessage() ) );
 			this.getValidation1dMetadataModule().getMessageService().print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logError( "<Error>"
+			LOGGER.logError( getTextResourceService().getText(
+					MESSAGE_XML_MODUL_Ad_SIP )
 					+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
 							e.getMessage() ) );
 			return false;
@@ -386,13 +394,15 @@ public class Controllersip implements MessageConstants
 				valid = false;
 			}
 		} catch ( Validation1eSipTypeException e ) {
-			LOGGER.logError( "<Error>"
+			LOGGER.logError( getTextResourceService().getText(
+					MESSAGE_XML_MODUL_Ae_SIP )
 					+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
 							e.getMessage() ) );
 			this.getValidation1eSipTypeModule().getMessageService().print();
 			valid = false;
 		} catch ( Exception e ) {
-			LOGGER.logError( "<Error>"
+			LOGGER.logError( getTextResourceService().getText(
+					MESSAGE_XML_MODUL_Ae_SIP )
 					+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
 							e.getMessage() ) );
 			return false;
@@ -410,13 +420,15 @@ public class Controllersip implements MessageConstants
 				valid = false;
 			}
 		} catch ( Validation1fPrimaryDataException e ) {
-			LOGGER.logError( "<Error>"
+			LOGGER.logError( getTextResourceService().getText(
+					MESSAGE_XML_MODUL_Af_SIP )
 					+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
 							e.getMessage() ) );
 			this.getValidation1fPrimaryDataModule().getMessageService().print();
 			valid = false;
 		} catch ( Exception e ) {
-			LOGGER.logError( "<Error>"
+			LOGGER.logError( getTextResourceService().getText(
+					MESSAGE_XML_MODUL_Af_SIP )
 					+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
 							e.getMessage() ) );
 			return false;
@@ -434,14 +446,16 @@ public class Controllersip implements MessageConstants
 				valid = false;
 			}
 		} catch ( Validation2aFileIntegrityException e ) {
-			LOGGER.logError( "<Error>"
+			LOGGER.logError( getTextResourceService().getText(
+					MESSAGE_XML_MODUL_Ba_SIP )
 					+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
 							e.getMessage() ) );
 			this.getValidation2aFileIntegrityModule().getMessageService()
 					.print();
 			valid = false;
 		} catch ( Exception e ) {
-			LOGGER.logError( "<Error>"
+			LOGGER.logError( getTextResourceService().getText(
+					MESSAGE_XML_MODUL_Ba_SIP )
 					+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
 							e.getMessage() ) );
 			return false;
@@ -459,13 +473,15 @@ public class Controllersip implements MessageConstants
 				valid = false;
 			}
 		} catch ( Validation2bChecksumException e ) {
-			LOGGER.logError( "<Error>"
+			LOGGER.logError( getTextResourceService().getText(
+					MESSAGE_XML_MODUL_Bb_SIP )
 					+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
 							e.getMessage() ) );
 			this.getValidation2bChecksumModule().getMessageService().print();
 			valid = false;
 		} catch ( Exception e ) {
-			LOGGER.logError( "<Error>"
+			LOGGER.logError( getTextResourceService().getText(
+					MESSAGE_XML_MODUL_Bb_SIP )
 					+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
 							e.getMessage() ) );
 			return false;
@@ -483,14 +499,16 @@ public class Controllersip implements MessageConstants
 				valid = false;
 			}
 		} catch ( Validation2cSurplusFilesException e ) {
-			LOGGER.logError( "<Error>"
+			LOGGER.logError( getTextResourceService().getText(
+					MESSAGE_XML_MODUL_Bc_SIP )
 					+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
 							e.getMessage() ) );
 			this.getValidation2cSurplusFilesModule().getMessageService()
 					.print();
 			valid = false;
 		} catch ( Exception e ) {
-			LOGGER.logError( "<Error>"
+			LOGGER.logError( getTextResourceService().getText(
+					MESSAGE_XML_MODUL_Bc_SIP )
 					+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
 							e.getMessage() ) );
 			return false;
@@ -508,14 +526,16 @@ public class Controllersip implements MessageConstants
 				valid = false;
 			}
 		} catch ( Validation2dGeverFileIntegrityException e ) {
-			LOGGER.logError( "<Error>"
+			LOGGER.logError( getTextResourceService().getText(
+					MESSAGE_XML_MODUL_Bd_SIP )
 					+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
 							e.getMessage() ) );
 			this.getValidation2dGeverFileIntegrityModule().getMessageService()
 					.print();
 			valid = false;
 		} catch ( Exception e ) {
-			LOGGER.logError( "<Error>"
+			LOGGER.logError( getTextResourceService().getText(
+					MESSAGE_XML_MODUL_Bd_SIP )
 					+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
 							e.getMessage() ) );
 			return false;
@@ -533,14 +553,16 @@ public class Controllersip implements MessageConstants
 				valid = false;
 			}
 		} catch ( Validation3aFormatRecognitionException e ) {
-			LOGGER.logError( "<Error>"
+			LOGGER.logError( getTextResourceService().getText(
+					MESSAGE_XML_MODUL_Ca_SIP )
 					+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
 							e.getMessage() ) );
 			this.getValidation3aFormatRecognitionModule().getMessageService()
 					.print();
 			valid = false;
 		} catch ( Exception e ) {
-			LOGGER.logError( "<Error>"
+			LOGGER.logError( getTextResourceService().getText(
+					MESSAGE_XML_MODUL_Ca_SIP )
 					+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
 							e.getMessage() ) );
 			return false;
@@ -558,14 +580,16 @@ public class Controllersip implements MessageConstants
 						.getMessageService().print();
 			}
 		} catch ( Validation3bUnspecifiedFormatException e ) {
-			LOGGER.logError( "<Error>"
+			LOGGER.logError( getTextResourceService().getText(
+					MESSAGE_XML_MODUL_Cb_SIP )
 					+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
 							e.getMessage() ) );
 			this.getValidation3bUnspecifiedFormatModule().getMessageService()
 					.print();
 			valid = false;
 		} catch ( Exception e ) {
-			LOGGER.logError( "<Error>"
+			LOGGER.logError( getTextResourceService().getText(
+					MESSAGE_XML_MODUL_Cb_SIP )
 					+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
 							e.getMessage() ) );
 			return false;
@@ -583,14 +607,16 @@ public class Controllersip implements MessageConstants
 				valid = false;
 			}
 		} catch ( Validation3cFormatValidationException e ) {
-			LOGGER.logError( "<Error>"
+			LOGGER.logError( getTextResourceService().getText(
+					MESSAGE_XML_MODUL_Cc_SIP )
 					+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
 							e.getMessage() ) );
 			this.getValidation3cFormatValidationModule().getMessageService()
 					.print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logError( "<Error>"
+			LOGGER.logError(getTextResourceService().getText(
+					MESSAGE_XML_MODUL_Cc_SIP )
 					+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
 							e.getMessage() ) );
 			return false;
@@ -606,13 +632,15 @@ public class Controllersip implements MessageConstants
 				valid = false;
 			}
 		} catch ( Validation3dPeriodException e ) {
-			LOGGER.logError( "<Error>"
+			LOGGER.logError( getTextResourceService().getText(
+					MESSAGE_XML_MODUL_Cd_SIP )
 					+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
 							e.getMessage() ) );
 			this.getValidation3dPeriodModule().getMessageService().print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logError( "<Error>"
+			LOGGER.logError( getTextResourceService().getText(
+					MESSAGE_XML_MODUL_Cd_SIP )
 					+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
 							e.getMessage() ) );
 			return false;

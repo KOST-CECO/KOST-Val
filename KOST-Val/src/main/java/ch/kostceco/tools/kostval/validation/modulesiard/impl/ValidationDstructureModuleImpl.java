@@ -74,6 +74,7 @@ public class ValidationDstructureModuleImpl extends ValidationModuleImpl
 			 * a jdom document
 			 */
 			String pathToWorkDir = getConfigurationService().getPathToWorkDir();
+			pathToWorkDir = pathToWorkDir + "\\SIARD";
 			File metadataXml = new File( new StringBuilder( pathToWorkDir )
 					.append( File.separator ).append( "header" )
 					.append( File.separator ).append( "metadata.xml" )

@@ -91,6 +91,7 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 			 * a jdom document
 			 */
 			String pathToWorkDir = getConfigurationService().getPathToWorkDir();
+			pathToWorkDir = pathToWorkDir + "\\SIARD";
 			File metadataXml = new File( new StringBuilder( pathToWorkDir )
 					.append( File.separator ).append( "header" )
 					.append( File.separator ).append( "metadata.xml" )
@@ -211,7 +212,7 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 		} else {
 			int limit = configurationService.getTableRowsLimit();
 			if ( range.max > limit ) {
-				getMessageService().logInfo(
+				getMessageService().logError(
 						getTextResourceService().getText(
 								MESSAGE_XML_MODUL_H_SIARD )
 								+ getTextResourceService().getText(

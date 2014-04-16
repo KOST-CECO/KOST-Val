@@ -79,6 +79,7 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 		boolean valid = true;
 		try {
 			String pathToWorkDir = getConfigurationService().getPathToWorkDir();
+			pathToWorkDir = pathToWorkDir + "\\SIARD";
 			/*
 			 * Nicht vergessen in
 			 * "src/main/resources/config/applicationContext-services.xml" beim
@@ -108,6 +109,9 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 			for ( File schema : schemas ) {
 				valid = valid && validateSchema( schema, xPath, doc );
 			}
+			xPath = null;
+			doc = null;
+
 		} catch ( java.io.IOException e ) {
 			valid = false;
 			getMessageService().logError(
@@ -145,7 +149,6 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 									ERROR_XML_UNKNOWN,
 									e.getMessage() + " (SAXException)" ) );
 		}
-
 		return valid;
 	}
 
@@ -189,7 +192,11 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 				valid = validateTable( table, xPath, doc ) && valid;
 			}
 		}
+		xPath = null;
+		doc = null;
+		schema = null;
 		return valid;
+
 	}
 
 	private boolean validateTable( final File table, XPath xPath, Document doc )
@@ -207,32 +214,23 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 				getMessageService().logError(
 						getTextResourceService().getText(
 								MESSAGE_XML_MODUL_J_SIARD )
-								+ schema.getName()
-								+ " "
 								+ getTextResourceService().getText(
-										MESSAGE_XML_J_INVALID_FILE )
-								+ " "
-								+ table.getName() + "." );
+										MESSAGE_XML_J_INVALID_FILE,
+										schema.getName(), table.getName() ) );
 			} else if ( table.isDirectory() ) {
 				getMessageService().logError(
 						getTextResourceService().getText(
 								MESSAGE_XML_MODUL_J_SIARD )
-								+ schema.getName()
-								+ " "
 								+ getTextResourceService().getText(
-										MESSAGE_XML_J_INVALID_FOLDER )
-								+ " "
-								+ table.getName() + "." );
+										MESSAGE_XML_J_INVALID_FOLDER,
+										schema.getName(), table.getName() ) );
 			} else {
 				getMessageService().logError(
 						getTextResourceService().getText(
 								MESSAGE_XML_MODUL_J_SIARD )
-								+ schema.getName()
-								+ " "
 								+ getTextResourceService().getText(
-										MESSAGE_XML_J_INVALID_ENTRY )
-								+ " "
-								+ table.getName() + "." );
+										MESSAGE_XML_J_INVALID_ENTRY,
+										schema.getName(), table.getName() ) );
 			}
 		}
 		if ( valid ) {
@@ -249,6 +247,8 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 				valid = validateFile( table, file, xPath, doc ) && valid;
 			}
 		}
+		xPath = null;
+		doc= null;
 		return valid;
 	}
 
@@ -269,34 +269,28 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 				getMessageService().logError(
 						getTextResourceService().getText(
 								MESSAGE_XML_MODUL_J_SIARD )
-								+ table.getName()
-								+ " "
 								+ getTextResourceService().getText(
-										MESSAGE_XML_J_INVALID_FILE )
-								+ " "
-								+ file.getName() + "." );
+										MESSAGE_XML_J_INVALID_FILE,
+										table.getName(), file.getName() ) );
 			} else if ( file.isDirectory() ) {
 				getMessageService().logError(
 						getTextResourceService().getText(
 								MESSAGE_XML_MODUL_J_SIARD )
-								+ table.getName()
-								+ " "
 								+ getTextResourceService().getText(
-										MESSAGE_XML_J_INVALID_FOLDER )
-								+ " "
-								+ file.getName() + "." );
+										MESSAGE_XML_J_INVALID_FOLDER,
+										table.getName(), file.getName() ) );
 			} else {
 				getMessageService().logError(
 						getTextResourceService().getText(
 								MESSAGE_XML_MODUL_J_SIARD )
-								+ table.getName()
-								+ " "
 								+ getTextResourceService().getText(
-										MESSAGE_XML_J_INVALID_ENTRY )
-								+ " "
-								+ file.getName() + "." );
+										MESSAGE_XML_J_INVALID_ENTRY,
+										table.getName(), file.getName() ) );
 			}
 		}
+		folder =null;
+		file= null;
+		xPath = null;
 		return valid;
 	}
 

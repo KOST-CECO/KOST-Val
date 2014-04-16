@@ -36,10 +36,6 @@ import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesip3.Validation3aFormatRecognitionModule;
 
-/**
- * @author razm Daniel Ludin, Bedag AG @version 0.2.0
- */
-
 public class Validation3aFormatRecognitionModuleImpl extends
 		ValidationModuleImpl implements Validation3aFormatRecognitionModule
 {
@@ -68,16 +64,19 @@ public class Validation3aFormatRecognitionModuleImpl extends
 		String nameOfSignature = getConfigurationService()
 				.getPathToDroidSignatureFile();
 		if ( nameOfSignature == null ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
-							+ getTextResourceService().getText(
-									MESSAGE_XML_CONFIGURATION_ERROR_NO_SIGNATURE ) );
+			getMessageService()
+					.logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_Ca_SIP )
+									+ getTextResourceService()
+											.getText(
+													MESSAGE_XML_CONFIGURATION_ERROR_NO_SIGNATURE ) );
 			return false;
 		}
 		// existiert die SignatureFile am angebenen Ort?
 		File fnameOfSignature = new File( nameOfSignature );
 		if ( !fnameOfSignature.exists() ) {
-			getMessageService().logInfo(
+			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
 							+ getTextResourceService().getText(
 									MESSAGE_XML_CA_DROID ) );
@@ -105,17 +104,13 @@ public class Validation3aFormatRecognitionModuleImpl extends
 			Util.switchOnConsole();
 		}
 
-		// Die Archivdatei wurde bereits vom Schritt 1d in das
+		// Die Archivdatei wurde bereits von der Formatvalidierung in das
 		// Arbeitsverzeichnis entpackt
 		String pathToWorkDir = getConfigurationService().getPathToWorkDir()
-				+ "\\ZIP"
-				+ valDatei.getName() + "\\content" ;
+				+ "\\ZIP";
+		
 		File workDir = new File( pathToWorkDir );
-		if ( !workDir.exists() ) {
-			pathToWorkDir= valDatei.getAbsolutePath() + "\\content" ;
-			workDir = new File( pathToWorkDir );
-		}
-
+		
 		Map<String, File> fileMap = Util.getFileMap( workDir, true );
 		Set<String> fileMapKeys = fileMap.keySet();
 		for ( Iterator<String> iterator = fileMapKeys.iterator(); iterator
@@ -138,7 +133,6 @@ public class Validation3aFormatRecognitionModuleImpl extends
 				.hasNext(); ) {
 			String fileKey = iterator.next();
 			File file = filesInSipFile.get( fileKey );
-
 			IdentificationFile ifile = droid.identify( file.getAbsolutePath() );
 
 			if ( ifile.getNumHits() > 0 ) {

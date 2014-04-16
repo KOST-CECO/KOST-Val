@@ -69,17 +69,20 @@ public class Validation3bUnspecifiedFormatModuleImpl extends
 				.getPathToDroidSignatureFile();
 
 		if ( nameOfSignature == null ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_Cb_SIP )
-							+ getTextResourceService().getText(
-									MESSAGE_XML_CONFIGURATION_ERROR_NO_SIGNATURE ) );
+			getMessageService()
+					.logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_Cb_SIP )
+									+ getTextResourceService()
+											.getText(
+													MESSAGE_XML_CONFIGURATION_ERROR_NO_SIGNATURE ) );
 			return false;
 		}
 
 		// existiert die SignatureFile am angebenen Ort?
 		File fnameOfSignature = new File( nameOfSignature );
 		if ( !fnameOfSignature.exists() ) {
-			getMessageService().logInfo(
+			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_XML_MODUL_Cb_SIP )
 							+ getTextResourceService().getText(
 									MESSAGE_XML_CA_DROID ) );
@@ -107,12 +110,19 @@ public class Validation3bUnspecifiedFormatModuleImpl extends
 			Util.switchOnConsole();
 		}
 
-		// Die Archivdatei wurde bereits vom Schritt 1d in das
+		// Die Archivdatei wurde bereits von der Formatvalidierung in das
 		// Arbeitsverzeichnis entpackt
 		String pathToWorkDir = getConfigurationService().getPathToWorkDir()
 				+ "\\ZIP";
+
+		/*
+		 * if ( !new File(pathToWorkDir).exists() ) { System.out.println(
+		 * pathToWorkDir + " existiert nicht !!!"); }
+		 */
+
 		File workDir = new File( pathToWorkDir );
-		Map<String, File> fileMap = Util.getFileMap( workDir, false );
+
+		Map<String, File> fileMap = Util.getFileMap( workDir, true );
 		Set<String> fileMapKeys = fileMap.keySet();
 		for ( Iterator<String> iterator = fileMapKeys.iterator(); iterator
 				.hasNext(); ) {
@@ -145,36 +155,15 @@ public class Validation3bUnspecifiedFormatModuleImpl extends
 					FileFormat ff = ffh.getFileFormat();
 
 					String extensionConfig = hPuids.get( ff.getPUID() );
-
-					// Fehlermeldung: [3b] -- content/2_DATEN/daten_VALIDA.siard
-					// (fmt/18 = pdf v1.4)
 					if ( extensionConfig == null ) {
 
-						if ( ff.getVersion() == null ) {
-							getMessageService().logError(
-									getTextResourceService().getText(
-											MESSAGE_XML_MODUL_Cb_SIP )
-											+ getTextResourceService().getText(
-													MESSAGE_XML_CB_FORMAT,
-													fileKey, ff.getPUID(),
-													ff.getExtension( x ) ) );
-							valid = false;
-
-						} else {
-							getMessageService()
-									.logError(
-											getTextResourceService().getText(
-													MESSAGE_XML_MODUL_Cb_SIP )
-													+ getTextResourceService()
-															.getText(
-																	MESSAGE_XML_CB_FORMATVERSION,
-																	fileKey,
-																	ff.getPUID(),
-																	ff.getExtension( x ),
-																	ff.getVersion() ) );
-
-							valid = false;
-						}
+						getMessageService().logError(
+								getTextResourceService().getText(
+										MESSAGE_XML_MODUL_Cb_SIP )
+										+ getTextResourceService().getText(
+												MESSAGE_XML_CB_FORMAT, fileKey,
+												ff.getPUID() ) );
+						valid = false;
 
 						if ( counterPuid.get( ff.getPUID() ) == null ) {
 							counterPuid.put( ff.getPUID(), new Integer( 1 ) );

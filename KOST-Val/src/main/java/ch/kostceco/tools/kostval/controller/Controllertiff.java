@@ -183,18 +183,22 @@ public class Controllertiff implements MessageConstants
 						.print();
 				return false;
 			}
-
 		} catch ( ValidationArecognitionException e ) {
-			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceService().getText(
+					MESSAGE_XML_MODUL_A_TIFF )
+					+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+							e.getMessage() ) );
 			this.getValidationArecognitionModule().getMessageService().print();
 			return false;
 
 		} catch ( Exception e ) {
-			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage()) );
+			LOGGER.logError( getTextResourceService().getText(
+					MESSAGE_XML_MODUL_A_TIFF )
+					+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+							e.getMessage() ) );
 			return false;
 		}
 		return valid;
-
 	}
 
 	public boolean executeOptional( File valDatei, File directoryOfLogfile )
@@ -211,14 +215,19 @@ public class Controllertiff implements MessageConstants
 						.print();
 				valid = false;
 			}
-
 		} catch ( ValidationBjhoveValidationException e ) {
-			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceService().getText(
+					MESSAGE_XML_MODUL_B_TIFF )
+					+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+							e.getMessage() ) );
 			this.getValidationBjhoveValidationModule().getMessageService()
 					.print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceService().getText(
+					MESSAGE_XML_MODUL_B_TIFF )
+					+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+							e.getMessage() ) );
 			return false;
 		}
 
@@ -233,14 +242,19 @@ public class Controllertiff implements MessageConstants
 						.getMessageService().print();
 				valid = false;
 			}
-
 		} catch ( ValidationCcompressionValidationException e ) {
-			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceService().getText(
+					MESSAGE_XML_MODUL_C_TIFF )
+					+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+							e.getMessage() ) );
 			this.getValidationCcompressionValidationModule()
 					.getMessageService().print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceService().getText(
+					MESSAGE_XML_MODUL_C_TIFF )
+					+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+							e.getMessage() ) );
 			return false;
 		}
 
@@ -255,14 +269,19 @@ public class Controllertiff implements MessageConstants
 						.getMessageService().print();
 				valid = false;
 			}
-
 		} catch ( ValidationDphotointerValidationException e ) {
-			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceService().getText(
+					MESSAGE_XML_MODUL_D_TIFF )
+					+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+							e.getMessage() ) );
 			this.getValidationDphotointerValidationModule().getMessageService()
 					.print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceService().getText(
+					MESSAGE_XML_MODUL_D_TIFF )
+					+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+							e.getMessage() ) );
 			return false;
 		}
 
@@ -277,14 +296,19 @@ public class Controllertiff implements MessageConstants
 						.getMessageService().print();
 				valid = false;
 			}
-
 		} catch ( ValidationEbitspersampleValidationException e ) {
-			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceService().getText(
+					MESSAGE_XML_MODUL_E_TIFF )
+					+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+							e.getMessage() ) );
 			this.getValidationEbitspersampleValidationModule()
 					.getMessageService().print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceService().getText(
+					MESSAGE_XML_MODUL_E_TIFF )
+					+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+							e.getMessage() ) );
 			return false;
 		}
 
@@ -299,14 +323,19 @@ public class Controllertiff implements MessageConstants
 						.getMessageService().print();
 				valid = false;
 			}
-
 		} catch ( ValidationFmultipageValidationException e ) {
-			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceService().getText(
+					MESSAGE_XML_MODUL_F_TIFF )
+					+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+							e.getMessage() ) );
 			this.getValidationFmultipageValidationModule().getMessageService()
 					.print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceService().getText(
+					MESSAGE_XML_MODUL_F_TIFF )
+					+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+							e.getMessage() ) );
 			return false;
 		}
 
@@ -321,14 +350,19 @@ public class Controllertiff implements MessageConstants
 						.print();
 				valid = false;
 			}
-
 		} catch ( ValidationGtilesValidationException e ) {
-			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceService().getText(
+					MESSAGE_XML_MODUL_G_TIFF )
+					+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+							e.getMessage() ) );
 			this.getValidationGtilesValidationModule().getMessageService()
 					.print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceService().getText(
+					MESSAGE_XML_MODUL_G_TIFF )
+					+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+							e.getMessage() ) );
 			return false;
 		}
 
@@ -343,14 +377,19 @@ public class Controllertiff implements MessageConstants
 						.print();
 				valid = false;
 			}
-
 		} catch ( ValidationHsizeValidationException e ) {
-			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceService().getText(
+					MESSAGE_XML_MODUL_H_TIFF )
+					+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+							e.getMessage() ) );
 			this.getValidationHsizeValidationModule().getMessageService()
 					.print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logError( "<Error>" + getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceService().getText(
+					MESSAGE_XML_MODUL_H_TIFF )
+					+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+							e.getMessage() ) );
 			return false;
 		}
 		return valid;
