@@ -1,5 +1,5 @@
 ; The name of the installer
-Name "KOST-Val v1.2.5"
+Name "KOST-Val v1.3.0"
 ; Sets the icon of the installer
 Icon "val.ico"
 ; remove the text 'Nullsoft Install System vX.XX' from the installer window 
@@ -27,7 +27,6 @@ XPStyle on
 ;--------------------------------
 !define INIFILE       "KOSTval.ini"
 !define KOSTHELP      "doc\KOST-Val_Anwendungshandbuch_*.pdf"
-!define LOG           "logs"
 !define CONFIG        "kostval.conf.xml"
 !define CONFIGPATH    "configuration"
 !define BACKUP        "~backup"
@@ -39,6 +38,7 @@ Var DIALOG
 Var KOSTFILE
 Var LOGFILE
 Var WORKDIR
+Var LOG
 Var JAVA
 Var T_FLAG
 Var P_FLAG
@@ -81,11 +81,13 @@ Function .onGUIEnd
   RMDir /r  $EXEDIR\${CONFIGPATH}\${BACKUP}
 FunctionEnd
 
-Function check4Workdir
+Function check4Dir
   StrCpy $WORKDIR ''
+  StrCpy $LOG ''
   ${xml::LoadFile} "$EXEDIR\${CONFIGPATH}\${CONFIG}" $0
   ${xml::RootElement} $0 $1
   ${xml::XPathString} "//configuration/pathtoworkdir/text()" $WORKDIR $1
+  ${xml::XPathString} "//configuration/pathtologfile/text()" $LOG $1
   ${xml::Unload}
   GetFullPathName $1 $WORKDIR
   IfFileExists $1 fex not_fex
@@ -220,7 +222,8 @@ Function LeaveDialog
     ${Break}
 
     ${Case} '${EDIT_Konfiguration}'
-      ExecWait '"notepad.exe" "$EXEDIR\${CONFIGPATH}\${CONFIG}"'
+      ; ExecWait '"notepad.exe" "$EXEDIR\${CONFIGPATH}\${CONFIG}"'
+      ExecShell "open" "$EXEDIR\${CONFIGPATH}\${CONFIG}"
       Abort
     ${Break}
 
@@ -239,21 +242,33 @@ FunctionEnd
 
 ;--------------------------------
 Function RunJar
+  ; get workdir and logdir
+  Call check4Dir
+
   ; get logfile name
   ${GetFileName} $KOSTFILE $LOGFILE
-  delete "$EXEDIR\${LOG}\$LOGFILE.kost-val.log"
-  ; get workdir
-  Call check4Workdir
+  CreateDirectory $LOG
+  IfFileExists "$LOG\*.*" +2 0
+  CreateDirectory "$EXEDIR\$LOG"
+  ClearErrors
+  FileOpen $R0 "$LOG\$LOGFILE.kost-val.log.tmp" w
+  FileClose $R0
+  ${If} ${Errors}
+    Delete "$LOG\$LOGFILE.kost-val.log.tmp"
+    MessageBox MB_OK|MB_ICONEXCLAMATION "${LOG_ERR} $LOG"
+    Abort
+  ${EndIf}
+  delete "$LOG\$LOGFILE.kost-val.log*"
 
   ; Launch java program
   ClearErrors
   ExecWait '"$JAVA\bin\java.exe" -Xmx1024m -jar ${KOSTVAL} $T_FLAG "$KOSTFILE" $P_FLAG'
-  IfFileExists "$EXEDIR\${LOG}\$LOGFILE.kost-val.log" 0 prog_err
+  IfFileExists "$LOG\$LOGFILE.kost-val.log*" 0 prog_err
   IfErrors goto_err goto_ok
   
 goto_err:
     ; validation with error
-    IfFileExists "$EXEDIR\${LOG}\$LOGFILE.kost-val.log" 0 prog_err
+    IfFileExists "$LOG\$LOGFILE.kost-val.log*" 0 prog_err
     ${If} $T_FLAG == '--sip'
       MessageBox MB_YESNO|MB_ICONEXCLAMATION "$KOSTFILE$\n${SIP_FALSE}" IDYES showlog
       Goto rm_workdir
@@ -275,7 +290,9 @@ goto_ok:
   ${EndIf}
 showlog:
   ; read logfile in detail view
-  ExecShell "open" "$EXEDIR\${LOG}\$LOGFILE.kost-val.log"
+  IfFileExists "$LOG\$LOGFILE.kost-val.log.xml" 0 +2
+  ExecShell "open" "$LOG\$LOGFILE.kost-val.log.xml"
+  ExecShell "open" "$LOG\$LOGFILE.kost-val.log"
 rm_workdir:
   GetFullPathName $1 $WORKDIR
   RMDir /r $1

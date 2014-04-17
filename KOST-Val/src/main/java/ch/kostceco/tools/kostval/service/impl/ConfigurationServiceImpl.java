@@ -75,15 +75,15 @@ public class ConfigurationServiceImpl implements ConfigurationService
 				config = new XMLConfiguration( path );
 
 			} catch ( ConfigurationException e ) {
-				LOGGER.logInfo( getTextResourceService().getText(
+				LOGGER.logError( getTextResourceService().getText(
 						MESSAGE_XML_MODUL_Ca_SIP )
 						+ getTextResourceService().getText(
 								MESSAGE_XML_CONFIGURATION_ERROR_1 ) );
-				LOGGER.logInfo( getTextResourceService().getText(
+				LOGGER.logError( getTextResourceService().getText(
 						MESSAGE_XML_MODUL_Ca_SIP )
 						+ getTextResourceService().getText(
 								MESSAGE_XML_CONFIGURATION_ERROR_2 ) );
-				LOGGER.logInfo( getTextResourceService().getText(
+				LOGGER.logError( getTextResourceService().getText(
 						MESSAGE_XML_MODUL_Ca_SIP )
 						+ getTextResourceService().getText(
 								MESSAGE_XML_CONFIGURATION_ERROR_3 ) );

@@ -118,13 +118,13 @@ public class KOSTVal implements MessageConstants
 
 		// Im Logverzeichnis besteht kein Schreibrecht
 		if ( !directoryOfLogfile.canWrite() ) {
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
+			System.out.println( kostval.getTextResourceService().getText(
 					ERROR_LOGDIRECTORY_NOTWRITABLE, directoryOfLogfile ) );
 			System.exit( 1 );
 		}
 
 		if ( !directoryOfLogfile.isDirectory() ) {
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
+			System.out.println( kostval.getTextResourceService().getText(
 					ERROR_LOGDIRECTORY_NODIRECTORY ) );
 			System.exit( 1 );
 		}
@@ -140,14 +140,18 @@ public class KOSTVal implements MessageConstants
 		String logFileName = logConfigurator.configure(
 				directoryOfLogfile.getAbsolutePath(), logDatei.getName() );
 		File logFile = new File( logFileName );
-		LOGGER.logInfo( kostval.getTextResourceService().getText(
+		// Ab hier kann ins log geschrieben werden...
+		LOGGER.logError( kostval.getTextResourceService().getText(
 				MESSAGE_XML_HEADER ) );
 		LOGGER.logError( kostval.getTextResourceService().getText(
 				MESSAGE_XML_START, ausgabeStart ) );
 		LOGGER.logError( kostval.getTextResourceService().getText(
 				MESSAGE_XML_END ) );
-		LOGGER.logInfo( kostval.getTextResourceService().getText(
+		LOGGER.logError( kostval.getTextResourceService().getText(
 				MESSAGE_XML_INFO ) );
+		System.out.println( "" );
+		String info = "KOST-Val v1.3.0, Copyright (C) 2012-2014 Claire Roethlisberger (KOST-CECO), Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Daniel Ludin (BEDAG AG). This program comes with ABSOLUTELY NO WARRANTY. This is free software, and you are welcome to redistribute it under certain conditions; see GPL-3.0_COPYING.txt for details.";
+		System.out.println( "" );
 
 		File xslOrig = new File( "resources\\kost-val.xsl" );
 		File xslCopy = new File( directoryOfLogfile.getAbsolutePath()
@@ -158,10 +162,12 @@ public class KOSTVal implements MessageConstants
 
 		// Ist die Anzahl Parameter (mind. 2) korrekt?
 		if ( args.length < 2 ) {
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
+			LOGGER.logError( kostval.getTextResourceService().getText(
 					ERROR_IOE,
 					kostval.getTextResourceService().getText(
 							ERROR_PARAMETER_USAGE ) ) );
+			System.out.println( kostval.getTextResourceService().getText(
+					ERROR_PARAMETER_USAGE ) );
 			System.exit( 1 );
 		}
 
@@ -189,21 +195,25 @@ public class KOSTVal implements MessageConstants
 		// Workverzeichnis gelöscht wird und entsprechend bestehende Dateien
 		// gelöscht werden können
 		if ( tmpDir.exists() ) {
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
+			LOGGER.logError( kostval.getTextResourceService().getText(
 					ERROR_IOE,
 					kostval.getTextResourceService().getText(
 							ERROR_WORKDIRECTORY_EXISTS, pathToWorkDir ) ) );
+			System.out.println( kostval.getTextResourceService().getText(
+					ERROR_WORKDIRECTORY_EXISTS, pathToWorkDir ) );
 			System.exit( 1 );
 		}
 
 		// die Anwendung muss mindestens unter Java 6 laufen
 		String javaRuntimeVersion = System.getProperty( "java.vm.version" );
 		if ( javaRuntimeVersion.compareTo( "1.6.0" ) < 0 ) {
-			LOGGER.logInfo( kostval.getTextResourceService()
+			LOGGER.logError( kostval.getTextResourceService()
 					.getText(
 							ERROR_IOE,
 							kostval.getTextResourceService().getText(
 									ERROR_WRONG_JRE ) ) );
+			System.out.println( kostval.getTextResourceService().getText(
+					ERROR_WRONG_JRE ) );
 			System.exit( 1 );
 		}
 
@@ -214,10 +224,12 @@ public class KOSTVal implements MessageConstants
 
 		// Im workverzeichnis besteht kein Schreibrecht
 		if ( !tmpDir.canWrite() ) {
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
+			LOGGER.logError( kostval.getTextResourceService().getText(
 					ERROR_IOE,
 					kostval.getTextResourceService().getText(
 							ERROR_WORKDIRECTORY_NOTWRITABLE, tmpDir ) ) );
+			System.out.println( kostval.getTextResourceService().getText(
+					ERROR_WORKDIRECTORY_NOTWRITABLE, tmpDir ) );
 			System.exit( 1 );
 		}
 
@@ -226,10 +238,12 @@ public class KOSTVal implements MessageConstants
 		boolean verbose = false;
 		if ( args.length > 2 ) {
 			if ( !(args[2].equals( "-v" )) ) {
-				LOGGER.logInfo( kostval.getTextResourceService().getText(
+				LOGGER.logError( kostval.getTextResourceService().getText(
 						ERROR_IOE,
 						kostval.getTextResourceService().getText(
 								ERROR_PARAMETER_OPTIONAL_1 ) ) );
+				System.out.println( kostval.getTextResourceService().getText(
+						ERROR_PARAMETER_OPTIONAL_1 ) );
 				System.exit( 1 );
 			} else {
 				verbose = true;
@@ -245,19 +259,23 @@ public class KOSTVal implements MessageConstants
 		if ( !fJhoveConf.exists()
 				|| !fJhoveConf.getName().equals( "jhove.conf" ) ) {
 
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
+			LOGGER.logError( kostval.getTextResourceService().getText(
 					ERROR_IOE,
 					kostval.getTextResourceService().getText(
 							ERROR_JHOVECONF_MISSING ) ) );
+			System.out.println( kostval.getTextResourceService().getText(
+					ERROR_JHOVECONF_MISSING ) );
 			System.exit( 1 );
 		}
 
 		// Ueberprüfung des Parameters (Val-Datei): existiert die Datei?
 		if ( !valDatei.exists() ) {
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
+			LOGGER.logError( kostval.getTextResourceService().getText(
 					ERROR_IOE,
 					kostval.getTextResourceService().getText(
 							ERROR_VALFILE_FILENOTEXISTING ) ) );
+			System.out.println( kostval.getTextResourceService().getText(
+					ERROR_VALFILE_FILENOTEXISTING ) );
 			System.exit( 1 );
 		}
 
@@ -530,9 +548,10 @@ public class KOSTVal implements MessageConstants
 							zip = true;
 						}
 					} catch ( Exception e ) {
-						LOGGER.logInfo( "<Error>"
+						LOGGER.logError( "<Error>"
 								+ kostval.getTextResourceService().getText(
 										ERROR_XML_UNKNOWN, e.getMessage() ) );
+						System.out.println( "Exception: " + e.getMessage() );
 					}
 				}
 
@@ -543,8 +562,10 @@ public class KOSTVal implements MessageConstants
 						.toLowerCase().endsWith( ".zip64" )))
 						|| zip == false ) {
 
-					LOGGER.logInfo( kostval.getTextResourceService().getText(
+					LOGGER.logError( kostval.getTextResourceService().getText(
 							ERROR_XML_AA_INCORRECTFILEENDING ) );
+					System.out.println( kostval.getTextResourceService()
+							.getText( ERROR_XML_AA_INCORRECTFILEENDING ) );
 
 				} else {
 					// geziptes SIP --> in temp dir entzipen
@@ -556,8 +577,11 @@ public class KOSTVal implements MessageConstants
 						try {
 							Zip64Archiver.unzip64( valDatei, tmpDirZip );
 						} catch ( Exception e1 ) {
-							LOGGER.logInfo( kostval.getTextResourceService()
+							LOGGER.logError( kostval.getTextResourceService()
 									.getText( ERROR_XML_AA_CANNOTEXTRACTZIP ) );
+							System.out.println( kostval
+									.getTextResourceService().getText(
+											ERROR_XML_AA_CANNOTEXTRACTZIP ) );
 						}
 					}
 					valDatei = tmpDirZip;
@@ -582,17 +606,20 @@ public class KOSTVal implements MessageConstants
 					Util.copyDir( contentOrig, contentCopy );
 					Util.copyDir( headerOrig, headerCopy );
 				} catch ( FileNotFoundException e ) {
-					LOGGER.logInfo( "<Error>"
+					LOGGER.logError( "<Error>"
 							+ kostval
 									.getTextResourceService()
 									.getText(
 											ERROR_XML_UNKNOWN,
 											e.getMessage()
 													+ " (FileNotFoundException)" ) );
+					System.out.println( "FileNotFoundException: "
+							+ e.getMessage() );
 				} catch ( IOException e ) {
-					LOGGER.logInfo( "<Error>"
+					LOGGER.logError( "<Error>"
 							+ kostval.getTextResourceService().getText(
 									ERROR_XML_UNKNOWN, e.getMessage() ) );
+					System.out.println( "Exception: " + e.getMessage() );
 				}
 
 			}
@@ -625,10 +652,13 @@ public class KOSTVal implements MessageConstants
 					} else if ( (valDatei.getAbsolutePath().toLowerCase()
 							.endsWith( ".siard" ))
 							&& siardValidation.equals( "yes" ) ) {
-						
-						// Arbeitsverzeichnis zum Entpacken des Archivs erstellen
-						String pathToWorkDirSiard = kostval.getConfigurationService().getPathToWorkDir();
-						File tmpDirSiard = new File( pathToWorkDirSiard + "\\SIARD" );
+
+						// Arbeitsverzeichnis zum Entpacken des Archivs
+						// erstellen
+						String pathToWorkDirSiard = kostval
+								.getConfigurationService().getPathToWorkDir();
+						File tmpDirSiard = new File( pathToWorkDirSiard
+								+ "\\SIARD" );
 						if ( tmpDirSiard.exists() ) {
 							Util.deleteDir( tmpDirSiard );
 						}
@@ -696,12 +726,15 @@ public class KOSTVal implements MessageConstants
 			valDatei = originalSipFile;
 			LOGGER.logError( kostval.getTextResourceService().getText(
 					MESSAGE_XML_VALERGEBNIS ) );
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
+			LOGGER.logError( kostval.getTextResourceService().getText(
 					MESSAGE_XML_VALTYPE,
 					kostval.getTextResourceService().getText(
 							MESSAGE_SIPVALIDATION ) ) );
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
+			LOGGER.logError( kostval.getTextResourceService().getText(
 					MESSAGE_XML_VALFILE, valDatei.getAbsolutePath() ) );
+			System.out.println( kostval.getTextResourceService().getText(
+					MESSAGE_SIPVALIDATION ) );
+			System.out.println( valDatei.getAbsolutePath() );
 			File targetFile = new File( pathToWorkDir + "\\SIP-Validierung",
 					valDatei.getName() + ".zip" );
 			File tmpDirSip = new File( pathToWorkDir + "\\SIP-Validierung" );
@@ -722,8 +755,10 @@ public class KOSTVal implements MessageConstants
 					valDatei = targetFile;
 
 				} catch ( Exception e ) {
-					LOGGER.logInfo( kostval.getTextResourceService().getText(
+					LOGGER.logError( kostval.getTextResourceService().getText(
 							ERROR_CANNOTCREATEZIP ) );
+					System.out.println( kostval.getTextResourceService()
+							.getText( ERROR_CANNOTCREATEZIP ) );
 					System.exit( 1 );
 				}
 
@@ -750,19 +785,24 @@ public class KOSTVal implements MessageConstants
 				Util.valElement(
 						kostval.getTextResourceService().getText(
 								MESSAGE_XML_VALERGEBNIS_VALID ), logFile );
-				LOGGER.logInfo( kostval.getTextResourceService().getText(
+				LOGGER.logError( kostval.getTextResourceService().getText(
 						MESSAGE_XML_VALERGEBNIS_CLOSE )
 						+ kostval.getTextResourceService().getText(
 								MESSAGE_XML_VALERGEBNIS_VALID ) );
+				System.out.println( "Valid" );
+				System.out.println( "" );
 			} else {
 				// Fehler im Validierten SIP --> invalide
 				Util.valElement(
 						kostval.getTextResourceService().getText(
 								MESSAGE_XML_VALERGEBNIS_INVALID ), logFile );
-				LOGGER.logInfo( kostval.getTextResourceService().getText(
+				LOGGER.logError( kostval.getTextResourceService().getText(
 						MESSAGE_XML_VALERGEBNIS_CLOSE )
 						+ kostval.getTextResourceService().getText(
 								MESSAGE_XML_VALERGEBNIS_INVALID ) );
+				System.out.println( "Invalid" );
+				System.out.println( "" );
+
 			}
 
 			// ggf. Fehlermeldung 3c ergänzen
@@ -829,10 +869,12 @@ public class KOSTVal implements MessageConstants
 		} else {
 			// Ueberprüfung des Parameters (Val-Typ): format / sip
 			// args[0] ist nicht "--format" oder "--sip" --> INVALIDE
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
+			LOGGER.logError( kostval.getTextResourceService().getText(
 					ERROR_IOE,
 					kostval.getTextResourceService().getText(
 							ERROR_PARAMETER_USAGE ) ) );
+			System.out.println( kostval.getTextResourceService().getText(
+					ERROR_PARAMETER_USAGE ) );
 			if ( tmpDir.exists() ) {
 				Util.deleteDir( tmpDir );
 				tmpDir.deleteOnExit();
@@ -858,12 +900,15 @@ public class KOSTVal implements MessageConstants
 				.getAbsolutePath().toLowerCase().endsWith( ".tif" )) ) {
 			LOGGER.logError( kostval.getTextResourceService().getText(
 					MESSAGE_XML_VALERGEBNIS ) );
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
+			LOGGER.logError( kostval.getTextResourceService().getText(
 					MESSAGE_XML_VALTYPE,
 					kostval.getTextResourceService().getText(
 							MESSAGE_TIFFVALIDATION ) ) );
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
+			LOGGER.logError( kostval.getTextResourceService().getText(
 					MESSAGE_XML_VALFILE, originalValName ) );
+			System.out.println( kostval.getTextResourceService().getText(
+					MESSAGE_TIFFVALIDATION ) );
+			System.out.println( originalValName );
 			Controllertiff controller1 = (Controllertiff) context
 					.getBean( "controllertiff" );
 			boolean okMandatory = controller1.executeMandatory( valDatei,
@@ -886,19 +931,23 @@ public class KOSTVal implements MessageConstants
 				Util.valElement(
 						kostval.getTextResourceService().getText(
 								MESSAGE_XML_VALERGEBNIS_VALID ), logFile );
-				LOGGER.logInfo( kostval.getTextResourceService().getText(
+				LOGGER.logError( kostval.getTextResourceService().getText(
 						MESSAGE_XML_VALERGEBNIS_CLOSE )
 						+ kostval.getTextResourceService().getText(
 								MESSAGE_XML_VALERGEBNIS_VALID ) );
+				System.out.println( "Valid" );
+				System.out.println( "" );
 			} else {
 				// Fehler in Validierte Datei --> invalide
 				Util.valElement(
 						kostval.getTextResourceService().getText(
 								MESSAGE_XML_VALERGEBNIS_INVALID ), logFile );
-				LOGGER.logInfo( kostval.getTextResourceService().getText(
+				LOGGER.logError( kostval.getTextResourceService().getText(
 						MESSAGE_XML_VALERGEBNIS_CLOSE )
 						+ kostval.getTextResourceService().getText(
 								MESSAGE_XML_VALERGEBNIS_INVALID ) );
+				System.out.println( "Invalid" );
+				System.out.println( "" );
 			}
 
 			// Ausgabe der Pfade zu den Jhove Reports, falls welche
@@ -919,12 +968,15 @@ public class KOSTVal implements MessageConstants
 				.endsWith( ".siard" )) ) {
 			LOGGER.logError( kostval.getTextResourceService().getText(
 					MESSAGE_XML_VALERGEBNIS ) );
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
+			LOGGER.logError( kostval.getTextResourceService().getText(
 					MESSAGE_XML_VALTYPE,
 					kostval.getTextResourceService().getText(
 							MESSAGE_SIARDVALIDATION ) ) );
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
+			LOGGER.logError( kostval.getTextResourceService().getText(
 					MESSAGE_XML_VALFILE, originalValName ) );
+			System.out.println( kostval.getTextResourceService().getText(
+					MESSAGE_SIARDVALIDATION ) );
+			System.out.println( originalValName );
 			Controllersiard controller2 = (Controllersiard) context
 					.getBean( "controllersiard" );
 			boolean okMandatory = controller2.executeMandatory( valDatei,
@@ -948,31 +1000,38 @@ public class KOSTVal implements MessageConstants
 				Util.valElement(
 						kostval.getTextResourceService().getText(
 								MESSAGE_XML_VALERGEBNIS_VALID ), logFile );
-				LOGGER.logInfo( kostval.getTextResourceService().getText(
+				LOGGER.logError( kostval.getTextResourceService().getText(
 						MESSAGE_XML_VALERGEBNIS_CLOSE )
 						+ kostval.getTextResourceService().getText(
 								MESSAGE_XML_VALERGEBNIS_VALID ) );
+				System.out.println( "Valid" );
+				System.out.println( "" );
 			} else {
 				// Fehler in Validierte Datei --> invalide
 				Util.valElement(
 						kostval.getTextResourceService().getText(
 								MESSAGE_XML_VALERGEBNIS_INVALID ), logFile );
-				LOGGER.logInfo( kostval.getTextResourceService().getText(
+				LOGGER.logError( kostval.getTextResourceService().getText(
 						MESSAGE_XML_VALERGEBNIS_CLOSE )
 						+ kostval.getTextResourceService().getText(
 								MESSAGE_XML_VALERGEBNIS_INVALID ) );
+				System.out.println( "Invalid" );
+				System.out.println( "" );
 			}
 
 		} else if ( (valDatei.getName().endsWith( ".pdf" ) || valDatei
 				.getName().endsWith( ".pdfa" )) ) {
 			LOGGER.logError( kostval.getTextResourceService().getText(
 					MESSAGE_XML_VALERGEBNIS ) );
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
+			LOGGER.logError( kostval.getTextResourceService().getText(
 					MESSAGE_XML_VALTYPE,
 					kostval.getTextResourceService().getText(
 							MESSAGE_PDFAVALIDATION ) ) );
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
+			LOGGER.logError( kostval.getTextResourceService().getText(
 					MESSAGE_XML_VALFILE, originalValName ) );
+			System.out.println( kostval.getTextResourceService().getText(
+					MESSAGE_PDFAVALIDATION ) );
+			System.out.println( originalValName );
 			Controllerpdfa controller3 = (Controllerpdfa) context
 					.getBean( "controllerpdfa" );
 			boolean okMandatory = controller3.executeMandatory( valDatei,
@@ -996,19 +1055,23 @@ public class KOSTVal implements MessageConstants
 				Util.valElement(
 						kostval.getTextResourceService().getText(
 								MESSAGE_XML_VALERGEBNIS_VALID ), logFile );
-				LOGGER.logInfo( kostval.getTextResourceService().getText(
+				LOGGER.logError( kostval.getTextResourceService().getText(
 						MESSAGE_XML_VALERGEBNIS_CLOSE )
 						+ kostval.getTextResourceService().getText(
 								MESSAGE_XML_VALERGEBNIS_VALID ) );
+				System.out.println( "Valid" );
+				System.out.println( "" );
 			} else {
 				// Validierte Datei invalide
 				Util.valElement(
 						kostval.getTextResourceService().getText(
 								MESSAGE_XML_VALERGEBNIS_INVALID ), logFile );
-				LOGGER.logInfo( kostval.getTextResourceService().getText(
+				LOGGER.logError( kostval.getTextResourceService().getText(
 						MESSAGE_XML_VALERGEBNIS_CLOSE )
 						+ kostval.getTextResourceService().getText(
 								MESSAGE_XML_VALERGEBNIS_INVALID ) );
+				System.out.println( "Invalid" );
+				System.out.println( "" );
 			}
 
 			// Ausgabe der Pfade zu den Pdftron Reports, falls welche
@@ -1028,7 +1091,9 @@ public class KOSTVal implements MessageConstants
 			}
 
 		} else {
-			LOGGER.logInfo( kostval.getTextResourceService().getText(
+			LOGGER.logError( kostval.getTextResourceService().getText(
+					ERROR_INCORRECTFILEENDING ) );
+			System.out.println( kostval.getTextResourceService().getText(
 					ERROR_INCORRECTFILEENDING ) );
 		}
 		return valFile;

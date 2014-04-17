@@ -14,4 +14,4 @@ DEL KOSTval_en.nsi
 Q:\KOST\Software\PCUnixUtils\sed.exe -f KOSTval_en.script KOSTval_de.nsi > KOSTval_en.nsi
 Q:\KOST\Software\NSIS\makensis.exe KOSTval_en.nsi
 
-PAUSE
+CALL KOST-Val_de.exe

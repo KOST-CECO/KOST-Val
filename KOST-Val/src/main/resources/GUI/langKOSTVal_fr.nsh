@@ -13,6 +13,7 @@ DetailsButtonText "Details zeigen"
 !define SIP_FALSE         "Validation SIP a échoué, ouvrir le fichier log?"
 !define FORMAT_FALSE      "Validation du format a échoué, ouvrir le fichier log?"
 !define PROG_ERR          "Erreur Java lorsque l'exécution du programme:"
+!define LOG_ERR           "Pas d'autorisation d'écriture pour le répertoire de logging:"
 
 !define NextButtonText    "&Terminer"
 

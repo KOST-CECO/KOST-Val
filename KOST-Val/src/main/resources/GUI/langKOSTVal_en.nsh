@@ -13,6 +13,7 @@ DetailsButtonText "Show Details"
 !define SIP_FALSE            "SIP validation failed, open log file?"
 !define FORMAT_FALSE         "Format validation failed, open log file?"
 !define PROG_ERR             "General Java runtime error:"
+!define LOG_ERR              "No write access in LOG folder:"
 
 !define NextButtonText       "&Exit"
 

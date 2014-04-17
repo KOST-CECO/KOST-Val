@@ -21,11 +21,12 @@ KOSTval
 		make_KOSTval.bat
 		KOSTval_fr.script
 		KOSTval_en.script
+		test.bat
 [Open project files]
-0=KOSTval_de.nsi
+0=Neu1.txt
 [Selected Project Files]
 Main=KOSTval_de.nsi
-Selected=KOSTval_de.nsi
-[KOSTval_de.nsi]
+Selected=Neu1.txt
+[Neu1.txt]
 TopLine=1
-Caret=22,2
+Caret=1,1
