@@ -83,7 +83,6 @@ public class ValidationCcompressionValidationModuleImpl extends
 				.getAllowedCompression32773();
 
 		Integer jhoveio = 0;
-		// TODO: kann gelöscht werden, da fix integriert Integer jhove15 = 0;
 		Integer typetiff = 0;
 
 		try {
@@ -91,9 +90,6 @@ public class ValidationCcompressionValidationModuleImpl extends
 					new FileReader( jhoveReport ) );
 			String line;
 			while ( (line = in.readLine()) != null ) {
-				/*
-				 * if ( line.contains( "Jhove (Rel. 1.5," ) ) { jhove15 = 1; }
-				 */
 				if ( line.contains( "Type: TIFF" ) ) {
 					typetiff = 1;
 					// TIFF-IFD
@@ -134,18 +130,11 @@ public class ValidationCcompressionValidationModuleImpl extends
 			if ( jhoveio == 0 ) {
 				// Invalider Status
 				isValid = false;
-				/*
-				 * if ( jhove15 == 0 ) { getMessageService().logError(
-				 * getTextResourceService().getText( MESSAGE_XML_MODUL_C_TIFF )
-				 * + getTextResourceService().getText(
-				 * MESSAGE_MODULE_CG_JHOVEN15 ) ); } else {
-				 */
 				getMessageService().logError(
 						getTextResourceService().getText(
 								MESSAGE_XML_MODUL_C_TIFF )
 								+ getTextResourceService().getText(
 										MESSAGE_XML_CG_JHOVENIO, "C" ) );
-				// }
 			}
 			in.close();
 		} catch ( Exception e ) {

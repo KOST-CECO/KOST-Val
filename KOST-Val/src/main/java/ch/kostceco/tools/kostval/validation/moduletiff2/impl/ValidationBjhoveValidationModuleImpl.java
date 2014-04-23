@@ -188,18 +188,6 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 				concatenatedOutputs.append( line );
 				concatenatedOutputs.append( NEWLINE );
 
-				// TODO: Kann gelöscht werden, da das Modul fix definiert wird
-				// und keine erkennung mehr gemacht wird
-				/*
-				 * // selten wird das Format von Jhove nicht als TIFF erkannt //
-				 * Invalid wenn Format nicht TIFF ist if ( line.contains(
-				 * " Format:" ) ) { if ( !line.contains( "TIFF" ) ) { //
-				 * Invalider Status isValid = false; getMessageService()
-				 * .logError( getTextResourceService().getText(
-				 * MESSAGE_XML_MODUL_B_TIFF ) + getTextResourceService()
-				 * .getText( MESSAGE_MODULE_B_JHOVEINVALIDFORMAT, line ) ); } }
-				 */
-
 				// die Status-Zeile enthält diese Möglichkeiten:
 				// Valider Status: "Well-Formed and valid"
 				// Invalider Status: "Not well-formed" oder
@@ -261,9 +249,7 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 		if ( jhoveReport.exists() ) {
 			jhoveReport.delete();
 		}
-		// if ( jhoveReport.exists() ) {
 		jhoveReport.deleteOnExit();
-		// }
 
 		return isValid;
 	}
