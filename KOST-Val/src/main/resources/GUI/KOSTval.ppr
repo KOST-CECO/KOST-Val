@@ -23,10 +23,10 @@ KOSTval
 		KOSTval_en.script
 		test.bat
 [Open project files]
-0=Neu1.txt
+0=resources\XTrans_1.8.0.2\readme.txt
 [Selected Project Files]
 Main=KOSTval_de.nsi
-Selected=Neu1.txt
-[Neu1.txt]
+Selected=resources\XTrans_1.8.0.2\readme.txt
+[resources\XTrans_1.8.0.2\readme.txt]
 TopLine=1
 Caret=1,1

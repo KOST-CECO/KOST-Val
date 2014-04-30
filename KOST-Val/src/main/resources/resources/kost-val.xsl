@@ -19,6 +19,7 @@
 					tr.caption {background-color: #eeafaf; font-weight:bold}
 					tr.captionm {background-color: #f8dfdf}
 					tr.captionio {background-color: #afeeaf; font-weight:bold}
+					tr.captioninfo {background-color: #b2b2c5}
 				</style>
 			</head>
 		<body>
@@ -66,6 +67,16 @@
 				</div>
 			</xsl:for-each>
 			<h1>Format:</h1>
+			<xsl:for-each select="KOSTValLog/Format/Info">
+				<div>
+					<table width="100%">
+						<tr class="captioninfo">
+							<td><xsl:value-of select="Message"/></td>
+						</tr>
+					</table>
+				</div>
+				<br/>
+			</xsl:for-each>
 			<h2>Invalid:</h2>
 			<xsl:for-each select="KOSTValLog/Format/Invalid">
 				<div>

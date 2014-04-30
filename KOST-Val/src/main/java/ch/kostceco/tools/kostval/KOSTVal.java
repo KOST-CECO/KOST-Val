@@ -1,5 +1,5 @@
 /*== KOST-Val ==================================================================================
-The KOST-Val v1.3.0 application is used for validate TIFF, SIARD, PDF/A-Files and Submission 
+The KOST-Val v1.3.1 application is used for validate TIFF, SIARD, PDF/A-Files and Submission 
 Information Package (SIP). 
 Copyright (C) 2012-2014 Claire Röthlisberger (KOST-CECO), Christian Eugster, Olivier Debenath, 
 Peter Schneider (Staatsarchiv Aargau), Daniel Ludin (BEDAG AG)
@@ -440,6 +440,14 @@ public class KOSTVal implements MessageConstants
 						}
 					}
 				}
+				
+				if ( countNio == count ) {
+					// keine Dateien Validiert
+					LOGGER.logError( kostval.getTextResourceService().getText(
+							ERROR_INCORRECTFILEENDINGS ) );
+					System.out.println( kostval.getTextResourceService()
+							.getText( ERROR_INCORRECTFILEENDINGS ) );
+				}
 
 				LOGGER.logError( kostval.getTextResourceService().getText(
 						MESSAGE_XML_FORMAT2 ) );
@@ -716,6 +724,15 @@ public class KOSTVal implements MessageConstants
 			} catch ( IOException e ) {
 				e.printStackTrace();
 			}
+			
+			if ( countNio == count ) {
+				// keine Dateien Validiert
+				LOGGER.logError( kostval.getTextResourceService().getText(
+						ERROR_INCORRECTFILEENDINGS ) );
+				System.out.println( kostval.getTextResourceService()
+						.getText( ERROR_INCORRECTFILEENDINGS ) );
+			}
+
 			LOGGER.logError( kostval.getTextResourceService().getText(
 					MESSAGE_XML_FORMAT2 ) );
 
@@ -1092,9 +1109,9 @@ public class KOSTVal implements MessageConstants
 
 		} else {
 			LOGGER.logError( kostval.getTextResourceService().getText(
-					ERROR_INCORRECTFILEENDING ) );
+					ERROR_INCORRECTFILEENDING, valDatei.getName() ) );
 			System.out.println( kostval.getTextResourceService().getText(
-					ERROR_INCORRECTFILEENDING ) );
+					ERROR_INCORRECTFILEENDING, valDatei.getName() ) );
 		}
 		return valFile;
 	}

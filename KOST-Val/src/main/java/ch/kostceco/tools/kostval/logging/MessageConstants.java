@@ -42,6 +42,7 @@ public interface MessageConstants
 	String	ERROR_JHOVECONF_MISSING						= "error.jhoveconf.missing";
 	String	ERROR_PARAMETER_OPTIONAL_1					= "error.parameter.optional.1";
 	String	ERROR_INCORRECTFILEENDING					= "error.incorrectfileending";
+	String	ERROR_INCORRECTFILEENDINGS					= "error.incorrectfileendings";
 	String	ERROR_WRONG_JRE								= "error.wrong.jdk";
 
 	// Globale Meldungen

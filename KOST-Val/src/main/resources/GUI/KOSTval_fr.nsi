@@ -1,5 +1,5 @@
 ; The name of the installer
-Name "KOST-Val v1.3.0"
+Name "KOST-Val v1.3.1"
 ; Sets the icon of the installer
 Icon "val.ico"
 ; remove the text 'Nullsoft Install System vX.XX' from the installer window 
@@ -22,7 +22,7 @@ XPStyle on
 !include getJavaHome.nsh
 !include langKOSTVal_fr.nsh
 !include nsDialogs.nsh
-!include "XML.nsh"
+!include XML.nsh
 
 ;--------------------------------
 !define INIFILE       "KOSTval.ini"
@@ -30,12 +30,13 @@ XPStyle on
 !define CONFIG        "kostval.conf.xml"
 !define CONFIGPATH    "configuration"
 !define BACKUP        "~backup"
-!define KOSTVAL       "kostval_fr.jar"
+!define JARFILE       "kostval_fr.jar"
+!define XTRANS        "resources\XTrans_1.8.0.2\XTrans.exe"
 !define JAVAPATH      "jre6"
 
 ;--------------------------------
 Var DIALOG
-Var KOSTFILE
+Var KOSTVAL
 Var LOGFILE
 Var WORKDIR
 Var LOG
@@ -59,6 +60,9 @@ Function .onInit
   Call getJavaHome
   pop $JAVA
   DetailPrint "java home: $JAVA"
+  
+  ; initial setting for validation folder/file
+  StrCpy $KOSTVAL $EXEDIR
   
   ; create configuration backup
   CreateDirectory $EXEDIR\${CONFIGPATH}\${BACKUP}
@@ -143,6 +147,12 @@ FunctionEnd
 
 ;--------------------------------
 Function LeaveDialog
+  ; If file, truncate KOSTVAL to folder  name
+  ${GetFileExt} $KOSTVAL $R0
+  ${If} $R0 != ''
+    ${GetParent} $KOSTVAL $KOSTVAL
+  ${EndIf}
+
   ; To get the input of the user, read the State value of a Field 
   ReadINIStr $0 $DIALOG "Settings" "State"
   
@@ -187,9 +197,9 @@ Function LeaveDialog
     
     ${Case} '${INPUT_FileRequest}'
       ${If} $T_FLAG == '--sip'
-        nsDialogs::SelectFileDialog 'open' '$EXEDIR\*.zip' 'SIP Files|*.zip'
+        nsDialogs::SelectFileDialog 'open' '$KOSTVAL\*.zip' 'SIP Files|*.zip'
       ${Else}
-        nsDialogs::SelectFileDialog 'open' '$EXEDIR\*' ''
+        nsDialogs::SelectFileDialog 'open' '$KOSTVAL\*' ''
       ${EndIf}
       Pop $R0
       ${If} $R0 == ''
@@ -197,33 +207,43 @@ Function LeaveDialog
       ${Else}
         ReadINIStr $1 $DIALOG '${SEL_FileFolder}' 'HWND'
         SendMessage $1 ${WM_SETTEXT} 1 'STR:$R0'
-        StrCpy $KOSTFILE $R0
+        StrCpy $KOSTVAL $R0
       ${EndIf}
       Abort
     ${Break}
     
     ${Case} '${INPUT_FolderRequest}'
-      nsDialogs::SelectFolderDialog "Select the folder" $EXEDIR
+      nsDialogs::SelectFolderDialog "${FOLDER_SelectTXT}" "$KOSTVAL"
       Pop $R0
       ${If} $R0 == 'error'
         MessageBox MB_OK "${FOLDER_SelectTXT}"
       ${Else}
         ReadINIStr $1 $DIALOG '${SEL_FileFolder}' 'HWND'
         SendMessage $1 ${WM_SETTEXT} 1 'STR:$R0'
-        StrCpy $KOSTFILE $R0
+        StrCpy $KOSTVAL $R0
       ${EndIf}
       Abort
     ${Break}
 
     ${Case} '${START_Validation}'
-      ReadINIStr $KOSTFILE $DIALOG "${SEL_FileFolder}" "State"
+      ReadINIStr $R0 $DIALOG "${SEL_FileFolder}" "State"
+      ; Trim path or file name
+      StrCpy $R1 $R0 1 -1
+      StrCmp $R1 '\' 0 +2
+        StrCpy $R0 $R0 -1
+        GetFullPathName $KOSTVAL $R0
       Call RunJar
       Abort
     ${Break}
 
     ${Case} '${EDIT_Konfiguration}'
+      ClearErrors
+      ExecWait '${XTRANS} "$EXEDIR\${CONFIGPATH}\${CONFIG}"'
+      ${If} ${Errors}
+        ExecWait '"notepad.exe" "$EXEDIR\${CONFIGPATH}\${CONFIG}"'
+      ${EndIf}
       ; ExecWait '"notepad.exe" "$EXEDIR\${CONFIGPATH}\${CONFIG}"'
-      ExecShell "open" "$EXEDIR\${CONFIGPATH}\${CONFIG}"
+      ; ExecShell "open" "$EXEDIR\${CONFIGPATH}\${CONFIG}"
       Abort
     ${Break}
 
@@ -246,7 +266,7 @@ Function RunJar
   Call check4Dir
 
   ; get logfile name
-  ${GetFileName} $KOSTFILE $LOGFILE
+  ${GetFileName} $KOSTVAL $LOGFILE
   CreateDirectory $LOG
   IfFileExists "$LOG\*.*" +2 0
   CreateDirectory "$EXEDIR\$LOG"
@@ -262,7 +282,8 @@ Function RunJar
 
   ; Launch java program
   ClearErrors
-  ExecWait '"$JAVA\bin\java.exe" -Xmx1024m -jar ${KOSTVAL} $T_FLAG "$KOSTFILE" $P_FLAG'
+  ; MessageBox MB_OK '"$JAVA\bin\java.exe" -Xmx1024m -jar ${JARFILE} $T_FLAG "$KOSTVAL" $P_FLAG'
+  ExecWait '"$JAVA\bin\java.exe" -Xmx1024m -jar ${JARFILE} $T_FLAG "$KOSTVAL" $P_FLAG'
   IfFileExists "$LOG\$LOGFILE.kost-val.log*" 0 prog_err
   IfErrors goto_err goto_ok
   
@@ -270,29 +291,34 @@ goto_err:
     ; validation with error
     IfFileExists "$LOG\$LOGFILE.kost-val.log*" 0 prog_err
     ${If} $T_FLAG == '--sip'
-      MessageBox MB_YESNO|MB_ICONEXCLAMATION "$KOSTFILE$\n${SIP_FALSE}" IDYES showlog
+      MessageBox MB_YESNO|MB_ICONEXCLAMATION "$KOSTVAL$\n${SIP_FALSE}" IDYES showlog
       Goto rm_workdir
   ${Else}
-      MessageBox MB_YESNO|MB_ICONEXCLAMATION "$KOSTFILE$\n${FORMAT_FALSE}" IDYES showlog
+      MessageBox MB_YESNO|MB_ICONEXCLAMATION "$KOSTVAL$\n${FORMAT_FALSE}" IDYES showlog
       Goto rm_workdir
   ${EndIf}
 prog_err:
-    MessageBox MB_OK|MB_ICONEXCLAMATION "${PROG_ERR} $\n$JAVA\bin\java.exe -jar ${KOSTVAL} $T_FLAG $KOSTFILE $P_FLAG"
+    MessageBox MB_OK|MB_ICONEXCLAMATION "${PROG_ERR} $\n$JAVA\bin\java.exe -jar ${JARFILE} $T_FLAG $KOSTVAL $P_FLAG"
     Goto rm_workdir
 goto_ok:
   ; validation without error completed
   ${If} $T_FLAG == '--sip'
-    MessageBox MB_YESNO "$KOSTFILE$\n${SIP_OK}" IDYES showlog
+    MessageBox MB_YESNO "$KOSTVAL$\n${SIP_OK}" IDYES showlog
     Goto rm_workdir
   ${Else}
-    MessageBox MB_YESNO "$KOSTFILE$\n${FORMAT_OK}" IDYES showlog
+    MessageBox MB_YESNO "$KOSTVAL$\n${FORMAT_OK}" IDYES showlog
     Goto rm_workdir
   ${EndIf}
 showlog:
   ; read logfile in detail view
-  IfFileExists "$LOG\$LOGFILE.kost-val.log.xml" 0 +2
-  ExecShell "open" "$LOG\$LOGFILE.kost-val.log.xml"
-  ExecShell "open" "$LOG\$LOGFILE.kost-val.log"
+  GetFullPathName $1 $LOG
+  IfFileExists "$LOG\$LOGFILE.kost-val.log.xml" 0 +3
+  ExecShell "" "iexplore.exe" "$1\$LOGFILE.kost-val.log.xml"
+  Goto rm_workdir
+  ExecShell "" "iexplore.exe" "$1\$LOGFILE.kost-val.log"
+  Goto rm_workdir
+  ; ExecShell "open" "$LOG\$LOGFILE.kost-val.log.xml"
+  ; ExecShell "open" "$LOG\$LOGFILE.kost-val.log"
 rm_workdir:
   GetFullPathName $1 $WORKDIR
   RMDir /r $1
