@@ -20,25 +20,12 @@ Boston, MA 02110-1301 USA or see <http://www.gnu.org/licenses/>.
 
 package ch.kostceco.tools.kostval.validation.modulesip1.impl;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathFactory;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -47,9 +34,6 @@ import ch.kostceco.tools.kostval.exception.modulesip1.Validation1dMetadataExcept
 import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesip1.Validation1dMetadataModule;
-import ch.enterag.utils.zip.EntryInputStream;
-import ch.enterag.utils.zip.FileEntry;
-import ch.enterag.utils.zip.Zip64File;
 
 /**
  * @author razm Daniel Ludin, Bedag AG @version 0.2.0
@@ -74,70 +58,18 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 
 	final int	BUFFER	= 2048;
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws Validation1dMetadataException
 	{
 
-		// fetch the metadata.xml file from the zip. There's no need to check
-		// for the existence of the metadata.xml file anymore, because this is
-		// already done in the previous validation step.
-
-		// ZipEntry metadataxml = null;
-		FileEntry metadataxml = null;
-		Map<String, String> xsdsInZip = new HashMap<String, String>();
-		Map<String, String> xsdsInMetadata = new HashMap<String, String>();
-
-		// File xmlToValidate = null;
-		// File xsdToValidate = null;
-
-		// Arbeitsverzeichnis zum Entpackten SIP
-		String pathToWorkDir = getConfigurationService().getPathToWorkDir()
-				+ "\\ZIP";
-
-		String toplevelDir = valDatei.getName();
-		int lastDotIdx = toplevelDir.lastIndexOf( "." );
-		toplevelDir = toplevelDir.substring( 0, lastDotIdx );
-
 		try {
-			// Das metadata.xml und seine xsd's müssen in das Filesystem
-			// extrahiert werden, weil bei bei Verwendung eines Inputstreams bei
-			// der Validierung ein Problem mit den xs:include Statements
-			// besteht, die includes können so nicht aufgelöst werden. Dies
-			// wurde bereits vorgängig für die Formatvalidierung gemacht.
-			Zip64File zipfile = new Zip64File( valDatei );
-
-			List<FileEntry> fileEntryList = zipfile.getListFileEntries();
-			for ( FileEntry fileEntry : fileEntryList ) {
-				if ( fileEntry.getName().equals( "header/" + METADATA )
-						|| fileEntry.getName().equals(
-								toplevelDir + "/" + "header/" + METADATA ) ) {
-					metadataxml = fileEntry;
-				}
-				if ( fileEntry.getName().startsWith( "header/xsd/" )
-						&& fileEntry.getName().endsWith( ".xsd" ) ) {
-					xsdsInZip.put( fileEntry.getName().split( "/" )[2],
-							fileEntry.getName().split( "/" )[2] );
-				} else if ( fileEntry.getName().startsWith(
-						toplevelDir + "/" + "header/xsd/" )
-						&& fileEntry.getName().endsWith( ".xsd" ) ) {
-					xsdsInZip.put( fileEntry.getName().split( "/" )[3],
-							fileEntry.getName().split( "/" )[3] );
-				}
-			}
-
-			File workToplevelDir = new File( pathToWorkDir + "\\" + toplevelDir );
-			if ( !workToplevelDir.exists() ) {
-				workToplevelDir = new File( pathToWorkDir );
-			}
-			File xmlToValidate = new File( workToplevelDir.getAbsolutePath()
+			File xmlToValidate = new File( valDatei.getAbsolutePath()
 					+ "\\header\\metadata.xml" );
 			File xsdToValidateBar1 = new File(
-					workToplevelDir.getAbsolutePath()
+					valDatei.getAbsolutePath()
 							+ "\\header\\xsd\\arelda_v3.13.2.xsd" );
 			File xsdToValidateEch1 = new File(
-					workToplevelDir.getAbsolutePath()
+					valDatei.getAbsolutePath()
 							+ "\\header\\xsd\\arelda.xsd" );
 
 			if ( xmlToValidate.exists() && xsdToValidateBar1.exists() ) {
@@ -314,16 +246,19 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 				}
 			}
 
-			if ( xmlToValidate == null || metadataxml == null ) {
+/*			if ( xmlToValidate == null || metadataxml == null ) {
 				getMessageService().logError(
 						getTextResourceService().getText(
 								MESSAGE_XML_MODUL_Ad_SIP )
 								+ getTextResourceService().getText(
 										ERROR_XML_AE_NOMETADATAFOUND ) );
 				return false;
-			}
+			}*/
+			
+			// TODO: Validieren ob die xsd korrekt in Metadata.xml enthalten sind
+			//evtl ist dies gar nicht nötig falls dies durch Modul2 abgefangen wird
 
-			EntryInputStream eis = zipfile.openEntryInputStream( metadataxml
+/*			EntryInputStream eis = zipfile.openEntryInputStream( metadataxml
 					.getName() );
 			BufferedInputStream is = new BufferedInputStream( eis );
 
@@ -345,7 +280,7 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 				 * ausgegeben, sollte in metadata.xml der content vor header
 				 * aufgeliestet sein (ERROR_MODULE_AD_CONTENTB4HEADER)
 				 */
-				Node parentNode = elementName.getParentNode();
+/*				Node parentNode = elementName.getParentNode();
 				NodeList nodeLst = parentNode.getChildNodes();
 
 				for ( int s = 0; s < nodeLst.getLength(); s++ ) {
@@ -381,6 +316,9 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 			// alle Files, die in metadata.xml unter <header><xsd>
 			// aufgelistet sind, müssen im Folder
 			// /header/xsd vorhanden sein, und umgekehrt
+			// Map<String, String> xsdsInZip
+			// Map<String, String> xsdsInMetadata
+
 
 			if ( xsdsInZip.size() != xsdsInMetadata.size() ) {
 				if ( xsdsInMetadata.size() == 0 ) {
@@ -428,7 +366,7 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 											ERROR_XML_AD_WRONGNUMBEROFXSDS ) );
 					return false;
 				}
-			}
+			}*/
 
 		} catch ( Exception e ) {
 			getMessageService().logError(

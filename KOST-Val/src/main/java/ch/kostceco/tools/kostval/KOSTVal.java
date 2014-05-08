@@ -1,5 +1,5 @@
 /*== KOST-Val ==================================================================================
-The KOST-Val v1.3.1 application is used for validate TIFF, SIARD, PDF/A-Files and Submission 
+The KOST-Val v1.3.2 application is used for validate TIFF, SIARD, PDF/A-Files and Submission 
 Information Package (SIP). 
 Copyright (C) 2012-2014 Claire Röthlisberger (KOST-CECO), Christian Eugster, Olivier Debenath, 
 Peter Schneider (Staatsarchiv Aargau), Daniel Ludin (BEDAG AG)
@@ -22,7 +22,6 @@ package ch.kostceco.tools.kostval;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
@@ -440,7 +439,7 @@ public class KOSTVal implements MessageConstants
 						}
 					}
 				}
-				
+
 				if ( countNio == count ) {
 					// keine Dateien Validiert
 					LOGGER.logError( kostval.getTextResourceService().getText(
@@ -497,6 +496,7 @@ public class KOSTVal implements MessageConstants
 			// --> erledigt --> nur Marker
 			boolean validFormat = false;
 			File originalSipFile = valDatei;
+			File unSipFile = valDatei;
 			File outputFile3c = null;
 			String fileName3c = null;
 			File tmpDirZip = null;
@@ -569,15 +569,70 @@ public class KOSTVal implements MessageConstants
 						.endsWith( ".zip" ) || valDatei.getAbsolutePath()
 						.toLowerCase().endsWith( ".zip64" )))
 						|| zip == false ) {
-
+					// Abbruch! D.h. Sip message beginnen, Meldung und Beenden
+					// ab hier bis System.exit( 1 );
 					LOGGER.logError( kostval.getTextResourceService().getText(
-							ERROR_XML_AA_INCORRECTFILEENDING ) );
+							MESSAGE_XML_FORMAT2 ) );
+					LOGGER.logError( kostval.getTextResourceService().getText(
+							MESSAGE_XML_SIP1 ) );
+					valDatei = originalSipFile;
+					LOGGER.logError( kostval.getTextResourceService().getText(
+							MESSAGE_XML_VALERGEBNIS ) );
+					LOGGER.logError( kostval.getTextResourceService().getText(
+							MESSAGE_XML_VALTYPE,
+							kostval.getTextResourceService().getText(
+									MESSAGE_SIPVALIDATION ) ) );
+					LOGGER.logError( kostval.getTextResourceService().getText(
+							MESSAGE_XML_VALFILE, valDatei.getAbsolutePath() ) );
+					System.out.println( kostval.getTextResourceService()
+							.getText( MESSAGE_SIPVALIDATION ) );
+					System.out.println( valDatei.getAbsolutePath() );
+
+					// die eigentliche Fehlermeldung
+					LOGGER.logError( kostval.getTextResourceService().getText(
+							MESSAGE_XML_MODUL_Aa_SIP )
+							+ kostval.getTextResourceService().getText(
+									ERROR_XML_AA_INCORRECTFILEENDING ) );
 					System.out.println( kostval.getTextResourceService()
 							.getText( ERROR_XML_AA_INCORRECTFILEENDING ) );
 
+					// Fehler im Validierten SIP --> invalide & Abbruch
+					Util.valElement(
+							kostval.getTextResourceService().getText(
+									MESSAGE_XML_VALERGEBNIS_INVALID ), logFile );
+					LOGGER.logError( kostval.getTextResourceService().getText(
+							MESSAGE_XML_VALERGEBNIS_CLOSE )
+							+ kostval.getTextResourceService().getText(
+									MESSAGE_XML_VALERGEBNIS_INVALID ) );
+					System.out.println( "Invalid" );
+					System.out.println( "" );
+					LOGGER.logError( kostval.getTextResourceService().getText(
+							MESSAGE_XML_SIP2 ) );
+					LOGGER.logError( kostval.getTextResourceService().getText(
+							MESSAGE_XML_LOGEND ) );
+
+					// Zeitstempel End
+					java.util.Date nowEnd = new java.util.Date();
+					java.text.SimpleDateFormat sdfEnd = new java.text.SimpleDateFormat(
+							"dd.MM.yyyy HH.mm.ss" );
+					String ausgabeEnd = sdfEnd.format( nowEnd );
+					ausgabeEnd = "<End>" + ausgabeEnd + "</End>";
+					Util.valEnd( ausgabeEnd, logFile );
+					Util.amp( logFile );
+
+					// bestehendes Workverzeichnis ggf. löschen
+					if ( tmpDir.exists() ) {
+						Util.deleteDir( tmpDir );
+					}
+					System.exit( 1 );
+
 				} else {
 					// geziptes SIP --> in temp dir entzipen
-					tmpDirZip = new File( tmpDir.getAbsolutePath() + "\\ZIP" );
+					String toplevelDir = valDatei.getName();
+					int lastDotIdx = toplevelDir.lastIndexOf( "." );
+					toplevelDir = toplevelDir.substring( 0, lastDotIdx );
+					tmpDirZip = new File( tmpDir.getAbsolutePath() + "\\ZIP\\"
+							+ toplevelDir );
 					try {
 						Zip64Archiver.unzip( valDatei.getAbsolutePath(),
 								tmpDirZip.getAbsolutePath() );
@@ -585,52 +640,87 @@ public class KOSTVal implements MessageConstants
 						try {
 							Zip64Archiver.unzip64( valDatei, tmpDirZip );
 						} catch ( Exception e1 ) {
+							// Abbruch! D.h. Sip message beginnen, Meldung und
+							// Beenden
+							// ab hier bis System.exit( 1 );
 							LOGGER.logError( kostval.getTextResourceService()
-									.getText( ERROR_XML_AA_CANNOTEXTRACTZIP ) );
+									.getText( MESSAGE_XML_FORMAT2 ) );
+							LOGGER.logError( kostval.getTextResourceService()
+									.getText( MESSAGE_XML_SIP1 ) );
+							valDatei = originalSipFile;
+							LOGGER.logError( kostval.getTextResourceService()
+									.getText( MESSAGE_XML_VALERGEBNIS ) );
+							LOGGER.logError( kostval
+									.getTextResourceService()
+									.getText(
+											MESSAGE_XML_VALTYPE,
+											kostval.getTextResourceService()
+													.getText(
+															MESSAGE_SIPVALIDATION ) ) );
+							LOGGER.logError( kostval.getTextResourceService()
+									.getText( MESSAGE_XML_VALFILE,
+											valDatei.getAbsolutePath() ) );
+							System.out.println( kostval
+									.getTextResourceService().getText(
+											MESSAGE_SIPVALIDATION ) );
+							System.out.println( valDatei.getAbsolutePath() );
+
+							// die eigentliche Fehlermeldung
+							LOGGER.logError( kostval.getTextResourceService()
+									.getText( MESSAGE_XML_MODUL_Aa_SIP )
+									+ kostval.getTextResourceService().getText(
+											ERROR_XML_AA_CANNOTEXTRACTZIP ) );
 							System.out.println( kostval
 									.getTextResourceService().getText(
 											ERROR_XML_AA_CANNOTEXTRACTZIP ) );
+
+							// Fehler im Validierten SIP --> invalide & Abbruch
+							Util.valElement(
+									kostval.getTextResourceService().getText(
+											MESSAGE_XML_VALERGEBNIS_INVALID ),
+									logFile );
+							LOGGER.logError( kostval.getTextResourceService()
+									.getText( MESSAGE_XML_VALERGEBNIS_CLOSE )
+									+ kostval.getTextResourceService().getText(
+											MESSAGE_XML_VALERGEBNIS_INVALID ) );
+							System.out.println( "Invalid" );
+							System.out.println( "" );
+							LOGGER.logError( kostval.getTextResourceService()
+									.getText( MESSAGE_XML_SIP2 ) );
+							LOGGER.logError( kostval.getTextResourceService()
+									.getText( MESSAGE_XML_LOGEND ) );
+
+							// Zeitstempel End
+							java.util.Date nowEnd = new java.util.Date();
+							java.text.SimpleDateFormat sdfEnd = new java.text.SimpleDateFormat(
+									"dd.MM.yyyy HH.mm.ss" );
+							String ausgabeEnd = sdfEnd.format( nowEnd );
+							ausgabeEnd = "<End>" + ausgabeEnd + "</End>";
+							Util.valEnd( ausgabeEnd, logFile );
+							Util.amp( logFile );
+
+							// bestehendes Workverzeichnis ggf. löschen
+							if ( tmpDir.exists() ) {
+								Util.deleteDir( tmpDir );
+							}
+							System.exit( 1 );
 						}
 					}
 					valDatei = tmpDirZip;
+
+					File toplevelfolder = new File( valDatei.getAbsolutePath()
+							+ "\\" + valDatei.getName() );
+					if ( toplevelfolder.exists() ) {
+						valDatei = toplevelfolder;
+					}
+					unSipFile = valDatei;
 				}
 			} else {
 				// SIP ist ein Ordner
-				// Für 1d und 3a&3b SIP in tempDir\ZIP\SIP-name kopieren
-				File contentOrig = new File( valDatei.getAbsolutePath()
-						+ "\\content" );
-				File headerOrig = new File( valDatei.getAbsolutePath()
-						+ "\\header" );
-				File zipCopy = new File( pathToWorkDir + "\\ZIP" );
-				zipCopy.mkdir();
-				File contentCopy = new File( pathToWorkDir + "\\ZIP\\content" );
-				contentCopy.mkdir();
-				File headerCopy = new File( pathToWorkDir + "\\ZIP\\header" );
-				headerCopy.mkdir();
-				File metadataXml = new File( headerCopy.getAbsolutePath()
-						+ "\\metadata.xml" );
-
-				try {
-					Util.copyDir( contentOrig, contentCopy );
-					Util.copyDir( headerOrig, headerCopy );
-				} catch ( FileNotFoundException e ) {
-					LOGGER.logError( "<Error>"
-							+ kostval
-									.getTextResourceService()
-									.getText(
-											ERROR_XML_UNKNOWN,
-											e.getMessage()
-													+ " (FileNotFoundException)" ) );
-					System.out.println( "FileNotFoundException: "
-							+ e.getMessage() );
-				} catch ( IOException e ) {
-					LOGGER.logError( "<Error>"
-							+ kostval.getTextResourceService().getText(
-									ERROR_XML_UNKNOWN, e.getMessage() ) );
-					System.out.println( "Exception: " + e.getMessage() );
-				}
-
+				// valDatei bleibt unverändert
 			}
+
+			// Vorgängige Formatvalidierung (Schritt 3c)
 			Map<String, File> fileMap = Util.getFileMap( valDatei, false );
 			Set<String> fileMapKeys = fileMap.keySet();
 			for ( Iterator<String> iterator = fileMapKeys.iterator(); iterator
@@ -724,13 +814,13 @@ public class KOSTVal implements MessageConstants
 			} catch ( IOException e ) {
 				e.printStackTrace();
 			}
-			
+
 			if ( countNio == count ) {
 				// keine Dateien Validiert
 				LOGGER.logError( kostval.getTextResourceService().getText(
 						ERROR_INCORRECTFILEENDINGS ) );
-				System.out.println( kostval.getTextResourceService()
-						.getText( ERROR_INCORRECTFILEENDINGS ) );
+				System.out.println( kostval.getTextResourceService().getText(
+						ERROR_INCORRECTFILEENDINGS ) );
 			}
 
 			LOGGER.logError( kostval.getTextResourceService().getText(
@@ -740,7 +830,7 @@ public class KOSTVal implements MessageConstants
 
 			LOGGER.logError( kostval.getTextResourceService().getText(
 					MESSAGE_XML_SIP1 ) );
-			valDatei = originalSipFile;
+			valDatei = unSipFile;
 			LOGGER.logError( kostval.getTextResourceService().getText(
 					MESSAGE_XML_VALERGEBNIS ) );
 			LOGGER.logError( kostval.getTextResourceService().getText(
@@ -748,38 +838,11 @@ public class KOSTVal implements MessageConstants
 					kostval.getTextResourceService().getText(
 							MESSAGE_SIPVALIDATION ) ) );
 			LOGGER.logError( kostval.getTextResourceService().getText(
-					MESSAGE_XML_VALFILE, valDatei.getAbsolutePath() ) );
+					MESSAGE_XML_VALFILE, originalSipFile.getAbsolutePath() ) );
 			System.out.println( kostval.getTextResourceService().getText(
 					MESSAGE_SIPVALIDATION ) );
-			System.out.println( valDatei.getAbsolutePath() );
-			File targetFile = new File( pathToWorkDir + "\\SIP-Validierung",
-					valDatei.getName() + ".zip" );
-			File tmpDirSip = new File( pathToWorkDir + "\\SIP-Validierung" );
-			tmpDirSip.mkdir();
+			System.out.println( originalSipFile.getAbsolutePath() );
 
-			// Ueberprüfung des 1. Parameters (SIP-Datei): ist die Datei ein
-			// Verzeichnis? Wenn ja, wird im work-Verzeichnis eine Zip-Datei
-			// daraus erstellt, damit die weiteren Validierungen Gebrauch von
-			// der java.util.zip API machen können, und somit die zu
-			// Validierenden Archive gleichartig behandelt werden können, egal
-			// ob es sich um eine Verzeichnisstruktur oder ein Zip-File handelt.
-			// Informationen zum Arbeitsverzeichnis holen
-
-			String originalSipName = valDatei.getAbsolutePath();
-			if ( valDatei.isDirectory() ) {
-				try {
-					Zip64Archiver.archivate( valDatei, targetFile );
-					valDatei = targetFile;
-
-				} catch ( Exception e ) {
-					LOGGER.logError( kostval.getTextResourceService().getText(
-							ERROR_CANNOTCREATEZIP ) );
-					System.out.println( kostval.getTextResourceService()
-							.getText( ERROR_CANNOTCREATEZIP ) );
-					System.exit( 1 );
-				}
-
-			}
 			Controllersip controller = (Controllersip) context
 					.getBean( "controllersip" );
 			boolean okMandatory = false;
@@ -791,6 +854,9 @@ public class KOSTVal implements MessageConstants
 			// wurden, können die restlichen
 			// Validierungen, welche nicht zum Abbruch der Applikation führen,
 			// ausgeführt werden.
+
+			// 1a wurde bereits getestet (vor der Formatvalidierung)
+			// entsprechend fängt der Controller mit 1b an
 			if ( okMandatory ) {
 				ok = controller.executeOptional( valDatei, directoryOfLogfile );
 			}

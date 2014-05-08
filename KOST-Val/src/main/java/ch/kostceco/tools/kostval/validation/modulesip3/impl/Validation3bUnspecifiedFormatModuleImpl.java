@@ -110,19 +110,7 @@ public class Validation3bUnspecifiedFormatModuleImpl extends
 			Util.switchOnConsole();
 		}
 
-		// Die Archivdatei wurde bereits von der Formatvalidierung in das
-		// Arbeitsverzeichnis entpackt
-		String pathToWorkDir = getConfigurationService().getPathToWorkDir()
-				+ "\\ZIP";
-
-		/*
-		 * if ( !new File(pathToWorkDir).exists() ) { System.out.println(
-		 * pathToWorkDir + " existiert nicht !!!"); }
-		 */
-
-		File workDir = new File( pathToWorkDir );
-
-		Map<String, File> fileMap = Util.getFileMap( workDir, true );
+		Map<String, File> fileMap = Util.getFileMap( valDatei, true );
 		Set<String> fileMapKeys = fileMap.keySet();
 		for ( Iterator<String> iterator = fileMapKeys.iterator(); iterator
 				.hasNext(); ) {
@@ -162,7 +150,7 @@ public class Validation3bUnspecifiedFormatModuleImpl extends
 										MESSAGE_XML_MODUL_Cb_SIP )
 										+ getTextResourceService().getText(
 												MESSAGE_XML_CB_FORMAT, fileKey,
-												ff.getPUID() ) );
+												ff.getPUID() + " Extension: "+ff.getExtension(x ) ) );
 						valid = false;
 
 						if ( counterPuid.get( ff.getPUID() ) == null ) {

@@ -21,7 +21,7 @@ package ch.kostceco.tools.kostval.controller;
 
 import java.io.File;
 
-import ch.kostceco.tools.kostval.exception.modulesip1.Validation1aZipException;
+//import ch.kostceco.tools.kostval.exception.modulesip1.Validation1aZipException;
 import ch.kostceco.tools.kostval.exception.modulesip1.Validation1bFolderStructureException;
 import ch.kostceco.tools.kostval.exception.modulesip1.Validation1cNamingException;
 import ch.kostceco.tools.kostval.exception.modulesip1.Validation1dMetadataException;
@@ -38,7 +38,7 @@ import ch.kostceco.tools.kostval.exception.modulesip3.Validation3dPeriodExceptio
 import ch.kostceco.tools.kostval.logging.Logger;
 import ch.kostceco.tools.kostval.logging.MessageConstants;
 import ch.kostceco.tools.kostval.service.TextResourceService;
-import ch.kostceco.tools.kostval.validation.modulesip1.Validation1aZipModule;
+//import ch.kostceco.tools.kostval.validation.modulesip1.Validation1aZipModule;
 import ch.kostceco.tools.kostval.validation.modulesip1.Validation1bFolderStructureModule;
 import ch.kostceco.tools.kostval.validation.modulesip1.Validation1cNamingModule;
 import ch.kostceco.tools.kostval.validation.modulesip1.Validation1dMetadataModule;
@@ -68,7 +68,7 @@ public class Controllersip implements MessageConstants
 	private static final Logger						LOGGER	= new Logger(
 																	Controllersip.class );
 
-	private Validation1aZipModule					validation1aZipModule;
+//	private Validation1aZipModule					validation1aZipModule;
 
 	private Validation1bFolderStructureModule		validation1bFolderStructureModule;
 
@@ -98,7 +98,7 @@ public class Controllersip implements MessageConstants
 
 	private TextResourceService						textResourceService;
 
-	public Validation1aZipModule getValidation1aZipModule()
+/*	public Validation1aZipModule getValidation1aZipModule()
 	{
 		return validation1aZipModule;
 	}
@@ -107,7 +107,7 @@ public class Controllersip implements MessageConstants
 			Validation1aZipModule validation1aZipModule )
 	{
 		this.validation1aZipModule = validation1aZipModule;
-	}
+	}*/
 
 	public Validation1bFolderStructureModule getValidation1bFolderStructureModule()
 	{
@@ -266,8 +266,9 @@ public class Controllersip implements MessageConstants
 	{
 		boolean valid = true;
 
-		// Validation Step Aa
-		try {
+		// Validation Step Aa 
+		// (wurde vor der Formatvalidierung in KOSTVal.jar bereits durchgeführt)
+/*		try {
 			if ( this.getValidation1aZipModule().validate( valDatei,
 					directoryOfLogfile ) ) {
 				this.getValidation1aZipModule().getMessageService().print();
@@ -291,7 +292,7 @@ public class Controllersip implements MessageConstants
 					+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
 							e.getMessage() ) );
 			return false;
-		}
+		}*/
 
 		// Validation Step Ab
 		try {

@@ -217,6 +217,7 @@ public interface MessageConstants
 
 	// Modul 1b Meldungen
 	String	ERROR_XML_AB_CONTENT						= "error.xml.ab.content";
+	String	ERROR_XML_AB_HEADER							= "error.xml.ab.header";
 	String	ERROR_XML_AB_XSD							= "error.xml.ab.xsd";
 	String	ERROR_XML_AB_METADATA						= "error.xml.ab.metadata";
 

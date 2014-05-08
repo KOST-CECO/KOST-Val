@@ -104,14 +104,7 @@ public class Validation3aFormatRecognitionModuleImpl extends
 			Util.switchOnConsole();
 		}
 
-		// Die Archivdatei wurde bereits von der Formatvalidierung in das
-		// Arbeitsverzeichnis entpackt
-		String pathToWorkDir = getConfigurationService().getPathToWorkDir()
-				+ "\\ZIP";
-		
-		File workDir = new File( pathToWorkDir );
-		
-		Map<String, File> fileMap = Util.getFileMap( workDir, true );
+		Map<String, File> fileMap = Util.getFileMap( valDatei, true );
 		Set<String> fileMapKeys = fileMap.keySet();
 		for ( Iterator<String> iterator = fileMapKeys.iterator(); iterator
 				.hasNext(); ) {

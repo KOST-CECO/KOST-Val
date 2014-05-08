@@ -20,11 +20,10 @@ Boston, MA 02110-1301 USA or see <http://www.gnu.org/licenses/>.
 
 package ch.kostceco.tools.kostval.validation.modulesip2.impl;
 
-import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -36,14 +35,13 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import ch.kostceco.tools.kostval.exception.modulesip2.Validation2aFileIntegrityException;
+import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesip2.Validation2aFileIntegrityModule;
-import ch.enterag.utils.zip.EntryInputStream;
-import ch.enterag.utils.zip.FileEntry;
-import ch.enterag.utils.zip.Zip64File;
 
 /**
- * @author razm Daniel Ludin, Bedag AG @version 0.2.0
+ * Sind alle referenzierten Dateien vorhanden? von allen datei nodes den subnode
+ * name holen und diesen mit der Struktur vergleichen
  */
 
 public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl
@@ -54,71 +52,32 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl
 	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws Validation2aFileIntegrityException
 	{
-
-		String toplevelDir = valDatei.getName();
-		int lastDotIdx = toplevelDir.lastIndexOf( "." );
-		toplevelDir = toplevelDir.substring( 0, lastDotIdx );
-
+		Map<String, String> filesInSip = new HashMap<String, String>();
 		boolean valid = true;
-		FileEntry metadataxml = null;
-		Map<String, String> filesInSipFile = new HashMap<String, String>();
-		Map<String, String> filesInMetadata = new HashMap<String, String>();
 
 		try {
-			Zip64File zipfile = new Zip64File( valDatei );
-			List<FileEntry> fileEntryList = zipfile.getListFileEntries();
-			for ( FileEntry fileEntry : fileEntryList ) {
-
-				// System.out.println(fileEntry.getName());
-
-				if ( fileEntry.getName().equals( "header/" + METADATA )
-						|| fileEntry.getName().equals(
-								toplevelDir + "/header/" + METADATA ) ) {
-					metadataxml = fileEntry;
-				}
-
-				if ( !fileEntry.isDirectory() ) {
-					if ( !fileEntry.getName().equals( "header/" + METADATA )
-							&& !fileEntry.getName().equals(
-									toplevelDir + "/header/" + METADATA ) ) {
-
-						String fileName = fileEntry.getName();
-						String toReplace = toplevelDir + "/";
-						fileName = fileName.replace( toReplace, "" );
-
-						filesInSipFile.put( fileName, fileName );
-
-					}
-				}
-
+			Map<String, File> fileMap = Util.getFileMap( valDatei, false );
+			Set<String> fileMapKeys = fileMap.keySet();
+			for ( Iterator<String> iterator = fileMapKeys.iterator(); iterator
+					.hasNext(); ) {
+				String entryName = iterator.next();
+				// entryName: content/DOS_02/gpl2.pdf
+				filesInSip.put( entryName, entryName );
 			}
-
-			// keine metadata.xml in der SIP-Datei gefunden
-			if ( metadataxml == null ) {
-				getMessageService().logError(
-						getTextResourceService().getText(
-								MESSAGE_XML_MODUL_Ba_SIP )
-								+ getTextResourceService().getText(
-										ERROR_XML_AE_NOMETADATAFOUND ) );
-				return false;
-
-			}
-
-			EntryInputStream eis = zipfile.openEntryInputStream( metadataxml
-					.getName() );
-			BufferedInputStream is = new BufferedInputStream( eis );
 
 			try {
 				DocumentBuilderFactory dbf = DocumentBuilderFactory
 						.newInstance();
+				// dbf.setValidating(false);
 				DocumentBuilder db = dbf.newDocumentBuilder();
-				Document doc = db.parse( is );
-				doc.normalize();
+				Document doc = db
+						.parse( new FileInputStream( new File( valDatei
+								.getAbsolutePath() + "//header//metadata.xml" ) ) );
+				doc.getDocumentElement().normalize();
 				NodeList nodeLst = doc.getElementsByTagName( "datei" );
 
 				for ( int s = 0; s < nodeLst.getLength(); s++ ) {
 					Node dateiNode = nodeLst.item( s );
-
 					String path = null;
 
 					NodeList childNodes = dateiNode.getChildNodes();
@@ -139,20 +98,16 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl
 					 */
 
 					boolean topReached = false;
-
 					while ( !topReached ) {
-
 						Node parentNode = dateiNode.getParentNode();
 						if ( parentNode.getNodeName().equals(
 								"inhaltsverzeichnis" ) ) {
 							topReached = true;
 							break;
 						}
-
 						NodeList childrenNodes = parentNode.getChildNodes();
 						for ( int x = 0; x < childrenNodes.getLength(); x++ ) {
 							Node childNode = childrenNodes.item( x );
-
 							if ( childNode.getNodeName().equals( "name" ) ) {
 								path = childNode.getTextContent() + "/" + path;
 								if ( dateiNode.getParentNode() != null ) {
@@ -162,8 +117,20 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl
 							}
 						}
 					}
+					String name = path;
 
-					filesInMetadata.put( path, path );
+					String removedEntry = filesInSip.remove( name );
+					if ( removedEntry == null ) {
+						getMessageService().logError(
+								getTextResourceService().getText(
+										MESSAGE_XML_MODUL_Ba_SIP )
+										+ getTextResourceService().getText(
+												MESSAGE_XML_BA_FILEMISSING,
+												name ) );
+						valid = false;
+					}
+
+					// filesInMetadata.put( path, path );
 					path = "";
 
 				}
@@ -173,32 +140,8 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl
 								MESSAGE_XML_MODUL_Ba_SIP )
 								+ getTextResourceService().getText(
 										ERROR_XML_UNKNOWN, e.getMessage() ) );
-				return false;
-			}
-
-			Set<String> keysInSipFile = filesInSipFile.keySet();
-			for ( Iterator<String> iterator = keysInSipFile.iterator(); iterator
-					.hasNext(); ) {
-				String keySipFile = iterator.next();
-				filesInMetadata.remove( keySipFile );
-			}
-
-			Set<String> keysInMetadata = filesInMetadata.keySet();
-			for ( Iterator<String> iterator = keysInMetadata.iterator(); iterator
-					.hasNext(); ) {
-				String keyMetadata = iterator.next();
-
-				getMessageService().logError(
-						getTextResourceService().getText(
-								MESSAGE_XML_MODUL_Ba_SIP )
-								+ getTextResourceService()
-										.getText( MESSAGE_XML_BA_FILEMISSING,
-												keyMetadata ) );
 				valid = false;
 			}
-
-			zipfile.close();
-			is.close();
 
 		} catch ( Exception e ) {
 			getMessageService().logError(
@@ -211,5 +154,4 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl
 		return valid;
 
 	}
-
 }

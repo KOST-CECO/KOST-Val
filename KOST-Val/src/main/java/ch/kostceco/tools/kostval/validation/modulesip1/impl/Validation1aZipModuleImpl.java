@@ -43,6 +43,9 @@ public class Validation1aZipModuleImpl extends ValidationModuleImpl implements
 	{
 
 		boolean valid = false;
+		
+		//TODO: Dieser Test wird eigentlich bereits in KOSTVal.java gemacht. Ergebnisse aus String holen wie in 3c
+		//1A ist dann nicht mehr nötig bleibt aber gegen aussen bestehen
 
 		// Eine ZIP Datei muss mit PK.. beginnen
 		if ( (valDatei.getAbsolutePath().toLowerCase().endsWith( ".zip" ) || valDatei

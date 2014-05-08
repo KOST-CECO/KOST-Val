@@ -165,10 +165,10 @@
 		<property name="configurationService" ref="configurationService" />
 	</bean>
 	
-	<bean id="validation1aZipModule" class="ch.kostceco.tools.kostval.validation.modulesip1.impl.Validation1aZipModuleImpl">
+<!--	<bean id="validation1aZipModule" class="ch.kostceco.tools.kostval.validation.modulesip1.impl.Validation1aZipModuleImpl">
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="messageService" ref="messageService" />
-	</bean>
+	</bean>-->
 	<bean id="validation1bFolderStructureModule" class="ch.kostceco.tools.kostval.validation.modulesip1.impl.Validation1bFolderStructureModuleImpl">
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="messageService" ref="messageService" />
@@ -278,7 +278,7 @@
 
 	<bean id="controllersip" class="ch.kostceco.tools.kostval.controller.Controllersip">
 		<property name="textResourceService" ref="textResourceService" />
-		<property name="validation1aZipModule" ref="validation1aZipModule" />
+<!--		<property name="validation1aZipModule" ref="validation1aZipModule" />-->
 		<property name="validation1bFolderStructureModule" ref="validation1bFolderStructureModule" />
 		<property name="validation1cNamingModule" ref="validation1cNamingModule" />
 		<property name="validation1dMetadataModule" ref="validation1dMetadataModule" />
