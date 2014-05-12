@@ -119,7 +119,7 @@
 		<property name="messageService" ref="messageService" />
 		<property name="configurationService" ref="configurationService" />
 	</bean>
-	<bean id="validationBstructureModule" class="ch.kostceco.tools.kostval.validation.modulepdfa.impl.ValidationBstructureModuleImpl">
+<!--	<bean id="validationBstructureModule" class="ch.kostceco.tools.kostval.validation.modulepdfa.impl.ValidationBstructureModuleImpl">
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="messageService" ref="messageService" />
 		<property name="configurationService" ref="configurationService" />
@@ -163,7 +163,7 @@
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="messageService" ref="messageService" />
 		<property name="configurationService" ref="configurationService" />
-	</bean>
+	</bean>-->
 	
 <!--	<bean id="validation1aZipModule" class="ch.kostceco.tools.kostval.validation.modulesip1.impl.Validation1aZipModuleImpl">
 		<property name="textResourceService" ref="textResourceService" />
@@ -265,7 +265,7 @@
 	<bean id="controllerpdfa" class="ch.kostceco.tools.kostval.controller.Controllerpdfa">
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="validationApdftronModule" ref="validationApdftronModule" />
-		<property name="validationBstructureModule" ref="validationBstructureModule" />
+<!--		<property name="validationBstructureModule" ref="validationBstructureModule" />
 		<property name="validationCgraphicsModule" ref="validationCgraphicsModule" />
 		<property name="validationDfontsModule" ref="validationDfontsModule" />
 		<property name="validationEtransparencyModule" ref="validationEtransparencyModule" />
@@ -274,6 +274,7 @@
 		<property name="validationHmetadataModule" ref="validationHmetadataModule" />
 		<property name="validationIaccessibleModule" ref="validationIaccessibleModule" />
 		<property name="validationJinteractiveformsModule" ref="validationJinteractiveformsModule" />
+-->	
 	</bean>
 
 	<bean id="controllersip" class="ch.kostceco.tools.kostval.controller.Controllersip">

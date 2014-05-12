@@ -161,9 +161,6 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 							.getTextContent().equals( "true" )) ? "ca. " : "")
 							+ elementAblDatumBis.getTextContent();
 
-					System.out.println( "Ablieferung: " + datumVon + " - "
-							+ datumBis );
-
 					// Liegt eines der Daten in der Zukunft? calNow2 muss
 					// gesetzt und verwendet werden (=jetzt), weil ansonsten
 					// manchmal einen Fehler

@@ -1126,8 +1126,14 @@ public class KOSTVal implements MessageConstants
 			// Validierungen, welche nicht zum Abbruch der
 			// Applikation führen, ausgeführt werden.
 			if ( okMandatory ) {
-				ok = controller3.executeOptional( valDatei, directoryOfLogfile );
+				// ok = controller3.executeOptional( valDatei,
+				// directoryOfLogfile );
 				// Ausführen der optionalen Schritte
+				/**
+				 * Die optionalen Schritte wurden direkt ins Modul A integriert,
+				 * da dies effizienter ist
+				 */
+				ok = true;
 			}
 
 			ok = (ok && okMandatory);
