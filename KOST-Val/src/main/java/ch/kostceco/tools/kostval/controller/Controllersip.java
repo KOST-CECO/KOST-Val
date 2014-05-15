@@ -68,8 +68,6 @@ public class Controllersip implements MessageConstants
 	private static final Logger						LOGGER	= new Logger(
 																	Controllersip.class );
 
-//	private Validation1aZipModule					validation1aZipModule;
-
 	private Validation1bFolderStructureModule		validation1bFolderStructureModule;
 
 	private Validation1cNamingModule				validation1cNamingModule;
@@ -97,17 +95,6 @@ public class Controllersip implements MessageConstants
 	private Validation3dPeriodModule				validation3dPeriodModule;
 
 	private TextResourceService						textResourceService;
-
-/*	public Validation1aZipModule getValidation1aZipModule()
-	{
-		return validation1aZipModule;
-	}
-
-	public void setValidation1aZipModule(
-			Validation1aZipModule validation1aZipModule )
-	{
-		this.validation1aZipModule = validation1aZipModule;
-	}*/
 
 	public Validation1bFolderStructureModule getValidation1bFolderStructureModule()
 	{
@@ -268,31 +255,6 @@ public class Controllersip implements MessageConstants
 
 		// Validation Step Aa 
 		// (wurde vor der Formatvalidierung in KOSTVal.jar bereits durchgeführt)
-/*		try {
-			if ( this.getValidation1aZipModule().validate( valDatei,
-					directoryOfLogfile ) ) {
-				this.getValidation1aZipModule().getMessageService().print();
-			} else {
-				// Ein negatives Validierungsresultat in diesem Schritt führt
-				// zum Abbruch der weiteren Verarbeitung
-				this.getValidation1aZipModule().getMessageService().print();
-				return false;
-			}
-		} catch ( Validation1aZipException e ) {
-			LOGGER.logError( getTextResourceService().getText(
-					MESSAGE_XML_MODUL_Aa_SIP )
-					+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
-							e.getMessage() ) );
-			this.getValidation1aZipModule().getMessageService().print();
-			return false;
-
-		} catch ( Exception e ) {
-			LOGGER.logError( getTextResourceService().getText(
-					MESSAGE_XML_MODUL_Aa_SIP )
-					+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
-							e.getMessage() ) );
-			return false;
-		}*/
 
 		// Validation Step Ab
 		try {

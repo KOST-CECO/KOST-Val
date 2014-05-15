@@ -231,8 +231,6 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 						jhoveReport ) );
 				out.write( concatenatedOutputs.toString() );
 				out.close();
-				Util.setPathToReportJHove( jhoveReport.getAbsolutePath() );
-
 			} catch ( IOException e ) {
 				getMessageService().logError(
 						getTextResourceService().getText(

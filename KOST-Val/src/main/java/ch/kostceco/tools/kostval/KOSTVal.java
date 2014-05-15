@@ -1,5 +1,5 @@
 /*== KOST-Val ==================================================================================
-The KOST-Val v1.3.3 application is used for validate TIFF, SIARD, PDF/A-Files and Submission 
+The KOST-Val v1.3.4 application is used for validate TIFF, SIARD, PDF/A-Files and Submission 
 Information Package (SIP). 
 Copyright (C) 2012-2014 Claire Röthlisberger (KOST-CECO), Christian Eugster, Olivier Debenath, 
 Peter Schneider (Staatsarchiv Aargau), Daniel Ludin (BEDAG AG)
@@ -1093,21 +1093,14 @@ public class KOSTVal implements MessageConstants
 					.getBean( "controllerpdfa" );
 			boolean okMandatory = controller3.executeMandatory( valDatei,
 					directoryOfLogfile );
-			boolean ok = false;
-
 			// die Validierung A ist obligatorisch, wenn sie
 			// bestanden wurden, können die restlichen
 			// Validierungen, welche nicht zum Abbruch der
 			// Applikation führen, ausgeführt werden.
-			if ( okMandatory ) {
-				ok = controller3.executeOptional( valDatei, directoryOfLogfile );
-				// Ausführen der optionalen Schritte
-			}
+			// Diese sind ab v1.3.4 auch im A enthalten
+			valFile = okMandatory;
 
-			ok = (ok && okMandatory);
-			valFile = ok;
-
-			if ( ok ) {
+			if ( valFile ) {
 				// Validierte Datei valide
 				LOGGER.logError( kostval.getTextResourceService().getText(
 						MESSAGE_XML_VALERGEBNIS_VALID ) );

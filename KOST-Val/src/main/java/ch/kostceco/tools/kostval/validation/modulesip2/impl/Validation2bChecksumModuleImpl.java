@@ -218,7 +218,7 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 																			path
 																					+ ": "
 																					+ pruefsumme
-																					+ " - "
+																					+ " ~ "
 																					+ output ) );
 								}
 							} catch ( IOException e ) {
@@ -315,7 +315,7 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 																			path
 																					+ ": "
 																					+ pruefsumme
-																					+ " - "
+																					+ " ~ "
 																					+ output ) );
 								}
 							} catch ( IOException e ) {
@@ -413,7 +413,7 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 																			path
 																					+ ": "
 																					+ pruefsumme
-																					+ " - "
+																					+ " ~ "
 																					+ output ) );
 								}
 							} catch ( IOException e ) {
@@ -511,7 +511,7 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 																			path
 																					+ ": "
 																					+ pruefsumme
-																					+ " - "
+																					+ " ~ "
 																					+ output ) );
 								}
 							} catch ( IOException e ) {

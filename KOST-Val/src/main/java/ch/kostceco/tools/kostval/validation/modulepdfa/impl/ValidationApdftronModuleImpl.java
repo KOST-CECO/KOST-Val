@@ -47,6 +47,13 @@ import ch.kostceco.tools.kostval.validation.modulepdfa.ValidationApdftronModule;
  * PDFA Validierungs mit PDFTron. Ist die vorliegende PDF-Datei eine valide
  * PDFA-Datei
  * 
+ * Zuerste erfolgt eine Erkennung, wenn diese io kommt die Validierung mit
+ * PDFTron Der Report von PDFTron wird den Einzelnen Gruppen (Modulen)
+ * zugeordnet
+ * 
+ * Ab der version 1.3.4 geschieht dies alles in einem Modul (dies benötigt
+ * weniger Memory)
+ * 
  * @author Rc Claire Röthlisberger, KOST-CECO
  */
 
@@ -307,6 +314,8 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 					// .split(" ") ist notwendig wenn in einem Pfad ein
 					// Doppelleerschlag vorhanden ist!
 
+					Util.switchOffConsole();
+
 					// Fehleroutput holen
 					StreamGobbler errorGobbler = new StreamGobbler(
 							proc.getErrorStream(), "ERROR" );
@@ -314,8 +323,6 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 					// Output holen
 					StreamGobbler outputGobbler = new StreamGobbler(
 							proc.getInputStream(), "OUTPUT" );
-
-					Util.switchOffConsole();
 
 					// Threads starten
 					errorGobbler.start();
@@ -327,16 +334,14 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 					Util.switchOnConsole();
 
 					// Der Name des generierten Reports lautet per default
-					// report.xml
-					// und es scheint keine
+					// report.xml und es scheint keine
 					// Möglichkeit zu geben, dies zu übersteuern.
 					report = new File( pathToPdftronOutput, "report.xml" );
 					File newReport = new File( pathToPdftronOutput,
 							valDatei.getName() + ".pdftron-log.xml" );
 
 					// falls das File bereits existiert, z.B. von einem
-					// vorhergehenden
-					// Durchlauf, löschen wir es
+					// vorhergehenden Durchlauf, löschen wir es
 					if ( newReport.exists() ) {
 						newReport.delete();
 					}
@@ -359,9 +364,6 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 				// Ende PDFTRON direkt auszulösen
 
 				String pathToPdftronReport = report.getAbsolutePath();
-
-				Util.setPathToReportPdftron( pathToPdftronReport );
-
 				BufferedInputStream bis = new BufferedInputStream(
 						new FileInputStream( pathToPdftronReport ) );
 				DocumentBuilderFactory dbf = DocumentBuilderFactory
@@ -389,7 +391,7 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 					// aus dem Output von Pdftron die Fehlercodes extrahieren
 					// und übersetzen
 
-					String errorDigit = "Fehler";
+					String errorDigitA = "Fehler";
 
 					NodeList nodeLst = doc.getElementsByTagName( "Error" );
 					// Bsp. für einen Error Code: <Error Code="e_PDFA173"
@@ -401,23 +403,23 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 						String errorCode = errorNode.getNodeValue();
 						Node errorNodeM = nodeMap.getNamedItem( "Message" );
 						String errorMessage = errorNodeM.getNodeValue();
-						errorDigit = errorCode.substring( 6, 7 );
+						errorDigitA = errorCode.substring( 6, 7 );
 
 						// der Error Code kann auch "Unknown" sein, dieser wird
 						// in
 						// den Code "0" übersetzt
-						if ( errorDigit.equals( "U" ) ) {
-							errorDigit = "0";
+						if ( errorDigitA.equals( "U" ) ) {
+							errorDigitA = "0";
 						}
-						if ( errorDigit.equals( "n" ) ) {
-							errorDigit = "0";
+						if ( errorDigitA.equals( "n" ) ) {
+							errorDigitA = "0";
 						}
 						/*
 						 * System.out.print( "errorDigit = " + errorDigit +
 						 * " > errorMessage = " + errorMessage + "  " );
 						 */
 
-						if ( errorDigit.equals( "0" ) ) {
+						if ( errorDigitA.equals( "0" ) ) {
 							// Allgemeiner Fehler -> A
 							isValid = false;
 							getMessageService()
@@ -431,7 +433,296 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 
 						}
 					}
-					if ( errorDigit.equals( "Fehler" ) ) {
+
+					/** Modul B **/
+					for ( int s = 0; s < nodeLst.getLength(); s++ ) {
+						Node dateiNode = nodeLst.item( s );
+						NamedNodeMap nodeMap = dateiNode.getAttributes();
+						Node errorNode = nodeMap.getNamedItem( "Code" );
+						String errorCode = errorNode.getNodeValue();
+						Node errorNodeM = nodeMap.getNamedItem( "Message" );
+						String errorMessage = errorNodeM.getNodeValue();
+						String errorDigit = errorCode.substring( 6, 7 );
+
+						// der Error Code kann auch "Unknown" sein, dieser wird
+						// in den Code "0" übersetzt
+						if ( errorDigit.equals( "U" ) ) {
+							errorDigit = "0";
+						}
+						if ( errorDigit.equals( "n" ) ) {
+							errorDigit = "0";
+						}
+						if ( errorDigit.equals( "1" ) ) {
+							// Struktur Fehler -> B
+							isValid = false;
+							getMessageService()
+									.logError(
+											getTextResourceService().getText(
+													MESSAGE_XML_MODUL_B_PDFA )
+													+ getTextResourceService()
+															.getText(
+																	ERROR_XML_AJ_PDFA_ERRORMESSAGE,
+																	errorMessage ) );
+						}
+					}
+
+					/** Modul C **/
+					for ( int s = 0; s < nodeLst.getLength(); s++ ) {
+						Node dateiNode = nodeLst.item( s );
+						NamedNodeMap nodeMap = dateiNode.getAttributes();
+						Node errorNode = nodeMap.getNamedItem( "Code" );
+						String errorCode = errorNode.getNodeValue();
+						Node errorNodeM = nodeMap.getNamedItem( "Message" );
+						String errorMessage = errorNodeM.getNodeValue();
+						String errorDigit = errorCode.substring( 6, 7 );
+
+						// der Error Code kann auch "Unknown" sein, dieser wird
+						// in den Code "0" übersetzt
+						if ( errorDigit.equals( "U" ) ) {
+							errorDigit = "0";
+						}
+						if ( errorDigit.equals( "n" ) ) {
+							errorDigit = "0";
+						}
+						if ( errorDigit.equals( "2" ) ) {
+							// Grafik Fehler -> C
+							isValid = false;
+							getMessageService()
+									.logError(
+											getTextResourceService().getText(
+													MESSAGE_XML_MODUL_C_PDFA )
+													+ getTextResourceService()
+															.getText(
+																	ERROR_XML_AJ_PDFA_ERRORMESSAGE,
+																	errorMessage ) );
+						}
+					}
+
+					/** Modul D **/
+					for ( int s = 0; s < nodeLst.getLength(); s++ ) {
+						Node dateiNode = nodeLst.item( s );
+						NamedNodeMap nodeMap = dateiNode.getAttributes();
+						Node errorNode = nodeMap.getNamedItem( "Code" );
+						String errorCode = errorNode.getNodeValue();
+						Node errorNodeM = nodeMap.getNamedItem( "Message" );
+						String errorMessage = errorNodeM.getNodeValue();
+						String errorDigit = errorCode.substring( 6, 7 );
+
+						// der Error Code kann auch "Unknown" sein, dieser wird
+						// in den Code "0" übersetzt
+						if ( errorDigit.equals( "U" ) ) {
+							errorDigit = "0";
+						}
+						if ( errorDigit.equals( "n" ) ) {
+							errorDigit = "0";
+						}
+						if ( errorDigit.equals( "3" ) ) {
+							// Schrift Fehler -> D
+							isValid = false;
+							getMessageService()
+									.logError(
+											getTextResourceService().getText(
+													MESSAGE_XML_MODUL_D_PDFA )
+													+ getTextResourceService()
+															.getText(
+																	ERROR_XML_AJ_PDFA_ERRORMESSAGE,
+																	errorMessage ) );
+						}
+					}
+
+					/** Modul E **/
+					for ( int s = 0; s < nodeLst.getLength(); s++ ) {
+						Node dateiNode = nodeLst.item( s );
+						NamedNodeMap nodeMap = dateiNode.getAttributes();
+						Node errorNode = nodeMap.getNamedItem( "Code" );
+						String errorCode = errorNode.getNodeValue();
+						Node errorNodeM = nodeMap.getNamedItem( "Message" );
+						String errorMessage = errorNodeM.getNodeValue();
+						String errorDigit = errorCode.substring( 6, 7 );
+
+						// der Error Code kann auch "Unknown" sein, dieser wird
+						// in den Code "0" übersetzt
+						if ( errorDigit.equals( "U" ) ) {
+							errorDigit = "0";
+						}
+						if ( errorDigit.equals( "n" ) ) {
+							errorDigit = "0";
+						}
+						if ( errorDigit.equals( "4" ) ) {
+							// Transparenz Fehler -> E
+							isValid = false;
+							getMessageService()
+									.logError(
+											getTextResourceService().getText(
+													MESSAGE_XML_MODUL_E_PDFA )
+													+ getTextResourceService()
+															.getText(
+																	ERROR_XML_AJ_PDFA_ERRORMESSAGE,
+																	errorMessage ) );
+						}
+					}
+
+					/** Modul F **/
+					for ( int s = 0; s < nodeLst.getLength(); s++ ) {
+						Node dateiNode = nodeLst.item( s );
+						NamedNodeMap nodeMap = dateiNode.getAttributes();
+						Node errorNode = nodeMap.getNamedItem( "Code" );
+						String errorCode = errorNode.getNodeValue();
+						Node errorNodeM = nodeMap.getNamedItem( "Message" );
+						String errorMessage = errorNodeM.getNodeValue();
+						String errorDigit = errorCode.substring( 6, 7 );
+
+						// der Error Code kann auch "Unknown" sein, dieser wird
+						// in den Code "0" übersetzt
+						if ( errorDigit.equals( "U" ) ) {
+							errorDigit = "0";
+						}
+						if ( errorDigit.equals( "n" ) ) {
+							errorDigit = "0";
+						}
+						if ( errorDigit.equals( "5" ) ) {
+							// Annotations Fehler -> F
+							isValid = false;
+							getMessageService()
+									.logError(
+											getTextResourceService().getText(
+													MESSAGE_XML_MODUL_F_PDFA )
+													+ getTextResourceService()
+															.getText(
+																	ERROR_XML_AJ_PDFA_ERRORMESSAGE,
+																	errorMessage ) );
+						}
+					}
+
+					/** Modul G **/
+					for ( int s = 0; s < nodeLst.getLength(); s++ ) {
+						Node dateiNode = nodeLst.item( s );
+						NamedNodeMap nodeMap = dateiNode.getAttributes();
+						Node errorNode = nodeMap.getNamedItem( "Code" );
+						String errorCode = errorNode.getNodeValue();
+						Node errorNodeM = nodeMap.getNamedItem( "Message" );
+						String errorMessage = errorNodeM.getNodeValue();
+						String errorDigit = errorCode.substring( 6, 7 );
+
+						// der Error Code kann auch "Unknown" sein, dieser wird
+						// in den Code "0" übersetzt
+						if ( errorDigit.equals( "U" ) ) {
+							errorDigit = "0";
+						}
+						if ( errorDigit.equals( "n" ) ) {
+							errorDigit = "0";
+						}
+						if ( errorDigit.equals( "6" ) ) {
+							// Aktions Fehler -> G
+							isValid = false;
+							getMessageService()
+									.logError(
+											getTextResourceService().getText(
+													MESSAGE_XML_MODUL_G_PDFA )
+													+ getTextResourceService()
+															.getText(
+																	ERROR_XML_AJ_PDFA_ERRORMESSAGE,
+																	errorMessage ) );
+						}
+					}
+
+					/** Modul H **/
+					for ( int s = 0; s < nodeLst.getLength(); s++ ) {
+						Node dateiNode = nodeLst.item( s );
+						NamedNodeMap nodeMap = dateiNode.getAttributes();
+						Node errorNode = nodeMap.getNamedItem( "Code" );
+						String errorCode = errorNode.getNodeValue();
+						Node errorNodeM = nodeMap.getNamedItem( "Message" );
+						String errorMessage = errorNodeM.getNodeValue();
+						String errorDigit = errorCode.substring( 6, 7 );
+
+						// der Error Code kann auch "Unknown" sein, dieser wird
+						// in den Code "0" übersetzt
+						if ( errorDigit.equals( "U" ) ) {
+							errorDigit = "0";
+						}
+						if ( errorDigit.equals( "n" ) ) {
+							errorDigit = "0";
+						}
+						if ( errorDigit.equals( "7" ) ) {
+							// Metadaten Fehler -> H
+							isValid = false;
+							getMessageService()
+									.logError(
+											getTextResourceService().getText(
+													MESSAGE_XML_MODUL_H_PDFA )
+													+ getTextResourceService()
+															.getText(
+																	ERROR_XML_AJ_PDFA_ERRORMESSAGE,
+																	errorMessage ) );
+						}
+					}
+
+					/** Modul I **/
+					for ( int s = 0; s < nodeLst.getLength(); s++ ) {
+						Node dateiNode = nodeLst.item( s );
+						NamedNodeMap nodeMap = dateiNode.getAttributes();
+						Node errorNode = nodeMap.getNamedItem( "Code" );
+						String errorCode = errorNode.getNodeValue();
+						Node errorNodeM = nodeMap.getNamedItem( "Message" );
+						String errorMessage = errorNodeM.getNodeValue();
+						String errorDigit = errorCode.substring( 6, 7 );
+
+						// der Error Code kann auch "Unknown" sein, dieser wird
+						// in den Code "0" übersetzt
+						if ( errorDigit.equals( "U" ) ) {
+							errorDigit = "0";
+						}
+						if ( errorDigit.equals( "n" ) ) {
+							errorDigit = "0";
+						}
+						if ( errorDigit.equals( "8" ) ) {
+							// Zugänglichkeit Fehler -> I
+							isValid = false;
+							getMessageService()
+									.logError(
+											getTextResourceService().getText(
+													MESSAGE_XML_MODUL_I_PDFA )
+													+ getTextResourceService()
+															.getText(
+																	ERROR_XML_AJ_PDFA_ERRORMESSAGE,
+																	errorMessage ) );
+						}
+					}
+
+					/** Modul J **/
+					for ( int s = 0; s < nodeLst.getLength(); s++ ) {
+						Node dateiNode = nodeLst.item( s );
+						NamedNodeMap nodeMap = dateiNode.getAttributes();
+						Node errorNode = nodeMap.getNamedItem( "Code" );
+						String errorCode = errorNode.getNodeValue();
+						Node errorNodeM = nodeMap.getNamedItem( "Message" );
+						String errorMessage = errorNodeM.getNodeValue();
+						String errorDigit = errorCode.substring( 6, 7 );
+
+						// der Error Code kann auch "Unknown" sein, dieser wird
+						// in den Code "0" übersetzt
+						if ( errorDigit.equals( "U" ) ) {
+							errorDigit = "0";
+						}
+						if ( errorDigit.equals( "n" ) ) {
+							errorDigit = "0";
+						}
+						if ( errorDigit.equals( "9" ) ) {
+							// Interaktions Fehler -> J
+							isValid = false;
+							getMessageService()
+									.logError(
+											getTextResourceService().getText(
+													MESSAGE_XML_MODUL_J_PDFA )
+													+ getTextResourceService()
+															.getText(
+																	ERROR_XML_AJ_PDFA_ERRORMESSAGE,
+																	errorMessage ) );
+						}
+					}
+
+					if ( errorDigitA.equals( "Fehler" ) ) {
 						// Fehler bei der Initialisierung
 						// Passierte bei einem Leerschlag im Namen
 						isValid = false;

@@ -42,33 +42,9 @@ import ch.kostceco.tools.kostval.util.Util;
 
 public class Util
 {
-
-	static String				pathToReportJHove;
-	static String				pathToReportPdftron;
-
 	static PrintStream			original;
 	static String				originalPath;
 	static Map<String, File>	fileMap	= new HashMap<String, File>();
-
-	public static String getPathToReportJHove()
-	{
-		return pathToReportJHove;
-	}
-
-	public static void setPathToReportJHove( String pathToReportJHove )
-	{
-		Util.pathToReportJHove = pathToReportJHove;
-	}
-
-	public static String getPathToReportPdftron()
-	{
-		return pathToReportPdftron;
-	}
-
-	public static void setPathToReportPdftron( String pathToReportPdftron )
-	{
-		Util.pathToReportPdftron = pathToReportPdftron;
-	}
 
 	/**
 	 * Schaltet die Konsolen-Ausgabe aus durch Umleitung in ein Null-Device.
@@ -243,14 +219,13 @@ public class Util
 		out.close();
 	}
 
-
 	/**
 	 * Ergänzt das XML-Element "<End></End>" mit dem ergebnis (string) in dem
 	 * kost-val.log.xml (file)
 	 * 
-	 *  ! Solche Ersetzungen dürfen nicht in einer Schleife gemacht werden 
-	 *    sondern erst am Schluss, da diese sehr Zeitintensiv sind !!!
-	 *    
+	 * ! Solche Ersetzungen dürfen nicht in einer Schleife gemacht werden
+	 * sondern erst am Schluss, da diese sehr Zeitintensiv sind !!!
+	 * 
 	 * @throws IOException
 	 */
 	public static void valEnd( String string, File file ) throws IOException
@@ -276,8 +251,8 @@ public class Util
 	 * Verändert <Message>3c</Message></Error> mit dem ergebnis (string) in dem
 	 * kost-val.log.xml (file)
 	 * 
-	 *  ! Solche Ersetzungen dürfen nicht in einer Schleife gemacht werden 
-	 *    sondern erst am Schluss, da diese sehr Zeitintensiv sind !!!
+	 * ! Solche Ersetzungen dürfen nicht in einer Schleife gemacht werden
+	 * sondern erst am Schluss, da diese sehr Zeitintensiv sind !!!
 	 * 
 	 * @throws IOException
 	 */
@@ -290,7 +265,8 @@ public class Util
 				oldtext += line + "\r\n";
 			}
 			reader.close();
-			String newtext = oldtext.replace( "<Message>3c</Message></Error>", string );
+			String newtext = oldtext.replace( "<Message>3c</Message></Error>",
+					string );
 			newtext = newtext.replace( (char) 0, (char) 32 );
 			FileWriter writer = new FileWriter( file );
 			writer.write( newtext );
@@ -302,6 +278,9 @@ public class Util
 
 	/**
 	 * Verändert & mit &amp;
+	 * 
+	 * ! Solche Ersetzungen dürfen nicht in einer Schleife gemacht werden
+	 * sondern erst am Schluss, da diese sehr Zeitintensiv sind !!!
 	 * 
 	 * @throws IOException
 	 */

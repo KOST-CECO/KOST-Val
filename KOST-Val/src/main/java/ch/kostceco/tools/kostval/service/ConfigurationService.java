@@ -131,7 +131,7 @@ public interface ConfigurationService extends Service
 	String getPathToWorkDir();
 
 	/**
-	 * Gibt den Pfad des Logverzeichnisses zurück. 
+	 * Gibt den Pfad des Logverzeichnisses zurück.
 	 * 
 	 * @return Pfad des Logverzeichnisses
 	 */
