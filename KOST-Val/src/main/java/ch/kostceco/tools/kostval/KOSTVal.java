@@ -1,5 +1,5 @@
 /*== KOST-Val ==================================================================================
-The KOST-Val v1.3.2 application is used for validate TIFF, SIARD, PDF/A-Files and Submission 
+The KOST-Val v1.3.3 application is used for validate TIFF, SIARD, PDF/A-Files and Submission 
 Information Package (SIP). 
 Copyright (C) 2012-2014 Claire Röthlisberger (KOST-CECO), Christian Eugster, Olivier Debenath, 
 Peter Schneider (Staatsarchiv Aargau), Daniel Ludin (BEDAG AG)
@@ -95,7 +95,7 @@ public class KOSTVal implements MessageConstants
 		// Zeitstempel Start
 		java.util.Date nowStart = new java.util.Date();
 		java.text.SimpleDateFormat sdfStart = new java.text.SimpleDateFormat(
-				"dd.MM.yyyy HH.mm.ss" );
+				"dd.MM.yyyy HH:mm:ss" );
 		String ausgabeStart = sdfStart.format( nowStart );
 
 		// TODO: siehe Bemerkung im applicationContext-services.xml bezüglich
@@ -312,7 +312,7 @@ public class KOSTVal implements MessageConstants
 				// Zeitstempel End
 				java.util.Date nowEnd = new java.util.Date();
 				java.text.SimpleDateFormat sdfEnd = new java.text.SimpleDateFormat(
-						"dd.MM.yyyy HH.mm.ss" );
+						"dd.MM.yyyy HH:mm:ss" );
 				String ausgabeEnd = sdfEnd.format( nowEnd );
 				ausgabeEnd = "<End>" + ausgabeEnd + "</End>";
 				Util.valEnd( ausgabeEnd, logFile );
@@ -456,7 +456,7 @@ public class KOSTVal implements MessageConstants
 				// Zeitstempel End
 				java.util.Date nowEnd = new java.util.Date();
 				java.text.SimpleDateFormat sdfEnd = new java.text.SimpleDateFormat(
-						"dd.MM.yyyy HH.mm.ss" );
+						"dd.MM.yyyy HH:mm:ss" );
 				String ausgabeEnd = sdfEnd.format( nowEnd );
 				ausgabeEnd = "<End>" + ausgabeEnd + "</End>";
 				Util.valEnd( ausgabeEnd, logFile );
@@ -597,13 +597,10 @@ public class KOSTVal implements MessageConstants
 							.getText( ERROR_XML_AA_INCORRECTFILEENDING ) );
 
 					// Fehler im Validierten SIP --> invalide & Abbruch
-					Util.valElement(
-							kostval.getTextResourceService().getText(
-									MESSAGE_XML_VALERGEBNIS_INVALID ), logFile );
 					LOGGER.logError( kostval.getTextResourceService().getText(
-							MESSAGE_XML_VALERGEBNIS_CLOSE )
-							+ kostval.getTextResourceService().getText(
-									MESSAGE_XML_VALERGEBNIS_INVALID ) );
+							MESSAGE_XML_VALERGEBNIS_INVALID ) );
+					LOGGER.logError( kostval.getTextResourceService().getText(
+							MESSAGE_XML_VALERGEBNIS_CLOSE ) );
 					System.out.println( "Invalid" );
 					System.out.println( "" );
 					LOGGER.logError( kostval.getTextResourceService().getText(
@@ -614,7 +611,7 @@ public class KOSTVal implements MessageConstants
 					// Zeitstempel End
 					java.util.Date nowEnd = new java.util.Date();
 					java.text.SimpleDateFormat sdfEnd = new java.text.SimpleDateFormat(
-							"dd.MM.yyyy HH.mm.ss" );
+							"dd.MM.yyyy HH:mm:ss" );
 					String ausgabeEnd = sdfEnd.format( nowEnd );
 					ausgabeEnd = "<End>" + ausgabeEnd + "</End>";
 					Util.valEnd( ausgabeEnd, logFile );
@@ -675,14 +672,10 @@ public class KOSTVal implements MessageConstants
 											ERROR_XML_AA_CANNOTEXTRACTZIP ) );
 
 							// Fehler im Validierten SIP --> invalide & Abbruch
-							Util.valElement(
-									kostval.getTextResourceService().getText(
-											MESSAGE_XML_VALERGEBNIS_INVALID ),
-									logFile );
 							LOGGER.logError( kostval.getTextResourceService()
-									.getText( MESSAGE_XML_VALERGEBNIS_CLOSE )
-									+ kostval.getTextResourceService().getText(
-											MESSAGE_XML_VALERGEBNIS_INVALID ) );
+									.getText( MESSAGE_XML_VALERGEBNIS_INVALID ) );
+							LOGGER.logError( kostval.getTextResourceService()
+									.getText( MESSAGE_XML_VALERGEBNIS_CLOSE ) );
 							System.out.println( "Invalid" );
 							System.out.println( "" );
 							LOGGER.logError( kostval.getTextResourceService()
@@ -693,7 +686,7 @@ public class KOSTVal implements MessageConstants
 							// Zeitstempel End
 							java.util.Date nowEnd = new java.util.Date();
 							java.text.SimpleDateFormat sdfEnd = new java.text.SimpleDateFormat(
-									"dd.MM.yyyy HH.mm.ss" );
+									"dd.MM.yyyy HH:mm:ss" );
 							String ausgabeEnd = sdfEnd.format( nowEnd );
 							ausgabeEnd = "<End>" + ausgabeEnd + "</End>";
 							Util.valEnd( ausgabeEnd, logFile );
@@ -865,24 +858,18 @@ public class KOSTVal implements MessageConstants
 
 			if ( ok ) {
 				// Validiertes SIP valide
-				Util.valElement(
-						kostval.getTextResourceService().getText(
-								MESSAGE_XML_VALERGEBNIS_VALID ), logFile );
 				LOGGER.logError( kostval.getTextResourceService().getText(
-						MESSAGE_XML_VALERGEBNIS_CLOSE )
-						+ kostval.getTextResourceService().getText(
-								MESSAGE_XML_VALERGEBNIS_VALID ) );
+						MESSAGE_XML_VALERGEBNIS_VALID ) );
+				LOGGER.logError( kostval.getTextResourceService().getText(
+						MESSAGE_XML_VALERGEBNIS_CLOSE ) );
 				System.out.println( "Valid" );
 				System.out.println( "" );
 			} else {
 				// Fehler im Validierten SIP --> invalide
-				Util.valElement(
-						kostval.getTextResourceService().getText(
-								MESSAGE_XML_VALERGEBNIS_INVALID ), logFile );
 				LOGGER.logError( kostval.getTextResourceService().getText(
-						MESSAGE_XML_VALERGEBNIS_CLOSE )
-						+ kostval.getTextResourceService().getText(
-								MESSAGE_XML_VALERGEBNIS_INVALID ) );
+						MESSAGE_XML_VALERGEBNIS_INVALID ) );
+				LOGGER.logError( kostval.getTextResourceService().getText(
+						MESSAGE_XML_VALERGEBNIS_CLOSE ) );
 				System.out.println( "Invalid" );
 				System.out.println( "" );
 
@@ -899,7 +886,7 @@ public class KOSTVal implements MessageConstants
 			// Zeitstempel End
 			java.util.Date nowEnd = new java.util.Date();
 			java.text.SimpleDateFormat sdfEnd = new java.text.SimpleDateFormat(
-					"dd.MM.yyyy HH.mm.ss" );
+					"dd.MM.yyyy HH:mm:ss" );
 			String ausgabeEnd = sdfEnd.format( nowEnd );
 			ausgabeEnd = "<End>" + ausgabeEnd + "</End>";
 			Util.valEnd( ausgabeEnd, logFile );
@@ -971,7 +958,6 @@ public class KOSTVal implements MessageConstants
 	private static boolean valFile( File valDatei, String logFileName,
 			File directoryOfLogfile, boolean verbose ) throws IOException
 	{
-		File logFile = new File( logFileName );
 		ApplicationContext context = new ClassPathXmlApplicationContext(
 				"classpath:config/applicationContext.xml" );
 
@@ -1011,24 +997,18 @@ public class KOSTVal implements MessageConstants
 
 			if ( ok ) {
 				// Validierte Datei valide
-				Util.valElement(
-						kostval.getTextResourceService().getText(
-								MESSAGE_XML_VALERGEBNIS_VALID ), logFile );
 				LOGGER.logError( kostval.getTextResourceService().getText(
-						MESSAGE_XML_VALERGEBNIS_CLOSE )
-						+ kostval.getTextResourceService().getText(
-								MESSAGE_XML_VALERGEBNIS_VALID ) );
+						MESSAGE_XML_VALERGEBNIS_VALID ) );
+				LOGGER.logError( kostval.getTextResourceService().getText(
+						MESSAGE_XML_VALERGEBNIS_CLOSE ) );
 				System.out.println( "Valid" );
 				System.out.println( "" );
 			} else {
 				// Fehler in Validierte Datei --> invalide
-				Util.valElement(
-						kostval.getTextResourceService().getText(
-								MESSAGE_XML_VALERGEBNIS_INVALID ), logFile );
 				LOGGER.logError( kostval.getTextResourceService().getText(
-						MESSAGE_XML_VALERGEBNIS_CLOSE )
-						+ kostval.getTextResourceService().getText(
-								MESSAGE_XML_VALERGEBNIS_INVALID ) );
+						MESSAGE_XML_VALERGEBNIS_INVALID ) );
+				LOGGER.logError( kostval.getTextResourceService().getText(
+						MESSAGE_XML_VALERGEBNIS_CLOSE ) );
 				System.out.println( "Invalid" );
 				System.out.println( "" );
 			}
@@ -1080,24 +1060,18 @@ public class KOSTVal implements MessageConstants
 
 			if ( ok ) {
 				// Validierte Datei valide
-				Util.valElement(
-						kostval.getTextResourceService().getText(
-								MESSAGE_XML_VALERGEBNIS_VALID ), logFile );
 				LOGGER.logError( kostval.getTextResourceService().getText(
-						MESSAGE_XML_VALERGEBNIS_CLOSE )
-						+ kostval.getTextResourceService().getText(
-								MESSAGE_XML_VALERGEBNIS_VALID ) );
+						MESSAGE_XML_VALERGEBNIS_VALID ) );
+				LOGGER.logError( kostval.getTextResourceService().getText(
+						MESSAGE_XML_VALERGEBNIS_CLOSE ) );
 				System.out.println( "Valid" );
 				System.out.println( "" );
 			} else {
 				// Fehler in Validierte Datei --> invalide
-				Util.valElement(
-						kostval.getTextResourceService().getText(
-								MESSAGE_XML_VALERGEBNIS_INVALID ), logFile );
 				LOGGER.logError( kostval.getTextResourceService().getText(
-						MESSAGE_XML_VALERGEBNIS_CLOSE )
-						+ kostval.getTextResourceService().getText(
-								MESSAGE_XML_VALERGEBNIS_INVALID ) );
+						MESSAGE_XML_VALERGEBNIS_INVALID ) );
+				LOGGER.logError( kostval.getTextResourceService().getText(
+						MESSAGE_XML_VALERGEBNIS_CLOSE ) );
 				System.out.println( "Invalid" );
 				System.out.println( "" );
 			}
@@ -1126,14 +1100,8 @@ public class KOSTVal implements MessageConstants
 			// Validierungen, welche nicht zum Abbruch der
 			// Applikation führen, ausgeführt werden.
 			if ( okMandatory ) {
-				// ok = controller3.executeOptional( valDatei,
-				// directoryOfLogfile );
+				ok = controller3.executeOptional( valDatei, directoryOfLogfile );
 				// Ausführen der optionalen Schritte
-				/**
-				 * Die optionalen Schritte wurden direkt ins Modul A integriert,
-				 * da dies effizienter ist
-				 */
-				ok = true;
 			}
 
 			ok = (ok && okMandatory);
@@ -1141,24 +1109,18 @@ public class KOSTVal implements MessageConstants
 
 			if ( ok ) {
 				// Validierte Datei valide
-				Util.valElement(
-						kostval.getTextResourceService().getText(
-								MESSAGE_XML_VALERGEBNIS_VALID ), logFile );
 				LOGGER.logError( kostval.getTextResourceService().getText(
-						MESSAGE_XML_VALERGEBNIS_CLOSE )
-						+ kostval.getTextResourceService().getText(
-								MESSAGE_XML_VALERGEBNIS_VALID ) );
+						MESSAGE_XML_VALERGEBNIS_VALID ) );
+				LOGGER.logError( kostval.getTextResourceService().getText(
+						MESSAGE_XML_VALERGEBNIS_CLOSE ) );
 				System.out.println( "Valid" );
 				System.out.println( "" );
 			} else {
 				// Validierte Datei invalide
-				Util.valElement(
-						kostval.getTextResourceService().getText(
-								MESSAGE_XML_VALERGEBNIS_INVALID ), logFile );
 				LOGGER.logError( kostval.getTextResourceService().getText(
-						MESSAGE_XML_VALERGEBNIS_CLOSE )
-						+ kostval.getTextResourceService().getText(
-								MESSAGE_XML_VALERGEBNIS_INVALID ) );
+						MESSAGE_XML_VALERGEBNIS_INVALID ) );
+				LOGGER.logError( kostval.getTextResourceService().getText(
+						MESSAGE_XML_VALERGEBNIS_CLOSE ) );
 				System.out.println( "Invalid" );
 				System.out.println( "" );
 			}

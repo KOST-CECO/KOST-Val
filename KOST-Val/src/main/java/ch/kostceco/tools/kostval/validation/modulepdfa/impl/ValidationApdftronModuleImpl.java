@@ -226,14 +226,6 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 		// PDF-Datei an Pdftron übergeben wenn die Erkennung erfolgreich
 		erkennung = valid;
 		if ( erkennung = true ) {
-			// Informationen zum PDFTRON-Logverzeichnis holen
-			File pdftronDir = directoryOfLogfile;
-			String pathToPdftronOutput = pdftronDir.getAbsolutePath();
-
-			if ( !pdftronDir.exists() ) {
-				pdftronDir.mkdir();
-			}
-
 			try {
 				// Start PDFTRON direkt auszulösen
 				File report;
@@ -296,7 +288,8 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 
 				// Pfad zum Programm Pdftron
 				File pdftronExe = new File( pathToPdftronExe );
-				File output = new File( pathToPdftronOutput );
+				File output = directoryOfLogfile;
+				String pathToPdftronOutput = output.getAbsolutePath();
 				StringBuffer command = new StringBuffer( pdftronExe + " " );
 				command.append( "-l " + level );
 				command.append( " -o " );
@@ -334,14 +327,16 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 					Util.switchOnConsole();
 
 					// Der Name des generierten Reports lautet per default
-					// report.xml und es scheint keine
+					// report.xml
+					// und es scheint keine
 					// Möglichkeit zu geben, dies zu übersteuern.
 					report = new File( pathToPdftronOutput, "report.xml" );
 					File newReport = new File( pathToPdftronOutput,
 							valDatei.getName() + ".pdftron-log.xml" );
 
 					// falls das File bereits existiert, z.B. von einem
-					// vorhergehenden Durchlauf, löschen wir es
+					// vorhergehenden
+					// Durchlauf, löschen wir es
 					if ( newReport.exists() ) {
 						newReport.delete();
 					}
@@ -409,13 +404,18 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 						errorDigit = errorCode.substring( 6, 7 );
 
 						// der Error Code kann auch "Unknown" sein, dieser wird
-						// in den Code "0" übersetzt
+						// in
+						// den Code "0" übersetzt
 						if ( errorDigit.equals( "U" ) ) {
 							errorDigit = "0";
 						}
 						if ( errorDigit.equals( "n" ) ) {
 							errorDigit = "0";
 						}
+						/*
+						 * System.out.print( "errorDigit = " + errorDigit +
+						 * " > errorMessage = " + errorMessage + "  " );
+						 */
 
 						if ( errorDigit.equals( "0" ) ) {
 							// Allgemeiner Fehler -> A
@@ -429,119 +429,7 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 																	ERROR_XML_AJ_PDFA_ERRORMESSAGE,
 																	errorMessage ) );
 
-						} else if ( errorDigit.equals( "1" ) ) {
-							// Struktur Fehler -> B
-							isValid = false;
-							getMessageService()
-									.logError(
-											getTextResourceService().getText(
-													MESSAGE_XML_MODUL_B_PDFA )
-													+ getTextResourceService()
-															.getText(
-																	ERROR_XML_AJ_PDFA_ERRORMESSAGE,
-																	errorMessage ) );
-						} else if ( errorDigit.equals( "2" ) ) {
-							// Grafik Fehler -> C
-							isValid = false;
-							getMessageService()
-									.logError(
-											getTextResourceService().getText(
-													MESSAGE_XML_MODUL_C_PDFA )
-													+ getTextResourceService()
-															.getText(
-																	ERROR_XML_AJ_PDFA_ERRORMESSAGE,
-																	errorMessage ) );
-						} else if ( errorDigit.equals( "3" ) ) {
-							// Schrift Fehler -> D
-							isValid = false;
-							getMessageService()
-									.logError(
-											getTextResourceService().getText(
-													MESSAGE_XML_MODUL_D_PDFA )
-													+ getTextResourceService()
-															.getText(
-																	ERROR_XML_AJ_PDFA_ERRORMESSAGE,
-																	errorMessage ) );
-						} else if ( errorDigit.equals( "4" ) ) {
-							// Transparenz Fehler -> E
-							isValid = false;
-							getMessageService()
-									.logError(
-											getTextResourceService().getText(
-													MESSAGE_XML_MODUL_E_PDFA )
-													+ getTextResourceService()
-															.getText(
-																	ERROR_XML_AJ_PDFA_ERRORMESSAGE,
-																	errorMessage ) );
-						} else if ( errorDigit.equals( "5" ) ) {
-							// Annotations Fehler -> F
-							isValid = false;
-							getMessageService()
-									.logError(
-											getTextResourceService().getText(
-													MESSAGE_XML_MODUL_F_PDFA )
-													+ getTextResourceService()
-															.getText(
-																	ERROR_XML_AJ_PDFA_ERRORMESSAGE,
-																	errorMessage ) );
-						} else if ( errorDigit.equals( "6" ) ) {
-							// Aktions Fehler -> G
-							isValid = false;
-							getMessageService()
-									.logError(
-											getTextResourceService().getText(
-													MESSAGE_XML_MODUL_G_PDFA )
-													+ getTextResourceService()
-															.getText(
-																	ERROR_XML_AJ_PDFA_ERRORMESSAGE,
-																	errorMessage ) );
-						} else if ( errorDigit.equals( "7" ) ) {
-							// Metadaten Fehler -> H
-							isValid = false;
-							getMessageService()
-									.logError(
-											getTextResourceService().getText(
-													MESSAGE_XML_MODUL_H_PDFA )
-													+ getTextResourceService()
-															.getText(
-																	ERROR_XML_AJ_PDFA_ERRORMESSAGE,
-																	errorMessage ) );
-						} else if ( errorDigit.equals( "8" ) ) {
-							// Zugänglichkeit Fehler -> I
-							isValid = false;
-							getMessageService()
-									.logError(
-											getTextResourceService().getText(
-													MESSAGE_XML_MODUL_I_PDFA )
-													+ getTextResourceService()
-															.getText(
-																	ERROR_XML_AJ_PDFA_ERRORMESSAGE,
-																	errorMessage ) );
-						} else if ( errorDigit.equals( "9" ) ) {
-							// Interaktions Fehler -> J
-							isValid = false;
-							getMessageService()
-									.logError(
-											getTextResourceService().getText(
-													MESSAGE_XML_MODUL_J_PDFA )
-													+ getTextResourceService()
-															.getText(
-																	ERROR_XML_AJ_PDFA_ERRORMESSAGE,
-																	errorMessage ) );
-						} else {
-							// Allgemeiner Fehler -> A
-							isValid = false;
-							getMessageService()
-									.logError(
-											getTextResourceService().getText(
-													MESSAGE_XML_MODUL_A_PDFA )
-													+ getTextResourceService()
-															.getText(
-																	ERROR_XML_AJ_PDFA_ERRORMESSAGE,
-																	errorMessage ) );
-
 						}
-
 					}
 					if ( errorDigit.equals( "Fehler" ) ) {
 						// Fehler bei der Initialisierung

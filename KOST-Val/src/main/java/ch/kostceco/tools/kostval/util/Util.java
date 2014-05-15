@@ -243,36 +243,14 @@ public class Util
 		out.close();
 	}
 
-	/**
-	 * Ersetzt das XML-Element "ValErgebnis>" mit dem ergebnis (string) in dem
-	 * kost-val.log.xml (file)
-	 * 
-	 * @throws IOException
-	 */
-	public static void valElement( String string, File file )
-			throws IOException
-	{
-		try {
-			BufferedReader reader = new BufferedReader( new FileReader( file ) );
-			String line = "", oldtext = "";
-			while ( (line = reader.readLine()) != null ) {
-				oldtext += line + "\r\n";
-			}
-			reader.close();
-			String newtext = oldtext.replace( "ValErgebnis>", string );
-			newtext = newtext.replace( (char) 0, (char) 32 );
-			FileWriter writer = new FileWriter( file );
-			writer.write( newtext );
-			writer.close();
-		} catch ( IOException ioe ) {
-			ioe.printStackTrace();
-		}
-	}
 
 	/**
 	 * Ergänzt das XML-Element "<End></End>" mit dem ergebnis (string) in dem
 	 * kost-val.log.xml (file)
 	 * 
+	 *  ! Solche Ersetzungen dürfen nicht in einer Schleife gemacht werden 
+	 *    sondern erst am Schluss, da diese sehr Zeitintensiv sind !!!
+	 *    
 	 * @throws IOException
 	 */
 	public static void valEnd( String string, File file ) throws IOException
@@ -297,6 +275,9 @@ public class Util
 	/**
 	 * Verändert <Message>3c</Message></Error> mit dem ergebnis (string) in dem
 	 * kost-val.log.xml (file)
+	 * 
+	 *  ! Solche Ersetzungen dürfen nicht in einer Schleife gemacht werden 
+	 *    sondern erst am Schluss, da diese sehr Zeitintensiv sind !!!
 	 * 
 	 * @throws IOException
 	 */

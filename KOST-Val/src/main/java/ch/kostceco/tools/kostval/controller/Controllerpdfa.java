@@ -23,7 +23,7 @@ package ch.kostceco.tools.kostval.controller;
 import java.io.File;
 
 import ch.kostceco.tools.kostval.exception.modulepdfa.ValidationApdftronException;
-/*import ch.kostceco.tools.kostval.exception.modulepdfa.ValidationBstructureException;
+import ch.kostceco.tools.kostval.exception.modulepdfa.ValidationBstructureException;
 import ch.kostceco.tools.kostval.exception.modulepdfa.ValidationCgraphicsException;
 import ch.kostceco.tools.kostval.exception.modulepdfa.ValidationDfontsException;
 import ch.kostceco.tools.kostval.exception.modulepdfa.ValidationEtransparencyException;
@@ -32,11 +32,11 @@ import ch.kostceco.tools.kostval.exception.modulepdfa.ValidationGactionsExceptio
 import ch.kostceco.tools.kostval.exception.modulepdfa.ValidationHmetadataException;
 import ch.kostceco.tools.kostval.exception.modulepdfa.ValidationIaccessibleException;
 import ch.kostceco.tools.kostval.exception.modulepdfa.ValidationJinteractiveformsException;
-*/import ch.kostceco.tools.kostval.logging.Logger;
+import ch.kostceco.tools.kostval.logging.Logger;
 import ch.kostceco.tools.kostval.logging.MessageConstants;
 import ch.kostceco.tools.kostval.service.TextResourceService;
 import ch.kostceco.tools.kostval.validation.modulepdfa.ValidationApdftronModule;
-/*import ch.kostceco.tools.kostval.validation.modulepdfa.ValidationBstructureModule;
+import ch.kostceco.tools.kostval.validation.modulepdfa.ValidationBstructureModule;
 import ch.kostceco.tools.kostval.validation.modulepdfa.ValidationCgraphicsModule;
 import ch.kostceco.tools.kostval.validation.modulepdfa.ValidationDfontsModule;
 import ch.kostceco.tools.kostval.validation.modulepdfa.ValidationEtransparencyModule;
@@ -45,7 +45,7 @@ import ch.kostceco.tools.kostval.validation.modulepdfa.ValidationGactionsModule;
 import ch.kostceco.tools.kostval.validation.modulepdfa.ValidationHmetadataModule;
 import ch.kostceco.tools.kostval.validation.modulepdfa.ValidationIaccessibleModule;
 import ch.kostceco.tools.kostval.validation.modulepdfa.ValidationJinteractiveformsModule;
-*/
+
 /**
  * kostval -->
  * 
@@ -64,7 +64,7 @@ public class Controllerpdfa implements MessageConstants
 	private TextResourceService					textResourceService;
 
 	private ValidationApdftronModule			validationApdftronModule;
-/*	private ValidationBstructureModule			validationBstructureModule;
+	private ValidationBstructureModule			validationBstructureModule;
 	private ValidationCgraphicsModule			validationCgraphicsModule;
 	private ValidationDfontsModule				validationDfontsModule;
 	private ValidationEtransparencyModule		validationEtransparencyModule;
@@ -72,7 +72,7 @@ public class Controllerpdfa implements MessageConstants
 	private ValidationGactionsModule			validationGactionsModule;
 	private ValidationHmetadataModule			validationHmetadataModule;
 	private ValidationIaccessibleModule			validationIaccessibleModule;
-	private ValidationJinteractiveformsModule	validationJinteractiveformsModule;*/
+	private ValidationJinteractiveformsModule	validationJinteractiveformsModule;
 
 	public ValidationApdftronModule getValidationApdftronModule()
 	{
@@ -85,7 +85,7 @@ public class Controllerpdfa implements MessageConstants
 		this.validationApdftronModule = validationApdftronModule;
 	}
 
-/*	public ValidationBstructureModule getValidationBstructureModule()
+	public ValidationBstructureModule getValidationBstructureModule()
 	{
 		return validationBstructureModule;
 	}
@@ -182,7 +182,7 @@ public class Controllerpdfa implements MessageConstants
 			ValidationJinteractiveformsModule validationJinteractiveformsModule )
 	{
 		this.validationJinteractiveformsModule = validationJinteractiveformsModule;
-	}*/
+	}
 
 	public TextResourceService getTextResourceService()
 	{
@@ -229,7 +229,7 @@ public class Controllerpdfa implements MessageConstants
 	{
 		boolean valid = true;
 
-/*		// Validation B
+		// Validation B
 		try {
 			if ( this.getValidationBstructureModule().validate( valDatei,
 					directoryOfLogfile ) ) {
@@ -455,7 +455,7 @@ public class Controllerpdfa implements MessageConstants
 							e.getMessage() ) );
 			valid = false;
 		}
-*/
+
 		return valid;
 	}
 }
