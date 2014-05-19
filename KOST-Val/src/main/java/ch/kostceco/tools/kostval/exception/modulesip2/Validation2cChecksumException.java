@@ -22,7 +22,7 @@ package ch.kostceco.tools.kostval.exception.modulesip2;
 
 import ch.kostceco.tools.kostval.exception.KOSTValException;
 
-public class Validation2bChecksumException extends KOSTValException
+public class Validation2cChecksumException extends KOSTValException
 {
 
 	/**
@@ -30,12 +30,12 @@ public class Validation2bChecksumException extends KOSTValException
 	 */
 	private static final long	serialVersionUID	= 3673372931705173414L;
 
-	public Validation2bChecksumException()
+	public Validation2cChecksumException()
 	{
 		super();
 	}
 
-	public Validation2bChecksumException( String message )
+	public Validation2cChecksumException( String message )
 	{
 		super( message );
 	}

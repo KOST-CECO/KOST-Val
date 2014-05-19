@@ -32,23 +32,23 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import ch.kostceco.tools.kostval.exception.modulesip2.Validation2bChecksumException;
+import ch.kostceco.tools.kostval.exception.modulesip2.Validation2cChecksumException;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
-import ch.kostceco.tools.kostval.validation.modulesip2.Validation2bChecksumModule;
+import ch.kostceco.tools.kostval.validation.modulesip2.Validation2cChecksumModule;
 
 /**
- * Stimmen die Prüfsummen der Dateien mit Prüfsumme überein? metadata.xml:
+ * Validierungsschritt 2c: Stimmen die Prüfsummen der Dateien mit Prüfsumme überein? metadata.xml:
  * pruefsumme, pruefalgorithmus und name pro Datei auslesen pfad ermitteln,
  * länge der summe kontrollieren datei: Summe berechnen und vergleichen
  */
 
-public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
-		implements Validation2bChecksumModule
+public class Validation2cChecksumModuleImpl extends ValidationModuleImpl
+		implements Validation2cChecksumModule
 {
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile )
-			throws Validation2bChecksumException
+			throws Validation2cChecksumException
 	{
 		boolean valid = true;
 
@@ -149,10 +149,10 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 						getMessageService()
 								.logError(
 										getTextResourceService().getText(
-												MESSAGE_XML_MODUL_Bb_SIP )
+												MESSAGE_XML_MODUL_Bc_SIP )
 												+ getTextResourceService()
 														.getText(
-																MESSAGE_XML_Bb_WRONGMD5,
+																MESSAGE_XML_BC_WRONGMD5,
 																path ) );
 
 					} else {
@@ -194,10 +194,10 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 											.logError(
 													getTextResourceService()
 															.getText(
-																	MESSAGE_XML_MODUL_Bb_SIP )
+																	MESSAGE_XML_MODUL_Bc_SIP )
 															+ getTextResourceService()
 																	.getText(
-																			ERROR_XML_BB_CANNOTCLOSESTREAMMD5 ) );
+																			ERROR_XML_BC_CANNOTCLOSESTREAMMD5 ) );
 									return false;
 								}
 
@@ -211,10 +211,10 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 											.logError(
 													getTextResourceService()
 															.getText(
-																	MESSAGE_XML_MODUL_Bb_SIP )
+																	MESSAGE_XML_MODUL_Bc_SIP )
 															+ getTextResourceService()
 																	.getText(
-																			MESSAGE_XML_Bb_WRONGMD5,
+																			MESSAGE_XML_BC_WRONGMD5,
 																			path
 																					+ ": "
 																					+ pruefsumme
@@ -226,10 +226,10 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 										.logError(
 												getTextResourceService()
 														.getText(
-																MESSAGE_XML_MODUL_Bb_SIP )
+																MESSAGE_XML_MODUL_Bc_SIP )
 														+ getTextResourceService()
 																.getText(
-																		ERROR_XML_BB_CANNOTPROCESSMD5 ) );
+																		ERROR_XML_BC_CANNOTPROCESSMD5 ) );
 								return false;
 							}
 						} else {
@@ -248,10 +248,10 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 						getMessageService()
 								.logError(
 										getTextResourceService().getText(
-												MESSAGE_XML_MODUL_Bb_SIP )
+												MESSAGE_XML_MODUL_Bc_SIP )
 												+ getTextResourceService()
 														.getText(
-																MESSAGE_XML_Bb_WRONGMD5,
+																MESSAGE_XML_BC_WRONGMD5,
 																path ) );
 
 					} else {
@@ -293,10 +293,10 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 											.logError(
 													getTextResourceService()
 															.getText(
-																	MESSAGE_XML_MODUL_Bb_SIP )
+																	MESSAGE_XML_MODUL_Bc_SIP )
 															+ getTextResourceService()
 																	.getText(
-																			ERROR_XML_BB_CANNOTCLOSESTREAMMD5 ) );
+																			ERROR_XML_BC_CANNOTCLOSESTREAMMD5 ) );
 									return false;
 								}
 
@@ -308,10 +308,10 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 											.logError(
 													getTextResourceService()
 															.getText(
-																	MESSAGE_XML_MODUL_Bb_SIP )
+																	MESSAGE_XML_MODUL_Bc_SIP )
 															+ getTextResourceService()
 																	.getText(
-																			MESSAGE_XML_Bb_WRONGMD5,
+																			MESSAGE_XML_BC_WRONGMD5,
 																			path
 																					+ ": "
 																					+ pruefsumme
@@ -323,10 +323,10 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 										.logError(
 												getTextResourceService()
 														.getText(
-																MESSAGE_XML_MODUL_Bb_SIP )
+																MESSAGE_XML_MODUL_Bc_SIP )
 														+ getTextResourceService()
 																.getText(
-																		ERROR_XML_BB_CANNOTPROCESSMD5 ) );
+																		ERROR_XML_BC_CANNOTPROCESSMD5 ) );
 								return false;
 							}
 						} else {
@@ -346,10 +346,10 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 						getMessageService()
 								.logError(
 										getTextResourceService().getText(
-												MESSAGE_XML_MODUL_Bb_SIP )
+												MESSAGE_XML_MODUL_Bc_SIP )
 												+ getTextResourceService()
 														.getText(
-																MESSAGE_XML_Bb_WRONGMD5,
+																MESSAGE_XML_BC_WRONGMD5,
 																path ) );
 
 					} else {
@@ -391,10 +391,10 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 											.logError(
 													getTextResourceService()
 															.getText(
-																	MESSAGE_XML_MODUL_Bb_SIP )
+																	MESSAGE_XML_MODUL_Bc_SIP )
 															+ getTextResourceService()
 																	.getText(
-																			ERROR_XML_BB_CANNOTCLOSESTREAMMD5 ) );
+																			ERROR_XML_BC_CANNOTCLOSESTREAMMD5 ) );
 									return false;
 								}
 
@@ -406,10 +406,10 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 											.logError(
 													getTextResourceService()
 															.getText(
-																	MESSAGE_XML_MODUL_Bb_SIP )
+																	MESSAGE_XML_MODUL_Bc_SIP )
 															+ getTextResourceService()
 																	.getText(
-																			MESSAGE_XML_Bb_WRONGMD5,
+																			MESSAGE_XML_BC_WRONGMD5,
 																			path
 																					+ ": "
 																					+ pruefsumme
@@ -421,10 +421,10 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 										.logError(
 												getTextResourceService()
 														.getText(
-																MESSAGE_XML_MODUL_Bb_SIP )
+																MESSAGE_XML_MODUL_Bc_SIP )
 														+ getTextResourceService()
 																.getText(
-																		ERROR_XML_BB_CANNOTPROCESSMD5 ) );
+																		ERROR_XML_BC_CANNOTPROCESSMD5 ) );
 								return false;
 							}
 						} else {
@@ -444,10 +444,10 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 						getMessageService()
 								.logError(
 										getTextResourceService().getText(
-												MESSAGE_XML_MODUL_Bb_SIP )
+												MESSAGE_XML_MODUL_Bc_SIP )
 												+ getTextResourceService()
 														.getText(
-																MESSAGE_XML_Bb_WRONGMD5,
+																MESSAGE_XML_BC_WRONGMD5,
 																path ) );
 
 					} else {
@@ -489,10 +489,10 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 											.logError(
 													getTextResourceService()
 															.getText(
-																	MESSAGE_XML_MODUL_Bb_SIP )
+																	MESSAGE_XML_MODUL_Bc_SIP )
 															+ getTextResourceService()
 																	.getText(
-																			ERROR_XML_BB_CANNOTCLOSESTREAMMD5 ) );
+																			ERROR_XML_BC_CANNOTCLOSESTREAMMD5 ) );
 									return false;
 								}
 
@@ -504,10 +504,10 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 											.logError(
 													getTextResourceService()
 															.getText(
-																	MESSAGE_XML_MODUL_Bb_SIP )
+																	MESSAGE_XML_MODUL_Bc_SIP )
 															+ getTextResourceService()
 																	.getText(
-																			MESSAGE_XML_Bb_WRONGMD5,
+																			MESSAGE_XML_BC_WRONGMD5,
 																			path
 																					+ ": "
 																					+ pruefsumme
@@ -519,10 +519,10 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 										.logError(
 												getTextResourceService()
 														.getText(
-																MESSAGE_XML_MODUL_Bb_SIP )
+																MESSAGE_XML_MODUL_Bc_SIP )
 														+ getTextResourceService()
 																.getText(
-																		ERROR_XML_BB_CANNOTPROCESSMD5 ) );
+																		ERROR_XML_BC_CANNOTPROCESSMD5 ) );
 								return false;
 							}
 						} else {
@@ -534,7 +534,7 @@ public class Validation2bChecksumModuleImpl extends ValidationModuleImpl
 			}
 		} catch ( Exception e ) {
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_Ba_SIP )
+					getTextResourceService().getText( MESSAGE_XML_MODUL_Bc_SIP )
 							+ getTextResourceService().getText(
 									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			valid = false;

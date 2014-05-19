@@ -40,8 +40,8 @@ import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesip2.Validation2aFileIntegrityModule;
 
 /**
- * Sind alle referenzierten Dateien vorhanden? von allen datei nodes den subnode
- * name holen und diesen mit der Struktur vergleichen
+ * Validierungsschritt 2a: Sind alle referenzierten Dateien vorhanden? von allen
+ * datei nodes den subnode name holen und diesen mit der Struktur vergleichen
  */
 
 public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl
@@ -52,6 +52,7 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl
 	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws Validation2aFileIntegrityException
 	{
+
 		Map<String, String> filesInSip = new HashMap<String, String>();
 		boolean valid = true;
 
@@ -75,6 +76,7 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl
 								.getAbsolutePath() + "//header//metadata.xml" ) ) );
 				doc.getDocumentElement().normalize();
 				NodeList nodeLst = doc.getElementsByTagName( "datei" );
+				NodeList nodeLstO = doc.getElementsByTagName( "ordner" );
 
 				for ( int s = 0; s < nodeLst.getLength(); s++ ) {
 					Node dateiNode = nodeLst.item( s );
@@ -121,6 +123,7 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl
 
 					String removedEntry = filesInSip.remove( name );
 					if ( removedEntry == null ) {
+						// Test von 2A
 						getMessageService().logError(
 								getTextResourceService().getText(
 										MESSAGE_XML_MODUL_Ba_SIP )
@@ -129,11 +132,64 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl
 												name ) );
 						valid = false;
 					}
-
-					// filesInMetadata.put( path, path );
 					path = "";
 
 				}
+				// das gleiche mit den Ordnern
+				for ( int sO = 0; sO < nodeLstO.getLength(); sO++ ) {
+					Node dateiNodeO = nodeLstO.item( sO );
+
+					String pathO = null;
+
+					NodeList childNodesO = dateiNodeO.getChildNodes();
+					for ( int y = 0; y < childNodesO.getLength(); y++ ) {
+						Node subNodeO = childNodesO.item( y );
+						if ( subNodeO.getNodeName().equals( "name" ) ) {
+							pathO = subNodeO.getTextContent() + "/";
+						}
+					}
+
+					// selectNodeIterator ist zu Zeitintensiv bei grossen
+					// XML-Dateien mit getChildNodes() ersetzt
+					/*
+					 * NodeIterator nlO = XPathAPI.selectNodeIterator(
+					 * dateiNodeO, "name" ); Node nameNodeO = nlO.nextNode();
+					 * String pathO = nameNodeO.getTextContent();
+					 */
+
+					boolean topReachedO = false;
+
+					while ( !topReachedO ) {
+
+						Node parentNodeO = dateiNodeO.getParentNode();
+						if ( parentNodeO.getNodeName().equals(
+								"inhaltsverzeichnis" ) ) {
+							topReachedO = true;
+							break;
+						}
+
+						NodeList childrenNodesO = parentNodeO.getChildNodes();
+						for ( int xO = 0; xO < childrenNodesO.getLength(); xO++ ) {
+							Node childNodeO = childrenNodesO.item( xO );
+
+							if ( childNodeO.getNodeName().equals( "name" ) ) {
+								pathO = childNodeO.getTextContent() + "/"
+										+ pathO;
+								if ( dateiNodeO.getParentNode() != null ) {
+									dateiNodeO = dateiNodeO.getParentNode();
+								}
+								break;
+							}
+						}
+					}
+
+					String name = pathO;
+
+					@SuppressWarnings("unused")
+					String removedEntry = filesInSip.remove( name );
+					pathO = "";
+				}
+
 			} catch ( Exception e ) {
 				getMessageService().logError(
 						getTextResourceService().getText(
@@ -141,6 +197,32 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl
 								+ getTextResourceService().getText(
 										ERROR_XML_UNKNOWN, e.getMessage() ) );
 				valid = false;
+			}
+
+			Set<String> filesInSipKeys = filesInSip.keySet();
+			for ( Iterator<String> iterator = filesInSipKeys.iterator(); iterator
+					.hasNext(); ) {
+				String entryName = iterator.next();
+				if ( entryName.startsWith( "header" ) ) {
+					// header wird in 2c ignoriert
+				} else {
+					if (entryName.endsWith( "/" )){
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_Bb_SIP )
+									+ getTextResourceService().getText(
+											MESSAGE_XML_BB_FILEMISSINGO,
+											entryName ) );
+					} else{
+						getMessageService().logError(
+								getTextResourceService().getText(
+										MESSAGE_XML_MODUL_Bb_SIP )
+										+ getTextResourceService().getText(
+												MESSAGE_XML_BB_FILEMISSING,
+												entryName ) );
+					}
+					valid = false;
+				}
 			}
 
 		} catch ( Exception e ) {
@@ -154,4 +236,5 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl
 		return valid;
 
 	}
+
 }

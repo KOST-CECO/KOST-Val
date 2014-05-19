@@ -28,8 +28,8 @@ import ch.kostceco.tools.kostval.exception.modulesip1.Validation1dMetadataExcept
 import ch.kostceco.tools.kostval.exception.modulesip1.Validation1eSipTypeException;
 import ch.kostceco.tools.kostval.exception.modulesip1.Validation1fPrimaryDataException;
 import ch.kostceco.tools.kostval.exception.modulesip2.Validation2aFileIntegrityException;
-import ch.kostceco.tools.kostval.exception.modulesip2.Validation2bChecksumException;
-import ch.kostceco.tools.kostval.exception.modulesip2.Validation2cSurplusFilesException;
+//import ch.kostceco.tools.kostval.exception.modulesip2.Validation2bSurplusFilesException;
+import ch.kostceco.tools.kostval.exception.modulesip2.Validation2cChecksumException;
 import ch.kostceco.tools.kostval.exception.modulesip2.Validation2dGeverFileIntegrityException;
 import ch.kostceco.tools.kostval.exception.modulesip3.Validation3aFormatRecognitionException;
 import ch.kostceco.tools.kostval.exception.modulesip3.Validation3bUnspecifiedFormatException;
@@ -45,8 +45,8 @@ import ch.kostceco.tools.kostval.validation.modulesip1.Validation1dMetadataModul
 import ch.kostceco.tools.kostval.validation.modulesip1.Validation1eSipTypeModule;
 import ch.kostceco.tools.kostval.validation.modulesip1.Validation1fPrimaryDataModule;
 import ch.kostceco.tools.kostval.validation.modulesip2.Validation2aFileIntegrityModule;
-import ch.kostceco.tools.kostval.validation.modulesip2.Validation2bChecksumModule;
-import ch.kostceco.tools.kostval.validation.modulesip2.Validation2cSurplusFilesModule;
+//import ch.kostceco.tools.kostval.validation.modulesip2.Validation2bSurplusFilesModule;
+import ch.kostceco.tools.kostval.validation.modulesip2.Validation2cChecksumModule;
 import ch.kostceco.tools.kostval.validation.modulesip2.Validation2dGeverFileIntegrityModule;
 import ch.kostceco.tools.kostval.validation.modulesip3.Validation3aFormatRecognitionModule;
 import ch.kostceco.tools.kostval.validation.modulesip3.Validation3bUnspecifiedFormatModule;
@@ -80,9 +80,7 @@ public class Controllersip implements MessageConstants
 
 	private Validation2aFileIntegrityModule			validation2aFileIntegrityModule;
 
-	private Validation2bChecksumModule				validation2bChecksumModule;
-
-	private Validation2cSurplusFilesModule			validation2cSurplusFilesModule;
+	private Validation2cChecksumModule				validation2cChecksumModule;
 
 	private Validation2dGeverFileIntegrityModule	validation2dGeverFileIntegrityModule;
 
@@ -162,26 +160,15 @@ public class Controllersip implements MessageConstants
 		this.validation2aFileIntegrityModule = validation2aFileIntegrityModule;
 	}
 
-	public Validation2bChecksumModule getValidation2bChecksumModule()
+	public Validation2cChecksumModule getValidation2cChecksumModule()
 	{
-		return validation2bChecksumModule;
+		return validation2cChecksumModule;
 	}
 
-	public void setValidation2bChecksumModule(
-			Validation2bChecksumModule validation2bChecksumModule )
+	public void setValidation2cChecksumModule(
+			Validation2cChecksumModule validation2cChecksumModule )
 	{
-		this.validation2bChecksumModule = validation2bChecksumModule;
-	}
-
-	public Validation2cSurplusFilesModule getValidation2cSurplusFilesModule()
-	{
-		return validation2cSurplusFilesModule;
-	}
-
-	public void setValidation2cSurplusFilesModule(
-			Validation2cSurplusFilesModule validation2cSurplusFilesModule )
-	{
-		this.validation2cSurplusFilesModule = validation2cSurplusFilesModule;
+		this.validation2cChecksumModule = validation2cChecksumModule;
 	}
 
 	public Validation2dGeverFileIntegrityModule getValidation2dGeverFileIntegrityModule()
@@ -346,7 +333,6 @@ public class Controllersip implements MessageConstants
 	public boolean executeOptional( File valDatei, File directoryOfLogfile )
 	{
 		boolean valid = true;
-
 		// Validation Step Ae
 		try {
 			if ( this.getValidation1eSipTypeModule().validate( valDatei,
@@ -425,48 +411,25 @@ public class Controllersip implements MessageConstants
 		}
 
 		// Validation Step Bb
-		try {
-			if ( this.getValidation2bChecksumModule().validate( valDatei,
-					directoryOfLogfile ) ) {
-				this.getValidation2bChecksumModule().getMessageService()
-						.print();
-			} else {
-				this.getValidation2bChecksumModule().getMessageService()
-						.print();
-				valid = false;
-			}
-		} catch ( Validation2bChecksumException e ) {
-			LOGGER.logError( getTextResourceService().getText(
-					MESSAGE_XML_MODUL_Bb_SIP )
-					+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
-							e.getMessage() ) );
-			this.getValidation2bChecksumModule().getMessageService().print();
-			valid = false;
-		} catch ( Exception e ) {
-			LOGGER.logError( getTextResourceService().getText(
-					MESSAGE_XML_MODUL_Bb_SIP )
-					+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
-							e.getMessage() ) );
-			return false;
-		}
+		// (wurde zusammen mit Ba (2a) durchgeführt)
 
 		// Validation Step Bc
 		try {
-			if ( this.getValidation2cSurplusFilesModule().validate( valDatei,
+			if ( this.getValidation2cChecksumModule().validate( valDatei,
 					directoryOfLogfile ) ) {
-				this.getValidation2cSurplusFilesModule().getMessageService()
+				this.getValidation2cChecksumModule().getMessageService()
 						.print();
 			} else {
-				this.getValidation2cSurplusFilesModule().getMessageService()
+				this.getValidation2cChecksumModule().getMessageService()
 						.print();
 				valid = false;
 			}
-		} catch ( Validation2cSurplusFilesException e ) {
+		} catch ( Validation2cChecksumException e ) {
 			LOGGER.logError( getTextResourceService().getText(
 					MESSAGE_XML_MODUL_Bc_SIP )
 					+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
 							e.getMessage() ) );
-			this.getValidation2cSurplusFilesModule().getMessageService()
+			this.getValidation2cChecksumModule().getMessageService()
 					.print();
 			valid = false;
 		} catch ( Exception e ) {

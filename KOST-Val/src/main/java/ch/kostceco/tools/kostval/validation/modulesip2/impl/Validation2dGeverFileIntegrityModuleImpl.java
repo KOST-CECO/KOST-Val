@@ -43,7 +43,10 @@ import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesip2.Validation2dGeverFileIntegrityModule;
 
 /**
- * Sind alle referenzierten Dateien auch im Ordnungsystem verzeichnet?
+ * Validierungsschritt 2d Bei GEVER SIP prüfen, ob alle in (metadata.xml)
+ * /paket/inhaltsverzeichnis/content referenzierten Dateien auch in
+ * (metadata.xml)/paket/ablieferung/ordnungsystem verzeichnet sind. Allfällige
+ * Inkonsistenzen auflisten. ( //dokument[@id] => //datei[@id] ).
  */
 
 public class Validation2dGeverFileIntegrityModuleImpl extends

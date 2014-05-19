@@ -26,10 +26,8 @@ import ch.kostceco.tools.kostval.exception.modulesip2.Validation2aFileIntegrityE
 import ch.kostceco.tools.kostval.validation.ValidationModule;
 
 /**
- * Validierungsschritt 2b Dateien mit Prüfsumme in (metadata.xml) //pruefsumme
- * validieren.
- * 
- * @author razm Daniel Ludin, Bedag AG @version 0.2.0
+ * Validierungsschritt 2a: Sind alle referenzierten Dateien vorhanden? von allen
+ * datei nodes den subnode name holen und diesen mit der Struktur vergleichen
  */
 
 public interface Validation2aFileIntegrityModule extends ValidationModule

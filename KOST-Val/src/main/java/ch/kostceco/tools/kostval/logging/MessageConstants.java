@@ -247,13 +247,13 @@ public interface MessageConstants
 	String	MESSAGE_XML_BA_FILEMISSING					= "message.xml.ba.filemissing";
 
 	// Modul 2b Meldungen
-	String	ERROR_XML_BB_CANNOTPROCESSMD5				= "error.xml.bb.cannotprocessmd5";
-	String	ERROR_XML_BB_CANNOTCLOSESTREAMMD5			= "error.xml.bb.cannotclosestreammd5";
-	String	MESSAGE_XML_Bb_WRONGMD5						= "error.xml.bb.wrongmd5";
+	String	MESSAGE_XML_BB_FILEMISSING					= "message.xml.bb.filemissing";
+	String	MESSAGE_XML_BB_FILEMISSINGO					= "message.xml.bb.filemissingo";
 
 	// Modul 2c Meldungen
-	String	MESSAGE_XML_BC_FILEMISSING					= "message.xml.bc.filemissing";
-	String	MESSAGE_XML_BC_FILEMISSINGO					= "message.xml.bc.filemissingo";
+	String	ERROR_XML_BC_CANNOTPROCESSMD5				= "error.xml.bc.cannotprocessmd5";
+	String	ERROR_XML_BC_CANNOTCLOSESTREAMMD5			= "error.xml.bc.cannotclosestreammd5";
+	String	MESSAGE_XML_BC_WRONGMD5						= "error.xml.bc.wrongmd5";
 
 	// Modul 2d Meldungen
 	String	MESSAGE_XML_BD_MISSINGINABLIEFERUNG			= "message.xml.bd.missinginablieferung";

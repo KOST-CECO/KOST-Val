@@ -30,8 +30,6 @@ import ch.kostceco.tools.kostval.validation.ValidationModule;
  * /paket/inhaltsverzeichnis/content referenzierten Dateien auch in
  * (metadata.xml)/paket/ablieferung/ordnungsystem verzeichnet sind. Allfällige
  * Inkonsistenzen auflisten. ( //dokument[@id] => //datei[@id] ).
- * 
- * @author razm Daniel Ludin, Bedag AG @version 0.2.0
  */
 
 public interface Validation2dGeverFileIntegrityModule extends ValidationModule

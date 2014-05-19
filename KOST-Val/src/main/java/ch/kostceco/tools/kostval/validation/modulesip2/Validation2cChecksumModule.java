@@ -22,21 +22,19 @@ package ch.kostceco.tools.kostval.validation.modulesip2;
 
 import java.io.File;
 
-import ch.kostceco.tools.kostval.exception.modulesip2.Validation2cSurplusFilesException;
+import ch.kostceco.tools.kostval.exception.modulesip2.Validation2cChecksumException;
 import ch.kostceco.tools.kostval.validation.ValidationModule;
 
 /**
- * Validierungsschritt 2c Im SIP vorhandene, aber nicht in
- * (metadata.xml)/paket/inhaltsverzeichnis verzeichnete Dateien auflisten
- * (ausser Datei metadata.xml).
- * 
- * @author razm Daniel Ludin, Bedag AG @version 0.2.0
+ * Validierungsschritt 2c: Stimmen die Prüfsummen der Dateien mit Prüfsumme überein? metadata.xml:
+ * pruefsumme, pruefalgorithmus und name pro Datei auslesen pfad ermitteln,
+ * länge der summe kontrollieren datei: Summe berechnen und vergleichen
  */
 
-public interface Validation2cSurplusFilesModule extends ValidationModule
+public interface Validation2cChecksumModule extends ValidationModule
 {
 
 	public boolean validate( File valDatei, File directoryOfLogfile )
-			throws Validation2cSurplusFilesException;
+			throws Validation2cChecksumException;
 
 }
