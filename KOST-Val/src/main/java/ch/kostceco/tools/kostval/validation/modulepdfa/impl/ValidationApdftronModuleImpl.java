@@ -20,6 +20,8 @@ Boston, MA 02110-1301 USA or see <http://www.gnu.org/licenses/>.
 
 package ch.kostceco.tools.kostval.validation.modulepdfa.impl;
 
+import static org.apache.commons.io.IOUtils.closeQuietly;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
@@ -308,9 +310,12 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 				command.append( valDatei.getAbsolutePath() );
 				command.append( "\"" );
 
+				Process proc = null;
+				Runtime rt = null;
+
 				try {
-					Runtime rt = Runtime.getRuntime();
-					Process proc = rt.exec( command.toString().split( " " ) );
+					rt = Runtime.getRuntime();
+					proc = rt.exec( command.toString().split( " " ) );
 					// .split(" ") ist notwendig wenn in einem Pfad ein
 					// Doppelleerschlag vorhanden ist!
 
@@ -360,6 +365,12 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 									+ getTextResourceService().getText(
 											ERROR_XML_A_PDFA_SERVICEFAILED ) );
 					return false;
+				} finally {
+					if ( proc != null ) {
+						closeQuietly( proc.getOutputStream() );
+						closeQuietly( proc.getInputStream() );
+						closeQuietly( proc.getErrorStream() );
+					}
 				}
 				// Ende PDFTRON direkt auszulösen
 
@@ -429,7 +440,8 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 													+ getTextResourceService()
 															.getText(
 																	ERROR_XML_AJ_PDFA_ERRORMESSAGE,
-																	errorMessage ) );
+																	errorMessage,
+																	errorCode ) );
 
 						}
 					}
@@ -462,7 +474,8 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 													+ getTextResourceService()
 															.getText(
 																	ERROR_XML_AJ_PDFA_ERRORMESSAGE,
-																	errorMessage ) );
+																	errorMessage,
+																	errorCode ) );
 						}
 					}
 
@@ -494,7 +507,8 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 													+ getTextResourceService()
 															.getText(
 																	ERROR_XML_AJ_PDFA_ERRORMESSAGE,
-																	errorMessage ) );
+																	errorMessage,
+																	errorCode ) );
 						}
 					}
 
@@ -526,7 +540,8 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 													+ getTextResourceService()
 															.getText(
 																	ERROR_XML_AJ_PDFA_ERRORMESSAGE,
-																	errorMessage ) );
+																	errorMessage,
+																	errorCode ) );
 						}
 					}
 
@@ -558,7 +573,8 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 													+ getTextResourceService()
 															.getText(
 																	ERROR_XML_AJ_PDFA_ERRORMESSAGE,
-																	errorMessage ) );
+																	errorMessage,
+																	errorCode ) );
 						}
 					}
 
@@ -590,7 +606,8 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 													+ getTextResourceService()
 															.getText(
 																	ERROR_XML_AJ_PDFA_ERRORMESSAGE,
-																	errorMessage ) );
+																	errorMessage,
+																	errorCode ) );
 						}
 					}
 
@@ -622,7 +639,8 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 													+ getTextResourceService()
 															.getText(
 																	ERROR_XML_AJ_PDFA_ERRORMESSAGE,
-																	errorMessage ) );
+																	errorMessage,
+																	errorCode ) );
 						}
 					}
 
@@ -654,7 +672,8 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 													+ getTextResourceService()
 															.getText(
 																	ERROR_XML_AJ_PDFA_ERRORMESSAGE,
-																	errorMessage ) );
+																	errorMessage,
+																	errorCode ) );
 						}
 					}
 
@@ -686,7 +705,8 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 													+ getTextResourceService()
 															.getText(
 																	ERROR_XML_AJ_PDFA_ERRORMESSAGE,
-																	errorMessage ) );
+																	errorMessage,
+																	errorCode ) );
 						}
 					}
 
@@ -718,7 +738,8 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 													+ getTextResourceService()
 															.getText(
 																	ERROR_XML_AJ_PDFA_ERRORMESSAGE,
-																	errorMessage ) );
+																	errorMessage,
+																	errorCode ) );
 						}
 					}
 

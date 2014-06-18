@@ -1,5 +1,5 @@
 /*== KOST-Val ==================================================================================
-The KOST-Val v1.3.5 application is used for validate TIFF, SIARD, PDF/A-Files and Submission 
+The KOST-Val v1.3.6 application is used for validate TIFF, SIARD, PDF/A-Files and Submission 
 Information Package (SIP). 
 Copyright (C) 2012-2014 Claire Röthlisberger (KOST-CECO), Christian Eugster, Olivier Debenath, 
 Peter Schneider (Staatsarchiv Aargau), Daniel Ludin (BEDAG AG)
@@ -128,6 +128,13 @@ public class KOSTVal implements MessageConstants
 			System.exit( 1 );
 		}
 
+		// Ist die Anzahl Parameter (mind. 2) korrekt?
+		if ( args.length < 2 ) {
+			System.out.println( kostval.getTextResourceService().getText(
+					ERROR_PARAMETER_USAGE ) );
+			System.exit( 1 );
+		}
+
 		File valDatei = new File( args[1] );
 		File logDatei = null;
 		logDatei = valDatei;
@@ -148,8 +155,7 @@ public class KOSTVal implements MessageConstants
 				MESSAGE_XML_END ) );
 		LOGGER.logError( kostval.getTextResourceService().getText(
 				MESSAGE_XML_INFO ) );
-		System.out.println( "" );
-		String info = "KOST-Val v1.3.0, Copyright (C) 2012-2014 Claire Roethlisberger (KOST-CECO), Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Daniel Ludin (BEDAG AG). This program comes with ABSOLUTELY NO WARRANTY. This is free software, and you are welcome to redistribute it under certain conditions; see GPL-3.0_COPYING.txt for details.";
+		System.out.println( "KOST-Val" );
 		System.out.println( "" );
 
 		File xslOrig = new File( "resources\\kost-val.xsl" );
@@ -157,17 +163,6 @@ public class KOSTVal implements MessageConstants
 				+ "\\kost-val.xsl" );
 		if ( !xslCopy.exists() ) {
 			Util.copyFile( xslOrig, xslCopy );
-		}
-
-		// Ist die Anzahl Parameter (mind. 2) korrekt?
-		if ( args.length < 2 ) {
-			LOGGER.logError( kostval.getTextResourceService().getText(
-					ERROR_IOE,
-					kostval.getTextResourceService().getText(
-							ERROR_PARAMETER_USAGE ) ) );
-			System.out.println( kostval.getTextResourceService().getText(
-					ERROR_PARAMETER_USAGE ) );
-			System.exit( 1 );
 		}
 
 		// Informationen zum Arbeitsverzeichnis holen
@@ -461,6 +456,8 @@ public class KOSTVal implements MessageConstants
 				ausgabeEnd = "<End>" + ausgabeEnd + "</End>";
 				Util.valEnd( ausgabeEnd, logFile );
 				Util.amp( logFile );
+
+				countSummaryNio = pdfaCountNio + siardCountNio + tiffCountNio;
 
 				if ( countNio == count ) {
 					// keine Dateien Validiert

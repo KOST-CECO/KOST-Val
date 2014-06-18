@@ -1,5 +1,5 @@
 ; The name of the installer
-Name "KOST-Val v1.3.1"
+Name "KOST-Val v1.3.6"
 ; Sets the icon of the installer
 Icon "val.ico"
 ; remove the text 'Nullsoft Install System vX.XX' from the installer window 
@@ -282,8 +282,8 @@ Function RunJar
 
   ; Launch java program
   ClearErrors
-  ; MessageBox MB_OK '"$JAVA\bin\java.exe" -Xmx1024m -jar ${JARFILE} $T_FLAG "$KOSTVAL" $P_FLAG'
-  ExecWait '"$JAVA\bin\java.exe" -Xmx1024m -jar ${JARFILE} $T_FLAG "$KOSTVAL" $P_FLAG'
+  ; MessageBox MB_OK '"$JAVA\bin\java.exe" -Xmx1024m -Xss64m -jar ${JARFILE} $T_FLAG "$KOSTVAL" $P_FLAG'
+  ExecWait '"$JAVA\bin\java.exe" -Xmx1024m -Xss64m -jar ${JARFILE} $T_FLAG "$KOSTVAL" $P_FLAG'
   IfFileExists "$LOG\$LOGFILE.kost-val.log*" 0 prog_err
   IfErrors goto_err goto_ok
   

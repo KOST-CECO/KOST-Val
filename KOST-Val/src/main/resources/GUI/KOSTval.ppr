@@ -23,10 +23,14 @@ KOSTval
 		KOSTval_en.script
 		test.bat
 [Open project files]
-0=resources\XTrans_1.8.0.2\readme.txt
+0=C:\Software\xampp\htdocs\wiki\lib\tikihelp\toolbar.html
+1=C:\Software\xampp\htdocs\wiki\lib\tikihelp\js\toolbar.js
 [Selected Project Files]
 Main=KOSTval_de.nsi
-Selected=resources\XTrans_1.8.0.2\readme.txt
-[resources\XTrans_1.8.0.2\readme.txt]
-TopLine=1
-Caret=1,1
+Selected=C:\Software\xampp\htdocs\wiki\lib\tikihelp\js\toolbar.js
+[C:\Software\xampp\htdocs\wiki\lib\tikihelp\toolbar.html]
+TopLine=31
+Caret=54,58
+[C:\Software\xampp\htdocs\wiki\lib\tikihelp\js\toolbar.js]
+TopLine=146
+Caret=66,166
