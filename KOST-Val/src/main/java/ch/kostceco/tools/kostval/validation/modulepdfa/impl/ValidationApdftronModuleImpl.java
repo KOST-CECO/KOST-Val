@@ -288,6 +288,7 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 								pdfaVer2 = 2;
 							}
 						}
+						// TODO: Entscheiden was es sein soll
 						if ( pdfaVer1 == 0 && pdfaVer2 == 0 ) {
 							// der Part wurde nicht gefunden --> Level 1
 							level = pdfa1;
@@ -397,6 +398,32 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 				}
 
 				if ( passCount == 0 ) {
+					// höchstwarscheinlich invalid
+					// wenn möglich durch 2. Validator bestätigen lassen
+
+					/*
+					 * TODO: Validator von PDF Tools ansprechen
+					 * 
+					 * wenn nicht vorhanden zählt einzig das Ergebnis von
+					 * PDFTron
+					 * 
+					 * Falls PDFTools = valid dann wird es als valid akzeptiert.
+					 * 
+					 * Beide Invalid kommt es zu einer Detail Auswertung Module
+					 * A, B und I sind Module die nicht dual bestätigt werden
+					 * müssen Der Rest (C D E F H J) müssen dual bestätigt
+					 * werden, damit das Modul als Invalide gilt --> dies
+					 * bedeutet, dass in wenigen Fällen ein 2fach invalides PDF
+					 * als valid akzeptiert werden könnte, sollte z.B. PDFTron
+					 * nur die Grafik bemängeln und PDFTools nur die Metadaten.
+					 * 
+					 * alles nicht bestätigte als Warnung herausgeben inkl. den
+					 * Warnungen von PDFTools
+					 * 
+					 * Sollte der Validator von PDF-Tools integriert werden
+					 * können sollte die Reihenfolge geändert werden.
+					 */
+
 					// Invalide PDFA-Datei
 
 					// aus dem Output von Pdftron die Fehlercodes extrahieren

@@ -19,6 +19,7 @@
 					tr.caption {background-color: #eeafaf; font-weight:bold}
 					tr.captionm {background-color: #f8dfdf}
 					tr.captionio {background-color: #afeeaf; font-weight:bold}
+					tr.captioniom {background-color: #ccffcc}
 					tr.captioninfo {background-color: #b2b2c5}
 				</style>
 			</head>
@@ -35,7 +36,8 @@
 				</div>
 				<br/>
 			</xsl:for-each>
-			<xsl:for-each select="KOSTValLog/Sip/Invalid">
+			<xsl:for-each select="KOSTValLog/Sip/Validation">
+				<xsl:if test="Invalid">
 				<h1>SIP:</h1>
 				<h2>Invalid:</h2>
 				<div>
@@ -53,9 +55,11 @@
 						</xsl:for-each>
 					</table>
 				</div>
+				</xsl:if>
 				<br/>
 			</xsl:for-each>
-			<xsl:for-each select="KOSTValLog/Sip/Valid">
+			<xsl:for-each select="KOSTValLog/Sip/Validation">
+				<xsl:if test="Valid">
 				<h1>SIP:</h1>
 				<h2>Valid:</h2>
 				<div>
@@ -63,8 +67,15 @@
 						<tr class="captionio">
 							<td><xsl:value-of select="ValType"/> -> <xsl:value-of select="ValFile"/></td>
 						</tr>
+						<xsl:for-each select="Error">
+							<tr class="captionio">
+								<td width="25%"><xsl:value-of select="Modul"/></td>
+								<td width="75%"><xsl:value-of select="Message"/></td>
+							</tr>
+						</xsl:for-each>
 					</table>
 				</div>
+				</xsl:if>
 			</xsl:for-each>
 			<h1>Format:</h1>
 			<xsl:for-each select="KOSTValLog/Format/Info">
@@ -78,7 +89,8 @@
 				<br/>
 			</xsl:for-each>
 			<h2>Invalid:</h2>
-			<xsl:for-each select="KOSTValLog/Format/Invalid">
+			<xsl:for-each select="KOSTValLog/Format/Validation">
+				<xsl:if test="Invalid">
 				<div>
 					<table width="100%">
 						<tr class="caption">
@@ -95,17 +107,28 @@
 					</table>
 				</div>
 				<br/>
+				</xsl:if>
 			</xsl:for-each>
 			<h2>Valid:</h2>
-			<div>
-				<table width="100%">
-					<xsl:for-each select="KOSTValLog/Format/Valid">
+			<xsl:for-each select="KOSTValLog/Format/Validation">
+				<xsl:if test="Valid">
+				<div>
+					<table width="100%">
 						<tr class="captionio">
 							<td><xsl:value-of select="ValType"/> -> <xsl:value-of select="ValFile"/></td>
 						</tr>
-					</xsl:for-each>
-				</table>
-			</div>
+					</table>
+					<table width="100%">
+						<xsl:for-each select="Error">
+							<tr class="captioniom">
+								<td width="25%"><xsl:value-of select="Modul"/></td>
+								<td width="75%"><xsl:value-of select="Message"/></td>
+							</tr>
+						</xsl:for-each>
+					</table>
+				</div>
+				</xsl:if>
+			</xsl:for-each>
 			<br/>
 			<hr noshade="noshade" size="1"/>
 			<h3><xsl:value-of select="KOSTValLog/Infos/Start"/> - <xsl:value-of select="KOSTValLog/Infos/End"/></h3>

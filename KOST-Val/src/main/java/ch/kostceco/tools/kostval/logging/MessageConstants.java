@@ -188,7 +188,6 @@ public interface MessageConstants
 	String	MESSAGE_XML_H_INVALID_XML					= "message.xml.h.invalid.xml";
 	String	MESSAGE_XML_H_INVALID_ERROR					= "message.xml.h.invalid.error";
 	String	MESSAGE_XML_H_TABLE_NOT_VALIDATED1			= "message.xml.h.table.not.validated1";
-	String	MESSAGE_XML_H_TABLE_NOT_VALIDATED2			= "message.xml.h.table.not.validated2";
 
 	// Modul I Meldungen
 	String	MESSAGE_XML_I_NOTALLOWEDEXT					= "message.xml.i.notallowedext";

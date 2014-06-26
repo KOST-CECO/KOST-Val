@@ -217,13 +217,7 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 								MESSAGE_XML_MODUL_H_SIARD )
 								+ getTextResourceService().getText(
 										MESSAGE_XML_H_TABLE_NOT_VALIDATED1,
-										xmlFile.getName() ) );
-				getMessageService().logError(
-						getTextResourceService().getText(
-								MESSAGE_XML_MODUL_H_SIARD )
-								+ getTextResourceService().getText(
-										MESSAGE_XML_H_TABLE_NOT_VALIDATED2,
-										range.max, limit,
+										xmlFile.getName(), range.max, limit,
 										schemaLocation.getName() ) );
 			}
 			return range.min <= limit && range.max <= limit;
