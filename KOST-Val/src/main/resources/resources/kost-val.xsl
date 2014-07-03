@@ -94,7 +94,7 @@
 				<div>
 					<table width="100%">
 						<tr class="caption">
-							<td><xsl:value-of select="ValType"/> -> <xsl:value-of select="ValFile"/></td>
+							<td><xsl:value-of select="ValType"/><xsl:value-of select="PdfaVL"/> -> <xsl:value-of select="ValFile"/></td>
 						</tr>
 					</table>
 					<table width="100%">
@@ -115,7 +115,7 @@
 				<div>
 					<table width="100%">
 						<tr class="captionio">
-							<td><xsl:value-of select="ValType"/> -> <xsl:value-of select="ValFile"/></td>
+							<td><xsl:value-of select="ValType"/><xsl:value-of select="PdfaVL"/> -> <xsl:value-of select="ValFile"/></td>
 						</tr>
 					</table>
 					<table width="100%">

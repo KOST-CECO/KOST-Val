@@ -55,6 +55,7 @@ public interface MessageConstants
 	String	MESSAGE_TIFFVALIDATION						= "message.tiffvalidation";
 	String	MESSAGE_SIARDVALIDATION						= "message.siardvalidation";
 	String	MESSAGE_PDFAVALIDATION						= "message.pdfavalidation";
+	String	MESSAGE_PDFAVALIDATION_VL					= "message.pdfavalidation.vl";	
 	String	MESSAGE_SIPVALIDATION						= "message.sipvalidation";
 	String	MESSAGE_XML_VALERGEBNIS						= "message.xml.valergebnis";
 	String	MESSAGE_XML_VALTYPE							= "message.xml.valtype";
@@ -96,7 +97,6 @@ public interface MessageConstants
 	String	MESSAGE_XML_MODUL_G_PDFA					= "message.xml.modul.g.pdfa";
 	String	MESSAGE_XML_MODUL_H_PDFA					= "message.xml.modul.h.pdfa";
 	String	MESSAGE_XML_MODUL_I_PDFA					= "message.xml.modul.i.pdfa";
-	String	MESSAGE_XML_MODUL_J_PDFA					= "message.xml.modul.j.pdfa";
 
 	String	MESSAGE_XML_MODUL_Aa_SIP					= "message.xml.modul.aa.sip";
 	String	MESSAGE_XML_MODUL_Ab_SIP					= "message.xml.modul.ab.sip";
@@ -206,8 +206,29 @@ public interface MessageConstants
 	String	ERROR_XML_PDFTRON_MISSING					= "error.xml.pdftron.missing";
 	String	ERROR_XML_A_PDFA_INIT						= "error.xml.a.pdfa.init";
 	String	ERROR_XML_A_PDFA_NOCONFIG					= "error.xml.a.pdfa.noconfig";
+	String	ERROR_XML_A_PDFTOOLS_LICENSE				= "error.xml.a.pdftools.license";
+	String	ERROR_XML_A_PDFTOOLS_ENCRYPTED				= "error.xml.a.pdftools.encrypted";
+	String	ERROR_XML_A_PDFTOOLS_DAMAGED				= "error.xml.a.pdftools.damaged";
 
-	String	ERROR_XML_AJ_PDFA_ERRORMESSAGE				= "error.xml.aj.pdfa.errormessage";
+	String	ERROR_XML_AI_0								= "error.xml.ai.0";
+	String	ERROR_XML_AI_1								= "error.xml.ai.1";
+	String	ERROR_XML_AI_2								= "error.xml.ai.2";
+	String	ERROR_XML_AI_3								= "error.xml.ai.3";
+	String	ERROR_XML_AI_4								= "error.xml.ai.4";
+	String	ERROR_XML_AI_5								= "error.xml.ai.5";
+	String	ERROR_XML_AI_6								= "error.xml.ai.6";
+	String	ERROR_XML_AI_7								= "error.xml.ai.7";
+	String	ERROR_XML_AI_8								= "error.xml.ai.8";
+	String	ERROR_XML_AI_9								= "error.xml.ai.9";
+	String	ERROR_XML_AI_10								= "error.xml.ai.10";
+	String	ERROR_XML_AI_11								= "error.xml.ai.11";
+	String	ERROR_XML_AI_12								= "error.xml.ai.12";
+	String	ERROR_XML_AI_13								= "error.xml.ai.13";
+	String	ERROR_XML_AI_14								= "error.xml.ai.14";
+	String	ERROR_XML_AI_15								= "error.xml.ai.15";
+	String	ERROR_XML_AI_16								= "error.xml.ai.16";
+	String	ERROR_XML_AI_17								= "error.xml.ai.17";
+	String	ERROR_XML_AI_18								= "error.xml.ai.18";
 
 	// *************SIP-Meldungen*************************************************************************
 	// Modul 1a Meldungen

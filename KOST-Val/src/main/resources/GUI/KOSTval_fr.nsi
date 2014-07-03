@@ -1,5 +1,5 @@
 ; The name of the installer
-Name "KOST-Val v1.3.6"
+Name "KOST-Val v1.4.0"
 ; Sets the icon of the installer
 Icon "val.ico"
 ; remove the text 'Nullsoft Install System vX.XX' from the installer window 
@@ -32,7 +32,7 @@ XPStyle on
 !define BACKUP        "~backup"
 !define JARFILE       "kostval_fr.jar"
 !define XTRANS        "resources\XTrans_1.8.0.2\XTrans.exe"
-!define JAVAPATH      "jre6"
+!define JAVAPATH      "resources\jre6"
 
 ;--------------------------------
 Var DIALOG

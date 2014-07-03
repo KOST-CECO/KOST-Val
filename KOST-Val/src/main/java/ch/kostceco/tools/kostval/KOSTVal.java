@@ -1,5 +1,5 @@
 /*== KOST-Val ==================================================================================
-The KOST-Val v1.3.7 application is used for validate TIFF, SIARD, PDF/A-Files and Submission 
+The KOST-Val v1.4.0 application is used for validate TIFF, SIARD, PDF/A-Files and Submission 
 Information Package (SIP). 
 Copyright (C) 2012-2014 Claire Röthlisberger (KOST-CECO), Christian Eugster, Olivier Debenath, 
 Peter Schneider (Staatsarchiv Aargau), Daniel Ludin (BEDAG AG)
@@ -344,6 +344,11 @@ public class KOSTVal implements MessageConstants
 						valDatei = newFile;
 						count = count + 1;
 
+						// Ausgabe Dateizähler
+						// Ersichtlich das KOST-Val Dateien durchsucht
+						System.out.print( count + "   " );
+						System.out.print( "\r" );
+
 						if ( ((valDatei.getAbsolutePath().toLowerCase()
 								.endsWith( ".tiff" ) || valDatei
 								.getAbsolutePath().toLowerCase()
@@ -435,7 +440,10 @@ public class KOSTVal implements MessageConstants
 					}
 				}
 
-				if ( countNio == count ) {
+				System.out.print( "                   " );
+				System.out.print( "\r" );
+
+				if ( countNio.equals( count ) ) {
 					// keine Dateien Validiert
 					LOGGER.logError( kostval.getTextResourceService().getText(
 							ERROR_INCORRECTFILEENDINGS ) );
@@ -459,7 +467,7 @@ public class KOSTVal implements MessageConstants
 
 				countSummaryNio = pdfaCountNio + siardCountNio + tiffCountNio;
 
-				if ( countNio == count ) {
+				if ( countNio.equals( count ) ) {
 					// keine Dateien Validiert
 					// bestehendes Workverzeichnis ggf. löschen
 					if ( tmpDir.exists() ) {
@@ -784,9 +792,13 @@ public class KOSTVal implements MessageConstants
 
 			countSummaryNio = pdfaCountNio + siardCountNio + tiffCountNio;
 			countSummaryIo = pdfaCountIo + siardCountIo + tiffCountIo;
+			int countSummaryIoP = 100 / count * countSummaryIo;
+			int countSummaryNioP = 100 / count * countSummaryNio;
+			int countNioP = 100 / count * countNio;
 			String summary3c = kostval.getTextResourceService().getText(
 					MESSAGE_XML_SUMMARY_3C, count, countSummaryIo,
-					countSummaryNio, countNio );
+					countSummaryNio, countNio, countSummaryIoP,
+					countSummaryNioP, countNioP );
 
 			if ( countSummaryNio == 0 ) {
 				// alle Validierten Dateien valide
