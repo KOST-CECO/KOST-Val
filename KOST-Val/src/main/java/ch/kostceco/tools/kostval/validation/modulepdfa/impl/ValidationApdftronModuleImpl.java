@@ -427,31 +427,31 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 						// System.out.println("ErrorCode; ErrorMessage; PageNumber; Count\n");
 						while ( err != null ) {
 							success = success + 1;
-							/*
-							 * // Error Code
-							 * 
-							 * int iErrorCode = err.getErrorCode();
-							 * 
-							 * // Error Message String sErrorMsg =
-							 * err.getMessage();
-							 * 
-							 * // Print message System.out.println( iErrorCode +
-							 * "; " + sErrorMsg );
-							 */
+
+							// Error Code
+
+							int iErrorCode = err.getErrorCode();
+
+							// Error Message
+							String sErrorMsg = err.getMessage();
+
+							// Print message
+							System.out.println( iErrorCode + "; " + sErrorMsg );
+
 							// Get next error
 							err = docPdf.getNextError();
 						}
-
-						/*
-						 * System.out.println( "Anzahl Error: " + success +
-						 * "   ErrorCode: " + successEC + "   Kategorie: " +
-						 * iCategory + " Level: " + level );
-						 */
 
 						if ( success == 0 && successEC == 0 && iCategory == 0 ) {
 							// valide
 							isValid = true;
 						} else {
+
+							System.out.println( "Anzahl Error: " + success
+									+ "   ErrorCode: " + successEC
+									+ "   Kategorie: " + iCategory + " Level: "
+									+ level );
+
 							/*
 							 * höchstwarscheinlich invalid wenn möglich durch
 							 * PDFTron bestätigen lassen
@@ -779,9 +779,22 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 										 * errorMessage + "  " );
 										 */
 
-										if ( errorDigitA.equals( "0" ) ) {
-											// Allgemeiner Fehler -> A
-											isValid = false;
+										try {
+											if ( errorDigitA.equals( "0" ) ) {
+
+												// Allgemeiner Fehler -> A
+												isValid = false;
+												getMessageService()
+														.logError(
+																getTextResourceService()
+																		.getText(
+																				MESSAGE_XML_MODUL_A_PDFA )
+																		+ getTextResourceService()
+																				.getText(
+																						errorCodeMsg,
+																						errorMessage ) );
+											}
+										} catch ( Exception e ) {
 											getMessageService()
 													.logError(
 															getTextResourceService()
@@ -789,7 +802,8 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 																			MESSAGE_XML_MODUL_A_PDFA )
 																	+ getTextResourceService()
 																			.getText(
-																					errorCodeMsg,
+																					ERROR_XML_AI_TRANSLATE,
+																					errorCode,
 																					errorMessage ) );
 										}
 									}
@@ -860,9 +874,21 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 										if ( errorDigit.equals( "n" ) ) {
 											errorDigit = "0";
 										}
-										if ( errorDigit.equals( "1" ) ) {
-											// Struktur Fehler -> B
-											isValid = false;
+										try {
+											if ( errorDigit.equals( "1" ) ) {
+												// Struktur Fehler -> B
+												isValid = false;
+												getMessageService()
+														.logError(
+																getTextResourceService()
+																		.getText(
+																				MESSAGE_XML_MODUL_B_PDFA )
+																		+ getTextResourceService()
+																				.getText(
+																						errorCodeMsg,
+																						errorMessage ) );
+											}
+										} catch ( Exception e ) {
 											getMessageService()
 													.logError(
 															getTextResourceService()
@@ -870,7 +896,8 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 																			MESSAGE_XML_MODUL_B_PDFA )
 																	+ getTextResourceService()
 																			.getText(
-																					errorCodeMsg,
+																					ERROR_XML_AI_TRANSLATE,
+																					errorCode,
 																					errorMessage ) );
 										}
 									}
@@ -954,9 +981,21 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 										if ( errorDigit.equals( "n" ) ) {
 											errorDigit = "0";
 										}
-										if ( errorDigit.equals( "2" ) ) {
-											// Grafik Fehler -> C
-											isValid = false;
+										try {
+											if ( errorDigit.equals( "2" ) ) {
+												// Grafik Fehler -> C
+												isValid = false;
+												getMessageService()
+														.logError(
+																getTextResourceService()
+																		.getText(
+																				MESSAGE_XML_MODUL_C_PDFA )
+																		+ getTextResourceService()
+																				.getText(
+																						errorCodeMsg,
+																						errorMessage ) );
+											}
+										} catch ( Exception e ) {
 											getMessageService()
 													.logError(
 															getTextResourceService()
@@ -964,7 +1003,8 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 																			MESSAGE_XML_MODUL_C_PDFA )
 																	+ getTextResourceService()
 																			.getText(
-																					errorCodeMsg,
+																					ERROR_XML_AI_TRANSLATE,
+																					errorCode,
 																					errorMessage ) );
 										}
 									}
@@ -1022,9 +1062,21 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 										if ( errorDigit.equals( "n" ) ) {
 											errorDigit = "0";
 										}
-										if ( errorDigit.equals( "3" ) ) {
-											// Schrift Fehler -> D
-											isValid = false;
+										try {
+											if ( errorDigit.equals( "3" ) ) {
+												// Schrift Fehler -> D
+												isValid = false;
+												getMessageService()
+														.logError(
+																getTextResourceService()
+																		.getText(
+																				MESSAGE_XML_MODUL_D_PDFA )
+																		+ getTextResourceService()
+																				.getText(
+																						errorCodeMsg,
+																						errorMessage ) );
+											}
+										} catch ( Exception e ) {
 											getMessageService()
 													.logError(
 															getTextResourceService()
@@ -1032,7 +1084,8 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 																			MESSAGE_XML_MODUL_D_PDFA )
 																	+ getTextResourceService()
 																			.getText(
-																					errorCodeMsg,
+																					ERROR_XML_AI_TRANSLATE,
+																					errorCode,
 																					errorMessage ) );
 										}
 									}
@@ -1077,9 +1130,21 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 										if ( errorDigit.equals( "n" ) ) {
 											errorDigit = "0";
 										}
-										if ( errorDigit.equals( "4" ) ) {
-											// Transparenz Fehler -> E
-											isValid = false;
+										try {
+											if ( errorDigit.equals( "4" ) ) {
+												// Transparenz Fehler -> E
+												isValid = false;
+												getMessageService()
+														.logError(
+																getTextResourceService()
+																		.getText(
+																				MESSAGE_XML_MODUL_E_PDFA )
+																		+ getTextResourceService()
+																				.getText(
+																						errorCodeMsg,
+																						errorMessage ) );
+											}
+										} catch ( Exception e ) {
 											getMessageService()
 													.logError(
 															getTextResourceService()
@@ -1087,7 +1152,8 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 																			MESSAGE_XML_MODUL_E_PDFA )
 																	+ getTextResourceService()
 																			.getText(
-																					errorCodeMsg,
+																					ERROR_XML_AI_TRANSLATE,
+																					errorCode,
 																					errorMessage ) );
 										}
 									}
@@ -1171,9 +1237,21 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 										if ( errorDigit.equals( "n" ) ) {
 											errorDigit = "0";
 										}
-										if ( errorDigit.equals( "5" ) ) {
-											// Annotations Fehler -> F
-											isValid = false;
+										try {
+											if ( errorDigit.equals( "5" ) ) {
+												// Annotations Fehler -> F
+												isValid = false;
+												getMessageService()
+														.logError(
+																getTextResourceService()
+																		.getText(
+																				MESSAGE_XML_MODUL_F_PDFA )
+																		+ getTextResourceService()
+																				.getText(
+																						errorCodeMsg,
+																						errorMessage ) );
+											}
+										} catch ( Exception e ) {
 											getMessageService()
 													.logError(
 															getTextResourceService()
@@ -1181,7 +1259,8 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 																			MESSAGE_XML_MODUL_F_PDFA )
 																	+ getTextResourceService()
 																			.getText(
-																					errorCodeMsg,
+																					ERROR_XML_AI_TRANSLATE,
+																					errorCode,
 																					errorMessage ) );
 										}
 									}
@@ -1226,9 +1305,37 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 										if ( errorDigit.equals( "n" ) ) {
 											errorDigit = "0";
 										}
-										if ( errorDigit.equals( "6" ) ) {
-											// Aktions Fehler -> G
-											isValid = false;
+										try {
+											if ( errorDigit.equals( "6" ) ) {
+												// Aktions Fehler -> G
+												isValid = false;
+												getMessageService()
+														.logError(
+																getTextResourceService()
+																		.getText(
+																				MESSAGE_XML_MODUL_G_PDFA )
+																		+ getTextResourceService()
+																				.getText(
+																						errorCodeMsg,
+																						errorMessage ) );
+											}
+											// neu sind die Interaktionen bei
+											// den
+											// Aktionen
+											if ( errorDigit.equals( "9" ) ) {
+												// Interaktions Fehler -> J
+												isValid = false;
+												getMessageService()
+														.logError(
+																getTextResourceService()
+																		.getText(
+																				MESSAGE_XML_MODUL_G_PDFA )
+																		+ getTextResourceService()
+																				.getText(
+																						errorCodeMsg,
+																						errorMessage ) );
+											}
+										} catch ( Exception e ) {
 											getMessageService()
 													.logError(
 															getTextResourceService()
@@ -1236,22 +1343,8 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 																			MESSAGE_XML_MODUL_G_PDFA )
 																	+ getTextResourceService()
 																			.getText(
-																					errorCodeMsg,
-																					errorMessage ) );
-										}
-										// neu sind die Interaktionen bei den
-										// Aktionen
-										if ( errorDigit.equals( "9" ) ) {
-											// Interaktions Fehler -> J
-											isValid = false;
-											getMessageService()
-													.logError(
-															getTextResourceService()
-																	.getText(
-																			MESSAGE_XML_MODUL_G_PDFA )
-																	+ getTextResourceService()
-																			.getText(
-																					errorCodeMsg,
+																					ERROR_XML_AI_TRANSLATE,
+																					errorCode,
 																					errorMessage ) );
 										}
 									}
@@ -1296,9 +1389,21 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 										if ( errorDigit.equals( "n" ) ) {
 											errorDigit = "0";
 										}
-										if ( errorDigit.equals( "7" ) ) {
-											// Metadaten Fehler -> H
-											isValid = false;
+										try {
+											if ( errorDigit.equals( "7" ) ) {
+												// Metadaten Fehler -> H
+												isValid = false;
+												getMessageService()
+														.logError(
+																getTextResourceService()
+																		.getText(
+																				MESSAGE_XML_MODUL_H_PDFA )
+																		+ getTextResourceService()
+																				.getText(
+																						errorCodeMsg,
+																						errorMessage ) );
+											}
+										} catch ( Exception e ) {
 											getMessageService()
 													.logError(
 															getTextResourceService()
@@ -1306,7 +1411,8 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 																			MESSAGE_XML_MODUL_H_PDFA )
 																	+ getTextResourceService()
 																			.getText(
-																					errorCodeMsg,
+																					ERROR_XML_AI_TRANSLATE,
+																					errorCode,
 																					errorMessage ) );
 										}
 									}
@@ -1351,9 +1457,21 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 										if ( errorDigit.equals( "n" ) ) {
 											errorDigit = "0";
 										}
-										if ( errorDigit.equals( "8" ) ) {
-											// Zugänglichkeit Fehler -> I
-											isValid = false;
+										try {
+											if ( errorDigit.equals( "8" ) ) {
+												// Zugänglichkeit Fehler -> I
+												isValid = false;
+												getMessageService()
+														.logError(
+																getTextResourceService()
+																		.getText(
+																				MESSAGE_XML_MODUL_I_PDFA )
+																		+ getTextResourceService()
+																				.getText(
+																						errorCodeMsg,
+																						errorMessage ) );
+											}
+										} catch ( Exception e ) {
 											getMessageService()
 													.logError(
 															getTextResourceService()
@@ -1361,7 +1479,8 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 																			MESSAGE_XML_MODUL_I_PDFA )
 																	+ getTextResourceService()
 																			.getText(
-																					errorCodeMsg,
+																					ERROR_XML_AI_TRANSLATE,
+																					errorCode,
 																					errorMessage ) );
 										}
 									}

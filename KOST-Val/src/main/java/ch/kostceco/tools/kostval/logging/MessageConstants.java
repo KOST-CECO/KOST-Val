@@ -229,6 +229,8 @@ public interface MessageConstants
 	String	ERROR_XML_AI_16								= "error.xml.ai.16";
 	String	ERROR_XML_AI_17								= "error.xml.ai.17";
 	String	ERROR_XML_AI_18								= "error.xml.ai.18";
+	
+	String	ERROR_XML_AI_TRANSLATE						= "error.xml.ai.translate";
 
 	// *************SIP-Meldungen*************************************************************************
 	// Modul 1a Meldungen
