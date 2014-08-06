@@ -188,6 +188,30 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		}
 		return null;
 	}
+	
+	@Override
+	public String firstValidator()
+	{
+		Object prop = getConfig().getProperty( "pdfa.firstvalidator" );
+
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
+	@Override
+	public String dualValidation()
+	{
+		Object prop = getConfig().getProperty( "pdfa.dualvalidation" );
+
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
 
 	/*--- SIARD ---------------------------------------------------------------------*/
 	@Override

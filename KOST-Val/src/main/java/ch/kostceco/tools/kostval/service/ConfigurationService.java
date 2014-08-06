@@ -170,6 +170,20 @@ public interface ConfigurationService extends Service
 	 * oder 2u oder no
 	 */
 	String pdfa2();
+	
+	/**
+	 * Gibt den Namen des Haupt-PDFA-Validator zurück.
+	 * 
+	 * @return Name zum Hauptvalidator
+	 */
+	String firstValidator();
+
+	/**
+	 * Gibt an ob eine duale PDF/A-Validierung gemacht werden soll oder nicht
+	 * 
+	 * @return dual oder simple
+	 */
+	String dualValidation();
 
 	/**
 	 * Gibt den Pfad zum Pdftron Exe zurück.
