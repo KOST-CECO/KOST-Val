@@ -138,6 +138,13 @@ public interface ConfigurationService extends Service
 	String getPathToLogfile();
 
 	/**
+	 * Gibt den Pfad zu den PDF-Diagnosedaten zurück.
+	 * 
+	 * @return Pfad zu PDF-Diagnosedaten
+	 */
+	String getPathToPdfDiagnose();
+
+	/**
 	 * Gibt an ob siard validiert werden soll yes oder no
 	 */
 	String siardValidation();

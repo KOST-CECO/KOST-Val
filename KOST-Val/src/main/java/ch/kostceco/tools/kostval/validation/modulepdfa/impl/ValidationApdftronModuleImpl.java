@@ -24,9 +24,13 @@ import static org.apache.commons.io.IOUtils.closeQuietly;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Arrays;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -107,6 +111,44 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 		 * entsprechenden Modul die property anzugeben: <property
 		 * name="configurationService" ref="configurationService" />
 		 */
+
+		// Vorberitung für eine allfällige Festhaltung bei unterschiedlichen
+		// Validierungsresultaten in einer PDF_Diagnosedatei
+		File pdfDia = null;
+		String pdfDiaPath = getConfigurationService().getPathToPdfDiagnose();
+
+		try {
+			pdfDia = new File( pdfDiaPath + "\\PDF-Diagnosedaten.kost-val.xml" );
+			if ( !pdfDia.exists() ) {
+				pdfDia.createNewFile();
+				PrintWriter output;
+				BufferedWriter buffer;
+				FileWriter fileWriter;
+				fileWriter = new FileWriter( pdfDia );
+				buffer = new BufferedWriter( fileWriter );
+				output = new PrintWriter( buffer );
+				try {
+					output.print( getTextResourceService().getText(
+							MESSAGE_XML_DIAHEADER )+"\n" );
+					output.print( getTextResourceService().getText(
+							MESSAGE_XML_DIAEND ) );
+				} finally {
+					output.close();
+					buffer.close();
+					fileWriter.close();
+				}
+			}
+			File xslDiaOrig = new File( "resources\\kost-val_PDFdia.xsl" );
+			File xslDiaCopy = new File( pdfDiaPath + "\\kost-val_PDFdia.xsl" );
+			if ( !xslDiaCopy.exists() ) {
+				Util.copyFile( xslDiaOrig, xslDiaCopy );
+			}
+		} catch ( IOException e ) {
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+							+ getTextResourceService().getText(
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
+		}
 
 		/*
 		 * Neu soll die Validierung mit PDFTron konfigurier bar sein Mögliche
@@ -292,7 +334,8 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 		boolean isValid = false;
 		boolean dual = false;
 
-		// Initialisierung PDFTron -> überprüfen der Angaben: existiert die PdftronExe am angebenen Ort?
+		// Initialisierung PDFTron -> überprüfen der Angaben: existiert die
+		// PdftronExe am angebenen Ort?
 		String pathToPdftronExe = getConfigurationService()
 				.getPathToPdftronExe();
 		String producerFirstValidator = getConfigurationService()
@@ -331,6 +374,10 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 			}
 		}
 		pathToPdftronExe = "\"" + pathToPdftronExe + "\"";
+
+		String pdfTools = "";
+		String pdfTron = "";
+		String newPdfDiaTxt = "";
 
 		try {
 			int iCategory = 999999999;
@@ -492,8 +539,8 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 								}
 
 								/*
-								 * ePDFA1a 5122 ePDFA1b 5121
-								 * ePDFA2a 5891 ePDFA2b 5889 ePDFA2u 5890
+								 * ePDFA1a 5122 ePDFA1b 5121 ePDFA2a 5891
+								 * ePDFA2b 5889 ePDFA2u 5890
 								 */
 								if ( level.contentEquals( "1A" ) ) {
 									if ( docPdf.open(
@@ -540,13 +587,21 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 
 								// Error Category
 								iCategory = docPdf.getCategories();
-								// die Zahl kann auch eine Summe von Kategorien sein z.B. 6144=2048+4096 -> getCategoryText gibt nur die erste Kategorie heraus (z.B. 2048)
+								// die Zahl kann auch eine Summe von Kategorien
+								// sein z.B. 6144=2048+4096 -> getCategoryText
+								// gibt nur die erste Kategorie heraus (z.B.
+								// 2048)
 
 								int success = 0;
 								int successEC = docPdf.getErrorCode();
 
 								PdfError err = docPdf.getFirstError();
+								PdfError err1 = docPdf.getFirstError();
+
+								@SuppressWarnings("unused")
+								int iError = 0;
 								while ( err != null ) {
+									iError = err1.getErrorCode();
 									success = success + 1;
 									// Get next error
 									err = docPdf.getNextError();
@@ -556,6 +611,40 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 										&& iCategory == 0 ) {
 									// valide
 									isValid = true;
+
+									// Diskrepanz => PDF-Diagnosedaten
+									// ErrorCodes von PDFTron holen
+									NodeList nodeLst = doc
+											.getElementsByTagName( "Error" );
+									String errorCodes = "";
+									for ( int s = 0; s < nodeLst.getLength(); s++ ) {
+										Node dateiNode = nodeLst.item( s );
+										NamedNodeMap nodeMap = dateiNode
+												.getAttributes();
+										Node errorNode = nodeMap
+												.getNamedItem( "Code" );
+										String errorCode = errorNode
+												.getNodeValue();
+										errorCodes = errorCodes + "  "
+												+ errorCode;
+									}
+
+									pdfTools = "<PDFTools><ErrorCode>0</ErrorCode><iCategory>0</iCategory><iError>0</iError></PDFTools>";
+									pdfTron = "<PDFTron><Code>" + errorCodes
+											+ "</Code></PDFTron>";
+									newPdfDiaTxt = "<Validation><ValFile>"
+											+ valDatei.getAbsolutePath()
+											+ "</ValFile><PdfaVL>"
+											+ level
+											+ "</PdfaVL>"
+											+ pdfTools
+											+ pdfTron
+											+ "</Validation>\n"
+											+ getTextResourceService().getText(
+													MESSAGE_XML_DIAEND );
+									Util.pdfDia( newPdfDiaTxt, pdfDia );
+									Util.amp( pdfDia );
+
 								} else {
 									// invalid
 									isValid = false;
@@ -618,8 +707,8 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 					}
 
 					/*
-					 * ePDFA1a 5122 ePDFA1b 5121
-					 * ePDFA2a 5891 ePDFA2b 5889 ePDFA2u 5890
+					 * ePDFA1a 5122 ePDFA1b 5121 ePDFA2a 5891 ePDFA2b 5889
+					 * ePDFA2u 5890
 					 */
 					if ( level.contentEquals( "1A" ) ) {
 						if ( docPdf.open( valDatei.getAbsolutePath(), "", 5122 ) ) {
@@ -654,13 +743,19 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 
 					// Error Category
 					iCategory = docPdf.getCategories();
-					// die Zahl kann auch eine Summe von Kategorien sein z.B. 6144=2048+4096 -> getCategoryText gibt nur die erste Kategorie heraus (z.B. 2048)
+					// die Zahl kann auch eine Summe von Kategorien sein z.B.
+					// 6144=2048+4096 -> getCategoryText gibt nur die erste
+					// Kategorie heraus (z.B. 2048)
 
 					int success = 0;
 					int successEC = docPdf.getErrorCode();
 
 					PdfError err = docPdf.getFirstError();
+					PdfError err1 = docPdf.getFirstError();
+
+					int iError = 0;
 					while ( err != null ) {
+						iError = err1.getErrorCode();
 						success = success + 1;
 						// Get next error
 						err = docPdf.getNextError();
@@ -700,7 +795,8 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 									rt = Runtime.getRuntime();
 									proc = rt.exec( command.toString().split(
 											" " ) );
-									// .split(" ") ist notwendig wenn in einem Pfad ein Doppelleerschlag vorhanden ist!
+									// .split(" ") ist notwendig wenn in einem
+									// Pfad ein Doppelleerschlag vorhanden ist!
 
 									Util.switchOffConsole();
 
@@ -721,7 +817,10 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 
 									Util.switchOnConsole();
 
-									// Der Name des generierten Reports lautet per default report.xml und es scheint keine Möglichkeit zu geben, dies zu übersteuern.
+									// Der Name des generierten Reports lautet
+									// per default report.xml und es scheint
+									// keine Möglichkeit zu geben, dies zu
+									// übersteuern.
 									report = new File( pathToPdftronOutput,
 											"report.xml" );
 									File newReport = new File(
@@ -729,7 +828,9 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 											valDatei.getName()
 													+ ".pdftron-log.xml" );
 
-									// falls das File bereits existiert, z.B. von einem vorhergehenden Durchlauf, löschen wir es
+									// falls das File bereits existiert, z.B.
+									// von einem vorhergehenden Durchlauf,
+									// löschen wir es
 									if ( newReport.exists() ) {
 										newReport.delete();
 									}
@@ -785,6 +886,28 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 									// Valide PDFA-Datei
 									// Module A-J sind Valid
 									isValid = true;
+
+									// Diskrepanz => PDF-Diagnosedaten
+									pdfTools = "<PDFTools><ErrorCode>"
+											+ successEC
+											+ "</ErrorCode><iCategory>"
+											+ iCategory
+											+ "</iCategory><iError>" + iError
+											+ "</iError></PDFTools>";
+									pdfTron = "<PDFTron><Code>Pass</Code></PDFTron>";
+									newPdfDiaTxt = "<Validation><ValFile>"
+											+ valDatei.getAbsolutePath()
+											+ "</ValFile><PdfaVL>"
+											+ level
+											+ "</PdfaVL>"
+											+ pdfTools
+											+ pdfTron
+											+ "</Validation>\n"
+											+ getTextResourceService().getText(
+													MESSAGE_XML_DIAEND );
+									Util.pdfDia( newPdfDiaTxt, pdfDia );
+									Util.amp( pdfDia );
+
 								}
 								if ( passCount == 0 ) {
 									// Invalide PDFA-Datei (doppelt bestätigt)
@@ -944,7 +1067,8 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 				Document doc = null;
 
 				if ( producerFirstValidator.contentEquals( "PDFTron" ) || dual ) {
-					// aus dem Output von Pdftron die Fehlercodes extrahieren und übersetzen
+					// aus dem Output von Pdftron die Fehlercodes extrahieren
+					// und übersetzen
 
 					String pathToPdftronReport = report.getAbsolutePath();
 					BufferedInputStream bis = new BufferedInputStream(
@@ -955,7 +1079,8 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 					doc = db.parse( bis );
 					doc.normalize();
 
-					// Bsp. für einen Error Code: <Error Code="e_PDFA173" die erste Ziffer nach e_PDFA ist der Error Code.
+					// Bsp. für einen Error Code: <Error Code="e_PDFA173" die
+					// erste Ziffer nach e_PDFA ist der Error Code.
 				}
 				/** Modul A **/
 				if ( exponent1 ) {
@@ -975,7 +1100,8 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 											ERROR_XML_AI_2, sCategory ) );
 				}
 				if ( producerFirstValidator.contentEquals( "PDFTron" ) || dual ) {
-					// aus dem Output von Pdftron die Fehlercodes extrahieren und übersetzen
+					// aus dem Output von Pdftron die Fehlercodes extrahieren
+					// und übersetzen
 
 					String errorDigitA = "Fehler";
 
@@ -995,7 +1121,8 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 						String errorMessage = errorNodeM.getNodeValue();
 						errorDigitA = errorCode.substring( 6, 7 );
 
-						// der Error Code kann auch "Unknown" sein, dieser wird in den Code "0" übersetzt
+						// der Error Code kann auch "Unknown" sein, dieser wird
+						// in den Code "0" übersetzt
 						if ( errorDigitA.equals( "U" ) ) {
 							errorDigitA = "0";
 						}
@@ -1358,7 +1485,8 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 														.getText( errorCodeMsg,
 																errorMessage ) );
 							}
-							// neu sind die Interaktionen (J) bei den Aktionen (G)
+							// neu sind die Interaktionen (J) bei den Aktionen
+							// (G)
 							if ( errorDigit.equals( "9" ) ) {
 								// Interaktions Fehler -> J
 								isValid = false;

@@ -1,5 +1,5 @@
 /*== KOST-Val ==================================================================================
-The KOST-Val v1.4.2 application is used for validate TIFF, SIARD, PDF/A-Files and Submission 
+The KOST-Val v1.4.3 application is used for validate TIFF, SIARD, PDF/A-Files and Submission 
 Information Package (SIP). 
 Copyright (C) 2012-2014 Claire Röthlisberger (KOST-CECO), Christian Eugster, Olivier Debenath, 
 Peter Schneider (Staatsarchiv Aargau), Daniel Ludin (BEDAG AG)
@@ -225,6 +225,29 @@ public class KOSTVal implements MessageConstants
 			System.out.println( kostval.getTextResourceService().getText(
 					ERROR_WORKDIRECTORY_NOTWRITABLE, tmpDir ) );
 			System.exit( 1 );
+		}
+
+		// Vorberitung für eine allfällige Festhaltung bei unterschiedlichen
+		// PDFA-Validierungsresultaten in einer PDF_Diagnosedatei
+		File pdfDia = null;
+		String pdfDiaPath = kostval.getConfigurationService()
+				.getPathToPdfDiagnose();
+
+		// Im diaverzeichnis besteht kein Schreibrecht
+		File diaDir = new File( pdfDiaPath );
+
+		if ( !diaDir.canWrite() ) {
+			LOGGER.logError( kostval.getTextResourceService().getText(
+					ERROR_IOE,
+					kostval.getTextResourceService().getText(
+							ERROR_DIADIRECTORY_NOTWRITABLE, diaDir ) ) );
+			System.out.println( kostval.getTextResourceService().getText(
+					ERROR_DIADIRECTORY_NOTWRITABLE, diaDir ) );
+			System.exit( 1 );
+		}
+		
+		if ( !diaDir.exists() ) {
+			diaDir.mkdir();
 		}
 
 		// Ueberprüfung des optionalen Parameters (2 -v --> im Verbose-mode
@@ -1128,19 +1151,15 @@ public class KOSTVal implements MessageConstants
 			}
 
 			// Ausgabe der Pfade zu den Pdftron Reports, falls welche
-			// generiert wurden (-v) oder Pdftron Reports löschen
+			// generiert wurden Pdftron Reports löschen
 			File pdftronReport = new File( directoryOfLogfile,
 					valDatei.getName() + ".pdftron-log.xml" );
 			File pdftronXsl = new File( directoryOfLogfile, "report.xsl" );
 
 			if ( pdftronReport.exists() ) {
-				if ( verbose ) {
-					// optionaler Parameter --> PDFTron-Report lassen
-				} else {
-					// kein optionaler Parameter --> PDFTron-Report loeschen!
-					pdftronReport.delete();
-					pdftronXsl.delete();
-				}
+				// PDFTron-Report loeschen!
+				pdftronReport.delete();
+				pdftronXsl.delete();
 			}
 
 		} else {

@@ -277,6 +277,33 @@ public class Util
 	}
 
 	/**
+	 * Ergänzt die PDF_Diagnosedaten mit einer weiteren Fall
+	 * 
+	 * ! Solche Ersetzungen dürfen nicht in einer Schleife gemacht werden
+	 * sondern erst am Schluss, da diese sehr Zeitintensiv sind !!!
+	 * 
+	 * @throws IOException
+	 */
+	public static void pdfDia( String string, File file ) throws IOException
+	{
+		try {
+			BufferedReader reader = new BufferedReader( new FileReader( file ) );
+			String line = "", oldtext = "";
+			while ( (line = reader.readLine()) != null ) {
+				oldtext += line + "\r\n";
+			}
+			reader.close();
+			String newtext = oldtext.replace( "</KOSTVal_PDF-Diagnose>", string );
+			newtext = newtext.replace( (char) 0, (char) 32 );
+			FileWriter writer = new FileWriter( file );
+			writer.write( newtext );
+			writer.close();
+		} catch ( IOException ioe ) {
+			ioe.printStackTrace();
+		}
+	}
+
+	/**
 	 * Verändert & mit &amp;
 	 * 
 	 * ! Solche Ersetzungen dürfen nicht in einer Schleife gemacht werden
