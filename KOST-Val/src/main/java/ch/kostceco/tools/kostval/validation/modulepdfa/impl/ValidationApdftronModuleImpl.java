@@ -45,7 +45,6 @@ import com.pdftools.pdfvalidator.PdfError;
 import com.pdftools.pdfvalidator.PdfValidatorAPI;
 import com.pdftools.NativeLibrary;
 
-import ch.kostceco.tools.kostval.exception.SystemException;
 import ch.kostceco.tools.kostval.exception.modulepdfa.ValidationApdftronException;
 import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.util.StreamGobbler;
@@ -129,7 +128,8 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 				output = new PrintWriter( buffer );
 				try {
 					output.print( getTextResourceService().getText(
-							MESSAGE_XML_DIAHEADER )+"\n" );
+							MESSAGE_XML_DIAHEADER )
+							+ "\n" );
 					output.print( getTextResourceService().getText(
 							MESSAGE_XML_DIAEND ) );
 				} finally {
@@ -411,12 +411,23 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 					Runtime rt = null;
 
 					try {
+						// Der Name des generierten Reports lautet per default
+						// report.xml und es scheint keine
+						// Möglichkeit zu geben, dies zu übersteuern.
+						report = new File( pathToPdftronOutput, "report.xml" );
+
+						// falls das File bereits existiert, z.B. von einem
+						// vorhergehenden Durchlauf, löschen wir es
+						if ( report.exists() ) {
+							report.delete();
+						}
+
+						Util.switchOffConsole();
+
 						rt = Runtime.getRuntime();
 						proc = rt.exec( command.toString().split( " " ) );
 						// .split(" ") ist notwendig wenn in einem Pfad ein
 						// Doppelleerschlag vorhanden ist!
-
-						Util.switchOffConsole();
 
 						// Fehleroutput holen
 						StreamGobbler errorGobbler = new StreamGobbler(
@@ -434,27 +445,6 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 						proc.waitFor();
 
 						Util.switchOnConsole();
-
-						// Der Name des generierten Reports lautet per default
-						// report.xml und es scheint keine
-						// Möglichkeit zu geben, dies zu übersteuern.
-						report = new File( pathToPdftronOutput, "report.xml" );
-						File newReport = new File( pathToPdftronOutput,
-								valDatei.getName() + ".pdftron-log.xml" );
-
-						// falls das File bereits existiert, z.B. von einem
-						// vorhergehenden Durchlauf, löschen wir es
-						if ( newReport.exists() ) {
-							newReport.delete();
-						}
-
-						boolean renameOk = report.renameTo( newReport );
-						if ( !renameOk ) {
-							throw new SystemException(
-									"Der Report konnte nicht umbenannt werden." );
-						}
-						report = newReport;
-
 					} catch ( Exception e ) {
 						getMessageService().logError(
 								getTextResourceService().getText(
@@ -792,13 +782,28 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 								Runtime rt = null;
 
 								try {
+									// Der Name des generierten Reports lautet
+									// per default
+									// report.xml und es scheint keine
+									// Möglichkeit zu geben, dies zu
+									// übersteuern.
+									report = new File( pathToPdftronOutput,
+											"report.xml" );
+
+									// falls das File bereits existiert, z.B.
+									// von einem
+									// vorhergehenden Durchlauf, löschen wir es
+									if ( report.exists() ) {
+										report.delete();
+									}
+
+									Util.switchOffConsole();
+
 									rt = Runtime.getRuntime();
 									proc = rt.exec( command.toString().split(
 											" " ) );
 									// .split(" ") ist notwendig wenn in einem
 									// Pfad ein Doppelleerschlag vorhanden ist!
-
-									Util.switchOffConsole();
 
 									// Fehleroutput holen
 									StreamGobbler errorGobbler = new StreamGobbler(
@@ -816,33 +821,6 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 									proc.waitFor();
 
 									Util.switchOnConsole();
-
-									// Der Name des generierten Reports lautet
-									// per default report.xml und es scheint
-									// keine Möglichkeit zu geben, dies zu
-									// übersteuern.
-									report = new File( pathToPdftronOutput,
-											"report.xml" );
-									File newReport = new File(
-											pathToPdftronOutput,
-											valDatei.getName()
-													+ ".pdftron-log.xml" );
-
-									// falls das File bereits existiert, z.B.
-									// von einem vorhergehenden Durchlauf,
-									// löschen wir es
-									if ( newReport.exists() ) {
-										newReport.delete();
-									}
-
-									boolean renameOk = report
-											.renameTo( newReport );
-									if ( !renameOk ) {
-										throw new SystemException(
-												"Der Report konnte nicht umbenannt werden." );
-									}
-									report = newReport;
-
 								} catch ( Exception e ) {
 									getMessageService()
 											.logError(
@@ -939,7 +917,6 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 
 			if ( !isValid ) {
 				// Invalide PDFA-Datei
-				String sCategory = "";
 
 				boolean exponent0 = false;
 				boolean exponent1 = false;
@@ -1063,7 +1040,7 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 				}
 
 				File report = new File( directoryOfLogfile.getAbsolutePath(),
-						valDatei.getName() + ".pdftron-log.xml" );
+						"report.xml" );
 				Document doc = null;
 
 				if ( producerFirstValidator.contentEquals( "PDFTron" ) || dual ) {
@@ -1084,20 +1061,18 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 				}
 				/** Modul A **/
 				if ( exponent1 ) {
-					sCategory = docPdf.getCategoryText( iExp1 );
 					getMessageService().logError(
 							getTextResourceService().getText(
 									MESSAGE_XML_MODUL_A_PDFA )
 									+ getTextResourceService().getText(
-											ERROR_XML_AI_1, sCategory ) );
+											ERROR_XML_AI_1, "iCategory_1" ) );
 				}
 				if ( exponent2 ) {
-					sCategory = docPdf.getCategoryText( iExp2 );
 					getMessageService().logError(
 							getTextResourceService().getText(
 									MESSAGE_XML_MODUL_A_PDFA )
 									+ getTextResourceService().getText(
-											ERROR_XML_AI_2, sCategory ) );
+											ERROR_XML_AI_2, "iCategory_2" ) );
 				}
 				if ( producerFirstValidator.contentEquals( "PDFTron" ) || dual ) {
 					// aus dem Output von Pdftron die Fehlercodes extrahieren
@@ -1139,7 +1114,7 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 												MESSAGE_XML_MODUL_A_PDFA )
 												+ getTextResourceService()
 														.getText( errorCodeMsg,
-																errorMessage ) );
+																errorCode ) );
 							}
 						} catch ( Exception e ) {
 							getMessageService().logError(
@@ -1166,28 +1141,25 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 
 				/** Modul B **/
 				if ( exponent0 ) {
-					sCategory = docPdf.getCategoryText( iExp0 );
 					getMessageService().logError(
 							getTextResourceService().getText(
 									MESSAGE_XML_MODUL_B_PDFA )
 									+ getTextResourceService().getText(
-											ERROR_XML_AI_0, sCategory ) );
+											ERROR_XML_AI_0, "iCategory_0" ) );
 				}
 				if ( exponent7 ) {
-					sCategory = docPdf.getCategoryText( iExp7 );
 					getMessageService().logError(
 							getTextResourceService().getText(
 									MESSAGE_XML_MODUL_B_PDFA )
 									+ getTextResourceService().getText(
-											ERROR_XML_AI_7, sCategory ) );
+											ERROR_XML_AI_7, "iCategory_7" ) );
 				}
 				if ( exponent18 ) {
-					sCategory = docPdf.getCategoryText( iExp18 );
 					getMessageService().logError(
 							getTextResourceService().getText(
 									MESSAGE_XML_MODUL_B_PDFA )
 									+ getTextResourceService().getText(
-											ERROR_XML_AI_18, sCategory ) );
+											ERROR_XML_AI_18, "iCategory_18" ) );
 				}
 				if ( producerFirstValidator.contentEquals( "PDFTron" ) || dual ) {
 					// Analog Modul A
@@ -1211,7 +1183,7 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 												MESSAGE_XML_MODUL_B_PDFA )
 												+ getTextResourceService()
 														.getText( errorCodeMsg,
-																errorMessage ) );
+																errorCode ) );
 							}
 						} catch ( Exception e ) {
 							getMessageService().logError(
@@ -1226,36 +1198,32 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 
 				/** Modul C **/
 				if ( exponent3 ) {
-					sCategory = docPdf.getCategoryText( iExp3 );
 					getMessageService().logError(
 							getTextResourceService().getText(
 									MESSAGE_XML_MODUL_C_PDFA )
 									+ getTextResourceService().getText(
-											ERROR_XML_AI_3, sCategory ) );
+											ERROR_XML_AI_3, "iCategory_3" ) );
 				}
 				if ( exponent4 ) {
-					sCategory = docPdf.getCategoryText( iExp4 );
 					getMessageService().logError(
 							getTextResourceService().getText(
 									MESSAGE_XML_MODUL_C_PDFA )
 									+ getTextResourceService().getText(
-											ERROR_XML_AI_4, sCategory ) );
+											ERROR_XML_AI_4, "iCategory_4" ) );
 				}
 				if ( exponent5 ) {
-					sCategory = docPdf.getCategoryText( iExp5 );
 					getMessageService().logError(
 							getTextResourceService().getText(
 									MESSAGE_XML_MODUL_C_PDFA )
 									+ getTextResourceService().getText(
-											ERROR_XML_AI_5, sCategory ) );
+											ERROR_XML_AI_5, "iCategory_5" ) );
 				}
 				if ( exponent6 ) {
-					sCategory = docPdf.getCategoryText( iExp6 );
 					getMessageService().logError(
 							getTextResourceService().getText(
 									MESSAGE_XML_MODUL_C_PDFA )
 									+ getTextResourceService().getText(
-											ERROR_XML_AI_6, sCategory ) );
+											ERROR_XML_AI_6, "iCategory_6" ) );
 				}
 				if ( producerFirstValidator.contentEquals( "PDFTron" ) || dual ) {
 					// Analog Modul A
@@ -1279,7 +1247,7 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 												MESSAGE_XML_MODUL_C_PDFA )
 												+ getTextResourceService()
 														.getText( errorCodeMsg,
-																errorMessage ) );
+																errorCode ) );
 							}
 						} catch ( Exception e ) {
 							getMessageService().logError(
@@ -1293,20 +1261,18 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 				}
 				/** Modul D **/
 				if ( exponent8 ) {
-					sCategory = docPdf.getCategoryText( iExp8 );
 					getMessageService().logError(
 							getTextResourceService().getText(
 									MESSAGE_XML_MODUL_D_PDFA )
 									+ getTextResourceService().getText(
-											ERROR_XML_AI_8, sCategory ) );
+											ERROR_XML_AI_8, "iCategory_8" ) );
 				}
 				if ( exponent9 ) {
-					sCategory = docPdf.getCategoryText( iExp9 );
 					getMessageService().logError(
 							getTextResourceService().getText(
 									MESSAGE_XML_MODUL_D_PDFA )
 									+ getTextResourceService().getText(
-											ERROR_XML_AI_9, sCategory ) );
+											ERROR_XML_AI_9, "iCategory_9" ) );
 				}
 				if ( producerFirstValidator.contentEquals( "PDFTron" ) || dual ) {
 					// Analog Modul A
@@ -1330,7 +1296,7 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 												MESSAGE_XML_MODUL_D_PDFA )
 												+ getTextResourceService()
 														.getText( errorCodeMsg,
-																errorMessage ) );
+																errorCode ) );
 							}
 						} catch ( Exception e ) {
 							getMessageService().logError(
@@ -1344,12 +1310,11 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 				}
 				/** Modul E **/
 				if ( exponent10 ) {
-					sCategory = docPdf.getCategoryText( iExp10 );
 					getMessageService().logError(
 							getTextResourceService().getText(
 									MESSAGE_XML_MODUL_E_PDFA )
 									+ getTextResourceService().getText(
-											ERROR_XML_AI_10, sCategory ) );
+											ERROR_XML_AI_10, "iCategory_10" ) );
 				}
 				if ( producerFirstValidator.contentEquals( "PDFTron" ) || dual ) {
 					// Analog Modul A
@@ -1373,7 +1338,7 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 												MESSAGE_XML_MODUL_E_PDFA )
 												+ getTextResourceService()
 														.getText( errorCodeMsg,
-																errorMessage ) );
+																errorCode ) );
 							}
 						} catch ( Exception e ) {
 							getMessageService().logError(
@@ -1387,36 +1352,32 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 				}
 				/** Modul F **/
 				if ( exponent11 ) {
-					sCategory = docPdf.getCategoryText( iExp11 );
 					getMessageService().logError(
 							getTextResourceService().getText(
 									MESSAGE_XML_MODUL_F_PDFA )
 									+ getTextResourceService().getText(
-											ERROR_XML_AI_11, sCategory ) );
+											ERROR_XML_AI_11, "iCategory_11" ) );
 				}
 				if ( exponent12 ) {
-					sCategory = docPdf.getCategoryText( iExp12 );
 					getMessageService().logError(
 							getTextResourceService().getText(
 									MESSAGE_XML_MODUL_F_PDFA )
 									+ getTextResourceService().getText(
-											ERROR_XML_AI_12, sCategory ) );
+											ERROR_XML_AI_12, "iCategory_12" ) );
 				}
 				if ( exponent13 ) {
-					sCategory = docPdf.getCategoryText( iExp13 );
 					getMessageService().logError(
 							getTextResourceService().getText(
 									MESSAGE_XML_MODUL_F_PDFA )
 									+ getTextResourceService().getText(
-											ERROR_XML_AI_13, sCategory ) );
+											ERROR_XML_AI_13, "iCategory_13" ) );
 				}
 				if ( exponent14 ) {
-					sCategory = docPdf.getCategoryText( iExp14 );
 					getMessageService().logError(
 							getTextResourceService().getText(
 									MESSAGE_XML_MODUL_F_PDFA )
 									+ getTextResourceService().getText(
-											ERROR_XML_AI_14, sCategory ) );
+											ERROR_XML_AI_14, "iCategory_14" ) );
 				}
 				if ( producerFirstValidator.contentEquals( "PDFTron" ) || dual ) {
 					// Analog Modul A
@@ -1440,7 +1401,7 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 												MESSAGE_XML_MODUL_F_PDFA )
 												+ getTextResourceService()
 														.getText( errorCodeMsg,
-																errorMessage ) );
+																errorCode ) );
 							}
 						} catch ( Exception e ) {
 							getMessageService().logError(
@@ -1454,12 +1415,11 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 				}
 				/** Modul G **/
 				if ( exponent15 ) {
-					sCategory = docPdf.getCategoryText( iExp15 );
 					getMessageService().logError(
 							getTextResourceService().getText(
 									MESSAGE_XML_MODUL_G_PDFA )
 									+ getTextResourceService().getText(
-											ERROR_XML_AI_15, sCategory ) );
+											ERROR_XML_AI_15, "iCategory_15" ) );
 				}
 				if ( producerFirstValidator.contentEquals( "PDFTron" ) || dual ) {
 					// Analog Modul A
@@ -1483,7 +1443,7 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 												MESSAGE_XML_MODUL_G_PDFA )
 												+ getTextResourceService()
 														.getText( errorCodeMsg,
-																errorMessage ) );
+																errorCode ) );
 							}
 							// neu sind die Interaktionen (J) bei den Aktionen
 							// (G)
@@ -1495,7 +1455,7 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 												MESSAGE_XML_MODUL_G_PDFA )
 												+ getTextResourceService()
 														.getText( errorCodeMsg,
-																errorMessage ) );
+																errorCode ) );
 							}
 						} catch ( Exception e ) {
 							getMessageService().logError(
@@ -1509,12 +1469,11 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 				}
 				/** Modul H **/
 				if ( exponent16 ) {
-					sCategory = docPdf.getCategoryText( iExp16 );
 					getMessageService().logError(
 							getTextResourceService().getText(
 									MESSAGE_XML_MODUL_H_PDFA )
 									+ getTextResourceService().getText(
-											ERROR_XML_AI_16, sCategory ) );
+											ERROR_XML_AI_16, "iCategory_16" ) );
 				}
 				if ( producerFirstValidator.contentEquals( "PDFTron" ) || dual ) {
 					// Analog Modul A
@@ -1538,7 +1497,7 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 												MESSAGE_XML_MODUL_H_PDFA )
 												+ getTextResourceService()
 														.getText( errorCodeMsg,
-																errorMessage ) );
+																errorCode ) );
 							}
 						} catch ( Exception e ) {
 							getMessageService().logError(
@@ -1552,12 +1511,11 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 				}
 				/** Modul I **/
 				if ( exponent17 ) {
-					sCategory = docPdf.getCategoryText( iExp17 );
 					getMessageService().logError(
 							getTextResourceService().getText(
 									MESSAGE_XML_MODUL_I_PDFA )
 									+ getTextResourceService().getText(
-											ERROR_XML_AI_17, sCategory ) );
+											ERROR_XML_AI_17, "iCategory_17" ) );
 				}
 				if ( producerFirstValidator.contentEquals( "PDFTron" ) || dual ) {
 					// Analog Modul A
@@ -1581,7 +1539,7 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 												MESSAGE_XML_MODUL_I_PDFA )
 												+ getTextResourceService()
 														.getText( errorCodeMsg,
-																errorMessage ) );
+																errorCode ) );
 							}
 						} catch ( Exception e ) {
 							getMessageService().logError(

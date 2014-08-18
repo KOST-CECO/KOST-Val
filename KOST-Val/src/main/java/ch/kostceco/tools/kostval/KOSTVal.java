@@ -1153,7 +1153,7 @@ public class KOSTVal implements MessageConstants
 			// Ausgabe der Pfade zu den Pdftron Reports, falls welche
 			// generiert wurden Pdftron Reports löschen
 			File pdftronReport = new File( directoryOfLogfile,
-					valDatei.getName() + ".pdftron-log.xml" );
+					"report.xml" );
 			File pdftronXsl = new File( directoryOfLogfile, "report.xsl" );
 
 			if ( pdftronReport.exists() ) {
