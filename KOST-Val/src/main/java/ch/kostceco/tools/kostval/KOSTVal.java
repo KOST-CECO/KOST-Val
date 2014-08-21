@@ -1,5 +1,5 @@
 /*== KOST-Val ==================================================================================
-The KOST-Val v1.4.3 application is used for validate TIFF, SIARD, PDF/A-Files and Submission 
+The KOST-Val v1.4.4 application is used for validate TIFF, SIARD, PDF/A-Files and Submission 
 Information Package (SIP). 
 Copyright (C) 2012-2014 Claire Röthlisberger (KOST-CECO), Christian Eugster, Olivier Debenath, 
 Peter Schneider (Staatsarchiv Aargau), Daniel Ludin (BEDAG AG)
@@ -29,8 +29,15 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import ch.kostceco.tools.kostval.controller.Controllersip;
 import ch.kostceco.tools.kostval.controller.Controllertiff;
@@ -229,12 +236,15 @@ public class KOSTVal implements MessageConstants
 
 		// Vorberitung für eine allfällige Festhaltung bei unterschiedlichen
 		// PDFA-Validierungsresultaten in einer PDF_Diagnosedatei
-		File pdfDia = null;
-		String pdfDiaPath = kostval.getConfigurationService()
-				.getPathToPdfDiagnose();
+		// sowie Zähler der SIP-Dateiformate
+		String diaPath = kostval.getConfigurationService().getPathToDiagnose();
 
 		// Im diaverzeichnis besteht kein Schreibrecht
-		File diaDir = new File( pdfDiaPath );
+		File diaDir = new File( diaPath );
+
+		if ( !diaDir.exists() ) {
+			diaDir.mkdir();
+		}
 
 		if ( !diaDir.canWrite() ) {
 			LOGGER.logError( kostval.getTextResourceService().getText(
@@ -245,9 +255,17 @@ public class KOSTVal implements MessageConstants
 					ERROR_DIADIRECTORY_NOTWRITABLE, diaDir ) );
 			System.exit( 1 );
 		}
-		
-		if ( !diaDir.exists() ) {
-			diaDir.mkdir();
+
+		File xmlDiaOrig = new File( "resources\\KaD-Diagnosedaten.kost-val.xml" );
+		File xmlDiaCopy = new File( diaPath
+				+ "\\KaD-Diagnosedaten.kost-val.xml" );
+		if ( !xmlDiaCopy.exists() ) {
+			Util.copyFile( xmlDiaOrig, xmlDiaCopy );
+		}
+		File xslDiaOrig = new File( "resources\\kost-val_KaDdia.xsl" );
+		File xslDiaCopy = new File( diaPath + "\\kost-val_KaDdia.xsl" );
+		if ( !xslDiaCopy.exists() ) {
+			Util.copyFile( xslDiaOrig, xslDiaCopy );
 		}
 
 		// Ueberprüfung des optionalen Parameters (2 -v --> im Verbose-mode
@@ -359,6 +377,7 @@ public class KOSTVal implements MessageConstants
 				// --> erledigt --> nur Marker
 				Map<String, File> fileMap = Util.getFileMap( valDatei, false );
 				Set<String> fileMapKeys = fileMap.keySet();
+
 				for ( Iterator<String> iterator = fileMapKeys.iterator(); iterator
 						.hasNext(); ) {
 					String entryName = iterator.next();
@@ -744,6 +763,30 @@ public class KOSTVal implements MessageConstants
 			// Vorgängige Formatvalidierung (Schritt 3c)
 			Map<String, File> fileMap = Util.getFileMap( valDatei, false );
 			Set<String> fileMapKeys = fileMap.keySet();
+
+			int pdf = 0;
+			int tiff = 0;
+			int siard = 0;
+			int txt = 0;
+			int csv = 0;
+			int xml = 0;
+			int xsd = 0;
+			int wave = 0;
+			int mp3 = 0;
+			int jp2 = 0;
+			int jpx = 0;
+			int jpeg = 0;
+			int png = 0;
+			int dng = 0;
+			int svg = 0;
+			int mpeg2 = 0;
+			int mp4 = 0;
+			int xls = 0;
+			int odt = 0;
+			int ods = 0;
+			int odp = 0;
+			int other = 0;
+
 			for ( Iterator<String> iterator = fileMapKeys.iterator(); iterator
 					.hasNext(); ) {
 				String entryName = iterator.next();
@@ -753,6 +796,81 @@ public class KOSTVal implements MessageConstants
 						&& newFile.getAbsolutePath().contains( "\\content\\" ) ) {
 					valDatei = newFile;
 					count = count + 1;
+
+					// Ausgabe Dateizähler
+					// Ersichtlich das KOST-Val Dateien durchsucht
+					System.out.print( count + "   " );
+					System.out.print( "\r" );
+
+					String extension = valDatei.getName();
+					int lastIndexOf = extension.lastIndexOf( "." );
+					if ( lastIndexOf == -1 ) {
+						// empty extension
+						extension = "other";
+					} else {
+						extension = extension.substring( lastIndexOf );
+					}
+
+					if ( extension.equals( ".pdf" )
+							|| extension.equals( ".pdfa" ) ) {
+						pdf = pdf + 1;
+					} else if ( extension.equals( ".tiff" )
+							|| extension.equals( ".tif" ) ) {
+						tiff = tiff + 1;
+					} else if ( extension.equals( ".siard" ) ) {
+						siard = siard + 1;
+					} else if ( extension.equals( ".txt" ) ) {
+						txt = txt + 1;
+					} else if ( extension.equals( ".csv" ) ) {
+						csv = csv + 1;
+					} else if ( extension.equals( ".xml" ) ) {
+						xml = xml + 1;
+					} else if ( extension.equals( ".xsd" ) ) {
+						xsd = xsd + 1;
+					} else if ( extension.equals( ".wav" ) ) {
+						wave = wave + 1;
+					} else if ( extension.equals( ".mp3" ) ) {
+						mp3 = mp3 + 1;
+					} else if ( extension.equals( ".jp2" ) ) {
+						jp2 = jp2 + 1;
+					} else if ( extension.equals( ".jpx" )
+							|| extension.equals( ".jpf" ) ) {
+						jpx = jpx + 1;
+					} else if ( extension.equals( ".jpe" )
+							|| extension.equals( ".jpeg" )
+							|| extension.equals( ".jpg" ) ) {
+						jpeg = jpeg + 1;
+					} else if ( extension.equals( ".png" ) ) {
+						png = png + 1;
+					} else if ( extension.equals( ".dng" ) ) {
+						dng = dng + 1;
+					} else if ( extension.equals( ".svg" ) ) {
+						svg = svg + 1;
+					} else if ( extension.equals( ".mpeg" )
+							|| extension.equals( ".mpg" ) ) {
+						mpeg2 = mpeg2 + 1;
+					} else if ( extension.equals( ".f4a" )
+							|| extension.equals( ".f4v" )
+							|| extension.equals( ".m4a" )
+							|| extension.equals( ".m4v" )
+							|| extension.equals( ".mp4" ) ) {
+						mp4 = mp4 + 1;
+					} else if ( extension.equals( ".xls" )
+							|| extension.equals( ".xlw" )
+							|| extension.equals( ".xlsx" ) ) {
+						xls = xls + 1;
+					} else if ( extension.equals( ".odt" )
+							|| extension.equals( ".ott" ) ) {
+						odt = odt + 1;
+					} else if ( extension.equals( ".ods" )
+							|| extension.equals( ".ots" ) ) {
+						ods = ods + 1;
+					} else if ( extension.equals( ".odp" )
+							|| extension.equals( ".otp" ) ) {
+						odp = odp + 1;
+					} else {
+						other = other + 1;
+					}
 
 					if ( ((valDatei.getAbsolutePath().toLowerCase()
 							.endsWith( ".tiff" ) || valDatei.getAbsolutePath()
@@ -931,6 +1049,240 @@ public class KOSTVal implements MessageConstants
 			}
 			StringBuffer command = new StringBuffer( "rd "
 					+ tmpDir.getAbsolutePath() + " /s /q" );
+
+			try {
+				// KaD-Diagnose-Datei mit den neusten Anzahl Dateien pro
+				// KaD-Format Updaten
+				DocumentBuilderFactory dbFactory = DocumentBuilderFactory
+						.newInstance();
+				DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+				Document doc = dBuilder.parse( xmlDiaCopy );
+
+				doc.getDocumentElement().normalize();
+
+				NodeList nList = doc.getElementsByTagName( "KOSTVal_FFCounter" );
+
+				for ( int temp = 0; temp < nList.getLength(); temp++ ) {
+
+					Node nNode = nList.item( temp );
+
+					if ( nNode.getNodeType() == Node.ELEMENT_NODE ) {
+						Element eElement = (Element) nNode;
+
+						if ( pdf > 0 ) {
+							String pdfNodeString = eElement
+									.getElementsByTagName( "pdf" ).item( 0 )
+									.getTextContent();
+							int pdfNodeValue = Integer.parseInt( pdfNodeString );
+							pdf = pdf + pdfNodeValue;
+							Util.kadDia( "<pdf>" + pdfNodeValue + "</pdf>",
+									"<pdf>" + pdf + "</pdf>", xmlDiaCopy );
+						}
+						if ( tiff > 0 ) {
+							String tiffNodeString = eElement
+									.getElementsByTagName( "tiff" ).item( 0 )
+									.getTextContent();
+							int tiffNodeValue = Integer
+									.parseInt( tiffNodeString );
+							tiff = tiff + tiffNodeValue;
+							Util.kadDia( "<tiff>" + tiffNodeValue + "</tiff>",
+									"<tiff>" + tiff + "</tiff>", xmlDiaCopy );
+						}
+						if ( siard > 0 ) {
+							String siardNodeString = eElement
+									.getElementsByTagName( "siard" ).item( 0 )
+									.getTextContent();
+							int siardNodeValue = Integer
+									.parseInt( siardNodeString );
+							siard = siard + siardNodeValue;
+							Util.kadDia( "<siard>" + siardNodeValue
+									+ "</siard>", "<siard>" + siard
+									+ "</siard>", xmlDiaCopy );
+						}
+						if ( txt > 0 ) {
+							String txtNodeString = eElement
+									.getElementsByTagName( "txt" ).item( 0 )
+									.getTextContent();
+							int txtNodeValue = Integer.parseInt( txtNodeString );
+							txt = txt + txtNodeValue;
+							Util.kadDia( "<txt>" + txtNodeValue + "</txt>",
+									"<txt>" + txt + "</txt>", xmlDiaCopy );
+						}
+						if ( csv > 0 ) {
+							String csvNodeString = eElement
+									.getElementsByTagName( "csv" ).item( 0 )
+									.getTextContent();
+							int csvNodeValue = Integer.parseInt( csvNodeString );
+							csv = csv + csvNodeValue;
+							Util.kadDia( "<csv>" + csvNodeValue + "</csv>",
+									"<csv>" + csv + "</csv>", xmlDiaCopy );
+						}
+						if ( xml > 0 ) {
+							String xmlNodeString = eElement
+									.getElementsByTagName( "xml" ).item( 0 )
+									.getTextContent();
+							int xmlNodeValue = Integer.parseInt( xmlNodeString );
+							xml = xml + xmlNodeValue;
+							Util.kadDia( "<xml>" + xmlNodeValue + "</xml>",
+									"<xml>" + xml + "</xml>", xmlDiaCopy );
+						}
+						if ( xsd > 0 ) {
+							String xsdNodeString = eElement
+									.getElementsByTagName( "xsd" ).item( 0 )
+									.getTextContent();
+							int xsdNodeValue = Integer.parseInt( xsdNodeString );
+							xsd = xsd + xsdNodeValue;
+							Util.kadDia( "<xsd>" + xsdNodeValue + "</xsd>",
+									"<xsd>" + xsd + "</xsd>", xmlDiaCopy );
+						}
+						if ( wave > 0 ) {
+							String waveNodeString = eElement
+									.getElementsByTagName( "wave" ).item( 0 )
+									.getTextContent();
+							int waveNodeValue = Integer
+									.parseInt( waveNodeString );
+							wave = wave + waveNodeValue;
+							Util.kadDia( "<wave>" + waveNodeValue + "</wave>",
+									"<wave>" + wave + "</wave>", xmlDiaCopy );
+						}
+						if ( mp3 > 0 ) {
+							String mp3NodeString = eElement
+									.getElementsByTagName( "mp3" ).item( 0 )
+									.getTextContent();
+							int mp3NodeValue = Integer.parseInt( mp3NodeString );
+							mp3 = mp3 + mp3NodeValue;
+							Util.kadDia( "<mp3>" + mp3NodeValue + "</mp3>",
+									"<mp3>" + mp3 + "</mp3>", xmlDiaCopy );
+						}
+						if ( jp2 > 0 ) {
+							String jp2NodeString = eElement
+									.getElementsByTagName( "jp2" ).item( 0 )
+									.getTextContent();
+							int jp2NodeValue = Integer.parseInt( jp2NodeString );
+							jp2 = jp2 + jp2NodeValue;
+							Util.kadDia( "<jp2>" + jp2NodeValue + "</jp2>",
+									"<jp2>" + jp2 + "</jp2>", xmlDiaCopy );
+						}
+						if ( jpx > 0 ) {
+							String jpxNodeString = eElement
+									.getElementsByTagName( "jpx" ).item( 0 )
+									.getTextContent();
+							int jpxNodeValue = Integer.parseInt( jpxNodeString );
+							jpx = jpx + jpxNodeValue;
+							Util.kadDia( "<jpx>" + jpxNodeValue + "</jpx>",
+									"<jpx>" + jpx + "</jpx>", xmlDiaCopy );
+						}
+						if ( jpeg > 0 ) {
+							String jpegNodeString = eElement
+									.getElementsByTagName( "jpeg" ).item( 0 )
+									.getTextContent();
+							int jpegNodeValue = Integer
+									.parseInt( jpegNodeString );
+							jpeg = jpeg + jpegNodeValue;
+							Util.kadDia( "<jpeg>" + jpegNodeValue + "</jpeg>",
+									"<jpeg>" + jpeg + "</jpeg>", xmlDiaCopy );
+						}
+						if ( png > 0 ) {
+							String pngNodeString = eElement
+									.getElementsByTagName( "png" ).item( 0 )
+									.getTextContent();
+							int pngNodeValue = Integer.parseInt( pngNodeString );
+							png = png + pngNodeValue;
+							Util.kadDia( "<png>" + pngNodeValue + "</png>",
+									"<png>" + png + "</png>", xmlDiaCopy );
+						}
+						if ( dng > 0 ) {
+							String dngNodeString = eElement
+									.getElementsByTagName( "dng" ).item( 0 )
+									.getTextContent();
+							int dngNodeValue = Integer.parseInt( dngNodeString );
+							dng = dng + dngNodeValue;
+							Util.kadDia( "<dng>" + dngNodeValue + "</dng>",
+									"<dng>" + dng + "</dng>", xmlDiaCopy );
+						}
+						if ( svg > 0 ) {
+							String svgNodeString = eElement
+									.getElementsByTagName( "svg" ).item( 0 )
+									.getTextContent();
+							int svgNodeValue = Integer.parseInt( svgNodeString );
+							svg = svg + svgNodeValue;
+							Util.kadDia( "<svg>" + svgNodeValue + "</svg>",
+									"<svg>" + svg + "</svg>", xmlDiaCopy );
+						}
+						if ( mpeg2 > 0 ) {
+							String mpeg2NodeString = eElement
+									.getElementsByTagName( "mpeg2" ).item( 0 )
+									.getTextContent();
+							int mpeg2NodeValue = Integer
+									.parseInt( mpeg2NodeString );
+							mpeg2 = mpeg2 + mpeg2NodeValue;
+							Util.kadDia( "<mpeg2>" + mpeg2NodeValue
+									+ "</mpeg2>", "<mpeg2>" + mpeg2
+									+ "</mpeg2>", xmlDiaCopy );
+						}
+						if ( mp4 > 0 ) {
+							String mp4NodeString = eElement
+									.getElementsByTagName( "mp4" ).item( 0 )
+									.getTextContent();
+							int mp4NodeValue = Integer.parseInt( mp4NodeString );
+							mp4 = mp4 + mp4NodeValue;
+							Util.kadDia( "<mp4>" + mp4NodeValue + "</mp4>",
+									"<mp4>" + mp4 + "</mp4>", xmlDiaCopy );
+						}
+						if ( xls > 0 ) {
+							String xlsNodeString = eElement
+									.getElementsByTagName( "xls" ).item( 0 )
+									.getTextContent();
+							int xlsNodeValue = Integer.parseInt( xlsNodeString );
+							xls = xls + xlsNodeValue;
+							Util.kadDia( "<xls>" + xlsNodeValue + "</xls>",
+									"<xls>" + xls + "</xls>", xmlDiaCopy );
+						}
+						if ( odt > 0 ) {
+							String odtNodeString = eElement
+									.getElementsByTagName( "odt" ).item( 0 )
+									.getTextContent();
+							int odtNodeValue = Integer.parseInt( odtNodeString );
+							odt = odt + odtNodeValue;
+							Util.kadDia( "<odt>" + odtNodeValue + "</odt>",
+									"<odt>" + odt + "</odt>", xmlDiaCopy );
+						}
+						if ( ods > 0 ) {
+							String odsNodeString = eElement
+									.getElementsByTagName( "ods" ).item( 0 )
+									.getTextContent();
+							int odsNodeValue = Integer.parseInt( odsNodeString );
+							ods = ods + odsNodeValue;
+							Util.kadDia( "<ods>" + odsNodeValue + "</ods>",
+									"<ods>" + ods + "</ods>", xmlDiaCopy );
+						}
+						if ( odp > 0 ) {
+							String odpNodeString = eElement
+									.getElementsByTagName( "odp" ).item( 0 )
+									.getTextContent();
+							int odpNodeValue = Integer.parseInt( odpNodeString );
+							odp = odp + odpNodeValue;
+							Util.kadDia( "<odp>" + odpNodeValue + "</odp>",
+									"<odp>" + odp + "</odp>", xmlDiaCopy );
+						}
+						if ( other > 0 ) {
+							String otherNodeString = eElement
+									.getElementsByTagName( "other" ).item( 0 )
+									.getTextContent();
+							int otherNodeValue = Integer
+									.parseInt( otherNodeString );
+							other = other + otherNodeValue;
+							Util.kadDia( "<other>" + otherNodeValue
+									+ "</other>", "<other>" + other
+									+ "</other>", xmlDiaCopy );
+						}
+
+					}
+				}
+			} catch ( Exception e ) {
+				e.printStackTrace();
+			}
+
 			if ( ok ) {
 				if ( tmpDir.exists() ) {
 
@@ -1152,8 +1504,7 @@ public class KOSTVal implements MessageConstants
 
 			// Ausgabe der Pfade zu den Pdftron Reports, falls welche
 			// generiert wurden Pdftron Reports löschen
-			File pdftronReport = new File( directoryOfLogfile,
-					"report.xml" );
+			File pdftronReport = new File( directoryOfLogfile, "report.xml" );
 			File pdftronXsl = new File( directoryOfLogfile, "report.xsl" );
 
 			if ( pdftronReport.exists() ) {

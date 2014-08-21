@@ -127,14 +127,14 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	}
 
 	@Override
-	public String getPathToPdfDiagnose()
+	public String getPathToDiagnose()
 	{
 		/**
-		 * Gibt den Pfad zu den PDF-Diagnosedaten zurück.
+		 * Gibt den Pfad zu den Diagnosedaten zurück.
 		 * 
-		 * @return Pfad zu PDF-Diagnosedaten
+		 * @return Pfad zu Diagnosedaten
 		 */
-		Object prop = getConfig().getProperty( "pathtopdfdiagnose" );
+		Object prop = getConfig().getProperty( "pathtodiagnose" );
 		if ( prop instanceof String ) {
 			String value = (String) prop;
 			return value;

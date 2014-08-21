@@ -293,7 +293,36 @@ public class Util
 				oldtext += line + "\r\n";
 			}
 			reader.close();
-			String newtext = oldtext.replace( "</KOSTVal_PDF-Diagnose>", string );
+			String newtext = oldtext
+					.replace( "</KOSTVal_PDF-Diagnose>", string );
+			newtext = newtext.replace( (char) 0, (char) 32 );
+			FileWriter writer = new FileWriter( file );
+			writer.write( newtext );
+			writer.close();
+		} catch ( IOException ioe ) {
+			ioe.printStackTrace();
+		}
+	}
+
+	/**
+	 * Erhöht die KaD_Diagnosedaten mit den neuen Zahlen
+	 * 
+	 * ! Solche Ersetzungen dürfen nicht in einer Schleife gemacht werden
+	 * sondern erst am Schluss, da diese sehr Zeitintensiv sind !!!
+	 * 
+	 * @throws IOException
+	 */
+	public static void kadDia( String oldString, String newString, File file )
+			throws IOException
+	{
+		try {
+			BufferedReader reader = new BufferedReader( new FileReader( file ) );
+			String line = "", oldtext = "";
+			while ( (line = reader.readLine()) != null ) {
+				oldtext += line + "\r\n";
+			}
+			reader.close();
+			String newtext = oldtext.replace( oldString, newString );
 			newtext = newtext.replace( (char) 0, (char) 32 );
 			FileWriter writer = new FileWriter( file );
 			writer.write( newtext );

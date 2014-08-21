@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<xsl:template match="/">
 		<html>
@@ -35,22 +35,25 @@
 					</table>
 					<table width="100%">
 						<tr class="captionm">
-							<td width="25%">PDFTools</td>
-							<td width="25%">ErrorCode: <xsl:value-of select="PDFTools/ErrorCode"/></td>
-							<td width="25%">Kategorie: <xsl:value-of select="PDFTools/iCategory"/></td>
-							<td width="25%">1. Error: <xsl:value-of select="PDFTools/iError"/></td>
+							<td width="24%">PDFTools</td>
+							<td width="38%">Kategorie: <xsl:value-of select="PDFTools/iCategory"/></td>
+							<td width="38%">1. Error: <xsl:value-of select="PDFTools/iError"/></td>
 						</tr>
 					</table>
 					<table width="100%">
 						<tr class="captionm">
-							<td width="25%">PDFTron</td>
-							<td width="75%">Code: <xsl:value-of select="PDFTron/Code"/></td>
+							<td width="24%">PDFTron</td>
+							<td width="76%">Code: <xsl:value-of select="PDFTron/Code"/></td>
 						</tr>
 					</table>
 				</div>
 				<br/>
 			</xsl:for-each>
 			<br/>
+			<br/>
+			<hr noshade="noshade" size="1"/>
+			<h3>Während der Verwendung der dualen PDF/A-Validierung sammelt KOST-Val bei Uneinigkeit der Validatoren in dieser Datei entsprechende PDF-Diagnosedaten, die für die Verbesserung der Tools und des Standards hilfreich sein können.</h3>
+			<h3>Wir sind Ihnen dankbar, wenn Sie diese PDF-Diagnosedatei bei Gelegenheit der KOST-Geschäftsstelle (kost-val@kost-ceco.ch) zusenden könnten.</h3>
 		</body>
 		</html>
 	</xsl:template>

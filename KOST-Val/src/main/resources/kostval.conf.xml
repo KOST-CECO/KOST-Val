@@ -2,7 +2,7 @@
 <configuration>
 	<pathtologfile>logs</pathtologfile>
 	<pathtoworkdir>temp_KOST-Val</pathtoworkdir>
-	<pathtopdfdiagnose>pdf_diagnose</pathtopdfdiagnose>
+	<pathtodiagnose>diagnose</pathtodiagnose>
 	<pathtojhoveconfig>configuration\jhove.conf</pathtojhoveconfig>
 	<pdfa>
 		<!--no verwenden wenn pdfa nicht validiert werden soll, ansonsten yes-->

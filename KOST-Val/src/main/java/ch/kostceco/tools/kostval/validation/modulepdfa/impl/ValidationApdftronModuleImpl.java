@@ -62,7 +62,7 @@ import ch.kostceco.tools.kostval.validation.modulepdfa.ValidationApdftronModule;
  * Bei Uneinigkeit gilt diese als valid.
  * 
  * Zuerste erfolgt eine Erkennung, wenn diese io kommt die Validierung mit
- * PDFTronund oder PDF-Tools. Die Fehler werden den Einzelnen Gruppen (Modulen)
+ * PDFTron und oder PDF-Tools. Die Fehler werden den Einzelnen Gruppen (Modulen)
  * zugeordnet
  * 
  * Ab der version 1.3.4 geschieht dies alles in einem Modul (dies benötigt
@@ -114,7 +114,7 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 		// Vorberitung für eine allfällige Festhaltung bei unterschiedlichen
 		// Validierungsresultaten in einer PDF_Diagnosedatei
 		File pdfDia = null;
-		String pdfDiaPath = getConfigurationService().getPathToPdfDiagnose();
+		String pdfDiaPath = getConfigurationService().getPathToDiagnose();
 
 		try {
 			pdfDia = new File( pdfDiaPath + "\\PDF-Diagnosedaten.kost-val.xml" );
@@ -504,7 +504,11 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 								if ( docPdf.open( valDatei.getAbsolutePath(),
 										"", NativeLibrary.COMPLIANCE.ePDFUnk ) ) {
 									// PDF Konnte geöffnet werden
+									docPdf.setStopOnError( true );
+									docPdf.setReportingLevel( 1 );
 								} else {
+									docPdf.setStopOnError( true );
+									docPdf.setReportingLevel( 1 );
 									if ( docPdf.getErrorCode() == NativeLibrary.ERRORCODE.PDF_E_PASSWORD ) {
 										getMessageService()
 												.logError(
@@ -572,9 +576,6 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 									}
 								}
 
-								docPdf.setStopOnError( false );
-								docPdf.setReportingLevel( 2 );
-
 								// Error Category
 								iCategory = docPdf.getCategories();
 								// die Zahl kann auch eine Summe von Kategorien
@@ -583,7 +584,14 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 								// 2048)
 
 								int success = 0;
-								int successEC = docPdf.getErrorCode();
+
+								/*
+								 * ErrorCode kann ungleich Null sein, wenn es
+								 * nur eine Information zu einer nicht
+								 * einhaltung einer Empfehlung gefunden wurde.
+								 * 
+								 * Entsprechend wird der ErrorCode ignoriert.
+								 */
 
 								PdfError err = docPdf.getFirstError();
 								PdfError err1 = docPdf.getFirstError();
@@ -597,8 +605,7 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 									err = docPdf.getNextError();
 								}
 
-								if ( success == 0 && successEC == 0
-										&& iCategory == 0 ) {
+								if ( success == 0 && iCategory == 0 ) {
 									// valide
 									isValid = true;
 
@@ -619,7 +626,7 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 												+ errorCode;
 									}
 
-									pdfTools = "<PDFTools><ErrorCode>0</ErrorCode><iCategory>0</iCategory><iError>0</iError></PDFTools>";
+									pdfTools = "<PDFTools><iCategory>0</iCategory><iError>0</iError></PDFTools>";
 									pdfTron = "<PDFTron><Code>" + errorCodes
 											+ "</Code></PDFTron>";
 									newPdfDiaTxt = "<Validation><ValFile>"
@@ -738,7 +745,6 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 					// Kategorie heraus (z.B. 2048)
 
 					int success = 0;
-					int successEC = docPdf.getErrorCode();
 
 					PdfError err = docPdf.getFirstError();
 					PdfError err1 = docPdf.getFirstError();
@@ -751,7 +757,7 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 						err = docPdf.getNextError();
 					}
 
-					if ( success == 0 && successEC == 0 && iCategory == 0 ) {
+					if ( success == 0 && iCategory == 0 ) {
 						// valide
 						isValid = true;
 					} else {
@@ -866,9 +872,7 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 									isValid = true;
 
 									// Diskrepanz => PDF-Diagnosedaten
-									pdfTools = "<PDFTools><ErrorCode>"
-											+ successEC
-											+ "</ErrorCode><iCategory>"
+									pdfTools = "<PDFTools><iCategory>"
 											+ iCategory
 											+ "</iCategory><iError>" + iError
 											+ "</iError></PDFTools>";
@@ -937,6 +941,7 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 				boolean exponent16 = false;
 				boolean exponent17 = false;
 				boolean exponent18 = false;
+
 				int iExp0 = (int) Math.pow( 2, 0 );
 				int iExp1 = (int) Math.pow( 2, 1 );
 				int iExp2 = (int) Math.pow( 2, 2 );
