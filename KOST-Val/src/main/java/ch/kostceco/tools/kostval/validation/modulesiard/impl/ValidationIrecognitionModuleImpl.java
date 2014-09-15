@@ -41,6 +41,10 @@ public class ValidationIrecognitionModuleImpl extends ValidationModuleImpl
 	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws ValidationIrecognitionException
 	{
+		// Ausgabe SIARD-Modul
+		// Ersichtlich das KOST-Val arbeitet
+		System.out.print( "I   " );
+		System.out.print( "\r" );
 
 		/**
 		 * Validierung ob die Extension .siard lautet

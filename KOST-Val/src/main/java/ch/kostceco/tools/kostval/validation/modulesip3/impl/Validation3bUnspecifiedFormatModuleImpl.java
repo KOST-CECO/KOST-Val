@@ -61,6 +61,12 @@ public class Validation3bUnspecifiedFormatModuleImpl extends
 	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws Validation3bUnspecifiedFormatException
 	{
+		// Ausgabe SIP-Modul
+		// Ersichtlich das KOST-Val arbeitet
+		System.out.print( "3B   " );
+		System.out.print( "\r" );
+		int onWork = 41;
+
 		boolean valid = true;
 
 		Map<String, File> filesInSipFile = new HashMap<String, File>();
@@ -120,6 +126,25 @@ public class Validation3bUnspecifiedFormatModuleImpl extends
 			if ( !newFile.isDirectory() && entryName.contains( "content/" ) ) {
 				filesInSipFile.put( entryName, newFile );
 			}
+			if ( onWork == 41 ) {
+				onWork = 2;
+				System.out.print( "3B-   " );
+				System.out.print( "\r" );
+			} else if ( onWork == 11 ) {
+				onWork = 12;
+				System.out.print( "3B\\   " );
+				System.out.print( "\r" );
+			} else if ( onWork == 21 ) {
+				onWork = 22;
+				System.out.print( "3B|   " );
+				System.out.print( "\r" );
+			} else if ( onWork == 31 ) {
+				onWork = 32;
+				System.out.print( "3B/   " );
+				System.out.print( "\r" );
+			} else {
+				onWork = onWork + 1;
+			}
 		}
 
 		Map<String, String> hPuids = getConfigurationService()
@@ -145,12 +170,17 @@ public class Validation3bUnspecifiedFormatModuleImpl extends
 					String extensionConfig = hPuids.get( ff.getPUID() );
 					if ( extensionConfig == null ) {
 
-						getMessageService().logError(
-								getTextResourceService().getText(
-										MESSAGE_XML_MODUL_Cb_SIP )
-										+ getTextResourceService().getText(
-												MESSAGE_XML_CB_FORMAT, fileKey,
-												ff.getPUID() + " Extension: "+ff.getExtension(x ) ) );
+						getMessageService()
+								.logError(
+										getTextResourceService().getText(
+												MESSAGE_XML_MODUL_Cb_SIP )
+												+ getTextResourceService()
+														.getText(
+																MESSAGE_XML_CB_FORMAT,
+																fileKey,
+																ff.getPUID()
+																		+ " Extension: "
+																		+ ff.getExtension( x ) ) );
 						valid = false;
 
 						if ( counterPuid.get( ff.getPUID() ) == null ) {
@@ -164,6 +194,25 @@ public class Validation3bUnspecifiedFormatModuleImpl extends
 
 				}
 
+			}
+			if ( onWork == 41 ) {
+				onWork = 2;
+				System.out.print( "3B-   " );
+				System.out.print( "\r" );
+			} else if ( onWork == 11 ) {
+				onWork = 12;
+				System.out.print( "3B\\   " );
+				System.out.print( "\r" );
+			} else if ( onWork == 21 ) {
+				onWork = 22;
+				System.out.print( "3B|   " );
+				System.out.print( "\r" );
+			} else if ( onWork == 31 ) {
+				onWork = 32;
+				System.out.print( "3B/   " );
+				System.out.print( "\r" );
+			} else {
+				onWork = onWork + 1;
 			}
 		}
 		return valid;

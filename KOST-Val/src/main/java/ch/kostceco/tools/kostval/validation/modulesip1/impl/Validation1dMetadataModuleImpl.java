@@ -61,16 +61,18 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws Validation1dMetadataException
 	{
+		// Ausgabe SIP-Modul
+		// Ersichtlich das KOST-Val arbeitet
+		System.out.print( "1D   " );
+		System.out.print( "\r" );
 
 		try {
 			File xmlToValidate = new File( valDatei.getAbsolutePath()
 					+ "\\header\\metadata.xml" );
-			File xsdToValidateBar1 = new File(
-					valDatei.getAbsolutePath()
-							+ "\\header\\xsd\\arelda_v3.13.2.xsd" );
-			File xsdToValidateEch1 = new File(
-					valDatei.getAbsolutePath()
-							+ "\\header\\xsd\\arelda.xsd" );
+			File xsdToValidateBar1 = new File( valDatei.getAbsolutePath()
+					+ "\\header\\xsd\\arelda_v3.13.2.xsd" );
+			File xsdToValidateEch1 = new File( valDatei.getAbsolutePath()
+					+ "\\header\\xsd\\arelda.xsd" );
 
 			if ( xmlToValidate.exists() && xsdToValidateBar1.exists() ) {
 				// Schemavalidierung Nach Version BAR 1
@@ -246,127 +248,94 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 				}
 			}
 
-/*			if ( xmlToValidate == null || metadataxml == null ) {
-				getMessageService().logError(
-						getTextResourceService().getText(
-								MESSAGE_XML_MODUL_Ad_SIP )
-								+ getTextResourceService().getText(
-										ERROR_XML_AE_NOMETADATAFOUND ) );
-				return false;
-			}*/
-			
-			// TODO: Validieren ob die xsd korrekt in Metadata.xml enthalten sind
-			//evtl ist dies gar nicht nötig falls dies durch Modul2 abgefangen wird
+			/*
+			 * if ( xmlToValidate == null || metadataxml == null ) {
+			 * getMessageService().logError( getTextResourceService().getText(
+			 * MESSAGE_XML_MODUL_Ad_SIP ) + getTextResourceService().getText(
+			 * ERROR_XML_AE_NOMETADATAFOUND ) ); return false; }
+			 */
 
-/*			EntryInputStream eis = zipfile.openEntryInputStream( metadataxml
-					.getName() );
-			BufferedInputStream is = new BufferedInputStream( eis );
+			// TODO: Validieren ob die xsd korrekt in Metadata.xml enthalten
+			// sind
+			// evtl ist dies gar nicht nötig falls dies durch Modul2 abgefangen
+			// wird
 
-			try {
-				DocumentBuilderFactory dbf = DocumentBuilderFactory
-						.newInstance();
-				DocumentBuilder db = dbf.newDocumentBuilder();
-				Document doc = db.parse( is );
-
-				XPath xpath = XPathFactory.newInstance().newXPath();
-				Element elementName = (Element) xpath.evaluate(
-						"/paket/inhaltsverzeichnis/ordner/ordner/name", doc,
-						XPathConstants.NODE );
-
-				// TODO: Gewährleisten, dass
-				// /paket/inhaltsverzeichnis/ordner/name = header ist
-				/*
-				 * Zwischenzeitlich wird eine Spezielle Fehlermeldung
-				 * ausgegeben, sollte in metadata.xml der content vor header
-				 * aufgeliestet sein (ERROR_MODULE_AD_CONTENTB4HEADER)
-				 */
-/*				Node parentNode = elementName.getParentNode();
-				NodeList nodeLst = parentNode.getChildNodes();
-
-				for ( int s = 0; s < nodeLst.getLength(); s++ ) {
-
-					Node fstNode = nodeLst.item( s );
-
-					if ( fstNode.getNodeType() == Node.ELEMENT_NODE
-							&& fstNode.getNodeName().equals( "datei" ) ) {
-						Element fstElmnt = (Element) fstNode;
-						NodeList fstElmntList = fstElmnt
-								.getElementsByTagName( "originalName" );
-						Node wantedNode = fstElmntList.item( 0 );
-						xsdsInMetadata.put( wantedNode.getTextContent(),
-								wantedNode.getTextContent() );
-					}
-
-				}
-
-			} catch ( Exception e ) {
-
-				getMessageService().logError(
-						getTextResourceService().getText(
-								MESSAGE_XML_MODUL_Ad_SIP )
-								+ getTextResourceService().getText(
-										ERROR_XML_UNKNOWN, e.getMessage() ) );
-				return false;
-			}
-
-			eis.close();
-			is.close();
-			zipfile.close();
-
-			// alle Files, die in metadata.xml unter <header><xsd>
-			// aufgelistet sind, müssen im Folder
-			// /header/xsd vorhanden sein, und umgekehrt
-			// Map<String, String> xsdsInZip
-			// Map<String, String> xsdsInMetadata
-
-
-			if ( xsdsInZip.size() != xsdsInMetadata.size() ) {
-				if ( xsdsInMetadata.size() == 0 ) {
-					getMessageService().logError(
-							getTextResourceService().getText(
-									MESSAGE_XML_MODUL_Ad_SIP )
-									+ getTextResourceService().getText(
-											ERROR_XML_AD_CONTENTB4HEADER ) );
-					return false;
-
-				} else {
-					getMessageService().logError(
-							getTextResourceService().getText(
-									MESSAGE_XML_MODUL_Ad_SIP )
-									+ getTextResourceService().getText(
-											ERROR_XML_AD_WRONGNUMBEROFXSDS ) );
-					return false;
-				}
-			} else {
-				Set keys = xsdsInZip.keySet();
-				Map xsdsInZipControl = new HashMap<String, String>();
-				xsdsInZipControl.putAll( xsdsInZip );
-
-				for ( Iterator<String> iterator = keys.iterator(); iterator
-						.hasNext(); ) {
-					String key = iterator.next();
-					String removedKey = xsdsInMetadata.remove( key );
-					if ( removedKey == null ) {
-						getMessageService()
-								.logError(
-										getTextResourceService().getText(
-												MESSAGE_XML_MODUL_Ad_SIP )
-												+ getTextResourceService()
-														.getText(
-																ERROR_XML_AD_WRONGNUMBEROFXSDS ) );
-						return false;
-					}
-					xsdsInZipControl.remove( key );
-				}
-				if ( xsdsInZipControl.size() != 0 ) {
-					getMessageService().logError(
-							getTextResourceService().getText(
-									MESSAGE_XML_MODUL_Ad_SIP )
-									+ getTextResourceService().getText(
-											ERROR_XML_AD_WRONGNUMBEROFXSDS ) );
-					return false;
-				}
-			}*/
+			/*
+			 * EntryInputStream eis = zipfile.openEntryInputStream( metadataxml
+			 * .getName() ); BufferedInputStream is = new BufferedInputStream(
+			 * eis );
+			 * 
+			 * try { DocumentBuilderFactory dbf = DocumentBuilderFactory
+			 * .newInstance(); DocumentBuilder db = dbf.newDocumentBuilder();
+			 * Document doc = db.parse( is );
+			 * 
+			 * XPath xpath = XPathFactory.newInstance().newXPath(); Element
+			 * elementName = (Element) xpath.evaluate(
+			 * "/paket/inhaltsverzeichnis/ordner/ordner/name", doc,
+			 * XPathConstants.NODE );
+			 * 
+			 * // TODO: Gewährleisten, dass //
+			 * /paket/inhaltsverzeichnis/ordner/name = header ist /*
+			 * Zwischenzeitlich wird eine Spezielle Fehlermeldung ausgegeben,
+			 * sollte in metadata.xml der content vor header aufgeliestet sein
+			 * (ERROR_MODULE_AD_CONTENTB4HEADER)
+			 */
+			/*
+			 * Node parentNode = elementName.getParentNode(); NodeList nodeLst =
+			 * parentNode.getChildNodes();
+			 * 
+			 * for ( int s = 0; s < nodeLst.getLength(); s++ ) {
+			 * 
+			 * Node fstNode = nodeLst.item( s );
+			 * 
+			 * if ( fstNode.getNodeType() == Node.ELEMENT_NODE &&
+			 * fstNode.getNodeName().equals( "datei" ) ) { Element fstElmnt =
+			 * (Element) fstNode; NodeList fstElmntList = fstElmnt
+			 * .getElementsByTagName( "originalName" ); Node wantedNode =
+			 * fstElmntList.item( 0 ); xsdsInMetadata.put(
+			 * wantedNode.getTextContent(), wantedNode.getTextContent() ); }
+			 * 
+			 * }
+			 * 
+			 * } catch ( Exception e ) {
+			 * 
+			 * getMessageService().logError( getTextResourceService().getText(
+			 * MESSAGE_XML_MODUL_Ad_SIP ) + getTextResourceService().getText(
+			 * ERROR_XML_UNKNOWN, e.getMessage() ) ); return false; }
+			 * 
+			 * eis.close(); is.close(); zipfile.close();
+			 * 
+			 * // alle Files, die in metadata.xml unter <header><xsd> //
+			 * aufgelistet sind, müssen im Folder // /header/xsd vorhanden sein,
+			 * und umgekehrt // Map<String, String> xsdsInZip // Map<String,
+			 * String> xsdsInMetadata
+			 * 
+			 * 
+			 * if ( xsdsInZip.size() != xsdsInMetadata.size() ) { if (
+			 * xsdsInMetadata.size() == 0 ) { getMessageService().logError(
+			 * getTextResourceService().getText( MESSAGE_XML_MODUL_Ad_SIP ) +
+			 * getTextResourceService().getText( ERROR_XML_AD_CONTENTB4HEADER )
+			 * ); return false;
+			 * 
+			 * } else { getMessageService().logError(
+			 * getTextResourceService().getText( MESSAGE_XML_MODUL_Ad_SIP ) +
+			 * getTextResourceService().getText( ERROR_XML_AD_WRONGNUMBEROFXSDS
+			 * ) ); return false; } } else { Set keys = xsdsInZip.keySet(); Map
+			 * xsdsInZipControl = new HashMap<String, String>();
+			 * xsdsInZipControl.putAll( xsdsInZip );
+			 * 
+			 * for ( Iterator<String> iterator = keys.iterator(); iterator
+			 * .hasNext(); ) { String key = iterator.next(); String removedKey =
+			 * xsdsInMetadata.remove( key ); if ( removedKey == null ) {
+			 * getMessageService() .logError( getTextResourceService().getText(
+			 * MESSAGE_XML_MODUL_Ad_SIP ) + getTextResourceService() .getText(
+			 * ERROR_XML_AD_WRONGNUMBEROFXSDS ) ); return false; }
+			 * xsdsInZipControl.remove( key ); } if ( xsdsInZipControl.size() !=
+			 * 0 ) { getMessageService().logError(
+			 * getTextResourceService().getText( MESSAGE_XML_MODUL_Ad_SIP ) +
+			 * getTextResourceService().getText( ERROR_XML_AD_WRONGNUMBEROFXSDS
+			 * ) ); return false; } }
+			 */
 
 		} catch ( Exception e ) {
 			getMessageService().logError(

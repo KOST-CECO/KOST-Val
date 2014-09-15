@@ -67,6 +67,12 @@ public class ValidationDstructureModuleImpl extends ValidationModuleImpl
 	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws ValidationDstructureException
 	{
+		// Ausgabe SIARD-Modul
+		// Ersichtlich das KOST-Val arbeitet
+		System.out.print( "D   " );
+		System.out.print( "\r" );
+		int onWork = 41;
+
 		boolean valid = true;
 		try {
 			/*
@@ -95,6 +101,25 @@ public class ValidationDstructureModuleImpl extends ValidationModuleImpl
 					.getChild( "schemas", ns ).getChildren( "schema", ns );
 			for ( Element schema : schemas ) {
 				valid = validateSchema( schema, ns, pathToWorkDir );
+				if ( onWork == 41 ) {
+					onWork = 2;
+					System.out.print( "D-   " );
+					System.out.print( "\r" );
+				} else if ( onWork == 11 ) {
+					onWork = 12;
+					System.out.print( "D\\   " );
+					System.out.print( "\r" );
+				} else if ( onWork == 21 ) {
+					onWork = 22;
+					System.out.print( "D|   " );
+					System.out.print( "\r" );
+				} else if ( onWork == 31 ) {
+					onWork = 32;
+					System.out.print( "D/   " );
+					System.out.print( "\r" );
+				} else {
+					onWork = onWork + 1;
+				}
 			}
 		} catch ( java.io.IOException ioe ) {
 			valid = false;
@@ -120,6 +145,7 @@ public class ValidationDstructureModuleImpl extends ValidationModuleImpl
 	private boolean validateSchema( Element schema, Namespace ns,
 			String pathToWorkDir )
 	{
+		int onWork = 41;
 		boolean valid = true;
 		Element schemaFolder = schema.getChild( "folder", ns );
 		File schemaPath = new File( new StringBuilder( pathToWorkDir )
@@ -132,6 +158,25 @@ public class ValidationDstructureModuleImpl extends ValidationModuleImpl
 			for ( Element table : tables ) {
 				valid = valid
 						&& validateTable( table, ns, pathToWorkDir, schemaPath );
+				if ( onWork == 41 ) {
+					onWork = 2;
+					System.out.print( "D-   " );
+					System.out.print( "\r" );
+				} else if ( onWork == 11 ) {
+					onWork = 12;
+					System.out.print( "D\\   " );
+					System.out.print( "\r" );
+				} else if ( onWork == 21 ) {
+					onWork = 22;
+					System.out.print( "D|   " );
+					System.out.print( "\r" );
+				} else if ( onWork == 31 ) {
+					onWork = 32;
+					System.out.print( "D/   " );
+					System.out.print( "\r" );
+				} else {
+					onWork = onWork + 1;
+				}
 			}
 		} else {
 			valid = false;

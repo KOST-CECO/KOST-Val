@@ -37,9 +37,10 @@ import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesip2.Validation2cChecksumModule;
 
 /**
- * Validierungsschritt 2c: Stimmen die Prüfsummen der Dateien mit Prüfsumme überein? metadata.xml:
- * pruefsumme, pruefalgorithmus und name pro Datei auslesen pfad ermitteln,
- * länge der summe kontrollieren datei: Summe berechnen und vergleichen
+ * Validierungsschritt 2c: Stimmen die Prüfsummen der Dateien mit Prüfsumme
+ * überein? metadata.xml: pruefsumme, pruefalgorithmus und name pro Datei
+ * auslesen pfad ermitteln, länge der summe kontrollieren datei: Summe berechnen
+ * und vergleichen
  */
 
 public class Validation2cChecksumModuleImpl extends ValidationModuleImpl
@@ -50,6 +51,12 @@ public class Validation2cChecksumModuleImpl extends ValidationModuleImpl
 	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws Validation2cChecksumException
 	{
+		// Ausgabe SIP-Modul
+		// Ersichtlich das KOST-Val arbeitet
+		System.out.print( "2C   " );
+		System.out.print( "\r" );
+		int onWork = 41;
+
 		boolean valid = true;
 
 		try {
@@ -530,6 +537,25 @@ public class Validation2cChecksumModuleImpl extends ValidationModuleImpl
 							// Kein Fehler da in 2a bereits ausgegeben
 						}
 					}
+				}
+				if ( onWork == 41 ) {
+					onWork = 2;
+					System.out.print( "2C-   " );
+					System.out.print( "\r" );
+				} else if ( onWork == 11 ) {
+					onWork = 12;
+					System.out.print( "2C\\   " );
+					System.out.print( "\r" );
+				} else if ( onWork == 21 ) {
+					onWork = 22;
+					System.out.print( "2C|   " );
+					System.out.print( "\r" );
+				} else if ( onWork == 31 ) {
+					onWork = 32;
+					System.out.print( "2C/   " );
+					System.out.print( "\r" );
+				} else {
+					onWork = onWork + 1;
 				}
 			}
 		} catch ( Exception e ) {

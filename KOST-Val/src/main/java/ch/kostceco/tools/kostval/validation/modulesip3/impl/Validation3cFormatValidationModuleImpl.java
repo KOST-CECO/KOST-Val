@@ -51,6 +51,10 @@ public class Validation3cFormatValidationModuleImpl extends
 	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws Validation3cFormatValidationException
 	{
+		// Ausgabe SIP-Modul
+		// Ersichtlich das KOST-Val arbeitet
+		System.out.print( "3C   " );
+		System.out.print( "\r" );
 
 		boolean isValid = true;
 		// Informationen zum Arbeitsverzeichnis holen

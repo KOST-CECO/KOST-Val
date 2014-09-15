@@ -52,6 +52,12 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl
 	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws Validation2aFileIntegrityException
 	{
+		// Ausgabe SIP-Modul
+		// Ersichtlich das KOST-Val arbeitet
+		System.out.print( "2A   " );
+		System.out.print( "\r" );
+
+		int onWork =41;
 
 		Map<String, String> filesInSip = new HashMap<String, String>();
 		boolean valid = true;
@@ -64,6 +70,25 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl
 				String entryName = iterator.next();
 				// entryName: content/DOS_02/gpl2.pdf
 				filesInSip.put( entryName, entryName );
+				if (onWork == 41){
+					onWork =2;
+					System.out.print( "2A-   " );
+					System.out.print( "\r" );					
+				} else if (onWork == 11){
+					onWork =12;
+					System.out.print( "2A\\   " );
+					System.out.print( "\r" );					
+				} else if (onWork == 21){
+					onWork =22;
+					System.out.print( "2A|   " );
+					System.out.print( "\r" );					
+				} else if (onWork == 31){
+					onWork =32;
+					System.out.print( "2A/   " );
+					System.out.print( "\r" );					
+				}else {
+					onWork = onWork +1;
+				}
 			}
 
 			try {
@@ -81,12 +106,50 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl
 				for ( int s = 0; s < nodeLst.getLength(); s++ ) {
 					Node dateiNode = nodeLst.item( s );
 					String path = null;
+					if (onWork == 41){
+						onWork =2;
+						System.out.print( "2A-   " );
+						System.out.print( "\r" );					
+					} else if (onWork == 11){
+						onWork =12;
+						System.out.print( "2A\\   " );
+						System.out.print( "\r" );					
+					} else if (onWork == 21){
+						onWork =22;
+						System.out.print( "2A|   " );
+						System.out.print( "\r" );					
+					} else if (onWork == 31){
+						onWork =32;
+						System.out.print( "2A/   " );
+						System.out.print( "\r" );					
+					}else {
+						onWork = onWork +1;
+					}
 
 					NodeList childNodes = dateiNode.getChildNodes();
 					for ( int y = 0; y < childNodes.getLength(); y++ ) {
 						Node subNode = childNodes.item( y );
 						if ( subNode.getNodeName().equals( "name" ) ) {
 							path = subNode.getTextContent();
+						}
+						if (onWork == 41){
+							onWork =2;
+							System.out.print( "2A-   " );
+							System.out.print( "\r" );					
+						} else if (onWork == 11){
+							onWork =12;
+							System.out.print( "2A\\   " );
+							System.out.print( "\r" );					
+						} else if (onWork == 21){
+							onWork =22;
+							System.out.print( "2A|   " );
+							System.out.print( "\r" );					
+						} else if (onWork == 31){
+							onWork =32;
+							System.out.print( "2A/   " );
+							System.out.print( "\r" );					
+						}else {
+							onWork = onWork +1;
 						}
 					}
 
@@ -117,6 +180,25 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl
 								}
 								break;
 							}
+						}
+						if (onWork == 41){
+							onWork =2;
+							System.out.print( "2A-   " );
+							System.out.print( "\r" );					
+						} else if (onWork == 11){
+							onWork =12;
+							System.out.print( "2A\\   " );
+							System.out.print( "\r" );					
+						} else if (onWork == 21){
+							onWork =22;
+							System.out.print( "2A|   " );
+							System.out.print( "\r" );					
+						} else if (onWork == 31){
+							onWork =32;
+							System.out.print( "2A/   " );
+							System.out.print( "\r" );					
+						}else {
+							onWork = onWork +1;
 						}
 					}
 					String name = path;
@@ -180,6 +262,25 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl
 								}
 								break;
 							}
+						}
+						if (onWork == 41){
+							onWork =2;
+							System.out.print( "2A-   " );
+							System.out.print( "\r" );					
+						} else if (onWork == 11){
+							onWork =12;
+							System.out.print( "2A\\   " );
+							System.out.print( "\r" );					
+						} else if (onWork == 21){
+							onWork =22;
+							System.out.print( "2A|   " );
+							System.out.print( "\r" );					
+						} else if (onWork == 31){
+							onWork =32;
+							System.out.print( "2A/   " );
+							System.out.print( "\r" );					
+						}else {
+							onWork = onWork +1;
 						}
 					}
 

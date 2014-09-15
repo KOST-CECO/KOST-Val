@@ -76,6 +76,12 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws ValidationJsurplusFilesException
 	{
+		// Ausgabe SIARD-Modul
+		// Ersichtlich das KOST-Val arbeitet
+		System.out.print( "J   " );
+		System.out.print( "\r" );
+		int onWork = 41;
+
 		boolean valid = true;
 		try {
 			String pathToWorkDir = getConfigurationService().getPathToWorkDir();
@@ -108,6 +114,25 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 			File[] schemas = content.listFiles();
 			for ( File schema : schemas ) {
 				valid = valid && validateSchema( schema, xPath, doc );
+				if ( onWork == 41 ) {
+					onWork = 2;
+					System.out.print( "J-   " );
+					System.out.print( "\r" );
+				} else if ( onWork == 11 ) {
+					onWork = 12;
+					System.out.print( "J\\   " );
+					System.out.print( "\r" );
+				} else if ( onWork == 21 ) {
+					onWork = 22;
+					System.out.print( "J|   " );
+					System.out.print( "\r" );
+				} else if ( onWork == 31 ) {
+					onWork = 32;
+					System.out.print( "J/   " );
+					System.out.print( "\r" );
+				} else {
+					onWork = onWork + 1;
+				}
 			}
 			xPath = null;
 			doc = null;
@@ -248,7 +273,7 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 			}
 		}
 		xPath = null;
-		doc= null;
+		doc = null;
 		return valid;
 	}
 
@@ -288,8 +313,8 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 										table.getName(), file.getName() ) );
 			}
 		}
-		folder =null;
-		file= null;
+		folder = null;
+		file = null;
 		xPath = null;
 		return valid;
 	}

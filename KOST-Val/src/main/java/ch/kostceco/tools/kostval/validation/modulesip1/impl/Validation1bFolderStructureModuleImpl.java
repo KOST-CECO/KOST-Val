@@ -38,6 +38,11 @@ public class Validation1bFolderStructureModuleImpl extends ValidationModuleImpl
 	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws Validation1bFolderStructureException
 	{
+		// Ausgabe SIP-Modul
+		// Ersichtlich das KOST-Val arbeitet
+		System.out.print( "1B   " );
+		System.out.print( "\r" );
+
 		boolean isValid = true;
 		File content = new File( valDatei.getAbsolutePath() + "\\content" );
 		File header = new File( valDatei.getAbsolutePath() + "\\header" );

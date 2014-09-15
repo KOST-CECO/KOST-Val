@@ -61,6 +61,11 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws Validation1cNamingException
 	{
+		// Ausgabe SIP-Modul
+		// Ersichtlich das KOST-Val arbeitet
+		System.out.print( "1C   " );
+		System.out.print( "\r" );
+		int onWork = 41;
 
 		boolean valid = true;
 		boolean charIo = true;
@@ -118,6 +123,25 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 						charIo = false;
 					}
 				}
+				if ( onWork == 41 ) {
+					onWork = 2;
+					System.out.print( "1C-   " );
+					System.out.print( "\r" );
+				} else if ( onWork == 11 ) {
+					onWork = 12;
+					System.out.print( "1C\\   " );
+					System.out.print( "\r" );
+				} else if ( onWork == 21 ) {
+					onWork = 22;
+					System.out.print( "1C|   " );
+					System.out.print( "\r" );
+				} else if ( onWork == 31 ) {
+					onWork = 32;
+					System.out.print( "1C/   " );
+					System.out.print( "\r" );
+				} else {
+					onWork = onWork + 1;
+				}
 			}
 		} catch ( Exception e ) {
 			getMessageService().logError(
@@ -164,6 +188,25 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 															name ) );
 					tlIo = false;
 				}
+				if ( onWork == 41 ) {
+					onWork = 2;
+					System.out.print( "1C-   " );
+					System.out.print( "\r" );
+				} else if ( onWork == 11 ) {
+					onWork = 12;
+					System.out.print( "1C\\   " );
+					System.out.print( "\r" );
+				} else if ( onWork == 21 ) {
+					onWork = 22;
+					System.out.print( "1C|   " );
+					System.out.print( "\r" );
+				} else if ( onWork == 31 ) {
+					onWork = 32;
+					System.out.print( "1C/   " );
+					System.out.print( "\r" );
+				} else {
+					onWork = onWork + 1;
+				}
 			}
 		} catch ( Exception e ) {
 			getMessageService().logError(
@@ -193,6 +236,25 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 											MESSAGE_XML_AC_NOTALLOWEDFILE,
 											"header/" + name ) );
 					tlIo = false;
+				}
+				if ( onWork == 41 ) {
+					onWork = 2;
+					System.out.print( "1C-   " );
+					System.out.print( "\r" );
+				} else if ( onWork == 11 ) {
+					onWork = 12;
+					System.out.print( "1C\\   " );
+					System.out.print( "\r" );
+				} else if ( onWork == 21 ) {
+					onWork = 22;
+					System.out.print( "1C|   " );
+					System.out.print( "\r" );
+				} else if ( onWork == 31 ) {
+					onWork = 32;
+					System.out.print( "1C/   " );
+					System.out.print( "\r" );
+				} else {
+					onWork = onWork + 1;
 				}
 			}
 		} catch ( Exception e ) {
@@ -295,6 +357,25 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 						valid = false;
 					}
 				}
+				if ( onWork == 41 ) {
+					onWork = 2;
+					System.out.print( "1C-   " );
+					System.out.print( "\r" );
+				} else if ( onWork == 11 ) {
+					onWork = 12;
+					System.out.print( "1C\\   " );
+					System.out.print( "\r" );
+				} else if ( onWork == 21 ) {
+					onWork = 22;
+					System.out.print( "1C|   " );
+					System.out.print( "\r" );
+				} else if ( onWork == 31 ) {
+					onWork = 32;
+					System.out.print( "1C/   " );
+					System.out.print( "\r" );
+				} else {
+					onWork = onWork + 1;
+				}
 			}
 
 			if ( valid != false ) {
@@ -317,6 +398,25 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 												"header/xsd/" + name ) );
 						valid = false;
 					}
+					if ( onWork == 41 ) {
+						onWork = 2;
+						System.out.print( "1C-   " );
+						System.out.print( "\r" );
+					} else if ( onWork == 11 ) {
+						onWork = 12;
+						System.out.print( "1C\\   " );
+						System.out.print( "\r" );
+					} else if ( onWork == 21 ) {
+						onWork = 22;
+						System.out.print( "1C|   " );
+						System.out.print( "\r" );
+					} else if ( onWork == 31 ) {
+						onWork = 32;
+						System.out.print( "1C/   " );
+						System.out.print( "\r" );
+					} else {
+						onWork = onWork + 1;
+					}
 				}
 
 				Set<String> keys = allowedXsdFiles.keySet();
@@ -330,6 +430,25 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 											MESSAGE_XML_AC_MISSINGFILE,
 											"header/xsd/" + string ) );
 					valid = false;
+					if ( onWork == 41 ) {
+						onWork = 2;
+						System.out.print( "1C-   " );
+						System.out.print( "\r" );
+					} else if ( onWork == 11 ) {
+						onWork = 12;
+						System.out.print( "1C\\   " );
+						System.out.print( "\r" );
+					} else if ( onWork == 21 ) {
+						onWork = 22;
+						System.out.print( "1C|   " );
+						System.out.print( "\r" );
+					} else if ( onWork == 31 ) {
+						onWork = 32;
+						System.out.print( "1C/   " );
+						System.out.print( "\r" );
+					} else {
+						onWork = onWork + 1;
+					}
 				}
 			}
 		} catch ( Exception e ) {
@@ -382,6 +501,25 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 							lengthIo = false;
 						}
 					}
+				}
+				if ( onWork == 41 ) {
+					onWork = 2;
+					System.out.print( "1C-   " );
+					System.out.print( "\r" );
+				} else if ( onWork == 11 ) {
+					onWork = 12;
+					System.out.print( "1C\\   " );
+					System.out.print( "\r" );
+				} else if ( onWork == 21 ) {
+					onWork = 22;
+					System.out.print( "1C|   " );
+					System.out.print( "\r" );
+				} else if ( onWork == 31 ) {
+					onWork = 32;
+					System.out.print( "1C/   " );
+					System.out.print( "\r" );
+				} else {
+					onWork = onWork + 1;
 				}
 			}
 		} catch ( Exception e ) {

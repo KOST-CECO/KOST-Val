@@ -52,6 +52,12 @@ public class Validation1fPrimaryDataModuleImpl extends ValidationModuleImpl
 	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws Validation1fPrimaryDataException
 	{
+		// Ausgabe SIP-Modul
+		// Ersichtlich das KOST-Val arbeitet
+		System.out.print( "1F   " );
+		System.out.print( "\r" );
+		int onWork = 41;
+
 		boolean contentFolderEmpty = true;
 
 		try {
@@ -64,6 +70,25 @@ public class Validation1fPrimaryDataModuleImpl extends ValidationModuleImpl
 				if ( entryName.startsWith( "content/" ) ) {
 					contentFolderEmpty = false;
 					break;
+				}
+				if ( onWork == 41 ) {
+					onWork = 2;
+					System.out.print( "1F-   " );
+					System.out.print( "\r" );
+				} else if ( onWork == 11 ) {
+					onWork = 12;
+					System.out.print( "1F\\   " );
+					System.out.print( "\r" );
+				} else if ( onWork == 21 ) {
+					onWork = 22;
+					System.out.print( "1F|   " );
+					System.out.print( "\r" );
+				} else if ( onWork == 31 ) {
+					onWork = 32;
+					System.out.print( "1F/   " );
+					System.out.print( "\r" );
+				} else {
+					onWork = onWork + 1;
 				}
 			}
 			if ( contentFolderEmpty == true ) {

@@ -47,6 +47,11 @@ public class Validation1eSipTypeModuleImpl extends ValidationModuleImpl
 	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws Validation1eSipTypeException
 	{
+		// Ausgabe SIP-Modul
+		// Ersichtlich das KOST-Val arbeitet
+		System.out.print( "1E   " );
+		System.out.print( "\r" );
+
 		try {
 
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();

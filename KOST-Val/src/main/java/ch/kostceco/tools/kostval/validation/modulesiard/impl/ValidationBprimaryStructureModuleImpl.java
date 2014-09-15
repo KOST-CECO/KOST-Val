@@ -48,6 +48,11 @@ public class ValidationBprimaryStructureModuleImpl extends ValidationModuleImpl
 	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws ValidationBprimaryStructureException
 	{
+		// Ausgabe SIARD-Modul
+		// Ersichtlich das KOST-Val arbeitet
+		System.out.print( "B   " );
+		System.out.print( "\r" );
+		int onWork = 41;
 
 		Integer bExistsHeaderFolder = 0;
 		Integer bExistsContentFolder = 0;
@@ -85,6 +90,25 @@ public class ValidationBprimaryStructureModuleImpl extends ValidationModuleImpl
 						// duerfte: {0}
 						return false;
 					}
+				}
+				if ( onWork == 41 ) {
+					onWork = 2;
+					System.out.print( "B-   " );
+					System.out.print( "\r" );
+				} else if ( onWork == 11 ) {
+					onWork = 12;
+					System.out.print( "B\\   " );
+					System.out.print( "\r" );
+				} else if ( onWork == 21 ) {
+					onWork = 22;
+					System.out.print( "B|   " );
+					System.out.print( "\r" );
+				} else if ( onWork == 31 ) {
+					onWork = 32;
+					System.out.print( "B/   " );
+					System.out.print( "\r" );
+				} else {
+					onWork = onWork + 1;
 				}
 			}
 			zipfile.close();

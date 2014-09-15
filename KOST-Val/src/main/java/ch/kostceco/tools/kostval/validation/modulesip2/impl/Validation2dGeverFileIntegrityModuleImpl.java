@@ -57,6 +57,12 @@ public class Validation2dGeverFileIntegrityModuleImpl extends
 	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws Validation2dGeverFileIntegrityException
 	{
+		// Ausgabe SIP-Modul
+		// Ersichtlich das KOST-Val arbeitet
+		System.out.print( "2D   " );
+		System.out.print( "\r" );
+		int onWork = 41;
+
 		Map<String, String> dateiRefContent = new HashMap<String, String>();
 		Map<String, String> dateiRefOrdnungssystem = new HashMap<String, String>();
 
@@ -92,6 +98,25 @@ public class Validation2dGeverFileIntegrityModuleImpl extends
 					Node titelNode = titelList.item( 0 );
 					dateiRefOrdnungssystem.put( fstNode.getTextContent(),
 							titelNode.getTextContent() );
+					if ( onWork == 41 ) {
+						onWork = 2;
+						System.out.print( "2D-   " );
+						System.out.print( "\r" );
+					} else if ( onWork == 11 ) {
+						onWork = 12;
+						System.out.print( "2D\\   " );
+						System.out.print( "\r" );
+					} else if ( onWork == 21 ) {
+						onWork = 22;
+						System.out.print( "2D|   " );
+						System.out.print( "\r" );
+					} else if ( onWork == 31 ) {
+						onWork = 32;
+						System.out.print( "2D/   " );
+						System.out.print( "\r" );
+					} else {
+						onWork = onWork + 1;
+					}
 				}
 
 				// alle datei ids aus header/content holen
@@ -128,6 +153,25 @@ public class Validation2dGeverFileIntegrityModuleImpl extends
 									+ titelNode.getTextContent() );
 						}
 					}
+					if ( onWork == 41 ) {
+						onWork = 2;
+						System.out.print( "2D-   " );
+						System.out.print( "\r" );
+					} else if ( onWork == 11 ) {
+						onWork = 12;
+						System.out.print( "2D\\   " );
+						System.out.print( "\r" );
+					} else if ( onWork == 21 ) {
+						onWork = 22;
+						System.out.print( "2D|   " );
+						System.out.print( "\r" );
+					} else if ( onWork == 31 ) {
+						onWork = 32;
+						System.out.print( "2D/   " );
+						System.out.print( "\r" );
+					} else {
+						onWork = onWork + 1;
+					}
 				}
 
 				Set<String> keysContent = dateiRefContent.keySet();
@@ -150,6 +194,25 @@ public class Validation2dGeverFileIntegrityModuleImpl extends
 						}
 						valid = false;
 					}
+					if ( onWork == 41 ) {
+						onWork = 2;
+						System.out.print( "2D-   " );
+						System.out.print( "\r" );
+					} else if ( onWork == 11 ) {
+						onWork = 12;
+						System.out.print( "2D\\   " );
+						System.out.print( "\r" );
+					} else if ( onWork == 21 ) {
+						onWork = 22;
+						System.out.print( "2D|   " );
+						System.out.print( "\r" );
+					} else if ( onWork == 31 ) {
+						onWork = 32;
+						System.out.print( "2D/   " );
+						System.out.print( "\r" );
+					} else {
+						onWork = onWork + 1;
+					}
 				}
 
 				Set<String> keysRefOrd = dateiRefOrdnungssystem.keySet();
@@ -169,6 +232,25 @@ public class Validation2dGeverFileIntegrityModuleImpl extends
 															MESSAGE_XML_BD_MISSINGINABLIEFERUNG,
 															keyOrd ) );
 					valid = false;
+					if ( onWork == 41 ) {
+						onWork = 2;
+						System.out.print( "2D-   " );
+						System.out.print( "\r" );
+					} else if ( onWork == 11 ) {
+						onWork = 12;
+						System.out.print( "2D\\   " );
+						System.out.print( "\r" );
+					} else if ( onWork == 21 ) {
+						onWork = 22;
+						System.out.print( "2D|   " );
+						System.out.print( "\r" );
+					} else if ( onWork == 31 ) {
+						onWork = 32;
+						System.out.print( "2D/   " );
+						System.out.print( "\r" );
+					} else {
+						onWork = onWork + 1;
+					}
 				}
 
 			} else {

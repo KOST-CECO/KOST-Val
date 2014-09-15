@@ -57,6 +57,12 @@ public class Validation3aFormatRecognitionModuleImpl extends
 	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws Validation3aFormatRecognitionException
 	{
+		// Ausgabe SIP-Modul
+		// Ersichtlich das KOST-Val arbeitet
+		System.out.print( "3A   " );
+		System.out.print( "\r" );
+		int onWork = 41;
+
 		boolean valid = true;
 
 		Map<String, File> filesInSipFile = new HashMap<String, File>();
@@ -114,6 +120,25 @@ public class Validation3aFormatRecognitionModuleImpl extends
 			if ( !newFile.isDirectory() ) {
 				filesInSipFile.put( entryName, newFile );
 			}
+			if ( onWork == 41 ) {
+				onWork = 2;
+				System.out.print( "3A-   " );
+				System.out.print( "\r" );
+			} else if ( onWork == 11 ) {
+				onWork = 12;
+				System.out.print( "3A\\   " );
+				System.out.print( "\r" );
+			} else if ( onWork == 21 ) {
+				onWork = 22;
+				System.out.print( "3A|   " );
+				System.out.print( "\r" );
+			} else if ( onWork == 31 ) {
+				onWork = 32;
+				System.out.print( "3A/   " );
+				System.out.print( "\r" );
+			} else {
+				onWork = onWork + 1;
+			}
 		}
 
 		Map<String, String> hPuids = getConfigurationService()
@@ -150,6 +175,25 @@ public class Validation3aFormatRecognitionModuleImpl extends
 
 				}
 
+			}
+			if ( onWork == 41 ) {
+				onWork = 2;
+				System.out.print( "3A-   " );
+				System.out.print( "\r" );
+			} else if ( onWork == 11 ) {
+				onWork = 12;
+				System.out.print( "3A\\   " );
+				System.out.print( "\r" );
+			} else if ( onWork == 21 ) {
+				onWork = 22;
+				System.out.print( "3A|   " );
+				System.out.print( "\r" );
+			} else if ( onWork == 31 ) {
+				onWork = 32;
+				System.out.print( "3A/   " );
+				System.out.print( "\r" );
+			} else {
+				onWork = onWork + 1;
 			}
 		}
 

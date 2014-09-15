@@ -50,6 +50,10 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements
 	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws ValidationAzipException
 	{
+		// Ausgabe SIARD-Modul
+		// Ersichtlich das KOST-Val arbeitet
+		System.out.print( "A   " );
+		System.out.print( "\r" );
 
 		boolean valid = false;
 

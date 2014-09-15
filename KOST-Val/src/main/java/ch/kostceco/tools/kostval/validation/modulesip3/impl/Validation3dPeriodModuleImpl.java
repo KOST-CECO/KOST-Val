@@ -60,6 +60,11 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws Validation3dPeriodException
 	{
+		// Ausgabe SIP-Modul
+		// Ersichtlich das KOST-Val arbeitet
+		System.out.print( "3D   " );
+		System.out.print( "\r" );
+		int onWork = 41;
 
 		boolean valid = true;
 
@@ -660,6 +665,25 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 											}
 										}
 									}
+									if ( onWork == 41 ) {
+										onWork = 2;
+										System.out.print( "3D-   " );
+										System.out.print( "\r" );
+									} else if ( onWork == 11 ) {
+										onWork = 12;
+										System.out.print( "3D\\   " );
+										System.out.print( "\r" );
+									} else if ( onWork == 21 ) {
+										onWork = 22;
+										System.out.print( "3D|   " );
+										System.out.print( "\r" );
+									} else if ( onWork == 31 ) {
+										onWork = 32;
+										System.out.print( "3D/   " );
+										System.out.print( "\r" );
+									} else {
+										onWork = onWork + 1;
+									}
 								}
 
 								// selectNodeIterator ist zu Zeitintensiv
@@ -902,6 +926,25 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 
 				// Ende der Zeitraumvalidierung auf der Stufe Dokument
 
+				if ( onWork == 41 ) {
+					onWork = 2;
+					System.out.print( "3D-   " );
+					System.out.print( "\r" );
+				} else if ( onWork == 11 ) {
+					onWork = 12;
+					System.out.print( "3D\\   " );
+					System.out.print( "\r" );
+				} else if ( onWork == 21 ) {
+					onWork = 22;
+					System.out.print( "3D|   " );
+					System.out.print( "\r" );
+				} else if ( onWork == 31 ) {
+					onWork = 32;
+					System.out.print( "3D/   " );
+					System.out.print( "\r" );
+				} else {
+					onWork = onWork + 1;
+				}
 			}
 
 		} catch ( Exception e ) {

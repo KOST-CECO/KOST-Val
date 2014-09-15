@@ -116,6 +116,11 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements
 	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws ValidationFrowException
 	{
+		// Ausgabe SIARD-Modul
+		// Ersichtlich das KOST-Val arbeitet
+		System.out.print( "F   " );
+		System.out.print( "\r" );
+
 		// All over validation flag
 		boolean valid = true;
 		ValidationContext validationContext = new ValidationContext();
@@ -249,6 +254,7 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements
 	private boolean validateTableXMLFiles( ValidationContext validationContext )
 			throws Exception
 	{
+		int onWork = 41;
 		boolean validTableXMLFiles = true;
 		StringBuilder namesOfInvalidTables = new StringBuilder();
 		Properties properties = validationContext.getValidationProperties();
@@ -287,6 +293,25 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements
 										.getProperty( "module.f.siard.table.xml.file.extension" )
 								+ " (+" + (rows - rowNumber) + ") " );
 			}
+			if ( onWork == 41 ) {
+				onWork = 2;
+				System.out.print( "F-   " );
+				System.out.print( "\r" );
+			} else if ( onWork == 11 ) {
+				onWork = 12;
+				System.out.print( "F\\   " );
+				System.out.print( "\r" );
+			} else if ( onWork == 21 ) {
+				onWork = 22;
+				System.out.print( "F|   " );
+				System.out.print( "\r" );
+			} else if ( onWork == 31 ) {
+				onWork = 32;
+				System.out.print( "F/   " );
+				System.out.print( "\r" );
+			} else {
+				onWork = onWork + 1;
+			}
 		}
 		// Writing back error log
 		this.setIncongruentTableXMLFiles( namesOfInvalidTables );
@@ -301,6 +326,7 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements
 	private boolean validateTableXSDFiles( ValidationContext validationContext )
 			throws Exception
 	{
+		int onWork = 41;
 		boolean validTableXSDFiles = true;
 		StringBuilder namesOfInvalidTables = new StringBuilder();
 		Properties properties = validationContext.getValidationProperties();
@@ -400,6 +426,25 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements
 						}
 					}
 				}
+			}
+			if ( onWork == 41 ) {
+				onWork = 2;
+				System.out.print( "F-   " );
+				System.out.print( "\r" );
+			} else if ( onWork == 11 ) {
+				onWork = 12;
+				System.out.print( "F\\   " );
+				System.out.print( "\r" );
+			} else if ( onWork == 21 ) {
+				onWork = 22;
+				System.out.print( "F|   " );
+				System.out.print( "\r" );
+			} else if ( onWork == 31 ) {
+				onWork = 32;
+				System.out.print( "F/   " );
+				System.out.print( "\r" );
+			} else {
+				onWork = onWork + 1;
 			}
 		}
 
@@ -544,6 +589,7 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements
 	private boolean extractSiardArchive( ValidationContext validationContext )
 			throws FileNotFoundException, IOException, Exception
 	{
+		int onWork = 41;
 		boolean sucessfullyCommitted = false;
 		// Initializing the access to the SIARD archive
 		Zip64File zipfile = new Zip64File( validationContext.getSiardArchive() );
@@ -573,6 +619,25 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements
 				extractedSiardFiles.put( newFile.getPath(), newFile );
 				eis.close();
 				fos.close();
+			}
+			if ( onWork == 41 ) {
+				onWork = 2;
+				System.out.print( "F-   " );
+				System.out.print( "\r" );
+			} else if ( onWork == 11 ) {
+				onWork = 12;
+				System.out.print( "F\\   " );
+				System.out.print( "\r" );
+			} else if ( onWork == 21 ) {
+				onWork = 22;
+				System.out.print( "F|   " );
+				System.out.print( "\r" );
+			} else if ( onWork == 31 ) {
+				onWork = 32;
+				System.out.print( "F/   " );
+				System.out.print( "\r" );
+			} else {
+				onWork = onWork + 1;
 			}
 		}
 		validationContext.setSiardFiles( extractedSiardFiles );
@@ -632,6 +697,7 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements
 	private boolean prepareValidationData( ValidationContext validationContext )
 			throws JDOMException, IOException, Exception
 	{
+		int onWork = 41;
 		boolean successfullyCommitted = false;
 		Properties properties = validationContext.getValidationProperties();
 		// Gets the tables to be validated
@@ -768,6 +834,25 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements
 					// validation context
 					validationContext.setSiardTables( siardTables );
 				}
+			}
+			if ( onWork == 41 ) {
+				onWork = 2;
+				System.out.print( "F-   " );
+				System.out.print( "\r" );
+			} else if ( onWork == 11 ) {
+				onWork = 12;
+				System.out.print( "F\\   " );
+				System.out.print( "\r" );
+			} else if ( onWork == 21 ) {
+				onWork = 22;
+				System.out.print( "F|   " );
+				System.out.print( "\r" );
+			} else if ( onWork == 31 ) {
+				onWork = 32;
+				System.out.print( "F/   " );
+				System.out.print( "\r" );
+			} else {
+				onWork = onWork + 1;
 			}
 		}
 		if ( validationContext.getSiardTables().size() > 0 ) {

@@ -72,6 +72,11 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws ValidationCheaderException
 	{
+		// Ausgabe SIARD-Modul
+		// Ersichtlich das KOST-Val arbeitet
+		System.out.print( "C   " );
+		System.out.print( "\r" );
+		int onWork = 41;
 
 		// Sind im Header-Ordner metadata.xml und metadata.xsd vorhanden?
 		FileEntry metadataxml = null;
@@ -86,6 +91,25 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 				}
 				if ( fileEntry.getName().equals( "header/" + XSD_METADATA ) ) {
 					metadataxsd = fileEntry;
+				}
+				if ( onWork == 41 ) {
+					onWork = 2;
+					System.out.print( "C-   " );
+					System.out.print( "\r" );
+				} else if ( onWork == 11 ) {
+					onWork = 12;
+					System.out.print( "C\\   " );
+					System.out.print( "\r" );
+				} else if ( onWork == 21 ) {
+					onWork = 22;
+					System.out.print( "C|   " );
+					System.out.print( "\r" );
+				} else if ( onWork == 31 ) {
+					onWork = 32;
+					System.out.print( "C/   " );
+					System.out.print( "\r" );
+				} else {
+					onWork = onWork + 1;
 				}
 			}
 			if ( metadataxml == null ) {
@@ -199,6 +223,25 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 					eis.close();
 				}
 
+				if ( onWork == 41 ) {
+					onWork = 2;
+					System.out.print( "C-   " );
+					System.out.print( "\r" );
+				} else if ( onWork == 11 ) {
+					onWork = 12;
+					System.out.print( "C\\   " );
+					System.out.print( "\r" );
+				} else if ( onWork == 21 ) {
+					onWork = 22;
+					System.out.print( "C|   " );
+					System.out.print( "\r" );
+				} else if ( onWork == 31 ) {
+					onWork = 32;
+					System.out.print( "C/   " );
+					System.out.print( "\r" );
+				} else {
+					onWork = onWork + 1;
+				}
 			}
 			if ( xmlToValidate != null && xsdToValidate != null ) {
 				// der andere Fall wurde bereits oben abgefangen

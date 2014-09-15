@@ -117,13 +117,19 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws ValidationEcolumnException
 	{
+		// Ausgabe SIARD-Modul
+		// Ersichtlich das KOST-Val arbeitet
+		System.out.print( "E   " );
+		System.out.print( "\r" );
+
 		// All over validation flag
 		boolean valid = true;
 		// Important validation flag
 		boolean congruentColumnCount = false;
 		ValidationContext validationContext = new ValidationContext();
 		validationContext.setSiardArchive( valDatei );
-		validationContext.setConfigurationService( this.getConfigurationService() );
+		validationContext.setConfigurationService( this
+				.getConfigurationService() );
 		this.setValidationContext( validationContext );
 		try {
 			// Initialize the validation context
@@ -280,6 +286,7 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 	private boolean validateColumnCount( ValidationContext validationContext )
 			throws Exception
 	{
+		int onWork = 41;
 		boolean validDatabase = true;
 		StringBuilder namesOfInvalidTables = new StringBuilder();
 		Properties properties = validationContext.getValidationProperties();
@@ -309,6 +316,25 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 						+ columnsDifference : columnsDifference) );
 				namesOfInvalidTables.append( ")" );
 			}
+			if ( onWork == 41 ) {
+				onWork = 2;
+				System.out.print( "E-   " );
+				System.out.print( "\r" );
+			} else if ( onWork == 11 ) {
+				onWork = 12;
+				System.out.print( "E\\   " );
+				System.out.print( "\r" );
+			} else if ( onWork == 21 ) {
+				onWork = 22;
+				System.out.print( "E|   " );
+				System.out.print( "\r" );
+			} else if ( onWork == 31 ) {
+				onWork = 32;
+				System.out.print( "E/   " );
+				System.out.print( "\r" );
+			} else {
+				onWork = onWork + 1;
+			}
 		}
 		// Writing back error log
 		this.setIncongruentColumnCount( namesOfInvalidTables );
@@ -323,6 +349,7 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 	private boolean validateColumnOccurrence(
 			ValidationContext validationContext ) throws Exception
 	{
+		int onWork = 41;
 		boolean validTable;
 		boolean validDatabase;
 		Properties properties = validationContext.getValidationProperties();
@@ -407,6 +434,25 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 				namesOfInvalidColumns = null;
 				namesOfInvalidColumns = new StringBuilder();
 			}
+			if ( onWork == 41 ) {
+				onWork = 2;
+				System.out.print( "E-   " );
+				System.out.print( "\r" );
+			} else if ( onWork == 11 ) {
+				onWork = 12;
+				System.out.print( "E\\   " );
+				System.out.print( "\r" );
+			} else if ( onWork == 21 ) {
+				onWork = 22;
+				System.out.print( "E|   " );
+				System.out.print( "\r" );
+			} else if ( onWork == 31 ) {
+				onWork = 32;
+				System.out.print( "E/   " );
+				System.out.print( "\r" );
+			} else {
+				onWork = onWork + 1;
+			}
 		}
 		// Writing back error log
 		this.setIncongruentColumnOccurrence( namesOfInvalidTables );
@@ -420,6 +466,7 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 	private boolean validateColumnType( ValidationContext validationContext )
 			throws Exception
 	{
+		int onWork = 41;
 		boolean validTable;
 		boolean validDatabase;
 		Properties properties = validationContext.getValidationProperties();
@@ -511,6 +558,25 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 				namesOfInvalidTables.append( ")" );
 				namesOfInvalidColumns = null;
 				namesOfInvalidColumns = new StringBuilder();
+			}
+			if ( onWork == 41 ) {
+				onWork = 2;
+				System.out.print( "E-   " );
+				System.out.print( "\r" );
+			} else if ( onWork == 11 ) {
+				onWork = 12;
+				System.out.print( "E\\   " );
+				System.out.print( "\r" );
+			} else if ( onWork == 21 ) {
+				onWork = 22;
+				System.out.print( "E|   " );
+				System.out.print( "\r" );
+			} else if ( onWork == 31 ) {
+				onWork = 32;
+				System.out.print( "E/   " );
+				System.out.print( "\r" );
+			} else {
+				onWork = onWork + 1;
 			}
 		}
 		this.setIncongruentColumnType( namesOfInvalidTables );
@@ -647,6 +713,7 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 	private boolean extractSiardArchive( ValidationContext validationContext )
 			throws FileNotFoundException, IOException, Exception
 	{
+		int onWork = 41;
 		boolean sucessfullyCommitted = false;
 		// Initializing the access to the SIARD archive
 		Zip64File zipfile = new Zip64File( validationContext.getSiardArchive() );
@@ -676,6 +743,25 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 				extractedSiardFiles.put( newFile.getPath(), newFile );
 				eis.close();
 				fos.close();
+			}
+			if ( onWork == 41 ) {
+				onWork = 2;
+				System.out.print( "E-   " );
+				System.out.print( "\r" );
+			} else if ( onWork == 11 ) {
+				onWork = 12;
+				System.out.print( "E\\   " );
+				System.out.print( "\r" );
+			} else if ( onWork == 21 ) {
+				onWork = 22;
+				System.out.print( "E|   " );
+				System.out.print( "\r" );
+			} else if ( onWork == 31 ) {
+				onWork = 32;
+				System.out.print( "E/   " );
+				System.out.print( "\r" );
+			} else {
+				onWork = onWork + 1;
 			}
 		}
 		validationContext.setSiardFiles( extractedSiardFiles );
@@ -731,6 +817,7 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 	private boolean prepareValidationData( ValidationContext validationContext )
 			throws JDOMException, IOException, Exception
 	{
+		int onWork = 41;
 		boolean successfullyCommitted = false;
 		Properties properties = validationContext.getValidationProperties();
 		// Gets the tables to be validated
@@ -845,6 +932,25 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 					// validation context
 					validationContext.setSiardTables( siardTables );
 				}
+			}
+			if ( onWork == 41 ) {
+				onWork = 2;
+				System.out.print( "E-   " );
+				System.out.print( "\r" );
+			} else if ( onWork == 11 ) {
+				onWork = 12;
+				System.out.print( "E\\   " );
+				System.out.print( "\r" );
+			} else if ( onWork == 21 ) {
+				onWork = 22;
+				System.out.print( "E|   " );
+				System.out.print( "\r" );
+			} else if ( onWork == 31 ) {
+				onWork = 32;
+				System.out.print( "E/   " );
+				System.out.print( "\r" );
+			} else {
+				onWork = onWork + 1;
 			}
 		}
 		if ( validationContext.getSiardTables().size() > 0 ) {
