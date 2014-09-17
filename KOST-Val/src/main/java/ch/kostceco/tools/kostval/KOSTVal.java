@@ -28,6 +28,8 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -205,6 +207,32 @@ public class KOSTVal implements MessageConstants
 			System.exit( 1 );
 		}
 
+		// Im Pfad keine Sonderzeichen
+		// xml-Validierung SIP 1d und SIARD C stürzen ab
+
+		String patternStr = "[^!#\\$%\\(\\)\\+,\\-_\\.=@\\[\\]\\{\\}\\~a-zA-Z0-9 ]";
+		Pattern pattern = Pattern.compile( patternStr );
+
+		String name = tmpDir.getAbsolutePath();
+
+		String[] pathElements = name.split( "/" );
+		for ( int i = 0; i < pathElements.length; i++ ) {
+			String element = pathElements[i];
+
+			Matcher matcher = pattern.matcher( element );
+
+			boolean matchFound = matcher.find();
+			if ( matchFound ) {
+				LOGGER.logError( kostval.getTextResourceService().getText(
+						ERROR_IOE,
+						kostval.getTextResourceService().getText(
+								ERROR_SPECIAL_CHARACTER, name ) ) );
+				System.out.println( kostval.getTextResourceService().getText(
+						ERROR_SPECIAL_CHARACTER, name ) );
+				System.exit( 1 );
+			}
+		}
+
 		// die Anwendung muss mindestens unter Java 6 laufen
 		String javaRuntimeVersion = System.getProperty( "java.vm.version" );
 		if ( javaRuntimeVersion.compareTo( "1.6.0" ) < 0 ) {
@@ -312,6 +340,29 @@ public class KOSTVal implements MessageConstants
 			System.out.println( kostval.getTextResourceService().getText(
 					ERROR_VALFILE_FILENOTEXISTING ) );
 			System.exit( 1 );
+		}
+		
+		// Im Pfad keine Sonderzeichen
+		// xml-Validierung SIP 1d und SIARD C stürzen ab
+
+		 name = valDatei.getAbsolutePath();
+
+		 pathElements = name.split( "/" );
+		for ( int i = 0; i < pathElements.length; i++ ) {
+			String element = pathElements[i];
+
+			Matcher matcher = pattern.matcher( element );
+
+			boolean matchFound = matcher.find();
+			if ( matchFound ) {
+				LOGGER.logError( kostval.getTextResourceService().getText(
+						ERROR_IOE,
+						kostval.getTextResourceService().getText(
+								ERROR_SPECIAL_CHARACTER, name ) ) );
+				System.out.println( kostval.getTextResourceService().getText(
+						ERROR_SPECIAL_CHARACTER, name ) );
+				System.exit( 1 );
+			}
 		}
 
 		if ( args[0].equals( "--format" ) ) {

@@ -78,6 +78,7 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 		System.out.print( "\r" );
 		int onWork = 41;
 
+		boolean result = true;
 		// Sind im Header-Ordner metadata.xml und metadata.xsd vorhanden?
 		FileEntry metadataxml = null;
 		FileEntry metadataxsd = null;
@@ -276,7 +277,8 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 											+ getTextResourceService().getText(
 													ERROR_XML_UNKNOWN,
 													ioe.getMessage()
-															+ " (IOException)" ) );
+															+ " (IOException)" ));
+					result = false;
 				} catch ( SAXException e ) {
 					getMessageService()
 							.logError(
@@ -287,6 +289,7 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 															ERROR_XML_UNKNOWN,
 															e.getMessage()
 																	+ " (SAXException)" ) );
+					result = false;
 				} catch ( ParserConfigurationException e ) {
 					getMessageService()
 							.logError(
@@ -297,6 +300,7 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 															ERROR_XML_UNKNOWN,
 															e.getMessage()
 																	+ " (ParserConfigurationException)" ) );
+					result = false;
 				}
 			}
 			zipfile.close();
@@ -308,7 +312,7 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
-		return true;
+		return result;
 	}
 
 	private class Validator extends DefaultHandler

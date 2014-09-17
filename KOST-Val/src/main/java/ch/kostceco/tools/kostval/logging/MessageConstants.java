@@ -45,7 +45,8 @@ public interface MessageConstants
 	String	ERROR_INCORRECTFILEENDING					= "error.incorrectfileending";
 	String	ERROR_INCORRECTFILEENDINGS					= "error.incorrectfileendings";
 	String	ERROR_WRONG_JRE								= "error.wrong.jdk";
-
+	String	ERROR_SPECIAL_CHARACTER						= "error.special.character";
+	
 	// Globale Meldungen
 	String	MESSAGE_XML_SUMMARY_3C						= "message.xml.summary.3c";
 	String	MESSAGE_XML_VALFILE							= "message.xml.valfile";

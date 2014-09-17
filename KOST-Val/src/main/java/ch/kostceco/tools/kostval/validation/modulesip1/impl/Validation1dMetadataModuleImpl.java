@@ -66,6 +66,8 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 		System.out.print( "1D   " );
 		System.out.print( "\r" );
 
+		boolean result = true;
+
 		try {
 			File xmlToValidate = new File( valDatei.getAbsolutePath()
 					+ "\\header\\metadata.xml" );
@@ -95,7 +97,7 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 					builder.setErrorHandler( handler );
 					builder.parse( xmlToValidate.getAbsolutePath() );
 					if ( handler.validationError == true ) {
-						return false;
+						result = false;
 					}
 
 				} catch ( java.io.IOException ioe ) {
@@ -107,6 +109,7 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 													ERROR_XML_UNKNOWN,
 													ioe.getMessage()
 															+ " (IOException)" ) );
+					result = false;
 				} catch ( SAXException e ) {
 					getMessageService()
 							.logError(
@@ -117,6 +120,7 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 															ERROR_XML_UNKNOWN,
 															e.getMessage()
 																	+ " (SAXException)" ) );
+					result = false;
 				} catch ( ParserConfigurationException e ) {
 					getMessageService()
 							.logError(
@@ -128,6 +132,7 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 															ERROR_XML_UNKNOWN,
 															e.getMessage()
 																	+ " (ParserConfigurationException)" ) );
+					result = false;
 				}
 			} else if ( xmlToValidate.exists() && xsdToValidateEch1.exists() ) {
 				// Schmavalidierung nach eCH Version 1 inkl Addendum in den
@@ -155,7 +160,7 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 					builder.setErrorHandler( handler );
 					builder.parse( xmlToValidate.getAbsolutePath() );
 					if ( handler.validationError == true ) {
-						return false;
+						result = false;
 					}
 
 				} catch ( java.io.IOException ioe ) {
@@ -167,6 +172,7 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 													ERROR_XML_UNKNOWN,
 													ioe.getMessage()
 															+ " (IOException)" ) );
+					result = false;
 				} catch ( SAXException e ) {
 					getMessageService()
 							.logError(
@@ -177,6 +183,7 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 															ERROR_XML_UNKNOWN,
 															e.getMessage()
 																	+ " (SAXException)" ) );
+					result = false;
 				} catch ( ParserConfigurationException e ) {
 					getMessageService()
 							.logError(
@@ -188,6 +195,7 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 															ERROR_XML_UNKNOWN,
 															e.getMessage()
 																	+ " (ParserConfigurationException)" ) );
+					result = false;
 				}
 
 				try {
@@ -212,7 +220,7 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 					builder.setErrorHandler( handler );
 					builder.parse( xmlToValidateAdd.getAbsolutePath() );
 					if ( handler.validationError == true ) {
-						return false;
+						result = false;
 					}
 
 				} catch ( java.io.IOException ioe ) {
@@ -224,6 +232,7 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 													ERROR_XML_UNKNOWN,
 													ioe.getMessage()
 															+ " (IOException)" ) );
+					result = false;
 				} catch ( SAXException e ) {
 					getMessageService()
 							.logError(
@@ -234,6 +243,7 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 															ERROR_XML_UNKNOWN,
 															e.getMessage()
 																	+ " (SAXException)" ) );
+					result = false;
 				} catch ( ParserConfigurationException e ) {
 					getMessageService()
 							.logError(
@@ -245,97 +255,9 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 															ERROR_XML_UNKNOWN,
 															e.getMessage()
 																	+ " (ParserConfigurationException)" ) );
+					result = false;
 				}
 			}
-
-			/*
-			 * if ( xmlToValidate == null || metadataxml == null ) {
-			 * getMessageService().logError( getTextResourceService().getText(
-			 * MESSAGE_XML_MODUL_Ad_SIP ) + getTextResourceService().getText(
-			 * ERROR_XML_AE_NOMETADATAFOUND ) ); return false; }
-			 */
-
-			// TODO: Validieren ob die xsd korrekt in Metadata.xml enthalten
-			// sind
-			// evtl ist dies gar nicht nötig falls dies durch Modul2 abgefangen
-			// wird
-
-			/*
-			 * EntryInputStream eis = zipfile.openEntryInputStream( metadataxml
-			 * .getName() ); BufferedInputStream is = new BufferedInputStream(
-			 * eis );
-			 * 
-			 * try { DocumentBuilderFactory dbf = DocumentBuilderFactory
-			 * .newInstance(); DocumentBuilder db = dbf.newDocumentBuilder();
-			 * Document doc = db.parse( is );
-			 * 
-			 * XPath xpath = XPathFactory.newInstance().newXPath(); Element
-			 * elementName = (Element) xpath.evaluate(
-			 * "/paket/inhaltsverzeichnis/ordner/ordner/name", doc,
-			 * XPathConstants.NODE );
-			 * 
-			 * // TODO: Gewährleisten, dass //
-			 * /paket/inhaltsverzeichnis/ordner/name = header ist /*
-			 * Zwischenzeitlich wird eine Spezielle Fehlermeldung ausgegeben,
-			 * sollte in metadata.xml der content vor header aufgeliestet sein
-			 * (ERROR_MODULE_AD_CONTENTB4HEADER)
-			 */
-			/*
-			 * Node parentNode = elementName.getParentNode(); NodeList nodeLst =
-			 * parentNode.getChildNodes();
-			 * 
-			 * for ( int s = 0; s < nodeLst.getLength(); s++ ) {
-			 * 
-			 * Node fstNode = nodeLst.item( s );
-			 * 
-			 * if ( fstNode.getNodeType() == Node.ELEMENT_NODE &&
-			 * fstNode.getNodeName().equals( "datei" ) ) { Element fstElmnt =
-			 * (Element) fstNode; NodeList fstElmntList = fstElmnt
-			 * .getElementsByTagName( "originalName" ); Node wantedNode =
-			 * fstElmntList.item( 0 ); xsdsInMetadata.put(
-			 * wantedNode.getTextContent(), wantedNode.getTextContent() ); }
-			 * 
-			 * }
-			 * 
-			 * } catch ( Exception e ) {
-			 * 
-			 * getMessageService().logError( getTextResourceService().getText(
-			 * MESSAGE_XML_MODUL_Ad_SIP ) + getTextResourceService().getText(
-			 * ERROR_XML_UNKNOWN, e.getMessage() ) ); return false; }
-			 * 
-			 * eis.close(); is.close(); zipfile.close();
-			 * 
-			 * // alle Files, die in metadata.xml unter <header><xsd> //
-			 * aufgelistet sind, müssen im Folder // /header/xsd vorhanden sein,
-			 * und umgekehrt // Map<String, String> xsdsInZip // Map<String,
-			 * String> xsdsInMetadata
-			 * 
-			 * 
-			 * if ( xsdsInZip.size() != xsdsInMetadata.size() ) { if (
-			 * xsdsInMetadata.size() == 0 ) { getMessageService().logError(
-			 * getTextResourceService().getText( MESSAGE_XML_MODUL_Ad_SIP ) +
-			 * getTextResourceService().getText( ERROR_XML_AD_CONTENTB4HEADER )
-			 * ); return false;
-			 * 
-			 * } else { getMessageService().logError(
-			 * getTextResourceService().getText( MESSAGE_XML_MODUL_Ad_SIP ) +
-			 * getTextResourceService().getText( ERROR_XML_AD_WRONGNUMBEROFXSDS
-			 * ) ); return false; } } else { Set keys = xsdsInZip.keySet(); Map
-			 * xsdsInZipControl = new HashMap<String, String>();
-			 * xsdsInZipControl.putAll( xsdsInZip );
-			 * 
-			 * for ( Iterator<String> iterator = keys.iterator(); iterator
-			 * .hasNext(); ) { String key = iterator.next(); String removedKey =
-			 * xsdsInMetadata.remove( key ); if ( removedKey == null ) {
-			 * getMessageService() .logError( getTextResourceService().getText(
-			 * MESSAGE_XML_MODUL_Ad_SIP ) + getTextResourceService() .getText(
-			 * ERROR_XML_AD_WRONGNUMBEROFXSDS ) ); return false; }
-			 * xsdsInZipControl.remove( key ); } if ( xsdsInZipControl.size() !=
-			 * 0 ) { getMessageService().logError(
-			 * getTextResourceService().getText( MESSAGE_XML_MODUL_Ad_SIP ) +
-			 * getTextResourceService().getText( ERROR_XML_AD_WRONGNUMBEROFXSDS
-			 * ) ); return false; } }
-			 */
 
 		} catch ( Exception e ) {
 			getMessageService().logError(
@@ -343,9 +265,8 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 							+ getTextResourceService().getText(
 									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
-
 		}
-		return true;
+		return result;
 	}
 
 	private class Validator extends DefaultHandler

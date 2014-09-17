@@ -84,16 +84,6 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 		Pattern pattern = Pattern.compile( patternStr );
 
 		try {
-			/*
-			 * Zip64File zipfile2 = new Zip64File( valDatei ); List<FileEntry>
-			 * fileEntryList2 = zipfile2.getListFileEntries(); for ( FileEntry
-			 * fileEntry : fileEntryList2 ) {
-			 * 
-			 * String name = fileEntry.getName();
-			 */
-
-			// TODO: 79-83 mit 86-94 ersetzten --> prinzip auch für 153, 240 &
-			// 407 und andere Module
 			Map<String, File> fileMap = Util.getFileMap( valDatei, true );
 			Set<String> fileMapKeys = fileMap.keySet();
 			for ( Iterator<String> iterator = fileMapKeys.iterator(); iterator
