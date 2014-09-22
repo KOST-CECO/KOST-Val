@@ -358,6 +358,22 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 			producerFirstValidator = "PDFTools";
 		}
 
+		File fPdftronExe = new File( pathToPdftronExe );
+		if ( !fPdftronExe.exists()
+				|| !fPdftronExe.getName().equals( "pdfa.exe" ) ) {
+			// Keine Duale Validierung m?glich
+			if ( dualValidation.contentEquals( "dual" )
+					|| producerFirstValidator.contentEquals( "PDFTron" ) ) {
+				getMessageService().logError(
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_A_PDFA )
+								+ getTextResourceService().getText(
+										ERROR_XML_PDFTRON_MISSING ) );
+				dual = false;
+				producerFirstValidator = "PDFTools";
+			}
+		}
+
 		pathToPdftronExe = "\"" + pathToPdftronExe + "\"";
 
 		String pdfTools = "";
@@ -473,151 +489,143 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 						if ( dual ) {
 							// Duale Validierung mit PDFTools
 
+							if ( docPdf.open( valDatei.getAbsolutePath(), "",
+									NativeLibrary.COMPLIANCE.ePDFUnk ) ) {
+								// PDF Konnte geöffnet werden
+								docPdf.setStopOnError( true );
+								docPdf.setReportingLevel( 1 );
+							} else {
+								docPdf.setStopOnError( true );
+								docPdf.setReportingLevel( 1 );
+								if ( docPdf.getErrorCode() == NativeLibrary.ERRORCODE.PDF_E_PASSWORD ) {
+									getMessageService()
+											.logError(
+													getTextResourceService()
+															.getText(
+																	MESSAGE_XML_MODUL_A_PDFA )
+															+ getTextResourceService()
+																	.getText(
+																			ERROR_XML_A_PDFTOOLS_ENCRYPTED ) );
+									return false;
+								} else {
+									getMessageService()
+											.logError(
+													getTextResourceService()
+															.getText(
+																	MESSAGE_XML_MODUL_A_PDFA )
+															+ getTextResourceService()
+																	.getText(
+																			ERROR_XML_A_PDFTOOLS_DAMAGED ) );
+									return false;
+								}
+							}
+
+							/*
+							 * ePDFA1a 5122 ePDFA1b 5121 ePDFA2a 5891 ePDFA2b
+							 * 5889 ePDFA2u 5890
+							 */
+							if ( level.contentEquals( "1A" ) ) {
 								if ( docPdf.open( valDatei.getAbsolutePath(),
-										"", NativeLibrary.COMPLIANCE.ePDFUnk ) ) {
-									// PDF Konnte geöffnet werden
-									docPdf.setStopOnError( true );
-									docPdf.setReportingLevel( 1 );
-								} else {
-									docPdf.setStopOnError( true );
-									docPdf.setReportingLevel( 1 );
-									if ( docPdf.getErrorCode() == NativeLibrary.ERRORCODE.PDF_E_PASSWORD ) {
-										getMessageService()
-												.logError(
-														getTextResourceService()
-																.getText(
-																		MESSAGE_XML_MODUL_A_PDFA )
-																+ getTextResourceService()
-																		.getText(
-																				ERROR_XML_A_PDFTOOLS_ENCRYPTED ) );
-										return false;
-									} else {
-										getMessageService()
-												.logError(
-														getTextResourceService()
-																.getText(
-																		MESSAGE_XML_MODUL_A_PDFA )
-																+ getTextResourceService()
-																		.getText(
-																				ERROR_XML_A_PDFTOOLS_DAMAGED ) );
-										return false;
-									}
+										"", 5122 ) ) {
+									docPdf.validate();
+								}
+							} else if ( level.contentEquals( "1B" ) ) {
+								if ( docPdf.open( valDatei.getAbsolutePath(),
+										"", 5121 ) ) {
+									docPdf.validate();
+								}
+							} else if ( level.contentEquals( "2A" ) ) {
+								if ( docPdf.open( valDatei.getAbsolutePath(),
+										"", 5891 ) ) {
+									docPdf.validate();
+								}
+							} else if ( level.contentEquals( "2B" ) ) {
+								if ( docPdf.open( valDatei.getAbsolutePath(),
+										"", 5889 ) ) {
+									docPdf.validate();
+								}
+							} else if ( level.contentEquals( "2U" ) ) {
+								if ( docPdf.open( valDatei.getAbsolutePath(),
+										"", 5890 ) ) {
+									docPdf.validate();
+								}
+							} else {
+								// Validierung nach 2b
+								level = "2B";
+								if ( docPdf.open( valDatei.getAbsolutePath(),
+										"", 5889 ) ) {
+									docPdf.validate();
+								}
+							}
+
+							// Error Category
+							iCategory = docPdf.getCategories();
+							// die Zahl kann auch eine Summe von Kategorien
+							// sein z.B. 6144=2048+4096 -> getCategoryText
+							// gibt nur die erste Kategorie heraus (z.B.
+							// 2048)
+
+							int success = 0;
+
+							/*
+							 * ErrorCode kann ungleich Null sein, wenn es nur
+							 * eine Information zu einer nicht einhaltung einer
+							 * Empfehlung gefunden wurde.
+							 * 
+							 * Entsprechend wird der ErrorCode ignoriert.
+							 */
+
+							PdfError err = docPdf.getFirstError();
+							PdfError err1 = docPdf.getFirstError();
+
+							@SuppressWarnings("unused")
+							int iError = 0;
+							while ( err != null ) {
+								iError = err1.getErrorCode();
+								success = success + 1;
+								// Get next error
+								err = docPdf.getNextError();
+							}
+
+							if ( success == 0 && iCategory == 0 ) {
+								// valide
+								isValid = true;
+
+								// Diskrepanz => PDF-Diagnosedaten
+								// ErrorCodes von PDFTron holen
+								NodeList nodeLst = doc
+										.getElementsByTagName( "Error" );
+								String errorCodes = "";
+								for ( int s = 0; s < nodeLst.getLength(); s++ ) {
+									Node dateiNode = nodeLst.item( s );
+									NamedNodeMap nodeMap = dateiNode
+											.getAttributes();
+									Node errorNode = nodeMap
+											.getNamedItem( "Code" );
+									String errorCode = errorNode.getNodeValue();
+									errorCodes = errorCodes + "  " + errorCode;
 								}
 
-								/*
-								 * ePDFA1a 5122 ePDFA1b 5121 ePDFA2a 5891
-								 * ePDFA2b 5889 ePDFA2u 5890
-								 */
-								if ( level.contentEquals( "1A" ) ) {
-									if ( docPdf.open(
-											valDatei.getAbsolutePath(), "",
-											5122 ) ) {
-										docPdf.validate();
-									}
-								} else if ( level.contentEquals( "1B" ) ) {
-									if ( docPdf.open(
-											valDatei.getAbsolutePath(), "",
-											5121 ) ) {
-										docPdf.validate();
-									}
-								} else if ( level.contentEquals( "2A" ) ) {
-									if ( docPdf.open(
-											valDatei.getAbsolutePath(), "",
-											5891 ) ) {
-										docPdf.validate();
-									}
-								} else if ( level.contentEquals( "2B" ) ) {
-									if ( docPdf.open(
-											valDatei.getAbsolutePath(), "",
-											5889 ) ) {
-										docPdf.validate();
-									}
-								} else if ( level.contentEquals( "2U" ) ) {
-									if ( docPdf.open(
-											valDatei.getAbsolutePath(), "",
-											5890 ) ) {
-										docPdf.validate();
-									}
-								} else {
-									// Validierung nach 2b
-									level = "2B";
-									if ( docPdf.open(
-											valDatei.getAbsolutePath(), "",
-											5889 ) ) {
-										docPdf.validate();
-									}
-								}
+								pdfTools = "<PDFTools><iCategory>0</iCategory><iError>0</iError></PDFTools>";
+								pdfTron = "<PDFTron><Code>" + errorCodes
+										+ "</Code></PDFTron>";
+								newPdfDiaTxt = "<Validation><ValFile>"
+										+ valDatei.getAbsolutePath()
+										+ "</ValFile><PdfaVL>"
+										+ level
+										+ "</PdfaVL>"
+										+ pdfTools
+										+ pdfTron
+										+ "</Validation>\n"
+										+ getTextResourceService().getText(
+												MESSAGE_XML_DIAEND );
+								Util.pdfDia( newPdfDiaTxt, pdfDia );
+								Util.amp( pdfDia );
 
-								// Error Category
-								iCategory = docPdf.getCategories();
-								// die Zahl kann auch eine Summe von Kategorien
-								// sein z.B. 6144=2048+4096 -> getCategoryText
-								// gibt nur die erste Kategorie heraus (z.B.
-								// 2048)
-
-								int success = 0;
-
-								/*
-								 * ErrorCode kann ungleich Null sein, wenn es
-								 * nur eine Information zu einer nicht
-								 * einhaltung einer Empfehlung gefunden wurde.
-								 * 
-								 * Entsprechend wird der ErrorCode ignoriert.
-								 */
-
-								PdfError err = docPdf.getFirstError();
-								PdfError err1 = docPdf.getFirstError();
-
-								@SuppressWarnings("unused")
-								int iError = 0;
-								while ( err != null ) {
-									iError = err1.getErrorCode();
-									success = success + 1;
-									// Get next error
-									err = docPdf.getNextError();
-								}
-
-								if ( success == 0 && iCategory == 0 ) {
-									// valide
-									isValid = true;
-
-									// Diskrepanz => PDF-Diagnosedaten
-									// ErrorCodes von PDFTron holen
-									NodeList nodeLst = doc
-											.getElementsByTagName( "Error" );
-									String errorCodes = "";
-									for ( int s = 0; s < nodeLst.getLength(); s++ ) {
-										Node dateiNode = nodeLst.item( s );
-										NamedNodeMap nodeMap = dateiNode
-												.getAttributes();
-										Node errorNode = nodeMap
-												.getNamedItem( "Code" );
-										String errorCode = errorNode
-												.getNodeValue();
-										errorCodes = errorCodes + "  "
-												+ errorCode;
-									}
-
-									pdfTools = "<PDFTools><iCategory>0</iCategory><iError>0</iError></PDFTools>";
-									pdfTron = "<PDFTron><Code>" + errorCodes
-											+ "</Code></PDFTron>";
-									newPdfDiaTxt = "<Validation><ValFile>"
-											+ valDatei.getAbsolutePath()
-											+ "</ValFile><PdfaVL>"
-											+ level
-											+ "</PdfaVL>"
-											+ pdfTools
-											+ pdfTron
-											+ "</Validation>\n"
-											+ getTextResourceService().getText(
-													MESSAGE_XML_DIAEND );
-									Util.pdfDia( newPdfDiaTxt, pdfDia );
-									Util.amp( pdfDia );
-
-								} else {
-									// invalid
-									isValid = false;
-								}
+							} else {
+								// invalid
+								isValid = false;
+							}
 						} else {
 							// keine duale Validierung -> invalid
 							isValid = false;
@@ -638,224 +646,153 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 				// TODO: Erledigt Start mit PDFTools
 				// zuerst mit PDFTools und danach ggf mit PDFTron
 
-					if ( docPdf.open( valDatei.getAbsolutePath(), "",
-							NativeLibrary.COMPLIANCE.ePDFUnk ) ) {
-						// PDF Konnte geöffnet werden
+				if ( docPdf.open( valDatei.getAbsolutePath(), "",
+						NativeLibrary.COMPLIANCE.ePDFUnk ) ) {
+					// PDF Konnte geöffnet werden
+				} else {
+					if ( docPdf.getErrorCode() == NativeLibrary.ERRORCODE.PDF_E_PASSWORD ) {
+						getMessageService()
+								.logError(
+										getTextResourceService().getText(
+												MESSAGE_XML_MODUL_A_PDFA )
+												+ getTextResourceService()
+														.getText(
+																ERROR_XML_A_PDFTOOLS_ENCRYPTED ) );
+						return false;
 					} else {
-						if ( docPdf.getErrorCode() == NativeLibrary.ERRORCODE.PDF_E_PASSWORD ) {
-							getMessageService()
-									.logError(
-											getTextResourceService().getText(
-													MESSAGE_XML_MODUL_A_PDFA )
-													+ getTextResourceService()
-															.getText(
-																	ERROR_XML_A_PDFTOOLS_ENCRYPTED ) );
-							return false;
-						} else {
-							getMessageService()
-									.logError(
-											getTextResourceService().getText(
-													MESSAGE_XML_MODUL_A_PDFA )
-													+ getTextResourceService()
-															.getText(
-																	ERROR_XML_A_PDFTOOLS_DAMAGED ) );
-							return false;
-						}
+						getMessageService().logError(
+								getTextResourceService().getText(
+										MESSAGE_XML_MODUL_A_PDFA )
+										+ getTextResourceService().getText(
+												ERROR_XML_A_PDFTOOLS_DAMAGED ) );
+						return false;
 					}
+				}
 
-					/*
-					 * ePDFA1a 5122 ePDFA1b 5121 ePDFA2a 5891 ePDFA2b 5889
-					 * ePDFA2u 5890
-					 */
-					if ( level.contentEquals( "1A" ) ) {
-						if ( docPdf.open( valDatei.getAbsolutePath(), "", 5122 ) ) {
-							docPdf.validate();
-						}
-					} else if ( level.contentEquals( "1B" ) ) {
-						if ( docPdf.open( valDatei.getAbsolutePath(), "", 5121 ) ) {
-							docPdf.validate();
-						}
-					} else if ( level.contentEquals( "2A" ) ) {
-						if ( docPdf.open( valDatei.getAbsolutePath(), "", 5891 ) ) {
-							docPdf.validate();
-						}
-					} else if ( level.contentEquals( "2B" ) ) {
-						if ( docPdf.open( valDatei.getAbsolutePath(), "", 5889 ) ) {
-							docPdf.validate();
-						}
-					} else if ( level.contentEquals( "2U" ) ) {
-						if ( docPdf.open( valDatei.getAbsolutePath(), "", 5890 ) ) {
-							docPdf.validate();
-						}
-					} else {
-						// Validierung nach 2b
-						level = "2B";
-						if ( docPdf.open( valDatei.getAbsolutePath(), "", 5889 ) ) {
-							docPdf.validate();
-						}
+				/*
+				 * ePDFA1a 5122 ePDFA1b 5121 ePDFA2a 5891 ePDFA2b 5889 ePDFA2u
+				 * 5890
+				 */
+				if ( level.contentEquals( "1A" ) ) {
+					if ( docPdf.open( valDatei.getAbsolutePath(), "", 5122 ) ) {
+						docPdf.validate();
 					}
-
-					docPdf.setStopOnError( false );
-					docPdf.setReportingLevel( 2 );
-
-					// Error Category
-					iCategory = docPdf.getCategories();
-					// die Zahl kann auch eine Summe von Kategorien sein z.B.
-					// 6144=2048+4096 -> getCategoryText gibt nur die erste
-					// Kategorie heraus (z.B. 2048)
-
-					int success = 0;
-
-					PdfError err = docPdf.getFirstError();
-					PdfError err1 = docPdf.getFirstError();
-
-					int iError = 0;
-					while ( err != null ) {
-						iError = err1.getErrorCode();
-						success = success + 1;
-						// Get next error
-						err = docPdf.getNextError();
+				} else if ( level.contentEquals( "1B" ) ) {
+					if ( docPdf.open( valDatei.getAbsolutePath(), "", 5121 ) ) {
+						docPdf.validate();
 					}
+				} else if ( level.contentEquals( "2A" ) ) {
+					if ( docPdf.open( valDatei.getAbsolutePath(), "", 5891 ) ) {
+						docPdf.validate();
+					}
+				} else if ( level.contentEquals( "2B" ) ) {
+					if ( docPdf.open( valDatei.getAbsolutePath(), "", 5889 ) ) {
+						docPdf.validate();
+					}
+				} else if ( level.contentEquals( "2U" ) ) {
+					if ( docPdf.open( valDatei.getAbsolutePath(), "", 5890 ) ) {
+						docPdf.validate();
+					}
+				} else {
+					// Validierung nach 2b
+					level = "2B";
+					if ( docPdf.open( valDatei.getAbsolutePath(), "", 5889 ) ) {
+						docPdf.validate();
+					}
+				}
 
-					if ( success == 0 && iCategory == 0 ) {
-						// valide
-						isValid = true;
-					} else {
-						if ( dual ) {
-							// duale Validierung
-							File report;
-							Document doc = null;
+				docPdf.setStopOnError( false );
+				docPdf.setReportingLevel( 2 );
+
+				// Error Category
+				iCategory = docPdf.getCategories();
+				// die Zahl kann auch eine Summe von Kategorien sein z.B.
+				// 6144=2048+4096 -> getCategoryText gibt nur die erste
+				// Kategorie heraus (z.B. 2048)
+
+				int success = 0;
+
+				PdfError err = docPdf.getFirstError();
+				PdfError err1 = docPdf.getFirstError();
+
+				int iError = 0;
+				while ( err != null ) {
+					iError = err1.getErrorCode();
+					success = success + 1;
+					// Get next error
+					err = docPdf.getNextError();
+				}
+
+				if ( success == 0 && iCategory == 0 ) {
+					// valide
+					isValid = true;
+				} else {
+					if ( dual ) {
+						// duale Validierung
+						File report;
+						Document doc = null;
+
+						try {
+							// Pfad zum Programm Pdftron
+							File pdftronExe = new File( pathToPdftronExe );
+							File output = directoryOfLogfile;
+							String pathToPdftronOutput = output
+									.getAbsolutePath();
+							StringBuffer command = new StringBuffer( pdftronExe
+									+ " " );
+							command.append( "-l " + level );
+							command.append( " -o " );
+							command.append( "\"" );
+							command.append( output.getAbsolutePath() );
+							command.append( "\"" );
+							command.append( " " );
+							command.append( "\"" );
+							command.append( valDatei.getAbsolutePath() );
+							command.append( "\"" );
+
+							Process proc = null;
+							Runtime rt = null;
 
 							try {
-								// Pfad zum Programm Pdftron
-								File pdftronExe = new File( pathToPdftronExe );
-								File output = directoryOfLogfile;
-								String pathToPdftronOutput = output
-										.getAbsolutePath();
-								StringBuffer command = new StringBuffer(
-										pdftronExe + " " );
-								command.append( "-l " + level );
-								command.append( " -o " );
-								command.append( "\"" );
-								command.append( output.getAbsolutePath() );
-								command.append( "\"" );
-								command.append( " " );
-								command.append( "\"" );
-								command.append( valDatei.getAbsolutePath() );
-								command.append( "\"" );
+								// Der Name des generierten Reports lautet
+								// per default
+								// report.xml und es scheint keine
+								// Möglichkeit zu geben, dies zu
+								// übersteuern.
+								report = new File( pathToPdftronOutput,
+										"report.xml" );
 
-								Process proc = null;
-								Runtime rt = null;
-
-								try {
-									// Der Name des generierten Reports lautet
-									// per default
-									// report.xml und es scheint keine
-									// Möglichkeit zu geben, dies zu
-									// übersteuern.
-									report = new File( pathToPdftronOutput,
-											"report.xml" );
-
-									// falls das File bereits existiert, z.B.
-									// von einem
-									// vorhergehenden Durchlauf, löschen wir es
-									if ( report.exists() ) {
-										report.delete();
-									}
-
-									Util.switchOffConsole();
-
-									rt = Runtime.getRuntime();
-									proc = rt.exec( command.toString().split(
-											" " ) );
-									// .split(" ") ist notwendig wenn in einem
-									// Pfad ein Doppelleerschlag vorhanden ist!
-
-									// Fehleroutput holen
-									StreamGobbler errorGobbler = new StreamGobbler(
-											proc.getErrorStream(), "ERROR" );
-
-									// Output holen
-									StreamGobbler outputGobbler = new StreamGobbler(
-											proc.getInputStream(), "OUTPUT" );
-
-									// Threads starten
-									errorGobbler.start();
-									outputGobbler.start();
-
-									// Warte, bis wget fertig ist
-									proc.waitFor();
-
-									Util.switchOnConsole();
-								} catch ( Exception e ) {
-									getMessageService()
-											.logError(
-													getTextResourceService()
-															.getText(
-																	MESSAGE_XML_MODUL_A_PDFA )
-															+ getTextResourceService()
-																	.getText(
-																			ERROR_XML_A_PDFA_SERVICEFAILED,
-																			e.getMessage() ) );
-									return false;
-								} finally {
-									if ( proc != null ) {
-										closeQuietly( proc.getOutputStream() );
-										closeQuietly( proc.getInputStream() );
-										closeQuietly( proc.getErrorStream() );
-									}
-								}
-								// Ende PDFTRON direkt auszulösen
-
-								String pathToPdftronReport = report
-										.getAbsolutePath();
-								BufferedInputStream bis = new BufferedInputStream(
-										new FileInputStream(
-												pathToPdftronReport ) );
-								DocumentBuilderFactory dbf = DocumentBuilderFactory
-										.newInstance();
-								DocumentBuilder db = dbf.newDocumentBuilder();
-								doc = db.parse( bis );
-								doc.normalize();
-
-								Integer passCount = new Integer( 0 );
-								NodeList nodeLstI = doc
-										.getElementsByTagName( "Pass" );
-
-								// Valide pdfa-Dokumente enthalten
-								// "<Validation> <Pass FileName..."
-								// Anzahl pass = anzahl Valider pdfa
-								for ( int s = 0; s < nodeLstI.getLength(); s++ ) {
-									passCount = passCount + 1;
-									// Valide PDFA-Datei
-									// Module A-J sind Valid
-									isValid = true;
-
-									// Diskrepanz => PDF-Diagnosedaten
-									pdfTools = "<PDFTools><iCategory>"
-											+ iCategory
-											+ "</iCategory><iError>" + iError
-											+ "</iError></PDFTools>";
-									pdfTron = "<PDFTron><Code>Pass</Code></PDFTron>";
-									newPdfDiaTxt = "<Validation><ValFile>"
-											+ valDatei.getAbsolutePath()
-											+ "</ValFile><PdfaVL>"
-											+ level
-											+ "</PdfaVL>"
-											+ pdfTools
-											+ pdfTron
-											+ "</Validation>\n"
-											+ getTextResourceService().getText(
-													MESSAGE_XML_DIAEND );
-									Util.pdfDia( newPdfDiaTxt, pdfDia );
-									Util.amp( pdfDia );
-
-								}
-								if ( passCount == 0 ) {
-									// Invalide PDFA-Datei (doppelt bestätigt)
-									isValid = false;
+								// falls das File bereits existiert, z.B.
+								// von einem
+								// vorhergehenden Durchlauf, löschen wir es
+								if ( report.exists() ) {
+									report.delete();
 								}
 
+								Util.switchOffConsole();
+
+								rt = Runtime.getRuntime();
+								proc = rt
+										.exec( command.toString().split( " " ) );
+								// .split(" ") ist notwendig wenn in einem
+								// Pfad ein Doppelleerschlag vorhanden ist!
+
+								// Fehleroutput holen
+								StreamGobbler errorGobbler = new StreamGobbler(
+										proc.getErrorStream(), "ERROR" );
+
+								// Output holen
+								StreamGobbler outputGobbler = new StreamGobbler(
+										proc.getInputStream(), "OUTPUT" );
+
+								// Threads starten
+								errorGobbler.start();
+								outputGobbler.start();
+
+								// Warte, bis wget fertig ist
+								proc.waitFor();
+
+								Util.switchOnConsole();
 							} catch ( Exception e ) {
 								getMessageService()
 										.logError(
@@ -867,12 +804,78 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 																		ERROR_XML_A_PDFA_SERVICEFAILED,
 																		e.getMessage() ) );
 								return false;
+							} finally {
+								if ( proc != null ) {
+									closeQuietly( proc.getOutputStream() );
+									closeQuietly( proc.getInputStream() );
+									closeQuietly( proc.getErrorStream() );
+								}
 							}
-						} else {
-							// keine duale Validierung -> invalid
-							isValid = false;
+							// Ende PDFTRON direkt auszulösen
+
+							String pathToPdftronReport = report
+									.getAbsolutePath();
+							BufferedInputStream bis = new BufferedInputStream(
+									new FileInputStream( pathToPdftronReport ) );
+							DocumentBuilderFactory dbf = DocumentBuilderFactory
+									.newInstance();
+							DocumentBuilder db = dbf.newDocumentBuilder();
+							doc = db.parse( bis );
+							doc.normalize();
+
+							Integer passCount = new Integer( 0 );
+							NodeList nodeLstI = doc
+									.getElementsByTagName( "Pass" );
+
+							// Valide pdfa-Dokumente enthalten
+							// "<Validation> <Pass FileName..."
+							// Anzahl pass = anzahl Valider pdfa
+							for ( int s = 0; s < nodeLstI.getLength(); s++ ) {
+								passCount = passCount + 1;
+								// Valide PDFA-Datei
+								// Module A-J sind Valid
+								isValid = true;
+
+								// Diskrepanz => PDF-Diagnosedaten
+								pdfTools = "<PDFTools><iCategory>" + iCategory
+										+ "</iCategory><iError>" + iError
+										+ "</iError></PDFTools>";
+								pdfTron = "<PDFTron><Code>Pass</Code></PDFTron>";
+								newPdfDiaTxt = "<Validation><ValFile>"
+										+ valDatei.getAbsolutePath()
+										+ "</ValFile><PdfaVL>"
+										+ level
+										+ "</PdfaVL>"
+										+ pdfTools
+										+ pdfTron
+										+ "</Validation>\n"
+										+ getTextResourceService().getText(
+												MESSAGE_XML_DIAEND );
+								Util.pdfDia( newPdfDiaTxt, pdfDia );
+								Util.amp( pdfDia );
+
+							}
+							if ( passCount == 0 ) {
+								// Invalide PDFA-Datei (doppelt bestätigt)
+								isValid = false;
+							}
+
+						} catch ( Exception e ) {
+							getMessageService()
+									.logError(
+											getTextResourceService().getText(
+													MESSAGE_XML_MODUL_A_PDFA )
+													+ getTextResourceService()
+															.getText(
+																	ERROR_XML_A_PDFA_SERVICEFAILED,
+																	e.getMessage() ) );
+							return false;
 						}
+					} else {
+						// keine duale Validierung -> invalid
+						isValid = false;
 					}
+				}
 			}
 
 			// TODO: Erledigt: Fehler Auswertung

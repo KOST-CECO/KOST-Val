@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry excluding="ch/kostceco/tools/kostval/validation/moduletiff2/impl/ch/kostceco/tools/kostval/validation/moduletiff2/impl/" kind="src" path="src/main/java"/>
-	<classpathentry kind="src" path="src/test/resources"/>
-	<classpathentry kind="src" path="src/test/java"/>
 	<classpathentry kind="src" path="src/main/resources"/>
 	<classpathentry excluding="src/main/java/|src/test/resources/|src/test/java/|src/main/resources/|src/|src/main/java/ch/kostceco/tools/kostval/validation/moduletiff2/impl/ch/kostceco/tools/kostval/validation/moduletiff2/impl/" kind="src" path=""/>
 	<classpathentry excluding="main/java/|test/resources/|test/java/|main/resources/|main/java/ch/kostceco/tools/kostval/validation/moduletiff2/impl/ch/kostceco/tools/kostval/validation/moduletiff2/impl/" kind="src" path="src"/>
