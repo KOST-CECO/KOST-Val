@@ -1,5 +1,5 @@
 /*== KOST-Val ==================================================================================
-The KOST-Val v1.4.4 application is used for validate TIFF, SIARD, PDF/A-Files and Submission 
+The KOST-Val v1.4.5 application is used for validate TIFF, SIARD, PDF/A-Files and Submission 
 Information Package (SIP). 
 Copyright (C) 2012-2014 Claire Röthlisberger (KOST-CECO), Christian Eugster, Olivier Debenath, 
 Peter Schneider (Staatsarchiv Aargau), Daniel Ludin (BEDAG AG)
@@ -194,23 +194,30 @@ public class KOSTVal implements MessageConstants
 
 		File tmpDir = new File( pathToWorkDir );
 
-		// bestehendes Workverzeichnis Abbruch, da am Schluss das
-		// Workverzeichnis gelöscht wird und entsprechend bestehende Dateien
+		// bestehendes Workverzeichnis Abbruch wenn nicht leer, da am Schluss
+		// das Workverzeichnis gelöscht wird und entsprechend bestehende Dateien
 		// gelöscht werden können
 		if ( tmpDir.exists() ) {
-			LOGGER.logError( kostval.getTextResourceService().getText(
-					ERROR_IOE,
-					kostval.getTextResourceService().getText(
-							ERROR_WORKDIRECTORY_EXISTS, pathToWorkDir ) ) );
-			System.out.println( kostval.getTextResourceService().getText(
-					ERROR_WORKDIRECTORY_EXISTS, pathToWorkDir ) );
-			System.exit( 1 );
+			if (tmpDir.isDirectory()) {
+	            // Get list of file in the directory. When its length is not zero
+	            // the folder is not empty.
+	            String[] files = tmpDir.list();
+	            if (files.length > 0) {
+	    			LOGGER.logError( kostval.getTextResourceService().getText(
+	    					ERROR_IOE,
+	    					kostval.getTextResourceService().getText(
+	    							ERROR_WORKDIRECTORY_EXISTS, pathToWorkDir ) ) );
+	    			System.out.println( kostval.getTextResourceService().getText(
+	    					ERROR_WORKDIRECTORY_EXISTS, pathToWorkDir ) );
+	    			System.exit( 1 );
+	            }
+	        }
 		}
 
 		// Im Pfad keine Sonderzeichen
 		// xml-Validierung SIP 1d und SIARD C stürzen ab
 
-		String patternStr = "[^!#\\$%\\(\\)\\+,\\-_\\.=@\\[\\]\\{\\}\\~a-zA-Z0-9 ]";
+		String patternStr = "[^!#\\$%\\(\\)\\+,\\-_\\.=@\\[\\]\\{\\}\\~:\\\\a-zA-Z0-9 ]";
 		Pattern pattern = Pattern.compile( patternStr );
 
 		String name = tmpDir.getAbsolutePath();
@@ -331,23 +338,12 @@ public class KOSTVal implements MessageConstants
 			System.exit( 1 );
 		}
 
-		// Ueberprüfung des Parameters (Val-Datei): existiert die Datei?
-		if ( !valDatei.exists() ) {
-			LOGGER.logError( kostval.getTextResourceService().getText(
-					ERROR_IOE,
-					kostval.getTextResourceService().getText(
-							ERROR_VALFILE_FILENOTEXISTING ) ) );
-			System.out.println( kostval.getTextResourceService().getText(
-					ERROR_VALFILE_FILENOTEXISTING ) );
-			System.exit( 1 );
-		}
-		
 		// Im Pfad keine Sonderzeichen
 		// xml-Validierung SIP 1d und SIARD C stürzen ab
 
-		 name = valDatei.getAbsolutePath();
+		name = valDatei.getAbsolutePath();
 
-		 pathElements = name.split( "/" );
+		pathElements = name.split( "/" );
 		for ( int i = 0; i < pathElements.length; i++ ) {
 			String element = pathElements[i];
 
@@ -363,6 +359,17 @@ public class KOSTVal implements MessageConstants
 						ERROR_SPECIAL_CHARACTER, name ) );
 				System.exit( 1 );
 			}
+		}
+
+		// Ueberprüfung des Parameters (Val-Datei): existiert die Datei?
+		if ( !valDatei.exists() ) {
+			LOGGER.logError( kostval.getTextResourceService().getText(
+					ERROR_IOE,
+					kostval.getTextResourceService().getText(
+							ERROR_VALFILE_FILENOTEXISTING ) ) );
+			System.out.println( kostval.getTextResourceService().getText(
+					ERROR_VALFILE_FILENOTEXISTING ) );
+			System.exit( 1 );
 		}
 
 		if ( args[0].equals( "--format" ) ) {

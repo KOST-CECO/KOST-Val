@@ -45,12 +45,12 @@ import com.pdftools.pdfvalidator.PdfError;
 import com.pdftools.pdfvalidator.PdfValidatorAPI;
 import com.pdftools.NativeLibrary;
 
-import ch.kostceco.tools.kostval.exception.modulepdfa.ValidationApdftronException;
+import ch.kostceco.tools.kostval.exception.modulepdfa.ValidationApdfvalidationException;
 import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.util.StreamGobbler;
 import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
-import ch.kostceco.tools.kostval.validation.modulepdfa.ValidationApdftronModule;
+import ch.kostceco.tools.kostval.validation.modulepdfa.ValidationAvalidationAiModule;
 
 /**
  * Ist die vorliegende PDF-Datei eine valide PDFA-Datei? PDFA Validierungs mit
@@ -71,8 +71,8 @@ import ch.kostceco.tools.kostval.validation.modulepdfa.ValidationApdftronModule;
  * @author Rc Claire Röthlisberger, KOST-CECO
  */
 
-public class ValidationApdftronModuleImpl extends ValidationModuleImpl
-		implements ValidationApdftronModule
+public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
+		implements ValidationAvalidationAiModule
 {
 
 	private ConfigurationService	configurationService;
@@ -92,7 +92,7 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile )
-			throws ValidationApdftronException
+			throws ValidationApdfvalidationException
 	{
 		@SuppressWarnings("unused")
 		boolean valid = false;
@@ -358,21 +358,6 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 			producerFirstValidator = "PDFTools";
 		}
 
-		File fPdftronExe = new File( pathToPdftronExe );
-		if ( !fPdftronExe.exists()
-				|| !fPdftronExe.getName().equals( "pdfa.exe" ) ) {
-			// Keine Duale Validierung möglich
-			if ( dualValidation.contentEquals( "dual" )
-					|| producerFirstValidator.contentEquals( "PDFTron" ) ) {
-				getMessageService().logError(
-						getTextResourceService().getText(
-								MESSAGE_XML_MODUL_A_PDFA )
-								+ getTextResourceService().getText(
-										ERROR_XML_PDFTRON_MISSING ) );
-				dual = false;
-				producerFirstValidator = "PDFTools";
-			}
-		}
 		pathToPdftronExe = "\"" + pathToPdftronExe + "\"";
 
 		String pdfTools = "";
@@ -487,19 +472,6 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 					if ( passCount == 0 ) {
 						if ( dual ) {
 							// Duale Validierung mit PDFTools
-
-							// Check license
-							if ( !PdfValidatorAPI.getLicenseIsValid() ) {
-								getMessageService()
-										.logError(
-												getTextResourceService()
-														.getText(
-																MESSAGE_XML_MODUL_A_PDFA )
-														+ getTextResourceService()
-																.getText(
-																		ERROR_XML_A_PDFTOOLS_LICENSE ) );
-								return false;
-							} else {
 
 								if ( docPdf.open( valDatei.getAbsolutePath(),
 										"", NativeLibrary.COMPLIANCE.ePDFUnk ) ) {
@@ -646,8 +618,6 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 									// invalid
 									isValid = false;
 								}
-
-							}
 						} else {
 							// keine duale Validierung -> invalid
 							isValid = false;
@@ -667,16 +637,6 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 			} else {
 				// TODO: Erledigt Start mit PDFTools
 				// zuerst mit PDFTools und danach ggf mit PDFTron
-
-				// Check license
-				if ( !PdfValidatorAPI.getLicenseIsValid() ) {
-					getMessageService().logError(
-							getTextResourceService().getText(
-									MESSAGE_XML_MODUL_A_PDFA )
-									+ getTextResourceService().getText(
-											ERROR_XML_A_PDFTOOLS_LICENSE ) );
-					return false;
-				} else {
 
 					if ( docPdf.open( valDatei.getAbsolutePath(), "",
 							NativeLibrary.COMPLIANCE.ePDFUnk ) ) {
@@ -913,8 +873,6 @@ public class ValidationApdftronModuleImpl extends ValidationModuleImpl
 							isValid = false;
 						}
 					}
-
-				}
 			}
 
 			// TODO: Erledigt: Fehler Auswertung

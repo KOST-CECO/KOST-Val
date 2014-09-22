@@ -22,7 +22,7 @@ package ch.kostceco.tools.kostval.validation.modulepdfa;
 
 import java.io.File;
 
-import ch.kostceco.tools.kostval.exception.modulepdfa.ValidationApdftronException;
+import ch.kostceco.tools.kostval.exception.modulepdfa.ValidationApdfvalidationException;
 import ch.kostceco.tools.kostval.validation.ValidationModule;
 
 /**
@@ -32,10 +32,10 @@ import ch.kostceco.tools.kostval.validation.ValidationModule;
  * @author Rc Claire Röthlisberger, KOST-CECO
  */
 
-public interface ValidationApdftronModule extends ValidationModule
+public interface ValidationAvalidationAiModule extends ValidationModule
 {
 
 	public boolean validate( File valDatei, File directoryOfLogfile )
-			throws ValidationApdftronException;
+			throws ValidationApdfvalidationException;
 
 }
