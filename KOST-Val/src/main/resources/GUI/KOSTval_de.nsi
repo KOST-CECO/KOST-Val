@@ -1,5 +1,5 @@
 ; The name of the installer
-Name "KOST-Val v1.4.0"
+Name "KOST-Val v1.4.2"
 ; Sets the icon of the installer
 Icon "val.ico"
 ; remove the text 'Nullsoft Install System vX.XX' from the installer window 
@@ -40,6 +40,7 @@ Var KOSTVAL
 Var LOGFILE
 Var WORKDIR
 Var LOG
+Var HEAPSIZE
 Var JAVA
 Var T_FLAG
 Var P_FLAG
@@ -110,6 +111,7 @@ Function ShowDialog
   WriteINIStr $DIALOG "${FORMAT_RadioButton}"    "Text"  "${FORMAT_RadioButtonTXT}"
   WriteINIStr $DIALOG "${SIP_RadioButton}"       "Text"  "${SIP_RadioButtonTXT}"
   WriteINIStr $DIALOG "${LOG_RadioButton}"       "Text"  "${LOG_RadioButtonTXT}"
+  WriteINIStr $DIALOG "Field 13"                 "Text"  "${JVM_DroplistTXT}"
   WriteINIStr $DIALOG "${INPUT_Group}"           "Text"  "${INPUT_GroupTXT}"
   WriteINIStr $DIALOG "${INPUT_FolderRequest}"   "Text"  "${INPUT_FolderRequestTXT}"
   WriteINIStr $DIALOG "${INPUT_FileRequest}"     "Text"  "${INPUT_FileRequestTXT}"
@@ -155,6 +157,7 @@ Function LeaveDialog
 
   ; To get the input of the user, read the State value of a Field 
   ReadINIStr $0 $DIALOG "Settings" "State"
+  ReadINIStr $HEAPSIZE $DIALOG "Field 14" "State" 
   
   ${Switch} "Field $0"
     
@@ -283,7 +286,7 @@ Function RunJar
   ; Launch java program
   ClearErrors
   ; MessageBox MB_OK '"$JAVA\bin\java.exe" -Xmx1024m -Xss64m -jar ${JARFILE} $T_FLAG "$KOSTVAL" $P_FLAG'
-  ExecWait '"$JAVA\bin\java.exe" -Xmx1024m -Xss64m -jar ${JARFILE} $T_FLAG "$KOSTVAL" $P_FLAG'
+  ExecWait '"$JAVA\bin\java.exe" $HEAPSIZE -jar ${JARFILE} $T_FLAG "$KOSTVAL" $P_FLAG'
   IfFileExists "$LOG\$LOGFILE.kost-val.log*" 0 prog_err
   IfErrors goto_err goto_ok
   

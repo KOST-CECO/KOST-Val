@@ -361,7 +361,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 		File fPdftronExe = new File( pathToPdftronExe );
 		if ( !fPdftronExe.exists()
 				|| !fPdftronExe.getName().equals( "pdfa.exe" ) ) {
-			// Keine Duale Validierung m?glich
+			// Keine Duale Validierung möglich
 			if ( dualValidation.contentEquals( "dual" )
 					|| producerFirstValidator.contentEquals( "PDFTron" ) ) {
 				getMessageService().logError(

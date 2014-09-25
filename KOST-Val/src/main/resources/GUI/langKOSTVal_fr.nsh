@@ -30,13 +30,14 @@ DetailsButtonText "Details zeigen"
 !define START_Validation          "Field 10"
 !define EDIT_Konfiguration        "Field 11"
 !define RESET_Konfiguration       "Field 12"
+!define JVM_Droplist              "Field 13"
 
 ;----------------------
 !define INTROTXT                 "KOST-Val validé les fichiers TIFF, SIARD et PDF/A, ainsi que des SIPs"
 !define HELP_ButtonTXT           "&Aide"
 !define FORMAT_RadioButtonTXT    "Validation du format"
 !define SIP_RadioButtonTXT       "Validation SIP, y compris validation du format"
-!define LOG_RadioButtonTXT       "Gardez les rapports PDFTron et Jhove"
+!define LOG_RadioButtonTXT       "Gardez les rapports Jhove"
 !define INPUT_GroupTXT           "${FORMAT_RadioButtonTXT}"
 !define INPUT_FolderRequestTXT   "Choisir un dossier ..."
 !define INPUT_FileRequestTXT     "Choisir un fichier ..."
@@ -44,6 +45,7 @@ DetailsButtonText "Details zeigen"
 !define START_ValidationTXT      "Valider"
 !define EDIT_KonfigurationTXT    "Modifier la configuration ..."
 !define RESET_KonfigurationTXT   "Réinitialiser la configuration"
+!define JVM_DroplistTXT          "Option de JVM:"
 
 ;----------------------
 !define FOLDER_SelectTXT         "S'il vous plaît choisissez un dossier valide"
