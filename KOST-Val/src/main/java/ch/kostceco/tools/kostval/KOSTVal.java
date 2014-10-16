@@ -1,5 +1,5 @@
 /*== KOST-Val ==================================================================================
-The KOST-Val v1.4.5 application is used for validate TIFF, SIARD, PDF/A-Files and Submission 
+The KOST-Val v1.4.6 application is used for validate TIFF, SIARD, PDF/A-Files and Submission 
 Information Package (SIP). 
 Copyright (C) 2012-2014 Claire Röthlisberger (KOST-CECO), Christian Eugster, Olivier Debenath, 
 Peter Schneider (Staatsarchiv Aargau), Daniel Ludin (BEDAG AG)
@@ -198,20 +198,24 @@ public class KOSTVal implements MessageConstants
 		// das Workverzeichnis gelöscht wird und entsprechend bestehende Dateien
 		// gelöscht werden können
 		if ( tmpDir.exists() ) {
-			if (tmpDir.isDirectory()) {
-	            // Get list of file in the directory. When its length is not zero
-	            // the folder is not empty.
-	            String[] files = tmpDir.list();
-	            if (files.length > 0) {
-	    			LOGGER.logError( kostval.getTextResourceService().getText(
-	    					ERROR_IOE,
-	    					kostval.getTextResourceService().getText(
-	    							ERROR_WORKDIRECTORY_EXISTS, pathToWorkDir ) ) );
-	    			System.out.println( kostval.getTextResourceService().getText(
-	    					ERROR_WORKDIRECTORY_EXISTS, pathToWorkDir ) );
-	    			System.exit( 1 );
-	            }
-	        }
+			if ( tmpDir.isDirectory() ) {
+				// Get list of file in the directory. When its length is not
+				// zero
+				// the folder is not empty.
+				String[] files = tmpDir.list();
+				if ( files.length > 0 ) {
+					LOGGER.logError( kostval.getTextResourceService()
+							.getText(
+									ERROR_IOE,
+									kostval.getTextResourceService().getText(
+											ERROR_WORKDIRECTORY_EXISTS,
+											pathToWorkDir ) ) );
+					System.out
+							.println( kostval.getTextResourceService().getText(
+									ERROR_WORKDIRECTORY_EXISTS, pathToWorkDir ) );
+					System.exit( 1 );
+				}
+			}
 		}
 
 		// Im Pfad keine Sonderzeichen
@@ -506,8 +510,10 @@ public class KOSTVal implements MessageConstants
 								}
 							}
 
-						} else if ( ((valDatei.getName().endsWith( ".pdf" ) || valDatei
-								.getName().endsWith( ".pdfa" )))
+						} else if ( ((valDatei.getAbsolutePath().toLowerCase()
+								.endsWith( ".pdf" ) || valDatei
+								.getAbsolutePath().toLowerCase()
+								.endsWith( ".pdfa" )))
 								&& pdfaValidation.equals( "yes" ) ) {
 
 							boolean valFile = valFile( valDatei, logFileName,
@@ -869,62 +875,62 @@ public class KOSTVal implements MessageConstants
 						extension = extension.substring( lastIndexOf );
 					}
 
-					if ( extension.equals( ".pdf" )
-							|| extension.equals( ".pdfa" ) ) {
+					if ( extension.equalsIgnoreCase( ".pdf" )
+							|| extension.equalsIgnoreCase( ".pdfa" ) ) {
 						pdf = pdf + 1;
-					} else if ( extension.equals( ".tiff" )
-							|| extension.equals( ".tif" ) ) {
+					} else if ( extension.equalsIgnoreCase( ".tiff" )
+							|| extension.equalsIgnoreCase( ".tif" ) ) {
 						tiff = tiff + 1;
-					} else if ( extension.equals( ".siard" ) ) {
+					} else if ( extension.equalsIgnoreCase( ".siard" ) ) {
 						siard = siard + 1;
-					} else if ( extension.equals( ".txt" ) ) {
+					} else if ( extension.equalsIgnoreCase( ".txt" ) ) {
 						txt = txt + 1;
-					} else if ( extension.equals( ".csv" ) ) {
+					} else if ( extension.equalsIgnoreCase( ".csv" ) ) {
 						csv = csv + 1;
-					} else if ( extension.equals( ".xml" ) ) {
+					} else if ( extension.equalsIgnoreCase( ".xml" ) ) {
 						xml = xml + 1;
-					} else if ( extension.equals( ".xsd" ) ) {
+					} else if ( extension.equalsIgnoreCase( ".xsd" ) ) {
 						xsd = xsd + 1;
-					} else if ( extension.equals( ".wav" ) ) {
+					} else if ( extension.equalsIgnoreCase( ".wav" ) ) {
 						wave = wave + 1;
-					} else if ( extension.equals( ".mp3" ) ) {
+					} else if ( extension.equalsIgnoreCase( ".mp3" ) ) {
 						mp3 = mp3 + 1;
-					} else if ( extension.equals( ".jp2" ) ) {
+					} else if ( extension.equalsIgnoreCase( ".jp2" ) ) {
 						jp2 = jp2 + 1;
-					} else if ( extension.equals( ".jpx" )
-							|| extension.equals( ".jpf" ) ) {
+					} else if ( extension.equalsIgnoreCase( ".jpx" )
+							|| extension.equalsIgnoreCase( ".jpf" ) ) {
 						jpx = jpx + 1;
-					} else if ( extension.equals( ".jpe" )
-							|| extension.equals( ".jpeg" )
-							|| extension.equals( ".jpg" ) ) {
+					} else if ( extension.equalsIgnoreCase( ".jpe" )
+							|| extension.equalsIgnoreCase( ".jpeg" )
+							|| extension.equalsIgnoreCase( ".jpg" ) ) {
 						jpeg = jpeg + 1;
-					} else if ( extension.equals( ".png" ) ) {
+					} else if ( extension.equalsIgnoreCase( ".png" ) ) {
 						png = png + 1;
-					} else if ( extension.equals( ".dng" ) ) {
+					} else if ( extension.equalsIgnoreCase( ".dng" ) ) {
 						dng = dng + 1;
-					} else if ( extension.equals( ".svg" ) ) {
+					} else if ( extension.equalsIgnoreCase( ".svg" ) ) {
 						svg = svg + 1;
-					} else if ( extension.equals( ".mpeg" )
-							|| extension.equals( ".mpg" ) ) {
+					} else if ( extension.equalsIgnoreCase( ".mpeg" )
+							|| extension.equalsIgnoreCase( ".mpg" ) ) {
 						mpeg2 = mpeg2 + 1;
-					} else if ( extension.equals( ".f4a" )
-							|| extension.equals( ".f4v" )
-							|| extension.equals( ".m4a" )
-							|| extension.equals( ".m4v" )
-							|| extension.equals( ".mp4" ) ) {
+					} else if ( extension.equalsIgnoreCase( ".f4a" )
+							|| extension.equalsIgnoreCase( ".f4v" )
+							|| extension.equalsIgnoreCase( ".m4a" )
+							|| extension.equalsIgnoreCase( ".m4v" )
+							|| extension.equalsIgnoreCase( ".mp4" ) ) {
 						mp4 = mp4 + 1;
-					} else if ( extension.equals( ".xls" )
-							|| extension.equals( ".xlw" )
-							|| extension.equals( ".xlsx" ) ) {
+					} else if ( extension.equalsIgnoreCase( ".xls" )
+							|| extension.equalsIgnoreCase( ".xlw" )
+							|| extension.equalsIgnoreCase( ".xlsx" ) ) {
 						xls = xls + 1;
-					} else if ( extension.equals( ".odt" )
-							|| extension.equals( ".ott" ) ) {
+					} else if ( extension.equalsIgnoreCase( ".odt" )
+							|| extension.equalsIgnoreCase( ".ott" ) ) {
 						odt = odt + 1;
-					} else if ( extension.equals( ".ods" )
-							|| extension.equals( ".ots" ) ) {
+					} else if ( extension.equalsIgnoreCase( ".ods" )
+							|| extension.equalsIgnoreCase( ".ots" ) ) {
 						ods = ods + 1;
-					} else if ( extension.equals( ".odp" )
-							|| extension.equals( ".otp" ) ) {
+					} else if ( extension.equalsIgnoreCase( ".odp" )
+							|| extension.equalsIgnoreCase( ".otp" ) ) {
 						odp = odp + 1;
 					} else {
 						other = other + 1;
@@ -970,8 +976,9 @@ public class KOSTVal implements MessageConstants
 							siardCountNio = siardCountNio + 1;
 						}
 
-					} else if ( ((valDatei.getName().endsWith( ".pdf" ) || valDatei
-							.getName().endsWith( ".pdfa" )))
+					} else if ( ((valDatei.getAbsolutePath().toLowerCase()
+							.endsWith( ".pdf" ) || valDatei.getAbsolutePath()
+							.toLowerCase().endsWith( ".pdfa" )))
 							&& pdfaValidation.equals( "yes" ) ) {
 
 						boolean valFile = valFile( valDatei, logFileName,
@@ -1518,8 +1525,8 @@ public class KOSTVal implements MessageConstants
 				System.out.println( "" );
 			}
 
-		} else if ( (valDatei.getName().endsWith( ".pdf" ) || valDatei
-				.getName().endsWith( ".pdfa" )) ) {
+		} else if ( (valDatei.getAbsolutePath().toLowerCase().endsWith( ".pdf" ) || valDatei
+				.getAbsolutePath().toLowerCase().endsWith( ".pdfa" )) ) {
 			LOGGER.logError( kostval.getTextResourceService().getText(
 					MESSAGE_XML_VALERGEBNIS ) );
 			LOGGER.logError( kostval.getTextResourceService().getText(

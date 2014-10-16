@@ -36,10 +36,6 @@ import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesip3.Validation3bUnspecifiedFormatModule;
 
-/**
- * @author razm Daniel Ludin, Bedag AG @version 0.2.0
- */
-
 public class Validation3bUnspecifiedFormatModuleImpl extends
 		ValidationModuleImpl implements Validation3bUnspecifiedFormatModule
 {
@@ -73,7 +69,6 @@ public class Validation3bUnspecifiedFormatModuleImpl extends
 
 		String nameOfSignature = getConfigurationService()
 				.getPathToDroidSignatureFile();
-
 		if ( nameOfSignature == null ) {
 			getMessageService()
 					.logError(
@@ -84,7 +79,6 @@ public class Validation3bUnspecifiedFormatModuleImpl extends
 													MESSAGE_XML_CONFIGURATION_ERROR_NO_SIGNATURE ) );
 			return false;
 		}
-
 		// existiert die SignatureFile am angebenen Ort?
 		File fnameOfSignature = new File( nameOfSignature );
 		if ( !fnameOfSignature.exists() ) {
@@ -100,7 +94,7 @@ public class Validation3bUnspecifiedFormatModuleImpl extends
 			// kleiner Hack, weil die Droid libraries irgendwo ein System.out
 			// drin haben, welche den Output stören
 			// Util.switchOffConsole() als Kommentar markieren wenn man die
-			// Fehlermeldung erhalten möchte @Rc
+			// Fehlermeldung erhalten möchte
 			Util.switchOffConsole();
 			droid = new Droid();
 
@@ -156,9 +150,7 @@ public class Validation3bUnspecifiedFormatModuleImpl extends
 		for ( Iterator<String> iterator = fileKeys.iterator(); iterator
 				.hasNext(); ) {
 			String fileKey = iterator.next();
-
 			File file = filesInSipFile.get( fileKey );
-
 			IdentificationFile ifile = droid.identify( file.getAbsolutePath() );
 
 			if ( ifile.getNumHits() > 0 ) {
@@ -168,6 +160,7 @@ public class Validation3bUnspecifiedFormatModuleImpl extends
 					FileFormat ff = ffh.getFileFormat();
 
 					String extensionConfig = hPuids.get( ff.getPUID() );
+
 					if ( extensionConfig == null ) {
 
 						getMessageService()
