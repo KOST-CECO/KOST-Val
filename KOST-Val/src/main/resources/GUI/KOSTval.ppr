@@ -23,14 +23,22 @@ KOSTval
 		KOSTval_en.script
 		test.bat
 [Open project files]
-0=C:\Software\xampp\htdocs\wiki\lib\tikihelp\toolbar.html
-1=C:\Software\xampp\htdocs\wiki\lib\tikihelp\js\toolbar.js
+0=KOSTval_de.nsi
+1=KOSTval.ini
+2=langKOSTVal_fr.nsh
+3=langKOSTVal_en.nsh
 [Selected Project Files]
 Main=KOSTval_de.nsi
-Selected=C:\Software\xampp\htdocs\wiki\lib\tikihelp\js\toolbar.js
-[C:\Software\xampp\htdocs\wiki\lib\tikihelp\toolbar.html]
-TopLine=31
-Caret=54,58
-[C:\Software\xampp\htdocs\wiki\lib\tikihelp\js\toolbar.js]
-TopLine=146
-Caret=66,166
+Selected=KOSTval_de.nsi
+[KOSTval_de.nsi]
+TopLine=287
+Caret=5,297
+[KOSTval.ini]
+TopLine=111
+Caret=15,130
+[langKOSTVal_fr.nsh]
+TopLine=15
+Caret=18,34
+[langKOSTVal_en.nsh]
+TopLine=15
+Caret=32,34

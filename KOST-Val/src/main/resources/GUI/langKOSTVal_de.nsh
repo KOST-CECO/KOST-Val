@@ -31,6 +31,7 @@ DetailsButtonText "Details zeigen"
 !define EDIT_Konfiguration        "Field 11"
 !define RESET_Konfiguration       "Field 12"
 !define JVM_Droplist              "Field 13"
+!define JVM_Value                 "Field 14"
 
 ;----------------------
 !define INTROTXT                 "KOST-Val validiert TIFF-, SIARD- und PDF/A Dateien sowie SIPs"
