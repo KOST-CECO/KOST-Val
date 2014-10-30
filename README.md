@@ -12,5 +12,5 @@ This program comes with ABSOLUTELY NO WARRANTY.
 This is free software, and you are welcome to redistribute it under 
 certain conditions; see GPL-3.0_COPYING.txt for details.
 
-You can download KOST-Val under http://kost-ceco.ch/cms/index.php?kost_val_de. 
+You can download KOST-Val under https://github.com/KOST-CECO/KOST-Val/releases or http://kost-ceco.ch/cms/index.php?kost_val_de. 
 For installation-instructions check the manual (DE/FR/EN).
