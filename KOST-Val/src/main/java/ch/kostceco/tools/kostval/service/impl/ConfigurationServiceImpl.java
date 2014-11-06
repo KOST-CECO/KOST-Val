@@ -268,6 +268,19 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		return value;
 	}
 
+	/*--- JP2 ---------------------------------------------------------------------*/
+	@Override
+	public String jp2Validation()
+	{
+		Object prop = getConfig().getProperty( "jp2.jp2validation" );
+
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
 	/*--- SIP ---------------------------------------------------------------------*/
 	@SuppressWarnings("unchecked")
 	@Override

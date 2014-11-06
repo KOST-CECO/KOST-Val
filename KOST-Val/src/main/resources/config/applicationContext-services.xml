@@ -124,6 +124,12 @@
 		<property name="messageService" ref="messageService" />
 		<property name="configurationService" ref="configurationService" />
 	</bean>
+
+	<bean id="validationAvalidationAModule" class="ch.kostceco.tools.kostval.validation.modulejp2.impl.ValidationAvalidationAModuleImpl">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="messageService" ref="messageService" />
+		<!-- <property name="configurationService" ref="configurationService" /> -->
+	</bean>
 	
 	<bean id="validation1bFolderStructureModule" class="ch.kostceco.tools.kostval.validation.modulesip1.impl.Validation1bFolderStructureModuleImpl">
 		<property name="textResourceService" ref="textResourceService" />
@@ -218,6 +224,11 @@
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="validationAinitialisationModule" ref="validationAinitialisationModule" />
 		<property name="validationAvalidationAiModule" ref="validationAvalidationAiModule" />
+	</bean>
+
+	<bean id="controllerjp2" class="ch.kostceco.tools.kostval.controller.Controllerjp2">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="validationAvalidationAModule" ref="validationAvalidationAModule" />
 	</bean>
 
 	<bean id="controllersip" class="ch.kostceco.tools.kostval.controller.Controllersip">

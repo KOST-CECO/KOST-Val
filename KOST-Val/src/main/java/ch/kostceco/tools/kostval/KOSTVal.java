@@ -41,6 +41,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import ch.kostceco.tools.kostval.controller.Controllerjp2;
 import ch.kostceco.tools.kostval.controller.Controllersip;
 import ch.kostceco.tools.kostval.controller.Controllertiff;
 import ch.kostceco.tools.kostval.controller.Controllersiard;
@@ -191,6 +192,8 @@ public class KOSTVal implements MessageConstants
 				.siardValidation();
 		String tiffValidation = kostval.getConfigurationService()
 				.tiffValidation();
+		String jp2Validation = kostval.getConfigurationService()
+		.jp2Validation();
 
 		File tmpDir = new File( pathToWorkDir );
 
@@ -388,6 +391,8 @@ public class KOSTVal implements MessageConstants
 			Integer siardCountNio = 0;
 			Integer tiffCountIo = 0;
 			Integer tiffCountNio = 0;
+			Integer jp2CountIo = 0;
+			Integer jp2CountNio = 0;
 
 			// TODO: Formatvalidierung an einer Datei
 			// --> erledigt --> nur Marker
@@ -454,6 +459,33 @@ public class KOSTVal implements MessageConstants
 						System.out.print( "\r" );
 
 						if ( ((valDatei.getAbsolutePath().toLowerCase()
+								.endsWith( ".jp2" )))
+								&& jp2Validation.equals( "yes" ) ) {
+
+							boolean valFile = valFile( valDatei, logFileName,
+									directoryOfLogfile, verbose );
+
+							// Löschen des Arbeitsverzeichnisses, falls eines
+							// angelegt wurde
+							if ( tmpDir.exists() ) {
+								Util.deleteDir( tmpDir );
+							}
+							if ( valFile ) {
+								jp2CountIo = jp2CountIo + 1;
+								// Löschen des Arbeitsverzeichnisses, falls
+								// eines angelegt wurde
+								if ( tmpDir.exists() ) {
+									Util.deleteDir( tmpDir );
+								}
+							} else {
+								jp2CountNio = jp2CountNio + 1;
+								// Löschen des Arbeitsverzeichnisses, falls
+								// eines angelegt wurde
+								if ( tmpDir.exists() ) {
+									Util.deleteDir( tmpDir );
+								}
+							}
+						} else if ( ((valDatei.getAbsolutePath().toLowerCase()
 								.endsWith( ".tiff" ) || valDatei
 								.getAbsolutePath().toLowerCase()
 								.endsWith( ".tif" )))
@@ -571,7 +603,7 @@ public class KOSTVal implements MessageConstants
 				Util.valEnd( ausgabeEnd, logFile );
 				Util.amp( logFile );
 
-				countSummaryNio = pdfaCountNio + siardCountNio + tiffCountNio;
+				countSummaryNio = pdfaCountNio + siardCountNio + tiffCountNio + jp2CountNio;
 
 				if ( countNio.equals( count ) ) {
 					// keine Dateien Validiert
@@ -624,6 +656,8 @@ public class KOSTVal implements MessageConstants
 			Integer siardCountNio = 0;
 			Integer tiffCountIo = 0;
 			Integer tiffCountNio = 0;
+			Integer jp2CountIo = 0;
+			Integer jp2CountNio = 0;
 
 			if ( !valDatei.isDirectory() ) {
 				Boolean zip = false;
@@ -937,6 +971,19 @@ public class KOSTVal implements MessageConstants
 					}
 
 					if ( ((valDatei.getAbsolutePath().toLowerCase()
+							.endsWith( ".jp2" ) ))
+							&& jp2Validation.equals( "yes" ) ) {
+
+						boolean valFile = valFile( valDatei, logFileName,
+								directoryOfLogfile, verbose );
+
+						if ( valFile ) {
+							jp2CountIo = jp2CountIo + 1;
+						} else {
+							jp2CountNio = jp2CountNio + 1;
+						}
+
+					} else if ( ((valDatei.getAbsolutePath().toLowerCase()
 							.endsWith( ".tiff" ) || valDatei.getAbsolutePath()
 							.toLowerCase().endsWith( ".tif" )))
 							&& tiffValidation.equals( "yes" ) ) {
@@ -996,8 +1043,8 @@ public class KOSTVal implements MessageConstants
 				}
 			}
 
-			countSummaryNio = pdfaCountNio + siardCountNio + tiffCountNio;
-			countSummaryIo = pdfaCountIo + siardCountIo + tiffCountIo;
+			countSummaryNio = pdfaCountNio + siardCountNio + tiffCountNio+ jp2CountNio;
+			countSummaryIo = pdfaCountIo + siardCountIo + tiffCountIo+ jp2CountIo;
 			int countSummaryIoP = 100 / count * countSummaryIo;
 			int countSummaryNioP = 100 / count * countSummaryNio;
 			int countNioP = 100 / count * countNio;
@@ -1414,7 +1461,57 @@ public class KOSTVal implements MessageConstants
 		String originalValName = valDatei.getAbsolutePath();
 		boolean valFile = false;
 
-		if ( (valDatei.getAbsolutePath().toLowerCase().endsWith( ".tiff" ) || valDatei
+		if ( (valDatei.getAbsolutePath().toLowerCase().endsWith( ".jp2" ) ) ) {
+			LOGGER.logError( kostval.getTextResourceService().getText(
+					MESSAGE_XML_VALERGEBNIS ) );
+			LOGGER.logError( kostval.getTextResourceService().getText(
+					MESSAGE_XML_VALTYPE,
+					kostval.getTextResourceService().getText(
+							MESSAGE_JP2VALIDATION ) ) );
+			LOGGER.logError( kostval.getTextResourceService().getText(
+					MESSAGE_XML_VALFILE, originalValName ) );
+			System.out.println( kostval.getTextResourceService().getText(
+					MESSAGE_JP2VALIDATION ) );
+			System.out.println( originalValName );
+			Controllerjp2 controller1 = (Controllerjp2) context
+					.getBean( "controllerjp2" );
+			boolean okMandatory = controller1.executeMandatory( valDatei,
+					directoryOfLogfile );
+			valFile = okMandatory;
+
+			if ( okMandatory ) {
+				// Validierte Datei valide
+				LOGGER.logError( kostval.getTextResourceService().getText(
+						MESSAGE_XML_VALERGEBNIS_VALID ) );
+				LOGGER.logError( kostval.getTextResourceService().getText(
+						MESSAGE_XML_VALERGEBNIS_CLOSE ) );
+				System.out.println( "Valid" );
+				System.out.println( "" );
+			} else {
+				// Fehler in Validierte Datei --> invalide
+				LOGGER.logError( kostval.getTextResourceService().getText(
+						MESSAGE_XML_VALERGEBNIS_INVALID ) );
+				LOGGER.logError( kostval.getTextResourceService().getText(
+						MESSAGE_XML_VALERGEBNIS_CLOSE ) );
+				System.out.println( "Invalid" );
+				System.out.println( "" );
+			}
+
+			// Ausgabe der Pfade zu den Jpylyzer Reports, falls welche
+			// generiert wurden (-v) oder Jpylyzer Report löschen
+			File JpylyzerReport = new File( directoryOfLogfile, valDatei.getName()
+					+ ".jpylyzer-log.xml" );
+
+			if ( JpylyzerReport.exists() ) {
+				if ( verbose ) {
+					// optionaler Parameter --> Jpylyzer-Report lassen
+				} else {
+					// kein optionaler Parameter --> Jpylyzer-Report loeschen!
+					JpylyzerReport.delete();
+				}
+			}
+
+		} else if ( (valDatei.getAbsolutePath().toLowerCase().endsWith( ".tiff" ) || valDatei
 				.getAbsolutePath().toLowerCase().endsWith( ".tif" )) ) {
 			LOGGER.logError( kostval.getTextResourceService().getText(
 					MESSAGE_XML_VALERGEBNIS ) );
