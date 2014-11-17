@@ -36,7 +36,14 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import uk.gov.nationalarchives.droid.core.signature.droid4.Droid;
+import uk.gov.nationalarchives.droid.core.signature.droid4.FileFormatHit;
+import uk.gov.nationalarchives.droid.core.signature.droid4.IdentificationFile;
+import uk.gov.nationalarchives.droid.core.signature.droid4.signaturefile.FileFormat;
+
 import ch.kostceco.tools.kostval.exception.modulejp2.ValidationAjp2validationException;
+import ch.kostceco.tools.kostval.service.ConfigurationService;
+import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulejp2.ValidationAvalidationAModule;
 
@@ -55,6 +62,18 @@ import ch.kostceco.tools.kostval.validation.modulejp2.ValidationAvalidationAModu
 public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 		implements ValidationAvalidationAModule
 {
+	private ConfigurationService	configurationService;
+
+	public ConfigurationService getConfigurationService()
+	{
+		return configurationService;
+	}
+
+	public void setConfigurationService(
+			ConfigurationService configurationService )
+	{
+		this.configurationService = configurationService;
+	}
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile )
@@ -136,11 +155,62 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 					// höchstwahrscheinlich ein JP2 da es mit
 					// 0000000c6a5020200d0a respektive ....jP ..‡ beginnt
 				} else {
+					//TODO: Droid-Erkennung, damit Details ausgegeben werden können
+					String nameOfSignature = getConfigurationService()
+							.getPathToDroidSignatureFile();
+					if ( nameOfSignature == null ) {
+						getMessageService()
+								.logError(
+										getTextResourceService().getText(
+												MESSAGE_XML_MODUL_A_JP2 )
+												+ getTextResourceService()
+														.getText(
+																MESSAGE_XML_CONFIGURATION_ERROR_NO_SIGNATURE ) );
+						return false;
+					}
+					// existiert die SignatureFile am angebenen Ort?
+					File fnameOfSignature = new File( nameOfSignature );
+					if ( !fnameOfSignature.exists() ) {
+						getMessageService().logError(
+								getTextResourceService().getText( MESSAGE_XML_MODUL_A_JP2 )
+										+ getTextResourceService().getText(
+												MESSAGE_XML_CA_DROID ) );
+						return false;
+					}
+
+					Droid droid = null;
+					try {
+						// kleiner Hack, weil die Droid libraries irgendwo ein System.out
+						// drin haben, welche den Output stören
+						// Util.switchOffConsole() als Kommentar markieren wenn man die
+						// Fehlermeldung erhalten möchte
+						Util.switchOffConsole();
+						droid = new Droid();
+
+						droid.readSignatureFile( nameOfSignature );
+
+					} catch ( Exception e ) {
+						getMessageService().logError(
+								getTextResourceService().getText( MESSAGE_XML_MODUL_A_JP2 )
+										+ getTextResourceService().getText(
+												ERROR_XML_CANNOT_INITIALIZE_DROID ) );
+						return false;
+					} finally {
+						Util.switchOnConsole();
+					}
+					File file = valDatei;
+					String puid= "";
+					IdentificationFile ifile = droid.identify( file.getAbsolutePath() );
+					for ( int x = 0; x < ifile.getNumHits(); x++ ) {
+						FileFormatHit ffh = ifile.getHit( x );
+						FileFormat ff = ffh.getFileFormat();
+						puid =  ff.getPUID() ;
+					}
 					getMessageService().logError(
 							getTextResourceService().getText(
 									MESSAGE_XML_MODUL_A_JP2 )
 									+ getTextResourceService().getText(
-											ERROR_XML_A_JP2_INCORRECTFILE ) );
+											ERROR_XML_A_JP2_INCORRECTFILE, puid ) );
 					return false;
 				}
 			} catch ( Exception e ) {
@@ -169,9 +239,9 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 		File fJpylyzerExe = new File( pathToJpylyzerExe );
 		if ( !fJpylyzerExe.exists() ) {
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_B_JP2 )
+					getTextResourceService().getText( MESSAGE_XML_MODUL_A_JP2 )
 							+ getTextResourceService().getText(
-									ERROR_XML_B_JP2_JPYLYZER_MISSING ) );
+									ERROR_XML_A_JP2_JPYLYZER_MISSING ) );
 		}
 
 		pathToJpylyzerExe = "\"" + pathToJpylyzerExe + "\"";
@@ -212,13 +282,13 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 
 					// Warte, bis proc fertig ist
 					proc.waitFor();
-					
+
 				} catch ( Exception e ) {
 					getMessageService().logError(
 							getTextResourceService().getText(
-									MESSAGE_XML_MODUL_B_JP2 )
+									MESSAGE_XML_MODUL_A_JP2 )
 									+ getTextResourceService().getText(
-											ERROR_XML_B_JP2_SERVICEFAILED,
+											ERROR_XML_A_JP2_SERVICEFAILED,
 											e.getMessage() ) );
 					return false;
 				} finally {
@@ -234,9 +304,9 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 					// Datei nicht angelegt...
 					getMessageService().logError(
 							getTextResourceService().getText(
-									MESSAGE_XML_MODUL_B_JP2 )
+									MESSAGE_XML_MODUL_A_JP2 )
 									+ getTextResourceService().getText(
-											ERROR_XML_B_JP2_NOREPORT ) );
+											ERROR_XML_A_JP2_NOREPORT ) );
 					return false;
 				}
 
@@ -263,8 +333,6 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 					for ( int i = 0; i < children.getLength(); i++ ) {
 						Node textChild = children.item( i );
 						if ( textChild.getNodeType() != Node.TEXT_NODE ) {
-							// System.err.println("Mixed content! Skipping child element "
-							// + textChild.getNodeName());
 							continue;
 						}
 						buf.append( textChild.getNodeValue() );
@@ -280,42 +348,609 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 						getMessageService()
 								.logError(
 										getTextResourceService().getText(
-												MESSAGE_XML_MODUL_B_JP2 )
+												MESSAGE_XML_MODUL_A_JP2 )
 												+ getTextResourceService()
 														.getText(
-																ERROR_XML_B_JP2_JPYLYZER_FAIL ) );
+																ERROR_XML_A_JP2_JPYLYZER_FAIL ) );
 						isValid = false;
 					}
-				}
-
-				// TODO: Fehler Auswertung
-
-				if ( !isValid ) {
-					// Invalide JP2-Datei
-					NodeList nodeLstII = doc.getElementsByTagName( "tests" );
-
-					// Node tests enthält die Schritte welche nicht bestanden
-					// wurden
-
 				}
 
 			} catch ( Exception e ) {
 				getMessageService().logError(
 						getTextResourceService().getText(
-								MESSAGE_XML_MODUL_B_JP2 )
+								MESSAGE_XML_MODUL_A_JP2 )
 								+ getTextResourceService().getText(
 										ERROR_XML_UNKNOWN, e.getMessage() ) );
 				return false;
 			}
+			// TODO: Erledigt: Fehler Auswertung
+
+			if ( !isValid ) {
+				// Invalide JP2-Datei
+				int isignatureBox = 0;
+				int ifileTypeBox = 0;
+				int iimageHeaderBox = 0;
+				int ibitsPerComponentBox = 0;
+				int icolourSpecificationBox = 0;
+				int ipaletteBox = 0;
+				int icomponentMappingBox = 0;
+				int ichannelDefinitionBox = 0;
+				int iresolutionBox = 0;
+				int itileParts = 0;
+				int isiz = 0;
+				int icod = 0;
+				int iqcd = 0;
+				int icoc = 0;
+				int icom = 0;
+				int iqcc = 0;
+				int irgn = 0;
+				int ipoc = 0;
+				int iplm = 0;
+				int ippm = 0;
+				int itlm = 0;
+				int icrg = 0;
+				int iplt = 0;
+				int ippt = 0;
+				int ixmlBox = 0;
+				int iuuidBox = 0;
+				int iuuidInfoBox = 0;
+				int iunknownBox = 0;
+				int icontainsImageHeaderBox = 0;
+				int icontainsColourSpecificationBox = 0;
+				int icontainsBitsPerComponentBox = 0;
+				int ifirstJP2HeaderBoxIsImageHeaderBox = 0;
+				int inoMoreThanOneImageHeaderBox = 0;
+				int inoMoreThanOneBitsPerComponentBox = 0;
+				int inoMoreThanOnePaletteBox = 0;
+				int inoMoreThanOneComponentMappingBox = 0;
+				int inoMoreThanOneChannelDefinitionBox = 0;
+				int inoMoreThanOneResolutionBox = 0;
+				int icolourSpecificationBoxesAreContiguous = 0;
+				int ipaletteAndComponentMappingBoxesOnlyTogether = 0;
+
+				int icodestreamStartsWithSOCMarker = 0;
+				int ifoundSIZMarker = 0;
+				int ifoundCODMarker = 0;
+				int ifoundQCDMarker = 0;
+				int iquantizationConsistentWithLevels = 0;
+				int ifoundExpectedNumberOfTiles = 0;
+				int ifoundExpectedNumberOfTileParts = 0;
+				int ifoundEOCMarker = 0;
+
+				NodeList nodeLstTest = doc.getElementsByTagName( "tests" );
+
+				// Node test enthält alle invaliden tests
+				for ( int s = 0; s < nodeLstTest.getLength(); s++ ) {
+					Node testNode = nodeLstTest.item( s );
+					NodeList children = testNode.getChildNodes();
+					for ( int i = 0; i < children.getLength(); i++ ) {
+						Node textChild = children.item( i );
+						if ( textChild.getNodeType() == Node.ELEMENT_NODE ) {
+							if ( textChild.getNodeName()
+									.equals( "signatureBox" ) ) {
+								isignatureBox = isignatureBox + 1;
+							} else if ( textChild.getNodeName().equals(
+									"fileTypeBox" ) ) {
+								ifileTypeBox = ifileTypeBox + 1;
+							} else if ( textChild.getNodeName().equals(
+									"jp2HeaderBox" ) ) {
+								NodeList childrenII = textChild.getChildNodes();
+								for ( int j = 0; j < childrenII.getLength(); j++ ) {
+									Node textChildII = childrenII.item( j );
+									if ( textChildII.getNodeType() == Node.ELEMENT_NODE ) {
+										if ( textChildII.getNodeName().equals(
+												"imageHeaderBox" ) ) {
+											iimageHeaderBox = iimageHeaderBox + 1;
+										} else if ( textChildII.getNodeName()
+												.equals( "bitsPerComponentBox" ) ) {
+											ibitsPerComponentBox = ibitsPerComponentBox + 1;
+										} else if ( textChildII
+												.getNodeName()
+												.equals(
+														"colourSpecificationBox" ) ) {
+											icolourSpecificationBox = icolourSpecificationBox + 1;
+										} else if ( textChildII.getNodeName()
+												.equals( "paletteBox" ) ) {
+											ipaletteBox = ipaletteBox + 1;
+										} else if ( textChildII.getNodeName()
+												.equals( "componentMappingBox" ) ) {
+											icomponentMappingBox = icomponentMappingBox + 1;
+										} else if ( textChildII
+												.getNodeName()
+												.equals( "channelDefinitionBox" ) ) {
+											ichannelDefinitionBox = ichannelDefinitionBox + 1;
+										} else if ( textChildII.getNodeName()
+												.equals( "resolutionBox" ) ) {
+											iresolutionBox = iresolutionBox + 1;
+										} else if ( textChildII.getNodeName()
+												.equals( "containsImageHeaderBox" ) ) {
+											icontainsImageHeaderBox = icontainsImageHeaderBox + 1;
+										} else if ( textChildII.getNodeName()
+												.equals( "containsColourSpecificationBox" ) ) {
+											icontainsColourSpecificationBox = icontainsColourSpecificationBox + 1;
+										} else if ( textChildII.getNodeName()
+												.equals( "containsBitsPerComponentBox" ) ) {
+											icontainsBitsPerComponentBox = icontainsBitsPerComponentBox + 1;
+										} else if ( textChildII.getNodeName()
+												.equals( "firstJP2HeaderBoxIsImageHeaderBox" ) ) {
+											ifirstJP2HeaderBoxIsImageHeaderBox = ifirstJP2HeaderBoxIsImageHeaderBox + 1;
+										} else if ( textChildII.getNodeName()
+												.equals( "noMoreThanOneImageHeaderBox" ) ) {
+											inoMoreThanOneImageHeaderBox = inoMoreThanOneImageHeaderBox + 1;
+										} else if ( textChildII.getNodeName()
+												.equals( "noMoreThanOneBitsPerComponentBox" ) ) {
+											inoMoreThanOneBitsPerComponentBox = inoMoreThanOneBitsPerComponentBox + 1;
+										} else if ( textChildII.getNodeName()
+												.equals( "noMoreThanOnePaletteBox" ) ) {
+											inoMoreThanOnePaletteBox = inoMoreThanOnePaletteBox + 1;
+										} else if ( textChildII.getNodeName()
+												.equals( "noMoreThanOneComponentMappingBox" ) ) {
+											inoMoreThanOneComponentMappingBox = inoMoreThanOneComponentMappingBox + 1;
+										} else if ( textChildII.getNodeName()
+												.equals( "noMoreThanOneChannelDefinitionBox" ) ) {
+											inoMoreThanOneChannelDefinitionBox = inoMoreThanOneChannelDefinitionBox + 1;
+										} else if ( textChildII.getNodeName()
+												.equals( "noMoreThanOneResolutionBox" ) ) {
+											inoMoreThanOneResolutionBox = inoMoreThanOneResolutionBox + 1;
+										} else if ( textChildII.getNodeName()
+												.equals( "colourSpecificationBoxesAreContiguous" ) ) {
+											icolourSpecificationBoxesAreContiguous = icolourSpecificationBoxesAreContiguous + 1;
+										} else if ( textChildII.getNodeName()
+												.equals( "paletteAndComponentMappingBoxesOnlyTogether" ) ) {
+											ipaletteAndComponentMappingBoxesOnlyTogether = ipaletteAndComponentMappingBoxesOnlyTogether + 1;
+										}
+									}
+									continue;
+								}
+							} else if ( textChild.getNodeName().equals(
+									"contiguousCodestreamBox" ) ) {
+								NodeList childrenIII = textChild
+										.getChildNodes();
+								for ( int k = 0; k < childrenIII
+										.getLength(); k++ ) {
+									Node textChildIII = childrenIII.item( k );
+									if ( textChildIII.getNodeType() == Node.ELEMENT_NODE ) {
+										if ( textChildIII.getNodeName().equals(
+												"tileParts" ) ) {
+											itileParts = itileParts + 1;
+										} else if ( textChildIII.getNodeName()
+												.equals( "siz" ) ) {
+											isiz = isiz + 1;
+										} else if ( textChildIII.getNodeName()
+												.equals( "cod" ) ) {
+											icod = icod + 1;
+										} else if ( textChildIII.getNodeName()
+												.equals( "qcd" ) ) {
+											iqcd = iqcd + 1;
+										} else if ( textChildIII.getNodeName()
+												.equals( "coc" ) ) {
+											icoc = icoc + 1;
+										} else if ( textChildIII.getNodeName()
+												.equals( "com" ) ) {
+											icom = icom + 1;
+										} else if ( textChildIII.getNodeName()
+												.equals( "qcc" ) ) {
+											iqcc = iqcc + 1;
+										} else if ( textChildIII.getNodeName()
+												.equals( "rgn" ) ) {
+											irgn = irgn + 1;
+										} else if ( textChildIII.getNodeName()
+												.equals( "poc" ) ) {
+											ipoc = ipoc + 1;
+										} else if ( textChildIII.getNodeName()
+												.equals( "plm" ) ) {
+											iplm = iplm + 1;
+										} else if ( textChildIII.getNodeName()
+												.equals( "ppm" ) ) {
+											ippm = ippm + 1;
+										} else if ( textChildIII.getNodeName()
+												.equals( "tlm" ) ) {
+											itlm = itlm + 1;
+										} else if ( textChildIII.getNodeName()
+												.equals( "crg" ) ) {
+											icrg = icrg + 1;
+										} else if ( textChildIII.getNodeName()
+												.equals( "plt" ) ) {
+											iplt = iplt + 1;
+										} else if ( textChildIII.getNodeName()
+												.equals( "ppt" ) ) {
+											ippt = ippt + 1;
+										} else if ( textChildIII.getNodeName()
+												.equals( "codestreamStartsWithSOCMarker" ) ) {
+											icodestreamStartsWithSOCMarker = icodestreamStartsWithSOCMarker + 1;
+										} else if ( textChildIII.getNodeName()
+												.equals( "foundSIZMarker" ) ) {
+											ifoundSIZMarker = ifoundSIZMarker + 1;
+										} else if ( textChildIII.getNodeName()
+												.equals( "foundCODMarker" ) ) {
+											ifoundCODMarker = ifoundCODMarker + 1;
+										} else if ( textChildIII.getNodeName()
+												.equals( "foundQCDMarker" ) ) {
+											ifoundQCDMarker = ifoundQCDMarker + 1;
+										} else if ( textChildIII.getNodeName()
+												.equals( "quantizationConsistentWithLevels" ) ) {
+											iquantizationConsistentWithLevels = iquantizationConsistentWithLevels + 1;
+										} else if ( textChildIII.getNodeName()
+												.equals( "foundExpectedNumberOfTiles" ) ) {
+											ifoundExpectedNumberOfTiles = ifoundExpectedNumberOfTiles + 1;
+										} else if ( textChildIII.getNodeName()
+												.equals( "foundExpectedNumberOfTileParts" ) ) {
+											ifoundExpectedNumberOfTileParts = ifoundExpectedNumberOfTileParts + 1;
+										} else if ( textChildIII.getNodeName()
+												.equals( "foundEOCMarker" ) ) {
+											ifoundEOCMarker = ifoundEOCMarker + 1;
+										}
+									}
+									continue;
+								}
+							} else if ( textChild.getNodeName().equals(
+									"xmlBox" ) ) {
+								ixmlBox = ixmlBox + 1;
+							} else if ( textChild.getNodeName().equals(
+									"uuidBox" ) ) {
+								iuuidBox = iuuidBox + 1;
+							} else if ( textChild.getNodeName().equals(
+									"uuidInfoBox" ) ) {
+								iuuidInfoBox = iuuidInfoBox + 1;
+							} else if ( textChild.getNodeName().equals(
+									"unknownBox" ) ) {
+								iunknownBox = iunknownBox + 1;
+							}
+						}
+						continue;
+					}
+					continue;
+				}
+
+				if ( isignatureBox >= 1 ) {
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_A_JP2 )
+									+ getTextResourceService().getText(
+											ERROR_XML_A_JP2_SIGNATURE ) );
+				}
+				if ( ifileTypeBox >= 1 ) {
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_A_JP2 )
+									+ getTextResourceService().getText(
+											ERROR_XML_A_JP2_FILETYPE ) );
+				}
+				if ( iimageHeaderBox >= 1 ) {
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_B_JP2 )
+									+ getTextResourceService().getText(
+											ERROR_XML_B_JP2_IMAGE ) );
+				}
+				if ( ibitsPerComponentBox >= 1 ) {
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_B_JP2 )
+									+ getTextResourceService().getText(
+											ERROR_XML_B_JP2_BITSPC ) );
+				}
+				if ( icolourSpecificationBox >= 1 ) {
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_B_JP2 )
+									+ getTextResourceService().getText(
+											ERROR_XML_B_JP2_COLOUR ) );
+				}
+				if ( ipaletteBox >= 1 ) {
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_B_JP2 )
+									+ getTextResourceService().getText(
+											ERROR_XML_B_JP2_PALETTE ) );
+				}
+				if ( icomponentMappingBox >= 1 ) {
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_B_JP2 )
+									+ getTextResourceService().getText(
+											ERROR_XML_B_JP2_MAPPING ) );
+				}
+				if ( ichannelDefinitionBox >= 1 ) {
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_B_JP2 )
+									+ getTextResourceService().getText(
+											ERROR_XML_B_JP2_CHANNEL ) );
+				}
+				if ( iresolutionBox >= 1 ) {
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_B_JP2 )
+									+ getTextResourceService().getText(
+											ERROR_XML_B_JP2_RESOLUTION ) );
+				}
+
+				if ( icontainsImageHeaderBox >= 1 ) {
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_B_JP2 )
+									+ getTextResourceService().getText(
+											ERROR_XML_B_JP2_NOIHB ) );
+				}
+				if ( icontainsColourSpecificationBox >= 1 ) {
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_B_JP2 )
+									+ getTextResourceService().getText(
+											ERROR_XML_B_JP2_NOCSB ) );
+				}
+				if ( icontainsBitsPerComponentBox >= 1 ) {
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_B_JP2 )
+									+ getTextResourceService().getText(
+											ERROR_XML_B_JP2_NBPCB ) );
+				}
+				if ( ifirstJP2HeaderBoxIsImageHeaderBox >= 1 ) {
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_B_JP2 )
+									+ getTextResourceService().getText(
+											ERROR_XML_B_JP2_IHBNF ) );
+				}
+				if ( inoMoreThanOneImageHeaderBox >= 1 ) {
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_B_JP2 )
+									+ getTextResourceService().getText(
+											ERROR_XML_B_JP2_IHBMO ) );
+				}
+				if ( inoMoreThanOneBitsPerComponentBox >= 1 ) {
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_B_JP2 )
+									+ getTextResourceService().getText(
+											ERROR_XML_B_JP2_OBPCMO ) );
+				}
+				if ( inoMoreThanOnePaletteBox >= 1 ) {
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_B_JP2 )
+									+ getTextResourceService().getText(
+											ERROR_XML_B_JP2_OPBMO ) );
+				}
+				if ( inoMoreThanOneComponentMappingBox >= 1 ) {
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_B_JP2 )
+									+ getTextResourceService().getText(
+											ERROR_XML_B_JP2_CMBMO ) );
+				}
+				if ( inoMoreThanOneChannelDefinitionBox >= 1 ) {
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_B_JP2 )
+									+ getTextResourceService().getText(
+											ERROR_XML_B_JP2_CDBMO ) );
+				}
+				if ( inoMoreThanOneResolutionBox >= 1 ) {
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_B_JP2 )
+									+ getTextResourceService().getText(
+											ERROR_XML_B_JP2_RBMO ) );
+				}
+				if ( icolourSpecificationBoxesAreContiguous >= 1 ) {
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_B_JP2 )
+									+ getTextResourceService().getText(
+											ERROR_XML_B_JP2_CSBNC ) );
+				}
+				if ( ipaletteAndComponentMappingBoxesOnlyTogether >= 1 ) {
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_B_JP2 )
+									+ getTextResourceService().getText(
+											ERROR_XML_B_JP2_PACMB ) );
+				}
+				
+				if ( icodestreamStartsWithSOCMarker >= 1 ) {
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_C_JP2 )
+									+ getTextResourceService().getText(
+											ERROR_XML_C_JP2_SOC ) );
+				}
+				if ( ifoundSIZMarker >= 1 ) {
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_C_JP2 )
+									+ getTextResourceService().getText(
+											ERROR_XML_C_JP2_FSIZ ) );
+				}
+				if ( ifoundCODMarker >= 1 ) {
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_C_JP2 )
+									+ getTextResourceService().getText(
+											ERROR_XML_C_JP2_FCOD ) );
+				}
+				if ( ifoundQCDMarker >= 1 ) {
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_C_JP2 )
+									+ getTextResourceService().getText(
+											ERROR_XML_C_JP2_FQCD ) );
+				}
+				if ( iquantizationConsistentWithLevels >= 1 ) {
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_C_JP2 )
+									+ getTextResourceService().getText(
+											ERROR_XML_C_JP2_PQCD ) );
+				}
+				if ( ifoundExpectedNumberOfTiles >= 1 ) {
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_C_JP2 )
+									+ getTextResourceService().getText(
+											ERROR_XML_C_JP2_NOTILES ) );
+				}
+				if ( ifoundExpectedNumberOfTileParts >= 1 ) {
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_C_JP2 )
+									+ getTextResourceService().getText(
+											ERROR_XML_C_JP2_NOTILESPART ) );
+				}
+				if ( ifoundEOCMarker >= 1 ) {
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_C_JP2 )
+									+ getTextResourceService().getText(
+											ERROR_XML_C_JP2_EOC ) );
+				}
+
+				if ( itileParts >= 1 ) {
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_C_JP2 )
+									+ getTextResourceService().getText(
+											ERROR_XML_C_JP2_TILEPARTS ) );
+				}
+				if ( isiz >= 1 ) {
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_C_JP2 )
+									+ getTextResourceService().getText(
+											ERROR_XML_C_JP2_SIZ ) );
+				}
+				if ( icod >= 1 ) {
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_C_JP2 )
+									+ getTextResourceService().getText(
+											ERROR_XML_C_JP2_COD ) );
+				}
+				if ( iqcd >= 1 ) {
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_C_JP2 )
+									+ getTextResourceService().getText(
+											ERROR_XML_C_JP2_QCD ) );
+				}
+				if ( icom >= 1 ) {
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_C_JP2 )
+									+ getTextResourceService().getText(
+											ERROR_XML_C_JP2_COM ) );
+				}
+				if ( icoc >= 1 ) {
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_C_JP2 )
+									+ getTextResourceService().getText(
+											ERROR_XML_C_JP2_COC ) );
+				}
+				if ( irgn >= 1 ) {
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_C_JP2 )
+									+ getTextResourceService().getText(
+											ERROR_XML_C_JP2_RGN ) );
+				}
+				if ( iqcc >= 1 ) {
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_C_JP2 )
+									+ getTextResourceService().getText(
+											ERROR_XML_C_JP2_QCC ) );
+				}
+				if ( ipoc >= 1 ) {
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_C_JP2 )
+									+ getTextResourceService().getText(
+											ERROR_XML_C_JP2_POC ) );
+				}
+				if ( iplm >= 1 ) {
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_C_JP2 )
+									+ getTextResourceService().getText(
+											ERROR_XML_C_JP2_PLM ) );
+				}
+				if ( ippm >= 1 ) {
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_C_JP2 )
+									+ getTextResourceService().getText(
+											ERROR_XML_C_JP2_PPM ) );
+				}
+				if ( itlm >= 1 ) {
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_C_JP2 )
+									+ getTextResourceService().getText(
+											ERROR_XML_C_JP2_TLM ) );
+				}
+				if ( icrg >= 1 ) {
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_C_JP2 )
+									+ getTextResourceService().getText(
+											ERROR_XML_C_JP2_CRG ) );
+				}
+				if ( iplt >= 1 ) {
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_C_JP2 )
+									+ getTextResourceService().getText(
+											ERROR_XML_C_JP2_PLT ) );
+				}
+				if ( ippt >= 1 ) {
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_C_JP2 )
+									+ getTextResourceService().getText(
+											ERROR_XML_C_JP2_PPT ) );
+				}
+
+				if ( ixmlBox >= 1 ) {
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_D_JP2 )
+									+ getTextResourceService().getText(
+											ERROR_XML_D_JP2_XML ) );
+				}
+				if ( iuuidBox >= 1 ) {
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_D_JP2 )
+									+ getTextResourceService().getText(
+											ERROR_XML_D_JP2_UUID ) );
+				}
+				if ( iuuidInfoBox >= 1 ) {
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_D_JP2 )
+									+ getTextResourceService().getText(
+											ERROR_XML_D_JP2_UUIDINFO ) );
+				}
+				if ( iunknownBox >= 1 ) {
+					getMessageService().logError(
+							getTextResourceService().getText(
+									MESSAGE_XML_MODUL_D_JP2 )
+									+ getTextResourceService().getText(
+											ERROR_XML_D_JP2_UNKNOWN ) );
+				}
+			}
 
 		} catch ( Exception e ) {
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_B_JP2 )
+					getTextResourceService().getText( MESSAGE_XML_MODUL_A_JP2 )
 							+ getTextResourceService().getText(
 									ERROR_XML_UNKNOWN, e.getMessage() ) );
 		}
-
 		return isValid;
 	}
-
 }

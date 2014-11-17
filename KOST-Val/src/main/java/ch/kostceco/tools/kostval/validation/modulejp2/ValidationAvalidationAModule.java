@@ -26,8 +26,8 @@ import ch.kostceco.tools.kostval.exception.modulejp2.ValidationAjp2validationExc
 import ch.kostceco.tools.kostval.validation.ValidationModule;
 
 /**
- * PDFA Validierungs mit PDFTron. Ist die vorliegende PDF-Datei eine valide
- * PDFA-Datei
+ * Ist die vorliegende JP2-Datei eine valide JP2-Datei? JP2 Validierungs mit
+ * Jpylyzer.
  * 
  * @author Rc Claire Röthlisberger, KOST-CECO
  */

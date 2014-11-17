@@ -41,6 +41,11 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import uk.gov.nationalarchives.droid.core.signature.droid4.Droid;
+import uk.gov.nationalarchives.droid.core.signature.droid4.FileFormatHit;
+import uk.gov.nationalarchives.droid.core.signature.droid4.IdentificationFile;
+import uk.gov.nationalarchives.droid.core.signature.droid4.signaturefile.FileFormat;
+
 import com.pdftools.pdfvalidator.PdfError;
 import com.pdftools.pdfvalidator.PdfValidatorAPI;
 import com.pdftools.NativeLibrary;
@@ -306,11 +311,62 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					// 25504446 respektive %PDF beginnt
 					valid = true;
 				} else {
-					getMessageService().logError(
+					//TODO: Droid-Erkennung, damit Details ausgegeben werden können
+					String nameOfSignature = getConfigurationService()
+							.getPathToDroidSignatureFile();
+					if ( nameOfSignature == null ) {
+						getMessageService()
+								.logError(
+										getTextResourceService().getText(
+												MESSAGE_XML_MODUL_A_PDFA )
+												+ getTextResourceService()
+														.getText(
+																MESSAGE_XML_CONFIGURATION_ERROR_NO_SIGNATURE ) );
+						return false;
+					}
+					// existiert die SignatureFile am angebenen Ort?
+					File fnameOfSignature = new File( nameOfSignature );
+					if ( !fnameOfSignature.exists() ) {
+						getMessageService().logError(
+								getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+										+ getTextResourceService().getText(
+												MESSAGE_XML_CA_DROID ) );
+						return false;
+					}
+
+					Droid droid = null;
+					try {
+						// kleiner Hack, weil die Droid libraries irgendwo ein System.out
+						// drin haben, welche den Output stören
+						// Util.switchOffConsole() als Kommentar markieren wenn man die
+						// Fehlermeldung erhalten möchte
+						Util.switchOffConsole();
+						droid = new Droid();
+
+						droid.readSignatureFile( nameOfSignature );
+
+					} catch ( Exception e ) {
+						getMessageService().logError(
+								getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+										+ getTextResourceService().getText(
+												ERROR_XML_CANNOT_INITIALIZE_DROID ) );
+						return false;
+					} finally {
+						Util.switchOnConsole();
+					}
+					File file = valDatei;
+					String puid= "";
+					IdentificationFile ifile = droid.identify( file.getAbsolutePath() );
+					for ( int x = 0; x < ifile.getNumHits(); x++ ) {
+						FileFormatHit ffh = ifile.getHit( x );
+						FileFormat ff = ffh.getFileFormat();
+						puid =  ff.getPUID() ;
+					}
+									getMessageService().logError(
 							getTextResourceService().getText(
 									MESSAGE_XML_MODUL_A_PDFA )
 									+ getTextResourceService().getText(
-											ERROR_XML_A_PDFA_INCORRECTFILE ) );
+											ERROR_XML_A_PDFA_INCORRECTFILE, puid ) );
 					return false;
 				}
 			} catch ( Exception e ) {

@@ -44,21 +44,15 @@ import ch.kostceco.tools.kostval.validation.bean.ValidationContext;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationFrowModule;
 
 /**
- * Validierungsschritt E (Spalten-Validierung) Wurden die Angaben aus
+ * Validierungsschritt F (Zeilen-Validierung) Wurden die Angaben aus
  * metadata.xml korrekt in die tableZ.xsd-Dateien übertragen? valid --> gleiche
- * Spaltendefinitionen (Anzahl, Type, Nullable)
+ * Zeilenzahl (rows in metadata.xml = max = minOccurs in tableZ.xsd Ansonsten:
+ * Enthält tableZ.xml die gleiche Anzahl Zeilen wie in metadata.xml definiert?
+ * valid --> gleiche Zeilenzahl (rows in metadata.xml = Anzahl row in tableZ.xml
  * 
  * 
- * The module <code>ValidationEcolumnModule</code> validates the columns
- * specified in the file <code>metadata.xml</code> against the according XML
- * schema files.
- * 
- * <p>
- * The column validation process consists of three steps. a) The validation of
- * the attribute count, b) the validation of the attribute's occurrence - which
- * conforms to the nullable attribute of the table definition - and c) the
- * validation of the attribute's type. The table columns are only valid if - and
- * only if - the three validation steps are completed successfully.
+ * The module <code>ValidationFrowModule</code> validates the rows specified in
+ * the file <code>metadata.xml</code> against the according XML schema files.
  * 
  * The table and their columns are described in the file
  * <code>metadata.xml</code> The element <code> &lt;table&gt</code> and its
@@ -121,55 +115,73 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements
 		System.out.print( "F   " );
 		System.out.print( "\r" );
 
-		// All over validation flag
-		boolean valid = true;
-		ValidationContext validationContext = new ValidationContext();
-		validationContext.setSiardArchive( valDatei );
-		validationContext.setConfigurationService( this
-				.getConfigurationService() );
-		this.setValidationContext( validationContext );
-		try {
-			// Initialize the validation context
-			valid = (prepareValidation( this.getValidationContext() ) == false ? false
-					: true);
-			// Get the prepared SIARD tables from the validation context
-			valid = (this.getValidationContext().getSiardTables() == null ? false
-					: true);
-			// Compares row information in metadata.xml and according table.xml
-			// files
-			if ( validateTableXMLFiles( this.getValidationContext() ) == false ) {
+		String rowValidation = getConfigurationService().siardFrowValidation();
+		// TODO: Als Zwischenlösung kann das Modul F (Validierung Anzahl Zeilen)
+		// in der Konfiguration ausgeschlossen werden. Das Modul F muss jedoch
+		// umprogrammieret werden, in dem z.B. mit GREP PIPE und WORDCOUNT die
+		// <\row> gezählt wird.
+
+		boolean valid = false;
+		if ( rowValidation.equals( "yes" ) ) {
+			// All over validation flag
+			ValidationContext validationContext = new ValidationContext();
+			validationContext.setSiardArchive( valDatei );
+			validationContext.setConfigurationService( this
+					.getConfigurationService() );
+			this.setValidationContext( validationContext );
+
+			try {
+				// Initialize the validation context -> [F.0]
+				valid = (prepareValidation( this.getValidationContext() ) == false ? false
+						: true);
+				// Get the prepared SIARD tables from the validation context
+				valid = (this.getValidationContext().getSiardTables() == null ? false
+						: true);
+				// Compares row information in metadata.xml and according
+				// table.xml
+				// files -> [F.1]
+				if ( validateTableXMLFiles( this.getValidationContext() ) == false ) {
+					valid = false;
+					getMessageService()
+							.logError(
+									getTextResourceService().getText(
+											MESSAGE_XML_MODUL_F_SIARD )
+											+ getTextResourceService()
+													.getText(
+															MESSAGE_XML_F_INVALID_TABLE_XML_FILES,
+															this.getIncongruentTableXMLFiles() ) );
+				}
+				// Compares row information in metadata.xml and according
+				// table.xsd
+				// files -> [F.2]
+				if ( validateTableXSDFiles( this.getValidationContext() ) == false ) {
+					valid = false;
+					getMessageService()
+							.logError(
+									getTextResourceService().getText(
+											MESSAGE_XML_MODUL_F_SIARD )
+											+ getTextResourceService()
+													.getText(
+															MESSAGE_XML_F_INVALID_TABLE_XSD_FILES,
+															this.getIncongruentTableXSDFiles() ) );
+				}
+			} catch ( Exception e ) {
 				valid = false;
 				getMessageService().logError(
 						getTextResourceService().getText(
 								MESSAGE_XML_MODUL_F_SIARD )
 								+ getTextResourceService().getText(
-										MESSAGE_XML_F_INVALID_TABLE_XML_FILES,
-										this.getIncongruentTableXMLFiles() ) );
+										ERROR_XML_UNKNOWN, e.getMessage() ) );
 			}
-			// Compares row information in metadata.xml and according table.xsd
-			// files
-			if ( validateTableXSDFiles( this.getValidationContext() ) == false ) {
-				valid = false;
-				getMessageService().logError(
-						getTextResourceService().getText(
-								MESSAGE_XML_MODUL_F_SIARD )
-								+ getTextResourceService().getText(
-										MESSAGE_XML_F_INVALID_TABLE_XSD_FILES,
-										this.getIncongruentTableXSDFiles() ) );
-			}
-		} catch ( Exception e ) {
-			valid = false;
-			getMessageService().logError(
-					getTextResourceService()
-							.getText( MESSAGE_XML_MODUL_F_SIARD )
-							+ getTextResourceService().getText(
-									ERROR_XML_UNKNOWN, e.getMessage() ) );
+		} else {
+			valid = true;
 		}
 		return valid;
+
 	}
 
 	/*
-	 * [E.0]Prepares the validation process by executing the following steps and
+	 * [F.0]Prepares the validation process by executing the following steps and
 	 * stores the resultsto the validation context:- Getting the Properties-
 	 * Initializing the SIARD path configuration- Extracting the SIARD package-
 	 * Pick up the metadata.xml- Prepares the XML Access (without XPath)-
@@ -181,7 +193,7 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements
 	{
 		// All over preparation flag
 		boolean prepared = true;
-		// Load the Java properties to the validation context
+		// Load the Java properties to the validation context -> [F.0.1]
 		boolean propertiesLoaded = initializeProperties();
 		if ( propertiesLoaded == false ) {
 			prepared = false;
@@ -191,7 +203,8 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements
 							+ getTextResourceService().getText(
 									MESSAGE_XML_F_PROPERTIES_ERROR ) );
 		}
-		// Initialize internal path configuration of the SIARD archive
+		// Initialize internal path configuration of the SIARD archive ->
+		// [F.0.2]
 		boolean pathInitialized = initializePath( validationContext );
 		if ( pathInitialized == false ) {
 			prepared = false;
@@ -202,7 +215,7 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements
 									MESSAGE_XML_F_PATH_ERROR ) );
 		}
 		// Extract the SIARD archive and distribute the content to the
-		// validation context
+		// validation context -> [F.0.3]
 		boolean siardArchiveExtracted = extractSiardArchive( validationContext );
 		if ( siardArchiveExtracted == false ) {
 			prepared = false;
@@ -212,7 +225,8 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements
 							+ getTextResourceService().getText(
 									MESSAGE_XML_E_EXTRACT_ERROR ) );
 		}
-		// Pick the metadata.xml and load it to the validation context
+		// Pick the metadata.xml and load it to the validation context ->
+		// [F.0.4]
 		boolean metadataXMLpicked = pickMetadataXML( validationContext );
 		if ( metadataXMLpicked == false ) {
 			prepared = false;
@@ -223,6 +237,7 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements
 									MESSAGE_XML_E_METADATA_ACCESS_ERROR ) );
 		}
 		// Prepare the XML configuration and store it to the validation context
+		// -> [F.0.5]
 
 		boolean xmlAccessPrepared = prepareXMLAccess( validationContext );
 		if ( xmlAccessPrepared == false ) {
@@ -234,7 +249,7 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements
 									MESSAGE_XML_E_XML_ACCESS_ERROR ) );
 		}
 		// Prepare the data to be validated such as metadata.xml and the
-		// according XML schemas
+		// according XML schemas -> [F.0.6]
 		boolean validationDataPrepared = prepareValidationData( validationContext );
 		if ( validationDataPrepared == false ) {
 			prepared = false;
@@ -248,7 +263,7 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements
 	}
 
 	/*
-	 * [E.1]Counts the columns in metadata.xml and compares it to the number of
+	 * [F.1]Counts the columns in metadata.xml and compares it to the number of
 	 * columns in the according XML schema files
 	 */
 	private boolean validateTableXMLFiles( ValidationContext validationContext )
@@ -320,7 +335,7 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements
 	}
 
 	/*
-	 * [E.2]Compares the <nullable> Element of the metadata.xml to the minOccurs
+	 * [F.2]Compares the <nullable> Element of the metadata.xml to the minOccurs
 	 * attributesin the according XML schemata
 	 */
 	private boolean validateTableXSDFiles( ValidationContext validationContext )
@@ -464,7 +479,7 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements
 
 	/* Internal helper methods */
 	/*
-	 * [E.0.1]Load the validation properties
+	 * [F.0.1]Load the validation properties
 	 */
 	private boolean initializeProperties() throws IOException
 	{
@@ -490,7 +505,7 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements
 	}
 
 	/*
-	 * [E.0.2]Initializes the SIARD path configuration
+	 * [F.0.2]Initializes the SIARD path configuration
 	 */
 	private boolean initializePath( ValidationContext validationContext )
 			throws Exception
@@ -528,7 +543,7 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements
 	}
 
 	/*
-	 * [E.0.5]Prepares the XML access
+	 * [F.0.5]Prepares the XML access
 	 */
 	private boolean prepareXMLAccess( ValidationContext validationContext )
 			throws JDOMException, IOException, Exception
@@ -584,7 +599,7 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements
 	}
 
 	/*
-	 * [E.0.3]Extracting the SIARD packages
+	 * [F.0.3]Extracting the SIARD packages
 	 */
 	private boolean extractSiardArchive( ValidationContext validationContext )
 			throws FileNotFoundException, IOException, Exception
@@ -654,7 +669,7 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements
 	}
 
 	/*
-	 * [E.0.4]Pick up the metadata.xml from the SIARD package
+	 * [F.0.4]Pick up the metadata.xml from the SIARD package
 	 */
 	private boolean pickMetadataXML( ValidationContext validationContext )
 			throws Exception
@@ -692,7 +707,7 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements
 	}
 
 	/*
-	 * [E.0.6]Preparing the data to be validated
+	 * [F.0.6]Preparing the data to be validated
 	 */
 	private boolean prepareValidationData( ValidationContext validationContext )
 			throws JDOMException, IOException, Exception

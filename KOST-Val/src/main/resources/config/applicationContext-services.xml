@@ -28,6 +28,7 @@
 	<bean id="validationArecognitionModule" class="ch.kostceco.tools.kostval.validation.moduletiff1.impl.ValidationArecognitionModuleImpl">
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="messageService" ref="messageService" />
+		<property name="configurationService" ref="configurationService" />
 	</bean>
 	<bean id="validationBjhoveValidationModule" class="ch.kostceco.tools.kostval.validation.moduletiff2.impl.ValidationBjhoveValidationModuleImpl">
 		<property name="textResourceService" ref="textResourceService" />

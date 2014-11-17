@@ -148,6 +148,11 @@ public interface ConfigurationService extends Service
 	 * Gibt an ob siard validiert werden soll yes oder no
 	 */
 	String siardValidation();
+	
+	/**
+	 * Gibt an ob siard validiert werden soll yes oder no
+	 */
+	String siardFrowValidation();
 
 	/**
 	 * Gibt die Grenze der Anzahl Zeilen pro Tabelle zurück. Grenze der zu

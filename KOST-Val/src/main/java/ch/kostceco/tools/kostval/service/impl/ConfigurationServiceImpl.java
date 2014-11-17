@@ -243,6 +243,18 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	}
 
 	@Override
+	public String siardFrowValidation()
+	{
+		Object prop = getConfig().getProperty( "siard.frowvalidation" );
+
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
+	@Override
 	public int getTableRowsLimit()
 	{
 		/**

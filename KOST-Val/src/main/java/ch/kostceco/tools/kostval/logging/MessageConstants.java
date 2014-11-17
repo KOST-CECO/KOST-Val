@@ -103,6 +103,8 @@ public interface MessageConstants
 
 	String	MESSAGE_XML_MODUL_A_JP2							= "message.xml.modul.a.jp2";
 	String	MESSAGE_XML_MODUL_B_JP2							= "message.xml.modul.b.jp2";
+	String	MESSAGE_XML_MODUL_C_JP2							= "message.xml.modul.c.jp2";
+	String	MESSAGE_XML_MODUL_D_JP2							= "message.xml.modul.d.jp2";
 
 	String	MESSAGE_XML_MODUL_Aa_SIP						= "message.xml.modul.aa.sip";
 	String	MESSAGE_XML_MODUL_Ab_SIP						= "message.xml.modul.ab.sip";
@@ -242,15 +244,67 @@ public interface MessageConstants
 	String	MESSAGE_XML_DIAEND								= "message.xml.diaend";
 
 	// *************JP2-Meldungen*************************************************************************
-	// Modul A&B Meldungen
+	// Modul A Meldungen
 	String	ERROR_XML_A_JP2_INCORRECTFILEENDING				= "error.xml.a.jp2.incorrectfileending";
 	String	ERROR_XML_A_JP2_INCORRECTFILE					= "error.xml.a.jp2.incorrectfile";
 	String	ERROR_XML_A_JP2_ISDIRECTORY						= "error.xml.a.jp2.isdirectory";
-	String	ERROR_XML_B_JP2_SERVICEFAILED					= "error.xml.b.jp2.servicefailed";
-	String	ERROR_XML_B_JP2_JPYLYZER_MISSING				= "error.xml.b.jp2.jpylyzer.missing";
-	String	ERROR_XML_B_JP2_JPYLYZER_FAIL					= "error.xml.b.jp2.jpylyzer.fail";
-	String	ERROR_XML_B_JP2_NOREPORT						= "error.xml.b.jp2.noreport";
+	String	ERROR_XML_A_JP2_SERVICEFAILED					= "error.xml.a.jp2.servicefailed";
+	String	ERROR_XML_A_JP2_JPYLYZER_MISSING				= "error.xml.a.jp2.jpylyzer.missing";
+	String	ERROR_XML_A_JP2_JPYLYZER_FAIL					= "error.xml.a.jp2.jpylyzer.fail";
+	String	ERROR_XML_A_JP2_NOREPORT						= "error.xml.a.jp2.noreport";
 
+	// Modul A-D Meldungen (Zusammengefasste Jylyzer-Meldungen)
+	String	ERROR_XML_A_JP2_SIGNATURE						= "error.xml.a.jp2.signature";
+	String	ERROR_XML_A_JP2_FILETYPE						= "error.xml.a.jp2.filetype";
+
+	String	ERROR_XML_B_JP2_IMAGE							= "error.xml.b.jp2.image";
+	String	ERROR_XML_B_JP2_BITSPC							= "error.xml.b.jp2.bitspc";
+	String	ERROR_XML_B_JP2_COLOUR							= "error.xml.b.jp2.colour";
+	String	ERROR_XML_B_JP2_PALETTE							= "error.xml.b.jp2.palette";
+	String	ERROR_XML_B_JP2_MAPPING							= "error.xml.b.jp2.mapping";
+	String	ERROR_XML_B_JP2_CHANNEL							= "error.xml.b.jp2.channel";
+	String	ERROR_XML_B_JP2_RESOLUTION						= "error.xml.b.jp2.resolution";
+	String	ERROR_XML_B_JP2_NOIHB							= "error.xml.b.jp2.noihb";
+	String	ERROR_XML_B_JP2_NOCSB							= "error.xml.b.jp2.nocsb";
+	String	ERROR_XML_B_JP2_NBPCB							= "error.xml.b.jp2.nbpcb";
+	String	ERROR_XML_B_JP2_IHBNF							= "error.xml.b.jp2.ihbnf";
+	String	ERROR_XML_B_JP2_IHBMO							= "error.xml.b.jp2.ihbmo";
+	String	ERROR_XML_B_JP2_OBPCMO							= "error.xml.b.jp2.obpcmo";
+	String	ERROR_XML_B_JP2_OPBMO							= "error.xml.b.jp2.opbmo";
+	String	ERROR_XML_B_JP2_CMBMO							= "error.xml.b.jp2.cmbmo";
+	String	ERROR_XML_B_JP2_CDBMO							= "error.xml.b.jp2.cdbmo";
+	String	ERROR_XML_B_JP2_RBMO							= "error.xml.b.jp2.rbmo";
+	String	ERROR_XML_B_JP2_CSBNC							= "error.xml.b.jp2.csbnc";
+	String	ERROR_XML_B_JP2_PACMB							= "error.xml.b.jp2.pacmb";
+
+	String	ERROR_XML_C_JP2_SIZ								= "error.xml.c.jp2.siz";
+	String	ERROR_XML_C_JP2_COD								= "error.xml.c.jp2.cod";
+	String	ERROR_XML_C_JP2_QCD								= "error.xml.c.jp2.qcd";
+	String	ERROR_XML_C_JP2_COM								= "error.xml.c.jp2.com";
+	String	ERROR_XML_C_JP2_TILEPARTS						= "error.xml.c.jp2.tileParts";
+	String	ERROR_XML_C_JP2_COC								= "error.xml.c.jp2.coc";
+	String	ERROR_XML_C_JP2_RGN								= "error.xml.c.jp2.rgn";
+	String	ERROR_XML_C_JP2_QCC								= "error.xml.c.jp2.qcc";
+	String	ERROR_XML_C_JP2_POC								= "error.xml.c.jp2.poc";
+	String	ERROR_XML_C_JP2_PLM								= "error.xml.c.jp2.plm";
+	String	ERROR_XML_C_JP2_PPM								= "error.xml.c.jp2.ppm";
+	String	ERROR_XML_C_JP2_TLM								= "error.xml.c.jp2.tlm";
+	String	ERROR_XML_C_JP2_CRG								= "error.xml.c.jp2.crg";
+	String	ERROR_XML_C_JP2_PLT								= "error.xml.c.jp2.plt";
+	String	ERROR_XML_C_JP2_PPT								= "error.xml.c.jp2.ppt";
+	String	ERROR_XML_C_JP2_SOC								= "error.xml.c.jp2.soc";
+	String	ERROR_XML_C_JP2_FSIZ							= "error.xml.c.jp2.fsiz";
+	String	ERROR_XML_C_JP2_FCOD							= "error.xml.c.jp2.fcod";
+	String	ERROR_XML_C_JP2_FQCD							= "error.xml.c.jp2.fqcd";
+	String	ERROR_XML_C_JP2_PQCD							= "error.xml.c.jp2.pqcd";
+	String	ERROR_XML_C_JP2_NOTILES							= "error.xml.c.jp2.notiles";
+	String	ERROR_XML_C_JP2_NOTILESPART						= "error.xml.c.jp2.notilespart";
+	String	ERROR_XML_C_JP2_EOC								= "error.xml.c.jp2.eoc";
+
+	String	ERROR_XML_D_JP2_XML								= "error.xml.d.jp2.xml";
+	String	ERROR_XML_D_JP2_UUID							= "error.xml.d.jp2.uuid";
+	String	ERROR_XML_D_JP2_UUIDINFO						= "error.xml.d.jp2.uuidinfo";
+	String	ERROR_XML_D_JP2_UNKNOWN							= "error.xml.d.jp2.unknown";
 	// *************SIP-Meldungen*************************************************************************
 	// Modul 1a Meldungen
 	String	ERROR_XML_AA_INCORRECTFILEENDING				= "error.xml.aa.incorrectfileending";
