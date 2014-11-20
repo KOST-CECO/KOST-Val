@@ -1,5 +1,5 @@
 /*== KOST-Val ==================================================================================
-The KOST-Val application is used for validate TIFF, SIARD, PDF/A-Files and Submission 
+The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2-Files and Submission 
 Information Package (SIP). 
 Copyright (C) 2012-2014 Claire Röthlisberger (KOST-CECO), Christian Eugster, Olivier Debenath, 
 Peter Schneider (Staatsarchiv Aargau), Daniel Ludin (BEDAG AG)
@@ -22,90 +22,59 @@ package ch.kostceco.tools.kostval.validation.modulesiard.impl;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Properties;
+
 import org.jdom2.*;
 import org.jdom2.input.SAXBuilder;
-import ch.enterag.utils.zip.EntryInputStream;
-import ch.enterag.utils.zip.FileEntry;
-import ch.enterag.utils.zip.Zip64File;
-import ch.kostceco.tools.kostval.exception.modulesiard.ValidationEcolumnException;
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.DefaultHandler;
+import org.xml.sax.helpers.XMLReaderFactory;
+
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationFrowException;
 import ch.kostceco.tools.kostval.service.ConfigurationService;
+import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
-import ch.kostceco.tools.kostval.validation.bean.SiardTable;
 import ch.kostceco.tools.kostval.validation.bean.ValidationContext;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationFrowModule;
 
 /**
  * Validierungsschritt F (Zeilen-Validierung) Wurden die Angaben aus
  * metadata.xml korrekt in die tableZ.xsd-Dateien übertragen? valid --> gleiche
- * Zeilenzahl (rows in metadata.xml = max = minOccurs in tableZ.xsd Ansonsten:
- * Enthält tableZ.xml die gleiche Anzahl Zeilen wie in metadata.xml definiert?
- * valid --> gleiche Zeilenzahl (rows in metadata.xml = Anzahl row in tableZ.xml
+ * Zeilenzahl (rows in metadata.xml = max = minOccurs in tableZ.xsd)
  * 
+ * bei 0 bis unbounded rows von metadata.xml in max = minOccurs von tableZ.xsd
+ * übertragen, damit im Modul H validiert werden kann.
  * 
- * The module <code>ValidationFrowModule</code> validates the rows specified in
- * the file <code>metadata.xml</code> against the according XML schema files.
- * 
- * The table and their columns are described in the file
- * <code>metadata.xml</code> The element <code> &lt;table&gt</code> and its
- * children are decisive for the table description: <blockquote>
- * 
- * <pre>
- *  <code>&lt;table&gt</code>
- * 	<code>&lt;name&gtTABLE_NAME&lt;/name&gt</code>
- * 	<code>&lt;folder&gtFOLDER_NAME&lt;/folder&gt</code>
- * 	<code>&lt;description&gtDESCRIPTION&lt;/description&gt</code>
- * 	<code>&lt;columns&gt</code>
- * 	<code>&lt;column&gt</code>
- * 	<code>&lt;name&gtCOLUMN_NAME&lt;/name&gt</code>
- * 	<code>&lt;type&gtCOLUMN_TYPE&lt;/type&gt</code>
- * 	<code>&lt;typeOriginal&gtCOLUMN_ORIGINAL_TYPE&lt;/typeOriginal&gt</code>
- * 	<code>&lt;nullable&gt</code>COLUMN_MINIMAL_OCCURRENCE<code>&lt;nullable&gt</code>
- * 	<code>&lt;description&gt</code>COLUMN_DESCRIPTION<code>&lt;description&gt</code>
- * 	<code>&lt;/column&gt</code>
- * 	<code>&lt;/columns&gt</code>
- * <code>&lt;/table&gt</code>
- * </pre>
- * 
- * </blockquote
- * 
- * @author Do Olivier Debenath
+ * @author Rc Claire Röthlisberger, KOST-CECO
+ * @param <Range>
+ * @param <RangeHandler>
  */
 
-public class ValidationFrowModuleImpl extends ValidationModuleImpl implements
-		ValidationFrowModule
+public class ValidationFrowModuleImpl<Range, RangeHandler> extends
+		ValidationModuleImpl implements ValidationFrowModule
 {
-	/* Validation Context */
-	private ValidationContext		validationContext;
-	/* Service related properties */
-	private ConfigurationService	configurationService;
-	/* Validation error related properties */
-	private StringBuilder			incongruentTableXMLFiles;
-	private StringBuilder			incongruentTableXSDFiles;
+	private static final int	UNBOUNDED	= -1;
 
-	/**
-	 * Start of the column validation. The <code>validate</code> method act as a
-	 * controller. First it initializes the validation by calling the
-	 * <code>validationPrepare()</code> method and subsequently it starts the
-	 * validation process by executing the validation subroutines:
-	 * <code>validateAttributeCount()</code>,
-	 * <code>validateAttributeOccurrence()</code> and finally
-	 * <code>validateAttributeType()</code>.
-	 * 
-	 * @param SIARD
-	 *            archive containing the tables whose columns are to be
-	 *            validated
-	 * @exception ValidationEcolumnException
-	 *                if the representation of the columns is invalid
-	 */
+	public ConfigurationService	configurationService;
+
+	public ConfigurationService getConfigurationService()
+	{
+		return configurationService;
+	}
+
+	public void setConfigurationService(
+			ConfigurationService configurationService )
+	{
+		this.configurationService = configurationService;
+	}
+
+	private XMLReader	reader;
+
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws ValidationFrowException
@@ -114,843 +83,268 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements
 		// Ersichtlich das KOST-Val arbeitet
 		System.out.print( "F   " );
 		System.out.print( "\r" );
+		int onWork = 41;
 
-		String rowValidation = getConfigurationService().siardFrowValidation();
-		// TODO: Als Zwischenlösung kann das Modul F (Validierung Anzahl Zeilen)
-		// in der Konfiguration ausgeschlossen werden. Das Modul F muss jedoch
-		// umprogrammieret werden, in dem z.B. mit GREP PIPE und WORDCOUNT die
-		// <\row> gezählt wird.
+		boolean valid = true;
+		try {
+			/*
+			 * Extract the metadata.xml from the temporare work folder and build
+			 * a jdom document
+			 */
+			String pathToWorkDir = getConfigurationService().getPathToWorkDir();
+			pathToWorkDir = pathToWorkDir + "\\SIARD";
+			File metadataXml = new File( new StringBuilder( pathToWorkDir )
+					.append( File.separator ).append( "header" )
+					.append( File.separator ).append( "metadata.xml" )
+					.toString() );
+			InputStream fin = new FileInputStream( metadataXml );
+			SAXBuilder builder = new SAXBuilder();
+			Document document = builder.build( fin );
+			fin.close();
 
-		boolean valid = false;
-		if ( rowValidation.equals( "yes" ) ) {
-			// All over validation flag
-			ValidationContext validationContext = new ValidationContext();
-			validationContext.setSiardArchive( valDatei );
-			validationContext.setConfigurationService( this
-					.getConfigurationService() );
-			this.setValidationContext( validationContext );
-
-			try {
-				// Initialize the validation context -> [F.0]
-				valid = (prepareValidation( this.getValidationContext() ) == false ? false
-						: true);
-				// Get the prepared SIARD tables from the validation context
-				valid = (this.getValidationContext().getSiardTables() == null ? false
-						: true);
-				// Compares row information in metadata.xml and according
-				// table.xml
-				// files -> [F.1]
-				if ( validateTableXMLFiles( this.getValidationContext() ) == false ) {
-					valid = false;
-					getMessageService()
-							.logError(
-									getTextResourceService().getText(
-											MESSAGE_XML_MODUL_F_SIARD )
-											+ getTextResourceService()
-													.getText(
-															MESSAGE_XML_F_INVALID_TABLE_XML_FILES,
-															this.getIncongruentTableXMLFiles() ) );
+			/*
+			 * read the document and for each schema and table entry verify
+			 * existence in temporary extracted structure and compare the
+			 * rownumber
+			 */
+			Namespace ns = Namespace
+					.getNamespace( "http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
+			// select schema elements and loop
+			List<Element> schemas = document.getRootElement()
+					.getChild( "schemas", ns ).getChildren( "schema", ns );
+			for ( Element schema : schemas ) {
+				valid = validateSchema( schema, ns, pathToWorkDir );
+				if ( onWork == 41 ) {
+					onWork = 2;
+					System.out.print( "F-   " );
+					System.out.print( "\r" );
+				} else if ( onWork == 11 ) {
+					onWork = 12;
+					System.out.print( "F\\   " );
+					System.out.print( "\r" );
+				} else if ( onWork == 21 ) {
+					onWork = 22;
+					System.out.print( "F|   " );
+					System.out.print( "\r" );
+				} else if ( onWork == 31 ) {
+					onWork = 32;
+					System.out.print( "F/   " );
+					System.out.print( "\r" );
+				} else {
+					onWork = onWork + 1;
 				}
-				// Compares row information in metadata.xml and according
-				// table.xsd
-				// files -> [F.2]
-				if ( validateTableXSDFiles( this.getValidationContext() ) == false ) {
-					valid = false;
-					getMessageService()
-							.logError(
-									getTextResourceService().getText(
-											MESSAGE_XML_MODUL_F_SIARD )
-											+ getTextResourceService()
-													.getText(
-															MESSAGE_XML_F_INVALID_TABLE_XSD_FILES,
-															this.getIncongruentTableXSDFiles() ) );
+			}
+		} catch ( java.io.IOException ioe ) {
+			valid = false;
+			getMessageService().logError(
+					getTextResourceService()
+							.getText( MESSAGE_XML_MODUL_F_SIARD )
+							+ getTextResourceService().getText(
+									ERROR_XML_UNKNOWN,
+									ioe.getMessage() + " (IOException)" ) );
+		} catch ( JDOMException e ) {
+			valid = false;
+			getMessageService().logError(
+					getTextResourceService()
+							.getText( MESSAGE_XML_MODUL_F_SIARD )
+							+ getTextResourceService().getText(
+									ERROR_XML_UNKNOWN,
+									e.getMessage() + " (JDOMException)" ) );
+		}
+
+		return valid;
+	}
+
+	private boolean validateSchema( Element schema, Namespace ns,
+			String pathToWorkDir )
+	{
+		int onWork = 41;
+		boolean valid = true;
+		Element schemaFolder = schema.getChild( "folder", ns );
+		File schemaPath = new File( new StringBuilder( pathToWorkDir )
+				.append( File.separator ).append( "content" )
+				.append( File.separator ).append( schemaFolder.getText() )
+				.toString() );
+		if ( schemaPath.isDirectory() ) {
+			List<Element> tables = schema.getChild( "tables", ns ).getChildren(
+					"table", ns );
+			for ( Element table : tables ) {
+				valid = valid
+						&& validateTable( table, ns, pathToWorkDir, schemaPath );
+				if ( onWork == 41 ) {
+					onWork = 2;
+					System.out.print( "F-   " );
+					System.out.print( "\r" );
+				} else if ( onWork == 11 ) {
+					onWork = 12;
+					System.out.print( "F\\   " );
+					System.out.print( "\r" );
+				} else if ( onWork == 21 ) {
+					onWork = 22;
+					System.out.print( "F|   " );
+					System.out.print( "\r" );
+				} else if ( onWork == 31 ) {
+					onWork = 32;
+					System.out.print( "F/   " );
+					System.out.print( "\r" );
+				} else {
+					onWork = onWork + 1;
 				}
-			} catch ( Exception e ) {
-				valid = false;
-				getMessageService().logError(
-						getTextResourceService().getText(
-								MESSAGE_XML_MODUL_F_SIARD )
-								+ getTextResourceService().getText(
-										ERROR_XML_UNKNOWN, e.getMessage() ) );
 			}
 		} else {
-			valid = true;
+			valid = false;
 		}
+		return valid;
+	}
+
+	private boolean validateTable( Element table, Namespace ns,
+			String pathToWorkDir, File schemaPath )
+	{
+		boolean valid = true;
+		Element tableFolder = table.getChild( "folder", ns );
+		Element tablerows = table.getChild( "rows", ns );
+		int rowmax = Integer.parseInt( tablerows.getText() );
+
+		File tablePath = new File( new StringBuilder(
+				schemaPath.getAbsolutePath() ).append( File.separator )
+				.append( tableFolder.getText() ).toString() );
+		File tableXsd = new File( new StringBuilder(
+				tablePath.getAbsolutePath() ).append( File.separator )
+				.append( tableFolder.getText() + ".xsd" ).toString() );
+		valid = valid && validateRow( tableXsd, rowmax );
+
+		return valid;
+	}
+
+	private boolean validateRow( File tableXsd, int rowmax )
+	{
+		boolean valid = false;
+		try {
+			Range range;
+			try {
+				range = getRange( tableXsd );
+
+				System.out.println( range.min + " " + range.max );
+				if ( range.min == 0 && range.max == UNBOUNDED ) {
+					// TODO die effektive Zahl in schemaLocation (Work)
+					// hereinschreiben
+					// int rowmax=9999;
+
+					String oldstring = "minOccurs=\"0\" maxOccurs=\"unbounded";
+					String newstring = "minOccurs=\"" + rowmax
+							+ "\" maxOccurs=\"" + rowmax;
+					Util.oldnewstring( oldstring, newstring, tableXsd );
+
+					// in einigen Fällen ist zuerst max und dann min
+					oldstring = "maxOccurs=\"unbounded\" minOccurs=\"0";
+					newstring = "maxOccurs=\"" + rowmax + "\" minOccurs=\""
+							+ rowmax;
+					Util.oldnewstring( oldstring, newstring, tableXsd );
+
+					valid = true;
+				} else {
+					if ( range.min == rowmax && range.max == rowmax ) {
+						valid = true;
+					} else {
+						valid = false;
+						getMessageService()
+								.logError(
+										getTextResourceService().getText(
+												MESSAGE_XML_MODUL_F_SIARD )
+												+ getTextResourceService()
+														.getText(
+																MESSAGE_XML_F_INVALID_TABLE_XML_FILES,
+																tableXsd ) );
+					}
+				}
+			} catch ( IOException e ) {
+				getMessageService().logError(
+						getTextResourceService()
+								.getText( MESSAGE_XML_MODUL_F_SIARD )
+								+ getTextResourceService().getText(
+										ERROR_XML_UNKNOWN,
+										e.getMessage() + " (IOException)" ) );
+			}
+		} catch ( SAXException e ) {
+			getMessageService().logError(
+					getTextResourceService()
+							.getText( MESSAGE_XML_MODUL_F_SIARD )
+							+ getTextResourceService().getText(
+									ERROR_XML_UNKNOWN,
+									e.getMessage() + " (SAXException)" ) );
+		}
+
 		return valid;
 
 	}
 
-	/*
-	 * [F.0]Prepares the validation process by executing the following steps and
-	 * stores the resultsto the validation context:- Getting the Properties-
-	 * Initializing the SIARD path configuration- Extracting the SIARD package-
-	 * Pick up the metadata.xml- Prepares the XML Access (without XPath)-
-	 * Prepares the table information from metadata.xml
-	 */
-	@Override
+	private Range getRange( File xsdFile ) throws SAXException, IOException
+	{
+		Range range = new Range();
+		RangeHandler rangeHandler = new RangeHandler();
+		try {
+			reader = XMLReaderFactory.createXMLReader();
+			reader.setFeature( "http://xml.org/sax/features/validation", false );
+			reader.setFeature(
+					"http://apache.org/xml/features/validation/schema", false );
+			reader.setContentHandler( rangeHandler );
+			reader.parse( new InputSource( new FileInputStream( xsdFile ) ) );
+		} catch ( SAXException e ) {
+			range = rangeHandler.getRange();
+		}
+		return range;
+	}
+
+	private class RangeHandler extends DefaultHandler
+	{
+		private Range	range	= new Range();
+
+		@Override
+		public void startElement( String uri, String localName, String qName,
+				Attributes attributes ) throws SAXException
+		{
+			if ( "row".equals( attributes.getValue( "name" ) ) ) {
+				if ( "rowType".equals( attributes.getValue( "type" ) ) ) {
+					this.range.min = getRange( attributes
+							.getValue( "minOccurs" ) );
+					this.range.max = getRange( attributes
+							.getValue( "maxOccurs" ) );
+					throw new SAXException();
+				}
+			}
+		}
+
+		private int getRange( String attributeValue )
+		{
+			int value = 1;
+			if ( attributeValue == null ) {
+				return value;
+			}
+			if ( attributeValue.equals( "unbounded" ) ) {
+				return -1;
+			}
+			try {
+				value = Integer.valueOf( attributeValue ).intValue();
+			} catch ( NumberFormatException e ) {
+			}
+			return value;
+		}
+
+		public Range getRange()
+		{
+			return range;
+		}
+	}
+
+	private class Range
+	{
+		public int	min	= 1;
+		public int	max	= 1;
+	}
+
 	public boolean prepareValidation( ValidationContext validationContext )
 			throws IOException, JDOMException, Exception
 	{
-		// All over preparation flag
-		boolean prepared = true;
-		// Load the Java properties to the validation context -> [F.0.1]
-		boolean propertiesLoaded = initializeProperties();
-		if ( propertiesLoaded == false ) {
-			prepared = false;
-			getMessageService().logError(
-					getTextResourceService()
-							.getText( MESSAGE_XML_MODUL_F_SIARD )
-							+ getTextResourceService().getText(
-									MESSAGE_XML_F_PROPERTIES_ERROR ) );
-		}
-		// Initialize internal path configuration of the SIARD archive ->
-		// [F.0.2]
-		boolean pathInitialized = initializePath( validationContext );
-		if ( pathInitialized == false ) {
-			prepared = false;
-			getMessageService().logError(
-					getTextResourceService()
-							.getText( MESSAGE_XML_MODUL_F_SIARD )
-							+ getTextResourceService().getText(
-									MESSAGE_XML_F_PATH_ERROR ) );
-		}
-		// Extract the SIARD archive and distribute the content to the
-		// validation context -> [F.0.3]
-		boolean siardArchiveExtracted = extractSiardArchive( validationContext );
-		if ( siardArchiveExtracted == false ) {
-			prepared = false;
-			getMessageService().logError(
-					getTextResourceService()
-							.getText( MESSAGE_XML_MODUL_F_SIARD )
-							+ getTextResourceService().getText(
-									MESSAGE_XML_E_EXTRACT_ERROR ) );
-		}
-		// Pick the metadata.xml and load it to the validation context ->
-		// [F.0.4]
-		boolean metadataXMLpicked = pickMetadataXML( validationContext );
-		if ( metadataXMLpicked == false ) {
-			prepared = false;
-			getMessageService().logError(
-					getTextResourceService()
-							.getText( MESSAGE_XML_MODUL_F_SIARD )
-							+ getTextResourceService().getText(
-									MESSAGE_XML_E_METADATA_ACCESS_ERROR ) );
-		}
-		// Prepare the XML configuration and store it to the validation context
-		// -> [F.0.5]
-
-		boolean xmlAccessPrepared = prepareXMLAccess( validationContext );
-		if ( xmlAccessPrepared == false ) {
-			prepared = false;
-			getMessageService().logError(
-					getTextResourceService()
-							.getText( MESSAGE_XML_MODUL_F_SIARD )
-							+ getTextResourceService().getText(
-									MESSAGE_XML_E_XML_ACCESS_ERROR ) );
-		}
-		// Prepare the data to be validated such as metadata.xml and the
-		// according XML schemas -> [F.0.6]
-		boolean validationDataPrepared = prepareValidationData( validationContext );
-		if ( validationDataPrepared == false ) {
-			prepared = false;
-			getMessageService().logError(
-					getTextResourceService()
-							.getText( MESSAGE_XML_MODUL_F_SIARD )
-							+ getTextResourceService().getText(
-									MESSAGE_XML_E_PREVALIDATION_ERROR ) );
-		}
-		return prepared;
+		return false;
 	}
-
-	/*
-	 * [F.1]Counts the columns in metadata.xml and compares it to the number of
-	 * columns in the according XML schema files
-	 */
-	private boolean validateTableXMLFiles( ValidationContext validationContext )
-			throws Exception
-	{
-		int onWork = 41;
-		boolean validTableXMLFiles = true;
-		StringBuilder namesOfInvalidTables = new StringBuilder();
-		Properties properties = validationContext.getValidationProperties();
-		List<SiardTable> siardTables = validationContext.getSiardTables();
-
-		for ( SiardTable siardTable : siardTables ) {
-			Element tableRootElement = siardTable.getTableRootElement();
-			Element tableRowsElement = tableRootElement
-					.getChild(
-							properties
-									.getProperty( "module.f.siard.table.xml.rows.element.name" ),
-							validationContext.getXmlNamespace() );
-			Integer rowNumber = new Integer( tableRowsElement.getValue() );
-			List<Element> xmlRowElements = siardTable.getTableXMLElements();
-			Integer rows = new Integer( xmlRowElements.size() );
-			if ( rowNumber > rows ) {
-				validTableXMLFiles = false;
-				namesOfInvalidTables
-						.append( (namesOfInvalidTables.length() > 0) ? ", "
-								: "" );
-				namesOfInvalidTables
-						.append( siardTable.getTableName()
-								+ properties
-										.getProperty( "module.f.siard.table.xml.file.extension" )
-								+ " (" + (rows - rowNumber) + ") " );
-			}
-
-			if ( rowNumber < rows ) {
-				validTableXMLFiles = false;
-				namesOfInvalidTables
-						.append( (namesOfInvalidTables.length() > 0) ? ", "
-								: "" );
-				namesOfInvalidTables
-						.append( siardTable.getTableName()
-								+ properties
-										.getProperty( "module.f.siard.table.xml.file.extension" )
-								+ " (+" + (rows - rowNumber) + ") " );
-			}
-			if ( onWork == 41 ) {
-				onWork = 2;
-				System.out.print( "F-   " );
-				System.out.print( "\r" );
-			} else if ( onWork == 11 ) {
-				onWork = 12;
-				System.out.print( "F\\   " );
-				System.out.print( "\r" );
-			} else if ( onWork == 21 ) {
-				onWork = 22;
-				System.out.print( "F|   " );
-				System.out.print( "\r" );
-			} else if ( onWork == 31 ) {
-				onWork = 32;
-				System.out.print( "F/   " );
-				System.out.print( "\r" );
-			} else {
-				onWork = onWork + 1;
-			}
-		}
-		// Writing back error log
-		this.setIncongruentTableXMLFiles( namesOfInvalidTables );
-		// Return the current validation state
-		return validTableXMLFiles;
-	}
-
-	/*
-	 * [F.2]Compares the <nullable> Element of the metadata.xml to the minOccurs
-	 * attributesin the according XML schemata
-	 */
-	private boolean validateTableXSDFiles( ValidationContext validationContext )
-			throws Exception
-	{
-		int onWork = 41;
-		boolean validTableXSDFiles = true;
-		StringBuilder namesOfInvalidTables = new StringBuilder();
-		Properties properties = validationContext.getValidationProperties();
-		List<SiardTable> siardTables = validationContext.getSiardTables();
-
-		for ( SiardTable siardTable : siardTables ) {
-
-			Element tableRootElement = siardTable.getTableRootElement();
-			Element tableRowsElement = tableRootElement
-					.getChild(
-							properties
-									.getProperty( "module.f.siard.table.xml.rows.element.name" ),
-							validationContext.getXmlNamespace() );
-			Integer rowNumber = new Integer( tableRowsElement.getValue() );
-			Long extendedRowNumber = rowNumber.longValue();
-
-			Element tableXSDRootElement = siardTable.getTableXSDRootElement();
-			Element tableElement = tableXSDRootElement
-					.getChild( properties
-							.getProperty( "module.f.siard.table.xsd.element" ),
-							tableXSDRootElement.getNamespace() );
-
-			Element tableComplexType = tableElement.getChild( properties
-					.getProperty( "module.f.siard.table.xsd.complexType" ),
-					tableXSDRootElement.getNamespace() );
-
-			Element tableSequence = tableComplexType.getChild( properties
-					.getProperty( "module.f.siard.table.xsd.sequence" ),
-					tableXSDRootElement.getNamespace() );
-
-			String maxOccurs = tableSequence
-					.getChild(
-							properties
-									.getProperty( "module.f.siard.table.xsd.element" ),
-							tableXSDRootElement.getNamespace() )
-					.getAttributeValue(
-							properties
-									.getProperty( "module.f.siard.table.xsd.attribute.maxOccurs.name" ) );
-			String minOccurs = tableSequence
-					.getChild(
-							properties
-									.getProperty( "module.f.siard.table.xsd.element" ),
-							tableXSDRootElement.getNamespace() )
-					.getAttributeValue(
-							properties
-									.getProperty( "module.f.siard.table.xsd.attribute.minOccurs.name" ) );
-
-			// Implicite max. bound: the maximal value of Long is used
-			if ( maxOccurs
-					.equalsIgnoreCase( properties
-							.getProperty( "module.f.siard.table.xsd.attribute.unbounded" ) ) ) {
-				if ( extendedRowNumber >= 0
-						&& extendedRowNumber <= Long.MAX_VALUE ) {
-				} else {
-					validTableXSDFiles = false;
-					namesOfInvalidTables
-							.append( (namesOfInvalidTables.length() > 0) ? ", "
-									: "" );
-					namesOfInvalidTables
-							.append( siardTable.getTableName()
-									+ properties
-											.getProperty( "module.f.siard.table.xsd.file.extension" ) );
-				}
-			}
-
-			// Explicite max. bound is used
-			if ( isLong( maxOccurs ) && isLong( minOccurs ) ) {
-				if ( new Long( minOccurs ) == extendedRowNumber
-						&& new Long( maxOccurs ) == extendedRowNumber ) {
-				} else {
-					if ( new Long( minOccurs ) - extendedRowNumber == 0
-							&& new Long( maxOccurs ) - extendedRowNumber == 0 ) {
-					} else {
-						if ( new Long( maxOccurs ) > extendedRowNumber ) {
-							validTableXSDFiles = false;
-							namesOfInvalidTables.append( (namesOfInvalidTables
-									.length() > 0) ? ", " : "" );
-							namesOfInvalidTables
-									.append( siardTable.getTableName()
-											+ properties
-													.getProperty( "module.f.siard.table.xsd.file.extension" )
-											+ " (+"
-											+ (new Long( maxOccurs ) - extendedRowNumber)
-											+ ") " );
-
-						} else {
-							validTableXSDFiles = false;
-							namesOfInvalidTables.append( (namesOfInvalidTables
-									.length() > 0) ? ", " : "" );
-							namesOfInvalidTables
-									.append( siardTable.getTableName()
-											+ properties
-													.getProperty( "module.f.siard.table.xsd.file.extension" )
-											+ " ("
-											+ (new Long( maxOccurs ) - extendedRowNumber)
-											+ ") " );
-						}
-					}
-				}
-			}
-			if ( onWork == 41 ) {
-				onWork = 2;
-				System.out.print( "F-   " );
-				System.out.print( "\r" );
-			} else if ( onWork == 11 ) {
-				onWork = 12;
-				System.out.print( "F\\   " );
-				System.out.print( "\r" );
-			} else if ( onWork == 21 ) {
-				onWork = 22;
-				System.out.print( "F|   " );
-				System.out.print( "\r" );
-			} else if ( onWork == 31 ) {
-				onWork = 32;
-				System.out.print( "F/   " );
-				System.out.print( "\r" );
-			} else {
-				onWork = onWork + 1;
-			}
-		}
-
-		this.setIncongruentTableXSDFiles( namesOfInvalidTables );
-		return validTableXSDFiles;
-	}
-
-	private boolean isLong( String input )
-	{
-		try {
-			Long.valueOf( input );
-			return true;
-		} catch ( Exception e ) {
-			return false;
-		}
-	}
-
-	/* Internal helper methods */
-	/*
-	 * [F.0.1]Load the validation properties
-	 */
-	private boolean initializeProperties() throws IOException
-	{
-		ValidationContext validationContext = this.getValidationContext();
-		boolean successfullyCommitted = false;
-		// Initializing the validation context properties
-		String propertiesName = "/validation.properties";
-		// Get the properties file
-		InputStream propertiesInputStream = getClass().getResourceAsStream(
-				propertiesName );
-		Properties properties = new Properties();
-		properties.load( propertiesInputStream );
-		validationContext.setValidationProperties( properties );
-		// Log messages are created inside the if clause to catch missing
-		// properties errors
-		if ( validationContext.getValidationProperties() != null ) {
-			successfullyCommitted = true;
-		} else {
-			successfullyCommitted = false;
-			throw new IOException();
-		}
-		return successfullyCommitted;
-	}
-
-	/*
-	 * [F.0.2]Initializes the SIARD path configuration
-	 */
-	private boolean initializePath( ValidationContext validationContext )
-			throws Exception
-	{
-		boolean successfullyCommitted = false;
-		Properties properties = validationContext.getValidationProperties();
-		StringBuilder headerPath = new StringBuilder();
-		StringBuilder contentPath = new StringBuilder();
-		// Initializing validation Logging
-		String workDir = validationContext.getConfigurationService()
-				.getPathToWorkDir();
-		// Preparing the internal SIARD directory structure
-		headerPath.append( workDir );
-		headerPath.append( File.separator );
-		headerPath.append( properties.getProperty( "module.f.header.suffix" ) );
-		contentPath.append( workDir );
-		contentPath.append( File.separator );
-		contentPath
-				.append( properties.getProperty( "module.f.content.suffix" ) );
-		// Writing back the directory structure to the validation context
-
-		validationContext.setHeaderPath( headerPath.toString() );
-		validationContext.setContentPath( contentPath.toString() );
-		if ( validationContext.getHeaderPath() != null
-				&& validationContext.getContentPath() != null
-				&& properties != null ) {
-			successfullyCommitted = true;
-			this.setValidationContext( validationContext );
-		} else {
-			successfullyCommitted = false;
-			this.setValidationContext( null );
-			throw new Exception();
-		}
-		return successfullyCommitted;
-	}
-
-	/*
-	 * [F.0.5]Prepares the XML access
-	 */
-	private boolean prepareXMLAccess( ValidationContext validationContext )
-			throws JDOMException, IOException, Exception
-	{
-		boolean successfullyCommitted = false;
-		Properties properties = validationContext.getValidationProperties();
-		File metadataXML = validationContext.getMetadataXML();
-		InputStream inputStream = new FileInputStream( metadataXML );
-		SAXBuilder builder = new SAXBuilder();
-		Document document = builder.build( inputStream );
-		// Assigning JDOM Document to the validation context
-		validationContext.setMetadataXMLDocument( document );
-		String xmlPrefix = properties
-				.getProperty( "module.f.metadata.xml.prefix" );
-		String xsdPrefix = properties.getProperty( "module.f.table.xsd.prefix" );
-		// Setting the namespaces to access metadata.xml and the different
-		// table.xsd
-		Element rootElement = document.getRootElement();
-		String namespaceURI = rootElement.getNamespaceURI();
-		Namespace xmlNamespace = Namespace.getNamespace( xmlPrefix,
-				namespaceURI );
-		Namespace xsdNamespace = Namespace.getNamespace( xsdPrefix,
-				namespaceURI );
-		// Assigning prefix to the validation context
-		validationContext.setXmlPrefix( xmlPrefix );
-		validationContext.setXsdPrefix( xsdPrefix );
-		// Assigning namespace info to the validation context
-		validationContext.setXmlNamespace( xmlNamespace );
-		validationContext.setXsdNamespace( xsdNamespace );
-		if ( validationContext.getXmlNamespace() != null
-				&& validationContext.getXsdNamespace() != null
-				&& validationContext.getXmlPrefix() != null
-				&& validationContext.getXsdPrefix() != null
-				&& validationContext.getMetadataXMLDocument() != null
-				&& validationContext.getValidationProperties() != null ) {
-			this.setValidationContext( validationContext );
-			successfullyCommitted = true;
-		} else {
-			successfullyCommitted = false;
-			this.setValidationContext( null );
-			throw new Exception();
-		}
-		return successfullyCommitted;
-	}
-
-	/* Trimming the search terms for column type validation */
-	@SuppressWarnings("unused")
-	private String trimLeftSideType( String leftside, String delimiter )
-			throws Exception
-	{
-		return (leftside.indexOf( delimiter ) > -1) ? leftside.substring( 0,
-				leftside.indexOf( delimiter ) ) : leftside;
-	}
-
-	/*
-	 * [F.0.3]Extracting the SIARD packages
-	 */
-	private boolean extractSiardArchive( ValidationContext validationContext )
-			throws FileNotFoundException, IOException, Exception
-	{
-		int onWork = 41;
-		boolean sucessfullyCommitted = false;
-		// Initializing the access to the SIARD archive
-		Zip64File zipfile = new Zip64File( validationContext.getSiardArchive() );
-		List<FileEntry> fileEntryList = zipfile.getListFileEntries();
-		String pathToWorkDir = validationContext.getConfigurationService()
-				.getPathToWorkDir();
-		File tmpDir = new File( pathToWorkDir );
-		// Initializing the resulting Hashmap containing all files, indexed by
-		// its absolute path
-		HashMap<String, File> extractedSiardFiles = new HashMap<String, File>();
-		// Iterating over the whole SIARD archive
-		for ( FileEntry fileEntry : fileEntryList ) {
-			if ( !fileEntry.isDirectory() ) {
-				byte[] buffer = new byte[8192];
-				EntryInputStream eis = zipfile.openEntryInputStream( fileEntry
-						.getName() );
-				File newFile = new File( tmpDir, fileEntry.getName() );
-				File parent = newFile.getParentFile();
-				if ( !parent.exists() ) {
-					parent.mkdirs();
-				}
-				FileOutputStream fos = new FileOutputStream( newFile );
-				for ( int iRead = eis.read( buffer ); iRead >= 0; iRead = eis
-						.read( buffer ) ) {
-					fos.write( buffer, 0, iRead );
-				}
-				extractedSiardFiles.put( newFile.getPath(), newFile );
-				eis.close();
-				fos.close();
-			}
-			if ( onWork == 41 ) {
-				onWork = 2;
-				System.out.print( "F-   " );
-				System.out.print( "\r" );
-			} else if ( onWork == 11 ) {
-				onWork = 12;
-				System.out.print( "F\\   " );
-				System.out.print( "\r" );
-			} else if ( onWork == 21 ) {
-				onWork = 22;
-				System.out.print( "F|   " );
-				System.out.print( "\r" );
-			} else if ( onWork == 31 ) {
-				onWork = 32;
-				System.out.print( "F/   " );
-				System.out.print( "\r" );
-			} else {
-				onWork = onWork + 1;
-			}
-		}
-		validationContext.setSiardFiles( extractedSiardFiles );
-		// Checks whether the siard extraction succeeded or not
-		if ( validationContext.getSiardFiles() != null ) {
-			this.setValidationContext( validationContext );
-			sucessfullyCommitted = true;
-		} else {
-			this.setValidationContext( null );
-			sucessfullyCommitted = false;
-			throw new Exception();
-		}
-		return sucessfullyCommitted;
-	}
-
-	/*
-	 * [F.0.4]Pick up the metadata.xml from the SIARD package
-	 */
-	private boolean pickMetadataXML( ValidationContext validationContext )
-			throws Exception
-	{
-		boolean successfullyCommitted = false;
-
-		Properties properties = validationContext.getValidationProperties();
-		StringBuilder pathToMetadataXML = new StringBuilder();
-		pathToMetadataXML.append( validationContext.getConfigurationService()
-				.getPathToWorkDir() );
-		pathToMetadataXML.append( File.separator );
-		pathToMetadataXML.append( properties
-				.getProperty( "module.f.siard.path.to.header" ) );
-		pathToMetadataXML.append( File.separator );
-		pathToMetadataXML.append( properties
-				.getProperty( "module.f.siard.metadata.xml" ) );
-		HashMap<String, File> siardFiles = validationContext.getSiardFiles();
-		File metadataXML = siardFiles.get( pathToMetadataXML.toString() );
-		// Retreave the metadata.xml from the SIARD archive and writes it back
-		// to the validation context
-		validationContext.setMetadataXML( metadataXML );
-		// Checks whether the metadata.xml could be picked up
-		if ( validationContext.getMetadataXML() != null && properties != null ) {
-			this.setValidationContext( validationContext );
-			successfullyCommitted = true;
-		} else {
-
-			this.setValidationContext( null );
-
-			successfullyCommitted = false;
-			throw new Exception();
-		}
-
-		return successfullyCommitted;
-	}
-
-	/*
-	 * [F.0.6]Preparing the data to be validated
-	 */
-	private boolean prepareValidationData( ValidationContext validationContext )
-			throws JDOMException, IOException, Exception
-	{
-		int onWork = 41;
-		boolean successfullyCommitted = false;
-		Properties properties = validationContext.getValidationProperties();
-		// Gets the tables to be validated
-		List<SiardTable> siardTables = new ArrayList<SiardTable>();
-		Document document = validationContext.getMetadataXMLDocument();
-		Element rootElement = document.getRootElement();
-		String workingDirectory = validationContext.getConfigurationService()
-				.getPathToWorkDir();
-		String siardSchemasElementsName = properties
-				.getProperty( "module.f.siard.metadata.xml.schemas.name" );
-		// Gets the list of <schemas> elements from metadata.xml
-		List<Element> siardSchemasElements = rootElement.getChildren(
-				siardSchemasElementsName, validationContext.getXmlNamespace() );
-		for ( Element siardSchemasElement : siardSchemasElements ) {
-			// Gets the list of <schema> elements from metadata.xml
-			List<Element> siardSchemaElements = siardSchemasElement
-					.getChildren(
-							properties
-									.getProperty( "module.f.siard.metadata.xml.schema.name" ),
-							validationContext.getXmlNamespace() );
-			// Iterating over all <schema> elements
-			for ( Element siardSchemaElement : siardSchemaElements ) {
-				String schemaFolderName = siardSchemaElement
-						.getChild(
-								properties
-										.getProperty( "module.f.siard.metadata.xml.schema.folder.name" ),
-								validationContext.getXmlNamespace() )
-						.getValue();
-				Element siardTablesElement = siardSchemaElement
-						.getChild(
-								properties
-										.getProperty( "module.f.siard.metadata.xml.tables.name" ),
-								validationContext.getXmlNamespace() );
-				List<Element> siardTableElements = siardTablesElement
-						.getChildren(
-								properties
-										.getProperty( "module.f.siard.metadata.xml.table.name" ),
-								validationContext.getXmlNamespace() );
-				// Iterating over all containing table elements
-				for ( Element siardTableElement : siardTableElements ) {
-					Element siardColumnsElement = siardTableElement
-							.getChild(
-									properties
-											.getProperty( "module.f.siard.metadata.xml.columns.name" ),
-									validationContext.getXmlNamespace() );
-					List<Element> siardColumnElements = siardColumnsElement
-							.getChildren(
-									properties
-											.getProperty( "module.f.siard.metadata.xml.column.name" ),
-									validationContext.getXmlNamespace() );
-					String tableName = siardTableElement
-							.getChild(
-									properties
-											.getProperty( "module.f.siard.metadata.xml.table.folder.name" ),
-									validationContext.getXmlNamespace() )
-							.getValue();
-					SiardTable siardTable = new SiardTable();
-					// Add Table Root Element
-					siardTable.setTableRootElement( siardTableElement );
-					siardTable.setMetadataXMLElements( siardColumnElements );
-					siardTable.setTableName( tableName );
-					String siardTableFolderName = siardTableElement
-							.getChild(
-									properties
-											.getProperty( "module.f.siard.metadata.xml.table.folder.name" ),
-									validationContext.getXmlNamespace() )
-							.getValue();
-					StringBuilder pathToTableSchema = new StringBuilder();
-					// Preparing access to the according XML schema file
-					pathToTableSchema.append( workingDirectory );
-					pathToTableSchema.append( File.separator );
-					pathToTableSchema.append( properties
-							.getProperty( "module.f.siard.path.to.content" ) );
-					pathToTableSchema.append( File.separator );
-					pathToTableSchema.append( schemaFolderName.replaceAll( " ",
-							"" ) );
-					pathToTableSchema.append( File.separator );
-					pathToTableSchema.append( siardTableFolderName.replaceAll(
-							" ", "" ) );
-					pathToTableSchema.append( File.separator );
-					pathToTableSchema.append( siardTableFolderName.replaceAll(
-							" ", "" ) );
-					pathToTableSchema
-							.append( properties
-									.getProperty( "module.f.siard.table.xsd.file.extension" ) );
-					// Retrieve the according XML schema
-					File tableSchema = validationContext.getSiardFiles().get(
-							pathToTableSchema.toString() );
-
-					// --> Hier
-					StringBuilder pathToTableXML = new StringBuilder();
-					pathToTableXML.append( workingDirectory );
-					pathToTableXML.append( File.separator );
-					pathToTableXML.append( properties
-							.getProperty( "module.f.siard.path.to.content" ) );
-					pathToTableXML.append( File.separator );
-					pathToTableXML.append( schemaFolderName
-							.replaceAll( " ", "" ) );
-					pathToTableXML.append( File.separator );
-					pathToTableXML.append( siardTableFolderName.replaceAll(
-							" ", "" ) );
-					pathToTableXML.append( File.separator );
-					pathToTableXML.append( siardTableFolderName.replaceAll(
-							" ", "" ) );
-					pathToTableXML
-							.append( properties
-									.getProperty( "module.f.siard.table.xml.file.extension" ) );
-					File tableXML = validationContext.getSiardFiles().get(
-							pathToTableXML.toString() );
-
-					SAXBuilder schemaBuilder = new SAXBuilder();
-					Document tableSchemaDocument = schemaBuilder
-							.build( tableSchema );
-					Element tableSchemaRootElement = tableSchemaDocument
-							.getRootElement();
-
-					// Getting the tags from XML schema to be validated
-
-					siardTable.setTableXSDRootElement( tableSchemaRootElement );
-
-					SAXBuilder xmlBuilder = new SAXBuilder();
-					Document tableXMLDocument = xmlBuilder.build( tableXML );
-					Element tableXMLRootElement = tableXMLDocument
-							.getRootElement();
-					Namespace xMLNamespace = tableXMLRootElement.getNamespace();
-					List<Element> tableXMLElements = tableXMLRootElement
-							.getChildren(
-									properties
-											.getProperty( "module.f.siard.table.xml.row.element.name" ),
-									xMLNamespace );
-					siardTable.setTableXMLElements( tableXMLElements );
-					siardTables.add( siardTable );
-					// Writing back the List off all SIARD tables to the
-					// validation context
-					validationContext.setSiardTables( siardTables );
-				}
-			}
-			if ( onWork == 41 ) {
-				onWork = 2;
-				System.out.print( "F-   " );
-				System.out.print( "\r" );
-			} else if ( onWork == 11 ) {
-				onWork = 12;
-				System.out.print( "F\\   " );
-				System.out.print( "\r" );
-			} else if ( onWork == 21 ) {
-				onWork = 22;
-				System.out.print( "F|   " );
-				System.out.print( "\r" );
-			} else if ( onWork == 31 ) {
-				onWork = 32;
-				System.out.print( "F/   " );
-				System.out.print( "\r" );
-			} else {
-				onWork = onWork + 1;
-			}
-		}
-		if ( validationContext.getSiardTables().size() > 0 ) {
-			this.setValidationContext( validationContext );
-			successfullyCommitted = true;
-		} else {
-			this.setValidationContext( null );
-			successfullyCommitted = false;
-			throw new Exception();
-		}
-		return successfullyCommitted;
-	}
-
-	// Setter and Getter methods
-	/**
-	 * @return the configurationService
-	 */
-	public ConfigurationService getConfigurationService()
-	{
-		return configurationService;
-	}
-
-	/**
-	 * @param configurationService
-	 *            the configurationService to set
-	 */
-	public void setConfigurationService(
-			ConfigurationService configurationService )
-	{
-		this.configurationService = configurationService;
-	}
-
-	/**
-	 * @return the validationContext
-	 */
-	public ValidationContext getValidationContext()
-	{
-		return validationContext;
-	}
-
-	/**
-	 * @param validationContext
-	 *            the validationContext to set
-	 */
-	public void setValidationContext( ValidationContext validationContext )
-	{
-		this.validationContext = validationContext;
-	}
-
-	/**
-	 * @return the incongruentTableXMLFiles
-	 */
-	public StringBuilder getIncongruentTableXMLFiles()
-	{
-		return incongruentTableXMLFiles;
-	}
-
-	/**
-	 * @param incongruentTableXMLFiles
-	 *            the incongruentTableXMLFiles to set
-	 */
-	public void setIncongruentTableXMLFiles(
-			StringBuilder incongruentTableXMLFiles )
-	{
-		this.incongruentTableXMLFiles = incongruentTableXMLFiles;
-	}
-
-	/**
-	 * @return the incongruentTableXSDFiles
-	 */
-	public StringBuilder getIncongruentTableXSDFiles()
-	{
-		return incongruentTableXSDFiles;
-	}
-
-	/**
-	 * @param incongruentTableXSDFiles
-	 *            the incongruentTableXSDFiles to set
-	 */
-	public void setIncongruentTableXSDFiles(
-			StringBuilder incongruentTableXSDFiles )
-	{
-		this.incongruentTableXSDFiles = incongruentTableXSDFiles;
-	}
-
 }

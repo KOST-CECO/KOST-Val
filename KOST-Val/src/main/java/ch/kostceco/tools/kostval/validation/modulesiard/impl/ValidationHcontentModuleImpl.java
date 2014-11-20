@@ -1,5 +1,5 @@
 /*== KOST-Val ==================================================================================
-The KOST-Val application is used for validate TIFF, SIARD, PDF/A-Files and Submission 
+The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2-Files and Submission 
 Information Package (SIP). 
 Copyright (C) 2012-2014 Claire Röthlisberger (KOST-CECO), Christian Eugster, Olivier Debenath, 
 Peter Schneider (Staatsarchiv Aargau), Daniel Ludin (BEDAG AG)
@@ -48,6 +48,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationHcontentException;
 import ch.kostceco.tools.kostval.service.ConfigurationService;
+import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationHcontentModule;
 
@@ -143,6 +144,7 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 									.append( File.separator )
 									.append( tableFolder.getText() + ".xsd" )
 									.toString() );
+							// TODO: hier erfolgt die Validerung
 							if ( verifyRowCount( tableXml, tableXsd ) ) {
 
 								valid = validate1( tableXml, tableXsd )
@@ -252,33 +254,20 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 	{
 		Range range = getRange( schemaLocation );
 		if ( range.min == 0 && range.max == UNBOUNDED ) {
+			// die effektive Zahl in schemaLocation (Work) konnte im H nicht
+			// hereingeschrieben werden. Eine Warnung wird herausgegeben
+			getMessageService().logError(
+					getTextResourceService()
+							.getText( MESSAGE_XML_MODUL_H_SIARD )
+							+ getTextResourceService().getText(
+									MESSAGE_XML_H_TABLE_NOT_VALIDATED1,
+									schemaLocation.getName() ) );
 			return true;
 		} else {
-			int limit = configurationService.getTableRowsLimit();
-			if ( range.max > limit ) {
-				getMessageService().logError(
-						getTextResourceService().getText(
-								MESSAGE_XML_MODUL_H_SIARD )
-								+ getTextResourceService().getText(
-										MESSAGE_XML_H_TABLE_NOT_VALIDATED1,
-										xmlFile.getName(), range.max, limit,
-										schemaLocation.getName() ) );
-			}
-			return range.min <= limit && range.max <= limit;
+			return true;
 		}
-	}
 
-	// private int getRowCount(File xmlFile) throws SAXException, IOException
-	// {
-	// reader = XMLReaderFactory.createXMLReader();
-	// reader.setFeature( "http://xml.org/sax/features/validation", false );
-	// reader.setFeature( "http://apache.org/xml/features/validation/schema",
-	// false );
-	// CountRowsHandler countRowsHandler = new CountRowsHandler();
-	// reader.setContentHandler( countRowsHandler );
-	// reader.parse( new InputSource(new FileInputStream(xmlFile)) );
-	// return countRowsHandler.getRows();
-	// }
+	}
 
 	private Range getRange( File xsdFile ) throws SAXException, IOException
 	{
@@ -357,25 +346,16 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 		}
 	}
 
-	@SuppressWarnings("unused")
-	private class CountRowsHandler extends DefaultHandler
-	{
-		private int	rows	= 0;
-
-		@Override
-		public void startElement( String uri, String localName, String qName,
-				Attributes attributes ) throws SAXException
-		{
-			if ( localName.equals( "row" ) ) {
-				rows++;
-			}
-		}
-
-		public int getRows()
-		{
-			return rows;
-		}
-	}
+	/*
+	 * private class CountRowsHandler extends DefaultHandler { private int rows
+	 * = 0;
+	 * 
+	 * @Override public void startElement( String uri, String localName, String
+	 * qName, Attributes attributes ) throws SAXException { if (
+	 * localName.equals( "row" ) ) { rows++; } }
+	 * 
+	 * public int getRows() { return rows; } }
+	 */
 
 	private class RangeHandler extends DefaultHandler
 	{

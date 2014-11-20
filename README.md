@@ -1,7 +1,7 @@
 KOST-Val
 ========
 
-The KOST-Val application is used for validate TIFF, SIARD, PDF/A-Files
+The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2-Files
 and Submission Information Package (SIP).
 
 KOST-Val, Copyright (C) 2012-2014 Claire Roethlisberger (KOST-CECO), 

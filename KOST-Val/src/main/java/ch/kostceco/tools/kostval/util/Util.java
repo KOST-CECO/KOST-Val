@@ -1,5 +1,5 @@
 /*== KOST-Val ==================================================================================
-The KOST-Val application is used for validate TIFF, SIARD, PDF/A-Files and Submission 
+The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2-Files and Submission 
 Information Package (SIP). 
 Copyright (C) 2012-2014 Claire Röthlisberger (KOST-CECO), Christian Eugster, Olivier Debenath, 
 Peter Schneider (Staatsarchiv Aargau), Daniel Ludin (BEDAG AG)
@@ -267,6 +267,33 @@ public class Util
 			reader.close();
 			String newtext = oldtext.replace( "<Message>3c</Message></Error>",
 					string );
+			newtext = newtext.replace( (char) 0, (char) 32 );
+			FileWriter writer = new FileWriter( file );
+			writer.write( newtext );
+			writer.close();
+		} catch ( IOException ioe ) {
+			ioe.printStackTrace();
+		}
+	}
+
+	/**
+	 * Verändert ersetzt oldstring mit newstring in file 
+	 * 
+	 * ! Solche Ersetzungen dürfen nicht in einer Schleife gemacht werden
+	 * sondern erst am Schluss, da diese sehr Zeitintensiv sind !!!
+	 * 
+	 * @throws IOException
+	 */
+	public static void oldnewstring( String oldstring, String newstring, File file ) throws IOException
+	{
+		try {
+			BufferedReader reader = new BufferedReader( new FileReader( file ) );
+			String line = "", oldtext = "";
+			while ( (line = reader.readLine()) != null ) {
+				oldtext += line + "\r\n";
+			}
+			reader.close();
+			String newtext = oldtext.replace( oldstring,newstring );
 			newtext = newtext.replace( (char) 0, (char) 32 );
 			FileWriter writer = new FileWriter( file );
 			writer.write( newtext );
