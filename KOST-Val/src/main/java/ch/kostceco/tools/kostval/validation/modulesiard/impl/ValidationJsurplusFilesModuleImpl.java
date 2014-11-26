@@ -136,7 +136,6 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 			}
 			xPath = null;
 			doc = null;
-
 		} catch ( java.io.IOException e ) {
 			valid = false;
 			getMessageService().logError(

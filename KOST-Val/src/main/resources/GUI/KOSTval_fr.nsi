@@ -1,5 +1,5 @@
 ; The name of the installer
-Name "KOST-Val v1.4.7"
+Name "KOST-Val v1.5.0"
 ; Sets the icon of the installer
 Icon "val.ico"
 ; remove the text 'Nullsoft Install System vX.XX' from the installer window 
@@ -112,7 +112,7 @@ Function ShowDialog
   ; Writes entry_name=value into [section_name] of ini file
   WriteINIStr $DIALOG "Settings" "NextButtonText" "${NextButtonText}"
   
-  WriteINIStr $DIALOG "${INTRO}"                 "Text"  "${INTROTXT}"
+  ;WriteINIStr $DIALOG "${INTRO}"                 "Text"  "${INTROTXT}"
   WriteINIStr $DIALOG "${HELP_Button}"           "Text"  "${HELP_ButtonTXT}"
   WriteINIStr $DIALOG "${FORMAT_RadioButton}"    "Text"  "${FORMAT_RadioButtonTXT}"
   WriteINIStr $DIALOG "${SIP_RadioButton}"       "Text"  "${SIP_RadioButtonTXT}"

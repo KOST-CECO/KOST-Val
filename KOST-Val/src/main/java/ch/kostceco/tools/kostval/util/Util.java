@@ -63,6 +63,49 @@ public class Util
 	}
 
 	/**
+	 * Schaltet die Konsolen-Ausgabe in ein file um.
+	 */
+	public static void switchOffConsoleToTxt( File file )
+			throws FileNotFoundException
+	{
+		// Keep a copy of the original out stream.
+		original = new PrintStream( System.out );
+
+		// replace the System.out, redirect to file
+		try {
+			FileOutputStream fos = new FileOutputStream( file );
+			PrintStream ps = new PrintStream( fos );
+			System.setOut( ps );
+		} catch ( FileNotFoundException e ) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Schaltet die Konsolen-Ausgabe in ein file um und beendet den Stream,
+	 * damit dieser gelöscht werden kann.
+	 */
+	public static void switchOffConsoleToTxtClose( File file )
+			throws FileNotFoundException
+	{
+		// Keep a copy of the original out stream.
+		original = new PrintStream( System.out );
+
+		// replace the System.out, redirect to file
+		try {
+			FileOutputStream fos = new FileOutputStream( file );
+			PrintStream ps = new PrintStream( fos );
+			System.setOut( ps );
+			fos.close();
+			ps.close();
+		} catch ( FileNotFoundException e ) {
+//			e.printStackTrace();
+		} catch ( IOException e ) {
+//			e.printStackTrace();
+		}
+	}
+
+	/**
 	 * Schaltet die mit switchOffConsole ausgeschaltete Konsole wieder ein.
 	 */
 	public static void switchOnConsole()
@@ -277,14 +320,15 @@ public class Util
 	}
 
 	/**
-	 * Verändert ersetzt oldstring mit newstring in file 
+	 * Verändert ersetzt oldstring mit newstring in file
 	 * 
 	 * ! Solche Ersetzungen dürfen nicht in einer Schleife gemacht werden
 	 * sondern erst am Schluss, da diese sehr Zeitintensiv sind !!!
 	 * 
 	 * @throws IOException
 	 */
-	public static void oldnewstring( String oldstring, String newstring, File file ) throws IOException
+	public static void oldnewstring( String oldstring, String newstring,
+			File file ) throws IOException
 	{
 		try {
 			BufferedReader reader = new BufferedReader( new FileReader( file ) );
@@ -293,7 +337,7 @@ public class Util
 				oldtext += line + "\r\n";
 			}
 			reader.close();
-			String newtext = oldtext.replace( oldstring,newstring );
+			String newtext = oldtext.replace( oldstring, newstring );
 			newtext = newtext.replace( (char) 0, (char) 32 );
 			FileWriter writer = new FileWriter( file );
 			writer.write( newtext );

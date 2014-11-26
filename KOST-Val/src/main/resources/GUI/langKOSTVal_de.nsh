@@ -18,7 +18,7 @@ DetailsButtonText "Details zeigen"
 !define NextButtonText    "&Beenden"
 
 ;----------------------
-!define INTRO                     "Field 1"
+;!define INTRO                     "Field 1"
 !define HELP_Button               "Field 2"
 !define FORMAT_RadioButton        "Field 3"
 !define SIP_RadioButton           "Field 4"
@@ -34,11 +34,11 @@ DetailsButtonText "Details zeigen"
 !define JVM_Value                 "Field 14"
 
 ;----------------------
-!define INTROTXT                 "KOST-Val validiert TIFF-, SIARD- und PDF/A Dateien sowie SIPs"
+;!define INTROTXT                 "KOST-Val validiert TIFF-, SIARD-, PDF/A- und JP2-Dateien sowie SIPs"
 !define HELP_ButtonTXT           "&Hilfe"
-!define FORMAT_RadioButtonTXT    "Formatvalidieren"
+!define FORMAT_RadioButtonTXT    "Formatvalidieren (TIFF-, SIARD-, PDF/A- und JP2)"
 !define SIP_RadioButtonTXT       "SIP Validierung inklusive Formatvalidieren"
-!define LOG_RadioButtonTXT       "Jhove Report behalten"
+!define LOG_RadioButtonTXT       "Verbose-Option"
 !define INPUT_GroupTXT           "${FORMAT_RadioButtonTXT}"
 !define INPUT_FolderRequestTXT   "Ordner auswählen ..."
 !define INPUT_FileRequestTXT     "Datei auswählen ..."

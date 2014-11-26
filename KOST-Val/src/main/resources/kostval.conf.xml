@@ -23,9 +23,11 @@
 	<siard>
 		<!--no verwenden wenn siard nicht validiert werden soll, ansonsten yes-->
 		<siardvalidation>yes</siardvalidation>
-		<!--SIARD-Konfiguration-->
-		<table-rows-limit>20000</table-rows-limit>
 	</siard>
+	<jp2>
+		<!--no verwenden wenn jp2 nicht validiert werden soll, ansonsten yes-->
+		<jp2validation>yes</jp2validation>
+	</jp2>
 	<tiff>
 		<!--no verwenden wenn tiff nicht validiert werden soll, ansonsten yes-->
 		<tiffvalidation>yes</tiffvalidation>
@@ -114,7 +116,7 @@
 			</allowedformat>
 			<allowedformat>
 				<puid>JP2</puid>
-				<extension>jp2, jpg2, j2c</extension>
+				<extension>jp2</extension>
 				<comment>JPEG2000</comment>
 			</allowedformat>
 			<allowedformat>

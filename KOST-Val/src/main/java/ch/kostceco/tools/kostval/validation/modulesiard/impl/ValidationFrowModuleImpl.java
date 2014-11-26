@@ -160,6 +160,7 @@ public class ValidationFrowModuleImpl<Range, RangeHandler> extends
 	{
 		int onWork = 41;
 		boolean valid = true;
+		boolean validT = true;
 		Element schemaFolder = schema.getChild( "folder", ns );
 		File schemaPath = new File( new StringBuilder( pathToWorkDir )
 				.append( File.separator ).append( "content" )
@@ -169,7 +170,9 @@ public class ValidationFrowModuleImpl<Range, RangeHandler> extends
 			List<Element> tables = schema.getChild( "tables", ns ).getChildren(
 					"table", ns );
 			for ( Element table : tables ) {
-				valid = valid
+				// Valid = True ansonsten validiert er nicht
+				validT = true;
+				validT = validT
 						&& validateTable( table, ns, pathToWorkDir, schemaPath );
 				if ( onWork == 41 ) {
 					onWork = 2;
@@ -190,10 +193,13 @@ public class ValidationFrowModuleImpl<Range, RangeHandler> extends
 				} else {
 					onWork = onWork + 1;
 				}
+				// Validierungsergebnis in valid speichern
+				valid = valid && validT;
 			}
 		} else {
 			valid = false;
 		}
+		valid = valid && validT;
 		return valid;
 	}
 
@@ -201,6 +207,7 @@ public class ValidationFrowModuleImpl<Range, RangeHandler> extends
 			String pathToWorkDir, File schemaPath )
 	{
 		boolean valid = true;
+		boolean validR = true;
 		Element tableFolder = table.getChild( "folder", ns );
 		Element tablerows = table.getChild( "rows", ns );
 		int rowmax = Integer.parseInt( tablerows.getText() );
@@ -211,7 +218,8 @@ public class ValidationFrowModuleImpl<Range, RangeHandler> extends
 		File tableXsd = new File( new StringBuilder(
 				tablePath.getAbsolutePath() ).append( File.separator )
 				.append( tableFolder.getText() + ".xsd" ).toString() );
-		valid = valid && validateRow( tableXsd, rowmax );
+		validR = validateRow( tableXsd, rowmax );
+		valid = valid && validR;
 
 		return valid;
 	}
@@ -223,13 +231,9 @@ public class ValidationFrowModuleImpl<Range, RangeHandler> extends
 			Range range;
 			try {
 				range = getRange( tableXsd );
-
-				System.out.println( range.min + " " + range.max );
 				if ( range.min == 0 && range.max == UNBOUNDED ) {
 					// TODO die effektive Zahl in schemaLocation (Work)
 					// hereinschreiben
-					// int rowmax=9999;
-
 					String oldstring = "minOccurs=\"0\" maxOccurs=\"unbounded";
 					String newstring = "minOccurs=\"" + rowmax
 							+ "\" maxOccurs=\"" + rowmax;
@@ -258,14 +262,16 @@ public class ValidationFrowModuleImpl<Range, RangeHandler> extends
 					}
 				}
 			} catch ( IOException e ) {
+				valid = false;
 				getMessageService().logError(
-						getTextResourceService()
-								.getText( MESSAGE_XML_MODUL_F_SIARD )
+						getTextResourceService().getText(
+								MESSAGE_XML_MODUL_F_SIARD )
 								+ getTextResourceService().getText(
 										ERROR_XML_UNKNOWN,
 										e.getMessage() + " (IOException)" ) );
 			}
 		} catch ( SAXException e ) {
+			valid = false;
 			getMessageService().logError(
 					getTextResourceService()
 							.getText( MESSAGE_XML_MODUL_F_SIARD )
@@ -273,9 +279,7 @@ public class ValidationFrowModuleImpl<Range, RangeHandler> extends
 									ERROR_XML_UNKNOWN,
 									e.getMessage() + " (SAXException)" ) );
 		}
-
 		return valid;
-
 	}
 
 	private Range getRange( File xsdFile ) throws SAXException, IOException

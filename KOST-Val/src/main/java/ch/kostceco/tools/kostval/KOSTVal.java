@@ -627,6 +627,10 @@ public class KOSTVal implements MessageConstants
 					// Fehler in Validierten Dateien --> invalide
 					System.exit( 2 );
 				}
+				if ( tmpDir.exists() ) {
+					Util.deleteDir( tmpDir );
+					tmpDir.deleteOnExit();
+				}
 			}
 			LOGGER.logError( kostval.getTextResourceService().getText(
 					MESSAGE_XML_FORMAT2 ) );
@@ -1396,36 +1400,23 @@ public class KOSTVal implements MessageConstants
 			}
 
 			if ( ok ) {
+				// bestehendes Workverzeichnis ggf. löschen
 				if ( tmpDir.exists() ) {
-
-					try {
+					Util.deleteDir( tmpDir );
+				}
+				if ( tmpDir.exists() ) {
 						Runtime rt = Runtime.getRuntime();
 						Process proc = rt.exec( command.toString() );
-					} catch ( IOException e ) {
-						System.out.println( "" );
-						System.out.println( tmpDir.getAbsolutePath() );
-						System.out
-								.println( "... konnte nicht geloescht werden. Bitte manuell loeschen." );
-						System.out
-								.println( "... n`a pas pu etre supprime. S`il vous plait supprimer manuellement." );
-						System.out.println( "" );
-					}
 				}
 				System.exit( 0 );
 			} else {
+				// bestehendes Workverzeichnis ggf. löschen
 				if ( tmpDir.exists() ) {
-					try {
+					Util.deleteDir( tmpDir );
+				}
+				if ( tmpDir.exists() ) {
 						Runtime rt = Runtime.getRuntime();
 						Process proc = rt.exec( command.toString() );
-					} catch ( IOException e ) {
-						System.out.println( "" );
-						System.out.println( tmpDir.getAbsolutePath() );
-						System.out
-								.println( "... konnte nicht geloescht werden. Bitte manuell loeschen." );
-						System.out
-								.println( "... n`a pas pu etre supprime. S`il vous plait supprimer manuellement." );
-						System.out.println( "" );
-					}
 				}
 				System.exit( 2 );
 			}

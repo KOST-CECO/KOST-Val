@@ -20,34 +20,30 @@ Boston, MA 02110-1301 USA or see <http://www.gnu.org/licenses/>.
 
 package ch.kostceco.tools.kostval.validation.modulesiard.impl;
 
+import static org.apache.commons.io.IOUtils.closeQuietly;
+
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
-
-import javax.xml.transform.Source;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
-import javax.xml.validation.Validator;
-
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.Namespace;
 import org.jdom2.input.SAXBuilder;
 import org.xml.sax.Attributes;
-import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationHcontentException;
 import ch.kostceco.tools.kostval.service.ConfigurationService;
+import ch.kostceco.tools.kostval.util.StreamGobbler;
 import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationHcontentModule;
@@ -58,6 +54,7 @@ import ch.kostceco.tools.kostval.validation.modulesiard.ValidationHcontentModule
  * tableZ.xsd
  * 
  * @author Ec Christian Eugster
+ * @author Rc Claire Röthlisberger, KOST-CECO
  */
 
 public class ValidationHcontentModuleImpl extends ValidationModuleImpl
@@ -147,8 +144,244 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 							// TODO: hier erfolgt die Validerung
 							if ( verifyRowCount( tableXml, tableXsd ) ) {
 
-								valid = validate1( tableXml, tableXsd )
-										&& valid;
+								// valid = validate1( tableXml, tableXsd ) &&
+								// valid;
+
+								// xmllint via cmd
+								// resources\xmllint\xmllint --noout --stream
+								// --schema tableXsd tableXml
+								try {
+									// Pfad zum Programm xmllint
+									// existiert die Dateien?
+									String pathToxmllintExe = "resources\\xmllint\\xmllint.exe";
+									String pathToxmllintDll1 = "resources\\xmllint\\iconv.dll";
+									String pathToxmllintDll2 = "resources\\xmllint\\libxml2.dll";
+									String pathToxmllintDll3 = "resources\\xmllint\\zlib1.dll";
+
+									File fpathToxmllintExe = new File(
+											pathToxmllintExe );
+									File fpathToxmllintDll1 = new File(
+											pathToxmllintDll1 );
+									File fpathToxmllintDll2 = new File(
+											pathToxmllintDll2 );
+									File fpathToxmllintDll3 = new File(
+											pathToxmllintDll3 );
+									if ( !fpathToxmllintExe.exists() ) {
+										getMessageService()
+												.logError(
+														getTextResourceService()
+																.getText(
+																		MESSAGE_XML_MODUL_H_SIARD )
+																+ getTextResourceService()
+																		.getText(
+																				ERROR_XML_XMLLINT1_MISSING ) );
+										valid = false;
+									} else if ( !fpathToxmllintDll1.exists() ) {
+										getMessageService()
+												.logError(
+														getTextResourceService()
+																.getText(
+																		MESSAGE_XML_MODUL_H_SIARD )
+																+ getTextResourceService()
+																		.getText(
+																				ERROR_XML_XMLLINT2_MISSING ) );
+										valid = false;
+									} else if ( !fpathToxmllintDll2.exists() ) {
+										getMessageService()
+												.logError(
+														getTextResourceService()
+																.getText(
+																		MESSAGE_XML_MODUL_H_SIARD )
+																+ getTextResourceService()
+																		.getText(
+																				ERROR_XML_XMLLINT3_MISSING ) );
+										valid = false;
+									} else if ( !fpathToxmllintDll3.exists() ) {
+										getMessageService()
+												.logError(
+														getTextResourceService()
+																.getText(
+																		MESSAGE_XML_MODUL_H_SIARD )
+																+ getTextResourceService()
+																		.getText(
+																				ERROR_XML_XMLLINT4_MISSING ) );
+										valid = false;
+									} else {
+
+										StringBuffer command = new StringBuffer(
+												"resources\\xmllint\\xmllint " );
+										command.append( "--noout --stream " );
+										command.append( " --schema " );
+										command.append( " " );
+										command.append( "\"" );
+										command.append( tableXsd
+												.getAbsolutePath() );
+										command.append( "\"" );
+										command.append( " " );
+										command.append( "\"" );
+										command.append( tableXml
+												.getAbsolutePath() );
+										command.append( "\"" );
+
+										Process proc = null;
+										Runtime rt = null;
+
+										try {
+											File outTableXml = new File(
+													pathToWorkDir
+															+ "\\"
+															+ "SIARD_H_"
+															+ tableXml
+																	.getName()
+															+ ".txt" );
+
+											Util.switchOffConsoleToTxt( outTableXml );
+
+											rt = Runtime.getRuntime();
+											proc = rt.exec( command.toString()
+													.split( " " ) );
+											// .split(" ") ist notwendig wenn in
+											// einem Pfad ein
+											// Doppelleerschlag vorhanden ist!
+
+											// Fehleroutput holen
+
+											StreamGobbler errorGobbler = new StreamGobbler(
+													proc.getErrorStream(),
+													"ERROR-"
+															+ tableXml
+																	.getName() );
+
+											// Output holen
+											StreamGobbler outputGobbler = new StreamGobbler(
+													proc.getInputStream(),
+													"OUTPUT-"
+															+ tableXml
+																	.getName() );
+
+											// Threads starten
+											errorGobbler.start();
+											outputGobbler.start();
+
+											// Warte, bis wget fertig ist
+											// 0 = Alles io
+											int exitStatus = proc.waitFor();
+
+											// 200ms warten bis die Konsole
+											// umgeschaltet wird, damit wirklich
+											// alles im file landet
+											Thread.sleep( 200 );
+											Util.switchOnConsole();
+
+											if ( 0 != exitStatus ) {
+												// message.xml.h.invalid.xml =
+												// <Message>{0} ist invalid zu
+												// {1}</Message></Error>
+												getMessageService()
+														.logError(
+																getTextResourceService()
+																		.getText(
+																				MESSAGE_XML_MODUL_H_SIARD )
+																		+ getTextResourceService()
+																				.getText(
+																						MESSAGE_XML_H_INVALID_XML,
+																						tableXml.getName(),
+																						tableXsd.getName() ) );
+												valid = false;
+
+												// Fehlermeldung aus outTableXml
+												// auslesen
+
+												BufferedReader br = new BufferedReader(
+														new FileReader(
+																outTableXml ) );
+												try {
+													String line = br.readLine();
+													String linePrev = null;
+													// Fehlermeldungen holen,
+													// ausser die letzte, die
+													// besagt, dass es invalide
+													// ist (wurde bereits oben
+													// in D, F,E ausgegeben
+													while ( line != null ) {
+														if ( linePrev != null ) {
+															getMessageService()
+																	.logError(
+																			getTextResourceService()
+																					.getText(
+																							MESSAGE_XML_MODUL_H_SIARD )
+																					+ getTextResourceService()
+																							.getText(
+																									MESSAGE_XML_H_INVALID_ERROR,
+																									linePrev ) );
+														}
+														linePrev = line;
+														line = br.readLine();
+													}
+												} finally {
+													br.close();
+
+													/*
+													 * Konsole zuerst einmal
+													 * noch umleiten und die
+													 * Streams beenden, damit
+													 * die dateien gelöscht
+													 * werden können
+													 */
+													Util.switchOffConsoleToTxtClose( outTableXml );
+													System.out.println( " . " );
+													Util.switchOnConsole();
+													Util.deleteFile( outTableXml );
+
+												}
+											} else {
+												/*
+												 * Konsole zuerst einmal noch
+												 * umleiten und die Streams
+												 * beenden, damit die dateien
+												 * gelöscht werden können
+												 */
+												Util.switchOffConsoleToTxtClose( outTableXml );
+												System.out.println( " . " );
+												Util.switchOnConsole();
+												Util.deleteFile( outTableXml );
+
+											}
+											/*
+											 * Konsole zuerst einmal noch
+											 * umleiten und die Streams beenden,
+											 * damit die dateien gelöscht werden
+											 * können
+											 */
+											Util.switchOffConsoleToTxtClose( outTableXml );
+											System.out.println( " . " );
+											Util.switchOnConsole();
+											Util.deleteFile( outTableXml );
+
+										} catch ( Exception e ) {
+											getMessageService()
+													.logError(
+															getTextResourceService()
+																	.getText(
+																			MESSAGE_XML_MODUL_H_SIARD )
+																	+ getTextResourceService()
+																			.getText(
+																					ERROR_XML_UNKNOWN,
+																					e.getMessage() ) );
+											return false;
+										} finally {
+											if ( proc != null ) {
+												closeQuietly( proc
+														.getOutputStream() );
+												closeQuietly( proc
+														.getInputStream() );
+												closeQuietly( proc
+														.getErrorStream() );
+											}
+										}
+									}
+								} finally {
+								}
 							}
 						}
 						if ( onWork == 41 ) {
@@ -221,33 +454,22 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 		return valid;
 	}
 
-	private boolean validate1( File xmlFile, File schemaLocation )
-			throws SAXException, IOException
-	{
-		SchemaFactory factory = SchemaFactory
-				.newInstance( "http://www.w3.org/2001/XMLSchema" );
-		ValidationErrorHandler errorHandler = new ValidationErrorHandler(
-				xmlFile, schemaLocation );
-		Schema schema = factory.newSchema( schemaLocation );
-		Validator validator = schema.newValidator();
-		validator.setErrorHandler( errorHandler );
-		Source source = new StreamSource( xmlFile );
-		validator.validate( source );
-		return errorHandler.isValid();
-	}
+	/*
+	 * private boolean validate1( File xmlFile, File schemaLocation ) throws
+	 * SAXException, IOException { SchemaFactory factory = SchemaFactory
+	 * .newInstance( "http://www.w3.org/2001/XMLSchema" );
+	 * ValidationErrorHandler errorHandler = new ValidationErrorHandler(
+	 * xmlFile, schemaLocation ); Schema schema = factory.newSchema(
+	 * schemaLocation ); Validator validator = schema.newValidator();
+	 * validator.setErrorHandler( errorHandler ); Source source = new
+	 * StreamSource( xmlFile ); validator.validate( source ); return
+	 * errorHandler.isValid(); }
+	 */
 
 	/**
-	 * Verify the number of rows in the table. If table count >=
-	 * kostval.conf.xml.table-rows-limit, the xsd minOccurs and maxOccurs values
-	 * are extracted. If those values are numbers, then the validation is not
-	 * executed, because the risk of an OutOfMemoryError is given.
-	 * 
-	 * @param xmlFile
-	 * @param schemaLocation
-	 * @return <code>true</code> if validation should be excecuted, else
-	 *         <code>false</code>
-	 * @throws SAXException
-	 * @throws IOException
+	 * Verify the number of rows in the table. If the xsd minOccurs = o and
+	 * maxOccurs = unbounded the validation of the numbers can't been executed.
+	 * A Warning is given.
 	 */
 	private boolean verifyRowCount( File xmlFile, File schemaLocation )
 			throws SAXException, IOException
@@ -286,65 +508,35 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 		return range;
 	}
 
-	private class ValidationErrorHandler implements ErrorHandler
-	{
-		private boolean	valid	= true;
-
-		private File	xmlFile;
-
-		private File	schemaLocation;
-
-		public ValidationErrorHandler( File xmlFile, File schemaLocation )
-		{
-			this.xmlFile = xmlFile;
-			this.schemaLocation = schemaLocation;
-		}
-
-		@Override
-		public void error( SAXParseException e ) throws SAXException
-		{
-			if ( valid ) {
-				valid = false;
-			}
-			logError( e );
-		}
-
-		@Override
-		public void fatalError( SAXParseException e ) throws SAXException
-		{
-			if ( valid ) {
-				valid = false;
-			}
-			logError( e );
-		}
-
-		@Override
-		public void warning( SAXParseException e ) throws SAXException
-		{
-			if ( valid ) {
-				valid = false;
-			}
-			logError( e );
-		}
-
-		private void logError( SAXParseException e )
-		{
-			getMessageService().logError(
-					getTextResourceService()
-							.getText( MESSAGE_XML_MODUL_H_SIARD )
-							+ getTextResourceService().getText(
-									MESSAGE_XML_H_INVALID_ERROR,
-									xmlFile.getName(),
-									schemaLocation.getName(),
-									e.getLineNumber(), e.getColumnNumber(),
-									e.getLocalizedMessage() ) );
-		}
-
-		public boolean isValid()
-		{
-			return valid;
-		}
-	}
+	/*
+	 * private class ValidationErrorHandler implements ErrorHandler { private
+	 * boolean valid = true;
+	 * 
+	 * private File xmlFile;
+	 * 
+	 * private File schemaLocation;
+	 * 
+	 * public ValidationErrorHandler( File xmlFile, File schemaLocation ) {
+	 * this.xmlFile = xmlFile; this.schemaLocation = schemaLocation; }
+	 * 
+	 * @Override public void error( SAXParseException e ) throws SAXException {
+	 * if ( valid ) { valid = false; } logError( e ); }
+	 * 
+	 * @Override public void fatalError( SAXParseException e ) throws
+	 * SAXException { if ( valid ) { valid = false; } logError( e ); }
+	 * 
+	 * @Override public void warning( SAXParseException e ) throws SAXException
+	 * { if ( valid ) { valid = false; } logError( e ); }
+	 * 
+	 * private void logError( SAXParseException e ) {
+	 * getMessageService().logError( getTextResourceService() .getText(
+	 * MESSAGE_XML_MODUL_H_SIARD ) + getTextResourceService() .getText(
+	 * MESSAGE_XML_H_INVALID_ERROR, xmlFile.getName(), schemaLocation.getName(),
+	 * e.getLineNumber(), e.getColumnNumber(), e.getLocalizedMessage() +
+	 * " (alte Loesung)" ) ); }
+	 * 
+	 * public boolean isValid() { return valid; } }
+	 */
 
 	/*
 	 * private class CountRowsHandler extends DefaultHandler { private int rows
