@@ -92,7 +92,7 @@ public class ValidationFrowModuleImpl<Range, RangeHandler> extends
 			 * a jdom document
 			 */
 			String pathToWorkDir = getConfigurationService().getPathToWorkDir();
-			pathToWorkDir = pathToWorkDir + "\\SIARD";
+			pathToWorkDir = pathToWorkDir + File.separator + "SIARD";
 			File metadataXml = new File( new StringBuilder( pathToWorkDir )
 					.append( File.separator ).append( "header" )
 					.append( File.separator ).append( "metadata.xml" )

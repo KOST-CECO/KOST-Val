@@ -122,7 +122,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 		String pdfDiaPath = getConfigurationService().getPathToDiagnose();
 
 		try {
-			pdfDia = new File( pdfDiaPath + "\\PDF-Diagnosedaten.kost-val.xml" );
+			pdfDia = new File( pdfDiaPath + File.separator
+					+ "PDF-Diagnosedaten.kost-val.xml" );
 			if ( !pdfDia.exists() ) {
 				pdfDia.createNewFile();
 				PrintWriter output;
@@ -143,8 +144,10 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					fileWriter.close();
 				}
 			}
-			File xslDiaOrig = new File( "resources\\kost-val_PDFdia.xsl" );
-			File xslDiaCopy = new File( pdfDiaPath + "\\kost-val_PDFdia.xsl" );
+			File xslDiaOrig = new File( "resources" + File.separator
+					+ "kost-val_PDFdia.xsl" );
+			File xslDiaCopy = new File( pdfDiaPath + File.separator
+					+ "kost-val_PDFdia.xsl" );
 			if ( !xslDiaCopy.exists() ) {
 				Util.copyFile( xslDiaOrig, xslDiaCopy );
 			}
@@ -311,7 +314,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					// 25504446 respektive %PDF beginnt
 					valid = true;
 				} else {
-					//TODO: Droid-Erkennung, damit Details ausgegeben werden können
+					// TODO: Droid-Erkennung, damit Details ausgegeben werden
+					// können
 					String nameOfSignature = getConfigurationService()
 							.getPathToDroidSignatureFile();
 					if ( nameOfSignature == null ) {
@@ -328,7 +332,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					File fnameOfSignature = new File( nameOfSignature );
 					if ( !fnameOfSignature.exists() ) {
 						getMessageService().logError(
-								getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+								getTextResourceService().getText(
+										MESSAGE_XML_MODUL_A_PDFA )
 										+ getTextResourceService().getText(
 												MESSAGE_XML_CA_DROID ) );
 						return false;
@@ -336,9 +341,11 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 
 					Droid droid = null;
 					try {
-						// kleiner Hack, weil die Droid libraries irgendwo ein System.out
+						// kleiner Hack, weil die Droid libraries irgendwo ein
+						// System.out
 						// drin haben, welche den Output stören
-						// Util.switchOffConsole() als Kommentar markieren wenn man die
+						// Util.switchOffConsole() als Kommentar markieren wenn
+						// man die
 						// Fehlermeldung erhalten möchte
 						Util.switchOffConsole();
 						droid = new Droid();
@@ -346,27 +353,32 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 						droid.readSignatureFile( nameOfSignature );
 
 					} catch ( Exception e ) {
-						getMessageService().logError(
-								getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-										+ getTextResourceService().getText(
-												ERROR_XML_CANNOT_INITIALIZE_DROID ) );
+						getMessageService()
+								.logError(
+										getTextResourceService().getText(
+												MESSAGE_XML_MODUL_A_PDFA )
+												+ getTextResourceService()
+														.getText(
+																ERROR_XML_CANNOT_INITIALIZE_DROID ) );
 						return false;
 					} finally {
 						Util.switchOnConsole();
 					}
 					File file = valDatei;
-					String puid= "";
-					IdentificationFile ifile = droid.identify( file.getAbsolutePath() );
+					String puid = "";
+					IdentificationFile ifile = droid.identify( file
+							.getAbsolutePath() );
 					for ( int x = 0; x < ifile.getNumHits(); x++ ) {
 						FileFormatHit ffh = ifile.getHit( x );
 						FileFormat ff = ffh.getFileFormat();
-						puid =  ff.getPUID() ;
+						puid = ff.getPUID();
 					}
-									getMessageService().logError(
+					getMessageService().logError(
 							getTextResourceService().getText(
 									MESSAGE_XML_MODUL_A_PDFA )
 									+ getTextResourceService().getText(
-											ERROR_XML_A_PDFA_INCORRECTFILE, puid ) );
+											ERROR_XML_A_PDFA_INCORRECTFILE,
+											puid ) );
 					return false;
 				}
 			} catch ( Exception e ) {

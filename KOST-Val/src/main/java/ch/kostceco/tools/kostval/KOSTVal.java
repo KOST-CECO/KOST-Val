@@ -168,9 +168,9 @@ public class KOSTVal implements MessageConstants
 		System.out.println( "KOST-Val" );
 		System.out.println( "" );
 
-		File xslOrig = new File( "resources\\kost-val.xsl" );
+		File xslOrig = new File( "resources" + File.separator + "kost-val.xsl" );
 		File xslCopy = new File( directoryOfLogfile.getAbsolutePath()
-				+ "\\kost-val.xsl" );
+				+ File.separator + "kost-val.xsl" );
 		if ( !xslCopy.exists() ) {
 			Util.copyFile( xslOrig, xslCopy );
 		}
@@ -193,7 +193,7 @@ public class KOSTVal implements MessageConstants
 		String tiffValidation = kostval.getConfigurationService()
 				.tiffValidation();
 		String jp2Validation = kostval.getConfigurationService()
-		.jp2Validation();
+				.jp2Validation();
 
 		File tmpDir = new File( pathToWorkDir );
 
@@ -298,14 +298,17 @@ public class KOSTVal implements MessageConstants
 			System.exit( 1 );
 		}
 
-		File xmlDiaOrig = new File( "resources\\KaD-Diagnosedaten.kost-val.xml" );
-		File xmlDiaCopy = new File( diaPath
-				+ "\\KaD-Diagnosedaten.kost-val.xml" );
+		File xmlDiaOrig = new File( "resources" + File.separator
+				+ "KaD-Diagnosedaten.kost-val.xml" );
+		File xmlDiaCopy = new File( diaPath + File.separator
+				+ "KaD-Diagnosedaten.kost-val.xml" );
 		if ( !xmlDiaCopy.exists() ) {
 			Util.copyFile( xmlDiaOrig, xmlDiaCopy );
 		}
-		File xslDiaOrig = new File( "resources\\kost-val_KaDdia.xsl" );
-		File xslDiaCopy = new File( diaPath + "\\kost-val_KaDdia.xsl" );
+		File xslDiaOrig = new File( "resources" + File.separator
+				+ "kost-val_KaDdia.xsl" );
+		File xslDiaCopy = new File( diaPath + File.separator
+				+ "kost-val_KaDdia.xsl" );
 		if ( !xslDiaCopy.exists() ) {
 			Util.copyFile( xslDiaOrig, xslDiaCopy );
 		}
@@ -603,7 +606,8 @@ public class KOSTVal implements MessageConstants
 				Util.valEnd( ausgabeEnd, logFile );
 				Util.amp( logFile );
 
-				countSummaryNio = pdfaCountNio + siardCountNio + tiffCountNio + jp2CountNio;
+				countSummaryNio = pdfaCountNio + siardCountNio + tiffCountNio
+						+ jp2CountNio;
 
 				if ( countNio.equals( count ) ) {
 					// keine Dateien Validiert
@@ -777,7 +781,8 @@ public class KOSTVal implements MessageConstants
 					String toplevelDir = valDatei.getName();
 					int lastDotIdx = toplevelDir.lastIndexOf( "." );
 					toplevelDir = toplevelDir.substring( 0, lastDotIdx );
-					tmpDirZip = new File( tmpDir.getAbsolutePath() + "\\ZIP\\"
+					tmpDirZip = new File( tmpDir.getAbsolutePath()
+							+ File.separator + "ZIP" + File.separator
 							+ toplevelDir );
 					try {
 						Zip64Archiver.unzip( valDatei.getAbsolutePath(),
@@ -851,7 +856,7 @@ public class KOSTVal implements MessageConstants
 					valDatei = tmpDirZip;
 
 					File toplevelfolder = new File( valDatei.getAbsolutePath()
-							+ "\\" + valDatei.getName() );
+							+ File.separator + valDatei.getName() );
 					if ( toplevelfolder.exists() ) {
 						valDatei = toplevelfolder;
 					}
@@ -895,7 +900,8 @@ public class KOSTVal implements MessageConstants
 				File newFile = fileMap.get( entryName );
 
 				if ( !newFile.isDirectory()
-						&& newFile.getAbsolutePath().contains( "\\content\\" ) ) {
+						&& newFile.getAbsolutePath().contains(
+								File.separator + "content" + File.separator ) ) {
 					valDatei = newFile;
 					count = count + 1;
 
@@ -975,7 +981,7 @@ public class KOSTVal implements MessageConstants
 					}
 
 					if ( ((valDatei.getAbsolutePath().toLowerCase()
-							.endsWith( ".jp2" ) ))
+							.endsWith( ".jp2" )))
 							&& jp2Validation.equals( "yes" ) ) {
 
 						boolean valFile = valFile( valDatei, logFileName,
@@ -1010,7 +1016,7 @@ public class KOSTVal implements MessageConstants
 						String pathToWorkDirSiard = kostval
 								.getConfigurationService().getPathToWorkDir();
 						File tmpDirSiard = new File( pathToWorkDirSiard
-								+ "\\SIARD" );
+								+ File.separator + "SIARD" );
 						if ( tmpDirSiard.exists() ) {
 							Util.deleteDir( tmpDirSiard );
 						}
@@ -1047,8 +1053,10 @@ public class KOSTVal implements MessageConstants
 				}
 			}
 
-			countSummaryNio = pdfaCountNio + siardCountNio + tiffCountNio+ jp2CountNio;
-			countSummaryIo = pdfaCountIo + siardCountIo + tiffCountIo+ jp2CountIo;
+			countSummaryNio = pdfaCountNio + siardCountNio + tiffCountNio
+					+ jp2CountNio;
+			countSummaryIo = pdfaCountIo + siardCountIo + tiffCountIo
+					+ jp2CountIo;
 			int countSummaryIoP = 100 / count * countSummaryIo;
 			int countSummaryNioP = 100 / count * countSummaryNio;
 			int countNioP = 100 / count * countNio;
@@ -1067,7 +1075,8 @@ public class KOSTVal implements MessageConstants
 				fileName3c = "3c_Invalide.txt";
 			}
 			// outputFile3c = new File( directoryOfLogfile + fileName3c );
-			outputFile3c = new File( pathToWorkDir + "\\" + fileName3c );
+			outputFile3c = new File( pathToWorkDir + File.separator
+					+ fileName3c );
 			try {
 				outputFile3c.createNewFile();
 			} catch ( IOException e ) {
@@ -1405,8 +1414,8 @@ public class KOSTVal implements MessageConstants
 					Util.deleteDir( tmpDir );
 				}
 				if ( tmpDir.exists() ) {
-						Runtime rt = Runtime.getRuntime();
-						Process proc = rt.exec( command.toString() );
+					Runtime rt = Runtime.getRuntime();
+					Process proc = rt.exec( command.toString() );
 				}
 				System.exit( 0 );
 			} else {
@@ -1415,8 +1424,8 @@ public class KOSTVal implements MessageConstants
 					Util.deleteDir( tmpDir );
 				}
 				if ( tmpDir.exists() ) {
-						Runtime rt = Runtime.getRuntime();
-						Process proc = rt.exec( command.toString() );
+					Runtime rt = Runtime.getRuntime();
+					Process proc = rt.exec( command.toString() );
 				}
 				System.exit( 2 );
 			}
@@ -1452,7 +1461,7 @@ public class KOSTVal implements MessageConstants
 		String originalValName = valDatei.getAbsolutePath();
 		boolean valFile = false;
 
-		if ( (valDatei.getAbsolutePath().toLowerCase().endsWith( ".jp2" ) ) ) {
+		if ( (valDatei.getAbsolutePath().toLowerCase().endsWith( ".jp2" )) ) {
 			LOGGER.logError( kostval.getTextResourceService().getText(
 					MESSAGE_XML_VALERGEBNIS ) );
 			LOGGER.logError( kostval.getTextResourceService().getText(
@@ -1490,8 +1499,8 @@ public class KOSTVal implements MessageConstants
 
 			// Ausgabe der Pfade zu den Jpylyzer Reports, falls welche
 			// generiert wurden (-v) oder Jpylyzer Report löschen
-			File JpylyzerReport = new File( directoryOfLogfile, valDatei.getName()
-					+ ".jpylyzer-log.xml" );
+			File JpylyzerReport = new File( directoryOfLogfile,
+					valDatei.getName() + ".jpylyzer-log.xml" );
 
 			if ( JpylyzerReport.exists() ) {
 				if ( verbose ) {
@@ -1502,8 +1511,9 @@ public class KOSTVal implements MessageConstants
 				}
 			}
 
-		} else if ( (valDatei.getAbsolutePath().toLowerCase().endsWith( ".tiff" ) || valDatei
-				.getAbsolutePath().toLowerCase().endsWith( ".tif" )) ) {
+		} else if ( (valDatei.getAbsolutePath().toLowerCase()
+				.endsWith( ".tiff" ) || valDatei.getAbsolutePath()
+				.toLowerCase().endsWith( ".tif" )) ) {
 			LOGGER.logError( kostval.getTextResourceService().getText(
 					MESSAGE_XML_VALERGEBNIS ) );
 			LOGGER.logError( kostval.getTextResourceService().getText(

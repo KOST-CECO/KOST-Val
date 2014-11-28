@@ -155,7 +155,8 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 					// höchstwahrscheinlich ein JP2 da es mit
 					// 0000000c6a5020200d0a respektive ....jP ..‡ beginnt
 				} else {
-					//TODO: Droid-Erkennung, damit Details ausgegeben werden können
+					// TODO: Droid-Erkennung, damit Details ausgegeben werden
+					// können
 					String nameOfSignature = getConfigurationService()
 							.getPathToDroidSignatureFile();
 					if ( nameOfSignature == null ) {
@@ -172,7 +173,8 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 					File fnameOfSignature = new File( nameOfSignature );
 					if ( !fnameOfSignature.exists() ) {
 						getMessageService().logError(
-								getTextResourceService().getText( MESSAGE_XML_MODUL_A_JP2 )
+								getTextResourceService().getText(
+										MESSAGE_XML_MODUL_A_JP2 )
 										+ getTextResourceService().getText(
 												MESSAGE_XML_CA_DROID ) );
 						return false;
@@ -180,9 +182,11 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 
 					Droid droid = null;
 					try {
-						// kleiner Hack, weil die Droid libraries irgendwo ein System.out
+						// kleiner Hack, weil die Droid libraries irgendwo ein
+						// System.out
 						// drin haben, welche den Output stören
-						// Util.switchOffConsole() als Kommentar markieren wenn man die
+						// Util.switchOffConsole() als Kommentar markieren wenn
+						// man die
 						// Fehlermeldung erhalten möchte
 						Util.switchOffConsole();
 						droid = new Droid();
@@ -190,27 +194,34 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 						droid.readSignatureFile( nameOfSignature );
 
 					} catch ( Exception e ) {
-						getMessageService().logError(
-								getTextResourceService().getText( MESSAGE_XML_MODUL_A_JP2 )
-										+ getTextResourceService().getText(
-												ERROR_XML_CANNOT_INITIALIZE_DROID ) );
+						getMessageService()
+								.logError(
+										getTextResourceService().getText(
+												MESSAGE_XML_MODUL_A_JP2 )
+												+ getTextResourceService()
+														.getText(
+																ERROR_XML_CANNOT_INITIALIZE_DROID ) );
 						return false;
 					} finally {
 						Util.switchOnConsole();
 					}
 					File file = valDatei;
-					String puid= "";
-					IdentificationFile ifile = droid.identify( file.getAbsolutePath() );
+					String puid = "";
+					IdentificationFile ifile = droid.identify( file
+							.getAbsolutePath() );
 					for ( int x = 0; x < ifile.getNumHits(); x++ ) {
 						FileFormatHit ffh = ifile.getHit( x );
 						FileFormat ff = ffh.getFileFormat();
-						puid =  ff.getPUID() ;
+						puid = ff.getPUID();
 					}
-					getMessageService().logError(
-							getTextResourceService().getText(
-									MESSAGE_XML_MODUL_A_JP2 )
-									+ getTextResourceService().getText(
-											ERROR_XML_A_JP2_INCORRECTFILE, puid ) );
+					getMessageService()
+							.logError(
+									getTextResourceService().getText(
+											MESSAGE_XML_MODUL_A_JP2 )
+											+ getTextResourceService()
+													.getText(
+															ERROR_XML_A_JP2_INCORRECTFILE,
+															puid ) );
 					return false;
 				}
 			} catch ( Exception e ) {
@@ -234,7 +245,8 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 		boolean isValid = false;
 
 		// TODO: Erledigt - Initialisierung Jpylyzer -> existiert Jpylyzer?
-		String pathToJpylyzerExe = "resources\\jpylyzer\\jpylyzer.exe";
+		String pathToJpylyzerExe = "resources" + File.separator + "jpylyzer"
+				+ File.separator + "jpylyzer.exe";
 
 		File fJpylyzerExe = new File( pathToJpylyzerExe );
 		if ( !fJpylyzerExe.exists() ) {
@@ -254,7 +266,7 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 				// jpylyzer-Befehl:
 				// pathToJpylyzerExe valDatei > valDatei.jpylyzer-log.xml
 				String outputPath = directoryOfLogfile.getAbsolutePath();
-				String outputName = "\\" + valDatei.getName()
+				String outputName = File.separator + valDatei.getName()
 						+ ".jpylyzer-log.xml";
 				String pathToJpylyzerReport = outputPath + outputName;
 				File output = new File( pathToJpylyzerReport );
@@ -463,41 +475,65 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 										} else if ( textChildII.getNodeName()
 												.equals( "resolutionBox" ) ) {
 											iresolutionBox = iresolutionBox + 1;
-										} else if ( textChildII.getNodeName()
-												.equals( "containsImageHeaderBox" ) ) {
+										} else if ( textChildII
+												.getNodeName()
+												.equals(
+														"containsImageHeaderBox" ) ) {
 											icontainsImageHeaderBox = icontainsImageHeaderBox + 1;
-										} else if ( textChildII.getNodeName()
-												.equals( "containsColourSpecificationBox" ) ) {
+										} else if ( textChildII
+												.getNodeName()
+												.equals(
+														"containsColourSpecificationBox" ) ) {
 											icontainsColourSpecificationBox = icontainsColourSpecificationBox + 1;
-										} else if ( textChildII.getNodeName()
-												.equals( "containsBitsPerComponentBox" ) ) {
+										} else if ( textChildII
+												.getNodeName()
+												.equals(
+														"containsBitsPerComponentBox" ) ) {
 											icontainsBitsPerComponentBox = icontainsBitsPerComponentBox + 1;
-										} else if ( textChildII.getNodeName()
-												.equals( "firstJP2HeaderBoxIsImageHeaderBox" ) ) {
+										} else if ( textChildII
+												.getNodeName()
+												.equals(
+														"firstJP2HeaderBoxIsImageHeaderBox" ) ) {
 											ifirstJP2HeaderBoxIsImageHeaderBox = ifirstJP2HeaderBoxIsImageHeaderBox + 1;
-										} else if ( textChildII.getNodeName()
-												.equals( "noMoreThanOneImageHeaderBox" ) ) {
+										} else if ( textChildII
+												.getNodeName()
+												.equals(
+														"noMoreThanOneImageHeaderBox" ) ) {
 											inoMoreThanOneImageHeaderBox = inoMoreThanOneImageHeaderBox + 1;
-										} else if ( textChildII.getNodeName()
-												.equals( "noMoreThanOneBitsPerComponentBox" ) ) {
+										} else if ( textChildII
+												.getNodeName()
+												.equals(
+														"noMoreThanOneBitsPerComponentBox" ) ) {
 											inoMoreThanOneBitsPerComponentBox = inoMoreThanOneBitsPerComponentBox + 1;
-										} else if ( textChildII.getNodeName()
-												.equals( "noMoreThanOnePaletteBox" ) ) {
+										} else if ( textChildII
+												.getNodeName()
+												.equals(
+														"noMoreThanOnePaletteBox" ) ) {
 											inoMoreThanOnePaletteBox = inoMoreThanOnePaletteBox + 1;
-										} else if ( textChildII.getNodeName()
-												.equals( "noMoreThanOneComponentMappingBox" ) ) {
+										} else if ( textChildII
+												.getNodeName()
+												.equals(
+														"noMoreThanOneComponentMappingBox" ) ) {
 											inoMoreThanOneComponentMappingBox = inoMoreThanOneComponentMappingBox + 1;
-										} else if ( textChildII.getNodeName()
-												.equals( "noMoreThanOneChannelDefinitionBox" ) ) {
+										} else if ( textChildII
+												.getNodeName()
+												.equals(
+														"noMoreThanOneChannelDefinitionBox" ) ) {
 											inoMoreThanOneChannelDefinitionBox = inoMoreThanOneChannelDefinitionBox + 1;
-										} else if ( textChildII.getNodeName()
-												.equals( "noMoreThanOneResolutionBox" ) ) {
+										} else if ( textChildII
+												.getNodeName()
+												.equals(
+														"noMoreThanOneResolutionBox" ) ) {
 											inoMoreThanOneResolutionBox = inoMoreThanOneResolutionBox + 1;
-										} else if ( textChildII.getNodeName()
-												.equals( "colourSpecificationBoxesAreContiguous" ) ) {
+										} else if ( textChildII
+												.getNodeName()
+												.equals(
+														"colourSpecificationBoxesAreContiguous" ) ) {
 											icolourSpecificationBoxesAreContiguous = icolourSpecificationBoxesAreContiguous + 1;
-										} else if ( textChildII.getNodeName()
-												.equals( "paletteAndComponentMappingBoxesOnlyTogether" ) ) {
+										} else if ( textChildII
+												.getNodeName()
+												.equals(
+														"paletteAndComponentMappingBoxesOnlyTogether" ) ) {
 											ipaletteAndComponentMappingBoxesOnlyTogether = ipaletteAndComponentMappingBoxesOnlyTogether + 1;
 										}
 									}
@@ -507,8 +543,7 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 									"contiguousCodestreamBox" ) ) {
 								NodeList childrenIII = textChild
 										.getChildNodes();
-								for ( int k = 0; k < childrenIII
-										.getLength(); k++ ) {
+								for ( int k = 0; k < childrenIII.getLength(); k++ ) {
 									Node textChildIII = childrenIII.item( k );
 									if ( textChildIII.getNodeType() == Node.ELEMENT_NODE ) {
 										if ( textChildIII.getNodeName().equals(
@@ -556,8 +591,10 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 										} else if ( textChildIII.getNodeName()
 												.equals( "ppt" ) ) {
 											ippt = ippt + 1;
-										} else if ( textChildIII.getNodeName()
-												.equals( "codestreamStartsWithSOCMarker" ) ) {
+										} else if ( textChildIII
+												.getNodeName()
+												.equals(
+														"codestreamStartsWithSOCMarker" ) ) {
 											icodestreamStartsWithSOCMarker = icodestreamStartsWithSOCMarker + 1;
 										} else if ( textChildIII.getNodeName()
 												.equals( "foundSIZMarker" ) ) {
@@ -568,14 +605,20 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 										} else if ( textChildIII.getNodeName()
 												.equals( "foundQCDMarker" ) ) {
 											ifoundQCDMarker = ifoundQCDMarker + 1;
-										} else if ( textChildIII.getNodeName()
-												.equals( "quantizationConsistentWithLevels" ) ) {
+										} else if ( textChildIII
+												.getNodeName()
+												.equals(
+														"quantizationConsistentWithLevels" ) ) {
 											iquantizationConsistentWithLevels = iquantizationConsistentWithLevels + 1;
-										} else if ( textChildIII.getNodeName()
-												.equals( "foundExpectedNumberOfTiles" ) ) {
+										} else if ( textChildIII
+												.getNodeName()
+												.equals(
+														"foundExpectedNumberOfTiles" ) ) {
 											ifoundExpectedNumberOfTiles = ifoundExpectedNumberOfTiles + 1;
-										} else if ( textChildIII.getNodeName()
-												.equals( "foundExpectedNumberOfTileParts" ) ) {
+										} else if ( textChildIII
+												.getNodeName()
+												.equals(
+														"foundExpectedNumberOfTileParts" ) ) {
 											ifoundExpectedNumberOfTileParts = ifoundExpectedNumberOfTileParts + 1;
 										} else if ( textChildIII.getNodeName()
 												.equals( "foundEOCMarker" ) ) {
@@ -751,7 +794,7 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 									+ getTextResourceService().getText(
 											ERROR_XML_B_JP2_PACMB ) );
 				}
-				
+
 				if ( icodestreamStartsWithSOCMarker >= 1 ) {
 					getMessageService().logError(
 							getTextResourceService().getText(

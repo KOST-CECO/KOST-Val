@@ -85,7 +85,7 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 		boolean valid = true;
 		try {
 			String pathToWorkDir = getConfigurationService().getPathToWorkDir();
-			pathToWorkDir = pathToWorkDir + "\\SIARD";
+			pathToWorkDir = pathToWorkDir + File.separator + "SIARD";
 			/*
 			 * Nicht vergessen in
 			 * "src/main/resources/config/applicationContext-services.xml" beim

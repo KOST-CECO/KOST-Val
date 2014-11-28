@@ -71,8 +71,10 @@ public class Validation3cFormatValidationModuleImpl extends
 		String fileName3cIo = "3c_Valide.txt";
 		String fileName3cNio = "3c_Invalide.txt";
 
-		File outputFile3cIo = new File( pathToWorkDir + "\\" + fileName3cIo );
-		File outputFile3cNio = new File( pathToWorkDir + "\\" + fileName3cNio );
+		File outputFile3cIo = new File( pathToWorkDir + File.separator
+				+ fileName3cIo );
+		File outputFile3cNio = new File( pathToWorkDir + File.separator
+				+ fileName3cNio );
 		if ( outputFile3cIo.exists() ) {
 			// 3c valid
 			Util.deleteDir( outputFile3cIo );

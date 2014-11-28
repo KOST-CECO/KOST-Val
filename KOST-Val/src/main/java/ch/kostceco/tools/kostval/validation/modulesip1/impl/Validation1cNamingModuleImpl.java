@@ -210,7 +210,8 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 		// es müssen genau xsd/ und metadata.xml vorhanden sein
 		// und nichts anderes.
 		try {
-			File dir = new File( valDatei.getAbsolutePath() + "\\header" );
+			File dir = new File( valDatei.getAbsolutePath() + File.separator
+					+ "header" );
 			// Liste mit den File objects
 			File[] files = dir.listFiles();
 
@@ -266,7 +267,8 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 		Map<String, String> allowedXsdFiles = new HashMap<String, String>();
 
 		try {
-			File xsd = new File( valDatei.getAbsolutePath() + "\\header\\xsd" );
+			File xsd = new File( valDatei.getAbsolutePath() + File.separator
+					+ "header" + File.separator + "xsd" );
 			// Liste mit den File objects in xsd
 			File[] filesXsd = xsd.listFiles();
 

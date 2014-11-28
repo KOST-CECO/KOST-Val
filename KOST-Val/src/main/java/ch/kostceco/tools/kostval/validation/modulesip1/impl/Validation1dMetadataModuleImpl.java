@@ -70,11 +70,14 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 
 		try {
 			File xmlToValidate = new File( valDatei.getAbsolutePath()
-					+ "\\header\\metadata.xml" );
+					+ File.separator + "header" + File.separator
+					+ "metadata.xml" );
 			File xsdToValidateBar1 = new File( valDatei.getAbsolutePath()
-					+ "\\header\\xsd\\arelda_v3.13.2.xsd" );
+					+ File.separator + "header" + File.separator + "xsd"
+					+ File.separator + "arelda_v3.13.2.xsd" );
 			File xsdToValidateEch1 = new File( valDatei.getAbsolutePath()
-					+ "\\header\\xsd\\arelda.xsd" );
+					+ File.separator + "header" + File.separator + "xsd"
+					+ File.separator + "arelda.xsd" );
 
 			if ( xmlToValidate.exists() && xsdToValidateBar1.exists() ) {
 				// Schemavalidierung Nach Version BAR 1
@@ -140,8 +143,9 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 				// Dies erfolgt mit einer Validierung übers Kreuz
 				try {
 					// xmlToValidate mit xsdToValidateEch1Add
-					File xsdToValidateEch1Add = new File(
-							"resources\\header_1d\\xsd\\arelda.xsd" );
+					File xsdToValidateEch1Add = new File( "resources"
+							+ File.separator + "header_1d" + File.separator
+							+ "xsd" + File.separator + "arelda.xsd" );
 					System.setProperty(
 							"javax.xml.parsers.DocumentBuilderFactory",
 							"org.apache.xerces.jaxp.DocumentBuilderFactoryImpl" );
@@ -200,8 +204,9 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 
 				try {
 					// xmlToValidateAdd mit xsdToValidateEch1
-					File xmlToValidateAdd = new File(
-							"resources\\header_1d\\metadata.xml" );
+					File xmlToValidateAdd = new File( "resources"
+							+ File.separator + "header_1d" + File.separator
+							+ "metadata.xml" );
 					System.setProperty(
 							"javax.xml.parsers.DocumentBuilderFactory",
 							"org.apache.xerces.jaxp.DocumentBuilderFactoryImpl" );

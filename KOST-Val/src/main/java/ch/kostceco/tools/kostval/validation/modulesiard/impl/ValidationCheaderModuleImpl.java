@@ -157,7 +157,7 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 			 */
 			// Arbeitsverzeichnis zum Entpacken des Archivs erstellen
 			String pathToWorkDir = getConfigurationService().getPathToWorkDir();
-			File tmpDir = new File( pathToWorkDir + "\\SIARD" );
+			File tmpDir = new File( pathToWorkDir + File.separator + "SIARD" );
 			if ( tmpDir.exists() ) {
 				Util.deleteDir( tmpDir );
 			}
@@ -277,7 +277,7 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 											+ getTextResourceService().getText(
 													ERROR_XML_UNKNOWN,
 													ioe.getMessage()
-															+ " (IOException)" ));
+															+ " (IOException)" ) );
 					result = false;
 				} catch ( SAXException e ) {
 					getMessageService()

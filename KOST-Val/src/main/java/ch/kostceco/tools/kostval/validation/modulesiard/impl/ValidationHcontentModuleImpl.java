@@ -95,7 +95,7 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 			 * a jdom document
 			 */
 			String pathToWorkDir = getConfigurationService().getPathToWorkDir();
-			pathToWorkDir = pathToWorkDir + "\\SIARD";
+			pathToWorkDir = pathToWorkDir + File.separator + "SIARD";
 			File metadataXml = new File( new StringBuilder( pathToWorkDir )
 					.append( File.separator ).append( "header" )
 					.append( File.separator ).append( "metadata.xml" )
@@ -153,10 +153,18 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 								try {
 									// Pfad zum Programm xmllint
 									// existiert die Dateien?
-									String pathToxmllintExe = "resources\\xmllint\\xmllint.exe";
-									String pathToxmllintDll1 = "resources\\xmllint\\iconv.dll";
-									String pathToxmllintDll2 = "resources\\xmllint\\libxml2.dll";
-									String pathToxmllintDll3 = "resources\\xmllint\\zlib1.dll";
+									String pathToxmllintExe = "resources"
+											+ File.separator + "xmllint"
+											+ File.separator + "xmllint.exe";
+									String pathToxmllintDll1 = "resources"
+											+ File.separator + "xmllint"
+											+ File.separator + "iconv.dll";
+									String pathToxmllintDll2 = "resources"
+											+ File.separator + "xmllint"
+											+ File.separator + "libxml2.dll";
+									String pathToxmllintDll3 = "resources"
+											+ File.separator + "xmllint"
+											+ File.separator + "zlib1.dll";
 
 									File fpathToxmllintExe = new File(
 											pathToxmllintExe );
@@ -209,7 +217,10 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 									} else {
 
 										StringBuffer command = new StringBuffer(
-												"resources\\xmllint\\xmllint " );
+												"resources" + File.separator
+														+ "xmllint"
+														+ File.separator
+														+ "xmllint " );
 										command.append( "--noout --stream " );
 										command.append( " --schema " );
 										command.append( " " );
@@ -229,7 +240,7 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 										try {
 											File outTableXml = new File(
 													pathToWorkDir
-															+ "\\"
+															+ File.separator
 															+ "SIARD_H_"
 															+ tableXml
 																	.getName()

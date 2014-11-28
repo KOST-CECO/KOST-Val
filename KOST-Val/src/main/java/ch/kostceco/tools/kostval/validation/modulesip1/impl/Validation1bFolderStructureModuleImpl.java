@@ -44,11 +44,14 @@ public class Validation1bFolderStructureModuleImpl extends ValidationModuleImpl
 		System.out.print( "\r" );
 
 		boolean isValid = true;
-		File content = new File( valDatei.getAbsolutePath() + "\\content" );
-		File header = new File( valDatei.getAbsolutePath() + "\\header" );
-		File xsd = new File( valDatei.getAbsolutePath() + "\\header\\xsd" );
-		File metadata = new File( valDatei.getAbsolutePath()
-				+ "\\header\\metadata.xml" );
+		File content = new File( valDatei.getAbsolutePath() + File.separator
+				+ "content" );
+		File header = new File( valDatei.getAbsolutePath() + File.separator
+				+ "header" );
+		File xsd = new File( valDatei.getAbsolutePath() + File.separator
+				+ "header" + File.separator + "xsd" );
+		File metadata = new File( valDatei.getAbsolutePath() + File.separator
+				+ "header" + File.separator + "metadata.xml" );
 
 		if ( !content.exists() ) {
 			isValid = false;
