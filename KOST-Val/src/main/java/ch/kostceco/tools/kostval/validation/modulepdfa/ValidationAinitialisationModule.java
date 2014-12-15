@@ -31,7 +31,7 @@ import ch.kostceco.tools.kostval.validation.ValidationModule;
  * Kontrolle ob ein Schlüssel vorhanden ist (Vollversion) wenn nicht, wird die
  * eingeschränkte Version verwendet
  * 
- * Da der Schlüssel nur für KOST-Val verwendet werden darf wird er nicht
+ * Da der Schlüssel nur für KOST-Val verwendet werden darf, wird er nicht
  * publiziert
  * 
  * @author Rc Claire Röthlisberger, KOST-CECO
