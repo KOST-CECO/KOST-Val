@@ -44,6 +44,7 @@ public interface MessageConstants
 	String	ERROR_PARAMETER_OPTIONAL_1						= "error.parameter.optional.1";
 	String	ERROR_INCORRECTFILEENDING						= "error.incorrectfileending";
 	String	ERROR_INCORRECTFILEENDINGS						= "error.incorrectfileendings";
+	String	ERROR_NOFILEENDINGS								= "error.nofileendings";
 	String	ERROR_WRONG_JRE									= "error.wrong.jdk";
 	String	ERROR_SPECIAL_CHARACTER							= "error.special.character";
 
@@ -53,6 +54,7 @@ public interface MessageConstants
 	String	MESSAGE_XML_HEADER								= "message.xml.header";
 	String	MESSAGE_XML_START								= "message.xml.start";
 	String	MESSAGE_XML_END									= "message.xml.end";
+	String	MESSAGE_XML_FORMATON							= "message.xml.formaton";
 	String	MESSAGE_XML_INFO								= "message.xml.info";
 	String	MESSAGE_TIFFVALIDATION							= "message.tiffvalidation";
 	String	MESSAGE_SIARDVALIDATION							= "message.siardvalidation";

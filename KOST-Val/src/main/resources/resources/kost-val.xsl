@@ -77,7 +77,7 @@
 				</div>
 				</xsl:if>
 			</xsl:for-each>
-			<h1>Format:</h1>
+			<h1>Format (<xsl:value-of select="KOSTValLog/Infos/FormatValOn"/>):</h1>
 			<xsl:for-each select="KOSTValLog/Format/Info">
 				<div>
 					<table width="100%">
