@@ -3,12 +3,14 @@
               Any modifications will be overwritten.
               To include a user specific buildfile here, simply create one in the same
               directory with the processing instruction <?eclipse.ant.import?>
-              as the first entry and export the buildfile again. --><project basedir="." default="build" name="KOST-Val">
+              as the first entry and export the buildfile again. -->
+<project basedir="." default="build" name="KOST-Val">
     <property environment="env"/>
     <property name="ECLIPSE_HOME" value="../../../Projekte/SIARD.val.OSGi/Target Platform/equinox-SDK-3.7.2"/>
     <property name="debuglevel" value="source,lines,vars"/>
     <property name="target" value="1.6"/>
     <property name="source" value="1.6"/>
+    <property name="source_encoding" value="ISO-8859-1"/>
     <path id="Persisted container [org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER for project [KOST-Val]].libraryclasspath"/>
     <path id="KOST-Val.classpath">
         <pathelement location="target/classes"/>
@@ -97,7 +99,7 @@
     <target name="build-subprojects"/>
     <target depends="init" name="build-project">
         <echo message="${ant.project.name}: ${ant.file}"/>
-        <javac debug="true" debuglevel="${debuglevel}" destdir="target/classes" source="${source}" target="${target}">
+        <javac debug="true" debuglevel="${debuglevel}" destdir="target/classes" source="${source}" target="${target}" encoding="${source_encoding}">
             <src path="src/main/java"/>
             <exclude name="ch/kostceco/tools/kostval/validation/moduletiff2/impl/ch/kostceco/tools/kostval/validation/moduletiff2/impl/"/>
             <classpath refid="KOST-Val.classpath"/>
@@ -106,7 +108,7 @@
             <src path="src/main/resources"/>
             <classpath refid="KOST-Val.classpath"/>
         </javac>
-        <javac debug="true" debuglevel="${debuglevel}" destdir="target/classes" source="${source}" target="${target}">
+        <javac debug="true" debuglevel="${debuglevel}" destdir="target/classes" source="${source}" target="${target}" encoding="${source_encoding}">
             <src path="."/>
             <exclude name="src/main/java/"/>
             <exclude name="src/test/resources/"/>
@@ -116,7 +118,7 @@
             <exclude name="src/main/java/ch/kostceco/tools/kostval/validation/moduletiff2/impl/ch/kostceco/tools/kostval/validation/moduletiff2/impl/"/>
             <classpath refid="KOST-Val.classpath"/>
         </javac>
-        <javac debug="true" debuglevel="${debuglevel}" destdir="target/classes" source="${source}" target="${target}">
+        <javac debug="true" debuglevel="${debuglevel}" destdir="target/classes" source="${source}" target="${target}" encoding="${source_encoding}">
             <src path="src"/>
             <exclude name="main/java/"/>
             <exclude name="test/resources/"/>
