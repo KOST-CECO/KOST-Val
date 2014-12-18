@@ -1,6 +1,6 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2-Files and Submission
- * Information Package (SIP). Copyright (C) 2012-2014 Claire Röthlisberger (KOST-CECO), Christian
+ * Information Package (SIP). Copyright (C) 2012-2014 Claire RÃ¶thlisberger (KOST-CECO), Christian
  * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
  * KOST-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. This application
@@ -41,17 +41,17 @@ import ch.kostceco.tools.kostval.validation.bean.ValidationContext;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationFrowModule;
 
 /** Validierungsschritt F (Zeilen-Validierung) Wurden die Angaben aus metadata.xml korrekt in die
- * tableZ.xsd-Dateien übertragen? valid --> gleiche Zeilenzahl (rows in metadata.xml = max =
+ * tableZ.xsd-Dateien Ã¼bertragen? valid --> gleiche Zeilenzahl (rows in metadata.xml = max =
  * minOccurs in tableZ.xsd)
  * 
- * bei 0 bis unbounded rows von metadata.xml in max = minOccurs von tableZ.xsd übertragen, damit im
+ * bei 0 bis unbounded rows von metadata.xml in max = minOccurs von tableZ.xsd Ã¼bertragen, damit im
  * Modul H validiert werden kann.
  * 
- * @author Rc Claire Röthlisberger, KOST-CECO
+ * @author Rc Claire RÃ¶thlisberger, KOST-CECO
  * @param <Range>
  * @param <RangeHandler> */
 
-public class ValidationFrowModuleImpl<Range, RangeHandler> extends ValidationModuleImpl implements
+public class ValidationFrowModuleImpl extends ValidationModuleImpl implements
 		ValidationFrowModule
 {
 	private static final int		UNBOUNDED	= -1;
@@ -216,7 +216,7 @@ public class ValidationFrowModuleImpl<Range, RangeHandler> extends ValidationMod
 					String newstring = "minOccurs=\"" + rowmax + "\" maxOccurs=\"" + rowmax;
 					Util.oldnewstring( oldstring, newstring, tableXsd );
 
-					// in einigen Fällen ist zuerst max und dann min
+					// in einigen FÃ¤llen ist zuerst max und dann min
 					oldstring = "maxOccurs=\"unbounded\" minOccurs=\"0";
 					newstring = "maxOccurs=\"" + rowmax + "\" minOccurs=\"" + rowmax;
 					Util.oldnewstring( oldstring, newstring, tableXsd );
