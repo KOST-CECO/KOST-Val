@@ -1,22 +1,20 @@
-/*== KOST-Val ==================================================================================
-The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2-Files and Submission 
-Information Package (SIP). 
-Copyright (C) 2012-2014 Claire Röthlisberger (KOST-CECO), Christian Eugster, Olivier Debenath, 
-Peter Schneider (Staatsarchiv Aargau), Daniel Ludin (BEDAG AG)
------------------------------------------------------------------------------------------------
-KOST-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
-This application is free software: you can redistribute it and/or modify it under the 
-terms of the GNU General Public License as published by the Free Software Foundation, 
-either version 3 of the License, or (at your option) any later version. 
-BEDAG AG and Daniel Ludin hereby disclaims all copyright interest in the program 
-SIP-Val v0.2.0 written by Daniel Ludin (BEDAG AG). Switzerland, 1 March 2011.
-This application is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
-without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
-See the follow GNU General Public License for more details.
-You should have received a copy of the GNU General Public License along with this program; 
-if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
-Boston, MA 02110-1301 USA or see <http://www.gnu.org/licenses/>.
-==============================================================================================*/
+/* == KOST-Val ==================================================================================
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2-Files and Submission
+ * Information Package (SIP). Copyright (C) 2012-2014 Claire Röthlisberger (KOST-CECO), Christian
+ * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Daniel Ludin (BEDAG AG)
+ * -----------------------------------------------------------------------------------------------
+ * KOST-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. This application
+ * is free software: you can redistribute it and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version. BEDAG AG and Daniel Ludin hereby disclaims all copyright
+ * interest in the program SIP-Val v0.2.0 written by Daniel Ludin (BEDAG AG). Switzerland, 1 March
+ * 2011. This application is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ * PURPOSE. See the follow GNU General Public License for more details. You should have received a
+ * copy of the GNU General Public License along with this program; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA or see
+ * <http://www.gnu.org/licenses/>.
+ * ============================================================================================== */
 
 package ch.kostceco.tools.kostval.validation.modulepdfa.impl;
 
@@ -57,40 +55,34 @@ import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulepdfa.ValidationAvalidationAiModule;
 
-/**
- * Ist die vorliegende PDF-Datei eine valide PDFA-Datei? PDFA Validierungs mit
- * PDFTron und oder PDF-Tools.
+/** Ist die vorliegende PDF-Datei eine valide PDFA-Datei? PDFA Validierungs mit PDFTron und oder
+ * PDF-Tools.
  * 
- * Folgendes ist Konfigurierbar: Hauptvalidator sowie ob eine duale Validierung
- * durchgeführt werden soll oder nicht. Bei der dualen Validierung müssen beide
- * Validatoren die Datei als invalide betrachten, damit diese als invalid gilt.
- * Bei Uneinigkeit gilt diese als valid.
+ * Folgendes ist Konfigurierbar: Hauptvalidator sowie ob eine duale Validierung durchgeführt werden
+ * soll oder nicht. Bei der dualen Validierung müssen beide Validatoren die Datei als invalide
+ * betrachten, damit diese als invalid gilt. Bei Uneinigkeit gilt diese als valid.
  * 
- * Zuerste erfolgt eine Erkennung, wenn diese io kommt die Validierung mit
- * PDFTron und oder PDF-Tools. Die Fehler werden den Einzelnen Gruppen (Modulen)
- * zugeordnet
+ * Zuerste erfolgt eine Erkennung, wenn diese io kommt die Validierung mit PDFTron und oder
+ * PDF-Tools. Die Fehler werden den Einzelnen Gruppen (Modulen) zugeordnet
  * 
- * Ab der version 1.3.4 geschieht dies alles in einem Modul (dies benötigt
- * weniger Memory)
+ * Ab der version 1.3.4 geschieht dies alles in einem Modul (dies benötigt weniger Memory)
  * 
- * @author Rc Claire Röthlisberger, KOST-CECO
- */
+ * @author Rc Claire Röthlisberger, KOST-CECO */
 
-public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
-		implements ValidationAvalidationAiModule
+public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl implements
+		ValidationAvalidationAiModule
 {
 
 	private ConfigurationService	configurationService;
 
-	public static String			NEWLINE	= System.getProperty( "line.separator" );
+	public static String					NEWLINE	= System.getProperty( "line.separator" );
 
 	public ConfigurationService getConfigurationService()
 	{
 		return configurationService;
 	}
 
-	public void setConfigurationService(
-			ConfigurationService configurationService )
+	public void setConfigurationService( ConfigurationService configurationService )
 	{
 		this.configurationService = configurationService;
 	}
@@ -109,21 +101,17 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 		Integer pdfaVer1 = 0;
 		Integer pdfaVer2 = 0;
 
-		/*
-		 * Nicht vergessen in
-		 * "src/main/resources/config/applicationContext-services.xml" beim
-		 * entsprechenden Modul die property anzugeben: <property
-		 * name="configurationService" ref="configurationService" />
-		 */
+		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
+		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
+		 * ref="configurationService" /> */
 
-		// Vorberitung für eine allfällige Festhaltung bei unterschiedlichen
-		// Validierungsresultaten in einer PDF_Diagnosedatei
+		// Vorbereitung für eine allfällige Festhaltung bei unterschiedlichen Validierungsresultaten in
+		// einer PDF_Diagnosedatei
 		File pdfDia = null;
 		String pdfDiaPath = getConfigurationService().getPathToDiagnose();
 
 		try {
-			pdfDia = new File( pdfDiaPath + File.separator
-					+ "PDF-Diagnosedaten.kost-val.xml" );
+			pdfDia = new File( pdfDiaPath + File.separator + "PDF-Diagnosedaten.kost-val.xml" );
 			if ( !pdfDia.exists() ) {
 				pdfDia.createNewFile();
 				PrintWriter output;
@@ -133,42 +121,31 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 				buffer = new BufferedWriter( fileWriter );
 				output = new PrintWriter( buffer );
 				try {
-					output.print( getTextResourceService().getText(
-							MESSAGE_XML_DIAHEADER )
-							+ "\n" );
-					output.print( getTextResourceService().getText(
-							MESSAGE_XML_DIAEND ) );
+					output.print( getTextResourceService().getText( MESSAGE_XML_DIAHEADER ) + "\n" );
+					output.print( getTextResourceService().getText( MESSAGE_XML_DIAEND ) );
 				} finally {
 					output.close();
 					buffer.close();
 					fileWriter.close();
 				}
 			}
-			File xslDiaOrig = new File( "resources" + File.separator
-					+ "kost-val_PDFdia.xsl" );
-			File xslDiaCopy = new File( pdfDiaPath + File.separator
-					+ "kost-val_PDFdia.xsl" );
+			File xslDiaOrig = new File( "resources" + File.separator + "kost-val_PDFdia.xsl" );
+			File xslDiaCopy = new File( pdfDiaPath + File.separator + "kost-val_PDFdia.xsl" );
 			if ( !xslDiaCopy.exists() ) {
 				Util.copyFile( xslDiaOrig, xslDiaCopy );
 			}
 		} catch ( IOException e ) {
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-							+ getTextResourceService().getText(
-									ERROR_XML_UNKNOWN, e.getMessage() ) );
+							+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 		}
 
-		/*
-		 * Neu soll die Validierung mit PDFTron konfigurier bar sein Mögliche
-		 * Werte 1A, 1B und no sowie 2A, 2B, 2U und no Da Archive beide
-		 * Versionen erlauben können sind es 2 config einträge Es gibt mehre
-		 * Möglichkeiten das PDF in der gewünschten Version zu testen -
-		 * Unterscheidung anhand DROID --> braucht viel Zeit auch mit
-		 * KaD_Signaturefile - Unterscheidung anhand PDF/A-Eintrag wie Droid
-		 * aber selber programmiert --> ist viel schneller
-		 */
-		if ( pdfa2.equals( "2A" ) || pdfa2.equals( "2B" )
-				|| pdfa2.equals( "2U" ) ) {
+		/* Neu soll die Validierung mit PDFTron konfigurier bar sein Mögliche Werte 1A, 1B und no sowie
+		 * 2A, 2B, 2U und no Da Archive beide Versionen erlauben können sind es 2 config einträge Es
+		 * gibt mehre Möglichkeiten das PDF in der gewünschten Version zu testen - Unterscheidung anhand
+		 * DROID --> braucht viel Zeit auch mit KaD_Signaturefile - Unterscheidung anhand PDF/A-Eintrag
+		 * wie Droid aber selber programmiert --> ist viel schneller */
+		if ( pdfa2.equals( "2A" ) || pdfa2.equals( "2B" ) || pdfa2.equals( "2U" ) ) {
 			// gültiger Konfigurationseintrag und V2 erlaubt
 			pdfaVer2 = 2;
 		} else {
@@ -183,12 +160,10 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 			pdfa1 = "no";
 		}
 		if ( pdfa1 == "no" && pdfa2 == "no" ) {
-			// keine Validierung möglich
-			// keine PDFA-Versionen konfiguriert
+			// keine Validierung möglich. keine PDFA-Versionen konfiguriert
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-							+ getTextResourceService().getText(
-									ERROR_XML_A_PDFA_NOCONFIG ) );
+							+ getTextResourceService().getText( ERROR_XML_A_PDFA_NOCONFIG ) );
 			valid = false;
 			return false;
 		}
@@ -206,12 +181,10 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 				// Beide sind möglich --> Level je nach File auswählen
 				pdfaVer1 = 0;
 				pdfaVer2 = 0;
-				BufferedReader in = new BufferedReader( new FileReader(
-						valDatei ) );
+				BufferedReader in = new BufferedReader( new FileReader( valDatei ) );
 				String line;
 				while ( (line = in.readLine()) != null ) {
-					// häufige Partangaben:
-					// pdfaid:part>1< pdfaid:part='1' pdfaid:part="1"
+					// häufige Partangaben: pdfaid:part>1< pdfaid:part='1' pdfaid:part="1"
 					if ( line.contains( "pdfaid:part" ) ) {
 						// pdfaid:part
 						if ( line.contains( "pdfaid:part>1<" ) ) {
@@ -232,13 +205,11 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 						} else if ( line.contains( "pdfaid:part=\"2\"" ) ) {
 							level = pdfa2;
 							pdfaVer2 = 2;
-						} else if ( line.contains( "pdfaid:part" )
-								&& line.contains( "1" ) ) {
+						} else if ( line.contains( "pdfaid:part" ) && line.contains( "1" ) ) {
 							// PDFA-Version = 1
 							level = pdfa1;
 							pdfaVer1 = 1;
-						} else if ( line.contains( "pdfaid:part" )
-								&& line.contains( "2" ) ) {
+						} else if ( line.contains( "pdfaid:part" ) && line.contains( "2" ) ) {
 							// PDFA-Version = 2
 							level = pdfa2;
 							pdfaVer2 = 2;
@@ -251,15 +222,12 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 				}
 			} catch ( Throwable e ) {
 				getMessageService().logError(
-						getTextResourceService().getText(
-								MESSAGE_XML_MODUL_A_PDFA )
-								+ getTextResourceService().getText(
-										ERROR_XML_UNKNOWN, e.getMessage() ) );
+						getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+								+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			}
 		}
 		getMessageService().logError(
-				getTextResourceService().getText( MESSAGE_PDFAVALIDATION_VL,
-						level ) );
+				getTextResourceService().getText( MESSAGE_PDFAVALIDATION_VL, level ) );
 
 		// Start mit der Erkennung
 
@@ -267,8 +235,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 		if ( valDatei.isDirectory() ) {
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-							+ getTextResourceService().getText(
-									ERROR_XML_A_PDFA_ISDIRECTORY ) );
+							+ getTextResourceService().getText( ERROR_XML_A_PDFA_ISDIRECTORY ) );
 			return false;
 		} else if ( (valDatei.getAbsolutePath().toLowerCase().endsWith( ".pdf" ) || valDatei
 				.getAbsolutePath().toLowerCase().endsWith( ".pdfa" )) ) {
@@ -304,97 +271,74 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 				for ( i = 0; i != length; i++ )
 					;
 
-				// die beiden charArrays (soll und ist) mit einander
-				// vergleichen IST = c1c2c3c4
+				// die beiden charArrays (soll und ist) mit einander vergleichen IST = c1c2c3c4
 				char[] charArray1 = buffer;
 				char[] charArray2 = new char[] { c1, c2, c3, c4 };
 
 				if ( Arrays.equals( charArray1, charArray2 ) ) {
-					// höchstwahrscheinlich ein PDF da es mit
-					// 25504446 respektive %PDF beginnt
+					// höchstwahrscheinlich ein PDF da es mit 25504446 respektive %PDF beginnt
 					valid = true;
 				} else {
-					// TODO: Droid-Erkennung, damit Details ausgegeben werden
-					// können
-					String nameOfSignature = getConfigurationService()
-							.getPathToDroidSignatureFile();
+					// Droid-Erkennung, damit Details ausgegeben werden können
+					String nameOfSignature = getConfigurationService().getPathToDroidSignatureFile();
 					if ( nameOfSignature == null ) {
-						getMessageService()
-								.logError(
-										getTextResourceService().getText(
-												MESSAGE_XML_MODUL_A_PDFA )
-												+ getTextResourceService()
-														.getText(
-																MESSAGE_XML_CONFIGURATION_ERROR_NO_SIGNATURE ) );
+						getMessageService().logError(
+								getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+										+ getTextResourceService().getText(
+												MESSAGE_XML_CONFIGURATION_ERROR_NO_SIGNATURE ) );
 						return false;
 					}
 					// existiert die SignatureFile am angebenen Ort?
 					File fnameOfSignature = new File( nameOfSignature );
 					if ( !fnameOfSignature.exists() ) {
 						getMessageService().logError(
-								getTextResourceService().getText(
-										MESSAGE_XML_MODUL_A_PDFA )
-										+ getTextResourceService().getText(
-												MESSAGE_XML_CA_DROID ) );
+								getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+										+ getTextResourceService().getText( MESSAGE_XML_CA_DROID ) );
 						return false;
 					}
 
 					Droid droid = null;
 					try {
-						// kleiner Hack, weil die Droid libraries irgendwo ein
-						// System.out
-						// drin haben, welche den Output stören
-						// Util.switchOffConsole() als Kommentar markieren wenn
-						// man die
-						// Fehlermeldung erhalten möchte
+						/* kleiner Hack, weil die Droid libraries irgendwo ein System.out drin haben, welche den
+						 * Output stören Util.switchOffConsole() als Kommentar markieren wenn man die
+						 * Fehlermeldung erhalten möchte */
 						Util.switchOffConsole();
 						droid = new Droid();
 
 						droid.readSignatureFile( nameOfSignature );
 
 					} catch ( Exception e ) {
-						getMessageService()
-								.logError(
-										getTextResourceService().getText(
-												MESSAGE_XML_MODUL_A_PDFA )
-												+ getTextResourceService()
-														.getText(
-																ERROR_XML_CANNOT_INITIALIZE_DROID ) );
+						getMessageService().logError(
+								getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+										+ getTextResourceService().getText( ERROR_XML_CANNOT_INITIALIZE_DROID ) );
 						return false;
 					} finally {
 						Util.switchOnConsole();
 					}
 					File file = valDatei;
 					String puid = "";
-					IdentificationFile ifile = droid.identify( file
-							.getAbsolutePath() );
+					IdentificationFile ifile = droid.identify( file.getAbsolutePath() );
 					for ( int x = 0; x < ifile.getNumHits(); x++ ) {
 						FileFormatHit ffh = ifile.getHit( x );
 						FileFormat ff = ffh.getFileFormat();
 						puid = ff.getPUID();
 					}
 					getMessageService().logError(
-							getTextResourceService().getText(
-									MESSAGE_XML_MODUL_A_PDFA )
-									+ getTextResourceService().getText(
-											ERROR_XML_A_PDFA_INCORRECTFILE,
-											puid ) );
+							getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+									+ getTextResourceService().getText( ERROR_XML_A_PDFA_INCORRECTFILE, puid ) );
 					return false;
 				}
 			} catch ( Exception e ) {
 				getMessageService().logError(
-						getTextResourceService().getText(
-								MESSAGE_XML_MODUL_A_PDFA )
-								+ getTextResourceService().getText(
-										ERROR_XML_A_PDFA_INCORRECTFILE ) );
+						getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+								+ getTextResourceService().getText( ERROR_XML_A_PDFA_INCORRECTFILE ) );
 				return false;
 			}
 		} else {
 			// die Datei endet nicht mit pdf oder pdfa -> Fehler
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-							+ getTextResourceService().getText(
-									ERROR_XML_A_PDFA_INCORRECTFILEENDING ) );
+							+ getTextResourceService().getText( ERROR_XML_A_PDFA_INCORRECTFILEENDING ) );
 			return false;
 		}
 		// Ende der Erkennung
@@ -402,20 +346,14 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 		boolean isValid = false;
 		boolean dual = false;
 
-		// Initialisierung PDFTron -> überprüfen der Angaben: existiert die
-		// PdftronExe am angebenen Ort?
-		String pathToPdftronExe = getConfigurationService()
-				.getPathToPdftronExe();
-		String producerFirstValidator = getConfigurationService()
-				.firstValidator();
+		// Initialisierung PDFTron -> überprüfen der Angaben: existiert die PdftronExe am angebenen Ort?
+		String pathToPdftronExe = getConfigurationService().getPathToPdftronExe();
+		String producerFirstValidator = getConfigurationService().firstValidator();
 		String dualValidation = getConfigurationService().dualValidation();
 
-		/*
-		 * Nicht vergessen in
-		 * "src/main/resources/config/applicationContext-services.xml" beim
-		 * entsprechenden Modul die property anzugeben: <property
-		 * name="configurationService" ref="configurationService" />
-		 */
+		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
+		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
+		 * ref="configurationService" /> */
 
 		if ( dualValidation.contentEquals( "dual" ) ) {
 			// Duale Validierung gewünscht
@@ -427,16 +365,13 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 		}
 
 		File fPdftronExe = new File( pathToPdftronExe );
-		if ( !fPdftronExe.exists()
-				|| !fPdftronExe.getName().equals( "pdfa.exe" ) ) {
+		if ( !fPdftronExe.exists() || !fPdftronExe.getName().equals( "pdfa.exe" ) ) {
 			// Keine Duale Validierung möglich
 			if ( dualValidation.contentEquals( "dual" )
 					|| producerFirstValidator.contentEquals( "PDFTron" ) ) {
 				getMessageService().logError(
-						getTextResourceService().getText(
-								MESSAGE_XML_MODUL_A_PDFA )
-								+ getTextResourceService().getText(
-										ERROR_XML_PDFTRON_MISSING ) );
+						getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+								+ getTextResourceService().getText( ERROR_XML_PDFTRON_MISSING ) );
 				dual = false;
 				producerFirstValidator = "PDFTools";
 			}
@@ -480,13 +415,12 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					Runtime rt = null;
 
 					try {
-						// Der Name des generierten Reports lautet per default
-						// report.xml und es scheint keine
-						// Möglichkeit zu geben, dies zu übersteuern.
+						/* Der Name des generierten Reports lautet per default report.xml und es scheint keine
+						 * Möglichkeit zu geben, dies zu übersteuern. */
 						report = new File( pathToPdftronOutput, "report.xml" );
 
-						// falls das File bereits existiert, z.B. von einem
-						// vorhergehenden Durchlauf, löschen wir es
+						// falls das File bereits existiert, z.B. von einem vorhergehenden Durchlauf, löschen
+						// wir es
 						if ( report.exists() ) {
 							report.delete();
 						}
@@ -495,16 +429,13 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 
 						rt = Runtime.getRuntime();
 						proc = rt.exec( command.toString().split( " " ) );
-						// .split(" ") ist notwendig wenn in einem Pfad ein
-						// Doppelleerschlag vorhanden ist!
+						// .split(" ") ist notwendig wenn in einem Pfad ein Doppelleerschlag vorhanden ist!
 
 						// Fehleroutput holen
-						StreamGobbler errorGobbler = new StreamGobbler(
-								proc.getErrorStream(), "ERROR" );
+						StreamGobbler errorGobbler = new StreamGobbler( proc.getErrorStream(), "ERROR" );
 
 						// Output holen
-						StreamGobbler outputGobbler = new StreamGobbler(
-								proc.getInputStream(), "OUTPUT" );
+						StreamGobbler outputGobbler = new StreamGobbler( proc.getInputStream(), "OUTPUT" );
 
 						// Threads starten
 						errorGobbler.start();
@@ -516,10 +447,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 						Util.switchOnConsole();
 					} catch ( Exception e ) {
 						getMessageService().logError(
-								getTextResourceService().getText(
-										MESSAGE_XML_MODUL_A_PDFA )
-										+ getTextResourceService().getText(
-												ERROR_XML_A_PDFA_SERVICEFAILED,
+								getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+										+ getTextResourceService().getText( ERROR_XML_A_PDFA_SERVICEFAILED,
 												e.getMessage() ) );
 						return false;
 					} finally {
@@ -532,10 +461,9 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					// Ende PDFTRON direkt auszulösen
 
 					String pathToPdftronReport = report.getAbsolutePath();
-					BufferedInputStream bis = new BufferedInputStream(
-							new FileInputStream( pathToPdftronReport ) );
-					DocumentBuilderFactory dbf = DocumentBuilderFactory
-							.newInstance();
+					BufferedInputStream bis = new BufferedInputStream( new FileInputStream(
+							pathToPdftronReport ) );
+					DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 					DocumentBuilder db = dbf.newDocumentBuilder();
 					doc = db.parse( bis );
 					doc.normalize();
@@ -543,13 +471,11 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					Integer passCount = new Integer( 0 );
 					NodeList nodeLstI = doc.getElementsByTagName( "Pass" );
 
-					// Valide pdfa-Dokumente enthalten
-					// "<Validation> <Pass FileName..."
-					// Anzahl pass = anzahl Valider pdfa
+					// Valide pdfa-Dokumente enthalten "<Validation> <Pass FileName..." Anzahl pass = anzahl
+					// Valider pdfa
 					for ( int s = 0; s < nodeLstI.getLength(); s++ ) {
 						passCount = passCount + 1;
-						// Valide PDFA-Datei
-						// Module A-J sind Valid
+						// Valide PDFA-Datei Module A-J sind Valid
 						isValid = true;
 					}
 
@@ -557,8 +483,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 						if ( dual ) {
 							// Duale Validierung mit PDFTools
 
-							if ( docPdf.open( valDatei.getAbsolutePath(), "",
-									NativeLibrary.COMPLIANCE.ePDFUnk ) ) {
+							if ( docPdf.open( valDatei.getAbsolutePath(), "", NativeLibrary.COMPLIANCE.ePDFUnk ) ) {
 								// PDF Konnte geöffnet werden
 								docPdf.setStopOnError( true );
 								docPdf.setReportingLevel( 1 );
@@ -566,82 +491,58 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 								docPdf.setStopOnError( true );
 								docPdf.setReportingLevel( 1 );
 								if ( docPdf.getErrorCode() == NativeLibrary.ERRORCODE.PDF_E_PASSWORD ) {
-									getMessageService()
-											.logError(
-													getTextResourceService()
-															.getText(
-																	MESSAGE_XML_MODUL_A_PDFA )
-															+ getTextResourceService()
-																	.getText(
-																			ERROR_XML_A_PDFTOOLS_ENCRYPTED ) );
+									getMessageService().logError(
+											getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+													+ getTextResourceService().getText( ERROR_XML_A_PDFTOOLS_ENCRYPTED ) );
 									return false;
 								} else {
-									getMessageService()
-											.logError(
-													getTextResourceService()
-															.getText(
-																	MESSAGE_XML_MODUL_A_PDFA )
-															+ getTextResourceService()
-																	.getText(
-																			ERROR_XML_A_PDFTOOLS_DAMAGED ) );
+									getMessageService().logError(
+											getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+													+ getTextResourceService().getText( ERROR_XML_A_PDFTOOLS_DAMAGED ) );
 									return false;
 								}
 							}
 
-							/*
-							 * ePDFA1a 5122 ePDFA1b 5121 ePDFA2a 5891 ePDFA2b
-							 * 5889 ePDFA2u 5890
-							 */
+							/* ePDFA1a 5122 ePDFA1b 5121 ePDFA2a 5891 ePDFA2b 5889 ePDFA2u 5890 */
 							if ( level.contentEquals( "1A" ) ) {
-								if ( docPdf.open( valDatei.getAbsolutePath(),
-										"", 5122 ) ) {
+								if ( docPdf.open( valDatei.getAbsolutePath(), "", 5122 ) ) {
 									docPdf.validate();
 								}
 							} else if ( level.contentEquals( "1B" ) ) {
-								if ( docPdf.open( valDatei.getAbsolutePath(),
-										"", 5121 ) ) {
+								if ( docPdf.open( valDatei.getAbsolutePath(), "", 5121 ) ) {
 									docPdf.validate();
 								}
 							} else if ( level.contentEquals( "2A" ) ) {
-								if ( docPdf.open( valDatei.getAbsolutePath(),
-										"", 5891 ) ) {
+								if ( docPdf.open( valDatei.getAbsolutePath(), "", 5891 ) ) {
 									docPdf.validate();
 								}
 							} else if ( level.contentEquals( "2B" ) ) {
-								if ( docPdf.open( valDatei.getAbsolutePath(),
-										"", 5889 ) ) {
+								if ( docPdf.open( valDatei.getAbsolutePath(), "", 5889 ) ) {
 									docPdf.validate();
 								}
 							} else if ( level.contentEquals( "2U" ) ) {
-								if ( docPdf.open( valDatei.getAbsolutePath(),
-										"", 5890 ) ) {
+								if ( docPdf.open( valDatei.getAbsolutePath(), "", 5890 ) ) {
 									docPdf.validate();
 								}
 							} else {
 								// Validierung nach 2b
 								level = "2B";
-								if ( docPdf.open( valDatei.getAbsolutePath(),
-										"", 5889 ) ) {
+								if ( docPdf.open( valDatei.getAbsolutePath(), "", 5889 ) ) {
 									docPdf.validate();
 								}
 							}
 
 							// Error Category
 							iCategory = docPdf.getCategories();
-							// die Zahl kann auch eine Summe von Kategorien
-							// sein z.B. 6144=2048+4096 -> getCategoryText
-							// gibt nur die erste Kategorie heraus (z.B.
-							// 2048)
+							/* die Zahl kann auch eine Summe von Kategorien sein z.B. 6144=2048+4096 ->
+							 * getCategoryText gibt nur die erste Kategorie heraus (z.B. 2048) */
 
 							int success = 0;
 
-							/*
-							 * ErrorCode kann ungleich Null sein, wenn es nur
-							 * eine Information zu einer nicht einhaltung einer
-							 * Empfehlung gefunden wurde.
+							/* ErrorCode kann ungleich Null sein, wenn es nur eine Information zu einer nicht
+							 * einhaltung einer Empfehlung gefunden wurde.
 							 * 
-							 * Entsprechend wird der ErrorCode ignoriert.
-							 */
+							 * Entsprechend wird der ErrorCode ignoriert. */
 
 							PdfError err = docPdf.getFirstError();
 							PdfError err1 = docPdf.getFirstError();
@@ -659,34 +560,22 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 								// valide
 								isValid = true;
 
-								// Diskrepanz => PDF-Diagnosedaten
-								// ErrorCodes von PDFTron holen
-								NodeList nodeLst = doc
-										.getElementsByTagName( "Error" );
+								// Diskrepanz => PDF-Diagnosedaten ErrorCodes von PDFTron holen
+								NodeList nodeLst = doc.getElementsByTagName( "Error" );
 								String errorCodes = "";
 								for ( int s = 0; s < nodeLst.getLength(); s++ ) {
 									Node dateiNode = nodeLst.item( s );
-									NamedNodeMap nodeMap = dateiNode
-											.getAttributes();
-									Node errorNode = nodeMap
-											.getNamedItem( "Code" );
+									NamedNodeMap nodeMap = dateiNode.getAttributes();
+									Node errorNode = nodeMap.getNamedItem( "Code" );
 									String errorCode = errorNode.getNodeValue();
 									errorCodes = errorCodes + "  " + errorCode;
 								}
 
 								pdfTools = "<PDFTools><iCategory>0</iCategory><iError>0</iError></PDFTools>";
-								pdfTron = "<PDFTron><Code>" + errorCodes
-										+ "</Code></PDFTron>";
-								newPdfDiaTxt = "<Validation><ValFile>"
-										+ valDatei.getAbsolutePath()
-										+ "</ValFile><PdfaVL>"
-										+ level
-										+ "</PdfaVL>"
-										+ pdfTools
-										+ pdfTron
-										+ "</Validation>\n"
-										+ getTextResourceService().getText(
-												MESSAGE_XML_DIAEND );
+								pdfTron = "<PDFTron><Code>" + errorCodes + "</Code></PDFTron>";
+								newPdfDiaTxt = "<Validation><ValFile>" + valDatei.getAbsolutePath()
+										+ "</ValFile><PdfaVL>" + level + "</PdfaVL>" + pdfTools + pdfTron
+										+ "</Validation>\n" + getTextResourceService().getText( MESSAGE_XML_DIAEND );
 								Util.pdfDia( newPdfDiaTxt, pdfDia );
 								Util.amp( pdfDia );
 
@@ -701,46 +590,32 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					}
 
 				} catch ( Exception e ) {
-					getMessageService()
-							.logError(
-									getTextResourceService().getText(
-											MESSAGE_XML_MODUL_A_PDFA )
-											+ getTextResourceService().getText(
-													ERROR_XML_UNKNOWN,
-													e.getMessage() ) );
+					getMessageService().logError(
+							getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+									+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 					return false;
 				}
 			} else {
 				// TODO: Erledigt Start mit PDFTools
 				// zuerst mit PDFTools und danach ggf mit PDFTron
 
-				if ( docPdf.open( valDatei.getAbsolutePath(), "",
-						NativeLibrary.COMPLIANCE.ePDFUnk ) ) {
+				if ( docPdf.open( valDatei.getAbsolutePath(), "", NativeLibrary.COMPLIANCE.ePDFUnk ) ) {
 					// PDF Konnte geöffnet werden
 				} else {
 					if ( docPdf.getErrorCode() == NativeLibrary.ERRORCODE.PDF_E_PASSWORD ) {
-						getMessageService()
-								.logError(
-										getTextResourceService().getText(
-												MESSAGE_XML_MODUL_A_PDFA )
-												+ getTextResourceService()
-														.getText(
-																ERROR_XML_A_PDFTOOLS_ENCRYPTED ) );
+						getMessageService().logError(
+								getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+										+ getTextResourceService().getText( ERROR_XML_A_PDFTOOLS_ENCRYPTED ) );
 						return false;
 					} else {
 						getMessageService().logError(
-								getTextResourceService().getText(
-										MESSAGE_XML_MODUL_A_PDFA )
-										+ getTextResourceService().getText(
-												ERROR_XML_A_PDFTOOLS_DAMAGED ) );
+								getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+										+ getTextResourceService().getText( ERROR_XML_A_PDFTOOLS_DAMAGED ) );
 						return false;
 					}
 				}
 
-				/*
-				 * ePDFA1a 5122 ePDFA1b 5121 ePDFA2a 5891 ePDFA2b 5889 ePDFA2u
-				 * 5890
-				 */
+				/* ePDFA1a 5122 ePDFA1b 5121 ePDFA2a 5891 ePDFA2b 5889 ePDFA2u 5890 */
 				if ( level.contentEquals( "1A" ) ) {
 					if ( docPdf.open( valDatei.getAbsolutePath(), "", 5122 ) ) {
 						docPdf.validate();
@@ -774,9 +649,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 
 				// Error Category
 				iCategory = docPdf.getCategories();
-				// die Zahl kann auch eine Summe von Kategorien sein z.B.
-				// 6144=2048+4096 -> getCategoryText gibt nur die erste
-				// Kategorie heraus (z.B. 2048)
+				/* die Zahl kann auch eine Summe von Kategorien sein z.B. 6144=2048+4096 -> getCategoryText
+				 * gibt nur die erste Kategorie heraus (z.B. 2048) */
 
 				int success = 0;
 
@@ -804,10 +678,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 							// Pfad zum Programm Pdftron
 							File pdftronExe = new File( pathToPdftronExe );
 							File output = directoryOfLogfile;
-							String pathToPdftronOutput = output
-									.getAbsolutePath();
-							StringBuffer command = new StringBuffer( pdftronExe
-									+ " " );
+							String pathToPdftronOutput = output.getAbsolutePath();
+							StringBuffer command = new StringBuffer( pdftronExe + " " );
 							command.append( "-l " + level );
 							command.append( " -o " );
 							command.append( "\"" );
@@ -822,17 +694,12 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 							Runtime rt = null;
 
 							try {
-								// Der Name des generierten Reports lautet
-								// per default
-								// report.xml und es scheint keine
-								// Möglichkeit zu geben, dies zu
-								// übersteuern.
-								report = new File( pathToPdftronOutput,
-										"report.xml" );
+								/* Der Name des generierten Reports lautet per default report.xml und es scheint
+								 * keine Möglichkeit zu geben, dies zu übersteuern. */
+								report = new File( pathToPdftronOutput, "report.xml" );
 
-								// falls das File bereits existiert, z.B.
-								// von einem
-								// vorhergehenden Durchlauf, löschen wir es
+								// falls das File bereits existiert, z.B. von einemvorhergehenden Durchlauf, löschen
+								// wir es
 								if ( report.exists() ) {
 									report.delete();
 								}
@@ -840,18 +707,14 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 								Util.switchOffConsole();
 
 								rt = Runtime.getRuntime();
-								proc = rt
-										.exec( command.toString().split( " " ) );
-								// .split(" ") ist notwendig wenn in einem
-								// Pfad ein Doppelleerschlag vorhanden ist!
+								proc = rt.exec( command.toString().split( " " ) );
+								// .split(" ") ist notwendig wenn in einem Pfad ein Doppelleerschlag vorhanden ist!
 
 								// Fehleroutput holen
-								StreamGobbler errorGobbler = new StreamGobbler(
-										proc.getErrorStream(), "ERROR" );
+								StreamGobbler errorGobbler = new StreamGobbler( proc.getErrorStream(), "ERROR" );
 
 								// Output holen
-								StreamGobbler outputGobbler = new StreamGobbler(
-										proc.getInputStream(), "OUTPUT" );
+								StreamGobbler outputGobbler = new StreamGobbler( proc.getInputStream(), "OUTPUT" );
 
 								// Threads starten
 								errorGobbler.start();
@@ -862,15 +725,10 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 
 								Util.switchOnConsole();
 							} catch ( Exception e ) {
-								getMessageService()
-										.logError(
-												getTextResourceService()
-														.getText(
-																MESSAGE_XML_MODUL_A_PDFA )
-														+ getTextResourceService()
-																.getText(
-																		ERROR_XML_A_PDFA_SERVICEFAILED,
-																		e.getMessage() ) );
+								getMessageService().logError(
+										getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+												+ getTextResourceService().getText( ERROR_XML_A_PDFA_SERVICEFAILED,
+														e.getMessage() ) );
 								return false;
 							} finally {
 								if ( proc != null ) {
@@ -881,44 +739,31 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 							}
 							// Ende PDFTRON direkt auszulösen
 
-							String pathToPdftronReport = report
-									.getAbsolutePath();
-							BufferedInputStream bis = new BufferedInputStream(
-									new FileInputStream( pathToPdftronReport ) );
-							DocumentBuilderFactory dbf = DocumentBuilderFactory
-									.newInstance();
+							String pathToPdftronReport = report.getAbsolutePath();
+							BufferedInputStream bis = new BufferedInputStream( new FileInputStream(
+									pathToPdftronReport ) );
+							DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 							DocumentBuilder db = dbf.newDocumentBuilder();
 							doc = db.parse( bis );
 							doc.normalize();
 
 							Integer passCount = new Integer( 0 );
-							NodeList nodeLstI = doc
-									.getElementsByTagName( "Pass" );
+							NodeList nodeLstI = doc.getElementsByTagName( "Pass" );
 
-							// Valide pdfa-Dokumente enthalten
-							// "<Validation> <Pass FileName..."
-							// Anzahl pass = anzahl Valider pdfa
+							// Valide pdfa-Dokumente enthalten "<Validation> <Pass FileName..." Anzahl pass =
+							// anzahl Valider pdfa
 							for ( int s = 0; s < nodeLstI.getLength(); s++ ) {
 								passCount = passCount + 1;
-								// Valide PDFA-Datei
-								// Module A-J sind Valid
+								// Valide PDFA-Datei Module A-J sind Valid
 								isValid = true;
 
 								// Diskrepanz => PDF-Diagnosedaten
-								pdfTools = "<PDFTools><iCategory>" + iCategory
-										+ "</iCategory><iError>" + iError
+								pdfTools = "<PDFTools><iCategory>" + iCategory + "</iCategory><iError>" + iError
 										+ "</iError></PDFTools>";
 								pdfTron = "<PDFTron><Code>Pass</Code></PDFTron>";
-								newPdfDiaTxt = "<Validation><ValFile>"
-										+ valDatei.getAbsolutePath()
-										+ "</ValFile><PdfaVL>"
-										+ level
-										+ "</PdfaVL>"
-										+ pdfTools
-										+ pdfTron
-										+ "</Validation>\n"
-										+ getTextResourceService().getText(
-												MESSAGE_XML_DIAEND );
+								newPdfDiaTxt = "<Validation><ValFile>" + valDatei.getAbsolutePath()
+										+ "</ValFile><PdfaVL>" + level + "</PdfaVL>" + pdfTools + pdfTron
+										+ "</Validation>\n" + getTextResourceService().getText( MESSAGE_XML_DIAEND );
 								Util.pdfDia( newPdfDiaTxt, pdfDia );
 								Util.amp( pdfDia );
 
@@ -929,14 +774,10 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 							}
 
 						} catch ( Exception e ) {
-							getMessageService()
-									.logError(
-											getTextResourceService().getText(
-													MESSAGE_XML_MODUL_A_PDFA )
-													+ getTextResourceService()
-															.getText(
-																	ERROR_XML_A_PDFA_SERVICEFAILED,
-																	e.getMessage() ) );
+							getMessageService().logError(
+									getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+											+ getTextResourceService().getText( ERROR_XML_A_PDFA_SERVICEFAILED,
+													e.getMessage() ) );
 							return false;
 						}
 					} else {
@@ -1073,65 +914,53 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					iCategory = 0;
 				}
 
-				File report = new File( directoryOfLogfile.getAbsolutePath(),
-						"report.xml" );
+				File report = new File( directoryOfLogfile.getAbsolutePath(), "report.xml" );
 				Document doc = null;
 
 				if ( producerFirstValidator.contentEquals( "PDFTron" ) || dual ) {
-					// aus dem Output von Pdftron die Fehlercodes extrahieren
-					// und übersetzen
+					// aus dem Output von Pdftron die Fehlercodes extrahieren und übersetzen
 
 					String pathToPdftronReport = report.getAbsolutePath();
-					BufferedInputStream bis = new BufferedInputStream(
-							new FileInputStream( pathToPdftronReport ) );
-					DocumentBuilderFactory dbf = DocumentBuilderFactory
-							.newInstance();
+					BufferedInputStream bis = new BufferedInputStream( new FileInputStream(
+							pathToPdftronReport ) );
+					DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 					DocumentBuilder db = dbf.newDocumentBuilder();
 					doc = db.parse( bis );
 					doc.normalize();
 
-					// Bsp. für einen Error Code: <Error Code="e_PDFA173" die
-					// erste Ziffer nach e_PDFA ist der Error Code.
+					// Bsp. für einen Error Code: <Error Code="e_PDFA173" die erste Ziffer nach e_PDFA ist der
+					// Error Code.
 				}
 				/** Modul A **/
 				if ( exponent1 ) {
 					getMessageService().logError(
-							getTextResourceService().getText(
-									MESSAGE_XML_MODUL_A_PDFA )
-									+ getTextResourceService().getText(
-											ERROR_XML_AI_1, "iCategory_1" ) );
+							getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+									+ getTextResourceService().getText( ERROR_XML_AI_1, "iCategory_1" ) );
 				}
 				if ( exponent2 ) {
 					getMessageService().logError(
-							getTextResourceService().getText(
-									MESSAGE_XML_MODUL_A_PDFA )
-									+ getTextResourceService().getText(
-											ERROR_XML_AI_2, "iCategory_2" ) );
+							getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+									+ getTextResourceService().getText( ERROR_XML_AI_2, "iCategory_2" ) );
 				}
 				if ( producerFirstValidator.contentEquals( "PDFTron" ) || dual ) {
-					// aus dem Output von Pdftron die Fehlercodes extrahieren
-					// und übersetzen
+					// aus dem Output von Pdftron die Fehlercodes extrahieren und übersetzen
 
 					String errorDigitA = "Fehler";
 
 					NodeList nodeLst = doc.getElementsByTagName( "Error" );
-					// Bsp. für einen Error Code: <Error
-					// Code="e_PDFA173"
-					// die erste Ziffer nach e_PDFA ist der
-					// Error Code.
+					/* Bsp. für einen Error Code: <Error Code="e_PDFA173" die erste Ziffer nach e_PDFA ist der
+					 * Error Code. */
 					for ( int s = 0; s < nodeLst.getLength(); s++ ) {
 						Node dateiNode = nodeLst.item( s );
 						NamedNodeMap nodeMap = dateiNode.getAttributes();
 						Node errorNode = nodeMap.getNamedItem( "Code" );
 						String errorCode = errorNode.getNodeValue();
-						String errorCodeMsg = "error.xml.ai."
-								+ errorCode.substring( 2 );
+						String errorCodeMsg = "error.xml.ai." + errorCode.substring( 2 );
 						Node errorNodeM = nodeMap.getNamedItem( "Message" );
 						String errorMessage = errorNodeM.getNodeValue();
 						errorDigitA = errorCode.substring( 6, 7 );
 
-						// der Error Code kann auch "Unknown" sein, dieser wird
-						// in den Code "0" übersetzt
+						// der Error Code kann auch "Unknown" sein, dieser wird in den Code "0" übersetzt
 						if ( errorDigitA.equals( "U" ) ) {
 							errorDigitA = "0";
 						}
@@ -1144,31 +973,22 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 								// Allgemeiner Fehler -> A
 								isValid = false;
 								getMessageService().logError(
-										getTextResourceService().getText(
-												MESSAGE_XML_MODUL_A_PDFA )
-												+ getTextResourceService()
-														.getText( errorCodeMsg,
-																errorCode ) );
+										getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+												+ getTextResourceService().getText( errorCodeMsg, errorCode ) );
 							}
 						} catch ( Exception e ) {
 							getMessageService().logError(
-									getTextResourceService().getText(
-											MESSAGE_XML_MODUL_A_PDFA )
-											+ getTextResourceService().getText(
-													ERROR_XML_AI_TRANSLATE,
-													errorCode, errorMessage ) );
+									getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+											+ getTextResourceService().getText( ERROR_XML_AI_TRANSLATE, errorCode,
+													errorMessage ) );
 						}
 					}
 					if ( errorDigitA.equals( "Fehler" ) ) {
-						// Fehler bei der Initialisierung
-						// Passierte bei einem Leerschlag im
-						// Namen
+						// Fehler bei der Initialisierung Passierte bei einem Leerschlag im Namen
 						isValid = false;
 						getMessageService().logError(
-								getTextResourceService().getText(
-										MESSAGE_XML_MODUL_A_PDFA )
-										+ getTextResourceService().getText(
-												ERROR_XML_A_PDFA_INIT ) );
+								getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+										+ getTextResourceService().getText( ERROR_XML_A_PDFA_INIT ) );
 						return false;
 					}
 				}
@@ -1176,24 +996,18 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 				/** Modul B **/
 				if ( exponent0 ) {
 					getMessageService().logError(
-							getTextResourceService().getText(
-									MESSAGE_XML_MODUL_B_PDFA )
-									+ getTextResourceService().getText(
-											ERROR_XML_AI_0, "iCategory_0" ) );
+							getTextResourceService().getText( MESSAGE_XML_MODUL_B_PDFA )
+									+ getTextResourceService().getText( ERROR_XML_AI_0, "iCategory_0" ) );
 				}
 				if ( exponent7 ) {
 					getMessageService().logError(
-							getTextResourceService().getText(
-									MESSAGE_XML_MODUL_B_PDFA )
-									+ getTextResourceService().getText(
-											ERROR_XML_AI_7, "iCategory_7" ) );
+							getTextResourceService().getText( MESSAGE_XML_MODUL_B_PDFA )
+									+ getTextResourceService().getText( ERROR_XML_AI_7, "iCategory_7" ) );
 				}
 				if ( exponent18 ) {
 					getMessageService().logError(
-							getTextResourceService().getText(
-									MESSAGE_XML_MODUL_B_PDFA )
-									+ getTextResourceService().getText(
-											ERROR_XML_AI_18, "iCategory_18" ) );
+							getTextResourceService().getText( MESSAGE_XML_MODUL_B_PDFA )
+									+ getTextResourceService().getText( ERROR_XML_AI_18, "iCategory_18" ) );
 				}
 				if ( producerFirstValidator.contentEquals( "PDFTron" ) || dual ) {
 					// Analog Modul A
@@ -1203,8 +1017,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 						NamedNodeMap nodeMap = dateiNode.getAttributes();
 						Node errorNode = nodeMap.getNamedItem( "Code" );
 						String errorCode = errorNode.getNodeValue();
-						String errorCodeMsg = "error.xml.ai."
-								+ errorCode.substring( 2 );
+						String errorCodeMsg = "error.xml.ai." + errorCode.substring( 2 );
 						Node errorNodeM = nodeMap.getNamedItem( "Message" );
 						String errorMessage = errorNodeM.getNodeValue();
 						String errorDigit = errorCode.substring( 6, 7 );
@@ -1213,19 +1026,14 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 								// Struktur Fehler -> B
 								isValid = false;
 								getMessageService().logError(
-										getTextResourceService().getText(
-												MESSAGE_XML_MODUL_B_PDFA )
-												+ getTextResourceService()
-														.getText( errorCodeMsg,
-																errorCode ) );
+										getTextResourceService().getText( MESSAGE_XML_MODUL_B_PDFA )
+												+ getTextResourceService().getText( errorCodeMsg, errorCode ) );
 							}
 						} catch ( Exception e ) {
 							getMessageService().logError(
-									getTextResourceService().getText(
-											MESSAGE_XML_MODUL_B_PDFA )
-											+ getTextResourceService().getText(
-													ERROR_XML_AI_TRANSLATE,
-													errorCode, errorMessage ) );
+									getTextResourceService().getText( MESSAGE_XML_MODUL_B_PDFA )
+											+ getTextResourceService().getText( ERROR_XML_AI_TRANSLATE, errorCode,
+													errorMessage ) );
 						}
 					}
 				}
@@ -1233,31 +1041,23 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 				/** Modul C **/
 				if ( exponent3 ) {
 					getMessageService().logError(
-							getTextResourceService().getText(
-									MESSAGE_XML_MODUL_C_PDFA )
-									+ getTextResourceService().getText(
-											ERROR_XML_AI_3, "iCategory_3" ) );
+							getTextResourceService().getText( MESSAGE_XML_MODUL_C_PDFA )
+									+ getTextResourceService().getText( ERROR_XML_AI_3, "iCategory_3" ) );
 				}
 				if ( exponent4 ) {
 					getMessageService().logError(
-							getTextResourceService().getText(
-									MESSAGE_XML_MODUL_C_PDFA )
-									+ getTextResourceService().getText(
-											ERROR_XML_AI_4, "iCategory_4" ) );
+							getTextResourceService().getText( MESSAGE_XML_MODUL_C_PDFA )
+									+ getTextResourceService().getText( ERROR_XML_AI_4, "iCategory_4" ) );
 				}
 				if ( exponent5 ) {
 					getMessageService().logError(
-							getTextResourceService().getText(
-									MESSAGE_XML_MODUL_C_PDFA )
-									+ getTextResourceService().getText(
-											ERROR_XML_AI_5, "iCategory_5" ) );
+							getTextResourceService().getText( MESSAGE_XML_MODUL_C_PDFA )
+									+ getTextResourceService().getText( ERROR_XML_AI_5, "iCategory_5" ) );
 				}
 				if ( exponent6 ) {
 					getMessageService().logError(
-							getTextResourceService().getText(
-									MESSAGE_XML_MODUL_C_PDFA )
-									+ getTextResourceService().getText(
-											ERROR_XML_AI_6, "iCategory_6" ) );
+							getTextResourceService().getText( MESSAGE_XML_MODUL_C_PDFA )
+									+ getTextResourceService().getText( ERROR_XML_AI_6, "iCategory_6" ) );
 				}
 				if ( producerFirstValidator.contentEquals( "PDFTron" ) || dual ) {
 					// Analog Modul A
@@ -1267,8 +1067,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 						NamedNodeMap nodeMap = dateiNode.getAttributes();
 						Node errorNode = nodeMap.getNamedItem( "Code" );
 						String errorCode = errorNode.getNodeValue();
-						String errorCodeMsg = "error.xml.ai."
-								+ errorCode.substring( 2 );
+						String errorCodeMsg = "error.xml.ai." + errorCode.substring( 2 );
 						Node errorNodeM = nodeMap.getNamedItem( "Message" );
 						String errorMessage = errorNodeM.getNodeValue();
 						String errorDigit = errorCode.substring( 6, 7 );
@@ -1277,36 +1076,27 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 								// Grafik Fehler -> C
 								isValid = false;
 								getMessageService().logError(
-										getTextResourceService().getText(
-												MESSAGE_XML_MODUL_C_PDFA )
-												+ getTextResourceService()
-														.getText( errorCodeMsg,
-																errorCode ) );
+										getTextResourceService().getText( MESSAGE_XML_MODUL_C_PDFA )
+												+ getTextResourceService().getText( errorCodeMsg, errorCode ) );
 							}
 						} catch ( Exception e ) {
 							getMessageService().logError(
-									getTextResourceService().getText(
-											MESSAGE_XML_MODUL_C_PDFA )
-											+ getTextResourceService().getText(
-													ERROR_XML_AI_TRANSLATE,
-													errorCode, errorMessage ) );
+									getTextResourceService().getText( MESSAGE_XML_MODUL_C_PDFA )
+											+ getTextResourceService().getText( ERROR_XML_AI_TRANSLATE, errorCode,
+													errorMessage ) );
 						}
 					}
 				}
 				/** Modul D **/
 				if ( exponent8 ) {
 					getMessageService().logError(
-							getTextResourceService().getText(
-									MESSAGE_XML_MODUL_D_PDFA )
-									+ getTextResourceService().getText(
-											ERROR_XML_AI_8, "iCategory_8" ) );
+							getTextResourceService().getText( MESSAGE_XML_MODUL_D_PDFA )
+									+ getTextResourceService().getText( ERROR_XML_AI_8, "iCategory_8" ) );
 				}
 				if ( exponent9 ) {
 					getMessageService().logError(
-							getTextResourceService().getText(
-									MESSAGE_XML_MODUL_D_PDFA )
-									+ getTextResourceService().getText(
-											ERROR_XML_AI_9, "iCategory_9" ) );
+							getTextResourceService().getText( MESSAGE_XML_MODUL_D_PDFA )
+									+ getTextResourceService().getText( ERROR_XML_AI_9, "iCategory_9" ) );
 				}
 				if ( producerFirstValidator.contentEquals( "PDFTron" ) || dual ) {
 					// Analog Modul A
@@ -1316,8 +1106,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 						NamedNodeMap nodeMap = dateiNode.getAttributes();
 						Node errorNode = nodeMap.getNamedItem( "Code" );
 						String errorCode = errorNode.getNodeValue();
-						String errorCodeMsg = "error.xml.ai."
-								+ errorCode.substring( 2 );
+						String errorCodeMsg = "error.xml.ai." + errorCode.substring( 2 );
 						Node errorNodeM = nodeMap.getNamedItem( "Message" );
 						String errorMessage = errorNodeM.getNodeValue();
 						String errorDigit = errorCode.substring( 6, 7 );
@@ -1326,29 +1115,22 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 								// Schrift Fehler -> D
 								isValid = false;
 								getMessageService().logError(
-										getTextResourceService().getText(
-												MESSAGE_XML_MODUL_D_PDFA )
-												+ getTextResourceService()
-														.getText( errorCodeMsg,
-																errorCode ) );
+										getTextResourceService().getText( MESSAGE_XML_MODUL_D_PDFA )
+												+ getTextResourceService().getText( errorCodeMsg, errorCode ) );
 							}
 						} catch ( Exception e ) {
 							getMessageService().logError(
-									getTextResourceService().getText(
-											MESSAGE_XML_MODUL_D_PDFA )
-											+ getTextResourceService().getText(
-													ERROR_XML_AI_TRANSLATE,
-													errorCode, errorMessage ) );
+									getTextResourceService().getText( MESSAGE_XML_MODUL_D_PDFA )
+											+ getTextResourceService().getText( ERROR_XML_AI_TRANSLATE, errorCode,
+													errorMessage ) );
 						}
 					}
 				}
 				/** Modul E **/
 				if ( exponent10 ) {
 					getMessageService().logError(
-							getTextResourceService().getText(
-									MESSAGE_XML_MODUL_E_PDFA )
-									+ getTextResourceService().getText(
-											ERROR_XML_AI_10, "iCategory_10" ) );
+							getTextResourceService().getText( MESSAGE_XML_MODUL_E_PDFA )
+									+ getTextResourceService().getText( ERROR_XML_AI_10, "iCategory_10" ) );
 				}
 				if ( producerFirstValidator.contentEquals( "PDFTron" ) || dual ) {
 					// Analog Modul A
@@ -1358,8 +1140,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 						NamedNodeMap nodeMap = dateiNode.getAttributes();
 						Node errorNode = nodeMap.getNamedItem( "Code" );
 						String errorCode = errorNode.getNodeValue();
-						String errorCodeMsg = "error.xml.ai."
-								+ errorCode.substring( 2 );
+						String errorCodeMsg = "error.xml.ai." + errorCode.substring( 2 );
 						Node errorNodeM = nodeMap.getNamedItem( "Message" );
 						String errorMessage = errorNodeM.getNodeValue();
 						String errorDigit = errorCode.substring( 6, 7 );
@@ -1368,50 +1149,37 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 								// Transparenz Fehler -> E
 								isValid = false;
 								getMessageService().logError(
-										getTextResourceService().getText(
-												MESSAGE_XML_MODUL_E_PDFA )
-												+ getTextResourceService()
-														.getText( errorCodeMsg,
-																errorCode ) );
+										getTextResourceService().getText( MESSAGE_XML_MODUL_E_PDFA )
+												+ getTextResourceService().getText( errorCodeMsg, errorCode ) );
 							}
 						} catch ( Exception e ) {
 							getMessageService().logError(
-									getTextResourceService().getText(
-											MESSAGE_XML_MODUL_E_PDFA )
-											+ getTextResourceService().getText(
-													ERROR_XML_AI_TRANSLATE,
-													errorCode, errorMessage ) );
+									getTextResourceService().getText( MESSAGE_XML_MODUL_E_PDFA )
+											+ getTextResourceService().getText( ERROR_XML_AI_TRANSLATE, errorCode,
+													errorMessage ) );
 						}
 					}
 				}
 				/** Modul F **/
 				if ( exponent11 ) {
 					getMessageService().logError(
-							getTextResourceService().getText(
-									MESSAGE_XML_MODUL_F_PDFA )
-									+ getTextResourceService().getText(
-											ERROR_XML_AI_11, "iCategory_11" ) );
+							getTextResourceService().getText( MESSAGE_XML_MODUL_F_PDFA )
+									+ getTextResourceService().getText( ERROR_XML_AI_11, "iCategory_11" ) );
 				}
 				if ( exponent12 ) {
 					getMessageService().logError(
-							getTextResourceService().getText(
-									MESSAGE_XML_MODUL_F_PDFA )
-									+ getTextResourceService().getText(
-											ERROR_XML_AI_12, "iCategory_12" ) );
+							getTextResourceService().getText( MESSAGE_XML_MODUL_F_PDFA )
+									+ getTextResourceService().getText( ERROR_XML_AI_12, "iCategory_12" ) );
 				}
 				if ( exponent13 ) {
 					getMessageService().logError(
-							getTextResourceService().getText(
-									MESSAGE_XML_MODUL_F_PDFA )
-									+ getTextResourceService().getText(
-											ERROR_XML_AI_13, "iCategory_13" ) );
+							getTextResourceService().getText( MESSAGE_XML_MODUL_F_PDFA )
+									+ getTextResourceService().getText( ERROR_XML_AI_13, "iCategory_13" ) );
 				}
 				if ( exponent14 ) {
 					getMessageService().logError(
-							getTextResourceService().getText(
-									MESSAGE_XML_MODUL_F_PDFA )
-									+ getTextResourceService().getText(
-											ERROR_XML_AI_14, "iCategory_14" ) );
+							getTextResourceService().getText( MESSAGE_XML_MODUL_F_PDFA )
+									+ getTextResourceService().getText( ERROR_XML_AI_14, "iCategory_14" ) );
 				}
 				if ( producerFirstValidator.contentEquals( "PDFTron" ) || dual ) {
 					// Analog Modul A
@@ -1421,8 +1189,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 						NamedNodeMap nodeMap = dateiNode.getAttributes();
 						Node errorNode = nodeMap.getNamedItem( "Code" );
 						String errorCode = errorNode.getNodeValue();
-						String errorCodeMsg = "error.xml.ai."
-								+ errorCode.substring( 2 );
+						String errorCodeMsg = "error.xml.ai." + errorCode.substring( 2 );
 						Node errorNodeM = nodeMap.getNamedItem( "Message" );
 						String errorMessage = errorNodeM.getNodeValue();
 						String errorDigit = errorCode.substring( 6, 7 );
@@ -1431,29 +1198,22 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 								// Annotations Fehler -> F
 								isValid = false;
 								getMessageService().logError(
-										getTextResourceService().getText(
-												MESSAGE_XML_MODUL_F_PDFA )
-												+ getTextResourceService()
-														.getText( errorCodeMsg,
-																errorCode ) );
+										getTextResourceService().getText( MESSAGE_XML_MODUL_F_PDFA )
+												+ getTextResourceService().getText( errorCodeMsg, errorCode ) );
 							}
 						} catch ( Exception e ) {
 							getMessageService().logError(
-									getTextResourceService().getText(
-											MESSAGE_XML_MODUL_F_PDFA )
-											+ getTextResourceService().getText(
-													ERROR_XML_AI_TRANSLATE,
-													errorCode, errorMessage ) );
+									getTextResourceService().getText( MESSAGE_XML_MODUL_F_PDFA )
+											+ getTextResourceService().getText( ERROR_XML_AI_TRANSLATE, errorCode,
+													errorMessage ) );
 						}
 					}
 				}
 				/** Modul G **/
 				if ( exponent15 ) {
 					getMessageService().logError(
-							getTextResourceService().getText(
-									MESSAGE_XML_MODUL_G_PDFA )
-									+ getTextResourceService().getText(
-											ERROR_XML_AI_15, "iCategory_15" ) );
+							getTextResourceService().getText( MESSAGE_XML_MODUL_G_PDFA )
+									+ getTextResourceService().getText( ERROR_XML_AI_15, "iCategory_15" ) );
 				}
 				if ( producerFirstValidator.contentEquals( "PDFTron" ) || dual ) {
 					// Analog Modul A
@@ -1463,8 +1223,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 						NamedNodeMap nodeMap = dateiNode.getAttributes();
 						Node errorNode = nodeMap.getNamedItem( "Code" );
 						String errorCode = errorNode.getNodeValue();
-						String errorCodeMsg = "error.xml.ai."
-								+ errorCode.substring( 2 );
+						String errorCodeMsg = "error.xml.ai." + errorCode.substring( 2 );
 						Node errorNodeM = nodeMap.getNamedItem( "Message" );
 						String errorMessage = errorNodeM.getNodeValue();
 						String errorDigit = errorCode.substring( 6, 7 );
@@ -1473,41 +1232,30 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 								// Aktions Fehler -> G
 								isValid = false;
 								getMessageService().logError(
-										getTextResourceService().getText(
-												MESSAGE_XML_MODUL_G_PDFA )
-												+ getTextResourceService()
-														.getText( errorCodeMsg,
-																errorCode ) );
+										getTextResourceService().getText( MESSAGE_XML_MODUL_G_PDFA )
+												+ getTextResourceService().getText( errorCodeMsg, errorCode ) );
 							}
-							// neu sind die Interaktionen (J) bei den Aktionen
-							// (G)
+							// neu sind die Interaktionen (J) bei den Aktionen (G)
 							if ( errorDigit.equals( "9" ) ) {
 								// Interaktions Fehler -> J
 								isValid = false;
 								getMessageService().logError(
-										getTextResourceService().getText(
-												MESSAGE_XML_MODUL_G_PDFA )
-												+ getTextResourceService()
-														.getText( errorCodeMsg,
-																errorCode ) );
+										getTextResourceService().getText( MESSAGE_XML_MODUL_G_PDFA )
+												+ getTextResourceService().getText( errorCodeMsg, errorCode ) );
 							}
 						} catch ( Exception e ) {
 							getMessageService().logError(
-									getTextResourceService().getText(
-											MESSAGE_XML_MODUL_G_PDFA )
-											+ getTextResourceService().getText(
-													ERROR_XML_AI_TRANSLATE,
-													errorCode, errorMessage ) );
+									getTextResourceService().getText( MESSAGE_XML_MODUL_G_PDFA )
+											+ getTextResourceService().getText( ERROR_XML_AI_TRANSLATE, errorCode,
+													errorMessage ) );
 						}
 					}
 				}
 				/** Modul H **/
 				if ( exponent16 ) {
 					getMessageService().logError(
-							getTextResourceService().getText(
-									MESSAGE_XML_MODUL_H_PDFA )
-									+ getTextResourceService().getText(
-											ERROR_XML_AI_16, "iCategory_16" ) );
+							getTextResourceService().getText( MESSAGE_XML_MODUL_H_PDFA )
+									+ getTextResourceService().getText( ERROR_XML_AI_16, "iCategory_16" ) );
 				}
 				if ( producerFirstValidator.contentEquals( "PDFTron" ) || dual ) {
 					// Analog Modul A
@@ -1517,8 +1265,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 						NamedNodeMap nodeMap = dateiNode.getAttributes();
 						Node errorNode = nodeMap.getNamedItem( "Code" );
 						String errorCode = errorNode.getNodeValue();
-						String errorCodeMsg = "error.xml.ai."
-								+ errorCode.substring( 2 );
+						String errorCodeMsg = "error.xml.ai." + errorCode.substring( 2 );
 						Node errorNodeM = nodeMap.getNamedItem( "Message" );
 						String errorMessage = errorNodeM.getNodeValue();
 						String errorDigit = errorCode.substring( 6, 7 );
@@ -1527,29 +1274,22 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 								// Metadaten Fehler -> H
 								isValid = false;
 								getMessageService().logError(
-										getTextResourceService().getText(
-												MESSAGE_XML_MODUL_H_PDFA )
-												+ getTextResourceService()
-														.getText( errorCodeMsg,
-																errorCode ) );
+										getTextResourceService().getText( MESSAGE_XML_MODUL_H_PDFA )
+												+ getTextResourceService().getText( errorCodeMsg, errorCode ) );
 							}
 						} catch ( Exception e ) {
 							getMessageService().logError(
-									getTextResourceService().getText(
-											MESSAGE_XML_MODUL_H_PDFA )
-											+ getTextResourceService().getText(
-													ERROR_XML_AI_TRANSLATE,
-													errorCode, errorMessage ) );
+									getTextResourceService().getText( MESSAGE_XML_MODUL_H_PDFA )
+											+ getTextResourceService().getText( ERROR_XML_AI_TRANSLATE, errorCode,
+													errorMessage ) );
 						}
 					}
 				}
 				/** Modul I **/
 				if ( exponent17 ) {
 					getMessageService().logError(
-							getTextResourceService().getText(
-									MESSAGE_XML_MODUL_I_PDFA )
-									+ getTextResourceService().getText(
-											ERROR_XML_AI_17, "iCategory_17" ) );
+							getTextResourceService().getText( MESSAGE_XML_MODUL_I_PDFA )
+									+ getTextResourceService().getText( ERROR_XML_AI_17, "iCategory_17" ) );
 				}
 				if ( producerFirstValidator.contentEquals( "PDFTron" ) || dual ) {
 					// Analog Modul A
@@ -1559,8 +1299,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 						NamedNodeMap nodeMap = dateiNode.getAttributes();
 						Node errorNode = nodeMap.getNamedItem( "Code" );
 						String errorCode = errorNode.getNodeValue();
-						String errorCodeMsg = "error.xml.ai."
-								+ errorCode.substring( 2 );
+						String errorCodeMsg = "error.xml.ai." + errorCode.substring( 2 );
 						Node errorNodeM = nodeMap.getNamedItem( "Message" );
 						String errorMessage = errorNodeM.getNodeValue();
 						String errorDigit = errorCode.substring( 6, 7 );
@@ -1569,19 +1308,14 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 								// Zugänglichkeit Fehler -> I
 								isValid = false;
 								getMessageService().logError(
-										getTextResourceService().getText(
-												MESSAGE_XML_MODUL_I_PDFA )
-												+ getTextResourceService()
-														.getText( errorCodeMsg,
-																errorCode ) );
+										getTextResourceService().getText( MESSAGE_XML_MODUL_I_PDFA )
+												+ getTextResourceService().getText( errorCodeMsg, errorCode ) );
 							}
 						} catch ( Exception e ) {
 							getMessageService().logError(
-									getTextResourceService().getText(
-											MESSAGE_XML_MODUL_I_PDFA )
-											+ getTextResourceService().getText(
-													ERROR_XML_AI_TRANSLATE,
-													errorCode, errorMessage ) );
+									getTextResourceService().getText( MESSAGE_XML_MODUL_I_PDFA )
+											+ getTextResourceService().getText( ERROR_XML_AI_TRANSLATE, errorCode,
+													errorMessage ) );
 						}
 					}
 				}
@@ -1597,8 +1331,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 		} catch ( Exception e ) {
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-							+ getTextResourceService().getText(
-									ERROR_XML_UNKNOWN, e.getMessage() ) );
+							+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 		}
 		return isValid;
 	}
