@@ -51,8 +51,12 @@ import ch.kostceco.tools.kostval.validation.modulesiard.ValidationFrowModule;
  * @param <Range>
  * @param <RangeHandler> */
 
-public class ValidationFrowModuleImpl<Range, RangeHandler> extends ValidationModuleImpl implements
-		ValidationFrowModule
+public class ValidationFrowModuleImpl extends ValidationModuleImpl implements ValidationFrowModule
+/* public class ValidationFrowModuleImpl<Range, RangeHandler> extends ValidationModuleImpl
+ * implements ValidationFrowModule
+ * 
+ * <Range, RangeHandler> bereitet Probleme beim Projekt-Build. Da es nicht benötigt wird, wurde es
+ * entfernt. */
 {
 	private static final int		UNBOUNDED	= -1;
 
