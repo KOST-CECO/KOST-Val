@@ -154,6 +154,12 @@ public class ValidationFrowModuleImpl<Range, RangeHandler> extends
 
 		return valid;
 	}
+	
+	private class Range
+	{
+		public int	min	= 1;
+		public int	max	= 1;
+	}
 
 	private boolean validateSchema( Element schema, Namespace ns,
 			String pathToWorkDir )
@@ -340,11 +346,13 @@ public class ValidationFrowModuleImpl<Range, RangeHandler> extends
 		}
 	}
 
-	private class Range
+	// Nach oben verschoben, da beim Projekt-Build ein Fehler entsteht, der
+	// möglicherweise darauf zurückzuführen ist
+	/* 	private class Range
 	{
 		public int	min	= 1;
 		public int	max	= 1;
-	}
+	}*/
 
 	public boolean prepareValidation( ValidationContext validationContext )
 			throws IOException, JDOMException, Exception
