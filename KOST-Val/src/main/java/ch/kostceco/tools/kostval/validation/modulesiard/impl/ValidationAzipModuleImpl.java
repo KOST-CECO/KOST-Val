@@ -48,6 +48,7 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 		System.out.print( "\r" );
 
 		boolean valid = false;
+		boolean validC = false;
 
 		// die Datei darf kein Directory sein
 		if ( valDatei.isDirectory() ) {
@@ -102,28 +103,94 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 			return false;
 		}
 
-		// Das ZIP-Archiv darf nicht komprimiert sein
-		Zip64File zf = null;
+		// Die byte 6-9 müssen 00 00 00 00 (/ 00 00 08 00 / 02 00 08 00) sein
+		FileReader fr69 = null;
 		try {
-			Integer compressed = 0;
-			// Versuche das ZIP file zu öffnen
-			zf = new Zip64File( valDatei );
-			// auslesen der Komprimierungsmethode aus allen FileEntries der zip(64)-Datei
-			List<FileEntry> fileEntryList = zf.getListFileEntries();
-			for ( FileEntry fileEntry : fileEntryList ) {
-				compressed = fileEntry.getMethod() + compressed;
-				// Compression method for uncompressed entries = STORED = 0
+			fr69 = new FileReader( valDatei );
+			BufferedReader read = new BufferedReader( fr69 );
+
+			// Hex 00 in Char umwandeln
+			String str00 = "00";
+			int i00 = Integer.parseInt( str00, 16 );
+			char c00 = (char) i00;
+			// Hex 02 in Char umwandeln
+			String str02 = "02";
+			int i02 = Integer.parseInt( str02, 16 );
+			char c02 = (char) i02;
+			// Hex 08 in Char umwandeln
+			String str08 = "08";
+			int i08 = Integer.parseInt( str08, 16 );
+			char c08 = (char) i08;
+
+			// auslesen der 6-9 Zeichen der Datei
+			int length;
+			int i;
+			char[] buffer = new char[9];
+			char c6 = 0;
+			char c7 = 0;
+			char c8 = 0;
+			char c9 = 0;
+			length = read.read( buffer );
+			for ( i = 6; i != length; i++ ) {
+				if ( i == 6 ) {
+					c6 = buffer[i];
+				} else if ( i == 7 ) {
+					c7 = buffer[i];
+				} else if ( i == 8 ) {
+					c8 = buffer[i];
+				}
+				if ( i == 9 ) {
+					c9 = buffer[i];
+				}
 			}
-			// und wenn es klappt, gleich wieder schliessen
-			zf.close();
-			if ( compressed == 0 ) {
-				// erlaubtes unkomprimiertes ZIP
-				valid = true;
+
+			// die beiden charArrays (soll und ist) mit einander vergleichen
+			char[] charArray1 = new char[] { c6, c7, c8, c9 };
+			char[] charArray2 = new char[] { c00, c00, c00, c00 }; // store
+			char[] charArray3 = new char[] { c00, c00, c08, c00 }; // defN
+			char[] charArray4 = new char[] { c02, c00, c08, c00 }; // defX
+
+			if ( Arrays.equals( charArray1, charArray3 ) ) {
+				// defN: DEFLATED-Normal) -> kann durch zip64 gelesen werden
+
+				// TODO: validC = true sobald Addendum 1 durch ist
+				validC = false;
+			} else if ( Arrays.equals( charArray1, charArray4 ) ) {
+				// defX: DEFLATED-Maximum) -> kann durch zip64 gelesen werden
+
+				// TODO: validC = true sobald Addendum 1 durch ist
+				validC = false;
+			} else if ( Arrays.equals( charArray1, charArray2 ) ) {
+				// höchstwahrscheinlich ein unkomprimiertes ZIP
+				validC = true;
+			} else {
+				validC = false;
+			}
+			if ( validC ) {
+				// Versuche das ZIP file zu öffnen
+				Zip64File zf = null;
+				try {
+					Integer compressed = 0;
+					zf = new Zip64File( valDatei );
+					// auslesen der Komprimierungsmethode aus allen FileEntries der zip(64)-Datei
+					List<FileEntry> fileEntryList = zf.getListFileEntries();
+					for ( FileEntry fileEntry : fileEntryList ) {
+						compressed = fileEntry.getMethod() + compressed;
+						// Compression method for uncompressed entries = STORED = 0
+					}
+					// und wenn es klappt, gleich wieder schliessen
+					zf.close();
+				} catch ( Exception e ) {
+					getMessageService().logError(
+							getTextResourceService().getText( MESSAGE_XML_MODUL_A_SIARD )
+									+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+					return false;
+				}
 			} else {
 				getMessageService().logError(
 						getTextResourceService().getText( MESSAGE_XML_MODUL_A_SIARD )
 								+ getTextResourceService().getText( ERROR_XML_A_DEFLATED ) );
-				// Die SIARD-Datei ist komprimiert.
+				// TODO: Die Fehlermeldung entsprechend anpassen!
 				return false;
 			}
 		} catch ( Exception e ) {
@@ -132,7 +199,6 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 							+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
-
 		return (valid);
 	}
 }
