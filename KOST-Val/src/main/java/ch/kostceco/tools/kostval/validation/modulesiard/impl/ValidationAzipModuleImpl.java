@@ -49,6 +49,10 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 
 		boolean valid = false;
 		boolean validC = false;
+		/*boolean store = false;
+		boolean def = false;
+		boolean defX = false;
+		boolean defN = false;*/
 
 		// die Datei darf kein Directory sein
 		if ( valDatei.isDirectory() ) {
@@ -103,40 +107,35 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 			return false;
 		}
 
-		// Die byte 6-9 müssen 00 00 00 00 (/ 00 00 08 00 / 02 00 08 00) sein
-		FileReader fr69 = null;
+		// Die byte 8 und 9 müssen 00 00 STORE / 08 00 DEFLATE sein
+
+		/* Dies ergibt jedoch nur ein Indix darauf, wie die Dateien gezipt sind. Dies weil in einem
+		 * Zip unterschiedliche Komprimierungen verwendet werden können und die erste Kopmprimierung
+		 * nicht das ganze Zip abbildet. */
+		FileReader fr89 = null;
 		try {
-			fr69 = new FileReader( valDatei );
-			BufferedReader read = new BufferedReader( fr69 );
+			fr89 = new FileReader( valDatei );
+			BufferedReader read = new BufferedReader( fr89 );
 
 			// Hex 00 in Char umwandeln
 			String str00 = "00";
 			int i00 = Integer.parseInt( str00, 16 );
 			char c00 = (char) i00;
-			// Hex 02 in Char umwandeln
-			String str02 = "02";
-			int i02 = Integer.parseInt( str02, 16 );
-			char c02 = (char) i02;
 			// Hex 08 in Char umwandeln
 			String str08 = "08";
 			int i08 = Integer.parseInt( str08, 16 );
 			char c08 = (char) i08;
 
-			// auslesen der 6-9 Zeichen der Datei
+			// auslesen der 8-9 Zeichen der Datei
+
 			int length;
 			int i;
 			char[] buffer = new char[9];
-			char c6 = 0;
-			char c7 = 0;
 			char c8 = 0;
 			char c9 = 0;
 			length = read.read( buffer );
-			for ( i = 6; i != length; i++ ) {
-				if ( i == 6 ) {
-					c6 = buffer[i];
-				} else if ( i == 7 ) {
-					c7 = buffer[i];
-				} else if ( i == 8 ) {
+			for ( i = 8; i != length; i++ ) {
+				if ( i == 8 ) {
 					c8 = buffer[i];
 				}
 				if ( i == 9 ) {
@@ -145,19 +144,16 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 			}
 
 			// die beiden charArrays (soll und ist) mit einander vergleichen
-			char[] charArray1 = new char[] { c6, c7, c8, c9 };
-			char[] charArray2 = new char[] { c00, c00, c00, c00 }; // store
-			char[] charArray3 = new char[] { c00, c00, c08, c00 }; // defN
-			char[] charArray4 = new char[] { c02, c00, c08, c00 }; // defX
-
+			char[] charArray1 = new char[] { c8, c9 };
+			char[] charArray2 = new char[] { c00, c00 }; // store
+			char[] charArray3 = new char[] { c08, c00 }; // def
+			
+			String hex8 = String.format("%04x", (int) c8);
+			int dec8 = Integer.parseInt(hex8, 16);
+			
 			if ( Arrays.equals( charArray1, charArray3 ) ) {
-				// defN: DEFLATED-Normal) -> kann durch zip64 gelesen werden
-
-				// TODO: validC = true sobald Addendum 1 durch ist
-				validC = false;
-			} else if ( Arrays.equals( charArray1, charArray4 ) ) {
-				// defX: DEFLATED-Maximum) -> kann durch zip64 gelesen werden
-
+				// def: DEFLATED
+				
 				// TODO: validC = true sobald Addendum 1 durch ist
 				validC = false;
 			} else if ( Arrays.equals( charArray1, charArray2 ) ) {
@@ -166,6 +162,7 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 			} else {
 				validC = false;
 			}
+			
 			if ( validC ) {
 				// Versuche das ZIP file zu öffnen
 				Zip64File zf = null;
@@ -175,22 +172,39 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 					// auslesen der Komprimierungsmethode aus allen FileEntries der zip(64)-Datei
 					List<FileEntry> fileEntryList = zf.getListFileEntries();
 					for ( FileEntry fileEntry : fileEntryList ) {
-						compressed = fileEntry.getMethod() + compressed;
+						compressed = fileEntry.getMethod();
 						// Compression method for uncompressed entries = STORED = 0
+						// Compression method for deflate compression = 8
+						if ( compressed==8 ) {
+							// def: DEFLATE  
+							getMessageService().logError(
+									getTextResourceService().getText( MESSAGE_XML_MODUL_A_SIARD )
+											+ getTextResourceService().getText( ERROR_XML_A_DEFLATED, compressed) );
+							// TODO: Die Fehlermeldung und return false löschen
+							return false;
+						} else if ( compressed==0 ) {
+							// store element  
+						} else {
+							// weder store noch def  
+							getMessageService().logError(
+									getTextResourceService().getText( MESSAGE_XML_MODUL_A_SIARD )
+											+ getTextResourceService().getText( ERROR_XML_A_DEFLATED, compressed) );
+							return false;
+						}
 					}
 					// und wenn es klappt, gleich wieder schliessen
 					zf.close();
 				} catch ( Exception e ) {
 					getMessageService().logError(
 							getTextResourceService().getText( MESSAGE_XML_MODUL_A_SIARD )
-									+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+									+ getTextResourceService().getText( ERROR_XML_A_INCORRECTZIP, e.getMessage() ) );
 					return false;
 				}
 			} else {
 				getMessageService().logError(
 						getTextResourceService().getText( MESSAGE_XML_MODUL_A_SIARD )
-								+ getTextResourceService().getText( ERROR_XML_A_DEFLATED ) );
-				// TODO: Die Fehlermeldung entsprechend anpassen!
+								+ getTextResourceService().getText( ERROR_XML_A_DEFLATED, dec8 ) );
+				// TODO: Die vorbereitete Fehlermeldung auskommentieren!
 				return false;
 			}
 		} catch ( Exception e ) {

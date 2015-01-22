@@ -149,6 +149,7 @@ public interface MessageConstants
 	String	ERROR_XML_A_NOFILE														= "error.xml.a.nofile";
 	String	ERROR_XML_A_INCORRECTFILEENDING_SIARD					= "error.xml.a.incorrectfileending.siard";
 	String	ERROR_XML_A_DEFLATED													= "error.xml.a.deflated";
+	String	ERROR_XML_A_INCORRECTZIP											= "error.xml.a.incorrectzip";
 
 	// Modul B Meldungen
 	String	MESSAGE_XML_B_NOTALLOWEDFILE									= "message.xml.b.notallowedfile";

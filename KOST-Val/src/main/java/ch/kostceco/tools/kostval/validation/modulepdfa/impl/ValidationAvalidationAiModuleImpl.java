@@ -955,18 +955,22 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 						NamedNodeMap nodeMap = dateiNode.getAttributes();
 						Node errorNode = nodeMap.getNamedItem( "Code" );
 						String errorCode = errorNode.getNodeValue();
-						String errorCodeMsg = "error.xml.ai." + errorCode.substring( 2 );
-						Node errorNodeM = nodeMap.getNamedItem( "Message" );
-						String errorMessage = errorNodeM.getNodeValue();
 						errorDigitA = errorCode.substring( 6, 7 );
 
-						// der Error Code kann auch "Unknown" sein, dieser wird in den Code "0" übersetzt
+						// der Error Code kann auch "_Unknown" sein, dieser wird in den Code "0" übersetzt
+						// e_PDF_Unknown ist meist ein korruptes oder verschlüsseltes Dokument
+						if ( errorDigitA.equals( "_" ) ) {
+							errorDigitA = "0";
+						}
 						if ( errorDigitA.equals( "U" ) ) {
 							errorDigitA = "0";
 						}
 						if ( errorDigitA.equals( "n" ) ) {
 							errorDigitA = "0";
 						}
+						String errorCodeMsg = "error.xml.ai." + errorCode.substring( 2 );
+						Node errorNodeM = nodeMap.getNamedItem( "Message" );
+						String errorMessage = errorNodeM.getNodeValue();
 						try {
 							if ( errorDigitA.equals( "0" ) ) {
 
