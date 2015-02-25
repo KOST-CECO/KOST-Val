@@ -2,6 +2,7 @@
 <project default="create_run_jar_de_fr_en" name="Create Runnable Jar for Project KOST-Val DE, FR, EN">
 	<!--ANT 1.7 is required                                        -->
 	<target name="create_run_jar_de_fr_en">
+        <mkdir dir="../KOST-Val_TEST"/>
 		<!--Kopiere de_messages.properties in target und erstelle kostval_de.jar -->
 		<copy file="KOST-Val/src/main/resources/de_messages.properties" overwrite="true" tofile="KOST-Val/target/classes/messages.properties"/>
 		<jar destfile="../KOST-Val_TEST/kostval_de.jar">
