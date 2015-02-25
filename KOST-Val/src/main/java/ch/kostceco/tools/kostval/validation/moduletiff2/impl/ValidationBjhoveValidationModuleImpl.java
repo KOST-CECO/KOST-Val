@@ -29,6 +29,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationBjhoveValidationException;
 import ch.kostceco.tools.kostval.service.ConfigurationService;
@@ -140,6 +142,7 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl i
 			OutputStream outStream = null;
 
 			try {
+				// umkopieren, damit es gelöscht werden kann
 				File afile = jhoveReport;
 				File bfile = jhoveLog;
 				inStream = new FileInputStream( afile );
@@ -168,6 +171,8 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl i
 		try {
 			BufferedReader in = new BufferedReader( new FileReader( jhoveLog ) );
 			String line;
+			Set<String> lines = new LinkedHashSet<String>( 100000 ); // evtl vergrössern
+			int counter = 0;
 			while ( (line = in.readLine()) != null ) {
 
 				concatenatedOutputs.append( line );
@@ -186,10 +191,33 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl i
 					}
 				}
 				if ( line.contains( "ErrorMessage:" ) ) {
-					// Linie mit der Fehlermeldung auch mitausgeben
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_B_TIFF )
-									+ getTextResourceService().getText( MESSAGE_XML_B_JHOVEMESSAGE, line ) );
+
+					/* Linie mit der Fehlermeldung auch mitausgeben, falls diese neu ist.
+					 * 
+					 * Korrupte TIFF-Dateien enthalten mehrere Zehntausen Mal den gleichen Eintrag
+					 * "  ErrorMessage: Unknown data type: Type = 0, Tag = 0" In einem Test wurde so die
+					 * Anzahl Errors von 65'060 auf 63 reduziert */
+
+					if ( lines.contains( line ) ) {
+						// Diese Linie = Fehlermelung wurde bereits ausgegeben
+					} else {
+						// neue Fehlermeldung
+						counter = counter + 1;
+						// max 10 Meldungen im Modul B
+						if ( counter < 11 ) {
+							getMessageService().logError(
+									getTextResourceService().getText( MESSAGE_XML_MODUL_B_TIFF )
+											+ getTextResourceService().getText( MESSAGE_XML_B_JHOVEMESSAGE, line ) );
+							lines.add( line );
+						}
+						if ( counter == 11 ) {
+							getMessageService().logError(
+									getTextResourceService().getText( MESSAGE_XML_MODUL_B_TIFF )
+											+ getTextResourceService().getText( MESSAGE_XML_B_JHOVEMESSAGE,
+													" ErrorMessage: . . . " ) );
+							lines.add( line );
+						}
+					}
 				}
 			}
 			in.close();
@@ -224,5 +252,4 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl i
 
 		return isValid;
 	}
-
 }

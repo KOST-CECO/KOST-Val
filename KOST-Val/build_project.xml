@@ -1,112 +1,124 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project basedir="." default="build" name="KOST-Val">
-    <property environment="env"/>
-    <property name="ECLIPSE_HOME" value="../../../Projekte/SIARD.val.OSGi/Target Platform/equinox-SDK-3.7.2"/>
-    <property name="debuglevel" value="source,lines,vars"/>
-    <property name="target" value="1.6"/>
-    <property name="source" value="1.6"/>
-    <property name="source_encoding" value="ISO-8859-1"/>
-    <path id="Persisted container [org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER for project [KOST-Val]].libraryclasspath"/>
-    <path id="KOST-Val.classpath">
-        <pathelement location="target/classes"/>
-        <path refid="Persisted container [org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER for project [KOST-Val]].libraryclasspath"/>
-        <pathelement location="lib/commons-configuration-1.6.jar"/>
-        <pathelement location="lib/log4j-1.2.12.jar"/>
-        <pathelement location="lib/spring-context-3.0.0.RELEASE.jar"/>
-        <pathelement location="lib/commons-logging-1.1.1.jar"/>
-        <pathelement location="lib/commons-lang-2.4.jar"/>
-        <pathelement location="lib/spring-beans-3.0.0.RELEASE.jar"/>
-        <pathelement location="lib/spring-core-3.0.0.RELEASE.jar"/>
-        <pathelement location="lib/spring-asm-3.0.0.RELEASE.jar"/>
-        <pathelement location="lib/spring-aop-3.0.0.RELEASE.jar"/>
-        <pathelement location="lib/spring-expression-3.0.0.RELEASE.jar"/>
-        <pathelement location="lib/spring-jdbc-3.0.0.RELEASE.jar"/>
-        <pathelement location="lib/spring-orm-3.0.0.RELEASE.jar"/>
-        <pathelement location="lib/spring-security-core-3.0.0.RELEASE.jar"/>
-        <pathelement location="lib/spring-test-3.0.0.RELEASE.jar"/>
-        <pathelement location="lib/spring-tx-3.0.0.RELEASE.jar"/>
-        <pathelement location="lib/commons-beanutils-1.7.0.jar"/>
-        <pathelement location="lib/commons-beanutils-core-1.8.0.jar"/>
-        <pathelement location="lib/commons-collections-3.2.1.jar"/>
-        <pathelement location="lib/commons-digester-1.8.jar"/>
-        <pathelement location="lib/commons-io-2.0.jar"/>
-        <pathelement location="lib/xml-apis-2.7.1.jar"/>
-        <pathelement location="lib/zip64file-1.0.jar"/>
-        <pathelement location="lib/xercesImpl-2.7.1.jar"/>
-        <pathelement location="lib/junit-4.4.jar"/>
-        <pathelement location="lib/jdom-2.0.0.jar"/>
-        <pathelement location="lib/zip64-1.0.jar"/>
-        <pathelement location="lib/JhoveApp-1.5.jar"/>
-        <pathelement location="lib/droid-core-5.0.3.jar"/>
-        <pathelement location="lib/droid-export-5.0.3.jar"/>
-        <pathelement location="lib/droid-export-interfaces-5.0.3.jar"/>
-        <pathelement location="lib/droid-help-5.0.3.jar"/>
-        <pathelement location="lib/droid-interfaces-5.0.3.jar"/>
-        <pathelement location="lib/droid-report-5.0.3.jar"/>
-        <pathelement location="lib/droid-report-interfaces-5.0.3.jar"/>
-        <pathelement location="lib/droid-results-5.0.3.jar"/>
-        <pathelement location="lib/VALA-4.4.25.RELEASE.jar"/>
-    </path>
-    <target name="init">
-        <mkdir dir="target/classes"/>
-        <copy includeemptydirs="false" todir="target/classes">
-            <fileset dir="src/main/java">
-                <exclude name="**/*.launch"/>
-                <exclude name="**/*.java"/>
-            </fileset>
-        </copy>
-        <copy includeemptydirs="false" todir="target/classes">
-            <fileset dir="src/main/resources">
-                <exclude name="**/*.launch"/>
-                <exclude name="**/*.java"/>
-            </fileset>
-        </copy>
-		<copy file="README.md" todir="target/classes"/>
-    </target>
-    <target name="clean">
-        <delete dir="target/classes"/>
-    </target>
-    <target depends="clean" name="cleanall"/>
-    <target depends="build-subprojects,build-project" name="build"/>
-    <target name="build-subprojects"/>
-    <target depends="init" name="build-project">
-        <echo message="${ant.project.name}: ${ant.file}"/>
-        <javac debug="true" debuglevel="${debuglevel}" destdir="target/classes" source="${source}" target="${target}" encoding="${source_encoding}">
-            <src path="src/main/java"/>
-            <classpath refid="KOST-Val.classpath"/>
-        </javac>
-        <javac debug="true" debuglevel="${debuglevel}" destdir="target/classes" source="${source}" target="${target}">
-            <src path="src/main/resources"/>
-            <classpath refid="KOST-Val.classpath"/>
-        </javac>
-        <javac debug="true" debuglevel="${debuglevel}" destdir="target/classes" source="${source}" target="${target}" encoding="${source_encoding}">
-            <src path="."/>
-            <exclude name="src/"/>
-            <classpath refid="KOST-Val.classpath"/>
-        </javac>
-        <javac debug="true" debuglevel="${debuglevel}" destdir="target/classes" source="${source}" target="${target}" encoding="${source_encoding}">
-            <src path="src"/>
-			<exclude name="main/"/>
-            <classpath refid="KOST-Val.classpath"/>
-        </javac>
-    </target>
-    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
-    <target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
-        <copy todir="${ant.library.dir}">
-            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
-        </copy>
-        <unzip dest="${ant.library.dir}">
-            <patternset includes="jdtCompilerAdapter.jar"/>
-            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
-        </unzip>
-    </target>
-    <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
-        <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
-        <antcall target="build"/>
-    </target>
-    <target name="KOST-Val">
-        <java classname="ch.kostceco.tools.kostval.KOSTVal" failonerror="true" fork="yes">
-            <classpath refid="KOST-Val.classpath"/>
-        </java>
-    </target>
+	<property environment="env" />
+	<property name="ECLIPSE_HOME"
+		value="../../../Projekte/SIARD.val.OSGi/Target Platform/equinox-SDK-3.7.2" />
+	<property name="debuglevel" value="source,lines,vars" />
+	<property name="target" value="1.6" />
+	<property name="source" value="1.6" />
+	<property name="source_encoding" value="ISO-8859-1" />
+	<path
+		id="Persisted container [org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER for project [KOST-Val]].libraryclasspath" />
+	<path id="KOST-Val.classpath">
+		<pathelement location="target/classes" />
+		<path
+			refid="Persisted container [org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER for project [KOST-Val]].libraryclasspath" />
+		<pathelement location="lib/commons-configuration-1.6.jar" />
+		<pathelement location="lib/log4j-1.2.12.jar" />
+		<pathelement location="lib/spring-context-3.0.0.RELEASE.jar" />
+		<pathelement location="lib/commons-logging-1.1.1.jar" />
+		<pathelement location="lib/commons-lang-2.4.jar" />
+		<pathelement location="lib/spring-beans-3.0.0.RELEASE.jar" />
+		<pathelement location="lib/spring-core-3.0.0.RELEASE.jar" />
+		<pathelement location="lib/spring-asm-3.0.0.RELEASE.jar" />
+		<pathelement location="lib/spring-aop-3.0.0.RELEASE.jar" />
+		<pathelement location="lib/spring-expression-3.0.0.RELEASE.jar" />
+		<pathelement location="lib/spring-jdbc-3.0.0.RELEASE.jar" />
+		<pathelement location="lib/spring-orm-3.0.0.RELEASE.jar" />
+		<pathelement location="lib/spring-security-core-3.0.0.RELEASE.jar" />
+		<pathelement location="lib/spring-test-3.0.0.RELEASE.jar" />
+		<pathelement location="lib/spring-tx-3.0.0.RELEASE.jar" />
+		<pathelement location="lib/commons-beanutils-1.7.0.jar" />
+		<pathelement location="lib/commons-beanutils-core-1.8.0.jar" />
+		<pathelement location="lib/commons-collections-3.2.1.jar" />
+		<pathelement location="lib/commons-digester-1.8.jar" />
+		<pathelement location="lib/commons-io-2.0.jar" />
+		<pathelement location="lib/xml-apis-2.7.1.jar" />
+		<pathelement location="lib/zip64file-1.0.jar" />
+		<pathelement location="lib/xercesImpl-2.7.1.jar" />
+		<pathelement location="lib/junit-4.4.jar" />
+		<pathelement location="lib/jdom-2.0.0.jar" />
+		<pathelement location="lib/zip64-1.0.jar" />
+		<pathelement location="lib/JhoveApp-1.5.jar" />
+		<pathelement location="lib/droid-core-5.0.3.jar" />
+		<pathelement location="lib/droid-export-5.0.3.jar" />
+		<pathelement location="lib/droid-export-interfaces-5.0.3.jar" />
+		<pathelement location="lib/droid-help-5.0.3.jar" />
+		<pathelement location="lib/droid-interfaces-5.0.3.jar" />
+		<pathelement location="lib/droid-report-5.0.3.jar" />
+		<pathelement location="lib/droid-report-interfaces-5.0.3.jar" />
+		<pathelement location="lib/droid-results-5.0.3.jar" />
+		<pathelement location="lib/VALA-4.5.6.RELEASE.jar" />
+	</path>
+	<target name="init">
+		<mkdir dir="target/classes" />
+		<copy includeemptydirs="false" todir="target/classes">
+			<fileset dir="src/main/java">
+				<exclude name="**/*.launch" />
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+		<copy includeemptydirs="false" todir="target/classes">
+			<fileset dir="src/main/resources">
+				<exclude name="**/*.launch" />
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+		<copy file="../README.md" todir="target/classes" />
+	</target>
+	<target name="clean">
+		<delete dir="target/classes" />
+	</target>
+	<target depends="clean" name="cleanall" />
+	<target depends="build-subprojects,build-project" name="build" />
+	<target name="build-subprojects" />
+	<target depends="init" name="build-project">
+		<echo message="${ant.project.name}: ${ant.file}" />
+		<javac debug="true" debuglevel="${debuglevel}" destdir="target/classes"
+			source="${source}" target="${target}" encoding="${source_encoding}">
+			<src path="src/main/java" />
+			<classpath refid="KOST-Val.classpath" />
+		</javac>
+		<javac debug="true" debuglevel="${debuglevel}" destdir="target/classes"
+			source="${source}" target="${target}">
+			<src path="src/main/resources" />
+			<classpath refid="KOST-Val.classpath" />
+		</javac>
+		<javac debug="true" debuglevel="${debuglevel}" destdir="target/classes"
+			source="${source}" target="${target}" encoding="${source_encoding}">
+			<src path="." />
+			<exclude name="src/" />
+			<classpath refid="KOST-Val.classpath" />
+		</javac>
+		<javac debug="true" debuglevel="${debuglevel}" destdir="target/classes"
+			source="${source}" target="${target}" encoding="${source_encoding}">
+			<src path="src" />
+			<exclude name="main/" />
+			<classpath refid="KOST-Val.classpath" />
+		</javac>
+	</target>
+	<target
+		description="Build all projects which reference this project. Useful to propagate changes."
+		name="build-refprojects" />
+	<target description="copy Eclipse compiler jars to ant lib directory"
+		name="init-eclipse-compiler">
+		<copy todir="${ant.library.dir}">
+			<fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar" />
+		</copy>
+		<unzip dest="${ant.library.dir}">
+			<patternset includes="jdtCompilerAdapter.jar" />
+			<fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar" />
+		</unzip>
+	</target>
+	<target description="compile project with Eclipse compiler"
+		name="build-eclipse-compiler">
+		<property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter" />
+		<antcall target="build" />
+	</target>
+	<target name="KOST-Val">
+		<java classname="ch.kostceco.tools.kostval.KOSTVal" failonerror="true"
+			fork="yes">
+			<classpath refid="KOST-Val.classpath" />
+		</java>
+	</target>
 </project>
