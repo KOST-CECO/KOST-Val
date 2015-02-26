@@ -1,6 +1,6 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2-Files and Submission
- * Information Package (SIP). Copyright (C) 2012-2014 Claire Röthlisberger (KOST-CECO), Christian
+ * Information Package (SIP). Copyright (C) 2012-2015 Claire Röthlisberger (KOST-CECO), Christian
  * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
  * KOST-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. This application
@@ -209,13 +209,15 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl i
 									getTextResourceService().getText( MESSAGE_XML_MODUL_B_TIFF )
 											+ getTextResourceService().getText( MESSAGE_XML_B_JHOVEMESSAGE, line ) );
 							lines.add( line );
-						}
-						if ( counter == 11 ) {
+						} else if ( counter == 11 ) {
 							getMessageService().logError(
 									getTextResourceService().getText( MESSAGE_XML_MODUL_B_TIFF )
 											+ getTextResourceService().getText( MESSAGE_XML_B_JHOVEMESSAGE,
-													" ErrorMessage: . . . " ) );
+													" ErrorMessage: . . ." ) );
 							lines.add( line );
+						} else {
+							// Modul B Abbrechen. Spart viel Zeit.
+							return false;
 						}
 					}
 				}
