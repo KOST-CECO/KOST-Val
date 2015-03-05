@@ -32,8 +32,8 @@ import ch.enterag.utils.zip.FileEntry;
 
 /** Validierungsschritt A (Lesbarkeit) Kann die SIARD-Datei gelesen werden? valid --> lesbare und
  * nicht passwortgeschützte ZIP-Datei oder ZIP64-Datei valid --> unkomprimierte ZIP64-Datei oder
- * unkomprimierte ZIP-Datei ==> Bei den Module A, B, C und D wird die Validierung abgebrochen,
- * sollte das Resulat invalid sein!
+ * unkomprimierte ZIP-Datei, seit dem Addendum auch Deflate-Komprimierung erlaubt ==> Bei den Module
+ * A, B, C und D wird die Validierung abgebrochen, sollte das Resulat invalid sein!
  * 
  * @author Rc Claire Röthlisberger, KOST-CECO */
 
@@ -49,10 +49,8 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 
 		boolean valid = false;
 		boolean validC = false;
-		/*boolean store = false;
-		boolean def = false;
-		boolean defX = false;
-		boolean defN = false;*/
+		/*
+		 * boolean store = false; boolean def = false; boolean defX = false; boolean defN = false; */
 
 		// die Datei darf kein Directory sein
 		if ( valDatei.isDirectory() ) {
@@ -109,9 +107,9 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 
 		// Die byte 8 und 9 müssen 00 00 STORE / 08 00 DEFLATE sein
 
-		/* Dies ergibt jedoch nur ein Indix darauf, wie die Dateien gezipt sind. Dies weil in einem
-		 * Zip unterschiedliche Komprimierungen verwendet werden können und die erste Kopmprimierung
-		 * nicht das ganze Zip abbildet. */
+		/* Dies ergibt jedoch nur ein Indix darauf, wie die Dateien gezipt sind. Dies weil in einem Zip
+		 * unterschiedliche Komprimierungen verwendet werden können und die erste Kopmprimierung nicht
+		 * das ganze Zip abbildet. */
 		FileReader fr89 = null;
 		try {
 			fr89 = new FileReader( valDatei );
@@ -147,22 +145,20 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 			char[] charArray1 = new char[] { c8, c9 };
 			char[] charArray2 = new char[] { c00, c00 }; // store
 			char[] charArray3 = new char[] { c08, c00 }; // def
-			
-			String hex8 = String.format("%04x", (int) c8);
-			int dec8 = Integer.parseInt(hex8, 16);
-			
+
+			String hex8 = String.format( "%04x", (int) c8 );
+			int dec8 = Integer.parseInt( hex8, 16 );
+
 			if ( Arrays.equals( charArray1, charArray3 ) ) {
-				// def: DEFLATED
-				
-				// TODO: validC = true sobald Addendum 1 durch ist
-				validC = false;
+				// def: DEFLATED -> validC = true seit Addendum 1 durch ist
+				validC = true;
 			} else if ( Arrays.equals( charArray1, charArray2 ) ) {
 				// höchstwahrscheinlich ein unkomprimiertes ZIP
 				validC = true;
 			} else {
 				validC = false;
 			}
-			
+
 			if ( validC ) {
 				// Versuche das ZIP file zu öffnen
 				Zip64File zf = null;
@@ -175,20 +171,15 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 						compressed = fileEntry.getMethod();
 						// Compression method for uncompressed entries = STORED = 0
 						// Compression method for deflate compression = 8
-						if ( compressed==8 ) {
-							// def: DEFLATE  
-							getMessageService().logError(
-									getTextResourceService().getText( MESSAGE_XML_MODUL_A_SIARD )
-											+ getTextResourceService().getText( ERROR_XML_A_DEFLATED, compressed) );
-							// TODO: Die Fehlermeldung und return false löschen
-							return false;
-						} else if ( compressed==0 ) {
-							// store element  
+						if ( compressed == 8 ) {
+							// def: DEFLATE
+						} else if ( compressed == 0 ) {
+							// store element
 						} else {
-							// weder store noch def  
+							// weder store noch def
 							getMessageService().logError(
 									getTextResourceService().getText( MESSAGE_XML_MODUL_A_SIARD )
-											+ getTextResourceService().getText( ERROR_XML_A_DEFLATED, compressed) );
+											+ getTextResourceService().getText( ERROR_XML_A_DEFLATED, compressed ) );
 							return false;
 						}
 					}
@@ -204,7 +195,6 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 				getMessageService().logError(
 						getTextResourceService().getText( MESSAGE_XML_MODUL_A_SIARD )
 								+ getTextResourceService().getText( ERROR_XML_A_DEFLATED, dec8 ) );
-				// TODO: Die vorbereitete Fehlermeldung auskommentieren!
 				return false;
 			}
 		} catch ( Exception e ) {
