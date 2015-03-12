@@ -270,6 +270,19 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		return null;
 	}
 
+	/*--- JPEG ---------------------------------------------------------------------*/
+	@Override
+	public String jpegValidation()
+	{
+		Object prop = getConfig().getProperty( "jpeg.jpegvalidation" );
+
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
 	/*--- SIP ---------------------------------------------------------------------*/
 	@SuppressWarnings("unchecked")
 	@Override

@@ -28,6 +28,10 @@
 		<!--no verwenden wenn jp2 nicht validiert werden soll, ansonsten yes -->
 		<jp2validation>yes</jp2validation>
 	</jp2>
+	<jpeg>
+		<!--no verwenden wenn jpeg nicht validiert werden soll, ansonsten yes -->
+		<jpegvalidation>yes</jpegvalidation>
+	</jpeg>
 	<tiff>
 		<!--no verwenden wenn tiff nicht validiert werden soll, ansonsten yes -->
 		<tiffvalidation>yes</tiffvalidation>

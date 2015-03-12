@@ -57,6 +57,7 @@ public interface MessageConstants
 	String	MESSAGE_PDFAVALIDATION												= "message.pdfavalidation";
 	String	MESSAGE_PDFAVALIDATION_VL											= "message.pdfavalidation.vl";
 	String	MESSAGE_JP2VALIDATION													= "message.jp2validation";
+	String	MESSAGE_JPEGVALIDATION												= "message.jpegvalidation";
 	String	MESSAGE_SIPVALIDATION													= "message.sipvalidation";
 	String	MESSAGE_XML_VALERGEBNIS												= "message.xml.valergebnis";
 	String	MESSAGE_XML_VALTYPE														= "message.xml.valtype";
@@ -103,6 +104,8 @@ public interface MessageConstants
 	String	MESSAGE_XML_MODUL_B_JP2												= "message.xml.modul.b.jp2";
 	String	MESSAGE_XML_MODUL_C_JP2												= "message.xml.modul.c.jp2";
 	String	MESSAGE_XML_MODUL_D_JP2												= "message.xml.modul.d.jp2";
+
+	String	MESSAGE_XML_MODUL_A_JPEG											= "message.xml.modul.a.jpeg";
 
 	String	MESSAGE_XML_MODUL_Aa_SIP											= "message.xml.modul.aa.sip";
 	String	MESSAGE_XML_MODUL_Ab_SIP											= "message.xml.modul.ab.sip";
@@ -308,6 +311,16 @@ public interface MessageConstants
 	String	ERROR_XML_D_JP2_UUID													= "error.xml.d.jp2.uuid";
 	String	ERROR_XML_D_JP2_UUIDINFO											= "error.xml.d.jp2.uuidinfo";
 	String	ERROR_XML_D_JP2_UNKNOWN												= "error.xml.d.jp2.unknown";
+
+	// *************JPEG-Meldungen*************************************************************************
+	// Modul A Meldungen
+	String	ERROR_XML_A_JPEG_INCORRECTFILEENDING					= "error.xml.a.jpeg.incorrectfileending";
+	String	ERROR_XML_A_JPEG_INCORRECTFILE								= "error.xml.a.jpeg.incorrectfile";
+	String	ERROR_XML_A_JPEG_ISDIRECTORY									= "error.xml.a.jpeg.isdirectory";
+	String	ERROR_XML_A_JPEG_SERVICEFAILED								= "error.xml.a.jpeg.servicefailed";
+	String	ERROR_XML_A_JPEG_JIIO_FAIL										= "error.xml.a.jpeg.jiio.fail";
+	String	ERROR_XML_A_JPEG_JIIO_ERROR										= "error.xml.a.jpeg.jiio.error";
+
 	// *************SIP-Meldungen*************************************************************************
 	// Modul 1a Meldungen
 	String	ERROR_XML_AA_INCORRECTFILEENDING							= "error.xml.aa.incorrectfileending";

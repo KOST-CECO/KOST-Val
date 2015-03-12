@@ -20,36 +20,36 @@ package ch.kostceco.tools.kostval.controller;
 
 import java.io.File;
 
-import ch.kostceco.tools.kostval.exception.modulejp2.ValidationAjp2validationException;
+import ch.kostceco.tools.kostval.exception.modulejpeg.ValidationAjpegvalidationException;
 import ch.kostceco.tools.kostval.logging.Logger;
 import ch.kostceco.tools.kostval.logging.MessageConstants;
 import ch.kostceco.tools.kostval.service.TextResourceService;
-import ch.kostceco.tools.kostval.validation.modulejp2.ValidationAvalidationAModule;
+import ch.kostceco.tools.kostval.validation.modulejpeg.ValidationAvalidationJpegModule;
 
 /** kostval -->
  * 
- * Der Controller ruft die benötigten Module zur Validierung der JPEG2000-Datei in der benötigten
+ * Der Controller ruft die benötigten Module zur Validierung der JPEG-Datei in der benötigten
  * Reihenfolge auf.
  * 
  * Die Validierungs-Module werden mittels Spring-Dependency-Injection eingebunden. */
 
-public class Controllerjp2 implements MessageConstants
+public class Controllerjpeg implements MessageConstants
 {
 
-	private static final Logger						LOGGER	= new Logger( Controllerjp2.class );
+	private static final Logger						LOGGER	= new Logger( Controllerjpeg.class );
 	private TextResourceService						textResourceService;
 
-	private ValidationAvalidationAModule	validationAvalidationAModule;
+	private ValidationAvalidationJpegModule	validationAvalidationJpegModule;
 
-	public ValidationAvalidationAModule getValidationAvalidationAModule()
+	public ValidationAvalidationJpegModule getValidationAvalidationJpegModule()
 	{
-		return validationAvalidationAModule;
+		return validationAvalidationJpegModule;
 	}
 
-	public void setValidationAvalidationAModule(
-			ValidationAvalidationAModule validationAvalidationAModule )
+	public void setValidationAvalidationJpegModule(
+			ValidationAvalidationJpegModule validationAvalidationJpegModule )
 	{
-		this.validationAvalidationAModule = validationAvalidationAModule;
+		this.validationAvalidationJpegModule = validationAvalidationJpegModule;
 	}
 
 	public TextResourceService getTextResourceService()
@@ -68,19 +68,19 @@ public class Controllerjp2 implements MessageConstants
 
 		// Validation A
 		try {
-			if ( this.getValidationAvalidationAModule().validate( valDatei, directoryOfLogfile ) ) {
-				this.getValidationAvalidationAModule().getMessageService().print();
+			if ( this.getValidationAvalidationJpegModule().validate( valDatei, directoryOfLogfile ) ) {
+				this.getValidationAvalidationJpegModule().getMessageService().print();
 			} else {
-				this.getValidationAvalidationAModule().getMessageService().print();
+				this.getValidationAvalidationJpegModule().getMessageService().print();
 				return false;
 			}
-		} catch ( ValidationAjp2validationException e ) {
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_A_JP2 )
+		} catch ( ValidationAjpegvalidationException e ) {
+			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_A_JPEG )
 					+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
-			this.getValidationAvalidationAModule().getMessageService().print();
+			this.getValidationAvalidationJpegModule().getMessageService().print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_A_JP2 )
+			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_A_JPEG )
 					+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
