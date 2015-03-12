@@ -7,12 +7,8 @@
 	<property name="target" value="1.6" />
 	<property name="source" value="1.6" />
 	<property name="source_encoding" value="ISO-8859-1" />
-	<path
-		id="Persisted container [org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER for project [KOST-Val]].libraryclasspath" />
 	<path id="KOST-Val.classpath">
 		<pathelement location="target/classes" />
-		<path
-			refid="Persisted container [org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER for project [KOST-Val]].libraryclasspath" />
 		<pathelement location="lib/commons-configuration-1.6.jar" />
 		<pathelement location="lib/log4j-1.2.12.jar" />
 		<pathelement location="lib/spring-context-3.0.0.RELEASE.jar" />
