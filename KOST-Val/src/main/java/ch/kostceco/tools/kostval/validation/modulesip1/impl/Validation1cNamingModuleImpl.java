@@ -265,8 +265,14 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl implement
 										+ getTextResourceService().getText( MESSAGE_XML_AC_NOTALLOWEDV, "BAR v1" ) );
 						valid = false;
 					}
-				}
-				if ( name.endsWith( "arelda.xsd" ) ) {
+				} else {
+					/* eigentlich müsste es ansonsten arelda.xsd enthalten sein.
+					 * 
+					 * Da aber bei schreibfehler in diesem Dateinamen alle xsd bemängelt werden wurde es
+					 * durch ein else ersetzt
+					 * 
+					 * if ( name.endsWith( "arelda.xsd" ) ) { */
+
 					// dann handelt es sich um die Version BAR4 respektive eCH1
 					version = 4;
 					if ( allowedV4 == 1 ) {
