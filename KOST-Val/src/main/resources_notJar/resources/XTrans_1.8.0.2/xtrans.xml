@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<root>
+	<name>XTrans</name>
+	<short>A compact free multi-documents text editor (featured syntax
+		highlighting, find/replace, bookmarks, undo/redo, etc.) allows a
+		XML/XSL developer to build XSL templates (by inserting prepared XSL
+		and HTML constructions) using the XPath analyzer, then test XSL
+		transformation. The result may be shown in the built in browser.</short>
+	<long>Features
+		Standard text editing functions
+		It has copy/paste, find/replace, bookmarks and other features.
+		XSL and HTML synatax highlighting
+		There is smart selection of highlighting: for XML, XSL and HTML types of
+		documents. You can designate your own color set.
+		Symmetric conception
+		It's mean, there was a basic idea - the result of a XML transformation is
+		a XML, so the original XML has the same right as the derived and then
+		you can apply another transformation to the derived.
+		Possibility to open many documents both types
+		You can process several data XML files through one XSL transformation, or
+		on the contrary - to design several stylesheets and try how they work
+		on a single XML
+		Template to create a new XSL or XML document
+		For an user who is not quite familiar with the structure of XML/XSL file
+		it will be useful to start with a common template of the document.
+		External insets - insertable parts of code
+		You can define your own set of code bits by edit a simple XML file.
+		Recent tags memorizer
+		The program remember all tags you have typed and all of them already were
+		in the file before. You can then simple insert them to the document.
+		XSL transformation tool
+		Just open both XML and XSL document, and apply the transformation. If
+		there is an error, the cursor will be placed to the position when the
+		error has occured.
+		Inplace browser preview
+		Each document can be shown in built in browser. You can easy switch
+		between views by key combination.
+		Text normalizer
+		If an XML document well-formed, you can apply the normalize tool. Text
+		will be indent by its hieararhy structure.
+		XPath query analizer
+		By this tool you can debug your XPath expression you need. You will see
+		a node-set list contains element name, type and inner values.
+		Possibility to pass parameters to the transformation
+		Sometimes it's usefull to pass one or more parameters to the stylesheet. XTrans
+		can do it now.
+		Mouseless operations
+		The user interface was designed for a user who prefer use the keyboard
+		instead the mouse.
+</long>
+
+</root>

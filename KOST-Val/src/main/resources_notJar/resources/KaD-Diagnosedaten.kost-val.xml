@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="ISO-8859-1"?><?xml-stylesheet type="text/xsl" href="kost-val_KaDdia.xsl"?>
+<KOSTVal_FFCounter>
+	<pdf>0</pdf>
+	<tiff>0</tiff>
+	<siard>0</siard>
+	<txt>0</txt>
+	<csv>0</csv>
+	<xml>0</xml>
+	<xsd>0</xsd>
+	<wave>0</wave>
+	<mp3>0</mp3>
+	<jp2>0</jp2>
+	<jpx>0</jpx>
+	<jpeg>0</jpeg>
+	<png>0</png>
+	<dng>0</dng>
+	<svg>0</svg>
+	<mpeg2>0</mpeg2>
+	<mp4>0</mp4>
+	<xls>0</xls>
+	<odt>0</odt>
+	<ods>0</ods>
+	<odp>0</odp>
+	<other>0</other>
+</KOSTVal_FFCounter>

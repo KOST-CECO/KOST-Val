@@ -1,0 +1,15 @@
+Alles ist in P:\KOST\Tools\simpleGUI\_KOST-Val_GUI
+++++++++++++++++++++++++++++++++++++++++++++++++++
+.nsi	-	Das ist das NullSoft Hauptdokument; dieses zieht die anderen Dateien an z.B. ini, nsn ...
+.ini	-	Layout der Fenster
+.nsn	-	NullSoft Module (entweder lokal oder in NSIS\Include)
+
+
+KOSTval.exe erstellen:
+-------------------------
+make_KOSTval.bat aufrufen
+
+
+nicht beachten
+--------------
+1 warning: Page instfiles not used, no sections will be executed!

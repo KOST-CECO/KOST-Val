@@ -1,0 +1,403 @@
+<?xml version="1.0"?>
+<INSETS>
+
+	<CATEGORY name="X&amp;ML construction">
+
+		<ITEM name="XML &amp;declaration">
+			<DESCRIPTION>The first processing instruction: XML declaration</DESCRIPTION>
+<![CDATA[<?xml version="1.0" encoding="windows-1252"?>
+]]></ITEM>
+		<ITEM name="Comment">
+			<DESCRIPTION>Empty comment construction</DESCRIPTION>
+<![CDATA[
+<!--  -->
+]]></ITEM>
+		<ITEM name="&amp;CDATA section">
+			<DESCRIPTION>Empty CDATA section</DESCRIPTION>
+			&lt;![CDATA[
+
+			]]&gt;
+		</ITEM>
+
+		<ITEM name="Styleshhet &amp;reference">
+			<DESCRIPTION>Instruction how to view the document</DESCRIPTION>
+<![CDATA[<?xmlstylesheet href="" type="text/xslt"?>
+]]></ITEM>
+
+	</CATEGORY>
+
+	<CATEGORY name="X&amp;SL tag">
+
+		<ITEM name="xsl:template">
+			<DESCRIPTION>Defines a new template for using by name or node
+				matching</DESCRIPTION>
+<![CDATA[<xsl:template match="">
+</xsl:template>]]></ITEM>
+
+		<ITEM name="xsl:apply-templates">
+			<DESCRIPTION>Uses all appropriate for current node templates</DESCRIPTION>
+<![CDATA[<xsl:apply-templates select=""/>]]></ITEM>
+
+		<ITEM name="xsl:call-template">
+			<DESCRIPTION>Invokes a template by name</DESCRIPTION>
+<![CDATA[<xsl:call-template name=""/>]]></ITEM>
+
+		<ITEM name="xsl:param">
+			<DESCRIPTION>Describes a template parameter</DESCRIPTION>
+<![CDATA[<xsl:param name="" select=""/>]]></ITEM>
+
+		<ITEM name="xsl:with-param">
+			<DESCRIPTION>Sets the value to template parameter</DESCRIPTION>
+<![CDATA[<xsl:with-param name="" select=""/>]]></ITEM>
+
+		<ITEM name="xsl:variable">
+			<DESCRIPTION>Declares a local or global variable and gives it a value</DESCRIPTION>
+<![CDATA[<xsl:variable name="" select="">
+</xsl:variable>]]></ITEM>
+
+		<ITEM separator="true" />
+
+		<ITEM name="xsl:value-of">
+			<DESCRIPTION>Inserts the value from the selected XML node to the
+				current template position</DESCRIPTION>
+<![CDATA[<xsl:value-of select=""/>]]></ITEM>
+
+		<ITEM name="xsl:for-each">
+			<DESCRIPTION>Repeats its content for each selected XML node</DESCRIPTION>
+<![CDATA[<xsl:for-each select="">
+</xsl:for-each>]]></ITEM>
+
+		<ITEM name="xsl:sort">
+			<DESCRIPTION>Defines a sort key, to specify the order in which
+				selected nodes are processed</DESCRIPTION>
+<![CDATA[<xsl:sort select="string(.)" order="ascending"/>]]></ITEM>
+
+		<ITEM name="xsl:key">
+			<DESCRIPTION>Declares a named key, for use with the key() function</DESCRIPTION>
+<![CDATA[<xsl:key name="" match="" use=""/>]]></ITEM>
+
+		<ITEM separator="true" />
+
+		<ITEM name="xsl:copy-of">
+			<DESCRIPTION>Inserts subtrees and result-tree fragments into the
+				result tree</DESCRIPTION>
+
+<![CDATA[<xsl:copy-of select=""/>]]></ITEM>
+
+		<ITEM name="xsl:copy">
+			<DESCRIPTION>Copies the current XML node exactly to the output</DESCRIPTION>
+<![CDATA[<xsl:copy></xsl:copy>]]></ITEM>
+
+		<ITEM name="xsl:element">
+			<DESCRIPTION>Creates new element with the specified name </DESCRIPTION>
+<![CDATA[<xsl:element name=""></xsl:element>]]></ITEM>
+
+		<ITEM name="xsl:attribute">
+			<DESCRIPTION>Creates new attribute in the parent element</DESCRIPTION>
+<![CDATA[<xsl:attribute name=""></xsl:attribute>]]></ITEM>
+
+		<ITEM separator="true" />
+
+		<ITEM name="xsl:text">
+			<DESCRIPTION>Puts contained text to the output</DESCRIPTION>
+<![CDATA[<xsl:text></xsl:text>]]></ITEM>
+
+		<ITEM name="xsl:comment">
+			<DESCRIPTION>Puts contained text of this tag to the output as a
+				comment</DESCRIPTION>
+<![CDATA[<xsl:comment>
+</xsl:comment>]]></ITEM>
+
+		<ITEM name="xsl:number value">
+			<DESCRIPTION>Formats a number for output</DESCRIPTION>
+<![CDATA[<xsl:number value="" format=""/>]]></ITEM>
+
+		<ITEM name="xsl:number">
+			<DESCRIPTION>Counts items by given condition</DESCRIPTION>
+<![CDATA[<xsl:number level="any" count="" from=""/>]]></ITEM>
+
+		<ITEM separator="true" />
+
+		<ITEM name="xsl:if">
+			<DESCRIPTION>Produces content only if condition is true</DESCRIPTION>
+<![CDATA[<xsl:if test="">
+</xsl:if>]]></ITEM>
+
+		<ITEM name="xsl:choose">
+			<DESCRIPTION>Produces only one of several fragment by 'when'
+				conditions</DESCRIPTION>
+<![CDATA[<xsl:choose>
+</xsl:choose>]]></ITEM>
+
+		<ITEM name="xsl:when">
+			<DESCRIPTION>Provides 'one of' content fragment by condition</DESCRIPTION>
+<![CDATA[<xsl:when test="">
+</xsl:when>]]></ITEM>
+
+		<ITEM name="xsl:otherwise">
+			<DESCRIPTION>Produces content fragment by default</DESCRIPTION>
+<![CDATA[<xsl:otherwise>
+</xsl:otherwise>]]></ITEM>
+
+		<ITEM name="xsl:choose,when,otherwise">
+			<DESCRIPTION>Complex choose structure</DESCRIPTION>
+<![CDATA[<xsl:choose>
+   <xsl:when test=""></xsl:when>
+   <xsl:otherwise></xsl:otherwise>
+</xsl:choose>]]></ITEM>
+
+		<ITEM separator="true" />
+
+		<ITEM name="xsl:output">
+			<DESCRIPTION>Specifies how the result tree will be output</DESCRIPTION>
+<![CDATA[<xsl:output method="xml" encoding="iso-8859-1"/>]]></ITEM>
+
+		<ITEM name="xsl:include">
+			<DESCRIPTION>Includes the contents of one stylesheet module within
+				another</DESCRIPTION>
+<![CDATA[<xsl:include href=""/>]]></ITEM>
+
+		<ITEM name="xsl:import">
+			<DESCRIPTION>Imports the contents of one stylesheet module into
+				another</DESCRIPTION>
+<![CDATA[<xsl:import href=""/>]]></ITEM>
+
+		<ITEM name="xsl:apply-imports">
+			<DESCRIPTION>Apply functionality from imported module</DESCRIPTION>
+<![CDATA[<xsl:apply-imports href=""/>]]></ITEM>
+
+	</CATEGORY>
+
+
+	<CATEGORY name="&amp;Namespaces">
+
+		<ITEM name="W&amp;D-xsl">
+			<DESCRIPTION>Worked Draft XSL namespace</DESCRIPTION>
+<![CDATA["http://www.w3.org/TR/WD-xsl"]]></ITEM>
+
+		<ITEM name="&amp;Transform">
+			<DESCRIPTION>Transform (XSLT) namespace</DESCRIPTION>
+<![CDATA["http://www.w3.org/1999/XSL/Transform"]]></ITEM>
+		<ITEM name="MS Data Types">
+<![CDATA["urn:schemas-microsoft-com:datatypes"]]>
+		</ITEM>
+	</CATEGORY>
+
+	<CATEGORY name="&amp;HTML">
+
+		<ITEM name="&amp;Table">
+			<DESCRIPTION>Insert an empty table skeleton</DESCRIPTION>
+<![CDATA[
+<TABLE border="1" width="100%">
+    <TR>
+        <TD> </TD>
+    </TR>
+</TABLE>
+]]></ITEM>
+
+		<ITEM name="&amp;Select">
+			<DESCRIPTION>Insert an empty select skeleton</DESCRIPTION>
+<![CDATA[
+<SELECT size="1">
+    <OPTION value=""> </OPTION>
+</SELECT>
+]]></ITEM>
+
+		<ITEM name="&amp;List">
+			<DESCRIPTION>Insert an empty list skeleton</DESCRIPTION>
+<![CDATA[
+<UL>
+    <LI> </LI>
+</UL>
+]]></ITEM>
+
+		<ITEM name="&amp;Page">
+			<DESCRIPTION>Insert an empty HTML page skeleton</DESCRIPTION>
+<![CDATA[
+<HTML>
+<HEAD>
+    <TITLE></TITLE>
+</HEAD>
+<BODY>
+
+</BODY>
+</HTML>
+]]></ITEM>
+
+	</CATEGORY>
+
+	<CATEGORY name="&amp;Functions">
+
+		<ITEM name="count">
+			<DESCRIPTION>Returns the number of nodes in the node-set argument.</DESCRIPTION>
+<![CDATA[count(node-set)]]></ITEM>
+
+		<ITEM name="document">
+			<DESCRIPTION>Retrieves other XML resources beyond the initial XML
+				data.</DESCRIPTION>
+<![CDATA[document(object node-set?)]]></ITEM>
+
+		<ITEM name="id">
+			<DESCRIPTION>Selects elements by their unique ID.</DESCRIPTION>
+<![CDATA[id(object)]]></ITEM>
+
+		<ITEM name="key">
+			<DESCRIPTION>Retrieves elements previously marked with an xsl:key
+				statement.</DESCRIPTION>
+<![CDATA[key(name value)]]></ITEM>
+
+		<ITEM name="last">
+			<DESCRIPTION>Returns a number equal to context size of the expression
+				evaluation context.</DESCRIPTION>
+<![CDATA[last()]]></ITEM>
+		<ITEM name="local-name">
+			<DESCRIPTION>Returns the local part of the expanded name of the node</DESCRIPTION>
+<![CDATA[local-name(node-set?)]]></ITEM>
+		<ITEM name="name">
+			<DESCRIPTION>Returns a string containing a QName representing the
+				expanded name of the node</DESCRIPTION>
+<![CDATA[name(node-set?)]]></ITEM>
+
+		<ITEM name="namespace-uri">
+			<DESCRIPTION>Returns the namespace URI of the expanded name of the
+				node</DESCRIPTION>
+<![CDATA[namespace-uri(node-set?)]]></ITEM>
+		<ITEM name="position">
+			<DESCRIPTION>Returns the index number of the node within the parent.</DESCRIPTION>
+<![CDATA[position()]]></ITEM>
+
+		<ITEM separator="true" />
+
+		<ITEM name="concat">
+			<DESCRIPTION>Returns the concatenation of the arguments. </DESCRIPTION>
+<![CDATA[concat(string string string*)]]></ITEM>
+		<ITEM name="contains">
+			<DESCRIPTION>Returns True if the first argument string contains the
+				second argument string</DESCRIPTION>
+<![CDATA[contains(string string)]]></ITEM>
+		<ITEM name="starts-with">
+			<DESCRIPTION>Returns True if the first argument string starts with
+				the second argument string</DESCRIPTION>
+<![CDATA[starts-with(string string)]]></ITEM>
+		<ITEM name="normalize_space">
+			<DESCRIPTION>Returns the argument string with the white space
+				stripped.</DESCRIPTION>
+<![CDATA[normalize_space(string)]]></ITEM>
+		<ITEM name="string">
+			<DESCRIPTION>Converts an object to a string.</DESCRIPTION>
+<![CDATA[string(object?)]]></ITEM>
+		<ITEM name="string-length">
+			<DESCRIPTION>Returns the number of characters in the string.</DESCRIPTION>
+<![CDATA[string-length(string)]]></ITEM>
+		<ITEM name="substring">
+			<DESCRIPTION>Substring of the 1st argument at the position and length</DESCRIPTION>
+<![CDATA[substring(string number number?)]]></ITEM>
+		<ITEM name="substring-after">
+			<DESCRIPTION>Substring of the 1st argument that follows the first
+				occurrence of the 2nd string</DESCRIPTION>
+<![CDATA[substring-after(string string)]]></ITEM>
+		<ITEM name="substring-before">
+			<DESCRIPTION>Substring of the 1st argument string before the first
+				occurrence of the 2nd string</DESCRIPTION>
+<![CDATA[substring-before(string string)]]></ITEM>
+		<ITEM name="translate">
+			<DESCRIPTION>Returns replaced characters of the string by</DESCRIPTION>
+<![CDATA[translate(string string string)]]></ITEM>
+
+		<ITEM separator="true" />
+
+		<ITEM name="boolean">
+			<DESCRIPTION>Converts the argument to a Boolean. </DESCRIPTION>
+<![CDATA[boolean(object)]]></ITEM>
+		<ITEM name="false">
+			<DESCRIPTION>Returns False. </DESCRIPTION>
+<![CDATA[false()]]></ITEM>
+		<ITEM name="lang">
+			<DESCRIPTION>True if the xml:lang attribute of the node is the same
+				as the argument string. </DESCRIPTION>
+<![CDATA[lang(string)]]></ITEM>
+		<ITEM name="not">
+			<DESCRIPTION>Returns True if the argument is false, and a false
+				otherwise. </DESCRIPTION>
+<![CDATA[not(boolean)]]></ITEM>
+		<ITEM name="true">
+			<DESCRIPTION>Returns True. </DESCRIPTION>
+<![CDATA[true()]]></ITEM>
+
+		<ITEM separator="true" />
+
+		<ITEM name="ceiling">
+			<DESCRIPTION>Returns the smallest integer that is not less than the
+				argument. </DESCRIPTION>
+<![CDATA[ceiling(number)]]></ITEM>
+		<ITEM name="floor">
+			<DESCRIPTION>Returns the largest integer that is not greater than the
+				argument.</DESCRIPTION>
+<![CDATA[floor(number)]]></ITEM>
+		<ITEM name="number">
+			<DESCRIPTION>Converts the argument to a number. </DESCRIPTION>
+<![CDATA[number(object?)]]></ITEM>
+		<ITEM name="round">
+			<DESCRIPTION>Returns an integer closest in value to the argument. </DESCRIPTION>
+<![CDATA[round(number)]]></ITEM>
+		<ITEM name="sum">
+			<DESCRIPTION>Returns the sum of all nodes (converted to a num) in the
+				node set.</DESCRIPTION>
+<![CDATA[sum(node-set)]]></ITEM>
+
+	</CATEGORY>
+
+	<CATEGORY name="&amp;Axis">
+		<ITEM name="ancestor">
+			<DESCRIPTION>The parent of the context node and the parent's parent
+				and so on</DESCRIPTION>
+	<![CDATA[ancestor::]]>
+		</ITEM>
+		<ITEM name="ancestor-or-self">
+			<DESCRIPTION>The context node and the ancestors of the context node</DESCRIPTION>
+	<![CDATA[ancestor-or-self::]]>
+		</ITEM>
+		<ITEM name="attribute">
+			<DESCRIPTION>Attributes of the context element-type node</DESCRIPTION>
+	<![CDATA[attribute::]]>
+		</ITEM>
+		<ITEM name="child">
+			<DESCRIPTION>Children of the context node</DESCRIPTION>
+	<![CDATA[child::]]>
+		</ITEM>
+		<ITEM name="descendant">
+			<DESCRIPTION>Child or a child of a child and so on</DESCRIPTION>
+	<![CDATA[descendant::]]>
+		</ITEM>
+		<ITEM name="descendant-or-self">
+			<DESCRIPTION>The context node and the descendants</DESCRIPTION>
+	<![CDATA[descendant-or-self::]]>
+		</ITEM>
+		<ITEM name="following">
+			<DESCRIPTION>All nodes after the context node with their children</DESCRIPTION>
+	<![CDATA[following::]]>
+		</ITEM>
+		<ITEM name="following-sibling">
+			<DESCRIPTION>Nodes after the context node on the same level</DESCRIPTION>
+	<![CDATA[following-sibling::]]>
+		</ITEM>
+		<ITEM name="parent">
+			<DESCRIPTION>Parent (if there is one) of the context node</DESCRIPTION>
+	<![CDATA[parent::]]>
+		</ITEM>
+		<ITEM name="preceding">
+			<DESCRIPTION>All nodes before the context node with their children</DESCRIPTION>
+	<![CDATA[preceding::]]>
+		</ITEM>
+		<ITEM name="preceding-sibling">
+			<DESCRIPTION>Nodes before the context node on the same level</DESCRIPTION>
+	<![CDATA[preceding-sibling::]]>
+		</ITEM>
+		<ITEM name="self">
+			<DESCRIPTION>The context node itself</DESCRIPTION>
+	<![CDATA[self::]]>
+		</ITEM>
+	</CATEGORY>
+
+
+</INSETS>
