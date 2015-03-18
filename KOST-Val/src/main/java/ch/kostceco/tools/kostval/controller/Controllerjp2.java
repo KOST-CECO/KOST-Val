@@ -75,15 +75,16 @@ public class Controllerjp2 implements MessageConstants
 				return false;
 			}
 		} catch ( ValidationAjp2validationException e ) {
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_A_JP2 )
 					+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationAvalidationAModule().getMessageService().print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_A_JP2 )
 					+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 		return valid;
+
 	}
 }
