@@ -44,9 +44,8 @@ import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationHsizeValidatio
 /** Der Controller ruft die benötigten Module zur Validierung des TIFF-Archivs in der benötigten
  * Reihenfolge auf.
  * 
- * Die Validierungs-Module werden mittels Spring-Dependency-Injection eingebunden.
- * 
- * @author Rc Claire Röthlisberger, KOST-CECO */
+ * Die Validierungs-Module werden mittels Spring-Dependency-Injection eingebunden. */
+
 public class Controllertiff implements MessageConstants
 {
 
@@ -169,8 +168,8 @@ public class Controllertiff implements MessageConstants
 			if ( this.getValidationArecognitionModule().validate( valDatei, directoryOfLogfile ) ) {
 				this.getValidationArecognitionModule().getMessageService().print();
 			} else {
-				// Ein negatives Validierungsresultat in diesem Schritt führt
-				// zum Abbruch der weiteren Verarbeitung
+				// Ein negatives Validierungsresultat in diesem Schritt führt zum Abbruch der weiteren
+				// Verarbeitung
 				this.getValidationArecognitionModule().getMessageService().print();
 				return false;
 			}
