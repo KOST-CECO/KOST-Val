@@ -23,7 +23,8 @@ import java.io.File;
 import ch.kostceco.tools.kostval.exception.modulejpeg.ValidationAjpegvalidationException;
 import ch.kostceco.tools.kostval.validation.ValidationModule;
 
-/** Ist die vorliegende JPEG-Datei eine valide JPEG-Datei? JPEG Validierungs mit  Java Image IO (JIIO) library.
+/** Ist die vorliegende JPEG-Datei eine valide JPEG-Datei? JPEG Validierungs mit Java Image IO (JIIO)
+ * library.
  * 
  * @author Rc Claire Röthlisberger, KOST-CECO */
 

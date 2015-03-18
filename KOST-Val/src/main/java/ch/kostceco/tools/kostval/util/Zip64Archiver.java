@@ -160,8 +160,7 @@ public class Zip64Archiver
 			String currentEntry = entry.getName();
 
 			File destFile = new File( unzipDestinationDirectory, currentEntry );
-			// destFile = new File(unzipDestinationDirectory,
-			// destFile.getName());
+			// destFile = new File(unzipDestinationDirectory, destFile.getName());
 
 			if ( currentEntry.endsWith( ".zip" ) ) {
 				zipFiles.add( destFile.getAbsolutePath() );
@@ -242,10 +241,9 @@ public class Zip64Archiver
 				fos.close();
 				eis.close();
 			} else {
-				// Scheibe den Ordner wenn noch nicht vorhanden an den richtigen
-				// Ort respektive in den richtigen Ordner der ggf angelegt
-				// werden muss. Dies muss gemacht werden, damit auch leere
-				// Ordner geschrieben werden.
+				/* Scheibe den Ordner wenn noch nicht vorhanden an den richtigen Ort respektive in den
+				 * richtigen Ordner der ggf angelegt werden muss. Dies muss gemacht werden, damit auch leere
+				 * Ordner geschrieben werden. */
 				EntryInputStream eis = zipfile.openEntryInputStream( fileEntry.getName() );
 				File newFolder = new File( outDir, fileEntry.getName() );
 				if ( !newFolder.exists() ) {

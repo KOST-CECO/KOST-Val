@@ -197,8 +197,8 @@ public class Util
 	{
 
 		File[] files = quelle.listFiles();
-		File newFile = null; // in diesem Objekt wird für jedes File der
-		// Zielpfad gespeichert.
+		File newFile = null;
+		// in diesem Objekt wird für jedes File der Zielpfad gespeichert.
 		// 1. Der alte Zielpfad
 		// 2. Das systemspezifische Pfadtrennungszeichen
 		// 3. Der Name des aktuellen Ordners/der aktuellen Datei

@@ -159,6 +159,9 @@ public interface ConfigurationService extends Service
 	/** Gibt an ob jp2 validiert werden soll yes oder no */
 	String jp2Validation();
 
+	/** Gibt an ob jpeg validiert werden soll yes oder no */
+	String jpegValidation();
+
 	/** Gibt eine Liste mit den PUIDs aus, welche im SIP vorkommen dürfen.
 	 * 
 	 * @return Liste mit den PUIDs aus, welche im SIP vorkommen dürfen. */

@@ -1,22 +1,20 @@
-/*== KOST-Val ==================================================================================
-The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2-Files and Submission 
-Information Package (SIP). 
-Copyright (C) 2012-2015 Claire Röthlisberger (KOST-CECO), Christian Eugster, Olivier Debenath, 
-Peter Schneider (Staatsarchiv Aargau), Daniel Ludin (BEDAG AG)
------------------------------------------------------------------------------------------------
-KOST-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. 
-This application is free software: you can redistribute it and/or modify it under the 
-terms of the GNU General Public License as published by the Free Software Foundation, 
-either version 3 of the License, or (at your option) any later version. 
-BEDAG AG and Daniel Ludin hereby disclaims all copyright interest in the program 
-SIP-Val v0.2.0 written by Daniel Ludin (BEDAG AG). Switzerland, 1 March 2011.
-This application is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
-without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
-See the follow GNU General Public License for more details.
-You should have received a copy of the GNU General Public License along with this program; 
-if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
-Boston, MA 02110-1301 USA or see <http://www.gnu.org/licenses/>.
-==============================================================================================*/
+/* == KOST-Val ==================================================================================
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2-Files and Submission
+ * Information Package (SIP). Copyright (C) 2012-2015 Claire Röthlisberger (KOST-CECO), Christian
+ * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Daniel Ludin (BEDAG AG)
+ * -----------------------------------------------------------------------------------------------
+ * KOST-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. This application
+ * is free software: you can redistribute it and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version. BEDAG AG and Daniel Ludin hereby disclaims all copyright
+ * interest in the program SIP-Val v0.2.0 written by Daniel Ludin (BEDAG AG). Switzerland, 1 March
+ * 2011. This application is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ * PURPOSE. See the follow GNU General Public License for more details. You should have received a
+ * copy of the GNU General Public License along with this program; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA or see
+ * <http://www.gnu.org/licenses/>.
+ * ============================================================================================== */
 
 package ch.kostceco.tools.kostval.service.impl;
 
@@ -39,9 +37,8 @@ import ch.kostceco.tools.kostval.service.TextResourceService;
 public class ConfigurationServiceImpl implements ConfigurationService
 {
 
-	private static final Logger	LOGGER	= new Logger(
-												ConfigurationServiceImpl.class );
-	XMLConfiguration			config	= null;
+	private static final Logger	LOGGER	= new Logger( ConfigurationServiceImpl.class );
+	XMLConfiguration						config	= null;
 	private TextResourceService	textResourceService;
 
 	public TextResourceService getTextResourceService()
@@ -62,8 +59,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 
 				String path = "configuration/kostval.conf.xml";
 
-				URL locationOfJar = KOSTVal.class.getProtectionDomain()
-						.getCodeSource().getLocation();
+				URL locationOfJar = KOSTVal.class.getProtectionDomain().getCodeSource().getLocation();
 				String locationOfJarPath = locationOfJar.getPath();
 
 				if ( locationOfJarPath.endsWith( ".jar" ) ) {
@@ -75,18 +71,12 @@ public class ConfigurationServiceImpl implements ConfigurationService
 				config = new XMLConfiguration( path );
 
 			} catch ( ConfigurationException e ) {
-				LOGGER.logError( getTextResourceService().getText(
-						MESSAGE_XML_MODUL_Ca_SIP )
-						+ getTextResourceService().getText(
-								MESSAGE_XML_CONFIGURATION_ERROR_1 ) );
-				LOGGER.logError( getTextResourceService().getText(
-						MESSAGE_XML_MODUL_Ca_SIP )
-						+ getTextResourceService().getText(
-								MESSAGE_XML_CONFIGURATION_ERROR_2 ) );
-				LOGGER.logError( getTextResourceService().getText(
-						MESSAGE_XML_MODUL_Ca_SIP )
-						+ getTextResourceService().getText(
-								MESSAGE_XML_CONFIGURATION_ERROR_3 ) );
+				LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
+						+ getTextResourceService().getText( MESSAGE_XML_CONFIGURATION_ERROR_1 ) );
+				LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
+						+ getTextResourceService().getText( MESSAGE_XML_CONFIGURATION_ERROR_2 ) );
+				LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
+						+ getTextResourceService().getText( MESSAGE_XML_CONFIGURATION_ERROR_3 ) );
 				System.exit( 1 );
 			}
 		}
@@ -96,12 +86,10 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	@Override
 	public String getPathToWorkDir()
 	{
-		/**
-		 * Gibt den Pfad des Arbeitsverzeichnisses zurück. Dieses Verzeichnis
-		 * wird zum Entpacken des .zip-Files verwendet.
+		/** Gibt den Pfad des Arbeitsverzeichnisses zurück. Dieses Verzeichnis wird zum Entpacken des
+		 * .zip-Files verwendet.
 		 * 
-		 * @return Pfad des Arbeitsverzeichnisses
-		 */
+		 * @return Pfad des Arbeitsverzeichnisses */
 		Object prop = getConfig().getProperty( "pathtoworkdir" );
 		if ( prop instanceof String ) {
 			String value = (String) prop;
@@ -113,11 +101,9 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	@Override
 	public String getPathToLogfile()
 	{
-		/**
-		 * Gibt den Pfad des Logverzeichnisses zurück.
+		/** Gibt den Pfad des Logverzeichnisses zurück.
 		 * 
-		 * @return Pfad des Logverzeichnisses
-		 */
+		 * @return Pfad des Logverzeichnisses */
 		Object prop = getConfig().getProperty( "pathtologfile" );
 		if ( prop instanceof String ) {
 			String value = (String) prop;
@@ -129,11 +115,9 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	@Override
 	public String getPathToDiagnose()
 	{
-		/**
-		 * Gibt den Pfad zu den Diagnosedaten zurück.
+		/** Gibt den Pfad zu den Diagnosedaten zurück.
 		 * 
-		 * @return Pfad zu Diagnosedaten
-		 */
+		 * @return Pfad zu Diagnosedaten */
 		Object prop = getConfig().getProperty( "pathtodiagnose" );
 		if ( prop instanceof String ) {
 			String value = (String) prop;
@@ -145,9 +129,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	@Override
 	public String getPathToJhoveConfiguration()
 	{
-		/**
-		 * Gibt den Pfad des jhove.conf zurück.
-		 */
+		/** Gibt den Pfad des jhove.conf zurück. */
 		Object prop = getConfig().getProperty( "pathtojhoveconfig" );
 		if ( prop instanceof String ) {
 			String value = (String) prop;
@@ -204,7 +186,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		}
 		return null;
 	}
-	
+
 	@Override
 	public String firstValidator()
 	{
@@ -257,17 +239,12 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	@Override
 	public int getTableRowsLimit()
 	{
-		/**
-		 * Gibt die maximale Anzahl von Rows zurück. Dieser Wert wird in Modul H
-		 * verwendet. Module H validiert die table.xml Dateien gegen ihre
-		 * table.xsd Schemas. Wenn ein Schema <xs:element name="row"
-		 * type="rowType" minOccurs="0" maxOccurs="unbounded"/> in minOccurs
-		 * oder maxOccurs hohe Zahlenwerte enthält, führt die Validierung zu
-		 * einem java.lang.OutOfMemoryError. Da dieser Error nicht aufgefangen
-		 * werden kann, werden vor der Validierung die Rows der Tabelle gezählt.
-		 * Die ermittelte Zahl darf nicht über dem hier zurückgegebenen Wert
-		 * liegen.
-		 */
+		/** Gibt die maximale Anzahl von Rows zurück. Dieser Wert wird in Modul H verwendet. Module H
+		 * validiert die table.xml Dateien gegen ihre table.xsd Schemas. Wenn ein Schema <xs:element
+		 * name="row" type="rowType" minOccurs="0" maxOccurs="unbounded"/> in minOccurs oder maxOccurs
+		 * hohe Zahlenwerte enthält, führt die Validierung zu einem java.lang.OutOfMemoryError. Da
+		 * dieser Error nicht aufgefangen werden kann, werden vor der Validierung die Rows der Tabelle
+		 * gezählt. Die ermittelte Zahl darf nicht über dem hier zurückgegebenen Wert liegen. */
 		int value = 20000;
 		Object prop = getConfig().getProperty( "siard.table-rows-limit" );
 		if ( prop != null ) {
@@ -293,6 +270,19 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		return null;
 	}
 
+	/*--- JPEG ---------------------------------------------------------------------*/
+	@Override
+	public String jpegValidation()
+	{
+		Object prop = getConfig().getProperty( "jpeg.jpegvalidation" );
+
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
 	/*--- SIP ---------------------------------------------------------------------*/
 	@SuppressWarnings("unchecked")
 	@Override
@@ -301,8 +291,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		Map<String, String> result = new HashMap<String, String>();
 		List<HierarchicalConfiguration> fields = getConfig().configurationsAt(
 				"sip.allowedformats.allowedformat" );
-		for ( Iterator<HierarchicalConfiguration> it = fields.iterator(); it
-				.hasNext(); ) {
+		for ( Iterator<HierarchicalConfiguration> it = fields.iterator(); it.hasNext(); ) {
 			HierarchicalConfiguration sub = it.next();
 			// sub contains now all data about a single field
 			String fieldPuid = sub.getString( "puid" );
@@ -360,9 +349,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		return null;
 	}
 
-	/**
-	 * Die Einschränkung des SIP-Namen ist konfigurierbar -> getAllowedSipName
-	 */
+	/** Die Einschränkung des SIP-Namen ist konfigurierbar -> getAllowedSipName */
 	@Override
 	public String getAllowedSipName()
 	{
@@ -371,10 +358,8 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String value = (String) prop;
 			return value;
 		} else {
-			LOGGER.logError( getTextResourceService().getText(
-					MESSAGE_XML_MODUL_Ac_SIP )
-					+ getTextResourceService().getText(
-							MESSAGE_XML_AC_INVALIDREGEX ) );
+			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ac_SIP )
+					+ getTextResourceService().getText( MESSAGE_XML_AC_INVALIDREGEX ) );
 		}
 		return null;
 	}
@@ -407,8 +392,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	@Override
 	public String getAllowedCompression1()
 	{
-		Object prop = getConfig().getProperty(
-				"tiff.allowedcompression.allowedcompression1" );
+		Object prop = getConfig().getProperty( "tiff.allowedcompression.allowedcompression1" );
 		if ( prop instanceof String ) {
 			String value = (String) prop;
 			return value;
@@ -419,8 +403,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	@Override
 	public String getAllowedCompression2()
 	{
-		Object prop = getConfig().getProperty(
-				"tiff.allowedcompression.allowedcompression2" );
+		Object prop = getConfig().getProperty( "tiff.allowedcompression.allowedcompression2" );
 		if ( prop instanceof String ) {
 			String value = (String) prop;
 			return value;
@@ -431,8 +414,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	@Override
 	public String getAllowedCompression3()
 	{
-		Object prop = getConfig().getProperty(
-				"tiff.allowedcompression.allowedcompression3" );
+		Object prop = getConfig().getProperty( "tiff.allowedcompression.allowedcompression3" );
 		if ( prop instanceof String ) {
 			String value = (String) prop;
 			return value;
@@ -443,8 +425,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	@Override
 	public String getAllowedCompression4()
 	{
-		Object prop = getConfig().getProperty(
-				"tiff.allowedcompression.allowedcompression4" );
+		Object prop = getConfig().getProperty( "tiff.allowedcompression.allowedcompression4" );
 		if ( prop instanceof String ) {
 			String value = (String) prop;
 			return value;
@@ -455,8 +436,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	@Override
 	public String getAllowedCompression5()
 	{
-		Object prop = getConfig().getProperty(
-				"tiff.allowedcompression.allowedcompression5" );
+		Object prop = getConfig().getProperty( "tiff.allowedcompression.allowedcompression5" );
 		if ( prop instanceof String ) {
 			String value = (String) prop;
 			return value;
@@ -467,8 +447,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	@Override
 	public String getAllowedCompression7()
 	{
-		Object prop = getConfig().getProperty(
-				"tiff.allowedcompression.allowedcompression7" );
+		Object prop = getConfig().getProperty( "tiff.allowedcompression.allowedcompression7" );
 		if ( prop instanceof String ) {
 			String value = (String) prop;
 			return value;
@@ -479,8 +458,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	@Override
 	public String getAllowedCompression8()
 	{
-		Object prop = getConfig().getProperty(
-				"tiff.allowedcompression.allowedcompression8" );
+		Object prop = getConfig().getProperty( "tiff.allowedcompression.allowedcompression8" );
 		if ( prop instanceof String ) {
 			String value = (String) prop;
 			return value;
@@ -491,8 +469,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	@Override
 	public String getAllowedCompression32773()
 	{
-		Object prop = getConfig().getProperty(
-				"tiff.allowedcompression.allowedcompression32773" );
+		Object prop = getConfig().getProperty( "tiff.allowedcompression.allowedcompression32773" );
 		if ( prop instanceof String ) {
 			String value = (String) prop;
 			return value;
@@ -504,8 +481,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	@Override
 	public String getAllowedPhotointer0()
 	{
-		Object prop = getConfig().getProperty(
-				"tiff.allowedphotointer.allowedphotointer0" );
+		Object prop = getConfig().getProperty( "tiff.allowedphotointer.allowedphotointer0" );
 		if ( prop instanceof String ) {
 			String value = (String) prop;
 			return value;
@@ -516,8 +492,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	@Override
 	public String getAllowedPhotointer1()
 	{
-		Object prop = getConfig().getProperty(
-				"tiff.allowedphotointer.allowedphotointer1" );
+		Object prop = getConfig().getProperty( "tiff.allowedphotointer.allowedphotointer1" );
 		if ( prop instanceof String ) {
 			String value = (String) prop;
 			return value;
@@ -528,8 +503,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	@Override
 	public String getAllowedPhotointer2()
 	{
-		Object prop = getConfig().getProperty(
-				"tiff.allowedphotointer.allowedphotointer2" );
+		Object prop = getConfig().getProperty( "tiff.allowedphotointer.allowedphotointer2" );
 		if ( prop instanceof String ) {
 			String value = (String) prop;
 			return value;
@@ -540,8 +514,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	@Override
 	public String getAllowedPhotointer3()
 	{
-		Object prop = getConfig().getProperty(
-				"tiff.allowedphotointer.allowedphotointer3" );
+		Object prop = getConfig().getProperty( "tiff.allowedphotointer.allowedphotointer3" );
 		if ( prop instanceof String ) {
 			String value = (String) prop;
 			return value;
@@ -552,8 +525,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	@Override
 	public String getAllowedPhotointer4()
 	{
-		Object prop = getConfig().getProperty(
-				"tiff.allowedphotointer.allowedphotointer4" );
+		Object prop = getConfig().getProperty( "tiff.allowedphotointer.allowedphotointer4" );
 		if ( prop instanceof String ) {
 			String value = (String) prop;
 			return value;
@@ -564,8 +536,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	@Override
 	public String getAllowedPhotointer5()
 	{
-		Object prop = getConfig().getProperty(
-				"tiff.allowedphotointer.allowedphotointer5" );
+		Object prop = getConfig().getProperty( "tiff.allowedphotointer.allowedphotointer5" );
 		if ( prop instanceof String ) {
 			String value = (String) prop;
 			return value;
@@ -576,8 +547,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	@Override
 	public String getAllowedPhotointer6()
 	{
-		Object prop = getConfig().getProperty(
-				"tiff.allowedphotointer.allowedphotointer6" );
+		Object prop = getConfig().getProperty( "tiff.allowedphotointer.allowedphotointer6" );
 		if ( prop instanceof String ) {
 			String value = (String) prop;
 			return value;
@@ -588,8 +558,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	@Override
 	public String getAllowedPhotointer8()
 	{
-		Object prop = getConfig().getProperty(
-				"tiff.allowedphotointer.allowedphotointer8" );
+		Object prop = getConfig().getProperty( "tiff.allowedphotointer.allowedphotointer8" );
 		if ( prop instanceof String ) {
 			String value = (String) prop;
 			return value;
@@ -601,8 +570,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	@Override
 	public String getAllowedBitspersample1()
 	{
-		Object prop = getConfig().getProperty(
-				"tiff.allowedbitspersample.allowedbitspersample1" );
+		Object prop = getConfig().getProperty( "tiff.allowedbitspersample.allowedbitspersample1" );
 		if ( prop instanceof String ) {
 			String value = (String) prop;
 			return value;
@@ -613,8 +581,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	@Override
 	public String getAllowedBitspersample2()
 	{
-		Object prop = getConfig().getProperty(
-				"tiff.allowedbitspersample.allowedbitspersample2" );
+		Object prop = getConfig().getProperty( "tiff.allowedbitspersample.allowedbitspersample2" );
 		if ( prop instanceof String ) {
 			String value = (String) prop;
 			return value;
@@ -625,8 +592,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	@Override
 	public String getAllowedBitspersample4()
 	{
-		Object prop = getConfig().getProperty(
-				"tiff.allowedbitspersample.allowedbitspersample4" );
+		Object prop = getConfig().getProperty( "tiff.allowedbitspersample.allowedbitspersample4" );
 		if ( prop instanceof String ) {
 			String value = (String) prop;
 			return value;
@@ -637,8 +603,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	@Override
 	public String getAllowedBitspersample8()
 	{
-		Object prop = getConfig().getProperty(
-				"tiff.allowedbitspersample.allowedbitspersample8" );
+		Object prop = getConfig().getProperty( "tiff.allowedbitspersample.allowedbitspersample8" );
 		if ( prop instanceof String ) {
 			String value = (String) prop;
 			return value;
@@ -649,8 +614,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	@Override
 	public String getAllowedBitspersample16()
 	{
-		Object prop = getConfig().getProperty(
-				"tiff.allowedbitspersample.allowedbitspersample16" );
+		Object prop = getConfig().getProperty( "tiff.allowedbitspersample.allowedbitspersample16" );
 		if ( prop instanceof String ) {
 			String value = (String) prop;
 			return value;
@@ -661,8 +625,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	@Override
 	public String getAllowedBitspersample32()
 	{
-		Object prop = getConfig().getProperty(
-				"tiff.allowedbitspersample.allowedbitspersample32" );
+		Object prop = getConfig().getProperty( "tiff.allowedbitspersample.allowedbitspersample32" );
 		if ( prop instanceof String ) {
 			String value = (String) prop;
 			return value;
@@ -673,8 +636,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	@Override
 	public String getAllowedBitspersample64()
 	{
-		Object prop = getConfig().getProperty(
-				"tiff.allowedbitspersample.allowedbitspersample64" );
+		Object prop = getConfig().getProperty( "tiff.allowedbitspersample.allowedbitspersample64" );
 		if ( prop instanceof String ) {
 			String value = (String) prop;
 			return value;
@@ -686,8 +648,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	@Override
 	public String getAllowedMultipage()
 	{
-		Object prop = getConfig().getProperty(
-				"tiff.allowedother.allowedmultipage" );
+		Object prop = getConfig().getProperty( "tiff.allowedother.allowedmultipage" );
 		if ( prop instanceof String ) {
 			String value = (String) prop;
 			return value;
@@ -699,8 +660,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	@Override
 	public String getAllowedTiles()
 	{
-		Object prop = getConfig()
-				.getProperty( "tiff.allowedother.allowedtiles" );
+		Object prop = getConfig().getProperty( "tiff.allowedother.allowedtiles" );
 		if ( prop instanceof String ) {
 			String value = (String) prop;
 			return value;
