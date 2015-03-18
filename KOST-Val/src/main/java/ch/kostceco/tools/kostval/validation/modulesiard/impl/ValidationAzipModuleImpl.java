@@ -111,8 +111,10 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements
 												.getText(
 														ERROR_XML_A_INCORRECTFILEENDING_SIARD ) );
 				// Die SIARD-Datei ist kein ZIP.
+				read.close();
 				return false;
 			}
+		read.close();
 		} catch ( Exception e ) {
 			getMessageService().logError(
 					getTextResourceService()

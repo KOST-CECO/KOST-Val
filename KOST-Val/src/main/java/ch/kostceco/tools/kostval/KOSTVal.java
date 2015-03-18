@@ -704,6 +704,7 @@ public class KOSTVal implements MessageConstants
 							// PK.. beginnt
 							zip = true;
 						}
+					read.close();
 					} catch ( Exception e ) {
 						LOGGER.logError( "<Error>"
 								+ kostval.getTextResourceService().getText(

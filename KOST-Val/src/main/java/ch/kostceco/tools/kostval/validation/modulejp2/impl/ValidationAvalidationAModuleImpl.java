@@ -166,6 +166,7 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 												+ getTextResourceService()
 														.getText(
 																MESSAGE_XML_CONFIGURATION_ERROR_NO_SIGNATURE ) );
+						read.close();
 						return false;
 					}
 					// existiert die SignatureFile am angebenen Ort?
@@ -175,6 +176,7 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 								getTextResourceService().getText( MESSAGE_XML_MODUL_A_JP2 )
 										+ getTextResourceService().getText(
 												MESSAGE_XML_CA_DROID ) );
+						read.close();
 						return false;
 					}
 
@@ -211,8 +213,10 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 									MESSAGE_XML_MODUL_A_JP2 )
 									+ getTextResourceService().getText(
 											ERROR_XML_A_JP2_INCORRECTFILE, puid ) );
+					read.close();
 					return false;
 				}
+				read.close();
 			} catch ( Exception e ) {
 				getMessageService().logError(
 						getTextResourceService().getText(
