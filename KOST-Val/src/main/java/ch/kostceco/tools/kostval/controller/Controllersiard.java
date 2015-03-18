@@ -187,8 +187,8 @@ public class Controllersiard implements MessageConstants
 			if ( this.getValidationAzipModule().validate( valDatei, directoryOfLogfile ) ) {
 				this.getValidationAzipModule().getMessageService().print();
 			} else {
-				// Ein negatives Validierungsresultat in diesem Schritt führt
-				// zum Abbruch der weiteren Verarbeitung
+				// Ein negatives Validierungsresultat in diesem Schritt führt zum Abbruch der weiteren
+				// Verarbeitung
 				this.getValidationAzipModule().getMessageService().print();
 				return false;
 			}
@@ -208,8 +208,8 @@ public class Controllersiard implements MessageConstants
 			if ( this.getValidationBprimaryStructureModule().validate( valDatei, directoryOfLogfile ) ) {
 				this.getValidationBprimaryStructureModule().getMessageService().print();
 			} else {
-				// Ein negatives Validierungsresultat in diesem Schritt führt
-				// zum Abbruch der weiteren Verarbeitung
+				// Ein negatives Validierungsresultat in diesem Schritt führt zum Abbruch der weiteren
+				// Verarbeitung
 				this.getValidationBprimaryStructureModule().getMessageService().print();
 				return false;
 			}
@@ -230,8 +230,8 @@ public class Controllersiard implements MessageConstants
 				this.getValidationCheaderModule().getMessageService().print();
 			} else {
 				this.getValidationCheaderModule().getMessageService().print();
-				// Ein negatives Validierungsresultat in diesem Schritt führt
-				// zum Abbruch der weiteren Verarbeitung
+				// Ein negatives Validierungsresultat in diesem Schritt führt zum Abbruch der weiteren
+				// Verarbeitung
 				return false;
 			}
 		} catch ( ValidationCheaderException e ) {
@@ -251,8 +251,8 @@ public class Controllersiard implements MessageConstants
 				this.getValidationDstructureModule().getMessageService().print();
 			} else {
 				this.getValidationDstructureModule().getMessageService().print();
-				// Ein negatives Validierungsresultat in diesem Schritt führt
-				// zum Abbruch der weiteren Verarbeitung
+				// Ein negatives Validierungsresultat in diesem Schritt führt zum Abbruch der weiteren
+				// Verarbeitung
 				return false;
 			}
 		} catch ( ValidationDstructureException e ) {
