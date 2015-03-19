@@ -3,6 +3,22 @@
 	<!--ANT 1.7 is required                                        -->
 	<target name="create_run_jar_de_fr_en">
         <mkdir dir="../KOST-Val_TEST"/>
+		<!--Erstelle target, damit die Jars auf dem aktuellen Code erstellt werden-->
+		<!--<delete dir="KOST-Val/target/classes" />-->
+		<mkdir dir="KOST-Val/target/classes" />
+		<copy includeemptydirs="false" overwrite="true" todir="KOST-Val/target/classes">
+			<fileset dir="KOST-Val/src/main/java">
+				<exclude name="**/*.launch" />
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+		<copy includeemptydirs="false" overwrite="true" todir="KOST-Val/target/classes">
+			<fileset dir="KOST-Val/src/main/resources">
+				<exclude name="**/*.launch" />
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+		<copy file="README.md" todir="KOST-Val/target/classes" />
 		<!--Kopiere de_messages.properties in target und erstelle kostval_de.jar -->
 		<copy file="KOST-Val/src/main/resources/de_messages.properties" overwrite="true" tofile="KOST-Val/target/classes/messages.properties"/>
 		<jar destfile="../KOST-Val_TEST/kostval_de.jar">
@@ -144,23 +160,23 @@
 			<zipfileset dir="KOST-Val/lib" includes="droid-results-5.0.3.jar"/>
 			<zipfileset dir="KOST-Val/lib" includes="VALA-4.5.6.RELEASE.jar"/>
 		</jar>
-		<!--Kopiere alle benötigten Ordner und Dokumente -->
-		<copy todir="../KOST-Val_TEST/configuration">
+		<!--Kopiere alle benötigten Ordner und Dokumente in KOST-Val_TEST-->
+		<copy overwrite="true" todir="../KOST-Val_TEST/configuration">
 			<fileset dir="KOST-Val/src/main/resources_notJar/configuration"/>
 		</copy>
-		<copy todir="../KOST-Val_TEST/doc">
+		<copy overwrite="true" todir="../KOST-Val_TEST/doc">
 			<fileset dir="KOST-Val/src/main/resources_notJar/doc"/>
 		</copy>
-		<copy todir="../KOST-Val_TEST/license">
+		<copy overwrite="true" todir="../KOST-Val_TEST/license">
 			<fileset dir="KOST-Val/src/main/resources_notJar/license"/>
 		</copy>
-		<copy todir="../KOST-Val_TEST/resources">
+		<copy overwrite="true" todir="../KOST-Val_TEST/resources">
 			<fileset dir="KOST-Val/src/main/resources_notJar/resources"/>
 		</copy>
 		<copy file="KOST-Val/src/main/resources_notJar/KOST-Val_de.exe" todir="../KOST-Val_TEST"/>
 		<copy file="KOST-Val/src/main/resources_notJar/KOST-Val_fr.exe" todir="../KOST-Val_TEST"/>
 		<copy file="KOST-Val/src/main/resources_notJar/KOST-Val_en.exe" todir="../KOST-Val_TEST"/>
-		<copy file="KOST-Val/src/main/resources_notJar/PdfValidatorAPI.dll" todir="../KOST-Val_TEST"/>
+		<copy file="KOST-Val/src/main/resources_notJar/PdfValidatorAPI.dll" overwrite="true" todir="../KOST-Val_TEST"/>
 		<copy file="KOST-Val/src/main/resources/de_messages.properties" overwrite="true" tofile="KOST-Val/target/classes/messages.properties"/>
 	</target>
 </project>

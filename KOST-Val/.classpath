@@ -2,8 +2,6 @@
 <classpath>
 	<classpathentry excluding="ch/kostceco/tools/kostval/validation/moduletiff2/impl/ch/kostceco/tools/kostval/validation/moduletiff2/impl/" kind="src" path="src/main/java"/>
 	<classpathentry kind="src" path="src/main/resources"/>
-	<classpathentry excluding="src/main/java/|src/test/resources/|src/test/java/|src/main/resources/|src/|src/main/java/ch/kostceco/tools/kostval/validation/moduletiff2/impl/ch/kostceco/tools/kostval/validation/moduletiff2/impl/" kind="src" path=""/>
-	<classpathentry excluding="main/java/|test/resources/|test/java/|main/resources/|main/java/ch/kostceco/tools/kostval/validation/moduletiff2/impl/ch/kostceco/tools/kostval/validation/moduletiff2/impl/" kind="src" path="src"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="con" path="org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/commons-configuration-1.6.jar" sourcepath="external-sources/commons-configuration-1.6-sources.jar"/>
