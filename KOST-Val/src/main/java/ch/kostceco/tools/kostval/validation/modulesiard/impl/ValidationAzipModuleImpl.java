@@ -49,8 +49,7 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 
 		boolean valid = false;
 		boolean validC = false;
-		/*
-		 * boolean store = false; boolean def = false; boolean defX = false; boolean defN = false; */
+		/* boolean store = false; boolean def = false; boolean defX = false; boolean defN = false; */
 
 		// die Datei darf kein Directory sein
 		if ( valDatei.isDirectory() ) {
@@ -96,8 +95,10 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 						getTextResourceService().getText( MESSAGE_XML_MODUL_A_SIARD )
 								+ getTextResourceService().getText( ERROR_XML_A_INCORRECTFILEENDING_SIARD ) );
 				// Die SIARD-Datei ist kein ZIP.
+				read.close();
 				return false;
 			}
+			read.close();
 		} catch ( Exception e ) {
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_XML_MODUL_A_SIARD )
@@ -180,6 +181,7 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 							getMessageService().logError(
 									getTextResourceService().getText( MESSAGE_XML_MODUL_A_SIARD )
 											+ getTextResourceService().getText( ERROR_XML_A_DEFLATED, compressed ) );
+							read.close();
 							return false;
 						}
 					}
@@ -189,14 +191,17 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 					getMessageService().logError(
 							getTextResourceService().getText( MESSAGE_XML_MODUL_A_SIARD )
 									+ getTextResourceService().getText( ERROR_XML_A_INCORRECTZIP, e.getMessage() ) );
+					read.close();
 					return false;
 				}
 			} else {
 				getMessageService().logError(
 						getTextResourceService().getText( MESSAGE_XML_MODUL_A_SIARD )
 								+ getTextResourceService().getText( ERROR_XML_A_DEFLATED, dec8 ) );
+				read.close();
 				return false;
 			}
+			read.close();
 		} catch ( Exception e ) {
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_XML_MODUL_A_SIARD )

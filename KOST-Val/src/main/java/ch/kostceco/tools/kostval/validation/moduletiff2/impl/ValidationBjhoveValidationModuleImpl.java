@@ -217,6 +217,7 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl i
 							lines.add( line );
 						} else {
 							// Modul B Abbrechen. Spart viel Zeit.
+							in.close();
 							return false;
 						}
 					}
