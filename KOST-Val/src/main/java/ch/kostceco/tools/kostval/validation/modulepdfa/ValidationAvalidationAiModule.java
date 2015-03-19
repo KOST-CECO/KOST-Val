@@ -23,7 +23,18 @@ import java.io.File;
 import ch.kostceco.tools.kostval.exception.modulepdfa.ValidationApdfvalidationException;
 import ch.kostceco.tools.kostval.validation.ValidationModule;
 
-/** PDFA Validierungs mit PDFTron. Ist die vorliegende PDF-Datei eine valide PDFA-Datei
+/** Ist die vorliegende PDF-Datei eine valide PDFA-Datei? PDFA Validierungs mit PDFTron und oder
+ * PDF-Tools.
+ * 
+ * Folgendes ist Konfigurierbar: Hauptvalidator sowie ob eine duale Validierung durchgeführt werden
+ * soll oder nicht. Bei der dualen Validierung müssen beide Validatoren die Datei als invalide
+ * betrachten, damit diese als invalid gilt. Bei Uneinigkeit gilt diese als valid.
+ * 
+ * Es wird falls vorhanden die Vollversion von PDF-Tools verwendet. KOST-Val muss nicht angepasst
+ * werden und verwendet automatisch den internen Schlüssel, sollte keine Vollversion existieren.
+ * 
+ * Zuerste erfolgt eine Erkennung, wenn diese io kommt die Validierung mit PDFTron und oder
+ * PDF-Tools. Die Fehler werden den Einzelnen Gruppen (Modulen) zugeordnet
  * 
  * @author Rc Claire Röthlisberger, KOST-CECO */
 

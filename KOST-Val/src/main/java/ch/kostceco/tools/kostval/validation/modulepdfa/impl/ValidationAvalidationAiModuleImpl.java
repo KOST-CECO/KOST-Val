@@ -62,10 +62,11 @@ import ch.kostceco.tools.kostval.validation.modulepdfa.ValidationAvalidationAiMo
  * soll oder nicht. Bei der dualen Validierung müssen beide Validatoren die Datei als invalide
  * betrachten, damit diese als invalid gilt. Bei Uneinigkeit gilt diese als valid.
  * 
+ * Es wird falls vorhanden die Vollversion von PDF-Tools verwendet. KOST-Val muss nicht angepasst
+ * werden und verwendet automatisch den internen Schlüssel, sollte keine Vollversion existieren.
+ * 
  * Zuerste erfolgt eine Erkennung, wenn diese io kommt die Validierung mit PDFTron und oder
  * PDF-Tools. Die Fehler werden den Einzelnen Gruppen (Modulen) zugeordnet
- * 
- * Ab der version 1.3.4 geschieht dies alles in einem Modul (dies benötigt weniger Memory)
  * 
  * @author Rc Claire Röthlisberger, KOST-CECO */
 
