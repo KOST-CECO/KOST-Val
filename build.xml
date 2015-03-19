@@ -4,7 +4,6 @@
 	<target name="create_run_jar_de_fr_en">
         <mkdir dir="../KOST-Val_TEST"/>
 		<!--Erstelle target, damit die Jars auf dem aktuellen Code erstellt werden-->
-		<!--<delete dir="KOST-Val/target/classes" />-->
 		<mkdir dir="KOST-Val/target/classes" />
 		<copy includeemptydirs="false" overwrite="true" todir="KOST-Val/target/classes">
 			<fileset dir="KOST-Val/src/main/java">
