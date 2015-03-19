@@ -30,16 +30,31 @@ import uk.gov.nationalarchives.droid.core.signature.droid4.Droid;
 import uk.gov.nationalarchives.droid.core.signature.droid4.FileFormatHit;
 import uk.gov.nationalarchives.droid.core.signature.droid4.IdentificationFile;
 import uk.gov.nationalarchives.droid.core.signature.droid4.signaturefile.FileFormat;
+
+import javax.imageio.IIOImage;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.plugins.jpeg.JPEGImageWriteParam;
+
+import org.junit.Assert;
+import org.junit.Test;
+
+import coderslagoon.badpeggy.scanner.ImageFormat;
+import coderslagoon.badpeggy.scanner.ImageScanner;
+import coderslagoon.baselib.imaging.Resolution;
+import coderslagoon.baselib.util.BinUtils;
+
+
 import ch.kostceco.tools.kostval.exception.modulejpeg.ValidationAjpegvalidationException;
 import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulejpeg.ValidationAvalidationJpegModule;
 
-/** Ist die vorliegende JPEG-Datei eine valide JPEG-Datei? JPEG Validierungs mit Java Image IO (JIIO)
- * library.
+/** Ist die vorliegende JPEG-Datei eine valide JPEG-Datei? JPEG Validierungs mit BadPeggy.
  * 
- * Zuerste erfolgt eine Erkennung, wenn diese io kommt die Validierung mit JIIO.
+ * Zuerste erfolgt eine Erkennung, wenn diese io kommt die Validierung mit BadPeggy.
  * 
  * @author Rc Claire Röthlisberger, KOST-CECO */
 
@@ -204,6 +219,64 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl im
 			/* TODO: Leider werden nicht alle Fehler entdeckt. Warum weiss ich nicht. evt sind der Rest
 			 * Warnungen oder so. Bad Peggy konsultieren, da diese es offensichtlich konnten... */
 		}
+	
+		/* Code schnippsel aus BadPeggy-Test: ImageScannerTest
+		 * TODO: zum laffenbringen
+		 * Doc mit BadPeggy + Lizenz erweitern
+		 * Message auf BadPeggy umschreiben
+		 * 
+    ImageScanner jscan = new ImageScanner();
+    ImageScanner.Result lastResult = null;
+
+    boolean ok = jscan.scan(new ByteArrayInputStream(imgdata_d), ifmt, this);
+    ImageScanner.Result result = jscan.lastResult();
+    assertTrue(lastResult != result);
+    lastResult = result;
+
+    if (ok) {
+      if (RECORD_NODETECTS) {
+          pwnd.print(damage == Damage.NONE ? "1" : "0");
+      }
+      else {
+          boolean nodetect = 0 == EXCLUSIONS[tabidx];
+          mismatchesNoDetects += (damage == Damage.NONE) ^ nodetect ? 0 : 1;
+          assertFalse(result.messages().iterator().hasNext());
+          assertTrue(ImageScanner.Result.Type.OK == result.type());
+      }
+  }
+  else {
+      if (RECORD_NODETECTS) {
+          pwnd.print("1");
+      }
+      if (DO_VERIFY) {
+          assertTrue(damage != Damage.NONE);
+          assertTrue(ImageScanner.Result.Type.OK != result.type());
+          assertTrue(result.messages().iterator().hasNext());
+          assertTrue(result.collapsedMessages().iterator().hasNext());
+          int ccm = 0;
+          Iterator<String> it = result.collapsedMessages().iterator();
+          while (it.hasNext()) {
+              assertNotNull(it.next());
+              ccm++;
+          }
+          it = result.messages().iterator();
+          int cm = 0;
+          while (it.hasNext()) {
+              cm++;
+              String msg = it.next();
+              int found = 0;
+              Iterator<String> itc = result.collapsedMessages().iterator();
+              while (itc.hasNext()) {
+                  if (itc.next().equals(msg)) {
+                      found++;
+                  }
+              }
+              assertTrue(1 == found);
+          }
+          assertTrue(cm >= ccm);
+      }
+  }
+*/
 		return isValid;
 	}
 }
