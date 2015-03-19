@@ -18,31 +18,18 @@
 
 package ch.kostceco.tools.kostval.validation.modulejpeg.impl;
 
-import static org.apache.commons.io.IOUtils.closeQuietly;
-
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileReader;
 import java.util.Arrays;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.imageio.ImageIO;
-import javax.imageio.event.*;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import uk.gov.nationalarchives.droid.core.signature.droid4.Droid;
 import uk.gov.nationalarchives.droid.core.signature.droid4.FileFormatHit;
 import uk.gov.nationalarchives.droid.core.signature.droid4.IdentificationFile;
 import uk.gov.nationalarchives.droid.core.signature.droid4.signaturefile.FileFormat;
-
 import ch.kostceco.tools.kostval.exception.modulejpeg.ValidationAjpegvalidationException;
 import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.util.Util;
@@ -75,12 +62,6 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl im
 	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws ValidationAjpegvalidationException
 	{
-		String pathToWorkDir = getConfigurationService().getPathToWorkDir();
-
-		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
-		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
-		 * ref="configurationService" /> */
-
 		// Start mit der Erkennung
 
 		// Eine JPEG Datei (.jpg / .jpeg) muss mit FFD8FF -> ÿØÿ beginnen
@@ -130,11 +111,16 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl im
 				} else {
 					// Droid-Erkennung, damit Details ausgegeben werden können
 					String nameOfSignature = getConfigurationService().getPathToDroidSignatureFile();
+					/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
+					 * entsprechenden Modul die property anzugeben: <property name="configurationService"
+					 * ref="configurationService" /> */
+
 					if ( nameOfSignature == null ) {
 						getMessageService().logError(
 								getTextResourceService().getText( MESSAGE_XML_MODUL_A_JPEG )
 										+ getTextResourceService().getText(
 												MESSAGE_XML_CONFIGURATION_ERROR_NO_SIGNATURE ) );
+						read.close();
 						return false;
 					}
 					// existiert die SignatureFile am angebenen Ort?
@@ -143,6 +129,7 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl im
 						getMessageService().logError(
 								getTextResourceService().getText( MESSAGE_XML_MODUL_A_JPEG )
 										+ getTextResourceService().getText( MESSAGE_XML_CA_DROID ) );
+						read.close();
 						return false;
 					}
 
@@ -160,6 +147,7 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl im
 						getMessageService().logError(
 								getTextResourceService().getText( MESSAGE_XML_MODUL_A_JPEG )
 										+ getTextResourceService().getText( ERROR_XML_CANNOT_INITIALIZE_DROID ) );
+						read.close();
 						return false;
 					} finally {
 						Util.switchOnConsole();
@@ -175,8 +163,10 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl im
 					getMessageService().logError(
 							getTextResourceService().getText( MESSAGE_XML_MODUL_A_JPEG )
 									+ getTextResourceService().getText( ERROR_XML_A_JPEG_INCORRECTFILE, puid ) );
+					read.close();
 					return false;
 				}
+				read.close();
 			} catch ( Exception e ) {
 				getMessageService().logError(
 						getTextResourceService().getText( MESSAGE_XML_MODUL_A_JPEG )
@@ -198,6 +188,7 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl im
 
 		// TODO: JPEG Validierung
 
+		@SuppressWarnings("unused")
 		BufferedImage bImage = null;
 		try {
 			bImage = ImageIO.read( valDatei );

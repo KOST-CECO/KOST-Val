@@ -220,6 +220,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 						level = pdfa2;
 					}
 				}
+				in.close();
 			} catch ( Throwable e ) {
 				getMessageService().logError(
 						getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
@@ -286,6 +287,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 								getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
 										+ getTextResourceService().getText(
 												MESSAGE_XML_CONFIGURATION_ERROR_NO_SIGNATURE ) );
+						read.close();
 						return false;
 					}
 					// existiert die SignatureFile am angebenen Ort?
@@ -294,6 +296,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 						getMessageService().logError(
 								getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
 										+ getTextResourceService().getText( MESSAGE_XML_CA_DROID ) );
+						read.close();
 						return false;
 					}
 
@@ -311,6 +314,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 						getMessageService().logError(
 								getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
 										+ getTextResourceService().getText( ERROR_XML_CANNOT_INITIALIZE_DROID ) );
+						read.close();
 						return false;
 					} finally {
 						Util.switchOnConsole();
@@ -326,8 +330,10 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 					getMessageService().logError(
 							getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
 									+ getTextResourceService().getText( ERROR_XML_A_PDFA_INCORRECTFILE, puid ) );
+					read.close();
 					return false;
 				}
+				read.close();
 			} catch ( Exception e ) {
 				getMessageService().logError(
 						getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )

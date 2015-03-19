@@ -36,8 +36,8 @@ import ch.kostceco.tools.kostval.validation.modulejpeg.ValidationAvalidationJpeg
 public class Controllerjpeg implements MessageConstants
 {
 
-	private static final Logger						LOGGER	= new Logger( Controllerjpeg.class );
-	private TextResourceService						textResourceService;
+	private static final Logger							LOGGER	= new Logger( Controllerjpeg.class );
+	private TextResourceService							textResourceService;
 
 	private ValidationAvalidationJpegModule	validationAvalidationJpegModule;
 

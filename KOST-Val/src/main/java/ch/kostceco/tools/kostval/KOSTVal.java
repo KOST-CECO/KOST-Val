@@ -513,7 +513,9 @@ public class KOSTVal implements MessageConstants
 									Util.deleteDir( tmpDir );
 								}
 							}
-						} else if ( ((valDatei.getAbsolutePath().toLowerCase().endsWith( ".jpeg" )||valDatei.getAbsolutePath().toLowerCase().endsWith( ".jpg" )||valDatei.getAbsolutePath().toLowerCase().endsWith( ".jpe" )))
+						} else if ( ((valDatei.getAbsolutePath().toLowerCase().endsWith( ".jpeg" )
+								|| valDatei.getAbsolutePath().toLowerCase().endsWith( ".jpg" ) || valDatei
+								.getAbsolutePath().toLowerCase().endsWith( ".jpe" )))
 								&& jpegValidation.equals( "yes" ) ) {
 
 							boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose );
@@ -762,6 +764,7 @@ public class KOSTVal implements MessageConstants
 							// höchstwahrscheinlich ein ZIP da es mit 504B0304 respektive PK.. beginnt
 							zip = true;
 						}
+						read.close();
 					} catch ( Exception e ) {
 						LOGGER.logError( "<Error>"
 								+ kostval.getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
@@ -1068,7 +1071,9 @@ public class KOSTVal implements MessageConstants
 							jp2CountNio = jp2CountNio + 1;
 						}
 
-					} else if ( ((valDatei.getAbsolutePath().toLowerCase().endsWith( ".jpeg" )||valDatei.getAbsolutePath().toLowerCase().endsWith( ".jpg" )||valDatei.getAbsolutePath().toLowerCase().endsWith( ".jpe" )))
+					} else if ( ((valDatei.getAbsolutePath().toLowerCase().endsWith( ".jpeg" )
+							|| valDatei.getAbsolutePath().toLowerCase().endsWith( ".jpg" ) || valDatei
+							.getAbsolutePath().toLowerCase().endsWith( ".jpe" )))
 							&& jpegValidation.equals( "yes" ) ) {
 
 						boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose );
@@ -1130,8 +1135,8 @@ public class KOSTVal implements MessageConstants
 				}
 			}
 
-			countSummaryNio = pdfaCountNio + siardCountNio + tiffCountNio + jp2CountNio+ jpegCountNio;
-			countSummaryIo = pdfaCountIo + siardCountIo + tiffCountIo + jp2CountIo+ jpegCountIo;
+			countSummaryNio = pdfaCountNio + siardCountNio + tiffCountNio + jp2CountNio + jpegCountNio;
+			countSummaryIo = pdfaCountIo + siardCountIo + tiffCountIo + jp2CountIo + jpegCountIo;
 			int countSummaryIoP = 100 / count * countSummaryIo;
 			int countSummaryNioP = 100 / count * countSummaryNio;
 			int countNioP = 100 / count * countNio;
@@ -1536,7 +1541,9 @@ public class KOSTVal implements MessageConstants
 				}
 			}
 
-		} else 		if ( (valDatei.getAbsolutePath().toLowerCase().endsWith( ".jpeg" )||valDatei.getAbsolutePath().toLowerCase().endsWith( ".jpg" )||valDatei.getAbsolutePath().toLowerCase().endsWith( ".jpe" )) ) {
+		} else if ( (valDatei.getAbsolutePath().toLowerCase().endsWith( ".jpeg" )
+				|| valDatei.getAbsolutePath().toLowerCase().endsWith( ".jpg" ) || valDatei
+				.getAbsolutePath().toLowerCase().endsWith( ".jpe" )) ) {
 			LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_VALERGEBNIS ) );
 			LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_VALTYPE,
 					kostval.getTextResourceService().getText( MESSAGE_JPEGVALIDATION ) ) );
