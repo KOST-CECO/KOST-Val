@@ -21,6 +21,9 @@ package ch.kostceco.tools.kostval.validation.modulejpeg.impl;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.awt.image.BufferedImage;
 
@@ -31,20 +34,9 @@ import uk.gov.nationalarchives.droid.core.signature.droid4.FileFormatHit;
 import uk.gov.nationalarchives.droid.core.signature.droid4.IdentificationFile;
 import uk.gov.nationalarchives.droid.core.signature.droid4.signaturefile.FileFormat;
 
-import javax.imageio.IIOImage;
-import javax.imageio.ImageIO;
-import javax.imageio.ImageWriteParam;
-import javax.imageio.ImageWriter;
-import javax.imageio.plugins.jpeg.JPEGImageWriteParam;
-
-import org.junit.Assert;
-import org.junit.Test;
-
 import coderslagoon.badpeggy.scanner.ImageFormat;
 import coderslagoon.badpeggy.scanner.ImageScanner;
-import coderslagoon.baselib.imaging.Resolution;
-import coderslagoon.baselib.util.BinUtils;
-
+import coderslagoon.badpeggy.scanner.ImageScanner.Callback;
 
 import ch.kostceco.tools.kostval.exception.modulejpeg.ValidationAjpegvalidationException;
 import ch.kostceco.tools.kostval.service.ConfigurationService;
@@ -220,62 +212,92 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl im
 			 * Warnungen oder so. Bad Peggy konsultieren, da diese es offensichtlich konnten... */
 		}
 	
-		/* Code schnippsel aus BadPeggy-Test: ImageScannerTest
-		 * TODO: zum laffenbringen
+		/* Code schnippsel aus BadPeggy-Demo: ImageScannerDemo
+		 * TODO: zum laufenbringen
 		 * Doc mit BadPeggy + Lizenz erweitern
 		 * Message auf BadPeggy umschreiben
 		 * 
-    ImageScanner jscan = new ImageScanner();
-    ImageScanner.Result lastResult = null;
+    // exit codes for this command line tool
+    enum ExitCode {
+        IMAGE_OK, // 0 - image seems to be undamaged
+        IMAGE_WARNING, // 1 - image produced warnings, should still render fine
+        IMAGE_ERROR, // 2 - image has errors
+        IMAGE_UNCAUGHT_ERROR, // 3 - imaged caused an uncaught exception
+        UNKNOWN_FORMAT, // 4 - the image format i.e. extension is not supported
+        SCAN_FAILED, // 5 - the scam somehow failed (read error, etc)
+        BAD_ARGS, // 5 - the command line arguments are wrong or missing
+        IO_ERROR, // 6 - the file could not be opened
+    }
+    
+    @Override
+    public boolean onProgress(double percent) {
+        // FIXME: the percentage depends on the number of pictures in the
+        //        container, so you can get 200% etc, but there is no (clean)
+        //        way to determine that number at this point ...
+        System.out.printf("%.1f %%\r\n", percent);
+        return true;
+    }
+    
+    public ExitCode run(String[] args) {
+        
+        if (1 != args.length) {
+            System.err.printf("usage: %s [image-file]\n",
+                              ImageScannerDemo.class.getName());
+            return ExitCode.BAD_ARGS;
+        }        
 
-    boolean ok = jscan.scan(new ByteArrayInputStream(imgdata_d), ifmt, this);
-    ImageScanner.Result result = jscan.lastResult();
-    assertTrue(lastResult != result);
-    lastResult = result;
+        // determine if the file format is known by the scanner
+        File fl = new File(args[0]);
+        ImageFormat ifmt = ImageFormat.fromFileName(fl.getName());
+        if (null == ifmt) {
+            System.err.println("file type not supported");
+            return ExitCode.UNKNOWN_FORMAT;
+        }
 
-    if (ok) {
-      if (RECORD_NODETECTS) {
-          pwnd.print(damage == Damage.NONE ? "1" : "0");
-      }
-      else {
-          boolean nodetect = 0 == EXCLUSIONS[tabidx];
-          mismatchesNoDetects += (damage == Damage.NONE) ^ nodetect ? 0 : 1;
-          assertFalse(result.messages().iterator().hasNext());
-          assertTrue(ImageScanner.Result.Type.OK == result.type());
-      }
-  }
-  else {
-      if (RECORD_NODETECTS) {
-          pwnd.print("1");
-      }
-      if (DO_VERIFY) {
-          assertTrue(damage != Damage.NONE);
-          assertTrue(ImageScanner.Result.Type.OK != result.type());
-          assertTrue(result.messages().iterator().hasNext());
-          assertTrue(result.collapsedMessages().iterator().hasNext());
-          int ccm = 0;
-          Iterator<String> it = result.collapsedMessages().iterator();
-          while (it.hasNext()) {
-              assertNotNull(it.next());
-              ccm++;
-          }
-          it = result.messages().iterator();
-          int cm = 0;
-          while (it.hasNext()) {
-              cm++;
-              String msg = it.next();
-              int found = 0;
-              Iterator<String> itc = result.collapsedMessages().iterator();
-              while (itc.hasNext()) {
-                  if (itc.next().equals(msg)) {
-                      found++;
-                  }
-              }
-              assertTrue(1 == found);
-          }
-          assertTrue(cm >= ccm);
-      }
-  }
+        // open the file
+        InputStream is;
+        try {
+            is = new FileInputStream(new File(args[0]));
+        }
+        catch (IOException ioe) {
+            System.err.printf("cannot open file (%s)\n",
+                              ioe.getMessage());
+            return ExitCode.IO_ERROR;
+        }
+        
+        // scan the file, the return value just tells us good or bad or ...
+        ImageScanner iscan = new ImageScanner();
+        Boolean ok = iscan.scan(is, ifmt, this);
+        if (null == ok) {
+            // ... that the scanner itself could not do its job at all
+            System.err.println("scan failed");
+            return ExitCode.SCAN_FAILED;
+        }
+        System.out.println(ok ? "IMAGE OK" : "IMAGE DAMAGED!");
+
+        // how what the actual result says, here you can distinguish further
+        // between errors or warnings ...
+        ImageScanner.Result ires = iscan.lastResult();
+        System.out.printf("result: %s\n", ires.type());
+        
+        // display the scanner's log messages
+        System.out.println("messages:");
+        for (String msg : ires.collapsedMessages()) {
+            System.out.println("\t" + msg);
+        }
+
+        // translate the result into an exit code
+        switch (ires.type()) {
+            case OK     : return ExitCode.IMAGE_OK;
+            case WARNING: return ExitCode.IMAGE_WARNING;
+            case ERROR  : return ExitCode.IMAGE_ERROR;
+            default     : return ExitCode.IMAGE_UNCAUGHT_ERROR;
+        }
+    }
+
+    public static void main(String[] args) {
+        System.exit(new ImageScannerDemo().run(args).ordinal());
+    }
 */
 		return isValid;
 	}
