@@ -1,7 +1,8 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2-Files and Submission
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
  * Information Package (SIP). Copyright (C) 2012-2015 Claire Röthlisberger (KOST-CECO), Christian
- * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Daniel Ludin (BEDAG AG)
+ * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
+ * Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
  * KOST-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. This application
  * is free software: you can redistribute it and/or modify it under the terms of the GNU General
@@ -265,13 +266,13 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl implement
 										+ getTextResourceService().getText( MESSAGE_XML_AC_NOTALLOWEDV, "BAR v1" ) );
 						valid = false;
 					}
-				 } else {
-					 /* eigentlich müsste es ansonsten arelda.xsd enthalten sein.
-						*
-						* Da aber bei schreibfehler in diesem Dateinamen alle xsd bemängelt werden wurde es
-						* durch ein else ersetzt
-						*
-						* if ( name.endsWith( "arelda.xsd" ) ) { */
+				} else {
+					/* eigentlich müsste es ansonsten arelda.xsd enthalten sein.
+					 * 
+					 * Da aber bei schreibfehler in diesem Dateinamen alle xsd bemängelt werden wurde es
+					 * durch ein else ersetzt
+					 * 
+					 * if ( name.endsWith( "arelda.xsd" ) ) { */
 
 					// dann handelt es sich um die Version BAR4 respektive eCH1
 					version = 4;

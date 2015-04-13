@@ -1,7 +1,8 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2-Files and Submission
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
  * Information Package (SIP). Copyright (C) 2012-2015 Claire Röthlisberger (KOST-CECO), Christian
- * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Daniel Ludin (BEDAG AG)
+ * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
+ * Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
  * KOST-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. This application
  * is free software: you can redistribute it and/or modify it under the terms of the GNU General
@@ -25,9 +26,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
-import java.awt.image.BufferedImage;
-
-import javax.imageio.ImageIO;
 
 import uk.gov.nationalarchives.droid.core.signature.droid4.Droid;
 import uk.gov.nationalarchives.droid.core.signature.droid4.FileFormatHit;
@@ -48,10 +46,11 @@ import ch.kostceco.tools.kostval.validation.modulejpeg.ValidationAvalidationJpeg
  * 
  * Zuerste erfolgt eine Erkennung, wenn diese io kommt die Validierung mit BadPeggy.
  * 
- * @author Rc Claire Röthlisberger, KOST-CECO */
+ * @author Rc Claire Röthlisberger, KOST-CECO
+ * @author Markus Hahn, coderslagoon */
 
 public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl implements
-		ValidationAvalidationJpegModule
+		ValidationAvalidationJpegModule, Callback
 {
 	private ConfigurationService	configurationService;
 
@@ -189,116 +188,89 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl im
 		}
 		// Ende der Erkennung
 
-		// TODO: Bis da umgeschrieben
-
 		boolean isValid = true;
 
-		// TODO: JPEG Validierung
+		// TODO: Erledigt: JPEG Validierung
 
-		@SuppressWarnings("unused")
-		BufferedImage bImage = null;
-		try {
-			bImage = ImageIO.read( valDatei );
-		} catch ( Exception e ) {
+		/* Code schnippsel erhalten von M. Hahn: ImageScannerDemo
+		 * 
+		 * und umgeschrieben durch C. Röthlisberger auf KOST-Val
+		 * 
+		 * TODO: JIIO-Fehlermeldungen Übersetzten und Gruppieren; Doc mit BadPeggy + Lizenz erweitern */
+
+		// determine if the file format is known by the scanner
+		File fl = valDatei;
+		ImageFormat ifmt = ImageFormat.fromFileName( fl.getName() );
+		if ( null == ifmt ) {
+			System.err.println( "file type not supported" );
 			// invalide
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_A_JP2 )
+					getTextResourceService().getText( MESSAGE_XML_MODUL_A_JPEG )
 							+ getTextResourceService().getText( ERROR_XML_A_JPEG_JIIO_FAIL ) );
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_A_JP2 )
-							+ getTextResourceService().getText( ERROR_XML_A_JPEG_JIIO_ERROR, e.getMessage() ) );
+					getTextResourceService().getText( MESSAGE_XML_MODUL_A_JPEG )
+							+ getTextResourceService().getText( ERROR_XML_A_JPEG_JIIO_FILETYPE ) );
 			isValid = false;
-			/* TODO: Leider werden nicht alle Fehler entdeckt. Warum weiss ich nicht. evt sind der Rest
-			 * Warnungen oder so. Bad Peggy konsultieren, da diese es offensichtlich konnten... */
 		}
-	
-		/* Code schnippsel aus BadPeggy-Demo: ImageScannerDemo
-		 * TODO: zum laufenbringen
-		 * Doc mit BadPeggy + Lizenz erweitern
-		 * Message auf BadPeggy umschreiben
-		 * 
-    // exit codes for this command line tool
-    enum ExitCode {
-        IMAGE_OK, // 0 - image seems to be undamaged
-        IMAGE_WARNING, // 1 - image produced warnings, should still render fine
-        IMAGE_ERROR, // 2 - image has errors
-        IMAGE_UNCAUGHT_ERROR, // 3 - imaged caused an uncaught exception
-        UNKNOWN_FORMAT, // 4 - the image format i.e. extension is not supported
-        SCAN_FAILED, // 5 - the scam somehow failed (read error, etc)
-        BAD_ARGS, // 5 - the command line arguments are wrong or missing
-        IO_ERROR, // 6 - the file could not be opened
-    }
-    
-    @Override
-    public boolean onProgress(double percent) {
-        // FIXME: the percentage depends on the number of pictures in the
-        //        container, so you can get 200% etc, but there is no (clean)
-        //        way to determine that number at this point ...
-        System.out.printf("%.1f %%\r\n", percent);
-        return true;
-    }
-    
-    public ExitCode run(String[] args) {
-        
-        if (1 != args.length) {
-            System.err.printf("usage: %s [image-file]\n",
-                              ImageScannerDemo.class.getName());
-            return ExitCode.BAD_ARGS;
-        }        
 
-        // determine if the file format is known by the scanner
-        File fl = new File(args[0]);
-        ImageFormat ifmt = ImageFormat.fromFileName(fl.getName());
-        if (null == ifmt) {
-            System.err.println("file type not supported");
-            return ExitCode.UNKNOWN_FORMAT;
-        }
+		// open the file
+		try {
+			InputStream is = new FileInputStream( valDatei );
 
-        // open the file
-        InputStream is;
-        try {
-            is = new FileInputStream(new File(args[0]));
-        }
-        catch (IOException ioe) {
-            System.err.printf("cannot open file (%s)\n",
-                              ioe.getMessage());
-            return ExitCode.IO_ERROR;
-        }
-        
-        // scan the file, the return value just tells us good or bad or ...
-        ImageScanner iscan = new ImageScanner();
-        Boolean ok = iscan.scan(is, ifmt, this);
-        if (null == ok) {
-            // ... that the scanner itself could not do its job at all
-            System.err.println("scan failed");
-            return ExitCode.SCAN_FAILED;
-        }
-        System.out.println(ok ? "IMAGE OK" : "IMAGE DAMAGED!");
+			// scan the file, the return value just tells us good or bad or ...
+			ImageScanner iscan = new ImageScanner();
+			Boolean ok = iscan.scan( is, ifmt, this );
+			if ( null == ok ) {
+				// ... that the scanner itself could not do its job at all
+				getMessageService().logError(
+						getTextResourceService().getText( MESSAGE_XML_MODUL_A_JPEG )
+								+ getTextResourceService().getText( ERROR_XML_A_JPEG_JIIO_FAIL ) );
+				getMessageService().logError(
+						getTextResourceService().getText( MESSAGE_XML_MODUL_A_JPEG )
+								+ getTextResourceService().getText( ERROR_XML_A_JPEG_JIIO_SCANFAILED ) );
+				// invalide
+				isValid = false;
+			}
+			if ( ok ) {
+				// valide
+				isValid = true;
+			} else {
+				// invalide
+				getMessageService().logError(
+						getTextResourceService().getText( MESSAGE_XML_MODUL_A_JPEG )
+								+ getTextResourceService().getText( ERROR_XML_A_JPEG_JIIO_FAIL ) );
+				isValid = false;
 
-        // how what the actual result says, here you can distinguish further
-        // between errors or warnings ...
-        ImageScanner.Result ires = iscan.lastResult();
-        System.out.printf("result: %s\n", ires.type());
-        
-        // display the scanner's log messages
-        System.out.println("messages:");
-        for (String msg : ires.collapsedMessages()) {
-            System.out.println("\t" + msg);
-        }
+				ImageScanner.Result ires = iscan.lastResult();
 
-        // translate the result into an exit code
-        switch (ires.type()) {
-            case OK     : return ExitCode.IMAGE_OK;
-            case WARNING: return ExitCode.IMAGE_WARNING;
-            case ERROR  : return ExitCode.IMAGE_ERROR;
-            default     : return ExitCode.IMAGE_UNCAUGHT_ERROR;
-        }
-    }
+				// display the scanner's log messages
+				for ( String msg : ires.collapsedMessages() ) {
+					getMessageService().logError(
+							getTextResourceService().getText( MESSAGE_XML_MODUL_A_JPEG )
+									+ getTextResourceService().getText( ERROR_XML_A_JPEG_JIIO_ERROR, msg ) );
+				}
 
-    public static void main(String[] args) {
-        System.exit(new ImageScannerDemo().run(args).ordinal());
-    }
-*/
+			}
+			is.close();
+		} catch ( IOException ioe ) {
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_A_JPEG )
+							+ getTextResourceService().getText( ERROR_XML_A_JPEG_JIIO_FAIL ) );
+			getMessageService()
+					.logError(
+							getTextResourceService().getText( MESSAGE_XML_MODUL_A_JPEG )
+									+ getTextResourceService().getText( ERROR_XML_A_JPEG_SERVICEFAILED,
+											ioe.getMessage() ) );
+			isValid = false;
+		}
+
 		return isValid;
+	}
+
+	@Override
+	public boolean onProgress( float percent )
+	{
+		// Muss auf return true sein, da ansonsten BadPeggy nicht funktioniert
+		return true;
 	}
 }

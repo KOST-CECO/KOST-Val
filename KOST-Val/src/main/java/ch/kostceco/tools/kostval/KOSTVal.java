@@ -1,7 +1,8 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val v1.5.1 application is used for validate TIFF, SIARD, PDF/A, JP2-Files and Submission
- * Information Package (SIP). Copyright (C) 2012-2015 Claire Röthlisberger (KOST-CECO), Christian
- * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Daniel Ludin (BEDAG AG)
+ * The KOST-Val v1.5.1 application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and
+ * Submission Information Package (SIP). Copyright (C) 2012-2015 Claire Röthlisberger (KOST-CECO),
+ * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
+ * (coderslagoon), Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
  * KOST-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. This application
  * is free software: you can redistribute it and/or modify it under the terms of the GNU General

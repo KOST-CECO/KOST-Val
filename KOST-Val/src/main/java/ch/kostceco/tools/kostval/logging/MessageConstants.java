@@ -1,7 +1,8 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2-Files and Submission
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
  * Information Package (SIP). Copyright (C) 2012-2015 Claire Röthlisberger (KOST-CECO), Christian
- * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Daniel Ludin (BEDAG AG)
+ * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
+ * Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
  * KOST-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. This application
  * is free software: you can redistribute it and/or modify it under the terms of the GNU General
@@ -319,6 +320,8 @@ public interface MessageConstants
 	String	ERROR_XML_A_JPEG_ISDIRECTORY									= "error.xml.a.jpeg.isdirectory";
 	String	ERROR_XML_A_JPEG_SERVICEFAILED								= "error.xml.a.jpeg.servicefailed";
 	String	ERROR_XML_A_JPEG_JIIO_FAIL										= "error.xml.a.jpeg.jiio.fail";
+	String	ERROR_XML_A_JPEG_JIIO_FILETYPE								= "error.xml.a.jpeg.jiio.filetype";
+	String	ERROR_XML_A_JPEG_JIIO_SCANFAILED							= "error.xml.a.jpeg.jiio.scanfailed";
 	String	ERROR_XML_A_JPEG_JIIO_ERROR										= "error.xml.a.jpeg.jiio.error";
 
 	// *************SIP-Meldungen*************************************************************************
