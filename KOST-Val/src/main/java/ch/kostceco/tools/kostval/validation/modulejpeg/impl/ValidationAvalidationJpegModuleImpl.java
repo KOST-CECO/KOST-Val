@@ -31,11 +31,9 @@ import uk.gov.nationalarchives.droid.core.signature.droid4.Droid;
 import uk.gov.nationalarchives.droid.core.signature.droid4.FileFormatHit;
 import uk.gov.nationalarchives.droid.core.signature.droid4.IdentificationFile;
 import uk.gov.nationalarchives.droid.core.signature.droid4.signaturefile.FileFormat;
-
 import coderslagoon.badpeggy.scanner.ImageFormat;
 import coderslagoon.badpeggy.scanner.ImageScanner;
 import coderslagoon.badpeggy.scanner.ImageScanner.Callback;
-
 import ch.kostceco.tools.kostval.exception.modulejpeg.ValidationAjpegvalidationException;
 import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.util.Util;
@@ -211,6 +209,7 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl im
 					getTextResourceService().getText( MESSAGE_XML_MODUL_A_JPEG )
 							+ getTextResourceService().getText( ERROR_XML_A_JPEG_JIIO_FILETYPE ) );
 			isValid = false;
+			return isValid;
 		}
 
 		// open the file
@@ -230,12 +229,14 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl im
 								+ getTextResourceService().getText( ERROR_XML_A_JPEG_JIIO_SCANFAILED ) );
 				// invalide
 				isValid = false;
+				return isValid;
 			}
 			if ( ok ) {
 				// valide
 				isValid = true;
 			} else {
 				// invalide
+
 				getMessageService().logError(
 						getTextResourceService().getText( MESSAGE_XML_MODUL_A_JPEG )
 								+ getTextResourceService().getText( ERROR_XML_A_JPEG_JIIO_FAIL ) );
@@ -245,9 +246,297 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl im
 
 				// display the scanner's log messages
 				for ( String msg : ires.collapsedMessages() ) {
+					// msg Not a JPEG file: starts with ... weiter analysieren
+
+					/* Fehlermeldung "Not a JPEG file: starts with ..." weiter analysieren. Meist ist zwischen
+					 * zwei EOI von Thumbnails kein SOI vorhanden. Ist letzteres der Fall muss ein
+					 * EOI-EOI-Fehler ausgegeben werden. */
+					// if SOI+ > EOI -> Invalid JPEG file structure: missing EOI marker
+					// else if SOI+ < EOI -> Invalid JPEG file structure: missing SOI marker
+					// else
+					// if EOI > 2 (zwei oder mehrere Thumbnails)
+					// Analysieren ob zwischen den EOI der Thumbnails ein SOI ist
+					// . (ggf Wiederholen bei mehrals 2 Thumbnails)
+					// . SOI = 0 . -> Invalid JPEG file structure: missing SOI between two EOI thumbnail
+					// markers
+					// . else -> Orinignalmeldung ausgegeben
+					// else -> Orinignalmeldung ausgegeben
+
+					if ( msg.startsWith( "Not a JPEG file: starts with" ) ) {
+						//Detailanalyse //
+
+						// SOI+ = FFD8FF (c1c2c1) und EOI = FFD9 (c1c3)
+
+						// Hex FF in Char umwandeln
+						String str1 = "FF";
+						int i1 = Integer.parseInt( str1, 16 );
+						char c1 = (char) i1;
+						// Hex D8 in Char umwandeln
+						String str2 = "D8";
+						int i2 = Integer.parseInt( str2, 16 );
+						char c2 = (char) i2;
+						// Hex D9 in Char umwandeln
+						String str3 = "D9";
+						int i3 = Integer.parseInt( str3, 16 );
+						char c3 = (char) i3;
+						boolean bc1 = false;
+						boolean bd8 = false;
+						long iSOI1 = -1;
+						long iEOI1 = -1;
+						long iSOI2 = -1;
+						long iEOI2 = -1;
+						long iSOI3 = -1;
+						long iEOI3 = -1;
+						long iSOI4 = -1;
+						long iEOI4 = -1;
+						long iSOI5 = -1;
+						long iEOI5 = -1;
+						long iSOI6 = -1;
+						long iEOI6 = -1;
+						long iSOI7 = -1;
+						long iEOI7 = -1;
+						long iSOI8 = -1;
+						long iEOI8 = -1;
+						long iSOI9 = -1;
+						long iEOI9 = -1;
+
+						int onWork = 40010;
+
+						FileInputStream fis = new FileInputStream( valDatei );
+						char character;
+						long c = 0;
+						while ( fis.available() > 0 ) {
+							character = (char) fis.read();
+							c = c + 1;
+							// onWork = kleine Windmühle die sich dreht -> KOST-Val arbeitet
+							if ( onWork == 40010 ) {
+								onWork = 2;
+								System.out.print( "-   " );
+								System.out.print( "\r" );
+							} else if ( onWork == 10010 ) {
+								onWork = 10011;
+								System.out.print( "\\   " );
+								System.out.print( "\r" );
+							} else if ( onWork == 20010 ) {
+								onWork = 20011;
+								System.out.print( "|   " );
+								System.out.print( "\r" );
+							} else if ( onWork == 30010 ) {
+								onWork = 30011;
+								System.out.print( "/   " );
+								System.out.print( "\r" );
+							} else {
+								onWork = onWork + 1;
+							}
+
+							if ( !bc1 ) {
+								// character=c1?
+								if ( character == c1 ) {
+									// das Zeichen ist ein FF
+									bc1 = true;
+								}
+							} else {
+								if ( !bd8 ) {
+									// character=c2 oder character=c3
+									if ( character == c2 ) {
+										// FFD8
+										bd8 = true;
+									} else if ( character == c3 ) {
+										// FFD9 =EOI
+										if ( iEOI1 == -1 ) {
+											// das ist das erste EOI
+											iEOI1 = c;
+											// System.out.println( "das ist das 1. EOI: " + c );
+										} else if ( iEOI2 == -1 ) {
+											// das ist das 2. EOI
+											iEOI2 = c;
+											// System.out.println( "das ist das 2. EOI: " + c );
+										} else if ( iEOI3 == -1 ) {
+											// das ist das 3. EOI
+											iEOI3 = c;
+											// System.out.println( "das ist das 3. EOI: " + c );
+										} else if ( iEOI4 == -1 ) {
+											// das ist das 4. EOI
+											iEOI4 = c;
+											// System.out.println( "das ist das 4. EOI: " + c );
+										} else if ( iEOI5 == -1 ) {
+											// das ist das 5. EOI
+											iEOI5 = c;
+											// System.out.println( "das ist das 5. EOI: " + c );
+										} else if ( iEOI6 == -1 ) {
+											// das ist das 6. EOI
+											iEOI6 = c;
+											// System.out.println( "das ist das 6. EOI: " + c );
+										} else if ( iEOI7 == -1 ) {
+											// das ist das 7. EOI
+											iEOI7 = c;
+											// System.out.println( "das ist das 7. EOI: " + c );
+										} else if ( iEOI8 == -1 ) {
+											// das ist das 8. EOI
+											iEOI8 = c;
+											// System.out.println( "das ist das 8. EOI: " + c );
+										} else {
+											// das ist das 9. EOI oder mehr
+											iEOI9 = 999999;
+											// System.out.println( "das ist das 9+. EOI: " + c );
+										}
+										bc1 = false;
+									} else {
+										// FF nicht gefolgt von D8 oder D9
+										bc1 = false;
+									}
+								} else {
+									// bis jetzt FFD8
+									// character=c1?
+									if ( character == c1 ) {
+										// FFD8FF =SOI+
+										if ( iSOI1 == -1 ) {
+											// das ist das erste SOI
+											iSOI1 = c;
+											// System.out.println( "das ist das 1. SOI: " + c );
+										} else if ( iSOI2 == -1 ) {
+											// das ist das 2. SOI
+											iSOI2 = c;
+											// System.out.println( "das ist das 2. SOI: " + c );
+										} else if ( iSOI3 == -1 ) {
+											// das ist das 3. SOI
+											iSOI3 = c;
+											// System.out.println( "das ist das 3. SOI: " + c );
+										} else if ( iSOI4 == -1 ) {
+											// das ist das 4. SOI
+											iSOI4 = c;
+											// System.out.println( "das ist das 4. SOI: " + c );
+										} else if ( iSOI5 == -1 ) {
+											// das ist das 5. SOI
+											iSOI5 = c;
+											// System.out.println( "das ist das 5. SOI: " + c );
+										} else if ( iSOI6 == -1 ) {
+											// das ist das 6. SOI
+											iSOI6 = c;
+											// System.out.println( "das ist das 6. SOI: " + c );
+										} else if ( iSOI7 == -1 ) {
+											// das ist das 7. SOI
+											iSOI7 = c;
+											// System.out.println( "das ist das 7. SOI: " + c );
+										} else if ( iSOI8 == -1 ) {
+											// das ist das 8. SOI
+											iSOI8 = c;
+											// System.out.println( "das ist das 8. SOI: " + c );
+										} else {
+											// das ist das 9. SOI oder mehr
+											iSOI9 = 999999;
+											// System.out.println( "das ist das 9+. SOI: " + c );
+										}
+										bc1 = false;
+										bd8 = false;
+									} else {
+										// FFD8 nicht gefolgt von FF
+										bc1 = false;
+										bd8 = false;
+									}
+								}
+							}
+
+						}
+						fis.close();
+						int cSOI = 0;
+						int cEOI = 0;
+
+						// Auswerten wie viele SOI marker vorhanden
+						if ( iSOI9 > -1 ) {
+							cSOI = 9;
+						} else if ( iSOI8 > -1 ) {
+							cSOI = 8;
+						} else if ( iSOI7 > -1 ) {
+							cSOI = 7;
+						} else if ( iSOI6 > -1 ) {
+							cSOI = 6;
+						} else if ( iSOI5 > -1 ) {
+							cSOI = 5;
+						} else if ( iSOI4 > -1 ) {
+							cSOI = 4;
+						} else if ( iSOI3 > -1 ) {
+							cSOI = 3;
+						} else if ( iSOI2 > -1 ) {
+							cSOI = 2;
+						} else if ( iSOI1 > -1 ) {
+							cSOI = 1;
+						} else {
+							// Invalid JPEG file structure: no SOI marker
+							msg = "Invalid JPEG file structure: no SOI marker";
+						}
+						// Auswerten wie viele EOI marker vorhanden
+						if ( iEOI9 > -1 ) {
+							cEOI = 9;
+						} else if ( iEOI8 > -1 ) {
+							cEOI = 8;
+						} else if ( iEOI7 > -1 ) {
+							cEOI = 7;
+						} else if ( iEOI6 > -1 ) {
+							cEOI = 6;
+						} else if ( iEOI5 > -1 ) {
+							cEOI = 5;
+						} else if ( iEOI4 > -1 ) {
+							cEOI = 4;
+						} else if ( iEOI3 > -1 ) {
+							cEOI = 3;
+						} else if ( iEOI2 > -1 ) {
+							cEOI = 2;
+						} else if ( iEOI1 > -1 ) {
+							cEOI = 1;
+						} else {
+							if ( cSOI == 0 ) {
+								// Invalid JPEG file structure: no SOI and EOI marker
+								msg = "Invalid JPEG file structure: no SOI and EOI marker";
+							} else {
+								// Invalid JPEG file structure: no EOI marker
+								msg = "Invalid JPEG file structure: no EOI marker";
+							}
+						}
+
+						if ( cSOI != 0 | cEOI != 0 ) {
+							// SOI = EOI ?
+							if ( cSOI > cEOI ) {
+								// Invalid JPEG file structure: missing EOI marker
+								msg = "Invalid JPEG file structure: missing EOI marker";
+							} else if ( cSOI < cEOI ) {
+								// Invalid JPEG file structure: missing SOI marker
+								msg = "Invalid JPEG file structure: missing SOI marker";
+							} else {
+								// gleich viele. Jetzt analysieren ob zwischen den Thumbnails EOI ein SOI ist
+
+								// Korrekte Struktur mit 3 Thumbnais zur Veranschaulichung
+
+								// ¦ iSOI1
+								// ¦
+								// ¦ _ ¦iSOI2
+								// ¦ _ ¦iEOI1
+								// ¦
+								// ¦ _ ¦iSOI3
+								// ¦ _ ¦iEOI2
+								// ¦
+								// ¦ _ ¦iSOI4
+								// ¦ _ ¦iEOI3
+								// ¦
+								// ¦ iEOI4
+
+								if ( cEOI > 2 ) {
+									// mindestens 2 Thumbnais vorhanden -> weiter analysieren
+									if ( iEOI1 > iSOI3 || iEOI2 < iSOI3 || iEOI2 > iSOI4 || iEOI3 < iSOI4
+											|| iEOI3 > iSOI5 || iEOI4 < iSOI5 || iEOI4 > iSOI6 || iEOI5 < iSOI6
+											|| iEOI5 > iSOI7 || iEOI6 < iSOI7 || iEOI6 > iSOI8 || iEOI7 < iSOI8
+											|| iEOI7 > iSOI9 || iEOI8 < iSOI9 ) {
+										// Invalid JPEG file structure: missing SOI between two EOI thumbnail markers
+										msg = "Invalid JPEG file structure: missing SOI between two EOI thumbnail markers";
+									}
+								}
+							}
+						}
+					}
 					getMessageService().logError(
 							getTextResourceService().getText( MESSAGE_XML_MODUL_A_JPEG )
 									+ getTextResourceService().getText( ERROR_XML_A_JPEG_JIIO_ERROR, msg ) );
+
 				}
 
 			}
@@ -262,6 +551,7 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl im
 									+ getTextResourceService().getText( ERROR_XML_A_JPEG_SERVICEFAILED,
 											ioe.getMessage() ) );
 			isValid = false;
+			return isValid;
 		}
 
 		return isValid;
