@@ -192,9 +192,7 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl im
 
 		/* Code schnippsel erhalten von M. Hahn: ImageScannerDemo
 		 * 
-		 * und umgeschrieben durch C. Röthlisberger auf KOST-Val
-		 * 
-		 * TODO: JIIO-Fehlermeldungen Übersetzten und Gruppieren; Doc mit BadPeggy + Lizenz erweitern */
+		 * und umgeschrieben durch C. Röthlisberger auf KOST-Val */
 
 		// determine if the file format is known by the scanner
 		File fl = valDatei;
@@ -263,7 +261,7 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl im
 					// else -> Orinignalmeldung ausgegeben
 
 					if ( msg.startsWith( "Not a JPEG file: starts with" ) ) {
-						//Detailanalyse //
+						// Detailanalyse //
 
 						// SOI+ = FFD8FF (c1c2c1) und EOI = FFD9 (c1c3)
 
@@ -463,7 +461,7 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl im
 							cSOI = 1;
 						} else {
 							// Invalid JPEG file structure: no SOI marker
-							msg = "Invalid JPEG file structure: no SOI marker";
+							msg = "No SOI marker";
 						}
 						// Auswerten wie viele EOI marker vorhanden
 						if ( iEOI9 > -1 ) {
@@ -487,10 +485,10 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl im
 						} else {
 							if ( cSOI == 0 ) {
 								// Invalid JPEG file structure: no SOI and EOI marker
-								msg = "Invalid JPEG file structure: no SOI and EOI marker";
+								msg = "No SOI and EOI marker";
 							} else {
 								// Invalid JPEG file structure: no EOI marker
-								msg = "Invalid JPEG file structure: no EOI marker";
+								msg = "No EOI marker";
 							}
 						}
 
@@ -498,10 +496,10 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl im
 							// SOI = EOI ?
 							if ( cSOI > cEOI ) {
 								// Invalid JPEG file structure: missing EOI marker
-								msg = "Invalid JPEG file structure: missing EOI marker";
+								msg = "Missing EOI marker";
 							} else if ( cSOI < cEOI ) {
 								// Invalid JPEG file structure: missing SOI marker
-								msg = "Invalid JPEG file structure: missing SOI marker";
+								msg = "Missing SOI marker";
 							} else {
 								// gleich viele. Jetzt analysieren ob zwischen den Thumbnails EOI ein SOI ist
 
@@ -527,18 +525,53 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl im
 											|| iEOI5 > iSOI7 || iEOI6 < iSOI7 || iEOI6 > iSOI8 || iEOI7 < iSOI8
 											|| iEOI7 > iSOI9 || iEOI8 < iSOI9 ) {
 										// Invalid JPEG file structure: missing SOI between two EOI thumbnail markers
-										msg = "Invalid JPEG file structure: missing SOI between two EOI thumbnail markers";
+										msg = "Missing SOI between two EOI thumbnail markers";
 									}
 								}
 							}
 						}
 					}
+					
 					getMessageService().logError(
 							getTextResourceService().getText( MESSAGE_XML_MODUL_A_JPEG )
-									+ getTextResourceService().getText( ERROR_XML_A_JPEG_JIIO_ERROR, msg ) );
+									+ getTextResourceService().getText( ERROR_XML_C_TRANSLATE, msg ) );
 
+					/* TODO: JIIO-Fehlermeldungen zuordnen msg kürzen; Doc mit BadPeggy + Lizenz erweitern 
+
+					ModulB
+Missing Huffman code table entry => ERROR_XML_A_HUFF_MISSING_CODE, msg
+Premature end of input file => ERROR_XML_A_INPUT_EOF, msg
+Premature end of JPEG file => ERROR_XML_A_JPEG_EOF, msg
+Corrupt JPEG data: found marker 0x%02x instead of RST%d => ERROR_XML_A_MUST_RESYNC, msg - "Corrupt JPEG data: "
+JPEG datastream contains no image => ERROR_XML_A_NO_IMAGE, msg
+Warning: thumbnail image size does not match data length %u => ERROR_XML_A_BADTHUMBNAILSIZE, msg - "Warning: "
+Corrupt JPEG data: bad arithmetic code => ERROR_XML_A_ARITH_BAD_CODE, msg - "Corrupt JPEG data: "
+Corrupt JPEG data: premature end of data segment => ERROR_XML_A_HIT_MARKER, msg - "Corrupt JPEG data: "
+Corrupt JPEG data: bad Huffman code => ERROR_XML_A_HUFF_BAD_CODE, msg - "Corrupt JPEG data: "
+Corrupt JPEG data: %u extraneous bytes before marker 0x%02x => ERROR_XML_A_EXTRANEOUS_DATA, msg - "Corrupt JPEG data: "
+
+Modul C
+Invalid component ID %d in SOS => ERROR_XML_B_BAD_COMPONENT_ID, msg
+Empty JPEG image (DNL not supported) => ERROR_XML_B_EMPTY_IMAGE, msg
+Missing SOI between two EOI thumbnail markers => ERROR_XML_B_KC_EOI_EOI, msg
+Missing EOI marker => ERROR_XML_B_KC_MISS_EOI, msg
+Missing SOI marker => ERROR_XML_B_KC_MISS_SOI, msg
+No EOI marker => ERROR_XML_B_KC_NO_EOI, msg
+No SOI marker => ERROR_XML_B_KC_NO_SOI, msg
+No SOI and EOI marker => ERROR_XML_B_KC_NO_SOI_EOI, msg
+Arithmetic table 0x%02x was not defined => ERROR_XML_B_NO_ARITH_TABLE, msg
+Huffman table 0x%02x was not defined => ERROR_XML_B_NO_HUFF_TABLE, msg
+Not a JPEG file: starts with 0x%02x 0x%02x => ERROR_XML_B_NO_SOI, msg
+Invalid SOS parameters for sequential JPEG => ERROR_XML_B_NOT_SEQUENTIAL, msg
+Invalid JPEG file structure: two SOF markers => ERROR_XML_B_SOF_DUPLICATE, msg - "Invalid JPEG file structure: "
+Invalid JPEG file structure: missing SOS marker => ERROR_XML_B_SOF_NO_SOS, msg - "Invalid JPEG file structure: "
+Invalid JPEG file structure: two SOI markers => ERROR_XML_B_SOI_DUPLICATE, msg - "Invalid JPEG file structure: "
+Invalid JPEG file structure: SOS before SOF => ERROR_XML_B_SOS_NO_SOF, msg - "Invalid JPEG file structure: "
+
+Modul D
+other => ERROR_XML_C_TRANSLATE, msg
+*/
 				}
-
 			}
 			is.close();
 		} catch ( IOException ioe ) {

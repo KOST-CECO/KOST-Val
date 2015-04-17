@@ -322,7 +322,36 @@ public interface MessageConstants
 	String	ERROR_XML_A_JPEG_JIIO_FAIL										= "error.xml.a.jpeg.jiio.fail";
 	String	ERROR_XML_A_JPEG_JIIO_FILETYPE								= "error.xml.a.jpeg.jiio.filetype";
 	String	ERROR_XML_A_JPEG_JIIO_SCANFAILED							= "error.xml.a.jpeg.jiio.scanfailed";
-	String	ERROR_XML_A_JPEG_JIIO_ERROR										= "error.xml.a.jpeg.jiio.error";
+
+	String	ERROR_XML_A_ARITH_BAD_CODE										= "error.xml.a.arith.bad.code";
+	String	ERROR_XML_A_BADTHUMBNAILSIZE									= "error.xml.a.badthumbnailsize";
+	String	ERROR_XML_A_EXTRANEOUS_DATA										= "error.xml.a.extraneous.data";
+	String	ERROR_XML_A_HIT_MARKER												= "error.xml.a.hit.marker";
+	String	ERROR_XML_A_HUFF_BAD_CODE											= "error.xml.a.huff.bad.code";
+	String	ERROR_XML_A_HUFF_MISSING_CODE									= "error.xml.a.huff.missing.code";
+	String	ERROR_XML_A_INPUT_EOF													= "error.xml.a.input.eof";
+	String	ERROR_XML_A_JPEG_EOF													= "error.xml.a.jpeg.eof";
+	String	ERROR_XML_A_MUST_RESYNC												= "error.xml.a.must.resync";
+	String	ERROR_XML_A_NO_IMAGE													= "error.xml.a.no.image";
+
+	String	ERROR_XML_B_BAD_COMPONENT_ID									= "error.xml.b.bad.component.id";
+	String	ERROR_XML_B_EMPTY_IMAGE												= "error.xml.b.empty.image";
+	String	ERROR_XML_B_KC_EOI_EOI												= "error.xml.b.kc.eoi.eoi";
+	String	ERROR_XML_B_KC_MISS_EOI												= "error.xml.b.kc.miss.eoi";
+	String	ERROR_XML_B_KC_MISS_SOI												= "error.xml.b.kc.miss.soi";
+	String	ERROR_XML_B_KC_NO_EOI													= "error.xml.b.kc.no.eoi";
+	String	ERROR_XML_B_KC_NO_SOI													= "error.xml.b.kc.no.soi";
+	String	ERROR_XML_B_KC_NO_SOI_EOI											= "error.xml.b.kc.no.soi.eoi";
+	String	ERROR_XML_B_NO_ARITH_TABLE										= "error.xml.b.no.arith.table";
+	String	ERROR_XML_B_NO_HUFF_TABLE											= "error.xml.b.no.huff.table";
+	String	ERROR_XML_B_NO_SOI														= "error.xml.b.no.soi";
+	String	ERROR_XML_B_NOT_SEQUENTIAL										= "error.xml.b.not.sequential";
+	String	ERROR_XML_B_SOF_DUPLICATE											= "error.xml.b.sof.duplicate";
+	String	ERROR_XML_B_SOF_NO_SOS												= "error.xml.b.sof.no.sos";
+	String	ERROR_XML_B_SOI_DUPLICATE											= "error.xml.b.soi.duplicate";
+	String	ERROR_XML_B_SOS_NO_SOF												= "error.xml.b.sos.no.sof";
+
+	String	ERROR_XML_C_TRANSLATE													= "error.xml.c.translate";
 
 	// *************SIP-Meldungen*************************************************************************
 	// Modul 1a Meldungen
