@@ -107,6 +107,9 @@ public interface MessageConstants
 	String	MESSAGE_XML_MODUL_D_JP2												= "message.xml.modul.d.jp2";
 
 	String	MESSAGE_XML_MODUL_A_JPEG											= "message.xml.modul.a.jpeg";
+	String	MESSAGE_XML_MODUL_B_JPEG											= "message.xml.modul.b.jpeg";
+	String	MESSAGE_XML_MODUL_C_JPEG											= "message.xml.modul.c.jpeg";
+	String	MESSAGE_XML_MODUL_D_JPEG											= "message.xml.modul.d.jpeg";
 
 	String	MESSAGE_XML_MODUL_Aa_SIP											= "message.xml.modul.aa.sip";
 	String	MESSAGE_XML_MODUL_Ab_SIP											= "message.xml.modul.ab.sip";
@@ -323,6 +326,7 @@ public interface MessageConstants
 	String	ERROR_XML_A_JPEG_JIIO_FILETYPE								= "error.xml.a.jpeg.jiio.filetype";
 	String	ERROR_XML_A_JPEG_JIIO_SCANFAILED							= "error.xml.a.jpeg.jiio.scanfailed";
 
+	String	ERROR_XML_A_UNS_IMAGE													= "error.xml.a.uns.image";
 	String	ERROR_XML_A_ARITH_BAD_CODE										= "error.xml.a.arith.bad.code";
 	String	ERROR_XML_A_BADTHUMBNAILSIZE									= "error.xml.a.badthumbnailsize";
 	String	ERROR_XML_A_EXTRANEOUS_DATA										= "error.xml.a.extraneous.data";
@@ -350,6 +354,7 @@ public interface MessageConstants
 	String	ERROR_XML_B_SOF_NO_SOS												= "error.xml.b.sof.no.sos";
 	String	ERROR_XML_B_SOI_DUPLICATE											= "error.xml.b.soi.duplicate";
 	String	ERROR_XML_B_SOS_NO_SOF												= "error.xml.b.sos.no.sof";
+	String	ERROR_XML_B_NO_EOI														= "error.xml.b.no.eoi";
 
 	String	ERROR_XML_C_TRANSLATE													= "error.xml.c.translate";
 

@@ -298,7 +298,7 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl im
 						long iSOI9 = -1;
 						long iEOI9 = -1;
 
-						int onWork = 40010;
+						int onWork = 400010;
 
 						FileInputStream fis = new FileInputStream( valDatei );
 						char character;
@@ -307,20 +307,21 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl im
 							character = (char) fis.read();
 							c = c + 1;
 							// onWork = kleine Windmühle die sich dreht -> KOST-Val arbeitet
-							if ( onWork == 40010 ) {
+							// nicht zu schnell, damit Validierung nicht unnötig verzögert wird
+							if ( onWork == 400010 ) {
 								onWork = 2;
 								System.out.print( "-   " );
 								System.out.print( "\r" );
-							} else if ( onWork == 10010 ) {
-								onWork = 10011;
+							} else if ( onWork == 100010 ) {
+								onWork = 100011;
 								System.out.print( "\\   " );
 								System.out.print( "\r" );
-							} else if ( onWork == 20010 ) {
-								onWork = 20011;
+							} else if ( onWork == 200010 ) {
+								onWork = 200011;
 								System.out.print( "|   " );
 								System.out.print( "\r" );
-							} else if ( onWork == 30010 ) {
-								onWork = 30011;
+							} else if ( onWork == 300010 ) {
+								onWork = 300011;
 								System.out.print( "/   " );
 								System.out.print( "\r" );
 							} else {
@@ -493,84 +494,231 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl im
 						}
 
 						if ( cSOI != 0 | cEOI != 0 ) {
-							// SOI = EOI ?
-							if ( cSOI > cEOI ) {
-								// Invalid JPEG file structure: missing EOI marker
-								msg = "Missing EOI marker";
-							} else if ( cSOI < cEOI ) {
-								// Invalid JPEG file structure: missing SOI marker
-								msg = "Missing SOI marker";
-							} else {
-								// gleich viele. Jetzt analysieren ob zwischen den Thumbnails EOI ein SOI ist
+							// Analysieren ob zwischen den Thumbnails EOI ein SOI ist
 
-								// Korrekte Struktur mit 3 Thumbnais zur Veranschaulichung
+							// Korrekte Struktur mit 3 Thumbnais zur Veranschaulichung
 
-								// ¦ iSOI1
-								// ¦
-								// ¦ _ ¦iSOI2
-								// ¦ _ ¦iEOI1
-								// ¦
-								// ¦ _ ¦iSOI3
-								// ¦ _ ¦iEOI2
-								// ¦
-								// ¦ _ ¦iSOI4
-								// ¦ _ ¦iEOI3
-								// ¦
-								// ¦ iEOI4
+							// ¦ iSOI1
+							// ¦
+							// ¦ _ ¦iSOI2
+							// ¦ _ ¦iEOI1
+							// ¦
+							// ¦ _ ¦iSOI3
+							// ¦ _ ¦iEOI2
+							// ¦
+							// ¦ _ ¦iSOI4
+							// ¦ _ ¦iEOI3
+							// ¦
+							// ¦ iEOI4
 
-								if ( cEOI > 2 ) {
-									// mindestens 2 Thumbnais vorhanden -> weiter analysieren
-									if ( iEOI1 > iSOI3 || iEOI2 < iSOI3 || iEOI2 > iSOI4 || iEOI3 < iSOI4
-											|| iEOI3 > iSOI5 || iEOI4 < iSOI5 || iEOI4 > iSOI6 || iEOI5 < iSOI6
-											|| iEOI5 > iSOI7 || iEOI6 < iSOI7 || iEOI6 > iSOI8 || iEOI7 < iSOI8
-											|| iEOI7 > iSOI9 || iEOI8 < iSOI9 ) {
-										// Invalid JPEG file structure: missing SOI between two EOI thumbnail markers
-										msg = "Missing SOI between two EOI thumbnail markers";
+							if ( cEOI > 2 ) {
+								// mindestens 2 Thumbnais vorhanden -> weiter analysieren
+								if ( iEOI1 > iSOI3 || iEOI2 < iSOI3 || iEOI2 > iSOI4 || iEOI3 < iSOI4
+										|| iEOI3 > iSOI5 || iEOI4 < iSOI5 || iEOI4 > iSOI6 || iEOI5 < iSOI6
+										|| iEOI5 > iSOI7 || iEOI6 < iSOI7 || iEOI6 > iSOI8 || iEOI7 < iSOI8
+										|| iEOI7 > iSOI9 || iEOI8 < iSOI9 ) {
+									// Invalid JPEG file structure: missing SOI between two EOI thumbnail markers
+									msg = "Missing SOI between two EOI thumbnail markers";
+								} else {
+									// SOI = EOI ?
+									if ( cSOI > cEOI ) {
+										// Invalid JPEG file structure: missing EOI marker
+										msg = "Missing EOI marker";
+									} else if ( cSOI < cEOI ) {
+										// Invalid JPEG file structure: missing SOI marker
+										msg = "Missing SOI marker";
 									}
+								}
+							} else {
+								// SOI = EOI ?
+								if ( cSOI > cEOI ) {
+									// Invalid JPEG file structure: missing EOI marker
+									msg = "Missing EOI marker";
+								} else if ( cSOI < cEOI ) {
+									// Invalid JPEG file structure: missing SOI marker
+									msg = "Missing SOI marker";
 								}
 							}
 						}
 					}
-					
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_A_JPEG )
-									+ getTextResourceService().getText( ERROR_XML_C_TRANSLATE, msg ) );
+					/* Das funktioniert zwar alles, könnte jedoch noch schneller sein. ca 35 sec für
+					 * FileInputStream fis = new FileInputStream( valDatei ); und alle character auslesen und
+					 * auswerten */
 
-					/* TODO: JIIO-Fehlermeldungen zuordnen msg kürzen; Doc mit BadPeggy + Lizenz erweitern 
+					if ( msg.startsWith( "Unsupported Image Type" ) ) {
+						// Unsupported Image Type => ERROR_XML_A_UNS_IMAGE, msg
+						msg = msg.substring( 19 );
+						getMessageService().logError(
+								getTextResourceService().getText( MESSAGE_XML_MODUL_A_JPEG )
+										+ getTextResourceService().getText( ERROR_XML_A_UNS_IMAGE, msg ) );
+					} else if ( msg.startsWith( "Corrupt JPEG data: premature end of data segment" ) ) {
+						// Corrupt JPEG data: premature end of data segment => ERROR_XML_A_HIT_MARKER, msg -
+						// "Corrupt JPEG data: "
+						msg = msg.substring( 19 );
+						getMessageService().logError(
+								getTextResourceService().getText( MESSAGE_XML_MODUL_B_JPEG )
+										+ getTextResourceService().getText( ERROR_XML_A_HIT_MARKER, msg ) );
+					} else if ( msg.startsWith( "Corrupt JPEG data: found marker " ) ) {
+						// Corrupt JPEG data: found marker 0x%02x instead of RST%d => ERROR_XML_A_MUST_RESYNC,
+						// msg - "Corrupt JPEG data: "
+						msg = msg.substring( 19 );
+						getMessageService().logError(
+								getTextResourceService().getText( MESSAGE_XML_MODUL_B_JPEG )
+										+ getTextResourceService().getText( ERROR_XML_A_MUST_RESYNC, msg ) );
+					} else if ( msg.startsWith( "Corrupt JPEG data: bad arithmetic code" ) ) {
+						// Corrupt JPEG data: bad arithmetic code => ERROR_XML_A_ARITH_BAD_CODE, msg -
+						// "Corrupt JPEG data: "
+						msg = msg.substring( 19 );
+						getMessageService().logError(
+								getTextResourceService().getText( MESSAGE_XML_MODUL_B_JPEG )
+										+ getTextResourceService().getText( ERROR_XML_A_ARITH_BAD_CODE, msg ) );
+					} else if ( msg.startsWith( "Corrupt JPEG data: bad Huffman code" ) ) {
+						// Corrupt JPEG data: bad Huffman code => ERROR_XML_A_HUFF_BAD_CODE, msg -
+						// "Corrupt JPEG data: "
+						msg = msg.substring( 19 );
+						getMessageService().logError(
+								getTextResourceService().getText( MESSAGE_XML_MODUL_B_JPEG )
+										+ getTextResourceService().getText( ERROR_XML_A_HUFF_BAD_CODE, msg ) );
+					} else if ( msg.startsWith( "Corrupt JPEG data:" ) ) {
+						// Alle anderen "Corrupt JPEG data:" bereits abgefangen...
+						// Corrupt JPEG data: %u extraneous bytes before marker 0x%02x =>
+						// ERROR_XML_A_EXTRANEOUS_DATA, msg - "Corrupt JPEG data: "
+						msg = msg.substring( 19 );
+						getMessageService().logError(
+								getTextResourceService().getText( MESSAGE_XML_MODUL_B_JPEG )
+										+ getTextResourceService().getText( ERROR_XML_A_EXTRANEOUS_DATA, msg ) );
+					} else if ( msg.startsWith( "Warning: thumbnail image size does not match data length" ) ) {
+						// Warning: thumbnail image size does not match data length %u =>
+						// ERROR_XML_A_BADTHUMBNAILSIZE, msg - "Warning: "
+						msg = msg.substring( 9 );
+						getMessageService().logError(
+								getTextResourceService().getText( MESSAGE_XML_MODUL_B_JPEG )
+										+ getTextResourceService().getText( ERROR_XML_A_BADTHUMBNAILSIZE, msg ) );
+					} else if ( msg.startsWith( "Premature end of input file" ) ) {
+						// Premature end of input file => ERROR_XML_A_INPUT_EOF, msg
+						getMessageService().logError(
+								getTextResourceService().getText( MESSAGE_XML_MODUL_B_JPEG )
+										+ getTextResourceService().getText( ERROR_XML_A_INPUT_EOF, msg ) );
+					} else if ( msg.startsWith( "Premature end of JPEG file" ) ) {
+						// Premature end of JPEG file => ERROR_XML_A_JPEG_EOF, msg
+						getMessageService().logError(
+								getTextResourceService().getText( MESSAGE_XML_MODUL_B_JPEG )
+										+ getTextResourceService().getText( ERROR_XML_A_JPEG_EOF, msg ) );
+					} else if ( msg.startsWith( "Missing Huffman code table entry" ) ) {
+						// Missing Huffman code table entry => ERROR_XML_A_HUFF_MISSING_CODE, msg
+						getMessageService().logError(
+								getTextResourceService().getText( MESSAGE_XML_MODUL_B_JPEG )
+										+ getTextResourceService().getText( ERROR_XML_A_HUFF_MISSING_CODE, msg ) );
+					} else if ( msg.startsWith( "JPEG datastream contains no image" ) ) {
+						// JPEG datastream contains no image => ERROR_XML_A_NO_IMAGE, msg
+						getMessageService().logError(
+								getTextResourceService().getText( MESSAGE_XML_MODUL_B_JPEG )
+										+ getTextResourceService().getText( ERROR_XML_A_NO_IMAGE, msg ) );
 
-					ModulB
-Missing Huffman code table entry => ERROR_XML_A_HUFF_MISSING_CODE, msg
-Premature end of input file => ERROR_XML_A_INPUT_EOF, msg
-Premature end of JPEG file => ERROR_XML_A_JPEG_EOF, msg
-Corrupt JPEG data: found marker 0x%02x instead of RST%d => ERROR_XML_A_MUST_RESYNC, msg - "Corrupt JPEG data: "
-JPEG datastream contains no image => ERROR_XML_A_NO_IMAGE, msg
-Warning: thumbnail image size does not match data length %u => ERROR_XML_A_BADTHUMBNAILSIZE, msg - "Warning: "
-Corrupt JPEG data: bad arithmetic code => ERROR_XML_A_ARITH_BAD_CODE, msg - "Corrupt JPEG data: "
-Corrupt JPEG data: premature end of data segment => ERROR_XML_A_HIT_MARKER, msg - "Corrupt JPEG data: "
-Corrupt JPEG data: bad Huffman code => ERROR_XML_A_HUFF_BAD_CODE, msg - "Corrupt JPEG data: "
-Corrupt JPEG data: %u extraneous bytes before marker 0x%02x => ERROR_XML_A_EXTRANEOUS_DATA, msg - "Corrupt JPEG data: "
+						// Modul C
+					} else if ( msg.startsWith( "Invalid JPEG file structure: SOS before SOF" ) ) {
+						// Invalid JPEG file structure: SOS before SOF => ERROR_XML_B_SOS_NO_SOF, msg -
+						// "Invalid JPEG file structure: "
+						msg = msg.substring( 29 );
+						getMessageService().logError(
+								getTextResourceService().getText( MESSAGE_XML_MODUL_C_JPEG )
+										+ getTextResourceService().getText( ERROR_XML_B_SOS_NO_SOF, msg ) );
+					} else if ( msg.startsWith( "Invalid JPEG file structure: two SOI markers" ) ) {
+						// Invalid JPEG file structure: two SOI markers => ERROR_XML_B_SOI_DUPLICATE, msg -
+						// "Invalid JPEG file structure: "
+						msg = msg.substring( 29 );
+						getMessageService().logError(
+								getTextResourceService().getText( MESSAGE_XML_MODUL_C_JPEG )
+										+ getTextResourceService().getText( ERROR_XML_B_SOI_DUPLICATE, msg ) );
+					} else if ( msg.startsWith( "Invalid JPEG file structure: missing SOS marker" ) ) {
+						// Invalid JPEG file structure: missing SOS marker => ERROR_XML_B_SOF_NO_SOS, msg -
+						// "Invalid JPEG file structure: "
+						msg = msg.substring( 29 );
+						getMessageService().logError(
+								getTextResourceService().getText( MESSAGE_XML_MODUL_C_JPEG )
+										+ getTextResourceService().getText( ERROR_XML_B_SOF_NO_SOS, msg ) );
+					} else if ( msg.startsWith( "Invalid JPEG file structure: two SOF markers" ) ) {
+						// Invalid JPEG file structure: two SOF markers => ERROR_XML_B_SOF_DUPLICATE, msg -
+						// "Invalid JPEG file structure: "
+						msg = msg.substring( 29 );
+						getMessageService().logError(
+								getTextResourceService().getText( MESSAGE_XML_MODUL_C_JPEG )
+										+ getTextResourceService().getText( ERROR_XML_B_SOF_DUPLICATE, msg ) );
+					} else if ( msg.startsWith( "Invalid SOS parameters for sequential JPEG" ) ) {
+						// Invalid SOS parameters for sequential JPEG => ERROR_XML_B_NOT_SEQUENTIAL, msg
+						getMessageService().logError(
+								getTextResourceService().getText( MESSAGE_XML_MODUL_C_JPEG )
+										+ getTextResourceService().getText( ERROR_XML_B_NOT_SEQUENTIAL, msg ) );
+					} else if ( msg.startsWith( "Not a JPEG file: starts with" ) ) {
+						// Not a JPEG file: starts with 0x%02x 0x%02x => ERROR_XML_B_NO_SOI, msg
+						getMessageService().logError(
+								getTextResourceService().getText( MESSAGE_XML_MODUL_C_JPEG )
+										+ getTextResourceService().getText( ERROR_XML_B_NO_SOI, msg ) );
+					} else if ( msg.startsWith( "No SOI and EOI marker" ) ) {
+						// No SOI and EOI marker => ERROR_XML_B_KC_NO_SOI_EOI, msg
+						getMessageService().logError(
+								getTextResourceService().getText( MESSAGE_XML_MODUL_C_JPEG )
+										+ getTextResourceService().getText( ERROR_XML_B_KC_NO_SOI_EOI, msg ) );
+					} else if ( msg.startsWith( "No SOI marker" ) ) {
+						// No SOI marker => ERROR_XML_B_KC_NO_SOI, msg
+						getMessageService().logError(
+								getTextResourceService().getText( MESSAGE_XML_MODUL_C_JPEG )
+										+ getTextResourceService().getText( ERROR_XML_B_KC_NO_SOI, msg ) );
+					} else if ( msg.startsWith( "No EOI marker" ) ) {
+						// No EOI marker => ERROR_XML_B_KC_NO_EOI, msg
+						getMessageService().logError(
+								getTextResourceService().getText( MESSAGE_XML_MODUL_C_JPEG )
+										+ getTextResourceService().getText( ERROR_XML_B_KC_NO_EOI, msg ) );
+					} else if ( msg.startsWith( "Missing SOI marker" ) ) {
+						// Missing SOI marker => ERROR_XML_B_KC_MISS_SOI, msg
+						getMessageService().logError(
+								getTextResourceService().getText( MESSAGE_XML_MODUL_C_JPEG )
+										+ getTextResourceService().getText( ERROR_XML_B_KC_MISS_SOI, msg ) );
+					} else if ( msg.startsWith( "Missing EOI marker" ) ) {
+						// Missing EOI marker => ERROR_XML_B_KC_MISS_EOI, msg
+						getMessageService().logError(
+								getTextResourceService().getText( MESSAGE_XML_MODUL_C_JPEG )
+										+ getTextResourceService().getText( ERROR_XML_B_KC_MISS_EOI, msg ) );
+					} else if ( msg.startsWith( "Missing SOI between two EOI thumbnail markers" ) ) {
+						// Missing SOI between two EOI thumbnail markers => ERROR_XML_B_KC_EOI_EOI, msg
+						getMessageService().logError(
+								getTextResourceService().getText( MESSAGE_XML_MODUL_C_JPEG )
+										+ getTextResourceService().getText( ERROR_XML_B_KC_EOI_EOI, msg ) );
+					} else if ( msg.startsWith( "Empty JPEG image " ) ) {
+						// Empty JPEG image (DNL not supported) => ERROR_XML_B_EMPTY_IMAGE, msg
+						getMessageService().logError(
+								getTextResourceService().getText( MESSAGE_XML_MODUL_C_JPEG )
+										+ getTextResourceService().getText( ERROR_XML_B_EMPTY_IMAGE, msg ) );
+					} else if ( msg.startsWith( "Invalid component ID " ) ) {
+						// Invalid component ID %d in SOS => ERROR_XML_B_BAD_COMPONENT_ID, msg
+						getMessageService().logError(
+								getTextResourceService().getText( MESSAGE_XML_MODUL_C_JPEG )
+										+ getTextResourceService().getText( ERROR_XML_B_BAD_COMPONENT_ID, msg ) );
+					} else if ( msg.startsWith( "Arithmetic table " ) ) {
+						// Arithmetic table 0x%02x was not defined => ERROR_XML_B_NO_ARITH_TABLE, msg
+						getMessageService().logError(
+								getTextResourceService().getText( MESSAGE_XML_MODUL_C_JPEG )
+										+ getTextResourceService().getText( ERROR_XML_B_NO_ARITH_TABLE, msg ) );
+					} else if ( msg.startsWith( "Huffman table " ) ) {
+						// Huffman table 0x%02x was not defined => ERROR_XML_B_NO_HUFF_TABLE, msg
+						getMessageService().logError(
+								getTextResourceService().getText( MESSAGE_XML_MODUL_C_JPEG )
+										+ getTextResourceService().getText( ERROR_XML_B_NO_HUFF_TABLE, msg ) );
+					} else if ( msg.startsWith( "Truncated File - Missing EOI marker" ) ) {
+						// Truncated File - Missing EOI marker => ERROR_XML_B_NO_EOI, msg
+						getMessageService().logError(
+								getTextResourceService().getText( MESSAGE_XML_MODUL_B_JPEG )
+										+ getTextResourceService().getText( ERROR_XML_B_NO_EOI, msg ) );
 
-Modul C
-Invalid component ID %d in SOS => ERROR_XML_B_BAD_COMPONENT_ID, msg
-Empty JPEG image (DNL not supported) => ERROR_XML_B_EMPTY_IMAGE, msg
-Missing SOI between two EOI thumbnail markers => ERROR_XML_B_KC_EOI_EOI, msg
-Missing EOI marker => ERROR_XML_B_KC_MISS_EOI, msg
-Missing SOI marker => ERROR_XML_B_KC_MISS_SOI, msg
-No EOI marker => ERROR_XML_B_KC_NO_EOI, msg
-No SOI marker => ERROR_XML_B_KC_NO_SOI, msg
-No SOI and EOI marker => ERROR_XML_B_KC_NO_SOI_EOI, msg
-Arithmetic table 0x%02x was not defined => ERROR_XML_B_NO_ARITH_TABLE, msg
-Huffman table 0x%02x was not defined => ERROR_XML_B_NO_HUFF_TABLE, msg
-Not a JPEG file: starts with 0x%02x 0x%02x => ERROR_XML_B_NO_SOI, msg
-Invalid SOS parameters for sequential JPEG => ERROR_XML_B_NOT_SEQUENTIAL, msg
-Invalid JPEG file structure: two SOF markers => ERROR_XML_B_SOF_DUPLICATE, msg - "Invalid JPEG file structure: "
-Invalid JPEG file structure: missing SOS marker => ERROR_XML_B_SOF_NO_SOS, msg - "Invalid JPEG file structure: "
-Invalid JPEG file structure: two SOI markers => ERROR_XML_B_SOI_DUPLICATE, msg - "Invalid JPEG file structure: "
-Invalid JPEG file structure: SOS before SOF => ERROR_XML_B_SOS_NO_SOF, msg - "Invalid JPEG file structure: "
+						// Modul D
+					} else {
+						// Fehlermeldung noch nicht Übersetzt und zugeordnet
+						getMessageService().logError(
+								getTextResourceService().getText( MESSAGE_XML_MODUL_D_JPEG )
+										+ getTextResourceService().getText( ERROR_XML_C_TRANSLATE, msg ) );
+					}
 
-Modul D
-other => ERROR_XML_C_TRANSLATE, msg
-*/
+					/* TODO: Doc fertigstellen, GUI mit JPEG erweitern alles auf Version 1.6.0 erhöhen */
 				}
 			}
 			is.close();
