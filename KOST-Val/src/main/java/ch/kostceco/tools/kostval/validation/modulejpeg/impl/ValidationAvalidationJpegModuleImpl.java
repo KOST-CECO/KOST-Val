@@ -694,8 +694,6 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl im
 								getTextResourceService().getText( MESSAGE_XML_MODUL_D_JPEG )
 										+ getTextResourceService().getText( ERROR_XML_C_TRANSLATE, msg ) );
 					}
-
-					/* TODO: Doc fertigstellen, GUI mit JPEG erweitern alles auf Version 1.6.0 erhöhen */
 				}
 			}
 			is.close();

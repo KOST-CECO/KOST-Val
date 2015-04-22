@@ -34,9 +34,9 @@ DetailsButtonText "Show Details"
 !define JVM_Value                "Field 14"
 
 ; ----------------------
-;!define INTROTXT                "KOST-Val validates TIFF , SIARD, PDF/A and JP2 files , as well as SIPs"
+;!define INTROTXT                "KOST-Val validates TIFF , SIARD, PDF/A, JP2 and JPEG files , as well as SIPs"
 !define HELP_ButtonTXT          "&Help"
-!define FORMAT_RadioButtonTXT   "Format validation (TIFF , SIARD, PDF/A and JP2)"
+!define FORMAT_RadioButtonTXT   "Format validation (TIFF , SIARD, PDF/A, JP2 and JPEG)"
 !define SIP_RadioButtonTXT      "SIP validation including format validation"
 !define LOG_RadioButtonTXT      "Verbose option"
 !define INPUT_GroupTXT          "${FORMAT_RadioButtonTXT}"
