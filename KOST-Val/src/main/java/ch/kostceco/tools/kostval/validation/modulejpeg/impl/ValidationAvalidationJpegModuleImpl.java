@@ -25,6 +25,8 @@ import java.io.FileReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.Arrays;
 
 import uk.gov.nationalarchives.droid.core.signature.droid4.Droid;
@@ -298,36 +300,14 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl im
 						long iSOI9 = -1;
 						long iEOI9 = -1;
 
-						int onWork = 400010;
-
-						FileInputStream fis = new FileInputStream( valDatei );
+						Reader r = new BufferedReader( new InputStreamReader( new FileInputStream( valDatei ) ) );
 						char character;
 						long c = 0;
-						while ( fis.available() > 0 ) {
-							character = (char) fis.read();
-							c = c + 1;
-							// onWork = kleine Windmühle die sich dreht -> KOST-Val arbeitet
-							// nicht zu schnell, damit Validierung nicht unnötig verzögert wird
-							if ( onWork == 400010 ) {
-								onWork = 2;
-								System.out.print( "-   " );
-								System.out.print( "\r" );
-							} else if ( onWork == 100010 ) {
-								onWork = 100011;
-								System.out.print( "\\   " );
-								System.out.print( "\r" );
-							} else if ( onWork == 200010 ) {
-								onWork = 200011;
-								System.out.print( "|   " );
-								System.out.print( "\r" );
-							} else if ( onWork == 300010 ) {
-								onWork = 300011;
-								System.out.print( "/   " );
-								System.out.print( "\r" );
-							} else {
-								onWork = onWork + 1;
-							}
+						long intch;
 
+						while ( (intch = r.read()) != -1 ) {
+							character = (char) intch;
+							c = c + 1;
 							if ( !bc1 ) {
 								// character=c1?
 								if ( character == c1 ) {
@@ -437,7 +417,7 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl im
 							}
 
 						}
-						fis.close();
+						r.close();
 						int cSOI = 0;
 						int cEOI = 0;
 
@@ -541,9 +521,6 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl im
 							}
 						}
 					}
-					/* Das funktioniert zwar alles, könnte jedoch noch schneller sein. ca 35 sec für
-					 * FileInputStream fis = new FileInputStream( valDatei ); und alle character auslesen und
-					 * auswerten */
 
 					if ( msg.startsWith( "Unsupported Image Type" ) ) {
 						// Unsupported Image Type => ERROR_XML_A_UNS_IMAGE, msg
