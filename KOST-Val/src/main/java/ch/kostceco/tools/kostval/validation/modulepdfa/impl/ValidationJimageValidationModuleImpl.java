@@ -59,6 +59,7 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl i
 	boolean												isValidJBIG2	= true;
 
 	String												invalidFile		= "";
+	int												jbig2Counter		= 0;
 
 	private ConfigurationService	configurationService;
 
@@ -107,12 +108,19 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl i
 				// Bildvalidierung bestanden
 				valid = true;
 			} else {
+				if (!isValidJPEG || !isValidJP2) {
 				// Bildvalidierung nicht bestanden
 				getMessageService().logError(
 						getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
 								+ getTextResourceService().getText( ERROR_XML_J_INVALID, invalidFile ) );
-
-			}
+				}
+				if (!isValidJBIG2) {
+					// PDF enthält JBIG2
+					getMessageService().logError(
+							getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
+									+ getTextResourceService().getText( ERROR_XML_J_JBIG2, valDatei.getName() ,jbig2Counter ) );
+					}
+				}
 		} else {
 			// keine Bildvalidierung
 			valid = true;
@@ -169,8 +177,17 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl i
 				PdfImageObject image = renderInfo.getImage();
 
 				PdfName filter = (PdfName) image.get( PdfName.FILTER );
+				System.out.println("Filter: " + filter);
+				String filterText = "" + filter;
+				System.out.println(filterText);
+				
+				/* TODO: B11 und B15 untersuchen*/
 
-				if ( PdfName.DCTDECODE.equals( filter ) ) {
+				if ( filterText.contains( "JBIG") ) {
+					/* Bild mit der JBIG2 Komprimierung */
+					isValidJBIG2	= false;
+					jbig2Counter = jbig2Counter + 1;
+			} else if ( PdfName.DCTDECODE.equals( filter ) ) {
 					/* JPEG Bild:
 					 * 
 					 * Das JPEG wird im Logverzeichnis unter dem [PDF-Name].Obj[objNr].jpg gespeichert */
@@ -232,22 +249,23 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl i
 					}
 					os.close();
 				} else if ( PdfName.JPXDECODE.equals( filter ) ) {
-					/* JPEG2000 Bild */
-					filename = path + ".Obj" + renderInfo.getRef().getNumber() + ".jp2";
+					/* JP2 Bild:
+					 * 
+					 * Das JP2 wird im Logverzeichnis unter dem [PDF-Name].Obj[objNr].jp2 gespeichert */
+					filename = pathToLogDir + File.separator + filenamePath + ".Obj"
+							+ renderInfo.getRef().getNumber() + ".jp2";
+					File fl = new File( filename );
 					os = new FileOutputStream( filename );
 					os.write( image.getImageAsBytes() );
 					os.flush();
-					// TODO: JP2 Validierung
-					os.close();
-				} else if ( PdfName.JBIG2DECODE.equals( filter ) ) {
-					/* Bild mit der JBIG2 Komprimierung */
-					System.out.println( "Ein JBIG2 wurde gefunden!  -> Objekt "
-							+ renderInfo.getRef().getNumber() );
 
-					// TODO: Fehlermeldung ausgeben
-					/* getMessageService().logError( getTextResourceService().getText(
-					 * MESSAGE_XML_MODUL_J_PDFA ) + getTextResourceService().getText( ERROR_XML_UNKNOWN,
-					 * e.getMessage() ) ); */
+				// TODO: JP2 Validierung
+					
+					if ( delFile ) {
+						// Validierung diese Bildes bestanden. Das Bild wird aus log gelöscht.
+						Util.deleteFile( fl );
+					}
+					os.close();
 				} else {
 					/* kein JPEG, JP2 oder JBIG2. Es wird entsprechend keine Validierung gemacht. */
 				}
