@@ -27,7 +27,9 @@ import java.util.Map;
 public interface ConfigurationService extends Service
 {
 
-	/** Gibt an ob tiff validiert werden soll yes oder no */
+	/** Gibt an ob tiff validiert werden soll
+	 * 
+	 * @return yes oder no */
 	String tiffValidation();
 
 	/** Gibt die Komprimierung aus, welche im TIFF vorkommen dürfen.
@@ -119,10 +121,14 @@ public interface ConfigurationService extends Service
 	 * @return Pfad zu Diagnosedaten */
 	String getPathToDiagnose();
 
-	/** Gibt an ob siard validiert werden soll yes oder no */
+	/** Gibt an ob siard validiert werden soll
+	 * 
+	 * @return yes oder no */
 	String siardValidation();
 
-	/** Gibt an ob siard validiert werden soll yes oder no */
+	/** Gibt an ob siard validiert werden soll
+	 * 
+	 * @return yes oder no */
 	String siardFrowValidation();
 
 	/** Gibt die Grenze der Anzahl Zeilen pro Tabelle zurück. Grenze der zu validierenden XML-Tabelle
@@ -133,13 +139,19 @@ public interface ConfigurationService extends Service
 	 * Tabellen und Module validiert werden können. */
 	int getTableRowsLimit();
 
-	/** Gibt an ob pdfa validiert werden soll yes oder no */
+	/** Gibt an ob pdfa validiert werden soll
+	 * 
+	 * @return yes oder no */
 	String pdfaValidation();
 
-	/** Gibt an welche Konformität mindestens erreicht werden muss 1a oder 1b oder no */
+	/** Gibt an welche Konformität mindestens erreicht werden muss
+	 * 
+	 * @return 1a oder 1b oder no */
 	String pdfa1();
 
-	/** Gibt an welche Konformität mindestens erreicht werden muss 2a oder 2b oder 2u oder no */
+	/** Gibt an welche Konformität mindestens erreicht werden muss
+	 * 
+	 * @return 2a oder 2b oder 2u oder no */
 	String pdfa2();
 
 	/** Gibt den Namen des Haupt-PDFA-Validator zurück.
@@ -157,10 +169,19 @@ public interface ConfigurationService extends Service
 	 * @return Pfad zum Pdftron Exe */
 	String getPathToPdftronExe();
 
-	/** Gibt an ob jp2 validiert werden soll yes oder no */
+	/** Gibt an ob die Bilder in pdfa validiert werden soll
+	 * 
+	 * @return yes oder no */
+	String pdfaimage();
+
+	/** Gibt an ob jp2 validiert werden soll
+	 * 
+	 * @return yes oder no */
 	String jp2Validation();
 
-	/** Gibt an ob jpeg validiert werden soll yes oder no */
+	/** Gibt an ob jpeg validiert werden soll
+	 * 
+	 * @return yes oder no */
 	String jpegValidation();
 
 	/** Gibt eine Liste mit den PUIDs aus, welche im SIP vorkommen dürfen.

@@ -22,10 +22,17 @@ package ch.kostceco.tools.kostval.controller;
 import java.io.File;
 
 import ch.kostceco.tools.kostval.exception.modulepdfa.ValidationApdfvalidationException;
+import ch.kostceco.tools.kostval.exception.modulesiard.ValidationEcolumnException;
+import ch.kostceco.tools.kostval.exception.modulesiard.ValidationFrowException;
+import ch.kostceco.tools.kostval.exception.modulesiard.ValidationGtableException;
+import ch.kostceco.tools.kostval.exception.modulesiard.ValidationHcontentException;
+import ch.kostceco.tools.kostval.exception.modulesiard.ValidationIrecognitionException;
+import ch.kostceco.tools.kostval.exception.modulesiard.ValidationJsurplusFilesException;
 import ch.kostceco.tools.kostval.logging.Logger;
 import ch.kostceco.tools.kostval.logging.MessageConstants;
 import ch.kostceco.tools.kostval.service.TextResourceService;
 import ch.kostceco.tools.kostval.validation.modulepdfa.ValidationAvalidationAiModule;
+import ch.kostceco.tools.kostval.validation.modulepdfa.ValidationJimageValidationModule;
 import ch.kostceco.tools.kostval.validation.modulepdfa.ValidationAinitialisationModule;
 
 /** kostval -->
@@ -38,11 +45,12 @@ import ch.kostceco.tools.kostval.validation.modulepdfa.ValidationAinitialisation
 public class Controllerpdfa implements MessageConstants
 {
 
-	private static final Logger							LOGGER	= new Logger( Controllerpdfa.class );
-	private TextResourceService							textResourceService;
+	private static final Logger								LOGGER	= new Logger( Controllerpdfa.class );
+	private TextResourceService								textResourceService;
 
-	private ValidationAvalidationAiModule		validationAvalidationAiModule;
-	private ValidationAinitialisationModule	validationAinitialisationModule;
+	private ValidationAvalidationAiModule			validationAvalidationAiModule;
+	private ValidationJimageValidationModule	validationJimageValidationModule;
+	private ValidationAinitialisationModule		validationAinitialisationModule;
 
 	public ValidationAvalidationAiModule getValidationAvalidationAiModule()
 	{
@@ -53,6 +61,17 @@ public class Controllerpdfa implements MessageConstants
 			ValidationAvalidationAiModule validationAvalidationAiModule )
 	{
 		this.validationAvalidationAiModule = validationAvalidationAiModule;
+	}
+
+	public ValidationJimageValidationModule getValidationJimageValidationModule()
+	{
+		return validationJimageValidationModule;
+	}
+
+	public void setValidationJimageValidationModule(
+			ValidationJimageValidationModule validationJimageValidationModule )
+	{
+		this.validationJimageValidationModule = validationJimageValidationModule;
 	}
 
 	public ValidationAinitialisationModule getValidationAinitialisationModule()
@@ -99,25 +118,52 @@ public class Controllerpdfa implements MessageConstants
 			return false;
 		}
 
+		return valid;
+
+	}
+
+	public boolean executeOptional( File valDatei, File directoryOfLogfile )
+	{
+		boolean valid = true;
+
 		// Validation A - I
 		try {
 			if ( this.getValidationAvalidationAiModule().validate( valDatei, directoryOfLogfile ) ) {
 				this.getValidationAvalidationAiModule().getMessageService().print();
 			} else {
 				this.getValidationAvalidationAiModule().getMessageService().print();
-				return false;
+				valid = false;
 			}
 		} catch ( ValidationApdfvalidationException e ) {
 			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
 					+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationAvalidationAiModule().getMessageService().print();
-			return false;
+			valid = false;
 		} catch ( Exception e ) {
 			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
 					+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			valid = false;
+		}
+
+		// Validation J
+		try {
+			if ( this.getValidationJimageValidationModule().validate( valDatei, directoryOfLogfile ) ) {
+				this.getValidationJimageValidationModule().getMessageService().print();
+			} else {
+				this.getValidationJimageValidationModule().getMessageService().print();
+				valid = false;
+			}
+		} catch ( ValidationApdfvalidationException e ) {
+			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
+					+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			this.getValidationJimageValidationModule().getMessageService().print();
 			return false;
+		} catch ( Exception e ) {
+			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
+					+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			valid = false;
 		}
 		return valid;
-
 	}
+
 }

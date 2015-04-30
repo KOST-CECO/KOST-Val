@@ -1668,11 +1668,20 @@ public class KOSTVal implements MessageConstants
 			System.out.println( kostval.getTextResourceService().getText( MESSAGE_PDFAVALIDATION ) );
 			System.out.println( originalValName );
 			Controllerpdfa controller3 = (Controllerpdfa) context.getBean( "controllerpdfa" );
+
 			boolean okMandatory = controller3.executeMandatory( valDatei, directoryOfLogfile );
-			/* die Validierung A ist obligatorisch, wenn sie bestanden wurden, können die restlichen
-			 * Validierungen, welche nicht zum Abbruch der Applikation führen, ausgeführt werden. Diese
-			 * sind ab v1.3.4 auch im A enthalten */
-			valFile = okMandatory;
+			boolean ok = false;
+
+			/* die Initialisierung ist obligatorisch, wenn sie bestanden wurden, können die restlichen
+			 * Validierungen, welche nicht zum Abbruch der Applikation führen, ausgeführt werden. */
+
+			if ( okMandatory ) {
+				ok = controller3.executeOptional( valDatei, directoryOfLogfile );
+				// Ausführen der validierung und optionalen Bildvalidierung
+			}
+
+			ok = (ok && okMandatory);
+			valFile = ok;
 
 			if ( valFile ) {
 				// Validierte Datei valide

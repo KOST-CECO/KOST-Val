@@ -211,6 +211,19 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		}
 		return null;
 	}
+	
+	@Override
+	public String pdfaimage()
+	{
+		Object prop = getConfig().getProperty( "pdfa.pdfaimage" );
+
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
 
 	/*--- SIARD ---------------------------------------------------------------------*/
 	@Override

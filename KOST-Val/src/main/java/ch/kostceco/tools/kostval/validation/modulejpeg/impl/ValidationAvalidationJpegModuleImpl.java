@@ -200,7 +200,7 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl im
 		File fl = valDatei;
 		ImageFormat ifmt = ImageFormat.fromFileName( fl.getName() );
 		if ( null == ifmt ) {
-			System.err.println( "file type not supported" );
+			// System.err.println( "file type not supported" );
 			// invalide
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_XML_MODUL_A_JPEG )
@@ -693,6 +693,15 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl im
 						getMessageService().logError(
 								getTextResourceService().getText( MESSAGE_XML_MODUL_D_JPEG )
 										+ getTextResourceService().getText( ERROR_XML_C_TRANSLATE, msg ) );
+
+						/* TODO: folgende Fehlermeldungen sind es bereits:
+						 * 
+						 * WARNING_NO_JFIF_IN_THUMB "JFIF markers not allowed in JFIF JPEG thumbnail; ignored"
+						 * 
+						 * WARNING_IGNORE_INVALID_ICC "Embedded color profile is invalid; ignored" */
+						
+						
+
 					}
 				}
 			}

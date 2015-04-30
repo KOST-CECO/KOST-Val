@@ -19,6 +19,8 @@
 		<!--1A / 1B / no -->
 		<pdfa2>2B</pdfa2>
 		<!--2A / 2B / 2U / no -->
+		<!--no verwenden wenn die Bilder in pdfa nicht validiert werden sollen, ansonsten yes -->
+		<pdfaimage>yes</pdfaimage>
 	</pdfa>
 	<siard>
 		<!--no verwenden wenn siard nicht validiert werden soll, ansonsten yes -->

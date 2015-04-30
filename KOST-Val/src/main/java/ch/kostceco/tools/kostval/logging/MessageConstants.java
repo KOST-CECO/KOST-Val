@@ -100,6 +100,7 @@ public interface MessageConstants
 	String	MESSAGE_XML_MODUL_G_PDFA											= "message.xml.modul.g.pdfa";
 	String	MESSAGE_XML_MODUL_H_PDFA											= "message.xml.modul.h.pdfa";
 	String	MESSAGE_XML_MODUL_I_PDFA											= "message.xml.modul.i.pdfa";
+	String	MESSAGE_XML_MODUL_J_PDFA											= "message.xml.modul.j.pdfa";
 
 	String	MESSAGE_XML_MODUL_A_JP2												= "message.xml.modul.a.jp2";
 	String	MESSAGE_XML_MODUL_B_JP2												= "message.xml.modul.b.jp2";
@@ -249,6 +250,8 @@ public interface MessageConstants
 	String	ERROR_XML_AI_18																= "error.xml.ai.18";
 
 	String	ERROR_XML_AI_TRANSLATE												= "error.xml.ai.translate";
+
+	String	ERROR_XML_J_INVALID														= "error.xml.j.invalid";
 
 	String	MESSAGE_XML_DIAHEADER													= "message.xml.diaheader";
 	String	MESSAGE_XML_DIAEND														= "message.xml.diaend";
