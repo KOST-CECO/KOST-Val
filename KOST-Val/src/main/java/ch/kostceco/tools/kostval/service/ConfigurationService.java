@@ -173,6 +173,11 @@ public interface ConfigurationService extends Service
 	 * 
 	 * @return yes oder no */
 	String pdfaimage();
+	
+	/** Gibt an ob JBIG2 erlaubt ist oder nicht
+	 * 
+	 * @return yes oder no */
+	String jbig2allowed();
 
 	/** Gibt an ob jp2 validiert werden soll
 	 * 

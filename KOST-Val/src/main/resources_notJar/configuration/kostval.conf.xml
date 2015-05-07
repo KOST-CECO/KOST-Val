@@ -21,6 +21,8 @@
 		<!--2A / 2B / 2U / no -->
 		<!--no verwenden wenn die Bilder in pdfa nicht validiert werden sollen, ansonsten yes -->
 		<pdfaimage>yes</pdfaimage>
+		<!--no verwenden wenn JBIG2 in pdfa nicht erlaubt werden sollen, ansonsten yes -->
+		<jbig2allowed>no</jbig2allowed>
 	</pdfa>
 	<siard>
 		<!--no verwenden wenn siard nicht validiert werden soll, ansonsten yes -->

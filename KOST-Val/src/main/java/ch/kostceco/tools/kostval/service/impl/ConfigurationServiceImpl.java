@@ -224,6 +224,18 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		return null;
 	}
 
+	@Override
+	public String jbig2allowed()
+	{
+		Object prop = getConfig().getProperty( "pdfa.jbig2allowed" );
+
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
 
 	/*--- SIARD ---------------------------------------------------------------------*/
 	@Override

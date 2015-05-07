@@ -22,12 +22,6 @@ package ch.kostceco.tools.kostval.controller;
 import java.io.File;
 
 import ch.kostceco.tools.kostval.exception.modulepdfa.ValidationApdfvalidationException;
-import ch.kostceco.tools.kostval.exception.modulesiard.ValidationEcolumnException;
-import ch.kostceco.tools.kostval.exception.modulesiard.ValidationFrowException;
-import ch.kostceco.tools.kostval.exception.modulesiard.ValidationGtableException;
-import ch.kostceco.tools.kostval.exception.modulesiard.ValidationHcontentException;
-import ch.kostceco.tools.kostval.exception.modulesiard.ValidationIrecognitionException;
-import ch.kostceco.tools.kostval.exception.modulesiard.ValidationJsurplusFilesException;
 import ch.kostceco.tools.kostval.logging.Logger;
 import ch.kostceco.tools.kostval.logging.MessageConstants;
 import ch.kostceco.tools.kostval.service.TextResourceService;
