@@ -360,6 +360,8 @@ public interface MessageConstants
 	String	ERROR_XML_B_SOI_DUPLICATE											= "error.xml.b.soi.duplicate";
 	String	ERROR_XML_B_SOS_NO_SOF												= "error.xml.b.sos.no.sof";
 	String	ERROR_XML_B_NO_EOI														= "error.xml.b.no.eoi";
+	String	ERROR_XML_B_NO_JFIF_IN_THUMB									= "error.xml.b.no.jfif.in.thumb";
+	String	ERROR_XML_B_INVALID_ICC												= "error.xml.b.invalid.icc";
 
 	String	ERROR_XML_C_TRANSLATE													= "error.xml.c.translate";
 

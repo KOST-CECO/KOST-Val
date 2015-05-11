@@ -686,6 +686,17 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl im
 						getMessageService().logError(
 								getTextResourceService().getText( MESSAGE_XML_MODUL_B_JPEG )
 										+ getTextResourceService().getText( ERROR_XML_B_NO_EOI, msg ) );
+					} else if ( msg.startsWith( "JFIF markers not allowed in JFIF JPEG thumbnail" ) ) {
+						// JFIF markers not allowed in JFIF JPEG thumbnail; ignored =>
+						// ERROR_XML_B_NO_JFIF_IN_THUMB, msg
+						getMessageService().logError(
+								getTextResourceService().getText( MESSAGE_XML_MODUL_C_JPEG )
+										+ getTextResourceService().getText( ERROR_XML_B_NO_JFIF_IN_THUMB, msg ) );
+					} else if ( msg.startsWith( "Embedded color profile is invalid" ) ) {
+						// Embedded color profile is invalid; ignored => ERROR_XML_B_INVALID_ICC, msg
+						getMessageService().logError(
+								getTextResourceService().getText( MESSAGE_XML_MODUL_B_JPEG )
+										+ getTextResourceService().getText( ERROR_XML_B_INVALID_ICC, msg ) );
 
 						// Modul D
 					} else {
@@ -696,11 +707,7 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl im
 
 						/* TODO: folgende Fehlermeldungen sind es bereits:
 						 * 
-						 * WARNING_NO_JFIF_IN_THUMB "JFIF markers not allowed in JFIF JPEG thumbnail; ignored"
-						 * 
-						 * WARNING_IGNORE_INVALID_ICC "Embedded color profile is invalid; ignored" */
-						
-						
+						 * momentan keine offenen :-) */
 
 					}
 				}
