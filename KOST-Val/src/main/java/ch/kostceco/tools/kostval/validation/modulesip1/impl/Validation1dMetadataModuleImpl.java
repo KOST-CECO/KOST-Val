@@ -20,6 +20,7 @@
 package ch.kostceco.tools.kostval.validation.modulesip1.impl;
 
 import java.io.File;
+import java.io.IOException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -33,8 +34,6 @@ import ch.kostceco.tools.kostval.exception.modulesip1.Validation1dMetadataExcept
 import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesip1.Validation1dMetadataModule;
-
-/** @author razm Daniel Ludin, Bedag AG @version 0.2.0 */
 
 public class Validation1dMetadataModuleImpl extends ValidationModuleImpl implements
 		Validation1dMetadataModule
@@ -61,7 +60,9 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl impleme
 		System.out.print( "1D   " );
 		System.out.print( "\r" );
 
-		boolean result = true;
+		boolean result = false;
+		String sipVer = "ECH1.0.txt";
+		File sipVersionFile;
 
 		try {
 			File xmlToValidate = new File( valDatei.getAbsolutePath() + File.separator + "header"
@@ -71,26 +72,38 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl impleme
 			File xsdToValidateEch1 = new File( valDatei.getAbsolutePath() + File.separator + "header"
 					+ File.separator + "xsd" + File.separator + "arelda.xsd" );
 
-			if ( xmlToValidate.exists() && xsdToValidateBar1.exists() ) {
+			String allowedV4 = getConfigurationService().getAllowedVersionBar4Ech1();
+			String allowedV1 = getConfigurationService().getAllowedVersionBar1();
+
+			if ( (xmlToValidate.exists() && xsdToValidateBar1.exists()) || allowedV4.startsWith( "0" ) ) {
 				// Schemavalidierung Nach Version BAR 1
+				sipVer = "BAR1.txt";
+				sipVersionFile = new File( directoryOfLogfile.getAbsolutePath() + File.separator + sipVer );
+				try {
+					sipVersionFile.createNewFile();
+				} catch ( IOException e ) {
+					e.printStackTrace();
+				}
+
 				try {
 					System.setProperty( "javax.xml.parsers.DocumentBuilderFactory",
 							"org.apache.xerces.jaxp.DocumentBuilderFactoryImpl" );
-					DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-					factory.setNamespaceAware( true );
-					factory.setValidating( true );
-					factory.setAttribute( "http://java.sun.com/xml/jaxp/properties/schemaLanguage",
+					DocumentBuilderFactory factoryMsg = DocumentBuilderFactory.newInstance();
+					factoryMsg.setNamespaceAware( true );
+					factoryMsg.setValidating( true );
+					factoryMsg.setAttribute( "http://java.sun.com/xml/jaxp/properties/schemaLanguage",
 							"http://www.w3.org/2001/XMLSchema" );
-					factory.setAttribute( "http://java.sun.com/xml/jaxp/properties/schemaSource",
+					factoryMsg.setAttribute( "http://java.sun.com/xml/jaxp/properties/schemaSource",
 							xsdToValidateBar1.getAbsolutePath() );
-					DocumentBuilder builder = factory.newDocumentBuilder();
-					Validator handler = new Validator();
-					builder.setErrorHandler( handler );
-					builder.parse( xmlToValidate.getAbsolutePath() );
-					if ( handler.validationError == true ) {
+					DocumentBuilder builderMsg = factoryMsg.newDocumentBuilder();
+					ValidatorMsg handlerMsg = new ValidatorMsg();
+					builderMsg.setErrorHandler( handlerMsg );
+					builderMsg.parse( xmlToValidate.getAbsolutePath() );
+					if ( handlerMsg.validationErrorMsg == true ) {
 						result = false;
+					} else {
+						result = true;
 					}
-
 				} catch ( java.io.IOException ioe ) {
 					getMessageService().logError(
 							getTextResourceService().getText( MESSAGE_XML_MODUL_Ad_SIP )
@@ -111,72 +124,118 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl impleme
 											e.getMessage() + " (ParserConfigurationException)" ) );
 					result = false;
 				}
-			} else if ( xmlToValidate.exists() && xsdToValidateEch1.exists() ) {
+			} else if ( (xmlToValidate.exists() && xsdToValidateEch1.exists())
+					|| allowedV1.startsWith( "0" ) ) {
 				// Schmavalidierung nach eCH Version 1 inkl Addendum in den Ressourcen. Dies erfolgt mit
 				// einer Validierung übers Kreuz
 				try {
-					// xmlToValidate mit xsdToValidateEch1Add
-					File xsdToValidateEch1Add = new File( "resources" + File.separator + "header_1d"
-							+ File.separator + "xsd" + File.separator + "arelda.xsd" );
-					System.setProperty( "javax.xml.parsers.DocumentBuilderFactory",
-							"org.apache.xerces.jaxp.DocumentBuilderFactoryImpl" );
-					DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-					factory.setNamespaceAware( true );
-					factory.setValidating( true );
-					factory.setAttribute( "http://java.sun.com/xml/jaxp/properties/schemaLanguage",
-							"http://www.w3.org/2001/XMLSchema" );
-					factory.setAttribute( "http://java.sun.com/xml/jaxp/properties/schemaSource",
-							xsdToValidateEch1Add.getAbsolutePath() );
-					DocumentBuilder builder = factory.newDocumentBuilder();
-					Validator handler = new Validator();
-					builder.setErrorHandler( handler );
-					builder.parse( xmlToValidate.getAbsolutePath() );
-					if ( handler.validationError == true ) {
-						result = false;
+					if ( allowedV4.startsWith( "1" ) ) {
+						/* Validierung nach eCH-0160v1.0. Dies ist auf jeden Fall erlaubt, auch wenn 1.1
+						 * definiert wurde */
+						// xmlToValidate mit xsdToValidateEch1Add
+						File xsdToValidateEch1Add = new File( "resources" + File.separator + "header_1d"
+								+ File.separator + "eCH-0160v1.0" + File.separator + "xsd" + File.separator
+								+ "arelda.xsd" );
+						System.setProperty( "javax.xml.parsers.DocumentBuilderFactory",
+								"org.apache.xerces.jaxp.DocumentBuilderFactoryImpl" );
+						DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+						factory.setNamespaceAware( true );
+						factory.setValidating( true );
+						factory.setAttribute( "http://java.sun.com/xml/jaxp/properties/schemaLanguage",
+								"http://www.w3.org/2001/XMLSchema" );
+						factory.setAttribute( "http://java.sun.com/xml/jaxp/properties/schemaSource",
+								xsdToValidateEch1Add.getAbsolutePath() );
+						DocumentBuilder builder = factory.newDocumentBuilder();
+						Validator handler = new Validator();
+						builder.setErrorHandler( handler );
+						builder.parse( xmlToValidate.getAbsolutePath() );
+						if ( handler.validationError == true ) {
+							/* Validierungsfehler. Wenn eCH-0160v1.1 erlaubt ist, wird noch danach validiert
+							 * ansonsten ist es invalide. */
+							result = false;
+							// prov auf invalide setzten
+							if ( allowedV4.startsWith( "1.1" ) ) {
+								/* Validierung nach eCH-0160v1.1. da 1.0 invalide */
+								sipVer = "ECH1.1.txt";
+								sipVersionFile = new File( directoryOfLogfile.getAbsolutePath() + File.separator
+										+ sipVer );
+								try {
+									sipVersionFile.createNewFile();
+								} catch ( IOException e ) {
+									e.printStackTrace();
+								}
+
+								// xmlToValidate mit xsdToValidateEch1Add11
+								File xsdToValidateEch1Add11 = new File( "resources" + File.separator + "header_1d"
+										+ File.separator + "eCH-0160v1.1" + File.separator + "xsd" + File.separator
+										+ "arelda.xsd" );
+								System.setProperty( "javax.xml.parsers.DocumentBuilderFactory",
+										"org.apache.xerces.jaxp.DocumentBuilderFactoryImpl" );
+								DocumentBuilderFactory factoryMsg = DocumentBuilderFactory.newInstance();
+								factoryMsg.setNamespaceAware( true );
+								factoryMsg.setValidating( true );
+								factoryMsg.setAttribute( "http://java.sun.com/xml/jaxp/properties/schemaLanguage",
+										"http://www.w3.org/2001/XMLSchema" );
+								factoryMsg.setAttribute( "http://java.sun.com/xml/jaxp/properties/schemaSource",
+										xsdToValidateEch1Add11.getAbsolutePath() );
+								DocumentBuilder builderMsg = factoryMsg.newDocumentBuilder();
+								ValidatorMsg handlerMsg = new ValidatorMsg();
+								builderMsg.setErrorHandler( handlerMsg );
+								builderMsg.parse( xmlToValidate.getAbsolutePath() );
+								if ( handlerMsg.validationErrorMsg == true ) {
+									/* Validierungsfehler auch mit eCH-0160v1.1 --> invalide. */
+									result = false;
+								} else {
+									/* Validierung mit eCH-0160v1.1 bestanden --> valide. */
+									result = true;
+								}
+							} else {
+								/* Validierung nach eCH-0160v1.0 bleibt invalide da 1.1 nicht erlaubt */
+								// revalidierung jetzt aber mit Fehlerausgabe
+								// xmlToValidate mit xsdToValidateEch1Add
+								File xsdToValidateEch1AddMsg = new File( "resources" + File.separator + "header_1d"
+										+ File.separator + "eCH-0160v1.0" + File.separator + "xsd" + File.separator
+										+ "arelda.xsd" );
+								System.setProperty( "javax.xml.parsers.DocumentBuilderFactory",
+										"org.apache.xerces.jaxp.DocumentBuilderFactoryImpl" );
+								DocumentBuilderFactory factoryMsg = DocumentBuilderFactory.newInstance();
+								factoryMsg.setNamespaceAware( true );
+								factoryMsg.setValidating( true );
+								factoryMsg.setAttribute( "http://java.sun.com/xml/jaxp/properties/schemaLanguage",
+										"http://www.w3.org/2001/XMLSchema" );
+								factoryMsg.setAttribute( "http://java.sun.com/xml/jaxp/properties/schemaSource",
+										xsdToValidateEch1AddMsg.getAbsolutePath() );
+								DocumentBuilder builderMsg = factoryMsg.newDocumentBuilder();
+								ValidatorMsg handlerMsg = new ValidatorMsg();
+								builderMsg.setErrorHandler( handlerMsg );
+								builderMsg.parse( xmlToValidate.getAbsolutePath() );
+								if ( handlerMsg.validationErrorMsg == true ) {
+									/* Validierungsfehler auch mit eCH-0160v1.1 --> invalide. */
+									result = false;
+								}
+								sipVer = "ECH1.0.txt";
+								sipVersionFile = new File( directoryOfLogfile.getAbsolutePath() + File.separator
+										+ sipVer );
+								try {
+									sipVersionFile.createNewFile();
+								} catch ( IOException e ) {
+									e.printStackTrace();
+								}
+								result = false;
+							}
+						} else {
+							/* Validierung nach eCH-0160v1.0 da 1.0 valide */
+							result = true;
+							sipVer = "ECH1.0.txt";
+							sipVersionFile = new File( directoryOfLogfile.getAbsolutePath() + File.separator
+									+ sipVer );
+							try {
+								sipVersionFile.createNewFile();
+							} catch ( IOException e ) {
+								e.printStackTrace();
+							}
+						}
 					}
-
-				} catch ( java.io.IOException ioe ) {
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_Ad_SIP )
-									+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
-											ioe.getMessage() + " (IOException)" ) );
-					result = false;
-				} catch ( SAXException e ) {
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_Ad_SIP )
-									+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
-											e.getMessage() + " (SAXException)" ) );
-					result = false;
-				} catch ( ParserConfigurationException e ) {
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_Ad_SIP )
-
-									+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
-											e.getMessage() + " (ParserConfigurationException)" ) );
-					result = false;
-				}
-
-				try {
-					// xmlToValidateAdd mit xsdToValidateEch1
-					File xmlToValidateAdd = new File( "resources" + File.separator + "header_1d"
-							+ File.separator + "metadata.xml" );
-					System.setProperty( "javax.xml.parsers.DocumentBuilderFactory",
-							"org.apache.xerces.jaxp.DocumentBuilderFactoryImpl" );
-					DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-					factory.setNamespaceAware( true );
-					factory.setValidating( true );
-					factory.setAttribute( "http://java.sun.com/xml/jaxp/properties/schemaLanguage",
-							"http://www.w3.org/2001/XMLSchema" );
-					factory.setAttribute( "http://java.sun.com/xml/jaxp/properties/schemaSource",
-							xsdToValidateEch1.getAbsolutePath() );
-					DocumentBuilder builder = factory.newDocumentBuilder();
-					Validator handler = new Validator();
-					builder.setErrorHandler( handler );
-					builder.parse( xmlToValidateAdd.getAbsolutePath() );
-					if ( handler.validationError == true ) {
-						result = false;
-					}
-
 				} catch ( java.io.IOException ioe ) {
 					getMessageService().logError(
 							getTextResourceService().getText( MESSAGE_XML_MODUL_Ad_SIP )
@@ -198,7 +257,6 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl impleme
 					result = false;
 				}
 			}
-
 		} catch ( Exception e ) {
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_XML_MODUL_Ad_SIP )
@@ -210,29 +268,54 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl impleme
 
 	private class Validator extends DefaultHandler
 	{
-		public boolean						validationError		= false;
-
-		public SAXParseException	saxParseException	= null;
+		// Validierung OHNE Fehlermeldung
+		public boolean	validationError	= false;
 
 		public void error( SAXParseException exception ) throws SAXException
 		{
 			validationError = true;
-			saxParseException = exception;
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_Ad_SIP )
-							+ getTextResourceService().getText( ERROR_XML_AD_METADATA_ERRORS,
-									saxParseException.getLineNumber(), saxParseException.getMessage() ) );
-
+			// ohne Msg, da ggf Validierung nach eCH 1.1 valide ist und Fehler nach 1.0 nicht ausgegeben
+			// werden dürfen
 		}
 
 		public void fatalError( SAXParseException exception ) throws SAXException
 		{
 			validationError = true;
-			saxParseException = exception;
+			// ohne Msg, da ggf Validierung nach eCH 1.1 valide ist und Fehler nach 1.0 nicht ausgegeben
+			// werden dürfen
+		}
+
+		public void warning( SAXParseException exception ) throws SAXException
+		{
+		}
+	}
+
+	private class ValidatorMsg extends DefaultHandler
+	{
+		// Validierung mit Fehlermeldung
+		public boolean						validationErrorMsg		= false;
+
+		public SAXParseException	saxParseExceptionMsg	= null;
+
+		public void error( SAXParseException exception ) throws SAXException
+		{
+			validationErrorMsg = true;
+			saxParseExceptionMsg = exception;
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_XML_MODUL_Ad_SIP )
 							+ getTextResourceService().getText( ERROR_XML_AD_METADATA_ERRORS,
-									saxParseException.getLineNumber(), saxParseException.getMessage() ) );
+									saxParseExceptionMsg.getLineNumber(), saxParseExceptionMsg.getMessage() ) );
+
+		}
+
+		public void fatalError( SAXParseException exception ) throws SAXException
+		{
+			validationErrorMsg = true;
+			saxParseExceptionMsg = exception;
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_Ad_SIP )
+							+ getTextResourceService().getText( ERROR_XML_AD_METADATA_ERRORS,
+									saxParseExceptionMsg.getLineNumber(), saxParseExceptionMsg.getMessage() ) );
 		}
 
 		public void warning( SAXParseException exception ) throws SAXException

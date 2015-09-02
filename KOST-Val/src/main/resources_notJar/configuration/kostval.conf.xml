@@ -109,8 +109,8 @@
 		<pathtodroidsignature>configuration\KaD_SignatureFile_V71.xml</pathtodroidsignature>
 		<allowedversionbar1>1</allowedversionbar1>
 		<!--0 / 1 -->
-		<allowedversionbar4ech1>1</allowedversionbar4ech1>
-		<!--0 / 1 -->
+		<allowedversionbar4ech1>1.1</allowedversionbar4ech1>
+		<!--0 / 1 / 1.1 -->
 		<allowedformats>
 			<allowedformat>
 				<puid>TXT</puid>

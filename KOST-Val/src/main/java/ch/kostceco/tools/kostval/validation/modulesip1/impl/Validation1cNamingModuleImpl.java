@@ -228,8 +228,8 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl implement
 
 		// V.) Im xsd Folder wiederum dürfen sich nur eine Reihe *.xsd files, welche sich je nach
 		// SIP-Version unterscheiden. Validieren ob vorliegende Version erlaubt ist.
-		Integer allowedV1 = getConfigurationService().getAllowedVersionBar1();
-		Integer allowedV4 = getConfigurationService().getAllowedVersionBar4Ech1();
+		String allowedV1 = getConfigurationService().getAllowedVersionBar1();
+		String allowedV4 = getConfigurationService().getAllowedVersionBar4Ech1();
 		// generiert eine Map mit den xsd-files und Ordnern, welche in header/xsd/ enthalten sein müssen
 		Map<String, String> allowedXsdFiles = new HashMap<String, String>();
 
@@ -242,63 +242,66 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl implement
 			for ( File fileXsd : filesXsd ) {
 				String name = fileXsd.getName();
 
-				if ( name.endsWith( XSD_ARELDA ) ) {
-					// dann handelt es sich um die Version BAR1
-					version = 1;
-					if ( allowedV1 == 1 ) {
-						allowedXsdFiles.put( "ablieferung.xsd", "ablieferung.xsd" );
-						allowedXsdFiles.put( "archivischeNotiz.xsd", "archivischeNotiz.xsd" );
-						allowedXsdFiles.put( "archivischerVorgang.xsd", "archivischerVorgang.xsd" );
-						allowedXsdFiles.put( "arelda_v3.13.2.xsd", "arelda_v3.13.2.xsd" );
-						allowedXsdFiles.put( "base.xsd", "base.xsd" );
-						allowedXsdFiles.put( "datei.xsd", "datei.xsd" );
-						allowedXsdFiles.put( "dokument.xsd", "dokument.xsd" );
-						allowedXsdFiles.put( "dossier.xsd", "dossier.xsd" );
-						allowedXsdFiles.put( "ordner.xsd", "ordner.xsd" );
-						allowedXsdFiles.put( "ordnungssystem.xsd", "ordnungssystem.xsd" );
-						allowedXsdFiles.put( "ordnungssystemposition.xsd", "ordnungssystemposition.xsd" );
-						allowedXsdFiles.put( "paket.xsd", "paket.xsd" );
-						allowedXsdFiles.put( "provenienz.xsd", "provenienz.xsd" );
+				if ( name.startsWith( "arel" ) ) {
+					if ( name.startsWith( "arelda_v3" ) ) {
+						// if ( name.endsWith( XSD_ARELDA ) ) {
+						// dann handelt es sich um die Version BAR1
+						version = 1;
+						if ( allowedV1.equals( "1" ) ) {
+							allowedXsdFiles.put( "ablieferung.xsd", "ablieferung.xsd" );
+							allowedXsdFiles.put( "archivischeNotiz.xsd", "archivischeNotiz.xsd" );
+							allowedXsdFiles.put( "archivischerVorgang.xsd", "archivischerVorgang.xsd" );
+							allowedXsdFiles.put( "arelda_v3.13.2.xsd", "arelda_v3.13.2.xsd" );
+							allowedXsdFiles.put( "base.xsd", "base.xsd" );
+							allowedXsdFiles.put( "datei.xsd", "datei.xsd" );
+							allowedXsdFiles.put( "dokument.xsd", "dokument.xsd" );
+							allowedXsdFiles.put( "dossier.xsd", "dossier.xsd" );
+							allowedXsdFiles.put( "ordner.xsd", "ordner.xsd" );
+							allowedXsdFiles.put( "ordnungssystem.xsd", "ordnungssystem.xsd" );
+							allowedXsdFiles.put( "ordnungssystemposition.xsd", "ordnungssystemposition.xsd" );
+							allowedXsdFiles.put( "paket.xsd", "paket.xsd" );
+							allowedXsdFiles.put( "provenienz.xsd", "provenienz.xsd" );
+						} else {
+							// Version 1 ist nicht erlaubt - Version {0} ist nicht erlaubt
+							getMessageService().logError(
+									getTextResourceService().getText( MESSAGE_XML_MODUL_Ac_SIP )
+											+ getTextResourceService().getText( MESSAGE_XML_AC_NOTALLOWEDV, "BAR v1" ) );
+							valid = false;
+						}
 					} else {
-						// Version 1 ist nicht erlaubt - Version {0} ist nicht erlaubt
-						getMessageService().logError(
-								getTextResourceService().getText( MESSAGE_XML_MODUL_Ac_SIP )
-										+ getTextResourceService().getText( MESSAGE_XML_AC_NOTALLOWEDV, "BAR v1" ) );
-						valid = false;
-					}
-				} else {
-					/* eigentlich müsste es ansonsten arelda.xsd enthalten sein.
-					 * 
-					 * Da aber bei schreibfehler in diesem Dateinamen alle xsd bemängelt werden wurde es
-					 * durch ein else ersetzt
-					 * 
-					 * if ( name.endsWith( "arelda.xsd" ) ) { */
+						/* eigentlich müsste es ansonsten arelda.xsd enthalten sein.
+						 * 
+						 * Da aber bei schreibfehler in diesem Dateinamen alle xsd bemängelt werden wurde es
+						 * durch ein else ersetzt
+						 * 
+						 * if ( name.endsWith( "arelda.xsd" ) ) { */
 
-					// dann handelt es sich um die Version BAR4 respektive eCH1
-					version = 4;
-					if ( allowedV4 == 1 ) {
+						// dann handelt es sich um die Version BAR4 respektive eCH1 oder eCH1.1
+						version = 4;
+						if ( allowedV4.startsWith( "1" ) ) {
 
-						allowedXsdFiles.put( "ablieferung.xsd", "ablieferung.xsd" );
-						allowedXsdFiles.put( "archivischeNotiz.xsd", "archivischeNotiz.xsd" );
-						allowedXsdFiles.put( "archivischerVorgang.xsd", "archivischerVorgang.xsd" );
-						allowedXsdFiles.put( "arelda.xsd", "arelda.xsd" );
-						allowedXsdFiles.put( "base.xsd", "base.xsd" );
-						allowedXsdFiles.put( "datei.xsd", "datei.xsd" );
-						allowedXsdFiles.put( "dokument.xsd", "dokument.xsd" );
-						allowedXsdFiles.put( "dossier.xsd", "dossier.xsd" );
-						allowedXsdFiles.put( "ordner.xsd", "ordner.xsd" );
-						allowedXsdFiles.put( "ordnungssystem.xsd", "ordnungssystem.xsd" );
-						allowedXsdFiles.put( "ordnungssystemposition.xsd", "ordnungssystemposition.xsd" );
-						allowedXsdFiles.put( "paket.xsd", "paket.xsd" );
-						allowedXsdFiles.put( "provenienz.xsd", "provenienz.xsd" );
-						allowedXsdFiles.put( "zusatzDaten.xsd", "zusatzDaten.xsd" );
-					} else {
-						// Version 4 ist nicht erlaubt - Version {0} ist nicht erlaubt
-						getMessageService().logError(
-								getTextResourceService().getText( MESSAGE_XML_MODUL_Ac_SIP )
-										+ getTextResourceService().getText( MESSAGE_XML_AC_NOTALLOWEDV,
-												"BAR v4 = eCH-0160 v1" ) );
-						valid = false;
+							allowedXsdFiles.put( "ablieferung.xsd", "ablieferung.xsd" );
+							allowedXsdFiles.put( "archivischeNotiz.xsd", "archivischeNotiz.xsd" );
+							allowedXsdFiles.put( "archivischerVorgang.xsd", "archivischerVorgang.xsd" );
+							allowedXsdFiles.put( "arelda.xsd", "arelda.xsd" );
+							allowedXsdFiles.put( "base.xsd", "base.xsd" );
+							allowedXsdFiles.put( "datei.xsd", "datei.xsd" );
+							allowedXsdFiles.put( "dokument.xsd", "dokument.xsd" );
+							allowedXsdFiles.put( "dossier.xsd", "dossier.xsd" );
+							allowedXsdFiles.put( "ordner.xsd", "ordner.xsd" );
+							allowedXsdFiles.put( "ordnungssystem.xsd", "ordnungssystem.xsd" );
+							allowedXsdFiles.put( "ordnungssystemposition.xsd", "ordnungssystemposition.xsd" );
+							allowedXsdFiles.put( "paket.xsd", "paket.xsd" );
+							allowedXsdFiles.put( "provenienz.xsd", "provenienz.xsd" );
+							allowedXsdFiles.put( "zusatzDaten.xsd", "zusatzDaten.xsd" );
+						} else {
+							// Version 4 ist nicht erlaubt - Version {0} ist nicht erlaubt
+							getMessageService().logError(
+									getTextResourceService().getText( MESSAGE_XML_MODUL_Ac_SIP )
+											+ getTextResourceService().getText( MESSAGE_XML_AC_NOTALLOWEDV,
+													"BAR v4 / eCH-0160 v1.x" ) );
+							valid = false;
+						}
 					}
 				}
 				if ( onWork == 41 ) {

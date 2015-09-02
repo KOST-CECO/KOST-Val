@@ -173,7 +173,7 @@ public interface ConfigurationService extends Service
 	 * 
 	 * @return yes oder no */
 	String pdfaimage();
-	
+
 	/** Gibt an ob JBIG2 erlaubt ist oder nicht
 	 * 
 	 * @return yes oder no */
@@ -213,11 +213,16 @@ public interface ConfigurationService extends Service
 	 * @return Namen des DROID Signature Files */
 	String getPathToDroidSignatureFile();
 
-	/** Gibt aus ob die BAR Version 1 und 4= eCH Version 1 erlaubt ist oder nicht.
+	/** Gibt aus ob die BAR Version 1 erlaubt ist oder nicht.
 	 * 
 	 * @return 1 wenn erlaubt respektive 0 wenn nicht erlaubt */
-	Integer getAllowedVersionBar1();
+	String getAllowedVersionBar1();
 
-	Integer getAllowedVersionBar4Ech1();
+	/** Gibt aus ob die eCH Version 1 (=BAR Version 4) oder Version 1.1 erlaubt ist oder nicht.
+	 * 
+	 * 1 = nur eCH-0160v1.0 / 2 = eCH-0160v1.1 respektive eCH-0160v1.0 da rückwärtskompatibel
+	 * 
+	 * @return 1 oder 1.1 wenn erlaubt respektive 0 wenn nicht erlaubt */
+	String getAllowedVersionBar4Ech1();
 
 }

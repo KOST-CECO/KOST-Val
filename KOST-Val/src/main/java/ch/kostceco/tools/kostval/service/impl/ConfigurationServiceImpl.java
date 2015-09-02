@@ -211,7 +211,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		}
 		return null;
 	}
-	
+
 	@Override
 	public String pdfaimage()
 	{
@@ -235,7 +235,6 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		}
 		return null;
 	}
-
 
 	/*--- SIARD ---------------------------------------------------------------------*/
 	@Override
@@ -352,25 +351,25 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	}
 
 	@Override
-	public Integer getAllowedVersionBar1()
+	public String getAllowedVersionBar1()
 	{
 		Object prop = getConfig().getProperty( "sip.allowedversionbar1" );
 		if ( prop instanceof String ) {
 			String value = (String) prop;
-			Integer intValue = new Integer( value );
-			return intValue;
+			String stringValue = new String( value );
+			return stringValue;
 		}
 		return null;
 	}
 
 	@Override
-	public Integer getAllowedVersionBar4Ech1()
+	public String getAllowedVersionBar4Ech1()
 	{
 		Object prop = getConfig().getProperty( "sip.allowedversionbar4ech1" );
 		if ( prop instanceof String ) {
 			String value = (String) prop;
-			Integer intValue = new Integer( value );
-			return intValue;
+			String stringValue = new String( value );
+			return stringValue;
 		}
 		return null;
 	}

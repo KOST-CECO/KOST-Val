@@ -1,5 +1,5 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val v1.6.1 application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and
+ * The KOST-Val v1.6.2 application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and
  * Submission Information Package (SIP). Copyright (C) 2012-2015 Claire Röthlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
@@ -169,6 +169,20 @@ public class KOSTVal implements MessageConstants
 				logDatei.getName() );
 		File logFile = new File( logFileName );
 		// Ab hier kann ins log geschrieben werden...
+		
+		// ggf alte SIP-Validierung-Versions-Notiz löschen
+		File BAR1 = new File( directoryOfLogfile.getAbsolutePath() + File.separator + "BAR1.txt" );
+		File ECH1_1 = new File( directoryOfLogfile.getAbsolutePath() + File.separator
+				+ "ECH1.1.txt" );
+		File ECH1_0 = new File( directoryOfLogfile.getAbsolutePath() + File.separator
+				+ "ECH1.0.txt" );
+		if ( BAR1.exists() ) {
+			Util.deleteFile( BAR1 );
+		} else if ( ECH1_1.exists() ) {
+			Util.deleteFile( ECH1_1 );
+		} else if ( ECH1_0.exists() ) {
+			Util.deleteFile( ECH1_0 );
+		}
 
 		String formatValOn = "";
 		// ermitteln welche Formate validiert werden können respektive eingeschaltet sind
@@ -1229,6 +1243,20 @@ public class KOSTVal implements MessageConstants
 			Util.valEnd( ausgabeEnd, logFile );
 			Util.val3c( summary3c, logFile );
 			Util.amp( logFile );
+
+			// Ergänzen welche SIP-Validierung durchgeführt wurde
+			String sipVersion = " ";
+			if ( BAR1.exists() ) {
+				sipVersion = " (BARv1)";
+				Util.deleteFile( BAR1 );
+			} else if ( ECH1_1.exists() ) {
+				sipVersion = " (eCH-0160v1.1)";
+				Util.deleteFile( ECH1_1 );
+			} else if ( ECH1_0.exists() )  {
+				sipVersion = " (eCH-0160v1.0)";
+				Util.deleteFile( ECH1_0 );
+			}
+			Util.valSipversion( sipVersion, logFile );
 
 			// Die Konfiguration hereinkopieren
 			try {
