@@ -1,7 +1,8 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
  * Information Package (SIP). Copyright (C) 2012-2015 Claire Röthlisberger (KOST-CECO), Christian
- * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon), Daniel Ludin (BEDAG AG)
+ * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
+ * Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
  * KOST-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. This application
  * is free software: you can redistribute it and/or modify it under the terms of the GNU General
@@ -22,6 +23,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 
+import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationFmultipageValidationException;
 import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationFmultipageValidationModule;
@@ -51,13 +53,15 @@ public class ValidationFmultipageValidationModuleImpl extends ValidationModuleIm
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile )
+			throws ValidationFmultipageValidationException
 	{
 
 		boolean isValid = true;
 
-		// Informationen zum Jhove-Logverzeichnis holen
-		String pathToJhoveOutput = directoryOfLogfile.getAbsolutePath();
-		File jhoveReport = new File( pathToJhoveOutput, valDatei.getName() + ".jhove-log.txt" );
+		// Informationen zum Logverzeichnis holen
+		String pathToExiftoolOutput = directoryOfLogfile.getAbsolutePath();
+		File exiftoolReport = new File( pathToExiftoolOutput, valDatei.getName() + ".exiftool-log.txt" );
+		pathToExiftoolOutput = exiftoolReport.getAbsolutePath();
 
 		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
 		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
@@ -66,50 +70,48 @@ public class ValidationFmultipageValidationModuleImpl extends ValidationModuleIm
 		String mp = getConfigurationService().getAllowedMultipage();
 		// 0=Singelpage / 1=Multipage
 
-		Integer jhoveio = 0;
+		Integer exiftoolio = 0;
 		Integer ifdCount = 0;
 		String ifdMsg;
+		if ( mp.contains( "1" ) ) {
+			// Valider Status (Multipage erlaubt)
+		} else {
+			try {
+				BufferedReader in = new BufferedReader( new FileReader( exiftoolReport ) );
+				String line;
+				while ( (line = in.readLine()) != null ) {
 
-		try {
-			BufferedReader in = new BufferedReader( new FileReader( jhoveReport ) );
-			String line;
-			while ( (line = in.readLine()) != null ) {
-
-				// Number und IFD: enthalten auch Exif Einträge. Ensprechend muss "Type: TIFF" gezählt
-				// werden
-				if ( line.contains( "Type: TIFF" ) ) {
-					jhoveio = 1;
-					ifdCount = ifdCount + 1;
+					// Number und IFD: enthalten auch Exif Einträge. Ensprechend muss "Type: TIFF" gezählt
+					// werden
+					if ( line.contains( "Compression: " ) ) {
+						exiftoolio = 1;
+						ifdCount = ifdCount + 1;
+					}
 				}
-			}
-			if ( jhoveio == 0 ) {
-				// Invalider Status
-				isValid = false;
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_F_TIFF )
-								+ getTextResourceService().getText( MESSAGE_XML_CG_JHOVENIO, "F" ) );
-			}
-			if ( ifdCount == 1 ) {
-				// Valider Status (nur eine Seite)
-			} else {
-				// Multipagetiff
-				if ( mp.contains( "1" ) ) {
-					// Valider Status (Multipage erlaubt)
+				if ( exiftoolio == 0 ) {
+					// Invalider Status
+					isValid = false;
+					getMessageService().logError(
+							getTextResourceService().getText( MESSAGE_XML_MODUL_F_TIFF )
+									+ getTextResourceService().getText( MESSAGE_XML_CG_ETNIO, "F" ) );
+				}
+				if ( ifdCount == 1 ) {
+					// Valider Status (nur eine Seite)
 				} else {
 					// Invalider Status
-					ifdMsg = ("\"" + ifdCount + " Seiten\"");
+					ifdMsg = ("Multipage (" + ifdCount + " TIFFs)");
 					isValid = false;
 					getMessageService().logError(
 							getTextResourceService().getText( MESSAGE_XML_MODUL_F_TIFF )
 									+ getTextResourceService().getText( MESSAGE_XML_CG_INVALID, ifdMsg ) );
 				}
+				in.close();
+			} catch ( Exception e ) {
+				getMessageService().logError(
+						getTextResourceService().getText( MESSAGE_XML_MODUL_F_TIFF )
+								+ getTextResourceService().getText( MESSAGE_XML_CG_CANNOTFINDETREPORT ) );
+				return false;
 			}
-			in.close();
-		} catch ( Exception e ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_F_TIFF )
-							+ getTextResourceService().getText( MESSAGE_XML_CG_CANNOTFINDJHOVEREPORT ) );
-			return false;
 		}
 		return isValid;
 	}

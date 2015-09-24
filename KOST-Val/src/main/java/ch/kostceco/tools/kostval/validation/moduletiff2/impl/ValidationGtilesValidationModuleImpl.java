@@ -1,7 +1,8 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
  * Information Package (SIP). Copyright (C) 2012-2015 Claire Röthlisberger (KOST-CECO), Christian
- * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon), Daniel Ludin (BEDAG AG)
+ * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
+ * Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
  * KOST-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. This application
  * is free software: you can redistribute it and/or modify it under the terms of the GNU General
@@ -22,6 +23,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 
+import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationGtilesValidationException;
 import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationGtilesValidationModule;
@@ -50,13 +52,15 @@ public class ValidationGtilesValidationModuleImpl extends ValidationModuleImpl i
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile )
+			throws ValidationGtilesValidationException
 	{
 
 		boolean isValid = true;
 
-		// Informationen zum Jhove-Logverzeichnis holen
-		String pathToJhoveOutput = directoryOfLogfile.getAbsolutePath();
-		File jhoveReport = new File( pathToJhoveOutput, valDatei.getName() + ".jhove-log.txt" );
+		// Informationen zum Logverzeichnis holen
+		String pathToExiftoolOutput = directoryOfLogfile.getAbsolutePath();
+		File exiftoolReport = new File( pathToExiftoolOutput, valDatei.getName() + ".exiftool-log.txt" );
+		pathToExiftoolOutput = exiftoolReport.getAbsolutePath();
 
 		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
 		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
@@ -64,53 +68,50 @@ public class ValidationGtilesValidationModuleImpl extends ValidationModuleImpl i
 
 		String tiles = getConfigurationService().getAllowedTiles();
 
-		Integer jhoveio = 0;
-		Integer typetiff = 0;
+		Integer exiftoolio = 0;
+		String oldErrorLine = "";
 
-		try {
-			BufferedReader in = new BufferedReader( new FileReader( jhoveReport ) );
-			String line;
-			while ( (line = in.readLine()) != null ) {
-				if ( line.contains( "Type: TIFF" ) ) {
-					typetiff = 1;
-					// TIFF-IFD
-				} else if ( line.contains( "Type: Exif" ) ) {
-					typetiff = 0;
-					// Exif-IFD
-				}
-				if ( typetiff == 1 ) {
+		if ( tiles.contains( "1" ) ) {
+			// Valider Status (Kacheln sind erlaubt)
+		} else {
+			try {
+				BufferedReader in = new BufferedReader( new FileReader( exiftoolReport ) );
+				String line;
+				while ( (line = in.readLine()) != null ) {
 					/* zu analysierende TIFF-IFD-Zeile die StripOffsets- oder TileOffsets-Zeile gibt Auskunft
-					 * über die Aufteilungsart */
-					if ( line.contains( "StripOffsets:" ) || line.contains( "TileOffsets:" ) ) {
-						jhoveio = 1;
-						if ( line.contains( "StripOffsets:" ) ) {
-							// Valider Status (Streifen sind immer erlaubt)
-						} else if ( tiles.contains( "1" ) ) {
-							// Valider Status (Kacheln sind erlaubt)
-						} else {
+					 * über die Aufteilungsart
+					 * 
+					 * -StripByteCounts -RowsPerStrip -FileSize -Orientation -TileWidth -TileLength -TileDepth */
+					if ( line.contains( "StripByteCounts: " ) || line.contains( "RowsPerStrip: " )
+							|| line.contains( "Tile" ) ) {
+						exiftoolio = 1;
+						if ( line.contains( "Tile" ) ) {
 							// Invalider Status (Kacheln sind nicht erlaubt)
 							isValid = false;
-							getMessageService().logError(
-									getTextResourceService().getText( MESSAGE_XML_MODUL_G_TIFF )
-											+ getTextResourceService().getText( MESSAGE_XML_CG_INVALID, line ) );
+							if ( !line.equals( oldErrorLine ) ) {
+								// neuer Fehler
+								oldErrorLine = line;
+								getMessageService().logError(
+										getTextResourceService().getText( MESSAGE_XML_MODUL_G_TIFF )
+												+ getTextResourceService().getText( MESSAGE_XML_CG_INVALID, line ) );
+							}
 						}
 					}
 				}
-			}
-			if ( jhoveio == 0 ) {
-				// Invalider Status
-				isValid = false;
-				isValid = false;
+				if ( exiftoolio == 0 ) {
+					// Invalider Status
+					isValid = false;
+					getMessageService().logError(
+							getTextResourceService().getText( MESSAGE_XML_MODUL_G_TIFF )
+									+ getTextResourceService().getText( MESSAGE_XML_CG_ETNIO, "G" ) );
+				}
+				in.close();
+			} catch ( Exception e ) {
 				getMessageService().logError(
 						getTextResourceService().getText( MESSAGE_XML_MODUL_G_TIFF )
-								+ getTextResourceService().getText( MESSAGE_XML_CG_JHOVENIO, "G" ) );
+								+ getTextResourceService().getText( MESSAGE_XML_CG_CANNOTFINDETREPORT ) );
+				return false;
 			}
-			in.close();
-		} catch ( Exception e ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_G_TIFF )
-							+ getTextResourceService().getText( MESSAGE_XML_CG_CANNOTFINDJHOVEREPORT ) );
-			return false;
 		}
 		return isValid;
 	}

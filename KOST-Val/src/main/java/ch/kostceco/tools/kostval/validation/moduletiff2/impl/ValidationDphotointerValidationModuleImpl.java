@@ -23,6 +23,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 
+import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationDphotointerValidationException;
 import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationDphotointerValidationModule;
@@ -51,13 +52,15 @@ public class ValidationDphotointerValidationModuleImpl extends ValidationModuleI
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile )
+			throws ValidationDphotointerValidationException
 	{
 
 		boolean isValid = true;
 
-		// Informationen zum Jhove-Logverzeichnis holen
-		String pathToJhoveOutput = directoryOfLogfile.getAbsolutePath();
-		File jhoveReport = new File( pathToJhoveOutput, valDatei.getName() + ".jhove-log.txt" );
+		// Informationen zum Logverzeichnis holen
+		String pathToExiftoolOutput = directoryOfLogfile.getAbsolutePath();
+		File exiftoolReport = new File( pathToExiftoolOutput, valDatei.getName() + ".exiftool-log.txt" );
+		pathToExiftoolOutput = exiftoolReport.getAbsolutePath();
 
 		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
 		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
@@ -72,29 +75,41 @@ public class ValidationDphotointerValidationModuleImpl extends ValidationModuleI
 		String pi6 = getConfigurationService().getAllowedPhotointer6();
 		String pi8 = getConfigurationService().getAllowedPhotointer8();
 
-		Integer jhoveio = 0;
-		Integer typetiff = 0;
+		Integer exiftoolio = 0;
+		String oldErrorLine = "";
 
 		try {
-			BufferedReader in = new BufferedReader( new FileReader( jhoveReport ) );
+			BufferedReader in = new BufferedReader( new FileReader( exiftoolReport ) );
 			String line;
 			while ( (line = in.readLine()) != null ) {
-				if ( line.contains( "Type: TIFF" ) ) {
-					typetiff = 1;
-					// TIFF-IFD
-				} else if ( line.contains( "Type: Exif" ) ) {
-					typetiff = 0;
-					// Exif-IFD
-				}
-				if ( typetiff == 1 ) {
-					// zu analysierende TIFF-IFD-Zeile
-
-					// die ColorSpace-Zeile enthält einer dieser Freitexte der Farbraumart
-					if ( line.contains( "ColorSpace:" ) ) {
-						jhoveio = 1;
-						if ( line.contains( pi0 ) || line.contains( pi1 ) || line.contains( pi2 )
-								|| line.contains( pi3 ) || line.contains( pi4 ) || line.contains( pi5 )
-								|| line.contains( pi6 ) || line.contains( pi8 ) ) {
+				// die PhotometricInterpretation-Zeile enthält einer dieser Freitexte der Farbraumart
+				if ( line.contains( "PhotometricInterpretation: " ) ) {
+					exiftoolio = 1;
+					if ( line.equalsIgnoreCase( "PhotometricInterpretation: " + pi0 )
+							|| line.equalsIgnoreCase( "PhotometricInterpretation: " + pi1 )
+							|| line.equalsIgnoreCase( "PhotometricInterpretation: " + pi2 )
+							|| line.equalsIgnoreCase( "PhotometricInterpretation: " + pi3 )
+							|| line.equalsIgnoreCase( "PhotometricInterpretation: " + pi4 )
+							|| line.equalsIgnoreCase( "PhotometricInterpretation: " + pi5 )
+							|| line.equalsIgnoreCase( "PhotometricInterpretation: " + pi6 )
+							|| line.equalsIgnoreCase( "PhotometricInterpretation: " + pi8 ) ) {
+						// Valider Status
+					} else {
+						// Invalider Status
+						isValid = false;
+						if ( !line.equals( oldErrorLine ) ) {
+							// neuer Fehler
+							oldErrorLine = line;
+							getMessageService().logError(
+									getTextResourceService().getText( MESSAGE_XML_MODUL_D_TIFF )
+											+ getTextResourceService().getText( MESSAGE_XML_CG_INVALID, line ) );
+						}
+					}
+					/* die PlanarConfiguration-Zeile muss Chunkey sein, da ansonsten nicht Baseline. Planar
+					 * wird kaum unterstützt */
+					if ( line.contains( "PlanarConfiguration: " ) ) {
+						exiftoolio = 1;
+						if ( line.contains( "Chunky" ) ) {
 							// Valider Status
 						} else {
 							// Invalider Status
@@ -106,19 +121,19 @@ public class ValidationDphotointerValidationModuleImpl extends ValidationModuleI
 					}
 				}
 			}
-			if ( jhoveio == 0 ) {
+			if ( exiftoolio == 0 ) {
 				// Invalider Status
 				isValid = false;
 				isValid = false;
 				getMessageService().logError(
 						getTextResourceService().getText( MESSAGE_XML_MODUL_D_TIFF )
-								+ getTextResourceService().getText( MESSAGE_XML_CG_JHOVENIO, "D" ) );
+								+ getTextResourceService().getText( MESSAGE_XML_CG_ETNIO, "D" ) );
 			}
 			in.close();
 		} catch ( Exception e ) {
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_XML_MODUL_D_TIFF )
-							+ getTextResourceService().getText( MESSAGE_XML_CG_CANNOTFINDJHOVEREPORT ) );
+							+ getTextResourceService().getText( MESSAGE_XML_CG_CANNOTFINDETREPORT ) );
 			return false;
 		}
 		return isValid;

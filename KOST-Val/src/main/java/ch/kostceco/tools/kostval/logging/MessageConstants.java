@@ -148,9 +148,11 @@ public interface MessageConstants
 	String	MESSAGE_XML_B_JHOVEMESSAGE										= "message.xml.b.jhovemessage";
 
 	// Modul C-G Meldungen
-	String	MESSAGE_XML_CG_CANNOTFINDJHOVEREPORT					= "message.xml.cg.cannotfindjhovereport";
+	String	MESSAGE_XML_CG_CANNOTFINDETREPORT					= "message.xml.cg.cannotfindetreport";
 	String	MESSAGE_XML_CG_INVALID												= "message.xml.cg.invalid";
-	String	MESSAGE_XML_CG_JHOVENIO												= "message.xml.cg.jhovenio";
+	String	MESSAGE_XML_CG_ETNIO												= "message.xml.cg.etnio";
+	String	MESSAGE_XML_CG_ET_MISSING										= "message.xml.cg.et.missing";
+	String	MESSAGE_XML_CG_ET_SERVICEFAILED							= "message.xml.cg.et.servicefailed";
 
 	// *************SIARD-Meldungen*************************************************************************
 	// Modul A Meldungen

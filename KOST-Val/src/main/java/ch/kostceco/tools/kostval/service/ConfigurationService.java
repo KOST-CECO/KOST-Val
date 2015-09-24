@@ -85,8 +85,6 @@ public interface ConfigurationService extends Service
 
 	String getAllowedBitspersample32();
 
-	String getAllowedBitspersample64();
-
 	/** Gibt an ob Multipage im TIFF vorkommen dürfen.
 	 * 
 	 * @return Name der Multipage, welche im TIFF vorkommen dürfen. */

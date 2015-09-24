@@ -1,7 +1,8 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
  * Information Package (SIP). Copyright (C) 2012-2015 Claire Röthlisberger (KOST-CECO), Christian
- * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon), Daniel Ludin (BEDAG AG)
+ * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
+ * Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
  * KOST-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. This application
  * is free software: you can redistribute it and/or modify it under the terms of the GNU General
@@ -22,6 +23,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 
+import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationHsizeValidationException;
 import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
@@ -51,13 +53,15 @@ public class ValidationHsizeValidationModuleImpl extends ValidationModuleImpl im
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile )
+			throws ValidationHsizeValidationException
 	{
 
 		boolean isValid = true;
 
-		// Informationen zum Jhove-Logverzeichnis holen
-		String pathToJhoveOutput = directoryOfLogfile.getAbsolutePath();
-		File jhoveReport = new File( pathToJhoveOutput, valDatei.getName() + ".jhove-log.txt" );
+		// Informationen zum Logverzeichnis holen
+		String pathToExiftoolOutput = directoryOfLogfile.getAbsolutePath();
+		File exiftoolReport = new File( pathToExiftoolOutput, valDatei.getName() + ".exiftool-log.txt" );
+		pathToExiftoolOutput = exiftoolReport.getAbsolutePath();
 
 		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
 		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
@@ -65,49 +69,73 @@ public class ValidationHsizeValidationModuleImpl extends ValidationModuleImpl im
 
 		String size = getConfigurationService().getAllowedSize();
 
-		Integer jhoveio = 0;
+		Integer exiftoolio = 0;
 
-		try {
-			BufferedReader in = new BufferedReader( new FileReader( jhoveReport ) );
-			String line;
-			while ( (line = in.readLine()) != null ) {
-				if ( line.contains( "Size:" ) ) {
-					jhoveio = 1;
-					Integer intSize = line.toCharArray().length;
-					if ( size.contains( "1" ) ) {
-						// Valider Status (Giga-Tiffs sind erlaubt)
-					} else if ( intSize > 17 ) {
-						// Invalider Status (Giga-Tiffs sind nicht erlaubt und zuviele Stellen)
-						isValid = false;
-						getMessageService().logError(
-								getTextResourceService().getText( MESSAGE_XML_MODUL_H_TIFF )
-										+ getTextResourceService().getText( MESSAGE_XML_CG_INVALID, line ) );
+		if ( size.contains( "1" ) ) {
+			// Valider Status (Giga-Tiffs sind erlaubt)
+		} else {
+			// Giga-Tiffs sind nicht erlaubt -> analysieren
+			try {
+				BufferedReader in = new BufferedReader( new FileReader( exiftoolReport ) );
+				String line;
+				while ( (line = in.readLine()) != null ) {
+					if ( line.contains( "FileSize: " ) ) {
+						exiftoolio = 1;
+						Integer intSize = line.toCharArray().length;
+						if ( line.contains( "byte" ) || line.contains( "kB" ) ) {
+							// Valider Status (kleines TIFF)
+						} else if ( line.contains( "MB" ) ) {
+
+							if ( intSize > 16 ) {
+								// Invalider Status (Giga-Tiffs sind nicht erlaubt und zuviele Stellen)
+								isValid = false;
+								getMessageService().logError(
+										getTextResourceService().getText( MESSAGE_XML_MODUL_H_TIFF )
+												+ getTextResourceService().getText( MESSAGE_XML_CG_INVALID, line ) );
+							}
+						} else {
+							// Invalider Status (unbekannte Grösse)
+							isValid = false;
+							getMessageService().logError(
+									getTextResourceService().getText( MESSAGE_XML_MODUL_H_TIFF )
+											+ getTextResourceService().getText( MESSAGE_XML_CG_INVALID, line ) );
+						}
 					}
 				}
 
-			}
-			if ( jhoveio == 0 ) {
-				// Invalider Status
-				isValid = false;
-				isValid = false;
+				if ( exiftoolio == 0 ) {
+					// Invalider Status
+					isValid = false;
+					isValid = false;
+					getMessageService().logError(
+							getTextResourceService().getText( MESSAGE_XML_MODUL_H_TIFF )
+									+ getTextResourceService().getText( MESSAGE_XML_CG_ETNIO, "H" ) );
+				}
+				in.close();
+
+			} catch ( Exception e ) {
 				getMessageService().logError(
 						getTextResourceService().getText( MESSAGE_XML_MODUL_H_TIFF )
-								+ getTextResourceService().getText( MESSAGE_XML_CG_JHOVENIO, "H" ) );
+								+ getTextResourceService().getText( MESSAGE_XML_CG_CANNOTFINDETREPORT ) );
+				/* exiftoolReport löschen */
+				if ( exiftoolReport.exists() ) {
+					exiftoolReport.delete();
+				}
+				return false;
 			}
-			in.close();
-
-		} catch ( Exception e ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_H_TIFF )
-							+ getTextResourceService().getText( MESSAGE_XML_CG_CANNOTFINDJHOVEREPORT ) );
-			return false;
 		}
 		String pathToWorkDir = getConfigurationService().getPathToWorkDir();
 		File newReport = new File( pathToWorkDir, valDatei.getName() + ".jhove-log.txt" );
 		if ( newReport.exists() ) {
 			Util.deleteFile( newReport );
 		}
-
+		/* exiftoolReport löschen */
+		if ( exiftoolReport.exists() ) {
+			exiftoolReport.delete();
+		}
+		if ( exiftoolReport.exists() ) {
+			Util.deleteFile( exiftoolReport );
+		}
 		return isValid;
 	}
 }

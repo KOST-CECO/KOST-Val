@@ -658,17 +658,6 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		return null;
 	}
 
-	@Override
-	public String getAllowedBitspersample64()
-	{
-		Object prop = getConfig().getProperty( "tiff.allowedbitspersample.allowedbitspersample64" );
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		return null;
-	}
-
 	// AllowedMultipage
 	@Override
 	public String getAllowedMultipage()
