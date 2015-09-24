@@ -100,7 +100,6 @@ public class KOSTVal implements MessageConstants
 	 * @param args
 	 * @throws IOException */
 
-	@SuppressWarnings("unused")
 	public static void main( String[] args ) throws IOException
 	{
 		ApplicationContext context = new ClassPathXmlApplicationContext(
@@ -621,7 +620,9 @@ public class KOSTVal implements MessageConstants
 									Util.deleteDir( tmpDir );
 								}
 							}
-
+							if ( tmpDir.exists() ) {
+								tmpDir.deleteOnExit();
+							}
 						} else {
 							countNio = countNio + 1;
 						}
@@ -692,11 +693,17 @@ public class KOSTVal implements MessageConstants
 					if ( tmpDir.exists() ) {
 						Util.deleteDir( tmpDir );
 					}
+					if ( tmpDir.exists() ) {
+						tmpDir.deleteOnExit();
+					}
 					System.exit( 1 );
 				} else if ( countSummaryNio == 0 ) {
 					// bestehendes Workverzeichnis ggf. löschen
 					if ( tmpDir.exists() ) {
 						Util.deleteDir( tmpDir );
+					}
+					if ( tmpDir.exists() ) {
+						tmpDir.deleteOnExit();
 					}
 					// alle Validierten Dateien valide
 					System.exit( 0 );
@@ -866,6 +873,9 @@ public class KOSTVal implements MessageConstants
 					if ( tmpDir.exists() ) {
 						Util.deleteDir( tmpDir );
 					}
+					if ( tmpDir.exists() ) {
+						tmpDir.deleteOnExit();
+					}
 					System.exit( 1 );
 
 				} else {
@@ -959,6 +969,9 @@ public class KOSTVal implements MessageConstants
 							// bestehendes Workverzeichnis ggf. löschen
 							if ( tmpDir.exists() ) {
 								Util.deleteDir( tmpDir );
+							}
+							if ( tmpDir.exists() ) {
+								tmpDir.deleteOnExit();
 							}
 							System.exit( 1 );
 						}
@@ -1297,7 +1310,9 @@ public class KOSTVal implements MessageConstants
 			if ( tmpDir.exists() ) {
 				Util.deleteDir( tmpDir );
 			}
-			StringBuffer command = new StringBuffer( "rd " + tmpDir.getAbsolutePath() + " /s /q" );
+			if ( tmpDir.exists() ) {
+				tmpDir.deleteOnExit();
+			}
 
 			try {
 				// KaD-Diagnose-Datei mit den neusten Anzahl Dateien pro KaD-Format Updaten
@@ -1488,8 +1503,7 @@ public class KOSTVal implements MessageConstants
 					Util.deleteDir( tmpDir );
 				}
 				if ( tmpDir.exists() ) {
-					Runtime rt = Runtime.getRuntime();
-					Process proc = rt.exec( command.toString() );
+					tmpDir.deleteOnExit();
 				}
 				System.exit( 0 );
 			} else {
@@ -1498,8 +1512,7 @@ public class KOSTVal implements MessageConstants
 					Util.deleteDir( tmpDir );
 				}
 				if ( tmpDir.exists() ) {
-					Runtime rt = Runtime.getRuntime();
-					Process proc = rt.exec( command.toString() );
+					tmpDir.deleteOnExit();
 				}
 				System.exit( 2 );
 			}
