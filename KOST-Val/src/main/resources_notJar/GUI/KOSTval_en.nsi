@@ -26,7 +26,7 @@ XPStyle on
 
 ;--------------------------------
 !define INIFILE       "KOSTval.ini"
-!define KOSTHELP      "doc\KOST-Val_Anwendungshandbuch_*.pdf"
+!define KOSTHELP      "doc\KOST-Val_Manual_Abridged_*.pdf"
 !define CONFIG        "kostval.conf.xml"
 !define CONFIGPATH    "configuration"
 !define BACKUP        "~backup"
