@@ -1,5 +1,5 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val v1.7.1 application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and
+ * The KOST-Val v1.7.2 application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and
  * Submission Information Package (SIP). Copyright (C) 2012-2015 Claire Röthlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
@@ -1165,9 +1165,9 @@ public class KOSTVal implements MessageConstants
 
 			countSummaryNio = pdfaCountNio + siardCountNio + tiffCountNio + jp2CountNio + jpegCountNio;
 			countSummaryIo = pdfaCountIo + siardCountIo + tiffCountIo + jp2CountIo + jpegCountIo;
-			int countSummaryIoP = 100 / count * countSummaryIo;
-			int countSummaryNioP = 100 / count * countSummaryNio;
-			int countNioP = 100 / count * countNio;
+			float countSummaryIoP = 100 / (float) count * (float) countSummaryIo;
+			float countSummaryNioP = 100 / (float) count * (float) countSummaryNio;
+			float countNioP = 100 / (float) count * (float) countNio;
 			String summary3c = kostval.getTextResourceService().getText( MESSAGE_XML_SUMMARY_3C, count,
 					countSummaryIo, countSummaryNio, countNio, countSummaryIoP, countSummaryNioP, countNioP );
 
