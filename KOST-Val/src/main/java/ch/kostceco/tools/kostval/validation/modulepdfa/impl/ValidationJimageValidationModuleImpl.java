@@ -1,6 +1,6 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
- * Information Package (SIP). Copyright (C) 2012-2015 Claire Rˆthlisberger (KOST-CECO), Christian
+ * Information Package (SIP). Copyright (C) 2012-2015 Claire R√∂thlisberger (KOST-CECO), Christian
  * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
  * Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
@@ -54,13 +54,13 @@ import com.itextpdf.text.pdf.parser.PdfReaderContentParser;
 import com.itextpdf.text.pdf.parser.RenderListener;
 import com.itextpdf.text.pdf.parser.TextRenderInfo;
 
-/** Enth‰lt die vorliegende PDF-Datei valide JP2- und JPEG-Bilder? Sind JBIG2-Bilder im PDF
+/** Enth√§lt die vorliegende PDF-Datei valide JP2- und JPEG-Bilder? Sind JBIG2-Bilder im PDF
  * enthalten? Die Bildextraktion erfolgt mit iText.
  * 
  * Danach erfolgt eine optionale (konfigurierbar) Bildvalidierung (JP2- und JPEG-Validierung, sowie
  * eine Fehlermeldung, wenn JBIG2 enthalten ist.
  * 
- * @author Rc Claire Rˆthlisberger, KOST-CECO */
+ * @author Rc Claire R√∂thlisberger, KOST-CECO */
 
 public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl implements
 		ValidationJimageValidationModule
@@ -144,7 +144,7 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl i
 					valid = false;
 				}
 				if ( !isValidJBIG2 && !isAllowedJBIG2 ) {
-					// PDF enth‰lt JBIG2, welches nicht erlaubt ist
+					// PDF enth√§lt JBIG2, welches nicht erlaubt ist
 					getMessageService().logError(
 							getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
 									+ getTextResourceService().getText( ERROR_XML_J_JBIG2, jbig2Counter, jbig2Obj ) );
@@ -176,6 +176,10 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl i
 				parser.processContent( i, listener );
 			}
 			reader.close();
+		} catch ( OutOfMemoryError e ) {
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
+							+ getTextResourceService().getText( ERROR_XML_UNKNOWN, "OutOfMemoryError " ) );
 		} catch ( IOException e ) {
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
@@ -208,6 +212,7 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl i
 				File filePath = new File( path );
 				String filenamePath = filePath.getName();
 				String pathToLogDir = getConfigurationService().getPathToLogfile();
+				String pdfaImage = getConfigurationService().pdfaimage();
 				boolean delFile = true;
 				FileOutputStream os;
 				PdfImageObject image = renderInfo.getImage();
@@ -223,223 +228,229 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl i
 					if ( PdfName.DCTDECODE.equals( filter ) ) {
 						/* JPEG Bild:
 						 * 
-						 * Das JPEG wird im Logverzeichnis unter dem [PDF-Name].Obj[objNr].jpg gespeichert */
-						filename = pathToLogDir + File.separator + filenamePath + ".Obj"
-								+ renderInfo.getRef().getNumber() + ".jpg";
-						os = new FileOutputStream( filename );
-						os.write( image.getImageAsBytes() );
-						os.flush();
+						 * Das JPEG wird im Logverzeichnis unter dem [PDF-Name].Obj[objNr].jpg gespeichert,
+						 * falls Bildvalidierung eingeschaltet ist. */
+						if ( pdfaImage.equalsIgnoreCase( "yes" ) ) {
+							filename = pathToLogDir + File.separator + filenamePath + ".Obj"
+									+ renderInfo.getRef().getNumber() + ".jpg";
+							os = new FileOutputStream( filename );
+							os.write( image.getImageAsBytes() );
+							os.flush();
 
-						// JPEG-Validierung: Start
-						File fl = new File( filename );
-						ImageFormat ifmt = ImageFormat.fromFileName( fl.getName() );
-						if ( null == ifmt ) {
-							// System.err.println( "file type not supported" );
-							// invalide
-							invalidJPEG = invalidJPEG + "   " + filename;
-							isValidJPEG = false;
-							delFile = false;
-							jpegCounter = jpegCounter + 1;
-						}
+							// JPEG-Validierung: Start
+							File fl = new File( filename );
+							ImageFormat ifmt = ImageFormat.fromFileName( fl.getName() );
+							if ( null == ifmt ) {
+								// System.err.println( "file type not supported" );
+								// invalide
+								invalidJPEG = invalidJPEG + "   " + filename;
+								isValidJPEG = false;
+								delFile = false;
+								jpegCounter = jpegCounter + 1;
+							}
 
-						// open the file
-						if ( delFile ) {
-							try {
-								InputStream is = new FileInputStream( fl );
+							// open the file
+							if ( delFile ) {
+								try {
+									InputStream is = new FileInputStream( fl );
 
-								// scan the file, the return value just tells us good or bad or ...
-								ImageScanner iscan = new ImageScanner();
-								Boolean ok = iscan.scan( is, ifmt, this );
-								if ( null == ok ) {
-									// ... that the scanner itself could not do its job at all
-									// invalide
-									isValidJPEG = false;
-									delFile = false;
-									invalidJPEG = invalidJPEG  + "   " + filename;
-									jpegCounter = jpegCounter + 1;
-								}
-								if ( ok ) {
-									// valide -> isValidJPEG bleibt unver‰ndert
-								} else {
-									// invalide
+									// scan the file, the return value just tells us good or bad or ...
+									ImageScanner iscan = new ImageScanner();
+									Boolean ok = iscan.scan( is, ifmt, this );
+									if ( null == ok ) {
+										// ... that the scanner itself could not do its job at all
+										// invalide
+										isValidJPEG = false;
+										delFile = false;
+										invalidJPEG = invalidJPEG + "   " + filename;
+										jpegCounter = jpegCounter + 1;
+									}
+									if ( ok ) {
+										// valide -> isValidJPEG bleibt unver√§ndert
+									} else {
+										// invalide
+										isValidJPEG = false;
+										delFile = false;
+										invalidJPEG = invalidJPEG + "   " + filename;
+										jpegCounter = jpegCounter + 1;
+									}
+									is.close();
+								} catch ( IOException ioe ) {
+									getMessageService().logError(
+											getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
+													+ getTextResourceService().getText( ERROR_XML_A_JPEG_SERVICEFAILED,
+															ioe.getMessage() ) );
 									isValidJPEG = false;
 									delFile = false;
 									invalidJPEG = invalidJPEG + "   " + filename;
 									jpegCounter = jpegCounter + 1;
 								}
-								is.close();
-							} catch ( IOException ioe ) {
-								getMessageService().logError(
-										getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
-												+ getTextResourceService().getText( ERROR_XML_A_JPEG_SERVICEFAILED,
-														ioe.getMessage() ) );
-								isValidJPEG = false;
-								delFile = false;
-								invalidJPEG = invalidJPEG + "   " + filename;
-								jpegCounter = jpegCounter + 1;
 							}
+							// JPEG-Validierung: Ende
+							if ( delFile ) {
+								// Validierung diese Bildes bestanden. Das Bild wird aus log gel√∂scht.
+								Util.deleteFile( fl );
+							}
+							os.close();
 						}
-						// JPEG-Validierung: Ende
-						if ( delFile ) {
-							// Validierung diese Bildes bestanden. Das Bild wird aus log gelˆscht.
-							Util.deleteFile( fl );
-						}
-						os.close();
 					} else if ( PdfName.JPXDECODE.equals( filter ) ) {
 						/* JP2 Bild:
 						 * 
-						 * Das JP2 wird im Logverzeichnis unter dem [PDF-Name].Obj[objNr].jp2 gespeichert */
-						filename = pathToLogDir + File.separator + filenamePath + ".Obj"
-								+ renderInfo.getRef().getNumber() + ".jp2";
-						File fl = new File( filename );
-						os = new FileOutputStream( filename );
-						os.write( image.getImageAsBytes() );
-						os.flush();
+						 * Das JP2 wird im Logverzeichnis unter dem [PDF-Name].Obj[objNr].jp2 gespeichert,
+						 * falls Bildvalidierung eingeschaltet ist. */
+						if ( pdfaImage.equalsIgnoreCase( "yes" ) ) {
+							filename = pathToLogDir + File.separator + filenamePath + ".Obj"
+									+ renderInfo.getRef().getNumber() + ".jp2";
+							File fl = new File( filename );
+							os = new FileOutputStream( filename );
+							os.write( image.getImageAsBytes() );
+							os.flush();
 
-						// TODO: JP2 Validierung
+							// TODO: JP2 Validierung
 
-						String pathToJpylyzerExe = "resources" + File.separator + "jpylyzer" + File.separator
-								+ "jpylyzer.exe";
+							String pathToJpylyzerExe = "resources" + File.separator + "jpylyzer" + File.separator
+									+ "jpylyzer.exe";
 
-						File fJpylyzerExe = new File( pathToJpylyzerExe );
-						if ( !fJpylyzerExe.exists() ) {
-							getMessageService().logError(
-									getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
-											+ getTextResourceService().getText( ERROR_XML_A_JP2_JPYLYZER_MISSING ) );
-						}
+							File fJpylyzerExe = new File( pathToJpylyzerExe );
+							if ( !fJpylyzerExe.exists() ) {
+								getMessageService().logError(
+										getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
+												+ getTextResourceService().getText( ERROR_XML_A_JP2_JPYLYZER_MISSING ) );
+							}
 
-						pathToJpylyzerExe = "\"" + pathToJpylyzerExe + "\"";
-
-						try {
-							File report = null;
+							pathToJpylyzerExe = "\"" + pathToJpylyzerExe + "\"";
 
 							try {
-								// jpylyzer-Befehl: pathToJpylyzerExe valDatei > valDatei.jpylyzer-log.xml
-								String outputPath = pathToLogDir;
-								String outputName = File.separator + fl.getName() + ".jpylyzer-log.xml";
-								String pathToJpylyzerReport = outputPath + outputName;
-								File output = new File( pathToJpylyzerReport );
-								Runtime rt = Runtime.getRuntime();
-								Process proc = null;
+								File report = null;
 
 								try {
-									report = output;
+									// jpylyzer-Befehl: pathToJpylyzerExe valDatei > valDatei.jpylyzer-log.xml
+									String outputPath = pathToLogDir;
+									String outputName = File.separator + fl.getName() + ".jpylyzer-log.xml";
+									String pathToJpylyzerReport = outputPath + outputName;
+									File output = new File( pathToJpylyzerReport );
+									Runtime rt = Runtime.getRuntime();
+									Process proc = null;
 
-									// falls das File bereits existiert, z.B. von einem vorhergehenden Durchlauf,
-									// lˆschen wir
-									// es
-									if ( report.exists() ) {
-										report.delete();
+									try {
+										report = output;
+
+										// falls das File bereits existiert, z.B. von einem vorhergehenden Durchlauf,
+										// l√∂schen wir
+										// es
+										if ( report.exists() ) {
+											report.delete();
+										}
+
+										/* Das redirect Zeichen verunm√∂glicht eine direkte eingabe. mit dem
+										 * geschachtellten Befehl gehts: cmd /c\"urspruenlicher Befehl\" */
+										String command = "cmd /c \"" + pathToJpylyzerExe + " \"" + fl.getAbsolutePath()
+												+ "\" > \"" + output.getAbsolutePath() + "\"\"";
+										proc = rt.exec( command.toString().split( " " ) );
+										// .split(" ") ist notwendig wenn in einem Pfad ein Doppelleerschlag vorhanden
+										// ist!
+
+										// Warte, bis proc fertig ist
+										proc.waitFor();
+
+									} catch ( Exception e ) {
+										getMessageService().logError(
+												getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
+														+ getTextResourceService().getText( ERROR_XML_A_JP2_SERVICEFAILED,
+																e.getMessage() ) );
+										isValidJP2 = false;
+										delFile = false;
+										invalidJP2 = invalidJP2 + "   " + filename;
+										jp2Counter = jp2Counter + 1;
+									} finally {
+										/* // Warte, bis wget fertig ist 0 = Alles io int exitStatus = proc.waitFor();
+										 * // 10ms warten bis die Konsole umgeschaltet wird Thread.sleep( 10 );
+										 * Util.switchOnConsole();
+										 * 
+										 * if ( 0 != exitStatus ) { // invalide isValidJP2 = false; delFile = false;
+										 * invalidFile = invalidFile + filename + " "; } */
+										if ( proc != null ) {
+											closeQuietly( proc.getOutputStream() );
+											closeQuietly( proc.getInputStream() );
+											closeQuietly( proc.getErrorStream() );
+										}
 									}
+									if ( report.exists() ) {
+										// TODO: auswerten
+										Document doc = null;
 
-									/* Das redirect Zeichen verunmˆglicht eine direkte eingabe. mit dem
-									 * geschachtellten Befehl gehts: cmd /c\"urspruenlicher Befehl\" */
-									String command = "cmd /c \"" + pathToJpylyzerExe + " \"" + fl.getAbsolutePath()
-											+ "\" > \"" + output.getAbsolutePath() + "\"\"";
-									proc = rt.exec( command.toString().split( " " ) );
-									// .split(" ") ist notwendig wenn in einem Pfad ein Doppelleerschlag vorhanden
-									// ist!
+										BufferedInputStream bis = new BufferedInputStream( new FileInputStream(
+												pathToJpylyzerReport ) );
+										DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+										DocumentBuilder db = dbf.newDocumentBuilder();
+										doc = db.parse( bis );
+										doc.normalize();
 
-									// Warte, bis proc fertig ist
-									proc.waitFor();
+										NodeList nodeLstI = doc.getElementsByTagName( "isValidJP2" );
 
+										// Node isValidJP2 enth√§lt im TextNode das Resultat TextNode ist ein ChildNode
+										for ( int s = 0; s < nodeLstI.getLength(); s++ ) {
+											Node resultNode = nodeLstI.item( s );
+											StringBuffer buf = new StringBuffer();
+											NodeList children = resultNode.getChildNodes();
+											for ( int i = 0; i < children.getLength(); i++ ) {
+												Node textChild = children.item( i );
+												if ( textChild.getNodeType() != Node.TEXT_NODE ) {
+													continue;
+												}
+												buf.append( textChild.getNodeValue() );
+											}
+											String result = buf.toString();
+
+											// Das Resultat ist False oder True
+											if ( result.equalsIgnoreCase( "True" ) ) {
+												// valid
+											} else {
+												// invalide
+												isValidJP2 = false;
+												delFile = false;
+												invalidJP2 = invalidJP2 + "   " + filename;
+												jp2Counter = jp2Counter + 1;
+											}
+										}
+
+									} else {
+										// Datei nicht angelegt...
+										getMessageService().logError(
+												getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
+														+ getTextResourceService().getText( ERROR_XML_A_JP2_NOREPORT ) );
+										isValidJP2 = false;
+										delFile = false;
+										invalidJP2 = invalidJP2 + "   " + filename;
+										jp2Counter = jp2Counter + 1;
+									}
 								} catch ( Exception e ) {
 									getMessageService().logError(
 											getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
-													+ getTextResourceService().getText( ERROR_XML_A_JP2_SERVICEFAILED,
-															e.getMessage() ) );
+													+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 									isValidJP2 = false;
 									delFile = false;
 									invalidJP2 = invalidJP2 + "   " + filename;
 									jp2Counter = jp2Counter + 1;
-								} finally {
-									/* // Warte, bis wget fertig ist 0 = Alles io int exitStatus = proc.waitFor(); //
-									 * 10ms warten bis die Konsole umgeschaltet wird Thread.sleep( 10 );
-									 * Util.switchOnConsole();
-									 * 
-									 * if ( 0 != exitStatus ) { // invalide isValidJP2 = false; delFile = false;
-									 * invalidFile = invalidFile + filename + " "; } */
-									if ( proc != null ) {
-										closeQuietly( proc.getOutputStream() );
-										closeQuietly( proc.getInputStream() );
-										closeQuietly( proc.getErrorStream() );
-									}
 								}
 								if ( report.exists() ) {
-									// TODO: auswerten
-									Document doc = null;
-
-									BufferedInputStream bis = new BufferedInputStream( new FileInputStream(
-											pathToJpylyzerReport ) );
-									DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-									DocumentBuilder db = dbf.newDocumentBuilder();
-									doc = db.parse( bis );
-									doc.normalize();
-
-									NodeList nodeLstI = doc.getElementsByTagName( "isValidJP2" );
-
-									// Node isValidJP2 enth‰lt im TextNode das Resultat TextNode ist ein ChildNode
-									for ( int s = 0; s < nodeLstI.getLength(); s++ ) {
-										Node resultNode = nodeLstI.item( s );
-										StringBuffer buf = new StringBuffer();
-										NodeList children = resultNode.getChildNodes();
-										for ( int i = 0; i < children.getLength(); i++ ) {
-											Node textChild = children.item( i );
-											if ( textChild.getNodeType() != Node.TEXT_NODE ) {
-												continue;
-											}
-											buf.append( textChild.getNodeValue() );
-										}
-										String result = buf.toString();
-
-										// Das Resultat ist False oder True
-										if ( result.equalsIgnoreCase( "True" ) ) {
-											// valid
-										} else {
-											// invalide
-											isValidJP2 = false;
-											delFile = false;
-											invalidJP2 = invalidJP2 + "   " + filename;
-											jp2Counter = jp2Counter + 1;
-										}
-									}
-
-								} else {
-									// Datei nicht angelegt...
-									getMessageService().logError(
-											getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
-													+ getTextResourceService().getText( ERROR_XML_A_JP2_NOREPORT ) );
-									isValidJP2 = false;
-									delFile = false;
-									invalidJP2 = invalidJP2 + "   " + filename;
-									jp2Counter = jp2Counter + 1;
+									report.delete();
 								}
+
 							} catch ( Exception e ) {
 								getMessageService().logError(
 										getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
 												+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
-								isValidJP2 = false;
-								delFile = false;
-								invalidJP2 = invalidJP2 + "   " + filename;
-								jp2Counter = jp2Counter + 1;
-							}
-							if ( report.exists() ) {
-								report.delete();
 							}
 
-						} catch ( Exception e ) {
-							getMessageService().logError(
-									getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
-											+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
-						}
+							// End JP2 Validierung
 
-						// End JP2 Validierung
-
-						if ( delFile ) {
-							// Validierung diese Bildes bestanden. Das Bild wird aus log gelˆscht.
-							Util.deleteFile( fl );
+							if ( delFile ) {
+								// Validierung diese Bildes bestanden. Das Bild wird aus log gel√∂scht.
+								Util.deleteFile( fl );
+							}
+							os.close();
 						}
-						os.close();
 					} else if ( PdfName.JBIG2DECODE.equals( filter ) ) {
 						/* Bild mit der JBIG2 Komprimierung */
 						isValidJBIG2 = false;
