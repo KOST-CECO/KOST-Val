@@ -774,7 +774,10 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 			int year = Integer.parseInt( sDate );
 			Calendar endOfYear = new GregorianCalendar( year, Calendar.DECEMBER, 31 );
 			date = endOfYear.getTime();
-			Calendar calNow = Calendar.getInstance();
+			/* Calendar calNow = Calendar.getInstance();
+			 * 
+			 * Dies beinhaltet den Zeitstempel und bereitet Probleme, wenn das Jahr das laufende Jahr ist */
+			Calendar calNow = new GregorianCalendar( year, Calendar.MONTH, Calendar.DAY_OF_MONTH );
 			Calendar endOfYearJan = new GregorianCalendar( year, Calendar.JANUARY, 1 );
 			if ( endOfYear.after( calNow ) ) {
 				if ( endOfYearJan.before( calNow ) ) {

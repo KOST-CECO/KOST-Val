@@ -1,5 +1,5 @@
 ; The name of the installer
-Name "KOST-Val v1.7.2"
+Name "KOST-Val v1.7.3"
 ; Sets the icon of the installer
 Icon "val.ico"
 ; remove the text 'Nullsoft Install System vX.XX' from the installer window 
@@ -26,7 +26,7 @@ XPStyle on
 
 ;--------------------------------
 !define INIFILE       "KOSTval.ini"
-!define KOSTHELP      "doc\KOST-Val_Manual_Abridged_*.pdf"
+!define KOSTHELP      "doc\KOST-Val_Manual_*.pdf"
 !define CONFIG        "kostval.conf.xml"
 !define CONFIGPATH    "configuration"
 !define BACKUP        "~backup"
