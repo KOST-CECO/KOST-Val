@@ -112,43 +112,56 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl i
 			String srcPdf = valDatei.getAbsolutePath();
 			String destImage = pathToWorkDir + File.separator + valDatei.getName();
 
-			try {
-				extractImages( srcPdf, destImage );
-			} catch ( DocumentException e ) {
+			File encrypt = new File( pathToWorkDir + File.separator + valDatei.getName() + "_encrypt.txt" );
+
+			if ( encrypt.exists() ) {
 				getMessageService().logError(
 						getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
-								+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
-			} catch ( IOException e ) {
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
-								+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
-			}
-			if ( isValidJPEG && isValidJP2 && isValidJBIG2 ) {
-				// Bildvalidierung bestanden
-				valid = true;
+								+ getTextResourceService().getText( ERROR_XML_J_ENCRYPT ) );
+				valid = false;
+				Util.deleteFile( encrypt );
 			} else {
-				if ( pdfaImage.equalsIgnoreCase( "yes" ) && !isValidJPEG ) {
-					// eingeschaltete Bildvalidierung nicht bestanden
+				Util.deleteFile( encrypt );
+				try {
+					extractImages( srcPdf, destImage );
+				} catch ( DocumentException e ) {
 					getMessageService().logError(
 							getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
-									+ getTextResourceService().getText( ERROR_XML_J_INVALID_JPEG, invalidJPEG,
-											jpegCounter ) );
-					valid = false;
+									+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+				} catch ( IOException e ) {
+					getMessageService().logError(
+							getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
+									+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 				}
-				if ( pdfaImage.equalsIgnoreCase( "yes" ) && !isValidJP2 ) {
-					// eingeschaltete Bildvalidierung nicht bestanden
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
-									+ getTextResourceService().getText( ERROR_XML_J_INVALID_JP2, invalidJP2,
-											jp2Counter ) );
-					valid = false;
-				}
-				if ( !isValidJBIG2 && !isAllowedJBIG2 ) {
-					// PDF enthält JBIG2, welches nicht erlaubt ist
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
-									+ getTextResourceService().getText( ERROR_XML_J_JBIG2, jbig2Counter, jbig2Obj ) );
-					valid = false;
+				if ( isValidJPEG && isValidJP2 && isValidJBIG2 ) {
+					// Bildvalidierung bestanden
+					valid = true;
+				} else {
+					if ( pdfaImage.equalsIgnoreCase( "yes" ) && !isValidJPEG ) {
+						// eingeschaltete Bildvalidierung nicht bestanden
+						getMessageService().logError(
+								getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
+										+ getTextResourceService().getText( ERROR_XML_J_INVALID_JPEG, invalidJPEG,
+												jpegCounter ) );
+						valid = false;
+					}
+					if ( pdfaImage.equalsIgnoreCase( "yes" ) && !isValidJP2 ) {
+						// eingeschaltete Bildvalidierung nicht bestanden
+						getMessageService().logError(
+								getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
+										+ getTextResourceService().getText( ERROR_XML_J_INVALID_JP2, invalidJP2,
+												jp2Counter ) );
+						valid = false;
+					}
+					if ( !isValidJBIG2 && !isAllowedJBIG2 ) {
+						// PDF enthält JBIG2, welches nicht erlaubt ist
+						getMessageService()
+								.logError(
+										getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
+												+ getTextResourceService().getText( ERROR_XML_J_JBIG2, jbig2Counter,
+														jbig2Obj ) );
+						valid = false;
+					}
 				}
 			}
 		} else {
@@ -176,10 +189,11 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl i
 				parser.processContent( i, listener );
 			}
 			reader.close();
+
 		} catch ( OutOfMemoryError e ) {
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
-							+ getTextResourceService().getText( ERROR_XML_UNKNOWN, "OutOfMemoryError " ) );
+							+ getTextResourceService().getText( ERROR_XML_J_CATCH4 ) );
 		} catch ( IOException e ) {
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
@@ -465,9 +479,30 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl i
 									+ getTextResourceService().getText( ERROR_XML_UNKNOWN, ioe.getMessage() ) );
 				}
 			} catch ( IOException e ) {
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
-								+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+				String input = e.getMessage();
+				String objectNumber = "" + renderInfo.getRef().getNumber();
+
+				if ( input.contains( "is not supported" ) ) {
+					if ( input.contains( "The color space" ) ) {
+						getMessageService().logError(
+								getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
+										+ getTextResourceService().getText( ERROR_XML_J_CATCH1, objectNumber ) );
+					} else if ( input.contains( "The color depth" ) ) {
+						getMessageService().logError(
+								getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
+										+ getTextResourceService().getText( ERROR_XML_J_CATCH2, objectNumber ) );
+					} else {
+						System.out.println( e.getMessage() );
+						getMessageService().logError(
+								getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
+										+ getTextResourceService().getText( ERROR_XML_J_CATCH3, objectNumber ) );
+					}
+				} else {
+					System.out.println( e.getMessage() );
+					getMessageService().logError(
+							getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
+									+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+				}
 			}
 		}
 

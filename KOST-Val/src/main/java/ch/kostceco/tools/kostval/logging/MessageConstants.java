@@ -148,11 +148,11 @@ public interface MessageConstants
 	String	MESSAGE_XML_B_JHOVEMESSAGE										= "message.xml.b.jhovemessage";
 
 	// Modul C-G Meldungen
-	String	MESSAGE_XML_CG_CANNOTFINDETREPORT					= "message.xml.cg.cannotfindetreport";
+	String	MESSAGE_XML_CG_CANNOTFINDETREPORT							= "message.xml.cg.cannotfindetreport";
 	String	MESSAGE_XML_CG_INVALID												= "message.xml.cg.invalid";
-	String	MESSAGE_XML_CG_ETNIO												= "message.xml.cg.etnio";
-	String	MESSAGE_XML_CG_ET_MISSING										= "message.xml.cg.et.missing";
-	String	MESSAGE_XML_CG_ET_SERVICEFAILED							= "message.xml.cg.et.servicefailed";
+	String	MESSAGE_XML_CG_ETNIO													= "message.xml.cg.etnio";
+	String	MESSAGE_XML_CG_ET_MISSING											= "message.xml.cg.et.missing";
+	String	MESSAGE_XML_CG_ET_SERVICEFAILED								= "message.xml.cg.et.servicefailed";
 
 	// *************SIARD-Meldungen*************************************************************************
 	// Modul A Meldungen
@@ -256,6 +256,11 @@ public interface MessageConstants
 	String	ERROR_XML_J_INVALID_JPEG											= "error.xml.j.invalid.jpeg";
 	String	ERROR_XML_J_INVALID_JP2												= "error.xml.j.invalid.jp2";
 	String	ERROR_XML_J_JBIG2															= "error.xml.j.jbig2";
+	String	ERROR_XML_J_CATCH1														= "error.xml.j.catch1";
+	String	ERROR_XML_J_CATCH2														= "error.xml.j.catch2";
+	String	ERROR_XML_J_CATCH3														= "error.xml.j.catch3";
+	String	ERROR_XML_J_CATCH4														= "error.xml.j.catch4";
+	String	ERROR_XML_J_ENCRYPT														= "error.xml.j.encrypt";
 
 	String	MESSAGE_XML_DIAHEADER													= "message.xml.diaheader";
 	String	MESSAGE_XML_DIAEND														= "message.xml.diaend";

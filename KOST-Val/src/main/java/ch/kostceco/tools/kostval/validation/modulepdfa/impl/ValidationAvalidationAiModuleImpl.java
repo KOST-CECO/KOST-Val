@@ -111,6 +111,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 		// einer PDF_Diagnosedatei
 		File pdfDia = null;
 		String pdfDiaPath = getConfigurationService().getPathToDiagnose();
+		String pathToWorkDir = getConfigurationService().getPathToWorkDir();
 
 		try {
 			pdfDia = new File( pdfDiaPath + File.separator + "PDF-Diagnosedaten.kost-val.xml" );
@@ -502,6 +503,16 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 									getMessageService().logError(
 											getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
 													+ getTextResourceService().getText( ERROR_XML_A_PDFTOOLS_ENCRYPTED ) );
+									// Encrypt-Fileanlegen, damit in J nicht validiert wird
+									File encrypt = new File( pathToWorkDir + File.separator + valDatei.getName()
+											+ "_encrypt.txt" );
+									if ( !encrypt.exists() ) {
+										try {
+											encrypt.createNewFile();
+										} catch ( IOException e ) {
+											e.printStackTrace();
+										}
+									}
 									return false;
 								} else {
 									getMessageService().logError(
@@ -614,6 +625,16 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 						getMessageService().logError(
 								getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
 										+ getTextResourceService().getText( ERROR_XML_A_PDFTOOLS_ENCRYPTED ) );
+						// Encrypt-Fileanlegen, damit in J nicht validiert wird
+						File encrypt = new File( pathToWorkDir + File.separator + valDatei.getName()
+								+ "_encrypt.txt" );
+						if ( !encrypt.exists() ) {
+							try {
+								encrypt.createNewFile();
+							} catch ( IOException e ) {
+								e.printStackTrace();
+							}
+						}
 						return false;
 					} else {
 						getMessageService().logError(
@@ -949,6 +970,16 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 					getMessageService().logError(
 							getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
 									+ getTextResourceService().getText( ERROR_XML_AI_2, "iCategory_2" ) );
+					// Encrypt-Fileanlegen, damit in J nicht validiert wird
+					File encrypt = new File( pathToWorkDir + File.separator + valDatei.getName()
+							+ "_encrypt.txt" );
+					if ( !encrypt.exists() ) {
+						try {
+							encrypt.createNewFile();
+						} catch ( IOException e ) {
+							e.printStackTrace();
+						}
+					}
 				}
 				if ( producerFirstValidator.contentEquals( "PDFTron" ) || dual ) {
 					// aus dem Output von Pdftron die Fehlercodes extrahieren und übersetzen
@@ -981,7 +1012,16 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 						String errorMessage = errorNodeM.getNodeValue();
 						try {
 							if ( errorDigitA.equals( "0" ) ) {
-
+								// Encrypt-Fileanlegen, damit in J nicht validiert wird
+								File encrypt = new File( pathToWorkDir + File.separator + valDatei.getName()
+										+ "_encrypt.txt" );
+								if ( !encrypt.exists() ) {
+									try {
+										encrypt.createNewFile();
+									} catch ( IOException e ) {
+										e.printStackTrace();
+									}
+								}
 								// Allgemeiner Fehler -> A
 								isValid = false;
 								getMessageService().logError(
@@ -1040,6 +1080,16 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 								getMessageService().logError(
 										getTextResourceService().getText( MESSAGE_XML_MODUL_B_PDFA )
 												+ getTextResourceService().getText( errorCodeMsg, errorCode ) );
+								// Encrypt-Fileanlegen, damit in J nicht validiert wird
+								File encrypt = new File( pathToWorkDir + File.separator + valDatei.getName()
+										+ "_encrypt.txt" );
+								if ( !encrypt.exists() ) {
+									try {
+										encrypt.createNewFile();
+									} catch ( IOException e ) {
+										e.printStackTrace();
+									}
+								}
 							}
 						} catch ( Exception e ) {
 							getMessageService().logError(
