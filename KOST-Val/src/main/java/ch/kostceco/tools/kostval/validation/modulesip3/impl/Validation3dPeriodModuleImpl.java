@@ -771,22 +771,24 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 
 		// "2007"
 		if ( sDate.length() == 4 ) {
-			int year = Integer.parseInt( sDate );
-			Calendar endOfYear = new GregorianCalendar( year, Calendar.DECEMBER, 31 );
-			date = endOfYear.getTime();
-			/* Calendar calNow = Calendar.getInstance();
-			 * 
-			 * Dies beinhaltet den Zeitstempel und bereitet Probleme, wenn das Jahr das laufende Jahr ist */
-			Calendar calNow = new GregorianCalendar( year, Calendar.MONTH, Calendar.DAY_OF_MONTH );
-			Calendar endOfYearJan = new GregorianCalendar( year, Calendar.JANUARY, 1 );
-			if ( endOfYear.after( calNow ) ) {
-				if ( endOfYearJan.before( calNow ) ) {
-					date = calNow.getTime();
+			DateFormat dateBisSIP = new SimpleDateFormat( "yyyy-MM-dd" );
+			Date dateBisNow = new Date();
+			String sDateEnd = sDate + "-12-31";
+			String sDateNow = "" + dateBisSIP.format( dateBisNow );
+			try {
+				Date dateEnd = (Date) formatter1.parse( sDateEnd );
+				Date dateNow = (Date) formatter1.parse( sDateNow );
+				if ( dateEnd.after( dateNow ) ) {
+					// Es kann nicht älter als heute sein
+					date = dateNow;
+					return date;
+				} else {
+					date = dateEnd;
 					return date;
 				}
-				return date;
+			} catch ( ParseException e ) {
+				return null;
 			}
-			return date;
 		}
 
 		// "2007-09-30"
@@ -817,10 +819,15 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 
 		// "2007"
 		if ( sDate.length() == 4 ) {
-			int year = Integer.parseInt( sDate );
-			Calendar endOfYear = new GregorianCalendar( year, Calendar.JANUARY, 1 );
-			date = endOfYear.getTime();
-			return date;
+			String sDateBegin = sDate + "-01-01";
+			try {
+				Date dateBegin = (Date) formatter1.parse( sDateBegin );
+					date = dateBegin;
+					return date;
+			} catch ( ParseException e ) {
+				return null;
+			}
+
 		}
 
 		// "2007-09-30"
