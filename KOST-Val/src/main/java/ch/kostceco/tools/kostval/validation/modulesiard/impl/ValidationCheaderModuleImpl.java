@@ -1,7 +1,8 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
  * Information Package (SIP). Copyright (C) 2012-2016 Claire Röthlisberger (KOST-CECO), Christian
- * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon), Daniel Ludin (BEDAG AG)
+ * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
+ * Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
  * KOST-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. This application
  * is free software: you can redistribute it and/or modify it under the terms of the GNU General
@@ -69,7 +70,7 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 		// Ausgabe SIARD-Modul Ersichtlich das KOST-Val arbeitet
 		System.out.print( "C   " );
 		System.out.print( "\r" );
-		int onWork = 41;
+		int onWork = 410;
 
 		boolean result = true;
 		// Sind im Header-Ordner metadata.xml und metadata.xsd vorhanden?
@@ -86,20 +87,20 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 				if ( fileEntry.getName().equals( "header/" + XSD_METADATA ) ) {
 					metadataxsd = fileEntry;
 				}
-				if ( onWork == 41 ) {
+				if ( onWork == 410 ) {
 					onWork = 2;
 					System.out.print( "C-   " );
 					System.out.print( "\r" );
-				} else if ( onWork == 11 ) {
-					onWork = 12;
+				} else if ( onWork == 110 ) {
+					onWork = onWork + 1;
 					System.out.print( "C\\   " );
 					System.out.print( "\r" );
-				} else if ( onWork == 21 ) {
-					onWork = 22;
+				} else if ( onWork == 210 ) {
+					onWork = onWork + 1;
 					System.out.print( "C|   " );
 					System.out.print( "\r" );
-				} else if ( onWork == 31 ) {
-					onWork = 32;
+				} else if ( onWork == 310 ) {
+					onWork = onWork + 1;
 					System.out.print( "C/   " );
 					System.out.print( "\r" );
 				} else {

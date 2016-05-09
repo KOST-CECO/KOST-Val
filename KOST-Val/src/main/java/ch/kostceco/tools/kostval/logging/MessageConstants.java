@@ -70,7 +70,8 @@ public interface MessageConstants
 	String	MESSAGE_XML_VALERGEBNIS_VALID									= "message.xml.valergebnis.valid";
 	String	MESSAGE_XML_VALERGEBNIS_INVALID								= "message.xml.valergebnis.invalid";
 	String	MESSAGE_XML_VALERGEBNIS_CLOSE									= "message.xml.valergebnis.close";
-
+	String	MESSAGE_XML_LOG																= "message.xml.log";
+	
 	String	MESSAGE_XML_MODUL_A_TIFF											= "message.xml.modul.a.tiff";
 	String	MESSAGE_XML_MODUL_B_TIFF											= "message.xml.modul.b.tiff";
 	String	MESSAGE_XML_MODUL_C_TIFF											= "message.xml.modul.c.tiff";

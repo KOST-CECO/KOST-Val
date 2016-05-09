@@ -57,7 +57,7 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl implement
 		// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
 		System.out.print( "1C   " );
 		System.out.print( "\r" );
-		int onWork = 41;
+		int onWork = 410;
 
 		boolean valid = true;
 		boolean charIo = true;
@@ -99,20 +99,20 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl implement
 						charIo = false;
 					}
 				}
-				if ( onWork == 41 ) {
+				if ( onWork == 410 ) {
 					onWork = 2;
 					System.out.print( "1C-   " );
 					System.out.print( "\r" );
-				} else if ( onWork == 11 ) {
-					onWork = 12;
+				} else if ( onWork == 110 ) {
+					onWork = onWork + 1;
 					System.out.print( "1C\\   " );
 					System.out.print( "\r" );
-				} else if ( onWork == 21 ) {
-					onWork = 22;
+				} else if ( onWork == 210 ) {
+					onWork = onWork + 1;
 					System.out.print( "1C|   " );
 					System.out.print( "\r" );
-				} else if ( onWork == 31 ) {
-					onWork = 32;
+				} else if ( onWork == 310 ) {
+					onWork = onWork + 1;
 					System.out.print( "1C/   " );
 					System.out.print( "\r" );
 				} else {
@@ -155,20 +155,20 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl implement
 									+ getTextResourceService().getText( MESSAGE_XML_AC_NOTALLOWEDFILE, name ) );
 					tlIo = false;
 				}
-				if ( onWork == 41 ) {
+				if ( onWork == 410 ) {
 					onWork = 2;
 					System.out.print( "1C-   " );
 					System.out.print( "\r" );
-				} else if ( onWork == 11 ) {
-					onWork = 12;
+				} else if ( onWork == 110 ) {
+					onWork = onWork + 1;
 					System.out.print( "1C\\   " );
 					System.out.print( "\r" );
-				} else if ( onWork == 21 ) {
-					onWork = 22;
+				} else if ( onWork == 210 ) {
+					onWork = onWork + 1;
 					System.out.print( "1C|   " );
 					System.out.print( "\r" );
-				} else if ( onWork == 31 ) {
-					onWork = 32;
+				} else if ( onWork == 310 ) {
+					onWork = onWork + 1;
 					System.out.print( "1C/   " );
 					System.out.print( "\r" );
 				} else {
@@ -199,20 +199,20 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl implement
 											"header/" + name ) );
 					tlIo = false;
 				}
-				if ( onWork == 41 ) {
+				if ( onWork == 410 ) {
 					onWork = 2;
 					System.out.print( "1C-   " );
 					System.out.print( "\r" );
-				} else if ( onWork == 11 ) {
-					onWork = 12;
+				} else if ( onWork == 110 ) {
+					onWork = onWork + 1;
 					System.out.print( "1C\\   " );
 					System.out.print( "\r" );
-				} else if ( onWork == 21 ) {
-					onWork = 22;
+				} else if ( onWork == 210 ) {
+					onWork = onWork + 1;
 					System.out.print( "1C|   " );
 					System.out.print( "\r" );
-				} else if ( onWork == 31 ) {
-					onWork = 32;
+				} else if ( onWork == 310 ) {
+					onWork = onWork + 1;
 					System.out.print( "1C/   " );
 					System.out.print( "\r" );
 				} else {
@@ -304,20 +304,20 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl implement
 						}
 					}
 				}
-				if ( onWork == 41 ) {
+				if ( onWork == 410 ) {
 					onWork = 2;
 					System.out.print( "1C-   " );
 					System.out.print( "\r" );
-				} else if ( onWork == 11 ) {
-					onWork = 12;
+				} else if ( onWork == 110 ) {
+					onWork = onWork + 1;
 					System.out.print( "1C\\   " );
 					System.out.print( "\r" );
-				} else if ( onWork == 21 ) {
-					onWork = 22;
+				} else if ( onWork == 210 ) {
+					onWork = onWork + 1;
 					System.out.print( "1C|   " );
 					System.out.print( "\r" );
-				} else if ( onWork == 31 ) {
-					onWork = 32;
+				} else if ( onWork == 310 ) {
+					onWork = onWork + 1;
 					System.out.print( "1C/   " );
 					System.out.print( "\r" );
 				} else {
@@ -342,20 +342,20 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl implement
 												"header/xsd/" + name ) );
 						valid = false;
 					}
-					if ( onWork == 41 ) {
+					if ( onWork == 410 ) {
 						onWork = 2;
 						System.out.print( "1C-   " );
 						System.out.print( "\r" );
-					} else if ( onWork == 11 ) {
-						onWork = 12;
+					} else if ( onWork == 110 ) {
+						onWork = onWork + 1;
 						System.out.print( "1C\\   " );
 						System.out.print( "\r" );
-					} else if ( onWork == 21 ) {
-						onWork = 22;
+					} else if ( onWork == 210 ) {
+						onWork = onWork + 1;
 						System.out.print( "1C|   " );
 						System.out.print( "\r" );
-					} else if ( onWork == 31 ) {
-						onWork = 32;
+					} else if ( onWork == 310 ) {
+						onWork = onWork + 1;
 						System.out.print( "1C/   " );
 						System.out.print( "\r" );
 					} else {
@@ -371,20 +371,20 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl implement
 									+ getTextResourceService().getText( MESSAGE_XML_AC_MISSINGFILE,
 											"header/xsd/" + string ) );
 					valid = false;
-					if ( onWork == 41 ) {
-						onWork = 2;
+					if ( onWork == 410 ) {
+						onWork = onWork + 1;
 						System.out.print( "1C-   " );
 						System.out.print( "\r" );
-					} else if ( onWork == 11 ) {
-						onWork = 12;
+					} else if ( onWork == 110 ) {
+						onWork = onWork + 1;
 						System.out.print( "1C\\   " );
 						System.out.print( "\r" );
-					} else if ( onWork == 21 ) {
-						onWork = 22;
+					} else if ( onWork == 210 ) {
+						onWork = onWork + 1;
 						System.out.print( "1C|   " );
 						System.out.print( "\r" );
-					} else if ( onWork == 31 ) {
-						onWork = 32;
+					} else if ( onWork == 310 ) {
+						onWork = onWork + 1;
 						System.out.print( "1C/   " );
 						System.out.print( "\r" );
 					} else {
@@ -433,20 +433,20 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl implement
 						}
 					}
 				}
-				if ( onWork == 41 ) {
+				if ( onWork == 410 ) {
 					onWork = 2;
 					System.out.print( "1C-   " );
 					System.out.print( "\r" );
-				} else if ( onWork == 11 ) {
-					onWork = 12;
+				} else if ( onWork == 110 ) {
+					onWork = onWork + 1;
 					System.out.print( "1C\\   " );
 					System.out.print( "\r" );
-				} else if ( onWork == 21 ) {
-					onWork = 22;
+				} else if ( onWork == 210 ) {
+					onWork = onWork + 1;
 					System.out.print( "1C|   " );
 					System.out.print( "\r" );
-				} else if ( onWork == 31 ) {
-					onWork = 32;
+				} else if ( onWork == 310 ) {
+					onWork = onWork + 1;
 					System.out.print( "1C/   " );
 					System.out.print( "\r" );
 				} else {

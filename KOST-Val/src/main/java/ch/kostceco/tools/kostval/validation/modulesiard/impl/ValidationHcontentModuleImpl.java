@@ -83,7 +83,7 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl implement
 		// Ausgabe SIARD-Modul Ersichtlich das KOST-Val arbeitet
 		System.out.print( "H   " );
 		System.out.print( "\r" );
-		int onWork = 41;
+		int onWork = 410;
 
 		boolean valid = true;
 		try {
@@ -292,20 +292,20 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl implement
 								}
 							}
 						}
-						if ( onWork == 41 ) {
+						if ( onWork == 410 ) {
 							onWork = 2;
 							System.out.print( "H-   " );
 							System.out.print( "\r" );
-						} else if ( onWork == 11 ) {
-							onWork = 12;
+						} else if ( onWork == 110 ) {
+							onWork = onWork + 1;
 							System.out.print( "H\\   " );
 							System.out.print( "\r" );
-						} else if ( onWork == 21 ) {
-							onWork = 22;
+						} else if ( onWork == 210 ) {
+							onWork = onWork + 1;
 							System.out.print( "H|   " );
 							System.out.print( "\r" );
-						} else if ( onWork == 31 ) {
-							onWork = 32;
+						} else if ( onWork == 310 ) {
+							onWork = onWork + 1;
 							System.out.print( "H/   " );
 							System.out.print( "\r" );
 						} else {
@@ -313,20 +313,20 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl implement
 						}
 					}
 				}
-				if ( onWork == 41 ) {
+				if ( onWork == 410 ) {
 					onWork = 2;
 					System.out.print( "H-   " );
 					System.out.print( "\r" );
-				} else if ( onWork == 11 ) {
-					onWork = 12;
+				} else if ( onWork == 110 ) {
+					onWork = onWork + 1;
 					System.out.print( "H\\   " );
 					System.out.print( "\r" );
-				} else if ( onWork == 21 ) {
-					onWork = 22;
+				} else if ( onWork == 210 ) {
+					onWork = onWork + 1;
 					System.out.print( "H|   " );
 					System.out.print( "\r" );
-				} else if ( onWork == 31 ) {
-					onWork = 32;
+				} else if ( onWork == 310 ) {
+					onWork = onWork + 1;
 					System.out.print( "H/   " );
 					System.out.print( "\r" );
 				} else {

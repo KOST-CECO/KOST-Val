@@ -60,7 +60,7 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 		// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
 		System.out.print( "3D   " );
 		System.out.print( "\r" );
-		int onWork = 41;
+		int onWork = 410;
 
 		boolean valid = true;
 
@@ -529,20 +529,20 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 											}
 										}
 									}
-									if ( onWork == 41 ) {
+									if ( onWork == 410 ) {
 										onWork = 2;
 										System.out.print( "3D-   " );
 										System.out.print( "\r" );
-									} else if ( onWork == 11 ) {
-										onWork = 12;
+									} else if ( onWork == 110 ) {
+										onWork = onWork + 1;
 										System.out.print( "3D\\   " );
 										System.out.print( "\r" );
-									} else if ( onWork == 21 ) {
-										onWork = 22;
+									} else if ( onWork == 210 ) {
+										onWork = onWork + 1;
 										System.out.print( "3D|   " );
 										System.out.print( "\r" );
-									} else if ( onWork == 31 ) {
-										onWork = 32;
+									} else if ( onWork == 310 ) {
+										onWork = onWork + 1;
 										System.out.print( "3D/   " );
 										System.out.print( "\r" );
 									} else {
@@ -723,20 +723,20 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 
 				// Ende der Zeitraumvalidierung auf der Stufe Dokument
 
-				if ( onWork == 41 ) {
+				if ( onWork == 410 ) {
 					onWork = 2;
 					System.out.print( "3D-   " );
 					System.out.print( "\r" );
-				} else if ( onWork == 11 ) {
-					onWork = 12;
+				} else if ( onWork == 110 ) {
+					onWork = onWork + 1;
 					System.out.print( "3D\\   " );
 					System.out.print( "\r" );
-				} else if ( onWork == 21 ) {
-					onWork = 22;
+				} else if ( onWork == 210 ) {
+					onWork = onWork + 1;
 					System.out.print( "3D|   " );
 					System.out.print( "\r" );
-				} else if ( onWork == 31 ) {
-					onWork = 32;
+				} else if ( onWork == 310 ) {
+					onWork = onWork + 1;
 					System.out.print( "3D/   " );
 					System.out.print( "\r" );
 				} else {
@@ -822,8 +822,8 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 			String sDateBegin = sDate + "-01-01";
 			try {
 				Date dateBegin = (Date) formatter1.parse( sDateBegin );
-					date = dateBegin;
-					return date;
+				date = dateBegin;
+				return date;
 			} catch ( ParseException e ) {
 				return null;
 			}

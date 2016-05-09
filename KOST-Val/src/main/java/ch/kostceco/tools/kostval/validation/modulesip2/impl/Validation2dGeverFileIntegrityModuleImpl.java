@@ -57,7 +57,7 @@ public class Validation2dGeverFileIntegrityModuleImpl extends ValidationModuleIm
 		// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
 		System.out.print( "2D   " );
 		System.out.print( "\r" );
-		int onWork = 41;
+		int onWork = 410;
 
 		Map<String, String> dateiRefContent = new HashMap<String, String>();
 		Map<String, String> dateiRefOrdnungssystem = new HashMap<String, String>();
@@ -92,20 +92,20 @@ public class Validation2dGeverFileIntegrityModuleImpl extends ValidationModuleIm
 
 					Node titelNode = titelList.item( 0 );
 					dateiRefOrdnungssystem.put( fstNode.getTextContent(), titelNode.getTextContent() );
-					if ( onWork == 41 ) {
+					if ( onWork == 410 ) {
 						onWork = 2;
 						System.out.print( "2D-   " );
 						System.out.print( "\r" );
-					} else if ( onWork == 11 ) {
-						onWork = 12;
+					} else if ( onWork == 110 ) {
+						onWork = onWork + 1;
 						System.out.print( "2D\\   " );
 						System.out.print( "\r" );
-					} else if ( onWork == 21 ) {
-						onWork = 22;
+					} else if ( onWork == 210 ) {
+						onWork = onWork + 1;
 						System.out.print( "2D|   " );
 						System.out.print( "\r" );
-					} else if ( onWork == 31 ) {
-						onWork = 32;
+					} else if ( onWork == 310 ) {
+						onWork = onWork + 1;
 						System.out.print( "2D/   " );
 						System.out.print( "\r" );
 					} else {
@@ -140,20 +140,20 @@ public class Validation2dGeverFileIntegrityModuleImpl extends ValidationModuleIm
 									+ "/" + titelNode.getTextContent() );
 						}
 					}
-					if ( onWork == 41 ) {
+					if ( onWork == 410 ) {
 						onWork = 2;
 						System.out.print( "2D-   " );
 						System.out.print( "\r" );
-					} else if ( onWork == 11 ) {
-						onWork = 12;
+					} else if ( onWork == 110 ) {
+						onWork = onWork + 1;
 						System.out.print( "2D\\   " );
 						System.out.print( "\r" );
-					} else if ( onWork == 21 ) {
-						onWork = 22;
+					} else if ( onWork == 210 ) {
+						onWork = onWork + 1;
 						System.out.print( "2D|   " );
 						System.out.print( "\r" );
-					} else if ( onWork == 31 ) {
-						onWork = 32;
+					} else if ( onWork == 310 ) {
+						onWork = onWork + 1;
 						System.out.print( "2D/   " );
 						System.out.print( "\r" );
 					} else {
@@ -176,20 +176,20 @@ public class Validation2dGeverFileIntegrityModuleImpl extends ValidationModuleIm
 						}
 						valid = false;
 					}
-					if ( onWork == 41 ) {
+					if ( onWork == 410 ) {
 						onWork = 2;
 						System.out.print( "2D-   " );
 						System.out.print( "\r" );
-					} else if ( onWork == 11 ) {
-						onWork = 12;
+					} else if ( onWork == 110 ) {
+						onWork = onWork + 1;
 						System.out.print( "2D\\   " );
 						System.out.print( "\r" );
-					} else if ( onWork == 21 ) {
-						onWork = 22;
+					} else if ( onWork == 210 ) {
+						onWork = onWork + 1;
 						System.out.print( "2D|   " );
 						System.out.print( "\r" );
-					} else if ( onWork == 31 ) {
-						onWork = 32;
+					} else if ( onWork == 310 ) {
+						onWork = onWork + 1;
 						System.out.print( "2D/   " );
 						System.out.print( "\r" );
 					} else {
@@ -208,20 +208,20 @@ public class Validation2dGeverFileIntegrityModuleImpl extends ValidationModuleIm
 											+ getTextResourceService().getText( MESSAGE_XML_BD_MISSINGINABLIEFERUNG,
 													keyOrd ) );
 					valid = false;
-					if ( onWork == 41 ) {
+					if ( onWork == 410 ) {
 						onWork = 2;
 						System.out.print( "2D-   " );
 						System.out.print( "\r" );
-					} else if ( onWork == 11 ) {
-						onWork = 12;
+					} else if ( onWork == 110 ) {
+						onWork = onWork + 1;
 						System.out.print( "2D\\   " );
 						System.out.print( "\r" );
-					} else if ( onWork == 21 ) {
-						onWork = 22;
+					} else if ( onWork == 210 ) {
+						onWork = onWork + 1;
 						System.out.print( "2D|   " );
 						System.out.print( "\r" );
-					} else if ( onWork == 31 ) {
-						onWork = 32;
+					} else if ( onWork == 310 ) {
+						onWork = onWork + 1;
 						System.out.print( "2D/   " );
 						System.out.print( "\r" );
 					} else {

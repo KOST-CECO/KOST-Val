@@ -12,7 +12,7 @@
 		<!--PDF/A Validierungsart: simple oder dual -->
 		<dualvalidation>simple</dualvalidation>
 		<!--Pfad zum PDF/A-Manager von PDFTron -->
-		<pathtopdftronexe>C:\Software\pdfa\pdfa.exe</pathtopdftronexe>
+		<pathtopdftronexe>C:\Tools\pdfa\pdfa.exe</pathtopdftronexe>
 		<!--Angeben welche Conformancelevel mindestens erreicht werden muss -->
 		<!--no verwenden wenn diese Version nicht erlaubt ist -->
 		<pdfa1>1B</pdfa1>

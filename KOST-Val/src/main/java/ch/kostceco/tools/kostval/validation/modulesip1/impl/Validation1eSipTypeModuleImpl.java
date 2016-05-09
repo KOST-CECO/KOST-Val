@@ -55,7 +55,15 @@ public class Validation1eSipTypeModuleImpl extends ValidationModuleImpl implemen
 			Document doc = db.parse( new FileInputStream( new File( valDatei.getAbsolutePath()
 					+ "//header//metadata.xml" ) ) );
 			doc.getDocumentElement().normalize();
+
+			/* Aktuelle Lösung funktioniert nur wenn kein Präfix beim Elementnamen erlaubt ist! IO:
+			 * ablieferung NIO: v4:ablieferung
+			 * 
+			 * Ansonsten müsste überall der NameSpace auf * gesetzt werden
+			 * 
+			 * NodeList layerConfigList = doc.getElementsByTagNameNS( "*", "ablieferung" ); */
 			NodeList layerConfigList = doc.getElementsByTagName( "ablieferung" );
+
 			Node node = layerConfigList.item( 0 );
 			Element e = (Element) node;
 			String name = e.getAttribute( "xsi:type" );
