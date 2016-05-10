@@ -51,7 +51,7 @@ public class Validation3cFormatValidationModuleImpl extends ValidationModuleImpl
 	{
 		// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
 		System.out.print( "3C   " );
-		System.out.print( "\r" );
+		System.out.print( "\b\b\b\b\b" );
 
 		boolean isValid = true;
 		// Informationen zum Arbeitsverzeichnis holen

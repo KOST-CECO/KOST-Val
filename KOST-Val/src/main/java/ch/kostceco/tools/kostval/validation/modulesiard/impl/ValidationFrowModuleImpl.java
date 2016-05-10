@@ -79,8 +79,8 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements Va
 	public boolean validate( File valDatei, File directoryOfLogfile ) throws ValidationFrowException
 	{
 		// Ausgabe SIARD-Modul Ersichtlich das KOST-Val arbeitet
-		System.out.print( "F   " );
-		System.out.print( "\r" );
+		System.out.print( "F    " );
+		System.out.print( "\b\b\b\b\b" );
 		int onWork = 410;
 
 		boolean valid = true;
@@ -107,19 +107,19 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements Va
 				if ( onWork == 410 ) {
 					onWork = 2;
 					System.out.print( "F-   " );
-					System.out.print( "\r" );
+					System.out.print( "\b\b\b\b\b" );
 				} else if ( onWork == 110 ) {
 					onWork = onWork + 1;
 					System.out.print( "F\\   " );
-					System.out.print( "\r" );
+					System.out.print( "\b\b\b\b\b" );
 				} else if ( onWork == 210 ) {
 					onWork = onWork + 1;
 					System.out.print( "F|   " );
-					System.out.print( "\r" );
+					System.out.print( "\b\b\b\b\b" );
 				} else if ( onWork == 310 ) {
 					onWork = onWork + 1;
 					System.out.print( "F/   " );
-					System.out.print( "\r" );
+					System.out.print( "\b\b\b\b\b" );
 				} else {
 					onWork = onWork + 1;
 				}
@@ -164,19 +164,19 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements Va
 				if ( onWork == 41 ) {
 					onWork = 2;
 					System.out.print( "F-   " );
-					System.out.print( "\r" );
+					System.out.print( "\b\b\b\b\b" );
 				} else if ( onWork == 11 ) {
 					onWork = 12;
 					System.out.print( "F\\   " );
-					System.out.print( "\r" );
+					System.out.print( "\b\b\b\b\b" );
 				} else if ( onWork == 21 ) {
 					onWork = 22;
 					System.out.print( "F|   " );
-					System.out.print( "\r" );
+					System.out.print( "\b\b\b\b\b" );
 				} else if ( onWork == 31 ) {
 					onWork = 32;
 					System.out.print( "F/   " );
-					System.out.print( "\r" );
+					System.out.print( "\b\b\b\b\b" );
 				} else {
 					onWork = onWork + 1;
 				}

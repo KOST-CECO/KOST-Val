@@ -45,7 +45,7 @@ public class Validation1eSipTypeModuleImpl extends ValidationModuleImpl implemen
 	{
 		// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
 		System.out.print( "1E   " );
-		System.out.print( "\r" );
+		System.out.print( "\b\b\b\b\b" );
 
 		try {
 

@@ -51,7 +51,7 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl im
 	{
 		// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
 		System.out.print( "2A   " );
-		System.out.print( "\r" );
+		System.out.print( "\b\b\b\b\b" );
 
 		int onWork = 410;
 
@@ -67,20 +67,20 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl im
 				filesInSip.put( entryName, entryName );
 				if ( onWork == 410 ) {
 					onWork = 2;
-					System.out.print( "2A-   " );
-					System.out.print( "\r" );
+					System.out.print( "2A-  " );
+					System.out.print( "\b\b\b\b\b" );
 				} else if ( onWork == 110 ) {
 					onWork = onWork + 1;
-					System.out.print( "2A\\   " );
-					System.out.print( "\r" );
+					System.out.print( "2A\\  " );
+					System.out.print( "\b\b\b\b\b" );
 				} else if ( onWork == 210 ) {
 					onWork = onWork + 1;
-					System.out.print( "2A|   " );
-					System.out.print( "\r" );
+					System.out.print( "2A|  " );
+					System.out.print( "\b\b\b\b\b" );
 				} else if ( onWork == 310 ) {
 					onWork = onWork + 1;
-					System.out.print( "2A/   " );
-					System.out.print( "\r" );
+					System.out.print( "2A/  " );
+					System.out.print( "\b\b\b\b\b" );
 				} else {
 					onWork = onWork + 1;
 				}
@@ -101,20 +101,20 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl im
 					String path = null;
 					if ( onWork == 410 ) {
 						onWork = 2;
-						System.out.print( "2A-   " );
-						System.out.print( "\r" );
+						System.out.print( "2A-  " );
+						System.out.print( "\b\b\b\b\b" );
 					} else if ( onWork == 110 ) {
 						onWork = onWork + 1;
-						System.out.print( "2A\\   " );
-						System.out.print( "\r" );
+						System.out.print( "2A\\  " );
+						System.out.print( "\b\b\b\b\b" );
 					} else if ( onWork == 210 ) {
 						onWork = onWork + 1;
-						System.out.print( "2A|   " );
-						System.out.print( "\r" );
+						System.out.print( "2A|  " );
+						System.out.print( "\b\b\b\b\b" );
 					} else if ( onWork == 310 ) {
 						onWork = onWork + 1;
-						System.out.print( "2A/   " );
-						System.out.print( "\r" );
+						System.out.print( "2A/  " );
+						System.out.print( "\b\b\b\b\b" );
 					} else {
 						onWork = onWork + 1;
 					}
@@ -127,20 +127,20 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl im
 						}
 						if ( onWork == 410 ) {
 							onWork = 2;
-							System.out.print( "2A-   " );
-							System.out.print( "\r" );
+							System.out.print( "2A-  " );
+							System.out.print( "\b\b\b\b\b" );
 						} else if ( onWork == 110 ) {
 							onWork = onWork + 1;
-							System.out.print( "2A\\   " );
-							System.out.print( "\r" );
+							System.out.print( "2A\\  " );
+							System.out.print( "\b\b\b\b\b" );
 						} else if ( onWork == 210 ) {
 							onWork = onWork + 1;
-							System.out.print( "2A|   " );
-							System.out.print( "\r" );
+							System.out.print( "2A|  " );
+							System.out.print( "\b\b\b\b\b" );
 						} else if ( onWork == 310 ) {
 							onWork = onWork + 1;
-							System.out.print( "2A/   " );
-							System.out.print( "\r" );
+							System.out.print( "2A/  " );
+							System.out.print( "\b\b\b\b\b" );
 						} else {
 							onWork = onWork + 1;
 						}
@@ -172,20 +172,20 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl im
 						}
 						if ( onWork == 410 ) {
 							onWork = 2;
-							System.out.print( "2A-   " );
-							System.out.print( "\r" );
+							System.out.print( "2A-  " );
+							System.out.print( "\b\b\b\b\b" );
 						} else if ( onWork == 110 ) {
 							onWork = onWork + 1;
-							System.out.print( "2A\\   " );
-							System.out.print( "\r" );
+							System.out.print( "2A\\  " );
+							System.out.print( "\b\b\b\b\b" );
 						} else if ( onWork == 210 ) {
 							onWork = onWork + 1;
-							System.out.print( "2A|   " );
-							System.out.print( "\r" );
+							System.out.print( "2A|  " );
+							System.out.print( "\b\b\b\b\b" );
 						} else if ( onWork == 310 ) {
 							onWork = onWork + 1;
-							System.out.print( "2A/   " );
-							System.out.print( "\r" );
+							System.out.print( "2A/  " );
+							System.out.print( "\b\b\b\b\b" );
 						} else {
 							onWork = onWork + 1;
 						}
@@ -246,20 +246,20 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl im
 						}
 						if ( onWork == 410 ) {
 							onWork = 2;
-							System.out.print( "2A-   " );
-							System.out.print( "\r" );
+							System.out.print( "2A-  " );
+							System.out.print( "\b\b\b\b\b" );
 						} else if ( onWork == 110 ) {
 							onWork = onWork + 1;
-							System.out.print( "2A\\   " );
-							System.out.print( "\r" );
+							System.out.print( "2A\\  " );
+							System.out.print( "\b\b\b\b\b" );
 						} else if ( onWork == 210 ) {
 							onWork = onWork + 1;
-							System.out.print( "2A|   " );
-							System.out.print( "\r" );
+							System.out.print( "2A|  " );
+							System.out.print( "\b\b\b\b\b" );
 						} else if ( onWork == 310 ) {
 							onWork = onWork + 1;
-							System.out.print( "2A/   " );
-							System.out.print( "\r" );
+							System.out.print( "2A/  " );
+							System.out.print( "\b\b\b\b\b" );
 						} else {
 							onWork = onWork + 1;
 						}

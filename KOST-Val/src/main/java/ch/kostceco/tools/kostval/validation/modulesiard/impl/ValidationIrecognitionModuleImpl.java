@@ -39,8 +39,8 @@ public class ValidationIrecognitionModuleImpl extends ValidationModuleImpl imple
 			throws ValidationIrecognitionException
 	{
 		// Ausgabe SIARD-Modul Ersichtlich das KOST-Val arbeitet
-		System.out.print( "I   " );
-		System.out.print( "\r" );
+		System.out.print( "I    " );
+		System.out.print( "\b\b\b\b\b" );
 
 		/** Validierung ob die Extension .siard lautet */
 		if ( !valDatei.getAbsolutePath().toLowerCase().endsWith( ".siard" ) ) {

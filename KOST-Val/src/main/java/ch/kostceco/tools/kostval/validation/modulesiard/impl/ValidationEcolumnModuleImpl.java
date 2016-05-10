@@ -106,8 +106,8 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 			throws ValidationEcolumnException
 	{
 		// Ausgabe SIARD-Modul Ersichtlich das KOST-Val arbeitet
-		System.out.print( "E   " );
-		System.out.print( "\r" );
+		System.out.print( "E    " );
+		System.out.print( "\b\b\b\b\b" );
 
 		// All over validation flag
 		boolean valid = true;
@@ -249,19 +249,19 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 			if ( onWork == 410 ) {
 				onWork = 2;
 				System.out.print( "E-   " );
-				System.out.print( "\r" );
+				System.out.print( "\b\b\b\b\b" );
 			} else if ( onWork == 110 ) {
 				onWork = onWork + 1;
 				System.out.print( "E\\   " );
-				System.out.print( "\r" );
+				System.out.print( "\b\b\b\b\b" );
 			} else if ( onWork == 210 ) {
 				onWork = onWork + 1;
 				System.out.print( "E|   " );
-				System.out.print( "\r" );
+				System.out.print( "\b\b\b\b\b" );
 			} else if ( onWork == 310 ) {
 				onWork = onWork + 1;
 				System.out.print( "E/   " );
-				System.out.print( "\r" );
+				System.out.print( "\b\b\b\b\b" );
 			} else {
 				onWork = onWork + 1;
 			}
@@ -347,19 +347,19 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 			if ( onWork == 41 ) {
 				onWork = 2;
 				System.out.print( "E-   " );
-				System.out.print( "\r" );
+				System.out.print( "\b\b\b\b\b" );
 			} else if ( onWork == 11 ) {
 				onWork = 12;
 				System.out.print( "E\\   " );
-				System.out.print( "\r" );
+				System.out.print( "\b\b\b\b\b" );
 			} else if ( onWork == 21 ) {
 				onWork = 22;
 				System.out.print( "E|   " );
-				System.out.print( "\r" );
+				System.out.print( "\b\b\b\b\b" );
 			} else if ( onWork == 31 ) {
 				onWork = 32;
 				System.out.print( "E/   " );
-				System.out.print( "\r" );
+				System.out.print( "\b\b\b\b\b" );
 			} else {
 				onWork = onWork + 1;
 			}
@@ -452,19 +452,19 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 			if ( onWork == 41 ) {
 				onWork = 2;
 				System.out.print( "E-   " );
-				System.out.print( "\r" );
+				System.out.print( "\b\b\b\b\b" );
 			} else if ( onWork == 11 ) {
 				onWork = 12;
 				System.out.print( "E\\   " );
-				System.out.print( "\r" );
+				System.out.print( "\b\b\b\b\b" );
 			} else if ( onWork == 21 ) {
 				onWork = 22;
 				System.out.print( "E|   " );
-				System.out.print( "\r" );
+				System.out.print( "\b\b\b\b\b" );
 			} else if ( onWork == 31 ) {
 				onWork = 32;
 				System.out.print( "E/   " );
-				System.out.print( "\r" );
+				System.out.print( "\b\b\b\b\b" );
 			} else {
 				onWork = onWork + 1;
 			}
@@ -612,19 +612,19 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 			if ( onWork == 41 ) {
 				onWork = 2;
 				System.out.print( "E-   " );
-				System.out.print( "\r" );
+				System.out.print( "\b\b\b\b\b" );
 			} else if ( onWork == 11 ) {
 				onWork = 12;
 				System.out.print( "E\\   " );
-				System.out.print( "\r" );
+				System.out.print( "\b\b\b\b\b" );
 			} else if ( onWork == 21 ) {
 				onWork = 22;
 				System.out.print( "E|   " );
-				System.out.print( "\r" );
+				System.out.print( "\b\b\b\b\b" );
 			} else if ( onWork == 31 ) {
 				onWork = 32;
 				System.out.print( "E/   " );
-				System.out.print( "\r" );
+				System.out.print( "\b\b\b\b\b" );
 			} else {
 				onWork = onWork + 1;
 			}
@@ -754,19 +754,19 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 			if ( onWork == 41 ) {
 				onWork = 2;
 				System.out.print( "E-   " );
-				System.out.print( "\r" );
+				System.out.print( "\b\b\b\b\b" );
 			} else if ( onWork == 11 ) {
 				onWork = 12;
 				System.out.print( "E\\   " );
-				System.out.print( "\r" );
+				System.out.print( "\b\b\b\b\b" );
 			} else if ( onWork == 21 ) {
 				onWork = 22;
 				System.out.print( "E|   " );
-				System.out.print( "\r" );
+				System.out.print( "\b\b\b\b\b" );
 			} else if ( onWork == 31 ) {
 				onWork = 32;
 				System.out.print( "E/   " );
-				System.out.print( "\r" );
+				System.out.print( "\b\b\b\b\b" );
 			} else {
 				onWork = onWork + 1;
 			}

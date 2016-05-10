@@ -59,7 +59,7 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 	{
 		// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
 		System.out.print( "3D   " );
-		System.out.print( "\r" );
+		System.out.print( "\b\b\b\b\b" );
 		int onWork = 410;
 
 		boolean valid = true;
@@ -531,20 +531,20 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 									}
 									if ( onWork == 410 ) {
 										onWork = 2;
-										System.out.print( "3D-   " );
-										System.out.print( "\r" );
+										System.out.print( "3D-  " );
+										System.out.print( "\b\b\b\b\b" );
 									} else if ( onWork == 110 ) {
 										onWork = onWork + 1;
-										System.out.print( "3D\\   " );
-										System.out.print( "\r" );
+										System.out.print( "3D\\  " );
+										System.out.print( "\b\b\b\b\b" );
 									} else if ( onWork == 210 ) {
 										onWork = onWork + 1;
-										System.out.print( "3D|   " );
-										System.out.print( "\r" );
+										System.out.print( "3D|  " );
+										System.out.print( "\b\b\b\b\b" );
 									} else if ( onWork == 310 ) {
 										onWork = onWork + 1;
-										System.out.print( "3D/   " );
-										System.out.print( "\r" );
+										System.out.print( "3D/  " );
+										System.out.print( "\b\b\b\b\b" );
 									} else {
 										onWork = onWork + 1;
 									}
@@ -725,20 +725,20 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 
 				if ( onWork == 410 ) {
 					onWork = 2;
-					System.out.print( "3D-   " );
-					System.out.print( "\r" );
+					System.out.print( "3D-  " );
+					System.out.print( "\b\b\b\b\b" );
 				} else if ( onWork == 110 ) {
 					onWork = onWork + 1;
-					System.out.print( "3D\\   " );
-					System.out.print( "\r" );
+					System.out.print( "3D\\  " );
+					System.out.print( "\b\b\b\b\b" );
 				} else if ( onWork == 210 ) {
 					onWork = onWork + 1;
-					System.out.print( "3D|   " );
-					System.out.print( "\r" );
+					System.out.print( "3D|  " );
+					System.out.print( "\b\b\b\b\b" );
 				} else if ( onWork == 310 ) {
 					onWork = onWork + 1;
-					System.out.print( "3D/   " );
-					System.out.print( "\r" );
+					System.out.print( "3D/  " );
+					System.out.print( "\b\b\b\b\b" );
 				} else {
 					onWork = onWork + 1;
 				}
