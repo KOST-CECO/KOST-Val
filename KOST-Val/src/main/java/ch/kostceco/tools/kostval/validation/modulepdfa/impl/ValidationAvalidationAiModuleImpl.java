@@ -111,8 +111,11 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 		// einer PDF_Diagnosedatei
 		File pdfDia = null;
 		String pdfDiaPath = getConfigurationService().getPathToDiagnose();
-		String pathToWorkDir = getConfigurationService().getPathToWorkDir();
-
+		// String pathToWorkDir = getConfigurationService().getPathToWorkDir();
+		String pathToLogDir = getConfigurationService().getPathToLogfile();
+		String pathToWorkDir = pathToLogDir;
+		/* Beim schreiben ins Workverzeichnis trat ab und zu ein fehler auf. entsprechend wird es letzt
+		 * ins logverzeichnis geschrieben */
 		try {
 			pdfDia = new File( pdfDiaPath + File.separator + "PDF-Diagnosedaten.kost-val.xml" );
 			if ( !pdfDia.exists() ) {
@@ -496,6 +499,22 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 								// PDF Konnte geöffnet werden
 								docPdf.setStopOnError( true );
 								docPdf.setReportingLevel( 1 );
+								if ( docPdf.getErrorCode() == NativeLibrary.ERRORCODE.PDF_E_PASSWORD ) {
+									getMessageService().logError(
+											getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+													+ getTextResourceService().getText( ERROR_XML_A_PDFTOOLS_ENCRYPTED ) );
+									// Encrypt-Fileanlegen, damit in J nicht validiert wird
+									File encrypt = new File( pathToWorkDir + File.separator + valDatei.getName()
+											+ "_encrypt.txt" );
+									if ( !encrypt.exists() ) {
+										try {
+											encrypt.createNewFile();
+										} catch ( IOException e ) {
+											e.printStackTrace();
+										}
+									}
+									return false;
+								}
 							} else {
 								docPdf.setStopOnError( true );
 								docPdf.setReportingLevel( 1 );
@@ -620,6 +639,24 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 
 				if ( docPdf.open( valDatei.getAbsolutePath(), "", NativeLibrary.COMPLIANCE.ePDFUnk ) ) {
 					// PDF Konnte geöffnet werden
+					docPdf.setStopOnError( true );
+					docPdf.setReportingLevel( 1 );
+					if ( docPdf.getErrorCode() == NativeLibrary.ERRORCODE.PDF_E_PASSWORD ) {
+						getMessageService().logError(
+								getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+										+ getTextResourceService().getText( ERROR_XML_A_PDFTOOLS_ENCRYPTED ) );
+						// Encrypt-Fileanlegen, damit in J nicht validiert wird
+						File encrypt = new File( pathToWorkDir + File.separator + valDatei.getName()
+								+ "_encrypt.txt" );
+						if ( !encrypt.exists() ) {
+							try {
+								encrypt.createNewFile();
+							} catch ( IOException e ) {
+								e.printStackTrace();
+							}
+						}
+						return false;
+					}
 				} else {
 					if ( docPdf.getErrorCode() == NativeLibrary.ERRORCODE.PDF_E_PASSWORD ) {
 						getMessageService().logError(
@@ -980,6 +1017,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 							e.printStackTrace();
 						}
 					}
+					return false;
 				}
 				if ( producerFirstValidator.contentEquals( "PDFTron" ) || dual ) {
 					// aus dem Output von Pdftron die Fehlercodes extrahieren und übersetzen

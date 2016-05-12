@@ -112,7 +112,9 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl i
 			String srcPdf = valDatei.getAbsolutePath();
 			String destImage = pathToWorkDir + File.separator + valDatei.getName();
 
-			File encrypt = new File( pathToWorkDir + File.separator + valDatei.getName() + "_encrypt.txt" );
+		String pathToLogDir = getConfigurationService().getPathToLogfile();
+
+			File encrypt = new File( pathToLogDir + File.separator + valDatei.getName() + "_encrypt.txt" );
 
 			if ( encrypt.exists() ) {
 				getMessageService().logError(

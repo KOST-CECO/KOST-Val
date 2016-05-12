@@ -5,110 +5,71 @@
 	<pathtodiagnose>diagnose</pathtodiagnose>
 	<pathtojhoveconfig>configuration\jhove.conf</pathtojhoveconfig>
 	<pdfa>
-		<!--no verwenden wenn pdfa nicht validiert werden soll, ansonsten yes -->
-		<pdfavalidation>yes</pdfavalidation>
-		<!--Haupt PDF/A-Validator: PDFTools oder PDFTron -->
-		<firstvalidator>PDFTools</firstvalidator>
-		<!--PDF/A Validierungsart: simple oder dual -->
-		<dualvalidation>simple</dualvalidation>
-		<!--Pfad zum PDF/A-Manager von PDFTron -->
-		<pathtopdftronexe>C:\Tools\pdfa\pdfa.exe</pathtopdftronexe>
+		<pdfavalidation>yes</pdfavalidation><!--no verwenden wenn pdfa nicht validiert werden soll, ansonsten yes -->
+		<firstvalidator>PDFTools</firstvalidator><!--Haupt PDF/A-Validator: PDFTools oder PDFTron -->
+		<dualvalidation>simple</dualvalidation><!--PDF/A Validierungsart: simple oder dual -->
+		<pathtopdftronexe>C:\Tools\pdfa\pdfa.exe</pathtopdftronexe><!--Pfad zum PDF/A-Manager von PDFTron -->
 		<!--Angeben welche Conformancelevel mindestens erreicht werden muss -->
 		<!--no verwenden wenn diese Version nicht erlaubt ist -->
-		<pdfa1>1B</pdfa1>
-		<!--1A / 1B / no -->
-		<pdfa2>2B</pdfa2>
-		<!--2A / 2B / 2U / no -->
-		<!--no verwenden wenn die Bilder in pdfa nicht validiert werden sollen, ansonsten yes -->
-		<pdfaimage>yes</pdfaimage>
-		<!--no verwenden wenn JBIG2 in pdfa nicht erlaubt werden sollen, ansonsten yes -->
-		<jbig2allowed>no</jbig2allowed>
+		<pdfa1>1B</pdfa1><!--1A / 1B / no -->
+		<pdfa2>2B</pdfa2><!--2A / 2B / 2U / no -->
+		<pdfaimage>yes</pdfaimage><!--no verwenden wenn die Bilder in pdfa nicht validiert werden sollen, ansonsten yes -->
+		<jbig2allowed>no</jbig2allowed><!--no verwenden wenn JBIG2 in pdfa nicht erlaubt werden sollen, ansonsten yes -->
 	</pdfa>
 	<siard>
-		<!--no verwenden wenn siard nicht validiert werden soll, ansonsten yes -->
-		<siardvalidation>yes</siardvalidation>
+		<siardvalidation>yes</siardvalidation><!--no verwenden wenn siard nicht validiert werden soll, ansonsten yes -->
 	</siard>
 	<jp2>
-		<!--no verwenden wenn jp2 nicht validiert werden soll, ansonsten yes -->
-		<jp2validation>yes</jp2validation>
+		<jp2validation>yes</jp2validation><!--no verwenden wenn jp2 nicht validiert werden soll, ansonsten yes -->
 	</jp2>
 	<jpeg>
-		<!--no verwenden wenn jpeg nicht validiert werden soll, ansonsten yes -->
-		<jpegvalidation>yes</jpegvalidation>
+		<jpegvalidation>yes</jpegvalidation><!--no verwenden wenn jpeg nicht validiert werden soll, ansonsten yes -->
 	</jpeg>
 	<tiff>
-		<!--no verwenden wenn tiff nicht validiert werden soll, ansonsten yes -->
-		<tiffvalidation>yes</tiffvalidation>
+		<tiffvalidation>yes</tiffvalidation><!--no verwenden wenn tiff nicht validiert werden soll, ansonsten yes -->
 		<!--TIFF-Praezisierungen -->
 		<!--Wenn erlaubt "Text" einfuegen ansonsten "0" -->
 		<allowedcompression>
-			<allowedcompression1>Uncompressed</allowedcompression1>
-			<!--0 / Uncompressed -->
-			<allowedcompression2>CCITT 1D</allowedcompression2>
-			<!--0 / CCITT 1D -->
-			<allowedcompression3>T4/Group 3 Fax</allowedcompression3>
-			<!--0 / T4/Group 3 Fax -->
-			<allowedcompression4>T6/Group 4 Fax</allowedcompression4>
-			<!--0 / T6/Group 4 Fax -->
-			<allowedcompression5>LZW</allowedcompression5>
-			<!--0 / LZW -->
-			<allowedcompression7>0</allowedcompression7>
-			<!--0 / JPEG -->
-			<allowedcompression8>0</allowedcompression8>
-			<!--0 / Deflate -->
-			<allowedcompression32773>PackBits</allowedcompression32773>
-			<!--0 / PackBits -->
+			<allowedcompression1>Uncompressed</allowedcompression1><!--0 / Uncompressed -->
+			<allowedcompression2>CCITT 1D</allowedcompression2><!--0 / CCITT 1D -->
+			<allowedcompression3>T4/Group 3 Fax</allowedcompression3><!--0 / T4/Group 3 Fax -->
+			<allowedcompression4>T6/Group 4 Fax</allowedcompression4><!--0 / T6/Group 4 Fax -->
+			<allowedcompression5>LZW</allowedcompression5><!--0 / LZW -->
+			<allowedcompression7>0</allowedcompression7><!--0 / JPEG -->
+			<allowedcompression8>0</allowedcompression8><!--0 / Deflate -->
+			<allowedcompression32773>PackBits</allowedcompression32773><!--0 / PackBits -->
 		</allowedcompression>
 		<allowedphotointer>
-			<allowedphotointer0>WhiteIsZero</allowedphotointer0>
-			<!--0 / WhiteIsZero -->
-			<allowedphotointer1>BlackIsZero</allowedphotointer1>
-			<!--0 / BlackIsZero -->
-			<allowedphotointer2>RGB</allowedphotointer2>
-			<!--0 / RGB -->
-			<allowedphotointer3>RGB Palette</allowedphotointer3>
-			<!--0 / RGB Palette -->
-			<allowedphotointer4>0</allowedphotointer4>
-			<!--0 / transparency mask -->
-			<allowedphotointer5>0</allowedphotointer5>
-			<!--0 / CMYK -->
-			<allowedphotointer6>0</allowedphotointer6>
-			<!--0 / YCbCr -->
-			<allowedphotointer8>0</allowedphotointer8>
-			<!--0 / CIE L*a*b* -->
+			<allowedphotointer0>WhiteIsZero</allowedphotointer0><!--0 / WhiteIsZero -->
+			<allowedphotointer1>BlackIsZero</allowedphotointer1><!--0 / BlackIsZero -->
+			<allowedphotointer2>RGB</allowedphotointer2><!--0 / RGB -->
+			<allowedphotointer3>RGB Palette</allowedphotointer3><!--0 / RGB Palette -->
+			<allowedphotointer4>0</allowedphotointer4><!--0 / transparency mask -->
+			<allowedphotointer5>0</allowedphotointer5><!--0 / CMYK -->
+			<allowedphotointer6>0</allowedphotointer6><!--0 / YCbCr -->
+			<allowedphotointer8>0</allowedphotointer8><!--0 / CIE L*a*b* -->
 		</allowedphotointer>
 		<allowedbitspersample>
-			<allowedbitspersample1>1</allowedbitspersample1>
-			<!--0 / 1 -->
-			<allowedbitspersample2>0</allowedbitspersample2>
-			<!--0 / 2 -->
-			<allowedbitspersample4>4</allowedbitspersample4>
-			<!--0 / 4 -->
-			<allowedbitspersample8>8</allowedbitspersample8>
-			<!--0 / 8 -->
-			<allowedbitspersample16>16</allowedbitspersample16>
-			<!--0 / 16 -->
-			<allowedbitspersample32>0</allowedbitspersample32>
-			<!--0 / 32 -->
+			<allowedbitspersample1>1</allowedbitspersample1><!--0 / 1 -->
+			<allowedbitspersample2>0</allowedbitspersample2><!--0 / 2 -->
+			<allowedbitspersample4>4</allowedbitspersample4><!--0 / 4 -->
+			<allowedbitspersample8>8</allowedbitspersample8><!--0 / 8 -->
+			<allowedbitspersample16>16</allowedbitspersample16><!--0 / 16 -->
+			<allowedbitspersample32>0</allowedbitspersample32><!--0 / 32 -->
 		</allowedbitspersample>
 		<allowedother>
-			<allowedmultipage>1</allowedmultipage>
-			<!--0 / 1 -->
-			<allowedtiles>0</allowedtiles>
-			<!--0 / 1 -->
-			<allowedsize>0</allowedsize>
-			<!--0 / 1 -->
+			<allowedmultipage>1</allowedmultipage><!--0 / 1 -->
+			<allowedtiles>0</allowedtiles><!--0 / 1 -->
+			<allowedsize>0</allowedsize><!--0 / 1 -->
 		</allowedother>
 	</tiff>
 	<sip>
 		<allowedlengthofpaths>179</allowedlengthofpaths>
 		<allowedlengthoffiles>40</allowedlengthoffiles>
 		<allowedsipname>SIP_[1-2][0-9]{3}[0-1][0-9][0-3][0-9]_\\w{3}</allowedsipname>
-		<pathtodroidsignature>configuration\KaD_SignatureFile_V71.xml</pathtodroidsignature>
-		<allowedversionbar1>1</allowedversionbar1>
-		<!--0 / 1 -->
-		<allowedversionbar4ech1>1.1</allowedversionbar4ech1>
-		<!--0 / 1 / 1.1 -->
+		<pathtodroidsignature>configuration\KaD_SignatureFile_V72.xml</pathtodroidsignature>
+		<allowedversionbar1>1</allowedversionbar1><!--0 / 1 -->
+		<allowedversionbar4ech1>1.1</allowedversionbar4ech1><!--0 / 1 / 1.1 -->
 		<allowedformats>
 		<!-- Text -->
 			<allowedformat>
@@ -126,7 +87,6 @@
 				<extension>pdf</extension>
 				<comment>PDF/A-2</comment>
 			</allowedformat>
-
 		<!-- Bild -->
 			<allowedformat>
 				<puid>TIFF</puid>
@@ -148,7 +108,6 @@
 				<extension>svg</extension> 
 				<comment>Scalable Vector Graphics</comment>
 			</allowedformat> -->
-
 		<!-- Audio -->
 			<allowedformat>
 				<puid>WAVE</puid>
@@ -160,7 +119,6 @@
 				<extension>mp3</extension>
 				<comment>MPEG 1/2 Audio Layer 3</comment> 
 			</allowedformat>
-
 		<!-- Video -->
 			<allowedformat>
 				<puid>MP4</puid>
@@ -182,7 +140,6 @@
 				<extension>mov</extension> 
 				<comment>Apple ProRes</comment>
 			</allowedformat> -->
-
 		<!-- Datenbank / strukturierte Daten -->
 			<allowedformat>
 				<puid>CSV</puid>
@@ -209,7 +166,6 @@
 				<extension>xls, xlw</extension> 
 				<comment>Microsoft Excel (xls)</comment>
 			</allowedformat> -->
-
 		<!-- Hypertext -->
 			<allowedformat>
 				<puid>WARC</puid>
