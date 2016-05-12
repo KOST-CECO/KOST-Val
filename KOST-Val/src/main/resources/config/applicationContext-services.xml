@@ -130,6 +130,12 @@
 		<property name="messageService" ref="messageService" />
 		<property name="configurationService" ref="configurationService" />
 	</bean>
+	<bean id="validationWwarningModule"
+		class="ch.kostceco.tools.kostval.validation.modulesiard.impl.ValidationWwarningModuleImpl">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="messageService" ref="messageService" />
+		<property name="configurationService" ref="configurationService" />
+	</bean>
 
 
 	<bean id="validationAinitialisationModule"
@@ -265,6 +271,7 @@
 		<property name="validationHcontentModule" ref="validationHcontentModule" />
 		<property name="validationIrecognitionModule" ref="validationIrecognitionModule" />
 		<property name="validationJsurplusFilesModule" ref="validationJsurplusFilesModule" />
+		<property name="validationWwarningModule" ref="validationWwarningModule" />
 	</bean>
 
 	<bean id="controllerpdfa" class="ch.kostceco.tools.kostval.controller.Controllerpdfa">

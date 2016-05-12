@@ -71,7 +71,7 @@ public interface MessageConstants
 	String	MESSAGE_XML_VALERGEBNIS_INVALID								= "message.xml.valergebnis.invalid";
 	String	MESSAGE_XML_VALERGEBNIS_CLOSE									= "message.xml.valergebnis.close";
 	String	MESSAGE_XML_LOG																= "message.xml.log";
-	
+
 	String	MESSAGE_XML_MODUL_A_TIFF											= "message.xml.modul.a.tiff";
 	String	MESSAGE_XML_MODUL_B_TIFF											= "message.xml.modul.b.tiff";
 	String	MESSAGE_XML_MODUL_C_TIFF											= "message.xml.modul.c.tiff";
@@ -91,6 +91,7 @@ public interface MessageConstants
 	String	MESSAGE_XML_MODUL_H_SIARD											= "message.xml.modul.h.siard";
 	String	MESSAGE_XML_MODUL_I_SIARD											= "message.xml.modul.i.siard";
 	String	MESSAGE_XML_MODUL_J_SIARD											= "message.xml.modul.j.siard";
+	String	MESSAGE_XML_MODUL_W_SIARD											= "message.xml.modul.w.siard";
 
 	String	MESSAGE_XML_MODUL_A_PDFA											= "message.xml.modul.a.pdfa";
 	String	MESSAGE_XML_MODUL_B_PDFA											= "message.xml.modul.b.pdfa";
@@ -218,6 +219,9 @@ public interface MessageConstants
 	String	MESSAGE_XML_J_INVALID_FOLDER									= "message.xml.j.invalid.folder";
 	String	MESSAGE_XML_J_INVALID_FILE										= "message.xml.j.invalid.file";
 	String	MESSAGE_XML_J_INVALID_ENTRY										= "message.xml.j.invalid.entry";
+
+	// Modul W Meldungen
+	String	MESSAGE_XML_W_WARNING_INITVALUE								= "message.xml.w.warning.initvalue";
 
 	// *************PDFA-Meldungen*************************************************************************
 	// Modul A Meldungen
