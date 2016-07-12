@@ -1,0 +1,201 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>focus - Manage the input focus</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;focus - Manage the input focus</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#quirks">QUIRKS</a></li>
+	<li><a href="#caveats">CAVEATS</a></li>
+	<li><a href="#keywords">KEYWORDS</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>focus - Manage the input focus</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p>&nbsp;&nbsp;&nbsp;<em>$widget</em>-&gt;<strong>focus</strong></p>
+<p>&nbsp;&nbsp;&nbsp;<em>$widget</em>-&gt;<strong>focus</strong><em>Option</em></p>
+<p>&nbsp;&nbsp;&nbsp;<em>$widget</em>-&gt;<strong>focusNext</strong></p>
+<p>&nbsp;&nbsp;&nbsp;<em>$widget</em>-&gt;<strong>focusPrev</strong></p>
+<p>&nbsp;&nbsp;&nbsp;<em>$widget</em>-&gt;<strong>focusFollowsMouse</strong></p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The <strong>focus</strong> methods are used to manage the Tk input focus.
+At any given time, one window on each display is designated as
+the <em>focus window</em>;  any key press or key release events for the
+display are sent to that window.
+It is normally up to the window manager to redirect the focus among the
+top-level windows of a display.  For example, some window managers
+automatically set the input focus to a top-level window whenever
+the mouse enters it;  others redirect the input focus only when
+the user clicks on a window.
+Usually the window manager will set the focus
+only to top-level windows, leaving it up to the application to
+redirect the focus among the children of the top-level.</p>
+<p>Tk remembers one focus window for each top-level (the most recent
+descendant of that top-level to receive the focus);  when the window
+manager gives the focus
+to a top-level, Tk automatically redirects it to the remembered
+window.  Within a top-level Tk uses an <em>explicit</em> focus model
+by default.  Moving the mouse within a top-level does not normally
+change the focus;  the focus changes only when a widget
+decides explicitly to claim the focus (e.g., because of a button
+click), or when the user types a key such as Tab that moves the
+focus.</p>
+<p>The method <strong>focusFollowsMouse</strong> may be invoked to
+create an <em>implicit</em> focus model:  it reconfigures Tk so that
+the focus is set to a window whenever the mouse enters it.
+The methods <strong>focusNext</strong> and <strong>focusPrev</strong>
+implement a focus order among the windows of a top-level;  they
+are used in the default bindings for Tab and Shift-Tab, among other
+things.</p>
+<p>The <strong>focus</strong> methods can take any of the following forms:</p>
+<dl>
+<dt><strong><a name="item_focuscurrent"><em>$widget</em>-&gt;<strong>focusCurrent</strong></a></strong><br />
+</dt>
+<dd>
+Returns the focus window on the display containing
+the <em>$widget</em>,  or an empty string if no window in
+this application has the focus on that display.
+</dd>
+<p></p>
+<dt><strong><a name="item_focus"><em>$widget</em>-&gt;<strong>focus</strong></a></strong><br />
+</dt>
+<dd>
+If the application currently has the input focus on <em>$widget</em>'s
+display, this command resets the input focus for <em>$widget</em>'s display
+to <em>$widget</em> and returns an empty string.
+If the application doesn't currently have the  input focus on
+<em>$widget</em>'s display, <em>$widget</em> will be remembered as the focus
+for its top-level;  the next time the focus arrives at the top-level,
+Tk will redirect it to <em>$widget</em>.
+</dd>
+<p></p>
+<dt><strong><a name="item_focusforce"><em>$widget</em>-&gt;<strong>focusForce</strong></a></strong><br />
+</dt>
+<dd>
+Sets the focus of <em>$widget</em>'s display to <em>$widget</em>, even if
+the application doesn't currently have the input focus for the display.
+This command should be used sparingly, if at all.
+In normal usage, an application should not claim the focus for
+itself;  instead, it should wait for the window manager to give it
+the focus.
+</dd>
+<p></p>
+<dt><strong><a name="item_focuslast"><em>$widget</em>-&gt;<strong>focusLast</strong></a></strong><br />
+</dt>
+<dd>
+Returns the name of the most recent window to have the input focus
+among all the windows in the same top-level as <em>$widget</em>.
+If no window in that top-level has ever had the input focus, or
+if the most recent focus window has been deleted, then
+the top-level is returned.  The return value is the window that
+will receive the input focus the next time the window manager gives
+the focus to the top-level.
+</dd>
+<p></p>
+<dt><strong><a name="item_focusnext"><em>$widget</em>-&gt;<strong>focusNext</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_focusprev"><em>$widget</em>-&gt;<strong>focusPrev</strong></a></strong><br />
+</dt>
+<dd>
+<strong>focusNext</strong> is a utility method used for keyboard traversal, but can be
+useful in other contexts.
+It sets the focus to the ``next'' window after <em>$widget</em> in focus order.
+The focus order is determined by
+the stacking order of windows and the structure of the window hierarchy.
+Among siblings, the focus order is the same as the stacking order, with the
+lowest window being first.
+If a window has children, the window is visited first, followed by
+its children (recursively), followed by its next sibling.
+Top-level windows other than <em>$widget</em> are skipped, so that
+<strong>focusNext</strong> never returns a window in a different top-level
+from <em>$widget</em>.
+</dd>
+<dd>
+<p>After computing the next window, <strong>focusNext</strong> examines the
+window's <strong>-takefocus</strong> option to see whether it should be skipped.
+If so, <strong>focusNext</strong> continues on to the next window in the focus
+order, until it eventually finds a window that will accept the focus
+or returns back to <em>$widget</em>.</p>
+</dd>
+<dd>
+<p><strong>focusPrev</strong> is similar to <strong>focusNext</strong> except that it
+sets the focus to the window just before <em>$widget</em> in the focus order.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item_focusfollowsmouse"><em>$widget</em>-&gt;<strong>focusFollowsMouse</strong></a></strong><br />
+</dt>
+<dd>
+<strong>focusFollowsMouse</strong> changes the focus model for the application
+to an implicit one where the window under the mouse gets the focus.
+After this procedure is called, whenever the mouse enters a window
+Tk will automatically give it the input focus.
+The <strong>focus</strong> command may be used to move the focus to a window
+other than the one under the mouse, but as soon as the mouse moves
+into a new window the focus will jump to that window.
+Note: at present there is no built-in support for returning the
+application to an explicit focus model;  to do this you'll have
+to write a script that deletes the bindings created by
+<strong>focusFollowsMouse</strong>.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="quirks">QUIRKS</a></h1>
+<p>When an internal window receives the input focus, Tk doesn't actually
+set the X focus to that window;  as far as X is concerned, the focus
+will stay on the top-level window containing the window with the focus.
+However, Tk generates FocusIn and FocusOut events just as if the X
+focus were on the internal window.   This approach gets around a
+number of problems that would occur if the X focus were actually moved;
+the fact that the X focus is on the top-level is invisible unless
+you use C code to query the X server directly.</p>
+<p>
+</p>
+<hr />
+<h1><a name="caveats">CAVEATS</a></h1>
+<p>Note that for the <strong>Canvas</strong> widget, the call to <strong>focus</strong> has to be
+fully qualified. This is because there is already a focus method for
+the <strong>Canvas</strong> widget, which sets the focus on individual canvas tags.</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>$canvas</em>-&gt;<strong>Tk::focus</strong></p>
+<p>
+</p>
+<hr />
+<h1><a name="keywords">KEYWORDS</a></h1>
+<p>events, focus, keyboard, top-level, window manager</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;focus - Manage the input focus</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

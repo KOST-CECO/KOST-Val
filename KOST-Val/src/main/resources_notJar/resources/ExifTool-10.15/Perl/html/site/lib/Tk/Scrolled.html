@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Tk::Scrolled - Create a widget with attached scrollbar</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::Scrolled - Create a widget with attached scrollbar</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#options">OPTIONS</a></li>
+	<li><a href="#advertised_subwidgets">ADVERTISED SUBWIDGETS</a></li>
+	<li><a href="#bugs">BUGS</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#keywords">KEYWORDS</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Tk::Scrolled - Create a widget with attached <code>scrollbar(s)</code></p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>$whatever</em> = <em>$parent</em>-&gt;<strong>Scrolled</strong>(<em>Whatever</em> ?,<strong>-scrollbars</strong>=&gt;<em>where</em>? ?,...?);</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>To stop a flood of <strong>ScrlWhatever</strong> widgets Perl/Tk introcuded the special
+constructor <strong>Scrolled</strong>.  <strong>Scrolled</strong> creates a widget of the given Class
+<em>Whatever</em> with attached <a href="../../../site/lib/Tk/Scrollbar.html">scrollbar(s)</a>.</p>
+<p>
+</p>
+<hr />
+<h1><a name="options">OPTIONS</a></h1>
+<p>All options beside <strong>-scrollbars</strong> explained below are passed to
+the <em>Whatever</em> widget constructor.</p>
+<dl>
+<dt><strong><a name="item__2dscrollbars">-scrollbars</a></strong><br />
+</dt>
+<dd>
+Expects as argument the position where the scrollbars should be
+created:  <strong>w</strong>, <strong>e</strong> or <strong>n</strong>, <strong>s</strong> or a combination of
+them.  If the one or both positions are prefixed with <strong>o</strong> the
+scrollbar will only show up if there is a 'real' need to scroll.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="advertised_subwidgets">ADVERTISED SUBWIDGETS</a></h1>
+<p>See <a href="../../../site/lib/Tk/mega.html#subwidget">Subwidget in the Tk::mega manpage</a> how to use advertised widgets.</p>
+<dl>
+<dt><strong><a name="item_scrolled">scrolled</a></strong><br />
+</dt>
+<dd>
+the scrolled widget
+</dd>
+<p></p>
+<dt><strong><a name="item_widget"><em>widget</em></a></strong><br />
+</dt>
+<dd>
+same as <strong>scrolled</strong> above.  <em>widget</em> is the kind of widget passed
+to scrolled as first argument in all lowercase.
+</dd>
+<p></p>
+<dt><strong><a name="item_xscrollbar">xscrollbar</a></strong><br />
+</dt>
+<dd>
+the <strong>Scrollbar</strong> widget used for horizontal scrolling (if it exists)
+</dd>
+<p></p>
+<dt><strong><a name="item_yscrollbar">yscrollbar</a></strong><br />
+</dt>
+<dd>
+the <strong>Scrollbar</strong> widget used for vertical scrolling (if it exists)
+</dd>
+<p></p>
+<dt><strong><a name="item_corner">corner</a></strong><br />
+</dt>
+<dd>
+a frame in the corner between the vertical and horizontal scrolbar
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="bugs">BUGS</a></h1>
+<p>If a widget does not support <em>-{x,y}scrollcommand</em> options,
+<strong>Scrolled</strong> does not complain if the specified widget class does
+not support them.  E.g.,</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>$parent</em>-&gt;<strong>Scrolled</strong>(<strong>'Button'</strong>, ...)</p>
+<p>One does not get an error message or warning when one tries to
+configure scrollbars after the widget construction:</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>$ascrolled</em>-&gt;<strong>configure</strong>(<strong>-scrollbars</strong> =&gt; <strong>'e'</strong>);</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../../../site/lib/Tk/Scrollbar.html">Tk::Scrollbar</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="keywords">KEYWORDS</a></h1>
+<p>scrolled, scrollbar</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::Scrolled - Create a widget with attached scrollbar</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

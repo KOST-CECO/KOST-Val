@@ -1,6 +1,6 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
- * Information Package (SIP). Copyright (C) 2012-2016 Claire Röthlisberger (KOST-CECO), Christian
+ * Information Package (SIP). Copyright (C) 2012-2016 Claire Roethlisberger (KOST-CECO), Christian
  * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
  * Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
@@ -54,7 +54,7 @@ import ch.kostceco.tools.kostval.validation.modulesiard.ValidationHcontentModule
  * Schema-Definition (XSD-Dateien)? valid --> tableZ.xml valid zu tableZ.xsd
  * 
  * @author Ec Christian Eugster
- * @author Rc Claire Röthlisberger, KOST-CECO */
+ * @author Rc Claire Roethlisberger, KOST-CECO */
 
 public class ValidationHcontentModuleImpl extends ValidationModuleImpl implements
 		ValidationHcontentModule
@@ -80,10 +80,21 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl implement
 	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws ValidationHcontentException
 	{
-		// Ausgabe SIARD-Modul Ersichtlich das KOST-Val arbeitet
-		System.out.print( "H    " );
-		System.out.print( "\b\b\b\b\b" );
+		boolean showOnWork = true;
 		int onWork = 410;
+		// Informationen zur Darstellung "onWork" holen
+		String onWorkConfig = getConfigurationService().getShowProgressOnWork();
+		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
+		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
+		 * ref="configurationService" /> */
+		if ( onWorkConfig.equals( "no" ) ) {
+			// keine Ausgabe
+			showOnWork = false;
+		} else {
+			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
+			System.out.print( "H    " );
+			System.out.print( "\b\b\b\b\b" );
+		}
 
 		boolean valid = true;
 		try {
@@ -212,7 +223,7 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl implement
 
 												// Fehlermeldung aus outTableXml auslesen
 												BufferedReader br = new BufferedReader( new FileReader( outTableXml ) );
-												Set<String> lines = new LinkedHashSet<String>( 100000 ); // evtl vergrössern
+												Set<String> lines = new LinkedHashSet<String>( 100000 ); // evtl vergrï¿½ssern
 												int counter = 0;
 												try {
 													String line = br.readLine();
@@ -222,7 +233,7 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl implement
 													while ( line != null ) {
 														if ( linePrev != null ) {
 															/* Nur neue Fehlermeldungen ausgeben und diese auf maximal 10
-															 * beschränken */
+															 * beschrï¿½nken */
 															if ( lines.contains( linePrev ) ) {
 																// Diese Linie = Fehlermelung wurde bereits ausgegeben
 															} else {
@@ -253,7 +264,7 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl implement
 												} finally {
 													br.close();
 													/* Konsole zuerst einmal noch umleiten und die Streams beenden, damit die
-													 * dateien gelöscht werden können */
+													 * dateien gelï¿½scht werden kÃ¶nnen */
 													Util.switchOffConsoleToTxtClose( outTableXml );
 													System.out.println( " . " );
 													Util.switchOnConsole();
@@ -261,14 +272,14 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl implement
 												}
 											} else {
 												/* Konsole zuerst einmal noch umleiten und die Streams beenden, damit die
-												 * dateien gelöscht werden können */
+												 * dateien gelï¿½scht werden kÃ¶nnen */
 												Util.switchOffConsoleToTxtClose( outTableXml );
 												System.out.println( " . " );
 												Util.switchOnConsole();
 												Util.deleteFile( outTableXml );
 											}
 											/* Konsole zuerst einmal noch umleiten und die Streams beenden, damit die
-											 * dateien gelöscht werden können */
+											 * dateien gelï¿½scht werden kÃ¶nnen */
 											Util.switchOffConsoleToTxtClose( outTableXml );
 											System.out.println( " . " );
 											Util.switchOnConsole();
@@ -292,45 +303,49 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl implement
 								}
 							}
 						}
-						if ( onWork == 410 ) {
-							onWork = 2;
-							System.out.print( "H-   " );
-							System.out.print( "\b\b\b\b\b" );
-						} else if ( onWork == 110 ) {
-							onWork = onWork + 1;
-							System.out.print( "H\\   " );
-							System.out.print( "\b\b\b\b\b" );
-						} else if ( onWork == 210 ) {
-							onWork = onWork + 1;
-							System.out.print( "H|   " );
-							System.out.print( "\b\b\b\b\b" );
-						} else if ( onWork == 310 ) {
-							onWork = onWork + 1;
-							System.out.print( "H/   " );
-							System.out.print( "\b\b\b\b\b" );
-						} else {
-							onWork = onWork + 1;
+						if ( showOnWork ) {
+							if ( onWork == 410 ) {
+								onWork = 2;
+								System.out.print( "H-   " );
+								System.out.print( "\b\b\b\b\b" );
+							} else if ( onWork == 110 ) {
+								onWork = onWork + 1;
+								System.out.print( "H\\   " );
+								System.out.print( "\b\b\b\b\b" );
+							} else if ( onWork == 210 ) {
+								onWork = onWork + 1;
+								System.out.print( "H|   " );
+								System.out.print( "\b\b\b\b\b" );
+							} else if ( onWork == 310 ) {
+								onWork = onWork + 1;
+								System.out.print( "H/   " );
+								System.out.print( "\b\b\b\b\b" );
+							} else {
+								onWork = onWork + 1;
+							}
 						}
 					}
 				}
-				if ( onWork == 410 ) {
-					onWork = 2;
-					System.out.print( "H-   " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 110 ) {
-					onWork = onWork + 1;
-					System.out.print( "H\\   " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 210 ) {
-					onWork = onWork + 1;
-					System.out.print( "H|   " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 310 ) {
-					onWork = onWork + 1;
-					System.out.print( "H/   " );
-					System.out.print( "\b\b\b\b\b" );
-				} else {
-					onWork = onWork + 1;
+				if ( showOnWork ) {
+					if ( onWork == 410 ) {
+						onWork = 2;
+						System.out.print( "H-   " );
+						System.out.print( "\b\b\b\b\b" );
+					} else if ( onWork == 110 ) {
+						onWork = onWork + 1;
+						System.out.print( "H\\   " );
+						System.out.print( "\b\b\b\b\b" );
+					} else if ( onWork == 210 ) {
+						onWork = onWork + 1;
+						System.out.print( "H|   " );
+						System.out.print( "\b\b\b\b\b" );
+					} else if ( onWork == 310 ) {
+						onWork = onWork + 1;
+						System.out.print( "H/   " );
+						System.out.print( "\b\b\b\b\b" );
+					} else {
+						onWork = onWork + 1;
+					}
 				}
 			}
 		} catch ( java.io.IOException ioe ) {

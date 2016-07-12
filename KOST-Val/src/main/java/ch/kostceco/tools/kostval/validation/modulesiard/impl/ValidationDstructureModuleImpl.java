@@ -1,6 +1,6 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
- * Information Package (SIP). Copyright (C) 2012-2016 Claire Röthlisberger (KOST-CECO), Christian
+ * Information Package (SIP). Copyright (C) 2012-2016 Claire Roethlisberger (KOST-CECO), Christian
  * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
  * Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
@@ -36,7 +36,7 @@ import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationDstructureModule;
 
 /** Validierungsschritt D (Struktur-Validierung) Stimmt die Struktur aus metadata.xml mit der
- * Datei-Struktur von content überein? valid --> schema0/table3 in metadata.xml ==
+ * Datei-Struktur von content Ã¼berein? valid --> schema0/table3 in metadata.xml ==
  * schema0/table3/tabe3.xsd und table3.xml in content ==> Bei den Module A, B, C und D wird die
  * Validierung abgebrochen, sollte das Resulat invalid sein!
  * 
@@ -62,10 +62,21 @@ public class ValidationDstructureModuleImpl extends ValidationModuleImpl impleme
 	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws ValidationDstructureException
 	{
-		// Ausgabe SIARD-Modul Ersichtlich das KOST-Val arbeitet
-		System.out.print( "D    " );
-		System.out.print( "\b\b\b\b\b" );
+		boolean showOnWork = true;
 		int onWork = 410;
+		// Informationen zur Darstellung "onWork" holen
+		String onWorkConfig = getConfigurationService().getShowProgressOnWork();
+		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
+		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
+		 * ref="configurationService" /> */
+		if ( onWorkConfig.equals( "no" ) ) {
+			// keine Ausgabe
+			showOnWork = false;
+		} else {
+			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
+			System.out.print( "D    " );
+			System.out.print( "\b\b\b\b\b" );
+		}
 
 		boolean valid = true;
 		try {
@@ -88,24 +99,26 @@ public class ValidationDstructureModuleImpl extends ValidationModuleImpl impleme
 					.getChildren( "schema", ns );
 			for ( Element schema : schemas ) {
 				valid = validateSchema( schema, ns, pathToWorkDir );
-				if ( onWork == 410 ) {
-					onWork = 2;
-					System.out.print( "D-   " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 110 ) {
-					onWork = onWork + 1;
-					System.out.print( "D\\   " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 210 ) {
-					onWork = onWork + 1;
-					System.out.print( "D|   " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 310 ) {
-					onWork = onWork + 1;
-					System.out.print( "D/   " );
-					System.out.print( "\b\b\b\b\b" );
-				} else {
-					onWork = onWork + 1;
+				if ( showOnWork ) {
+					if ( onWork == 410 ) {
+						onWork = 2;
+						System.out.print( "D-   " );
+						System.out.print( "\b\b\b\b\b" );
+					} else if ( onWork == 110 ) {
+						onWork = onWork + 1;
+						System.out.print( "D\\   " );
+						System.out.print( "\b\b\b\b\b" );
+					} else if ( onWork == 210 ) {
+						onWork = onWork + 1;
+						System.out.print( "D|   " );
+						System.out.print( "\b\b\b\b\b" );
+					} else if ( onWork == 310 ) {
+						onWork = onWork + 1;
+						System.out.print( "D/   " );
+						System.out.print( "\b\b\b\b\b" );
+					} else {
+						onWork = onWork + 1;
+					}
 				}
 			}
 		} catch ( java.io.IOException ioe ) {
@@ -127,7 +140,21 @@ public class ValidationDstructureModuleImpl extends ValidationModuleImpl impleme
 
 	private boolean validateSchema( Element schema, Namespace ns, String pathToWorkDir )
 	{
-		int onWork = 41;
+		boolean showOnWork = true;
+		int onWork = 410;
+		// Informationen zur Darstellung "onWork" holen
+		String onWorkConfig = getConfigurationService().getShowProgressOnWork();
+		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
+		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
+		 * ref="configurationService" /> */
+		if ( onWorkConfig.equals( "no" ) ) {
+			// keine Ausgabe
+			showOnWork = false;
+		} else {
+			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
+			System.out.print( "D    " );
+			System.out.print( "\b\b\b\b\b" );
+		}
 		boolean valid = true;
 		Element schemaFolder = schema.getChild( "folder", ns );
 		File schemaPath = new File( new StringBuilder( pathToWorkDir ).append( File.separator )
@@ -136,24 +163,26 @@ public class ValidationDstructureModuleImpl extends ValidationModuleImpl impleme
 			List<Element> tables = schema.getChild( "tables", ns ).getChildren( "table", ns );
 			for ( Element table : tables ) {
 				valid = valid && validateTable( table, ns, pathToWorkDir, schemaPath );
-				if ( onWork == 41 ) {
-					onWork = 2;
-					System.out.print( "D-   " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 11 ) {
-					onWork = 12;
-					System.out.print( "D\\   " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 21 ) {
-					onWork = 22;
-					System.out.print( "D|   " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 31 ) {
-					onWork = 32;
-					System.out.print( "D/   " );
-					System.out.print( "\b\b\b\b\b" );
-				} else {
-					onWork = onWork + 1;
+				if ( showOnWork ) {
+					if ( onWork == 410 ) {
+						onWork = 2;
+						System.out.print( "D-   " );
+						System.out.print( "\b\b\b\b\b" );
+					} else if ( onWork == 110 ) {
+						onWork = onWork + 1;
+						System.out.print( "D\\   " );
+						System.out.print( "\b\b\b\b\b" );
+					} else if ( onWork == 210 ) {
+						onWork = onWork + 1;
+						System.out.print( "D|   " );
+						System.out.print( "\b\b\b\b\b" );
+					} else if ( onWork == 310 ) {
+						onWork = onWork + 1;
+						System.out.print( "D/   " );
+						System.out.print( "\b\b\b\b\b" );
+					} else {
+						onWork = onWork + 1;
+					}
 				}
 			}
 		} else {

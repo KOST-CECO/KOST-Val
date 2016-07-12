@@ -1,6 +1,6 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
- * Information Package (SIP). Copyright (C) 2012-2016 Claire Röthlisberger (KOST-CECO), Christian
+ * Information Package (SIP). Copyright (C) 2012-2016 Claire Roethlisberger (KOST-CECO), Christian
  * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
  * Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
@@ -21,9 +21,9 @@ package ch.kostceco.tools.kostval.service;
 
 import java.util.Map;
 
-/** Service Interface für die Konfigurationsdatei.
+/** Service Interface fÃ¼r die Konfigurationsdatei.
  * 
- * @author Rc Claire Röthlisberger, KOST-CECO */
+ * @author Rc Claire Roethlisberger, KOST-CECO */
 public interface ConfigurationService extends Service
 {
 
@@ -32,9 +32,9 @@ public interface ConfigurationService extends Service
 	 * @return yes oder no */
 	String tiffValidation();
 
-	/** Gibt die Komprimierung aus, welche im TIFF vorkommen dürfen.
+	/** Gibt die Komprimierung aus, welche im TIFF vorkommen dÃ¼rfen.
 	 * 
-	 * @return Name der Komprimierung, welche im TIFF vorkommen dürfen. */
+	 * @return Name der Komprimierung, welche im TIFF vorkommen dÃ¼rfen. */
 	String getAllowedCompression1();
 
 	String getAllowedCompression2();
@@ -51,9 +51,9 @@ public interface ConfigurationService extends Service
 
 	String getAllowedCompression32773();
 
-	/** Gibt die Farbraum aus, welche im TIFF vorkommen dürfen.
+	/** Gibt die Farbraum aus, welche im TIFF vorkommen dÃ¼rfen.
 	 * 
-	 * @return Name der Farbraum, welche im TIFF vorkommen dürfen. */
+	 * @return Name der Farbraum, welche im TIFF vorkommen dÃ¼rfen. */
 	String getAllowedPhotointer0();
 
 	String getAllowedPhotointer1();
@@ -70,9 +70,9 @@ public interface ConfigurationService extends Service
 
 	String getAllowedPhotointer8();
 
-	/** Gibt die BitsPerSample aus, welche im TIFF vorkommen dürfen.
+	/** Gibt die BitsPerSample aus, welche im TIFF vorkommen dÃ¼rfen.
 	 * 
-	 * @return Name der BitsPerSample, welche im TIFF vorkommen dürfen. */
+	 * @return Name der BitsPerSample, welche im TIFF vorkommen dÃ¼rfen. */
 	String getAllowedBitspersample1();
 
 	String getAllowedBitspersample2();
@@ -85,17 +85,17 @@ public interface ConfigurationService extends Service
 
 	String getAllowedBitspersample32();
 
-	/** Gibt an ob Multipage im TIFF vorkommen dürfen.
+	/** Gibt an ob Multipage im TIFF vorkommen dÃ¼rfen.
 	 * 
-	 * @return Name der Multipage, welche im TIFF vorkommen dürfen. */
+	 * @return Name der Multipage, welche im TIFF vorkommen dÃ¼rfen. */
 	String getAllowedMultipage();
 
-	/** Gibt an ob Tiles im TIFF vorkommen dürfen.
+	/** Gibt an ob Tiles im TIFF vorkommen dÃ¼rfen.
 	 * 
-	 * @return Name der Tiles, welche im TIFF vorkommen dürfen. */
+	 * @return Name der Tiles, welche im TIFF vorkommen dÃ¼rfen. */
 	String getAllowedTiles();
 
-	/** Gibt an ob Giga-TIFF vorkommen dürfen.
+	/** Gibt an ob Giga-TIFF vorkommen dÃ¼rfen.
 	 * 
 	 * @return Wert 0/1 */
 	String getAllowedSize();
@@ -103,18 +103,18 @@ public interface ConfigurationService extends Service
 	/** Pfad zu Jhove Configuration */
 	String getPathToJhoveConfiguration();
 
-	/** Gibt den Pfad des Arbeitsverzeichnisses zurück. Dieses Verzeichnis wird z.B. zum Entpacken des
+	/** Gibt den Pfad des Arbeitsverzeichnisses zurÃ¼ck. Dieses Verzeichnis wird z.B. zum Entpacken des
 	 * .zip-Files verwendet.
 	 * 
 	 * @return Pfad des Arbeitsverzeichnisses */
 	String getPathToWorkDir();
 
-	/** Gibt den Pfad des Logverzeichnisses zurück.
+	/** Gibt den Pfad des Logverzeichnisses zurÃ¼ck.
 	 * 
 	 * @return Pfad des Logverzeichnisses */
 	String getPathToLogfile();
 
-	/** Gibt den Pfad zu den Diagnosedaten zurück.
+	/** Gibt den Pfad zu den Diagnosedaten zurÃ¼ck.
 	 * 
 	 * @return Pfad zu Diagnosedaten */
 	String getPathToDiagnose();
@@ -129,12 +129,12 @@ public interface ConfigurationService extends Service
 	 * @return yes oder no */
 	String siardFrowValidation();
 
-	/** Gibt die Grenze der Anzahl Zeilen pro Tabelle zurück. Grenze der zu validierenden XML-Tabelle
-	 * im Modul H. Diese Grenze wird nur verwendet, sollte die dazugehörende XSD-Datei die genaue
+	/** Gibt die Grenze der Anzahl Zeilen pro Tabelle zurÃ¼ck. Grenze der zu validierenden XML-Tabelle
+	 * im Modul H. Diese Grenze wird nur verwendet, sollte die dazugehÃ¶rende XSD-Datei die genaue
 	 * Anzahl Datenzeilen der XML-Tabelle enthalten. Sind mehr Datenzeilen in der Tabelle enthal-ten
 	 * als in der Konfigurationsdatei eingegrenzt, wird diese einzelnen Tabelle nicht vali-diert,
 	 * damit einen entsprechenden Out-of-Memory-Fehler verhindert werden kann und die restlichen
-	 * Tabellen und Module validiert werden können. */
+	 * Tabellen und Module validiert werden kÃ¶nnen. */
 	int getTableRowsLimit();
 
 	/** Gibt an ob pdfa validiert werden soll
@@ -142,17 +142,17 @@ public interface ConfigurationService extends Service
 	 * @return yes oder no */
 	String pdfaValidation();
 
-	/** Gibt an welche Konformität mindestens erreicht werden muss
+	/** Gibt an welche KonformitÃ¤t mindestens erreicht werden muss
 	 * 
 	 * @return 1a oder 1b oder no */
 	String pdfa1();
 
-	/** Gibt an welche Konformität mindestens erreicht werden muss
+	/** Gibt an welche KonformitÃ¤t mindestens erreicht werden muss
 	 * 
 	 * @return 2a oder 2b oder 2u oder no */
 	String pdfa2();
 
-	/** Gibt den Namen des Haupt-PDFA-Validator zurück.
+	/** Gibt den Namen des Haupt-PDFA-Validator zurÃ¼ck.
 	 * 
 	 * @return Name zum Hauptvalidator */
 	String firstValidator();
@@ -162,7 +162,7 @@ public interface ConfigurationService extends Service
 	 * @return dual oder simple */
 	String dualValidation();
 
-	/** Gibt den Pfad zum Pdftron Exe zurück.
+	/** Gibt den Pfad zum Pdftron Exe zurÃ¼ck.
 	 * 
 	 * @return Pfad zum Pdftron Exe */
 	String getPathToPdftronExe();
@@ -187,29 +187,32 @@ public interface ConfigurationService extends Service
 	 * @return yes oder no */
 	String jpegValidation();
 
-	/** Gibt eine Liste mit den PUIDs aus, welche im SIP vorkommen dürfen.
+	/** Gibt eine Liste mit den PUIDs aus, welche im SIP vorkommen dÃ¼rfen.
 	 * 
-	 * @return Liste mit den PUIDs aus, welche im SIP vorkommen dürfen. */
+	 * @return Liste mit den PUIDs aus, welche im SIP vorkommen dÃ¼rfen. */
 	Map<String, String> getAllowedPuids();
 
-	/** Gibt die Maximal erlaubte Länge eines Pfades in der SIP-Datei aus.
+	/** Gibt die Maximal erlaubte LÃ¤nge eines Pfades in der SIP-Datei aus.
 	 * 
-	 * @return Maximal erlaubte Länge eines Pfades in der SIP-Datei */
+	 * @return Maximal erlaubte LÃ¤nge eines Pfades in der SIP-Datei */
 	Integer getMaximumPathLength();
 
-	/** Gibt die Maximal erlaubte Länge eines Files oder Orners in der SIP-Datei aus.
+	/** Gibt die Maximal erlaubte LÃ¤nge eines Files oder Orners in der SIP-Datei aus.
 	 * 
-	 * @return Maximal erlaubte Länge eines Files oder Orners in der SIP-Datei */
+	 * @return Maximal erlaubte LÃ¤nge eines Files oder Orners in der SIP-Datei */
 	Integer getMaximumFileLength();
 
-	/** Die Einschränkung des SIP-Namen ist konfigurierbar -> getAllowedSipName. */
+	/** Die EinschrÃ¤nkung des SIP-Namen ist konfigurierbar -> getAllowedSipName. */
 	String getAllowedSipName();
 
-	/** Gibt den Namen des DROID Signature Files zurück. Die Signaturen werden laufend aktualisiert und
-	 * müssen deshalb von Zeit zu Zeit ausgetauscht werden. Daher der konfigurierbare Name.
+	/** Gibt den Namen des DROID Signature Files zurÃ¼ck. Die Signaturen werden laufend aktualisiert und
+	 * mÃ¼ssen deshalb von Zeit zu Zeit ausgetauscht werden. Daher der konfigurierbare Name.
 	 * 
 	 * @return Namen des DROID Signature Files */
 	String getPathToDroidSignatureFile();
+
+	/** Angabe ob dargestellt werden soll, dass KOST-Val noch lÃ¤uft */
+	String getShowProgressOnWork();
 
 	/** Gibt aus ob die BAR Version 1 erlaubt ist oder nicht.
 	 * 
@@ -218,7 +221,7 @@ public interface ConfigurationService extends Service
 
 	/** Gibt aus ob die eCH Version 1 (=BAR Version 4) oder Version 1.1 erlaubt ist oder nicht.
 	 * 
-	 * 1 = nur eCH-0160v1.0 / 2 = eCH-0160v1.1 respektive eCH-0160v1.0 da rückwärtskompatibel
+	 * 1 = nur eCH-0160v1.0 / 2 = eCH-0160v1.1 respektive eCH-0160v1.0 da rÃ¼ckwÃ¤rtskompatibel
 	 * 
 	 * @return 1 oder 1.1 wenn erlaubt respektive 0 wenn nicht erlaubt */
 	String getAllowedVersionBar4Ech1();

@@ -1,0 +1,165 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Win32::OLE::Const - Extract constant definitions from TypeLib</title>
+<link rel="stylesheet" href="../../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Win32::OLE::Const - Extract constant definitions from TypeLib</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<ul>
+
+		<li><a href="#functions_methods">Functions/Methods</a></li>
+	</ul>
+
+	<li><a href="#examples">EXAMPLES</a></li>
+	<li><a href="#authors_copyright">AUTHORS/COPYRIGHT</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Win32::OLE::Const - Extract constant definitions from TypeLib</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+    use Win32::OLE::Const 'Microsoft Excel';
+    printf &quot;xlMarkerStyleDot = %d\n&quot;, xlMarkerStyleDot;</pre>
+<pre>
+    my $wd = Win32::OLE::Const-&gt;Load(&quot;Microsoft Word 8\\.0 Object Library&quot;);
+    foreach my $key (keys %$wd) {
+        printf &quot;$key = %s\n&quot;, $wd-&gt;{$key};
+    }</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>This modules makes all constants from a registered OLE type library
+available to the Perl program.  The constant definitions can be
+imported as functions, providing compile time name checking.
+Alternatively the constants can be returned in a hash reference
+which avoids defining lots of functions of unknown names.</p>
+<p>
+</p>
+<h2><a name="functions_methods">Functions/Methods</a></h2>
+<dl>
+<dt><strong><a name="item_use_win32_3a_3aole_3a_3aconst">use Win32::OLE::Const</a></strong><br />
+</dt>
+<dd>
+The <a href="../../../../lib/Pod/perlfunc.html#item_use"><code>use</code></a> statement can be used to directly import the constant names
+and values into the users namespace.
+</dd>
+<dd>
+<pre>
+    use Win32::OLE::Const (TYPELIB,MAJOR,MINOR,LANGUAGE);</pre>
+</dd>
+<dd>
+<p>The TYPELIB argument specifies a regular expression for searching
+through the registry for the type library.  Note that this argument is
+implicitly prefixed with <code>^</code> to speed up matches in the most common
+cases.  Use a typelib name like ``.*Excel'' to match anywhere within the
+description.  TYPELIB is the only required argument.</p>
+</dd>
+<dd>
+<p>The MAJOR and MINOR arguments specify the requested version of
+the type specification.  If the MAJOR argument is used then only
+typelibs with exactly this major version number will be matched.  The
+MINOR argument however specifies the minimum acceptable minor version.
+MINOR is ignored if MAJOR is undefined.</p>
+</dd>
+<dd>
+<p>If the LANGUAGE argument is used then only typelibs with exactly this
+language id will be matched.</p>
+</dd>
+<dd>
+<p>The module will select the typelib with the highest version number
+satisfying the request.  If no language id is specified then a the default
+language (0) will be preferred over the others.</p>
+</dd>
+<dd>
+<p>Note that only constants with valid Perl variable names will be exported,
+i.e. names matching this regexp: <code>/^[a-zA-Z_][a-zA-Z0-9_]*$/</code>.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item_load">Win32::OLE::Const-&gt;Load</a></strong><br />
+</dt>
+<dd>
+The Win32::OLE::Const-&gt;Load method returns a reference to a hash of
+constant definitions.
+</dd>
+<dd>
+<pre>
+    my $const = Win32::OLE::Const-&gt;Load(TYPELIB,MAJOR,MINOR,LANGUAGE);</pre>
+</dd>
+<dd>
+<p>The parameters are the same as for the <a href="../../../../lib/Pod/perlfunc.html#item_use"><code>use</code></a> case.</p>
+</dd>
+<dd>
+<p>This method is generally preferrable when the typelib uses a non-english
+language and the constant names contain locale specific characters not
+allowed in Perl variable names.</p>
+</dd>
+<dd>
+<p>Another advantage is that all available constants can now be enumerated.</p>
+</dd>
+<dd>
+<p>The load method also accepts an OLE object as a parameter.  In this case
+the OLE object is queried about its containing type library and no registry
+search is done at all.  Interestingly this seems to be slower.</p>
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="examples">EXAMPLES</a></h1>
+<p>The first example imports all Excel constants names into the main namespace
+and prints the value of xlMarkerStyleDot (-4118).</p>
+<pre>
+    use Win32::OLE::Const ('Microsoft Excel 8.0 Object Library');
+    print &quot;xlMarkerStyleDot = %d\n&quot;, xlMarkerStyleDot;</pre>
+<p>The second example returns all Word constants in a hash ref.</p>
+<pre>
+    use Win32::OLE::Const;
+    my $wd = Win32::OLE::Const-&gt;Load(&quot;Microsoft Word 8.0 Object Library&quot;);
+    foreach my $key (keys %$wd) {
+        printf &quot;$key = %s\n&quot;, $wd-&gt;{$key};
+    }
+    printf &quot;wdGreen = %s\n&quot;, $wd-&gt;{wdGreen};</pre>
+<p>The last example uses an OLE object to specify the type library:</p>
+<pre>
+    use Win32::OLE;
+    use Win32::OLE::Const;
+    my $Excel = Win32::OLE-&gt;new('Excel.Application', 'Quit');
+    my $xl = Win32::OLE::Const-&gt;Load($Excel);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="authors_copyright">AUTHORS/COPYRIGHT</a></h1>
+<p>This module is part of the Win32::OLE distribution.</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Win32::OLE::Const - Extract constant definitions from TypeLib</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>HTTP::Date - date conversion routines</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;HTTP::Date - date conversion routines</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>HTTP::Date - date conversion routines</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ use HTTP::Date;</pre>
+<pre>
+ $string = time2str($time);    # Format as GMT ASCII time
+ $time = str2time($string);    # convert ASCII date to machine time</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>This module provides functions that deal the date formats used by the
+HTTP protocol (and then some more).  Only the first two functions,
+<a href="#item_time2str"><code>time2str()</code></a> and str2time(), are exported by default.</p>
+<dl>
+<dt><strong><a name="item_time2str">time2str( [$time] )</a></strong><br />
+</dt>
+<dd>
+The <a href="#item_time2str"><code>time2str()</code></a> function converts a machine time (seconds since epoch)
+to a string.  If the function is called without an argument, it will
+use the current time.
+</dd>
+<dd>
+<p>The string returned is in the format preferred for the HTTP protocol.
+This is a fixed length subset of the format defined by RFC 1123,
+represented in Universal Time (GMT).  An example of a time stamp
+in this format is:</p>
+</dd>
+<dd>
+<pre>
+   Sun, 06 Nov 1994 08:49:37 GMT</pre>
+</dd>
+<p></p>
+<dt><strong><a name="item_str2time">str2time( $str [, $zone] )</a></strong><br />
+</dt>
+<dd>
+The <a href="#item_str2time"><code>str2time()</code></a> function converts a string to machine time.  It returns
+<a href="../../../lib/Pod/perlfunc.html#item_undef"><code>undef</code></a> if the format of $str is unrecognized, or the time is outside
+the representable range.  The time formats recognized are the same as
+for parse_date().
+</dd>
+<dd>
+<p>The function also takes an optional second argument that specifies the
+default time zone to use when converting the date.  This parameter is
+ignored if the zone is found in the date string itself.  If this
+parameter is missing, and the date string format does not contain any
+zone specification, then the local time zone is assumed.</p>
+</dd>
+<dd>
+<p>If the zone is not ``<code>GMT</code>'' or numerical (like ``<code>-0800</code>'' or
+``<code>+0100</code>''), then the <code>Time::Zone</code> module must be installed in order
+to get the date recognized.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item_parse_date">parse_date( $str )</a></strong><br />
+</dt>
+<dd>
+This function will try to parse a date string, and then return it as a
+list of numerical values followed by a (possible undefined) time zone
+specifier; ($year, $month, $day, $hour, $min, $sec, $tz).  The $year
+returned will <strong>not</strong> have the number 1900 subtracted from it and the
+$month numbers start with 1.
+</dd>
+<dd>
+<p>In scalar context the numbers are interpolated in a string of the
+``YYYY-MM-DD hh:mm:ss TZ''-format and returned.</p>
+</dd>
+<dd>
+<p>If the date is unrecognized, then the empty list is returned.</p>
+</dd>
+<dd>
+<p>The function is able to parse the following formats:</p>
+</dd>
+<dd>
+<pre>
+ &quot;Wed, 09 Feb 1994 22:23:32 GMT&quot;       -- HTTP format
+ &quot;Thu Feb  3 17:03:55 GMT 1994&quot;        -- ctime(3) format
+ &quot;Thu Feb  3 00:00:00 1994&quot;,           -- ANSI C asctime() format
+ &quot;Tuesday, 08-Feb-94 14:15:29 GMT&quot;     -- old rfc850 HTTP format
+ &quot;Tuesday, 08-Feb-1994 14:15:29 GMT&quot;   -- broken rfc850 HTTP format</pre>
+</dd>
+<dd>
+<pre>
+ &quot;03/Feb/1994:17:03:55 -0700&quot;   -- common logfile format
+ &quot;09 Feb 1994 22:23:32 GMT&quot;     -- HTTP format (no weekday)
+ &quot;08-Feb-94 14:15:29 GMT&quot;       -- rfc850 format (no weekday)
+ &quot;08-Feb-1994 14:15:29 GMT&quot;     -- broken rfc850 format (no weekday)</pre>
+</dd>
+<dd>
+<pre>
+ &quot;1994-02-03 14:15:29 -0100&quot;    -- ISO 8601 format
+ &quot;1994-02-03 14:15:29&quot;          -- zone is optional
+ &quot;1994-02-03&quot;                   -- only date
+ &quot;1994-02-03T14:15:29&quot;          -- Use T as separator
+ &quot;19940203T141529Z&quot;             -- ISO 8601 compact format
+ &quot;19940203&quot;                     -- only date</pre>
+</dd>
+<dd>
+<pre>
+ &quot;08-Feb-94&quot;         -- old rfc850 HTTP format    (no weekday, no time)
+ &quot;08-Feb-1994&quot;       -- broken rfc850 HTTP format (no weekday, no time)
+ &quot;09 Feb 1994&quot;       -- proposed new HTTP format  (no weekday, no time)
+ &quot;03/Feb/1994&quot;       -- common logfile format     (no time, no offset)</pre>
+</dd>
+<dd>
+<pre>
+ &quot;Feb  3  1994&quot;      -- Unix 'ls -l' format
+ &quot;Feb  3 17:03&quot;      -- Unix 'ls -l' format</pre>
+</dd>
+<dd>
+<pre>
+ &quot;11-15-96  03:52PM&quot; -- Windows 'dir' format</pre>
+</dd>
+<dd>
+<p>The parser ignores leading and trailing whitespace.  It also allow the
+seconds to be missing and the month to be numerical in most formats.</p>
+</dd>
+<dd>
+<p>If the year is missing, then we assume that the date is the first
+matching date <em>before</em> current month.  If the year is given with only
+2 digits, then <a href="#item_parse_date"><code>parse_date()</code></a> will select the century that makes the
+year closest to the current date.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item_time2iso">time2iso( [$time] )</a></strong><br />
+</dt>
+<dd>
+Same as time2str(), but returns a ``YYYY-MM-DD hh:mm:ss''-formatted
+string representing time in the local time zone.
+</dd>
+<p></p>
+<dt><strong><a name="item_time2isoz">time2isoz( [$time] )</a></strong><br />
+</dt>
+<dd>
+Same as time2str(), but returns a ``YYYY-MM-DD hh:mm:ssZ''-formatted
+string representing Universal Time.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../../../lib/Pod/perlfunc.html#time">time in the perlfunc manpage</a>, <a href="../../../Time/Zone.html">the Time::Zone manpage</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 1995-1999, Gisle Aas</p>
+<p>This library is free software; you can redistribute it and/or
+modify it under the same terms as Perl itself.</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;HTTP::Date - date conversion routines</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

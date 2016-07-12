@@ -1,0 +1,523 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Tk::DItem - Tix Display Items</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::DItem - Tix Display Items</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#display_item_types_and_options">DISPLAY ITEM TYPES AND OPTIONS</a></li>
+	<li><a href="#imagetext_items">IMAGETEXT ITEMS</a></li>
+	<ul>
+
+		<li><a href="#imagetext_item_options">Imagetext Item Options</a></li>
+		<li><a href="#imagetext_style_options">Imagetext Style Options</a></li>
+	</ul>
+
+	<li><a href="#text_items">TEXT ITEMS</a></li>
+	<ul>
+
+		<li><a href="#text_item_options">Text Item Options</a></li>
+		<li><a href="#text_style_options">Text Style Options</a></li>
+	</ul>
+
+	<li><a href="#window_items">WINDOW ITEMS</a></li>
+	<ul>
+
+		<li><a href="#window_item_options">Window Item Options</a></li>
+		<li><a href="#window_style_options">Window Style Options</a></li>
+	</ul>
+
+	<li><a href="#creating_display_items">CREATING DISPLAY ITEMS</a></li>
+	<li><a href="#creating_and_manipulating_item_styles">CREATING AND MANIPULATING ITEM STYLES</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#style_methods">STYLE METHODS</a></li>
+	<li><a href="#example">EXAMPLE</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#keywords">KEYWORDS</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Tk::DItem - Tix Display Items</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The Tix <strong>Display Items</strong> and <strong>Display Types</strong> are devised to
+solve a general problem: many Tix widgets (both existing and planned
+ones) display many items of many types simultaneously.</p>
+<p>For example, a hierarchical listbox widget (see <a href="../../../site/lib/Tk/HList.html">the Tk::HList manpage</a>) can display
+items
+of images, plain text and subwindows in the form of a
+hierarchy. Another widget, the tabular listbox widget (see <a href="../../../site/lib/Tk/TList.html">the Tk::TList manpage</a>)
+also displays items of the
+same types, although it arranges the items in a tabular form. Yet
+another widget, the spreadsheet widget (see <a href="../../../site/lib/Tk/TixGrid.html">the Tk::TixGrid manpage</a>),
+also displays similar types
+items, but in yet another format.</p>
+<p>In these examples, the display items in different widgets are only
+different in how they are arranged by the <strong>host widget</strong>. In Tix,
+display items are clearly separated from the host widgets. The
+advantage is two-fold: first, the creation and configuration of
+display items become uniform across different host widgets. Second,
+new display item types can be added without the need to modify the
+existing host widgets.</p>
+<p>In a way, Tix display items are similar to the items inside Tk
+the canvas widget. However, unlike the Tix display items, the canvas
+items are not independent of the canvas widget; this makes it
+impossible to use the canvas items inside other types of TK widgets.</p>
+<p>The appearance of a display item is controlled by a set of
+<em>attributes</em>. It is observed that each the attributes usually fall
+into one of two categroies: ``<em>individual</em>'' or
+``<em>collective</em>''. For example, the text items inside a HList widget
+may all display a different text string; however, in most cases, the
+text items share the same color, font and spacing. Instead of keeping
+a duplicated version of the same attributes inside each display item,
+it will be advantageous to put the collective attributes in a
+special object called a <strong>display style</strong>. First, there is the space
+concern: a host widget may have many thousands of items; keeping
+dupilcated attributes will be very wasteful. Second, when it becomes
+necessary to change a collective attribute, such as changing all the
+text items' foreground color to red, it will be more efficient to
+change only the display style object than to modify all the text
+items one by one.</p>
+<p>The attributes of the a display item are thus stored in two places: it
+has a set of <strong>item options</strong> to store its individual attributes. Each
+display item is also associated with a <em>display style</em>, which specifies
+the collective attributes of all items associated with itself.</p>
+<p>The division between the individual and collective attributes are
+fixed and cannot be changed. Thus, when it becomes necessary for some
+items to differ in their collective attributes, two or more <strong>display styles</strong>
+can be used. For example, suppose you want to display two
+columns of text items inside an HList widget, one column in red and
+the other in blue. You can create a TextStyle object called ``$red''
+which defines a red foreground, and another called ``$blue'', which
+defines a blue foreground. You can then associate all text items of
+the first column to ``$red'' and the second column to ``$blue''</p>
+<p>
+</p>
+<hr />
+<h1><a name="display_item_types_and_options">DISPLAY ITEM TYPES AND OPTIONS</a></h1>
+<p>Currently there are three types of display items: <strong>text</strong>,
+<strong>imagetext</strong> and <em>window</em>.</p>
+<p>
+</p>
+<hr />
+<h1><a name="imagetext_items">IMAGETEXT ITEMS</a></h1>
+<p>Display items of the type <strong>imagetext</strong> are used to display an image
+together with a text string. Imagetext items support the following options:</p>
+<p>
+</p>
+<h2><a name="imagetext_item_options">Imagetext Item Options</a></h2>
+<dl>
+<dt><strong><a name="item_name_3a_bitmap">Name:	<strong>bitmap</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_bitmap">Class:	<strong>Bitmap</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dbitmap">Switch:	<strong>-bitmap</strong></a></strong><br />
+</dt>
+<dd>
+Specifies the bitmap to display in the item.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_image">Name:	<strong>image</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_image">Class:	<strong>Image</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dimage">Switch:	<strong>-image</strong></a></strong><br />
+</dt>
+<dd>
+Specifies the image to display in the item. When both the
+<strong>-bitmap</strong> and <strong>-image</strong> options are specified, only the image
+will be displayed.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_imagetextstyle">Name:	<strong>imageTextStyle</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_imagetextstyle">Class:	<strong>ImageTextStyle</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dstyle">Switch:	<strong>-style</strong></a></strong><br />
+</dt>
+<dd>
+Specifies the display style to use for this item. Must be the
+name of a <strong>imagetext</strong> display style that has already be created with
+<strong>ItemStyle</strong>.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_showimage">Name:	<strong>showImage</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_showimage">Class:	<strong>ShowImage</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dshowimage">Switch:	<strong>-showimage</strong></a></strong><br />
+</dt>
+<dd>
+A Boolean value that specifies whether the image/bitmap should be
+displayed.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_showtext">Name:	<strong>showText</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_showtext">Class:	<strong>ShowText</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dshowtext">Switch:	<strong>-showtext</strong></a></strong><br />
+</dt>
+<dd>
+A Boolean value that specifies whether the text string should be
+displayed.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_text">Name:	<strong>text</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_text">Class:	<strong>Text</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dtext">Switch:	<strong>-text</strong></a></strong><br />
+</dt>
+<dd>
+Specifies the text string to display in the item.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_underline">Name:	<strong>underline</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_underline">Class:	<strong>Underline</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dunderline">Switch:	<strong>-underline</strong></a></strong><br />
+</dt>
+<dd>
+Specifies the integer index of a character to underline in the text
+string in the item.  0 corresponds to the first character of the text
+displayed in the widget, 1 to the next character, and so on.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<h2><a name="imagetext_style_options">Imagetext Style Options</a></h2>
+<p>The style information of <strong>imagetext</strong> items are stored in the
+<strong>imagetext</strong> display style. The following options are supported:</p>
+<p><strong>STANDARD OPTIONS</strong></p>
+<p><table cellspacing="0" cellpadding="0"><tr><td><strong>-activebackground</strong><td><strong>-activeforeground</strong>
+<tr><td><strong>-anchor</strong><td><strong>-background</strong>
+<tr><td><strong>-disabledbackground</strong><td><strong>-disabledforeground</strong>
+<tr><td><strong>-foreground</strong><td><strong>-font</strong>
+<tr><td><strong>-justify</strong><td><strong>-padx</strong>
+<tr><td><strong>-pady</strong><td><strong>-selectbackground</strong>
+<tr><td><strong>-selectforeground</strong><td><strong>-wraplength</strong></table></p>
+<p>See <a href="../../../site/lib/Tk/options.html">the Tk::options manpage</a> for details of the standard options.</p>
+<p><strong>STYLE-SPECIFIC OPTIONS</strong></p>
+<dl>
+<dt><strong><a name="item_name_3a_gap">Name:	<strong>gap</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_gap">Class:	<strong>Gap</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dgap">Switch:	<strong>-gap</strong></a></strong><br />
+</dt>
+<dd>
+Specifies the distance between the bitmap/image and the text string,
+in number of pixels.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_textanchor">Name:	<strong>textAnchor</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_textanchor">Class:	<strong>TextAnchor</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dtextanchor">Switch:	<strong>-textanchor</strong></a></strong><br />
+</dt>
+<dd>
+The anchor position on the image to which text part is attached.
+This is a perl/Tk addition. Defaults to <strong>e</strong> for compatibility with standard
+Tix. The interesting cases are
+</dd>
+<dl>
+<dt><strong><a name="item_n"><strong>n</strong></a></strong><br />
+</dt>
+<dd>
+Text is centred above the image.
+</dd>
+<p></p>
+<dt><strong><a name="item_s"><strong>s</strong></a></strong><br />
+</dt>
+<dd>
+Text is centred below the image
+</dd>
+<p></p>
+<dt><strong><a name="item_e"><strong>e</strong></a></strong><br />
+</dt>
+<dd>
+Text is centred to right of the image.
+</dd>
+<p></p>
+<dt><strong><a name="item_w"><strong>w</strong></a></strong><br />
+</dt>
+<dd>
+Text is centred to left of the image.
+</dd>
+<p></p>
+<dt><strong><a name="item_c"><strong>c</strong></a></strong><br />
+</dt>
+<dd>
+Text is centred over the image.
+</dd>
+<p></p></dl>
+<p>The <strong>sw</strong>, <strong>se</strong>, <strong>ne</strong>, and b&lt;nw&gt; cases look rather odd.</p>
+<p>To get items to line up correctly it will usually be necessary
+to specify <strong>-anchor</strong> as well. e.g. with default <strong>e</strong> then anchoring
+item as a whole <strong>w</strong> lines images up down left with text stuck to right side.</p>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="text_items">TEXT ITEMS</a></h1>
+<p>Display items of the type <strong>text</strong> are used to display a text string
+in a widget. Text items support the following options:</p>
+<p>
+</p>
+<h2><a name="text_item_options">Text Item Options</a></h2>
+<dl>
+<dt><strong><a name="item_name_3a_textstyle">Name:	<strong>textStyle</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_textstyle">Class:	<strong>TextStyle</strong></a></strong><br />
+</dt>
+<dt><strong>Switch:	<strong>-style</strong></strong><br />
+</dt>
+<dd>
+Specifies the display style to use for this text item. Must be the
+name of a <strong>text</strong> display style that has already be created with
+<strong>ItemStyle</strong>.
+</dd>
+<p></p>
+<dt><strong>Name:	<strong>text</strong></strong><br />
+</dt>
+<dt><strong>Class:	<strong>Text</strong></strong><br />
+</dt>
+<dt><strong>Switch:	<strong>-text</strong></strong><br />
+</dt>
+<dd>
+Specifies the text string to display in the item.
+</dd>
+<p></p>
+<dt><strong>Name:	<strong>underline</strong></strong><br />
+</dt>
+<dt><strong>Class:	<strong>Underline</strong></strong><br />
+</dt>
+<dt><strong>Switch:	<strong>-underline</strong></strong><br />
+</dt>
+<dd>
+Specifies the integer index of a character to underline in the item.
+0 corresponds to the first character of the text displayed in the
+widget, 1 to the next character, and so on.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<h2><a name="text_style_options">Text Style Options</a></h2>
+<p><strong>STANDARD OPTIONS</strong></p>
+<p><table cellspacing="0" cellpadding="0"><tr><td><strong>-activebackground</strong><td><strong>-activeforeground</strong>
+<tr><td><strong>-anchor</strong><td><strong>-background</strong>
+<tr><td><strong>-disabledbackground</strong><td><strong>-disabledforeground</strong>
+<tr><td><strong>-foreground</strong><td><strong>-font</strong>
+<tr><td><strong>-justify</strong><td><strong>-padx</strong>
+<tr><td><strong>-pady</strong><td><strong>-selectbackground</strong>
+<tr><td><strong>-selectforeground</strong><td><strong>-wraplength</strong></table></p>
+<p>See <a href="../../../site/lib/Tk/options.html">the Tk::options manpage</a> for details of the standard options.</p>
+<p>
+</p>
+<hr />
+<h1><a name="window_items">WINDOW ITEMS</a></h1>
+<p>Display items of the type <em>window</em> are used to display a
+sub-window in a widget. <strong>Window</strong> items support the following
+options:</p>
+<p>
+</p>
+<h2><a name="window_item_options">Window Item Options</a></h2>
+<dl>
+<dt><strong><a name="item_name_3a_windowstyle">Name:	<strong>windowStyle</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_windowstyle">Class:	<strong>WindowStyle</strong></a></strong><br />
+</dt>
+<dt><strong>Switch:	<strong>-style</strong></strong><br />
+</dt>
+<dd>
+Specifies the display style to use for this window item. Must be the
+name of a <em>window</em> display style that has already be created with
+the <strong>ItemStyle</strong> method.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_window">Name:	<strong>window</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_window">Class:	<strong>Window</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dwindow">Switch:	<strong>-window</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_alias_3a__2dwidget">Alias:	<strong>-widget</strong></a></strong><br />
+</dt>
+<dd>
+Specifies the sub-window to display in the item.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<h2><a name="window_style_options">Window Style Options</a></h2>
+<p><strong>STYLE STANDARD OPTIONS</strong></p>
+<p><strong>-anchor</strong>	<strong>-padx</strong>	<strong>-pady</strong></p>
+<p>See <a href="../../../site/lib/Tk/options.html">the Tk::options manpage</a> for details of the standard options.</p>
+<p>
+</p>
+<hr />
+<h1><a name="creating_display_items">CREATING DISPLAY ITEMS</a></h1>
+<p>Display items do not exist on their and thus they cannot be created
+independently of the widgets they reside in. As a rule, display items
+are created by special methods of their ``host'' widgets. For
+example, the HList widgets has a method <strong>item</strong> which can be used
+to create new display items. The following code creates a new text
+item at the third column of the entry foo inside an HList widget:</p>
+<pre>
+ my $hlist = $parent-&gt;HList(-columns=&gt;3);
+ $hlist-&gt;add('foo');
+ $hlist-&gt;itemCreate('foo', 2, -itemtype=&gt;'text', -text=&gt;'Hello');</pre>
+<p>The <strong>itemCreate</strong> method of the HList widget accepts a variable
+number of arguments. The special argument <strong>-itemtype</strong> specifies
+which type of display item to create. Options that are valid for this
+type of display items can then be specified by one or more
+<em>option-value</em> pairs.</p>
+<p>After the display item is created, they can then be configured or
+destroyed using the methods provided by the host widget. For example,
+the HList widget has the methods <strong>itemConfigure</strong>, <strong>itemCget</strong>
+and <strong>itemDelete</strong> for accessing the display items.</p>
+<p>
+</p>
+<hr />
+<h1><a name="creating_and_manipulating_item_styles">CREATING AND MANIPULATING ITEM STYLES</a></h1>
+<p>Item styles are created with <strong>ItemStyle</strong>:</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p>&nbsp;&nbsp;&nbsp;<em>$widget</em>-&gt;<strong>ItemStyle</strong>(<em>itemType</em> ?,<strong>-stylename</strong>=&gt;<em>name</em>? ?,<strong>-refwindow</strong>=&gt;<em>pathName</em>? ?,<em>option</em>=&gt;<em>value</em>, ...&gt;?);</p>
+<p><em>itemType</em> must be one of the existing display items types such as
+<strong>text</strong>, <strong>imagetext</strong>, <strong>window</strong> or any new types added by
+the user. Additional arguments can be given in one or more
+<em>option-value</em> pairs. <em>option</em> can be any of the valid option
+for this display style or any of the following:</p>
+<dl>
+<dt><strong><a name="item__2dstylename__3d_3e_name"><strong>-stylename</strong> =&gt; <em>name</em></a></strong><br />
+</dt>
+<dd>
+Specifies a name for this style. If unspecified, then a default name
+will be chosen for this style.
+</dd>
+<p></p>
+<dt><strong><a name="item__2drefwindow__3d_3e__24otherwidget"><strong>-refwindow</strong> =&gt; <em>$otherwidget</em></a></strong><br />
+</dt>
+<dd>
+Specifies a window to use for determine the default values of the
+display type. If unspecified, the <em>$widget</em> will be used. Default
+values for the display types can be set via the options database. The
+following example sets the <strong>-disablebackground</strong> and
+<strong>-disabledforeground</strong> options of a <strong>text</strong> display style via
+the option database:
+</dd>
+<dd>
+<pre>
+  $widget-&gt;optionAdd('*table.list*disabledForeground' =&gt; 'blue');
+  $widget-&gt;optionAdd('*table.list*disabledBackground' =&gt; 'darkgray');
+  $widget-&gt;ItemStyle('text', -refwindow =&gt; $table_list, -fg =&gt; 'red');</pre>
+</dd>
+<dd>
+<p>By using the option database to set the options of the display styles,
+we can advoid hard-coding the option values and give the user more
+flexibility in customization. See <a href="../../../site/lib/Tk/option.html">the Tk::option manpage</a> for a detailed description
+of the option database.</p>
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="style_methods">STYLE METHODS</a></h1>
+<p>The <strong>ItemStyle</strong> method creates an object.
+This object supports the <strong>configure</strong> and <strong>cget</strong> methods
+described in <a href="../../../site/lib/Tk/options.html">the Tk::options manpage</a> which can be used to enquire and
+modify the options described above.</p>
+<p>The following additional methods are available for item styles:</p>
+<dl>
+<dt><strong><a name="item_delete"><em>$style</em>-&gt;<strong>delete</strong></a></strong><br />
+</dt>
+<dd>
+Destroy this display style object.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="example">EXAMPLE</a></h1>
+<p>The following example creates two columns of data in a HList
+widget. The first column is in red and the second column in blue. The
+colors of the columns are controlled by two different <strong>text</strong>
+styles. Also, the anchor and font of the second column is chosen so
+that the income data is aligned properly.</p>
+<pre>
+   use strict;
+   use Tk;
+   use Tk::HList;
+   use Tk::ItemStyle;</pre>
+<pre>
+   my $mw = MainWindow-&gt;new();</pre>
+<pre>
+   my $hlist = $mw-&gt;HList(-columns=&gt;2)-&gt;pack;</pre>
+<pre>
+   my $red  = $hlist-&gt;ItemStyle('text', -foreground=&gt;'#800000');
+   my $blue = $hlist-&gt;ItemStyle('text', -foreground=&gt;'#000080', -anchor=&gt;'e');</pre>
+<pre>
+   my $e;
+   foreach ([Joe =&gt; '$10,000'], [Peter =&gt; '$20,000'],
+            [Raj =&gt; '$90,000'],  [Zinh =&gt; '$0']) {
+       $e = $hlist-&gt;addchild(&quot;&quot;);
+       $hlist-&gt;itemCreate($e, 0, -itemtype=&gt;'text',
+                -text=&gt;$_-&gt;[0], -style=&gt;$red );
+       $hlist-&gt;itemCreate($e, 1, -itemtype=&gt;'text',
+                -text=&gt;$_-&gt;[1], -style=&gt;$blue);
+   }</pre>
+<pre>
+   Tk::MainLoop;</pre>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../../../site/lib/Tk/HList.html">Tk::HList</a>
+<a href="../../../site/lib/Tk/TixGrid.html">Tk::TixGrid</a>
+<a href="../../../site/lib/Tk/TList.html">Tk::TList</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="keywords">KEYWORDS</a></h1>
+<p>display item, display style, item style</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::DItem - Tix Display Items</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

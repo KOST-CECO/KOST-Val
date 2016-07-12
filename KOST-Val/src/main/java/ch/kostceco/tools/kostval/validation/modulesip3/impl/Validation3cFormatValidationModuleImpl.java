@@ -1,6 +1,6 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
- * Information Package (SIP). Copyright (C) 2012-2016 Claire Röthlisberger (KOST-CECO), Christian
+ * Information Package (SIP). Copyright (C) 2012-2016 Claire Roethlisberger (KOST-CECO), Christian
  * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
  * Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
@@ -49,9 +49,18 @@ public class Validation3cFormatValidationModuleImpl extends ValidationModuleImpl
 	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws Validation3cFormatValidationException
 	{
-		// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
-		System.out.print( "3C   " );
-		System.out.print( "\b\b\b\b\b" );
+		// Informationen zur Darstellung "onWork" holen
+		String onWork = getConfigurationService().getShowProgressOnWork();
+		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
+		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
+		 * ref="configurationService" /> */
+		if ( onWork.equals( "no" ) ) {
+			// keine Ausgabe
+		} else {
+			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
+			System.out.print( "3C   " );
+			System.out.print( "\b\b\b\b\b" );
+		}
 
 		boolean isValid = true;
 		// Informationen zum Arbeitsverzeichnis holen

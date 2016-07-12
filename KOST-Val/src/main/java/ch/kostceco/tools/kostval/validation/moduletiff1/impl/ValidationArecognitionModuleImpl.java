@@ -1,6 +1,6 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
- * Information Package (SIP). Copyright (C) 2012-2016 Claire Röthlisberger (KOST-CECO), Christian
+ * Information Package (SIP). Copyright (C) 2012-2016 Claire Roethlisberger (KOST-CECO), Christian
  * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
  * Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
@@ -39,7 +39,7 @@ import ch.kostceco.tools.kostval.validation.moduletiff1.ValidationArecognitionMo
  * valid --> beginnt mit II*. [49492A00] oder mit MM.* [4D4D002A] ==> Bei dem Modul A wird die
  * Validierung abgebrochen, sollte das Resulat invalid sein!
  * 
- * @author Rc Claire Röthlisberger, KOST-CECO */
+ * @author Rc Claire Roethlisberger, KOST-CECO */
 public class ValidationArecognitionModuleImpl extends ValidationModuleImpl implements
 		ValidationArecognitionModule
 {

@@ -1,6 +1,6 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
- * Information Package (SIP). Copyright (C) 2012-2016 Claire Röthlisberger (KOST-CECO), Christian
+ * Information Package (SIP). Copyright (C) 2012-2016 Claire Roethlisberger (KOST-CECO), Christian
  * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
  * Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
@@ -23,31 +23,55 @@ import java.io.File;
 import java.util.List;
 
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationBprimaryStructureException;
+import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationBprimaryStructureModule;
 import ch.enterag.utils.zip.FileEntry;
 import ch.enterag.utils.zip.Zip64File;
 
-/** Validierungsschritt B (primäre Verzeichnisstruktur) Besteht eine korrekte primäre
+/** Validierungsschritt B (primÃ¤re Verzeichnisstruktur) Besteht eine korrekte primÃ¤re
  * Verzeichnisstruktur? valid --> [Name].siard/header und [Name].siard/content invalid -->
  * [Name].siard/[Name]/header und [Name].siard/[Name]/content invalid --> Andere Ordner oder Dateien
  * im Toplevel-Ordner ==> Bei den Module A, B, C und D wird die Validierung abgebrochen, sollte das
  * Resulat invalid sein!
  * 
- * @author Rc Claire Röthlisberger, KOST-CECO */
+ * @author Rc Claire Roethlisberger, KOST-CECO */
 
 public class ValidationBprimaryStructureModuleImpl extends ValidationModuleImpl implements
 		ValidationBprimaryStructureModule
 {
 
+	private ConfigurationService	configurationService;
+
+	public ConfigurationService getConfigurationService()
+	{
+		return configurationService;
+	}
+
+	public void setConfigurationService( ConfigurationService configurationService )
+	{
+		this.configurationService = configurationService;
+	}
+
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws ValidationBprimaryStructureException
 	{
-		// Ausgabe SIARD-Modul Ersichtlich das KOST-Val arbeitet
-		System.out.print( "B    " );
-		System.out.print( "\b\b\b\b\b" );
+		boolean showOnWork = true;
 		int onWork = 410;
+		// Informationen zur Darstellung "onWork" holen
+		String onWorkConfig = getConfigurationService().getShowProgressOnWork();
+		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
+		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
+		 * ref="configurationService" /> */
+		if ( onWorkConfig.equals( "no" ) ) {
+			// keine Ausgabe
+			showOnWork = false;
+		} else {
+			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
+			System.out.print( "B    " );
+			System.out.print( "\b\b\b\b\b" );
+		}
 
 		Integer bExistsHeaderFolder = 0;
 		Integer bExistsContentFolder = 0;
@@ -62,7 +86,7 @@ public class ValidationBprimaryStructureModuleImpl extends ValidationModuleImpl 
 			List<FileEntry> fileEntryList = zipfile.getListFileEntries();
 			for ( FileEntry fileEntry : fileEntryList ) {
 
-				/* nur valid wenn es mit header oder content anfängt dies schliesst auch
+				/* nur valid wenn es mit header oder content anfï¿½ngt dies schliesst auch
 				 * [Name].siard/[Name]/header und [Name].siard/[Name]/content mit ein */
 				String name = fileEntry.getName();
 				if ( name.startsWith( "content/" ) ) {
@@ -73,7 +97,7 @@ public class ValidationBprimaryStructureModuleImpl extends ValidationModuleImpl 
 						// erlaubter Inhalt header/...
 						bExistsHeaderFolder = 1;
 					} else {
-						// keines der beiden validen Möglichkeiten -> Fehler
+						// keines der beiden validen Mï¿½glichkeiten -> Fehler
 						getMessageService().logError(
 								getTextResourceService().getText( MESSAGE_XML_MODUL_B_SIARD )
 										+ getTextResourceService().getText( MESSAGE_XML_B_NOTALLOWEDFILE, name ) );
@@ -81,24 +105,26 @@ public class ValidationBprimaryStructureModuleImpl extends ValidationModuleImpl 
 						return false;
 					}
 				}
-				if ( onWork == 410 ) {
-					onWork = 2;
-					System.out.print( "B-   " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 110 ) {
-					onWork = onWork + 1;
-					System.out.print( "B\\   " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 210 ) {
-					onWork = onWork + 1;
-					System.out.print( "B|   " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 310 ) {
-					onWork = onWork + 1;
-					System.out.print( "B/   " );
-					System.out.print( "\b\b\b\b\b" );
-				} else {
-					onWork = onWork + 1;
+				if ( showOnWork ) {
+					if ( onWork == 410 ) {
+						onWork = 2;
+						System.out.print( "B-   " );
+						System.out.print( "\b\b\b\b\b" );
+					} else if ( onWork == 110 ) {
+						onWork = onWork + 1;
+						System.out.print( "B\\   " );
+						System.out.print( "\b\b\b\b\b" );
+					} else if ( onWork == 210 ) {
+						onWork = onWork + 1;
+						System.out.print( "B|   " );
+						System.out.print( "\b\b\b\b\b" );
+					} else if ( onWork == 310 ) {
+						onWork = onWork + 1;
+						System.out.print( "B/   " );
+						System.out.print( "\b\b\b\b\b" );
+					} else {
+						onWork = onWork + 1;
+					}
 				}
 			}
 			zipfile.close();

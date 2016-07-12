@@ -1,6 +1,6 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
- * Information Package (SIP). Copyright (C) 2012-2016 Claire Röthlisberger (KOST-CECO), Christian
+ * Information Package (SIP). Copyright (C) 2012-2016 Claire Roethlisberger (KOST-CECO), Christian
  * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
  * Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
@@ -22,21 +22,43 @@ package ch.kostceco.tools.kostval.validation.modulesip1.impl;
 import java.io.File;
 
 import ch.kostceco.tools.kostval.exception.modulesip1.Validation1bFolderStructureException;
+import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesip1.Validation1bFolderStructureModule;
 
-/** Besteht eine korrekte primäre Verzeichnisstruktur: /header/metadata.xml /header/xsd /content */
+/** Besteht eine korrekte primÃ¤re Verzeichnisstruktur: /header/metadata.xml /header/xsd /content */
 public class Validation1bFolderStructureModuleImpl extends ValidationModuleImpl implements
 		Validation1bFolderStructureModule
 {
+
+	private ConfigurationService	configurationService;
+
+	public ConfigurationService getConfigurationService()
+	{
+		return configurationService;
+	}
+
+	public void setConfigurationService( ConfigurationService configurationService )
+	{
+		this.configurationService = configurationService;
+	}
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws Validation1bFolderStructureException
 	{
-		// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
-		System.out.print( "1B   " );
-		System.out.print( "\b\b\b\b\b" );
+		// Informationen zur Darstellung "onWork" holen
+		String onWork = getConfigurationService().getShowProgressOnWork();
+		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
+		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
+		 * ref="configurationService" /> */
+		if ( onWork.equals( "no" ) ) {
+			// keine Ausgabe
+		} else {
+			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
+			System.out.print( "1B   " );
+			System.out.print( "\b\b\b\b\b" );
+		}
 
 		boolean isValid = true;
 		File content = new File( valDatei.getAbsolutePath() + File.separator + "content" );

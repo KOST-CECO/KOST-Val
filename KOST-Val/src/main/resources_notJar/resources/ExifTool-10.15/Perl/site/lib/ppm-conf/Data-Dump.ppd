@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SOFTPKG NAME="Data-Dump" VERSION="1,01,0,0">
+<TITLE>Data-Dump</TITLE>
+<ABSTRACT>Pretty printing of data structures</ABSTRACT>
+<AUTHOR>Gisle Aas &lt;gisle@aas.no&gt;</AUTHOR>
+<IMPLEMENTATION>
+<CODEBASE HREF="http://ppm.ActiveState.com/PPMPackages/5.8-windows/MSWin32-x86-multi-thread-5.8/Data-Dump.tar.gz" />
+<INSTALL />
+<UNINSTALL />
+</IMPLEMENTATION>
+</SOFTPKG>

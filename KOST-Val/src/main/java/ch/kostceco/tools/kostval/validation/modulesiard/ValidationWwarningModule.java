@@ -1,6 +1,6 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
- * Information Package (SIP). Copyright (C) 2012-2016 Claire Röthlisberger (KOST-CECO), Christian
+ * Information Package (SIP). Copyright (C) 2012-2016 Claire Roethlisberger (KOST-CECO), Christian
  * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
  * Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
@@ -28,12 +28,12 @@ import ch.kostceco.tools.kostval.exception.modulesiard.ValidationWwarningExcepti
 import ch.kostceco.tools.kostval.validation.ValidationModule;
 import ch.kostceco.tools.kostval.validation.bean.ValidationContext;
 
-/** Validierungsschritt W (Warnungen) Wurden dataOwner und dataOriginTimespan ausgefüllt und nicht
+/** Validierungsschritt W (Warnungen) Wurden dataOwner und dataOriginTimespan ausgefÃ¼llt und nicht
  * auf (...) belassen? <dataOwner>(...)</dataOwner> <dataOriginTimespan>(...)</dataOriginTimespan>
  * 
  * nur Messeage ausgeben aber immer valid
  * 
- * @author Rc Claire Röthlisberger, KOST-CECO */
+ * @author Rc Claire Roethlisberger, KOST-CECO */
 
 public interface ValidationWwarningModule extends ValidationModule
 {

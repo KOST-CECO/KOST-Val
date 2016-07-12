@@ -1,6 +1,6 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
- * Information Package (SIP). Copyright (C) 2012-2016 Claire Röthlisberger (KOST-CECO), Christian
+ * Information Package (SIP). Copyright (C) 2012-2016 Claire Roethlisberger (KOST-CECO), Christian
  * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
  * Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
@@ -34,26 +34,49 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import ch.kostceco.tools.kostval.exception.modulesip1.Validation1fPrimaryDataException;
+import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesip1.Validation1fPrimaryDataModule;
 
-/** Diese Validierung gibt true (OK) zurück, wenn keine Primärdateien im Verzeichnis content
- * vorhanden sind, der Ablieferungstyp aber GEVER ist. Sind keine Primärdateien im Verzeichnis
+/** Diese Validierung gibt true (OK) zurï¿½ck, wenn keine PrimÃ¤rdateien im Verzeichnis content
+ * vorhanden sind, der Ablieferungstyp aber GEVER ist. Sind keine PrimÃ¤rdateien im Verzeichnis
  * content vorhanden, der Ablieferungstyp ist jedoch FILE, ist dies ein Fehler und gibt false
- * zurück. */
+ * zurï¿½ck. */
 public class Validation1fPrimaryDataModuleImpl extends ValidationModuleImpl implements
 		Validation1fPrimaryDataModule
 {
+	private ConfigurationService	configurationService;
+
+	public ConfigurationService getConfigurationService()
+	{
+		return configurationService;
+	}
+
+	public void setConfigurationService( ConfigurationService configurationService )
+	{
+		this.configurationService = configurationService;
+	}
+
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws Validation1fPrimaryDataException
 	{
-		// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
-		System.out.print( "1F   " );
-		System.out.print( "\b\b\b\b\b" );
+		boolean showOnWork = true;
 		int onWork = 410;
-
+		// Informationen zur Darstellung "onWork" holen
+		String onWorkConfig = getConfigurationService().getShowProgressOnWork();
+		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
+		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
+		 * ref="configurationService" /> */
+		if ( onWorkConfig.equals( "no" ) ) {
+			// keine Ausgabe
+			showOnWork = false;
+		} else {
+			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
+			System.out.print( "1F   " );
+			System.out.print( "\b\b\b\b\b" );
+		}
 		boolean contentFolderEmpty = true;
 
 		try {
@@ -66,24 +89,26 @@ public class Validation1fPrimaryDataModuleImpl extends ValidationModuleImpl impl
 					contentFolderEmpty = false;
 					break;
 				}
-				if ( onWork == 410 ) {
-					onWork = 2;
-					System.out.print( "1F-  " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 110 ) {
-					onWork = onWork + 1;
-					System.out.print( "1F\\  " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 210 ) {
-					onWork = onWork + 1;
-					System.out.print( "1F|  " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 310 ) {
-					onWork = onWork + 1;
-					System.out.print( "1F/  " );
-					System.out.print( "\b\b\b\b\b" );
-				} else {
-					onWork = onWork + 1;
+				if ( showOnWork ) {
+					if ( onWork == 410 ) {
+						onWork = 2;
+						System.out.print( "1F-  " );
+						System.out.print( "\b\b\b\b\b" );
+					} else if ( onWork == 110 ) {
+						onWork = onWork + 1;
+						System.out.print( "1F\\  " );
+						System.out.print( "\b\b\b\b\b" );
+					} else if ( onWork == 210 ) {
+						onWork = onWork + 1;
+						System.out.print( "1F|  " );
+						System.out.print( "\b\b\b\b\b" );
+					} else if ( onWork == 310 ) {
+						onWork = onWork + 1;
+						System.out.print( "1F/  " );
+						System.out.print( "\b\b\b\b\b" );
+					} else {
+						onWork = onWork + 1;
+					}
 				}
 			}
 			if ( contentFolderEmpty == true ) {

@@ -1,6 +1,6 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
- * Information Package (SIP). Copyright (C) 2012-2016 Claire Röthlisberger (KOST-CECO), Christian
+ * Information Package (SIP). Copyright (C) 2012-2016 Claire Roethlisberger (KOST-CECO), Christian
  * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
  * Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
@@ -35,7 +35,7 @@ import java.util.Map;
 
 import ch.kostceco.tools.kostval.util.Util;
 
-/** @author Rc Claire Röthlisberger, KOST-CECO */
+/** @author Rc Claire Roethlisberger, KOST-CECO */
 
 public class Util
 {
@@ -73,7 +73,7 @@ public class Util
 		}
 	}
 
-	/** Schaltet die Konsolen-Ausgabe in ein file um und beendet den Stream, damit dieser gelöscht
+	/** Schaltet die Konsolen-Ausgabe in ein file um und beendet den Stream, damit dieser gelÃ¶scht
 	 * werden kann. */
 	public static void switchOffConsoleToTxtClose( File file ) throws FileNotFoundException
 	{
@@ -100,11 +100,11 @@ public class Util
 		System.setOut( original );
 	}
 
-	/** Löscht ein Verzeichnis rekursiv.
+	/** LÃ¶scht ein Verzeichnis rekursiv.
 	 * 
 	 * @param dir
-	 *          das zu löschende Verzeichnis
-	 * @return true wenn alle Files und Verzeichnisse gelöscht werden konnten */
+	 *          das zu lÃ¶schende Verzeichnis
+	 * @return true wenn alle Files und Verzeichnisse gelÃ¶scht werden konnten */
 	public static boolean deleteDir( File dir )
 	{
 		if ( dir.isDirectory() ) {
@@ -199,11 +199,11 @@ public class Util
 
 		File[] files = quelle.listFiles();
 		File newFile = null;
-		// in diesem Objekt wird für jedes File der Zielpfad gespeichert.
+		// in diesem Objekt wird fÃ¼r jedes File der Zielpfad gespeichert.
 		// 1. Der alte Zielpfad
 		// 2. Das systemspezifische Pfadtrennungszeichen
 		// 3. Der Name des aktuellen Ordners/der aktuellen Datei
-		ziel.mkdirs(); // erstellt alle benötigten Ordner
+		ziel.mkdirs(); // erstellt alle benÃ¶tigten Ordner
 		if ( files != null ) {
 			for ( int i = 0; i < files.length; i++ ) {
 				newFile = new File( ziel.getAbsolutePath() + System.getProperty( "file.separator" )
@@ -236,22 +236,41 @@ public class Util
 		out.close();
 	}
 
-	/** Ergänzt das XML-Element "<End></End>" mit dem ergebnis (string) in dem kost-val.log.xml (file)
+	/* TODO: Wichtige Notiz zur Performance
 	 * 
-	 * ! Solche Ersetzungen dürfen nicht in einer Schleife gemacht werden sondern erst am Schluss, da
+	 * Statt
+	 * 
+	 * while ( (line = reader.readLine()) != null ) { oldtext += line + "\r\n"; }
+	 * 
+	 * Soll
+	 * 
+	 * StringBuilder sb = new StringBuilder(); while ( (line = reader.readLine()) != null ) {
+	 * sb.append( line ); sb.append( "\r\n" ); } oldtext= sb.toString();
+	 * 
+	 * verwendet werden. Dies insbesondere bei grossem Text massiv schneller. Da bei diesen
+	 * Ersetzungen meist der Output gelesen wird, kann dieser natÃ¼rich gross sein. */
+
+	/** VerÃ¤ndert & mit &amp und ergÃ¤nzt das XML-Element "<End></End>" mit dem ergebnis (stringEnd) sowie <Message>3c</Message></Error> mit dem ergebnis (string3c) in dem kost-val.log.xml (file)
+	 * 
+	 * ! Solche Ersetzungen dÃ¼rfen nicht in einer Schleife gemacht werden sondern erst am Schluss, da
 	 * diese sehr Zeitintensiv sind !!!
 	 * 
 	 * @throws IOException */
-	public static void valEnd( String string, File file ) throws IOException
+	public static void valEnd3cAmp( String stringEnd, String string3c, File file ) throws IOException
 	{
 		try {
 			BufferedReader reader = new BufferedReader( new FileReader( file ) );
 			String line = "", oldtext = "";
+			StringBuilder sb = new StringBuilder();
 			while ( (line = reader.readLine()) != null ) {
-				oldtext += line + "\r\n";
+				sb.append( line );
+				sb.append( "\r\n" );
 			}
+			oldtext = sb.toString();
 			reader.close();
-			String newtext = oldtext.replace( "<End></End>", string );
+			String newtext = oldtext.replace( "<End></End>", stringEnd );
+			newtext = newtext.replace( "<Message>3c</Message></Error>", string3c );
+			newtext = newtext.replace( "&", "&amp;" );
 			newtext = newtext.replace( (char) 0, (char) 32 );
 			FileWriter writer = new FileWriter( file );
 			writer.write( newtext );
@@ -261,35 +280,9 @@ public class Util
 		}
 	}
 
-	/** Verändert <Message>3c</Message></Error> mit dem ergebnis (string) in dem kost-val.log.xml
-	 * (file)
+	/** ErgÃ¤nzt "Validierung: SIP" mit der Version (string) in dem kost-val.log.xml (file)
 	 * 
-	 * ! Solche Ersetzungen dürfen nicht in einer Schleife gemacht werden sondern erst am Schluss, da
-	 * diese sehr Zeitintensiv sind !!!
-	 * 
-	 * @throws IOException */
-	public static void val3c( String string, File file ) throws IOException
-	{
-		try {
-			BufferedReader reader = new BufferedReader( new FileReader( file ) );
-			String line = "", oldtext = "";
-			while ( (line = reader.readLine()) != null ) {
-				oldtext += line + "\r\n";
-			}
-			reader.close();
-			String newtext = oldtext.replace( "<Message>3c</Message></Error>", string );
-			newtext = newtext.replace( (char) 0, (char) 32 );
-			FileWriter writer = new FileWriter( file );
-			writer.write( newtext );
-			writer.close();
-		} catch ( IOException ioe ) {
-			ioe.printStackTrace();
-		}
-	}
-
-	/** Ergänzt "Validierung: SIP" mit der Version (string) in dem kost-val.log.xml (file)
-	 * 
-	 * ! Solche Ersetzungen dürfen nicht in einer Schleife gemacht werden sondern erst am Schluss, da
+	 * ! Solche Ersetzungen dÃ¼rfen nicht in einer Schleife gemacht werden sondern erst am Schluss, da
 	 * diese sehr Zeitintensiv sind !!!
 	 * 
 	 * @throws IOException */
@@ -298,11 +291,14 @@ public class Util
 		try {
 			BufferedReader reader = new BufferedReader( new FileReader( file ) );
 			String line = "", oldtext = "";
+			StringBuilder sb = new StringBuilder();
 			while ( (line = reader.readLine()) != null ) {
-				oldtext += line + "\r\n";
+				sb.append( line );
+				sb.append( "\r\n" );
 			}
+			oldtext = sb.toString();
 			reader.close();
-			string = "Validierung: SIP" + string ;
+			string = "Validierung: SIP" + string;
 			String newtext = oldtext.replace( "Validierung: SIP", string );
 			newtext = newtext.replace( (char) 0, (char) 32 );
 			FileWriter writer = new FileWriter( file );
@@ -313,9 +309,9 @@ public class Util
 		}
 	}
 
-	/** Verändert ersetzt oldstring mit newstring in file
+	/** VerÃ¤ndert ersetzt oldstring mit newstring in file
 	 * 
-	 * ! Solche Ersetzungen dürfen nicht in einer Schleife gemacht werden sondern erst am Schluss, da
+	 * ! Solche Ersetzungen dÃ¼rfen nicht in einer Schleife gemacht werden sondern erst am Schluss, da
 	 * diese sehr Zeitintensiv sind !!!
 	 * 
 	 * @throws IOException */
@@ -325,9 +321,12 @@ public class Util
 		try {
 			BufferedReader reader = new BufferedReader( new FileReader( file ) );
 			String line = "", oldtext = "";
+			StringBuilder sb = new StringBuilder();
 			while ( (line = reader.readLine()) != null ) {
-				oldtext += line + "\r\n";
+				sb.append( line );
+				sb.append( "\r\n" );
 			}
+			oldtext = sb.toString();
 			reader.close();
 			String newtext = oldtext.replace( oldstring, newstring );
 			newtext = newtext.replace( (char) 0, (char) 32 );
@@ -339,9 +338,9 @@ public class Util
 		}
 	}
 
-	/** Ergänzt die PDF_Diagnosedaten mit einer weiteren Fall
+	/** VerÃ¤ndert & mit &amp und ergÃ¤nzt die PDF_Diagnosedaten mit einer weiteren Fall
 	 * 
-	 * ! Solche Ersetzungen dürfen nicht in einer Schleife gemacht werden sondern erst am Schluss, da
+	 * ! Solche Ersetzungen dÃ¼rfen nicht in einer Schleife gemacht werden sondern erst am Schluss, da
 	 * diese sehr Zeitintensiv sind !!!
 	 * 
 	 * @throws IOException */
@@ -350,11 +349,15 @@ public class Util
 		try {
 			BufferedReader reader = new BufferedReader( new FileReader( file ) );
 			String line = "", oldtext = "";
+			StringBuilder sb = new StringBuilder();
 			while ( (line = reader.readLine()) != null ) {
-				oldtext += line + "\r\n";
+				sb.append( line );
+				sb.append( "\r\n" );
 			}
+			oldtext = sb.toString();
 			reader.close();
 			String newtext = oldtext.replace( "</KOSTVal_PDF-Diagnose>", string );
+			newtext = newtext.replace( "&", "&amp;" );
 			newtext = newtext.replace( (char) 0, (char) 32 );
 			FileWriter writer = new FileWriter( file );
 			writer.write( newtext );
@@ -364,9 +367,9 @@ public class Util
 		}
 	}
 
-	/** Erhöht die KaD_Diagnosedaten mit den neuen Zahlen
+	/** ErhÃ¶ht die KaD_Diagnosedaten mit den neuen Zahlen
 	 * 
-	 * ! Solche Ersetzungen dürfen nicht in einer Schleife gemacht werden sondern erst am Schluss, da
+	 * ! Solche Ersetzungen dÃ¼rfen nicht in einer Schleife gemacht werden sondern erst am Schluss, da
 	 * diese sehr Zeitintensiv sind !!!
 	 * 
 	 * @throws IOException */
@@ -375,36 +378,14 @@ public class Util
 		try {
 			BufferedReader reader = new BufferedReader( new FileReader( file ) );
 			String line = "", oldtext = "";
+			StringBuilder sb = new StringBuilder();
 			while ( (line = reader.readLine()) != null ) {
-				oldtext += line + "\r\n";
+				sb.append( line );
+				sb.append( "\r\n" );
 			}
+			oldtext = sb.toString();
 			reader.close();
 			String newtext = oldtext.replace( oldString, newString );
-			newtext = newtext.replace( (char) 0, (char) 32 );
-			FileWriter writer = new FileWriter( file );
-			writer.write( newtext );
-			writer.close();
-		} catch ( IOException ioe ) {
-			ioe.printStackTrace();
-		}
-	}
-
-	/** Verändert & mit &amp;
-	 * 
-	 * ! Solche Ersetzungen dürfen nicht in einer Schleife gemacht werden sondern erst am Schluss, da
-	 * diese sehr Zeitintensiv sind !!!
-	 * 
-	 * @throws IOException */
-	public static void amp( File file ) throws IOException
-	{
-		try {
-			BufferedReader reader = new BufferedReader( new FileReader( file ) );
-			String line = "", oldtext = "";
-			while ( (line = reader.readLine()) != null ) {
-				oldtext += line + "\r\n";
-			}
-			reader.close();
-			String newtext = oldtext.replace( "&", "&amp;" );
 			newtext = newtext.replace( (char) 0, (char) 32 );
 			FileWriter writer = new FileWriter( file );
 			writer.write( newtext );

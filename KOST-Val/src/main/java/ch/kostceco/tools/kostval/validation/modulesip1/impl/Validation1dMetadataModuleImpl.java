@@ -1,6 +1,6 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
- * Information Package (SIP). Copyright (C) 2012-2016 Claire Röthlisberger (KOST-CECO), Christian
+ * Information Package (SIP). Copyright (C) 2012-2016 Claire Roethlisberger (KOST-CECO), Christian
  * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
  * Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
@@ -56,9 +56,18 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl impleme
 	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws Validation1dMetadataException
 	{
-		// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
-		System.out.print( "1D   " );
-		System.out.print( "\b\b\b\b\b" );
+		// Informationen zur Darstellung "onWork" holen
+		String onWork = getConfigurationService().getShowProgressOnWork();
+		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
+		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
+		 * ref="configurationService" /> */
+		if ( onWork.equals( "no" ) ) {
+			// keine Ausgabe
+		} else {
+			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
+			System.out.print( "1D   " );
+			System.out.print( "\b\b\b\b\b" );
+		}
 
 		boolean result = false;
 		String sipVer = "ECH1.0.txt";
@@ -71,6 +80,15 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl impleme
 					+ File.separator + "xsd" + File.separator + "arelda_v3.13.2.xsd" );
 			File xsdToValidateEch1 = new File( valDatei.getAbsolutePath() + File.separator + "header"
 					+ File.separator + "xsd" + File.separator + "arelda.xsd" );
+
+			File xsd10 = new File( "resources" + File.separator + "header_1d" + File.separator
+					+ "eCH-0160v1.0" + File.separator + "xsd" + File.separator + "arelda.xsd" );
+			File xsd11 = new File( "resources" + File.separator + "header_1d" + File.separator
+					+ "eCH-0160v1.1" + File.separator + "xsd" + File.separator + "arelda.xsd" );
+			File xml10 = new File( "resources" + File.separator + "header_1d" + File.separator
+					+ "eCH-0160v1.0" + File.separator + "metadata.xml" );
+			File xml11 = new File( "resources" + File.separator + "header_1d" + File.separator
+					+ "eCH-0160v1.1" + File.separator + "metadata.xml" );
 
 			String allowedV4 = getConfigurationService().getAllowedVersionBar4Ech1();
 			String allowedV1 = getConfigurationService().getAllowedVersionBar1();
@@ -126,107 +144,81 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl impleme
 				}
 			} else if ( (xmlToValidate.exists() && xsdToValidateEch1.exists())
 					|| allowedV1.startsWith( "0" ) ) {
-				// Schmavalidierung nach eCH Version 1 inkl Addendum in den Ressourcen. Dies erfolgt mit
-				// einer Validierung übers Kreuz
+
+				/* Legende:
+				 * 
+				 * Osi10: Validierung ohne Fehlermeldung [Validator] der Version 1.0 ( Validierung nach
+				 * eCH-0160v1.0. Dies ist auf jeden Fall erlaubt, auch wenn 1.1 definiert wurde) mit dem Xml
+				 * des SIP [xmlToValidate] und der KOST-Val xsd [xsd10]
+				 * 
+				 * 
+				 * Oi10s: Validierung ohne Fehlermeldung [Validator] der Version 1.0 ( Validierung nach
+				 * eCH-0160v1.0. Dies ist auf jeden Fall erlaubt, auch wenn 1.1 definiert wurde) mit dem
+				 * KOST-Val Xml [xml10] und der KOST-Val xsd [xsdToValidateEch1]
+				 * 
+				 * 
+				 * Mss: Validierung mit Fehlermeldung [ValidatorMsg] der Version 1.0 ( Validierung nach
+				 * eCH-0160v1.0. Dies ist auf jeden Fall erlaubt, auch wenn 1.1 definiert wurde) mit dem Xml
+				 * des SIP [xmlToValidate] und xsd des SIP [xsdToValidateEch1]
+				 * 
+				 * Msi10: Validierung mit Fehlermeldung [ValidatorMsg] der Version 1.0 ( Validierung nach
+				 * eCH-0160v1.0. Dies ist auf jeden Fall erlaubt, auch wenn 1.1 definiert wurde) mit dem Xml
+				 * des SIP [xmlToValidate] und der KOST-Val xsd [xsd10]
+				 * 
+				 * 
+				 * Mi10s: Validierung mit Fehlermeldung [ValidatorMsg] der Version 1.0 ( Validierung nach
+				 * eCH-0160v1.0. Dies ist auf jeden Fall erlaubt, auch wenn 1.1 definiert wurde) mit dem
+				 * KOST-Val Xml [xml10] und der KOST-Val xsd [xsdToValidateEch1]
+				 * 
+				 * Msi11: Validierung mit Fehlermeldung [ValidatorMsg] der Version 1.0 ( Validierung nach
+				 * eCH-0160v1.1) mit dem Xml des SIP [xmlToValidate] und der KOST-Val xsd [xsd11]
+				 * 
+				 * 
+				 * Mi11s: Validierung mit Fehlermeldung [ValidatorMsg] der Version 1.0 ( Validierung nach
+				 * eCH-0160v1.1) mit dem KOST-Val Xml [xml11] und der KOST-Val xsd [xsdToValidateEch1]
+				 * 
+				 * 
+				 * Diagramm:
+				 * 
+				 * <<Mss>> -valid-> <<1.1>> -false-> <<Msi10>> -valid-> <<Mi10s>> -valid-> || 1.0 VALID ||
+				 * 
+				 * invalid . . . . . true . . . . . . invalid-----------invalid----------> || 1.0 INVALID ||
+				 * 
+				 * invalid . . . . <<Osi10>> ---valid---> <<Oi10s>> ---valid---> || 1.0 VALID ||
+				 * 
+				 * invalid . . . . invalid <--------------invalid
+				 * 
+				 * invalid . . . . <<Msi11>> ---valid---> <<Mi11s>> ---valid---> || 1.1 VALID ||
+				 * 
+				 * invalid---------invalid----------------invalid--------------> || 1.0 & 1.1 INVALID ||
+				 * 
+				 * 
+				 * . */
+
+				/* Schmavalidierung nach eCH. Dies erfolgt mit einer Validierung gemÃ¤ss Diagramm */
+
 				try {
 					if ( allowedV4.startsWith( "1" ) ) {
-						/* Validierung nach eCH-0160v1.0. Dies ist auf jeden Fall erlaubt, auch wenn 1.1
-						 * definiert wurde */
-						// xmlToValidate mit xsdToValidateEch1Add
-						File xsdToValidateEch1Add = new File( "resources" + File.separator + "header_1d"
-								+ File.separator + "eCH-0160v1.0" + File.separator + "xsd" + File.separator
-								+ "arelda.xsd" );
+						// Start Mss
 						System.setProperty( "javax.xml.parsers.DocumentBuilderFactory",
 								"org.apache.xerces.jaxp.DocumentBuilderFactoryImpl" );
-						DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-						factory.setNamespaceAware( true );
-						factory.setValidating( true );
-						factory.setAttribute( "http://java.sun.com/xml/jaxp/properties/schemaLanguage",
+						DocumentBuilderFactory factoryMss = DocumentBuilderFactory.newInstance();
+						factoryMss.setNamespaceAware( true );
+						factoryMss.setValidating( true );
+						factoryMss.setAttribute( "http://java.sun.com/xml/jaxp/properties/schemaLanguage",
 								"http://www.w3.org/2001/XMLSchema" );
-						factory.setAttribute( "http://java.sun.com/xml/jaxp/properties/schemaSource",
-								xsdToValidateEch1Add.getAbsolutePath() );
-						DocumentBuilder builder = factory.newDocumentBuilder();
-						Validator handler = new Validator();
-						builder.setErrorHandler( handler );
-						builder.parse( xmlToValidate.getAbsolutePath() );
-						if ( handler.validationError == true ) {
-							/* Validierungsfehler. Wenn eCH-0160v1.1 erlaubt ist, wird noch danach validiert
-							 * ansonsten ist es invalide. */
-							result = false;
-							// prov auf invalide setzten
-							if ( allowedV4.startsWith( "1.1" ) ) {
-								/* Validierung nach eCH-0160v1.1. da 1.0 invalide */
-								sipVer = "ECH1.1.txt";
-								sipVersionFile = new File( directoryOfLogfile.getAbsolutePath() + File.separator
-										+ sipVer );
-								try {
-									sipVersionFile.createNewFile();
-								} catch ( IOException e ) {
-									e.printStackTrace();
-								}
-
-								// xmlToValidate mit xsdToValidateEch1Add11
-								File xsdToValidateEch1Add11 = new File( "resources" + File.separator + "header_1d"
-										+ File.separator + "eCH-0160v1.1" + File.separator + "xsd" + File.separator
-										+ "arelda.xsd" );
-								System.setProperty( "javax.xml.parsers.DocumentBuilderFactory",
-										"org.apache.xerces.jaxp.DocumentBuilderFactoryImpl" );
-								DocumentBuilderFactory factoryMsg = DocumentBuilderFactory.newInstance();
-								factoryMsg.setNamespaceAware( true );
-								factoryMsg.setValidating( true );
-								factoryMsg.setAttribute( "http://java.sun.com/xml/jaxp/properties/schemaLanguage",
-										"http://www.w3.org/2001/XMLSchema" );
-								factoryMsg.setAttribute( "http://java.sun.com/xml/jaxp/properties/schemaSource",
-										xsdToValidateEch1Add11.getAbsolutePath() );
-								DocumentBuilder builderMsg = factoryMsg.newDocumentBuilder();
-								ValidatorMsg handlerMsg = new ValidatorMsg();
-								builderMsg.setErrorHandler( handlerMsg );
-								builderMsg.parse( xmlToValidate.getAbsolutePath() );
-								if ( handlerMsg.validationErrorMsg == true ) {
-									/* Validierungsfehler auch mit eCH-0160v1.1 --> invalide. */
-									result = false;
-								} else {
-									/* Validierung mit eCH-0160v1.1 bestanden --> valide. */
-									result = true;
-								}
-							} else {
-								/* Validierung nach eCH-0160v1.0 bleibt invalide da 1.1 nicht erlaubt */
-								// revalidierung jetzt aber mit Fehlerausgabe
-								// xmlToValidate mit xsdToValidateEch1Add
-								File xsdToValidateEch1AddMsg = new File( "resources" + File.separator + "header_1d"
-										+ File.separator + "eCH-0160v1.0" + File.separator + "xsd" + File.separator
-										+ "arelda.xsd" );
-								System.setProperty( "javax.xml.parsers.DocumentBuilderFactory",
-										"org.apache.xerces.jaxp.DocumentBuilderFactoryImpl" );
-								DocumentBuilderFactory factoryMsg = DocumentBuilderFactory.newInstance();
-								factoryMsg.setNamespaceAware( true );
-								factoryMsg.setValidating( true );
-								factoryMsg.setAttribute( "http://java.sun.com/xml/jaxp/properties/schemaLanguage",
-										"http://www.w3.org/2001/XMLSchema" );
-								factoryMsg.setAttribute( "http://java.sun.com/xml/jaxp/properties/schemaSource",
-										xsdToValidateEch1AddMsg.getAbsolutePath() );
-								DocumentBuilder builderMsg = factoryMsg.newDocumentBuilder();
-								ValidatorMsg handlerMsg = new ValidatorMsg();
-								builderMsg.setErrorHandler( handlerMsg );
-								builderMsg.parse( xmlToValidate.getAbsolutePath() );
-								if ( handlerMsg.validationErrorMsg == true ) {
-									/* Validierungsfehler auch mit eCH-0160v1.1 --> invalide. */
-									result = false;
-								}
-								sipVer = "ECH1.0.txt";
-								sipVersionFile = new File( directoryOfLogfile.getAbsolutePath() + File.separator
-										+ sipVer );
-								try {
-									sipVersionFile.createNewFile();
-								} catch ( IOException e ) {
-									e.printStackTrace();
-								}
-								result = false;
-							}
-						} else {
-							/* Validierung nach eCH-0160v1.0 da 1.0 valide */
-							result = true;
-							sipVer = "ECH1.0.txt";
+						// XSD-Variable
+						factoryMss.setAttribute( "http://java.sun.com/xml/jaxp/properties/schemaSource",
+								xsdToValidateEch1.getAbsolutePath() );
+						DocumentBuilder builderMss = factoryMss.newDocumentBuilder();
+						// Validator-Variable
+						ValidatorMss handler = new ValidatorMss();
+						builderMss.setErrorHandler( handler );
+						// XML-Variable
+						builderMss.parse( xmlToValidate.getAbsolutePath() );
+						if ( handler.validationErrorMss == true ) {
+							/* Validierungsfehler. eCH-0160v1.0 und eCH-0160v1.1 invalide. */
+							sipVer = "ECH1.1.txt";
 							sipVersionFile = new File( directoryOfLogfile.getAbsolutePath() + File.separator
 									+ sipVer );
 							try {
@@ -234,7 +226,330 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl impleme
 							} catch ( IOException e ) {
 								e.printStackTrace();
 							}
+							builderMss.reset();
+							result = false;
+						} else {
+							if ( !allowedV4.startsWith( "1.1" ) ) {
+								builderMss.reset();
+								// Nur Version 1.0 erlaubt
+
+								// Start Msi10
+								System.setProperty( "javax.xml.parsers.DocumentBuilderFactory",
+										"org.apache.xerces.jaxp.DocumentBuilderFactoryImpl" );
+								DocumentBuilderFactory factoryMsi10 = DocumentBuilderFactory.newInstance();
+								factoryMsi10.setNamespaceAware( true );
+								factoryMsi10.setValidating( true );
+								factoryMsi10.setAttribute(
+										"http://java.sun.com/xml/jaxp/properties/schemaLanguage",
+										"http://www.w3.org/2001/XMLSchema" );
+								// XSD-Variable
+								factoryMsi10.setAttribute( "http://java.sun.com/xml/jaxp/properties/schemaSource",
+										xsd10.getAbsolutePath() );
+								DocumentBuilder builderMsi10 = factoryMsi10.newDocumentBuilder();
+								// Validator-Variable
+								ValidatorMsi10 handlerMsi10 = new ValidatorMsi10();
+								builderMsi10.setErrorHandler( handlerMsi10 );
+								// XML-Variable
+								builderMsi10.parse( xmlToValidate.getAbsolutePath() );
+								if ( handlerMsi10.validationErrorMsi10 == true ) {
+									/* Validierungsfehler. eCH-0160v1.0 invalide. */
+									sipVer = "ECH1.0.txt";
+									sipVersionFile = new File( directoryOfLogfile.getAbsolutePath() + File.separator
+											+ sipVer );
+									try {
+										sipVersionFile.createNewFile();
+									} catch ( IOException e ) {
+										e.printStackTrace();
+									}
+									builderMsi10.reset();
+									result = false;
+								} else {
+									builderMsi10.reset();
+
+									// Start Mi10s
+									System.setProperty( "javax.xml.parsers.DocumentBuilderFactory",
+											"org.apache.xerces.jaxp.DocumentBuilderFactoryImpl" );
+									DocumentBuilderFactory factoryMi10s = DocumentBuilderFactory.newInstance();
+									factoryMi10s.setNamespaceAware( true );
+									factoryMi10s.setValidating( true );
+									factoryMi10s.setAttribute(
+											"http://java.sun.com/xml/jaxp/properties/schemaLanguage",
+											"http://www.w3.org/2001/XMLSchema" );
+									// XSD-Variable
+									factoryMi10s.setAttribute(
+											"http://java.sun.com/xml/jaxp/properties/schemaSource",
+											xsdToValidateEch1.getAbsolutePath() );
+									DocumentBuilder builderMi10s = factoryMi10s.newDocumentBuilder();
+									// Validator-Variable
+									ValidatorMi10s handlerMi10s = new ValidatorMi10s();
+									builderMi10s.setErrorHandler( handlerMi10s );
+									// XML-Variable
+									builderMi10s.parse( xml10.getAbsolutePath() );
+									if ( handlerMi10s.validationErrorMi10s == true ) {
+										/* Validierungsfehler. eCH-0160v1.0 invalide. */
+										sipVer = "ECH1.0.txt";
+										sipVersionFile = new File( directoryOfLogfile.getAbsolutePath()
+												+ File.separator + sipVer );
+										try {
+											sipVersionFile.createNewFile();
+										} catch ( IOException e ) {
+											e.printStackTrace();
+										}
+										builderMi10s.reset();
+										result = false;
+									} else {
+										/* eCH-0160v1.0 valide. */
+										sipVer = "ECH1.0.txt";
+										sipVersionFile = new File( directoryOfLogfile.getAbsolutePath()
+												+ File.separator + sipVer );
+										try {
+											sipVersionFile.createNewFile();
+										} catch ( IOException e ) {
+											e.printStackTrace();
+										}
+										builderMi10s.reset();
+										result = true;
+									}
+									// Ende Mi10s
+								}
+								// Ende Msi10
+
+							} else {
+								// Auch Version 1.1 erlaubt
+
+								// Start Osi10
+								System.setProperty( "javax.xml.parsers.DocumentBuilderFactory",
+										"org.apache.xerces.jaxp.DocumentBuilderFactoryImpl" );
+								DocumentBuilderFactory factoryOsi10 = DocumentBuilderFactory.newInstance();
+								factoryOsi10.setNamespaceAware( true );
+								factoryOsi10.setValidating( true );
+								factoryOsi10.setAttribute(
+										"http://java.sun.com/xml/jaxp/properties/schemaLanguage",
+										"http://www.w3.org/2001/XMLSchema" );
+								// XSD-Variable
+								factoryOsi10.setAttribute( "http://java.sun.com/xml/jaxp/properties/schemaSource",
+										xsd10.getAbsolutePath() );
+								DocumentBuilder builderOsi10 = factoryOsi10.newDocumentBuilder();
+								// Validator-Variable
+								ValidatorOsi10 handlerOsi10 = new ValidatorOsi10();
+								builderOsi10.setErrorHandler( handlerOsi10 );
+								// XML-Variable
+								builderOsi10.parse( xmlToValidate.getAbsolutePath() );
+								if ( handlerOsi10.validationErrorOsi10 == true ) {
+									builderOsi10.reset();
+									/* Validierungsfehler. eCH-0160v1.0 invalide, Validierung nach eCH-0160v1.1 */
+
+									// Start Msi11
+									System.setProperty( "javax.xml.parsers.DocumentBuilderFactory",
+											"org.apache.xerces.jaxp.DocumentBuilderFactoryImpl" );
+									DocumentBuilderFactory factoryMsi11 = DocumentBuilderFactory.newInstance();
+									factoryMsi11.setNamespaceAware( true );
+									factoryMsi11.setValidating( true );
+									factoryMsi11.setAttribute(
+											"http://java.sun.com/xml/jaxp/properties/schemaLanguage",
+											"http://www.w3.org/2001/XMLSchema" );
+									// XSD-Variable
+									factoryMsi11.setAttribute(
+											"http://java.sun.com/xml/jaxp/properties/schemaSource",
+											xsd11.getAbsolutePath() );
+									DocumentBuilder builderMsi11 = factoryMsi11.newDocumentBuilder();
+									// Validator-Variable
+									ValidatorMsi11 handlerMsi11 = new ValidatorMsi11();
+									builderMsi11.setErrorHandler( handlerMsi11 );
+									// XML-Variable
+									builderMsi11.parse( xmlToValidate.getAbsolutePath() );
+									if ( handlerMsi11.validationErrorMsi11 == true ) {
+										/* Validierungsfehler. eCH-0160v1.1 invalide */
+										sipVer = "ECH1.1.txt";
+										sipVersionFile = new File( directoryOfLogfile.getAbsolutePath()
+												+ File.separator + sipVer );
+										try {
+											sipVersionFile.createNewFile();
+										} catch ( IOException e ) {
+											e.printStackTrace();
+										}
+										builderMsi11.reset();
+										result = false;
+									} else {
+										builderMsi11.reset();
+
+										// Start Mi11s
+										System.setProperty( "javax.xml.parsers.DocumentBuilderFactory",
+												"org.apache.xerces.jaxp.DocumentBuilderFactoryImpl" );
+										DocumentBuilderFactory factoryMi11s = DocumentBuilderFactory.newInstance();
+										factoryMi11s.setNamespaceAware( true );
+										factoryMi11s.setValidating( true );
+										factoryMi11s.setAttribute(
+												"http://java.sun.com/xml/jaxp/properties/schemaLanguage",
+												"http://www.w3.org/2001/XMLSchema" );
+										// XSD-Variable
+										factoryMi11s.setAttribute(
+												"http://java.sun.com/xml/jaxp/properties/schemaSource",
+												xsdToValidateEch1.getAbsolutePath() );
+										DocumentBuilder builderMi11s = factoryMi11s.newDocumentBuilder();
+										// Validator-Variable
+										ValidatorMi11s handlerMi11s = new ValidatorMi11s();
+										builderMi11s.setErrorHandler( handlerMi11s );
+										// XML-Variable
+										builderMi11s.parse( xml11.getAbsolutePath() );
+										if ( handlerMi11s.validationErrorMi11s == true ) {
+											/* Validierungsfehler. eCH-0160v1.1 invalide */
+											sipVer = "ECH1.1.txt";
+											sipVersionFile = new File( directoryOfLogfile.getAbsolutePath()
+													+ File.separator + sipVer );
+											try {
+												sipVersionFile.createNewFile();
+											} catch ( IOException e ) {
+												e.printStackTrace();
+											}
+											builderMi11s.reset();
+											result = false;
+										} else {
+											/* eCH-0160v1.1 valide. */
+											sipVer = "ECH1.1.txt";
+											sipVersionFile = new File( directoryOfLogfile.getAbsolutePath()
+													+ File.separator + sipVer );
+											try {
+												sipVersionFile.createNewFile();
+											} catch ( IOException e ) {
+												e.printStackTrace();
+											}
+											builderMi11s.reset();
+											result = true;
+										}
+										// Ende Mi11s
+									}
+									// Ende Msi11
+
+								} else {
+									builderOsi10.reset();
+
+									// Start Oi10s
+									System.setProperty( "javax.xml.parsers.DocumentBuilderFactory",
+											"org.apache.xerces.jaxp.DocumentBuilderFactoryImpl" );
+									DocumentBuilderFactory factoryOi10s = DocumentBuilderFactory.newInstance();
+									factoryOi10s.setNamespaceAware( true );
+									factoryOi10s.setValidating( true );
+									factoryOi10s.setAttribute(
+											"http://java.sun.com/xml/jaxp/properties/schemaLanguage",
+											"http://www.w3.org/2001/XMLSchema" );
+									// XSD-Variable
+									factoryOi10s.setAttribute(
+											"http://java.sun.com/xml/jaxp/properties/schemaSource",
+											xsdToValidateEch1.getAbsolutePath() );
+									DocumentBuilder builderOi10s = factoryOi10s.newDocumentBuilder();
+									// Validator-Variable
+									ValidatorOi10s handlerOi10s = new ValidatorOi10s();
+									builderOi10s.setErrorHandler( handlerOi10s );
+									// XML-Variable
+									builderOi10s.parse( xml10.getAbsolutePath() );
+									if ( handlerOi10s.validationErrorOi10s == true ) {
+										builderOi10s.reset();
+										/* Validierungsfehler. eCH-0160v1.0 invalide, Validierung nach eCH-0160v1.1 */
+
+										// Start Msi11
+										System.setProperty( "javax.xml.parsers.DocumentBuilderFactory",
+												"org.apache.xerces.jaxp.DocumentBuilderFactoryImpl" );
+										DocumentBuilderFactory factoryMsi11 = DocumentBuilderFactory.newInstance();
+										factoryMsi11.setNamespaceAware( true );
+										factoryMsi11.setValidating( true );
+										factoryMsi11.setAttribute(
+												"http://java.sun.com/xml/jaxp/properties/schemaLanguage",
+												"http://www.w3.org/2001/XMLSchema" );
+										// XSD-Variable
+										factoryMsi11.setAttribute(
+												"http://java.sun.com/xml/jaxp/properties/schemaSource",
+												xsd11.getAbsolutePath() );
+										DocumentBuilder builderMsi11 = factoryMsi11.newDocumentBuilder();
+										// Validator-Variable
+										ValidatorMsi11 handlerMsi11 = new ValidatorMsi11();
+										builderMsi11.setErrorHandler( handlerMsi11 );
+										// XML-Variable
+										builderMsi11.parse( xmlToValidate.getAbsolutePath() );
+										if ( handlerMsi11.validationErrorMsi11 == true ) {
+											/* Validierungsfehler. eCH-0160v1.1 invalide */
+											sipVer = "ECH1.1.txt";
+											sipVersionFile = new File( directoryOfLogfile.getAbsolutePath()
+													+ File.separator + sipVer );
+											try {
+												sipVersionFile.createNewFile();
+											} catch ( IOException e ) {
+												e.printStackTrace();
+											}
+											builderMsi11.reset();
+											result = false;
+										} else {
+											builderMsi11.reset();
+
+											// Start Mi11s
+											System.setProperty( "javax.xml.parsers.DocumentBuilderFactory",
+													"org.apache.xerces.jaxp.DocumentBuilderFactoryImpl" );
+											DocumentBuilderFactory factoryMi11s = DocumentBuilderFactory.newInstance();
+											factoryMi11s.setNamespaceAware( true );
+											factoryMi11s.setValidating( true );
+											factoryMi11s.setAttribute(
+													"http://java.sun.com/xml/jaxp/properties/schemaLanguage",
+													"http://www.w3.org/2001/XMLSchema" );
+											// XSD-Variable
+											factoryMi11s.setAttribute(
+													"http://java.sun.com/xml/jaxp/properties/schemaSource",
+													xsdToValidateEch1.getAbsolutePath() );
+											DocumentBuilder builderMi11s = factoryMi11s.newDocumentBuilder();
+											// Validator-Variable
+											ValidatorMi11s handlerMi11s = new ValidatorMi11s();
+											builderMi11s.setErrorHandler( handlerMi11s );
+											// XML-Variable
+											builderMi11s.parse( xml11.getAbsolutePath() );
+											if ( handlerMi11s.validationErrorMi11s == true ) {
+												/* Validierungsfehler. eCH-0160v1.1 invalide */
+												sipVer = "ECH1.1.txt";
+												sipVersionFile = new File( directoryOfLogfile.getAbsolutePath()
+														+ File.separator + sipVer );
+												try {
+													sipVersionFile.createNewFile();
+												} catch ( IOException e ) {
+													e.printStackTrace();
+												}
+												builderMi11s.reset();
+												result = false;
+											} else {
+												/* eCH-0160v1.1 valide. */
+												sipVer = "ECH1.1.txt";
+												sipVersionFile = new File( directoryOfLogfile.getAbsolutePath()
+														+ File.separator + sipVer );
+												try {
+													sipVersionFile.createNewFile();
+												} catch ( IOException e ) {
+													e.printStackTrace();
+												}
+												builderMi11s.reset();
+												result = true;
+											}
+											// Ende Mi11s
+										}
+										// Ende Msi11
+
+									} else {
+										/* eCH-0160v1.0 valide. */
+										sipVer = "ECH1.0.txt";
+										sipVersionFile = new File( directoryOfLogfile.getAbsolutePath()
+												+ File.separator + sipVer );
+										try {
+											sipVersionFile.createNewFile();
+										} catch ( IOException e ) {
+											e.printStackTrace();
+										}
+										builderOi10s.reset();
+										result = true;
+									}
+									// Ende Oi10s
+								}
+								// Ende Osi10
+
+							}
 						}
+						// Ende Mss
+
 					}
 				} catch ( java.io.IOException ioe ) {
 					getMessageService().logError(
@@ -266,26 +581,225 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl impleme
 		return result;
 	}
 
-	private class Validator extends DefaultHandler
+	private class ValidatorOsi10 extends DefaultHandler
 	{
 		// Validierung OHNE Fehlermeldung
-		public boolean	validationError	= false;
+		public boolean	validationErrorOsi10	= false;
 
 		public void error( SAXParseException exception ) throws SAXException
 		{
-			validationError = true;
+			validationErrorOsi10 = true;
 			// ohne Msg, da ggf Validierung nach eCH 1.1 valide ist und Fehler nach 1.0 nicht ausgegeben
-			// werden dürfen
+			// werden dï¿½rfen
 		}
 
 		public void fatalError( SAXParseException exception ) throws SAXException
 		{
-			validationError = true;
+			validationErrorOsi10 = true;
 			// ohne Msg, da ggf Validierung nach eCH 1.1 valide ist und Fehler nach 1.0 nicht ausgegeben
-			// werden dürfen
+			// werden dï¿½rfen
 		}
 
 		public void warning( SAXParseException exception ) throws SAXException
+		{
+		}
+	}
+
+	private class ValidatorOi10s extends DefaultHandler
+	{
+		// Validierung OHNE Fehlermeldung
+		public boolean	validationErrorOi10s	= false;
+
+		public void error( SAXParseException exception ) throws SAXException
+		{
+			validationErrorOi10s = true;
+			// ohne Msg, da ggf Validierung nach eCH 1.1 valide ist und Fehler nach 1.0 nicht ausgegeben
+			// werden dï¿½rfen
+		}
+
+		public void fatalError( SAXParseException exception ) throws SAXException
+		{
+			validationErrorOi10s = true;
+			// ohne Msg, da ggf Validierung nach eCH 1.1 valide ist und Fehler nach 1.0 nicht ausgegeben
+			// werden dï¿½rfen
+		}
+
+		public void warning( SAXParseException exception ) throws SAXException
+		{
+		}
+	}
+
+	private class ValidatorMss extends DefaultHandler
+	{
+		// Validierung mit Fehlermeldung
+		public boolean						validationErrorMss		= false;
+
+		public SAXParseException	saxParseExceptionMss	= null;
+
+		public void error( SAXParseException exceptionMss ) throws SAXException
+		{
+			validationErrorMss = true;
+			saxParseExceptionMss = exceptionMss;
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_Ad_SIP )
+							+ getTextResourceService().getText( ERROR_XML_AD_METADATA_ERRORS,
+									saxParseExceptionMss.getLineNumber(),
+									saxParseExceptionMss.getMessage() + " (Mss)" ) );
+
+		}
+
+		public void fatalError( SAXParseException exceptionMss ) throws SAXException
+		{
+			validationErrorMss = true;
+			saxParseExceptionMss = exceptionMss;
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_Ad_SIP )
+							+ getTextResourceService().getText( ERROR_XML_AD_METADATA_ERRORS,
+									saxParseExceptionMss.getLineNumber(),
+									saxParseExceptionMss.getMessage() + " (Mss)" ) );
+		}
+
+		public void warning( SAXParseException exceptionMss ) throws SAXException
+		{
+		}
+	}
+
+	private class ValidatorMsi10 extends DefaultHandler
+	{
+		// Validierung mit Fehlermeldung
+		public boolean						validationErrorMsi10		= false;
+
+		public SAXParseException	saxParseExceptionMsi10	= null;
+
+		public void error( SAXParseException exceptionMsi10 ) throws SAXException
+		{
+			validationErrorMsi10 = true;
+			saxParseExceptionMsi10 = exceptionMsi10;
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_Ad_SIP )
+							+ getTextResourceService().getText( ERROR_XML_AD_METADATA_ERRORS,
+									saxParseExceptionMsi10.getLineNumber(),
+									saxParseExceptionMsi10.getMessage() + " (Msi10)" ) );
+
+		}
+
+		public void fatalError( SAXParseException exceptionMsi10 ) throws SAXException
+		{
+			validationErrorMsi10 = true;
+			saxParseExceptionMsi10 = exceptionMsi10;
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_Ad_SIP )
+							+ getTextResourceService().getText( ERROR_XML_AD_METADATA_ERRORS,
+									saxParseExceptionMsi10.getLineNumber(),
+									saxParseExceptionMsi10.getMessage() + " (Msi10)" ) );
+		}
+
+		public void warning( SAXParseException exceptionMsi10 ) throws SAXException
+		{
+		}
+	}
+
+	private class ValidatorMi10s extends DefaultHandler
+	{
+		// Validierung mit Fehlermeldung
+		public boolean						validationErrorMi10s		= false;
+
+		public SAXParseException	saxParseExceptionMi10s	= null;
+
+		public void error( SAXParseException exceptionMi10s ) throws SAXException
+		{
+			validationErrorMi10s = true;
+			saxParseExceptionMi10s = exceptionMi10s;
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_Ad_SIP )
+							+ getTextResourceService().getText( ERROR_XML_AD_METADATA_ERRORS,
+									saxParseExceptionMi10s.getLineNumber(),
+									saxParseExceptionMi10s.getMessage() + " (Mi10s)" ) );
+
+		}
+
+		public void fatalError( SAXParseException exceptionMi10s ) throws SAXException
+		{
+			validationErrorMi10s = true;
+			saxParseExceptionMi10s = exceptionMi10s;
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_Ad_SIP )
+							+ getTextResourceService().getText( ERROR_XML_AD_METADATA_ERRORS,
+									saxParseExceptionMi10s.getLineNumber(),
+									saxParseExceptionMi10s.getMessage() + " (Mi10s)" ) );
+		}
+
+		public void warning( SAXParseException exception ) throws SAXException
+		{
+		}
+	}
+
+	private class ValidatorMsi11 extends DefaultHandler
+	{
+		// Validierung mit Fehlermeldung
+		public boolean						validationErrorMsi11		= false;
+
+		public SAXParseException	saxParseExceptionMsi11	= null;
+
+		public void error( SAXParseException exceptionMsi11 ) throws SAXException
+		{
+			validationErrorMsi11 = true;
+			saxParseExceptionMsi11 = exceptionMsi11;
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_Ad_SIP )
+							+ getTextResourceService().getText( ERROR_XML_AD_METADATA_ERRORS,
+									saxParseExceptionMsi11.getLineNumber(),
+									saxParseExceptionMsi11.getMessage() + " (Msi11)" ) );
+
+		}
+
+		public void fatalError( SAXParseException exceptionMsi11 ) throws SAXException
+		{
+			validationErrorMsi11 = true;
+			saxParseExceptionMsi11 = exceptionMsi11;
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_Ad_SIP )
+							+ getTextResourceService().getText( ERROR_XML_AD_METADATA_ERRORS,
+									saxParseExceptionMsi11.getLineNumber(),
+									saxParseExceptionMsi11.getMessage() + " (Msi11)" ) );
+		}
+
+		public void warning( SAXParseException exceptionMsi11 ) throws SAXException
+		{
+		}
+	}
+
+	private class ValidatorMi11s extends DefaultHandler
+	{
+		// Validierung mit Fehlermeldung
+		public boolean						validationErrorMi11s		= false;
+
+		public SAXParseException	saxParseExceptionMi11s	= null;
+
+		public void error( SAXParseException exceptionMi11s ) throws SAXException
+		{
+			validationErrorMi11s = true;
+			saxParseExceptionMi11s = exceptionMi11s;
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_Ad_SIP )
+							+ getTextResourceService().getText( ERROR_XML_AD_METADATA_ERRORS,
+									saxParseExceptionMi11s.getLineNumber(),
+									saxParseExceptionMi11s.getMessage() + "( Mi11s)" ) );
+
+		}
+
+		public void fatalError( SAXParseException exceptionMi11s ) throws SAXException
+		{
+			validationErrorMi11s = true;
+			saxParseExceptionMi11s = exceptionMi11s;
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_Ad_SIP )
+							+ getTextResourceService().getText( ERROR_XML_AD_METADATA_ERRORS,
+									saxParseExceptionMi11s.getLineNumber(),
+									saxParseExceptionMi11s.getMessage() + " (Mi11s)" ) );
+		}
+
+		public void warning( SAXParseException exceptionMi11s ) throws SAXException
 		{
 		}
 	}
@@ -297,10 +811,10 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl impleme
 
 		public SAXParseException	saxParseExceptionMsg	= null;
 
-		public void error( SAXParseException exception ) throws SAXException
+		public void error( SAXParseException exceptionMsg ) throws SAXException
 		{
 			validationErrorMsg = true;
-			saxParseExceptionMsg = exception;
+			saxParseExceptionMsg = exceptionMsg;
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_XML_MODUL_Ad_SIP )
 							+ getTextResourceService().getText( ERROR_XML_AD_METADATA_ERRORS,
@@ -308,17 +822,17 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl impleme
 
 		}
 
-		public void fatalError( SAXParseException exception ) throws SAXException
+		public void fatalError( SAXParseException exceptionMsg ) throws SAXException
 		{
 			validationErrorMsg = true;
-			saxParseExceptionMsg = exception;
+			saxParseExceptionMsg = exceptionMsg;
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_XML_MODUL_Ad_SIP )
 							+ getTextResourceService().getText( ERROR_XML_AD_METADATA_ERRORS,
 									saxParseExceptionMsg.getLineNumber(), saxParseExceptionMsg.getMessage() ) );
 		}
 
-		public void warning( SAXParseException exception ) throws SAXException
+		public void warning( SAXParseException exceptionMsg ) throws SAXException
 		{
 		}
 	}

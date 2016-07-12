@@ -1,0 +1,691 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Win32::OLE::Variant - Create and modify OLE VARIANT variables</title>
+<link rel="stylesheet" href="../../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Win32::OLE::Variant - Create and modify OLE VARIANT variables</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<ul>
+
+		<li><a href="#functions">Functions</a></li>
+		<li><a href="#methods">Methods</a></li>
+		<li><a href="#overloading">Overloading</a></li>
+		<li><a href="#class_variables">Class Variables</a></li>
+		<li><a href="#constants">Constants</a></li>
+		<li><a href="#variants">Variants</a></li>
+		<li><a href="#variant_arrays">Variant arrays</a></li>
+		<li><a href="#variants_by_reference">Variants by reference</a></li>
+	</ul>
+
+	<li><a href="#authors_copyright">AUTHORS/COPYRIGHT</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Win32::OLE::Variant - Create and modify OLE VARIANT variables</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+        use Win32::OLE::Variant;
+        my $var = Variant(VT_DATE, 'Jan 1,1970');
+        $OleObject-&gt;{value} = $var;
+        $OleObject-&gt;Method($var);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The IDispatch interface used by the Perl OLE module uses a universal
+argument type called VARIANT.  This is basically an object containing
+a data type and the actual data value.  The data type is specified by
+the VT_xxx constants.</p>
+<p>
+</p>
+<h2><a name="functions">Functions</a></h2>
+<dl>
+<dt><strong><a name="item_nothing"><code>nothing()</code></a></strong><br />
+</dt>
+<dd>
+The <a href="#item_nothing"><code>nothing()</code></a> function returns an empty VT_DISPATCH variant.  It can be
+used to clear an object reference stored in a property
+</dd>
+<dd>
+<pre>
+        use Win32::OLE::Variant qw(:DEFAULT nothing);
+        # ...
+        $object-&gt;{Property} = nothing;</pre>
+</dd>
+<dd>
+<p>This has the same effect as the Visual Basic statement</p>
+</dd>
+<dd>
+<pre>
+        Set object.Property = Nothing</pre>
+</dd>
+<dd>
+<p>The <a href="#item_nothing"><code>nothing()</code></a> function is <strong>not</strong> exported by default.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item_nullstring"><code>nullstring()</code></a></strong><br />
+</dt>
+<dd>
+The <a href="#item_nullstring"><code>nullstring()</code></a> function returns a VT_BSTR variant with a NULL string
+pointer.  This is <strong>not</strong> the same as a VT_BSTR variant with an empty
+string ``''.  The <a href="#item_nullstring"><code>nullstring()</code></a> value is the same as the vbNullString
+constant in Visual Basic.
+</dd>
+<dd>
+<p>The <a href="#item_nullstring"><code>nullstring()</code></a> function is <strong>not</strong> exported by default.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item_variant">Variant(TYPE, DATA)</a></strong><br />
+</dt>
+<dd>
+This is just a function alias of the <code>Win32::OLE::Variant-</code>new()&gt;
+method (see below).  This function is exported by default.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<h2><a name="methods">Methods</a></h2>
+<dl>
+<dt><strong><a name="item_new">new(TYPE, DATA)</a></strong><br />
+</dt>
+<dd>
+This method returns a Win32::OLE::Variant object of the specified
+TYPE that contains the given DATA.  The Win32::OLE::Variant object
+can be used to specify data types other than IV, NV or PV (which are
+supported transparently).  See <em>Variants</em> below for details.
+</dd>
+<dd>
+<p>For VT_EMPTY and VT_NULL variants, the DATA argument may be omitted.
+For all non-VT_ARRAY variants DATA specifies the initial value.</p>
+</dd>
+<dd>
+<p>To create a SAFEARRAY variant, you have to specify the VT_ARRAY flag in
+addition to the variant base type of the array elemnts.  In this cases
+DATA must be a list specifying the dimensions of the array.  Each element
+can be either an element count (indices 0 to count-1) or an array
+reference pointing to the lower and upper array bounds of this dimension:</p>
+</dd>
+<dd>
+<pre>
+        my $Array = Win32::OLE::Variant-&gt;new(VT_ARRAY|VT_R8, [1,2], 2);</pre>
+</dd>
+<dd>
+<p>This creates a 2-dimensional SAFEARRAY of doubles with 4 elements:
+(1,0), (1,1), (2,0) and (2,1).</p>
+</dd>
+<dd>
+<p>A special case is the the creation of one-dimensional VT_UI1 arrays with
+a string DATA argument:</p>
+</dd>
+<dd>
+<pre>
+        my $String = Variant(VT_ARRAY|VT_UI1, &quot;String&quot;);</pre>
+</dd>
+<dd>
+<p>This creates a 6 element character array initialized to ``String''.  For
+backward compatibility VT_UI1 with a string initializer automatically
+implies VT_ARRAY.  The next line is equivalent to the previous example:</p>
+</dd>
+<dd>
+<pre>
+        my $String = Variant(VT_UI1, &quot;String&quot;);</pre>
+</dd>
+<dd>
+<p>If you really need a single character VT_UI1 variant, you have to create
+it using a numeric intializer:</p>
+</dd>
+<dd>
+<pre>
+        my $Char = Variant(VT_UI1, ord('A'));</pre>
+</dd>
+<p></p>
+<dt><strong><a name="item_as"><code>As(TYPE)</code></a></strong><br />
+</dt>
+<dd>
+<a href="#item_as"><code>As</code></a> converts the VARIANT to the new type before converting to a
+Perl value.  This take the current LCID setting into account.  For
+example a string might contain a ',' as the decimal point character.
+Using <code>$variant-</code>As(VT_R8)&gt; will correctly return the floating
+point value.
+</dd>
+<dd>
+<p>The underlying variant object is NOT changed by this method.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item_changetype"><code>ChangeType(TYPE)</code></a></strong><br />
+</dt>
+<dd>
+This method changes the type of the contained VARIANT in place.  It
+returns the object itself, not the converted value.
+</dd>
+<p></p>
+<dt><strong><a name="item_copy"><code>Copy([DIM])</code></a></strong><br />
+</dt>
+<dd>
+This method creates a copy of the object.  If the original variant had
+the VT_BYREF bit set then the new object will contain a copy of the
+referenced data and not a reference to the same old data.  The new
+object will not have the VT_BYREF bit set.
+</dd>
+<dd>
+<pre>
+        my $Var = Variant(VT_I4|VT_ARRAY|VT_BYREF, [1,5], 3);
+        my $Copy = $Var-&gt;Copy;</pre>
+</dd>
+<dd>
+<p>The type of <code>$Copy</code> is now VT_I4|VT_ARRAY and the value is a copy of
+the other SAFEARRAY.  Changes to elements of <code>$Var</code> will not be reflected
+in <code>$Copy</code> and vice versa.</p>
+</dd>
+<dd>
+<p>The <a href="#item_copy"><code>Copy</code></a> method can also be used to extract a single element of a
+VT_ARRAY | VT_VARIANT object.  In this case the array indices must be
+specified as a list DIM:</p>
+</dd>
+<dd>
+<pre>
+        my $Int = $Var-&gt;Copy(1, 2);</pre>
+</dd>
+<dd>
+<p><code>$Int</code> is now a VT_I4 Variant object containing the value of element (1,2).</p>
+</dd>
+<p></p>
+<dt><strong><a name="item_currency">Currency([FORMAT[, LCID]])</a></strong><br />
+</dt>
+<dd>
+This method converts the VARIANT value into a formatted curency string.  The
+FORMAT can be either an integer constant or a hash reference.  Valid constants
+are 0 and LOCALE_NOUSEROVERRIDE.  You get the value of LOCALE_NOUSEROVERRIDE
+from the Win32::OLE::NLS module:
+</dd>
+<dd>
+<pre>
+        use Win32::OLE::NLS qw(:LOCALE);</pre>
+</dd>
+<dd>
+<p>LOCALE_NOUSEROVERRIDE tells the method to use the system default currency
+format for the specified locale, disregarding any changes that might have
+been made through the control panel application.</p>
+</dd>
+<dd>
+<p>The hash reference could contain the following keys:</p>
+</dd>
+<dd>
+<pre>
+        NumDigits       number of fractional digits
+        LeadingZero     whether to use leading zeroes in decimal fields
+        Grouping        size of each group of digits to the left of the decimal
+        DecimalSep      decimal separator string
+        ThousandSep     thousand separator string
+        NegativeOrder   see L&lt;Win32::OLE::NLS/LOCALE_ICURRENCY&gt;
+        PositiveOrder   see L&lt;Win32::OLE::NLS/LOCALE_INEGCURR&gt;
+        CurrencySymbol  currency symbol string</pre>
+</dd>
+<dd>
+<p>For example:</p>
+</dd>
+<dd>
+<pre>
+        use Win32::OLE::Variant;
+        use Win32::OLE::NLS qw(:DEFAULT :LANG :SUBLANG :DATE :TIME);
+        my $lcidGerman = MAKELCID(MAKELANGID(LANG_GERMAN, SUBLANG_NEUTRAL));
+        my $v = Variant(VT_CY, &quot;-922337203685477.5808&quot;);
+        print $v-&gt;Currency({CurrencySymbol =&gt; &quot;Tuits&quot;}, $lcidGerman), &quot;\n&quot;;</pre>
+</dd>
+<dd>
+<p>will print:</p>
+</dd>
+<dd>
+<pre>
+        -922.337.203.685.477,58 Tuits</pre>
+</dd>
+<p></p>
+<dt><strong><a name="item_date">Date([FORMAT[, LCID]])</a></strong><br />
+</dt>
+<dd>
+Converts the VARIANT into a formatted date string.  FORMAT can be either
+one of the following integer constants or a format string:
+</dd>
+<dd>
+<pre>
+        LOCALE_NOUSEROVERRIDE   system default date format for this locale
+        DATE_SHORTDATE          use the short date format (default)
+        DATE_LONGDATE           use the long date format
+        DATE_YEARMONTH          use the year/month format
+        DATE_USE_ALT_CALENDAR   use the alternate calendar, if one exists
+        DATE_LTRREADING         left-to-right reading order layout
+        DATE_RTLREADING         right-to left reading order layout</pre>
+</dd>
+<dd>
+<p>The constants are available from the Win32::OLE::NLS module:</p>
+</dd>
+<dd>
+<pre>
+        use Win32::OLE::NLS qw(:LOCALE :DATE);</pre>
+</dd>
+<dd>
+<p>The following elements can be used to construct a date format string.
+Characters must be specified exactly as given below (e.g. ``dd'' <strong>not</strong> ``DD'').
+Spaces can be inserted anywhere between formating codes, other verbatim
+text should be included in single quotes.</p>
+</dd>
+<dd>
+<pre>
+        d       day of month
+        dd      day of month with leading zero for single-digit days
+        ddd     day of week: three-letter abbreviation (LOCALE_SABBREVDAYNAME)
+        dddd    day of week: full name (LOCALE_SDAYNAME)
+        M       month
+        MM      month with leading zero for single-digit months
+        MMM     month: three-letter abbreviation (LOCALE_SABBREVMONTHNAME)
+        MMMM    month: full name (LOCALE_SMONTHNAME)
+        y       year as last two digits
+        yy      year as last two digits with leading zero for years less than 10
+        yyyy    year represented by full four digits
+        gg      period/era string</pre>
+</dd>
+<dd>
+<p>For example:</p>
+</dd>
+<dd>
+<pre>
+        my $v = Variant(VT_DATE, &quot;April 1 99&quot;);
+        print $v-&gt;Date(DATE_LONGDATE), &quot;\n&quot;;
+        print $v-&gt;Date(&quot;ddd',' MMM dd yy&quot;), &quot;\n&quot;;</pre>
+</dd>
+<dd>
+<p>will print:</p>
+</dd>
+<dd>
+<pre>
+        Thursday, April 01, 1999
+        Thu, Apr 01 99</pre>
+</dd>
+<p></p>
+<dt><strong><a name="item_dim"><code>Dim()</code></a></strong><br />
+</dt>
+<dd>
+Returns a list of array bounds for a VT_ARRAY variant.  The list contains
+an array reference for each dimension of the variant's SAFEARRAY.  This
+reference points to an array containing the lower and upper bounds for
+this dimension.  For example:
+</dd>
+<dd>
+<pre>
+        my @Dim = $Var-&gt;Dim;</pre>
+</dd>
+<dd>
+<p>Now <code>@Dim</code> contains the following list: <code>([1,5], [0,2])</code>.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item_get"><code>Get(DIM)</code></a></strong><br />
+</dt>
+<dd>
+For normal variants <a href="#item_get"><code>Get</code></a> returns the value of the variant, just like the
+<a href="#item_value"><code>Value</code></a> method.  For VT_ARRAY variants <a href="#item_get"><code>Get</code></a> retrieves the value of a single
+array element.  In this case <code>DIM</code> must be a list of array indices.  E.g.
+</dd>
+<dd>
+<pre>
+        my $Val = $Var-&gt;Get(2,0);</pre>
+</dd>
+<dd>
+<p>As a special case for one dimensional VT_UI1|VT_ARRAY variants the <a href="#item_get"><code>Get</code></a>
+method without arguments returns the character array as a Perl string.</p>
+</dd>
+<dd>
+<pre>
+        print $String-&gt;Get, &quot;\n&quot;;</pre>
+</dd>
+<p></p>
+<dt><strong><a name="item_isnothing"><code>IsNothing()</code></a></strong><br />
+</dt>
+<dd>
+Tests if the object is an empty VT_DISPATCH variant.  See also nothing().
+</dd>
+<p></p>
+<dt><strong><a name="item_isnullstring"><code>IsNullString()</code></a></strong><br />
+</dt>
+<dd>
+Tests if the object is an empty VT_BSTR variant.  See also nullstring().
+</dd>
+<p></p>
+<dt><strong><a name="item_lasterror"><code>LastError()</code></a></strong><br />
+</dt>
+<dd>
+The use of the <code>Win32::OLE::Variant-</code>LastError()&gt; method is deprecated.
+Please use the <code>Win32::OLE-</code>LastError()&gt; class method instead.
+</dd>
+<p></p>
+<dt><strong><a name="item_number">Number([FORMAT[, LCID]])</a></strong><br />
+</dt>
+<dd>
+This method converts the VARIANT value into a formatted number string.  The
+FORMAT can be either an integer constant or a hash reference.  Valid constants
+are 0 and LOCALE_NOUSEROVERRIDE.  You get the value of LOCALE_NOUSEROVERRIDE
+from the Win32::OLE::NLS module:
+</dd>
+<dd>
+<pre>
+        use Win32::OLE::NLS qw(:LOCALE);</pre>
+</dd>
+<dd>
+<p>LOCALE_NOUSEROVERRIDE tells the method to use the system default number
+format for the specified locale, disregarding any changes that might have
+been made through the control panel application.</p>
+</dd>
+<dd>
+<p>The hash reference could contain the following keys:</p>
+</dd>
+<dd>
+<pre>
+        NumDigits       number of fractional digits
+        LeadingZero     whether to use leading zeroes in decimal fields
+        Grouping        size of each group of digits to the left of the decimal
+        DecimalSep      decimal separator string
+        ThousandSep     thousand separator string
+        NegativeOrder   see L&lt;Win32::OLE::NLS/LOCALE_INEGNUMBER&gt;</pre>
+</dd>
+<p></p>
+<dt><strong><a name="item_put">Put(DIM, VALUE)</a></strong><br />
+</dt>
+<dd>
+The <a href="#item_put"><code>Put</code></a> method is used to assign a new value to a variant.  The value will
+be coerced into the current type of the variant.  E.g.:
+</dd>
+<dd>
+<pre>
+        my $Var = Variant(VT_I4, 42);
+        $Var-&gt;Put(3.1415);</pre>
+</dd>
+<dd>
+<p>This changes the value of the variant to <code>3</code> because the type is VT_I4.</p>
+</dd>
+<dd>
+<p>For VT_ARRAY type variants the indices for each dimension of the contained
+SAFEARRAY must be specified in front of the new value:</p>
+</dd>
+<dd>
+<pre>
+        $Array-&gt;Put(1, 1, 2.7);</pre>
+</dd>
+<dd>
+<p>It is also possible to assign values to *every* element of the SAFEARRAY at
+once using a single <a href="#item_put"><code>Put()</code></a> method call:</p>
+</dd>
+<dd>
+<pre>
+        $Array-&gt;Put([[1,2], [3,4]]);</pre>
+</dd>
+<dd>
+<p>In this case the argument to <a href="#item_put"><code>Put()</code></a> must be an array reference and the
+dimensions of the Perl list-of-lists must match the dimensions of the
+SAFEARRAY exactly.</p>
+</dd>
+<dd>
+<p>The are a few special cases for one-dimensional VT_UI1 arrays: The VALUE
+can be specified as a string instead of a number.  This will set the selected
+character to the first character of the string or to '\0' if the string was
+empty:</p>
+</dd>
+<dd>
+<pre>
+        my $String = Variant(VT_UI1|VT_ARRAY, &quot;ABCDE&quot;);
+        $String-&gt;Put(1, &quot;123&quot;);
+        $String-&gt;Put(3, ord('Z'));
+        $String-&gt;Put(4, '');</pre>
+</dd>
+<dd>
+<p>This will set the value of <code>$String</code> to <code>&quot;A1CZ\0&quot;</code>.  If the index is omitted
+then the string is copied to the value completely.  The string is truncated
+if it is longer than the size of the VT_UI1 array.  The result will be padded
+with '\0's if the string is shorter:</p>
+</dd>
+<dd>
+<pre>
+        $String-&gt;Put(&quot;String&quot;);</pre>
+</dd>
+<dd>
+<p>Now <code>$String</code> contains the value ``Strin''.</p>
+</dd>
+<dd>
+<p><a href="#item_put"><code>Put</code></a> returns the Variant object itself so that multiple <a href="#item_put"><code>Put</code></a> calls can be
+chained together:</p>
+</dd>
+<dd>
+<pre>
+        $Array-&gt;Put(0,0,$First_value)-&gt;Put(0,1,$Another_value);</pre>
+</dd>
+<p></p>
+<dt><strong><a name="item_time">Time([FORMAT[, LCID]])</a></strong><br />
+</dt>
+<dd>
+Converts the VARIANT into a formatted time string.  FORMAT can be either
+one of the following integer constants or a format string:
+</dd>
+<dd>
+<pre>
+        LOCALE_NOUSEROVERRIDE   system default time format for this locale
+        TIME_NOMINUTESORSECONDS don't use minutes or seconds
+        TIME_NOSECONDS          don't use seconds
+        TIME_NOTIMEMARKER       don't use a time marker
+        TIME_FORCE24HOURFORMAT  always use a 24-hour time format</pre>
+</dd>
+<dd>
+<p>The constants are available from the Win32::OLE::NLS module:</p>
+</dd>
+<dd>
+<pre>
+        use Win32::OLE::NLS qw(:LOCALE :TIME);</pre>
+</dd>
+<dd>
+<p>The following elements can be used to construct a time format string.
+Characters must be specified exactly as given below (e.g. ``dd'' <strong>not</strong> ``DD'').
+Spaces can be inserted anywhere between formating codes, other verbatim
+text should be included in single quotes.</p>
+</dd>
+<dd>
+<pre>
+        h       hours; 12-hour clock
+        hh      hours with leading zero for single-digit hours; 12-hour clock
+        H       hours; 24-hour clock
+        HH      hours with leading zero for single-digit hours; 24-hour clock
+        m       minutes
+        mm      minutes with leading zero for single-digit minutes
+        s       seconds
+        ss      seconds with leading zero for single-digit seconds
+        t       one character time marker string, such as A or P
+        tt      multicharacter time marker string, such as AM or PM</pre>
+</dd>
+<dd>
+<p>For example:</p>
+</dd>
+<dd>
+<pre>
+        my $v = Variant(VT_DATE, &quot;April 1 99 2:23 pm&quot;);
+        print $v-&gt;Time, &quot;\n&quot;;
+        print $v-&gt;Time(TIME_FORCE24HOURFORMAT|TIME_NOTIMEMARKER), &quot;\n&quot;;
+        print $v-&gt;Time(&quot;hh.mm.ss tt&quot;), &quot;\n&quot;;</pre>
+</dd>
+<dd>
+<p>will print:</p>
+</dd>
+<dd>
+<pre>
+        2:23:00 PM
+        14:23:00
+        02.23.00 PM</pre>
+</dd>
+<p></p>
+<dt><strong><a name="item_type"><code>Type()</code></a></strong><br />
+</dt>
+<dd>
+The <a href="#item_type"><code>Type</code></a> method returns the variant type of the contained VARIANT.
+</dd>
+<p></p>
+<dt><strong><a name="item_unicode"><code>Unicode()</code></a></strong><br />
+</dt>
+<dd>
+The <a href="#item_unicode"><code>Unicode</code></a> method returns a <code>Unicode::String</code> object.  This contains
+the BSTR value of the variant in network byte order.  If the variant is
+not currently in VT_BSTR format then a VT_BSTR copy will be produced first.
+</dd>
+<p></p>
+<dt><strong><a name="item_value"><code>Value()</code></a></strong><br />
+</dt>
+<dd>
+The <a href="#item_value"><code>Value</code></a> method returns the value of the VARIANT as a Perl value.  The
+conversion is performed in the same manner as all return values of
+Win32::OLE method calls are converted.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<h2><a name="overloading">Overloading</a></h2>
+<p>The Win32::OLE::Variant package has overloaded the conversion to
+string and number formats.  Therefore variant objects can be used in
+arithmetic and string operations without applying the <a href="#item_value"><code>Value</code></a>
+method first.</p>
+<p>
+</p>
+<h2><a name="class_variables">Class Variables</a></h2>
+<p>The Win32::OLE::Variant class used to have its own set of class variables
+like <code>$CP</code>, <code>$LCID</code> and <code>$Warn</code>.  In version 0.1003 and later of the
+Win32::OLE module these variables have been eleminated.  Now the settings
+of Win32::OLE are used by the Win32::OLE::Variant module too.  Please read
+the documentation of the <code>Win32::OLE-&amp;gt;Option</code> class method.</p>
+<p>
+</p>
+<h2><a name="constants">Constants</a></h2>
+<p>These constants are exported by default:</p>
+<pre>
+        VT_EMPTY
+        VT_NULL
+        VT_I2
+        VT_I4
+        VT_R4
+        VT_R8
+        VT_CY
+        VT_DATE
+        VT_BSTR
+        VT_DISPATCH
+        VT_ERROR
+        VT_BOOL
+        VT_VARIANT
+        VT_UNKNOWN
+        VT_DECIMAL
+        VT_UI1</pre>
+<pre>
+        VT_ARRAY
+        VT_BYREF</pre>
+<p>VT_DECIMAL is not on the official list of allowable OLE Automation
+datatypes.  But even Microsoft ADO seems to sometimes return values
+of Recordset fields in VT_DECIMAL format.</p>
+<p>
+</p>
+<h2><a name="variants">Variants</a></h2>
+<p>A Variant is a data type that is used to pass data between OLE
+connections.</p>
+<p>The default behavior is to convert each perl scalar variable into
+an OLE Variant according to the internal perl representation.
+The following type correspondence holds:</p>
+<pre>
+        C type          Perl type       OLE type
+        ------          ---------       --------
+          int              IV            VT_I4
+        double             NV            VT_R8
+        char *             PV            VT_BSTR
+        void *           ref to AV       VT_ARRAY
+           ?              undef          VT_ERROR
+           ?        Win32::OLE object    VT_DISPATCH</pre>
+<p>Note that VT_BSTR is a wide character or Unicode string.  This presents a
+problem if you want to pass in binary data as a parameter as 0x00 is
+inserted between all the bytes in your data.  The <a href="#item_variant"><code>Variant()</code></a> method
+provides a solution to this.  With Variants the script writer can specify
+the OLE variant type that the parameter should be converted to.  Currently
+supported types are:</p>
+<pre>
+        VT_UI1     unsigned char
+        VT_I2      signed int (2 bytes)
+        VT_I4      signed int (4 bytes)
+        VT_R4      float      (4 bytes)
+        VT_R8      float      (8 bytes)
+        VT_DATE    OLE Date
+        VT_BSTR    OLE String
+        VT_CY      OLE Currency
+        VT_BOOL    OLE Boolean</pre>
+<p>When VT_DATE and VT_CY objects are created, the input parameter is treated
+as a Perl string type, which is then converted to VT_BSTR, and finally to
+VT_DATE of VT_CY using the <code>VariantChangeType()</code> OLE API function.
+See <a href="../../../../site/lib/Win32/OLE.html#examples">EXAMPLES in the Win32::OLE manpage</a> for how these types can be used.</p>
+<p>
+</p>
+<h2><a name="variant_arrays">Variant arrays</a></h2>
+<p>A variant can not only contain a single value but also a multi-dimensional
+array of values (called a SAFEARRAY).  In this case the VT_ARRAY flag must
+be added to the base variant type, e.g. <code>VT_I4 | VT_ARRAY</code> for an array of
+integers.  The VT_EMPTY and VT_NULL types are invalid for SAFEARRAYs.  It
+is possible to create an array of variants: <code>VT_VARIANT | VT_ARRAY</code>.  In this
+case each element of the array can have a different type (including VT_EMPTY
+and VT_NULL).  The elements of a VT_VARIANT SAFEARRAY cannot have either of the
+VT_ARRAY or VT_BYREF flags set.</p>
+<p>The lower and upper bounds for each dimension can be specified separately.
+They do not have to have all the same lower bound (unlike Perl's arrays).</p>
+<p>
+</p>
+<h2><a name="variants_by_reference">Variants by reference</a></h2>
+<p>Some OLE servers expect parameters passed by reference so that they
+can be changed in the method call.  This allows methods to easily
+return multiple values.  There is preliminary support for this in
+the Win32::OLE::Variant module:</p>
+<pre>
+        my $x = Variant(VT_I4|VT_BYREF, 0);
+        my $y = Variant(VT_I4|VT_BYREF, 0);
+        $Corel-&gt;GetSize($x, $y);
+        print &quot;Size is $x by $y\n&quot;;</pre>
+<p>After the <code>GetSize</code> method call <code>$x</code> and <code>$y</code> will be set to
+the respective sizes.  They will still be variants.  In the print
+statement the overloading converts them to string representation
+automatically.</p>
+<p>VT_BYREF is now supported for all variant types (including SAFEARRAYs).
+It can also be used to pass an OLE object by reference:</p>
+<pre>
+        my $Results = $App-&gt;CreateResultsObject;
+        $Object-&gt;Method(Variant(VT_DISPATCH|VT_BYREF, $Results));</pre>
+<p>
+</p>
+<hr />
+<h1><a name="authors_copyright">AUTHORS/COPYRIGHT</a></h1>
+<p>This module is part of the Win32::OLE distribution.</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Win32::OLE::Variant - Create and modify OLE VARIANT variables</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

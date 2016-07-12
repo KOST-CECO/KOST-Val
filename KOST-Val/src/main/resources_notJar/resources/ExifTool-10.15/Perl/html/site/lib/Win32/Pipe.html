@@ -1,0 +1,268 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Win32::Pipe - Win32 Named Pipe</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Win32::Pipe - Win32 Named Pipe</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<ul>
+
+		<li><a href="#general_use">General Use</a></li>
+		<li><a href="#benefits">Benefits</a></li>
+	</ul>
+
+	<li><a href="#constructor">CONSTRUCTOR</a></li>
+	<li><a href="#methods">METHODS</a></li>
+	<li><a href="#limitations">LIMITATIONS</a></li>
+	<li><a href="#installation_notes">INSTALLATION NOTES</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+	<li><a href="#disclaimer">DISCLAIMER</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Win32::Pipe - Win32 Named Pipe</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p>To use this extension, follow these basic steps. First, you need to
+'use' the pipe extension:</p>
+<pre>
+    use Win32::Pipe;</pre>
+<p>Then you need to create a server side of a named pipe:</p>
+<pre>
+    $Pipe = new Win32::Pipe(&quot;My Pipe Name&quot;);</pre>
+<p>or if you are going to connect to pipe that has already been created:</p>
+<pre>
+    $Pipe = new Win32::Pipe(&quot;\\\\server\\pipe\\My Pipe Name&quot;);</pre>
+<pre>
+    NOTE: The &quot;\\\\server\\pipe\\&quot; is necessary when connecting
+          to an existing pipe! If you are accessing the same
+          machine you could use &quot;\\\\.\\pipe\\&quot; but either way
+          works fine.</pre>
+<p>You should check to see if <code>$Pipe</code> is indeed defined otherwise there
+has been an error.</p>
+<p>Whichever end is the server, it must now wait for a connection...</p>
+<pre>
+    $Result = $Pipe-&gt;Connect();</pre>
+<pre>
+    NOTE: The client end does not do this! When the client creates
+          the pipe it has already connected!</pre>
+<p>Now you can read and write data from either end of the pipe:</p>
+<pre>
+    $Data = $Pipe-&gt;Read();</pre>
+<pre>
+    $Result = $Pipe-&gt;Write(&quot;Howdy! This is cool!&quot;);</pre>
+<p>When the server is finished it must disconnect:</p>
+<pre>
+    $Pipe-&gt;Disconnect();</pre>
+<p>Now the server could <a href="#item_connect"><code>Connect</code></a> again (and wait for another client) or
+it could destroy the named pipe...</p>
+<pre>
+    $Data-&gt;Close();</pre>
+<p>The client should <a href="#item_close"><code>Close</code></a> in order to properly end the session.</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>
+</p>
+<h2><a name="general_use">General Use</a></h2>
+<p>This extension gives Win32 Perl the ability to use Named Pipes. Why?
+Well considering that Win32 Perl does not (yet) have the ability to
+<a href="../../../lib/Pod/perlfunc.html#item_fork"><code>fork</code></a> I could not see what good the <a href="../../../lib/Pod/perlfunc.html#item_pipe"><code>pipe(X,Y)</code></a> was. Besides, where
+I am as an admin I must have several perl daemons running on several
+NT Servers. It dawned on me one day that if I could pipe all these
+daemons' output to my workstation (across the net) then it would be
+much easier to monitor. This was the impetus for an extension using
+Named Pipes. I think that it is kinda cool. :)</p>
+<p>
+</p>
+<h2><a name="benefits">Benefits</a></h2>
+<p>And what are the benefits of this module?</p>
+<ul>
+<li></li>
+You may create as many named pipes as you want (uh, well, as many as
+your resources will allow).
+<p></p>
+<li></li>
+Currently there is a limit of 256 instances of a named pipe (once a
+pipe is created you can have 256 client/server connections to that
+name).
+<p></p>
+<li></li>
+The default buffer size is 512 bytes; this can be altered by the
+<a href="#item_resizebuffer"><code>ResizeBuffer</code></a> method.
+<p></p>
+<li></li>
+All named pipes are byte streams. There is currently no way to alter a
+pipe to be message based.
+<p></p>
+<li></li>
+Other things that I cannot think of right now... :)
+<p></p></ul>
+<p>
+</p>
+<hr />
+<h1><a name="constructor">CONSTRUCTOR</a></h1>
+<dl>
+<dt><strong><a name="item_new">new ( NAME )</a></strong><br />
+</dt>
+<dd>
+Creates a named pipe if used in server context or a connection to the
+specified named pipe if used in client context. Client context is
+determined by prepending $Name with ``\\\\''.
+</dd>
+<dd>
+<p>Returns <em>true</em> on success, <em>false</em> on failure.</p>
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="methods">METHODS</a></h1>
+<dl>
+<dt><strong><a name="item_buffersize">BufferSize ()</a></strong><br />
+</dt>
+<dd>
+Returns the size of the instance of the buffer of the named pipe.
+</dd>
+<p></p>
+<dt><strong><a name="item_connect">Connect ()</a></strong><br />
+</dt>
+<dd>
+Tells the named pipe to create an instance of the named pipe and wait
+until a client connects. Returns <em>true</em> on success, <em>false</em> on
+failure.
+</dd>
+<p></p>
+<dt><strong><a name="item_close">Close ()</a></strong><br />
+</dt>
+<dd>
+Closes the named pipe.
+</dd>
+<p></p>
+<dt><strong><a name="item_disconnect">Disconnect ()</a></strong><br />
+</dt>
+<dd>
+Disconnects (and destroys) the instance of the named pipe from the
+client. Returns <em>true</em> on success, <em>false</em> on failure.
+</dd>
+<p></p>
+<dt><strong><a name="item_error">Error ()</a></strong><br />
+</dt>
+<dd>
+Returns the last error messages pertaining to the named pipe. If used
+in context to the package. Returns a list containing <code>ERROR_NUMBER</code>
+and <code>ERROR_TEXT</code>.
+</dd>
+<p></p>
+<dt><strong><a name="item_read">Read ()</a></strong><br />
+</dt>
+<dd>
+Reads from the named pipe. Returns data read from the pipe on success,
+undef on failure.
+</dd>
+<p></p>
+<dt><strong><a name="item_resizebuffer">ResizeBuffer ( SIZE )</a></strong><br />
+</dt>
+<dd>
+Sets the size of the buffer of the instance of the named pipe to
+<code>SIZE</code>. Returns the size of the buffer on success, <em>false</em> on
+failure.
+</dd>
+<p></p>
+<dt><strong><a name="item_write">Write ( DATA )</a></strong><br />
+</dt>
+<dd>
+Writes <code>DATA</code> to the named pipe. Returns <em>true</em> on success, <em>false</em>
+on failure.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="limitations">LIMITATIONS</a></h1>
+<p>What known problems does this thing have?</p>
+<ul>
+<li></li>
+If someone is waiting on a <a href="#item_read"><code>Read</code></a> and the other end terminates then
+you will wait for one <strong>REALLY</strong> long time! (If anyone has an idea on
+how I can detect the termination of the other end let me know!)
+<p></p>
+<li></li>
+All pipes are blocking. I am considering using threads and callbacks
+into Perl to perform async IO but this may be too much for my time
+stress. ;)
+<p></p>
+<li></li>
+There is no security placed on these pipes.
+<p></p>
+<li></li>
+This module has neither been optimized for speed nor optimized for
+memory consumption. This may run into memory bloat.
+<p></p></ul>
+<p>
+</p>
+<hr />
+<h1><a name="installation_notes">INSTALLATION NOTES</a></h1>
+<p>If you wish to use this module with a build of Perl other than
+ActivePerl, you may wish to fetch the source distribution for this
+module. The source is included as part of the <code>libwin32</code> bundle,
+which you can find in any CPAN mirror here:</p>
+<pre>
+  modules/by-authors/Gurusamy_Sarathy/libwin32-0.151.tar.gz</pre>
+<p>The source distribution also contains a pair of sample client/server
+test scripts. For the latest information on this module, consult the
+following web site:</p>
+<pre>
+  <a href="http://www.roth.net/perl">http://www.roth.net/perl</a></pre>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Dave Roth &lt;<a href="mailto:rothd@roth.net">rothd@roth.net</a>&gt;</p>
+<p>
+</p>
+<hr />
+<h1><a name="disclaimer">DISCLAIMER</a></h1>
+<p>I do not guarantee <strong>ANYTHING</strong> with this package. If you use it you
+are doing so <strong>AT YOUR OWN RISK</strong>! I may or may not support this
+depending on my time schedule.</p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright (c) 1996 Dave Roth. All rights reserved.
+This program is free software; you can redistribute
+it and/or modify it under the same terms as Perl itself.</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Win32::Pipe - Win32 Named Pipe</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SOFTPKG NAME="Digest-SHA1" VERSION="2,06,0,0">
+<TITLE>Digest-SHA1</TITLE>
+<ABSTRACT>Perl interface to the SHA-1 Algorithm</ABSTRACT>
+<AUTHOR>Gisle Aas &lt;gisle@aas.no&gt;</AUTHOR>
+<IMPLEMENTATION>
+<CODEBASE HREF="http://ppm.ActiveState.com/PPMPackages/5.8-windows/MSWin32-x86-multi-thread-5.8/Digest-SHA1.tar.gz" />
+<INSTALL />
+<UNINSTALL />
+</IMPLEMENTATION>
+</SOFTPKG>

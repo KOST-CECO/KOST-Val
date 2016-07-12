@@ -1,6 +1,6 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
- * Information Package (SIP). Copyright (C) 2012-2016 Claire Röthlisberger (KOST-CECO), Christian
+ * Information Package (SIP). Copyright (C) 2012-2016 Claire Roethlisberger (KOST-CECO), Christian
  * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
  * Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
@@ -29,8 +29,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
+
 import org.jdom2.*;
 import org.jdom2.input.SAXBuilder;
+
 import ch.enterag.utils.zip.EntryInputStream;
 import ch.enterag.utils.zip.FileEntry;
 import ch.enterag.utils.zip.Zip64File;
@@ -42,7 +44,7 @@ import ch.kostceco.tools.kostval.validation.bean.ValidationContext;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationEcolumnModule;
 
 /** Validierungsschritt E (Spalten-Validierung) Wurden die Angaben aus metadata.xml korrekt in die
- * tableZ.xsd-Dateien übertragen? valid --> gleiche Spaltendefinitionen (Anzahl, Type, Nullable)
+ * tableZ.xsd-Dateien ï¿½bertragen? valid --> gleiche Spaltendefinitionen (Anzahl, Type, Nullable)
  * 
  * 
  * The module <code>ValidationEcolumnModule</code> validates the columns specified in the file
@@ -105,9 +107,18 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws ValidationEcolumnException
 	{
-		// Ausgabe SIARD-Modul Ersichtlich das KOST-Val arbeitet
-		System.out.print( "E    " );
-		System.out.print( "\b\b\b\b\b" );
+		// Informationen zur Darstellung "onWork" holen
+		String onWork = getConfigurationService().getShowProgressOnWork();
+		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
+		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
+		 * ref="configurationService" /> */
+		if ( onWork.equals( "no" ) ) {
+			// keine Ausgabe
+		} else {
+			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
+			System.out.print( "E    " );
+			System.out.print( "\b\b\b\b\b" );
+		}
 
 		// All over validation flag
 		boolean valid = true;
@@ -221,7 +232,21 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 	 * according XML schema files */
 	private boolean validateColumnCount( ValidationContext validationContext ) throws Exception
 	{
+		boolean showOnWork = true;
 		int onWork = 410;
+		// Informationen zur Darstellung "onWork" holen
+		String onWorkConfig = getConfigurationService().getShowProgressOnWork();
+		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
+		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
+		 * ref="configurationService" /> */
+		if ( onWorkConfig.equals( "no" ) ) {
+			// keine Ausgabe
+			showOnWork = false;
+		} else {
+			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
+			System.out.print( "E    " );
+			System.out.print( "\b\b\b\b\b" );
+		}
 		boolean validDatabase = true;
 		StringBuilder namesOfInvalidTables = new StringBuilder();
 		Properties properties = validationContext.getValidationProperties();
@@ -246,24 +271,26 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 						: columnsDifference) );
 				namesOfInvalidTables.append( ")" );
 			}
-			if ( onWork == 410 ) {
-				onWork = 2;
-				System.out.print( "E-   " );
-				System.out.print( "\b\b\b\b\b" );
-			} else if ( onWork == 110 ) {
-				onWork = onWork + 1;
-				System.out.print( "E\\   " );
-				System.out.print( "\b\b\b\b\b" );
-			} else if ( onWork == 210 ) {
-				onWork = onWork + 1;
-				System.out.print( "E|   " );
-				System.out.print( "\b\b\b\b\b" );
-			} else if ( onWork == 310 ) {
-				onWork = onWork + 1;
-				System.out.print( "E/   " );
-				System.out.print( "\b\b\b\b\b" );
-			} else {
-				onWork = onWork + 1;
+			if ( showOnWork ) {
+				if ( onWork == 410 ) {
+					onWork = 2;
+					System.out.print( "E-   " );
+					System.out.print( "\b\b\b\b\b" );
+				} else if ( onWork == 110 ) {
+					onWork = onWork + 1;
+					System.out.print( "E\\   " );
+					System.out.print( "\b\b\b\b\b" );
+				} else if ( onWork == 210 ) {
+					onWork = onWork + 1;
+					System.out.print( "E|   " );
+					System.out.print( "\b\b\b\b\b" );
+				} else if ( onWork == 310 ) {
+					onWork = onWork + 1;
+					System.out.print( "E/   " );
+					System.out.print( "\b\b\b\b\b" );
+				} else {
+					onWork = onWork + 1;
+				}
 			}
 		}
 		// Writing back error log
@@ -276,7 +303,21 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 	 * according XML schemata */
 	private boolean validateColumnOccurrence( ValidationContext validationContext ) throws Exception
 	{
-		int onWork = 41;
+		boolean showOnWork = true;
+		int onWork = 410;
+		// Informationen zur Darstellung "onWork" holen
+		String onWorkConfig = getConfigurationService().getShowProgressOnWork();
+		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
+		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
+		 * ref="configurationService" /> */
+		if ( onWorkConfig.equals( "no" ) ) {
+			// keine Ausgabe
+			showOnWork = false;
+		} else {
+			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
+			System.out.print( "E    " );
+			System.out.print( "\b\b\b\b\b" );
+		}
 		boolean validTable;
 		boolean validDatabase;
 		Properties properties = validationContext.getValidationProperties();
@@ -344,24 +385,26 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 				namesOfInvalidColumns = null;
 				namesOfInvalidColumns = new StringBuilder();
 			}
-			if ( onWork == 41 ) {
-				onWork = 2;
-				System.out.print( "E-   " );
-				System.out.print( "\b\b\b\b\b" );
-			} else if ( onWork == 11 ) {
-				onWork = 12;
-				System.out.print( "E\\   " );
-				System.out.print( "\b\b\b\b\b" );
-			} else if ( onWork == 21 ) {
-				onWork = 22;
-				System.out.print( "E|   " );
-				System.out.print( "\b\b\b\b\b" );
-			} else if ( onWork == 31 ) {
-				onWork = 32;
-				System.out.print( "E/   " );
-				System.out.print( "\b\b\b\b\b" );
-			} else {
-				onWork = onWork + 1;
+			if ( showOnWork ) {
+				if ( onWork == 410 ) {
+					onWork = 2;
+					System.out.print( "E-   " );
+					System.out.print( "\b\b\b\b\b" );
+				} else if ( onWork == 110 ) {
+					onWork = onWork + 1;
+					System.out.print( "E\\   " );
+					System.out.print( "\b\b\b\b\b" );
+				} else if ( onWork == 210 ) {
+					onWork = onWork + 1;
+					System.out.print( "E|   " );
+					System.out.print( "\b\b\b\b\b" );
+				} else if ( onWork == 310 ) {
+					onWork = onWork + 1;
+					System.out.print( "E/   " );
+					System.out.print( "\b\b\b\b\b" );
+				} else {
+					onWork = onWork + 1;
+				}
 			}
 		}
 		// Writing back error log
@@ -372,7 +415,21 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 	/* [E.3]Compares the column types in the metadata.xml to the accordingXML schemata */
 	private boolean validateColumnType( ValidationContext validationContext ) throws Exception
 	{
-		int onWork = 41;
+		boolean showOnWork = true;
+		int onWork = 410;
+		// Informationen zur Darstellung "onWork" holen
+		String onWorkConfig = getConfigurationService().getShowProgressOnWork();
+		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
+		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
+		 * ref="configurationService" /> */
+		if ( onWorkConfig.equals( "no" ) ) {
+			// keine Ausgabe
+			showOnWork = false;
+		} else {
+			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
+			System.out.print( "E    " );
+			System.out.print( "\b\b\b\b\b" );
+		}
 		boolean validTable;
 		boolean validDatabase;
 		Properties properties = validationContext.getValidationProperties();
@@ -449,24 +506,26 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 				namesOfInvalidColumns = null;
 				namesOfInvalidColumns = new StringBuilder();
 			}
-			if ( onWork == 41 ) {
-				onWork = 2;
-				System.out.print( "E-   " );
-				System.out.print( "\b\b\b\b\b" );
-			} else if ( onWork == 11 ) {
-				onWork = 12;
-				System.out.print( "E\\   " );
-				System.out.print( "\b\b\b\b\b" );
-			} else if ( onWork == 21 ) {
-				onWork = 22;
-				System.out.print( "E|   " );
-				System.out.print( "\b\b\b\b\b" );
-			} else if ( onWork == 31 ) {
-				onWork = 32;
-				System.out.print( "E/   " );
-				System.out.print( "\b\b\b\b\b" );
-			} else {
-				onWork = onWork + 1;
+			if ( showOnWork ) {
+				if ( onWork == 410 ) {
+					onWork = 2;
+					System.out.print( "E-   " );
+					System.out.print( "\b\b\b\b\b" );
+				} else if ( onWork == 110 ) {
+					onWork = onWork + 1;
+					System.out.print( "E\\   " );
+					System.out.print( "\b\b\b\b\b" );
+				} else if ( onWork == 210 ) {
+					onWork = onWork + 1;
+					System.out.print( "E|   " );
+					System.out.print( "\b\b\b\b\b" );
+				} else if ( onWork == 310 ) {
+					onWork = onWork + 1;
+					System.out.print( "E/   " );
+					System.out.print( "\b\b\b\b\b" );
+				} else {
+					onWork = onWork + 1;
+				}
 			}
 		}
 		this.setIncongruentColumnType( namesOfInvalidTables );
@@ -582,7 +641,21 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 	private boolean extractSiardArchive( ValidationContext validationContext )
 			throws FileNotFoundException, IOException, Exception
 	{
-		int onWork = 41;
+		boolean showOnWork = true;
+		int onWork = 410;
+		// Informationen zur Darstellung "onWork" holen
+		String onWorkConfig = getConfigurationService().getShowProgressOnWork();
+		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
+		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
+		 * ref="configurationService" /> */
+		if ( onWorkConfig.equals( "no" ) ) {
+			// keine Ausgabe
+			showOnWork = false;
+		} else {
+			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
+			System.out.print( "E    " );
+			System.out.print( "\b\b\b\b\b" );
+		}
 		boolean sucessfullyCommitted = false;
 		// Initializing the access to the SIARD archive
 		Zip64File zipfile = new Zip64File( validationContext.getSiardArchive() );
@@ -609,24 +682,26 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 				eis.close();
 				fos.close();
 			}
-			if ( onWork == 41 ) {
-				onWork = 2;
-				System.out.print( "E-   " );
-				System.out.print( "\b\b\b\b\b" );
-			} else if ( onWork == 11 ) {
-				onWork = 12;
-				System.out.print( "E\\   " );
-				System.out.print( "\b\b\b\b\b" );
-			} else if ( onWork == 21 ) {
-				onWork = 22;
-				System.out.print( "E|   " );
-				System.out.print( "\b\b\b\b\b" );
-			} else if ( onWork == 31 ) {
-				onWork = 32;
-				System.out.print( "E/   " );
-				System.out.print( "\b\b\b\b\b" );
-			} else {
-				onWork = onWork + 1;
+			if ( showOnWork ) {
+				if ( onWork == 410 ) {
+					onWork = 2;
+					System.out.print( "E-   " );
+					System.out.print( "\b\b\b\b\b" );
+				} else if ( onWork == 110 ) {
+					onWork = onWork + 1;
+					System.out.print( "E\\   " );
+					System.out.print( "\b\b\b\b\b" );
+				} else if ( onWork == 210 ) {
+					onWork = onWork + 1;
+					System.out.print( "E|   " );
+					System.out.print( "\b\b\b\b\b" );
+				} else if ( onWork == 310 ) {
+					onWork = onWork + 1;
+					System.out.print( "E/   " );
+					System.out.print( "\b\b\b\b\b" );
+				} else {
+					onWork = onWork + 1;
+				}
 			}
 		}
 		validationContext.setSiardFiles( extractedSiardFiles );
@@ -673,7 +748,21 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 	private boolean prepareValidationData( ValidationContext validationContext )
 			throws JDOMException, IOException, Exception
 	{
-		int onWork = 41;
+		boolean showOnWork = true;
+		int onWork = 410;
+		// Informationen zur Darstellung "onWork" holen
+		String onWorkConfig = getConfigurationService().getShowProgressOnWork();
+		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
+		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
+		 * ref="configurationService" /> */
+		if ( onWorkConfig.equals( "no" ) ) {
+			// keine Ausgabe
+			showOnWork = false;
+		} else {
+			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
+			System.out.print( "E    " );
+			System.out.print( "\b\b\b\b\b" );
+		}
 		boolean successfullyCommitted = false;
 		Properties properties = validationContext.getValidationProperties();
 		// Gets the tables to be validated
@@ -751,24 +840,26 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 					validationContext.setSiardTables( siardTables );
 				}
 			}
-			if ( onWork == 41 ) {
-				onWork = 2;
-				System.out.print( "E-   " );
-				System.out.print( "\b\b\b\b\b" );
-			} else if ( onWork == 11 ) {
-				onWork = 12;
-				System.out.print( "E\\   " );
-				System.out.print( "\b\b\b\b\b" );
-			} else if ( onWork == 21 ) {
-				onWork = 22;
-				System.out.print( "E|   " );
-				System.out.print( "\b\b\b\b\b" );
-			} else if ( onWork == 31 ) {
-				onWork = 32;
-				System.out.print( "E/   " );
-				System.out.print( "\b\b\b\b\b" );
-			} else {
-				onWork = onWork + 1;
+			if ( showOnWork ) {
+				if ( onWork == 410 ) {
+					onWork = 2;
+					System.out.print( "E-   " );
+					System.out.print( "\b\b\b\b\b" );
+				} else if ( onWork == 110 ) {
+					onWork = onWork + 1;
+					System.out.print( "E\\   " );
+					System.out.print( "\b\b\b\b\b" );
+				} else if ( onWork == 210 ) {
+					onWork = onWork + 1;
+					System.out.print( "E|   " );
+					System.out.print( "\b\b\b\b\b" );
+				} else if ( onWork == 310 ) {
+					onWork = onWork + 1;
+					System.out.print( "E/   " );
+					System.out.print( "\b\b\b\b\b" );
+				} else {
+					onWork = onWork + 1;
+				}
 			}
 		}
 		if ( validationContext.getSiardTables().size() > 0 ) {

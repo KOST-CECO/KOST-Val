@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Win32::File - manage file attributes in perl</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Win32::File - manage file attributes in perl</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#functions">Functions</a></li>
+	<ul>
+
+		<li><a href="#note">NOTE</a></li>
+	</ul>
+
+	<li><a href="#constants">Constants</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Win32::File - manage file attributes in perl</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+        use Win32::File;</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>This module offers the retrieval and setting of file attributes.</p>
+<p>
+</p>
+<hr />
+<h1><a name="functions">Functions</a></h1>
+<p>
+</p>
+<h2><a name="note">NOTE</a></h2>
+<p>All of the functions return FALSE (0) if they fail, unless otherwise noted.
+The function names are exported into the caller's namespace by request.</p>
+<dl>
+<dt><strong><a name="item_getattributes">GetAttributes(filename, returnedAttributes)</a></strong><br />
+</dt>
+<dd>
+Gets the attributes of a file or directory. returnedAttributes will be set
+to the OR-ed combination of the filename attributes.
+</dd>
+<p></p>
+<dt><strong><a name="item_setattributes">SetAttributes(filename, newAttributes)</a></strong><br />
+</dt>
+<dd>
+Sets the attributes of a file or directory. newAttributes must be an OR-ed
+combination of the attributes.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="constants">Constants</a></h1>
+<p>The following constants are exported by default.</p>
+<dl>
+<dt><strong><a name="item_archive">ARCHIVE</a></strong><br />
+</dt>
+<dt><strong><a name="item_compressed">COMPRESSED</a></strong><br />
+</dt>
+<dt><strong><a name="item_directory">DIRECTORY</a></strong><br />
+</dt>
+<dt><strong><a name="item_hidden">HIDDEN</a></strong><br />
+</dt>
+<dt><strong><a name="item_normal">NORMAL</a></strong><br />
+</dt>
+<dt><strong><a name="item_offline">OFFLINE</a></strong><br />
+</dt>
+<dt><strong><a name="item_readonly">READONLY</a></strong><br />
+</dt>
+<dt><strong><a name="item_system">SYSTEM</a></strong><br />
+</dt>
+<dt><strong><a name="item_temporary">TEMPORARY</a></strong><br />
+</dt>
+</dl>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Win32::File - manage file attributes in perl</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

@@ -1,6 +1,6 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
- * Information Package (SIP). Copyright (C) 2012-2016 Claire Röthlisberger (KOST-CECO), Christian
+ * Information Package (SIP). Copyright (C) 2012-2016 Claire Roethlisberger (KOST-CECO), Christian
  * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
  * Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
@@ -46,7 +46,7 @@ import ch.kostceco.tools.kostval.validation.modulejpeg.ValidationAvalidationJpeg
  * 
  * Zuerste erfolgt eine Erkennung, wenn diese io kommt die Validierung mit BadPeggy.
  * 
- * @author Rc Claire Röthlisberger, KOST-CECO
+ * @author Rc Claire Roethlisberger, KOST-CECO
  * @author Markus Hahn, coderslagoon */
 
 public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl implements
@@ -194,7 +194,7 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl im
 
 		/* Code schnippsel erhalten von M. Hahn: ImageScannerDemo
 		 * 
-		 * und umgeschrieben durch C. Röthlisberger auf KOST-Val */
+		 * und umgeschrieben durch C. Roethlisberger auf KOST-Val */
 
 		// determine if the file format is known by the scanner
 		File fl = valDatei;

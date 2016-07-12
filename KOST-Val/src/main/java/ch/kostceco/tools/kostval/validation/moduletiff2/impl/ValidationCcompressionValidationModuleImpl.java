@@ -1,6 +1,6 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
- * Information Package (SIP). Copyright (C) 2012-2016 Claire Rˆthlisberger (KOST-CECO), Christian
+ * Information Package (SIP). Copyright (C) 2012-2016 Claire Roethlisberger (KOST-CECO), Christian
  * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
  * Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
@@ -32,10 +32,10 @@ import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationCcompressionValidationModule;
 
-/** Validierungsschritt C (Komprimierung-Validierung) Ist die TIFF-Datei gem‰ss Konfigurationsdatei
+/** Validierungsschritt C (Komprimierung-Validierung) Ist die TIFF-Datei gem√§ss Konfigurationsdatei
  * valid?
  * 
- * @author Rc Claire Rˆthlisberger, KOST-CECO */
+ * @author Rc Claire Roethlisberger, KOST-CECO */
 
 public class ValidationCcompressionValidationModuleImpl extends ValidationModuleImpl implements
 		ValidationCcompressionValidationModule
@@ -85,93 +85,106 @@ public class ValidationCcompressionValidationModuleImpl extends ValidationModule
 
 		/* TODO: Exiftool starten. Anschliessend auswerten! Auf jhove wird verzichtet */
 
-		File fIdentifyExe = new File( "resources" + File.separator + "exiftool-9.32" + File.separator
-				+ "exiftool.exe" );
-		if ( !fIdentifyExe.exists() ) {
-			// exiftool.exe existiert nicht --> Abbruch
+		File fIdentifyPl = new File( "resources" + File.separator + "ExifTool-10.15" + File.separator
+				+ "exiftool.pl" );
+		String pathToIdentifyPl = fIdentifyPl.getAbsolutePath();
+		if ( !fIdentifyPl.exists() ) {
+			// exiftool.pl existiert nicht --> Abbruch
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_XML_MODUL_C_TIFF )
-							+ getTextResourceService().getText( MESSAGE_XML_CG_ET_MISSING ) );
+							+ getTextResourceService().getText( MESSAGE_XML_CG_ET_MISSING, pathToIdentifyPl ) );
 			return false;
 		} else {
-			String pathToIdentifyExe = fIdentifyExe.getAbsolutePath();
-
-			try {
-
-				String command = "cmd /c \"\""
-						+ pathToIdentifyExe
-						+ "\" -ver -a -s2 -FileName -Directory -Compression -FillOrder -PhotometricInterpretation"
-						+ " -PlanarConfiguration -BitsPerSample -StripByteCounts -RowsPerStrip -FileSize"
-						+ " -Orientation -TileWidth -TileLength -TileDepth \"" + valDatei.getAbsolutePath()
-						+ "\" >>\"" + pathToExiftoolOutput + "\"";
-				/* Das redirect Zeichen verunmˆglicht eine direkte eingabe. mit dem geschachtellten Befehl
-				 * gehts: cmd /c\"urspruenlicher Befehl\" */
-
-				Process proc = null;
-				Runtime rt = null;
+			File fPerl = new File( "resources" + File.separator + "ExifTool-10.15" + File.separator
+					+ "Perl" + File.separator + "bin" + File.separator + "perl.exe" );
+			String pathToPerl = fPerl.getAbsolutePath();
+			if ( !fPerl.exists() ) {
+				// Perl.exe existiert nicht --> Abbruch
+				getMessageService().logError(
+						getTextResourceService().getText( MESSAGE_XML_MODUL_C_TIFF )
+								+ getTextResourceService().getText( MESSAGE_XML_CG_ET_MISSING, pathToPerl ) );
+				return false;
+			} else {
 
 				try {
-					/* falls das File exiftoolReport bereits existiert, z.B. von einem vorhergehenden
-					 * Durchlauf, lˆschen wir es */
-					if ( exiftoolReport.exists() ) {
-						exiftoolReport.delete();
-					}
-					Util.switchOffConsole();
-					rt = Runtime.getRuntime();
-					proc = rt.exec( command.toString().split( " " ) );
-					// .split(" ") ist notwendig wenn in einem Pfad ein Doppelleerschlag vorhanden ist!
 
-					// Fehleroutput holen
-					StreamGobbler errorGobbler = new StreamGobbler( proc.getErrorStream(), "ERROR" );
+					String command = "cmd /c \"\""
+							+ pathToPerl
+							+ "\" \""
+							+ pathToIdentifyPl
+							+ "\" -ver -a -s2 -FileName -Directory -Compression -FillOrder -PhotometricInterpretation"
+							+ " -PlanarConfiguration -BitsPerSample -StripByteCounts -RowsPerStrip -FileSize"
+							+ " -Orientation -TileWidth -TileLength -TileDepth \"" + valDatei.getAbsolutePath()
+							+ "\" >>\"" + pathToExiftoolOutput + "\"";
+					/* Das redirect Zeichen verunm√∂glicht eine direkte eingabe. mit dem geschachtellten Befehl
+					 * gehts: cmd /c\"urspruenlicher Befehl\" */
 
-					// Output holen
-					StreamGobbler outputGobbler = new StreamGobbler( proc.getInputStream(), "OUTPUT" );
+					Process proc = null;
+					Runtime rt = null;
 
-					// Threads starten
-					errorGobbler.start();
-					outputGobbler.start();
+					try {
+						/* falls das File exiftoolReport bereits existiert, z.B. von einem vorhergehenden
+						 * Durchlauf, l√∂schen wir es */
+						if ( exiftoolReport.exists() ) {
+							exiftoolReport.delete();
+						}
+						Util.switchOffConsole();
+						rt = Runtime.getRuntime();
+						proc = rt.exec( command.toString().split( " " ) );
+						// .split(" ") ist notwendig wenn in einem Pfad ein Doppelleerschlag vorhanden ist!
 
-					// Warte, bis wget fertig ist
-					proc.waitFor();
+						// Fehleroutput holen
+						StreamGobbler errorGobbler = new StreamGobbler( proc.getErrorStream(), "ERROR" );
 
-					Util.switchOnConsole();
-					// Kontrolle ob der Report existiert
-					if ( !exiftoolReport.exists() ) {
+						// Output holen
+						StreamGobbler outputGobbler = new StreamGobbler( proc.getInputStream(), "OUTPUT" );
+
+						// Threads starten
+						errorGobbler.start();
+						outputGobbler.start();
+
+						// Warte, bis wget fertig ist
+						proc.waitFor();
+
+						Util.switchOnConsole();
+						// Kontrolle ob der Report existiert
+						if ( !exiftoolReport.exists() ) {
+							getMessageService().logError(
+									getTextResourceService().getText( MESSAGE_XML_MODUL_C_TIFF )
+											+ getTextResourceService().getText( MESSAGE_XML_CG_ET_MISSING ) );
+							return false;
+						}
+					} catch ( Exception e ) {
 						getMessageService().logError(
 								getTextResourceService().getText( MESSAGE_XML_MODUL_C_TIFF )
-										+ getTextResourceService().getText( MESSAGE_XML_CG_ET_MISSING ) );
+										+ getTextResourceService().getText( MESSAGE_XML_CG_ET_SERVICEFAILED,
+												e.getMessage() ) );
 						return false;
+					} finally {
+						if ( proc != null ) {
+							closeQuietly( proc.getOutputStream() );
+							closeQuietly( proc.getInputStream() );
+							closeQuietly( proc.getErrorStream() );
+						}
 					}
+
+					// Ende Exiftool direkt auszul√∂sen
+
 				} catch ( Exception e ) {
 					getMessageService().logError(
 							getTextResourceService().getText( MESSAGE_XML_MODUL_C_TIFF )
-									+ getTextResourceService().getText( MESSAGE_XML_CG_ET_SERVICEFAILED,
-											e.getMessage() ) );
+									+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 					return false;
-				} finally {
-					if ( proc != null ) {
-						closeQuietly( proc.getOutputStream() );
-						closeQuietly( proc.getInputStream() );
-						closeQuietly( proc.getErrorStream() );
-					}
 				}
 
-				// Ende Exiftool direkt auszulˆsen
-
-			} catch ( Exception e ) {
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_C_TIFF )
-								+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
-				return false;
 			}
-
 		}
 
 		try {
 			BufferedReader in = new BufferedReader( new FileReader( exiftoolReport ) );
 			String line;
 			while ( (line = in.readLine()) != null ) {
-				/* zu analysierende TIFF-IFD-Zeile die CompressionScheme-Zeile enth‰lt einer dieser
+				/* zu analysierende TIFF-IFD-Zeile die CompressionScheme-Zeile enth√§lt einer dieser
 				 * Freitexte der Komprimierungsart */
 				if ( line.contains( "Compression: " ) ) {
 					exiftoolio = 1;

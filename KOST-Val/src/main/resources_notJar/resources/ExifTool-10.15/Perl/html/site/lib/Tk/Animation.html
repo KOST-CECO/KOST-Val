@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Tk::Animation - Display sequence of Tk::Photo images</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::Animation - Display sequence of Tk::Photo images</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#bugs">BUGS</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Tk::Animation - Display sequence of Tk::Photo images</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+  use Tk::Animation
+  my $img = $widget-&gt;Animation('-format' =&gt; 'gif', -file =&gt; 'somefile.gif');</pre>
+<pre>
+  $img-&gt;add_frame(@images);</pre>
+<pre>
+  $img-&gt;start_animation( $period );</pre>
+<pre>
+  $img-&gt;next_image;
+  $img-&gt;prev_image;
+  $img-&gt;set_image( 0 .. $#frames );</pre>
+<pre>
+  $img-&gt;pause_animation;
+  $img-&gt;resume_animation( $period );</pre>
+<pre>
+  $img-&gt;fast_forward( $multiplier );
+  $img-&gt;fast_reverse( $multiplier );</pre>
+<pre>
+  $img-&gt;stop_animation;</pre>
+<pre>
+  $img-&gt;blank( $boolean );</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>In the simple case when <code>Animation</code> is passed a GIF89 style GIF with
+multiple 'frames', it will build an internal array of <code>Photo</code> images.</p>
+<p>The <code>add_frame</code> method adds images to the sequence. It is provided
+to allow animations to be constructed from separate images.
+All images must be <code>Photo</code>s and should all be the same size.</p>
+<p><code>start_animation($period)</code> then initiates a <code>repeat</code> with specified
+<em>$period</em> to sequence through these images. As for raw <code>repeat</code>
+<em>$period</em> is in milliseconds, for a 50Hz monitor it should be at
+least 20mS. If $period is omitted it defaults to 100 milliseconds.</p>
+<p><code>stop_animation</code> cancels the <code>repeat</code> and resets the image to the first
+image in the sequence.</p>
+<p>For fine-grained control <code>next_image</code> and <code>prev_image</code> move one frame forward
+or backward.  <code>set_image</code> randomly positions the animation to a particular frame.</p>
+<p><code>pause_animation</code> pauses the movie and <code>resume_animation</code> continues from the
+pause point.</p>
+<p><code>fast_forward</code> and <code>fast_reverse</code> speed through the movie either
+forwards or backwards.  $multiplier specifies how much faster the
+animation moves.</p>
+<p>By default Animation leaves the previous movie frame in the animation
+photo.  Many times overlaying subsequent frames produces a composite
+that looks blurred.  The <code>blank</code> method is used to blank the
+animation photo before displaying new frames.  The default is 0 for
+backward compatibility.</p>
+<p>
+</p>
+<hr />
+<h1><a name="bugs">BUGS</a></h1>
+<p>The 'period' should probably be a property of the Animation object
+rather than specified at 'start' time. It may even be embedded
+in the GIF.</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::Animation - Display sequence of Tk::Photo images</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

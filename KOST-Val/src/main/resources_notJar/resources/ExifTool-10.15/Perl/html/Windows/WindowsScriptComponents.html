@@ -1,0 +1,926 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+
+<head>
+<title>Windows Script Components (WSC)</title>
+<link rel="STYLESHEET" href="../Active.css" type="text/css" media="screen">
+</head>
+
+<body>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#EAE2BB">
+<tr> 
+<td width="57"><a target=_blank href="http://www.ActiveState.com/ActivePerl/">
+<img src="../images/activeperl_logo.gif" width="57" height="48" border="0" alt="ActivePerl"></a></td>
+<td><div align="center" class="heading">ActivePerl User Guide</div></td>
+<td width="112"><a target=_blank  href="http://www.ActiveState.com">
+<img src="../images/AS_logo.gif" width="112" height="48" border="0"  alt="ActiveState" /></a></td>
+</tr>
+<tr>
+<td class="lineColour" colspan="3"></td>
+</tr>
+</table>
+
+<h1>Windows Script Components (WSC)</h1>
+
+<ul>
+  <li><a class="doc" href="#wsca">Windows Script Components (WSC)</a>
+    <ul>
+      <li><a class="doc" href="#com">The Component Object Model</a>
+      <li><a class="doc" href="#standardimplementation">A Standard And An Implementation</a>
+      <li><a class="doc" href="#parts">The Parts of A Component</a>
+        <ul>
+          <li><a class="doc" href="#comint">COM Interface</a>
+          <li><a class="doc" href="#comcls">COM Class</a>
+          <li><a class="doc" href="#comobj">COM Object</a>
+          <li><a class="doc" href="#comcom">COM Component</a>
+        </ul>
+      <li><a class="doc" href="#scraut">Scripting Languages And Automation</a>
+        <ul>
+          <li><a class="doc" href="#dispid">The Dispatch Interface</a>
+        </ul>
+      <li><a class="doc" href="#createwsc">Creating Windows Script Components</a>
+        <ul>
+          <li><a class="doc" href="#10steps">Ten Easy Steps</a>
+            <ul>
+              <li><a class="doc" href="#impps">Implementing the PerlScript</a>
+              <li><a class="doc" href="#regcom">Registering the Component</a>
+            </ul>
+          <li><a class="doc" href="#comprop">WSC with Properties and Notification</a>
+        </ul>
+      <li><a class="doc" href="#elementref">XML Element Reference</a>
+        <ul>
+          <li><a class="doc" href="#elemcom">&lt;component&gt;</a>
+          <li><a class="doc" href="#elemreg">&lt;registration&gt;</a>
+          <li><a class="doc" href="#elempub">&lt;public&gt;</a>
+            <ul>
+              <li><a class="doc" href="#elemprop">&lt;property&gt;</a>
+              <li><a class="doc" href="#elemmet">&lt;method&gt;</a>
+              <li><a class="doc" href="#elemevent">&lt;event&gt;</a>
+            </ul>
+          <li><a class="doc" href="#elemimp">&lt;implements&gt;</a>
+          <li><a class="doc" href="#elemscr">&lt;script&gt;</a>
+          <li><a class="doc" href="#elemobj">&lt;object&gt;</a>
+          <li><a class="doc" href="#elemres">&lt;resource&gt;</a>
+          <li><a class="doc" href="#elemref">&lt;reference&gt;</a>
+          <li><a class="doc" href="#elemcomment">&lt;comment&gt;</a>
+        </ul>
+    </ul>
+  <li><a class="doc" href="#author and copyright">AUTHOR AND COPYRIGHT</a>
+</ul>
+
+ 
+<h2><a name="wsca">Windows Script Components (WSC)</a></h2>
+<p>Windows Script Components (WSC), formerly known as Scriplets, is a technology
+for developing powerful COM components in an easy fashion. WSC's can be authored
+in any scripting language that has implemented the ActiveX Scripting Interfaces,
+which means that units of PerlScript code can be encapsulated as Windows Script
+Components.</p>
+
+<p>Be warned, reader, a lengthy introduction to the Component Object Model (COM)
+stretches until the topic of Windows Script Components. Please move directly to
+the topic of Windows Script Components if you feel that you understand the COM;
+the COM is essential to WSC, thus it is necessary to cover the fundamentals of
+the COM.</p>
+
+<h2><a name="com">The Component Object Model</a></h2>
+<p>The Component Object Model (COM) is a language-independent and
+object-oriented programming model. It is not, however, a programming language,
+and it does not demand that a new style of programming be learned. It is a
+binary standard that enables software to be implemented as units called
+components. The component can be authored in any programming language or
+scripting language provided that the language supports the standard defined by
+the COM. After the binary unit has been built, it can communicate with other
+units that were produced in any other language, on the same machine or on remote
+machines provided that the units were written as COM components.
+
+<p>As many see it, the Component Object Model is elegant and powerful. The basic
+yet ingenious programming model provides the foundation for
+application-development. The power resides in that everything built on the same
+foundation can communicate with each other without any restrictions such as
+programming languages or platforms. When developing an application devoted to
+COM, components should encapsulate every functionality that the application
+requires. A task performed by the application would be executed by a component,
+and these components would be reused in other and future applications. For
+example, a Perl component can contain the process of sending an email or
+performing a series of regular expressions on text. The component can then be
+used to provide functionality for an Active Server Pages application or a
+Windows desktop application.</p>
+
+<p>In summary, although the language in which a component is generated may vary
+from component to component, a binary standard overcomes the limitation of
+programming in different languages. It does not care about anything else but the
+binary form of the machine code that the once source code was turned into and
+the fact that is implemented into COM. In this sense, the component is not a
+regular script or executable, but a black box that performs one task and returns
+the projected result. Multiple languages can be used for one application because
+COM provides a binary standard. A binary standard also results in
+platform-independence provided that multiple platforms support COM. Units of
+code that are used in COM are known as components, and on Windows a component is
+normally file with the extension .dll; however, there are offshoots such as
+Windows Script Components, which have the extension .wsc. The purpose of the
+component is to perform the one task that it has been programmed for, and
+through COM, it can communicate with other components, languages, and platforms.</p>
+
+<h2><a name="standardimplementation">A Standard And An Implementation</a></h2>
+<p>COM is both a specification and an implementation. And being both a
+specification and an implementation, the COM defines a standard for how the
+components are created and how they communicate - namely as objects. As a
+result, the specification solves the implementation issues of the following key
+issues:</p>
+<blockquote style="MARGIN-RIGHT: 0px">
+  <ul>
+    <li>The calling of a component</li>
+    <li>The locating of a component</li>
+    <li>The identification of a component</li>
+    <li>The creation of a component</li>
+  </ul>
+</blockquote>
+<p>Although the parts above are involved in the specification of how to implement
+components, the programmer normally does not have to worry much about them. A
+software development tool that holds high class will create a skeleton for a
+component, and leave it up to the programmer only to plug in the code in the
+right places. Thanks to this, the code itself can be developed, debugged, and
+experimented with as usual. And then when the code is finished, it is placed in
+the skeleton, the right buttons are clicked, and the component pops out.</p>
+
+<h2><a name="parts">The Parts of A Component</a></h2>
+<p>When wondering what makes up a component, recall that COM is an
+object-oriented programming model that requires every component to be
+implemented as an object, so from this we know that we will be talking about
+classes, methods, properties, and such entities that belong in an
+object-oriented programming model. However, let’s start at the bottom level
+and move our way up from interfaces, to classes, and to objects.</p>
+
+<h3><a name="comint">COM Interface</a></h3>
+<p>When the component is implemented, it exposes its features through one or more
+interfaces. The interface is a specification of a collection of methods and
+properties that are related to each other, so when a component is called, it
+must be called through one of its interfaces. In general, this means that an
+interface relates to an operation such as verifying a credit-card number or
+sending an email. Because the component may expose several interfaces and the
+method-calls pass by way of the correct interface, the interface that is called
+must be identifiable. It is a fact that names easily clash, and especially with
+a high pace of component development, so another solution is provided. An
+interface uses a globally unique identifier (GUID) which is a 128-bit integer.
+And through the GUID, the interface is identified to the COM.</p>
+
+<h3><a name="comcls">COM Class</a></h3>
+<p>Next, the COM class implements, or maybe better 'inherits', one or more COM
+interfaces. A Class ID (CLSID) uniquely identifies the COM class, and while the
+interfaces are at the base level of the COM architecture, the COM class is on
+top of the interfaces - one step close to the application. The main purpose of
+the COM class is to generate, or instantiate, the COM object that represents the
+functionality of the unit of code.</p>
+
+<h3><a name="comobj">COM Object</a></h3>
+<p>As previously mentioned, this part of COM simply is the instance of a COM class,
+or the entity from which all the features of the COM class are accessed.</p>
+
+<h3><a name="comcom">COM Component</a></h3>
+<p>In the midst of everything, where does the component fit into the picture? It
+can be easily summarized as that the component is used to include a COM class by
+identifying it by the CLSID, create an instance of the COM class as the COM
+object, and then let the application make use if the COM object on the machine.</p>
+
+<h2><a name="scraut">Scripting Languages and Automation</a></h2>
+<p>Automation, formerly OLE automation, makes it easier for the masses to access COM
+object servers such as components. In terms of a scripting language, the only way for
+a COM component to make its features available is through Automation. Automation is
+one level higher up than COM, in other words one step closer to the application, and it
+is the technology that lets software packages such as Microsoft Office expose its functionality in
+an object-model for scripting languages that support Automation.</p>
+
+<p>In the same manner as large applications like MS Office are exposed, smaller COM
+components are made available to a scripting language through Automation, as
+well. Without it, the scripting language would necessarily have to know all the
+interfaces of an object that it wants to use before calling it - too much
+information to build into a language.</p>
+
+<p>Instead of bloating a language with junk, COM defines the standard for accessing
+COM object servers: Automation. In turn, Automation makes sure that a standard
+interface that allows, in our case, script-access to the component is always
+available for object-access. This standard interface used in Automation is
+called a dispatch interface, dispinterface, or automation interface.</p>
+
+<h3><a name="dispid">The Dispatch Interface</a></h3>
+<p>A dispatch interface is somewhat different than the standard COM interface.
+Methods are associated with dispatch IDs (dispids), and methods have been
+provided for reading and writing the values of properties - the access to the
+data members in the underlying data structure.</p>
+
+<p>The standard dispatch interface for automation is called IDispatch. Through
+IDispatch, a component can expose as much as it wants to expose. Then in order
+for Perl to gain access to components, the interpreter needs to support an
+object-oriented programming model, have the ability to call methods through
+IDispatch, know how to return errors, and be able to destroy objects.</p>
+
+<p>A method that belongs to an interface of a COM component is retrieved by the
+dispatch interface and in Perl this can occur by what is known as late binding.
+A dispatch method called GetIDsOfNames is called with the name and the
+parameters of the method of the COM interface that is called. The dispatch ID of
+the method is returned. Next, the Invoke-method of IDispatch is called with all
+the processed information returned from GetIDsOfNames, and from that call the
+result is returned in an output parameter. This method is called late binding,
+and there are two things to notice about it:</p>
+<blockquote>
+  <ul>
+    <li>There is an overhead involved in the Automation discussed</li>
+    <li>All data types that are sent as parameters through Invoke to the method
+      of an interface must be passed as Variants or converted into Variants.</li>
+  </ul>
+</blockquote>
+
+<p>When not using late binding, the application already is aware of all the
+dispatch IDs and does not call GetIDsOfNames at all. This is called early
+binding since the information needed for using the components have been built
+into the application and are used at run-time.</p>
+
+<p>Perl uses late binding, and the process of late binding is simple. First, a
+moniker is required, which is a name that uniquely identifies the COM object.
+The moniker is then used to locate the object, which next is either in running
+state or put into running state. When in running state, the server application
+can access the interfaces of the COM object, and when that is completed, an
+interface pointer is returned to it. The dispatch interface that makes COM
+objects accessible to a scripting language is implemented as a COM interface
+that uses IDispatch. And the IDispatch functions of this interface only calls
+the methods that are laid out in the COM interface, and these two interfaces are
+called dual interfaces because an application that knows only early-binding can
+access it while another language that knows only late-binding can access it, as
+well.</p>
+
+<p>Although the implementation of all of the above is hidden to Perl, there are some
+things to know. In most cases, Automation will accept and convert scalar data
+into the correct variant-type. However, it might be necessary to specify the
+type of data; so to solve this issue, you would convert Perl data types to the
+variants used.</p>
+<blockquote>
+  <table border="0" cellpadding="0" cellspacing="0" width="400" valign="TOP">
+    <tr>
+      <td valign="TOP">VT_EMPTY</td>
+      <td valign="TOP">No Value</td>
+    </tr>
+    <tr>
+      <td valign="TOP">VT_NULL</td>
+      <td valign="TOP">Null Value</td>
+    </tr>
+    <tr>
+      <td valign="TOP">VT_I2</td>
+      <td valign="TOP">2-byte integer</td>
+    </tr>
+    <tr>
+      <td valign="TOP">VT_I4</td>
+      <td valign="TOP">4-byte integer</td>
+    </tr>
+    <tr>
+      <td valign="TOP">VT_R4</td>
+      <td valign="TOP">4-byte real value</td>
+    </tr>
+    <tr>
+      <td valign="TOP">VT_R8</td>
+      <td valign="TOP">8-byte real value</td>
+    </tr>
+    <tr>
+      <td valign="TOP">VT_CY</td>
+      <td valign="TOP">Currency</td>
+    </tr>
+    <tr>
+      <td valign="TOP">VT_DATE</td>
+      <td valign="TOP">Date</td>
+    </tr>
+    <tr>
+      <td valign="TOP">VT_BSTR</td>
+      <td valign="TOP">Binary string</td>
+    </tr>
+    <tr>
+      <td valign="TOP">VT_DISPATCH</td>
+      <td valign="TOP">Automation object</td>
+    </tr>
+    <tr>
+      <td valign="TOP">VT_ERROR</td>
+      <td valign="TOP">Error code</td>
+    </tr>
+    <tr>
+      <td valign="TOP">VT_BOOL</td>
+      <td valign="TOP">Boolean value</td>
+    </tr>
+    <tr>
+      <td valign="TOP">VT_VARIANT</td>
+      <td valign="TOP">Variant</td>
+    </tr>
+    <tr>
+      <td valign="TOP">VT_UNKNOWN</td>
+      <td valign="TOP">IUknown Pointer</td>
+    </tr>
+    <tr>
+      <td valign="TOP">VT_UI1</td>
+      <td valign="TOP">Unsigned 1-byte character</td>
+    </tr>
+    <tr>
+      <td valign="TOP">VT_BYREF</td>
+      <td valign="TOP">Describes the data as passed by reference</td>
+    </tr>
+    <tr>
+      <td valign="TOP">VT_ARRAY</td>
+      <td valign="TOP">An OLE Safearray</td>
+    </tr>
+  </table>
+  <br>
+</blockquote>
+<p>In Perl, Automation and creation of Automation objects is provided by the
+Win32::OLE module, Furthermore, Variant data types can be converted by the
+Variant() method or the OLE module although Perl seamlessly takes care of most
+of the conversion needed.</p>
+ 
+<h2><a name="createwsc">Creating Windows Script Component's</a></h2>
+<p>When it comes to writing a WSC, it is a surprisingly quick and easy process. In
+fact, anybody who has written an ASP page with some script commands and HTML
+will have completed a WSC in less than five minutes. And although .wsc files are
+Extensible Markup Language (XML) files, no previous experience with XML is
+necessary in order to build a successful component.</p>
+
+
+<h3><a name="10steps">Ten Easy Steps</a></h3>
+<p>In order to create a WSC, you can use the Windows Script Component Wizard. The
+wizard will produce a valid skeleton for your WSC, and all you will have to do
+is enter your PerlScript. Let's create a simple WSC that can be instantiated
+within a script and holds the basic functionality of being passed a string and
+retuns the reversed string, so follow me on these steps.</p>
+<blockquote>
+  <ul>
+    <li>Open the Windows Script Component Wizard</li>
+    <li>Enter &quot;Easy&quot; in the component name-field; progID automatically
+      becomes Easy.WSC, which is fine.</li>
+    <li>Click &quot;Next&quot;</li>
+    <li>Set the &quot;Language&quot;-option for the component to
+      &quot;Other&quot; and enter &quot;PerlScript&quot;</li>
+    <li>Click &quot;Next&quot;</li>
+    <li>Click &quot;Next&quot; in the &quot;Properties&quot; window</li>
+    <li>Enter &quot;SayHello&quot; as a method with no parameters</li>
+    <li>Click &quot;Next&quot;</li>
+    <li>Click &quot;Next&quot; in the &quot;Events&quot; windows</li>
+    <li>Click &quot;Finish&quot;</li>
+  </ul>
+</blockquote>
+
+<h3><a name="impps">Implementing the PerlScript</a></h3>
+<p>Following the simple steps above will create a nice skeleton to hold your code.
+With the exception for the classid, which is unique each time one is generated,
+it will look as illustrated.</p>
+<blockquote>
+  <code>&lt;?xml version=&quot;1.0&quot;?&gt;<br>
+  &lt;component&gt;<br>
+  <br>
+  &lt;registration&gt;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;description=&quot;Easy&quot;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;progid=&quot;Easy.WSC&quot;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;version=&quot;1.00&quot;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;classid=&quot;{74bb1ba9-2e69-4ad6-b02c-c52f3cbe153b}&quot;<br>
+  &lt;/registration&gt;<br>
+  <br>
+  &lt;public&gt;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&lt;method name=&quot;SayHello&quot;&gt;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&lt;/method&gt;<br>
+  &lt;/public&gt;<br>
+  <br>
+  &lt;script language=&quot;PerlScript&quot;&gt;<br>
+  &lt;![CDATA[<br>
+  <br>
+  ]]&gt;<br>
+  &lt;/script&gt;<br>
+  &lt;/component&gt;</code>
+</blockquote>
+
+<p>As seen above, you have a Window Script Component that is an XML file. The first
+declaration of the WSC enables strict XML. In that mode, the elements and
+attributes are case-sensitive, and attribute values must be enclosed within
+single quotes or double quotes. You may omit the XML declaration on top of the
+document and it will not be compiled as strictly, but in these examples, we will
+stick with XML conformity and leave the declaration in each document. Note: XML
+elements is that they, like HTML, have tag pairs like
+&quot;&lt;registration&gt;&quot; and &quot;&lt;/registration&gt;&quot;.</p>
+
+<p>Secondly, you have a component element. This element is used to enclose each
+component. You will place one at the beginning, and one at the end. As an
+exception to the rule, there is an element that has a higher priority than the
+component, and that element must be used whenever you keep more than one
+component in your WSC file. Is is the package element. It will as a single
+element enclose all components; however, as mentioned, it is not required when
+you have one component within the file.</p>
+
+<p>Next, the registration element contains the information about your component
+such as the progid, classid, description, and version number. Description is a
+string in which you can write a short abstract summary the funcitonality of your
+component. The progid is used by the program which creates an instance of your
+component, and the version number should be incremented if you release a new
+version of your component. The version number can also be appeneded to the
+progid as as Easy.WSC.1.00 when creating the instance of your component.</p>
+
+<p>After the registration element, the data and functionality that the component
+expose are defined. The public element will hold properties, methods, and
+events. We declare a method by the name &quot;SayHello&quot; and then skip on
+down to the script-elements. As you can tell, there is no source code, so we
+need to fill that out. In the empty space, enter the following:</p>
+<blockquote>
+  <code>sub SayHello {<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;my($param) = shift @_;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;return reverse($param);<br>
+  }</code>
+</blockquote>
+
+<p>Finally, your script file will look like this:<br>
+<blockquote style="MARGIN-RIGHT: 0px">
+  <code>&lt;?xml version=&quot;1.0&quot;?&gt;<br>
+  &lt;component&gt;<br>
+  <br>
+  &lt;registration&gt;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;description=&quot;Easy&quot;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;progid=&quot;Easy.WSC&quot;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;version=&quot;1.00&quot;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;classid=&quot;{74bb1ba9-2e69-4ad6-b02c-c52f3cbe153b}&quot;<br>
+  &lt;/registration&gt;<br>
+  <br>
+  &lt;public&gt;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&lt;method name=&quot;SayHello&quot;&gt;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&lt;/method&gt;<br>
+  &lt;/public&gt;<br>
+  <br>
+  &lt;script language=&quot;PerlScript&quot;&gt;<br>
+  &lt;![CDATA[<br>
+  sub SayHello {<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;my($param) = shift @_;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;return reverse($param);<br>
+  }<br>
+  ]]&gt;<br>
+  &lt;/script&gt;<br>
+  &lt;/component&gt;</code>
+</blockquote>
+
+<h3><a name="regcom">Registering the Component</a></h3>
+<p>Now, it's time to register the component on the system so that it can be used.
+If we assume that the file is saved as c:\easy.wsc, there are two ways to do this:
+<ul>
+    <li>You can type <code>regsvr32 c:\easy.wsc</code> in the command window.</li>
+    <li>Or you can locate it through Windows Explorer, right-click on the file and then choose &quot;Register&quot;.</li>
+</ul>
+
+<p>Either one of the above methods for registering a component should notify you
+upon success or failure. After registering the component, you can use it from
+within Active Server Pages by authoring a small script.<br>
+<blockquote>
+  <code>&lt;%@Language=PerlScript%&gt;<br>
+  &lt;%<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;$obj = $Server-&gt;CreateObject('Easy.WSC');<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;$retval = $obj-&gt;SayHello(&quot;Hello World&quot;);<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;$Response-&gt;Write($retval);<br>
+  %&gt;</code>
+</blockquote>
+
+<h3><a name="comprop">WSC with Properties and Notification</a></h3>
+<p>Next, let's look at how to get a few properties included in the component, too.
+The following example will display how to read and write properties. It also
+includes comments, and, in addition, a custom subroutine is run when the
+component is registered and unregistered. What will happen is that when the
+component has been registered, a message box pops up with the text &quot;Windows
+Script Component says: First.WSC has been registered!&quot; and a similar
+tailored message when the component is unregistered by either one of the ways
+previously shown. So, open up the Windows Script Component wizard, again, and
+this time enter the read/write property &quot;YourName&quot;, and the method
+&quot;SayHello.&quot; The property is a global variable, and it internally is
+read and written by subroutines that implement the functionality needed for
+performing the given operation. The property can either use &quot;get&quot; and
+&quot;set&quot; attributes that point to the mentioned subroutines or there can
+be separate &quot;get&quot; and &quot;set&quot; elements as in the example.
+Their values point to internal Perl subroutines that do their thing on the
+property. It is a simple example, and it is as follows.</p>
+<blockquote>
+  <code>&lt;?xml version=&quot;1.0&quot;?&gt;<br>
+  &lt;component&gt;<br>
+  <br>
+  &lt;registration&gt;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;description=&quot;First&quot;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;progid=&quot;First.WSC&quot;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;version=&quot;1.00&quot;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;classid=&quot;{d0ccb637-bd0c-4c90-a4bd-7473f499d35a}&quot;&gt;<br>
+  <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&lt;comment&gt; This makes the messagebox pop up on
+  registration and unregistation &lt;/comment&gt;<br>
+  <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&lt;script language=&quot;PerlScript&quot;&gt;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&lt;![CDATA[<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;use Win32;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sub register {<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Win32::MsgBox('Windows
+  Script Component says: First.WSC has been registered!');<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sub unregister {<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Win32::MsgBox('Windows
+  Script Component says: First.WSC has been unregistered!');<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;]]&gt;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&lt;/script&gt;<br>
+  &lt;/registration&gt;<br>
+  <br>
+  &lt;comment&gt; The methods and properties to expose to the data consumer
+  &lt;/comment&gt;<br>
+  <br>
+  &lt;public&gt;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&lt;property name=&quot;YourName&quot;&gt;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;get
+  internalName=&quot;hiddenGetProperty&quot;/&gt;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;put
+  internalName=&quot;hiddenSetProperty&quot;/&gt;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&lt;/property&gt;<br>
+  <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&lt;method name=&quot;SayHello&quot;&gt;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&lt;/method&gt;<br>
+  &lt;/public&gt;<br>
+  <br>
+  &lt;comment&gt; The code that implements the functionality of the component
+  &lt;/comment&gt;<br>
+  <br>
+  &lt;script language=&quot;PerlScript&quot;&gt;<br>
+  &lt;![CDATA[<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;use vars qw($YourName_Property);<br>
+  <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;sub hiddenGetProperty {<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return $YourName_Property;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+  <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;sub hiddenSetProperty {<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my $param = shift;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$YourName_Property = $param;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+  <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;sub SayHello {<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return &quot;Hello
+  $YourName_Property!&quot;;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+  ]]&gt;<br>
+  &lt;/script&gt;<br>
+  <br>
+  &lt;/component&gt;</code>
+</blockquote> 
+
+<h2><a name="elementref">XML Element Reference</a></h2>
+<p>Windows Script Components use XML to mark up the definition of the component and
+what is exposed by the component. Listed below are the elements that are valid
+XML elements for use within WSC components.
+
+<h3><a name="elemcom">The Component Element</a></h3>
+<p>The component element is used to define the beginning and the end of the
+components. It encapsulates all other WSC tags as illustrated.</p>
+<blockquote>
+  <code>&lt;component&gt;<br>
+  .<br>
+  .<br>
+  .<br>
+  &lt;/component&gt;</code>
+</blockquote>
+
+<p>You can also set a boolean value of true (1) or false (0) for error checking or
+debugging by using <code>&lt;? component error=&quot;true&quot;
+debug=&quot;true&quot; ?&gt;</code></p>
+
+<p>In case your file will contain more than one component, you use a <code>&lt;component
+id=componentID&gt;</code> element for each, and you are required to then enclose
+all components within a &lt;package&gt; element.<p>
+<blockquote>
+  <code>&lt;package&gt;<br>
+  &lt;component id=&quot;ComponentA&quot;&gt;<br>
+  .<br>
+  .<br>
+  .<br>
+  &lt;/component&gt;<br>
+  &lt;component id=&quot;ComponentB&quot;&gt;<br>
+  .<br>
+  .<br>
+  .<br>
+  &lt;/component&gt;<br>
+  &lt;/package&gt;</code>
+</blockquote>
+
+<p>The default value for the component ID is ComponentCoClass, and when you define
+your own, either to identify the components or for generating a type library,
+the name must be unique and it must begin with a letter and contain no spaces.</p>
+
+<p>When using more than one component within a package, you can create instances of
+the other component within the current component by calling the <code>createComponent(componentID)</code>
+function.
+
+<h3><a name="elemreg">The Registration Element</a></h3>
+<p><code>&lt;registration&gt;</code> contains the necessary information in order to successfully
+register the component as a COM component, and it has two ways of writing.</p>
+<p>Syntax:
+<blockquote>
+  <code>&lt;registration<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;progid=&quot;progID&quot;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;classid=&quot;GUID&quot;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;description=&quot;description&quot;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;version=&quot;version&quot;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;[remotable=remoteFlag]<br>
+  /&gt;</code>
+</blockquote>
+<p>or
+<blockquote style="MARGIN-RIGHT: 0px">
+  <code>&lt;registration<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;progid=&quot;progID&quot;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;classid=&quot;GUID&quot;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;description=&quot;description&quot;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;version=&quot;version&quot;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;[remotable=remoteFlag]<br>
+  &gt;<br>
+  &lt;script&gt;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;(registration and unregistration script)<br>
+  &lt;/script&gt;<br>
+  &lt;/registration&gt;</code>
+</blockquote>
+
+<p>Most of the element attributes have been discussed in the introduction to the
+COM. However, remotable, which is optional, specifies if the component can be
+instantiated using DCOM. Its value can be true or false.</p>
+
+<h3><a name="elempub">The Public Element</a></h3>
+<p>The public element implements Automation, formerly known as OLE Automation, and
+within the public elements you define the properties, methods, and events that
+the component exposes after it has been registered. This is done using the
+property, method, and event elements.</p>
+<blockquote>
+  <code>&lt;public&gt;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&lt;property name=&quot;myProperty&quot;/&gt;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&lt;method name=&quot;myMethod&quot;/&gt;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&lt;event name=&quot;myEvent&quot;/&gt;<br>
+  &lt;/public&gt;</code>
+</blockquote>
+
+<h3><a name="elemprop">The Property Element</a></h3>
+<p>Property declares a property exposed by the component. Syntax:
+<blockquote>
+  <code>&lt;property name=&quot;myProperty&quot;
+  [internalName=&quot;propertyScalarVariable&quot;] /&gt;</code>
+</blockquote>
+<p>The name of the property is what it will be exposed as, which needs to be the
+same name as the global variable used to represent the proeprty. In contrast,
+you can set an internalName attribute and run the property under another name
+within the &lt;script&gt; elements. You may also use the following syntax if you
+wish to implement the properties as subroutines that calculate the value of the
+property.</p>
+<blockquote>
+  <code>&lt;property name=&quot;myProperty&quot;
+  get=&quot;getSubroutineNamet&quot; put=&quot;putSubroutineName&quot;/&gt;</code>
+</blockquote>
+
+<p>or
+
+<blockquote>
+  <code>&lt;property name=&quot;myProperty&quot;&gt;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&lt;get [internalName=&quot;getSubroutineName&quot;]
+  /&gt;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&lt;put [internalName=&quot;putSubroutineName&quot;]
+  /&gt;<br>
+  &lt;/property&gt;</code>
+</blockquote>
+
+<p>Put indicates write-permissions while get indicated read-permissions. A
+combination of the both as seen above indicated read/wrote permissons.
+
+<h3><a name="elemmet">The Method Element</a></h3>
+<p>The method elements define the methods that are exposed by the component.</p>
+<p>Syntax:
+<blockquote style="MARGIN-RIGHT: 0px">
+  <code>&lt;method name=&quot;methodName&quot;
+  internalName=&quot;subroutineName&quot; dispid=dispatchID /&gt;</code>
+</blockquote>
+<p>or
+<blockquote style="MARGIN-RIGHT: 0px">
+  <code>&lt;method name=&quot;methodName&quot;
+  internalName=&quot;subroutineName&quot; dispid=dispatchID &gt;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;[&lt;parameter name=&quot;param&quot;/&gt;]<br>
+  &lt;/method&gt;</code>
+</blockquote>
+
+<p>The dispatchID is automatically generated unless you specify &quot;0&quot; as a
+dispatchID, which will result in it being the default method of the component.
+Parameter elements may belong to the method, if defined.</p>
+<blockquote>
+  <code>&lt;parameter name=&quot;param&quot;/&gt;</code>
+</blockquote>
+
+<h3><a name="elemevent">The Event Element</a></h3>
+<p>Declare an event that can be fired from within the component.</p>
+<p>Syntax:
+<blockquote style="MARGIN-RIGHT: 0px">
+  <code>&lt;event name=&quot;name&quot; dispid=dispatchID/&gt;</code>
+</blockquote>
+
+<p>DispatchID is a numeric value that is generated automatically unless you specify
+it. From within your script, you use the <code>fireEvent(eventname);</code>
+method to execute an event.</p>
+
+<h3><a name="elemimp">The Implements Element</a></h3>
+<p>The Implements element enables you to include more COM interface handlers within
+your script.</p>
+<p>Syntax:
+<blockquote>
+  <code>&lt;implements type=&quot;COMHandlerName&quot;
+  [id=&quot;internalName&quot;] [default=fAssumed] &gt;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Information related to the COMHandler goes here<br>
+  &lt;/implements&gt;</code>
+</blockquote>
+
+<p>COMHandlerName is the name of an interface handler that you wish to implement,
+and internalName is the name to which you want to reference the COMHandler. This
+is useful to avoid naming conflicts because the components exposed data is
+available in the global namespace. The fAssumed flag is a boolean value used to
+define if internalName is assumed in scripts, which is the default setting.</p>
+
+<p>The Windows Script Components run-time (scrobj.dll) implement handlers for
+Automation and ASP, and also handlers for accesing the DHTML object model in the
+page.
+<blockquote>
+  <code>&lt;component&gt;<br>
+  &lt;registration progid=&quot;SimpleASP.WSC&quot;/&gt;<br>
+  <br>
+  &lt;public&gt;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&lt;method name=&quot;TestWrite&quot;/&gt;<br>
+  &lt;/public&gt;<br>
+  <br>
+  &lt;implements type=&quot;ASP&quot;/&gt;<br>
+  &lt;script language=&quot;PerlScript&quot;&gt;<br>
+  &lt;![CDATA[<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;sub TestWrite {<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Response.Write(&quot;Hello
+  World, says ASP!&quot;)<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+  ]]&gt;<br>
+  &lt;/script&gt;<br>
+  &lt;/component&gt;</code>
+</blockquote>
+
+<h3><a name="elemscr">The Script Element</a></h3>
+<p>The script element lets you define the scripting language to use, and then with
+its closing-tag functions as delimiters for the script code.
+<p>Syntax:
+<blockquote>
+  <code>&lt;script language=&quot;languageName&quot;&gt; code &lt;/script&gt;</code>
+</blockquote>
+<p>For example.
+<blockquote>
+  <code>&lt;?XML version=&quot;1.0&quot;?&gt;<br>
+  &lt;component&gt;<br>
+  ...<br>
+  &lt;script language=&quot;PerlScriptt&quot;&gt;<br>
+  &lt;![CDATA[<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;sub ReturnValue {<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;#<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;# Perl code here<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;#<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+  ]]&gt;<br>
+  &lt;/script&gt;<br>
+  &lt;/component&gt;</code>
+</blockquote>
+
+
+<h3><a name="elemobj">The Object Element</a></h3>
+<p>The object element enables you to create an instance of a COM object that you
+want to use within your Windows Script Component.
+<p>Syntax:
+<blockquote>
+  <code>&lt;object id=&quot;objectID&quot; [classid=&quot;classid:GUID&quot; |
+  progid=&quot;progID&quot;]/&gt;</code>
+</blockquote>
+<p>The objectID is the name by which you want to reference the object within your
+script, and you can use either the progID or classID to locate the component.
+For example, how to create an instance using the COM components progID:
+<blockquote style="MARGIN-RIGHT: 0px">
+  <code>&lt;?XML version=&quot;1.0&quot;?&gt;<br>
+  &lt;component&gt;<br>
+  &lt;object id=&quot;conn&quot; progid=&quot;ADODB.Connection.2.5&quot;&gt;<br>
+  &lt;script language=&quot;PerlScript&quot;&gt;<br>
+  &lt;![CDATA[<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;sub OpenConn {<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my($status);<br>
+  <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$conn-&gt;Open('ADOSamples');<br>
+  <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if($conn-&gt;{State} ==
+  adStateOpen) {<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$status
+  = &quot;Connection was a success&quot;;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else {<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$status
+  = &quot;Connection failed because &quot;;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$status
+  .= $conn-&gt;Errors(0)-&gt;{Description};<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+  <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$conn-&gt;Close();<br>
+  <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return $status;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+  ]]&gt;<br>
+  &lt;/script&gt;<br>
+  &lt;/component&gt;</code>
+</blockquote>
+
+<h3><a name="elemres">The Resource Element</a></h3>
+<p>The resource element is a placeholder for strings or numeric data that should be
+separate from the script commands yet may be used within the script.
+<p>Syntax:
+<blockquote>
+  <code>&lt;resource id=&quot;resourceID&quot;&gt; text or number to represent
+  resource goes here &lt;/resource&gt;</code>
+</blockquote>
+
+<p>You use the <code>getResource(resourceID)</code> to retrieve the contents of the
+resource specified in the resourceID parameter.
+
+<h3><a name="elemref">The Reference Element</a></h3>
+<p>You can import external type libraries into your component by using the
+reference element. By importing a type library into your component, you will be
+able to naturally access the constants that belongs to it, too.
+<p>Syntax:
+<blockquote>
+  <code>&lt;reference [object=&quot;progID&quot; | guid=&quot;typelibGUID&quot;]
+  [version=&quot;versionNo&quot;] /&gt;</code>
+</blockquote>
+<p>For example, you can use an ActiveX Data Object within your component.
+<blockquote>
+  <code>&lt;?XML version=&quot;1.0&quot;?&gt;<br>
+  &lt;component&gt;<br>
+  &lt;reference object=&quot;ADODB.Connection.2.5&quot;/&gt;<br>
+  &lt;registration progid=&quot;SimpleADO.WSC&quot;/&gt;<br>
+  &lt;public&gt;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&lt;method name=&quot;OpenConn&quot;/&gt;<br>
+  &lt;/public&gt;<br>
+  <br>
+  &lt;script language=&quot;PerlScript&quot;&gt;<br>
+  &lt;![CDATA[<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;sub OpenConn {<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my($status);<br>
+  <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$conn = new
+  Win32::OLE(&quot;ADODB.Connection&quot;);<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$conn-&gt;Open(&quot;ADOSamples');<br>
+  <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if($conn-&gt;{State} ==
+  adStateOpen) {<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$status
+  = &quot;Connection was a success&quot;;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else {<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$status
+  = &quot;Connection failed because &quot;;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$status
+  .= $conn-&gt;Errors(0)-&gt;{Description};<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+  <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$conn-&gt;Close();<br>
+  <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return $status;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+  ]]&gt;<br>
+  &lt;/script&gt;<br>
+  &lt;/component&gt;</code>
+</blockquote>
+
+<h3><a name="elemcomment">The Comment Element</a></h3>
+<p>The Comment element encloses descriptive strings that are used to describe the
+on-goings in the code and the strings are ignored by the language parser when
+preparing the code to execute.
+<blockquote>
+  <code>&lt;comment&gt;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Author: John Doe<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Description: This WSC component is used to output a
+  Binary Large Object (BLOB)<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;from an SQL Server database . . .<br>
+  &lt;/comment&gt;</code>
+</blockquote>
+ 
+<h2><a name="author and copyright">AUTHOR AND COPYRIGHT</a></h2>
+<p>Copyright (c) 2000 Tobias Martinsson. All Rights Reserved.</p>
+<p>When included as part of the Standard Version of Perl, or as part of its
+complete documentation whether printed or otherwise, this work may be
+distributed only under the terms of Perl's Artistic License. Any distribution of
+this file or derivatives thereof <i>outside</i> of that package require that
+special arrangements be made with copyright holder.</p>
+<p>Irrespective of its distribution, all code examples in this file are hereby
+placed into the public domain. You are permitted and encouraged to use this code
+in your own programs for fun or for profit as you see fit. A simple comment in
+the code giving credit would be courteous but is not required.</p>
+<p>Windows Script Components is copyright (c) 1991-2000 Microsoft Corporation.
+All rights reserved.</p>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+  <tr>
+    <td class="block" valign="MIDDLE" width="100%" bgcolor="#cccccc"><strong>
+      <p class="block">&nbsp;Windows Script Components</p>
+      </strong></td>
+  </tr>
+</table>
+
+</body>
+
+</html>

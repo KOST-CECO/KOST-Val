@@ -1,6 +1,6 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
- * Information Package (SIP). Copyright (C) 2012-2016 Claire Röthlisberger (KOST-CECO), Christian
+ * Information Package (SIP). Copyright (C) 2012-2016 Claire Roethlisberger (KOST-CECO), Christian
  * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
  * Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
@@ -24,7 +24,7 @@ import ch.kostceco.tools.kostval.exception.KOSTValException;
 public class ValidationHsizeValidationException extends KOSTValException
 {
 
-	/** @author Rc Claire Röthlisberger, KOST-CECO */
+	/** @author Rc Claire Roethlisberger, KOST-CECO */
 	private static final long	serialVersionUID	= -2554852466330221247L;
 
 	public ValidationHsizeValidationException()

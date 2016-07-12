@@ -1,0 +1,322 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Tk::ConfigSpecs - Defining behaviour of 'configure' for composite widgets.</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::ConfigSpecs - Defining behaviour of 'configure' for composite widgets.</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<ul>
+
+		<li><a href="#defining_the_configspecs_for_a_class_">Defining the ConfigSpecs for a class.</a></li>
+		<li><a href="#delegating_all_options_of_a_widget_class_to_a_subwidget">Delegating all options of a widget class to a subwidget</a></li>
+		<li><a href="#default_values">Default values</a></li>
+		<li><a href="#new__time_configure"><strong>New()-time configure</strong></a></li>
+		<li><a href="#configuring_composites">Configuring composites</a></li>
+		<li><a href="#inquiring_attributes_of_composites">Inquiring attributes of composites</a></li>
+	</ul>
+
+	<li><a href="#caveats">CAVEATS</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Tk::ConfigSpecs - Defining behaviour of 'configure' for composite widgets.</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+    sub Populate
+    {
+     my ($composite,$args) = @_;
+     ...
+     $composite-&gt;ConfigSpecs('-attribute' =&gt; [ where,dbName,dbClass,default ]);
+     $composite-&gt;ConfigSpecs('-alias' =&gt; '-otherattribute');
+     $composite-&gt;ConfigSpecs('DEFAULT' =&gt; [ where ]);
+     $composite-&gt;ConfigSpecs($subwidget-&gt;ConfigSpecs);
+     ...
+    }</pre>
+<pre>
+    $composite-&gt;configure(-attribute =&gt; value);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The aim is to make the composite widget configure method look as much like
+a regular Tk widget's configure as possible.
+(See <a href="../../../site/lib/Tk/options.html">the Tk::options manpage</a> for a description of this behaviour.)
+To enable this the attributes that the composite as a whole accepts
+needs to be defined.</p>
+<p>
+</p>
+<h2><a name="defining_the_configspecs_for_a_class_">Defining the ConfigSpecs for a class.</a></h2>
+<p>Typically a widget will have one or more calls like the following</p>
+<pre>
+    $composite-&gt;ConfigSpecs(-attribute =&gt; [where,dbName,dbClass,default]);</pre>
+<p>in its <strong>Populate</strong> method. When <strong>ConfigSpecs</strong> is called this way
+(with arguments) the arguments are used to construct or augment/replace
+a hash table for the widget. (More than one <em>-option</em>=&gt;<em>value</em>
+pair can be specified to a single call.)</p>
+<p><strong>dbName</strong>, <strong>dbClass</strong> and default are only used by <strong>ConfigDefault</strong> described
+below, or to respond to 'inquiry' configure commands.</p>
+<p>It may be either one of the values below, or a list of such values
+enclosed in <strong>[]</strong>.</p>
+<p>The currently permitted values of <strong>where</strong> are:</p>
+<dl>
+<dt><strong><a name="item__27advertised_27"><strong>'ADVERTISED'</strong></a></strong><br />
+</dt>
+<dd>
+Apply <strong>configure</strong> to <em>advertised</em> subwidgets.
+</dd>
+<p></p>
+<dt><strong><a name="item__27descendants_27"><strong>'DESCENDANTS'</strong></a></strong><br />
+</dt>
+<dd>
+Apply <strong>configure</strong> recursively to all descendants.
+</dd>
+<p></p>
+<dt><strong><a name="item__27callback_27"><strong>'CALLBACK'</strong></a></strong><br />
+</dt>
+<dd>
+Setting the attribute does <code>Tk::Callback-&gt;new($value)</code> before storing
+in <code>$composite-&gt;{Configure}{-attribute}</code>. This is appropriate for
+<code>-command =&gt; ...</code> attributes that are handled by the composite and not
+forwarded to a subwidget. (E.g. <strong>Tk::Tiler</strong> has <code>-yscrollcommand</code> to
+allow it to have scrollbar attached.)
+</dd>
+<dd>
+<p>This may be the first of several 'validating' keywords (e.g. font, cursor,
+anchor etc.) that core Tk makes special for C code.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item__27children_27"><strong>'CHILDREN'</strong></a></strong><br />
+</dt>
+<dd>
+Apply <strong>configure</strong> to all children.  (Children are the immediate
+descendants of a widget.)
+</dd>
+<p></p>
+<dt><strong><a name="item__27method_27"><strong>'METHOD'</strong></a></strong><br />
+</dt>
+<dd>
+Call <code>$cw-&gt;attribute(value)</code>
+</dd>
+<dd>
+<p>This is the most general case. Simply have a method of the composite
+class with the same name as the attribute.  The method may do any
+validation and have whatever side-effects you like.  (It is probably
+worth 'queueing' using <strong>afterIdle</strong> for more complex side-effects.)</p>
+</dd>
+<p></p>
+<dt><strong><a name="item__27passive_27"><strong>'PASSIVE'</strong></a></strong><br />
+</dt>
+<dd>
+Simply store value in <code>$composite-&gt;{Configure}{-attribute}</code>.
+</dd>
+<dd>
+<p>This form is also a useful placeholder for attributes which you
+currently only handle at create time.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item__27self_27"><strong>'SELF'</strong></a></strong><br />
+</dt>
+<dd>
+Apply <strong>configure</strong> to the core widget (e.g. <strong>Frame</strong>) that is the basis of
+the composite. (This is the default behaviour for most attributes which
+makes a simple Frame behave the way you would expect.) Note that once
+you have specified <strong>ConfigSpecs</strong> for an attribute you must explicitly
+include <a href="#item__27self_27"><code>'SELF'</code></a> in the list if you want the attribute to apply to the
+composite itself (this avoids nasty infinite recursion problems).
+</dd>
+<p></p>
+<dt><strong><a name="item_reference"><strong>$reference</strong> (blessed)</a></strong><br />
+</dt>
+<dd>
+Call <strong>$reference</strong>-&gt;configure(-attribute =&gt; value)
+</dd>
+<dd>
+<p>A common case is where <strong>$reference</strong> is a subwidget.</p>
+</dd>
+<dd>
+<p>$reference may also be result of</p>
+</dd>
+<dd>
+<pre>
+     Tk::Config-&gt;new(setmethod,getmethod,args,...);</pre>
+</dd>
+<dd>
+<p><strong>Tk::Config</strong> class is used to implement all the above keyword types.  The
+class has <code>configure</code> and <code>cget</code> methods so allows higher level code to
+<em>always</em> just call one of those methods on an <em>object</em> of some kind.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item_hash_reference"><strong>hash reference</strong></a></strong><br />
+</dt>
+<dd>
+Defining:
+</dd>
+<dd>
+<pre>
+        $cw-&gt;ConfigSpecs(
+                ...
+                -option =&gt; [ { -optionX=&gt;$w1, -optionY=&gt;[$w2, $w3] },
+                                dbname dbclass default ],
+                ...
+                );</pre>
+</dd>
+<dd>
+<p>So <code>$cw-&gt;configure(-option =&gt; value)</code> actually does</p>
+</dd>
+<dd>
+<pre>
+        $w1-&gt;configure(-optionX =&gt; value);
+        $w2-&gt;configure(-optionY =&gt; value);
+        $w3-&gt;configure(-optionY =&gt; value);</pre>
+</dd>
+<p></p>
+<dt><strong><a name="item__27otherstring_27"><strong>'otherstring'</strong></a></strong><br />
+</dt>
+<dd>
+Call
+</dd>
+<dd>
+<pre>
+    $composite-&gt;Subwidget('otherstring')-&gt;configure( -attribute =&gt; value );</pre>
+</dd>
+<dd>
+<p>While this is here for backward compatibility with Tk-b5, it is probably
+better just to use the subwidget reference directly.  The only
+case for retaining this form is to allow an additional layer of
+abstraction - perhaps having a 'current' subwidget - this is unproven.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item_aliases"><strong>Aliases</strong></a></strong><br />
+</dt>
+<dd>
+<code>ConfigSpecs( -alias =&gt; '-otherattribute' )</code> is used to make <code>-alias</code>
+equivalent to <code>-otherattribute</code>. For example the aliases
+</dd>
+<dd>
+<pre>
+    -fg =&gt; '-foreground',
+    -bg =&gt; '-background'</pre>
+</dd>
+<dd>
+<p>are provided automatically (if not already specified).</p>
+</dd>
+<p></p></dl>
+<p>
+</p>
+<h2><a name="delegating_all_options_of_a_widget_class_to_a_subwidget">Delegating all options of a widget class to a subwidget</a></h2>
+<pre>
+    $composite-&gt;ConfigSpecs($subwidget-&gt;ConfigSpecs);</pre>
+<p>The above generates a list of <em>composite</em> ConfigSpecs arguments, one
+for each valid option in $subwidget's class, and delegates said option
+to $subwidget.  See <a href="../../../site/lib/Tk/Widget.html">the Tk::Widget manpage</a> and the <em>widget</em> method
+ConfigSpecs.  Duplicating <em>composite</em> ConfigSpecs and <em>widget</em>
+ConfigSpecs keys will yield undefined results.</p>
+<p>
+</p>
+<h2><a name="default_values">Default values</a></h2>
+<p>When the <strong>Populate</strong> method returns <strong>ConfigDefault</strong> is called.  This calls</p>
+<pre>
+    $composite-&gt;ConfigSpecs;</pre>
+<p>(with no arguments) to return a reference to a hash. Entries in the hash
+take the form:</p>
+<pre>
+    '-attribute' =&gt; [ where, dbName, dbClass, default ]</pre>
+<p><strong>ConfigDefault</strong> ignores 'where' completely (and also the DEFAULT entry) and
+checks the 'options' database on the widget's behalf, and if an entry is
+present matching dbName/dbClass</p>
+<pre>
+    -attribute =&gt; value</pre>
+<p>is added to the list of options that <strong>new</strong> will eventually apply to the
+widget. Likewise if there is not a match and default is defined this
+default value will be added.</p>
+<p>Alias entries in the hash are used to convert user-specified values for the
+alias into values for the real attribute.</p>
+<p>
+</p>
+<h2><a name="new__time_configure"><strong>New()-time configure</strong></a></h2>
+<p>Once control returns to <strong>new</strong>, the list of user-supplied options
+augmented by those from <strong>ConfigDefault</strong> are applied to the widget using the
+<strong>configure</strong> method below.</p>
+<p>Widgets are most flexible and most Tk-like if they handle the majority of
+their attributes this way.</p>
+<p>
+</p>
+<h2><a name="configuring_composites">Configuring composites</a></h2>
+<p>Once the above have occurred calls of the form:</p>
+<pre>
+    $composite-&gt;configure( -attribute =&gt; value );</pre>
+<p>should behave like any other widget as far as end-user code is concerned.
+<strong>configure</strong> will be handled by <strong>Tk::Derived::configure</strong> as follows:</p>
+<pre>
+    $composite-&gt;ConfigSpecs;</pre>
+<p>is called (with no arguments) to return a reference to a hash <strong>-attribute</strong> is
+looked up in this hash, if <strong>-attribute</strong> is not present in the hash then
+<strong>'DEFAULT'</strong> is looked for instead.  (Aliases are tried as well and cause
+redirection to the aliased attribute).  The result should be a reference to a
+list like:</p>
+<pre>
+  [ where, dbName, dbClass, default ]</pre>
+<p>at this stage only <em>where</em> is of interest, it maps to a list of object
+references (maybe only one) foreach one</p>
+<pre>
+   $object-&gt;configure( -attribute =&gt; value );</pre>
+<p>is <strong>eval</strong>ed.</p>
+<p>
+</p>
+<h2><a name="inquiring_attributes_of_composites">Inquiring attributes of composites</a></h2>
+<pre>
+   $composite-&gt;cget( '-attribute' );</pre>
+<p>This is handled by  <strong>Tk::Derived::cget</strong> in a similar manner to configure. At
+present if <em>where</em> is a list of more than one object it is ignored completely
+and the ``cached'' value in</p>
+<pre>
+   $composite-&gt;{Configure}{-attribute}.</pre>
+<p>is returned.</p>
+<p>
+</p>
+<hr />
+<h1><a name="caveats">CAVEATS</a></h1>
+<p>It is the author's intention to port as many of the ``Tix'' composite widgets
+as make sense. The mechanism described above may have to evolve in order to
+make this possible, although now aliases are handled I think the above is
+sufficient.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../../../site/lib/Tk/composite.html">Tk::composite</a>,
+<a href="../../../site/lib/Tk/options.html">Tk::options</a>,
+<a href="../../../site/lib/Tk/Widget.html">the Tk::Widget manpage</a></p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::ConfigSpecs - Defining behaviour of 'configure' for composite widgets.</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Tk::Selection - Manipulate the X selection</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::Selection - Manipulate the X selection</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#keywords">KEYWORDS</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Tk::Selection - Manipulate the X selection</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p><em>$widget</em>-&gt;<strong>Selection</strong><em>Option</em>?(<em>args</em>)?</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>This command provides an interface to the X selection mechanism and
+implements the full selection functionality described in the
+X Inter-Client Communication Conventions Manual (ICCCM).</p>
+<p>The widget object used to invoke the methods below determines which
+display is used to access the selection.
+In order to avoid conflicts with <strong>selection</strong> methods of widget classes
+(e.g. <strong>Text</strong>) this set of methods uses the prefix <strong>Selection</strong>.
+The following methods are currently supported:</p>
+<dl>
+<dt><strong><a name="item_selectionclear"><em>$widget</em>-&gt;<strong>SelectionClear</strong>?(<strong>-selection</strong>=&gt;<em>selection</em>)?</a></strong><br />
+</dt>
+<dd>
+If <em>selection</em> exists anywhere on <em>$widget</em>'s display, clear it
+so that no window owns the selection anymore.  <em>Selection</em>
+specifies the X selection that should be cleared, and should be an
+atom name such as PRIMARY or CLIPBOARD; see the Inter-Client
+Communication Conventions Manual for complete details.
+<em>Selection</em> defaults to PRIMARY.
+Returns an empty string.
+</dd>
+<p></p>
+<dt><strong><a name="item_selectionget"><em>$widget</em>-&gt;<strong>SelectionGet</strong>?(?<strong>-selection</strong>=&gt;<em>selection</em>?,?<strong>-type</strong>=&gt;<em>type</em>?)?</a></strong><br />
+</dt>
+<dd>
+Retrieves the value of <em>selection</em> from <em>$widget</em>'s display and
+returns it as a result.  <em>Selection</em> defaults to PRIMARY.
+</dd>
+<dd>
+<p><em>Type</em> specifies the form in which the selection is to be returned
+(the desired ``target'' for conversion, in ICCCM terminology), and
+should be an atom name such as STRING or FILE_NAME; see the
+Inter-Client Communication Conventions Manual for complete details.
+<em>Type</em> defaults to STRING.  The selection owner may choose to
+return the selection in any of several different representation
+formats, such as STRING, ATOM, INTEGER, etc. (this format is different
+than the selection type; see the ICCCM for all the confusing details).</p>
+</dd>
+<dd>
+<p>If <em>format</em> is not STRING then things get messy, the following
+description is from the Tcl/Tk man page as yet incompetely translated for
+the perl version - it is misleading at best.</p>
+</dd>
+<dd>
+<p>If the selection is returned in a non-string format, such as INTEGER
+or ATOM, the <strong>SelectionGet</strong> converts it to a list of perl
+values: atoms are converted to their
+textual names, and anything else is converted integers.</p>
+</dd>
+<dd>
+<p>A goal of the perl port is to provide better handling of different
+formats than Tcl/Tk does, which should be possible given perl's
+wider range of ``types''. Although some thought went into this
+in very early days of perl/Tk what exactly happens is still
+``not quite right'' and subject to change.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item_selectionhandle"><em>$widget</em>-&gt;<strong>SelectionHandle</strong>(?<strong>-selection</strong>=&gt;<em>selection</em>?,?<strong>-type</strong>=&gt;<em>type</em>?,?<strong>-format</strong>=&gt;<em>format</em>? <em>callback</em>)</a></strong><br />
+</dt>
+<dd>
+Creates a handler for selection requests, such that <em>callback</em> will
+be executed whenever <em>selection</em> is owned by <em>$widget</em> and
+someone attempts to retrieve it in the form given by <em>type</em>
+(e.g. <em>type</em> is specified in the <strong>selection get</strong> command).
+<em>Selection</em> defaults to PRIMARY, <em>type</em> defaults to STRING, and
+<em>format</em> defaults to STRING.  If <em>callback</em> is an empty string
+then any existing handler for <em>$widget</em>, <em>type</em>, and
+<em>selection</em> is removed.
+</dd>
+<p>When <em>selection</em> is requested, <em>$widget</em> is the selection owner,
+and <em>type</em> is the requested type, <em>callback</em> will be executed
+with two additional arguments.
+The two additional arguments
+are <em>offset</em> and <em>maxBytes</em>:  <em>offset</em> specifies a starting
+character position in the selection and <em>maxBytes</em> gives the maximum
+number of bytes to retrieve.  The command should return a value consisting
+of at most <em>maxBytes</em> of the selection, starting at position
+<em>offset</em>.  For very large selections (larger than <em>maxBytes</em>)
+the selection will be retrieved using several invocations of <em>callback</em>
+with increasing <em>offset</em> values.  If <em>callback</em> returns a string
+whose length is less than <em>maxBytes</em>, the return value is assumed to
+include all of the remainder of the selection;  if the length of
+<em>callback</em>'s result is equal to <em>maxBytes</em> then
+<em>callback</em> will be invoked again, until it eventually
+returns a result shorter than <em>maxBytes</em>.  The value of <em>maxBytes</em>
+will always be relatively large (thousands of bytes).</p>
+<p>If <em>callback</em> returns an error (e.g. via <strong>die</strong>)
+then the selection retrieval is rejected
+just as if the selection didn't exist at all.</p>
+<p>The <em>format</em> argument specifies the representation that should be
+used to transmit the selection to the requester (the second column of
+Table 2 of the ICCCM), and defaults to STRING.  If <em>format</em> is
+STRING, the selection is transmitted as 8-bit ASCII characters (i.e.
+just in the form returned by <em>command</em>).</p>
+<p>If <em>format</em> is not STRING then things get messy, the following
+description is from the Tcl/Tk man page as yet untranslated for
+the perl version - it is misleading at best.</p>
+<p>If <em>format</em> is
+ATOM, then the return value from <em>command</em> is divided into fields
+separated by white space;  each field is converted to its atom value,
+and the 32-bit atom value is transmitted instead of the atom name.
+For any other <em>format</em>, the return value from <em>command</em> is
+divided into fields separated by white space and each field is
+converted to a 32-bit integer;  an array of integers is transmitted
+to the selection requester.</p>
+<p>The <em>format</em> argument is needed only for compatibility with
+many selection requesters, except Tcl/Tk.  If Tcl/Tk is being
+used to retrieve the selection then the value is converted back to
+a string at the requesting end, so <em>format</em> is
+irrelevant.</p>
+<p>A goal of the perl port is to provide better handling of different
+formats than Tcl/Tk does, which should be possible given perl's
+wider range of ``types''. Although some thought went into this
+in very early days of perl/Tk what exactly happens is still
+``not quite right'' and subject to change.</p>
+<dl>
+<dt><strong><a name="item_selectionowner"><em>$widget</em>-&gt;<strong>SelectionOwner</strong>?(<strong>-selection</strong>=&gt;<em>selection</em>)?</a></strong><br />
+</dt>
+<dd>
+<strong>SelectionOwner</strong> returns the
+window in this application that owns <em>selection</em> on the display
+containing <em>$widget</em>, or an empty string if no window in this
+application owns the selection.  <em>Selection</em> defaults to PRIMARY.
+</dd>
+<p></p>
+<dt><strong><a name="item_selectionown"><em>$widget</em>-&gt;<strong>SelectionOwn</strong>?(?<strong>-command</strong>=&gt;<em>callback</em>?,?<strong>-selection</strong>=&gt;<em>selection</em>?)?</a></strong><br />
+</dt>
+<dd>
+<strong>SelectionOwn</strong> causes <em>$widget</em> to become
+the new owner of <em>selection</em> on <em>$widget</em>'s display, returning
+an empty string as result. The existing owner, if any, is notified
+that it has lost the selection.
+If <em>callback</em> is specified, it will be executed when
+some other window claims ownership of the selection away from
+<em>$widget</em>.  <em>Selection</em> defaults to PRIMARY.
+</dd>
+<p></p></dl>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="keywords">KEYWORDS</a></h1>
+<p>clear, format, handler, ICCCM, own, selection, target, type</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::Selection - Manipulate the X selection</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

@@ -1,6 +1,6 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
- * Information Package (SIP). Copyright (C) 2012-2016 Claire Röthlisberger (KOST-CECO), Christian
+ * Information Package (SIP). Copyright (C) 2012-2016 Claire Roethlisberger (KOST-CECO), Christian
  * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
  * Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
@@ -26,27 +26,49 @@ import java.util.Arrays;
 import java.util.List;
 
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationAzipException;
+import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationAzipModule;
 import ch.enterag.utils.zip.Zip64File;
 import ch.enterag.utils.zip.FileEntry;
 
 /** Validierungsschritt A (Lesbarkeit) Kann die SIARD-Datei gelesen werden? valid --> lesbare und
- * nicht passwortgeschützte ZIP-Datei oder ZIP64-Datei valid --> unkomprimierte ZIP64-Datei oder
+ * nicht passwortgeschï¿½tzte ZIP-Datei oder ZIP64-Datei valid --> unkomprimierte ZIP64-Datei oder
  * unkomprimierte ZIP-Datei, seit dem Addendum auch Deflate-Komprimierung erlaubt ==> Bei den Module
  * A, B, C und D wird die Validierung abgebrochen, sollte das Resulat invalid sein!
  * 
- * @author Rc Claire Röthlisberger, KOST-CECO */
+ * @author Rc Claire Roethlisberger, KOST-CECO */
 
 public class ValidationAzipModuleImpl extends ValidationModuleImpl implements ValidationAzipModule
 {
 
+	private ConfigurationService	configurationService;
+
+	public ConfigurationService getConfigurationService()
+	{
+		return configurationService;
+	}
+
+	public void setConfigurationService( ConfigurationService configurationService )
+	{
+		this.configurationService = configurationService;
+	}
+
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile ) throws ValidationAzipException
 	{
-		// Ausgabe SIARD-Modul Ersichtlich das KOST-Val arbeitet
-		System.out.print( "A    " );
-		System.out.print( "\b\b\b\b\b" );
+		// Informationen zur Darstellung "onWork" holen
+		String onWork = getConfigurationService().getShowProgressOnWork();
+		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
+		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
+		 * ref="configurationService" /> */
+		if ( onWork.equals( "no" ) ) {
+			// keine Ausgabe
+		} else {
+			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
+			System.out.print( "A    " );
+			System.out.print( "\b\b\b\b\b" );
+		}
 
 		boolean valid = false;
 		boolean validC = false;
@@ -89,7 +111,7 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 			char[] charArray2 = new char[] { 'P', 'K', c3, c4 };
 
 			if ( Arrays.equals( charArray1, charArray2 ) ) {
-				// höchstwahrscheinlich ein ZIP da es mit 504B0304 respektive PK.. beginnt
+				// hï¿½chstwahrscheinlich ein ZIP da es mit 504B0304 respektive PK.. beginnt
 				valid = true;
 			} else {
 				getMessageService().logError(
@@ -107,10 +129,10 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 			return false;
 		}
 
-		// Die byte 8 und 9 müssen 00 00 STORE / 08 00 DEFLATE sein
+		// Die byte 8 und 9 mÃ¼ssen 00 00 STORE / 08 00 DEFLATE sein
 
 		/* Dies ergibt jedoch nur ein Indix darauf, wie die Dateien gezipt sind. Dies weil in einem Zip
-		 * unterschiedliche Komprimierungen verwendet werden können und die erste Kopmprimierung nicht
+		 * unterschiedliche Komprimierungen verwendet werden kÃ¶nnen und die erste Kopmprimierung nicht
 		 * das ganze Zip abbildet. */
 		FileReader fr89 = null;
 		try {
@@ -155,14 +177,14 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 				// def: DEFLATED -> validC = true seit Addendum 1 durch ist
 				validC = true;
 			} else if ( Arrays.equals( charArray1, charArray2 ) ) {
-				// höchstwahrscheinlich ein unkomprimiertes ZIP
+				// hï¿½chstwahrscheinlich ein unkomprimiertes ZIP
 				validC = true;
 			} else {
 				validC = false;
 			}
 
 			if ( validC ) {
-				// Versuche das ZIP file zu öffnen
+				// Versuche das ZIP file zu ï¿½ffnen
 				Zip64File zf = null;
 				try {
 					Integer compressed = 0;

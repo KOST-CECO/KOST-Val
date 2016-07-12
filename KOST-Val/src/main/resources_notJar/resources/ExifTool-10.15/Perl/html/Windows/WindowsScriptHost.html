@@ -1,0 +1,588 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+
+<head>
+<title>Rough Guide to Windows Script Host</title>
+<link rel="stylesheet" href="../Active.css" type="text/css">
+</head>
+
+<body>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#EAE2BB">
+<tr> 
+<td width="57"><a target=_blank href="http://www.ActiveState.com/ActivePerl/">
+<img src="../images/activeperl_logo.gif" width="57" height="48" border="0" alt="ActivePerl"></a></td>
+<td><div align="center" class="heading">ActivePerl User Guide</div></td>
+<td width="112"><a target=_blank  href="http://www.ActiveState.com">
+<img src="../images/AS_logo.gif" width="112" height="48" border="0"  alt="ActiveState" /></a></td>
+</tr>
+<tr>
+<td class="lineColour" colspan="3"></td>
+</tr>
+</table>
+
+<h1>Windows Script Host (WSH)</h1>
+
+<a name="__index__"></a>
+<ul>
+  <li><a class="doc" href="#introduction">Windows Script Host (WSH)</a>
+    <ul>
+      <li><a class="doc" href="#executing">Running a WSH File</a>
+      <li><a class="doc" href="#objectmodel">The Object Model</a>
+        <ul>
+          <li><a class="doc" href="#wscript">The Windows Script Object</a>
+          <li><a class="doc" href="#wshshell">The WshShell Object</a>
+            <ul>
+              <li><a class="doc" href="#shortcut">Creating Shortcuts</a>
+              <li><a class="doc" href="#specialfolder">Special Folders</a>
+              <li><a class="doc" href="#registry">working with The Registry</a>
+              <li><a class="doc" href="#misc">Miscellanous</a>
+            </ul>
+          <li><a class="doc" href="#network">The WshNetwork Object</a>
+        </ul>
+      <li><a class="doc" href="#elementref">XML Element Referece</a>
+        <ul>
+          <li><a class="doc" href="#elemjob">&lt;job&gt;</a>
+          <li><a class="doc" href="#elemscr">&lt;script&gt;</a>
+          <li><a class="doc" href="#elemres">&lt;resource&gt;</a>
+          <li><a class="doc" href="#elemref">&lt;reference&gt;</a>
+        </ul>
+    </ul>
+  <li><a class="doc" href="#author and copyright">AUTHOR AND COPYRIGHT</a>
+</ul>
+
+ 
+<h2><a name="introduction">Windows Script Host (ASP)</a></h2>
+<p>Windows Script Host (WSH) is a scripting host for ActiveX Scripting Engines such
+as PerlScript. As a host, WSH enables you to use the scripting language from the
+command-line and from within the Windows desktop with the WSH features.</p>
+
+<h2><a name="executing">Running a WSH File</a></h2>
+<p>In order to execute a WSH-file, use one of two executable files depending on
+your needs: WScript.exe for Windows desktop files and CScript.exe is for
+command-line scripts. You can set the behavior and appearance of these executed
+scripts by running the executable without providing a file; if so, WScript will
+display a properties page that you can modify, and CScript will show the
+available switches. At work, WSH enables you to use more than one scripting
+engine in the same file, include typelibraries, and run more than a single job
+from one file to name a few.</p>
+
+<h2><a name="objectmodel">The Object Model</a></h2>
+<p>Implemented as an object-model, WSH provides a simple interface for its tasks.
+As you author, the WSH file uses XML as its markup for separating the elements.
+Let's look at a simple WSH file that prints &quot;Hello World!&quot;.
+<blockquote style="MARGIN-RIGHT: 0px">
+  <code>&lt;Job ID=&quot;HelloWorld&quot;&gt;<br>
+  &lt;script language=PerlScript&gt;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;$WScript-&gt;Echo(&quot;Hello World!&quot;);<br>
+  &lt;/script&gt;<br>
+  &lt;/Job&gt;</code>
+</blockquote>
+<p>The XML Job-elements encloses the ID of the Job that is run, and the script
+elements define PerlScript as the script language to use. You will experience
+different results depending if you execute this from the command-line or from
+the windows desktop. The first instance will print text to the screen, but the
+Windows desktop will pop up a messagebox with &quot;Hello World!&quot; Next,
+let's look at what the WScript object has to offer.</p>
+
+<h2><a name="wscript">The Windows Script Object</a></h2>
+<p>The WScript object is a built-in object; therefore, you do not need to create a
+specific instance of it within your WSH. On the contrary, the object in place is
+used to create instances of most other objects exposed through the WSH
+programming interface.</p>
+
+<p>The <code>CreateObject</code> method will create an instance of a given object.
+In the following example, we'll see how an ADO Connection object is easily
+created within WSH.
+<blockquote style="MARGIN-RIGHT: 0px">
+  <code>&lt;Job ID=&quot;ADOSample1&quot;&gt;<br>
+  &lt;script language=PerlScript&gt;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;$conn = $WScript-&gt;CreateObject('ADODB.Connection');<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;$conn-&gt;Open('ADOSamples');<br>
+  <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;if($conn-&gt;{State} == 1) {<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$WScript-&gt;Echo(&quot;Connection
+  Successful!&quot;)<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;else {<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$WScript-&gt;Echo(&quot;Connection
+  Failed ...&quot;);<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+  &lt;/script&gt;<br>
+  &lt;/Job&gt;</code>
+</blockquote>
+
+<p>In addition to the above, you can specify a second parameter in the call to <code>CreateObject</code>.
+This parameter contains a string which defines a prefix that you specify. By
+doing so, the object's outgoing interface is connected and any time an event is
+fired from the object, you can intercept it within the WSH file. For example, in
+the ADO connection object, there are a number of events. Sparing the details, <code>WillConnect</code>
+is called before a connection starts, and <code>Connectcomplete</code> is called
+after a connection has been started. They can be easily intercepted within the
+WSH file.
+<blockquote style="MARGIN-RIGHT: 0px">
+  <code>&lt;Job ID=&quot;Test&quot;&gt;<br>
+  &lt;script language=PerlScript&gt;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;$conn=$WScript-&gt;CreateObject('ADODB.Connection', 'MyWSH_');<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;$conn-&gt;Open('ADOSamples');<br>
+  <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;if($conn-&gt;{State} == 1) {<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$WScript-&gt;Echo(&quot;Connection
+  Successful!&quot;)<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;else {<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$WScript-&gt;Echo(&quot;Connection
+  Failed ...&quot;);<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+  <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;sub MyWSH_ConnectComplete {<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$WScript-&gt;Echo(&quot;ConnectComplete
+  was fired ... &quot;);<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+  <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;sub MyWSH_WillConnect {<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$WScript-&gt;Echo(&quot;WillConnect
+  was fired ... &quot;);<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+  &lt;/script&gt;<br>
+  &lt;/Job&gt;</code>
+</blockquote>
+
+<p>For the same result as above, you can use the <code>ConnectObject</code>-method
+whose syntax is <code>$WScript-&gt;ConnectObject(Object, Prefix);</code>. The
+method <code>$WScript-&gt;DisconnectObject(Object);</code> will disconnect its
+event handling provided that the object is connected. Some other methods are as
+follows: <code>$Wscript-&gt;Echo(1, 2, 3, n);</code> Print text to the standard
+output defined by WSH. Separating the arguments cause only a space to separate
+the items in a desktop environment and a newline to separate the items in a
+command-line scenario.<br>
+<br>
+<blockquote style="MARGIN-RIGHT: 0px">
+  <code>$WScript-&gt;GetObject(Pathname [,ProgID] [,Prefix]);</code>
+</blockquote>
+<p>Retrieves an Automation object from a file or an object specified by the
+strProgID parameter.<br>
+<br>
+<blockquote style="MARGIN-RIGHT: 0px">
+  <code>$WScript-&gt;Quit([$int_errorcode]);</code>
+</blockquote>
+<p>Quit and process and optionally provide an integer which represents an error
+code.<br>
+<br>
+<blockquote style="MARGIN-RIGHT: 0px">
+  <code>$WScript-&gt;Sleep($int_milliseconds);</code>
+</blockquote>
+<p>Places the script process into an inactive state for the number of milliseconds
+specified and then continues execution.<br>
+<br>
+<p>And its properties are:
+<blockquote style="MARGIN-RIGHT: 0px">
+  <code>$WScript-&gt;{Application};</code>
+</blockquote>
+<p>Provides the IDispatch interface on the WScript object<br>
+<br>
+<blockquote style="MARGIN-RIGHT: 0px">
+  <code>$WScript-&gt;{Arguments};</code>
+</blockquote>
+<p>Returns a pointer to the WshArguments collection or identifies arguments for the
+shortcut to the collection.<br>
+<br>
+<blockquote style="MARGIN-RIGHT: 0px">
+  <code>$WScript-&gt;{Fullname};</code>
+</blockquote>
+<p>Returns a string containing the full path to the host executable file or
+shortcut object.<br>
+<br>
+<blockquote style="MARGIN-RIGHT: 0px">
+  <code>$WScript-&gt;{Name};</code>
+</blockquote>
+<p>Returns a string containing the friendly name of the WScript object.<br>
+<br>
+<blockquote style="MARGIN-RIGHT: 0px">
+  <code>$WScript-&gt;{Path};</code>
+</blockquote>
+<p>Provides a string containing the name of the directory where WScript.exe or
+CScript.exe resides.<br>
+<br>
+<blockquote style="MARGIN-RIGHT: 0px">
+  <code>$WScript-&gt;{Scriptfullname};</code>
+</blockquote>
+<p>Provides the full path to the script currently being run.<br>
+<br>
+<blockquote style="MARGIN-RIGHT: 0px">
+  <code>$WScript-&gt;{Scriptname};</code>
+</blockquote>
+<p>Provides the file name of the script currently being run.<br>
+<br>
+<blockquote style="MARGIN-RIGHT: 0px">
+  <code>$WScript-&gt;{StdError};</code>
+</blockquote>
+<p>Exposes the write-only error output stream for the current script. Only
+applicable with CScript command-line WSH files.<br>
+<br>
+<blockquote style="MARGIN-RIGHT: 0px">
+  <code>$WScript-&gt;{StdIn};</code>
+</blockquote>
+<p>Exposes the read-only input stream for the current script. CScript only.<br>
+<br>
+<blockquote style="MARGIN-RIGHT: 0px">
+  <code>WScript-&gt;{StdOut};</code>
+</blockquote>
+<p>Exposes the write-only output stream for the current script. CScript only.<br>
+<br>
+<blockquote style="MARGIN-RIGHT: 0px">
+  <code>$WScript-&gt;{Version};</code>
+</blockquote>
+<p>Returns the version of Microsoft Windows Script Host.<br>
+<p>On a final note, if you are using Cscript.exe and passing arguments to the file,
+you can read the arguments as follows:
+<blockquote style="MARGIN-RIGHT: 0px">
+  <code>&lt;Job ID=&quot;args&quot;&gt;<br>
+  &lt;script language=PerlScript&gt;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;$arg = $WScript-&gt;{Arguments};<br>
+  <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;$countArgs = $arg-&gt;{Count};<br>
+  <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;for($i=0; $i&lt;$countArgs; $i++) {<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$WScript-&gt;Echo($arg-&gt;Item($i));<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+  &lt;/script&gt;<br>
+  &lt;/job&gt;</code>
+</blockquote>
+
+<h2><a name="wshshell">The WShShell Object</a></h2>
+<p>The WshShell object must be instantiated by the WScript object.
+<blockquote style="MARGIN-RIGHT: 0px">
+  <code>$WshShell = $WScript-&gt;CreateObject(&quot;WScript.Shell&quot;)</code>
+</blockquote>
+<p>An interesting method of the WshShell object is the ability to activate an
+application window and putting it in focus. This is done by calling AppActivate
+either with the title in the title bar of the running application window as a
+parameter or by using the task ID as a parameter.
+<blockquote style="MARGIN-RIGHT: 0px">
+  <code>&lt;Job Id=&quot;WshShell&quot;&gt;<br>
+  &lt;script language=PerlScript&gt;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;$WshShell = $WScript-&gt;CreateObject(&quot;WScript.Shell&quot;);<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;$WshShell-&gt;Run(&quot;notepad&quot;);<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;$WshShell-&gt;AppActivate(&quot;Untitled -
+  Notepad&quot;);<br>
+  <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;my $message = &quot;Hello from PerlScript!\n&quot;;<br>
+  <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;for($i=0; $i &lt; length($message); $i++) {<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$char = substr($message, $i,
+  1);<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$WScript-&gt;Sleep(100);<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$WshShell-&gt;SendKeys($char);<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+  &lt;/script&gt;<br>
+  &lt;/job&gt;</code>
+</blockquote>
+<p>The <code>SendKeys</code>-method simply sends keystrokes to the active windows.
+<p>The <code>Run</code> method is a little more flexible.
+<blockquote style="MARGIN-RIGHT: 0px">
+  <code>$WshShell-&gt;Run(Command, [WindowStyle], [WaitOnReturn]);</code>
+</blockquote>
+<p>The WindowStyle can be an integer between 0 through 10, and WaitOnReturn is a
+boolean value or 1 (TRUE) or 0 (FALSE). FALSE is the default value it means that
+an immeditate return to script execution contrary to waiting for the process to
+end is preferable. It also returns an error code of zero while TRUE returns any
+error code generated by the active application.
+
+<h3><a name="shortcut">Creating Shortcuts</a></h3>
+<p>In addition, you can create shortcuts. Either you create a dekstop shortcut or a
+URL shortcul. The method call <code>CreateShortcut($path_or_url)</code> returns
+an object reference to a <code>WshShortcut</code>-object. Keep in mind that a
+dekstop shortcut has tbe extension .lnk and an URL shortcul has the file
+extension .url. In the latter case, a WshURLShortcut object is returned.</p>
+
+<p>With the WshShortcut-object, one method exists, so it is mainly properties
+regarding the shortcut that you need to set. The <code>Description</code>-property
+contains a string describing the shortcut, <code>Fullname</code> returns the
+full path to the host executable, <code>Hotkey</code> allows for combinations
+such as &quot;ALT+CTRL+X&quot; as hotkeys for shortcuts on the Windows dekstop
+or windows startmenu, <code>IconLocation</code> is a property that you set to
+&quot;Path, index&quot; to provide the Icon location of the shortcut. In
+addition, use the <code>TargetPath</code>-property to set the path to the
+executable file pointed to by the shortcut, <code>WindowStyle</code> can be set
+to either 1, 3, or 7 for the shortcut object, and <code>WorkingDirectory</code>
+defines the directory in which the shortcut should start. If you are
+shortcutting a URL, you have only the <code>Fullname</code> and <code>TargetPath</code>
+properties where the latter one is a URL. All shortcut objects are final when
+you call the <code>Save</code> method.</p>
+
+<h3><a name="specialfolder">Special Folders</a></h3>
+<p>The WshShell object can also return a WshSpecialFolders object which contains
+paths to shell folders such as the desktop, start menu, and personal documents.
+<blockquote style="MARGIN-RIGHT: 0px">
+  <code>&lt;Job Id=&quot;SpecialFolder&quot;&gt;<br>
+  &lt;script language=PerlScript&gt;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;$WshShell = $WScript-&gt;CreateObject(&quot;WScript.Shell&quot;);<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;$numFolders = $WshShell-&gt;SpecialFolders-&gt;{Count};<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;$title = &quot;PerlScript &amp; WSH Example&quot;;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;$style = 1;<br>
+  <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;for($i=0; $i&lt;$numFolders; $i++) {<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$ok_or_cancel = $WshShell-&gt;Popup(<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$WshShell-&gt;SpecialFolders($i),<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;undef,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$title,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$style);<br>
+  <br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit if ($ok_or_cancel == 2);<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+  &lt;/script&gt;<br>
+  &lt;/job&gt;</code>
+</blockquote>
+
+<h3><a name="registry">Working With the Registry</a></h3>
+<p>The WshShell object provides functionality for working with the registry. The
+three methods for this are: <code>RegRead</code>, <code>RegWrite</code>, and <code>RegDelete</code>.
+Simply provide either method with a string such as the short form HKCU\ScriptEngine\Val
+or longer variant HKEY_CURRENT_USER\ScrtipeEngine\Val. Notice that a key is
+returned if the last character is a backslash, and a value is returned if no
+backslash is at the end. The <code>RegRead</code> method supports the following data types:
+<blockquote style="MARGIN-RIGHT: 0px">
+  <ul>
+    <li>REG_SZ
+    <li>REG_EXPAND_SZ
+    <li>REG_DWORD
+    <li>REG_BINARY
+    <li>REG_MULTI_SZ
+  </ul>
+</blockquote>
+<p><code>RegWrite</code> requires a few extra parameters:
+<blockquote style="MARGIN-RIGHT: 0px">
+  <code>$WshShell-&gt;RegWrite(Name, Value [,Type]);</code>
+</blockquote>
+<p>The name is a fully qualified string such as HKCU\ScriptEngine\Val where the
+same rules apply for key and value as previously mentioned. The Type-parameter
+is optional, but if used, it must be one of the following data types:
+<blockquote style="MARGIN-RIGHT: 0px">
+  <ul>
+    <li>REG_SZ
+    <li>REG_EXPAND_SZ
+    <li>REG_DWORD
+    <li>REG_BINARY
+  </ul>
+</blockquote>
+
+<h3><a name="misc">Miscellanous</a></h3>
+<p>Expands the requested environment variable from the running process:
+<blockquote style="MARGIN-RIGHT: 0px">
+  <code>$WshShell-&gt;ExpandEnvironmentStrings($string);</code>
+</blockquote>
+<p>In addition, log an event in the NT event log or WSH.log (Windows 9x) file
+using:
+<blockquote style="MARGIN-RIGHT: 0px">
+  <code>$WshShell-&gt;LogEvent(Type, Message [,Target]);</code>
+</blockquote>
+<p>Target is the name of the system on NT, thus only applicable on NT. The Type of
+event is either
+<blockquote style="MARGIN-RIGHT: 0px">
+  <ul>
+    <li>0 (SUCCESS)
+    <li>1 (ERROR)
+    <li>2 (WARNING)
+    <li>4 (INFORMATION),
+    <li>8 (AUDIT_SUCCESS)
+    <li>16 (AUDIT_FAILURE)
+  </ul>
+</blockquote>
+<p>This method returns a boolean value indicating success or failure. Another
+method is Popup, which sends a Windows messagebox up on the screen.
+<blockquote style="MARGIN-RIGHT: 0px">
+  <code>$retval = $WshShell-&gt;Popup(Text, [SecondsWait], [Title], [Type]);</code>
+</blockquote>
+<p>The method allows you to define the text to pop up, alternatively seconds to
+wait before closing window, the title of the window, and lastly the type of
+buttons available in the window. They can be:
+<blockquote style="MARGIN-RIGHT: 0px">
+  <ul>
+    <li>0 (Ok)
+    <li>1 (Ok and Cancel)
+    <li>2 (Abort, Retry, and Ignore)
+    <li>3 (Yes, No, and Cancel)
+    <li>4 (Yes and No)
+    <li>5 (Retry and Cancel)
+  </ul>
+</blockquote>
+<p>The value that you choose can also be combined with an icon:
+<blockquote style="MARGIN-RIGHT: 0px">
+  <ul>
+    <li>16 (Stop Mark)
+    <li>32 (Question Mark)
+    <li>48 (Exclamation Mark)
+    <li>64 (Information Mark)
+  </ul>
+</blockquote>
+<p>The return values returned to <code>$retval</code> indicates which button was
+pressed. The value will be one of the following:
+<blockquote style="MARGIN-RIGHT: 0px">
+  <ul>
+    <li>1 (OK)
+    <li>2 (Cancel)
+    <li>3 (Abort)
+    <li>4 (Retry)
+    <li>5 (Ignore)
+    <li>6 (Yes)
+    <li>7 (No)
+  </ul>
+</blockquote>
+
+<h2><a name="network">The WshNetwork Object</a></h2>
+<p>The WshNetwork object exposes some network functionality. To begin:
+<blockquote style="MARGIN-RIGHT: 0px">
+  <code>$WshNetwork-&gt;AddPrinterConnection($LocalName, $RemoteName[,$UpdateProfile][,$User][,$Password]);</code>
+</blockquote>
+<p>User and password are two parameters with given meaning. Localname
+and Remotename are the names of the printer resource. Set UpdateProfile to TRUE
+for storing this mapping in the user profile. Next, AddWindowsPrinterConnection()
+adds a printer just as you would add one using the control panel. On Windows
+NT/2000 the only parameter you need to call this method with is the path to the
+printer while windows 9x requires you to specify the driver to use, and
+optionally specify which port to which it is connected. In the last event, the
+syntax is:
+<blockquote style="MARGIN-RIGHT: 0px">
+  <code>$WshNetwork-&gt;AddWindowsPrinterConnection($PrinterPath, $DriverName[,$Port])</code>
+</blockquote>
+<p>As easily as adding a printer, you can remove a printer. Simply do
+<blockquote style="MARGIN-RIGHT: 0px">
+  <code>$WshNetwork-&gt;RemovePrinterConnection($Name, [$Force], [$UpdateProfile]);</code>
+</blockquote>
+<p>If you set $Force to TRUE (1), it will remove the connection regardless if it is
+being used, and setting $UpdateProfile to true will remove any user profile
+mapping.<br>
+<br>
+<p>If you're happy with your printers, you can set one of the printer as your
+default printer by a quick call:
+<blockquote style="MARGIN-RIGHT: 0px">
+  <code>$WshNetwork-&gt;SetDefaultPrinter($PrinterName);</code>
+</blockquote>
+<p>To return a collection of all your printers, call:
+<blockquote style="MARGIN-RIGHT: 0px">
+  <code>$Printers = $WshNetwork-&gt;EnumPrinterConnections();</code>
+</blockquote>
+<p>Then use the Count-property to retrieve the number of items in the $Printers
+collection object.<br>
+<br>
+<p>When you want to map a drive to a network share, you can use the MapNetworkDrive
+method.
+<blockquote style="MARGIN-RIGHT: 0px">
+  <code>$WshNetwork-&gt;MapNetworkDrive($LocalName, $RemoteName,
+  [$UpdateProfile], [$User], [$Password]);</code>
+</blockquote>
+<p>For example:
+<blockquote style="MARGIN-RIGHT: 0px">
+  <code>$WshNetwork-&gt;MapNetworkDrive('C:\', '\\MyComputerServer\\ShareHere);</code>
+</blockquote>
+<p>Remove a network drive using the now familiar syntax
+<blockquote style="MARGIN-RIGHT: 0px">
+  <code>$WshNetwork-&gt;RemoveNetworkDrive($Name, [$Force], [$UpdateProfile])</code>
+</blockquote>
+<p>or enumerate the network drives as:
+<blockquote style="MARGIN-RIGHT: 0px">
+  <code>$Drives = $WshNetwork-&gt;EnumNetworkDrive();</code>
+</blockquote>
+<p>The three properties of the network object are ComputerName, UserName, and
+UserDomain.</p>
+ 
+<h2><a name="elementref">XML Element Reference</a></h2>
+<p>Like Windows Script Components, the Windows Script Host has a set of XML
+elements that can be deployed. For a basic understanding of how they are used,
+please refer to the section about Windows Script Components.</p>
+
+<h3><a name="elemjob">The Job Element</a></h3>
+<p>The Job element is used to define the beginning and the end of the components.
+It encapsulates all other tags. Should your WSH file contain more than one job,
+encapsulate them within a &lt;package&gt; element. When declaring jobs, the ID
+attribute is optional.</p>
+<p>Syntax:
+<blockquote>
+  <code>&lt;Job [id=JobID]&gt;</code>
+</blockquote>
+<p>For example:
+<blockquote>
+  <code>&lt;package&gt;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&lt;Job id=&quot;PrintOutput&quot;&gt;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&lt;/Job&gt;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&lt;Job id=&quot;ReadInput&quot;&gt;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&lt;/Job&gt;<br>
+  &lt;/package&gt;</code>
+</blockquote>
+<p>You can also set a boolean value of true (1) or false (0) for error checking or
+debugging by using the additional tag
+<blockquote style="MARGIN-RIGHT: 0px">
+  <code>&lt;? job error=&quot;true&quot; debug=&quot;true&quot; ?&gt;</code>
+</blockquote>
+
+<h3><a name="elemscr">The Script Element</a></h3>
+<p>The script element lets you define the scripting language to use, and then with
+its closing-tag functions as delimiters for the script code.<br>
+<p>Syntax:
+<blockquote>
+  <code>&lt;script language=&quot;languageName&quot;&gt; code &lt;/script&gt;</code>
+</blockquote>
+<p>For example.
+<blockquote>
+  <code>&lt;?XML version=&quot;1.0&quot;?&gt;<br>
+  &lt;job&gt;<br>
+  ...<br>
+  &lt;script language=&quot;PerlScriptt&quot;&gt;<br>
+  &lt;![CDATA[<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;sub ReturnValue {<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;#<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;# Perl code here<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;#<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+  ]]&gt;<br>
+  &lt;/script&gt;<br>
+  &lt;/job&gt;</code>
+</blockquote>
+
+<h3><a name="elemres">The Resource Element</a></h3>
+<p>The resource element is a placeholder for strings or numeric data that should be
+separate from the script commands yet may be used within the script.</p>
+<p>Syntax:
+<blockquote>
+  <code>&lt;resource id=&quot;resourceID&quot;&gt; text or number to represent
+  resource goes here &lt;/resource&gt;</code>
+</blockquote>
+<p>You use the <code>getResource(resourceID)</code> to retrieve the contents of the
+resource specified in the resourceID parameter.</p>
+
+<h3><a name="elemref">The Reference Element</a></h3>
+<p>You can import external type libraries by using the reference element. By
+importing a type library, you will be able to naturally access the constants
+that belongs to it, too.</p>
+<p>Syntax:
+<blockquote>
+  <code>&lt;reference [object=&quot;progID&quot; | guid=&quot;typelibGUID&quot;]
+  [version=&quot;versionNo&quot;] /&gt;</code>
+</blockquote>
+ 
+<h2><a name="author and copyright">AUTHOR AND COPYRIGHT</a></h2>
+<p>Written document copyright (c) 2000 Tobias Martinsson. All rights reserved.</p>
+<p>When included as part of the Standard Version of Perl, or as part of its
+complete documentation whether printed or otherwise, this work may be
+distributed only under the terms of Perl's Artistic License. Any distribution of
+this file or derivatives thereof <i>outside</i> of that package require that
+special arrangements be made with copyright holder.</p>
+<p>Irrespective of its distribution, all code examples in this file are hereby
+placed into the public domain. You are permitted and encouraged to use this code
+in your own programs for fun or for profit as you see fit. A simple comment in
+the code giving credit would be courteous but is not required.</p>
+<p>Windows Script Host is copyright (c) 1991-2000 Microsoft Corporation. All
+Rights Reserved.</p>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+  <tr>
+    <td class="block" valign="MIDDLE" width="100%" bgcolor="#cccccc"><strong>
+      <p class="block">&nbsp;Rough Guide to Windows Script Host</p>
+      </strong></td>
+  </tr>
+</table>
+
+</body>
+
+</html>

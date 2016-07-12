@@ -1,0 +1,105 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>podselect - print selected sections of pod documentation on standard output</title>
+<link rel="stylesheet" href="../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;podselect - print selected sections of pod documentation on standard output</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#options_and_arguments">OPTIONS AND ARGUMENTS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>podselect - print selected sections of pod documentation on standard output</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p><strong>podselect</strong> [<strong>-help</strong>] [<strong>-man</strong>] [<strong>-section</strong>&nbsp;<em>section-spec</em>]
+[<em>file</em>&nbsp;...]</p>
+<p>
+</p>
+<hr />
+<h1><a name="options_and_arguments">OPTIONS AND ARGUMENTS</a></h1>
+<dl>
+<dt><strong><a name="item__2dhelp"><strong>-help</strong></a></strong><br />
+</dt>
+<dd>
+Print a brief help message and exit.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dman"><strong>-man</strong></a></strong><br />
+</dt>
+<dd>
+Print the manual page and exit.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dsection_section_2dspec"><strong>-section</strong>&nbsp;<em>section-spec</em></a></strong><br />
+</dt>
+<dd>
+Specify a section to include in the output.
+See <a href="../lib/Pod/Parser.html#section_specifications">SECTION SPECIFICATIONS in the Pod::Parser manpage</a>
+for the format to use for <em>section-spec</em>.
+This option may be given multiple times on the command line.
+</dd>
+<p></p>
+<dt><strong><a name="item_file"><em>file</em></a></strong><br />
+</dt>
+<dd>
+The pathname of a file from which to select sections of pod
+documentation (defaults to standard input).
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p><strong>podselect</strong> will read the given input files looking for pod
+documentation and will print out (in raw pod format) all sections that
+match one ore more of the given section specifications. If no section
+specifications are given than all pod sections encountered are output.</p>
+<p><strong>podselect</strong> invokes the <strong>podselect()</strong> function exported by <strong>Pod::Select</strong>
+Please see <a href="../lib/Pod/Select.html#podselect__">podselect() in the Pod::Select manpage</a> for more details.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../lib/Pod/Parser.html">the Pod::Parser manpage</a> and <a href="../lib/Pod/Select.html">the Pod::Select manpage</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Please report bugs using <a href="http://rt.cpan.org">http://rt.cpan.org</a>.</p>
+<p>Brad Appleton &lt;<a href="mailto:bradapp@enteract.com">bradapp@enteract.com</a>&gt;</p>
+<p>Based on code for <strong>Pod::Text::pod2text(1)</strong> written by
+Tom Christiansen &lt;<a href="mailto:tchrist@mox.perl.com">tchrist@mox.perl.com</a>&gt;</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;podselect - print selected sections of pod documentation on standard output</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

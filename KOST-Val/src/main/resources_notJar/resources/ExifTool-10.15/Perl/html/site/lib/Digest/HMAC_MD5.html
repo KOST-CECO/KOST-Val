@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Digest::HMAC_MD5 - Keyed-Hashing for Message Authentication</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Digest::HMAC_MD5 - Keyed-Hashing for Message Authentication</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Digest::HMAC_MD5 - Keyed-Hashing for Message Authentication</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ # Functional style
+ use Digest::HMAC_MD5 qw(hmac_md5 hmac_md5_hex);
+ $digest = hmac_md5($data, $key);
+ print hmac_md5_hex($data, $key);</pre>
+<pre>
+ # OO style
+ use Digest::HMAC_MD5;
+ $hmac = Digest::HMAC_MD5-&gt;new($key);</pre>
+<pre>
+ $hmac-&gt;add($data);
+ $hmac-&gt;addfile(*FILE);</pre>
+<pre>
+ $digest = $hmac-&gt;digest;
+ $digest = $hmac-&gt;hexdigest;
+ $digest = $hmac-&gt;b64digest;</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>This module provide HMAC-MD5 hashing.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../../../site/lib/Digest/HMAC.html">the Digest::HMAC manpage</a>, <a href="../../../lib/Digest/MD5.html">the Digest::MD5 manpage</a>, <a href="../../../site/lib/Digest/HMAC_SHA1.html">the Digest::HMAC_SHA1 manpage</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Gisle Aas &lt;<a href="mailto:gisle@aas.no">gisle@aas.no</a>&gt;</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Digest::HMAC_MD5 - Keyed-Hashing for Message Authentication</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

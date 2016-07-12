@@ -1,6 +1,6 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
- * Information Package (SIP). Copyright (C) 2012-2016 Claire RÃ¶thlisberger (KOST-CECO), Christian
+ * Information Package (SIP). Copyright (C) 2012-2016 Claire Roethlisberger (KOST-CECO), Christian
  * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
  * Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
@@ -32,26 +32,49 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import ch.kostceco.tools.kostval.exception.modulesip2.Validation2cChecksumException;
+import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesip2.Validation2cChecksumModule;
 
-/** Validierungsschritt 2c: Stimmen die Prüfsummen der Dateien mit Prüfsumme überein? metadata.xml:
- * pruefsumme, pruefalgorithmus und name pro Datei auslesen pfad ermitteln, länge der summe
+/** Validierungsschritt 2c: Stimmen die Prï¿½fsummen der Dateien mit Prï¿½fsumme Ã¼berein? metadata.xml:
+ * pruefsumme, pruefalgorithmus und name pro Datei auslesen pfad ermitteln, lï¿½nge der summe
  * kontrollieren datei: Summe berechnen und vergleichen */
 
 public class Validation2cChecksumModuleImpl extends ValidationModuleImpl implements
 		Validation2cChecksumModule
 {
 
+	private ConfigurationService	configurationService;
+
+	public ConfigurationService getConfigurationService()
+	{
+		return configurationService;
+	}
+
+	public void setConfigurationService( ConfigurationService configurationService )
+	{
+		this.configurationService = configurationService;
+	}
+
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws Validation2cChecksumException
 	{
-		// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
-		System.out.print( "2C   " );
-		System.out.print( "\b\b\b\b\b" );
+		boolean showOnWork = true;
 		int onWork = 410;
-
+		// Informationen zur Darstellung "onWork" holen
+		String onWorkConfig = getConfigurationService().getShowProgressOnWork();
+		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
+		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
+		 * ref="configurationService" /> */
+		if ( onWorkConfig.equals( "no" ) ) {
+			// keine Ausgabe
+			showOnWork = false;
+		} else {
+			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
+			System.out.print( "2C   " );
+			System.out.print( "\b\b\b\b\b" );
+		}
 		boolean valid = true;
 
 		try {
@@ -131,7 +154,7 @@ public class Validation2cChecksumModuleImpl extends ValidationModuleImpl impleme
 				}
 
 				if ( pruefalgorithmus.equals( pruefalgorithmusMD5 ) ) {
-					// pruefalgorithmus ist MD5 und wird auf die korrekte Länge (=32) überprüft
+					// pruefalgorithmus ist MD5 und wird auf die korrekte Lï¿½nge (=32) ï¿½berprï¿½ft
 
 					if ( pruefsumme.length() != 32 ) {
 						valid = false;
@@ -174,7 +197,7 @@ public class Validation2cChecksumModuleImpl extends ValidationModuleImpl impleme
 									return false;
 								}
 
-								// Vergleich der Prüfsummen
+								// Vergleich der Prï¿½fsummen
 								if ( output.equalsIgnoreCase( pruefsumme ) ) {
 									// identisch :-)
 								} else {
@@ -198,7 +221,7 @@ public class Validation2cChecksumModuleImpl extends ValidationModuleImpl impleme
 					}
 				}
 				if ( pruefalgorithmus.equals( pruefalgorithmusSHA1 ) ) {
-					// pruefalgorithmus ist SHA1 und wird auf die korrekte Länge (=40) überprüft
+					// pruefalgorithmus ist SHA1 und wird auf die korrekte Lï¿½nge (=40) ï¿½berprï¿½ft
 
 					if ( pruefsumme.length() != 40 ) {
 						valid = false;
@@ -241,7 +264,7 @@ public class Validation2cChecksumModuleImpl extends ValidationModuleImpl impleme
 									return false;
 								}
 
-								// Vergleich der Prüfsummen
+								// Vergleich der Prï¿½fsummen
 								if ( !output.equalsIgnoreCase( pruefsumme ) ) {
 									valid = false;
 
@@ -264,7 +287,7 @@ public class Validation2cChecksumModuleImpl extends ValidationModuleImpl impleme
 				}
 
 				if ( pruefalgorithmus.equals( pruefalgorithmusSHA256 ) ) {
-					// pruefalgorithmus ist SHA256 und wird auf die korrekte Länge (=64) überprüft
+					// pruefalgorithmus ist SHA256 und wird auf die korrekte Lï¿½nge (=64) ï¿½berprï¿½ft
 
 					if ( pruefsumme.length() != 64 ) {
 						valid = false;
@@ -307,7 +330,7 @@ public class Validation2cChecksumModuleImpl extends ValidationModuleImpl impleme
 									return false;
 								}
 
-								// Vergleich der Prüfsummen
+								// Vergleich der Prï¿½fsummen
 								if ( !output.equalsIgnoreCase( pruefsumme ) ) {
 									valid = false;
 
@@ -330,7 +353,7 @@ public class Validation2cChecksumModuleImpl extends ValidationModuleImpl impleme
 				}
 
 				if ( pruefalgorithmus.equals( pruefalgorithmusSHA512 ) ) {
-					// pruefalgorithmus ist SHA512 und wird auf die korrekte Länge (=128) überprüft
+					// pruefalgorithmus ist SHA512 und wird auf die korrekte Lï¿½nge (=128) ï¿½berprï¿½ft
 
 					if ( pruefsumme.length() != 128 ) {
 						valid = false;
@@ -373,7 +396,7 @@ public class Validation2cChecksumModuleImpl extends ValidationModuleImpl impleme
 									return false;
 								}
 
-								// Vergleich der Prüfsummen
+								// Vergleich der Prï¿½fsummen
 								if ( !output.equalsIgnoreCase( pruefsumme ) ) {
 									valid = false;
 
@@ -394,24 +417,26 @@ public class Validation2cChecksumModuleImpl extends ValidationModuleImpl impleme
 						}
 					}
 				}
-				if ( onWork == 410 ) {
-					onWork = 2;
-					System.out.print( "2C-  " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 110 ) {
-					onWork = onWork + 1;
-					System.out.print( "2C\\  " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 210 ) {
-					onWork = onWork + 1;
-					System.out.print( "2C|  " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 310 ) {
-					onWork = onWork + 1;
-					System.out.print( "2C/  " );
-					System.out.print( "\b\b\b\b\b" );
-				} else {
-					onWork = onWork + 1;
+				if ( showOnWork ) {
+					if ( onWork == 410 ) {
+						onWork = 2;
+						System.out.print( "2C-  " );
+						System.out.print( "\b\b\b\b\b" );
+					} else if ( onWork == 110 ) {
+						onWork = onWork + 1;
+						System.out.print( "2C\\  " );
+						System.out.print( "\b\b\b\b\b" );
+					} else if ( onWork == 210 ) {
+						onWork = onWork + 1;
+						System.out.print( "2C|  " );
+						System.out.print( "\b\b\b\b\b" );
+					} else if ( onWork == 310 ) {
+						onWork = onWork + 1;
+						System.out.print( "2C/  " );
+						System.out.print( "\b\b\b\b\b" );
+					} else {
+						onWork = onWork + 1;
+					}
 				}
 			}
 		} catch ( Exception e ) {

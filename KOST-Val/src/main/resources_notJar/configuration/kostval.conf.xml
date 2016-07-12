@@ -4,6 +4,7 @@
 	<pathtoworkdir>temp_KOST-Val</pathtoworkdir>
 	<pathtodiagnose>diagnose</pathtodiagnose>
 	<pathtojhoveconfig>configuration\jhove.conf</pathtojhoveconfig>
+	<showprogressonwork>yes</showprogressonwork><!--no / yes -->
 	<pdfa>
 		<pdfavalidation>yes</pdfavalidation><!--no verwenden wenn pdfa nicht validiert werden soll, ansonsten yes -->
 		<firstvalidator>PDFTools</firstvalidator><!--Haupt PDF/A-Validator: PDFTools oder PDFTron -->
@@ -72,111 +73,132 @@
 		<allowedversionbar4ech1>1.1</allowedversionbar4ech1><!--0 / 1 / 1.1 -->
 		<allowedformats>
 		<!-- Text -->
+			<!-- TXT: x-fmt/111 -->
 			<allowedformat>
 				<puid>TXT</puid>
 				<extension>txt</extension>
 				<comment>Plain Text file</comment>
 			</allowedformat>
+			<!-- PDFA1: fmt/95 & fmt/354 -->
 			<allowedformat>
 				<puid>PDFA1</puid>
 				<extension>pdf</extension>
 				<comment>PDF/A-1</comment>
 			</allowedformat>
+			<!-- PDFA2: fmt/476 &fmt/477 & fmt/478 -->
 			<allowedformat>
 				<puid>PDFA2</puid>
 				<extension>pdf</extension>
 				<comment>PDF/A-2</comment>
 			</allowedformat>
 		<!-- Bild -->
+			<!-- TIFF: fmt/353 & fmt/152 & fmt/153 & fmt/154 & fmt/155 & fmt/156 -->
 			<allowedformat>
 				<puid>TIFF</puid>
 				<extension>tif, tiff</extension>
 				<comment>Tagged Image File Format</comment>
 			</allowedformat>
+			<!-- JP2: x-fmt/392 -->
 			<allowedformat>
 				<puid>JP2</puid>
 				<extension>jp2</extension>
 				<comment>JPEG2000</comment>
 			</allowedformat>
+			<!-- JPEG: fmt/42 & fmt/43 & fmt/44 -->
 			<allowedformat>
 				<puid>JPEG</puid>
 				<extension>jpeg, jpg, jpe</extension> 
 				<comment>JPEG</comment>
 			</allowedformat>
+			<!-- SVG: fmt/91 & fmt/92 & fmt/413 -->
 			<!-- <allowedformat>
 				<puid>SVG</puid>
 				<extension>svg</extension> 
 				<comment>Scalable Vector Graphics</comment>
 			</allowedformat> -->
 		<!-- Audio -->
+			<!-- WAVE: fmt/142 & fmt/143 -->
 			<allowedformat>
 				<puid>WAVE</puid>
 				<extension>wav, wave</extension>
 				<comment>Waveform Audio</comment>
 			</allowedformat>
+			<!-- MP3: fmt/134 -->
 			<allowedformat> 
 				<puid>MP3</puid>
 				<extension>mp3</extension>
 				<comment>MPEG 1/2 Audio Layer 3</comment> 
 			</allowedformat>
 		<!-- Video -->
+			<!-- MP4: fmt/199 -->
 			<allowedformat>
 				<puid>MP4</puid>
 				<extension>mp4, m4v, m4a, f4v, f4a</extension> 
 				<comment>MPEG-4 Media File</comment>
 			</allowedformat>
+			<!-- MJ2: fmt/337 -->
 			<allowedformat>
 				<puid>MJ2</puid>
 				<extension>mj2, mjp2</extension> 
 				<comment>MJ2 (Motion JPEG 2000)</comment>
 			</allowedformat>
+			<!-- MPEG2: fmt/640 -->
 			<!-- <allowedformat>
 				<puid>MPEG2</puid>
 				<extension>mpeg, mpg, m2v</extension> 
 				<comment>MPEG-2 Video Format</comment>
 			</allowedformat> -->
+			<!-- PRORES: fmt/797 -->
 			<!-- <allowedformat>
 				<puid>PRORES</puid>
 				<extension>mov</extension> 
 				<comment>Apple ProRes</comment>
 			</allowedformat> -->
 		<!-- Datenbank / strukturierte Daten -->
+			<!-- CSV: x-fmt/18 -->
 			<allowedformat>
 				<puid>CSV</puid>
 				<extension>csv</extension>
 				<comment>Comma Separated Values</comment>
 			</allowedformat>
+			<!-- SIARD: fmt/161 -->
 			<allowedformat>
 				<puid>SIARD</puid>
 				<extension>siard</extension>
 				<comment>SIARD</comment>
 			</allowedformat>
+			<!-- XML: fmt/101 -->
 			<!-- <allowedformat>
 				<puid>XML</puid>
 				<extension>xml</extension>
 				<comment>Ext. Markup Language</comment>
 			</allowedformat> -->
+			<!-- XSD: x-fmt/280 -->
 			<!-- <allowedformat>
 				<puid>XSD</puid>
 				<extension>xsd</extension>
 				<comment>XML Schema Definition</comment>
 			</allowedformat> -->
+			<!-- XLS: fmt/55 ... -->
 			<!-- <allowedformat>
 				<puid>XLS</puid>
 				<extension>xls, xlw</extension> 
 				<comment>Microsoft Excel (xls)</comment>
 			</allowedformat> -->
 		<!-- Hypertext -->
+			<!-- WARC: fmt/289 -->
 			<allowedformat>
 				<puid>WARC</puid>
 				<extension>warc</extension> 
 				<comment>WARC</comment>
 			</allowedformat>
+			<!-- ARC: x-fmt/219 & fmt/410 -->
 			<!-- <allowedformat>
 				<puid>ARC</puid>
 				<extension>arc</extension> 
 				<comment>Internet Archive</comment>
 			</allowedformat> -->
+			<!-- HTML: fmt/96 & fmt/97 & fmt/98 & fmt/99 & fmt/100 & fmt/471 -->
 			<!-- <allowedformat>
 				<puid>HTML</puid>
 				<extension>htm, html</extension> 

@@ -1,0 +1,208 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>URI::file - URI that maps to local file names</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;URI::file - URI that maps to local file names</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#mapping_notes">MAPPING NOTES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>URI::file - URI that maps to local file names</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ use URI::file;
+ 
+ $u1 = URI-&gt;new(&quot;<a href="file:/foo/bar&quot">file:/foo/bar&quot</a>;);
+ $u2 = URI-&gt;new(&quot;foo/bar&quot;, &quot;file&quot;);
+ 
+ $u3 = URI::file-&gt;new($path);
+ $u4 = URI::file-&gt;new(&quot;c:\\windows\\&quot;, &quot;win32&quot;);</pre>
+<pre>
+ $u1-&gt;file;
+ $u1-&gt;file(&quot;mac&quot;);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The <code>URI::file</code> class supports <code>URI</code> objects belonging to the <em>file</em>
+URI scheme.  This scheme allows us to map the conventional file names
+found on various computer systems to the URI name space.  An old
+specification of the <em>file</em> URI scheme is found in RFC 1738.  Some
+older background information is also in RFC 1630. There are no newer
+specifications as far as I know.</p>
+<p>If you simply want to construct <em>file</em> URI objects from URI strings,
+use the normal <code>URI</code> constructor.  If you want to construct <em>file</em>
+URI objects from the actual file names used by various systems, then
+use one of the following <code>URI::file</code> constructors:</p>
+<dl>
+<dt><strong><a name="item_new">$u = URI::file-&gt;new( $filename, [$os] )</a></strong><br />
+</dt>
+<dd>
+Maps a file name to the <em>file:</em> URI name space, creates a URI object
+and returns it.  The $filename is interpreted as belonging to the
+indicated operating system ($os), which defaults to the value of the
+$^O variable.  The $filename can be either absolute or relative, and
+the corresponding type of URI object for $os is returned.
+</dd>
+<p></p>
+<dt><strong><a name="item_new_abs">$u = URI::file-&gt;new_abs( $filename, [$os] )</a></strong><br />
+</dt>
+<dd>
+Same as URI::file-&gt;new, but makes sure that the URI returned
+represents an absolute file name.  If the $filename argument is
+relative, then the name is resolved relative to the current directory,
+i.e. this constructor is really the same as:
+</dd>
+<dd>
+<pre>
+  URI::file-&gt;new($filename)-&gt;abs(URI::file-&gt;cwd);</pre>
+</dd>
+<p></p>
+<dt><strong><a name="item_cwd">$u = URI::file-&gt;cwd</a></strong><br />
+</dt>
+<dd>
+Returns a <em>file</em> URI that represents the current working directory.
+See <a href="../../../lib/Cwd.html">the Cwd manpage</a>.
+</dd>
+<p></p></dl>
+<p>The following methods are supported for <em>file</em> URI (in addition to
+the common and generic methods described in <a href="../../../site/lib/URI.html">the URI manpage</a>):</p>
+<dl>
+<dt><strong><a name="item_file">$u-&gt;file( [$os] )</a></strong><br />
+</dt>
+<dd>
+Returns a file name.  It maps from the URI name space
+to the file name space of the indicated operating system.
+</dd>
+<dd>
+<p>It might return <a href="../../../lib/Pod/perlfunc.html#item_undef"><code>undef</code></a> if the name can not be represented in the
+indicated file system.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item_dir">$u-&gt;dir( [$os] )</a></strong><br />
+</dt>
+<dd>
+Some systems use a different form for names of directories than for plain
+files.  Use this method if you know you want to use the name for
+a directory.
+</dd>
+<p></p></dl>
+<p>The <code>URI::file</code> module can be used to map generic file names to names
+suitable for the current system.  As such, it can work as a nice
+replacement for the <code>File::Spec</code> module.  For instance, the following
+code translates the UNIX-style file name <em>Foo/Bar.pm</em> to a name
+suitable for the local system:</p>
+<pre>
+  $file = URI::file-&gt;new(&quot;Foo/Bar.pm&quot;, &quot;unix&quot;)-&gt;file;
+  die &quot;Can't map filename Foo/Bar.pm for $^O&quot; unless defined $file;
+  open(FILE, $file) || die &quot;Can't open '$file': $!&quot;;
+  # do something with FILE</pre>
+<p>
+</p>
+<hr />
+<h1><a name="mapping_notes">MAPPING NOTES</a></h1>
+<p>Most computer systems today have hierarchically organized file systems.
+Mapping the names used in these systems to the generic URI syntax
+allows us to work with relative file URIs that behave as they should
+when resolved using the generic algorithm for URIs (specified in RFC
+2396).  Mapping a file name to the generic URI syntax involves mapping
+the path separator character to ``/'' and encoding any reserved
+characters that appear in the path segments of the file name.  If
+path segments consisting of the strings ``.'' or ``..'' have a
+different meaning than what is specified for generic URIs, then these
+must be encoded as well.</p>
+<p>If the file system has device, volume or drive specifications as
+the root of the name space, then it makes sense to map them to the
+authority field of the generic URI syntax.  This makes sure that
+relative URIs can not be resolved ``above'' them, i.e. generally how
+relative file names work in those systems.</p>
+<p>Another common use of the authority field is to encode the host on which
+this file name is valid.  The host name ``localhost'' is special and
+generally has the same meaning as a missing or empty authority
+field.  This use is in conflict with using it as a device
+specification, but can often be resolved for device specifications
+having characters not legal in plain host names.</p>
+<p>File name to URI mapping in normally not one-to-one.  There are
+usually many URIs that map to any given file name.  For instance, an
+authority of ``localhost'' maps the same as a URI with a missing or empty
+authority.</p>
+<p>Example 1: The Mac uses ``:'' as path separator, but not in the same way
+as a generic URI. ``:foo'' is a relative name.  ``foo:bar'' is an absolute
+name.  Also, path segments can contain the ``/'' character as well as the
+literal ``.'' or ``..''.  So the mapping looks like this:</p>
+<pre>
+  Mac                   URI
+  ----------            -------------------
+  :foo:bar     &lt;==&gt;     foo/bar
+  :            &lt;==&gt;     ./
+  ::foo:bar    &lt;==&gt;     ../foo/bar
+  :::          &lt;==&gt;     ../../
+  foo:bar      &lt;==&gt;     <a href="file:/foo/bar">file:/foo/bar</a>
+  foo:bar:     &lt;==&gt;     <a href="file:/foo/bar/">file:/foo/bar/</a>
+  ..           &lt;==&gt;     %2E%2E
+  &lt;undef&gt;      &lt;==      /
+  foo/         &lt;==      <a href="file:/foo%2F">file:/foo%2F</a>
+  ./foo.txt    &lt;==      <a href="file:/.%2Ffoo.txt">file:/.%2Ffoo.txt</a></pre>
+<p>Note that if you want a relative URL, you *must* begin the path with a :.  Any
+path that begins with [^:] is treated as absolute.</p>
+<p>Example 2: The UNIX file system is easy to map, as it uses the same path
+separator as URIs, has a single root, and segments of ``.'' and ``..''
+have the same meaning.  URIs that have the character ``\0'' or ``/'' as
+part of any path segment can not be turned into valid UNIX file names.</p>
+<pre>
+  UNIX                  URI
+  ----------            ------------------
+  foo/bar      &lt;==&gt;     foo/bar
+  /foo/bar     &lt;==&gt;     <a href="file:/foo/bar">file:/foo/bar</a>
+  /foo/bar     &lt;==      <a href="file://localhost/foo/bar">file://localhost/foo/bar</a>
+  file:         ==&gt;     ./file:
+  &lt;undef&gt;      &lt;==      <a href="file:/fo%00/bar">file:/fo%00/bar</a>
+  /            &lt;==&gt;     <a href="file:/">file:/</a></pre>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../../../site/lib/URI.html">the URI manpage</a>, <a href="../../../lib/File/Spec.html">the File::Spec manpage</a>, <a href="../../../lib/Pod/perlport.html">the perlport manpage</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 1995-1998 Gisle Aas.</p>
+<p>This library is free software; you can redistribute it and/or
+modify it under the same terms as Perl itself.</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;URI::file - URI that maps to local file names</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

@@ -1,6 +1,6 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
- * Information Package (SIP). Copyright (C) 2012-2016 Claire Röthlisberger (KOST-CECO), Christian
+ * Information Package (SIP). Copyright (C) 2012-2016 Claire Roethlisberger (KOST-CECO), Christian
  * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
  * Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
@@ -55,10 +55,32 @@ public class Validation3aFormatRecognitionModuleImpl extends ValidationModuleImp
 	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws Validation3aFormatRecognitionException
 	{
-		// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
-		System.out.print( "3A   " );
-		System.out.print( "\b\b\b\b\b" );
+		/* fÃ¼r die Geschwindigkeit von Droid ja nach SignatureFile zu messen kann dies verwendet werden:
+		 * 
+		 * java.util.Date nowStart = new java.util.Date();
+		 * 
+		 * java.text.SimpleDateFormat sdfStart = new java.text.SimpleDateFormat( "dd.MM.yyyy HH:mm:ss"
+		 * );
+		 * 
+		 * String ausgabeStart = sdfStart.format( nowStart );
+		 * 
+		 * System.out.println ("Start:" + ausgabeStart); */
+
+		boolean showOnWork = true;
 		int onWork = 410;
+		// Informationen zur Darstellung "onWork" holen
+		String onWorkConfig = getConfigurationService().getShowProgressOnWork();
+		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
+		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
+		 * ref="configurationService" /> */
+		if ( onWorkConfig.equals( "no" ) ) {
+			// keine Ausgabe
+			showOnWork = false;
+		} else {
+			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
+			System.out.print( "3A   " );
+			System.out.print( "\b\b\b\b\b" );
+		}
 
 		boolean valid = true;
 
@@ -83,8 +105,8 @@ public class Validation3aFormatRecognitionModuleImpl extends ValidationModuleImp
 		Droid droid = null;
 		try {
 			/* kleiner Hack, weil die Droid libraries irgendwo ein System.out drin haben, welche den
-			 * Output stören Util.switchOffConsole() als Kommentar markieren wenn man die Fehlermeldung
-			 * erhalten möchte */
+			 * Output stï¿½ren Util.switchOffConsole() als Kommentar markieren wenn man die Fehlermeldung
+			 * erhalten mï¿½chte */
 			Util.switchOffConsole();
 			droid = new Droid();
 
@@ -108,24 +130,26 @@ public class Validation3aFormatRecognitionModuleImpl extends ValidationModuleImp
 			if ( !newFile.isDirectory() ) {
 				filesInSipFile.put( entryName, newFile );
 			}
-			if ( onWork == 410 ) {
-				onWork = 2;
-				System.out.print( "3A-  " );
-				System.out.print( "\b\b\b\b\b" );
-			} else if ( onWork == 110 ) {
-				onWork = onWork + 1;
-				System.out.print( "3A\\  " );
-				System.out.print( "\b\b\b\b\b" );
-			} else if ( onWork == 210 ) {
-				onWork = onWork + 1;
-				System.out.print( "3A|  " );
-				System.out.print( "\b\b\b\b\b" );
-			} else if ( onWork == 310 ) {
-				onWork = onWork + 1;
-				System.out.print( "3A/  " );
-				System.out.print( "\b\b\b\b\b" );
-			} else {
-				onWork = onWork + 1;
+			if ( showOnWork ) {
+				if ( onWork == 410 ) {
+					onWork = 2;
+					System.out.print( "3A-  " );
+					System.out.print( "\b\b\b\b\b" );
+				} else if ( onWork == 110 ) {
+					onWork = onWork + 1;
+					System.out.print( "3A\\  " );
+					System.out.print( "\b\b\b\b\b" );
+				} else if ( onWork == 210 ) {
+					onWork = onWork + 1;
+					System.out.print( "3A|  " );
+					System.out.print( "\b\b\b\b\b" );
+				} else if ( onWork == 310 ) {
+					onWork = onWork + 1;
+					System.out.print( "3A/  " );
+					System.out.print( "\b\b\b\b\b" );
+				} else {
+					onWork = onWork + 1;
+				}
 			}
 		}
 
@@ -161,24 +185,26 @@ public class Validation3aFormatRecognitionModuleImpl extends ValidationModuleImp
 				}
 
 			}
-			if ( onWork == 410 ) {
-				onWork = 2;
-				System.out.print( "3A-  " );
-				System.out.print( "\b\b\b\b\b" );
-			} else if ( onWork == 110 ) {
-				onWork = onWork + 1;
-				System.out.print( "3A\\  " );
-				System.out.print( "\b\b\b\b\b" );
-			} else if ( onWork == 210 ) {
-				onWork = onWork + 1;
-				System.out.print( "3A|  " );
-				System.out.print( "\b\b\b\b\b" );
-			} else if ( onWork == 310 ) {
-				onWork = onWork + 1;
-				System.out.print( "3A/  " );
-				System.out.print( "\b\b\b\b\b" );
-			} else {
-				onWork = onWork + 1;
+			if ( showOnWork ) {
+				if ( onWork == 410 ) {
+					onWork = 2;
+					System.out.print( "3A-  " );
+					System.out.print( "\b\b\b\b\b" );
+				} else if ( onWork == 110 ) {
+					onWork = onWork + 1;
+					System.out.print( "3A\\  " );
+					System.out.print( "\b\b\b\b\b" );
+				} else if ( onWork == 210 ) {
+					onWork = onWork + 1;
+					System.out.print( "3A|  " );
+					System.out.print( "\b\b\b\b\b" );
+				} else if ( onWork == 310 ) {
+					onWork = onWork + 1;
+					System.out.print( "3A/  " );
+					System.out.print( "\b\b\b\b\b" );
+				} else {
+					onWork = onWork + 1;
+				}
 			}
 		}
 
@@ -191,6 +217,15 @@ public class Validation3aFormatRecognitionModuleImpl extends ValidationModuleImp
 							+ getTextResourceService().getText( MESSAGE_XML_CA_FILES, keyExt, value.toString() ) );
 			valid = false;
 		}
+		/* fÃ¼r die Geschwindigkeit von Droid ja nach SignatureFile zu messen kann dies verwendet werden:
+		 * 
+		 * java.util.Date nowEnd = new java.util.Date();
+		 * 
+		 * java.text.SimpleDateFormat sdfEnd = new java.text.SimpleDateFormat( "dd.MM.yyyy HH:mm:ss" );
+		 * 
+		 * String ausgabeEnd = sdfEnd.format( nowEnd );
+		 * 
+		 * System.out.println( "Ende:" + ausgabeEnd ); */
 		return valid;
 	}
 

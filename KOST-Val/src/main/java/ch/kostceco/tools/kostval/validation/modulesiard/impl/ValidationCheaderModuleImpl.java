@@ -1,6 +1,6 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
- * Information Package (SIP). Copyright (C) 2012-2016 Claire Röthlisberger (KOST-CECO), Christian
+ * Information Package (SIP). Copyright (C) 2012-2016 Claire Roethlisberger (KOST-CECO), Christian
  * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
  * Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
@@ -41,11 +41,11 @@ import ch.enterag.utils.zip.FileEntry;
 import ch.enterag.utils.zip.Zip64File;
 
 /** Validierungsschritt C (Header-Validierung) Ist der header-Ordner valid? valid --> metadata.xml
- * valid zu metadata.xsd und beides vorhanden Bemerkung --> zusätzliche Ordner oder Dateien wie z.B.
+ * valid zu metadata.xsd und beides vorhanden Bemerkung --> zusÃ¤tzliche Ordner oder Dateien wie z.B.
  * metadata.xls sind im header-Ordner erlaubt ==> Bei den Module A, B, C und D wird die Validierung
  * abgebrochen, sollte das Resulat invalid sein!
  * 
- * @author Rc Claire Röthlisberger, KOST-CECO */
+ * @author Rc Claire Roethlisberger, KOST-CECO */
 
 public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 		ValidationCheaderModule
@@ -67,10 +67,21 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws ValidationCheaderException
 	{
-		// Ausgabe SIARD-Modul Ersichtlich das KOST-Val arbeitet
-		System.out.print( "C    " );
-		System.out.print( "\b\b\b\b\b" );
+		boolean showOnWork = true;
 		int onWork = 410;
+		// Informationen zur Darstellung "onWork" holen
+		String onWorkConfig = getConfigurationService().getShowProgressOnWork();
+		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
+		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
+		 * ref="configurationService" /> */
+		if ( onWorkConfig.equals( "no" ) ) {
+			// keine Ausgabe
+			showOnWork = false;
+		} else {
+			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
+			System.out.print( "C    " );
+			System.out.print( "\b\b\b\b\b" );
+		}
 
 		boolean result = true;
 		// Sind im Header-Ordner metadata.xml und metadata.xsd vorhanden?
@@ -87,24 +98,26 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 				if ( fileEntry.getName().equals( "header/" + XSD_METADATA ) ) {
 					metadataxsd = fileEntry;
 				}
-				if ( onWork == 410 ) {
-					onWork = 2;
-					System.out.print( "C-   " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 110 ) {
-					onWork = onWork + 1;
-					System.out.print( "C\\   " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 210 ) {
-					onWork = onWork + 1;
-					System.out.print( "C|   " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 310 ) {
-					onWork = onWork + 1;
-					System.out.print( "C/   " );
-					System.out.print( "\b\b\b\b\b" );
-				} else {
-					onWork = onWork + 1;
+				if ( showOnWork ) {
+					if ( onWork == 410 ) {
+						onWork = 2;
+						System.out.print( "C-   " );
+						System.out.print( "\b\b\b\b\b" );
+					} else if ( onWork == 110 ) {
+						onWork = onWork + 1;
+						System.out.print( "C\\   " );
+						System.out.print( "\b\b\b\b\b" );
+					} else if ( onWork == 210 ) {
+						onWork = onWork + 1;
+						System.out.print( "C|   " );
+						System.out.print( "\b\b\b\b\b" );
+					} else if ( onWork == 310 ) {
+						onWork = onWork + 1;
+						System.out.print( "C/   " );
+						System.out.print( "\b\b\b\b\b" );
+					} else {
+						onWork = onWork + 1;
+					}
 				}
 			}
 			if ( metadataxml == null ) {
@@ -150,11 +163,11 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 				tmpDir.mkdir();
 			}
 
-			/* Das metadata.xml und sein xsd müssen in das Filesystem extrahiert werden, weil bei bei
+			/* Das metadata.xml und sein xsd mÃ¼ssen in das Filesystem extrahiert werden, weil bei bei
 			 * Verwendung eines Inputstreams bei der Validierung ein Problem mit den xs:include Statements
-			 * besteht, die includes können so nicht aufgelöst werden. Es werden hier jedoch nicht nur
-			 * diese Files extrahiert, sondern gleich die ganze Zip-Datei, weil auch spätere Validierungen
-			 * nur mit den extrahierten Files arbeiten können. */
+			 * besteht, die includes kÃ¶nnen so nicht aufgelÃ¶st werden. Es werden hier jedoch nicht nur
+			 * diese Files extrahiert, sondern gleich die ganze Zip-Datei, weil auch spÃ¤tere Validierungen
+			 * nur mit den extrahierten Files arbeiten kÃ¶nnen. */
 			Zip64File zipfile = new Zip64File( valDatei );
 			List<FileEntry> fileEntryList = zipfile.getListFileEntries();
 			for ( FileEntry fileEntry : fileEntryList ) {
@@ -197,25 +210,26 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 					}
 					eis.close();
 				}
-
-				if ( onWork == 41 ) {
-					onWork = 2;
-					System.out.print( "C-   " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 11 ) {
-					onWork = 12;
-					System.out.print( "C\\   " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 21 ) {
-					onWork = 22;
-					System.out.print( "C|   " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 31 ) {
-					onWork = 32;
-					System.out.print( "C/   " );
-					System.out.print( "\b\b\b\b\b" );
-				} else {
-					onWork = onWork + 1;
+				if ( showOnWork ) {
+					if ( onWork == 41 ) {
+						onWork = 2;
+						System.out.print( "C-   " );
+						System.out.print( "\b\b\b\b\b" );
+					} else if ( onWork == 11 ) {
+						onWork = 12;
+						System.out.print( "C\\   " );
+						System.out.print( "\b\b\b\b\b" );
+					} else if ( onWork == 21 ) {
+						onWork = 22;
+						System.out.print( "C|   " );
+						System.out.print( "\b\b\b\b\b" );
+					} else if ( onWork == 31 ) {
+						onWork = 32;
+						System.out.print( "C/   " );
+						System.out.print( "\b\b\b\b\b" );
+					} else {
+						onWork = onWork + 1;
+					}
 				}
 			}
 			if ( xmlToValidate != null && xsdToValidate != null ) {

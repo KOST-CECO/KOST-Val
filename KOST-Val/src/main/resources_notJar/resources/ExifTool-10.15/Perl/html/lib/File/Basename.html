@@ -1,0 +1,163 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>fileparse - split a pathname into pieces</title>
+<link rel="stylesheet" href="../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;fileparse - split a pathname into pieces</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#examples">EXAMPLES</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>fileparse - split a pathname into pieces</p>
+<p>basename - extract just the filename from a path</p>
+<p>dirname - extract just the directory from a path</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+    use File::Basename;</pre>
+<pre>
+    ($name,$path,$suffix) = fileparse($fullname,@suffixlist)
+    fileparse_set_fstype($os_string);
+    $basename = basename($fullname,@suffixlist);
+    $dirname = dirname($fullname);</pre>
+<pre>
+    ($name,$path,$suffix) = fileparse(&quot;lib/File/Basename.pm&quot;,qr{\.pm});
+    fileparse_set_fstype(&quot;VMS&quot;);
+    $basename = basename(&quot;lib/File/Basename.pm&quot;,&quot;.pm&quot;);
+    $dirname = dirname(&quot;lib/File/Basename.pm&quot;);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>These routines allow you to parse file specifications into useful
+pieces using the syntax of different operating systems.</p>
+<dl>
+<dt><strong><a name="item_fileparse_set_fstype">fileparse_set_fstype</a></strong><br />
+</dt>
+<dd>
+You select the syntax via the routine fileparse_set_fstype().
+</dd>
+<dd>
+<p>If the argument passed to it contains one of the substrings
+``VMS'', ``MSDOS'', ``MacOS'', ``AmigaOS'' or ``MSWin32'', the file specification 
+syntax of that operating system is used in future calls to 
+fileparse(), basename(), and dirname().  If it contains none of
+these substrings, Unix syntax is used.  This pattern matching is
+case-insensitive.  If you've selected VMS syntax, and the file
+specification you pass to one of these routines contains a ``/'',
+they assume you are using Unix emulation and apply the Unix syntax
+rules instead, for that function call only.</p>
+</dd>
+<dd>
+<p>If the argument passed to it contains one of the substrings ``VMS'',
+``MSDOS'', ``MacOS'', ``AmigaOS'', ``os2'', ``MSWin32'' or ``RISCOS'', then the pattern
+matching for suffix removal is performed without regard for case,
+since those systems are not case-sensitive when opening existing files
+(though some of them preserve case on file creation).</p>
+</dd>
+<dd>
+<p>If you haven't called fileparse_set_fstype(), the syntax is chosen
+by examining the builtin variable <a href="../../lib/Pod/perlvar.html#item__24_5eo"><code>$^O</code></a> according to these rules.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item_fileparse">fileparse</a></strong><br />
+</dt>
+<dd>
+The <a href="#item_fileparse"><code>fileparse()</code></a> routine divides a file specification into three
+parts: a leading <strong>path</strong>, a file <strong>name</strong>, and a <strong>suffix</strong>.  The
+<strong>path</strong> contains everything up to and including the last directory
+separator in the input file specification.  The remainder of the input
+file specification is then divided into <strong>name</strong> and <strong>suffix</strong> based on
+the optional patterns you specify in <code>@suffixlist</code>.  Each element of
+this list can be a qr-quoted pattern (or a string which is interpreted
+as a regular expression), and is matched
+against the end of <strong>name</strong>.  If this succeeds, the matching portion of
+<strong>name</strong> is removed and prepended to <strong>suffix</strong>.  By proper use of
+<code>@suffixlist</code>, you can remove file types or versions for examination.
+</dd>
+<dd>
+<p>You are guaranteed that if you concatenate <strong>path</strong>, <strong>name</strong>, and
+<strong>suffix</strong> together in that order, the result will denote the same
+file as the input file specification.</p>
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="examples">EXAMPLES</a></h1>
+<p>Using Unix file syntax:</p>
+<pre>
+    ($base,$path,$type) = fileparse('/virgil/aeneid/draft.book7',
+                                    qr{\.book\d+});</pre>
+<p>would yield</p>
+<pre>
+    $base eq 'draft'
+    $path eq '/virgil/aeneid/',
+    $type eq '.book7'</pre>
+<p>Similarly, using VMS syntax:</p>
+<pre>
+    ($name,$dir,$type) = fileparse('Doc_Root:[Help]Rhetoric.Rnh',
+                                   qr{\..*});</pre>
+<p>would yield</p>
+<pre>
+    $name eq 'Rhetoric'
+    $dir  eq 'Doc_Root:[Help]'
+    $type eq '.Rnh'</pre>
+<dl>
+<dt><strong><a name="item_basename"><code>basename</code></a></strong><br />
+</dt>
+<dd>
+The <a href="#item_basename"><code>basename()</code></a> routine returns the first element of the list produced
+by calling <a href="#item_fileparse"><code>fileparse()</code></a> with the same arguments, except that it always
+quotes metacharacters in the given suffixes.  It is provided for
+programmer compatibility with the Unix shell command basename(1).
+</dd>
+<p></p>
+<dt><strong><a name="item_dirname"><code>dirname</code></a></strong><br />
+</dt>
+<dd>
+The <a href="#item_dirname"><code>dirname()</code></a> routine returns the directory portion of the input file
+specification.  When using VMS or MacOS syntax, this is identical to the
+second element of the list produced by calling <a href="#item_fileparse"><code>fileparse()</code></a> with the same
+input file specification.  (Under VMS, if there is no directory information
+in the input file specification, then the current default device and
+directory are returned.)  When using Unix or MSDOS syntax, the return
+value conforms to the behavior of the Unix shell command dirname(1).  This
+is usually the same as the behavior of fileparse(), but differs in some
+cases.  For example, for the input file specification <em>lib/</em>, <a href="#item_fileparse"><code>fileparse()</code></a>
+considers the directory name to be <em>lib/</em>, while <a href="#item_dirname"><code>dirname()</code></a> considers the
+directory name to be <em>.</em>).
+</dd>
+<p></p></dl>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;fileparse - split a pathname into pieces</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

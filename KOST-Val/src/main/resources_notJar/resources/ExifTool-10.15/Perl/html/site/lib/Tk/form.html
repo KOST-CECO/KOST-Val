@@ -1,0 +1,487 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Tk::form - Geometry manager based on attachment rules</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::form - Geometry manager based on attachment rules</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#specifying_attachments">SPECIFYING ATTACHMENTS</a></li>
+	<ul>
+
+		<li><a href="#abbreviations_">ABBREVIATIONS:</a></li>
+	</ul>
+
+	<li><a href="#using_springs">USING SPRINGS</a></li>
+	<li><a href="#algorithm_of_form">ALGORITHM OF FORM</a></li>
+	<li><a href="#circular_dependency">CIRCULAR DEPENDENCY</a></li>
+	<li><a href="#bugs">BUGS</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#keywords">KEYWORDS</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Tk::form - Geometry manager based on attachment rules</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>$widget</em>-&gt;<strong>form</strong>?(<em>args</em>)?</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>$widget</em>-&gt;<strong>form</strong><em>Option</em>?(<em>args</em>)?</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The <strong>form</strong> method is used to communicate with the
+<strong>form</strong> Geometry Manager, a geometry manager that arranges the
+geometry of the children in a parent window according to attachment
+rules. The <strong>form</strong> geometry manager is very flexible and
+powerful; it can be used to emulate all the existing features of the
+Tk packer and placer geometry managers (see <a href="../../../site/lib/Tk/pack.html">pack</a>,
+<a href="../../../site/lib/Tk/place.html">place</a>).
+The <strong>form</strong> method can have any of several forms,
+depending on <em>Option</em>:</p>
+<dl>
+<dt><strong><a name="item_form"><em>$slave</em>-&gt;<strong>form</strong>?(<em>options</em>)?</a></strong><br />
+</dt>
+<dd>
+Sets or adjusts the attachment values of the slave window
+according to the <em>-option</em>=&gt;<em>value</em> argument pairs.
+</dd>
+<dl>
+<dt><strong><a name="item__2db__3d_3e_attachment"><strong>-b</strong> =&gt; <em>attachment</em></a></strong><br />
+</dt>
+<dd>
+Abbreviation for the <strong>-bottom</strong> option.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dbottom__3d_3e_attachment"><strong>-bottom</strong> =&gt; <em>attachment</em></a></strong><br />
+</dt>
+<dd>
+Specifies an attachment for the bottom edge of the slave window. The
+attachment must specified according to <a href="#specifying_attachments">SPECIFYING ATTACHMENTS</a> below.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dbottomspring__3d_3e_weight"><strong>-bottomspring</strong> =&gt; <em>weight</em></a></strong><br />
+</dt>
+<dd>
+Specifies the weight of the spring at the bottom edge of the slave
+window. See <a href="#using_springs">USING SPRINGS</a> below.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dbp__3d_3e_value"><strong>-bp</strong> =&gt; <em>value</em></a></strong><br />
+</dt>
+<dd>
+Abbreviation for the <strong>-padbottom</strong> option.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dbs__3d_3e_weight"><strong>-bs</strong> =&gt; <em>weight</em></a></strong><br />
+</dt>
+<dd>
+Abbreviation for the <strong>-bottomspring</strong> option.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dfill__3d_3e_style"><strong>-fill</strong> =&gt; <em>style</em></a></strong><br />
+</dt>
+<dd>
+Specifies the fillings when springs are used for this widget. The
+value must be <strong>x</strong>, <strong>y</strong>, <strong>both</strong> or <strong>none</strong>.
+</dd>
+<p></p>
+<dt><strong><a name="item__2din__3d_3e__24master"><strong>-in</strong> =&gt; <em>$master</em></a></strong><br />
+</dt>
+<dd>
+Places the slave window into the specified <em>$master</em> window. If the slave
+was originally in another master window, all attachment values with
+respect to the original master window are discarded. Even if the
+attachment values are the same as in the original master window, they
+need to be specified again.  The <strong>-in</strong> flag, when needed, must appear
+as the first flag of <em>options</em>. Otherwise an error is
+generated.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dl__3d_3e_attachment"><strong>-l</strong> =&gt; <em>attachment</em></a></strong><br />
+</dt>
+<dd>
+Abbreviation for the <strong>-left</strong> option.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dleft__3d_3e_attachment"><strong>-left</strong> =&gt; <em>attachment</em></a></strong><br />
+</dt>
+<dd>
+Specifies an attachment for the left edge of the slave window. The
+attachment must specified according to <a href="#specifying_attachments">SPECIFYING ATTACHMENTS</a> below.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dleftspring__3d_3e_weight"><strong>-leftspring</strong> =&gt; <em>weight</em></a></strong><br />
+</dt>
+<dd>
+Specifies the weight of the spring at the left edge of the slave
+window. See <a href="#using_springs">USING SPRINGS</a> below.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dlp__3d_3e_value"><strong>-lp</strong> =&gt; <em>value</em></a></strong><br />
+</dt>
+<dd>
+Abbreviation for the <strong>-padleft</strong> option.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dls__3d_3e_weight"><strong>-ls</strong> =&gt; <em>weight</em></a></strong><br />
+</dt>
+<dd>
+Abbreviation for the <strong>-leftspring</strong> option.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dpadbottom__3d_3e_value"><strong>-padbottom</strong> =&gt; <em>value</em></a></strong><br />
+</dt>
+<dd>
+Specifies the amount of external padding to leave on the bottom side
+of the slave. The <em>value</em> may have any of the forms acceptable to
+<strong>Tk_GetPixels</strong>.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dpadleft__3d_3e_value"><strong>-padleft</strong> =&gt; <em>value</em></a></strong><br />
+</dt>
+<dd>
+Specifies the amount of external padding to leave on the left side of
+the slave.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dpadright__3d_3e_value"><strong>-padright</strong> =&gt; <em>value</em></a></strong><br />
+</dt>
+<dd>
+Specifies the amount of external padding to leave on the right side of
+the slave.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dpadtop__3d_3e_value"><strong>-padtop</strong> =&gt; <em>value</em></a></strong><br />
+</dt>
+<dd>
+Specifies the amount of external padding to leave on the top side of
+the slave.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dpadx__3d_3e_value"><strong>-padx</strong> =&gt; <em>value</em></a></strong><br />
+</dt>
+<dd>
+Specifies the amount of external padding to leave on both the left and
+the right sides of the slave.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dpady__3d_3e_value"><strong>-pady</strong> =&gt; <em>value</em></a></strong><br />
+</dt>
+<dd>
+Specifies the amount of external padding to leave on both the top and
+the bottom sides of the slave.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dr__3d_3e_attachment"><strong>-r</strong> =&gt; <em>attachment</em></a></strong><br />
+</dt>
+<dd>
+Abbreviation for the <strong>-right</strong> option.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dright__3d_3e_attachment"><strong>-right</strong> =&gt; <em>attachment</em></a></strong><br />
+</dt>
+<dd>
+Specifies an attachment for the right edge of the slave window. The
+attachment must specified according to <a href="#specifying_attachments">SPECIFYING ATTACHMENTS</a> below.
+</dd>
+<p></p>
+<dt><strong><a name="item__2drightspring__3d_3e_weight"><strong>-rightspring</strong> =&gt; <em>weight</em></a></strong><br />
+</dt>
+<dd>
+Specifies the weight of the spring at the right edge of the slave
+window. See <a href="#using_springs">USING SPRINGS</a> below.
+</dd>
+<p></p>
+<dt><strong><a name="item__2drp__3d_3e_value"><strong>-rp</strong>  =&gt; <em>value</em></a></strong><br />
+</dt>
+<dd>
+Abbreviation for the <strong>-padright</strong> option.
+</dd>
+<p></p>
+<dt><strong><a name="item__2drs__3d_3e_weight"><strong>-rs</strong> =&gt; <em>weight</em></a></strong><br />
+</dt>
+<dd>
+Abbreviation for the <strong>-rightspring</strong> option.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dt__3d_3e_attachment"><strong>-t</strong> =&gt; <em>attachment</em></a></strong><br />
+</dt>
+<dd>
+Abbreviation for the <strong>-top</strong> option.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dtop__3d_3e_attachment"><strong>-top</strong> =&gt; <em>attachment</em></a></strong><br />
+</dt>
+<dd>
+Specifies an attachment for the top edge of the slave window. The
+attachment must specified according to <a href="#specifying_attachments">SPECIFYING ATTACHMENTS</a> below.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dtopspring__3d_3e_weight"><strong>-topspring</strong> =&gt; <em>weight</em></a></strong><br />
+</dt>
+<dd>
+Specifies the weight of the spring at the top edge of the slave
+window. See <a href="#using_springs">USING SPRINGS</a> below.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dtp__3d_3e_value"><strong>-tp</strong> =&gt; <em>value</em></a></strong><br />
+</dt>
+<dd>
+Abbreviation for the <strong>-padtop</strong> option.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dts__3d_3e_weight"><strong>-ts</strong> =&gt; <em>weight</em></a></strong><br />
+</dt>
+<dd>
+Abbreviation for the <strong>-topspring</strong> option.
+</dd>
+<p></p></dl>
+<dt><strong><a name="item_formcheck"><em>$master</em>-&gt;<strong>formCheck</strong></a></strong><br />
+</dt>
+<dd>
+This method checks whether there is circular dependency in the
+attachments of the master's slaves (see <a href="#circular_dependency">CIRCULAR DEPENDENCY</a> below).
+It returns the Boolean value <strong>TRUE</strong> if it
+discover circular dependency and <strong>FALSE</strong> otherwise.
+</dd>
+<p></p>
+<dt><strong><a name="item_formforget"><em>$slave</em>-&gt;<strong>formForget</strong></a></strong><br />
+</dt>
+<dd>
+Removes the slave from its master and unmaps its window.
+The slave will no longer be managed by form. All attachment values
+with respect to its master window are discarded. If another slave
+is attached to this slave, then the attachment of the other slave will
+be changed to grid attachment based on its geometry.
+</dd>
+<p></p>
+<dt><strong><a name="item_formgrid"><em>$master</em>-&gt;<strong>formGrid</strong>?(<em>x_size, y_size</em>)?</a></strong><br />
+</dt>
+<dd>
+When <em>x_size</em> and <em>y_size</em> are given, this method returns the
+number of grids of the <em>$master</em> window in a pair of integers of the form
+(<em>x_size, y_size</em>). When both <em>x_size</em> and <em>y_size</em> are
+given, this method changes the number of horizontal and vertical
+grids on the master window.
+</dd>
+<p></p>
+<dt><strong><a name="item_forminfo"><em>$slave</em>-&gt;<strong>formInfo</strong>?(<em>-option)</em>?</a></strong><br />
+</dt>
+<dd>
+Queries the attachment options of a slave window. <em>-option</em> can be
+any of the options accepted by the <strong>form</strong> method. If
+<em>-option</em> is given, only the value of that option is returned.
+Otherwise, this method returns a list whose elements are the current
+configuration state of the slave given in the same <em>option-value</em> form
+that might be specified to <strong>form</strong>. The first two
+elements in this list list are ``<strong>-in</strong>=&gt;<em>$master</em>'' where
+<em>$master</em> is the slave's master window.
+</dd>
+<p></p>
+<dt><strong><a name="item_formslaves"><em>$master</em>-&gt;<strong>formSlaves</strong></a></strong><br />
+</dt>
+<dd>
+Returns a list of all of the slaves for the master window. The order
+of the slaves in the list is the same as their order in the packing
+order. If master has no slaves then an empty string is returned.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="specifying_attachments">SPECIFYING ATTACHMENTS</a></h1>
+<p>One can specify an attachment for each side of a slave window managed
+by form. An attachment is specified in the the form ``-<em>side</em> =&gt;
+[<em>anchor_point</em>, <em>offset</em>]''. -<em>side</em> can be one of
+<strong>-top</strong>, <strong>-bottom</strong>, <strong>-left</strong> or <strong>-right</strong>.</p>
+<p><em>Offset</em> is given in screen units (i.e. any of the forms
+acceptable to <strong>Tk_GetPixels</strong>).  A positive offset indicates
+shifting to a position to the right or bottom of an anchor point. A
+negative offset indicates shifting to a position to the left or top of
+an anchor point.</p>
+<p><em>Anchor_point</em> can be given in one of the
+following forms:</p>
+<dl>
+<dt><strong><a name="item_grid_attachment"><strong>Grid Attachment</strong></a></strong><br />
+</dt>
+<dd>
+The master window is divided into a number of horizontal and vertical
+grids. By default the master window is divided into 100x100 grids; the
+number of grids can be adjusted by the <strong>formGrid</strong> method. A
+grid attachment anchor point is given by a <strong>%</strong> sign followed by an
+integer value. For example, <strong>'%0'</strong> specifies the first grid
+line (the top or left edge of the master window). <strong>'%100'</strong> specifies
+the last grid line (the bottom or right edge of the master window).
+</dd>
+<p></p>
+<dt><strong><a name="item_opposite_side_attachment"><strong>Opposite Side Attachment</strong></a></strong><br />
+</dt>
+<dd>
+Opposite attachment specifies an anchor point located on the
+<strong>opposite</strong> side of another slave widget, which must be managed by
+form in the same master window. An opposite attachment anchor point
+is given by the name of another widget. For example,
+``<em>$b</em>-&gt;<strong>form</strong>(<strong>-top</strong>=&gt;[<em>$a</em>,0])'' attaches the top side of the widget <em>$b</em> to the
+bottom of the widget <em>$a</em>.
+</dd>
+<p></p>
+<dt><strong><a name="item_parallel_side_attachment"><strong>Parallel Side Attachment</strong></a></strong><br />
+</dt>
+<dd>
+Opposite attachment specifies an anchor point located on the
+<strong>same</strong> side of another slave widget, which must be managed by
+form in the same master window. An parallel attachment anchor point
+is given by the sign <strong>&amp;</strong> follwed by the name of another widget.
+For example, ``<em>$b</em>-&gt;<strong>form</strong>(<strong>-top</strong>=&gt;['&amp;',<em>$a</em>,0])'' attaches the top side of
+the widget <em>$b</em> to the top of the widget <em>$a</em>, making
+the top sides of these two widgets at the same vertical position
+in their parent window.
+</dd>
+<p></p>
+<dt><strong><a name="item_no_attachment"><strong>No Attachment</strong></a></strong><br />
+</dt>
+<dd>
+Specifies a side of the slave to be attached to nothing, indicated by
+the keyword <strong>none</strong>. When the <strong>none</strong> anchor point is given, the
+offset must be zero (or not present).
+When a side of a slave is attached to <strong>['none', 0]</strong>, the position
+of this side is calculated by the position of the other side and the
+natural size of the slave. For example, if a the left side of a
+widget is attached to <strong>['%0', 100]</strong>, its right side attached to
+<strong>['none', 0]</strong>, and the natural size of the widget is <strong>50</strong> pixels,
+the right side of the widget will be positioned at pixel
+<strong>['%0', 149]</strong>.
+When both <strong>-top</strong> and <strong>-bottom</strong> are attached to <strong>none</strong>,
+then by default <strong>-top</strong> will be attached to <strong>['%0', 0]</strong>. When both
+<strong>-left</strong> and <strong>-right</strong> are attached to none, then by default
+<strong>-left</strong> will be attached to <strong>['%0', 0]</strong>.
+</dd>
+<p></p></dl>
+<p>Shifting effects can be achieved by specifying a non-zero offset with
+an anchor point. In the following example, the top side of
+widget <em>\$b</em> is attached to the bottom of
+<em>\$a</em>; hence <em>\$b</em>
+always appears below <em>\$a</em>.  Also, the left edge of <em>\$b</em>
+is attached to the left side of <em>\$a</em> with a 10
+pixel offest.  Therefore, the left edge of <em>\$b</em> is always
+shifted 10 pixels to the right of <em>\$a</em>'s left edge:</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>$b</em>-&gt;<strong>form</strong>(<strong>-left</strong>=&gt;[<em>$a</em>,10], <strong>-top</strong>=&gt;[<em>$a</em>,0]);</p>
+<p>
+</p>
+<h2><a name="abbreviations_">ABBREVIATIONS:</a></h2>
+<p>Certain abbreviations can be made on the
+attachment specifications: First an offset of zero can be omitted.
+Thus, the following two lines are equivalent:</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>$b</em>-&gt;<strong>form</strong>(<strong>-top</strong>=&gt;[<em>$a</em>,0], <strong>-right</strong>=&gt;['%100',0]);</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>$b</em>-&gt;<strong>form</strong>(<strong>-top</strong>=&gt;[<em>$a</em>], <strong>-right</strong>=&gt;'%100');</p>
+<p>In the second case, when the anchor point is omitted, the offset must
+be given. A default anchor point is chosen according to the value of
+the offset. If the anchor point is <strong>0</strong> or positive, the default
+anchor point %0 is used; thus, ``<em>$b</em>-&gt;<strong>form</strong>(<strong>-top</strong>=&gt;15)'' attaches the top
+edge of <em>$b</em> to a position 15 pixels below the top edge of the
+master window. If the anchor point is ``<strong>-0</strong>'' or negative, the
+default anchor point <strong>%100</strong> is used; thus, ``<em>$a</em>-&gt;<strong>form</strong>(<strong>-right</strong>=&gt;-2)''
+attaches the right edge of <em>\$a</em> to a position 2 pixels to
+the left of the master window's right edge.  An further example
+below shows a method with its equivalent abbreviation.</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>$b</em>-&gt;<strong>form</strong>(<strong>-top</strong>=&gt;['%0',10], <strong>-bottom</strong>=&gt;['%100',0]);</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>$b</em>-&gt;<strong>form</strong>(<strong>-top</strong>=&gt;10, <strong>-bottom</strong>=&gt;-0);</p>
+<p>
+</p>
+<hr />
+<h1><a name="using_springs">USING SPRINGS</a></h1>
+<p>To be written.</p>
+<p>
+</p>
+<hr />
+<h1><a name="algorithm_of_form">ALGORITHM OF FORM</a></h1>
+<p><strong>form</strong> starts with any slave in the list of slaves of the master
+window. Then it tries to determine the position of each side of the
+slave.</p>
+<p>If the attachment of a side of the slave is grid attachment, the
+position of the side is readily determined.</p>
+<p>If the attachment of this side is <strong>none</strong>, then form tries to
+determine the position of the opposite side first, and then use the
+position of the opposite side and the natural size of the slave to
+determine the position of this side.</p>
+<p>If the attachment is opposite or parallel widget attachments, then
+form tries to determine the positions of the other widget first,
+and then use the positions of the other widget and the natural size of
+the slave determine the position of this side. This recursive
+algorithmis carried on until the positions of all slaves are
+determined.</p>
+<p>
+</p>
+<hr />
+<h1><a name="circular_dependency">CIRCULAR DEPENDENCY</a></h1>
+<p>The algorithm of form will fail if a circular dependency exists in
+the attachments of the slaves. For example:</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>$c</em>-&gt;<strong>form</strong>(<strong>-left</strong>=&gt;<em>$b</em>);</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>$b</em>-&gt;<strong>form</strong>(<strong>-right</strong>=&gt;<em>$c</em>);</p>
+<p>In this example, the position of the left side of <em>$b</em> depends on
+the right side of <em>$c</em>, which in turn depends on the left side of <em>$b</em>.</p>
+<p>When a circular dependency is discovered during the execution of the
+form algorithm, form will generate a background error and the
+geometry of the slaves are undefined (and will be arbitrary). Notice
+that form only executes the algorithm when the specification of the
+slaves' attachments is complete.  Therefore, it allows intermediate
+states of circular dependency during the specification of the slaves'
+attachments.  Also, unlike the Motif Form manager widget, form
+defines circular dependency as
+``<em>dependency in the same dimension</em>''.
+Therefore, the following code fragment will does not
+have circular dependency because the two widgets do not depend on each
+other in the same dimension (<em>$b</em> depends <em>$c</em> in the
+horizontal dimension and <em>$c</em> depends on <em>$b</em> in the vertical
+dimension):</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>$b</em>-&gt;<strong>form</strong>(<strong>-left</strong>=&gt;<em>$c</em>);</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>$c</em>-&gt;<strong>form</strong>(<strong>-top</strong>=&gt;<em>$b</em>);</p>
+<p>
+</p>
+<hr />
+<h1><a name="bugs">BUGS</a></h1>
+<p>Springs have not been fully implemented yet.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../../../site/lib/Tk/grid.html">Tk::grid</a>
+<a href="../../../site/lib/Tk/pack.html">Tk::pack</a>
+<a href="../../../site/lib/Tk/place.html">Tk::place</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="keywords">KEYWORDS</a></h1>
+<p>geometry manager, form, attachment, spring, propagation, size, pack,
+tix, master, slave</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::form - Geometry manager based on attachment rules</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

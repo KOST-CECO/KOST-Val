@@ -1,0 +1,249 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Win32::Registry - accessing the Windows registry [obsolete, use Win32::TieRegistry]</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Win32::Registry - accessing the Windows registry [obsolete, use Win32::TieRegistry]</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<ul>
+
+		<li><a href="#methods">Methods</a></li>
+	</ul>
+
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Win32::Registry - accessing the Windows registry [obsolete, use Win32::TieRegistry]</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+    use Win32::Registry;
+    my $tips;
+    $::HKEY_LOCAL_MACHINE-&gt;Open(&quot;SOFTWARE\\Microsoft\\Windows&quot;
+                               .&quot;\\CurrentVersion\\Explorer\\Tips&quot;, $tips)
+        or die &quot;Can't open tips: $^E&quot;;
+    my ($type, $value);
+    $tips-&gt;QueryValueEx(&quot;18&quot;, $type, $value) or die &quot;No tip #18: $^E&quot;;
+    print &quot;Here's a tip: $value\n&quot;;</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<pre>
+    NOTE: This module provides a very klunky interface to access the
+    Windows registry, and is not currently being developed actively.  It
+    only exists for backward compatibility with old code that uses it.
+    For more powerful and flexible ways to access the registry, use
+    Win32::TieRegistry.</pre>
+<p>Win32::Registry provides an object oriented interface to the Windows
+Registry.</p>
+<p>The following ``root'' registry objects are exported to the main:: name
+space.  Additional keys must be opened by calling the provided methods
+on one of these.</p>
+<pre>
+    $HKEY_CLASSES_ROOT
+    $HKEY_CURRENT_USER
+    $HKEY_LOCAL_MACHINE
+    $HKEY_USERS
+    $HKEY_PERFORMANCE_DATA
+    $HKEY_CURRENT_CONFIG
+    $HKEY_DYN_DATA</pre>
+<p>
+</p>
+<h2><a name="methods">Methods</a></h2>
+<p>The following methods are supported.  Note that subkeys can be
+specified as a path name, separated by backslashes (which may
+need to be doubled if you put them in double quotes).</p>
+<dl>
+<dt><strong><a name="item_open">Open</a></strong><br />
+</dt>
+<dd>
+<pre>
+    $reg_obj-&gt;Open($sub_key_name, $sub_reg_obj);</pre>
+</dd>
+<dd>
+<p>Opens a subkey of a registry object, returning the new registry object
+in $sub_reg_obj.</p>
+</dd>
+<dt><strong><a name="item_close">Close</a></strong><br />
+</dt>
+<dd>
+<pre>
+    $reg_obj-&gt;Close();</pre>
+</dd>
+<dd>
+<p>Closes an open registry key.</p>
+</dd>
+<dt><strong><a name="item_connect">Connect</a></strong><br />
+</dt>
+<dd>
+<pre>
+    $reg_obj-&gt;Connect($node_name, $new_reg_obj);</pre>
+</dd>
+<dd>
+<p>Connects to a remote Registry on the node specified by $node_name,
+returning it in $new_reg_obj.  Returns false if it fails.</p>
+</dd>
+<dt><strong><a name="item_create">Create</a></strong><br />
+</dt>
+<dd>
+<pre>
+    $reg_obj-&gt;Create($sub_key_name, $new_reg_obj);</pre>
+</dd>
+<dd>
+<p>Opens the subkey specified by $sub_key_name, returning the new registry
+object in $new_reg_obj.  If the specified subkey doesn't exist, it is
+created.</p>
+</dd>
+<dt><strong><a name="item_setvalue">SetValue</a></strong><br />
+</dt>
+<dd>
+<pre>
+    $reg_obj-&gt;SetValue($sub_key_name, $type, $value);</pre>
+</dd>
+<dd>
+<p>Sets the default value for a subkey specified by $sub_key_name.</p>
+</dd>
+<dt><strong><a name="item_setvalueex">SetValueEx</a></strong><br />
+</dt>
+<dd>
+<pre>
+    $reg_obj-&gt;SetValueEx($value_name, $reserved, $type, $value);</pre>
+</dd>
+<dd>
+<p>Sets the value for the value name identified by $value_name
+in the key specified by $reg_obj.</p>
+</dd>
+<dt><strong><a name="item_queryvalue">QueryValue</a></strong><br />
+</dt>
+<dd>
+<pre>
+    $reg_obj-&gt;QueryValue($sub_key_name, $value);</pre>
+</dd>
+<dd>
+<p>Gets the default value of the subkey specified by $sub_key_name.</p>
+</dd>
+<dt><strong><a name="item_querykey">QueryKey</a></strong><br />
+</dt>
+<dd>
+<pre>
+    $reg_obj-&gt;QueryKey($classref, $number_of_subkeys, $number_of_values);</pre>
+</dd>
+<dd>
+<p>Gets information on a key specified by $reg_obj.</p>
+</dd>
+<dt><strong><a name="item_queryvalueex">QueryValueEx</a></strong><br />
+</dt>
+<dd>
+<pre>
+    $reg_obj-&gt;QueryValueEx($value_name, $type, $value);</pre>
+</dd>
+<dd>
+<p>Gets the value for the value name identified by $value_name
+in the key specified by $reg_obj.</p>
+</dd>
+<dt><strong><a name="item_getkeys">GetKeys</a></strong><br />
+</dt>
+<dd>
+<pre>
+    my @keys;
+    $reg_obj-&gt;GetKeys(\@keys);</pre>
+</dd>
+<dd>
+<p>Populates the supplied array reference with the names of all the keys
+within the registry object $reg_obj.</p>
+</dd>
+<dt><strong><a name="item_getvalues">GetValues</a></strong><br />
+</dt>
+<dd>
+<pre>
+    my %values;
+    $reg_obj-&gt;GetValues(\%values);</pre>
+</dd>
+<dd>
+<p>Populates the supplied hash reference with entries of the form</p>
+</dd>
+<dd>
+<pre>
+    $value_name =&gt; [ $value_name, $type, $data ]</pre>
+</dd>
+<dd>
+<p>for each value in the registry object $reg_obj.</p>
+</dd>
+<dt><strong><a name="item_deletekey">DeleteKey</a></strong><br />
+</dt>
+<dd>
+<pre>
+    $reg_obj-&gt;DeleteKey($sub_key_name);</pre>
+</dd>
+<dd>
+<p>Deletes a subkey specified by $sub_key_name from the registry.</p>
+</dd>
+<dt><strong><a name="item_deletevalue">DeleteValue</a></strong><br />
+</dt>
+<dd>
+<pre>
+    $reg_obj-&gt;DeleteValue($value_name);</pre>
+</dd>
+<dd>
+<p>Deletes a value identified by $value_name from the registry.</p>
+</dd>
+<dt><strong><a name="item_save">Save</a></strong><br />
+</dt>
+<dd>
+<pre>
+    $reg_obj-&gt;Save($filename);</pre>
+</dd>
+<dd>
+<p>Saves the hive specified by $reg_obj to a file.</p>
+</dd>
+<dt><strong><a name="item_load">Load</a></strong><br />
+</dt>
+<dd>
+<pre>
+    $reg_obj-&gt;Load($sub_key_name, $file_name);</pre>
+</dd>
+<dd>
+<p>Loads a key specified by $sub_key_name from a file.</p>
+</dd>
+<dt><strong><a name="item_unload">UnLoad</a></strong><br />
+</dt>
+<dd>
+<pre>
+    $reg_obj-&gt;Unload($sub_key_name);</pre>
+</dd>
+<dd>
+<p>Unloads a registry hive.</p>
+</dd>
+</dl>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Win32::Registry - accessing the Windows registry [obsolete, use Win32::TieRegistry]</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

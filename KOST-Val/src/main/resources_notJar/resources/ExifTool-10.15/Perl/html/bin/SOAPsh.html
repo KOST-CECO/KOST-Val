@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SOAPsh.pl - Interactive shell for SOAP calls</title>
+<link rel="stylesheet" href="../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;SOAPsh.pl - Interactive shell for SOAP calls</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>SOAPsh.pl - Interactive shell for SOAP calls</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+  perl SOAPsh.pl <a href="http://services.soaplite.com/examples.cgi">http://services.soaplite.com/examples.cgi</a> <a href="http://www.soaplite.com/My/Examples">http://www.soaplite.com/My/Examples</a>
+  &gt; getStateName(2)
+  &gt; getStateNames(1,2,3,7)
+  &gt; getStateList([1,9])
+  &gt; getStateStruct({a=&gt;1, b=&gt;24})
+  &gt; Ctrl-D (Ctrl-Z on Windows)</pre>
+<p>or</p>
+<pre>
+  # all parameters after uri will be executed as methods
+  perl SOAPsh.pl <a href="http://soap.4s4c.com/ssss4c/soap.asp">http://soap.4s4c.com/ssss4c/soap.asp</a> <a href="http://simon.fell.com/calc">http://simon.fell.com/calc</a> doubler([10,20,30])
+  &gt; Ctrl-D (Ctrl-Z on Windows)</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>SOAPsh.pl is a shell for making SOAP calls. It takes two parameters:
+mandatory endpoint and optional uri (actually it will tell you about it 
+if you try to run it). Additional commands can follow.</p>
+<p>After that you'll be able to run any methods of SOAP::Lite, like autotype, 
+readable, encoding, etc. You can run it the same way as you do it in 
+your Perl script. You'll see output from method, result of SOAP call,
+detailed info on SOAP faulure or transport error.</p>
+<p>For full list of available methods see documentation for SOAP::Lite.</p>
+<p>Along with methods of SOAP::Lite you'll be able (and that's much more 
+interesting) run any SOAP methods you know about on remote server and
+see processed results. You can even switch on debugging (with call 
+something like: <code>on_debug(sub{print@_})</code>) and see SOAP code with 
+headers sent and recieved.</p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright (C) 2000 Paul Kulchenko. All rights reserved.</p>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Paul Kulchenko (<a href="mailto:paulclinger@yahoo.com">paulclinger@yahoo.com</a>)</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;SOAPsh.pl - Interactive shell for SOAP calls</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

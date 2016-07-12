@@ -1,0 +1,232 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>perl - very old suspect documentation on porting.</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;perl - very old suspect documentation on porting.</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Tcl vs perl - very old suspect documentation on porting.</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>This isn't really a .pod yet, nor is it Tcl vs perl
+it is a copy of John's comparison of Malcolm's original perl/Tk
+port with the current one. It is also out-of-date in places.</p>
+<pre>
+  From: john@WPI.EDU (John Stoffel )</pre>
+<pre>
+  Here are some thoughts on the new Tk extension and how I think the
+  organization of the commands looks.  Mostly, I'm happy with it, it
+  makes some things more organized and more consistent with tcl/tk, but
+  since the overlying language is so different, I don't think we need to
+  follow exactly the tcl/tk model for how to call the language.</pre>
+<pre>
+  The basic structure of the Tk program is:</pre>
+<pre>
+      require Tk;</pre>
+<pre>
+      $top = MainWindow-&gt;new();</pre>
+<pre>
+      #
+      # create widgets
+      #</pre>
+<pre>
+      Tk::MainLoop;</pre>
+<pre>
+      sub method1 {
+      }</pre>
+<pre>
+      sub methodN {
+      }</pre>
+<pre>
+  This is pretty much the same as tkperl5a5, with some cosmetic naming
+  changes, and some more useful command name and usage changes.  A quick
+  comparison in no particular order follows:</pre>
+<pre>
+  tkperl5a5                             Tk
+  -------------------------------       -----------------------------------
+  $top=tkinit(name,display,sync);       $top=MainWindow-&gt;new();</pre>
+<pre>
+  tkpack $w, ... ;              $w-&gt;pack(...)</pre>
+<pre>
+  $w = Class::new($top, ...);   $w = $top-&gt;Class(...);</pre>
+<pre>
+  tkmainloop;                   Tk::MainLoop;</pre>
+<pre>
+  tkbind($w,&quot;&lt;key&gt;&quot;,sub);               $w-&gt;bind(&quot;&lt;key&gt;&quot;,sub);</pre>
+<pre>
+  tkdelete($w, ...);            $w-&gt;delete(...);</pre>
+<pre>
+  $w-&gt;scanmark(...);            $w-&gt;scan(&quot;mark&quot;, ...);</pre>
+<pre>
+  $w-&gt;scandragto(...);          $w-&gt;scan(&quot;dragto&quot;, ...);</pre>
+<pre>
+  $w-&gt;tkselect();                       $w-&gt;Select();</pre>
+<pre>
+  $w-&gt;selectadjust(...);                $w-&gt;selection(&quot;adjust&quot;, ...);</pre>
+<pre>
+  $w-&gt;selectto(...);            $w-&gt;selection(&quot;to&quot;, ...);</pre>
+<pre>
+  $w-&gt;selectfrom(...);          $w-&gt;selection(&quot;from&quot;, ...);</pre>
+<pre>
+  $w-&gt;tkindex(...);             $w-&gt;index(...);</pre>
+<pre>
+  tclcmd(&quot;xxx&quot;,...);              &amp;Tk::xxx(...)    # all Tk commands, but no Tcl at all</pre>
+<pre>
+  tclcmd(&quot;winfo&quot;, xxx, $w, ...);  $w-&gt;xxx(...);</pre>
+<pre>
+                                $w-&gt;mark(...);</pre>
+<pre>
+                                $w-&gt;tag(...);</pre>
+<pre>
+  $w-&gt;grabstatus();             $w-&gt;grab(&quot;status&quot;);</pre>
+<pre>
+  $w-&gt;grabrelease(...);         $w-&gt;grab(&quot;release&quot;, ...);</pre>
+<pre>
+  focus($w);                    $w-&gt;focus;</pre>
+<pre>
+  update();                     Tk-&gt;update();</pre>
+<pre>
+  idletasks();                  Tk-&gt;update(&quot;idletasks&quot;);</pre>
+<pre>
+  wm(&quot;cmd&quot;,$w, ...);            $w-&gt;cmd(...);</pre>
+<pre>
+  destroy($w);                  $w-&gt;destroy();</pre>
+<pre>
+                                Tk::option(...);
+                                  $w-&gt;OptionGet(name,Class)</pre>
+<pre>
+                                $w-&gt;place(...)</pre>
+<pre>
+                                Tk::property(...);</pre>
+<pre>
+  $w = Entry::new($parent,...)</pre>
+<pre>
+  is now</pre>
+<pre>
+  $w = $parent-&gt;Entry(...)</pre>
+<pre>
+  As this allows new to be inherited from a Window class.</pre>
+<pre>
+    -method=&gt;x,-slave=&gt;y</pre>
+<pre>
+   is now</pre>
+<pre>
+    -command =&gt; [x,y]</pre>
+<pre>
+  1st element of list is treated as &quot;method&quot; if y is an object reference.
+  (You can have -command =&gt; [a,b,c,d,e] too; b..e get passed as args).</pre>
+<pre>
+  Object references are now hashes rather than scalars and there
+  is only ever one such per window.  The Tcl_CmdInfo and PathName
+  are entries in the hash.</pre>
+<pre>
+  (This allows derived classes to
+  re-bless the hash and keep their on stuff in it too.)</pre>
+<pre>
+  Tk's &quot;Tcl_Interp&quot; is in fact a ref to &quot;.&quot; window.
+  You can find all the Tk windows descended from it as their object
+  references get added (by PathName) into this hash.
+  $w-&gt;MainWindow returns this hash from any window.</pre>
+<pre>
+  I think that it should extend to multiple tkinits / Tk-&gt;news
+  with different Display's - if Tk code does.</pre>
+<pre>
+  Finally &quot;bind&quot; passes window as &quot;extra&quot; (or only)
+  argument. Thus</pre>
+<pre>
+  Tk::Button-&gt;bind(&lt;Any-Enter&gt;,&quot;Enter&quot;);</pre>
+<pre>
+  Binds Enter events to Tk::Button::Enter by default
+  but gets called as $w-&gt;Enter so derived class of Button can just
+  define its own Enter method. &amp;EvWref and associated globals and race
+  conditions are no longer needed.</pre>
+<pre>
+  One thing to beware of : commands bound to events with $widget-&gt;bind
+  follow same pattern, but get passed extra args :</pre>
+<pre>
+  $widget-&gt;bind(&lt;Any-1&gt;,[sub {print shift}, $one, $two ]);</pre>
+<pre>
+  When sub gets called it has :</pre>
+<pre>
+     $widget $one $two</pre>
+<pre>
+  passed.</pre>
+<pre>
+  1st extra arg is reference to the per-widget hash that serves as the
+  perl object for the widget.</pre>
+<pre>
+  Every time an XEvent a reference to a special class is placed
+  in the widget hash. It can be retrieved by $w-&gt;XEvent method.</pre>
+<pre>
+  The methods of the XEvent class are the
+  Tcl/Tk % special characters.</pre>
+<pre>
+  Thus:</pre>
+<pre>
+  $widget-&gt;bind(&lt;Any-KeyPress&gt;,
+                sub {
+                 my $w = shift;
+                 my $e = $w-&gt;XEvent;
+                 print $w-&gt;PathName,&quot; &quot;,$e-&gt;A,&quot; pressed ,$e-&gt;xy,&quot;\n&quot;);
+                });</pre>
+<pre>
+  XEvent-&gt;xy is a special case which returns &quot;@&quot; . $e-&gt;x . &quot;,&quot; . $e-&gt;y
+  which is common in Text package.</pre>
+<pre>
+  Because of passing a blessed widget hash to &quot;bound&quot; subs they can be
+  bound to (possibly inherited) methods of the widget's class:</pre>
+<pre>
+  Class-&gt;bind(&lt;Any-Down&gt;,Down);</pre>
+<pre>
+  sub Class::Down
+  {
+   my $w = shift;
+   # handle down arrow
+  }</pre>
+<pre>
+  Also:</pre>
+<pre>
+  -command and friends can take a list the 1st element can be a ref to
+  as sub or a method name. Remaining elements are passed as args to the
+  sub at &quot;invoke&quot; time. Thus :</pre>
+<pre>
+  $b= $w-&gt;Button(blah blah, '-command' =&gt; [sub{print shift} , $fred ]);</pre>
+<pre>
+  Should do the trick, provided $fred is defined at time of button creation.</pre>
+<pre>
+  Thus 1st element of list is equivalent to Malcolm's -method and second
+  would be his -slave.  Any further elements are a bonus and avoid
+  having to pass ref to an array/hash as a slave.</pre>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;perl - very old suspect documentation on porting.</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

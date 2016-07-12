@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>libnetcfg - configure libnet</title>
+<link rel="stylesheet" href="../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;libnetcfg - configure libnet</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#usage">USAGE</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#authors">AUTHORS</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>libnetcfg - configure libnet</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The libnetcfg utility can be used to configure the libnet.
+Starting from perl 5.8 libnet is part of the standard Perl
+distribution, but the libnetcfg can be used for any libnet
+installation.</p>
+<p>
+</p>
+<hr />
+<h1><a name="usage">USAGE</a></h1>
+<p>Without arguments libnetcfg displays the current configuration.</p>
+<pre>
+    $ libnetcfg
+    # old config ./libnet.cfg
+    daytime_hosts        ntp1.none.such
+    ftp_int_passive      0
+    ftp_testhost         ftp.funet.fi
+    inet_domain          none.such
+    nntp_hosts           nntp.none.such
+    ph_hosts             
+    pop3_hosts           pop.none.such
+    smtp_hosts           smtp.none.such
+    snpp_hosts           
+    test_exist           1
+    test_hosts           1
+    time_hosts           ntp.none.such
+    # libnetcfg -h for help
+    $</pre>
+<p>It tells where the old configuration file was found (if found).</p>
+<p>The <a href="../lib/Pod/perlrun.html#item__2dh"><code>-h</code></a> option will show a usage message.</p>
+<p>To change the configuration you will need to use either the <a href="../lib/Pod/perlrun.html#item__2dc"><code>-c</code></a> or
+the <a href="../lib/Pod/perlrun.html#item__2dd"><code>-d</code></a> options.</p>
+<p>The default name of the old configuration file is by default
+``libnet.cfg'', unless otherwise specified using the -i option,
+<code>-i oldfile</code>, and it is searched first from the current directory,
+and then from your module path.</p>
+<p>The default name of the new configuration file is ``libnet.cfg'', and by
+default it is written to the current directory, unless otherwise
+specified using the -o option, <code>-o newfile</code>.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../lib/Net/Config.html">the Net::Config manpage</a>, <a href="../lib/Net/libnetFAQ.html">the Net::libnetFAQ manpage</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="authors">AUTHORS</a></h1>
+<p>Graham Barr, the original Configure script of libnet.</p>
+<p>Jarkko Hietaniemi, conversion into libnetcfg for inclusion into Perl 5.8.</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;libnetcfg - configure libnet</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

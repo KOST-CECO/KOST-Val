@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Win32::Semaphore - Use Win32 semaphore objects from Perl</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Win32::Semaphore - Use Win32 semaphore objects from Perl</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<ul>
+
+		<li><a href="#methods">Methods</a></li>
+		<li><a href="#deprecated_functions_and_methods">Deprecated Functions and Methods</a></li>
+	</ul>
+
+	<li><a href="#author">AUTHOR</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Win32::Semaphore - Use Win32 semaphore objects from Perl</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis_require_win32__semaphore_">SYNOPSIS
+	require Win32::Semaphore;</a></h1>
+<pre>
+        $sem = Win32::Semaphore-&gt;new($initial,$maximum,$name);
+        $sem-&gt;wait;</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>This module allows access to Win32 semaphore objects.  The <a href="#item_wait"><code>wait</code></a>
+method and <code>wait_all</code> &amp; <code>wait_any</code> functions are inherited from the
+<a href="#win32__ipc">Win32::IPC</a> module.</p>
+<p>
+</p>
+<h2><a name="methods">Methods</a></h2>
+<dl>
+<dt><strong><a name="item_new">$semaphore = Win32::Semaphore-&gt;new($initial, $maximum, [$name])</a></strong><br />
+</dt>
+<dd>
+Constructor for a new semaphore object.  <code>$initial</code> is the initial
+count, and <code>$maximum</code> is the maximum count for the semaphore.  If
+<code>$name</code> is omitted, creates an unnamed semaphore object.
+</dd>
+<dd>
+<p>If <code>$name</code> signifies an existing semaphore object, then <code>$initial</code>
+and <code>$maximum</code> are ignored and the object is opened.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item_open">$semaphore = Win32::Semaphore-&gt;<code>open($name)</code></a></strong><br />
+</dt>
+<dd>
+Constructor for opening an existing semaphore object.
+</dd>
+<p></p>
+<dt><strong><a name="item_release">$semaphore-&gt;release([$increment, [$previous]])</a></strong><br />
+</dt>
+<dd>
+Increment the count of <code>$semaphore</code> by <code>$increment</code> (default 1).
+If <code>$increment</code> plus the semaphore's current count is more than its
+maximum count, the count is not changed.  Returns true if the
+increment is successful.
+</dd>
+<dd>
+<p>The semaphore's count (before incrementing) is stored in the second
+argument (if any).</p>
+</dd>
+<dd>
+<p>It is not necessary to wait on a semaphore before calling <a href="#item_release"><code>release</code></a>,
+but you'd better know what you're doing.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item_wait">$semaphore-&gt;<code>wait([$timeout])</code></a></strong><br />
+</dt>
+<dd>
+Wait for <code>$semaphore</code>'s count to be nonzero, then decrement it by 1.
+See <a href="#win32__ipc">Win32::IPC</a>.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<h2><a name="deprecated_functions_and_methods">Deprecated Functions and Methods</a></h2>
+<p><strong>Win32::Semaphore</strong> still supports the ActiveWare syntax, but its use
+is deprecated.</p>
+<dl>
+<dt><strong><a name="item_create">Win32::Semaphore::Create($SemObject,$Initial,$Max,$Name)</a></strong><br />
+</dt>
+<dd>
+Use <a href="#item_new"><code>$SemObject = Win32::Semaphore-&gt;new($Initial,$Max,$Name)</code></a> instead.
+</dd>
+<p></p>
+<dt><strong><a name="item_open">Win32::Semaphore::Open($SemObject, $Name)</a></strong><br />
+</dt>
+<dd>
+Use <a href="#item_open"><code>$SemObject = Win32::Semaphore-&gt;open($Name)</code></a> instead.
+</dd>
+<p></p>
+<dt><strong><a name="item_release">$SemObj-&gt;<code>Release($Count,$LastVal)</code></a></strong><br />
+</dt>
+<dd>
+Use <a href="#item_release"><code>$SemObj-&gt;release($Count,$LastVal)</code></a> instead.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Christopher J. Madsen &lt;<em><a href="mailto:chris_madsen@geocities.com">chris_madsen@geocities.com</a></em>&gt;</p>
+<p>Loosely based on the original module by ActiveWare Internet Corp.,
+<em><a href="http://www.ActiveWare.com">http://www.ActiveWare.com</a></em></p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Win32::Semaphore - Use Win32 semaphore objects from Perl</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

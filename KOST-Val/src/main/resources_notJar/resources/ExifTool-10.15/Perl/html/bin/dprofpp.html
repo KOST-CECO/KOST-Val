@@ -1,0 +1,379 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>dprofpp - display perl profile data</title>
+<link rel="stylesheet" href="../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;dprofpp - display perl profile data</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#output">OUTPUT</a></li>
+	<li><a href="#options">OPTIONS</a></li>
+	<li><a href="#environment">ENVIRONMENT</a></li>
+	<li><a href="#bugs">BUGS</a></li>
+	<li><a href="#files">FILES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>dprofpp - display perl profile data</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p>dprofpp [<strong>-a</strong>|<strong>-z</strong>|<strong>-l</strong>|<strong>-v</strong>|<strong>-U</strong>] [<strong>-d</strong>] [<strong>-s</strong>|<strong>-r</strong>|<strong>-u</strong>] [<strong>-q</strong>] [<strong>-F</strong>] [<strong>-I|-E</strong>] [<strong>-O cnt</strong>] [<strong>-A</strong>] [<strong>-R</strong>] [<strong>-S</strong>] [<strong>-g subroutine</strong>] [<strong>-G</strong> &lt;regexp&gt; [<strong>-P</strong>]] [<strong>-f</strong> &lt;regexp&gt;] [profile]
+</p>
+<pre>
+
+dprofpp B&lt;-T&gt; [B&lt;-F&gt;] [B&lt;-g subroutine&gt;] [profile]</pre>
+<p>dprofpp <strong>-t</strong> [<strong>-F</strong>] [<strong>-g subroutine</strong>] [profile]</p>
+<p>dprofpp <strong>-G</strong> &lt;regexp&gt; [<strong>-P</strong>] [profile]
+</p>
+<pre>
+
+dprofpp B&lt;-p script&gt; [B&lt;-Q&gt;] [other opts]</pre>
+<p>dprofpp <strong>-V</strong> [profile]</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The <em>dprofpp</em> command interprets profile data produced by a profiler, such
+as the Devel::DProf profiler.  Dprofpp will read the file <em>tmon.out</em> and
+will display the 15 subroutines which are using the most time.  By default
+the times for each subroutine are given exclusive of the times of their
+child subroutines.</p>
+<p>To profile a Perl script run the perl interpreter with the <strong>-d</strong> switch.  So
+to profile script <em>test.pl</em> with Devel::DProf the following command should
+be used.</p>
+<pre>
+        $ perl5 -d:DProf test.pl</pre>
+<p>Then run dprofpp to analyze the profile.  The output of dprofpp depends
+on the flags to the program and the version of Perl you're using.</p>
+<pre>
+        $ dprofpp -u
+        Total Elapsed Time =    1.67 Seconds
+                 User Time =    0.61 Seconds
+        Exclusive Times
+        %Time Seconds     #Calls sec/call Name
+         52.4   0.320          2   0.1600 main::foo
+         45.9   0.280        200   0.0014 main::bar
+         0.00   0.000          1   0.0000 DynaLoader::import
+         0.00   0.000          1   0.0000 main::baz</pre>
+<p>The dprofpp tool can also run the profiler before analyzing the profile
+data.  The above two commands can be executed with one dprofpp command.</p>
+<pre>
+        $ dprofpp -u -p test.pl</pre>
+<p>Consult <a href="../lib/Devel/DProf.html#profile_format">PROFILE FORMAT in the Devel::DProf manpage</a> for a description of the raw profile.</p>
+<p>
+</p>
+<hr />
+<h1><a name="output">OUTPUT</a></h1>
+<p>Columns are:</p>
+<dl>
+<dt><strong><a name="item__time">%Time</a></strong><br />
+</dt>
+<dd>
+Percentage of time spent in this routine.
+</dd>
+<p></p>
+<dt><strong><a name="item__23calls">#Calls</a></strong><br />
+</dt>
+<dd>
+Number of calls to this routine.
+</dd>
+<p></p>
+<dt><strong><a name="item_sec_2fcall">sec/call</a></strong><br />
+</dt>
+<dd>
+Average number of seconds per call to this routine.
+</dd>
+<p></p>
+<dt><strong><a name="item_name">Name</a></strong><br />
+</dt>
+<dd>
+Name of routine.
+</dd>
+<p></p>
+<dt><strong><a name="item_cumuls">CumulS</a></strong><br />
+</dt>
+<dd>
+Time (in seconds) spent in this routine and routines called from it.
+</dd>
+<p></p>
+<dt><strong><a name="item_exclsec">ExclSec</a></strong><br />
+</dt>
+<dd>
+Time (in seconds) spent in this routine (not including those called
+from it).
+</dd>
+<p></p>
+<dt><strong><a name="item_csec_2fc">Csec/c</a></strong><br />
+</dt>
+<dd>
+Average time (in seconds) spent in each call of this routine
+(including those called from it).
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="options">OPTIONS</a></h1>
+<dl>
+<dt><strong><a name="item__2da"><strong>-a</strong></a></strong><br />
+</dt>
+<dd>
+Sort alphabetically by subroutine names.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dd"><strong>-d</strong></a></strong><br />
+</dt>
+<dd>
+Reverse whatever sort is used
+</dd>
+<p></p>
+<dt><strong><a name="item__2da"><strong>-A</strong></a></strong><br />
+</dt>
+<dd>
+Count timing for autoloaded subroutine as timing for <code>*::AUTOLOAD</code>.
+Otherwise the time to autoload it is counted as time of the subroutine
+itself (there is no way to separate autoload time from run time).
+</dd>
+<dd>
+<p>This is going to be irrelevant with newer Perls.  They will inform
+<code>Devel::DProf</code> <em>when</em> the <code>AUTOLOAD</code> switches to actual subroutine,
+so a separate statistics for <code>AUTOLOAD</code> will be collected no matter
+whether this option is set.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item__2dr"><strong>-R</strong></a></strong><br />
+</dt>
+<dd>
+Count anonymous subroutines defined in the same package separately.
+</dd>
+<p></p>
+<dt><strong><a name="item__2de"><strong>-E</strong></a></strong><br />
+</dt>
+<dd>
+(default)  Display all subroutine times exclusive of child subroutine times.
+</dd>
+<p></p>
+<dt><strong><a name="item__2df"><strong>-F</strong></a></strong><br />
+</dt>
+<dd>
+Force the generation of fake exit timestamps if dprofpp reports that the
+profile is garbled.  This is only useful if dprofpp determines that the
+profile is garbled due to missing exit timestamps.  You're on your own if
+you do this.  Consult the BUGS section.
+</dd>
+<p></p>
+<dt><strong><a name="item__2di"><strong>-I</strong></a></strong><br />
+</dt>
+<dd>
+Display all subroutine times inclusive of child subroutine times.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dl"><strong>-l</strong></a></strong><br />
+</dt>
+<dd>
+Sort by number of calls to the subroutines.  This may help identify
+candidates for inlining.
+</dd>
+<p></p>
+<dt><strong><a name="item__2do_cnt"><strong>-O cnt</strong></a></strong><br />
+</dt>
+<dd>
+Show only <em>cnt</em> subroutines.  The default is 15.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dp_script"><strong>-p script</strong></a></strong><br />
+</dt>
+<dd>
+Tells dprofpp that it should profile the given script and then interpret its
+profile data.  See <strong>-Q</strong>.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dq"><strong>-Q</strong></a></strong><br />
+</dt>
+<dd>
+Used with <strong>-p</strong> to tell dprofpp to quit after profiling the script, without
+interpreting the data.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dq"><strong>-q</strong></a></strong><br />
+</dt>
+<dd>
+Do not display column headers.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dr"><strong>-r</strong></a></strong><br />
+</dt>
+<dd>
+Display elapsed real times rather than user+system times.
+</dd>
+<p></p>
+<dt><strong><a name="item__2ds"><strong>-s</strong></a></strong><br />
+</dt>
+<dd>
+Display system times rather than user+system times.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dt"><strong>-T</strong></a></strong><br />
+</dt>
+<dd>
+Display subroutine call tree to stdout.  Subroutine statistics are
+not displayed.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dt"><strong>-t</strong></a></strong><br />
+</dt>
+<dd>
+Display subroutine call tree to stdout.  Subroutine statistics are not
+displayed.  When a function is called multiple consecutive times at the same
+calling level then it is displayed once with a repeat count.
+</dd>
+<p></p>
+<dt><strong><a name="item__2ds"><strong>-S</strong></a></strong><br />
+</dt>
+<dd>
+Display <em>merged</em> subroutine call tree to stdout.  Statistics are
+displayed for each branch of the tree.
+</dd>
+<dd>
+<p>When a function is called multiple (<em>not necessarily consecutive</em>)
+times in the same branch then all these calls go into one branch of
+the next level.  A repeat count is output together with combined
+inclusive, exclusive and kids time.</p>
+</dd>
+<dd>
+<p>Branches are sorted w.r.t. inclusive time.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item__2du"><strong>-U</strong></a></strong><br />
+</dt>
+<dd>
+Do not sort.  Display in the order found in the raw profile.
+</dd>
+<p></p>
+<dt><strong><a name="item__2du"><strong>-u</strong></a></strong><br />
+</dt>
+<dd>
+Display user times rather than user+system times.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dv"><strong>-V</strong></a></strong><br />
+</dt>
+<dd>
+Print dprofpp's version number and exit.  If a raw profile is found then its
+XS_VERSION variable will be displayed, too.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dv"><strong>-v</strong></a></strong><br />
+</dt>
+<dd>
+Sort by average time spent in subroutines during each call.  This may help
+identify candidates for inlining.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dz"><strong>-z</strong></a></strong><br />
+</dt>
+<dd>
+(default) Sort by amount of user+system time used.  The first few lines
+should show you which subroutines are using the most time.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dg_subroutine"><strong>-g</strong> <code>subroutine</code></a></strong><br />
+</dt>
+<dd>
+Ignore subroutines except <code>subroutine</code> and whatever is called from it.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dg__3cregexp_3e"><strong>-G</strong> &lt;regexp&gt;</a></strong><br />
+</dt>
+<dd>
+Aggregate ``Group'' all calls matching the pattern together.
+For example this can be used to group all calls of a set of packages
+</dd>
+<dd>
+<pre>
+  -G &quot;(package1::)|(package2::)|(package3::)&quot;</pre>
+</dd>
+<dd>
+<p>or to group subroutines by name:</p>
+</dd>
+<dd>
+<pre>
+  -G &quot;getNum&quot;</pre>
+</dd>
+<p></p>
+<dt><strong><a name="item__2dp"><strong>-P</strong></a></strong><br />
+</dt>
+<dd>
+Used with -G to aggregate ``Pull''  together all calls that did not match -G.
+</dd>
+<p></p>
+<dt><strong><a name="item__2df__3cregexp_3e"><strong>-f</strong> &lt;regexp&gt;</a></strong><br />
+</dt>
+<dd>
+Filter all calls matching the pattern.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="environment">ENVIRONMENT</a></h1>
+<p>The environment variable <strong>DPROFPP_OPTS</strong> can be set to a string containing
+options for dprofpp.  You might use this if you prefer <strong>-I</strong> over <strong>-E</strong> or
+if you want <strong>-F</strong> on all the time.</p>
+<p>This was added fairly lazily, so there are some undesirable side effects.
+Options on the commandline should override options in DPROFPP_OPTS--but
+don't count on that in this version.</p>
+<p>
+</p>
+<hr />
+<h1><a name="bugs">BUGS</a></h1>
+<p>Applications which call <code>_exit()</code> or <a href="../lib/Pod/perlfunc.html#item_exec"><code>exec()</code></a> from within a subroutine
+will leave an incomplete profile.  See the <strong>-F</strong> option.</p>
+<p>Any bugs in Devel::DProf, or any profiler generating the profile data, could
+be visible here.  See <a href="../lib/Devel/DProf.html#bugs">BUGS in the Devel::DProf manpage</a>.</p>
+<p>Mail bug reports and feature requests to the perl5-porters mailing list at
+<em>&lt;<a href="mailto:perl5-porters@perl.org">perl5-porters@perl.org</a>&gt;</em>.  Bug reports should include the
+output of the <strong>-V</strong> option.</p>
+<p>
+</p>
+<hr />
+<h1><a name="files">FILES</a></h1>
+<pre>
+        dprofpp         - profile processor
+        tmon.out        - raw profile</pre>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../lib/Pod/perl.html">the perl manpage</a>, <a href="../lib/Devel/DProf.html">the Devel::DProf manpage</a>, <a href="../lib/Pod/perlfunc.html#item_times"><code>times(2)</code></a></p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;dprofpp - display perl profile data</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

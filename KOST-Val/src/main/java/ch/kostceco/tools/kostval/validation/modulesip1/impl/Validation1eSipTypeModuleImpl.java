@@ -1,6 +1,6 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
- * Information Package (SIP). Copyright (C) 2012-2016 Claire Röthlisberger (KOST-CECO), Christian
+ * Information Package (SIP). Copyright (C) 2012-2016 Claire Roethlisberger (KOST-CECO), Christian
  * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
  * Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
@@ -31,6 +31,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import ch.kostceco.tools.kostval.exception.modulesip1.Validation1eSipTypeException;
+import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesip1.Validation1eSipTypeModule;
 
@@ -39,13 +40,34 @@ public class Validation1eSipTypeModuleImpl extends ValidationModuleImpl implemen
 		Validation1eSipTypeModule
 {
 
+	private ConfigurationService	configurationService;
+
+	public ConfigurationService getConfigurationService()
+	{
+		return configurationService;
+	}
+
+	public void setConfigurationService( ConfigurationService configurationService )
+	{
+		this.configurationService = configurationService;
+	}
+
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws Validation1eSipTypeException
 	{
-		// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
-		System.out.print( "1E   " );
-		System.out.print( "\b\b\b\b\b" );
+		// Informationen zur Darstellung "onWork" holen
+		String onWork = getConfigurationService().getShowProgressOnWork();
+		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
+		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
+		 * ref="configurationService" /> */
+		if ( onWork.equals( "no" ) ) {
+			// keine Ausgabe
+		} else {
+			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
+			System.out.print( "1E   " );
+			System.out.print( "\b\b\b\b\b" );
+		}
 
 		try {
 
@@ -56,21 +78,26 @@ public class Validation1eSipTypeModuleImpl extends ValidationModuleImpl implemen
 					+ "//header//metadata.xml" ) ) );
 			doc.getDocumentElement().normalize();
 
-			/* Aktuelle Lösung funktioniert nur wenn kein Präfix beim Elementnamen erlaubt ist! IO:
+			dbf.setFeature( "http://xml.org/sax/features/namespaces", false );
+
+			/* Aktuelle Lï¿½sung funktioniert nur wenn kein Prï¿½fix beim Elementnamen erlaubt ist! IO:
 			 * ablieferung NIO: v4:ablieferung
 			 * 
-			 * Ansonsten müsste überall der NameSpace auf * gesetzt werden
+			 * Ansonsten mï¿½sste ï¿½berall der NameSpace auf * gesetzt werden
 			 * 
 			 * NodeList layerConfigList = doc.getElementsByTagNameNS( "*", "ablieferung" ); */
+
+			// NodeList layerConfigList = doc.getElementsByTagNameNS( "*", "ablieferung" );
 			NodeList layerConfigList = doc.getElementsByTagName( "ablieferung" );
+			// NodeList layerConfigList = doc.getElementsByTagName( "ablieferung" );
 
 			Node node = layerConfigList.item( 0 );
 			Element e = (Element) node;
 			String name = e.getAttribute( "xsi:type" );
 
-			if ( name.equals( "ablieferungGeverSIP" ) ) {
+			if ( name.contains( "ablieferungGeverSIP" ) ) {
 				// GEVER-SIP
-			} else if ( name.equals( "ablieferungFilesSIP" ) ) {
+			} else if ( name.contains( "ablieferungFilesSIP" ) ) {
 				// FILE-SIP
 			} else {
 				getMessageService().logError(

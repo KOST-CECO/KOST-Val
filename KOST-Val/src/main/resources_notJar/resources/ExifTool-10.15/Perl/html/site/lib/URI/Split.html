@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>URI::Split - Parse and compose URI strings</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;URI::Split - Parse and compose URI strings</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>URI::Split - Parse and compose URI strings</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ use URI::Split qw(uri_split uri_join);
+ ($scheme, $auth, $path, $query, $frag) = uri_split($uri);
+ $uri = uri_join($scheme, $auth, $path, $query, $frag);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>Provides functions to parse and compose URI
+strings.  The following functions are provided:</p>
+<dl>
+<dt><strong><a name="item_uri_split">($scheme, $auth, $path, $query, $frag) = <code>uri_split($uri)</code></a></strong><br />
+</dt>
+<dd>
+Breaks up a URI string into its component
+parts.  An <a href="../../../lib/Pod/perlfunc.html#item_undef"><code>undef</code></a> value is returned for those parts that are not
+present.  The $path part is always present (but can be the empty
+string) and is thus never returned as <a href="../../../lib/Pod/perlfunc.html#item_undef"><code>undef</code></a>.
+</dd>
+<dd>
+<p>No sensible value is returned if this function is called in a scalar
+context.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item_uri_join">$uri = uri_join($scheme, $auth, $path, $query, $frag)</a></strong><br />
+</dt>
+<dd>
+Puts together a URI string from its parts.
+Missing parts are signaled by passing <a href="../../../lib/Pod/perlfunc.html#item_undef"><code>undef</code></a> for the corresponding
+argument.
+</dd>
+<dd>
+<p>Minimal escaping is applied to parts that contain reserved chars
+that would confuse a parser.  For instance, any occurrence of '?' or '#'
+in $path is always escaped, as it would otherwise be parsed back
+as a query or fragment.</p>
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../../../site/lib/URI.html">the URI manpage</a>, <a href="../../../site/lib/URI/Escape.html">the URI::Escape manpage</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 2003, Gisle Aas</p>
+<p>This library is free software; you can redistribute it and/or
+modify it under the same terms as Perl itself.</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;URI::Split - Parse and compose URI strings</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

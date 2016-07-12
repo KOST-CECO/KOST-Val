@@ -1,0 +1,552 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Tk::Photo - Full-color images</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::Photo - Full-color images</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#creating_photos">CREATING PHOTOS</a></li>
+	<li><a href="#image_methods">IMAGE METHODS</a></li>
+	<li><a href="#image_formats">IMAGE FORMATS</a></li>
+	<li><a href="#color_allocation">COLOR ALLOCATION</a></li>
+	<li><a href="#credits">CREDITS</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#keywords">KEYWORDS</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Tk::Photo - Full-color images</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>$widget</em>-&gt;<strong>Photo</strong>(?<em>name</em>??, <em>options</em>?)</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>A photo is an <a href="../../../site/lib/Tk/Image.html">image</a> whose pixels can display any color or be
+transparent.  A photo image is stored internally in full color (32
+bits per pixel), and is displayed using dithering if necessary.  Image
+data for a photo image can be obtained from a file or a string, or it
+can be supplied from
+C code through a procedural interface.  At present, only GIF,
+XBM, XPM, BMP, JPEG, PNG and PPM/PGM
+formats are supported, but an interface exists to allow additional
+image file formats to be added easily.  A photo image is transparent
+in regions where no image data has been supplied
+or where it has been set transparent by the <strong>transparencySet</strong>
+subcommand.</p>
+<p>
+</p>
+<hr />
+<h1><a name="creating_photos">CREATING PHOTOS</a></h1>
+<p>Photos are created using the <strong>Photo</strong> method.
+<strong>Photo</strong> supports the following <em>options</em>:</p>
+<dl>
+<dt><strong><a name="item__2ddata__3d_3e_string"><strong>-data</strong> =&gt; <em>string</em></a></strong><br />
+</dt>
+<dd>
+Specifies the contents of the image as a string.
+The string can
+contain base64 encoded data or binary data.
+The format of the
+string must be one of those for which there is an image file format
+handler that will accept string data.  If both the <strong>-data</strong>
+and <strong>-file</strong> options are specified, the <strong>-file</strong> option takes
+precedence.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dformat__3d_3e_format_2dname"><strong>-format</strong> =&gt; <em>format-name</em></a></strong><br />
+</dt>
+<dd>
+Specifies the name of the file format for the data specified with the
+<strong>-data</strong> or <strong>-file</strong> option.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dfile__3d_3e_name"><strong>-file</strong> =&gt; <em>name</em></a></strong><br />
+</dt>
+<dd>
+<em>name</em> gives the name of a file that is to be read to supply data
+for the photo image.  The file format must be one of those for which
+there is an image file format handler that can read data.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dgamma__3d_3e_value"><strong>-gamma</strong> =&gt; <em>value</em></a></strong><br />
+</dt>
+<dd>
+Specifies that the colors allocated for displaying this image in a
+window should be corrected for a non-linear display with the specified
+gamma exponent value.  (The intensity produced by most
+CRT displays is a power function of the input value, to a good
+approximation; gamma is the exponent and is typically around 2).
+The value specified must be greater than zero.  The default
+value is one (no correction).  In general, values greater than one
+will make the image lighter, and values less than one will make it
+darker.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dheight__3d_3e_number"><strong>-height</strong> =&gt; <em>number</em></a></strong><br />
+</dt>
+<dd>
+Specifies the height of the image, in pixels.  This option is useful
+primarily in situations where the user wishes to build up the contents
+of the image piece by piece.  A value of zero (the default) allows the
+image to expand or shrink vertically to fit the data stored in it.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dpalette__3d_3e_palette_2dspec"><strong>-palette</strong> =&gt; <em>palette-spec</em></a></strong><br />
+</dt>
+<dd>
+Specifies the resolution of the color cube to be allocated for
+displaying this image, and thus the number of colors used from the
+colormaps of the windows where it is displayed.  The
+<em>palette-spec</em> string may be either a single decimal number,
+specifying the number of shades of gray to use, or three decimal
+numbers separated by slashes (/), specifying the number of shades of
+red, green and blue to use, respectively.  If the first form (a single
+number) is used, the image will be displayed in monochrome (i.e.,
+grayscale).
+</dd>
+<p></p>
+<dt><strong><a name="item__2dwidth__3d_3e_number"><strong>-width</strong> =&gt; <em>number</em></a></strong><br />
+</dt>
+<dd>
+Specifies the width of the image, in pixels.    This option is useful
+primarily in situations where the user wishes to build up the contents
+of the image piece by piece.  A value of zero (the default) allows the
+image to expand or shrink horizontally to fit the data stored in it.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="image_methods">IMAGE METHODS</a></h1>
+<p>When a photo image is created, Tk also creates a new object.
+This object supports the <strong>configure</strong> and <strong>cget</strong> methods
+described in <a href="../../../site/lib/Tk/options.html">the Tk::options manpage</a> which can be used to enquire and
+modify the options described above.</p>
+<p>Those options that write data to the image generally expand the size
+of the image, if necessary, to accommodate the data written to the
+image, unless the user has specified non-zero values for the
+<strong>-width</strong> and/or <strong>-height</strong> configuration options, in which
+case the width and/or height, respectively, of the image will not be
+changed.</p>
+<p>The following addition methods are available for photo images:</p>
+<dl>
+<dt><strong><a name="item_blank"><em>$image</em>-&gt;<strong>blank</strong></a></strong><br />
+</dt>
+<dd>
+Blank the image; that is, set the entire image to have no data, so it
+will be displayed as transparent, and the background of whatever
+window it is displayed in will show through.
+</dd>
+<p></p>
+<dt><strong><a name="item_copy"><em>$image</em>-&gt;<strong>copy</strong>(<em>sourceImage</em> ?,<em>option value(s) ...</em>?)</a></strong><br />
+</dt>
+<dd>
+Copies a region from the image called <em>$sourceImage</em> (which must
+be a photo image) to the image called <em>$image</em>, possibly with
+pixel zooming and/or subsampling.  If no options are specified, this
+method copies the whole of <em>$sourceImage</em> into <em>$image</em>,
+starting at coordinates (0,0) in <em>$image</em>.  The following
+options may be specified:
+</dd>
+<dl>
+<dt><strong><a name="item__2dfrom__3d_3e_x1_2c_y1_2c__3f__2cx2_2c_y2_3f"><strong>-from</strong> =&gt; <em>x1, y1, ? ,x2, y2?</em></a></strong><br />
+</dt>
+<dd>
+Specifies a rectangular sub-region of the source image to be copied.
+(<em>x1,y1</em>) and (<em>x2,y2</em>) specify diagonally opposite corners of
+the rectangle.  If <em>x2</em> and <em>y2</em> are not specified, the
+default value is the bottom-right corner of the source image.  The
+pixels copied will include the left and top edges of the specified
+rectangle but not the bottom or right edges.  If the <strong>-from</strong>
+option is not given, the default is the whole source image.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dto__3d_3e_x1_2c_y1_2c__3f_2c_x2_2c_y2_3f"><strong>-to</strong> =&gt; <em>x1, y1, ?, x2, y2?</em></a></strong><br />
+</dt>
+<dd>
+Specifies a rectangular sub-region of the destination image to be
+affected.  (<em>x1,y1</em>) and (<em>x2,y2</em>) specify diagonally opposite
+corners of the rectangle.  If <em>x2</em> and <em>y2</em> are not specified,
+the default value is (<em>x1,y1</em>) plus the size of the source
+region (after subsampling and zooming, if specified).  If <em>x2</em> and
+<em>y2</em> are specified, the source region will be replicated if
+necessary to fill the destination region in a tiled fashion.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dshrink"><strong>-shrink</strong></a></strong><br />
+</dt>
+<dd>
+Specifies that the size of the destination image should be reduced, if
+necessary, so that the region being copied into is at the bottom-right
+corner of the image.  This option will not affect the width or height
+of the image if the user has specified a non-zero value for the
+<strong>-width</strong> or <strong>-height</strong> configuration option, respectively.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dzoom__3d_3e_x_2c_y"><strong>-zoom</strong> =&gt; <em>x, y</em></a></strong><br />
+</dt>
+<dd>
+Specifies that the source region should be magnified by a factor of
+<em>x</em> in the X direction and <em>y</em> in the Y direction.  If <em>y</em>
+is not given, the default value is the same as <em>x</em>.  With this
+option, each pixel in the source image will be expanded into a block
+of <em>x</em> x <em>y</em> pixels in the destination image, all the same
+color.  <em>x</em> and <em>y</em> must be greater than 0.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dsubsample__3d_3e_x_2c_y"><strong>-subsample</strong> =&gt; <em>x, y</em></a></strong><br />
+</dt>
+<dd>
+Specifies that the source image should be reduced in size by using
+only every <em>x</em>th pixel in the X direction and <em>y</em>th pixel in
+the Y direction.  Negative values will cause the image to be flipped
+about the Y or X axes, respectively.  If <em>y</em> is not given, the
+default value is the same as <em>x</em>.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dcompositingrule__3d_3e_rule"><strong>-compositingrule</strong> =&gt; <em>rule</em></a></strong><br />
+</dt>
+<dd>
+Specifies how transparent pixels in the source image are combined with
+the destination image.  When a compositing rule of <em>overlay</em> is
+set, the old contents of the destination image are visible, as if the
+source image were printed on a piece of transparent film and placed
+over the top of the destination.  When a compositing rule of <em>set</em>
+is set, the old contents of the destination image are discarded and
+the source image is used as-is.  The default compositing rule is
+<em>overlay</em>.
+</dd>
+<p></p></dl>
+<dt><strong><a name="item_data"><em>$image</em>-&gt;<strong>data</strong>(?<em>option value(s), ...</em>?)</a></strong><br />
+</dt>
+<dd>
+Returns image data in the form of a string.
+The following options may be specified:
+</dd>
+<dl>
+<dt><strong><a name="item__2dbackground__3d_3e_color"><strong>-background</strong> =&gt; <em> color</em></a></strong><br />
+</dt>
+<dd>
+If the color is specified, the data will not contain any transparency
+information. In all transparent pixels the color will be replaced by
+the specified color.
+</dd>
+<p></p>
+<dt><strong><strong>-format</strong> =&gt; <em>format-name</em></strong><br />
+</dt>
+<dd>
+Specifies the name of the image file format handler to be used.
+Specifically, this method searches
+for the first handler whose name matches a initial substring of
+<em>format-name</em> and which has the capability to read this image data.
+If this option is not given, this method uses the first
+handler that has the capability to read the image data.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dfrom__3d_3e_x1_2c_y1_2c__3f_2c_x2_2c_y2_3f"><strong>-from</strong> =&gt; <em>x1, y1, ?, x2, y2?</em></a></strong><br />
+</dt>
+<dd>
+Specifies a rectangular region of <em>$image</em> to be 
+returned.  If only <em>x1</em> and <em>y1</em> are specified, the region
+extends from <em>(x1,y1)</em> to the bottom-right corner of
+<em>$image</em>.  If all four coordinates are given, they specify
+diagonally opposite corners of the rectangular region, including x1,y1
+and excluding x2,y2.  The default,
+if this option is not given, is the whole image.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dgrayscale"><strong>-grayscale</strong></a></strong><br />
+</dt>
+<dd>
+If this options is specified, the data will not contain color
+information. All pixel data will be transformed into grayscale.
+</dd>
+<p></p></dl>
+<dt><strong><a name="item_get"><em>$image</em>-&gt;<strong>get</strong>(<em>x, y</em>)</a></strong><br />
+</dt>
+<dd>
+Returns the color of the pixel at coordinates (<em>x</em>,<em>y</em>) in the
+image as a list of three integers between 0 and 255, representing the
+red, green and blue components respectively.
+</dd>
+<p></p>
+<dt><strong><a name="item_put"><em>$image</em>-&gt;<strong>put</strong>(<em>data</em> ?,<strong>-format</strong>=&gt;<em>format-name</em>? ?,<strong>-to</strong>=&gt;<em> x1 y1 ?x2 y2?</em>?)</a></strong><br />
+</dt>
+<dd>
+Sets pixels in <em>$image</em> to the data specified in <em>data</em>.
+This command first searches the list of image file format handlers for
+a handler that can interpret the data in <em>data</em>, and then reads
+the image encoded within into <em>$image</em> (the destination image).
+If <em>data</em> does not match any known format, an attempt to interpret
+it as a (top-to-bottom) list of scan-lines is made, with each
+scan-line being a (left-to-right) list of pixel colors (see
+<strong>Tk_GetColor</strong> for a description of valid colors.)  Every scan-line
+must be of the same length.  Note that when <em>data</em> is a single
+color name, you are instructing Tk to fill a rectangular region with
+that color.  The following options may be specified:
+</dd>
+<dl>
+<dt><strong><a name="item__2dformat__3d_3eformat_2dname"><strong>-format</strong> =&gt;<em>format-name</em></a></strong><br />
+</dt>
+<dd>
+Specifies the format of the image data in <em>data</em>.
+Specifically, only image file format handlers whose names begin with
+<em>format-name</em> will be used while searching for an image data
+format handler to read the data.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dto__3d_3ex_2c_y__3f_2c_x2_2c_y2_3f"><strong>-to</strong> =&gt;<em>x, y</em> ?<em>, x2, y2</em>?</a></strong><br />
+</dt>
+<dd>
+Specifies the coordinates of the top-left corner (<em>x1</em>,<em>y1</em>)
+of the region of <em>$image</em> into which data from <em>filename</em>
+are to be read.  The default is (0,0).  If <em>x2</em>,<em>y2</em> is given
+and <em>data</em> is not large enough to cover the rectangle specified by
+this option, the image data extracted will be tiled so it covers the
+entire destination rectangle.  Note that if <em>data</em> specifies a
+single color value, then a region extending to the bottom-right corner
+represented by (<em>x2</em>,<em>y2</em>) will be filled with that color.
+</dd>
+<p></p></dl>
+<dt><strong><a name="item_read"><em>$image</em>-&gt;<strong>read</strong>(<em>filename</em> ?,<em>option value(s), ...</em>?)</a></strong><br />
+</dt>
+<dd>
+Reads image data from the file named <em>filename</em> into the image.
+This method first searches the list of
+image file format handlers for a handler that can interpret the data
+in <em>filename</em>, and then reads the image in <em>filename</em> into
+<em>$image</em> (the destination image).  The following options may be
+specified:
+</dd>
+<dl>
+<dt><strong><strong>-format</strong> =&gt; <em>format-name</em></strong><br />
+</dt>
+<dd>
+Specifies the format of the image data in <em>filename</em>.
+Specifically, only image file format handlers whose names begin with
+<em>format-name</em> will be used while searching for an image data
+format handler to read the data.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dfrom__3d_3e_x1_2c_y1_2c_x2_2c_y2"><strong>-from</strong> =&gt; <em>x1, y1, x2, y2</em></a></strong><br />
+</dt>
+<dd>
+Specifies a rectangular sub-region of the image file data to be copied
+to the destination image.  If only <em>x1</em> and <em>y1</em> are
+specified, the region extends from (<em>x1,y1</em>) to the bottom-right
+corner of the image in the image file.  If all four coordinates are
+specified, they specify diagonally opposite corners or the region.
+The default, if this option is not specified, is the whole of the
+image in the image file.
+</dd>
+<p></p>
+<dt><strong><strong>-shrink</strong></strong><br />
+</dt>
+<dd>
+If this option is specified, the size of <em>$image</em> will be reduced, if
+necessary, so that the region into which the image file data are read
+is at the bottom-right corner of the <em>$image</em>.  This option
+will not affect the width or height of the image if the user has
+specified a non-zero value for the <strong>-width</strong> or <strong>-height</strong>
+configuration option, respectively.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dto__3d_3e_x_2c_y"><strong>-to</strong> =&gt; <em>x, y</em></a></strong><br />
+</dt>
+<dd>
+Specifies the coordinates of the top-left corner of the region of
+<em>$image</em> into which data from <em>filename</em> are to be read.
+The default is (0,0).
+</dd>
+<p></p></dl>
+<dt><strong><a name="item_redither"><em>$image</em>-&gt;<strong>redither</strong></a></strong><br />
+</dt>
+<dd>
+The dithering algorithm used in displaying photo images propagates
+quantization errors from one pixel to its neighbors.
+If the image data for <em>$image</em> is supplied in pieces, the
+dithered image may not be exactly correct.  Normally the difference is
+not noticeable, but if it is a problem, this method can be used to
+recalculate the dithered image in each window where the image is
+displayed.
+</dd>
+<p></p>
+<dt><strong><a name="item_transparency"><em>$image</em>-&gt;<strong>transparency</strong>(<em>subcommand, ?arg, arg ...?</em>);</a></strong><br />
+</dt>
+<dd>
+Allows examination and manipulation of the transparency information in
+the photo image.  Several subcommands are available:
+</dd>
+<dl>
+<dt><strong><a name="item_transparencyget"><em>$image</em>-&gt;<strong>transparencyGet</strong>(<em>x, y</em>);</a></strong><br />
+</dt>
+<dd>
+Returns a boolean indicating if the pixel at (<em>x</em>,<em>y</em>) is
+transparent.
+</dd>
+<p></p>
+<dt><strong><a name="item_transparencyset"><em>$image</em>-&gt;<strong>transparencySet</strong>(<em>x, y, boolean</em>);</a></strong><br />
+</dt>
+<dd>
+Makes the pixel at (<em>x</em>,<em>y</em>) transparent if <em>boolean</em> is
+true, and makes that pixel opaque otherwise.
+</dd>
+<p></p></dl>
+<dt><strong><a name="item_write"><em>$image</em>-&gt;<strong>write</strong>(<em>filename</em> ?,<em>option value(s), ...</em>?)</a></strong><br />
+</dt>
+<dd>
+Writes image data from <em>$image</em> to a file named <em>filename</em>.
+The following options may be specified:
+</dd>
+<dl>
+<dt><strong><strong>-background</strong> =&gt; <em> color</em></strong><br />
+</dt>
+<dd>
+If the color is specified, the data will not contain any transparency
+information. In all transparent pixels the color will be replaced by
+the specified color.
+</dd>
+<p></p>
+<dt><strong><strong>-format</strong> =&gt; <em>format-name</em></strong><br />
+</dt>
+<dd>
+Specifies the name of the image file format handler to be used to
+write the data to the file.  Specifically, this subcommand searches
+for the first handler whose name matches a initial substring of
+<em>format-name</em> and which has the capability to write an image
+file.  If this option is not given, this subcommand uses the first
+handler that has the capability to write an image file.
+</dd>
+<p></p>
+<dt><strong><strong>-from</strong> =&gt; <em>x1, y1, ?, x2, y2?</em></strong><br />
+</dt>
+<dd>
+Specifies a rectangular region of <em>$image</em> to be written to the
+image file.  If only <em>x1</em> and <em>y1</em> are specified, the region
+extends from <em>(x1,y1)</em> to the bottom-right corner of
+<em>$image</em>.  If all four coordinates are given, they specify
+diagonally opposite corners of the rectangular region.  The default,
+if this option is not given, is the whole image.
+</dd>
+<p></p>
+<dt><strong><strong>-grayscale</strong></strong><br />
+</dt>
+<dd>
+If this options is specified, the data will not contain color
+information. All pixel data will be transformed into grayscale.
+</dd>
+<p></p></dl>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="image_formats">IMAGE FORMATS</a></h1>
+<p>The photo image code is structured to allow handlers for additional
+image file formats to be added easily.  The photo image code maintains
+a list of these handlers.  Handlers are added to the list by
+registering them with a call to <strong>Tk_CreatePhotoImageFormat</strong>.  The
+standard Tk distribution comes with handlers for XBM, XPM, BMP, JPEG,
+PNG and PPM/PGM formats, which are automatically registered on
+initialization.</p>
+<p>When reading an image file or processing
+string data specified with the <strong>-data</strong> configuration option, the
+photo image code invokes each handler in turn until one is
+found that claims to be able to read the data in the file or string.
+Usually this will find the correct handler, but if it doesn't, the
+user may give a format name with the <strong>-format</strong> option to specify
+which handler to use.  In fact the photo image code will try those
+handlers whose names begin with the string specified for the
+<strong>-format</strong> option (the comparison is case-insensitive).  For
+example, if the user specifies <strong>-format</strong> <strong>=&gt;</strong> <strong>gif</strong>, then a handler
+named GIF87 or GIF89 may be invoked, but a handler
+named JPEG may not (assuming that such handlers had been
+registered).</p>
+<p>When writing image data to a file, the processing of the
+<strong>-format</strong> option is slightly different: the string value given
+for the <strong>-format</strong> option must begin with the complete name of the
+requested handler, and may contain additional information following
+that, which the handler can use, for example, to specify which variant
+to use of the formats supported by the handler.
+Note that not all image handlers may support writing transparency data
+to a file, even where the target image format does.</p>
+<p>
+</p>
+<hr />
+<h1><a name="color_allocation">COLOR ALLOCATION</a></h1>
+<p>When a photo image is displayed in a window, the photo image code
+allocates colors to use to display the image and dithers the image, if
+necessary, to display a reasonable approximation to the image using
+the colors that are available.  The colors are allocated as a color
+cube, that is, the number of colors allocated is the product of the
+number of shades of red, green and blue.</p>
+<p>Normally, the number of
+colors allocated is chosen based on the depth of the window.  For
+example, in an 8-bit PseudoColor window, the photo image code will
+attempt to allocate seven shades of red, seven shades of green and
+four shades of blue, for a total of 198 colors.  In a 1-bit StaticGray
+(monochrome) window, it will allocate two colors, black and white.  In
+a 24-bit DirectColor or TrueColor window, it will allocate 256 shades
+each of red, green and blue.  Fortunately, because of the way that
+pixel values can be combined in DirectColor and TrueColor windows,
+this only requires 256 colors to be allocated.  If not all of the
+colors can be allocated, the photo image code reduces the number of
+shades of each primary color and tries again.</p>
+<p>The user can exercise some control over the number of colors that a
+photo image uses with the <strong>-palette</strong> configuration option.  If
+this option is used, it specifies the maximum number of shades of
+each primary color to try to allocate.  It can also be used to force
+the image to be displayed in shades of gray, even on a color display,
+by giving a single number rather than three numbers separated by
+slashes.</p>
+<p>
+</p>
+<hr />
+<h1><a name="credits">CREDITS</a></h1>
+<p>The photo image type was designed and implemented by Paul Mackerras,
+based on his earlier photo widget and some suggestions from
+John Ousterhout.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../../../site/lib/Tk/Bitmap.html">Tk::Bitmap</a>
+<a href="../../../site/lib/Tk/Image.html">Tk::Image</a>
+<a href="../../../site/lib/Tk/Pixmap.html">Tk::Pixmap</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="keywords">KEYWORDS</a></h1>
+<p>photo, image, color</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::Photo - Full-color images</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

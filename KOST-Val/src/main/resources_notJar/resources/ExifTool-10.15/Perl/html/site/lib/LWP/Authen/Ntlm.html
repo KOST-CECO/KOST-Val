@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>LWP::Authen::Ntlm - Library for enabling NTLM authentication in LWP</title>
+<link rel="stylesheet" href="../../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;LWP::Authen::Ntlm - Library for enabling NTLM authentication in LWP</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#usage">USAGE</a></li>
+	<li><a href="#availability">AVAILABILITY</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>LWP::Authen::Ntlm - Library for enabling NTLM authentication (Microsoft) in LWP</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ use LWP::UserAgent;
+ use HTTP::Request::Common;
+ my $url = '<a href="http://www.company.com/protected_page.html">http://www.company.com/protected_page.html</a>';</pre>
+<pre>
+ # Set up the ntlm client and then the base64 encoded ntlm handshake message
+ my $ua = new LWP::UserAgent(keep_alive=&gt;1);
+ $ua-&gt;credentials('www.company.com:80', '', &quot;MyDomain\\MyUserCode&quot;, 'MyPassword');</pre>
+<pre>
+ $request = GET $url;
+ print &quot;--Performing request now...-----------\n&quot;;
+ $response = $ua-&gt;request($request);
+ print &quot;--Done with request-------------------\n&quot;;</pre>
+<pre>
+ if ($response-&gt;is_success) {print &quot;It worked!-&gt;&quot; . $response-&gt;code . &quot;\n&quot;}
+ else {print &quot;It didn't work!-&gt;&quot; . $response-&gt;code . &quot;\n&quot;}</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p><code>LWP::Authen::Ntlm</code> allows LWP to authenticate against servers that are using the 
+NTLM authentication scheme popularized by Microsoft.  This type of authentication is 
+common on intranets of Microsoft-centric organizations.</p>
+<p>The module takes advantage of the Authen::NTLM module by Mark Bush.  Since there 
+is also another Authen::NTLM module available from CPAN by Yee Man Chan with an 
+entirely different interface, it is necessary to ensure that you have the correct 
+NTLM module.</p>
+<p>In addition, there have been problems with incompatibilities between different 
+versions of Mime::Base64, which Bush's Authen::NTLM makes use of.  Therefore, it is 
+necessary to ensure that your Mime::Base64 module supports exporting of the 
+encode_base64 and decode_base64 functions.</p>
+<p>
+</p>
+<hr />
+<h1><a name="usage">USAGE</a></h1>
+<p>The module is used indirectly through LWP, rather than including it directly in your 
+code.  The LWP system will invoke the NTLM authentication when it encounters the 
+authentication scheme while attempting to retrieve a URL from a server.  In order 
+for the NTLM authentication to work, you must have a few things set up in your 
+code prior to attempting to retrieve the URL:</p>
+<ul>
+<li></li>
+Enable persistent HTTP connections
+<p>To do this, pass the ``keep_alive=&gt;1'' option to the LWP::UserAgent when creating it, like this:</p>
+<pre>
+    my $ua = new LWP::UserAgent(keep_alive=&gt;1);</pre>
+<p></p>
+<li></li>
+Set the credentials on the UserAgent object
+<p>The credentials must be set like this:</p>
+<pre>
+   $ua-&gt;credentials('www.company.com:80', '', &quot;MyDomain\\MyUserCode&quot;, 'MyPassword');</pre>
+<p>Note that you cannot use the HTTP::Request object's <code>authorization_basic()</code> method to set 
+the credentials.  Note, too, that the 'www.company.com:80' portion only sets credentials 
+on the specified port AND it is case-sensitive (this is due to the way LWP is coded, and 
+has nothing to do with LWP::Authen::Ntlm)</p>
+<p></p></ul>
+<p>If you run into trouble and need help troubleshooting your problems, try enabling LWP 
+debugging by putting this line at the top of your code:</p>
+<pre>
+    use LWP::Debug qw(+);</pre>
+<p>You should get copious debugging output, including messages from LWP::Authen::Ntlm itself.</p>
+<p>
+</p>
+<hr />
+<h1><a name="availability">AVAILABILITY</a></h1>
+<p>General queries regarding LWP should be made to the LWP Mailing List.</p>
+<p>Questions specific to LWP::Authen::Ntlm can be forwarded to <a href="mailto:jtillman@bigfoot.com">jtillman@bigfoot.com</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright (c) 2002 James Tillman. All rights reserved. This
+program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../../../../site/lib/LWP.html">the LWP manpage</a>, <a href="../../../../site/lib/LWP/UserAgent.html">the LWP::UserAgent manpage</a>, <a href="../../../../site/lib/lwpcook.html">the lwpcook manpage</a>.</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;LWP::Authen::Ntlm - Library for enabling NTLM authentication in LWP</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

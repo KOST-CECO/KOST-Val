@@ -1,0 +1,150 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Tk::Dialog - Create modal dialog and wait for a response.</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::Dialog - Create modal dialog and wait for a response.</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#options">OPTIONS</a></li>
+	<li><a href="#methods">METHODS</a></li>
+	<li><a href="#advertised_widgets">ADVERTISED WIDGETS</a></li>
+	<li><a href="#example">EXAMPLE</a></li>
+	<li><a href="#keywords">KEYWORDS</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Tk::Dialog - Create modal dialog and wait for a response.</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>$dialog</em> = <em>$parent</em>-&gt;<strong>Dialog</strong>(<em>-option</em> =&gt; <em>value</em>, ... );</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>This procedure is part of the Tk script library - its arguments
+describe a dialog box.  After creating a dialog box, <strong>Dialog</strong> waits
+for the user to select one of the Buttons either by clicking on the
+Button with the mouse or by typing return to invoke the default Button
+(if any).  Then it returns the text string of the selected Button.</p>
+<p>While waiting for the user to respond, <strong>Dialog</strong> sets a local
+grab.  This prevents the user from interacting with the application
+in any way except to invoke the dialog box.  See the <strong>Show()</strong> method.</p>
+<p>
+</p>
+<hr />
+<h1><a name="options">OPTIONS</a></h1>
+<p>The following option/value pairs are supported:</p>
+<dl>
+<dt><strong><a name="item__2dtitle"><strong>-title</strong></a></strong><br />
+</dt>
+<dd>
+Text to appear in the window manager's title bar for the dialog.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dtext"><strong>-text</strong></a></strong><br />
+</dt>
+<dd>
+Message to appear in the top portion of the Dialog.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dbitmap"><strong>-bitmap</strong></a></strong><br />
+</dt>
+<dd>
+If non-empty, specifies a bitmap to display in the top portion of the
+Dialog, to the left of the text.  If this is an empty string then no
+bitmap is displayed in the Dialog.
+</dd>
+<p></p>
+<dt><strong><a name="item__2ddefault_button"><strong>-default_button</strong></a></strong><br />
+</dt>
+<dd>
+Text label string of the Button that displays the default ring.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dbuttons"><strong>-buttons</strong></a></strong><br />
+</dt>
+<dd>
+A reference to a list of Button label strings.  Each <em>string</em>
+specifies text to display in a Button, in order from left to right.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="methods">METHODS</a></h1>
+<dl>
+<dt><strong><a name="item_show"><em>$answer</em> = $dialog-&gt;<strong>Show(</strong>?-global?<strong>)</strong>;</a></strong><br />
+</dt>
+<dd>
+This method displays the Dialog, waits for the user's response, and stores
+the text string of the selected Button in <em>$answer</em>.  If <em>-global</em> is
+specified a global (rather than local) grab is performed.
+</dd>
+<dd>
+<p>The actual Dialog is shown using the <strong>Popup</strong> method. Any other
+options supplied to <strong>Show</strong> are passed to <strong>Popup</strong>, and can be used to
+position the Dialog on the screen. Please read Tk::Popup for details.</p>
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="advertised_widgets">ADVERTISED WIDGETS</a></h1>
+<p>Because Tk::Dialog is a subclass of Tk::DialogBox it inherits all the
+advertised subwidgets of its superclass: e.g. ``B_button-text'', where
+'button-text' is a Button's -text value. Additionally, Tk::Dialog
+advertises:</p>
+<dl>
+<dt><strong><a name="item_message"><strong>message</strong></a></strong><br />
+</dt>
+<dd>
+The dialog's Label widget containing the message text.
+</dd>
+<p></p>
+<dt><strong><a name="item_bitmap"><strong>bitmap</strong></a></strong><br />
+</dt>
+<dd>
+The dialog's Label widget containing the bitmap image.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="example">EXAMPLE</a></h1>
+<p><em>$dialog</em> = <em>$mw</em>-&gt;<strong>Dialog</strong>(-text =&gt; 'Save File?', -bitmap =&gt; 'question', -title =&gt; 'Save File Dialog', -default_button =&gt; 'Yes', -buttons =&gt; [qw/Yes No Cancel/);</p>
+<p>
+</p>
+<hr />
+<h1><a name="keywords">KEYWORDS</a></h1>
+<p>bitmap, dialog, modal, messageBox</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::Dialog - Create modal dialog and wait for a response.</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

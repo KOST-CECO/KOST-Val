@@ -1,0 +1,191 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Tk::Frame - Create and manipulate Frame widgets</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::Frame - Create and manipulate Frame widgets</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#standard_options">STANDARD OPTIONS</a></li>
+	<li><a href="#widgetspecific_options">WIDGET-SPECIFIC OPTIONS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#widget_methods">WIDGET METHODS</a></li>
+	<li><a href="#bindings">BINDINGS</a></li>
+	<li><a href="#keywords">KEYWORDS</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Tk::Frame - Create and manipulate Frame widgets</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>$frame</em> = <em>$parent</em>-&gt;<strong>Frame</strong>(?<em>options</em>?);</p>
+<p>
+</p>
+<hr />
+<h1><a name="standard_options">STANDARD OPTIONS</a></h1>
+<p><table cellspacing="0" cellpadding="0"><tr><td><strong>-borderwidth</strong><td><strong>-highlightbackground</strong><td><strong>-highlightthickness</strong><td><strong>-takefocus</strong>
+<tr><td><strong>-class</strong><td><strong>-highlightcolor</strong><td><strong>-relief</strong>
+<tr><td><strong>-cursor</strong></table></p>
+<p>See <a href="../../../site/lib/Tk/options.html">the Tk::options manpage</a> for details of the standard options.</p>
+<p>
+</p>
+<hr />
+<h1><a name="widgetspecific_options">WIDGET-SPECIFIC OPTIONS</a></h1>
+<dl>
+<dt><strong><a name="item_name_3a_background">Name:	<strong>background</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_background">Class:	<strong>Background</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dbackground">Switch:	<strong>-background</strong></a></strong><br />
+</dt>
+<dd>
+This option is the same as the standard <strong>background</strong> option
+except that its value may also be specified as an undefined value.
+In this case, the widget will display no background or border, and
+no colors will be consumed from its colormap for its background
+and border.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_colormap">Name:	<strong>colormap</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_colormap">Class:	<strong>Colormap</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dcolormap">Switch:	<strong>-colormap</strong></a></strong><br />
+</dt>
+<dd>
+Specifies a colormap to use for the window.
+The value may be either <strong>new</strong>, in which case a new colormap is
+created for the window and its children, or the name of another
+window (which must be on the same screen and have the same visual
+as $widget), in which case the new window will use the colormap
+from the specified window.
+If the <strong>colormap</strong> option is not specified, the new window
+uses the same colormap as its parent.
+This option may not be changed with the <strong>configure</strong>
+method.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_container">Name:	<strong>container</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_container">Class:	<strong>Container</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dcontainer">Switch:	<strong>-container</strong></a></strong><br />
+</dt>
+<dd>
+The value must be a boolean.  If true, it means that this window will
+be used as a container in which some other application will be embedded
+(for example, a Tk toplevel can be embedded using the <strong>-use</strong> option).
+The window will support the appropriate window manager protocols for
+things like geometry requests.  The window should not have any
+children of its own in this application.
+This option may not be changed with the <strong>configure</strong>
+method.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_height">Name:	<strong>height</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_height">Class:	<strong>Height</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dheight">Switch:	<strong>-height</strong></a></strong><br />
+</dt>
+<dd>
+Specifies the desired height for the window in any of the forms
+acceptable to <strong>Tk_GetPixels</strong>.
+If this option is less than or equal to zero then the window will
+not request any size at all.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_visual">Name:	<strong>visual</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_visual">Class:	<strong>Visual</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dvisual">Switch:	<strong>-visual</strong></a></strong><br />
+</dt>
+<dd>
+Specifies visual information for the new window in any of the
+forms accepted by <strong>Tk_GetVisual</strong>.
+If this option is not specified, the new window will use the same
+visual as its parent.
+The <strong>visual</strong> option may not be modified with the <strong>configure</strong>
+method.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_width">Name:	<strong>width</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_width">Class:	<strong>Width</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dwidth">Switch:	<strong>-width</strong></a></strong><br />
+</dt>
+<dd>
+Specifies the desired width for the window in any of the forms
+acceptable to <strong>Tk_GetPixels</strong>.
+If this option is less than or equal to zero then the window will
+not request any size at all.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The <strong>Frame</strong> method creates a new window (given by the
+$widget argument) and makes it into a frame widget.
+Additional
+options, described above, may be specified on the command line
+or in the option database
+to configure aspects of the frame such as its background color
+and relief.  The <strong>frame</strong> command returns the
+path name of the new window.</p>
+<p>A frame is a simple widget.  Its primary purpose is to act as a
+spacer or container for complex window layouts.  The only features
+of a frame are its background color and an optional 3-D border to make the
+frame appear raised or sunken.</p>
+<p>
+</p>
+<hr />
+<h1><a name="widget_methods">WIDGET METHODS</a></h1>
+<p>The <strong>Frame</strong> method creates a widget object.
+This object supports the <strong>configure</strong> and <strong>cget</strong> methods
+described in <a href="../../../site/lib/Tk/options.html">the Tk::options manpage</a> which can be used to enquire and
+modify the options described above.
+The widget also inherits all the methods provided by the generic
+<a href="../../../site/lib/Tk/Widget.html">Tk::Widget</a> class.</p>
+<p>
+</p>
+<hr />
+<h1><a name="bindings">BINDINGS</a></h1>
+<p>When a new frame is created, it has no default event bindings:
+frames are not intended to be interactive.</p>
+<p>
+</p>
+<hr />
+<h1><a name="keywords">KEYWORDS</a></h1>
+<p>frame, widget</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::Frame - Create and manipulate Frame widgets</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

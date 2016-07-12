@@ -1,0 +1,266 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>option - Using the option database in Perl/Tk</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;option - Using the option database in Perl/Tk</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<ul>
+
+		<li><a href="#being_a_good_citizen">Being a good citizen</a></li>
+		<li><a href="#option_rules_and_widget_identification">Option rules and widget identification</a></li>
+	</ul>
+
+	<li><a href="#methods">METHODS</a></li>
+	<li><a href="#bugs">BUGS</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#keywords">KEYWORDS</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>option - Using the option database in Perl/Tk</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>$widget</em>-&gt;<strong>widgetClass</strong>(<strong>Name</strong>=&gt;<em>name</em>, <strong>-class</strong>=&gt;<em>class</em>);</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>$widget</em>-&gt;<strong>PathName</strong>;</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>$widget</em>-&gt;<strong>optionAdd</strong>(<em>pattern</em>=&gt;<em>value </em> ?,<em>priority</em>?);</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>$widget</em>-&gt;<strong>optionClear</strong>;</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>$widget</em>-&gt;<strong>optionGet</strong>(<em>name, class</em>);</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>$widget</em>-&gt;<strong>optionReadfile</strong>(<em>fileName</em> ?,<em>priority</em>?);</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The option database (also known as the <em>resource database</em> or the
+<em>application defaults database</em>) is a set of rules for applying
+default options to widgets.  Users and system administrators can
+set up these rules to customize the appearance of applications
+without changing any application code; for example, a user might
+set up personal foreground and background colors, or a site
+might use fonts associated with visual or language preferences.
+Different window managers (and implementations of them) have implemented
+the database differently, but most Xt-based window managers use the
+<em>.Xdefaults</em> file or the <em>xrdb</em> utility to manage user preferences;
+some use both, and/or implement a more complex set of site, user and
+application databases.  Check your site documentation for these topics
+or your window manager's <strong>RESOURCE_MANAGER</strong> property.</p>
+<p>
+</p>
+<h2><a name="being_a_good_citizen">Being a good citizen</a></h2>
+<p>For most applications, the option database ``just works.''  The <strong>option...</strong>
+methods are for applications that need to do something unusual, such as
+add new rules or test an option's default.  Even in such cases, the
+application should provide for user preferences.
+Do not hardcode widget options without a <strong>very</strong> good reason.
+All users have their own tastes and they are all different.
+They choose a special font in a special size and have often spend a
+lot of time working out a color scheme that they will love until death.
+When you respect their choices they will enjoy working with your
+applications much more.  Don't destroy the common look and feel of a
+personal desktop.</p>
+<p>
+</p>
+<h2><a name="option_rules_and_widget_identification">Option rules and widget identification</a></h2>
+<p>All widgets in an application are identified hierarchically by <em>pathname</em>,
+starting from the <strong>MainWindow</strong> and passing through each widget used to create
+the endpoint.  The path elements are <em>widget names</em>, much like the elements
+of a file path from the root directory to a file.  The rules in the option
+database are patterns that are matched against a widget's <em>pathname</em> to
+determine which defaults apply.
+When a widget is created, the <strong>Name</strong> option can be
+used to assign the widget's name and thus create a distinctive path
+for widgets in an application.  If the <strong>Name</strong> option isn't given,
+Perl/Tk assigns a default name based on the type of widget; a
+<strong>MainWindow</strong>'s default name is the <strong>appname</strong>.  These defaults are fine
+for most widgets, so don't feel you need to find a meaningful name for
+every widget you create.
+A widget must have a distinctive name to allow users to tailor its
+options independently of other widgets in an application.  For instance,
+to create a <strong>Text</strong> widget that will
+have special options assigned to it, give it a name such as:</p>
+<pre>
+  $text = $mw-&gt;Text(Name =&gt; 'importantText');</pre>
+<p>You can then tailor the widget's attributes with a rule in the option
+database such as:</p>
+<pre>
+  *importantText*foreground: red</pre>
+<p>The <em>class</em> attribute identifies groups of widgets, usually within an
+application but also to group similar widgets among different applications.
+One typically assigns a class to a <strong>TopLevel</strong> or <strong>Frame</strong> so that the
+class will apply to all of that widget's children.  To extend the example,
+we could be more specific about the importantText widget
+by giving its frame a class:</p>
+<pre>
+  $frame = $mw-&gt;Frame(-class =&gt; 'Urgent');
+  $text = $frame-&gt;Text(Name =&gt; 'importantText');</pre>
+<p>Then the resource pattern can be specified as so:</p>
+<pre>
+  *Urgent*importantText*foreground: red</pre>
+<p>Similarly, the pattern <code>*Urgent*background: cyan</code> would apply to all
+widgets in the frame.</p>
+<p>
+</p>
+<hr />
+<h1><a name="methods">METHODS</a></h1>
+<dl>
+<dt><strong><a name="item_widgetclass"><em>$widget</em>-&gt;<strong>widgetClass</strong>(<strong>Name</strong>=&gt;<em>name</em>, <strong>-class</strong>=&gt;<em>class</em>);</a></strong><br />
+</dt>
+<dd>
+Identify a new widget with <em>name</em> and/or <em>class</em>.
+<strong>Name</strong> specifies the path element for the widget; names generally begin with a
+lowercase letter.  <strong>-class</strong> specifies the class for the widget and its
+children; classes generally begin with an uppercase letter.
+If not specified, Perl/Tk will assign a unique default name to each widget.
+Only <strong>MainWindow</strong> widgets have a default class, made by uppercasing the
+first letter of the application name.
+</dd>
+<p></p>
+<dt><strong><a name="item_pathname"><em>$widget</em>-&gt;<strong>PathName</strong>;</a></strong><br />
+</dt>
+<dd>
+The <strong>PathName</strong> method returns the widget's <em>pathname</em>, which uniquely
+identifies the widget within the application.
+</dd>
+<p></p>
+<dt><strong><a name="item_optionadd"><em>$widget</em>-&gt;<strong>optionAdd</strong>(<em>pattern</em>=&gt;<em>value </em>?, <em>priority</em>?);</a></strong><br />
+</dt>
+<dd>
+The <strong>optionAdd</strong> method adds a new option to the database.
+<em>Pattern</em> contains the option being specified, and consists of
+names and/or classes separated by asterisks or dots, in the usual
+X format.  <em>Value</em> contains a text string to associate with
+<em>pattern</em>; this is the value that will be returned in calls to
+the <strong>optionGet</strong> method.  If <em>priority</em> is specified, it indicates
+the priority level for this option (see below for legal values);
+it defaults to <strong>interactive</strong>. This method always returns an empty
+string.
+</dd>
+<p></p>
+<dt><strong><a name="item_optionclear"><em>$widget</em>-&gt;<strong>optionClear</strong>;</a></strong><br />
+</dt>
+<dd>
+The <strong>optionClear</strong> method clears the option database.  Default
+options (from the <strong>RESOURCE_MANAGER</strong> property or the <strong>.Xdefaults</strong>
+file) will be reloaded automatically the next time an option is
+added to the database or removed from it.  This method always returns
+an empty string.
+</dd>
+<p></p>
+<dt><strong><a name="item_optionget"><em>$widget</em>-&gt;<strong>optionGet</strong>(<em>name,class</em>);</a></strong><br />
+</dt>
+<dd>
+The <strong>optionGet</strong> method returns the value of the option specified for
+<em>$widget</em> under <em>name</em> and <em>class</em>.  To look up the option,
+<strong>optionGet</strong> matches the patterns in the resource database against
+<em>$widget</em>'s <em>pathname</em> along with the class of <em>$widget</em>
+(or its parent if <em>$widget</em> has no class specified).  The widget's
+class and name are options set when the widget is created (not
+related to class in the sense of <a href="../../../lib/Pod/perlfunc.html#item_bless">bless</a>); the <strong>MainWindow</strong>'s name
+is the <strong>appname</strong> and its class is (by default) derived from the name
+of the script.
+</dd>
+<dd>
+<p>If several entries in the option database match <em>$widget</em>'s <em>pathname</em>,
+<em>name</em>, and <em>class</em>, then the method returns whichever was created with
+highest <em>priority</em> level.  If there are several matching
+entries at the same priority level, then it returns whichever entry
+was <em>most recently entered</em> into the option database.  If there are
+no matching entries, then the empty string is returned.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item_optionreadfile"><em>$widget</em>-&gt;<strong>optionReadfile</strong>(<em>fileName</em>?,<em>priority</em>?);</a></strong><br />
+</dt>
+<dd>
+The <strong>optionReadfile</strong> method reads <em>fileName</em>, which should have the
+standard format for an X resource database such as <strong>.Xdefaults</strong>, and
+adds all the options specified in that file to the option database.
+If <em>priority</em> is specified, it indicates the priority level at which
+to enter the options;  <em>priority</em> defaults to <strong>interactive</strong>.
+</dd>
+<dd>
+<p>The <em>priority</em> arguments to the <strong>option</strong> methods are
+normally specified symbolically using one of the following values:</p>
+</dd>
+<dl>
+<dt><strong><a name="item_widgetdefault"><strong>widgetDefault</strong></a></strong><br />
+</dt>
+<dd>
+Level 20.  Used for default values hard-coded into widgets.
+</dd>
+<p></p>
+<dt><strong><a name="item_startupfile"><strong>startupFile</strong></a></strong><br />
+</dt>
+<dd>
+Level 40.  Used for options specified in application-specific
+startup files.
+</dd>
+<p></p>
+<dt><strong><a name="item_userdefault"><strong>userDefault</strong></a></strong><br />
+</dt>
+<dd>
+Level 60.  Used for options specified in user-specific defaults
+files, such as <strong>.Xdefaults</strong>, resource databases loaded into
+the X server, or user-specific startup files.
+</dd>
+<p></p>
+<dt><strong><a name="item_interactive"><strong>interactive</strong></a></strong><br />
+</dt>
+<dd>
+Level 80.  Used for options specified interactively after the application
+starts running.  If <em>priority</em> isn't specified, it defaults to
+this level.
+</dd>
+<p></p></dl>
+<p>Any of the above keywords may be abbreviated.  In addition, priorities
+may be specified numerically using integers between 0 and 100,
+inclusive.  The numeric form is probably a bad idea except for new priority
+levels other than the ones given above.</p>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="bugs">BUGS</a></h1>
+<p>The priority scheme used by core Tk is not the same as used by normal Xlib
+routines. In particular is assumes that the order of the entries is defined,
+but user commands like <strong>xrdb -merge</strong> can change the order.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../../../site/lib/Tk/Xrm.html">Tk::Xrm</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="keywords">KEYWORDS</a></h1>
+<p>database, option, priority, retrieve</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;option - Using the option database in Perl/Tk</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

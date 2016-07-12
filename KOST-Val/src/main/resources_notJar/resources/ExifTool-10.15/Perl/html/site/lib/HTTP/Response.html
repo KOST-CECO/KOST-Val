@@ -1,0 +1,274 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>HTTP::Response - HTTP style response message</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;HTTP::Response - HTTP style response message</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>HTTP::Response - HTTP style response message</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p>Response objects are returned by the <a href="#item_request"><code>request()</code></a> method of the <code>LWP::UserAgent</code>:</p>
+<pre>
+    # ...
+    $response = $ua-&gt;request($request)
+    if ($response-&gt;is_success) {
+        print $response-&gt;content;
+    }
+    else {
+        print STDERR $response-&gt;status_line, &quot;\n&quot;;
+    }</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The <code>HTTP::Response</code> class encapsulates HTTP style responses.  A
+response consists of a response line, some headers, and a content
+body. Note that the LWP library uses HTTP style responses even for
+non-HTTP protocol schemes.  Instances of this class are usually
+created and returned by the <a href="#item_request"><code>request()</code></a> method of an <code>LWP::UserAgent</code>
+object.</p>
+<p><code>HTTP::Response</code> is a subclass of <code>HTTP::Message</code> and therefore
+inherits its methods.  The following additional methods are available:</p>
+<dl>
+<dt><strong><a name="item_new">$r = HTTP::Response-&gt;new( $code )</a></strong><br />
+</dt>
+<dt><strong>$r = HTTP::Response-&gt;new( $code, $msg )</strong><br />
+</dt>
+<dt><strong>$r = HTTP::Response-&gt;new( $code, $msg, $header )</strong><br />
+</dt>
+<dt><strong>$r = HTTP::Response-&gt;new( $code, $msg, $header, $content )</strong><br />
+</dt>
+<dd>
+Constructs a new <code>HTTP::Response</code> object describing a response with
+response code $code and optional message $msg.  The optional $header
+argument should be a reference to an <code>HTTP::Headers</code> object or a
+plain array reference of key/value pairs.  The optional $content
+argument should be a string of bytes.  The meaning these arguments are
+described below.
+</dd>
+<p></p>
+<dt><strong><a name="item_parse">$r = HTTP::Response-&gt;parse( $str )</a></strong><br />
+</dt>
+<dd>
+This constructs a new response object by parsing the given string.
+</dd>
+<p></p>
+<dt><strong><a name="item_code">$r-&gt;code</a></strong><br />
+</dt>
+<dt><strong>$r-&gt;code( $code )</strong><br />
+</dt>
+<dd>
+This is used to get/set the code attribute.  The code is a 3 digit
+number that encode the overall outcome of a HTTP response.  The
+<code>HTTP::Status</code> module provide constants that provide mnemonic names
+for the code attribute.
+</dd>
+<p></p>
+<dt><strong><a name="item_message">$r-&gt;message</a></strong><br />
+</dt>
+<dt><strong>$r-&gt;message( $message )</strong><br />
+</dt>
+<dd>
+This is used to get/set the message attribute.  The message is a short
+human readable single line string that explains the response code.
+</dd>
+<p></p>
+<dt><strong><a name="item_header">$r-&gt;header( $field )</a></strong><br />
+</dt>
+<dt><strong>$r-&gt;header( $field =&gt; $value )</strong><br />
+</dt>
+<dd>
+This is used to get/set header values and it is inherited from
+<code>HTTP::Headers</code> via <code>HTTP::Message</code>.  See <a href="../../../site/lib/HTTP/Headers.html">the HTTP::Headers manpage</a> for
+details and other similar methods that can be used to access the
+headers.
+</dd>
+<p></p>
+<dt><strong><a name="item_content">$r-&gt;content</a></strong><br />
+</dt>
+<dt><strong>$r-&gt;content( $content )</strong><br />
+</dt>
+<dd>
+This is used to get/set the content and it is inherited from the
+<code>HTTP::Message</code> base class.  See <a href="../../../site/lib/HTTP/Message.html">the HTTP::Message manpage</a> for details and
+other methods that can be used to access the content.
+</dd>
+<p></p>
+<dt><strong><a name="item_request">$r-&gt;request</a></strong><br />
+</dt>
+<dt><strong>$r-&gt;request( $request )</strong><br />
+</dt>
+<dd>
+This is used to get/set the request attribute.  The request attribute
+is a reference to the the request that caused this response.  It does
+not have to be the same request passed to the $ua-&gt;<a href="#item_request"><code>request()</code></a> method,
+because there might have been redirects and authorization retries in
+between.
+</dd>
+<p></p>
+<dt><strong><a name="item_previous">$r-&gt;previous</a></strong><br />
+</dt>
+<dt><strong>$r-&gt;previous( $response )</strong><br />
+</dt>
+<dd>
+This is used to get/set the previous attribute.  The previous
+attribute is used to link together chains of responses.  You get
+chains of responses if the first response is redirect or unauthorized.
+The value is <a href="../../../lib/Pod/perlfunc.html#item_undef"><code>undef</code></a> if this is the first response in a chain.
+</dd>
+<p></p>
+<dt><strong><a name="item_status_line">$r-&gt;status_line</a></strong><br />
+</dt>
+<dd>
+Returns the string ``&lt;code&gt; &lt;message&gt;''.  If the message attribute
+is not set then the official name of &lt;code&gt; (see <a href="../../../site/lib/HTTP/Status.html">the HTTP::Status manpage</a>)
+is substituted.
+</dd>
+<p></p>
+<dt><strong><a name="item_base">$r-&gt;base</a></strong><br />
+</dt>
+<dd>
+Returns the base URI for this response.  The return value will be a
+reference to a URI object.
+</dd>
+<dd>
+<p>The base URI is obtained from one the following sources (in priority
+order):</p>
+</dd>
+<ol>
+<li></li>
+Embedded in the document content, for instance &lt;BASE HREF=``...''&gt;
+in HTML documents.
+<p></p>
+<li></li>
+A ``Content-Base:'' or a ``Content-Location:'' header in the response.
+<p>For backwards compatibility with older HTTP implementations we will
+also look for the ``Base:'' header.</p>
+<p></p>
+<li></li>
+The URI used to request this response. This might not be the original
+URI that was passed to $ua-&gt;<a href="#item_request"><code>request()</code></a> method, because we might have
+received some redirect responses first.
+<p></p></ol>
+<p>When the LWP protocol modules produce the HTTP::Response object, then
+any base URI embedded in the document (step 1) will already have
+initialized the ``Content-Base:'' header. This means that this method
+only performs the last 2 steps (the content is not always available
+either).</p>
+<dt><strong><a name="item_as_string">$r-&gt;as_string</a></strong><br />
+</dt>
+<dt><strong>$r-&gt;as_string( $eol )</strong><br />
+</dt>
+<dd>
+Returns a textual representation of the response.
+</dd>
+<p></p>
+<dt><strong><a name="item_is_info">$r-&gt;is_info</a></strong><br />
+</dt>
+<dt><strong><a name="item_is_success">$r-&gt;is_success</a></strong><br />
+</dt>
+<dt><strong><a name="item_is_redirect">$r-&gt;is_redirect</a></strong><br />
+</dt>
+<dt><strong><a name="item_is_error">$r-&gt;is_error</a></strong><br />
+</dt>
+<dd>
+These methods indicate if the response was informational, successful, a
+redirection, or an error.  See <a href="../../../site/lib/HTTP/Status.html">the HTTP::Status manpage</a> for the meaning of these.
+</dd>
+<p></p>
+<dt><strong><a name="item_error_as_html">$r-&gt;error_as_HTML</a></strong><br />
+</dt>
+<dd>
+Returns a string containing a complete HTML document indicating what
+error occurred.  This method should only be called when $r-&gt;is_error
+is TRUE.
+</dd>
+<p></p>
+<dt><strong><a name="item_current_age">$r-&gt;current_age</a></strong><br />
+</dt>
+<dd>
+Calculates the ``current age'' of the response as specified by RFC 2616
+section 13.2.3.  The age of a response is the time since it was sent
+by the origin server.  The returned value is a number representing the
+age in seconds.
+</dd>
+<p></p>
+<dt><strong><a name="item_freshness_lifetime">$r-&gt;freshness_lifetime</a></strong><br />
+</dt>
+<dd>
+Calculates the ``freshness lifetime'' of the response as specified by
+RFC 2616 section 13.2.4.  The ``freshness lifetime'' is the length of
+time between the generation of a response and its expiration time.
+The returned value is a number representing the freshness lifetime in
+seconds.
+</dd>
+<dd>
+<p>If the response does not contain an ``Expires'' or a ``Cache-Control''
+header, then this function will apply some simple heuristic based on
+'Last-Modified' to determine a suitable lifetime.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item_is_fresh">$r-&gt;is_fresh</a></strong><br />
+</dt>
+<dd>
+Returns TRUE if the response is fresh, based on the values of
+<a href="#item_freshness_lifetime"><code>freshness_lifetime()</code></a> and current_age().  If the response is no longer
+fresh, then it has to be refetched or revalidated by the origin
+server.
+</dd>
+<p></p>
+<dt><strong><a name="item_fresh_until">$r-&gt;fresh_until</a></strong><br />
+</dt>
+<dd>
+Returns the time when this entity is no longer fresh.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../../../site/lib/HTTP/Headers.html">the HTTP::Headers manpage</a>, <a href="../../../site/lib/HTTP/Message.html">the HTTP::Message manpage</a>, <a href="../../../site/lib/HTTP/Status.html">the HTTP::Status manpage</a>, <a href="../../../site/lib/HTTP/Request.html">the HTTP::Request manpage</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 1995-2004 Gisle Aas.</p>
+<p>This library is free software; you can redistribute it and/or
+modify it under the same terms as Perl itself.</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;HTTP::Response - HTTP style response message</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Unicode::CharName - Look up Unicode character names</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Unicode::CharName - Look up Unicode character names</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Unicode::CharName - Look up Unicode character names</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ use Unicode::CharName qw(uname ublock);
+ print uname(ord('%')), &quot;\n&quot;;
+ print ublock(0x0300), &quot;\n&quot;;</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>This module provide a two functions named <code>uname()</code> and ublock().  The
+<code>uname()</code> function will return the Unicode character name for the given
+code (a number between 0 and 0x10FFFF).  Unicode character names are
+written in upper-case ASCII letters, and are strings like:</p>
+<pre>
+  LATIN CAPITAL LETTER A
+  LATIN SMALL LETTER A WITH RING ABOVE
+  CJK UNIFIED IDEOGRAPH 7C80
+  HANGUL SYLLABLE PWILH</pre>
+<p>The <code>ublock()</code> will return the name of the Unicode
+character block that the given character belongs to.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../../../site/lib/Unicode/String.html">the Unicode::String manpage</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 1997 Gisle Aas.</p>
+<p>This library is free software; you can redistribute it and/or
+modify it under the same terms as Perl itself.</p>
+<p>Name table extracted from the Unicode 2.0 Character
+Database. Copyright (c) 1991-1996 Unicode, Inc. All Rights reserved.</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Unicode::CharName - Look up Unicode character names</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

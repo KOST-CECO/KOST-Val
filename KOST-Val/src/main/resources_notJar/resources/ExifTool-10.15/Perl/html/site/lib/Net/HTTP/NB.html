@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Net::HTTP::NB - Non-blocking HTTP client</title>
+<link rel="stylesheet" href="../../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Net::HTTP::NB - Non-blocking HTTP client</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Net::HTTP::NB - Non-blocking HTTP client</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ use Net::HTTP::NB;
+ my $s = Net::HTTP::NB-&gt;new(Host =&gt; &quot;www.perl.com) || die $@;
+ $s-&gt;write_request(GET =&gt; &quot;/&quot;);</pre>
+<pre>
+ use IO::Select;
+ my $sel = IO::Select-&gt;new($s);</pre>
+<pre>
+ READ_HEADER: {
+    die &quot;Header timeout&quot; unless $sel-&gt;can_read(10);
+    my($code, $mess, %h) = $s-&gt;read_response_headers;
+    redo READ_HEADER unless $code;
+ }</pre>
+<pre>
+ while (1) {
+    die &quot;Body timeout&quot; unless $sel-&gt;can_read(10);
+    my $buf;
+    my $n = $s-&gt;read_entity_body($buf, 1024);
+    last unless $n;
+    print $buf;
+ }</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>Same interface as <code>Net::HTTP</code> but it will never try multiple reads
+when the <code>read_response_headers()</code> or <code>read_entity_body()</code> methods are
+invoked.  This make it possible to multiplex multiple Net::HTTP::NB
+using select without risk blocking.</p>
+<p>If <code>read_response_headers()</code> did not see enough data to complete the
+headers an empty list is returned.</p>
+<p>If <code>read_entity_body()</code> did not see new entity data in its read
+the value -1 is returned.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../../../../site/lib/Net/HTTP.html">the Net::HTTP manpage</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 2001 Gisle Aas.</p>
+<p>This library is free software; you can redistribute it and/or
+modify it under the same terms as Perl itself.</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Net::HTTP::NB - Non-blocking HTTP client</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

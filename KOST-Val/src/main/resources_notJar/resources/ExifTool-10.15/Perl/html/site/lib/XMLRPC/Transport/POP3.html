@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>XMLRPC::Transport::POP3 - Server side POP3 support for XMLRPC::Lite</title>
+<link rel="stylesheet" href="../../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;XMLRPC::Transport::POP3 - Server side POP3 support for XMLRPC::Lite</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>XMLRPC::Transport::POP3 - Server side POP3 support for XMLRPC::Lite</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+  use XMLRPC::Transport::POP3;</pre>
+<pre>
+  my $server = XMLRPC::Transport::POP3::Server
+    -&gt; new('pop://pop.mail.server')
+    # if you want to have all in one place
+    # -&gt; new('pop://user:password@pop.mail.server') 
+    # or, if you have server that supports MD5 protected passwords
+    # -&gt; new('pop://user:password;AUTH=+APOP@pop.mail.server') 
+    # specify path to My/Examples.pm here
+    -&gt; dispatch_to('/Your/Path/To/Deployed/Modules', 'Module::Name', 'Module::method') 
+  ;
+  # you don't need to use next line if you specified your password in new()
+  $server-&gt;login('user' =&gt; 'password') or die &quot;Can't authenticate to POP3 server\n&quot;;</pre>
+<pre>
+  # handle will return number of processed mails
+  # you can organize loop if you want
+  do { $server-&gt;handle } while sleep 10;</pre>
+<pre>
+  # you may also call $server-&gt;quit explicitly to purge deleted messages</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright (C) 2000-2001 Paul Kulchenko. All rights reserved.</p>
+<p>This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.</p>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Paul Kulchenko (<a href="mailto:paulclinger@yahoo.com">paulclinger@yahoo.com</a>)</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;XMLRPC::Transport::POP3 - Server side POP3 support for XMLRPC::Lite</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

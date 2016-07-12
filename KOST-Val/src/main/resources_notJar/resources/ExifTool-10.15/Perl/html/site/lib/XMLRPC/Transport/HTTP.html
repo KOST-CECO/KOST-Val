@@ -1,0 +1,190 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>XMLRPC::Transport::HTTP - Server/Client side HTTP support for XMLRPC::Lite</title>
+<link rel="stylesheet" href="../../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;XMLRPC::Transport::HTTP - Server/Client side HTTP support for XMLRPC::Lite</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<ul>
+
+		<li><a href="#proxy_settings">PROXY SETTINGS</a></li>
+		<li><a href="#cookiebased_authentication">COOKIE-BASED AUTHENTICATION</a></li>
+		<li><a href="#compression">COMPRESSION</a></li>
+	</ul>
+
+	<li><a href="#dependencies">DEPENDENCIES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>XMLRPC::Transport::HTTP - Server/Client side HTTP support for XMLRPC::Lite</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<dl>
+<dt><strong><a name="item_client">Client</a></strong><br />
+</dt>
+<dd>
+<pre>
+  use XMLRPC::Lite 
+    proxy =&gt; '<a href="http://localhost/">http://localhost/</a>', 
+  # proxy =&gt; '<a href="http://localhost/cgi-bin/xmlrpc.cgi">http://localhost/cgi-bin/xmlrpc.cgi</a>', # local CGI server
+  # proxy =&gt; '<a href="http://localhost/">http://localhost/</a>',                   # local daemon server
+  # proxy =&gt; '<a href="http://login:password@localhost/cgi-bin/xmlrpc.cgi">http://login:password@localhost/cgi-bin/xmlrpc.cgi</a>', # local CGI server with authentication
+  ;</pre>
+</dd>
+<dd>
+<pre>
+  print getStateName(1);</pre>
+</dd>
+<dt><strong><a name="item_cgi_server">CGI server</a></strong><br />
+</dt>
+<dd>
+<pre>
+  use XMLRPC::Transport::HTTP;</pre>
+</dd>
+<dd>
+<pre>
+  my $server = XMLRPC::Transport::HTTP::CGI
+    -&gt; dispatch_to('methodName')
+    -&gt; handle
+  ;</pre>
+</dd>
+<dt><strong><a name="item_daemon_server">Daemon server</a></strong><br />
+</dt>
+<dd>
+<pre>
+  use XMLRPC::Transport::HTTP;</pre>
+</dd>
+<dd>
+<pre>
+  my $daemon = XMLRPC::Transport::HTTP::Daemon
+    -&gt; new (LocalPort =&gt; 80)
+    -&gt; dispatch_to('methodName')
+  ;
+  print &quot;Contact to XMLRPC server at &quot;, $daemon-&gt;url, &quot;\n&quot;;
+  $daemon-&gt;handle;</pre>
+</dd>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>This class encapsulates all HTTP related logic for a XMLRPC server,
+independent of what web server it's attached to. 
+If you want to use this class you should follow simple guideline
+mentioned above.</p>
+<p>
+</p>
+<h2><a name="proxy_settings">PROXY SETTINGS</a></h2>
+<p>You can use any proxy setting you use with LWP::UserAgent modules:</p>
+<pre>
+ XMLRPC::Lite-&gt;proxy('<a href="http://endpoint.server/">http://endpoint.server/</a>', 
+                     proxy =&gt; ['http' =&gt; '<a href="http://my.proxy.server">http://my.proxy.server</a>']);</pre>
+<p>or</p>
+<pre>
+ $xmlrpc-&gt;transport-&gt;proxy('http' =&gt; '<a href="http://my.proxy.server">http://my.proxy.server</a>');</pre>
+<p>should specify proxy server for you. And if you use <code>HTTP_proxy_user</code> 
+and <code>HTTP_proxy_pass</code> for proxy authorization SOAP::Lite should know 
+how to handle it properly.</p>
+<p>
+</p>
+<h2><a name="cookiebased_authentication">COOKIE-BASED AUTHENTICATION</a></h2>
+<pre>
+  use HTTP::Cookies;</pre>
+<pre>
+  my $cookies = HTTP::Cookies-&gt;new(ignore_discard =&gt; 1);
+    # you may also add 'file' if you want to keep them between sessions</pre>
+<pre>
+  my $xmlrpc = XMLRPC::Lite-&gt;proxy('<a href="http://localhost/">http://localhost/</a>');
+  $xmlrpc-&gt;transport-&gt;cookie_jar($cookies);</pre>
+<p>Cookies will be taken from response and provided for request. You may
+always add another cookie (or extract what you need after response)
+with HTTP::Cookies interface.</p>
+<p>You may also do it in one line:</p>
+<pre>
+  $xmlrpc-&gt;proxy('<a href="http://localhost/">http://localhost/</a>', 
+                 cookie_jar =&gt; HTTP::Cookies-&gt;new(ignore_discard =&gt; 1));</pre>
+<p>
+</p>
+<h2><a name="compression">COMPRESSION</a></h2>
+<p>XMLRPC::Lite provides you option for enabling compression on wire (for HTTP 
+transport only). Both server and client should support this capability, 
+but this logic should be absolutely transparent for your application. 
+Server will respond with encoded message only if client can accept it 
+(client sends Accept-Encoding with 'deflate' or '*' values) and client 
+has fallback logic, so if server doesn't understand specified encoding 
+(Content-Encoding: deflate) and returns proper error code 
+(415 NOT ACCEPTABLE) client will repeat the same request not encoded and 
+will store this server in per-session cache, so all other requests will 
+go there without encoding.</p>
+<p>Having options on client and server side that let you specify threshold
+for compression you can safely enable this feature on both client and 
+server side.</p>
+<p>Compression will be enabled on client side IF: threshold is specified AND
+size of current message is bigger than threshold AND module Compress::Zlib
+is available. Client will send header 'Accept-Encoding' with value 'deflate'
+if threshold is specified AND module Compress::Zlib is available.</p>
+<p>Server will accept compressed message if module Compress::Zlib is available,
+and will respond with compressed message ONLY IF: threshold is specified AND
+size of current message is bigger than threshold AND module Compress::Zlib
+is available AND header 'Accept-Encoding' is presented in request.</p>
+<p>
+</p>
+<hr />
+<h1><a name="dependencies">DEPENDENCIES</a></h1>
+<pre>
+ Crypt::SSLeay             for HTTPS/SSL
+ HTTP::Daemon              for XMLRPC::Transport::HTTP::Daemon
+ Apache, Apache::Constants for XMLRPC::Transport::HTTP::Apache</pre>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<pre>
+ See ::CGI, ::Daemon and ::Apache for implementation details.
+ See examples/XMLRPC/* for examples.</pre>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright (C) 2000-2001 Paul Kulchenko. All rights reserved.</p>
+<p>This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.</p>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Paul Kulchenko (<a href="mailto:paulclinger@yahoo.com">paulclinger@yahoo.com</a>)</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;XMLRPC::Transport::HTTP - Server/Client side HTTP support for XMLRPC::Lite</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

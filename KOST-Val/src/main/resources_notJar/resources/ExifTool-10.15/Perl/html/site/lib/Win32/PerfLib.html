@@ -1,0 +1,286 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Win32::PerfLib - accessing the Windows NT Performance Counter</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Win32::PerfLib - accessing the Windows NT Performance Counter</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#functions">FUNCTIONS</a></li>
+	<ul>
+
+		<li><a href="#note">NOTE</a></li>
+	</ul>
+
+	<li><a href="#datastructures">Datastructures</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Win32::PerfLib - accessing the Windows NT Performance Counter</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+  use Win32::PerfLib;
+  my $server = &quot;&quot;;
+  Win32::PerfLib::GetCounterNames($server, \%counter);
+  %r_counter = map { $counter{$_} =&gt; $_ } keys %counter;
+  # retrieve the id for process object
+  $process_obj = $r_counter{Process};
+  # retrieve the id for the process ID counter
+  $process_id = $r_counter{'ID Process'};</pre>
+<pre>
+  # create connection to $server
+  $perflib = new Win32::PerfLib($server);
+  $proc_ref = {};
+  # get the performance data for the process object
+  $perflib-&gt;GetObjectList($process_obj, $proc_ref);
+  $perflib-&gt;Close();
+  $instance_ref = $proc_ref-&gt;{Objects}-&gt;{$process_obj}-&gt;{Instances};
+  foreach $p (sort keys %{$instance_ref})
+  {
+      $counter_ref = $instance_ref-&gt;{$p}-&gt;{Counters};
+      foreach $i (keys %{$counter_ref})
+      {
+          if($counter_ref-&gt;{$i}-&gt;{CounterNameTitleIndex} == $process_id)
+          {
+              printf( &quot;% 6d %s\n&quot;, $counter_ref-&gt;{$i}-&gt;{Counter},
+                      $instance_ref-&gt;{$p}-&gt;{Name}
+                    );
+          }
+      }
+  }</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>This module allows to retrieve the performance counter of any computer
+(running Windows NT) in the network.</p>
+<p>
+</p>
+<hr />
+<h1><a name="functions">FUNCTIONS</a></h1>
+<p>
+</p>
+<h2><a name="note">NOTE</a></h2>
+<p>All of the functions return false if they fail, unless otherwise noted.
+If the $server argument is undef the local machine is assumed.</p>
+<dl>
+<dt><strong><a name="item_getcounternames">Win32::PerfLib::GetCounterNames($server,$hashref)</a></strong><br />
+</dt>
+<dd>
+Retrieves the counter names and their indices from the registry and stores them
+in the hash reference
+</dd>
+<p></p>
+<dt><strong><a name="item_getcounterhelp">Win32::PerfLib::GetCounterHelp($server,$hashref)</a></strong><br />
+</dt>
+<dd>
+Retrieves the counter help strings and their indices from the registry and
+stores them in the hash reference
+</dd>
+<p></p>
+<dt><strong><a name="item_new">$perflib = Win32::PerfLib-&gt;new ($server)</a></strong><br />
+</dt>
+<dd>
+Creates a connection to the performance counters of the given server
+</dd>
+<p></p>
+<dt><strong><a name="item_getobjectlist">$perflib-&gt;<code>GetObjectList($objectid,$hashref)</code></a></strong><br />
+</dt>
+<dd>
+retrieves the object and counter list of the given performance object.
+</dd>
+<p></p>
+<dt><strong><a name="item_close">$perflib-&gt;<code>Close($hashref)</code></a></strong><br />
+</dt>
+<dd>
+closes the connection to the performance counters
+</dd>
+<p></p>
+<dt><strong><a name="item_getcountertype">Win32::PerfLib::GetCounterType(countertype)</a></strong><br />
+</dt>
+<dd>
+converts the counter type to readable string as referenced in <em>calc.html</em> so
+that it is easier to find the appropriate formula to calculate the raw counter
+data.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="datastructures">Datastructures</a></h1>
+<p>The performance data is returned in the following data structure:</p>
+<dl>
+<dt><strong><a name="item_level_1">Level 1</a></strong><br />
+</dt>
+<dd>
+<pre>
+  $hashref = {
+      'NumObjectTypes'   =&gt; VALUE
+      'Objects'          =&gt; HASHREF
+      'PerfFreq'         =&gt; VALUE
+      'PerfTime'         =&gt; VALUE
+      'PerfTime100nSec'  =&gt; VALUE
+      'SystemName'       =&gt; STRING
+      'SystemTime'       =&gt; VALUE
+  }</pre>
+</dd>
+<dt><strong><a name="item_level_2">Level 2</a></strong><br />
+</dt>
+<dd>
+The hash reference $hashref-&gt;{Objects} has the returned object <code>ID(s)</code> as keys and
+a hash reference to the object counter data as value. Even there is only one
+object requested in the call to GetObjectList there may be more than one object
+in the result.
+</dd>
+<dd>
+<pre>
+  $hashref-&gt;{Objects} = {
+      &lt;object1&gt;  =&gt; HASHREF
+      &lt;object2&gt;  =&gt; HASHREF
+      ...
+  }</pre>
+</dd>
+<p></p>
+<dt><strong><a name="item_level_3">Level 3</a></strong><br />
+</dt>
+<dd>
+Each returned object ID has object-specific performance information. If an
+object has instances like the process object there is also a reference to
+the instance information.
+</dd>
+<dd>
+<pre>
+  $hashref-&gt;{Objects}-&gt;{&lt;object1&gt;} = {
+      'DetailLevel'           =&gt; VALUE
+      'Instances'             =&gt; HASHREF
+      'Counters'              =&gt; HASHREF
+      'NumCounters'           =&gt; VALUE
+      'NumInstances'          =&gt; VALUE
+      'ObjectHelpTitleIndex'  =&gt; VALUE
+      'ObjectNameTitleIndex'  =&gt; VALUE
+      'PerfFreq'              =&gt; VALUE
+      'PerfTime'              =&gt; VALUE
+  }</pre>
+</dd>
+<p></p>
+<dt><strong><a name="item_level_4">Level 4</a></strong><br />
+</dt>
+<dd>
+If there are instance information for the object available they are stored in
+the 'Instances' hashref. If the object has no instances there is an 'Counters'
+key instead. The instances or counters are numbered.
+</dd>
+<dd>
+<pre>
+  $hashref-&gt;{Objects}-&gt;{&lt;object1&gt;}-&gt;{Instances} = {
+      &lt;1&gt;     =&gt; HASHREF
+      &lt;2&gt;     =&gt; HASHREF
+      ...
+      &lt;n&gt;     =&gt; HASHREF
+  }
+  or
+  $hashref-&gt;{Objects}-&gt;{&lt;object1&gt;}-&gt;{Counters} = {
+      &lt;1&gt;     =&gt; HASHREF
+      &lt;2&gt;     =&gt; HASHREF
+      ...
+      &lt;n&gt;     =&gt; HASHREF
+  }</pre>
+</dd>
+<p></p>
+<dt><strong><a name="item_level_5">Level 5</a></strong><br />
+</dt>
+<dd>
+<pre>
+  $hashref-&gt;{Objects}-&gt;{&lt;object1&gt;}-&gt;{Instances}-&gt;{&lt;1&gt;} = {
+      Counters               =&gt; HASHREF
+      Name                   =&gt; STRING
+      ParentObjectInstance   =&gt; VALUE
+      ParentObjectTitleIndex =&gt; VALUE
+  }
+  or
+  $hashref-&gt;{Objects}-&gt;{&lt;object1&gt;}-&gt;{Counters}-&gt;{&lt;1&gt;} = {
+      Counter               =&gt; VALUE
+      CounterHelpTitleIndex =&gt; VALUE
+      CounterNameTitleIndex =&gt; VALUE
+      CounterSize           =&gt; VALUE
+      CounterType           =&gt; VALUE
+      DefaultScale          =&gt; VALUE
+      DetailLevel           =&gt; VALUE
+      Display               =&gt; STRING
+  }</pre>
+</dd>
+<dt><strong><a name="item_level_6">Level 6</a></strong><br />
+</dt>
+<dd>
+<pre>
+  $hashref-&gt;{Objects}-&gt;{&lt;object1&gt;}-&gt;{Instances}-&gt;{&lt;1&gt;}-&gt;{Counters} = {
+      &lt;1&gt;     =&gt; HASHREF
+      &lt;2&gt;     =&gt; HASHREF
+      ...
+      &lt;n&gt;     =&gt; HASHREF
+  }</pre>
+</dd>
+<dt><strong><a name="item_level_7">Level 7</a></strong><br />
+</dt>
+<dd>
+<pre>
+  $hashref-&gt;{Objects}-&gt;{&lt;object1&gt;}-&gt;{Instances}-&gt;{&lt;1&gt;}-&gt;{Counters}-&gt;{&lt;1&gt;} = {
+      Counter               =&gt; VALUE
+      CounterHelpTitleIndex =&gt; VALUE
+      CounterNameTitleIndex =&gt; VALUE
+      CounterSize           =&gt; VALUE
+      CounterType           =&gt; VALUE
+      DefaultScale          =&gt; VALUE
+      DetailLevel           =&gt; VALUE
+      Display               =&gt; STRING
+  }</pre>
+</dd>
+<dd>
+<p>Depending on the <strong>CounterType</strong> there are calculations to do (see calc.html).</p>
+</dd>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Jutta M. Klebe, <a href="mailto:jmk@bybyte.de">jmk@bybyte.de</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p>perl(1).
+
+</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Win32::PerfLib - accessing the Windows NT Performance Counter</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

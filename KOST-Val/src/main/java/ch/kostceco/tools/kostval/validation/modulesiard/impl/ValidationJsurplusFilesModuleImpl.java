@@ -1,6 +1,6 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
- * Information Package (SIP). Copyright (C) 2012-2016 Claire Rˆthlisberger (KOST-CECO), Christian
+ * Information Package (SIP). Copyright (C) 2012-2016 Claire Roethlisberger (KOST-CECO), Christian
  * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
  * Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
@@ -46,8 +46,8 @@ import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationJsurplusFilesModule;
 
-/** Validierungsschritt J (Zus‰tzliche Prim‰rdateien) Enth‰lt der content-Ordner Dateien oder Ordner
- * die nicht in metadata.xml beschrieben sind ? invalid --> Zus‰tzliche Ordner oder Dateien im
+/** Validierungsschritt J (zus√§tzliche Prim√§rdateien) EnthÔøΩlt der content-Ordner Dateien oder Ordner
+ * die nicht in metadata.xml beschrieben sind ? invalid --> zus√§tzliche Ordner oder Dateien im
  * content-Ordner
  * 
  * @author Ec Christian Eugster */
@@ -72,10 +72,21 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl impl
 	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws ValidationJsurplusFilesException
 	{
-		// Ausgabe SIARD-Modul Ersichtlich das KOST-Val arbeitet
-		System.out.print( "J    " );
-		System.out.print( "\b\b\b\b\b" );
+		boolean showOnWork = true;
 		int onWork = 410;
+		// Informationen zur Darstellung "onWork" holen
+		String onWorkConfig = getConfigurationService().getShowProgressOnWork();
+		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
+		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
+		 * ref="configurationService" /> */
+		if ( onWorkConfig.equals( "no" ) ) {
+			// keine Ausgabe
+			showOnWork = false;
+		} else {
+			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
+			System.out.print( "J    " );
+			System.out.print( "\b\b\b\b\b" );
+		}
 
 		boolean valid = true;
 		try {
@@ -103,24 +114,26 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl impl
 			File[] schemas = content.listFiles();
 			for ( File schema : schemas ) {
 				valid = valid && validateSchema( schema, xPath, doc );
-				if ( onWork == 410 ) {
-					onWork = 2;
-					System.out.print( "J-   " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 110 ) {
-					onWork = onWork + 1;
-					System.out.print( "J\\   " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 210 ) {
-					onWork = onWork + 1;
-					System.out.print( "J|   " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 310 ) {
-					onWork = onWork + 1;
-					System.out.print( "J/   " );
-					System.out.print( "\b\b\b\b\b" );
-				} else {
-					onWork = onWork + 1;
+				if ( showOnWork ) {
+					if ( onWork == 410 ) {
+						onWork = 2;
+						System.out.print( "J-   " );
+						System.out.print( "\b\b\b\b\b" );
+					} else if ( onWork == 110 ) {
+						onWork = onWork + 1;
+						System.out.print( "J\\   " );
+						System.out.print( "\b\b\b\b\b" );
+					} else if ( onWork == 210 ) {
+						onWork = onWork + 1;
+						System.out.print( "J|   " );
+						System.out.print( "\b\b\b\b\b" );
+					} else if ( onWork == 310 ) {
+						onWork = onWork + 1;
+						System.out.print( "J/   " );
+						System.out.print( "\b\b\b\b\b" );
+					} else {
+						onWork = onWork + 1;
+					}
 				}
 			}
 			xPath = null;

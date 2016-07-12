@@ -1,0 +1,166 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>LWP::DebugFile - routines for tracing/debugging LWP</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;LWP::DebugFile - routines for tracing/debugging LWP</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#options">OPTIONS</a></li>
+	<li><a href="#output_file_naming">OUTPUT FILE NAMING</a></li>
+	<li><a href="#environment">ENVIRONMENT</a></li>
+	<li><a href="#implementation_notes">IMPLEMENTATION NOTES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#copyright_and_disclaimers">COPYRIGHT AND DISCLAIMERS</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>LWP::DebugFile - routines for tracing/debugging LWP</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p>If you want to see just what LWP is doing when your program calls it,
+add this to the beginning of your program's source:</p>
+<pre>
+  use LWP::DebugFile;</pre>
+<p>For even more verbose debug output, do this instead:</p>
+<pre>
+  use LWP::DebugFile ('+');</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>This module is like LWP::Debug in that it allows you to see what your
+calls to LWP are doing behind the scenes.  But it is unlike
+<a href="../../../site/lib/LWP/Debug.html">LWP::Debug</a> in that it sends the output to a file, instead
+of to STDERR (as LWP::Debug does).</p>
+<p>
+</p>
+<hr />
+<h1><a name="options">OPTIONS</a></h1>
+<p>The options you can use in <code>use LWP::DebugFile (options)</code> are the
+same as the <strong>non-exporting</strong> options available from <code>use LWP::Debug
+(I&lt;options&gt;)</code>.  That is, you can do things like this:</p>
+<pre>
+  use LWP::DebugFile qw(+);
+  use LWP::Debug qw(+ -conns);
+  use LWP::Debug qw(trace);</pre>
+<p>The meanings of these are explained in the
+<a href="../../../site/lib/LWP/Debug.html">documentation for LWP::Debug</a>.
+The only differences are that by default, LWP::DebugFile has <code>cons</code>
+debugging on, ad that (as mentioned earlier), only <code>non-exporting</code>
+options are available.  That is, you <strong>can't</strong> do this:</p>
+<pre>
+  use LWP::DebugFile qw(trace); # wrong</pre>
+<p>You might expect that to export LWP::Debug's <code>trace()</code> function,
+but it doesn't work -- it's a compile-time error.</p>
+<p>
+</p>
+<hr />
+<h1><a name="output_file_naming">OUTPUT FILE NAMING</a></h1>
+<p>If you don't do anything, the output file (where all the LWP debug/trace
+output goes) will be in the current directory, and will be named like
+<em>lwp_3db7aede_b93.log</em>, where <em>3db7aede</em> is <a href="../../../lib/Pod/perlvar.html#item__24_5et"><code>$^T</code></a> expressed in hex,
+and <code>b93</code> is <a href="../../../lib/Pod/perlvar.html#item__24_24"><code>$$</code></a> expressed in hex.  Presumably this is a
+unique-for-all-time filename!</p>
+<p>If you don't want the files to go in the current directory, you
+can set <code>$LWP::DebugFile::outpath</code> before you load the LWP::DebugFile
+module:</p>
+<pre>
+  BEGIN { $LWP::DebugFile::outpath = '/tmp/crunk/' }
+  use LWP::DebugFile;</pre>
+<p>Note that you must end the value with a path separator (``/'' in this
+case -- under MacPerl it would be ``:'').  With that set, you will
+have output files named like <em>/tmp/crunk/lwp_3db7aede_b93.log</em>.</p>
+<p>If you want the LWP::DebugFile output to go a specific filespec (instead
+of just a uniquely named file, in whatever directory), instead set the
+variable <code>$LWP::DebugFile::outname</code>, like so:</p>
+<pre>
+  BEGIN { $LWP::DebugFile::outname = '/home/mojojojo/lwp.log' }
+  use LWP::DebugFile;</pre>
+<p>In that case, <code>$LWP::DebugFile::outpath</code> isn't consulted at all, and
+output is always written to the file <em>/home/mojojojo/lwp.log</em>.</p>
+<p>Note that the value of <code>$LWP::DebugFile::outname</code> doesn't need to
+be an absolute filespec.  You can do this:</p>
+<pre>
+  BEGIN { $LWP::DebugFile::outname = 'lwp.log' }
+  use LWP::DebugFile;</pre>
+<p>In that case, output goes to a file named <em>lwp.log</em> in the current
+directory -- specifically, whatever directory is current when
+LWP::DebugFile is first loaded. <code>$LWP::DebugFile::outpath</code> is still not
+consulted -- its value is used only if <code>$LWP::DebugFile::outname</code>
+isn't set.</p>
+<p>
+</p>
+<hr />
+<h1><a name="environment">ENVIRONMENT</a></h1>
+<p>If you set the environment variables <code>LWPDEBUGPATH</code> or 
+<code>LWPDEBUGFILE</code>, their values will be used in initializing the
+values of <code>$LWP::DebugFile::outpath</code>
+and <code>$LWP::DebugFile::outname</code>.</p>
+<p>That is, if you have <code>LWPDEBUGFILE</code> set to <em>/home/mojojojo/lwp.log</em>,
+then you can just start out your program with:</p>
+<pre>
+  use LWP::DebugFile;</pre>
+<p>and it will act as if you had started it like this:</p>
+<pre>
+  BEGIN { $LWP::DebugFile::outname = '/home/mojojojo/lwp.log' }
+  use LWP::DebugFile;</pre>
+<p>
+</p>
+<hr />
+<h1><a name="implementation_notes">IMPLEMENTATION NOTES</a></h1>
+<p>This module works by subclassing <code>LWP::Debug</code>, (notably inheriting its
+<a href="../../../lib/Pod/perlfunc.html#item_import"><code>import</code></a>). It also redefines <code>&amp;LWP::Debug::conns</code> and
+<code>&amp;LWP::Debug::_log</code> to make for output that is a little more verbose,
+and friendlier for when you're looking at it later in a log file.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../../../site/lib/LWP/Debug.html">the LWP::Debug manpage</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright_and_disclaimers">COPYRIGHT AND DISCLAIMERS</a></h1>
+<p>Copyright (c) 2002 Sean M. Burke.</p>
+<p>This library is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.</p>
+<p>This program is distributed in the hope that it will be useful, but
+without any warranty; without even the implied warranty of
+merchantability or fitness for a particular purpose.</p>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Sean M. Burke <code>sburke@cpan.org</code></p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;LWP::DebugFile - routines for tracing/debugging LWP</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

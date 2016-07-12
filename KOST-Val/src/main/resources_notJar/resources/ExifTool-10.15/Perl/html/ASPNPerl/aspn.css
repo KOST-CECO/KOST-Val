@@ -1,0 +1,655 @@
+/* standard elements */
+body
+    {
+    background: #FFFFFF;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    }	
+td
+    {
+    font-size: 70%;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    text-decoration: none;
+    }
+input
+    {
+	font-size: 12px;
+    }
+select
+    {
+	font-size: 12px;
+    }
+p
+    {
+    color: #000000;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    }
+blockquote
+    {
+    color: #000000;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    }
+dl
+    {
+    color: #000000;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    }
+
+dt
+    {
+    color: #000000;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    }
+
+ul
+    {
+    color: #000000;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    list-style-type: disc;
+    }
+ol
+    {
+    color: #000000;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    }
+h1
+    { 
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    color: #B82619;
+    }
+h2 
+    {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    color: #B82619;
+    background-color: #EAE2BB;
+    }
+h3
+    { 
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    color: #000000;
+    }        
+h4
+    { 
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    font-weight: bold;
+    color: #B82619; 
+    } 	
+        
+/* default links */
+a:link 
+	{ 
+	color: #B82619;
+    text-decoration: underline;
+	}
+a:visited 
+	{ 
+	color: #80764F;
+    text-decoration: underline;
+	}
+a:hover
+	{
+	color: #000000;
+    text-decoration: underline;
+	}
+a:active 
+	{ 
+	color: #B82619;
+    text-decoration: underline;
+	}
+
+/* documentation link formatting */
+a.doc:link 
+	{ 
+	color: #B82619;
+    text-decoration: underline;
+	}
+a.doc:visited 
+	{ 
+	color: #B82619;
+    text-decoration: underline;
+	}
+a.doc:hover
+	{
+	color: #000000;
+    text-decoration: underline;
+	}
+a.doc:active 
+	{ 
+	color: #B82619;
+    text-decoration: underline;
+	}
+    
+/* general styles */	
+.heading 
+	{ 
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 18px;
+	font-weight: bold;
+	color: #B82619;
+	}
+.headingwhite
+	{ 
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 18px;
+	font-weight: bold;
+	color: #FFFFFF;
+	}
+.subheading 
+	{ 
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px; 
+	font-weight: bold;
+	color: #B82619;
+	}
+.subheadingsmall
+	{ 
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: bold;
+	color: #B82619;
+	}
+.subheadingblack 
+	{ 
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	color: #000000; 
+	}
+.subheadingwhite 
+	{ 
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	color: #FFFFFF; 
+	}
+.docsubheading
+	{
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 13px;
+	font-weight: bold;
+	color: #B82619;
+	background-color: #EAE2BB;
+	}
+.docsubheadinggrey
+	{
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 13px;
+	font-weight: bold;
+	color: #B82619;
+	background-color: #cccccc;
+    }
+.error
+    {
+    color: #B82619;
+    }    
+.err
+    {
+    color: #B82619;
+    }    
+    
+/* deco */
+.lineColour
+    {
+    background: #999999;
+    }
+    
+/* unordered list without bullets */
+ul.sans 
+	{ 
+	list-style-type: none;
+	}
+        
+/* user options */    
+td.userOptions
+    {
+    background: #FFFFFF;
+    font-size: 70%;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    text-decoration: none;
+    }
+    td.userOptions a:link
+        {
+        color: #B82619;
+        text-decoration: underline;
+        }	
+    td.userOptions a:visited
+        {
+        color: #B82619;
+        text-decoration: underline;
+        }	
+    
+/* primary navigation selected */
+td.navSel
+    {
+    background: #EAE2BB;
+    font-size: 12px;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    }
+    td.navSel a:link
+        {
+        color: #000000;
+        text-decoration: none;
+        }
+    td.navSel a:hover
+        {
+        color: #B82619;
+        text-decoration: none;
+        }
+    td.navSel a:active
+        {
+        color: #B82619;
+        text-decoration: none;
+        }
+    td.navSel a:visited
+        {
+        color: #000000;
+        text-decoration: none;
+        }
+    
+/* primary navigation not selected */
+td.navunSel
+    {
+    background: #B82619;
+    font-size: 12px;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    text-decoration: none;
+    }
+    td.navunSel a:link
+        {
+        color: #FFFFFF;
+        text-decoration: none;
+        }
+    td.navunSel a:hover
+        {
+        color: #FFFFFF;
+        text-decoration: none;
+        }
+    td.navunSel a:active
+        {
+        color: #FFFFFF;
+        text-decoration: none;
+        }
+    td.navunSel a:visited
+        {
+        color: #FFFFFF;
+        text-decoration: none;
+        }
+        
+/* secondary nav */
+td.navSecondary   
+    {
+    background: #EAE2BB;
+    color: #000000;
+    font-size: 11px;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    } 
+    td.navSecondary a:link
+        {
+        color: #000000;
+        text-decoration: none;
+        }
+    td.navSecondary a:hover
+        {
+        color: #B82619;
+        text-decoration: none;
+        }
+    td.navSecondary a:active
+        {
+        color: #B82619;
+        text-decoration: none;
+        }
+    td.navSecondary a:visited
+        {
+        color: #000000;
+        text-decoration: none;
+        }    
+
+/* categories */
+p.cat
+    {
+    line-height : 5px;
+    }
+p.cat a:link
+        {
+        color: #B82619;
+        }
+p.cat a:hover
+        {
+        color: #000000;
+        }
+p.cat a:active
+        {
+        color: #B82619;
+        }
+p.cat a:visited
+        {
+        color: #B82619;
+        }
+
+/* not currently used 
+a.cat1
+    {
+    font-size: 80%;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    }
+    a.cat1:link
+        {
+        color: #B82619;
+        }
+    a.cat1:hover
+        {
+        color: #000000;
+        }
+    a.cat1:active
+        {
+        color: #B82619;
+        }
+    a.cat1:visited
+        {
+        color: #80764F;
+        }
+
+a.cat2
+    {
+    font-size: 70%;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    text-indent: 5px;
+    }
+    a.cat2:link
+        {
+        color: #B82619;
+        }
+    a.cat2:hover
+        {
+        color: #000000;
+        }
+    a.cat2:active
+        {
+        color: #B82619;
+        }
+    a.cat2:visited
+        {
+        color: #80764F;
+        }  
+*/
+        
+/*  path  */
+td.path
+    {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 70%;
+    font-weight: normal;
+    color: #000000;
+    text-decoration: none;
+    } 
+           
+/*  footer  */
+td.footer 
+	{ 
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 70%;
+	color: #000000;
+	text-decoration: none;
+	}
+td.formRequired
+    {
+    font-size: 70%;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    }
+    
+/* search */
+td.searchResults
+    {
+    background: #FFFFFF;
+    font-size: 70%;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    text-decoration: none;
+    }    
+td.previousNext
+    {
+    background: #FFFFFF;
+    font-size: 70%;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    }
+td.previousNextRef
+    {
+    background: #EEEEEE;
+    font-size: 70%;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    }
+td.treeRefMain
+    {
+    background: #FFFFFF;
+    font-size: 80%;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    }
+    td.treeRefMain a:link
+        {
+        color: #000000;
+        text-decoration: none;
+        }	
+    td.treeRefMain a:visited
+        {
+        color: #666666;
+        text-decoration: none;
+        }	
+    td.treeRefMain a:hover
+        {
+        color: #B82619;
+        text-decoration: underline;
+        }	
+    td.treeRefMain a:active
+        {
+        color: #B82619;
+        text-decoration: underline;
+        }	
+td.treeRef
+    {
+    background: #FFFFFF;
+    font-size: 70%;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    }
+    td.treeRef a:link
+        {
+        color: #000000;
+        text-decoration: none;
+        }	
+    td.treeRef a:visited
+        {
+        color: #666666;
+        text-decoration: none;
+        }	
+    td.treeRef a:hover
+        {
+        color: #B82619;
+        text-decoration: underline;
+        }	
+    td.treeRef a:active
+        {
+        color: #B82619;
+        text-decoration: underline;
+        }	
+
+td.downloads
+    {
+    background: #FFFFFF;
+    font-size: 70%;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    }
+    td.downloads a:link
+        {
+        color: #B82619;
+        }	
+    td.downloads a:visited
+        {
+        color: #B82619;
+        }	
+td.downloadsBeta
+    {
+    background: #EEEEEE;
+    font-size: 70%;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    }
+    td.downloadsBeta a:link
+        {
+        color: #B82619;
+        }	
+    td.downloadsBeta a:visited
+        {
+        color: #B82619;
+        }
+p.downloadsMain
+    {
+    background: #FFFFFF;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    }
+    p.downloadsMain a:link
+        {
+        font-weight: normal;
+        }	
+    p.downloadsMain a:hover
+        {
+        font-weight: normal;
+        }	
+    p.downloadsMain a:active
+        {
+        font-weight: normal;
+        }	
+    p.downloadsMain a:visited
+        {
+        color: #B82619;
+        font-weight: normal;
+        }	
+
+    p.downloadsMain a.downloadName:link
+        {
+        color: #000000;
+        font-weight: bold;
+        }	
+    p.downloadsMain a.downloadName:hover
+        {
+        color: #000000;
+        font-weight: bold;
+        }	
+    p.downloadsMain a.downloadName:active
+        {
+        color: #000000;
+        font-weight: bold;
+        }	
+    p.downloadsMain a.downloadName:visited
+        {
+        color: #000000;
+        font-weight: bold;
+        }
+td.quote
+    {
+    color: #666666;
+    font-size: 70%;
+    }
+
+/* stuff for cookbook coloring */
+.syntaxstring { color:  #23238e; }
+.syntaxtext { color:  #000000; }
+.syntaxcomment { color:  #696969; }
+.syntaxname { color:  #000000; }
+.syntaxerror { color:  #e63c3c; }
+.syntaxkeyword { color:  #871f78; }
+/* end stuff */
+
+/* shopping cart */
+td.SCheader
+{
+	background: #C2B266;
+	font-size: 80%;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-weight : bold;
+	text-align : center;
+}
+
+td.SCshade
+{
+	background: #EAE2BB;
+    font-size: 80%;
+    font-family: Verdana, Arial, Helvetica, sans-serif;	
+}
+
+/* used on popup */
+a.windowClose:link
+	{ 
+	font-weight: bold;
+	color: 		#FFFFFF;
+	}
+a.windowClose:visited 
+	{ 
+	font-weight: bold;
+	color: 		#FFFFFF;
+	}
+a.windowClose:hover 
+	{ 
+	font-weight: bold;
+	color: 		#FFFFFF;
+	}
+a.windowClose:active 
+	{ 
+	font-weight: bold;
+	color: 		#FFFFFF;
+	}
+
+/* used by mailarchive */
+a.arc:link
+        {
+        color: #000000;
+        text-decoration: none;
+        }	
+a.arc:visited
+        {
+        color: #666666;
+        text-decoration: none;
+        }	
+a.arc:hover
+        {
+        color: #B82619;
+        text-decoration: underline;
+        }	
+a.arc:active
+        {
+        color: #B82619;
+        text-decoration: underline;
+        }	
+
+/* used to highlight search terms */
+.highlight1 { background: #EAE2BB; }
+.highlight2 { background: #BBBBBB; }
+.highlight3 { background: #CFBF7F; }
+.highlight4 { background: #DDDDDD; }
+.highlight5 { background: #CCC8B8; }
+.mail_quotation { color: #80764F; }

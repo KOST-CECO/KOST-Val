@@ -1,6 +1,6 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
- * Information Package (SIP). Copyright (C) 2012-2016 Claire Röthlisberger (KOST-CECO), Christian
+ * Information Package (SIP). Copyright (C) 2012-2016 Claire Roethlisberger (KOST-CECO), Christian
  * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
  * Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
@@ -33,7 +33,7 @@ import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesip1.Validation1cNamingModule;
 
-/** Diverse Validierungen zu den Namen der Files und Ordner, erlaubte Längen, verwendete Zeichen usw. */
+/** Diverse Validierungen zu den Namen der Files und Ordner, erlaubte Lï¿½ngen, verwendete Zeichen usw. */
 public class Validation1cNamingModuleImpl extends ValidationModuleImpl implements
 		Validation1cNamingModule
 {
@@ -54,10 +54,21 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl implement
 	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws Validation1cNamingException
 	{
-		// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
-		System.out.print( "1C   " );
-		System.out.print( "\b\b\b\b\b" );
+		boolean showOnWork = true;
 		int onWork = 410;
+		// Informationen zur Darstellung "onWork" holen
+		String onWorkConfig = getConfigurationService().getShowProgressOnWork();
+		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
+		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
+		 * ref="configurationService" /> */
+		if ( onWorkConfig.equals( "no" ) ) {
+			// keine Ausgabe
+			showOnWork = false;
+		} else {
+			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
+			System.out.print( "1C   " );
+			System.out.print( "\b\b\b\b\b" );
+		}
 
 		boolean valid = true;
 		boolean charIo = true;
@@ -99,24 +110,26 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl implement
 						charIo = false;
 					}
 				}
-				if ( onWork == 410 ) {
-					onWork = 2;
-					System.out.print( "1C-  " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 110 ) {
-					onWork = onWork + 1;
-					System.out.print( "1C\\  " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 210 ) {
-					onWork = onWork + 1;
-					System.out.print( "1C|  " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 310 ) {
-					onWork = onWork + 1;
-					System.out.print( "1C/  " );
-					System.out.print( "\b\b\b\b\b" );
-				} else {
-					onWork = onWork + 1;
+				if ( showOnWork ) {
+					if ( onWork == 410 ) {
+						onWork = 2;
+						System.out.print( "1C-  " );
+						System.out.print( "\b\b\b\b\b" );
+					} else if ( onWork == 110 ) {
+						onWork = onWork + 1;
+						System.out.print( "1C\\  " );
+						System.out.print( "\b\b\b\b\b" );
+					} else if ( onWork == 210 ) {
+						onWork = onWork + 1;
+						System.out.print( "1C|  " );
+						System.out.print( "\b\b\b\b\b" );
+					} else if ( onWork == 310 ) {
+						onWork = onWork + 1;
+						System.out.print( "1C/  " );
+						System.out.print( "\b\b\b\b\b" );
+					} else {
+						onWork = onWork + 1;
+					}
 				}
 			}
 		} catch ( Exception e ) {
@@ -138,7 +151,7 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl implement
 			sipIo = false;
 		}
 
-		// III.) Validierung der beiden Second-Level-Ordner im Toplevel-Ordner, es müssen genau header/
+		// III.) Validierung der beiden Second-Level-Ordner im Toplevel-Ordner, es mÃ¼ssen genau header/
 		// und content/ vorhanden sein und nichts anderes.
 		try {
 			File dir = valDatei;
@@ -155,24 +168,26 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl implement
 									+ getTextResourceService().getText( MESSAGE_XML_AC_NOTALLOWEDFILE, name ) );
 					tlIo = false;
 				}
-				if ( onWork == 410 ) {
-					onWork = 2;
-					System.out.print( "1C-  " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 110 ) {
-					onWork = onWork + 1;
-					System.out.print( "1C\\  " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 210 ) {
-					onWork = onWork + 1;
-					System.out.print( "1C|  " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 310 ) {
-					onWork = onWork + 1;
-					System.out.print( "1C/  " );
-					System.out.print( "\b\b\b\b\b" );
-				} else {
-					onWork = onWork + 1;
+				if ( showOnWork ) {
+					if ( onWork == 410 ) {
+						onWork = 2;
+						System.out.print( "1C-  " );
+						System.out.print( "\b\b\b\b\b" );
+					} else if ( onWork == 110 ) {
+						onWork = onWork + 1;
+						System.out.print( "1C\\  " );
+						System.out.print( "\b\b\b\b\b" );
+					} else if ( onWork == 210 ) {
+						onWork = onWork + 1;
+						System.out.print( "1C|  " );
+						System.out.print( "\b\b\b\b\b" );
+					} else if ( onWork == 310 ) {
+						onWork = onWork + 1;
+						System.out.print( "1C/  " );
+						System.out.print( "\b\b\b\b\b" );
+					} else {
+						onWork = onWork + 1;
+					}
 				}
 			}
 		} catch ( Exception e ) {
@@ -182,7 +197,7 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl implement
 			return false;
 		}
 
-		// IV.) Validierung des header-Ordner, es müssen genau xsd/ und metadata.xml vorhanden sein und
+		// IV.) Validierung des header-Ordner, es mÃ¼ssen genau xsd/ und metadata.xml vorhanden sein und
 		// nichts anderes.
 		try {
 			File dir = new File( valDatei.getAbsolutePath() + File.separator + "header" );
@@ -199,24 +214,26 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl implement
 											"header/" + name ) );
 					tlIo = false;
 				}
-				if ( onWork == 410 ) {
-					onWork = 2;
-					System.out.print( "1C-  " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 110 ) {
-					onWork = onWork + 1;
-					System.out.print( "1C\\  " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 210 ) {
-					onWork = onWork + 1;
-					System.out.print( "1C|  " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 310 ) {
-					onWork = onWork + 1;
-					System.out.print( "1C/  " );
-					System.out.print( "\b\b\b\b\b" );
-				} else {
-					onWork = onWork + 1;
+				if ( showOnWork ) {
+					if ( onWork == 410 ) {
+						onWork = 2;
+						System.out.print( "1C-  " );
+						System.out.print( "\b\b\b\b\b" );
+					} else if ( onWork == 110 ) {
+						onWork = onWork + 1;
+						System.out.print( "1C\\  " );
+						System.out.print( "\b\b\b\b\b" );
+					} else if ( onWork == 210 ) {
+						onWork = onWork + 1;
+						System.out.print( "1C|  " );
+						System.out.print( "\b\b\b\b\b" );
+					} else if ( onWork == 310 ) {
+						onWork = onWork + 1;
+						System.out.print( "1C/  " );
+						System.out.print( "\b\b\b\b\b" );
+					} else {
+						onWork = onWork + 1;
+					}
 				}
 			}
 		} catch ( Exception e ) {
@@ -226,11 +243,11 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl implement
 			return false;
 		}
 
-		// V.) Im xsd Folder wiederum dürfen sich nur eine Reihe *.xsd files, welche sich je nach
+		// V.) Im xsd Folder wiederum dï¿½rfen sich nur eine Reihe *.xsd files, welche sich je nach
 		// SIP-Version unterscheiden. Validieren ob vorliegende Version erlaubt ist.
 		String allowedV1 = getConfigurationService().getAllowedVersionBar1();
 		String allowedV4 = getConfigurationService().getAllowedVersionBar4Ech1();
-		// generiert eine Map mit den xsd-files und Ordnern, welche in header/xsd/ enthalten sein müssen
+		// generiert eine Map mit den xsd-files und Ordnern, welche in header/xsd/ enthalten sein mÃ¼ssen
 		Map<String, String> allowedXsdFiles = new HashMap<String, String>();
 
 		try {
@@ -269,9 +286,9 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl implement
 							valid = false;
 						}
 					} else {
-						/* eigentlich müsste es ansonsten arelda.xsd enthalten sein.
+						/* eigentlich mï¿½sste es ansonsten arelda.xsd enthalten sein.
 						 * 
-						 * Da aber bei schreibfehler in diesem Dateinamen alle xsd bemängelt werden wurde es
+						 * Da aber bei schreibfehler in diesem Dateinamen alle xsd bemï¿½ngelt werden wurde es
 						 * durch ein else ersetzt
 						 * 
 						 * if ( name.endsWith( "arelda.xsd" ) ) { */
@@ -304,29 +321,31 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl implement
 						}
 					}
 				}
-				if ( onWork == 410 ) {
-					onWork = 2;
-					System.out.print( "1C-  " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 110 ) {
-					onWork = onWork + 1;
-					System.out.print( "1C\\  " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 210 ) {
-					onWork = onWork + 1;
-					System.out.print( "1C|  " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 310 ) {
-					onWork = onWork + 1;
-					System.out.print( "1C/  " );
-					System.out.print( "\b\b\b\b\b" );
-				} else {
-					onWork = onWork + 1;
+				if ( showOnWork ) {
+					if ( onWork == 410 ) {
+						onWork = 2;
+						System.out.print( "1C-  " );
+						System.out.print( "\b\b\b\b\b" );
+					} else if ( onWork == 110 ) {
+						onWork = onWork + 1;
+						System.out.print( "1C\\  " );
+						System.out.print( "\b\b\b\b\b" );
+					} else if ( onWork == 210 ) {
+						onWork = onWork + 1;
+						System.out.print( "1C|  " );
+						System.out.print( "\b\b\b\b\b" );
+					} else if ( onWork == 310 ) {
+						onWork = onWork + 1;
+						System.out.print( "1C/  " );
+						System.out.print( "\b\b\b\b\b" );
+					} else {
+						onWork = onWork + 1;
+					}
 				}
 			}
 
 			if ( valid != false ) {
-				// Dieser Schritt wird nur durchgeführt, wenn die verwendete Version erlaubt ist
+				// Dieser Schritt wird nur durchgefï¿½hrt, wenn die verwendete Version erlaubt ist
 
 				// Liste mit den File objects in xsd
 				File[] filesXsd2 = xsd.listFiles();
@@ -342,24 +361,26 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl implement
 												"header/xsd/" + name ) );
 						valid = false;
 					}
-					if ( onWork == 410 ) {
-						onWork = 2;
-						System.out.print( "1C-  " );
-						System.out.print( "\b\b\b\b\b" );
-					} else if ( onWork == 110 ) {
-						onWork = onWork + 1;
-						System.out.print( "1C\\  " );
-						System.out.print( "\b\b\b\b\b" );
-					} else if ( onWork == 210 ) {
-						onWork = onWork + 1;
-						System.out.print( "1C|  " );
-						System.out.print( "\b\b\b\b\b" );
-					} else if ( onWork == 310 ) {
-						onWork = onWork + 1;
-						System.out.print( "1C/  " );
-						System.out.print( "\b\b\b\b\b" );
-					} else {
-						onWork = onWork + 1;
+					if ( showOnWork ) {
+						if ( onWork == 410 ) {
+							onWork = 2;
+							System.out.print( "1C-  " );
+							System.out.print( "\b\b\b\b\b" );
+						} else if ( onWork == 110 ) {
+							onWork = onWork + 1;
+							System.out.print( "1C\\  " );
+							System.out.print( "\b\b\b\b\b" );
+						} else if ( onWork == 210 ) {
+							onWork = onWork + 1;
+							System.out.print( "1C|  " );
+							System.out.print( "\b\b\b\b\b" );
+						} else if ( onWork == 310 ) {
+							onWork = onWork + 1;
+							System.out.print( "1C/  " );
+							System.out.print( "\b\b\b\b\b" );
+						} else {
+							onWork = onWork + 1;
+						}
 					}
 				}
 
@@ -371,24 +392,26 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl implement
 									+ getTextResourceService().getText( MESSAGE_XML_AC_MISSINGFILE,
 											"header/xsd/" + string ) );
 					valid = false;
-					if ( onWork == 410 ) {
-						onWork = 2;
-						System.out.print( "1C-  " );
-						System.out.print( "\b\b\b\b\b" );
-					} else if ( onWork == 110 ) {
-						onWork = onWork + 1;
-						System.out.print( "1C\\  " );
-						System.out.print( "\b\b\b\b\b" );
-					} else if ( onWork == 210 ) {
-						onWork = onWork + 1;
-						System.out.print( "1C|  " );
-						System.out.print( "\b\b\b\b\b" );
-					} else if ( onWork == 310 ) {
-						onWork = onWork + 1;
-						System.out.print( "1C/  " );
-						System.out.print( "\b\b\b\b\b" );
-					} else {
-						onWork = onWork + 1;
+					if ( showOnWork ) {
+						if ( onWork == 410 ) {
+							onWork = 2;
+							System.out.print( "1C-  " );
+							System.out.print( "\b\b\b\b\b" );
+						} else if ( onWork == 110 ) {
+							onWork = onWork + 1;
+							System.out.print( "1C\\  " );
+							System.out.print( "\b\b\b\b\b" );
+						} else if ( onWork == 210 ) {
+							onWork = onWork + 1;
+							System.out.print( "1C|  " );
+							System.out.print( "\b\b\b\b\b" );
+						} else if ( onWork == 310 ) {
+							onWork = onWork + 1;
+							System.out.print( "1C/  " );
+							System.out.print( "\b\b\b\b\b" );
+						} else {
+							onWork = onWork + 1;
+						}
 					}
 				}
 			}
@@ -400,7 +423,7 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl implement
 			return false;
 		}
 
-		// VI.+ VII) Länge der Pfade (< 180) und File/Ordnernamen (<41)
+		// VI.+ VII) Lï¿½nge der Pfade (< 180) und File/Ordnernamen (<41)
 		Integer maxPathLength = getConfigurationService().getMaximumPathLength();
 		Integer maxFileLength = getConfigurationService().getMaximumFileLength();
 		try {
@@ -421,7 +444,7 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl implement
 
 				String[] pathElements = name.split( "/" );
 				if ( version == 1 ) {
-					// Einschränkung der Namenslänge muss geprüft werden
+					// Einschrï¿½nkung der Namenslï¿½nge muss geprï¿½ft werden
 					for ( int i = 0; i < pathElements.length; i++ ) {
 						String pathElement = pathElements[i];
 						if ( pathElement.length() > maxFileLength.intValue() ) {
@@ -433,24 +456,26 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl implement
 						}
 					}
 				}
-				if ( onWork == 410 ) {
-					onWork = 2;
-					System.out.print( "1C-  " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 110 ) {
-					onWork = onWork + 1;
-					System.out.print( "1C\\  " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 210 ) {
-					onWork = onWork + 1;
-					System.out.print( "1C|  " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 310 ) {
-					onWork = onWork + 1;
-					System.out.print( "1C/  " );
-					System.out.print( "\b\b\b\b\b" );
-				} else {
-					onWork = onWork + 1;
+				if ( showOnWork ) {
+					if ( onWork == 410 ) {
+						onWork = 2;
+						System.out.print( "1C-  " );
+						System.out.print( "\b\b\b\b\b" );
+					} else if ( onWork == 110 ) {
+						onWork = onWork + 1;
+						System.out.print( "1C\\  " );
+						System.out.print( "\b\b\b\b\b" );
+					} else if ( onWork == 210 ) {
+						onWork = onWork + 1;
+						System.out.print( "1C|  " );
+						System.out.print( "\b\b\b\b\b" );
+					} else if ( onWork == 310 ) {
+						onWork = onWork + 1;
+						System.out.print( "1C/  " );
+						System.out.print( "\b\b\b\b\b" );
+					} else {
+						onWork = onWork + 1;
+					}
 				}
 			}
 		} catch ( Exception e ) {

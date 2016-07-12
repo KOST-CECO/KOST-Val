@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Tk::SlideSwitch - a 2 position horizontal or vertical switch.</title>
+<link rel="stylesheet" href="../../../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::SlideSwitch - a 2 position horizontal or vertical switch.</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#options">OPTIONS</a></li>
+	<li><a href="#methods">METHODS</a></li>
+	<li><a href="#advertised_widgets">ADVERTISED WIDGETS</a></li>
+	<li><a href="#example">EXAMPLE</a></li>
+	<li><a href="#bugs">BUGS</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+	<li><a href="#keywords">KEYWORDS</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Tk::SlideSwitch - a 2 position horizontal or vertical switch.</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ use Tk::SlideSwitch;</pre>
+<pre>
+ my $sl = $frame1-&gt;SlideSwitch(
+     -bg          =&gt; 'gray',
+     -orient      =&gt; 'horizontal',
+     -command     =&gt; [$self =&gt; 'on'],
+     -llabel      =&gt; [-text =&gt; 'OFF', -foreground =&gt; 'blue'],
+     -rlabel      =&gt; [-text =&gt; 'ON',  -foreground =&gt; 'blue'],
+     -troughcolor =&gt; 'tan',
+ )-&gt;pack(qw/-side left -expand 1/);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>Tk::SlideSwitch is a Frame based composite mega-widget featuring a binary Scale
+widget surrounded by two Label widgets.  The Scale's value can be either 0 or
+1. The Labels are positioned to the left and right of the Scale if its
+orientation is horizontal, else on the top and bottom of the Scale.</p>
+<p>
+</p>
+<hr />
+<h1><a name="options">OPTIONS</a></h1>
+<p>In addition to all Scale options, the following option/value pairs are
+also supported:</p>
+<dl>
+<dt><strong><a name="item__2dllabel"><strong>-llabel</strong></a></strong><br />
+</dt>
+<dd>
+A reference to an array of left (or top) Label configuration options.
+</dd>
+<p></p>
+<dt><strong><a name="item__2drlabel"><strong>-rlabel</strong></a></strong><br />
+</dt>
+<dd>
+A reference to an array of right (or bottom) Label configuration options.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="methods">METHODS</a></h1>
+<p>There are no special methods.</p>
+<p>
+</p>
+<hr />
+<h1><a name="advertised_widgets">ADVERTISED WIDGETS</a></h1>
+<p>Component subwidgets can be accessed via the <strong>Subwidget</strong> method.
+This mega widget has no advertised subwidgets.</p>
+<p>
+</p>
+<hr />
+<h1><a name="example">EXAMPLE</a></h1>
+<p>See Synopsis.</p>
+<p>
+</p>
+<hr />
+<h1><a name="bugs">BUGS</a></h1>
+<p>This widget uses only the pack geometry manager.</p>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p><a href="mailto:sol0@Lehigh.EDU">sol0@Lehigh.EDU</a></p>
+<p>Copyright (C) 2002 - 2003, Steve Lidie. All rights reserved.</p>
+<p>This program is free software; you can redistribute it and/or
+modify it under the same terms as Perl itself.</p>
+<p>
+</p>
+<hr />
+<h1><a name="keywords">KEYWORDS</a></h1>
+<p>SlideSwitch, Scale</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::SlideSwitch - a 2 position horizontal or vertical switch.</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

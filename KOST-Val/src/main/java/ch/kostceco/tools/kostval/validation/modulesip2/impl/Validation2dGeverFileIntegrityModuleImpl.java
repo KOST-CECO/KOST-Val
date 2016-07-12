@@ -1,6 +1,6 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
- * Information Package (SIP). Copyright (C) 2012-2016 Claire Röthlisberger (KOST-CECO), Christian
+ * Information Package (SIP). Copyright (C) 2012-2016 Claire Roethlisberger (KOST-CECO), Christian
  * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
  * Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
@@ -38,27 +38,50 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import ch.kostceco.tools.kostval.exception.modulesip2.Validation2dGeverFileIntegrityException;
+import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesip2.Validation2dGeverFileIntegrityModule;
 
-/** Validierungsschritt 2d Bei GEVER SIP prüfen, ob alle in (metadata.xml)
+/** Validierungsschritt 2d Bei GEVER SIP prï¿½fen, ob alle in (metadata.xml)
  * /paket/inhaltsverzeichnis/content referenzierten Dateien auch in
- * (metadata.xml)/paket/ablieferung/ordnungsystem verzeichnet sind. Allfällige Inkonsistenzen
+ * (metadata.xml)/paket/ablieferung/ordnungsystem verzeichnet sind. AllfÃ¤llige Inkonsistenzen
  * auflisten. ( //dokument[@id] => //datei[@id] ). */
 
 public class Validation2dGeverFileIntegrityModuleImpl extends ValidationModuleImpl implements
 		Validation2dGeverFileIntegrityModule
 {
 
+	private ConfigurationService	configurationService;
+
+	public ConfigurationService getConfigurationService()
+	{
+		return configurationService;
+	}
+
+	public void setConfigurationService( ConfigurationService configurationService )
+	{
+		this.configurationService = configurationService;
+	}
+
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws Validation2dGeverFileIntegrityException
 	{
-		// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
-		System.out.print( "2D   " );
-		System.out.print( "\b\b\b\b\b" );
+		boolean showOnWork = true;
 		int onWork = 410;
-
+		// Informationen zur Darstellung "onWork" holen
+		String onWorkConfig = getConfigurationService().getShowProgressOnWork();
+		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
+		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
+		 * ref="configurationService" /> */
+		if ( onWorkConfig.equals( "no" ) ) {
+			// keine Ausgabe
+			showOnWork = false;
+		} else {
+			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
+			System.out.print( "2D   " );
+			System.out.print( "\b\b\b\b\b" );
+		}
 		Map<String, String> dateiRefContent = new HashMap<String, String>();
 		Map<String, String> dateiRefOrdnungssystem = new HashMap<String, String>();
 
@@ -92,24 +115,26 @@ public class Validation2dGeverFileIntegrityModuleImpl extends ValidationModuleIm
 
 					Node titelNode = titelList.item( 0 );
 					dateiRefOrdnungssystem.put( fstNode.getTextContent(), titelNode.getTextContent() );
-					if ( onWork == 410 ) {
-						onWork = 2;
-						System.out.print( "2D-  " );
-						System.out.print( "\b\b\b\b\b" );
-					} else if ( onWork == 110 ) {
-						onWork = onWork + 1;
-						System.out.print( "2D\\  " );
-						System.out.print( "\b\b\b\b\b" );
-					} else if ( onWork == 210 ) {
-						onWork = onWork + 1;
-						System.out.print( "2D|  " );
-						System.out.print( "\b\b\b\b\b" );
-					} else if ( onWork == 310 ) {
-						onWork = onWork + 1;
-						System.out.print( "2D/  " );
-						System.out.print( "\b\b\b\b\b" );
-					} else {
-						onWork = onWork + 1;
+					if ( showOnWork ) {
+						if ( onWork == 410 ) {
+							onWork = 2;
+							System.out.print( "2D-  " );
+							System.out.print( "\b\b\b\b\b" );
+						} else if ( onWork == 110 ) {
+							onWork = onWork + 1;
+							System.out.print( "2D\\  " );
+							System.out.print( "\b\b\b\b\b" );
+						} else if ( onWork == 210 ) {
+							onWork = onWork + 1;
+							System.out.print( "2D|  " );
+							System.out.print( "\b\b\b\b\b" );
+						} else if ( onWork == 310 ) {
+							onWork = onWork + 1;
+							System.out.print( "2D/  " );
+							System.out.print( "\b\b\b\b\b" );
+						} else {
+							onWork = onWork + 1;
+						}
 					}
 				}
 
@@ -140,24 +165,26 @@ public class Validation2dGeverFileIntegrityModuleImpl extends ValidationModuleIm
 									+ "/" + titelNode.getTextContent() );
 						}
 					}
-					if ( onWork == 410 ) {
-						onWork = 2;
-						System.out.print( "2D-  " );
-						System.out.print( "\b\b\b\b\b" );
-					} else if ( onWork == 110 ) {
-						onWork = onWork + 1;
-						System.out.print( "2D\\  " );
-						System.out.print( "\b\b\b\b\b" );
-					} else if ( onWork == 210 ) {
-						onWork = onWork + 1;
-						System.out.print( "2D|  " );
-						System.out.print( "\b\b\b\b\b" );
-					} else if ( onWork == 310 ) {
-						onWork = onWork + 1;
-						System.out.print( "2D/  " );
-						System.out.print( "\b\b\b\b\b" );
-					} else {
-						onWork = onWork + 1;
+					if ( showOnWork ) {
+						if ( onWork == 410 ) {
+							onWork = 2;
+							System.out.print( "2D-  " );
+							System.out.print( "\b\b\b\b\b" );
+						} else if ( onWork == 110 ) {
+							onWork = onWork + 1;
+							System.out.print( "2D\\  " );
+							System.out.print( "\b\b\b\b\b" );
+						} else if ( onWork == 210 ) {
+							onWork = onWork + 1;
+							System.out.print( "2D|  " );
+							System.out.print( "\b\b\b\b\b" );
+						} else if ( onWork == 310 ) {
+							onWork = onWork + 1;
+							System.out.print( "2D/  " );
+							System.out.print( "\b\b\b\b\b" );
+						} else {
+							onWork = onWork + 1;
+						}
 					}
 				}
 
@@ -176,24 +203,26 @@ public class Validation2dGeverFileIntegrityModuleImpl extends ValidationModuleIm
 						}
 						valid = false;
 					}
-					if ( onWork == 410 ) {
-						onWork = 2;
-						System.out.print( "2D-  " );
-						System.out.print( "\b\b\b\b\b" );
-					} else if ( onWork == 110 ) {
-						onWork = onWork + 1;
-						System.out.print( "2D\\  " );
-						System.out.print( "\b\b\b\b\b" );
-					} else if ( onWork == 210 ) {
-						onWork = onWork + 1;
-						System.out.print( "2D|  " );
-						System.out.print( "\b\b\b\b\b" );
-					} else if ( onWork == 310 ) {
-						onWork = onWork + 1;
-						System.out.print( "2D/  " );
-						System.out.print( "\b\b\b\b\b" );
-					} else {
-						onWork = onWork + 1;
+					if ( showOnWork ) {
+						if ( onWork == 410 ) {
+							onWork = 2;
+							System.out.print( "2D-  " );
+							System.out.print( "\b\b\b\b\b" );
+						} else if ( onWork == 110 ) {
+							onWork = onWork + 1;
+							System.out.print( "2D\\  " );
+							System.out.print( "\b\b\b\b\b" );
+						} else if ( onWork == 210 ) {
+							onWork = onWork + 1;
+							System.out.print( "2D|  " );
+							System.out.print( "\b\b\b\b\b" );
+						} else if ( onWork == 310 ) {
+							onWork = onWork + 1;
+							System.out.print( "2D/  " );
+							System.out.print( "\b\b\b\b\b" );
+						} else {
+							onWork = onWork + 1;
+						}
 					}
 				}
 
@@ -208,24 +237,26 @@ public class Validation2dGeverFileIntegrityModuleImpl extends ValidationModuleIm
 											+ getTextResourceService().getText( MESSAGE_XML_BD_MISSINGINABLIEFERUNG,
 													keyOrd ) );
 					valid = false;
-					if ( onWork == 410 ) {
-						onWork = 2;
-						System.out.print( "2D-  " );
-						System.out.print( "\b\b\b\b\b" );
-					} else if ( onWork == 110 ) {
-						onWork = onWork + 1;
-						System.out.print( "2D\\  " );
-						System.out.print( "\b\b\b\b\b" );
-					} else if ( onWork == 210 ) {
-						onWork = onWork + 1;
-						System.out.print( "2D|  " );
-						System.out.print( "\b\b\b\b\b" );
-					} else if ( onWork == 310 ) {
-						onWork = onWork + 1;
-						System.out.print( "2D/  " );
-						System.out.print( "\b\b\b\b\b" );
-					} else {
-						onWork = onWork + 1;
+					if ( showOnWork ) {
+						if ( onWork == 410 ) {
+							onWork = 2;
+							System.out.print( "2D-  " );
+							System.out.print( "\b\b\b\b\b" );
+						} else if ( onWork == 110 ) {
+							onWork = onWork + 1;
+							System.out.print( "2D\\  " );
+							System.out.print( "\b\b\b\b\b" );
+						} else if ( onWork == 210 ) {
+							onWork = onWork + 1;
+							System.out.print( "2D|  " );
+							System.out.print( "\b\b\b\b\b" );
+						} else if ( onWork == 310 ) {
+							onWork = onWork + 1;
+							System.out.print( "2D/  " );
+							System.out.print( "\b\b\b\b\b" );
+						} else {
+							onWork = onWork + 1;
+						}
 					}
 				}
 

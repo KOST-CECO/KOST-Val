@@ -1,0 +1,135 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>HTML::Entities - Encode or decode strings with HTML entities</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;HTML::Entities - Encode or decode strings with HTML entities</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>HTML::Entities - Encode or decode strings with HTML entities</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ use HTML::Entities;</pre>
+<pre>
+ $a = &quot;V&amp;aring;re norske tegn b&amp;oslash;r &amp;#230res&quot;;
+ decode_entities($a);
+ encode_entities($a, &quot;\200-\377&quot;);</pre>
+<p>For example, this:</p>
+<pre>
+ $input = &quot;vis-à-vis Beyoncé's naïve\npapier-mâché résumé&quot;;
+ print encode_entities($in), &quot;\n&quot;</pre>
+<p>Prints this out:</p>
+<pre>
+ vis-&amp;agrave;-vis Beyonc&amp;eacute;'s na&amp;iuml;ve
+ papier-m&amp;acirc;ch&amp;eacute; r&amp;eacute;sum&amp;eacute;</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>This module deals with encoding and decoding of strings with HTML
+character entities.  The module provides the following functions:</p>
+<dl>
+<dt><strong><a name="item_decode_entities">decode_entities( $string )</a></strong><br />
+</dt>
+<dd>
+This routine replaces HTML entities found in the $string with the
+corresponding ISO-8859-1 character, and if possible (under perl 5.8
+or later) will replace to Unicode characters.  Unrecognized
+entities are left alone.
+</dd>
+<dd>
+<p>This routine is exported by default.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item_encode_entities">encode_entities( $string )</a></strong><br />
+</dt>
+<dt><strong>encode_entities( $string, $unsafe_chars )</strong><br />
+</dt>
+<dd>
+This routine replaces unsafe characters in $string with their entity
+representation. A second argument can be given to specify which
+characters to consider unsafe (i.e., which to escape). The default set
+of characters to encode are control chars, high-bit chars, and the
+<code>&lt;</code>, <code>&amp;</code>, <code>&gt;</code>, and <code>&quot;</code>
+characters.  But this, for example, would encode <em>just</em> the
+<code>&lt;</code>, <code>&amp;</code>, <code>&gt;</code>, and <code>&quot;</code> characters:
+</dd>
+<dd>
+<pre>
+  $escaped = encode_entities($input, '&lt;&gt;&amp;&quot;');</pre>
+</dd>
+<dd>
+<p>This routine is exported by default.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item_encode_entities_numeric">encode_entities_numeric( $string )</a></strong><br />
+</dt>
+<dt><strong>encode_entities_numeric( $string, $unsafe_chars )</strong><br />
+</dt>
+<dd>
+This routine works just like encode_entities, except that the replacement
+entities are always <code>&amp;#xhexnum;</code> and never <code>&amp;entname;</code>.  For
+example, <code>escape_entities(&quot;r\xF4le&quot;)</code> returns ``r&amp;ocirc;le'', but
+<code>escape_entities_numeric(&quot;r\xF4le&quot;)</code> returns ``r&amp;#xF4;le''.
+</dd>
+<dd>
+<p>This routine is <em>not</em> exported by default.  But you can always
+export it with <code>use HTML::Entities qw(encode_entities_numeric);</code>
+or even <code>use HTML::Entities qw(:DEFAULT encode_entities_numeric);</code></p>
+</dd>
+<p></p></dl>
+<p>All these routines modify the string passed as the first argument, if
+called in a void context.  In scalar and array contexts, the encoded or
+decoded string is returned (without changing the input string).</p>
+<p>If you prefer not to import these routines into your namespace, you can
+call them as:</p>
+<pre>
+  use HTML::Entities ();
+  $decoded = HTML::Entities::decode($a);
+  $encoded = HTML::Entities::encode($a);
+  $encoded = HTML::Entities::encode_numeric($a);</pre>
+<p>The module can also export the %char2entity and the %entity2char
+hashes, which contain the mapping from all characters to the
+corresponding entities (and vice versa, respectively).</p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 1995-2003 Gisle Aas. All rights reserved.</p>
+<p>This library is free software; you can redistribute it and/or
+modify it under the same terms as Perl itself.</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;HTML::Entities - Encode or decode strings with HTML entities</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

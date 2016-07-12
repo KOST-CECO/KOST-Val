@@ -1,6 +1,6 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
- * Information Package (SIP). Copyright (C) 2012-2016 Claire Röthlisberger (KOST-CECO), Christian
+ * Information Package (SIP). Copyright (C) 2012-2016 Claire Roethlisberger (KOST-CECO), Christian
  * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
  * Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
@@ -87,7 +87,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	@Override
 	public String getPathToWorkDir()
 	{
-		/** Gibt den Pfad des Arbeitsverzeichnisses zurück. Dieses Verzeichnis wird zum Entpacken des
+		/** Gibt den Pfad des Arbeitsverzeichnisses zurÃ¼ck. Dieses Verzeichnis wird zum Entpacken des
 		 * .zip-Files verwendet.
 		 * 
 		 * @return Pfad des Arbeitsverzeichnisses */
@@ -102,7 +102,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	@Override
 	public String getPathToLogfile()
 	{
-		/** Gibt den Pfad des Logverzeichnisses zurück.
+		/** Gibt den Pfad des Logverzeichnisses zurÃ¼ck.
 		 * 
 		 * @return Pfad des Logverzeichnisses */
 		Object prop = getConfig().getProperty( "pathtologfile" );
@@ -116,7 +116,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	@Override
 	public String getPathToDiagnose()
 	{
-		/** Gibt den Pfad zu den Diagnosedaten zurück.
+		/** Gibt den Pfad zu den Diagnosedaten zurÃ¼ck.
 		 * 
 		 * @return Pfad zu Diagnosedaten */
 		Object prop = getConfig().getProperty( "pathtodiagnose" );
@@ -130,7 +130,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	@Override
 	public String getPathToJhoveConfiguration()
 	{
-		/** Gibt den Pfad des jhove.conf zurück. */
+		/** Gibt den Pfad des jhove.conf zurÃ¼ck. */
 		Object prop = getConfig().getProperty( "pathtojhoveconfig" );
 		if ( prop instanceof String ) {
 			String value = (String) prop;
@@ -138,6 +138,19 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		}
 		return null;
 	}
+	
+	@Override
+	public String getShowProgressOnWork()
+	{
+		/** Angabe ob dargestellt werden soll, dass KOST-Val noch lÃ¤uft */
+		Object prop = getConfig().getProperty( "showprogressonwork" );
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		return null;
+	}
+
 
 	/*--- PDF/A ---------------------------------------------------------------------*/
 	@Override
@@ -264,12 +277,12 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	@Override
 	public int getTableRowsLimit()
 	{
-		/** Gibt die maximale Anzahl von Rows zurück. Dieser Wert wird in Modul H verwendet. Module H
+		/** Gibt die maximale Anzahl von Rows zurÃ¼ck. Dieser Wert wird in Modul H verwendet. Module H
 		 * validiert die table.xml Dateien gegen ihre table.xsd Schemas. Wenn ein Schema <xs:element
 		 * name="row" type="rowType" minOccurs="0" maxOccurs="unbounded"/> in minOccurs oder maxOccurs
-		 * hohe Zahlenwerte enthält, führt die Validierung zu einem java.lang.OutOfMemoryError. Da
+		 * hohe Zahlenwerte enthÃ¤lt, fÃ¼hrt die Validierung zu einem java.lang.OutOfMemoryError. Da
 		 * dieser Error nicht aufgefangen werden kann, werden vor der Validierung die Rows der Tabelle
-		 * gezählt. Die ermittelte Zahl darf nicht über dem hier zurückgegebenen Wert liegen. */
+		 * gezÃ¤hlt. Die ermittelte Zahl darf nicht Ã¼ber dem hier zurÃ¼ckgegebenen Wert liegen. */
 		int value = 20000;
 		Object prop = getConfig().getProperty( "siard.table-rows-limit" );
 		if ( prop != null ) {
@@ -374,7 +387,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		return null;
 	}
 
-	/** Die Einschränkung des SIP-Namen ist konfigurierbar -> getAllowedSipName */
+	/** Die EinschrÃ¤nkung des SIP-Namen ist konfigurierbar -> getAllowedSipName */
 	@Override
 	public String getAllowedSipName()
 	{

@@ -1,0 +1,2591 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Tk::Text - Create and manipulate Text widgets</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::Text - Create and manipulate Text widgets</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#widgetspecific_options">WIDGET-SPECIFIC OPTIONS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#indices">INDICES</a></li>
+	<li><a href="#tags">TAGS</a></li>
+	<li><a href="#marks">MARKS</a></li>
+	<li><a href="#embedded_windows">EMBEDDED WINDOWS</a></li>
+	<li><a href="#embedded_images">EMBEDDED IMAGES</a></li>
+	<li><a href="#the_selection">THE SELECTION</a></li>
+	<li><a href="#the_insertion_cursor">THE INSERTION CURSOR</a></li>
+	<li><a href="#the_modified_flag">THE MODIFIED FLAG</a></li>
+	<li><a href="#widget_methods">WIDGET METHODS</a></li>
+	<li><a href="#bindings">BINDINGS</a></li>
+	<li><a href="#tied_interface">TIED INTERFACE</a></li>
+	<li><a href="#performance_issues">PERFORMANCE ISSUES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#keywords">KEYWORDS</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Tk::Text - Create and manipulate Text widgets</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p><strong>text</strong> $text ?<em>options</em>?</p>
+<p><table cellspacing="0" cellpadding="0"><tr><td><strong>-background</strong><td><strong>-highlightbackground</strong><td><strong>-insertontime</strong><td><strong>-selectborderwidth</strong>
+<tr><td><strong>-borderwidth</strong><td><strong>-highlightcolor</strong><td><strong>-insertwidth</strong><td><strong>-selectforeground</strong>
+<tr><td><strong>-cursor</strong><td><strong>-highlightthickness</strong><td><strong>-padx</strong><td><strong>-setgrid</strong>
+<tr><td><strong>-exportselection</strong><td><strong>-insertbackground</strong><td><strong>-pady</strong><td><strong>-takefocus</strong>
+<tr><td><strong>-font</strong><td><strong>-insertborderwidth</strong><td><strong>-relief</strong><td><strong>-xscrollcommand</strong>
+<tr><td><strong>-foreground</strong><td><strong>-insertofftime</strong><td><strong>-selectbackground</strong><td><strong>-yscrollcommand</strong></table></p>
+<p>
+</p>
+<hr />
+<h1><a name="widgetspecific_options">WIDGET-SPECIFIC OPTIONS</a></h1>
+<dl>
+<dt><strong><a name="item_name_3a_height">Name:	<strong>height</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_height">Class:	<strong>Height</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dheight">Switch:	<strong>-height</strong></a></strong><br />
+</dt>
+<dd>
+Specifies the desired height for the window, in units of characters
+in the font given by the <strong>-font</strong> option.
+Must be at least one.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_spacing1">Name:	<strong>spacing1</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_spacing1">Class:	<strong>Spacing1</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dspacing1">Switch:	<strong>-spacing1</strong></a></strong><br />
+</dt>
+<dd>
+Requests additional space above each text line in the widget,
+using any of the standard forms for screen distances.
+If a line wraps, this option only applies to the first line
+on the display.
+This option may be overriden with <strong>-spacing1</strong> options in
+tags.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_spacing2">Name:	<strong>spacing2</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_spacing2">Class:	<strong>Spacing2</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dspacing2">Switch:	<strong>-spacing2</strong></a></strong><br />
+</dt>
+<dd>
+For lines that wrap (so that they cover more than one line on the
+display) this option specifies additional space to provide between
+the display lines that represent a single line of text.
+The value may have any of the standard forms for screen distances.
+This option may be overriden with <strong>-spacing2</strong> options in
+tags.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_spacing3">Name:	<strong>spacing3</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_spacing3">Class:	<strong>Spacing3</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dspacing3">Switch:	<strong>-spacing3</strong></a></strong><br />
+</dt>
+<dd>
+Requests additional space below each text line in the widget,
+using any of the standard forms for screen distances.
+If a line wraps, this option only applies to the last line
+on the display.
+This option may be overriden with <strong>-spacing3</strong> options in
+tags.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_state">Name:	<strong>state</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_state">Class:	<strong>State</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dstate">Switch:	<strong>-state</strong></a></strong><br />
+</dt>
+<dd>
+Specifies one of two states for the text:  <strong>normal</strong> or <strong>disabled</strong>.
+If the text is disabled then characters may not be inserted or deleted
+and no insertion cursor will be displayed, even if the input focus is
+in the widget.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_tabs">Name:	<strong>tabs</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_tabs">Class:	<strong>Tabs</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dtabs">Switch:	<strong>-tabs</strong></a></strong><br />
+</dt>
+<dd>
+Specifies a set of tab stops for the window.  The option's value consists
+of a list of screen distances giving the positions of the tab stops.  Each
+position may optionally be followed in the next list element
+by one of the keywords <strong>left</strong>, <strong>right</strong>, <strong>center</strong>,
+or <strong>numeric</strong>, which specifies how to justify
+text relative to the tab stop.  <strong>Left</strong> is the default; it causes
+the text following the tab character to be positioned with its left edge
+at the tab position.  <strong>Right</strong> means that the right edge of the text
+following the tab character is positioned at the tab position, and
+<strong>center</strong> means that the text is centered at the tab position.
+<strong>Numeric</strong> means that the decimal point in the text is positioned
+at the tab position;  if there is no decimal point then the least
+significant digit of the number is positioned just to the left of the
+tab position;  if there is no number in the text then the text is
+right-justified at the tab position.
+For example, <strong>-tabs =&gt; [qw/2c left 4c 6c center/]</strong> creates three
+tab stops at two-centimeter intervals;  the first two use left
+justification and the third uses center justification.
+If the list of tab stops does not have enough elements to cover all
+of the tabs in a text line, then Tk extrapolates new tab stops using
+the spacing and alignment from the last tab stop in the list.
+The value of the <strong>tabs</strong> option may be overridden by <strong>-tabs</strong>
+options in tags.
+If no <strong>-tabs</strong> option is specified, or if it is specified as
+an empty list, then Tk uses default tabs spaced every eight
+(average size) characters.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_width">Name:	<strong>width</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_width">Class:	<strong>Width</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dwidth">Switch:	<strong>-width</strong></a></strong><br />
+</dt>
+<dd>
+Specifies the desired width for the window in units of characters
+in the font given by the <strong>-font</strong> option.
+If the font doesn't have a uniform width then the width of the
+character ``0'' is used in translating from character units to
+screen units.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_wrap">Name:	<strong>wrap</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_wrap">Class:	<strong>Wrap</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dwrap">Switch:	<strong>-wrap</strong></a></strong><br />
+</dt>
+<dd>
+Specifies how to handle lines in the text that are too long to be
+displayed in a single line of the text's window.
+The value must be <strong>none</strong> or <strong>char</strong> or <strong>word</strong>.
+A wrap mode of <strong>none</strong> means that each line of text appears as
+exactly one line on the screen;  extra characters that don't fit
+on the screen are not displayed.
+In the other modes each line of text will be broken up into several
+screen lines if necessary to keep all the characters visible.
+In <strong>char</strong> mode a screen line break may occur after any character;
+in <strong>word</strong> mode a line break will only be made at word boundaries.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The <strong>Text</strong> method creates a new window (given by the
+$text argument) and makes it into a text widget.
+Additional
+options, described above, may be specified on the command line
+or in the option database
+to configure aspects of the text such as its default background color
+and relief.  The <strong>text</strong> command returns the
+path name of the new window.</p>
+<p>A text widget displays one or more lines of text and allows that
+text to be edited.
+Text widgets support four different kinds of annotations on the
+text, called tags, marks, embedded windows or embedded images.
+Tags allow different portions of the text
+to be displayed with different fonts and colors.
+In addition, <a href="../../../site/lib/Tk/callbacks.html">perl\/Tk callbacks</a> can be associated with tags so
+that scripts are invoked when particular actions such as keystrokes
+and mouse button presses occur in particular ranges of the text.
+See <a href="#tags">TAGS</a> below for more details.</p>
+<p>The second form of annotation consists of marks, which are floating
+markers in the text.
+Marks are used to keep track of various interesting positions in the
+text as it is edited.
+See <a href="#marks">MARKS</a> below for more details.</p>
+<p>The third form of annotation allows arbitrary windows to be
+embedded in a text widget.
+See <a href="#embedded_windows">EMBEDDED WINDOWS</a> below for more details.</p>
+<p>The fourth form of annotation allows Tk images to be embedded in a text
+widget.
+See <a href="#embedded_images">EMBEDDED IMAGES</a> below for more details.</p>
+<p>The Perl/Tk <strong>Text</strong> widget does not support undo/redo, use the <strong>TextUndo</strong>
+widget instead.</p>
+<p>
+</p>
+<hr />
+<h1><a name="indices">INDICES</a></h1>
+<p>Many of the methods for texts take one or more indices
+as arguments.
+An index is a string used to indicate a particular place within
+a text, such as a place to insert characters or one endpoint of a
+range of characters to delete.
+Indices have the syntax</p>
+<pre>
+ base modifier modifier modifier ...</pre>
+<p>Where <em>base</em> gives a starting point and the <em>modifier</em>s
+adjust the index from the starting point (e.g. move forward or
+backward one character).  Every index must contain a <em>base</em>,
+but the <em>modifier</em>s are optional.</p>
+<p>The <em>base</em> for an index must have one of the following forms:</p>
+<dl>
+<dt><strong><a name="item_line_2echar"><em>line</em><strong>.</strong><em>char</em></a></strong><br />
+</dt>
+<dd>
+Indicates <em>char</em>'th character on line <em>line</em>.
+Lines are numbered from 1 for consistency with other UNIX programs
+that use this numbering scheme.
+Within a line, characters are numbered from 0.
+If <em>char</em> is <strong>end</strong> then it refers to the newline character
+that ends the line.
+</dd>
+<p></p>
+<dt><strong><a name="item__40x_2cy"><strong>@</strong><em>x</em><strong>,</strong><em>y</em></a></strong><br />
+</dt>
+<dd>
+Indicates the character that covers the pixel whose x and y coordinates
+within the text's window are <em>x</em> and <em>y</em>.
+</dd>
+<p></p>
+<dt><strong><a name="item_end"><strong>end</strong></a></strong><br />
+</dt>
+<dd>
+Indicates the end of the text (the character just after the last
+newline).
+</dd>
+<p></p>
+<dt><strong><a name="item_mark"><em>mark</em></a></strong><br />
+</dt>
+<dd>
+Indicates the character just after the mark whose name is <em>mark</em>.
+</dd>
+<p></p>
+<dt><strong><a name="item_tag_2efirst"><em>tag</em><strong>.first</strong></a></strong><br />
+</dt>
+<dd>
+Indicates the first character in the text that has been tagged with
+<em>tag</em>.
+This form generates an error if no characters are currently tagged
+with <em>tag</em>.
+</dd>
+<p></p>
+<dt><strong><a name="item_tag_2elast"><em>tag</em><strong>.last</strong></a></strong><br />
+</dt>
+<dd>
+Indicates the character just after the last one in the text that has
+been tagged with <em>tag</em>.
+This form generates an error if no characters are currently tagged
+with <em>tag</em>.
+</dd>
+<p></p>
+<dt><strong><a name="item__24widget"><em>$widget</em></a></strong><br />
+</dt>
+<dd>
+Indicates the position of the embedded window referenced by <em>$widget</em>.
+This form generates an error if <em>$widget</em> does not reference to an
+embedded window.
+</dd>
+<p></p>
+<dt><strong><a name="item_imagename"><em>imageName</em></a></strong><br />
+</dt>
+<dd>
+Indicates the position of the embedded image whose name is
+<em>imageName</em>.
+This form generates an error if there is no embedded image
+by the given name.
+</dd>
+<dd>
+<p>If the <em>base</em> could match more than one of the above forms, such
+as a <em>mark</em> and <em>imageName</em> both having the same value, then
+the form earlier in the above list takes precedence.
+If modifiers follow the base index, each one of them must have one
+of the forms listed below.  Keywords such as <strong>chars</strong> and <strong>wordend</strong>
+may be abbreviated as long as the abbreviation is unambiguous.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item__2b_count_chars"><strong>+ </strong><em>count</em><strong> chars</strong></a></strong><br />
+</dt>
+<dd>
+Adjust the index forward by <em>count</em> characters, moving to later
+lines in the text if necessary.  If there are fewer than <em>count</em>
+characters in the text after the current index, then set the index
+to the last character in the text.
+Spaces on either side of <em>count</em> are optional.
+</dd>
+<p></p>
+<dt><strong><a name="item__2d_count_chars"><strong>- </strong><em>count</em><strong> chars</strong></a></strong><br />
+</dt>
+<dd>
+Adjust the index backward by <em>count</em> characters, moving to earlier
+lines in the text if necessary.  If there are fewer than <em>count</em>
+characters in the text before the current index, then set the index
+to the first character in the text.
+Spaces on either side of <em>count</em> are optional.
+</dd>
+<p></p>
+<dt><strong><a name="item__2b_count_lines"><strong>+ </strong><em>count</em><strong> lines</strong></a></strong><br />
+</dt>
+<dd>
+Adjust the index forward by <em>count</em> lines, retaining the same
+character position within the line.  If there are fewer than <em>count</em>
+lines after the line containing the current index, then set the index
+to refer to the same character position on the last line of the text.
+Then, if the line is not long enough to contain a character at the indicated
+character position, adjust the character position to refer to the last
+character of the line (the newline).
+Spaces on either side of <em>count</em> are optional.
+</dd>
+<p></p>
+<dt><strong><a name="item__2d_count_lines"><strong>- </strong><em>count</em><strong> lines</strong></a></strong><br />
+</dt>
+<dd>
+Adjust the index backward by <em>count</em> lines, retaining the same
+character position within the line.  If there are fewer than <em>count</em>
+lines before the line containing the current index, then set the index
+to refer to the same character position on the first line of the text.
+Then, if the line is not long enough to contain a character at the indicated
+character position, adjust the character position to refer to the last
+character of the line (the newline).
+Spaces on either side of <em>count</em> are optional.
+</dd>
+<p></p>
+<dt><strong><a name="item_linestart"><strong>linestart</strong></a></strong><br />
+</dt>
+<dd>
+Adjust the index to refer to the first character on the line.
+</dd>
+<p></p>
+<dt><strong><a name="item_lineend"><strong>lineend</strong></a></strong><br />
+</dt>
+<dd>
+Adjust the index to refer to the last character on the line (the newline).
+</dd>
+<p></p>
+<dt><strong><a name="item_wordstart"><strong>wordstart</strong></a></strong><br />
+</dt>
+<dd>
+Adjust the index to refer to the first character of the word containing
+the current index.  A word consists of any number of adjacent characters
+that are letters, digits, or underscores, or a single character that
+is not one of these.
+</dd>
+<p></p>
+<dt><strong><a name="item_wordend"><strong>wordend</strong></a></strong><br />
+</dt>
+<dd>
+Adjust the index to refer to the character just after the last one of the
+word containing the current index.  If the current index refers to the last
+character of the text then it is not modified.
+</dd>
+<dd>
+<p>If more than one modifier is present then they are applied in
+left-to-right order.  For example, the index ``<strong>end - 1 chars</strong>''
+refers to the next-to-last character in the text and
+``<strong>insert wordstart - 1 c</strong>'' refers to the character just before
+the first one in the word containing the insertion cursor.</p>
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="tags">TAGS</a></h1>
+<p>The first form of annotation in text widgets is a tag.
+A tag is a textual string that is associated with some of the characters
+in a text.
+Tags may contain arbitrary characters, but it is probably best to
+avoid using the the characters `` '' (space), <strong>+</strong>, or <strong>-</strong>:
+these characters have special meaning in indices, so tags containing
+them can't be used as indices.
+There may be any number of tags associated with characters in a
+text.
+Each tag may refer to a single character, a range of characters, or
+several ranges of characters.
+An individual character may have any number of tags associated with it.</p>
+<p>A priority order is defined among tags, and this order is used in
+implementing some of the tag-related functions described below.
+When a tag is defined (by associating it with characters or setting
+its display options or binding callbacks to it), it is given
+a priority higher than any existing tag.
+The priority order of tags may be redefined using the
+``<em>$text</em>-&gt;<strong>tagRaise</strong>'' and ``<em>$text</em>-&gt;<strong>tagLower</strong>''
+methods.</p>
+<p>Tags serve three purposes in text widgets.
+First, they control the way information is displayed on the screen.
+By default, characters are displayed as determined by the
+<strong>background</strong>, <strong>font</strong>, and <strong>foreground</strong> options for the
+text widget.
+However, display options may be associated with individual tags
+using the ``<em>$text</em>-&gt;<strong>tagConfigure</strong>'' method.
+If a character has been tagged, then the display options associated
+with the tag override the default display style.
+The following options are currently supported for tags:</p>
+<dl>
+<dt><strong><a name="item__2dbackground__3d_3e_color"><strong>-background</strong> =&gt; <em>color</em></a></strong><br />
+</dt>
+<dd>
+<em>Color</em> specifies the background color to use for characters
+associated with the tag.
+It may have any of the forms accepted by <strong>Tk_GetColor</strong>.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dbgstipple__3d_3e_bitmap"><strong>-bgstipple</strong> =&gt; <em>bitmap</em></a></strong><br />
+</dt>
+<dd>
+<em>Bitmap</em> specifies a bitmap that is used as a stipple pattern
+for the background.
+It may have any of the forms accepted by <strong>Tk_GetBitmap</strong>.
+If <em>bitmap</em> hasn't been specified, or if it is specified
+as an empty string, then a solid fill will be used for the
+background.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dborderwidth__3d_3e_pixels"><strong>-borderwidth</strong> =&gt; <em>pixels</em></a></strong><br />
+</dt>
+<dd>
+<em>Pixels</em> specifies the width of a 3-D border to draw around
+the background.
+It may have any of the forms accepted by <strong>Tk_GetPixels</strong>.
+This option is used in conjunction with the <strong>-relief</strong>
+option to give a 3-D appearance to the background for characters;
+it is ignored unless the <strong>-background</strong> option
+has been set for the tag.
+</dd>
+<p></p>
+<dt><strong><a name="item__2delide__3d_3e_boolean"><strong>-elide</strong> =&gt; boolean</a></strong><br />
+</dt>
+<dd>
+Elide  specifies whether the data should be elided.  Elided data
+is not displayed and takes no space on screen,  but  further  on
+behaves just as normal data.
+</dd>
+<p></p>
+<dt><strong><a name="item__2ddata__3d_3e_value"><strong>-data</strong> =&gt; <em>value</em></a></strong><br />
+</dt>
+<dd>
+Allows an arbitrary perl scalar <em>value</em> to be associated with the tag.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dfgstipple__3d_3e_bitmap"><strong>-fgstipple</strong> =&gt; <em>bitmap</em></a></strong><br />
+</dt>
+<dd>
+<em>Bitmap</em> specifies a bitmap that is used as a stipple pattern
+when drawing text and other foreground information such as
+underlines.
+It may have any of the forms accepted by <strong>Tk_GetBitmap</strong>.
+If <em>bitmap</em> hasn't been specified, or if it is specified
+as an empty string, then a solid fill will be used.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dfont__3d_3e_fontname"><strong>-font</strong> =&gt; <em>fontName</em></a></strong><br />
+</dt>
+<dd>
+<em>FontName</em> is the name of a font to use for drawing characters.
+It may have any of the forms accepted by <strong>Tk_GetFontStruct</strong>.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dforeground__3d_3e_color"><strong>-foreground</strong> =&gt; <em>color</em></a></strong><br />
+</dt>
+<dd>
+<em>Color</em> specifies the color to use when drawing text and other
+foreground information such as underlines.
+It may have any of the forms accepted by <strong>Tk_GetColor</strong>.
+</dd>
+<p></p>
+<dt><strong><a name="item__2djustify__3d_3e_justify"><strong>-justify</strong> =&gt; <em>justify</em></a></strong><br />
+</dt>
+<dd>
+If the first character of a display line has a tag for which this
+option has been specified, then <em>justify</em> determines how to
+justify the line.
+It must be one of <strong>left</strong>, <strong>right</strong>, or <strong>center</strong>.
+If a line wraps, then the justification for each line on the
+display is determined by the first character of that display line.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dlmargin1__3d_3e_pixels"><strong>-lmargin1</strong> =&gt; <em>pixels</em></a></strong><br />
+</dt>
+<dd>
+If the first character of a text line has a tag for which this
+option has been specified, then <em>pixels</em> specifies how
+much the line should be indented from the left edge of the
+window.
+<em>Pixels</em> may have any of the standard forms for screen
+distances.
+If a line of text wraps, this option only applies to the
+first line on the display;  the <strong>-lmargin2</strong> option controls
+the indentation for subsequent lines.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dlmargin2__3d_3e_pixels"><strong>-lmargin2</strong> =&gt; <em>pixels</em></a></strong><br />
+</dt>
+<dd>
+If the first character of a display line has a tag for which this
+option has been specified, and if the display line is not the
+first for its text line (i.e., the text line has wrapped), then
+<em>pixels</em> specifies how much the line should be indented from
+the left edge of the window.
+<em>Pixels</em> may have any of the standard forms for screen
+distances.
+This option is only used when wrapping is enabled, and it only
+applies to the second and later display lines for a text line.
+</dd>
+<p></p>
+<dt><strong><a name="item__2doffset__3d_3e_pixels"><strong>-offset</strong> =&gt; <em>pixels</em></a></strong><br />
+</dt>
+<dd>
+<em>Pixels</em> specifies an amount by which the text's baseline
+should be offset vertically from the baseline of the overall
+line, in pixels.
+For example, a positive offset can be used for superscripts
+and a negative offset can be used for subscripts.
+<em>Pixels</em> may have any of the standard forms for screen
+distances.
+</dd>
+<p></p>
+<dt><strong><a name="item__2doverstrike__3d_3e_boolean"><strong>-overstrike</strong> =&gt; <em>boolean</em></a></strong><br />
+</dt>
+<dd>
+Specifies whether or not to draw a horizontal rule through
+the middle of characters.
+<em>Boolean</em> may have any of the forms accepted by <strong>Tk_GetBoolean</strong>.
+</dd>
+<p></p>
+<dt><strong><a name="item__2drelief__3d_3e_relief"><strong>-relief</strong> =&gt; <em>relief</em></a></strong><br />
+</dt>
+<dd>
+<em>Relief</em> specifies the 3-D relief to use for drawing backgrounds,
+in any of the forms accepted by <strong>Tk_GetRelief</strong>.
+This option is used in conjunction with the <strong>-borderwidth</strong>
+option to give a 3-D appearance to the background for characters;
+it is ignored unless the <strong>-background</strong> option
+has been set for the tag.
+</dd>
+<p></p>
+<dt><strong><a name="item__2drmargin__3d_3e_pixels"><strong>-rmargin</strong> =&gt; <em>pixels</em></a></strong><br />
+</dt>
+<dd>
+If the first character of a display line has a tag for which this
+option has been specified, then <em>pixels</em> specifies how wide
+a margin to leave between the end of the line and the right
+edge of the window.
+<em>Pixels</em> may have any of the standard forms for screen
+distances.
+This option is only used when wrapping is enabled.
+If a text line wraps, the right margin for each line on the
+display is determined by the first character of that display
+line.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dspacing1__3d_3e_pixels"><strong>-spacing1</strong> =&gt; <em>pixels</em></a></strong><br />
+</dt>
+<dd>
+<em>Pixels</em> specifies how much additional space should be
+left above each text line, using any of the standard forms for
+screen distances.
+If a line wraps, this option only applies to the first
+line on the display.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dspacing2__3d_3e_pixels"><strong>-spacing2</strong> =&gt; <em>pixels</em></a></strong><br />
+</dt>
+<dd>
+For lines that wrap, this option specifies how much additional
+space to leave between the display lines for a single text line.
+<em>Pixels</em> may have any of the standard forms for screen
+distances.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dspacing3__3d_3e_pixels"><strong>-spacing3</strong> =&gt; <em>pixels</em></a></strong><br />
+</dt>
+<dd>
+<em>Pixels</em> specifies how much additional space should be
+left below each text line, using any of the standard forms for
+screen distances.
+If a line wraps, this option only applies to the last
+line on the display.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dtabs__3d_3e_tablist"><strong>-tabs</strong> =&gt; <em>tabList</em></a></strong><br />
+</dt>
+<dd>
+<em>TabList</em> specifies a set of tab stops in the same form
+as for the <strong>-tabs</strong> option for the text widget.  This
+option only applies to a display line if it applies to the
+first character on that display line.
+If this option is specified as an empty string, it cancels
+the option, leaving it unspecified for the tag (the default).
+If the option is specified as a non-empty string that is
+an empty list, such as <strong>-tabs =</strong> `` ''&gt;, then it requests
+default 8-character tabs as described for the <strong>tabs</strong>
+widget option.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dunderline__3d_3e_boolean"><strong>-underline</strong> =&gt; <em>boolean</em></a></strong><br />
+</dt>
+<dd>
+<em>Boolean</em> specifies whether or not to draw an underline underneath
+characters.
+It may have any of the forms accepted by <strong>Tk_GetBoolean</strong>.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dwrap__3d_3e_mode"><strong>-wrap</strong> =&gt; <em>mode</em></a></strong><br />
+</dt>
+<dd>
+<em>Mode</em> specifies how to handle lines that are wider than the
+text's window.
+It has the same legal values as the <strong>-wrap</strong> option
+for the text widget:  <strong>none</strong>, <strong>char</strong>, or <strong>word</strong>.
+If this tag option is specified, it overrides the <strong>-wrap</strong> option
+for the text widget.
+</dd>
+<p></p></dl>
+<p>If a character has several tags associated with it, and if their
+display options conflict, then the options of the highest priority
+tag are used.
+If a particular display option hasn't been specified for a
+particular tag, or if it is specified as an empty string, then
+that option will never be used;  the next-highest-priority
+tag's option will used instead.
+If no tag specifies a particular display option, then the default
+style for the widget will be used.</p>
+<p>The second purpose for tags is event bindings.
+You can associate bindings with a tag in much the same way you can
+associate bindings with a widget class:  whenever particular X
+events occur on characters with the given tag, a given
+&lt;perl/Tk callback|Tk::callbacks&gt; will be executed.
+Tag bindings can be used to give behaviors to ranges of characters;
+among other things, this allows hypertext-like
+features to be implemented.
+For details, see the description of the <strong>tagBind</strong> widget
+method below.</p>
+<p>The third use for tags is in managing the selection.
+See <a href="#the_selection">THE SELECTION</a> below.</p>
+<p>
+</p>
+<hr />
+<h1><a name="marks">MARKS</a></h1>
+<p>The second form of annotation in text widgets is a mark.
+Marks are used for remembering particular places in a text.
+They are something like tags, in that they have names and
+they refer to places in the file, but a mark isn't associated
+with particular characters.
+Instead, a mark is associated with the gap between two characters.
+Only a single position may be associated with a mark at any given
+time.
+If the characters around a mark are deleted the mark will still
+remain;  it will just have new neighbor characters.
+In contrast, if the characters containing a tag are deleted then
+the tag will no longer have an association with characters in
+the file.
+Marks may be manipulated with the ``<em>$text</em>-&gt;<strong>mark</strong>'' text widget
+method, and their current locations may be determined by using the
+mark name as an index in methods.</p>
+<p>Each mark also has a <em>gravity</em>, which is either <strong>left</strong> or
+<strong>right</strong>.
+The gravity for a mark specifies what happens to the mark when
+text is inserted at the point of the mark.
+If a mark has left gravity, then the mark is treated as if it
+were attached to the character on its left, so the mark will
+remain to the left of any text inserted at the mark position.
+If the mark has right gravity, new text inserted at the mark
+position will appear to the right of the mark.  The gravity
+for a mark defaults to <strong>right</strong>.</p>
+<p>The name space for marks is different from that for tags:  the
+same name may be used for both a mark and a tag, but they will refer
+to different things.</p>
+<p>Two marks have special significance.
+First, the mark <strong>insert</strong> is associated with the insertion cursor,
+as described under <a href="#the_insertion_cursor">THE INSERTION CURSOR</a> below.
+Second, the mark <strong>current</strong> is associated with the character
+closest to the mouse and is adjusted automatically to track the
+mouse position and any changes to the text in the widget (one
+exception:  <strong>current</strong> is not updated in response to mouse
+motions if a mouse button is down;  the update will be deferred
+until all mouse buttons have been released).
+Neither of these special marks may be deleted.</p>
+<p>
+</p>
+<hr />
+<h1><a name="embedded_windows">EMBEDDED WINDOWS</a></h1>
+<p>The third form of annotation in text widgets is an embedded window.
+Each embedded window annotation causes a window to be displayed
+at a particular point in  the text.
+There may be any number of embedded windows in a text widget,
+and any widget may be used as an embedded window (subject to the
+usual rules for geometry management, which require the text window
+to be the parent of the embedded window or a descendant of its
+parent).
+The embedded window's position on the screen will be updated as the
+text is modified or scrolled, and it will be mapped and unmapped as
+it moves into and out of the visible area of the text widget.
+Each embedded window occupies one character's worth of index space
+in the text widget, and it may be referred to either by the name
+of its embedded window or by its position in the widget's
+index space.
+If the range of text containing the embedded window is deleted then
+the window is destroyed.</p>
+<p>When an embedded window is added to a text widget with the
+<strong>widgetCreate</strong> method, several configuration
+options may be associated with it.
+These options may be  modified later with the <strong>widgetConfigure</strong>
+method.
+The following options are currently supported:</p>
+<dl>
+<dt><strong><a name="item__2dalign__3d_3e_where"><strong>-align</strong> =&gt; <em>where</em></a></strong><br />
+</dt>
+<dd>
+If the window is not as tall as the line in which it is displayed,
+this option determines where the window is displayed in the line.
+<em>Where</em> must have one of the values <strong>top</strong> (align the top of the window
+with the top of the line), <strong>center</strong> (center the window
+within the range of the line), <strong>bottom</strong> (align the bottom of the
+window with the bottom of the line's area),
+or <strong>baseline</strong> (align the bottom of the window with the baseline
+of the line).
+</dd>
+<p></p>
+<dt><strong><a name="item__2dcreate__3d_3e_callback"><strong>-create</strong> =&gt; <em>callback</em></a></strong><br />
+</dt>
+<dd>
+Specifies a <a href="../../../site/lib/Tk/callbacks.html">callback</a> that may be evaluated to create the window
+for the annotation.
+If no <strong>-window</strong> option has been specified for the annotation
+this <em>callback</em> will be evaluated when the annotation is about to
+be displayed on the screen.
+<em>Callback</em> must create a window for the annotation and return
+the name of that window as its result.
+If the annotation's window should ever be deleted, <em>callback</em>
+will be evaluated again the next time the annotation is displayed.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dpadx__3d_3e_pixels"><strong>-padx</strong> =&gt; <em>pixels</em></a></strong><br />
+</dt>
+<dd>
+<em>Pixels</em> specifies the amount of extra space to leave on
+each side of the embedded window.
+It may have any of the usual forms defined for a screen distance
+(see <strong>Tk_GetPixels</strong>).
+</dd>
+<p></p>
+<dt><strong><a name="item__2dpady__3d_3e_pixels"><strong>-pady</strong> =&gt; <em>pixels</em></a></strong><br />
+</dt>
+<dd>
+<em>Pixels</em> specifies the amount of extra space to leave on
+the top and on the bottom of the embedded window.
+It may have any of the usual forms defined for a screen distance
+(see <strong>Tk_GetPixels</strong>).
+</dd>
+<p></p>
+<dt><strong><a name="item__2dstretch__3d_3e_boolean"><strong>-stretch</strong> =&gt; <em>boolean</em></a></strong><br />
+</dt>
+<dd>
+If the requested height of the embedded window is less than the
+height of the line in which it is displayed, this option can be
+used to specify whether the window should be stretched vertically
+to fill its line.
+If the <strong>-pady</strong> option has been specified as well, then the
+requested padding will be retained even if the window is
+stretched.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dwindow__3d_3e__24widget"><strong>-window</strong> =&gt; <em>$widget</em></a></strong><br />
+</dt>
+<dd>
+Specifies the name of a window to display in the annotation.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="embedded_images">EMBEDDED IMAGES</a></h1>
+<p>The final form of annotation in text widgets is an embedded image.
+Each embedded image annotation causes an image to be displayed
+at a particular point in  the text.
+There may be any number of embedded images in a text widget,
+and a particular image may be embedded in multiple places in the same
+text widget.
+The embedded image's position on the screen will be updated as the
+text is modified or scrolled.
+Each embedded image occupies one character's worth of index space
+in the text widget, and it may be referred to either by
+its position in the widget's index space, or the name it is assigned
+when the image is inserted into the text widget with <strong>imageCreate</strong>.
+If the range of text containing the embedded image is deleted then
+that copy of the image is removed from the screen.</p>
+<p>When an embedded image is added to a text widget with the <strong>image</strong>
+create method, a name unique to this instance of the image
+is returned.  This name may then be used to refer to this image
+instance.  The name is taken to be the value of the <strong>-name</strong> option
+(described below).  If the <strong>-name</strong> option is not provided, the
+<strong>-image</strong> name is used instead.  If the <em>imageName</em> is already
+in use in the text widget, then <strong>#</strong><em>nn</em> is added to the end of the
+<em>imageName</em>, where <em>nn</em> is an arbitrary integer.  This insures
+the <em>imageName</em> is unique.
+Once this name is assigned to this instance of the image, it does not
+change, even though the <strong>-image</strong> or <strong>-name</strong> values can be changed
+with <strong>image configure</strong>.</p>
+<p>When an embedded image is added to a text widget with the
+<strong>imageCreate</strong> method, several configuration
+options may be associated with it.
+These options may be modified later with the <strong>image configure</strong>
+method.
+The following options are currently supported:</p>
+<dl>
+<dt><strong><strong>-align</strong> =&gt; <em>where</em></strong><br />
+</dt>
+<dd>
+If the image is not as tall as the line in which it is displayed,
+this option determines where the image is displayed in the line.
+<em>Where</em> must have one of the values <strong>top</strong> (align the top of the image
+with the top of the line), <strong>center</strong> (center the image
+within the range of the line), <strong>bottom</strong> (align the bottom of the
+image with the bottom of the line's area),
+or <strong>baseline</strong> (align the bottom of the image with the baseline
+of the line).
+</dd>
+<p></p>
+<dt><strong><a name="item__2dimage__3d_3e_image"><strong>-image</strong> =&gt; <em>image</em></a></strong><br />
+</dt>
+<dd>
+Specifies the name of the Tk image to display in the annotation.
+If <em>image</em> is not a valid Tk image, then an error is returned.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dname__3d_3e_imagename"><strong>-name</strong> =&gt; <em>ImageName</em></a></strong><br />
+</dt>
+<dd>
+Specifies the name by which this image instance may be referenced in
+the text widget. If <em>ImageName</em> is not supplied, then the
+name of the Tk image is used instead.
+If the <em>imageName</em> is already in use, <em>#nn</em> is appended to
+the end of the name as described above.
+</dd>
+<p></p>
+<dt><strong><strong>-padx</strong> =&gt; <em>pixels</em></strong><br />
+</dt>
+<dd>
+<em>Pixels</em> specifies the amount of extra space to leave on
+each side of the embedded image.
+It may have any of the usual forms defined for a screen distance.
+</dd>
+<p></p>
+<dt><strong><strong>-pady</strong> =&gt; <em>pixels</em></strong><br />
+</dt>
+<dd>
+<em>Pixels</em> specifies the amount of extra space to leave on
+the top and on the bottom of the embedded image.
+It may have any of the usual forms defined for a screen distance.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="the_selection">THE SELECTION</a></h1>
+<p>Selection support is implemented via tags.
+If the <strong>exportSelection</strong> option for the text widget is true
+then the <strong>sel</strong> tag will be associated with the selection:</p>
+<dl>
+<dt><strong><a name="item__5b1_5d">[1]</a></strong><br />
+</dt>
+<dd>
+Whenever characters are tagged with <strong>sel</strong> the text widget
+will claim ownership of the selection.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b2_5d">[2]</a></strong><br />
+</dt>
+<dd>
+Attempts to retrieve the
+selection will be serviced by the text widget, returning all the
+characters with the <strong>sel</strong> tag.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b3_5d">[3]</a></strong><br />
+</dt>
+<dd>
+If the selection is claimed away by another application or by another
+window within this application, then the <strong>sel</strong> tag will be removed
+from all characters in the text.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b4_5d">[4]</a></strong><br />
+</dt>
+<dd>
+Whenever the sel tag range changes a virtual event <strong>&lt;&lt;Selection</strong>&gt;&gt;
+is generated.
+</dd>
+<dd>
+<p>The <strong>sel</strong> tag is automatically defined when a text widget is
+created, and it may not be deleted with the ``<em>$text</em>-&gt;<strong>tagDelete</strong>''
+method.  Furthermore, the <strong>selectBackground</strong>,
+<strong>selectBorderWidth</strong>, and <strong>selectForeground</strong> options for
+the text widget are tied to the <strong>-background</strong>,
+<strong>-borderwidth</strong>, and <strong>-foreground</strong> options for the <strong>sel</strong>
+tag:  changes in either will automatically be reflected in the
+other.</p>
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="the_insertion_cursor">THE INSERTION CURSOR</a></h1>
+<p>The mark named <strong>insert</strong> has special significance in text widgets.
+It is defined automatically when a text widget is created and it
+may not be unset with the ``<em>$text</em>-&gt;<strong>markUnset</strong>'' widget
+command.
+The <strong>insert</strong> mark represents the position of the insertion
+cursor, and the insertion cursor will automatically be drawn at
+this point whenever the text widget has the input focus.</p>
+<p>
+</p>
+<hr />
+<h1><a name="the_modified_flag">THE MODIFIED FLAG</a></h1>
+<p>The text widget can keep track of changes to the content of the  widget
+by means of the modified flag. Inserting or deleting text will set this
+flag. The flag can be queried, set and cleared programatically as well.
+Whenever  the flag changes state a <strong>&lt;&lt;Modified</strong>&gt;&gt; virtual event is gener-
+ated. See the edit modified widget command for more details.</p>
+<p>
+</p>
+<hr />
+<h1><a name="widget_methods">WIDGET METHODS</a></h1>
+<p>The <strong>Text</strong> method creates a widget object.
+This object supports the <strong>configure</strong> and <strong>cget</strong> methods
+described in <a href="../../../site/lib/Tk/options.html">the Tk::options manpage</a> which can be used to enquire and
+modify the options described above.
+The widget also inherits all the methods provided by the generic
+<a href="../../../site/lib/Tk/Widget.html">Tk::Widget</a> class.</p>
+<p>The following additional methods are available for text widgets.
+In addition, the extended text widget methods as documented
+in <em>``Mastering Perl/Tk''</em> are included in this pod (with
+permission from the publisher, <strong>O'Reilly and Associates Inc.</strong>).</p>
+<dl>
+<dt><strong><a name="item_adjustselect"><em>$text</em>-&gt;<strong>adjustSelect</strong></a></strong><br />
+</dt>
+<dd>
+Moves the end point of the selection and anchor point to the
+mouse pointer location.
+</dd>
+<p></p>
+<dt><strong><a name="item_bbox"><em>$text</em>-&gt;<strong>bbox</strong>(<em>index</em>)</a></strong><br />
+</dt>
+<dd>
+Returns a list of four elements describing the screen area
+of the character given by <em>index</em>.
+The first two elements of the list give the x and y coordinates
+of the upper-left corner of the area occupied by the
+character, and the last two elements give the width and height
+of the area.
+If the character is only partially visible on the screen, then
+the return value reflects just the visible part.
+If the character is not visible on the screen then the return
+value is an empty list.
+</dd>
+<p></p>
+<dt><strong><a name="item_clipboardcolumncopy"><em>$text</em>-&gt;<strong>clipboardColumnCopy</strong></a></strong><br />
+</dt>
+<dd>
+Performs a rectangular copy of the currently selected text with
+basic compensation for tab characters.
+</dd>
+<p></p>
+<dt><strong><a name="item_clipboardcolumncut"><em>$text</em>-&gt;<strong>clipboardColumnCut</strong></a></strong><br />
+</dt>
+<dd>
+Performs a rectangular cut of the currently selected text with
+basic compensation for tab characters.
+</dd>
+<p></p>
+<dt><strong><a name="item_clipboardcolumnpaste"><em>$text</em>-&gt;<strong>clipboardColumnPaste</strong></a></strong><br />
+</dt>
+<dd>
+Performs a rectangular paste of the text in the clipboard. The
+upper-left corner is specified by the current position of the
+insert mark with basic compensation for tab characters.
+</dd>
+<p></p>
+<dt><strong><a name="item_compare"><em>$text</em>-&gt;<strong>compare</strong>(<em>index1, op, index2</em>)</a></strong><br />
+</dt>
+<dd>
+Compares the indices given by <em>index1</em> and <em>index2</em> according
+to the relational operator given by <em>op</em>, and returns 1 if
+the relationship is satisfied and 0 if it isn't.
+<em>Op</em> must be one of the operators &lt;, &lt;=, ==, &gt;=, &gt;, or !=.
+If <em>op</em> is == then 1 is returned if the two indices refer to
+the same character, if <em>op</em> is &lt; then 1 is returned if <em>index1</em>
+refers to an earlier character in the text than <em>index2</em>, and
+so on.
+</dd>
+<p></p>
+<dt><strong><a name="item_contents"><em>$text</em>-&gt;<strong>Contents</strong>(<em>?args</em>?)</a></strong><br />
+</dt>
+<dd>
+Query or change the entire contents of the text widget. If no
+arguments are given, the entire contents of the text widget are
+returned. If any arguments are given, the entire contents of the
+text widget are deleted and replaced by the argument list.
+</dd>
+<p></p>
+<dt><strong><a name="item_debug"><em>$text</em>-&gt;<strong>debug</strong>(?<em>boolean</em>?)</a></strong><br />
+</dt>
+<dd>
+If <em>boolean</em> is specified, then it must have one of the true or
+false values accepted by Tcl_GetBoolean.
+If the value is a true one then internal consistency checks will be
+turned on in the B-tree code associated with text widgets.
+If <em>boolean</em> has a false value then the debugging checks will
+be turned off.
+In either case the command returns an empty string.
+If <em>boolean</em> is not specified then the command returns <strong>on</strong>
+or <strong>off</strong> to indicate whether or not debugging is turned on.
+There is a single debugging switch shared by all text widgets:  turning
+debugging on or off in any widget turns it on or off for all widgets.
+For widgets with large amounts of text, the consistency checks may
+cause a noticeable slow-down.
+</dd>
+<p></p>
+<dt><strong><a name="item_delete"><em>$text</em>-&gt;<strong>delete</strong>(<em>index1, </em>?<em>index2</em>?)</a></strong><br />
+</dt>
+<dd>
+Delete a range of characters from the text.
+If both <em>index1</em> and <em>index2</em> are specified, then delete
+all the characters starting with the one given by <em>index1</em>
+and stopping just before <em>index2</em> (i.e. the character at
+<em>index2</em> is not deleted).
+If <em>index2</em> doesn't specify a position later in the text
+than <em>index1</em> then no characters are deleted.
+If <em>index2</em> isn't specified then the single character at
+<em>index1</em> is deleted.
+It is not allowable to delete characters in a way that would leave
+the text without a newline as the last character.
+The command returns an empty string.
+If more indices are given, multiple ranges of text will
+be deleted.  All indices are first checked for  validity  before
+any deletions are made.  They are sorted and the text is removed
+from the last range to the first range to deleted text does  not
+cause  a  undesired  index  shifting  side-effects.  If multiple
+ranges with the same start index are  given,  then  the  longest
+range  is used.  If overlapping ranges are given, then they will
+be merged into spans that do not cause deletion of text  outside
+the given ranges due to text shifted during deletion.
+</dd>
+<p></p>
+<dt><strong><a name="item_deleteselected"><em>$text</em>-&gt;<strong>deleteSelected</strong></a></strong><br />
+</dt>
+<dd>
+Delete the currently selected text.
+</dd>
+<p></p>
+<dt><strong><a name="item_deletetexttaggedwith"><em>$text</em>-&gt;<strong>deleteTextTaggedWith</strong>(<em>tag</em>)</a></strong><br />
+</dt>
+<dd>
+Delete the text tagged with the <em>tag</em> parameter.
+</dd>
+<p></p>
+<dt><strong><a name="item_deletetoendofline"><em>$text</em>-&gt;<strong>deleteToEndofLine</strong></a></strong><br />
+</dt>
+<dd>
+Delete from the insert mark location to the end of line.
+</dd>
+<p></p>
+<dt><strong><a name="item_dlineinfo"><em>$text</em>-&gt;<strong>dlineinfo</strong>(<em>index</em>)</a></strong><br />
+</dt>
+<dd>
+Returns a list with five elements describing the area occupied
+by the display line containing <em>index</em>.
+The first two elements of the list give the x and y coordinates
+of the upper-left corner of the area occupied by the
+line, the third and fourth elements give the width and height
+of the area, and the fifth element gives the position of the baseline
+for the line, measured down from the top of the area.
+All of this information is measured in pixels.
+If the current wrap mode is <strong>none</strong> and the line extends beyond
+the boundaries of the window,
+the area returned reflects the entire area of the line, including the
+portions that are out of the window.
+If the line is shorter than the full width of the window then the
+area returned reflects just the portion of the line that is occupied
+by characters and embedded windows.
+If the display line containing <em>index</em> is not visible on
+the screen then the return value is an empty list.
+</dd>
+<p></p>
+<dt><strong><a name="item_dump"><em>$text</em>-&gt;<strong>dump</strong>(?<em>switches</em>?, <em>index1, </em>?<em>index2</em>?)</a></strong><br />
+</dt>
+<dd>
+Return the contents of the text widget from <em>index1</em> up to,
+but not including <em>index2</em>,
+including the text and
+information about marks, tags, and embedded windows.
+If <em>index2</em> is not specified, then it defaults to
+one character past <em>index1</em>.  The information is returned
+in the following format:
+</dd>
+<dd>
+<p><em>key1 value1 index1 key2 value2 index2</em> ...</p>
+</dd>
+<dd>
+<p>The possible <em>key</em> values are <strong>text</strong>, <strong>mark</strong>,
+<strong>tagon</strong>, <strong>tagoff</strong>, and <em>$text</em>.  The corresponding
+<em>value</em> is the text, mark name, tag name, or window name.
+The <em>index</em> information is the index of the
+start of the text, the mark, the tag transition, or the window.
+One or more of the following switches (or abbreviations thereof)
+may be specified to control the dump:</p>
+</dd>
+<dl>
+<dt><strong><a name="item__2dall"><strong>-all</strong></a></strong><br />
+</dt>
+<dd>
+Return information about all elements: text, marks, tags, and windows.
+This is the default.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dcommand__3d_3e_callback"><strong>-command</strong> =&gt; <em>callback</em></a></strong><br />
+</dt>
+<dd>
+Instead of returning the information as the result of the dump operation,
+invoke the <em>callback</em> on each element of the text widget within the range.
+The callback has three arguments appended to it before it is evaluated:
+the <em>key</em>, <em>value</em>, and <em>index</em>.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dmark"><strong>-mark</strong></a></strong><br />
+</dt>
+<dd>
+Include information about marks in the dump results.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dtag"><strong>-tag</strong></a></strong><br />
+</dt>
+<dd>
+Include information about tag transitions in the dump results. Tag information is
+returned as <strong>tagon</strong> and <strong>tagoff</strong> elements that indicate the
+begin and end of each range of each tag, respectively.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dtext"><strong>-text</strong></a></strong><br />
+</dt>
+<dd>
+Include information about text in the dump results.  The value is the
+text up to the next element or the end of range indicated by <em>index2</em>.
+A text element does not span newlines.  A multi-line block of text that
+contains no marks or tag transitions will still be dumped as a set
+of text seqments that each end with a newline.  The newline is part
+of the value.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dwindow"><strong>-window</strong></a></strong><br />
+</dt>
+</dl>
+<p>Include information about embedded windows in the dump results.
+The value of a window is its Tk pathname, unless the window
+has not been created yet.  (It must have a create script.)
+In this case an empty string is returned, and you must query the
+window by its index position to get more information.</p>
+<dt><strong><a name="item_edit"><em>$text</em>-&gt;<strong>edit</strong>( <em> option, ?arg, arg ...?</em> );</a></strong><br />
+</dt>
+<dd>
+This  command controls the undo mechanism and the modified flag.
+The exact behavior of the command depends on the option argument
+that follows the edit argument.  The following forms of the command
+are currently supported:
+</dd>
+<dl>
+<dt><strong><a name="item_editmodified"><em>$text</em>-&gt;<strong>editModified</strong>( ?boolean? );</a></strong><br />
+</dt>
+<dd>
+If boolean is not specified, returns the modified flag of
+the widget. The insert, delete, edit undo and  edit  redo
+commands  or the user can set or clear the modified flag.
+If boolean is specified, sets the modified  flag  of  the
+widget to boolean.
+</dd>
+<p></p>
+<dt><strong><a name="item_editredo"><em>$text</em>-&gt;<strong>editRedo</strong>;</a></strong><br />
+</dt>
+<dd>
+(Not implemented, use <strong>TextUndo</strong>.)  When the <strong>-undo</strong> option is true,
+reapplies the last undone edits provided no other edits were done
+since then. Generates an error when the redo stack is empty.  Does
+nothing when the <strong>-undo</strong> option is false.
+</dd>
+<p></p>
+<dt><strong><a name="item_editreset"><em>$text</em>-&gt;<strong>editReset</strong>;</a></strong><br />
+</dt>
+<dd>
+(Not implemented, use <strong>TextUndo</strong>.) Clears the undo and redo stacks.
+</dd>
+<p></p>
+<dt><strong><a name="item_editseparator"><em>$text</em>-&gt;<strong>editSeparator</strong>;</a></strong><br />
+</dt>
+<dd>
+(Not implemented, use <strong>TextUndo</strong>.) Inserts a separator (boundary) on
+the undo stack. Does nothing when the -undo option is false.
+</dd>
+<p></p>
+<dt><strong><a name="item_editundo"><em>$text</em>-&gt;<strong>editUndo</strong>;</a></strong><br />
+</dt>
+<dd>
+(Not implemented, use <strong>TextUndo</strong>.) Undoes the last edit action when
+the -undo option is true.  An edit action is defined as all the insert
+and delete commands that are recorded on the undo stack in between two
+separators. Generates an error when the undo stack is empty.  Does
+nothing when the -undo option is false.
+</dd>
+<p></p></dl>
+<dt><strong><a name="item_findall"><em>$text</em>-&gt;<strong>FindAll</strong>(<em>mode, case, pattern</em>)</a></strong><br />
+</dt>
+<dd>
+Removes any current selections and then performs a global text
+search. All matches are tagged with the <strong>sel</strong> tag.
+</dd>
+<dd>
+<p><em>mode</em> can be be <strong>-exact</strong> or <strong>-regexp</strong>. See the <strong>search</strong> command
+for more information</p>
+</dd>
+<dd>
+<p><em>case</em> can be <strong>-nocase</strong> or <strong>-case</strong>. See the <strong>search</strong> command
+for more information</p>
+</dd>
+<dd>
+<p><em>pattern</em> is an exact string to match if <em>mode</em> is <strong>-exact</strong> or a
+regular expression if the match <em>mode</em> is <strong>-regexp</strong>.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item_findandreplaceall"><em>$text</em>-&gt;<strong>FindAndReplaceAll</strong>(<em>mode, case, find, replace</em>)</a></strong><br />
+</dt>
+<dd>
+Same as the <strong>FindAll</strong> method, however additionally substitutes the
+matched text with the characters <em>replace</em>.
+</dd>
+<p></p>
+<dt><strong><a name="item_findandreplacepopup"><em>$text</em>-&gt;<strong>FindAndReplacePopUp</strong></a></strong><br />
+</dt>
+<dd>
+Creates a find-and-replace popup window if one does not already exist.
+If there is currently selected text, then the 'find' field will be
+'pre-filled' with the selection.
+</dd>
+<p></p>
+<dt><strong><a name="item_findnext"><em>$text</em>-&gt;<strong>FindNext</strong>(<em>direction, mode, case, pattern</em>)</a></strong><br />
+</dt>
+<dd>
+Removes any current selections and then performs a forward or reverse
+text search. All matches are tagged with the <strong>sel</strong> tag. <em>direction</em>
+can be <strong>-forward</strong> or <strong>-reverse</strong>. <em>mode, case</em> and <em>pattern</em> are
+as for the <strong>FindAll</strong> method.
+</dd>
+<p></p>
+<dt><strong><a name="item_findpopup"><em>$text</em>-&gt;<strong>FindPopUp</strong></a></strong><br />
+</dt>
+<dd>
+Creates a find popup, if one does not yet exist. If there is currently
+selected text, then the 'find' field will be 'pre-filled' with the
+selection.
+</dd>
+<p></p>
+<dt><strong><a name="item_findselectionnext"><em>$text</em>-&gt;<strong>FindSelectionNext</strong></a></strong><br />
+</dt>
+<dd>
+Gets the currently selected text and removes all selections. It then
+finds the next exact, case-sensitive string that matches in a forward
+direction and selects the text and makes the new selection visible.
+</dd>
+<p></p>
+<dt><strong><a name="item_findselectionprevious"><em>$text</em>-&gt;<strong>FindSelectionPrevious</strong></a></strong><br />
+</dt>
+<dd>
+Gets the currently selected text and removes all selections. It then
+finds the next exact, case-sensitive string that matches in a reverse
+direction and selects the text and makes the new selection visible.
+</dd>
+<p></p>
+<dt><strong><a name="item_get"><em>$text</em>-&gt;<strong>get</strong>(<em>index1, </em>?<em>index2</em>?)</a></strong><br />
+</dt>
+<dd>
+Return a range of characters from the text.  The return value will be
+all the characters in the text starting with the one whose index is
+<em>index1</em> and ending just before the one whose index is <em>index2</em> (the
+character at <em>index2</em> will not be returned).  If <em>index2</em> is omitted
+then the single character at <em>index1</em> is returned.  If there are no
+characters in the specified range (e.g. <em>index1</em> is past the end of
+the file or <em>index2</em> is less than or equal to <em>index1</em>) then an
+empty string is returned.  If the specified range contains embedded
+windows, no information about them is included in the returned string.
+If multiple index pairs are given, multiple ranges of text will be
+returned in a list.  Invalid ranges will not be represented with empty
+strings in the list.  The ranges are returned in the order passed to
+<strong>get</strong>.
+</dd>
+<p></p>
+<dt><strong><a name="item_getselected"><em>$text</em>-&gt;<strong>getSelected</strong></a></strong><br />
+</dt>
+<dd>
+Return the currently selected text.
+</dd>
+<p></p>
+<dt><strong><a name="item_gettexttaggedwith"><em>$text</em>-&gt;<strong>GetTextTaggedWith</strong>(<em>tag</em>)</a></strong><br />
+</dt>
+<dd>
+Return the text tagged with the <em>tag</em> parameter.
+</dd>
+<p></p>
+<dt><strong><a name="item_gotolinenumber"><em>$text</em>-&gt;<strong>GotoLineNumber</strong>(<em>line_number</em>)</a></strong><br />
+</dt>
+<dd>
+Set the insert mark to <em>line_number</em> and ensures the line is
+visible.
+</dd>
+<p></p>
+<dt><strong><a name="item_gotolinenumberpopup"><em>$text</em>-&gt;<strong>GotoLineNumberPopUp</strong>(<em>line_number</em>)</a></strong><br />
+</dt>
+<dd>
+Displays a popup, pre-filling it with selected numeric text
+(if any), or the line number from <strong>GotoLineNumber</strong> (if any).
+</dd>
+<p></p>
+<dt><strong><a name="item_image"><em>$text</em>-&gt;<strong>image</strong>(<em>option</em>, ?<em>arg, arg, ...</em>?)</a></strong><br />
+</dt>
+<dt><strong><a name="item_imageoption"><em>$text</em>-&gt;<strong>image</strong><em>Option</em>(?<em>arg, arg, ...</em>?)</a></strong><br />
+</dt>
+<dd>
+This method is used to manipulate embedded images.
+The behavior of the method depends on the <em>option</em> argument
+that follows the <strong>image</strong> prefix.
+The following forms of the methods are currently supported:
+</dd>
+<dl>
+<dt><strong><a name="item_imagecget"><em>$text</em>-&gt;<strong>imageCget</strong>(<em>index, option</em>)</a></strong><br />
+</dt>
+<dd>
+Returns the value of a configuration option for an embedded image.
+<em>Index</em> identifies the embedded image, and <em>option</em>
+specifies a particular configuration option, which must be one of
+the ones listed in <a href="#embedded_images">EMBEDDED IMAGES</a>.
+</dd>
+<p></p>
+<dt><strong><a name="item_imageconfigure"><em>$text</em>-&gt;<strong>imageConfigure</strong>(<em>index, </em>?<em>option, value, ...</em>?)</a></strong><br />
+</dt>
+<dd>
+Query or modify the configuration options for an embedded image.
+If no <em>option</em> is specified, returns a list describing all of
+the available options for the embedded image at <em>index</em>
+(see <a href="../../../site/lib/Tk/options.html">the Tk::options manpage</a> for information on the format of this list).
+If <em>option</em> is specified with no <em>value</em>, then the command
+returns a list describing the one named option (this list will be
+identical to the corresponding sublist of the value returned if no
+<em>option</em> is specified).
+If one or more <em>option-value</em> pairs are specified, then the command
+modifies the given <code>option(s)</code> to have the given value(s);  in
+this case the command returns an empty string.
+See <a href="#embedded_images">EMBEDDED IMAGES</a> for information on the options that
+are supported.
+</dd>
+<p></p>
+<dt><strong><a name="item_imagecreate"><em>$text</em>-&gt;<strong>imageCreate</strong>(<em>index, </em>?<em>option, value, ...</em>?)</a></strong><br />
+</dt>
+<dd>
+This command creates a new image annotation, which will appear
+in the text at the position given by <em>index</em>.
+Any number of <em>option-value</em> pairs may be specified to
+configure the annotation.
+Returns a unique identifier that may be used as an index to refer to
+this image.
+See <a href="#embedded_images">EMBEDDED IMAGES</a> for information on the options that
+are supported, and a description of the identifier returned.
+</dd>
+<p></p>
+<dt><strong><a name="item_imagenames"><em>$text</em>-&gt;<strong>imageNames</strong></a></strong><br />
+</dt>
+<dd>
+Returns a list whose elements are the names of all image instances currently
+embedded in $text.
+</dd>
+<p></p></dl>
+<dt><strong><a name="item_index"><em>$text</em>-&gt;<strong>index</strong>(<em>index</em>)</a></strong><br />
+</dt>
+<dd>
+Returns the position corresponding to <em>index</em> in the form
+<em>line.char</em> where <em>line</em> is the line number and <em>char</em>
+is the character number.
+<em>Index</em> may have any of the forms described under <a href="#indices">INDICES</a> above.
+</dd>
+<p></p>
+<dt><strong><a name="item_insert"><em>$text</em>-&gt;<strong>insert</strong>(<em>index, chars, </em>?<em>tagList, chars, tagList, ...</em>?)</a></strong><br />
+</dt>
+<dd>
+Inserts all of the <em>chars</em> arguments just before the character at
+<em>index</em>.
+If <em>index</em> refers to the end of the text (the character after
+the last newline) then the new text is inserted just before the
+last newline instead.
+If there is a single <em>chars</em> argument and no <em>tagList</em>, then
+the new text will receive any tags that are present on both the
+character before and the character after the insertion point; if a tag
+is present on only one of these characters then it will not be
+applied to the new text.
+If <em>tagList</em> is specified then it consists of a list of
+tag names;  the new characters will receive all of the tags in
+this list and no others, regardless of the tags present around
+the insertion point.
+If multiple <em>chars</em>-<em>tagList</em> argument pairs are present,
+they produce the same effect as if a separate <strong>insert</strong> widget
+command had been issued for each pair, in order.
+The last <em>tagList</em> argument may be omitted.
+</dd>
+<p></p>
+<dt><strong><a name="item_insert"><em>$text</em>-&gt;<strong>Insert</strong>(<em>string</em>)</a></strong><br />
+</dt>
+<dd>
+Do NOT confuse this with the lower-case <strong>insert</strong> method.
+Insert <em>string</em> at the point of the insertion cursor. If there is
+a selection in the text, and it covers the point of the insertion
+cursor, then it deletes the selection before inserting.
+</dd>
+<p></p>
+<dt><strong><a name="item_insertkeypress"><em>$text</em>-&gt;<strong>InsertKeypress</strong>(<em>character</em>)</a></strong><br />
+</dt>
+<dd>
+Inserts <em>character</em> at the <strong>insert</strong> mark. If in overstrike mode,
+it firsts deletes the character at the <strong>insert</strong> mark.
+</dd>
+<p></p>
+<dt><strong><a name="item_insertselection"><em>$text</em>-&gt;<strong>InsertSelection</strong></a></strong><br />
+</dt>
+<dd>
+Inserts the current selection at the <strong>insert</strong> mark.
+</dd>
+<p></p>
+<dt><strong><a name="item_inserttab"><em>$text</em>-&gt;<strong>insertTab</strong></a></strong><br />
+</dt>
+<dd>
+Inserts a tab (\t) character at the <strong>insert</strong> mark.
+</dd>
+<p></p>
+<dt><strong><em>$text</em>-&gt;<strong>mark</strong>(<em>option, </em>?<em>arg, arg, ...</em>?)</strong><br />
+</dt>
+<dd>
+This command is used to manipulate marks.  The exact behavior of
+the command depends on the <em>option</em> argument that follows
+the <strong>mark</strong> argument.  The following forms of the command
+are currently supported:
+</dd>
+<dl>
+<dt><strong><a name="item_markgravity"><em>$text</em>-&gt;<strong>markGravity</strong>(<em>markName, </em>?<em>direction</em>?)</a></strong><br />
+</dt>
+<dd>
+If <em>direction</em> is not specified, returns <strong>left</strong> or <strong>right</strong>
+to indicate which of its adjacent characters <em>markName</em> is attached
+to.
+If <em>direction</em> is specified, it must be <strong>left</strong> or <strong>right</strong>;
+the gravity of <em>markName</em> is set to the given value.
+</dd>
+<p></p>
+<dt><strong><a name="item_marknames"><em>$text</em>-&gt;<strong>markNames</strong></a></strong><br />
+</dt>
+<dd>
+Returns a list whose elements are the names of all the marks that
+are currently set.
+</dd>
+<p></p>
+<dt><strong><a name="item_marknext"><em>$text</em>-&gt;<strong>markNext</strong>(<em>index</em>)</a></strong><br />
+</dt>
+<dd>
+Returns the name of the next mark at or after <em>index</em>.
+If <em>index</em> is specified in numerical form, then the search for
+the next mark begins at that index.
+If <em>index</em> is the name of a mark, then the search for
+the next mark begins immediately after that mark.
+This can still return a mark at the same position if
+there are multiple marks at the same index.
+These semantics mean that the <strong>mark next</strong> operation can be used to
+step through all the marks in a text widget in the same order
+as the mark information returned by the <strong>dump</strong> operation.
+If a mark has been set to the special <strong>end</strong> index,
+then it appears to be <em>after</em> <strong>end</strong> with respect to the <strong>mark next</strong> operation.
+An empty string is returned if there are no marks after <em>index</em>.
+</dd>
+<p></p>
+<dt><strong><a name="item_markprevious"><em>$text</em>-&gt;<strong>markPrevious</strong>(<em>index</em>)</a></strong><br />
+</dt>
+<dd>
+Returns the name of the mark at or before <em>index</em>.
+If <em>index</em> is specified in numerical form, then the search for
+the previous mark begins with the character just before that index.
+If <em>index</em> is the name of a mark, then the search for
+the next mark begins immediately before that mark.
+This can still return a mark at the same position if
+there are multiple marks at the same index.
+These semantics mean that the <strong>mark previous</strong> operation can be used to
+step through all the marks in a text widget in the reverse order
+as the mark information returned by the <strong>dump</strong> operation.
+An empty string is returned if there are no marks before <em>index</em>.
+</dd>
+<p></p>
+<dt><strong><a name="item_markset"><em>$text</em>-&gt;<strong>markSet</strong>(<em>markName, index</em>)</a></strong><br />
+</dt>
+<dd>
+Sets the mark named <em>markName</em> to a position just before the
+character at <em>index</em>.
+If <em>markName</em> already exists, it is moved from its old position;
+if it doesn't exist, a new mark is created.
+This command returns an empty string.
+</dd>
+<p></p>
+<dt><strong><a name="item_markunset"><em>$text</em>-&gt;<strong>markUnset</strong>(<em>markName</em>?, <em>markName, markName, ...</em>?)</a></strong><br />
+</dt>
+<dd>
+Remove the mark corresponding to each of the <em>markName</em> arguments.
+The removed marks will not be usable in indices and will not be
+returned by future calls to ``<em>$text</em>-&gt;<strong>markNames</strong>''.
+This command returns an empty string.
+</dd>
+<p></p></dl>
+<dt><strong><a name="item_markexists"><em>$text</em>-&gt;<strong>markExists</strong>(<em>markname</em>)</a></strong><br />
+</dt>
+<dd>
+Returns true if <em>markname</em> exists - false otherwise.
+</dd>
+<p></p>
+<dt><strong><a name="item_menu"><em>$text</em>-&gt;<strong>menu</strong>(<em>?menu?</em>)</a></strong><br />
+</dt>
+<dd>
+If <em>menu</em> reference is given as an argument, then the text widget
+menu is adjusted to use this new <em>menu</em>. If the <em>menu</em> argument
+is <strong>undef</strong>, then this command disables the current text widget menu.
+If the <em>menu</em> argument is omitted altogether, then the current text
+widget menu reference is returned.
+</dd>
+<p></p>
+<dt><strong><a name="item_openline"><em>$text</em>-&gt;<strong>openLine</strong></a></strong><br />
+</dt>
+<dd>
+Inserts a newline (\n) at the insert mark.
+</dd>
+<p></p>
+<dt><strong><a name="item_overstrikemode"><em>$text</em>-&gt;<strong>OverstrikeMode</strong>(<em>?boolean?</em>)</a></strong><br />
+</dt>
+<dd>
+Returns the overstrike mode if <em>boolean</em> is omitted or sets the
+overstrike mode to <em>boolean</em>. True means overstrike mode is enabled.
+</dd>
+<p></p>
+<dt><strong><a name="item_postpopupmenu"><em>$text</em>-&gt;<strong>PostPopupMenu</strong>(<em>x,y</em>)</a></strong><br />
+</dt>
+<dd>
+Creates a popup menu at the specified (<em>x,y</em>) pixel coordinates. The
+default menu has File, Edit, Search and View menu items which cascade
+to sub-menus for further commands. There is an implicit &lt;Button-3&gt;
+binding to this method that posts the menu over the cursor.
+</dd>
+<p></p>
+<dt><strong><a name="item_resetanchor"><em>$text</em>-&gt;<strong>ResetAnchor</strong></a></strong><br />
+</dt>
+<dd>
+Sets the selection anchor to whichever end is farthest from the index
+argument.
+</dd>
+<p></p>
+<dt><strong><a name="item_scan"><em>$text</em>-&gt;<strong>scan</strong>(<em>option</em>, <em>args</em>) or</a></strong><br />
+</dt>
+<dt><strong><a name="item_scanoption"><em>$text</em>-&gt;<strong>scan</strong><em>option</em>(<em>args</em>)</a></strong><br />
+</dt>
+<dd>
+This method is used to implement scanning on texts.  It has
+two forms, depending on <em>option</em>:
+</dd>
+<dl>
+<dt><strong><a name="item_scanmark"><em>$text</em>-&gt;<strong>scanMark</strong>(<em>x, y</em>)</a></strong><br />
+</dt>
+<dd>
+Records <em>x</em> and <em>y</em> and the current view in the text window,
+for use in conjunction with later <strong>scanDragto</strong> method.
+Typically this method is associated with a mouse button press in
+the widget.  It returns an empty string.
+</dd>
+<p></p>
+<dt><strong><a name="item_scandragto"><em>$text</em>-&gt;<strong>scanDragto</strong>(<em>x, y</em>)</a></strong><br />
+</dt>
+<dd>
+This command computes the difference between its <em>x</em> and <em>y</em>
+arguments and the <em>x</em> and <em>y</em> arguments to the last
+<strong>scanMark</strong> method for the widget.
+It then adjusts the view by 10 times the difference in coordinates.
+This command is typically associated
+with mouse motion events in the widget, to produce the effect of
+dragging the text at high speed through the window.  The return
+value is an empty string.
+</dd>
+<p></p></dl>
+<dt><strong><a name="item_search"><em>$text</em>-&gt;<strong>search</strong>(?<em>switches</em>,? <em>pattern, index, </em>?<em>stopIndex</em>?)</a></strong><br />
+</dt>
+<dd>
+Searches the text in <em>$text</em> starting at <em>index</em> for a range
+of characters that matches <em>pattern</em>.
+If a match is found, the index of the first character in the match is
+returned as result;  otherwise an empty string is returned.
+One or more of the following switches (or abbreviations thereof)
+may be specified to control the search:
+</dd>
+<dl>
+<dt><strong><a name="item__2dforwards"><strong>-forwards</strong></a></strong><br />
+</dt>
+<dd>
+The search will proceed forward through the text, finding the first
+matching range starting at or after the position given by <em>index</em>.
+This is the default.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dbackwards"><strong>-backwards</strong></a></strong><br />
+</dt>
+<dd>
+The search will proceed backward through the text, finding the
+matching range closest to <em>index</em> whose first character
+is before <em>index</em>.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dexact"><strong>-exact</strong></a></strong><br />
+</dt>
+<dd>
+Use exact matching:  the characters in the matching range must be
+identical to those in <em>pattern</em>.
+This is the default.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dregexp"><strong>-regexp</strong></a></strong><br />
+</dt>
+<dd>
+Treat <em>pattern</em> as a regular expression and match it against
+the text using the rules for regular expressions (see the <strong>regexp</strong>
+command for details).
+</dd>
+<p></p>
+<dt><strong><a name="item__2dnocase"><strong>-nocase</strong></a></strong><br />
+</dt>
+<dd>
+Ignore case differences between the pattern and the text.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dcount_varname"><strong>-count</strong><em> varName</em></a></strong><br />
+</dt>
+<dd>
+The argument following <strong>-count</strong> gives the name of a variable;
+if a match is found, the number of characters in the matching
+range will be stored in the variable.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dhidden"><strong>-hidden</strong></a></strong><br />
+</dt>
+<dd>
+Find hidden text as well. By default only displayed text is found.
+</dd>
+<p></p>
+<dt><strong><a name="item__2d_2d"><strong>--</strong></a></strong><br />
+</dt>
+<dd>
+This switch has no effect except to terminate the list of switches:
+the next argument will be treated as <em>pattern</em> even if it starts
+with <strong>-</strong>.
+</dd>
+<p></p></dl>
+</dl>
+<p>The matching range must be entirely within a single line of text.
+For regular expression matching the newlines are removed from the ends
+of the lines before matching:  use the <strong>$</strong> feature in regular
+expressions to match the end of a line.
+For exact matching the newlines are retained.
+If <em>stopIndex</em> is specified, the search stops at that index:
+for forward searches, no match at or after <em>stopIndex</em> will
+be considered;  for backward searches, no match earlier in the
+text than <em>stopIndex</em> will be considered.
+If <em>stopIndex</em> is omitted, the entire text will be searched:
+when the beginning or end of the text is reached, the search
+continues at the other end until the starting location is reached
+again;  if <em>stopIndex</em> is specified, no wrap-around will occur.</p>
+<dl>
+<dt><strong><a name="item_see"><em>$text</em>-&gt;<strong>see</strong>(<em>index</em>)</a></strong><br />
+</dt>
+<dd>
+Adjusts the view in the window so that the character given by <em>index</em>
+is completely visible.
+If <em>index</em> is already visible then the command does nothing.
+If <em>index</em> is a short distance out of view, the command
+adjusts the view just enough to make <em>index</em> visible at the
+edge of the window.
+If <em>index</em> is far out of view, then the command centers
+<em>index</em> in the window.
+</dd>
+<p></p>
+<dt><strong><a name="item_selectall"><em>$text</em>-&gt;<strong>selectAll</strong></a></strong><br />
+</dt>
+<dd>
+Selects all the text in the widget.
+</dd>
+<p></p>
+<dt><strong><a name="item_selectline"><em>$text</em>-&gt;<strong>selectLine</strong></a></strong><br />
+</dt>
+<dd>
+Selects the line with the insert mark.
+</dd>
+<p></p>
+<dt><strong><a name="item_selectword"><em>$text</em>-&gt;<strong>selectWord</strong></a></strong><br />
+</dt>
+<dd>
+Selects the word with the insert mark.
+</dd>
+<p></p>
+<dt><strong><a name="item_setcursor"><em>$text</em>-&gt;<strong>SetCursor</strong>(<em>position</em>)</a></strong><br />
+</dt>
+<dd>
+Moves the insert mark to <em>position</em>.
+</dd>
+<p></p>
+<dt><strong><a name="item_tag"><em>$text</em>-&gt;<strong>tag</strong>(<em>option, </em>?<em>arg, arg, ...</em>?)</a></strong><br />
+</dt>
+<dd>
+This command is used to manipulate tags.  The exact behavior of the
+command depends on the <em>option</em> argument that follows the
+<strong>tag</strong> argument.  The following forms of the command are currently
+supported:
+</dd>
+<dl>
+<dt><strong><a name="item_tagadd"><em>$text</em>-&gt;<strong>tagAdd</strong>(<em>tagName, index1, </em>?<em>index2, index1, index2, ...</em>?)</a></strong><br />
+</dt>
+<dd>
+Associate the tag <em>tagName</em> with all of the characters starting
+with <em>index1</em> and ending just before
+<em>index2</em> (the character at <em>index2</em> isn't tagged).
+A single command may contain any number of <em>index1</em>-<em>index2</em>
+pairs.
+If the last <em>index2</em> is omitted then the single character at
+<em>index1</em> is tagged.
+If there are no characters in the specified range (e.g. <em>index1</em>
+is past the end of the file or <em>index2</em> is less than or equal
+to <em>index1</em>) then the command has no effect.
+</dd>
+<p></p>
+<dt><strong><a name="item_tagbind"><em>$text</em>-&gt;<strong>tagBind</strong>(<em>tagName, </em>?<em>sequence</em>?, ?<em>script</em>?)</a></strong><br />
+</dt>
+<dd>
+This command associates <em>script</em> with the tag given by
+<em>tagName</em>.
+Whenever the event sequence given by <em>sequence</em> occurs for a
+character that has been tagged with <em>tagName</em>,
+the script will be invoked.
+This method is similar to the <strong>bind</strong> command except that
+it operates on characters in a text rather than entire widgets.
+See the <a href="../../../site/lib/Tk/bind.html">the Tk::bind manpage</a> documentation for complete details
+on the syntax of <em>sequence</em> and the substitutions performed
+on <em>script</em> before invoking it.
+If all arguments are specified then a new binding is created, replacing
+any existing binding for the same <em>sequence</em> and <em>tagName</em>
+(if the first character of <em>script</em> is ``+'' then <em>script</em>
+augments an existing binding rather than replacing it).
+In this case the return value is an empty string.
+If <em>script</em> is omitted then the command returns the <em>script</em>
+associated with <em>tagName</em> and <em>sequence</em> (an error occurs
+if there is no such binding).
+If both <em>script</em> and <em>sequence</em> are omitted then the command
+returns a list of all the sequences for which bindings have been
+defined for <em>tagName</em>.
+</dd>
+<dd>
+<p>The only events for which bindings may be specified are those related
+to the mouse and keyboard (such as <strong>Enter</strong>, <strong>Leave</strong>,
+<strong>ButtonPress</strong>, <strong>Motion</strong>, and <strong>KeyPress</strong>) or virtual events.
+Event bindings for a text widget use the <strong>current</strong> mark described
+under <a href="#marks">MARKS</a> above.  An <strong>Enter</strong> event triggers for a tag when the tag
+first becomes present on the current character, and a <strong>Leave</strong> event
+triggers for a tag when it ceases to be present on the current character.
+<strong>Enter</strong> and <strong>Leave</strong> events can happen either because the
+<strong>current</strong> mark moved or because the character at that position
+changed.  Note that these events are different than <strong>Enter</strong> and
+<strong>Leave</strong> events for windows.  Mouse and keyboard events are directed
+to the current character.  If a virtual event is used in a binding, that
+binding can trigger only if the virtual event is defined by an underlying
+mouse-related or keyboard-related event.</p>
+</dd>
+<dd>
+<p>It is possible for the current character to have multiple tags,
+and for each of them to have a binding for a particular event
+sequence.
+When this occurs, one binding is invoked for each tag, in order
+from lowest-priority to highest priority.
+If there are multiple matching bindings for a single tag, then
+the most specific binding is chosen (see the the documentation for
+the <strong>bind</strong> command for details).
+<strong>continue</strong> and <strong>break</strong> commands within binding scripts
+are processed in the same way as for bindings created with
+the <strong>bind</strong> command.</p>
+</dd>
+<dd>
+<p>If bindings are created for the widget as a whole using the
+<strong>bind</strong> command, then those bindings will supplement the
+tag bindings.
+The tag bindings will be invoked first, followed by bindings
+for the window as a whole.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item_tagcget"><em>$text</em>-&gt;<strong>tagCget</strong>(<em>tagName, option</em>)</a></strong><br />
+</dt>
+<dd>
+This command returns the current value of the option named <em>option</em>
+associated with the tag given by <em>tagName</em>.
+<em>Option</em> may have any of the values accepted by the <strong>tag configure</strong>
+method.
+</dd>
+<p></p>
+<dt><strong><a name="item_tagconfigure"><em>$text</em>-&gt;<strong>tagConfigure</strong>(<em>tagName, </em>?<em>option</em>?, ?<em>value</em>?, ?<em>option, value, ...</em>?)</a></strong><br />
+</dt>
+<dd>
+This command is similar to the <strong>configure</strong> method except
+that it modifies options associated with the tag given by <em>tagName</em>
+instead of modifying options for the overall text widget.
+If no <em>option</em> is specified, the command returns a list describing
+all of the available options for <em>tagName</em>
+(see <a href="../../../site/lib/Tk/options.html">the Tk::options manpage</a> for information on the format of this list).
+If <em>option</em> is specified with no <em>value</em>, then the command returns
+a list describing the one named option (this list will be identical to
+the corresponding sublist of the value returned if no <em>option</em>
+is specified).
+If one or more <em>option-value</em> pairs are specified, then the command
+modifies the given <code>option(s)</code> to have the given <code>value(s)</code> in <em>tagName</em>;
+in this case the command returns an empty string.
+See <a href="#tags">TAGS</a> above for details on the options available for tags.
+</dd>
+<p></p>
+<dt><strong><a name="item_tagdelete"><em>$text</em>-&gt;<strong>tagDelete</strong>(<em>tagName, </em>?<em>tagName, ...</em>?)</a></strong><br />
+</dt>
+<dd>
+Deletes all tag information for each of the <em>tagName</em>
+arguments.
+The command removes the tags from all characters in the file
+and also deletes any other information associated with the tags,
+such as bindings and display information.
+The command returns an empty string.
+</dd>
+<p></p>
+<dt><strong><a name="item_taglower"><em>$text</em>-&gt;<strong>tagLower</strong>(<em>tagName</em>?, <em>belowThis</em>?)</a></strong><br />
+</dt>
+<dd>
+Changes the priority of tag <em>tagName</em> so that it is just lower
+in priority than the tag whose name is <em>belowThis</em>.
+If <em>belowThis</em> is omitted, then <em>tagName</em>'s priority
+is changed to make it lowest priority of all tags.
+</dd>
+<p></p>
+<dt><strong><a name="item_tagnames"><em>$text</em>-&gt;<strong>tagNames</strong>(?<em>index</em>?)</a></strong><br />
+</dt>
+<dd>
+Returns a list whose elements are the names of all the tags that
+are active at the character position given by <em>index</em>.
+If <em>index</em> is omitted, then the return value will describe
+all of the tags that exist for the text (this includes all tags
+that have been named in a ``<em>$text</em>-&gt;<strong>tag</strong>'' widget
+command but haven't been deleted by a ``<em>$text</em>-&gt;<strong>tagDelete</strong>''
+method, even if no characters are currently marked with
+the tag).
+The list will be sorted in order from lowest priority to highest
+priority.
+</dd>
+<p></p>
+<dt><strong><a name="item_tagnextrange"><em>$text</em>-&gt;<strong>tagNextrange</strong>(<em>tagName, index1, </em>?<em>index2</em>?)</a></strong><br />
+</dt>
+<dd>
+This command searches the text for a range of characters tagged
+with <em>tagName</em> where the first character of the range is
+no earlier than the character at <em>index1</em> and no later than
+the character just before <em>index2</em> (a range starting at
+<em>index2</em> will not be considered).
+If several matching ranges exist, the first one is chosen.
+The command's return value is a list containing
+two elements, which are the index of the first character of the
+range and the index of the character just after the last one in
+the range.
+If no matching range is found then the return value is an
+empty string.
+If <em>index2</em> is not given then it defaults to the end of the text.
+</dd>
+<p></p>
+<dt><strong><a name="item_tagprevrange"><em>$text</em>-&gt;<strong>tagPrevrange</strong>(<em>tagName, index1, </em>?<em>index2</em>?)</a></strong><br />
+</dt>
+<dd>
+This command searches the text for a range of characters tagged
+with <em>tagName</em> where the first character of the range is
+before the character at <em>index1</em> and no earlier than
+the character at <em>index2</em> (a range starting at
+<em>index2</em> will be considered).
+If several matching ranges exist, the one closest to <em>index1</em> is chosen.
+The command's return value is a list containing
+two elements, which are the index of the first character of the
+range and the index of the character just after the last one in
+the range.
+If no matching range is found then the return value is an
+empty string.
+If <em>index2</em> is not given then it defaults to the beginning of the text.
+</dd>
+<p></p>
+<dt><strong><a name="item_tagraise"><em>$text</em>-&gt;<strong>tagRaise</strong>(<em>tagName, </em>?<em>aboveThis</em>?)</a></strong><br />
+</dt>
+<dd>
+Changes the priority of tag <em>tagName</em> so that it is just higher
+in priority than the tag whose name is <em>aboveThis</em>.
+If <em>aboveThis</em> is omitted, then <em>tagName</em>'s priority
+is changed to make it highest priority of all tags.
+</dd>
+<p></p>
+<dt><strong><a name="item_tagranges"><em>$text</em>-&gt;<strong>tagRanges</strong>(<em>tagName</em>)</a></strong><br />
+</dt>
+<dd>
+Returns a list describing all of the ranges of text that have been
+tagged with <em>tagName</em>.
+The first two elements of the list describe the first tagged range
+in the text, the next two elements describe the second range, and
+so on.
+The first element of each pair contains the index of the first
+character of the range, and the second element of the pair contains
+the index of the character just after the last one in the
+range.
+If there are no characters tagged with <em>tag</em> then an
+empty string is returned.
+</dd>
+<p></p>
+<dt><strong><a name="item_tagremove"><em>$text</em>-&gt;<strong>tagRemove</strong>(<em>tagName, index1, </em>?<em>index2, index1, index2, ...</em>?)</a></strong><br />
+</dt>
+<dd>
+Remove the tag <em>tagName</em> from all of the characters starting
+at <em>index1</em> and ending just before
+<em>index2</em> (the character at <em>index2</em> isn't affected).
+A single command may contain any number of <em>index1</em>-<em>index2</em>
+pairs.
+If the last <em>index2</em> is omitted then the single character at
+<em>index1</em> is tagged.
+If there are no characters in the specified range (e.g. <em>index1</em>
+is past the end of the file or <em>index2</em> is less than or equal
+to <em>index1</em>) then the command has no effect.
+This command returns an empty string.
+</dd>
+<p></p></dl>
+<dt><strong><a name="item_toggleinsertmode"><em>$text</em>-&gt;<strong>ToggleInsertMode</strong></a></strong><br />
+</dt>
+<dd>
+Toggles the current overstrike mode.
+</dd>
+<p></p>
+<dt><strong><a name="item_unselectall"><em>$text</em>-&gt;<strong>unselectAll</strong></a></strong><br />
+</dt>
+<dd>
+Unselects all the text in the widget.
+</dd>
+<p></p>
+<dt><strong><a name="item_whatlinenumberpopup"><em>$text</em>-&gt;<strong>WhatLineNumberPopup</strong></a></strong><br />
+</dt>
+<dd>
+Creates a popup that displays the current line number of the
+insert mark.
+</dd>
+<p></p>
+<dt><strong><a name="item_widget"><em>$text</em>-&gt;<strong>widget</strong>(<em>option?, arg, arg, ...</em>?)</a></strong><br />
+</dt>
+<dt><strong><a name="item_widgetoption"><em>$text</em>-&gt;<strong>widget</strong><em>Option</em>(?<em>arg, arg, ...</em>?)</a></strong><br />
+</dt>
+<dd>
+This method is used to manipulate embedded windows.
+The behavior of the method depends on the <em>option</em> argument
+that follows the <strong>window</strong> argument.
+The following forms of the method are currently supported:
+</dd>
+<dl>
+<dt><strong><a name="item_windowcget"><em>$text</em>-&gt;<strong>windowCget</strong>(<em>index, option</em>)</a></strong><br />
+</dt>
+<dd>
+Returns the value of a configuration option for an embedded window.
+<em>Index</em> identifies the embedded window, and <em>option</em>
+specifies a particular configuration option, which must be one of
+the ones listed in <a href="#embedded_windows">EMBEDDED WINDOWS</a> above.
+</dd>
+<p></p>
+<dt><strong><a name="item_windowconfigure"><em>$text</em>-&gt;<strong>windowConfigure</strong>(<em>index</em>?, <em>option, value, ...</em>?)</a></strong><br />
+</dt>
+<dd>
+Query or modify the configuration options for an embedded window.
+If no <em>option</em> is specified, returns a list describing all of
+the available options for the embedded window at <em>index</em>
+(see <a href="../../../site/lib/Tk/options.html">the Tk::options manpage</a> for information on the format of this list).
+If <em>option</em> is specified with no <em>value</em>, then the command
+returns a list describing the one named option (this list will be
+identical to the corresponding sublist of the value returned if no
+<em>option</em> is specified).
+If one or more <em>option-value</em> pairs are specified, then the command
+modifies the given <code>option(s)</code> to have the given value(s);  in
+this case the command returns an empty string.
+See <a href="#embedded_windows">EMBEDDED WINDOWS</a> above for information on the options that
+are supported.
+</dd>
+<p></p>
+<dt><strong><a name="item_windowcreate"><em>$text</em>-&gt;<strong>windowCreate</strong>(<em>index</em>?, <em>option, value, ...</em>?)</a></strong><br />
+</dt>
+<dd>
+This command creates a new window annotation, which will appear
+in the text at the position given by <em>index</em>.
+Any number of <em>option-value</em> pairs may be specified to
+configure the annotation.
+See <a href="#embedded_windows">EMBEDDED WINDOWS</a> above for information on the options that
+are supported.
+Returns an empty string.
+</dd>
+<p></p>
+<dt><strong><a name="item_windownames"><em>$text</em>-&gt;<strong>windowNames</strong></a></strong><br />
+</dt>
+<dd>
+Returns a list whose elements are the names of all windows currently
+embedded in $text.
+</dd>
+<p></p></dl>
+<dt><strong><a name="item_xview"><em>$text</em>-&gt;<strong>xview</strong>(<em>option, args</em>)</a></strong><br />
+</dt>
+<dd>
+This command is used to query and change the horizontal position of the
+text in the widget's window.  It can take any of the following
+forms:
+</dd>
+<dl>
+<dt><strong><em>$text</em>-&gt;<strong>xview</strong></strong><br />
+</dt>
+<dd>
+Returns a list containing two elements.
+Each element is a real fraction between 0 and 1;  together they describe
+the portion of the document's horizontal span that is visible in
+the window.
+For example, if the first element is .2 and the second element is .6,
+20% of the text is off-screen to the left, the middle 40% is visible
+in the window, and 40% of the text is off-screen to the right.
+The fractions refer only to the lines that are actually visible in the
+window:  if the lines in the window are all very short, so that they
+are entirely visible, the returned fractions will be 0 and 1,
+even if there are other lines in the text that are
+much wider than the window.
+These are the same values passed to scrollbars via the <strong>-xscrollcommand</strong>
+option.
+</dd>
+<p></p>
+<dt><strong><a name="item_xviewmoveto"><em>$text</em>-&gt;<strong>xviewMoveto</strong>(<em>fraction</em>)</a></strong><br />
+</dt>
+<dd>
+Adjusts the view in the window so that <em>fraction</em> of the horizontal
+span of the text is off-screen to the left.
+<em>Fraction</em> is a fraction between 0 and 1.
+</dd>
+<p></p>
+<dt><strong><a name="item_xviewscroll"><em>$text</em>-&gt;<strong>xviewScroll</strong>(<em>number, what</em>)</a></strong><br />
+</dt>
+<dd>
+This command shifts the view in the window left or right according to
+<em>number</em> and <em>what</em>.
+<em>Number</em> must be an integer.
+<em>What</em> must be either <strong>units</strong> or <strong>pages</strong> or an abbreviation
+of one of these.
+If <em>what</em> is <strong>units</strong>, the view adjusts left or right by
+<em>number</em> average-width characters on the display;  if it is
+<strong>pages</strong> then the view adjusts by <em>number</em> screenfuls.
+If <em>number</em> is negative then characters farther to the left
+become visible;  if it is positive then characters farther to the right
+become visible.
+</dd>
+<p></p></dl>
+<dt><strong><a name="item_yview"><em>$text</em>-&gt;<strong>yview</strong>(<em>?args</em>?)</a></strong><br />
+</dt>
+<dd>
+This command is used to query and change the vertical position of the
+text in the widget's window.
+It can take any of the following forms:
+</dd>
+<dl>
+<dt><strong><em>$text</em>-&gt;<strong>yview</strong></strong><br />
+</dt>
+<dd>
+Returns a list containing two elements, both of which are real fractions
+between 0 and 1.
+The first element gives the position of the first character in the
+top line in the window, relative to the text as a whole (0.5 means
+it is halfway through the text, for example).
+The second element gives the position of the character just after
+the last one in the bottom line of the window,
+relative to the text as a whole.
+These are the same values passed to scrollbars via the <strong>-yscrollcommand</strong>
+option.
+</dd>
+<p></p>
+<dt><strong><a name="item_yviewmoveto"><em>$text</em>-&gt;<strong>yviewMoveto</strong>(<em>fraction</em>)</a></strong><br />
+</dt>
+<dd>
+Adjusts the view in the window so that the character given by <em>fraction</em>
+appears on the top line of the window.
+<em>Fraction</em> is a fraction between 0 and 1;  0 indicates the first
+character in the text, 0.33 indicates the character one-third the
+way through the text, and so on.
+</dd>
+<p></p>
+<dt><strong><a name="item_yviewscroll"><em>$text</em>-&gt;<strong>yviewScroll</strong>(<em>number, what</em>)</a></strong><br />
+</dt>
+<dd>
+This command adjust the view in the window up or down according to
+<em>number</em> and <em>what</em>.
+<em>Number</em> must be an integer.
+<em>What</em> must be either <strong>units</strong> or <strong>pages</strong>.
+If <em>what</em> is <strong>units</strong>, the view adjusts up or down by
+<em>number</em> lines on the display;  if it is <strong>pages</strong> then
+the view adjusts by <em>number</em> screenfuls.
+If <em>number</em> is negative then earlier positions in the text
+become visible;  if it is positive then later positions in the text
+become visible.
+</dd>
+<p></p>
+<dt><strong><em>$text</em>-&gt;<strong>yview</strong>(?<strong>-pickplace</strong>,? <em>index</em>)</strong><br />
+</dt>
+<dd>
+Changes the view in the <em>$text</em>'s window to make <em>index</em> visible.
+If the <strong>-pickplace</strong> option isn't specified then <em>index</em> will
+appear at the top of the window.
+If <strong>-pickplace</strong> is specified then the widget chooses where
+<em>index</em> appears in the window:
+</dd>
+<dl>
+<dt><strong>[1]</strong><br />
+</dt>
+<dd>
+If <em>index</em> is already visible somewhere in the window then the
+command does nothing.
+</dd>
+<p></p>
+<dt><strong>[2]</strong><br />
+</dt>
+<dd>
+If <em>index</em> is only a few lines off-screen above the window then
+it will be positioned at the top of the window.
+</dd>
+<p></p>
+<dt><strong>[3]</strong><br />
+</dt>
+<dd>
+If <em>index</em> is only a few lines off-screen below the window then
+it will be positioned at the bottom of the window.
+</dd>
+<p></p>
+<dt><strong>[4]</strong><br />
+</dt>
+<dd>
+Otherwise, <em>index</em> will be centered in the window.
+</dd>
+<p></p></dl>
+</dl>
+</dl>
+<p>The <strong>-pickplace</strong> option has been obsoleted by the <strong>see</strong> widget
+command (<strong>see</strong> handles both x- and y-motion to make a location
+visible, whereas <strong>-pickplace</strong> only handles motion in y).</p>
+<dl>
+<dt><strong><em>$text</em>-&gt;<strong>yview</strong>(<em>number</em>)</strong><br />
+</dt>
+<dd>
+This command makes the first character on the line after
+the one given by <em>number</em> visible at the top of the window.
+<em>Number</em> must be an integer.
+This command used to be used for scrolling, but now it is obsolete.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="bindings">BINDINGS</a></h1>
+<p>Tk automatically creates class bindings for texts that give them
+the following default behavior.
+In the descriptions below, ``word'' refers to a contiguous group
+of letters, digits, or ``_'' characters, or any single character
+other than these.</p>
+<dl>
+<dt><strong>[1]</strong><br />
+</dt>
+<dd>
+Clicking mouse button 1 positions the insertion cursor
+just before the character underneath the mouse cursor, sets the
+input focus to this widget, and clears any selection in the widget.
+Dragging with mouse button 1 strokes out a selection between
+the insertion cursor and the character under the mouse.
+</dd>
+<p></p>
+<dt><strong>[2]</strong><br />
+</dt>
+<dd>
+Double-clicking with mouse button 1 selects the word under the mouse
+and positions the insertion cursor at the beginning of the word.
+Dragging after a double click will stroke out a selection consisting
+of whole words.
+</dd>
+<p></p>
+<dt><strong>[3]</strong><br />
+</dt>
+<dd>
+Triple-clicking with mouse button 1 selects the line under the mouse
+and positions the insertion cursor at the beginning of the line.
+Dragging after a triple click will stroke out a selection consisting
+of whole lines.
+</dd>
+<p></p>
+<dt><strong>[4]</strong><br />
+</dt>
+<dd>
+The ends of the selection can be adjusted by dragging with mouse
+button 1 while the Shift key is down;  this will adjust the end
+of the selection that was nearest to the mouse cursor when button
+1 was pressed.
+If the button is double-clicked before dragging then the selection
+will be adjusted in units of whole words;  if it is triple-clicked
+then the selection will be adjusted in units of whole lines.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b5_5d">[5]</a></strong><br />
+</dt>
+<dd>
+Clicking mouse button 1 with the Control key down will reposition the
+insertion cursor without affecting the selection.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b6_5d">[6]</a></strong><br />
+</dt>
+<dd>
+If any normal printing characters are typed, they are
+inserted at the point of the insertion cursor.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b7_5d">[7]</a></strong><br />
+</dt>
+<dd>
+The view in the widget can be adjusted by dragging with mouse button 2.
+If mouse button 2 is clicked without moving the mouse, the selection
+is copied into the text at the position of the mouse cursor.
+The Insert key also inserts the selection, but at the position of
+the insertion cursor.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b8_5d">[8]</a></strong><br />
+</dt>
+<dd>
+If the mouse is dragged out of the widget
+while button 1 is pressed, the entry will automatically scroll to
+make more text visible (if there is more text off-screen on the side
+where the mouse left the window).
+</dd>
+<p></p>
+<dt><strong><a name="item__5b9_5d">[9]</a></strong><br />
+</dt>
+<dd>
+The Left and Right keys move the insertion cursor one character to the
+left or right;  they also clear any selection in the text.
+If Left or Right is typed with the Shift key down, then the insertion
+cursor moves and the selection is extended to include the new character.
+Control-Left and Control-Right move the insertion cursor by words, and
+Control-Shift-Left and Control-Shift-Right move the insertion cursor
+by words and also extend the selection.
+Control-b and Control-f behave the same as Left and Right, respectively.
+Meta-b and Meta-f behave the same as Control-Left and Control-Right,
+respectively.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b10_5d">[10]</a></strong><br />
+</dt>
+<dd>
+The Up and Down keys move the insertion cursor one line up or
+down and clear any selection in the text.
+If Up or Right is typed with the Shift key down, then the insertion
+cursor moves and the selection is extended to include the new character.
+Control-Up and Control-Down move the insertion cursor by paragraphs (groups
+of lines separated by blank lines), and
+Control-Shift-Up and Control-Shift-Down move the insertion cursor
+by paragraphs and also extend the selection.
+Control-p and Control-n behave the same as Up and Down, respectively.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b11_5d">[11]</a></strong><br />
+</dt>
+<dd>
+The Next and Prior keys move the insertion cursor forward or backwards
+by one screenful and clear any selection in the text.
+If the Shift key is held down while Next or Prior is typed, then
+the selection is extended to include the new character.
+Control-v moves the view down one screenful without moving the
+insertion cursor or adjusting the selection.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b12_5d">[12]</a></strong><br />
+</dt>
+<dd>
+Control-Next and Control-Prior scroll the view right or left by one page
+without moving the insertion cursor or affecting the selection.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b13_5d">[13]</a></strong><br />
+</dt>
+<dd>
+Home and Control-a move the insertion cursor to the
+beginning of its line and clear any selection in the widget.
+Shift-Home moves the insertion cursor to the beginning of the line
+and also extends the selection to that point.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b14_5d">[14]</a></strong><br />
+</dt>
+<dd>
+End and Control-e move the insertion cursor to the
+end of the line and clear any selection in the widget.
+Shift-End moves the cursor to the end of the line and extends the selection
+to that point.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b15_5d">[15]</a></strong><br />
+</dt>
+<dd>
+Control-Home and Meta-&lt; move the insertion cursor to the beginning of
+the text and clear any selection in the widget.
+Control-Shift-Home moves the insertion cursor to the beginning of the text
+and also extends the selection to that point.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b16_5d">[16]</a></strong><br />
+</dt>
+<dd>
+Control-End and Meta-&gt; move the insertion cursor to the end of the
+text and clear any selection in the widget.
+Control-Shift-End moves the cursor to the end of the text and extends
+the selection to that point.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b17_5d">[17]</a></strong><br />
+</dt>
+<dd>
+The Select key and Control-Space set the selection anchor to the position
+of the insertion cursor.  They don't affect the current selection.
+Shift-Select and Control-Shift-Space adjust the selection to the
+current position of the insertion cursor, selecting from the anchor
+to the insertion cursor if there was not any selection previously.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b18_5d">[18]</a></strong><br />
+</dt>
+<dd>
+Control-/ selects the entire contents of the widget.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b19_5d">[19]</a></strong><br />
+</dt>
+<dd>
+Control-\ clears any selection in the widget.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b20_5d">[20]</a></strong><br />
+</dt>
+<dd>
+The F16 key (labelled Copy on many Sun workstations) or Meta-w
+copies the selection in the widget to the clipboard, if there is a selection.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b21_5d">[21]</a></strong><br />
+</dt>
+<dd>
+The F20 key (labelled Cut on many Sun workstations) or Control-w
+copies the selection in the widget to the clipboard and deletes
+the selection.
+If there is no selection in the widget then these keys have no effect.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b22_5d">[22]</a></strong><br />
+</dt>
+<dd>
+The F18 key (labelled Paste on many Sun workstations) or Control-y
+inserts the contents of the clipboard at the position of the
+insertion cursor.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b23_5d">[23]</a></strong><br />
+</dt>
+<dd>
+The Delete key deletes the selection, if there is one in the widget.
+If there is no selection, it deletes the character to the right of
+the insertion cursor.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b24_5d">[24]</a></strong><br />
+</dt>
+<dd>
+Backspace and Control-h delete the selection, if there is one
+in the widget.
+If there is no selection, they delete the character to the left of
+the insertion cursor.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b25_5d">[25]</a></strong><br />
+</dt>
+<dd>
+Control-d deletes the character to the right of the insertion cursor.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b26_5d">[26]</a></strong><br />
+</dt>
+<dd>
+Meta-d deletes the word to the right of the insertion cursor.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b27_5d">[27]</a></strong><br />
+</dt>
+<dd>
+Control-k deletes from the insertion cursor to the end of its line;
+if the insertion cursor is already at the end of a line, then
+Control-k deletes the newline character.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b28_5d">[28]</a></strong><br />
+</dt>
+<dd>
+Control-o opens a new line by inserting a newline character in
+front of the insertion cursor without moving the insertion cursor.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b29_5d">[29]</a></strong><br />
+</dt>
+<dd>
+Meta-backspace and Meta-Delete delete the word to the left of the
+insertion cursor.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b30_5d">[30]</a></strong><br />
+</dt>
+<dd>
+Control-x deletes whatever is selected in the text widget.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b31_5d">[31]</a></strong><br />
+</dt>
+<dd>
+Control-t reverses the order of the two characters to the right of
+the insertion cursor.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b32_5d">[32]</a></strong><br />
+</dt>
+<dd>
+Control-z (and Control-underscore on UNIX when tk_strictMotif is
+true)  undoes  the last edit action if the -undo option is true.
+Does nothing otherwise.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b33_5d">[33]</a></strong><br />
+</dt>
+<dd>
+Control-Z (or Control-y on Windows) reapplies the last undone edit
+action if the -undo option is true. Does nothing otherwise.
+</dd>
+<p></p></dl>
+<p>If the widget is disabled using the <strong>-state</strong> option, then its
+view can still be adjusted and text can still be selected,
+but no insertion cursor will be displayed and no text modifications will
+take place.</p>
+<p>The behavior of texts can be changed by defining new bindings for
+individual widgets or by redefining the class bindings.</p>
+<p>
+</p>
+<hr />
+<h1><a name="tied_interface">TIED INTERFACE</a></h1>
+<p>The Perl/Tk Text widget also has built-in TIEHANDLE methods for
+<strong>print</strong> and <strong>printf</strong> statements. This means you can print to file
+handles tied to a Text widget, and the tied methods automatically
+insert the print statement's arguments into the Text widget.</p>
+<p>For example:</p>
+<pre>
+ #!/usr/local/bin/perl -w
+ use POSIX 'acos';
+ use Tk;
+ use strict;</pre>
+<pre>
+ my $mw = MainWindow-&gt;new;
+ my $text = $mw-&gt;Text(qw/-width 40 -height 10/)-&gt;pack;</pre>
+<pre>
+ tie *STDOUT, ref $text, $text;</pre>
+<pre>
+ print &quot;Hello Text World!\n&quot;;
+ printf &quot;pi ~= %1.5f&quot;, acos(-1.0);</pre>
+<pre>
+ MainLoop;</pre>
+<p>
+</p>
+<hr />
+<h1><a name="performance_issues">PERFORMANCE ISSUES</a></h1>
+<p>Text widgets should run efficiently under a variety
+of conditions.  The text widget uses about 2-3 bytes of
+main memory for each byte of text, so texts containing a megabyte
+or more should be practical on most workstations.
+Text is represented internally with a modified B-tree structure
+that makes operations relatively efficient even with large texts.
+Tags are included in the B-tree structure in a way that allows
+tags to span large ranges or have many disjoint smaller ranges
+without loss of efficiency.
+Marks are also implemented in a way that allows large numbers of
+marks.
+In most cases it is fine to have large numbers of unique tags,
+or a tag that has many distinct ranges.</p>
+<p>One performance problem can arise if you have hundreds or thousands
+of different tags that all have the following characteristics:
+the first and last ranges of each tag are near the beginning and
+end of the text, respectively,
+or a single tag range covers most of the text widget.
+The cost of adding and deleting tags like this is proportional
+to the number of other tags with the same properties.
+In contrast, there is no problem with having thousands of distinct
+tags if their overall ranges are localized and spread uniformly throughout
+the text.</p>
+<p>Very long text lines can be expensive,
+especially if they have many marks and tags within them.</p>
+<p>The display line with the insert cursor is redrawn each time the
+cursor blinks, which causes a steady stream of graphics traffic.
+Set the <strong>-insertofftime</strong> option to 0 avoid this.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../../../site/lib/Tk/ROText.html">Tk::ROText</a>
+<a href="../../../site/lib/Tk/TextUndo.html">Tk::TextUndo</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="keywords">KEYWORDS</a></h1>
+<p>text, widget</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::Text - Create and manipulate Text widgets</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

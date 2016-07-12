@@ -1,9 +1,9 @@
 ; The name of the installer
-Name "KOST-Val v1.7.5"
+Name "KOST-Val v1.7.6"
 ; Sets the icon of the installer
 Icon "val.ico"
 ; remove the text 'Nullsoft Install System vX.XX' from the installer window 
-BrandingText "Copyright © KOST/CECO"
+BrandingText "Copyright (c) KOST/CECO"
 ; The file to write
 OutFile "KOST-Val_de.exe"
 ; The default installation directory

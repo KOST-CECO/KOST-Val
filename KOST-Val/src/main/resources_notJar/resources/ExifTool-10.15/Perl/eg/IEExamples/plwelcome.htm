@@ -1,0 +1,55 @@
+
+<HTML>
+
+<HEAD><TITLE>PerlScript Welcome Sample</TITLE>
+<link rel="stylesheet" type="text/css" href="../HTML/Active.css">
+</HEAD>
+
+<!-- 
+	ActiveState PerlScript sample 
+	PerlScript:  The easiest, most powerful way to program custom web solutions. 
+-->
+
+<BODY>
+
+<!-- Table A - Page heading including masthead -->
+<TABLE CELLPADDING=0 BORDER=3 CELLSPACING=0>
+<TR VALIGN=TOP ><TD>
+<A HREF="index.htm" NAME="Image"><IMG SRC="PSBWlogo.gif" WIDTH=400 HEIGHT=48 ALT="The power of PerlScript!" BORDER=5></A><P>
+</TD></TR>
+</TABLE>
+<hr>
+<BR>
+
+<SCRIPT language="PerlScript">
+
+sub PrintWelcome {	
+	($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst)=localtime();
+	$thisday=(Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday)[$wday];
+	$thismon=(January,February,March,April,May,June,July,August,September,October,November,December)[$mon];
+	if ($hour < 12) {
+		$window->document->write( "Good morning!  ");
+	} elsif ($hour < 17) {
+		$window->document->write( "Good afternoon!  ");
+	} else {
+		$window->document->write( "Good evening!  ");
+	};
+	$ampm = 'AM';
+	if ($hour > 12) {
+		$hour-=12;
+		$ampm = 'PM';
+		}
+	$time = sprintf '%d:%2.2d:%2.2d',$hour,$min,$sec;
+	$year += 1900;
+	$datetime = $time.' '.$ampm.', '.$thisday.', '.$thismon.' '.$mday.', '.$year;		
+	$window->document->write("Welcome to the world of PerlScript.<BR>  ");
+	$window->document->write("Just in case you were wondering, it's<BR> "); 
+	$window->document->write($datetime);
+}
+
+PrintWelcome();
+
+  </SCRIPT>
+<P>
+</BODY>
+</HTML>

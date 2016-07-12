@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+
+<head>
+<title>ActivePerl faq10 - Embedding and Extending</title>
+<link rel="STYLESHEET" href="../../Active.css" type="text/css" media="screen">
+</head>
+
+<body>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#EAE2BB">
+<tr> 
+<td width="57"><a target=_blank href="http://www.ActiveState.com/ActivePerl/">
+<img src="../../images/activeperl_logo.gif" width="57" height="48" border="0" alt="ActivePerl"></a></td>
+<td><div align="center" class="heading">ActivePerl User Guide</div></td>
+<td width="112"><a target=_blank  href="http://www.ActiveState.com">
+<img src="../../images/AS_logo.gif" width="112" height="48" border="0"  alt="ActiveState" /></a></td>
+</tr>
+<tr>
+<td class="lineColour" colspan="3"></td>
+</tr>
+</table>
+
+<h1>Embedding and Extending</h1>
+
+<ul>
+  <li><a class="doc" href="#NAME">NAME</a></li>
+  <li><a class="doc" href="#DESCRIPTION">DESCRIPTION</a>
+    <ul>
+      <li><a class="doc" href="#How_do_I_write_an_extension_for_">How do I write an
+        extension for ActivePerl?</a></li>
+      <li><a class="doc" href="#How_do_I_embed_the_Perl_interpre">How do I embed the Perl
+        interpreter into my C/C++ program?</a></li>
+    </ul>
+  </li>
+  <li><a class="doc" href="#AUTHOR_AND_COPYRIGHT">AUTHOR AND COPYRIGHT</a></li>
+</ul>
+ 
+<h2><a name="NAME">NAME</a></h2>
+<p>ActivePerl-faq10 - Embedding and Extending</p>
+ 
+<h2><a name="DESCRIPTION">DESCRIPTION</a></h2>
+<p>Techniques for Embedding and Extending ActivePerl</p>
+ 
+<h2><a name="How_do_I_write_an_extension_for_">How do I write an extension for
+ActivePerl?</a></h2>
+
+<p>Writing extensions in C or C++ for ActivePerl is identical to writing them for standard Perl. Consult the
+perlxstut document for complete information and pointers to other sources of information.</p>
+
+<p>As a result of the oneperl effort, you no longer need to build ActivePerl from the source distribution to
+write or compile extensions. The Perl installation will detect your C compiler (currently, just Visual C++),
+and configure Perl to use it for compiling extensions.</p>
+
+<p>Note that writing extensions in C or C++ is not easy. You need to have experience writing C 
+programs for Windows platforms before you should even think about writing an extension.</p>
+ 
+<h2><a name="How_do_I_embed_the_Perl_interpre">How do I embed the Perl
+interpreter into my C/C++ program?</a></h2>
+
+<p>Writing applications that contain Perl interpreters using ActivePerl is
+identical to writing them for standard Perl. Consult the perlembed document for
+complete information and pointers to other sources of information.</p>
+
+<p>Note that the subject of embedding Perl interpreters inside applications is
+not a trivial one. You need to have experience writing C programs for Windows platforms before
+you should even think about writing an embedding Perl interpreters in your application.</p>
+
+<p>NOTE: ActivePerl 5xx series builds had a different mechanism for embedding
+that was restricted to C++. This is no longer supported.
+The standard way to embed interpreters now supports all the functionality that
+used to be available only with C++, and then some. Use
+the mechanisms described in the perlembed documentation.</p>
+ 
+<h2><a name="AUTHOR_AND_COPYRIGHT">AUTHOR AND COPYRIGHT</a></h2>
+
+<p>This FAQ was originally assembled and maintained by
+Evangelo Prodromou. It has been revised and updated by Brian Jepson of O'Reilly
+&amp; Associates, David Grove, David Dmytryshyn, and David Sparks of
+ActiveState.</p>
+
+<p>This FAQ is in the public domain. If you use it,
+however, please ensure that you give credit to the original authors. 
+</p>
+
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+  <tr>
+    <td class="block" valign="MIDDLE" width="100%" bgcolor="#cccccc"><strong>
+      <p class="block">&nbsp;ActivePerl FAQ - Embedding and Extending</p>
+      </strong></td>
+  </tr>
+</table>
+
+</body>
+
+</html>

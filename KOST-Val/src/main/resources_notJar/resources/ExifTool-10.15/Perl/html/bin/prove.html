@@ -1,0 +1,228 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>prove -- A command-line tool for running tests against Test::Harness</title>
+<link rel="stylesheet" href="../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;prove -- A command-line tool for running tests against Test::Harness</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#overview">OVERVIEW</a></li>
+	<li><a href="#prove_vs__make_test">PROVE VS. ``MAKE TEST''</a></li>
+	<li><a href="#command_line_options">COMMAND LINE OPTIONS</a></li>
+	<ul>
+
+		<li><a href="#b__blib">-b, -blib</a></li>
+		<li><a href="#d__debug">-d, -debug</a></li>
+		<li><a href="#d__dry">-D, -dry</a></li>
+		<li><a href="#ext_extension">-ext=extension</a></li>
+		<li><a href="#i">-I</a></li>
+		<li><a href="#l__lib">-l, -lib</a></li>
+		<li><a href="#r__recurse">-r, -recurse</a></li>
+		<li><a href="#s__shuffle">-s, -shuffle</a></li>
+		<li><a href="#t">-t</a></li>
+		<li><a href="#t">-T</a></li>
+		<li><a href="#v__verbose">-v, -verbose</a></li>
+		<li><a href="#v__version">-V, -version</a></li>
+	</ul>
+
+	<li><a href="#bugs">BUGS</a></li>
+	<li><a href="#todo">TODO</a></li>
+	<li><a href="#authors">AUTHORS</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>prove -- A command-line tool for running tests against Test::Harness</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p>prove [options] [files/directories]</p>
+<p>Options:</p>
+<pre>
+    -b, --blib      Adds blib/lib to the path for your tests, a la &quot;use blib&quot;.
+    -d, --debug     Includes extra debugging information.
+    -D, --dry       Dry run: Show the tests to run, but don't run them.
+        --ext=x     Extensions (defaults to .t)
+    -h, --help      Display this help
+    -H, --man       Longer manpage for prove
+    -I              Add libraries to @INC, as Perl's -I
+    -l, --lib       Add lib to the path for your tests.
+    -r, --recurse   Recursively descend into directories.
+    -s, --shuffle   Run the tests in a random order.
+    -T              Enable tainting checks
+    -t              Enable tainting warnings
+    -v, --verbose   Display standard output of test scripts while running them.
+    -V, --version   Display version info</pre>
+<p>Single-character options may be stacked.  Default options may be set by
+specifying the PROVE_SWITCHES environment variable.</p>
+<p>
+</p>
+<hr />
+<h1><a name="overview">OVERVIEW</a></h1>
+<p><em>prove</em> is a command-line interface to the test-running functionality
+of <code>Test::Harness</code>.  With no arguments, it will run all tests in the
+current directory.</p>
+<p>Shell metacharacters may be used with command lines options and will be exanded 
+via <a href="../lib/Pod/perlfunc.html#item_glob"><code>glob</code></a>.</p>
+<p>
+</p>
+<hr />
+<h1><a name="prove_vs__make_test">PROVE VS. ``MAKE TEST''</a></h1>
+<p><em>prove</em> has a number of advantages over <code>make test</code> when doing development.</p>
+<ul>
+<li><strong><a name="item_prove_is_designed_as_a_development_tool"><em>prove</em> is designed as a development tool</a></strong><br />
+</li>
+Perl users typically run the test harness through a makefile via
+<code>make test</code>.  That's fine for module distributions, but it's
+suboptimal for a test/code/debug development cycle.
+<p></p>
+<li><strong><a name="item_prove_is_granular"><em>prove</em> is granular</a></strong><br />
+</li>
+<em>prove</em> lets your run against only the files you want to check.
+Running <code>prove t/live/ t/master.t</code> checks every <em>*.t</em> in <em>t/live</em>,
+plus <em>t/master.t</em>.
+<p></p>
+<li><strong><a name="item_prove_has_an_easy_verbose_mode"><em>prove</em> has an easy verbose mode</a></strong><br />
+</li>
+<em>prove</em> has a <a href="../lib/Pod/perlrun.html#item__2dv"><code>-v</code></a> option to see the raw output from the tests.
+To do this with <code>make test</code>, you must set <code>HARNESS_VERBOSE=1</code> in
+the environment.
+<p></p>
+<li><strong><a name="item_prove_can_run_under_taint_mode"><em>prove</em> can run under taint mode</a></strong><br />
+</li>
+<em>prove</em>'s <a href="../lib/Pod/perlrun.html#item__2dt"><code>-T</code></a> runs your tests under <code>perl -T</code>, and <a href="../lib/Pod/perlrun.html#item__2dt"><code>-t</code></a> runs them
+under <code>perl -t</code>.
+<p></p>
+<li><strong><a name="item_prove_can_shuffle_tests"><em>prove</em> can shuffle tests</a></strong><br />
+</li>
+You can use <em>prove</em>'s <code>--shuffle</code> option to try to excite problems
+that don't show up when tests are run in the same order every time.
+<p></p>
+<li><strong><a name="item_prove_doesn_27t_rely_on_a_make_tool"><em>prove</em> doesn't rely on a make tool</a></strong><br />
+</li>
+Not everyone wants to write a makefile, or use <a href="../lib/ExtUtils/MakeMaker.html">the ExtUtils::MakeMaker manpage</a>
+to do so.  <em>prove</em> has no external dependencies.
+<p></p>
+<li><strong><a name="item_not_everything_is_a_module">Not everything is a module</a></strong><br />
+</li>
+More and more users are using Perl's testing tools outside the
+context of a module distribution, and may not even use a makefile
+at all.
+<p></p></ul>
+<p>
+</p>
+<hr />
+<h1><a name="command_line_options">COMMAND LINE OPTIONS</a></h1>
+<p>
+</p>
+<h2><a name="b__blib">-b, --blib</a></h2>
+<p>Adds blib/lib to the path for your tests, a la ``use blib''.</p>
+<p>
+</p>
+<h2><a name="d__debug">-d, --debug</a></h2>
+<p>Include debug information about how <em>prove</em> is being run.  This
+option doesn't show the output from the test scripts.  That's handled
+by -v,--verbose.</p>
+<p>
+</p>
+<h2><a name="d__dry">-D, --dry</a></h2>
+<p>Dry run: Show the tests to run, but don't run them.</p>
+<p>
+</p>
+<h2><a name="ext_extension">--ext=extension</a></h2>
+<p>Specify extensions of the test files to run.  By default, these are .t,
+but you may have other non-.t test files, most likely .sh shell scripts.
+The --ext is repeatable.</p>
+<p>
+</p>
+<h2><a name="i">-I</a></h2>
+<p>Add libraries to @INC, as Perl's -I.</p>
+<p>
+</p>
+<h2><a name="l__lib">-l, --lib</a></h2>
+<p>Add <code>lib</code> to @INC.  Equivalent to <code>-Ilib</code>.</p>
+<p>
+</p>
+<h2><a name="r__recurse">-r, --recurse</a></h2>
+<p>Descends into subdirectories of any directories specified, looking for tests.</p>
+<p>
+</p>
+<h2><a name="s__shuffle">-s, --shuffle</a></h2>
+<p>Sometimes tests are accidentally dependent on tests that have been
+run before.  This switch will shuffle the tests to be run prior to
+running them, thus ensuring that hidden dependencies in the test
+order are likely to be revealed.  The author hopes the run the
+algorithm on the preceding sentence to see if he can produce something
+slightly less awkward.</p>
+<p>
+</p>
+<h2><a name="t">-t</a></h2>
+<p>Runs test programs under perl's -t taint warning mode.</p>
+<p>
+</p>
+<h2><a name="t">-T</a></h2>
+<p>Runs test programs under perl's -T taint mode.</p>
+<p>
+</p>
+<h2><a name="v__verbose">-v, --verbose</a></h2>
+<p>Display standard output of test scripts while running them.</p>
+<p>
+</p>
+<h2><a name="v__version">-V, --version</a></h2>
+<p>Display version info.</p>
+<p>
+</p>
+<hr />
+<h1><a name="bugs">BUGS</a></h1>
+<p>Please use the CPAN bug ticketing system at <a href="http://rt.cpan.org/">http://rt.cpan.org/</a>.
+You can also mail bugs, fixes and enhancements to 
+<code>&lt;bug-test-harness@rt.cpan.org&gt;</code>.</p>
+<p>
+</p>
+<hr />
+<h1><a name="todo">TODO</a></h1>
+<ul>
+<li></li>
+Shuffled tests must be recreatable
+<p></p></ul>
+<p>
+</p>
+<hr />
+<h1><a name="authors">AUTHORS</a></h1>
+<p>Andy Lester <code>&lt;andy@petdance.com&gt;</code></p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 2003 by Andy Lester <code>&lt;andy@petdance.com&gt;</code>.</p>
+<p>This program is free software; you can redistribute it and/or 
+modify it under the same terms as Perl itself.</p>
+<p>See <a href="http://www.perl.com/perl/misc/Artistic.html">http://www.perl.com/perl/misc/Artistic.html</a>.</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;prove -- A command-line tool for running tests against Test::Harness</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

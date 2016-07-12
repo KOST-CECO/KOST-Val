@@ -1,0 +1,115 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Tk::TextUndo - perl/tk text widget with bindings to undo changes.</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::TextUndo - perl/tk text widget with bindings to undo changes.</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<ul>
+
+		<li><a href="#bindings">Bindings</a></li>
+		<li><a href="#methods">Methods</a></li>
+	</ul>
+
+	<li><a href="#keys">KEYS</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Tk::TextUndo - perl/tk text widget with bindings to undo changes.</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<strong>use Tk::TextUndo;</strong></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>$testundo</em> = <em>$parent</em>-&gt;<strong>TextUndo</strong>(?<em>-option</em>=&gt;<em>value</em>, ...?);</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>This IS-A text widget with an unlimited 'undo' history but without
+a re'undo' capability.</p>
+<p>
+</p>
+<h2><a name="bindings">Bindings</a></h2>
+<p>The <code>TextUndo</code> widget has the same bindings as the <a href="../../../site/lib/Tk/Text.html">Text</a> widget.
+In addition there are the following bindings:</p>
+<dl>
+<dt><strong><a name="item_event__3cl4_3e__3c_3cundo_3e_3e">Event &lt;L4&gt; &lt;&lt;Undo&gt;&gt;</a></strong><br />
+</dt>
+<dd>
+undo the last change.  Pressing &lt;L4&gt; several times undo
+step by step the changes made to the text widget.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<h2><a name="methods">Methods</a></h2>
+<p>The <code>TextUndo</code> widget has the same methods as <code>Text</code> widget.
+Additional methods for the <code>TextUndo</code> widget are:</p>
+<dl>
+<dt><strong><a name="item_load">$text-&gt;Load($filename);</a></strong><br />
+</dt>
+<dd>
+Loads the contents of the $filename into the text widget. <a href="#item_load"><code>Load()</code></a>
+delete the previous contents of the text widget as well as it's
+undo history of the previous file.
+</dd>
+<p></p>
+<dt><strong><a name="item_save">$text-&gt;<code>Save(?$otherfilename?)</code></a></strong><br />
+</dt>
+<dd>
+Save contents of the text widget to a file. If the
+$otherfilename is not specified, the text widget contents
+writes the file of $filename used in the last <a href="#item_load"><code>Load()</code></a>
+call.  If no file was previously Load()'ed an error message
+pops up.  The default filename of the last <a href="#item_load"><code>Load()</code></a> call
+is not overwriten by $otherfilename.
+</dd>
+<p></p>
+<dt><strong><a name="item_filename">$text-&gt;<code>FileName(?$otherfilename?)</code></a></strong><br />
+</dt>
+<dd>
+If passed an argument sets the file name associated with the loaded
+document. Returns the current file name associated with the document.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="keys">KEYS</a></h1>
+<p>widget, text, undo</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../../../site/lib/Tk/Text.html">the Tk::Text manpage</a>, <a href="../../../site/lib/Tk/ROText.html">the Tk::ROText manpage</a></p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::TextUndo - perl/tk text widget with bindings to undo changes.</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

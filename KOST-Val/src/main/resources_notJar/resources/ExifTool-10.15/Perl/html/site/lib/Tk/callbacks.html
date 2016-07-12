@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Tk::callbacks - Specifying code for Tk to call.</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::callbacks - Specifying code for Tk to call.</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#examples">EXAMPLES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#keywords">KEYWORDS</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Tk::callbacks - Specifying code for Tk to call.</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p>One can specify a callback in one of the following ways:</p>
+<p>Without arguments:</p>
+<pre>
+    ... =&gt; \&amp;subname, ...
+    ... =&gt; sub { ... }, ...
+    ... =&gt; 'methodname', ...</pre>
+<p>or with arguments:</p>
+<pre>
+    ... =&gt; [ \&amp;subname ?, args ...? ], ...
+    ... =&gt; [ sub { ... } ?, args...? ], ...
+    ... =&gt; [ 'methodname' ?, args...?], ...</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>Perl/Tk has a callback, where Tcl/Tk has a command string (i.e. a fragment of
+Tcl to be executed).  A perl/Tk callback can take one of the following
+basic forms:</p>
+<ul>
+<li><strong><a name="item_reference_to_a_subroutine__5c_26subname">Reference to a subroutine <code>\&amp;subname</code></a></strong><br />
+</li>
+<li><strong><a name="item_subroutine">Anonymous subroutine (closure) <a href="../../../lib/Pod/perlfunc.html#item_sub"><code>sub { ... }</code></a></a></strong><br />
+</li>
+<li><strong><a name="item_a_method_name__27methodname_27">A method name <code>'methodname'</code></a></strong><br />
+</li>
+</ul>
+<p>Any of these can be provided with arguments by enclosing them and the
+arguments in <strong>[]</strong>. Here are some examples:</p>
+<p><em>$mw</em>-&gt;<strong>bind</strong>(<em>$class,</em> <strong>``&lt;Delete&gt;'' =&gt; 'Delete'</strong>);</p>
+<p>This will call <em>$widget</em>-&gt;<strong>Delete</strong>, the <em>$widget</em> being provided (by bind) as
+the one where the Delete key was pressed.</p>
+<p>While having bind provide a widget object for you is ideal in many cases
+it can be irritating in others. Using the list form this behaviour
+can be modified:</p>
+<p><em>$a</em>-&gt;<strong>bind</strong>(<strong>``&lt;Delete&gt;''</strong>,[<em>$b</em> =&gt; 'Delete']);</p>
+<p>because the first element <em>$b</em> is an object bind
+will call <em>$b</em>-&gt;<strong>Delete</strong>.</p>
+<p>Note that method/object ordering only matters for <a href="../../../lib/Pod/perlfunc.html#item_bind"><code>bind</code></a> callbacks,
+the auto-quoting in perl5.001 makes the first of these a little more readable:</p>
+<p>$w-&gt;configure(-yscrollcommand =&gt; [ set =&gt; $ysb]);</p>
+<p>$w-&gt;configure(-yscrollcommand =&gt; [ $ysb =&gt; 'set' ]);</p>
+<p>but both will call <code>$ysb</code>-&gt;set(args provided by Tk)</p>
+<p>Another use of arguments allows you to write generalized methods which are
+easier to re-use:</p>
+<p>$a-&gt;bind(``&lt;Next&gt;'',['Next','Page']);</p>
+<p>$a-&gt;bind(``&lt;Down&gt;'',['Next','Line']);</p>
+<p>This will call <a href="../../../lib/Pod/perlvar.html#item__24a"><code>$a</code></a>-&gt;<em>Next</em>('Page') or <a href="../../../lib/Pod/perlvar.html#item__24a"><code>$a</code></a>-&gt;<em>Next</em>('Line') respectively.</p>
+<p>Note that the contents of the <code>[]</code> are evaluated by perl when the
+callback is created. It is often desirable for the arguments provided
+to the callback to depend on the details of the event which caused
+it to be executed. To allow for this callbacks can be nested using the
+<code>Ev(...)</code> ``constructor''.
+<code>Ev(...)</code> inserts callback objects into the
+argument list. When perl/Tk glue code is preparing the argument list for
+the callback it is about to call it spots these special objects and
+recursively applies the callback process to them.</p>
+<p>
+</p>
+<hr />
+<h1><a name="examples">EXAMPLES</a></h1>
+<pre>
+    $entry-&gt;bind('&lt;Return&gt;' =&gt; [$w , 'validate', Ev(['get'])]);</pre>
+<pre>
+    $toplevel-&gt;bind('all', '&lt;Visibility&gt;', [\&amp;unobscure, Ev('s')]);</pre>
+<pre>
+    $mw-&gt;bind($class, '&lt;Down&gt;', ['SetCursor', Ev('UpDownLine',1)]);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../../../site/lib/Tk/bind.html">Tk::bind</a>
+<a href="../../../site/lib/Tk/after.html">Tk::after</a>
+<a href="../../../site/lib/Tk/options.html">Tk::options</a>
+<a href="../../../site/lib/Tk/fileevent.html">Tk::fileevent</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="keywords">KEYWORDS</a></h1>
+<p>callback, closure, anonymous subroutine, bind</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::callbacks - Specifying code for Tk to call.</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

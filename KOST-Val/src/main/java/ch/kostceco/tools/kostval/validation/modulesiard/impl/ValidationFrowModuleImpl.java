@@ -1,6 +1,6 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
- * Information Package (SIP). Copyright (C) 2012-2016 Claire Röthlisberger (KOST-CECO), Christian
+ * Information Package (SIP). Copyright (C) 2012-2016 Claire Roethlisberger (KOST-CECO), Christian
  * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
  * Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
@@ -42,13 +42,13 @@ import ch.kostceco.tools.kostval.validation.bean.ValidationContext;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationFrowModule;
 
 /** Validierungsschritt F (Zeilen-Validierung) Wurden die Angaben aus metadata.xml korrekt in die
- * tableZ.xsd-Dateien übertragen? valid --> gleiche Zeilenzahl (rows in metadata.xml = max =
+ * tableZ.xsd-Dateien ï¿½bertragen? valid --> gleiche Zeilenzahl (rows in metadata.xml = max =
  * minOccurs in tableZ.xsd)
  * 
- * bei 0 bis unbounded rows von metadata.xml in max = minOccurs von tableZ.xsd übertragen, damit im
+ * bei 0 bis unbounded rows von metadata.xml in max = minOccurs von tableZ.xsd ï¿½bertragen, damit im
  * Modul H validiert werden kann.
  * 
- * @author Rc Claire Röthlisberger, KOST-CECO
+ * @author Rc Claire Roethlisberger, KOST-CECO
  * @param <Range>
  * @param <RangeHandler> */
 
@@ -56,7 +56,7 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements Va
 /* public class ValidationFrowModuleImpl<Range, RangeHandler> extends ValidationModuleImpl
  * implements ValidationFrowModule
  * 
- * <Range, RangeHandler> bereitet Probleme beim Projekt-Build. Da es nicht benötigt wird, wurde es
+ * <Range, RangeHandler> bereitet Probleme beim Projekt-Build. Da es nicht benï¿½tigt wird, wurde es
  * entfernt. */
 {
 	private static final int		UNBOUNDED	= -1;
@@ -78,10 +78,21 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements Va
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile ) throws ValidationFrowException
 	{
-		// Ausgabe SIARD-Modul Ersichtlich das KOST-Val arbeitet
-		System.out.print( "F    " );
-		System.out.print( "\b\b\b\b\b" );
+		boolean showOnWork = true;
 		int onWork = 410;
+		// Informationen zur Darstellung "onWork" holen
+		String onWorkConfig = getConfigurationService().getShowProgressOnWork();
+		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
+		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
+		 * ref="configurationService" /> */
+		if ( onWorkConfig.equals( "no" ) ) {
+			// keine Ausgabe
+			showOnWork = false;
+		} else {
+			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
+			System.out.print( "F    " );
+			System.out.print( "\b\b\b\b\b" );
+		}
 
 		boolean valid = true;
 		try {
@@ -104,24 +115,26 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements Va
 					.getChildren( "schema", ns );
 			for ( Element schema : schemas ) {
 				valid = validateSchema( schema, ns, pathToWorkDir );
-				if ( onWork == 410 ) {
-					onWork = 2;
-					System.out.print( "F-   " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 110 ) {
-					onWork = onWork + 1;
-					System.out.print( "F\\   " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 210 ) {
-					onWork = onWork + 1;
-					System.out.print( "F|   " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 310 ) {
-					onWork = onWork + 1;
-					System.out.print( "F/   " );
-					System.out.print( "\b\b\b\b\b" );
-				} else {
-					onWork = onWork + 1;
+				if ( showOnWork ) {
+					if ( onWork == 410 ) {
+						onWork = 2;
+						System.out.print( "F-   " );
+						System.out.print( "\b\b\b\b\b" );
+					} else if ( onWork == 110 ) {
+						onWork = onWork + 1;
+						System.out.print( "F\\   " );
+						System.out.print( "\b\b\b\b\b" );
+					} else if ( onWork == 210 ) {
+						onWork = onWork + 1;
+						System.out.print( "F|   " );
+						System.out.print( "\b\b\b\b\b" );
+					} else if ( onWork == 310 ) {
+						onWork = onWork + 1;
+						System.out.print( "F/   " );
+						System.out.print( "\b\b\b\b\b" );
+					} else {
+						onWork = onWork + 1;
+					}
 				}
 			}
 		} catch ( java.io.IOException ioe ) {
@@ -149,7 +162,21 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements Va
 
 	private boolean validateSchema( Element schema, Namespace ns, String pathToWorkDir )
 	{
-		int onWork = 41;
+		boolean showOnWork = true;
+		int onWork = 410;
+		// Informationen zur Darstellung "onWork" holen
+		String onWorkConfig = getConfigurationService().getShowProgressOnWork();
+		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
+		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
+		 * ref="configurationService" /> */
+		if ( onWorkConfig.equals( "no" ) ) {
+			// keine Ausgabe
+			showOnWork = false;
+		} else {
+			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
+			System.out.print( "F    " );
+			System.out.print( "\b\b\b\b\b" );
+		}
 		boolean valid = true;
 		boolean validT = true;
 		Element schemaFolder = schema.getChild( "folder", ns );
@@ -161,24 +188,26 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements Va
 				// Valid = True ansonsten validiert er nicht
 				validT = true;
 				validT = validT && validateTable( table, ns, pathToWorkDir, schemaPath );
-				if ( onWork == 41 ) {
-					onWork = 2;
-					System.out.print( "F-   " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 11 ) {
-					onWork = 12;
-					System.out.print( "F\\   " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 21 ) {
-					onWork = 22;
-					System.out.print( "F|   " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 31 ) {
-					onWork = 32;
-					System.out.print( "F/   " );
-					System.out.print( "\b\b\b\b\b" );
-				} else {
-					onWork = onWork + 1;
+				if ( showOnWork ) {
+					if ( onWork == 410 ) {
+						onWork = 2;
+						System.out.print( "F-   " );
+						System.out.print( "\b\b\b\b\b" );
+					} else if ( onWork == 110 ) {
+						onWork = onWork + 1;
+						System.out.print( "F\\   " );
+						System.out.print( "\b\b\b\b\b" );
+					} else if ( onWork == 210 ) {
+						onWork = onWork + 1;
+						System.out.print( "F|   " );
+						System.out.print( "\b\b\b\b\b" );
+					} else if ( onWork == 310 ) {
+						onWork = onWork + 1;
+						System.out.print( "F/   " );
+						System.out.print( "\b\b\b\b\b" );
+					} else {
+						onWork = onWork + 1;
+					}
 				}
 				// Validierungsergebnis in valid speichern
 				valid = valid && validT;
@@ -221,7 +250,7 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements Va
 					String newstring = "minOccurs=\"" + rowmax + "\" maxOccurs=\"" + rowmax;
 					Util.oldnewstring( oldstring, newstring, tableXsd );
 
-					// in einigen Fällen ist zuerst max und dann min
+					// in einigen Fï¿½llen ist zuerst max und dann min
 					oldstring = "maxOccurs=\"unbounded\" minOccurs=\"0";
 					newstring = "maxOccurs=\"" + rowmax + "\" minOccurs=\"" + rowmax;
 					Util.oldnewstring( oldstring, newstring, tableXsd );

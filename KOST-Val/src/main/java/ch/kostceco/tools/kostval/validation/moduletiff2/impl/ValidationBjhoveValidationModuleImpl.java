@@ -1,6 +1,6 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
- * Information Package (SIP). Copyright (C) 2012-2016 Claire Röthlisberger (KOST-CECO), Christian
+ * Information Package (SIP). Copyright (C) 2012-2016 Claire Roethlisberger (KOST-CECO), Christian
  * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
  * Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
@@ -43,10 +43,10 @@ import edu.harvard.hul.ois.jhove.*;
 import edu.harvard.hul.ois.jhove.module.TiffModule;
 import edu.harvard.hul.ois.jhove.Module;
 
-/** Validierungsschritt B (Jhove-Validierung) Ist die TIFF-Datei gemäss Jhove valid? valid -->
+/** Validierungsschritt B (Jhove-Validierung) Ist die TIFF-Datei gemÃ¤ss Jhove valid? valid -->
  * Status: "Well-Formed and valid"
  * 
- * @author Rc Claire Röthlisberger, KOST-CECO */
+ * @author Rc Claire Roethlisberger, KOST-CECO */
 
 public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl implements
 		ValidationBjhoveValidationModule
@@ -77,7 +77,7 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl i
 		int lastDotIdx = toplevelDir.lastIndexOf( "." );
 		toplevelDir = toplevelDir.substring( 0, lastDotIdx );
 
-		// Vorbereitungen: valDatei an die JHove Applikation übergeben
+		// Vorbereitungen: valDatei an die JHove Applikation Ã¼bergeben
 		File jhoveReport = null;
 		StringBuffer concatenatedOutputs = new StringBuffer();
 		String pathToJhoveConfig = getConfigurationService().getPathToJhoveConfiguration();
@@ -91,7 +91,7 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl i
 		String pathToJhoveOutput = System.getProperty( "java.io.tmpdir" );
 		String pathToJhoveOutput2 = directoryOfLogfile.getAbsolutePath();
 		/* Jhove schreibt ins Work-Verzeichnis, damit danach eine Kopie ins Log-Verzeichnis abgelegt
-		 * werden kann, welche auch gelöscht werden kann. */
+		 * werden kann, welche auch gelÃ¶scht werden kann. */
 		File jhoveLog = new File( pathToJhoveOutput2, valDatei.getName() + ".jhove-log.txt" );
 
 		File jhoveDir = new File( pathToJhoveOutput );
@@ -143,7 +143,7 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl i
 			OutputStream outStream = null;
 
 			try {
-				// umkopieren, damit es gelöscht werden kann
+				// umkopieren, damit es gelÃ¶scht werden kann
 				File afile = jhoveReport;
 				File bfile = jhoveLog;
 				inStream = new FileInputStream( afile );
@@ -172,16 +172,16 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl i
 		try {
 			BufferedReader in = new BufferedReader( new FileReader( jhoveLog ) );
 			String line;
-			Set<String> lines = new LinkedHashSet<String>( 100000 ); // evtl vergrössern
+			Set<String> lines = new LinkedHashSet<String>( 100000 ); // evtl vergrÃ¶ssern
 			int counter = 0;
 			while ( (line = in.readLine()) != null ) {
 
 				concatenatedOutputs.append( line );
 				concatenatedOutputs.append( NEWLINE );
 
-				/* die Status-Zeile enthält diese Möglichkeiten: Valider Status: "Well-Formed and valid"
-				 * Invalider Status: "Not well-formed" oder "Well-Formed, but not valid" möglicherweise
-				 * existieren weitere Ausgabemöglichkeiten */
+				/* die Status-Zeile enthÃ¤lt diese MÃ¶glichkeiten: Valider Status: "Well-Formed and valid"
+				 * Invalider Status: "Not well-formed" oder "Well-Formed, but not valid" mÃ¶glicherweise
+				 * existieren weitere AusgabemÃ¶glichkeiten */
 				if ( line.contains( "Status:" ) ) {
 					if ( !line.contains( "Well-Formed and valid" ) ) {
 						// Invalider Status
@@ -232,7 +232,7 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl i
 			return false;
 		}
 
-		// die im StringBuffer JHove-Outputs wieder in das Output-File zurückschreiben
+		// die im StringBuffer JHove-Outputs wieder in das Output-File zurÃ¼ckschreiben
 		if ( jhoveReport != null ) {
 			try {
 				BufferedWriter out = new BufferedWriter( new FileWriter( jhoveReport ) );
@@ -245,7 +245,7 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl i
 				return false;
 			}
 		}
-		// bestehendes Workverzeichnis löschen
+		// bestehendes Workverzeichnis lÃ¶schen
 		if ( jhoveReport.exists() ) {
 			Util.deleteFile( jhoveReport );
 		}

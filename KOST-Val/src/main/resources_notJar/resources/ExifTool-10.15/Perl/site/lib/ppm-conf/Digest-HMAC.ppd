@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SOFTPKG NAME="Digest-HMAC" VERSION="1,01,0,0">
+<TITLE>Digest-HMAC</TITLE>
+<ABSTRACT>Keyed-Hashing for Message Authentication</ABSTRACT>
+<AUTHOR>Gisle Aas &lt;gisle@aas.no&gt;</AUTHOR>
+<IMPLEMENTATION>
+<CODEBASE HREF="http://ppm.ActiveState.com/PPMPackages/5.8-windows/MSWin32-x86-multi-thread-5.8/Digest-HMAC.tar.gz" />
+<INSTALL />
+<UNINSTALL />
+</IMPLEMENTATION>
+</SOFTPKG>

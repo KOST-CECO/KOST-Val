@@ -1,0 +1,389 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Tk::mega - Perl/Tk support for writing widgets in pure Perl</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::mega - Perl/Tk support for writing widgets in pure Perl</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#megawidget_support">MEGA-WIDGET SUPPORT</a></li>
+	<ul>
+
+		<li><a href="#advertise">Advertise</a></li>
+		<li><a href="#callback">Callback</a></li>
+		<li><a href="#classinit">ClassInit</a></li>
+		<li><a href="#component">Component</a></li>
+		<li><a href="#configspecs">ConfigSpecs</a></li>
+		<li><a href="#construct">Construct</a></li>
+		<li><a href="#createargs">CreateArgs</a></li>
+		<li><a href="#delegates">Delegates</a></li>
+		<li><a href="#initobject">InitObject</a></li>
+		<li><a href="#ondestroy">OnDestroy</a></li>
+		<li><a href="#populate">Populate</a></li>
+		<li><a href="#privatedata">privateData</a></li>
+		<li><a href="#subwidget">Subwidget</a></li>
+	</ul>
+
+	<li><a href="#pitfalls">PITFALLS</a></li>
+	<li><a href="#missing">MISSING</a></li>
+	<li><a href="#keywords">KEYWORDS</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Tk::mega - Perl/Tk support for writing widgets in pure Perl</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p>Define the widget's new class name:</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<strong>package Tk::</strong><em>MyNewWidget</em>;</p>
+<p>For composite widget classes:</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<strong>use base qw/ Tk::container /</strong>; # where <strong>container</strong> is <em>Frame</em> or <em>Toplevel</em></p>
+<p>For derived widget classes:</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<strong>use base qw/ Tk::Derived Tk::DerivedWidget /;</strong></p>
+<p>Install the new widget in Tk's namespace and establish class and instance
+constructors.</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<strong>Construct Tk::</strong><em>Widget</em> <em>'MyNewWidget'</em>;</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<strong>sub ClassInit</strong> { <em>my ($self, $args) = @_; ...</em> }</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<strong>sub Populate</strong> { <em>my ($self, $args) = @_; ...</em> }</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The goal of the mega-widget support of Perl/Tk is to make it
+easy to write mega-widgets that obey the same protocol and
+interface that the Tk core widgets support.
+<em>For mega-widget sample code please run the <strong>widget</strong> demonstration program and go to the section <strong>Sample Perl Mega-Widgets</strong>.</em></p>
+<p>There are two kinds of mega-widgets:</p>
+<ul>
+<li><strong><a name="item_composite_widgets">Composite Widgets</a></strong><br />
+</li>
+A composite widget is composed with one or more existing widgets.
+The composite widget looks to the user like a simple single widget.
+A well known example is the file selection box.
+<p></p>
+<li><strong><a name="item_derived_widgets">Derived Widgets</a></strong><br />
+</li>
+A derived widget adds/modifies/removes properties and methods
+from a single widget (this widget may itself be a mega-widget).
+<p></p></ul>
+<p>
+</p>
+<hr />
+<h1><a name="megawidget_support">MEGA-WIDGET SUPPORT</a></h1>
+<p>
+</p>
+<h2><a name="advertise">Advertise</a></h2>
+<p>Give a subwidget a symbolic name.</p>
+<p>Usage:</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>$self</em>-&gt;<strong>Advertise</strong>(<strong>name</strong>=&gt;<em>$widget</em>);</p>
+<p>Gives a subwidget <em>$widget</em> of the mega-widget <em>$self</em> the
+name <strong>name</strong>.  One can retrieve the reference of an advertised subwidget
+with the <a href="#subwidget">Subwidget</a> method.</p>
+<p><strong>Comment:</strong> Mega-Widget Writers: Please make sure to document the
+advertised widgets that are intended for <em>public</em> use.
+If there are none, document this fact, e.g.:</p>
+<pre>
+        =head1 ADVERTISED WIDGETS</pre>
+<pre>
+        None.</pre>
+<p>
+</p>
+<h2><a name="callback">Callback</a></h2>
+<p>Invoke a callback specified with an option.</p>
+<p>Usage:</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>$self</em>-&gt;<strong>Callback</strong>(<em>-option</em> ?,<em>args</em> ...?);</p>
+<p><strong>Callback</strong> executes the <a href="../../../site/lib/Tk/callbacks.html">callback</a> defined with
+<em>$self</em>-&gt;<strong>ConfigSpecs</strong>(<em>-option</em>, [<strong>CALLBACK</strong>, ...]);
+If <em>args</em> are given they are passed to the callback. If
+<em>-option</em> is not defined it does nothing.</p>
+<p>
+</p>
+<h2><a name="classinit">ClassInit</a></h2>
+<p>Initialization of the mega-widget class.</p>
+<p>Usage:</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<strong>sub ClassInit</strong> { <em>my ($class, $mw) = @_;</em> ...  }</p>
+<p><strong>ClassInit</strong> is called once for <em>each</em> <a href="../../../site/lib/Tk/MainWindow.html">MainWindow</a>
+just before the first widget instance of a class is created in
+the widget tree of <strong>MainWindow</strong>.</p>
+<p><strong>ClassInit</strong> is often used to define bindings and/or other
+resources shared by all instances, e.g., images.</p>
+<p>Examples:</p>
+<pre>
+ $mw-&gt;bind($class,&quot;&lt;Tab&gt;&quot;, sub { my $w = shift; $w-&gt;Insert(&quot;\t&quot;); $w-&gt;focus; $w-&gt;break});
+ $mw-&gt;bind($class,&quot;&lt;Return&gt;&quot;, ['Insert',&quot;\n&quot;]);
+ $mw-&gt;bind($class,&quot;&lt;Delete&gt;&quot;,'Delete');</pre>
+<p>Notice that <em>$class</em> is the class name (e.g. <strong>Tk::MyText</strong>) and <em>$mw</em> is the mainwindow.</p>
+<p>Don't forget to call <em>$class</em>-&gt;<strong>SUPER::ClassInit($mw)</strong> in
+<strong>ClassInit</strong>.</p>
+<p>
+</p>
+<h2><a name="component">Component</a></h2>
+<p>Convenience function to create subwidgets.</p>
+<p>Usage:</p>
+<pre>
+    $cw-&gt;Component('Whatever', 'AdvertisedName',
+        -delegate =&gt; ['method1', 'method2', ...],
+        ... more widget options ...,
+    );</pre>
+<p><strong>Component</strong> does several things for you with one call:</p>
+<p>o Creates the widget</p>
+<p>o Advertises it with a given name (overridden by 'Name' option)</p>
+<p>o Delegates a set of methods to this widget (optional)</p>
+<p>Example:</p>
+<pre>
+    $cw-&gt;Component('Button', 'quitButton', -command =&gt; sub{$mw-&gt;'destroy'});</pre>
+<p>
+</p>
+<h2><a name="configspecs">ConfigSpecs</a></h2>
+<p>Defines options and their treatment</p>
+<p>Usage:</p>
+<pre>
+    $cw-&gt;ConfigSpecs(
+        -option =&gt; [ where, dbname, dbclass, default],
+        ...,
+        DEFAULT =&gt; [where],
+    );</pre>
+<p>Defines the options of a mega-widget and what actions
+are triggered by configure/cget of an option
+(see <a href="../../../site/lib/Tk/ConfigSpecs.html">the Tk::ConfigSpecs manpage</a> and <a href="../../../site/lib/Tk/Derived.html">the Tk::Derived manpage</a> for details).</p>
+<p>
+</p>
+<h2><a name="construct">Construct</a></h2>
+<p>Make the new mega-widget known to <strong>Tk</strong>.</p>
+<p>Usage:</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<strong>Construct</strong> <em>baseclass</em> <strong>'Name'</strong>;</p>
+<p><strong>Construct</strong> declares the new widget class so that your mega-widget
+works like normal Perl/Tk widgets.</p>
+<p>Examples:</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<strong>Construct Tk::Widget</strong> <em>'Whatever'</em>;
+&nbsp;&nbsp;&nbsp;&nbsp;<strong>Construct Tk::Menu</strong>   <em>'MyItem'</em>;</p>
+<p>First example lets one use <em>$widget</em>-&gt;<strong>Whatever</strong> to create
+new <strong>Whatever</strong> widget.</p>
+<p>The second example restricts the usage of the <strong>MyItem</strong> constructor
+method to widgets that are derived from <strong>Menu</strong>:
+<em>$isamenu</em>-&gt;<em>MyItem</em>.</p>
+<p>
+</p>
+<h2><a name="createargs">CreateArgs</a></h2>
+<p>Process options before any widget is created:</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<strong>sub CreateArgs</strong> { <em>my ($package, $parent, $args) = @_; ...; return @newargs;</em> }</p>
+<p><em>$package</em> is the package of the mega-widget (e.g., <strong>Tk::MyText</strong>,
+<em>$parent</em> the parent of the widget to be created and $args the hash
+reference to the options specified in the widget constructor call.</p>
+<p>Don't forget to call <em>$package</em>-&gt;<strong>SUPER::CreateArgs</strong>(<em>$parent</em>, <em>$args</em>) in
+<strong>CreateArgs</strong>.</p>
+<p>
+</p>
+<h2><a name="delegates">Delegates</a></h2>
+<p>Redirect a method of the mega-widget to a subwidget of
+the composite widget</p>
+<p>Usage:</p>
+<pre>
+    $cw-&gt;Delegates(
+        'method1' =&gt; $subwidget1,
+        'method2' =&gt; 'advertived_name',
+        ...,
+        'Construct' =&gt; $subwidget2,
+        'DEFAULT'   =&gt; $subwidget3,
+    );</pre>
+<p>The <strong>'Construct'</strong> delegation has a special meaning.  After
+'Construct' is delegated all Widget constructors are redirected.
+E.g. after</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>$self</em>-&gt;<strong>Delegates</strong>(<strong>'Construct'</strong>=&gt;<em>$subframe</em>);</p>
+<p>a <em>$self</em>-&gt;<strong>Button</strong> does really a <em>$subframe</em>-&gt;<strong>Button</strong>
+so the created button is a child of <em>$subframe</em> and not <em>$self</em>.</p>
+<p><strong>Comment:</strong> Delegates works only with methods that <em>$cw</em> does
+not have itself.</p>
+<p>
+</p>
+<h2><a name="initobject">InitObject</a></h2>
+<p><em>Note: this method should not, in general, be used, as it has been
+superceeded by <strong>Populate</strong> and specifying <strong>Tk::Derived</strong> as one of the base
+classes.</em></p>
+<p>Defines construction and interface of derived widgets.</p>
+<p>Usage:</p>
+<pre>
+    sub InitObject {
+        my ($derived, $args) = @_;
+        ...
+    }</pre>
+<p>where <em>$derived</em> is the widget reference of the already created
+baseclass widget and <em>$args</em> is the reference to a hash of
+<em>-option-value</em> pairs.</p>
+<p><strong>InitObject</strong> is almost identical to <a href="#populate">Populate</a> method.
+<strong>Populate</strong> does some more 'magic' things useful for mega-widgets
+with several widgets.</p>
+<p>Don't forget to call <em>$derived</em>-&gt;<strong>SUPER::InitObject</strong>(<em>$args</em>) in
+<strong>InitObject</strong>.</p>
+<p>
+</p>
+<h2><a name="ondestroy">OnDestroy</a></h2>
+<p>Define a callback invoked when the mega-widget is destroyed.</p>
+<p>Usage:</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>$widget</em>-&gt;<strong>OnDestroy</strong>(<em>callback</em>);</p>
+<p><strong>OnDestroy</strong> installs a <a href="../../../site/lib/Tk/callbacks.html">callback</a> that's called
+when a widget is going to to be destroyed.  Useful
+for special cleanup actions.  It differs from a normal <strong>destroy</strong>
+in that all the widget's data structures are still intact.</p>
+<p><strong>Comment:</strong> This method could be used with any widgets not just
+for mega-widgets.  It's listed here because of it's usefulness.</p>
+<p>
+</p>
+<h2><a name="populate">Populate</a></h2>
+<p>Defines construction and interface of the composite
+widget.</p>
+<p>Usage:</p>
+<pre>
+    sub Populate {
+        my ($self, $args) = @_;
+        ...
+    }</pre>
+<p>where <em>$self</em> is the widget reference of the already created baseclass
+widget and <em>$args</em> is the
+reference to a hash of <em>-option-value</em> pairs.</p>
+<p>Most the other support function are normally used inside the <strong>Populate</strong>
+subroutine.</p>
+<p>Don't forget to call <em>$cw</em>-&gt;<strong>SUPER::Populate</strong>(<em>$args</em>) in
+<strong>Populate</strong>.</p>
+<p>
+</p>
+<h2><a name="privatedata">privateData</a></h2>
+<p>Set/get a private hash of a widget to storage
+composite internal data</p>
+<p>Usage:</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>$hashref</em> = <em>$self</em>-&gt;<strong>privateData</strong>();</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>$another</em> = <em>$self</em>-&gt;<strong>privateData</strong>(<em>unique_key</em>|<em>package</em>);</p>
+<p>
+</p>
+<h2><a name="subwidget">Subwidget</a></h2>
+<p>Get the widget reference of an advertised subwidget.</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>@subwidget</em> = <em>$cw</em>-&gt;<strong>Subwidget</strong>();</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>$subwidget</em> = <em>$cw</em>-&gt;<strong>Subwidget</strong>(<em>name</em>);</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>@subwidget</em> = <em>$cw</em>-&gt;<strong>Subwidget</strong>(<em>name</em> ?,...?);</p>
+<p>Returns the widget <code>reference(s)</code> of the subwidget known under the given
+name(s). Without arguments, return all known subwidgets of <em>$cw</em>. See
+<a href="#advertise">Advertise</a> method how to define <em>name</em> for a subwidget.</p>
+<p><strong>Comment:</strong> Mega-Widget Users: Use <strong>Subwidget</strong> to get <em>only</em>
+documented subwidgets.</p>
+<p>
+</p>
+<hr />
+<h1><a name="pitfalls">PITFALLS</a></h1>
+<ul>
+<li><strong><a name="item_resource_db_class_name">Resource DB class name</a></strong><br />
+</li>
+Some of the standard options use a resource date base class
+that is not equal to the resource database name.  E.g.,
+<pre>
+  Switch:            Name:             Class:</pre>
+<pre>
+  -padx              padX              Pad
+  -activerelief      activeRelief      Relief
+  -activebackground  activeBackground  Foreground
+  -status            undef             undef</pre>
+<p>One should do the same when one defines one of these
+options via <strong>ConfigSpecs</strong>.</p>
+<p></p>
+<li><strong><a name="item_method_delegation">Method delegation</a></strong><br />
+</li>
+Redirecting methods to a subwidget with <strong>Delegate</strong>
+can only work if the base widget itself does have a
+method with this name.  Therefore one can't ``<em>delegate</em>''
+any of the methods listed in <a href="../../../site/lib/Tk/Widget.html">Tk::Widget</a>.
+A common problematic method is <strong>bind</strong>.  In this case
+one as to explicitely redirect the method.
+<pre>
+  sub bind {
+      my $self = shift;
+      my $to = $self-&gt;privateData-&gt;{'my_bind_target'};
+      $to-&gt;bind(@_);
+  }</pre>
+<p></p>
+<li><strong><a name="item_privatedata">privateData</a></strong><br />
+</li>
+Graham Barr wrote: ... It is probably
+more private than most people think. Not all calls to privateData will
+return that same HASH reference. The HASH reference that is returned
+depends on the package it was called from, a different HASH is returned
+for each package. This allows a widget to hold private data, but then
+if it is sub-classed the sub-class will get a different HASH and so not
+cause duplicate name clashes.
+<p>But privateData does take an optional argument if you want to
+force which HASH is returned.</p>
+<p></p>
+<li><strong><a name="item_scrolled_and_composite">Scrolled and Composite</a></strong><br />
+</li>
+<strong>Scrolled</strong>(<em>Kind</em>,...) constructor can not be used with <strong>Composite</strong>.
+One has to use $cw-&gt;<strong>Composite</strong>(<strong>Scrl</strong><em>Kind</em> =&gt; <strong>'name'</strong>, ...);
+<p></p></ul>
+<p>
+</p>
+<hr />
+<h1><a name="missing">MISSING</a></h1>
+<p>Of course Perl/Tk does not define support function for
+all necessities.  Here's a short list of things you have to
+handle yourself:</p>
+<ul>
+<li></li>
+No support to define construction-time only options.
+<p></p>
+<li></li>
+No support to remove an option that is known to the
+base widget.
+<p></p>
+<li></li>
+It's hard to define <strong>undef</strong> as fallback for an widget
+option that is not already <strong>undef</strong>.
+<p></p>
+<li></li>
+Frame in Perl/Tk carries magic and overhead not needed
+for composite widget class definition.
+<p></p>
+<li></li>
+No support methods for bindings that are shared between all
+widgets of a composite widget (makes sense at all?)
+<p></p></ul>
+<p>
+</p>
+<hr />
+<h1><a name="keywords">KEYWORDS</a></h1>
+<p>mega, composite, derived, widget</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../../../site/lib/Tk/composite.html">Tk::composite</a>
+<a href="../../../site/lib/Tk/ConfigSpecs.html">Tk::ConfigSpecs</a>
+<a href="../../../site/lib/Tk/option.html">Tk::option</a>
+<a href="../../../site/lib/Tk/callbacks.html">Tk::callbacks</a>
+<a href="../../../site/lib/Tk/bind.html">Tk::bind</a></p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::mega - Perl/Tk support for writing widgets in pure Perl</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

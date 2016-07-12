@@ -1,0 +1,199 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>LWP::ConnCache - Connection cache manager</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;LWP::ConnCache - Connection cache manager</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#note">NOTE</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#subclassing">SUBCLASSING</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>LWP::ConnCache - Connection cache manager</p>
+<p>
+</p>
+<hr />
+<h1><a name="note">NOTE</a></h1>
+<p>This module is experimental.  Details of its interface is likely to
+change in the future.</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ use LWP::ConnCache;
+ my $cache = LWP::ConnCache-&gt;new;
+ $cache-&gt;deposit($type, $key, $sock);
+ $sock = $cache-&gt;withdraw($type, $key);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The <code>LWP::ConnCache</code> class is the standard connection cache manager
+for LWP::UserAgent.</p>
+<p>The following basic methods are provided:</p>
+<dl>
+<dt><strong><a name="item_new">$cache = LWP::ConnCache-&gt;new( %options )</a></strong><br />
+</dt>
+<dd>
+This method constructs a new <code>LWP::ConnCache</code> object.  The only
+option currently accepted is 'total_capacity'.  If specified it
+initialize the total_capacity option.  It defaults to the value 1.
+</dd>
+<p></p>
+<dt><strong><a name="item_total_capacity">$cache-&gt;total_capacity( [$num_connections] )</a></strong><br />
+</dt>
+<dd>
+Get/sets the number of connection that will be cached.  Connections
+will start to be dropped when this limit is reached.  If set to <code>0</code>,
+then all connections are immediately dropped.  If set to <a href="../../../lib/Pod/perlfunc.html#item_undef"><code>undef</code></a>,
+then there is no limit.
+</dd>
+<p></p>
+<dt><strong><a name="item_capacity">$cache-&gt;capacity($type, [$num_connections] )</a></strong><br />
+</dt>
+<dd>
+Get/set a limit for the number of connections of the specified type
+that can be cached.  The $type will typically be a short string like
+``http'' or ``ftp''.
+</dd>
+<p></p>
+<dt><strong><a name="item_drop">$cache-&gt;drop( [$checker, [$reason]] )</a></strong><br />
+</dt>
+<dd>
+Drop connections by some criteria.  The $checker argument is a
+subroutine that is called for each connection.  If the routine returns
+a TRUE value then the connection is dropped.  The routine is called
+with ($conn, $type, $key, $deposit_time) as arguments.
+</dd>
+<dd>
+<p>Shortcuts: If the $checker argument is absent (or <a href="../../../lib/Pod/perlfunc.html#item_undef"><code>undef</code></a>) all cached
+connections are dropped.  If the $checker is a number then all
+connections untouched that the given number of seconds or more are
+dropped.  If $checker is a string then all connections of the given
+type are dropped.</p>
+</dd>
+<dd>
+<p>The $reason argument is passed on to the <code>dropped()</code> method.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item_prune">$cache-&gt;prune</a></strong><br />
+</dt>
+<dd>
+Calling this method will drop all connections that are dead.  This is
+tested by calling the <code>ping()</code> method on the connections.  If the <code>ping()</code>
+method exists and returns a FALSE value, then the connection is
+dropped.
+</dd>
+<p></p>
+<dt><strong><a name="item_get_types">$cache-&gt;get_types</a></strong><br />
+</dt>
+<dd>
+This returns all the 'type' fields used for the currently cached
+connections.
+</dd>
+<p></p>
+<dt><strong><a name="item_get_connections">$cache-&gt;get_connections( [$type] )</a></strong><br />
+</dt>
+<dd>
+This returns all connection objects of the specified type.  If no type
+is specified then all connections are returned.  In scalar context the
+number of cached connections of the specified type is returned.
+</dd>
+<p></p></dl>
+<p>The following methods are called by low-level protocol modules to
+try to save away connections and to get them back.</p>
+<dl>
+<dt><strong><a name="item_deposit">$cache-&gt;deposit($type, $key, $conn)</a></strong><br />
+</dt>
+<dd>
+This method adds a new connection to the cache.  As a result other
+already cached connections might be dropped.  Multiple connections with
+the same $type/$key might added.
+</dd>
+<p></p>
+<dt><strong><a name="item_withdraw">$conn = $cache-&gt;withdraw($type, $key)</a></strong><br />
+</dt>
+<dd>
+This method tries to fetch back a connection that was previously
+deposited.  If no cached connection with the specified $type/$key is
+found, then <a href="../../../lib/Pod/perlfunc.html#item_undef"><code>undef</code></a> is returned.  There is not guarantee that a
+deposited connection can be withdrawn, as the cache manger is free to
+drop connections at any time.
+</dd>
+<p></p></dl>
+<p>The following methods are called internally.  Subclasses might want to
+override them.</p>
+<dl>
+<dt><strong><a name="item_enforce_limits">$conn-&gt;<code>enforce_limits([$type])</code></a></strong><br />
+</dt>
+<dd>
+This method is called with after a new connection is added (deposited)
+in the cache or capacity limits are adjusted.  The default
+implementation drops connections until the specified capacity limits
+are not exceeded.
+</dd>
+<p></p>
+<dt><strong><a name="item_dropping">$conn-&gt;dropping($conn_record, $reason)</a></strong><br />
+</dt>
+<dd>
+This method is called when a connection is dropped.  The record
+belonging to the dropped connection is passed as the first argument
+and a string describing the reason for the drop is passed as the
+second argument.  The default implementation makes some noise if the
+$LWP::ConnCache::DEBUG variable is set and nothing more.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="subclassing">SUBCLASSING</a></h1>
+<p>For specialized cache policy it makes sense to subclass
+<code>LWP::ConnCache</code> and perhaps override the deposit(), <a href="#item_enforce_limits"><code>enforce_limits()</code></a>
+and <a href="#item_dropping"><code>dropping()</code></a> methods.</p>
+<p>The object itself is a hash.  Keys prefixed with <code>cc_</code> are reserved
+for the base class.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../../../site/lib/LWP/UserAgent.html">the LWP::UserAgent manpage</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 2001 Gisle Aas.</p>
+<p>This library is free software; you can redistribute it and/or
+modify it under the same terms as Perl itself.</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;LWP::ConnCache - Connection cache manager</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

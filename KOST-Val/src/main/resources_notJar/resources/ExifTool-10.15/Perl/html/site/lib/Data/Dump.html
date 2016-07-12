@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Data::Dump - Pretty printing of data structures</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Data::Dump - Pretty printing of data structures</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#history">HISTORY</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#authors">AUTHORS</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Data::Dump - Pretty printing of data structures</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ use Data::Dump qw(dump);</pre>
+<pre>
+ $str = dump(@list)
+ @copy_of_list = eval $str;</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>This module provides a single function called <a href="../../../lib/Pod/perlfunc.html#item_dump"><code>dump()</code></a> that takes a list
+of values as its argument and produces a string as its result.  The string
+contains Perl code that, when <a href="../../../lib/Pod/perlfunc.html#item_eval"><code>eval</code></a>ed, produces a deep copy of the
+original arguments.  The string is formatted for easy reading.</p>
+<p>If <a href="../../../lib/Pod/perlfunc.html#item_dump"><code>dump()</code></a> is called in a void context, then the dump is printed on
+STDERR instead of being returned.</p>
+<p>If you don't like importing a function that overrides Perl's
+not-so-useful builtin, then you can also import the same function as
+pp(), mnemonic for ``pretty-print''.</p>
+<p>
+</p>
+<hr />
+<h1><a name="history">HISTORY</a></h1>
+<p>The <code>Data::Dump</code> module grew out of frustration with Sarathy's
+in-most-cases-excellent <code>Data::Dumper</code>.  Basic ideas and some code are shared
+with Sarathy's module.</p>
+<p>The <code>Data::Dump</code> module provides a much simpler interface than
+<code>Data::Dumper</code>.  No OO interface is available and there are no
+configuration options to worry about (yet :-).  The other benefit is
+that the dump produced does not try to set any variables.  It only
+returns what is needed to produce a copy of the arguments.  This means
+that <a href="../../../lib/Pod/perlfunc.html#item_dump"><code>dump(&quot;foo&quot;)</code></a> simply returns <code>&quot;foo&quot;</code>, and <a href="../../../lib/Pod/perlfunc.html#item_dump"><code>dump(1..5)</code></a> simply
+returns <code>(1, 2, 3, 4, 5)</code>.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../../../lib/Data/Dumper.html">the Data::Dumper manpage</a>, <a href="../../../lib/Storable.html">the Storable manpage</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="authors">AUTHORS</a></h1>
+<p>The <code>Data::Dump</code> module is written by Gisle Aas &lt;<a href="mailto:gisle@aas.no">gisle@aas.no</a>&gt;, based
+on <code>Data::Dumper</code> by Gurusamy Sarathy &lt;<a href="mailto:gsar@umich.edu">gsar@umich.edu</a>&gt;.</p>
+<pre>
+ Copyright 1998-2000,2003-2004 Gisle Aas.
+ Copyright 1996-1998 Gurusamy Sarathy.</pre>
+<p>This library is free software; you can redistribute it and/or
+modify it under the same terms as Perl itself.</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Data::Dump - Pretty printing of data structures</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

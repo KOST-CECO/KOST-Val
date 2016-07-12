@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Tk::IO - high level interface to Tk's 'fileevent' mechanism</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::IO - high level interface to Tk's 'fileevent' mechanism</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#warning">WARNING</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#bugs">BUGS</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Tk::IO - high level interface to Tk's 'fileevent' mechanism</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+  my $fh = Tk::IO-&gt;new(-linecommand =&gt; callback, -childcommand =&gt; callback);
+  $fh-&gt;exec(&quot;command&quot;)
+  $fh-&gt;wait
+  $fh-&gt;kill</pre>
+<p>
+</p>
+<hr />
+<h1><a name="warning">WARNING</a></h1>
+<p>INTERFACES TO THIS MODULE MAY CHANGE AS PERL'S IO EVOLVES
+AND WITH PORT OF TK4.1</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>Tk::IO is now layered on perl's IO::Handle class. Interfaces
+have changed, and are still evolving.</p>
+<p>In theory C methods which enable non-blocking IO as in earlier Tk-b*
+<code>release(s)</code> are still there. I have not changed them to use perl's
+additional Configure information, or tested them much.</p>
+<p>Assumption is that <strong>exec</strong> is
+used to fork a child process and a callback is called each time a
+complete line arrives up the implied pipe.</p>
+<p>``line'' should probably be defined in terms of perl's input record
+separator but is not yet.</p>
+<p>The -childcommand callback is called when end-of-file occurs.</p>
+<p>$fh-&gt;<strong>wait</strong> can be used to wait for child process while processing
+other Tk events.</p>
+<p>$fh-&gt;<strong>kill</strong> can be used to send signal to child process.</p>
+<p>
+</p>
+<hr />
+<h1><a name="bugs">BUGS</a></h1>
+<p>Still not finished.
+Idea is to use ``exec'' to emulate ``system'' in a non-blocking manner.</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::IO - high level interface to Tk's 'fileevent' mechanism</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

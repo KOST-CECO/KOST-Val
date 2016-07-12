@@ -1,0 +1,319 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Tk::NoteBook - display several windows in limited space with notebook metaphor.</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::NoteBook - display several windows in limited space with notebook metaphor.</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#methods">METHODS</a></li>
+	<li><a href="#authors">AUTHORS</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Tk::NoteBook - display several windows in limited space with notebook metaphor.</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+  use Tk::NoteBook;
+  ...
+  $w = $frame-&gt;NoteBook();
+  $page1 = $w-&gt;add(&quot;page1&quot;, options);
+  $page2 = $w-&gt;add(&quot;page2&quot;, options);
+  ...
+  $page2 = $w-&gt;add(&quot;page2&quot;, options);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The NoteBook widget provides a notebook metaphor to display several
+windows in limited space. The notebook is divided into a stack of pages
+of which only one is displayed at any time. The other pages can be
+selected by means of choosing the visual ``tabs'' at the top of the
+widget. Additionally, the &lt;Tab&gt; key may be used to traverse the pages.
+If <strong>-underline</strong> is used, Alt- bindings will also work.</p>
+<p>The widget takes all the options that a Frame does. In addition,
+it supports the following options:</p>
+<dl>
+<dt><strong><a name="item__2ddynamicgeometry"><strong>-dynamicgeometry</strong></a></strong><br />
+</dt>
+<dd>
+If set to false (default and recommended), the size of the NoteBook
+will match the size of the largest page. Otherwise the size will
+match the size of the current page causing the NoteBook to change
+size when different pages of different sizes are selected.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dipadx"><strong>-ipadx</strong></a></strong><br />
+</dt>
+<dd>
+The amount of internal horizontal padding around the pages.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dipady"><strong>-ipady</strong></a></strong><br />
+</dt>
+<dd>
+The amount of internal vertical padding around the pages.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dbackpagecolor"><strong>-backpagecolor</strong></a></strong><br />
+</dt>
+<dd>
+The background color of the tabs and back page.
+</dd>
+<p></p>
+<dt><strong><a name="item__2ddisabledforeground"><strong>-disabledforeground</strong></a></strong><br />
+</dt>
+<dd>
+XXX
+</dd>
+<p></p>
+<dt><strong><a name="item__2dfocuscolor"><strong>-focuscolor</strong></a></strong><br />
+</dt>
+<dd>
+The color of the focus border around the tabs.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dfont"><strong>-font</strong></a></strong><br />
+</dt>
+<dd>
+The font of the tab labels.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dinactivebackground"><strong>-inactivebackground</strong></a></strong><br />
+</dt>
+<dd>
+XXX
+</dd>
+<p></p>
+<dt><strong><a name="item__2dtabpadx"><strong>-tabpadx</strong></a></strong><br />
+</dt>
+<dd>
+Horizonzal padding around the tab label.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dtabpady"><strong>-tabpady</strong></a></strong><br />
+</dt>
+<dd>
+Vertical padding around the tab label.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="methods">METHODS</a></h1>
+<p>The following methods may be used with a NoteBook object in addition
+to standard methods.</p>
+<dl>
+<dt><strong><a name="item_add"><strong>add(</strong><em>pageName</em>, <em>options</em><strong>)</strong></a></strong><br />
+</dt>
+<dd>
+Adds a page with name <em>pageName</em> to the notebook. Returns an object
+of type <strong>Frame</strong>. The recognized <em>options</em> are:
+</dd>
+<dl>
+<dt><strong><a name="item__2danchor"><strong>-anchor</strong></a></strong><br />
+</dt>
+<dd>
+Specifies how the information in a tab is to be displayed. Must be
+one of <strong>n</strong>, <strong>ne</strong>, <strong>e</strong>, <strong>se</strong>, <strong>s</strong>, <strong>sw</strong>, <strong>w</strong>, <strong>nw</strong> or
+<strong>center</strong>.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dbitmap"><strong>-bitmap</strong></a></strong><br />
+</dt>
+<dd>
+Specifies a bitmap to display on the tab of this page. The bitmap
+is displayed only if none of the <strong>-label</strong> or <strong>-image</strong> options
+are specified.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dimage"><strong>-image</strong></a></strong><br />
+</dt>
+<dd>
+Specifies an image to display on the tab of this page. The image
+is displayed only if the <strong>-label</strong> option is not specified.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dlabel"><strong>-label</strong></a></strong><br />
+</dt>
+<dd>
+Specifies the text string to display on the tab of this page.
+</dd>
+<p></p>
+<dt><strong><a name="item__2djustify"><strong>-justify</strong></a></strong><br />
+</dt>
+<dd>
+When there are multiple lines of text displayed in a tab, this
+option determines the justification of the lines.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dcreatecmd"><strong>-createcmd</strong></a></strong><br />
+</dt>
+<dd>
+Specifies a <a href="../../../site/lib/Tk/callbacks.html">callback</a> to be called the first time the page is
+shown on the screen. This option can be used to delay the creation
+of the contents of a page until necessary. It can be useful in
+situations where there are a large number of pages in a NoteBook
+widget; with <strong>-createcmd</strong> you do not have to make the user wait
+until all pages are constructed before displaying the first page.
+</dd>
+<p></p>
+<dt><strong><a name="item__2draisecmd"><strong>-raisecmd</strong></a></strong><br />
+</dt>
+<dd>
+Specifies a <a href="../../../site/lib/Tk/callbacks.html">callback</a> to be called whenever this page is raised
+by the user.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dstate"><strong>-state</strong></a></strong><br />
+</dt>
+<dd>
+Specifies whether this page can be raised by the user. Must be
+either <strong>normal</strong> or <strong>disabled</strong>.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dunderline"><strong>-underline</strong></a></strong><br />
+</dt>
+<dd>
+Specifies the integer index of a character to underline in the
+tab. This option is used by the default bindings to implement
+keyboard traversal for menu buttons and menu entries. 0
+corresponds to the first character of text displayed on the
+widget, 1 to the next character and so on.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dwraplength"><strong>-wraplength</strong></a></strong><br />
+</dt>
+<dd>
+This option specifies the maximum line length of the label string
+on this tab. If the line length of the label string exceeds this
+length, then it is wrapped onto the next line so that no line is
+longer than the specified length. The value may be specified in
+any standard forms for screen distances. If this value is less
+than or equal to 0, then no wrapping is done: lines will break
+only at newline characters in the text.
+</dd>
+<p></p></dl>
+<dt><strong><a name="item_delete"><strong>delete(</strong><em>pageName</em><strong>)</strong></a></strong><br />
+</dt>
+<dd>
+Deletes the page identified by <em>pageName</em>.
+</dd>
+<p></p>
+<dt><strong><a name="item_pagecget"><strong>pagecget(</strong><em>pageName</em>, <em>-option</em><strong>)</strong></a></strong><br />
+</dt>
+<dd>
+Returns the current value of the configuration option given by
+<em>-option</em> in the page given by <em>pageName</em>. <em>Option</em> may have any of
+the values accepted in the <strong>add</strong> method.
+</dd>
+<p></p>
+<dt><strong><a name="item_pageconfigure"><strong>pageconfigure(</strong><em>pageName</em>, <em>options</em><strong>)</strong></a></strong><br />
+</dt>
+<dd>
+Like configure for the page indicated by <em>pageName</em>. <em>Options</em> may
+be any of the options accepted by the <strong>add</strong> method.
+</dd>
+<p></p>
+<dt><strong><a name="item_pages"><strong>pages</strong></a></strong><br />
+</dt>
+<dd>
+Returns a list consisting of the names of all currently defined
+pages, i.e., those created with the <strong>add</strong> method.
+</dd>
+<p></p>
+<dt><strong><a name="item_raise"><strong>raise(</strong><em>pageName</em><strong>)</strong></a></strong><br />
+</dt>
+<dd>
+Raise the page identified by <em>pageName</em>.
+</dd>
+<p></p>
+<dt><strong><a name="item_raised"><strong>raised()</strong></a></strong><br />
+</dt>
+<dd>
+Returns the name of the currently raised page.
+</dd>
+<p></p>
+<dt><strong><a name="item_geometryinfo"><strong>geometryinfo</strong></a></strong><br />
+</dt>
+<dd>
+Return the dimensions of the tab area.
+</dd>
+<p></p>
+<dt><strong><a name="item_identify"><strong>identify(</strong><em>x</em>,<em>y</em><strong>)</strong></a></strong><br />
+</dt>
+<dd>
+Identify the tab's page name under the specified coordinates. Return
+an empty string if there's no tab.
+</dd>
+<p></p>
+<dt><strong><a name="item_info"><strong>info(&quot;pages&quot;)</strong></a></strong><br />
+</dt>
+<dd>
+Return a list of all pages.
+</dd>
+<p></p>
+<dt><strong><strong>info(&quot;focus&quot;)</strong></strong><br />
+</dt>
+<dd>
+Return the page name of the tab with the current focus.
+</dd>
+<p></p>
+<dt><strong><strong>info(&quot;focusnext&quot;)</strong></strong><br />
+</dt>
+<dd>
+Return the page name of the tab which would receive the next focus.
+</dd>
+<p></p>
+<dt><strong><strong>info(&quot;focusprev&quot;)</strong></strong><br />
+</dt>
+<dd>
+Return the page name of the tab which had the previous focus.
+</dd>
+<p></p>
+<dt><strong><strong>info(&quot;active&quot;)</strong></strong><br />
+</dt>
+<dd>
+Return the page name of the active tab.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="authors">AUTHORS</a></h1>
+<p><strong>Rajappa Iyer</strong>  &lt;<a href="mailto:rsi@earthling.net">rsi@earthling.net</a>&gt;
+Nick Ing-Simmons &lt;<a href="mailto:nick@ni-s.u-net.com">nick@ni-s.u-net.com</a>&gt;</p>
+<p>This code and documentation was derived from NoteBook.tcl in
+Tix4.0 written by Ioi Lam. It may be distributed under the same
+conditions as Perl itself.</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::NoteBook - display several windows in limited space with notebook metaphor.</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

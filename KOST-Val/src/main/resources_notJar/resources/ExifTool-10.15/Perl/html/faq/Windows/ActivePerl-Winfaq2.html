@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+
+<head>
+<title>PerlIS - Perl for ISAPI</title>
+<link rel="STYLESHEET" href="../../Active.css" type="text/css" media="screen">
+</head>
+
+<body>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#EAE2BB">
+<tr> 
+<td width="57"><a target=_blank href="http://www.ActiveState.com/ActivePerl/">
+<img src="../../images/activeperl_logo.gif" width="57" height="48" border="0" alt="ActivePerl"></a></td>
+<td><div align="center" class="heading">ActivePerl User Guide</div></td>
+<td width="112"><a target=_blank  href="http://www.ActiveState.com">
+<img src="../../images/AS_logo.gif" width="112" height="48" border="0"  alt="ActiveState" /></a></td>
+</tr>
+<tr>
+<td class="lineColour" colspan="3"></td>
+</tr>
+</table>
+
+<h1>PerlIS - Perl for ISAPI</h1>
+
+<ul>
+  <li><a class="doc" href="#NAME">NAME</a></li>
+  <li><a class="doc" href="#DESCRIPTION">DESCRIPTION</a>
+    <ul>
+      <li><a class="doc" href="#Sources_of_other_information">Sources of other information</a></li>
+      <li><a class="doc" href="#What_is_ISAPI_">What is ISAPI?</a></li>
+      <li><a class="doc" href="#What_is_Perl_for_ISAPI_">What is Perl for ISAPI?</a></li>
+      <li><a class="doc" href="#Where_can_I_get_Perl_for_ISAPI_">Where can I get Perl for
+        ISAPI?</a></li>
+      <li><a class="doc" href="#Why_should_I_use_Perl_for_ISAPI_">Why should I use Perl for
+        ISAPI rather than ActivePerl (perl.exe)?</a></li>
+      <li><a class="doc" href="#Where_s_the_source_code_for_Perl">Where's the source code
+        for Perl for ISAPI?</a></li>
+    </ul>
+  </li>
+  <li><a class="doc" href="#AUTHOR_AND_COPYRIGHT">AUTHOR AND COPYRIGHT</a></li>
+</ul>
+ 
+<h2><a name="NAME">NAME</a></h2>
+<p>PerlIS - Perl for ISAPI</p>
+ 
+<h2><a name="DESCRIPTION">DESCRIPTION</a></h2>
+<p>About Perl for ISAPI<font size="-1">.</font></p>
+ 
+<h2><a name="Sources_of_other_information">Sources of other information</a></h2>
+<p>Information on Perl for ISAPI can also be found in <a class="doc" href="ActivePerl-Winfaq6.html">the
+ActivePerl-Winfaq6 manpage</a> and <a class="doc" href="ActivePerl-Winfaq7.html">the
+ActivePerl-Winfaq7 manpage</a>.</p>
+ 
+<h2><a name="What_is_ISAPI_">What is ISAPI?</a></h2>
+<p>ISAPI (Internet Server Application Programming Interface) is an API for
+writing extensions to web servers. It was originally developed by Process
+Software, and adopted by Microsoft as its standard server API<font size="-1">.</font>
+It complements or replaces the Common Gateway Interface <font size="-1">(</font>CGI<font size="-1">),</font>
+the standard interprocess protocol for writing extensions to web servers.</p>
+<p>ISAPI's main advantage over CGI is that it uses dynamic-link library <font size="-1">(DLL)</font>
+function calls to communicate with extension components, rather than environment
+variables and standard <font size="-1">I/O,</font> as CGI does. There's a lot of
+overhead when starting new processes on Win32 platforms, and DLL calls eliminate
+the need for new processes, thus reducing the running time.</p>
+<p>Although it was originally developed for Microsoft Internet Information
+Server, many Windows NT-hosted web servers now support ISAPI<font size="-1">.</font>
+See <a class="doc" href="ActivePerl-Winfaq6.html#What_HTTP_servers_support_Perl_f">What HTTP
+servers support ActivePerl?</a> for the names of a few. If your server isn't
+there, check its documentation.</p>
+ 
+<h2><a name="What_is_Perl_for_ISAPI_">What is Perl for ISAPI?</a></h2>
+<p>Perl for ISAPI<font size="-1">,</font> is an ISAPI extension that runs Perl
+scripts on Win32 platforms.</p>
+<p>Perl for ISAPI is mainly used for creating dynamic content on World Wide Web
+sites. Writing Perl scripts that run under PerlIS is not much different than
+writing scripts for the Common Gateway Interface <font size="-1">(</font>CGI<font size="-1">).</font></p>
+<p>Perl for ISAPI doesn't have much general purpose use. For general purpose
+programming, stick with the perl interpreter (<em>perl.exe</em>).</p>
+<p>You may also see Perl for ISAPI referred to as PerlIS. PerlIS is the name of
+the Perl for ISAPI DLL<font size="-1">.</font></p>
+ 
+<h2><a name="Where_can_I_get_Perl_for_ISAPI_">Where can I get Perl for ISAPI?</a></h2>
+<p>Perl for ISAPI is distributed as a part of the ActivePerl distribution. You
+can optionally install it when installing ActivePerl.</p>
+ 
+<h2><a name="Why_should_I_use_Perl_for_ISAPI_">Why should I use Perl for ISAPI
+rather than Perl for Win32 (perl.exe)?</a></h2>
+<p>The short answer is: it's faster. The long answer gets kind of technical, but
+it goes like this:</p>
+<p>The main advantage of PerlIS over <em>perl.exe</em> is that PerlIS runs as a
+DLL in the web server's process space. Because Win32 platforms set up a
+protected memory space for each process that is started, there's a lot of
+overhead in starting a new process or program. Passing scripts to an
+interpreter, such as <em>perl.exe</em>, requires starting a new process for
+every script, which gets expensive in terms of system resources.</p>
+<p>DLLs, on the other hand, don't need their own process space; they use the
+space of the process that calls them. They don't require nearly as much overhead
+to start, and once loaded they stay loaded until the calling process ends.
+PerlIS therefore runs Perl scripts with a quicker turn-around time than <em>perl.exe</em>.</p>
+<p>Extra care should be taken when you write PerlIS applications. It is
+difficult to crash the web server using <font size="-1">CGI,</font> but because
+the PerlIS <font size="-1">DLL</font> runs in the process space of the server,
+your web server is more susceptible to crashes and hangs caused by programming
+errors.</p>
+ 
+<h2><a name="Where_s_the_source_code_for_Perl">Where's the source code for Perl
+for ISAPI?</a></h2>
+<p>The source for Perl for ISAPI is not distributed to the public.</p>
+ 
+<h2><a name="AUTHOR_AND_COPYRIGHT">AUTHOR AND COPYRIGHT</a></h2>
+<p>This FAQ was originally assembled and maintained by Evangelo Prodromou. It
+has been revised and updated by Brian Jepson of O'Reilly &amp; Associates, David
+Grove, David Dmytryshyn and David Sparks of ActiveState.</p>
+<p>This FAQ is in the public domain. If you use it, however, please ensure that
+you give credit to the original authors.</p>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+  <tr>
+    <td class="block" valign="MIDDLE" width="100%" bgcolor="#cccccc"><strong>
+      <p class="block">&nbsp;ActivePerl FAQ - PerlIS - Perl for ISAPI</p>
+      </strong></td>
+  </tr>
+</table>
+
+</body>
+
+</html>

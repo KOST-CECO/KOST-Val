@@ -1,6 +1,6 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
- * Information Package (SIP). Copyright (C) 2012-2016 Claire Röthlisberger (KOST-CECO), Christian
+ * Information Package (SIP). Copyright (C) 2012-2016 Claire Roethlisberger (KOST-CECO), Christian
  * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
  * Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
@@ -55,10 +55,21 @@ public class Validation3bUnspecifiedFormatModuleImpl extends ValidationModuleImp
 	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws Validation3bUnspecifiedFormatException
 	{
-		// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
-		System.out.print( "3B   " );
-		System.out.print( "\b\b\b\b\b" );
+		boolean showOnWork = true;
 		int onWork = 410;
+		// Informationen zur Darstellung "onWork" holen
+		String onWorkConfig = getConfigurationService().getShowProgressOnWork();
+		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
+		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
+		 * ref="configurationService" /> */
+		if ( onWorkConfig.equals( "no" ) ) {
+			// keine Ausgabe
+			showOnWork = false;
+		} else {
+			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
+			System.out.print( "3B   " );
+			System.out.print( "\b\b\b\b\b" );
+		}
 
 		boolean valid = true;
 
@@ -83,8 +94,8 @@ public class Validation3bUnspecifiedFormatModuleImpl extends ValidationModuleImp
 		Droid droid = null;
 		try {
 			/* kleiner Hack, weil die Droid libraries irgendwo ein System.out drin haben, welche den
-			 * Output stören Util.switchOffConsole() als Kommentar markieren wenn man die Fehlermeldung
-			 * erhalten möchte */
+			 * Output stï¿½ren Util.switchOffConsole() als Kommentar markieren wenn man die Fehlermeldung
+			 * erhalten mï¿½chte */
 			Util.switchOffConsole();
 			droid = new Droid();
 
@@ -108,24 +119,26 @@ public class Validation3bUnspecifiedFormatModuleImpl extends ValidationModuleImp
 			if ( !newFile.isDirectory() && entryName.contains( "content/" ) ) {
 				filesInSipFile.put( entryName, newFile );
 			}
-			if ( onWork == 410 ) {
-				onWork = 2;
-				System.out.print( "3B-  " );
-				System.out.print( "\b\b\b\b\b" );
-			} else if ( onWork == 110 ) {
-				onWork = onWork + 1;
-				System.out.print( "3B\\  " );
-				System.out.print( "\b\b\b\b\b" );
-			} else if ( onWork == 210 ) {
-				onWork = onWork + 1;
-				System.out.print( "3B|  " );
-				System.out.print( "\b\b\b\b\b" );
-			} else if ( onWork == 310 ) {
-				onWork = onWork + 1;
-				System.out.print( "3B/  " );
-				System.out.print( "\b\b\b\b\b" );
-			} else {
-				onWork = onWork + 1;
+			if ( showOnWork ) {
+				if ( onWork == 410 ) {
+					onWork = 2;
+					System.out.print( "3B-  " );
+					System.out.print( "\b\b\b\b\b" );
+				} else if ( onWork == 110 ) {
+					onWork = onWork + 1;
+					System.out.print( "3B\\  " );
+					System.out.print( "\b\b\b\b\b" );
+				} else if ( onWork == 210 ) {
+					onWork = onWork + 1;
+					System.out.print( "3B|  " );
+					System.out.print( "\b\b\b\b\b" );
+				} else if ( onWork == 310 ) {
+					onWork = onWork + 1;
+					System.out.print( "3B/  " );
+					System.out.print( "\b\b\b\b\b" );
+				} else {
+					onWork = onWork + 1;
+				}
 			}
 		}
 
@@ -166,24 +179,26 @@ public class Validation3bUnspecifiedFormatModuleImpl extends ValidationModuleImp
 				}
 
 			}
-			if ( onWork == 410 ) {
-				onWork = 2;
-				System.out.print( "3B-  " );
-				System.out.print( "\b\b\b\b\b" );
-			} else if ( onWork == 110 ) {
-				onWork = onWork + 1;
-				System.out.print( "3B\\  " );
-				System.out.print( "\b\b\b\b\b" );
-			} else if ( onWork == 210 ) {
-				onWork = onWork + 1;
-				System.out.print( "3B|  " );
-				System.out.print( "\b\b\b\b\b" );
-			} else if ( onWork == 310 ) {
-				onWork = onWork + 1;
-				System.out.print( "3B/  " );
-				System.out.print( "\b\b\b\b\b" );
-			} else {
-				onWork = onWork + 1;
+			if ( showOnWork ) {
+				if ( onWork == 410 ) {
+					onWork = 2;
+					System.out.print( "3B-  " );
+					System.out.print( "\b\b\b\b\b" );
+				} else if ( onWork == 110 ) {
+					onWork = onWork + 1;
+					System.out.print( "3B\\  " );
+					System.out.print( "\b\b\b\b\b" );
+				} else if ( onWork == 210 ) {
+					onWork = onWork + 1;
+					System.out.print( "3B|  " );
+					System.out.print( "\b\b\b\b\b" );
+				} else if ( onWork == 310 ) {
+					onWork = onWork + 1;
+					System.out.print( "3B/  " );
+					System.out.print( "\b\b\b\b\b" );
+				} else {
+					onWork = onWork + 1;
+				}
 			}
 		}
 		return valid;

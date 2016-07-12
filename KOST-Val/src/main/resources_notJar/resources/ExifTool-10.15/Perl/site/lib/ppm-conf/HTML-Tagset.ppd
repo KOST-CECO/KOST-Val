@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SOFTPKG NAME="HTML-Tagset" VERSION="3,03,0,0">
+<TITLE>HTML-Tagset</TITLE>
+<ABSTRACT>Data tables useful in parsing HTML</ABSTRACT>
+<AUTHOR>Sean M. Burke, &lt;sburke@cpan.org&gt;</AUTHOR>
+<IMPLEMENTATION>
+<CODEBASE HREF="http://ppm.ActiveState.com/PPMPackages/5.8-windows/MSWin32-x86-multi-thread-5.8/HTML-Tagset.tar.gz" />
+<INSTALL />
+<UNINSTALL />
+</IMPLEMENTATION>
+</SOFTPKG>

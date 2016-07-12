@@ -1,6 +1,6 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
- * Information Package (SIP). Copyright (C) 2012-2016 Claire Röthlisberger (KOST-CECO), Christian
+ * Information Package (SIP). Copyright (C) 2012-2016 Claire Roethlisberger (KOST-CECO), Christian
  * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
  * Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
@@ -39,12 +39,12 @@ import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.bean.ValidationContext;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationWwarningModule;
 
-/** Validierungsschritt W (Warnungen) Wurden dataOwner und dataOriginTimespan ausgefüllt und nicht
+/** Validierungsschritt W (Warnungen) Wurden dataOwner und dataOriginTimespan ausgefï¿½llt und nicht
  * auf (...) belassen? <dataOwner>(...)</dataOwner> <dataOriginTimespan>(...)</dataOriginTimespan>
  * 
  * nur Messeage ausgeben aber immer valid
  * 
- * @author Rc Claire Röthlisberger, KOST-CECO */
+ * @author Rc Claire Roethlisberger, KOST-CECO */
 
 public class ValidationWwarningModuleImpl extends ValidationModuleImpl implements
 		ValidationWwarningModule
@@ -67,9 +67,18 @@ public class ValidationWwarningModuleImpl extends ValidationModuleImpl implement
 	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws ValidationWwarningException
 	{
-		// Ausgabe SIARD-Modul Ersichtlich das KOST-Val arbeitet
-		System.out.print( "W    " );
-		System.out.print( "\b\b\b\b\b" );
+		// Informationen zur Darstellung "onWork" holen
+		String onWork = getConfigurationService().getShowProgressOnWork();
+		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
+		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
+		 * ref="configurationService" /> */
+		if ( onWork.equals( "no" ) ) {
+			// keine Ausgabe
+		} else {
+			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
+			System.out.print( "W    " );
+			System.out.print( "\b\b\b\b\b" );
+		}
 
 		try {
 
@@ -97,7 +106,7 @@ public class ValidationWwarningModuleImpl extends ValidationModuleImpl implement
 			if ( elementDataOwner != null ) {
 				String dataOwnerValue = elementDataOwner.getTextContent();
 				if ( dataOwnerValue.equals( "(...)" ) ) {
-					/* Der Initialwert wurde nicht verändert respektive ausgefüllt, entsprechend wird eine
+					/* Der Initialwert wurde nicht verÃ¤ndert respektive ausgefï¿½llt, entsprechend wird eine
 					 * Warnung ausgegeben */
 					getMessageService().logError(
 							getTextResourceService().getText( MESSAGE_XML_MODUL_W_SIARD )
@@ -109,7 +118,7 @@ public class ValidationWwarningModuleImpl extends ValidationModuleImpl implement
 			if ( elementDataOriginTimespan != null ) {
 				String dataOriginTimespanValue = elementDataOriginTimespan.getTextContent();
 				if ( dataOriginTimespanValue.equals( "(...)" ) ) {
-					/* Der Initialwert wurde nicht verändert respektive ausgefüllt, entsprechend wird eine
+					/* Der Initialwert wurde nicht verÃ¤ndert respektive ausgefï¿½llt, entsprechend wird eine
 					 * Warnung ausgegeben */
 					getMessageService().logError(
 							getTextResourceService().getText( MESSAGE_XML_MODUL_W_SIARD )

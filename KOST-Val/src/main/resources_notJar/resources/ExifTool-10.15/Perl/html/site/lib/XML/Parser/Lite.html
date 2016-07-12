@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>XML::Parser::Lite - Lightweight regexp-based XML parser</title>
+<link rel="stylesheet" href="../../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;XML::Parser::Lite - Lightweight regexp-based XML parser</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>XML::Parser::Lite - Lightweight regexp-based XML parser</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+  use XML::Parser::Lite;
+  
+  $p1 = new XML::Parser::Lite;
+  $p1-&gt;setHandlers(
+    Start =&gt; sub { shift; print &quot;start: @_\n&quot; },
+    Char =&gt; sub { shift; print &quot;char: @_\n&quot; },
+    End =&gt; sub { shift; print &quot;end: @_\n&quot; },
+  );
+  $p1-&gt;parse('&lt;foo id=&quot;me&quot;&gt;Hello World!&lt;/foo&gt;');</pre>
+<pre>
+  $p2 = new XML::Parser::Lite
+    Handlers =&gt; {
+      Start =&gt; sub { shift; print &quot;start: @_\n&quot; },
+      Char =&gt; sub { shift; print &quot;char: @_\n&quot; },
+      End =&gt; sub { shift; print &quot;end: @_\n&quot; },
+    }
+  ;
+  $p2-&gt;parse('&lt;foo id=&quot;me&quot;&gt;Hello &lt;bar&gt;cruel&lt;/bar&gt; World!&lt;/foo&gt;');</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>This Perl module gives you access to XML parser with interface similar to
+XML::Parser interface. Though only basic calls are supported (init, final,
+start, char, and end) you should be able to use it in the same way you use
+XML::Parser. Due to using experimantal regexp features it'll work only on
+Perl 5.6 and may behave differently on different platforms.
+</p>
+<pre>
+
+=head1 SEE ALSO</pre>
+<pre>
+ XML::Parser</pre>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright (C) 2000-2001 Paul Kulchenko. All rights reserved.</p>
+<p>This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.</p>
+<p>This parser is based on ``shallow parser'' <a href="http://www.cs.sfu.ca/~cameron/REX.html">http://www.cs.sfu.ca/~cameron/REX.html</a>
+Copyright (c) 1998, Robert D. Cameron.</p>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Paul Kulchenko (<a href="mailto:paulclinger@yahoo.com">paulclinger@yahoo.com</a>)</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;XML::Parser::Lite - Lightweight regexp-based XML parser</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

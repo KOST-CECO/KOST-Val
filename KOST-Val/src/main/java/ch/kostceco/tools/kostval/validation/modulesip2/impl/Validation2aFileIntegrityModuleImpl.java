@@ -1,6 +1,6 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
- * Information Package (SIP). Copyright (C) 2012-2016 Claire Röthlisberger (KOST-CECO), Christian
+ * Information Package (SIP). Copyright (C) 2012-2016 Claire Roethlisberger (KOST-CECO), Christian
  * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
  * Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
@@ -34,6 +34,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import ch.kostceco.tools.kostval.exception.modulesip2.Validation2aFileIntegrityException;
+import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesip2.Validation2aFileIntegrityModule;
@@ -45,15 +46,37 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl im
 		Validation2aFileIntegrityModule
 {
 
+	private ConfigurationService	configurationService;
+
+	public ConfigurationService getConfigurationService()
+	{
+		return configurationService;
+	}
+
+	public void setConfigurationService( ConfigurationService configurationService )
+	{
+		this.configurationService = configurationService;
+	}
+
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws Validation2aFileIntegrityException
 	{
-		// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
-		System.out.print( "2A   " );
-		System.out.print( "\b\b\b\b\b" );
-
+		boolean showOnWork = true;
 		int onWork = 410;
+		// Informationen zur Darstellung "onWork" holen
+		String onWorkConfig = getConfigurationService().getShowProgressOnWork();
+		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
+		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
+		 * ref="configurationService" /> */
+		if ( onWorkConfig.equals( "no" ) ) {
+			// keine Ausgabe
+			showOnWork = false;
+		} else {
+			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
+			System.out.print( "2A   " );
+			System.out.print( "\b\b\b\b\b" );
+		}
 
 		Map<String, String> filesInSip = new HashMap<String, String>();
 		boolean valid = true;
@@ -65,40 +88,7 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl im
 				String entryName = iterator.next();
 				// entryName: content/DOS_02/gpl2.pdf
 				filesInSip.put( entryName, entryName );
-				if ( onWork == 410 ) {
-					onWork = 2;
-					System.out.print( "2A-  " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 110 ) {
-					onWork = onWork + 1;
-					System.out.print( "2A\\  " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 210 ) {
-					onWork = onWork + 1;
-					System.out.print( "2A|  " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 310 ) {
-					onWork = onWork + 1;
-					System.out.print( "2A/  " );
-					System.out.print( "\b\b\b\b\b" );
-				} else {
-					onWork = onWork + 1;
-				}
-			}
-
-			try {
-				DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-				// dbf.setValidating(false);
-				DocumentBuilder db = dbf.newDocumentBuilder();
-				Document doc = db.parse( new FileInputStream( new File( valDatei.getAbsolutePath()
-						+ "//header//metadata.xml" ) ) );
-				doc.getDocumentElement().normalize();
-				NodeList nodeLst = doc.getElementsByTagName( "datei" );
-				NodeList nodeLstO = doc.getElementsByTagName( "ordner" );
-
-				for ( int s = 0; s < nodeLst.getLength(); s++ ) {
-					Node dateiNode = nodeLst.item( s );
-					String path = null;
+				if ( showOnWork ) {
 					if ( onWork == 410 ) {
 						onWork = 2;
 						System.out.print( "2A-  " );
@@ -118,13 +108,23 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl im
 					} else {
 						onWork = onWork + 1;
 					}
+				}
+			}
 
-					NodeList childNodes = dateiNode.getChildNodes();
-					for ( int y = 0; y < childNodes.getLength(); y++ ) {
-						Node subNode = childNodes.item( y );
-						if ( subNode.getNodeName().equals( "name" ) ) {
-							path = subNode.getTextContent();
-						}
+			try {
+				DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+				// dbf.setValidating(false);
+				DocumentBuilder db = dbf.newDocumentBuilder();
+				Document doc = db.parse( new FileInputStream( new File( valDatei.getAbsolutePath()
+						+ "//header//metadata.xml" ) ) );
+				doc.getDocumentElement().normalize();
+				NodeList nodeLst = doc.getElementsByTagName( "datei" );
+				NodeList nodeLstO = doc.getElementsByTagName( "ordner" );
+
+				for ( int s = 0; s < nodeLst.getLength(); s++ ) {
+					Node dateiNode = nodeLst.item( s );
+					String path = null;
+					if ( showOnWork ) {
 						if ( onWork == 410 ) {
 							onWork = 2;
 							System.out.print( "2A-  " );
@@ -143,6 +143,35 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl im
 							System.out.print( "\b\b\b\b\b" );
 						} else {
 							onWork = onWork + 1;
+						}
+					}
+
+					NodeList childNodes = dateiNode.getChildNodes();
+					for ( int y = 0; y < childNodes.getLength(); y++ ) {
+						Node subNode = childNodes.item( y );
+						if ( subNode.getNodeName().equals( "name" ) ) {
+							path = subNode.getTextContent();
+						}
+						if ( showOnWork ) {
+							if ( onWork == 410 ) {
+								onWork = 2;
+								System.out.print( "2A-  " );
+								System.out.print( "\b\b\b\b\b" );
+							} else if ( onWork == 110 ) {
+								onWork = onWork + 1;
+								System.out.print( "2A\\  " );
+								System.out.print( "\b\b\b\b\b" );
+							} else if ( onWork == 210 ) {
+								onWork = onWork + 1;
+								System.out.print( "2A|  " );
+								System.out.print( "\b\b\b\b\b" );
+							} else if ( onWork == 310 ) {
+								onWork = onWork + 1;
+								System.out.print( "2A/  " );
+								System.out.print( "\b\b\b\b\b" );
+							} else {
+								onWork = onWork + 1;
+							}
 						}
 					}
 
@@ -170,24 +199,26 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl im
 								break;
 							}
 						}
-						if ( onWork == 410 ) {
-							onWork = 2;
-							System.out.print( "2A-  " );
-							System.out.print( "\b\b\b\b\b" );
-						} else if ( onWork == 110 ) {
-							onWork = onWork + 1;
-							System.out.print( "2A\\  " );
-							System.out.print( "\b\b\b\b\b" );
-						} else if ( onWork == 210 ) {
-							onWork = onWork + 1;
-							System.out.print( "2A|  " );
-							System.out.print( "\b\b\b\b\b" );
-						} else if ( onWork == 310 ) {
-							onWork = onWork + 1;
-							System.out.print( "2A/  " );
-							System.out.print( "\b\b\b\b\b" );
-						} else {
-							onWork = onWork + 1;
+						if ( showOnWork ) {
+							if ( onWork == 410 ) {
+								onWork = 2;
+								System.out.print( "2A-  " );
+								System.out.print( "\b\b\b\b\b" );
+							} else if ( onWork == 110 ) {
+								onWork = onWork + 1;
+								System.out.print( "2A\\  " );
+								System.out.print( "\b\b\b\b\b" );
+							} else if ( onWork == 210 ) {
+								onWork = onWork + 1;
+								System.out.print( "2A|  " );
+								System.out.print( "\b\b\b\b\b" );
+							} else if ( onWork == 310 ) {
+								onWork = onWork + 1;
+								System.out.print( "2A/  " );
+								System.out.print( "\b\b\b\b\b" );
+							} else {
+								onWork = onWork + 1;
+							}
 						}
 					}
 					String name = path;
@@ -244,24 +275,26 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl im
 								break;
 							}
 						}
-						if ( onWork == 410 ) {
-							onWork = 2;
-							System.out.print( "2A-  " );
-							System.out.print( "\b\b\b\b\b" );
-						} else if ( onWork == 110 ) {
-							onWork = onWork + 1;
-							System.out.print( "2A\\  " );
-							System.out.print( "\b\b\b\b\b" );
-						} else if ( onWork == 210 ) {
-							onWork = onWork + 1;
-							System.out.print( "2A|  " );
-							System.out.print( "\b\b\b\b\b" );
-						} else if ( onWork == 310 ) {
-							onWork = onWork + 1;
-							System.out.print( "2A/  " );
-							System.out.print( "\b\b\b\b\b" );
-						} else {
-							onWork = onWork + 1;
+						if ( showOnWork ) {
+							if ( onWork == 410 ) {
+								onWork = 2;
+								System.out.print( "2A-  " );
+								System.out.print( "\b\b\b\b\b" );
+							} else if ( onWork == 110 ) {
+								onWork = onWork + 1;
+								System.out.print( "2A\\  " );
+								System.out.print( "\b\b\b\b\b" );
+							} else if ( onWork == 210 ) {
+								onWork = onWork + 1;
+								System.out.print( "2A|  " );
+								System.out.print( "\b\b\b\b\b" );
+							} else if ( onWork == 310 ) {
+								onWork = onWork + 1;
+								System.out.print( "2A/  " );
+								System.out.print( "\b\b\b\b\b" );
+							} else {
+								onWork = onWork + 1;
+							}
 						}
 					}
 

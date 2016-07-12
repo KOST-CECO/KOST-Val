@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>HTML::Tree - overview of HTML::TreeBuilder et al</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;HTML::Tree - overview of HTML::TreeBuilder et al</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>HTML::Tree - overview of HTML::TreeBuilder et al</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+  use HTML::TreeBuilder;
+  my $tree = HTML::TreeBuilder-&gt;new();
+  $tree-&gt;parse_file($filename);
+   #
+   # Then do something with the tree, using HTML::Element
+   # methods -- for example $tree-&gt;dump
+   #
+   # Then:
+  $tree-&gt;delete;</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>HTML-Tree is a suite of Perl modules for making parse trees out of
+HTML source.  It consists of mainly two modules, whose documentation
+you should refer to: <a href="../../../site/lib/HTML/TreeBuilder.html">HTML::TreeBuilder</a>
+and <a href="../../../site/lib/HTML/Element.html">HTML::Element</a>.</p>
+<p>HTML::TreeBuilder is the module that builds the parse trees.  (It uses
+HTML::Parser to do the work of breaking the HTML up into tokens.)</p>
+<p>The tree that TreeBuilder builds for you is made up of objects of the
+class HTML::Element.</p>
+<p>If you find that you do not properly understand the documentation
+for HTML::TreeBuilder and HTML::Element, it may be because you are
+unfamiliar with tree-shaped data structures, or with object-oriented
+modules in general.  I have written some articles for <em>The Perl
+Journal</em> (<code>www.tpj.com</code>) that seek to provide that background:
+my article ``A User's View of Object-Oriented Modules'' in TPJ17;
+my article ``Trees'' in TPJ18;
+and
+my article ``Scanning HTML'' in TPJ19.
+The full text of those articles is contained in this distribution, as:</p>
+<p><a href="../../../site/lib/HTML/Tree/AboutObjects.html">HTML::Tree::AboutObjects</a>
+-- article: ``User's View of Object-Oriented Modules''</p>
+<p><a href="../../../site/lib/HTML/Tree/AboutTrees.html">HTML::Tree::AboutTrees</a>
+-- article: ``Trees''</p>
+<p><a href="../../../site/lib/HTML/Tree/Scanning.html">HTML::Tree::Scanning</a>
+-- article: ``Scanning HTML''</p>
+<p>Readers already familiar with object-oriented modules and tree-shaped
+data structures should read just the last article.  Readers without
+that background should read the first, then the second, and then the
+third.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../../../site/lib/HTML/TreeBuilder.html">the HTML::TreeBuilder manpage</a>, <a href="../../../site/lib/HTML/Element.html">the HTML::Element manpage</a>, <a href="../../../site/lib/HTML/Tagset.html">the HTML::Tagset manpage</a>,
+<a href="../../../site/lib/HTML/Parser.html">the HTML::Parser manpage</a></p>
+<p><a href="../../../HTML/DOMbo.html">the HTML::DOMbo manpage</a></p>
+<p>The book <em>Perl &amp; LWP</em> by me, Sean M. Burke, published by
+O'Reilly and Associates, 2002.  ISBN: 0-596-00178-9</p>
+<p>It has several chapters to do with HTML processing in general,
+and HTML-Tree specifically.  There's more info at:</p>
+<pre>
+  <a href="http://www.oreilly.com/catalog/perllwp/">http://www.oreilly.com/catalog/perllwp/</a>
+  <a href="http://www.amazon.com/exec/obidos/ASIN/0596001789">http://www.amazon.com/exec/obidos/ASIN/0596001789</a></pre>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 1995-1998 Gisle Aas; copyright 1999-2002 Sean M. Burke.
+(Except the articles contained in HTML::Tree::AboutObjects,
+HTML::Tree::AboutTrees, and HTML::Tree::Scanning, which are all
+copyright 2000 The Perl Journal.)</p>
+<p>Except for those three TPJ articles, the whole HTML-Tree distribution,
+of which this file is a part, is free software; you can redistribute
+it and/or modify it under the same terms as Perl itself.</p>
+<p>Those three TPJ articles may be distributed under the same terms as
+Perl itself.</p>
+<p>The programs and documentation in this dist are distributed in
+the hope that they will be useful, but without any warranty; without
+even the implied warranty of merchantability or fitness for a
+particular purpose.</p>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Original HTML-Tree author Gisle Aas &lt;<a href="mailto:gisle@aas.no">gisle@aas.no</a>&gt;; current
+maintainer Sean M. Burke, &lt;<a href="mailto:sburke@cpan.org">sburke@cpan.org</a>&gt;</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;HTML::Tree - overview of HTML::TreeBuilder et al</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

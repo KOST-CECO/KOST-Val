@@ -1,6 +1,6 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
- * Information Package (SIP). Copyright (C) 2012-2016 Claire RÃ¶thlisberger (KOST-CECO), Christian
+ * Information Package (SIP). Copyright (C) 2012-2016 Claire Roethlisberger (KOST-CECO), Christian
  * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
  * Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
@@ -40,27 +40,51 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import ch.kostceco.tools.kostval.exception.modulesip3.Validation3dPeriodException;
+import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesip3.Validation3dPeriodModule;
 
-/** Stimmen die Zeitangaben in (metadata.xml)/ablieferung überein? */
+/** Stimmen die Zeitangaben in (metadata.xml)/ablieferung Ã¼berein? */
 
 public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implements
 		Validation3dPeriodModule
 {
 
-	DateFormat	formatter1	= new SimpleDateFormat( "yyyy-MM-dd" );
-	DateFormat	formatter2	= new SimpleDateFormat( "dd.MM.yyyy" );
-	DateFormat	formatter3	= new SimpleDateFormat( "yyyy" );
+	DateFormat										formatter1	= new SimpleDateFormat( "yyyy-MM-dd" );
+	DateFormat										formatter2	= new SimpleDateFormat( "dd.MM.yyyy" );
+	DateFormat										formatter3	= new SimpleDateFormat( "yyyy" );
+
+	private ConfigurationService	configurationService;
+
+	public ConfigurationService getConfigurationService()
+	{
+		return configurationService;
+	}
+
+	public void setConfigurationService( ConfigurationService configurationService )
+	{
+		this.configurationService = configurationService;
+	}
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile )
 			throws Validation3dPeriodException
 	{
-		// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
-		System.out.print( "3D   " );
-		System.out.print( "\b\b\b\b\b" );
+		boolean showOnWork = true;
 		int onWork = 410;
+		// Informationen zur Darstellung "onWork" holen
+		String onWorkConfig = getConfigurationService().getShowProgressOnWork();
+		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
+		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
+		 * ref="configurationService" /> */
+		if ( onWorkConfig.equals( "no" ) ) {
+			// keine Ausgabe
+			showOnWork = false;
+		} else {
+			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
+			System.out.print( "3D   " );
+			System.out.print( "\b\b\b\b\b" );
+		}
 
 		boolean valid = true;
 
@@ -91,7 +115,7 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 			elementAblCaBis = (Element) xpath.evaluate( "/paket/ablieferung/entstehungszeitraum/bis/ca",
 					doc, XPathConstants.NODE );
 
-			/* Wenn nachträglich nicht geändert ist der Ablieferungs-entstehungszeitraum brauchbar, d.h.
+			/* Wenn nachtrÃ¤glich nicht geÃ¤ndert ist der Ablieferungs-entstehungszeitraum brauchbar, d.h.
 			 * er soll mit dem Zeitraum vom Dossier validiert werden. */
 			boolean dateAblieferungUseable = true;
 
@@ -101,11 +125,11 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 			// Existiert das "Ablieferungsdatum Von"?
 			if ( elementAblDatumVon != null ) {
 
-				/* Das elementAblDatumVon existiert und wird gemäss dem Subprogramm parseDatumVon in ein
+				/* Das elementAblDatumVon existiert und wird gemÃ¤ss dem Subprogramm parseDatumVon in ein
 				 * Datum umgewandelt und validiert */
 				Date date = parseDatumVon( elementAblDatumVon.getTextContent() );
 
-				// das umgewandelte Datum wird als calAblieferungVon übernommen
+				// das umgewandelte Datum wird als calAblieferungVon Ã¼bernommen
 				calAblieferungVon.setTime( date );
 				if ( date == null ) {
 
@@ -120,11 +144,11 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 				// Existiert das "Ablieferungsdatum Bis"?
 				if ( elementAblDatumBis != null ) {
 
-					/* Das elementAblDatumBis existiert und wird gemäss dem Subprogramm parseDatumBis in ein
+					/* Das elementAblDatumBis existiert und wird gemÃ¤ss dem Subprogramm parseDatumBis in ein
 					 * Datum umgewandelt und validiert */
 					Date dateB = parseDatumBis( elementAblDatumBis.getTextContent() );
 
-					// das umgewandelte Datum wird als calAblieferungBis übernommen
+					// das umgewandelte Datum wird als calAblieferungBis Ã¼bernommen
 					calAblieferungBis.setTime( dateB );
 					if ( dateB == null ) {
 
@@ -136,8 +160,8 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 						return false;
 					}
 
-					/* der String datumVon respektive datumBis enthält die reelle Eingabe des
-					 * Entstehungszeitraums Von und Bis und wird für den allfälligen Fehlerlog benötigt */
+					/* der String datumVon respektive datumBis enthÃ¤lt die reelle Eingabe des
+					 * Entstehungszeitraums Von und Bis und wird fÃ¼r den allfÃ¤lligen Fehlerlog benÃ¶tigt */
 					String datumVon = ((elementAblCaVon != null && elementAblCaVon.getTextContent().equals(
 							"true" )) ? "ca. " : "")
 							+ elementAblDatumVon.getTextContent();
@@ -184,13 +208,13 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 
 					/* falls das Ablieferungs-Datum "Bis" vor dem Datum "Von" liegt, gehen wir davon aus, das
 					 * eine Verwechslung vorliegt, d.h. wir geben den Fehler aus, Schritt 3d ist invalid und
-					 * für die weiterverarbeitung tauschen die calDaten gegeneinander aus. */
+					 * fÃ¼r die weiterverarbeitung tauschen die calDaten gegeneinander aus. */
 					if ( calAblieferungBis.before( calAblieferungVon ) ) {
 						Calendar calTmp = calAblieferungBis;
 						calAblieferungBis = calAblieferungVon;
 						calAblieferungVon = calTmp;
 
-						// Zusammenstellung der parameter die für den logreport gebraucht werden (die reellen
+						// Zusammenstellung der parameter die fÃ¼r den logreport gebraucht werden (die reellen
 						// Daten)
 						String[] params = new String[4];
 						params[0] = (elementAblCaVon != null && elementAblCaVon.getTextContent()
@@ -213,7 +237,7 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 				} else {
 
 					/* Das elementAblDatumBis existiert nicht Dies bedeutet, dass dieser Schritt noch immer
-					 * Valid sein könnte, da der Entstehungszeitraum auf der Stufe Ablieferung optional ist.
+					 * Valid sein kÃ¶nnte, da der Entstehungszeitraum auf der Stufe Ablieferung optional ist.
 					 * Es Soll kein Fehler ausgegeben werden sondern nur der Marker dateAblieferungUsable =
 					 * false (unbrauchbar) gesetzt werden. */
 					dateAblieferungUseable = false;
@@ -222,7 +246,7 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 			} else {
 
 				/* Das elementAblDatumVon existiert nicht Dies bedeutet, dass dieser Schritt noch immer
-				 * Valid sein könnte, da der Entstehungszeitraum auf der Stufe Ablieferung optional ist. Es
+				 * Valid sein kÃ¶nnte, da der Entstehungszeitraum auf der Stufe Ablieferung optional ist. Es
 				 * Soll kein Fehler ausgegeben werden sondern nur der Marker dateAblieferungUsable = false
 				 * (unbrauchbar) gesetzt werden. */
 				dateAblieferungUseable = false;
@@ -231,9 +255,9 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 			// Ende der Zeitraumvalidierung auf der Stufe Ablieferung
 			// ******************************************************
 			// Start mit der Zeitraumvalidierung auf der Stufe Dossier
-			// mit allfälliger Validierung gegenüber jener der Ablieferung
+			// mit allfÃ¤lliger Validierung gegenÃ¼ber jener der Ablieferung
 
-			// über alle Dossiers iterieren
+			// Ã¼ber alle Dossiers iterieren
 			boolean noDateValidation = false;
 			NodeList nodeLstDossier = doc.getElementsByTagName( "dossier" );
 			for ( int s = 0; s < nodeLstDossier.getLength(); s++ ) {
@@ -287,7 +311,7 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 				boolean dossierRangeOk = true;
 				if ( dateDossierVon != null && dateDossierBis != null ) {
 
-					/* dateDossierVon existiert und wird geäss dem Subprogramm parseDatumVon in ein Datum
+					/* dateDossierVon existiert und wird gemÃ¤ss dem Subprogramm parseDatumVon in ein Datum
 					 * umgewandelt und validiert */
 					Date date = parseDatumVon( dateDossierVon );
 
@@ -300,10 +324,10 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 						return false;
 					}
 
-					// das umgewandelte Datum wird als calDossierVon übernommen
+					// das umgewandelte Datum wird als calDossierVon Ã¼bernommen
 					calDossierVon.setTime( date );
 
-					/* dateDossierBis existiert und wird gemäss dem Subprogramm parseDatumBis in ein Datum
+					/* dateDossierBis existiert und wird gemÃ¤ss dem Subprogramm parseDatumBis in ein Datum
 					 * umgewandelt und validiert */
 					date = parseDatumBis( dateDossierBis );
 
@@ -316,11 +340,11 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 						return false;
 					}
 
-					// das umgewandelte Datum wird als calDossierBis übernommen
+					// das umgewandelte Datum wird als calDossierBis Ã¼bernommen
 					calDossierBis.setTime( date );
 
-					/* der String datumVonDos respektive datumBisDos enthält die reelle Eingabe des
-					 * Entstehungszeitraums Von und Bis und wird ür den allfälligen Fehlerlog benötigt */
+					/* der String datumVonDos respektive datumBisDos enthÃ¤lt die reelle Eingabe des
+					 * Entstehungszeitraums Von und Bis und wird fÃ¼r den allfÃ¤lligen Fehlerlog benÃ¶tigt */
 					String datumVonDos = ((circaDossierVonNode != null && circaDossierVonNode
 							.getTextContent().equals( "true" )) ? "ca. " : "") + dateDossierVon;
 					String datumBisDos = ((circaDossierBisNode != null && circaDossierBisNode
@@ -368,7 +392,7 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 					}
 
 					/* falls das Dossier-Datum "Bis" vor dem Datum "Von" liegt, gehen wir davon aus, das eine
-					 * Verwechslung vorliegt, d.h. wir geben den Fehler aus, Schritt 3d ist invalid und für
+					 * Verwechslung vorliegt, d.h. wir geben den Fehler aus, Schritt 3d ist invalid und fÃ¼r
 					 * die weiterverarbeitung tauschen die calDaten gegeneinander aus. */
 					if ( calDossierBis.before( calDossierVon ) ) {
 						Calendar calTmp = calDossierBis;
@@ -379,7 +403,7 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 						dossierElement = (Element) dossierNode;
 						String dossierId = dossierElement.getAttribute( "id" );
 
-						// Zusammenstellung der parameter die für den logreport gebraucht werden (die reellen
+						// Zusammenstellung der parameter die fÃ¼r den logreport gebraucht werden (die reellen
 						// Daten)
 						String[] params = new String[5];
 						params[0] = dossierId;
@@ -400,11 +424,11 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 						valid = false;
 					}
 
-					// Validierung der Zeiträume gegenüber jener der Ablieferung
+					// Validierung der ZeitrÃ¤ume gegenÃ¼ber jener der Ablieferung
 					// ---------------------------------------------------------
 
 					/* nur wenn ein der Ablieferungszeitraum brauchbar ist, wird ein Dossierzeitraum darauf
-					 * geprüft, dass er in diesen hineinpasst. */
+					 * geprÃ¼ft, dass er in diesen hineinpasst. */
 					if ( dateAblieferungUseable ) {
 						// "keine Angabe" auf Stufe Dossier wird mit dem calWert von der Ablieferung gesetzt
 						if ( dateDossierVon.equals( "keine Angabe" ) ) {
@@ -427,7 +451,7 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 							dossierElement = (Element) dossierNode;
 							String dossierId = dossierElement.getAttribute( "id" );
 
-							/* Zusammenstellung der parameter die für den logreport gebraucht werden (die reellen
+							/* Zusammenstellung der parameter die fÃ¼r den logreport gebraucht werden (die reellen
 							 * Daten) */
 							String[] params = new String[9];
 							params[0] = dossierId;
@@ -459,15 +483,15 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 				}
 
 				if ( !dossierRangeOk ) {
-					// kein gültiger Dossierzeitraum vorhanden
+					// kein gÃ¼ltiger Dossierzeitraum vorhanden
 					if ( dateAblieferungUseable ) {
-						/* wir haben keinen gültigen Dossierzeitraum, jedoch Ablieferungszeitraum und verwenden
-						 * diesen als Validierungszeitraum für untergeordnete Dokumente */
+						/* wir haben keinen gÃ¼ltigen Dossierzeitraum, jedoch Ablieferungszeitraum und verwenden
+						 * diesen als Validierungszeitraum fÃ¼r untergeordnete Dokumente */
 						calDossierVon = calAblieferungVon;
 						calDossierBis = calAblieferungBis;
 					} else {
-						/* wir haben weder einen gültigen Dossier- noch Ablieferungs-Zeitraum, allfällige
-						 * untergeordnete Dokumente werden also nicht gegenüber der oberen Ebene validiert. */
+						/* wir haben weder einen gÃ¼ltigen Dossier- noch Ablieferungs-Zeitraum, allfÃ¤llige
+						 * untergeordnete Dokumente werden also nicht gegenÃ¼ber der oberen Ebene validiert. */
 						noDateValidation = true;
 					}
 				}
@@ -475,7 +499,7 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 				// Ende der Zeitraumvalidierung auf der Stufe Dossier
 				// ******************************************************
 				// Start mit der Zeitraumvalidierung auf der Stufe Dokument
-				// mit allfälliger Validierung gegenüber jener der Dossier
+				// mit allfÃ¤lliger Validierung gegenÃ¼ber jener der Dossier
 
 				// Lesen der Werte vom Entstehungszeitraum der Dokumente
 
@@ -529,24 +553,26 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 											}
 										}
 									}
-									if ( onWork == 410 ) {
-										onWork = 2;
-										System.out.print( "3D-  " );
-										System.out.print( "\b\b\b\b\b" );
-									} else if ( onWork == 110 ) {
-										onWork = onWork + 1;
-										System.out.print( "3D\\  " );
-										System.out.print( "\b\b\b\b\b" );
-									} else if ( onWork == 210 ) {
-										onWork = onWork + 1;
-										System.out.print( "3D|  " );
-										System.out.print( "\b\b\b\b\b" );
-									} else if ( onWork == 310 ) {
-										onWork = onWork + 1;
-										System.out.print( "3D/  " );
-										System.out.print( "\b\b\b\b\b" );
-									} else {
-										onWork = onWork + 1;
+									if ( showOnWork ) {
+										if ( onWork == 410 ) {
+											onWork = 2;
+											System.out.print( "3D-  " );
+											System.out.print( "\b\b\b\b\b" );
+										} else if ( onWork == 110 ) {
+											onWork = onWork + 1;
+											System.out.print( "3D\\  " );
+											System.out.print( "\b\b\b\b\b" );
+										} else if ( onWork == 210 ) {
+											onWork = onWork + 1;
+											System.out.print( "3D|  " );
+											System.out.print( "\b\b\b\b\b" );
+										} else if ( onWork == 310 ) {
+											onWork = onWork + 1;
+											System.out.print( "3D/  " );
+											System.out.print( "\b\b\b\b\b" );
+										} else {
+											onWork = onWork + 1;
+										}
 									}
 								}
 
@@ -558,7 +584,7 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 								// Existiert das "Dokumentdatum Von"?
 								if ( nodeVon != null && nodeVon.getTextContent() != null ) {
 
-									/* dateDokVon existiert und wird gemäss dem Subprogramm parseDatumVon in ein Datum
+									/* dateDokVon existiert und wird gemÃ¤ss dem Subprogramm parseDatumVon in ein Datum
 									 * umgewandelt und validiert */
 									dateDokVon = parseDatumVon( nodeVon.getTextContent() );
 									if ( dateDokVon == null ) {
@@ -573,7 +599,7 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 
 								}
 
-								// das umgewandelte Datum wird als calDokVon übernommen
+								// das umgewandelte Datum wird als calDokVon Ã¼bernommen
 								Calendar calDokVon = Calendar.getInstance();
 								calDokVon.setTime( dateDokVon );
 
@@ -582,7 +608,7 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 								// Existiert das "Dokumentdatum Bis"?
 								if ( nodeBis != null && nodeBis.getTextContent() != null ) {
 
-									/* dateDokBis existiert und wird gemäss dem Subprogramm parseDatumVon in ein Datum
+									/* dateDokBis existiert und wird gemÃ¤ss dem Subprogramm parseDatumVon in ein Datum
 									 * umgewandelt und validiert */
 									dateDokBis = parseDatumBis( nodeBis.getTextContent() );
 									if ( dateDokBis == null ) {
@@ -596,7 +622,7 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 									}
 								}
 
-								// das umgewandelte Datum wird als calDokBis übernommen
+								// das umgewandelte Datum wird als calDokBis Ã¼bernommen
 								Calendar calDokBis = Calendar.getInstance();
 								calDokBis.setTime( dateDokBis );
 
@@ -610,7 +636,7 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 									/* Der Von-Wert liegt nach jetzt und ist entsprechend in der Zukunft = invalid */
 									valid = false;
 
-									/* Zusammenstellung der parameter die für den logreport gebraucht werden (die
+									/* Zusammenstellung der parameter die fÃ¼r den logreport gebraucht werden (die
 									 * reellen Daten) */
 									String[] params = new String[3];
 									params[0] = dokumentId;
@@ -630,7 +656,7 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 									// Der Von-Wert liegt nach jetzt und ist entsprechend in der Zukunft = invalid
 									valid = false;
 
-									/* Zusammenstellung der parameter die für den logreport gebraucht werden (die
+									/* Zusammenstellung der parameter die fÃ¼r den logreport gebraucht werden (die
 									 * reellen Daten) */
 									String[] params = new String[3];
 									params[0] = dokumentId;
@@ -646,13 +672,13 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 
 								/* falls das Dokument-Datum "Bis" vor dem Datum "Von" liegt, gehen wir davon aus,
 								 * das eine Verwechslung vorliegt, d.h. wir geben den Fehler aus, Schritt 3d ist
-								 * invalid und für die weiterverarbeitung tauschen die calDaten gegeneinander aus. */
+								 * invalid und fÃ¼r die weiterverarbeitung tauschen die calDaten gegeneinander aus. */
 								if ( calDokBis.before( calDokVon ) ) {
 									Calendar calTmp = calDokBis;
 									calDokBis = calDokVon;
 									calDokVon = calTmp;
 
-									/* Zusammenstellung der parameter die für den logreport gebraucht werden (die
+									/* Zusammenstellung der parameter die fÃ¼r den logreport gebraucht werden (die
 									 * reellen Daten) */
 									String[] params = new String[5];
 									params[0] = dokumentId;
@@ -671,10 +697,10 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 									valid = false;
 								}
 
-								// Validierung der Zeiträume gegenüber jener der Dossier
+								// Validierung der ZeitrÃ¤ume gegenÃ¼ber jener der Dossier
 								// ---------------------------------------------------------
 
-								/* nur wenn ein Zeitraum brauchbar ist, wird ein Dokumentzeitraum darauf geprüft,
+								/* nur wenn ein Zeitraum brauchbar ist, wird ein Dokumentzeitraum darauf geprÃ¼ft,
 								 * dass er in diesen hineinpasst. */
 								if ( !noDateValidation ) {
 									// "keine Angabe" auf Stufe Dok wird mit dem calWert vom Dossier gesetzt
@@ -689,7 +715,7 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 									 * Dossierzeitraum nicht innerhalb des Ablieferungszeitraums -> Fehler */
 									if ( (calDokVon.before( calDossierVon ) || calDokBis.after( calDossierBis )) ) {
 
-										/* Zusammenstellung der parameter die für den logreport gebraucht werden (die
+										/* Zusammenstellung der parameter die fÃ¼r den logreport gebraucht werden (die
 										 * reellen Daten) */
 
 										String[] params = new String[9];
@@ -723,24 +749,26 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 
 				// Ende der Zeitraumvalidierung auf der Stufe Dokument
 
-				if ( onWork == 410 ) {
-					onWork = 2;
-					System.out.print( "3D-  " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 110 ) {
-					onWork = onWork + 1;
-					System.out.print( "3D\\  " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 210 ) {
-					onWork = onWork + 1;
-					System.out.print( "3D|  " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 310 ) {
-					onWork = onWork + 1;
-					System.out.print( "3D/  " );
-					System.out.print( "\b\b\b\b\b" );
-				} else {
-					onWork = onWork + 1;
+				if ( showOnWork ) {
+					if ( onWork == 410 ) {
+						onWork = 2;
+						System.out.print( "3D-  " );
+						System.out.print( "\b\b\b\b\b" );
+					} else if ( onWork == 110 ) {
+						onWork = onWork + 1;
+						System.out.print( "3D\\  " );
+						System.out.print( "\b\b\b\b\b" );
+					} else if ( onWork == 210 ) {
+						onWork = onWork + 1;
+						System.out.print( "3D|  " );
+						System.out.print( "\b\b\b\b\b" );
+					} else if ( onWork == 310 ) {
+						onWork = onWork + 1;
+						System.out.print( "3D/  " );
+						System.out.print( "\b\b\b\b\b" );
+					} else {
+						onWork = onWork + 1;
+					}
 				}
 			}
 
@@ -779,7 +807,7 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 				Date dateEnd = (Date) formatter1.parse( sDateEnd );
 				Date dateNow = (Date) formatter1.parse( sDateNow );
 				if ( dateEnd.after( dateNow ) ) {
-					// Es kann nicht älter als heute sein
+					// Es kann nicht Ã¤lter als heute sein
 					date = dateNow;
 					return date;
 				} else {

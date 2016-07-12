@@ -1,0 +1,489 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Tk::grid - Geometry manager that arranges widgets in a grid</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::grid - Geometry manager that arranges widgets in a grid</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#relative_placement">RELATIVE PLACEMENT</a></li>
+	<li><a href="#the_grid_algorithm">THE GRID ALGORITHM</a></li>
+	<li><a href="#geometry_propagation">GEOMETRY PROPAGATION</a></li>
+	<li><a href="#restrictions_on_master_windows">RESTRICTIONS ON MASTER WINDOWS</a></li>
+	<li><a href="#stacking_order">STACKING ORDER</a></li>
+	<li><a href="#credits">CREDITS</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#keywords">KEYWORDS</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Tk::grid - Geometry manager that arranges widgets in a grid</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>$widget</em>-&gt;<strong>grid</strong>?(?<em>widget</em> ...,? ?<em>arg</em> ?...&gt;?)?</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>$widget</em>-&gt;<strong>grid</strong><em>Option</em>?(<em>arg</em> ?,<em>arg</em> ...?)?</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The <strong>grid</strong> method is used to communicate with the grid
+geometry manager that arranges widgets in rows and columns inside
+of another window, called the geometry master (or master window).
+The <strong>grid</strong> method can have any of several forms, depending
+on the <em>option</em> argument:</p>
+<dl>
+<dt><strong><a name="item_grid"><em>$slave</em>-&gt;<strong>grid</strong>(?<em>$slave, ...</em>??, <em>options</em>?)</a></strong><br />
+</dt>
+<dd>
+The arguments consist of the optional references to more slave windows
+followed by pairs of arguments that specify how to manage the slaves.
+The characters <strong>-</strong>,  <strong>x</strong> and <strong>^</strong>,
+can be specified instead of a window reference to alter the default
+location of a <em>$slave</em>, as described in <a href="#relative_placement">RELATIVE PLACEMENT</a>, below.
+</dd>
+<dd>
+<p>If any of the slaves are already managed by the geometry manager
+then any unspecified options for them retain their previous values rather
+than receiving default values.</p>
+</dd>
+<dd>
+<p>The following options are supported:</p>
+</dd>
+<dl>
+<dt><strong><a name="item__2dcolumn__3d_3e_n"><strong>-column</strong> =&gt; <em>n</em></a></strong><br />
+</dt>
+<dd>
+Insert the <em>$slave</em> so that it occupies the <em>n</em>th column in the grid.
+Column numbers start with 0.  If this option is not supplied, then the
+<em>$slave</em> is arranged just to the right of previous slave specified on this
+call to <strong>grid</strong>, or column ``0'' if it is the first slave.  For each
+<strong>x</strong> that immediately precedes the <em>$slave</em>, the column position
+is incremented by one.  Thus the <strong>x</strong> represents a blank column
+for this row in the grid.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dcolumnspan__3d_3e_n"><strong>-columnspan</strong> =&gt; <em>n</em></a></strong><br />
+</dt>
+<dd>
+Insert the slave so that it occupies <em>n</em> columns in the grid.
+The default is one column, unless the window name is followed by a
+<strong>-</strong>, in which case the columnspan is incremented once for each immediately
+following <strong>-</strong>.
+</dd>
+<p></p>
+<dt><strong><a name="item__2din__3d_3e__24other"><strong>-in</strong> =&gt; <em>$other</em></a></strong><br />
+</dt>
+<dd>
+Insert the <code>slave(s)</code> in the master
+window given by <em>$other</em>.  The default is the first slave's
+parent window.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dipadx__3d_3e_amount"><strong>-ipadx</strong> =&gt; <em>amount</em></a></strong><br />
+</dt>
+<dd>
+The <em>amount</em> specifies how much horizontal internal padding to
+leave on each side of the slave(s).  This is space is added
+inside the <code>slave(s)</code> border.
+The <em>amount</em> must be a valid screen distance, such as <strong>2</strong> or <strong>'.5c'</strong>.
+It defaults to 0.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dipady__3d_3e_amount"><strong>-ipady</strong> =&gt; <em>amount</em></a></strong><br />
+</dt>
+<dd>
+The <em>amount</em> specifies how much vertical internal padding to
+leave on on the top and bottom of the slave(s).
+This space is added inside the <code>slave(s)</code> border.
+The <em>amount</em>  defaults to 0.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dpadx__3d_3e_amount"><strong>-padx</strong> =&gt; <em>amount</em></a></strong><br />
+</dt>
+<dd>
+The <em>amount</em> specifies how much horizontal external padding to
+leave on each side of the slave(s), in screen units.
+The <em>amount</em> defaults to 0.
+This space is added outside the <code>slave(s)</code> border.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dpady__3d_3e_amount"><strong>-pady</strong> =&gt; <em>amount</em></a></strong><br />
+</dt>
+<dd>
+The <em>amount</em> specifies how much vertical external padding to
+leave on the top and bottom of the slave(s), in screen units.
+The <em>amount</em> defaults to 0.
+This space is added outside the <code>slave(s)</code> border.
+</dd>
+<p></p>
+<dt><strong><a name="item__2drow__3d_3e_n"><strong>-row</strong> =&gt; <em>n</em></a></strong><br />
+</dt>
+<dd>
+Insert the slave so that it occupies the <em>n</em>th row in the grid.
+Row numbers start with 0.  If this option is not supplied, then the
+slave is arranged on the same row as the previous slave specified on this
+call to <strong>grid</strong>, or the first unoccupied row if this is the first slave.
+</dd>
+<p></p>
+<dt><strong><a name="item__2drowspan__3d_3e_n"><strong>-rowspan</strong> =&gt; <em>n</em></a></strong><br />
+</dt>
+<dd>
+Insert the slave so that it occupies <em>n</em> rows in the grid.
+The default is one row.  If the next <strong>grid</strong> method contains
+<strong>^</strong> characters instead of <em>$slave</em>s that line up with the columns
+of this <em>$slave</em>, then the <strong>rowspan</strong> of this <em>$slave</em> is
+extended by one.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dsticky__3d_3e_style"><strong>-sticky</strong> =&gt; <em>style</em></a></strong><br />
+</dt>
+<dd>
+If a slave's cell is larger than its requested dimensions, this
+option may be used to position (or stretch) the slave within its cell.
+<em>Style</em>  is a string that contains zero or more of the characters
+<strong>n</strong>, <strong>s</strong>, <strong>e</strong> or <strong>w</strong>.
+The string can optionally contain spaces or
+commas, but they are ignored.  Each letter refers to a side (north, south,
+east, or west) that the slave will ``stick'' to.  If both <strong>n</strong> and <strong>s</strong> (or
+<strong>e</strong> and <strong>w</strong>) are specified, the slave will be stretched to fill the entire
+height (or width) of its cavity.  The <strong>sticky</strong> option subsumes the
+combination of <strong>-anchor</strong> and <strong>-fill</strong> that is used by <a href="../../../site/lib/Tk/pack.html">pack</a>.
+The default is <strong>''</strong>, which causes the slave to be centered in its cavity,
+at its requested size.
+</dd>
+<p></p></dl>
+<dt><strong><a name="item_gridbbox"><em>$master</em>-&gt;<strong>gridBbox</strong>(?<em>column, row</em>,? ?<em>column2, row2</em>?)</a></strong><br />
+</dt>
+<dd>
+With no arguments,
+the bounding box (in pixels) of the grid is returned.
+The return value consists of 4 integers.  The first two are the pixel
+offset from the master window (x then y) of the top-left corner of the
+grid, and the second two integers are the width and height of the grid,
+also in pixels.  If a single <em>column</em> and <em>row</em> is specified on
+the command line, then the bounding box for that cell is returned, where the
+top left cell is numbered from zero.  If both <em>column</em> and <em>row</em>
+arguments are specified, then the bounding box spanning the rows and columns
+indicated is returned.
+</dd>
+<p></p>
+<dt><strong><a name="item_gridcolumnconfigure"><em>$master</em>-&gt;<strong>gridColumnconfigure</strong>(<em>index</em>?, <em>-option</em>=&gt;<em>value, ...</em>?)</a></strong><br />
+</dt>
+<dd>
+Query or set the column properties of the <em>index</em> column of the
+geometry master, <em>$master</em>.
+The valid options are <strong>-minsize</strong>, <strong>-weight</strong> and <strong>-pad</strong>.
+If one or more options are provided, then <em>index</em> may be given as
+a list of column indices to which the configuration options will operate on.
+The <strong>-minsize</strong> option sets the minimum size, in screen units,
+that will be permitted for this column.
+The <strong>-weight</strong> option (an integer value)
+sets the relative weight for apportioning
+any extra spaces among
+columns.
+A weight of zero (0) indicates the column will not deviate from its requested
+size.  A column whose weight is two will grow at twice the rate as a column
+of weight one when extra space is allocated to the layout.
+The <strong>-uniform</strong> option,  when  a
+non-empty  value  is  supplied,  places  the column in a <em>uniform
+group</em> with other columns that have the same value for <strong>-uniform</strong>.
+The  space for columns belonging to a uniform group is allocated
+so that their sizes are always in  strict  proportion  to  their
+<strong>-weight</strong> values.   See  <em>THE GRID ALGORITHM</em> below for further
+details. 
+The <strong>-pad</strong> option specifies the number of screen units that will be
+added to the largest window contained completely in that column when the
+grid geometry manager requests a size from the containing window.
+If only an option is specified, with no value,
+the current value of that option is returned.
+If only the master window and index is specified, all the current settings
+are returned in an list of ``-option value'' pairs.
+</dd>
+<p></p>
+<dt><strong><a name="item_gridconfigure"><em>$slave</em>-&gt;<strong>gridConfigure</strong>(?<em>$slave, ...</em>?, <em>options</em>?)</a></strong><br />
+</dt>
+<dd>
+The same as <strong>grid</strong> method.
+</dd>
+<p></p>
+<dt><strong><a name="item_gridforget"><em>$slave</em>-&gt;<strong>gridForget</strong>?(<em>$slave, ...</em>)?</a></strong><br />
+</dt>
+<dd>
+Removes each of the <em>$slave</em>s from grid for its
+master and unmaps their windows.
+The slaves will no longer be managed by the grid geometry manager.
+The configuration options for that window are forgotten, so that if the
+slave is managed once more by the grid geometry manager, the initial
+default settings are used.
+</dd>
+<p></p>
+<dt><strong><a name="item_gridinfo"><em>$slave</em>-&gt;<strong>gridInfo</strong></a></strong><br />
+</dt>
+<dd>
+Returns a list whose elements are the current configuration state of
+the slave given by <em>$slave</em> in the same option-value form that
+might be specified to <strong>gridConfigure</strong>.
+The first two elements of the list are ``<strong>-in</strong>=&gt;<em>$master</em>'' where
+<em>$master</em> is the slave's master.
+</dd>
+<p></p>
+<dt><strong><a name="item_gridlocation"><em>$master</em>-&gt;<strong>gridLocation</strong>(<em>x, y</em>)</a></strong><br />
+</dt>
+<dd>
+Given  <em>x</em> and <em>y</em> values in screen units relative to the master window,
+the column and row number at that <em>x</em> and <em>y</em> location is returned.
+For locations that are above or to the left of the grid, <strong>-1</strong> is returned.
+</dd>
+<p></p>
+<dt><strong><a name="item_gridpropagate"><em>$master</em>-&gt;<strong>gridPropagate</strong>?(<em>boolean</em>)?</a></strong><br />
+</dt>
+<dd>
+If <em>boolean</em> has a true boolean value such as <strong>1</strong> or <strong>on</strong>
+then propagation is enabled for <em>$master</em>, which must be a window
+name (see <a href="#geometry_propagation">GEOMETRY PROPAGATION</a> below).
+If <em>boolean</em> has a false boolean value then propagation is
+disabled for <em>$master</em>.
+In either of these cases an empty string is returned.
+If <em>boolean</em> is omitted then the method returns <strong>0</strong> or
+<strong>1</strong> to indicate whether propagation is currently enabled
+for <em>$master</em>.
+Propagation is enabled by default.
+</dd>
+<p></p>
+<dt><strong><a name="item_gridrowconfigure"><em>$master</em>-&gt;<strong>gridRowconfigure</strong>(<em>index</em>?, <em>-option</em>=&gt;<em>value, ...</em>?)</a></strong><br />
+</dt>
+<dd>
+Query or set the row properties of the <em>index</em> row of the
+geometry master, <em>$master</em>.
+The valid options are <strong>-minsize</strong>, <strong>-weight</strong> and <strong>-pad</strong>.
+If one or more options are provided, then <em>index</em> may be given as
+a list of row indeces to which the configuration options will operate on.
+The <strong>-minsize</strong> option sets the minimum size, in screen units,
+that will be permitted for this row.
+The <strong>-weight</strong> option (an integer value)
+sets the relative weight for apportioning
+any extra spaces among
+rows.
+A weight of zero (0) indicates the row will not deviate from its requested
+size.  A row whose weight is two will grow at twice the rate as a row
+of weight one when extra space is allocated to the layout.
+The <strong>-uniform</strong>  option, when a non-empty value is supplied, places the
+row in a <em>uniform group</em> with other rows that have the same  value
+for <strong>-uniform</strong>.   The space for rows belonging to a uniform group
+is allocated so that their sizes are always in strict proportion
+to  their <strong>-weight</strong> values.  See <em>THE GRID ALGORITHM</em> below for
+further details. 
+The <strong>-pad</strong> option specifies the number of screen units that will be
+added to the largest window contained completely in that row when the
+grid geometry manager requests a size from the containing window.
+If only an option is specified, with no value,
+the current value of that option is returned.
+If only the master window and index is specified, all the current settings
+are returned in an list of ``option-value'' pairs.
+</dd>
+<p></p>
+<dt><strong><a name="item_gridremove"><em>$slave</em>-&gt;<strong>gridRemove</strong>?(<em>$slave, ...</em>)?</a></strong><br />
+</dt>
+<dd>
+Removes each of the <em>$slave</em>s from grid for its
+master and unmaps their windows.
+The slaves will no longer be managed by the grid geometry manager.
+However, the configuration options for that window are remembered,
+so that if the
+slave is managed once more by the grid geometry manager, the previous
+values are retained.
+</dd>
+<p></p>
+<dt><strong><a name="item_gridsize"><em>$master</em>-&gt;<strong>gridSize</strong></a></strong><br />
+</dt>
+<dd>
+Returns the size of the grid (in columns then rows) for <em>$master</em>.
+The size is determined either by the <em>$slave</em> occupying the largest
+row or column, or the largest column or row with a <strong>-minsize</strong>,
+<strong>-weight</strong>, or <strong>-pad</strong> that is non-zero.
+</dd>
+<p></p>
+<dt><strong><a name="item_gridslaves"><em>$master</em>-&gt;<strong>gridSlaves</strong>?(<em>-option</em>=&gt;<em>value</em>)?</a></strong><br />
+</dt>
+<dd>
+If no options are supplied, a list of all of the slaves in <em>$master</em>
+are returned, most recently manages first.
+<em>-option</em> can be either <strong>-row</strong> or <strong>-column</strong> which
+causes only the slaves in the row (or column) specified by <em>value</em>
+to be returned.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="relative_placement">RELATIVE PLACEMENT</a></h1>
+<p>The <strong>grid</strong> method contains a limited set of capabilities that
+permit layouts to be created without specifying the row and column
+information for each slave.  This permits slaves to be rearranged,
+added, or removed without the need to explicitly specify row and
+column information.
+When no column or row information is specified for a <em>$slave</em>,
+default values are chosen for
+<strong>-column</strong>, <strong>-row</strong>, <strong>-columnspan</strong> and <strong>-rowspan</strong>
+at the time the <em>$slave</em> is managed. The values are chosen
+based upon the current layout of the grid, the position of the <em>$slave</em>
+relative to other <em>$slave</em>s in the same grid method, and the presence
+of the characters <strong>-</strong>, <strong>^</strong>, and <strong>^</strong> in <strong>grid</strong>
+method where <em>$slave</em> names are normally expected.</p>
+<dl>
+<dt><strong><a name="item__2d"><strong>-</strong></a></strong><br />
+</dt>
+<dd>
+This increases the columnspan of the <em>$slave</em> to the left.  Several
+<strong>-</strong>'s in a row will successively increase the columnspan. A <strong>-</strong>
+may not follow a <strong>^</strong> or a <strong>x</strong>.
+</dd>
+<p></p>
+<dt><strong><a name="item_x"><strong>x</strong></a></strong><br />
+</dt>
+<dd>
+This leaves an empty column between the <em>$slave</em> on the left and
+the <em>$slave</em> on the right.
+</dd>
+<p></p>
+<dt><strong><a name="item__5e"><strong>^</strong></a></strong><br />
+</dt>
+<dd>
+This extends the <strong>-rowspan</strong> of the <em>$slave</em> above the <strong>^</strong>'s
+in the grid.  The number of <strong>^</strong>'s in a row must match the number of
+columns spanned by the <em>$slave</em> above it.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="the_grid_algorithm">THE GRID ALGORITHM</a></h1>
+<p>The grid geometry manager lays out its slaves in three steps.
+In the first step, the minimum size needed to fit all of the slaves
+is computed, then (if propagation is turned on), a request is made
+of the master window to become that size.
+In the second step, the requested size is compared against the actual size
+of the master.  If the sizes are different, then space is added to or taken
+away from the layout as needed.
+For the final step, each slave is positioned in its <code>row(s)</code> and <code>column(s)</code>
+based on the setting of its <em>sticky</em> flag.</p>
+<p>To compute the minimum size of a layout, the grid geometry manager
+first looks at all slaves whose columnspan and rowspan values are one,
+and computes the nominal size of each row or column to be either the
+<em>minsize</em> for that row or column, or the sum of the <em>pad</em>ding
+plus the size of the largest slave, whichever is greater.  Then the
+slaves whose rowspans or columnspans are greater than one are
+examined.  If a group of rows or columns need to be increased in size
+in order to accommodate these slaves, then extra space is added to each
+row or column in the group according to its <em>weight</em>.  For each
+group whose weights are all zero, the additional space is apportioned
+equally.</p>
+<p>When multiple rows or columns belong to a uniform group, the space
+allocated to them is always in proportion to their weights. (A weight
+of zero is considered to be 1.)  In other words, a row or column
+configured with <strong>-weight 1 -uniform</strong> a will have exactly the same size
+as any other row or column configured with <strong>-weight 1 -uniform a</strong>.  A
+row or column configured with <strong>-weight 2 -uniform b</strong> will be exactly
+twice as large as one that is configured with <strong>-weight 1 -uniform b</strong>.</p>
+<p>More technically, each row or column in the group will have a size
+equal to <em>k*weight</em> for some constant k.  The constant k is chosen so
+that no row or column becomes smaller than its minimum size.  For
+example, if all rows or columns in a group have the same weight, then
+each row or column will have the same size as the largest row or
+column in the group.</p>
+<p>For masters whose size is larger than the requested layout, the additional
+space is apportioned according to the row and column weights.  If all of
+the weights are zero, the layout is centered within its master.
+For masters whose size is smaller than the requested layout, space is taken
+away from columns and rows according to their weights.  However, once a
+column or row shrinks to its minsize, its weight is taken to be zero.
+If more space needs to be removed from a layout than would be permitted, as
+when all the rows or columns are at there minimum sizes, the layout is
+clipped on the bottom and right.</p>
+<p>
+</p>
+<hr />
+<h1><a name="geometry_propagation">GEOMETRY PROPAGATION</a></h1>
+<p>The grid geometry manager normally computes how large a master must be to
+just exactly meet the needs of its slaves, and it sets the
+requested width and height of the master to these dimensions.
+This causes geometry information to propagate up through a
+window hierarchy to a top-level window so that the entire
+sub-tree sizes itself to fit the needs of the leaf windows.
+However, the <strong>gridPropagate</strong> method may be used to
+turn off propagation for one or more masters.
+If propagation is disabled then grid will not set
+the requested width and height of the master window.
+This may be useful if, for example, you wish for a master
+window to have a fixed size that you specify.</p>
+<p>
+</p>
+<hr />
+<h1><a name="restrictions_on_master_windows">RESTRICTIONS ON MASTER WINDOWS</a></h1>
+<p>The master for each slave must either be the slave's parent
+(the default) or a descendant of the slave's parent.
+This restriction is necessary to guarantee that the
+slave can be placed over any part of its master that is
+visible without danger of the slave being clipped by its parent.
+In addition, all slaves in one call to <strong>grid</strong> must have the same master.</p>
+<p>
+</p>
+<hr />
+<h1><a name="stacking_order">STACKING ORDER</a></h1>
+<p>If the master for a slave is not its parent then you must make sure
+that the slave is higher in the stacking order than the master.
+Otherwise the master will obscure the slave and it will appear as
+if the slave hasn't been managed correctly.
+The easiest way to make sure the slave is higher than the master is
+to create the master window first:  the most recently created window
+will be highest in the stacking order.</p>
+<p>
+</p>
+<hr />
+<h1><a name="credits">CREDITS</a></h1>
+<p>The <strong>grid</strong> method is based on ideas taken from the <em>GridBag</em>
+geometry manager written by Doug. Stein, and the <strong>blt_table</strong> geometry
+manager, written by George Howlett.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../../../site/lib/Tk/form.html">Tk::form</a>
+<a href="../../../site/lib/Tk/pack.html">Tk::pack</a>
+<a href="../../../site/lib/Tk/place.html">Tk::place</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="keywords">KEYWORDS</a></h1>
+<p>geometry manager, location, grid, cell, propagation, size, pack,
+master, slave</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::grid - Geometry manager that arranges widgets in a grid</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

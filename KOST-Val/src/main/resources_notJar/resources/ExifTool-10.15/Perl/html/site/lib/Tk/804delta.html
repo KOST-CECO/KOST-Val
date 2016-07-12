@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Tk::804delta - what is new for perl/Tk 804</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::804delta - what is new for perl/Tk 804</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#incompatible_changes">Incompatible Changes</a></li>
+	<li><a href="#enhancements">Enhancements</a></li>
+	<li><a href="#new_widgets">New Widgets</a></li>
+	<li><a href="#selected_bug_fixes">Selected Bug Fixes</a></li>
+	<li><a href="#changed_internals">Changed Internals</a></li>
+	<li><a href="#platform_specific_problems">Platform Specific Problems</a></li>
+	<li><a href="#future_directions">Future Directions</a></li>
+	<li><a href="#reporting_bugs">Reporting Bugs</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Tk::804delta - what is new for perl/Tk 804</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>This document describes differences between the Tk800 series and the
+Tk804 series.</p>
+<p>
+</p>
+<hr />
+<h1><a name="incompatible_changes">Incompatible Changes</a></h1>
+<p>Tk804 will only work with perl 5.8.0 and above. For older perl
+versions look for Tk800.025.</p>
+<p><strong>curselection</strong> of <strong>Tk::Listbox</strong> now returns an array reference in
+scalar context. This means you have to write</p>
+<pre>
+        my(@selected) = $listbox-&gt;curselection</pre>
+<p>or</p>
+<pre>
+        my(@selected) = @{ $listbox-&gt;curselection }</pre>
+<p>now.</p>
+<p>The <strong>fontActual</strong> method now returns the pixel value instead of the
+point value for <strong>-size</strong>. Pixel values are expressed as negative
+numbers.</p>
+<p>Some enhancements from the &quot;dash&quot; patches are lost for now
+(i.e. <strong>-tile</strong>, <strong>-troughtile</strong> ...).</p>
+<p>The <strong>-state</strong> option is not available anymore for <strong>Tk::Text</strong> tags.
+Use <strong>-elide</strong> instead.</p>
+<p>
+</p>
+<hr />
+<h1><a name="enhancements">Enhancements</a></h1>
+<p>Tk804 is Unicode-aware.</p>
+<p>It is possible to build Tk with Xft support on X11. This is strongly
+recommened if you are planning to make use of Unicode rendering
+capabilities of Tk. It also gives anti-aliased fonts for regular text
+(if you have TrueType or Type1 fonts and they are in your fontconfig
+config file).</p>
+<p>The new method <strong>chooseDirectory</strong> is available as a standard directory
+selector.</p>
+<p><strong>Tk::PNG</strong> and <strong>Tk::JPEG</strong> are bundled now with the perl/Tk
+distribution, providing support for the image formats <strong>png</strong> and
+<strong>jpeg</strong>.</p>
+<p>Improvements to <strong>Tk::Listbox</strong>: new option <strong>-activestyle</strong>, new
+methods <strong>itemconfigure</strong> and <strong>itemcget</strong>, new virtual event <strong>&lt;&lt;
+&lt;&lt;ListboxSelect</strong>&gt; &gt;&gt;&gt;.</p>
+<p>More tests.</p>
+<p>
+</p>
+<hr />
+<h1><a name="new_widgets">New Widgets</a></h1>
+<dl>
+<dt><strong><a name="item_tk_3a_3alabelframe">Tk::Labelframe</a></strong><br />
+</dt>
+<dd>
+An alternative to <strong>Tk::LabFrame</strong>.
+</dd>
+<p></p>
+<dt><strong><a name="item_tk_3a_3apanedwindow">Tk::Panedwindow</a></strong><br />
+</dt>
+<dd>
+An alternative to <strong>Tk::Adjuster</strong>.
+</dd>
+<p></p>
+<dt><strong><a name="item_tk_3a_3aspinbox">Tk::Spinbox</a></strong><br />
+</dt>
+<dd>
+An alternative to the CPAN module <strong>Tk::NumEntry</strong>.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="selected_bug_fixes">Selected Bug Fixes</a></h1>
+<p>
+</p>
+<hr />
+<h1><a name="changed_internals">Changed Internals</a></h1>
+<p>
+</p>
+<hr />
+<h1><a name="platform_specific_problems">Platform Specific Problems</a></h1>
+<p>
+</p>
+<hr />
+<h1><a name="future_directions">Future Directions</a></h1>
+<p>
+</p>
+<hr />
+<h1><a name="reporting_bugs">Reporting Bugs</a></h1>
+<p>If you find what you think is a bug, you might check the articles
+recently posted to the comp.lang.perl.tk newsgroup.</p>
+<p>If you believe you have an unreported bug, please send a mail to &lt;<a href="mailto:ptk@lists.stanford.edu">ptk@lists.stanford.edu</a>&gt; and/or &lt;<a href="mailto:nick@ing-simmons.net">nick@ing-simmons.net</a>&gt;.  Be sure to trim your bug down
+to a tiny but sufficient test case.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../../../site/lib/Tk.html">the Tk manpage</a>.</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::804delta - what is new for perl/Tk 804</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

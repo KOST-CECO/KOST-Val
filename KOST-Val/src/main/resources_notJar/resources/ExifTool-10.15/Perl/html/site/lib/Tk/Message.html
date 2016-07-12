@@ -1,0 +1,190 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Tk::Message - Create and manipulate Message widgets</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::Message - Create and manipulate Message widgets</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#standard_options">STANDARD OPTIONS</a></li>
+	<li><a href="#widgetspecific_options">WIDGET-SPECIFIC OPTIONS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#widget_methods">WIDGET METHODS</a></li>
+	<li><a href="#default_bindings">DEFAULT BINDINGS</a></li>
+	<li><a href="#bugs">BUGS</a></li>
+	<li><a href="#keywords">KEYWORDS</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Tk::Message - Create and manipulate Message widgets</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p><em>$message</em> = <em>$parent</em>-&gt;<strong>Message</strong>(?<em>options</em>?);</p>
+<p>
+</p>
+<hr />
+<h1><a name="standard_options">STANDARD OPTIONS</a></h1>
+<p><table cellspacing="0" cellpadding="0"><tr><td><strong>-anchor</strong><td><strong>-font</strong><td><strong>-highlightthickness</strong><td><strong>-takefocus</strong>
+<tr><td><strong>-background</strong><td><strong>-foreground</strong><td><strong>-padx</strong><td><strong>-text</strong>
+<tr><td><strong>-borderwidth</strong><td><strong>-highlightbackground</strong><td><strong>-pady</strong><td><strong>-textvariable</strong>
+<tr><td><strong>-cursor</strong><td><strong>-highlightcolor</strong><td><strong>-relief</strong><td><strong>-width</strong></table></p>
+<p>See <a href="../../../site/lib/Tk/options.html">the Tk::options manpage</a> for details of the standard options.</p>
+<p>
+</p>
+<hr />
+<h1><a name="widgetspecific_options">WIDGET-SPECIFIC OPTIONS</a></h1>
+<dl>
+<dt><strong><a name="item_name_3a_aspect">Name:	<strong>aspect</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_aspect">Class:	<strong>Aspect</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2daspect">Switch:	<strong>-aspect</strong></a></strong><br />
+</dt>
+<dd>
+Specifies a non-negative integer value indicating desired
+aspect ratio for the text.  The aspect ratio is specified as
+100*width/height.  100 means the text should
+be as wide as it is tall, 200 means the text should
+be twice as wide as it is tall, 50 means the text should
+be twice as tall as it is wide, and so on.
+Used to choose line length for text if <strong>width</strong> option
+isn't specified.
+Defaults to 150.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_justify">Name:	<strong>justify</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_justify">Class:	<strong>Justify</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2djustify">Switch:	<strong>-justify</strong></a></strong><br />
+</dt>
+<dd>
+Specifies how to justify lines of text.
+Must be one of <strong>left</strong>, <strong>center</strong>, or <strong>right</strong>.  Defaults
+to <strong>left</strong>.
+This option works together with the <strong>anchor</strong>, <strong>aspect</strong>,
+<strong>padX</strong>, <strong>padY</strong>, and <strong>width</strong> options to provide a variety
+of arrangements of the text within the window.
+The <strong>aspect</strong> and <strong>width</strong> options determine the amount of
+screen space needed to display the text.
+The <strong>anchor</strong>, <strong>padX</strong>, and <strong>padY</strong> options determine where this
+rectangular area is displayed within the widget's window, and the
+<strong>justify</strong> option determines how each line is displayed within that
+rectangular region.
+For example, suppose <strong>anchor</strong> is <strong>e</strong> and <strong>justify</strong> is
+<strong>left</strong>, and that the message window is much larger than needed
+for the text.
+The the text will displayed so that the left edges of all the lines
+line up and the right edge of the longest line is <strong>padX</strong> from
+the right side of the window;  the entire text block will be centered
+in the vertical span of the window.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_width">Name:	<strong>width</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_width">Class:	<strong>Width</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dwidth">Switch:	<strong>-width</strong></a></strong><br />
+</dt>
+<dd>
+Specifies the length of lines in the window.
+The value may have any of the forms acceptable to <strong>Tk_GetPixels</strong>.
+If this option has a value greater than zero then the <strong>aspect</strong>
+option is ignored and the <strong>width</strong> option determines the line
+length.
+If this option has a value less than or equal to zero, then
+the <strong>aspect</strong> option determines the line length.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The <strong>Message</strong> method creates a new window (given by the
+$widget argument) and makes it into a message widget.
+Additional
+options, described above, may be specified on the command line
+or in the option database
+to configure aspects of the message such as its colors, font,
+text, and initial relief.  The <strong>message</strong> command returns its
+$widget argument.  At the time this command is invoked,
+there must not exist a window named $widget, but
+$widget's parent must exist.</p>
+<p>A message is a widget that displays a textual string.  A message
+widget has three special features.  First, it breaks up
+its string into lines in order to produce a given aspect ratio
+for the window.  The line breaks are chosen at word boundaries
+wherever possible (if not even a single word would fit on a
+line, then the word will be split across lines).  Newline characters
+in the string will force line breaks;  they can be used, for example,
+to leave blank lines in the display.</p>
+<p>The second feature of a message widget is justification.  The text
+may be displayed left-justified (each line starts at the left side of
+the window), centered on a line-by-line basis, or right-justified
+(each line ends at the right side of the window).</p>
+<p>The third feature of a message widget is that it handles control
+characters and non-printing characters specially.  Tab characters
+are replaced with enough blank space to line up on the next
+8-character boundary.  Newlines cause line breaks.  Other control
+characters (ASCII code less than 0x20) and characters not defined
+in the font are displayed as a four-character sequence <strong>\x</strong><em>hh</em> where
+<em>hh</em> is the two-digit hexadecimal number corresponding to
+the character.  In the unusual case where the font doesn't contain
+all of the characters in ``0123456789abcdef\x'' then control
+characters and undefined characters are not displayed at all.</p>
+<p>
+</p>
+<hr />
+<h1><a name="widget_methods">WIDGET METHODS</a></h1>
+<p>The <strong>Message</strong> method creates a widget object.
+This object supports the <strong>configure</strong> and <strong>cget</strong> methods
+described in <a href="../../../site/lib/Tk/options.html">the Tk::options manpage</a> which can be used to enquire and
+modify the options described above.
+The widget also inherits all the methods provided by the generic
+<a href="../../../site/lib/Tk/Widget.html">Tk::Widget</a> class.</p>
+<p>
+</p>
+<hr />
+<h1><a name="default_bindings">DEFAULT BINDINGS</a></h1>
+<p>When a new message is created, it has no default event bindings:
+messages are intended for output purposes only.</p>
+<p>
+</p>
+<hr />
+<h1><a name="bugs">BUGS</a></h1>
+<p>Tabs don't work very well with text that is centered or right-justified.
+The most common result is that the line is justified wrong.</p>
+<p>
+</p>
+<hr />
+<h1><a name="keywords">KEYWORDS</a></h1>
+<p>message, widget</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::Message - Create and manipulate Message widgets</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

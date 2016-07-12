@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SOFTPKG NAME="Digest-MD4" VERSION="1,1,0,0">
+<TITLE>Digest-MD4</TITLE>
+<ABSTRACT>Perl interface to the MD4 Algorithm</ABSTRACT>
+<AUTHOR>Gisle Aas &lt;gisle@aas.no&gt;</AUTHOR>
+<IMPLEMENTATION>
+<CODEBASE HREF="http://ppm.ActiveState.com/PPMPackages/5.8-windows/MSWin32-x86-multi-thread-5.8/Digest-MD4.tar.gz" />
+<INSTALL />
+<UNINSTALL />
+</IMPLEMENTATION>
+</SOFTPKG>

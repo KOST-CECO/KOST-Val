@@ -1,0 +1,220 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>getSaveFile - pop up a dialog box for the user to select a file to open or save.</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;getSaveFile - pop up a dialog box for the user to select a file to open or save.</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#specifying_file_patterns">SPECIFYING FILE PATTERNS</a></li>
+	<li><a href="#specifying_extensions">SPECIFYING EXTENSIONS</a></li>
+	<li><a href="#example">EXAMPLE</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#keywords">KEYWORDS</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>getOpenFile, getSaveFile - pop up a dialog box for the user to select a file to open or save.</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>$widget</em>-&gt;<strong>getOpenFile</strong>(?<em>-option</em>=&gt;value, ...&gt;?)</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>$widget</em>-&gt;<strong>getSaveFile</strong>(?<em>-option</em>=&gt;value, ...&gt;?)</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The methods <strong>getOpenFile</strong> and <strong>getSaveFile</strong> pop up a
+dialog box for the user to select a file to open or save.</p>
+<p>The <strong>getOpenFile</strong> method is usually associated with the <strong>Open</strong>
+command in the <strong>File</strong> menu.  Its purpose is for the user to select an
+existing file <em>only</em>.  If the user enters an non-existent file, the
+dialog box gives the user an error prompt and requires the user to give
+an alternative selection. If an application allows the user to create
+new files, it should do so by providing a separate <strong>New</strong> menu command.</p>
+<p>The <strong>getSaveFile</strong> method is usually associated with the <strong>Save</strong>
+as command in the <strong>File</strong> menu. If the user enters a file that
+already exists, the dialog box prompts the user for confirmation
+whether the existing file should be overwritten or not.</p>
+<p>If the user selects a file, both <strong>getOpenFile</strong> and
+<strong>getSaveFile</strong> return the full pathname of this file. If the
+user cancels the operation, both commands return an undefined value.</p>
+<p>The following <em>option-value</em> pairs are possible as command line
+arguments to these two commands:</p>
+<dl>
+<dt><strong><a name="item__2ddefaultextension__3d_3e_extension"><strong>-defaultextension</strong> =&gt; <em>extension</em></a></strong><br />
+</dt>
+<dd>
+Specifies a string that will be appended to the filename if the user
+enters a filename without an extension. The default value is the empty
+string, which means no extension will be appended to the filename in
+any case. This option is ignored on the Macintosh platform, which
+does not require extensions to filenames, and the UNIX implementation
+guesses reasonable values  for  this from the <strong>-filetypes</strong>
+option when this is not supplied.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dfiletypes__3d_3e__5bfilepattern__3f_2c__2e_2e_2"><strong>-filetypes</strong> =&gt; [<em>filePattern</em> ?, ...?]</a></strong><br />
+</dt>
+<dd>
+If a <strong>File types</strong> listbox exists in the file dialog on the particular
+platform, this option gives the <em>filetype</em>s in this listbox. When
+the user choose a filetype in the listbox, only the files of that type
+are listed. If this option is unspecified, or if it is set to the
+empty list, or if the <strong>File types</strong> listbox is not supported by the
+particular platform then all files are listed regardless of their
+types. See <a href="#specifying_file_patterns">SPECIFYING FILE PATTERNS</a> below for a
+discussion on the contents of <em>filePattern</em>s.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dinitialdir__3d_3e_directory"><strong>-initialdir</strong> =&gt; <em>directory</em></a></strong><br />
+</dt>
+<dd>
+Specifies that the files in <em>directory</em> should be displayed
+when the dialog pops up. If this parameter is not specified, then
+the files in the current working directory are displayed.  This
+option may not always work on the Macintosh.  This is not a bug.
+Rather, the <em>General Controls</em> control panel on the Mac allows the
+end user to override the application default directory.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dinitialfile__3d_3e_filename"><strong>-initialfile</strong> =&gt; <em>filename</em></a></strong><br />
+</dt>
+<dd>
+Specifies a filename to be displayed in the dialog when it pops
+up. This option is ignored by the <strong>getOpenFile</strong> method.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dmultiple"><strong>-multiple</strong></a></strong><br />
+</dt>
+<dd>
+Allows the user to choose multiple files from the Open dialog.  On the
+Macintosh, this is only available when Navigation Services are
+installed.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dmessage__3d_3e_string"><strong>-message</strong> =&gt; <em>string</em></a></strong><br />
+</dt>
+<dd>
+Specifies a message to include in the client area of the dialog. This
+is only available on the Macintosh, and only when Navigation Services
+are installed.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dtitle__3d_3e_titlestring"><strong>-title</strong> =&gt; <em>titleString</em></a></strong><br />
+</dt>
+<dd>
+Specifies a string to display as the title of the dialog box. If this
+option is not specified, then a default title is displayed. This
+option is ignored on the Macintosh platform.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="specifying_file_patterns">SPECIFYING FILE PATTERNS</a></h1>
+<p>The <em>filePattern</em>s given by the <strong>-filetypes</strong> option
+are a list of file patterns. Each file pattern is a list of the
+form</p>
+<pre>
+ typeName [extension ?extension ...?] ?[macType ?macType ...?]?</pre>
+<p><em>typeName</em> is the name of the file type described by this
+file pattern and is the text string that appears in the <strong>File types</strong>
+listbox. <em>extension</em> is a file extension for this file pattern.
+<em>macType</em> is a four-character Macintosh file type. The list of
+<em>macType</em>s is optional and may be omitted for applications that do
+not need to execute on the Macintosh platform.</p>
+<p>Several file patterns may have the same <em>typeName,</em> in which case
+they refer to the same file type and share the same entry in the
+listbox. When the user selects an entry in the listbox, all the files
+that match at least one of the file patterns corresponding
+to that entry are listed. Usually, each file pattern corresponds to a
+distinct type of file. The use of more than one file patterns for one
+type of file is necessary on the Macintosh platform only.</p>
+<p>On the Macintosh platform, a file matches a file pattern if its
+name matches at least one of the <em>extension</em>(s) AND it
+belongs to at least one of the <em>macType</em>(s) of the
+file pattern. For example, the <strong>C Source Files</strong> file pattern in the
+sample code matches with files that have a <strong>\.c</strong> extension AND
+belong to the <em>macType</em> <strong>TEXT</strong>. To use the OR rule instead,
+you can use two file patterns, one with the <em>extensions</em> only and
+the other with the <em>macType</em> only. The <strong>GIF Files</strong> file type
+in the sample code matches files that EITHER have a <strong>\.gif</strong>
+extension OR belong to the <em>macType</em> <strong>GIFF</strong>.</p>
+<p>On the Unix and Windows platforms, a file matches a file pattern
+if its name matches at at least one of the <em>extension</em>(s) of
+the file pattern. The <em>macType</em>s are ignored.</p>
+<p>
+</p>
+<hr />
+<h1><a name="specifying_extensions">SPECIFYING EXTENSIONS</a></h1>
+<p>On the Unix and Macintosh platforms, extensions are matched using
+glob-style pattern matching. On the Windows platforms, extensions are
+matched by the underlying operating system. The types of possible
+extensions are: (1) the special extension * matches any
+file; (2) the special extension ``'' matches any files that
+do not have an extension (i.e., the filename contains no full stop
+character); (3) any character string that does not contain any wild
+card characters (* and ?).</p>
+<p>Due to the different pattern matching rules on the various platforms,
+to ensure portability, wild card characters are not allowed in the
+extensions, except as in the special extension *. Extensions
+without a full stop character (e.g, ~) are allowed but may not
+work on all platforms.</p>
+<p>
+</p>
+<hr />
+<h1><a name="example">EXAMPLE</a></h1>
+<pre>
+ my $types = [
+     ['Text Files',       ['.txt', '.text']],
+     ['TCL Scripts',      '.tcl'           ],
+     ['C Source Files',   '.c',      'TEXT'],
+     ['GIF Files',        '.gif',          ],
+     ['GIF Files',        '',        'GIFF'],
+     ['All Files',        '*',             ],
+ ];
+ my $filename = $widget-&gt;getOpenFile(-filetypes=&gt;$types);</pre>
+<pre>
+ if ($filename ne &quot;&quot;) {
+     # Open the file ...
+ }</pre>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../../../site/lib/Tk/FBox.html">Tk::FBox</a>, <a href="../../../site/lib/Tk/FileSelect.html">Tk::FileSelect</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="keywords">KEYWORDS</a></h1>
+<p>file selection dialog</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;getSaveFile - pop up a dialog box for the user to select a file to open or save.</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

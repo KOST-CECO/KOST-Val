@@ -1,0 +1,219 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>XS::APItest - Test the perl C API</title>
+<link rel="stylesheet" href="../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;XS::APItest - Test the perl C API</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#abstract">ABSTRACT</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<ul>
+
+		<li><a href="#export">EXPORT</a></li>
+	</ul>
+
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#authors">AUTHORS</a></li>
+	<li><a href="#copyright_and_license">COPYRIGHT AND LICENSE</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>XS::APItest - Test the perl C API</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+  use XS::APItest;
+  print_double(4);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="abstract">ABSTRACT</a></h1>
+<p>This module tests the perl C API. Currently tests that <a href="../../lib/Pod/perlfunc.html#item_printf"><code>printf</code></a>
+works correctly.</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>This module can be used to check that the perl C API is behaving
+correctly. This module provides test functions and an associated
+test script that verifies the output.</p>
+<p>This module is not meant to be installed.</p>
+<p>
+</p>
+<h2><a name="export">EXPORT</a></h2>
+<p>Exports all the test functions:</p>
+<dl>
+<dt><strong><a name="item_print_double"><strong>print_double</strong></a></strong><br />
+</dt>
+<dd>
+Test that a double-precision floating point number is formatted
+correctly by <a href="../../lib/Pod/perlfunc.html#item_printf"><code>printf</code></a>.
+</dd>
+<dd>
+<pre>
+  print_double( $val );</pre>
+</dd>
+<dd>
+<p>Output is sent to STDOUT.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item_print_long_double"><strong>print_long_double</strong></a></strong><br />
+</dt>
+<dd>
+Test that a <code>long double</code> is formatted correctly by
+<a href="../../lib/Pod/perlfunc.html#item_printf"><code>printf</code></a>. Takes no arguments - the test value is hard-wired
+into the function (as ``7'').
+</dd>
+<dd>
+<pre>
+  print_long_double();</pre>
+</dd>
+<dd>
+<p>Output is sent to STDOUT.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item_have_long_double"><strong>have_long_double</strong></a></strong><br />
+</dt>
+<dd>
+Determine whether a <code>long double</code> is supported by Perl.  This should
+be used to determine whether to test <a href="#item_print_long_double"><code>print_long_double</code></a>.
+</dd>
+<dd>
+<pre>
+  print_long_double() if have_long_double;</pre>
+</dd>
+<p></p>
+<dt><strong><a name="item_print_nv"><strong>print_nv</strong></a></strong><br />
+</dt>
+<dd>
+Test that an <code>NV</code> is formatted correctly by
+<a href="../../lib/Pod/perlfunc.html#item_printf"><code>printf</code></a>.
+</dd>
+<dd>
+<pre>
+  print_nv( $val );</pre>
+</dd>
+<dd>
+<p>Output is sent to STDOUT.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item_print_iv"><strong>print_iv</strong></a></strong><br />
+</dt>
+<dd>
+Test that an <code>IV</code> is formatted correctly by
+<a href="../../lib/Pod/perlfunc.html#item_printf"><code>printf</code></a>.
+</dd>
+<dd>
+<pre>
+  print_iv( $val );</pre>
+</dd>
+<dd>
+<p>Output is sent to STDOUT.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item_print_uv"><strong>print_uv</strong></a></strong><br />
+</dt>
+<dd>
+Test that an <code>UV</code> is formatted correctly by
+<a href="../../lib/Pod/perlfunc.html#item_printf"><code>printf</code></a>.
+</dd>
+<dd>
+<pre>
+  print_uv( $val );</pre>
+</dd>
+<dd>
+<p>Output is sent to STDOUT.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item_print_int"><strong>print_int</strong></a></strong><br />
+</dt>
+<dd>
+Test that an <a href="../../lib/Pod/perlfunc.html#item_int"><code>int</code></a> is formatted correctly by
+<a href="../../lib/Pod/perlfunc.html#item_printf"><code>printf</code></a>.
+</dd>
+<dd>
+<pre>
+  print_int( $val );</pre>
+</dd>
+<dd>
+<p>Output is sent to STDOUT.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item_print_long"><strong>print_long</strong></a></strong><br />
+</dt>
+<dd>
+Test that an <code>long</code> is formatted correctly by
+<a href="../../lib/Pod/perlfunc.html#item_printf"><code>printf</code></a>.
+</dd>
+<dd>
+<pre>
+  print_long( $val );</pre>
+</dd>
+<dd>
+<p>Output is sent to STDOUT.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item_print_float"><strong>print_float</strong></a></strong><br />
+</dt>
+<dd>
+Test that a single-precision floating point number is formatted
+correctly by <a href="../../lib/Pod/perlfunc.html#item_printf"><code>printf</code></a>.
+</dd>
+<dd>
+<pre>
+  print_float( $val );</pre>
+</dd>
+<dd>
+<p>Output is sent to STDOUT.</p>
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../../lib/XS/Typemap.html">the XS::Typemap manpage</a>, <a href="../../lib/Pod/perlapi.html">the perlapi manpage</a>.</p>
+<p>
+</p>
+<hr />
+<h1><a name="authors">AUTHORS</a></h1>
+<p>Tim Jenness, &lt;<a href="mailto:t.jenness@jach.hawaii.edu">t.jenness@jach.hawaii.edu</a>&gt;,
+Christian Soeller, &lt;<a href="mailto:csoelle@mph.auckland.ac.nz">csoelle@mph.auckland.ac.nz</a>&gt;,
+Hugo van der Sanden &lt;<a href="mailto:hv@crypt.compulink.co.uk">hv@crypt.compulink.co.uk</a>&gt;</p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright_and_license">COPYRIGHT AND LICENSE</a></h1>
+<p>Copyright (C) 2002 Tim Jenness, Christian Soeller, Hugo van der Sanden.
+All Rights Reserved.</p>
+<p>This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;XS::APItest - Test the perl C API</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

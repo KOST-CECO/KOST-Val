@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>HTML::AsSubs - functions that construct a HTML syntax tree</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;HTML::AsSubs - functions that construct a HTML syntax tree</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#acknowledgement">ACKNOWLEDGEMENT</a></li>
+	<li><a href="#bugs">BUGS</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>HTML::AsSubs - functions that construct a HTML syntax tree</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ use HTML::AsSubs;
+ $h = body(
+           h1(&quot;This is the heading&quot;),
+           p(&quot;This is the first paragraph which contains a &quot;,
+             a({href=&gt;'link.html'}, &quot;link&quot;),
+             &quot; and an &quot;,
+             img({src=&gt;'img.gif', alt=&gt;'image'}),
+             &quot;.&quot;
+            ),
+          );
+ print $h-&gt;as_HTML;</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>This module exports functions that can be used to construct various
+HTML elements. The functions are named after the tags of the
+correponding HTML element and are all written in lower case. If the
+first argument is a hash reference then it will be used to initialize the
+attributes of this element. The remaining arguments are regarded as
+content.</p>
+<p>For a similar idea (i.e., it's another case where the syntax tree
+of the Perl source mirrors the syntax tree of the HTML produced),
+see HTML::Element's <code>new_from_lol</code> method.</p>
+<p>For what I now think is a cleaner implementation of this same idea,
+see the excellent module <code>XML::Generator</code>, which is what I suggest
+for actual real-life use.  (I suggest this over <code>HTML::AsSubs</code> and
+over <code>CGI.pm</code>'s HTML-making functions.)</p>
+<p>
+</p>
+<hr />
+<h1><a name="acknowledgement">ACKNOWLEDGEMENT</a></h1>
+<p>This module was inspired by the following message:</p>
+<pre>
+ Date: Tue, 4 Oct 1994 16:11:30 +0100
+ Subject: Wow! I have a large lightbulb above my head!</pre>
+<pre>
+ Take a moment to consider these lines:</pre>
+<pre>
+ %OVERLOAD=( '&quot;&quot;' =&gt; sub { join(&quot;&quot;, @{$_[0]}) } );</pre>
+<pre>
+ sub html { my($type)=shift; bless [&quot;&lt;$type&gt;&quot;, @_, &quot;&lt;/$type&gt;&quot;]; }</pre>
+<pre>
+ :-)  I *love* Perl 5!  Thankyou Larry and Ilya.</pre>
+<pre>
+ Regards,
+ Tim Bunce.</pre>
+<pre>
+ p.s. If you didn't get it, think about recursive data types: html(html())
+ p.p.s. I'll turn this into a much more practical example in a day or two.
+ p.p.p.s. It's a pity that overloads are not inherited. Is this a bug?</pre>
+<p>
+</p>
+<hr />
+<h1><a name="bugs">BUGS</a></h1>
+<p>The exported <a href="../../../lib/Pod/perlfunc.html#item_link"><code>link()</code></a> function overrides the builtin <a href="../../../lib/Pod/perlfunc.html#item_link"><code>link()</code></a> function.
+The exported <code>tr()</code> function must be called using &amp;tr(...) syntax
+because it clashes with the builtin tr/../../ operator.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../../../site/lib/HTML/Element.html">the HTML::Element manpage</a>, <a href="../../../XML/Generator.html">the XML::Generator manpage</a></p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;HTML::AsSubs - functions that construct a HTML syntax tree</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

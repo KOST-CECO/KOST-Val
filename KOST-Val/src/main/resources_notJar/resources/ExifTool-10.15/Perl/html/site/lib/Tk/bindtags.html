@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Tk::bindtags - Determine which bindings apply to a window, and order of evaluation</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::bindtags - Determine which bindings apply to a window, and order of evaluation</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#bugs">BUGS</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#keywords">KEYWORDS</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Tk::bindtags - Determine which bindings apply to a window, and order of evaluation</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p><em>$widget</em>-&gt;<strong>bindtags</strong>([<em>tagList</em>]);
+<em>@tags</em> = <em>$widget</em>-&gt;<strong>bindtags</strong>;</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>When a binding is created with the <strong>bind</strong> command, it is
+associated either with a particular window such as <em>$widget</em>,
+a class name such as <strong>Tk::Button</strong>, the keyword <strong>all</strong>, or any
+other string.
+All of these forms are called <em>binding tags</em>.
+Each window has a list of binding tags that determine how
+events are processed for the window.
+When an event occurs in a window, it is applied to each of the
+window's tags in order:  for each tag, the most specific binding
+that matches the given tag and event is executed.
+See the <a href="../../../site/lib/Tk/bind.html">the Tk::bind manpage</a> documentation for more information on the matching
+process.</p>
+<p>By default, each window has four binding tags consisting of the
+the window's class name, name of the window, the name of the window's
+nearest toplevel ancestor, and <strong>all</strong>, in that order.
+Toplevel windows have only three tags by default, since the toplevel
+name is the same as that of the window.</p>
+<p>Note that this order is <em>different</em> from order used by Tcl/Tk.
+Tcl/Tk has the window ahead of the class name in the binding order.
+This is because Tcl is procedural rather than object oriented and
+the normal way for Tcl/Tk applications to override class bindings
+is with an instance binding. However, with perl/Tk the normal way
+to override a class binding is to derive a class. The perl/Tk order
+causes instance bindings to execute after the class binding, and
+so instance bind callbacks can make use of state changes (e.g. changes
+to the selection) than the class bindings have made.</p>
+<p>The <strong>bindtags</strong> command allows the binding tags for a window to be
+read and modified.</p>
+<p>If <em>$widget</em>-&gt;<strong>bindtags</strong> is invoked without an argument, then the
+current set of binding tags for $widget is returned as a list.
+If the <em>tagList</em> argument is specified to <strong>bindtags</strong>,
+then it must be a reference to and array; the tags for $widget are changed
+to the elements of the array. (A reference to an anonymous array can
+be created by enclosin the elements in <strong>[ ]</strong>.)
+The elements of <em>tagList</em> may be arbitrary strings or widget objects,
+if no window exists for an object at the time an event is processed,
+then the tag is ignored for that event.
+The order of the elements in <em>tagList</em> determines the order in
+which binding callbacks are executed in response to events.
+For example, the command</p>
+<pre>
+ $b-&gt;bindtags([$b,ref($b),$b-&gt;toplevel,'all'])</pre>
+<p>applies the Tcl/Tk binding order which binding callbacks will be
+evaluated for a button (say) <strong>$b</strong> so that <strong>$b</strong>'s instance bindings
+are invoked first, following by bindings for <strong>$b</strong>'s class, followed by
+bindings for <strong>$b</strong>'s toplevel, followed by '<strong>all</strong>' bindings.</p>
+<p>If <em>tagList</em> is an empty list i.e. <strong>[]</strong>, then the binding
+tags for $widget are returned to the perl/Tk default state described above.</p>
+<p>The <strong>bindtags</strong> command may be used to introduce arbitrary
+additional binding tags for a window, or to remove standard tags.
+For example, the command</p>
+<pre>
+ $b-&gt;bindtags(['TrickyButton',$b-&gt;toplevel,'all'])</pre>
+<p>replaces the (say) <strong>Tk::Button</strong> tag for <strong>$b</strong> with <strong>TrickyButton</strong>.
+This means that the default widget bindings for buttons, which are
+associated with the <strong>Tk::Button</strong> tag, will no longer apply to <strong>$b</strong>,
+but any bindings associated with <strong>TrickyButton</strong> (perhaps some
+new button behavior) will apply.</p>
+<p>
+</p>
+<hr />
+<h1><a name="bugs">BUGS</a></h1>
+<p>The current mapping of the 'native' Tk behaviour of this method
+i.e. returning a list but only accepting a reference to an array is
+counter intuitive. The perl/Tk interface  may be tidied up, returning
+a list is sensible so, most likely fix will be to allow a list to be
+passed to /fIset/fR the bindtags.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../../../site/lib/Tk/bind.html">Tk::bind</a>
+<a href="../../../site/lib/Tk/callbacks.html">Tk::callbacks</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="keywords">KEYWORDS</a></h1>
+<p>binding, event, tag</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::bindtags - Determine which bindings apply to a window, and order of evaluation</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

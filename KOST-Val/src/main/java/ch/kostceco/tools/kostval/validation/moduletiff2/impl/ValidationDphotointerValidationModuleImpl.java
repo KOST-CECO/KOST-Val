@@ -1,6 +1,6 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
- * Information Package (SIP). Copyright (C) 2012-2016 Claire Röthlisberger (KOST-CECO), Christian
+ * Information Package (SIP). Copyright (C) 2012-2016 Claire Roethlisberger (KOST-CECO), Christian
  * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
  * Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
@@ -28,9 +28,9 @@ import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationDphotointerValidationModule;
 
-/** Validierungsschritt D (Farbraum-Validierung) Ist die TIFF-Datei gemäss Konfigurationsdatei valid?
+/** Validierungsschritt D (Farbraum-Validierung) Ist die TIFF-Datei gemÃ¤ss Konfigurationsdatei valid?
  * 
- * @author Rc Claire Röthlisberger, KOST-CECO */
+ * @author Rc Claire Roethlisberger, KOST-CECO */
 
 public class ValidationDphotointerValidationModuleImpl extends ValidationModuleImpl implements
 		ValidationDphotointerValidationModule
@@ -82,7 +82,7 @@ public class ValidationDphotointerValidationModuleImpl extends ValidationModuleI
 			BufferedReader in = new BufferedReader( new FileReader( exiftoolReport ) );
 			String line;
 			while ( (line = in.readLine()) != null ) {
-				// die PhotometricInterpretation-Zeile enthält einer dieser Freitexte der Farbraumart
+				// die PhotometricInterpretation-Zeile enthÃ¤lt einer dieser Freitexte der Farbraumart
 				if ( line.contains( "PhotometricInterpretation: " ) ) {
 					exiftoolio = 1;
 					if ( line.equalsIgnoreCase( "PhotometricInterpretation: " + pi0 )
@@ -106,7 +106,7 @@ public class ValidationDphotointerValidationModuleImpl extends ValidationModuleI
 						}
 					}
 					/* die PlanarConfiguration-Zeile muss Chunkey sein, da ansonsten nicht Baseline. Planar
-					 * wird kaum unterstützt */
+					 * wird kaum unterstÃ¼tzt */
 					if ( line.contains( "PlanarConfiguration: " ) ) {
 						exiftoolio = 1;
 						if ( line.contains( "Chunky" ) ) {

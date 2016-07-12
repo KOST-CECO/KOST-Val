@@ -1,0 +1,154 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Apache::XMLRPC::Lite - mod_perl-based XML-RPC server with minimum configuration</title>
+<link rel="stylesheet" href="../../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Apache::XMLRPC::Lite - mod_perl-based XML-RPC server with minimum configuration</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#dependencies">DEPENDENCIES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Apache::XMLRPC::Lite - mod_perl-based XML-RPC server with minimum configuration</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<dl>
+<dt><strong><a name="item_conf">httpd.conf (Location), directory-based access</a></strong><br />
+</dt>
+<dd>
+<pre>
+  &lt;Location /mod_xmlrpc&gt;
+    SetHandler perl-script
+    PerlHandler Apache::XMLRPC::Lite
+    PerlSetVar dispatch_to &quot;/Your/Path/To/Deployed/Modules, Module::Name, Module::method&quot;
+    PerlSetVar options &quot;compress_threshold =&gt; 10000&quot;
+  &lt;/Location&gt;</pre>
+</dd>
+<dt><strong>httpd.conf (Files), file-based access</strong><br />
+</dt>
+<dd>
+<pre>
+  &lt;FilesMatch &quot;\.xmlrpc$&quot;&gt;
+    SetHandler perl-script
+    PerlHandler Apache::XMLRPC::Lite
+    PerlSetVar dispatch_to &quot;/Your/Path/To/Deployed/Modules, Module::Name, Module::method&quot;
+    PerlSetVar options &quot;compress_threshold =&gt; 10000&quot;
+  &lt;/FilesMatch&gt;</pre>
+</dd>
+<dt><strong><a name="item__2ehtaccess_2c_directory_2dbased_access">.htaccess, directory-based access</a></strong><br />
+</dt>
+<dd>
+<pre>
+  SetHandler perl-script
+  PerlHandler Apache::XMLRPC::Lite
+  PerlSetVar dispatch_to &quot;/Your/Path/To/Deployed/Modules, Module::Name, Module::method&quot;
+  PerlSetVar options &quot;compress_threshold =&gt; 10000&quot;</pre>
+</dd>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>This Apache Perl module provides the ability to add support for XML-RPC 
+protocol with easy configuration (either in .conf or in .htaccess file). 
+This functionality should give you lightweight option
+for hosting SOAP services and greatly simplify configuration aspects. This
+module inherites functionality from XMLRPC::Transport::HTTP::Apache component
+of XMLRPC::Lite module.
+</p>
+<pre>
+
+=head1 CONFIGURATION</pre>
+<p>The module can be placed in &lt;Location&gt;, &lt;Directory&gt;, &lt;Files&gt;, &lt;FilesMatch&gt;
+directives in main server configuration areas or directly in .htaccess file.</p>
+<p>All parameters should be quoted and can be separated with commas or spaces 
+for lists (``a, b, c'') and with 'wide arrows' and commas for hash parameters 
+(``key1 =&gt; value1, key2 =&gt; value2'').</p>
+<p>All options that you can find in XMLRPC::Transport::HTTP::Apache component
+are available for configuration. Here is the description of most important
+ones.</p>
+<dl>
+<dt><strong><a name="item_dispatch_to">dispatch_to (LIST)</a></strong><br />
+</dt>
+<dd>
+Specifies path to directory that contains Perl modules you'd like to give 
+access to, or just list of modules (for preloaded modules).
+</dd>
+<dd>
+<pre>
+  PerlSetVar dispatch_to &quot;/Your/Path/To/Deployed/Modules, Module::Name, Module::method&quot;</pre>
+</dd>
+<p></p>
+<dt><strong><a name="item_options">options (HASH)</a></strong><br />
+</dt>
+<dd>
+Specifies list of options for your module, for example threshold for 
+compression. Future versions will support more options. See 
+XMLRPC::Transport::HTTP documentation for other options.
+</dd>
+<dd>
+<pre>
+  PerlSetVar options &quot;compress_threshold =&gt; 10000&quot;</pre>
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="dependencies">DEPENDENCIES</a></h1>
+<pre>
+ XMLRPC::Lite
+ mod_perl</pre>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<pre>
+ XMLRPC::Transport::HTTP::Apache for implementation details,
+ XMLRPC::Lite for general information, and
+ F&lt;examples/server/mod_xmlrpc.htaccess&gt; for .htaccess example</pre>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright (C) 2000-2001 Paul Kulchenko. All rights reserved.</p>
+<p>This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.</p>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Paul Kulchenko (<a href="mailto:paulclinger@yahoo.com">paulclinger@yahoo.com</a>)</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Apache::XMLRPC::Lite - mod_perl-based XML-RPC server with minimum configuration</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>
