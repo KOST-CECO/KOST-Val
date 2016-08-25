@@ -29,7 +29,7 @@ import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationHsizeValidationModule;
 
-/** Validierungsschritt H (Groessen-Validierung) Ist die TIFF-Datei gemäss Konfigurationsdatei valid?
+/** Validierungsschritt H (Groessen-Validierung) Ist die TIFF-Datei gemÃ¤ss Konfigurationsdatei valid?
  * 
  * @author Rc Claire Roethlisberger, KOST-CECO */
 
@@ -80,21 +80,24 @@ public class ValidationHsizeValidationModuleImpl extends ValidationModuleImpl im
 				String line;
 				while ( (line = in.readLine()) != null ) {
 					if ( line.contains( "FileSize: " ) ) {
+						System.out.print( line + " " );
 						exiftoolio = 1;
 						Integer intSize = line.toCharArray().length;
 						if ( line.contains( "byte" ) || line.contains( "kB" ) ) {
 							// Valider Status (kleines TIFF)
 						} else if ( line.contains( "MB" ) ) {
-
-							if ( intSize > 16 ) {
-								// Invalider Status (Giga-Tiffs sind nicht erlaubt und zuviele Stellen)
+							if ( line.contains( "." ) ) {
+								// Valider Status <=10.0 MB
+							} else if ( intSize > 16 ) {
+								/* Invalider Status (Giga-Tiffs sind nicht erlaubt und zuviele Stellen und keine
+								 * Kommastelle) */
 								isValid = false;
 								getMessageService().logError(
 										getTextResourceService().getText( MESSAGE_XML_MODUL_H_TIFF )
 												+ getTextResourceService().getText( MESSAGE_XML_CG_INVALID, line ) );
 							}
 						} else {
-							// Invalider Status (unbekannte Grösse)
+							// Invalider Status (unbekannte GrÃ¶sse)
 							isValid = false;
 							getMessageService().logError(
 									getTextResourceService().getText( MESSAGE_XML_MODUL_H_TIFF )
@@ -117,7 +120,7 @@ public class ValidationHsizeValidationModuleImpl extends ValidationModuleImpl im
 				getMessageService().logError(
 						getTextResourceService().getText( MESSAGE_XML_MODUL_H_TIFF )
 								+ getTextResourceService().getText( MESSAGE_XML_CG_CANNOTFINDETREPORT ) );
-				/* exiftoolReport löschen */
+				/* exiftoolReport lÃ¶schen */
 				if ( exiftoolReport.exists() ) {
 					exiftoolReport.delete();
 				}
@@ -129,7 +132,7 @@ public class ValidationHsizeValidationModuleImpl extends ValidationModuleImpl im
 		if ( newReport.exists() ) {
 			Util.deleteFile( newReport );
 		}
-		/* exiftoolReport löschen */
+		/* exiftoolReport lÃ¶schen */
 		if ( exiftoolReport.exists() ) {
 			exiftoolReport.delete();
 		}

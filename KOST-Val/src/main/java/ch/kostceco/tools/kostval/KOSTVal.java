@@ -233,7 +233,7 @@ public class KOSTVal implements MessageConstants
 		LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_INFO ) );
 		System.out.println( "KOST-Val" );
 		System.out.println( "" );
-		
+
 		if ( args[0].equals( "--format" ) && formatValOn.equals( "" ) ) {
 			// Formatvalidierung aber alle Formate ausgeschlossen
 			LOGGER.logError( kostval.getTextResourceService().getText( ERROR_IOE,
@@ -490,6 +490,11 @@ public class KOSTVal implements MessageConstants
 				}
 			} else {
 				// TODO: Formatvalidierung über ein Ordner --> erledigt --> nur Marker
+
+				/* TODO: PDF-Validierung über den GANZEN Ordner wenn der Hauptvalidator PDFTron ist. Dies
+				 * bringt eine extreme Performanceoptimierung!
+				 * 
+				 * Dieser Report analysieren. Sollte Datei nicht dort sein noch separat anstossen */
 				try {
 					Map<String, File> fileMap = Util.getFileMap( valDatei, false );
 					Set<String> fileMapKeys = fileMap.keySet();
@@ -738,6 +743,11 @@ public class KOSTVal implements MessageConstants
 			LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_FORMAT1 ) );
 
 			// TODO: Sipvalidierung --> erledigt --> nur Marker
+
+			/* TODO: PDF-Validierung über den GANZEN Ordner wenn der Hauptvalidator PDFTron ist. Dies
+			 * bringt eine extreme Performanceoptimierung!
+			 * 
+			 * Dieser Report analysieren. Sollte Datei nicht dort sein noch separat anstossen */
 			try {
 				boolean validFormat = false;
 				File originalSipFile = valDatei;
@@ -823,7 +833,7 @@ public class KOSTVal implements MessageConstants
 						LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_VALFILE,
 								valDatei.getAbsolutePath() ) );
 						System.out.println( "" );
-						System.out.println("SIP:   "+ valDatei.getAbsolutePath() );
+						System.out.println( "SIP:   " + valDatei.getAbsolutePath() );
 
 						// die eigentliche Fehlermeldung
 						LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_MODUL_Aa_SIP )
@@ -918,7 +928,7 @@ public class KOSTVal implements MessageConstants
 								LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_VALFILE,
 										valDatei.getAbsolutePath() ) );
 								System.out.println( "" );
-								System.out.println("SIP:   "+ valDatei.getAbsolutePath() );
+								System.out.println( "SIP:   " + valDatei.getAbsolutePath() );
 
 								// die eigentliche Fehlermeldung
 								LOGGER.logError( kostval.getTextResourceService()
@@ -1098,6 +1108,32 @@ public class KOSTVal implements MessageConstants
 							} else {
 								countNio = countNio + 1;
 							}
+						} else if ( valDateiExt.equals( ".jpe" ) || valDateiExt.equals( ".jpeg" )
+								|| valDateiExt.equals( ".jpg" ) ) {
+							jpeg = jpeg + 1;
+							if ( jpegValidation.equals( "yes" ) ) {
+								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose );
+								if ( valFile ) {
+									jpegCountIo = jpegCountIo + 1;
+								} else {
+									jpegCountNio = jpegCountNio + 1;
+								}
+							} else {
+								countNio = countNio + 1;
+							}
+						} else if ( valDateiExt.equals( ".jp2" ) ) {
+							jp2 = jp2 + 1;
+							if ( jp2Validation.equals( "yes" ) ) {
+								// Validierung durchführen
+								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose );
+								if ( valFile ) {
+									jp2CountIo = jp2CountIo + 1;
+								} else {
+									jp2CountNio = jp2CountNio + 1;
+								}
+							} else {
+								countNio = countNio + 1;
+							}
 						} else if ( valDateiExt.equals( ".txt" ) ) {
 							txt = txt + 1;
 							countNio = countNio + 1;
@@ -1116,35 +1152,9 @@ public class KOSTVal implements MessageConstants
 						} else if ( valDateiExt.equals( ".mp3" ) ) {
 							mp3 = mp3 + 1;
 							countNio = countNio + 1;
-						} else if ( valDateiExt.equals( ".jp2" ) ) {
-							jp2 = jp2 + 1;
-							if ( jp2Validation.equals( "yes" ) ) {
-								// Validierung durchführen
-								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose );
-								if ( valFile ) {
-									jp2CountIo = jp2CountIo + 1;
-								} else {
-									jp2CountNio = jp2CountNio + 1;
-								}
-							} else {
-								countNio = countNio + 1;
-							}
 						} else if ( valDateiExt.equals( ".jpx" ) || valDateiExt.equals( ".jpf" ) ) {
 							jpx = jpx + 1;
 							countNio = countNio + 1;
-						} else if ( valDateiExt.equals( ".jpe" ) || valDateiExt.equals( ".jpeg" )
-								|| valDateiExt.equals( ".jpg" ) ) {
-							jpeg = jpeg + 1;
-							if ( jpegValidation.equals( "yes" ) ) {
-								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose );
-								if ( valFile ) {
-									jpegCountIo = jpegCountIo + 1;
-								} else {
-									jpegCountNio = jpegCountNio + 1;
-								}
-							} else {
-								countNio = countNio + 1;
-							}
 						} else if ( valDateiExt.equals( ".png" ) ) {
 							png = png + 1;
 							countNio = countNio + 1;
@@ -1192,6 +1202,8 @@ public class KOSTVal implements MessageConstants
 						.getText( MESSAGE_XML_SUMMARY_3C, count, countSummaryIo, countSummaryNio, countNio,
 								countSummaryIoP, countSummaryNioP, countNioP );
 
+				//TODO auch bei der REINEN Formatvalidierung MESSAGE_XML_SUMMARY ausgeben als Mini-Statistik
+				
 				if ( countSummaryNio == 0 ) {
 					// alle Validierten Dateien valide
 					validFormat = true;
@@ -1229,7 +1241,7 @@ public class KOSTVal implements MessageConstants
 				LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_VALFILE,
 						originalSipFile.getAbsolutePath() ) );
 				System.out.println( "" );
-				System.out.println("SIP:   "+ valDatei.getAbsolutePath() );
+				System.out.println( "SIP:   " + valDatei.getAbsolutePath() );
 
 				Controllersip controller = (Controllersip) context.getBean( "controllersip" );
 				boolean okMandatory = false;

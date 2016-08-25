@@ -59,12 +59,12 @@ import ch.kostceco.tools.kostval.validation.modulepdfa.ValidationAvalidationAiMo
 /** Ist die vorliegende PDF-Datei eine valide PDFA-Datei? PDFA Validierungs mit PDFTron und oder
  * PDF-Tools.
  * 
- * Folgendes ist Konfigurierbar: Hauptvalidator sowie ob eine duale Validierung durchgef�hrt werden
+ * Folgendes ist Konfigurierbar: Hauptvalidator sowie ob eine duale Validierung durchgeführt werden
  * soll oder nicht. Bei der dualen Validierung müssen beide Validatoren die Datei als invalide
  * betrachten, damit diese als invalid gilt. Bei Uneinigkeit gilt diese als valid.
  * 
  * Es wird falls vorhanden die Vollversion von PDF-Tools verwendet. KOST-Val muss nicht angepasst
- * werden und verwendet automatisch den internen Schl�ssel, sollte keine Vollversion existieren.
+ * werden und verwendet automatisch den internen Schlüssel, sollte keine Vollversion existieren.
  * 
  * Zuerste erfolgt eine Erkennung, wenn diese io kommt die Validierung mit PDFTron und oder
  * PDF-Tools. Die Fehler werden den Einzelnen Gruppen (Modulen) zugeordnet
@@ -146,27 +146,27 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 							+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 		}
 
-		/* Neu soll die Validierung mit PDFTron konfigurier bar sein M�gliche Werte 1A, 1B und no sowie
-		 * 2A, 2B, 2U und no Da Archive beide Versionen erlauben können sind es 2 config eintr�ge Es
-		 * gibt mehre M�glichkeiten das PDF in der gew�nschten Version zu testen - Unterscheidung anhand
+		/* Neu soll die Validierung mit PDFTron konfigurier bar sein Mögliche Werte 1A, 1B und no sowie
+		 * 2A, 2B, 2U und no Da Archive beide Versionen erlauben können sind es 2 config einträge Es
+		 * gibt mehre Möglichkeiten das PDF in der gewünschten Version zu testen - Unterscheidung anhand
 		 * DROID --> braucht viel Zeit auch mit KaD_Signaturefile - Unterscheidung anhand PDF/A-Eintrag
 		 * wie Droid aber selber programmiert --> ist viel schneller */
 		if ( pdfa2.equals( "2A" ) || pdfa2.equals( "2B" ) || pdfa2.equals( "2U" ) ) {
-			// g�ltiger Konfigurationseintrag und V2 erlaubt
+			// gültiger Konfigurationseintrag und V2 erlaubt
 			pdfaVer2 = 2;
 		} else {
 			// v2 nicht erlaubt oder falscher eintrag
 			pdfa2 = "no";
 		}
 		if ( pdfa1.equals( "1A" ) || pdfa1.equals( "1B" ) ) {
-			// g�ltiger Konfigurationseintrag und V1 erlaubt
+			// gültiger Konfigurationseintrag und V1 erlaubt
 			pdfaVer1 = 1;
 		} else {
 			// v1 nicht erlaubt oder falscher eintrag
 			pdfa1 = "no";
 		}
 		if ( pdfa1 == "no" && pdfa2 == "no" ) {
-			// keine Validierung m�glich. keine PDFA-Versionen konfiguriert
+			// keine Validierung möglich. keine PDFA-Versionen konfiguriert
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
 							+ getTextResourceService().getText( ERROR_XML_A_PDFA_NOCONFIG ) );
@@ -184,13 +184,13 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 			level = pdfa1;
 		} else {
 			try {
-				// Beide sind m�glich --> Level je nach File ausw�hlen
+				// Beide sind möglich --> Level je nach File auswählen
 				pdfaVer1 = 0;
 				pdfaVer2 = 0;
 				BufferedReader in = new BufferedReader( new FileReader( valDatei ) );
 				String line;
 				while ( (line = in.readLine()) != null ) {
-					// h�ufige Partangaben: pdfaid:part>1< pdfaid:part='1' pdfaid:part="1"
+					// häufige Partangaben: pdfaid:part>1< pdfaid:part='1' pdfaid:part="1"
 					if ( line.contains( "pdfaid:part" ) ) {
 						// pdfaid:part
 						if ( line.contains( "pdfaid:part>1<" ) ) {
@@ -283,7 +283,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 				char[] charArray2 = new char[] { c1, c2, c3, c4 };
 
 				if ( Arrays.equals( charArray1, charArray2 ) ) {
-					// h�chstwahrscheinlich ein PDF da es mit 25504446 respektive %PDF beginnt
+					// höchstwahrscheinlich ein PDF da es mit 25504446 respektive %PDF beginnt
 					valid = true;
 				} else {
 					// Droid-Erkennung, damit Details ausgegeben werden können
@@ -309,8 +309,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 					Droid droid = null;
 					try {
 						/* kleiner Hack, weil die Droid libraries irgendwo ein System.out drin haben, welche den
-						 * Output st�ren Util.switchOffConsole() als Kommentar markieren wenn man die
-						 * Fehlermeldung erhalten m�chte */
+						 * Output stören Util.switchOffConsole() als Kommentar markieren wenn man die
+						 * Fehlermeldung erhalten möchte */
 						Util.switchOffConsole();
 						droid = new Droid();
 
@@ -358,7 +358,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 		boolean isValid = false;
 		boolean dual = false;
 
-		// Initialisierung PDFTron -> �berpr�fen der Angaben: existiert die PdftronExe am angebenen Ort?
+		// Initialisierung PDFTron -> überprüfen der Angaben: existiert die PdftronExe am angebenen Ort?
 		String pathToPdftronExe = getConfigurationService().getPathToPdftronExe();
 		String producerFirstValidator = getConfigurationService().firstValidator();
 		String dualValidation = getConfigurationService().dualValidation();
@@ -368,7 +368,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 		 * ref="configurationService" /> */
 
 		if ( dualValidation.contentEquals( "dual" ) ) {
-			// Duale Validierung gew�nscht
+			// Duale Validierung gewünscht
 			dual = true;
 		}
 		if ( !producerFirstValidator.contentEquals( "PDFTron" ) ) {
@@ -378,7 +378,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 
 		File fPdftronExe = new File( pathToPdftronExe );
 		if ( !fPdftronExe.exists() || !fPdftronExe.getName().equals( "pdfa.exe" ) ) {
-			// Keine Duale Validierung m�glich
+			// Keine Duale Validierung möglich
 			if ( dualValidation.contentEquals( "dual" )
 					|| producerFirstValidator.contentEquals( "PDFTron" ) ) {
 				getMessageService().logError(
@@ -428,10 +428,10 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 
 					try {
 						/* Der Name des generierten Reports lautet per default report.xml und es scheint keine
-						 * M�glichkeit zu geben, dies zu �bersteuern. */
+						 * Möglichkeit zu geben, dies zu übersteuern. */
 						report = new File( pathToPdftronOutput, "report.xml" );
 
-						// falls das File bereits existiert, z.B. von einem vorhergehenden Durchlauf, l�schen
+						// falls das File bereits existiert, z.B. von einem vorhergehenden Durchlauf, löschen
 						// wir es
 						if ( report.exists() ) {
 							report.delete();
@@ -470,7 +470,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 							closeQuietly( proc.getErrorStream() );
 						}
 					}
-					// Ende PDFTRON direkt auszul�sen
+					// Ende PDFTRON direkt auszulösen
 
 					String pathToPdftronReport = report.getAbsolutePath();
 					BufferedInputStream bis = new BufferedInputStream( new FileInputStream(
@@ -496,7 +496,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 							// Duale Validierung mit PDFTools
 
 							if ( docPdf.open( valDatei.getAbsolutePath(), "", NativeLibrary.COMPLIANCE.ePDFUnk ) ) {
-								// PDF Konnte ge�ffnet werden
+								// PDF Konnte geöffnet werden
 								docPdf.setStopOnError( true );
 								docPdf.setReportingLevel( 1 );
 								if ( docPdf.getErrorCode() == NativeLibrary.ERRORCODE.PDF_E_PASSWORD ) {
@@ -640,7 +640,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 				// zuerst mit PDFTools und danach ggf mit PDFTron
 
 				if ( docPdf.open( valDatei.getAbsolutePath(), "", NativeLibrary.COMPLIANCE.ePDFUnk ) ) {
-					// PDF Konnte ge�ffnet werden
+					// PDF Konnte geöffnet werden
 					docPdf.setStopOnError( true );
 					docPdf.setReportingLevel( 1 );
 					if ( docPdf.getErrorCode() == NativeLibrary.ERRORCODE.PDF_E_PASSWORD ) {
@@ -763,10 +763,10 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 
 							try {
 								/* Der Name des generierten Reports lautet per default report.xml und es scheint
-								 * keine M�glichkeit zu geben, dies zu �bersteuern. */
+								 * keine Möglichkeit zu geben, dies zu übersteuern. */
 								report = new File( pathToPdftronOutput, "report.xml" );
 
-								// falls das File bereits existiert, z.B. von einemvorhergehenden Durchlauf, l�schen
+								// falls das File bereits existiert, z.B. von einemvorhergehenden Durchlauf, löschen
 								// wir es
 								if ( report.exists() ) {
 									report.delete();
@@ -805,7 +805,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 									closeQuietly( proc.getErrorStream() );
 								}
 							}
-							// Ende PDFTRON direkt auszul�sen
+							// Ende PDFTRON direkt auszulösen
 
 							String pathToPdftronReport = report.getAbsolutePath();
 							BufferedInputStream bis = new BufferedInputStream( new FileInputStream(
@@ -839,7 +839,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 
 							}
 							if ( passCount == 0 ) {
-								// Invalide PDFA-Datei (doppelt best�tigt)
+								// Invalide PDFA-Datei (doppelt bestätigt)
 								isValid = false;
 							}
 
@@ -988,7 +988,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 				Document doc = null;
 
 				if ( producerFirstValidator.contentEquals( "PDFTron" ) || dual ) {
-					// aus dem Output von Pdftron die Fehlercodes extrahieren und �bersetzen
+					// aus dem Output von Pdftron die Fehlercodes extrahieren und übersetzen
 
 					String pathToPdftronReport = report.getAbsolutePath();
 					BufferedInputStream bis = new BufferedInputStream( new FileInputStream(
@@ -1024,7 +1024,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 					return false;
 				}
 				if ( producerFirstValidator.contentEquals( "PDFTron" ) || dual ) {
-					// aus dem Output von Pdftron die Fehlercodes extrahieren und �bersetzen
+					// aus dem Output von Pdftron die Fehlercodes extrahieren und übersetzen
 
 					String errorDigitA = "Fehler";
 
@@ -1038,8 +1038,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 						String errorCode = errorNode.getNodeValue();
 						errorDigitA = errorCode.substring( 6, 7 );
 
-						// der Error Code kann auch "_Unknown" sein, dieser wird in den Code "0" �bersetzt
-						// e_PDF_Unknown ist meist ein korruptes oder verschl�sseltes Dokument
+						// der Error Code kann auch "_Unknown" sein, dieser wird in den Code "0" übersetzt
+						// e_PDF_Unknown ist meist ein korruptes oder verschlüsseltes Dokument
 						if ( errorDigitA.equals( "_" ) ) {
 							errorDigitA = "0";
 						}
@@ -1409,7 +1409,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 						String errorDigit = errorCode.substring( 6, 7 );
 						try {
 							if ( errorDigit.equals( "8" ) ) {
-								// Zug�nglichkeit Fehler -> I
+								// Zugänglichkeit Fehler -> I
 								isValid = false;
 								getMessageService().logError(
 										getTextResourceService().getText( MESSAGE_XML_MODUL_I_PDFA )

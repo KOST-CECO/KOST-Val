@@ -19,7 +19,7 @@
 
 package ch.kostceco.tools.kostval.logging;
 
-/** Interface für den Zugriff auf Resourcen aus dem ResourceBundle.
+/** Interface fÃ¼r den Zugriff auf Resourcen aus dem ResourceBundle.
  * 
  * @author Rc Claire Roethlisberger, KOST-CECO */
 public interface MessageConstants
@@ -47,6 +47,7 @@ public interface MessageConstants
 
 	// Globale Meldungen
 	String	MESSAGE_XML_SUMMARY_3C												= "message.xml.summary.3c";
+	String	MESSAGE_XML_SUMMARY														= "message.xml.summary";
 	String	MESSAGE_XML_VALFILE														= "message.xml.valfile";
 	String	MESSAGE_XML_HEADER														= "message.xml.header";
 	String	MESSAGE_XML_START															= "message.xml.start";

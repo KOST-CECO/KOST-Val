@@ -112,7 +112,7 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl i
 			String srcPdf = valDatei.getAbsolutePath();
 			String destImage = pathToWorkDir + File.separator + valDatei.getName();
 
-		String pathToLogDir = getConfigurationService().getPathToLogfile();
+			String pathToLogDir = getConfigurationService().getPathToLogfile();
 
 			File encrypt = new File( pathToLogDir + File.separator + valDatei.getName() + "_encrypt.txt" );
 
@@ -284,11 +284,27 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl i
 									if ( ok ) {
 										// valide -> isValidJPEG bleibt unverändert
 									} else {
-										// invalide
-										isValidJPEG = false;
-										delFile = false;
-										invalidJPEG = invalidJPEG + "   " + filename;
-										jpegCounter = jpegCounter + 1;
+										// invalide oder Warnung
+
+										ImageScanner.Result ires = iscan.lastResult();
+
+										// display the scanner's log messages
+										for ( String msg : ires.collapsedMessages() ) {
+											// Warnung abfangen
+											if ( msg.startsWith( "Unsupported Image Type" ) ) {
+												// Unsupported Image Type => ERROR_XML_A_UNS_IMAGE, msg
+												
+												// nur Warnung, könnte valide sein
+											} else {
+												// invalide
+												isValidJPEG = false;
+											}
+										}
+										if ( !isValidJPEG ) {
+											delFile = false;
+											invalidJPEG = invalidJPEG + "   " + filename;
+											jpegCounter = jpegCounter + 1;
+										}
 									}
 									is.close();
 								} catch ( IOException ioe ) {
