@@ -80,10 +80,10 @@ public class Validation1eSipTypeModuleImpl extends ValidationModuleImpl implemen
 
 			dbf.setFeature( "http://xml.org/sax/features/namespaces", false );
 
-			/* Aktuelle L�sung funktioniert nur wenn kein Pr�fix beim Elementnamen erlaubt ist! IO:
+			/* Aktuelle Lösung funktioniert nur wenn kein Präfix beim Elementnamen erlaubt ist! IO:
 			 * ablieferung NIO: v4:ablieferung
 			 * 
-			 * Ansonsten m�sste �berall der NameSpace auf * gesetzt werden
+			 * Ansonsten müsste überall der NameSpace auf * gesetzt werden
 			 * 
 			 * NodeList layerConfigList = doc.getElementsByTagNameNS( "*", "ablieferung" ); */
 

@@ -140,6 +140,11 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl implement
 
 		// II.) Validierung des Formats des Dateinamen
 		patternStr = getConfigurationService().getAllowedSipName();
+		if ( patternStr.startsWith( "Configuration-Error:" ) ) {
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_Ac_SIP ) + patternStr );
+			return false;
+		}
 		Pattern p = Pattern.compile( patternStr );
 		Matcher matcher = p.matcher( fileName );
 
@@ -247,6 +252,16 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl implement
 		// SIP-Version unterscheiden. Validieren ob vorliegende Version erlaubt ist.
 		String allowedV1 = getConfigurationService().getAllowedVersionBar1();
 		String allowedV4 = getConfigurationService().getAllowedVersionBar4Ech1();
+		if ( allowedV1.startsWith( "Configuration-Error:" ) ) {
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_Ac_SIP ) + allowedV1 );
+			return false;
+		}
+		if ( allowedV4.startsWith( "Configuration-Error:" ) ) {
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_Ac_SIP ) + allowedV4 );
+			return false;
+		}
 		// generiert eine Map mit den xsd-files und Ordnern, welche in header/xsd/ enthalten sein müssen
 		Map<String, String> allowedXsdFiles = new HashMap<String, String>();
 

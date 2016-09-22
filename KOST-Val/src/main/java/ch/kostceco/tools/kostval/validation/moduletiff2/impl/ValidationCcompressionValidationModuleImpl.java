@@ -80,6 +80,47 @@ public class ValidationCcompressionValidationModuleImpl extends ValidationModule
 		String com8 = getConfigurationService().getAllowedCompression8();
 		String com32773 = getConfigurationService().getAllowedCompression32773();
 
+		if ( com1.startsWith( "Configuration-Error:" ) ) {
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_C_TIFF ) + com1 );
+			return false;
+		}
+		if ( com2.startsWith( "Configuration-Error:" ) ) {
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_C_TIFF ) + com2 );
+			return false;
+		}
+		if ( com3.startsWith( "Configuration-Error:" ) ) {
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_C_TIFF ) + com3 );
+			return false;
+		}
+		if ( com4.startsWith( "Configuration-Error:" ) ) {
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_C_TIFF ) + com4 );
+			return false;
+		}
+		if ( com5.startsWith( "Configuration-Error:" ) ) {
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_C_TIFF ) + com5 );
+			return false;
+		}
+		if ( com7.startsWith( "Configuration-Error:" ) ) {
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_C_TIFF ) + com7 );
+			return false;
+		}
+		if ( com8.startsWith( "Configuration-Error:" ) ) {
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_C_TIFF ) + com8 );
+			return false;
+		}
+		if ( com32773.startsWith( "Configuration-Error:" ) ) {
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_C_TIFF ) + com32773 );
+			return false;
+		}
+
 		Integer exiftoolio = 0;
 		String oldErrorLine = "";
 

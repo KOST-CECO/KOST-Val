@@ -75,6 +75,47 @@ public class ValidationDphotointerValidationModuleImpl extends ValidationModuleI
 		String pi6 = getConfigurationService().getAllowedPhotointer6();
 		String pi8 = getConfigurationService().getAllowedPhotointer8();
 
+		if ( pi0.startsWith( "Configuration-Error:" ) ) {
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_D_TIFF ) + pi0 );
+			return false;
+		}
+		if ( pi1.startsWith( "Configuration-Error:" ) ) {
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_D_TIFF ) + pi1 );
+			return false;
+		}
+		if ( pi2.startsWith( "Configuration-Error:" ) ) {
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_D_TIFF ) + pi2 );
+			return false;
+		}
+		if ( pi3.startsWith( "Configuration-Error:" ) ) {
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_D_TIFF ) + pi3 );
+			return false;
+		}
+		if ( pi4.startsWith( "Configuration-Error:" ) ) {
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_D_TIFF ) + pi4 );
+			return false;
+		}
+		if ( pi5.startsWith( "Configuration-Error:" ) ) {
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_D_TIFF ) + pi5 );
+			return false;
+		}
+		if ( pi6.startsWith( "Configuration-Error:" ) ) {
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_D_TIFF ) + pi6 );
+			return false;
+		}
+		if ( pi8.startsWith( "Configuration-Error:" ) ) {
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_D_TIFF ) + pi8 );
+			return false;
+		}
+
 		Integer exiftoolio = 0;
 		String oldErrorLine = "";
 

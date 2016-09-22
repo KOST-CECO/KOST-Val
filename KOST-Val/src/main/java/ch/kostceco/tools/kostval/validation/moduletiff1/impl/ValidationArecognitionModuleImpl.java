@@ -107,17 +107,15 @@ public class ValidationArecognitionModuleImpl extends ValidationModuleImpl imple
 				char[] charArray3 = new char[] { c2, c2, c4, c3 };
 
 				if ( Arrays.equals( charArray1, charArray2 ) ) {
-					/* höchstwahrscheinlich ein TIFF da es mit 49492A00 respektive II*. beginnt valid = true; */
+					/* hï¿½chstwahrscheinlich ein TIFF da es mit 49492A00 respektive II*. beginnt valid = true; */
 				} else if ( Arrays.equals( charArray1, charArray3 ) ) {
-					/* höchstwahrscheinlich ein TIFF da es mit 4D4D002A respektive MM.* beginnt valid = true; */
+					/* hï¿½chstwahrscheinlich ein TIFF da es mit 4D4D002A respektive MM.* beginnt valid = true; */
 				} else {
-					// Droid-Erkennung, damit Details ausgegeben werden können
+					// Droid-Erkennung, damit Details ausgegeben werden kï¿½nnen
 					String nameOfSignature = getConfigurationService().getPathToDroidSignatureFile();
-					if ( nameOfSignature == null ) {
+					if ( nameOfSignature.startsWith( "Configuration-Error:" ) ) {
 						getMessageService().logError(
-								getTextResourceService().getText( MESSAGE_XML_MODUL_A_TIFF )
-										+ getTextResourceService().getText(
-												MESSAGE_XML_CONFIGURATION_ERROR_NO_SIGNATURE ) );
+								getTextResourceService().getText( MESSAGE_XML_MODUL_A_TIFF ) + nameOfSignature );
 						read.close();
 						return false;
 					}
@@ -134,8 +132,8 @@ public class ValidationArecognitionModuleImpl extends ValidationModuleImpl imple
 					Droid droid = null;
 					try {
 						/* kleiner Hack, weil die Droid libraries irgendwo ein System.out drin haben, welche den
-						 * Output stören Util.switchOffConsole() als Kommentar markieren wenn man die
-						 * Fehlermeldung erhalten möchte */
+						 * Output stï¿½ren Util.switchOffConsole() als Kommentar markieren wenn man die
+						 * Fehlermeldung erhalten mï¿½chte */
 						Util.switchOffConsole();
 						droid = new Droid();
 

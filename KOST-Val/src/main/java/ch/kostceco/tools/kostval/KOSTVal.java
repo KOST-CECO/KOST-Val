@@ -120,7 +120,10 @@ public class KOSTVal implements MessageConstants
 
 		// Ueberprüfung des Parameters (Log-Verzeichnis)
 		String pathToLogfile = kostval.getConfigurationService().getPathToLogfile();
-
+		if ( pathToLogfile.startsWith( "Configuration-Error:" ) ) {
+			System.out.println( pathToLogfile );
+			System.exit( 1 );
+		}
 		File directoryOfLogfile = new File( pathToLogfile );
 
 		if ( !directoryOfLogfile.exists() ) {
@@ -139,6 +142,11 @@ public class KOSTVal implements MessageConstants
 					.println( kostval.getTextResourceService().getText( ERROR_LOGDIRECTORY_NODIRECTORY ) );
 			System.exit( 1 );
 		}
+		File pdftronReport = new File( pathToLogfile,"PDFTron.xml" );
+
+		if ( pdftronReport.exists() ) {
+			Util.deleteFile( pdftronReport );
+		}
 
 		// Ist die Anzahl Parameter (mind. 2) korrekt?
 		if ( args.length < 2 ) {
@@ -152,6 +160,11 @@ public class KOSTVal implements MessageConstants
 
 		// Informationen zum Arbeitsverzeichnis holen
 		String pathToWorkDir = kostval.getConfigurationService().getPathToWorkDir();
+		if ( pathToWorkDir.startsWith( "Configuration-Error:" ) ) {
+			System.out.println( kostval.getTextResourceService().getText( MESSAGE_XML_MODUL_Ab_SIP )
+					+ pathToWorkDir );
+			System.exit( 1 );
+		}
 		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
 		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
 		 * ref="configurationService" /> */
@@ -162,6 +175,31 @@ public class KOSTVal implements MessageConstants
 		String tiffValidation = kostval.getConfigurationService().tiffValidation();
 		String jp2Validation = kostval.getConfigurationService().jp2Validation();
 		String jpegValidation = kostval.getConfigurationService().jpegValidation();
+		if ( pdfaValidation.startsWith( "Configuration-Error:" ) ) {
+			System.out.println( kostval.getTextResourceService().getText( MESSAGE_XML_MODUL_Ab_SIP )
+					+ pdfaValidation );
+			System.exit( 1 );
+		}
+		if ( siardValidation.startsWith( "Configuration-Error:" ) ) {
+			System.out.println( kostval.getTextResourceService().getText( MESSAGE_XML_MODUL_Ab_SIP )
+					+ siardValidation );
+			System.exit( 1 );
+		}
+		if ( tiffValidation.startsWith( "Configuration-Error:" ) ) {
+			System.out.println( kostval.getTextResourceService().getText( MESSAGE_XML_MODUL_Ab_SIP )
+					+ tiffValidation );
+			System.exit( 1 );
+		}
+		if ( jp2Validation.startsWith( "Configuration-Error:" ) ) {
+			System.out.println( kostval.getTextResourceService().getText( MESSAGE_XML_MODUL_Ab_SIP )
+					+ jp2Validation );
+			System.exit( 1 );
+		}
+		if ( jpegValidation.startsWith( "Configuration-Error:" ) ) {
+			System.out.println( kostval.getTextResourceService().getText( MESSAGE_XML_MODUL_Ab_SIP )
+					+ jpegValidation );
+			System.exit( 1 );
+		}
 
 		// Konfiguration des Loggings, ein File Logger wird zusätzlich erstellt
 		LogConfigurator logConfigurator = (LogConfigurator) context.getBean( "logconfigurator" );
@@ -232,7 +270,6 @@ public class KOSTVal implements MessageConstants
 		LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_FORMATON, formatValOn ) );
 		LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_INFO ) );
 		System.out.println( "KOST-Val" );
-		System.out.println( "" );
 
 		if ( args[0].equals( "--format" ) && formatValOn.equals( "" ) ) {
 			// Formatvalidierung aber alle Formate ausgeschlossen
@@ -318,6 +355,11 @@ public class KOSTVal implements MessageConstants
 		/* Vorberitung für eine allfällige Festhaltung bei unterschiedlichen PDFA-Validierungsresultaten
 		 * in einer PDF_Diagnosedatei sowie Zähler der SIP-Dateiformate */
 		String diaPath = kostval.getConfigurationService().getPathToDiagnose();
+		if ( diaPath.startsWith( "Configuration-Error:" ) ) {
+			LOGGER.logError( kostval.getTextResourceService().getText( ERROR_IOE ) + diaPath );
+			System.out.println( diaPath );
+			System.exit( 1 );
+		}
 
 		// Im diaverzeichnis besteht kein Schreibrecht
 		File diaDir = new File( diaPath );
@@ -362,6 +404,13 @@ public class KOSTVal implements MessageConstants
 		/* Initialisierung TIFF-Modul B (JHove-Validierung) überprüfen der Konfiguration: existiert die
 		 * jhove.conf am angebenen Ort? */
 		String jhoveConf = kostval.getConfigurationService().getPathToJhoveConfiguration();
+		if ( diaPath.startsWith( "Configuration-Error:" ) ) {
+			LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_MODUL_Ab_SIP )
+					+ diaPath );
+			System.out.println( kostval.getTextResourceService().getText( MESSAGE_XML_MODUL_Ab_SIP )
+					+ diaPath );
+			System.exit( 1 );
+		}
 		File fJhoveConf = new File( jhoveConf );
 		if ( !fJhoveConf.exists() || !fJhoveConf.getName().equals( "jhove.conf" ) ) {
 
@@ -404,6 +453,7 @@ public class KOSTVal implements MessageConstants
 			LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_FORMAT1 ) );
 			Integer countNio = 0;
 			Integer countSummaryNio = 0;
+			Integer countSummaryIo = 0;
 			Integer count = 0;
 			Integer pdfaCountIo = 0;
 			Integer pdfaCountNio = 0;
@@ -490,15 +540,9 @@ public class KOSTVal implements MessageConstants
 				}
 			} else {
 				// TODO: Formatvalidierung über ein Ordner --> erledigt --> nur Marker
-
-				/* TODO: PDF-Validierung über den GANZEN Ordner wenn der Hauptvalidator PDFTron ist. Dies
-				 * bringt eine extreme Performanceoptimierung!
-				 * 
-				 * Dieser Report analysieren. Sollte Datei nicht dort sein noch separat anstossen */
 				try {
 					Map<String, File> fileMap = Util.getFileMap( valDatei, false );
 					Set<String> fileMapKeys = fileMap.keySet();
-
 					for ( Iterator<String> iterator = fileMapKeys.iterator(); iterator.hasNext(); ) {
 						String entryName = iterator.next();
 						File newFile = fileMap.get( entryName );
@@ -666,6 +710,34 @@ public class KOSTVal implements MessageConstants
 				// logFile bereinigung (& End und ggf 3c)
 				Util.valEnd3cAmp( ausgabeEnd, "", logFile );
 
+				countSummaryNio = pdfaCountNio + siardCountNio + tiffCountNio + jp2CountNio + jpegCountNio;
+				countSummaryIo = pdfaCountIo + siardCountIo + tiffCountIo + jp2CountIo + jpegCountIo;
+				
+				/* Summary über Formatvaliderung herausgeben analog 3c.
+				 * 
+				 * message.xml.summary.3c = <Message>Von den {0} Dateien sind {1} ({4}%) valid, {2} ({5}%)
+				 * invalid und {3} ({6}%) wurden nicht validiert.</Message></Error>
+				 * 
+				 * countNio=3
+				 * count=0
+				 * countSummaryIo=1
+				 *  countSummaryNio=2
+				 * 
+				 * diese meldung einfach noch mit info einfassen. */
+
+				float countSummaryIoP = 100 / (float) count * (float) countSummaryIo;
+				float countSummaryNioP = 100 / (float) count * (float) countSummaryNio;
+				float countNioP = 100 / (float) count * (float) countNio;
+				String summaryFormat = kostval.getTextResourceService()
+						.getText( MESSAGE_XML_SUMMARY_FORMAT, count, countSummaryIo, countSummaryNio, countNio,
+								countSummaryIoP, countSummaryNioP, countNioP );
+				String newFormat= "<Format><Info><Message>"
+						+ summaryFormat+ "</Message></Info>";
+				Util.oldnewstring( "<Format>", newFormat, logFile );
+
+				System.out.println( kostval.getTextResourceService()
+						.getText( MESSAGE_FORMATVALIDATION_DONE, summaryFormat, logFile.getAbsolutePath() ));
+
 				// Die Konfiguration hereinkopieren
 				try {
 					DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -703,8 +775,8 @@ public class KOSTVal implements MessageConstants
 				System.out.print( "                                                                    " );
 				System.out.print( "\r" );
 
-				countSummaryNio = pdfaCountNio + siardCountNio + tiffCountNio + jp2CountNio + jpegCountNio;
-
+				Util.deleteFile( pdftronReport );
+				
 				if ( countNio.equals( count ) ) {
 					// keine Dateien Validiert bestehendes Workverzeichnis ggf. löschen
 					if ( tmpDir.exists() ) {
@@ -1202,8 +1274,6 @@ public class KOSTVal implements MessageConstants
 						.getText( MESSAGE_XML_SUMMARY_3C, count, countSummaryIo, countSummaryNio, countNio,
 								countSummaryIoP, countSummaryNioP, countNioP );
 
-				//TODO auch bei der REINEN Formatvalidierung MESSAGE_XML_SUMMARY ausgeben als Mini-Statistik
-				
 				if ( countSummaryNio == 0 ) {
 					// alle Validierten Dateien valide
 					validFormat = true;
@@ -1550,7 +1620,12 @@ public class KOSTVal implements MessageConstants
 				}
 				System.out.print( "                                                                    " );
 				System.out.print( "\r" );
+				
+				System.out.println( kostval.getTextResourceService()
+						.getText( MESSAGE_SIPVALIDATION_DONE,  logFile.getAbsolutePath() ));
 
+				Util.deleteFile( pdftronReport );
+				
 				if ( ok ) {
 					// bestehendes Workverzeichnis ggf. löschen
 					if ( tmpDir.exists() ) {

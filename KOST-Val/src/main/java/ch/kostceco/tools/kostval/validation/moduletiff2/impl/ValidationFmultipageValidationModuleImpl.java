@@ -28,7 +28,7 @@ import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationFmultipageValidationModule;
 
-/** Validierungsschritt F (Multipage-Validierung) Ist die TIFF-Datei gemäss Konfigurationsdatei
+/** Validierungsschritt F (Multipage-Validierung) Ist die TIFF-Datei gemï¿½ss Konfigurationsdatei
  * valid?
  * 
  * @author Rc Claire Roethlisberger, KOST-CECO */
@@ -68,6 +68,11 @@ public class ValidationFmultipageValidationModuleImpl extends ValidationModuleIm
 		 * ref="configurationService" /> */
 
 		String mp = getConfigurationService().getAllowedMultipage();
+		if ( mp.startsWith( "Configuration-Error:" ) ) {
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_F_TIFF ) + mp );
+			return false;
+		}
 		// 0=Singelpage / 1=Multipage
 
 		Integer exiftoolio = 0;
@@ -81,7 +86,7 @@ public class ValidationFmultipageValidationModuleImpl extends ValidationModuleIm
 				String line;
 				while ( (line = in.readLine()) != null ) {
 
-					// Number und IFD: enthalten auch Exif Einträge. Ensprechend muss "Type: TIFF" gezählt
+					// Number und IFD: enthalten auch Exif Eintrï¿½ge. Ensprechend muss "Type: TIFF" gezï¿½hlt
 					// werden
 					if ( line.contains( "Compression: " ) ) {
 						exiftoolio = 1;

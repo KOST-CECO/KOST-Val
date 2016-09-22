@@ -103,6 +103,11 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 		Integer pdfaVer1 = 0;
 		Integer pdfaVer2 = 0;
 
+		File outputLog = directoryOfLogfile;
+		String pathToPdftronOutput = outputLog.getAbsolutePath();
+
+		File reportPdftron = new File( pathToPdftronOutput, "PDFTron.xml" );
+
 		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
 		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
 		 * ref="configurationService" /> */
@@ -288,11 +293,9 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 				} else {
 					// Droid-Erkennung, damit Details ausgegeben werden können
 					String nameOfSignature = getConfigurationService().getPathToDroidSignatureFile();
-					if ( nameOfSignature == null ) {
+					if ( nameOfSignature.startsWith( "Configuration-Error:" ) ) {
 						getMessageService().logError(
-								getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-										+ getTextResourceService().getText(
-												MESSAGE_XML_CONFIGURATION_ERROR_NO_SIGNATURE ) );
+								getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA ) + nameOfSignature );
 						read.close();
 						return false;
 					}
@@ -367,6 +370,22 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
 		 * ref="configurationService" /> */
 
+		if ( pathToPdftronExe.startsWith( "Configuration-Error:" ) ) {
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA ) + pathToPdftronExe );
+			return false;
+		}
+		if ( producerFirstValidator.startsWith( "Configuration-Error:" ) ) {
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA ) + producerFirstValidator );
+			return false;
+		}
+		if ( dualValidation.startsWith( "Configuration-Error:" ) ) {
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA ) + dualValidation );
+			return false;
+		}
+
 		if ( dualValidation.contentEquals( "dual" ) ) {
 			// Duale Validierung gewünscht
 			dual = true;
@@ -402,21 +421,21 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 
 			// TODO: Erledigt Start mit PDFTron
 			if ( producerFirstValidator.contentEquals( "PDFTron" ) ) {
+				// Pfad zum Programm Pdftron
+				File pdftronExe = new File( pathToPdftronExe );
+
+				if ( !reportPdftron.exists() ) {
+				}
 				// zuerst mit PDFTron und danach ggf mit PDFTools
 				File report;
 				Document doc = null;
 
 				try {
-
-					// Pfad zum Programm Pdftron
-					File pdftronExe = new File( pathToPdftronExe );
-					File output = directoryOfLogfile;
-					String pathToPdftronOutput = output.getAbsolutePath();
 					StringBuffer command = new StringBuffer( pdftronExe + " " );
 					command.append( "-l " + level );
 					command.append( " -o " );
 					command.append( "\"" );
-					command.append( output.getAbsolutePath() );
+					command.append( outputLog.getAbsolutePath() );
 					command.append( "\"" );
 					command.append( " " );
 					command.append( "\"" );
@@ -482,13 +501,18 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 
 					Integer passCount = new Integer( 0 );
 					NodeList nodeLstI = doc.getElementsByTagName( "Pass" );
-
-					// Valide pdfa-Dokumente enthalten "<Validation> <Pass FileName..." Anzahl pass = anzahl
-					// Valider pdfa
 					for ( int s = 0; s < nodeLstI.getLength(); s++ ) {
-						passCount = passCount + 1;
-						// Valide PDFA-Datei Module A-J sind Valid
-						isValid = true;
+						// <Pass FileName="Name" FileNameAndPath="Pfad\Name"></Pass>
+						/* System.out.println( nodeLstI.item( s ).getAttributes().getNamedItem(
+						 * "FileNameAndPath" ) .getNodeValue() + " = " + valDatei.getAbsolutePath() ); */
+						if ( nodeLstI.item( s ).getAttributes().getNamedItem( "FileNameAndPath" )
+								.getNodeValue().equals( valDatei.getAbsolutePath() ) ) {
+							passCount = passCount + 1;
+							// Valide PDFA-Datei Module A-J sind Valid
+							isValid = true;
+							break;
+						}
+
 					}
 
 					if ( passCount == 0 ) {
@@ -746,7 +770,6 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 							// Pfad zum Programm Pdftron
 							File pdftronExe = new File( pathToPdftronExe );
 							File output = directoryOfLogfile;
-							String pathToPdftronOutput = output.getAbsolutePath();
 							StringBuffer command = new StringBuffer( pdftronExe + " " );
 							command.append( "-l " + level );
 							command.append( " -o " );
@@ -858,6 +881,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 			}
 
 			// TODO: Erledigt: Fehler Auswertung
+
 
 			if ( !isValid ) {
 				// Invalide PDFA-Datei

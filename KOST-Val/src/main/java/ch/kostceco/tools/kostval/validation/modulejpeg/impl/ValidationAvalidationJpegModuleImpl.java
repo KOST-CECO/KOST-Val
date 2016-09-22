@@ -116,16 +116,14 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl im
 					/* höchstwahrscheinlich ein JPEG da es mit FFD8FF respektive ÿØÿ beginnt */
 				} else {
 					// Droid-Erkennung, damit Details ausgegeben werden können
-					String nameOfSignature = getConfigurationService().getPathToDroidSignatureFile();
+
 					/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
 					 * entsprechenden Modul die property anzugeben: <property name="configurationService"
 					 * ref="configurationService" /> */
-
-					if ( nameOfSignature == null ) {
+					String nameOfSignature = getConfigurationService().getPathToDroidSignatureFile();
+					if ( nameOfSignature.startsWith( "Configuration-Error:" ) ) {
 						getMessageService().logError(
-								getTextResourceService().getText( MESSAGE_XML_MODUL_A_JPEG )
-										+ getTextResourceService().getText(
-												MESSAGE_XML_CONFIGURATION_ERROR_NO_SIGNATURE ) );
+								getTextResourceService().getText( MESSAGE_XML_MODUL_A_JPEG ) + nameOfSignature );
 						read.close();
 						return false;
 					}

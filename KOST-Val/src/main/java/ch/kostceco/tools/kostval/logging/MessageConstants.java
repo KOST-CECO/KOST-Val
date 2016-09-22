@@ -47,6 +47,7 @@ public interface MessageConstants
 
 	// Globale Meldungen
 	String	MESSAGE_XML_SUMMARY_3C												= "message.xml.summary.3c";
+	String	MESSAGE_XML_SUMMARY_FORMAT										= "message.xml.summary.format";
 	String	MESSAGE_XML_SUMMARY														= "message.xml.summary";
 	String	MESSAGE_XML_VALFILE														= "message.xml.valfile";
 	String	MESSAGE_XML_HEADER														= "message.xml.header";
@@ -72,6 +73,8 @@ public interface MessageConstants
 	String	MESSAGE_XML_VALERGEBNIS_INVALID								= "message.xml.valergebnis.invalid";
 	String	MESSAGE_XML_VALERGEBNIS_CLOSE									= "message.xml.valergebnis.close";
 	String	MESSAGE_XML_LOG																= "message.xml.log";
+	String	MESSAGE_FORMATVALIDATION_DONE									= "message.formatvalidation.done";
+	String	MESSAGE_SIPVALIDATION_DONE										= "message.sipvalidation.done";
 
 	String	MESSAGE_XML_MODUL_A_TIFF											= "message.xml.modul.a.tiff";
 	String	MESSAGE_XML_MODUL_B_TIFF											= "message.xml.modul.b.tiff";

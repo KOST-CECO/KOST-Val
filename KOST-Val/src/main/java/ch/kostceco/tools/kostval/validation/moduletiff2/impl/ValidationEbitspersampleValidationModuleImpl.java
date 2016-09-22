@@ -28,7 +28,7 @@ import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationEbitspersampleValidationModule;
 
-/** Validierungsschritt E (BitsPerSample-Validierung) Ist die TIFF-Datei gemäss Konfigurationsdatei
+/** Validierungsschritt E (BitsPerSample-Validierung) Ist die TIFF-Datei gemï¿½ss Konfigurationsdatei
  * valid?
  * 
  * @author Rc Claire Roethlisberger, KOST-CECO */
@@ -74,6 +74,37 @@ public class ValidationEbitspersampleValidationModuleImpl extends ValidationModu
 		String bps16 = getConfigurationService().getAllowedBitspersample16();
 		String bps32 = getConfigurationService().getAllowedBitspersample32();
 
+		if ( bps1.startsWith( "Configuration-Error:" ) ) {
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_E_TIFF ) + bps1 );
+			return false;
+		}
+		if ( bps2.startsWith( "Configuration-Error:" ) ) {
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_E_TIFF ) + bps2 );
+			return false;
+		}
+		if ( bps4.startsWith( "Configuration-Error:" ) ) {
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_E_TIFF ) + bps4 );
+			return false;
+		}
+		if ( bps8.startsWith( "Configuration-Error:" ) ) {
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_E_TIFF ) + bps8 );
+			return false;
+		}
+		if ( bps16.startsWith( "Configuration-Error:" ) ) {
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_E_TIFF ) + bps16 );
+			return false;
+		}
+		if ( bps32.startsWith( "Configuration-Error:" ) ) {
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_E_TIFF ) + bps32 );
+			return false;
+		}
+
 		Integer exiftoolio = 0;
 		String oldErrorLine = "";
 
@@ -81,7 +112,7 @@ public class ValidationEbitspersampleValidationModuleImpl extends ValidationModu
 			BufferedReader in = new BufferedReader( new FileReader( exiftoolReport ) );
 			String line;
 			while ( (line = in.readLine()) != null ) {
-				/* zu analysierende TIFF-IFD-Zeile die BitsPerSample-Zeile enthält einer dieser Freitexte
+				/* zu analysierende TIFF-IFD-Zeile die BitsPerSample-Zeile enthï¿½lt einer dieser Freitexte
 				 * der BitsPerSampleart max ist 1, 2, 4, 8, 16, 32 erlaubt
 				 * 
 				 * Varianten: BitsPerSample: 8 BitsPerSample: 8 8 8 BitsPerSample: 8, 8, 8 evtl noch mehr */

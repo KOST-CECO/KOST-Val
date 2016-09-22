@@ -54,6 +54,10 @@ public class Validation1bFolderStructureModuleImpl extends ValidationModuleImpl 
 		 * ref="configurationService" /> */
 		if ( onWork.equals( "no" ) ) {
 			// keine Ausgabe
+		} else if ( onWork.startsWith( "Configuration-Error:" ) ) {
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_Ab_SIP ) + onWork );
+			return false;
 		} else {
 			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
 			System.out.print( "1B   " );

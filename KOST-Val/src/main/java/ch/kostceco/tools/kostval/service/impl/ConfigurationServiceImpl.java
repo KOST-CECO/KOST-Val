@@ -96,7 +96,8 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String value = (String) prop;
 			return value;
 		}
-		return null;
+		String error = "Configuration-Error: Missing pathtoworkdir";
+		return error;
 	}
 
 	@Override
@@ -110,7 +111,8 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String value = (String) prop;
 			return value;
 		}
-		return null;
+		String error = "Configuration-Error: Missing pathtologfile";
+		return error;
 	}
 
 	@Override
@@ -124,7 +126,8 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String value = (String) prop;
 			return value;
 		}
-		return null;
+		String error = "Configuration-Error: Missing pathtodiagnose";
+		return error;
 	}
 
 	@Override
@@ -136,9 +139,10 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String value = (String) prop;
 			return value;
 		}
-		return null;
+		String error = "Configuration-Error: Missing pathtojhoveconfig";
+		return error;
 	}
-	
+
 	@Override
 	public String getShowProgressOnWork()
 	{
@@ -148,9 +152,9 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String value = (String) prop;
 			return value;
 		}
-		return null;
+		String error = "Configuration-Error: Missing showprogressonwork";
+		return error;
 	}
-
 
 	/*--- PDF/A ---------------------------------------------------------------------*/
 	@Override
@@ -162,7 +166,8 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String value = (String) prop;
 			return value;
 		}
-		return null;
+		String error = "Configuration-Error: Missing pdfa.pdfavalidation";
+		return error;
 	}
 
 	@Override
@@ -174,7 +179,8 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String value = (String) prop;
 			return value;
 		}
-		return null;
+		String error = "Configuration-Error: Missing pdfa.pathtopdftronexe";
+		return error;
 	}
 
 	@Override
@@ -186,7 +192,8 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String value = (String) prop;
 			return value;
 		}
-		return null;
+		String error = "Configuration-Error: Missing pdfa.pdfa1";
+		return error;
 	}
 
 	@Override
@@ -198,7 +205,8 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String value = (String) prop;
 			return value;
 		}
-		return null;
+		String error = "Configuration-Error: Missing pdfa.pdfa2";
+		return error;
 	}
 
 	@Override
@@ -210,7 +218,8 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String value = (String) prop;
 			return value;
 		}
-		return null;
+		String error = "Configuration-Error: Missing pdfa.firstvalidator";
+		return error;
 	}
 
 	@Override
@@ -222,7 +231,8 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String value = (String) prop;
 			return value;
 		}
-		return null;
+		String error = "Configuration-Error: Missing pdfa.dualvalidation";
+		return error;
 	}
 
 	@Override
@@ -234,7 +244,8 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String value = (String) prop;
 			return value;
 		}
-		return null;
+		String error = "Configuration-Error: Missing pdfa.pdfaimage";
+		return error;
 	}
 
 	@Override
@@ -246,7 +257,8 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String value = (String) prop;
 			return value;
 		}
-		return null;
+		String error = "Configuration-Error: Missing pdfa.jbig2allowed";
+		return error;
 	}
 
 	/*--- SIARD ---------------------------------------------------------------------*/
@@ -259,7 +271,8 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String value = (String) prop;
 			return value;
 		}
-		return null;
+		String error = "Configuration-Error: Missing siard.siardvalidation";
+		return error;
 	}
 
 	@Override
@@ -271,7 +284,8 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String value = (String) prop;
 			return value;
 		}
-		return null;
+		String error = "Configuration-Error: Missing siard.frowvalidation";
+		return error;
 	}
 
 	@Override
@@ -305,7 +319,8 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String value = (String) prop;
 			return value;
 		}
-		return null;
+		String error = "Configuration-Error: Missing jp2.jp2validation";
+		return error;
 	}
 
 	/*--- JPEG ---------------------------------------------------------------------*/
@@ -318,7 +333,8 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String value = (String) prop;
 			return value;
 		}
-		return null;
+		String error = "Configuration-Error: Missing jpeg.jpegvalidation";
+		return error;
 	}
 
 	/*--- SIP ---------------------------------------------------------------------*/
@@ -348,7 +364,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			Integer intValue = new Integer( value );
 			return intValue;
 		}
-		return null;
+		return 99999;
 	}
 
 	@Override
@@ -360,7 +376,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			Integer intValue = new Integer( value );
 			return intValue;
 		}
-		return null;
+		return 99999;
 	}
 
 	@Override
@@ -372,7 +388,8 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String stringValue = new String( value );
 			return stringValue;
 		}
-		return null;
+		String error = "Configuration-Error: Missing sip.allowedversionbar1";
+		return error;
 	}
 
 	@Override
@@ -384,7 +401,8 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String stringValue = new String( value );
 			return stringValue;
 		}
-		return null;
+		String error = "Configuration-Error: Missing sip.allowedversionbar4ech1";
+		return error;
 	}
 
 	/** Die Einschränkung des SIP-Namen ist konfigurierbar -> getAllowedSipName */
@@ -399,7 +417,8 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ac_SIP )
 					+ getTextResourceService().getText( MESSAGE_XML_AC_INVALIDREGEX ) );
 		}
-		return null;
+		String error = "Configuration-Error: Missing sip.allowedsipname";
+		return error;
 	}
 
 	@Override
@@ -410,7 +429,8 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String value = (String) prop;
 			return value;
 		}
-		return null;
+		String error = "Configuration-Error: Missing sip.pathtodroidsignature";
+		return error;
 	}
 
 	/*--- TIFF ---------------------------------------------------------------------*/
@@ -435,7 +455,8 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String value = (String) prop;
 			return value;
 		}
-		return null;
+		String error = "Configuration-Error: Missing tiff.allowedcompression.allowedcompression1";
+		return error;
 	}
 
 	@Override
@@ -446,7 +467,8 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String value = (String) prop;
 			return value;
 		}
-		return null;
+		String error = "Configuration-Error: Missing tiff.allowedcompression.allowedcompression2";
+		return error;
 	}
 
 	@Override
@@ -457,7 +479,8 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String value = (String) prop;
 			return value;
 		}
-		return null;
+		String error = "Configuration-Error: Missing tiff.allowedcompression.allowedcompression3";
+		return error;
 	}
 
 	@Override
@@ -468,7 +491,8 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String value = (String) prop;
 			return value;
 		}
-		return null;
+		String error = "Configuration-Error: Missing tiff.allowedcompression.allowedcompression4";
+		return error;
 	}
 
 	@Override
@@ -479,7 +503,8 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String value = (String) prop;
 			return value;
 		}
-		return null;
+		String error = "Configuration-Error: Missing tiff.allowedcompression.allowedcompression5";
+		return error;
 	}
 
 	@Override
@@ -490,7 +515,8 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String value = (String) prop;
 			return value;
 		}
-		return null;
+		String error = "Configuration-Error: Missing tiff.allowedcompression.allowedcompression7";
+		return error;
 	}
 
 	@Override
@@ -501,7 +527,8 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String value = (String) prop;
 			return value;
 		}
-		return null;
+		String error = "Configuration-Error: Missing tiff.allowedcompression.allowedcompression8";
+		return error;
 	}
 
 	@Override
@@ -512,7 +539,8 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String value = (String) prop;
 			return value;
 		}
-		return null;
+		String error = "Configuration-Error: Missing tiff.allowedcompression.allowedcompression32773";
+		return error;
 	}
 
 	// AllowedPhotointer
@@ -524,7 +552,8 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String value = (String) prop;
 			return value;
 		}
-		return null;
+		String error = "Configuration-Error: Missing tiff.allowedphotointer.allowedphotointer0";
+		return error;
 	}
 
 	@Override
@@ -535,7 +564,8 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String value = (String) prop;
 			return value;
 		}
-		return null;
+		String error = "Configuration-Error: Missing tiff.allowedphotointer.allowedphotointer1";
+		return error;
 	}
 
 	@Override
@@ -546,7 +576,8 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String value = (String) prop;
 			return value;
 		}
-		return null;
+		String error = "Configuration-Error: Missing tiff.allowedphotointer.allowedphotointer2";
+		return error;
 	}
 
 	@Override
@@ -557,7 +588,8 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String value = (String) prop;
 			return value;
 		}
-		return null;
+		String error = "Configuration-Error: Missing tiff.allowedphotointer.allowedphotointer3";
+		return error;
 	}
 
 	@Override
@@ -568,7 +600,8 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String value = (String) prop;
 			return value;
 		}
-		return null;
+		String error = "Configuration-Error: Missing tiff.allowedphotointer.allowedphotointer4";
+		return error;
 	}
 
 	@Override
@@ -579,7 +612,8 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String value = (String) prop;
 			return value;
 		}
-		return null;
+		String error = "Configuration-Error: Missing tiff.allowedphotointer.allowedphotointer5";
+		return error;
 	}
 
 	@Override
@@ -590,7 +624,8 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String value = (String) prop;
 			return value;
 		}
-		return null;
+		String error = "Configuration-Error: Missing tiff.allowedphotointer.allowedphotointer6";
+		return error;
 	}
 
 	@Override
@@ -601,7 +636,8 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String value = (String) prop;
 			return value;
 		}
-		return null;
+		String error = "Configuration-Error: Missing tiff.allowedphotointer.allowedphotointer8";
+		return error;
 	}
 
 	// AllowedBitspersample
@@ -613,7 +649,8 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String value = (String) prop;
 			return value;
 		}
-		return null;
+		String error = "Configuration-Error: Missing tiff.allowedbitspersample.allowedbitspersample1";
+		return error;
 	}
 
 	@Override
@@ -624,7 +661,8 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String value = (String) prop;
 			return value;
 		}
-		return null;
+		String error = "Configuration-Error: Missing tiff.allowedbitspersample.allowedbitspersample2";
+		return error;
 	}
 
 	@Override
@@ -635,7 +673,8 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String value = (String) prop;
 			return value;
 		}
-		return null;
+		String error = "Configuration-Error: Missing tiff.allowedbitspersample.allowedbitspersample4";
+		return error;
 	}
 
 	@Override
@@ -646,7 +685,8 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String value = (String) prop;
 			return value;
 		}
-		return null;
+		String error = "Configuration-Error: Missing tiff.allowedbitspersample.allowedbitspersample8";
+		return error;
 	}
 
 	@Override
@@ -657,7 +697,8 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String value = (String) prop;
 			return value;
 		}
-		return null;
+		String error = "Configuration-Error: Missing tiff.allowedbitspersample.allowedbitspersample16";
+		return error;
 	}
 
 	@Override
@@ -668,7 +709,8 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String value = (String) prop;
 			return value;
 		}
-		return null;
+		String error = "Configuration-Error: Missing tiff.allowedbitspersample.allowedbitspersample32";
+		return error;
 	}
 
 	// AllowedMultipage
@@ -680,7 +722,8 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String value = (String) prop;
 			return value;
 		}
-		return null;
+		String error = "Configuration-Error: Missing tiff.allowedother.allowedmultipage";
+		return error;
 	}
 
 	// AllowedTiles
@@ -692,7 +735,8 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String value = (String) prop;
 			return value;
 		}
-		return null;
+		String error = "Configuration-Error: Missing tiff.allowedother.allowedtiles";
+		return error;
 	}
 
 	// AllowedSize
@@ -704,6 +748,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String value = (String) prop;
 			return value;
 		}
-		return null;
+		String error = "Configuration-Error: Missing tiff.allowedother.allowedsize";
+		return error;
 	}
 }

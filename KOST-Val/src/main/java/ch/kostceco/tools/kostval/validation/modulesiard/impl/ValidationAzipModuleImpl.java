@@ -64,6 +64,10 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 		 * ref="configurationService" /> */
 		if ( onWork.equals( "no" ) ) {
 			// keine Ausgabe
+		} else if ( onWork.startsWith( "Configuration-Error:" ) ) {
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_A_SIARD ) + onWork );
+			return false;
 		} else {
 			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
 			System.out.print( "A    " );

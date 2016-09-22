@@ -74,7 +74,7 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl imple
 
 		// Start mit der Erkennung
 
-		// Eine JP2 Datei (.jp2) muss mit ....jP ..‡.ftypjp2
+		// Eine JP2 Datei (.jp2) muss mit ....jP ..ï¿½.ftypjp2
 		// [0000000c6a5020200d0a870a] beginnen
 		if ( valDatei.isDirectory() ) {
 			getMessageService().logError(
@@ -140,16 +140,18 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl imple
 				char[] charArray2 = new char[] { c1, c1, c1, c2, c3, c4, c5, c5, c6, c7 };
 
 				if ( Arrays.equals( charArray1, charArray2 ) ) {
-					/* höchstwahrscheinlich ein JP2 da es mit 0000000c6a5020200d0a respektive ....jP ..‡
+					/* hÃ¶chstwahrscheinlich ein JP2 da es mit 0000000c6a5020200d0a respektive ....jP ..ï¿½
 					 * beginnt */
 				} else {
-					// Droid-Erkennung, damit Details ausgegeben werden können
+					// Droid-Erkennung, damit Details ausgegeben werden kÃ¶nnen
+
+					/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
+					 * entsprechenden Modul die property anzugeben: <property name="configurationService"
+					 * ref="configurationService" /> */
 					String nameOfSignature = getConfigurationService().getPathToDroidSignatureFile();
-					if ( nameOfSignature == null ) {
+					if ( nameOfSignature.startsWith( "Configuration-Error:" ) ) {
 						getMessageService().logError(
-								getTextResourceService().getText( MESSAGE_XML_MODUL_A_JP2 )
-										+ getTextResourceService().getText(
-												MESSAGE_XML_CONFIGURATION_ERROR_NO_SIGNATURE ) );
+								getTextResourceService().getText( MESSAGE_XML_MODUL_A_JP2 ) + nameOfSignature );
 						read.close();
 						return false;
 					}
@@ -166,8 +168,8 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl imple
 					Droid droid = null;
 					try {
 						/* kleiner Hack, weil die Droid libraries irgendwo ein System.out drin haben, welche den
-						 * Output stören Util.switchOffConsole() als Kommentar markieren wenn man die
-						 * Fehlermeldung erhalten möchte */
+						 * Output stÃ¶ren Util.switchOffConsole() als Kommentar markieren wenn man die
+						 * Fehlermeldung erhalten mÃ¶chte */
 						Util.switchOffConsole();
 						droid = new Droid();
 
@@ -243,13 +245,13 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl imple
 				try {
 					report = output;
 
-					// falls das File bereits existiert, z.B. von einem vorhergehenden Durchlauf, löschen wir
+					// falls das File bereits existiert, z.B. von einem vorhergehenden Durchlauf, lÃ¶schen wir
 					// es
 					if ( report.exists() ) {
 						report.delete();
 					}
 
-					/* Das redirect Zeichen verunmöglicht eine direkte eingabe. mit dem geschachtellten Befehl
+					/* Das redirect Zeichen verunmÃ¶glicht eine direkte eingabe. mit dem geschachtellten Befehl
 					 * gehts: cmd /c\"urspruenlicher Befehl\" */
 					String command = "cmd /c \"" + pathToJpylyzerExe + " \"" + valDatei.getAbsolutePath()
 							+ "\" > \"" + output.getAbsolutePath() + "\"\"";
@@ -282,7 +284,7 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl imple
 					return false;
 				}
 
-				// Ende Jpylyzer direkt auszulösen
+				// Ende Jpylyzer direkt auszulÃ¶sen
 
 				// TODO: Erledigt - Ergebnis auslesen
 
@@ -295,7 +297,7 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl imple
 
 				NodeList nodeLstI = doc.getElementsByTagName( "isValidJP2" );
 
-				// Node isValidJP2 enthält im TextNode das Resultat TextNode ist ein ChildNode
+				// Node isValidJP2 enthÃ¤lt im TextNode das Resultat TextNode ist ein ChildNode
 				for ( int s = 0; s < nodeLstI.getLength(); s++ ) {
 					Node resultNode = nodeLstI.item( s );
 					StringBuffer buf = new StringBuffer();
@@ -384,7 +386,7 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl imple
 
 				NodeList nodeLstTest = doc.getElementsByTagName( "tests" );
 
-				// Node test enthält alle invaliden tests
+				// Node test enthÃ¤lt alle invaliden tests
 				for ( int s = 0; s < nodeLstTest.getLength(); s++ ) {
 					Node testNode = nodeLstTest.item( s );
 					NodeList children = testNode.getChildNodes();

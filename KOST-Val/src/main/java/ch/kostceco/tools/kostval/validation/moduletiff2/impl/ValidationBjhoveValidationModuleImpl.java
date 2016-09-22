@@ -81,6 +81,11 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl i
 		File jhoveReport = null;
 		StringBuffer concatenatedOutputs = new StringBuffer();
 		String pathToJhoveConfig = getConfigurationService().getPathToJhoveConfiguration();
+		if ( pathToJhoveConfig.startsWith( "Configuration-Error:" ) ) {
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_B_TIFF ) + pathToJhoveConfig );
+			return false;
+		}
 		String pathToWorkDir = getConfigurationService().getPathToWorkDir();
 
 		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim

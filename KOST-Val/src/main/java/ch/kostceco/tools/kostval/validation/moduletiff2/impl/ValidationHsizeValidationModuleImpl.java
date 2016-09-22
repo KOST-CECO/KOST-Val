@@ -68,6 +68,11 @@ public class ValidationHsizeValidationModuleImpl extends ValidationModuleImpl im
 		 * ref="configurationService" /> */
 
 		String size = getConfigurationService().getAllowedSize();
+		if ( size.startsWith( "Configuration-Error:" ) ) {
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_H_TIFF ) + size );
+			return false;
+		}
 
 		Integer exiftoolio = 0;
 
@@ -80,7 +85,7 @@ public class ValidationHsizeValidationModuleImpl extends ValidationModuleImpl im
 				String line;
 				while ( (line = in.readLine()) != null ) {
 					if ( line.contains( "FileSize: " ) ) {
-						System.out.print( line + " " );
+						// System.out.print( line + " " );
 						exiftoolio = 1;
 						Integer intSize = line.toCharArray().length;
 						if ( line.contains( "byte" ) || line.contains( "kB" ) ) {

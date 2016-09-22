@@ -28,7 +28,7 @@ import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationGtilesValidationModule;
 
-/** Validierungsschritt G (Kacheln-Validierung) Ist die TIFF-Datei gemäss Konfigurationsdatei valid?
+/** Validierungsschritt G (Kacheln-Validierung) Ist die TIFF-Datei gemï¿½ss Konfigurationsdatei valid?
  * 
  * @author Rc Claire Roethlisberger, KOST-CECO */
 
@@ -67,6 +67,11 @@ public class ValidationGtilesValidationModuleImpl extends ValidationModuleImpl i
 		 * ref="configurationService" /> */
 
 		String tiles = getConfigurationService().getAllowedTiles();
+		if ( tiles.startsWith( "Configuration-Error:" ) ) {
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_G_TIFF ) + tiles );
+			return false;
+		}
 
 		Integer exiftoolio = 0;
 		String oldErrorLine = "";
@@ -79,7 +84,7 @@ public class ValidationGtilesValidationModuleImpl extends ValidationModuleImpl i
 				String line;
 				while ( (line = in.readLine()) != null ) {
 					/* zu analysierende TIFF-IFD-Zeile die StripOffsets- oder TileOffsets-Zeile gibt Auskunft
-					 * über die Aufteilungsart
+					 * ï¿½ber die Aufteilungsart
 					 * 
 					 * -StripByteCounts -RowsPerStrip -FileSize -Orientation -TileWidth -TileLength -TileDepth */
 					if ( line.contains( "StripByteCounts: " ) || line.contains( "RowsPerStrip: " )

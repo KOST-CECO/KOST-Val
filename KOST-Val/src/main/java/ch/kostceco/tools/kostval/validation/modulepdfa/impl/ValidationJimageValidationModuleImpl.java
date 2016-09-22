@@ -98,7 +98,17 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl i
 
 		// Optionale Bildvalidierung eingeschaltet?
 		String pdfaImage = getConfigurationService().pdfaimage();
+		if ( pdfaImage.startsWith( "Configuration-Error:" ) ) {
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA ) + pdfaImage );
+			return false;
+		}
 		String jbig2Allowed = getConfigurationService().jbig2allowed();
+		if ( jbig2Allowed.startsWith( "Configuration-Error:" ) ) {
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA ) + jbig2Allowed );
+			return false;
+		}
 		if ( jbig2Allowed.equalsIgnoreCase( "yes" ) ) {
 			// JBIG2 ist erlaubt
 			isAllowedJBIG2 = true;
@@ -293,7 +303,7 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl i
 											// Warnung abfangen
 											if ( msg.startsWith( "Unsupported Image Type" ) ) {
 												// Unsupported Image Type => ERROR_XML_A_UNS_IMAGE, msg
-												
+
 												// nur Warnung, könnte valide sein
 											} else {
 												// invalide
