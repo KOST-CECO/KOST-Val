@@ -142,7 +142,9 @@ public class KOSTVal implements MessageConstants
 					.println( kostval.getTextResourceService().getText( ERROR_LOGDIRECTORY_NODIRECTORY ) );
 			System.exit( 1 );
 		}
-		File pdftronReport = new File( pathToLogfile,"PDFTron.xml" );
+		File pdftronReport = new File( pathToLogfile, "PDFTron.xml" );
+		File pdftronReportXsl = new File( pathToLogfile, "report.xsl");
+		
 
 		if ( pdftronReport.exists() ) {
 			Util.deleteFile( pdftronReport );
@@ -157,6 +159,7 @@ public class KOSTVal implements MessageConstants
 		File valDatei = new File( args[1] );
 		File logDatei = null;
 		logDatei = valDatei;
+		File logDirValDatei = new File( pathToLogfile, valDatei.getName()  );
 
 		// Informationen zum Arbeitsverzeichnis holen
 		String pathToWorkDir = kostval.getConfigurationService().getPathToWorkDir();
@@ -541,6 +544,22 @@ public class KOSTVal implements MessageConstants
 			} else {
 				// TODO: Formatvalidierung über ein Ordner --> erledigt --> nur Marker
 				try {
+					/* PDFTron über content durchführen. Performance optimierung */
+					String firstValidator = kostval.getConfigurationService().firstValidator();
+					if ( firstValidator.startsWith( "Configuration-Error:" ) ) {
+						LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_MODUL_Ab_SIP )
+								+ firstValidator );
+						System.out.println( kostval.getTextResourceService().getText( MESSAGE_XML_MODUL_Ab_SIP )
+								+ firstValidator );
+						System.exit( 1 );
+					}
+
+					if ( firstValidator.equalsIgnoreCase( "PDFTron" ) ) {
+						Controllerpdfa controller3 = (Controllerpdfa) context.getBean( "controllerpdfa" );
+						@SuppressWarnings("unused")
+						boolean okPdftron = controller3.executePdftron( valDatei, directoryOfLogfile );
+					}
+
 					Map<String, File> fileMap = Util.getFileMap( valDatei, false );
 					Set<String> fileMapKeys = fileMap.keySet();
 					for ( Iterator<String> iterator = fileMapKeys.iterator(); iterator.hasNext(); ) {
@@ -712,31 +731,27 @@ public class KOSTVal implements MessageConstants
 
 				countSummaryNio = pdfaCountNio + siardCountNio + tiffCountNio + jp2CountNio + jpegCountNio;
 				countSummaryIo = pdfaCountIo + siardCountIo + tiffCountIo + jp2CountIo + jpegCountIo;
-				
+
 				/* Summary über Formatvaliderung herausgeben analog 3c.
 				 * 
 				 * message.xml.summary.3c = <Message>Von den {0} Dateien sind {1} ({4}%) valid, {2} ({5}%)
 				 * invalid und {3} ({6}%) wurden nicht validiert.</Message></Error>
 				 * 
-				 * countNio=3
-				 * count=0
-				 * countSummaryIo=1
-				 *  countSummaryNio=2
+				 * countNio=3 count=0 countSummaryIo=1 countSummaryNio=2
 				 * 
 				 * diese meldung einfach noch mit info einfassen. */
 
 				float countSummaryIoP = 100 / (float) count * (float) countSummaryIo;
 				float countSummaryNioP = 100 / (float) count * (float) countSummaryNio;
 				float countNioP = 100 / (float) count * (float) countNio;
-				String summaryFormat = kostval.getTextResourceService()
-						.getText( MESSAGE_XML_SUMMARY_FORMAT, count, countSummaryIo, countSummaryNio, countNio,
-								countSummaryIoP, countSummaryNioP, countNioP );
-				String newFormat= "<Format><Info><Message>"
-						+ summaryFormat+ "</Message></Info>";
+				String summaryFormat = kostval.getTextResourceService().getText(
+						MESSAGE_XML_SUMMARY_FORMAT, count, countSummaryIo, countSummaryNio, countNio,
+						countSummaryIoP, countSummaryNioP, countNioP );
+				String newFormat = "<Format><Info><Message>" + summaryFormat + "</Message></Info>";
 				Util.oldnewstring( "<Format>", newFormat, logFile );
 
-				System.out.println( kostval.getTextResourceService()
-						.getText( MESSAGE_FORMATVALIDATION_DONE, summaryFormat, logFile.getAbsolutePath() ));
+				System.out.println( kostval.getTextResourceService().getText(
+						MESSAGE_FORMATVALIDATION_DONE, summaryFormat, logFile.getAbsolutePath() ) );
 
 				// Die Konfiguration hereinkopieren
 				try {
@@ -776,7 +791,9 @@ public class KOSTVal implements MessageConstants
 				System.out.print( "\r" );
 
 				Util.deleteFile( pdftronReport );
-				
+				Util.deleteFile( pdftronReportXsl );
+				Util.deleteDir( logDirValDatei );
+
 				if ( countNio.equals( count ) ) {
 					// keine Dateien Validiert bestehendes Workverzeichnis ggf. löschen
 					if ( tmpDir.exists() ) {
@@ -1115,6 +1132,22 @@ public class KOSTVal implements MessageConstants
 				int ods = 0;
 				int odp = 0;
 				int other = 0;
+				
+				/* PDFTron über content durchführen. Performance optimierung */
+				String firstValidator = kostval.getConfigurationService().firstValidator();
+				if ( firstValidator.startsWith( "Configuration-Error:" ) ) {
+					LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_MODUL_Ab_SIP )
+							+ firstValidator );
+					System.out.println( kostval.getTextResourceService().getText( MESSAGE_XML_MODUL_Ab_SIP )
+							+ firstValidator );
+					System.exit( 1 );
+				}
+
+				if ( firstValidator.equalsIgnoreCase( "PDFTron" ) ) {
+					Controllerpdfa controller3 = (Controllerpdfa) context.getBean( "controllerpdfa" );
+					@SuppressWarnings("unused")
+					boolean okPdftron = controller3.executePdftron( valDatei, directoryOfLogfile );
+				}	
 
 				for ( Iterator<String> iterator = fileMapKeys.iterator(); iterator.hasNext(); ) {
 					String entryName = iterator.next();
@@ -1620,12 +1653,14 @@ public class KOSTVal implements MessageConstants
 				}
 				System.out.print( "                                                                    " );
 				System.out.print( "\r" );
-				
-				System.out.println( kostval.getTextResourceService()
-						.getText( MESSAGE_SIPVALIDATION_DONE,  logFile.getAbsolutePath() ));
+
+				System.out.println( kostval.getTextResourceService().getText( MESSAGE_SIPVALIDATION_DONE,
+						logFile.getAbsolutePath() ) );
 
 				Util.deleteFile( pdftronReport );
-				
+				Util.deleteFile( pdftronReportXsl );
+				Util.deleteDir( logDirValDatei );
+
 				if ( ok ) {
 					// bestehendes Workverzeichnis ggf. löschen
 					if ( tmpDir.exists() ) {

@@ -178,6 +178,16 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl i
 			}
 		} else {
 			// keine Bildvalidierung und JBIG2 erlaubt
+			String pathToLogDir = getConfigurationService().getPathToLogfile();
+			File encrypt = new File( pathToLogDir + File.separator + valDatei.getName() + "_encrypt.txt" );
+
+			if ( encrypt.exists() ) {
+				getMessageService().logError(
+						getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
+								+ getTextResourceService().getText( ERROR_XML_J_ENCRYPT ) );
+				valid = false;
+				Util.deleteFile( encrypt );
+			}
 			valid = true;
 		}
 
