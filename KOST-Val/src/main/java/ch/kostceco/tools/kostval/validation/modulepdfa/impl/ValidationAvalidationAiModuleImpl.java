@@ -124,6 +124,31 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 		String pathToWorkDir = pathToLogDir;
 		/* Beim schreiben ins Workverzeichnis trat ab und zu ein fehler auf. entsprechend wird es letzt
 		 * ins logverzeichnis geschrieben */
+
+		boolean moduleJ = false;
+		boolean isAllowedJBIG2 = false;
+
+		// Optionale Bildvalidierung eingeschaltet?
+		String pdfaImage = getConfigurationService().pdfaimage();
+		if ( pdfaImage.startsWith( "Configuration-Error:" ) ) {
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA ) + pdfaImage );
+			return false;
+		}
+		String jbig2Allowed = getConfigurationService().jbig2allowed();
+		if ( jbig2Allowed.startsWith( "Configuration-Error:" ) ) {
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA ) + jbig2Allowed );
+			return false;
+		}
+		if ( jbig2Allowed.equalsIgnoreCase( "yes" ) ) {
+			// JBIG2 ist erlaubt
+			isAllowedJBIG2 = true;
+		}
+		if ( pdfaImage.equalsIgnoreCase( "yes" ) || !isAllowedJBIG2 ) {
+			moduleJ = true;
+		}
+
 		try {
 			pdfDia = new File( pdfDiaPath + File.separator + "PDF-Diagnosedaten.kost-val.xml" );
 			if ( !pdfDia.exists() ) {
@@ -589,14 +614,16 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 								getMessageService().logError(
 										getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
 												+ getTextResourceService().getText( ERROR_XML_A_PDFTOOLS_ENCRYPTED ) );
-								// Encrypt-Fileanlegen, damit in J nicht validiert wird
-								File encrypt = new File( pathToWorkDir + File.separator + valDatei.getName()
-										+ "_encrypt.txt" );
-								if ( !encrypt.exists() ) {
-									try {
-										encrypt.createNewFile();
-									} catch ( IOException e ) {
-										e.printStackTrace();
+								if ( moduleJ ) {
+									// Encrypt-Fileanlegen, damit in J nicht validiert wird
+									File encrypt = new File( pathToWorkDir + File.separator + valDatei.getName()
+											+ "_encrypt.txt" );
+									if ( !encrypt.exists() ) {
+										try {
+											encrypt.createNewFile();
+										} catch ( IOException e ) {
+											e.printStackTrace();
+										}
 									}
 								}
 								return false;
@@ -608,14 +635,16 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 								getMessageService().logError(
 										getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
 												+ getTextResourceService().getText( ERROR_XML_A_PDFTOOLS_ENCRYPTED ) );
-								// Encrypt-Fileanlegen, damit in J nicht validiert wird
-								File encrypt = new File( pathToWorkDir + File.separator + valDatei.getName()
-										+ "_encrypt.txt" );
-								if ( !encrypt.exists() ) {
-									try {
-										encrypt.createNewFile();
-									} catch ( IOException e ) {
-										e.printStackTrace();
+								if ( moduleJ ) {
+									// Encrypt-Fileanlegen, damit in J nicht validiert wird
+									File encrypt = new File( pathToWorkDir + File.separator + valDatei.getName()
+											+ "_encrypt.txt" );
+									if ( !encrypt.exists() ) {
+										try {
+											encrypt.createNewFile();
+										} catch ( IOException e ) {
+											e.printStackTrace();
+										}
 									}
 								}
 								return false;
@@ -727,14 +756,16 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 						getMessageService().logError(
 								getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
 										+ getTextResourceService().getText( ERROR_XML_A_PDFTOOLS_ENCRYPTED ) );
-						// Encrypt-Fileanlegen, damit in J nicht validiert wird
-						File encrypt = new File( pathToWorkDir + File.separator + valDatei.getName()
-								+ "_encrypt.txt" );
-						if ( !encrypt.exists() ) {
-							try {
-								encrypt.createNewFile();
-							} catch ( IOException e ) {
-								e.printStackTrace();
+						if ( moduleJ ) {
+							// Encrypt-Fileanlegen, damit in J nicht validiert wird
+							File encrypt = new File( pathToWorkDir + File.separator + valDatei.getName()
+									+ "_encrypt.txt" );
+							if ( !encrypt.exists() ) {
+								try {
+									encrypt.createNewFile();
+								} catch ( IOException e ) {
+									e.printStackTrace();
+								}
 							}
 						}
 						return false;
@@ -744,14 +775,16 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 						getMessageService().logError(
 								getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
 										+ getTextResourceService().getText( ERROR_XML_A_PDFTOOLS_ENCRYPTED ) );
-						// Encrypt-Fileanlegen, damit in J nicht validiert wird
-						File encrypt = new File( pathToWorkDir + File.separator + valDatei.getName()
-								+ "_encrypt.txt" );
-						if ( !encrypt.exists() ) {
-							try {
-								encrypt.createNewFile();
-							} catch ( IOException e ) {
-								e.printStackTrace();
+						if ( moduleJ ) {
+							// Encrypt-Fileanlegen, damit in J nicht validiert wird
+							File encrypt = new File( pathToWorkDir + File.separator + valDatei.getName()
+									+ "_encrypt.txt" );
+							if ( !encrypt.exists() ) {
+								try {
+									encrypt.createNewFile();
+								} catch ( IOException e ) {
+									e.printStackTrace();
+								}
 							}
 						}
 						return false;
@@ -1128,14 +1161,16 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 					getMessageService().logError(
 							getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
 									+ getTextResourceService().getText( ERROR_XML_AI_2, "iCategory_2" ) );
-					// Encrypt-Fileanlegen, damit in J nicht validiert wird
-					File encrypt = new File( pathToWorkDir + File.separator + valDatei.getName()
-							+ "_encrypt.txt" );
-					if ( !encrypt.exists() ) {
-						try {
-							encrypt.createNewFile();
-						} catch ( IOException e ) {
-							e.printStackTrace();
+					if ( moduleJ ) {
+						// Encrypt-Fileanlegen, damit in J nicht validiert wird
+						File encrypt = new File( pathToWorkDir + File.separator + valDatei.getName()
+								+ "_encrypt.txt" );
+						if ( !encrypt.exists() ) {
+							try {
+								encrypt.createNewFile();
+							} catch ( IOException e ) {
+								e.printStackTrace();
+							}
 						}
 					}
 					return false;
@@ -1170,14 +1205,16 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 						String errorMessage = errorNodeM.getNodeValue();
 						try {
 							if ( errorDigitA.equals( "0" ) ) {
-								// Encrypt-Fileanlegen, damit in J nicht validiert wird
-								File encrypt = new File( pathToWorkDir + File.separator + valDatei.getName()
-										+ "_encrypt.txt" );
-								if ( !encrypt.exists() ) {
-									try {
-										encrypt.createNewFile();
-									} catch ( IOException e ) {
-										e.printStackTrace();
+								if ( moduleJ ) {
+									// Encrypt-Fileanlegen, damit in J nicht validiert wird
+									File encrypt = new File( pathToWorkDir + File.separator + valDatei.getName()
+											+ "_encrypt.txt" );
+									if ( !encrypt.exists() ) {
+										try {
+											encrypt.createNewFile();
+										} catch ( IOException e ) {
+											e.printStackTrace();
+										}
 									}
 								}
 								// Allgemeiner Fehler -> A
@@ -1237,14 +1274,16 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 								getMessageService().logError(
 										getTextResourceService().getText( MESSAGE_XML_MODUL_B_PDFA )
 												+ getTextResourceService().getText( errorCodeMsg, errorCode ) );
-								// Encrypt-Fileanlegen, damit in J nicht validiert wird
-								File encrypt = new File( pathToWorkDir + File.separator + valDatei.getName()
-										+ "_encrypt.txt" );
-								if ( !encrypt.exists() ) {
-									try {
-										encrypt.createNewFile();
-									} catch ( IOException e ) {
-										e.printStackTrace();
+								if ( moduleJ ) {
+									// Encrypt-Fileanlegen, damit in J nicht validiert wird
+									File encrypt = new File( pathToWorkDir + File.separator + valDatei.getName()
+											+ "_encrypt.txt" );
+									if ( !encrypt.exists() ) {
+										try {
+											encrypt.createNewFile();
+										} catch ( IOException e ) {
+											e.printStackTrace();
+										}
 									}
 								}
 							}

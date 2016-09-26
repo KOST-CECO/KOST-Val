@@ -39,7 +39,6 @@ import uk.gov.nationalarchives.droid.core.signature.droid4.Droid;
 import uk.gov.nationalarchives.droid.core.signature.droid4.FileFormatHit;
 import uk.gov.nationalarchives.droid.core.signature.droid4.IdentificationFile;
 import uk.gov.nationalarchives.droid.core.signature.droid4.signaturefile.FileFormat;
-
 import ch.kostceco.tools.kostval.exception.modulejp2.ValidationAjp2validationException;
 import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.util.Util;
@@ -76,6 +75,15 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl imple
 
 		// Eine JP2 Datei (.jp2) muss mit ....jP ..�.ftypjp2
 		// [0000000c6a5020200d0a870a] beginnen
+
+		/* Sicherstellen, dass es ein JP2 und kein JPX ist. Jpylyzer kann nur JP2 und gibt sonst keine
+		 * korrekte Fehlermeldung raus.
+		 * 
+		 * JP2-BOF: 00 00 00 0C 6A 50 20 20 0D 0A 87 0A {4} 66 74 79 70 6A 70 32
+		 * 
+		 * 1 2 3 4 5 6 7 8 9 10 11 12 17 18 19 20 21 22 23
+		 * 
+		 * JPX-BOF: 00 00 00 0C 6A 50 20 20 0D 0A 87 0A {4} 66 74 79 70 6A 70 78 */
 		if ( valDatei.isDirectory() ) {
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_XML_MODUL_A_JP2 )
@@ -89,14 +97,20 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl imple
 				fr = new FileReader( valDatei );
 				BufferedReader read = new BufferedReader( fr );
 
-				// wobei hier nur die ersten 10 Zeichen der Datei ausgelesen werden
+				// wobei hier nur die ersten 23 Zeichen der Datei ausgelesen werden
 				// 1 00 010203
 				// 2 0c 04
-				// 3 6a 05
+				// 3 6a 0521
 				// 4 50 06
 				// 5 20 0708
 				// 6 0d 09
-				// 7 0a 10
+				// 7 0a 1012
+
+				// 9 66 17
+				// 10 74 18
+				// 11 79 19
+				// 12 70 2022
+				// 13 32 23
 
 				// Hex 00 in Char umwandeln
 				String str1 = "00";
@@ -127,6 +141,27 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl imple
 				int i7 = Integer.parseInt( str7, 16 );
 				char c7 = (char) i7;
 
+				// Hex 66 in Char umwandeln
+				String str9 = "66";
+				int i9 = Integer.parseInt( str9, 16 );
+				char c9 = (char) i9;
+				// Hex 74 in Char umwandeln
+				String str10 = "74";
+				int i10 = Integer.parseInt( str10, 16 );
+				char c10 = (char) i10;
+				// Hex 79 in Char umwandeln
+				String str11 = "79";
+				int i11 = Integer.parseInt( str11, 16 );
+				char c11 = (char) i11;
+				// Hex 70 in Char umwandeln
+				String str12 = "70";
+				int i12 = Integer.parseInt( str12, 16 );
+				char c12 = (char) i12;
+				// Hex 32 in Char umwandeln
+				String str13 = "32";
+				int i13 = Integer.parseInt( str13, 16 );
+				char c13 = (char) i13;
+
 				// auslesen der ersten 10 Zeichen der Datei
 				int length;
 				int i;
@@ -142,6 +177,36 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl imple
 				if ( Arrays.equals( charArray1, charArray2 ) ) {
 					/* höchstwahrscheinlich ein JP2 da es mit 0000000c6a5020200d0a respektive ....jP ..�
 					 * beginnt */
+					// System.out.println("es ist ein JP2 oder JPX ");
+
+					// auslesen der ersten 23 Zeiche der Datei
+					FileReader fr23 = new FileReader( valDatei );
+					@SuppressWarnings("resource")
+					BufferedReader read23 = new BufferedReader( fr23 );
+					int length23;
+					int i23;
+					char[] buffer23 = new char[23];
+					length23 = read23.read( buffer23 );
+					for ( i23 = 0; i23 != length23; i23++ )
+						;
+
+					/* die beiden charArrays (soll und ist) mit einander vergleichen IST = c9, c10, c11, c12,
+					 * c3, c12, c13 */
+					char[] charArray3 = buffer23;
+					char[] charArray4 = new char[] { c9, c10, c11, c12, c3, c12, c13 };
+					String stringCharArray3 = String.valueOf( charArray3 );
+					String stringCharArray4 = String.valueOf( charArray4 );
+					if ( stringCharArray3.endsWith( stringCharArray4 ) ) {
+						// System.out.print("es ist ein JP2 (JPEG2000 Part1)");
+					} else {
+						// System.out.print("es ist ein JPX (extended JPEG2000 Part2)");
+						getMessageService().logError(
+								getTextResourceService().getText( MESSAGE_XML_MODUL_A_JP2 )
+										+ getTextResourceService().getText( ERROR_XML_A_JP2_INCORRECTFILE, "JPX" ) );
+						read.close();
+						return false;
+					}
+
 				} else {
 					// Droid-Erkennung, damit Details ausgegeben werden können
 

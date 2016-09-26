@@ -22,11 +22,14 @@ package ch.kostceco.tools.kostval.validation.modulepdfa.impl;
 import static org.apache.commons.io.IOUtils.closeQuietly;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -358,144 +361,267 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl i
 							os.write( image.getImageAsBytes() );
 							os.flush();
 
-							// TODO: JP2 Validierung
+							// Erkennung JP2 oder JPX
+							FileReader fr = null;
 
-							String pathToJpylyzerExe = "resources" + File.separator + "jpylyzer" + File.separator
-									+ "jpylyzer.exe";
+							fr = new FileReader( fl );
+							BufferedReader read = new BufferedReader( fr );
 
-							File fJpylyzerExe = new File( pathToJpylyzerExe );
-							if ( !fJpylyzerExe.exists() ) {
-								getMessageService().logError(
-										getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
-												+ getTextResourceService().getText( ERROR_XML_A_JP2_JPYLYZER_MISSING ) );
-							}
+							// wobei hier nur die ersten 23 Zeichen der Datei ausgelesen werden
+							// 1 00 010203
+							// 2 0c 04
+							// 3 6a 0521
+							// 4 50 06
+							// 5 20 0708
+							// 6 0d 09
+							// 7 0a 1012
 
-							pathToJpylyzerExe = "\"" + pathToJpylyzerExe + "\"";
+							// 9 66 17
+							// 10 74 18
+							// 11 79 19
+							// 12 70 2022
+							// 13 32 23
 
-							try {
-								File report = null;
+							// Hex 00 in Char umwandeln
+							String str1 = "00";
+							int i1 = Integer.parseInt( str1, 16 );
+							char c1 = (char) i1;
+							// Hex 0c in Char umwandeln
+							String str2 = "0c";
+							int i2 = Integer.parseInt( str2, 16 );
+							char c2 = (char) i2;
+							// Hex 6a in Char umwandeln
+							String str3 = "6a";
+							int i3 = Integer.parseInt( str3, 16 );
+							char c3 = (char) i3;
+							// Hex 50 in Char umwandeln
+							String str4 = "50";
+							int i4 = Integer.parseInt( str4, 16 );
+							char c4 = (char) i4;
+							// Hex 20 in Char umwandeln
+							String str5 = "20";
+							int i5 = Integer.parseInt( str5, 16 );
+							char c5 = (char) i5;
+							// Hex 0d in Char umwandeln
+							String str6 = "0d";
+							int i6 = Integer.parseInt( str6, 16 );
+							char c6 = (char) i6;
+							// Hex 0a in Char umwandeln
+							String str7 = "0a";
+							int i7 = Integer.parseInt( str7, 16 );
+							char c7 = (char) i7;
 
-								try {
-									// jpylyzer-Befehl: pathToJpylyzerExe valDatei > valDatei.jpylyzer-log.xml
-									String outputPath = pathToLogDir;
-									String outputName = File.separator + fl.getName() + ".jpylyzer-log.xml";
-									String pathToJpylyzerReport = outputPath + outputName;
-									File output = new File( pathToJpylyzerReport );
-									Runtime rt = Runtime.getRuntime();
-									Process proc = null;
+							// Hex 66 in Char umwandeln
+							String str9 = "66";
+							int i9 = Integer.parseInt( str9, 16 );
+							char c9 = (char) i9;
+							// Hex 74 in Char umwandeln
+							String str10 = "74";
+							int i10 = Integer.parseInt( str10, 16 );
+							char c10 = (char) i10;
+							// Hex 79 in Char umwandeln
+							String str11 = "79";
+							int i11 = Integer.parseInt( str11, 16 );
+							char c11 = (char) i11;
+							// Hex 70 in Char umwandeln
+							String str12 = "70";
+							int i12 = Integer.parseInt( str12, 16 );
+							char c12 = (char) i12;
+							// Hex 32 in Char umwandeln
+							String str13 = "32";
+							int i13 = Integer.parseInt( str13, 16 );
+							char c13 = (char) i13;
 
-									try {
-										report = output;
+							// auslesen der ersten 10 Zeichen der Datei
+							int length;
+							char[] buffer = new char[10];
+							length = read.read( buffer );
+							for ( int y = 0; y != length; y++ )
+								;
 
-										// falls das File bereits existiert, z.B. von einem vorhergehenden Durchlauf,
-										// löschen wir
-										// es
-										if ( report.exists() ) {
-											report.delete();
-										}
+							/* die beiden charArrays (soll und ist) mit einander vergleichen IST =
+							 * c1c1c1c2c3c4c5c5c6c7 */
+							char[] charArray1 = buffer;
+							char[] charArray2 = new char[] { c1, c1, c1, c2, c3, c4, c5, c5, c6, c7 };
 
-										/* Das redirect Zeichen verunmöglicht eine direkte eingabe. mit dem
-										 * geschachtellten Befehl gehts: cmd /c\"urspruenlicher Befehl\" */
-										String command = "cmd /c \"" + pathToJpylyzerExe + " \"" + fl.getAbsolutePath()
-												+ "\" > \"" + output.getAbsolutePath() + "\"\"";
-										proc = rt.exec( command.toString().split( " " ) );
-										// .split(" ") ist notwendig wenn in einem Pfad ein Doppelleerschlag vorhanden
-										// ist!
+							if ( Arrays.equals( charArray1, charArray2 ) ) {
+								/* höchstwahrscheinlich ein JP2 da es mit 0000000c6a5020200d0a respektive ....jP ..�
+								 * beginnt */
+								// System.out.println("es ist ein JP2 oder JPX ");
 
-										// Warte, bis proc fertig ist
-										proc.waitFor();
+								// auslesen der ersten 23 Zeiche der Datei
+								FileReader fr23 = new FileReader( fl );
+								@SuppressWarnings("resource")
+								BufferedReader read23 = new BufferedReader( fr23 );
+								int length23;
+								int i23;
+								char[] buffer23 = new char[23];
+								length23 = read23.read( buffer23 );
+								for ( i23 = 0; i23 != length23; i23++ )
+									;
 
-									} catch ( Exception e ) {
+								/* die beiden charArrays (soll und ist) mit einander vergleichen IST = c9, c10, c11,
+								 * c12, c3, c12, c13 */
+								char[] charArray3 = buffer23;
+								char[] charArray4 = new char[] { c9, c10, c11, c12, c3, c12, c13 };
+								String stringCharArray3 = String.valueOf( charArray3 );
+								String stringCharArray4 = String.valueOf( charArray4 );
+								if ( stringCharArray3.endsWith( stringCharArray4 ) ) {
+									// System.out.print("es ist ein JP2 (JPEG2000 Part1)");
+									// TODO: JP2 Validierung
+
+									String pathToJpylyzerExe = "resources" + File.separator + "jpylyzer"
+											+ File.separator + "jpylyzer.exe";
+
+									File fJpylyzerExe = new File( pathToJpylyzerExe );
+									if ( !fJpylyzerExe.exists() ) {
 										getMessageService().logError(
 												getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
-														+ getTextResourceService().getText( ERROR_XML_A_JP2_SERVICEFAILED,
-																e.getMessage() ) );
-										isValidJP2 = false;
-										delFile = false;
-										invalidJP2 = invalidJP2 + "   " + filename;
-										jp2Counter = jp2Counter + 1;
-									} finally {
-										/* // Warte, bis wget fertig ist 0 = Alles io int exitStatus = proc.waitFor();
-										 * // 10ms warten bis die Konsole umgeschaltet wird Thread.sleep( 10 );
-										 * Util.switchOnConsole();
-										 * 
-										 * if ( 0 != exitStatus ) { // invalide isValidJP2 = false; delFile = false;
-										 * invalidFile = invalidFile + filename + " "; } */
-										if ( proc != null ) {
-											closeQuietly( proc.getOutputStream() );
-											closeQuietly( proc.getInputStream() );
-											closeQuietly( proc.getErrorStream() );
-										}
+														+ getTextResourceService().getText( ERROR_XML_A_JP2_JPYLYZER_MISSING ) );
 									}
-									if ( report.exists() ) {
-										// TODO: auswerten
-										Document doc = null;
 
-										BufferedInputStream bis = new BufferedInputStream( new FileInputStream(
-												pathToJpylyzerReport ) );
-										DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-										DocumentBuilder db = dbf.newDocumentBuilder();
-										doc = db.parse( bis );
-										doc.normalize();
+									pathToJpylyzerExe = "\"" + pathToJpylyzerExe + "\"";
 
-										NodeList nodeLstI = doc.getElementsByTagName( "isValidJP2" );
+									try {
+										File report = null;
 
-										// Node isValidJP2 enthält im TextNode das Resultat TextNode ist ein ChildNode
-										for ( int s = 0; s < nodeLstI.getLength(); s++ ) {
-											Node resultNode = nodeLstI.item( s );
-											StringBuffer buf = new StringBuffer();
-											NodeList children = resultNode.getChildNodes();
-											for ( int i = 0; i < children.getLength(); i++ ) {
-												Node textChild = children.item( i );
-												if ( textChild.getNodeType() != Node.TEXT_NODE ) {
-													continue;
+										try {
+											// jpylyzer-Befehl: pathToJpylyzerExe valDatei > valDatei.jpylyzer-log.xml
+											String outputPath = pathToLogDir;
+											String outputName = File.separator + fl.getName() + ".jpylyzer-log.xml";
+											String pathToJpylyzerReport = outputPath + outputName;
+											File output = new File( pathToJpylyzerReport );
+											Runtime rt = Runtime.getRuntime();
+											Process proc = null;
+
+											try {
+												report = output;
+
+												// falls das File bereits existiert, z.B. von einem vorhergehenden
+												// Durchlauf,
+												// löschen wir
+												// es
+												if ( report.exists() ) {
+													report.delete();
 												}
-												buf.append( textChild.getNodeValue() );
-											}
-											String result = buf.toString();
 
-											// Das Resultat ist False oder True
-											if ( result.equalsIgnoreCase( "True" ) ) {
-												// valid
+												/* Das redirect Zeichen verunmöglicht eine direkte eingabe. mit dem
+												 * geschachtellten Befehl gehts: cmd /c\"urspruenlicher Befehl\" */
+												String command = "cmd /c \"" + pathToJpylyzerExe + " \""
+														+ fl.getAbsolutePath() + "\" > \"" + output.getAbsolutePath() + "\"\"";
+												proc = rt.exec( command.toString().split( " " ) );
+												// .split(" ") ist notwendig wenn in einem Pfad ein Doppelleerschlag
+												// vorhanden
+												// ist!
+
+												// Warte, bis proc fertig ist
+												proc.waitFor();
+
+											} catch ( Exception e ) {
+												getMessageService().logError(
+														getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
+																+ getTextResourceService().getText( ERROR_XML_A_JP2_SERVICEFAILED,
+																		e.getMessage() ) );
+												isValidJP2 = false;
+												delFile = false;
+												invalidJP2 = invalidJP2 + "   " + filename;
+												jp2Counter = jp2Counter + 1;
+											} finally {
+												/* // Warte, bis wget fertig ist 0 = Alles io int exitStatus =
+												 * proc.waitFor(); // 10ms warten bis die Konsole umgeschaltet wird
+												 * Thread.sleep( 10 ); Util.switchOnConsole();
+												 * 
+												 * if ( 0 != exitStatus ) { // invalide isValidJP2 = false; delFile = false;
+												 * invalidFile = invalidFile + filename + " "; } */
+												if ( proc != null ) {
+													closeQuietly( proc.getOutputStream() );
+													closeQuietly( proc.getInputStream() );
+													closeQuietly( proc.getErrorStream() );
+												}
+											}
+											if ( report.exists() ) {
+												// TODO: auswerten
+												Document doc = null;
+
+												BufferedInputStream bis = new BufferedInputStream( new FileInputStream(
+														pathToJpylyzerReport ) );
+												DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+												DocumentBuilder db = dbf.newDocumentBuilder();
+												doc = db.parse( bis );
+												doc.normalize();
+
+												NodeList nodeLstI = doc.getElementsByTagName( "isValidJP2" );
+
+												// Node isValidJP2 enthält im TextNode das Resultat TextNode ist ein
+												// ChildNode
+												for ( int s = 0; s < nodeLstI.getLength(); s++ ) {
+													Node resultNode = nodeLstI.item( s );
+													StringBuffer buf = new StringBuffer();
+													NodeList children = resultNode.getChildNodes();
+													for ( int i = 0; i < children.getLength(); i++ ) {
+														Node textChild = children.item( i );
+														if ( textChild.getNodeType() != Node.TEXT_NODE ) {
+															continue;
+														}
+														buf.append( textChild.getNodeValue() );
+													}
+													String result = buf.toString();
+
+													// Das Resultat ist False oder True
+													if ( result.equalsIgnoreCase( "True" ) ) {
+														// valid
+													} else {
+														// invalide
+														isValidJP2 = false;
+														delFile = false;
+														invalidJP2 = invalidJP2 + "   " + filename;
+														jp2Counter = jp2Counter + 1;
+													}
+												}
+
 											} else {
-												// invalide
+												// Datei nicht angelegt...
+												getMessageService().logError(
+														getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
+																+ getTextResourceService().getText( ERROR_XML_A_JP2_NOREPORT ) );
 												isValidJP2 = false;
 												delFile = false;
 												invalidJP2 = invalidJP2 + "   " + filename;
 												jp2Counter = jp2Counter + 1;
 											}
+										} catch ( Exception e ) {
+											getMessageService().logError(
+													getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
+															+ getTextResourceService()
+																	.getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+											isValidJP2 = false;
+											delFile = false;
+											invalidJP2 = invalidJP2 + "   " + filename;
+											jp2Counter = jp2Counter + 1;
+										}
+										if ( report.exists() ) {
+											report.delete();
 										}
 
-									} else {
-										// Datei nicht angelegt...
-										getMessageService().logError(
-												getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
-														+ getTextResourceService().getText( ERROR_XML_A_JP2_NOREPORT ) );
-										isValidJP2 = false;
-										delFile = false;
-										invalidJP2 = invalidJP2 + "   " + filename;
-										jp2Counter = jp2Counter + 1;
+									} catch ( Exception e ) {
+										getMessageService()
+												.logError(
+														getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
+																+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+																		e.getMessage() ) );
 									}
-								} catch ( Exception e ) {
-									getMessageService().logError(
-											getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
-													+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
-									isValidJP2 = false;
-									delFile = false;
-									invalidJP2 = invalidJP2 + "   " + filename;
-									jp2Counter = jp2Counter + 1;
-								}
-								if ( report.exists() ) {
-									report.delete();
+
+									// End JP2 Validierung
+
+								} else {
+									// System.out.print("es ist ein JPX (extended JPEG2000 Part2)");
+
+									/* JPX wird nicht validiert, entsprechend File löschen */
+									Util.deleteFile( fl );
 								}
 
-							} catch ( Exception e ) {
-								getMessageService().logError(
-										getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
-												+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 							}
-
-							// End JP2 Validierung
+							read.close();
 
 							if ( delFile ) {
 								// Validierung diese Bildes bestanden. Das Bild wird aus log gelöscht.
