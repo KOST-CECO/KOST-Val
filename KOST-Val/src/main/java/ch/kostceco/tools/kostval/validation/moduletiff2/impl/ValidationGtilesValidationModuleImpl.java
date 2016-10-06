@@ -74,7 +74,11 @@ public class ValidationGtilesValidationModuleImpl extends ValidationModuleImpl i
 		}
 
 		Integer exiftoolio = 0;
-		String oldErrorLine = "";
+		String oldErrorLine1 = "";
+		String oldErrorLine2 = "";
+		String oldErrorLine3 = "";
+		String oldErrorLine4 = "";
+		String oldErrorLine5 = "";
 
 		if ( tiles.contains( "1" ) ) {
 			// Valider Status (Kacheln sind erlaubt)
@@ -93,12 +97,24 @@ public class ValidationGtilesValidationModuleImpl extends ValidationModuleImpl i
 						if ( line.contains( "Tile" ) ) {
 							// Invalider Status (Kacheln sind nicht erlaubt)
 							isValid = false;
-							if ( !line.equals( oldErrorLine ) ) {
+							if ( !line.equals( oldErrorLine1 ) && !line.equals( oldErrorLine2 )
+									&& !line.equals( oldErrorLine3 ) && !line.equals( oldErrorLine4 )
+									&& !line.equals( oldErrorLine5 ) ) {
 								// neuer Fehler
-								oldErrorLine = line;
 								getMessageService().logError(
 										getTextResourceService().getText( MESSAGE_XML_MODUL_G_TIFF )
 												+ getTextResourceService().getText( MESSAGE_XML_CG_INVALID, line ) );
+								if ( oldErrorLine1.equals( "" ) ) {
+									oldErrorLine1 = line;
+								} else if ( oldErrorLine2.equals( "" ) ) {
+									oldErrorLine2 = line;
+								} else if ( oldErrorLine3.equals( "" ) ) {
+									oldErrorLine3 = line;
+								} else if ( oldErrorLine4.equals( "" ) ) {
+									oldErrorLine4 = line;
+								} else if ( oldErrorLine5.equals( "" ) ) {
+									oldErrorLine5 = line;
+								}
 							}
 						}
 					}

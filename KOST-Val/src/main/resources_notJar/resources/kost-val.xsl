@@ -40,8 +40,8 @@
 					tr.captionm {background-color: #f8dfdf}
 					tr.captionio {background-color: #afeeaf; font-weight:bold}
 					tr.captioniom {background-color: #ccffcc}
-					tr.captioninfo
-					{background-color: #b2b2c5}
+					tr.captioninfo {background-color: #b2b2c5}
+					tr.captioninfom {background-color: #e7e7ed}
 				</style>
 			</head>
 			<body>
@@ -128,14 +128,23 @@
 					<xsl:value-of select="KOSTValLog/Infos/FormatValOn" />
 					):
 				</h1>
-				<xsl:for-each select="KOSTValLog/Format/Info">
+				<xsl:for-each select="KOSTValLog/Format/Infos">
 					<div>
 						<table width="100%">
-							<tr class="captioninfo">
-								<td>
-									<xsl:value-of select="Message" />
-								</td>
-							</tr>
+								<tr class="captioninfo">
+									<td>
+										<xsl:value-of select="Summary" />
+									</td>
+								</tr>
+						</table>
+						<table width="100%">
+							<xsl:for-each select="Info">
+								<tr class="captioninfom">
+									<td>
+										<xsl:value-of select="Message" />
+									</td>
+								</tr>
+							</xsl:for-each>
 						</table>
 					</div>
 					<br />

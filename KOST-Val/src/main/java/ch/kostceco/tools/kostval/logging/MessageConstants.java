@@ -177,6 +177,7 @@ public interface MessageConstants
 	String	MESSAGE_XML_C_NOMETADATAXSD										= "message.xml.c.nometadataxsd";
 	String	MESSAGE_XML_C_METADATA_ERRORS									= "message.xml.c.metadata.errors";
 	String	MESSAGE_XML_C_METADATA_ORIGERRORS							= "message.xml.c.metadata.origerrors";
+	String	MESSAGE_XML_C_METADATA_NSFOUND								= "message.xml.c.metadata.nsfound";
 
 	// Modul D Meldungen
 	String	MESSAGE_XML_D_INVALID_FOLDER									= "message.xml.d.invalid.folder";
@@ -406,6 +407,7 @@ public interface MessageConstants
 	String	ERROR_XML_AD_WRONGNUMBEROFXSDS								= "error.xml.ad.wrongnumberofxsds";
 	String	ERROR_XML_AD_CONTENTB4HEADER									= "error.xml.ad.contentB4header";
 	String	ERROR_XML_AD_METADATA_ERRORS									= "error.xml.ad.metadata.errors";
+	String	ERROR_XML_AD_NSFOUND													= "error.xml.ad.nsfound";
 
 	// Modul 1e Meldungen
 	String	ERROR_XML_AE_NOMETADATAFOUND									= "error.xml.ae.nometadatafound";

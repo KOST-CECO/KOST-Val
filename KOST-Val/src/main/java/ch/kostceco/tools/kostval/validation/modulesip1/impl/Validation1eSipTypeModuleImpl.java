@@ -75,21 +75,20 @@ public class Validation1eSipTypeModuleImpl extends ValidationModuleImpl implemen
 			// dbf.setValidating(false);
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			Document doc = db.parse( new FileInputStream( new File( valDatei.getAbsolutePath()
-					+ "//header//metadata.xml" ) ) );
+					+ File.separator + "header" + File.separator + "metadata.xml" ) ) );
 			doc.getDocumentElement().normalize();
 
 			dbf.setFeature( "http://xml.org/sax/features/namespaces", false );
 
-			/* Aktuelle Lösung funktioniert nur wenn kein Präfix beim Elementnamen erlaubt ist! IO:
-			 * ablieferung NIO: v4:ablieferung
+			/* Aktuelle Lösung funktioniert nur wenn kein Präfix beim Elementnamen erlaubt ist!
 			 * 
-			 * Ansonsten müsste überall der NameSpace auf * gesetzt werden
+			 * IO: ablieferung
 			 * 
-			 * NodeList layerConfigList = doc.getElementsByTagNameNS( "*", "ablieferung" ); */
+			 * NIO: v4:ablieferung 
+			 * 
+			 * Wird neu in 1d kontrolliert*/
 
-			// NodeList layerConfigList = doc.getElementsByTagNameNS( "*", "ablieferung" );
 			NodeList layerConfigList = doc.getElementsByTagName( "ablieferung" );
-			// NodeList layerConfigList = doc.getElementsByTagName( "ablieferung" );
 
 			Node node = layerConfigList.item( 0 );
 			Element e = (Element) node;

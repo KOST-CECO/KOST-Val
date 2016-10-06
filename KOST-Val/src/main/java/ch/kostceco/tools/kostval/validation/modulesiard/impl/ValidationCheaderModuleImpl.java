@@ -19,14 +19,18 @@
 
 package ch.kostceco.tools.kostval.validation.modulesiard.impl;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -50,6 +54,8 @@ import ch.enterag.utils.zip.Zip64File;
 public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 		ValidationCheaderModule
 {
+
+	public static String				NEWLINE	= System.getProperty( "line.separator" );
 
 	public ConfigurationService	configurationService;
 
@@ -235,6 +241,46 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 			if ( xmlToValidate != null && xsdToValidate != null ) {
 				// der andere Fall wurde bereits oben abgefangen
 				try {
+
+					DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+					// dbf.setValidating(false);
+					DocumentBuilder db = dbf.newDocumentBuilder();
+					Document doc = db.parse( new FileInputStream( xmlToValidate ) );
+					doc.getDocumentElement().normalize();
+
+					BufferedReader in = new BufferedReader( new FileReader( xmlToValidate ) );
+					StringBuffer concatenatedOutputs = new StringBuffer();
+					String line;
+					while ( (line = in.readLine()) != null ) {
+
+						concatenatedOutputs.append( line );
+						concatenatedOutputs.append( NEWLINE );
+						/* Kontrollieren, dass kein Namespace verwendet wurde wie z.B. v4:
+						 * 
+						 * <dbname> */
+						if ( line.contains( "dbname>" ) ) {
+							if ( !line.contains( "<dbname>" ) ) {
+								// Invalider Status
+								int start = line.indexOf( "<" ) + 1;
+								int ns = line.indexOf( ":" ) + 1;
+								int end = line.indexOf( ">" );
+								String lineNode = line.substring( ns, end );
+								String lineNodeNS = line.substring( start, end );
+								// System.out.println( lineNode + " " + lineNodeNS );
+								getMessageService().logError(
+										getTextResourceService().getText( MESSAGE_XML_MODUL_C_SIARD )
+												+ getTextResourceService().getText( MESSAGE_XML_C_METADATA_NSFOUND,
+														lineNode, lineNodeNS ) );
+								in.close();
+								return false;
+							} else {
+								// valider Status
+								line = null;
+							}
+						}
+					}
+					in.close();
+
 					// Validierung von metadata.xml und metadata.xsd mit dem (private class) Validator
 					System.setProperty( "javax.xml.parsers.DocumentBuilderFactory",
 							"org.apache.xerces.jaxp.DocumentBuilderFactoryImpl" );

@@ -52,7 +52,7 @@ import ch.kostceco.tools.kostval.validation.modulesip3.Validation3bUnspecifiedFo
 import ch.kostceco.tools.kostval.validation.modulesip3.Validation3cFormatValidationModule;
 import ch.kostceco.tools.kostval.validation.modulesip3.Validation3dPeriodModule;
 
-/** Der Controller ruft die benötigten Module zur Validierung des SIP-Archivs in der benötigten
+/** Der Controller ruft die benï¿½tigten Module zur Validierung des SIP-Archivs in der benï¿½tigten
  * Reihenfolge auf.
  * 
  * Die Validierungs-Module werden mittels Spring-Dependency-Injection eingebunden. */
@@ -229,14 +229,14 @@ public class Controllersip implements MessageConstants
 	{
 		boolean valid = true;
 
-		// Validation Step Aa (wurde vor der Formatvalidierung in KOSTVal.jar bereits durchgeführt)
+		// Validation Step Aa (wurde vor der Formatvalidierung in KOSTVal.jar bereits durchgefï¿½hrt)
 
 		// Validation Step Ab
 		try {
 			if ( this.getValidation1bFolderStructureModule().validate( valDatei, directoryOfLogfile ) ) {
 				this.getValidation1bFolderStructureModule().getMessageService().print();
 			} else {
-				// Ein negatives Validierungsresultat in diesem Schritt führt zum Abbruch der weiteren
+				// Ein negatives Validierungsresultat in diesem Schritt fï¿½hrt zum Abbruch der weiteren
 				// Verarbeitung
 				this.getValidation1bFolderStructureModule().getMessageService().print();
 				return false;
@@ -258,7 +258,7 @@ public class Controllersip implements MessageConstants
 				this.getValidation1cNamingModule().getMessageService().print();
 			} else {
 				this.getValidation1cNamingModule().getMessageService().print();
-				// Ein negatives Validierungsresultat in diesem Schritt führt zum Abbruch der weiteren
+				// Ein negatives Validierungsresultat in diesem Schritt fï¿½hrt zum Abbruch der weiteren
 				// Verarbeitung
 				return false;
 			}
@@ -279,7 +279,7 @@ public class Controllersip implements MessageConstants
 				this.getValidation1dMetadataModule().getMessageService().print();
 			} else {
 				this.getValidation1dMetadataModule().getMessageService().print();
-				// Ein negatives Validierungsresultat in diesem Schritt führt zum Abbruch der weiteren
+				// Ein negatives Validierungsresultat in diesem Schritt fï¿½hrt zum Abbruch der weiteren
 				// Verarbeitung
 				return false;
 			}
@@ -358,7 +358,7 @@ public class Controllersip implements MessageConstants
 			return false;
 		}
 
-		// Validation Step Bb (wurde zusammen mit Ba (2a) durchgeführt)
+		// Validation Step Bb (wurde zusammen mit Ba (2a) durchgefï¿½hrt)
 
 		// Validation Step Bc
 		try {

@@ -1,5 +1,5 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val v1.7.6 application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and
+ * The KOST-Val v1.7.7 application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and
  * Submission Information Package (SIP). Copyright (C) 2012-2016 Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
@@ -454,6 +454,7 @@ public class KOSTVal implements MessageConstants
 
 		if ( args[0].equals( "--format" ) ) {
 			LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_FORMAT1 ) );
+			String countNioDetail = "";
 			Integer countNio = 0;
 			Integer countSummaryNio = 0;
 			Integer countSummaryIo = 0;
@@ -688,6 +689,7 @@ public class KOSTVal implements MessageConstants
 								}
 							} else {
 								countNio = countNio + 1;
+								countNioDetail = countNioDetail+"</Message></Info><Info><Message> - "+valDatei.getAbsolutePath();
 							}
 						}
 					}
@@ -747,7 +749,10 @@ public class KOSTVal implements MessageConstants
 				String summaryFormat = kostval.getTextResourceService().getText(
 						MESSAGE_XML_SUMMARY_FORMAT, count, countSummaryIo, countSummaryNio, countNio,
 						countSummaryIoP, countSummaryNioP, countNioP );
-				String newFormat = "<Format><Info><Message>" + summaryFormat + "</Message></Info>";
+				String summary = kostval.getTextResourceService().getText(
+						MESSAGE_XML_SUMMARY, count, countSummaryIo, countSummaryNio, countNio,
+						countSummaryIoP, countSummaryNioP, countNioP, countNioDetail );
+				String newFormat = "<Format>" + summary;
 				Util.oldnewstring( "<Format>", newFormat, logFile );
 
 				System.out.println( kostval.getTextResourceService().getText(

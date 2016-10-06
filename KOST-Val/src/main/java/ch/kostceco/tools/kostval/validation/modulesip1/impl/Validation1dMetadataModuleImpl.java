@@ -19,13 +19,17 @@
 
 package ch.kostceco.tools.kostval.validation.modulesip1.impl;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -38,6 +42,8 @@ import ch.kostceco.tools.kostval.validation.modulesip1.Validation1dMetadataModul
 public class Validation1dMetadataModuleImpl extends ValidationModuleImpl implements
 		Validation1dMetadataModule
 {
+
+	public static String					NEWLINE	= System.getProperty( "line.separator" );
 
 	private ConfigurationService	configurationService;
 
@@ -74,6 +80,50 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl impleme
 		File sipVersionFile;
 
 		try {
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+			// dbf.setValidating(false);
+			DocumentBuilder db = dbf.newDocumentBuilder();
+			Document doc = db.parse( new FileInputStream( new File( valDatei.getAbsolutePath()
+					+ File.separator + "header" + File.separator + "metadata.xml" ) ) );
+			doc.getDocumentElement().normalize();
+
+			BufferedReader in = new BufferedReader( new FileReader( new File( valDatei.getAbsolutePath()
+					+ File.separator + "header" + File.separator + "metadata.xml" ) ) );
+			StringBuffer concatenatedOutputs = new StringBuffer();
+			String line;
+			while ( (line = in.readLine()) != null ) {
+
+				concatenatedOutputs.append( line );
+				concatenatedOutputs.append( NEWLINE );
+				/* Kontrollieren, dass kein Namespace verwendet wurde wie z.B. v4:
+				 * 
+				 * <?xml version="1.0" encoding="UTF-8"?> <v4:paket schemaVersion="4.1"
+				 * xsi:type="v4:paketSIP" xmlns:v4="http://bar.admin.ch/arelda/v4"
+				 * xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> <v4:paketTyp>SIP</v4:paketTyp>
+				 * <v4:inhaltsverzeichnis> */
+				if ( line.contains( "paketTyp>" ) ) {
+					if ( !line.contains( "<paketTyp>" ) ) {
+						// Invalider Status
+						int start = line.indexOf( "<" ) + 1;
+						int ns = line.indexOf( ":" ) + 1;
+						int end = line.indexOf( ">" );
+						String lineNode = line.substring( ns, end );
+						String lineNodeNS = line.substring( start, end );
+						getMessageService()
+								.logError(
+										getTextResourceService().getText( MESSAGE_XML_MODUL_Ad_SIP )
+												+ getTextResourceService().getText( ERROR_XML_AD_NSFOUND, lineNode,
+														lineNodeNS ) );
+						in.close();
+						return false;
+					} else {
+						// valider Status
+						line = null;
+					}
+				}
+			}
+			in.close();
+
 			File xmlToValidate = new File( valDatei.getAbsolutePath() + File.separator + "header"
 					+ File.separator + "metadata.xml" );
 			File xsdToValidateBar1 = new File( valDatei.getAbsolutePath() + File.separator + "header"
