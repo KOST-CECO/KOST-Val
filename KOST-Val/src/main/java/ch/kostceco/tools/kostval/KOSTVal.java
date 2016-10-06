@@ -142,13 +142,6 @@ public class KOSTVal implements MessageConstants
 					.println( kostval.getTextResourceService().getText( ERROR_LOGDIRECTORY_NODIRECTORY ) );
 			System.exit( 1 );
 		}
-		File pdftronReport = new File( pathToLogfile, "PDFTron.xml" );
-		File pdftronReportXsl = new File( pathToLogfile, "report.xsl");
-		
-
-		if ( pdftronReport.exists() ) {
-			Util.deleteFile( pdftronReport );
-		}
 
 		// Ist die Anzahl Parameter (mind. 2) korrekt?
 		if ( args.length < 2 ) {
@@ -545,22 +538,6 @@ public class KOSTVal implements MessageConstants
 			} else {
 				// TODO: Formatvalidierung über ein Ordner --> erledigt --> nur Marker
 				try {
-					/* PDFTron über content durchführen. Performance optimierung */
-					String firstValidator = kostval.getConfigurationService().firstValidator();
-					if ( firstValidator.startsWith( "Configuration-Error:" ) ) {
-						LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_MODUL_Ab_SIP )
-								+ firstValidator );
-						System.out.println( kostval.getTextResourceService().getText( MESSAGE_XML_MODUL_Ab_SIP )
-								+ firstValidator );
-						System.exit( 1 );
-					}
-
-					if ( firstValidator.equalsIgnoreCase( "PDFTron" ) ) {
-						Controllerpdfa controller3 = (Controllerpdfa) context.getBean( "controllerpdfa" );
-						@SuppressWarnings("unused")
-						boolean okPdftron = controller3.executePdftron( valDatei, directoryOfLogfile );
-					}
-
 					Map<String, File> fileMap = Util.getFileMap( valDatei, false );
 					Set<String> fileMapKeys = fileMap.keySet();
 					for ( Iterator<String> iterator = fileMapKeys.iterator(); iterator.hasNext(); ) {
@@ -786,6 +763,7 @@ public class KOSTVal implements MessageConstants
 					String newstring = kostval.getTextResourceService().getText( MESSAGE_XML_HEADER );
 					String oldstring = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><KOSTValLog>";
 					Util.oldnewstring( oldstring, newstring, logFile );
+					Thread.sleep(5000);
 
 				} catch ( Exception e ) {
 					LOGGER.logError( "<Error>"
@@ -794,10 +772,6 @@ public class KOSTVal implements MessageConstants
 				}
 				System.out.print( "                                                                    " );
 				System.out.print( "\r" );
-
-				Util.deleteFile( pdftronReport );
-				Util.deleteFile( pdftronReportXsl );
-				Util.deleteDir( logDirValDatei );
 
 				if ( countNio.equals( count ) ) {
 					// keine Dateien Validiert bestehendes Workverzeichnis ggf. löschen
@@ -1138,22 +1112,6 @@ public class KOSTVal implements MessageConstants
 				int odp = 0;
 				int other = 0;
 				
-				/* PDFTron über content durchführen. Performance optimierung */
-				String firstValidator = kostval.getConfigurationService().firstValidator();
-				if ( firstValidator.startsWith( "Configuration-Error:" ) ) {
-					LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_MODUL_Ab_SIP )
-							+ firstValidator );
-					System.out.println( kostval.getTextResourceService().getText( MESSAGE_XML_MODUL_Ab_SIP )
-							+ firstValidator );
-					System.exit( 1 );
-				}
-
-				if ( firstValidator.equalsIgnoreCase( "PDFTron" ) ) {
-					Controllerpdfa controller3 = (Controllerpdfa) context.getBean( "controllerpdfa" );
-					@SuppressWarnings("unused")
-					boolean okPdftron = controller3.executePdftron( valDatei, directoryOfLogfile );
-				}	
-
 				for ( Iterator<String> iterator = fileMapKeys.iterator(); iterator.hasNext(); ) {
 					String entryName = iterator.next();
 					File newFile = fileMap.get( entryName );
@@ -1661,10 +1619,6 @@ public class KOSTVal implements MessageConstants
 
 				System.out.println( kostval.getTextResourceService().getText( MESSAGE_SIPVALIDATION_DONE,
 						logFile.getAbsolutePath() ) );
-
-				Util.deleteFile( pdftronReport );
-				Util.deleteFile( pdftronReportXsl );
-				Util.deleteDir( logDirValDatei );
 
 				if ( ok ) {
 					// bestehendes Workverzeichnis ggf. löschen

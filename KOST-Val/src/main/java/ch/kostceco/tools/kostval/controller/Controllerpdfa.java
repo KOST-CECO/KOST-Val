@@ -26,7 +26,6 @@ import ch.kostceco.tools.kostval.logging.Logger;
 import ch.kostceco.tools.kostval.logging.MessageConstants;
 import ch.kostceco.tools.kostval.service.TextResourceService;
 import ch.kostceco.tools.kostval.validation.modulepdfa.ValidationAvalidationAiModule;
-import ch.kostceco.tools.kostval.validation.modulepdfa.ValidationApdftronModule;
 import ch.kostceco.tools.kostval.validation.modulepdfa.ValidationJimageValidationModule;
 import ch.kostceco.tools.kostval.validation.modulepdfa.ValidationAinitialisationModule;
 
@@ -44,7 +43,6 @@ public class Controllerpdfa implements MessageConstants
 	private TextResourceService								textResourceService;
 
 	private ValidationAvalidationAiModule			validationAvalidationAiModule;
-	private ValidationApdftronModule			validationApdftronModule;
 	private ValidationJimageValidationModule	validationJimageValidationModule;
 	private ValidationAinitialisationModule		validationAinitialisationModule;
 
@@ -57,17 +55,6 @@ public class Controllerpdfa implements MessageConstants
 			ValidationAvalidationAiModule validationAvalidationAiModule )
 	{
 		this.validationAvalidationAiModule = validationAvalidationAiModule;
-	}
-
-	public ValidationApdftronModule getValidationApdftronModule()
-	{
-		return validationApdftronModule;
-	}
-
-	public void setValidationApdftronModule(
-			ValidationApdftronModule validationApdftronModule )
-	{
-		this.validationApdftronModule = validationApdftronModule;
 	}
 
 	public ValidationJimageValidationModule getValidationJimageValidationModule()
@@ -123,33 +110,6 @@ public class Controllerpdfa implements MessageConstants
 			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
 					+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
-		}
-
-		return valid;
-
-	}
-
-	public boolean executePdftron( File valDatei, File directoryOfLogfile )
-	{
-		boolean valid = true;
-
-		// Validation PDFTron
-		try {
-			if ( this.getValidationApdftronModule().validate( valDatei, directoryOfLogfile ) ) {
-				this.getValidationApdftronModule().getMessageService().print();
-			} else {
-				this.getValidationApdftronModule().getMessageService().print();
-				valid = false;
-			}
-		} catch ( ValidationApdfvalidationException e ) {
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-					+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
-			this.getValidationApdftronModule().getMessageService().print();
-			valid = false;
-		} catch ( Exception e ) {
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-					+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
-			valid = false;
 		}
 
 		return valid;

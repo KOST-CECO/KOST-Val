@@ -147,12 +147,6 @@
 		<property name="messageService" ref="messageService" />
 		<property name="configurationService" ref="configurationService" />
 	</bean>
-	<bean id="validationApdftronModule"
-		class="ch.kostceco.tools.kostval.validation.modulepdfa.impl.ValidationApdftronModuleImpl">
-		<property name="textResourceService" ref="textResourceService" />
-		<property name="messageService" ref="messageService" />
-		<property name="configurationService" ref="configurationService" />
-	</bean>
 	<bean id="validationAvalidationAiModule"
 		class="ch.kostceco.tools.kostval.validation.modulepdfa.impl.ValidationAvalidationAiModuleImpl">
 		<property name="textResourceService" ref="textResourceService" />
@@ -293,7 +287,6 @@
 	<bean id="controllerpdfa" class="ch.kostceco.tools.kostval.controller.Controllerpdfa">
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="validationAinitialisationModule" ref="validationAinitialisationModule" />
-		<property name="validationApdftronModule" ref="validationApdftronModule" />
 		<property name="validationAvalidationAiModule" ref="validationAvalidationAiModule" />
 		<property name="validationJimageValidationModule" ref="validationJimageValidationModule" />
 	</bean>
