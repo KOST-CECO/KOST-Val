@@ -266,9 +266,6 @@ public interface MessageConstants
 	String	ERROR_XML_J_INVALID_JPEG											= "error.xml.j.invalid.jpeg";
 	String	ERROR_XML_J_INVALID_JP2												= "error.xml.j.invalid.jp2";
 	String	ERROR_XML_J_JBIG2															= "error.xml.j.jbig2";
-	String	ERROR_XML_J_CATCH1														= "error.xml.j.catch1";
-	String	ERROR_XML_J_CATCH2														= "error.xml.j.catch2";
-	String	ERROR_XML_J_CATCH3														= "error.xml.j.catch3";
 	String	ERROR_XML_J_CATCH4														= "error.xml.j.catch4";
 	String	ERROR_XML_J_ENCRYPT														= "error.xml.j.encrypt";
 

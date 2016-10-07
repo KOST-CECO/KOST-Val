@@ -197,7 +197,7 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl i
 		return valid;
 	}
 
-	/** Parses a PDF and extracts all the images.
+	/** TODO: Parses a PDF and extracts all the images.
 	 * 
 	 * @param src
 	 *          the source PDF
@@ -644,22 +644,14 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl i
 				}
 			} catch ( IOException e ) {
 				String input = e.getMessage();
-				String objectNumber = "" + renderInfo.getRef().getNumber();
 
 				if ( input.contains( "is not supported" ) ) {
 					if ( input.contains( "The color space" ) ) {
-						getMessageService().logError(
-								getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
-										+ getTextResourceService().getText( ERROR_XML_J_CATCH1, objectNumber ) );
+						// Warnung wird nicht ausgegeben
 					} else if ( input.contains( "The color depth" ) ) {
-						getMessageService().logError(
-								getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
-										+ getTextResourceService().getText( ERROR_XML_J_CATCH2, objectNumber ) );
+						// Warnung wird nicht ausgegeben
 					} else {
-						System.out.println( e.getMessage() );
-						getMessageService().logError(
-								getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
-										+ getTextResourceService().getText( ERROR_XML_J_CATCH3, objectNumber ) );
+						// Warnung wird nicht ausgegeben
 					}
 				} else {
 					System.out.println( e.getMessage() );
