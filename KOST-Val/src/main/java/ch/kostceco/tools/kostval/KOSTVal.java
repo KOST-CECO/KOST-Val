@@ -19,6 +19,8 @@
 
 package ch.kostceco.tools.kostval;
 
+import static org.apache.commons.io.IOUtils.closeQuietly;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -59,6 +61,7 @@ import ch.kostceco.tools.kostval.logging.Logger;
 import ch.kostceco.tools.kostval.logging.MessageConstants;
 import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.service.TextResourceService;
+import ch.kostceco.tools.kostval.util.StreamGobbler;
 import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.util.Zip64Archiver;
 
@@ -152,7 +155,7 @@ public class KOSTVal implements MessageConstants
 		File valDatei = new File( args[1] );
 		File logDatei = null;
 		logDatei = valDatei;
-		File logDirValDatei = new File( pathToLogfile, valDatei.getName()  );
+		// File logDirValDatei = new File( pathToLogfile, valDatei.getName() );
 
 		// Informationen zum Arbeitsverzeichnis holen
 		String pathToWorkDir = kostval.getConfigurationService().getPathToWorkDir();
@@ -216,10 +219,93 @@ public class KOSTVal implements MessageConstants
 			Util.deleteFile( ECH1_0 );
 		}
 
+		String version = "";
+
 		String formatValOn = "";
 		// ermitteln welche Formate validiert werden können respektive eingeschaltet sind
 		if ( pdfaValidation.equals( "yes" ) ) {
 			formatValOn = "PDF/A";
+			// ggf PDFTron-Version ermitteln und logen
+			String dual = kostval.getConfigurationService().dualValidation();
+			if ( dual.startsWith( "Configuration-Error:" ) ) {
+				LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+						+ dual );
+				System.out.println( kostval.getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+						+ dual );
+				System.exit( 1 );
+			}
+			String firstVal = kostval.getConfigurationService().firstValidator();
+			if ( firstVal.startsWith( "Configuration-Error:" ) ) {
+				LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+						+ firstVal );
+				System.out.println( kostval.getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+						+ firstVal );
+				System.exit( 1 );
+			}
+			if ( dual.equalsIgnoreCase( "dual" ) || firstVal.equalsIgnoreCase( "PDFTron" ) ) {
+				String pdfexe = kostval.getConfigurationService().getPathToPdftronExe();
+				if ( pdfexe.startsWith( "Configuration-Error:" ) ) {
+					LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+							+ pdfexe );
+					System.out.println( kostval.getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+							+ pdfexe );
+					System.exit( 1 );
+				}
+				File fpdfexe = new File( pdfexe );
+				if ( fpdfexe.exists() ) {
+					File fversion = new File( directoryOfLogfile.getAbsolutePath() + File.separator
+							+ "PDFTronVersion.txt" );
+					try {
+						// Pfad zum Programm Pdftron
+						StringBuffer command = new StringBuffer( pdfexe + " -v" );
+
+						Process proc = null;
+						Runtime rt = null;
+
+						try {
+							Util.switchOffConsoleToTxt( fversion );
+
+							rt = Runtime.getRuntime();
+							proc = rt.exec( command.toString().split( " " ) );
+							StreamGobbler errorGobbler = new StreamGobbler( proc.getErrorStream(), "ERROR" );
+							StreamGobbler outputGobbler = new StreamGobbler( proc.getInputStream(), "OUTPUT" );
+							errorGobbler.start();
+							outputGobbler.start();
+							proc.waitFor();
+
+							Util.switchOnConsole();
+						} catch ( Exception e ) {
+							LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+									+ kostval.getTextResourceService().getText( ERROR_XML_A_PDFA_SERVICEFAILED,
+											e.getMessage() ) );
+						} finally {
+							if ( proc != null ) {
+								closeQuietly( proc.getOutputStream() );
+								closeQuietly( proc.getInputStream() );
+								closeQuietly( proc.getErrorStream() );
+							}
+						}
+						// Ende PDFTRON direkt auszulösen
+
+						BufferedReader in = new BufferedReader( new FileReader( fversion ) );
+						String line;
+						while ( (line = in.readLine()) != null ) {
+							if ( line.contains( "Manager V" ) ) {
+								line = line.substring( 9 );
+								version = "<VersionPDFTron>" + line + "</VersionPDFTron>";
+								Util.deleteFile( fversion );
+							}
+						}
+						in.close();
+
+					} catch ( Exception e ) {
+						LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+								+ kostval.getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+					}
+				}
+
+			}
+
 			if ( tiffValidation.equals( "yes" ) ) {
 				formatValOn = formatValOn + ", TIFF";
 			}
@@ -263,7 +349,8 @@ public class KOSTVal implements MessageConstants
 		LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_HEADER ) );
 		LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_START, ausgabeStart ) );
 		LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_END ) );
-		LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_FORMATON, formatValOn ) );
+		LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_FORMATON, formatValOn,
+				version ) );
 		LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_INFO ) );
 		System.out.println( "KOST-Val" );
 
@@ -400,11 +487,11 @@ public class KOSTVal implements MessageConstants
 		/* Initialisierung TIFF-Modul B (JHove-Validierung) überprüfen der Konfiguration: existiert die
 		 * jhove.conf am angebenen Ort? */
 		String jhoveConf = kostval.getConfigurationService().getPathToJhoveConfiguration();
-		if ( diaPath.startsWith( "Configuration-Error:" ) ) {
+		if ( jhoveConf.startsWith( "Configuration-Error:" ) ) {
 			LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_MODUL_Ab_SIP )
-					+ diaPath );
+					+ jhoveConf );
 			System.out.println( kostval.getTextResourceService().getText( MESSAGE_XML_MODUL_Ab_SIP )
-					+ diaPath );
+					+ jhoveConf );
 			System.exit( 1 );
 		}
 		File fJhoveConf = new File( jhoveConf );
@@ -666,7 +753,8 @@ public class KOSTVal implements MessageConstants
 								}
 							} else {
 								countNio = countNio + 1;
-								countNioDetail = countNioDetail+"</Message></Info><Info><Message> - "+valDatei.getAbsolutePath();
+								countNioDetail = countNioDetail + "</Message></Info><Info><Message> - "
+										+ valDatei.getAbsolutePath();
 							}
 						}
 					}
@@ -726,9 +814,9 @@ public class KOSTVal implements MessageConstants
 				String summaryFormat = kostval.getTextResourceService().getText(
 						MESSAGE_XML_SUMMARY_FORMAT, count, countSummaryIo, countSummaryNio, countNio,
 						countSummaryIoP, countSummaryNioP, countNioP );
-				String summary = kostval.getTextResourceService().getText(
-						MESSAGE_XML_SUMMARY, count, countSummaryIo, countSummaryNio, countNio,
-						countSummaryIoP, countSummaryNioP, countNioP, countNioDetail );
+				String summary = kostval.getTextResourceService().getText( MESSAGE_XML_SUMMARY, count,
+						countSummaryIo, countSummaryNio, countNio, countSummaryIoP, countSummaryNioP,
+						countNioP, countNioDetail );
 				String newFormat = "<Format>" + summary;
 				Util.oldnewstring( "<Format>", newFormat, logFile );
 
@@ -763,7 +851,7 @@ public class KOSTVal implements MessageConstants
 					String newstring = kostval.getTextResourceService().getText( MESSAGE_XML_HEADER );
 					String oldstring = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><KOSTValLog>";
 					Util.oldnewstring( oldstring, newstring, logFile );
-					Thread.sleep(5000);
+					Thread.sleep( 5000 );
 
 				} catch ( Exception e ) {
 					LOGGER.logError( "<Error>"
@@ -1111,7 +1199,7 @@ public class KOSTVal implements MessageConstants
 				int ods = 0;
 				int odp = 0;
 				int other = 0;
-				
+
 				for ( Iterator<String> iterator = fileMapKeys.iterator(); iterator.hasNext(); ) {
 					String entryName = iterator.next();
 					File newFile = fileMap.get( entryName );

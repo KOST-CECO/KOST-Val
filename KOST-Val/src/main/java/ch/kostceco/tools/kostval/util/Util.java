@@ -250,7 +250,8 @@ public class Util
 	 * verwendet werden. Dies insbesondere bei grossem Text massiv schneller. Da bei diesen
 	 * Ersetzungen meist der Output gelesen wird, kann dieser natürich gross sein. */
 
-	/** Verändert & mit &amp und ergänzt das XML-Element "<End></End>" mit dem ergebnis (stringEnd) sowie <Message>3c</Message></Error> mit dem ergebnis (string3c) in dem kost-val.log.xml (file)
+	/** Verändert & mit &amp und ergänzt das XML-Element "<End></End>" mit dem ergebnis (stringEnd)
+	 * sowie <Message>3c</Message></Error> mit dem ergebnis (string3c) in dem kost-val.log.xml (file)
 	 * 
 	 * ! Solche Ersetzungen dürfen nicht in einer Schleife gemacht werden sondern erst am Schluss, da
 	 * diese sehr Zeitintensiv sind !!!
