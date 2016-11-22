@@ -356,6 +356,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 		// Ende der Erkennung
 
 		boolean isValid = false;
+		boolean isPdftron = false;
 		boolean dual = false;
 
 		// Initialisierung PDFTron -> überprüfen der Angaben: existiert die PdftronExe am angebenen Ort?
@@ -412,14 +413,19 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 					File pdftronExe = new File( pathToPdftronExe );
 					File output = directoryOfLogfile;
 					String pathToPdftronOutput = output.getAbsolutePath();
+					String extension = ".pdf";
+					if ( (valDatei.getAbsolutePath().toLowerCase().endsWith( ".pdfa" )) ) {
+						extension = ".pdfa";
+					} else if ( (valDatei.getAbsolutePath().toLowerCase().endsWith( ".pdf" )) ) {
+						extension = ".pdf";
+					}
 					StringBuffer command = new StringBuffer( pdftronExe + " " );
+					command.append( "--extension " + extension + " " );
 					command.append( "-l " + level );
 					command.append( " -o " );
 					command.append( "\"" );
 					command.append( output.getAbsolutePath() );
-					command.append( "\"" );
-					command.append( " " );
-					command.append( "\"" );
+					command.append( "\" \"" );
 					command.append( valDatei.getAbsolutePath() );
 					command.append( "\"" );
 
@@ -482,13 +488,36 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 
 					Integer passCount = new Integer( 0 );
 					NodeList nodeLstI = doc.getElementsByTagName( "Pass" );
+					Integer failCount = new Integer( 0 );
+					NodeList nodeLstF = doc.getElementsByTagName( "Fail" );
 
-					// Valide pdfa-Dokumente enthalten "<Validation> <Pass FileName..." Anzahl pass = anzahl
-					// Valider pdfa
+					/* Valide pdfa-Dokumente enthalten "<Validation> <Pass FileName..." Anzahl pass = anzahl
+					 * Valider pdfa
+					 * 
+					 * <Validation> <Fail FileName... ist wenn nicht bestanden
+					 * 
+					 * TODO Neu muss auch der Fall abgefangen werden, dass weder pass noch fail existiert =>
+					 * Problem bei der Initialisierung
+					 * 
+					 * enthält nur <PDFAManagerReport RunDateTime="..."></PDFAManagerReport> */
 					for ( int s = 0; s < nodeLstI.getLength(); s++ ) {
 						passCount = passCount + 1;
 						// Valide PDFA-Datei Module A-J sind Valid
 						isValid = true;
+						// Validierung dieser Datei mit PDFTron hat funktioniert
+						isPdftron = true;
+					}
+					for ( int s = 0; s < nodeLstF.getLength(); s++ ) {
+						failCount = failCount + 1;
+						// Validierung dieser Datei mit PDFTron hat funktioniert
+						isPdftron = true;
+					}
+
+					if ( !isPdftron ) {
+						getMessageService().logError(
+								getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+										+ getTextResourceService().getText( ERROR_XML_A_PDFA_NOFAILORPASS ) );
+						return false;
 					}
 
 					if ( passCount == 0 ) {
@@ -747,14 +776,19 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 							File pdftronExe = new File( pathToPdftronExe );
 							File output = directoryOfLogfile;
 							String pathToPdftronOutput = output.getAbsolutePath();
+							String extension = ".pdf";
+							if ( (valDatei.getAbsolutePath().toLowerCase().endsWith( ".pdfa" )) ) {
+								extension = ".pdfa";
+							} else if ( (valDatei.getAbsolutePath().toLowerCase().endsWith( ".pdf" )) ) {
+								extension = ".pdf";
+							}
 							StringBuffer command = new StringBuffer( pdftronExe + " " );
+							command.append( "--extension " + extension + " " );
 							command.append( "-l " + level );
 							command.append( " -o " );
 							command.append( "\"" );
 							command.append( output.getAbsolutePath() );
-							command.append( "\"" );
-							command.append( " " );
-							command.append( "\"" );
+							command.append( "\" \"" );
 							command.append( valDatei.getAbsolutePath() );
 							command.append( "\"" );
 
@@ -817,13 +851,25 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 
 							Integer passCount = new Integer( 0 );
 							NodeList nodeLstI = doc.getElementsByTagName( "Pass" );
+							Integer failCount = new Integer( 0 );
+							NodeList nodeLstF = doc.getElementsByTagName( "Fail" );
 
-							// Valide pdfa-Dokumente enthalten "<Validation> <Pass FileName..." Anzahl pass =
-							// anzahl Valider pdfa
+							/* Valide pdfa-Dokumente enthalten "<Validation> <Pass FileName..." Anzahl pass =
+							 * anzahl Valider pdfa
+							 * 
+							 * <Validation> <Fail FileName... ist wenn nicht bestanden
+							 * 
+							 * TODO Neu muss auch der Fall abgefangen werden, dass weder pass noch fail existiert
+							 * => Problem bei der Initialisierung
+							 * 
+							 * enthält nur <PDFAManagerReport RunDateTime="..."></PDFAManagerReport> */
+
 							for ( int s = 0; s < nodeLstI.getLength(); s++ ) {
 								passCount = passCount + 1;
 								// Valide PDFA-Datei Module A-J sind Valid
 								isValid = true;
+								// Validierung dieser Datei mit PDFTron hat funktioniert
+								isPdftron = true;
 
 								// Diskrepanz => PDF-Diagnosedaten
 								pdfTools = "<PDFTools><iCategory>" + iCategory + "</iCategory><iError>" + iError
@@ -838,6 +884,19 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 								 * aus performance-Gründen direkt in pdfDia integriert */
 
 							}
+
+							for ( int s = 0; s < nodeLstF.getLength(); s++ ) {
+								failCount = failCount + 1;
+								// Validierung dieser Datei mit PDFTron hat funktioniert
+								isPdftron = true;
+							}
+
+							if ( !isPdftron ) {
+								getMessageService().logError(
+										getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+												+ getTextResourceService().getText( ERROR_XML_A_PDFA_NOFAILORPASS ) );
+							}
+
 							if ( passCount == 0 ) {
 								// Invalide PDFA-Datei (doppelt bestätigt)
 								isValid = false;
@@ -987,7 +1046,9 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 				File report = new File( directoryOfLogfile.getAbsolutePath(), "report.xml" );
 				Document doc = null;
 
-				if ( producerFirstValidator.contentEquals( "PDFTron" ) || dual ) {
+				if ( !isPdftron ) {
+					// Fehler bereits ausgegeben
+				} else if ( producerFirstValidator.contentEquals( "PDFTron" ) || dual ) {
 					// aus dem Output von Pdftron die Fehlercodes extrahieren und übersetzen
 
 					String pathToPdftronReport = report.getAbsolutePath();
@@ -1023,7 +1084,9 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 					}
 					return false;
 				}
-				if ( producerFirstValidator.contentEquals( "PDFTron" ) || dual ) {
+				if ( !isPdftron ) {
+					// Fehler bereits ausgegeben
+				} else if ( producerFirstValidator.contentEquals( "PDFTron" ) || dual ) {
 					// aus dem Output von Pdftron die Fehlercodes extrahieren und übersetzen
 
 					String errorDigitA = "Fehler";
@@ -1042,12 +1105,17 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 						// e_PDF_Unknown ist meist ein korruptes oder verschlüsseltes Dokument
 						if ( errorDigitA.equals( "_" ) ) {
 							errorDigitA = "0";
-						}
-						if ( errorDigitA.equals( "U" ) ) {
+						} else if ( errorDigitA.equals( "U" ) ) {
 							errorDigitA = "0";
-						}
-						if ( errorDigitA.equals( "n" ) ) {
+						} else if ( errorDigitA.equals( "n" ) ) {
 							errorDigitA = "0";
+						} else if ( errorDigitA.equals( "Fehler" ) ) {
+							isValid = false;
+							getMessageService().logError(
+									getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+											+ getTextResourceService().getText( ERROR_XML_A_PDFA_INIT, errorCode ) );
+							return false;
+
 						}
 						String errorCodeMsg = "error.xml.ai." + errorCode.substring( 2 );
 						Node errorNodeM = nodeMap.getNamedItem( "Message" );
@@ -1103,7 +1171,9 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 							getTextResourceService().getText( MESSAGE_XML_MODUL_B_PDFA )
 									+ getTextResourceService().getText( ERROR_XML_AI_18, "iCategory_18" ) );
 				}
-				if ( producerFirstValidator.contentEquals( "PDFTron" ) || dual ) {
+				if ( !isPdftron ) {
+					// Fehler bereits ausgegeben
+				} else if ( producerFirstValidator.contentEquals( "PDFTron" ) || dual ) {
 					// Analog Modul A
 					NodeList nodeLst = doc.getElementsByTagName( "Error" );
 					for ( int s = 0; s < nodeLst.getLength(); s++ ) {
@@ -1163,7 +1233,9 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 							getTextResourceService().getText( MESSAGE_XML_MODUL_C_PDFA )
 									+ getTextResourceService().getText( ERROR_XML_AI_6, "iCategory_6" ) );
 				}
-				if ( producerFirstValidator.contentEquals( "PDFTron" ) || dual ) {
+				if ( !isPdftron ) {
+					// Fehler bereits ausgegeben
+				} else if ( producerFirstValidator.contentEquals( "PDFTron" ) || dual ) {
 					// Analog Modul A
 					NodeList nodeLst = doc.getElementsByTagName( "Error" );
 					for ( int s = 0; s < nodeLst.getLength(); s++ ) {
@@ -1202,7 +1274,9 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 							getTextResourceService().getText( MESSAGE_XML_MODUL_D_PDFA )
 									+ getTextResourceService().getText( ERROR_XML_AI_9, "iCategory_9" ) );
 				}
-				if ( producerFirstValidator.contentEquals( "PDFTron" ) || dual ) {
+				if ( !isPdftron ) {
+					// Fehler bereits ausgegeben
+				} else if ( producerFirstValidator.contentEquals( "PDFTron" ) || dual ) {
 					// Analog Modul A
 					NodeList nodeLst = doc.getElementsByTagName( "Error" );
 					for ( int s = 0; s < nodeLst.getLength(); s++ ) {
@@ -1236,7 +1310,9 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 							getTextResourceService().getText( MESSAGE_XML_MODUL_E_PDFA )
 									+ getTextResourceService().getText( ERROR_XML_AI_10, "iCategory_10" ) );
 				}
-				if ( producerFirstValidator.contentEquals( "PDFTron" ) || dual ) {
+				if ( !isPdftron ) {
+					// Fehler bereits ausgegeben
+				} else if ( producerFirstValidator.contentEquals( "PDFTron" ) || dual ) {
 					// Analog Modul A
 					NodeList nodeLst = doc.getElementsByTagName( "Error" );
 					for ( int s = 0; s < nodeLst.getLength(); s++ ) {
@@ -1285,7 +1361,9 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 							getTextResourceService().getText( MESSAGE_XML_MODUL_F_PDFA )
 									+ getTextResourceService().getText( ERROR_XML_AI_14, "iCategory_14" ) );
 				}
-				if ( producerFirstValidator.contentEquals( "PDFTron" ) || dual ) {
+				if ( !isPdftron ) {
+					// Fehler bereits ausgegeben
+				} else if ( producerFirstValidator.contentEquals( "PDFTron" ) || dual ) {
 					// Analog Modul A
 					NodeList nodeLst = doc.getElementsByTagName( "Error" );
 					for ( int s = 0; s < nodeLst.getLength(); s++ ) {
@@ -1319,7 +1397,9 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 							getTextResourceService().getText( MESSAGE_XML_MODUL_G_PDFA )
 									+ getTextResourceService().getText( ERROR_XML_AI_15, "iCategory_15" ) );
 				}
-				if ( producerFirstValidator.contentEquals( "PDFTron" ) || dual ) {
+				if ( !isPdftron ) {
+					// Fehler bereits ausgegeben
+				} else if ( producerFirstValidator.contentEquals( "PDFTron" ) || dual ) {
 					// Analog Modul A
 					NodeList nodeLst = doc.getElementsByTagName( "Error" );
 					for ( int s = 0; s < nodeLst.getLength(); s++ ) {
@@ -1361,7 +1441,9 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 							getTextResourceService().getText( MESSAGE_XML_MODUL_H_PDFA )
 									+ getTextResourceService().getText( ERROR_XML_AI_16, "iCategory_16" ) );
 				}
-				if ( producerFirstValidator.contentEquals( "PDFTron" ) || dual ) {
+				if ( !isPdftron ) {
+					// Fehler bereits ausgegeben
+				} else if ( producerFirstValidator.contentEquals( "PDFTron" ) || dual ) {
 					// Analog Modul A
 					NodeList nodeLst = doc.getElementsByTagName( "Error" );
 					for ( int s = 0; s < nodeLst.getLength(); s++ ) {
@@ -1395,7 +1477,9 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 							getTextResourceService().getText( MESSAGE_XML_MODUL_I_PDFA )
 									+ getTextResourceService().getText( ERROR_XML_AI_17, "iCategory_17" ) );
 				}
-				if ( producerFirstValidator.contentEquals( "PDFTron" ) || dual ) {
+				if ( !isPdftron ) {
+					// Fehler bereits ausgegeben
+				} else if ( producerFirstValidator.contentEquals( "PDFTron" ) || dual ) {
 					// Analog Modul A
 					NodeList nodeLst = doc.getElementsByTagName( "Error" );
 					for ( int s = 0; s < nodeLst.getLength(); s++ ) {

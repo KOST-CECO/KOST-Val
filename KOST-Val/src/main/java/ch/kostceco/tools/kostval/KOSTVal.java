@@ -1,5 +1,5 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val v1.7.8 application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and
+ * The KOST-Val v1.7.9 application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and
  * Submission Information Package (SIP). Copyright (C) 2012-2016 Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
@@ -405,9 +405,27 @@ public class KOSTVal implements MessageConstants
 			boolean matchFound = matcher.find();
 			if ( matchFound ) {
 				LOGGER.logError( kostval.getTextResourceService().getText( ERROR_IOE,
-						kostval.getTextResourceService().getText( ERROR_SPECIAL_CHARACTER, name ) ) );
-				System.out.println( kostval.getTextResourceService()
-						.getText( ERROR_SPECIAL_CHARACTER, name ) );
+						kostval.getTextResourceService().getText( ERROR_SPECIAL_CHARACTER, name, matcher.group( i ) ) ) );
+				System.console().printf( kostval.getTextResourceService()
+						.getText( ERROR_SPECIAL_CHARACTER, name, matcher.group( i ) ) );
+				System.exit( 1 );
+			}
+		}
+
+		name = directoryOfLogfile.getAbsolutePath();
+
+		pathElements = name.split( "/" );
+		for ( int i = 0; i < pathElements.length; i++ ) {
+			String element = pathElements[i];
+
+			Matcher matcher = pattern.matcher( element );
+
+			boolean matchFound = matcher.find();
+			if ( matchFound ) {
+				LOGGER.logError( kostval.getTextResourceService().getText( ERROR_IOE,
+						kostval.getTextResourceService().getText( ERROR_SPECIAL_CHARACTER, name, matcher.group( i ) ) ) );
+				System.console().printf( kostval.getTextResourceService()
+						.getText( ERROR_SPECIAL_CHARACTER, name, matcher.group( i ) ) );
 				System.exit( 1 );
 			}
 		}
@@ -516,9 +534,9 @@ public class KOSTVal implements MessageConstants
 			boolean matchFound = matcher.find();
 			if ( matchFound ) {
 				LOGGER.logError( kostval.getTextResourceService().getText( ERROR_IOE,
-						kostval.getTextResourceService().getText( ERROR_SPECIAL_CHARACTER, name ) ) );
-				System.out.println( kostval.getTextResourceService()
-						.getText( ERROR_SPECIAL_CHARACTER, name ) );
+						kostval.getTextResourceService().getText( ERROR_SPECIAL_CHARACTER, name, matcher.group( i ) ) ) );
+				System.console().printf( kostval.getTextResourceService()
+						.getText( ERROR_SPECIAL_CHARACTER, name, matcher.group( i ) ) );
 				System.exit( 1 );
 			}
 		}

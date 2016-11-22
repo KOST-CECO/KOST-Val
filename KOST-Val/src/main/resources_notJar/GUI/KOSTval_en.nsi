@@ -1,5 +1,5 @@
 ; The name of the installer
-Name "KOST-Val v1.7.8"
+Name "KOST-Val v1.7.9"
 ; Sets the icon of the installer
 Icon "val.ico"
 ; remove the text 'Nullsoft Install System vX.XX' from the installer window 
