@@ -1788,6 +1788,21 @@ public class KOSTVal implements MessageConstants
 		String valDateiName = valDatei.getName();
 		String valDateiExt = "." + FilenameUtils.getExtension( valDateiName ).toLowerCase();
 		boolean valFile = false;
+		
+		File pathTemp = new File( directoryOfLogfile, "path.tmp" );
+
+		// falls das File bereits existiert, z.B. von einem vorhergehenden Durchlauf, löschen
+		// wir es
+		if ( pathTemp.exists() ) {
+			pathTemp.delete();
+		}
+		try {
+			pathTemp.createNewFile();
+		} catch ( IOException e ) {
+			e.printStackTrace();
+		}
+
+		Util.oldnewstring( "", originalValName, pathTemp );
 
 		if ( (valDateiExt.equals( ".jp2" )) ) {
 			LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_VALERGEBNIS ) );
