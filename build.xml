@@ -25,7 +25,7 @@
 				<attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
 				<attribute name="Rsrc-Main-Class" value="ch.kostceco.tools.kostval.KOSTVal"/>
 				<attribute name="Class-Path" value="."/>
-				<attribute name="Rsrc-Class-Path" value="./ commons-configuration-1.6.jar log4j-1.2.12.jar spring-context-3.0.0.RELEASE.jar commons-logging-1.1.1.jar commons-lang-2.4.jar spring-beans-3.0.0.RELEASE.jar spring-core-3.0.0.RELEASE.jar spring-asm-3.0.0.RELEASE.jar spring-aop-3.0.0.RELEASE.jar spring-expression-3.0.0.RELEASE.jar spring-jdbc-3.0.0.RELEASE.jar spring-orm-3.0.0.RELEASE.jar spring-security-core-3.0.0.RELEASE.jar spring-test-3.0.0.RELEASE.jar spring-tx-3.0.0.RELEASE.jar commons-beanutils-1.7.0.jar commons-beanutils-core-1.8.0.jar commons-collections-3.2.1.jar commons-digester-1.8.jar commons-io-2.0.jar xml-apis-2.7.1.jar zip64file-1.0.jar xercesImpl-2.7.1.jar junit-4.4.jar jdom-2.0.0.jar zip64-1.0.jar JhoveApp-1.5.jar droid-core-5.0.3.jar droid-export-5.0.3.jar droid-export-interfaces-5.0.3.jar droid-help-5.0.3.jar droid-interfaces-5.0.3.jar droid-report-5.0.3.jar droid-report-interfaces-5.0.3.jar droid-results-5.0.3.jar VALA-4.7.0.RELEASE.jar badpeggy-2.0.jar itextpdf-5.5.5.jar"/>
+				<attribute name="Rsrc-Class-Path" value="./ commons-configuration-1.6.jar log4j-1.2.12.jar spring-context-3.0.0.RELEASE.jar commons-logging-1.1.1.jar commons-lang-2.4.jar spring-beans-3.0.0.RELEASE.jar spring-core-3.0.0.RELEASE.jar spring-asm-3.0.0.RELEASE.jar spring-aop-3.0.0.RELEASE.jar spring-expression-3.0.0.RELEASE.jar spring-jdbc-3.0.0.RELEASE.jar spring-orm-3.0.0.RELEASE.jar spring-security-core-3.0.0.RELEASE.jar spring-test-3.0.0.RELEASE.jar spring-tx-3.0.0.RELEASE.jar commons-beanutils-1.7.0.jar commons-beanutils-core-1.8.0.jar commons-collections-3.2.1.jar commons-digester-1.8.jar commons-io-2.0.jar xml-apis-2.7.1.jar zip64file-1.0.jar xercesImpl-2.7.1.jar junit-4.4.jar jdom-2.0.0.jar zip64-1.0.jar JhoveApp-1.5.jar droid-core-5.0.3.jar droid-export-5.0.3.jar droid-export-interfaces-5.0.3.jar droid-help-5.0.3.jar droid-interfaces-5.0.3.jar droid-report-5.0.3.jar droid-report-interfaces-5.0.3.jar droid-results-5.0.3.jar VALA-4.8.25.RELEASE.jar badpeggy-2.0.jar itextpdf-5.5.5.jar"/>
 			</manifest>
 			<zipfileset dir="KOST-Val/target/classes"/>
 			<zipfileset dir="KOST-Val/lib" includes="commons-configuration-1.6.jar"/>
@@ -63,7 +63,7 @@
 			<zipfileset dir="KOST-Val/lib" includes="droid-report-5.0.3.jar"/>
 			<zipfileset dir="KOST-Val/lib" includes="droid-report-interfaces-5.0.3.jar"/>
 			<zipfileset dir="KOST-Val/lib" includes="droid-results-5.0.3.jar"/>
-			<zipfileset dir="KOST-Val/lib" includes="VALA-4.7.0.RELEASE.jar"/>
+			<zipfileset dir="KOST-Val/lib" includes="VALA-4.8.25.RELEASE.jar"/>
 			<zipfileset dir="KOST-Val/lib" includes="badpeggy-2.0.jar"/>
 			<zipfileset dir="KOST-Val/lib" includes="itextpdf-5.5.5.jar"/>
 		</jar>
@@ -74,7 +74,7 @@
 				<attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
 				<attribute name="Rsrc-Main-Class" value="ch.kostceco.tools.kostval.KOSTVal"/>
 				<attribute name="Class-Path" value="."/>
-				<attribute name="Rsrc-Class-Path" value="./ commons-configuration-1.6.jar log4j-1.2.12.jar spring-context-3.0.0.RELEASE.jar commons-logging-1.1.1.jar commons-lang-2.4.jar spring-beans-3.0.0.RELEASE.jar spring-core-3.0.0.RELEASE.jar spring-asm-3.0.0.RELEASE.jar spring-aop-3.0.0.RELEASE.jar spring-expression-3.0.0.RELEASE.jar spring-jdbc-3.0.0.RELEASE.jar spring-orm-3.0.0.RELEASE.jar spring-security-core-3.0.0.RELEASE.jar spring-test-3.0.0.RELEASE.jar spring-tx-3.0.0.RELEASE.jar commons-beanutils-1.7.0.jar commons-beanutils-core-1.8.0.jar commons-collections-3.2.1.jar commons-digester-1.8.jar commons-io-2.0.jar xml-apis-2.7.1.jar zip64file-1.0.jar xercesImpl-2.7.1.jar junit-4.4.jar jdom-2.0.0.jar zip64-1.0.jar JhoveApp-1.5.jar droid-core-5.0.3.jar droid-export-5.0.3.jar droid-export-interfaces-5.0.3.jar droid-help-5.0.3.jar droid-interfaces-5.0.3.jar droid-report-5.0.3.jar droid-report-interfaces-5.0.3.jar droid-results-5.0.3.jar VALA-4.7.0.RELEASE.jar badpeggy-2.0.jar itextpdf-5.5.5.jar"/>
+				<attribute name="Rsrc-Class-Path" value="./ commons-configuration-1.6.jar log4j-1.2.12.jar spring-context-3.0.0.RELEASE.jar commons-logging-1.1.1.jar commons-lang-2.4.jar spring-beans-3.0.0.RELEASE.jar spring-core-3.0.0.RELEASE.jar spring-asm-3.0.0.RELEASE.jar spring-aop-3.0.0.RELEASE.jar spring-expression-3.0.0.RELEASE.jar spring-jdbc-3.0.0.RELEASE.jar spring-orm-3.0.0.RELEASE.jar spring-security-core-3.0.0.RELEASE.jar spring-test-3.0.0.RELEASE.jar spring-tx-3.0.0.RELEASE.jar commons-beanutils-1.7.0.jar commons-beanutils-core-1.8.0.jar commons-collections-3.2.1.jar commons-digester-1.8.jar commons-io-2.0.jar xml-apis-2.7.1.jar zip64file-1.0.jar xercesImpl-2.7.1.jar junit-4.4.jar jdom-2.0.0.jar zip64-1.0.jar JhoveApp-1.5.jar droid-core-5.0.3.jar droid-export-5.0.3.jar droid-export-interfaces-5.0.3.jar droid-help-5.0.3.jar droid-interfaces-5.0.3.jar droid-report-5.0.3.jar droid-report-interfaces-5.0.3.jar droid-results-5.0.3.jar VALA-4.8.25.RELEASE.jar badpeggy-2.0.jar itextpdf-5.5.5.jar"/>
 			</manifest>
 			<zipfileset dir="KOST-Val/target/classes"/>
 			<zipfileset dir="KOST-Val/lib" includes="commons-configuration-1.6.jar"/>
@@ -112,7 +112,7 @@
 			<zipfileset dir="KOST-Val/lib" includes="droid-report-5.0.3.jar"/>
 			<zipfileset dir="KOST-Val/lib" includes="droid-report-interfaces-5.0.3.jar"/>
 			<zipfileset dir="KOST-Val/lib" includes="droid-results-5.0.3.jar"/>
-			<zipfileset dir="KOST-Val/lib" includes="VALA-4.7.0.RELEASE.jar"/>
+			<zipfileset dir="KOST-Val/lib" includes="VALA-4.8.25.RELEASE.jar"/>
 			<zipfileset dir="KOST-Val/lib" includes="badpeggy-2.0.jar"/>
 			<zipfileset dir="KOST-Val/lib" includes="itextpdf-5.5.5.jar"/>
 		</jar>
@@ -123,7 +123,7 @@
 				<attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
 				<attribute name="Rsrc-Main-Class" value="ch.kostceco.tools.kostval.KOSTVal"/>
 				<attribute name="Class-Path" value="."/>
-				<attribute name="Rsrc-Class-Path" value="./ commons-configuration-1.6.jar log4j-1.2.12.jar spring-context-3.0.0.RELEASE.jar commons-logging-1.1.1.jar commons-lang-2.4.jar spring-beans-3.0.0.RELEASE.jar spring-core-3.0.0.RELEASE.jar spring-asm-3.0.0.RELEASE.jar spring-aop-3.0.0.RELEASE.jar spring-expression-3.0.0.RELEASE.jar spring-jdbc-3.0.0.RELEASE.jar spring-orm-3.0.0.RELEASE.jar spring-security-core-3.0.0.RELEASE.jar spring-test-3.0.0.RELEASE.jar spring-tx-3.0.0.RELEASE.jar commons-beanutils-1.7.0.jar commons-beanutils-core-1.8.0.jar commons-collections-3.2.1.jar commons-digester-1.8.jar commons-io-2.0.jar xml-apis-2.7.1.jar zip64file-1.0.jar xercesImpl-2.7.1.jar junit-4.4.jar jdom-2.0.0.jar zip64-1.0.jar JhoveApp-1.5.jar droid-core-5.0.3.jar droid-export-5.0.3.jar droid-export-interfaces-5.0.3.jar droid-help-5.0.3.jar droid-interfaces-5.0.3.jar droid-report-5.0.3.jar droid-report-interfaces-5.0.3.jar droid-results-5.0.3.jar VALA-4.7.0.RELEASE.jar badpeggy-2.0.jar itextpdf-5.5.5.jar"/>
+				<attribute name="Rsrc-Class-Path" value="./ commons-configuration-1.6.jar log4j-1.2.12.jar spring-context-3.0.0.RELEASE.jar commons-logging-1.1.1.jar commons-lang-2.4.jar spring-beans-3.0.0.RELEASE.jar spring-core-3.0.0.RELEASE.jar spring-asm-3.0.0.RELEASE.jar spring-aop-3.0.0.RELEASE.jar spring-expression-3.0.0.RELEASE.jar spring-jdbc-3.0.0.RELEASE.jar spring-orm-3.0.0.RELEASE.jar spring-security-core-3.0.0.RELEASE.jar spring-test-3.0.0.RELEASE.jar spring-tx-3.0.0.RELEASE.jar commons-beanutils-1.7.0.jar commons-beanutils-core-1.8.0.jar commons-collections-3.2.1.jar commons-digester-1.8.jar commons-io-2.0.jar xml-apis-2.7.1.jar zip64file-1.0.jar xercesImpl-2.7.1.jar junit-4.4.jar jdom-2.0.0.jar zip64-1.0.jar JhoveApp-1.5.jar droid-core-5.0.3.jar droid-export-5.0.3.jar droid-export-interfaces-5.0.3.jar droid-help-5.0.3.jar droid-interfaces-5.0.3.jar droid-report-5.0.3.jar droid-report-interfaces-5.0.3.jar droid-results-5.0.3.jar VALA-4.8.25.RELEASE.jar badpeggy-2.0.jar itextpdf-5.5.5.jar"/>
 			</manifest>
 			<zipfileset dir="KOST-Val/target/classes"/>
 			<zipfileset dir="KOST-Val/lib" includes="commons-configuration-1.6.jar"/>
@@ -161,7 +161,7 @@
 			<zipfileset dir="KOST-Val/lib" includes="droid-report-5.0.3.jar"/>
 			<zipfileset dir="KOST-Val/lib" includes="droid-report-interfaces-5.0.3.jar"/>
 			<zipfileset dir="KOST-Val/lib" includes="droid-results-5.0.3.jar"/>
-			<zipfileset dir="KOST-Val/lib" includes="VALA-4.7.0.RELEASE.jar"/>
+			<zipfileset dir="KOST-Val/lib" includes="VALA-4.8.25.RELEASE.jar"/>
 			<zipfileset dir="KOST-Val/lib" includes="badpeggy-2.0.jar"/>
 			<zipfileset dir="KOST-Val/lib" includes="itextpdf-5.5.5.jar"/>
 		</jar>
