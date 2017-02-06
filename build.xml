@@ -2,7 +2,7 @@
 <project default="create_run_jar_de_fr_en" name="Create Runnable Jar for Project KOST-Val DE, FR, EN">
 	<!--ANT 1.7 is required                                        -->
 	<target name="create_run_jar_de_fr_en">
-        <mkdir dir="../KOST-Val_TEST"/>
+        <mkdir dir="../../KOST-Val"/>
 		<!--Erstelle target, damit die Jars auf dem aktuellen Code erstellt werden-->
 		<mkdir dir="KOST-Val/target/classes" />
 		<copy includeemptydirs="false" overwrite="true" todir="KOST-Val/target/classes">
@@ -20,7 +20,7 @@
 		<copy file="README.md" todir="KOST-Val/target/classes" />
 		<!--Kopiere de_messages.properties in target und erstelle kostval_de.jar -->
 		<copy file="KOST-Val/src/main/resources/de_messages.properties" overwrite="true" tofile="KOST-Val/target/classes/messages.properties"/>
-		<jar destfile="../KOST-Val_TEST/kostval_de.jar">
+		<jar destfile="../../KOST-Val/kostval_de.jar">
 			<manifest>
 				<attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
 				<attribute name="Rsrc-Main-Class" value="ch.kostceco.tools.kostval.KOSTVal"/>
@@ -69,7 +69,7 @@
 		</jar>
 		<!--Kopiere fr_messages.properties in target und erstelle kostval_fr.jar -->
 		<copy file="KOST-Val/src/main/resources/fr_messages.properties" overwrite="true" tofile="KOST-Val/target/classes/messages.properties"/>
-		<jar destfile="../KOST-Val_TEST/kostval_fr.jar">
+		<jar destfile="../../KOST-Val/kostval_fr.jar">
 			<manifest>
 				<attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
 				<attribute name="Rsrc-Main-Class" value="ch.kostceco.tools.kostval.KOSTVal"/>
@@ -118,7 +118,7 @@
 		</jar>
 		<!--Kopiere en_messages.properties in target und erstelle kostval_en.jar -->
 		<copy file="KOST-Val/src/main/resources/en_messages.properties" overwrite="true" tofile="KOST-Val/target/classes/messages.properties"/>
-		<jar destfile="../KOST-Val_TEST/kostval_en.jar">
+		<jar destfile="../../KOST-Val/kostval_en.jar">
 			<manifest>
 				<attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
 				<attribute name="Rsrc-Main-Class" value="ch.kostceco.tools.kostval.KOSTVal"/>
@@ -166,22 +166,22 @@
 			<zipfileset dir="KOST-Val/lib" includes="itextpdf-5.5.5.jar"/>
 		</jar>
 		<!--Kopiere alle benötigten Ordner und Dokumente in KOST-Val_TEST-->
-		<copy overwrite="true" todir="../KOST-Val_TEST/configuration">
+		<copy overwrite="true" todir="../../KOST-Val/configuration">
 			<fileset dir="KOST-Val/src/main/resources_notJar/configuration"/>
 		</copy>
-		<copy overwrite="true" todir="../KOST-Val_TEST/doc">
+		<copy overwrite="true" todir="../../KOST-Val/doc">
 			<fileset dir="KOST-Val/src/main/resources_notJar/doc"/>
 		</copy>
-		<copy overwrite="true" todir="../KOST-Val_TEST/license">
+		<copy overwrite="true" todir="../../KOST-Val/license">
 			<fileset dir="KOST-Val/src/main/resources_notJar/license"/>
 		</copy>
-		<copy overwrite="true" todir="../KOST-Val_TEST/resources">
+		<copy overwrite="true" todir="../../KOST-Val/resources">
 			<fileset dir="KOST-Val/src/main/resources_notJar/resources"/>
 		</copy>
-		<copy file="KOST-Val/src/main/resources_notJar/KOST-Val_de.exe" todir="../KOST-Val_TEST"/>
-		<copy file="KOST-Val/src/main/resources_notJar/KOST-Val_fr.exe" todir="../KOST-Val_TEST"/>
-		<copy file="KOST-Val/src/main/resources_notJar/KOST-Val_en.exe" todir="../KOST-Val_TEST"/>
-		<copy file="KOST-Val/src/main/resources_notJar/PdfValidatorAPI.dll" overwrite="true" todir="../KOST-Val_TEST"/>
+		<copy file="KOST-Val/src/main/resources_notJar/KOST-Val_de.exe" todir="../../KOST-Val"/>
+		<copy file="KOST-Val/src/main/resources_notJar/KOST-Val_fr.exe" todir="../../KOST-Val"/>
+		<copy file="KOST-Val/src/main/resources_notJar/KOST-Val_en.exe" todir="../../KOST-Val"/>
+		<copy file="KOST-Val/src/main/resources_notJar/PdfValidatorAPI.dll" overwrite="true" todir="../../KOST-Val"/>
 		<copy file="KOST-Val/src/main/resources/de_messages.properties" overwrite="true" tofile="KOST-Val/target/classes/messages.properties"/>
 	</target>
 </project>

@@ -7,8 +7,8 @@
 <stringAttribute key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER" value="org.eclipse.ant.ui.AntClasspathProvider"/>
 <booleanAttribute key="org.eclipse.jdt.launching.DEFAULT_CLASSPATH" value="true"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value=""/>
-<stringAttribute key="org.eclipse.ui.externaltools.ATTR_LOCATION" value="C:/Users/U80809724/GIT/KOST-Val/build.xml"/>
+<stringAttribute key="org.eclipse.ui.externaltools.ATTR_LOCATION" value="C:/Tools/_Entwicklungsumgebung/GIT/KOST-Val/build.xml"/>
 <stringAttribute key="org.eclipse.ui.externaltools.ATTR_RUN_BUILD_KINDS" value="full,incremental,"/>
 <booleanAttribute key="org.eclipse.ui.externaltools.ATTR_TRIGGERS_CONFIGURED" value="true"/>
-<stringAttribute key="org.eclipse.ui.externaltools.ATTR_WORKING_DIRECTORY" value="C:/Users/U80809724/GIT/KOST-Val"/>
+<stringAttribute key="org.eclipse.ui.externaltools.ATTR_WORKING_DIRECTORY" value="C:/Tools/_Entwicklungsumgebung/GIT/KOST-Val"/>
 </launchConfiguration>
