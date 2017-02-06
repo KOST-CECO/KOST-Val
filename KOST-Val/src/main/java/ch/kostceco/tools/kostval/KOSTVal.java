@@ -404,10 +404,13 @@ public class KOSTVal implements MessageConstants
 
 			boolean matchFound = matcher.find();
 			if ( matchFound ) {
-				LOGGER.logError( kostval.getTextResourceService().getText( ERROR_IOE,
-						kostval.getTextResourceService().getText( ERROR_SPECIAL_CHARACTER, name, matcher.group( i ) ) ) );
-				System.console().printf( kostval.getTextResourceService()
-						.getText( ERROR_SPECIAL_CHARACTER, name, matcher.group( i ) ) );
+				LOGGER.logError( kostval.getTextResourceService().getText(
+						ERROR_IOE,
+						kostval.getTextResourceService().getText( ERROR_SPECIAL_CHARACTER, name,
+								matcher.group( i ) ) ) );
+				System.console().printf(
+						kostval.getTextResourceService().getText( ERROR_SPECIAL_CHARACTER, name,
+								matcher.group( i ) ) );
 				System.exit( 1 );
 			}
 		}
@@ -422,10 +425,13 @@ public class KOSTVal implements MessageConstants
 
 			boolean matchFound = matcher.find();
 			if ( matchFound ) {
-				LOGGER.logError( kostval.getTextResourceService().getText( ERROR_IOE,
-						kostval.getTextResourceService().getText( ERROR_SPECIAL_CHARACTER, name, matcher.group( i ) ) ) );
-				System.console().printf( kostval.getTextResourceService()
-						.getText( ERROR_SPECIAL_CHARACTER, name, matcher.group( i ) ) );
+				LOGGER.logError( kostval.getTextResourceService().getText(
+						ERROR_IOE,
+						kostval.getTextResourceService().getText( ERROR_SPECIAL_CHARACTER, name,
+								matcher.group( i ) ) ) );
+				System.console().printf(
+						kostval.getTextResourceService().getText( ERROR_SPECIAL_CHARACTER, name,
+								matcher.group( i ) ) );
 				System.exit( 1 );
 			}
 		}
@@ -533,10 +539,13 @@ public class KOSTVal implements MessageConstants
 
 			boolean matchFound = matcher.find();
 			if ( matchFound ) {
-				LOGGER.logError( kostval.getTextResourceService().getText( ERROR_IOE,
-						kostval.getTextResourceService().getText( ERROR_SPECIAL_CHARACTER, name, matcher.group( i ) ) ) );
-				System.console().printf( kostval.getTextResourceService()
-						.getText( ERROR_SPECIAL_CHARACTER, name, matcher.group( i ) ) );
+				LOGGER.logError( kostval.getTextResourceService().getText(
+						ERROR_IOE,
+						kostval.getTextResourceService().getText( ERROR_SPECIAL_CHARACTER, name,
+								matcher.group( i ) ) ) );
+				System.console().printf(
+						kostval.getTextResourceService().getText( ERROR_SPECIAL_CHARACTER, name,
+								matcher.group( i ) ) );
 				System.exit( 1 );
 			}
 		}
@@ -553,6 +562,7 @@ public class KOSTVal implements MessageConstants
 		if ( args[0].equals( "--format" ) ) {
 			LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_FORMAT1 ) );
 			String countNioDetail = "";
+			String countNioExtension = "";
 			Integer countNio = 0;
 			Integer countSummaryNio = 0;
 			Integer countSummaryIo = 0;
@@ -773,6 +783,16 @@ public class KOSTVal implements MessageConstants
 								countNio = countNio + 1;
 								countNioDetail = countNioDetail + "</Message></Info><Info><Message> - "
 										+ valDatei.getAbsolutePath();
+								if ( countNioExtension == "" ) {
+									countNioExtension = valDateiExt;
+								} else {
+									// bereits Extensions vorhanden
+									if ( countNioExtension.contains( valDateiExt ) ) {
+										// Extension bereits erfasst
+									} else {
+										countNioExtension = countNioExtension + ", " + valDateiExt;
+									}
+								}
 							}
 						}
 					}
@@ -832,9 +852,18 @@ public class KOSTVal implements MessageConstants
 				String summaryFormat = kostval.getTextResourceService().getText(
 						MESSAGE_XML_SUMMARY_FORMAT, count, countSummaryIo, countSummaryNio, countNio,
 						countSummaryIoP, countSummaryNioP, countNioP );
-				String summary = kostval.getTextResourceService().getText( MESSAGE_XML_SUMMARY, count,
-						countSummaryIo, countSummaryNio, countNio, countSummaryIoP, countSummaryNioP,
-						countNioP, countNioDetail );
+				String summary = "";
+				if ( countNio > 0 ) {
+					// mit Detail weil countNio > 0
+					summary = kostval.getTextResourceService().getText( MESSAGE_XML_SUMMARYDETAIL, count,
+							countSummaryIo, countSummaryNio, countNio, countSummaryIoP, countSummaryNioP,
+							countNioP, countNioDetail, countNioExtension );
+				} else {
+					// ohne Detail weil countNio == 0
+					summary = kostval.getTextResourceService().getText( MESSAGE_XML_SUMMARY, count,
+							countSummaryIo, countSummaryNio, countNio, countSummaryIoP, countSummaryNioP,
+							countNioP );
+				}
 				String newFormat = "<Format>" + summary;
 				Util.oldnewstring( "<Format>", newFormat, logFile );
 
@@ -918,10 +947,6 @@ public class KOSTVal implements MessageConstants
 
 			// TODO: Sipvalidierung --> erledigt --> nur Marker
 
-			/* TODO: PDF-Validierung über den GANZEN Ordner wenn der Hauptvalidator PDFTron ist. Dies
-			 * bringt eine extreme Performanceoptimierung!
-			 * 
-			 * Dieser Report analysieren. Sollte Datei nicht dort sein noch separat anstossen */
 			try {
 				boolean validFormat = false;
 				File originalSipFile = valDatei;
@@ -933,6 +958,9 @@ public class KOSTVal implements MessageConstants
 				String valDateiExt = "." + FilenameUtils.getExtension( valDateiName ).toLowerCase();
 
 				// zuerst eine Formatvalidierung über den Content dies ist analog aufgebaut wie --format
+				String newFormat = "";
+				String countNioDetail = "";
+				String countNioExtension = "";
 				Integer countNio = 0;
 				Integer countSummaryNio = 0;
 				Integer countSummaryIo = 0;
@@ -1245,6 +1273,18 @@ public class KOSTVal implements MessageConstants
 								}
 							} else {
 								countNio = countNio + 1;
+								countNioDetail = countNioDetail + "</Message></Info><Info><Message> - "
+										+ valDatei.getAbsolutePath();
+								if ( countNioExtension == "" ) {
+									countNioExtension = valDateiExt;
+								} else {
+									// bereits Extensions vorhanden
+									if ( countNioExtension.contains( valDateiExt ) ) {
+										// Extension bereits erfasst
+									} else {
+										countNioExtension = countNioExtension + ", " + valDateiExt;
+									}
+								}
 							}
 						} else if ( valDateiExt.equals( ".tiff" ) || valDateiExt.equals( ".tif" ) ) {
 							tiff = tiff + 1;
@@ -1258,6 +1298,18 @@ public class KOSTVal implements MessageConstants
 								}
 							} else {
 								countNio = countNio + 1;
+								countNioDetail = countNioDetail + "</Message></Info><Info><Message> - "
+										+ valDatei.getAbsolutePath();
+								if ( countNioExtension == "" ) {
+									countNioExtension = valDateiExt;
+								} else {
+									// bereits Extensions vorhanden
+									if ( countNioExtension.contains( valDateiExt ) ) {
+										// Extension bereits erfasst
+									} else {
+										countNioExtension = countNioExtension + ", " + valDateiExt;
+									}
+								}
 							}
 						} else if ( valDateiExt.equals( ".siard" ) ) {
 							siard = siard + 1;
@@ -1281,6 +1333,18 @@ public class KOSTVal implements MessageConstants
 								}
 							} else {
 								countNio = countNio + 1;
+								countNioDetail = countNioDetail + "</Message></Info><Info><Message> - "
+										+ valDatei.getAbsolutePath();
+								if ( countNioExtension == "" ) {
+									countNioExtension = valDateiExt;
+								} else {
+									// bereits Extensions vorhanden
+									if ( countNioExtension.contains( valDateiExt ) ) {
+										// Extension bereits erfasst
+									} else {
+										countNioExtension = countNioExtension + ", " + valDateiExt;
+									}
+								}
 							}
 						} else if ( valDateiExt.equals( ".jpe" ) || valDateiExt.equals( ".jpeg" )
 								|| valDateiExt.equals( ".jpg" ) ) {
@@ -1294,6 +1358,18 @@ public class KOSTVal implements MessageConstants
 								}
 							} else {
 								countNio = countNio + 1;
+								countNioDetail = countNioDetail + "</Message></Info><Info><Message> - "
+										+ valDatei.getAbsolutePath();
+								if ( countNioExtension == "" ) {
+									countNioExtension = valDateiExt;
+								} else {
+									// bereits Extensions vorhanden
+									if ( countNioExtension.contains( valDateiExt ) ) {
+										// Extension bereits erfasst
+									} else {
+										countNioExtension = countNioExtension + ", " + valDateiExt;
+									}
+								}
 							}
 						} else if ( valDateiExt.equals( ".jp2" ) ) {
 							jp2 = jp2 + 1;
@@ -1307,61 +1383,277 @@ public class KOSTVal implements MessageConstants
 								}
 							} else {
 								countNio = countNio + 1;
+								countNioDetail = countNioDetail + "</Message></Info><Info><Message> - "
+										+ valDatei.getAbsolutePath();
+								if ( countNioExtension == "" ) {
+									countNioExtension = valDateiExt;
+								} else {
+									// bereits Extensions vorhanden
+									if ( countNioExtension.contains( valDateiExt ) ) {
+										// Extension bereits erfasst
+									} else {
+										countNioExtension = countNioExtension + ", " + valDateiExt;
+									}
+								}
 							}
 						} else if ( valDateiExt.equals( ".txt" ) ) {
 							txt = txt + 1;
 							countNio = countNio + 1;
+							countNioDetail = countNioDetail + "</Message></Info><Info><Message> - "
+									+ valDatei.getAbsolutePath();
+							if ( countNioExtension == "" ) {
+								countNioExtension = valDateiExt;
+							} else {
+								// bereits Extensions vorhanden
+								if ( countNioExtension.contains( valDateiExt ) ) {
+									// Extension bereits erfasst
+								} else {
+									countNioExtension = countNioExtension + ", " + valDateiExt;
+								}
+							}
 						} else if ( valDateiExt.equals( ".csv" ) ) {
 							csv = csv + 1;
 							countNio = countNio + 1;
+							countNioDetail = countNioDetail + "</Message></Info><Info><Message> - "
+									+ valDatei.getAbsolutePath();
+							if ( countNioExtension == "" ) {
+								countNioExtension = valDateiExt;
+							} else {
+								// bereits Extensions vorhanden
+								if ( countNioExtension.contains( valDateiExt ) ) {
+									// Extension bereits erfasst
+								} else {
+									countNioExtension = countNioExtension + ", " + valDateiExt;
+								}
+							}
 						} else if ( valDateiExt.equals( ".xml" ) ) {
 							xml = xml + 1;
 							countNio = countNio + 1;
+							countNioDetail = countNioDetail + "</Message></Info><Info><Message> - "
+									+ valDatei.getAbsolutePath();
+							if ( countNioExtension == "" ) {
+								countNioExtension = valDateiExt;
+							} else {
+								// bereits Extensions vorhanden
+								if ( countNioExtension.contains( valDateiExt ) ) {
+									// Extension bereits erfasst
+								} else {
+									countNioExtension = countNioExtension + ", " + valDateiExt;
+								}
+							}
 						} else if ( valDateiExt.equals( ".xsd" ) ) {
 							xsd = xsd + 1;
 							countNio = countNio + 1;
+							countNioDetail = countNioDetail + "</Message></Info><Info><Message> - "
+									+ valDatei.getAbsolutePath();
+							if ( countNioExtension == "" ) {
+								countNioExtension = valDateiExt;
+							} else {
+								// bereits Extensions vorhanden
+								if ( countNioExtension.contains( valDateiExt ) ) {
+									// Extension bereits erfasst
+								} else {
+									countNioExtension = countNioExtension + ", " + valDateiExt;
+								}
+							}
 						} else if ( valDateiExt.equals( ".wav" ) ) {
 							wave = wave + 1;
 							countNio = countNio + 1;
+							countNioDetail = countNioDetail + "</Message></Info><Info><Message> - "
+									+ valDatei.getAbsolutePath();
+							if ( countNioExtension == "" ) {
+								countNioExtension = valDateiExt;
+							} else {
+								// bereits Extensions vorhanden
+								if ( countNioExtension.contains( valDateiExt ) ) {
+									// Extension bereits erfasst
+								} else {
+									countNioExtension = countNioExtension + ", " + valDateiExt;
+								}
+							}
 						} else if ( valDateiExt.equals( ".mp3" ) ) {
 							mp3 = mp3 + 1;
 							countNio = countNio + 1;
+							countNioDetail = countNioDetail + "</Message></Info><Info><Message> - "
+									+ valDatei.getAbsolutePath();
+							if ( countNioExtension == "" ) {
+								countNioExtension = valDateiExt;
+							} else {
+								// bereits Extensions vorhanden
+								if ( countNioExtension.contains( valDateiExt ) ) {
+									// Extension bereits erfasst
+								} else {
+									countNioExtension = countNioExtension + ", " + valDateiExt;
+								}
+							}
 						} else if ( valDateiExt.equals( ".jpx" ) || valDateiExt.equals( ".jpf" ) ) {
 							jpx = jpx + 1;
 							countNio = countNio + 1;
+							countNioDetail = countNioDetail + "</Message></Info><Info><Message> - "
+									+ valDatei.getAbsolutePath();
+							if ( countNioExtension == "" ) {
+								countNioExtension = valDateiExt;
+							} else {
+								// bereits Extensions vorhanden
+								if ( countNioExtension.contains( valDateiExt ) ) {
+									// Extension bereits erfasst
+								} else {
+									countNioExtension = countNioExtension + ", " + valDateiExt;
+								}
+							}
 						} else if ( valDateiExt.equals( ".png" ) ) {
 							png = png + 1;
 							countNio = countNio + 1;
+							countNioDetail = countNioDetail + "</Message></Info><Info><Message> - "
+									+ valDatei.getAbsolutePath();
+							if ( countNioExtension == "" ) {
+								countNioExtension = valDateiExt;
+							} else {
+								// bereits Extensions vorhanden
+								if ( countNioExtension.contains( valDateiExt ) ) {
+									// Extension bereits erfasst
+								} else {
+									countNioExtension = countNioExtension + ", " + valDateiExt;
+								}
+							}
 						} else if ( valDateiExt.equals( ".dng" ) ) {
 							dng = dng + 1;
 							countNio = countNio + 1;
+							countNioDetail = countNioDetail + "</Message></Info><Info><Message> - "
+									+ valDatei.getAbsolutePath();
+							if ( countNioExtension == "" ) {
+								countNioExtension = valDateiExt;
+							} else {
+								// bereits Extensions vorhanden
+								if ( countNioExtension.contains( valDateiExt ) ) {
+									// Extension bereits erfasst
+								} else {
+									countNioExtension = countNioExtension + ", " + valDateiExt;
+								}
+							}
 						} else if ( valDateiExt.equals( ".svg" ) ) {
 							svg = svg + 1;
 							countNio = countNio + 1;
+							countNioDetail = countNioDetail + "</Message></Info><Info><Message> - "
+									+ valDatei.getAbsolutePath();
+							if ( countNioExtension == "" ) {
+								countNioExtension = valDateiExt;
+							} else {
+								// bereits Extensions vorhanden
+								if ( countNioExtension.contains( valDateiExt ) ) {
+									// Extension bereits erfasst
+								} else {
+									countNioExtension = countNioExtension + ", " + valDateiExt;
+								}
+							}
 						} else if ( valDateiExt.equals( ".mpeg" ) || valDateiExt.equals( ".mpg" ) ) {
 							mpeg2 = mpeg2 + 1;
 							countNio = countNio + 1;
+							countNioDetail = countNioDetail + "</Message></Info><Info><Message> - "
+									+ valDatei.getAbsolutePath();
+							if ( countNioExtension == "" ) {
+								countNioExtension = valDateiExt;
+							} else {
+								// bereits Extensions vorhanden
+								if ( countNioExtension.contains( valDateiExt ) ) {
+									// Extension bereits erfasst
+								} else {
+									countNioExtension = countNioExtension + ", " + valDateiExt;
+								}
+							}
 						} else if ( valDateiExt.equals( ".f4a" ) || valDateiExt.equals( ".f4v" )
 								|| valDateiExt.equals( ".m4a" ) || valDateiExt.equals( ".m4v" )
 								|| valDateiExt.equals( ".mp4" ) ) {
 							mp4 = mp4 + 1;
 							countNio = countNio + 1;
+							countNioDetail = countNioDetail + "</Message></Info><Info><Message> - "
+									+ valDatei.getAbsolutePath();
+							if ( countNioExtension == "" ) {
+								countNioExtension = valDateiExt;
+							} else {
+								// bereits Extensions vorhanden
+								if ( countNioExtension.contains( valDateiExt ) ) {
+									// Extension bereits erfasst
+								} else {
+									countNioExtension = countNioExtension + ", " + valDateiExt;
+								}
+							}
 						} else if ( valDateiExt.equals( ".xls" ) || valDateiExt.equals( ".xlw" )
 								|| valDateiExt.equals( ".xlsx" ) ) {
 							xls = xls + 1;
 							countNio = countNio + 1;
+							countNioDetail = countNioDetail + "</Message></Info><Info><Message> - "
+									+ valDatei.getAbsolutePath();
+							if ( countNioExtension == "" ) {
+								countNioExtension = valDateiExt;
+							} else {
+								// bereits Extensions vorhanden
+								if ( countNioExtension.contains( valDateiExt ) ) {
+									// Extension bereits erfasst
+								} else {
+									countNioExtension = countNioExtension + ", " + valDateiExt;
+								}
+							}
 						} else if ( valDateiExt.equals( ".odt" ) || valDateiExt.equals( ".ott" ) ) {
 							odt = odt + 1;
 							countNio = countNio + 1;
+							countNioDetail = countNioDetail + "</Message></Info><Info><Message> - "
+									+ valDatei.getAbsolutePath();
+							if ( countNioExtension == "" ) {
+								countNioExtension = valDateiExt;
+							} else {
+								// bereits Extensions vorhanden
+								if ( countNioExtension.contains( valDateiExt ) ) {
+									// Extension bereits erfasst
+								} else {
+									countNioExtension = countNioExtension + ", " + valDateiExt;
+								}
+							}
 						} else if ( valDateiExt.equals( ".ods" ) || valDateiExt.equals( ".ots" ) ) {
 							ods = ods + 1;
 							countNio = countNio + 1;
+							countNioDetail = countNioDetail + "</Message></Info><Info><Message> - "
+									+ valDatei.getAbsolutePath();
+							if ( countNioExtension == "" ) {
+								countNioExtension = valDateiExt;
+							} else {
+								// bereits Extensions vorhanden
+								if ( countNioExtension.contains( valDateiExt ) ) {
+									// Extension bereits erfasst
+								} else {
+									countNioExtension = countNioExtension + ", " + valDateiExt;
+								}
+							}
 						} else if ( valDateiExt.equals( ".odp" ) || valDateiExt.equals( ".otp" ) ) {
 							odp = odp + 1;
 							countNio = countNio + 1;
+							countNioDetail = countNioDetail + "</Message></Info><Info><Message> - "
+									+ valDatei.getAbsolutePath();
+							if ( countNioExtension == "" ) {
+								countNioExtension = valDateiExt;
+							} else {
+								// bereits Extensions vorhanden
+								if ( countNioExtension.contains( valDateiExt ) ) {
+									// Extension bereits erfasst
+								} else {
+									countNioExtension = countNioExtension + ", " + valDateiExt;
+								}
+							}
 						} else {
 							other = other + 1;
 							countNio = countNio + 1;
+							countNioDetail = countNioDetail + "</Message></Info><Info><Message> - "
+									+ valDatei.getAbsolutePath();
+							if ( countNioExtension == "" ) {
+								countNioExtension = valDateiExt;
+							} else {
+								// bereits Extensions vorhanden
+								if ( countNioExtension.contains( valDateiExt ) ) {
+									// Extension bereits erfasst
+								} else {
+									countNioExtension = countNioExtension + ", " + valDateiExt;
+								}
+							}
 						}
 
 					}
@@ -1375,6 +1667,19 @@ public class KOSTVal implements MessageConstants
 				String summary3c = kostval.getTextResourceService()
 						.getText( MESSAGE_XML_SUMMARY_3C, count, countSummaryIo, countSummaryNio, countNio,
 								countSummaryIoP, countSummaryNioP, countNioP );
+
+				String summary = "";
+				if ( countNio > 0 ) {
+					// mit Detail weil countNio > 0
+					summary = kostval.getTextResourceService().getText( MESSAGE_XML_SUMMARYDETAIL, count,
+							countSummaryIo, countSummaryNio, countNio, countSummaryIoP, countSummaryNioP,
+							countNioP, countNioDetail, countNioExtension );
+				} else {
+					// ohne Detail weil countNio == 0
+					summary = kostval.getTextResourceService().getText( MESSAGE_XML_SUMMARY, count,
+							countSummaryIo, countSummaryNio, countNio, countSummaryIoP, countSummaryNioP,
+							countNioP );
+				}
 
 				if ( countSummaryNio == 0 ) {
 					// alle Validierten Dateien valide
@@ -1438,6 +1743,8 @@ public class KOSTVal implements MessageConstants
 							.logError( kostval.getTextResourceService().getText( MESSAGE_XML_VALERGEBNIS_VALID ) );
 					LOGGER
 							.logError( kostval.getTextResourceService().getText( MESSAGE_XML_VALERGEBNIS_CLOSE ) );
+				LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_SIP2 ) );
+				LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_LOGEND ) );
 					System.out.println( "Valid" );
 					System.out.println( "" );
 				} else {
@@ -1446,13 +1753,19 @@ public class KOSTVal implements MessageConstants
 							MESSAGE_XML_VALERGEBNIS_INVALID ) );
 					LOGGER
 							.logError( kostval.getTextResourceService().getText( MESSAGE_XML_VALERGEBNIS_CLOSE ) );
+					LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_SIP2 ) );
+					LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_LOGEND ) );
 					System.out.println( "Invalid" );
 					System.out.println( "" );
 
 				}
 
-				LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_SIP2 ) );
-				LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_LOGEND ) );
+				// Bereinigungen und ergaenzungen durchfuehren
+				
+				// Ergaenzung Format Summary
+				newFormat = "<Format>" + summary;
+				Util.oldnewstring( "<Format>", newFormat, logFile );
+
 				// Zeitstempel End
 				java.util.Date nowEnd = new java.util.Date();
 				java.text.SimpleDateFormat sdfEnd = new java.text.SimpleDateFormat( "dd.MM.yyyy HH:mm:ss" );
@@ -1745,7 +2058,6 @@ public class KOSTVal implements MessageConstants
 					}
 					System.exit( 2 );
 				}
-				LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_SIP2 ) );
 			} catch ( Exception e ) {
 				LOGGER.logError( "<Error>"
 						+ kostval.getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() )
@@ -1788,7 +2100,6 @@ public class KOSTVal implements MessageConstants
 		String valDateiName = valDatei.getName();
 		String valDateiExt = "." + FilenameUtils.getExtension( valDateiName ).toLowerCase();
 		boolean valFile = false;
-		
 		File pathTemp = new File( directoryOfLogfile, "path.tmp" );
 
 		// falls das File bereits existiert, z.B. von einem vorhergehenden Durchlauf, löschen

@@ -49,6 +49,7 @@ public interface MessageConstants
 	String	MESSAGE_XML_SUMMARY_3C												= "message.xml.summary.3c";
 	String	MESSAGE_XML_SUMMARY_FORMAT										= "message.xml.summary.format";
 	String	MESSAGE_XML_SUMMARY														= "message.xml.summary";
+	String	MESSAGE_XML_SUMMARYDETAIL											= "message.xml.summarydetail";
 	String	MESSAGE_XML_VALFILE														= "message.xml.valfile";
 	String	MESSAGE_XML_HEADER														= "message.xml.header";
 	String	MESSAGE_XML_START															= "message.xml.start";
