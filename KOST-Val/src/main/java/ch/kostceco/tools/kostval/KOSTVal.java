@@ -32,6 +32,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -653,7 +654,8 @@ public class KOSTVal implements MessageConstants
 			} else {
 				// TODO: Formatvalidierung über ein Ordner --> erledigt --> nur Marker
 				try {
-					Map<String, File> fileMap = Util.getFileMap( valDatei, false );
+					Map<String, File> fileUnsortedMap = Util.getFileMap( valDatei, false );
+					Map<String, File> fileMap = new TreeMap<String, File>(fileUnsortedMap);
 					Set<String> fileMapKeys = fileMap.keySet();
 					for ( Iterator<String> iterator = fileMapKeys.iterator(); iterator.hasNext(); ) {
 						String entryName = iterator.next();
@@ -1220,7 +1222,8 @@ public class KOSTVal implements MessageConstants
 				}
 
 				// Vorgängige Formatvalidierung (Schritt 3c)
-				Map<String, File> fileMap = Util.getFileMap( valDatei, false );
+				Map<String, File> fileUnsortedMap = Util.getFileMap( valDatei, false );
+				Map<String, File> fileMap = new TreeMap<String, File>(fileUnsortedMap);
 				Set<String> fileMapKeys = fileMap.keySet();
 
 				int pdf = 0;
