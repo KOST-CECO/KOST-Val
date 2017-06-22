@@ -24,6 +24,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -92,9 +93,26 @@ public class ValidationDstructureModuleImpl extends ValidationModuleImpl impleme
 
 			/* read the document and for each schema and table entry verify existence in temporary
 			 * extracted structure */
+			Boolean version1 = FileUtils.readFileToString( metadataXml ).contains(
+					"http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
+			Boolean version2 = FileUtils.readFileToString( metadataXml ).contains(
+					"http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
 			Namespace ns = Namespace
 					.getNamespace( "http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
+			if ( version1 ) {
+				// ns = Namespace.getNamespace( "http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
+			} else {
+				if ( version2 ) {
+					ns = Namespace.getNamespace( "http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
+				} else {
+					valid = false;
+					getMessageService().logError(
+							getTextResourceService().getText( MESSAGE_XML_MODUL_D_SIARD )
+									+ getTextResourceService().getText( MESSAGE_XML_D_INVALID_XMLNS, metadataXml ) );
+				}
+			}
 			// select schema elements and loop
+			// TODO: schema2 aus Beispiel unterstützen
 			List<Element> schemas = document.getRootElement().getChild( "schemas", ns )
 					.getChildren( "schema", ns );
 			for ( Element schema : schemas ) {

@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.commons.io.FileUtils;
 import org.jdom2.*;
 import org.jdom2.input.SAXBuilder;
 
@@ -83,6 +84,7 @@ import ch.kostceco.tools.kostval.validation.modulesiard.ValidationEcolumnModule;
 public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 		ValidationEcolumnModule
 {
+	//TODO: schema1 aus Beispiel funktioniert noch nicht (null)
 	/* Validation Context */
 	private ValidationContext			validationContext;
 	/* Service related properties */
@@ -327,7 +329,6 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 		validDatabase = true;
 		// Iterate over the SIARD tables and verify the nullable attribute
 		for ( SiardTable siardTable : siardTables ) {
-			String nullable = new String();
 			String minOccurs = new String();
 			validTable = true;
 			// Number of attributes in metadata.xml
@@ -344,29 +345,35 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 			List<Element> xsdElements = siardTable.getTableXSDElements();
 			Namespace xmlNamespace = validationContext.getXmlNamespace();
 			for ( int i = 0; i < columnCount; i++ ) {
+				String nullable = new String();
 				// Actual Element of the metadata.xml
 				Element xmlElement = xmlElements.get( i );
 				// Actual Element of the according XML schema
 				Element xsdElement = xsdElements.get( i );
-				String nullableElementDescription = properties
-						.getProperty( "module.e.siard.metadata.xml.nullable.element.name" );
-				String minuOccursAttributeDescription = properties
-						.getProperty( "module.e.siard.table.xsd.attribute.minOccurs.name" );
-				String nameAttributeDescription = properties
-						.getProperty( "module.e.siard.table.xsd.attribute.name" );
-				// Value of the nullable Element in metadata.xml
-				nullable = xmlElement.getChild( nullableElementDescription, xmlNamespace ).getValue();
+				String nullableElementDescription = "nullable";
+				String minuOccursAttributeDescription = "minOccurs";
+				String nameAttributeDescription = "name";
 				// Value of the minOccurs attribute in the according XML schema
-				minOccurs = xsdElement.getAttributeValue( minuOccursAttributeDescription );
+				if ( xsdElement.getAttributeValue( minuOccursAttributeDescription ) == null ) {
+					minOccurs = "1";
+				} else {
+					minOccurs = xsdElement.getAttributeValue( minuOccursAttributeDescription );
+				}
+				if ( xmlElement.getChild( nullableElementDescription, xmlNamespace ) == null ) {
+					nullable = "true";
+				} else {
+					// Value of the nullable Element in metadata.xml
+					nullable = xmlElement.getChild( nullableElementDescription, xmlNamespace ).getValue();
+				}
 				// If the nullable Element is set to true and the minOccurs attribute is null
-				if ( nullable.equalsIgnoreCase( "true" ) && minOccurs == null ) {
+				if ( nullable.equalsIgnoreCase( "true" ) && minOccurs.equalsIgnoreCase( "1" ) ) {
 					validTable = false;
 					validDatabase = false;
 					namesOfInvalidColumns.append( (namesOfInvalidColumns.length() > 0) ? ", " : "" );
 					namesOfInvalidColumns.append( xsdElement.getAttributeValue( nameAttributeDescription ) );
 					// If the nullable Element is set to true and the minOccurs attribute is set to zero
 				} else if ( nullable.equalsIgnoreCase( "true" ) && minOccurs.equalsIgnoreCase( "0" ) ) {
-				} else if ( nullable.equalsIgnoreCase( "false" ) && minOccurs == null ) {
+				} else if ( nullable.equalsIgnoreCase( "false" ) && minOccurs.equalsIgnoreCase( "1" ) ) {
 				} else if ( nullable.equalsIgnoreCase( "false" ) && minOccurs.equalsIgnoreCase( "0" ) ) {
 					validTable = false;
 					validDatabase = false;
@@ -477,6 +484,19 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 				// Trim the column types - eliminates the brackets and specific numeric parameters
 				String trimmedExpectedType = trimLeftSideType( leftSide, delimiter );
 				// Designing expected column type in table.xsd, called "rightSide"
+				String pathToWorkDir = getConfigurationService().getPathToWorkDir();
+				pathToWorkDir = pathToWorkDir + File.separator + "SIARD";
+				File metadataXml = new File( new StringBuilder( pathToWorkDir ).append( File.separator )
+						.append( "header" ).append( File.separator ).append( "metadata.xml" ).toString() );
+				Boolean version1 = FileUtils.readFileToString( metadataXml ).contains(
+						"http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
+				Boolean version2 = FileUtils.readFileToString( metadataXml ).contains(
+						"http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
+				if ( version1 ) {
+					trimmedExpectedType = "1_" + trimmedExpectedType;
+				} else if ( version2 ) {
+					trimmedExpectedType = "2_" + trimmedExpectedType;
+				}
 				String expectedType = properties.getProperty( trimmedExpectedType );
 				// In case the expected type does not exist
 				if ( expectedType == null ) {
@@ -484,7 +504,7 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 					validTable = false;
 					validDatabase = false;
 					namesOfInvalidColumns.append( (namesOfInvalidColumns.length() > 0) ? ", " : "" );
-					namesOfInvalidColumns.append( columnName + "{" + expectedType + "}" );
+					namesOfInvalidColumns.append( columnName + "{" + trimmedExpectedType + "}" );
 				} else if ( !expectedType.equalsIgnoreCase( rightSide ) && expectedType != null ) {
 					validTable = false;
 					validDatabase = false;

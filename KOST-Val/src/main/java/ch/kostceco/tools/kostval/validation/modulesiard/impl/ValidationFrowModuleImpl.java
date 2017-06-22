@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
 import org.jdom2.*;
 import org.jdom2.input.SAXBuilder;
 import org.xml.sax.Attributes;
@@ -42,10 +43,10 @@ import ch.kostceco.tools.kostval.validation.bean.ValidationContext;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationFrowModule;
 
 /** Validierungsschritt F (Zeilen-Validierung) Wurden die Angaben aus metadata.xml korrekt in die
- * tableZ.xsd-Dateien �bertragen? valid --> gleiche Zeilenzahl (rows in metadata.xml = max =
+ * tableZ.xsd-Dateienuebertragen? valid --> gleiche Zeilenzahl (rows in metadata.xml = max =
  * minOccurs in tableZ.xsd)
  * 
- * bei 0 bis unbounded rows von metadata.xml in max = minOccurs von tableZ.xsd �bertragen, damit im
+ * bei 0 bis unbounded rows von metadata.xml in max = minOccurs von tableZ.xsd uebertragen, damit im
  * Modul H validiert werden kann.
  * 
  * @author Rc Claire Roethlisberger, KOST-CECO
@@ -56,9 +57,12 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements Va
 /* public class ValidationFrowModuleImpl<Range, RangeHandler> extends ValidationModuleImpl
  * implements ValidationFrowModule
  * 
- * <Range, RangeHandler> bereitet Probleme beim Projekt-Build. Da es nicht ben�tigt wird, wurde es
+ * <Range, RangeHandler> bereitet Probleme beim Projekt-Build. Da es nicht benoetigt wird, wurde es
  * entfernt. */
 {
+	Boolean											version1	= false;
+	Boolean											version2	= false;
+
 	private static final int		UNBOUNDED	= -1;
 
 	public ConfigurationService	configurationService;
@@ -108,8 +112,19 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements Va
 
 			/* read the document and for each schema and table entry verify existence in temporary
 			 * extracted structure and compare the rownumber */
+			version1 = FileUtils.readFileToString( metadataXml ).contains(
+					"http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
+			version2 = FileUtils.readFileToString( metadataXml ).contains(
+					"http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
 			Namespace ns = Namespace
 					.getNamespace( "http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
+			if ( version1 ) {
+				// ns = Namespace.getNamespace( "http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
+			} else {
+				if ( version2 ) {
+					ns = Namespace.getNamespace( "http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
+				}
+			}
 			// select schema elements and loop
 			List<Element> schemas = document.getRootElement().getChild( "schemas", ns )
 					.getChildren( "schema", ns );
@@ -309,10 +324,20 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements Va
 				throws SAXException
 		{
 			if ( "row".equals( attributes.getValue( "name" ) ) ) {
-				if ( "rowType".equals( attributes.getValue( "type" ) ) ) {
-					this.range.min = getRange( attributes.getValue( "minOccurs" ) );
-					this.range.max = getRange( attributes.getValue( "maxOccurs" ) );
-					throw new SAXException();
+				if ( version1 ) {
+					// version 1.0 hat rowType
+					if ( "rowType".equals( attributes.getValue( "type" ) ) ) {
+						this.range.min = getRange( attributes.getValue( "minOccurs" ) );
+						this.range.max = getRange( attributes.getValue( "maxOccurs" ) );
+						throw new SAXException();
+					}
+				} else {
+					// version 2.0 har recordType
+					if ( "recordType".equals( attributes.getValue( "type" ) ) ) {
+						this.range.min = getRange( attributes.getValue( "minOccurs" ) );
+						this.range.max = getRange( attributes.getValue( "maxOccurs" ) );
+						throw new SAXException();
+					}
 				}
 			}
 		}
@@ -323,7 +348,7 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements Va
 			if ( attributeValue == null ) {
 				return value;
 			}
-			if ( attributeValue.equals( "unbounded" ) ) {
+			if ( attributeValue.equalsIgnoreCase( "unbounded" ) ) {
 				return -1;
 			}
 			try {

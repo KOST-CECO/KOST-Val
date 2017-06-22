@@ -185,7 +185,8 @@ public interface MessageConstants
 	String	MESSAGE_XML_D_MISSING_FOLDER									= "message.xml.d.missing.folder";
 	String	MESSAGE_XML_D_INVALID_FILE										= "message.xml.d.invalid.file";
 	String	MESSAGE_XML_D_MISSING_FILE										= "message.xml.d.missing.file";
-
+	String	MESSAGE_XML_D_INVALID_XMLNS										= "message.xml.d.invalid.xmlns";
+	
 	// Modul E Meldungen
 	String	MESSAGE_XML_E_PROPERTIES_ERROR								= "message.xml.e.properties.error";
 	String	MESSAGE_XML_E_PATH_ERROR											= "message.xml.e.path.error";
@@ -201,7 +202,6 @@ public interface MessageConstants
 	String	MESSAGE_XML_F_PROPERTIES_ERROR								= "message.xml.f.properties.error";
 	String	MESSAGE_XML_F_PATH_ERROR											= "message.xml.f.path.error";
 	String	MESSAGE_XML_F_INVALID_TABLE_XML_FILES					= "message.xml.f.invalid.table.xml.files";
-	String	MESSAGE_XML_F_INVALID_TABLE_XSD_FILES					= "message.xml.f.invalid.table.xsd.files";
 
 	// Modul G Meldungen
 	String	MESSAGE_XML_G_DUPLICATE_SCHEMA								= "message.xml.g.duplicate.schema";
