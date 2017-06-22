@@ -186,7 +186,7 @@ public interface MessageConstants
 	String	MESSAGE_XML_D_INVALID_FILE										= "message.xml.d.invalid.file";
 	String	MESSAGE_XML_D_MISSING_FILE										= "message.xml.d.missing.file";
 	String	MESSAGE_XML_D_INVALID_XMLNS										= "message.xml.d.invalid.xmlns";
-	
+
 	// Modul E Meldungen
 	String	MESSAGE_XML_E_PROPERTIES_ERROR								= "message.xml.e.properties.error";
 	String	MESSAGE_XML_E_PATH_ERROR											= "message.xml.e.path.error";
@@ -220,6 +220,7 @@ public interface MessageConstants
 
 	// Modul I Meldungen
 	String	MESSAGE_XML_I_NOTALLOWEDEXT										= "message.xml.i.notallowedext";
+	String	MESSAGE_XML_I_SIARDVERSION										= "message.xml.i.siardversion";
 
 	// Modul J Meldungen
 	String	MESSAGE_XML_J_INVALID_FOLDER									= "message.xml.j.invalid.folder";

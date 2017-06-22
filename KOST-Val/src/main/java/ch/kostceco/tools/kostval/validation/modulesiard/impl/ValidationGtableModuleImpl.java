@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -45,6 +46,9 @@ import ch.kostceco.tools.kostval.validation.modulesiard.ValidationGtableModule;
 public class ValidationGtableModuleImpl extends ValidationModuleImpl implements
 		ValidationGtableModule
 {
+	Boolean											version1	= false;
+	Boolean											version2	= false;
+
 	public ConfigurationService	configurationService;
 
 	public ConfigurationService getConfigurationService()
@@ -102,8 +106,17 @@ public class ValidationGtableModuleImpl extends ValidationModuleImpl implements
 
 			/* read the document and for each schema and table entry verify existence in temporary
 			 * extracted structure */
+			version1 = FileUtils.readFileToString( metadataXml ).contains(
+					"http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
+			version2 = FileUtils.readFileToString( metadataXml ).contains(
+					"http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
 			Namespace ns = Namespace
 					.getNamespace( "http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
+			if ( version1 ) {
+				// ns = Namespace.getNamespace( "http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
+			} else if ( version2 ) {
+				ns = Namespace.getNamespace( "http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
+			}
 
 			// select schema elements and loop
 			List<Element> schemas = document.getRootElement().getChild( "schemas", ns )

@@ -36,6 +36,7 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import org.apache.commons.io.FileUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
@@ -288,21 +289,44 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl impl
 
 	private class SiardNamespaceContext implements NamespaceContext
 	{
-		private static final String	SIARD_URI	= "http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd";
+		Boolean											version1	= false;
+		Boolean											version2	= false;
+
+		private String							SIARD_URI	= "http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd";
 
 		private static final String	DB_URI		= "http://db.apache.org/torque/4.0/templates/database";
 
 		@Override
 		public String getNamespaceURI( String prefix )
 		{
-			if ( prefix == null ) {
-				throw new NullPointerException( "Null prefix is not allowed" );
-			}
-			if ( "siard".equals( prefix ) ) {
-				return SIARD_URI;
-			}
-			if ( "db".equals( prefix ) ) {
-				return DB_URI;
+			try {
+				if ( prefix == null ) {
+					throw new NullPointerException( "Null prefix is not allowed" );
+				}
+				if ( "siard".equals( prefix ) ) {
+					String pathToWorkDir = getConfigurationService().getPathToWorkDir();
+					pathToWorkDir = pathToWorkDir + File.separator + "SIARD";
+					/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
+					 * entsprechenden Modul die property anzugeben: <property name="configurationService"
+					 * ref="configurationService" /> */
+					File metadataXml = new File( new StringBuilder( pathToWorkDir ).append( File.separator )
+							.append( "header" ).append( File.separator ).append( "metadata.xml" ).toString() );
+					version1 = FileUtils.readFileToString( metadataXml ).contains(
+							"http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
+					version2 = FileUtils.readFileToString( metadataXml ).contains(
+							"http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
+					if ( version1 ) {
+						SIARD_URI = "http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd";
+					} else if ( version2 ) {
+						SIARD_URI = "http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd";
+					}
+
+					return SIARD_URI;
+				}
+				if ( "db".equals( prefix ) ) {
+					return DB_URI;
+				}
+			} catch ( java.io.IOException ioe ) {
 			}
 			return XMLConstants.XML_NS_URI;
 		}

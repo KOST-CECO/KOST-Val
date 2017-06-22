@@ -31,6 +31,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.io.FileUtils;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -59,6 +60,8 @@ import ch.kostceco.tools.kostval.validation.modulesiard.ValidationHcontentModule
 public class ValidationHcontentModuleImpl extends ValidationModuleImpl implements
 		ValidationHcontentModule
 {
+	Boolean											version1	= false;
+	Boolean											version2	= false;
 
 	private static final int		UNBOUNDED	= -1;
 
@@ -110,8 +113,17 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl implement
 
 			/* read the document and for each schema and table entry verify existence in temporary
 			 * extracted structure */
+			version1 = FileUtils.readFileToString( metadataXml ).contains(
+					"http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
+			version2 = FileUtils.readFileToString( metadataXml ).contains(
+					"http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
 			Namespace ns = Namespace
 					.getNamespace( "http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
+			if ( version1 ) {
+				// ns = Namespace.getNamespace( "http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
+			} else if ( version2 ) {
+				ns = Namespace.getNamespace( "http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
+			}
 			// select schema elements and loop
 			List<Element> schemas = document.getRootElement().getChild( "schemas", ns )
 					.getChildren( "schema", ns );

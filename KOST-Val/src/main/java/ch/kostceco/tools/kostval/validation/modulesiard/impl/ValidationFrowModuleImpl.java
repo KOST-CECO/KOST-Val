@@ -120,10 +120,8 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements Va
 					.getNamespace( "http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
 			if ( version1 ) {
 				// ns = Namespace.getNamespace( "http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
-			} else {
-				if ( version2 ) {
-					ns = Namespace.getNamespace( "http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
-				}
+			} else if ( version2 ) {
+				ns = Namespace.getNamespace( "http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
 			}
 			// select schema elements and loop
 			List<Element> schemas = document.getRootElement().getChild( "schemas", ns )
