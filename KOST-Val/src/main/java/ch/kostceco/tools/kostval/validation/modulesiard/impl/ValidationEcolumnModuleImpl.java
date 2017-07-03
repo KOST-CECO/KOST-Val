@@ -177,7 +177,6 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 	public boolean prepareValidation( ValidationContext validationContext ) throws IOException,
 			JDOMException, Exception
 	{
-		System.out.print("prepareValidation");
 		// All over preparation flag
 		boolean prepared = true;
 		// Load the Java properties to the validation context
@@ -235,7 +234,6 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 	 * according XML schema files */
 	private boolean validateColumnCount( ValidationContext validationContext ) throws Exception
 	{
-		System.out.print("E.1");
 		boolean showOnWork = true;
 		int onWork = 410;
 		// Informationen zur Darstellung "onWork" holen
@@ -305,7 +303,6 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 	 * according XML schemata */
 	private boolean validateColumnOccurrence( ValidationContext validationContext ) throws Exception
 	{
-		System.out.print("E.2");
 		boolean showOnWork = true;
 		int onWork = 410;
 		// Informationen zur Darstellung "onWork" holen
@@ -421,7 +418,6 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 	/* [E.3]Compares the column types in the metadata.xml to the accordingXML schemata */
 	private boolean validateColumnType( ValidationContext validationContext ) throws Exception
 	{
-		System.out.print("E.3");
 		boolean showOnWork = true;
 		int onWork = 410;
 		// Informationen zur Darstellung "onWork" holen
@@ -503,7 +499,7 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 					namesOfInvalidColumns.append( (namesOfInvalidColumns.length() > 0) ? ", " : "" );
 					namesOfInvalidColumns.append( columnName + "{" + trimmedExpectedType + "}" );
 				} else if ( !expectedType.equalsIgnoreCase( rightSide )  ) {
-					System.out.print (" "+expectedType+" = "+rightSide+" . ");
+					System.out.print (" "+expectedType+" = "+rightSide+" . "); // TODO: wieder löschen
 					validTable = false;
 					validDatabase = false;
 					namesOfInvalidColumns.append( (namesOfInvalidColumns.length() > 0) ? ", " : "" );
@@ -558,7 +554,6 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 	/* [E.0.1]Load the validation properties */
 	private boolean initializeProperties() throws IOException
 	{
-		System.out.print("E.0.1");
 		ValidationContext validationContext = this.getValidationContext();
 		boolean successfullyCommitted = false;
 		// Initializing the validation context properties
@@ -581,7 +576,6 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 	/* [E.0.2]Initializes the SIARD path configuration */
 	private boolean initializePath( ValidationContext validationContext ) throws Exception
 	{
-		System.out.print("E.0.2");
 		boolean successfullyCommitted = false;
 		StringBuilder headerPath = new StringBuilder();
 		StringBuilder contentPath = new StringBuilder();
@@ -613,7 +607,6 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 	private boolean prepareXMLAccess( ValidationContext validationContext ) throws JDOMException,
 			IOException, Exception
 	{
-		System.out.print("E.0.5");
 		boolean successfullyCommitted = false;
 		File metadataXML = validationContext.getMetadataXML();
 		InputStream inputStream = new FileInputStream( metadataXML );
@@ -658,7 +651,6 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 	private boolean extractSiardArchive( ValidationContext validationContext )
 			throws FileNotFoundException, IOException, Exception
 	{
-		System.out.print("E.0.3");
 		boolean showOnWork = true;
 		int onWork = 410;
 		// Informationen zur Darstellung "onWork" holen
@@ -738,7 +730,6 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 	/* [E.0.4]Pick up the metadata.xml from the SIARD package */
 	private boolean pickMetadataXML( ValidationContext validationContext ) throws Exception
 	{
-		System.out.print("E.0.4");
 		boolean successfullyCommitted = false;
 		StringBuilder pathToMetadataXML = new StringBuilder();
 		pathToMetadataXML.append( validationContext.getConfigurationService().getPathToWorkDir() );
@@ -766,7 +757,6 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 	private boolean prepareValidationData( ValidationContext validationContext )
 			throws JDOMException, IOException, Exception
 	{
-		System.out.print("E.0.6");
 		boolean showOnWork = true;
 		int onWork = 410;
 		// Informationen zur Darstellung "onWork" holen
