@@ -84,7 +84,7 @@ import ch.kostceco.tools.kostval.validation.modulesiard.ValidationEcolumnModule;
 public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 		ValidationEcolumnModule
 {
-	//TODO: schema1 aus Beispiel funktioniert noch nicht (null)
+	// TODO: schema1 aus Beispiel funktioniert noch nicht (null)
 	/* Validation Context */
 	private ValidationContext			validationContext;
 	/* Service related properties */
@@ -93,6 +93,7 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 	private StringBuilder					incongruentColumnCount;
 	private StringBuilder					incongruentColumnOccurrence;
 	private StringBuilder					incongruentColumnType;
+	private StringBuilder					warningColumnType;
 	private StringBuilder					incongruentColumnSequence;
 
 	/** Start of the column validation. The <code>validate</code> method act as a controller. First it
@@ -159,6 +160,17 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 						getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
 								+ getTextResourceService().getText( MESSAGE_XML_E_INVALID_ATTRIBUTE_TYPE,
 										this.getIncongruentColumnType() ) );
+				// UDT-Warning mit ausgeben wenn vorhanden: MESSAGE_XML_E_TYPE_NOT_VALIDATED
+				getMessageService().logError(
+						getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
+								+ getTextResourceService().getText( MESSAGE_XML_E_TYPE_NOT_VALIDATED,
+										this.getWarningColumnType() ) );
+			} else {
+				// UDT-Warning mit ausgeben wenn vorhanden: MESSAGE_XML_E_TYPE_NOT_VALIDATED
+				getMessageService().logError(
+						getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
+								+ getTextResourceService().getText( MESSAGE_XML_E_TYPE_NOT_VALIDATED,
+										this.getWarningColumnType() ) );
 			}
 		} catch ( Exception e ) {
 			valid = false;
@@ -265,7 +277,7 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 				validDatabase = false;
 				namesOfInvalidTables.append( (namesOfInvalidTables.length() > 0) ? ", " : "" );
 				namesOfInvalidTables.append( siardTable.getTableName() );
-				namesOfInvalidTables.append( ".xsd");
+				namesOfInvalidTables.append( ".xsd" );
 				namesOfInvalidTables.append( "(" );
 				namesOfInvalidTables.append( (columnsDifference > 0 ? "+" + columnsDifference
 						: columnsDifference) );
@@ -381,7 +393,7 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 			if ( validTable == false ) {
 				namesOfInvalidTables.append( (namesOfInvalidTables.length() > 0) ? ", " : "" );
 				namesOfInvalidTables.append( siardTable.getTableName() );
-				namesOfInvalidTables.append( ".xsd"  );
+				namesOfInvalidTables.append( ".xsd" );
 				namesOfInvalidTables.append( "(" );
 				namesOfInvalidTables.append( namesOfInvalidColumns );
 				namesOfInvalidTables.append( ")" );
@@ -434,11 +446,14 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 			System.out.print( "\b\b\b\b\b" );
 		}
 		boolean validTable;
+		boolean udtColumn;
 		boolean validDatabase;
 		Properties properties = validationContext.getValidationProperties();
 		List<SiardTable> siardTables = validationContext.getSiardTables();
 		StringBuilder namesOfInvalidTables = new StringBuilder();
 		StringBuilder namesOfInvalidColumns = new StringBuilder();
+		StringBuilder namesOfUdtTables = new StringBuilder();
+		StringBuilder namesOfUdtColumns = new StringBuilder();
 		// List of all XML column elements to verify the allover sequence
 		List<String> xmlElementSequence = new ArrayList<String>();
 		// List of all XSD column elements
@@ -459,65 +474,122 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 			int columnCount = (metadataXMLColumnsCount >= tableXSDColumnsCount) ? tableXSDColumnsCount
 					: metadataXMLColumnsCount;
 			validTable = true;
+			udtColumn = false;
 			// Verify whether the number of column elements in XML and XSD are equal
 			for ( int i = 0; i < columnCount; i++ ) {
 				Element xmlElement = xmlElements.get( i );
 				Element xsdElement = xsdElements.get( i );
 				// Retrieve the Elements name
 				String xmlTypeElementName = "type";
-				String xsdTypeAttribute = "type" ;
+				String xsdTypeAttribute = "type";
 				String xsdAttribute = "name";
+				String leftSide = "";
+				String rightSide = "";
 				String columnName = xsdElement.getAttributeValue( xsdAttribute );
-				// Retrieve the original column type from metadata.xml
-				String leftSide = xmlElement.getChild( xmlTypeElementName,
-						validationContext.getXmlNamespace() ).getValue();
-				// Retrieve the original column type from table.xsd
-				String rightSide = xsdElement.getAttributeValue( xsdTypeAttribute );
-				String delimiter = "(" ;
-				// Trim the column types - eliminates the brackets and specific numeric parameters
-				String trimmedExpectedType = trimLeftSideType( leftSide, delimiter );
-				// Designing expected column type in table.xsd, called "rightSide"
-				String pathToWorkDir = getConfigurationService().getPathToWorkDir();
-				pathToWorkDir = pathToWorkDir + File.separator + "SIARD";
-				File metadataXml = new File( new StringBuilder( pathToWorkDir ).append( File.separator )
-						.append( "header" ).append( File.separator ).append( "metadata.xml" ).toString() );
-				Boolean version1 = FileUtils.readFileToString( metadataXml ).contains(
-						"http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
-				Boolean version2 = FileUtils.readFileToString( metadataXml ).contains(
-						"http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
-				if ( version1 ) {
-					trimmedExpectedType = "1_" + trimmedExpectedType;
-				} else if ( version2 ) {
-					trimmedExpectedType = "2_" + trimmedExpectedType;
+				Namespace xmlNamespace = validationContext.getXmlNamespace();
+				if ( xmlElement.getChild( xmlTypeElementName, xmlNamespace ) == null
+						|| xmlElement.getChild( xmlTypeElementName, xmlNamespace ).getValue() == null ) {
+					/* TODO: bei UDT stehen beide typen in den subelementen (beide null). UDT koennen wiederum
+					 * Array oder UDT enthalen und diese mehrfach. Entsprechend wird das noch nicht
+					 * unterstützt! */
+					udtColumn = true;
+					// validDatabase = unverändert -> nur Warnung
+					namesOfUdtColumns.append( (namesOfUdtColumns.length() > 0) ? ", " : "" );
+					namesOfUdtColumns.append( columnName );
+					// Keine Typenvalidierung dieser Spalte
+				} else {
+					// Typenvalidierung der Spalte möglich
+
+					// Retrieve the original column type from metadata.xml
+					leftSide = xmlElement.getChild( xmlTypeElementName, xmlNamespace ).getValue();
+					// Retrieve the original column type from table.xsd
+					rightSide = xsdElement.getAttributeValue( xsdTypeAttribute );
+					if ( rightSide == null || rightSide == "" ) {
+						/* null bei Array, weil type in jedem subelement steht (alle muessen gleich sein) */
+
+						List<Element> childListElement = xsdElement.getChildren();
+						for ( int y = 0; y < childListElement.size(); y++ ) {
+							Element subElement = childListElement.get( y );
+							List<Element> arrayListElement = subElement.getChildren();
+							for ( int x = 0; x < arrayListElement.size(); x++ ) {
+								Element subSubElement = arrayListElement.get( x );
+								List<Element> array2ListElement = subSubElement.getChildren();
+								for ( int z = 0; z < array2ListElement.size(); z++ ) {
+									Element arrayElement = array2ListElement.get( z );
+									String array0 = "";
+									String arrays = "";
+									arrays = arrayElement.getAttributeValue( "type" );
+									if ( array0.equals( "" ) ) {
+										array0 = arrays;
+										rightSide = array0;
+									} else {
+										// alle arrys müssen den gleichen Typ haben
+										if ( !array0.equalsIgnoreCase( arrays ) ) {
+											// TODO: Fehlermeldung
+											System.out.println( "    " + array0 + " - " + arrays + " " );
+										}
+									}
+								}
+							}
+						}
+					}
+					String delimiter = "(";
+					// Trim the column types - eliminates the brackets and specific numeric parameters
+					String trimmedExpectedType = trimLeftSideType( leftSide, delimiter );
+					// Designing expected column type in table.xsd, called "rightSide"
+					String pathToWorkDir = getConfigurationService().getPathToWorkDir();
+					pathToWorkDir = pathToWorkDir + File.separator + "SIARD";
+					File metadataXml = new File( new StringBuilder( pathToWorkDir ).append( File.separator )
+							.append( "header" ).append( File.separator ).append( "metadata.xml" ).toString() );
+					Boolean version1 = FileUtils.readFileToString( metadataXml ).contains(
+							"http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
+					Boolean version2 = FileUtils.readFileToString( metadataXml ).contains(
+							"http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
+					if ( version1 ) {
+						trimmedExpectedType = "1_" + trimmedExpectedType;
+					} else if ( version2 ) {
+						trimmedExpectedType = "2_" + trimmedExpectedType;
+					}
+					String expectedType = properties.getProperty( trimmedExpectedType );
+					// In case the expected type does not exist
+					if ( expectedType == null ) {
+						System.out.print( " Unknown Type " + trimmedExpectedType );
+						expectedType = "Unknown Type";
+						validTable = false;
+						validDatabase = false;
+						namesOfInvalidColumns.append( (namesOfInvalidColumns.length() > 0) ? ", " : "" );
+						namesOfInvalidColumns.append( columnName + "(" + trimmedExpectedType + "=?)" );
+					} else if ( !expectedType.equalsIgnoreCase( rightSide ) ) {
+						validTable = false;
+						validDatabase = false;
+						String columnNameLsRs = columnName + " (" + expectedType + " - " + rightSide + ")";
+						namesOfInvalidColumns.append( (namesOfInvalidColumns.length() > 0) ? ", " : "" );
+						namesOfInvalidColumns.append( columnNameLsRs );
+					}
+					// Convey the column types for the all over sequence test [E.4]
+					xmlElementSequence.add( expectedType );
+					xsdElementSequence.add( rightSide );
 				}
-				String expectedType = properties.getProperty( trimmedExpectedType );
-				// In case the expected type does not exist
-				if ( expectedType == null ) {
-					expectedType = "Unknown Type";
-					validTable = false;
-					validDatabase = false;
-					namesOfInvalidColumns.append( (namesOfInvalidColumns.length() > 0) ? ", " : "" );
-					namesOfInvalidColumns.append( columnName + "{" + trimmedExpectedType + "}" );
-				} else if ( !expectedType.equalsIgnoreCase( rightSide )  ) {
-					System.out.print (" "+expectedType+" = "+rightSide+" . "); // TODO: wieder löschen
-					validTable = false;
-					validDatabase = false;
-					namesOfInvalidColumns.append( (namesOfInvalidColumns.length() > 0) ? ", " : "" );
-					namesOfInvalidColumns.append( columnName );
-				}
-				// Convey the column types for the all over sequence test [E.4]
-				xmlElementSequence.add( expectedType );
-				xsdElementSequence.add( rightSide );
 			}
-			if ( validTable == false ) {
+			if ( !validTable ) {
 				namesOfInvalidTables.append( (namesOfInvalidTables.length() > 0) ? ", " : "" );
 				namesOfInvalidTables.append( siardTable.getTableName() );
-				namesOfInvalidTables.append( ".xsd"  );
+				namesOfInvalidTables.append( ".xsd" );
 				namesOfInvalidTables.append( "(" );
 				namesOfInvalidTables.append( namesOfInvalidColumns );
 				namesOfInvalidTables.append( ")" );
 				namesOfInvalidColumns = null;
 				namesOfInvalidColumns = new StringBuilder();
+			}
+			if ( udtColumn ) {
+				namesOfUdtTables.append( (namesOfUdtTables.length() > 0) ? ", " : "" );
+				namesOfUdtTables.append( siardTable.getTableName() );
+				namesOfUdtTables.append( ".xsd" );
+				namesOfUdtTables.append( "(" );
+				namesOfUdtTables.append( namesOfUdtColumns );
+				namesOfUdtTables.append( ")" );
+				namesOfUdtColumns = null;
+				namesOfUdtColumns = new StringBuilder();
 			}
 			if ( showOnWork ) {
 				if ( onWork == 410 ) {
@@ -542,6 +614,7 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 			}
 		}
 		this.setIncongruentColumnType( namesOfInvalidTables );
+		this.setWarningColumnType( namesOfUdtTables );
 		// Save the allover column elements for [E.4]
 		validationContext.setXmlElementsSequence( xmlElementSequence );
 		validationContext.setXsdElementsSequence( xsdElementSequence );
@@ -584,15 +657,14 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 		// Preparing the internal SIARD directory structure
 		headerPath.append( workDir );
 		headerPath.append( File.separator );
-		headerPath.append(  "header"  );
+		headerPath.append( "header" );
 		contentPath.append( workDir );
 		contentPath.append( File.separator );
-		contentPath.append(  "content"  );
+		contentPath.append( "content" );
 		// Writing back the directory structure to the validation context
 		validationContext.setHeaderPath( headerPath.toString() );
 		validationContext.setContentPath( contentPath.toString() );
-		if ( validationContext.getHeaderPath() != null && validationContext.getContentPath() != null
-				 ) {
+		if ( validationContext.getHeaderPath() != null && validationContext.getContentPath() != null ) {
 			successfullyCommitted = true;
 			this.setValidationContext( validationContext );
 		} else {
@@ -773,48 +845,35 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 			System.out.print( "\b\b\b\b\b" );
 		}
 		boolean successfullyCommitted = false;
+		Namespace xmlNamespace = validationContext.getXmlNamespace();
 		// Gets the tables to be validated
 		List<SiardTable> siardTables = new ArrayList<SiardTable>();
 		Document document = validationContext.getMetadataXMLDocument();
 		Element rootElement = document.getRootElement();
 		String workingDirectory = validationContext.getConfigurationService().getPathToWorkDir();
-		String siardSchemasElementsName = "schemas" ;
+		String siardSchemasElementsName = "schemas";
 		// Gets the list of <schemas> elements from metadata.xml
 		List<Element> siardSchemasElements = rootElement.getChildren( siardSchemasElementsName,
-				validationContext.getXmlNamespace() );
+				xmlNamespace );
 		for ( Element siardSchemasElement : siardSchemasElements ) {
 			// Gets the list of <schema> elements from metadata.xml
-			List<Element> siardSchemaElements = siardSchemasElement.getChildren(
-					"schema",
-					validationContext.getXmlNamespace() );
+			List<Element> siardSchemaElements = siardSchemasElement.getChildren( "schema", xmlNamespace );
 			// Iterating over all <schema> elements
 			for ( Element siardSchemaElement : siardSchemaElements ) {
-				String schemaFolderName = siardSchemaElement.getChild(
-						"folder",
-						validationContext.getXmlNamespace() ).getValue();
-				Element siardTablesElement = siardSchemaElement.getChild(
-						"tables",
-						validationContext.getXmlNamespace() );
-				List<Element> siardTableElements = siardTablesElement.getChildren(
-						"table",
-						validationContext.getXmlNamespace() );
+				String schemaFolderName = siardSchemaElement.getChild( "folder", xmlNamespace ).getValue();
+				Element siardTablesElement = siardSchemaElement.getChild( "tables", xmlNamespace );
+				List<Element> siardTableElements = siardTablesElement.getChildren( "table", xmlNamespace );
 				// Iterating over all containing table elements
 				for ( Element siardTableElement : siardTableElements ) {
-					Element siardColumnsElement = siardTableElement.getChild(
-							"columns",
-							validationContext.getXmlNamespace() );
-					List<Element> siardColumnElements = siardColumnsElement.getChildren(
-							"column",
-							validationContext.getXmlNamespace() );
-					String tableName = siardTableElement.getChild(
-							"folder",
-							validationContext.getXmlNamespace() ).getValue();
+					Element siardColumnsElement = siardTableElement.getChild( "columns", xmlNamespace );
+					List<Element> siardColumnElements = siardColumnsElement.getChildren( "column",
+							xmlNamespace );
+					String tableName = siardTableElement.getChild( "folder", xmlNamespace ).getValue();
 					SiardTable siardTable = new SiardTable();
 					siardTable.setMetadataXMLElements( siardColumnElements );
 					siardTable.setTableName( tableName );
-					String siardTableFolderName = siardTableElement.getChild(
-							"folder",
-							validationContext.getXmlNamespace() ).getValue();
+					String siardTableFolderName = siardTableElement.getChild( "folder", xmlNamespace )
+							.getValue();
 					StringBuilder pathToTableSchema = new StringBuilder();
 					// Preparing access to the according XML schema file
 					pathToTableSchema.append( workingDirectory );
@@ -826,7 +885,7 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 					pathToTableSchema.append( siardTableFolderName.replaceAll( " ", "" ) );
 					pathToTableSchema.append( File.separator );
 					pathToTableSchema.append( siardTableFolderName.replaceAll( " ", "" ) );
-					pathToTableSchema.append( ".xsd"  );
+					pathToTableSchema.append( ".xsd" );
 					// Retrieve the according XML schema
 					File tableSchema = validationContext.getSiardFiles().get( pathToTableSchema.toString() );
 					SAXBuilder builder = new SAXBuilder();
@@ -834,10 +893,10 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 					Element tableSchemaRootElement = tableSchemaDocument.getRootElement();
 					Namespace namespace = tableSchemaRootElement.getNamespace();
 					// Getting the tags from XML schema to be validated
-					Element tableSchemaComplexType = tableSchemaRootElement.getChild(
-							"complexType", namespace );
-					Element tableSchemaComplexTypeSequence = tableSchemaComplexType.getChild(
-							"sequence", namespace );
+					Element tableSchemaComplexType = tableSchemaRootElement.getChild( "complexType",
+							namespace );
+					Element tableSchemaComplexTypeSequence = tableSchemaComplexType.getChild( "sequence",
+							namespace );
 					List<Element> tableSchemaComplexTypeElements = tableSchemaComplexTypeSequence
 							.getChildren( "element", namespace );
 					siardTable.setTableXSDElements( tableSchemaComplexTypeElements );
@@ -943,6 +1002,19 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 	public void setIncongruentColumnType( StringBuilder incongruentColumnType )
 	{
 		this.incongruentColumnType = incongruentColumnType;
+	}
+
+	/** @return the warningColumnType */
+	public StringBuilder getWarningColumnType()
+	{
+		return warningColumnType;
+	}
+
+	/** @param warningColumnType
+	 *          the warningColumnType to set */
+	public void setWarningColumnType( StringBuilder warningColumnType )
+	{
+		this.warningColumnType = warningColumnType;
 	}
 
 	/** @return the incongruentColumnSequence */

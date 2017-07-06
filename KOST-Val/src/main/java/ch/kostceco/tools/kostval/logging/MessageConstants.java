@@ -197,6 +197,7 @@ public interface MessageConstants
 	String	MESSAGE_XML_E_INVALID_ATTRIBUTE_COUNT					= "message.xml.e.attribute.count.validation.failed";
 	String	MESSAGE_XML_E_INVALID_ATTRIBUTE_OCCURRENCE		= "message.xml.e.attribute.occurrence.validation.failed";
 	String	MESSAGE_XML_E_INVALID_ATTRIBUTE_TYPE					= "message.xml.e.attribute.type.validation.failed";
+	String	MESSAGE_XML_E_TYPE_NOT_VALIDATED							= "message.xml.e.type.not.validated";
 
 	// Modul F Meldungen
 	String	MESSAGE_XML_F_PROPERTIES_ERROR								= "message.xml.f.properties.error";
