@@ -224,8 +224,6 @@ public interface MessageConstants
 	String	MESSAGE_XML_I_SIARDVERSION										= "message.xml.i.siardversion";
 
 	// Modul J Meldungen
-	String	MESSAGE_XML_J_INVALID_FOLDER									= "message.xml.j.invalid.folder";
-	String	MESSAGE_XML_J_INVALID_FILE										= "message.xml.j.invalid.file";
 	String	MESSAGE_XML_J_INVALID_ENTRY										= "message.xml.j.invalid.entry";
 
 	// Modul W Meldungen

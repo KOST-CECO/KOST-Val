@@ -145,6 +145,24 @@ public class Util
 		return file.delete();
 	}
 
+	public static Map<String, File> getContent( File dir, HashMap<String, File> fileMap )
+	{
+		String filePath = dir.getPath();
+		String content = "temp_KOST-Val" + File.separator + "SIARD" + File.separator + "content";
+		if ( filePath.equalsIgnoreCase( content ) ) {
+			// kein Eintrag in die Map
+		} else {
+			fileMap.put( filePath, dir );
+		}
+		if ( dir.isDirectory() ) {
+			String[] subNote = dir.list();
+			for ( String filename : subNote ) {
+				getContent( new File( dir, filename ), fileMap );
+			}
+		}
+		return fileMap;
+	}
+
 	public static Map<String, File> getFileMap( File dir, boolean nurPrimaerDateien )
 	{
 		originalPath = dir.getAbsolutePath();

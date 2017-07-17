@@ -79,7 +79,8 @@ import ch.kostceco.tools.kostval.validation.modulesiard.ValidationEcolumnModule;
  * 
  * </blockquote
  * 
- * @author Do Olivier Debenath */
+ * @author Do Olivier Debenath
+ * @author Rc Claire Roethlisberger, KOST-CECO */
 
 public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 		ValidationEcolumnModule
@@ -545,6 +546,12 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 							"http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
 					Boolean version2 = FileUtils.readFileToString( metadataXml ).contains(
 							"http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
+					
+					/*Interval wird vereinfacht kontrolliert*/
+					if (trimmedExpectedType.startsWith( "INTERVAL" )||trimmedExpectedType.startsWith( "interval" )){
+						trimmedExpectedType="INTERVAL";
+					}
+					
 					if ( version1 ) {
 						trimmedExpectedType = "1_" + trimmedExpectedType;
 					} else if ( version2 ) {
