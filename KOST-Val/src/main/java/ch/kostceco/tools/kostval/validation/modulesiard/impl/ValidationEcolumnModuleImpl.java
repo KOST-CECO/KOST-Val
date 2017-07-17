@@ -515,10 +515,10 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 							for ( int x = 0; x < arrayListElement.size(); x++ ) {
 								Element subSubElement = arrayListElement.get( x );
 								List<Element> array2ListElement = subSubElement.getChildren();
+								String array0 = "";
+								String arrays = "";
 								for ( int z = 0; z < array2ListElement.size(); z++ ) {
 									Element arrayElement = array2ListElement.get( z );
-									String array0 = "";
-									String arrays = "";
 									arrays = arrayElement.getAttributeValue( "type" );
 									if ( array0.equals( "" ) ) {
 										array0 = arrays;
@@ -526,8 +526,15 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 									} else {
 										// alle arrys müssen den gleichen Typ haben
 										if ( !array0.equalsIgnoreCase( arrays ) ) {
-											// TODO: Fehlermeldung
-											System.out.println( "    " + array0 + " - " + arrays + " " );
+											validTable = false;
+											validDatabase = false;
+											namesOfInvalidColumns.append( (namesOfInvalidColumns.length() > 0) ? ", " : "" );
+											namesOfInvalidColumns.append( columnName );
+											getMessageService()
+													.logError(
+															getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
+																	+ getTextResourceService().getText( MESSAGE_XML_E_ARRAY,
+																			(siardTable.getTableName()+".xsd("+ columnName+")") ) );
 										}
 									}
 								}
@@ -546,12 +553,13 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 							"http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
 					Boolean version2 = FileUtils.readFileToString( metadataXml ).contains(
 							"http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
-					
-					/*Interval wird vereinfacht kontrolliert*/
-					if (trimmedExpectedType.startsWith( "INTERVAL" )||trimmedExpectedType.startsWith( "interval" )){
-						trimmedExpectedType="INTERVAL";
+
+					/* Interval wird vereinfacht kontrolliert */
+					if ( trimmedExpectedType.startsWith( "INTERVAL" )
+							|| trimmedExpectedType.startsWith( "interval" ) ) {
+						trimmedExpectedType = "INTERVAL";
 					}
-					
+
 					if ( version1 ) {
 						trimmedExpectedType = "1_" + trimmedExpectedType;
 					} else if ( version2 ) {
