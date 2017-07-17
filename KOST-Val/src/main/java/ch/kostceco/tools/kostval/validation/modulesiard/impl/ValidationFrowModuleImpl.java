@@ -196,34 +196,38 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements Va
 		File schemaPath = new File( new StringBuilder( pathToWorkDir ).append( File.separator )
 				.append( "content" ).append( File.separator ).append( schemaFolder.getText() ).toString() );
 		if ( schemaPath.isDirectory() ) {
-			List<Element> tables = schema.getChild( "tables", ns ).getChildren( "table", ns );
-			for ( Element table : tables ) {
-				// Valid = True ansonsten validiert er nicht
-				validT = true;
-				validT = validT && validateTable( table, ns, pathToWorkDir, schemaPath );
-				if ( showOnWork ) {
-					if ( onWork == 410 ) {
-						onWork = 2;
-						System.out.print( "F-   " );
-						System.out.print( "\b\b\b\b\b" );
-					} else if ( onWork == 110 ) {
-						onWork = onWork + 1;
-						System.out.print( "F\\   " );
-						System.out.print( "\b\b\b\b\b" );
-					} else if ( onWork == 210 ) {
-						onWork = onWork + 1;
-						System.out.print( "F|   " );
-						System.out.print( "\b\b\b\b\b" );
-					} else if ( onWork == 310 ) {
-						onWork = onWork + 1;
-						System.out.print( "F/   " );
-						System.out.print( "\b\b\b\b\b" );
-					} else {
-						onWork = onWork + 1;
+			if ( schema.getChild( "tables", ns ) != null ) {
+				List<Element> tables = schema.getChild( "tables", ns ).getChildren( "table", ns );
+				for ( Element table : tables ) {
+					// Valid = True ansonsten validiert er nicht
+					validT = true;
+					validT = validT && validateTable( table, ns, pathToWorkDir, schemaPath );
+					if ( showOnWork ) {
+						if ( onWork == 410 ) {
+							onWork = 2;
+							System.out.print( "F-   " );
+							System.out.print( "\b\b\b\b\b" );
+						} else if ( onWork == 110 ) {
+							onWork = onWork + 1;
+							System.out.print( "F\\   " );
+							System.out.print( "\b\b\b\b\b" );
+						} else if ( onWork == 210 ) {
+							onWork = onWork + 1;
+							System.out.print( "F|   " );
+							System.out.print( "\b\b\b\b\b" );
+						} else if ( onWork == 310 ) {
+							onWork = onWork + 1;
+							System.out.print( "F/   " );
+							System.out.print( "\b\b\b\b\b" );
+						} else {
+							onWork = onWork + 1;
+						}
 					}
+					// Validierungsergebnis in valid speichern
+					valid = valid && validT;
 				}
-				// Validierungsergebnis in valid speichern
-				valid = valid && validT;
+			} else {
+				// kein Fehler sondern leeres schema
 			}
 		} else {
 			valid = false;

@@ -347,53 +347,58 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl impl
 		filesInSiard.remove( schemaPathString );
 
 		if ( schemaPath.isDirectory() ) {
-			List<Element> tables = schema.getChild( "tables", ns ).getChildren( "table", ns );
-			for ( Element table : tables ) {
-				String name = "";
-				Element tableFolder = table.getChild( "folder", ns );
-				File tablePath = new File( new StringBuilder( schemaPath.getPath() )
-						.append( File.separator ).append( tableFolder.getText() ).toString() );
-				name = tablePath.toString();
-				filesInSiard.remove( name );
-				// die Datei "name" aus filesInSiard entfernen
+			if ( schema.getChild( "tables", ns ) != null ) {
 
-				if ( tablePath.isDirectory() ) {
-					File tableXsd = new File( new StringBuilder( tablePath.getPath() )
-							.append( File.separator ).append( tableFolder.getText() + ".xsd" ).toString() );
-					name = tableXsd.toString();
-					// die Datei "name" aus filesInSiard entfernen
+				List<Element> tables = schema.getChild( "tables", ns ).getChildren( "table", ns );
+				for ( Element table : tables ) {
+					String name = "";
+					Element tableFolder = table.getChild( "folder", ns );
+					File tablePath = new File( new StringBuilder( schemaPath.getPath() )
+							.append( File.separator ).append( tableFolder.getText() ).toString() );
+					name = tablePath.toString();
 					filesInSiard.remove( name );
-
-					File tableXml = new File( new StringBuilder( tablePath.getPath() )
-							.append( File.separator ).append( tableFolder.getText() + ".xml" ).toString() );
-					name = tableXml.toString();
 					// die Datei "name" aus filesInSiard entfernen
-					filesInSiard.remove( name );
-					// die Datei "name" in die Liste aller table.xml eintragen
-					tablesInSiard.put( name, name );
 
-				}
-				if ( showOnWork ) {
-					if ( onWork == 410 ) {
-						onWork = 2;
-						System.out.print( "J-   " );
-						System.out.print( "\b\b\b\b\b" );
-					} else if ( onWork == 110 ) {
-						onWork = onWork + 1;
-						System.out.print( "J\\   " );
-						System.out.print( "\b\b\b\b\b" );
-					} else if ( onWork == 210 ) {
-						onWork = onWork + 1;
-						System.out.print( "J|   " );
-						System.out.print( "\b\b\b\b\b" );
-					} else if ( onWork == 310 ) {
-						onWork = onWork + 1;
-						System.out.print( "J/   " );
-						System.out.print( "\b\b\b\b\b" );
-					} else {
-						onWork = onWork + 1;
+					if ( tablePath.isDirectory() ) {
+						File tableXsd = new File( new StringBuilder( tablePath.getPath() )
+								.append( File.separator ).append( tableFolder.getText() + ".xsd" ).toString() );
+						name = tableXsd.toString();
+						// die Datei "name" aus filesInSiard entfernen
+						filesInSiard.remove( name );
+
+						File tableXml = new File( new StringBuilder( tablePath.getPath() )
+								.append( File.separator ).append( tableFolder.getText() + ".xml" ).toString() );
+						name = tableXml.toString();
+						// die Datei "name" aus filesInSiard entfernen
+						filesInSiard.remove( name );
+						// die Datei "name" in die Liste aller table.xml eintragen
+						tablesInSiard.put( name, name );
+
+					}
+					if ( showOnWork ) {
+						if ( onWork == 410 ) {
+							onWork = 2;
+							System.out.print( "J-   " );
+							System.out.print( "\b\b\b\b\b" );
+						} else if ( onWork == 110 ) {
+							onWork = onWork + 1;
+							System.out.print( "J\\   " );
+							System.out.print( "\b\b\b\b\b" );
+						} else if ( onWork == 210 ) {
+							onWork = onWork + 1;
+							System.out.print( "J|   " );
+							System.out.print( "\b\b\b\b\b" );
+						} else if ( onWork == 310 ) {
+							onWork = onWork + 1;
+							System.out.print( "J/   " );
+							System.out.print( "\b\b\b\b\b" );
+						} else {
+							onWork = onWork + 1;
+						}
 					}
 				}
+			} else {
+				// Kein Fehler sondern leeres Schema
 			}
 		}
 		return valid;

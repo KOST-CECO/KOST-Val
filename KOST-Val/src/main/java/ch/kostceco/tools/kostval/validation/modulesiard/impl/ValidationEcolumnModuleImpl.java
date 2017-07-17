@@ -528,13 +528,13 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 										if ( !array0.equalsIgnoreCase( arrays ) ) {
 											validTable = false;
 											validDatabase = false;
-											namesOfInvalidColumns.append( (namesOfInvalidColumns.length() > 0) ? ", " : "" );
+											namesOfInvalidColumns.append( (namesOfInvalidColumns.length() > 0) ? ", "
+													: "" );
 											namesOfInvalidColumns.append( columnName );
-											getMessageService()
-													.logError(
-															getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
-																	+ getTextResourceService().getText( MESSAGE_XML_E_ARRAY,
-																			(siardTable.getTableName()+".xsd("+ columnName+")") ) );
+											getMessageService().logError(
+													getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
+															+ getTextResourceService().getText( MESSAGE_XML_E_ARRAY,
+																	(siardTable.getTableName() + ".xsd(" + columnName + ")") ) );
 										}
 									}
 								}
@@ -876,48 +876,52 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 			// Iterating over all <schema> elements
 			for ( Element siardSchemaElement : siardSchemaElements ) {
 				String schemaFolderName = siardSchemaElement.getChild( "folder", xmlNamespace ).getValue();
-				Element siardTablesElement = siardSchemaElement.getChild( "tables", xmlNamespace );
-				List<Element> siardTableElements = siardTablesElement.getChildren( "table", xmlNamespace );
-				// Iterating over all containing table elements
-				for ( Element siardTableElement : siardTableElements ) {
-					Element siardColumnsElement = siardTableElement.getChild( "columns", xmlNamespace );
-					List<Element> siardColumnElements = siardColumnsElement.getChildren( "column",
-							xmlNamespace );
-					String tableName = siardTableElement.getChild( "folder", xmlNamespace ).getValue();
-					SiardTable siardTable = new SiardTable();
-					siardTable.setMetadataXMLElements( siardColumnElements );
-					siardTable.setTableName( tableName );
-					String siardTableFolderName = siardTableElement.getChild( "folder", xmlNamespace )
-							.getValue();
-					StringBuilder pathToTableSchema = new StringBuilder();
-					// Preparing access to the according XML schema file
-					pathToTableSchema.append( workingDirectory );
-					pathToTableSchema.append( File.separator );
-					pathToTableSchema.append( "content" );
-					pathToTableSchema.append( File.separator );
-					pathToTableSchema.append( schemaFolderName.replaceAll( " ", "" ) );
-					pathToTableSchema.append( File.separator );
-					pathToTableSchema.append( siardTableFolderName.replaceAll( " ", "" ) );
-					pathToTableSchema.append( File.separator );
-					pathToTableSchema.append( siardTableFolderName.replaceAll( " ", "" ) );
-					pathToTableSchema.append( ".xsd" );
-					// Retrieve the according XML schema
-					File tableSchema = validationContext.getSiardFiles().get( pathToTableSchema.toString() );
-					SAXBuilder builder = new SAXBuilder();
-					Document tableSchemaDocument = builder.build( tableSchema );
-					Element tableSchemaRootElement = tableSchemaDocument.getRootElement();
-					Namespace namespace = tableSchemaRootElement.getNamespace();
-					// Getting the tags from XML schema to be validated
-					Element tableSchemaComplexType = tableSchemaRootElement.getChild( "complexType",
-							namespace );
-					Element tableSchemaComplexTypeSequence = tableSchemaComplexType.getChild( "sequence",
-							namespace );
-					List<Element> tableSchemaComplexTypeElements = tableSchemaComplexTypeSequence
-							.getChildren( "element", namespace );
-					siardTable.setTableXSDElements( tableSchemaComplexTypeElements );
-					siardTables.add( siardTable );
-					// Writing back the List off all SIARD tables to the validation context
-					validationContext.setSiardTables( siardTables );
+				if ( siardSchemaElement.getChild( "tables", xmlNamespace ) != null ) {
+					Element siardTablesElement = siardSchemaElement.getChild( "tables", xmlNamespace );
+					List<Element> siardTableElements = siardTablesElement.getChildren( "table", xmlNamespace );
+					// Iterating over all containing table elements
+					for ( Element siardTableElement : siardTableElements ) {
+						Element siardColumnsElement = siardTableElement.getChild( "columns", xmlNamespace );
+						List<Element> siardColumnElements = siardColumnsElement.getChildren( "column",
+								xmlNamespace );
+						String tableName = siardTableElement.getChild( "folder", xmlNamespace ).getValue();
+						SiardTable siardTable = new SiardTable();
+						siardTable.setMetadataXMLElements( siardColumnElements );
+						siardTable.setTableName( tableName );
+						String siardTableFolderName = siardTableElement.getChild( "folder", xmlNamespace )
+								.getValue();
+						StringBuilder pathToTableSchema = new StringBuilder();
+						// Preparing access to the according XML schema file
+						pathToTableSchema.append( workingDirectory );
+						pathToTableSchema.append( File.separator );
+						pathToTableSchema.append( "content" );
+						pathToTableSchema.append( File.separator );
+						pathToTableSchema.append( schemaFolderName.replaceAll( " ", "" ) );
+						pathToTableSchema.append( File.separator );
+						pathToTableSchema.append( siardTableFolderName.replaceAll( " ", "" ) );
+						pathToTableSchema.append( File.separator );
+						pathToTableSchema.append( siardTableFolderName.replaceAll( " ", "" ) );
+						pathToTableSchema.append( ".xsd" );
+						// Retrieve the according XML schema
+						File tableSchema = validationContext.getSiardFiles().get( pathToTableSchema.toString() );
+						SAXBuilder builder = new SAXBuilder();
+						Document tableSchemaDocument = builder.build( tableSchema );
+						Element tableSchemaRootElement = tableSchemaDocument.getRootElement();
+						Namespace namespace = tableSchemaRootElement.getNamespace();
+						// Getting the tags from XML schema to be validated
+						Element tableSchemaComplexType = tableSchemaRootElement.getChild( "complexType",
+								namespace );
+						Element tableSchemaComplexTypeSequence = tableSchemaComplexType.getChild( "sequence",
+								namespace );
+						List<Element> tableSchemaComplexTypeElements = tableSchemaComplexTypeSequence
+								.getChildren( "element", namespace );
+						siardTable.setTableXSDElements( tableSchemaComplexTypeElements );
+						siardTables.add( siardTable );
+						// Writing back the List off all SIARD tables to the validation context
+						validationContext.setSiardTables( siardTables );
+					}
+				} else {
+					// Kein Fehler sondern leeres schema
 				}
 			}
 			if ( showOnWork ) {

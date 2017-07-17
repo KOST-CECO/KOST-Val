@@ -125,53 +125,57 @@ public class ValidationGtableModuleImpl extends ValidationModuleImpl implements
 				String schemaName = schema.getChild( "name", ns ).getText();
 
 				String lsSch = (new StringBuilder().append( schemaName ).toString());
+				if ( schema.getChild( "tables", ns ) != null ) {
 
-				// select table elements and loop
-				List<Element> tables = schema.getChild( "tables", ns ).getChildren( "table", ns );
-				for ( Element table : tables ) {
-					String tableName = table.getChild( "name", ns ).getText();
+					// select table elements and loop
+					List<Element> tables = schema.getChild( "tables", ns ).getChildren( "table", ns );
+					for ( Element table : tables ) {
+						String tableName = table.getChild( "name", ns ).getText();
 
-					// Concatenate schema and table
-					String lsTab = (new StringBuilder().append( schemaName ).append( " / " )
-							.append( tableName ).toString());
+						// Concatenate schema and table
+						String lsTab = (new StringBuilder().append( schemaName ).append( " / " )
+								.append( tableName ).toString());
 
-					// select column elements and loop
-					List<Element> columns = table.getChild( "columns", ns ).getChildren( "column", ns );
-					for ( Element column : columns ) {
-						String columnName = column.getChild( "name", ns ).getText();
+						// select column elements and loop
+						List<Element> columns = table.getChild( "columns", ns ).getChildren( "column", ns );
+						for ( Element column : columns ) {
+							String columnName = column.getChild( "name", ns ).getText();
 
-						// Concatenate schema, table and column
-						String lsCol = (new StringBuilder().append( schemaName ).append( " / " )
-								.append( tableName ).append( " / " ).append( columnName ).toString());
-						listColumns.add( lsCol );
-						// concatenating Strings
-					}
-					listTables.add( lsTab );
-					// concatenating Strings (table names)
-					if ( showOnWork ) {
-						if ( onWork == 410 ) {
-							onWork = 2;
-							System.out.print( "G-   " );
-							System.out.print( "\b\b\b\b\b" );
-						} else if ( onWork == 110 ) {
-							onWork = onWork + 1;
-							System.out.print( "G\\   " );
-							System.out.print( "\b\b\b\b\b" );
-						} else if ( onWork == 210 ) {
-							onWork = onWork + 1;
-							System.out.print( "G|   " );
-							System.out.print( "\b\b\b\b\b" );
-						} else if ( onWork == 310 ) {
-							onWork = onWork + 1;
-							System.out.print( "G/   " );
-							System.out.print( "\b\b\b\b\b" );
-						} else {
-							onWork = onWork + 1;
+							// Concatenate schema, table and column
+							String lsCol = (new StringBuilder().append( schemaName ).append( " / " )
+									.append( tableName ).append( " / " ).append( columnName ).toString());
+							listColumns.add( lsCol );
+							// concatenating Strings
+						}
+						listTables.add( lsTab );
+						// concatenating Strings (table names)
+						if ( showOnWork ) {
+							if ( onWork == 410 ) {
+								onWork = 2;
+								System.out.print( "G-   " );
+								System.out.print( "\b\b\b\b\b" );
+							} else if ( onWork == 110 ) {
+								onWork = onWork + 1;
+								System.out.print( "G\\   " );
+								System.out.print( "\b\b\b\b\b" );
+							} else if ( onWork == 210 ) {
+								onWork = onWork + 1;
+								System.out.print( "G|   " );
+								System.out.print( "\b\b\b\b\b" );
+							} else if ( onWork == 310 ) {
+								onWork = onWork + 1;
+								System.out.print( "G/   " );
+								System.out.print( "\b\b\b\b\b" );
+							} else {
+								onWork = onWork + 1;
+							}
 						}
 					}
+					listSchemas.add( lsSch );
+					// concatenating Strings (schema names)
+				} else {
+					// kein Fehler sondern leeres schema
 				}
-				listSchemas.add( lsSch );
-				// concatenating Strings (schema names)
 			}
 			HashSet hashSchemas = new HashSet(); // check for duplicate schemas
 			for ( Object value : listSchemas )
