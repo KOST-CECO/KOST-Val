@@ -33,7 +33,6 @@ public interface MessageConstants
 	String	ERROR_WORKDIRECTORY_NOTDELETABLE							= "error.workdirectory.notdeletable";
 	String	ERROR_WORKDIRECTORY_NOTWRITABLE								= "error.workdirectory.notwritable";
 	String	ERROR_WORKDIRECTORY_EXISTS										= "error.workdirectory.exists";
-	String	ERROR_DIADIRECTORY_NOTWRITABLE								= "error.diadirectory.notwritable";
 	String	ERROR_VALFILE_FILENOTEXISTING									= "error.valfile.filenotexisting";
 	String	ERROR_LOGGING_NOFILEAPPENDER									= "error.logging.nofileappender";
 	String	ERROR_CANNOTCREATEZIP													= "error.cannotcreatezip";
@@ -271,9 +270,6 @@ public interface MessageConstants
 	String	ERROR_XML_J_JBIG2															= "error.xml.j.jbig2";
 	String	ERROR_XML_J_CATCH4														= "error.xml.j.catch4";
 	String	ERROR_XML_J_ENCRYPT														= "error.xml.j.encrypt";
-
-	String	MESSAGE_XML_DIAHEADER													= "message.xml.diaheader";
-	String	MESSAGE_XML_DIAEND														= "message.xml.diaend";
 
 	// *************JP2-Meldungen*************************************************************************
 	// Modul A Meldungen

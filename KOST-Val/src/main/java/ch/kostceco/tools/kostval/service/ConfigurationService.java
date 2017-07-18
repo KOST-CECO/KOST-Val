@@ -114,11 +114,6 @@ public interface ConfigurationService extends Service
 	 * @return Pfad des Logverzeichnisses */
 	String getPathToLogfile();
 
-	/** Gibt den Pfad zu den Diagnosedaten zurück.
-	 * 
-	 * @return Pfad zu Diagnosedaten */
-	String getPathToDiagnose();
-
 	/** Gibt an ob siard validiert werden soll
 	 * 
 	 * @return yes oder no */

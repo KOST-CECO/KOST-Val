@@ -1,5 +1,5 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val v1.7.9 application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and
+ * The KOST-Val v1.8.0 application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and
  * Submission Information Package (SIP). Copyright (C) 2012-2017 Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
@@ -36,7 +36,6 @@ import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
@@ -460,41 +459,6 @@ public class KOSTVal implements MessageConstants
 			System.exit( 1 );
 		}
 
-		/* Vorberitung für eine allfällige Festhaltung bei unterschiedlichen PDFA-Validierungsresultaten
-		 * in einer PDF_Diagnosedatei sowie Zähler der SIP-Dateiformate */
-		String diaPath = kostval.getConfigurationService().getPathToDiagnose();
-		if ( diaPath.startsWith( "Configuration-Error:" ) ) {
-			LOGGER.logError( kostval.getTextResourceService().getText( ERROR_IOE ) + diaPath );
-			System.out.println( diaPath );
-			System.exit( 1 );
-		}
-
-		// Im diaverzeichnis besteht kein Schreibrecht
-		File diaDir = new File( diaPath );
-
-		if ( !diaDir.exists() ) {
-			diaDir.mkdir();
-		}
-
-		if ( !diaDir.canWrite() ) {
-			LOGGER.logError( kostval.getTextResourceService().getText( ERROR_IOE,
-					kostval.getTextResourceService().getText( ERROR_DIADIRECTORY_NOTWRITABLE, diaDir ) ) );
-			System.out.println( kostval.getTextResourceService().getText( ERROR_DIADIRECTORY_NOTWRITABLE,
-					diaDir ) );
-			System.exit( 1 );
-		}
-
-		File xmlDiaOrig = new File( "resources" + File.separator + "KaD-Diagnosedaten.kost-val.xml" );
-		File xmlDiaCopy = new File( diaPath + File.separator + "KaD-Diagnosedaten.kost-val.xml" );
-		if ( !xmlDiaCopy.exists() ) {
-			Util.copyFile( xmlDiaOrig, xmlDiaCopy );
-		}
-		File xslDiaOrig = new File( "resources" + File.separator + "kost-val_KaDdia.xsl" );
-		File xslDiaCopy = new File( diaPath + File.separator + "kost-val_KaDdia.xsl" );
-		if ( !xslDiaCopy.exists() ) {
-			Util.copyFile( xslDiaOrig, xslDiaCopy );
-		}
-
 		/* Ueberprüfung des optionalen Parameters (2 -v --> im Verbose-mode werden die originalen Logs
 		 * nicht gelöscht (PDFTron, Jhove & Co.) */
 		boolean verbose = false;
@@ -655,7 +619,7 @@ public class KOSTVal implements MessageConstants
 				// TODO: Formatvalidierung über ein Ordner --> erledigt --> nur Marker
 				try {
 					Map<String, File> fileUnsortedMap = Util.getFileMap( valDatei, false );
-					Map<String, File> fileMap = new TreeMap<String, File>(fileUnsortedMap);
+					Map<String, File> fileMap = new TreeMap<String, File>( fileUnsortedMap );
 					Set<String> fileMapKeys = fileMap.keySet();
 					for ( Iterator<String> iterator = fileMapKeys.iterator(); iterator.hasNext(); ) {
 						String entryName = iterator.next();
@@ -1223,31 +1187,8 @@ public class KOSTVal implements MessageConstants
 
 				// Vorgängige Formatvalidierung (Schritt 3c)
 				Map<String, File> fileUnsortedMap = Util.getFileMap( valDatei, false );
-				Map<String, File> fileMap = new TreeMap<String, File>(fileUnsortedMap);
+				Map<String, File> fileMap = new TreeMap<String, File>( fileUnsortedMap );
 				Set<String> fileMapKeys = fileMap.keySet();
-
-				int pdf = 0;
-				int tiff = 0;
-				int siard = 0;
-				int txt = 0;
-				int csv = 0;
-				int xml = 0;
-				int xsd = 0;
-				int wave = 0;
-				int mp3 = 0;
-				int jp2 = 0;
-				int jpx = 0;
-				int jpeg = 0;
-				int png = 0;
-				int dng = 0;
-				int svg = 0;
-				int mpeg2 = 0;
-				int mp4 = 0;
-				int xls = 0;
-				int odt = 0;
-				int ods = 0;
-				int odp = 0;
-				int other = 0;
 
 				for ( Iterator<String> iterator = fileMapKeys.iterator(); iterator.hasNext(); ) {
 					String entryName = iterator.next();
@@ -1265,7 +1206,6 @@ public class KOSTVal implements MessageConstants
 						 * extension = extension.substring( lastIndexOf ); } */
 
 						if ( valDateiExt.equals( ".pdf" ) || valDateiExt.equals( ".pdfa" ) ) {
-							pdf = pdf + 1;
 							if ( pdfaValidation.equals( "yes" ) ) {
 								// Validierung durchführen
 								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose );
@@ -1290,7 +1230,6 @@ public class KOSTVal implements MessageConstants
 								}
 							}
 						} else if ( valDateiExt.equals( ".tiff" ) || valDateiExt.equals( ".tif" ) ) {
-							tiff = tiff + 1;
 							if ( tiffValidation.equals( "yes" ) ) {
 								// Validierung durchführen
 								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose );
@@ -1315,7 +1254,6 @@ public class KOSTVal implements MessageConstants
 								}
 							}
 						} else if ( valDateiExt.equals( ".siard" ) ) {
-							siard = siard + 1;
 							if ( siardValidation.equals( "yes" ) ) {
 								// Validierung durchführen
 
@@ -1351,7 +1289,6 @@ public class KOSTVal implements MessageConstants
 							}
 						} else if ( valDateiExt.equals( ".jpe" ) || valDateiExt.equals( ".jpeg" )
 								|| valDateiExt.equals( ".jpg" ) ) {
-							jpeg = jpeg + 1;
 							if ( jpegValidation.equals( "yes" ) ) {
 								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose );
 								if ( valFile ) {
@@ -1375,7 +1312,6 @@ public class KOSTVal implements MessageConstants
 								}
 							}
 						} else if ( valDateiExt.equals( ".jp2" ) ) {
-							jp2 = jp2 + 1;
 							if ( jp2Validation.equals( "yes" ) ) {
 								// Validierung durchführen
 								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose );
@@ -1397,264 +1333,6 @@ public class KOSTVal implements MessageConstants
 									} else {
 										countNioExtension = countNioExtension + ", " + valDateiExt;
 									}
-								}
-							}
-						} else if ( valDateiExt.equals( ".txt" ) ) {
-							txt = txt + 1;
-							countNio = countNio + 1;
-							countNioDetail = countNioDetail + "</Message></Info><Info><Message> - "
-									+ valDatei.getAbsolutePath();
-							if ( countNioExtension == "" ) {
-								countNioExtension = valDateiExt;
-							} else {
-								// bereits Extensions vorhanden
-								if ( countNioExtension.contains( valDateiExt ) ) {
-									// Extension bereits erfasst
-								} else {
-									countNioExtension = countNioExtension + ", " + valDateiExt;
-								}
-							}
-						} else if ( valDateiExt.equals( ".csv" ) ) {
-							csv = csv + 1;
-							countNio = countNio + 1;
-							countNioDetail = countNioDetail + "</Message></Info><Info><Message> - "
-									+ valDatei.getAbsolutePath();
-							if ( countNioExtension == "" ) {
-								countNioExtension = valDateiExt;
-							} else {
-								// bereits Extensions vorhanden
-								if ( countNioExtension.contains( valDateiExt ) ) {
-									// Extension bereits erfasst
-								} else {
-									countNioExtension = countNioExtension + ", " + valDateiExt;
-								}
-							}
-						} else if ( valDateiExt.equals( ".xml" ) ) {
-							xml = xml + 1;
-							countNio = countNio + 1;
-							countNioDetail = countNioDetail + "</Message></Info><Info><Message> - "
-									+ valDatei.getAbsolutePath();
-							if ( countNioExtension == "" ) {
-								countNioExtension = valDateiExt;
-							} else {
-								// bereits Extensions vorhanden
-								if ( countNioExtension.contains( valDateiExt ) ) {
-									// Extension bereits erfasst
-								} else {
-									countNioExtension = countNioExtension + ", " + valDateiExt;
-								}
-							}
-						} else if ( valDateiExt.equals( ".xsd" ) ) {
-							xsd = xsd + 1;
-							countNio = countNio + 1;
-							countNioDetail = countNioDetail + "</Message></Info><Info><Message> - "
-									+ valDatei.getAbsolutePath();
-							if ( countNioExtension == "" ) {
-								countNioExtension = valDateiExt;
-							} else {
-								// bereits Extensions vorhanden
-								if ( countNioExtension.contains( valDateiExt ) ) {
-									// Extension bereits erfasst
-								} else {
-									countNioExtension = countNioExtension + ", " + valDateiExt;
-								}
-							}
-						} else if ( valDateiExt.equals( ".wav" ) ) {
-							wave = wave + 1;
-							countNio = countNio + 1;
-							countNioDetail = countNioDetail + "</Message></Info><Info><Message> - "
-									+ valDatei.getAbsolutePath();
-							if ( countNioExtension == "" ) {
-								countNioExtension = valDateiExt;
-							} else {
-								// bereits Extensions vorhanden
-								if ( countNioExtension.contains( valDateiExt ) ) {
-									// Extension bereits erfasst
-								} else {
-									countNioExtension = countNioExtension + ", " + valDateiExt;
-								}
-							}
-						} else if ( valDateiExt.equals( ".mp3" ) ) {
-							mp3 = mp3 + 1;
-							countNio = countNio + 1;
-							countNioDetail = countNioDetail + "</Message></Info><Info><Message> - "
-									+ valDatei.getAbsolutePath();
-							if ( countNioExtension == "" ) {
-								countNioExtension = valDateiExt;
-							} else {
-								// bereits Extensions vorhanden
-								if ( countNioExtension.contains( valDateiExt ) ) {
-									// Extension bereits erfasst
-								} else {
-									countNioExtension = countNioExtension + ", " + valDateiExt;
-								}
-							}
-						} else if ( valDateiExt.equals( ".jpx" ) || valDateiExt.equals( ".jpf" ) ) {
-							jpx = jpx + 1;
-							countNio = countNio + 1;
-							countNioDetail = countNioDetail + "</Message></Info><Info><Message> - "
-									+ valDatei.getAbsolutePath();
-							if ( countNioExtension == "" ) {
-								countNioExtension = valDateiExt;
-							} else {
-								// bereits Extensions vorhanden
-								if ( countNioExtension.contains( valDateiExt ) ) {
-									// Extension bereits erfasst
-								} else {
-									countNioExtension = countNioExtension + ", " + valDateiExt;
-								}
-							}
-						} else if ( valDateiExt.equals( ".png" ) ) {
-							png = png + 1;
-							countNio = countNio + 1;
-							countNioDetail = countNioDetail + "</Message></Info><Info><Message> - "
-									+ valDatei.getAbsolutePath();
-							if ( countNioExtension == "" ) {
-								countNioExtension = valDateiExt;
-							} else {
-								// bereits Extensions vorhanden
-								if ( countNioExtension.contains( valDateiExt ) ) {
-									// Extension bereits erfasst
-								} else {
-									countNioExtension = countNioExtension + ", " + valDateiExt;
-								}
-							}
-						} else if ( valDateiExt.equals( ".dng" ) ) {
-							dng = dng + 1;
-							countNio = countNio + 1;
-							countNioDetail = countNioDetail + "</Message></Info><Info><Message> - "
-									+ valDatei.getAbsolutePath();
-							if ( countNioExtension == "" ) {
-								countNioExtension = valDateiExt;
-							} else {
-								// bereits Extensions vorhanden
-								if ( countNioExtension.contains( valDateiExt ) ) {
-									// Extension bereits erfasst
-								} else {
-									countNioExtension = countNioExtension + ", " + valDateiExt;
-								}
-							}
-						} else if ( valDateiExt.equals( ".svg" ) ) {
-							svg = svg + 1;
-							countNio = countNio + 1;
-							countNioDetail = countNioDetail + "</Message></Info><Info><Message> - "
-									+ valDatei.getAbsolutePath();
-							if ( countNioExtension == "" ) {
-								countNioExtension = valDateiExt;
-							} else {
-								// bereits Extensions vorhanden
-								if ( countNioExtension.contains( valDateiExt ) ) {
-									// Extension bereits erfasst
-								} else {
-									countNioExtension = countNioExtension + ", " + valDateiExt;
-								}
-							}
-						} else if ( valDateiExt.equals( ".mpeg" ) || valDateiExt.equals( ".mpg" ) ) {
-							mpeg2 = mpeg2 + 1;
-							countNio = countNio + 1;
-							countNioDetail = countNioDetail + "</Message></Info><Info><Message> - "
-									+ valDatei.getAbsolutePath();
-							if ( countNioExtension == "" ) {
-								countNioExtension = valDateiExt;
-							} else {
-								// bereits Extensions vorhanden
-								if ( countNioExtension.contains( valDateiExt ) ) {
-									// Extension bereits erfasst
-								} else {
-									countNioExtension = countNioExtension + ", " + valDateiExt;
-								}
-							}
-						} else if ( valDateiExt.equals( ".f4a" ) || valDateiExt.equals( ".f4v" )
-								|| valDateiExt.equals( ".m4a" ) || valDateiExt.equals( ".m4v" )
-								|| valDateiExt.equals( ".mp4" ) ) {
-							mp4 = mp4 + 1;
-							countNio = countNio + 1;
-							countNioDetail = countNioDetail + "</Message></Info><Info><Message> - "
-									+ valDatei.getAbsolutePath();
-							if ( countNioExtension == "" ) {
-								countNioExtension = valDateiExt;
-							} else {
-								// bereits Extensions vorhanden
-								if ( countNioExtension.contains( valDateiExt ) ) {
-									// Extension bereits erfasst
-								} else {
-									countNioExtension = countNioExtension + ", " + valDateiExt;
-								}
-							}
-						} else if ( valDateiExt.equals( ".xls" ) || valDateiExt.equals( ".xlw" )
-								|| valDateiExt.equals( ".xlsx" ) ) {
-							xls = xls + 1;
-							countNio = countNio + 1;
-							countNioDetail = countNioDetail + "</Message></Info><Info><Message> - "
-									+ valDatei.getAbsolutePath();
-							if ( countNioExtension == "" ) {
-								countNioExtension = valDateiExt;
-							} else {
-								// bereits Extensions vorhanden
-								if ( countNioExtension.contains( valDateiExt ) ) {
-									// Extension bereits erfasst
-								} else {
-									countNioExtension = countNioExtension + ", " + valDateiExt;
-								}
-							}
-						} else if ( valDateiExt.equals( ".odt" ) || valDateiExt.equals( ".ott" ) ) {
-							odt = odt + 1;
-							countNio = countNio + 1;
-							countNioDetail = countNioDetail + "</Message></Info><Info><Message> - "
-									+ valDatei.getAbsolutePath();
-							if ( countNioExtension == "" ) {
-								countNioExtension = valDateiExt;
-							} else {
-								// bereits Extensions vorhanden
-								if ( countNioExtension.contains( valDateiExt ) ) {
-									// Extension bereits erfasst
-								} else {
-									countNioExtension = countNioExtension + ", " + valDateiExt;
-								}
-							}
-						} else if ( valDateiExt.equals( ".ods" ) || valDateiExt.equals( ".ots" ) ) {
-							ods = ods + 1;
-							countNio = countNio + 1;
-							countNioDetail = countNioDetail + "</Message></Info><Info><Message> - "
-									+ valDatei.getAbsolutePath();
-							if ( countNioExtension == "" ) {
-								countNioExtension = valDateiExt;
-							} else {
-								// bereits Extensions vorhanden
-								if ( countNioExtension.contains( valDateiExt ) ) {
-									// Extension bereits erfasst
-								} else {
-									countNioExtension = countNioExtension + ", " + valDateiExt;
-								}
-							}
-						} else if ( valDateiExt.equals( ".odp" ) || valDateiExt.equals( ".otp" ) ) {
-							odp = odp + 1;
-							countNio = countNio + 1;
-							countNioDetail = countNioDetail + "</Message></Info><Info><Message> - "
-									+ valDatei.getAbsolutePath();
-							if ( countNioExtension == "" ) {
-								countNioExtension = valDateiExt;
-							} else {
-								// bereits Extensions vorhanden
-								if ( countNioExtension.contains( valDateiExt ) ) {
-									// Extension bereits erfasst
-								} else {
-									countNioExtension = countNioExtension + ", " + valDateiExt;
-								}
-							}
-						} else {
-							other = other + 1;
-							countNio = countNio + 1;
-							countNioDetail = countNioDetail + "</Message></Info><Info><Message> - "
-									+ valDatei.getAbsolutePath();
-							if ( countNioExtension == "" ) {
-								countNioExtension = valDateiExt;
-							} else {
-								// bereits Extensions vorhanden
-								if ( countNioExtension.contains( valDateiExt ) ) {
-									// Extension bereits erfasst
-								} else {
-									countNioExtension = countNioExtension + ", " + valDateiExt;
 								}
 							}
 						}
@@ -1746,8 +1424,8 @@ public class KOSTVal implements MessageConstants
 							.logError( kostval.getTextResourceService().getText( MESSAGE_XML_VALERGEBNIS_VALID ) );
 					LOGGER
 							.logError( kostval.getTextResourceService().getText( MESSAGE_XML_VALERGEBNIS_CLOSE ) );
-				LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_SIP2 ) );
-				LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_LOGEND ) );
+					LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_SIP2 ) );
+					LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_LOGEND ) );
 					System.out.println( "Valid" );
 					System.out.println( "" );
 				} else {
@@ -1764,7 +1442,7 @@ public class KOSTVal implements MessageConstants
 				}
 
 				// Bereinigungen und ergaenzungen durchfuehren
-				
+
 				// Ergaenzung Format Summary
 				newFormat = "<Format>" + summary;
 				Util.oldnewstring( "<Format>", newFormat, logFile );
@@ -1838,204 +1516,6 @@ public class KOSTVal implements MessageConstants
 					tmpDir.deleteOnExit();
 				}
 
-				try {
-					// KaD-Diagnose-Datei mit den neusten Anzahl Dateien pro KaD-Format Updaten
-					DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-					DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-					Document doc = dBuilder.parse( xmlDiaCopy );
-
-					doc.getDocumentElement().normalize();
-
-					NodeList nList = doc.getElementsByTagName( "KOSTVal_FFCounter" );
-
-					for ( int temp = 0; temp < nList.getLength(); temp++ ) {
-
-						Node nNode = nList.item( temp );
-
-						if ( nNode.getNodeType() == Node.ELEMENT_NODE ) {
-							Element eElement = (Element) nNode;
-
-							if ( pdf > 0 ) {
-								String pdfNodeString = eElement.getElementsByTagName( "pdf" ).item( 0 )
-										.getTextContent();
-								int pdfNodeValue = Integer.parseInt( pdfNodeString );
-								pdf = pdf + pdfNodeValue;
-								Util.kadDia( "<pdf>" + pdfNodeValue + "</pdf>", "<pdf>" + pdf + "</pdf>",
-										xmlDiaCopy );
-							}
-							if ( tiff > 0 ) {
-								String tiffNodeString = eElement.getElementsByTagName( "tiff" ).item( 0 )
-										.getTextContent();
-								int tiffNodeValue = Integer.parseInt( tiffNodeString );
-								tiff = tiff + tiffNodeValue;
-								Util.kadDia( "<tiff>" + tiffNodeValue + "</tiff>", "<tiff>" + tiff + "</tiff>",
-										xmlDiaCopy );
-							}
-							if ( siard > 0 ) {
-								String siardNodeString = eElement.getElementsByTagName( "siard" ).item( 0 )
-										.getTextContent();
-								int siardNodeValue = Integer.parseInt( siardNodeString );
-								siard = siard + siardNodeValue;
-								Util.kadDia( "<siard>" + siardNodeValue + "</siard>", "<siard>" + siard
-										+ "</siard>", xmlDiaCopy );
-							}
-							if ( txt > 0 ) {
-								String txtNodeString = eElement.getElementsByTagName( "txt" ).item( 0 )
-										.getTextContent();
-								int txtNodeValue = Integer.parseInt( txtNodeString );
-								txt = txt + txtNodeValue;
-								Util.kadDia( "<txt>" + txtNodeValue + "</txt>", "<txt>" + txt + "</txt>",
-										xmlDiaCopy );
-							}
-							if ( csv > 0 ) {
-								String csvNodeString = eElement.getElementsByTagName( "csv" ).item( 0 )
-										.getTextContent();
-								int csvNodeValue = Integer.parseInt( csvNodeString );
-								csv = csv + csvNodeValue;
-								Util.kadDia( "<csv>" + csvNodeValue + "</csv>", "<csv>" + csv + "</csv>",
-										xmlDiaCopy );
-							}
-							if ( xml > 0 ) {
-								String xmlNodeString = eElement.getElementsByTagName( "xml" ).item( 0 )
-										.getTextContent();
-								int xmlNodeValue = Integer.parseInt( xmlNodeString );
-								xml = xml + xmlNodeValue;
-								Util.kadDia( "<xml>" + xmlNodeValue + "</xml>", "<xml>" + xml + "</xml>",
-										xmlDiaCopy );
-							}
-							if ( xsd > 0 ) {
-								String xsdNodeString = eElement.getElementsByTagName( "xsd" ).item( 0 )
-										.getTextContent();
-								int xsdNodeValue = Integer.parseInt( xsdNodeString );
-								xsd = xsd + xsdNodeValue;
-								Util.kadDia( "<xsd>" + xsdNodeValue + "</xsd>", "<xsd>" + xsd + "</xsd>",
-										xmlDiaCopy );
-							}
-							if ( wave > 0 ) {
-								String waveNodeString = eElement.getElementsByTagName( "wave" ).item( 0 )
-										.getTextContent();
-								int waveNodeValue = Integer.parseInt( waveNodeString );
-								wave = wave + waveNodeValue;
-								Util.kadDia( "<wave>" + waveNodeValue + "</wave>", "<wave>" + wave + "</wave>",
-										xmlDiaCopy );
-							}
-							if ( mp3 > 0 ) {
-								String mp3NodeString = eElement.getElementsByTagName( "mp3" ).item( 0 )
-										.getTextContent();
-								int mp3NodeValue = Integer.parseInt( mp3NodeString );
-								mp3 = mp3 + mp3NodeValue;
-								Util.kadDia( "<mp3>" + mp3NodeValue + "</mp3>", "<mp3>" + mp3 + "</mp3>",
-										xmlDiaCopy );
-							}
-							if ( jp2 > 0 ) {
-								String jp2NodeString = eElement.getElementsByTagName( "jp2" ).item( 0 )
-										.getTextContent();
-								int jp2NodeValue = Integer.parseInt( jp2NodeString );
-								jp2 = jp2 + jp2NodeValue;
-								Util.kadDia( "<jp2>" + jp2NodeValue + "</jp2>", "<jp2>" + jp2 + "</jp2>",
-										xmlDiaCopy );
-							}
-							if ( jpx > 0 ) {
-								String jpxNodeString = eElement.getElementsByTagName( "jpx" ).item( 0 )
-										.getTextContent();
-								int jpxNodeValue = Integer.parseInt( jpxNodeString );
-								jpx = jpx + jpxNodeValue;
-								Util.kadDia( "<jpx>" + jpxNodeValue + "</jpx>", "<jpx>" + jpx + "</jpx>",
-										xmlDiaCopy );
-							}
-							if ( jpeg > 0 ) {
-								String jpegNodeString = eElement.getElementsByTagName( "jpeg" ).item( 0 )
-										.getTextContent();
-								int jpegNodeValue = Integer.parseInt( jpegNodeString );
-								jpeg = jpeg + jpegNodeValue;
-								Util.kadDia( "<jpeg>" + jpegNodeValue + "</jpeg>", "<jpeg>" + jpeg + "</jpeg>",
-										xmlDiaCopy );
-							}
-							if ( png > 0 ) {
-								String pngNodeString = eElement.getElementsByTagName( "png" ).item( 0 )
-										.getTextContent();
-								int pngNodeValue = Integer.parseInt( pngNodeString );
-								png = png + pngNodeValue;
-								Util.kadDia( "<png>" + pngNodeValue + "</png>", "<png>" + png + "</png>",
-										xmlDiaCopy );
-							}
-							if ( dng > 0 ) {
-								String dngNodeString = eElement.getElementsByTagName( "dng" ).item( 0 )
-										.getTextContent();
-								int dngNodeValue = Integer.parseInt( dngNodeString );
-								dng = dng + dngNodeValue;
-								Util.kadDia( "<dng>" + dngNodeValue + "</dng>", "<dng>" + dng + "</dng>",
-										xmlDiaCopy );
-							}
-							if ( svg > 0 ) {
-								String svgNodeString = eElement.getElementsByTagName( "svg" ).item( 0 )
-										.getTextContent();
-								int svgNodeValue = Integer.parseInt( svgNodeString );
-								svg = svg + svgNodeValue;
-								Util.kadDia( "<svg>" + svgNodeValue + "</svg>", "<svg>" + svg + "</svg>",
-										xmlDiaCopy );
-							}
-							if ( mpeg2 > 0 ) {
-								String mpeg2NodeString = eElement.getElementsByTagName( "mpeg2" ).item( 0 )
-										.getTextContent();
-								int mpeg2NodeValue = Integer.parseInt( mpeg2NodeString );
-								mpeg2 = mpeg2 + mpeg2NodeValue;
-								Util.kadDia( "<mpeg2>" + mpeg2NodeValue + "</mpeg2>", "<mpeg2>" + mpeg2
-										+ "</mpeg2>", xmlDiaCopy );
-							}
-							if ( mp4 > 0 ) {
-								String mp4NodeString = eElement.getElementsByTagName( "mp4" ).item( 0 )
-										.getTextContent();
-								int mp4NodeValue = Integer.parseInt( mp4NodeString );
-								mp4 = mp4 + mp4NodeValue;
-								Util.kadDia( "<mp4>" + mp4NodeValue + "</mp4>", "<mp4>" + mp4 + "</mp4>",
-										xmlDiaCopy );
-							}
-							if ( xls > 0 ) {
-								String xlsNodeString = eElement.getElementsByTagName( "xls" ).item( 0 )
-										.getTextContent();
-								int xlsNodeValue = Integer.parseInt( xlsNodeString );
-								xls = xls + xlsNodeValue;
-								Util.kadDia( "<xls>" + xlsNodeValue + "</xls>", "<xls>" + xls + "</xls>",
-										xmlDiaCopy );
-							}
-							if ( odt > 0 ) {
-								String odtNodeString = eElement.getElementsByTagName( "odt" ).item( 0 )
-										.getTextContent();
-								int odtNodeValue = Integer.parseInt( odtNodeString );
-								odt = odt + odtNodeValue;
-								Util.kadDia( "<odt>" + odtNodeValue + "</odt>", "<odt>" + odt + "</odt>",
-										xmlDiaCopy );
-							}
-							if ( ods > 0 ) {
-								String odsNodeString = eElement.getElementsByTagName( "ods" ).item( 0 )
-										.getTextContent();
-								int odsNodeValue = Integer.parseInt( odsNodeString );
-								ods = ods + odsNodeValue;
-								Util.kadDia( "<ods>" + odsNodeValue + "</ods>", "<ods>" + ods + "</ods>",
-										xmlDiaCopy );
-							}
-							if ( odp > 0 ) {
-								String odpNodeString = eElement.getElementsByTagName( "odp" ).item( 0 )
-										.getTextContent();
-								int odpNodeValue = Integer.parseInt( odpNodeString );
-								odp = odp + odpNodeValue;
-								Util.kadDia( "<odp>" + odpNodeValue + "</odp>", "<odp>" + odp + "</odp>",
-										xmlDiaCopy );
-							}
-							if ( other > 0 ) {
-								String otherNodeString = eElement.getElementsByTagName( "other" ).item( 0 )
-										.getTextContent();
-								int otherNodeValue = Integer.parseInt( otherNodeString );
-								other = other + otherNodeValue;
-								Util.kadDia( "<other>" + otherNodeValue + "</other>", "<other>" + other
-										+ "</other>", xmlDiaCopy );
-							}
-						}
-					}
-				} catch ( Exception e ) {
-					e.printStackTrace();
-				}
 				System.out.print( "                                                                    " );
 				System.out.print( "\r" );
 

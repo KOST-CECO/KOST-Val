@@ -2,7 +2,6 @@
 <configuration>
 	<pathtologfile>logs</pathtologfile>
 	<pathtoworkdir>temp_KOST-Val</pathtoworkdir>
-	<pathtodiagnose>diagnose</pathtodiagnose>
 	<pathtojhoveconfig>configuration\jhove.conf</pathtojhoveconfig>
 	<showprogressonwork>yes</showprogressonwork><!--no / yes -->
 	<pdfa>

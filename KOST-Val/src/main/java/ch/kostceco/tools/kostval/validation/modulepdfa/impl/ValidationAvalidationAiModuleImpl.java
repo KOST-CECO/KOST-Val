@@ -23,13 +23,10 @@ import static org.apache.commons.io.IOUtils.closeQuietly;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Arrays;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -107,44 +104,11 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
 		 * ref="configurationService" /> */
 
-		// Vorbereitung für eine allfällige Festhaltung bei unterschiedlichen Validierungsresultaten in
-		// einer PDF_Diagnosedatei
-		File pdfDia = null;
-		String pdfDiaPath = getConfigurationService().getPathToDiagnose();
 		// String pathToWorkDir = getConfigurationService().getPathToWorkDir();
 		String pathToLogDir = getConfigurationService().getPathToLogfile();
 		String pathToWorkDir = pathToLogDir;
 		/* Beim schreiben ins Workverzeichnis trat ab und zu ein fehler auf. entsprechend wird es letzt
 		 * ins logverzeichnis geschrieben */
-		try {
-			pdfDia = new File( pdfDiaPath + File.separator + "PDF-Diagnosedaten.kost-val.xml" );
-			if ( !pdfDia.exists() ) {
-				pdfDia.createNewFile();
-				PrintWriter output;
-				BufferedWriter buffer;
-				FileWriter fileWriter;
-				fileWriter = new FileWriter( pdfDia );
-				buffer = new BufferedWriter( fileWriter );
-				output = new PrintWriter( buffer );
-				try {
-					output.print( getTextResourceService().getText( MESSAGE_XML_DIAHEADER ) + "\n" );
-					output.print( getTextResourceService().getText( MESSAGE_XML_DIAEND ) );
-				} finally {
-					output.close();
-					buffer.close();
-					fileWriter.close();
-				}
-			}
-			File xslDiaOrig = new File( "resources" + File.separator + "kost-val_PDFdia.xsl" );
-			File xslDiaCopy = new File( pdfDiaPath + File.separator + "kost-val_PDFdia.xsl" );
-			if ( !xslDiaCopy.exists() ) {
-				Util.copyFile( xslDiaOrig, xslDiaCopy );
-			}
-		} catch ( IOException e ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-							+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
-		}
 
 		/* Neu soll die Validierung mit PDFTron konfigurier bar sein Mögliche Werte 1A, 1B und no sowie
 		 * 2A, 2B, 2U und no Da Archive beide Versionen erlauben können sind es 2 config einträge Es
@@ -392,10 +356,6 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 
 		pathToPdftronExe = "\"" + pathToPdftronExe + "\"";
 
-		String pdfTools = "";
-		String pdfTron = "";
-		String newPdfDiaTxt = "";
-
 		try {
 			int iCategory = 999999999;
 			// Create object
@@ -626,28 +586,6 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 							if ( success == 0 && iCategory == 0 ) {
 								// valide
 								isValid = true;
-
-								// Diskrepanz => PDF-Diagnosedaten ErrorCodes von PDFTron holen
-								NodeList nodeLst = doc.getElementsByTagName( "Error" );
-								String errorCodes = "";
-								for ( int s = 0; s < nodeLst.getLength(); s++ ) {
-									Node dateiNode = nodeLst.item( s );
-									NamedNodeMap nodeMap = dateiNode.getAttributes();
-									Node errorNode = nodeMap.getNamedItem( "Code" );
-									String errorCode = errorNode.getNodeValue();
-									errorCodes = errorCodes + "  " + errorCode;
-								}
-
-								pdfTools = "<PDFTools><iCategory>0</iCategory><iError>0</iError></PDFTools>";
-								pdfTron = "<PDFTron><Code>" + errorCodes + "</Code></PDFTron>";
-								newPdfDiaTxt = "<Validation><ValFile>" + valDatei.getAbsolutePath()
-										+ "</ValFile><PdfaVL>" + level + "</PdfaVL>" + pdfTools + pdfTron
-										+ "</Validation>\n" + getTextResourceService().getText( MESSAGE_XML_DIAEND );
-								Util.pdfDia( newPdfDiaTxt, pdfDia );
-								/* Util.amp( pdfDia );
-								 * 
-								 * aus performance-Gründen direkt in pdfDia integriert */
-
 							} else {
 								// invalid
 								isValid = false;
@@ -752,11 +690,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 				int success = 0;
 
 				PdfError err = docPdf.getFirstError();
-				PdfError err1 = docPdf.getFirstError();
 
-				int iError = 0;
 				while ( err != null ) {
-					iError = err1.getErrorCode();
 					success = success + 1;
 					// Get next error
 					err = docPdf.getNextError();
@@ -870,19 +805,6 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 								isValid = true;
 								// Validierung dieser Datei mit PDFTron hat funktioniert
 								isPdftron = true;
-
-								// Diskrepanz => PDF-Diagnosedaten
-								pdfTools = "<PDFTools><iCategory>" + iCategory + "</iCategory><iError>" + iError
-										+ "</iError></PDFTools>";
-								pdfTron = "<PDFTron><Code>Pass</Code></PDFTron>";
-								newPdfDiaTxt = "<Validation><ValFile>" + valDatei.getAbsolutePath()
-										+ "</ValFile><PdfaVL>" + level + "</PdfaVL>" + pdfTools + pdfTron
-										+ "</Validation>\n" + getTextResourceService().getText( MESSAGE_XML_DIAEND );
-								Util.pdfDia( newPdfDiaTxt, pdfDia );
-								/* Util.amp( pdfDia );
-								 * 
-								 * aus performance-Gründen direkt in pdfDia integriert */
-
 							}
 
 							for ( int s = 0; s < nodeLstF.getLength(); s++ ) {

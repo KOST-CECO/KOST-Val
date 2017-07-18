@@ -116,21 +116,6 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	}
 
 	@Override
-	public String getPathToDiagnose()
-	{
-		/** Gibt den Pfad zu den Diagnosedaten zurück.
-		 * 
-		 * @return Pfad zu Diagnosedaten */
-		Object prop = getConfig().getProperty( "pathtodiagnose" );
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		String error = "Configuration-Error: Missing pathtodiagnose";
-		return error;
-	}
-
-	@Override
 	public String getPathToJhoveConfiguration()
 	{
 		/** Gibt den Pfad des jhove.conf zurück. */
