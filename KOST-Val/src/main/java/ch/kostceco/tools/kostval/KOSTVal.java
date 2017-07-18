@@ -208,15 +208,14 @@ public class KOSTVal implements MessageConstants
 		// Ab hier kann ins log geschrieben werden...
 
 		// ggf alte SIP-Validierung-Versions-Notiz löschen
-		File BAR1 = new File( directoryOfLogfile.getAbsolutePath() + File.separator + "BAR1.txt" );
-		File ECH1_1 = new File( directoryOfLogfile.getAbsolutePath() + File.separator + "ECH1.1.txt" );
-		File ECH1_0 = new File( directoryOfLogfile.getAbsolutePath() + File.separator + "ECH1.0.txt" );
-		if ( BAR1.exists() ) {
-			Util.deleteFile( BAR1 );
-		} else if ( ECH1_1.exists() ) {
-			Util.deleteFile( ECH1_1 );
-		} else if ( ECH1_0.exists() ) {
-			Util.deleteFile( ECH1_0 );
+		File ECH160_1_1 = new File( directoryOfLogfile.getAbsolutePath() + File.separator
+				+ "ECH160_1.1.txt" );
+		File ECH160_1_0 = new File( directoryOfLogfile.getAbsolutePath() + File.separator
+				+ "ECH160_1.0.txt" );
+		if ( ECH160_1_1.exists() ) {
+			Util.deleteFile( ECH160_1_1 );
+		} else if ( ECH160_1_0.exists() ) {
+			Util.deleteFile( ECH160_1_0 );
 		}
 
 		String version = "";
@@ -1458,15 +1457,12 @@ public class KOSTVal implements MessageConstants
 
 				// Ergänzen welche SIP-Validierung durchgeführt wurde
 				String sipVersion = " ";
-				if ( BAR1.exists() ) {
-					sipVersion = " (BARv1)";
-					Util.deleteFile( BAR1 );
-				} else if ( ECH1_1.exists() ) {
+				if ( ECH160_1_1.exists() ) {
 					sipVersion = " (eCH-0160v1.1)";
-					Util.deleteFile( ECH1_1 );
-				} else if ( ECH1_0.exists() ) {
+					Util.deleteFile( ECH160_1_1 );
+				} else if ( ECH160_1_0.exists() ) {
 					sipVersion = " (eCH-0160v1.0)";
-					Util.deleteFile( ECH1_0 );
+					Util.deleteFile( ECH160_1_0 );
 				}
 				Util.valSipversion( sipVersion, logFile );
 

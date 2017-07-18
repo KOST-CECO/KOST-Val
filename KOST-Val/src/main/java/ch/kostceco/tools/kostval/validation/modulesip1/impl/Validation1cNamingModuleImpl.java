@@ -78,7 +78,6 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl implement
 		boolean lengthIo = true;
 
 		String fileName = valDatei.getName();
-		Integer version = (0);
 
 		// I.) Validierung der Namen aller Dateien: sind die enthaltenen Zeichen alle erlaubt?
 
@@ -248,20 +247,7 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl implement
 			return false;
 		}
 
-		// V.) Im xsd Folder wiederum d�rfen sich nur eine Reihe *.xsd files, welche sich je nach
-		// SIP-Version unterscheiden. Validieren ob vorliegende Version erlaubt ist.
-		String allowedV1 = getConfigurationService().getAllowedVersionBar1();
-		String allowedV4 = getConfigurationService().getAllowedVersionBar4Ech1();
-		if ( allowedV1.startsWith( "Configuration-Error:" ) ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_Ac_SIP ) + allowedV1 );
-			return false;
-		}
-		if ( allowedV4.startsWith( "Configuration-Error:" ) ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_Ac_SIP ) + allowedV4 );
-			return false;
-		}
+		// V.) Im xsd Folder wiederum d�rfen sich nur eine Reihe *.xsd files sein
 		// generiert eine Map mit den xsd-files und Ordnern, welche in header/xsd/ enthalten sein müssen
 		Map<String, String> allowedXsdFiles = new HashMap<String, String>();
 
@@ -275,66 +261,21 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl implement
 				String name = fileXsd.getName();
 
 				if ( name.startsWith( "arel" ) ) {
-					if ( name.startsWith( "arelda_v3" ) ) {
-						// if ( name.endsWith( XSD_ARELDA ) ) {
-						// dann handelt es sich um die Version BAR1
-						version = 1;
-						if ( allowedV1.equals( "1" ) ) {
-							allowedXsdFiles.put( "ablieferung.xsd", "ablieferung.xsd" );
-							allowedXsdFiles.put( "archivischeNotiz.xsd", "archivischeNotiz.xsd" );
-							allowedXsdFiles.put( "archivischerVorgang.xsd", "archivischerVorgang.xsd" );
-							allowedXsdFiles.put( "arelda_v3.13.2.xsd", "arelda_v3.13.2.xsd" );
-							allowedXsdFiles.put( "base.xsd", "base.xsd" );
-							allowedXsdFiles.put( "datei.xsd", "datei.xsd" );
-							allowedXsdFiles.put( "dokument.xsd", "dokument.xsd" );
-							allowedXsdFiles.put( "dossier.xsd", "dossier.xsd" );
-							allowedXsdFiles.put( "ordner.xsd", "ordner.xsd" );
-							allowedXsdFiles.put( "ordnungssystem.xsd", "ordnungssystem.xsd" );
-							allowedXsdFiles.put( "ordnungssystemposition.xsd", "ordnungssystemposition.xsd" );
-							allowedXsdFiles.put( "paket.xsd", "paket.xsd" );
-							allowedXsdFiles.put( "provenienz.xsd", "provenienz.xsd" );
-						} else {
-							// Version 1 ist nicht erlaubt - Version {0} ist nicht erlaubt
-							getMessageService().logError(
-									getTextResourceService().getText( MESSAGE_XML_MODUL_Ac_SIP )
-											+ getTextResourceService().getText( MESSAGE_XML_AC_NOTALLOWEDV, "BAR v1" ) );
-							valid = false;
-						}
-					} else {
-						/* eigentlich m�sste es ansonsten arelda.xsd enthalten sein.
-						 * 
-						 * Da aber bei schreibfehler in diesem Dateinamen alle xsd bem�ngelt werden wurde es
-						 * durch ein else ersetzt
-						 * 
-						 * if ( name.endsWith( "arelda.xsd" ) ) { */
-
-						// dann handelt es sich um die Version BAR4 respektive eCH1 oder eCH1.1
-						version = 4;
-						if ( allowedV4.startsWith( "1" ) ) {
-
-							allowedXsdFiles.put( "ablieferung.xsd", "ablieferung.xsd" );
-							allowedXsdFiles.put( "archivischeNotiz.xsd", "archivischeNotiz.xsd" );
-							allowedXsdFiles.put( "archivischerVorgang.xsd", "archivischerVorgang.xsd" );
-							allowedXsdFiles.put( "arelda.xsd", "arelda.xsd" );
-							allowedXsdFiles.put( "base.xsd", "base.xsd" );
-							allowedXsdFiles.put( "datei.xsd", "datei.xsd" );
-							allowedXsdFiles.put( "dokument.xsd", "dokument.xsd" );
-							allowedXsdFiles.put( "dossier.xsd", "dossier.xsd" );
-							allowedXsdFiles.put( "ordner.xsd", "ordner.xsd" );
-							allowedXsdFiles.put( "ordnungssystem.xsd", "ordnungssystem.xsd" );
-							allowedXsdFiles.put( "ordnungssystemposition.xsd", "ordnungssystemposition.xsd" );
-							allowedXsdFiles.put( "paket.xsd", "paket.xsd" );
-							allowedXsdFiles.put( "provenienz.xsd", "provenienz.xsd" );
-							allowedXsdFiles.put( "zusatzDaten.xsd", "zusatzDaten.xsd" );
-						} else {
-							// Version 4 ist nicht erlaubt - Version {0} ist nicht erlaubt
-							getMessageService().logError(
-									getTextResourceService().getText( MESSAGE_XML_MODUL_Ac_SIP )
-											+ getTextResourceService().getText( MESSAGE_XML_AC_NOTALLOWEDV,
-													"BAR v4 / eCH-0160 v1.x" ) );
-							valid = false;
-						}
-					}
+					// dann handelt es sich um eCH-160_v1 oder eCH-160_v1.1
+					allowedXsdFiles.put( "ablieferung.xsd", "ablieferung.xsd" );
+					allowedXsdFiles.put( "archivischeNotiz.xsd", "archivischeNotiz.xsd" );
+					allowedXsdFiles.put( "archivischerVorgang.xsd", "archivischerVorgang.xsd" );
+					allowedXsdFiles.put( "arelda.xsd", "arelda.xsd" );
+					allowedXsdFiles.put( "base.xsd", "base.xsd" );
+					allowedXsdFiles.put( "datei.xsd", "datei.xsd" );
+					allowedXsdFiles.put( "dokument.xsd", "dokument.xsd" );
+					allowedXsdFiles.put( "dossier.xsd", "dossier.xsd" );
+					allowedXsdFiles.put( "ordner.xsd", "ordner.xsd" );
+					allowedXsdFiles.put( "ordnungssystem.xsd", "ordnungssystem.xsd" );
+					allowedXsdFiles.put( "ordnungssystemposition.xsd", "ordnungssystemposition.xsd" );
+					allowedXsdFiles.put( "paket.xsd", "paket.xsd" );
+					allowedXsdFiles.put( "provenienz.xsd", "provenienz.xsd" );
+					allowedXsdFiles.put( "zusatzDaten.xsd", "zusatzDaten.xsd" );
 				}
 				if ( showOnWork ) {
 					if ( onWork == 410 ) {
@@ -438,9 +379,8 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl implement
 			return false;
 		}
 
-		// VI.+ VII) L�nge der Pfade (< 180) und File/Ordnernamen (<41)
+		// VI.+ VII) L�nge der Pfade (< 180)
 		Integer maxPathLength = getConfigurationService().getMaximumPathLength();
-		Integer maxFileLength = getConfigurationService().getMaximumFileLength();
 		try {
 			Map<String, File> fileMap = Util.getFileMap( valDatei, true );
 			Set<String> fileMapKeys = fileMap.keySet();
@@ -457,20 +397,6 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl implement
 					lengthIo = false;
 				}
 
-				String[] pathElements = name.split( "/" );
-				if ( version == 1 ) {
-					// Einschr�nkung der Namensl�nge muss gepr�ft werden
-					for ( int i = 0; i < pathElements.length; i++ ) {
-						String pathElement = pathElements[i];
-						if ( pathElement.length() > maxFileLength.intValue() ) {
-							getMessageService().logError(
-									getTextResourceService().getText( MESSAGE_XML_MODUL_Ac_SIP )
-											+ getTextResourceService().getText( MESSAGE_XML_AC_FILENAMETOOLONG,
-													pathElement ) );
-							lengthIo = false;
-						}
-					}
-				}
 				if ( showOnWork ) {
 					if ( onWork == 410 ) {
 						onWork = 2;

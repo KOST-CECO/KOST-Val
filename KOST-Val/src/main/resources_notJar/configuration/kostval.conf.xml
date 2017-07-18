@@ -65,11 +65,8 @@
 	</tiff>
 	<sip>
 		<allowedlengthofpaths>179</allowedlengthofpaths>
-		<allowedlengthoffiles>40</allowedlengthoffiles>
 		<allowedsipname>SIP_[1-2][0-9]{3}[0-1][0-9][0-3][0-9]_\\w{3}</allowedsipname>
 		<pathtodroidsignature>configuration\KaD_SignatureFile_V72.xml</pathtodroidsignature>
-		<allowedversionbar1>1</allowedversionbar1><!--0 / 1 -->
-		<allowedversionbar4ech1>1.1</allowedversionbar4ech1><!--0 / 1 / 1.1 -->
 		<allowedformats>
 		<!-- Text -->
 			<!-- TXT: x-fmt/111 -->

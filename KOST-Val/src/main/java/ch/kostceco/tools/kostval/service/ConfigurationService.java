@@ -192,11 +192,6 @@ public interface ConfigurationService extends Service
 	 * @return Maximal erlaubte Länge eines Pfades in der SIP-Datei */
 	Integer getMaximumPathLength();
 
-	/** Gibt die Maximal erlaubte Länge eines Files oder Orners in der SIP-Datei aus.
-	 * 
-	 * @return Maximal erlaubte Länge eines Files oder Orners in der SIP-Datei */
-	Integer getMaximumFileLength();
-
 	/** Die Einschränkung des SIP-Namen ist konfigurierbar -> getAllowedSipName. */
 	String getAllowedSipName();
 
@@ -208,17 +203,5 @@ public interface ConfigurationService extends Service
 
 	/** Angabe ob dargestellt werden soll, dass KOST-Val noch läuft */
 	String getShowProgressOnWork();
-
-	/** Gibt aus ob die BAR Version 1 erlaubt ist oder nicht.
-	 * 
-	 * @return 1 wenn erlaubt respektive 0 wenn nicht erlaubt */
-	String getAllowedVersionBar1();
-
-	/** Gibt aus ob die eCH Version 1 (=BAR Version 4) oder Version 1.1 erlaubt ist oder nicht.
-	 * 
-	 * 1 = nur eCH-0160v1.0 / 2 = eCH-0160v1.1 respektive eCH-0160v1.0 da rückwärtskompatibel
-	 * 
-	 * @return 1 oder 1.1 wenn erlaubt respektive 0 wenn nicht erlaubt */
-	String getAllowedVersionBar4Ech1();
 
 }
