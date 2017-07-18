@@ -145,7 +145,7 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl implement
 										.append( File.separator ).append( tableFolder.getText() + ".xml" ).toString() );
 								File tableXsd = new File( new StringBuilder( tablePath.getAbsolutePath() )
 										.append( File.separator ).append( tableFolder.getText() + ".xsd" ).toString() );
-								// TODO: hier erfolgt die Validerung
+								// hier erfolgt die Validerung
 								if ( verifyRowCount( tableXml, tableXsd ) ) {
 									// valid = validate1( tableXml, tableXsd ) && valid;
 
@@ -288,7 +288,7 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl implement
 													}
 												} else {
 													/* Konsole zuerst einmal noch umleiten und die Streams beenden, damit die
-													 * dateien gel�scht werden können */
+													 * dateien geloescht werden koennen */
 													Util.switchOffConsoleToTxtClose( outTableXml );
 													System.out.println( " . " );
 													Util.switchOnConsole();

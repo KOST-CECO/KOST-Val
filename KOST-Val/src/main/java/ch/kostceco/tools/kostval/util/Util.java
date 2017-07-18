@@ -68,6 +68,7 @@ public class Util
 			FileOutputStream fos = new FileOutputStream( file );
 			PrintStream ps = new PrintStream( fos );
 			System.setOut( ps );
+			ps.close();
 		} catch ( FileNotFoundException e ) {
 			e.printStackTrace();
 		}
