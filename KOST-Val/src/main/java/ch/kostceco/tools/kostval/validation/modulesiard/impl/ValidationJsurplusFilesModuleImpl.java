@@ -158,7 +158,6 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl impl
 					}
 				}
 				// select schema elements and loop
-				// TODO: schema2 aus Beispiel unterstützen
 				List<Element> schemas = ((org.jdom2.Document) document).getRootElement()
 						.getChild( "schemas", ns ).getChildren( "schema", ns );
 				for ( Element schema : schemas ) {

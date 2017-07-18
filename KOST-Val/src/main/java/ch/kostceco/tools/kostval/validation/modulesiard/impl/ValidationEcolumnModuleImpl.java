@@ -96,6 +96,8 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 	private StringBuilder					incongruentColumnType;
 	private StringBuilder					warningColumnType;
 	private StringBuilder					incongruentColumnSequence;
+	
+	boolean udtColumn = false;
 
 	/** Start of the column validation. The <code>validate</code> method act as a controller. First it
 	 * initializes the validation by calling the <code>validationPrepare()</code> method and
@@ -161,17 +163,19 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 						getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
 								+ getTextResourceService().getText( MESSAGE_XML_E_INVALID_ATTRIBUTE_TYPE,
 										this.getIncongruentColumnType() ) );
+				if (udtColumn){
 				// UDT-Warning mit ausgeben wenn vorhanden: MESSAGE_XML_E_TYPE_NOT_VALIDATED
 				getMessageService().logError(
 						getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
 								+ getTextResourceService().getText( MESSAGE_XML_E_TYPE_NOT_VALIDATED,
-										this.getWarningColumnType() ) );
+										this.getWarningColumnType() ) );}
 			} else {
+				if (udtColumn){
 				// UDT-Warning mit ausgeben wenn vorhanden: MESSAGE_XML_E_TYPE_NOT_VALIDATED
 				getMessageService().logError(
 						getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
 								+ getTextResourceService().getText( MESSAGE_XML_E_TYPE_NOT_VALIDATED,
-										this.getWarningColumnType() ) );
+										this.getWarningColumnType() ) );}
 			}
 		} catch ( Exception e ) {
 			valid = false;
@@ -447,7 +451,7 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 			System.out.print( "\b\b\b\b\b" );
 		}
 		boolean validTable;
-		boolean udtColumn;
+		udtColumn = false;
 		boolean validDatabase;
 		Properties properties = validationContext.getValidationProperties();
 		List<SiardTable> siardTables = validationContext.getSiardTables();

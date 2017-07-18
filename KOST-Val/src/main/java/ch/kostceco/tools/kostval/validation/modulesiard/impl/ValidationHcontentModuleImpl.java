@@ -109,7 +109,6 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl implement
 			InputStream fin = new FileInputStream( metadataXml );
 			SAXBuilder builder = new SAXBuilder();
 			Document document = builder.build( fin );
-			fin.close();
 
 			/* read the document and for each schema and table entry verify existence in temporary
 			 * extracted structure */
@@ -238,7 +237,7 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl implement
 													// Fehlermeldung aus outTableXml auslesen
 													BufferedReader br = new BufferedReader( new FileReader( outTableXml ) );
 													Set<String> lines = new LinkedHashSet<String>( 100000 ); // evtl
-																																										// vergr�ssern
+																																										// vergroessern
 													int counter = 0;
 													try {
 														String line = br.readLine();
@@ -248,7 +247,7 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl implement
 														while ( line != null ) {
 															if ( linePrev != null ) {
 																/* Nur neue Fehlermeldungen ausgeben und diese auf maximal 10
-																 * beschr�nken */
+																 * beschraenken */
 																if ( lines.contains( linePrev ) ) {
 																	// Diese Linie = Fehlermelung wurde bereits ausgegeben
 																} else {
@@ -281,7 +280,7 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl implement
 													} finally {
 														br.close();
 														/* Konsole zuerst einmal noch umleiten und die Streams beenden, damit
-														 * die dateien gel�scht werden können */
+														 * die dateien geloescht werden koennen */
 														Util.switchOffConsoleToTxtClose( outTableXml );
 														System.out.println( " . " );
 														Util.switchOnConsole();
@@ -296,7 +295,7 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl implement
 													Util.deleteFile( outTableXml );
 												}
 												/* Konsole zuerst einmal noch umleiten und die Streams beenden, damit die
-												 * dateien gel�scht werden können */
+												 * dateien geloescht werden koennen */
 												Util.switchOffConsoleToTxtClose( outTableXml );
 												System.out.println( " . " );
 												Util.switchOnConsole();
@@ -368,6 +367,7 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl implement
 					}
 				}
 			}
+			fin.close();
 		} catch ( java.io.IOException ioe ) {
 			valid = false;
 			getMessageService().logError(

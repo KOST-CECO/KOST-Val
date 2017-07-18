@@ -112,7 +112,6 @@ public class ValidationDstructureModuleImpl extends ValidationModuleImpl impleme
 				}
 			}
 			// select schema elements and loop
-			// TODO: schema2 aus Beispiel unterstützen
 			List<Element> schemas = document.getRootElement().getChild( "schemas", ns )
 					.getChildren( "schema", ns );
 			for ( Element schema : schemas ) {
