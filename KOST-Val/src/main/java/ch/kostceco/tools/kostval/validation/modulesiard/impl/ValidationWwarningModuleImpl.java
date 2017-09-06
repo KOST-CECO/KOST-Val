@@ -41,6 +41,7 @@ import ch.kostceco.tools.kostval.validation.modulesiard.ValidationWwarningModule
 
 /** Validierungsschritt W (Warnungen) Wurden dataOwner und dataOriginTimespan ausgef�llt und nicht
  * auf (...) belassen? <dataOwner>(...)</dataOwner> <dataOriginTimespan>(...)</dataOriginTimespan>
+ * ab 1.8 auch <dbname>(...)</dbname>
  * 
  * nur Messeage ausgeben aber immer valid
  * 
@@ -92,15 +93,19 @@ public class ValidationWwarningModuleImpl extends ValidationModuleImpl implement
 			Document doc = db.parse( new FileInputStream( metadataXml ) );
 			doc.getDocumentElement().normalize();
 
-			// Lesen der Werte von dataOwner und dataOriginTimespan
+			// Lesen der Werte von dataOwner und dataOriginTimespan sowie dbname
 			XPath xpath = XPathFactory.newInstance().newXPath();
 			Element elementDataOwner = null;
 			Element elementDataOriginTimespan = null;
+			Element elementDbName = null;
 
 			elementDataOwner = (Element) xpath.evaluate( "/siardArchive/dataOwner", doc,
 					XPathConstants.NODE );
 
 			elementDataOriginTimespan = (Element) xpath.evaluate( "/siardArchive/dataOriginTimespan",
+					doc, XPathConstants.NODE );
+
+			elementDbName = (Element) xpath.evaluate( "/siardArchive/dbname",
 					doc, XPathConstants.NODE );
 
 			if ( elementDataOwner != null ) {
@@ -124,6 +129,18 @@ public class ValidationWwarningModuleImpl extends ValidationModuleImpl implement
 							getTextResourceService().getText( MESSAGE_XML_MODUL_W_SIARD )
 									+ getTextResourceService().getText( MESSAGE_XML_W_WARNING_INITVALUE,
 											"dataOriginTimespan", dataOriginTimespanValue ) );
+				}
+			}
+
+			if ( elementDbName != null ) {
+				String dataDbNameValue = elementDbName.getTextContent();
+				if ( dataDbNameValue.equals( "(...)" ) ) {
+					/* Der Initialwert wurde nicht verändert respektive ausgef�llt, entsprechend wird eine
+					 * Warnung ausgegeben */
+					getMessageService().logError(
+							getTextResourceService().getText( MESSAGE_XML_MODUL_W_SIARD )
+									+ getTextResourceService().getText( MESSAGE_XML_W_WARNING_INITVALUE,
+											"dbname", dataDbNameValue ) );
 				}
 			}
 
