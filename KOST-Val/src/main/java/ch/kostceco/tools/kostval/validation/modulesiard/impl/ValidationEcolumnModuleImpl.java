@@ -96,8 +96,8 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 	private StringBuilder					incongruentColumnType;
 	private StringBuilder					warningColumnType;
 	private StringBuilder					incongruentColumnSequence;
-	
-	boolean udtColumn = false;
+
+	boolean												udtColumn	= false;
 
 	/** Start of the column validation. The <code>validate</code> method act as a controller. First it
 	 * initializes the validation by calling the <code>validationPrepare()</code> method and
@@ -163,19 +163,21 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 						getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
 								+ getTextResourceService().getText( MESSAGE_XML_E_INVALID_ATTRIBUTE_TYPE,
 										this.getIncongruentColumnType() ) );
-				if (udtColumn){
-				// UDT-Warning mit ausgeben wenn vorhanden: MESSAGE_XML_E_TYPE_NOT_VALIDATED
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
-								+ getTextResourceService().getText( MESSAGE_XML_E_TYPE_NOT_VALIDATED,
-										this.getWarningColumnType() ) );}
+				if ( udtColumn ) {
+					// UDT-Warning mit ausgeben wenn vorhanden: MESSAGE_XML_E_TYPE_NOT_VALIDATED
+					getMessageService().logError(
+							getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
+									+ getTextResourceService().getText( MESSAGE_XML_E_TYPE_NOT_VALIDATED,
+											this.getWarningColumnType() ) );
+				}
 			} else {
-				if (udtColumn){
-				// UDT-Warning mit ausgeben wenn vorhanden: MESSAGE_XML_E_TYPE_NOT_VALIDATED
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
-								+ getTextResourceService().getText( MESSAGE_XML_E_TYPE_NOT_VALIDATED,
-										this.getWarningColumnType() ) );}
+				if ( udtColumn ) {
+					// UDT-Warning mit ausgeben wenn vorhanden: MESSAGE_XML_E_TYPE_NOT_VALIDATED
+					getMessageService().logError(
+							getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
+									+ getTextResourceService().getText( MESSAGE_XML_E_TYPE_NOT_VALIDATED,
+											this.getWarningColumnType() ) );
+				}
 			}
 		} catch ( Exception e ) {
 			valid = false;
@@ -579,11 +581,23 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 						namesOfInvalidColumns.append( (namesOfInvalidColumns.length() > 0) ? ", " : "" );
 						namesOfInvalidColumns.append( columnName + "(" + trimmedExpectedType + "=?)" );
 					} else if ( !expectedType.equalsIgnoreCase( rightSide ) ) {
-						validTable = false;
-						validDatabase = false;
-						String columnNameLsRs = columnName + " (" + expectedType + " - " + rightSide + ")";
-						namesOfInvalidColumns.append( (namesOfInvalidColumns.length() > 0) ? ", " : "" );
-						namesOfInvalidColumns.append( columnNameLsRs );
+						/* grössere strings dürfen auch als clob separat abgespeichert werden. Das gleiche für
+						 * hexBinarx als blob
+						 * 
+						 * xs:hexBinary ~ blobType && xs:string ~ clobType */
+						if ( expectedType.equalsIgnoreCase( "xs:hexBinary" )
+								&& rightSide.equalsIgnoreCase( "blobType" ) ) {
+							// valid: xs:hexBinary ~ blobType
+						} else if ( expectedType.equalsIgnoreCase( "xs:string" )
+								&& rightSide.equalsIgnoreCase( "clobType" ) ) {
+							// valid: xs:string ~ clobType
+						} else {
+							validTable = false;
+							validDatabase = false;
+							String columnNameLsRs = columnName + " (" + expectedType + " - " + rightSide + ")";
+							namesOfInvalidColumns.append( (namesOfInvalidColumns.length() > 0) ? ", " : "" );
+							namesOfInvalidColumns.append( columnNameLsRs );
+						}
 					}
 					// Convey the column types for the all over sequence test [E.4]
 					xmlElementSequence.add( expectedType );
