@@ -19,16 +19,20 @@
 
 package ch.kostceco.tools.kostval.validation.modulesiard.impl;
 
+import static org.apache.commons.io.IOUtils.closeQuietly;
+
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.Set;
+import java.util.TreeMap;
 
 import org.apache.commons.io.FileUtils;
 import org.jdom2.Document;
@@ -39,6 +43,7 @@ import org.jdom2.input.SAXBuilder;
 
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationJsurplusFilesException;
 import ch.kostceco.tools.kostval.service.ConfigurationService;
+import ch.kostceco.tools.kostval.util.StreamGobbler;
 import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationJsurplusFilesModule;
@@ -66,10 +71,11 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl impl
 		this.configurationService = configurationService;
 	}
 
-	Map<String, String>	filesInSiard		= new HashMap<String, String>();
-	Map<String, String>	tablesInSiard		= new HashMap<String, String>();
-	Map<String, String>	tablesToRemove	= new HashMap<String, String>();
-	Map<String, String>	filesToRemove		= new HashMap<String, String>();
+	Map<String, String>	filesInSiardUnsorted	= new HashMap<String, String>();
+	Map<String, String>	filesInSiard					= new HashMap<String, String>();
+	Map<String, String>	tablesInSiard					= new HashMap<String, String>();
+	Map<String, String>	tablesToRemove				= new HashMap<String, String>();
+	Map<String, String>	filesToRemove					= new HashMap<String, String>();
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile )
@@ -104,7 +110,7 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl impl
 			for ( Iterator<String> iterator = fileMapKeys.iterator(); iterator.hasNext(); ) {
 				String entryName = iterator.next();
 				// entryName: content/schema1/table7/table7.xsd
-				filesInSiard.put( entryName, entryName );
+				filesInSiardUnsorted.put( entryName, entryName );
 				if ( showOnWork ) {
 					if ( onWork == 410 ) {
 						onWork = 2;
@@ -126,6 +132,59 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl impl
 						onWork = onWork + 1;
 					}
 				}
+			}
+
+			filesInSiard = new TreeMap<String, String>( filesInSiardUnsorted );
+
+			File fSedExe = new File( "resources" + File.separator + "sed" + File.separator + "sed.exe" );
+			File msys20dll = new File( "resources" + File.separator + "sed" + File.separator
+					+ "msys-2.0.dll" );
+			File msysgccs1dll = new File( "resources" + File.separator + "sed" + File.separator
+					+ "msys-gcc_s-1.dll" );
+			File msysiconv2dll = new File( "resources" + File.separator + "sed" + File.separator
+					+ "msys-iconv-2.dll" );
+			File msysintl8dll = new File( "resources" + File.separator + "sed" + File.separator
+					+ "msys-intl-8.dll" );
+			String pathToSedExe = fSedExe.getAbsolutePath();
+			if ( !fSedExe.exists() ) {
+				// sed.exe existiert nicht --> Abbruch
+				getMessageService().logError(
+						getTextResourceService().getText( MESSAGE_XML_MODUL_J_SIARD )
+								+ getTextResourceService().getText( MESSAGE_XML_D_MISSING_FILE,
+										fSedExe.getAbsolutePath() ) );
+				return false;
+			}
+			if ( !msys20dll.exists() ) {
+				// existiert nicht --> Abbruch
+				getMessageService().logError(
+						getTextResourceService().getText( MESSAGE_XML_MODUL_J_SIARD )
+								+ getTextResourceService().getText( MESSAGE_XML_D_MISSING_FILE,
+										msys20dll.getAbsolutePath() ) );
+				return false;
+			}
+			if ( !msysgccs1dll.exists() ) {
+				// existiert nicht --> Abbruch
+				getMessageService().logError(
+						getTextResourceService().getText( MESSAGE_XML_MODUL_J_SIARD )
+								+ getTextResourceService().getText( MESSAGE_XML_D_MISSING_FILE,
+										msysgccs1dll.getAbsolutePath() ) );
+				return false;
+			}
+			if ( !msysiconv2dll.exists() ) {
+				// existiert nicht --> Abbruch
+				getMessageService().logError(
+						getTextResourceService().getText( MESSAGE_XML_MODUL_J_SIARD )
+								+ getTextResourceService().getText( MESSAGE_XML_D_MISSING_FILE,
+										msysiconv2dll.getAbsolutePath() ) );
+				return false;
+			}
+			if ( !msysintl8dll.exists() ) {
+				// existiert nicht --> Abbruch
+				getMessageService().logError(
+						getTextResourceService().getText( MESSAGE_XML_MODUL_J_SIARD )
+								+ getTextResourceService().getText( MESSAGE_XML_D_MISSING_FILE,
+										msysintl8dll.getAbsolutePath() ) );
+				return false;
 			}
 
 			try {
@@ -203,6 +262,8 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl impl
 					// in filesInSiard sind jetzt noch die drinnen, welche nicht in metadata.xml erwaehnt
 					// wurden
 
+					// TODO: grep verwenden, damit auch grosse dateien funktionieren!
+
 					Set<String> filesInSiardKeys = filesInSiard.keySet();
 					for ( Iterator<String> iterator = filesInSiardKeys.iterator(); iterator.hasNext(); ) {
 						String entryName = iterator.next();
@@ -213,13 +274,169 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl impl
 							String tableName = iteratorTables.next();
 							File tableXml = new File( tableName );
 							boolean tableFile = false;
+
+							File fSearchtable = tableXml;
+							File fSearchtableTemp = new File( fSearchtable.getAbsolutePath() + "_Temp.xml" );
+							String pathTofSearchtable = fSearchtable.getAbsolutePath();
+							String pathTofSearchtableTemp = fSearchtableTemp.getAbsolutePath();
+							/* mit Util.oldnewstring respektive replace können sehr grosse files nicht bearbeitet
+							 * werden!
+							 * 
+							 * Entsprechend wurde sed verwendet. */
+
+							// Bringt alles auf eine Zeile
+							String commandSed = "cmd /c \"" + pathToSedExe + " 's/\\n/ /g' " + pathTofSearchtable
+									+ " > " + pathTofSearchtableTemp + "\"";
+							String commandSed2 = "cmd /c \"" + pathToSedExe + " ':a;N;$!ba;s/\\n/ /g' "
+									+ pathTofSearchtableTemp + " > " + pathTofSearchtable + "\"";
+							// Trennt ><row. Nur eine row auf einer Zeile
+							String commandSed3 = "cmd /c \"" + pathToSedExe + " 's/\\d060row/\\n\\d060row/g' "
+									+ pathTofSearchtable + " > " + pathTofSearchtableTemp + "\"";
+							// Trennt ><table. <table auf eine neue Zeile
+							String commandSed4 = "cmd /c \"" + pathToSedExe
+									+ " 's/\\d060\\d047table/\\n\\d060\\d047table/g' " + pathTofSearchtableTemp
+									+ " > " + pathTofSearchtable + "\"";
+
+							// String commandSed = "cmd /c \"\"pathToSedExe\"  's/row/R0W/g\' 'hallo row.'\"";
+							/* Das redirect Zeichen verunmöglicht eine direkte eingabe. mit dem geschachtellten
+							 * Befehl gehts: cmd /c\"urspruenlicher Befehl\" */
+
+							Process procSed = null;
+							Runtime rtSed = null;
+							Process procSed2 = null;
+							Runtime rtSed2 = null;
+							Process procSed3 = null;
+							Runtime rtSed3 = null;
+							Process procSed4 = null;
+							Runtime rtSed4 = null;
+
 							try {
-								Scanner scanner = new Scanner( tableXml );
+								Util.switchOffConsole();
+								rtSed = Runtime.getRuntime();
+								procSed = rtSed.exec( commandSed.toString().split( " " ) );
+								// .split(" ") ist notwendig wenn in einem Pfad ein Doppelleerschlag vorhanden ist!
+
+								// Fehleroutput holen
+								StreamGobbler errorGobblerSed = new StreamGobbler( procSed.getErrorStream(),
+										"ERROR" );
+
+								// Output holen
+								StreamGobbler outputGobblerSed = new StreamGobbler( procSed.getInputStream(),
+										"OUTPUT" );
+
+								// Threads starten
+								errorGobblerSed.start();
+								outputGobblerSed.start();
+
+								// Warte, bis wget fertig ist
+								procSed.waitFor();
+
+								// ---------------------------
+
+								rtSed2 = Runtime.getRuntime();
+								procSed2 = rtSed2.exec( commandSed2.toString().split( " " ) );
+								// .split(" ") ist notwendig wenn in einem Pfad ein Doppelleerschlag vorhanden ist!
+
+								// Fehleroutput holen
+								StreamGobbler errorGobblerSed2 = new StreamGobbler( procSed2.getErrorStream(),
+										"ERROR" );
+
+								// Output holen
+								StreamGobbler outputGobblerSed2 = new StreamGobbler( procSed2.getInputStream(),
+										"OUTPUT" );
+
+								// Threads starten
+								errorGobblerSed2.start();
+								outputGobblerSed2.start();
+
+								// Warte, bis wget fertig ist
+								procSed2.waitFor();
+
+								// ---------------------------
+
+								rtSed3 = Runtime.getRuntime();
+								procSed3 = rtSed3.exec( commandSed3.toString().split( " " ) );
+								// .split(" ") ist notwendig wenn in einem Pfad ein Doppelleerschlag vorhanden ist!
+
+								// Fehleroutput holen
+								StreamGobbler errorGobblerSed3 = new StreamGobbler( procSed3.getErrorStream(),
+										"ERROR" );
+
+								// Output holen
+								StreamGobbler outputGobblerSed3 = new StreamGobbler( procSed3.getInputStream(),
+										"OUTPUT" );
+
+								// Threads starten
+								errorGobblerSed3.start();
+								outputGobblerSed3.start();
+
+								// Warte, bis wget fertig ist
+								procSed3.waitFor();
+
+								// ---------------------------
+
+								rtSed4 = Runtime.getRuntime();
+								procSed4 = rtSed4.exec( commandSed4.toString().split( " " ) );
+								// .split(" ") ist notwendig wenn in einem Pfad ein Doppelleerschlag vorhanden ist!
+
+								// Fehleroutput holen
+								StreamGobbler errorGobblerSed4 = new StreamGobbler( procSed4.getErrorStream(),
+										"ERROR" );
+
+								// Output holen
+								StreamGobbler outputGobblerSed4 = new StreamGobbler( procSed4.getInputStream(),
+										"OUTPUT" );
+
+								// Threads starten
+								errorGobblerSed4.start();
+								outputGobblerSed4.start();
+
+								// Warte, bis wget fertig ist
+								procSed4.waitFor();
+
+								// ---------------------------
+
+								Util.switchOnConsole();
+
+							} catch ( Exception e ) {
+								getMessageService().logError(
+										getTextResourceService().getText( MESSAGE_XML_MODUL_J_SIARD )
+												+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+								return false;
+							} finally {
+								if ( procSed != null ) {
+									closeQuietly( procSed.getOutputStream() );
+									closeQuietly( procSed.getInputStream() );
+									closeQuietly( procSed.getErrorStream() );
+								}
+								if ( procSed2 != null ) {
+									closeQuietly( procSed2.getOutputStream() );
+									closeQuietly( procSed2.getInputStream() );
+									closeQuietly( procSed2.getErrorStream() );
+								}
+								if ( procSed3 != null ) {
+									closeQuietly( procSed3.getOutputStream() );
+									closeQuietly( procSed3.getInputStream() );
+									closeQuietly( procSed3.getErrorStream() );
+								}
+								if ( procSed4 != null ) {
+									closeQuietly( procSed4.getOutputStream() );
+									closeQuietly( procSed4.getInputStream() );
+									closeQuietly( procSed4.getErrorStream() );
+								}
+							}
+
+							if ( fSearchtableTemp.exists() ) {
+								Util.deleteDir( fSearchtableTemp );
+							}
+
+							try {
+								InputStream fis = new FileInputStream( tableXml );
+								BufferedReader br = new BufferedReader( new InputStreamReader( fis ) );
 
 								// Datei Zeile für Zeile lesen und ermitteln ob "file=" darin enthalten ist
-								tableFile = false;
-								while ( scanner.hasNextLine() ) {
-									String line = scanner.nextLine();
+
+								for ( String line = br.readLine(); line != null; line = br.readLine() ) {
 									if ( line.contains( " file=" ) ) {
 										tableFile = true;
 										String newEntryName = entryName.substring( entryName.indexOf( "content" ),
@@ -231,18 +448,17 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl impl
 										} else {
 											newEntryName = newEntryName.replace( "\\", "/" );
 											if ( line.contains( newEntryName ) ) {
-												// entryName ist in der Tabelle enthalten und wird spaeter aus liste
-												// geloescht
+												// entryName ist in Tabelle enthalten und wird spaeter aus liste geloescht
 												filesToRemove.put( entryName, entryName );
 												break;
 											} else {
-												// entryName wurde nicht in dieser Zeile gefunden
-												// keine Aktion
+												// entryName wurde nicht in dieser Zeile gefunden keine Aktion
 											}
 										}
 									}
 								}
-								scanner.close();
+
+								br.close();
 							} catch ( FileNotFoundException e ) {
 								getMessageService().logError(
 										getTextResourceService().getText( MESSAGE_XML_MODUL_J_SIARD )
