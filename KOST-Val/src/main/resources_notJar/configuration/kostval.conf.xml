@@ -5,10 +5,10 @@
 	<pathtojhoveconfig>configuration\jhove.conf</pathtojhoveconfig>
 	<showprogressonwork>yes</showprogressonwork><!--no / yes -->
 	<pdfa>
-		<pdfavalidation>yes</pdfavalidation><!--no verwenden wenn pdfa nicht validiert werden soll, ansonsten yes -->
-		<firstvalidator>PDFTools</firstvalidator><!--Haupt PDF/A-Validator: PDFTools oder PDFTron -->
-		<dualvalidation>simple</dualvalidation><!--PDF/A Validierungsart: simple oder dual -->
-		<pathtopdftronexe>C:\Tools\pdfa\pdfa.exe</pathtopdftronexe><!--Pfad zum PDF/A-Manager von PDFTron -->
+		<!-- sind callas und pdftools beide auf no wird keine pdfa Validierung durchgefuehrt -->
+		<!-- sind callas und pdftools beide auf yes wird die duale pdfa Validierung durchgefuehrt -->
+		<callas>yes</callas><!--no wenn callas nicht verwendet werden soll, ansonsten yes -->
+		<pdftools>yes</pdftools><!--no wenn PDF Tools nicht verwendet werden soll, ansonsten yes -->
 		<!--Angeben welche Conformancelevel mindestens erreicht werden muss -->
 		<!--no verwenden wenn diese Version nicht erlaubt ist -->
 		<pdfa1>1B</pdfa1><!--1A / 1B / no -->

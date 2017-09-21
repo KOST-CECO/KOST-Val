@@ -132,10 +132,15 @@ public interface ConfigurationService extends Service
 	 * Tabellen und Module validiert werden können. */
 	int getTableRowsLimit();
 
-	/** Gibt an ob pdfa validiert werden soll
+	/** Gibt an ob pdfa mit callas validiert werden soll
 	 * 
 	 * @return yes oder no */
-	String pdfaValidation();
+	String callas();
+
+	/** Gibt an ob pdfa mit PDF Tools validiert werden soll
+	 * 
+	 * @return yes oder no */
+	String pdftools();
 
 	/** Gibt an welche Konformität mindestens erreicht werden muss
 	 * 
@@ -146,21 +151,6 @@ public interface ConfigurationService extends Service
 	 * 
 	 * @return 2a oder 2b oder 2u oder no */
 	String pdfa2();
-
-	/** Gibt den Namen des Haupt-PDFA-Validator zurück.
-	 * 
-	 * @return Name zum Hauptvalidator */
-	String firstValidator();
-
-	/** Gibt an ob eine duale PDF/A-Validierung gemacht werden soll oder nicht
-	 * 
-	 * @return dual oder simple */
-	String dualValidation();
-
-	/** Gibt den Pfad zum Pdftron Exe zurück.
-	 * 
-	 * @return Pfad zum Pdftron Exe */
-	String getPathToPdftronExe();
 
 	/** Gibt an ob die Bilder in pdfa validiert werden soll
 	 * 

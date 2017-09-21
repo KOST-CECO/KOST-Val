@@ -143,28 +143,28 @@ public class ConfigurationServiceImpl implements ConfigurationService
 
 	/*--- PDF/A ---------------------------------------------------------------------*/
 	@Override
-	public String pdfaValidation()
+	public String callas()
 	{
-		Object prop = getConfig().getProperty( "pdfa.pdfavalidation" );
+		Object prop = getConfig().getProperty( "pdfa.callas" );
 
 		if ( prop instanceof String ) {
 			String value = (String) prop;
 			return value;
 		}
-		String error = "Configuration-Error: Missing pdfa.pdfavalidation";
+		String error = "Configuration-Error: Missing pdfa.callas";
 		return error;
 	}
 
 	@Override
-	public String getPathToPdftronExe()
+	public String pdftools()
 	{
-		Object prop = getConfig().getProperty( "pdfa.pathtopdftronexe" );
+		Object prop = getConfig().getProperty( "pdfa.pdftools" );
 
 		if ( prop instanceof String ) {
 			String value = (String) prop;
 			return value;
 		}
-		String error = "Configuration-Error: Missing pdfa.pathtopdftronexe";
+		String error = "Configuration-Error: Missing pdfa.pdftools";
 		return error;
 	}
 
@@ -191,32 +191,6 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			return value;
 		}
 		String error = "Configuration-Error: Missing pdfa.pdfa2";
-		return error;
-	}
-
-	@Override
-	public String firstValidator()
-	{
-		Object prop = getConfig().getProperty( "pdfa.firstvalidator" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		String error = "Configuration-Error: Missing pdfa.firstvalidator";
-		return error;
-	}
-
-	@Override
-	public String dualValidation()
-	{
-		Object prop = getConfig().getProperty( "pdfa.dualvalidation" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		String error = "Configuration-Error: Missing pdfa.dualvalidation";
 		return error;
 	}
 

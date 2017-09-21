@@ -19,8 +19,6 @@
 
 package ch.kostceco.tools.kostval;
 
-import static org.apache.commons.io.IOUtils.closeQuietly;
-
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -61,7 +59,6 @@ import ch.kostceco.tools.kostval.logging.Logger;
 import ch.kostceco.tools.kostval.logging.MessageConstants;
 import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.service.TextResourceService;
-import ch.kostceco.tools.kostval.util.StreamGobbler;
 import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.util.Zip64Archiver;
 
@@ -169,14 +166,24 @@ public class KOSTVal implements MessageConstants
 		 * ref="configurationService" /> */
 
 		// Informationen holen, welche Formate validiert werden sollen
-		String pdfaValidation = kostval.getConfigurationService().pdfaValidation();
+		String pdfaValidationPdftools = kostval.getConfigurationService().pdftools();
+		String pdfaValidationCallas = kostval.getConfigurationService().callas();
+		String pdfaValidation = "no";
+		if (pdfaValidationPdftools.equalsIgnoreCase( "yes" ) || pdfaValidationCallas.equalsIgnoreCase( "yes" )){
+			 pdfaValidation = "yes";
+		}
 		String siardValidation = kostval.getConfigurationService().siardValidation();
 		String tiffValidation = kostval.getConfigurationService().tiffValidation();
 		String jp2Validation = kostval.getConfigurationService().jp2Validation();
 		String jpegValidation = kostval.getConfigurationService().jpegValidation();
-		if ( pdfaValidation.startsWith( "Configuration-Error:" ) ) {
+		if ( pdfaValidationPdftools.startsWith( "Configuration-Error:" ) ) {
 			System.out.println( kostval.getTextResourceService().getText( MESSAGE_XML_MODUL_Ab_SIP )
-					+ pdfaValidation );
+					+ pdfaValidationPdftools );
+			System.exit( 1 );
+		}
+		if ( pdfaValidationCallas.startsWith( "Configuration-Error:" ) ) {
+			System.out.println( kostval.getTextResourceService().getText( MESSAGE_XML_MODUL_Ab_SIP )
+					+ pdfaValidationCallas );
 			System.exit( 1 );
 		}
 		if ( siardValidation.startsWith( "Configuration-Error:" ) ) {
@@ -224,87 +231,6 @@ public class KOSTVal implements MessageConstants
 		// ermitteln welche Formate validiert werden können respektive eingeschaltet sind
 		if ( pdfaValidation.equals( "yes" ) ) {
 			formatValOn = "PDF/A";
-			// ggf PDFTron-Version ermitteln und logen
-			String dual = kostval.getConfigurationService().dualValidation();
-			if ( dual.startsWith( "Configuration-Error:" ) ) {
-				LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-						+ dual );
-				System.out.println( kostval.getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-						+ dual );
-				System.exit( 1 );
-			}
-			String firstVal = kostval.getConfigurationService().firstValidator();
-			if ( firstVal.startsWith( "Configuration-Error:" ) ) {
-				LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-						+ firstVal );
-				System.out.println( kostval.getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-						+ firstVal );
-				System.exit( 1 );
-			}
-			if ( dual.equalsIgnoreCase( "dual" ) || firstVal.equalsIgnoreCase( "PDFTron" ) ) {
-				String pdfexe = kostval.getConfigurationService().getPathToPdftronExe();
-				if ( pdfexe.startsWith( "Configuration-Error:" ) ) {
-					LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-							+ pdfexe );
-					System.out.println( kostval.getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-							+ pdfexe );
-					System.exit( 1 );
-				}
-				File fpdfexe = new File( pdfexe );
-				if ( fpdfexe.exists() ) {
-					File fversion = new File( directoryOfLogfile.getAbsolutePath() + File.separator
-							+ "PDFTronVersion.txt" );
-					try {
-						// Pfad zum Programm Pdftron
-						StringBuffer command = new StringBuffer( pdfexe + " -v" );
-
-						Process proc = null;
-						Runtime rt = null;
-
-						try {
-							Util.switchOffConsoleToTxt( fversion );
-
-							rt = Runtime.getRuntime();
-							proc = rt.exec( command.toString().split( " " ) );
-							StreamGobbler errorGobbler = new StreamGobbler( proc.getErrorStream(), "ERROR" );
-							StreamGobbler outputGobbler = new StreamGobbler( proc.getInputStream(), "OUTPUT" );
-							errorGobbler.start();
-							outputGobbler.start();
-							proc.waitFor();
-
-							Util.switchOnConsole();
-						} catch ( Exception e ) {
-							LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-									+ kostval.getTextResourceService().getText( ERROR_XML_A_PDFA_SERVICEFAILED,
-											e.getMessage() ) );
-						} finally {
-							if ( proc != null ) {
-								closeQuietly( proc.getOutputStream() );
-								closeQuietly( proc.getInputStream() );
-								closeQuietly( proc.getErrorStream() );
-							}
-						}
-						// Ende PDFTRON direkt auszulösen
-
-						BufferedReader in = new BufferedReader( new FileReader( fversion ) );
-						String line;
-						while ( (line = in.readLine()) != null ) {
-							if ( line.contains( "Manager V" ) ) {
-								line = line.substring( 9 );
-								version = "<VersionPDFTron>" + line + "</VersionPDFTron>";
-								Util.deleteFile( fversion );
-							}
-						}
-						in.close();
-
-					} catch ( Exception e ) {
-						LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-								+ kostval.getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
-					}
-				}
-
-			}
-
 			if ( tiffValidation.equals( "yes" ) ) {
 				formatValOn = formatValOn + ", TIFF";
 			}

@@ -464,6 +464,7 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl impl
 										getTextResourceService().getText( MESSAGE_XML_MODUL_J_SIARD )
 												+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
 														"FileNotFoundException" ) );
+								return false;
 							} catch ( Exception e ) {
 								getMessageService().logError(
 										getTextResourceService().getText( MESSAGE_XML_MODUL_J_SIARD )
