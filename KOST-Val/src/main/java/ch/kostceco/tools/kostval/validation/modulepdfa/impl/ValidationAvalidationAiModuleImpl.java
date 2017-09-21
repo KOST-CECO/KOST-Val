@@ -19,15 +19,12 @@
 
 package ch.kostceco.tools.kostval.validation.modulepdfa.impl;
 
-import static org.apache.commons.io.IOUtils.closeQuietly;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 
@@ -42,8 +39,8 @@ import com.pdftools.NativeLibrary;
 
 import ch.kostceco.tools.kostval.exception.modulepdfa.ValidationApdfvalidationException;
 import ch.kostceco.tools.kostval.service.ConfigurationService;
-import ch.kostceco.tools.kostval.util.StreamGobbler;
 import ch.kostceco.tools.kostval.util.Util;
+import ch.kostceco.tools.kostval.util.UtilCallas;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulepdfa.ValidationAvalidationAiModule;
 
@@ -479,76 +476,14 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 					 * 4) valPath: Pfad zur Datei
 					 * 
 					 * 5) reportPath: Pfad zum Report */
-					
+
 					String analye = "-a --noprogress --nohits --level=" + level;
 					String lang = "-l=DE";
 					String valPath = valDatei.getAbsolutePath();
 					String reportPath = report.getAbsolutePath();
-					
-					/* C:\Tools\pdfaPilot\callas_pdfaPilotServer_Win_7.0.268\cli\pdfaPilot.exe -a --noprogress
-					 * --nohits --level=1b -l=DE valDatei >> pathToPdfapilotOutput */
-					StringBuffer command = new StringBuffer( pdfapilotExe + " " );
-					command.append( analye + " " );
-					command.append( lang + " \"" );
-					command.append( valPath + "\" >> \"" );
-					command.append( reportPath + "\"" );
 
-					String commandRed = "cmd /c \"" + command + "\"";
-					/* Das redirect Zeichen verunmöglicht eine direkte eingabe. mit dem geschachtellten Befehl
-					 * gehts: cmd /c\"urspruenlicher Befehl\" */
-
-					Process proc = null;
-					Runtime rt = null;
-
-					try {
-
-						// Util.switchOffConsole();
-
-						rt = Runtime.getRuntime();
-						proc = rt.exec( commandRed.split( " " ) );
-						// .split(" ") ist notwendig wenn in einem Pfad ein Doppelleerschlag vorhanden ist!
-
-						// Fehleroutput holen
-						StreamGobbler errorGobbler = new StreamGobbler( proc.getErrorStream(), "ERROR" );
-
-						// Output holen
-						StreamGobbler outputGobbler = new StreamGobbler( proc.getInputStream(), "OUTPUT" );
-
-						// Threads starten
-						errorGobbler.start();
-						outputGobbler.start();
-
-						// Warte, bis wget fertig ist
-						int returnCode = proc.waitFor();
-						System.out.println( "  returnCode: " + returnCode );
-
-						if ( returnCode == 0 ) {
-							/* 0 PDF is valid PDF/A-file additional checks wihtout problems
-							 * 
-							 * 1 PDF is valid PDF/A-file but additional checks with problems – severity info
-							 * 
-							 * 2 PDF is valid PDF/A-file but additional checks with problems – severity warning
-							 * 
-							 * 3 PDF is valid PDF/A-file but additional checks with problems – severity error
-							 * 
-							 * 4 PDF is not a valid PDF/A-file */
-							isValid = true;
-						}
-
-						// Util.switchOnConsole();
-					} catch ( Exception e ) {
-						getMessageService().logError(
-								getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-										+ getTextResourceService().getText( ERROR_XML_A_PDFA_SERVICEFAILED,
-												e.getMessage() ) );
-						return false;
-					} finally {
-						if ( proc != null ) {
-							closeQuietly( proc.getOutputStream() );
-							closeQuietly( proc.getInputStream() );
-							closeQuietly( proc.getErrorStream() );
-						}
-					}
+					/* callas separat ausführen und Ergebnis in isValid zurückgeben */
+					isValid = UtilCallas.execCallas( pdfapilotExe, analye, lang, valPath, reportPath );
 					// Ende callas direkt auszulösen
 
 				} catch ( Exception e ) {
@@ -724,8 +659,6 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 						 * 
 						 * Error: The document structure is corrupt. */
 						for ( String line = br.readLine(); line != null; line = br.readLine() ) {
-							System.out.println( line );
-
 							if ( line.startsWith( "Error" ) ) {
 								getMessageService().logError(
 										getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA ) + "<Message>"
