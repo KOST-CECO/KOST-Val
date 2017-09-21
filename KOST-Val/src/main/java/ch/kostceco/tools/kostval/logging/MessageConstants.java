@@ -137,6 +137,8 @@ public interface MessageConstants
 	String	MESSAGE_XML_CONFIGURATION_ERROR_2							= "message.xml.configuration.error.2";
 	String	MESSAGE_XML_CONFIGURATION_ERROR_3							= "message.xml.configuration.error.3";
 
+	String	MESSAGE_XML_LANGUAGE													= "message.xml.language";
+
 	String	MESSAGE_XML_CONFIGURATION_ERROR_NO_SIGNATURE	= "message.xml.configuration.error.no.signature";
 	String	ERROR_XML_CANNOT_INITIALIZE_DROID							= "error.xml.cannot.initialize.droid";
 
@@ -234,10 +236,7 @@ public interface MessageConstants
 	String	ERROR_XML_A_PDFA_INCORRECTFILEENDING					= "error.xml.a.pdfa.incorrectfileending";
 	String	ERROR_XML_A_PDFA_INCORRECTFILE								= "error.xml.a.pdfa.incorrectfile";
 	String	ERROR_XML_A_PDFA_ISDIRECTORY									= "error.xml.a.pdfa.isdirectory";
-	String	ERROR_XML_A_PDFA_SERVICEFAILED								= "error.xml.a.pdfa.servicefailed";
 	String	ERROR_XML_CALLAS_MISSING											= "error.xml.callas.missing";
-	String	ERROR_XML_A_PDFA_INIT													= "error.xml.a.pdfa.init";
-	String	ERROR_XML_A_PDFA_NOFAILORPASS									= "error.xml.a.pdfa.nofailorpass";
 	String	ERROR_XML_A_PDFA_NOCONFIG											= "error.xml.a.pdfa.noconfig";
 	String	ERROR_XML_A_PDFTOOLS_LICENSE									= "error.xml.a.pdftools.license";
 	String	ERROR_XML_A_PDFTOOLS_ENCRYPTED								= "error.xml.a.pdftools.encrypted";

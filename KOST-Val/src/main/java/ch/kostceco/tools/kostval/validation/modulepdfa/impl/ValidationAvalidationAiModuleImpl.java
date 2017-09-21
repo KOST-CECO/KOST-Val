@@ -478,7 +478,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 					 * 5) reportPath: Pfad zum Report */
 
 					String analye = "-a --noprogress --nohits --level=" + level;
-					String lang = "-l=DE";
+					String lang = "-l="+getTextResourceService().getText( MESSAGE_XML_LANGUAGE );
 					String valPath = valDatei.getAbsolutePath();
 					String reportPath = report.getAbsolutePath();
 
@@ -489,7 +489,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 				} catch ( Exception e ) {
 					getMessageService().logError(
 							getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-									+ getTextResourceService().getText( ERROR_XML_A_PDFA_SERVICEFAILED,
+									+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
 											e.getMessage() ) );
 					return false;
 				}
@@ -498,8 +498,6 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 			// TODO: Erledigt: Fehler Auswertung
 
 			if ( !isValid ) {
-				System.out.println( "Invalide PDFA-Datei" );
-
 				boolean exponent0 = false;
 				boolean exponent1 = false;
 				boolean exponent2 = false;
@@ -659,7 +657,18 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 						 * 
 						 * Error: The document structure is corrupt. */
 						for ( String line = br.readLine(); line != null; line = br.readLine() ) {
-							if ( line.startsWith( "Error" ) ) {
+							int index = 0;
+							if ( line.startsWith( "Errors" ) ) {
+								// Errors plus Zahl entfernen aus Linie
+								 index = line.indexOf("\t",7);
+								 System.out.print (" "+index+" ");
+								line=line.substring(index);
+								getMessageService().logError(
+										getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA ) + "<Message>"
+												+ line + "</Message></Error>" );
+							}
+							if ( line.startsWith( "Error:" ) ) {
+								line=line.substring(7);
 								getMessageService().logError(
 										getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA ) + "<Message>"
 												+ line + "</Message></Error>" );
