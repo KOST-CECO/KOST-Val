@@ -41,7 +41,7 @@ import ch.kostceco.tools.kostval.validation.modulesiard.ValidationWwarningModule
 
 /** Validierungsschritt W (Warnungen) Wurden dataOwner und dataOriginTimespan ausgef�llt und nicht
  * auf (...) belassen? <dataOwner>(...)</dataOwner> <dataOriginTimespan>(...)</dataOriginTimespan>
- * ab 1.8 auch <dbname>(...)</dbname>
+ * ab 1.8 auch <dbname>(...)</dbname> plus dito für unspecified
  * 
  * nur Messeage ausgeben aber immer valid
  * 
@@ -105,12 +105,11 @@ public class ValidationWwarningModuleImpl extends ValidationModuleImpl implement
 			elementDataOriginTimespan = (Element) xpath.evaluate( "/siardArchive/dataOriginTimespan",
 					doc, XPathConstants.NODE );
 
-			elementDbName = (Element) xpath.evaluate( "/siardArchive/dbname",
-					doc, XPathConstants.NODE );
+			elementDbName = (Element) xpath.evaluate( "/siardArchive/dbname", doc, XPathConstants.NODE );
 
 			if ( elementDataOwner != null ) {
 				String dataOwnerValue = elementDataOwner.getTextContent();
-				if ( dataOwnerValue.equals( "(...)" ) ) {
+				if ( dataOwnerValue.equals( "(...)" ) || dataOwnerValue.equals( "unspecified" ) ) {
 					/* Der Initialwert wurde nicht verändert respektive ausgef�llt, entsprechend wird eine
 					 * Warnung ausgegeben */
 					getMessageService().logError(
@@ -139,8 +138,8 @@ public class ValidationWwarningModuleImpl extends ValidationModuleImpl implement
 					 * Warnung ausgegeben */
 					getMessageService().logError(
 							getTextResourceService().getText( MESSAGE_XML_MODUL_W_SIARD )
-									+ getTextResourceService().getText( MESSAGE_XML_W_WARNING_INITVALUE,
-											"dbname", dataDbNameValue ) );
+									+ getTextResourceService().getText( MESSAGE_XML_W_WARNING_INITVALUE, "dbname",
+											dataDbNameValue ) );
 				}
 			}
 

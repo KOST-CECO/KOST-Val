@@ -13,8 +13,8 @@
 		<!--no verwenden wenn diese Version nicht erlaubt ist -->
 		<pdfa1>1B</pdfa1><!--1A / 1B / no -->
 		<pdfa2>2B</pdfa2><!--2A / 2B / 2U / no -->
-		<pdfaimage>yes</pdfaimage><!--no verwenden wenn die Bilder in pdfa nicht validiert werden sollen, ansonsten yes -->
-		<jbig2allowed>no</jbig2allowed><!--no verwenden wenn JBIG2 in pdfa nicht erlaubt werden sollen, ansonsten yes -->
+		<pdfaimage>no</pdfaimage><!--no verwenden wenn die Bilder in pdfa nicht validiert werden sollen, ansonsten yes -->
+		<jbig2allowed>yes</jbig2allowed><!--no verwenden wenn JBIG2 in pdfa nicht erlaubt werden sollen, ansonsten yes -->
 	</pdfa>
 	<siard>
 		<siardvalidation>yes</siardvalidation><!--no verwenden wenn siard nicht validiert werden soll, ansonsten yes -->

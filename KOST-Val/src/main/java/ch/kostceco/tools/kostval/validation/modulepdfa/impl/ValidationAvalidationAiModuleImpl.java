@@ -141,6 +141,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 
 		String level = "no";
 		// Richtiges Level definieren
+		// TODO: <pdfaid:conformance>A< evtl mit berücksichtigen
 		if ( pdfaVer1 != 1 ) {
 			// Level 1 nicht erlaubt --> Level 2
 			level = pdfa2;
@@ -346,103 +347,111 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 
 			/* TODO: Erledigt Start mit PDFTools
 			 * 
-			 * Wenn pdftools eingeschaltet ist, wird immer zuerst pdftools genommen, da diese schneller
-			 * ist alls callas */
+			 * Wenn pdftools eingeschaltet ist, wird immer zuerst pdftools genommen, da dieser in
+			 * KOST-Val schneller ist alls callas */
 			if ( pdftools ) {
-				if ( docPdf.open( valDatei.getAbsolutePath(), "", NativeLibrary.COMPLIANCE.ePDFUnk ) ) {
-					// PDF Konnte geöffnet werden
-					docPdf.setStopOnError( true );
-					docPdf.setReportingLevel( 1 );
-					if ( docPdf.getErrorCode() == NativeLibrary.ERRORCODE.PDF_E_PASSWORD ) {
-						getMessageService().logError(
-								getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-										+ getTextResourceService().getText( ERROR_XML_A_PDFTOOLS_ENCRYPTED ) );
-						// Encrypt-Fileanlegen, damit in J nicht validiert wird
-						File encrypt = new File( pathToWorkDir + File.separator + valDatei.getName()
-								+ "_encrypt.txt" );
-						if ( !encrypt.exists() ) {
-							try {
-								encrypt.createNewFile();
-							} catch ( IOException e ) {
-								e.printStackTrace();
+				try {
+					if ( docPdf.open( valDatei.getAbsolutePath(), "", NativeLibrary.COMPLIANCE.ePDFUnk ) ) {
+						// PDF Konnte geöffnet werden
+						docPdf.setStopOnError( true );
+						docPdf.setReportingLevel( 1 );
+						if ( docPdf.getErrorCode() == NativeLibrary.ERRORCODE.PDF_E_PASSWORD ) {
+							getMessageService().logError(
+									getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+											+ getTextResourceService().getText( ERROR_XML_A_PDFTOOLS_ENCRYPTED ) );
+							// Encrypt-Fileanlegen, damit in J nicht validiert wird
+							File encrypt = new File( pathToWorkDir + File.separator + valDatei.getName()
+									+ "_encrypt.txt" );
+							if ( !encrypt.exists() ) {
+								try {
+									encrypt.createNewFile();
+								} catch ( IOException e ) {
+									e.printStackTrace();
+								}
 							}
+							return false;
 						}
-						return false;
-					}
-				} else {
-					if ( docPdf.getErrorCode() == NativeLibrary.ERRORCODE.PDF_E_PASSWORD ) {
-						getMessageService().logError(
-								getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-										+ getTextResourceService().getText( ERROR_XML_A_PDFTOOLS_ENCRYPTED ) );
-						// Encrypt-Fileanlegen, damit in J nicht validiert wird
-						File encrypt = new File( pathToWorkDir + File.separator + valDatei.getName()
-								+ "_encrypt.txt" );
-						if ( !encrypt.exists() ) {
-							try {
-								encrypt.createNewFile();
-							} catch ( IOException e ) {
-								e.printStackTrace();
-							}
-						}
-						return false;
 					} else {
-						getMessageService().logError(
-								getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-										+ getTextResourceService().getText( ERROR_XML_A_PDFTOOLS_DAMAGED ) );
-						return false;
+						if ( docPdf.getErrorCode() == NativeLibrary.ERRORCODE.PDF_E_PASSWORD ) {
+							getMessageService().logError(
+									getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+											+ getTextResourceService().getText( ERROR_XML_A_PDFTOOLS_ENCRYPTED ) );
+							// Encrypt-Fileanlegen, damit in J nicht validiert wird
+							File encrypt = new File( pathToWorkDir + File.separator + valDatei.getName()
+									+ "_encrypt.txt" );
+							if ( !encrypt.exists() ) {
+								try {
+									encrypt.createNewFile();
+								} catch ( IOException e ) {
+									e.printStackTrace();
+								}
+							}
+							return false;
+						} else {
+							getMessageService().logError(
+									getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+											+ getTextResourceService().getText( ERROR_XML_A_PDFTOOLS_DAMAGED ) );
+							return false;
+						}
 					}
-				}
 
-				/* ePDFA1a 5122 ePDFA1b 5121 ePDFA2a 5891 ePDFA2b 5889 ePDFA2u 5890 */
-				if ( level.contentEquals( "1A" ) ) {
-					if ( docPdf.open( valDatei.getAbsolutePath(), "", 5122 ) ) {
-						docPdf.validate();
+					/* ePDFA1a 5122 ePDFA1b 5121 ePDFA2a 5891 ePDFA2b 5889 ePDFA2u 5890 */
+					if ( level.contentEquals( "1A" ) ) {
+						if ( docPdf.open( valDatei.getAbsolutePath(), "", 5122 ) ) {
+							docPdf.validate();
+						}
+					} else if ( level.contentEquals( "1B" ) ) {
+						if ( docPdf.open( valDatei.getAbsolutePath(), "", 5121 ) ) {
+							docPdf.validate();
+						}
+					} else if ( level.contentEquals( "2A" ) ) {
+						if ( docPdf.open( valDatei.getAbsolutePath(), "", 5891 ) ) {
+							docPdf.validate();
+						}
+					} else if ( level.contentEquals( "2B" ) ) {
+						if ( docPdf.open( valDatei.getAbsolutePath(), "", 5889 ) ) {
+							docPdf.validate();
+						}
+					} else if ( level.contentEquals( "2U" ) ) {
+						if ( docPdf.open( valDatei.getAbsolutePath(), "", 5890 ) ) {
+							docPdf.validate();
+						}
+					} else {
+						// Validierung nach 2b
+						level = "2B";
+						if ( docPdf.open( valDatei.getAbsolutePath(), "", 5889 ) ) {
+							docPdf.validate();
+						}
 					}
-				} else if ( level.contentEquals( "1B" ) ) {
-					if ( docPdf.open( valDatei.getAbsolutePath(), "", 5121 ) ) {
-						docPdf.validate();
+
+					docPdf.setStopOnError( false );
+					docPdf.setReportingLevel( 2 );
+
+					// Error Category
+					iCategory = docPdf.getCategories();
+					/* die Zahl kann auch eine Summe von Kategorien sein z.B. 6144=2048+4096 ->
+					 * getCategoryText gibt nur die erste Kategorie heraus (z.B. 2048) */
+
+					int success = 0;
+
+					PdfError err = docPdf.getFirstError();
+
+					while ( err != null ) {
+						success = success + 1;
+						// Get next error
+						err = docPdf.getNextError();
 					}
-				} else if ( level.contentEquals( "2A" ) ) {
-					if ( docPdf.open( valDatei.getAbsolutePath(), "", 5891 ) ) {
-						docPdf.validate();
+
+					if ( success == 0 && iCategory == 0 ) {
+						// valide
+						isValid = true;
 					}
-				} else if ( level.contentEquals( "2B" ) ) {
-					if ( docPdf.open( valDatei.getAbsolutePath(), "", 5889 ) ) {
-						docPdf.validate();
-					}
-				} else if ( level.contentEquals( "2U" ) ) {
-					if ( docPdf.open( valDatei.getAbsolutePath(), "", 5890 ) ) {
-						docPdf.validate();
-					}
-				} else {
-					// Validierung nach 2b
-					level = "2B";
-					if ( docPdf.open( valDatei.getAbsolutePath(), "", 5889 ) ) {
-						docPdf.validate();
-					}
-				}
-
-				docPdf.setStopOnError( false );
-				docPdf.setReportingLevel( 2 );
-
-				// Error Category
-				iCategory = docPdf.getCategories();
-				/* die Zahl kann auch eine Summe von Kategorien sein z.B. 6144=2048+4096 -> getCategoryText
-				 * gibt nur die erste Kategorie heraus (z.B. 2048) */
-
-				int success = 0;
-
-				PdfError err = docPdf.getFirstError();
-
-				while ( err != null ) {
-					success = success + 1;
-					// Get next error
-					err = docPdf.getNextError();
-				}
-
-				if ( success == 0 && iCategory == 0 ) {
-					// valide
-					isValid = true;
+				} catch ( Exception e ) {
+					getMessageService().logError(
+							getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+									+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+											"Exec PDF Tools: " + e.getMessage() ) );
+					return false;
 				}
 			}
 
@@ -453,44 +462,56 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 				try {
 					// Initialisierung callas -> existiert pdfaPilot in den resources?
 					File fpdfapilotExe = new File( "resources" + File.separator
-							+ "callas_pdfaPilotServer_Win_7.0.268" + File.separator + "cli" + File.separator
-							+ "pdfaPilot.exe" );
+							+ "callas_pdfaPilotServer_Win_7.0.268_cli-a" + File.separator + "pdfaPilot.exe" );
 					if ( !fpdfapilotExe.exists() ) {
 						// Keine callas Validierung möglich
-						getMessageService().logError(
-								getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-										+ getTextResourceService().getText( ERROR_XML_CALLAS_MISSING ) );
-						return false;
+						if ( pdftools ) {
+							callas = false;
+							getMessageService().logError(
+									getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+											+ getTextResourceService().getText( ERROR_XML_CALLAS_MISSING2,
+													fpdfapilotExe.getAbsolutePath() ) );
+							isValid = false;
+						} else {
+							getMessageService().logError(
+									getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+											+ getTextResourceService().getText( ERROR_XML_CALLAS_MISSING,
+													fpdfapilotExe.getAbsolutePath() ) );
+							return false;
+						}
 					}
+					if ( callas ) {
+						String pdfapilotExe = fpdfapilotExe.getAbsolutePath();
 
-					String pdfapilotExe = fpdfapilotExe.getAbsolutePath();
+						// TODO N-Entry überprüfen
 
-					/* Aufbau command:
-					 * 
-					 * 1) pdfapilotExe: Pfad zum Programm pdfapilot
-					 * 
-					 * 2) analye: Befehl inkl optionen
-					 * 
-					 * 3) lang: Sprache
-					 * 
-					 * 4) valPath: Pfad zur Datei
-					 * 
-					 * 5) reportPath: Pfad zum Report */
+						/* Aufbau command:
+						 * 
+						 * 1) pdfapilotExe: Pfad zum Programm pdfapilot
+						 * 
+						 * 2) analye: Befehl inkl optionen
+						 * 
+						 * 3) lang: Sprache
+						 * 
+						 * 4) valPath: Pfad zur Datei
+						 * 
+						 * 5) reportPath: Pfad zum Report */
 
-					String analye = "-a --noprogress --nohits --level=" + level;
-					String lang = "-l="+getTextResourceService().getText( MESSAGE_XML_LANGUAGE );
-					String valPath = valDatei.getAbsolutePath();
-					String reportPath = report.getAbsolutePath();
+						String analye = "-a --noprogress --nohits --level=" + level
+								+ " --profile=resources\\callas_pdfaPilotServer_Win_7.0.268_cli-a\\N-Entry.kfpx";
+						String lang = "-l=" + getTextResourceService().getText( MESSAGE_XML_LANGUAGE );
+						String valPath = valDatei.getAbsolutePath();
+						String reportPath = report.getAbsolutePath();
 
-					/* callas separat ausführen und Ergebnis in isValid zurückgeben */
-					isValid = UtilCallas.execCallas( pdfapilotExe, analye, lang, valPath, reportPath );
-					// Ende callas direkt auszulösen
-
+						/* callas separat ausführen und Ergebnis in isValid zurückgeben */
+						isValid = UtilCallas.execCallas( pdfapilotExe, analye, lang, valPath, reportPath );
+						// Ende callas direkt auszulösen
+					}
 				} catch ( Exception e ) {
 					getMessageService().logError(
 							getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
 									+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
-											e.getMessage() ) );
+											"Exec pdfaPilot: " + e.getMessage() ) );
 					return false;
 				}
 			}
@@ -621,34 +642,21 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 				}
 
 				/** Modul A **/
-				if ( exponent1 ) {
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-									+ getTextResourceService().getText( ERROR_XML_AI_1, "iCategory_1" ) );
-				}
-				if ( exponent2 ) {
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-									+ getTextResourceService().getText( ERROR_XML_AI_2, "iCategory_2" ) );
-					// Encrypt-Fileanlegen, damit in J nicht validiert wird
-					File encrypt = new File( pathToWorkDir + File.separator + valDatei.getName()
-							+ "_encrypt.txt" );
-					if ( !encrypt.exists() ) {
-						try {
-							encrypt.createNewFile();
-						} catch ( IOException e ) {
-							e.printStackTrace();
-						}
-					}
-					return false;
-				}
+				String callasB = "";
+				String callasC = "";
+				String callasD = "";
+				String callasE = "";
+				String callasF = "";
+				String callasG = "";
+				String callasH = "";
+				String callasI = "";
 				if ( callas ) {
 					// aus dem Output die Fehler holen
 					// TODO: umschreiben
 
 					try {
 						BufferedReader br = new BufferedReader( new InputStreamReader( new FileInputStream(
-								report ), "ISO-8859-15" ) );
+								report ) ) );
 
 						/* Datei Zeile für Zeile lesen und ermitteln ob "Error" darin enthalten ist
 						 * 
@@ -658,17 +666,109 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 						 * Error: The document structure is corrupt. */
 						for ( String line = br.readLine(); line != null; line = br.readLine() ) {
 							int index = 0;
+
+							line = line.replace( "ü", "ue" );
+							line = line.replace( "ö", "oe" );
+							line = line.replace( "ä", "ae" );
+							line = line.replace( "é", "e" );
+							line = line.replace( "è", "e" );
+							line = line.replace( "ê", "e" );
+							line = line.replace( "à", "a" );
+							line = line.replace( "â", "a" );
+							line = line.replace( "û", "u" );
+							line = line.replace( "ô", "o" );
+							line = line.replace( "î", "i" );
+
+							/* Die Linien (Fehlermeldung von Callas) anhand von Wörter den Modulen zuordnen
+							 * 
+							 * A) Allgemeines B) Struktur C) Grafiken D) Schrift E) transparen F) annotation G)
+							 * aktion H) metadata I) Zugaenglichkeit */
+
 							if ( line.startsWith( "Errors" ) ) {
 								// Errors plus Zahl entfernen aus Linie
-								 index = line.indexOf("\t",7);
-								 System.out.print (" "+index+" ");
-								line=line.substring(index);
-								getMessageService().logError(
-										getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA ) + "<Message>"
-												+ line + "</Message></Error>" );
+								index = line.indexOf( "\t", 7 );
+								line = line.substring( index );
+								line = line + " [callas] ";
+
+								if ( line.toLowerCase().contains( "grafiken" )
+										|| line.toLowerCase().contains( "graphique" )
+										|| line.toLowerCase().contains( "graphics" )
+										|| line.toLowerCase().contains( "image" )
+										|| line.toLowerCase().contains( "bild" ) || line.toLowerCase().contains( "icc" )
+										|| line.toLowerCase().contains( "color" )
+										|| line.toLowerCase().contains( "couleur" )
+										|| line.toLowerCase().contains( "farb" ) || line.toLowerCase().contains( "rgb" )
+										|| line.toLowerCase().contains( "rvb" ) || line.toLowerCase().contains( "cmyk" )
+										|| line.toLowerCase().contains( "cmjn" )
+										|| line.toLowerCase().contains( "outputintent" )
+										|| line.toLowerCase().contains( "jpeg2000" )
+										|| line.toLowerCase().contains( "devicegray" )
+										|| line.toLowerCase().contains( "tr2" ) ) {
+									callasC = callasC + getTextResourceService().getText( MESSAGE_XML_MODUL_C_PDFA )
+											+ "<Message>" + line + "</Message></Error>";
+
+								} else if ( line.toLowerCase().contains( "schrift" )
+										|| line.toLowerCase().contains( "police" )
+										|| line.toLowerCase().contains( "font" ) || line.toLowerCase().contains( "gly" )
+										|| line.toLowerCase().contains( "truetype" )
+										|| line.toLowerCase().contains( "unicode" )
+										|| line.toLowerCase().contains( "cid" )
+										|| line.toLowerCase().contains( "charset" ) ) {
+									callasD = callasD + getTextResourceService().getText( MESSAGE_XML_MODUL_D_PDFA )
+											+ "<Message>" + line + "</Message></Error>";
+
+								} else if ( line.toLowerCase().contains( "zugaenglich" )
+										|| line.toLowerCase().contains( "disponibi" )
+										|| line.toLowerCase().contains( "accessibi" )
+										|| line.toLowerCase().contains( "markinfo" )
+										|| line.toLowerCase().contains( "structree" )
+										|| line.toLowerCase().contains( "structure tree root" )
+										|| line.toLowerCase().contains( "strukturbaum" ) ) {
+									callasI = callasI + getTextResourceService().getText( MESSAGE_XML_MODUL_I_PDFA )
+											+ "<Message>" + line + "</Message></Error>";
+
+								} else if ( line.toLowerCase().contains( "struktur" )
+										|| line.toLowerCase().contains( "structure" )
+										|| line.toLowerCase().contains( " eol" ) ) {
+									callasB = callasB + getTextResourceService().getText( MESSAGE_XML_MODUL_B_PDFA )
+											+ "<Message>" + line + "</Message></Error>";
+
+								} else if ( line.toLowerCase().contains( "metad" )
+										|| line.toLowerCase().contains( "xmp" ) ) {
+									callasH = callasH + getTextResourceService().getText( MESSAGE_XML_MODUL_H_PDFA )
+											+ "<Message>" + line + "</Message></Error>";
+
+								} else if ( line.toLowerCase().contains( "transparen" ) ) {
+									callasE = callasE + getTextResourceService().getText( MESSAGE_XML_MODUL_E_PDFA )
+											+ "<Message>" + line + "</Message></Error>";
+
+								} else if ( line.toLowerCase().contains( "aktion" )
+										|| line.toLowerCase().contains( "action" )
+										|| line.toLowerCase().contains( "aa" ) ) {
+									callasG = callasG + getTextResourceService().getText( MESSAGE_XML_MODUL_G_PDFA )
+											+ "<Message>" + line + "</Message></Error>";
+
+								} else if ( line.toLowerCase().contains( "annotation" )
+										|| line.toLowerCase().contains( "embedd" )
+										|| line.toLowerCase().contains( "komment" )
+										|| line.toLowerCase().contains( "comment" )
+										|| line.toLowerCase().contains( "structure" )
+										|| line.toLowerCase().contains( "drucke" )
+										|| line.toLowerCase().contains( "print" )
+										|| line.toLowerCase().contains( "imprim" )
+										|| line.toLowerCase().contains( "eingebette" )
+										|| line.toLowerCase().contains( "incorpor" ) ) {
+									callasF = callasF + getTextResourceService().getText( MESSAGE_XML_MODUL_F_PDFA )
+											+ "<Message>" + line + "</Message></Error>";
+
+								} else {
+									getMessageService().logError(
+											getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA ) + "<Message>"
+													+ line + "</Message></Error>" );
+								}
 							}
 							if ( line.startsWith( "Error:" ) ) {
-								line=line.substring(7);
+								line = line.substring( 7 );
 								getMessageService().logError(
 										getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA ) + "<Message>"
 												+ line + "</Message></Error>" );
@@ -693,104 +793,150 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 					}
 				}
 
+				if ( exponent1 ) {
+					getMessageService().logError(
+							getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+									+ getTextResourceService().getText( ERROR_XML_AI_1, "PDF Tools: iCategory_1" ) );
+				}
+				if ( exponent2 ) {
+					getMessageService().logError(
+							getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+									+ getTextResourceService().getText( ERROR_XML_AI_2, "PDF Tools: iCategory_2" ) );
+					// Encrypt-Fileanlegen, damit in J nicht validiert wird
+					File encrypt = new File( pathToWorkDir + File.separator + valDatei.getName()
+							+ "_encrypt.txt" );
+					if ( !encrypt.exists() ) {
+						try {
+							encrypt.createNewFile();
+						} catch ( IOException e ) {
+							e.printStackTrace();
+						}
+					}
+					return false;
+				}
+
 				/** Modul B **/
+				if ( callas && !callasB.equals( "" ) ) {
+					getMessageService().logError( callasB );
+				}
 				if ( exponent0 ) {
 					getMessageService().logError(
 							getTextResourceService().getText( MESSAGE_XML_MODUL_B_PDFA )
-									+ getTextResourceService().getText( ERROR_XML_AI_0, "iCategory_0" ) );
+									+ getTextResourceService().getText( ERROR_XML_AI_0, "PDF Tools: iCategory_0" ) );
 				}
 				if ( exponent7 ) {
 					getMessageService().logError(
 							getTextResourceService().getText( MESSAGE_XML_MODUL_B_PDFA )
-									+ getTextResourceService().getText( ERROR_XML_AI_7, "iCategory_7" ) );
+									+ getTextResourceService().getText( ERROR_XML_AI_7, "PDF Tools: iCategory_7" ) );
 				}
 				if ( exponent18 ) {
 					getMessageService().logError(
 							getTextResourceService().getText( MESSAGE_XML_MODUL_B_PDFA )
-									+ getTextResourceService().getText( ERROR_XML_AI_18, "iCategory_18" ) );
+									+ getTextResourceService().getText( ERROR_XML_AI_18, "PDF Tools: iCategory_18" ) );
 				}
 
 				/** Modul C **/
+				if ( callas && !callasC.equals( "" ) ) {
+					getMessageService().logError( callasC );
+				}
 				if ( exponent3 ) {
 					getMessageService().logError(
 							getTextResourceService().getText( MESSAGE_XML_MODUL_C_PDFA )
-									+ getTextResourceService().getText( ERROR_XML_AI_3, "iCategory_3" ) );
+									+ getTextResourceService().getText( ERROR_XML_AI_3, "PDF Tools: iCategory_3" ) );
 				}
 				if ( exponent4 ) {
 					getMessageService().logError(
 							getTextResourceService().getText( MESSAGE_XML_MODUL_C_PDFA )
-									+ getTextResourceService().getText( ERROR_XML_AI_4, "iCategory_4" ) );
+									+ getTextResourceService().getText( ERROR_XML_AI_4, "PDF Tools: iCategory_4" ) );
 				}
 				if ( exponent5 ) {
 					getMessageService().logError(
 							getTextResourceService().getText( MESSAGE_XML_MODUL_C_PDFA )
-									+ getTextResourceService().getText( ERROR_XML_AI_5, "iCategory_5" ) );
+									+ getTextResourceService().getText( ERROR_XML_AI_5, "PDF Tools: iCategory_5" ) );
 				}
 				if ( exponent6 ) {
 					getMessageService().logError(
 							getTextResourceService().getText( MESSAGE_XML_MODUL_C_PDFA )
-									+ getTextResourceService().getText( ERROR_XML_AI_6, "iCategory_6" ) );
+									+ getTextResourceService().getText( ERROR_XML_AI_6, "PDF Tools: iCategory_6" ) );
 				}
 
 				/** Modul D **/
+				if ( callas && !callasD.equals( "" ) ) {
+					getMessageService().logError( callasD );
+				}
 				if ( exponent8 ) {
 					getMessageService().logError(
 							getTextResourceService().getText( MESSAGE_XML_MODUL_D_PDFA )
-									+ getTextResourceService().getText( ERROR_XML_AI_8, "iCategory_8" ) );
+									+ getTextResourceService().getText( ERROR_XML_AI_8, "PDF Tools: iCategory_8" ) );
 				}
 				if ( exponent9 ) {
 					getMessageService().logError(
 							getTextResourceService().getText( MESSAGE_XML_MODUL_D_PDFA )
-									+ getTextResourceService().getText( ERROR_XML_AI_9, "iCategory_9" ) );
+									+ getTextResourceService().getText( ERROR_XML_AI_9, "PDF Tools: iCategory_9" ) );
 				}
 
 				/** Modul E **/
+				if ( callas && !callasE.equals( "" ) ) {
+					getMessageService().logError( callasE );
+				}
 				if ( exponent10 ) {
 					getMessageService().logError(
 							getTextResourceService().getText( MESSAGE_XML_MODUL_E_PDFA )
-									+ getTextResourceService().getText( ERROR_XML_AI_10, "iCategory_10" ) );
+									+ getTextResourceService().getText( ERROR_XML_AI_10, "PDF Tools: iCategory_10" ) );
 				}
 
 				/** Modul F **/
+				if ( callas && !callasF.equals( "" ) ) {
+					getMessageService().logError( callasF );
+				}
 				if ( exponent11 ) {
 					getMessageService().logError(
 							getTextResourceService().getText( MESSAGE_XML_MODUL_F_PDFA )
-									+ getTextResourceService().getText( ERROR_XML_AI_11, "iCategory_11" ) );
+									+ getTextResourceService().getText( ERROR_XML_AI_11, "PDF Tools: iCategory_11" ) );
 				}
 				if ( exponent12 ) {
 					getMessageService().logError(
 							getTextResourceService().getText( MESSAGE_XML_MODUL_F_PDFA )
-									+ getTextResourceService().getText( ERROR_XML_AI_12, "iCategory_12" ) );
+									+ getTextResourceService().getText( ERROR_XML_AI_12, "PDF Tools: iCategory_12" ) );
 				}
 				if ( exponent13 ) {
 					getMessageService().logError(
 							getTextResourceService().getText( MESSAGE_XML_MODUL_F_PDFA )
-									+ getTextResourceService().getText( ERROR_XML_AI_13, "iCategory_13" ) );
+									+ getTextResourceService().getText( ERROR_XML_AI_13, "PDF Tools: iCategory_13" ) );
 				}
 				if ( exponent14 ) {
 					getMessageService().logError(
 							getTextResourceService().getText( MESSAGE_XML_MODUL_F_PDFA )
-									+ getTextResourceService().getText( ERROR_XML_AI_14, "iCategory_14" ) );
+									+ getTextResourceService().getText( ERROR_XML_AI_14, "PDF Tools: iCategory_14" ) );
 				}
 				/** Modul G **/
+				if ( callas && !callasG.equals( "" ) ) {
+					getMessageService().logError( callasG );
+				}
 				if ( exponent15 ) {
 					getMessageService().logError(
 							getTextResourceService().getText( MESSAGE_XML_MODUL_G_PDFA )
-									+ getTextResourceService().getText( ERROR_XML_AI_15, "iCategory_15" ) );
+									+ getTextResourceService().getText( ERROR_XML_AI_15, "PDF Tools: iCategory_15" ) );
 				}
 
 				/** Modul H **/
+				if ( callas && !callasH.equals( "" ) ) {
+					getMessageService().logError( callasH );
+				}
 				if ( exponent16 ) {
 					getMessageService().logError(
 							getTextResourceService().getText( MESSAGE_XML_MODUL_H_PDFA )
-									+ getTextResourceService().getText( ERROR_XML_AI_16, "iCategory_16" ) );
+									+ getTextResourceService().getText( ERROR_XML_AI_16, "PDF Tools: iCategory_16" ) );
 				}
 
 				/** Modul I **/
+				if ( callas && !callasI.equals( "" ) ) {
+					getMessageService().logError( callasI );
+				}
 				if ( exponent17 ) {
 					getMessageService().logError(
 							getTextResourceService().getText( MESSAGE_XML_MODUL_I_PDFA )
-									+ getTextResourceService().getText( ERROR_XML_AI_17, "iCategory_17" ) );
+									+ getTextResourceService().getText( ERROR_XML_AI_17, "PDF Tools: iCategory_17" ) );
 				}
 
 				/** Modul J **/

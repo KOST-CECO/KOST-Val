@@ -237,6 +237,7 @@ public interface MessageConstants
 	String	ERROR_XML_A_PDFA_INCORRECTFILE								= "error.xml.a.pdfa.incorrectfile";
 	String	ERROR_XML_A_PDFA_ISDIRECTORY									= "error.xml.a.pdfa.isdirectory";
 	String	ERROR_XML_CALLAS_MISSING											= "error.xml.callas.missing";
+	String	ERROR_XML_CALLAS_MISSING2											= "error.xml.callas.missing2";
 	String	ERROR_XML_A_PDFA_NOCONFIG											= "error.xml.a.pdfa.noconfig";
 	String	ERROR_XML_A_PDFTOOLS_LICENSE									= "error.xml.a.pdftools.license";
 	String	ERROR_XML_A_PDFTOOLS_ENCRYPTED								= "error.xml.a.pdftools.encrypted";

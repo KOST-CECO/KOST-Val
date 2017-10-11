@@ -1,5 +1,5 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val v1.8.1 application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and
+ * The KOST-Val v1.8.2 application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and
  * Submission Information Package (SIP). Copyright (C) 2012-2017 Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
@@ -106,6 +106,8 @@ public class KOSTVal implements MessageConstants
 		ApplicationContext context = new ClassPathXmlApplicationContext(
 				"classpath:config/applicationContext.xml" );
 
+		System.out.println( "KOST-Val" );
+
 		// Zeitstempel Start
 		java.util.Date nowStart = new java.util.Date();
 		java.text.SimpleDateFormat sdfStart = new java.text.SimpleDateFormat( "dd.MM.yyyy HH:mm:ss" );
@@ -169,8 +171,9 @@ public class KOSTVal implements MessageConstants
 		String pdfaValidationPdftools = kostval.getConfigurationService().pdftools();
 		String pdfaValidationCallas = kostval.getConfigurationService().callas();
 		String pdfaValidation = "no";
-		if (pdfaValidationPdftools.equalsIgnoreCase( "yes" ) || pdfaValidationCallas.equalsIgnoreCase( "yes" )){
-			 pdfaValidation = "yes";
+		if ( pdfaValidationPdftools.equalsIgnoreCase( "yes" )
+				|| pdfaValidationCallas.equalsIgnoreCase( "yes" ) ) {
+			pdfaValidation = "yes";
 		}
 		String siardValidation = kostval.getConfigurationService().siardValidation();
 		String tiffValidation = kostval.getConfigurationService().tiffValidation();
@@ -277,7 +280,6 @@ public class KOSTVal implements MessageConstants
 		LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_FORMATON, formatValOn,
 				version ) );
 		LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_INFO ) );
-		System.out.println( "KOST-Val" );
 
 		if ( args[0].equals( "--format" ) && formatValOn.equals( "" ) ) {
 			// Formatvalidierung aber alle Formate ausgeschlossen
