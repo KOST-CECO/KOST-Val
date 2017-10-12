@@ -25,6 +25,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 
+import ch.kostceco.tools.kostval.KOSTVal;
 import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationCcompressionValidationException;
 import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.util.StreamGobbler;
@@ -130,7 +131,25 @@ public class ValidationCcompressionValidationModuleImpl extends ValidationModule
 
 		/* TODO: Exiftool starten. Anschliessend auswerten! Auf jhove wird verzichtet */
 
-		File fIdentifyPl = new File( "resources" + File.separator + "ExifTool-10.15" + File.separator
+		
+		/* dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist ein generelles TODO in
+		 * allen Modulen. Zuerst immer dirOfJarPath ermitteln und dann alle Pfade mit
+		 * 
+		 * dirOfJarPath + File.separator +
+		 * 
+		 * erweitern. */
+		String path = new java.io.File( KOSTVal.class.getProtectionDomain().getCodeSource()
+				.getLocation().getPath() ).getAbsolutePath();
+		path = path.substring( 0, path.lastIndexOf( "." ) );
+		path = path + System.getProperty( "java.class.path" );
+		String locationOfJarPath = path;
+		String dirOfJarPath = locationOfJarPath;
+		if ( locationOfJarPath.endsWith( ".jar" ) ) {
+			File file = new File( locationOfJarPath );
+			dirOfJarPath = file.getParent();
+		}
+
+		File fIdentifyPl = new File(dirOfJarPath + File.separator + "resources" + File.separator + "ExifTool-10.15" + File.separator
 				+ "exiftool.pl" );
 		String pathToIdentifyPl = fIdentifyPl.getAbsolutePath();
 		if ( !fIdentifyPl.exists() ) {
@@ -140,7 +159,7 @@ public class ValidationCcompressionValidationModuleImpl extends ValidationModule
 							+ getTextResourceService().getText( MESSAGE_XML_CG_ET_MISSING, pathToIdentifyPl ) );
 			return false;
 		} else {
-			File fPerl = new File( "resources" + File.separator + "ExifTool-10.15" + File.separator
+			File fPerl = new File(dirOfJarPath + File.separator + "resources" + File.separator + "ExifTool-10.15" + File.separator
 					+ "Perl" + File.separator + "bin" + File.separator + "perl.exe" );
 			String pathToPerl = fPerl.getAbsolutePath();
 			if ( !fPerl.exists() ) {

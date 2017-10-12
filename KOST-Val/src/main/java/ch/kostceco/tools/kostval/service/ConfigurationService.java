@@ -100,9 +100,6 @@ public interface ConfigurationService extends Service
 	 * @return Wert 0/1 */
 	String getAllowedSize();
 
-	/** Pfad zu Jhove Configuration */
-	String getPathToJhoveConfiguration();
-
 	/** Gibt den Pfad des Arbeitsverzeichnisses zurück. Dieses Verzeichnis wird z.B. zum Entpacken des
 	 * .zip-Files verwendet.
 	 * 

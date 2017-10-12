@@ -37,6 +37,7 @@ import com.pdftools.pdfvalidator.PdfError;
 import com.pdftools.pdfvalidator.PdfValidatorAPI;
 import com.pdftools.NativeLibrary;
 
+import ch.kostceco.tools.kostval.KOSTVal;
 import ch.kostceco.tools.kostval.exception.modulepdfa.ValidationApdfvalidationException;
 import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.util.Util;
@@ -461,8 +462,26 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 
 				try {
 					// Initialisierung callas -> existiert pdfaPilot in den resources?
-					File fpdfapilotExe = new File( "resources" + File.separator
-							+ "callas_pdfaPilotServer_Win_7.0.268_cli-a" + File.separator + "pdfaPilot.exe" );
+					/* dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist ein generelles TODO
+					 * in allen Modulen. Zuerst immer dirOfJarPath ermitteln und dann alle Pfade mit
+					 * 
+					 * dirOfJarPath + File.separator +
+					 * 
+					 * erweitern. */
+					String path = new java.io.File( KOSTVal.class.getProtectionDomain().getCodeSource()
+							.getLocation().getPath() ).getAbsolutePath();
+					path = path.substring( 0, path.lastIndexOf( "." ) );
+					path = path + System.getProperty( "java.class.path" );
+					String locationOfJarPath = path;
+					String dirOfJarPath = locationOfJarPath;
+					if ( locationOfJarPath.endsWith( ".jar" ) ) {
+						File file = new File( locationOfJarPath );
+						dirOfJarPath = file.getParent();
+					}
+
+					File fpdfapilotExe = new File( dirOfJarPath + File.separator + "resources"
+							+ File.separator + "callas_pdfaPilotServer_Win_7.0.268_cli-a" + File.separator
+							+ "pdfaPilot.exe" );
 					if ( !fpdfapilotExe.exists() ) {
 						// Keine callas Validierung möglich
 						if ( pdftools ) {
@@ -673,11 +692,14 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 							line = line.replace( "é", "e" );
 							line = line.replace( "è", "e" );
 							line = line.replace( "ê", "e" );
+							line = line.replace( "ë", "e" );
 							line = line.replace( "à", "a" );
 							line = line.replace( "â", "a" );
 							line = line.replace( "û", "u" );
 							line = line.replace( "ô", "o" );
 							line = line.replace( "î", "i" );
+							line = line.replace( "ï", "i" );
+							line = line.replace( "ß", "ss" );
 
 							/* Die Linien (Fehlermeldung von Callas) anhand von Wörter den Modulen zuordnen
 							 * 
@@ -688,7 +710,21 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 								// Errors plus Zahl entfernen aus Linie
 								index = line.indexOf( "\t", 7 );
 								line = line.substring( index );
-								line = line + " [callas] ";
+								if ( line
+										.contains( "Komponentenanzahl im N-Eintrag des PDF/A Output Intent stimmt nicht mit ICC-Profil ueberein" )
+										|| line
+												.contains( "Number of components in PDF/A OutputIntent N entry does not match ICC profile" ) ) {
+									// als zusatz im Log kennzeichnen
+									line = line + " [callas addition] ";
+								} else if ( line.contains( "Le nombre de composants dans l'entree" )
+										&& line
+												.contains( "N des conditions de sortie PDF/A ne correspond pas au profil ICC" ) ) {
+									// als zusatz im Log kennzeichnen
+									// enthält " l'entreeÂ N " entsprechend alles neu...
+									line = "Le nombre de composants dans l'entree N des conditions de sortie PDF/A ne correspond pas au profil ICC [callas addition] ";
+								} else {
+									line = line + " [callas] ";
+								}
 
 								if ( line.toLowerCase().contains( "grafiken" )
 										|| line.toLowerCase().contains( "graphique" )
@@ -769,6 +805,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 							}
 							if ( line.startsWith( "Error:" ) ) {
 								line = line.substring( 7 );
+								line = line + " [callas] ";
 								getMessageService().logError(
 										getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA ) + "<Message>"
 												+ line + "</Message></Error>" );

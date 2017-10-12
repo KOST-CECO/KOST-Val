@@ -38,6 +38,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import ch.kostceco.tools.kostval.KOSTVal;
 import ch.kostceco.tools.kostval.exception.modulepdfa.ValidationApdfvalidationException;
 import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.util.Util;
@@ -185,9 +186,8 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl i
 			File encrypt = new File( pathToLogDir + File.separator + valDatei.getName() + "_encrypt.txt" );
 
 			if ( encrypt.exists() ) {
-/*				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
-								+ getTextResourceService().getText( ERROR_XML_J_ENCRYPT ) );*/
+				/* getMessageService().logError( getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA
+				 * ) + getTextResourceService().getText( ERROR_XML_J_ENCRYPT ) ); */
 				valid = false;
 				Util.deleteFile( encrypt );
 			}
@@ -470,8 +470,26 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl i
 									// System.out.print("es ist ein JP2 (JPEG2000 Part1)");
 									// TODO: JP2 Validierung
 
-									String pathToJpylyzerExe = "resources" + File.separator + "jpylyzer"
-											+ File.separator + "jpylyzer.exe";
+									/* dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist ein
+									 * generelles TODO in allen Modulen. Zuerst immer dirOfJarPath ermitteln und dann
+									 * alle Pfade mit
+									 * 
+									 * dirOfJarPath + File.separator +
+									 * 
+									 * erweitern. */
+									String path = new java.io.File( KOSTVal.class.getProtectionDomain()
+											.getCodeSource().getLocation().getPath() ).getAbsolutePath();
+									path = path.substring( 0, path.lastIndexOf( "." ) );
+									path = path + System.getProperty( "java.class.path" );
+									String locationOfJarPath = path;
+									String dirOfJarPath = locationOfJarPath;
+									if ( locationOfJarPath.endsWith( ".jar" ) ) {
+										File file = new File( locationOfJarPath );
+										dirOfJarPath = file.getParent();
+									}
+
+									String pathToJpylyzerExe = dirOfJarPath + File.separator + "resources"
+											+ File.separator + "jpylyzer" + File.separator + "jpylyzer.exe";
 
 									File fJpylyzerExe = new File( pathToJpylyzerExe );
 									if ( !fJpylyzerExe.exists() ) {

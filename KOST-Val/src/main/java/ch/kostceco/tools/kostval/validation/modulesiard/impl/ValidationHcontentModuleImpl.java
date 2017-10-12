@@ -44,6 +44,7 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
+import ch.kostceco.tools.kostval.KOSTVal;
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationHcontentException;
 import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.util.StreamGobbler;
@@ -152,14 +153,32 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl implement
 									// cmd: resources\xmllint\xmllint --noout --stream --schema tableXsd tableXml
 									try {
 										// Pfad zum Programm xmllint existiert die Dateien?
-										String pathToxmllintExe = "resources" + File.separator + "xmllint"
-												+ File.separator + "xmllint.exe";
-										String pathToxmllintDll1 = "resources" + File.separator + "xmllint"
-												+ File.separator + "iconv.dll";
-										String pathToxmllintDll2 = "resources" + File.separator + "xmllint"
-												+ File.separator + "libxml2.dll";
-										String pathToxmllintDll3 = "resources" + File.separator + "xmllint"
-												+ File.separator + "zlib1.dll";
+										/* dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist ein
+										 * generelles TODO in allen Modulen. Zuerst immer dirOfJarPath ermitteln und
+										 * dann alle Pfade mit
+										 * 
+										 * dirOfJarPath + File.separator +
+										 * 
+										 * erweitern. */
+										String path = new java.io.File( KOSTVal.class.getProtectionDomain()
+												.getCodeSource().getLocation().getPath() ).getAbsolutePath();
+										path = path.substring( 0, path.lastIndexOf( "." ) );
+										path = path + System.getProperty( "java.class.path" );
+										String locationOfJarPath = path;
+										String dirOfJarPath = locationOfJarPath;
+										if ( locationOfJarPath.endsWith( ".jar" ) ) {
+											File file = new File( locationOfJarPath );
+											dirOfJarPath = file.getParent();
+										}
+
+										String pathToxmllintExe = dirOfJarPath + File.separator + "resources"
+												+ File.separator + "xmllint" + File.separator + "xmllint.exe";
+										String pathToxmllintDll1 = dirOfJarPath + File.separator + "resources"
+												+ File.separator + "xmllint" + File.separator + "iconv.dll";
+										String pathToxmllintDll2 = dirOfJarPath + File.separator + "resources"
+												+ File.separator + "xmllint" + File.separator + "libxml2.dll";
+										String pathToxmllintDll3 = dirOfJarPath + File.separator + "resources"
+												+ File.separator + "xmllint" + File.separator + "zlib1.dll";
 
 										File fpathToxmllintExe = new File( pathToxmllintExe );
 										File fpathToxmllintDll1 = new File( pathToxmllintDll1 );
@@ -186,8 +205,8 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl implement
 															+ getTextResourceService().getText( ERROR_XML_XMLLINT4_MISSING ) );
 											valid = false;
 										} else {
-											StringBuffer command = new StringBuffer( "resources" + File.separator
-													+ "xmllint" + File.separator + "xmllint " );
+											StringBuffer command = new StringBuffer( dirOfJarPath + File.separator
+													+ "resources" + File.separator + "xmllint" + File.separator + "xmllint " );
 											command.append( "--noout --stream " );
 											command.append( " --schema " );
 											command.append( " " );

@@ -118,7 +118,26 @@ public class KOSTVal implements MessageConstants
 		 * (ValidationModuleImpl) context.getBean("validationmoduleimpl"); */
 
 		KOSTVal kostval = (KOSTVal) context.getBean( "kostval" );
-		File configFile = new File( "configuration" + File.separator + "kostval.conf.xml" );
+
+		/* dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist ein generelles TODO in
+		 * allen Modulen. Zuerst immer dirOfJarPath ermitteln und dann alle Pfade mit
+		 * 
+		 * dirOfJarPath + File.separator +
+		 * 
+		 * erweitern. */
+		String path = new java.io.File( KOSTVal.class.getProtectionDomain().getCodeSource()
+				.getLocation().getPath() ).getAbsolutePath();
+		path = path.substring( 0, path.lastIndexOf( "." ) );
+		path = path + System.getProperty( "java.class.path" );
+		String locationOfJarPath = path;
+		String dirOfJarPath = locationOfJarPath;
+		if ( locationOfJarPath.endsWith( ".jar" ) ) {
+			File file = new File( locationOfJarPath );
+			dirOfJarPath = file.getParent();
+		}
+
+		File configFile = new File( dirOfJarPath + File.separator + "configuration" + File.separator
+				+ "kostval.conf.xml" );
 
 		// Ueberprüfung des Parameters (Log-Verzeichnis)
 		String pathToLogfile = kostval.getConfigurationService().getPathToLogfile();
@@ -289,7 +308,8 @@ public class KOSTVal implements MessageConstants
 			System.exit( 1 );
 		}
 
-		File xslOrig = new File( "resources" + File.separator + "kost-val.xsl" );
+		File xslOrig = new File( dirOfJarPath + File.separator + "resources" + File.separator
+				+ "kost-val.xsl" );
 		File xslCopy = new File( directoryOfLogfile.getAbsolutePath() + File.separator + "kost-val.xsl" );
 		if ( !xslCopy.exists() ) {
 			Util.copyFile( xslOrig, xslCopy );
@@ -400,19 +420,10 @@ public class KOSTVal implements MessageConstants
 			}
 		}
 
-		/* Initialisierung TIFF-Modul B (JHove-Validierung) überprüfen der Konfiguration: existiert die
-		 * jhove.conf am angebenen Ort? */
-		String jhoveConf = kostval.getConfigurationService().getPathToJhoveConfiguration();
-		if ( jhoveConf.startsWith( "Configuration-Error:" ) ) {
-			LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_MODUL_Ab_SIP )
-					+ jhoveConf );
-			System.out.println( kostval.getTextResourceService().getText( MESSAGE_XML_MODUL_Ab_SIP )
-					+ jhoveConf );
-			System.exit( 1 );
-		}
-		File fJhoveConf = new File( jhoveConf );
-		if ( !fJhoveConf.exists() || !fJhoveConf.getName().equals( "jhove.conf" ) ) {
-
+		/* Initialisierung TIFF-Modul B (JHove-Validierung) existiert configuration\jhove.conf */
+		File fJhoveConf = new File( dirOfJarPath + File.separator + "configuration" + File.separator
+				+ "jhove.conf" );
+		if ( !fJhoveConf.exists() ) {
 			LOGGER.logError( kostval.getTextResourceService().getText( ERROR_IOE,
 					kostval.getTextResourceService().getText( ERROR_JHOVECONF_MISSING ) ) );
 			System.out.println( kostval.getTextResourceService().getText( ERROR_JHOVECONF_MISSING ) );
@@ -473,7 +484,7 @@ public class KOSTVal implements MessageConstants
 			// TODO: Formatvalidierung an einer Datei --> erledigt --> nur Marker
 			if ( !valDatei.isDirectory() ) {
 
-				boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose );
+				boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose, dirOfJarPath );
 
 				LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_FORMAT2 ) );
 
@@ -559,7 +570,8 @@ public class KOSTVal implements MessageConstants
 
 							if ( ((valDateiExt.equals( ".jp2" ))) && jp2Validation.equals( "yes" ) ) {
 
-								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose );
+								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
+										dirOfJarPath );
 
 								// Löschen des Arbeitsverzeichnisses, falls eines angelegt wurde
 								if ( tmpDir.exists() ) {
@@ -582,7 +594,8 @@ public class KOSTVal implements MessageConstants
 									.getAbsolutePath().toLowerCase().endsWith( ".jpe" )))
 									&& jpegValidation.equals( "yes" ) ) {
 
-								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose );
+								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
+										dirOfJarPath );
 
 								// Löschen des Arbeitsverzeichnisses, falls eines angelegt wurde
 								if ( tmpDir.exists() ) {
@@ -605,7 +618,8 @@ public class KOSTVal implements MessageConstants
 									.toLowerCase().endsWith( ".tif" )))
 									&& tiffValidation.equals( "yes" ) ) {
 
-								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose );
+								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
+										dirOfJarPath );
 
 								// Löschen des Arbeitsverzeichnisses, falls eines angelegt wurde
 								if ( tmpDir.exists() ) {
@@ -626,7 +640,8 @@ public class KOSTVal implements MessageConstants
 								}
 							} else if ( (valDateiExt.equals( ".siard" )) && siardValidation.equals( "yes" ) ) {
 
-								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose );
+								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
+										dirOfJarPath );
 
 								// Löschen des Arbeitsverzeichnisses, falls eines angelegt wurde
 								if ( tmpDir.exists() ) {
@@ -650,7 +665,8 @@ public class KOSTVal implements MessageConstants
 									.toLowerCase().endsWith( ".pdfa" )))
 									&& pdfaValidation.equals( "yes" ) ) {
 
-								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose );
+								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
+										dirOfJarPath );
 
 								// Löschen des Arbeitsverzeichnisses, falls eines angelegt wurde
 								if ( tmpDir.exists() ) {
@@ -1135,7 +1151,8 @@ public class KOSTVal implements MessageConstants
 						if ( valDateiExt.equals( ".pdf" ) || valDateiExt.equals( ".pdfa" ) ) {
 							if ( pdfaValidation.equals( "yes" ) ) {
 								// Validierung durchführen
-								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose );
+								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
+										dirOfJarPath );
 								if ( valFile ) {
 									pdfaCountIo = pdfaCountIo + 1;
 								} else {
@@ -1159,7 +1176,8 @@ public class KOSTVal implements MessageConstants
 						} else if ( valDateiExt.equals( ".tiff" ) || valDateiExt.equals( ".tif" ) ) {
 							if ( tiffValidation.equals( "yes" ) ) {
 								// Validierung durchführen
-								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose );
+								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
+										dirOfJarPath );
 								if ( valFile ) {
 									tiffCountIo = tiffCountIo + 1;
 								} else {
@@ -1193,7 +1211,8 @@ public class KOSTVal implements MessageConstants
 								if ( !tmpDirSiard.exists() ) {
 									tmpDirSiard.mkdir();
 								}
-								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose );
+								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
+										dirOfJarPath );
 								if ( valFile ) {
 									siardCountIo = siardCountIo + 1;
 								} else {
@@ -1217,7 +1236,8 @@ public class KOSTVal implements MessageConstants
 						} else if ( valDateiExt.equals( ".jpe" ) || valDateiExt.equals( ".jpeg" )
 								|| valDateiExt.equals( ".jpg" ) ) {
 							if ( jpegValidation.equals( "yes" ) ) {
-								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose );
+								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
+										dirOfJarPath );
 								if ( valFile ) {
 									jpegCountIo = jpegCountIo + 1;
 								} else {
@@ -1241,7 +1261,8 @@ public class KOSTVal implements MessageConstants
 						} else if ( valDateiExt.equals( ".jp2" ) ) {
 							if ( jp2Validation.equals( "yes" ) ) {
 								// Validierung durchführen
-								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose );
+								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
+										dirOfJarPath );
 								if ( valFile ) {
 									jp2CountIo = jp2CountIo + 1;
 								} else {
@@ -1497,7 +1518,7 @@ public class KOSTVal implements MessageConstants
 
 	// TODO: ValFile --> Formatvalidierung einer Datei --> erledigt --> nur Marker
 	private static boolean valFile( File valDatei, String logFileName, File directoryOfLogfile,
-			boolean verbose ) throws IOException
+			boolean verbose, String dirOfJarPath ) throws IOException
 	{
 		ApplicationContext context = new ClassPathXmlApplicationContext(
 				"classpath:config/applicationContext.xml" );

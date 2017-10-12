@@ -39,6 +39,7 @@ import uk.gov.nationalarchives.droid.core.signature.droid4.Droid;
 import uk.gov.nationalarchives.droid.core.signature.droid4.FileFormatHit;
 import uk.gov.nationalarchives.droid.core.signature.droid4.IdentificationFile;
 import uk.gov.nationalarchives.droid.core.signature.droid4.signaturefile.FileFormat;
+import ch.kostceco.tools.kostval.KOSTVal;
 import ch.kostceco.tools.kostval.exception.modulejp2.ValidationAjp2validationException;
 import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.util.Util;
@@ -282,8 +283,26 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl imple
 		boolean isValid = false;
 
 		// TODO: Erledigt - Initialisierung Jpylyzer -> existiert Jpylyzer?
-		String pathToJpylyzerExe = "resources" + File.separator + "jpylyzer" + File.separator
-				+ "jpylyzer.exe";
+
+		/* dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist ein generelles TODO in
+		 * allen Modulen. Zuerst immer dirOfJarPath ermitteln und dann alle Pfade mit
+		 * 
+		 * dirOfJarPath + File.separator +
+		 * 
+		 * erweitern. */
+		String path = new java.io.File( KOSTVal.class.getProtectionDomain().getCodeSource()
+				.getLocation().getPath() ).getAbsolutePath();
+		path = path.substring( 0, path.lastIndexOf( "." ) );
+		path = path + System.getProperty( "java.class.path" );
+		String locationOfJarPath = path;
+		String dirOfJarPath = locationOfJarPath;
+		if ( locationOfJarPath.endsWith( ".jar" ) ) {
+			File file = new File( locationOfJarPath );
+			dirOfJarPath = file.getParent();
+		}
+
+		String pathToJpylyzerExe = dirOfJarPath + File.separator + "resources" + File.separator
+				+ "jpylyzer" + File.separator + "jpylyzer.exe";
 
 		File fJpylyzerExe = new File( pathToJpylyzerExe );
 		if ( !fJpylyzerExe.exists() ) {

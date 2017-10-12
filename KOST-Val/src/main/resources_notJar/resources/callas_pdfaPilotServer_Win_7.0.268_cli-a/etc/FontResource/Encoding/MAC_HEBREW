@@ -1,0 +1,98 @@
+%!PS-Adobe-3.0 Resource-CMap
+%%DocumentNeededResources: ProcSet (CIDInit)
+%%IncludeResource: ProcSet (CIDInit)
+%%BeginResource: CMap (MAC_HEBREW)
+%%Title: (MAC_HEBREW 0)
+%%EndComments
+
+/CIDInit /ProcSet findresource begin
+
+12 dict begin
+
+begincmap
+
+/CMapName /MAC_HEBREW def
+/CMapType 2 def
+
+1 begincodespacerange
+  <20> <FF>
+endcodespacerange
+
+53 beginbfchar
+  <80> <00C4>
+  <81> <05F205B7>
+  <82> <00C7>
+  <83> <00C9>
+  <84> <00D1>
+  <85> <00D6>
+  <86> <00DC>
+  <87> <00E1>
+  <88> <00E0>
+  <89> <00E2>
+  <8A> <00E4>
+  <8B> <00E3>
+  <8C> <00E5>
+  <8D> <00E7>
+  <8E> <00E9>
+  <8F> <00E8>
+  <92> <00ED>
+  <93> <00EC>
+  <96> <00F1>
+  <97> <00F3>
+  <98> <00F2>
+  <99> <00F4>
+  <9A> <00F6>
+  <9B> <00F5>
+  <9C> <00FA>
+  <9D> <00F9>
+  <A6> <20AA>
+  <A7> <0027>
+  <A8> <0029>
+  <A9> <0028>
+  <C0> <F86A05DC05B9>
+  <C1> <201E>
+  <C6> <05BC>
+  <C7> <FB4B>
+  <C8> <FB35>
+  <C9> <2026>
+  <CA> <00A0>
+  <CB> <05B8>
+  <CC> <05B7>
+  <CF> <05B4>
+  <D8> <05BF>
+  <D9> <05B0>
+  <DA> <05B2>
+  <DB> <05B1>
+  <DC> <05BB>
+  <DD> <05B9>
+  <DE> <05B8F87F>
+  <DF> <05B3>
+  <FB> <007D>
+  <FC> <005D>
+  <FD> <007B>
+  <FE> <005B>
+  <FF> <007C>
+endbfchar
+
+13 beginbfrange
+  <20> <7E> <0020>
+  <90> <91> <00EA>
+  <94> <95> <00EE>
+  <9E> <9F> <00FB>
+  <A0> <A5> <0020>
+  <AA> <BF> <002A>
+  <C2> <C5> <F89B>
+  <CD> <CE> <05B5>
+  <D0> <D1> <2013>
+  <D2> <D3> <201C>
+  <D4> <D5> <2018>
+  <D6> <D7> <FB2A>
+  <E0> <FA> <05D0>
+endbfrange
+endcmap
+CMapName currentdict /CMap defineresource pop
+end
+end
+
+%%EndResource
+%%EOF

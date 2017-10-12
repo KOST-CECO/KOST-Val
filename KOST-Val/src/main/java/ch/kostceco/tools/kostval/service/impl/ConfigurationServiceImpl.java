@@ -116,15 +116,14 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	}
 
 	@Override
-	public String getPathToJhoveConfiguration()
+	public String getPathToDroidSignatureFile()
 	{
-		/** Gibt den Pfad des jhove.conf zurück. */
-		Object prop = getConfig().getProperty( "pathtojhoveconfig" );
+		Object prop = getConfig().getProperty( "pathtodroidsignature" );
 		if ( prop instanceof String ) {
 			String value = (String) prop;
 			return value;
 		}
-		String error = "Configuration-Error: Missing pathtojhoveconfig";
+		String error = "Configuration-Error: Missing pathtodroidsignature";
 		return error;
 	}
 
@@ -339,18 +338,6 @@ public class ConfigurationServiceImpl implements ConfigurationService
 					+ getTextResourceService().getText( MESSAGE_XML_AC_INVALIDREGEX ) );
 		}
 		String error = "Configuration-Error: Missing sip.allowedsipname";
-		return error;
-	}
-
-	@Override
-	public String getPathToDroidSignatureFile()
-	{
-		Object prop = getConfig().getProperty( "sip.pathtodroidsignature" );
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		String error = "Configuration-Error: Missing sip.pathtodroidsignature";
 		return error;
 	}
 

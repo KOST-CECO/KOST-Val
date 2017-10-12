@@ -36,6 +36,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import ch.kostceco.tools.kostval.KOSTVal;
 import ch.kostceco.tools.kostval.exception.modulesip1.Validation1dMetadataException;
 import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
@@ -131,14 +132,33 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl impleme
 			File xsdToValidateEch160 = new File( valDatei.getAbsolutePath() + File.separator + "header"
 					+ File.separator + "xsd" + File.separator + "arelda.xsd" );
 
-			File xsd10 = new File( "resources" + File.separator + "header_1d" + File.separator
-					+ "eCH-0160v1.0" + File.separator + "xsd" + File.separator + "arelda.xsd" );
-			File xsd11 = new File( "resources" + File.separator + "header_1d" + File.separator
-					+ "eCH-0160v1.1" + File.separator + "xsd" + File.separator + "arelda.xsd" );
-			File xml10 = new File( "resources" + File.separator + "header_1d" + File.separator
-					+ "eCH-0160v1.0" + File.separator + "metadata.xml" );
-			File xml11 = new File( "resources" + File.separator + "header_1d" + File.separator
-					+ "eCH-0160v1.1" + File.separator + "metadata.xml" );
+			/* dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist ein generelles TODO in
+			 * allen Modulen. Zuerst immer dirOfJarPath ermitteln und dann alle Pfade mit
+			 * 
+			 * dirOfJarPath + File.separator +
+			 * 
+			 * erweitern. */
+			String path = new java.io.File( KOSTVal.class.getProtectionDomain().getCodeSource()
+					.getLocation().getPath() ).getAbsolutePath();
+			path = path.substring( 0, path.lastIndexOf( "." ) );
+			path = path + System.getProperty( "java.class.path" );
+			String locationOfJarPath = path;
+			String dirOfJarPath = locationOfJarPath;
+			if ( locationOfJarPath.endsWith( ".jar" ) ) {
+				File file = new File( locationOfJarPath );
+				dirOfJarPath = file.getParent();
+			}
+
+			File xsd10 = new File( dirOfJarPath + File.separator + "resources" + File.separator
+					+ "header_1d" + File.separator + "eCH-0160v1.0" + File.separator + "xsd" + File.separator
+					+ "arelda.xsd" );
+			File xsd11 = new File( dirOfJarPath + File.separator + "resources" + File.separator
+					+ "header_1d" + File.separator + "eCH-0160v1.1" + File.separator + "xsd" + File.separator
+					+ "arelda.xsd" );
+			File xml10 = new File( dirOfJarPath + File.separator + "resources" + File.separator
+					+ "header_1d" + File.separator + "eCH-0160v1.0" + File.separator + "metadata.xml" );
+			File xml11 = new File( dirOfJarPath + File.separator + "resources" + File.separator
+					+ "header_1d" + File.separator + "eCH-0160v1.1" + File.separator + "metadata.xml" );
 
 			File xmlIntern = xml10;
 			File xsdIntern = xsd10;

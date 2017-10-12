@@ -41,6 +41,7 @@ import org.jdom2.JDOMException;
 import org.jdom2.Namespace;
 import org.jdom2.input.SAXBuilder;
 
+import ch.kostceco.tools.kostval.KOSTVal;
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationJsurplusFilesException;
 import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.util.StreamGobbler;
@@ -136,15 +137,33 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl impl
 
 			filesInSiard = new TreeMap<String, String>( filesInSiardUnsorted );
 
-			File fSedExe = new File( "resources" + File.separator + "sed" + File.separator + "sed.exe" );
-			File msys20dll = new File( "resources" + File.separator + "sed" + File.separator
-					+ "msys-2.0.dll" );
-			File msysgccs1dll = new File( "resources" + File.separator + "sed" + File.separator
-					+ "msys-gcc_s-1.dll" );
-			File msysiconv2dll = new File( "resources" + File.separator + "sed" + File.separator
-					+ "msys-iconv-2.dll" );
-			File msysintl8dll = new File( "resources" + File.separator + "sed" + File.separator
-					+ "msys-intl-8.dll" );
+			/* dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist ein generelles TODO in
+			 * allen Modulen. Zuerst immer dirOfJarPath ermitteln und dann alle Pfade mit
+			 * 
+			 * dirOfJarPath + File.separator +
+			 * 
+			 * erweitern. */
+			String path = new java.io.File( KOSTVal.class.getProtectionDomain().getCodeSource()
+					.getLocation().getPath() ).getAbsolutePath();
+			path = path.substring( 0, path.lastIndexOf( "." ) );
+			path = path + System.getProperty( "java.class.path" );
+			String locationOfJarPath = path;
+			String dirOfJarPath = locationOfJarPath;
+			if ( locationOfJarPath.endsWith( ".jar" ) ) {
+				File file = new File( locationOfJarPath );
+				dirOfJarPath = file.getParent();
+			}
+
+			File fSedExe = new File( dirOfJarPath + File.separator + "resources" + File.separator + "sed"
+					+ File.separator + "sed.exe" );
+			File msys20dll = new File( dirOfJarPath + File.separator + "resources" + File.separator
+					+ "sed" + File.separator + "msys-2.0.dll" );
+			File msysgccs1dll = new File( dirOfJarPath + File.separator + "resources" + File.separator
+					+ "sed" + File.separator + "msys-gcc_s-1.dll" );
+			File msysiconv2dll = new File( dirOfJarPath + File.separator + "resources" + File.separator
+					+ "sed" + File.separator + "msys-iconv-2.dll" );
+			File msysintl8dll = new File( dirOfJarPath + File.separator + "resources" + File.separator
+					+ "sed" + File.separator + "msys-intl-8.dll" );
 			String pathToSedExe = fSedExe.getAbsolutePath();
 			if ( !fSedExe.exists() ) {
 				// sed.exe existiert nicht --> Abbruch

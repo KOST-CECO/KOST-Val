@@ -1,0 +1,6 @@
+DisplayName	1	FEATURE_AdjustDotGain3Perc_long
+
+INPUT	DEFAULT
+0.0	0.0
+0.5	0.53
+1.0	1.0

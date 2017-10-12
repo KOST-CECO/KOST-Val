@@ -33,12 +33,12 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import ch.kostceco.tools.kostval.KOSTVal;
 import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationBjhoveValidationException;
 import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationBjhoveValidationModule;
-
 import edu.harvard.hul.ois.jhove.*;
 import edu.harvard.hul.ois.jhove.module.TiffModule;
 import edu.harvard.hul.ois.jhove.Module;
@@ -78,14 +78,29 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl i
 		toplevelDir = toplevelDir.substring( 0, lastDotIdx );
 
 		// Vorbereitungen: valDatei an die JHove Applikation übergeben
+
+		
+		/* dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist ein generelles TODO in
+		 * allen Modulen. Zuerst immer dirOfJarPath ermitteln und dann alle Pfade mit
+		 * 
+		 * dirOfJarPath + File.separator +
+		 * 
+		 * erweitern. */
+		String path = new java.io.File( KOSTVal.class.getProtectionDomain().getCodeSource()
+				.getLocation().getPath() ).getAbsolutePath();
+		path = path.substring( 0, path.lastIndexOf( "." ) );
+		path = path + System.getProperty( "java.class.path" );
+		String locationOfJarPath = path;
+		String dirOfJarPath = locationOfJarPath;
+		if ( locationOfJarPath.endsWith( ".jar" ) ) {
+			File file = new File( locationOfJarPath );
+			dirOfJarPath = file.getParent();
+		}
+
 		File jhoveReport = null;
 		StringBuffer concatenatedOutputs = new StringBuffer();
-		String pathToJhoveConfig = getConfigurationService().getPathToJhoveConfiguration();
-		if ( pathToJhoveConfig.startsWith( "Configuration-Error:" ) ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_B_TIFF ) + pathToJhoveConfig );
-			return false;
-		}
+		String pathToJhoveConfig = dirOfJarPath + File.separator + "configuration" + File.separator
+				+ "jhove.conf" ; 
 		String pathToWorkDir = getConfigurationService().getPathToWorkDir();
 
 		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim

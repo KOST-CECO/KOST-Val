@@ -2,7 +2,7 @@
 <configuration>
 	<pathtologfile>logs</pathtologfile>
 	<pathtoworkdir>temp_KOST-Val</pathtoworkdir>
-	<pathtojhoveconfig>configuration\jhove.conf</pathtojhoveconfig>
+	<pathtodroidsignature>configuration\KaD_SignatureFile_V72.xml</pathtodroidsignature>
 	<showprogressonwork>yes</showprogressonwork><!--no / yes -->
 	<pdfa>
 		<!-- sind callas und pdftools beide auf no wird keine pdfa Validierung durchgefuehrt -->
@@ -66,7 +66,6 @@
 	<sip>
 		<allowedlengthofpaths>179</allowedlengthofpaths>
 		<allowedsipname>SIP_[1-2][0-9]{3}[0-1][0-9][0-3][0-9]_\\w{3}</allowedsipname>
-		<pathtodroidsignature>configuration\KaD_SignatureFile_V72.xml</pathtodroidsignature>
 		<allowedformats>
 		<!-- Text -->
 			<!-- TXT: x-fmt/111 -->
