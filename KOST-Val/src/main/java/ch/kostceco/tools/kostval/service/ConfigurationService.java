@@ -129,15 +129,20 @@ public interface ConfigurationService extends Service
 	 * Tabellen und Module validiert werden können. */
 	int getTableRowsLimit();
 
+	/** Gibt an ob pdfa mit PDF Tools validiert werden soll
+	 * 
+	 * @return yes oder no */
+	String pdftools();
+
 	/** Gibt an ob pdfa mit callas validiert werden soll
 	 * 
 	 * @return yes oder no */
 	String callas();
 
-	/** Gibt an ob pdfa mit PDF Tools validiert werden soll
+	/** N-Eintrag: Soll seitens callas ein Fehler (E) oder eine Warnung (W) ausgegeben werden
 	 * 
-	 * @return yes oder no */
-	String pdftools();
+	 * @return W oder E */
+	String nentry();
 
 	/** Gibt an welche Konformität mindestens erreicht werden muss
 	 * 

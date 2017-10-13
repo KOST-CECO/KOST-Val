@@ -5,10 +5,12 @@
 	<pathtodroidsignature>configuration\KaD_SignatureFile_V72.xml</pathtodroidsignature>
 	<showprogressonwork>yes</showprogressonwork><!--no / yes -->
 	<pdfa>
-		<!-- sind callas und pdftools beide auf no wird keine pdfa Validierung durchgefuehrt -->
-		<!-- sind callas und pdftools beide auf yes wird die duale pdfa Validierung durchgefuehrt -->
-		<callas>yes</callas><!--no wenn callas nicht verwendet werden soll, ansonsten yes -->
+		<!-- sind pdftools und callas beide auf no wird keine pdfa Validierung durchgefuehrt -->
+		<!-- sind pdftools und callas beide auf yes wird die duale pdfa Validierung durchgefuehrt -->
 		<pdftools>yes</pdftools><!--no wenn PDF Tools nicht verwendet werden soll, ansonsten yes -->
+		<callas>yes</callas><!--no wenn callas nicht verwendet werden soll, ansonsten yes -->
+		<!-- N-Eintrag: Soll seitens callas ein Fehler (E) oder eine Warnung (W) ausgegeben werden  -->
+		<nentry>W</nentry><!--W verwenden wenn Warnung ansonsten E für Fehler -->
 		<!--Angeben welche Conformancelevel mindestens erreicht werden muss -->
 		<!--no verwenden wenn diese Version nicht erlaubt ist -->
 		<pdfa1>1B</pdfa1><!--1A / 1B / no -->

@@ -142,6 +142,19 @@ public class ConfigurationServiceImpl implements ConfigurationService
 
 	/*--- PDF/A ---------------------------------------------------------------------*/
 	@Override
+	public String pdftools()
+	{
+		Object prop = getConfig().getProperty( "pdfa.pdftools" );
+
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		String error = "Configuration-Error: Missing pdfa.pdftools";
+		return error;
+	}
+
+	@Override
 	public String callas()
 	{
 		Object prop = getConfig().getProperty( "pdfa.callas" );
@@ -155,15 +168,15 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	}
 
 	@Override
-	public String pdftools()
+	public String nentry()
 	{
-		Object prop = getConfig().getProperty( "pdfa.pdftools" );
+		Object prop = getConfig().getProperty( "pdfa.nentry" );
 
 		if ( prop instanceof String ) {
 			String value = (String) prop;
 			return value;
 		}
-		String error = "Configuration-Error: Missing pdfa.pdftools";
+		String error = "Configuration-Error: Missing pdfa.nentry";
 		return error;
 	}
 

@@ -325,6 +325,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 		boolean isValid = false;
 		boolean callas = false;
 		boolean pdftools = false;
+		int callasReturnCode = 9;
 
 		String callasConfig = getConfigurationService().callas();
 		String pdftoolsConfig = getConfigurationService().pdftools();
@@ -460,6 +461,15 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 			if ( callas && !isValid ) {
 				// Validierung mit callas
 
+				/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
+				 * entsprechenden Modul die property anzugeben: <property name="configurationService"
+				 * ref="configurationService" /> */
+				String nEntry = getConfigurationService().nentry();
+				boolean bNentryError = true;
+				if ( nEntry.equalsIgnoreCase( "W" ) ) {
+					bNentryError = false;
+				}
+
 				try {
 					// Initialisierung callas -> existiert pdfaPilot in den resources?
 					/* dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist ein generelles TODO
@@ -502,8 +512,6 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 					if ( callas ) {
 						String pdfapilotExe = fpdfapilotExe.getAbsolutePath();
 
-						// TODO N-Entry überprüfen
-
 						/* Aufbau command:
 						 * 
 						 * 1) pdfapilotExe: Pfad zum Programm pdfapilot
@@ -516,14 +524,57 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 						 * 
 						 * 5) reportPath: Pfad zum Report */
 
-						String analye = "-a --noprogress --nohits --level=" + level
-								+ " --profile=resources\\callas_pdfaPilotServer_Win_7.0.268_cli-a\\N-Entry.kfpx";
+						String profile = dirOfJarPath + File.separator + "resources" + File.separator
+								+ "callas_pdfaPilotServer_Win_7.0.268_cli-a" + File.separator + "N-Entry.kfpx";
+						String analye = "-a --noprogress --nohits --level=" + level + " --profile=" + profile;
+						String langConfig = getTextResourceService().getText( MESSAGE_XML_LANGUAGE );
 						String lang = "-l=" + getTextResourceService().getText( MESSAGE_XML_LANGUAGE );
 						String valPath = valDatei.getAbsolutePath();
 						String reportPath = report.getAbsolutePath();
 
 						/* callas separat ausführen und Ergebnis in isValid zurückgeben */
-						isValid = UtilCallas.execCallas( pdfapilotExe, analye, lang, valPath, reportPath );
+						callasReturnCode = UtilCallas.execCallas( pdfapilotExe, analye, lang, valPath,
+								reportPath );
+
+						if ( callasReturnCode == 0 ) {
+							/* 0 PDF is valid PDF/A-file additional checks wihtout problems
+							 * 
+							 * 1 PDF is valid PDF/A-file but additional checks with problems – severity info
+							 * 
+							 * 2 PDF is valid PDF/A-file but additional checks with problems – severity warning
+							 * 
+							 * 3 PDF is valid PDF/A-file but additional checks with problems – severity error -->
+							 * N-Eintrag
+							 * 
+							 * 4 PDF is not a valid PDF/A-file */
+							isValid = true;
+						} else if ( callasReturnCode > 3 ) {
+							isValid = false;
+						} else {
+							// Zusatzprüfung nicht bestanden
+
+							if ( bNentryError ) {
+								// Zusatzprüfung nicht bestanden = Error
+								isValid = false;
+							} else {
+								/* Zusatzprüfung nicht bestanden = Warnung aber valide
+								 * 
+								 * Warnung jetzt ausgeben */
+								String warning = "";
+								isValid = true;
+								if ( langConfig.equalsIgnoreCase( "de" ) ) {
+									warning = "Warnung: Komponentenanzahl im N-Eintrag des PDF/A Output Intent stimmt nicht mit ICC-Profil ueberein. [callas] ";
+								} else if ( langConfig.equalsIgnoreCase( "fr" ) ) {
+									warning = "Avertissement: Le nombre de composants dans l'entree N des conditions de sortie PDF/A ne correspond pas au profil ICC. [callas] ";
+								} else {
+									warning = "Warning: Number of components in PDF/A OutputIntent N entry does not match ICC profile. [callas] ";
+								}
+								getMessageService().logError(
+										getTextResourceService().getText( MESSAGE_XML_MODUL_C_PDFA ) + "<Message>"
+												+ warning + "</Message></Error>" );
+							}
+						}
+
 						// Ende callas direkt auszulösen
 					}
 				} catch ( Exception e ) {
@@ -715,13 +766,13 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 										|| line
 												.contains( "Number of components in PDF/A OutputIntent N entry does not match ICC profile" ) ) {
 									// als zusatz im Log kennzeichnen
-									line = line + " [callas addition] ";
+									line = line + " [callas] ";
 								} else if ( line.contains( "Le nombre de composants dans l'entree" )
 										&& line
 												.contains( "N des conditions de sortie PDF/A ne correspond pas au profil ICC" ) ) {
 									// als zusatz im Log kennzeichnen
 									// enthält " l'entreeÂ N " entsprechend alles neu...
-									line = "Le nombre de composants dans l'entree N des conditions de sortie PDF/A ne correspond pas au profil ICC [callas addition] ";
+									line = "Le nombre de composants dans l'entree N des conditions de sortie PDF/A ne correspond pas au profil ICC [callas] ";
 								} else {
 									line = line + " [callas] ";
 								}
