@@ -542,6 +542,18 @@ public class KOSTVal implements MessageConstants
 					if ( tmpDir.exists() ) {
 						Util.deleteDir( tmpDir );
 					}
+					if ( tmpDir.exists() ) {
+						tmpDir.deleteOnExit();
+					}
+
+					File pathTemp = new File( directoryOfLogfile, "path.tmp" );
+					if ( pathTemp.exists() ) {
+						pathTemp.delete();
+					}
+					if ( pathTemp.exists() ) {
+						pathTemp.deleteOnExit();
+					}
+
 					// Validierte Datei valide
 					System.exit( 0 );
 				} else {
@@ -834,6 +846,15 @@ public class KOSTVal implements MessageConstants
 					if ( tmpDir.exists() ) {
 						tmpDir.deleteOnExit();
 					}
+
+					File pathTemp = new File( directoryOfLogfile, "path.tmp" );
+					if ( pathTemp.exists() ) {
+						pathTemp.delete();
+					}
+					if ( pathTemp.exists() ) {
+						pathTemp.deleteOnExit();
+					}
+
 					// alle Validierten Dateien valide
 					System.exit( 0 );
 				} else {
@@ -1461,6 +1482,14 @@ public class KOSTVal implements MessageConstants
 					tmpDir.deleteOnExit();
 				}
 
+				File pathTemp = new File( directoryOfLogfile, "path.tmp" );
+				if ( pathTemp.exists() ) {
+					pathTemp.delete();
+				}
+				if ( pathTemp.exists() ) {
+					pathTemp.deleteOnExit();
+				}
+
 				System.out.print( "                                                                    " );
 				System.out.print( "\r" );
 
@@ -1721,23 +1750,18 @@ public class KOSTVal implements MessageConstants
 				System.out.println( " = Invalid" );
 			}
 
-			/* Ausgabe der Pfade zu den Pdftron Reports, falls welche generiert wurden Pdftron Reports
-			 * löschen */
-			File pdftronReport = new File( directoryOfLogfile, "report.xml" );
-			File pdftronXsl = new File( directoryOfLogfile, "report.xsl" );
-
-			if ( pdftronReport.exists() ) {
-				// PDFTron-Report loeschen!
-				pdftronReport.delete();
-				pdftronXsl.delete();
-			}
-
 		} else {
 			LOGGER.logError( kostval.getTextResourceService().getText( ERROR_INCORRECTFILEENDING,
 					valDatei.getName() ) );
 			System.out.println( kostval.getTextResourceService().getText( ERROR_INCORRECTFILEENDING,
 					valDatei.getName() ) );
 		}
+
+		if ( pathTemp.exists() ) {
+			// pathTemploeschen!
+			pathTemp.delete();
+		}
+
 		return valFile;
 	}
 

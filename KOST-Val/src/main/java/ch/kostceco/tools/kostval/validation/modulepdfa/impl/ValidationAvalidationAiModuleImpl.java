@@ -526,7 +526,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 
 						String profile = dirOfJarPath + File.separator + "resources" + File.separator
 								+ "callas_pdfaPilotServer_Win_7.0.268_cli-a" + File.separator + "N-Entry.kfpx";
-						String analye = "-a --noprogress --nohits --level=" + level + " --profile=" + profile;
+						String analye = "-a --noprogress --nohits --level=" + level + " --profile=\"" + profile+"\"";
 						String langConfig = getTextResourceService().getText( MESSAGE_XML_LANGUAGE );
 						String lang = "-l=" + getTextResourceService().getText( MESSAGE_XML_LANGUAGE );
 						String valPath = valDatei.getAbsolutePath();
@@ -853,12 +853,17 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 											getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA ) + "<Message>"
 													+ line + "</Message></Error>" );
 								}
-							}
-							if ( line.startsWith( "Error:" ) ) {
+							} else if ( line.startsWith( "Error:" ) ) {
 								line = line.substring( 7 );
 								line = line + " [callas] ";
 								getMessageService().logError(
 										getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA ) + "<Message>"
+												+ line + "</Message></Error>" );
+							} else if ( line.startsWith( "Error" ) ) {
+								line = line.substring( 11 );
+								line = line + " [callas] ";
+								getMessageService().logError(
+										getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA ) + "<Message>Error: "
 												+ line + "</Message></Error>" );
 							}
 						}
@@ -1038,7 +1043,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 			}
 			if ( report.exists() ) {
 				report.delete();
-			}
+			} 
 		} catch ( Exception e ) {
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
