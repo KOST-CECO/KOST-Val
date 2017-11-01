@@ -24,10 +24,9 @@ import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulepdfa.ValidationAinitialisationModule;
 
-/** Initialisierung PDF-Tools
- * Kontrolle ob ein Schlüssel vorhanden ist (Vollversion) wenn nicht, wird die eingeschränkte
- * Version verwendet
- * Da der Schlüssel nur für KOST-Val verwendet werden darf, wird er nicht publiziert
+/** Initialisierung PDF-Tools Kontrolle ob ein Schlüssel vorhanden ist (Vollversion) wenn nicht, wird
+ * die eingeschränkte Version verwendet Da der Schlüssel nur für KOST-Val verwendet werden darf,
+ * wird er nicht publiziert
  * 
  * @author Rc Claire Röthlisberger, KOST-CECO */
 
@@ -56,27 +55,25 @@ public class ValidationAinitialisationModuleImpl extends ValidationModuleImpl im
 		boolean dual = false;
 		// Initialisierung PDFTron -> überprüfen der Angaben: existiert die
 		// PdftronExe am angebenen Ort?
-		String producerFirstValidator = getConfigurationService().firstValidator();
-		String dualValidation = getConfigurationService().dualValidation();
+		String pdftoolsValidator = getConfigurationService().pdftools();
 		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
 		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
 		 * ref="configurationService" /> */
 		try {
-			// PDFTools: Check license
-			if ( !PdfValidatorAPI.getLicenseIsValid() ) {
-				// Keine Vollversion vorhanden -> Interne
-				// eigeschränke Version verwenden
-				/** Da der Schlüssel nur für KOST-Val verwendet werden darf, wird er nicht publiziert -->
-				 * 000-YOUR-OWN-OEM-LICENCEKEY-000 mit dem OEM-Lizenzschlüssel ersetzten!
-				 *
-				 * Because the key is only allowed to be used for KOST-Val, he is not published -> replaced
-				 * 000-YOUR-OWN-OEM-LICENCEKEY-000 with the your OEM license key! **/
-				String strLicenseKey = "000-YOUR-OWN-OEM-LICENCEKEY-000";
-				PdfValidatorAPI.setLicenseKey( strLicenseKey );
-			}
-			if ( !PdfValidatorAPI.getLicenseIsValid() ) {
-				if ( dualValidation.contentEquals( "dual" )
-						|| !producerFirstValidator.contentEquals( "PDFTron" ) ) {
+			if ( pdftoolsValidator.equalsIgnoreCase( "yes" ) ) {
+				// PDFTools: Check license
+				if ( !PdfValidatorAPI.getLicenseIsValid() ) {
+					// Keine Vollversion vorhanden -> Interne
+					// eigeschränke Version verwenden
+					/** Da der Schlüssel nur für KOST-Val verwendet werden darf, wird er nicht publiziert -->
+					 * 000-YOUR-OWN-OEM-LICENCEKEY-000 mit dem OEM-Lizenzschlüssel ersetzten!
+					 *
+					 * Because the key is only allowed to be used for KOST-Val, he is not published ->
+					 * replaced 000-YOUR-OWN-OEM-LICENCEKEY-000 with the your OEM license key! **/
+					String strLicenseKey = "000-YOUR-OWN-OEM-LICENCEKEY-000";
+					PdfValidatorAPI.setLicenseKey( strLicenseKey );
+				}
+				if ( !PdfValidatorAPI.getLicenseIsValid() ) {
 					getMessageService().logError(
 							getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
 									+ getTextResourceService().getText( ERROR_XML_A_PDFTOOLS_LICENSE ) );

@@ -20,7 +20,6 @@
 package ch.kostceco.tools.kostval.util;
 
 import static org.apache.commons.io.IOUtils.closeQuietly;
-
 import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.util.StreamGobbler;
 import ch.kostceco.tools.kostval.util.Util;
@@ -58,7 +57,7 @@ public class UtilCallas
 	 * @param reportPath
 	 *          : Pfad zum Report
 	 * @return isValid true wenn validierung bestanden wurde */
-	public static boolean execCallas( String pdfapilotExe, String analye, String lang,
+	public static int execCallas( String pdfapilotExe, String analye, String lang,
 			String valPath, String reportPath ) throws Exception
 	{
 		/* Aufbau command:
@@ -86,7 +85,7 @@ public class UtilCallas
 		/* Das redirect Zeichen verunmöglicht eine direkte eingabe. mit dem geschachtellten Befehl
 		 * gehts: cmd /c\"urspruenlicher Befehl\" */
 
-		boolean isValid = false;
+		int returnCode=999;
 
 		Process proc = null;
 		Runtime rt = null;
@@ -110,25 +109,12 @@ public class UtilCallas
 			outputGobbler.start();
 
 			// Warte, bis wget fertig ist
-			int returnCode = proc.waitFor();
-
-			if ( returnCode == 0 ) {
-				/* 0 PDF is valid PDF/A-file additional checks wihtout problems
-				 * 
-				 * 1 PDF is valid PDF/A-file but additional checks with problems – severity info
-				 * 
-				 * 2 PDF is valid PDF/A-file but additional checks with problems – severity warning
-				 * 
-				 * 3 PDF is valid PDF/A-file but additional checks with problems – severity error
-				 * 
-				 * 4 PDF is not a valid PDF/A-file */
-				isValid = true;
-			}
+			returnCode = proc.waitFor();
 
 			Util.switchOnConsole();
 		} catch ( Exception e ) {
 			e.getMessage();
-			return false;
+			return returnCode;
 		} finally {
 			if ( proc != null ) {
 				closeQuietly( proc.getOutputStream() );
@@ -137,7 +123,7 @@ public class UtilCallas
 			}
 		}
 		// Validierungsergebnis zurückgeben
-		return isValid;
+		return returnCode;
 	}
 
 }
