@@ -218,7 +218,7 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl i
 		} catch ( OutOfMemoryError e ) {
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
-							+ getTextResourceService().getText( ERROR_XML_J_CATCH4 ) );
+							+ getTextResourceService().getText( ERROR_XML_OUTOFMEMORYERROR ) );
 		} catch ( IOException e ) {
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )

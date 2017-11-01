@@ -143,6 +143,9 @@ public interface MessageConstants
 	String	ERROR_XML_CANNOT_INITIALIZE_DROID							= "error.xml.cannot.initialize.droid";
 
 	String	ERROR_XML_UNKNOWN															= "error.xml.unknown";
+	String	ERROR_XML_OUTOFMEMORYERROR										= "error.xml.outofmemoryerror";
+	String	ERROR_XML_OUTOFMEMORYMAIN											= "error.xml.outofmemorymain";
+	String	ERROR_XML_STACKOVERFLOWMAIN										= "error.xml.stackoverflowmain";
 
 	// *************TIFF-Meldungen*************************************************************************
 	// Modul A Meldungen
@@ -268,7 +271,6 @@ public interface MessageConstants
 	String	ERROR_XML_J_INVALID_JPEG											= "error.xml.j.invalid.jpeg";
 	String	ERROR_XML_J_INVALID_JP2												= "error.xml.j.invalid.jp2";
 	String	ERROR_XML_J_JBIG2															= "error.xml.j.jbig2";
-	String	ERROR_XML_J_CATCH4														= "error.xml.j.catch4";
 	String	ERROR_XML_J_ENCRYPT														= "error.xml.j.encrypt";
 
 	// *************JP2-Meldungen*************************************************************************

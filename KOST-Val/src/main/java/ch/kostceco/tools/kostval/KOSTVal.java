@@ -724,12 +724,10 @@ public class KOSTVal implements MessageConstants
 							+ kostval.getTextResourceService().getText( MESSAGE_XML_LOGEND ) );
 					System.out.println( "Exception: " + e.getMessage() );
 				} catch ( StackOverflowError eso ) {
-					LOGGER
-							.logError( "<Validation><ValType>StackOverflowError</ValType><Invalid>invalid</Invalid></Validation></Format></KOSTValLog>" );
+					LOGGER.logError( kostval.getTextResourceService().getText( ERROR_XML_STACKOVERFLOWMAIN ) );
 					System.out.println( "Exception: " + "StackOverflowError" );
 				} catch ( OutOfMemoryError eoom ) {
-					LOGGER
-							.logError( "<Validation><ValType>OutOfMemoryError</ValType><Invalid>invalid</Invalid></Validation></Format></KOSTValLog>" );
+					LOGGER.logError( kostval.getTextResourceService().getText( ERROR_XML_OUTOFMEMORYMAIN ) );
 					System.out.println( "Exception: " + "OutOfMemoryError" );
 				}
 
@@ -1304,8 +1302,21 @@ public class KOSTVal implements MessageConstants
 									}
 								}
 							}
+						} else {
+							countNio = countNio + 1;
+							countNioDetail = countNioDetail + "</Message></Info><Info><Message> - "
+									+ valDatei.getAbsolutePath();
+							if ( countNioExtension == "" ) {
+								countNioExtension = valDateiExt;
+							} else {
+								// bereits Extensions vorhanden
+								if ( countNioExtension.contains( valDateiExt ) ) {
+									// Extension bereits erfasst
+								} else {
+									countNioExtension = countNioExtension + ", " + valDateiExt;
+								}
+							}
 						}
-
 					}
 				}
 
@@ -1522,12 +1533,10 @@ public class KOSTVal implements MessageConstants
 						+ kostval.getTextResourceService().getText( MESSAGE_XML_LOGEND ) );
 				System.out.println( "Exception: " + e.getMessage() );
 			} catch ( StackOverflowError eso ) {
-				LOGGER
-						.logError( "<Validation><ValType>StackOverflowError</ValType><Invalid>invalid</Invalid></Validation></Format></KOSTValLog>" );
+				LOGGER.logError( kostval.getTextResourceService().getText( ERROR_XML_STACKOVERFLOWMAIN ) );
 				System.out.println( "Exception: " + "StackOverflowError" );
 			} catch ( OutOfMemoryError eoom ) {
-				LOGGER
-						.logError( "<Validation><ValType>OutOfMemoryError</ValType><Invalid>invalid</Invalid></Validation></Format></KOSTValLog>" );
+				LOGGER.logError( kostval.getTextResourceService().getText( ERROR_XML_OUTOFMEMORYMAIN ) );
 				System.out.println( "Exception: " + "OutOfMemoryError" );
 			}
 
