@@ -490,7 +490,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 					}
 
 					File fpdfapilotExe = new File( dirOfJarPath + File.separator + "resources"
-							+ File.separator + "callas_pdfaPilotServer_Win_7.0.268_cli-a" + File.separator
+							+ File.separator + "callas_pdfaPilotServer_Win_7.2.276_cli-a" + File.separator
 							+ "pdfaPilot.exe" );
 					if ( !fpdfapilotExe.exists() ) {
 						// Keine callas Validierung möglich
@@ -525,7 +525,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 						 * 5) reportPath: Pfad zum Report */
 
 						String profile = dirOfJarPath + File.separator + "resources" + File.separator
-								+ "callas_pdfaPilotServer_Win_7.0.268_cli-a" + File.separator + "N-Entry.kfpx";
+								+ "callas_pdfaPilotServer_Win_7.2.276_cli-a" + File.separator + "N-Entry.kfpx";
 						String analye = "-a --noprogress --nohits --level=" + level + " --profile=\"" + profile+"\"";
 						String langConfig = getTextResourceService().getText( MESSAGE_XML_LANGUAGE );
 						String lang = "-l=" + getTextResourceService().getText( MESSAGE_XML_LANGUAGE );

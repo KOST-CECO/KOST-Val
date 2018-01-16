@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pdfpreflight version="12.0">
+	<package>
+		<id3>503ce46cce5caadcb21eaeff53ea9f74</id3>
+		<pdfxoutintentlist>
+		</pdfxoutintentlist>
+		<iccprofilelist>
+		</iccprofilelist>
+		<ccpolicies>
+		</ccpolicies>
+		<occdsetups>
+		</occdsetups>
+		<curves>
+		</curves>
+		<fspolicies>
+		</fspolicies>
+		<resources>
+		</resources>
+		<conditions>
+			<condition>
+				<id1>C52551e574d9bb99a306784ea06ab8397</id1>
+				<id2>C3f6406e7dff7316029beff15b52975d6</id2>
+				<id3>fcad513ed8092557f92c25c8450e5aab</id3>
+				<id4>2421e3c0bc75a464bf84207ec366ff68</id4>
+				<name></name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::PAGE</group>
+					<token>PAGE::PageUsesSpecificPlates</token>
+					<operator>OP::less</operator>
+					<data>
+						<rect>
+							<width>Cyan&#9;Magenta&#9;Yellow&#9;@spot&#9;pt</width>
+							<height>@@mininkamount:&quot;D_12_Minimuminkamountperplatepercent_long&quot; 1@@mm</height>
+							<tolerance>10mm</tolerance>
+							<ignore>0</ignore>
+						</rect>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>C77153ca2af2aa3449596043bcb6376fd</id1>
+				<id2>C1c702c7f991141ddf35291e4cd9952fc</id2>
+				<id3>75f5c38e3b89203cae5178216d72d6e8</id3>
+				<id4>ea872b5f7590db2ccbafabb20fdec28f</id4>
+				<name></name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::PAGE</group>
+					<token>PAGE::PageUsesSpecificPlates</token>
+					<operator>OP::greater</operator>
+					<data>
+						<rect>
+							<width>@spot&#9;pt</width>
+							<height>@@mininkamount:&quot;D_12_Minimuminkamountperplatepercent_long&quot; 1@@mm</height>
+							<tolerance>10mm</tolerance>
+							<ignore>0</ignore>
+						</rect>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>Cc7becc37e77ea641eba20400d549f704</id1>
+				<id2>C328557689cd2d25c7433ca8ba30e884d</id2>
+				<id3>ee7d3b60a18ed21ebe81ebe0ba53d5aa</id3>
+				<id4>bf5a626df9b6f18d22964c03a941b0ba</id4>
+				<name></name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::PAGE</group>
+					<token>PAGE::PageUsesSpecificPlates</token>
+					<operator>OP::greater</operator>
+					<data>
+						<rect>
+							<width>Cyan&#9;Magenta&#9;Yellow&#9;pt</width>
+							<height>@@mininkamount:&quot;D_12_Minimuminkamountperplatepercent_long&quot; 1@@mm</height>
+							<tolerance>10mm</tolerance>
+							<ignore>0</ignore>
+						</rect>
+					</data>
+				</atom>
+			</condition>
+		</conditions>
+		<rules>
+			<rule>
+				<id1>R4d22c8352340d8cba91d17e12a9b6430</id1>
+				<id2>R34b8b7634ec514103b0f3ae3fb8ed7a2</id2>
+				<id3>fdc7cac26f706c3179c80b62779a558c</id3>
+				<id4>4bd68b85cee5f930b329be5b8494bf6b</id4>
+				<name>R_12_PageusesonlyBlack</name>
+				<comment>R_12_PageusesonlyBlack</comment>
+				<flags analysis="17" condition_logic="0" ignore_objects="3" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>C52551e574d9bb99a306784ea06ab8397</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>R76cbc5c42f933f6c2ace15934fabe979</id1>
+				<id2>R50b6f676041206f5b8c2ef3cf5c079d3</id2>
+				<id3>2931b9e2d6ea493b0ca0be38c2b971b1</id3>
+				<id4>047257600b6a6f72ee668443d3185d07</id4>
+				<name>R_12_Pageusesspotcolor</name>
+				<comment>R_12_Pageusesspotcolor</comment>
+				<flags analysis="17" condition_logic="0" ignore_objects="3" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>C77153ca2af2aa3449596043bcb6376fd</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>R03d10107d158b2df6552cac010a43979</id1>
+				<id2>Re76e461bf97959514eb82ec2f3726127</id2>
+				<id3>f4dd7e64efb9fee95fa1bb85635de6e5</id3>
+				<id4>1132f1563e988587c2ebed253b899608</id4>
+				<name>R_12_PageusesCMYnotonlyBlackorspotcolor</name>
+				<comment>R_12_PageusesCMYnotonlyBlackorspotcolor</comment>
+				<flags analysis="17" condition_logic="0" ignore_objects="3" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>Cc7becc37e77ea641eba20400d549f704</condition>
+				</conditions>
+			</rule>
+		</rules>
+		<rulesets>
+			<ruleset>
+				<id1>S1966554ea026f362f1b11305621ce519</id1>
+				<id2>Scf8eba284963e6ac4322c94e58099f33</id2>
+				<id3>467a50cb3f964ba675936568c03b7060</id3>
+				<id4>b078add9b35f7d2038bb363de672ddd0</id4>
+				<name>SSS_RULESET_DEF_NAME</name>
+				<comment>SSS_RULESET_DEF_NAME</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<rules>
+					<rule check_severity="1" check_timing="2">R4d22c8352340d8cba91d17e12a9b6430</rule>
+					<rule check_severity="1" check_timing="2">R76cbc5c42f933f6c2ace15934fabe979</rule>
+					<rule check_severity="1" check_timing="2">R03d10107d158b2df6552cac010a43979</rule>
+				</rules>
+			</ruleset>
+		</rulesets>
+		<fixups>
+		</fixups>
+		<fixupsets>
+		</fixupsets>
+		<actions>
+		</actions>
+		<profiles>
+			<profile>
+				<id1>P0bb1efe142779b34529ac7c3c08c6163</id1>
+				<id2>Pdca254d0bec1a290c62a45b7d65251a4</id2>
+				<id3>1ccd5efe7327374646014e5b7f04d1c1</id3>
+				<id4>0626b0dafa084cdd6639322f85625059</id4>
+				<name>P_12_Analyzepagesforeffectivelyusedplates</name>
+				<comment>P_12_Analyzepagesforeffectivelyusedplates</comment>
+				<flags edit="0" visible="1" dict="1"></flags>
+				<metalist>
+					<metadata>
+						<metakey>author</metakey>
+						<metavalue>callas software</metavalue>
+					</metadata>
+					<metadata>
+						<metakey>email</metakey>
+						<metavalue>support@callassoftware.com</metavalue>
+					</metadata>
+				</metalist>
+				<creation>D:20120904075739+02&apos;00&apos;</creation>
+				<modification>D:20120904075919+02&apos;00&apos;</modification>
+				<pdfstd>
+					<pdfx convert="0"></pdfx>
+					<pdfa convert="0"></pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond>ISO Web Coated (ECI)</outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+				</pdfstd>
+				<pdfstdemb>
+					<pdfx convert="0"></pdfx>
+					<pdfa convert="0"></pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond>ISO Web Coated (ECI)</outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+					<afrelationship set_relationship="0"></afrelationship>
+				</pdfstdemb>
+				<wizard>
+				</wizard>
+				<rulesets>
+					<ruleset>S1966554ea026f362f1b11305621ce519</ruleset>
+				</rulesets>
+				<fixupsets>
+				</fixupsets>
+			</profile>
+		</profiles>
+		<metaprofs>
+		</metaprofs>
+		<profgroups>
+		</profgroups>
+	</package>
+</pdfpreflight>

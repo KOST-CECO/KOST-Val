@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pdfpreflight version="15.0">
+	<package>
+		<id3>19eb5908943383127a12f1eaa6de7a36</id3>
+		<pdfxoutintentlist>
+		</pdfxoutintentlist>
+		<iccprofilelist>
+		</iccprofilelist>
+		<ccpolicies>
+		</ccpolicies>
+		<occdsetups>
+		</occdsetups>
+		<curves>
+		</curves>
+		<fspolicies>
+		</fspolicies>
+		<resources>
+		</resources>
+		<variables>
+		</variables>
+		<conditions>
+			<condition>
+				<id1>C0e89bb876c4c4b141b3684cd36ec57ac</id1>
+				<id2>C1e707426c7fdcc266fd1ba05c15c5b66</id2>
+				<id3>8f3eb1919c303026cd980cb5d723593f</id3>
+				<id4>f53282c7d6e51ddbb0e58fe1e20142ad</id4>
+				<name> (Copy 14)</name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSCOLOR</group>
+					<token>CSCOLOR::isDeviceGray</token>
+					<operator>OP::is_not_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>C69f4b10161fefcfaf942f67e79ad4aa9</id1>
+				<id2>C1e578fd878c0f6578a9b0373a6d88996</id2>
+				<id3>67d47d36eea4fcbf66206ccdf6c19739</id3>
+				<id4>2d70625663b5b82f952fe2a4d94666e6</id4>
+				<name>CC_ObjectUsesBlackOnly</name>
+				<comment>CC_ObjectUsesBlackOnly</comment>
+				<flags user_units="1" edit="1" visible="1" dict="1"></flags>
+				<atom>
+					<group>Group::CSCOLOR</group>
+					<token>CSCOLOR::ObjectUsesBlackOnly</token>
+					<operator>OP::is_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>C8e64b078f74debc430504546c262b2fb</id1>
+				<id2>Cf740c60329cbc2fa2586cfba0f8f2309</id2>
+				<id3>efacb4e68a2908a23f95584e59818670</id3>
+				<id4>b7796e76e220935773cd5560eded834f</id4>
+				<name>CC_FilledObjectNotSetToKnockOut</name>
+				<comment>CC_FilledObjectNotSetToKnockOut</comment>
+				<flags user_units="1" edit="1" visible="1" dict="1"></flags>
+				<atom>
+					<group>Group::CSGST_F</group>
+					<token>CSGST_F::isOverPrintEnabledFill</token>
+					<operator>OP::is_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>C4bb4164cfac881f540f95b1fedb1b301</id1>
+				<id2>C88b69f226f026ea12fa8f575237fd38d</id2>
+				<id3>9a7a8bb6df775847ed744bbb25a3c4ac</id3>
+				<id4>3793f3f86d6b0d1116c70b97b0a44f6a</id4>
+				<name>CC_StrokedObjectNotSetToKnockOut</name>
+				<comment>CC_StrokedObjectNotSetToKnockOut</comment>
+				<flags user_units="1" edit="1" visible="1" dict="1"></flags>
+				<atom>
+					<group>Group::CSGST_S</group>
+					<token>CSGST_S::isOverPrintEnabledStroke</token>
+					<operator>OP::is_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+		</conditions>
+		<rules>
+			<rule>
+				<id1>R143acac69f6de7a34524bb48a2b8f116</id1>
+				<id2>R614d7cd97c63150384ad38dd1b83d77c</id2>
+				<id3>3e89e0b27893ca6899da17ee79b8760c</id3>
+				<id4>e35702e12ce6649940a45756d838daad</id4>
+				<name>R_8_Blackobjectsettooverprint</name>
+				<comment>R_8_Blackobjectsettooverprint</comment>
+				<flags analysis="17" condition_logic="0" ignore_objects="0" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>C0e89bb876c4c4b141b3684cd36ec57ac</condition>
+					<condition>C69f4b10161fefcfaf942f67e79ad4aa9</condition>
+					<condition>C8e64b078f74debc430504546c262b2fb</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>R1ce53591431f0f37e93c1abf51e6a8f7</id1>
+				<id2>R50457c97490c3926036478f4283a4ab3</id2>
+				<id3>c188ebaa4aebe97bdfa3e982fce64691</id3>
+				<id4>950173ddd2a00e0e69fcca346b6db1da</id4>
+				<name>R_8_Blackobjectsettooverprintstroked</name>
+				<comment>R_8_Blackobjectsettooverprintstroked</comment>
+				<flags analysis="17" condition_logic="0" ignore_objects="0" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>C0e89bb876c4c4b141b3684cd36ec57ac</condition>
+					<condition>C4bb4164cfac881f540f95b1fedb1b301</condition>
+					<condition>C69f4b10161fefcfaf942f67e79ad4aa9</condition>
+				</conditions>
+			</rule>
+		</rules>
+		<rulesets>
+			<ruleset>
+				<id1>S20e0f64612804ef00c2b2e366e834a04</id1>
+				<id2>S8d2bda1d3cb9f6187f6d0ae9baa306a9</id2>
+				<id3>73debf41af02034c6ef3f91e715f2ce8</id3>
+				<id4>484b6e1c47f8124863b4c9575c873dd2</id4>
+				<name>SSS_RULESET_DEF_NAME</name>
+				<comment>SSS_RULESET_DEF_NAME</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<rules>
+					<rule check_severity="1" check_timing="2">R143acac69f6de7a34524bb48a2b8f116</rule>
+					<rule check_severity="1" check_timing="2">R1ce53591431f0f37e93c1abf51e6a8f7</rule>
+				</rules>
+			</ruleset>
+		</rulesets>
+		<fixups>
+		</fixups>
+		<fixupsets>
+		</fixupsets>
+		<actions>
+		</actions>
+		<profiles>
+			<profile>
+				<id1>P399754187f52d634690cfefea01d80c3</id1>
+				<id2>P64a24734b74758630d3c42ddb9c011ee</id2>
+				<id3>d0fc45f77dd6fea219734872f8eef2fd</id3>
+				<id4>075361e1a5bfd727d679f8de60f472e5</id4>
+				<name>P_8_Listblackobjectssettooverprint</name>
+				<comment>P_8_Listblackobjectssettooverprint</comment>
+				<flags edit="0" visible="1" dict="1"></flags>
+				<metalist>
+					<metadata>
+						<metakey>author</metakey>
+						<metavalue>callas software</metavalue>
+					</metadata>
+					<metadata>
+						<metakey>email</metakey>
+						<metavalue>support@callassoftware.com</metavalue>
+					</metadata>
+				</metalist>
+				<creation>D:20090513135309+02&apos;00&apos;</creation>
+				<modification>D:20160629094113+02&apos;00&apos;</modification>
+				<pdfstd>
+					<pdfx convert="0"></pdfx>
+					<pdfa convert="0"></pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond></outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+				</pdfstd>
+				<pdfstdemb>
+					<pdfx convert="0"></pdfx>
+					<pdfa convert="0"></pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond></outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+					<afrelationship set_relationship="0"></afrelationship>
+				</pdfstdemb>
+				<wizard>
+				</wizard>
+				<rulesets>
+					<ruleset>S20e0f64612804ef00c2b2e366e834a04</ruleset>
+				</rulesets>
+				<fixupsets>
+				</fixupsets>
+			</profile>
+		</profiles>
+		<metaprofs>
+		</metaprofs>
+		<profgroups>
+		</profgroups>
+	</package>
+</pdfpreflight>

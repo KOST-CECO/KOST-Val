@@ -1,0 +1,66 @@
+%!PS-Adobe-3.0 Resource-CMap
+%%DocumentNeededResources: ProcSet (CIDInit)
+%%IncludeResource: ProcSet (CIDInit)
+%%BeginResource: CMap (MAC_GURMUKHI)
+%%Title: (MAC_GURMUKHI 0)
+%%EndComments
+
+/CIDInit /ProcSet findresource begin
+
+12 dict begin
+
+begincmap
+
+/CMapName /MAC_GURMUKHI def
+/CMapType 2 def
+
+1 begincodespacerange
+  <20> <FA>
+endcodespacerange
+
+21 beginbfchar
+  <80> <00D7>
+  <81> <2212>
+  <86> <2026>
+  <87> <2022>
+  <88> <00A9>
+  <89> <00AE>
+  <8A> <2122>
+  <90> <0A71>
+  <91> <0A5C>
+  <92> <0A73>
+  <93> <0A72>
+  <94> <0A74>
+  <A2> <0A02>
+  <CF> <0A30>
+  <D1> <0A32>
+  <D4> <0A35>
+  <D5> <F8600A380A3C>
+  <D9> <200E>
+  <E8> <0A4D>
+  <E9> <0A3C>
+  <EA> <0964>
+endbfchar
+
+13 beginbfrange
+  <20> <7E> <0020>
+  <82> <83> <2013>
+  <84> <85> <2018>
+  <A4> <A9> <0A05>
+  <AC> <AD> <0A0F>
+  <B0> <B1> <0A13>
+  <B3> <C6> <0A15>
+  <C8> <CD> <0A2A>
+  <D7> <D8> <0A38>
+  <DA> <DE> <0A3E>
+  <E1> <E2> <0A47>
+  <E5> <E6> <0A4B>
+  <F1> <FA> <0A66>
+endbfrange
+endcmap
+CMapName currentdict /CMap defineresource pop
+end
+end
+
+%%EndResource
+%%EOF

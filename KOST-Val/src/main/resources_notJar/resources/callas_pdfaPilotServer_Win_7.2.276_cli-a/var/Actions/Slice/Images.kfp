@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pdfpreflight version="6.0">
+	<package>
+		<id3>0b40672627424702a2cf4842bdd2054e</id3>
+		<pdfxoutintentlist>
+		</pdfxoutintentlist>
+		<iccprofilelist>
+		</iccprofilelist>
+		<conditions>
+			<condition>
+				<id1>C0cbd9daa52903e86f6c06b9343b9b0d2</id1>
+				<id2>Ce78ba1956ef1720f0895f02f5f126ebc</id2>
+				<id3>93cb0a113dfb3e35dba3e36c6deb4b35</id3>
+				<id4>b107f7759a855da67e91b19da2fc1473</id4>
+				<name>CC_ObjectIsAnImage</name>
+				<comment>CC_ObjectIsAnImage</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<atom>
+					<group>Group::CONTSTM</group>
+					<token>CONTSTM::IsImage</token>
+					<operator>OP::is_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+		</conditions>
+		<rules>
+			<rule>
+				<id1>R73e0509904b4b5dc558e19bb02fe7222</id1>
+				<id2>R702fc10fefe8ae5ed80c674d220e614b</id2>
+				<id3>6140e12121de50c8880d613e771d4b30</id3>
+				<id4>828b5cd8c5a9cf272414c4d788023a69</id4>
+				<name>Images</name>
+				<comment></comment>
+				<flags analysis="1" condition_logic="0" ignore_objects="0" edit="1" visible="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>C0cbd9daa52903e86f6c06b9343b9b0d2</condition>
+				</conditions>
+			</rule>
+		</rules>
+		<rulesets>
+			<ruleset>
+				<id1>S724351c2ab272985de695729a0e1f74c</id1>
+				<id2>S632df94d83fc905eb675e5e42e688cbb</id2>
+				<id3>bb2a11eb18923a299cb896460041dda7</id3>
+				<id4>5a504d81f925623db829436bd096661e</id4>
+				<name>SSS_RULESET_DEF_NAME</name>
+				<comment>SSS_RULESET_DEF_NAME</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<rules>
+					<rule check_severity="3" check_timing="2">R73e0509904b4b5dc558e19bb02fe7222</rule>
+				</rules>
+			</ruleset>
+		</rulesets>
+		<fixups>
+		</fixups>
+		<fixupsets>
+		</fixupsets>
+		<profiles>
+			<profile>
+				<id1>Pe28de655977d3bb47f3ad6d5e7daf6f1</id1>
+				<id2>Pf7f4b63d61c10ae8a9f463ab9e91d94a</id2>
+				<id3>00d7749ba0cf540d23ee23bd04d1c2a6</id3>
+				<id4>a162be12221e1db5df08305cd6a055a0</id4>
+				<name>Images</name>
+				<comment></comment>
+				<flags edit="1" visible="1"></flags>
+				<metalist>
+					<metadata>
+						<metakey>author</metakey>
+						<metavalue>callas</metavalue>
+					</metadata>
+				</metalist>
+				<creation>D:20081009151847+02&apos;00&apos;</creation>
+				<modification>D:20081009152018+02&apos;00&apos;</modification>
+				<pdfstd>
+					<pdfx convert="0"></pdfx>
+					<pdfa convert="0"></pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond>Coated GRACoL 2006</outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+				</pdfstd>
+				<wizard>
+				</wizard>
+				<rulesets>
+					<ruleset>S724351c2ab272985de695729a0e1f74c</ruleset>
+				</rulesets>
+				<fixupsets>
+				</fixupsets>
+			</profile>
+		</profiles>
+		<profgroups>
+		</profgroups>
+	</package>
+</pdfpreflight>

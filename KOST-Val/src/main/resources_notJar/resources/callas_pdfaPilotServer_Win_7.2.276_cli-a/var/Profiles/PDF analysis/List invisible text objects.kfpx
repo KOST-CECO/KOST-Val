@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pdfpreflight version="8.0">
+	<package>
+		<id3>7850860ca5c5ef38e3695830702561da</id3>
+		<pdfxoutintentlist>
+		</pdfxoutintentlist>
+		<iccprofilelist>
+		</iccprofilelist>
+		<ccpolicies>
+		</ccpolicies>
+		<occdsetups>
+		</occdsetups>
+		<curves>
+		</curves>
+		<fspolicies>
+		</fspolicies>
+		<conditions>
+			<condition>
+				<id1>C3ca3e00b1df5b336304b59cbf1b932d8</id1>
+				<id2>Cf184b25d808b59d4df515cb612591e84</id2>
+				<id3>6ae71b3c1ef9bdec0aff32e229219a8c</id3>
+				<id4>6e2cf431ba24a5990cb98a505b47c4c5</id4>
+				<name></name>
+				<comment></comment>
+				<flags edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSTEXT</group>
+					<token>CSTEXT::TextIsNotRenderAndNotUsedAsCl</token>
+					<operator>OP::is_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+		</conditions>
+		<rules>
+			<rule>
+				<id1>Rc716ab206b75faaca3a8c55777cb1264</id1>
+				<id2>R005b7cc1a8d328073039d0f5c78fba54</id2>
+				<id3>4d33eec1797fc14256818738006c542f</id3>
+				<id4>3e2603fb32d52e76159f855152e55caa</id4>
+				<name>RRR_Invisibletextobjects</name>
+				<comment>RRR_Invisibletextobjects</comment>
+				<flags analysis="1" condition_logic="0" ignore_objects="0" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>C3ca3e00b1df5b336304b59cbf1b932d8</condition>
+				</conditions>
+			</rule>
+		</rules>
+		<rulesets>
+			<ruleset>
+				<id1>Sab94a8a3977b17a30e2e87112e372835</id1>
+				<id2>Sdb5f7ba2b1907a48bbe60260d8b968f4</id2>
+				<id3>f7b53b1964eb5f1ef95127f47e1a90a7</id3>
+				<id4>a45f77b3bb929e5e8e9acf039eabf7a0</id4>
+				<name>SSS_RULESET_DEF_NAME</name>
+				<comment>SSS_RULESET_DEF_NAME</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<rules>
+					<rule check_severity="1" check_timing="2">Rc716ab206b75faaca3a8c55777cb1264</rule>
+				</rules>
+			</ruleset>
+		</rulesets>
+		<fixups>
+		</fixups>
+		<fixupsets>
+		</fixupsets>
+		<profiles>
+			<profile>
+				<id1>Ped6f1959966a94600f3aedabe56ad50b</id1>
+				<id2>P05d6d538e3c785724fb20e497b567d9d</id2>
+				<id3>6d7ffc76ce65644e524521cb11fbc5bb</id3>
+				<id4>8aecee17577a786c4e892473bc2bcd86</id4>
+				<name>PPP_Listinvisibletextobjects</name>
+				<comment>PPP_Listinvisibletextobjects</comment>
+				<flags edit="0" visible="1" dict="1"></flags>
+				<metalist>
+					<metadata>
+						<metakey>author</metakey>
+						<metavalue>callas pdfToolbox 4</metavalue>
+					</metadata>
+					<metadata>
+						<metakey>email</metakey>
+						<metavalue>support@callassoftware.com</metavalue>
+					</metadata>
+				</metalist>
+				<creation>D:20060612224017+01&apos;00&apos;</creation>
+				<modification>D:20090218151918+01&apos;00&apos;</modification>
+				<pdfstd>
+					<pdfx convert="0"></pdfx>
+					<pdfa convert="0"></pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond></outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+				</pdfstd>
+				<wizard>
+				</wizard>
+				<rulesets>
+					<ruleset>Sab94a8a3977b17a30e2e87112e372835</ruleset>
+				</rulesets>
+				<fixupsets>
+				</fixupsets>
+			</profile>
+		</profiles>
+		<profgroups>
+		</profgroups>
+	</package>
+</pdfpreflight>

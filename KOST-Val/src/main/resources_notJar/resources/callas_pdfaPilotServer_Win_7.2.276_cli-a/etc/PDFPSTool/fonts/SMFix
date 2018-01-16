@@ -1,0 +1,84 @@
+%!PS-AdobeFont-1.0: SMFix 1.000
+%%CreationDate: Thu Sep 18 10:28:13 1997
+%%VMusage: 4020 5535
+11 dict begin
+/FontInfo 10 dict dup begin
+/version (1.000) readonly def
+/Notice (Copyright (c) 1997 Adobe Systems Incorporated. All Rights Reserved.) readonly def
+/FullName (SoftMagic Fix) readonly def
+/FamilyName (SoftMagic) readonly def
+/Weight (Regular) readonly def
+/isFixedPitch true def
+/ItalicAngle 0 def
+/UnderlinePosition -100 def
+/UnderlineThickness 50 def
+end readonly def
+/FontName /SMFix def
+/Encoding 256 array
+0 1 255 {1 index exch /.notdef put} for
+dup 17 /c11 put
+dup 18 /c12 put
+dup 20 /c14 put
+dup 33 /c21 put
+dup 34 /c22 put
+dup 35 /c23 put
+dup 36 /c24 put
+dup 37 /c25 put
+dup 38 /c26 put
+dup 39 /c27 put
+dup 40 /c28 put
+dup 96 /c60 put
+readonly def
+/PaintType 0 def
+/FontType 1 def
+/FontMatrix [0.001 0 0 0.001 0 0]  def
+/UniqueID 41691 def
+/FontBBox{142 -48 860 775}readonly def
+currentdict end
+systemdict begin
+dup /Private 14 dict dup begin
+/lenIV -1 def
+/-|{string currentfile exch readstring pop}executeonly def
+/|-{def}executeonly def
+/|{put}executeonly def
+/BlueValues [ -250 -250 1100 1100 ] |-
+/MinFeature{16 16} |-
+/StdHW [1] |-
+/StdVW [1] |-
+/password 5839 def
+/Erode{
+0.5  dup 3 -1 roll 0.1 mul exch 0.5 sub mul cvi sub dup mul
+1  0 dtransform dup mul exch dup mul add
+le{pop pop 1.0 1.0}{pop pop 0.0 1.5}ifelse}def
+/UniqueID 41691 def
+/Subrs 5 array
+dup 0 11 -| ‹! |
+dup 1 5 -| ‹Œ |
+dup 2 5 -| ‹ |
+dup 3 1 -|  |
+dup 4 8 -| Œ
+ |
+|-
+2 index /CharStrings 13 dict dup begin
+/c11 5 -| ‹÷á |-
+/c12 5 -| ‹÷\ |-
+/c14 121 -| ÷"ú|‹ùb[ùËø¥ù•‘4…=+‡7ã‘ßàˆä	÷QüñF©[Ì‹Ø‹Ñ³ÅÆ­gÉZ¬A‹O‹abQ‹S‹p´F‹û'9ûû‹'¶*È=­_¿PÈ‹»‹°®¸‹¸‹¶i¾‹ê‹Ü÷¡Ü	 |-
+/c21 38 -| ÷^øˆ‹ä÷Øääø¥xqqyxqrx¥¥¥	 |-
+/c22 38 -| ÷[øˆ‹ö÷Óîöø©snmsxll¤y¨¨£ª	 |-
+/c23 41 -| ÷Vøˆ‹÷
+÷Ê÷
+÷
+ø®s£hhsshh£s®®££®	 |-
+/c24 41 -| ÷Møˆ‹÷÷¿÷÷ø³p¨bbnpba©n´³¦©³	 |-
+/c25 24 -| ÷føˆ‹Õ÷áÒÕ÷áÒAD	 |-
+/c26 24 -| ÷[øˆ‹ë÷Öèë÷Öè+.	 |-
+/c27 27 -| ÷Qøˆ‹÷÷İñ÷÷İñû%	 |-
+/c28 30 -| ÷Høˆ‹÷÷É÷ ÷÷É÷ ûû 	 |-
+/c60 5 -| ‹÷ |-
+/.notdef 5 -| ‹÷ |-
+end
+end
+readonly put
+noaccess put
+dup/FontName get exch definefont pop
+end

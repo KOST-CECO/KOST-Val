@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pdfpreflight version="8.0">
+	<package>
+		<id3>0660d55dfcf1c88251f35029089b96ff</id3>
+		<pdfxoutintentlist>
+		</pdfxoutintentlist>
+		<iccprofilelist>
+		</iccprofilelist>
+		<ccpolicies>
+		</ccpolicies>
+		<occdsetups>
+		</occdsetups>
+		<curves>
+		</curves>
+		<fspolicies>
+		</fspolicies>
+		<conditions>
+			<condition>
+				<id1>Ce3325f41a5890bde7c1aff95b8b22bf8</id1>
+				<id2>Cdec8c6077e26786c6b4efc9f6404c57e</id2>
+				<id3>15b5f0cec323f20715f438b9654f2da2</id3>
+				<id4>f19db0b9efd7c0f788f41e878af4c47b</id4>
+				<name> (Copy 7)</name>
+				<comment></comment>
+				<flags edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSCOLOR</group>
+					<token>CSCOLOR::BlackObjUsesCMYwithAPercentageOf</token>
+					<operator>OP::greater</operator>
+					<data>
+						<num>
+							<value>0</value>
+							<tolerance></tolerance>
+						</num>
+					</data>
+				</atom>
+			</condition>
+		</conditions>
+		<rules>
+			<rule>
+				<id1>R70c20b8090c3c16eeffd6bddfb93545e</id1>
+				<id2>R26da83e90bae4d7916e2283c8f8a80a6</id2>
+				<id3>9d1f6aada04ba527f1ba2ba5f72056cd</id3>
+				<id4>ba51eff196759bd9318f25fd13365d9f</id4>
+				<name>R_6_UsesrichblackCMY0</name>
+				<comment>R_6_UsesrichblackCMY0</comment>
+				<flags analysis="1" condition_logic="0" ignore_objects="0" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>Ce3325f41a5890bde7c1aff95b8b22bf8</condition>
+				</conditions>
+			</rule>
+		</rules>
+		<rulesets>
+			<ruleset>
+				<id1>Sd3f6b97314fb0ef3337013382b6462cb</id1>
+				<id2>S2c0f6394f2b6e81e35a3121637226e93</id2>
+				<id3>01a31cc08b83e31b9f138de28521a4ee</id3>
+				<id4>b26a917fed1c556b678f15e658cea2b5</id4>
+				<name>SSS_RULESET_DEF_NAME</name>
+				<comment>SSS_RULESET_DEF_NAME</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<rules>
+					<rule check_severity="1" check_timing="2">R70c20b8090c3c16eeffd6bddfb93545e</rule>
+				</rules>
+			</ruleset>
+		</rulesets>
+		<fixups>
+		</fixups>
+		<fixupsets>
+		</fixupsets>
+		<profiles>
+			<profile>
+				<id1>P2502f721ea8f68f1e842d1fa83bff4fb</id1>
+				<id2>P69475779bd9bb2af5f4e822372bd9d13</id2>
+				<id3>339f330ef5eafbcfae31a4b6db830849</id3>
+				<id4>89570eafa96a0086be8206021169de4a</id4>
+				<name>P_6_Listrichblackobjects</name>
+				<comment>P_6_Listrichblackobjects</comment>
+				<flags edit="0" visible="1" dict="1"></flags>
+				<metalist>
+					<metadata>
+						<metakey>author</metakey>
+						<metavalue>callas pdfToolbox 4</metavalue>
+					</metadata>
+					<metadata>
+						<metakey>email</metakey>
+						<metavalue>support@callassoftware.com</metavalue>
+					</metadata>
+				</metalist>
+				<creation>D:20080107190432+01&apos;00&apos;</creation>
+				<modification>D:20090218151918+01&apos;00&apos;</modification>
+				<pdfstd>
+					<pdfx convert="0"></pdfx>
+					<pdfa convert="0"></pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond></outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+				</pdfstd>
+				<wizard>
+				</wizard>
+				<rulesets>
+					<ruleset>Sd3f6b97314fb0ef3337013382b6462cb</ruleset>
+				</rulesets>
+				<fixupsets>
+				</fixupsets>
+			</profile>
+		</profiles>
+		<profgroups>
+		</profgroups>
+	</package>
+</pdfpreflight>

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pdfpreflight version="8.0">
+	<package>
+		<id3>a2cb869eaab147c65bf497ceefa7b1de</id3>
+		<pdfxoutintentlist>
+		</pdfxoutintentlist>
+		<iccprofilelist>
+		</iccprofilelist>
+		<ccpolicies>
+		</ccpolicies>
+		<occdsetups>
+		</occdsetups>
+		<curves>
+		</curves>
+		<fspolicies>
+		</fspolicies>
+		<conditions>
+			<condition>
+				<id1>C10582f204dde22d723685713e1aa2d07</id1>
+				<id2>C9c309f785ba49ce2848b160876c20f29</id2>
+				<id3>a7ea4ba96c3e34837b24614a83e7492c</id3>
+				<id4>c3344765c63b3a8bf1f8e808a9984fa2</id4>
+				<name>CC_ObjectIsInsideTrimboxOrBleedbox</name>
+				<comment>CC_ObjectIsInsideTrimboxOrBleedbox</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<atom>
+					<group>Group::CONTSTM</group>
+					<token>CONTSTM::ObjectIsOutsidBleedBox</token>
+					<operator>OP::is_not_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>Cb84269f166c2b626291889afaa8ec276</id1>
+				<id2>Cef9acbf7fa98a3a33a2909906edfc2af</id2>
+				<id3>f05561f3bc6efc2eb9af29e6d79fea28</id3>
+				<id4>6ab1e27bf7d17a895ea830bc6644c9f1</id4>
+				<name>CC_TextUsesCourier</name>
+				<comment>CC_TextUsesCourier</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<atom>
+					<group>Group::CSFONT</group>
+					<token>CSFONT::BaseFontName</token>
+					<operator>OP::contains</operator>
+					<data>
+						<text>
+							<value>Courier</value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+		</conditions>
+		<rules>
+			<rule>
+				<id1>Rc232344b3526db9567561864b1abd4d8</id1>
+				<id2>R25df8b61be7da6e35650794e67da8e84</id2>
+				<id3>cdf2fe47473d8c670ee9312107102ed8</id3>
+				<id4>0302cd1df071ef5d3297d8ed4e58c62a</id4>
+				<name>RR_ListTextUsingCourierInsideTrimboxBleedbox</name>
+				<comment>RR_ListTextUsingCourierInsideTrimboxBleedbox</comment>
+				<flags analysis="1" condition_logic="0" ignore_objects="0" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>C10582f204dde22d723685713e1aa2d07</condition>
+					<condition>Cb84269f166c2b626291889afaa8ec276</condition>
+				</conditions>
+			</rule>
+		</rules>
+		<rulesets>
+			<ruleset>
+				<id1>Sfe612231ad703210d2f139806a19c9b3</id1>
+				<id2>S085ef7a77ca9fb4691d42d044514f02a</id2>
+				<id3>07a47c6d73c272cba35b67ff487cb039</id3>
+				<id4>1895d11d340ebf22a89ab7e1eed1b3e1</id4>
+				<name>SSS_RULESET_DEF_NAME</name>
+				<comment>SSS_RULESET_DEF_NAME</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<rules>
+					<rule check_severity="1" check_timing="2">Rc232344b3526db9567561864b1abd4d8</rule>
+				</rules>
+			</ruleset>
+		</rulesets>
+		<fixups>
+		</fixups>
+		<fixupsets>
+		</fixupsets>
+		<profiles>
+			<profile>
+				<id1>P389e7f54f157e7767fd2af927f541a2e</id1>
+				<id2>Pcedd4bd40ec56149bf56dbb5c861559b</id2>
+				<id3>f59097b2819189a2cc96a3b1454f8cc3</id3>
+				<id4>5e5263ae5f541b654be6d5c0f45951e5</id4>
+				<name>PPP_ListtextusingCourierinsideTrimBleedBox</name>
+				<comment>PPP_ListtextusingCourierinsideTrimBleedBox</comment>
+				<flags edit="0" visible="1" dict="1"></flags>
+				<metalist>
+					<metadata>
+						<metakey>author</metakey>
+						<metavalue>callas pdfToolbox 4</metavalue>
+					</metadata>
+					<metadata>
+						<metakey>email</metakey>
+						<metavalue>support@callassoftware.com</metavalue>
+					</metadata>
+				</metalist>
+				<creation>D:20060413134919+01&apos;00&apos;</creation>
+				<modification>D:20090218151918+01&apos;00&apos;</modification>
+				<pdfstd>
+					<pdfx convert="0"></pdfx>
+					<pdfa convert="0"></pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond></outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+				</pdfstd>
+				<wizard>
+				</wizard>
+				<rulesets>
+					<ruleset>Sfe612231ad703210d2f139806a19c9b3</ruleset>
+				</rulesets>
+				<fixupsets>
+				</fixupsets>
+			</profile>
+		</profiles>
+		<profgroups>
+		</profgroups>
+	</package>
+</pdfpreflight>

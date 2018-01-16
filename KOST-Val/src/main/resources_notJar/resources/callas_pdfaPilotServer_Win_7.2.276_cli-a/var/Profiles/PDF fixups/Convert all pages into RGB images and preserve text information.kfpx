@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pdfpreflight version="15.0">
+	<package>
+		<id3>0b8535ef900a4b2d0124037e70af0cfd</id3>
+		<pdfxoutintentlist>
+		</pdfxoutintentlist>
+		<iccprofilelist>
+		</iccprofilelist>
+		<ccpolicies>
+		</ccpolicies>
+		<occdsetups>
+		</occdsetups>
+		<curves>
+		</curves>
+		<fspolicies>
+		</fspolicies>
+		<resources>
+		</resources>
+		<variables>
+		</variables>
+		<conditions>
+		</conditions>
+		<rules>
+		</rules>
+		<rulesets>
+		</rulesets>
+		<fixups>
+			<fixup>
+				<id1>F41a78c47d877165d4c096bad8432cdff</id1>
+				<id2>Fde944c1e90aea4b2cf9c90b69b407214</id2>
+				<id3>6613eea346739c2098891d62054b8ce1</id3>
+				<id4>a9c460986ed2b75608c07f04cc84d323</id4>
+				<name>F_13_Createaninvisibletextcopyforalltext</name>
+				<comment>F_13_Createaninvisibletextcopyforalltext</comment>
+				<flags user_units="1" scope="16" edit="1" visible="1" dict="1"></flags>
+				<fcfgs>
+					<fcfg>
+						<ffeat>DuplicateTextAsInvisible</ffeat>
+						<fparams>
+							<fparam>All</fparam>
+						</fparams>
+					</fcfg>
+					<fcfg>
+						<ffeat></ffeat>
+						<fparams>
+						</fparams>
+					</fcfg>
+					<fcfg>
+						<ffeat></ffeat>
+						<fparams>
+						</fparams>
+					</fcfg>
+				</fcfgs>
+				<reportFailed></reportFailed>
+			</fixup>
+			<fixup>
+				<id1>Fd8605906d1225c71a9484cdcf544a4a9</id1>
+				<id2>Fc0075e49872b6dacb92b82c5af36f9dd</id2>
+				<id3>c8bfe2af333bcb73422fa235a025b1a0</id3>
+				<id4>0b37202c5cd665561718c4eafb747883</id4>
+				<name>F15_ConvertpagecontentintoRGBimage150ppihighJPEGquality</name>
+				<comment>F15_ConvertpagecontentintoRGBimage150ppihighJPEGquality</comment>
+				<flags user_units="1" scope="16" edit="1" visible="1" dict="1"></flags>
+				<fcfgs>
+					<fcfg>
+						<ffeat>RemoveContentByImage</ffeat>
+						<fparams>
+							<fparam>150</fparam>
+							<fparam>All</fparam>
+							<fparam>JPEGHigh</fparam>
+							<fparam>RGB</fparam>
+							<fparam>LineArtTextImages</fparam>
+							<fparam>0</fparam>
+							<fparam>1</fparam>
+						</fparams>
+					</fcfg>
+				</fcfgs>
+				<reportFailed></reportFailed>
+			</fixup>
+		</fixups>
+		<fixupsets>
+			<fixupset>
+				<id1>U304084ffdec63c28b29c2d3496f87140</id1>
+				<id2>U189e257960156d759c6434c48dde4272</id2>
+				<id3>feac69f17e38ebbe497a53912ff80be9</id3>
+				<id4>53477771b4a0a1e5f58fc85b695e2c4a</id4>
+				<name>UUUU_FIXUPSET_DEF_NAME</name>
+				<comment>UUUU_FIXUPSET_DEF_NAME</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<fixups>
+					<fixup>F41a78c47d877165d4c096bad8432cdff</fixup>
+					<fixup>Fd8605906d1225c71a9484cdcf544a4a9</fixup>
+				</fixups>
+			</fixupset>
+		</fixupsets>
+		<actions>
+		</actions>
+		<profiles>
+			<profile>
+				<id1>P97f71ad8d79e853efa2e068c445621a6</id1>
+				<id2>P29e429926ab97f551943c9c39e89823a</id2>
+				<id3>139c89489fdb49a3e6ed9c5d66349253</id3>
+				<id4>b1918cc983307030bf0a7e1c2a27a328</id4>
+				<name>P15_ConvertallpagesintoRGBimagesandpreservetextinformation</name>
+				<comment>P15_ConvertallpagesintoRGBimagesandpreservetextinformation</comment>
+				<flags edit="0" visible="1" dict="1"></flags>
+				<metalist>
+					<metadata>
+						<metakey>author</metakey>
+						<metavalue>callas software</metavalue>
+					</metadata>
+					<metadata>
+						<metakey>email</metakey>
+						<metavalue>support@callassoftware.com</metavalue>
+					</metadata>
+				</metalist>
+				<creation>D:20140113143537+02&apos;00&apos;</creation>
+				<modification>D:20160629101734+02&apos;00&apos;</modification>
+				<pdfstd>
+					<pdfx convert="0"></pdfx>
+					<pdfa convert="0"></pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond>ISO Coated v2 (ECI)</outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+				</pdfstd>
+				<pdfstdemb>
+					<pdfx convert="0"></pdfx>
+					<pdfa convert="0"></pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond></outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+					<afrelationship set_relationship="0"></afrelationship>
+				</pdfstdemb>
+				<wizard>
+				</wizard>
+				<rulesets>
+				</rulesets>
+				<fixupsets>
+					<fixupset>U304084ffdec63c28b29c2d3496f87140</fixupset>
+				</fixupsets>
+			</profile>
+		</profiles>
+		<metaprofs>
+		</metaprofs>
+		<profgroups>
+		</profgroups>
+	</package>
+</pdfpreflight>

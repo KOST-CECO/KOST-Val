@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pdfpreflight version="14.0">
+	<package>
+		<id3>bc751a2e35062c802c2767fb15f9f6cc</id3>
+		<pdfxoutintentlist>
+		</pdfxoutintentlist>
+		<iccprofilelist>
+		</iccprofilelist>
+		<ccpolicies>
+		</ccpolicies>
+		<occdsetups>
+		</occdsetups>
+		<curves>
+		</curves>
+		<fspolicies>
+			<fspolicy>
+				<fspolicyname>020_SimilarFonts.cfg</fspolicyname>
+				<fspolicydata>DisplayName&#9;1&#9;FEATURE_FontSubstitutionPolicySimilarFonts_long&#10;&#10;SubstituteAll&#9;Arial&#9;Helvetica&#9;Helvetica Neue&#9;Futura&#9;Helvetica Neue&#9;Microsoft Sans Serif&#9;MS PGothic&#9;Trebuchet MS&#9;Verdana&#10;SubstituteAll&#9;Arial Bold&#9;Arial-Bold&#9;Helvetica Bold&#9;Futura-Bold&#9;Futura Bold&#9;Helvetica-Bold&#10;SubstituteAll&#9;Arial Italic&#9;Arial-Italic&#9;Helvetica Italic&#9;Helvetica-Italic&#9;Futura-Italic&#9;Futura Italic&#9;Arial Oblique&#9;Arial-Oblique&#9;Helvetica Oblique&#9;Helvetica-Oblique&#9;Futura-Oblique&#9;Futura Oblique&#10;SubstituteAll&#9;Arial Bold Italic&#9;Arial-Bold-Italic&#9;Helvetica Bold Italic&#9;Futura-Bold-Italic&#9;Futura Bold Italic&#9;Arial Bold Oblique&#9;Arial-Bold-Oblique&#9;Arial-BoldOblique&#9;Helvetica Bold Oblique&#9;Helvetica-BoldOblique&#9;Futura-Bold-Oblique&#9;Futura Bold Oblique&#10;SubstituteAll&#9;Arial Black&#9;Arial-Black&#9;Helvetica Black&#9;Helvetica-Black&#9;Futura-Bold&#9;Futura Bold&#9;Arial-Bold&#10;SubstituteAll&#9;Arial Narrow&#9;Helvetica Narrow&#10;SubstituteAll&#9;Arial Narrow Bold&#9;Helvetica Narrow Bold&#9;Arial Narrow Fett&#9;Helvetica Narrow Fett&#10;SubstituteAll&#9;Arial Narrow Bold Italic&#9;Helvetica Narrow Bold Italic&#9;Arial Narrow Fett Kursiv&#9;Helvetica Narrow Fett Kursiv&#10;SubstituteAll&#9;Times-Roman&#9;Times&#9;Times New Roman&#9;Garamond&#10;SubstituteAll&#9;Times-Bold&#9;Times-Roman Bold&#9;Times Bold&#9;Times New Roman Bold&#9;Times Fett&#9;Times New Roman Fett&#10;SubstituteAll&#9;Times-Italic&#9;Times-Roman Italic&#9;Times New Roman Italic&#9;Times Italic&#9;Times Kursiv&#9;Times New Roman Kursiv&#10;SubstituteAll&#9;Times-Bold-Italic&#9;Times-Roman Bold Italic&#9;Times Bold Italic&#9;Times New Roman Bold Italic&#9;Times Fett Kursiv&#9;Times New Roman Fett Kursiv&#10;SubstituteAll&#9;Courier&#9;Courier New&#9;Courier Std New&#9;Lucida Console&#9;MS Gothic&#10;SubstituteAll&#9;CourierStd-Bold&#9;Courier Std Bold&#9;Courier Bold&#9;Courier-Bold&#9;Courier New Bold&#9;Courier New-Bold&#10;SubstituteAll&#9;CourierStd-Oblique&#9;Courier Std Oblique&#9;CourierStd-Italic&#9;Courier Std Italic&#9;Courier Italic&#9;Courier-Italic&#9;Courier New Italic&#9;Courier New-Italic&#9;Courier Oblique&#9;Courier-Oblique&#9;Courier New Oblique&#9;Courier New-Oblique&#10;SubstituteAll&#9;CourierStd-BoldOblique&#9;Courier Std Bold Oblique&#9;Courier BoldItalic&#9;Courier-BoldItalic&#9;Courier New Bold Italic&#9;Courier New-Bold-Italic&#9;Courier BoldOblique&#9;Courier-BoldOblique&#9;Courier New Bold Oblique&#9;Courier New-Bold-Oblique</fspolicydata>
+			</fspolicy>
+		</fspolicies>
+		<resources>
+		</resources>
+		<conditions>
+		</conditions>
+		<rules>
+		</rules>
+		<rulesets>
+		</rulesets>
+		<fixups>
+			<fixup>
+				<id1>Fb62dce43ab246c1915c7ac01b4b605d3</id1>
+				<id2>Fa94a1b1f8d0127b5ced632241851e010</id2>
+				<id3>f2d04eb5990182613073346180da40a6</id3>
+				<id4>4f12b92e0c500dae61424ff577ede0f5</id4>
+				<name>F_14_Embedmissingfontssubstitutesimilarfontsonlyforvisibletextcurrentandembeddedfiles</name>
+				<comment>F_14_Embedmissingfontssubstitutesimilarfontsonlyforvisibletextcurrentandembeddedfiles</comment>
+				<flags user_units="0" scope="48" edit="1" visible="1" dict="1"></flags>
+				<fcfg>EmbedMissingFonts&#9;All&#9;100&#9;1&#9;&#9;1&#9;020_SimilarFonts.cfg&#9;1&#10;</fcfg>
+				<reportFailed></reportFailed>
+			</fixup>
+			<fixup>
+				<id1>F58643b77d7b1c2fa538a8f30339d0b6d</id1>
+				<id2>F3286faf114ca7f49d4190e12a47075db</id2>
+				<id3>d43e9c3c260378c77fee100e8c5b1e4a</id3>
+				<id4>fed7ba25456719a871bcb141e9fb6235</id4>
+				<name>F_14_RemoveXMPMetadataifnotcompliantwithPDFA2Currentandembeddedfiles</name>
+				<comment>F_14_RemoveXMPMetadataifnotcompliantwithPDFA2Currentandembeddedfiles</comment>
+				<flags user_units="0" scope="48" edit="1" visible="1" dict="1"></flags>
+				<fcfg>RemoveNonCompliantPDFAMetadata&#9;PDFA2&#10;</fcfg>
+				<reportFailed></reportFailed>
+			</fixup>
+		</fixups>
+		<fixupsets>
+			<fixupset>
+				<id1>U3147689fabecafe3712d7ba793e40f9b</id1>
+				<id2>U12e4de0f672cbe3822f861f6de43b0bc</id2>
+				<id3>fa1418fc61fa185d416b9fe1e7e5ed59</id3>
+				<id4>2439cf6ff9480e6d0b4003b953fab1fb</id4>
+				<name>UUUU_FIXUPSET_DEF_NAME</name>
+				<comment>UUUU_FIXUPSET_DEF_NAME</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<fixups>
+					<fixup>Fb62dce43ab246c1915c7ac01b4b605d3</fixup>
+					<fixup>F58643b77d7b1c2fa538a8f30339d0b6d</fixup>
+				</fixups>
+			</fixupset>
+		</fixupsets>
+		<actions>
+		</actions>
+		<profiles>
+			<profile>
+				<id1>Pdfb22980895050dc2789d0677707a2a3</id1>
+				<id2>P25fc0d239cbd5de49086eb65ca3b5c43</id2>
+				<id3>d178aa76f8e2cf6276628912daf26992</id3>
+				<id4>09b525f381155e1f3088199e8bb651fc</id4>
+				<name>P_12_ConverttoPDFA2bwithoutfallbackconversion</name>
+				<comment>P_12_ConverttoPDFA2bwithoutfallbackconversion</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<metalist>
+					<metadata>
+						<metakey>author</metakey>
+						<metavalue>callas software</metavalue>
+					</metadata>
+					<metadata>
+						<metakey>email</metakey>
+						<metavalue>support@callassoftware.com</metavalue>
+					</metadata>
+				</metalist>
+				<creation>D:20130319145614+02&apos;00&apos;</creation>
+				<modification>D:20150622063654+02&apos;00&apos;</modification>
+				<pdfstd>
+					<pdfx convert="0"></pdfx>
+					<pdfa force_conv="256" force_conv_dpi="100" convert="3" apply_fixups="1">4</pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond></outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+				</pdfstd>
+				<pdfstdemb>
+					<pdfx convert="0"></pdfx>
+					<pdfa force_conv="256" force_conv_dpi="100" convert="3" apply_fixups="1">4</pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond></outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+					<afrelationship set_relationship="0"></afrelationship>
+				</pdfstdemb>
+				<wizard>
+				</wizard>
+				<rulesets>
+				</rulesets>
+				<fixupsets>
+					<fixupset>U3147689fabecafe3712d7ba793e40f9b</fixupset>
+				</fixupsets>
+			</profile>
+		</profiles>
+		<metaprofs>
+		</metaprofs>
+		<profgroups>
+		</profgroups>
+	</package>
+</pdfpreflight>

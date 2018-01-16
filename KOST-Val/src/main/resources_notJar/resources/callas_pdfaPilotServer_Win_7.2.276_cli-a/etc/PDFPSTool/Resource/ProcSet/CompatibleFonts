@@ -1,0 +1,100 @@
+%!PS-Adobe-3.0 Resource-ProcSet
+%%BeginResource: ProcSet (CompatibleFonts)
+%%Title: (ProcSet/CompatibleFonts)
+%%Version: 3010.01
+%%Copyright: ------------------------------------------------------------
+%%Copyright: Copyright 1990-1994 Adobe Systems Incorporated.
+%%Copyright: All rights reserved.
+%%Copyright:
+%%Copyright: Patents Pending
+%%Copyright:
+%%Copyright: NOTICE: All information contained herein is the property
+%%Copyright: of Adobe Systems Incorporated. Many of the intellectual
+%%Copyright: and technical concepts contained herein are proprietary
+%%Copyright: to Adobe, are protected as trade secrets, and are made
+%%Copyright: available only to Adobe licensees for their internal use.
+%%Copyright: Any reproduction or dissemination of this software is
+%%Copyright: strictly forbidden unless prior written permission is
+%%Copyright: obtained from Adobe.
+%%Copyright:
+%%Copyright: PostScript and Display PostScript are trademarks of
+%%Copyright: Adobe Systems Incorporated which may be registered in
+%%Copyright: certain jurisdictions.
+%%Copyright: ------------------------------------------------------------
+%%EndComments
+systemdict/languagelevel known{currentglobal false setglobal}if 15 dict begin
+/haveEE/CIDProductSupport/ProcSet 2 copy resourcestatus{pop pop findresource
+dup/cfeewrite known exch dup/cfeeread known exch dup/ProductCFNames known exch
+/ProductCCIDFNames known and and and}{pop pop false}ifelse def//haveEE{
+/CIDProductSupport/ProcSet findresource dup/cfeewrite get/cfeewrite exch def
+dup/cfeeread get/cfeeread exch def dup/ProductCFNames get/ProductCFNames exch
+def/ProductCCIDFNames get/ProductCCIDFNames exch def}{/cfeewrite{pop pop}bind
+def/cfeeread{pop//false}bind def/ProductCFNames 0 dict def/ProductCCIDFNames 0
+dict def}ifelse/TransformPath{PrependRoot}bind def/NVdata 3 dict def NVdata
+begin//haveEE{0//cfeeread not{(CF/Global)//TransformPath exec dup status{pop
+pop pop pop deletefile}{pop}ifelse(CF/CompatibleCIDFont)//TransformPath exec
+dup status{pop pop pop pop deletefile}{pop}ifelse(CF/CompatibleFont)
+//TransformPath exec dup status{pop pop pop pop deletefile}{pop}ifelse 0 true
+//cfeewrite}if}if(CF/Global)//TransformPath exec dup status{pop pop pop pop
+mark exch dup{run}stopped{systemdict/languagelevel known{true setglobal}if
+cleartomark true}{dup type/dicttype eq{/Global exch def cleartomark false}{
+cleartomark true}ifelse}ifelse}{pop true}ifelse{/Global 1 dict def Global
+/enable//haveEE{1//cfeeread not}{//true}ifelse put}if(CF/CompatibleCIDFont)
+//TransformPath exec dup status{pop pop pop pop mark exch dup{run}stopped{
+systemdict/languagelevel known{true setglobal}if cleartomark true}{dup type
+/dicttype eq{/CompatibleCIDFont exch def cleartomark false}{cleartomark true}
+ifelse}ifelse}{pop true}ifelse{/CompatibleCIDFont//ProductCCIDFNames length 20
+add dict def//haveEE{CompatibleCIDFont begin//ProductCCIDFNames{//cfeeread{
+//true def}{pop}ifelse}forall end}if}if(CF/CompatibleFont)//TransformPath exec
+dup status{pop pop pop pop mark exch dup{run}stopped{systemdict/languagelevel
+known{true setglobal}if cleartomark true}{dup type/dicttype eq{/CompatibleFont
+exch def cleartomark false}{cleartomark true}ifelse}ifelse}{pop true}ifelse{
+/CompatibleFont//ProductCFNames length 20 add dict def//haveEE{CompatibleFont
+begin//ProductCFNames{//cfeeread{//true def}{pop}ifelse}forall end}if}if end
+/scratch 32 string def/writeNV{{dup/Global eq{pop(CF/Global)//TransformPath
+exec(w){file}stopped{systemdict/languagelevel known{true setglobal}if pop pop}
+{dup(1 dict dup /enable )writestring dup//NVdata/Global get/enable get{(true)}
+{(false)}ifelse writestring dup( put
+)writestring closefile}ifelse exit}if dup/CompatibleFont eq{pop//NVdata
+/CompatibleFont get length dup 0 gt{(CF/CompatibleFont)//TransformPath exec(w)
+{file}stopped{systemdict/languagelevel known{true setglobal}if pop pop pop}{
+exch 10 add 10//scratch cvrs 1 index exch writestring dup( dict dup
+begin
+)writestring dup//NVdata/CompatibleFont get{{//scratch cvs 1 index(/)
+writestring writestring dup( true def
+)writestring dup}{pop}ifelse}forall(end
+)writestring closefile}ifelse}{pop}ifelse exit}if dup/CompatibleCIDFont eq{pop
+//NVdata/CompatibleCIDFont get length dup 0 gt{(CF/CompatibleCIDFont)
+//TransformPath exec(w){file}stopped{systemdict/languagelevel known{true
+setglobal}if pop pop pop}{exch 10 add 10//scratch cvrs 1 index exch
+writestring dup( dict dup
+begin
+)writestring dup//NVdata/CompatibleCIDFont get{{//scratch cvs 1 index(/)
+writestring writestring dup( true def
+)writestring dup}{pop}ifelse}forall(end
+)writestring closefile}ifelse}{pop}ifelse exit}if pop exit}loop}bind def 5
+dict dup begin/Version(3010.01)def/currentenable{//NVdata/Global get/enable
+get}bind executeonly def/setenable{count 0 eq{/setenable errordict
+/stackunderflow get exec}if dup type/booleantype ne{/setenable errordict
+/typecheck get exec}if dup//NVdata/Global get exch/enable exch put vmstatus
+pop pop 0 eq{//haveEE{1 exch not//cfeewrite}{pop}ifelse/Global//writeNV exec}{
+pop}ifelse}bind executeonly def/currentexception{count 2 lt{/currentexception
+errordict/stackunderflow get exec}if 2 copy type dup/nametype ne exch
+/stringtype ne and exch type dup/nametype ne exch/stringtype ne and or{
+/currentexception errordict/typecheck get exec}if dup dup/CompatibleFont ne
+exch/CompatibleCIDFont ne and{/currentexception errordict/rangecheck get exec}
+if//NVdata exch get exch 2 copy known{get}{pop pop false}ifelse}bind
+executeonly def/setexception{count 3 lt{/setexception errordict/stackunderflow
+get exec}if 3 copy type/booleantype ne exch type dup/nametype ne exch
+/stringtype ne and or exch type dup/nametype ne exch/stringtype ne and or{
+/setexception errordict/typecheck get exec}if 1 index dup/CompatibleFont ne
+exch/CompatibleCIDFont ne and{/setexception errordict/rangecheck get exec}if 3
+copy pop resourcestatus{pop pop exch systemdict/languagelevel known not{
+//NVdata 1 index get dup 4 index known not{dup dup length exch maxlength eq{
+dup maxlength 10 add dict copy//NVdata exch 2 index exch put}{pop}ifelse}{pop}
+ifelse}if 3 copy//NVdata 1 index get 4 2 roll put vmstatus pop pop 0 eq{
+//writeNV exec/CompatibleFont eq{//ProductCFNames}{//ProductCCIDFNames}ifelse
+3 -1 roll 2 copy known//haveEE and{get exch//cfeewrite}{pop pop pop}ifelse}{
+pop pop pop pop}ifelse}{pop pop pop}ifelse}bind executeonly def end end
+/CompatibleFonts exch/ProcSet defineresource pop systemdict/languagelevel
+known{setglobal}if

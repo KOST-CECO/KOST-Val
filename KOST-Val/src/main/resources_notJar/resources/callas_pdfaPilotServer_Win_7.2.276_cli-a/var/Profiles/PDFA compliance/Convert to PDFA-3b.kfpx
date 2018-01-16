@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pdfpreflight version="15.0">
+	<package>
+		<id3>4e36f2556d965e3299f6a542b433ae75</id3>
+		<pdfxoutintentlist>
+		</pdfxoutintentlist>
+		<iccprofilelist>
+		</iccprofilelist>
+		<ccpolicies>
+		</ccpolicies>
+		<occdsetups>
+		</occdsetups>
+		<curves>
+		</curves>
+		<fspolicies>
+			<fspolicy>
+				<fspolicyname>020_SimilarFonts.cfg</fspolicyname>
+				<fspolicydata>DisplayName&#9;1&#9;FEATURE_FontSubstitutionPolicySimilarFonts_long&#10;&#10;SubstituteAll&#9;Arial&#9;Helvetica&#9;Helvetica Neue&#9;Futura&#9;Helvetica Neue&#9;Microsoft Sans Serif&#9;MS PGothic&#9;Trebuchet MS&#9;Verdana&#10;SubstituteAll&#9;Arial Bold&#9;Arial-Bold&#9;Helvetica Bold&#9;Futura-Bold&#9;Futura Bold&#9;Helvetica-Bold&#10;SubstituteAll&#9;Arial Italic&#9;Arial-Italic&#9;Helvetica Italic&#9;Helvetica-Italic&#9;Futura-Italic&#9;Futura Italic&#9;Arial Oblique&#9;Arial-Oblique&#9;Helvetica Oblique&#9;Helvetica-Oblique&#9;Futura-Oblique&#9;Futura Oblique&#10;SubstituteAll&#9;Arial Bold Italic&#9;Arial-Bold-Italic&#9;Helvetica Bold Italic&#9;Futura-Bold-Italic&#9;Futura Bold Italic&#9;Arial Bold Oblique&#9;Arial-Bold-Oblique&#9;Arial-BoldOblique&#9;Helvetica Bold Oblique&#9;Helvetica-BoldOblique&#9;Futura-Bold-Oblique&#9;Futura Bold Oblique&#10;SubstituteAll&#9;Arial Black&#9;Arial-Black&#9;Helvetica Black&#9;Helvetica-Black&#9;Futura-Bold&#9;Futura Bold&#9;Arial-Bold&#10;SubstituteAll&#9;Arial Narrow&#9;Helvetica Narrow&#10;SubstituteAll&#9;Arial Narrow Bold&#9;Helvetica Narrow Bold&#9;Arial Narrow Fett&#9;Helvetica Narrow Fett&#10;SubstituteAll&#9;Arial Narrow Bold Italic&#9;Helvetica Narrow Bold Italic&#9;Arial Narrow Fett Kursiv&#9;Helvetica Narrow Fett Kursiv&#10;SubstituteAll&#9;Times-Roman&#9;Times&#9;Times New Roman&#9;Garamond&#10;SubstituteAll&#9;Times-Bold&#9;Times-Roman Bold&#9;Times Bold&#9;Times New Roman Bold&#9;Times Fett&#9;Times New Roman Fett&#10;SubstituteAll&#9;Times-Italic&#9;Times-Roman Italic&#9;Times New Roman Italic&#9;Times Italic&#9;Times Kursiv&#9;Times New Roman Kursiv&#10;SubstituteAll&#9;Times-Bold-Italic&#9;Times-Roman Bold Italic&#9;Times Bold Italic&#9;Times New Roman Bold Italic&#9;Times Fett Kursiv&#9;Times New Roman Fett Kursiv&#10;SubstituteAll&#9;Courier&#9;Courier New&#9;Courier Std New&#9;Lucida Console&#9;MS Gothic&#10;SubstituteAll&#9;CourierStd-Bold&#9;Courier Std Bold&#9;Courier Bold&#9;Courier-Bold&#9;Courier New Bold&#9;Courier New-Bold&#10;SubstituteAll&#9;CourierStd-Oblique&#9;Courier Std Oblique&#9;CourierStd-Italic&#9;Courier Std Italic&#9;Courier Italic&#9;Courier-Italic&#9;Courier New Italic&#9;Courier New-Italic&#9;Courier Oblique&#9;Courier-Oblique&#9;Courier New Oblique&#9;Courier New-Oblique&#10;SubstituteAll&#9;CourierStd-BoldOblique&#9;Courier Std Bold Oblique&#9;Courier BoldItalic&#9;Courier-BoldItalic&#9;Courier New Bold Italic&#9;Courier New-Bold-Italic&#9;Courier BoldOblique&#9;Courier-BoldOblique&#9;Courier New Bold Oblique&#9;Courier New-Bold-Oblique</fspolicydata>
+			</fspolicy>
+		</fspolicies>
+		<resources>
+		</resources>
+		<variables>
+		</variables>
+		<conditions>
+		</conditions>
+		<rules>
+		</rules>
+		<rulesets>
+		</rulesets>
+		<fixups>
+			<fixup>
+				<id1>Fd989cc32ea82a2e482074e4a2cadf998</id1>
+				<id2>F929e5a35f69ac398b036d6409d0f790f</id2>
+				<id3>14b54a5d5677966ddca57571ddb52f97</id3>
+				<id4>f10bce4bf6c8c101a2c65a2919d2e27e</id4>
+				<name>F_9_RemoveXMPMetadataifnotcompliantwithPDFA2</name>
+				<comment>F_9_RemoveXMPMetadataifnotcompliantwithPDFA2</comment>
+				<flags user_units="0" scope="16" edit="1" visible="1" dict="1"></flags>
+				<fcfgs>
+					<fcfg>
+						<ffeat>RemoveNonCompliantPDFAMetadata</ffeat>
+						<fparams>
+							<fparam>PDFA2</fparam>
+						</fparams>
+					</fcfg>
+					<fcfg>
+						<ffeat></ffeat>
+						<fparams>
+						</fparams>
+					</fcfg>
+				</fcfgs>
+				<reportFailed></reportFailed>
+			</fixup>
+			<fixup>
+				<id1>F5822d3488c09c961ae8046cfcf4bb4d1</id1>
+				<id2>F76b93e33e5d2031a1088716c3d441de4</id2>
+				<id3>1c44e47a3f83e3ef8f39125d45948c06</id3>
+				<id4>d08be43b12ce2ecd02daf2d0bc927880</id4>
+				<name>F_10_Embedmissingfontssubstitutesimilarfontsonlyforvisibletext</name>
+				<comment>F_10_Embedmissingfontssubstitutesimilarfontsonlyforvisibletext</comment>
+				<flags user_units="0" scope="16" edit="1" visible="1" dict="1"></flags>
+				<fcfgs>
+					<fcfg>
+						<ffeat>EmbedMissingFonts</ffeat>
+						<fparams>
+							<fparam>All</fparam>
+							<fparam>100</fparam>
+							<fparam>1</fparam>
+							<fparam></fparam>
+							<fparam>1</fparam>
+							<fparam>020_SimilarFonts.cfg</fparam>
+							<fparam>1</fparam>
+						</fparams>
+					</fcfg>
+					<fcfg>
+						<ffeat></ffeat>
+						<fparams>
+						</fparams>
+					</fcfg>
+				</fcfgs>
+				<reportFailed></reportFailed>
+			</fixup>
+			<fixup>
+				<id1>Fccda0cd2333f28f280a87c3883abcc91</id1>
+				<id2>F3033507007c1082899c86c654c1faa81</id2>
+				<id3>f4ee332231e971a71d2e0f23250a2d0a</id3>
+				<id4>0052ff7a54ba674a64b985d44ef932a9</id4>
+				<name>F_11_Substitutecharactersusingnotdefglyphwithspacecharacters</name>
+				<comment>F_11_Substitutecharactersusingnotdefglyphwithspacecharacters</comment>
+				<flags user_units="0" scope="16" edit="1" visible="1" dict="1"></flags>
+				<fcfgs>
+					<fcfg>
+						<ffeat>RemoveNotdef</ffeat>
+						<fparams>
+							<fparam>IfEmpty</fparam>
+						</fparams>
+					</fcfg>
+					<fcfg>
+						<ffeat></ffeat>
+						<fparams>
+						</fparams>
+					</fcfg>
+				</fcfgs>
+				<reportFailed></reportFailed>
+			</fixup>
+		</fixups>
+		<fixupsets>
+			<fixupset>
+				<id1>Ub3b066941df8b13990166254171e3366</id1>
+				<id2>U58cf689ac1961b9697175a0dc327b95b</id2>
+				<id3>8fd74480debd97ce01047b8af5e09b53</id3>
+				<id4>f07e4b7ef55be68e484f2b80e9cef58e</id4>
+				<name>UUUU_FIXUPSET_DEF_NAME</name>
+				<comment>UUUU_FIXUPSET_DEF_NAME</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<fixups>
+					<fixup>Fd989cc32ea82a2e482074e4a2cadf998</fixup>
+					<fixup>F5822d3488c09c961ae8046cfcf4bb4d1</fixup>
+					<fixup>Fccda0cd2333f28f280a87c3883abcc91</fixup>
+				</fixups>
+			</fixupset>
+		</fixupsets>
+		<actions>
+		</actions>
+		<profiles>
+			<profile>
+				<id1>Pc976e9d2a690b6959c079239d64886d7</id1>
+				<id2>P559bf15558e1925f2414be9aac84f385</id2>
+				<id3>568db893beb5373e683254a2d9ce483f</id3>
+				<id4>993a29162cee5eeea7da43deb4ea3766</id4>
+				<name>P_11_ConverttoPDFA3b</name>
+				<comment>P_11_ConverttoPDFA3b</comment>
+				<flags edit="0" visible="1" dict="1"></flags>
+				<metalist>
+					<metadata>
+						<metakey>author</metakey>
+						<metavalue>callas software</metavalue>
+					</metadata>
+					<metadata>
+						<metakey>email</metakey>
+						<metavalue>support@callassoftware.com</metavalue>
+					</metadata>
+				</metalist>
+				<creation>D:20120830104631+02&apos;00&apos;</creation>
+				<modification>D:20160725103105+02&apos;00&apos;</modification>
+				<pdfstd>
+					<pdfx convert="0"></pdfx>
+					<pdfa force_conv="262" force_conv_dpi="100" convert="1" apply_fixups="1">7</pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond>Coated GRACoL 2006</outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+				</pdfstd>
+				<pdfstdemb>
+					<pdfx convert="0"></pdfx>
+					<pdfa convert="0"></pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond>Coated GRACoL 2006</outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+					<afrelationship set_relationship="2">Unspecified</afrelationship>
+				</pdfstdemb>
+				<wizard>
+					<check name="PRCWzXComp_PDFDocumentA" check_severity="0">
+						<data name="PDFA1a2005">0</data>
+						<data name="PDFA1b2005">0</data>
+						<data name="PDFA2a">0</data>
+						<data name="PDFA2b">0</data>
+						<data name="PDFA2u">0</data>
+						<data name="PDFA3ZFeRD">0</data>
+						<data name="PDFA3a">0</data>
+						<data name="PDFA3b">1</data>
+						<data name="PDFA3u">0</data>
+					</check>
+				</wizard>
+				<rulesets>
+				</rulesets>
+				<fixupsets>
+					<fixupset>Ub3b066941df8b13990166254171e3366</fixupset>
+				</fixupsets>
+			</profile>
+		</profiles>
+		<metaprofs>
+		</metaprofs>
+		<profgroups>
+		</profgroups>
+	</package>
+</pdfpreflight>
