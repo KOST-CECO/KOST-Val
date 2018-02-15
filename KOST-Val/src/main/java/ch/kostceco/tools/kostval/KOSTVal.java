@@ -1,5 +1,5 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val v1.8.2 application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and
+ * The KOST-Val v1.8.3 application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and
  * Submission Information Package (SIP). Copyright (C) 2012-2017 Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
@@ -235,7 +235,7 @@ public class KOSTVal implements MessageConstants
 		String logFileName = logConfigurator.configure( directoryOfLogfile.getAbsolutePath(),
 				logDatei.getName() );
 		File logFile = new File( logFileName );
-		// Ab hier kann ins log geschrieben werden...
+		// TODO: Ab hier kann ins log geschrieben werden...
 
 		// ggf alte SIP-Validierung-Versions-Notiz löschen
 		File ECH160_1_1 = new File( directoryOfLogfile.getAbsolutePath() + File.separator
@@ -306,6 +306,8 @@ public class KOSTVal implements MessageConstants
 			LOGGER.logError( kostval.getTextResourceService().getText( ERROR_IOE,
 					kostval.getTextResourceService().getText( ERROR_NOFILEENDINGS ) ) );
 			System.out.println( kostval.getTextResourceService().getText( ERROR_NOFILEENDINGS ) );
+			// logFile bereinigung (& End und ggf 3c)
+			Util.valEnd3cAmp(  "", logFile );
 			System.exit( 1 );
 		}
 
@@ -332,6 +334,8 @@ public class KOSTVal implements MessageConstants
 											pathToWorkDir ) ) );
 					System.out.println( kostval.getTextResourceService().getText( ERROR_WORKDIRECTORY_EXISTS,
 							pathToWorkDir ) );
+					// logFile bereinigung (& End und ggf 3c)
+					Util.valEnd3cAmp(  "", logFile );
 					System.exit( 1 );
 				}
 			}
@@ -359,6 +363,8 @@ public class KOSTVal implements MessageConstants
 				System.console().printf(
 						kostval.getTextResourceService().getText( ERROR_SPECIAL_CHARACTER, name,
 								matcher.group( i ) ) );
+				// logFile bereinigung (& End und ggf 3c)
+				Util.valEnd3cAmp(  "", logFile );
 				System.exit( 1 );
 			}
 		}
@@ -380,6 +386,8 @@ public class KOSTVal implements MessageConstants
 				System.console().printf(
 						kostval.getTextResourceService().getText( ERROR_SPECIAL_CHARACTER, name,
 								matcher.group( i ) ) );
+				// logFile bereinigung (& End und ggf 3c)
+				Util.valEnd3cAmp(  "", logFile );
 				System.exit( 1 );
 			}
 		}
@@ -390,6 +398,8 @@ public class KOSTVal implements MessageConstants
 			LOGGER.logError( kostval.getTextResourceService().getText( ERROR_IOE,
 					kostval.getTextResourceService().getText( ERROR_WRONG_JRE ) ) );
 			System.out.println( kostval.getTextResourceService().getText( ERROR_WRONG_JRE ) );
+			// logFile bereinigung (& End und ggf 3c)
+			Util.valEnd3cAmp(  "", logFile );
 			System.exit( 1 );
 		}
 
@@ -404,6 +414,8 @@ public class KOSTVal implements MessageConstants
 					kostval.getTextResourceService().getText( ERROR_WORKDIRECTORY_NOTWRITABLE, tmpDir ) ) );
 			System.out.println( kostval.getTextResourceService().getText(
 					ERROR_WORKDIRECTORY_NOTWRITABLE, tmpDir ) );
+			// logFile bereinigung (& End und ggf 3c)
+			Util.valEnd3cAmp(  "", logFile );
 			System.exit( 1 );
 		}
 
@@ -415,6 +427,8 @@ public class KOSTVal implements MessageConstants
 				LOGGER.logError( kostval.getTextResourceService().getText( ERROR_IOE,
 						kostval.getTextResourceService().getText( ERROR_PARAMETER_OPTIONAL_1 ) ) );
 				System.out.println( kostval.getTextResourceService().getText( ERROR_PARAMETER_OPTIONAL_1 ) );
+				// logFile bereinigung (& End und ggf 3c)
+				Util.valEnd3cAmp(  "", logFile );
 				System.exit( 1 );
 			} else {
 				verbose = true;
@@ -428,6 +442,8 @@ public class KOSTVal implements MessageConstants
 			LOGGER.logError( kostval.getTextResourceService().getText( ERROR_IOE,
 					kostval.getTextResourceService().getText( ERROR_JHOVECONF_MISSING ) ) );
 			System.out.println( kostval.getTextResourceService().getText( ERROR_JHOVECONF_MISSING ) );
+			// logFile bereinigung (& End und ggf 3c)
+			Util.valEnd3cAmp(  "", logFile );
 			System.exit( 1 );
 		}
 
@@ -450,6 +466,8 @@ public class KOSTVal implements MessageConstants
 				System.console().printf(
 						kostval.getTextResourceService().getText( ERROR_SPECIAL_CHARACTER, name,
 								matcher.group( i ) ) );
+				// logFile bereinigung (& End und ggf 3c)
+				Util.valEnd3cAmp(  "", logFile );
 				System.exit( 1 );
 			}
 		}
@@ -460,6 +478,8 @@ public class KOSTVal implements MessageConstants
 					kostval.getTextResourceService().getText( ERROR_VALFILE_FILENOTEXISTING ) ) );
 			System.out
 					.println( kostval.getTextResourceService().getText( ERROR_VALFILE_FILENOTEXISTING ) );
+			// logFile bereinigung (& End und ggf 3c)
+			Util.valEnd3cAmp(  "", logFile );
 			System.exit( 1 );
 		}
 
@@ -471,6 +491,7 @@ public class KOSTVal implements MessageConstants
 			Integer countSummaryNio = 0;
 			Integer countSummaryIo = 0;
 			Integer count = 0;
+			Integer countProgress = 0;
 			Integer pdfaCountIo = 0;
 			Integer pdfaCountNio = 0;
 			Integer siardCountIo = 0;
@@ -495,13 +516,8 @@ public class KOSTVal implements MessageConstants
 				}
 
 				LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_LOGEND ) );
-				// Zeitstempel End
-				java.util.Date nowEnd = new java.util.Date();
-				java.text.SimpleDateFormat sdfEnd = new java.text.SimpleDateFormat( "dd.MM.yyyy HH:mm:ss" );
-				String ausgabeEnd = sdfEnd.format( nowEnd );
-				ausgabeEnd = "<End>" + ausgabeEnd + "</End>";
 				// logFile bereinigung (& End und ggf 3c)
-				Util.valEnd3cAmp( ausgabeEnd, "", logFile );
+				Util.valEnd3cAmp(  "", logFile );
 
 				// Die Konfiguration hereinkopieren
 				try {
@@ -534,8 +550,8 @@ public class KOSTVal implements MessageConstants
 
 				} catch ( Exception e ) {
 					LOGGER.logError( "<Error>"
-							+ kostval.getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
-					System.out.println( "Exception: " + e.getMessage() );
+							+ kostval.getTextResourceService().getText( ERROR_XML_UNKNOWN, "CopyConfigException: " + e.getMessage() ) );
+					System.out.println( "CopyConfigException: " + e.getMessage() );
 				}
 
 				if ( valFile ) {
@@ -571,6 +587,7 @@ public class KOSTVal implements MessageConstants
 				try {
 					Map<String, File> fileUnsortedMap = Util.getFileMap( valDatei, false );
 					Map<String, File> fileMap = new TreeMap<String, File>( fileUnsortedMap );
+					int numberInFileMap = fileMap.size();
 					Set<String> fileMapKeys = fileMap.keySet();
 					for ( Iterator<String> iterator = fileMapKeys.iterator(); iterator.hasNext(); ) {
 						String entryName = iterator.next();
@@ -580,8 +597,11 @@ public class KOSTVal implements MessageConstants
 							String valDateiName = valDatei.getName();
 							String valDateiExt = "." + FilenameUtils.getExtension( valDateiName ).toLowerCase();
 							count = count + 1;
+							countProgress = countProgress + 1;
 
 							if ( ((valDateiExt.equals( ".jp2" ))) && jp2Validation.equals( "yes" ) ) {
+								int countToValidated = numberInFileMap - count;
+								System.out.print( countToValidated + " " );
 
 								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
 										dirOfJarPath );
@@ -606,6 +626,8 @@ public class KOSTVal implements MessageConstants
 							} else if ( ((valDateiExt.equals( ".jpeg" ) || valDateiExt.equals( ".jpg" ) || valDatei
 									.getAbsolutePath().toLowerCase().endsWith( ".jpe" )))
 									&& jpegValidation.equals( "yes" ) ) {
+								int countToValidated = numberInFileMap - count;
+								System.out.print( countToValidated + " " );
 
 								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
 										dirOfJarPath );
@@ -630,6 +652,8 @@ public class KOSTVal implements MessageConstants
 							} else if ( ((valDateiExt.equals( ".tiff" ) || valDatei.getAbsolutePath()
 									.toLowerCase().endsWith( ".tif" )))
 									&& tiffValidation.equals( "yes" ) ) {
+								int countToValidated = numberInFileMap - count;
+								System.out.print( countToValidated + " " );
 
 								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
 										dirOfJarPath );
@@ -652,6 +676,8 @@ public class KOSTVal implements MessageConstants
 									}
 								}
 							} else if ( (valDateiExt.equals( ".siard" )) && siardValidation.equals( "yes" ) ) {
+								int countToValidated = numberInFileMap - count;
+								System.out.print( countToValidated + " " );
 
 								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
 										dirOfJarPath );
@@ -677,6 +703,8 @@ public class KOSTVal implements MessageConstants
 							} else if ( ((valDateiExt.equals( ".pdf" ) || valDatei.getAbsolutePath()
 									.toLowerCase().endsWith( ".pdfa" )))
 									&& pdfaValidation.equals( "yes" ) ) {
+								int countToValidated = numberInFileMap - count;
+								System.out.print( countToValidated + " " );
 
 								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
 										dirOfJarPath );
@@ -720,7 +748,7 @@ public class KOSTVal implements MessageConstants
 					}
 				} catch ( Exception e ) {
 					LOGGER.logError( "<Error>"
-							+ kostval.getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() )
+							+ kostval.getTextResourceService().getText( ERROR_XML_UNKNOWN, "Formatvalidation: "+e.getMessage() )
 							+ kostval.getTextResourceService().getText( MESSAGE_XML_FORMAT2 )
 							+ kostval.getTextResourceService().getText( MESSAGE_XML_LOGEND ) );
 					System.out.println( "Exception: " + e.getMessage() );
@@ -746,13 +774,8 @@ public class KOSTVal implements MessageConstants
 				LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_FORMAT2 ) );
 
 				LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_LOGEND ) );
-				// Zeitstempel End
-				java.util.Date nowEnd = new java.util.Date();
-				java.text.SimpleDateFormat sdfEnd = new java.text.SimpleDateFormat( "dd.MM.yyyy HH:mm:ss" );
-				String ausgabeEnd = sdfEnd.format( nowEnd );
-				ausgabeEnd = "<End>" + ausgabeEnd + "</End>";
 				// logFile bereinigung (& End und ggf 3c)
-				Util.valEnd3cAmp( ausgabeEnd, "", logFile );
+				Util.valEnd3cAmp(  "", logFile );
 
 				countSummaryNio = pdfaCountNio + siardCountNio + tiffCountNio + jp2CountNio + jpegCountNio;
 				countSummaryIo = pdfaCountIo + siardCountIo + tiffCountIo + jp2CountIo + jpegCountIo;
@@ -821,9 +844,9 @@ public class KOSTVal implements MessageConstants
 					Thread.sleep( 5000 );
 
 				} catch ( Exception e ) {
-					LOGGER.logError( "<Error>"
-							+ kostval.getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
-					System.out.println( "Exception: " + e.getMessage() );
+					LOGGER.logError( "Error>"
+							+ kostval.getTextResourceService().getText( ERROR_XML_UNKNOWN, "CopyConfigException2: " + e.getMessage() ) );
+					System.out.println( "CopyConfigException2: " + e.getMessage() );
 				}
 				System.out.print( "                                                                    " );
 				System.out.print( "\r" );
@@ -894,6 +917,7 @@ public class KOSTVal implements MessageConstants
 				Integer countSummaryNio = 0;
 				Integer countSummaryIo = 0;
 				Integer count = 0;
+				Integer countProgress = 0;
 				Integer pdfaCountIo = 0;
 				Integer pdfaCountNio = 0;
 				Integer siardCountIo = 0;
@@ -945,7 +969,7 @@ public class KOSTVal implements MessageConstants
 							read.close();
 						} catch ( Exception e ) {
 							LOGGER.logError( "<Error>"
-									+ kostval.getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+									+ kostval.getTextResourceService().getText( ERROR_XML_UNKNOWN, "ZIP-Header-Exception: " + e.getMessage() ) );
 							System.out.println( "Exception: " + e.getMessage() );
 						}
 					}
@@ -982,14 +1006,8 @@ public class KOSTVal implements MessageConstants
 						LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_SIP2 ) );
 						LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_LOGEND ) );
 
-						// Zeitstempel End
-						java.util.Date nowEnd = new java.util.Date();
-						java.text.SimpleDateFormat sdfEnd = new java.text.SimpleDateFormat(
-								"dd.MM.yyyy HH:mm:ss" );
-						String ausgabeEnd = sdfEnd.format( nowEnd );
-						ausgabeEnd = "<End>" + ausgabeEnd + "</End>";
 						// logFile bereinigung (& End und ggf 3c)
-						Util.valEnd3cAmp( ausgabeEnd, "", logFile );
+						Util.valEnd3cAmp(  "", logFile );
 
 						// Die Konfiguration hereinkopieren
 						try {
@@ -1022,8 +1040,8 @@ public class KOSTVal implements MessageConstants
 
 						} catch ( Exception e ) {
 							LOGGER.logError( "<Error>"
-									+ kostval.getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
-							System.out.println( "Exception: " + e.getMessage() );
+									+ kostval.getTextResourceService().getText( ERROR_XML_UNKNOWN, "CopyConfigException: " +e.getMessage() ) );
+							System.out.println( "CopyConfigException: " + e.getMessage() );
 						}
 
 						// bestehendes Workverzeichnis ggf. löschen
@@ -1078,14 +1096,8 @@ public class KOSTVal implements MessageConstants
 								LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_SIP2 ) );
 								LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_LOGEND ) );
 
-								// Zeitstempel End
-								java.util.Date nowEnd = new java.util.Date();
-								java.text.SimpleDateFormat sdfEnd = new java.text.SimpleDateFormat(
-										"dd.MM.yyyy HH:mm:ss" );
-								String ausgabeEnd = sdfEnd.format( nowEnd );
-								ausgabeEnd = "<End>" + ausgabeEnd + "</End>";
 								// logFile bereinigung (& End und ggf 3c)
-								Util.valEnd3cAmp( ausgabeEnd, "", logFile );
+								Util.valEnd3cAmp(  "", logFile );
 
 								// Die Konfiguration hereinkopieren
 								try {
@@ -1119,8 +1131,8 @@ public class KOSTVal implements MessageConstants
 								} catch ( Exception e2 ) {
 									LOGGER.logError( "<Error>"
 											+ kostval.getTextResourceService().getText( ERROR_XML_UNKNOWN,
-													e2.getMessage() ) );
-									System.out.println( "Exception: " + e2.getMessage() );
+													"CopyConfigException2: " + e2.getMessage() ) );
+									System.out.println( "CopyConfigException2: " + e2.getMessage() );
 								}
 
 								// bestehendes Workverzeichnis ggf. löschen
@@ -1151,6 +1163,7 @@ public class KOSTVal implements MessageConstants
 				// Vorgängige Formatvalidierung (Schritt 3c)
 				Map<String, File> fileUnsortedMap = Util.getFileMap( valDatei, false );
 				Map<String, File> fileMap = new TreeMap<String, File>( fileUnsortedMap );
+				int numberInFileMap = fileMap.size();
 				Set<String> fileMapKeys = fileMap.keySet();
 
 				for ( Iterator<String> iterator = fileMapKeys.iterator(); iterator.hasNext(); ) {
@@ -1163,6 +1176,7 @@ public class KOSTVal implements MessageConstants
 						valDateiName = valDatei.getName();
 						valDateiExt = "." + FilenameUtils.getExtension( valDateiName ).toLowerCase();
 						count = count + 1;
+						countProgress = countProgress + 1;
 
 						/* String extension = valDatei.getName(); int lastIndexOf = extension.lastIndexOf( "."
 						 * ); if ( lastIndexOf == -1 ) { // empty extension extension = "other"; } else {
@@ -1171,6 +1185,8 @@ public class KOSTVal implements MessageConstants
 						if ( valDateiExt.equals( ".pdf" ) || valDateiExt.equals( ".pdfa" ) ) {
 							if ( pdfaValidation.equals( "yes" ) ) {
 								// Validierung durchführen
+								int countToValidated = numberInFileMap - count;
+								System.out.print( countToValidated + " " );
 								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
 										dirOfJarPath );
 								if ( valFile ) {
@@ -1196,6 +1212,8 @@ public class KOSTVal implements MessageConstants
 						} else if ( valDateiExt.equals( ".tiff" ) || valDateiExt.equals( ".tif" ) ) {
 							if ( tiffValidation.equals( "yes" ) ) {
 								// Validierung durchführen
+								int countToValidated = numberInFileMap - count;
+								System.out.print( countToValidated + " " );
 								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
 										dirOfJarPath );
 								if ( valFile ) {
@@ -1221,6 +1239,8 @@ public class KOSTVal implements MessageConstants
 						} else if ( valDateiExt.equals( ".siard" ) ) {
 							if ( siardValidation.equals( "yes" ) ) {
 								// Validierung durchführen
+								int countToValidated = numberInFileMap - count;
+								System.out.print( countToValidated + " " );
 
 								// Arbeitsverzeichnis zum Entpacken des Archivs erstellen
 								String pathToWorkDirSiard = kostval.getConfigurationService().getPathToWorkDir();
@@ -1256,6 +1276,8 @@ public class KOSTVal implements MessageConstants
 						} else if ( valDateiExt.equals( ".jpe" ) || valDateiExt.equals( ".jpeg" )
 								|| valDateiExt.equals( ".jpg" ) ) {
 							if ( jpegValidation.equals( "yes" ) ) {
+								int countToValidated = numberInFileMap - count;
+								System.out.print( countToValidated + " " );
 								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
 										dirOfJarPath );
 								if ( valFile ) {
@@ -1281,6 +1303,8 @@ public class KOSTVal implements MessageConstants
 						} else if ( valDateiExt.equals( ".jp2" ) ) {
 							if ( jp2Validation.equals( "yes" ) ) {
 								// Validierung durchführen
+								int countToValidated = numberInFileMap - count;
+								System.out.print( countToValidated + " " );
 								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
 										dirOfJarPath );
 								if ( valFile ) {
@@ -1428,14 +1452,9 @@ public class KOSTVal implements MessageConstants
 				newFormat = "<Format>" + summary;
 				Util.oldnewstring( "<Format>", newFormat, logFile );
 
-				// Zeitstempel End
-				java.util.Date nowEnd = new java.util.Date();
-				java.text.SimpleDateFormat sdfEnd = new java.text.SimpleDateFormat( "dd.MM.yyyy HH:mm:ss" );
-				String ausgabeEnd = sdfEnd.format( nowEnd );
-				ausgabeEnd = "<End>" + ausgabeEnd + "</End>";
 				// ggf. Fehlermeldung 3c ergänzen Util.val3c(summary3c, logFile );
 				// logFile bereinigung (& End und ggf 3c)
-				Util.valEnd3cAmp( ausgabeEnd, summary3c, logFile );
+				Util.valEnd3cAmp(  summary3c, logFile );
 
 				// Ergänzen welche SIP-Validierung durchgeführt wurde
 				String sipVersion = " ";
@@ -1482,8 +1501,8 @@ public class KOSTVal implements MessageConstants
 
 				} catch ( Exception e ) {
 					LOGGER.logError( "<Error>"
-							+ kostval.getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
-					System.out.println( "Exception: " + e.getMessage() );
+							+ kostval.getTextResourceService().getText( ERROR_XML_UNKNOWN, "CopyConfigException3: " +e.getMessage() ) );
+					System.out.println( "CopyConfigException3: " + e.getMessage() );
 				}
 
 				// bestehendes Workverzeichnis ggf. löschen
@@ -1529,7 +1548,7 @@ public class KOSTVal implements MessageConstants
 				}
 			} catch ( Exception e ) {
 				LOGGER.logError( "<Error>"
-						+ kostval.getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() )
+						+ kostval.getTextResourceService().getText( ERROR_XML_UNKNOWN, "SIP-ValidationException: " +e.getMessage() )
 						+ kostval.getTextResourceService().getText( MESSAGE_XML_SIP2 )
 						+ kostval.getTextResourceService().getText( MESSAGE_XML_LOGEND ) );
 				System.out.println( "Exception: " + e.getMessage() );
@@ -1551,6 +1570,8 @@ public class KOSTVal implements MessageConstants
 				Util.deleteDir( tmpDir );
 				tmpDir.deleteOnExit();
 			}
+			// logFile bereinigung (& End und ggf 3c)
+			Util.valEnd3cAmp(  "", logFile );
 			System.exit( 1 );
 		}
 	}

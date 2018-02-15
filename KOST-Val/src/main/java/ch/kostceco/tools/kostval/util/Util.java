@@ -276,7 +276,7 @@ public class Util
 	 * diese sehr Zeitintensiv sind !!!
 	 * 
 	 * @throws IOException */
-	public static void valEnd3cAmp( String stringEnd, String string3c, File file ) throws IOException
+	public static void valEnd3cAmp( String string3c, File file ) throws IOException
 	{
 		try {
 			BufferedReader reader = new BufferedReader( new FileReader( file ) );
@@ -286,11 +286,18 @@ public class Util
 				sb.append( line );
 				sb.append( "\r\n" );
 			}
+			// Zeitstempel End
+			java.util.Date nowEnd = new java.util.Date();
+			java.text.SimpleDateFormat sdfEnd = new java.text.SimpleDateFormat( "dd.MM.yyyy HH:mm:ss" );
+			String ausgabeEnd = sdfEnd.format( nowEnd );
+			ausgabeEnd = "<End>" + ausgabeEnd + "</End>";
+			String stringEnd = ausgabeEnd;
 			oldtext = sb.toString();
 			reader.close();
 			String newtext = oldtext.replace( "<End></End>", stringEnd );
 			newtext = newtext.replace( "<Message>3c</Message></Error>", string3c );
 			newtext = newtext.replace( "&", "&amp;" );
+			newtext = newtext.replace( "<<", "<" );
 			newtext = newtext.replace( (char) 0, (char) 32 );
 			FileWriter writer = new FileWriter( file );
 			writer.write( newtext );

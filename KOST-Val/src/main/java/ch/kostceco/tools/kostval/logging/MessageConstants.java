@@ -58,7 +58,7 @@ public interface MessageConstants
 	String	MESSAGE_TIFFVALIDATION												= "message.tiffvalidation";
 	String	MESSAGE_SIARDVALIDATION												= "message.siardvalidation";
 	String	MESSAGE_PDFAVALIDATION												= "message.pdfavalidation";
-	String	MESSAGE_PDFAVALIDATION_VL											= "message.pdfavalidation.vl";
+	String	MESSAGE_FORMATVALIDATION_VL											= "message.formatvalidation.vl";
 	String	MESSAGE_JP2VALIDATION													= "message.jp2validation";
 	String	MESSAGE_JPEGVALIDATION												= "message.jpegvalidation";
 	String	MESSAGE_SIPVALIDATION													= "message.sipvalidation";

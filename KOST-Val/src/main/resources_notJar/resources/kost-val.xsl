@@ -157,7 +157,7 @@
 								<tr class="caption">
 									<td>
 										<xsl:value-of select="ValType" />
-										<xsl:value-of select="PdfaVL" />
+										<xsl:value-of select="FormatVL" />
 										->
 										<xsl:value-of select="ValFile" />
 									</td>
@@ -187,7 +187,7 @@
 								<tr class="captionio">
 									<td>
 										<xsl:value-of select="ValType" />
-										<xsl:value-of select="PdfaVL" />
+										<xsl:value-of select="FormatVL" />
 										->
 										<xsl:value-of select="ValFile" />
 									</td>

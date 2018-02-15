@@ -201,7 +201,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 			}
 		}
 		getMessageService().logError(
-				getTextResourceService().getText( MESSAGE_PDFAVALIDATION_VL, level ) );
+				getTextResourceService().getText( MESSAGE_FORMATVALIDATION_VL, level ) );
 
 		// Start mit der Erkennung
 

@@ -90,18 +90,18 @@ public class ValidationIrecognitionModuleImpl extends ValidationModuleImpl imple
 			if ( version1 ) {
 				// keine zusaetzliche kontrolle
 			} else if ( version2 ) {
-				File version20 = new File( new StringBuilder( pathToWorkDir ).append( File.separator )
+				File version21 = new File( new StringBuilder( pathToWorkDir ).append( File.separator )
 						.append( "header" ).append( File.separator ).append( "siardversion" )
-						.append( File.separator ).append( "2.0" ).toString() );
+						.append( File.separator ).append( "2.1" ).toString() );
 
 				/* bestehendes Workverzeichnis Abbruch wenn nicht leer, da am Schluss das Workverzeichnis
 				 * gelöscht wird und entsprechend bestehende Dateien gelöscht werden können */
-				if ( !version20.exists() ) {
+				if ( !version21.exists() ) {
 					valid = false;
 					getMessageService().logError(
 							getTextResourceService().getText( MESSAGE_XML_MODUL_I_SIARD )
-									+ getTextResourceService().getText( MESSAGE_XML_I_SIARDVERSION, "2.0",
-											version20.getAbsolutePath() ) );
+									+ getTextResourceService().getText( MESSAGE_XML_I_SIARDVERSION, "2.1",
+											version21.getAbsolutePath() ) );
 				}
 
 			}

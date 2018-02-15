@@ -30,6 +30,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.commons.io.FileUtils;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
@@ -238,6 +239,26 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 					}
 				}
 			}
+			// Ausgabe der SIARD-Version
+			String pathToWorkDir2 = pathToWorkDir + File.separator + "SIARD";
+			File metadataXml = new File( new StringBuilder( pathToWorkDir2 ).append( File.separator )
+					.append( "header" ).append( File.separator ).append( "metadata.xml" ).toString() );
+			Boolean version1 = FileUtils.readFileToString( metadataXml ).contains(
+					"http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
+			Boolean version2 = FileUtils.readFileToString( metadataXml ).contains(
+					"http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
+			if ( version1 ) {
+				getMessageService().logError(
+						getTextResourceService().getText( MESSAGE_FORMATVALIDATION_VL, "v1.0" ) );
+			} else if ( version2 ) {
+				File versionDir = new File( pathToWorkDir2+ File.separator + "header" + File.separator + "siardversion"
+						+ File.separator + "2.1" );
+				if ( versionDir.exists() ) {
+					getMessageService().logError(
+							getTextResourceService().getText( MESSAGE_FORMATVALIDATION_VL, "v2.1" ) );
+				}
+			}
+
 			if ( xmlToValidate != null && xsdToValidate != null ) {
 				// der andere Fall wurde bereits oben abgefangen
 				try {
