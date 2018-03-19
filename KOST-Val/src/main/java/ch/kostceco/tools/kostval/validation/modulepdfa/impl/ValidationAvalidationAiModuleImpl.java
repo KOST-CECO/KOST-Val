@@ -326,6 +326,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 		boolean callas = false;
 		boolean pdftools = false;
 		int callasReturnCode = 9;
+		boolean callasServiceFailed = false;
 
 		String callasConfig = getConfigurationService().callas();
 		String pdftoolsConfig = getConfigurationService().pdftools();
@@ -526,7 +527,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 
 						String profile = dirOfJarPath + File.separator + "resources" + File.separator
 								+ "callas_pdfaPilotServer_Win_7.2.276_cli-a" + File.separator + "N-Entry.kfpx";
-						String analye = "-a --noprogress --nohits --level=" + level + " --profile=\"" + profile+"\"";
+						String analye = "-a --noprogress --nohits --level=" + level + " --profile=\"" + profile
+								+ "\"";
 						String langConfig = getTextResourceService().getText( MESSAGE_XML_LANGUAGE );
 						String lang = "-l=" + getTextResourceService().getText( MESSAGE_XML_LANGUAGE );
 						String valPath = valDatei.getAbsolutePath();
@@ -550,7 +552,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 							isValid = true;
 						} else if ( callasReturnCode > 3 ) {
 							isValid = false;
-						} else {
+						} else if ( callasReturnCode > 0 ) {
 							// Zusatzprüfung nicht bestanden
 
 							if ( bNentryError ) {
@@ -573,6 +575,9 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 										getTextResourceService().getText( MESSAGE_XML_MODUL_C_PDFA ) + "<Message>"
 												+ warning + "</Message></Error>" );
 							}
+						} else {
+							isValid = false;
+							callasServiceFailed = true;
 						}
 
 						// Ende callas direkt auszulösen
@@ -721,6 +726,12 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 				String callasH = "";
 				String callasI = "";
 				if ( callas ) {
+					if ( callasServiceFailed ) {
+						getMessageService().logError(
+								getTextResourceService().getText(MESSAGE_XML_MODUL_A_PDFA ) + getTextResourceService().getText( ERROR_XML_A_CALLAS_SERVICEFAILED,
+										callasReturnCode ) );
+					}
+
 					// aus dem Output die Fehler holen
 					// TODO: umschreiben
 
@@ -863,8 +874,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 								line = line.substring( 11 );
 								line = line + " [callas] ";
 								getMessageService().logError(
-										getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA ) + "<Message>Error: "
-												+ line + "</Message></Error>" );
+										getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+												+ "<Message>Error: " + line + "</Message></Error>" );
 							}
 						}
 
@@ -1043,7 +1054,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 			}
 			if ( report.exists() ) {
 				report.delete();
-			} 
+			}
 		} catch ( Exception e ) {
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
