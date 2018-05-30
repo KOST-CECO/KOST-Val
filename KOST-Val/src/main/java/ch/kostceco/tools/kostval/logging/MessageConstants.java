@@ -241,6 +241,8 @@ public interface MessageConstants
 	String	ERROR_XML_A_PDFA_ISDIRECTORY									= "error.xml.a.pdfa.isdirectory";
 	String	ERROR_XML_CALLAS_MISSING											= "error.xml.callas.missing";
 	String	ERROR_XML_CALLAS_MISSING2											= "error.xml.callas.missing2";
+	String	ERROR_XML_CALLAS_FATAL												= "error.xml.callas.fatal";
+	String	ERROR_XML_CALLAS_FATAL2												= "error.xml.callas.fatal2";
 	String	ERROR_XML_A_CALLAS_SERVICEFAILED							= "error.xml.a.callas.servicefailed";
 	String	ERROR_XML_A_PDFA_NOCONFIG											= "error.xml.a.pdfa.noconfig";
 	String	ERROR_XML_A_PDFTOOLS_LICENSE									= "error.xml.a.pdftools.license";

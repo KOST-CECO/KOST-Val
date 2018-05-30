@@ -1,5 +1,5 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val v1.8.4 application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and
+ * The KOST-Val v1.9.0 application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and
  * Submission Information Package (SIP). Copyright (C) 2012-2018 Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
@@ -26,7 +26,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
-
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
@@ -137,8 +136,15 @@ public class KOSTVal implements MessageConstants
 			dirOfJarPath = file.getParent();
 		}
 
-		File configFile = new File( dirOfJarPath + File.separator + "configuration" + File.separator
+		File configFileZip = new File( dirOfJarPath + File.separator + "configuration" + File.separator
 				+ "kostval.conf.xml" );
+		File directoryOfConfigfile = new File( System.getenv( "USERPROFILE" ) + File.separator
+				+ ".kost-val" + File.separator + "configuration" );
+		File configFile = new File( directoryOfConfigfile + File.separator + "kostval.conf.xml" );
+		if ( !configFile.exists() ) {
+			directoryOfConfigfile.mkdirs(); 
+			Util.copyFile( configFileZip, configFile );
+		}
 
 		// Ueberprüfung des Parameters (Log-Verzeichnis)
 		String pathToLogfile = kostval.getConfigurationService().getPathToLogfile();
@@ -307,7 +313,7 @@ public class KOSTVal implements MessageConstants
 					kostval.getTextResourceService().getText( ERROR_NOFILEENDINGS ) ) );
 			System.out.println( kostval.getTextResourceService().getText( ERROR_NOFILEENDINGS ) );
 			// logFile bereinigung (& End und ggf 3c)
-			Util.valEnd3cAmp(  "", logFile );
+			Util.valEnd3cAmp( "", logFile );
 			System.exit( 1 );
 		}
 
@@ -335,7 +341,7 @@ public class KOSTVal implements MessageConstants
 					System.out.println( kostval.getTextResourceService().getText( ERROR_WORKDIRECTORY_EXISTS,
 							pathToWorkDir ) );
 					// logFile bereinigung (& End und ggf 3c)
-					Util.valEnd3cAmp(  "", logFile );
+					Util.valEnd3cAmp( "", logFile );
 					System.exit( 1 );
 				}
 			}
@@ -364,7 +370,7 @@ public class KOSTVal implements MessageConstants
 						kostval.getTextResourceService().getText( ERROR_SPECIAL_CHARACTER, name,
 								matcher.group( i ) ) );
 				// logFile bereinigung (& End und ggf 3c)
-				Util.valEnd3cAmp(  "", logFile );
+				Util.valEnd3cAmp( "", logFile );
 				System.exit( 1 );
 			}
 		}
@@ -387,7 +393,7 @@ public class KOSTVal implements MessageConstants
 						kostval.getTextResourceService().getText( ERROR_SPECIAL_CHARACTER, name,
 								matcher.group( i ) ) );
 				// logFile bereinigung (& End und ggf 3c)
-				Util.valEnd3cAmp(  "", logFile );
+				Util.valEnd3cAmp( "", logFile );
 				System.exit( 1 );
 			}
 		}
@@ -399,7 +405,7 @@ public class KOSTVal implements MessageConstants
 					kostval.getTextResourceService().getText( ERROR_WRONG_JRE ) ) );
 			System.out.println( kostval.getTextResourceService().getText( ERROR_WRONG_JRE ) );
 			// logFile bereinigung (& End und ggf 3c)
-			Util.valEnd3cAmp(  "", logFile );
+			Util.valEnd3cAmp( "", logFile );
 			System.exit( 1 );
 		}
 
@@ -415,7 +421,7 @@ public class KOSTVal implements MessageConstants
 			System.out.println( kostval.getTextResourceService().getText(
 					ERROR_WORKDIRECTORY_NOTWRITABLE, tmpDir ) );
 			// logFile bereinigung (& End und ggf 3c)
-			Util.valEnd3cAmp(  "", logFile );
+			Util.valEnd3cAmp( "", logFile );
 			System.exit( 1 );
 		}
 
@@ -428,7 +434,7 @@ public class KOSTVal implements MessageConstants
 						kostval.getTextResourceService().getText( ERROR_PARAMETER_OPTIONAL_1 ) ) );
 				System.out.println( kostval.getTextResourceService().getText( ERROR_PARAMETER_OPTIONAL_1 ) );
 				// logFile bereinigung (& End und ggf 3c)
-				Util.valEnd3cAmp(  "", logFile );
+				Util.valEnd3cAmp( "", logFile );
 				System.exit( 1 );
 			} else {
 				verbose = true;
@@ -443,7 +449,7 @@ public class KOSTVal implements MessageConstants
 					kostval.getTextResourceService().getText( ERROR_JHOVECONF_MISSING ) ) );
 			System.out.println( kostval.getTextResourceService().getText( ERROR_JHOVECONF_MISSING ) );
 			// logFile bereinigung (& End und ggf 3c)
-			Util.valEnd3cAmp(  "", logFile );
+			Util.valEnd3cAmp( "", logFile );
 			System.exit( 1 );
 		}
 
@@ -467,7 +473,7 @@ public class KOSTVal implements MessageConstants
 						kostval.getTextResourceService().getText( ERROR_SPECIAL_CHARACTER, name,
 								matcher.group( i ) ) );
 				// logFile bereinigung (& End und ggf 3c)
-				Util.valEnd3cAmp(  "", logFile );
+				Util.valEnd3cAmp( "", logFile );
 				System.exit( 1 );
 			}
 		}
@@ -479,7 +485,7 @@ public class KOSTVal implements MessageConstants
 			System.out
 					.println( kostval.getTextResourceService().getText( ERROR_VALFILE_FILENOTEXISTING ) );
 			// logFile bereinigung (& End und ggf 3c)
-			Util.valEnd3cAmp(  "", logFile );
+			Util.valEnd3cAmp( "", logFile );
 			System.exit( 1 );
 		}
 
@@ -517,7 +523,7 @@ public class KOSTVal implements MessageConstants
 
 				LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_LOGEND ) );
 				// logFile bereinigung (& End und ggf 3c)
-				Util.valEnd3cAmp(  "", logFile );
+				Util.valEnd3cAmp( "", logFile );
 
 				// Die Konfiguration hereinkopieren
 				try {
@@ -550,7 +556,8 @@ public class KOSTVal implements MessageConstants
 
 				} catch ( Exception e ) {
 					LOGGER.logError( "<Error>"
-							+ kostval.getTextResourceService().getText( ERROR_XML_UNKNOWN, "CopyConfigException: " + e.getMessage() ) );
+							+ kostval.getTextResourceService().getText( ERROR_XML_UNKNOWN,
+									"CopyConfigException: " + e.getMessage() ) );
 					System.out.println( "CopyConfigException: " + e.getMessage() );
 				}
 
@@ -748,7 +755,8 @@ public class KOSTVal implements MessageConstants
 					}
 				} catch ( Exception e ) {
 					LOGGER.logError( "<Error>"
-							+ kostval.getTextResourceService().getText( ERROR_XML_UNKNOWN, "Formatvalidation: "+e.getMessage() )
+							+ kostval.getTextResourceService().getText( ERROR_XML_UNKNOWN,
+									"Formatvalidation: " + e.getMessage() )
 							+ kostval.getTextResourceService().getText( MESSAGE_XML_FORMAT2 )
 							+ kostval.getTextResourceService().getText( MESSAGE_XML_LOGEND ) );
 					System.out.println( "Exception: " + e.getMessage() );
@@ -775,7 +783,7 @@ public class KOSTVal implements MessageConstants
 
 				LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_LOGEND ) );
 				// logFile bereinigung (& End und ggf 3c)
-				Util.valEnd3cAmp(  "", logFile );
+				Util.valEnd3cAmp( "", logFile );
 
 				countSummaryNio = pdfaCountNio + siardCountNio + tiffCountNio + jp2CountNio + jpegCountNio;
 				countSummaryIo = pdfaCountIo + siardCountIo + tiffCountIo + jp2CountIo + jpegCountIo;
@@ -845,7 +853,8 @@ public class KOSTVal implements MessageConstants
 
 				} catch ( Exception e ) {
 					LOGGER.logError( "Error>"
-							+ kostval.getTextResourceService().getText( ERROR_XML_UNKNOWN, "CopyConfigException2: " + e.getMessage() ) );
+							+ kostval.getTextResourceService().getText( ERROR_XML_UNKNOWN,
+									"CopyConfigException2: " + e.getMessage() ) );
 					System.out.println( "CopyConfigException2: " + e.getMessage() );
 				}
 				System.out.print( "                                                                    " );
@@ -969,7 +978,8 @@ public class KOSTVal implements MessageConstants
 							read.close();
 						} catch ( Exception e ) {
 							LOGGER.logError( "<Error>"
-									+ kostval.getTextResourceService().getText( ERROR_XML_UNKNOWN, "ZIP-Header-Exception: " + e.getMessage() ) );
+									+ kostval.getTextResourceService().getText( ERROR_XML_UNKNOWN,
+											"ZIP-Header-Exception: " + e.getMessage() ) );
 							System.out.println( "Exception: " + e.getMessage() );
 						}
 					}
@@ -1007,7 +1017,7 @@ public class KOSTVal implements MessageConstants
 						LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_LOGEND ) );
 
 						// logFile bereinigung (& End und ggf 3c)
-						Util.valEnd3cAmp(  "", logFile );
+						Util.valEnd3cAmp( "", logFile );
 
 						// Die Konfiguration hereinkopieren
 						try {
@@ -1040,7 +1050,8 @@ public class KOSTVal implements MessageConstants
 
 						} catch ( Exception e ) {
 							LOGGER.logError( "<Error>"
-									+ kostval.getTextResourceService().getText( ERROR_XML_UNKNOWN, "CopyConfigException: " +e.getMessage() ) );
+									+ kostval.getTextResourceService().getText( ERROR_XML_UNKNOWN,
+											"CopyConfigException: " + e.getMessage() ) );
 							System.out.println( "CopyConfigException: " + e.getMessage() );
 						}
 
@@ -1097,7 +1108,7 @@ public class KOSTVal implements MessageConstants
 								LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_LOGEND ) );
 
 								// logFile bereinigung (& End und ggf 3c)
-								Util.valEnd3cAmp(  "", logFile );
+								Util.valEnd3cAmp( "", logFile );
 
 								// Die Konfiguration hereinkopieren
 								try {
@@ -1454,7 +1465,7 @@ public class KOSTVal implements MessageConstants
 
 				// ggf. Fehlermeldung 3c ergänzen Util.val3c(summary3c, logFile );
 				// logFile bereinigung (& End und ggf 3c)
-				Util.valEnd3cAmp(  summary3c, logFile );
+				Util.valEnd3cAmp( summary3c, logFile );
 
 				// Ergänzen welche SIP-Validierung durchgeführt wurde
 				String sipVersion = " ";
@@ -1501,7 +1512,8 @@ public class KOSTVal implements MessageConstants
 
 				} catch ( Exception e ) {
 					LOGGER.logError( "<Error>"
-							+ kostval.getTextResourceService().getText( ERROR_XML_UNKNOWN, "CopyConfigException3: " +e.getMessage() ) );
+							+ kostval.getTextResourceService().getText( ERROR_XML_UNKNOWN,
+									"CopyConfigException3: " + e.getMessage() ) );
 					System.out.println( "CopyConfigException3: " + e.getMessage() );
 				}
 
@@ -1548,7 +1560,8 @@ public class KOSTVal implements MessageConstants
 				}
 			} catch ( Exception e ) {
 				LOGGER.logError( "<Error>"
-						+ kostval.getTextResourceService().getText( ERROR_XML_UNKNOWN, "SIP-ValidationException: " +e.getMessage() )
+						+ kostval.getTextResourceService().getText( ERROR_XML_UNKNOWN,
+								"SIP-ValidationException: " + e.getMessage() )
 						+ kostval.getTextResourceService().getText( MESSAGE_XML_SIP2 )
 						+ kostval.getTextResourceService().getText( MESSAGE_XML_LOGEND ) );
 				System.out.println( "Exception: " + e.getMessage() );
@@ -1571,7 +1584,7 @@ public class KOSTVal implements MessageConstants
 				tmpDir.deleteOnExit();
 			}
 			// logFile bereinigung (& End und ggf 3c)
-			Util.valEnd3cAmp(  "", logFile );
+			Util.valEnd3cAmp( "", logFile );
 			System.exit( 1 );
 		}
 	}

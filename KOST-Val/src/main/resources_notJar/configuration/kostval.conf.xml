@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <configuration>
-	<pathtologfile>logs</pathtologfile>
-	<pathtoworkdir>temp_KOST-Val</pathtoworkdir>
-	<pathtodroidsignature>configuration\KaD_SignatureFile_V72.xml</pathtodroidsignature>
 	<showprogressonwork>yes</showprogressonwork><!--no / yes -->
 	<pdfa>
 		<!-- sind pdftools und callas beide auf no wird keine pdfa Validierung durchgefuehrt -->
 		<!-- sind pdftools und callas beide auf yes wird die duale pdfa Validierung durchgefuehrt -->
 		<pdftools>yes</pdftools><!--no wenn PDF Tools nicht verwendet werden soll, ansonsten yes -->
 		<callas>yes</callas><!--no wenn callas nicht verwendet werden soll, ansonsten yes -->
+		<!-- Detailreport: Soll seitens pdftools auch Details in Englisch (detail) oder nur Kategorien (no) ausgegeben werden  -->
+		<detail>detail</detail><!--no verwenden wenn nur Kategorien ansonsten detail fuer detailierte Fehlermeldung -->
 		<!-- N-Eintrag: Soll seitens callas ein Fehler (E) oder eine Warnung (W) ausgegeben werden  -->
-		<nentry>W</nentry><!--W verwenden wenn Warnung ansonsten E für Fehler -->
+		<nentry>W</nentry><!--W verwenden wenn Warnung ansonsten E fuer Fehler -->
 		<!--Angeben welche Conformancelevel mindestens erreicht werden muss -->
 		<!--no verwenden wenn diese Version nicht erlaubt ist -->
 		<pdfa1>1B</pdfa1><!--1A / 1B / no -->
-		<pdfa2>2B</pdfa2><!--2A / 2B / 2U / no -->
+		<pdfa2>2U</pdfa2><!--2A / 2B / 2U / no -->
 		<pdfaimage>no</pdfaimage><!--no verwenden wenn die Bilder in pdfa nicht validiert werden sollen, ansonsten yes -->
 		<jbig2allowed>yes</jbig2allowed><!--no verwenden wenn JBIG2 in pdfa nicht erlaubt werden sollen, ansonsten yes -->
 	</pdfa>
@@ -203,4 +202,9 @@
 			</allowedformat> -->
 		</allowedformats>
 	</sip>
+	<ignoreerror>
+		<!-- Zu ignorierende Fehlermeldungen. Aktuell nur details von pdftools unterstuetzt -->
+		<ignore>The document does not conform to the requested standard. [PDF Tools: 0x83410612]
+			The value of the key N is 4 but must be 3. [PDF Tools: 0x80410607]</ignore>
+	</ignoreerror>
 </configuration>

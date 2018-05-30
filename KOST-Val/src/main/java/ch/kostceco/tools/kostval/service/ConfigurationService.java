@@ -134,6 +134,11 @@ public interface ConfigurationService extends Service
 	 * @return yes oder no */
 	String pdftools();
 
+	/** Gibt an ob pdfa mit PDF Tools im detail validiert werden soll
+	 * 
+	 * @return detail oder no */
+	String detail();
+
 	/** Gibt an ob pdfa mit callas validiert werden soll
 	 * 
 	 * @return yes oder no */
@@ -196,4 +201,8 @@ public interface ConfigurationService extends Service
 	/** Angabe ob dargestellt werden soll, dass KOST-Val noch läuft */
 	String getShowProgressOnWork();
 
+	/** Gibt an welche Fehler ignoriert werden sollen
+	 * 
+	 * @return fehlermeldungen */
+	String ignore();
 }

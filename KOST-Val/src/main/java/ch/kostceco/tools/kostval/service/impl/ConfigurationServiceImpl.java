@@ -20,7 +20,6 @@
 package ch.kostceco.tools.kostval.service.impl;
 
 import java.io.File;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -30,7 +29,6 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.XMLConfiguration;
 import org.apache.commons.configuration.HierarchicalConfiguration;
 
-import ch.kostceco.tools.kostval.KOSTVal;
 import ch.kostceco.tools.kostval.logging.Logger;
 import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.service.TextResourceService;
@@ -58,18 +56,11 @@ public class ConfigurationServiceImpl implements ConfigurationService
 
 			try {
 
-				String path = "configuration/kostval.conf.xml";
+				File directoryOfConfigfile = new File( System.getenv( "USERPROFILE" ) + File.separator
+						+ ".kost-val" + File.separator + "configuration" );
+				File configFile = new File( directoryOfConfigfile + File.separator + "kostval.conf.xml" );
 
-				URL locationOfJar = KOSTVal.class.getProtectionDomain().getCodeSource().getLocation();
-				String locationOfJarPath = locationOfJar.getPath();
-
-				if ( locationOfJarPath.endsWith( ".jar" ) ) {
-					File file = new File( locationOfJarPath );
-					String fileParent = file.getParent();
-					path = fileParent + "/" + path;
-				}
-
-				config = new XMLConfiguration( path );
+				config = new XMLConfiguration( configFile );
 
 			} catch ( ConfigurationException e ) {
 				LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
@@ -90,14 +81,14 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		/** Gibt den Pfad des Arbeitsverzeichnisses zurück. Dieses Verzeichnis wird zum Entpacken des
 		 * .zip-Files verwendet.
 		 * 
-		 * @return Pfad des Arbeitsverzeichnisses */
-		Object prop = getConfig().getProperty( "pathtoworkdir" );
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
+		 * @return Pfad des Arbeitsverzeichnisses = USERPROFILE/.kost-val/temp_KOST-Val */
+		String pathtoworkdir = System.getenv( "USERPROFILE" ) + File.separator + ".kost-val"
+				+ File.separator + "temp_KOST-Val";
+		File dir = new File( pathtoworkdir );
+		if ( !dir.exists() ) {
+			dir.mkdirs();
 		}
-		String error = "Configuration-Error: Missing pathtoworkdir";
-		return error;
+		return pathtoworkdir;
 	}
 
 	@Override
@@ -105,26 +96,24 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	{
 		/** Gibt den Pfad des Logverzeichnisses zurück.
 		 * 
-		 * @return Pfad des Logverzeichnisses */
-		Object prop = getConfig().getProperty( "pathtologfile" );
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
+		 * @return Pfad des Logverzeichnisses = USERPROFILE/.kost-val/logs */
+		String logs = System.getenv( "USERPROFILE" ) + File.separator + ".kost-val" + File.separator
+				+ "logs";
+		File dir = new File( logs );
+		if ( !dir.exists() ) {
+			dir.mkdirs();
 		}
-		String error = "Configuration-Error: Missing pathtologfile";
-		return error;
+		return logs;
 	}
 
 	@Override
 	public String getPathToDroidSignatureFile()
 	{
-		Object prop = getConfig().getProperty( "pathtodroidsignature" );
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		String error = "Configuration-Error: Missing pathtodroidsignature";
-		return error;
+		/** Gibt den Pfad des Logverzeichnisses zurück.
+		 * 
+		 * @return Pfad des Logverzeichnisses = configuration\KaD_SignatureFile_V72.xml */
+		String droid = "configuration" + File.separator + "KaD_SignatureFile_V72.xml";
+		return droid;
 	}
 
 	@Override
@@ -151,6 +140,19 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			return value;
 		}
 		String error = "Configuration-Error: Missing pdfa.pdftools";
+		return error;
+	}
+
+	@Override
+	public String detail()
+	{
+		Object prop = getConfig().getProperty( "pdfa.detail" );
+
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		String error = "Configuration-Error: Missing pdfa.detail";
 		return error;
 	}
 
@@ -305,6 +307,20 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			return value;
 		}
 		String error = "Configuration-Error: Missing jpeg.jpegvalidation";
+		return error;
+	}
+
+	/*--- IgnorError ---------------------------------------------------------------*/
+	@Override
+	public String ignore()
+	{
+		Object prop = getConfig().getProperty( "ignoreerror.ignore" );
+
+		if ( prop instanceof String ) {
+			String value = (String) prop;
+			return value;
+		}
+		String error = "";
 		return error;
 	}
 

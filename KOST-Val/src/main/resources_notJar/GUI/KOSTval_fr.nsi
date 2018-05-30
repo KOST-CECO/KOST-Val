@@ -7,7 +7,6 @@ BrandingText "Copyright © KOST/CECO"
 ; The file to write
 OutFile "KOST-Val_fr.exe"
 ; The default installation directory
-; InstallDir $DESKTOP
 InstallDir $EXEDIR
 ; Request application privileges for Windows Vista
 RequestExecutionLevel user
@@ -23,23 +22,25 @@ XPStyle on
 !include langKOSTVal_fr.nsh
 !include nsDialogs.nsh
 !include XML.nsh
+!include NTProfiles.nsh
 
 ;--------------------------------
 !define INIFILE       "KOSTval.ini"
 !define KOSTHELP      "doc\KOST-Val_Guide_d_application_*.pdf"
 !define CONFIG        "kostval.conf.xml"
-!define CONFIGPATH    "configuration"
+!define CONFIGPATH    ".kost-val\configuration"
 !define BACKUP        "~backup"
+!define WORKDIR       ".kost-val\temp_KOST-Val"
+!define LOG           ".kost-val\logs"
 !define JARFILE       "kostval_fr.jar"
-!define XTRANS        "resources\XTrans_1.8.0.2\XTrans.exe"
+!define XTRANS        "resources\XTrans_1.8.0.4\XTrans.exe"
 !define JAVAPATH      "resources\jre6"
 
 ;--------------------------------
+Var USER
 Var DIALOG
 Var KOSTVAL
 Var LOGFILE
-Var WORKDIR
-Var LOG
 Var HEAPSIZE
 Var JAVA
 Var T_FLAG
@@ -65,9 +66,20 @@ Function .onInit
   ; initial setting for validation folder/file
   StrCpy $KOSTVAL $EXEDIR
   
+  System::Call "advapi32::GetUserName(t .r0, *i ${NSIS_MAX_STRLEN} r1) i.r2"
+  ; MessageBox MB_OK "User name: $0 | Number of characters: $1 | Return value (OK if non-zero): $2"  
+  ${ProfilePathDefaultUser} $3
+  StrCpy $USER "$3$0"
+  ; MessageBox MB_OK `Default User profile path:$\n"$USER"`
+  
+  IfFileExists "$USER\${CONFIGPATH}\*.*" +4 0
+  CreateDirectory "$USER\.kost-val"
+  CreateDirectory "$USER\${CONFIGPATH}"
+  CopyFiles /SILENT /FILESONLY "$KOSTVAL\configuration\${CONFIG}" "$USER\${CONFIGPATH}"
+  
   ; create configuration backup
-  CreateDirectory $EXEDIR\${CONFIGPATH}\${BACKUP}
-  CopyFiles /SILENT /FILESONLY $EXEDIR\${CONFIGPATH}\*.* $EXEDIR\${CONFIGPATH}\${BACKUP}
+  CreateDirectory $USER\${CONFIGPATH}\${BACKUP}
+  CopyFiles /SILENT /FILESONLY "$USER\${CONFIGPATH}\${CONFIG}" "$USER\${CONFIGPATH}\${BACKUP}"
 
   ; Initializes the plug-ins dir ($PLUGINSDIR) if not already initialized
   InitPluginsDir
@@ -82,23 +94,8 @@ FunctionEnd
 
 Function .onGUIEnd
   ; reset configuration and delete backup folder
-  CopyFiles /SILENT /FILESONLY $EXEDIR\${CONFIGPATH}\${BACKUP}\*.* $EXEDIR\${CONFIGPATH}
-  RMDir /r  $EXEDIR\${CONFIGPATH}\${BACKUP}
-FunctionEnd
-
-Function check4Dir
-  StrCpy $WORKDIR ''
-  StrCpy $LOG ''
-  ${xml::LoadFile} "$EXEDIR\${CONFIGPATH}\${CONFIG}" $0
-  ${xml::RootElement} $0 $1
-  ${xml::XPathString} "//configuration/pathtoworkdir/text()" $WORKDIR $1
-  ${xml::XPathString} "//configuration/pathtologfile/text()" $LOG $1
-  ${xml::Unload}
-  GetFullPathName $1 $WORKDIR
-  IfFileExists $1 fex not_fex
-fex:
-  StrCpy $WORKDIR ''
-not_fex:
+  CopyFiles /SILENT /FILESONLY "$USER\${CONFIGPATH}\${BACKUP}\${CONFIG}" "$USER\${CONFIGPATH}"
+  RMDir /r  $USER\${CONFIGPATH}\${BACKUP}
 FunctionEnd
 
 Function checkHeapsize
@@ -247,17 +244,17 @@ Function LeaveDialog
 
     ${Case} '${EDIT_Konfiguration}'
       ClearErrors
-      ExecWait '${XTRANS} "$EXEDIR\${CONFIGPATH}\${CONFIG}"'
+      ExecWait '${XTRANS} "$USER\${CONFIGPATH}\${CONFIG}"'
       ${If} ${Errors}
-        ExecWait '"notepad.exe" "$EXEDIR\${CONFIGPATH}\${CONFIG}"'
+        ExecWait '"notepad.exe" "$USER\${CONFIGPATH}\${CONFIG}"'
       ${EndIf}
-      ; ExecWait '"notepad.exe" "$EXEDIR\${CONFIGPATH}\${CONFIG}"'
-      ; ExecShell "open" "$EXEDIR\${CONFIGPATH}\${CONFIG}"
+      ; ExecWait '"notepad.exe" "$USER\${CONFIGPATH}\${CONFIG}"'
+      ; ExecShell "open" "$USER\${CONFIGPATH}\${CONFIG}"
       Abort
     ${Break}
 
     ${Case} '${RESET_Konfiguration}'
-      CopyFiles /SILENT /FILESONLY $EXEDIR\${CONFIGPATH}\${BACKUP}\*.* $EXEDIR\${CONFIGPATH}
+      CopyFiles /SILENT /FILESONLY $USER\${CONFIGPATH}\${BACKUP}\${CONFIG} $USER\${CONFIGPATH}
       Abort
     ${Break}
 
@@ -271,37 +268,22 @@ FunctionEnd
 
 ;--------------------------------
 Function RunJar
-  ; get workdir and logdir
-  Call check4Dir
-  
   ; normalize java heap and stack
   Call checkHeapsize
 
   ; get logfile name
   ${GetFileName} $KOSTVAL $LOGFILE
-  CreateDirectory $LOG
-  IfFileExists "$LOG\*.*" +2 0
-  CreateDirectory "$EXEDIR\$LOG"
-  ClearErrors
-  FileOpen $R0 "$LOG\$LOGFILE.kost-val.log.tmp" w
-  FileClose $R0
-  ${If} ${Errors}
-    Delete "$LOG\$LOGFILE.kost-val.log.tmp"
-    MessageBox MB_OK|MB_ICONEXCLAMATION "${LOG_ERR} $LOG"
-    Abort
-  ${EndIf}
-  delete "$LOG\$LOGFILE.kost-val.log*"
 
   ; Launch java program
   ClearErrors
-  ; MessageBox MB_OK '"$JAVA\bin\java.exe" $HEAPSIZE -jar ${JARFILE} $T_FLAG "$KOSTVAL" $P_FLAG'
   ExecWait '"$JAVA\bin\java.exe" $HEAPSIZE -jar ${JARFILE} $T_FLAG "$KOSTVAL" $P_FLAG'
-  IfFileExists "$LOG\$LOGFILE.kost-val.log*" 0 prog_err
+  ; MessageBox MB_OK `LOGFILE:$\n"$USER\${LOG}\$LOGFILE.kost-val.log.xml"`
+  IfFileExists $USER\${LOG}\$LOGFILE.kost-val.log.xml 0 prog_err
   IfErrors goto_err goto_ok
   
 goto_err:
     ; validation with error
-    IfFileExists "$LOG\$LOGFILE.kost-val.log*" 0 prog_err
+    IfFileExists $USER\${LOG}\$LOGFILE.kost-val.log.xml 0 prog_err
     ${If} $T_FLAG == '--sip'
       MessageBox MB_YESNO|MB_ICONEXCLAMATION "$KOSTVAL$\n${SIP_FALSE}" IDYES showlog
       Goto rm_workdir
@@ -323,16 +305,14 @@ goto_ok:
   ${EndIf}
 showlog:
   ; read logfile in detail view
-  GetFullPathName $1 $LOG
-  IfFileExists "$LOG\$LOGFILE.kost-val.log.xml" 0 +3
+  GetFullPathName $1 $USER\${LOG}
+  IfFileExists "$USER\${LOG}\$LOGFILE.kost-val.log.xml" 0 +3
   ExecShell "" "iexplore.exe" "$1\$LOGFILE.kost-val.log.xml"
   Goto rm_workdir
-  ExecShell "" "iexplore.exe" "$1\$LOGFILE.kost-val.log"
+  ExecShell "" "iexplore.exe" "$1\$LOGFILE.kost-val.log.xml"
   Goto rm_workdir
-  ; ExecShell "open" "$LOG\$LOGFILE.kost-val.log.xml"
-  ; ExecShell "open" "$LOG\$LOGFILE.kost-val.log"
 rm_workdir:
-  GetFullPathName $1 $WORKDIR
+  GetFullPathName $1 $USER\${WORKDIR}
   RMDir /r $1
 FunctionEnd
 
