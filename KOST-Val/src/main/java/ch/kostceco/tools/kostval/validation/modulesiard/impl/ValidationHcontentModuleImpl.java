@@ -205,8 +205,9 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl implement
 															+ getTextResourceService().getText( ERROR_XML_XMLLINT4_MISSING ) );
 											valid = false;
 										} else {
-											StringBuffer command = new StringBuffer( dirOfJarPath + File.separator
-													+ "resources" + File.separator + "xmllint" + File.separator + "xmllint " );
+											StringBuffer command = new StringBuffer( "\"" + dirOfJarPath + File.separator
+													+ "resources" + File.separator + "xmllint" + File.separator
+													+ "xmllint\" " );
 											command.append( "--noout --stream " );
 											command.append( " --schema " );
 											command.append( " " );

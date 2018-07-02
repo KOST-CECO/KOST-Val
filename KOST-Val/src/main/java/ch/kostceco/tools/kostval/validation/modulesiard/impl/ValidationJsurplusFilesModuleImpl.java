@@ -102,8 +102,9 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl impl
 		try {
 			String pathToWorkDir = getConfigurationService().getPathToWorkDir();
 			pathToWorkDir = pathToWorkDir + File.separator + "SIARD";
-			File content = new File( new StringBuilder( pathToWorkDir ).append( File.separator )
-					.append( "content" ).toString() );
+			String contentString = new StringBuilder( pathToWorkDir ).append( File.separator )
+					.append( "content" ).toString();
+			File content = new File( contentString );
 			HashMap<String, File> hashMap = new HashMap<String, File>();
 			Map<String, File> fileMap = Util.getContent( content, hashMap );
 			Set<String> fileMapKeys = fileMap.keySet();
@@ -111,26 +112,28 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl impl
 			for ( Iterator<String> iterator = fileMapKeys.iterator(); iterator.hasNext(); ) {
 				String entryName = iterator.next();
 				// entryName: content/schema1/table7/table7.xsd
-				filesInSiardUnsorted.put( entryName, entryName );
-				if ( showOnWork ) {
-					if ( onWork == 410 ) {
-						onWork = 2;
-						System.out.print( "J-   " );
-						System.out.print( "\b\b\b\b\b" );
-					} else if ( onWork == 110 ) {
-						onWork = onWork + 1;
-						System.out.print( "J\\   " );
-						System.out.print( "\b\b\b\b\b" );
-					} else if ( onWork == 210 ) {
-						onWork = onWork + 1;
-						System.out.print( "J|   " );
-						System.out.print( "\b\b\b\b\b" );
-					} else if ( onWork == 310 ) {
-						onWork = onWork + 1;
-						System.out.print( "J/   " );
-						System.out.print( "\b\b\b\b\b" );
-					} else {
-						onWork = onWork + 1;
+				if ( !entryName.equalsIgnoreCase( contentString ) ) {
+					filesInSiardUnsorted.put( entryName, entryName );
+					if ( showOnWork ) {
+						if ( onWork == 410 ) {
+							onWork = 2;
+							System.out.print( "J-   " );
+							System.out.print( "\b\b\b\b\b" );
+						} else if ( onWork == 110 ) {
+							onWork = onWork + 1;
+							System.out.print( "J\\   " );
+							System.out.print( "\b\b\b\b\b" );
+						} else if ( onWork == 210 ) {
+							onWork = onWork + 1;
+							System.out.print( "J|   " );
+							System.out.print( "\b\b\b\b\b" );
+						} else if ( onWork == 310 ) {
+							onWork = onWork + 1;
+							System.out.print( "J/   " );
+							System.out.print( "\b\b\b\b\b" );
+						} else {
+							onWork = onWork + 1;
+						}
 					}
 				}
 			}
@@ -304,17 +307,18 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl impl
 							 * Entsprechend wurde sed verwendet. */
 
 							// Bringt alles auf eine Zeile
-							String commandSed = "cmd /c \"" + pathToSedExe + " 's/\\n/ /g' " + pathTofSearchtable
-									+ " > " + pathTofSearchtableTemp + "\"";
-							String commandSed2 = "cmd /c \"" + pathToSedExe + " ':a;N;$!ba;s/\\n/ /g' "
-									+ pathTofSearchtableTemp + " > " + pathTofSearchtable + "\"";
+							String commandSed = "cmd /c \"\"" + pathToSedExe + "\" 's/\\n/ /g' \""
+									+ pathTofSearchtable + "\" > \"" + pathTofSearchtableTemp + "\"\"";
+							String commandSed2 = "cmd /c \"\"" + pathToSedExe + "\" ':a;N;$!ba;s/\\n/ /g' \""
+									+ pathTofSearchtableTemp + "\" > \"" + pathTofSearchtable + "\"\"";
 							// Trennt ><row. Nur eine row auf einer Zeile
-							String commandSed3 = "cmd /c \"" + pathToSedExe + " 's/\\d060row/\\n\\d060row/g' "
-									+ pathTofSearchtable + " > " + pathTofSearchtableTemp + "\"";
+							String commandSed3 = "cmd /c \"\"" + pathToSedExe
+									+ "\" 's/\\d060row/\\n\\d060row/g' \"" + pathTofSearchtable + "\" > \""
+									+ pathTofSearchtableTemp + "\"\"";
 							// Trennt ><table. <table auf eine neue Zeile
-							String commandSed4 = "cmd /c \"" + pathToSedExe
-									+ " 's/\\d060\\d047table/\\n\\d060\\d047table/g' " + pathTofSearchtableTemp
-									+ " > " + pathTofSearchtable + "\"";
+							String commandSed4 = "cmd /c \"\"" + pathToSedExe
+									+ "\" 's/\\d060\\d047table/\\n\\d060\\d047table/g' \"" + pathTofSearchtableTemp
+									+ "\" > \"" + pathTofSearchtable + "\"\"";
 
 							// String commandSed = "cmd /c \"\"pathToSedExe\"  's/row/R0W/g\' 'hallo row.'\"";
 							/* Das redirect Zeichen verunmöglicht eine direkte eingabe. mit dem geschachtellten
