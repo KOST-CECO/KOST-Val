@@ -21,6 +21,7 @@ package ch.kostceco.tools.kostval.validation.modulesiard.impl;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.util.Map;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -36,7 +37,6 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationCheaderException;
 import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
@@ -56,31 +56,16 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 		ValidationCheaderModule
 {
 
-	public static String				NEWLINE	= System.getProperty( "line.separator" );
-
-	public ConfigurationService	configurationService;
-
-	public ConfigurationService getConfigurationService()
-	{
-		return configurationService;
-	}
-
-	public void setConfigurationService( ConfigurationService configurationService )
-	{
-		this.configurationService = configurationService;
-	}
+	public static String	NEWLINE	= System.getProperty( "line.separator" );
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile )
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
 			throws ValidationCheaderException
 	{
 		boolean showOnWork = true;
 		int onWork = 410;
 		// Informationen zur Darstellung "onWork" holen
-		String onWorkConfig = getConfigurationService().getShowProgressOnWork();
-		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
-		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
-		 * ref="configurationService" /> */
+		String onWorkConfig = configMap.get( "ShowProgressOnWork" );
 		if ( onWorkConfig.equals( "no" ) ) {
 			// keine Ausgabe
 			showOnWork = false;
@@ -161,7 +146,7 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 			 * entsprechenden Modul die property anzugeben: <property name="configurationService"
 			 * ref="configurationService" /> */
 			// Arbeitsverzeichnis zum Entpacken des Archivs erstellen
-			String pathToWorkDir = getConfigurationService().getPathToWorkDir();
+			String pathToWorkDir = configMap.get( "PathToWorkDir" );
 			File tmpDir = new File( pathToWorkDir + File.separator + "SIARD" );
 			if ( tmpDir.exists() ) {
 				Util.deleteDir( tmpDir );
@@ -251,8 +236,8 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 				getMessageService().logError(
 						getTextResourceService().getText( MESSAGE_FORMATVALIDATION_VL, "v1.0" ) );
 			} else if ( version2 ) {
-				File versionDir = new File( pathToWorkDir2+ File.separator + "header" + File.separator + "siardversion"
-						+ File.separator + "2.1" );
+				File versionDir = new File( pathToWorkDir2 + File.separator + "header" + File.separator
+						+ "siardversion" + File.separator + "2.1" );
 				if ( versionDir.exists() ) {
 					getMessageService().logError(
 							getTextResourceService().getText( MESSAGE_FORMATVALIDATION_VL, "v2.1" ) );

@@ -21,6 +21,7 @@ package ch.kostceco.tools.kostval.validation.moduletiff1.impl;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.util.Map;
 import java.io.FileReader;
 import java.util.Arrays;
 
@@ -30,7 +31,6 @@ import uk.gov.nationalarchives.droid.core.signature.droid4.IdentificationFile;
 import uk.gov.nationalarchives.droid.core.signature.droid4.signaturefile.FileFormat;
 
 import ch.kostceco.tools.kostval.exception.moduletiff1.ValidationArecognitionException;
-import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.moduletiff1.ValidationArecognitionModule;
@@ -43,20 +43,9 @@ import ch.kostceco.tools.kostval.validation.moduletiff1.ValidationArecognitionMo
 public class ValidationArecognitionModuleImpl extends ValidationModuleImpl implements
 		ValidationArecognitionModule
 {
-	private ConfigurationService	configurationService;
-
-	public ConfigurationService getConfigurationService()
-	{
-		return configurationService;
-	}
-
-	public void setConfigurationService( ConfigurationService configurationService )
-	{
-		this.configurationService = configurationService;
-	}
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile )
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
 			throws ValidationArecognitionException
 	{
 		/* Eine TIFF Datei (.tiff / .tif / .tfx) muss entweder mit II*. [49492A00] oder mit MM.*
@@ -112,7 +101,7 @@ public class ValidationArecognitionModuleImpl extends ValidationModuleImpl imple
 					/* h�chstwahrscheinlich ein TIFF da es mit 4D4D002A respektive MM.* beginnt valid = true; */
 				} else {
 					// Droid-Erkennung, damit Details ausgegeben werden k�nnen
-					String nameOfSignature = getConfigurationService().getPathToDroidSignatureFile();
+					String nameOfSignature = configMap.get( "PathToDroidSignatureFile" );
 					if ( nameOfSignature.startsWith( "Configuration-Error:" ) ) {
 						getMessageService().logError(
 								getTextResourceService().getText( MESSAGE_XML_MODUL_A_TIFF ) + nameOfSignature );

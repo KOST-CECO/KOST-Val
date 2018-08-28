@@ -21,10 +21,10 @@ package ch.kostceco.tools.kostval.validation.moduletiff2.impl;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.util.Map;
 import java.io.FileReader;
 
 import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationEbitspersampleValidationException;
-import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationEbitspersampleValidationModule;
 
@@ -37,22 +37,10 @@ public class ValidationEbitspersampleValidationModuleImpl extends ValidationModu
 		ValidationEbitspersampleValidationModule
 {
 
-	private ConfigurationService	configurationService;
-
-	public static String					NEWLINE	= System.getProperty( "line.separator" );
-
-	public ConfigurationService getConfigurationService()
-	{
-		return configurationService;
-	}
-
-	public void setConfigurationService( ConfigurationService configurationService )
-	{
-		this.configurationService = configurationService;
-	}
+	public static String	NEWLINE	= System.getProperty( "line.separator" );
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile )
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
 			throws ValidationEbitspersampleValidationException
 	{
 
@@ -67,12 +55,12 @@ public class ValidationEbitspersampleValidationModuleImpl extends ValidationModu
 		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
 		 * ref="configurationService" /> */
 
-		String bps1 = getConfigurationService().getAllowedBitspersample1();
-		String bps2 = getConfigurationService().getAllowedBitspersample2();
-		String bps4 = getConfigurationService().getAllowedBitspersample4();
-		String bps8 = getConfigurationService().getAllowedBitspersample8();
-		String bps16 = getConfigurationService().getAllowedBitspersample16();
-		String bps32 = getConfigurationService().getAllowedBitspersample32();
+		String bps1 = configMap.get( "AllowedBitspersample1" );
+		String bps2 = configMap.get( "AllowedBitspersample2" );
+		String bps4 = configMap.get( "AllowedBitspersample4" );
+		String bps8 = configMap.get( "AllowedBitspersample8" );
+		String bps16 = configMap.get( "AllowedBitspersample16" );
+		String bps32 = configMap.get( "AllowedBitspersample32" );
 
 		if ( bps1.startsWith( "Configuration-Error:" ) ) {
 			getMessageService().logError(

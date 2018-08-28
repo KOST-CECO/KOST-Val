@@ -21,6 +21,7 @@ package ch.kostceco.tools.kostval.validation.modulejpeg.impl;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.util.Map;
 import java.io.FileReader;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -37,7 +38,6 @@ import coderslagoon.badpeggy.scanner.ImageFormat;
 import coderslagoon.badpeggy.scanner.ImageScanner;
 import coderslagoon.badpeggy.scanner.ImageScanner.Callback;
 import ch.kostceco.tools.kostval.exception.modulejpeg.ValidationAjpegvalidationException;
-import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulejpeg.ValidationAvalidationJpegModule;
@@ -52,20 +52,9 @@ import ch.kostceco.tools.kostval.validation.modulejpeg.ValidationAvalidationJpeg
 public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl implements
 		ValidationAvalidationJpegModule, Callback
 {
-	private ConfigurationService	configurationService;
-
-	public ConfigurationService getConfigurationService()
-	{
-		return configurationService;
-	}
-
-	public void setConfigurationService( ConfigurationService configurationService )
-	{
-		this.configurationService = configurationService;
-	}
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile )
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
 			throws ValidationAjpegvalidationException
 	{
 		// Start mit der Erkennung
@@ -120,7 +109,7 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl im
 					/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
 					 * entsprechenden Modul die property anzugeben: <property name="configurationService"
 					 * ref="configurationService" /> */
-					String nameOfSignature = getConfigurationService().getPathToDroidSignatureFile();
+					String nameOfSignature = configMap.get( "PathToDroidSignatureFile" );
 					if ( nameOfSignature.startsWith( "Configuration-Error:" ) ) {
 						getMessageService().logError(
 								getTextResourceService().getText( MESSAGE_XML_MODUL_A_JPEG ) + nameOfSignature );

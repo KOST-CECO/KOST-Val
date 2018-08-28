@@ -19,7 +19,7 @@
 
 package ch.kostceco.tools.kostval.validation.modulesip1;
 
-import java.io.File;
+import java.io.File; import java.util.Map;
 
 import ch.kostceco.tools.kostval.exception.modulesip1.Validation1fPrimaryDataException;
 import ch.kostceco.tools.kostval.validation.ValidationModule;
@@ -33,7 +33,7 @@ import ch.kostceco.tools.kostval.validation.ValidationModule;
 public interface Validation1fPrimaryDataModule extends ValidationModule
 {
 
-	public boolean validate( File valDatei, File directoryOfLogfile )
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
 			throws Validation1fPrimaryDataException;
 
 }

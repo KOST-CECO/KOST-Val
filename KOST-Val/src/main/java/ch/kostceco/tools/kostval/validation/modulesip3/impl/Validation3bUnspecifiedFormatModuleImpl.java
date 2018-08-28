@@ -30,7 +30,6 @@ import uk.gov.nationalarchives.droid.core.signature.droid4.FileFormatHit;
 import uk.gov.nationalarchives.droid.core.signature.droid4.IdentificationFile;
 import uk.gov.nationalarchives.droid.core.signature.droid4.signaturefile.FileFormat;
 import ch.kostceco.tools.kostval.exception.modulesip3.Validation3bUnspecifiedFormatException;
-import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesip3.Validation3bUnspecifiedFormatModule;
@@ -39,26 +38,14 @@ public class Validation3bUnspecifiedFormatModuleImpl extends ValidationModuleImp
 		Validation3bUnspecifiedFormatModule
 {
 
-	private ConfigurationService	configurationService;
-
-	public ConfigurationService getConfigurationService()
-	{
-		return configurationService;
-	}
-
-	public void setConfigurationService( ConfigurationService configurationService )
-	{
-		this.configurationService = configurationService;
-	}
-
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile )
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
 			throws Validation3bUnspecifiedFormatException
 	{
 		boolean showOnWork = true;
 		int onWork = 410;
 		// Informationen zur Darstellung "onWork" holen
-		String onWorkConfig = getConfigurationService().getShowProgressOnWork();
+		String onWorkConfig = configMap.get( "ShowProgressOnWork" );
 		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
 		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
 		 * ref="configurationService" /> */
@@ -75,7 +62,7 @@ public class Validation3bUnspecifiedFormatModuleImpl extends ValidationModuleImp
 
 		Map<String, File> filesInSipFile = new HashMap<String, File>();
 
-		String nameOfSignature = getConfigurationService().getPathToDroidSignatureFile();
+		String nameOfSignature = configMap.get( "PathToDroidSignatureFile" );
 		if ( nameOfSignature.startsWith( "Configuration-Error:" ) ) {
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_XML_MODUL_Cb_SIP ) + nameOfSignature );
@@ -141,7 +128,8 @@ public class Validation3bUnspecifiedFormatModuleImpl extends ValidationModuleImp
 			}
 		}
 
-		Map<String, String> hPuids = getConfigurationService().getAllowedPuids();
+		String allowedformats = configMap.get( "allowedformats" );
+		// Map<String, String> hPuids = getConfigurationService().getAllowedPuids();
 		Map<String, Integer> counterPuid = new HashMap<String, Integer>();
 
 		Set<String> fileKeys = filesInSipFile.keySet();
@@ -156,10 +144,9 @@ public class Validation3bUnspecifiedFormatModuleImpl extends ValidationModuleImp
 				for ( int x = 0; x < ifile.getNumHits(); x++ ) {
 					FileFormatHit ffh = ifile.getHit( x );
 					FileFormat ff = ffh.getFileFormat();
+					String ffString = ff.getPUID() + "";
 
-					String extensionConfig = hPuids.get( ff.getPUID() );
-
-					if ( extensionConfig == null ) {
+					if ( !allowedformats.contains( ffString ) ) {
 
 						getMessageService().logError(
 								getTextResourceService().getText( MESSAGE_XML_MODUL_Cb_SIP )

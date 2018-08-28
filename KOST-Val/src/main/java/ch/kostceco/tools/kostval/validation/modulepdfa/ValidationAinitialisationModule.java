@@ -20,12 +20,13 @@
 package ch.kostceco.tools.kostval.validation.modulepdfa;
 
 import java.io.File;
+import java.util.Map;
 
 import ch.kostceco.tools.kostval.exception.modulepdfa.ValidationApdfvalidationException;
 import ch.kostceco.tools.kostval.validation.ValidationModule;
 
-/** Initialisierung PDF-Tools Kontrolle ob ein Schlüssel vorhanden ist (Vollversion) wenn nicht, wird
- * die eingeschränkte Version verwendet Da der Schlüssel nur für KOST-Val verwendet werden darf,
+/** Initialisierung PDF-Tools Kontrolle ob ein Schlï¿½ssel vorhanden ist (Vollversion) wenn nicht, wird
+ * die eingeschrï¿½nkte Version verwendet Da der Schlï¿½ssel nur fï¿½r KOST-Val verwendet werden darf,
  * wird er nicht publiziert
  * 
  * @author Rc Claire Roethlisberger, KOST-CECO */
@@ -33,7 +34,7 @@ import ch.kostceco.tools.kostval.validation.ValidationModule;
 public interface ValidationAinitialisationModule extends ValidationModule
 {
 
-	public boolean validate( File valDatei, File directoryOfLogfile )
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
 			throws ValidationApdfvalidationException;
 
 }

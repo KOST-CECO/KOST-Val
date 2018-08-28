@@ -19,7 +19,7 @@
 
 package ch.kostceco.tools.kostval.validation.modulesip1.impl;
 
-import java.io.File;
+import java.io.File; import java.util.Map;
 import java.io.FileInputStream;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -31,7 +31,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import ch.kostceco.tools.kostval.exception.modulesip1.Validation1eSipTypeException;
-import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesip1.Validation1eSipTypeModule;
 
@@ -40,24 +39,12 @@ public class Validation1eSipTypeModuleImpl extends ValidationModuleImpl implemen
 		Validation1eSipTypeModule
 {
 
-	private ConfigurationService	configurationService;
-
-	public ConfigurationService getConfigurationService()
-	{
-		return configurationService;
-	}
-
-	public void setConfigurationService( ConfigurationService configurationService )
-	{
-		this.configurationService = configurationService;
-	}
-
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile )
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
 			throws Validation1eSipTypeException
 	{
 		// Informationen zur Darstellung "onWork" holen
-		String onWork = getConfigurationService().getShowProgressOnWork();
+		String onWork = configMap.get( "ShowProgressOnWork");
 		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
 		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
 		 * ref="configurationService" /> */

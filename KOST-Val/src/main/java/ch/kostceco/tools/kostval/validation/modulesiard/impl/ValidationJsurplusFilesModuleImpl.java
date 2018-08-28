@@ -23,6 +23,7 @@ import static org.apache.commons.io.IOUtils.closeQuietly;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.util.Map;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -30,7 +31,6 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -43,7 +43,6 @@ import org.jdom2.input.SAXBuilder;
 
 import ch.kostceco.tools.kostval.KOSTVal;
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationJsurplusFilesException;
-import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.util.StreamGobbler;
 import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
@@ -60,18 +59,6 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl impl
 		ValidationJsurplusFilesModule
 {
 
-	public ConfigurationService	configurationService;
-
-	public ConfigurationService getConfigurationService()
-	{
-		return configurationService;
-	}
-
-	public void setConfigurationService( ConfigurationService configurationService )
-	{
-		this.configurationService = configurationService;
-	}
-
 	Map<String, String>	filesInSiardUnsorted	= new HashMap<String, String>();
 	Map<String, String>	filesInSiard					= new HashMap<String, String>();
 	Map<String, String>	tablesInSiard					= new HashMap<String, String>();
@@ -79,13 +66,13 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl impl
 	Map<String, String>	filesToRemove					= new HashMap<String, String>();
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile )
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
 			throws ValidationJsurplusFilesException
 	{
 		boolean showOnWork = true;
 		int onWork = 410;
 		// Informationen zur Darstellung "onWork" holen
-		String onWorkConfig = getConfigurationService().getShowProgressOnWork();
+		String onWorkConfig = configMap.get( "ShowProgressOnWork" );
 		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
 		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
 		 * ref="configurationService" /> */
@@ -100,7 +87,7 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl impl
 
 		boolean valid = true;
 		try {
-			String pathToWorkDir = getConfigurationService().getPathToWorkDir();
+			String pathToWorkDir = configMap.get( "PathToWorkDir" );
 			pathToWorkDir = pathToWorkDir + File.separator + "SIARD";
 			String contentString = new StringBuilder( pathToWorkDir ).append( File.separator )
 					.append( "content" ).toString();
@@ -211,7 +198,7 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl impl
 
 			try {
 				// Struktur aus metadata.xml herauslesen (path)
-				pathToWorkDir = getConfigurationService().getPathToWorkDir();
+				pathToWorkDir = configMap.get( "PathToWorkDir" );
 				pathToWorkDir = pathToWorkDir + File.separator + "SIARD";
 				File metadataXml = new File( new StringBuilder( pathToWorkDir ).append( File.separator )
 						.append( "header" ).append( File.separator ).append( "metadata.xml" ).toString() );
@@ -242,7 +229,7 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl impl
 				List<Element> schemas = ((org.jdom2.Document) document).getRootElement()
 						.getChild( "schemas", ns ).getChildren( "schema", ns );
 				for ( Element schema : schemas ) {
-					valid = validateSchema( schema, ns, pathToWorkDir );
+					valid = validateSchema( schema, ns, pathToWorkDir, configMap );
 					if ( showOnWork ) {
 						if ( onWork == 410 ) {
 							onWork = 2;
@@ -545,12 +532,13 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl impl
 
 	}
 
-	private boolean validateSchema( Element schema, Namespace ns, String pathToWorkDir )
+	private boolean validateSchema( Element schema, Namespace ns, String pathToWorkDir,
+			Map<String, String> configMap )
 	{
 		boolean showOnWork = true;
 		int onWork = 410;
 		// Informationen zur Darstellung "onWork" holen
-		String onWorkConfig = getConfigurationService().getShowProgressOnWork();
+		String onWorkConfig = configMap.get( "ShowProgressOnWork" );
 		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
 		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
 		 * ref="configurationService" /> */

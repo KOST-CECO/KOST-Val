@@ -24,6 +24,7 @@ import static org.apache.commons.io.IOUtils.closeQuietly;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
+import java.util.Map;
 import java.io.FileInputStream;
 import java.io.FileReader;
 import java.util.Arrays;
@@ -41,7 +42,6 @@ import uk.gov.nationalarchives.droid.core.signature.droid4.IdentificationFile;
 import uk.gov.nationalarchives.droid.core.signature.droid4.signaturefile.FileFormat;
 import ch.kostceco.tools.kostval.KOSTVal;
 import ch.kostceco.tools.kostval.exception.modulejp2.ValidationAjp2validationException;
-import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulejp2.ValidationAvalidationAModule;
@@ -55,20 +55,9 @@ import ch.kostceco.tools.kostval.validation.modulejp2.ValidationAvalidationAModu
 public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl implements
 		ValidationAvalidationAModule
 {
-	private ConfigurationService	configurationService;
-
-	public ConfigurationService getConfigurationService()
-	{
-		return configurationService;
-	}
-
-	public void setConfigurationService( ConfigurationService configurationService )
-	{
-		this.configurationService = configurationService;
-	}
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile )
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
 			throws ValidationAjp2validationException
 	{
 
@@ -211,10 +200,7 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl imple
 				} else {
 					// Droid-Erkennung, damit Details ausgegeben werden können
 
-					/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
-					 * entsprechenden Modul die property anzugeben: <property name="configurationService"
-					 * ref="configurationService" /> */
-					String nameOfSignature = getConfigurationService().getPathToDroidSignatureFile();
+					String nameOfSignature = configMap.get( "PathToDroidSignatureFile" );
 					if ( nameOfSignature.startsWith( "Configuration-Error:" ) ) {
 						getMessageService().logError(
 								getTextResourceService().getText( MESSAGE_XML_MODUL_A_JP2 ) + nameOfSignature );

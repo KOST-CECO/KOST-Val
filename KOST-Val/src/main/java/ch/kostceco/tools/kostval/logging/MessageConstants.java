@@ -107,6 +107,7 @@ public interface MessageConstants
 	String	MESSAGE_XML_MODUL_H_PDFA											= "message.xml.modul.h.pdfa";
 	String	MESSAGE_XML_MODUL_I_PDFA											= "message.xml.modul.i.pdfa";
 	String	MESSAGE_XML_MODUL_J_PDFA											= "message.xml.modul.j.pdfa";
+	String	MESSAGE_XML_MODUL_K_PDFA											= "message.xml.modul.k.pdfa";
 
 	String	MESSAGE_XML_MODUL_A_JP2												= "message.xml.modul.a.jp2";
 	String	MESSAGE_XML_MODUL_B_JP2												= "message.xml.modul.b.jp2";
@@ -275,6 +276,9 @@ public interface MessageConstants
 	String	ERROR_XML_J_INVALID_JP2												= "error.xml.j.invalid.jp2";
 	String	ERROR_XML_J_JBIG2															= "error.xml.j.jbig2";
 	String	ERROR_XML_J_ENCRYPT														= "error.xml.j.encrypt";
+
+	String	ERROR_XML_K_OVERVIEW													= "error.xml.k.overview";
+	String	ERROR_XML_K_DETAIL														= "error.xml.k.detail";
 
 	// *************JP2-Meldungen*************************************************************************
 	// Modul A Meldungen

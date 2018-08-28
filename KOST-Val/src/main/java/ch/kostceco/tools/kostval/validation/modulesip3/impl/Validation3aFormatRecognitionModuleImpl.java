@@ -19,7 +19,7 @@
 
 package ch.kostceco.tools.kostval.validation.modulesip3.impl;
 
-import java.io.File;
+import java.io.File; 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -30,7 +30,6 @@ import uk.gov.nationalarchives.droid.core.signature.droid4.FileFormatHit;
 import uk.gov.nationalarchives.droid.core.signature.droid4.IdentificationFile;
 import uk.gov.nationalarchives.droid.core.signature.droid4.signaturefile.FileFormat;
 import ch.kostceco.tools.kostval.exception.modulesip3.Validation3aFormatRecognitionException;
-import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesip3.Validation3aFormatRecognitionModule;
@@ -39,20 +38,8 @@ public class Validation3aFormatRecognitionModuleImpl extends ValidationModuleImp
 		Validation3aFormatRecognitionModule
 {
 
-	private ConfigurationService	configurationService;
-
-	public ConfigurationService getConfigurationService()
-	{
-		return configurationService;
-	}
-
-	public void setConfigurationService( ConfigurationService configurationService )
-	{
-		this.configurationService = configurationService;
-	}
-
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile )
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
 			throws Validation3aFormatRecognitionException
 	{
 		/* für die Geschwindigkeit von Droid ja nach SignatureFile zu messen kann dies verwendet werden:
@@ -69,7 +56,7 @@ public class Validation3aFormatRecognitionModuleImpl extends ValidationModuleImp
 		boolean showOnWork = true;
 		int onWork = 410;
 		// Informationen zur Darstellung "onWork" holen
-		String onWorkConfig = getConfigurationService().getShowProgressOnWork();
+		String onWorkConfig = configMap.get( "ShowProgressOnWork");
 		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
 		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
 		 * ref="configurationService" /> */
@@ -86,7 +73,7 @@ public class Validation3aFormatRecognitionModuleImpl extends ValidationModuleImp
 
 		Map<String, File> filesInSipFile = new HashMap<String, File>();
 
-		String nameOfSignature = getConfigurationService().getPathToDroidSignatureFile();
+		String nameOfSignature = configMap.get( "PathToDroidSignatureFile");
 		if ( nameOfSignature.startsWith( "Configuration-Error:" ) ) {
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP ) + nameOfSignature );
@@ -151,8 +138,8 @@ public class Validation3aFormatRecognitionModuleImpl extends ValidationModuleImp
 				}
 			}
 		}
-
-		Map<String, String> hPuids = getConfigurationService().getAllowedPuids();
+		String allowedformats = configMap.get( "allowedformats");
+		//Map<String, String> hPuids = getConfigurationService().getAllowedPuids();
 		Map<String, Integer> counterPuid = new HashMap<String, Integer>();
 
 		Set<String> fileKeys = filesInSipFile.keySet();
@@ -167,10 +154,9 @@ public class Validation3aFormatRecognitionModuleImpl extends ValidationModuleImp
 				for ( int x = 0; x < ifile.getNumHits(); x++ ) {
 					FileFormatHit ffh = ifile.getHit( x );
 					FileFormat ff = ffh.getFileFormat();
+					String ffString=ff.getPUID()+"";
 
-					String extensionConfig = hPuids.get( ff.getPUID() );
-
-					if ( extensionConfig == null ) {
+					if ( !allowedformats.contains( ffString ) ) {
 						valid = false;
 
 						if ( counterPuid.get( ff.getPUID() ) == null ) {

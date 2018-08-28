@@ -20,15 +20,14 @@
 package ch.kostceco.tools.kostval.validation.modulesip1.impl;
 
 import java.io.File;
+import java.util.Map;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import ch.kostceco.tools.kostval.exception.modulesip1.Validation1cNamingException;
-import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesip1.Validation1cNamingModule;
@@ -38,26 +37,14 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl implement
 		Validation1cNamingModule
 {
 
-	private ConfigurationService	configurationService;
-
-	public ConfigurationService getConfigurationService()
-	{
-		return configurationService;
-	}
-
-	public void setConfigurationService( ConfigurationService configurationService )
-	{
-		this.configurationService = configurationService;
-	}
-
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile )
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
 			throws Validation1cNamingException
 	{
 		boolean showOnWork = true;
 		int onWork = 410;
 		// Informationen zur Darstellung "onWork" holen
-		String onWorkConfig = getConfigurationService().getShowProgressOnWork();
+		String onWorkConfig = configMap.get( "ShowProgressOnWork" );
 		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
 		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
 		 * ref="configurationService" /> */
@@ -138,7 +125,7 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl implement
 		}
 
 		// II.) Validierung des Formats des Dateinamen
-		patternStr = getConfigurationService().getAllowedSipName();
+		patternStr = configMap.get( "AllowedSipName" );
 		if ( patternStr.startsWith( "Configuration-Error:" ) ) {
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_XML_MODUL_Ac_SIP ) + patternStr );
@@ -380,7 +367,8 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl implement
 		}
 
 		// VI.+ VII) L�nge der Pfade (< 180)
-		Integer maxPathLength = getConfigurationService().getMaximumPathLength();
+		String maxPathLengthString = configMap.get( "MaximumPathLength" );
+		Integer maxPathLength = Integer.parseInt( maxPathLengthString );
 		try {
 			Map<String, File> fileMap = Util.getFileMap( valDatei, true );
 			Set<String> fileMapKeys = fileMap.keySet();

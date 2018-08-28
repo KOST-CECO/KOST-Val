@@ -9,11 +9,11 @@
 	<property name="source_encoding" value="ISO-8859-1" />
 	<path id="KOST-Val.classpath">
 		<pathelement location="target/classes" />
-		<pathelement location="lib/commons-configuration-1.6.jar" />
+		<pathelement location="lib/commons-configuration2-2.3.jar" />
 		<pathelement location="lib/log4j-1.2.12.jar" />
 		<pathelement location="lib/spring-context-3.0.0.RELEASE.jar" />
-		<pathelement location="lib/commons-logging-1.1.1.jar" />
-		<pathelement location="lib/commons-lang-2.4.jar" />
+		<pathelement location="lib/commons-logging-1.2.jar" />
+		<pathelement location="lib/commons-lang3-3.7.jar" />
 		<pathelement location="lib/spring-beans-3.0.0.RELEASE.jar" />
 		<pathelement location="lib/spring-core-3.0.0.RELEASE.jar" />
 		<pathelement location="lib/spring-asm-3.0.0.RELEASE.jar" />
@@ -24,10 +24,10 @@
 		<pathelement location="lib/spring-security-core-3.0.0.RELEASE.jar" />
 		<pathelement location="lib/spring-test-3.0.0.RELEASE.jar" />
 		<pathelement location="lib/spring-tx-3.0.0.RELEASE.jar" />
-		<pathelement location="lib/commons-beanutils-1.7.0.jar" />
+		<pathelement location="lib/commons-beanutils-1.9.3.jar" />
 		<pathelement location="lib/commons-beanutils-core-1.8.0.jar" />
 		<pathelement location="lib/commons-collections-3.2.1.jar" />
-		<pathelement location="lib/commons-digester-1.8.jar" />
+		<pathelement location="lib/commons-digester3-3.2.jar" />
 		<pathelement location="lib/commons-io-2.0.jar" />
 		<pathelement location="lib/xml-apis-2.7.1.jar" />
 		<pathelement location="lib/zip64file-1.0.jar" />
@@ -44,7 +44,7 @@
 		<pathelement location="lib/droid-report-5.0.3.jar" />
 		<pathelement location="lib/droid-report-interfaces-5.0.3.jar" />
 		<pathelement location="lib/droid-results-5.0.3.jar" />
-		<pathelement location="lib/VALA-4.5.6.RELEASE.jar" />
+		<pathelement location="lib/VALA-4.12.0.RELEASE.jar" />
 		<pathelement location="lib/badpeggy-2.0.jar" />
 		<pathelement location="lib/itextpdf-5.5.5.jar" />
 	</path>

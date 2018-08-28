@@ -19,7 +19,7 @@
 
 package ch.kostceco.tools.kostval.validation.modulesip3;
 
-import java.io.File;
+import java.io.File; import java.util.Map;
 
 import ch.kostceco.tools.kostval.exception.modulesip3.Validation3aFormatRecognitionException;
 import ch.kostceco.tools.kostval.validation.ValidationModule;
@@ -33,7 +33,7 @@ import ch.kostceco.tools.kostval.validation.ValidationModule;
 public interface Validation3aFormatRecognitionModule extends ValidationModule
 {
 
-	public boolean validate( File valDatei, File directoryOfLogfile )
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
 			throws Validation3aFormatRecognitionException;
 
 }

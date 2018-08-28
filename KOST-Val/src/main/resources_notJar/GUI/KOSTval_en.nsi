@@ -18,7 +18,6 @@ XPStyle on
 !include WinMessages.nsh
 !include FileFunc.nsh
 !include LogicLib.nsh
-!include getJavaHome.nsh
 !include langKOSTVal_en.nsh
 !include nsDialogs.nsh
 !include XML.nsh
@@ -34,7 +33,6 @@ XPStyle on
 !define LOG           ".kost-val\logs"
 !define JARFILE       "kostval_en.jar"
 !define XTRANS        "resources\XTrans_1.8.0.4\XTrans.exe"
-!define JAVAPATH      "resources\jre6"
 
 ;--------------------------------
 Var USER
@@ -42,7 +40,6 @@ Var DIALOG
 Var KOSTVAL
 Var LOGFILE
 Var HEAPSIZE
-Var JAVA
 Var T_FLAG
 Var P_FLAG
 Var HWND
@@ -57,12 +54,6 @@ Page Custom ShowDialog LeaveDialog
 ;--------------------------------
 ; Functions
 Function .onInit
-  ; looking for java home directory
-  push ${JAVAPATH}
-  Call getJavaHome
-  pop $JAVA
-  DetailPrint "java home: $JAVA"
-  
   ; initial setting for validation folder/file
   StrCpy $KOSTVAL $EXEDIR
   
@@ -276,7 +267,7 @@ Function RunJar
 
   ; Launch java program
   ClearErrors
-  ExecWait '"$JAVA\bin\java.exe" $HEAPSIZE -jar ${JARFILE} $T_FLAG "$KOSTVAL" $P_FLAG'
+  ExecWait 'java $HEAPSIZE -jar ${JARFILE} $T_FLAG "$KOSTVAL" $P_FLAG'
   ; MessageBox MB_OK `LOGFILE:$\n"$USER\${LOG}\$LOGFILE.kost-val.log.xml"`
   IfFileExists $USER\${LOG}\$LOGFILE.kost-val.log.xml 0 prog_err
   IfErrors goto_err goto_ok
@@ -292,7 +283,7 @@ goto_err:
       Goto rm_workdir
   ${EndIf}
 prog_err:
-    MessageBox MB_OK|MB_ICONEXCLAMATION "${PROG_ERR} $\n$JAVA\bin\java.exe -jar ${JARFILE} $T_FLAG $KOSTVAL $P_FLAG"
+    MessageBox MB_OK|MB_ICONEXCLAMATION "${PROG_ERR} $\n$java -jar ${JARFILE} $T_FLAG $KOSTVAL $P_FLAG"
     Goto rm_workdir
 goto_ok:
   ; validation without error completed

@@ -21,12 +21,12 @@ package ch.kostceco.tools.kostval.validation.modulesiard.impl;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.util.Map;
 import java.io.FileReader;
 import java.util.Arrays;
 import java.util.List;
 
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationAzipException;
-import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationAzipModule;
 import ch.enterag.utils.zip.Zip64File;
@@ -42,26 +42,12 @@ import ch.enterag.utils.zip.FileEntry;
 public class ValidationAzipModuleImpl extends ValidationModuleImpl implements ValidationAzipModule
 {
 
-	private ConfigurationService	configurationService;
-
-	public ConfigurationService getConfigurationService()
-	{
-		return configurationService;
-	}
-
-	public void setConfigurationService( ConfigurationService configurationService )
-	{
-		this.configurationService = configurationService;
-	}
-
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile ) throws ValidationAzipException
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
+			throws ValidationAzipException
 	{
 		// Informationen zur Darstellung "onWork" holen
-		String onWork = getConfigurationService().getShowProgressOnWork();
-		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
-		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
-		 * ref="configurationService" /> */
+		String onWork = configMap.get( "ShowProgressOnWork" );
 		if ( onWork.equals( "no" ) ) {
 			// keine Ausgabe
 		} else if ( onWork.startsWith( "Configuration-Error:" ) ) {

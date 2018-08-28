@@ -20,6 +20,7 @@
 package ch.kostceco.tools.kostval.controller;
 
 import java.io.File;
+import java.util.Map;
 
 import ch.kostceco.tools.kostval.exception.moduletiff1.ValidationArecognitionException;
 import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationBjhoveValidationException;
@@ -42,7 +43,7 @@ import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationFmultipageVali
 import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationGtilesValidationModule;
 import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationHsizeValidationModule;
 
-/** Der Controller ruft die benötigten Module zur Validierung des TIFF-Archivs in der benötigten
+/** Der Controller ruft die benï¿½tigten Module zur Validierung des TIFF-Archivs in der benï¿½tigten
  * Reihenfolge auf.
  * 
  * Die Validierungs-Module werden mittels Spring-Dependency-Injection eingebunden. */
@@ -161,15 +162,17 @@ public class Controllertiff implements MessageConstants
 		this.textResourceService = textResourceService;
 	}
 
-	public boolean executeMandatory( File valDatei, File directoryOfLogfile )
+	public boolean executeMandatory( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap )
 	{
 		boolean valid = true;
 		// Validation Step A
 		try {
-			if ( this.getValidationArecognitionModule().validate( valDatei, directoryOfLogfile ) ) {
+			if ( this.getValidationArecognitionModule()
+					.validate( valDatei, directoryOfLogfile, configMap ) ) {
 				this.getValidationArecognitionModule().getMessageService().print();
 			} else {
-				// Ein negatives Validierungsresultat in diesem Schritt führt zum Abbruch der weiteren
+				// Ein negatives Validierungsresultat in diesem Schritt fï¿½hrt zum Abbruch der weiteren
 				// Verarbeitung
 				this.getValidationArecognitionModule().getMessageService().print();
 				return false;
@@ -188,12 +191,14 @@ public class Controllertiff implements MessageConstants
 		return valid;
 	}
 
-	public boolean executeOptional( File valDatei, File directoryOfLogfile )
+	public boolean executeOptional( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap )
 	{
 		boolean valid = true;
 		// Validation Step B
 		try {
-			if ( this.getValidationBjhoveValidationModule().validate( valDatei, directoryOfLogfile ) ) {
+			if ( this.getValidationBjhoveValidationModule().validate( valDatei, directoryOfLogfile,
+					configMap ) ) {
 				this.getValidationBjhoveValidationModule().getMessageService().print();
 			} else {
 				this.getValidationBjhoveValidationModule().getMessageService().print();
@@ -212,7 +217,8 @@ public class Controllertiff implements MessageConstants
 
 		// Validation Step C
 		try {
-			if ( this.getValidationCcompressionValidationModule().validate( valDatei, directoryOfLogfile ) ) {
+			if ( this.getValidationCcompressionValidationModule().validate( valDatei, directoryOfLogfile,
+					configMap ) ) {
 				this.getValidationCcompressionValidationModule().getMessageService().print();
 			} else {
 				this.getValidationCcompressionValidationModule().getMessageService().print();
@@ -231,7 +237,8 @@ public class Controllertiff implements MessageConstants
 
 		// Validation Step D
 		try {
-			if ( this.getValidationDphotointerValidationModule().validate( valDatei, directoryOfLogfile ) ) {
+			if ( this.getValidationDphotointerValidationModule().validate( valDatei, directoryOfLogfile,
+					configMap ) ) {
 				this.getValidationDphotointerValidationModule().getMessageService().print();
 			} else {
 				this.getValidationDphotointerValidationModule().getMessageService().print();
@@ -251,7 +258,7 @@ public class Controllertiff implements MessageConstants
 		// Validation Step E
 		try {
 			if ( this.getValidationEbitspersampleValidationModule().validate( valDatei,
-					directoryOfLogfile ) ) {
+					directoryOfLogfile, configMap ) ) {
 				this.getValidationEbitspersampleValidationModule().getMessageService().print();
 			} else {
 				this.getValidationEbitspersampleValidationModule().getMessageService().print();
@@ -270,7 +277,8 @@ public class Controllertiff implements MessageConstants
 
 		// Validation Step F
 		try {
-			if ( this.getValidationFmultipageValidationModule().validate( valDatei, directoryOfLogfile ) ) {
+			if ( this.getValidationFmultipageValidationModule().validate( valDatei, directoryOfLogfile,
+					configMap ) ) {
 				this.getValidationFmultipageValidationModule().getMessageService().print();
 			} else {
 				this.getValidationFmultipageValidationModule().getMessageService().print();
@@ -289,7 +297,8 @@ public class Controllertiff implements MessageConstants
 
 		// Validation Step G
 		try {
-			if ( this.getValidationGtilesValidationModule().validate( valDatei, directoryOfLogfile ) ) {
+			if ( this.getValidationGtilesValidationModule().validate( valDatei, directoryOfLogfile,
+					configMap ) ) {
 				this.getValidationGtilesValidationModule().getMessageService().print();
 			} else {
 				this.getValidationGtilesValidationModule().getMessageService().print();
@@ -308,7 +317,8 @@ public class Controllertiff implements MessageConstants
 
 		// Validation Step H
 		try {
-			if ( this.getValidationHsizeValidationModule().validate( valDatei, directoryOfLogfile ) ) {
+			if ( this.getValidationHsizeValidationModule().validate( valDatei, directoryOfLogfile,
+					configMap ) ) {
 				this.getValidationHsizeValidationModule().getMessageService().print();
 			} else {
 				this.getValidationHsizeValidationModule().getMessageService().print();

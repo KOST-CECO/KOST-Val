@@ -20,6 +20,7 @@
 package ch.kostceco.tools.kostval.validation.modulesiard.impl;
 
 import java.io.File;
+import java.util.Map;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -38,7 +39,6 @@ import ch.enterag.utils.zip.EntryInputStream;
 import ch.enterag.utils.zip.FileEntry;
 import ch.enterag.utils.zip.Zip64File;
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationEcolumnException;
-import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.bean.SiardTable;
 import ch.kostceco.tools.kostval.validation.bean.ValidationContext;
@@ -87,17 +87,17 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 {
 	// TODO: schema1 aus Beispiel funktioniert noch nicht (null)
 	/* Validation Context */
-	private ValidationContext			validationContext;
+	private ValidationContext					validationContext;
 	/* Service related properties */
-	private ConfigurationService	configurationService;
 	/* Validation error related properties */
-	private StringBuilder					incongruentColumnCount;
-	private StringBuilder					incongruentColumnOccurrence;
-	private StringBuilder					incongruentColumnType;
-	private StringBuilder					warningColumnType;
-	private StringBuilder					incongruentColumnSequence;
+	private StringBuilder							incongruentColumnCount;
+	private StringBuilder							incongruentColumnOccurrence;
+	private StringBuilder							incongruentColumnType;
+	private StringBuilder							warningColumnType;
+	private StringBuilder							incongruentColumnSequence;
+	public static Map<String, String>	configMapFinal	= null;
 
-	boolean												udtColumn	= false;
+	boolean														udtColumn				= false;
 
 	/** Start of the column validation. The <code>validate</code> method act as a controller. First it
 	 * initializes the validation by calling the <code>validationPrepare()</code> method and
@@ -110,11 +110,12 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 	 * @exception ValidationEcolumnException
 	 *              if the representation of the columns is invalid */
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile )
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
 			throws ValidationEcolumnException
 	{
+		configMapFinal = configMap;
 		// Informationen zur Darstellung "onWork" holen
-		String onWork = getConfigurationService().getShowProgressOnWork();
+		String onWork = configMap.get( "ShowProgressOnWork" );
 		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
 		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
 		 * ref="configurationService" /> */
@@ -132,7 +133,6 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 		boolean congruentColumnCount = false;
 		ValidationContext validationContext = new ValidationContext();
 		validationContext.setSiardArchive( valDatei );
-		validationContext.setConfigurationService( this.getConfigurationService() );
 		this.setValidationContext( validationContext );
 		try {
 			// Initialize the validation context
@@ -140,7 +140,7 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 			// Get the prepared SIARD tables from the validation context
 			valid = (this.getValidationContext().getSiardTables() == null ? false : true);
 			// Validates the number of the attributes
-			congruentColumnCount = validateColumnCount( this.getValidationContext() );
+			congruentColumnCount = validateColumnCount( this.getValidationContext(), configMap );
 			if ( congruentColumnCount == false ) {
 				valid = false;
 				getMessageService().logError(
@@ -149,7 +149,7 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 										this.getIncongruentColumnCount() ) );
 			}
 			// Validates the nullable property in metadata.xml
-			if ( validateColumnOccurrence( this.getValidationContext() ) == false ) {
+			if ( validateColumnOccurrence( this.getValidationContext(), configMap ) == false ) {
 				valid = false;
 				getMessageService().logError(
 						getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
@@ -157,7 +157,7 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 										this.getIncongruentColumnOccurrence() ) );
 			}
 			// Validates the type of table attributes in metadata.xml
-			if ( validateColumnType( this.getValidationContext() ) == false ) {
+			if ( validateColumnType( this.getValidationContext(), configMap ) == false ) {
 				valid = false;
 				getMessageService().logError(
 						getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
@@ -207,7 +207,7 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 							+ getTextResourceService().getText( MESSAGE_XML_E_PROPERTIES_ERROR ) );
 		}
 		// Initialize internal path configuration of the SIARD archive
-		boolean pathInitialized = initializePath( validationContext );
+		boolean pathInitialized = initializePath( validationContext, configMapFinal );
 		if ( pathInitialized == false ) {
 			prepared = false;
 			getMessageService().logError(
@@ -215,7 +215,7 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 							+ getTextResourceService().getText( MESSAGE_XML_E_PATH_ERROR ) );
 		}
 		// Extract the SIARD archive and distribute the content to the validation context
-		boolean siardArchiveExtracted = extractSiardArchive( validationContext );
+		boolean siardArchiveExtracted = extractSiardArchive( validationContext, configMapFinal );
 		if ( siardArchiveExtracted == false ) {
 			prepared = false;
 			getMessageService().logError(
@@ -223,7 +223,7 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 							+ getTextResourceService().getText( MESSAGE_XML_E_EXTRACT_ERROR ) );
 		}
 		// Pick the metadata.xml and load it to the validation context
-		boolean metadataXMLpicked = pickMetadataXML( validationContext );
+		boolean metadataXMLpicked = pickMetadataXML( validationContext, configMapFinal );
 		if ( metadataXMLpicked == false ) {
 			prepared = false;
 			getMessageService().logError(
@@ -239,7 +239,7 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 							+ getTextResourceService().getText( MESSAGE_XML_E_XML_ACCESS_ERROR ) );
 		}
 		// Prepare the data to be validated such as metadata.xml and the according XML schemas
-		boolean validationDataPrepared = prepareValidationData( validationContext );
+		boolean validationDataPrepared = prepareValidationData( validationContext, configMapFinal );
 		if ( validationDataPrepared == false ) {
 			prepared = false;
 			getMessageService().logError(
@@ -251,15 +251,13 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 
 	/* [E.1]Counts the columns in metadata.xml and compares it to the number of columns in the
 	 * according XML schema files */
-	private boolean validateColumnCount( ValidationContext validationContext ) throws Exception
+	private boolean validateColumnCount( ValidationContext validationContext,
+			Map<String, String> configMap ) throws Exception
 	{
 		boolean showOnWork = true;
 		int onWork = 410;
 		// Informationen zur Darstellung "onWork" holen
-		String onWorkConfig = getConfigurationService().getShowProgressOnWork();
-		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
-		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
-		 * ref="configurationService" /> */
+		String onWorkConfig = configMap.get( "ShowProgressOnWork" );
 		if ( onWorkConfig.equals( "no" ) ) {
 			// keine Ausgabe
 			showOnWork = false;
@@ -320,15 +318,13 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 
 	/* [E.2]Compares the <nullable> Element of the metadata.xml to the minOccurs attributesin the
 	 * according XML schemata */
-	private boolean validateColumnOccurrence( ValidationContext validationContext ) throws Exception
+	private boolean validateColumnOccurrence( ValidationContext validationContext,
+			Map<String, String> configMap ) throws Exception
 	{
 		boolean showOnWork = true;
 		int onWork = 410;
 		// Informationen zur Darstellung "onWork" holen
-		String onWorkConfig = getConfigurationService().getShowProgressOnWork();
-		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
-		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
-		 * ref="configurationService" /> */
+		String onWorkConfig = configMap.get( "ShowProgressOnWork" );
 		if ( onWorkConfig.equals( "no" ) ) {
 			// keine Ausgabe
 			showOnWork = false;
@@ -435,15 +431,13 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 	}
 
 	/* [E.3]Compares the column types in the metadata.xml to the accordingXML schemata */
-	private boolean validateColumnType( ValidationContext validationContext ) throws Exception
+	private boolean validateColumnType( ValidationContext validationContext,
+			Map<String, String> configMap ) throws Exception
 	{
 		boolean showOnWork = true;
 		int onWork = 410;
 		// Informationen zur Darstellung "onWork" holen
-		String onWorkConfig = getConfigurationService().getShowProgressOnWork();
-		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
-		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
-		 * ref="configurationService" /> */
+		String onWorkConfig = configMap.get( "ShowProgressOnWork" );
 		if ( onWorkConfig.equals( "no" ) ) {
 			// keine Ausgabe
 			showOnWork = false;
@@ -551,7 +545,7 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 					// Trim the column types - eliminates the brackets and specific numeric parameters
 					String trimmedExpectedType = trimLeftSideType( leftSide, delimiter );
 					// Designing expected column type in table.xsd, called "rightSide"
-					String pathToWorkDir = getConfigurationService().getPathToWorkDir();
+					String pathToWorkDir = configMap.get( "PathToWorkDir" );
 					pathToWorkDir = pathToWorkDir + File.separator + "SIARD";
 					File metadataXml = new File( new StringBuilder( pathToWorkDir ).append( File.separator )
 							.append( "header" ).append( File.separator ).append( "metadata.xml" ).toString() );
@@ -680,13 +674,14 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 	}
 
 	/* [E.0.2]Initializes the SIARD path configuration */
-	private boolean initializePath( ValidationContext validationContext ) throws Exception
+	private boolean initializePath( ValidationContext validationContext, Map<String, String> configMap )
+			throws Exception
 	{
 		boolean successfullyCommitted = false;
 		StringBuilder headerPath = new StringBuilder();
 		StringBuilder contentPath = new StringBuilder();
 		// Initializing validation Logging
-		String workDir = validationContext.getConfigurationService().getPathToWorkDir();
+		String workDir = configMap.get( "PathToWorkDir" );
 		// Preparing the internal SIARD directory structure
 		headerPath.append( workDir );
 		headerPath.append( File.separator );
@@ -753,16 +748,13 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 	}
 
 	/* [E.0.3]Extracting the SIARD packages */
-	private boolean extractSiardArchive( ValidationContext validationContext )
-			throws FileNotFoundException, IOException, Exception
+	private boolean extractSiardArchive( ValidationContext validationContext,
+			Map<String, String> configMap ) throws FileNotFoundException, IOException, Exception
 	{
 		boolean showOnWork = true;
 		int onWork = 410;
 		// Informationen zur Darstellung "onWork" holen
-		String onWorkConfig = getConfigurationService().getShowProgressOnWork();
-		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
-		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
-		 * ref="configurationService" /> */
+		String onWorkConfig = configMap.get( "ShowProgressOnWork" );
 		if ( onWorkConfig.equals( "no" ) ) {
 			// keine Ausgabe
 			showOnWork = false;
@@ -775,7 +767,7 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 		// Initializing the access to the SIARD archive
 		Zip64File zipfile = new Zip64File( validationContext.getSiardArchive() );
 		List<FileEntry> fileEntryList = zipfile.getListFileEntries();
-		String pathToWorkDir = validationContext.getConfigurationService().getPathToWorkDir();
+		String pathToWorkDir = configMap.get( "PathToWorkDir" );
 		File tmpDir = new File( pathToWorkDir );
 		// Initializing the resulting Hashmap containing all files, indexed by its absolute path
 		HashMap<String, File> extractedSiardFiles = new HashMap<String, File>();
@@ -833,11 +825,12 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 	}
 
 	/* [E.0.4]Pick up the metadata.xml from the SIARD package */
-	private boolean pickMetadataXML( ValidationContext validationContext ) throws Exception
+	private boolean pickMetadataXML( ValidationContext validationContext,
+			Map<String, String> configMap ) throws Exception
 	{
 		boolean successfullyCommitted = false;
 		StringBuilder pathToMetadataXML = new StringBuilder();
-		pathToMetadataXML.append( validationContext.getConfigurationService().getPathToWorkDir() );
+		pathToMetadataXML.append( configMap.get( "PathToWorkDir" ) );
 		pathToMetadataXML.append( File.separator );
 		pathToMetadataXML.append( "header" );
 		pathToMetadataXML.append( File.separator );
@@ -859,16 +852,13 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 	}
 
 	/* [E.0.6]Preparing the data to be validated */
-	private boolean prepareValidationData( ValidationContext validationContext )
-			throws JDOMException, IOException, Exception
+	private boolean prepareValidationData( ValidationContext validationContext,
+			Map<String, String> configMap ) throws JDOMException, IOException, Exception
 	{
 		boolean showOnWork = true;
 		int onWork = 410;
 		// Informationen zur Darstellung "onWork" holen
-		String onWorkConfig = getConfigurationService().getShowProgressOnWork();
-		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
-		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
-		 * ref="configurationService" /> */
+		String onWorkConfig = configMap.get( "ShowProgressOnWork" );
 		if ( onWorkConfig.equals( "no" ) ) {
 			// keine Ausgabe
 			showOnWork = false;
@@ -883,7 +873,7 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 		List<SiardTable> siardTables = new ArrayList<SiardTable>();
 		Document document = validationContext.getMetadataXMLDocument();
 		Element rootElement = document.getRootElement();
-		String workingDirectory = validationContext.getConfigurationService().getPathToWorkDir();
+		String workingDirectory = configMap.get( "PathToWorkDir" );
 		String siardSchemasElementsName = "schemas";
 		// Gets the list of <schemas> elements from metadata.xml
 		List<Element> siardSchemasElements = rootElement.getChildren( siardSchemasElementsName,
@@ -976,18 +966,6 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 	}
 
 	// Setter and Getter methods
-	/** @return the configurationService */
-	public ConfigurationService getConfigurationService()
-	{
-		return configurationService;
-	}
-
-	/** @param configurationService
-	 *          the configurationService to set */
-	public void setConfigurationService( ConfigurationService configurationService )
-	{
-		this.configurationService = configurationService;
-	}
 
 	/** @return the validationContext */
 	public ValidationContext getValidationContext()

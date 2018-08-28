@@ -41,7 +41,7 @@ import ch.enterag.utils.zip.FileEntry;
 import ch.enterag.utils.zip.Zip64File;
 
 /** @author razm Daniel Ludin, Bedag AG @version 0.2.0 Diese Klasse benutzt die Zip64File Library zum
- *         Komprimieren und Archivieren von Dateien, welche grösser als 4 G sein können. */
+ *         Komprimieren und Archivieren von Dateien, welche grï¿½sser als 4 G sein kï¿½nnen. */
 
 public class Zip64Archiver
 {

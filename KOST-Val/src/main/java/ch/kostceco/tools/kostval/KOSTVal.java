@@ -26,6 +26,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
+//import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
@@ -142,16 +143,13 @@ public class KOSTVal implements MessageConstants
 				+ ".kost-val" + File.separator + "configuration" );
 		File configFile = new File( directoryOfConfigfile + File.separator + "kostval.conf.xml" );
 		if ( !configFile.exists() ) {
-			directoryOfConfigfile.mkdirs(); 
+			directoryOfConfigfile.mkdirs();
 			Util.copyFile( configFileZip, configFile );
 		}
+		Map<String, String> configMap = kostval.getConfigurationService().configMap();
 
 		// Ueberprüfung des Parameters (Log-Verzeichnis)
-		String pathToLogfile = kostval.getConfigurationService().getPathToLogfile();
-		if ( pathToLogfile.startsWith( "Configuration-Error:" ) ) {
-			System.out.println( pathToLogfile );
-			System.exit( 1 );
-		}
+		String pathToLogfile = configMap.get( "PathToLogfile" );
 		File directoryOfLogfile = new File( pathToLogfile );
 
 		if ( !directoryOfLogfile.exists() ) {
@@ -183,28 +181,23 @@ public class KOSTVal implements MessageConstants
 		// File logDirValDatei = new File( pathToLogfile, valDatei.getName() );
 
 		// Informationen zum Arbeitsverzeichnis holen
-		String pathToWorkDir = kostval.getConfigurationService().getPathToWorkDir();
-		if ( pathToWorkDir.startsWith( "Configuration-Error:" ) ) {
-			System.out.println( kostval.getTextResourceService().getText( MESSAGE_XML_MODUL_Ab_SIP )
-					+ pathToWorkDir );
-			System.exit( 1 );
-		}
+		String pathToWorkDir = configMap.get( "PathToWorkDir" );
 		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
 		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
 		 * ref="configurationService" /> */
 
 		// Informationen holen, welche Formate validiert werden sollen
-		String pdfaValidationPdftools = kostval.getConfigurationService().pdftools();
-		String pdfaValidationCallas = kostval.getConfigurationService().callas();
+		String pdfaValidationPdftools = configMap.get( "pdftools" );
+		String pdfaValidationCallas = configMap.get( "callas" );
 		String pdfaValidation = "no";
 		if ( pdfaValidationPdftools.equalsIgnoreCase( "yes" )
 				|| pdfaValidationCallas.equalsIgnoreCase( "yes" ) ) {
 			pdfaValidation = "yes";
 		}
-		String siardValidation = kostval.getConfigurationService().siardValidation();
-		String tiffValidation = kostval.getConfigurationService().tiffValidation();
-		String jp2Validation = kostval.getConfigurationService().jp2Validation();
-		String jpegValidation = kostval.getConfigurationService().jpegValidation();
+		String siardValidation = configMap.get( "siardValidation" );
+		String tiffValidation = configMap.get( "tiffValidation" );
+		String jp2Validation = configMap.get( "jp2Validation" );
+		String jpegValidation = configMap.get( "jpegValidation" );
 		if ( pdfaValidationPdftools.startsWith( "Configuration-Error:" ) ) {
 			System.out.println( kostval.getTextResourceService().getText( MESSAGE_XML_MODUL_Ab_SIP )
 					+ pdfaValidationPdftools );
@@ -511,8 +504,13 @@ public class KOSTVal implements MessageConstants
 
 			// TODO: Formatvalidierung an einer Datei --> erledigt --> nur Marker
 			if ( !valDatei.isDirectory() ) {
+				/* System.out.println( new Timestamp( System.currentTimeMillis() ) +
+				 * " Formatvalidierung an einer Datei 516 " ); */
 
-				boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose, dirOfJarPath );
+				boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
+						dirOfJarPath, configMap );
+				/* System.out.println( new Timestamp( System.currentTimeMillis() ) +
+				 * " Formatvalidierung erfolgt 519 " ); */
 
 				LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_FORMAT2 ) );
 
@@ -524,8 +522,11 @@ public class KOSTVal implements MessageConstants
 				LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_LOGEND ) );
 				// logFile bereinigung (& End und ggf 3c)
 				Util.valEnd3cAmp( "", logFile );
+				/* System.out.println( new Timestamp( System.currentTimeMillis() ) + " Konfig kopieren 532 "
+				 * ); */
 
 				// Die Konfiguration hereinkopieren
+				// TODO: Kopieren mit Files.copy("source.txt", "dest.txt"); ab JRE7 möglich
 				try {
 					DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 					factory.setValidating( false );
@@ -560,6 +561,8 @@ public class KOSTVal implements MessageConstants
 									"CopyConfigException: " + e.getMessage() ) );
 					System.out.println( "CopyConfigException: " + e.getMessage() );
 				}
+				/* System.out.println( new Timestamp( System.currentTimeMillis() ) +
+				 * " Konfig Kopiert. Start Bereinigung 569 " ); */
 
 				if ( valFile ) {
 					// Löschen des Arbeitsverzeichnisses, falls eines angelegt wurde
@@ -611,7 +614,7 @@ public class KOSTVal implements MessageConstants
 								System.out.print( countToValidated + " " );
 
 								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
-										dirOfJarPath );
+										dirOfJarPath, configMap );
 
 								// Löschen des Arbeitsverzeichnisses, falls eines angelegt wurde
 								if ( tmpDir.exists() ) {
@@ -637,7 +640,7 @@ public class KOSTVal implements MessageConstants
 								System.out.print( countToValidated + " " );
 
 								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
-										dirOfJarPath );
+										dirOfJarPath, configMap );
 
 								// Löschen des Arbeitsverzeichnisses, falls eines angelegt wurde
 								if ( tmpDir.exists() ) {
@@ -663,7 +666,7 @@ public class KOSTVal implements MessageConstants
 								System.out.print( countToValidated + " " );
 
 								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
-										dirOfJarPath );
+										dirOfJarPath, configMap );
 
 								// Löschen des Arbeitsverzeichnisses, falls eines angelegt wurde
 								if ( tmpDir.exists() ) {
@@ -687,7 +690,7 @@ public class KOSTVal implements MessageConstants
 								System.out.print( countToValidated + " " );
 
 								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
-										dirOfJarPath );
+										dirOfJarPath, configMap );
 
 								// Löschen des Arbeitsverzeichnisses, falls eines angelegt wurde
 								if ( tmpDir.exists() ) {
@@ -714,7 +717,7 @@ public class KOSTVal implements MessageConstants
 								System.out.print( countToValidated + " " );
 
 								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
-										dirOfJarPath );
+										dirOfJarPath, configMap );
 
 								// Löschen des Arbeitsverzeichnisses, falls eines angelegt wurde
 								if ( tmpDir.exists() ) {
@@ -1199,7 +1202,7 @@ public class KOSTVal implements MessageConstants
 								int countToValidated = numberInFileMap - count;
 								System.out.print( countToValidated + " " );
 								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
-										dirOfJarPath );
+										dirOfJarPath, configMap );
 								if ( valFile ) {
 									pdfaCountIo = pdfaCountIo + 1;
 								} else {
@@ -1226,7 +1229,7 @@ public class KOSTVal implements MessageConstants
 								int countToValidated = numberInFileMap - count;
 								System.out.print( countToValidated + " " );
 								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
-										dirOfJarPath );
+										dirOfJarPath, configMap );
 								if ( valFile ) {
 									tiffCountIo = tiffCountIo + 1;
 								} else {
@@ -1254,7 +1257,7 @@ public class KOSTVal implements MessageConstants
 								System.out.print( countToValidated + " " );
 
 								// Arbeitsverzeichnis zum Entpacken des Archivs erstellen
-								String pathToWorkDirSiard = kostval.getConfigurationService().getPathToWorkDir();
+								String pathToWorkDirSiard = configMap.get( "PathToWorkDir" );
 								File tmpDirSiard = new File( pathToWorkDirSiard + File.separator + "SIARD" );
 								if ( tmpDirSiard.exists() ) {
 									Util.deleteDir( tmpDirSiard );
@@ -1263,7 +1266,7 @@ public class KOSTVal implements MessageConstants
 									tmpDirSiard.mkdir();
 								}
 								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
-										dirOfJarPath );
+										dirOfJarPath, configMap );
 								if ( valFile ) {
 									siardCountIo = siardCountIo + 1;
 								} else {
@@ -1290,7 +1293,7 @@ public class KOSTVal implements MessageConstants
 								int countToValidated = numberInFileMap - count;
 								System.out.print( countToValidated + " " );
 								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
-										dirOfJarPath );
+										dirOfJarPath, configMap );
 								if ( valFile ) {
 									jpegCountIo = jpegCountIo + 1;
 								} else {
@@ -1317,7 +1320,7 @@ public class KOSTVal implements MessageConstants
 								int countToValidated = numberInFileMap - count;
 								System.out.print( countToValidated + " " );
 								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
-										dirOfJarPath );
+										dirOfJarPath, configMap );
 								if ( valFile ) {
 									jp2CountIo = jp2CountIo + 1;
 								} else {
@@ -1419,7 +1422,7 @@ public class KOSTVal implements MessageConstants
 
 				Controllersip controller = (Controllersip) context.getBean( "controllersip" );
 				boolean okMandatory = false;
-				okMandatory = controller.executeMandatory( valDatei, directoryOfLogfile );
+				okMandatory = controller.executeMandatory( valDatei, directoryOfLogfile, configMap );
 				boolean ok = false;
 
 				/* die Validierungen 1a - 1d sind obligatorisch, wenn sie bestanden wurden, können die
@@ -1429,7 +1432,7 @@ public class KOSTVal implements MessageConstants
 				 * 1a wurde bereits getestet (vor der Formatvalidierung entsprechend fängt der Controller
 				 * mit 1b an */
 				if ( okMandatory ) {
-					ok = controller.executeOptional( valDatei, directoryOfLogfile );
+					ok = controller.executeOptional( valDatei, directoryOfLogfile, configMap );
 				}
 				// Formatvalidierung validFormat
 				ok = (ok && okMandatory && validFormat);
@@ -1591,7 +1594,7 @@ public class KOSTVal implements MessageConstants
 
 	// TODO: ValFile --> Formatvalidierung einer Datei --> erledigt --> nur Marker
 	private static boolean valFile( File valDatei, String logFileName, File directoryOfLogfile,
-			boolean verbose, String dirOfJarPath ) throws IOException
+			boolean verbose, String dirOfJarPath, Map<String, String> configMap ) throws IOException
 	{
 		ApplicationContext context = new ClassPathXmlApplicationContext(
 				"classpath:config/applicationContext.xml" );
@@ -1624,7 +1627,7 @@ public class KOSTVal implements MessageConstants
 					originalValName ) );
 			System.out.print( "JP2:   " + originalValName + " " );
 			Controllerjp2 controller1 = (Controllerjp2) context.getBean( "controllerjp2" );
-			boolean okMandatory = controller1.executeMandatory( valDatei, directoryOfLogfile );
+			boolean okMandatory = controller1.executeMandatory( valDatei, directoryOfLogfile, configMap );
 			valFile = okMandatory;
 
 			if ( okMandatory ) {
@@ -1662,7 +1665,7 @@ public class KOSTVal implements MessageConstants
 					originalValName ) );
 			System.out.print( "JPEG:  " + originalValName + " " );
 			Controllerjpeg controller1 = (Controllerjpeg) context.getBean( "controllerjpeg" );
-			boolean okMandatory = controller1.executeMandatory( valDatei, directoryOfLogfile );
+			boolean okMandatory = controller1.executeMandatory( valDatei, directoryOfLogfile, configMap );
 			valFile = okMandatory;
 
 			if ( okMandatory ) {
@@ -1686,13 +1689,13 @@ public class KOSTVal implements MessageConstants
 					originalValName ) );
 			System.out.print( "TIFF:  " + originalValName + " " );
 			Controllertiff controller1 = (Controllertiff) context.getBean( "controllertiff" );
-			boolean okMandatory = controller1.executeMandatory( valDatei, directoryOfLogfile );
+			boolean okMandatory = controller1.executeMandatory( valDatei, directoryOfLogfile, configMap );
 			boolean ok = false;
 
 			/* die Validierungen A sind obligatorisch, wenn sie bestanden wurden, können die restlichen
 			 * Validierungen, welche nicht zum Abbruch der Applikation führen, ausgeführt werden. */
 			if ( okMandatory ) {
-				ok = controller1.executeOptional( valDatei, directoryOfLogfile );
+				ok = controller1.executeOptional( valDatei, directoryOfLogfile, configMap );
 			}
 
 			ok = (ok && okMandatory);
@@ -1732,13 +1735,13 @@ public class KOSTVal implements MessageConstants
 					originalValName ) );
 			System.out.print( "SIARD: " + originalValName + " " );
 			Controllersiard controller2 = (Controllersiard) context.getBean( "controllersiard" );
-			boolean okMandatory = controller2.executeMandatory( valDatei, directoryOfLogfile );
+			boolean okMandatory = controller2.executeMandatory( valDatei, directoryOfLogfile, configMap );
 			boolean ok = false;
 
 			/* die Validierungen A-D sind obligatorisch, wenn sie bestanden wurden, können die restlichen
 			 * Validierungen, welche nicht zum Abbruch der Applikation führen, ausgeführt werden. */
 			if ( okMandatory ) {
-				ok = controller2.executeOptional( valDatei, directoryOfLogfile );
+				ok = controller2.executeOptional( valDatei, directoryOfLogfile, configMap );
 				// Ausführen der optionalen Schritte
 			}
 
@@ -1767,14 +1770,14 @@ public class KOSTVal implements MessageConstants
 			System.out.print( "PDFA:  " + originalValName );
 			Controllerpdfa controller3 = (Controllerpdfa) context.getBean( "controllerpdfa" );
 
-			boolean okMandatory = controller3.executeMandatory( valDatei, directoryOfLogfile );
+			boolean okMandatory = controller3.executeMandatory( valDatei, directoryOfLogfile, configMap );
 			boolean ok = false;
 
 			/* die Initialisierung ist obligatorisch, wenn sie bestanden wurden, können die restlichen
 			 * Validierungen, welche nicht zum Abbruch der Applikation führen, ausgeführt werden. */
 
 			if ( okMandatory ) {
-				ok = controller3.executeOptional( valDatei, directoryOfLogfile );
+				ok = controller3.executeOptional( valDatei, directoryOfLogfile, configMap );
 				// Ausführen der validierung und optionalen Bildvalidierung
 			}
 
@@ -1792,6 +1795,22 @@ public class KOSTVal implements MessageConstants
 						.logError( kostval.getTextResourceService().getText( MESSAGE_XML_VALERGEBNIS_INVALID ) );
 				LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_VALERGEBNIS_CLOSE ) );
 				System.out.println( " = Invalid" );
+			}
+
+			/* Ausgabe der Pfade zu den _FontValidation.xml Reports, falls welche generiert wurden. Ggf
+			 * löschen */
+			File fontValidationReport = new File( directoryOfLogfile, valDatei.getName()
+					+ "_FontValidation.xml" );
+			// Test.pdf_FontValidation.xml
+			if ( fontValidationReport.exists() ) {
+				if ( verbose ) {
+					// optionaler Parameter --> fontValidationReport lassen
+				} else {
+					// kein optionaler Parameter --> fontValidationReport loeschen!
+					fontValidationReport.delete();
+					fontValidationReport.deleteOnExit();
+					Util.deleteFile( fontValidationReport );
+				}
 			}
 
 		} else {

@@ -20,6 +20,7 @@
 package ch.kostceco.tools.kostval.validation.modulesiard.impl;
 
 import java.io.File;
+import java.util.Map;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,7 +37,6 @@ import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationFrowException;
-import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.bean.ValidationContext;
@@ -60,35 +60,21 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements Va
  * <Range, RangeHandler> bereitet Probleme beim Projekt-Build. Da es nicht benoetigt wird, wurde es
  * entfernt. */
 {
-	Boolean											version1	= false;
-	Boolean											version2	= false;
+	Boolean										version1	= false;
+	Boolean										version2	= false;
 
-	private static final int		UNBOUNDED	= -1;
+	private static final int	UNBOUNDED	= -1;
 
-	public ConfigurationService	configurationService;
-
-	public ConfigurationService getConfigurationService()
-	{
-		return configurationService;
-	}
-
-	public void setConfigurationService( ConfigurationService configurationService )
-	{
-		this.configurationService = configurationService;
-	}
-
-	private XMLReader	reader;
+	private XMLReader					reader;
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile ) throws ValidationFrowException
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
+			throws ValidationFrowException
 	{
 		boolean showOnWork = true;
 		int onWork = 410;
 		// Informationen zur Darstellung "onWork" holen
-		String onWorkConfig = getConfigurationService().getShowProgressOnWork();
-		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
-		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
-		 * ref="configurationService" /> */
+		String onWorkConfig = configMap.get( "ShowProgressOnWork" );
 		if ( onWorkConfig.equals( "no" ) ) {
 			// keine Ausgabe
 			showOnWork = false;
@@ -101,7 +87,7 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements Va
 		boolean valid = true;
 		try {
 			/* Extract the metadata.xml from the temporare work folder and build a jdom document */
-			String pathToWorkDir = getConfigurationService().getPathToWorkDir();
+			String pathToWorkDir = configMap.get( "PathToWorkDir" );
 			pathToWorkDir = pathToWorkDir + File.separator + "SIARD";
 			File metadataXml = new File( new StringBuilder( pathToWorkDir ).append( File.separator )
 					.append( "header" ).append( File.separator ).append( "metadata.xml" ).toString() );
@@ -127,7 +113,7 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements Va
 			List<Element> schemas = document.getRootElement().getChild( "schemas", ns )
 					.getChildren( "schema", ns );
 			for ( Element schema : schemas ) {
-				valid = validateSchema( schema, ns, pathToWorkDir );
+				valid = validateSchema( schema, ns, pathToWorkDir, configMap );
 				if ( showOnWork ) {
 					if ( onWork == 410 ) {
 						onWork = 2;
@@ -173,12 +159,13 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements Va
 		public int	max	= 1;
 	}
 
-	private boolean validateSchema( Element schema, Namespace ns, String pathToWorkDir )
+	private boolean validateSchema( Element schema, Namespace ns, String pathToWorkDir,
+			Map<String, String> configMap )
 	{
 		boolean showOnWork = true;
 		int onWork = 410;
 		// Informationen zur Darstellung "onWork" holen
-		String onWorkConfig = getConfigurationService().getShowProgressOnWork();
+		String onWorkConfig = configMap.get( "ShowProgressOnWork" );
 		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
 		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
 		 * ref="configurationService" /> */

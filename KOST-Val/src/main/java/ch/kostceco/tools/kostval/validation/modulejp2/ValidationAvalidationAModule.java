@@ -20,6 +20,7 @@
 package ch.kostceco.tools.kostval.validation.modulejp2;
 
 import java.io.File;
+import java.util.Map;
 
 import ch.kostceco.tools.kostval.exception.modulejp2.ValidationAjp2validationException;
 import ch.kostceco.tools.kostval.validation.ValidationModule;
@@ -31,7 +32,7 @@ import ch.kostceco.tools.kostval.validation.ValidationModule;
 public interface ValidationAvalidationAModule extends ValidationModule
 {
 
-	public boolean validate( File valDatei, File directoryOfLogfile )
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
 			throws ValidationAjp2validationException;
 
 }

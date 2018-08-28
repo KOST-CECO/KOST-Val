@@ -19,7 +19,7 @@
 
 package ch.kostceco.tools.kostval.validation.modulesiard;
 
-import java.io.File;
+import java.io.File; import java.util.Map;
 
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationLconstraintException;
 import ch.kostceco.tools.kostval.validation.ValidationModule;
@@ -32,7 +32,7 @@ import ch.kostceco.tools.kostval.validation.ValidationModule;
 public interface ValidationLconstraintModule extends ValidationModule
 {
 
-	public boolean validate( File valDatei, File directoryOfLogfile )
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
 			throws ValidationLconstraintException;
 
 }

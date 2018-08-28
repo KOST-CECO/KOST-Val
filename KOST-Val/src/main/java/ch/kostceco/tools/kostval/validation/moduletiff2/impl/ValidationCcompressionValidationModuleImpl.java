@@ -23,11 +23,11 @@ import static org.apache.commons.io.IOUtils.closeQuietly;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.util.Map;
 import java.io.FileReader;
 
 import ch.kostceco.tools.kostval.KOSTVal;
 import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationCcompressionValidationException;
-import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.util.StreamGobbler;
 import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
@@ -42,22 +42,10 @@ public class ValidationCcompressionValidationModuleImpl extends ValidationModule
 		ValidationCcompressionValidationModule
 {
 
-	private ConfigurationService	configurationService;
-
-	public static String					NEWLINE	= System.getProperty( "line.separator" );
-
-	public ConfigurationService getConfigurationService()
-	{
-		return configurationService;
-	}
-
-	public void setConfigurationService( ConfigurationService configurationService )
-	{
-		this.configurationService = configurationService;
-	}
+	public static String	NEWLINE	= System.getProperty( "line.separator" );
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile )
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
 			throws ValidationCcompressionValidationException
 	{
 
@@ -72,14 +60,14 @@ public class ValidationCcompressionValidationModuleImpl extends ValidationModule
 		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
 		 * ref="configurationService" /> */
 
-		String com1 = getConfigurationService().getAllowedCompression1();
-		String com2 = getConfigurationService().getAllowedCompression2();
-		String com3 = getConfigurationService().getAllowedCompression3();
-		String com4 = getConfigurationService().getAllowedCompression4();
-		String com5 = getConfigurationService().getAllowedCompression5();
-		String com7 = getConfigurationService().getAllowedCompression7();
-		String com8 = getConfigurationService().getAllowedCompression8();
-		String com32773 = getConfigurationService().getAllowedCompression32773();
+		String com1 = configMap.get( "AllowedCompression1" );
+		String com2 = configMap.get( "AllowedCompression2" );
+		String com3 = configMap.get( "AllowedCompression3" );
+		String com4 = configMap.get( "AllowedCompression4" );
+		String com5 = configMap.get( "AllowedCompression5" );
+		String com7 = configMap.get( "AllowedCompression7" );
+		String com8 = configMap.get( "AllowedCompression8" );
+		String com32773 = configMap.get( "AllowedCompression32773" );
 
 		if ( com1.startsWith( "Configuration-Error:" ) ) {
 			getMessageService().logError(
@@ -131,7 +119,6 @@ public class ValidationCcompressionValidationModuleImpl extends ValidationModule
 
 		/* TODO: Exiftool starten. Anschliessend auswerten! Auf jhove wird verzichtet */
 
-		
 		/* dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist ein generelles TODO in
 		 * allen Modulen. Zuerst immer dirOfJarPath ermitteln und dann alle Pfade mit
 		 * 
@@ -149,8 +136,8 @@ public class ValidationCcompressionValidationModuleImpl extends ValidationModule
 			dirOfJarPath = file.getParent();
 		}
 
-		File fIdentifyPl = new File(dirOfJarPath + File.separator + "resources" + File.separator + "ExifTool-10.15" + File.separator
-				+ "exiftool.pl" );
+		File fIdentifyPl = new File( dirOfJarPath + File.separator + "resources" + File.separator
+				+ "ExifTool-10.15" + File.separator + "exiftool.pl" );
 		String pathToIdentifyPl = fIdentifyPl.getAbsolutePath();
 		if ( !fIdentifyPl.exists() ) {
 			// exiftool.pl existiert nicht --> Abbruch
@@ -159,8 +146,9 @@ public class ValidationCcompressionValidationModuleImpl extends ValidationModule
 							+ getTextResourceService().getText( MESSAGE_XML_CG_ET_MISSING, pathToIdentifyPl ) );
 			return false;
 		} else {
-			File fPerl = new File(dirOfJarPath + File.separator + "resources" + File.separator + "ExifTool-10.15" + File.separator
-					+ "Perl" + File.separator + "bin" + File.separator + "perl.exe" );
+			File fPerl = new File( dirOfJarPath + File.separator + "resources" + File.separator
+					+ "ExifTool-10.15" + File.separator + "Perl" + File.separator + "bin" + File.separator
+					+ "perl.exe" );
 			String pathToPerl = fPerl.getAbsolutePath();
 			if ( !fPerl.exists() ) {
 				// Perl.exe existiert nicht --> Abbruch

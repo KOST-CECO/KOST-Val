@@ -23,6 +23,7 @@ import static org.apache.commons.io.IOUtils.closeQuietly;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.util.Map;
 import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
@@ -46,7 +47,6 @@ import org.xml.sax.helpers.XMLReaderFactory;
 
 import ch.kostceco.tools.kostval.KOSTVal;
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationHcontentException;
-import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.util.StreamGobbler;
 import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
@@ -61,33 +61,21 @@ import ch.kostceco.tools.kostval.validation.modulesiard.ValidationHcontentModule
 public class ValidationHcontentModuleImpl extends ValidationModuleImpl implements
 		ValidationHcontentModule
 {
-	Boolean											version1	= false;
-	Boolean											version2	= false;
+	Boolean										version1	= false;
+	Boolean										version2	= false;
 
-	private static final int		UNBOUNDED	= -1;
+	private static final int	UNBOUNDED	= -1;
 
-	public ConfigurationService	configurationService;
-
-	private XMLReader						reader;
-
-	public ConfigurationService getConfigurationService()
-	{
-		return configurationService;
-	}
-
-	public void setConfigurationService( ConfigurationService configurationService )
-	{
-		this.configurationService = configurationService;
-	}
+	private XMLReader					reader;
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile )
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
 			throws ValidationHcontentException
 	{
 		boolean showOnWork = true;
 		int onWork = 410;
 		// Informationen zur Darstellung "onWork" holen
-		String onWorkConfig = getConfigurationService().getShowProgressOnWork();
+		String onWorkConfig = configMap.get( "ShowProgressOnWork" );
 		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
 		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
 		 * ref="configurationService" /> */
@@ -103,7 +91,7 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl implement
 		boolean valid = true;
 		try {
 			/* Extract the metadata.xml from the temporary work folder and build a jdom document */
-			String pathToWorkDir = getConfigurationService().getPathToWorkDir();
+			String pathToWorkDir = configMap.get( "PathToWorkDir" );
 			pathToWorkDir = pathToWorkDir + File.separator + "SIARD";
 			File metadataXml = new File( new StringBuilder( pathToWorkDir ).append( File.separator )
 					.append( "header" ).append( File.separator ).append( "metadata.xml" ).toString() );

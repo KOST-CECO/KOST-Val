@@ -22,6 +22,7 @@ package ch.kostceco.tools.kostval.validation.moduletiff2.impl;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.util.Map;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -35,7 +36,6 @@ import java.util.Set;
 
 import ch.kostceco.tools.kostval.KOSTVal;
 import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationBjhoveValidationException;
-import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationBjhoveValidationModule;
@@ -52,22 +52,10 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl i
 		ValidationBjhoveValidationModule
 {
 
-	private ConfigurationService	configurationService;
-
-	public static String					NEWLINE	= System.getProperty( "line.separator" );
-
-	public ConfigurationService getConfigurationService()
-	{
-		return configurationService;
-	}
-
-	public void setConfigurationService( ConfigurationService configurationService )
-	{
-		this.configurationService = configurationService;
-	}
+	public static String	NEWLINE	= System.getProperty( "line.separator" );
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile )
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
 			throws ValidationBjhoveValidationException
 	{
 
@@ -79,7 +67,6 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl i
 
 		// Vorbereitungen: valDatei an die JHove Applikation übergeben
 
-		
 		/* dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist ein generelles TODO in
 		 * allen Modulen. Zuerst immer dirOfJarPath ermitteln und dann alle Pfade mit
 		 * 
@@ -100,8 +87,8 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl i
 		File jhoveReport = null;
 		StringBuffer concatenatedOutputs = new StringBuffer();
 		String pathToJhoveConfig = dirOfJarPath + File.separator + "configuration" + File.separator
-				+ "jhove.conf" ; 
-		String pathToWorkDir = getConfigurationService().getPathToWorkDir();
+				+ "jhove.conf";
+		String pathToWorkDir = configMap.get( "PathToWorkDir" );
 
 		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
 		 * entsprechenden Modul die property anzugeben: <property name="configurationService"

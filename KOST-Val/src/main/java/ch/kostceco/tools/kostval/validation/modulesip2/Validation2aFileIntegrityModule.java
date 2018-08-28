@@ -19,7 +19,7 @@
 
 package ch.kostceco.tools.kostval.validation.modulesip2;
 
-import java.io.File;
+import java.io.File; import java.util.Map;
 
 import ch.kostceco.tools.kostval.exception.modulesip2.Validation2aFileIntegrityException;
 import ch.kostceco.tools.kostval.validation.ValidationModule;
@@ -30,7 +30,7 @@ import ch.kostceco.tools.kostval.validation.ValidationModule;
 public interface Validation2aFileIntegrityModule extends ValidationModule
 {
 
-	public boolean validate( File valDatei, File directoryOfLogfile )
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
 			throws Validation2aFileIntegrityException;
 
 }

@@ -20,6 +20,7 @@
 package ch.kostceco.tools.kostval.validation.modulesip3.impl;
 
 import java.io.File;
+import java.util.Map;
 import java.io.FileInputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -40,7 +41,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import ch.kostceco.tools.kostval.exception.modulesip3.Validation3dPeriodException;
-import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesip3.Validation3dPeriodModule;
 
@@ -50,33 +50,18 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 		Validation3dPeriodModule
 {
 
-	DateFormat										formatter1	= new SimpleDateFormat( "yyyy-MM-dd" );
-	DateFormat										formatter2	= new SimpleDateFormat( "dd.MM.yyyy" );
-	DateFormat										formatter3	= new SimpleDateFormat( "yyyy" );
-
-	private ConfigurationService	configurationService;
-
-	public ConfigurationService getConfigurationService()
-	{
-		return configurationService;
-	}
-
-	public void setConfigurationService( ConfigurationService configurationService )
-	{
-		this.configurationService = configurationService;
-	}
+	DateFormat	formatter1	= new SimpleDateFormat( "yyyy-MM-dd" );
+	DateFormat	formatter2	= new SimpleDateFormat( "dd.MM.yyyy" );
+	DateFormat	formatter3	= new SimpleDateFormat( "yyyy" );
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile )
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
 			throws Validation3dPeriodException
 	{
 		boolean showOnWork = true;
 		int onWork = 410;
 		// Informationen zur Darstellung "onWork" holen
-		String onWorkConfig = getConfigurationService().getShowProgressOnWork();
-		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
-		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
-		 * ref="configurationService" /> */
+		String onWorkConfig = configMap.get( "ShowProgressOnWork" );
 		if ( onWorkConfig.equals( "no" ) ) {
 			// keine Ausgabe
 			showOnWork = false;

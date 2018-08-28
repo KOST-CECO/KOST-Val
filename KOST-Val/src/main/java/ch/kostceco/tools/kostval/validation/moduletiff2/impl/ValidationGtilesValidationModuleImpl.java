@@ -21,10 +21,10 @@ package ch.kostceco.tools.kostval.validation.moduletiff2.impl;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.util.Map;
 import java.io.FileReader;
 
 import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationGtilesValidationException;
-import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationGtilesValidationModule;
 
@@ -36,22 +36,10 @@ public class ValidationGtilesValidationModuleImpl extends ValidationModuleImpl i
 		ValidationGtilesValidationModule
 {
 
-	private ConfigurationService	configurationService;
-
-	public static String					NEWLINE	= System.getProperty( "line.separator" );
-
-	public ConfigurationService getConfigurationService()
-	{
-		return configurationService;
-	}
-
-	public void setConfigurationService( ConfigurationService configurationService )
-	{
-		this.configurationService = configurationService;
-	}
+	public static String	NEWLINE	= System.getProperty( "line.separator" );
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile )
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
 			throws ValidationGtilesValidationException
 	{
 
@@ -66,7 +54,7 @@ public class ValidationGtilesValidationModuleImpl extends ValidationModuleImpl i
 		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
 		 * ref="configurationService" /> */
 
-		String tiles = getConfigurationService().getAllowedTiles();
+		String tiles = configMap.get( "AllowedTiles" );
 		if ( tiles.startsWith( "Configuration-Error:" ) ) {
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_XML_MODUL_G_TIFF ) + tiles );

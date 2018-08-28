@@ -21,6 +21,7 @@ package ch.kostceco.tools.kostval.validation.modulesip1.impl;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.util.Map;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -38,7 +39,6 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import ch.kostceco.tools.kostval.KOSTVal;
 import ch.kostceco.tools.kostval.exception.modulesip1.Validation1dMetadataException;
-import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesip1.Validation1dMetadataModule;
 
@@ -46,27 +46,15 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl impleme
 		Validation1dMetadataModule
 {
 
-	public static String					NEWLINE	= System.getProperty( "line.separator" );
+	public static String	NEWLINE	= System.getProperty( "line.separator" );
 
-	private ConfigurationService	configurationService;
+	final int							BUFFER	= 2048;
 
-	public ConfigurationService getConfigurationService()
-	{
-		return configurationService;
-	}
-
-	public void setConfigurationService( ConfigurationService configurationService )
-	{
-		this.configurationService = configurationService;
-	}
-
-	final int	BUFFER	= 2048;
-
-	public boolean validate( File valDatei, File directoryOfLogfile )
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
 			throws Validation1dMetadataException
 	{
 		// Informationen zur Darstellung "onWork" holen
-		String onWork = getConfigurationService().getShowProgressOnWork();
+		String onWork = configMap.get( "ShowProgressOnWork" );
 		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
 		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
 		 * ref="configurationService" /> */

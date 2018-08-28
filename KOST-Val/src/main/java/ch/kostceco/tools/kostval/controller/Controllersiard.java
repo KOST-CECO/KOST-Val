@@ -20,6 +20,7 @@
 package ch.kostceco.tools.kostval.controller;
 
 import java.io.File;
+import java.util.Map;
 
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationAzipException;
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationBprimaryStructureException;
@@ -49,7 +50,7 @@ import ch.kostceco.tools.kostval.validation.modulesiard.ValidationWwarningModule
 
 /** kostval -->
  * 
- * Der Controller ruft die benötigten Module zur Validierung der SIARD-Datei in der benötigten
+ * Der Controller ruft die benï¿½tigten Module zur Validierung der SIARD-Datei in der benï¿½tigten
  * Reihenfolge auf.
  * 
  * Die Validierungs-Module werden mittels Spring-Dependency-Injection eingebunden. */
@@ -177,8 +178,7 @@ public class Controllersiard implements MessageConstants
 		return validationWwarningModule;
 	}
 
-	public void setValidationWwarningModule(
-			ValidationWwarningModule validationWwarningModule )
+	public void setValidationWwarningModule( ValidationWwarningModule validationWwarningModule )
 	{
 		this.validationWwarningModule = validationWwarningModule;
 	}
@@ -193,16 +193,17 @@ public class Controllersiard implements MessageConstants
 		this.textResourceService = textResourceService;
 	}
 
-	public boolean executeMandatory( File valDatei, File directoryOfLogfile )
+	public boolean executeMandatory( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap )
 	{
 		boolean valid = true;
 
 		// Validation Step A (Lesbarkeit)
 		try {
-			if ( this.getValidationAzipModule().validate( valDatei, directoryOfLogfile ) ) {
+			if ( this.getValidationAzipModule().validate( valDatei, directoryOfLogfile, configMap ) ) {
 				this.getValidationAzipModule().getMessageService().print();
 			} else {
-				// Ein negatives Validierungsresultat in diesem Schritt führt zum Abbruch der weiteren
+				// Ein negatives Validierungsresultat in diesem Schritt fï¿½hrt zum Abbruch der weiteren
 				// Verarbeitung
 				this.getValidationAzipModule().getMessageService().print();
 				return false;
@@ -218,12 +219,13 @@ public class Controllersiard implements MessageConstants
 			return false;
 		}
 
-		// Validation Step B (primäre Verzeichnisstruktur)
+		// Validation Step B (primï¿½re Verzeichnisstruktur)
 		try {
-			if ( this.getValidationBprimaryStructureModule().validate( valDatei, directoryOfLogfile ) ) {
+			if ( this.getValidationBprimaryStructureModule().validate( valDatei, directoryOfLogfile,
+					configMap ) ) {
 				this.getValidationBprimaryStructureModule().getMessageService().print();
 			} else {
-				// Ein negatives Validierungsresultat in diesem Schritt führt zum Abbruch der weiteren
+				// Ein negatives Validierungsresultat in diesem Schritt fï¿½hrt zum Abbruch der weiteren
 				// Verarbeitung
 				this.getValidationBprimaryStructureModule().getMessageService().print();
 				return false;
@@ -241,11 +243,11 @@ public class Controllersiard implements MessageConstants
 
 		// Validation Step C (Header-Validierung)
 		try {
-			if ( this.getValidationCheaderModule().validate( valDatei, directoryOfLogfile ) ) {
+			if ( this.getValidationCheaderModule().validate( valDatei, directoryOfLogfile, configMap ) ) {
 				this.getValidationCheaderModule().getMessageService().print();
 			} else {
 				this.getValidationCheaderModule().getMessageService().print();
-				// Ein negatives Validierungsresultat in diesem Schritt führt zum Abbruch der weiteren
+				// Ein negatives Validierungsresultat in diesem Schritt fï¿½hrt zum Abbruch der weiteren
 				// Verarbeitung
 				return false;
 			}
@@ -262,11 +264,11 @@ public class Controllersiard implements MessageConstants
 
 		// Validation Step D (Struktur-Validierung)
 		try {
-			if ( this.getValidationDstructureModule().validate( valDatei, directoryOfLogfile ) ) {
+			if ( this.getValidationDstructureModule().validate( valDatei, directoryOfLogfile, configMap ) ) {
 				this.getValidationDstructureModule().getMessageService().print();
 			} else {
 				this.getValidationDstructureModule().getMessageService().print();
-				// Ein negatives Validierungsresultat in diesem Schritt führt zum Abbruch der weiteren
+				// Ein negatives Validierungsresultat in diesem Schritt fï¿½hrt zum Abbruch der weiteren
 				// Verarbeitung
 				return false;
 			}
@@ -284,13 +286,14 @@ public class Controllersiard implements MessageConstants
 		return valid;
 	}
 
-	public boolean executeOptional( File valDatei, File directoryOfLogfile )
+	public boolean executeOptional( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap )
 	{
 		boolean valid = true;
 
 		// Validation Step E (Spalten-Validierung)
 		try {
-			if ( this.getValidationEcolumnModule().validate( valDatei, directoryOfLogfile ) ) {
+			if ( this.getValidationEcolumnModule().validate( valDatei, directoryOfLogfile, configMap ) ) {
 				this.getValidationEcolumnModule().getMessageService().print();
 			} else {
 				this.getValidationEcolumnModule().getMessageService().print();
@@ -306,7 +309,7 @@ public class Controllersiard implements MessageConstants
 		}
 
 		try {
-			if ( this.getValidationFrowModule().validate( valDatei, directoryOfLogfile ) ) {
+			if ( this.getValidationFrowModule().validate( valDatei, directoryOfLogfile, configMap ) ) {
 				this.getValidationFrowModule().getMessageService().print();
 			} else {
 				this.getValidationFrowModule().getMessageService().print();
@@ -325,7 +328,7 @@ public class Controllersiard implements MessageConstants
 
 		// Validation Step G (Tabellen-Validierung)
 		try {
-			if ( this.getValidationGtableModule().validate( valDatei, directoryOfLogfile ) ) {
+			if ( this.getValidationGtableModule().validate( valDatei, directoryOfLogfile, configMap ) ) {
 				this.getValidationGtableModule().getMessageService().print();
 			} else {
 				this.getValidationGtableModule().getMessageService().print();
@@ -344,7 +347,7 @@ public class Controllersiard implements MessageConstants
 
 		// Validation Step H (Content-Validierung)
 		try {
-			if ( this.getValidationHcontentModule().validate( valDatei, directoryOfLogfile ) ) {
+			if ( this.getValidationHcontentModule().validate( valDatei, directoryOfLogfile, configMap ) ) {
 				this.getValidationHcontentModule().getMessageService().print();
 			} else {
 				this.getValidationHcontentModule().getMessageService().print();
@@ -363,7 +366,8 @@ public class Controllersiard implements MessageConstants
 
 		// Validation Step I (SIARD-Erkennung)
 		try {
-			if ( this.getValidationIrecognitionModule().validate( valDatei, directoryOfLogfile ) ) {
+			if ( this.getValidationIrecognitionModule()
+					.validate( valDatei, directoryOfLogfile, configMap ) ) {
 				this.getValidationIrecognitionModule().getMessageService().print();
 			} else {
 				this.getValidationIrecognitionModule().getMessageService().print();
@@ -380,9 +384,10 @@ public class Controllersiard implements MessageConstants
 			return false;
 		}
 
-		// Validation Step J (Zusätzliche Primärdateien)
+		// Validation Step J (Zusï¿½tzliche Primï¿½rdateien)
 		try {
-			if ( this.getValidationJsurplusFilesModule().validate( valDatei, directoryOfLogfile ) ) {
+			if ( this.getValidationJsurplusFilesModule().validate( valDatei, directoryOfLogfile,
+					configMap ) ) {
 				this.getValidationJsurplusFilesModule().getMessageService().print();
 			} else {
 				this.getValidationJsurplusFilesModule().getMessageService().print();
@@ -401,7 +406,7 @@ public class Controllersiard implements MessageConstants
 
 		// Validation W (Warnungen)
 		try {
-			if ( this.getValidationWwarningModule().validate( valDatei, directoryOfLogfile ) ) {
+			if ( this.getValidationWwarningModule().validate( valDatei, directoryOfLogfile, configMap ) ) {
 				this.getValidationWwarningModule().getMessageService().print();
 			} else {
 				this.getValidationWwarningModule().getMessageService().print();

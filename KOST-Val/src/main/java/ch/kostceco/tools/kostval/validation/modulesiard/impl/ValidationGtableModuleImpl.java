@@ -20,6 +20,7 @@
 package ch.kostceco.tools.kostval.validation.modulesiard.impl;
 
 import java.io.File;
+import java.util.Map;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -33,7 +34,6 @@ import org.jdom2.JDOMException;
 import org.jdom2.Namespace;
 import org.jdom2.input.SAXBuilder;
 
-import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationGtableException;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationGtableModule;
@@ -46,30 +46,18 @@ import ch.kostceco.tools.kostval.validation.modulesiard.ValidationGtableModule;
 public class ValidationGtableModuleImpl extends ValidationModuleImpl implements
 		ValidationGtableModule
 {
-	Boolean											version1	= false;
-	Boolean											version2	= false;
-
-	public ConfigurationService	configurationService;
-
-	public ConfigurationService getConfigurationService()
-	{
-		return configurationService;
-	}
-
-	public void setConfigurationService( ConfigurationService configurationService )
-	{
-		this.configurationService = configurationService;
-	}
+	Boolean	version1	= false;
+	Boolean	version2	= false;
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile )
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
 			throws ValidationGtableException
 	{
 		boolean showOnWork = true;
 		int onWork = 410;
 		// Informationen zur Darstellung "onWork" holen
-		String onWorkConfig = getConfigurationService().getShowProgressOnWork();
+		String onWorkConfig = configMap.get( "ShowProgressOnWork" );
 		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
 		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
 		 * ref="configurationService" /> */
@@ -86,7 +74,7 @@ public class ValidationGtableModuleImpl extends ValidationModuleImpl implements
 		try {
 			/* Extract the metadata.xml from the temporare work folder and build a jdom document */
 
-			String pathToWorkDir = getConfigurationService().getPathToWorkDir();
+			String pathToWorkDir = configMap.get( "PathToWorkDir" );
 			pathToWorkDir = pathToWorkDir + File.separator + "SIARD";
 			/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
 			 * entsprechenden Modul die property anzugeben: <property name="configurationService"

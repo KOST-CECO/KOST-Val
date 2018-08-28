@@ -20,9 +20,9 @@
 package ch.kostceco.tools.kostval.validation.modulesip3.impl;
 
 import java.io.File;
+import java.util.Map;
 
 import ch.kostceco.tools.kostval.exception.modulesip3.Validation3cFormatValidationException;
-import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesip3.Validation3cFormatValidationModule;
@@ -31,26 +31,14 @@ public class Validation3cFormatValidationModuleImpl extends ValidationModuleImpl
 		Validation3cFormatValidationModule
 {
 
-	private ConfigurationService	configurationService;
-
-	public static String					NEWLINE	= System.getProperty( "line.separator" );
-
-	public ConfigurationService getConfigurationService()
-	{
-		return configurationService;
-	}
-
-	public void setConfigurationService( ConfigurationService configurationService )
-	{
-		this.configurationService = configurationService;
-	}
+	public static String	NEWLINE	= System.getProperty( "line.separator" );
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile )
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
 			throws Validation3cFormatValidationException
 	{
 		// Informationen zur Darstellung "onWork" holen
-		String onWork = getConfigurationService().getShowProgressOnWork();
+		String onWork = configMap.get( "ShowProgressOnWork" );
 		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
 		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
 		 * ref="configurationService" /> */
@@ -64,7 +52,7 @@ public class Validation3cFormatValidationModuleImpl extends ValidationModuleImpl
 
 		boolean isValid = true;
 		// Informationen zum Arbeitsverzeichnis holen
-		String pathToWorkDir = getConfigurationService().getPathToWorkDir();
+		String pathToWorkDir = configMap.get( "PathToWorkDir" );
 		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
 		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
 		 * ref="configurationService" /> */

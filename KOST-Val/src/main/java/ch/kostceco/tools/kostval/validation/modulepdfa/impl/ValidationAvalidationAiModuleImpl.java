@@ -19,27 +19,51 @@
 
 package ch.kostceco.tools.kostval.validation.modulepdfa.impl;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.StringWriter;
+import java.nio.channels.FileChannel;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathFactory;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import uk.gov.nationalarchives.droid.core.signature.droid4.Droid;
 import uk.gov.nationalarchives.droid.core.signature.droid4.FileFormatHit;
 import uk.gov.nationalarchives.droid.core.signature.droid4.IdentificationFile;
 import uk.gov.nationalarchives.droid.core.signature.droid4.signaturefile.FileFormat;
 
+import com.pdftools.*;
 import com.pdftools.pdfvalidator.PdfError;
 import com.pdftools.pdfvalidator.PdfValidatorAPI;
-import com.pdftools.NativeLibrary;
 
 import ch.kostceco.tools.kostval.KOSTVal;
 import ch.kostceco.tools.kostval.exception.modulepdfa.ValidationApdfvalidationException;
-import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.util.UtilCallas;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
@@ -65,43 +89,27 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 		ValidationAvalidationAiModule
 {
 
-	private ConfigurationService	configurationService;
-
-	public static String					NEWLINE	= System.getProperty( "line.separator" );
-
-	public ConfigurationService getConfigurationService()
-	{
-		return configurationService;
-	}
-
-	public void setConfigurationService( ConfigurationService configurationService )
-	{
-		this.configurationService = configurationService;
-	}
+	public static String	NEWLINE	= System.getProperty( "line.separator" );
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile )
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
 			throws ValidationApdfvalidationException
 	{
 		@SuppressWarnings("unused")
 		boolean valid = false;
 		int iCategory = 999999999;
+		String errorK = "";
 		// Create object
 		PdfValidatorAPI docPdf = new PdfValidatorAPI();
 
 		// Version & Level herausfinden
-		String pdfa1 = getConfigurationService().pdfa1();
-		String pdfa2 = getConfigurationService().pdfa2();
+		String pdfa1 = configMap.get( "pdfa1" );
+		String pdfa2 = configMap.get( "pdfa2" );
 
 		Integer pdfaVer1 = 0;
 		Integer pdfaVer2 = 0;
 
-		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
-		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
-		 * ref="configurationService" /> */
-
-		// String pathToWorkDir = getConfigurationService().getPathToWorkDir();
-		String pathToLogDir = getConfigurationService().getPathToLogfile();
+		String pathToLogDir = configMap.get( "PathToLogfile" );
 		String pathToWorkDir = pathToLogDir;
 		/* Beim schreiben ins Workverzeichnis trat ab und zu ein fehler auf. entsprechend wird es jetzt
 		 * ins logverzeichnis geschrieben */
@@ -256,7 +264,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 					valid = true;
 				} else {
 					// Droid-Erkennung, damit Details ausgegeben werden können
-					String nameOfSignature = getConfigurationService().getPathToDroidSignatureFile();
+					String nameOfSignature = configMap.get( "PathToDroidSignatureFile" );
 					if ( nameOfSignature == null ) {
 						getMessageService().logError(
 								getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
@@ -325,6 +333,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 		// Ende der Erkennung
 
 		boolean isValid = false;
+		boolean isValidFont = true;
 		boolean callas = false;
 		boolean pdftools = false;
 		int callasReturnCode = 9;
@@ -341,8 +350,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 		String pdftoolsH = "";
 		String pdftoolsI = "";
 
-		String callasConfig = getConfigurationService().callas();
-		String pdftoolsConfig = getConfigurationService().pdftools();
+		String callasConfig = configMap.get( "callas" );
+		String pdftoolsConfig = configMap.get( "pdftools" );
 
 		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
 		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
@@ -461,6 +470,212 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 						// valide
 						isValid = true;
 					}
+
+					String fontYesNo = configMap.get( "pdfafont" );
+					if ( fontYesNo.equalsIgnoreCase( "yes" ) ) {
+						/* WriteFontValidationXML Method: Boolean WriteFontValidationXML(Stream outputStream)
+						 * Write font validation information in XML format to a stream. This method must be
+						 * called after Validate and before Close. For more information on the structure of the
+						 * resulting XML, see the XML schema ValidatorFontInformation.xsd and the stylesheet
+						 * ValidatorFontInformation.xsl in the documentation directory. Parameter: outputStream
+						 * [Stream] The stream the font validation information is written to. Returns: True The
+						 * font information has been written successfully. False Otherwise. */
+						String pathToFontOutput = pathToLogDir + File.separator + valDatei.getName()
+								+ "_FontValidation.xml";
+						File fontReport = new File( pathToFontOutput );
+						if ( fontReport.exists() ) {
+							fontReport.delete();
+						}
+						String pathToFontOutputError = pathToLogDir + File.separator + valDatei.getName()
+								+ "_FontValidation_Error.xml";
+						File fontReportError = new File( pathToFontOutputError );
+						if ( fontReportError.exists() ) {
+							fontReportError.delete();
+						}
+
+						// Write font validation information
+						FileStream fs =new FileStream( fontReport, "rw" );
+						Stream xmlStream = fs;
+						if ( !docPdf.writeFontValidationXML( xmlStream ) ) {
+							// throw new
+							// Exception(String.format("Failed to write font validation information: %s",
+							// docPdf.getErrorMessage()));
+							System.out.println( String.format( "Failed to write font validation information: %s",
+									docPdf.getErrorMessage() ) );
+						}
+						fs.close();
+						
+						// TODO erledigt: Auswertung betreffend unbekannt und undefiniert
+						try {
+							FileChannel inputChannel = null;
+							FileChannel outputChannel = null;
+							FileInputStream fis=null;
+							FileOutputStream fos=null;
+							try {
+								fis = new FileInputStream( fontReport );
+								inputChannel = fis.getChannel();
+								fos = new FileOutputStream( fontReportError );
+								outputChannel = fos.getChannel();
+								outputChannel.transferFrom( inputChannel, 0, inputChannel.size() );
+							} finally {
+								inputChannel.close();
+								outputChannel.close();
+							}
+							fis.close();
+							fos.close();
+							inputChannel.close();
+							outputChannel.close();
+						} catch ( Exception e ) {
+							getMessageService().logError(
+									getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+											+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+													"Exec PDF Tools FileChannel: " + e.getMessage() ) );
+							return false;
+						}
+
+						Document doc = null;
+						Document docError = null;
+
+						BufferedInputStream bis = new BufferedInputStream(
+								new FileInputStream( fontReportError ) );
+						DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+						DocumentBuilder db = dbf.newDocumentBuilder();
+						doc = db.parse( bis );
+						doc.normalize();
+
+						// <characterCount>122</characterCount>
+						// <characterUnknown>0</characterUnknown>
+						// <characterUnknownPercentage>0</characterUnknownPercentage>
+						// <characterUndefined>122</characterUndefined>
+						// <characterUndefinedPercentage>100</characterUndefinedPercentage>
+
+						String elementCount = doc.getElementsByTagName( "characterCount" ).item( 0 )
+								.getTextContent();
+						String elementUnknown = doc.getElementsByTagName( "characterUnknown" ).item( 0 )
+								.getTextContent();
+						String elementUnknownP = doc.getElementsByTagName( "characterUnknownPercentage" )
+								.item( 0 ).getTextContent();
+						String elementUndefined = doc.getElementsByTagName( "characterUndefined" ).item( 0 )
+								.getTextContent();
+						String elementUndefinedP = doc.getElementsByTagName( "characterUndefinedPercentage" )
+								.item( 0 ).getTextContent();
+
+						if ( !elementUnknown.equals( "0" ) || !elementUndefined.equals( "0" ) ) {
+							try {
+								isValidFont = false;
+								errorK = errorK
+										+ getTextResourceService().getText( MESSAGE_XML_MODUL_K_PDFA )
+										+ getTextResourceService().getText( ERROR_XML_K_OVERVIEW, elementCount,
+												elementUnknown, elementUnknownP, elementUndefined, elementUndefinedP );
+
+								NodeList nodeCharacterLst = doc.getElementsByTagName( "character" );
+								Set<Node> targetNode = new HashSet<Node>();
+
+								for ( int s = 0; s < nodeCharacterLst.getLength(); s++ ) {
+									boolean charUndef = false;
+									boolean unicode = false;
+									Node charNode = nodeCharacterLst.item( s );
+
+									if ( charNode.hasAttributes() ) {
+										NamedNodeMap attrs = charNode.getAttributes();
+										for ( int i = 0; i < attrs.getLength(); i++ ) {
+											Attr attribute = (Attr) attrs.item( i );
+											String attName = attribute.getName();
+											String attNameValue = attribute.getName() + " = " + attribute.getValue();
+											// System.out.println( " -> " + attribute.getName() + " = " +
+											// attribute.getValue() );
+
+											/* -> cid = 60 -> glyphId = 60 -> unicode = U+FFFD -> unicodeUndefined = true */
+											if ( attName.equalsIgnoreCase( "unicode" ) ) {
+												unicode = true;
+											}
+											if ( attNameValue.equalsIgnoreCase( "unicodeUndefined = true" ) ) {
+												charUndef = true;
+											}
+										}
+										if ( !unicode ) {
+											// System.out.println( " unicode nicht bekannt -> node interessant");
+										} else if ( charUndef ) {
+											// System.out.println( " unicode nicht definiert -> node interessant");
+										} else {
+											// System.out.println( " unicode bekannt -> dieser node kann geloescht werden"
+											// );
+											// Node zum leschen vormerken
+											targetNode.add( charNode );
+										}
+									}
+								}
+
+								for ( Node e : targetNode ) {
+									e.getParentNode().removeChild( e );
+								}
+
+								// write the content into xml file
+								TransformerFactory transformerFactory = TransformerFactory.newInstance();
+								Transformer transformer = transformerFactory.newTransformer();
+								DOMSource source = new DOMSource( doc );
+								StreamResult result = new StreamResult( fontReportError );
+								// Output to console for testing
+								// result = new StreamResult( System.out );
+
+								transformer.transform( source, result );
+
+								// Fonts ohne character loeschen
+								BufferedInputStream bisError = new BufferedInputStream( new FileInputStream(
+										fontReportError ) );
+								DocumentBuilderFactory dbfError = DocumentBuilderFactory.newInstance();
+								DocumentBuilder dbError = dbfError.newDocumentBuilder();
+								docError = dbError.parse( bisError );
+								docError.normalize();
+
+								NodeList nodeFontLst = docError.getElementsByTagName( "font" );
+								Set<Node> targetNodeFont = new HashSet<Node>();
+
+								for ( int s = 0; s < nodeFontLst.getLength(); s++ ) {
+									Node fontNode = nodeFontLst.item( s );
+
+									NodeList nodeFontCharLst = fontNode.getChildNodes();
+									if ( nodeFontCharLst.getLength() <= 1 ) {
+										// font Node zum leschen vormerken
+										targetNodeFont.add( fontNode );
+									}
+
+								}
+
+								for ( Node f : targetNodeFont ) {
+									f.getParentNode().removeChild( f );
+								}
+								docError.getDocumentElement().normalize();
+								XPathExpression xpath = XPathFactory.newInstance().newXPath()
+										.compile( "//text()[normalize-space(.) = '']" );
+								NodeList blankTextNodes = (NodeList) xpath.evaluate( docError,
+										XPathConstants.NODESET );
+
+								for ( int i = 0; i < blankTextNodes.getLength(); i++ ) {
+									blankTextNodes.item( i ).getParentNode().removeChild( blankTextNodes.item( i ) );
+								}
+
+								// Ende Bereinigung
+								Node nodeInfo = docError.getElementsByTagName( "docInfo" ).item( 0 );
+								String stringInfo = nodeToString( nodeInfo );
+								Node nodeFonts = docError.getElementsByTagName( "fonts" ).item( 0 );
+								String stringFonts = nodeToString( nodeFonts );
+								errorK = errorK
+										+ getTextResourceService()
+												.getText( ERROR_XML_K_DETAIL, stringInfo, stringFonts );
+								bisError.close();
+
+							} catch ( Exception e ) {
+								getMessageService().logError(
+										getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+												+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+														"Exec PDF Tools Font: " + e.getMessage() ) );
+								return false;
+							}
+						}
+						bis.close();
+						fontReportError.deleteOnExit();
+					}
 				} catch ( Exception e ) {
 					getMessageService().logError(
 							getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
@@ -473,7 +688,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 					// Ermittlung Detail-Fehlermeldungen von pdftools (entspricht -rd)
 					PdfError err = docPdf.getFirstError();
 					boolean rd = false;
-					String detailConfig = getConfigurationService().detail();
+					String detailConfig = configMap.get( "detail" );
 					if ( detailConfig.equalsIgnoreCase( "detail" ) ) {
 						rd = true;
 					}
@@ -492,7 +707,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 							 * (weitere Fehler existieren)
 							 * 
 							 * zB - The value of the key N is 4 but must be 3. [PDF Tools: 0x80410607] */
-							String detailIgnore = getConfigurationService().ignore();
+							String detailIgnore = configMap.get( "ignore" );
 
 							if ( detailIgnore.contains( errorMsgCode0xText ) ) {
 								// Fehler wird ignoriert. Entsprechend wird kein Detail geschrieben.
@@ -631,7 +846,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 				/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
 				 * entsprechenden Modul die property anzugeben: <property name="configurationService"
 				 * ref="configurationService" /> */
-				String nEntry = getConfigurationService().nentry();
+				String nEntry = configMap.get( "nentry" );
 				boolean bNentryError = true;
 				if ( nEntry.equalsIgnoreCase( "W" ) ) {
 					bNentryError = false;
@@ -789,6 +1004,9 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 			}
 
 			// TODO: Erledigt: Fehler Auswertung
+			if ( isValid ) {
+				isValid = isValidFont;
+			}
 
 			if ( !isValid ) {
 				boolean exponent0 = false;
@@ -1299,6 +1517,9 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 				/** Modul J **/
 				// neu sind die Interaktionen (J) bei den Aktionen (G)
 
+				/** Modul K **/
+				getMessageService().logError( errorK );
+
 				docPdf.close();
 
 				// Destroy the object
@@ -1313,7 +1534,29 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 					getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
 							+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 		}
+		docPdf.close();
+
+		// Destroy the object
+		docPdf.destroyObject();
 		return isValid;
 	}
 
+	private String nodeToString( Node node )
+	{
+		String swString = "";
+		try {
+			StringWriter sw = new StringWriter();
+			Transformer t = TransformerFactory.newInstance().newTransformer();
+			t.setOutputProperty( OutputKeys.OMIT_XML_DECLARATION, "yes" );
+			t.transform( new DOMSource( node ), new StreamResult( sw ) );
+			swString = sw.toString();
+			sw.close();
+		} catch ( TransformerException te ) {
+			System.out.println( "nodeToString Transformer Exception" );
+		} catch ( IOException e ) {
+			e.printStackTrace();
+			System.out.println( "IOException:" + e );
+		}
+		return swString;
+	}
 }

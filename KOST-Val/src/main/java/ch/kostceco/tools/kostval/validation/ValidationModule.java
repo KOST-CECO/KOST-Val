@@ -20,12 +20,13 @@
 package ch.kostceco.tools.kostval.validation;
 
 import java.io.File;
+import java.util.Map;
 
 import ch.kostceco.tools.kostval.exception.KOSTValException;
 import ch.kostceco.tools.kostval.service.MessageService;
 import ch.kostceco.tools.kostval.service.Service;
 
-/** Dies ist das Interface für alle Validierungs-Module und vereinigt alle Funktionalitäten, die den
+/** Dies ist das Interface fï¿½r alle Validierungs-Module und vereinigt alle Funktionalitï¿½ten, die den
  * jeweiligen Modulen gemeinsam sind.
  * 
  * @author Rc Claire Roethlisberger, KOST-CECO */
@@ -33,7 +34,8 @@ import ch.kostceco.tools.kostval.service.Service;
 public interface ValidationModule extends Service
 {
 
-	public boolean validate( File valDatei, File directoryOfLogfile ) throws KOSTValException;
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
+			throws KOSTValException;
 
 	public MessageService getMessageService();
 

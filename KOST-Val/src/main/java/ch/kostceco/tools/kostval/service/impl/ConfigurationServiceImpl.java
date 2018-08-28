@@ -19,15 +19,19 @@
 
 package ch.kostceco.tools.kostval.service.impl;
 
-import java.io.File;
+import java.io.File; 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.XMLConfiguration;
-import org.apache.commons.configuration.HierarchicalConfiguration;
+// http://commons.apache.org/proper/commons-configuration/userguide/upgradeto2_0.html
+import org.apache.commons.configuration2.ex.ConfigurationException;
+import org.apache.commons.configuration2.io.FileHandler;
+import org.apache.commons.configuration2.XMLConfiguration;
+import org.apache.commons.configuration2.builder.BasicConfigurationBuilder;
+import org.apache.commons.configuration2.builder.fluent.Parameters;
 
 import ch.kostceco.tools.kostval.logging.Logger;
 import ch.kostceco.tools.kostval.service.ConfigurationService;
@@ -36,8 +40,10 @@ import ch.kostceco.tools.kostval.service.TextResourceService;
 public class ConfigurationServiceImpl implements ConfigurationService
 {
 
-	private static final Logger	LOGGER	= new Logger( ConfigurationServiceImpl.class );
-	XMLConfiguration						config	= null;
+	private static final Logger	LOGGER		= new Logger( ConfigurationServiceImpl.class );
+	XMLConfiguration						config		= null;
+	Map<String, String>					configMap	= null;
+	// TODO Hier alle Werte definieren, bei getConfig füllen und dann nur noch Wert gleichsetzen
 	private TextResourceService	textResourceService;
 
 	public TextResourceService getTextResourceService()
@@ -50,19 +56,152 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		this.textResourceService = textResourceService;
 	}
 
-	private XMLConfiguration getConfig()
+	public Map<String, String> configMap()
 	{
 		if ( this.config == null ) {
 
 			try {
-
 				File directoryOfConfigfile = new File( System.getenv( "USERPROFILE" ) + File.separator
 						+ ".kost-val" + File.separator + "configuration" );
 				File configFile = new File( directoryOfConfigfile + File.separator + "kostval.conf.xml" );
+				InputStream inputStream;
+				inputStream = new FileInputStream( configFile );
 
-				config = new XMLConfiguration( configFile );
+				config = new BasicConfigurationBuilder<>( XMLConfiguration.class ).configure(
+						new Parameters().xml() ).getConfiguration();
+				FileHandler fh = new FileHandler( config );
+				fh.load( inputStream );
 
-			} catch ( ConfigurationException e ) {
+				Map<String, String> configMap = new HashMap<String, String>();
+
+				/** Gibt den Pfad des Arbeitsverzeichnisses zurück. Dieses Verzeichnis wird zum Entpacken des
+				 * .zip-Files verwendet.
+				 * 
+				 * Pfad des Arbeitsverzeichnisses = USERPROFILE/.kost-val/temp_KOST-Val */
+				String pathtoworkdir = System.getenv( "USERPROFILE" ) + File.separator + ".kost-val"
+						+ File.separator + "temp_KOST-Val";
+				File dir = new File( pathtoworkdir );
+				if ( !dir.exists() ) {
+					dir.mkdirs();
+				}
+
+				/** Gibt den Pfad des Logverzeichnisses zurück.
+				 * 
+				 * Pfad des Logverzeichnisses = USERPROFILE/.kost-val/logs */
+				String logs = System.getenv( "USERPROFILE" ) + File.separator + ".kost-val"
+						+ File.separator + "logs";
+				File dir1 = new File( logs );
+				if ( !dir1.exists() ) {
+					dir1.mkdirs();
+				}
+
+				/** Gibt den Pfad des Logverzeichnisses zurück.
+				 * 
+				 * Pfad des Logverzeichnisses = configuration\KaD_SignatureFile_V72.xml */
+				String droid = "configuration" + File.separator + "KaD_SignatureFile_V72.xml";
+
+				// Gibt den Pfad des Arbeitsverzeichnisses zurück.
+				configMap.put( "PathToWorkDir", pathtoworkdir );
+				// Gibt den Pfad des Logverzeichnisses zurück.
+				configMap.put( "PathToLogfile", logs );
+				// Gibt den Namen des DROID Signature Files zurück.
+				configMap.put( "PathToDroidSignatureFile", droid );
+				// Angabe ob dargestellt werden soll, dass KOST-Val noch läuft */
+				configMap.put( "ShowProgressOnWork", config.getString( "showprogressonwork" ) );
+				// Gibt an ob pdfa mit PDF Tools validiert werden soll
+				configMap.put( "pdftools", config.getString( "pdfa.pdftools" ) );
+				// Gibt an ob pdfa mit PDF Tools im detail validiert werden soll
+				configMap.put( "detail", config.getString( "pdfa.detail" ) );
+				// Gibt an ob pdfa mit callas validiert werden soll
+				configMap.put( "callas", config.getString( "pdfa.callas" ) );
+				// N-Eintrag: Soll seitens callas ein Fehler (E) oder eine Warnung (W) ausgegeben werden
+				configMap.put( "nentry", config.getString( "pdfa.nentry" ) );
+				// Gibt an welche 1erKonformität mindestens erreicht werden muss
+				configMap.put( "pdfa1", config.getString( "pdfa.pdfa1" ) );
+				// Gibt an welche 2erKonformität mindestens erreicht werden muss
+				configMap.put( "pdfa2", config.getString( "pdfa.pdfa2" ) );
+				// Gibt an ob die Schriften in pdfa validiert werden soll
+				configMap.put( "pdfafont", config.getString( "pdfa.pdfafont" ) );
+				// Gibt an ob die Bilder in pdfa validiert werden soll
+				configMap.put( "pdfaimage", config.getString( "pdfa.pdfaimage" ) );
+				// Gibt an ob JBIG2 erlaubt ist oder nicht
+				configMap.put( "jbig2allowed", config.getString( "pdfa.jbig2allowed" ) );
+				// Gibt an ob siard validiert werden soll
+				configMap.put( "siardValidation", config.getString( "siard.siardvalidation" ) );
+				// Gibt an ob jp2 validiert werden soll
+				configMap.put( "jp2Validation", config.getString( "jp2.jp2validation" ) );
+				// Gibt an ob jpeg validiert werden soll
+				configMap.put( "jpegValidation", config.getString( "jpeg.jpegvalidation" ) );
+				// Gibt an welche Fehler ignoriert werden sollen
+				configMap.put( "ignore", config.getString( "ignoreerror.ignore" ) );
+				// Gibt eine Liste mit den PUIDs aus, welche im SIP vorkommen dürfen.
+				configMap.put( "allowedformats", config.getString( "sip.allowedformats" ) );
+				// Gibt die Maximal erlaubte Länge eines Pfades in der SIP-Datei aus.
+				configMap.put( "MaximumPathLength", config.getString( "sip.allowedlengthofpaths" ) );
+				// Die Einschränkung des SIP-Namen ist konfigurierbar
+				configMap.put( "AllowedSipName", config.getString( "sip.allowedsipname" ) );
+				// Gibt an ob tiff validiert werden soll
+				configMap.put( "tiffValidation", config.getString( "tiff.tiffvalidation" ) );
+				// Gibt die Komprimierung aus, welche im TIFF vorkommen dürfen.
+				configMap.put( "AllowedCompression1",
+						config.getString( "tiff.allowedcompression.allowedcompression1" ) );
+				configMap.put( "AllowedCompression2",
+						config.getString( "tiff.allowedcompression.allowedcompression2" ) );
+				configMap.put( "AllowedCompression3",
+						config.getString( "tiff.allowedcompression.allowedcompression3" ) );
+				configMap.put( "AllowedCompression4",
+						config.getString( "tiff.allowedcompression.allowedcompression4" ) );
+				configMap.put( "AllowedCompression5",
+						config.getString( "tiff.allowedcompression.allowedcompression5" ) );
+				configMap.put( "AllowedCompression7",
+						config.getString( "tiff.allowedcompression.allowedcompression7" ) );
+				configMap.put( "AllowedCompression8",
+						config.getString( "tiff.allowedcompression.allowedcompression8" ) );
+				configMap.put( "AllowedCompression32773",
+						config.getString( "tiff.allowedcompression.allowedcompression32773" ) );
+				// Gibt die Farbraum aus, welche im TIFF vorkommen dürfen.
+				configMap.put( "AllowedPhotointer0",
+						config.getString( "tiff.allowedphotointer.allowedphotointer0" ) );
+				configMap.put( "AllowedPhotointer1",
+						config.getString( "tiff.allowedphotointer.allowedphotointer1" ) );
+				configMap.put( "AllowedPhotointer2",
+						config.getString( "tiff.allowedphotointer.allowedphotointer2" ) );
+				configMap.put( "AllowedPhotointer3",
+						config.getString( "tiff.allowedphotointer.allowedphotointer3" ) );
+				configMap.put( "AllowedPhotointer4",
+						config.getString( "tiff.allowedphotointer.allowedphotointer4" ) );
+				configMap.put( "AllowedPhotointer5",
+						config.getString( "tiff.allowedphotointer.allowedphotointer5" ) );
+				configMap.put( "AllowedPhotointer6",
+						config.getString( "tiff.allowedphotointer.allowedphotointer6" ) );
+				configMap.put( "AllowedPhotointer8",
+						config.getString( "tiff.allowedphotointer.allowedphotointer8" ) );
+				// Gibt die BitsPerSample aus, welche im TIFF vorkommen dürfen.
+				configMap.put( "AllowedBitspersample1",
+						config.getString( "tiff.allowedbitspersample.allowedbitspersample1" ) );
+				configMap.put( "AllowedBitspersample2",
+						config.getString( "tiff.allowedbitspersample.allowedbitspersample2" ) );
+				configMap.put( "AllowedBitspersample4",
+						config.getString( "tiff.allowedbitspersample.allowedbitspersample4" ) );
+				configMap.put( "AllowedBitspersample8",
+						config.getString( "tiff.allowedbitspersample.allowedbitspersample8" ) );
+				configMap.put( "AllowedBitspersample16",
+						config.getString( "tiff.allowedbitspersample.allowedbitspersample16" ) );
+				configMap.put( "AllowedBitspersample32",
+						config.getString( "tiff.allowedbitspersample.allowedbitspersample32" ) );
+				// Gibt an ob Multipage im TIFF vorkommen dürfen.
+				configMap
+						.put( "AllowedMultipage", config.getString( "tiff.allowedother.allowedmultipage" ) );
+				// Gibt an ob Tiles im TIFF vorkommen dürfen.
+				configMap.put( "AllowedTiles", config.getString( "tiff.allowedother.allowedtiles" ) );
+				// Gibt an ob Giga-TIFF vorkommen dürfen.
+				configMap.put( "AllowedSize", config.getString( "tiff.allowedother.allowedsize" ) );
+
+				// System.out.println("Value is b : " + (map.get("key") == b));
+
+				return configMap;
+
+			} catch ( ConfigurationException cex ) {
 				LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
 						+ getTextResourceService().getText( MESSAGE_XML_CONFIGURATION_ERROR_1 ) );
 				LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
@@ -70,622 +209,13 @@ public class ConfigurationServiceImpl implements ConfigurationService
 				LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
 						+ getTextResourceService().getText( MESSAGE_XML_CONFIGURATION_ERROR_3 ) );
 				System.exit( 1 );
+			} catch ( FileNotFoundException e ) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.exit( 1 );
 			}
 		}
-		return config;
+		return configMap;
 	}
 
-	@Override
-	public String getPathToWorkDir()
-	{
-		/** Gibt den Pfad des Arbeitsverzeichnisses zurück. Dieses Verzeichnis wird zum Entpacken des
-		 * .zip-Files verwendet.
-		 * 
-		 * @return Pfad des Arbeitsverzeichnisses = USERPROFILE/.kost-val/temp_KOST-Val */
-		String pathtoworkdir = System.getenv( "USERPROFILE" ) + File.separator + ".kost-val"
-				+ File.separator + "temp_KOST-Val";
-		File dir = new File( pathtoworkdir );
-		if ( !dir.exists() ) {
-			dir.mkdirs();
-		}
-		return pathtoworkdir;
-	}
-
-	@Override
-	public String getPathToLogfile()
-	{
-		/** Gibt den Pfad des Logverzeichnisses zurück.
-		 * 
-		 * @return Pfad des Logverzeichnisses = USERPROFILE/.kost-val/logs */
-		String logs = System.getenv( "USERPROFILE" ) + File.separator + ".kost-val" + File.separator
-				+ "logs";
-		File dir = new File( logs );
-		if ( !dir.exists() ) {
-			dir.mkdirs();
-		}
-		return logs;
-	}
-
-	@Override
-	public String getPathToDroidSignatureFile()
-	{
-		/** Gibt den Pfad des Logverzeichnisses zurück.
-		 * 
-		 * @return Pfad des Logverzeichnisses = configuration\KaD_SignatureFile_V72.xml */
-		String droid = "configuration" + File.separator + "KaD_SignatureFile_V72.xml";
-		return droid;
-	}
-
-	@Override
-	public String getShowProgressOnWork()
-	{
-		/** Angabe ob dargestellt werden soll, dass KOST-Val noch läuft */
-		Object prop = getConfig().getProperty( "showprogressonwork" );
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		String error = "Configuration-Error: Missing showprogressonwork";
-		return error;
-	}
-
-	/*--- PDF/A ---------------------------------------------------------------------*/
-	@Override
-	public String pdftools()
-	{
-		Object prop = getConfig().getProperty( "pdfa.pdftools" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		String error = "Configuration-Error: Missing pdfa.pdftools";
-		return error;
-	}
-
-	@Override
-	public String detail()
-	{
-		Object prop = getConfig().getProperty( "pdfa.detail" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		String error = "Configuration-Error: Missing pdfa.detail";
-		return error;
-	}
-
-	@Override
-	public String callas()
-	{
-		Object prop = getConfig().getProperty( "pdfa.callas" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		String error = "Configuration-Error: Missing pdfa.callas";
-		return error;
-	}
-
-	@Override
-	public String nentry()
-	{
-		Object prop = getConfig().getProperty( "pdfa.nentry" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		String error = "Configuration-Error: Missing pdfa.nentry";
-		return error;
-	}
-
-	@Override
-	public String pdfa1()
-	{
-		Object prop = getConfig().getProperty( "pdfa.pdfa1" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		String error = "Configuration-Error: Missing pdfa.pdfa1";
-		return error;
-	}
-
-	@Override
-	public String pdfa2()
-	{
-		Object prop = getConfig().getProperty( "pdfa.pdfa2" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		String error = "Configuration-Error: Missing pdfa.pdfa2";
-		return error;
-	}
-
-	@Override
-	public String pdfaimage()
-	{
-		Object prop = getConfig().getProperty( "pdfa.pdfaimage" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		String error = "Configuration-Error: Missing pdfa.pdfaimage";
-		return error;
-	}
-
-	@Override
-	public String jbig2allowed()
-	{
-		Object prop = getConfig().getProperty( "pdfa.jbig2allowed" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		String error = "Configuration-Error: Missing pdfa.jbig2allowed";
-		return error;
-	}
-
-	/*--- SIARD ---------------------------------------------------------------------*/
-	@Override
-	public String siardValidation()
-	{
-		Object prop = getConfig().getProperty( "siard.siardvalidation" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		String error = "Configuration-Error: Missing siard.siardvalidation";
-		return error;
-	}
-
-	@Override
-	public String siardFrowValidation()
-	{
-		Object prop = getConfig().getProperty( "siard.frowvalidation" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		String error = "Configuration-Error: Missing siard.frowvalidation";
-		return error;
-	}
-
-	@Override
-	public int getTableRowsLimit()
-	{
-		/** Gibt die maximale Anzahl von Rows zurück. Dieser Wert wird in Modul H verwendet. Module H
-		 * validiert die table.xml Dateien gegen ihre table.xsd Schemas. Wenn ein Schema <xs:element
-		 * name="row" type="rowType" minOccurs="0" maxOccurs="unbounded"/> in minOccurs oder maxOccurs
-		 * hohe Zahlenwerte enthält, führt die Validierung zu einem java.lang.OutOfMemoryError. Da
-		 * dieser Error nicht aufgefangen werden kann, werden vor der Validierung die Rows der Tabelle
-		 * gezählt. Die ermittelte Zahl darf nicht über dem hier zurückgegebenen Wert liegen. */
-		int value = 20000;
-		Object prop = getConfig().getProperty( "siard.table-rows-limit" );
-		if ( prop != null ) {
-			try {
-				value = Integer.valueOf( prop.toString() ).intValue();
-			} catch ( NumberFormatException e ) {
-				// Do nothing
-			}
-		}
-		return value;
-	}
-
-	/*--- JP2 ---------------------------------------------------------------------*/
-	@Override
-	public String jp2Validation()
-	{
-		Object prop = getConfig().getProperty( "jp2.jp2validation" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		String error = "Configuration-Error: Missing jp2.jp2validation";
-		return error;
-	}
-
-	/*--- JPEG ---------------------------------------------------------------------*/
-	@Override
-	public String jpegValidation()
-	{
-		Object prop = getConfig().getProperty( "jpeg.jpegvalidation" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		String error = "Configuration-Error: Missing jpeg.jpegvalidation";
-		return error;
-	}
-
-	/*--- IgnorError ---------------------------------------------------------------*/
-	@Override
-	public String ignore()
-	{
-		Object prop = getConfig().getProperty( "ignoreerror.ignore" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		String error = "";
-		return error;
-	}
-
-	/*--- SIP ---------------------------------------------------------------------*/
-	@SuppressWarnings("unchecked")
-	@Override
-	public Map<String, String> getAllowedPuids()
-	{
-		Map<String, String> result = new HashMap<String, String>();
-		List<HierarchicalConfiguration> fields = getConfig().configurationsAt(
-				"sip.allowedformats.allowedformat" );
-		for ( Iterator<HierarchicalConfiguration> it = fields.iterator(); it.hasNext(); ) {
-			HierarchicalConfiguration sub = it.next();
-			// sub contains now all data about a single field
-			String fieldPuid = sub.getString( "puid" );
-			String fieldExt = sub.getString( "extension" );
-			result.put( fieldPuid, fieldExt );
-		}
-		return result;
-	}
-
-	@Override
-	public Integer getMaximumPathLength()
-	{
-		Object prop = getConfig().getProperty( "sip.allowedlengthofpaths" );
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			Integer intValue = new Integer( value );
-			return intValue;
-		}
-		return 99999;
-	}
-
-	/** Die Einschränkung des SIP-Namen ist konfigurierbar -> getAllowedSipName */
-	@Override
-	public String getAllowedSipName()
-	{
-		Object prop = getConfig().getProperty( "sip.allowedsipname" );
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		} else {
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ac_SIP )
-					+ getTextResourceService().getText( MESSAGE_XML_AC_INVALIDREGEX ) );
-		}
-		String error = "Configuration-Error: Missing sip.allowedsipname";
-		return error;
-	}
-
-	/*--- TIFF ---------------------------------------------------------------------*/
-	@Override
-	public String tiffValidation()
-	{
-		Object prop = getConfig().getProperty( "tiff.tiffvalidation" );
-
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		return null;
-	}
-
-	// AllowedCompression
-	@Override
-	public String getAllowedCompression1()
-	{
-		Object prop = getConfig().getProperty( "tiff.allowedcompression.allowedcompression1" );
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		String error = "Configuration-Error: Missing tiff.allowedcompression.allowedcompression1";
-		return error;
-	}
-
-	@Override
-	public String getAllowedCompression2()
-	{
-		Object prop = getConfig().getProperty( "tiff.allowedcompression.allowedcompression2" );
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		String error = "Configuration-Error: Missing tiff.allowedcompression.allowedcompression2";
-		return error;
-	}
-
-	@Override
-	public String getAllowedCompression3()
-	{
-		Object prop = getConfig().getProperty( "tiff.allowedcompression.allowedcompression3" );
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		String error = "Configuration-Error: Missing tiff.allowedcompression.allowedcompression3";
-		return error;
-	}
-
-	@Override
-	public String getAllowedCompression4()
-	{
-		Object prop = getConfig().getProperty( "tiff.allowedcompression.allowedcompression4" );
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		String error = "Configuration-Error: Missing tiff.allowedcompression.allowedcompression4";
-		return error;
-	}
-
-	@Override
-	public String getAllowedCompression5()
-	{
-		Object prop = getConfig().getProperty( "tiff.allowedcompression.allowedcompression5" );
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		String error = "Configuration-Error: Missing tiff.allowedcompression.allowedcompression5";
-		return error;
-	}
-
-	@Override
-	public String getAllowedCompression7()
-	{
-		Object prop = getConfig().getProperty( "tiff.allowedcompression.allowedcompression7" );
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		String error = "Configuration-Error: Missing tiff.allowedcompression.allowedcompression7";
-		return error;
-	}
-
-	@Override
-	public String getAllowedCompression8()
-	{
-		Object prop = getConfig().getProperty( "tiff.allowedcompression.allowedcompression8" );
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		String error = "Configuration-Error: Missing tiff.allowedcompression.allowedcompression8";
-		return error;
-	}
-
-	@Override
-	public String getAllowedCompression32773()
-	{
-		Object prop = getConfig().getProperty( "tiff.allowedcompression.allowedcompression32773" );
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		String error = "Configuration-Error: Missing tiff.allowedcompression.allowedcompression32773";
-		return error;
-	}
-
-	// AllowedPhotointer
-	@Override
-	public String getAllowedPhotointer0()
-	{
-		Object prop = getConfig().getProperty( "tiff.allowedphotointer.allowedphotointer0" );
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		String error = "Configuration-Error: Missing tiff.allowedphotointer.allowedphotointer0";
-		return error;
-	}
-
-	@Override
-	public String getAllowedPhotointer1()
-	{
-		Object prop = getConfig().getProperty( "tiff.allowedphotointer.allowedphotointer1" );
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		String error = "Configuration-Error: Missing tiff.allowedphotointer.allowedphotointer1";
-		return error;
-	}
-
-	@Override
-	public String getAllowedPhotointer2()
-	{
-		Object prop = getConfig().getProperty( "tiff.allowedphotointer.allowedphotointer2" );
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		String error = "Configuration-Error: Missing tiff.allowedphotointer.allowedphotointer2";
-		return error;
-	}
-
-	@Override
-	public String getAllowedPhotointer3()
-	{
-		Object prop = getConfig().getProperty( "tiff.allowedphotointer.allowedphotointer3" );
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		String error = "Configuration-Error: Missing tiff.allowedphotointer.allowedphotointer3";
-		return error;
-	}
-
-	@Override
-	public String getAllowedPhotointer4()
-	{
-		Object prop = getConfig().getProperty( "tiff.allowedphotointer.allowedphotointer4" );
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		String error = "Configuration-Error: Missing tiff.allowedphotointer.allowedphotointer4";
-		return error;
-	}
-
-	@Override
-	public String getAllowedPhotointer5()
-	{
-		Object prop = getConfig().getProperty( "tiff.allowedphotointer.allowedphotointer5" );
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		String error = "Configuration-Error: Missing tiff.allowedphotointer.allowedphotointer5";
-		return error;
-	}
-
-	@Override
-	public String getAllowedPhotointer6()
-	{
-		Object prop = getConfig().getProperty( "tiff.allowedphotointer.allowedphotointer6" );
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		String error = "Configuration-Error: Missing tiff.allowedphotointer.allowedphotointer6";
-		return error;
-	}
-
-	@Override
-	public String getAllowedPhotointer8()
-	{
-		Object prop = getConfig().getProperty( "tiff.allowedphotointer.allowedphotointer8" );
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		String error = "Configuration-Error: Missing tiff.allowedphotointer.allowedphotointer8";
-		return error;
-	}
-
-	// AllowedBitspersample
-	@Override
-	public String getAllowedBitspersample1()
-	{
-		Object prop = getConfig().getProperty( "tiff.allowedbitspersample.allowedbitspersample1" );
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		String error = "Configuration-Error: Missing tiff.allowedbitspersample.allowedbitspersample1";
-		return error;
-	}
-
-	@Override
-	public String getAllowedBitspersample2()
-	{
-		Object prop = getConfig().getProperty( "tiff.allowedbitspersample.allowedbitspersample2" );
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		String error = "Configuration-Error: Missing tiff.allowedbitspersample.allowedbitspersample2";
-		return error;
-	}
-
-	@Override
-	public String getAllowedBitspersample4()
-	{
-		Object prop = getConfig().getProperty( "tiff.allowedbitspersample.allowedbitspersample4" );
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		String error = "Configuration-Error: Missing tiff.allowedbitspersample.allowedbitspersample4";
-		return error;
-	}
-
-	@Override
-	public String getAllowedBitspersample8()
-	{
-		Object prop = getConfig().getProperty( "tiff.allowedbitspersample.allowedbitspersample8" );
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		String error = "Configuration-Error: Missing tiff.allowedbitspersample.allowedbitspersample8";
-		return error;
-	}
-
-	@Override
-	public String getAllowedBitspersample16()
-	{
-		Object prop = getConfig().getProperty( "tiff.allowedbitspersample.allowedbitspersample16" );
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		String error = "Configuration-Error: Missing tiff.allowedbitspersample.allowedbitspersample16";
-		return error;
-	}
-
-	@Override
-	public String getAllowedBitspersample32()
-	{
-		Object prop = getConfig().getProperty( "tiff.allowedbitspersample.allowedbitspersample32" );
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		String error = "Configuration-Error: Missing tiff.allowedbitspersample.allowedbitspersample32";
-		return error;
-	}
-
-	// AllowedMultipage
-	@Override
-	public String getAllowedMultipage()
-	{
-		Object prop = getConfig().getProperty( "tiff.allowedother.allowedmultipage" );
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		String error = "Configuration-Error: Missing tiff.allowedother.allowedmultipage";
-		return error;
-	}
-
-	// AllowedTiles
-	@Override
-	public String getAllowedTiles()
-	{
-		Object prop = getConfig().getProperty( "tiff.allowedother.allowedtiles" );
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		String error = "Configuration-Error: Missing tiff.allowedother.allowedtiles";
-		return error;
-	}
-
-	// AllowedSize
-	@Override
-	public String getAllowedSize()
-	{
-		Object prop = getConfig().getProperty( "tiff.allowedother.allowedsize" );
-		if ( prop instanceof String ) {
-			String value = (String) prop;
-			return value;
-		}
-		String error = "Configuration-Error: Missing tiff.allowedother.allowedsize";
-		return error;
-	}
 }

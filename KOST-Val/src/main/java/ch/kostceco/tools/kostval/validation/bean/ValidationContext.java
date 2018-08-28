@@ -19,7 +19,7 @@
 
 package ch.kostceco.tools.kostval.validation.bean;
 
-import java.io.File;
+import java.io.File; 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;

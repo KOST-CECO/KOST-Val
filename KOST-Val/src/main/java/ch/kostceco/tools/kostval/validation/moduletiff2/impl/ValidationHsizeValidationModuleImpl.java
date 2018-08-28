@@ -21,10 +21,10 @@ package ch.kostceco.tools.kostval.validation.moduletiff2.impl;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.util.Map;
 import java.io.FileReader;
 
 import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationHsizeValidationException;
-import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationHsizeValidationModule;
@@ -37,22 +37,10 @@ public class ValidationHsizeValidationModuleImpl extends ValidationModuleImpl im
 		ValidationHsizeValidationModule
 {
 
-	private ConfigurationService	configurationService;
-
-	public static String					NEWLINE	= System.getProperty( "line.separator" );
-
-	public ConfigurationService getConfigurationService()
-	{
-		return configurationService;
-	}
-
-	public void setConfigurationService( ConfigurationService configurationService )
-	{
-		this.configurationService = configurationService;
-	}
+	public static String	NEWLINE	= System.getProperty( "line.separator" );
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile )
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
 			throws ValidationHsizeValidationException
 	{
 
@@ -67,7 +55,7 @@ public class ValidationHsizeValidationModuleImpl extends ValidationModuleImpl im
 		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
 		 * ref="configurationService" /> */
 
-		String size = getConfigurationService().getAllowedSize();
+		String size = configMap.get( "AllowedSize" );
 		if ( size.startsWith( "Configuration-Error:" ) ) {
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_XML_MODUL_H_TIFF ) + size );
@@ -132,7 +120,7 @@ public class ValidationHsizeValidationModuleImpl extends ValidationModuleImpl im
 				return false;
 			}
 		}
-		String pathToWorkDir = getConfigurationService().getPathToWorkDir();
+		String pathToWorkDir = configMap.get( "PathToWorkDir" );
 		File newReport = new File( pathToWorkDir, valDatei.getName() + ".jhove-log.txt" );
 		if ( newReport.exists() ) {
 			Util.deleteFile( newReport );

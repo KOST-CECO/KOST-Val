@@ -20,10 +20,10 @@
 package ch.kostceco.tools.kostval.validation.modulesiard.impl;
 
 import java.io.File;
+import java.util.Map;
 import java.util.List;
 
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationBprimaryStructureException;
-import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationBprimaryStructureModule;
 import ch.enterag.utils.zip.FileEntry;
@@ -41,29 +41,14 @@ public class ValidationBprimaryStructureModuleImpl extends ValidationModuleImpl 
 		ValidationBprimaryStructureModule
 {
 
-	private ConfigurationService	configurationService;
-
-	public ConfigurationService getConfigurationService()
-	{
-		return configurationService;
-	}
-
-	public void setConfigurationService( ConfigurationService configurationService )
-	{
-		this.configurationService = configurationService;
-	}
-
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile )
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
 			throws ValidationBprimaryStructureException
 	{
 		boolean showOnWork = true;
 		int onWork = 410;
 		// Informationen zur Darstellung "onWork" holen
-		String onWorkConfig = getConfigurationService().getShowProgressOnWork();
-		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
-		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
-		 * ref="configurationService" /> */
+		String onWorkConfig = configMap.get( "ShowProgressOnWork" );
 		if ( onWorkConfig.equals( "no" ) ) {
 			// keine Ausgabe
 			showOnWork = false;

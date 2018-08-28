@@ -19,7 +19,7 @@
 
 package ch.kostceco.tools.kostval.validation.modulesip2;
 
-import java.io.File;
+import java.io.File; import java.util.Map;
 
 import ch.kostceco.tools.kostval.exception.modulesip2.Validation2cChecksumException;
 import ch.kostceco.tools.kostval.validation.ValidationModule;
@@ -31,7 +31,7 @@ import ch.kostceco.tools.kostval.validation.ValidationModule;
 public interface Validation2cChecksumModule extends ValidationModule
 {
 
-	public boolean validate( File valDatei, File directoryOfLogfile )
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
 			throws Validation2cChecksumException;
 
 }

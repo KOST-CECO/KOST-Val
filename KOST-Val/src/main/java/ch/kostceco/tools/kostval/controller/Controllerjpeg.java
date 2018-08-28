@@ -20,6 +20,7 @@
 package ch.kostceco.tools.kostval.controller;
 
 import java.io.File;
+import java.util.Map;
 
 import ch.kostceco.tools.kostval.exception.modulejpeg.ValidationAjpegvalidationException;
 import ch.kostceco.tools.kostval.logging.Logger;
@@ -29,7 +30,7 @@ import ch.kostceco.tools.kostval.validation.modulejpeg.ValidationAvalidationJpeg
 
 /** kostval -->
  * 
- * Der Controller ruft die benötigten Module zur Validierung der JPEG-Datei in der benötigten
+ * Der Controller ruft die benï¿½tigten Module zur Validierung der JPEG-Datei in der benï¿½tigten
  * Reihenfolge auf.
  * 
  * Die Validierungs-Module werden mittels Spring-Dependency-Injection eingebunden. */
@@ -63,13 +64,15 @@ public class Controllerjpeg implements MessageConstants
 		this.textResourceService = textResourceService;
 	}
 
-	public boolean executeMandatory( File valDatei, File directoryOfLogfile )
+	public boolean executeMandatory( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap )
 	{
 		boolean valid = true;
 
 		// Validation A
 		try {
-			if ( this.getValidationAvalidationJpegModule().validate( valDatei, directoryOfLogfile ) ) {
+			if ( this.getValidationAvalidationJpegModule().validate( valDatei, directoryOfLogfile,
+					configMap ) ) {
 				this.getValidationAvalidationJpegModule().getMessageService().print();
 			} else {
 				this.getValidationAvalidationJpegModule().getMessageService().print();

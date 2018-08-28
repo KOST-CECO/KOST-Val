@@ -20,6 +20,7 @@
 package ch.kostceco.tools.kostval.validation.modulesiard.impl;
 
 import java.io.File;
+import java.util.Map;
 import java.io.FileInputStream;
 import java.io.IOException;
 
@@ -34,7 +35,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationWwarningException;
-import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.bean.ValidationContext;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationWwarningModule;
@@ -52,24 +52,12 @@ public class ValidationWwarningModuleImpl extends ValidationModuleImpl implement
 
 {
 
-	public ConfigurationService	configurationService;
-
-	public ConfigurationService getConfigurationService()
-	{
-		return configurationService;
-	}
-
-	public void setConfigurationService( ConfigurationService configurationService )
-	{
-		this.configurationService = configurationService;
-	}
-
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile )
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
 			throws ValidationWwarningException
 	{
 		// Informationen zur Darstellung "onWork" holen
-		String onWork = getConfigurationService().getShowProgressOnWork();
+		String onWork = configMap.get( "ShowProgressOnWork" );
 		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
 		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
 		 * ref="configurationService" /> */
@@ -83,7 +71,7 @@ public class ValidationWwarningModuleImpl extends ValidationModuleImpl implement
 
 		try {
 
-			String pathToWorkDir = getConfigurationService().getPathToWorkDir();
+			String pathToWorkDir = configMap.get( "PathToWorkDir" );
 			pathToWorkDir = pathToWorkDir + File.separator + "SIARD";
 			File metadataXml = new File( new StringBuilder( pathToWorkDir ).append( File.separator )
 					.append( "header" ).append( File.separator ).append( "metadata.xml" ).toString() );

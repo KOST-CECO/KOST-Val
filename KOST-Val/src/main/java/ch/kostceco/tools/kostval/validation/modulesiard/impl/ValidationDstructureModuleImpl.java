@@ -20,6 +20,7 @@
 package ch.kostceco.tools.kostval.validation.modulesiard.impl;
 
 import java.io.File;
+import java.util.Map;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.List;
@@ -32,7 +33,6 @@ import org.jdom2.Namespace;
 import org.jdom2.input.SAXBuilder;
 
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationDstructureException;
-import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationDstructureModule;
 
@@ -47,29 +47,14 @@ public class ValidationDstructureModuleImpl extends ValidationModuleImpl impleme
 		ValidationDstructureModule
 {
 
-	public ConfigurationService	configurationService;
-
-	public ConfigurationService getConfigurationService()
-	{
-		return configurationService;
-	}
-
-	public void setConfigurationService( ConfigurationService configurationService )
-	{
-		this.configurationService = configurationService;
-	}
-
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile )
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
 			throws ValidationDstructureException
 	{
 		boolean showOnWork = true;
 		int onWork = 410;
 		// Informationen zur Darstellung "onWork" holen
-		String onWorkConfig = getConfigurationService().getShowProgressOnWork();
-		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
-		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
-		 * ref="configurationService" /> */
+		String onWorkConfig = configMap.get( "ShowProgressOnWork" );
 		if ( onWorkConfig.equals( "no" ) ) {
 			// keine Ausgabe
 			showOnWork = false;
@@ -82,7 +67,7 @@ public class ValidationDstructureModuleImpl extends ValidationModuleImpl impleme
 		boolean valid = true;
 		try {
 			/* Extract the metadata.xml from the temporare work folder and build a jdom document */
-			String pathToWorkDir = getConfigurationService().getPathToWorkDir();
+			String pathToWorkDir = configMap.get( "PathToWorkDir" );
 			pathToWorkDir = pathToWorkDir + File.separator + "SIARD";
 			File metadataXml = new File( new StringBuilder( pathToWorkDir ).append( File.separator )
 					.append( "header" ).append( File.separator ).append( "metadata.xml" ).toString() );
@@ -115,7 +100,7 @@ public class ValidationDstructureModuleImpl extends ValidationModuleImpl impleme
 			List<Element> schemas = document.getRootElement().getChild( "schemas", ns )
 					.getChildren( "schema", ns );
 			for ( Element schema : schemas ) {
-				valid = validateSchema( schema, ns, pathToWorkDir );
+				valid = validateSchema( schema, ns, pathToWorkDir, configMap );
 				if ( showOnWork ) {
 					if ( onWork == 410 ) {
 						onWork = 2;
@@ -155,15 +140,13 @@ public class ValidationDstructureModuleImpl extends ValidationModuleImpl impleme
 		return valid;
 	}
 
-	private boolean validateSchema( Element schema, Namespace ns, String pathToWorkDir )
+	private boolean validateSchema( Element schema, Namespace ns, String pathToWorkDir,
+			Map<String, String> configMap )
 	{
 		boolean showOnWork = true;
 		int onWork = 410;
 		// Informationen zur Darstellung "onWork" holen
-		String onWorkConfig = getConfigurationService().getShowProgressOnWork();
-		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
-		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
-		 * ref="configurationService" /> */
+		String onWorkConfig = configMap.get( "ShowProgressOnWork" );
 		if ( onWorkConfig.equals( "no" ) ) {
 			// keine Ausgabe
 			showOnWork = false;
@@ -203,7 +186,7 @@ public class ValidationDstructureModuleImpl extends ValidationModuleImpl impleme
 						}
 					}
 				}
-			}else{
+			} else {
 				// Kein Fehler sondern leeres Schema
 			}
 		} else {

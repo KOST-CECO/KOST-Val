@@ -21,10 +21,10 @@ package ch.kostceco.tools.kostval.validation.moduletiff2.impl;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.util.Map;
 import java.io.FileReader;
 
 import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationDphotointerValidationException;
-import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationDphotointerValidationModule;
 
@@ -36,22 +36,10 @@ public class ValidationDphotointerValidationModuleImpl extends ValidationModuleI
 		ValidationDphotointerValidationModule
 {
 
-	private ConfigurationService	configurationService;
-
-	public static String					NEWLINE	= System.getProperty( "line.separator" );
-
-	public ConfigurationService getConfigurationService()
-	{
-		return configurationService;
-	}
-
-	public void setConfigurationService( ConfigurationService configurationService )
-	{
-		this.configurationService = configurationService;
-	}
+	public static String	NEWLINE	= System.getProperty( "line.separator" );
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile )
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
 			throws ValidationDphotointerValidationException
 	{
 
@@ -66,14 +54,14 @@ public class ValidationDphotointerValidationModuleImpl extends ValidationModuleI
 		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
 		 * ref="configurationService" /> */
 
-		String pi0 = getConfigurationService().getAllowedPhotointer0();
-		String pi1 = getConfigurationService().getAllowedPhotointer1();
-		String pi2 = getConfigurationService().getAllowedPhotointer2();
-		String pi3 = getConfigurationService().getAllowedPhotointer3();
-		String pi4 = getConfigurationService().getAllowedPhotointer4();
-		String pi5 = getConfigurationService().getAllowedPhotointer5();
-		String pi6 = getConfigurationService().getAllowedPhotointer6();
-		String pi8 = getConfigurationService().getAllowedPhotointer8();
+		String pi0 = configMap.get( "AllowedPhotointer0" );
+		String pi1 = configMap.get( "AllowedPhotointer1" );
+		String pi2 = configMap.get( "AllowedPhotointer2" );
+		String pi3 = configMap.get( "AllowedPhotointer3" );
+		String pi4 = configMap.get( "AllowedPhotointer4" );
+		String pi5 = configMap.get( "AllowedPhotointer5" );
+		String pi6 = configMap.get( "AllowedPhotointer6" );
+		String pi8 = configMap.get( "AllowedPhotointer8" );
 
 		if ( pi0.startsWith( "Configuration-Error:" ) ) {
 			getMessageService().logError(
