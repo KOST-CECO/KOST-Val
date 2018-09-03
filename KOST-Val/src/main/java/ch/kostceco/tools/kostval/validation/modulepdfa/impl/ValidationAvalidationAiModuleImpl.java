@@ -34,6 +34,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+//import java.sql.Timestamp;
 
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -494,7 +495,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 						}
 
 						// Write font validation information
-						FileStream fs =new FileStream( fontReport, "rw" );
+						FileStream fs = new FileStream( fontReport, "rw" );
 						Stream xmlStream = fs;
 						if ( !docPdf.writeFontValidationXML( xmlStream ) ) {
 							// throw new
@@ -504,13 +505,13 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 									docPdf.getErrorMessage() ) );
 						}
 						fs.close();
-						
-						// TODO erledigt: Auswertung betreffend unbekannt und undefiniert
+
+						// TODO erledigt: Start der Font-Auswertung betreffend unbekannt und undefiniert
 						try {
 							FileChannel inputChannel = null;
 							FileChannel outputChannel = null;
-							FileInputStream fis=null;
-							FileOutputStream fos=null;
+							FileInputStream fis = null;
+							FileOutputStream fos = null;
 							try {
 								fis = new FileInputStream( fontReport );
 								inputChannel = fis.getChannel();

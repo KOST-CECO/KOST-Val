@@ -98,9 +98,9 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements Va
 
 			/* read the document and for each schema and table entry verify existence in temporary
 			 * extracted structure and compare the rownumber */
-			version1 = FileUtils.readFileToString( metadataXml ).contains(
+			version1 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" ).contains(
 					"http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
-			version2 = FileUtils.readFileToString( metadataXml ).contains(
+			version2 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" ).contains(
 					"http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
 			Namespace ns = Namespace
 					.getNamespace( "http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );

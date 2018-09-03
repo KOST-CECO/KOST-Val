@@ -78,9 +78,9 @@ public class ValidationDstructureModuleImpl extends ValidationModuleImpl impleme
 
 			/* read the document and for each schema and table entry verify existence in temporary
 			 * extracted structure */
-			Boolean version1 = FileUtils.readFileToString( metadataXml ).contains(
+			Boolean version1 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" ).contains(
 					"http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
-			Boolean version2 = FileUtils.readFileToString( metadataXml ).contains(
+			Boolean version2 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" ).contains(
 					"http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
 			Namespace ns = Namespace
 					.getNamespace( "http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );

@@ -19,8 +19,6 @@
 
 package ch.kostceco.tools.kostval.validation.modulesiard.impl;
 
-import static org.apache.commons.io.IOUtils.closeQuietly;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.util.Map;
@@ -101,9 +99,9 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl implement
 
 			/* read the document and for each schema and table entry verify existence in temporary
 			 * extracted structure */
-			version1 = FileUtils.readFileToString( metadataXml ).contains(
+			version1 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" ).contains(
 					"http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
-			version2 = FileUtils.readFileToString( metadataXml ).contains(
+			version2 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" ).contains(
 					"http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
 			Namespace ns = Namespace
 					.getNamespace( "http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
@@ -317,9 +315,9 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl implement
 												return false;
 											} finally {
 												if ( proc != null ) {
-													closeQuietly( proc.getOutputStream() );
-													closeQuietly( proc.getInputStream() );
-													closeQuietly( proc.getErrorStream() );
+													proc.getOutputStream().close();
+													proc.getInputStream().close();
+													proc.getErrorStream().close();
 												}
 											}
 										}

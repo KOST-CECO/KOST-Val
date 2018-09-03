@@ -20,10 +20,8 @@
 package ch.kostceco.tools.kostval;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 //import java.sql.Timestamp;
@@ -35,7 +33,6 @@ import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -44,10 +41,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import ch.kostceco.tools.kostval.controller.Controllerjp2;
 import ch.kostceco.tools.kostval.controller.Controllerjpeg;
@@ -104,8 +98,12 @@ public class KOSTVal implements MessageConstants
 
 	public static void main( String[] args ) throws IOException
 	{
+		// System.out.println( new Timestamp( System.currentTimeMillis() ) + " 107 Start " );
+		@SuppressWarnings("resource")
 		ApplicationContext context = new ClassPathXmlApplicationContext(
 				"classpath:config/applicationContext.xml" );
+		/* System.out.println( new Timestamp( System.currentTimeMillis() ) +
+		 * " 110 Ende ApplicationContext " ); */
 
 		System.out.println( "KOST-Val" );
 
@@ -137,10 +135,17 @@ public class KOSTVal implements MessageConstants
 			dirOfJarPath = file.getParent();
 		}
 
-		File configFileZip = new File( dirOfJarPath + File.separator + "configuration" + File.separator
-				+ "kostval.conf.xml" );
 		File directoryOfConfigfile = new File( System.getenv( "USERPROFILE" ) + File.separator
 				+ ".kost-val" + File.separator + "configuration" );
+		File kadZip = new File( dirOfJarPath + File.separator + "configuration" + File.separator
+				+ "KaD_SignatureFile_V72.xml" );
+		File kadFile = new File( directoryOfConfigfile + File.separator + "KaD_SignatureFile_V72.xml" );
+		if ( !kadFile.exists() ) {
+			directoryOfConfigfile.mkdirs();
+			Util.copyFile( kadZip, kadFile );
+		}
+		File configFileZip = new File( dirOfJarPath + File.separator + "configuration" + File.separator
+				+ "kostval.conf.xml" );
 		File configFile = new File( directoryOfConfigfile + File.separator + "kostval.conf.xml" );
 		if ( !configFile.exists() ) {
 			directoryOfConfigfile.mkdirs();
@@ -299,6 +304,11 @@ public class KOSTVal implements MessageConstants
 		LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_FORMATON, formatValOn,
 				version ) );
 		LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_INFO ) );
+		String config = "";
+		for ( String key : configMap.keySet() ) {
+			config = config + key + " " + configMap.get( key ) + "; ";
+		}
+		LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_CONFIG, config ) );
 
 		if ( args[0].equals( "--format" ) && formatValOn.equals( "" ) ) {
 			// Formatvalidierung aber alle Formate ausgeschlossen
@@ -504,13 +514,9 @@ public class KOSTVal implements MessageConstants
 
 			// TODO: Formatvalidierung an einer Datei --> erledigt --> nur Marker
 			if ( !valDatei.isDirectory() ) {
-				/* System.out.println( new Timestamp( System.currentTimeMillis() ) +
-				 * " Formatvalidierung an einer Datei 516 " ); */
 
 				boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
 						dirOfJarPath, configMap );
-				/* System.out.println( new Timestamp( System.currentTimeMillis() ) +
-				 * " Formatvalidierung erfolgt 519 " ); */
 
 				LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_FORMAT2 ) );
 
@@ -522,47 +528,6 @@ public class KOSTVal implements MessageConstants
 				LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_LOGEND ) );
 				// logFile bereinigung (& End und ggf 3c)
 				Util.valEnd3cAmp( "", logFile );
-				/* System.out.println( new Timestamp( System.currentTimeMillis() ) + " Konfig kopieren 532 "
-				 * ); */
-
-				// Die Konfiguration hereinkopieren
-				// TODO: Kopieren mit Files.copy("source.txt", "dest.txt"); ab JRE7 möglich
-				try {
-					DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-					factory.setValidating( false );
-
-					factory.setExpandEntityReferences( false );
-
-					Document docConfig = factory.newDocumentBuilder().parse( configFile );
-					NodeList list = docConfig.getElementsByTagName( "configuration" );
-					Element element = (Element) list.item( 0 );
-
-					Document docLog = factory.newDocumentBuilder().parse( logFile );
-
-					Node dup = docLog.importNode( element, true );
-
-					docLog.getDocumentElement().appendChild( dup );
-					FileWriter writer = new FileWriter( logFile );
-
-					ByteArrayOutputStream baos = new ByteArrayOutputStream();
-					ElementToStream( docLog.getDocumentElement(), baos );
-					String stringDoc2 = new String( baos.toByteArray() );
-					writer.write( stringDoc2 );
-					writer.close();
-
-					// Der Header wird dabei leider verschossen, wieder zurück ändern
-					String newstring = kostval.getTextResourceService().getText( MESSAGE_XML_HEADER );
-					String oldstring = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><KOSTValLog>";
-					Util.oldnewstring( oldstring, newstring, logFile );
-
-				} catch ( Exception e ) {
-					LOGGER.logError( "<Error>"
-							+ kostval.getTextResourceService().getText( ERROR_XML_UNKNOWN,
-									"CopyConfigException: " + e.getMessage() ) );
-					System.out.println( "CopyConfigException: " + e.getMessage() );
-				}
-				/* System.out.println( new Timestamp( System.currentTimeMillis() ) +
-				 * " Konfig Kopiert. Start Bereinigung 569 " ); */
 
 				if ( valFile ) {
 					// Löschen des Arbeitsverzeichnisses, falls eines angelegt wurde
@@ -824,42 +789,6 @@ public class KOSTVal implements MessageConstants
 				System.out.println( kostval.getTextResourceService().getText(
 						MESSAGE_FORMATVALIDATION_DONE, summaryFormat, logFile.getAbsolutePath() ) );
 
-				// Die Konfiguration hereinkopieren
-				try {
-					DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-					factory.setValidating( false );
-
-					factory.setExpandEntityReferences( false );
-
-					Document docConfig = factory.newDocumentBuilder().parse( configFile );
-					NodeList list = docConfig.getElementsByTagName( "configuration" );
-					Element element = (Element) list.item( 0 );
-
-					Document docLog = factory.newDocumentBuilder().parse( logFile );
-
-					Node dup = docLog.importNode( element, true );
-
-					docLog.getDocumentElement().appendChild( dup );
-					FileWriter writer = new FileWriter( logFile );
-
-					ByteArrayOutputStream baos = new ByteArrayOutputStream();
-					ElementToStream( docLog.getDocumentElement(), baos );
-					String stringDoc2 = new String( baos.toByteArray() );
-					writer.write( stringDoc2 );
-					writer.close();
-
-					// Der Header wird dabei leider verschossen, wieder zurück ändern
-					String newstring = kostval.getTextResourceService().getText( MESSAGE_XML_HEADER );
-					String oldstring = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><KOSTValLog>";
-					Util.oldnewstring( oldstring, newstring, logFile );
-					Thread.sleep( 5000 );
-
-				} catch ( Exception e ) {
-					LOGGER.logError( "Error>"
-							+ kostval.getTextResourceService().getText( ERROR_XML_UNKNOWN,
-									"CopyConfigException2: " + e.getMessage() ) );
-					System.out.println( "CopyConfigException2: " + e.getMessage() );
-				}
 				System.out.print( "                                                                    " );
 				System.out.print( "\r" );
 
@@ -1022,42 +951,6 @@ public class KOSTVal implements MessageConstants
 						// logFile bereinigung (& End und ggf 3c)
 						Util.valEnd3cAmp( "", logFile );
 
-						// Die Konfiguration hereinkopieren
-						try {
-							DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-							factory.setValidating( false );
-
-							factory.setExpandEntityReferences( false );
-
-							Document docConfig = factory.newDocumentBuilder().parse( configFile );
-							NodeList list = docConfig.getElementsByTagName( "configuration" );
-							Element element = (Element) list.item( 0 );
-
-							Document docLog = factory.newDocumentBuilder().parse( logFile );
-
-							Node dup = docLog.importNode( element, true );
-
-							docLog.getDocumentElement().appendChild( dup );
-							FileWriter writer = new FileWriter( logFile );
-
-							ByteArrayOutputStream baos = new ByteArrayOutputStream();
-							ElementToStream( docLog.getDocumentElement(), baos );
-							String stringDoc2 = new String( baos.toByteArray() );
-							writer.write( stringDoc2 );
-							writer.close();
-
-							// Der Header wird dabei leider verschossen, wieder zurück ändern
-							String newstring = kostval.getTextResourceService().getText( MESSAGE_XML_HEADER );
-							String oldstring = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><KOSTValLog>";
-							Util.oldnewstring( oldstring, newstring, logFile );
-
-						} catch ( Exception e ) {
-							LOGGER.logError( "<Error>"
-									+ kostval.getTextResourceService().getText( ERROR_XML_UNKNOWN,
-											"CopyConfigException: " + e.getMessage() ) );
-							System.out.println( "CopyConfigException: " + e.getMessage() );
-						}
-
 						// bestehendes Workverzeichnis ggf. löschen
 						if ( tmpDir.exists() ) {
 							Util.deleteDir( tmpDir );
@@ -1112,42 +1005,6 @@ public class KOSTVal implements MessageConstants
 
 								// logFile bereinigung (& End und ggf 3c)
 								Util.valEnd3cAmp( "", logFile );
-
-								// Die Konfiguration hereinkopieren
-								try {
-									DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-									factory.setValidating( false );
-
-									factory.setExpandEntityReferences( false );
-
-									Document docConfig = factory.newDocumentBuilder().parse( configFile );
-									NodeList list = docConfig.getElementsByTagName( "configuration" );
-									Element element = (Element) list.item( 0 );
-
-									Document docLog = factory.newDocumentBuilder().parse( logFile );
-
-									Node dup = docLog.importNode( element, true );
-
-									docLog.getDocumentElement().appendChild( dup );
-									FileWriter writer = new FileWriter( logFile );
-
-									ByteArrayOutputStream baos = new ByteArrayOutputStream();
-									ElementToStream( docLog.getDocumentElement(), baos );
-									String stringDoc2 = new String( baos.toByteArray() );
-									writer.write( stringDoc2 );
-									writer.close();
-
-									// Der Header wird dabei leider verschossen, wieder zurück ändern
-									String newstring = kostval.getTextResourceService().getText( MESSAGE_XML_HEADER );
-									String oldstring = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><KOSTValLog>";
-									Util.oldnewstring( oldstring, newstring, logFile );
-
-								} catch ( Exception e2 ) {
-									LOGGER.logError( "<Error>"
-											+ kostval.getTextResourceService().getText( ERROR_XML_UNKNOWN,
-													"CopyConfigException2: " + e2.getMessage() ) );
-									System.out.println( "CopyConfigException2: " + e2.getMessage() );
-								}
 
 								// bestehendes Workverzeichnis ggf. löschen
 								if ( tmpDir.exists() ) {
@@ -1484,42 +1341,6 @@ public class KOSTVal implements MessageConstants
 				System.out.print( kostval.getTextResourceService().getText( MESSAGE_XML_LOG ) );
 				System.out.print( "\r" );
 
-				// Die Konfiguration hereinkopieren
-				try {
-					DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-					factory.setValidating( false );
-
-					factory.setExpandEntityReferences( false );
-
-					Document docConfig = factory.newDocumentBuilder().parse( configFile );
-					NodeList list = docConfig.getElementsByTagName( "configuration" );
-					Element element = (Element) list.item( 0 );
-
-					Document docLog = factory.newDocumentBuilder().parse( logFile );
-
-					Node dup = docLog.importNode( element, true );
-
-					docLog.getDocumentElement().appendChild( dup );
-					FileWriter writer = new FileWriter( logFile );
-
-					ByteArrayOutputStream baos = new ByteArrayOutputStream();
-					ElementToStream( docLog.getDocumentElement(), baos );
-					String stringDoc2 = new String( baos.toByteArray() );
-					writer.write( stringDoc2 );
-					writer.close();
-
-					// Der Header wird dabei leider verschossen, wieder zurück ändern
-					String newstring = kostval.getTextResourceService().getText( MESSAGE_XML_HEADER );
-					String oldstring = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><KOSTValLog>";
-					Util.oldnewstring( oldstring, newstring, logFile );
-
-				} catch ( Exception e ) {
-					LOGGER.logError( "<Error>"
-							+ kostval.getTextResourceService().getText( ERROR_XML_UNKNOWN,
-									"CopyConfigException3: " + e.getMessage() ) );
-					System.out.println( "CopyConfigException3: " + e.getMessage() );
-				}
-
 				// bestehendes Workverzeichnis ggf. löschen
 				if ( tmpDir.exists() ) {
 					Util.deleteDir( tmpDir );
@@ -1596,6 +1417,7 @@ public class KOSTVal implements MessageConstants
 	private static boolean valFile( File valDatei, String logFileName, File directoryOfLogfile,
 			boolean verbose, String dirOfJarPath, Map<String, String> configMap ) throws IOException
 	{
+		@SuppressWarnings("resource")
 		ApplicationContext context = new ClassPathXmlApplicationContext(
 				"classpath:config/applicationContext.xml" );
 

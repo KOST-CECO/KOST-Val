@@ -19,8 +19,6 @@
 
 package ch.kostceco.tools.kostval.validation.modulesiard.impl;
 
-import static org.apache.commons.io.IOUtils.closeQuietly;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.util.Map;
@@ -207,9 +205,9 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl impl
 				Document document = (Document) builder.build( fin );
 				fin.close();
 
-				Boolean version1 = FileUtils.readFileToString( metadataXml ).contains(
+				Boolean version1 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" ).contains(
 						"http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
-				Boolean version2 = FileUtils.readFileToString( metadataXml ).contains(
+				Boolean version2 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" ).contains(
 						"http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
 				Namespace ns = Namespace
 						.getNamespace( "http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
@@ -415,24 +413,24 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl impl
 								return false;
 							} finally {
 								if ( procSed != null ) {
-									closeQuietly( procSed.getOutputStream() );
-									closeQuietly( procSed.getInputStream() );
-									closeQuietly( procSed.getErrorStream() );
+									procSed.getOutputStream().close();
+									procSed.getInputStream().close();
+									procSed.getErrorStream().close();
 								}
 								if ( procSed2 != null ) {
-									closeQuietly( procSed2.getOutputStream() );
-									closeQuietly( procSed2.getInputStream() );
-									closeQuietly( procSed2.getErrorStream() );
+									procSed2.getOutputStream().close();
+									procSed2.getInputStream().close();
+									procSed2.getErrorStream().close();
 								}
 								if ( procSed3 != null ) {
-									closeQuietly( procSed3.getOutputStream() );
-									closeQuietly( procSed3.getInputStream() );
-									closeQuietly( procSed3.getErrorStream() );
+									procSed3.getOutputStream().close();
+									procSed3.getInputStream().close();
+									procSed3.getErrorStream().close();
 								}
 								if ( procSed4 != null ) {
-									closeQuietly( procSed4.getOutputStream() );
-									closeQuietly( procSed4.getInputStream() );
-									closeQuietly( procSed4.getErrorStream() );
+									procSed4.getOutputStream().close();
+									procSed4.getInputStream().close();
+									procSed4.getErrorStream().close();
 								}
 							}
 

@@ -94,9 +94,9 @@ public class ValidationGtableModuleImpl extends ValidationModuleImpl implements
 
 			/* read the document and for each schema and table entry verify existence in temporary
 			 * extracted structure */
-			version1 = FileUtils.readFileToString( metadataXml ).contains(
+			version1 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" ).contains(
 					"http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
-			version2 = FileUtils.readFileToString( metadataXml ).contains(
+			version2 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" ).contains(
 					"http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
 			Namespace ns = Namespace
 					.getNamespace( "http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );

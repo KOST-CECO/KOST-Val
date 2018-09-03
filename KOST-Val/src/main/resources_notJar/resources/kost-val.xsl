@@ -33,6 +33,9 @@
 					sans-serif; font-size: 10pt; color: #808080; }
 					.footer {font-family:
 					Verdana, Geneva, sans-serif; font-size: 10pt; color: #808080; }
+					h4
+					{font-family: Verdana, Geneva, sans-serif; font-weight:bold;
+					font-size: 10pt; color: #000000; }
 					tr
 					{background-color: #f0f0f0;}
 					tr.caption {background-color: #eeafaf;
@@ -131,11 +134,11 @@
 				<xsl:for-each select="KOSTValLog/Format/Infos">
 					<div>
 						<table width="100%">
-								<tr class="captioninfo">
-									<td>
-										<xsl:value-of select="Summary" />
-									</td>
-								</tr>
+							<tr class="captioninfo">
+								<td>
+									<xsl:value-of select="Summary" />
+								</td>
+							</tr>
 						</table>
 						<table width="100%">
 							<xsl:for-each select="Info">
@@ -171,6 +174,57 @@
 										</td>
 										<td width="75%">
 											<xsl:value-of select="Message" />
+											<xsl:if test="MessageFont">
+												<tr class="captionm">
+
+													<td width="100%">
+														<strong>Producer: <xsl:value-of select="MessageFont/docInfo/producer"/>
+														</strong>	
+
+														<xsl:for-each select="MessageFont/fonts/font" >
+															<br />
+															<txt>
+																<strong>Font: <xsl:value-of select="@name"/>
+																</strong>
+																<txt>  Full name: </txt>
+																<xsl:value-of select="@fullname"/>
+																<xsl:if test="@objectNo"> (object no <xsl:value-of select="@objectNo"/>)
+																</xsl:if>
+																<txt>  Type: </txt>
+																<xsl:value-of select="@type"/>
+																<xsl:if test="@fontfile">
+																	<txt>  Font file: </txt>
+																	<xsl:value-of select="@fontfile"/>
+																</xsl:if>
+															</txt>
+															<br />
+															<txt>
+																<xsl:for-each select="character">
+																	<xsl:choose>
+																		<xsl:when test="@unicodeUndefined">
+																			<img height="30">
+																				<xsl:attribute name="src">
+																					<xsl:value-of select="."/>
+																				</xsl:attribute>
+																			</img>
+																		</xsl:when>
+																		<xsl:when test="@unicode">
+																		</xsl:when>
+																		<xsl:otherwise>
+
+																			<img height="30"  border="1px">
+																				<xsl:attribute name="src">
+																					<xsl:value-of select="."/>
+																				</xsl:attribute>
+																			</img>
+																		</xsl:otherwise>
+																	</xsl:choose>
+																</xsl:for-each>
+															</txt>
+														</xsl:for-each>
+													</td>
+												</tr>
+											</xsl:if>
 										</td>
 									</tr>
 								</xsl:for-each>

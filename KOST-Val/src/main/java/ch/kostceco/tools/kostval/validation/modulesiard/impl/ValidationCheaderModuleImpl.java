@@ -228,9 +228,9 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 			String pathToWorkDir2 = pathToWorkDir + File.separator + "SIARD";
 			File metadataXml = new File( new StringBuilder( pathToWorkDir2 ).append( File.separator )
 					.append( "header" ).append( File.separator ).append( "metadata.xml" ).toString() );
-			Boolean version1 = FileUtils.readFileToString( metadataXml ).contains(
+			Boolean version1 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" ).contains(
 					"http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
-			Boolean version2 = FileUtils.readFileToString( metadataXml ).contains(
+			Boolean version2 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" ).contains(
 					"http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
 			if ( version1 ) {
 				getMessageService().logError(

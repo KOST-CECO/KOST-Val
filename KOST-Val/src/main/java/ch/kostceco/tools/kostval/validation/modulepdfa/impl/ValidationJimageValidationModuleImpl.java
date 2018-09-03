@@ -19,8 +19,6 @@
 
 package ch.kostceco.tools.kostval.validation.modulepdfa.impl;
 
-import static org.apache.commons.io.IOUtils.closeQuietly;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
@@ -70,35 +68,34 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl i
 		ValidationJimageValidationModule
 {
 	public static Map<String, String>	configMapFinal	= null;
-	boolean												isValidJPEG		= true;
-	boolean												isValidJP2		= true;
-	boolean												isValidJBIG2	= true;
+	boolean														isValidJPEG			= true;
+	boolean														isValidJP2			= true;
+	boolean														isValidJBIG2		= true;
 
-	String												invalidJPEG		= "";
-	String												invalidJP2		= "";
-	int														jpegCounter		= 0;
-	int														jp2Counter		= 0;
-	int														jbig2Counter	= 0;
-	String												jbig2Obj			= "";
-	public static String					NEWLINE				= System.getProperty( "line.separator" );
-	
+	String														invalidJPEG			= "";
+	String														invalidJP2			= "";
+	int																jpegCounter			= 0;
+	int																jp2Counter			= 0;
+	int																jbig2Counter		= 0;
+	String														jbig2Obj				= "";
+	public static String							NEWLINE					= System.getProperty( "line.separator" );
+
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
 			throws ValidationApdfvalidationException
 	{
 		boolean valid = true;
 		boolean isAllowedJBIG2 = false;
-		configMapFinal =configMap;
-
+		configMapFinal = configMap;
 
 		// Optionale Bildvalidierung eingeschaltet?
-		String pdfaImage = configMap.get("pdfaimage");
+		String pdfaImage = configMap.get( "pdfaimage" );
 		if ( pdfaImage.startsWith( "Configuration-Error:" ) ) {
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA ) + pdfaImage );
 			return false;
 		}
-		String jbig2Allowed = configMap.get("jbig2allowed");
+		String jbig2Allowed = configMap.get( "jbig2allowed" );
 		if ( jbig2Allowed.startsWith( "Configuration-Error:" ) ) {
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA ) + jbig2Allowed );
@@ -112,12 +109,12 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl i
 			// Optionale Bildvalidierung eingeschaltet und oder JBIG2 nicht erlaubt
 
 			// Informationen zum Arbeitsverzeichnis holen
-			String pathToWorkDir = configMap.get("PathToWorkDir");
+			String pathToWorkDir = configMap.get( "PathToWorkDir" );
 
 			String srcPdf = valDatei.getAbsolutePath();
 			String destImage = pathToWorkDir + File.separator + valDatei.getName();
 
-			String pathToLogDir = configMap.get("PathToLogfile");
+			String pathToLogDir = configMap.get( "PathToLogfile" );
 
 			File encrypt = new File( pathToLogDir + File.separator + valDatei.getName() + "_encrypt.txt" );
 
@@ -173,7 +170,7 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl i
 			}
 		} else {
 			// keine Bildvalidierung und JBIG2 erlaubt
-			String pathToLogDir = configMap.get("PathToLogfile");
+			String pathToLogDir = configMap.get( "PathToLogfile" );
 			File encrypt = new File( pathToLogDir + File.separator + valDatei.getName() + "_encrypt.txt" );
 
 			if ( encrypt.exists() ) {
@@ -194,8 +191,8 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl i
 	 *          the source PDF
 	 * @param dest
 	 *          the resulting PDF */
-	public void extractImages( String srcPdf, String destImage, Map<String, String> configMap ) throws IOException,
-			DocumentException
+	public void extractImages( String srcPdf, String destImage, Map<String, String> configMap )
+			throws IOException, DocumentException
 	{
 		try {
 			PdfReader reader = new PdfReader( srcPdf );
@@ -241,8 +238,8 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl i
 				String filename;
 				File filePath = new File( path );
 				String filenamePath = filePath.getName();
-				String pathToLogDir = configMapFinal.get("PathToLogfile");
-				String pdfaImage = configMapFinal.get("pdfaimage");
+				String pathToLogDir = configMapFinal.get( "PathToLogfile" );
+				String pdfaImage = configMapFinal.get( "pdfaimage" );
 				boolean delFile = true;
 				FileOutputStream os;
 				PdfImageObject image = renderInfo.getImage();
@@ -543,9 +540,9 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl i
 												 * if ( 0 != exitStatus ) { // invalide isValidJP2 = false; delFile = false;
 												 * invalidFile = invalidFile + filename + " "; } */
 												if ( proc != null ) {
-													closeQuietly( proc.getOutputStream() );
-													closeQuietly( proc.getInputStream() );
-													closeQuietly( proc.getErrorStream() );
+													proc.getOutputStream().close();
+													proc.getInputStream().close();
+													proc.getErrorStream().close();
 												}
 											}
 											if ( report.exists() ) {

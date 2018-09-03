@@ -19,8 +19,6 @@
 
 package ch.kostceco.tools.kostval.validation.moduletiff2.impl;
 
-import static org.apache.commons.io.IOUtils.closeQuietly;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.util.Map;
@@ -214,9 +212,9 @@ public class ValidationCcompressionValidationModuleImpl extends ValidationModule
 						return false;
 					} finally {
 						if ( proc != null ) {
-							closeQuietly( proc.getOutputStream() );
-							closeQuietly( proc.getInputStream() );
-							closeQuietly( proc.getErrorStream() );
+							proc.getOutputStream().close();
+							proc.getInputStream().close();
+							proc.getErrorStream().close();
 						}
 					}
 

@@ -55,6 +55,7 @@ public interface MessageConstants
 	String	MESSAGE_XML_END																= "message.xml.end";
 	String	MESSAGE_XML_FORMATON													= "message.xml.formaton";
 	String	MESSAGE_XML_INFO															= "message.xml.info";
+	String	MESSAGE_XML_CONFIG														= "message.xml.config";
 	String	MESSAGE_TIFFVALIDATION												= "message.tiffvalidation";
 	String	MESSAGE_SIARDVALIDATION												= "message.siardvalidation";
 	String	MESSAGE_PDFAVALIDATION												= "message.pdfavalidation";

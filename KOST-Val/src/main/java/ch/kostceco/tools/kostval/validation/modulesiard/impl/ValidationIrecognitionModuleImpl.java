@@ -71,9 +71,9 @@ public class ValidationIrecognitionModuleImpl extends ValidationModuleImpl imple
 				valid = false;
 			}
 
-			version1 = FileUtils.readFileToString( metadataXml ).contains(
+			version1 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" ).contains(
 					"http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
-			version2 = FileUtils.readFileToString( metadataXml ).contains(
+			version2 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" ).contains(
 					"http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
 			if ( version1 ) {
 				// keine zusaetzliche kontrolle
