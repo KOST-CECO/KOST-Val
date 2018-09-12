@@ -34,7 +34,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-//import java.sql.Timestamp;
+// import java.sql.Timestamp;
 
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -335,6 +335,13 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 
 		boolean isValid = false;
 		boolean isValidFont = true;
+		boolean isWarningFont = false;
+		int undefiniedWarning = 0;
+		String undefiniedWarningString = "";
+		int symbolWarning = 0;
+		String symbolWarningString = "";
+		String fontundefined = "E";
+		String fontsymbol = "E";
 		boolean callas = false;
 		boolean pdftools = false;
 		int callasReturnCode = 9;
@@ -552,27 +559,59 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 
 						String elementCount = doc.getElementsByTagName( "characterCount" ).item( 0 )
 								.getTextContent();
+						int count = Integer.valueOf( elementCount );
 						String elementUnknown = doc.getElementsByTagName( "characterUnknown" ).item( 0 )
 								.getTextContent();
+						// int unknown=Integer.valueOf( elementUnknown );
 						String elementUnknownP = doc.getElementsByTagName( "characterUnknownPercentage" )
 								.item( 0 ).getTextContent();
+						double unknownPdouble = Double.valueOf( elementUnknownP );
 						String elementUndefined = doc.getElementsByTagName( "characterUndefined" ).item( 0 )
 								.getTextContent();
+						// int undefined=Integer.valueOf( elementUndefined );
 						String elementUndefinedP = doc.getElementsByTagName( "characterUndefinedPercentage" )
 								.item( 0 ).getTextContent();
-
+						double undefinedPdouble = Double.valueOf( elementUndefinedP );
+						double elementTolerance = unknownPdouble + undefinedPdouble;
 						if ( !elementUnknown.equals( "0" ) || !elementUndefined.equals( "0" ) ) {
 							try {
-								isValidFont = false;
-								errorK = errorK
-										+ getTextResourceService().getText( MESSAGE_XML_MODUL_K_PDFA )
-										+ getTextResourceService().getText( ERROR_XML_K_OVERVIEW, elementCount,
-												elementUnknown, elementUnknownP, elementUndefined, elementUndefinedP );
+								/* Ausnahmen ermitteln und abfangen:
+								 * 
+								 * Toleranzschwelle Fehler / Warnung (S, M, L)
+								 * 
+								 * Symbol-Schriften als Warnung / Fehler behandeln (W, E)
+								 * 
+								 * Undefinierte Zeichen als Warnung / Fehler behandeln (W, E) */
+								String fonttolerance = configMap.get( "fonttolerance" );
+								double tolerance = 10.000;
+								if ( fonttolerance.equalsIgnoreCase( "S" ) ) {
+									tolerance = 5.000;
+								} else if ( fonttolerance.equalsIgnoreCase( "L" ) ) {
+									tolerance = 20.000;
+								}
+								if ( tolerance > elementTolerance ) {
+									isWarningFont = true;
+								}
+								fontsymbol = configMap.get( "fontsymbol" );
+								if ( fontsymbol.equalsIgnoreCase( "W" ) && isWarningFont ) {
+									// Warning und Schwelle nicht ueberschritten
+									fontsymbol = "W";
+								} else {
+									fontsymbol = "E";
+								}
+								fontundefined = configMap.get( "fontundefined" );
+								if ( fontundefined.equalsIgnoreCase( "W" ) && isWarningFont ) {
+									// Warning und Schwelle nicht ueberschritten
+									fontundefined = "W";
+								} else {
+									fontundefined = "E";
+								}
 
 								NodeList nodeCharacterLst = doc.getElementsByTagName( "character" );
 								Set<Node> targetNode = new HashSet<Node>();
 
 								for ( int s = 0; s < nodeCharacterLst.getLength(); s++ ) {
+									// unnoetige character aus log loeschen
 									boolean charUndef = false;
 									boolean unicode = false;
 									Node charNode = nodeCharacterLst.item( s );
@@ -597,7 +636,13 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 										if ( !unicode ) {
 											// System.out.println( " unicode nicht bekannt -> node interessant");
 										} else if ( charUndef ) {
-											// System.out.println( " unicode nicht definiert -> node interessant");
+											// System.out.println( " unicode nicht definiert ");
+											if ( fontundefined.equalsIgnoreCase( "W" ) ) {
+												// System.out.println( " unicode nicht definiert -> node loeschen");
+												undefiniedWarning = undefiniedWarning + 1;
+												// Node zum leschen vormerken
+												targetNode.add( charNode );
+											}
 										} else {
 											// System.out.println( " unicode bekannt -> dieser node kann geloescht werden"
 											// );
@@ -639,8 +684,30 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 									if ( nodeFontCharLst.getLength() <= 1 ) {
 										// font Node zum leschen vormerken
 										targetNodeFont.add( fontNode );
-									}
+									} else if ( fontNode.hasAttributes() && fontsymbol.equalsIgnoreCase( "W" ) ) {
+										NamedNodeMap attrs = fontNode.getAttributes();
+										for ( int i = 0; i < attrs.getLength(); i++ ) {
+											Attr attribute = (Attr) attrs.item( i );
+											String attName = attribute.getName();
+											String attValue = attribute.getValue();
+											// System.out.println( " -> " + attribute.getName() + " = " +
+											// attribute.getValue() );
 
+											/* -> <font fontfile="TrueType" fullname="Symbol" name="Symbol" objectNo="161"
+											 * type="Type0 (CIDFontType2)"> */
+											if ( attName.equalsIgnoreCase( "name" ) ) {
+												if ( attValue.contains( "Symbol" ) || attValue.contains( "Webdings" )
+														|| attValue.contains( "Wingdings" ) || attValue.contains( "Math" )
+														|| attValue.contains( "symbol" ) || attValue.contains( "webdings" )
+														|| attValue.contains( "wingdings" ) || attValue.contains( "math" ) ) {
+													if ( fontsymbol.equalsIgnoreCase( "W" ) ) {
+														targetNodeFont.add( fontNode );
+														symbolWarning = symbolWarning + 1;
+													}
+												}
+											}
+										}
+									}
 								}
 
 								for ( Node f : targetNodeFont ) {
@@ -657,15 +724,96 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 								}
 
 								// Ende Bereinigung
-								Node nodeInfo = docError.getElementsByTagName( "docInfo" ).item( 0 );
-								String stringInfo = nodeToString( nodeInfo );
-								Node nodeFonts = docError.getElementsByTagName( "fonts" ).item( 0 );
-								String stringFonts = nodeToString( nodeFonts );
-								errorK = errorK
-										+ getTextResourceService()
-												.getText( ERROR_XML_K_DETAIL, stringInfo, stringFonts );
-								bisError.close();
 
+								/* Nach der Bereinigung ermitteln wieviele unbekannt und undefiniert sind und ob es
+								 * ein Fehler ist oder nicht
+								 * 
+								 * unbekannt unknown = count - undefined
+								 * 
+								 * undefiniert undefined = (unicodeUndefined = true) */
+								int undefinedW = undefiniedWarning;
+								int undefinedE = 0;
+
+								NodeList nodeCharacterLstError = docError.getElementsByTagName( "character" );
+
+								for ( int s = 0; s < nodeCharacterLstError.getLength(); s++ ) {
+									Node charNode = nodeCharacterLstError.item( s );
+
+									if ( charNode.hasAttributes() ) {
+										NamedNodeMap attrs = charNode.getAttributes();
+										for ( int i = 0; i < attrs.getLength(); i++ ) {
+											Attr attribute = (Attr) attrs.item( i );
+											String attNameValue = attribute.getName() + " = " + attribute.getValue();
+											if ( attNameValue.equalsIgnoreCase( "unicodeUndefined = true" ) ) {
+												if ( fontundefined.equalsIgnoreCase( "E" ) ) {
+													undefinedE = undefinedE + 1;
+												}
+											}
+										}
+									}
+								}
+								int unknownW = nodeCharacterLstError.getLength();
+								float unknownPdoubleW = 100 / (float) count * (float) unknownW;
+								float undefinedPdoubleE = 100 / (float) count * (float) undefinedE;
+
+								if ( undefinedW != 0 && isWarningFont ) {
+									undefiniedWarningString = undefiniedWarningString
+											+ getTextResourceService().getText( WARNING_XML_K_UNDEFINIED, undefinedW );
+								}
+								if ( symbolWarning != 0 && isWarningFont ) {
+									symbolWarningString = symbolWarningString
+											+ getTextResourceService().getText( WARNING_XML_K_SYMBOL, symbolWarning );
+								}
+
+								String warning = symbolWarningString + " " + undefiniedWarningString;
+								if ( fontundefined.equalsIgnoreCase( "W" ) ) {
+									if ( unknownW != 0 ) {
+										isValidFont = false;
+										errorK = errorK
+												+ getTextResourceService().getText( MESSAGE_XML_MODUL_K_PDFA )
+												+ getTextResourceService().getText( ERROR_XML_K_OVERVIEW2, count, unknownW,
+														unknownPdoubleW, warning );
+									} else {
+										if ( !warning.equals( " " ) ) {
+											errorK = errorK + getTextResourceService().getText( MESSAGE_XML_MODUL_K_PDFA )
+													+ warning + "</Error>";
+										}
+									}
+								} else if ( fontsymbol.equalsIgnoreCase( "W" ) ) {
+									if ( unknownW != 0 || undefinedW != 0 ) {
+										isValidFont = false;
+										errorK = errorK
+												+ getTextResourceService().getText( MESSAGE_XML_MODUL_K_PDFA )
+												+ getTextResourceService().getText( ERROR_XML_K_OVERVIEW, count, unknownW,
+														unknownPdoubleW, undefinedE, undefinedPdoubleE,
+														warning );
+									} else {
+										if ( symbolWarning != 0 ) {
+											errorK = errorK + getTextResourceService().getText( MESSAGE_XML_MODUL_K_PDFA )
+													 + warning + "</Error>";
+										}
+
+									}
+								} else {
+									if ( !elementUnknown.equals( "0" ) || !elementUndefined.equals( "0" ) ) {
+										isValidFont = false;
+										errorK = errorK
+												+ getTextResourceService().getText( MESSAGE_XML_MODUL_K_PDFA )
+												+ getTextResourceService().getText( ERROR_XML_K_OVERVIEW, elementCount,
+														elementUnknown, elementUnknownP, elementUndefined, elementUndefinedP,
+														 warning );
+									}
+								}
+								if ( !isValidFont ) {
+									Node nodeInfo = docError.getElementsByTagName( "docInfo" ).item( 0 );
+									String stringInfo = nodeToString( nodeInfo );
+									Node nodeFonts = docError.getElementsByTagName( "fonts" ).item( 0 );
+									String stringFonts = nodeToString( nodeFonts );
+									errorK = errorK
+											+ getTextResourceService().getText( ERROR_XML_K_DETAIL, stringInfo,
+													stringFonts );
+									bisError.close();
+								}
 							} catch ( Exception e ) {
 								getMessageService().logError(
 										getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
@@ -1526,6 +1674,9 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 				// Destroy the object
 				docPdf.destroyObject();
 
+			} else {
+				// ggf Warning Modul K ausgeben
+				getMessageService().logError( errorK );
 			}
 			if ( report.exists() ) {
 				report.delete();

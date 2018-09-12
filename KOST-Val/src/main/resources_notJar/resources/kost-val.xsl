@@ -173,7 +173,10 @@
 											<xsl:value-of select="Modul" />
 										</td>
 										<td width="75%">
-											<xsl:value-of select="Message" />
+											<xsl:for-each select="Message">
+												<xsl:value-of select="." />
+												<br />
+											</xsl:for-each>
 											<xsl:if test="MessageFont">
 												<tr class="captionm">
 
@@ -254,7 +257,10 @@
 											<xsl:value-of select="Modul" />
 										</td>
 										<td width="75%">
-											<xsl:value-of select="Message" />
+											<xsl:for-each select="Message">
+												<xsl:value-of select="." />
+												<br />
+											</xsl:for-each>
 										</td>
 									</tr>
 								</xsl:for-each>

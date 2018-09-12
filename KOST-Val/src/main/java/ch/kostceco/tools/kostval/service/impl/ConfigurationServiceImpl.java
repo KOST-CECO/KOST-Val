@@ -27,9 +27,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-
-
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -61,228 +58,271 @@ public class ConfigurationServiceImpl implements ConfigurationService
 
 	public Map<String, String> configMap()
 	{
-			try {
-				File directoryOfConfigfile = new File( System.getenv( "USERPROFILE" ) + File.separator
-						+ ".kost-val" + File.separator + "configuration" );
-				File configFile = new File( directoryOfConfigfile + File.separator + "kostval.conf.xml" );
+		try {
+			File directoryOfConfigfile = new File( System.getenv( "USERPROFILE" ) + File.separator
+					+ ".kost-val" + File.separator + "configuration" );
+			File configFile = new File( directoryOfConfigfile + File.separator + "kostval.conf.xml" );
 
-				Document doc = null;
+			Document doc = null;
 
-				BufferedInputStream bis = new BufferedInputStream(
-						new FileInputStream( configFile ) );
-				DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-				DocumentBuilder db = dbf.newDocumentBuilder();
-				doc = db.parse( bis );
-				doc.normalize();
+			BufferedInputStream bis = new BufferedInputStream( new FileInputStream( configFile ) );
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+			DocumentBuilder db = dbf.newDocumentBuilder();
+			doc = db.parse( bis );
+			doc.normalize();
 
-				Map<String, String> configMap = new HashMap<String, String>();
+			Map<String, String> configMap = new HashMap<String, String>();
 
-				// Gibt den Pfad des Arbeitsverzeichnisses zurück. = USERPROFILE/.kost-val/temp_KOST-Val
-				String pathtoworkdir = System.getenv( "USERPROFILE" ) + File.separator + ".kost-val"
-						+ File.separator + "temp_KOST-Val";
-				File dir = new File( pathtoworkdir );
-				if ( !dir.exists() ) {
-					dir.mkdirs();
-				}
-				configMap.put( "PathToWorkDir", pathtoworkdir );
-
-				// Gibt den Pfad des Logverzeichnisses zurück. = USERPROFILE/.kost-val/logs
-				String logs = System.getenv( "USERPROFILE" ) + File.separator + ".kost-val"
-						+ File.separator + "logs";
-				File dir1 = new File( logs );
-				if ( !dir1.exists() ) {
-					dir1.mkdirs();
-				}
-				configMap.put( "PathToLogfile", logs );
-
-				// Gibt den Namen des DROID Signature Files zurück. = USERPROFILE/.kost-val/configuration/KaD...
-				File droidFile = new File( directoryOfConfigfile + File.separator + "KaD_SignatureFile_V72.xml" );
-				String droidPath = droidFile.getAbsolutePath();
-				configMap.put( "PathToDroidSignatureFile", droidPath );
-				
-				// Angabe ob dargestellt werden soll, dass KOST-Val noch läuft */
-				String showprogressonwork = doc.getElementsByTagName( "showprogressonwork" ).item( 0 ).getTextContent();
-				configMap.put( "ShowProgressOnWork", showprogressonwork );
-				
-				// Gibt an ob pdfa mit PDF Tools validiert werden soll
-				String pdftools = doc.getElementsByTagName( "pdftools" ).item( 0 ).getTextContent();
-				configMap.put( "pdftools", pdftools );
-				
-				// Gibt an ob pdfa mit PDF Tools im detail validiert werden soll
-				String detail = doc.getElementsByTagName( "detail" ).item( 0 ).getTextContent();
-				configMap.put( "detail", detail );
-				
-				// Gibt an ob pdfa mit callas validiert werden soll
-				String callas = doc.getElementsByTagName( "callas" ).item( 0 ).getTextContent();
-				configMap.put( "callas", callas );
-				
-				// N-Eintrag: Soll seitens callas ein Fehler (E) oder eine Warnung (W) ausgegeben werden
-				String nentry = doc.getElementsByTagName( "nentry" ).item( 0 ).getTextContent();
-				configMap.put( "nentry", nentry );
-				
-				// Gibt an welche 1erKonformität mindestens erreicht werden muss
-				String pdfa1 = doc.getElementsByTagName( "pdfa1" ).item( 0 ).getTextContent();
-				configMap.put( "pdfa1", pdfa1 );
-				
-				// Gibt an welche 2erKonformität mindestens erreicht werden muss
-				String pdfa2 = doc.getElementsByTagName( "pdfa2" ).item( 0 ).getTextContent();
-				configMap.put( "pdfa2", pdfa2 );
-				
-				// Gibt an ob die Schriften in pdfa validiert werden soll
-				String pdfafont = doc.getElementsByTagName( "pdfafont" ).item( 0 ).getTextContent();
-				configMap.put( "pdfafont", pdfafont );
-				
-				// Gibt an ob die Bilder in pdfa validiert werden soll
-				String pdfaimage = doc.getElementsByTagName( "pdfaimage" ).item( 0 ).getTextContent();
-				configMap.put( "pdfaimage", pdfaimage);
-				
-				// Gibt an ob JBIG2 erlaubt ist oder nicht
-				String jbig2allowed = doc.getElementsByTagName( "jbig2allowed" ).item( 0 ).getTextContent();
-				configMap.put( "jbig2allowed", jbig2allowed );
-				
-				// Gibt an ob siard validiert werden soll
-				String siardvalidation = doc.getElementsByTagName( "siardvalidation" ).item( 0 ).getTextContent();
-				configMap.put( "siardValidation", siardvalidation);
-				
-				// Gibt an ob jp2 validiert werden soll
-				String jp2validation = doc.getElementsByTagName( "jp2validation" ).item( 0 ).getTextContent();
-				configMap.put( "jp2Validation", jp2validation );
-				
-				// Gibt an ob jpeg validiert werden soll
-				String jpegvalidation = doc.getElementsByTagName( "jpegvalidation" ).item( 0 ).getTextContent();
-				configMap.put( "jpegValidation", jpegvalidation );
-				
-				// Gibt an welche Fehler ignoriert werden sollen
-				String ignore = doc.getElementsByTagName( "ignore" ).item( 0 ).getTextContent();
-				configMap.put( "ignore", ignore );
-	
-				// Gibt eine Liste mit den PUIDs aus, welche im SIP vorkommen dürfen.
-				String allowedformats = doc.getElementsByTagName( "allowedformats" ).item( 0 ).getTextContent();
-				configMap.put( "allowedformats", allowedformats );
-				
-				// Gibt die Maximal erlaubte Länge eines Pfades in der SIP-Datei aus.
-				String allowedlengthofpaths = doc.getElementsByTagName( "allowedlengthofpaths" ).item( 0 ).getTextContent();
-				configMap.put( "MaximumPathLength", allowedlengthofpaths );
-				
-				// Die Einschränkung des SIP-Namen ist konfigurierbar
-				String allowedsipname = doc.getElementsByTagName( "allowedsipname" ).item( 0 ).getTextContent();
-				configMap.put( "AllowedSipName", allowedsipname );
-				
-				// Gibt an ob tiff validiert werden soll
-				String tiffvalidation = doc.getElementsByTagName( "tiffvalidation" ).item( 0 ).getTextContent();
-				configMap.put( "tiffValidation", tiffvalidation );
-				
-				// Gibt die Komprimierung aus, welche im TIFF vorkommen dürfen.
-				String allowedcompression1 = doc.getElementsByTagName( "allowedcompression1" ).item( 0 ).getTextContent();
-				String allowedcompression2 = doc.getElementsByTagName( "allowedcompression2" ).item( 0 ).getTextContent();
-				String allowedcompression3 = doc.getElementsByTagName( "allowedcompression3" ).item( 0 ).getTextContent();
-				String allowedcompression4 = doc.getElementsByTagName( "allowedcompression4" ).item( 0 ).getTextContent();
-				String allowedcompression5 = doc.getElementsByTagName( "allowedcompression5" ).item( 0 ).getTextContent();
-				String allowedcompression7 = doc.getElementsByTagName( "allowedcompression7" ).item( 0 ).getTextContent();
-				String allowedcompression8 = doc.getElementsByTagName( "allowedcompression8" ).item( 0 ).getTextContent();
-				String allowedcompression32773 = doc.getElementsByTagName( "allowedcompression32773" ).item( 0 ).getTextContent();
-				configMap.put( "AllowedCompression1",allowedcompression1 );
-				configMap.put( "AllowedCompression2",allowedcompression2 );
-				configMap.put( "AllowedCompression3",allowedcompression3 );
-				configMap.put( "AllowedCompression4",allowedcompression4 );
-				configMap.put( "AllowedCompression5",allowedcompression5 );
-				configMap.put( "AllowedCompression7",allowedcompression7 );
-				configMap.put( "AllowedCompression8",allowedcompression8 );
-				configMap.put( "AllowedCompression32773",allowedcompression32773 );
-				
-				// Gibt die Farbraum aus, welche im TIFF vorkommen dürfen.
-				String allowedphotointer0 = doc.getElementsByTagName( "allowedphotointer0" ).item( 0 ).getTextContent();
-				String allowedphotointer1 = doc.getElementsByTagName( "allowedphotointer1" ).item( 0 ).getTextContent();
-				String allowedphotointer2 = doc.getElementsByTagName( "allowedphotointer2" ).item( 0 ).getTextContent();
-				String allowedphotointer3 = doc.getElementsByTagName( "allowedphotointer3" ).item( 0 ).getTextContent();
-				String allowedphotointer4 = doc.getElementsByTagName( "allowedphotointer4" ).item( 0 ).getTextContent();
-				String allowedphotointer5 = doc.getElementsByTagName( "allowedphotointer5" ).item( 0 ).getTextContent();
-				String allowedphotointer6 = doc.getElementsByTagName( "allowedphotointer6" ).item( 0 ).getTextContent();
-				String allowedphotointer8 = doc.getElementsByTagName( "allowedphotointer8" ).item( 0 ).getTextContent();
-				configMap.put( "AllowedPhotointer0", allowedphotointer0);
-				configMap.put( "AllowedPhotointer1", allowedphotointer1 );
-				configMap.put( "AllowedPhotointer2", allowedphotointer2 );
-				configMap.put( "AllowedPhotointer3", allowedphotointer3 );
-				configMap.put( "AllowedPhotointer4", allowedphotointer4 );
-				configMap.put( "AllowedPhotointer5", allowedphotointer5 );
-				configMap.put( "AllowedPhotointer6", allowedphotointer6 );
-				configMap.put( "AllowedPhotointer8", allowedphotointer8 );
-				
-				// Gibt die BitsPerSample aus, welche im TIFF vorkommen dürfen.
-				String allowedbitspersample1 = doc.getElementsByTagName( "allowedbitspersample1" ).item( 0 ).getTextContent();
-				String allowedbitspersample2 = doc.getElementsByTagName( "allowedbitspersample2" ).item( 0 ).getTextContent();
-				String allowedbitspersample4 = doc.getElementsByTagName( "allowedbitspersample4" ).item( 0 ).getTextContent();
-				String allowedbitspersample8 = doc.getElementsByTagName( "allowedbitspersample8" ).item( 0 ).getTextContent();
-				String allowedbitspersample16 = doc.getElementsByTagName( "allowedbitspersample16" ).item( 0 ).getTextContent();
-				String allowedbitspersample32 = doc.getElementsByTagName( "allowedbitspersample32" ).item( 0 ).getTextContent();
-				configMap.put( "AllowedBitspersample1", allowedbitspersample1 );
-				configMap.put( "AllowedBitspersample2", allowedbitspersample2 );
-				configMap.put( "AllowedBitspersample4", allowedbitspersample4 );
-				configMap.put( "AllowedBitspersample8", allowedbitspersample8 );
-				configMap.put( "AllowedBitspersample16", allowedbitspersample16 );
-				configMap.put( "AllowedBitspersample32", allowedbitspersample32 );
-				
-				// Gibt an ob Multipage im TIFF vorkommen dürfen.
-				String allowedmultipage = doc.getElementsByTagName( "allowedmultipage" ).item( 0 ).getTextContent();
-				configMap.put( "AllowedMultipage", allowedmultipage);
-				
-				// Gibt an ob Tiles im TIFF vorkommen dürfen.
-				String allowedtiles = doc.getElementsByTagName( "allowedtiles" ).item( 0 ).getTextContent();
-				configMap.put( "AllowedTiles", allowedtiles);
-
-				// Gibt an ob Giga-TIFF vorkommen dürfen.
-				String allowedsize = doc.getElementsByTagName( "allowedsize" ).item( 0 ).getTextContent();
-				configMap.put( "AllowedSize", allowedsize);
-
-				// System.out.println("Value is b : " + (map.get("key") == b));
-				bis.close();
-				return configMap;
-
-			} catch ( FileNotFoundException e ) {
-				LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
-						+ getTextResourceService().getText( MESSAGE_XML_CONFIGURATION_ERROR_1 ) );
-				LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
-						+ getTextResourceService().getText( MESSAGE_XML_CONFIGURATION_ERROR_2 ) );
-				LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
-						+ getTextResourceService().getText( MESSAGE_XML_CONFIGURATION_ERROR_3 ) );
-				String error=e.getMessage()+" (FileNotFoundException)" ;
-				LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
-						+ getTextResourceService().getText( ERROR_XML_UNKNOWN,error ) );
-				System.exit( 1 );
-			} catch ( ParserConfigurationException e ) {
-				LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
-						+ getTextResourceService().getText( MESSAGE_XML_CONFIGURATION_ERROR_1 ) );
-				LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
-						+ getTextResourceService().getText( MESSAGE_XML_CONFIGURATION_ERROR_2 ) );
-				LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
-						+ getTextResourceService().getText( MESSAGE_XML_CONFIGURATION_ERROR_3 ) );
-				String error=e.getMessage()+" (ParserConfigurationException)" ;
-				LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
-						+ getTextResourceService().getText( ERROR_XML_UNKNOWN,error ) );
-				System.exit( 1 );
-			} catch ( SAXException e ) {
-				LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
-						+ getTextResourceService().getText( MESSAGE_XML_CONFIGURATION_ERROR_1 ) );
-				LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
-						+ getTextResourceService().getText( MESSAGE_XML_CONFIGURATION_ERROR_2 ) );
-				LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
-						+ getTextResourceService().getText( MESSAGE_XML_CONFIGURATION_ERROR_3 ) );
-				String error=e.getMessage()+" (SAXException)" ;
-				LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
-						+ getTextResourceService().getText( ERROR_XML_UNKNOWN,error ) );
-				System.exit( 1 );
-			} catch ( IOException e ) {
-				LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
-						+ getTextResourceService().getText( MESSAGE_XML_CONFIGURATION_ERROR_1 ) );
-				LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
-						+ getTextResourceService().getText( MESSAGE_XML_CONFIGURATION_ERROR_2 ) );
-				LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
-						+ getTextResourceService().getText( MESSAGE_XML_CONFIGURATION_ERROR_3 ) );
-				String error=e.getMessage()+" (IOException)" ;
-				LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
-						+ getTextResourceService().getText( ERROR_XML_UNKNOWN,error ) );
-				System.exit( 1 );
+			// Gibt den Pfad des Arbeitsverzeichnisses zurück. = USERPROFILE/.kost-val/temp_KOST-Val
+			String pathtoworkdir = System.getenv( "USERPROFILE" ) + File.separator + ".kost-val"
+					+ File.separator + "temp_KOST-Val";
+			File dir = new File( pathtoworkdir );
+			if ( !dir.exists() ) {
+				dir.mkdirs();
 			}
+			configMap.put( "PathToWorkDir", pathtoworkdir );
+
+			// Gibt den Pfad des Logverzeichnisses zurück. = USERPROFILE/.kost-val/logs
+			String logs = System.getenv( "USERPROFILE" ) + File.separator + ".kost-val" + File.separator
+					+ "logs";
+			File dir1 = new File( logs );
+			if ( !dir1.exists() ) {
+				dir1.mkdirs();
+			}
+			configMap.put( "PathToLogfile", logs );
+
+			// Gibt den Namen des DROID Signature Files zurück. =
+			// USERPROFILE/.kost-val/configuration/KaD...
+			File droidFile = new File( directoryOfConfigfile + File.separator
+					+ "KaD_SignatureFile_V72.xml" );
+			String droidPath = droidFile.getAbsolutePath();
+			configMap.put( "PathToDroidSignatureFile", droidPath );
+
+			// Angabe ob dargestellt werden soll, dass KOST-Val noch läuft */
+			String showprogressonwork = doc.getElementsByTagName( "showprogressonwork" ).item( 0 )
+					.getTextContent();
+			configMap.put( "ShowProgressOnWork", showprogressonwork );
+
+			// Gibt an ob pdfa mit PDF Tools validiert werden soll
+			String pdftools = doc.getElementsByTagName( "pdftools" ).item( 0 ).getTextContent();
+			configMap.put( "pdftools", pdftools );
+
+			// Gibt an ob pdfa mit PDF Tools im detail validiert werden soll
+			String detail = doc.getElementsByTagName( "detail" ).item( 0 ).getTextContent();
+			configMap.put( "detail", detail );
+
+			// Gibt an ob pdfa mit callas validiert werden soll
+			String callas = doc.getElementsByTagName( "callas" ).item( 0 ).getTextContent();
+			configMap.put( "callas", callas );
+
+			// N-Eintrag: Soll seitens callas ein Fehler (E) oder eine Warnung (W) ausgegeben werden
+			String nentry = doc.getElementsByTagName( "nentry" ).item( 0 ).getTextContent();
+			configMap.put( "nentry", nentry );
+
+			// Gibt an welche 1erKonformität mindestens erreicht werden muss
+			String pdfa1 = doc.getElementsByTagName( "pdfa1" ).item( 0 ).getTextContent();
+			configMap.put( "pdfa1", pdfa1 );
+
+			// Gibt an welche 2erKonformität mindestens erreicht werden muss
+			String pdfa2 = doc.getElementsByTagName( "pdfa2" ).item( 0 ).getTextContent();
+			configMap.put( "pdfa2", pdfa2 );
+
+			// Gibt an ob die Schriften in pdfa validiert werden soll
+			String pdfafont = doc.getElementsByTagName( "pdfafont" ).item( 0 ).getTextContent();
+			configMap.put( "pdfafont", pdfafont );
+
+			// Gibt die Toleranz der Warnings an bei der Schriftvalidierung
+			String fonttolerance = doc.getElementsByTagName( "fonttolerance" ).item( 0 ).getTextContent();
+			configMap.put( "fonttolerance", fonttolerance );
+
+			// Angabe ob die Symbolschriften Warnungen oder Fehler auslösen
+			String fontsymbol = doc.getElementsByTagName( "fontsymbol" ).item( 0 ).getTextContent();
+			configMap.put( "fontsymbol", fontsymbol );
+
+			// Angabe ob die undefinierte Zeichen Warnungen oder Fehler auslösen
+			String fontundefined = doc.getElementsByTagName( "fontundefined" ).item( 0 ).getTextContent();
+			configMap.put( "fontundefined", fontundefined );
+
+			// Gibt an ob die Bilder in pdfa validiert werden soll
+			String pdfaimage = doc.getElementsByTagName( "pdfaimage" ).item( 0 ).getTextContent();
+			configMap.put( "pdfaimage", pdfaimage );
+
+			// Gibt an ob JBIG2 erlaubt ist oder nicht
+			String jbig2allowed = doc.getElementsByTagName( "jbig2allowed" ).item( 0 ).getTextContent();
+			configMap.put( "jbig2allowed", jbig2allowed );
+
+			// Gibt an ob siard validiert werden soll
+			String siardvalidation = doc.getElementsByTagName( "siardvalidation" ).item( 0 )
+					.getTextContent();
+			configMap.put( "siardValidation", siardvalidation );
+
+			// Gibt an ob jp2 validiert werden soll
+			String jp2validation = doc.getElementsByTagName( "jp2validation" ).item( 0 ).getTextContent();
+			configMap.put( "jp2Validation", jp2validation );
+
+			// Gibt an ob jpeg validiert werden soll
+			String jpegvalidation = doc.getElementsByTagName( "jpegvalidation" ).item( 0 )
+					.getTextContent();
+			configMap.put( "jpegValidation", jpegvalidation );
+
+			// Gibt an welche Fehler ignoriert werden sollen
+			String ignore = doc.getElementsByTagName( "ignore" ).item( 0 ).getTextContent();
+			configMap.put( "ignore", ignore );
+
+			// Gibt eine Liste mit den PUIDs aus, welche im SIP vorkommen dürfen.
+			String allowedformats = doc.getElementsByTagName( "allowedformats" ).item( 0 )
+					.getTextContent();
+			configMap.put( "allowedformats", allowedformats );
+
+			// Gibt die Maximal erlaubte Länge eines Pfades in der SIP-Datei aus.
+			String allowedlengthofpaths = doc.getElementsByTagName( "allowedlengthofpaths" ).item( 0 )
+					.getTextContent();
+			configMap.put( "MaximumPathLength", allowedlengthofpaths );
+
+			// Die Einschränkung des SIP-Namen ist konfigurierbar
+			String allowedsipname = doc.getElementsByTagName( "allowedsipname" ).item( 0 )
+					.getTextContent();
+			configMap.put( "AllowedSipName", allowedsipname );
+
+			// Gibt an ob tiff validiert werden soll
+			String tiffvalidation = doc.getElementsByTagName( "tiffvalidation" ).item( 0 )
+					.getTextContent();
+			configMap.put( "tiffValidation", tiffvalidation );
+
+			// Gibt die Komprimierung aus, welche im TIFF vorkommen dürfen.
+			String allowedcompression1 = doc.getElementsByTagName( "allowedcompression1" ).item( 0 )
+					.getTextContent();
+			String allowedcompression2 = doc.getElementsByTagName( "allowedcompression2" ).item( 0 )
+					.getTextContent();
+			String allowedcompression3 = doc.getElementsByTagName( "allowedcompression3" ).item( 0 )
+					.getTextContent();
+			String allowedcompression4 = doc.getElementsByTagName( "allowedcompression4" ).item( 0 )
+					.getTextContent();
+			String allowedcompression5 = doc.getElementsByTagName( "allowedcompression5" ).item( 0 )
+					.getTextContent();
+			String allowedcompression7 = doc.getElementsByTagName( "allowedcompression7" ).item( 0 )
+					.getTextContent();
+			String allowedcompression8 = doc.getElementsByTagName( "allowedcompression8" ).item( 0 )
+					.getTextContent();
+			String allowedcompression32773 = doc.getElementsByTagName( "allowedcompression32773" )
+					.item( 0 ).getTextContent();
+			configMap.put( "AllowedCompression1", allowedcompression1 );
+			configMap.put( "AllowedCompression2", allowedcompression2 );
+			configMap.put( "AllowedCompression3", allowedcompression3 );
+			configMap.put( "AllowedCompression4", allowedcompression4 );
+			configMap.put( "AllowedCompression5", allowedcompression5 );
+			configMap.put( "AllowedCompression7", allowedcompression7 );
+			configMap.put( "AllowedCompression8", allowedcompression8 );
+			configMap.put( "AllowedCompression32773", allowedcompression32773 );
+
+			// Gibt die Farbraum aus, welche im TIFF vorkommen dürfen.
+			String allowedphotointer0 = doc.getElementsByTagName( "allowedphotointer0" ).item( 0 )
+					.getTextContent();
+			String allowedphotointer1 = doc.getElementsByTagName( "allowedphotointer1" ).item( 0 )
+					.getTextContent();
+			String allowedphotointer2 = doc.getElementsByTagName( "allowedphotointer2" ).item( 0 )
+					.getTextContent();
+			String allowedphotointer3 = doc.getElementsByTagName( "allowedphotointer3" ).item( 0 )
+					.getTextContent();
+			String allowedphotointer4 = doc.getElementsByTagName( "allowedphotointer4" ).item( 0 )
+					.getTextContent();
+			String allowedphotointer5 = doc.getElementsByTagName( "allowedphotointer5" ).item( 0 )
+					.getTextContent();
+			String allowedphotointer6 = doc.getElementsByTagName( "allowedphotointer6" ).item( 0 )
+					.getTextContent();
+			String allowedphotointer8 = doc.getElementsByTagName( "allowedphotointer8" ).item( 0 )
+					.getTextContent();
+			configMap.put( "AllowedPhotointer0", allowedphotointer0 );
+			configMap.put( "AllowedPhotointer1", allowedphotointer1 );
+			configMap.put( "AllowedPhotointer2", allowedphotointer2 );
+			configMap.put( "AllowedPhotointer3", allowedphotointer3 );
+			configMap.put( "AllowedPhotointer4", allowedphotointer4 );
+			configMap.put( "AllowedPhotointer5", allowedphotointer5 );
+			configMap.put( "AllowedPhotointer6", allowedphotointer6 );
+			configMap.put( "AllowedPhotointer8", allowedphotointer8 );
+
+			// Gibt die BitsPerSample aus, welche im TIFF vorkommen dürfen.
+			String allowedbitspersample1 = doc.getElementsByTagName( "allowedbitspersample1" ).item( 0 )
+					.getTextContent();
+			String allowedbitspersample2 = doc.getElementsByTagName( "allowedbitspersample2" ).item( 0 )
+					.getTextContent();
+			String allowedbitspersample4 = doc.getElementsByTagName( "allowedbitspersample4" ).item( 0 )
+					.getTextContent();
+			String allowedbitspersample8 = doc.getElementsByTagName( "allowedbitspersample8" ).item( 0 )
+					.getTextContent();
+			String allowedbitspersample16 = doc.getElementsByTagName( "allowedbitspersample16" ).item( 0 )
+					.getTextContent();
+			String allowedbitspersample32 = doc.getElementsByTagName( "allowedbitspersample32" ).item( 0 )
+					.getTextContent();
+			configMap.put( "AllowedBitspersample1", allowedbitspersample1 );
+			configMap.put( "AllowedBitspersample2", allowedbitspersample2 );
+			configMap.put( "AllowedBitspersample4", allowedbitspersample4 );
+			configMap.put( "AllowedBitspersample8", allowedbitspersample8 );
+			configMap.put( "AllowedBitspersample16", allowedbitspersample16 );
+			configMap.put( "AllowedBitspersample32", allowedbitspersample32 );
+
+			// Gibt an ob Multipage im TIFF vorkommen dürfen.
+			String allowedmultipage = doc.getElementsByTagName( "allowedmultipage" ).item( 0 )
+					.getTextContent();
+			configMap.put( "AllowedMultipage", allowedmultipage );
+
+			// Gibt an ob Tiles im TIFF vorkommen dürfen.
+			String allowedtiles = doc.getElementsByTagName( "allowedtiles" ).item( 0 ).getTextContent();
+			configMap.put( "AllowedTiles", allowedtiles );
+
+			// Gibt an ob Giga-TIFF vorkommen dürfen.
+			String allowedsize = doc.getElementsByTagName( "allowedsize" ).item( 0 ).getTextContent();
+			configMap.put( "AllowedSize", allowedsize );
+
+			// System.out.println("Value is b : " + (map.get("key") == b));
+			bis.close();
+			return configMap;
+
+		} catch ( FileNotFoundException e ) {
+			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
+					+ getTextResourceService().getText( MESSAGE_XML_CONFIGURATION_ERROR_1 ) );
+			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
+					+ getTextResourceService().getText( MESSAGE_XML_CONFIGURATION_ERROR_2 ) );
+			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
+					+ getTextResourceService().getText( MESSAGE_XML_CONFIGURATION_ERROR_3 ) );
+			String error = e.getMessage() + " (FileNotFoundException)";
+			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
+					+ getTextResourceService().getText( ERROR_XML_UNKNOWN, error ) );
+			System.exit( 1 );
+		} catch ( ParserConfigurationException e ) {
+			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
+					+ getTextResourceService().getText( MESSAGE_XML_CONFIGURATION_ERROR_1 ) );
+			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
+					+ getTextResourceService().getText( MESSAGE_XML_CONFIGURATION_ERROR_2 ) );
+			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
+					+ getTextResourceService().getText( MESSAGE_XML_CONFIGURATION_ERROR_3 ) );
+			String error = e.getMessage() + " (ParserConfigurationException)";
+			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
+					+ getTextResourceService().getText( ERROR_XML_UNKNOWN, error ) );
+			System.exit( 1 );
+		} catch ( SAXException e ) {
+			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
+					+ getTextResourceService().getText( MESSAGE_XML_CONFIGURATION_ERROR_1 ) );
+			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
+					+ getTextResourceService().getText( MESSAGE_XML_CONFIGURATION_ERROR_2 ) );
+			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
+					+ getTextResourceService().getText( MESSAGE_XML_CONFIGURATION_ERROR_3 ) );
+			String error = e.getMessage() + " (SAXException)";
+			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
+					+ getTextResourceService().getText( ERROR_XML_UNKNOWN, error ) );
+			System.exit( 1 );
+		} catch ( IOException e ) {
+			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
+					+ getTextResourceService().getText( MESSAGE_XML_CONFIGURATION_ERROR_1 ) );
+			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
+					+ getTextResourceService().getText( MESSAGE_XML_CONFIGURATION_ERROR_2 ) );
+			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
+					+ getTextResourceService().getText( MESSAGE_XML_CONFIGURATION_ERROR_3 ) );
+			String error = e.getMessage() + " (IOException)";
+			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
+					+ getTextResourceService().getText( ERROR_XML_UNKNOWN, error ) );
+			System.exit( 1 );
+		}
 		return configMap;
 	}
 

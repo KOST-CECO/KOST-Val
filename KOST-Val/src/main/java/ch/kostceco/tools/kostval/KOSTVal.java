@@ -24,7 +24,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStream;
-//import java.sql.Timestamp;
+// import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
@@ -514,7 +514,7 @@ public class KOSTVal implements MessageConstants
 
 			// TODO: Formatvalidierung an einer Datei --> erledigt --> nur Marker
 			if ( !valDatei.isDirectory() ) {
-
+				System.out.print( valDatei.getAbsolutePath() + " " );
 				boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
 						dirOfJarPath, configMap );
 
@@ -560,7 +560,7 @@ public class KOSTVal implements MessageConstants
 			} else {
 				// TODO: Formatvalidierung über ein Ordner --> erledigt --> nur Marker
 				try {
-					Map<String, File> fileUnsortedMap = Util.getFileMap( valDatei, false );
+					Map<String, File> fileUnsortedMap = Util.getFileMapFile( valDatei );
 					Map<String, File> fileMap = new TreeMap<String, File>( fileUnsortedMap );
 					int numberInFileMap = fileMap.size();
 					Set<String> fileMapKeys = fileMap.keySet();
@@ -576,7 +576,8 @@ public class KOSTVal implements MessageConstants
 
 							if ( ((valDateiExt.equals( ".jp2" ))) && jp2Validation.equals( "yes" ) ) {
 								int countToValidated = numberInFileMap - count;
-								System.out.print( countToValidated + " " );
+								System.out.print( countToValidated + " " + "JP2:   " + valDatei.getAbsolutePath()
+										+ " " );
 
 								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
 										dirOfJarPath, configMap );
@@ -602,7 +603,8 @@ public class KOSTVal implements MessageConstants
 									.getAbsolutePath().toLowerCase().endsWith( ".jpe" )))
 									&& jpegValidation.equals( "yes" ) ) {
 								int countToValidated = numberInFileMap - count;
-								System.out.print( countToValidated + " " );
+								System.out.print( countToValidated + " " + "JPEG:  " + valDatei.getAbsolutePath()
+										+ " " );
 
 								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
 										dirOfJarPath, configMap );
@@ -628,7 +630,8 @@ public class KOSTVal implements MessageConstants
 									.toLowerCase().endsWith( ".tif" )))
 									&& tiffValidation.equals( "yes" ) ) {
 								int countToValidated = numberInFileMap - count;
-								System.out.print( countToValidated + " " );
+								System.out.print( countToValidated + " " + "TIFF:  " + valDatei.getAbsolutePath()
+										+ " " );
 
 								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
 										dirOfJarPath, configMap );
@@ -652,7 +655,8 @@ public class KOSTVal implements MessageConstants
 								}
 							} else if ( (valDateiExt.equals( ".siard" )) && siardValidation.equals( "yes" ) ) {
 								int countToValidated = numberInFileMap - count;
-								System.out.print( countToValidated + " " );
+								System.out.print( countToValidated + " " + "SIARD: " + valDatei.getAbsolutePath()
+										+ " " );
 
 								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
 										dirOfJarPath, configMap );
@@ -679,7 +683,7 @@ public class KOSTVal implements MessageConstants
 									.toLowerCase().endsWith( ".pdfa" )))
 									&& pdfaValidation.equals( "yes" ) ) {
 								int countToValidated = numberInFileMap - count;
-								System.out.print( countToValidated + " " );
+								System.out.print( countToValidated + " " + "PDFA:  " + valDatei.getAbsolutePath() );
 
 								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
 										dirOfJarPath, configMap );
@@ -1032,7 +1036,7 @@ public class KOSTVal implements MessageConstants
 				}
 
 				// Vorgängige Formatvalidierung (Schritt 3c)
-				Map<String, File> fileUnsortedMap = Util.getFileMap( valDatei, false );
+				Map<String, File> fileUnsortedMap = Util.getFileMapFile( valDatei );
 				Map<String, File> fileMap = new TreeMap<String, File>( fileUnsortedMap );
 				int numberInFileMap = fileMap.size();
 				Set<String> fileMapKeys = fileMap.keySet();
@@ -1057,7 +1061,7 @@ public class KOSTVal implements MessageConstants
 							if ( pdfaValidation.equals( "yes" ) ) {
 								// Validierung durchführen
 								int countToValidated = numberInFileMap - count;
-								System.out.print( countToValidated + " " );
+								System.out.print( countToValidated + " " + "PDFA:  " + valDatei.getAbsolutePath() );
 								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
 										dirOfJarPath, configMap );
 								if ( valFile ) {
@@ -1084,7 +1088,8 @@ public class KOSTVal implements MessageConstants
 							if ( tiffValidation.equals( "yes" ) ) {
 								// Validierung durchführen
 								int countToValidated = numberInFileMap - count;
-								System.out.print( countToValidated + " " );
+								System.out.print( countToValidated + " " + "TIFF:  " + valDatei.getAbsolutePath()
+										+ " " );
 								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
 										dirOfJarPath, configMap );
 								if ( valFile ) {
@@ -1111,7 +1116,8 @@ public class KOSTVal implements MessageConstants
 							if ( siardValidation.equals( "yes" ) ) {
 								// Validierung durchführen
 								int countToValidated = numberInFileMap - count;
-								System.out.print( countToValidated + " " );
+								System.out.print( countToValidated + " " + "SIARD: " + valDatei.getAbsolutePath()
+										+ " " );
 
 								// Arbeitsverzeichnis zum Entpacken des Archivs erstellen
 								String pathToWorkDirSiard = configMap.get( "PathToWorkDir" );
@@ -1148,7 +1154,8 @@ public class KOSTVal implements MessageConstants
 								|| valDateiExt.equals( ".jpg" ) ) {
 							if ( jpegValidation.equals( "yes" ) ) {
 								int countToValidated = numberInFileMap - count;
-								System.out.print( countToValidated + " " );
+								System.out.print( countToValidated + " " + "JPEG:  " + valDatei.getAbsolutePath()
+										+ " " );
 								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
 										dirOfJarPath, configMap );
 								if ( valFile ) {
@@ -1175,7 +1182,8 @@ public class KOSTVal implements MessageConstants
 							if ( jp2Validation.equals( "yes" ) ) {
 								// Validierung durchführen
 								int countToValidated = numberInFileMap - count;
-								System.out.print( countToValidated + " " );
+								System.out.print( countToValidated + " " + "JP2:   " + valDatei.getAbsolutePath()
+										+ " " );
 								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
 										dirOfJarPath, configMap );
 								if ( valFile ) {
@@ -1447,7 +1455,6 @@ public class KOSTVal implements MessageConstants
 					kostval.getTextResourceService().getText( MESSAGE_JP2VALIDATION ) ) );
 			LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_VALFILE,
 					originalValName ) );
-			System.out.print( "JP2:   " + originalValName + " " );
 			Controllerjp2 controller1 = (Controllerjp2) context.getBean( "controllerjp2" );
 			boolean okMandatory = controller1.executeMandatory( valDatei, directoryOfLogfile, configMap );
 			valFile = okMandatory;
@@ -1485,7 +1492,6 @@ public class KOSTVal implements MessageConstants
 					kostval.getTextResourceService().getText( MESSAGE_JPEGVALIDATION ) ) );
 			LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_VALFILE,
 					originalValName ) );
-			System.out.print( "JPEG:  " + originalValName + " " );
 			Controllerjpeg controller1 = (Controllerjpeg) context.getBean( "controllerjpeg" );
 			boolean okMandatory = controller1.executeMandatory( valDatei, directoryOfLogfile, configMap );
 			valFile = okMandatory;
@@ -1509,7 +1515,6 @@ public class KOSTVal implements MessageConstants
 					kostval.getTextResourceService().getText( MESSAGE_TIFFVALIDATION ) ) );
 			LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_VALFILE,
 					originalValName ) );
-			System.out.print( "TIFF:  " + originalValName + " " );
 			Controllertiff controller1 = (Controllertiff) context.getBean( "controllertiff" );
 			boolean okMandatory = controller1.executeMandatory( valDatei, directoryOfLogfile, configMap );
 			boolean ok = false;
@@ -1555,7 +1560,6 @@ public class KOSTVal implements MessageConstants
 					kostval.getTextResourceService().getText( MESSAGE_SIARDVALIDATION ) ) );
 			LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_VALFILE,
 					originalValName ) );
-			System.out.print( "SIARD: " + originalValName + " " );
 			Controllersiard controller2 = (Controllersiard) context.getBean( "controllersiard" );
 			boolean okMandatory = controller2.executeMandatory( valDatei, directoryOfLogfile, configMap );
 			boolean ok = false;
@@ -1589,7 +1593,6 @@ public class KOSTVal implements MessageConstants
 					kostval.getTextResourceService().getText( MESSAGE_PDFAVALIDATION ) ) );
 			LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_VALFILE,
 					originalValName ) );
-			System.out.print( "PDFA:  " + originalValName );
 			Controllerpdfa controller3 = (Controllerpdfa) context.getBean( "controllerpdfa" );
 
 			boolean okMandatory = controller3.executeMandatory( valDatei, directoryOfLogfile, configMap );

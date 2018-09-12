@@ -207,6 +207,47 @@ public class Util
 		}
 	}
 
+	public static Map<String, File> getFileMapFile( File dir )
+	{
+		originalPath = dir.getAbsolutePath();
+		fileMap = new HashMap<String, File>();
+		visitAllDirsAndFilesStoreFiles( dir );
+		return fileMap;
+	}
+
+	// Process all files and directories under dir aber nur Files speichern
+	public static void visitAllDirsAndFilesStoreFiles( File dir )
+	{
+
+		String filePath = dir.getAbsolutePath();
+		filePath = filePath.replace( originalPath, "" );
+
+		if ( filePath.length() > 0 ) {
+			filePath = filePath.replaceAll( "\\\\", "/" );
+			if ( filePath.startsWith( "/" ) ) {
+				filePath = filePath.substring( 1 );
+			}
+			if ( dir.isDirectory() && !filePath.endsWith( "/" ) ) {
+				filePath += "/";
+			}
+			File file =new File (filePath);
+
+			if ( file.isDirectory() ) {
+				// filePath nicht in Map schreiben
+			} else {
+				fileMap.put( filePath, dir );
+			}
+
+		}
+
+		if ( dir.isDirectory() ) {
+			String[] children = dir.list();
+			for ( int i = 0; i < children.length; i++ ) {
+				visitAllDirsAndFilesStoreFiles( new File( dir, children[i] ) );
+			}
+		}
+	}
+
 	/** Kopiert ein Verzeichnis.
 	 * 
 	 * @param quelle
@@ -269,7 +310,7 @@ public class Util
 	 * verwendet werden. Dies insbesondere bei grossem Text massiv schneller. Da bei diesen
 	 * Ersetzungen meist der Output gelesen wird, kann dieser natürich gross sein. */
 
-	/** Verändert & mit &amp und ergänzt das XML-Element "<End></End>" mit dem ergebnis (stringEnd)
+	/** Verändert [& mit &amp], [ '<'  	mit  '&lt;' ] sowie [ '>'  mit  '&gt;' ] und ergänzt das XML-Element "<End></End>" mit dem ergebnis (stringEnd)
 	 * sowie <Message>3c</Message></Error> mit dem ergebnis (string3c) in dem kost-val.log.xml (file)
 	 * 
 	 * ! Solche Ersetzungen dürfen nicht in einer Schleife gemacht werden sondern erst am Schluss, da
@@ -297,6 +338,8 @@ public class Util
 			String newtext = oldtext.replace( "<End></End>", stringEnd );
 			newtext = newtext.replace( "<Message>3c</Message></Error>", string3c );
 			newtext = newtext.replace( "&", "&amp;" );
+			newtext = newtext.replace( " '<' ", " '&lt;' " );
+			newtext = newtext.replace( " '>' ", " '&gt;' " );
 			newtext = newtext.replace( "<<", "<" );
 			newtext = newtext.replace( (char) 0, (char) 32 );
 			FileWriter writer = new FileWriter( file );

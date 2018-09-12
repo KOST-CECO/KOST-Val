@@ -15,6 +15,9 @@
 		<pdfa1>1B</pdfa1><!--1A / 1B / no -->
 		<pdfa2>2U</pdfa2><!--2A / 2B / 2U / no -->
 		<pdfafont>no</pdfafont><!--no verwenden wenn die Schriften in pdfa nicht validiert werden sollen, ansonsten yes -->
+		<fontsymbol>W</fontsymbol><!--W verwenden wenn Warnung ansonsten E fuer Fehler -->
+		<fontundefined>W</fontundefined><!--W verwenden wenn Warnung ansonsten E fuer Fehler -->
+		<fonttolerance>M</fonttolerance><!--Toleranz für Warnung (S, M, L) -->
 		<pdfaimage>no</pdfaimage><!--no verwenden wenn die Bilder in pdfa nicht validiert werden sollen, ansonsten yes -->
 		<jbig2allowed>yes</jbig2allowed><!--no verwenden wenn JBIG2 in pdfa nicht erlaubt werden sollen, ansonsten yes -->
 	</pdfa>
