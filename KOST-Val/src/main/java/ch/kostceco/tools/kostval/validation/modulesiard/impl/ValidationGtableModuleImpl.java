@@ -86,6 +86,8 @@ public class ValidationGtableModuleImpl extends ValidationModuleImpl implements
 			SAXBuilder builder = new SAXBuilder();
 			Document document = builder.build( fin );
 			fin.close();
+			// set to null
+			fin = null;
 
 			// declare ArrayLists
 			List listSchemas = new ArrayList();

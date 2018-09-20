@@ -69,6 +69,8 @@ public class Util
 			PrintStream ps = new PrintStream( fos );
 			System.setOut( ps );
 			ps.close();
+			// set to null
+			ps = null;
 		} catch ( FileNotFoundException e ) {
 			e.printStackTrace();
 		}
@@ -88,6 +90,9 @@ public class Util
 			System.setOut( ps );
 			fos.close();
 			ps.close();
+			// set to null
+			fos = null;
+			ps = null;
 		} catch ( FileNotFoundException e ) {
 			// e.printStackTrace();
 		} catch ( IOException e ) {
@@ -230,7 +235,7 @@ public class Util
 			if ( dir.isDirectory() && !filePath.endsWith( "/" ) ) {
 				filePath += "/";
 			}
-			File file =new File (filePath);
+			File file = new File( filePath );
 
 			if ( file.isDirectory() ) {
 				// filePath nicht in Map schreiben
@@ -294,6 +299,9 @@ public class Util
 		}
 		in.close();
 		out.close();
+		// set to null
+		in = null;
+		out = null;
 	}
 
 	/* TODO: Wichtige Notiz zur Performance
@@ -310,7 +318,7 @@ public class Util
 	 * verwendet werden. Dies insbesondere bei grossem Text massiv schneller. Da bei diesen
 	 * Ersetzungen meist der Output gelesen wird, kann dieser natürich gross sein. */
 
-	/** Verändert [& mit &amp], [ '<'  	mit  '&lt;' ] sowie [ '>'  mit  '&gt;' ] und ergänzt das XML-Element "<End></End>" mit dem ergebnis (stringEnd)
+/** Verändert [& mit &amp], [ '<'  	mit  '&lt;' ] sowie [ '>'  mit  '&gt;' ] und ergänzt das XML-Element "<End></End>" mit dem ergebnis (stringEnd)
 	 * sowie <Message>3c</Message></Error> mit dem ergebnis (string3c) in dem kost-val.log.xml (file)
 	 * 
 	 * ! Solche Ersetzungen dürfen nicht in einer Schleife gemacht werden sondern erst am Schluss, da
@@ -335,6 +343,8 @@ public class Util
 			String stringEnd = ausgabeEnd;
 			oldtext = sb.toString();
 			reader.close();
+			// set to null
+			reader = null;
 			String newtext = oldtext.replace( "<End></End>", stringEnd );
 			newtext = newtext.replace( "<Message>3c</Message></Error>", string3c );
 			newtext = newtext.replace( "&", "&amp;" );
@@ -345,6 +355,8 @@ public class Util
 			FileWriter writer = new FileWriter( file );
 			writer.write( newtext );
 			writer.close();
+			// set to null
+			writer = null;
 		} catch ( IOException ioe ) {
 			ioe.printStackTrace();
 		}
@@ -368,12 +380,16 @@ public class Util
 			}
 			oldtext = sb.toString();
 			reader.close();
+			// set to null
+			reader = null;
 			string = "Validierung: SIP" + string;
 			String newtext = oldtext.replace( "Validierung: SIP", string );
 			newtext = newtext.replace( (char) 0, (char) 32 );
 			FileWriter writer = new FileWriter( file );
 			writer.write( newtext );
 			writer.close();
+			// set to null
+			writer = null;
 		} catch ( IOException ioe ) {
 			ioe.printStackTrace();
 		}
@@ -398,11 +414,15 @@ public class Util
 			}
 			oldtext = sb.toString();
 			reader.close();
+			// set to null
+			reader = null;
 			String newtext = oldtext.replace( oldstring, newstring );
 			newtext = newtext.replace( (char) 0, (char) 32 );
 			FileWriter writer = new FileWriter( file );
 			writer.write( newtext );
 			writer.close();
+			// set to null
+			writer = null;
 		} catch ( IOException ioe ) {
 			ioe.printStackTrace();
 		}

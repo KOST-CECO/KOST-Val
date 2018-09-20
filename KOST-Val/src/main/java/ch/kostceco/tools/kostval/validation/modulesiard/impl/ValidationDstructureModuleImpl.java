@@ -75,6 +75,8 @@ public class ValidationDstructureModuleImpl extends ValidationModuleImpl impleme
 			SAXBuilder builder = new SAXBuilder();
 			Document document = builder.build( fin );
 			fin.close();
+			// set to null
+			fin = null;
 
 			/* read the document and for each schema and table entry verify existence in temporary
 			 * extracted structure */

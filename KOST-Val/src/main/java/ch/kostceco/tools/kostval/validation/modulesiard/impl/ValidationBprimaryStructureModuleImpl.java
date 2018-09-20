@@ -113,6 +113,8 @@ public class ValidationBprimaryStructureModuleImpl extends ValidationModuleImpl 
 				}
 			}
 			zipfile.close();
+			// set to null
+			zipfile = null;
 			if ( bExistsContentFolder == 0 ) {
 				getMessageService().logError(
 						getTextResourceService().getText( MESSAGE_XML_MODUL_B_SIARD )

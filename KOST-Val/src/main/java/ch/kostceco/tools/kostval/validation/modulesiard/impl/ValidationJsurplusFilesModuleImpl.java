@@ -204,6 +204,8 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl impl
 				SAXBuilder builder = new SAXBuilder();
 				Document document = (Document) builder.build( fin );
 				fin.close();
+				// set to null
+				fin = null;
 
 				Boolean version1 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" ).contains(
 						"http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
@@ -467,6 +469,8 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl impl
 								}
 
 								br.close();
+								// set to null
+								br = null;
 							} catch ( FileNotFoundException e ) {
 								getMessageService().logError(
 										getTextResourceService().getText( MESSAGE_XML_MODUL_J_SIARD )

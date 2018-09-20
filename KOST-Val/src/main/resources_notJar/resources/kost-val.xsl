@@ -178,55 +178,54 @@
 												<br />
 											</xsl:for-each>
 											<xsl:if test="MessageFont">
-												<tr class="captionm">
-
-													<td width="100%">
-														<strong>Producer: <xsl:value-of select="MessageFont/docInfo/producer"/>
-														</strong>	
-
-														<xsl:for-each select="MessageFont/fonts/font" >
-															<br />
-															<txt>
-																<strong>Font: <xsl:value-of select="@name"/>
-																</strong>
-																<txt>  Full name: </txt>
-																<xsl:value-of select="@fullname"/>
-																<xsl:if test="@objectNo"> (object no <xsl:value-of select="@objectNo"/>)
-																</xsl:if>
-																<txt>  Type: </txt>
-																<xsl:value-of select="@type"/>
-																<xsl:if test="@fontfile">
-																	<txt>  Font file: </txt>
-																	<xsl:value-of select="@fontfile"/>
-																</xsl:if>
-															</txt>
-															<br />
-															<txt>
-																<xsl:for-each select="character">
-																	<xsl:choose>
-																		<xsl:when test="@unicodeUndefined">
-																			<img height="30">
-																				<xsl:attribute name="src">
-																					<xsl:value-of select="."/>
-																				</xsl:attribute>
-																			</img>
-																		</xsl:when>
-																		<xsl:when test="@unicode">
-																		</xsl:when>
-																		<xsl:otherwise>
-
-																			<img height="30"  border="1px">
-																				<xsl:attribute name="src">
-																					<xsl:value-of select="."/>
-																				</xsl:attribute>
-																			</img>
-																		</xsl:otherwise>
-																	</xsl:choose>
-																</xsl:for-each>
-															</txt>
-														</xsl:for-each>
-													</td>
-												</tr>
+												<table width="100%">
+													<tr class="captionm">
+														<td width="100%">
+															<strong>Producer: <xsl:value-of select="MessageFont/docInfo/producer"/>
+															</strong>	
+															<xsl:for-each select="MessageFont/fonts/font" >
+																<br />
+																<txt>
+																	<strong>Font: <xsl:value-of select="@name"/>
+																	</strong>
+																	<txt>  Full name: </txt>
+																	<xsl:value-of select="@fullname"/>
+																	<xsl:if test="@objectNo"> (object no <xsl:value-of select="@objectNo"/>)
+																	</xsl:if>
+																	<txt>  Type: </txt>
+																	<xsl:value-of select="@type"/>
+																	<xsl:if test="@fontfile">
+																		<txt>  Font file: </txt>
+																		<xsl:value-of select="@fontfile"/>
+																	</xsl:if>
+																</txt>
+																<br />
+																<txt>
+																	<xsl:for-each select="character">
+																		<xsl:choose>
+																			<xsl:when test="@unicodeUndefined">
+																				<img height="30">
+																					<xsl:attribute name="src">
+																						<xsl:value-of select="."/>
+																					</xsl:attribute>
+																				</img>
+																			</xsl:when>
+																			<xsl:when test="@unicode">
+																			</xsl:when>
+																			<xsl:otherwise>
+																				<img height="30"  border="1px">
+																					<xsl:attribute name="src">
+																						<xsl:value-of select="."/>
+																					</xsl:attribute>
+																				</img>
+																			</xsl:otherwise>
+																		</xsl:choose>
+																	</xsl:for-each>
+																</txt>
+															</xsl:for-each>
+														</td>
+													</tr>
+												</table>
 											</xsl:if>
 										</td>
 									</tr>

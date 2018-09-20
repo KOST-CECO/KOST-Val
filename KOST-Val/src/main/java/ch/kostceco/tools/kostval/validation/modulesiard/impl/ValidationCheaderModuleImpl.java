@@ -179,6 +179,9 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 					}
 					eis.close();
 					fos.close();
+					// set to null
+					eis = null;
+					fos = null;
 					// Festhalten von metadata.xml und metadata.xsd
 					if ( newFile.getName().endsWith( METADATA ) ) {
 						xmlToValidate = newFile;
@@ -201,6 +204,8 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 						newFolder.mkdirs();
 					}
 					eis.close();
+					// set to null
+					eis = null;
 				}
 				if ( showOnWork ) {
 					if ( onWork == 41 ) {
@@ -278,6 +283,8 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 												+ getTextResourceService().getText( MESSAGE_XML_C_METADATA_NSFOUND,
 														lineNode, lineNodeNS ) );
 								in.close();
+								// set to null
+								in = null;
 								return false;
 							} else {
 								// valider Status
@@ -286,6 +293,8 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 						}
 					}
 					in.close();
+					// set to null
+					in = null;
 
 					// Validierung von metadata.xml und metadata.xsd mit dem (private class) Validator
 					System.setProperty( "javax.xml.parsers.DocumentBuilderFactory",
@@ -325,6 +334,8 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 				}
 			}
 			zipfile.close();
+			// set to null
+			zipfile = null;
 		} catch ( Exception e ) {
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_XML_MODUL_C_SIARD )

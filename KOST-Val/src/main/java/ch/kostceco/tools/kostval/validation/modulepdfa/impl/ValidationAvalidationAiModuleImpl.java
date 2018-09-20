@@ -205,10 +205,15 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 					}
 				}
 				in.close();
+				// set to null
+				in = null;
+
 			} catch ( Throwable e ) {
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-								+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+				getMessageService()
+						.logError(
+								getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+										+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+												"Version " + e.getMessage() ) );
 			}
 		}
 		getMessageService().logError(
@@ -272,6 +277,9 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 										+ getTextResourceService().getText(
 												MESSAGE_XML_CONFIGURATION_ERROR_NO_SIGNATURE ) );
 						read.close();
+						// set to null
+						read = null;
+
 						return false;
 					}
 					// existiert die SignatureFile am angebenen Ort?
@@ -281,6 +289,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 								getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
 										+ getTextResourceService().getText( MESSAGE_XML_CA_DROID ) );
 						read.close();
+						// set to null
+						read = null;
 						return false;
 					}
 
@@ -299,6 +309,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 								getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
 										+ getTextResourceService().getText( ERROR_XML_CANNOT_INITIALIZE_DROID ) );
 						read.close();
+						// set to null
+						read = null;
 						return false;
 					} finally {
 						Util.switchOnConsole();
@@ -315,9 +327,13 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 							getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
 									+ getTextResourceService().getText( ERROR_XML_A_PDFA_INCORRECTFILE, puid ) );
 					read.close();
+					// set to null
+					read = null;
 					return false;
 				}
 				read.close();
+				// set to null
+				read = null;
 			} catch ( Exception e ) {
 				getMessageService().logError(
 						getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
@@ -512,6 +528,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 									docPdf.getErrorMessage() ) );
 						}
 						fs.close();
+						// set to null
+						fs = null;
 
 						// TODO erledigt: Start der Font-Auswertung betreffend unbekannt und undefiniert
 						try {
@@ -528,11 +546,15 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 							} finally {
 								inputChannel.close();
 								outputChannel.close();
+								// set to null
+								inputChannel = null;
+								outputChannel = null;
 							}
 							fis.close();
 							fos.close();
-							inputChannel.close();
-							outputChannel.close();
+							// set to null
+							fis = null;
+							fos = null;
 						} catch ( Exception e ) {
 							getMessageService().logError(
 									getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
@@ -785,12 +807,11 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 										errorK = errorK
 												+ getTextResourceService().getText( MESSAGE_XML_MODUL_K_PDFA )
 												+ getTextResourceService().getText( ERROR_XML_K_OVERVIEW, count, unknownW,
-														unknownPdoubleW, undefinedE, undefinedPdoubleE,
-														warning );
+														unknownPdoubleW, undefinedE, undefinedPdoubleE, warning );
 									} else {
 										if ( symbolWarning != 0 ) {
 											errorK = errorK + getTextResourceService().getText( MESSAGE_XML_MODUL_K_PDFA )
-													 + warning + "</Error>";
+													+ warning + "</Error>";
 										}
 
 									}
@@ -801,7 +822,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 												+ getTextResourceService().getText( MESSAGE_XML_MODUL_K_PDFA )
 												+ getTextResourceService().getText( ERROR_XML_K_OVERVIEW, elementCount,
 														elementUnknown, elementUnknownP, elementUndefined, elementUndefinedP,
-														 warning );
+														warning );
 									}
 								}
 								if ( !isValidFont ) {
@@ -812,8 +833,12 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 									errorK = errorK
 											+ getTextResourceService().getText( ERROR_XML_K_DETAIL, stringInfo,
 													stringFonts );
-									bisError.close();
 								}
+								bisError.close();
+								// set to null
+								bisError = null;
+								source = null;
+								result = null;
 							} catch ( Exception e ) {
 								getMessageService().logError(
 										getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
@@ -823,6 +848,11 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 							}
 						}
 						bis.close();
+						// set to null
+						bis = null;
+						if ( fontReportError.exists() ) {
+							fontReportError.delete();
+						}
 						fontReportError.deleteOnExit();
 					}
 				} catch ( Exception e ) {
@@ -1487,6 +1517,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 						}
 
 						br.close();
+						// set to null
+						br = null;
 					} catch ( FileNotFoundException e ) {
 						getMessageService()
 								.logError(
@@ -1670,7 +1702,6 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 				getMessageService().logError( errorK );
 
 				docPdf.close();
-
 				// Destroy the object
 				docPdf.destroyObject();
 
@@ -1687,9 +1718,10 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 							+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 		}
 		docPdf.close();
-
-		// Destroy the object
+		// Destroy the object and set to null
 		docPdf.destroyObject();
+		docPdf = null;
+
 		return isValid;
 	}
 

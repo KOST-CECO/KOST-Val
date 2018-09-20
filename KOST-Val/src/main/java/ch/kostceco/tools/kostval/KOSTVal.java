@@ -119,11 +119,8 @@ public class KOSTVal implements MessageConstants
 		KOSTVal kostval = (KOSTVal) context.getBean( "kostval" );
 
 		/* dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist ein generelles TODO in
-		 * allen Modulen. Zuerst immer dirOfJarPath ermitteln und dann alle Pfade mit
-		 * 
-		 * dirOfJarPath + File.separator +
-		 * 
-		 * erweitern. */
+		 * allen Modulen. Zuerst immer dirOfJarPath ermitteln und dann alle Pfade mit dirOfJarPath +
+		 * File.separator + erweitern. */
 		String path = new java.io.File( KOSTVal.class.getProtectionDomain().getCodeSource()
 				.getLocation().getPath() ).getAbsolutePath();
 		path = path.substring( 0, path.lastIndexOf( "." ) );
@@ -754,6 +751,10 @@ public class KOSTVal implements MessageConstants
 				LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_FORMAT2 ) );
 
 				LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_LOGEND ) );
+
+				// Garbage Collecter aufruf zur Bereinigung
+				System.gc();
+
 				// logFile bereinigung (& End und ggf 3c)
 				Util.valEnd3cAmp( "", logFile );
 
@@ -912,6 +913,8 @@ public class KOSTVal implements MessageConstants
 								zip = true;
 							}
 							read.close();
+							// set to null
+							read = null;
 						} catch ( Exception e ) {
 							LOGGER.logError( "<Error>"
 									+ kostval.getTextResourceService().getText( ERROR_XML_UNKNOWN,
@@ -1325,6 +1328,9 @@ public class KOSTVal implements MessageConstants
 
 				}
 
+				// Garbage Collecter aufruf zur Bereinigung
+				System.gc();
+
 				// Bereinigungen und ergaenzungen durchfuehren
 
 				// Ergaenzung Format Summary
@@ -1649,6 +1655,9 @@ public class KOSTVal implements MessageConstants
 			// pathTemploeschen!
 			pathTemp.delete();
 		}
+
+		// Garbage Collecter aufruf zur Bereinigung
+		System.gc();
 
 		return valFile;
 	}

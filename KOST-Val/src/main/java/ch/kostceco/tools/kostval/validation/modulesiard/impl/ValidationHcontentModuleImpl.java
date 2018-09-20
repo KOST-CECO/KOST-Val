@@ -285,6 +285,8 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl implement
 														}
 													} finally {
 														br.close();
+														// set to null
+														br = null;
 														/* Konsole zuerst einmal noch umleiten und die Streams beenden, damit
 														 * die dateien geloescht werden koennen */
 														Util.switchOffConsoleToTxtClose( outTableXml );
@@ -374,6 +376,8 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl implement
 				}
 			}
 			fin.close();
+			// set to null
+			fin = null;
 		} catch ( java.io.IOException ioe ) {
 			valid = false;
 			getMessageService().logError(

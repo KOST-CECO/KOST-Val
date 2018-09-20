@@ -788,6 +788,9 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 				extractedSiardFiles.put( newFile.getPath(), newFile );
 				eis.close();
 				fos.close();
+				// set to null
+				eis = null;
+				fos = null;
 			}
 			if ( showOnWork ) {
 				if ( onWork == 410 ) {
