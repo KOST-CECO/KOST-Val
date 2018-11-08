@@ -3,7 +3,7 @@ Name "KOST-Val v1.9.0"
 ; Sets the icon of the installer
 Icon "val.ico"
 ; remove the text 'Nullsoft Install System vX.XX' from the installer window 
-BrandingText "Copyright ? KOST/CECO"
+BrandingText "Copyright (c) KOST/CECO"
 ; The file to write
 OutFile "KOST-Val_en.exe"
 ; The default installation directory
@@ -18,7 +18,7 @@ XPStyle on
 !include WinMessages.nsh
 !include FileFunc.nsh
 !include LogicLib.nsh
-!include getJavaHome.nsh
+; !include getJavaHome.nsh
 !include langKOSTVal_en.nsh
 !include nsDialogs.nsh
 !include XML.nsh
@@ -34,7 +34,6 @@ XPStyle on
 !define LOG           ".kost-val\logs"
 !define JARFILE       "kostval_en.jar"
 !define XTRANS        "resources\XTrans_1.8.0.4\XTrans.exe"
-!define JAVAPATH      "resources\jre8_32bit"
 
 ;--------------------------------
 Var USER
@@ -58,9 +57,10 @@ Page Custom ShowDialog LeaveDialog
 ; Functions
 Function .onInit
   ; looking for java home directory
-  push ${JAVAPATH}
-  Call getJavaHome
-  pop $JAVA
+  ReadINIStr $JAVA $DIALOG "${JAVA_Exe}" "State"
+  ; push ${JAVAPATH}
+  ; Call getJavaHome
+  ; pop $JAVA
   DetailPrint "java home: $JAVA"
   
   ; initial setting for validation folder/file
@@ -115,6 +115,7 @@ Function ShowDialog
   WriteINIStr $DIALOG "${SIP_RadioButton}"       "Text"  "${SIP_RadioButtonTXT}"
   WriteINIStr $DIALOG "${LOG_RadioButton}"       "Text"  "${LOG_RadioButtonTXT}"
   WriteINIStr $DIALOG "${JVM_Droplist}"          "Text"  "${JVM_DroplistTXT}"
+  WriteINIStr $DIALOG "${JAVA_Exe}"              "Text"  "${JAVA_ExeTXT}"
   WriteINIStr $DIALOG "${INPUT_Group}"           "Text"  "${INPUT_GroupTXT}"
   WriteINIStr $DIALOG "${INPUT_FolderRequest}"   "Text"  "${INPUT_FolderRequestTXT}"
   WriteINIStr $DIALOG "${INPUT_FileRequest}"     "Text"  "${INPUT_FileRequestTXT}"
@@ -238,6 +239,7 @@ Function LeaveDialog
       StrCmp $R1 '\' 0 +2
         StrCpy $R0 $R0 -1
         GetFullPathName $KOSTVAL $R0
+      ReadINIStr $JAVA $DIALOG "${JAVA_Exe}" "State"
       Call RunJar
       Abort
     ${Break}
@@ -276,7 +278,7 @@ Function RunJar
 
   ; Launch java program
   ClearErrors
-  ExecWait '"$JAVA\bin\java.exe" $HEAPSIZE -jar ${JARFILE} $T_FLAG "$KOSTVAL" $P_FLAG'
+  ExecWait '"$JAVA" $HEAPSIZE -jar ${JARFILE} $T_FLAG "$KOSTVAL" $P_FLAG'
   ; MessageBox MB_OK `LOGFILE:$\n"$USER\${LOG}\$LOGFILE.kost-val.log.xml"`
   IfFileExists $USER\${LOG}\$LOGFILE.kost-val.log.xml 0 prog_err
   IfErrors goto_err goto_ok
@@ -292,7 +294,7 @@ goto_err:
       Goto rm_workdir
   ${EndIf}
 prog_err:
-    MessageBox MB_OK|MB_ICONEXCLAMATION "${PROG_ERR} $\n$JAVA\bin\java.exe -jar ${JARFILE} $T_FLAG $KOSTVAL $P_FLAG"
+    MessageBox MB_OK|MB_ICONEXCLAMATION "${PROG_ERR} $\n$JAVA -jar ${JARFILE} $T_FLAG $KOSTVAL $P_FLAG"
     Goto rm_workdir
 goto_ok:
   ; validation without error completed

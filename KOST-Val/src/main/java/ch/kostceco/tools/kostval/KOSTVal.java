@@ -752,6 +752,11 @@ public class KOSTVal implements MessageConstants
 
 				LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_LOGEND ) );
 
+				File callasNo = new File( directoryOfLogfile + File.separator + "_callas_NO.txt" );
+				if ( callasNo.exists() ) {
+					callasNo.delete();
+				}
+
 				// Garbage Collecter aufruf zur Bereinigung
 				System.gc();
 
@@ -1369,6 +1374,11 @@ public class KOSTVal implements MessageConstants
 				}
 				if ( pathTemp.exists() ) {
 					pathTemp.deleteOnExit();
+				}
+
+				File callasNo = new File( directoryOfLogfile + File.separator + "_callas_NO.txt" );
+				if ( callasNo.exists() ) {
+					callasNo.delete();
 				}
 
 				System.out.print( "                                                                    " );

@@ -131,18 +131,6 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String pdfafont = doc.getElementsByTagName( "pdfafont" ).item( 0 ).getTextContent();
 			configMap.put( "pdfafont", pdfafont );
 
-			// Gibt die Toleranz der Warnings an bei der Schriftvalidierung
-			String fonttolerance = doc.getElementsByTagName( "fonttolerance" ).item( 0 ).getTextContent();
-			configMap.put( "fonttolerance", fonttolerance );
-
-			// Angabe ob die Symbolschriften Warnungen oder Fehler auslösen
-			String fontsymbol = doc.getElementsByTagName( "fontsymbol" ).item( 0 ).getTextContent();
-			configMap.put( "fontsymbol", fontsymbol );
-
-			// Angabe ob die undefinierte Zeichen Warnungen oder Fehler auslösen
-			String fontundefined = doc.getElementsByTagName( "fontundefined" ).item( 0 ).getTextContent();
-			configMap.put( "fontundefined", fontundefined );
-
 			// Gibt an ob die Bilder in pdfa validiert werden soll
 			String pdfaimage = doc.getElementsByTagName( "pdfaimage" ).item( 0 ).getTextContent();
 			configMap.put( "pdfaimage", pdfaimage );

@@ -32,6 +32,7 @@ DetailsButtonText "Details zeigen"
 !define RESET_Konfiguration       "Field 12"
 !define JVM_Droplist              "Field 13"
 !define JVM_Value                 "Field 14"
+!define JAVA_Exe                  "Field 15"
 
 ;----------------------
 ;!define INTROTXT                 "KOST-Val validé les fichiers TIFF, SIARD, PDF/A, JP2 et JPEG, ainsi que des SIPs"
@@ -47,6 +48,7 @@ DetailsButtonText "Details zeigen"
 !define EDIT_KonfigurationTXT    "Modifier la configuration ..."
 !define RESET_KonfigurationTXT   "Réinitialiser la configuration"
 !define JVM_DroplistTXT          "Option de JVM:"
+!define JAVA_ExeTXT              "java.exe"
 
 ;----------------------
 !define FOLDER_SelectTXT         "S'il vous plaît choisissez un dossier valide"

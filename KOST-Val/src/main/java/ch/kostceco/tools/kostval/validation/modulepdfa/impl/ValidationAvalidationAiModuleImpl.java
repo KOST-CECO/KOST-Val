@@ -115,6 +115,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 		/* Beim schreiben ins Workverzeichnis trat ab und zu ein fehler auf. entsprechend wird es jetzt
 		 * ins logverzeichnis geschrieben */
 
+		File callasNo = new File( pathToWorkDir + File.separator + "_callas_NO.txt" );
+
 		String pathToPdfapilotOutput = pathToLogDir + File.separator + "callasTEMP.txt";
 		File report = new File( pathToPdfapilotOutput );
 
@@ -356,8 +358,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 		String undefiniedWarningString = "";
 		int symbolWarning = 0;
 		String symbolWarningString = "";
-		String fontundefined = "E";
-		String fontsymbol = "E";
+		String fontundefined = "W";
+		String fontsymbol = "W";
 		boolean callas = false;
 		boolean pdftools = false;
 		int callasReturnCode = 9;
@@ -383,7 +385,13 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 
 		if ( callasConfig.contentEquals( "yes" ) ) {
 			// callas Validierung gewünscht
-			callas = true;
+			if ( callasNo.exists() ) {
+				/* Callas wurde in einem früheren durchgang getestet und es funktioniert bei dem Benutzer
+				 * nicht korrekt. Entsprechend ist die Validierung mit callas nicht möglich */
+				callas = false;
+			} else {
+				callas = true;
+			}
 		}
 		if ( pdftoolsConfig.contentEquals( "yes" ) ) {
 			// pdftools Validierung gewünscht
@@ -496,7 +504,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 					}
 
 					String fontYesNo = configMap.get( "pdfafont" );
-					if ( fontYesNo.equalsIgnoreCase( "yes" ) ) {
+					if ( fontYesNo.equalsIgnoreCase( "yes" ) || fontYesNo.equalsIgnoreCase( "yess" )
+							|| fontYesNo.equalsIgnoreCase( "yesl" ) ) {
 						/* WriteFontValidationXML Method: Boolean WriteFontValidationXML(Stream outputStream)
 						 * Write font validation information in XML format to a stream. This method must be
 						 * called after Validate and before Close. For more information on the structure of the
@@ -604,28 +613,20 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 								 * Symbol-Schriften als Warnung / Fehler behandeln (W, E)
 								 * 
 								 * Undefinierte Zeichen als Warnung / Fehler behandeln (W, E) */
-								String fonttolerance = configMap.get( "fonttolerance" );
 								double tolerance = 10.000;
-								if ( fonttolerance.equalsIgnoreCase( "S" ) ) {
-									tolerance = 5.000;
-								} else if ( fonttolerance.equalsIgnoreCase( "L" ) ) {
+								if ( fontYesNo.equalsIgnoreCase( "yess" ) ) {
+									tolerance = 0.000;
+									fontsymbol = "E";
+									fontundefined = "E";
+								} else if ( fontYesNo.equalsIgnoreCase( "yesl" ) ) {
 									tolerance = 20.000;
+									fontsymbol = "I";
+									fontundefined = "I";
 								}
 								if ( tolerance > elementTolerance ) {
 									isWarningFont = true;
-								}
-								fontsymbol = configMap.get( "fontsymbol" );
-								if ( fontsymbol.equalsIgnoreCase( "W" ) && isWarningFont ) {
-									// Warning und Schwelle nicht ueberschritten
-									fontsymbol = "W";
 								} else {
 									fontsymbol = "E";
-								}
-								fontundefined = configMap.get( "fontundefined" );
-								if ( fontundefined.equalsIgnoreCase( "W" ) && isWarningFont ) {
-									// Warning und Schwelle nicht ueberschritten
-									fontundefined = "W";
-								} else {
 									fontundefined = "E";
 								}
 
@@ -662,6 +663,10 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 											if ( fontundefined.equalsIgnoreCase( "W" ) ) {
 												// System.out.println( " unicode nicht definiert -> node loeschen");
 												undefiniedWarning = undefiniedWarning + 1;
+												// Node zum leschen vormerken
+												targetNode.add( charNode );
+											} else if ( fontundefined.equalsIgnoreCase( "I" ) ) {
+												// System.out.println( " unicode nicht definiert -> node loeschen");
 												// Node zum leschen vormerken
 												targetNode.add( charNode );
 											}
@@ -706,7 +711,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 									if ( nodeFontCharLst.getLength() <= 1 ) {
 										// font Node zum leschen vormerken
 										targetNodeFont.add( fontNode );
-									} else if ( fontNode.hasAttributes() && fontsymbol.equalsIgnoreCase( "W" ) ) {
+									} else if ( (fontNode.hasAttributes() && fontsymbol.equalsIgnoreCase( "W" ))
+											|| (fontNode.hasAttributes() && fontsymbol.equalsIgnoreCase( "I" )) ) {
 										NamedNodeMap attrs = fontNode.getAttributes();
 										for ( int i = 0; i < attrs.getLength(); i++ ) {
 											Attr attribute = (Attr) attrs.item( i );
@@ -725,6 +731,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 													if ( fontsymbol.equalsIgnoreCase( "W" ) ) {
 														targetNodeFont.add( fontNode );
 														symbolWarning = symbolWarning + 1;
+													} else if ( fontsymbol.equalsIgnoreCase( "I" ) ) {
+														targetNodeFont.add( fontNode );
 													}
 												}
 											}
@@ -788,7 +796,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 								}
 
 								String warning = symbolWarningString + " " + undefiniedWarningString;
-								if ( fontundefined.equalsIgnoreCase( "W" ) ) {
+								if ( fontundefined.equalsIgnoreCase( "W" ) || fontundefined.equalsIgnoreCase( "I" ) ) {
 									if ( unknownW != 0 ) {
 										isValidFont = false;
 										errorK = errorK
@@ -801,7 +809,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 													+ warning + "</Error>";
 										}
 									}
-								} else if ( fontsymbol.equalsIgnoreCase( "W" ) ) {
+								} else if ( fontsymbol.equalsIgnoreCase( "W" ) || fontsymbol.equalsIgnoreCase( "I" ) ) {
 									if ( unknownW != 0 || undefinedW != 0 ) {
 										isValidFont = false;
 										errorK = errorK
@@ -868,7 +876,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 					PdfError err = docPdf.getFirstError();
 					boolean rd = false;
 					String detailConfig = configMap.get( "detail" );
-					if ( detailConfig.equalsIgnoreCase( "detail" ) ) {
+					if ( detailConfig.equalsIgnoreCase( "detail" ) || detailConfig.equalsIgnoreCase( "yes" ) ) {
 						rd = true;
 					}
 					if ( err != null && rd ) {
@@ -954,7 +962,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 									}
 
 								} else if ( errorMsgCode0x.toLowerCase().contains( "metad" )
-										|| errorMsgCode0x.toLowerCase().contains( "xmp" ) ) {
+										|| errorMsgCode0x.toLowerCase().contains( "xmp" )
+										|| errorMsgCode0x.toLowerCase().contains( "key 'Filter'." ) ) {
 									if ( pdftoolsH.toLowerCase().contains( errorMsgCode0x.toLowerCase() ) ) {
 										// Fehlermeldung bereits erfasst -> keine Aktion
 									} else {
@@ -987,7 +996,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 										|| errorMsgCode0x.toLowerCase().contains( "comment" )
 										|| errorMsgCode0x.toLowerCase().contains( "structure" )
 										|| errorMsgCode0x.toLowerCase().contains( "print" )
-										|| errorMsgCode0x.toLowerCase().contains( "incorpor" ) ) {
+										|| errorMsgCode0x.toLowerCase().contains( "incorpor" )
+										|| errorMsgCode0x.toLowerCase().contains( "key F is" ) ) {
 									if ( pdftoolsF.toLowerCase().contains( errorMsgCode0x.toLowerCase() ) ) {
 										// Fehlermeldung bereits erfasst -> keine Aktion
 									} else {
@@ -1103,9 +1113,17 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 					callasReturnCodeTest = UtilCallas.execCallas( pdfapilotExe, analye, lang, valPathTest,
 							reportPath );
 
-					if ( callasReturnCodeTest == 0 || callasReturnCodeTest == 1 || callasReturnCodeTest == 2
-							|| callasReturnCodeTest == 3 ) {
+					if ( callasReturnCodeTest <= 3 ) {
 						// Keine callas Validierung möglich
+
+						// -callas_NO -Fileanlegen, damit in J nicht validiert wird
+						if ( !callasNo.exists() ) {
+							try {
+								callasNo.createNewFile();
+							} catch ( IOException e ) {
+								e.printStackTrace();
+							}
+						}
 
 						if ( pdftools ) {
 							callas = false;

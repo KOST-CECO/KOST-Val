@@ -5,19 +5,16 @@
 		<!-- sind pdftools und callas beide auf no wird keine pdfa Validierung durchgefuehrt -->
 		<!-- sind pdftools und callas beide auf yes wird die duale pdfa Validierung durchgefuehrt -->
 		<pdftools>yes</pdftools><!--no wenn PDF Tools nicht verwendet werden soll, ansonsten yes -->
+		<!-- Detailreport: Soll seitens pdftools auch Details in Englisch (yes) oder nur Kategorien (no) ausgegeben werden  -->
+		<detail>yes</detail><!--no verwenden wenn nur Kategorien ansonsten yes fuer detailierte Fehlermeldung -->
 		<callas>yes</callas><!--no wenn callas nicht verwendet werden soll, ansonsten yes -->
-		<!-- Detailreport: Soll seitens pdftools auch Details in Englisch (detail) oder nur Kategorien (no) ausgegeben werden  -->
-		<detail>detail</detail><!--no verwenden wenn nur Kategorien ansonsten detail fuer detailierte Fehlermeldung -->
 		<!-- N-Eintrag: Soll seitens callas ein Fehler (E) oder eine Warnung (W) ausgegeben werden  -->
 		<nentry>W</nentry><!--W verwenden wenn Warnung ansonsten E fuer Fehler -->
 		<!--Angeben welche Conformancelevel mindestens erreicht werden muss -->
 		<!--no verwenden wenn diese Version nicht erlaubt ist -->
 		<pdfa1>1B</pdfa1><!--1A / 1B / no -->
 		<pdfa2>2U</pdfa2><!--2A / 2B / 2U / no -->
-		<pdfafont>no</pdfafont><!--no verwenden wenn die Schriften in pdfa nicht validiert werden sollen, ansonsten yes -->
-		<fontsymbol>W</fontsymbol><!--W verwenden wenn Warnung ansonsten E fuer Fehler -->
-		<fontundefined>W</fontundefined><!--W verwenden wenn Warnung ansonsten E fuer Fehler -->
-		<fonttolerance>M</fonttolerance><!--Toleranz für Warnung (S, M, L) -->
+		<pdfafont>no</pdfafont><!--no verwenden wenn die Schriften in pdfa nicht validiert werden sollen, ansonsten yes yesS yesL-->
 		<pdfaimage>no</pdfaimage><!--no verwenden wenn die Bilder in pdfa nicht validiert werden sollen, ansonsten yes -->
 		<jbig2allowed>yes</jbig2allowed><!--no verwenden wenn JBIG2 in pdfa nicht erlaubt werden sollen, ansonsten yes -->
 	</pdfa>
