@@ -18,7 +18,6 @@ XPStyle on
 !include WinMessages.nsh
 !include FileFunc.nsh
 !include LogicLib.nsh
-; !include getJavaHome.nsh
 !include langKOSTVal_fr.nsh
 !include nsDialogs.nsh
 !include XML.nsh
@@ -56,12 +55,9 @@ Page Custom ShowDialog LeaveDialog
 ;--------------------------------
 ; Functions
 Function .onInit
-  ; looking for java home directory
+  ; looking for java directory
   ReadINIStr $JAVA $DIALOG "${JAVA_Exe}" "State"
-  ; push ${JAVAPATH}
-  ; Call getJavaHome
-  ; pop $JAVA
-  DetailPrint "java home: $JAVA"
+  DetailPrint "java: $JAVA"
   
   ; initial setting for validation folder/file
   StrCpy $KOSTVAL $EXEDIR
@@ -239,7 +235,7 @@ Function LeaveDialog
       StrCmp $R1 '\' 0 +2
         StrCpy $R0 $R0 -1
         GetFullPathName $KOSTVAL $R0
-      ReadINIStr $JAVA $DIALOG "${JAVA_Exe}" "State"
+      ReadINIStr "$JAVA" $DIALOG "${JAVA_Exe}" "State"
       Call RunJar
       Abort
     ${Break}

@@ -504,8 +504,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 					}
 
 					String fontYesNo = configMap.get( "pdfafont" );
-					if ( fontYesNo.equalsIgnoreCase( "yes" ) || fontYesNo.equalsIgnoreCase( "yess" )
-							|| fontYesNo.equalsIgnoreCase( "yesl" ) ) {
+					if ( fontYesNo.equalsIgnoreCase( "yes" ) || fontYesNo.equalsIgnoreCase( "tolerant" )
+							|| fontYesNo.equalsIgnoreCase( "warning" ) || fontYesNo.equalsIgnoreCase( "strict" ) ) {
 						/* WriteFontValidationXML Method: Boolean WriteFontValidationXML(Stream outputStream)
 						 * Write font validation information in XML format to a stream. This method must be
 						 * called after Validate and before Close. For more information on the structure of the
@@ -614,11 +614,11 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 								 * 
 								 * Undefinierte Zeichen als Warnung / Fehler behandeln (W, E) */
 								double tolerance = 10.000;
-								if ( fontYesNo.equalsIgnoreCase( "yess" ) ) {
+								if ( fontYesNo.equalsIgnoreCase( "strict" ) ) {
 									tolerance = 0.000;
 									fontsymbol = "E";
 									fontundefined = "E";
-								} else if ( fontYesNo.equalsIgnoreCase( "yesl" ) ) {
+								} else if ( fontYesNo.equalsIgnoreCase( "tolerant" ) ) {
 									tolerance = 20.000;
 									fontsymbol = "I";
 									fontundefined = "I";
