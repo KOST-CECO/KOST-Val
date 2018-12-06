@@ -318,7 +318,7 @@ public class Util
 	 * verwendet werden. Dies insbesondere bei grossem Text massiv schneller. Da bei diesen
 	 * Ersetzungen meist der Output gelesen wird, kann dieser natürich gross sein. */
 
-/** Verändert [& mit &amp], [ '<'  	mit  '&lt;' ] sowie [ '>'  mit  '&gt;' ] und ergänzt das XML-Element "<End></End>" mit dem ergebnis (stringEnd)
+/** Verändert [& mit &amp;], [ '<'  	mit  '&lt;' ] sowie [ '>'  mit  '&gt;' ] und ergänzt das XML-Element "<End></End>" mit dem ergebnis (stringEnd)
 	 * sowie <Message>3c</Message></Error> mit dem ergebnis (string3c) in dem kost-val.log.xml (file)
 	 * 
 	 * ! Solche Ersetzungen dürfen nicht in einer Schleife gemacht werden sondern erst am Schluss, da
@@ -348,8 +348,9 @@ public class Util
 			String newtext = oldtext.replace( "<End></End>", stringEnd );
 			newtext = newtext.replace( "<Message>3c</Message></Error>", string3c );
 			newtext = newtext.replace( "&", "&amp;" );
-			newtext = newtext.replace( " '<' ", " '&lt;' " );
-			newtext = newtext.replace( " '>' ", " '&gt;' " );
+			newtext = newtext.replace( "<http", "&lt;http" );
+			newtext = newtext.replace( "'<'", "'&lt;'" );
+			newtext = newtext.replace( "'>'", "'&gt;'" );
 			newtext = newtext.replace( "<<", "<" );
 			newtext = newtext.replace( (char) 0, (char) 32 );
 			FileWriter writer = new FileWriter( file );

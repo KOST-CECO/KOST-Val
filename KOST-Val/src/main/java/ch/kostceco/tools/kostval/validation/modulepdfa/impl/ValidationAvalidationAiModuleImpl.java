@@ -982,7 +982,9 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 									}
 
 								} else if ( errorMsgCode0x.toLowerCase().contains( "action" )
-										|| errorMsgCode0x.toLowerCase().contains( "aa" ) ) {
+										|| errorMsgCode0x.toLowerCase().contains( "aa" )
+										|| errorMsgCode0x.toLowerCase().contains( "key 'a'" )
+										|| errorMsgCode0x.toLowerCase().contains( "javascript" ) ) {
 									if ( pdftoolsG.toLowerCase().contains( errorMsgCode0x.toLowerCase() ) ) {
 										// Fehlermeldung bereits erfasst -> keine Aktion
 									} else {
@@ -997,7 +999,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 										|| errorMsgCode0x.toLowerCase().contains( "structure" )
 										|| errorMsgCode0x.toLowerCase().contains( "print" )
 										|| errorMsgCode0x.toLowerCase().contains( "incorpor" )
-										|| errorMsgCode0x.toLowerCase().contains( "key F is" ) ) {
+										|| errorMsgCode0x.toLowerCase().contains( "key f " )
+										|| errorMsgCode0x.toLowerCase().contains( "appearance" ) ) {
 									if ( pdftoolsF.toLowerCase().contains( errorMsgCode0x.toLowerCase() ) ) {
 										// Fehlermeldung bereits erfasst -> keine Aktion
 									} else {
@@ -1018,7 +1021,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 							}
 						}
 
-						// TODO Kontrolle ob details noch existieren
+						// Kontrolle ob details noch existieren
 						if ( pdftoolsA.equals( "" ) && pdftoolsB.equals( "" ) && pdftoolsC.equals( "" )
 								&& pdftoolsD.equals( "" ) && pdftoolsE.equals( "" ) && pdftoolsF.equals( "" )
 								&& pdftoolsG.equals( "" ) && pdftoolsH.equals( "" ) && pdftoolsI.equals( "" ) ) {
@@ -1043,7 +1046,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 
 				try {
 					// Initialisierung callas -> existiert pdfaPilot in den resources?
-					/* dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist ein generelles TODO
+					/* dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist ein generelles to do
 					 * in allen Modulen. Zuerst immer dirOfJarPath ermitteln und dann alle Pfade mit
 					 * 
 					 * dirOfJarPath + File.separator +
@@ -1480,7 +1483,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 
 								} else if ( line.toLowerCase().contains( "aktion" )
 										|| line.toLowerCase().contains( "action" )
-										|| line.toLowerCase().contains( "aa" ) ) {
+										|| line.toLowerCase().contains( "aa" )
+										|| line.toLowerCase().contains( "javascript" ) ) {
 									if ( callasG.toLowerCase().contains( line.toLowerCase() ) ) {
 										// Fehlermeldung bereits erfasst -> keine Aktion
 									} else {
