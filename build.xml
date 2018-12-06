@@ -158,7 +158,6 @@
 		<copy file="KOST-Val/src/main/resources_notJar/KOST-Val_fr.exe" todir="../../KOST-Val"/>
 		<copy file="KOST-Val/src/main/resources_notJar/KOST-Val_en.exe" todir="../../KOST-Val"/>
 		<copy file="KOST-Val/src/main/resources_notJar/PdfValidatorAPI.dll" overwrite="true" todir="../../KOST-Val"/>
-		<copy file="KOST-Val/src/main/resources_notJar/php56_pdftools.dll" overwrite="true" todir="../../KOST-Val"/>
 		<copy file="KOST-Val/src/main/resources_notJar/php70_pdftools.dll" overwrite="true" todir="../../KOST-Val"/>
 		<copy file="KOST-Val/src/main/resources/de_messages.properties" overwrite="true" tofile="KOST-Val/target/classes/messages.properties"/>
 	</target>
