@@ -65,7 +65,7 @@ public class Controllersiard implements MessageConstants
 	private ValidationBprimaryStructureModule	validationBprimaryStructureModule;
 	private ValidationCheaderModule						validationCheaderModule;
 	private ValidationDstructureModule				validationDstructureModule;
-	private ValidationEcolumnModule						validationEcolumnModule;
+	//private ValidationEcolumnModule						validationEcolumnModule;
 	private ValidationFrowModule							validationFrowModule;
 	private ValidationGtableModule						validationGtableModule;
 	private ValidationHcontentModule					validationHcontentModule;
@@ -292,7 +292,7 @@ public class Controllersiard implements MessageConstants
 		boolean valid = true;
 
 		// Validation Step E (Spalten-Validierung)
-		try {
+/*		try {
 			if ( this.getValidationEcolumnModule().validate( valDatei, directoryOfLogfile, configMap ) ) {
 				this.getValidationEcolumnModule().getMessageService().print();
 			} else {
@@ -307,7 +307,7 @@ public class Controllersiard implements MessageConstants
 					+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
-
+*/
 		try {
 			if ( this.getValidationFrowModule().validate( valDatei, directoryOfLogfile, configMap ) ) {
 				this.getValidationFrowModule().getMessageService().print();
@@ -426,7 +426,7 @@ public class Controllersiard implements MessageConstants
 		return valid;
 	}
 
-	public ValidationEcolumnModule getValidationEcolumnModule()
+/*	public ValidationEcolumnModule getValidationEcolumnModule()
 	{
 		return validationEcolumnModule;
 	}
@@ -435,7 +435,7 @@ public class Controllersiard implements MessageConstants
 	{
 		this.validationEcolumnModule = validationEcolumnModule;
 	}
-
+*/
 	/** @return the validationFrowModule */
 	public ValidationFrowModule getValidationFrowModule()
 	{

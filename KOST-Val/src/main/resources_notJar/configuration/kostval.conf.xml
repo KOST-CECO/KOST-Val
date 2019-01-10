@@ -67,7 +67,7 @@
 	</tiff>
 	<sip>
 		<allowedlengthofpaths>179</allowedlengthofpaths>
-		<allowedsipname>SIP_[1-2][0-9]{3}[0-1][0-9][0-3][0-9]_\\w{3}</allowedsipname>
+		<allowedsipname>SIP_[1-2][0-9]{3}[0-1][0-9][0-3][0-9]_\w{3}</allowedsipname>
 		<allowedformats>TXT PDFA1 PDFA2 TIFF JP2 JPEG WAVE MP3 MP4 MJ2 MPEG2 CSV SIARD WARC</allowedformats>
 		<!-- <allowedformats>SVG MPEG2 PRORES XML XSD XLS ARC HTML</allowedformats> -->
 	</sip>

@@ -22,10 +22,13 @@ package ch.kostceco.tools.kostval.validation.modulesiard.impl;
 import java.io.BufferedReader;
 import java.io.File;
 import java.util.Map;
+import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.util.List;
+import java.io.IOException;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -41,9 +44,6 @@ import ch.kostceco.tools.kostval.exception.modulesiard.ValidationCheaderExceptio
 import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationCheaderModule;
-import ch.enterag.utils.zip.EntryInputStream;
-import ch.enterag.utils.zip.FileEntry;
-import ch.enterag.utils.zip.Zip64File;
 
 /** Validierungsschritt C (Header-Validierung) Ist der header-Ordner valid? valid --> metadata.xml
  * valid zu metadata.xsd und beides vorhanden Bemerkung --> zusätzliche Ordner oder Dateien wie z.B.
@@ -77,18 +77,21 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 
 		boolean result = true;
 		// Sind im Header-Ordner metadata.xml und metadata.xsd vorhanden?
-		FileEntry metadataxml = null;
-		FileEntry metadataxsd = null;
+		ZipEntry metadataxml = null;
+		ZipEntry metadataxsd = null;
 
 		try {
-			Zip64File zipfile = new Zip64File( valDatei );
-			List<FileEntry> fileEntryList = zipfile.getListFileEntries();
-			for ( FileEntry fileEntry : fileEntryList ) {
-				if ( fileEntry.getName().equals( "header/" + METADATA ) ) {
-					metadataxml = fileEntry;
+			ZipInputStream zipfile = null;
+			ZipEntry zEntry = null;
+			FileInputStream fis = null;
+			fis = new FileInputStream( valDatei );
+			zipfile = new ZipInputStream( new BufferedInputStream( fis ) );
+			while ( (zEntry = zipfile.getNextEntry()) != null ) {
+				if ( zEntry.getName().equals( "header/" + METADATA ) ) {
+					metadataxml = zEntry;
 				}
-				if ( fileEntry.getName().equals( "header/" + XSD_METADATA ) ) {
-					metadataxsd = fileEntry;
+				if ( zEntry.getName().equals( "header/" + XSD_METADATA ) ) {
+					metadataxsd = zEntry;
 				}
 				if ( showOnWork ) {
 					if ( onWork == 410 ) {
@@ -117,6 +120,7 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 				getMessageService().logError(
 						getTextResourceService().getText( MESSAGE_XML_MODUL_C_SIARD )
 								+ getTextResourceService().getText( MESSAGE_XML_C_NOMETADATAFOUND ) );
+				zipfile.close();
 				return false;
 			}
 			if ( metadataxsd == null ) {
@@ -124,8 +128,10 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 				getMessageService().logError(
 						getTextResourceService().getText( MESSAGE_XML_MODUL_C_SIARD )
 								+ getTextResourceService().getText( MESSAGE_XML_C_NOMETADATAXSD ) );
+				zipfile.close();
 				return false;
 			}
+			zipfile.close();
 		} catch ( Exception e ) {
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_XML_MODUL_C_SIARD )
@@ -160,52 +166,54 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 			 * besteht, die includes können so nicht aufgelöst werden. Es werden hier jedoch nicht nur
 			 * diese Files extrahiert, sondern gleich die ganze Zip-Datei, weil auch spätere Validierungen
 			 * nur mit den extrahierten Files arbeiten können. */
-			Zip64File zipfile = new Zip64File( valDatei );
-			List<FileEntry> fileEntryList = zipfile.getListFileEntries();
-			for ( FileEntry fileEntry : fileEntryList ) {
-				if ( !fileEntry.isDirectory() ) {
-					byte[] buffer = new byte[8192];
-					// Scheibe die Datei an den richtigen Ort respektive in den richtigen Ordner der ggf
-					// angelegt werden muss.
-					EntryInputStream eis = zipfile.openEntryInputStream( fileEntry.getName() );
-					File newFile = new File( tmpDir, fileEntry.getName() );
-					File parent = newFile.getParentFile();
-					if ( !parent.exists() ) {
-						parent.mkdirs();
-					}
-					FileOutputStream fos = new FileOutputStream( newFile );
-					for ( int iRead = eis.read( buffer ); iRead >= 0; iRead = eis.read( buffer ) ) {
-						fos.write( buffer, 0, iRead );
-					}
-					eis.close();
-					fos.close();
-					// set to null
-					eis = null;
-					fos = null;
-					// Festhalten von metadata.xml und metadata.xsd
-					if ( newFile.getName().endsWith( METADATA ) ) {
-						xmlToValidate = newFile;
-					}
-					if ( newFile.getName().endsWith( XSD_METADATA ) ) {
-						xsdToValidate = newFile;
-					}
+			FileInputStream fis = null;
+			ZipInputStream zipfile = null;
+			ZipEntry zEntry = null;
+			fis = new FileInputStream( valDatei );
+			zipfile = new ZipInputStream( new BufferedInputStream( fis ) );
 
-				} else {
-					/* Scheibe den Ordner wenn noch nicht vorhanden an den richtigen Ort respektive in den
-					 * richtigen Ordner der ggf angelegt werden muss. Dies muss gemacht werden, damit auch
-					 * leere Ordner ins Work geschrieben werden. Diese werden danach im J als Fehler angegeben */
-					EntryInputStream eis = zipfile.openEntryInputStream( fileEntry.getName() );
-					File newFolder = new File( tmpDir, fileEntry.getName() );
-					if ( !newFolder.exists() ) {
-						File parent = newFolder.getParentFile();
+			while ( (zEntry = zipfile.getNextEntry()) != null ) {
+				try {
+					if ( !zEntry.isDirectory() ) {
+						byte[] tmp = new byte[4 * 1024];
+						FileOutputStream fos = null;
+						String opFilePath = tmpDir + File.separator + zEntry.getName();
+						File newFile = new File( opFilePath );
+						File parent = newFile.getParentFile();
 						if ( !parent.exists() ) {
 							parent.mkdirs();
 						}
-						newFolder.mkdirs();
+						// System.out.println( "Extracting file to " + newFile.getAbsolutePath() );
+						fos = new FileOutputStream( opFilePath );
+						int size = 0;
+						while ( (size = zipfile.read( tmp )) != -1 ) {
+							fos.write( tmp, 0, size );
+						}
+						fos.flush();
+						fos.close();
+						// Festhalten von metadata.xml und metadata.xsd
+						if ( newFile.getName().endsWith( METADATA ) ) {
+							xmlToValidate = newFile;
+						}
+						if ( newFile.getName().endsWith( XSD_METADATA ) ) {
+							xsdToValidate = newFile;
+						}
+					} else {
+						/* Scheibe den Ordner wenn noch nicht vorhanden an den richtigen Ort respektive in den
+						 * richtigen Ordner der ggf angelegt werden muss. Dies muss gemacht werden, damit auch
+						 * leere Ordner ins Work geschrieben werden. Diese werden danach im J als Fehler
+						 * angegeben */
+						File newFolder = new File( tmpDir, zEntry.getName() );
+						if ( !newFolder.exists() ) {
+							File parent = newFolder.getParentFile();
+							if ( !parent.exists() ) {
+								parent.mkdirs();
+							}
+							newFolder.mkdirs();
+						}
 					}
-					eis.close();
-					// set to null
-					eis = null;
+				} catch ( IOException e ) {
+					System.out.println( e.getMessage() );
 				}
 				if ( showOnWork ) {
 					if ( onWork == 41 ) {

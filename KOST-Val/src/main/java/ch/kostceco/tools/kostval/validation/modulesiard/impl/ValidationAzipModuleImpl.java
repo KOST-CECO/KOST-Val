@@ -19,18 +19,19 @@
 
 package ch.kostceco.tools.kostval.validation.modulesiard.impl;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.util.Map;
 import java.io.FileReader;
 import java.util.Arrays;
-import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationAzipException;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationAzipModule;
-import ch.enterag.utils.zip.Zip64File;
-import ch.enterag.utils.zip.FileEntry;
 
 /** Validierungsschritt A (Lesbarkeit) Kann die SIARD-Datei gelesen werden? valid --> lesbare und
  * nicht passwortgesch�tzte ZIP-Datei oder ZIP64-Datei valid --> unkomprimierte ZIP64-Datei oder
@@ -177,16 +178,130 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 				validC = false;
 			}
 
+			/*
+			 * package com.mkyong.zip;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+
+public class UnZip
+{
+    List<String> fileList;
+    private static final String INPUT_ZIP_FILE = "C:\\MyFile.zip";
+    private static final String OUTPUT_FOLDER = "C:\\outputzip";
+		
+    public static void main( String[] args )
+    {
+    	UnZip unZip = new UnZip();
+    	unZip.unZipIt(INPUT_ZIP_FILE,OUTPUT_FOLDER);
+    }
+    
+    public void unZipIt(String zipFile, String outputFolder){
+
+     byte[] buffer = new byte[1024];
+    	
+     try{
+    		
+    	//create output directory is not exists
+    	File folder = new File(OUTPUT_FOLDER);
+    	if(!folder.exists()){
+    		folder.mkdir();
+    	}
+    		
+    	//get the zip file content
+    	ZipInputStream zis = 
+    		new ZipInputStream(new FileInputStream(zipFile));
+    	//get the zipped file list entry
+    	ZipEntry ze = zis.getNextEntry();
+    		
+    	while(ze!=null){
+    			
+    	   String fileName = ze.getName();
+           File newFile = new File(outputFolder + File.separator + fileName);
+                
+           System.out.println("file unzip : "+ newFile.getAbsoluteFile());
+                
+            //create all non exists folders
+            //else you will hit FileNotFoundException for compressed folder
+            new File(newFile.getParent()).mkdirs();
+              
+            FileOutputStream fos = new FileOutputStream(newFile);             
+
+            int len;
+            while ((len = zis.read(buffer)) > 0) {
+       		fos.write(buffer, 0, len);
+            }
+        		
+            fos.close();   
+            ze = zis.getNextEntry();
+    	}
+    	
+        zis.closeEntry();
+    	zis.close();
+    		
+    	System.out.println("Done");
+    		
+    }catch(IOException ex){
+       ex.printStackTrace(); 
+    }
+   }    
+}
+
+
+-----
+
+public void unZipIt(String zipFile, String outputFolder){
+
+    //create output directory is not exists
+    File folder = new File(OUTPUT_FOLDER);
+    if(!folder.exists()){
+        folder.mkdir();
+    }
+
+    FileInputStream fis = null;
+    ZipInputStream zipIs = null;
+    ZipEntry zEntry = null;
+    try 
+    {
+        fis = new FileInputStream(zipFile);
+        zipIs = new ZipInputStream(new BufferedInputStream(fis));
+
+        while((zEntry = zipIs.getNextEntry()) != null){
+            System.out.println(zEntry.getMethod());
+            try{
+                byte[] tmp = new byte[4*1024];
+                FileOutputStream fos = null;
+                String opFilePath = OUTPUT_FOLDER + "\\" + zEntry.getName();
+                System.out.println("Extracting file to "+opFilePath);
+                fos = new FileOutputStream(opFilePath);
+                int size = 0;
+                while((size = zipIs.read(tmp)) != -1){
+                    fos.write(tmp, 0 , size);
+                }
+                fos.flush();
+                fos.close();
+            } catch(IOException e){
+                System.out.println(e.getMessage());
+            }
+        }
+        zipIs.close();
+			 */
 			if ( validC ) {
 				// Versuche das ZIP file zu �ffnen
-				Zip64File zf = null;
+				ZipInputStream zf = null;
+				ZipEntry zEntry = null;
+				FileInputStream fis = null;
 				try {
 					Integer compressed = 0;
-					zf = new Zip64File( valDatei );
-					// auslesen der Komprimierungsmethode aus allen FileEntries der zip(64)-Datei
-					List<FileEntry> fileEntryList = zf.getListFileEntries();
-					for ( FileEntry fileEntry : fileEntryList ) {
-						compressed = fileEntry.getMethod();
+					fis = new FileInputStream( valDatei );
+					zf = new ZipInputStream( new BufferedInputStream( fis ) );
+					while ( (zEntry = zf.getNextEntry()) != null ) {
+						compressed = zEntry.getMethod();
 						// Compression method for uncompressed entries = STORED = 0
 						// Compression method for deflate compression = 8
 						if ( compressed == 8 ) {
@@ -198,9 +313,7 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 							getMessageService().logError(
 									getTextResourceService().getText( MESSAGE_XML_MODUL_A_SIARD )
 											+ getTextResourceService().getText( ERROR_XML_A_DEFLATED, compressed ) );
-							read.close();
-							// set to null
-							read = null;
+							zf.close();
 							return false;
 						}
 					}

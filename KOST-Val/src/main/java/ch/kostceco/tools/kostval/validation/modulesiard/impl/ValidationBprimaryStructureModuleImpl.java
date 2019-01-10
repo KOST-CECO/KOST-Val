@@ -19,15 +19,16 @@
 
 package ch.kostceco.tools.kostval.validation.modulesiard.impl;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.util.Map;
-import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationBprimaryStructureException;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationBprimaryStructureModule;
-import ch.enterag.utils.zip.FileEntry;
-import ch.enterag.utils.zip.Zip64File;
 
 /** Validierungsschritt B (primäre Verzeichnisstruktur) Besteht eine korrekte primäre
  * Verzeichnisstruktur? valid --> [Name].siard/header und [Name].siard/content invalid -->
@@ -67,13 +68,15 @@ public class ValidationBprimaryStructureModuleImpl extends ValidationModuleImpl 
 
 		try {
 
-			Zip64File zipfile = new Zip64File( valDatei );
-			List<FileEntry> fileEntryList = zipfile.getListFileEntries();
-			for ( FileEntry fileEntry : fileEntryList ) {
-
+			ZipInputStream zipfile = null;
+			ZipEntry zEntry = null;
+			FileInputStream fis = null;
+			fis = new FileInputStream( valDatei );
+			zipfile = new ZipInputStream( new BufferedInputStream( fis ) );
+			while ( (zEntry = zipfile.getNextEntry()) != null ) {
 				/* nur valid wenn es mit header oder content anf�ngt dies schliesst auch
 				 * [Name].siard/[Name]/header und [Name].siard/[Name]/content mit ein */
-				String name = fileEntry.getName();
+				String name = zEntry.getName();
 				if ( name.startsWith( "content/" ) ) {
 					// erlaubter Inhalt content/...
 					bExistsContentFolder = 1;
@@ -87,6 +90,7 @@ public class ValidationBprimaryStructureModuleImpl extends ValidationModuleImpl 
 								getTextResourceService().getText( MESSAGE_XML_MODUL_B_SIARD )
 										+ getTextResourceService().getText( MESSAGE_XML_B_NOTALLOWEDFILE, name ) );
 						// SIARD enthaelt ein File, das sich nicht dort befinden duerfte: {0}
+						zipfile.close();
 						return false;
 					}
 				}
