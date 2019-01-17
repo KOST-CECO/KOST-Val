@@ -85,11 +85,11 @@
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="messageService" ref="messageService" />
 	</bean>
-<!--	<bean id="validationEcolumnModule" -->
-<!--		class="ch.kostceco.tools.kostval.validation.modulesiard.impl.ValidationEcolumnModuleImpl"> -->
-<!--		<property name="textResourceService" ref="textResourceService" /> -->
-<!--		<property name="messageService" ref="messageService" /> -->
-<!--	</bean> -->
+	<bean id="validationEcolumnModule" 
+		class="ch.kostceco.tools.kostval.validation.modulesiard.impl.ValidationEcolumnModuleImpl"> 
+		<property name="textResourceService" ref="textResourceService" /> 
+		<property name="messageService" ref="messageService" /> 
+	</bean> 
 	<bean id="validationFrowModule"
 		class="ch.kostceco.tools.kostval.validation.modulesiard.impl.ValidationFrowModuleImpl">
 		<property name="textResourceService" ref="textResourceService" />
@@ -239,7 +239,7 @@
 		<property name="validationBprimaryStructureModule" ref="validationBprimaryStructureModule" />
 		<property name="validationCheaderModule" ref="validationCheaderModule" />
 		<property name="validationDstructureModule" ref="validationDstructureModule" />
-		<!-- <property name="validationEcolumnModule" ref="validationEcolumnModule" /> -->
+		<property name="validationEcolumnModule" ref="validationEcolumnModule" /> 
 		<property name="validationFrowModule" ref="validationFrowModule" />
 		<property name="validationGtableModule" ref="validationGtableModule" />
 		<property name="validationHcontentModule" ref="validationHcontentModule" />

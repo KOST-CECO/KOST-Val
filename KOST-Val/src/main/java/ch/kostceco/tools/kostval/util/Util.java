@@ -1,6 +1,6 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
- * Information Package (SIP). Copyright (C) 2012-2018 Claire Roethlisberger (KOST-CECO), Christian
+ * Information Package (SIP). Copyright (C) 2012-2019 Claire Roethlisberger (KOST-CECO), Christian
  * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
  * Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
@@ -352,6 +352,7 @@ public class Util
 			newtext = newtext.replace( "'<'", "'&lt;'" );
 			newtext = newtext.replace( "'>'", "'&gt;'" );
 			newtext = newtext.replace( "<<", "<" );
+			newtext = newtext.replace( "& ", "&amp; " );
 			newtext = newtext.replace( (char) 0, (char) 32 );
 			FileWriter writer = new FileWriter( file );
 			writer.write( newtext );

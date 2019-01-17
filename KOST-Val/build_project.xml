@@ -23,11 +23,11 @@
 		<pathelement location="lib/spring-tx-5.0.8.RELEASE.jar" />
 		<pathelement location="lib/commons-io-2.6.jar" />
 		<pathelement location="lib/xml-apis-2.7.1.jar" />
+		<pathelement location="lib/zip64file-1.0.jar" />
 		<pathelement location="lib/xercesImpl-2.7.1.jar" />
 		<pathelement location="lib/junit-4.12.jar" />
 		<pathelement location="lib/jdom-2.0.0.jar" />
-		<pathelement location="lib/zip64-2.1.58.jar"/>
-		<pathelement location="enterutils-2.1.58.jar"/>
+		<pathelement location="lib/zip64-1.0.jar" />
 		<pathelement location="lib/JhoveApp-1.5.jar" />
 		<pathelement location="lib/droid-core-5.0.3.jar" />
 		<pathelement location="lib/droid-export-5.0.3.jar" />

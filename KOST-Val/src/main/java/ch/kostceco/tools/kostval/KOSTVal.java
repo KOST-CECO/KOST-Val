@@ -1,6 +1,6 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val v1.9.1 application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and
- * Submission Information Package (SIP). Copyright (C) 2012-2018 Claire Roethlisberger (KOST-CECO),
+ * The KOST-Val v1.9.2 application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and
+ * Submission Information Package (SIP). Copyright (C) 2012-2019 Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
@@ -19,8 +19,11 @@
 
 package ch.kostceco.tools.kostval;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -32,6 +35,8 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
@@ -572,7 +577,7 @@ public class KOSTVal implements MessageConstants
 							countProgress = countProgress + 1;
 
 							if ( ((valDateiExt.equals( ".jp2" ))) && jp2Validation.equals( "yes" ) ) {
-								int countToValidated = numberInFileMap - count;
+								int countToValidated = numberInFileMap - countProgress;
 								System.out.print( countToValidated + " " + "JP2:   " + valDatei.getAbsolutePath()
 										+ " " );
 
@@ -599,7 +604,7 @@ public class KOSTVal implements MessageConstants
 							} else if ( ((valDateiExt.equals( ".jpeg" ) || valDateiExt.equals( ".jpg" ) || valDatei
 									.getAbsolutePath().toLowerCase().endsWith( ".jpe" )))
 									&& jpegValidation.equals( "yes" ) ) {
-								int countToValidated = numberInFileMap - count;
+								int countToValidated = numberInFileMap - countProgress;
 								System.out.print( countToValidated + " " + "JPEG:  " + valDatei.getAbsolutePath()
 										+ " " );
 
@@ -626,7 +631,7 @@ public class KOSTVal implements MessageConstants
 							} else if ( ((valDateiExt.equals( ".tiff" ) || valDatei.getAbsolutePath()
 									.toLowerCase().endsWith( ".tif" )))
 									&& tiffValidation.equals( "yes" ) ) {
-								int countToValidated = numberInFileMap - count;
+								int countToValidated = numberInFileMap - countProgress;
 								System.out.print( countToValidated + " " + "TIFF:  " + valDatei.getAbsolutePath()
 										+ " " );
 
@@ -651,7 +656,7 @@ public class KOSTVal implements MessageConstants
 									}
 								}
 							} else if ( (valDateiExt.equals( ".siard" )) && siardValidation.equals( "yes" ) ) {
-								int countToValidated = numberInFileMap - count;
+								int countToValidated = numberInFileMap - countProgress;
 								System.out.print( countToValidated + " " + "SIARD: " + valDatei.getAbsolutePath()
 										+ " " );
 
@@ -679,7 +684,7 @@ public class KOSTVal implements MessageConstants
 							} else if ( ((valDateiExt.equals( ".pdf" ) || valDatei.getAbsolutePath()
 									.toLowerCase().endsWith( ".pdfa" )))
 									&& pdfaValidation.equals( "yes" ) ) {
-								int countToValidated = numberInFileMap - count;
+								int countToValidated = numberInFileMap - countProgress;
 								System.out.print( countToValidated + " " + "PDFA:  " + valDatei.getAbsolutePath() );
 
 								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
@@ -720,6 +725,9 @@ public class KOSTVal implements MessageConstants
 									}
 								}
 							}
+						} else {
+							// Ordner. Count aktualisieren
+							countProgress = countProgress + 1;
 						}
 					}
 				} catch ( Exception e ) {
@@ -980,7 +988,51 @@ public class KOSTVal implements MessageConstants
 						tmpDirZip = new File( tmpDir.getAbsolutePath() + File.separator + "ZIP"
 								+ File.separator + toplevelDir );
 						try {
-							Zip64Archiver.unzip( valDatei.getAbsolutePath(), tmpDirZip.getAbsolutePath() );
+							FileInputStream fis = null;
+							ZipInputStream zipfile = null;
+							ZipEntry zEntry = null;
+							fis = new FileInputStream( valDatei );
+							zipfile = new ZipInputStream( new BufferedInputStream( fis ) );
+							while ( (zEntry = zipfile.getNextEntry()) != null ) {
+								try {
+									if ( !zEntry.isDirectory() ) {
+										byte[] tmp = new byte[4 * 1024];
+										FileOutputStream fos = null;
+										String opFilePath = tmpDirZip + File.separator + zEntry.getName();
+										File newFile = new File( opFilePath );
+										File parent = newFile.getParentFile();
+										if ( !parent.exists() ) {
+											parent.mkdirs();
+										}
+										// System.out.println( "Extracting file to " + newFile.getAbsolutePath() );
+										fos = new FileOutputStream( opFilePath );
+										int size = 0;
+										while ( (size = zipfile.read( tmp )) != -1 ) {
+											fos.write( tmp, 0, size );
+										}
+										fos.flush();
+										fos.close();
+									} else {
+										/* Scheibe den Ordner wenn noch nicht vorhanden an den richtigen Ort respektive
+										 * in den richtigen Ordner der ggf angelegt werden muss. Dies muss gemacht
+										 * werden, damit auch leere Ordner ins Work geschrieben werden. Diese werden
+										 * danach im J als Fehler angegeben */
+										File newFolder = new File( tmpDirZip, zEntry.getName() );
+										if ( !newFolder.exists() ) {
+											File parent = newFolder.getParentFile();
+											if ( !parent.exists() ) {
+												parent.mkdirs();
+											}
+											newFolder.mkdirs();
+										}
+									}
+								} catch ( IOException e ) {
+									System.out.println( e.getMessage() );
+								}
+							}
+							zipfile.close();
+							// set to null
+							zipfile = null;
 						} catch ( Exception e ) {
 							try {
 								Zip64Archiver.unzip64( valDatei, tmpDirZip );
@@ -1068,7 +1120,7 @@ public class KOSTVal implements MessageConstants
 						if ( valDateiExt.equals( ".pdf" ) || valDateiExt.equals( ".pdfa" ) ) {
 							if ( pdfaValidation.equals( "yes" ) ) {
 								// Validierung durchführen
-								int countToValidated = numberInFileMap - count;
+								int countToValidated = numberInFileMap - countProgress;
 								System.out.print( countToValidated + " " + "PDFA:  " + valDatei.getAbsolutePath() );
 								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
 										dirOfJarPath, configMap );
@@ -1095,7 +1147,7 @@ public class KOSTVal implements MessageConstants
 						} else if ( valDateiExt.equals( ".tiff" ) || valDateiExt.equals( ".tif" ) ) {
 							if ( tiffValidation.equals( "yes" ) ) {
 								// Validierung durchführen
-								int countToValidated = numberInFileMap - count;
+								int countToValidated = numberInFileMap - countProgress;
 								System.out.print( countToValidated + " " + "TIFF:  " + valDatei.getAbsolutePath()
 										+ " " );
 								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
@@ -1123,7 +1175,7 @@ public class KOSTVal implements MessageConstants
 						} else if ( valDateiExt.equals( ".siard" ) ) {
 							if ( siardValidation.equals( "yes" ) ) {
 								// Validierung durchführen
-								int countToValidated = numberInFileMap - count;
+								int countToValidated = numberInFileMap - countProgress;
 								System.out.print( countToValidated + " " + "SIARD: " + valDatei.getAbsolutePath()
 										+ " " );
 
@@ -1161,7 +1213,7 @@ public class KOSTVal implements MessageConstants
 						} else if ( valDateiExt.equals( ".jpe" ) || valDateiExt.equals( ".jpeg" )
 								|| valDateiExt.equals( ".jpg" ) ) {
 							if ( jpegValidation.equals( "yes" ) ) {
-								int countToValidated = numberInFileMap - count;
+								int countToValidated = numberInFileMap - countProgress;
 								System.out.print( countToValidated + " " + "JPEG:  " + valDatei.getAbsolutePath()
 										+ " " );
 								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
@@ -1189,7 +1241,7 @@ public class KOSTVal implements MessageConstants
 						} else if ( valDateiExt.equals( ".jp2" ) ) {
 							if ( jp2Validation.equals( "yes" ) ) {
 								// Validierung durchführen
-								int countToValidated = numberInFileMap - count;
+								int countToValidated = numberInFileMap - countProgress;
 								System.out.print( countToValidated + " " + "JP2:   " + valDatei.getAbsolutePath()
 										+ " " );
 								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
@@ -1229,6 +1281,9 @@ public class KOSTVal implements MessageConstants
 								}
 							}
 						}
+					} else {
+						// Ordner. Count aktualisieren
+						countProgress = countProgress + 1;
 					}
 				}
 
