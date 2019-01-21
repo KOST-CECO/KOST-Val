@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pdfpreflight version="13.0">
+	<package>
+		<id3>fbcc7286e777c4a197cb46972b6a35fc</id3>
+		<pdfxoutintentlist>
+		</pdfxoutintentlist>
+		<iccprofilelist>
+		</iccprofilelist>
+		<ccpolicies>
+		</ccpolicies>
+		<occdsetups>
+		</occdsetups>
+		<curves>
+		</curves>
+		<fspolicies>
+		</fspolicies>
+		<resources>
+		</resources>
+		<conditions>
+		</conditions>
+		<rules>
+		</rules>
+		<rulesets>
+		</rulesets>
+		<fixups>
+			<fixup>
+				<id1>F37b8cb7d0b06b4e8fd9f5710576442a5</id1>
+				<id2>F3ee808da3c8e0e17a2525b9e77302fb7</id2>
+				<id3>164c930392031196c30d52b3f268849c</id3>
+				<id4>cd68db1d90696d924be332e84913209d</id4>
+				<name>F_6_Downsamplebitmapimagesto600ppiifabove00ppi</name>
+				<comment>F_6_Downsamplebitmapimagesto600ppiifabove00ppi</comment>
+				<flags user_units="0" edit="1" visible="1" dict="1"></flags>
+				<fcfg>DsRcmpMchImgs&#9;BicDownsampling&#9;600&#9;900&#9;CCITTG4&#9;Lossless&#9;None&#9;0&#9;0&#10;&#10;</fcfg>
+				<reportFailed></reportFailed>
+			</fixup>
+			<fixup>
+				<id1>Feef4444c4b629634133d8db5c0702280</id1>
+				<id2>Fe11c2733f0764097cbf29ad8ff301ebe</id2>
+				<id3>5900ce4a0a0f3ca663509b7f6596718c</id3>
+				<id4>389d0c0df51a747b17f50991e15b1f6d</id4>
+				<name>F_6_Downsamplecolorimagesto200ppiifabove300ppi</name>
+				<comment>F_6_Downsamplecolorimagesto200ppiifabove300ppi</comment>
+				<flags user_units="0" edit="1" visible="1" dict="1"></flags>
+				<fcfg>DsRcmpClrImgs&#9;BicDownsampling&#9;200&#9;300&#9;ZIP&#9;Lossless&#9;256&#9;None&#9;0&#9;0&#10;&#10;</fcfg>
+				<reportFailed></reportFailed>
+			</fixup>
+			<fixup>
+				<id1>F66bf7c6db084df48dc4e53a4f2bd864c</id1>
+				<id2>Ff8b088d38b43f2d6be2c13b615468398</id2>
+				<id3>a39e861adc9bfca4a85b6eab9612e765</id3>
+				<id4>de143c7020a77d34f6ccb56a3bde9586</id4>
+				<name>F_6_Downsamplegrayscaleimagesto200ppiifabove300ppi</name>
+				<comment>F_6_Downsamplegrayscaleimagesto200ppiifabove300ppi</comment>
+				<flags user_units="0" edit="1" visible="1" dict="1"></flags>
+				<fcfg>DsRcmpGscImgs&#9;BicDownsampling&#9;200&#9;300&#9;ZIP&#9;Lossless&#9;256&#9;None&#9;0&#9;0&#10;&#10;</fcfg>
+				<reportFailed></reportFailed>
+			</fixup>
+		</fixups>
+		<fixupsets>
+			<fixupset>
+				<id1>U672d2321e6c7f9b2961fc5542acd8cf8</id1>
+				<id2>U24a1669621e5f25463d52d989dc3c8b2</id2>
+				<id3>603fa02aa07480d540e864efcdf7b33d</id3>
+				<id4>09fc41ba253a937ecf7cfc89f5805bad</id4>
+				<name>UUUU_FIXUPSET_DEF_NAME</name>
+				<comment>UUUU_FIXUPSET_DEF_NAME</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<fixups>
+					<fixup>F37b8cb7d0b06b4e8fd9f5710576442a5</fixup>
+					<fixup>Feef4444c4b629634133d8db5c0702280</fixup>
+					<fixup>F66bf7c6db084df48dc4e53a4f2bd864c</fixup>
+				</fixups>
+			</fixupset>
+		</fixupsets>
+		<actions>
+		</actions>
+		<profiles>
+			<profile>
+				<id1>P6e91a052c106cca403a8503d76d608ea</id1>
+				<id2>Paa70c2dbec1ec0fe0550ea1f27c61815</id2>
+				<id3>44cb0b0d1791db3948ca0f57f6a72f09</id3>
+				<id4>288bc1a6752cedbef76f8a340b65767e</id4>
+				<name>P_6_Downsampleimageresolutionto200ppibitmapsto600ppi</name>
+				<comment>P_6_Downsampleimageresolutionto200ppibitmapsto600ppi</comment>
+				<flags edit="0" visible="1" dict="1"></flags>
+				<metalist>
+					<metadata>
+						<metakey>author</metakey>
+						<metavalue>callas software</metavalue>
+					</metadata>
+					<metadata>
+						<metakey>email</metakey>
+						<metavalue>support@callassoftware.com</metavalue>
+					</metadata>
+				</metalist>
+				<creation>D:20071205203328+01&apos;00&apos;</creation>
+				<modification>D:20140206114046+01&apos;00&apos;</modification>
+				<pdfstd>
+					<pdfx convert="0"></pdfx>
+					<pdfa convert="0"></pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond></outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+				</pdfstd>
+				<pdfstdemb>
+					<pdfx convert="0"></pdfx>
+					<pdfa convert="0"></pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond></outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+					<afrelationship set_relationship="0"></afrelationship>
+				</pdfstdemb>
+				<wizard>
+				</wizard>
+				<rulesets>
+				</rulesets>
+				<fixupsets>
+					<fixupset>U672d2321e6c7f9b2961fc5542acd8cf8</fixupset>
+				</fixupsets>
+			</profile>
+		</profiles>
+		<metaprofs>
+		</metaprofs>
+		<profgroups>
+		</profgroups>
+	</package>
+</pdfpreflight>

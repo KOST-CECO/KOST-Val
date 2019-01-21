@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pdfpreflight version="8.0">
+	<package>
+		<id3>928004997df236e27bd02a925649cae7</id3>
+		<pdfxoutintentlist>
+		</pdfxoutintentlist>
+		<iccprofilelist>
+		</iccprofilelist>
+		<ccpolicies>
+		</ccpolicies>
+		<occdsetups>
+		</occdsetups>
+		<curves>
+		</curves>
+		<fspolicies>
+		</fspolicies>
+		<conditions>
+			<condition>
+				<id1>C3419d4f63818ce39b4eb3bdfd612dce2</id1>
+				<id2>C87ac20ed5c786ada2c2357dcd1d93402</id2>
+				<id3>dc41a4b89b5855f89dbf6af8ffa560cb</id3>
+				<id4>f233e70031fe9f093099a91a4656d347</id4>
+				<name> (Copy 41)</name>
+				<comment></comment>
+				<flags edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSIMAGE</group>
+					<token>CSIMAGE::Resolution</token>
+					<operator>OP::less_or_equal</operator>
+					<data>
+						<num>
+							<value>249</value>
+							<tolerance></tolerance>
+						</num>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>Cd4b96f234710f8b8742db31fc14aeae7</id1>
+				<id2>C9d41258ab6bccadb13216974b6a95696</id2>
+				<id3>bc9b74113f9fbe2f1b980b32011536ee</id3>
+				<id4>1460068bfeef1702ee917ee48ecda87d</id4>
+				<name> (Copy 41)</name>
+				<comment></comment>
+				<flags edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSIMAGE</group>
+					<token>CSIMAGE::Resolution</token>
+					<operator>OP::greater_or_equal</operator>
+					<data>
+						<num>
+							<value>451</value>
+							<tolerance></tolerance>
+						</num>
+					</data>
+				</atom>
+			</condition>
+		</conditions>
+		<rules>
+			<rule>
+				<id1>R0e2953bbe96436ced34e42d0bdaf7e05</id1>
+				<id2>R92d08d4355f407d66b1bf468ba1d4ade</id2>
+				<id3>0a53a1b39a8e450994bbdc3dbd3c662d</id3>
+				<id4>3e4a38f0011bb062be81bde5c4dc481e</id4>
+				<name>R_8_Listcolorandgrayscaleimagesnotwithin250to450ppi</name>
+				<comment>R_8_Listcolorandgrayscaleimagesnotwithin250to450ppi</comment>
+				<flags analysis="15" condition_logic="1" ignore_objects="0" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>C3419d4f63818ce39b4eb3bdfd612dce2</condition>
+					<condition>Cd4b96f234710f8b8742db31fc14aeae7</condition>
+				</conditions>
+			</rule>
+		</rules>
+		<rulesets>
+			<ruleset>
+				<id1>Se8f7bbff1ad31c119ae4fd8f2175cbe5</id1>
+				<id2>S5f80ffdc303282140f110d675747e712</id2>
+				<id3>4716b78ed74d9575ecbae124708038d8</id3>
+				<id4>009cc0d83777c3d73d558b0ebf7e36cb</id4>
+				<name>SSS_RULESET_DEF_NAME</name>
+				<comment>SSS_RULESET_DEF_NAME</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<rules>
+					<rule check_severity="1" check_timing="2">R0e2953bbe96436ced34e42d0bdaf7e05</rule>
+				</rules>
+			</ruleset>
+		</rulesets>
+		<fixups>
+		</fixups>
+		<fixupsets>
+		</fixupsets>
+		<profiles>
+			<profile>
+				<id1>P0e6a1697bed91fcecf5b2d985c319e5b</id1>
+				<id2>Pd4ad16db3b582bad0b54f8a98083269e</id2>
+				<id3>3461468debc35fc1430ba3a045ae9fd7</id3>
+				<id4>643bc8faafeebe5af779b7417bcf23ba</id4>
+				<name>P_8_Listcolorandgrayscaleimagesnotwithin250to450ppi</name>
+				<comment>P_8_Listcolorandgrayscaleimagesnotwithin250to450ppi</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<metalist>
+					<metadata>
+						<metakey>author</metakey>
+						<metavalue>callas pdfToolbox 4</metavalue>
+					</metadata>
+					<metadata>
+						<metakey>email</metakey>
+						<metavalue>support@callassoftware.com</metavalue>
+					</metadata>
+				</metalist>
+				<creation>D:20091022080103+01&apos;00&apos;</creation>
+				<modification>D:20091105120200+01&apos;00&apos;</modification>
+				<pdfstd>
+					<pdfx convert="0"></pdfx>
+					<pdfa convert="0"></pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond>ISO Coated v2 300% (ECI)</outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+				</pdfstd>
+				<wizard>
+				</wizard>
+				<rulesets>
+					<ruleset>Se8f7bbff1ad31c119ae4fd8f2175cbe5</ruleset>
+				</rulesets>
+				<fixupsets>
+				</fixupsets>
+			</profile>
+		</profiles>
+		<profgroups>
+		</profgroups>
+	</package>
+</pdfpreflight>

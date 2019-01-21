@@ -1,0 +1,393 @@
+%!PS-Adobe-3.0 Resource-File
+%%BeginResource: file (FS/Local)
+%%Title: (FS/Local)
+%%Version: 3010.01
+%%Copyright: ------------------------------------------------------------
+%%Copyright: Copyright 1990-1998 Adobe Systems Incorporated.
+%%Copyright: All rights reserved.
+%%Copyright:
+%%Copyright: Patents Pending
+%%Copyright:
+%%Copyright: NOTICE: All information contained herein is the property
+%%Copyright: of Adobe Systems Incorporated. Many of the intellectual
+%%Copyright: and technical concepts contained herein are proprietary
+%%Copyright: to Adobe, are protected as trade secrets, and are made
+%%Copyright: available only to Adobe licensees for their internal use.
+%%Copyright: Any reproduction or dissemination of this software is
+%%Copyright: strictly forbidden unless prior written permission is
+%%Copyright: obtained from Adobe.
+%%Copyright:
+%%Copyright: PostScript and Display PostScript are trademarks of
+%%Copyright: Adobe Systems Incorporated which may be registered in
+%%Copyright: certain jurisdictions.
+%%Copyright: ------------------------------------------------------------
+%%EndComments
+systemdict/currentglobal known{currentglobal false setglobal}if userdict begin
+/cid_def systemdict/def get dup exec currentdict/localdict known not{
+/localdict 150 dict cid_def}if end localdict dup length 0 eq exch begin{
+/$rundepth -1 cid_def/$rundepthlast -1 cid_def/$runarray 20 array cid_def}if
+/run{localdict begin $rundepth 1 add dup/$rundepth exch cid_def dup
+$rundepthlast eq{(
+)print}if{( )print}repeat dup length string copy dup $runarray exch $rundepth
+exch put dup(\()print print(\) run
+)print flush dup status{pop pop pop pop true}{false}ifelse end{{systemdict/run
+get exec}stopped{localdict begin $rundepth{( )print}repeat $runarray $rundepth
+get(\()print print(\) BAD!
+)print flush localdict begin L_cr L_LINE print( TRAP)L_CR end . localdict
+begin L_LINE L_CR L_cr end end stop}{localdict begin $rundepth{( )print}repeat
+$runarray $rundepth get(\()print print(\)
+)print flush end}ifelse}{localdict begin pop $rundepth{( )print}repeat
+$runarray $rundepth get(\()print print(\) NO SUCH FILE!
+)print flush end}ifelse localdict begin/$rundepthlast $rundepth cid_def
+/$rundepth $rundepth 1 sub cid_def end}bind cid_def end localdict begin
+/L_NUMERIC_STRING null cid_def/L_STRING_INDEX 0 cid_def/L_NEW_STRING null
+cid_def/L_TERMINAL_MODE/ascii cid_def/L_OUTPUT_FORMAT null cid_def
+/L_OUTPUT_DEFAULT/string cid_def/L_OUTPUT_MODE null cid_def/L_OUTPUT_LINE 40
+cid_def/L_DICT_DETAIL/dictdetail cid_def/L_DICT_COMPACT/dictcompact cid_def
+/L_ATTRIBUTES/attributes cid_def/L_DEPTH -1 cid_def/L_i 0 cid_def/L_n 0
+cid_def/L_sstr1 128 string cid_def/L_sstr2 128 string cid_def/L_sstr3 128
+string cid_def/L_LENGTH 0 cid_def/L_STRING_DETAIL/stringdetailoff cid_def
+/L_ARRAY_DETAIL/arraydetail cid_def/L_GLOBAL false cid_def/L_STANDOUT_BEGIN
+(\033[4m)cid_def/L_STANDOUT_END(\033[m)cid_def/L_STANDOUT false cid_def/L_VM
+false cid_def/L_VM_LEVEL 0 cid_def/L_VM_USED 0 cid_def/L_VM_MAXIMUM 0 cid_def
+/L_OKAY_TO_CHECK 4 dict cid_def/L_OSTACK_LINES 25 cid_def/L_LINE
+(-----------------------------------------------------------------------)
+cid_def/L_DBL_LINE
+(###############################################################)cid_def
+/L_scratchdict 44 dict cid_def/L_CDevProcs 100 dict cid_def/L_CDevProcCount 1
+cid_def/L_strIncrement 128 def/L_level2 systemdict/languagelevel known def
+L_OKAY_TO_CHECK begin/arraytype true cid_def/dicttype true cid_def/filetype
+true cid_def/stringtype true cid_def end/gcheck where{pop}{/gcheck{pop false}
+bind cid_def}ifelse/L_DICTIONARIES[[//systemdict(/systemdict)][//statusdict
+(/statusdict)][//userdict(/userdict)][//$error(/$error)][//errordict
+(/errordict)][//FontDirectory(/FontDirectory)][1183615869//internaldict
+(/internaldict)]//systemdict/serverdict known{[//systemdict/serverdict get
+(/serverdict)]}if//systemdict/globaldict known{[//systemdict/globaldict get
+(/globaldict)]}if//systemdict/GlobalFontDirectory known{[//systemdict
+/GlobalFontDirectory get(/GlobalFontDirectory)]}if//userdict/localdict known{[
+//userdict/localdict get(/localdict)]}if]cid_def/L_hexchartodecimal{dup
+(0123456789ABCDEF)exch search{length 4 1 roll pop pop pop}{pop
+(0123456789abcdef)exch search{length 3 1 roll pop pop}{pop 0}ifelse}ifelse}
+bind cid_def/L_visibleprint{L_OUTPUT_MODE/hex eq{print}{0 2 2 index length 2
+sub{1 index exch 2 getinterval dup 0 1 getinterval L_hexchartodecimal 16 mul
+exch 1 1 getinterval L_hexchartodecimal add dup dup 32 lt exch 126 gt or{0 eq{
+(.)}{(?)}ifelse print}{L_sstr1 exch 0 exch put L_sstr1 0 1 getinterval print}
+ifelse}for pop}ifelse}bind cid_def/L_c{L_TERMINAL_MODE/xterm eq{
+(\033[H\033[2J)print flush}{50{(
+)print}repeat}ifelse}bind cid_def/L_cr{(
+)print}bind cid_def/L_CR{print L_cr}bind cid_def/L_wprint{2 index 10 L_sstr1
+cvrs length dup 2 index dup 0 lt{neg}if gt{1 index 0 lt{neg}if exch}if pop dup
+dup 0 lt{neg}if L_sstr1 0 3 -1 roll getinterval 0 1 3 index dup 0 lt{neg}if 1
+sub{1 index exch 4 index 0 1 getinterval putinterval}for dup 5 1 roll 3 -1
+roll pop 3 -1 roll L_sstr2 cvs 3 -1 roll dup 0 lt{pop 0 exch putinterval}{exch
+dup length 3 -1 roll exch sub exch putinterval}ifelse}bind cid_def/L_dumpother
+{L_showattributes(--------------  )print L_OUTPUT_DEFAULT/hex eq{dup type
+/integertype eq{(16#)print dup 16 L_sstr1 cvrs print(=)print}if}if ==}bind
+cid_def/L_dumpstring{L_showattributes(string)print dup length( )print( )7
+L_wprint print( )print flush L_STRING_DETAIL/stringdetailoff eq{dup[
+L_OUTPUT_DEFAULT/hex eq{(<)}{(\()}ifelse L_OUTPUT_LINE L_OUTPUT_DEFAULT/hex eq
+{(>)}{(\))}ifelse/quit]L_printns length L_OUTPUT_LINE gt{(...)print}if}{
+L_OUTPUT_DEFAULT/hex eq{(
+               <)print}{(
+               \()print}ifelse[L_OUTPUT_LINE 3 mul 2 idiv/skip
+(
+                )]L_printns L_OUTPUT_DEFAULT/hex eq{(>)}{(\))}ifelse print}
+ifelse L_cr}bind cid_def/L_indent{1 add{(   )print}repeat flush}bind cid_def
+/L_dumparray{L_showattributes( array)print([)print dup length 10 L_sstr1 cvrs
+print(])print dup L_istagged L_cr 1 index L_DEPTH le{L_ARRAY_DETAIL
+/arraydetailoff eq{pop pop}{0 1 2 index length 1 sub{2 index L_indent dup( )3
+L_wprint print(\) )print 1 index exch get{dup type/arraytype eq{2 index 1 add
+exch L_dumparray exit}if dup type/packedarraytype eq{2 index 1 add exch
+L_dumparray exit}if dup type/dicttype eq{L_dumpdict exit}if dup type
+/stringtype eq{L_STRING_DETAIL exch/L_STRING_DETAIL/stringdetailoff cid_def
+L_dumpstring/L_STRING_DETAIL exch cid_def exit}if L_dumpother exit}loop}for
+pop pop}ifelse}{pop pop}ifelse}bind cid_def/L_okayToCheck{dup type
+L_OKAY_TO_CHECK exch known{true}{false}ifelse}bind cid_def/L_showattributes{
+L_ATTRIBUTES/attributes eq{dup gcheck{(G)print}{(L)print}ifelse L_okayToCheck{
+dup rcheck{(R)print}{( )print}ifelse}{( )print}ifelse L_okayToCheck{dup wcheck
+{(W)print}{( )print}ifelse}{( )print}ifelse dup xcheck{(X)print}{( )print}
+ifelse(  )print}if}bind cid_def/L_dumpdict{L_showattributes(  dict)print dup
+length( )print( )3 L_wprint print dup maxlength(.)print(.)3 L_wprint print
+L_istagged L_cr}bind cid_def/L_dstack{L_cr(dict stack: )print countdictstack
+dup 1 sub == dup array dictstack 1 1 3 index 1 sub{dup 1 sub( )3 L_wprint
+print(: )print 2 index exch sub 1 sub 1 index exch get L_dumpdict}for pop pop}
+bind cid_def/L_parray{0 exch L_dumparray}bind cid_def/L_dumpop{{dup type
+/dicttype eq{L_dumpdict exit}if dup type/arraytype eq{L_parray exit}if dup
+type/packedarraytype eq{L_parray exit}if dup type/stringtype eq{L_dumpstring
+exit}if L_dumpother exit}loop}bind cid_def/L_ostack{L_cr(op stack: )print
+count 1 sub == 1 1 count 3 sub dup L_OSTACK_LINES gt{pop L_OSTACK_LINES}if{dup
+1 sub( )3 L_wprint print(: )print index L_dumpop}for}bind cid_def/L_istagged{
+/L_i//false cid_def L_DICTIONARIES{dup 0 get 2 index eq{1 get exch/L_i//true
+cid_def exit}{pop}ifelse}forall pop L_i{(  )print L_STANDOUT{L_STANDOUT_BEGIN
+print}if print L_STANDOUT{L_STANDOUT_END print}if}if}bind cid_def/L_saveglobal
+{localdict begin vmstatus/L_VM_MAXIMUM exch cid_def/L_VM_USED exch cid_def
+/L_VM_LEVEL exch cid_def end systemdict/currentglobal known{/L_GLOBAL
+currentglobal cid_def false setglobal}{/L_GLOBAL false cid_def}ifelse}bind
+cid_def/L_restoreglobal{localdict begin systemdict/currentglobal known{
+L_GLOBAL setglobal}if end}bind cid_def/L_pindex{dup 1 add index exch( )3
+L_wprint print(: )print L_dumpop}bind cid_def/L_InitStackLevels{userdict
+/L_errordict known not{userdict/L_errordict 4 dict dup begin
+/L_opStackCountByLevel 32 dict def/L_opStackLevel 0 def
+/L_dictStackCountByLevel 32 dict def/L_dictStackLevel 0 def end put}if}bind
+def/L_SaveStackLevels{L_errordict begin L_opStackCountByLevel L_opStackLevel 2
+copy known not{2 copy 3 dict dup/args 7 index 5 add array put put get}{get dup
+/args get dup length 3 index lt{dup length 5 add array exch 1 index exch 0
+exch putinterval 1 index exch/args exch put}{pop}ifelse}ifelse begin count 2
+sub 1 index lt{pop count 1 sub}if dup/argCount exch def dup 0 gt{exch 1 index
+2 add 1 roll args exch 0 exch getinterval astore pop}{pop}ifelse count 1 sub
+/restCount exch def end/L_opStackLevel L_opStackLevel 1 add def countdictstack
+1 sub L_dictStackCountByLevel exch L_dictStackLevel exch put/L_dictStackLevel
+L_dictStackLevel 1 add def end}bind def/L_RestoreStackLevels{L_errordict begin
+/L_opStackLevel L_opStackLevel 1 sub def L_opStackCountByLevel L_opStackLevel
+get begin count restCount sub dup 0 gt{{pop}repeat}{pop}ifelse args 0 argCount
+getinterval{}forall end/L_dictStackLevel L_dictStackLevel 1 sub def
+L_dictStackCountByLevel L_dictStackLevel get end countdictstack exch sub dup 0
+gt{{end}repeat}{pop}ifelse}bind def/L_PopStackLevels{L_errordict begin
+/L_opStackLevel L_opStackLevel 1 sub def/L_dictStackLevel L_dictStackLevel 1
+sub def end}bind def/L_Raise{exch cvx exch errordict exch get exec stop}bind
+def/L_ReRaise{cvx $error/errorname get errordict exch get exec stop}bind def
+/L_Stopped{0 L_Stopped}bind def/L_Stopped{L_InitStackLevels L_SaveStackLevels
+stopped{L_RestoreStackLevels true}{L_PopStackLevels false}ifelse}bind def
+/L_Arg{L_errordict begin L_opStackCountByLevel L_opStackLevel 1 sub get/args
+get exch get end}bind def/L_sS1 128 string def/L_sS2 128 string def/L_sS3 128
+string def/L_sS4 128 string def/L_SortInsert{exch dup 0 get null eq{exch[exch
+1 array 1 array]0 exch put}{aload pop aload pop 4 2 roll 2 copy L_sS1 cvs exch
+L_sS2 cvs exch gt{pop 3 -1 roll pop L_SortInsert}{pop exch pop L_SortInsert}
+ifelse}ifelse}bind def/L_SortWalk{dup 0 get null eq{pop}{aload pop aload pop
+exch L_SortWalk exch dup 0 L_Arg exch get 1 L_Arg exec L_SortWalk}ifelse}bind
+def/L_SortedForAll{cvx{1 array 0 L_Arg{pop 1 index exch L_SortInsert}forall
+L_SortWalk}2 L_Stopped{/L_SortedForAll L_ReRaise}if}bind def/L_docr2nl true
+def/L_cr2nl{userdict begin/RETURN(\r)0 get def/NEWLINE(
+)0 get def 0 1 2 index length 1 sub{2 copy get RETURN eq{2 copy NEWLINE put}if
+pop}for end}bind def/L_xcat{count 2 lt{(Error
+)print flush stop}if{dup type/arraytype eq{/xcatproc exch bind def exit}if dup
+type/nametype eq{{null filter}dup 0 4 -1 roll put bind/xcatproc exch def exit}
+if(Error
+)print flush stop}loop userdict begin(----------- Begin L_xcat: )print dup
+print(
+)print flush dup status{pop pop exch pop/filesize exch def(r)file/inputobj
+exch def/buffersize 8192 def/buffer buffersize string def/fileobj(%stdout)(w)
+file xcatproc def{/filesize filesize dup dup 0 eq{pop pop pop exit}if
+buffersize ge{buffersize inputobj buffer}{filesize inputobj buffer 0 filesize
+getinterval}ifelse readstring not{(Failed to read required input
+)print flush stop}if L_docr2nl{L_cr2nl}if fileobj exch{writestring fileobj
+flushfile}stopped{(Failed to write required output
+)print flush stop}if sub def}loop}if(
+----------- End L_xcat
+)print flush end}def/L_cat{{}L_xcat}bind def/L_Strcpy{currentdict 2 index 2
+copy known{get type/dicttype ne}{pop pop true}ifelse{1 index 4 L_level2{
+currentglobal currentdict gcheck setglobal exch dict exch setglobal}{dict}
+ifelse def}if 1 index load begin/L_strUsed 0 def/L_strIncrement L_strIncrement
+def currentdict/L_strMaximum known not{/L_strMaximum -1 def/L_strText null def
+}if end L_Strcat}bind def/L_Strcat{dup type/nametype eq{L_sS1 cvs}if 1 index
+load begin dup length L_strUsed add dup L_strMaximum gt{dup L_strIncrement
+idiv 1 add L_strIncrement mul dup L_level2{currentglobal currentdict gcheck
+setglobal exch string exch setglobal L_strText currentdict/L_strText undef}{
+string L_strText}ifelse dup null ne{1 index copy}if pop/L_strText exch def
+/L_strMaximum exch def}if exch L_strText exch L_strUsed exch putinterval
+/L_strUsed exch def end}bind def/L_Strget{load begin L_strText 0 L_strUsed
+getinterval end}bind def systemdict/currentglobal known{currentglobal true
+setglobal}if/TraceSpace{systemdict/currentglobal known{currentglobal false
+setglobal}if localdict/TraceDepth get{( )print}repeat systemdict/currentglobal
+known{setglobal}if}bind def/Trace++{systemdict/currentglobal known{
+currentglobal false setglobal}if localdict dup begin/TraceDepth known{
+/TraceDepth TraceDepth 1 add dup 40 gt{pop 40}if def}{/TraceDepth 0 def}ifelse
+end systemdict/currentglobal known{setglobal}if}bind def/Trace--{systemdict
+/currentglobal known{currentglobal false setglobal}if localdict dup begin
+/TraceDepth known{/TraceDepth TraceDepth 1 sub dup 0 lt{pop 0}if def}{
+/TraceDepth 0 def}ifelse end systemdict/currentglobal known{setglobal}if}bind
+def systemdict/currentglobal known{setglobal}if/TraceProcs{exch dup gcheck
+setglobal dup dup length dict copy begin{xcheck{dup 128 string cvs[/Trace++
+load/exec load/TraceSpace load/exec load(< )dup length string copy/print load
+2{9 index dup length string copy/print load}repeat(
+)dup length string copy/print load/flush load 15 index load/exec load
+/TraceSpace load/exec load/Trace-- load/exec load(> )dup length string copy
+/print load 7{14 index}repeat]cvx bind exch pop def}{pop}ifelse}forall pop
+currentdict end false setglobal}bind def/TraceDict{dup where{exch 2 copy get
+localdict begin/L_temp 2 index L_Strcpy(: )L_Strcat L_Strget end TraceProcs 2
+index gcheck setglobal put false setglobal}{(Not found.
+)print flush}ifelse}bind def/TraceResource{2 copy resourcestatus{pop pop 2
+copy findresource localdict begin 2 index/L_temp exch L_Strcpy(/)L_Strcat 2
+index L_Strcat(: )L_Strcat L_Strget end TraceProcs dup gcheck setglobal exch
+defineresource pop false setglobal}{(Not found.
+)print flush}ifelse}bind def/L_cvns{dup type/stringtype ne{/L_cvns errordict
+/typecheck get exec}if localdict begin L_saveglobal/L_NUMERIC_STRING exch
+cid_def/L_STRING_INDEX 0 cid_def 0 1/L_NUMERIC_STRING load length dup 2 mul
+string/L_NEW_STRING exch cid_def 1 sub{/L_NUMERIC_STRING load exch get dup -4
+bitshift 16 L_sstr1 cvrs L_STRING_INDEX dup 3 -1 roll L_NEW_STRING 3 1 roll
+putinterval 1 add dup 3 -1 roll 15 and 16 L_sstr1 cvrs L_NEW_STRING 3 1 roll
+putinterval 1 add/L_STRING_INDEX exch cid_def}for L_NEW_STRING L_restoreglobal
+end}bind cid_def/L_printns{localdict begin L_saveglobal dup type/arraytype eq{
+/L_OUTPUT_FORMAT exch cid_def}{/L_OUTPUT_FORMAT[36(
+)]cid_def}ifelse dup type/stringtype ne{end/L_printns errordict/typecheck get
+exec}if/L_i 0 cid_def/L_n 0 cid_def/L_OUTPUT_MODE L_OUTPUT_DEFAULT cid_def
+L_cvns dup/L_NUMERIC_STRING exch cid_def length/L_LENGTH exch cid_def{
+L_OUTPUT_FORMAT{{dup/skip eq{pop L_OUTPUT_MODE/skip eq{/L_OUTPUT_MODE/quit
+cid_def exit}if exit}if dup type/stringtype eq{print exit}if L_n L_LENGTH ge{
+pop exit}if dup/hex eq{/L_OUTPUT_MODE exch cid_def exit}if dup/string eq{
+/L_OUTPUT_MODE exch cid_def exit}if dup/quit eq{/L_OUTPUT_MODE exch cid_def
+exit}if dup null eq{(\t)print pop([)print L_i 10 L_sstr1 cvrs print(] )print
+/L_i L_i 1 add cid_def exit}if dup type/integertype eq{2 mul dup L_n add
+L_LENGTH gt{pop L_NUMERIC_STRING L_n dup L_LENGTH exch sub dup L_n add/L_n
+exch cid_def getinterval L_visibleprint/L_OUTPUT_MODE/skip cid_def}{dup
+L_NUMERIC_STRING exch L_n exch getinterval L_visibleprint L_n add/L_n exch
+cid_def}ifelse exit}if pop}loop L_OUTPUT_MODE/quit eq{exit}if}forall L_n
+L_LENGTH ge L_OUTPUT_MODE/quit eq or{exit}if}loop flush L_restoreglobal end}
+bind cid_def/L_time{localdict begin L_saveglobal/START_TIME usertime cid_def
+L_restoreglobal end exec localdict begin(Elapsed time: )print usertime
+START_TIME sub dup 1000 idiv exch 1 index 1000 mul sub exch dup 60 idiv exch 1
+index 60 mul sub exch dup 60 idiv exch 1 index 60 mul sub exch dup 24 idiv
+exch 1 index 24 mul sub exch(0)2 L_wprint print(+)print(0)2 L_wprint print(:)
+print(0)2 L_wprint print(:)print(0)2 L_wprint print(.)print(0)3 L_wprint print
+(
+)print end}bind cid_def/L_mode{localdict begin L_saveglobal{dup/hex eq{
+/L_OUTPUT_DEFAULT exch cid_def/L_OUTPUT_LINE 20 cid_def exit}if dup/string eq{
+/L_OUTPUT_DEFAULT exch cid_def/L_OUTPUT_LINE 40 cid_def exit}if dup/xterm eq{
+/L_TERMINAL_MODE exch cid_def exit}if dup/ascii eq{/L_TERMINAL_MODE exch
+cid_def exit}if dup/stringdetail eq{/L_STRING_DETAIL exch cid_def exit}if dup
+/stringdetailoff eq{/L_STRING_DETAIL exch cid_def exit}if dup/arraydetail eq{
+/L_ARRAY_DETAIL exch cid_def exit}if dup/arraydetailoff eq{/L_ARRAY_DETAIL
+exch cid_def exit}if dup type/integertype eq{/L_DEPTH exch 1 sub cid_def exit}
+if dup/dictdetail eq{/L_DICT_DETAIL exch cid_def exit}if dup/dictdetailoff eq{
+/L_DICT_DETAIL exch cid_def exit}if dup/dictcompact eq{/L_DICT_COMPACT exch
+cid_def exit}if dup/dictcompactoff eq{/L_DICT_COMPACT exch cid_def exit}if dup
+/oslines eq{pop/L_OSTACK_LINES exch cid_def exit}if dup/attributes eq{
+/L_ATTRIBUTES exch cid_def exit}if dup/attributesoff eq{/L_ATTRIBUTES exch
+cid_def exit}if dup/standout eq{pop/L_STANDOUT L_STANDOUT not cid_def exit}if
+dup/vm eq{pop/L_VM L_VM not cid_def exit}if pop exit}loop L_restoreglobal end}
+bind cid_def/L_showmodes{L_cr L_LINE print( MODES)L_CR
+(Terminal mode \(/xterm or /ascii\):                  )print L_TERMINAL_MODE
+==(String representation \(/string or /hex\):           )print
+L_OUTPUT_DEFAULT ==(String detail \(/stringdetail or /stringdetailoff\): )
+print L_STRING_DETAIL ==
+(Array detail \(/arraydetail or /arraydetailoff\):    )print L_ARRAY_DETAIL ==
+(Array depth level \(integer >= 0\):                  )print L_DEPTH 1 add ==
+(Dict detail \(/dictdetail or /dictdetailoff\):       )print L_DICT_DETAIL ==
+(Dict compact \(/dictcompact or /dictcompactoff\):    )print L_DICT_COMPACT ==
+(OP Stack Lines \(/oslines\):                         )print L_OSTACK_LINES ==
+(Object attributes \(/attributes or /attributesoff\): )print L_ATTRIBUTES ==
+(Standout mode \(toggled with /standout\):            )print L_STANDOUT ==
+(VM reclaim mode \(toggled with /vm\):                )print L_VM == L_LINE
+L_CR L_cr}bind cid_def/L_pstack{L_VM{2 vmreclaim}if L_saveglobal save L_LINE
+print( BEGIN)L_CR(VM: Maximum=)print L_VM_MAXIMUM L_sstr1 cvs print( Used=)
+print L_VM_USED L_sstr1 cvs print( Savelevel=)print L_VM_LEVEL L_sstr1 cvs
+print L_GLOBAL{( GlobalVM)}{( LocalVM)}ifelse print systemdict/currentpacking
+known{currentpacking{( Packing)print}if}if(
+)print L_dstack L_ostack L_LINE print( END)L_CR restore L_restoreglobal}bind
+cid_def/L_pstring{localdict begin L_saveglobal L_dumpstring L_restoreglobal
+end}bind cid_def/L_tag{localdict begin L_saveglobal exch/L_i//true cid_def
+L_DICTIONARIES{dup 0 get 2 index eq{3 -1 roll 1 exch put pop/L_i//false
+cid_def exit}{pop}ifelse}forall L_i{exch L_DICTIONARIES length dup 1 add array
+dup L_DICTIONARIES exch copy pop dup 3 -1 roll[6 -2 roll]put/L_DICTIONARIES
+exch cid_def}if L_restoreglobal end}bind cid_def/L_pdict{L_saveglobal
+localdict begin L_OUTPUT_LINE exch/L_OUTPUT_LINE L_OUTPUT_DEFAULT/hex eq{10}{
+20}ifelse cid_def end L_cr L_LINE print( DICT)L_CR{exch L_sstr1 cvs(/)print
+L_DICT_DETAIL/dictdetail eq{dup print(:)print length 16 sub dup 0 lt{neg{( )
+print}repeat}{pop}ifelse L_DICT_COMPACT/dictcompact eq{(\t)}{(
+     )}ifelse print L_dumpop}{L_CR pop}ifelse}L_SortedForAll L_LINE L_CR L_cr
+localdict begin/L_OUTPUT_LINE exch cid_def end L_restoreglobal}bind cid_def
+/L_tracepushdepth{userdict begin tracedepth 0 ge{tracedeptharray tracedepth
+tracecount put}if/tracedepth tracedepth 1 add def/tracecount 0 def end}bind
+cid_def/L_tracepopdepth{userdict begin/tracedepth tracedepth 1 sub def
+tracedepth 0 ge{/tracecount tracedeptharray tracedepth get def}if end}bind
+cid_def/L_trace{localdict/L_tracepushdepth get exec{userdict begin dup type
+dup/arraytype ne exch/packedarraytype ne and/traceisprimitive exch def
+/tracechar traceisprimitive{(=)}{(#)}ifelse def tracelineok{tracedepth dup 40
+gt{pop 40}if dup dup 0 gt{{( )print}repeat}{pop}ifelse 41 exch sub{tracechar
+print}repeat( )print tracedepth traceisprimitive not{1 add}if 10 L_sstr1 cvrs
+print traceisprimitive{(/)print tracecount 10 L_sstr1 cvrs print(: )}{
+( BEGIN
+)}ifelse print/tracelineok false def}if dup == flush/tracecount tracecount 1
+add def end traceisprimitive{{userdict begin tracedump{tracedepth dup 40 gt{
+pop 40}if dup dup 0 gt{{( )print}repeat}{pop}ifelse 41 exch sub{tracechar
+print}repeat( EXEC
+)print flush}if/tracelineok true def end dup dup systemdict/exit get eq exch
+/exit eq or{userdict/tracerun false put}if tracerun{dup/tracecmd exch def exec
+}{pop}ifelse tracedump{.}if traceshowtop{(\t\tTOP >>>> )print ,}if}stopped{
+(
+>$>$>$>$>$>$>$>$>$>$>$>$>$>$>$>$>$>$>$>$> STOP ENCOUNTERED!
+)print .(COMMAND= )print $error/command get ==(ERROR  = )print $error
+/errorname get == flush stop $error/command get errordict $error/errorname get
+get exec stop}{tracerun not{exit}if}ifelse}{userdict/traceisarray true put dup
+xcheck{[exch/L_trace load/exec load]cvx}if}ifelse}forall tracerun not{
+(Caught exit; present command = )print tracecmd == flush userdict/tracerun
+true put exit}if localdict/L_tracepopdepth get exec traceisarray tracedepth 0
+ge and{tracedepth dup 40 gt{pop 40}if dup{( )print}repeat 41 exch sub{(#)print
+}repeat( )print tracedepth 1 add 10 L_sstr1 cvrs print( END
+)print}if}bind cid_def/L_printtab{Depth{(   )print}repeat print}bind cid_def
+/L_PrintType0{/Depth Depth 1 add def/FD exch def(Type:\t)L_printtab FD
+/FontType get 4 string cvs print(/)print FD/FMapType get dup ==(FontName:\t)
+L_printtab FD/FontName get == FD/FontMatrix known{(FontMatrix:\t)L_printtab FD
+/FontMatrix get ==}if FD/PaintType known{(PaintType:\t)L_printtab FD/PaintType
+get ==}if 6 eq{(SubsVector:\t)L_printtab FD/SubsVector get/tempstr exch def
+/prevrange 0 def/pstring 4 string def(<)print 0 1 tempstr length 1 sub{tempstr
+exch get 16 pstring cvrs print( )print}for(>)print(
+)print tempstr 0 get 0 eq{(1 Byte Codes, Ranges: [)L_printtab 1 1 tempstr
+length 1 sub{tempstr exch get prevrange 16 =string cvrs print(-)print
+prevrange add dup 1 sub 16 =string cvrs print( )print/prevrange exch def}for
+prevrange 16 =string cvrs print(-FF]
+)print}if}if(Encoding:\t)L_printtab FD/Encoding get == FD/FDepVector get
+(FDepVector:\t)L_printtab dup length == dup 0 exch 1 exch length 1 sub{2 copy
+(Font:)L_printtab == exch get dup/FMapType known{L_PrintType0}{dup/FontName
+known{( |FontName:)L_printtab dup/FontName get ==}if dup/CIDFontType known{
+( |CIDFontName:)L_printtab dup/CIDFontName get ==( |CIDFontType:)L_printtab
+dup/CIDFontType get ==}if( |FontType:)L_printtab dup/FontType get == dup
+/CDevProc known{( |CDevProc:)L_printtab dup/CDevProc get false L_CDevProcs{3
+index eq{== pop true exit}{pop}ifelse}forall{pop}{(*** Call this proc ")print
+L_CDevProcCount 4 string cvs print(" from now on:
+)print dup == L_CDevProcs exch L_CDevProcCount exch put/L_CDevProcCount where
+pop/L_CDevProcCount L_CDevProcCount 1 add put}ifelse}if dup/FontMatrix known{
+( |FontMatrix:)L_printtab dup/FontMatrix get ==}if dup/PaintType known{
+( |PaintType:)L_printtab dup/PaintType get ==}if dup/Encoding known{
+( |Encoding:)L_printtab dup/Encoding get length ==}if dup/CFont known{
+( |CFont:
+)L_printtab dup/CFont get L_PrintType0}if pop}ifelse}for pop/Depth Depth 1 sub
+def}bind cid_def/L_showfont{//L_scratchdict begin/Depth 0 def L_CDevProcs
+begin/StandardCDevProc/StandardCDevProc findcdevproc def end dup L_PrintType0
+end}bind cid_def/L_notimeouts{systemdict/languagelevel known{2 dict dup
+/WaitTimeout 0 put dup/JobTimeout 0 put setuserparams}{statusdict begin
+/waittimeout 0 def 0 setjobtimeout end}ifelse}bind cid_def end localdict begin
+/L_PROMPT version dup length 5 add string exch 1 index copy length 1 index
+exch( PS| )putinterval cid_def/prompt{L_PROMPT print flush}bind cid_def
+/setprompt{/L_PROMPT exch cid_def}bind cid_def/PS|{pop}bind cid_def/L_exec{
+localdict begin cvx 1183615869 internaldict/superexec get exec end}bind
+cid_def/L_top{count 0 gt{dup L_dumpop}if}bind cid_def/L_at{dup count sub 3 add
+0 le{index L_dumpop}{pop}ifelse}bind cid_def/.{{L_pstack}L_exec}bind cid_def/'
+{{L_pdict}L_exec}bind cid_def/'f{{L_showfont}L_exec}bind cid_def/,{{0 L_at}
+L_exec}bind cid_def/@{{L_at}L_exec}bind cid_def/${{L_pstring}L_exec}bind
+cid_def/:{{L_tag}L_exec}bind cid_def/^{{L_mode}L_exec}bind cid_def/*{{L_time}
+L_exec}bind cid_def/0*{{L_notimeouts}L_exec}bind cid_def/c{{L_c}L_exec}bind
+cid_def/|{{L_cat}L_exec}bind cid_def/85|{{/ASCII85Encode L_xcat}L_exec}bind
+cid_def/?{false false _?}bind cid_def/??{true false _?}bind cid_def/???{
+L_OSTACK_LINES 25 eq{5/oslines ^}if false true _? 25/oslines ^}bind cid_def/_?
+{{userdict begin/traceisarray false def/tracedump exch def/traceshowtop exch
+def/tracedepth -1 def/tracelineok true def/tracedeptharray 128 array def
+/tracerun true def end L_trace}1183615869 internaldict/superexec get exec}bind
+cid_def/cid_def_{{dup type dup/dicttype eq exch/arraytype eq or{localdict
+begin dup 2 index L_sstr3 cvs dup length 1 add string dup 0(/)putinterval dup
+1 4 -1 roll putinterval L_tag end}if cid_def}stopped{localdict begin L_cr
+L_LINE print( TRAP)L_CR end . localdict begin L_LINE L_CR L_cr end stop}if}
+bind cid_def end 21 dict begin/==dict currentdict def/==string 256 string def
+localdict/=={//==dict begin mark{1 index/cp 0 def/supplws//true def typeexec
+(
+)print}stopped{cleartomark end//$error/command/== put stop}if pop pop end}bind
+put/cprint{dup length cp add/cp exch def print}bind def/bprint{dup length cp
+add rmargin gt{(
+)print/cp 0 def/supplws//false def}{supplws{/supplws//false def}{( )cprint}
+ifelse}ifelse}bind def/tprint{bprint cprint}bind def/typeprint{type//==string
+cvs(type)search pop bprint(-)cprint cprint(-)cprint pop pop}bind def/typeexec{
+dup type dup currentdict exch known{exec}{pop typeprint}ifelse}bind def
+/rmargin 68 def/integertype{//==string cvs tprint}bind def/realtype
+//integertype def/booleantype//integertype def/operatortype{//==string cvs
+bprint(--)cprint cprint(--)cprint}bind def/nametype{bprint dup xcheck not{(/)
+cprint}if//==string cvs cprint}bind def/substrprint{{{(\()(\))(\\)}{search{
+substrprint(\\)cprint cprint//true exit}if}forall dup type/stringtype eq{
+cprint exit}if pop}loop}bind def/stringtype{dup rcheck{dup length 200 gt exch
+1 index{0 200 getinterval}if bprint(\()cprint substrprint{(...)cprint}if(\))
+cprint}{typeprint}ifelse}bind def/arraytype{dup rcheck{(          )bprint pop
+/supplws//true def dup xcheck{({)cprint{typeexec}forall(})cprint}{([)cprint{
+typeexec}forall(])cprint}ifelse/supplws//false def}{typeprint}ifelse}bind def
+/packedarraytype//arraytype def end systemdict/currentglobal known{setglobal}
+if
+%%EndResource
+%%EOF

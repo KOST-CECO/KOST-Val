@@ -1,0 +1,278 @@
+%!PS-Adobe-3.0 Resource-File
+%%BeginResource: file (CID/Start)
+%%Title: (CID/Start)
+%%Version: 3010.02
+%%Copyright: ------------------------------------------------------------
+%%Copyright: Copyright 1990-1999 Adobe Systems Incorporated.
+%%Copyright: All rights reserved.
+%%Copyright: 
+%%Copyright: Patents Pending
+%%Copyright: 
+%%Copyright: NOTICE: All information contained herein is the property
+%%Copyright: of Adobe Systems Incorporated. Many of the intellectual
+%%Copyright: and technical concepts contained herein are proprietary
+%%Copyright: to Adobe, are protected as trade secrets, and are made
+%%Copyright: available only to Adobe licensees for their internal use.
+%%Copyright: Any reproduction or dissemination of this software is
+%%Copyright: strictly forbidden unless prior written permission is
+%%Copyright: obtained from Adobe.
+%%Copyright: 
+%%Copyright: PostScript and Display PostScript are trademarks of
+%%Copyright: Adobe Systems Incorporated which may be registered in
+%%Copyright: certain jurisdictions.
+%%Copyright: ------------------------------------------------------------
+%%EndComments
+cid_runBootup true ne{1 dict begin/ROS null def}if cid_runBootup true eq{
+lib_extensions begin false lib_vmSaveState end}if cid_runBootup true eq{
+lib_level2{(FS/Level2CID)}{(FS/Level1CID)}ifelse PrependRoot run(PGF/Start)
+PrependRoot run cid_extensions begin/cid_fileNameString 256 string def
+/cid_fileName()def/cid_fileDescriptor 0 def/cid_fileIsOpen false def
+/cid_charDataString 16384 string def/cid_sstr1 256 string def/cid_sstr2 256
+string def/cid_sstr3 256 string def/cid_sstrx 1 string readonly def
+/cid_streamedCIDFont true def/cid_FontType4Template 23 dict dup begin/FontType
+4 def/FontMatrix[.001 0 0 .001 0 0]def/CDevProc/StandardCDevProc findcdevproc
+def/Encoding/NominalJISEncoding findencoding def/PaintType 0 def end def
+lib_level2{currentglobal true setglobal}if/CMap 50 dict def/CIDFont 50 dict
+def lib_level2{setglobal}if end}if cid_runBootup true eq{lib_extensions begin
+lib_vmRestoreState true lib_vmSaveState end}if cid_runBootup true eq{userdict
+begin cid_extensions begin
+%%BeginHack
+/cid_innerParseFile
+%%EndHack
+10 dict begin/ROS{false exch{3 dict
+begin token{dup type dup/nametype eq exch/integertype eq or{cvlit/Registry
+exch def}{pop pop exit}ifelse}{pop true exit}ifelse token{dup type dup
+/nametype eq exch/integertype eq or{cvlit/Ordering exch def}{pop pop exit}
+ifelse}{exit}ifelse token{dup type/integertype eq{/Supplement exch def}{pop
+pop exit}ifelse}{exit}ifelse token not{pop true}if exit}loop dup{/t2 t2 1 add
+store}{end t2{end}repeat/t2 0 store}ifelse}bind def}if cid_runBootup true eq{{
+20 dict begin/t1 false def/t2 0 def/t3 0 def/t5 true def/cid_lastToken null
+def/cid_consumeCIDSystemInfo 4 dict dup begin/array{cid_lastToken dup type
+/integertype eq{dup 1 ge{/t3 exch store}{pop}ifelse}{pop}ifelse}bind def/dict{
+/t3 1 store}bind def(<<)token{exch pop{/t3 1 store}bind def}if([)token{exch
+pop{}bind def}if end def/cid_ROS 7 dict dup begin/Registry 0 def/Ordering 0
+def/Supplement 0 def(])token pop exch pop 1 def/StartData 2 def/endcmap 2 def
+/null 3 def end def 2 copy 3 dict begin dup/CMap eq{/CMapName}{/CIDFontName}
+ifelse 2 index def lib_level2{/Category findresource begin cid_sstr1
+ResourceFileName end}{lib_extensions begin/lib_dstr1(Resource/)lib_Strcpy exch
+lib_Strcat(/)lib_Strcat exch lib_Strcat lib_Strget end}ifelse dup
+cid_extensions/systemdict get/status get exec{/Created exch def pop pop pop{
+(r)file}stopped{pop pop pop pop null}{
+
+false 1183615869 internaldict /setdistillerdscparsing 2 copy known { get exec } { pop pop pop } ifelse
+{dup cid_sstr1{readline}stopped{pop pop
+exit}if{dup token{pop pop pop exit}if(%%Title:)anchorsearch{pop token{exch pop
+dup type/stringtype eq{token{pop dup token{dup type/nametype eq{pop pop//ROS
+exec{/t1 true store}if}{dup type/stringtype eq{3 2 roll pop{//ROS exec{token{
+dup type/stringtype ne{pop pop exit}if}{dup cid_sstr1 readline pop(%%+)
+anchorsearch{pop token not{exit}if exch pop dup type/stringtype eq{token not{
+exit}if dup type/stringtype ne{pop pop t2{end}repeat/t2 0 store exit}if}{pop
+/t1 true store exit}ifelse}{pop/t1 true store exit}ifelse}ifelse}{pop exit}
+ifelse}loop}{pop pop pop}ifelse}ifelse}{pop}ifelse}{}ifelse}{pop}ifelse}{}
+ifelse exit}{pop}ifelse}{pop exit}ifelse}loop
+true 1183615869 internaldict /setdistillerdscparsing 2 copy known { get exec } { pop pop pop } ifelse
+
+t1 not{dup 0 setfileposition/t2
+0 store{dup token{dup dup/StartData eq exch/endcmap eq or{pop exit}{
+/CIDSystemInfo eq{{dup token{cid_consumeCIDSystemInfo 1 index 2 copy known{get
+exec pop 3 dict begin/t2 t2 1 add store{dup token{cid_ROS 1 index 2 copy known
+{get dup 0 eq{pop dup currentdict exch known{pop exit}{1 index token{dup type
+2 index/Supplement eq{/integertype ne{pop pop exit}if}{/stringtype ne{pop pop
+exit}if cvn}ifelse def currentdict length 3 eq{t3 1 sub dup/t3 exch store 0 eq
+{/t1 true store exit}{/t2 t2 1 add store 3 dict begin}ifelse}if}{pop exit}
+ifelse}ifelse}{dup 1 eq{pop pop t2 1 gt currentdict length 0 eq and{end/t2 t2
+1 sub store t3 0 le{/t1 true store}if exit}{exit}ifelse}{dup 3 eq{pop pop
+currentdict length 0 eq{t3 1 sub dup/t3 exch store 0 eq{/t1 true store exit}{
+/t2 t2 1 add store 3 dict begin}ifelse}{exit}ifelse}{pop pop exit}ifelse}
+ifelse}ifelse}{pop pop pop}ifelse}{exit}ifelse}loop exit}{pop pop dup dup
+/StartData eq exch/endcmap eq or{pop exit}{/cid_lastToken exch store}ifelse}
+ifelse}{exit}ifelse}loop}if}ifelse}{exit}ifelse}loop t1 not t2 1 ge and{t2{end
+}repeat/t2 0 store}if}if t1 t2 1 ge and{1 index/CIDFont eq t2 1 gt and{
+closefile pop pop null}{t2 array dup t2 1 sub -1 0{currentdict end dup length
+0 eq{pop null}if put dup}for pop 2 index/CIDFont eq dup{pop 0 get dup null eq
+dup{pop pop closefile pop pop null true}if}if not{/CIDSystemInfo exch def
+closefile pop pop currentdict}if}ifelse}{closefile pop pop null}ifelse}ifelse}
+{pop pop pop pop pop null}ifelse end end}bind end def/cid_GetStatusInfo{2 copy
+cid_SafeResourceStatus{pop 2 eq{lib_level2{/Category findresource begin
+cid_sstr1 ResourceFileName end}{lib_extensions begin/lib_dstr1(Resource/)
+lib_Strcpy exch lib_Strcat(/)lib_Strcat exch lib_Strcat lib_Strget end}ifelse
+systemdict/status get exec{exch pop exch pop exch pop}{null}ifelse}{
+findresource}ifelse}{pop pop null}ifelse}bind def
+%%BeginHack:
+/cid_ParseFile {
+  dup/CIDFont ne lib_level2 not or
+  {cid_innerParseFile}
+  {
+    2 copy cid_hasDSC
+    {cid_innerParseFile}
+    {
+      3 dict begin findresource dup
+      dup/CIDSystemInfo get/CIDSystemInfo exch def
+      /CIDFontName get/CIDFontName exch def
+      /Created exch def
+      currentdict end
+    }
+    ifelse
+  }
+  ifelse
+}bind def
+/cid_hasDSC
+{
+  /Category findresource begin cid_sstr1 ResourceFileName end dup
+  //systemdict /status get exec
+  {
+    pop pop pop pop
+    {(r) file}
+    stopped
+    {exit}
+    {
+      dup
+      {read}
+      stopped
+      {pop pop exit}
+      if
+      {37 eq}
+      {true}
+      ifelse
+      exch closefile
+    }
+    ifelse
+  }
+  {pop false}
+  ifelse
+}bind def
+%%EndHack
+/cid_UpdateDB{lib_level2{
+currentglobal true setglobal 3 1 roll}if 2 copy cid_SafeResourceStatus{pop 2
+eq{2 copy cid_ParseFile}{3 dict begin 2 copy findresource dup dup
+/CIDSystemInfo get/CIDSystemInfo exch 4 index/CMap eq{dup type/arraytype ne{[
+exch]}if def/CMapName}{def/CIDFontName}ifelse exch 1 index get def/Created
+exch def currentdict end}ifelse}{null}ifelse 3 1 roll lib_level2{load}{dup
+load dup dup maxlength exch length sub 0 le{dup maxlength dup add dict copy 1
+index exch def load}{exch pop}ifelse}ifelse dup 2 index known{exch 2 index put
+}{2 index null eq{pop pop}{exch 2 index put}ifelse}ifelse lib_level2{exch
+setglobal}if}bind def/cid_GetCIDSystemInfo{1 index type/stringtype eq{exch cvn
+exch}if cid_extensions begin dup load 2 index known{2 copy cid_GetStatusInfo
+dup null ne{1 index load 3 index get exch 1 index/Created get eq{exch pop exch
+pop}{pop cid_UpdateDB}ifelse}{pop cid_UpdateDB}ifelse}{cid_UpdateDB}ifelse end
+}bind def end end cid_extensions begin lib_extensions/lib_cidFS get{
+/cid_IsComposedFont{/CIDInitN/ProcSet findresource/cid_IsCIDKeyedFont get exec
+}bind def}{/cid_IsComposedFont{dup type/stringtype ne{cid_sstr1 cvs}if dup
+length string copy/cid_s1 exch def{cid_s1(--)search{exch pop cid_IsCompatible{
+cid_s1 cid_s3[cid_s2]true exit}if}{pop}ifelse false cid_s1 length dup/cid_s4
+exch def 2 sub -1 0{dup cid_s1 exch 1 getinterval dup(-)eq exch(.)eq or{dup
+cid_s1 exch 1 add dup cid_s4 exch sub getinterval exch cid_s1 exch 0 exch
+getinterval cid_IsCompatible{not exit}if}{pop}ifelse}for{cid_s1 cid_s3[cid_s2]
+true exit}if cid_s1 false exit}loop}bind def/cid_IsCompatible{2 copy/cid_s2
+exch def/cid_s3 exch def/CIDFont cid_GetCIDSystemInfo dup null eq{pop pop
+false}{exch/CMap cid_GetCIDSystemInfo dup null eq{pop pop false}{
+/CIDSystemInfo get 0 get dup null eq{pop pop true}{begin/CIDSystemInfo get dup
+/Registry get exch/Ordering get Ordering eq exch Registry eq and Ordering
+/Identity eq Registry/Adobe eq and or end}ifelse}ifelse}ifelse}bind def}ifelse
+/cid_ClearToNamedMark{true 2 1 count 3 sub{dup 1 add index mark eq{dup 2 add
+count 1 sub 1 index gt{index 3 index eq{exch pop exch pop{pop}repeat false
+exit}{pop}ifelse}{pop pop exit}ifelse}{pop}ifelse}for{/cid_ClearToNamedMark
+errordict/unmatchedmark get exec stop}if}bind def/cid_SafeResourceStatus{
+lib_level2{lib_extensions/lib_cidFS get{1 dict dup/CIDFS false put/CIDInitN
+/ProcSet findresource/cid_SetRequestedFeatures get exec}if mark 3 1 roll
+/Category findresource begin({ResourceStatus} stopped)0()/SubFileDecode filter
+cvx exec{cleartomark false}{{3 2 roll pop true}{cleartomark false}ifelse}
+ifelse end lib_extensions/lib_cidFS get{1 dict dup/CIDFS true put/CIDInitN
+/ProcSet findresource/cid_SetRequestedFeatures get exec}if}{resourcestatus}
+ifelse}bind def/cid_StringIsTemplate{count 2 lt{/cid_StringIsTemplate
+errordict/stackunderflow get exec stop}if 2 copy type/stringtype ne exch type
+/stringtype ne or{/cid_StringIsTemplate errordict/typecheck get exec stop}if 2
+copy length exch length(*?\\){}forall 0 0 cid_StringIsTemplateBody}bind def
+/cid_StringIsTemplateBody{{6 index 2 index eq{5 index 1 index eq exit}if exch
+dup 1 add 3 1 roll 8 index exch get dup 6 index eq{pop 6 index 2 index eq{true
+exit}if{9 copy cid_StringIsTemplateBody{true exit}if dup 1 add exch 6 index eq
+{false exit}if}loop exit}{dup 5 index eq{pop dup 1 add exch 6 index eq{false
+exit}if}{dup 4 index eq{pop exch dup 1 add 3 1 roll dup 8 index eq{pop dup 6
+index eq exit}if 8 index exch get}if exch dup 1 add 3 1 roll dup 8 index eq{
+pop pop false exit}if 10 index exch get ne{false exit}if}ifelse}ifelse}loop
+mark 11 2 roll cleartomark}bind def/cid_CIDKeyedFontsForall{lib_extensions
+begin false lib_vmSaveState end cid_extensions begin/cid_s12 exch def{2 index
+(fonts/*)cid_StringIsTemplate{true exit}if 2 index(%*%fonts/*)
+cid_StringIsTemplate{true exit}if false exit}loop{/cid_s7 exch def
+/cid_FOR_PROC_ORIG exch def(fonts/)search pop/cid_FOR_DEVICE exch def pop
+/cid_FOR_TEMPLATE_ORIG exch def[{cid_FOR_DEVICE 2 copy cid_StringIsTemplate{
+pop dup length string copy}{pop pop}ifelse}cid_s7 devforall]dup length 0 eq
+cid_FOR_DEVICE()eq and{pop[()]}if{/cid_FOR_DEVICE exch def/CompatibleFonts
+/ProcSet findresource/currentenable get exec{cid_FOR_TEMPLATE_ORIG{dup
+/CompatibleFont/CompatibleFonts/ProcSet findresource/currentexception get exec
+not FontDirectory 2 index known not and{lib_extensions begin lib_level2{
+/CompatibleFont/Category findresource begin dup cid_sstr3 ResourceFileName end
+}{/lib_dstr5(Resource/CompatibleFont/)lib_Strcpy 1 index lib_Strcat lib_Strget
+}ifelse/lib_dstr4 cid_FOR_DEVICE lib_Strcpy exch lib_Strcat lib_Strget end
+systemdict/status get exec{pop pop pop pop cid_s12{lib_extensions begin
+/lib_dstr4 cid_FOR_DEVICE lib_Strcpy(fonts/)lib_Strcat exch lib_Strcat
+lib_Strget end}if/cid_FOR_PROC_ORIG load end 1{exec cid_extensions
+/cid_caughtExit false put}repeat cid_extensions begin cid_caughtExit{exit}if}{
+pop}ifelse}{pop}ifelse}cid_s7/CompatibleFont resourceforall}if cid_caughtExit{
+exit}if/CompatibleFonts/ProcSet findresource/currentenable get exec{
+cid_FOR_TEMPLATE_ORIG{dup/CompatibleFont/CompatibleFonts/ProcSet findresource
+/currentexception get exec not FontDirectory 2 index known not and{
+lib_extensions begin lib_level2{/CompatibleFont/Category findresource begin
+dup cid_sstr3 ResourceFileName end}{/lib_dstr5(Resource/CompatibleFont/)
+lib_Strcpy 1 index lib_Strcat lib_Strget}ifelse/lib_dstr4 cid_FOR_DEVICE
+lib_Strcpy exch lib_Strcat lib_Strget end systemdict/status get exec{pop pop
+pop pop cid_s12{lib_extensions begin/lib_dstr4 cid_FOR_DEVICE lib_Strcpy
+(fonts/)lib_Strcat exch lib_Strcat lib_Strget end}if/cid_FOR_PROC_ORIG load
+end exec cid_extensions begin}{pop}ifelse}{pop}ifelse}cid_s7/CompatibleFont
+resourceforall}if/cid_CMAP_INFO 50 dict dup begin(*){cvn 2 copy known{pop}{
+/CMap cid_GetCIDSystemInfo dup type/dicttype eq{dup/CMapName 2 copy known{get
+exch lib_level2{def}{currentdict dup maxlength exch length gt{def}{currentdict
+dup maxlength dup add dict copy end begin def pop currentdict}ifelse}ifelse}{
+pop pop pop}ifelse}{pop}ifelse}ifelse}cid_sstr1/CMap resourceforall end def
+/cid_CIDFONT_INFO 50 dict begin lib_extensions begin/lib_dstr4 cid_FOR_DEVICE
+lib_Strcpy(*)/CIDFont getresfilename lib_Strcat lib_Strget end dup(*)search
+pop exch pop exch pop exch currentdict exch{2 index anchorsearch pop pop cvn
+/CIDFont cid_GetCIDSystemInfo dup/CIDFontName 2 copy known{get exch lib_level2
+{def}{currentdict dup maxlength exch length gt{def}{currentdict dup maxlength
+dup add dict copy end begin def pop currentdict}ifelse}ifelse}{pop pop pop}
+ifelse}cid_sstr1 systemdict/filenameforall get exec end exch pop def
+cid_CIDFONT_INFO{exch pop/cid_s11 exch def cid_CMAP_INFO{exch pop dup
+/CIDSystemInfo get 0 get dup type/dicttype eq{begin Registry Ordering end
+cid_s11/CIDSystemInfo get begin Ordering eq exch Registry eq and end}{pop
+false}ifelse{lib_extensions begin/lib_dstr3 cid_s11/CIDFontName get lib_Strcpy
+(-)lib_Strcat exch/CMapName get lib_Strcat lib_Strget FontDirectory 1 index
+known not cid_s12 or exch dup cid_FOR_TEMPLATE_ORIG cid_StringIsTemplate 3 -1
+roll and{cid_s12{/lib_dstr4 cid_FOR_DEVICE lib_Strcpy(fonts/)lib_Strcat exch
+lib_Strcat lib_Strget}if end cid_s7 copy/cid_FOR_PROC_ORIG load end exec
+cid_extensions begin}{pop end}ifelse}{pop}ifelse}forall}forall cid_caughtExit{
+exit}if}forall}{pop pop pop}ifelse end lib_extensions begin lib_vmRestoreState
+end}bind def/cid_InitCIDFontCache{dup/cid_cidFontCacheLast exch 1 sub def
+/cid_cidFontCache exch array def cid_cidFontCache 0 1 cid_cidFontCacheLast{2
+copy 20 dict begin/cid_filename 128 string def/cid_filenameLength 0 def
+/cid_fileDescriptor null def/cid_map[]def currentdict end put pop}for pop
+/cid_mapSize 1000 def}bind def 5 cid_InitCIDFontCache end/CIDInit/ProcSet
+cid_execresfile userdict begin lib_extensions/lib_nativeMode get not{
+/composefont{dup length 1 eq{dup 0 get/CIDFont resourcestatus{pop pop 1 index
+type dup/nametype eq exch/stringtype eq or}{false}ifelse}{false}ifelse{
+lib_extensions begin/lib_dstr1 1 index 0 get lib_Strcpy(-)lib_Strcat 2 index
+lib_Strcat lib_Strget cvn end findfont exch pop exch pop definefont}{/CIDInit
+/ProcSet lib_extensions/lib_findresource get exec begin lib_extensions begin
+false lib_vmSaveState end cid_composefont lib_extensions begin
+lib_vmRestoreState end end}ifelse}bind def}if lib_extensions/lib_cidFS get not
+{/filenameforall{count 3 lt{/filenameforall errordict/stackunderflow get exec
+stop}if 1 index xcheck not{/filenameforall errordict/typecheck get exec stop}
+if cid_extensions begin 3 copy/cid_s7 exch def/cid_s6 exch def/cid_s5 exch def
+/cid_caughtExit false def end lib_level2{currentglobal false setglobal 4 1
+roll}if exch[exch cid_extensions/cid_caughtExit true/put load/exec load
+cid_extensions/cid_caughtExit false/put load]cvx exch lib_level2{4 -1 roll
+setglobal}if cid_extensions/systemdict get/filenameforall get exec
+cid_extensions/cid_caughtExit get not{cid_extensions begin cid_s5/cid_s6 load
+cid_s7 true/cid_CIDKeyedFontsForall load end exec}if}bind def/status{count 1
+lt{/status errordict/stackunderflow get exec stop}if dup type/stringtype eq{
+cid_extensions begin cid_sstrx search{exch pop exch pop}if dup dup(fonts/*)
+cid_StringIsTemplate exch(%*%fonts/*)cid_StringIsTemplate or end{dup//status{5
+-1 roll pop true}{lib_extensions begin true lib_vmSaveState end(fonts/)search
+pop pop pop cid_extensions begin cid_IsComposedFont end lib_extensions begin
+lib_vmRestoreState end{pop pop pop 0 0 0 0 true}{/CompatibleFonts/ProcSet
+findresource begin dup currentenable exch/CompatibleFont currentexception not
+and end{/CompatibleFont cid_extensions begin cid_SafeResourceStatus end dup{
+pop pop pop 0 0 0 0 true}if}{pop false}ifelse}ifelse}ifelse}{//status}ifelse}{
+//status}ifelse}bind def}if end}if cid_runBootup true eq{lib_extensions begin
+lib_vmRestoreState end}if cid_runBootup true ne{end}if
+%%EndResource
+%%EOF

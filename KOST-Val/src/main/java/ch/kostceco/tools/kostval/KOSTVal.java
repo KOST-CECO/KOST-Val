@@ -1,5 +1,5 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val v1.9.2 application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and
+ * The KOST-Val v1.9.3 application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and
  * Submission Information Package (SIP). Copyright (C) 2012-2019 Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
@@ -104,11 +104,10 @@ public class KOSTVal implements MessageConstants
 	public static void main( String[] args ) throws IOException
 	{
 		// System.out.println( new Timestamp( System.currentTimeMillis() ) + " 107 Start " );
-		@SuppressWarnings("resource")
 		ApplicationContext context = new ClassPathXmlApplicationContext(
 				"classpath:config/applicationContext.xml" );
-		/* System.out.println( new Timestamp( System.currentTimeMillis() ) +
-		 * " 110 Ende ApplicationContext " ); */
+		// System.out.println( new Timestamp( System.currentTimeMillis() ) +
+		// " 110 Ende ApplicationContext " );
 
 		System.out.println( "KOST-Val" );
 
@@ -518,7 +517,7 @@ public class KOSTVal implements MessageConstants
 			if ( !valDatei.isDirectory() ) {
 				System.out.print( valDatei.getAbsolutePath() + " " );
 				boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
-						dirOfJarPath, configMap );
+						dirOfJarPath, configMap, context );
 
 				LOGGER.logError( kostval.getTextResourceService().getText( MESSAGE_XML_FORMAT2 ) );
 
@@ -582,7 +581,7 @@ public class KOSTVal implements MessageConstants
 										+ " " );
 
 								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
-										dirOfJarPath, configMap );
+										dirOfJarPath, configMap, context );
 
 								// Löschen des Arbeitsverzeichnisses, falls eines angelegt wurde
 								if ( tmpDir.exists() ) {
@@ -609,7 +608,7 @@ public class KOSTVal implements MessageConstants
 										+ " " );
 
 								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
-										dirOfJarPath, configMap );
+										dirOfJarPath, configMap, context );
 
 								// Löschen des Arbeitsverzeichnisses, falls eines angelegt wurde
 								if ( tmpDir.exists() ) {
@@ -636,7 +635,7 @@ public class KOSTVal implements MessageConstants
 										+ " " );
 
 								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
-										dirOfJarPath, configMap );
+										dirOfJarPath, configMap, context );
 
 								// Löschen des Arbeitsverzeichnisses, falls eines angelegt wurde
 								if ( tmpDir.exists() ) {
@@ -661,7 +660,7 @@ public class KOSTVal implements MessageConstants
 										+ " " );
 
 								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
-										dirOfJarPath, configMap );
+										dirOfJarPath, configMap, context );
 
 								// Löschen des Arbeitsverzeichnisses, falls eines angelegt wurde
 								if ( tmpDir.exists() ) {
@@ -688,7 +687,7 @@ public class KOSTVal implements MessageConstants
 								System.out.print( countToValidated + " " + "PDFA:  " + valDatei.getAbsolutePath() );
 
 								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
-										dirOfJarPath, configMap );
+										dirOfJarPath, configMap, context );
 
 								// Löschen des Arbeitsverzeichnisses, falls eines angelegt wurde
 								if ( tmpDir.exists() ) {
@@ -1123,7 +1122,7 @@ public class KOSTVal implements MessageConstants
 								int countToValidated = numberInFileMap - countProgress;
 								System.out.print( countToValidated + " " + "PDFA:  " + valDatei.getAbsolutePath() );
 								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
-										dirOfJarPath, configMap );
+										dirOfJarPath, configMap, context );
 								if ( valFile ) {
 									pdfaCountIo = pdfaCountIo + 1;
 								} else {
@@ -1151,7 +1150,7 @@ public class KOSTVal implements MessageConstants
 								System.out.print( countToValidated + " " + "TIFF:  " + valDatei.getAbsolutePath()
 										+ " " );
 								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
-										dirOfJarPath, configMap );
+										dirOfJarPath, configMap, context );
 								if ( valFile ) {
 									tiffCountIo = tiffCountIo + 1;
 								} else {
@@ -1189,7 +1188,7 @@ public class KOSTVal implements MessageConstants
 									tmpDirSiard.mkdir();
 								}
 								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
-										dirOfJarPath, configMap );
+										dirOfJarPath, configMap, context );
 								if ( valFile ) {
 									siardCountIo = siardCountIo + 1;
 								} else {
@@ -1217,7 +1216,7 @@ public class KOSTVal implements MessageConstants
 								System.out.print( countToValidated + " " + "JPEG:  " + valDatei.getAbsolutePath()
 										+ " " );
 								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
-										dirOfJarPath, configMap );
+										dirOfJarPath, configMap, context );
 								if ( valFile ) {
 									jpegCountIo = jpegCountIo + 1;
 								} else {
@@ -1245,7 +1244,7 @@ public class KOSTVal implements MessageConstants
 								System.out.print( countToValidated + " " + "JP2:   " + valDatei.getAbsolutePath()
 										+ " " );
 								boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
-										dirOfJarPath, configMap );
+										dirOfJarPath, configMap, context );
 								if ( valFile ) {
 									jp2CountIo = jp2CountIo + 1;
 								} else {
@@ -1494,12 +1493,9 @@ public class KOSTVal implements MessageConstants
 
 	// TODO: ValFile --> Formatvalidierung einer Datei --> erledigt --> nur Marker
 	private static boolean valFile( File valDatei, String logFileName, File directoryOfLogfile,
-			boolean verbose, String dirOfJarPath, Map<String, String> configMap ) throws IOException
+			boolean verbose, String dirOfJarPath, Map<String, String> configMap,
+			ApplicationContext context ) throws IOException
 	{
-		@SuppressWarnings("resource")
-		ApplicationContext context = new ClassPathXmlApplicationContext(
-				"classpath:config/applicationContext.xml" );
-
 		KOSTVal kostval = (KOSTVal) context.getBean( "kostval" );
 		String originalValName = valDatei.getAbsolutePath();
 		String valDateiName = valDatei.getName();

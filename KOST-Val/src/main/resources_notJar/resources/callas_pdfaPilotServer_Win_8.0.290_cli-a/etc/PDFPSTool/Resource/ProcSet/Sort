@@ -1,0 +1,98 @@
+%!PS-Adobe-3.0 Resource-ProcSet
+%%Title: Sort procedure for arrays
+%
+% (c) Copyright 1993 Adobe Systems Incorporated.
+% All rights reserved.  All information contained herein is the property
+% of Adobe Systems Incorporated or its Licensors, and are protected trade
+% secrets and copyrights, and may be covered by U.S. and foreign patents
+% or patents pending and/or mask works. Any reproduction or dissemination
+% of any portion of this document or of software or other works derived
+% from it is strictly forbidden unless prior written permission is
+% obtained from Adobe Systems Incorporated.
+%
+% Patents Pending
+%
+% PostScript and Display PostScript are trademarks of Adobe Systems
+% Incorporated which may be registered in certain jurisdictions.
+%
+%%EndComments
+
+%%BeginResource: procset Sort 1 0
+%
+% This procedure set implements a sort algorithm for an array. The elements
+% of the array must be directly comparable with the PostScript comparison
+% operators (e.g., le).
+%
+% The ProcSet exports a single procedure "Sort":
+%
+%	array Sort array
+%
+% sorts the operand array in place, returning it as the result array.
+%
+% The procedure is typically invoked as follows:
+% 	... generate array ...
+%	/Sort /ProcSet findresource /Sort get exec
+%
+% Internally, the algorithm uses is "QuickSort" which takes a partition of
+% the array (beginning with the whole array) and splits it into three parts:
+% a "middle" value, picked at "random", and two sequences in which the items
+% in the first sequence all precede the "middle" value in the final order
+% and the items in the second sequence follow the "middle" value in the
+% final order. The same algorithm is then applied recursively to both of
+% the new sequences until the sequence length is one.
+
+<<
+  /Sort		% array Sort array
+  {
+    dup length 0 exch 1 sub /Sort /ProcSet findresource begin
+      QuickSort
+    end
+  } bind
+
+  /QuickSort	% array l r QuickSort array
+  {
+    7 dict begin
+      /r exch def
+      /l exch def
+      /table exch def
+      /i l def
+      /j r def
+      % Begin sort
+      l r lt {
+        {
+          i j eq {
+            exit
+          } {
+            table i get table j get
+            2 copy le {
+              pop pop
+              /i i 1 add def
+            } {
+              table i 3 -1 roll put
+              table j 3 -1 roll put
+	      {
+                i j eq {
+                  exit
+                } if
+                table i get table j get
+                2 copy le {
+                  pop pop
+                  /j j 1 sub def
+                } {
+                  table i 3 -1 roll put
+                  table j 3 -1 roll put
+                  exit
+                } ifelse
+              } loop
+            } ifelse
+          } ifelse
+        } loop
+        table l i 1 sub QuickSort pop
+        table i 1 add r QuickSort pop
+      } if
+      % End sort
+      table
+    end
+  } bind
+>> /Sort exch /ProcSet defineresource pop
+%%EndResource

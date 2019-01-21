@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<manifest xmlns:x="http://www.callassoftware.com/cchip/1/manifest/">
+	<x:displayname dict="DLG_BATCH_RepInfoPDF_long">PDF report (Overview)</x:displayname>
+	<x:comment>A PDF overview report based on HTML template.</x:comment>
+	
+	<x:settings>
+		<!--- if 'true' temporary files are moved next to the resulting PDF file (useful for developing templates) -->
+		<x:keeptemp>false</x:keeptemp>
+	</x:settings>
+
+	<x:resources>
+
+		<!--- include dictionary -->
+		<x:dict>
+			<x:overview/>
+		</x:dict>
+		<!-- -->
+
+		<!--- include compare tree if comparison resources are used inside index.html
+		<x:compare>
+			<x:document_a resolution="20"/>
+			<x:document_b resolution="20"/>
+			<x:diffresult resolution="20"/>
+		</x:compare>
+		-->
+
+		<!--- include results tree if result resources are used inside index.html -->
+		<x:results>
+			<!--- Create xml report. default value for path: xml/report.xml to pick ip content in report using JavaScript 
+				<x:xmlreport path="xml/report.xml" inkcovres="72" inkcovbox="TrimBox"/>
+			-->
+			<x:preview resolution="20" page="1"/>
+		</x:results>
+		<!-- -->
+
+	</x:resources>
+</manifest>

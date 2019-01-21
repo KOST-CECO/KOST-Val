@@ -1,0 +1,50 @@
+########################
+# NUp Runlist
+#
+# callas software 20080530
+#
+########################
+# Environmanet vars
+#
+# "BOA_CROP_MARKS"                
+# "BOA_CROP_MARK_LENGTH"          
+# "BOA_CROP_MARK_GAP"             
+# "BOA_CROP_MARK_WIDTH"           
+# "BOA_NUM_SLOTS"               
+
+##########################
+# Set up params
+#
+Set	CropMarkGap	ENVIRONMENT("BOA_CROP_MARK_GAP")
+Set	CropMarkLength	ENVIRONMENT("BOA_CROP_MARK_LENGTH")
+Set	CropMarkWidth	ENVIRONMENT("BOA_CROP_MARK_WIDTH")
+Set	Counter1	1
+
+##########################
+AppendPages
+
+##########################
+# Loop
+#
+NewSheet	1
+
+Loop
+	Set	remainingPages	VAR("LastPhysicalPage") - VAR("NumPositionedPages")
+	Set	isLastSheet	( VAR("remainingPages") / ENVIRONMENT("BOA_NUM_SLOTS") ) < 1
+
+	If	VAR("isLastSheet")
+		Set	Counter2	VAR("Counter1") + ENVIRONMENT("BOA_NUM_SLOTS")
+		PositionPage	FirstPage	Slot_0	Counter2
+	Else
+		PositionPage	FirstPage	Slot_0	Counter1
+	EndIf
+
+	Increment	FirstPage
+	Increment	Counter1
+	If	VAR("Counter1") > ENVIRONMENT("BOA_NUM_SLOTS")
+		Set	Counter1	1
+		NewSheet	1
+	EndIf
+
+###########################
+# EOF

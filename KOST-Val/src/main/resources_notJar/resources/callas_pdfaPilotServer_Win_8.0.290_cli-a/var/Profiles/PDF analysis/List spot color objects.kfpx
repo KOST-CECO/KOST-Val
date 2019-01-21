@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pdfpreflight version="12.0">
+	<package>
+		<id3>5108c5d0f22345f032c32f0b4ae1e7d4</id3>
+		<pdfxoutintentlist>
+		</pdfxoutintentlist>
+		<iccprofilelist>
+		</iccprofilelist>
+		<ccpolicies>
+		</ccpolicies>
+		<occdsetups>
+		</occdsetups>
+		<curves>
+		</curves>
+		<fspolicies>
+		</fspolicies>
+		<resources>
+		</resources>
+		<conditions>
+			<condition>
+				<id1>C6714680ea825e977af1da76a7600ed3c</id1>
+				<id2>Ca6730a571f2a93c67b7e3d6caff0d7bc</id2>
+				<id3>9dfb294eb19d3d872c10863f1466e8b7</id3>
+				<id4>96e88106842f1aa9b3eba4bcf91adcfe</id4>
+				<name></name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSCOLOR</group>
+					<token>CSCOLOR::SpotColorName</token>
+					<operator>OP::unequal</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+		</conditions>
+		<rules>
+			<rule>
+				<id1>Rdda01b8387c3fbdd8cc722dd04ef1678</id1>
+				<id2>Rdc4ea9176ceaddd2832ae69b31c18c6a</id2>
+				<id3>ab5539de6b9ea33340e9c92bacfc4ac5</id3>
+				<id4>5f787bf300d304124600c32030ce5f02</id4>
+				<name>R_6_Spotcolorisused</name>
+				<comment>R_6_Spotcolorisused</comment>
+				<flags analysis="17" condition_logic="0" ignore_objects="0" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>C6714680ea825e977af1da76a7600ed3c</condition>
+				</conditions>
+			</rule>
+		</rules>
+		<rulesets>
+			<ruleset>
+				<id1>S76ecf123c6905434c7eaf2d308b47696</id1>
+				<id2>S83abd9e83f72630e7b2a74e605514e2a</id2>
+				<id3>954376e0a3f94ae0b43cb018b5e2df35</id3>
+				<id4>4377f639947fec426a185163e5e1dd0e</id4>
+				<name>SSS_RULESET_DEF_NAME</name>
+				<comment>SSS_RULESET_DEF_NAME</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<rules>
+					<rule check_severity="1" check_timing="2">Rdda01b8387c3fbdd8cc722dd04ef1678</rule>
+				</rules>
+			</ruleset>
+		</rulesets>
+		<fixups>
+		</fixups>
+		<fixupsets>
+		</fixupsets>
+		<actions>
+		</actions>
+		<profiles>
+			<profile>
+				<id1>P2183c75d5d3c9352bfd940ed9397271e</id1>
+				<id2>Pe241146cf856c122c1634fbdff74f3b6</id2>
+				<id3>8cdba9ca778d190106ab684dd7a2e55e</id3>
+				<id4>39102c018c54ddbf00bb4365cc6ce7c0</id4>
+				<name>PPP_Listspotcolorobjects</name>
+				<comment>PPP_Listspotcolorobjects</comment>
+				<flags edit="0" visible="1" dict="1"></flags>
+				<metalist>
+					<metadata>
+						<metakey>author</metakey>
+						<metavalue>callas software</metavalue>
+					</metadata>
+					<metadata>
+						<metakey>email</metakey>
+						<metavalue>support@callassoftware.com</metavalue>
+					</metadata>
+				</metalist>
+				<creation>D:20110329091814+02&apos;00&apos;</creation>
+				<modification>D:20120904070017+02&apos;00&apos;</modification>
+				<pdfstd>
+					<pdfx convert="0"></pdfx>
+					<pdfa convert="0"></pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond></outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+				</pdfstd>
+				<pdfstdemb>
+					<pdfx convert="0"></pdfx>
+					<pdfa convert="0"></pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond></outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+					<afrelationship set_relationship="0"></afrelationship>
+				</pdfstdemb>
+				<wizard>
+				</wizard>
+				<rulesets>
+					<ruleset>S76ecf123c6905434c7eaf2d308b47696</ruleset>
+				</rulesets>
+				<fixupsets>
+				</fixupsets>
+			</profile>
+		</profiles>
+		<metaprofs>
+		</metaprofs>
+		<profgroups>
+		</profgroups>
+	</package>
+</pdfpreflight>

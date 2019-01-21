@@ -1,0 +1,20 @@
+@import url(all.css);
+
+.no_css
+{
+    border-bottom:                      2px #960 solid;
+    opacity:                            1;
+
+    animation-duration:                 0s;
+    -webkit-animation-duration:         0s;
+}
+
+.no_css:hover
+{
+    border-bottom:                      2px #960 solid;
+    
+    animation-duration:                 0s;
+    -webkit-animation-duration:         0s;
+}
+
+/* --------- */

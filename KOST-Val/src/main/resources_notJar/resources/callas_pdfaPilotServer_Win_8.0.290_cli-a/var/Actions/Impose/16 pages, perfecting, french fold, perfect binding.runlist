@@ -1,0 +1,73 @@
+NAME	DICT_16pagesperfectingfrenchfoldperfectbinding
+SLOT_FILTER	*	1-8	*
+SLOT_FILTER	*	101	*
+PAGES_PER_SHEET	8
+
+#===================================
+#Runlist
+
+Set	RunListTerminationMode	1
+Set	CropMarkLength	"3,0mm"
+Set	CropMarkWidth	"0,04mm"
+Set	CropMarkGap	"2mm"
+Set	ShinglingOffset	"0,0mm"
+Set	TextSize	"12pt"
+Set	TextFont	"Helvetica"
+Set	SheetCount	1
+
+Set	PagesPerSheet	8
+Set	PrintedSides	2
+
+# Fill up missing pages to PagesPerSheet
+Set	c	var('LastPage')%(var('PagesPerSheet')*var('PrintedSides'))
+If	VAR('c') > 0
+	Set	LastPage	var('LastPage')+((var('PagesPerSheet')*var('PrintedSides'))-var('c'))
+Else
+EndIf
+
+AppendPages
+
+Loop		
+NewSheet		
+PlaceText	Slot_101	datetime("YYYY-MM-DD, hh:mm") & " - Plate " & var('CurrentSheet') & ", Sheet: " & var('SheetCount') & "F - File: " & filename(docpath())
+Set	MidPage	var('FirstPage')+15
+PositionPage	FirstPage	Slot_4
+Set	FirstPage	var('FirstPage')+3
+PositionPage	MidPage	Slot_3
+Set	MidPage	var('MidPage')-3
+PositionPage	FirstPage	Slot_1
+Set	FirstPage	var('FirstPage')+1
+PositionPage	MidPage	Slot_2
+Set	MidPage	var('MidPage')-1
+PositionPage	FirstPage	Slot_5
+Set	FirstPage	var('FirstPage')+3
+PositionPage	MidPage	Slot_6
+Set	MidPage	var('MidPage')-3
+PositionPage	FirstPage	Slot_8
+Set	FirstPage	var('FirstPage')-6
+PositionPage	MidPage	Slot_7
+Set	MidPage	var('MidPage')+6
+NewSheet		
+PlaceText	Slot_101	datetime("YYYY-MM-DD, hh:mm") & " - Plate " & var('CurrentSheet') & ", Sheet: " & var('SheetCount') & "B - File: " & filename(docpath())
+PositionPage	FirstPage	Slot_1
+Set	FirstPage	var('FirstPage')+1
+PositionPage	MidPage	Slot_2
+Set	MidPage	var('MidPage')-1
+PositionPage	FirstPage	Slot_4
+Set	FirstPage	var('FirstPage')+3
+PositionPage	MidPage	Slot_3
+Set	MidPage	var('MidPage')-3
+PositionPage	FirstPage	Slot_8
+Set	FirstPage	var('FirstPage')+1
+PositionPage	MidPage	Slot_7
+Set	MidPage	var('MidPage')-1
+PositionPage	FirstPage	Slot_5
+PositionPage	MidPage	Slot_6
+
+Set	FirstPage	var('FirstPage')+10
+
+Set	SheetCount	var('SheetCount')+1
+
+
+#===================================
+#EOF

@@ -1,0 +1,170 @@
+@font-face {
+    font-family: 'SourceSansPro-Light';
+    src: url('../fonts/SourceSansPro-Light.otf');
+    font-weight: 200;
+    font-style: normal;
+}
+
+@media screen and (min-width: 1px) {
+	body:after {
+        content: "screen";
+        display: none;
+    }
+} 
+
+* {
+	font-family: SourceSansPro-Light;
+}
+
+@page {
+	size: A4 portrait; 
+	marks:crop;
+}
+
+body {
+	margin: 0;
+	font-family: SourceSansPro-Light;
+    font-size: 14pt;
+}
+
+#header {
+	position: static;
+	background-color: red;
+}
+
+#header-background {
+	width: 210mm;
+	position: absolute;
+	left: 0mm;
+	top: 0mm;
+}
+
+#header-logo {
+	position: absolute;
+	height: 35mm;
+	left: 5mm;
+	top: 5mm;
+}
+
+#details {
+	position: static;
+	margin: 70mm 0mm;
+	padding: 5mm;
+}
+
+h1 {
+	font-size: 30pt;
+	font-weight: normal;
+	margin: 0;
+}
+
+p.subtitle {
+	color: #DB5E09;
+	margin: 0mm 0mm 10mm 0mm;
+}
+
+#details-embedded-files ul {
+	margin-top:2mm;
+	margin-bottom: 2mm;
+}
+
+#details-embedded-files ul ul {
+	margin-top: 4mm;
+}
+
+#details-embedded-files ul ul li {
+	padding-left: 20px;
+}
+
+#details-embedded-files li {
+	list-style-type: none;
+    padding-left: 20px;
+    padding-bottom: 5px;
+}
+
+#details-embedded-files li a {
+	text-decoration: none;
+}
+
+#details-embedded-files li span.details-file-info {
+	font-size: 12pt;
+}
+
+#details-embedded-files li.file {
+    list-style-image:url('../images/icon-file.pdf');
+}
+
+#details-embedded-files li.folder {
+    list-style-image:url('../images/icon-folder.pdf');
+}
+
+#details-embedded-files li.type-pdf {
+    list-style-image:url('../images/icon-pdf.pdf');
+}
+
+#details-embedded-files li.type-word {
+    list-style-image:url('../images/icon-word.pdf');
+}
+
+#details-embedded-files li.type-calc {
+    list-style-image:url('../images/icon-calc.pdf');
+}
+
+#details-embedded-files li.type-css {
+    list-style-image:url('../images/icon-css.pdf');
+}
+
+#details-embedded-files li.type-email {
+    list-style-image:url('../images/icon-email.pdf');
+}
+
+#details-embedded-files li.type-eml {
+    list-style-image:url('../images/icon-eml.pdf');
+}
+
+#details-embedded-files li.type-excel {
+    list-style-image:url('../images/icon-excel.pdf');
+}
+
+#details-embedded-files li.type-html {
+    list-style-image:url('../images/icon-html.pdf');
+}
+
+#details-embedded-files li.type-jpg {
+    list-style-image:url('../images/icon-jpg.pdf');
+}
+
+#details-embedded-files li.type-js {
+    list-style-image:url('../images/icon-js.pdf');
+}
+
+#details-embedded-files li.type-office {
+    list-style-image:url('../images/icon-office.pdf');
+}
+
+#details-embedded-files li.type-png {
+    list-style-image:url('../images/icon-png.pdf');
+}
+
+#details-embedded-files li.type-powerpoint {
+    list-style-image:url('../images/icon-powerpoint.pdf');
+}
+
+#details-embedded-files li.type-txt {
+    list-style-image:url('../images/icon-txt.pdf');
+}
+
+#details-embedded-files li.type-writer {
+    list-style-image:url('../images/icon-writer.pdf');
+}
+
+#details-embedded-files li.type-xml {
+    list-style-image:url('../images/icon-xml.pdf');
+}
+
+
+
+
+
+
+

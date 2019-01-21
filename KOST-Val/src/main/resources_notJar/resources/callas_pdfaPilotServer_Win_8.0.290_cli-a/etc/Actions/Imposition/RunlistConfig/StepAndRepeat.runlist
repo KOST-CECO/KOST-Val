@@ -1,0 +1,36 @@
+########################
+# Step And Repeat Runlist
+########################
+# Environmanet vars
+#
+# "BOA_CROP_MARKS"                
+# "BOA_CROP_MARK_LENGTH"          
+# "BOA_CROP_MARK_GAP"             
+# "BOA_CROP_MARK_WIDTH"           
+# "BOA_NUM_SLOTS"               
+
+##########################
+# Set up params
+#
+Set	CropMarkGap	ENVIRONMENT("BOA_CROP_MARK_GAP")
+Set	CropMarkLength	ENVIRONMENT("BOA_CROP_MARK_LENGTH")
+Set	CropMarkWidth	ENVIRONMENT("BOA_CROP_MARK_WIDTH")
+Set	Counter1	1
+Set	LoopCheck	0
+
+##########################
+# Loop
+#
+NewSheet	1
+
+Loop
+PositionPage	FirstPage	Slot_0	Counter1
+Increment	Counter1
+If	VAR("Counter1") > ENVIRONMENT("BOA_NUM_SLOTS")
+	Increment	FirstPage
+	Set	Counter1	1
+	NewSheet	1
+EndIf
+
+###########################
+# EOF

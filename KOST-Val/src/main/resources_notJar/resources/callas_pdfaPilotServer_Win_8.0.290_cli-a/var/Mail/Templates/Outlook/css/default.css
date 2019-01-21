@@ -1,0 +1,149 @@
+@font-face {
+	font-family: "OpenSans";
+	src: url("../fonts/OpenSans-Regular.ttf");
+	font-style: normal
+}
+
+@font-face {
+	font-family: "OpenSans";
+	src: url("../fonts/OpenSans-Bold.ttf");
+	font-weight: bold
+}
+
+@page {
+	size: A4 portrait; 
+	margin: 20mm 13mm 20mm 13mm
+}
+
+body {
+	width: 184mm; /* must match @page settings! */
+	margin: 0mm;
+	padding: 0mm
+}
+
+/*img[apple-width="yes"],*/
+img.ccmip-img
+ {
+	height:auto;
+	/* width:auto; */
+	max-width: 100%
+}
+
+.ccmip-text-plain {
+/*	
+	font-family: "SegoeUI", "Tahoma", "OpenSans", sans-serif;
+*/
+	font-family: OpenSans, sans-serif;
+	font-size: 10pt;
+	white-space: pre-wrap;
+	word-break: break-word
+}
+
+.cchip_body {
+	word-break: break-word
+}
+
+.ccmip-text-html {
+	padding-top: 0.5em;
+	border-top-width: 1px;
+	border-top-style: solid
+}
+
+table.ccmip-rtf, th.ccmip-rtf, td.ccmip-rtf {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+td.ccmip-rtf {
+    vertical-align: top;
+}
+
+p.ccmip-rtf, ol.ccmip-rtf, ul.ccmip-rtf, li.ccmip-rtf { 
+    margin: 0px;
+}
+
+span.ccmip-rtf {
+    tab-size: 48px;
+}
+
+.cchip_attachment_page {
+	page-break-before: always
+}
+
+.cchip_attachment_page_header {
+	margin: 0mm 0mm 5mm 0mm
+}
+
+.cchip_attachment_page img {
+	max-width: 180mm;
+	max-height: 247mm
+}
+
+.cchip_headers {
+	width: 100%;
+	padding-bottom: 10mm;
+	background-color: #fff;
+	color: #000;
+	text-align: left
+}
+
+.cchip_header_key,
+.cchip_header_value {
+/*
+	font-family: "SegoeUI", "Tahoma", "OpenSans", sans-serif;
+*/
+	font-family: "OpenSans", sans-serif;
+	font-size: 10pt;
+	word-break: break-word
+}
+
+.cchip_header_value {
+	width: 64%;
+	display: inline-block
+}
+
+.cchip_header_value a {
+	color: #00f
+}
+
+.cchip_header_value .cchip_display_name {
+	margin-right: 0.5em
+}
+
+.cchip_header_value .cchip_sep {
+	margin-right: 0.5em
+}
+
+.cchip_header_key {
+	display: inline-block;
+	width: 36%;
+	vertical-align: top;
+	font-weight: bold	
+}
+
+.x-envelope-to_value {
+	display: inline-block;
+	width: 100%;
+	font-size: 12pt;
+	font-weight: bold;
+	border-bottom: 1.5mm #000 solid;
+	margin-bottom: 5mm
+}
+
+div.cchip_debug {
+	padding-bottom: 10mm;
+	background-color: Bisque;
+	color: green;
+	text-align: left;
+	font-family: Courier;
+
+	position: absolute;   
+    height: auto; width: auto;    
+    left: 60; top: 30px;
+    padding: 3px;
+/*
+	opacity: 0.6;
+*/
+	font-size: 6pt;
+	text-align: left
+}

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pdfpreflight version="12.0">
+	<package>
+		<id3>c99186361b8f492af6878d6d30d84eee</id3>
+		<pdfxoutintentlist>
+		</pdfxoutintentlist>
+		<iccprofilelist>
+		</iccprofilelist>
+		<ccpolicies>
+		</ccpolicies>
+		<occdsetups>
+		</occdsetups>
+		<curves>
+		</curves>
+		<fspolicies>
+		</fspolicies>
+		<resources>
+		</resources>
+		<conditions>
+		</conditions>
+		<rules>
+		</rules>
+		<rulesets>
+		</rulesets>
+		<fixups>
+		</fixups>
+		<fixupsets>
+		</fixupsets>
+		<actions>
+		</actions>
+		<profiles>
+			<profile>
+				<id1>Pf1e6000efe6f000145328b12accec68f</id1>
+				<id2>P3c4d018cc86dc5424beb7137358fa975</id2>
+				<id3>84255fdf656b818fb3a3af44ba38dbcb</id3>
+				<id4>3e69ba5b9ba1ff3b26cc41484c8990b2</id4>
+				<name>PPP_VerifycompliancewithPDFA1b</name>
+				<comment>PPP_VerifycompliancewithPDFA1b</comment>
+				<flags edit="0" visible="1" dict="1"></flags>
+				<metalist>
+					<metadata>
+						<metakey>author</metakey>
+						<metavalue>callas software</metavalue>
+					</metadata>
+					<metadata>
+						<metakey>email</metakey>
+						<metavalue>support@callassoftware.com</metavalue>
+					</metadata>
+				</metalist>
+				<creation>D:20110329083624+02&apos;00&apos;</creation>
+				<modification>D:20120702110250+02&apos;00&apos;</modification>
+				<pdfstd>
+					<pdfx convert="0"></pdfx>
+					<pdfa convert="0"></pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond></outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+				</pdfstd>
+				<pdfstdemb>
+					<pdfx convert="0"></pdfx>
+					<pdfa convert="0"></pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond></outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+					<afrelationship set_relationship="0"></afrelationship>
+				</pdfstdemb>
+				<wizard>
+					<check name="PRCWzXComp_PDFDocumentA" check_severity="0">
+						<data name="PDFA1a2005">1</data>
+						<data name="PDFA1b2005">1</data>
+						<data name="PDFA2a">0</data>
+						<data name="PDFA2b">0</data>
+						<data name="PDFA2u">0</data>
+						<data name="PDFA3a">0</data>
+						<data name="PDFA3b">0</data>
+						<data name="PDFA3u">0</data>
+					</check>
+				</wizard>
+				<rulesets>
+				</rulesets>
+				<fixupsets>
+				</fixupsets>
+			</profile>
+		</profiles>
+		<metaprofs>
+		</metaprofs>
+		<profgroups>
+		</profgroups>
+	</package>
+</pdfpreflight>

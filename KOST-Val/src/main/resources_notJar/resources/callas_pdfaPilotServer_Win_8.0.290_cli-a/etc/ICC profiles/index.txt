@@ -1,0 +1,5 @@
+#Key	Value	Value
+#ICCProfile	Name	FileName
+ICCProfile	sRGB IEC61966-2.1	sRGB IEC61966-2.1.icc
+ICCProfile	Dot Gain 15%	Dot Gain 15 prct.icc
+ICCProfile	ISO Coated v2 (ECI)	ISOcoated_v2_eci.icc

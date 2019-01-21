@@ -1,0 +1,7 @@
+userdict dup
+/| undef dup
+/-| undef dup
+/|- undef dup
+/RD undef dup
+/ND undef dup
+/NP undef

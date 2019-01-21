@@ -1,0 +1,1236 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pdfpreflight version="15.0">
+	<package>
+		<id3>6ca9646480f7e80b2641c6905e1e533d</id3>
+		<pdfxoutintentlist>
+		</pdfxoutintentlist>
+		<iccprofilelist>
+		</iccprofilelist>
+		<ccpolicies>
+		</ccpolicies>
+		<occdsetups>
+		</occdsetups>
+		<curves>
+		</curves>
+		<fspolicies>
+		</fspolicies>
+		<resources>
+		</resources>
+		<variables>
+		</variables>
+		<conditions>
+			<condition>
+				<id1>Cf24b8775d8634b3bbeb4ecc41dbb548c</id1>
+				<id2>C586d4a737bc120ba18bc835b99525252</id2>
+				<id3>23764d36fad893a2ca90e37ef1a5459b</id3>
+				<id4>ee136be8d401882b26c11ffe9f0af272</id4>
+				<name>Objekt hat mehr als 97% Schwarz</name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSCOLOR</group>
+					<token>CSCOLOR::ObjectUsesBlackWithAPercenOf</token>
+					<operator>OP::greater</operator>
+					<data>
+						<num>
+							<value>96</value>
+							<tolerance>0</tolerance>
+						</num>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>Cd64a712eceb7e63765f94696c9dc3837</id1>
+				<id2>Cb7e4cfc8df89d78d9cf20057e6d1f3d3</id2>
+				<id3>18a4ac7ef2ea2d6c46d45c029c937fd9</id3>
+				<id4>6855273a9b501b9707bbc6030f3d3f67</id4>
+				<name>CC_FilledObjectIsNotSetToOverprint</name>
+				<comment>CC_FilledObjectIsNotSetToOverprint</comment>
+				<flags user_units="1" edit="1" visible="1" dict="1"></flags>
+				<atom>
+					<group>Group::CSGST_F</group>
+					<token>CSGST_F::isOverPrintEnabledFill</token>
+					<operator>OP::is_not_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>C83de41a870298395361e699c76f48b84</id1>
+				<id2>C16cf91fff9340c3dbece44dfb71b5aa6</id2>
+				<id3>c48b439459c166d74dbc3a212477aad6</id3>
+				<id4>e2be33959f4c8dd4de241a36f9ce142a</id4>
+				<name>CMYK only (no spot colors)</name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSCOLOR</group>
+					<token>CSCOLOR::ObjectUsesCMYKOnly_noSpotColo</token>
+					<operator>OP::is_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>C624ce845e278f25c955102d5e01b5e03</id1>
+				<id2>C1e707426c7fdcc266fd1ba05c15c5b66</id2>
+				<id3>f3cc4d246aceefcce5190fb1630fff7b</id3>
+				<id4>498110321fb5fae57c4f391b95598738</id4>
+				<name> (Copy 14)</name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSCOLOR</group>
+					<token>CSCOLOR::isDeviceGray</token>
+					<operator>OP::is_not_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>Cfb3bba61d37de306031c8681e7587779</id1>
+				<id2>Cc7a1b54c9b000e935c7453bf425a522c</id2>
+				<id3>bb837efe55cecbc5ce48651c2cfd9bad</id3>
+				<id4>0b33418cc550bce118f3286ac0770235</id4>
+				<name>CC_ObjectIsWhite</name>
+				<comment>CC_ObjectIsWhite</comment>
+				<flags user_units="1" edit="1" visible="1" dict="1"></flags>
+				<atom>
+					<group>Group::CSCOLOR</group>
+					<token>CSCOLOR::ObjectIsWhite</token>
+					<operator>OP::is_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>Cc7aa9b1c7d0fa902c590f9a47887ced4</id1>
+				<id2>Cf740c60329cbc2fa2586cfba0f8f2309</id2>
+				<id3>53745901cb20ce52f28581731f3cf5ca</id3>
+				<id4>a42eeb2b78d7d8b3a9676db063697cf6</id4>
+				<name>CC_FilledObjectNotSetToKnockOut</name>
+				<comment>CC_FilledObjectNotSetToKnockOut</comment>
+				<flags user_units="1" edit="1" visible="1" dict="1"></flags>
+				<atom>
+					<group>Group::CSGST_F</group>
+					<token>CSGST_F::isOverPrintEnabledFill</token>
+					<operator>OP::is_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>C7ff9bf22202d59f48f808162a965d359</id1>
+				<id2>C22361b9f0a9a4aaeea854c1cad8fa2a5</id2>
+				<id3>c4702709dc811f69c6c3c3fa8e5f59af</id3>
+				<id4>7d9c9b157d3d2548caeb0f4b88dae783</id4>
+				<name></name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CONTSTM</group>
+					<token>CONTSTM::IsText</token>
+					<operator>OP::is_not_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>C9ff27f6de543ead6b2894f80931fd178</id1>
+				<id2>C88b69f226f026ea12fa8f575237fd38d</id2>
+				<id3>4a49f26d145a7678e7289fddbd584386</id3>
+				<id4>10c310ba8560d6300bf6772ce549d0c1</id4>
+				<name>CC_StrokedObjectNotSetToKnockOut</name>
+				<comment>CC_StrokedObjectNotSetToKnockOut</comment>
+				<flags user_units="1" edit="1" visible="1" dict="1"></flags>
+				<atom>
+					<group>Group::CSGST_S</group>
+					<token>CSGST_S::isOverPrintEnabledStroke</token>
+					<operator>OP::is_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>C3322a33a59ee067657f4465a96b17544</id1>
+				<id2>C38146b2e0bd993065eb05df29fce3397</id2>
+				<id3>5b240273025a4898373f24f9d1a9298f</id3>
+				<id4>2801027dd3e45d00f5e15168c4e01f5e</id4>
+				<name>CC_UsesDevicegray</name>
+				<comment>CC_UsesDevicegray</comment>
+				<flags user_units="1" edit="1" visible="1" dict="1"></flags>
+				<atom>
+					<group>Group::CSCOLOR</group>
+					<token>CSCOLOR::isDeviceGray</token>
+					<operator>OP::is_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>C69ff6bf58868d6b67be3ac2c6283c975</id1>
+				<id2>C74ea7bca2ebdf4ac32e4588914ca892a</id2>
+				<id3>43ff2677e9fff99e15b07ba22238550e</id3>
+				<id4>54f6767c43fa345886aaa5be8b11c0bf</id4>
+				<name>CC_UsesDevicergb</name>
+				<comment>CC_UsesDevicergb</comment>
+				<flags user_units="1" edit="1" visible="1" dict="1"></flags>
+				<atom>
+					<group>Group::CSCOLOR</group>
+					<token>CSCOLOR::isDeviceRGB</token>
+					<operator>OP::is_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>C7fb48a1860696eb64005f7df69836a9c</id1>
+				<id2>Ce3258052a10734262eed4b7117ecf679</id2>
+				<id3>3e4abe2d952536276ff96da21b32245d</id3>
+				<id4>81668419278eab9726809aa67b630635</id4>
+				<name> (Copy 14)</name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSCOLOR</group>
+					<token>CSCOLOR::isCIEBasedColorSpace</token>
+					<operator>OP::is_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>Ce3667edc6dd3c4dcc7e02c65aebef116</id1>
+				<id2>C93b5542bd5fde87dc2db4c17e4bdfa4b</id2>
+				<id3>06623c4049994fab16d2c0dd4a5b99eb</id3>
+				<id4>88a62ce18878824918b88dd601e9b4c0</id4>
+				<name>CSCOLOR_isSpotColor</name>
+				<comment>CSCOLOR_isSpotColor</comment>
+				<flags user_units="1" edit="1" visible="1" dict="1"></flags>
+				<atom>
+					<group>Group::CSCOLOR</group>
+					<token>CSCOLOR::isSpotColor</token>
+					<operator>OP::is_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>Cec6fa7a16b7b9dcfa99801d18814e559</id1>
+				<id2>C496cea312744a9fd797d15896996dbac</id2>
+				<id3>db691945fe76bc6bab50ca10f5935040</id3>
+				<id4>feecaea80ad9c6fc8876be0fd9eed27b</id4>
+				<name>Is not register color</name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSCOLOR</group>
+					<token>CSCOLOR::isRegistrationColor</token>
+					<operator>OP::is_not_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>Ccac382843921bb98bb68093a45c70a3e</id1>
+				<id2>C5a6bfa2b4d03801220e15ff29ed3a1e2</id2>
+				<id3>1c005d872fadbe1deeb6d59d16b844c9</id3>
+				<id4>803b001eb30bd5aab3ae62e83f66821b</id4>
+				<name> (Copy 12)</name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSTEXT</group>
+					<token>CSTEXT::Textsize</token>
+					<operator>OP::less</operator>
+					<data>
+						<num>
+							<value>12</value>
+							<tolerance></tolerance>
+						</num>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>Cfd268bdfdcc85172f65f67306f08a73b</id1>
+				<id2>C18b078f0738d0488cb9b9a77bc250460</id2>
+				<id3>7b74a6c84e41fe16c71f6552d3435914</id3>
+				<id4>a3d3386fd36b06879b6a0b69bcfc29b0</id4>
+				<name> (Copy 14)</name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSCOLOR</group>
+					<token>CSCOLOR::ObjectUsesBlackWithAPercenOf</token>
+					<operator>OP::greater_or_equal</operator>
+					<data>
+						<num>
+							<value>96</value>
+							<tolerance>0</tolerance>
+						</num>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>C025b703d043787e548749bb290edf0ff</id1>
+				<id2>C1e578fd878c0f6578a9b0373a6d88996</id2>
+				<id3>00cbc0fb2c6081322f4bb71717d4ba14</id3>
+				<id4>2084a54c499d5dde5ddc8c194fead977</id4>
+				<name>CC_ObjectUsesBlackOnly</name>
+				<comment>CC_ObjectUsesBlackOnly</comment>
+				<flags user_units="1" edit="1" visible="1" dict="1"></flags>
+				<atom>
+					<group>Group::CSCOLOR</group>
+					<token>CSCOLOR::ObjectUsesBlackOnly</token>
+					<operator>OP::is_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>Cd74ec5763ebb8266ec2d001d0782bd31</id1>
+				<id2>C86400712ec7541edac60f78be79935e9</id2>
+				<id3>313a75c095216a1f7349b21cd21906dc</id3>
+				<id4>e5a7d697bafc58c8d1aba5f4f3cf1839</id4>
+				<name></name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSCOLOR</group>
+					<token>CSCOLOR::isDeviceCMYK</token>
+					<operator>OP::is_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>C9ec6a6a20f20fd8dad4a428dac84a0fb</id1>
+				<id2>Cbcb7c1809e9f97115a4f0b83f3ae432a</id2>
+				<id3>b4bab0e00667289aa13f67db65d15df0</id3>
+				<id4>5649c0d80728e15af4ddd9dc6957bc83</id4>
+				<name>Illustrator Overprint Mode is off (OPM=0)</name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSGST_G</group>
+					<token>CSGST_G::isIllustratorOverPrintMode</token>
+					<operator>OP::is_not_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>Cddf4b2ff3954a254e367094047fc900a</id1>
+				<id2>C689273266c62eec1b9ee8d6945415249</id2>
+				<id3>af88c9962958b8e22e86fb9fbe1986ee</id3>
+				<id4>15f0185ffb22c04479e9d67e81fa002a</id4>
+				<name></name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CONTSTM</group>
+					<token>CONTSTM::IsText</token>
+					<operator>OP::is_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>C06b3bcc3303b2f24e63f77a3c06a32d4</id1>
+				<id2>Cb6a113162e5fa4cbff3edd61ca9cf06f</id2>
+				<id3>9aa5fff0a7a3c5dbc400a171d446edfb</id3>
+				<id4>b30ee7c6bf543ae15ce954b07fa563fe</id4>
+				<name>CC_ObjectIsNotWhite</name>
+				<comment>CC_ObjectIsNotWhite</comment>
+				<flags user_units="1" edit="1" visible="1" dict="1"></flags>
+				<atom>
+					<group>Group::CSCOLOR</group>
+					<token>CSCOLOR::ObjectIsWhite</token>
+					<operator>OP::is_not_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>C8ba1712074d12b2bf1f78109371baeb4</id1>
+				<id2>C414f6fae4fa24e8b77333d95c20dcf43</id2>
+				<id3>b83b91466bdf00d9f6603f677b40719d</id3>
+				<id4>915fb16c282e322a1ce0ddd8bae5a62f</id4>
+				<name>Flächendeckung kleiner 20% (Füllung)</name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSGST_F</group>
+					<token>CSGST_F::TotalAmountOfInk</token>
+					<operator>OP::less</operator>
+					<data>
+						<num>
+							<value>20</value>
+							<tolerance>0</tolerance>
+						</num>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>C2f86e9f0e8bda7c36109613f1ead77ac</id1>
+				<id2>Cd58fe0ff6d8c48cf7b8f2f5a81031a3e</id2>
+				<id3>21809dafbadf4bf8469f2c3a9b129b00</id3>
+				<id4>c70eafc6365b760040cabab7cf147478</id4>
+				<name> (Copy 14)</name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSCOLOR</group>
+					<token>CSCOLOR::NumberOfNonZeroCMYKComponents</token>
+					<operator>OP::equal</operator>
+					<data>
+						<num>
+							<value>4</value>
+							<tolerance></tolerance>
+						</num>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>C38022e1caf0b26f13796541a70aca464</id1>
+				<id2>Cfa39a8ebdcdaa94b403d3a5486fe0459</id2>
+				<id3>be729641da9fe5fb4a4a3c8a2b278ab1</id3>
+				<id4>5823d0e85c60208fcc6f91031d5ad38d</id4>
+				<name></name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSGST_G</group>
+					<token>CSGST_G::isIllustratorOverPrintMode</token>
+					<operator>OP::is_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>Ca81f17cd425341849914060fb7c3f8f1</id1>
+				<id2>Cc9f547437d6436e90657232a227f7968</id2>
+				<id3>e85386cff5510bb66839a5a6cee40ad2</id3>
+				<id4>401725e4e66b8a09a95471dc63fe866d</id4>
+				<name> (Copy 14)</name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSCOLOR</group>
+					<token>CSCOLOR::ObjectUsesBlackWithAPercenOf</token>
+					<operator>OP::less_or_equal</operator>
+					<data>
+						<num>
+							<value>96</value>
+							<tolerance>0</tolerance>
+						</num>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>Ca4ec2e07296734d60de23f943b3f817d</id1>
+				<id2>C30a73c25445c3c7ed997d5352ce60964</id2>
+				<id3>2e58c5f4c86c4cf7cd6bee74b2ba52e8</id3>
+				<id4>0b42271230bef9b4081ea471c52aaf39</id4>
+				<name> (Copy 1)</name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSIMAGE</group>
+					<token>CSIMAGE::BitsPerColourComponent</token>
+					<operator>OP::equal</operator>
+					<data>
+						<num>
+							<value>1</value>
+							<tolerance></tolerance>
+						</num>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>C82288aad76fd7d5ee1165e0cb45d7005</id1>
+				<id2>C1d8c78f470fdc6533e27489cedc24935</id2>
+				<id3>1bd587b6741d477ff85a5a91b3071486</id3>
+				<id4>82fa6283696f4b38c14a39947d63d077</id4>
+				<name></name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CONTSTM</group>
+					<token>CONTSTM::IsBitmapImageOrImageMask</token>
+					<operator>OP::is_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>C5da56ac9991cfc74c2fa10bb6fb85c6d</id1>
+				<id2>Ca32b59bbabe7123fc98e8125f0ad8132</id2>
+				<id3>e70598fb5b5b2ba3d8726a2d5fc0fa46</id3>
+				<id4>31ea1c3b3b9bade49a9252656e8f6e6d</id4>
+				<name> (Copy 1)</name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSIMAGE</group>
+					<token>CSIMAGE::BitsPerColourComponent</token>
+					<operator>OP::greater</operator>
+					<data>
+						<num>
+							<value>1</value>
+							<tolerance></tolerance>
+						</num>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>C07f2a02b624b2145988a107d41fcd131</id1>
+				<id2>Ce78ba1956ef1720f0895f02f5f126ebc</id2>
+				<id3>79d23f7cd2fdfd703f8bb572bee707ea</id3>
+				<id4>e7be4837155e1d9fd54e2ae749299463</id4>
+				<name>CC_ObjectIsAnImage</name>
+				<comment>CC_ObjectIsAnImage</comment>
+				<flags user_units="1" edit="1" visible="1" dict="1"></flags>
+				<atom>
+					<group>Group::CONTSTM</group>
+					<token>CONTSTM::IsImage</token>
+					<operator>OP::is_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>C279ab37b866051dbdd0a8df35ff15dc0</id1>
+				<id2>C9df197a9b2b22ca47b7cb98f6b5e7da7</id2>
+				<id3>0c23a76c32404712d18e190cf095de43</id3>
+				<id4>a9e5a8ef8fc159a7cd69a34a17d50828</id4>
+				<name>Verwendet Lab</name>
+				<comment>Objekt verwendet Lab.</comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSCOLOR</group>
+					<token>CSCOLOR::isLabColorSpace</token>
+					<operator>OP::is_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>C8c5568ccb881357cd8f9f67a3a46897f</id1>
+				<id2>C73c07e7b1280dd103a041a2b669d39f6</id2>
+				<id3>596673839d570ba4db36163f037e3ec2</id3>
+				<id4>d4d760b9030777af2451f22bf247d648</id4>
+				<name> (Copy 14)</name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSCOLOR</group>
+					<token>CSCOLOR::ObjectUsesSpotColor_Only_noCM</token>
+					<operator>OP::is_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>Cd775589ab6679e75d2b45baefa884111</id1>
+				<id2>Cf14f7cbcfe8a1e380133f0b38e339d31</id2>
+				<id3>8367d5e5d97c605d7aa2a68f4e207d83</id3>
+				<id4>b83dbdac11f87c555542389c66914896</id4>
+				<name>CC_StrokedObjectIsNotSetToOverprint</name>
+				<comment>CC_StrokedObjectIsNotSetToOverprint</comment>
+				<flags user_units="1" edit="1" visible="1" dict="1"></flags>
+				<atom>
+					<group>Group::CSGST_S</group>
+					<token>CSGST_S::isOverPrintEnabledStroke</token>
+					<operator>OP::is_not_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>C52eee088079b298621404ceabf0b46a0</id1>
+				<id2>C84e7d0bd97e2b1d60091b5f43c70822d</id2>
+				<id3>da9887384dfe9184adba3723c399ab49</id3>
+				<id4>727cc12ff18efbbb5ef41a0ae719e4a3</id4>
+				<name> (Copy 14)</name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSGST_S</group>
+					<token>CSGST_S::TotalAmountOfInk</token>
+					<operator>OP::less</operator>
+					<data>
+						<num>
+							<value>20</value>
+							<tolerance></tolerance>
+						</num>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>C6b9e784987487dbf3a0ae512a96ede2b</id1>
+				<id2>C7db64155b7ecc897638f06025c7bd7fe</id2>
+				<id3>934e9b931b066a9a6614732a71c0f344</id3>
+				<id4>6fe065eca1326116e4ed47d7e4eb1eaa</id4>
+				<name> (Copy 14)</name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSCOLOR</group>
+					<token>CSCOLOR::isDeviceCMYK</token>
+					<operator>OP::is_not_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+		</conditions>
+		<rules>
+			<rule>
+				<id1>Rad117edc84061fa886c4749588b66c7d</id1>
+				<id2>Rbde0f51fd29e5fba969fe40fc9d4f267</id2>
+				<id3>09c437d66b32df06e6f9278f620d39ff</id3>
+				<id4>6c97cbcefdac3220d823e7052129f1ac</id4>
+				<name>R_6_Blackobjectissettoknockout</name>
+				<comment>R_6_Blackobjectissettoknockout</comment>
+				<flags analysis="17" condition_logic="0" ignore_objects="2" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>Cf24b8775d8634b3bbeb4ecc41dbb548c</condition>
+					<condition>Cd64a712eceb7e63765f94696c9dc3837</condition>
+					<condition>C83de41a870298395361e699c76f48b84</condition>
+					<condition>C624ce845e278f25c955102d5e01b5e03</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>R6c5c815177316c38ea6320a98ccadda9</id1>
+				<id2>Rad6cb5e9ff05ce0b6852189b39e3a896</id2>
+				<id3>a56605cc0de313adcff8f63599bfa7db</id3>
+				<id4>a4c0c84c727bb820d2dc3e64d5c6f184</id4>
+				<name>R_6_Whitevectorobjectisnotsettoknockout</name>
+				<comment>R_6_Whitevectorobjectisnotsettoknockout</comment>
+				<flags analysis="17" condition_logic="0" ignore_objects="2" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>Cfb3bba61d37de306031c8681e7587779</condition>
+					<condition>Cc7aa9b1c7d0fa902c590f9a47887ced4</condition>
+					<condition>C7ff9bf22202d59f48f808162a965d359</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>R8f248e0254b98d9c2bd70d3e4e6db004</id1>
+				<id2>Rfc661e86bd43442938fa43a090c5f1fb</id2>
+				<id3>f35febf32ff696c83bac1a6c02d55e29</id3>
+				<id4>387df2ca7247e62df3b520e948488983</id4>
+				<name>R_6_Whitevectorobjectisnotsettoknockoutstroked</name>
+				<comment>R_6_Whitevectorobjectisnotsettoknockoutstroked</comment>
+				<flags analysis="17" condition_logic="0" ignore_objects="2" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>Cfb3bba61d37de306031c8681e7587779</condition>
+					<condition>C9ff27f6de543ead6b2894f80931fd178</condition>
+					<condition>C7ff9bf22202d59f48f808162a965d359</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>R2a5d94dd51ce92ebb4703d11f6d07220</id1>
+				<id2>R9e91f41cfcf95d85ee6fda27c0896675</id2>
+				<id3>37b459a04ff815382560995d39bd87f0</id3>
+				<id4>f47c42cc12dfd3b4186908a765935922</id4>
+				<name>R_6_Grayobjectissettooverprintstroked</name>
+				<comment>R_6_Grayobjectissettooverprintstroked</comment>
+				<flags analysis="17" condition_logic="0" ignore_objects="2" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>C3322a33a59ee067657f4465a96b17544</condition>
+					<condition>C9ff27f6de543ead6b2894f80931fd178</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>R05839e13bd9fe36938c4aae3047834c4</id1>
+				<id2>Rb2746a15eae24e3e9f43b0c9d70143e4</id2>
+				<id3>aa0fb864b3cd24faf77bec170c864c37</id3>
+				<id4>57faf7cd2d03a80c460976cceb38dff7</id4>
+				<name>R_6_Grayobjectissettooverprint</name>
+				<comment>R_6_Grayobjectissettooverprint</comment>
+				<flags analysis="17" condition_logic="0" ignore_objects="2" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>C3322a33a59ee067657f4465a96b17544</condition>
+					<condition>Cc7aa9b1c7d0fa902c590f9a47887ced4</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>Rf375995e2754b18eb2eae423a7764352</id1>
+				<id2>R8171fb01f3534b03860ae188b1894cf6</id2>
+				<id3>d4f6a9eda850bdda8f37e016508415aa</id3>
+				<id4>8961907b46a64a1b1d3dcc5a1417a818</id4>
+				<name>R_6_RGBobjectissettooverprint</name>
+				<comment>R_6_RGBobjectissettooverprint</comment>
+				<flags analysis="17" condition_logic="0" ignore_objects="2" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>C69ff6bf58868d6b67be3ac2c6283c975</condition>
+					<condition>Cc7aa9b1c7d0fa902c590f9a47887ced4</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>R64dc9123fc9f46559b8a0d764cc8f84e</id1>
+				<id2>R02e22e202ff661c6034dd27de4d2ce0f</id2>
+				<id3>0407e5ddb0db99b9bba0ce2f363319fb</id3>
+				<id4>cc49b3de255ec89e4c121400db599085</id4>
+				<name>R_6_Calibratedobjectissettooverprint</name>
+				<comment>R_6_Calibratedobjectissettooverprint</comment>
+				<flags analysis="17" condition_logic="0" ignore_objects="2" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>C7fb48a1860696eb64005f7df69836a9c</condition>
+					<condition>Cc7aa9b1c7d0fa902c590f9a47887ced4</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>Rd079a49a7b70e2161144b76fad39f15e</id1>
+				<id2>R3c28875229a45a3738a5d79b353116c9</id2>
+				<id3>84e69ed8399a1d18fefe558600ea3b83</id3>
+				<id4>ccd9bcd96eceea1de73b1287c9727137</id4>
+				<name>R_6_Spotcolorobjectissettooverprint</name>
+				<comment>R_6_Spotcolorobjectissettooverprint</comment>
+				<flags analysis="17" condition_logic="0" ignore_objects="2" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>Ce3667edc6dd3c4dcc7e02c65aebef116</condition>
+					<condition>Cec6fa7a16b7b9dcfa99801d18814e559</condition>
+					<condition>Cc7aa9b1c7d0fa902c590f9a47887ced4</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>R75b74411ea9434a45844c9bf72217322</id1>
+				<id2>R4d10ec360272c2493a7e4303b3fa0386</id2>
+				<id3>0ec6a937214d45a6377eb176fe7994b3</id3>
+				<id4>b666e763398dc7e0f74a5e657fcb161b</id4>
+				<name>R_6_Smallblacktext12ptissettoknockout</name>
+				<comment>R_6_Smallblacktext12ptissettoknockout</comment>
+				<flags analysis="17" condition_logic="0" ignore_objects="2" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>Ccac382843921bb98bb68093a45c70a3e</condition>
+					<condition>Cfd268bdfdcc85172f65f67306f08a73b</condition>
+					<condition>C624ce845e278f25c955102d5e01b5e03</condition>
+					<condition>Cd64a712eceb7e63765f94696c9dc3837</condition>
+					<condition>C025b703d043787e548749bb290edf0ff</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>Rea7e42f4d1d76f1f3ecc74d3d345c6cd</id1>
+				<id2>R257925c634c3c245c482322f50bd9395</id2>
+				<id3>3e9b0b1c57d3cb2c12d14131cc0c0573</id3>
+				<id4>447638281d5ac370c54f7b31ca58973b</id4>
+				<name>R_6_CMYKobjectissettooverprintbutOPMisoff</name>
+				<comment>R_6_CMYKobjectissettooverprintbutOPMisoff</comment>
+				<flags analysis="17" condition_logic="0" ignore_objects="2" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>Cd74ec5763ebb8266ec2d001d0782bd31</condition>
+					<condition>Cc7aa9b1c7d0fa902c590f9a47887ced4</condition>
+					<condition>C9ec6a6a20f20fd8dad4a428dac84a0fb</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>R2adb8cebe8e225f75ee37a78f9ae02ae</id1>
+				<id2>R83c4a0f94215e845271022cf92abcdeb</id2>
+				<id3>56b0e2350b36183ac1c3ff91998a9e76</id3>
+				<id4>0d8a565f4853d8e353475bab218d5ef1</id4>
+				<name>R_6_Whitetextisnotsettoknockout</name>
+				<comment>R_6_Whitetextisnotsettoknockout</comment>
+				<flags analysis="17" condition_logic="0" ignore_objects="2" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>Cfb3bba61d37de306031c8681e7587779</condition>
+					<condition>Cc7aa9b1c7d0fa902c590f9a47887ced4</condition>
+					<condition>Cddf4b2ff3954a254e367094047fc900a</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>R6ea87c5aab87e6566fedabde00e77bcf</id1>
+				<id2>R1150bffed6a8642c122709f2f63c4539</id2>
+				<id3>313297089a9964a520e47768cf6787ea</id3>
+				<id4>6298e0da8e3ebb997bccbf6c06a839cb</id4>
+				<name>R_6_Lightobjectissettooverprint</name>
+				<comment>R_6_Lightobjectissettooverprint</comment>
+				<flags analysis="17" condition_logic="0" ignore_objects="2" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>C06b3bcc3303b2f24e63f77a3c06a32d4</condition>
+					<condition>Cc7aa9b1c7d0fa902c590f9a47887ced4</condition>
+					<condition>Cec6fa7a16b7b9dcfa99801d18814e559</condition>
+					<condition>C83de41a870298395361e699c76f48b84</condition>
+					<condition>C8ba1712074d12b2bf1f78109371baeb4</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>Re8f98fa59d207e4b7c900b1915cb9cfc</id1>
+				<id2>Rf50afc0a2cfc1379231b95cf480e8610</id2>
+				<id3>736257864a77d106bc1d808fcdf486a6</id3>
+				<id4>a9a6fb34d255ae464a71a2966ed71d0d</id4>
+				<name>R_6_CMYKobjectissettooverprintbutOPMisoffstroked</name>
+				<comment>R_6_CMYKobjectissettooverprintbutOPMisoffstroked</comment>
+				<flags analysis="17" condition_logic="0" ignore_objects="2" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>Cd74ec5763ebb8266ec2d001d0782bd31</condition>
+					<condition>C9ec6a6a20f20fd8dad4a428dac84a0fb</condition>
+					<condition>C9ff27f6de543ead6b2894f80931fd178</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>R13d826e43dbbe43b7e67ac6774aaf6c2</id1>
+				<id2>R4d32637a4c3b033c71df06742764a84d</id2>
+				<id3>63111507344e224ec2892ab86d236a51</id3>
+				<id4>507ec29c9e8c699f826625c9cdbd1d34</id4>
+				<name>R_6_CMYKobjectusing4channelsissettooverprint</name>
+				<comment>R_6_CMYKobjectusing4channelsissettooverprint</comment>
+				<flags analysis="17" condition_logic="0" ignore_objects="2" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>Cd74ec5763ebb8266ec2d001d0782bd31</condition>
+					<condition>C2f86e9f0e8bda7c36109613f1ead77ac</condition>
+					<condition>C38022e1caf0b26f13796541a70aca464</condition>
+					<condition>Cc7aa9b1c7d0fa902c590f9a47887ced4</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>R89e226014027990aa1e62064553e8243</id1>
+				<id2>R0890656e5973746663201daae7030545</id2>
+				<id3>64ed00221b0a3494adcc9884440b4f04</id3>
+				<id4>902924c97d17cb22ed17934ce5ead1e2</id4>
+				<name>R_6_Grayobjectblackbelow6issettooverprintstroked</name>
+				<comment>R_6_Grayobjectblackbelow6issettooverprintstroked</comment>
+				<flags analysis="17" condition_logic="0" ignore_objects="2" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>Ca81f17cd425341849914060fb7c3f8f1</condition>
+					<condition>C83de41a870298395361e699c76f48b84</condition>
+					<condition>C9ff27f6de543ead6b2894f80931fd178</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>R0495d0ee4f7c57da718b0804f015f131</id1>
+				<id2>Rd166f1db8ecfae2237f90dc71fad7f41</id2>
+				<id3>0c98e44735d2d9469fc85044db862805</id3>
+				<id4>975784b5ee25e167c38cee2977b70a39</id4>
+				<name>R_6_Blackbitmapimageissettoknockout</name>
+				<comment>R_6_Blackbitmapimageissettoknockout</comment>
+				<flags analysis="17" condition_logic="0" ignore_objects="2" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>Ca4ec2e07296734d60de23f943b3f817d</condition>
+					<condition>Cd64a712eceb7e63765f94696c9dc3837</condition>
+					<condition>C82288aad76fd7d5ee1165e0cb45d7005</condition>
+					<condition>C025b703d043787e548749bb290edf0ff</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>R28a75dd954a443c8cc3224dc88e3a831</id1>
+				<id2>R00bf5a5d097d7cea06a4eab8b5f2017e</id2>
+				<id3>7bf09acd499e59d8f528f1f89f34ec11</id3>
+				<id4>65d3155fbe9a45b6cd68f5f52fbbabd1</id4>
+				<name>R_6_CMYKimagesettooverprint</name>
+				<comment>R_6_CMYKimagesettooverprint</comment>
+				<flags analysis="17" condition_logic="0" ignore_objects="2" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>C5da56ac9991cfc74c2fa10bb6fb85c6d</condition>
+					<condition>Cc7aa9b1c7d0fa902c590f9a47887ced4</condition>
+					<condition>C07f2a02b624b2145988a107d41fcd131</condition>
+					<condition>C83de41a870298395361e699c76f48b84</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>R67fedbdffef8d83d6fe9368468ef1c3e</id1>
+				<id2>R9c48886dce07b5712b30609f7156217e</id2>
+				<id3>1546044f6131e5651161ac3b82857bd5</id3>
+				<id4>2a962761aa3e83198e15ba061044a254</id4>
+				<name>R_6_Labobjectissettooverprintstroked</name>
+				<comment>R_6_Labobjectissettooverprintstroked</comment>
+				<flags analysis="17" condition_logic="0" ignore_objects="2" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>C279ab37b866051dbdd0a8df35ff15dc0</condition>
+					<condition>C9ff27f6de543ead6b2894f80931fd178</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>R9069942768e015f595988d426d99ba68</id1>
+				<id2>R0667be8e85e1bffa3838b8487ffe8e39</id2>
+				<id3>7a4278bc29d31aa5fc70be0b3825e4f0</id3>
+				<id4>e866774e97cb92f52b3db8f2b61ad60a</id4>
+				<name>R_6_Grayimagesettooverprint</name>
+				<comment>R_6_Grayimagesettooverprint</comment>
+				<flags analysis="17" condition_logic="0" ignore_objects="2" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>C5da56ac9991cfc74c2fa10bb6fb85c6d</condition>
+					<condition>C3322a33a59ee067657f4465a96b17544</condition>
+					<condition>Cc7aa9b1c7d0fa902c590f9a47887ced4</condition>
+					<condition>C07f2a02b624b2145988a107d41fcd131</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>Ra9224b99226e031dce074a5ee936b8ab</id1>
+				<id2>Redcd8cfa93111166e3cc35560c954695</id2>
+				<id3>d6949c496e8ad4abc9cf2cbbaaf6e0a7</id3>
+				<id4>d4941a88b519c6587025c164ba4c4f70</id4>
+				<name>R_6_Spotcolorimageissettooverprint</name>
+				<comment>R_6_Spotcolorimageissettooverprint</comment>
+				<flags analysis="17" condition_logic="0" ignore_objects="2" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>C5da56ac9991cfc74c2fa10bb6fb85c6d</condition>
+					<condition>Cc7aa9b1c7d0fa902c590f9a47887ced4</condition>
+					<condition>C07f2a02b624b2145988a107d41fcd131</condition>
+					<condition>C8c5568ccb881357cd8f9f67a3a46897f</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>R2430757c9b34eff7b76a53168ff56106</id1>
+				<id2>R2e436499deaf01774d9d08ad65b154ad</id2>
+				<id3>7c666a0ff45205619f65f4cca49f396e</id3>
+				<id4>e810b57b5c200355e4a40dceb01257f5</id4>
+				<name>R_6_Calibratedobjectissettooverprintstroked</name>
+				<comment>R_6_Calibratedobjectissettooverprintstroked</comment>
+				<flags analysis="17" condition_logic="0" ignore_objects="2" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>C7fb48a1860696eb64005f7df69836a9c</condition>
+					<condition>C9ff27f6de543ead6b2894f80931fd178</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>Rc2dfd6327203c153c2aab41179367d8f</id1>
+				<id2>R00630cbf26fdc1174854b05591cbea89</id2>
+				<id3>27a6b645334d7615c62646810fc682a0</id3>
+				<id4>7453e35e31dcdbc327475df6f1383a26</id4>
+				<name>R_6_RGBobjectissettooverprintstroked</name>
+				<comment>R_6_RGBobjectissettooverprintstroked</comment>
+				<flags analysis="17" condition_logic="0" ignore_objects="2" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>C69ff6bf58868d6b67be3ac2c6283c975</condition>
+					<condition>C9ff27f6de543ead6b2894f80931fd178</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>Ree2c938dc98b118e406b0e6464908559</id1>
+				<id2>R04426cf8d94d843d830f1a4a4c24553d</id2>
+				<id3>358f4150ec6a8915e9937ac3fcc2e9a0</id3>
+				<id4>8439bc514bd78bd375a36b7991add8a7</id4>
+				<name>R_6_Blackobjectissettoknockoutstroked</name>
+				<comment>R_6_Blackobjectissettoknockoutstroked</comment>
+				<flags analysis="17" condition_logic="0" ignore_objects="2" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>Cf24b8775d8634b3bbeb4ecc41dbb548c</condition>
+					<condition>Cd775589ab6679e75d2b45baefa884111</condition>
+					<condition>C83de41a870298395361e699c76f48b84</condition>
+					<condition>C624ce845e278f25c955102d5e01b5e03</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>Rede38b5318aee7bb7e0388ca3c4cea2b</id1>
+				<id2>R30720d5f15ed5c73087a72e177ed2eb5</id2>
+				<id3>95b0fd5cb6854383351e97082c12ca07</id3>
+				<id4>7e2922fc19f9b10f872ae1f605166e79</id4>
+				<name>R_6_Grayobjectblackbelow6issettooverprint</name>
+				<comment>R_6_Grayobjectblackbelow6issettooverprint</comment>
+				<flags analysis="17" condition_logic="0" ignore_objects="2" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>Ca81f17cd425341849914060fb7c3f8f1</condition>
+					<condition>C83de41a870298395361e699c76f48b84</condition>
+					<condition>Cc7aa9b1c7d0fa902c590f9a47887ced4</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>R069fbed654f8c39eda043540528c366e</id1>
+				<id2>R665d5c0cf6594329236d8cf8c9ce0250</id2>
+				<id3>47d4c418f3c9b613f258c36b1f953d97</id3>
+				<id4>11f87739a7421d3f4047c3342047f646</id4>
+				<name>R_6_Whitetextisnotsettoknockoutstroked</name>
+				<comment>R_6_Whitetextisnotsettoknockoutstroked</comment>
+				<flags analysis="17" condition_logic="0" ignore_objects="2" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>Cfb3bba61d37de306031c8681e7587779</condition>
+					<condition>C9ff27f6de543ead6b2894f80931fd178</condition>
+					<condition>Cddf4b2ff3954a254e367094047fc900a</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>Rea20122128bf4ddd1d74d648eb4e7189</id1>
+				<id2>R4a8b5a554196e3b8bdb53af8b7cde978</id2>
+				<id3>055bcdaaea6ea3cfb8e89a6539f37bfa</id3>
+				<id4>8b668857d53c119e3eff8d66e2014deb</id4>
+				<name>R_6_Lightobjectissettooverprintstroked</name>
+				<comment>R_6_Lightobjectissettooverprintstroked</comment>
+				<flags analysis="17" condition_logic="0" ignore_objects="2" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>C06b3bcc3303b2f24e63f77a3c06a32d4</condition>
+					<condition>Cec6fa7a16b7b9dcfa99801d18814e559</condition>
+					<condition>C83de41a870298395361e699c76f48b84</condition>
+					<condition>C52eee088079b298621404ceabf0b46a0</condition>
+					<condition>C9ff27f6de543ead6b2894f80931fd178</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>R502c9665767c9e64a77562006a758dd3</id1>
+				<id2>R0debe47cda9669dcee3b5e3ca5af7a08</id2>
+				<id3>d4f835adb847c0cb0b9ecd48e241a04a</id3>
+				<id4>81c2d9cc7d10a7572822fb743d801738</id4>
+				<name>R_6_Labobjectissettooverprint</name>
+				<comment>R_6_Labobjectissettooverprint</comment>
+				<flags analysis="17" condition_logic="0" ignore_objects="2" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>C279ab37b866051dbdd0a8df35ff15dc0</condition>
+					<condition>Cc7aa9b1c7d0fa902c590f9a47887ced4</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>R3d1472fbe5e317d872d37c805ff252bf</id1>
+				<id2>Rcbb17e8427a72d2709a9e98837592e3e</id2>
+				<id3>df279f2ffe30bf925b4c9a67b7b8e746</id3>
+				<id4>d5f6fecabe60f7421a98f7ee8be8a51a</id4>
+				<name>R_6_CMYKobjectusing4channelsissettooverprintstroked</name>
+				<comment>R_6_CMYKobjectusing4channelsissettooverprintstroked</comment>
+				<flags analysis="17" condition_logic="0" ignore_objects="2" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>Cd74ec5763ebb8266ec2d001d0782bd31</condition>
+					<condition>C2f86e9f0e8bda7c36109613f1ead77ac</condition>
+					<condition>C38022e1caf0b26f13796541a70aca464</condition>
+					<condition>C9ff27f6de543ead6b2894f80931fd178</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>R82c2750c9b60662fb80c6f624a3a63ae</id1>
+				<id2>Rf6063fd047d488e3853c6100ee2b176f</id2>
+				<id3>cedc224108b06044639681cb303a354b</id3>
+				<id4>de3cce26174b282e41f0f3d3b424a9d8</id4>
+				<name>R_6_CMYKobjectDeviceNusing4channelsissettooverprintstroked</name>
+				<comment>R_6_CMYKobjectDeviceNusing4channelsissettooverprintstroked</comment>
+				<flags analysis="17" condition_logic="0" ignore_objects="2" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>C6b9e784987487dbf3a0ae512a96ede2b</condition>
+					<condition>C2f86e9f0e8bda7c36109613f1ead77ac</condition>
+					<condition>C83de41a870298395361e699c76f48b84</condition>
+					<condition>C9ff27f6de543ead6b2894f80931fd178</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>R01235495b8be594f9bc252823067a43e</id1>
+				<id2>R237c5f558bdb4fd66cd738760e576633</id2>
+				<id3>ad2f15a858c4dd0a3a6757e297d7596f</id3>
+				<id4>fd9d3f4d0d65de998fc3b1a4b54f00f6</id4>
+				<name>R_6_CMYKobjectDeviceNusing4channelsissettooverprint</name>
+				<comment>R_6_CMYKobjectDeviceNusing4channelsissettooverprint</comment>
+				<flags analysis="17" condition_logic="0" ignore_objects="2" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>C6b9e784987487dbf3a0ae512a96ede2b</condition>
+					<condition>C2f86e9f0e8bda7c36109613f1ead77ac</condition>
+					<condition>C83de41a870298395361e699c76f48b84</condition>
+					<condition>Cc7aa9b1c7d0fa902c590f9a47887ced4</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>R6a1c33c3ca6017196b6c39ad450a9480</id1>
+				<id2>Rd59d1d3edf3e9c2e06a94f5555ef805f</id2>
+				<id3>2339ec47fc660b1a73e5b6d21737a240</id3>
+				<id4>3ad50f125835aeba7dc4a067a6f4e7b9</id4>
+				<name>R_6_Spotcolorobjectissettooverprintstroked</name>
+				<comment>R_6_Spotcolorobjectissettooverprintstroked</comment>
+				<flags analysis="17" condition_logic="0" ignore_objects="2" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>Ce3667edc6dd3c4dcc7e02c65aebef116</condition>
+					<condition>Cec6fa7a16b7b9dcfa99801d18814e559</condition>
+					<condition>C9ff27f6de543ead6b2894f80931fd178</condition>
+				</conditions>
+			</rule>
+		</rules>
+		<rulesets>
+			<ruleset>
+				<id1>Sb5b20ce0fcc0b801efe778165759308d</id1>
+				<id2>Sc6a5d672d5feadc59e2a705a3a9d5f21</id2>
+				<id3>89480a81d38f01a4c30a1cc35a108d11</id3>
+				<id4>0854ff98c7674ba0834288735441317f</id4>
+				<name>SSS_RULESET_DEF_NAME</name>
+				<comment>SSS_RULESET_DEF_NAME</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<rules>
+					<rule check_severity="2" check_timing="2">Rad117edc84061fa886c4749588b66c7d</rule>
+					<rule check_severity="2" check_timing="2">R6c5c815177316c38ea6320a98ccadda9</rule>
+					<rule check_severity="2" check_timing="2">R8f248e0254b98d9c2bd70d3e4e6db004</rule>
+					<rule check_severity="2" check_timing="2">R2a5d94dd51ce92ebb4703d11f6d07220</rule>
+					<rule check_severity="2" check_timing="2">R05839e13bd9fe36938c4aae3047834c4</rule>
+					<rule check_severity="2" check_timing="2">Rf375995e2754b18eb2eae423a7764352</rule>
+					<rule check_severity="2" check_timing="2">R64dc9123fc9f46559b8a0d764cc8f84e</rule>
+					<rule check_severity="2" check_timing="2">Rd079a49a7b70e2161144b76fad39f15e</rule>
+					<rule check_severity="2" check_timing="2">R75b74411ea9434a45844c9bf72217322</rule>
+					<rule check_severity="2" check_timing="2">Rea7e42f4d1d76f1f3ecc74d3d345c6cd</rule>
+					<rule check_severity="2" check_timing="2">R2adb8cebe8e225f75ee37a78f9ae02ae</rule>
+					<rule check_severity="2" check_timing="2">R6ea87c5aab87e6566fedabde00e77bcf</rule>
+					<rule check_severity="2" check_timing="2">Re8f98fa59d207e4b7c900b1915cb9cfc</rule>
+					<rule check_severity="2" check_timing="2">R13d826e43dbbe43b7e67ac6774aaf6c2</rule>
+					<rule check_severity="2" check_timing="2">R89e226014027990aa1e62064553e8243</rule>
+					<rule check_severity="2" check_timing="2">R0495d0ee4f7c57da718b0804f015f131</rule>
+					<rule check_severity="2" check_timing="2">R28a75dd954a443c8cc3224dc88e3a831</rule>
+					<rule check_severity="2" check_timing="2">R67fedbdffef8d83d6fe9368468ef1c3e</rule>
+					<rule check_severity="2" check_timing="2">R9069942768e015f595988d426d99ba68</rule>
+					<rule check_severity="2" check_timing="2">Ra9224b99226e031dce074a5ee936b8ab</rule>
+					<rule check_severity="2" check_timing="2">R2430757c9b34eff7b76a53168ff56106</rule>
+					<rule check_severity="2" check_timing="2">Rc2dfd6327203c153c2aab41179367d8f</rule>
+					<rule check_severity="2" check_timing="2">Ree2c938dc98b118e406b0e6464908559</rule>
+					<rule check_severity="2" check_timing="2">Rede38b5318aee7bb7e0388ca3c4cea2b</rule>
+					<rule check_severity="2" check_timing="2">R069fbed654f8c39eda043540528c366e</rule>
+					<rule check_severity="2" check_timing="2">Rea20122128bf4ddd1d74d648eb4e7189</rule>
+					<rule check_severity="2" check_timing="2">R502c9665767c9e64a77562006a758dd3</rule>
+					<rule check_severity="2" check_timing="2">R3d1472fbe5e317d872d37c805ff252bf</rule>
+					<rule check_severity="2" check_timing="2">R82c2750c9b60662fb80c6f624a3a63ae</rule>
+					<rule check_severity="2" check_timing="2">R01235495b8be594f9bc252823067a43e</rule>
+					<rule check_severity="2" check_timing="2">R6a1c33c3ca6017196b6c39ad450a9480</rule>
+				</rules>
+			</ruleset>
+		</rulesets>
+		<fixups>
+		</fixups>
+		<fixupsets>
+		</fixupsets>
+		<actions>
+		</actions>
+		<profiles>
+			<profile>
+				<id1>Pafb13fc0f57d34469a2cd7f2a74cbc0d</id1>
+				<id2>P881e03974a3ad7b142d8b0b59a725d76</id2>
+				<id3>dd8cd6ede887af13e4219863ba079afb</id3>
+				<id4>3fdd4c2f1deba7464887b0e33d64370a</id4>
+				<name>P_7_Listpotentialoverprintproblems</name>
+				<comment>P_7_Listpotentialoverprintproblems</comment>
+				<flags edit="0" visible="1" dict="1"></flags>
+				<metalist>
+					<metadata>
+						<metakey>author</metakey>
+						<metavalue>callas software</metavalue>
+					</metadata>
+					<metadata>
+						<metakey>email</metakey>
+						<metavalue>support@callassoftware.com</metavalue>
+					</metadata>
+				</metalist>
+				<creation>D:20080115131829+02&apos;00&apos;</creation>
+				<modification>D:20160629094113+02&apos;00&apos;</modification>
+				<pdfstd>
+					<pdfx convert="0"></pdfx>
+					<pdfa convert="0"></pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond>PSO Super Calandered SC (ECI)</outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+				</pdfstd>
+				<pdfstdemb>
+					<pdfx convert="0"></pdfx>
+					<pdfa convert="0"></pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond></outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+					<afrelationship set_relationship="0"></afrelationship>
+				</pdfstdemb>
+				<wizard>
+				</wizard>
+				<rulesets>
+					<ruleset>Sb5b20ce0fcc0b801efe778165759308d</ruleset>
+				</rulesets>
+				<fixupsets>
+				</fixupsets>
+			</profile>
+		</profiles>
+		<metaprofs>
+		</metaprofs>
+		<profgroups>
+		</profgroups>
+	</package>
+</pdfpreflight>
