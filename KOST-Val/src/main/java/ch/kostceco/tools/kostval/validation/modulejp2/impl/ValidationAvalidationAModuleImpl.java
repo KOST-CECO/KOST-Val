@@ -71,7 +71,9 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl imple
 		 * 
 		 * 1 2 3 4 5 6 7 8 9 10 11 12 17 18 19 20 21 22 23
 		 * 
-		 * JPX-BOF: 00 00 00 0C 6A 50 20 20 0D 0A 87 0A {4} 66 74 79 70 6A 70 78 */
+		 * JPX-BOF: 00 00 00 0C 6A 50 20 20 0D 0A 87 0A {4} 66 74 79 70 6A 70 78
+		 * 
+		 * JPM-BOF: 00 00 00 0C 6A 50 20 20 0D 0A 87 0A {4} 66 74 79 70 6A 70 6D */
 		if ( valDatei.isDirectory() ) {
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_XML_MODUL_A_JP2 )
@@ -187,10 +189,10 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl imple
 					if ( stringCharArray3.endsWith( stringCharArray4 ) ) {
 						// System.out.print("es ist ein JP2 (JPEG2000 Part1)");
 					} else {
-						// System.out.print("es ist ein JPX (extended JPEG2000 Part2)");
+						// System.out.print("es ist ein JPX (Part2) / JPM (Part6)");
 						getMessageService().logError(
 								getTextResourceService().getText( MESSAGE_XML_MODUL_A_JP2 )
-										+ getTextResourceService().getText( ERROR_XML_A_JP2_INCORRECTFILE, "JPX" ) );
+										+ getTextResourceService().getText( ERROR_XML_A_JP2_INCORRECTFILE, "JPX/JPM" ) );
 						read.close();
 						return false;
 					}

@@ -76,7 +76,7 @@ public class ValidationFmultipageValidationModuleImpl extends ValidationModuleIm
 
 					// Number und IFD: enthalten auch Exif Eintr�ge. Ensprechend muss "Type: TIFF" gez�hlt
 					// werden
-					if ( line.contains( "Compression: " ) ) {
+					if ( line.contains( "Compression: " ) && line.contains( "[EXIF:IFD" ) ) {
 						exiftoolio = 1;
 						ifdCount = ifdCount + 1;
 					}

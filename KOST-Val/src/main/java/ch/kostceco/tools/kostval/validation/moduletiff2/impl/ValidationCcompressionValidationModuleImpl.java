@@ -164,8 +164,8 @@ public class ValidationCcompressionValidationModuleImpl extends ValidationModule
 							+ pathToIdentifyPl
 							+ "\" -ver -a -s2 -FileName -Directory -Compression -FillOrder -PhotometricInterpretation"
 							+ " -PlanarConfiguration -BitsPerSample -StripByteCounts -RowsPerStrip -FileSize"
-							+ " -Orientation -TileWidth -TileLength -TileDepth \"" + valDatei.getAbsolutePath()
-							+ "\" >>\"" + pathToExiftoolOutput + "\"";
+							+ " -Orientation -TileWidth -TileLength -TileDepth -G0:1 \""
+							+ valDatei.getAbsolutePath() + "\" >>\"" + pathToExiftoolOutput + "\"";
 					/* Das redirect Zeichen verunmöglicht eine direkte eingabe. mit dem geschachtellten Befehl
 					 * gehts: cmd /c\"urspruenlicher Befehl\" */
 
@@ -236,16 +236,13 @@ public class ValidationCcompressionValidationModuleImpl extends ValidationModule
 			while ( (line = in.readLine()) != null ) {
 				/* zu analysierende TIFF-IFD-Zeile die CompressionScheme-Zeile enthält einer dieser
 				 * Freitexte der Komprimierungsart */
-				if ( line.contains( "Compression: " ) ) {
+				if ( line.contains( "Compression: " ) && line.contains( "[EXIF:IFD" ) ) {
 					exiftoolio = 1;
-					if ( line.equalsIgnoreCase( "Compression: " + com1 )
-							|| line.equalsIgnoreCase( "Compression: " + com2 )
-							|| line.equalsIgnoreCase( "Compression: " + com3 )
-							|| line.equalsIgnoreCase( "Compression: " + com4 )
-							|| line.equalsIgnoreCase( "Compression: " + com5 )
-							|| line.equalsIgnoreCase( "Compression: " + com7 )
-							|| line.equalsIgnoreCase( "Compression: " + com8 )
-							|| line.equalsIgnoreCase( "Compression: " + com32773 ) ) {
+					if ( line.contains( "Compression: " + com1 ) || line.contains( "Compression: " + com2 )
+							|| line.contains( "Compression: " + com3 ) || line.contains( "Compression: " + com4 )
+							|| line.contains( "Compression: " + com5 ) || line.contains( "Compression: " + com7 )
+							|| line.contains( "Compression: " + com8 )
+							|| line.contains( "Compression: " + com32773 ) ) {
 						// Valider Status
 					} else {
 						// Invalider Status

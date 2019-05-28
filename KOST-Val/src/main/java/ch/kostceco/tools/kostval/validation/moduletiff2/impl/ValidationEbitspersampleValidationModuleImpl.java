@@ -108,20 +108,20 @@ public class ValidationEbitspersampleValidationModuleImpl extends ValidationModu
 				 * der BitsPerSampleart max ist 1, 2, 4, 8, 16, 32 erlaubt
 				 * 
 				 * Varianten: BitsPerSample: 8 BitsPerSample: 8 8 8 BitsPerSample: 8, 8, 8 evtl noch mehr */
-				if ( line.contains( "BitsPerSample: " ) ) {
+				if ( line.contains( "BitsPerSample: " ) && line.contains( "[EXIF:IFD" ) ) {
 					exiftoolio = 1;
 					if ( ((line.contains( "BitsPerSample: 1 " ) || (line.contains( "BitsPerSample: 1," )) || (line
-							.equals( "BitsPerSample: 1" ))) && bps1.equals( "1" ))
+							.contains( "BitsPerSample: 1" ))) && bps1.contains( "1" ))
 							|| ((line.contains( "BitsPerSample: 2 " ) || (line.contains( "BitsPerSample: 2," )) || (line
-									.equals( "BitsPerSample: 2" ))) && bps2.equals( "2" ))
+									.contains( "BitsPerSample: 2" ))) && bps2.contains( "2" ))
 							|| ((line.contains( "BitsPerSample: 4 " ) || (line.contains( "BitsPerSample: 4," )) || (line
-									.equals( "BitsPerSample: 4" ))) && bps4.equals( "4" ))
+									.contains( "BitsPerSample: 4" ))) && bps4.contains( "4" ))
 							|| ((line.contains( "BitsPerSample: 8 " ) || (line.contains( "BitsPerSample: 8," )) || (line
-									.equals( "BitsPerSample: 8" ))) && bps8.equals( "8" ))
+									.contains( "BitsPerSample: 8" ))) && bps8.contains( "8" ))
 							|| ((line.contains( "BitsPerSample: 16 " ) || (line.contains( "BitsPerSample: 16," )) || (line
-									.equals( "BitsPerSample: 16" ))) && bps16.equals( "16" ))
+									.contains( "BitsPerSample: 16" ))) && bps16.contains( "16" ))
 							|| ((line.contains( "BitsPerSample: 32 " ) || (line.contains( "BitsPerSample: 32," )) || (line
-									.equals( "BitsPerSample: 32" ))) && bps32.equals( "32" )) ) {
+									.contains( "BitsPerSample: 32" ))) && bps32.contains( "32" )) ) {
 						// Valid
 					} else {
 						// Invalider Status

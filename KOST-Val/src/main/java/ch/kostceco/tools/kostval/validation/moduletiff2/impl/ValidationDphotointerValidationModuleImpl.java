@@ -116,16 +116,16 @@ public class ValidationDphotointerValidationModuleImpl extends ValidationModuleI
 			String line;
 			while ( (line = in.readLine()) != null ) {
 				// die PhotometricInterpretation-Zeile enthält einer dieser Freitexte der Farbraumart
-				if ( line.contains( "PhotometricInterpretation: " ) ) {
+				if ( line.contains( "PhotometricInterpretation: " ) && line.contains( "[EXIF:IFD" ) ) {
 					exiftoolio = 1;
-					if ( line.equalsIgnoreCase( "PhotometricInterpretation: " + pi0 )
-							|| line.equalsIgnoreCase( "PhotometricInterpretation: " + pi1 )
-							|| line.equalsIgnoreCase( "PhotometricInterpretation: " + pi2 )
-							|| line.equalsIgnoreCase( "PhotometricInterpretation: " + pi3 )
-							|| line.equalsIgnoreCase( "PhotometricInterpretation: " + pi4 )
-							|| line.equalsIgnoreCase( "PhotometricInterpretation: " + pi5 )
-							|| line.equalsIgnoreCase( "PhotometricInterpretation: " + pi6 )
-							|| line.equalsIgnoreCase( "PhotometricInterpretation: " + pi8 ) ) {
+					if ( line.contains( "PhotometricInterpretation: " + pi0 )
+							|| line.contains( "PhotometricInterpretation: " + pi1 )
+							|| line.contains( "PhotometricInterpretation: " + pi2 )
+							|| line.contains( "PhotometricInterpretation: " + pi3 )
+							|| line.contains( "PhotometricInterpretation: " + pi4 )
+							|| line.contains( "PhotometricInterpretation: " + pi5 )
+							|| line.contains( "PhotometricInterpretation: " + pi6 )
+							|| line.contains( "PhotometricInterpretation: " + pi8 ) ) {
 						// Valider Status
 					} else {
 						// Invalider Status
@@ -152,7 +152,7 @@ public class ValidationDphotointerValidationModuleImpl extends ValidationModuleI
 					}
 					/* die PlanarConfiguration-Zeile muss Chunkey sein, da ansonsten nicht Baseline. Planar
 					 * wird kaum unterstützt */
-					if ( line.contains( "PlanarConfiguration: " ) ) {
+					if ( line.contains( "PlanarConfiguration: " ) && line.contains( "[EXIF:IFD" ) ) {
 						exiftoolio = 1;
 						if ( line.contains( "Chunky" ) ) {
 							// Valider Status

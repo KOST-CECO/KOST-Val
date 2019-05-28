@@ -79,8 +79,9 @@ public class ValidationGtilesValidationModuleImpl extends ValidationModuleImpl i
 					 * �ber die Aufteilungsart
 					 * 
 					 * -StripByteCounts -RowsPerStrip -FileSize -Orientation -TileWidth -TileLength -TileDepth */
-					if ( line.contains( "StripByteCounts: " ) || line.contains( "RowsPerStrip: " )
-							|| line.contains( "Tile" ) ) {
+					if ( (line.contains( "StripByteCounts: " ) && line.contains( "[EXIF:IFD" ))
+							|| (line.contains( "RowsPerStrip: " ) && line.contains( "[EXIF:IFD" ))
+							|| (line.contains( "Tile" ) && line.contains( "[EXIF:IFD" )) ) {
 						exiftoolio = 1;
 						if ( line.contains( "Tile" ) ) {
 							// Invalider Status (Kacheln sind nicht erlaubt)

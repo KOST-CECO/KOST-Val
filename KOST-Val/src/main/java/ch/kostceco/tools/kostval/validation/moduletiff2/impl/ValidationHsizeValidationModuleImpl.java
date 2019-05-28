@@ -72,7 +72,7 @@ public class ValidationHsizeValidationModuleImpl extends ValidationModuleImpl im
 				BufferedReader in = new BufferedReader( new FileReader( exiftoolReport ) );
 				String line;
 				while ( (line = in.readLine()) != null ) {
-					if ( line.contains( "FileSize: " ) ) {
+					if ( line.contains( "[File:System] FileSize: " ) ) {
 						// System.out.print( line + " " );
 						exiftoolio = 1;
 						Integer intSize = line.toCharArray().length;
@@ -81,7 +81,7 @@ public class ValidationHsizeValidationModuleImpl extends ValidationModuleImpl im
 						} else if ( line.contains( "MB" ) ) {
 							if ( line.contains( "." ) ) {
 								// Valider Status <=10.0 MB
-							} else if ( intSize > 16 ) {
+							} else if ( intSize > 30 ) {
 								/* Invalider Status (Giga-Tiffs sind nicht erlaubt und zuviele Stellen und keine
 								 * Kommastelle) */
 								isValid = false;
