@@ -181,6 +181,9 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl i
 			String line;
 			Set<String> lines = new LinkedHashSet<String>( 100000 ); // evtl vergrössern
 			int counter = 0;
+			String status = "";
+			int statuscounter = 0;
+			int ignorcounter = 0;
 			while ( (line = in.readLine()) != null ) {
 
 				concatenatedOutputs.append( line );
@@ -191,45 +194,62 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl i
 				 * existieren weitere Ausgabemöglichkeiten */
 				if ( line.contains( "Status:" ) ) {
 					if ( !line.contains( "Well-Formed and valid" ) ) {
-						// Invalider Status
-						isValid = false;
-						getMessageService().logError(
-								getTextResourceService().getText( MESSAGE_XML_MODUL_B_TIFF )
-										+ getTextResourceService().getText( MESSAGE_XML_B_JHOVEINVALID, line ) );
+						status = line;
+						/* Status nur als Fehlermeldung ausgeben, wenn nicht alle ErrorMessages ignoriert werden
+						 * konnten */
 					}
 				}
 				if ( line.contains( "ErrorMessage:" ) ) {
-
-					/* Linie mit der Fehlermeldung auch mitausgeben, falls diese neu ist.
-					 * 
-					 * Korrupte TIFF-Dateien enthalten mehrere Zehntausen Mal den gleichen Eintrag
-					 * "  ErrorMessage: Unknown data type: Type = 0, Tag = 0" In einem Test wurde so die
-					 * Anzahl Errors von 65'060 auf 63 reduziert */
-
-					if ( lines.contains( line ) ) {
-						// Diese Linie = Fehlermelung wurde bereits ausgegeben
+					if ( line.contains( " out of sequence" ) ) {
+						ignorcounter = ignorcounter + 1;
 					} else {
-						// neue Fehlermeldung
-						counter = counter + 1;
-						// max 10 Meldungen im Modul B
-						if ( counter < 11 ) {
+						if ( statuscounter == 0 ) {
+							// Invalider Status & Status noch nicht ausgegeben
+							isValid = false;
 							getMessageService().logError(
 									getTextResourceService().getText( MESSAGE_XML_MODUL_B_TIFF )
-											+ getTextResourceService().getText( MESSAGE_XML_B_JHOVEMESSAGE, line ) );
-							lines.add( line );
-						} else if ( counter == 11 ) {
-							getMessageService().logError(
-									getTextResourceService().getText( MESSAGE_XML_MODUL_B_TIFF )
-											+ getTextResourceService().getText( MESSAGE_XML_B_JHOVEMESSAGE,
-													" ErrorMessage: . . ." ) );
-							lines.add( line );
+											+ getTextResourceService().getText( MESSAGE_XML_B_JHOVEINVALID, status ) );
+							statuscounter = 1; // Marker Status Ausgegeben
+						}
+						/* Linie mit der Fehlermeldung auch mitausgeben, falls diese neu ist.
+						 * 
+						 * Korrupte TIFF-Dateien enthalten mehrere Zehntausen Mal den gleichen Eintrag
+						 * "  ErrorMessage: Unknown data type: Type = 0, Tag = 0" In einem Test wurde so die
+						 * Anzahl Errors von 65'060 auf 63 reduziert */
+
+						if ( lines.contains( line ) ) {
+							// Diese Linie = Fehlermelung wurde bereits ausgegeben
 						} else {
-							// Modul B Abbrechen. Spart viel Zeit.
-							in.close();
-							return false;
+							// neue Fehlermeldung
+							counter = counter + 1;
+							// max 10 Meldungen im Modul B
+							if ( counter < 11 ) {
+								getMessageService().logError(
+										getTextResourceService().getText( MESSAGE_XML_MODUL_B_TIFF )
+												+ getTextResourceService().getText( MESSAGE_XML_B_JHOVEMESSAGE, line ) );
+								lines.add( line );
+							} else if ( counter == 11 ) {
+								getMessageService().logError(
+										getTextResourceService().getText( MESSAGE_XML_MODUL_B_TIFF )
+												+ getTextResourceService().getText( MESSAGE_XML_B_JHOVEMESSAGE,
+														" ErrorMessage: . . ." ) );
+								lines.add( line );
+							} else {
+								// Modul B Abbrechen. Spart viel Zeit.
+								in.close();
+								return false;
+							}
 						}
 					}
 				}
+			}
+			if ( (statuscounter == 0) && (ignorcounter == 0) && !status.equals( "" ) ) {
+				// Status noch nicht ausgegeben & keine Errors ignoriert & Invalider Status
+				isValid = false;
+				getMessageService().logError(
+						getTextResourceService().getText( MESSAGE_XML_MODUL_B_TIFF )
+								+ getTextResourceService().getText( MESSAGE_XML_B_JHOVEINVALID, status ) );
+				statuscounter = 1; // Marker Status Ausgegeben
 			}
 			in.close();
 		} catch ( Exception e ) {

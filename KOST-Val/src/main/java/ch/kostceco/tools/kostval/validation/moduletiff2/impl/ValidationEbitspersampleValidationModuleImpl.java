@@ -149,11 +149,15 @@ public class ValidationEbitspersampleValidationModuleImpl extends ValidationModu
 				}
 			}
 			if ( exiftoolio == 0 ) {
-				// Invalider Status
-				isValid = false;
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_E_TIFF )
-								+ getTextResourceService().getText( MESSAGE_XML_CG_ETNIO, "E" ) );
+				// default = 1
+				if ( bps1.contains( "1" ) ) {
+					// Valid
+				} else {
+					line = "Default BitsPerSample 1";
+					getMessageService().logError(
+							getTextResourceService().getText( MESSAGE_XML_MODUL_E_TIFF )
+									+ getTextResourceService().getText( MESSAGE_XML_CG_INVALID, line ) );
+				}
 			}
 			in.close();
 		} catch ( Exception e ) {
