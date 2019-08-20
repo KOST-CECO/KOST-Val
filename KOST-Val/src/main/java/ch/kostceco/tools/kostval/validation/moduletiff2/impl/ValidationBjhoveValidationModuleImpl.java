@@ -137,13 +137,31 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl i
 			je.setShowRawFlag( false );
 			je.setSignatureFlag( false );
 			try {
+				Util.switchOffConsole();
 				File newReport = new File( pathToJhoveOutput, valDatei.getName() + ".jhove-log.txt" );
+				if ( newReport.exists() ) {
+					Util.deleteFile( newReport );
+				}
+				if ( newReport.exists() ) {
+					newReport.delete();
+				}
 				String outputFile = newReport.getAbsolutePath();
 				String[] dirFileOrUri = { valDatei.getAbsolutePath() };
 				je.dispatch( app, module, null, handler, outputFile, dirFileOrUri );
+				/* TODO: beim Ausführen von je.dispatch gibt es in seltenen Fällen einen Fehler:
+				 * 
+				 * [Fatal Error] :174:20: Content is not allowed in trailing section.
+				 * 
+				 * Der Log wird aber korrekt erstellt und der Error kann auch nicht unterdrückt werden */
 				jhoveReport = newReport;
+				Util.switchOnConsole();
 			} catch ( Exception e ) {
+				System.out.println( "Jhove dispatch exception" );
 				e.printStackTrace();
+				getMessageService().logError(
+						getTextResourceService().getText( MESSAGE_XML_MODUL_B_TIFF )
+								+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+										"Jhove dispatch exception: " + e.getMessage() ) );
 			}
 
 			InputStream inStream = null;
@@ -168,12 +186,20 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl i
 
 			} catch ( IOException e ) {
 				e.printStackTrace();
+				getMessageService().logError(
+						getTextResourceService().getText( MESSAGE_XML_MODUL_B_TIFF )
+								+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+										"Jhove copy report exception: " + e.getMessage() ) );
 			}
 			inStream.close();
 			outStream.close();
 			Util.deleteFile( jhoveReport );
 		} catch ( Exception e ) {
 			e.printStackTrace();
+			getMessageService().logError(
+					getTextResourceService().getText( MESSAGE_XML_MODUL_B_TIFF )
+							+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+									"Jhove exception: " + e.getMessage() ) );
 		}
 
 		try {

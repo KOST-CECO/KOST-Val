@@ -238,10 +238,13 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl im
 					} else {
 						// invalide
 
-						getMessageService().logError(
-								getTextResourceService().getText( MESSAGE_XML_MODUL_A_JPEG )
-										+ getTextResourceService().getText( ERROR_XML_A_JPEG_JIIO_FAIL ) );
-						isValid = false;
+						if ( isValid ) {
+							// Erster Fehler! Meldung A ausgeben und invalid setzten
+							getMessageService().logError(
+									getTextResourceService().getText( MESSAGE_XML_MODUL_A_JPEG )
+											+ getTextResourceService().getText( ERROR_XML_A_JPEG_JIIO_FAIL ) );
+							isValid = false;
+						}
 
 						// msg Not a JPEG file: starts with ... weiter analysieren
 

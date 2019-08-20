@@ -162,9 +162,9 @@ public class ValidationCcompressionValidationModuleImpl extends ValidationModule
 							+ pathToPerl
 							+ "\" \""
 							+ pathToIdentifyPl
-							+ "\" -ver -a -s2 -FileName -Directory -Compression -FillOrder -PhotometricInterpretation"
+							+ "\" -ver -a -s2 -FileName -Directory -Compression -PhotometricInterpretation"
 							+ " -PlanarConfiguration -BitsPerSample -StripByteCounts -RowsPerStrip -FileSize"
-							+ " -Orientation -TileWidth -TileLength -TileDepth -G0:1 \""
+							+ " -TileWidth -TileLength -TileDepth -G0:1 \""
 							+ valDatei.getAbsolutePath() + "\" >>\"" + pathToExiftoolOutput + "\"";
 					/* Das redirect Zeichen verunmöglicht eine direkte eingabe. mit dem geschachtellten Befehl
 					 * gehts: cmd /c\"urspruenlicher Befehl\" */

@@ -96,6 +96,7 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl impl
 			// alle Dateien in SIARD in die Map filesInSiard schreiben (Inhalt)
 			for ( Iterator<String> iterator = fileMapKeys.iterator(); iterator.hasNext(); ) {
 				String entryName = iterator.next();
+				// System.out.println( "entryName: " + entryName );
 				// entryName: content/schema1/table7/table7.xsd
 				if ( !entryName.equalsIgnoreCase( contentString ) ) {
 					filesInSiardUnsorted.put( entryName, entryName );
@@ -276,7 +277,7 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl impl
 					Set<String> filesInSiardKeys = filesInSiard.keySet();
 					for ( Iterator<String> iterator = filesInSiardKeys.iterator(); iterator.hasNext(); ) {
 						String entryName = iterator.next();
-
+						// System.out.println( "gesucht: " + entryName );
 						Set<String> tablesInSiardKeys = tablesInSiard.keySet();
 						for ( Iterator<String> iteratorTables = tablesInSiardKeys.iterator(); iteratorTables
 								.hasNext(); ) {
@@ -291,21 +292,22 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl impl
 							/* mit Util.oldnewstring respektive replace können sehr grosse files nicht bearbeitet
 							 * werden!
 							 * 
-							 * Entsprechend wurde sed verwendet. */
+							 * Entsprechend wurde sed verwendet. die einzelnen Aktionen werden in Serie (-e)
+							 * ausgeführt:
+							 * 
+							 * sed -e 's/a/A/g' -e 's/b/B/g' 1.txt */
 
 							// Bringt alles auf eine Zeile
-							String commandSed = "cmd /c \"\"" + pathToSedExe + "\" 's/\\n/ /g' \""
-									+ pathTofSearchtable + "\" > \"" + pathTofSearchtableTemp + "\"\"";
-							String commandSed2 = "cmd /c \"\"" + pathToSedExe + "\" ':a;N;$!ba;s/\\n/ /g' \""
-									+ pathTofSearchtableTemp + "\" > \"" + pathTofSearchtable + "\"\"";
+							String sed = "-e 's/\\n/ /g' ";
+							String sed2 = "-e ':a;N;$!ba;s/\\n/ /g' ";
 							// Trennt ><row. Nur eine row auf einer Zeile
-							String commandSed3 = "cmd /c \"\"" + pathToSedExe
-									+ "\" 's/\\d060row/\\n\\d060row/g' \"" + pathTofSearchtable + "\" > \""
-									+ pathTofSearchtableTemp + "\"\"";
+							String sed3 = "-e 's/\\d060row/\\n\\d060row/g' ";
 							// Trennt ><table. <table auf eine neue Zeile
-							String commandSed4 = "cmd /c \"\"" + pathToSedExe
-									+ "\" 's/\\d060\\d047table/\\n\\d060\\d047table/g' \"" + pathTofSearchtableTemp
-									+ "\" > \"" + pathTofSearchtable + "\"\"";
+							String sed4 = "-e 's/\\d060\\d047table/\\n\\d060\\d047table/g' ";
+
+							// Bringt alles auf eine Zeile
+							String commandSed = "cmd /c \"\"" + pathToSedExe + "\" " + sed + sed2 + sed3 + sed4
+									+ "\"" + pathTofSearchtable + "\" > \"" + pathTofSearchtableTemp + "\"\"";
 
 							// String commandSed = "cmd /c \"\"pathToSedExe\"  's/row/R0W/g\' 'hallo row.'\"";
 							/* Das redirect Zeichen verunmöglicht eine direkte eingabe. mit dem geschachtellten
@@ -313,131 +315,48 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl impl
 
 							Process procSed = null;
 							Runtime rtSed = null;
-							Process procSed2 = null;
-							Runtime rtSed2 = null;
-							Process procSed3 = null;
-							Runtime rtSed3 = null;
-							Process procSed4 = null;
-							Runtime rtSed4 = null;
+							if ( !fSearchtableTemp.exists() ) {
 
-							try {
-								Util.switchOffConsole();
-								rtSed = Runtime.getRuntime();
-								procSed = rtSed.exec( commandSed.toString().split( " " ) );
-								// .split(" ") ist notwendig wenn in einem Pfad ein Doppelleerschlag vorhanden ist!
+								try {
+									Util.switchOffConsole();
+									rtSed = Runtime.getRuntime();
+									procSed = rtSed.exec( commandSed.toString().split( " " ) );
+									// .split(" ") ist notwendig wenn in einem Pfad ein Doppelleerschlag vorhanden
+									// ist!
 
-								// Fehleroutput holen
-								StreamGobbler errorGobblerSed = new StreamGobbler( procSed.getErrorStream(),
-										"ERROR" );
+									// Fehleroutput holen
+									StreamGobbler errorGobblerSed = new StreamGobbler( procSed.getErrorStream(),
+											"ERROR" );
 
-								// Output holen
-								StreamGobbler outputGobblerSed = new StreamGobbler( procSed.getInputStream(),
-										"OUTPUT" );
+									// Output holen
+									StreamGobbler outputGobblerSed = new StreamGobbler( procSed.getInputStream(),
+											"OUTPUT" );
 
-								// Threads starten
-								errorGobblerSed.start();
-								outputGobblerSed.start();
+									// Threads starten
+									errorGobblerSed.start();
+									outputGobblerSed.start();
 
-								// Warte, bis wget fertig ist
-								procSed.waitFor();
+									// Warte, bis wget fertig ist
+									procSed.waitFor();
+									Thread.sleep(10);
 
-								// ---------------------------
+									Util.switchOnConsole();
 
-								rtSed2 = Runtime.getRuntime();
-								procSed2 = rtSed2.exec( commandSed2.toString().split( " " ) );
-								// .split(" ") ist notwendig wenn in einem Pfad ein Doppelleerschlag vorhanden ist!
-
-								// Fehleroutput holen
-								StreamGobbler errorGobblerSed2 = new StreamGobbler( procSed2.getErrorStream(),
-										"ERROR" );
-
-								// Output holen
-								StreamGobbler outputGobblerSed2 = new StreamGobbler( procSed2.getInputStream(),
-										"OUTPUT" );
-
-								// Threads starten
-								errorGobblerSed2.start();
-								outputGobblerSed2.start();
-
-								// Warte, bis wget fertig ist
-								procSed2.waitFor();
-
-								// ---------------------------
-
-								rtSed3 = Runtime.getRuntime();
-								procSed3 = rtSed3.exec( commandSed3.toString().split( " " ) );
-								// .split(" ") ist notwendig wenn in einem Pfad ein Doppelleerschlag vorhanden ist!
-
-								// Fehleroutput holen
-								StreamGobbler errorGobblerSed3 = new StreamGobbler( procSed3.getErrorStream(),
-										"ERROR" );
-
-								// Output holen
-								StreamGobbler outputGobblerSed3 = new StreamGobbler( procSed3.getInputStream(),
-										"OUTPUT" );
-
-								// Threads starten
-								errorGobblerSed3.start();
-								outputGobblerSed3.start();
-
-								// Warte, bis wget fertig ist
-								procSed3.waitFor();
-
-								// ---------------------------
-
-								rtSed4 = Runtime.getRuntime();
-								procSed4 = rtSed4.exec( commandSed4.toString().split( " " ) );
-								// .split(" ") ist notwendig wenn in einem Pfad ein Doppelleerschlag vorhanden ist!
-
-								// Fehleroutput holen
-								StreamGobbler errorGobblerSed4 = new StreamGobbler( procSed4.getErrorStream(),
-										"ERROR" );
-
-								// Output holen
-								StreamGobbler outputGobblerSed4 = new StreamGobbler( procSed4.getInputStream(),
-										"OUTPUT" );
-
-								// Threads starten
-								errorGobblerSed4.start();
-								outputGobblerSed4.start();
-
-								// Warte, bis wget fertig ist
-								procSed4.waitFor();
-
-								// ---------------------------
-
-								Util.switchOnConsole();
-
-							} catch ( Exception e ) {
-								getMessageService().logError(
-										getTextResourceService().getText( MESSAGE_XML_MODUL_J_SIARD )
-												+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
-								return false;
-							} finally {
-								if ( procSed != null ) {
-									procSed.getOutputStream().close();
-									procSed.getInputStream().close();
-									procSed.getErrorStream().close();
+								} catch ( Exception e ) {
+									getMessageService().logError(
+											getTextResourceService().getText( MESSAGE_XML_MODUL_J_SIARD )
+													+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+									return false;
+								} finally {
+									if ( procSed != null ) {
+										procSed.getOutputStream().close();
+										procSed.getInputStream().close();
+										procSed.getErrorStream().close();
+									}
 								}
-								if ( procSed2 != null ) {
-									procSed2.getOutputStream().close();
-									procSed2.getInputStream().close();
-									procSed2.getErrorStream().close();
-								}
-								if ( procSed3 != null ) {
-									procSed3.getOutputStream().close();
-									procSed3.getInputStream().close();
-									procSed3.getErrorStream().close();
-								}
-								if ( procSed4 != null ) {
-									procSed4.getOutputStream().close();
-									procSed4.getInputStream().close();
-									procSed4.getErrorStream().close();
-								}
-							}
-
-							if ( fSearchtableTemp.exists() ) {
-								Util.deleteDir( fSearchtableTemp );
+								tableXml = fSearchtableTemp;
+							} else {
+								tableXml = fSearchtableTemp;
 							}
 
 							try {
@@ -460,6 +379,7 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl impl
 											if ( line.contains( newEntryName ) ) {
 												// entryName ist in Tabelle enthalten und wird spaeter aus liste geloescht
 												filesToRemove.put( entryName, entryName );
+												// System.out.println( "gefunden" );
 												break;
 											} else {
 												// entryName wurde nicht in dieser Zeile gefunden keine Aktion
@@ -587,6 +507,7 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl impl
 					name = tablePath.toString();
 					filesInSiard.remove( name );
 					// die Datei "name" aus filesInSiard entfernen
+					// System.out.println( "Remove von metadata.xml: " + name );
 
 					if ( tablePath.isDirectory() ) {
 						File tableXsd = new File( new StringBuilder( tablePath.getPath() )

@@ -194,7 +194,8 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl implement
 											StringBuffer command = new StringBuffer( "\"" + dirOfJarPath + File.separator
 													+ "resources" + File.separator + "xmllint" + File.separator
 													+ "xmllint\" " );
-											command.append( "--noout --stream " );
+											// command.append( "--noout --stream " );
+											command.append( "--noout --stream --nowarning" );
 											command.append( " --schema " );
 											command.append( " " );
 											command.append( "\"" );
@@ -231,7 +232,7 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl implement
 												Thread.sleep( 50 );
 												Util.switchOnConsole();
 
-												if ( 0 != exitStatus ) {
+												if ( 2 < exitStatus ) {
 													// message.xml.h.invalid.xml = <Message>{0} ist invalid zu
 													// {1}</Message></Error>
 													getMessageService().logError(

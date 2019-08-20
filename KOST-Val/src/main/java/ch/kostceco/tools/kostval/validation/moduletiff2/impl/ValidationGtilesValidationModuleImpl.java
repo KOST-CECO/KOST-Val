@@ -78,7 +78,7 @@ public class ValidationGtilesValidationModuleImpl extends ValidationModuleImpl i
 					/* zu analysierende TIFF-IFD-Zeile die StripOffsets- oder TileOffsets-Zeile gibt Auskunft
 					 * �ber die Aufteilungsart
 					 * 
-					 * -StripByteCounts -RowsPerStrip -FileSize -Orientation -TileWidth -TileLength -TileDepth */
+					 * -StripByteCounts -RowsPerStrip -FileSize -TileWidth -TileLength -TileDepth */
 					if ( (line.contains( "StripByteCounts: " ) && line.contains( "[EXIF:IFD" ))
 							|| (line.contains( "RowsPerStrip: " ) && line.contains( "[EXIF:IFD" ))
 							|| (line.contains( "Tile" ) && line.contains( "[EXIF:IFD" )) ) {
