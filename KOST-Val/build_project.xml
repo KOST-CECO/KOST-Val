@@ -13,7 +13,6 @@
 		<pathelement location="lib/spring-context-3.0.0.RELEASE.jar" />
 		<pathelement location="lib/commons-logging-1.2.jar" />
 		<pathelement location="lib/commons-lang3-3.7.jar" />
-		<pathelement location="lib/commons-compress-1.18.jar" />
 		<pathelement location="lib/spring-beans-5.0.8.RELEASE.jar" />
 		<pathelement location="lib/spring-core-5.0.8.RELEASE.jar" />
 		<pathelement location="lib/spring-aop-5.0.8.RELEASE.jar" />

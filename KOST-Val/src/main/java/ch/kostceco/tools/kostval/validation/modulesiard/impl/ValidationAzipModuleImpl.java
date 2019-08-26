@@ -19,20 +19,18 @@
 
 package ch.kostceco.tools.kostval.validation.modulesiard.impl;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
+import java.util.Enumeration;
 import java.util.Map;
 import java.io.FileReader;
 import java.util.Arrays;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
+import java.util.zip.ZipFile;
 import java.util.List;
 
 import ch.enterag.utils.zip.Zip64File;
 import ch.enterag.utils.zip.FileEntry;
-
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationAzipException;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationAzipModule;
@@ -185,14 +183,12 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 			if ( validC ) {
 				// Versuche das ZIP file zu �ffnen
 				// Zuerst mit Java.util.zip und dann Zip64_1.0
-				ZipInputStream zf = null;
-				ZipEntry zEntry = null;
-				FileInputStream fis = null;
 				try {
-					Integer compressed = 0;
-					fis = new FileInputStream( valDatei );
-					zf = new ZipInputStream( new BufferedInputStream( fis ) );
-					while ( (zEntry = zf.getNextEntry()) != null ) {
+					Integer compressed = 1000;
+					ZipFile zf = new ZipFile( valDatei.getAbsolutePath() );
+					Enumeration<? extends ZipEntry> entries = zf.entries();
+					while ( entries.hasMoreElements() ) {
+						ZipEntry zEntry = entries.nextElement();
 						compressed = zEntry.getMethod();
 						// Compression method for uncompressed entries = STORED = 0
 						// Compression method for deflate compression = 8

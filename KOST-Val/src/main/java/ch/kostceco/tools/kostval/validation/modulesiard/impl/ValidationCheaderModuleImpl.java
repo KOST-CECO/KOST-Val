@@ -21,14 +21,16 @@ package ch.kostceco.tools.kostval.validation.modulesiard.impl;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.util.Enumeration;
 import java.util.Map;
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.IOException;
+import java.io.InputStream;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
+import java.util.zip.ZipFile;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -81,12 +83,10 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 		ZipEntry metadataxsd = null;
 
 		try {
-			ZipInputStream zipfile = null;
-			ZipEntry zEntry = null;
-			FileInputStream fis = null;
-			fis = new FileInputStream( valDatei );
-			zipfile = new ZipInputStream( new BufferedInputStream( fis ) );
-			while ( (zEntry = zipfile.getNextEntry()) != null ) {
+			ZipFile zipfile = new ZipFile( valDatei.getAbsolutePath() );
+			Enumeration<? extends ZipEntry> entries = zipfile.entries();
+			while ( entries.hasMoreElements() ) {
+				ZipEntry zEntry = entries.nextElement();
 				if ( zEntry.getName().equals( "header/" + METADATA ) ) {
 					metadataxml = zEntry;
 				}
@@ -166,54 +166,45 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 			 * besteht, die includes können so nicht aufgelöst werden. Es werden hier jedoch nicht nur
 			 * diese Files extrahiert, sondern gleich die ganze Zip-Datei, weil auch spätere Validierungen
 			 * nur mit den extrahierten Files arbeiten können. */
-			FileInputStream fis = null;
-			ZipInputStream zipfile = null;
-			ZipEntry zEntry = null;
-			fis = new FileInputStream( valDatei );
-			zipfile = new ZipInputStream( new BufferedInputStream( fis ) );
+			int BUFFER = 2048;
+			ZipFile zipfile = new ZipFile( valDatei.getAbsolutePath() );
+			Enumeration<? extends ZipEntry> entries = zipfile.entries();
 
-			while ( (zEntry = zipfile.getNextEntry()) != null ) {
-				try {
-					if ( !zEntry.isDirectory() ) {
-						byte[] tmp = new byte[4 * 1024];
-						FileOutputStream fos = null;
-						String opFilePath = tmpDir + File.separator + zEntry.getName();
-						File newFile = new File( opFilePath );
-						File parent = newFile.getParentFile();
-						if ( !parent.exists() ) {
-							parent.mkdirs();
-						}
-						// System.out.println( "Extracting file to " + newFile.getAbsolutePath() );
-						fos = new FileOutputStream( opFilePath );
-						int size = 0;
-						while ( (size = zipfile.read( tmp )) != -1 ) {
-							fos.write( tmp, 0, size );
-						}
-						fos.flush();
-						fos.close();
-						// Festhalten von metadata.xml und metadata.xsd
-						if ( newFile.getName().endsWith( METADATA ) ) {
-							xmlToValidate = newFile;
-						}
-						if ( newFile.getName().endsWith( XSD_METADATA ) ) {
-							xsdToValidate = newFile;
-						}
-					} else {
-						/* Scheibe den Ordner wenn noch nicht vorhanden an den richtigen Ort respektive in den
-						 * richtigen Ordner der ggf angelegt werden muss. Dies muss gemacht werden, damit auch
-						 * leere Ordner ins Work geschrieben werden. Diese werden danach im J als Fehler
-						 * angegeben */
-						File newFolder = new File( tmpDir, zEntry.getName() );
-						if ( !newFolder.exists() ) {
-							File parent = newFolder.getParentFile();
-							if ( !parent.exists() ) {
-								parent.mkdirs();
-							}
-							newFolder.mkdirs();
-						}
+			// jeden entry durchgechen
+			while ( entries.hasMoreElements() ) {
+				ZipEntry entry = (ZipEntry) entries.nextElement();
+				String entryName = entry.getName();
+				File destFile = new File( tmpDir, entryName );
+				// System.out.println (entryName);
+
+				// erstelle den Ueberordner
+				File destinationParent = destFile.getParentFile();
+				destinationParent.mkdirs();
+				if ( !entry.isDirectory() ) {
+					// Festhalten von metadata.xml und metadata.xsd
+					if ( destFile.getName().endsWith( METADATA ) ) {
+						xmlToValidate = destFile;
 					}
-				} catch ( IOException e ) {
-					System.out.println( e.getMessage() );
+					if ( destFile.getName().endsWith( XSD_METADATA ) ) {
+						xsdToValidate = destFile;
+					}
+					InputStream stream = zipfile.getInputStream( entry );
+					BufferedInputStream is = new BufferedInputStream( stream );
+					int currentByte;
+
+					// erstellung Buffer zum schreiben der Dateien
+					byte data[] = new byte[BUFFER];
+
+					// schreibe die aktuelle Datei an den geuenschten Ort
+					FileOutputStream fos = new FileOutputStream( destFile );
+					BufferedOutputStream dest = new BufferedOutputStream( fos, BUFFER );
+					while ( (currentByte = is.read( data, 0, BUFFER )) != -1 ) {
+						dest.write( data, 0, currentByte );
+					}
+					dest.flush();
+					dest.close();
+					is.close();
+					stream.close();
 				}
 				if ( showOnWork ) {
 					if ( onWork == 41 ) {
@@ -237,6 +228,7 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 					}
 				}
 			}
+			// Thread.sleep( 100 );
 			// Ausgabe der SIARD-Version
 			String pathToWorkDir2 = pathToWorkDir + File.separator + "SIARD";
 			File metadataXml = new File( new StringBuilder( pathToWorkDir2 ).append( File.separator )

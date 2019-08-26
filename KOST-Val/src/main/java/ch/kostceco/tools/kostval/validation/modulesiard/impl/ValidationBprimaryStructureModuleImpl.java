@@ -19,12 +19,11 @@
 
 package ch.kostceco.tools.kostval.validation.modulesiard.impl;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
+import java.util.Enumeration;
 import java.util.Map;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
+import java.util.zip.ZipFile;
 
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationBprimaryStructureException;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
@@ -67,16 +66,14 @@ public class ValidationBprimaryStructureModuleImpl extends ValidationModuleImpl 
 		toplevelDir = toplevelDir.substring( 0, lastDotIdx );
 
 		try {
-
-			ZipInputStream zipfile = null;
-			ZipEntry zEntry = null;
-			FileInputStream fis = null;
-			fis = new FileInputStream( valDatei );
-			zipfile = new ZipInputStream( new BufferedInputStream( fis ) );
-			while ( (zEntry = zipfile.getNextEntry()) != null ) {
+			ZipFile zipfile = new ZipFile( valDatei.getAbsolutePath() );
+			Enumeration<? extends ZipEntry> entries = zipfile.entries();
+			while ( entries.hasMoreElements() ) {
+				ZipEntry entry = entries.nextElement();
 				/* nur valid wenn es mit header oder content anf�ngt dies schliesst auch
 				 * [Name].siard/[Name]/header und [Name].siard/[Name]/content mit ein */
-				String name = zEntry.getName();
+				String name = entry.getName();
+				// System.out.println( "Entry: " + name );
 				if ( name.startsWith( "content/" ) ) {
 					// erlaubter Inhalt content/...
 					bExistsContentFolder = 1;
@@ -117,7 +114,6 @@ public class ValidationBprimaryStructureModuleImpl extends ValidationModuleImpl 
 				}
 			}
 			zipfile.close();
-			// set to null
 			zipfile = null;
 			if ( bExistsContentFolder == 0 ) {
 				getMessageService().logError(
