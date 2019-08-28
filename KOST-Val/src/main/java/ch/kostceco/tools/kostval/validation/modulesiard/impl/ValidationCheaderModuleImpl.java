@@ -205,6 +205,8 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 					dest.close();
 					is.close();
 					stream.close();
+				} else {
+					destFile.mkdirs();
 				}
 				if ( showOnWork ) {
 					if ( onWork == 41 ) {

@@ -23,22 +23,21 @@ import java.io.File;
 import java.util.Map;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.jdom2.*;
 import org.jdom2.input.SAXBuilder;
 
-import ch.enterag.utils.zip.EntryInputStream;
-import ch.enterag.utils.zip.FileEntry;
-import ch.enterag.utils.zip.Zip64File;
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationEcolumnException;
+import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.bean.SiardTable;
 import ch.kostceco.tools.kostval.validation.bean.ValidationContext;
@@ -135,55 +134,98 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 		validationContext.setSiardArchive( valDatei );
 		this.setValidationContext( validationContext );
 		try {
-			// Initialize the validation context
-			valid = (prepareValidation( this.getValidationContext() ) == false ? false : true);
-			// Get the prepared SIARD tables from the validation context
-			valid = (this.getValidationContext().getSiardTables() == null ? false : true);
-			// Validates the number of the attributes
-			congruentColumnCount = validateColumnCount( this.getValidationContext(), configMap );
-			if ( congruentColumnCount == false ) {
+			try {
+				// Initialize the validation context
+				valid = (prepareValidation( this.getValidationContext() ) == false ? false : true);
+			} catch ( Exception e ) {
 				valid = false;
 				getMessageService().logError(
 						getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
-								+ getTextResourceService().getText( MESSAGE_XML_E_INVALID_ATTRIBUTE_COUNT,
-										this.getIncongruentColumnCount() ) );
+								+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+										e.getMessage() + " (Initialize the validation context)" ) );
 			}
-			// Validates the nullable property in metadata.xml
-			if ( validateColumnOccurrence( this.getValidationContext(), configMap ) == false ) {
+			try {
+				// Get the prepared SIARD tables from the validation context
+				valid = (this.getValidationContext().getSiardTables() == null ? false : true);
+			} catch ( Exception e ) {
 				valid = false;
 				getMessageService().logError(
 						getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
-								+ getTextResourceService().getText( MESSAGE_XML_E_INVALID_ATTRIBUTE_OCCURRENCE,
-										this.getIncongruentColumnOccurrence() ) );
+								+ getTextResourceService()
+										.getText(
+												ERROR_XML_UNKNOWN,
+												e.getMessage()
+														+ " (Get the prepared SIARD tables from the validation context)" ) );
 			}
-			// Validates the type of table attributes in metadata.xml
-			if ( validateColumnType( this.getValidationContext(), configMap ) == false ) {
-				valid = false;
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
-								+ getTextResourceService().getText( MESSAGE_XML_E_INVALID_ATTRIBUTE_TYPE,
-										this.getIncongruentColumnType() ) );
-				if ( udtColumn ) {
-					// UDT-Warning mit ausgeben wenn vorhanden: MESSAGE_XML_E_TYPE_NOT_VALIDATED
+			try {
+				// Validates the number of the attributes
+				congruentColumnCount = validateColumnCount( this.getValidationContext(), configMap );
+				if ( congruentColumnCount == false ) {
+					valid = false;
 					getMessageService().logError(
 							getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
-									+ getTextResourceService().getText( MESSAGE_XML_E_TYPE_NOT_VALIDATED,
-											this.getWarningColumnType() ) );
+									+ getTextResourceService().getText( MESSAGE_XML_E_INVALID_ATTRIBUTE_COUNT,
+											this.getIncongruentColumnCount() ) );
 				}
-			} else {
-				if ( udtColumn ) {
-					// UDT-Warning mit ausgeben wenn vorhanden: MESSAGE_XML_E_TYPE_NOT_VALIDATED
+			} catch ( Exception e ) {
+				valid = false;
+				getMessageService().logError(
+						getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
+								+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+										e.getMessage() + " (Validates the number of the attributes)" ) );
+			}
+			try {
+				// Validates the nullable property in metadata.xml
+				if ( validateColumnOccurrence( this.getValidationContext(), configMap ) == false ) {
+					valid = false;
 					getMessageService().logError(
 							getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
-									+ getTextResourceService().getText( MESSAGE_XML_E_TYPE_NOT_VALIDATED,
-											this.getWarningColumnType() ) );
+									+ getTextResourceService().getText( MESSAGE_XML_E_INVALID_ATTRIBUTE_OCCURRENCE,
+											this.getIncongruentColumnOccurrence() ) );
 				}
+			} catch ( Exception e ) {
+				valid = false;
+				getMessageService().logError(
+						getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
+								+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+										e.getMessage() + " (Validates the nullable property in metadata.xml)" ) );
+			}
+			try {
+				// Validates the type of table attributes in metadata.xml
+				if ( validateColumnType( this.getValidationContext(), configMap ) == false ) {
+					valid = false;
+					getMessageService().logError(
+							getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
+									+ getTextResourceService().getText( MESSAGE_XML_E_INVALID_ATTRIBUTE_TYPE,
+											this.getIncongruentColumnType() ) );
+					if ( udtColumn ) {
+						// UDT-Warning mit ausgeben wenn vorhanden: MESSAGE_XML_E_TYPE_NOT_VALIDATED
+						getMessageService().logError(
+								getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
+										+ getTextResourceService().getText( MESSAGE_XML_E_TYPE_NOT_VALIDATED,
+												this.getWarningColumnType() ) );
+					}
+				} else {
+					if ( udtColumn ) {
+						// UDT-Warning mit ausgeben wenn vorhanden: MESSAGE_XML_E_TYPE_NOT_VALIDATED
+						getMessageService().logError(
+								getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
+										+ getTextResourceService().getText( MESSAGE_XML_E_TYPE_NOT_VALIDATED,
+												this.getWarningColumnType() ) );
+					}
+				}
+			} catch ( Exception e ) {
+				valid = false;
+				getMessageService().logError(
+						getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
+								+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+										e.getMessage() + " (Validates the type of table attributes in metadata.xml)" ) );
 			}
 		} catch ( Exception e ) {
 			valid = false;
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
-							+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+							+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() + " (E)" ) );
 		}
 		return valid;
 	}
@@ -198,53 +240,95 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 	{
 		// All over preparation flag
 		boolean prepared = true;
-		// Load the Java properties to the validation context
-		boolean propertiesLoaded = initializeProperties();
-		if ( propertiesLoaded == false ) {
-			prepared = false;
+		try {
+			// Load the Java properties to the validation context
+			boolean propertiesLoaded = initializeProperties();
+			if ( propertiesLoaded == false ) {
+				prepared = false;
+				getMessageService().logError(
+						getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
+								+ getTextResourceService().getText( MESSAGE_XML_E_PROPERTIES_ERROR ) );
+			}
+		} catch ( Exception e ) {
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
-							+ getTextResourceService().getText( MESSAGE_XML_E_PROPERTIES_ERROR ) );
+							+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+									e.getMessage() + " (propertiesLoaded)" ) );
 		}
-		// Initialize internal path configuration of the SIARD archive
-		boolean pathInitialized = initializePath( validationContext, configMapFinal );
-		if ( pathInitialized == false ) {
-			prepared = false;
+		try {
+			// Initialize internal path configuration of the SIARD archive
+			boolean pathInitialized = initializePath( validationContext, configMapFinal );
+			if ( pathInitialized == false ) {
+				prepared = false;
+				getMessageService().logError(
+						getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
+								+ getTextResourceService().getText( MESSAGE_XML_E_PATH_ERROR ) );
+			}
+		} catch ( Exception e ) {
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
-							+ getTextResourceService().getText( MESSAGE_XML_E_PATH_ERROR ) );
+							+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+									e.getMessage() + " (pathInitialized)" ) );
 		}
-		// Extract the SIARD archive and distribute the content to the validation context
-		boolean siardArchiveExtracted = extractSiardArchive( validationContext, configMapFinal );
-		if ( siardArchiveExtracted == false ) {
-			prepared = false;
+		try {
+			// Extract the SIARD archive and distribute the content to the validation context
+			boolean siardArchiveExtracted = extractSiardArchive( validationContext, configMapFinal );
+			if ( siardArchiveExtracted == false ) {
+				prepared = false;
+				getMessageService().logError(
+						getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
+								+ getTextResourceService().getText( MESSAGE_XML_E_EXTRACT_ERROR ) );
+			}
+		} catch ( Exception e ) {
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
-							+ getTextResourceService().getText( MESSAGE_XML_E_EXTRACT_ERROR ) );
+							+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+									e.getMessage() + " (siardArchiveExtracted)" ) );
 		}
-		// Pick the metadata.xml and load it to the validation context
-		boolean metadataXMLpicked = pickMetadataXML( validationContext, configMapFinal );
-		if ( metadataXMLpicked == false ) {
-			prepared = false;
+		try {
+			// Pick the metadata.xml and load it to the validation context
+			boolean metadataXMLpicked = pickMetadataXML( validationContext, configMapFinal );
+			if ( metadataXMLpicked == false ) {
+				prepared = false;
+				getMessageService().logError(
+						getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
+								+ getTextResourceService().getText( MESSAGE_XML_E_METADATA_ACCESS_ERROR ) );
+			}
+		} catch ( Exception e ) {
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
-							+ getTextResourceService().getText( MESSAGE_XML_E_METADATA_ACCESS_ERROR ) );
+							+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+									e.getMessage() + " (metadataXMLpicked)" ) );
 		}
-		// Prepare the XML configuration and store it to the validation context
-		boolean xmlAccessPrepared = prepareXMLAccess( validationContext );
-		if ( xmlAccessPrepared == false ) {
-			prepared = false;
+		try {
+			// Prepare the XML configuration and store it to the validation context
+			boolean xmlAccessPrepared = prepareXMLAccess( validationContext );
+			if ( xmlAccessPrepared == false ) {
+				prepared = false;
+				getMessageService().logError(
+						getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
+								+ getTextResourceService().getText( MESSAGE_XML_E_XML_ACCESS_ERROR ) );
+			}
+		} catch ( Exception e ) {
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
-							+ getTextResourceService().getText( MESSAGE_XML_E_XML_ACCESS_ERROR ) );
+							+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+									e.getMessage() + " (xmlAccessPrepared)" ) );
 		}
-		// Prepare the data to be validated such as metadata.xml and the according XML schemas
-		boolean validationDataPrepared = prepareValidationData( validationContext, configMapFinal );
-		if ( validationDataPrepared == false ) {
-			prepared = false;
+		try {
+			// Prepare the data to be validated such as metadata.xml and the according XML schemas
+			boolean validationDataPrepared = prepareValidationData( validationContext, configMapFinal );
+			if ( validationDataPrepared == false ) {
+				prepared = false;
+				getMessageService().logError(
+						getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
+								+ getTextResourceService().getText( MESSAGE_XML_E_PREVALIDATION_ERROR ) );
+			}
+		} catch ( Exception e ) {
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
-							+ getTextResourceService().getText( MESSAGE_XML_E_PREVALIDATION_ERROR ) );
+							+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+									e.getMessage() + " (validationDataPrepared)" ) );
 		}
 		return prepared;
 	}
@@ -646,6 +730,7 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 		validationContext.setXmlElementsSequence( xmlElementSequence );
 		validationContext.setXsdElementsSequence( xsdElementSequence );
 		this.setValidationContext( validationContext );
+		Thread.sleep( 10 );
 		// Return the current validation state
 		return validDatabase;
 	}
@@ -681,7 +766,7 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 		StringBuilder headerPath = new StringBuilder();
 		StringBuilder contentPath = new StringBuilder();
 		// Initializing validation Logging
-		String workDir = configMap.get( "PathToWorkDir" );
+		String workDir = configMap.get( "PathToWorkDir" ) + File.separator + "SIARD";
 		// Preparing the internal SIARD directory structure
 		headerPath.append( workDir );
 		headerPath.append( File.separator );
@@ -751,67 +836,25 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 	private boolean extractSiardArchive( ValidationContext validationContext,
 			Map<String, String> configMap ) throws FileNotFoundException, IOException, Exception
 	{
-		boolean showOnWork = true;
-		int onWork = 410;
-		// Informationen zur Darstellung "onWork" holen
-		String onWorkConfig = configMap.get( "ShowProgressOnWork" );
-		if ( onWorkConfig.equals( "no" ) ) {
-			// keine Ausgabe
-			showOnWork = false;
-		} else {
-			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
-			System.out.print( "E    " );
-			System.out.print( "\b\b\b\b\b" );
-		}
 		boolean sucessfullyCommitted = false;
-		// Initializing the access to the SIARD archive
-		Zip64File zipfile = new Zip64File( validationContext.getSiardArchive() );
-		List<FileEntry> fileEntryList = zipfile.getListFileEntries();
-		String pathToWorkDir = configMap.get( "PathToWorkDir" );
-		File tmpDir = new File( pathToWorkDir );
-		// Initializing the resulting Hashmap containing all files, indexed by its absolute path
+		String pathToWorkDir = configMap.get( "PathToWorkDir" ) + File.separator + "SIARD";
 		HashMap<String, File> extractedSiardFiles = new HashMap<String, File>();
 		// Iterating over the whole SIARD archive
-		for ( FileEntry fileEntry : fileEntryList ) {
-			if ( !fileEntry.isDirectory() ) {
-				byte[] buffer = new byte[8192];
-				EntryInputStream eis = zipfile.openEntryInputStream( fileEntry.getName() );
-				File newFile = new File( tmpDir, fileEntry.getName() );
-				File parent = newFile.getParentFile();
-				if ( !parent.exists() ) {
-					parent.mkdirs();
-				}
-				FileOutputStream fos = new FileOutputStream( newFile );
-				for ( int iRead = eis.read( buffer ); iRead >= 0; iRead = eis.read( buffer ) ) {
-					fos.write( buffer, 0, iRead );
-				}
-				extractedSiardFiles.put( newFile.getPath(), newFile );
-				eis.close();
-				fos.close();
-				// set to null
-				eis = null;
-				fos = null;
-			}
-			if ( showOnWork ) {
-				if ( onWork == 410 ) {
-					onWork = 2;
-					System.out.print( "E-   " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 110 ) {
-					onWork = onWork + 1;
-					System.out.print( "E\\   " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 210 ) {
-					onWork = onWork + 1;
-					System.out.print( "E|   " );
-					System.out.print( "\b\b\b\b\b" );
-				} else if ( onWork == 310 ) {
-					onWork = onWork + 1;
-					System.out.print( "E/   " );
-					System.out.print( "\b\b\b\b\b" );
-				} else {
-					onWork = onWork + 1;
-				}
+
+		String contentString = new StringBuilder( pathToWorkDir ).append( File.separator )
+				.append( "content" ).toString();
+		File content = new File( contentString );
+		HashMap<String, File> hashMap = new HashMap<String, File>();
+		Map<String, File> fileMap = Util.getContent( content, hashMap );
+		Set<String> fileMapKeys = fileMap.keySet();
+		// alle Dateien in SIARD in die Map filesInSiard schreiben (Inhalt)
+		for ( Iterator<String> iterator = fileMapKeys.iterator(); iterator.hasNext(); ) {
+			String entryName = iterator.next();
+			// System.out.println( "entryName: " + entryName );
+			// entryName: content/schema1/table7/table7.xsd
+			if ( !entryName.equalsIgnoreCase( contentString ) ) {
+				extractedSiardFiles.put( entryName, new File( entryName ) );
+
 			}
 		}
 		validationContext.setSiardFiles( extractedSiardFiles );
@@ -827,7 +870,7 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 		return sucessfullyCommitted;
 	}
 
-	/* [E.0.4]Pick up the metadata.xml from the SIARD package */
+	/* [E.0.4]Pick up the metadata.xml from the extracted SIARD package */
 	private boolean pickMetadataXML( ValidationContext validationContext,
 			Map<String, String> configMap ) throws Exception
 	{
@@ -835,11 +878,12 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 		StringBuilder pathToMetadataXML = new StringBuilder();
 		pathToMetadataXML.append( configMap.get( "PathToWorkDir" ) );
 		pathToMetadataXML.append( File.separator );
+		pathToMetadataXML.append( "SIARD" );
+		pathToMetadataXML.append( File.separator );
 		pathToMetadataXML.append( "header" );
 		pathToMetadataXML.append( File.separator );
 		pathToMetadataXML.append( "metadata.xml" );
-		HashMap<String, File> siardFiles = validationContext.getSiardFiles();
-		File metadataXML = siardFiles.get( pathToMetadataXML.toString() );
+		File metadataXML = new File( pathToMetadataXML.toString() );
 		// Retreave the metadata.xml from the SIARD archive and writes it back to the validation context
 		validationContext.setMetadataXML( metadataXML );
 		// Checks whether the metadata.xml could be picked up
@@ -876,7 +920,7 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 		List<SiardTable> siardTables = new ArrayList<SiardTable>();
 		Document document = validationContext.getMetadataXMLDocument();
 		Element rootElement = document.getRootElement();
-		String workingDirectory = configMap.get( "PathToWorkDir" );
+		String workingDirectory = configMap.get( "PathToWorkDir" ) + File.separator + "SIARD";
 		String siardSchemasElementsName = "schemas";
 		// Gets the list of <schemas> elements from metadata.xml
 		List<Element> siardSchemasElements = rootElement.getChildren( siardSchemasElementsName,

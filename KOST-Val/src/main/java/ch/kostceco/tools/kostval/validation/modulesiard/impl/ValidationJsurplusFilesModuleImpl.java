@@ -63,10 +63,16 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl impl
 	Map<String, String>	tablesToRemove				= new HashMap<String, String>();
 	Map<String, String>	filesToRemove					= new HashMap<String, String>();
 
+	
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
 			throws ValidationJsurplusFilesException
 	{
+		filesInSiardUnsorted.clear();
+		filesInSiard.clear();
+		tablesInSiard.clear();
+		tablesToRemove.clear();
+		filesToRemove.clear();
 		boolean showOnWork = true;
 		int onWork = 410;
 		// Informationen zur Darstellung "onWork" holen
@@ -449,6 +455,11 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl impl
 							+ getTextResourceService().getText( ERROR_XML_UNKNOWN, (e.getMessage() + " 3") ) );
 			// return false;
 		}
+		filesInSiardUnsorted.clear();
+		filesInSiard.clear();
+		tablesInSiard.clear();
+		tablesToRemove.clear();
+		filesToRemove.clear();
 
 		return valid;
 
