@@ -14,7 +14,7 @@
 		<!--no verwenden wenn diese Version nicht erlaubt ist -->
 		<pdfa1>1B</pdfa1><!--1A / 1B / no -->
 		<pdfa2>2U</pdfa2><!--2A / 2B / 2U / no -->
-		<pdfafont>no</pdfafont><!--no verwenden wenn die Schriften in pdfa nicht validiert werden sollen, ansonsten tolerant, warning oder strict-->
+		<pdfafont>no</pdfafont><!--no verwenden wenn die Schriften in pdfa nicht validiert werden sollen, ansonsten tolerant oder strict-->
 		<pdfaimage>no</pdfaimage><!--no verwenden wenn die Bilder in pdfa nicht validiert werden sollen, ansonsten yes -->
 		<jbig2allowed>yes</jbig2allowed><!--no verwenden wenn JBIG2 in pdfa nicht erlaubt werden sollen, ansonsten yes -->
 	</pdfa>
