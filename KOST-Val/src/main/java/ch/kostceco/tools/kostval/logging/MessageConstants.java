@@ -281,8 +281,6 @@ public interface MessageConstants
 	String	ERROR_XML_K_OVERVIEW													= "error.xml.k.overview";
 	String	ERROR_XML_K_OVERVIEW2													= "error.xml.k.overview2";
 	String	ERROR_XML_K_DETAIL														= "error.xml.k.detail";
-	String	WARNING_XML_K_SYMBOL													= "warning.xml.k.symbol";
-	String	WARNING_XML_K_UNDEFINIED											= "warning.xml.k.undefinied";
 
 	// *************JP2-Meldungen*************************************************************************
 	// Modul A Meldungen
