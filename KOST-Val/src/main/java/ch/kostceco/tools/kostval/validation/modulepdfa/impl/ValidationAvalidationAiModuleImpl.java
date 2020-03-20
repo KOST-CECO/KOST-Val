@@ -1,6 +1,6 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
- * Information Package (SIP). Copyright (C) 2012-2019 Claire Roethlisberger (KOST-CECO), Christian
+ * Information Package (SIP). Copyright (C) 2012-2020 Claire Roethlisberger (KOST-CECO), Christian
  * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
  * Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
@@ -103,7 +103,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 		int iCategory = 999999999;
 		String errorK = "";
 		// Create object
-		PdfValidatorAPI docPdf = new PdfValidatorAPI();
+		PdfValidatorAPI docPdf = null;
 
 		// Version & Level herausfinden
 		String pdfa1 = configMap.get( "pdfa1" );
@@ -405,6 +405,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 			 * Wenn pdftools eingeschaltet ist, wird immer zuerst pdftools genommen, da dieser in
 			 * KOST-Val schneller ist alls callas */
 			if ( pdftools ) {
+				docPdf = new PdfValidatorAPI();
+
 				try {
 					if ( docPdf.open( valDatei.getAbsolutePath(), "", NativeLibrary.COMPLIANCE.ePDFUnk ) ) {
 						// PDF Konnte geöffnet werden

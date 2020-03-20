@@ -1,6 +1,6 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val v1.9.7 application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and
- * Submission Information Package (SIP). Copyright (C) 2012-2019 Claire Roethlisberger (KOST-CECO),
+ * The KOST-Val v1.9.8 application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and
+ * Submission Information Package (SIP). Copyright (C) 2012-2020 Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
@@ -566,6 +566,15 @@ public class KOSTVal implements MessageConstants
 					int numberInFileMap = fileMap.size();
 					Set<String> fileMapKeys = fileMap.keySet();
 					for ( Iterator<String> iterator = fileMapKeys.iterator(); iterator.hasNext(); ) {
+						// configmap neu auslesen im bereich pdf, da veraenderungen moeglich sind
+						pdfaValidationPdftools = configMap.get( "pdftools" );
+						pdfaValidationCallas = configMap.get( "callas" );
+						pdfaValidation = "no";
+						if ( pdfaValidationPdftools.equalsIgnoreCase( "yes" )
+								|| pdfaValidationCallas.equalsIgnoreCase( "yes" ) ) {
+							pdfaValidation = "yes";
+						}
+
 						String entryName = iterator.next();
 						File newFile = fileMap.get( entryName );
 						if ( !newFile.isDirectory() ) {
@@ -1101,6 +1110,14 @@ public class KOSTVal implements MessageConstants
 				Set<String> fileMapKeys = fileMap.keySet();
 
 				for ( Iterator<String> iterator = fileMapKeys.iterator(); iterator.hasNext(); ) {
+					// configmap neu auslesen im bereich pdf, da veraenderungen moeglich sind
+					pdfaValidationPdftools = configMap.get( "pdftools" );
+					pdfaValidationCallas = configMap.get( "callas" );
+					pdfaValidation = "no";
+					if ( pdfaValidationPdftools.equalsIgnoreCase( "yes" )
+							|| pdfaValidationCallas.equalsIgnoreCase( "yes" ) ) {
+						pdfaValidation = "yes";
+					}
 					String entryName = iterator.next();
 					File newFile = fileMap.get( entryName );
 

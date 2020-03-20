@@ -1,6 +1,6 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
- * Information Package (SIP). Copyright (C) 2012-2019 Claire Roethlisberger (KOST-CECO), Christian
+ * Information Package (SIP). Copyright (C) 2012-2020 Claire Roethlisberger (KOST-CECO), Christian
  * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
  * Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
@@ -84,6 +84,17 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl i
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
 			throws ValidationApdfvalidationException
 	{
+		isValidJPEG = true;
+		isValidJP2 = true;
+		isValidJBIG2 = true;
+
+		invalidJPEG = "";
+		invalidJP2 = "";
+		jpegCounter = 0;
+		jp2Counter = 0;
+		jbig2Counter = 0;
+		jbig2Obj = "";
+
 		boolean valid = true;
 		boolean isAllowedJBIG2 = false;
 		configMapFinal = configMap;
@@ -127,15 +138,37 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl i
 			} else {
 				Util.deleteFile( encrypt );
 				try {
+					// Bildvalidierung anstossen
 					extractImages( srcPdf, destImage, configMap );
 				} catch ( DocumentException e ) {
 					getMessageService().logError(
 							getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
-									+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+									+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+											(e.getMessage() + " DocumentException") ) );
 				} catch ( IOException e ) {
 					getMessageService().logError(
 							getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
-									+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+									+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+											(e.getMessage() + " IOException") ) );
+				} catch ( Exception e ) {
+					if ( jbig2Allowed.equalsIgnoreCase( "no" ) && pdfaImage.equalsIgnoreCase( "no" ) ) {
+						String input = e.getMessage();
+
+						if ( input.contains( "Unexpected color space" ) ) {
+							// Warnung wird nicht ausgegeben
+						} else {
+							System.out.println( e.getMessage() );
+							getMessageService().logError(
+									getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
+											+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+													(e.getMessage() + " Image-IOException 2") ) );
+						}
+					} else {
+						getMessageService().logError(
+								getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
+										+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+												(e.getMessage() + " Exception") ) );
+					}
 				}
 				if ( isValidJPEG && isValidJP2 && isValidJBIG2 ) {
 					// Bildvalidierung bestanden
@@ -210,7 +243,8 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl i
 		} catch ( IOException e ) {
 			getMessageService().logError(
 					getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
-							+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+							+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+									(e.getMessage() + " extractImages-IOException") ) );
 		}
 	}
 
@@ -240,6 +274,7 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl i
 				String filenamePath = filePath.getName();
 				String pathToLogDir = configMapFinal.get( "PathToLogfile" );
 				String pdfaImage = configMapFinal.get( "pdfaimage" );
+				String jbig2Allowed = configMapFinal.get( "jbig2allowed" );
 				boolean delFile = true;
 				FileOutputStream os;
 				PdfImageObject image = renderInfo.getImage();
@@ -251,7 +286,7 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl i
 					if ( myObj instanceof PdfName ) {
 						filter = (PdfName) myObj;
 					}
-
+					// System.out.println ("Filter: "+filter);
 					if ( PdfName.DCTDECODE.equals( filter ) ) {
 						/* JPEG Bild:
 						 * 
@@ -598,8 +633,8 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl i
 										} catch ( Exception e ) {
 											getMessageService().logError(
 													getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
-															+ getTextResourceService()
-																	.getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+															+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+																	(e.getMessage() + " JP2-Exception") ) );
 											isValidJP2 = false;
 											delFile = false;
 											invalidJP2 = invalidJP2 + "   " + filename;
@@ -610,11 +645,10 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl i
 										}
 
 									} catch ( Exception e ) {
-										getMessageService()
-												.logError(
-														getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
-																+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
-																		e.getMessage() ) );
+										getMessageService().logError(
+												getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
+														+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+																(e.getMessage() + " JP2-Exception2") ) );
 									}
 
 									// End JP2 Validierung
@@ -637,16 +671,21 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl i
 						}
 					} else if ( PdfName.JBIG2DECODE.equals( filter ) ) {
 						/* Bild mit der JBIG2 Komprimierung */
-						isValidJBIG2 = false;
-						jbig2Counter = jbig2Counter + 1;
-						jbig2Obj = jbig2Obj + renderInfo.getRef().getNumber() + " ";
+						if ( jbig2Allowed.equalsIgnoreCase( "yes" ) ) {
+							// JBIG2 Komprimierung erlaubt. Keine Meldung
+						} else {
+							isValidJBIG2 = false;
+							jbig2Counter = jbig2Counter + 1;
+							jbig2Obj = jbig2Obj + renderInfo.getRef().getNumber() + " ";
+						}
 					} else {
 						/* kein JPEG, JP2 oder JBIG2. Es wird entsprechend keine Validierung gemacht. */
 					}
 				} catch ( IOException ioe ) {
 					getMessageService().logError(
 							getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
-									+ getTextResourceService().getText( ERROR_XML_UNKNOWN, ioe.getMessage() ) );
+									+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+											(ioe.getMessage() + " Image-IOException") ) );
 				}
 			} catch ( IOException e ) {
 				String input = e.getMessage();
@@ -659,11 +698,14 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl i
 					} else {
 						// Warnung wird nicht ausgegeben
 					}
+				} else if ( input.contains( "Unexpected color space" ) ) {
+					// Warnung wird nicht ausgegeben
 				} else {
 					System.out.println( e.getMessage() );
 					getMessageService().logError(
 							getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
-									+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+									+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+											(e.getMessage() + " Image-IOException 2") ) );
 				}
 			}
 		}

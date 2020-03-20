@@ -1,6 +1,6 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
- * Information Package (SIP). Copyright (C) 2012-2019 Claire Roethlisberger (KOST-CECO), Christian
+ * Information Package (SIP). Copyright (C) 2012-2020 Claire Roethlisberger (KOST-CECO), Christian
  * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
  * Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
@@ -19,7 +19,7 @@
 
 package ch.kostceco.tools.kostval.controller;
 
-import java.io.File; 
+import java.io.File;
 import java.util.Map;
 
 import ch.kostceco.tools.kostval.exception.modulepdfa.ValidationApdfvalidationException;
@@ -90,13 +90,15 @@ public class Controllerpdfa implements MessageConstants
 		this.textResourceService = textResourceService;
 	}
 
-	public boolean executeMandatory( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
+	public boolean executeMandatory( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap )
 	{
 		boolean valid = true;
 
 		// Initialisation PDF-Tools
 		try {
-			if ( this.getValidationAinitialisationModule().validate( valDatei, directoryOfLogfile, configMap ) ) {
+			if ( this.getValidationAinitialisationModule().validate( valDatei, directoryOfLogfile,
+					configMap ) ) {
 				this.getValidationAinitialisationModule().getMessageService().print();
 			} else {
 				this.getValidationAinitialisationModule().getMessageService().print();
@@ -117,13 +119,15 @@ public class Controllerpdfa implements MessageConstants
 
 	}
 
-		public boolean executeOptional( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
-		{
-			boolean valid = true;
+	public boolean executeOptional( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap )
+	{
+		boolean valid = true;
 
 		// Validation A - I
 		try {
-			if ( this.getValidationAvalidationAiModule().validate( valDatei, directoryOfLogfile, configMap ) ) {
+			if ( this.getValidationAvalidationAiModule().validate( valDatei, directoryOfLogfile,
+					configMap ) ) {
 				this.getValidationAvalidationAiModule().getMessageService().print();
 			} else {
 				this.getValidationAvalidationAiModule().getMessageService().print();
@@ -142,7 +146,8 @@ public class Controllerpdfa implements MessageConstants
 
 		// Validation J
 		try {
-			if ( this.getValidationJimageValidationModule().validate( valDatei, directoryOfLogfile, configMap ) ) {
+			if ( this.getValidationJimageValidationModule().validate( valDatei, directoryOfLogfile,
+					configMap ) ) {
 				this.getValidationJimageValidationModule().getMessageService().print();
 			} else {
 				this.getValidationJimageValidationModule().getMessageService().print();
