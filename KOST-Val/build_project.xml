@@ -4,8 +4,8 @@
 	<property name="ECLIPSE_HOME"
 		value="../../../Projekte/SIARD.val.OSGi/Target Platform/equinox-SDK-3.7.2" />
 	<property name="debuglevel" value="source,lines,vars" />
-	<property name="target" value="1.6" />
-	<property name="source" value="1.6" />
+	<property name="target" value="1.8" />
+	<property name="source" value="1.8" />
 	<property name="source_encoding" value="ISO-8859-1" />
 	<path id="KOST-Val.classpath">
 		<pathelement location="target/classes" />
