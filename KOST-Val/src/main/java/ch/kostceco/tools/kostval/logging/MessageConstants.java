@@ -247,6 +247,8 @@ public interface MessageConstants
 	String	ERROR_XML_CALLAS_FATAL2												= "error.xml.callas.fatal2";
 	String	ERROR_XML_A_CALLAS_SERVICEFAILED							= "error.xml.a.callas.servicefailed";
 	String	ERROR_XML_A_PDFA_NOCONFIG											= "error.xml.a.pdfa.noconfig";
+	String	WARNING_XML_A_PDFTOOLS_LICENSE_1							= "warning.xml.a.pdftools.license.1";
+	String	WARNING_XML_A_PDFTOOLS_LICENSE_2							= "warning.xml.a.pdftools.license.2";
 	String	ERROR_XML_A_PDFTOOLS_LICENSE									= "error.xml.a.pdftools.license";
 	String	ERROR_XML_A_PDFTOOLS_ENCRYPTED								= "error.xml.a.pdftools.encrypted";
 	String	ERROR_XML_A_PDFTOOLS_DAMAGED									= "error.xml.a.pdftools.damaged";

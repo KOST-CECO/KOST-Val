@@ -1995,6 +1995,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 		// Destroy the object and set to null
 		docPdf.destroyObject();
 		docPdf = null;
+		PdfValidatorAPI.setLicenseKey( " " );
 
 		return isValid;
 	}
