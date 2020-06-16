@@ -19,7 +19,9 @@
 
 package ch.kostceco.tools.kostval.validation.modulesip2.impl;
 
-import java.io.File; import java.util.Map;
+import java.io.File;
+import java.util.Locale;
+import java.util.Map;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.security.MessageDigest;
@@ -36,15 +38,15 @@ import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesip2.Validation2cChecksumModule;
 
-/** Validierungsschritt 2c: Stimmen die Pr�fsummen der Dateien mit Pr�fsumme überein? metadata.xml:
- * pruefsumme, pruefalgorithmus und name pro Datei auslesen pfad ermitteln, l�nge der summe
- * kontrollieren datei: Summe berechnen und vergleichen */
+/** Validierungsschritt 2c: Stimmen die Pr�fsummen der Dateien mit Pr�fsumme überein?
+ * metadata.xml: pruefsumme, pruefalgorithmus und name pro Datei auslesen pfad ermitteln, l�nge
+ * der summe kontrollieren datei: Summe berechnen und vergleichen */
 
-public class Validation2cChecksumModuleImpl extends ValidationModuleImpl implements
-		Validation2cChecksumModule
+public class Validation2cChecksumModuleImpl extends ValidationModuleImpl
+		implements Validation2cChecksumModule
 {
 
-	private ConfigurationService	configurationService;
+	private ConfigurationService configurationService;
 
 	public ConfigurationService getConfigurationService()
 	{
@@ -57,13 +59,13 @@ public class Validation2cChecksumModuleImpl extends ValidationModuleImpl impleme
 	}
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
-			throws Validation2cChecksumException
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
+			Locale locale ) throws Validation2cChecksumException
 	{
 		boolean showOnWork = true;
 		int onWork = 410;
 		// Informationen zur Darstellung "onWork" holen
-		String onWorkConfig = configMap.get( "ShowProgressOnWork");
+		String onWorkConfig = configMap.get( "ShowProgressOnWork" );
 		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
 		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
 		 * ref="configurationService" /> */
@@ -81,8 +83,8 @@ public class Validation2cChecksumModuleImpl extends ValidationModuleImpl impleme
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			// dbf.setValidating(false);
 			DocumentBuilder db = dbf.newDocumentBuilder();
-			Document doc = db.parse( new FileInputStream( new File( valDatei.getAbsolutePath()
-					+ "//header//metadata.xml" ) ) );
+			Document doc = db.parse( new FileInputStream(
+					new File( valDatei.getAbsolutePath() + "//header//metadata.xml" ) ) );
 			doc.getDocumentElement().normalize();
 			NodeList nodeLst = doc.getElementsByTagName( "datei" );
 
@@ -159,9 +161,9 @@ public class Validation2cChecksumModuleImpl extends ValidationModuleImpl impleme
 					if ( pruefsumme.length() != 32 ) {
 						valid = false;
 
-						getMessageService().logError(
-								getTextResourceService().getText( MESSAGE_XML_MODUL_Bc_SIP )
-										+ getTextResourceService().getText( MESSAGE_XML_BC_WRONGMD5, path ) );
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bc_SIP )
+										+ getTextResourceService().getText( locale, MESSAGE_XML_BC_WRONGMD5, path ) );
 
 					} else {
 						// Start MD5 Berechnung
@@ -181,7 +183,8 @@ public class Validation2cChecksumModuleImpl extends ValidationModuleImpl impleme
 								StringBuffer sb = new StringBuffer( "" );
 
 								for ( int i = 0; i < digestBytes.length; i++ ) {
-									sb.append( Integer.toString( (digestBytes[i] & 0xff) + 0x100, 16 ).substring( 1 ) );
+									sb.append(
+											Integer.toString( (digestBytes[i] & 0xff) + 0x100, 16 ).substring( 1 ) );
 								}
 								String output = sb.toString();
 								while ( output.length() < 32 ) {
@@ -192,8 +195,9 @@ public class Validation2cChecksumModuleImpl extends ValidationModuleImpl impleme
 									fileInput.close();
 								} catch ( IOException e ) {
 									getMessageService().logError(
-											getTextResourceService().getText( MESSAGE_XML_MODUL_Bc_SIP )
-													+ getTextResourceService().getText( ERROR_XML_BC_CANNOTCLOSESTREAMMD5 ) );
+											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bc_SIP )
+													+ getTextResourceService().getText( locale,
+															ERROR_XML_BC_CANNOTCLOSESTREAMMD5 ) );
 									return false;
 								}
 
@@ -204,14 +208,14 @@ public class Validation2cChecksumModuleImpl extends ValidationModuleImpl impleme
 									valid = false;
 
 									getMessageService().logError(
-											getTextResourceService().getText( MESSAGE_XML_MODUL_Bc_SIP )
-													+ getTextResourceService().getText( MESSAGE_XML_BC_WRONGMD5,
+											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bc_SIP )
+													+ getTextResourceService().getText( locale, MESSAGE_XML_BC_WRONGMD5,
 															path + ": " + pruefsumme + " ~ " + output ) );
 								}
 							} catch ( IOException e ) {
-								getMessageService().logError(
-										getTextResourceService().getText( MESSAGE_XML_MODUL_Bc_SIP )
-												+ getTextResourceService().getText( ERROR_XML_BC_CANNOTPROCESSMD5 ) );
+								getMessageService().logError( getTextResourceService().getText( locale,
+										MESSAGE_XML_MODUL_Bc_SIP )
+										+ getTextResourceService().getText( locale, ERROR_XML_BC_CANNOTPROCESSMD5 ) );
 								return false;
 							}
 						} else {
@@ -226,9 +230,9 @@ public class Validation2cChecksumModuleImpl extends ValidationModuleImpl impleme
 					if ( pruefsumme.length() != 40 ) {
 						valid = false;
 
-						getMessageService().logError(
-								getTextResourceService().getText( MESSAGE_XML_MODUL_Bc_SIP )
-										+ getTextResourceService().getText( MESSAGE_XML_BC_WRONGMD5, path ) );
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bc_SIP )
+										+ getTextResourceService().getText( locale, MESSAGE_XML_BC_WRONGMD5, path ) );
 
 					} else {
 						// Start SHA-1 Berechnung
@@ -248,7 +252,8 @@ public class Validation2cChecksumModuleImpl extends ValidationModuleImpl impleme
 								StringBuffer sb = new StringBuffer( "" );
 
 								for ( int i = 0; i < digestBytes.length; i++ ) {
-									sb.append( Integer.toString( (digestBytes[i] & 0xff) + 0x100, 16 ).substring( 1 ) );
+									sb.append(
+											Integer.toString( (digestBytes[i] & 0xff) + 0x100, 16 ).substring( 1 ) );
 								}
 								String output = sb.toString();
 								while ( output.length() < 40 ) {
@@ -259,8 +264,9 @@ public class Validation2cChecksumModuleImpl extends ValidationModuleImpl impleme
 									fileInput.close();
 								} catch ( IOException e ) {
 									getMessageService().logError(
-											getTextResourceService().getText( MESSAGE_XML_MODUL_Bc_SIP )
-													+ getTextResourceService().getText( ERROR_XML_BC_CANNOTCLOSESTREAMMD5 ) );
+											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bc_SIP )
+													+ getTextResourceService().getText( locale,
+															ERROR_XML_BC_CANNOTCLOSESTREAMMD5 ) );
 									return false;
 								}
 
@@ -269,14 +275,14 @@ public class Validation2cChecksumModuleImpl extends ValidationModuleImpl impleme
 									valid = false;
 
 									getMessageService().logError(
-											getTextResourceService().getText( MESSAGE_XML_MODUL_Bc_SIP )
-													+ getTextResourceService().getText( MESSAGE_XML_BC_WRONGMD5,
+											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bc_SIP )
+													+ getTextResourceService().getText( locale, MESSAGE_XML_BC_WRONGMD5,
 															path + ": " + pruefsumme + " ~ " + output ) );
 								}
 							} catch ( IOException e ) {
-								getMessageService().logError(
-										getTextResourceService().getText( MESSAGE_XML_MODUL_Bc_SIP )
-												+ getTextResourceService().getText( ERROR_XML_BC_CANNOTPROCESSMD5 ) );
+								getMessageService().logError( getTextResourceService().getText( locale,
+										MESSAGE_XML_MODUL_Bc_SIP )
+										+ getTextResourceService().getText( locale, ERROR_XML_BC_CANNOTPROCESSMD5 ) );
 								return false;
 							}
 						} else {
@@ -292,9 +298,9 @@ public class Validation2cChecksumModuleImpl extends ValidationModuleImpl impleme
 					if ( pruefsumme.length() != 64 ) {
 						valid = false;
 
-						getMessageService().logError(
-								getTextResourceService().getText( MESSAGE_XML_MODUL_Bc_SIP )
-										+ getTextResourceService().getText( MESSAGE_XML_BC_WRONGMD5, path ) );
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bc_SIP )
+										+ getTextResourceService().getText( locale, MESSAGE_XML_BC_WRONGMD5, path ) );
 
 					} else {
 						// Start SHA-256 Berechnung
@@ -314,7 +320,8 @@ public class Validation2cChecksumModuleImpl extends ValidationModuleImpl impleme
 								StringBuffer sb = new StringBuffer( "" );
 
 								for ( int i = 0; i < digestBytes.length; i++ ) {
-									sb.append( Integer.toString( (digestBytes[i] & 0xff) + 0x100, 16 ).substring( 1 ) );
+									sb.append(
+											Integer.toString( (digestBytes[i] & 0xff) + 0x100, 16 ).substring( 1 ) );
 								}
 								String output = sb.toString();
 								while ( output.length() < 64 ) {
@@ -325,8 +332,9 @@ public class Validation2cChecksumModuleImpl extends ValidationModuleImpl impleme
 									fileInput.close();
 								} catch ( IOException e ) {
 									getMessageService().logError(
-											getTextResourceService().getText( MESSAGE_XML_MODUL_Bc_SIP )
-													+ getTextResourceService().getText( ERROR_XML_BC_CANNOTCLOSESTREAMMD5 ) );
+											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bc_SIP )
+													+ getTextResourceService().getText( locale,
+															ERROR_XML_BC_CANNOTCLOSESTREAMMD5 ) );
 									return false;
 								}
 
@@ -335,14 +343,14 @@ public class Validation2cChecksumModuleImpl extends ValidationModuleImpl impleme
 									valid = false;
 
 									getMessageService().logError(
-											getTextResourceService().getText( MESSAGE_XML_MODUL_Bc_SIP )
-													+ getTextResourceService().getText( MESSAGE_XML_BC_WRONGMD5,
+											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bc_SIP )
+													+ getTextResourceService().getText( locale, MESSAGE_XML_BC_WRONGMD5,
 															path + ": " + pruefsumme + " ~ " + output ) );
 								}
 							} catch ( IOException e ) {
-								getMessageService().logError(
-										getTextResourceService().getText( MESSAGE_XML_MODUL_Bc_SIP )
-												+ getTextResourceService().getText( ERROR_XML_BC_CANNOTPROCESSMD5 ) );
+								getMessageService().logError( getTextResourceService().getText( locale,
+										MESSAGE_XML_MODUL_Bc_SIP )
+										+ getTextResourceService().getText( locale, ERROR_XML_BC_CANNOTPROCESSMD5 ) );
 								return false;
 							}
 						} else {
@@ -358,9 +366,9 @@ public class Validation2cChecksumModuleImpl extends ValidationModuleImpl impleme
 					if ( pruefsumme.length() != 128 ) {
 						valid = false;
 
-						getMessageService().logError(
-								getTextResourceService().getText( MESSAGE_XML_MODUL_Bc_SIP )
-										+ getTextResourceService().getText( MESSAGE_XML_BC_WRONGMD5, path ) );
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bc_SIP )
+										+ getTextResourceService().getText( locale, MESSAGE_XML_BC_WRONGMD5, path ) );
 
 					} else {
 						// Start SHA-512 Berechnung
@@ -380,7 +388,8 @@ public class Validation2cChecksumModuleImpl extends ValidationModuleImpl impleme
 								StringBuffer sb = new StringBuffer( "" );
 
 								for ( int i = 0; i < digestBytes.length; i++ ) {
-									sb.append( Integer.toString( (digestBytes[i] & 0xff) + 0x100, 16 ).substring( 1 ) );
+									sb.append(
+											Integer.toString( (digestBytes[i] & 0xff) + 0x100, 16 ).substring( 1 ) );
 								}
 								String output = sb.toString();
 								while ( output.length() < 128 ) {
@@ -391,8 +400,9 @@ public class Validation2cChecksumModuleImpl extends ValidationModuleImpl impleme
 									fileInput.close();
 								} catch ( IOException e ) {
 									getMessageService().logError(
-											getTextResourceService().getText( MESSAGE_XML_MODUL_Bc_SIP )
-													+ getTextResourceService().getText( ERROR_XML_BC_CANNOTCLOSESTREAMMD5 ) );
+											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bc_SIP )
+													+ getTextResourceService().getText( locale,
+															ERROR_XML_BC_CANNOTCLOSESTREAMMD5 ) );
 									return false;
 								}
 
@@ -401,14 +411,14 @@ public class Validation2cChecksumModuleImpl extends ValidationModuleImpl impleme
 									valid = false;
 
 									getMessageService().logError(
-											getTextResourceService().getText( MESSAGE_XML_MODUL_Bc_SIP )
-													+ getTextResourceService().getText( MESSAGE_XML_BC_WRONGMD5,
+											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bc_SIP )
+													+ getTextResourceService().getText( locale, MESSAGE_XML_BC_WRONGMD5,
 															path + ": " + pruefsumme + " ~ " + output ) );
 								}
 							} catch ( IOException e ) {
-								getMessageService().logError(
-										getTextResourceService().getText( MESSAGE_XML_MODUL_Bc_SIP )
-												+ getTextResourceService().getText( ERROR_XML_BC_CANNOTPROCESSMD5 ) );
+								getMessageService().logError( getTextResourceService().getText( locale,
+										MESSAGE_XML_MODUL_Bc_SIP )
+										+ getTextResourceService().getText( locale, ERROR_XML_BC_CANNOTPROCESSMD5 ) );
 								return false;
 							}
 						} else {
@@ -440,9 +450,9 @@ public class Validation2cChecksumModuleImpl extends ValidationModuleImpl impleme
 				}
 			}
 		} catch ( Exception e ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_Bc_SIP )
-							+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bc_SIP )
+							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			valid = false;
 		}
 		return valid;

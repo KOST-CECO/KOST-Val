@@ -21,6 +21,7 @@ package ch.kostceco.tools.kostval.validation.moduletiff2.impl;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.util.Locale;
 import java.util.Map;
 import java.io.FileReader;
 
@@ -33,22 +34,23 @@ import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationFmultipageVali
  * 
  * @author Rc Claire Roethlisberger, KOST-CECO */
 
-public class ValidationFmultipageValidationModuleImpl extends ValidationModuleImpl implements
-		ValidationFmultipageValidationModule
+public class ValidationFmultipageValidationModuleImpl extends ValidationModuleImpl
+		implements ValidationFmultipageValidationModule
 {
 
-	public static String	NEWLINE	= System.getProperty( "line.separator" );
+	public static String NEWLINE = System.getProperty( "line.separator" );
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
-			throws ValidationFmultipageValidationException
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
+			Locale locale ) throws ValidationFmultipageValidationException
 	{
 
 		boolean isValid = true;
 
 		// Informationen zum Logverzeichnis holen
 		String pathToExiftoolOutput = directoryOfLogfile.getAbsolutePath();
-		File exiftoolReport = new File( pathToExiftoolOutput, valDatei.getName() + ".exiftool-log.txt" );
+		File exiftoolReport = new File( pathToExiftoolOutput,
+				valDatei.getName() + ".exiftool-log.txt" );
 		pathToExiftoolOutput = exiftoolReport.getAbsolutePath();
 
 		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
@@ -57,8 +59,8 @@ public class ValidationFmultipageValidationModuleImpl extends ValidationModuleIm
 
 		String mp = configMap.get( "AllowedMultipage" );
 		if ( mp.startsWith( "Configuration-Error:" ) ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_F_TIFF ) + mp );
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_TIFF ) + mp );
 			return false;
 		}
 		// 0=Singelpage / 1=Multipage
@@ -84,9 +86,9 @@ public class ValidationFmultipageValidationModuleImpl extends ValidationModuleIm
 				if ( exiftoolio == 0 ) {
 					// Invalider Status
 					isValid = false;
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_F_TIFF )
-									+ getTextResourceService().getText( MESSAGE_XML_CG_ETNIO, "F" ) );
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_TIFF )
+									+ getTextResourceService().getText( locale, MESSAGE_XML_CG_ETNIO, "F" ) );
 				}
 				if ( ifdCount == 1 ) {
 					// Valider Status (nur eine Seite)
@@ -94,15 +96,15 @@ public class ValidationFmultipageValidationModuleImpl extends ValidationModuleIm
 					// Invalider Status
 					ifdMsg = ("Multipage (" + ifdCount + " TIFFs)");
 					isValid = false;
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_F_TIFF )
-									+ getTextResourceService().getText( MESSAGE_XML_CG_INVALID, ifdMsg ) );
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_TIFF )
+									+ getTextResourceService().getText( locale, MESSAGE_XML_CG_INVALID, ifdMsg ) );
 				}
 				in.close();
 			} catch ( Exception e ) {
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_F_TIFF )
-								+ getTextResourceService().getText( MESSAGE_XML_CG_CANNOTFINDETREPORT ) );
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_TIFF )
+								+ getTextResourceService().getText( locale, MESSAGE_XML_CG_CANNOTFINDETREPORT ) );
 				return false;
 			}
 		}

@@ -21,6 +21,7 @@ package ch.kostceco.tools.kostval.validation.modulesip1.impl;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.util.Locale;
 import java.util.Map;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -42,16 +43,16 @@ import ch.kostceco.tools.kostval.exception.modulesip1.Validation1dMetadataExcept
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesip1.Validation1dMetadataModule;
 
-public class Validation1dMetadataModuleImpl extends ValidationModuleImpl implements
-		Validation1dMetadataModule
+public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
+		implements Validation1dMetadataModule
 {
 
 	public static String	NEWLINE	= System.getProperty( "line.separator" );
 
 	final int							BUFFER	= 2048;
 
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
-			throws Validation1dMetadataException
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
+			Locale locale ) throws Validation1dMetadataException
 	{
 		// Informationen zur Darstellung "onWork" holen
 		String onWork = configMap.get( "ShowProgressOnWork" );
@@ -101,10 +102,9 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl impleme
 						String lineNode = line.substring( ns, end );
 						String lineNodeNS = line.substring( start, end );
 						getMessageService()
-								.logError(
-										getTextResourceService().getText( MESSAGE_XML_MODUL_Ad_SIP )
-												+ getTextResourceService().getText( ERROR_XML_AD_NSFOUND, lineNode,
-														lineNodeNS ) );
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
+										+ getTextResourceService().getText( locale, ERROR_XML_AD_NSFOUND, lineNode,
+												lineNodeNS ) );
 						in.close();
 						return false;
 					} else {
@@ -126,8 +126,9 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl impleme
 			 * dirOfJarPath + File.separator +
 			 * 
 			 * erweitern. */
-			String path = new java.io.File( KOSTVal.class.getProtectionDomain().getCodeSource()
-					.getLocation().getPath() ).getAbsolutePath();
+			String path = new java.io.File(
+					KOSTVal.class.getProtectionDomain().getCodeSource().getLocation().getPath() )
+							.getAbsolutePath();
 			path = path.substring( 0, path.lastIndexOf( "." ) );
 			path = path + System.getProperty( "java.class.path" );
 			String locationOfJarPath = path;
@@ -148,6 +149,7 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl impleme
 			File xml11 = new File( dirOfJarPath + File.separator + "resources" + File.separator
 					+ "header_1d" + File.separator + "eCH-0160v1.1" + File.separator + "metadata.xml" );
 
+			System.out.println (dirOfJarPath+" "+xsd10.getAbsolutePath()+" "+xsd11.getAbsolutePath()+" "+xml10.getAbsolutePath()+" "+xml11.getAbsolutePath());
 			File xmlIntern = xml10;
 			File xsdIntern = xsd10;
 
@@ -169,7 +171,8 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl impleme
 					scanner.close();
 
 					// ins log eine txt anlegen mit der Version
-					sipVersionFile = new File( directoryOfLogfile.getAbsolutePath() + File.separator + sipVer );
+					sipVersionFile = new File(
+							directoryOfLogfile.getAbsolutePath() + File.separator + sipVer );
 					try {
 						sipVersionFile.createNewFile();
 					} catch ( IOException e ) {
@@ -177,13 +180,15 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl impleme
 					}
 
 				} catch ( FileNotFoundException e ) {
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_J_SIARD )
-									+ getTextResourceService().getText( ERROR_XML_UNKNOWN, "FileNotFoundException" ) );
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
+									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+											"FileNotFoundException" ) );
 				} catch ( Exception e ) {
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_J_SIARD )
-									+ getTextResourceService().getText( ERROR_XML_UNKNOWN, (e.getMessage() + " 1") ) ); //
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
+									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+											(e.getMessage() + " 1") ) ); //
 					return false;
 				}
 
@@ -276,30 +281,30 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl impleme
 					// Ende ss
 
 				} catch ( java.io.IOException ioe ) {
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_Ad_SIP )
-									+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
+									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 											ioe.getMessage() + " (IOException)" ) );
 					result = false;
 				} catch ( SAXException e ) {
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_Ad_SIP )
-									+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
+									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 											e.getMessage() + " (SAXException)" ) );
 					result = false;
 				} catch ( ParserConfigurationException e ) {
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_Ad_SIP )
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
 
-									+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 											e.getMessage() + " (ParserConfigurationException)" ) );
 					result = false;
 				}
 			}
 		} catch ( Exception e ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_Ad_SIP )
-							+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
+							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 		return result;
@@ -311,25 +316,27 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl impleme
 
 		public SAXParseException	saxParseExceptionMss	= null;
 
-		public void error( SAXParseException exceptionMss ) throws SAXException
+		@SuppressWarnings("unused")
+		public void error( SAXParseException exceptionMss, Locale locale ) throws SAXException
 		{
 			validationErrorMss = true;
 			saxParseExceptionMss = exceptionMss;
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_Ad_SIP )
-							+ getTextResourceService().getText( ERROR_XML_AD_METADATA_ERRORS,
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
+							+ getTextResourceService().getText( locale, ERROR_XML_AD_METADATA_ERRORS,
 									saxParseExceptionMss.getLineNumber(),
 									saxParseExceptionMss.getMessage() + " (Mss)" ) );
 
 		}
 
-		public void fatalError( SAXParseException exceptionMss ) throws SAXException
+		@SuppressWarnings("unused")
+		public void fatalError( SAXParseException exceptionMss, Locale locale ) throws SAXException
 		{
 			validationErrorMss = true;
 			saxParseExceptionMss = exceptionMss;
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_Ad_SIP )
-							+ getTextResourceService().getText( ERROR_XML_AD_METADATA_ERRORS,
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
+							+ getTextResourceService().getText( locale, ERROR_XML_AD_METADATA_ERRORS,
 									saxParseExceptionMss.getLineNumber(),
 									saxParseExceptionMss.getMessage() + " (Mss)" ) );
 		}
@@ -345,27 +352,27 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl impleme
 
 		public SAXParseException	saxParseExceptionMsi	= null;
 
-		public void error( SAXParseException exceptionMsi ) throws SAXException
+		@SuppressWarnings("unused")
+		public void error( SAXParseException exceptionMsi, Locale locale ) throws SAXException
 		{
 			validationErrorMsi = true;
 			saxParseExceptionMsi = exceptionMsi;
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_Ad_SIP )
-							+ getTextResourceService()
-									.getText( ERROR_XML_AD_METADATA_ERRORS, saxParseExceptionMsi.getLineNumber(),
-											saxParseExceptionMsi.getMessage() + " (si)" ) );
+			getMessageService().logError( getTextResourceService().getText( locale,
+					MESSAGE_XML_MODUL_Ad_SIP )
+					+ getTextResourceService().getText( locale, ERROR_XML_AD_METADATA_ERRORS,
+							saxParseExceptionMsi.getLineNumber(), saxParseExceptionMsi.getMessage() + " (si)" ) );
 
 		}
 
-		public void fatalError( SAXParseException exceptionMsi ) throws SAXException
+		@SuppressWarnings("unused")
+		public void fatalError( SAXParseException exceptionMsi, Locale locale ) throws SAXException
 		{
 			validationErrorMsi = true;
 			saxParseExceptionMsi = exceptionMsi;
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_Ad_SIP )
-							+ getTextResourceService()
-									.getText( ERROR_XML_AD_METADATA_ERRORS, saxParseExceptionMsi.getLineNumber(),
-											saxParseExceptionMsi.getMessage() + " (si)" ) );
+			getMessageService().logError( getTextResourceService().getText( locale,
+					MESSAGE_XML_MODUL_Ad_SIP )
+					+ getTextResourceService().getText( locale, ERROR_XML_AD_METADATA_ERRORS,
+							saxParseExceptionMsi.getLineNumber(), saxParseExceptionMsi.getMessage() + " (si)" ) );
 		}
 
 		public void warning( SAXParseException exceptionMsi ) throws SAXException
@@ -379,27 +386,27 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl impleme
 
 		public SAXParseException	saxParseExceptionMis	= null;
 
-		public void error( SAXParseException exceptionMis ) throws SAXException
+		@SuppressWarnings("unused")
+		public void error( SAXParseException exceptionMis, Locale locale ) throws SAXException
 		{
 			validationErrorMis = true;
 			saxParseExceptionMis = exceptionMis;
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_Ad_SIP )
-							+ getTextResourceService()
-									.getText( ERROR_XML_AD_METADATA_ERRORS, saxParseExceptionMis.getLineNumber(),
-											saxParseExceptionMis.getMessage() + " (is)" ) );
+			getMessageService().logError( getTextResourceService().getText( locale,
+					MESSAGE_XML_MODUL_Ad_SIP )
+					+ getTextResourceService().getText( locale, ERROR_XML_AD_METADATA_ERRORS,
+							saxParseExceptionMis.getLineNumber(), saxParseExceptionMis.getMessage() + " (is)" ) );
 
 		}
 
-		public void fatalError( SAXParseException exceptionMis ) throws SAXException
+		@SuppressWarnings("unused")
+		public void fatalError( SAXParseException exceptionMis, Locale locale ) throws SAXException
 		{
 			validationErrorMis = true;
 			saxParseExceptionMis = exceptionMis;
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_Ad_SIP )
-							+ getTextResourceService()
-									.getText( ERROR_XML_AD_METADATA_ERRORS, saxParseExceptionMis.getLineNumber(),
-											saxParseExceptionMis.getMessage() + " (is)" ) );
+			getMessageService().logError( getTextResourceService().getText( locale,
+					MESSAGE_XML_MODUL_Ad_SIP )
+					+ getTextResourceService().getText( locale, ERROR_XML_AD_METADATA_ERRORS,
+							saxParseExceptionMis.getLineNumber(), saxParseExceptionMis.getMessage() + " (is)" ) );
 		}
 
 		public void warning( SAXParseException exception ) throws SAXException

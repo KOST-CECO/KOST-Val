@@ -19,7 +19,9 @@
 
 package ch.kostceco.tools.kostval.validation.modulesiard;
 
-import java.io.File; import java.util.Map;
+import java.io.File;
+import java.util.Locale;
+import java.util.Map;
 
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationAzipException;
 import ch.kostceco.tools.kostval.validation.ValidationModule;
@@ -34,6 +36,7 @@ import ch.kostceco.tools.kostval.validation.ValidationModule;
 public interface ValidationAzipModule extends ValidationModule
 {
 
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap ) throws ValidationAzipException;
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
+			Locale locale ) throws ValidationAzipException;
 
 }

@@ -1,6 +1,6 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
- * Information Package (SIP). Copyright (C) 2012-2017 Claire Roethlisberger (KOST-CECO), Christian
+ * Information Package (SIP). Copyright (C) 2012-2020 Claire Roethlisberger (KOST-CECO), Christian
  * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
  * Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
@@ -19,7 +19,12 @@
 
 package ch.kostceco.tools.kostval.util;
 
-import static org.apache.commons.io.IOUtils.closeQuietly;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.math.*;
+import java.security.*;
+import java.util.Date;
+
 import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.util.StreamGobbler;
 import ch.kostceco.tools.kostval.util.Util;
@@ -42,7 +47,7 @@ public class UtilCallas
 		this.configurationService = configurationService;
 	}
 
-	/** Callas ausfÃ¼hren. Die Art, wie allgemein callas angesprochen wird, wird er nicht publiziert.
+	/** Callas ausführen. Die Art, wie allgemein callas angesprochen wird, wird hier nicht publiziert.
 	 * Publiziert wird wie callas angesprochen wird, wenn diese separat erworben und aktiviert wurde.
 	 * 
 	 * @author Rc Claire Roethlisberger, KOST-CECO
@@ -57,8 +62,8 @@ public class UtilCallas
 	 * @param reportPath
 	 *          : Pfad zum Report
 	 * @return isValid true wenn validierung bestanden wurde */
-	public static int execCallas( String pdfapilotExe, String analye, String lang,
-			String valPath, String reportPath ) throws Exception
+	public static int execCallas( String pdfapilotExe, String analye, String lang, String valPath,
+			String reportPath ) throws Exception
 	{
 		/* Aufbau command:
 		 * 
@@ -72,20 +77,63 @@ public class UtilCallas
 		 * 
 		 * 5) reportPath: Pfad zum Report */
 
-		/* C:\Tools\pdfaPilot\callas_pdfaPilotServer_Win_7.0.268\cli\pdfaPilot.exe -a --noprogress
+		/* C:\Tools\pdfaPilot\callas_pdfaPilotServer_Win_7.2.276\cli\pdfaPilot.exe -a --noprogress
 		 * --nohits --level=1b -l=DE valDatei >> pathToPdfapilotOutput */
+		String ac5 = "7GQQE";
+		String dm = "--";
+		String pac1 = "146B9";
+		String mK = "M";
+		String ac4 = "UEWWW";
+		String pac2 = "AF4D";
+		String ac7 = "KDDFZ";
+		String callas = "pdfaPilot";
+		String s = "secret";
+		String d = "d";
+		String kost = "KOST";
+		String ac1 = "TJCGZ";
+		String pac3 = "GOETZ";
+		String h = "H";
+		String ac6 = "AUFBZ";
+		String l = "license";
+		String ac9 = "AKSS";
+		String ac3 = "GY2QR";
+		String y = "y";
+		String ac2 = "YQ6SE";
+		String pac4 = "S0QW7";
+		String m = "m";
+		String ac8 = "HRZ6E";
 
-		StringBuffer command = new StringBuffer( pdfapilotExe + " " );
+		// Calculation of Secret Hash
+		DateFormat dateFormat = new SimpleDateFormat( y + y + y + y + "-" + mK + mK + "-" + d + d + "-"
+				+ h + h + "-" + m + m );
+		Date date = new Date();
+		String secret = "<" + ac1 + ac2 + ac3 + ac4 + ac5 + ac6 + ac7 + ac8 + ac9 + "><"
+				+ dateFormat.format( date ) + "><" + callas + "4" + kost + ">";
+		MessageDigest md5 = MessageDigest.getInstance( "MD5" );
+		md5.update( secret.getBytes() );
+		byte[] digest = md5.digest();
+		BigInteger bigInt = new BigInteger( 1, digest );
+		String hash = bigInt.toString( 16 );
+		// Now we need to zero pad it
+		while ( hash.length() < 32 ) {
+			hash = "0" + hash;
+		}
+		String license = dm + s + "=" + hash + " " + dm + l + "=" + callas + "4" + kost;
+		@SuppressWarnings("unused")
+		String pseudo = pac1 + pac2 + pac3 + pac4;
+		// executepdfaPilot
+		StringBuffer command = new StringBuffer( "\"" + pdfapilotExe + "\" " );
 		command.append( analye + " " );
+		command.append( license + " " );
 		command.append( lang + " \"" );
 		command.append( valPath + "\" >> \"" );
 		command.append( reportPath + "\"" );
 
 		String commandRed = "cmd /c \"" + command + "\"";
-		/* Das redirect Zeichen verunmÃ¶glicht eine direkte eingabe. mit dem geschachtellten Befehl
+		/* Das redirect Zeichen verunmöglicht eine direkte eingabe. mit dem geschachtellten Befehl
 		 * gehts: cmd /c\"urspruenlicher Befehl\" */
 
-		int returnCode=999;
+		int returnCode = 999;
 
 		Process proc = null;
 		Runtime rt = null;
@@ -117,12 +165,12 @@ public class UtilCallas
 			return returnCode;
 		} finally {
 			if ( proc != null ) {
-				closeQuietly( proc.getOutputStream() );
-				closeQuietly( proc.getInputStream() );
-				closeQuietly( proc.getErrorStream() );
+				proc.getOutputStream().close();
+				proc.getInputStream().close();
+				proc.getErrorStream().close();
 			}
 		}
-		// Validierungsergebnis zurÃ¼ckgeben
+		// Validierungsergebnis zurückgeben
 		return returnCode;
 	}
 

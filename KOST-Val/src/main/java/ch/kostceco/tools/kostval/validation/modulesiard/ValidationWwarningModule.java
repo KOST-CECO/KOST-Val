@@ -19,7 +19,9 @@
 
 package ch.kostceco.tools.kostval.validation.modulesiard;
 
-import java.io.File; import java.util.Map;
+import java.io.File;
+import java.util.Locale;
+import java.util.Map;
 import java.io.IOException;
 
 import org.jdom2.JDOMException;
@@ -38,10 +40,10 @@ import ch.kostceco.tools.kostval.validation.bean.ValidationContext;
 public interface ValidationWwarningModule extends ValidationModule
 {
 
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
-			throws ValidationWwarningException;
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
+			Locale locale ) throws ValidationWwarningException;
 
-	public boolean prepareValidation( ValidationContext validationContext ) throws IOException,
-			JDOMException, Exception;
+	public boolean prepareValidation( ValidationContext validationContext )
+			throws IOException, JDOMException, Exception;
 
 }

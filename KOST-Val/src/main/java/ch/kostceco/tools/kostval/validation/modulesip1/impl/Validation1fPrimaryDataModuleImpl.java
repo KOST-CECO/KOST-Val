@@ -22,6 +22,7 @@ package ch.kostceco.tools.kostval.validation.modulesip1.impl;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -42,13 +43,13 @@ import ch.kostceco.tools.kostval.validation.modulesip1.Validation1fPrimaryDataMo
  * vorhanden sind, der Ablieferungstyp aber GEVER ist. Sind keine Primärdateien im Verzeichnis
  * content vorhanden, der Ablieferungstyp ist jedoch FILE, ist dies ein Fehler und gibt false
  * zur�ck. */
-public class Validation1fPrimaryDataModuleImpl extends ValidationModuleImpl implements
-		Validation1fPrimaryDataModule
+public class Validation1fPrimaryDataModuleImpl extends ValidationModuleImpl
+		implements Validation1fPrimaryDataModule
 {
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
-			throws Validation1fPrimaryDataException
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
+			Locale locale ) throws Validation1fPrimaryDataException
 	{
 		boolean showOnWork = true;
 		int onWork = 410;
@@ -105,8 +106,8 @@ public class Validation1fPrimaryDataModuleImpl extends ValidationModuleImpl impl
 				DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 				// dbf.setValidating(false);
 				DocumentBuilder db = dbf.newDocumentBuilder();
-				Document doc = db.parse( new FileInputStream( new File( valDatei.getAbsolutePath()
-						+ "//header//metadata.xml" ) ) );
+				Document doc = db.parse( new FileInputStream(
+						new File( valDatei.getAbsolutePath() + "//header//metadata.xml" ) ) );
 				doc.getDocumentElement().normalize();
 				NodeList layerConfigList = doc.getElementsByTagName( "ablieferung" );
 				Node node = layerConfigList.item( 0 );
@@ -115,17 +116,18 @@ public class Validation1fPrimaryDataModuleImpl extends ValidationModuleImpl impl
 
 				if ( name.equals( "ablieferungFilesSIP" ) ) {
 					// FILE-SIP
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_Af_SIP )
-									+ getTextResourceService().getText( ERROR_XML_AF_FILESIPWITHOUTPRIMARYDATA ) );
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Af_SIP )
+									+ getTextResourceService().getText( locale,
+											ERROR_XML_AF_FILESIPWITHOUTPRIMARYDATA ) );
 					return false;
 				}
 			}
 
 		} catch ( Exception e ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_Af_SIP )
-							+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Af_SIP )
+							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 		return true;

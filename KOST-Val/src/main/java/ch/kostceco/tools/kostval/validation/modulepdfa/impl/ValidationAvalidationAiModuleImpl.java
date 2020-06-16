@@ -35,6 +35,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -77,27 +78,27 @@ import ch.kostceco.tools.kostval.validation.modulepdfa.ValidationAvalidationAiMo
  * PDF-Tools.
  * 
  * Folgendes ist Konfigurierbar: welche Validatoren verwendet werden sollen. Sollen beide verwendet
- * werden wird die Duale Validierung durchgeführt. Bei der dualen Validierung müssen beide
+ * werden wird die Duale Validierung durchgefuehrt. Bei der dualen Validierung muessen beide
  * Validatoren die Datei als invalide betrachten, damit diese als invalid gilt. Bei Uneinigkeit gilt
  * diese als valid.
  * 
  * Es wird falls vorhanden die Vollversion von PDF-Tools verwendet. KOST-Val muss nicht angepasst
- * werden und verwendet automatisch den internen Schlüssel, sollte keine Vollversion existieren.
+ * werden und verwendet automatisch den internen Schluessel, sollte keine Vollversion existieren.
  * 
  * Zuerste erfolgt eine Erkennung, wenn diese io kommt die Validierung mit PDF Tools und oder
  * callas. Die Fehler werden den Einzelnen Gruppen (Modulen) zugeordnet
  * 
  * @author Rc Claire Roethlisberger, KOST-CECO */
 
-public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl implements
-		ValidationAvalidationAiModule
+public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
+		implements ValidationAvalidationAiModule
 {
 
-	public static String	NEWLINE	= System.getProperty( "line.separator" );
+	public static String NEWLINE = System.getProperty( "line.separator" );
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
-			throws ValidationApdfvalidationException
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
+			Locale locale ) throws ValidationApdfvalidationException
 	{
 		boolean valid = false;
 		int iCategory = 999999999;
@@ -122,42 +123,42 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 		String pathToPdfapilotOutput = pathToLogDir + File.separator + "callasTEMP.txt";
 		File report = new File( pathToPdfapilotOutput );
 
-		// falls das File bereits existiert, z.B. von einemvorhergehenden Durchlauf, löschen wir es
+		// falls das File bereits existiert, z.B. von einemvorhergehenden Durchlauf, loeschen wir es
 		if ( report.exists() ) {
 			report.delete();
 		}
 
-		/* Neu soll die Validierung mit PDFTron konfigurier bar sein Mögliche Werte 1A, 1B und no sowie
-		 * 2A, 2B, 2U und no Da Archive beide Versionen erlauben können sind es 2 config einträge Es
-		 * gibt mehre Möglichkeiten das PDF in der gewünschten Version zu testen - Unterscheidung anhand
-		 * DROID --> braucht viel Zeit auch mit KaD_Signaturefile - Unterscheidung anhand PDF/A-Eintrag
-		 * wie Droid aber selber programmiert --> ist viel schneller */
+		/* Neu soll die Validierung mit PDFTron konfigurier bar sein Moegliche Werte 1A, 1B und no sowie
+		 * 2A, 2B, 2U und no Da Archive beide Versionen erlauben koennen sind es 2 config eintraege Es
+		 * gibt mehre Moeglichkeiten das PDF in der gewuenschten Version zu testen - Unterscheidung
+		 * anhand DROID --> braucht viel Zeit auch mit KaD_Signaturefile - Unterscheidung anhand
+		 * PDF/A-Eintrag wie Droid aber selber programmiert --> ist viel schneller */
 		if ( pdfa2.equals( "2A" ) || pdfa2.equals( "2B" ) || pdfa2.equals( "2U" ) ) {
-			// gültiger Konfigurationseintrag und V2 erlaubt
+			// gueltiger Konfigurationseintrag und V2 erlaubt
 			pdfaVer2 = 2;
 		} else {
 			// v2 nicht erlaubt oder falscher eintrag
 			pdfa2 = "no";
 		}
 		if ( pdfa1.equals( "1A" ) || pdfa1.equals( "1B" ) ) {
-			// gültiger Konfigurationseintrag und V1 erlaubt
+			// gueltiger Konfigurationseintrag und V1 erlaubt
 			pdfaVer1 = 1;
 		} else {
 			// v1 nicht erlaubt oder falscher eintrag
 			pdfa1 = "no";
 		}
 		if ( pdfa1 == "no" && pdfa2 == "no" ) {
-			// keine Validierung möglich. keine PDFA-Versionen konfiguriert
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-							+ getTextResourceService().getText( ERROR_XML_A_PDFA_NOCONFIG ) );
+			// keine Validierung moeglich. keine PDFA-Versionen konfiguriert
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+							+ getTextResourceService().getText( locale, ERROR_XML_A_PDFA_NOCONFIG ) );
 			valid = false;
 			return false;
 		}
 
 		String level = "no";
 		// Richtiges Level definieren
-		// TODO: <pdfaid:conformance>A< evtl mit berücksichtigen
+		// TODO: <pdfaid:conformance>A< evtl mit beruecksichtigen
 		if ( pdfaVer1 != 1 ) {
 			// Level 1 nicht erlaubt --> Level 2
 			level = pdfa2;
@@ -166,13 +167,13 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 			level = pdfa1;
 		} else {
 			try {
-				// Beide sind möglich --> Level je nach File auswählen
+				// Beide sind moeglich --> Level je nach File auswaehlen
 				pdfaVer1 = 0;
 				pdfaVer2 = 0;
 				BufferedReader in = new BufferedReader( new FileReader( valDatei ) );
 				String line;
 				while ( (line = in.readLine()) != null ) {
-					// häufige Partangaben: pdfaid:part>1< pdfaid:part='1' pdfaid:part="1"
+					// haeufige Partangaben: pdfaid:part>1< pdfaid:part='1' pdfaid:part="1"
 					if ( line.contains( "pdfaid:part" ) ) {
 						// pdfaid:part
 						if ( line.contains( "pdfaid:part>1<" ) ) {
@@ -214,25 +215,24 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 
 			} catch ( Throwable e ) {
 				getMessageService()
-						.logError(
-								getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-										+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
-												"Version " + e.getMessage() ) );
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+										"Version " + e.getMessage() ) );
 			}
 		}
-		getMessageService().logError(
-				getTextResourceService().getText( MESSAGE_FORMATVALIDATION_VL, level ) );
+		getMessageService()
+				.logError( getTextResourceService().getText( locale, MESSAGE_FORMATVALIDATION_VL, level ) );
 
 		// Start mit der Erkennung
 
 		// Eine PDF Datei (.pdf / .pdfa) muss mit %PDF [25504446] beginnen
 		if ( valDatei.isDirectory() ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-							+ getTextResourceService().getText( ERROR_XML_A_PDFA_ISDIRECTORY ) );
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+							+ getTextResourceService().getText( locale, ERROR_XML_A_PDFA_ISDIRECTORY ) );
 			return false;
-		} else if ( (valDatei.getAbsolutePath().toLowerCase().endsWith( ".pdf" ) || valDatei
-				.getAbsolutePath().toLowerCase().endsWith( ".pdfa" )) ) {
+		} else if ( (valDatei.getAbsolutePath().toLowerCase().endsWith( ".pdf" )
+				|| valDatei.getAbsolutePath().toLowerCase().endsWith( ".pdfa" )) ) {
 
 			FileReader fr = null;
 
@@ -262,6 +262,9 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 				int i;
 				char[] buffer = new char[4];
 				length = read.read( buffer );
+				read.close();
+				// set to null
+				read = null;
 				for ( i = 0; i != length; i++ )
 					;
 
@@ -270,51 +273,41 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 				char[] charArray2 = new char[] { c1, c2, c3, c4 };
 
 				if ( Arrays.equals( charArray1, charArray2 ) ) {
-					// höchstwahrscheinlich ein PDF da es mit 25504446 respektive %PDF beginnt
+					// hoechstwahrscheinlich ein PDF da es mit 25504446 respektive %PDF beginnt
 					valid = true;
 				} else {
-					// Droid-Erkennung, damit Details ausgegeben werden können
+					// Droid-Erkennung, damit Details ausgegeben werden koennen
 					String nameOfSignature = configMap.get( "PathToDroidSignatureFile" );
 					if ( nameOfSignature == null ) {
-						getMessageService().logError(
-								getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-										+ getTextResourceService().getText(
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+										+ getTextResourceService().getText( locale,
 												MESSAGE_XML_CONFIGURATION_ERROR_NO_SIGNATURE ) );
-						read.close();
-						// set to null
-						read = null;
-
 						return false;
 					}
 					// existiert die SignatureFile am angebenen Ort?
 					File fnameOfSignature = new File( nameOfSignature );
 					if ( !fnameOfSignature.exists() ) {
-						getMessageService().logError(
-								getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-										+ getTextResourceService().getText( MESSAGE_XML_CA_DROID ) );
-						read.close();
-						// set to null
-						read = null;
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+										+ getTextResourceService().getText( locale, MESSAGE_XML_CA_DROID ) );
 						return false;
 					}
 
 					Droid droid = null;
 					try {
 						/* kleiner Hack, weil die Droid libraries irgendwo ein System.out drin haben, welche den
-						 * Output stören Util.switchOffConsole() als Kommentar markieren wenn man die
-						 * Fehlermeldung erhalten möchte */
+						 * Output stoeren Util.switchOffConsole() als Kommentar markieren wenn man die
+						 * Fehlermeldung erhalten moechte */
 						Util.switchOffConsole();
 						droid = new Droid();
 
 						droid.readSignatureFile( nameOfSignature );
 
 					} catch ( Exception e ) {
-						getMessageService().logError(
-								getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-										+ getTextResourceService().getText( ERROR_XML_CANNOT_INITIALIZE_DROID ) );
-						read.close();
-						// set to null
-						read = null;
+						getMessageService().logError( getTextResourceService().getText( locale,
+								MESSAGE_XML_MODUL_A_PDFA )
+								+ getTextResourceService().getText( locale, ERROR_XML_CANNOT_INITIALIZE_DROID ) );
 						return false;
 					} finally {
 						Util.switchOnConsole();
@@ -327,28 +320,22 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 						FileFormat ff = ffh.getFileFormat();
 						puid = ff.getPUID();
 					}
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-									+ getTextResourceService().getText( ERROR_XML_A_PDFA_INCORRECTFILE, puid ) );
-					read.close();
-					// set to null
-					read = null;
+					getMessageService().logError( getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_A_PDFA )
+							+ getTextResourceService().getText( locale, ERROR_XML_A_PDFA_INCORRECTFILE, puid ) );
 					return false;
 				}
-				read.close();
-				// set to null
-				read = null;
 			} catch ( Exception e ) {
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-								+ getTextResourceService().getText( ERROR_XML_A_PDFA_INCORRECTFILE ) );
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+								+ getTextResourceService().getText( locale, ERROR_XML_A_PDFA_INCORRECTFILE ) );
 				return false;
 			}
 		} else {
 			// die Datei endet nicht mit pdf oder pdfa -> Fehler
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-							+ getTextResourceService().getText( ERROR_XML_A_PDFA_INCORRECTFILEENDING ) );
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+							+ getTextResourceService().getText( locale, ERROR_XML_A_PDFA_INCORRECTFILEENDING ) );
 			return false;
 		}
 		// Ende der Erkennung
@@ -384,17 +371,17 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 		 * ref="configurationService" /> */
 
 		if ( callasConfig.contentEquals( "yes" ) ) {
-			// callas Validierung gewünscht
+			// callas Validierung gewuenscht
 			if ( callasNo.exists() ) {
-				/* Callas wurde in einem früheren durchgang getestet und es funktioniert bei dem Benutzer
-				 * nicht korrekt. Entsprechend ist die Validierung mit callas nicht möglich */
+				/* Callas wurde in einem frueheren durchgang getestet und es funktioniert bei dem Benutzer
+				 * nicht korrekt. Entsprechend ist die Validierung mit callas nicht moeglich */
 				callas = false;
 			} else {
 				callas = true;
 			}
 		}
 		if ( pdftoolsConfig.contentEquals( "yes" ) ) {
-			// pdftools Validierung gewünscht
+			// pdftools Validierung gewuenscht
 			pdftools = true;
 		}
 
@@ -402,23 +389,23 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 
 			/* TODO: Erledigt Start mit PDFTools
 			 * 
-			 * Wenn pdftools eingeschaltet ist, wird immer zuerst pdftools genommen, da dieser in
-			 * KOST-Val schneller ist alls callas */
+			 * Wenn pdftools eingeschaltet ist, wird immer zuerst pdftools genommen, da dieser in KOST-Val
+			 * schneller ist alls callas */
 			if ( pdftools ) {
 				docPdf = new PdfValidatorAPI();
 
 				try {
 					if ( docPdf.open( valDatei.getAbsolutePath(), "", NativeLibrary.COMPLIANCE.ePDFUnk ) ) {
-						// PDF Konnte geöffnet werden
+						// PDF Konnte geoeffnet werden
 						docPdf.setStopOnError( true );
 						docPdf.setReportingLevel( 1 );
 						if ( docPdf.getErrorCode() == NativeLibrary.ERRORCODE.PDF_E_PASSWORD ) {
-							getMessageService().logError(
-									getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-											+ getTextResourceService().getText( ERROR_XML_A_PDFTOOLS_ENCRYPTED ) );
+							getMessageService().logError( getTextResourceService().getText( locale,
+									MESSAGE_XML_MODUL_A_PDFA )
+									+ getTextResourceService().getText( locale, ERROR_XML_A_PDFTOOLS_ENCRYPTED ) );
 							// Encrypt-Fileanlegen, damit in J nicht validiert wird
-							File encrypt = new File( pathToWorkDir + File.separator + valDatei.getName()
-									+ "_encrypt.txt" );
+							File encrypt = new File(
+									pathToWorkDir + File.separator + valDatei.getName() + "_encrypt.txt" );
 							if ( !encrypt.exists() ) {
 								try {
 									encrypt.createNewFile();
@@ -430,12 +417,12 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 						}
 					} else {
 						if ( docPdf.getErrorCode() == NativeLibrary.ERRORCODE.PDF_E_PASSWORD ) {
-							getMessageService().logError(
-									getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-											+ getTextResourceService().getText( ERROR_XML_A_PDFTOOLS_ENCRYPTED ) );
+							getMessageService().logError( getTextResourceService().getText( locale,
+									MESSAGE_XML_MODUL_A_PDFA )
+									+ getTextResourceService().getText( locale, ERROR_XML_A_PDFTOOLS_ENCRYPTED ) );
 							// Encrypt-Fileanlegen, damit in J nicht validiert wird
-							File encrypt = new File( pathToWorkDir + File.separator + valDatei.getName()
-									+ "_encrypt.txt" );
+							File encrypt = new File(
+									pathToWorkDir + File.separator + valDatei.getName() + "_encrypt.txt" );
 							if ( !encrypt.exists() ) {
 								try {
 									encrypt.createNewFile();
@@ -445,9 +432,9 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 							}
 							return false;
 						} else {
-							getMessageService().logError(
-									getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-											+ getTextResourceService().getText( ERROR_XML_A_PDFTOOLS_DAMAGED ) );
+							getMessageService()
+									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+											+ getTextResourceService().getText( locale, ERROR_XML_A_PDFTOOLS_DAMAGED ) );
 							return false;
 						}
 					}
@@ -567,9 +554,9 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 							fis = null;
 							fos = null;
 						} catch ( Exception e ) {
-							getMessageService().logError(
-									getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-											+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+							getMessageService()
+									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+											+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 													"Exec PDF Tools FileChannel: " + e.getMessage() ) );
 							return false;
 						}
@@ -650,13 +637,13 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 									 * 
 									 * A) max 5 Zeichen
 									 * 
-									 * B) Undefinierte Zeichen ignorieren wenn Mängel<=20%
+									 * B) Undefinierte Zeichen ignorieren wenn Maengel<=20%
 									 * 
 									 * C) Bekannte Abstaende und Aufzaehlungszeichen ignorieren
 									 * 
 									 * D) Symbol-Schriften ignorieren
 									 * 
-									 * E) Wenn am Schluss nur noch max 4 Zeichen bemängelt werden */
+									 * E) Wenn am Schluss nur noch max 4 Zeichen bemaengelt werden */
 									if ( count <= 5 ) {
 										/* => A) max 5 Zeichen
 										 * 
@@ -679,7 +666,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 										}
 
 										if ( elementUnknown.equals( "0" ) && ignorUndefinied ) {
-											/* => B) Undefinierte Zeichen ignorieren wenn Mängel<=20%
+											/* => B) Undefinierte Zeichen ignorieren wenn Maengel<=20%
 											 * 
 											 * -> Modul K bestanden, keine Auswertung noetig da nur undefiniertes
 											 * 
@@ -740,7 +727,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 
 														// wenn I ignorieren und sonst belassen
 														if ( fontErrorIgnor.equalsIgnoreCase( "I" ) ) {
-															// => B) Undefinierte Zeichen ignorieren wenn Mängel<=20%
+															// => B) Undefinierte Zeichen ignorieren wenn Maengel<=20%
 
 															// Node zum loeschen vormerken, da er ignoriert werden kann (I)
 															targetNode.add( charNode );
@@ -769,8 +756,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 											transformer.transform( source, result );
 
 											// Fonts ohne character loeschen
-											BufferedInputStream bisError = new BufferedInputStream( new FileInputStream(
-													fontReportError ) );
+											BufferedInputStream bisError = new BufferedInputStream(
+													new FileInputStream( fontReportError ) );
 											DocumentBuilderFactory dbfError = DocumentBuilderFactory.newInstance();
 											DocumentBuilder dbError = dbfError.newDocumentBuilder();
 											docError = dbError.parse( bisError );
@@ -803,7 +790,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 																	|| attValue.contains( "Wingdings" ) || attValue.contains( "Math" )
 																	|| attValue.contains( "symbol" )
 																	|| attValue.contains( "webdings" )
-																	|| attValue.contains( "wingdings" ) || attValue.contains( "math" ) ) {
+																	|| attValue.contains( "wingdings" )
+																	|| attValue.contains( "math" ) ) {
 																// => D) Symbol-Schriften ignorieren
 
 																// font Node zum leschen vormerken
@@ -871,14 +859,14 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 												if ( fontErrorIgnor.equalsIgnoreCase( "I" ) ) {
 													isValidFont = false;
 													errorK = errorK
-															+ getTextResourceService().getText( MESSAGE_XML_MODUL_K_PDFA )
-															+ getTextResourceService().getText( ERROR_XML_K_OVERVIEW2, count,
-																	unknownW, unknownPdoubleW );
+															+ getTextResourceService().getText( locale, MESSAGE_XML_MODUL_K_PDFA )
+															+ getTextResourceService().getText( locale, ERROR_XML_K_OVERVIEW2,
+																	count, unknownW, unknownPdoubleW );
 												} else {
 													isValidFont = false;
 													errorK = errorK
-															+ getTextResourceService().getText( MESSAGE_XML_MODUL_K_PDFA )
-															+ getTextResourceService().getText( ERROR_XML_K_OVERVIEW,
+															+ getTextResourceService().getText( locale, MESSAGE_XML_MODUL_K_PDFA )
+															+ getTextResourceService().getText( locale, ERROR_XML_K_OVERVIEW,
 																	elementCount, elementUnknown, elementUnknownP, elementUndefined,
 																	elementUndefinedP );
 												}
@@ -888,9 +876,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 												String stringInfo = nodeToString( nodeInfo );
 												Node nodeFonts = docError.getElementsByTagName( "fonts" ).item( 0 );
 												String stringFonts = nodeToString( nodeFonts );
-												errorK = errorK
-														+ getTextResourceService().getText( ERROR_XML_K_DETAIL, stringInfo,
-																stringFonts );
+												errorK = errorK + getTextResourceService().getText( locale,
+														ERROR_XML_K_DETAIL, stringInfo, stringFonts );
 											} else {
 												// <docInfo> und <characterCount> auf eine Zeile ausgeben
 												getMessageService().logError( docInfoCharacterCount );
@@ -958,8 +945,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 									transformer.transform( source, result );
 
 									// Fonts ohne character loeschen
-									BufferedInputStream bisError = new BufferedInputStream( new FileInputStream(
-											fontReportError ) );
+									BufferedInputStream bisError = new BufferedInputStream(
+											new FileInputStream( fontReportError ) );
 									DocumentBuilderFactory dbfError = DocumentBuilderFactory.newInstance();
 									DocumentBuilder dbError = dbfError.newDocumentBuilder();
 									docError = dbError.parse( bisError );
@@ -990,7 +977,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 											XPathConstants.NODESET );
 
 									for ( int i = 0; i < blankTextNodes.getLength(); i++ ) {
-										blankTextNodes.item( i ).getParentNode().removeChild( blankTextNodes.item( i ) );
+										blankTextNodes.item( i ).getParentNode()
+												.removeChild( blankTextNodes.item( i ) );
 									}
 
 									// Ende Bereinigung
@@ -1024,9 +1012,10 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 									if ( !elementUnknown.equals( "0" ) || !elementUndefined.equals( "0" ) ) {
 										isValidFont = false;
 										errorK = errorK
-												+ getTextResourceService().getText( MESSAGE_XML_MODUL_K_PDFA )
-												+ getTextResourceService().getText( ERROR_XML_K_OVERVIEW, elementCount,
-														elementUnknown, elementUnknownP, elementUndefined, elementUndefinedP );
+												+ getTextResourceService().getText( locale, MESSAGE_XML_MODUL_K_PDFA )
+												+ getTextResourceService().getText( locale, ERROR_XML_K_OVERVIEW,
+														elementCount, elementUnknown, elementUnknownP, elementUndefined,
+														elementUndefinedP );
 									}
 
 									if ( !isValidFont ) {
@@ -1034,9 +1023,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 										String stringInfo = nodeToString( nodeInfo );
 										Node nodeFonts = docError.getElementsByTagName( "fonts" ).item( 0 );
 										String stringFonts = nodeToString( nodeFonts );
-										errorK = errorK
-												+ getTextResourceService().getText( ERROR_XML_K_DETAIL, stringInfo,
-														stringFonts );
+										errorK = errorK + getTextResourceService().getText( locale, ERROR_XML_K_DETAIL,
+												stringInfo, stringFonts );
 									} else {
 										// <docInfo> und <characterCount> auf eine Zeile ausgeben
 										getMessageService().logError( docInfoCharacterCount );
@@ -1049,9 +1037,9 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 
 								}
 							} catch ( Exception e ) {
-								getMessageService().logError(
-										getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-												+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+								getMessageService()
+										.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+												+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 														"Exec PDF Tools Font: " + e.getMessage() ) );
 								return false;
 							}
@@ -1065,9 +1053,9 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 						fontReportError.deleteOnExit();
 					}
 				} catch ( Exception e ) {
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-									+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 											"Exec PDF Tools: " + e.getMessage() ) );
 					return false;
 				}
@@ -1077,7 +1065,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 					PdfError err = docPdf.getFirstError();
 					boolean rd = false;
 					String detailConfig = configMap.get( "detail" );
-					if ( detailConfig.equalsIgnoreCase( "detail" ) || detailConfig.equalsIgnoreCase( "yes" ) ) {
+					if ( detailConfig.equalsIgnoreCase( "detail" )
+							|| detailConfig.equalsIgnoreCase( "yes" ) ) {
 						rd = true;
 					}
 					if ( err != null && rd ) {
@@ -1119,7 +1108,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 										// Fehlermeldung bereits erfasst -> keine Aktion
 									} else {
 										pdftoolsC = pdftoolsC
-												+ getTextResourceService().getText( MESSAGE_XML_MODUL_C_PDFA )
+												+ getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_PDFA )
 												+ "<Message>" + errorMsgCode0x + "</Message></Error>";
 									}
 
@@ -1134,7 +1123,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 										// Fehlermeldung bereits erfasst -> keine Aktion
 									} else {
 										pdftoolsD = pdftoolsD
-												+ getTextResourceService().getText( MESSAGE_XML_MODUL_D_PDFA )
+												+ getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_PDFA )
 												+ "<Message>" + errorMsgCode0x + "</Message></Error>";
 									}
 
@@ -1148,7 +1137,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 										// Fehlermeldung bereits erfasst -> keine Aktion
 									} else {
 										pdftoolsI = pdftoolsI
-												+ getTextResourceService().getText( MESSAGE_XML_MODUL_I_PDFA )
+												+ getTextResourceService().getText( locale, MESSAGE_XML_MODUL_I_PDFA )
 												+ "<Message>" + errorMsgCode0x + "</Message></Error>";
 									}
 
@@ -1158,7 +1147,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 										// Fehlermeldung bereits erfasst -> keine Aktion
 									} else {
 										pdftoolsB = pdftoolsB
-												+ getTextResourceService().getText( MESSAGE_XML_MODUL_B_PDFA )
+												+ getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_PDFA )
 												+ "<Message>" + errorMsgCode0x + "</Message></Error>";
 									}
 
@@ -1170,7 +1159,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 										// Fehlermeldung bereits erfasst -> keine Aktion
 									} else {
 										pdftoolsH = pdftoolsH
-												+ getTextResourceService().getText( MESSAGE_XML_MODUL_H_PDFA )
+												+ getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_PDFA )
 												+ "<Message>" + errorMsgCode0x + "</Message></Error>";
 									}
 
@@ -1179,7 +1168,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 										// Fehlermeldung bereits erfasst -> keine Aktion
 									} else {
 										pdftoolsE = pdftoolsE
-												+ getTextResourceService().getText( MESSAGE_XML_MODUL_E_PDFA )
+												+ getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_PDFA )
 												+ "<Message>" + errorMsgCode0x + "</Message></Error>";
 									}
 
@@ -1191,7 +1180,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 										// Fehlermeldung bereits erfasst -> keine Aktion
 									} else {
 										pdftoolsG = pdftoolsG
-												+ getTextResourceService().getText( MESSAGE_XML_MODUL_G_PDFA )
+												+ getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_PDFA )
 												+ "<Message>" + errorMsgCode0x + "</Message></Error>";
 									}
 
@@ -1207,7 +1196,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 										// Fehlermeldung bereits erfasst -> keine Aktion
 									} else {
 										pdftoolsF = pdftoolsF
-												+ getTextResourceService().getText( MESSAGE_XML_MODUL_F_PDFA )
+												+ getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_PDFA )
 												+ "<Message>" + errorMsgCode0x + "</Message></Error>";
 									}
 
@@ -1216,7 +1205,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 										// Fehlermeldung bereits erfasst -> keine Aktion
 									} else {
 										pdftoolsA = pdftoolsA
-												+ getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+												+ getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
 												+ "<Message>" + errorMsgCode0x + "</Message></Error>";
 									}
 								}
@@ -1254,8 +1243,9 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 					 * dirOfJarPath + File.separator +
 					 * 
 					 * erweitern. */
-					String path = new java.io.File( KOSTVal.class.getProtectionDomain().getCodeSource()
-							.getLocation().getPath() ).getAbsolutePath();
+					String path = new java.io.File(
+							KOSTVal.class.getProtectionDomain().getCodeSource().getLocation().getPath() )
+									.getAbsolutePath();
 					path = path.substring( 0, path.lastIndexOf( "." ) );
 					path = path + System.getProperty( "java.class.path" );
 					String locationOfJarPath = path;
@@ -1271,21 +1261,21 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 					File fpdfapilotExe = new File( dirOfJarPath + File.separator + "resources"
 							+ File.separator + folderCallas + File.separator + "pdfaPilot.exe" );
 					if ( !fpdfapilotExe.exists() ) {
-						// Keine callas Validierung möglich
+						// Keine callas Validierung moeglich
 
 						/* Testen der Installation und System anhand
 						 * 3-Heights(TM)_PDFA_Validator_API_LICENSE.pdf -> invalid */
 						if ( pdftools ) {
 							callas = false;
-							getMessageService().logError(
-									getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-											+ getTextResourceService().getText( ERROR_XML_CALLAS_MISSING2,
+							getMessageService()
+									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+											+ getTextResourceService().getText( locale, ERROR_XML_CALLAS_MISSING2,
 													fpdfapilotExe.getAbsolutePath() ) );
 							isValid = false;
 						} else {
-							getMessageService().logError(
-									getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-											+ getTextResourceService().getText( ERROR_XML_CALLAS_MISSING,
+							getMessageService()
+									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+											+ getTextResourceService().getText( locale, ERROR_XML_CALLAS_MISSING,
 													fpdfapilotExe.getAbsolutePath() ) );
 							return false;
 						}
@@ -1308,14 +1298,14 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 							+ folderCallas + File.separator + "N-Entry.kfpx";
 					String analye = "-a --noprogress --nohits --level=" + level + " --profile=\"" + profile
 							+ "\"";
-					String langConfig = getTextResourceService().getText( MESSAGE_XML_LANGUAGE );
-					String lang = "-l=" + getTextResourceService().getText( MESSAGE_XML_LANGUAGE );
+					String langConfig = getTextResourceService().getText( locale, MESSAGE_XML_LANGUAGE );
+					String lang = "-l=" + getTextResourceService().getText( locale, MESSAGE_XML_LANGUAGE );
 					String valPath = valDatei.getAbsolutePath();
 					String reportPath = report.getAbsolutePath();
 
 					if ( callas ) {
 
-						/* callas separat ausführen und Ergebnis in isValid zurückgeben */
+						/* callas separat ausfuehren und Ergebnis in isValid zurueckgeben */
 						callasReturnCode = UtilCallas.execCallas( pdfapilotExe, analye, lang, valPath,
 								reportPath );
 
@@ -1326,8 +1316,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 							 * 
 							 * 2 PDF is valid PDF/A-file but additional checks with problems – severity warning
 							 * 
-							 * 3 PDF is valid PDF/A-file but additional checks with problems – severity error -->
-							 * N-Eintrag
+							 * 3 PDF is valid PDF/A-file but additional checks with problems – severity error
+							 * --> N-Eintrag
 							 * 
 							 * 4 PDF is not a valid PDF/A-file */
 
@@ -1337,16 +1327,16 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 
 							/* Testen der Installation und System anhand
 							 * 3-Heights(TM)_PDFA_Validator_API_LICENSE.pdf -> invalid */
-							callasReturnCodeTest = UtilCallas.execCallas( pdfapilotExe, analye, lang,
-									valPathTest, reportPath );
+							callasReturnCodeTest = UtilCallas.execCallas( pdfapilotExe, analye, lang, valPathTest,
+									reportPath );
 
-							// report des Testdurchlaufes löschen
+							// report des Testdurchlaufes loeschen
 							if ( report.exists() ) {
 								report.delete();
 							}
 
 							if ( callasReturnCodeTest <= 3 ) {
-								// Keine callas Validierung möglich
+								// Keine callas Validierung moeglich
 
 								// -callas_NO -Fileanlegen, damit in J nicht validiert wird
 								if ( !callasNo.exists() ) {
@@ -1360,14 +1350,14 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 								if ( pdftools ) {
 									callas = false;
 									getMessageService().logError(
-											getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-													+ getTextResourceService().getText( ERROR_XML_CALLAS_FATAL2,
+											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+													+ getTextResourceService().getText( locale, ERROR_XML_CALLAS_FATAL2,
 															fpdfapilotExe.getAbsolutePath() ) );
 									isValid = false;
 								} else {
 									getMessageService().logError(
-											getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-													+ getTextResourceService().getText( ERROR_XML_CALLAS_FATAL,
+											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+													+ getTextResourceService().getText( locale, ERROR_XML_CALLAS_FATAL,
 															fpdfapilotExe.getAbsolutePath() ) );
 									return false;
 								}
@@ -1376,23 +1366,23 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 						} else if ( callasReturnCode > 3 ) {
 							isValid = false;
 						} else if ( callasReturnCode == 1 || callasReturnCode == 2 || callasReturnCode == 3 ) {
-							// Zusatzprüfung nicht bestanden
+							// Zusatzpruefung nicht bestanden
 							String valPathTest = dirOfJarPath + File.separator + "license" + File.separator
 									+ "other_License" + File.separator
 									+ "3-Heights(TM)_PDFA_Validator_API_LICENSE.pdf";
 
 							/* Testen der Installation und System anhand
 							 * 3-Heights(TM)_PDFA_Validator_API_LICENSE.pdf -> invalid */
-							callasReturnCodeTest = UtilCallas.execCallas( pdfapilotExe, analye, lang,
-									valPathTest, reportPath );
+							callasReturnCodeTest = UtilCallas.execCallas( pdfapilotExe, analye, lang, valPathTest,
+									reportPath );
 
-							// report des Testdurchlaufes löschen
+							// report des Testdurchlaufes loeschen
 							if ( report.exists() ) {
 								report.delete();
 							}
 
 							if ( callasReturnCodeTest <= 3 ) {
-								// Keine callas Validierung möglich
+								// Keine callas Validierung moeglich
 
 								// -callas_NO -Fileanlegen, damit in J nicht validiert wird
 								if ( !callasNo.exists() ) {
@@ -1406,24 +1396,24 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 								if ( pdftools ) {
 									callas = false;
 									getMessageService().logError(
-											getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-													+ getTextResourceService().getText( ERROR_XML_CALLAS_FATAL2,
+											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+													+ getTextResourceService().getText( locale, ERROR_XML_CALLAS_FATAL2,
 															fpdfapilotExe.getAbsolutePath() ) );
 									isValid = false;
 								} else {
 									getMessageService().logError(
-											getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-													+ getTextResourceService().getText( ERROR_XML_CALLAS_FATAL,
+											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+													+ getTextResourceService().getText( locale, ERROR_XML_CALLAS_FATAL,
 															fpdfapilotExe.getAbsolutePath() ) );
 									return false;
 								}
 							}
 
 							if ( bNentryError ) {
-								// Zusatzprüfung nicht bestanden = Error
+								// Zusatzpruefung nicht bestanden = Error
 								isValid = false;
 							} else {
-								/* Zusatzprüfung nicht bestanden = Warnung aber valide
+								/* Zusatzpruefung nicht bestanden = Warnung aber valide
 								 * 
 								 * Warnung jetzt ausgeben */
 								String warning = "";
@@ -1435,21 +1425,21 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 								} else {
 									warning = "Warning: Number of components in PDF/A OutputIntent N entry does not match ICC profile. [callas] ";
 								}
-								getMessageService().logError(
-										getTextResourceService().getText( MESSAGE_XML_MODUL_C_PDFA ) + "<Message>"
-												+ warning + "</Message></Error>" );
+								getMessageService()
+										.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_PDFA )
+												+ "<Message>" + warning + "</Message></Error>" );
 							}
 						} else {
 							isValid = false;
 							callasServiceFailed = true;
 						}
 
-						// Ende callas direkt auszulösen
+						// Ende callas direkt auszuloesen
 					}
 				} catch ( Exception e ) {
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-									+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 											"Exec pdfaPilot: " + e.getMessage() ) );
 					return false;
 				}
@@ -1595,9 +1585,9 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 				String callasI = "";
 				if ( callas ) {
 					if ( callasServiceFailed ) {
-						getMessageService().logError(
-								getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-										+ getTextResourceService().getText( ERROR_XML_A_CALLAS_SERVICEFAILED,
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+										+ getTextResourceService().getText( locale, ERROR_XML_A_CALLAS_SERVICEFAILED,
 												callasReturnCode ) );
 					}
 
@@ -1605,34 +1595,34 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 					// TODO: umschreiben
 
 					try {
-						BufferedReader br = new BufferedReader( new InputStreamReader( new FileInputStream(
-								report ) ) );
+						BufferedReader br = new BufferedReader(
+								new InputStreamReader( new FileInputStream( report ) ) );
 
-						/* Datei Zeile für Zeile lesen und ermitteln ob "Error" darin enthalten ist
+						/* Datei Zeile fuer Zeile lesen und ermitteln ob "Error" darin enthalten ist
 						 * 
-						 * Errors 1013 CharSet incomplete for Type 1 font Errors 9 OpenType font used Errors
-						 * 790 Transparency used (transparency group)
+						 * Errors 1013 CharSet incomplete for Type 1 font Errors 9 OpenType font used Errors 790
+						 * Transparency used (transparency group)
 						 * 
 						 * Error: The document structure is corrupt. */
 						for ( String line = br.readLine(); line != null; line = br.readLine() ) {
 							int index = 0;
 
-							line = line.replace( "ü", "ue" );
-							line = line.replace( "ö", "oe" );
-							line = line.replace( "ä", "ae" );
-							line = line.replace( "é", "e" );
-							line = line.replace( "è", "e" );
-							line = line.replace( "ê", "e" );
-							line = line.replace( "ë", "e" );
-							line = line.replace( "à", "a" );
-							line = line.replace( "â", "a" );
-							line = line.replace( "û", "u" );
-							line = line.replace( "ô", "o" );
-							line = line.replace( "î", "i" );
-							line = line.replace( "ï", "i" );
-							line = line.replace( "ß", "ss" );
+							line = line.replace( "�", "ue" );
+							line = line.replace( "�", "oe" );
+							line = line.replace( "�", "ae" );
+							line = line.replace( "�", "e" );
+							line = line.replace( "�", "e" );
+							line = line.replace( "�", "e" );
+							line = line.replace( "�", "e" );
+							line = line.replace( "�", "a" );
+							line = line.replace( "�", "a" );
+							line = line.replace( "�", "u" );
+							line = line.replace( "�", "o" );
+							line = line.replace( "�", "i" );
+							line = line.replace( "�", "i" );
+							line = line.replace( "�", "ss" );
 
-							/* Die Linien (Fehlermeldung von Callas) anhand von Wörter den Modulen zuordnen
+							/* Die Linien (Fehlermeldung von Callas) anhand von Woerter den Modulen zuordnen
 							 * 
 							 * A) Allgemeines B) Struktur C) Grafiken D) Schrift E) transparen F) annotation G)
 							 * aktion H) metadata I) Zugaenglichkeit */
@@ -1641,17 +1631,16 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 								// Errors plus Zahl entfernen aus Linie
 								index = line.indexOf( "\t", 7 );
 								line = line.substring( index );
-								if ( line
-										.contains( "Komponentenanzahl im N-Eintrag des PDF/A Output Intent stimmt nicht mit ICC-Profil ueberein" )
-										|| line
-												.contains( "Number of components in PDF/A OutputIntent N entry does not match ICC profile" ) ) {
+								if ( line.contains(
+										"Komponentenanzahl im N-Eintrag des PDF/A Output Intent stimmt nicht mit ICC-Profil ueberein" )
+										|| line.contains(
+												"Number of components in PDF/A OutputIntent N entry does not match ICC profile" ) ) {
 									// als zusatz im Log kennzeichnen
 									line = line + " [callas] ";
-								} else if ( line.contains( "Le nombre de composants dans l'entree" )
-										&& line
-												.contains( "N des conditions de sortie PDF/A ne correspond pas au profil ICC" ) ) {
+								} else if ( line.contains( "Le nombre de composants dans l'entr" ) && line.contains(
+										"N des conditions de sortie PDF/A ne correspond pas au profil ICC" ) ) {
 									// als zusatz im Log kennzeichnen
-									// enthält " l'entreeÂ N " entsprechend alles neu...
+									// enthaelt " l'entree� N " entsprechend alles neu...
 									line = "Le nombre de composants dans l'entree N des conditions de sortie PDF/A ne correspond pas au profil ICC [callas] ";
 								} else {
 									line = line + " [callas] ";
@@ -1674,7 +1663,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 									if ( callasC.toLowerCase().contains( line.toLowerCase() ) ) {
 										// Fehlermeldung bereits erfasst -> keine Aktion
 									} else {
-										callasC = callasC + getTextResourceService().getText( MESSAGE_XML_MODUL_C_PDFA )
+										callasC = callasC
+												+ getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_PDFA )
 												+ "<Message>" + line + "</Message></Error>";
 									}
 
@@ -1688,7 +1678,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 									if ( callasD.toLowerCase().contains( line.toLowerCase() ) ) {
 										// Fehlermeldung bereits erfasst -> keine Aktion
 									} else {
-										callasD = callasD + getTextResourceService().getText( MESSAGE_XML_MODUL_D_PDFA )
+										callasD = callasD
+												+ getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_PDFA )
 												+ "<Message>" + line + "</Message></Error>";
 									}
 
@@ -1702,7 +1693,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 									if ( callasI.toLowerCase().contains( line.toLowerCase() ) ) {
 										// Fehlermeldung bereits erfasst -> keine Aktion
 									} else {
-										callasI = callasI + getTextResourceService().getText( MESSAGE_XML_MODUL_I_PDFA )
+										callasI = callasI
+												+ getTextResourceService().getText( locale, MESSAGE_XML_MODUL_I_PDFA )
 												+ "<Message>" + line + "</Message></Error>";
 									}
 
@@ -1712,7 +1704,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 									if ( callasB.toLowerCase().contains( line.toLowerCase() ) ) {
 										// Fehlermeldung bereits erfasst -> keine Aktion
 									} else {
-										callasB = callasB + getTextResourceService().getText( MESSAGE_XML_MODUL_B_PDFA )
+										callasB = callasB
+												+ getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_PDFA )
 												+ "<Message>" + line + "</Message></Error>";
 									}
 
@@ -1721,7 +1714,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 									if ( callasH.toLowerCase().contains( line.toLowerCase() ) ) {
 										// Fehlermeldung bereits erfasst -> keine Aktion
 									} else {
-										callasH = callasH + getTextResourceService().getText( MESSAGE_XML_MODUL_H_PDFA )
+										callasH = callasH
+												+ getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_PDFA )
 												+ "<Message>" + line + "</Message></Error>";
 									}
 
@@ -1729,7 +1723,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 									if ( callasE.toLowerCase().contains( line.toLowerCase() ) ) {
 										// Fehlermeldung bereits erfasst -> keine Aktion
 									} else {
-										callasE = callasE + getTextResourceService().getText( MESSAGE_XML_MODUL_E_PDFA )
+										callasE = callasE
+												+ getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_PDFA )
 												+ "<Message>" + line + "</Message></Error>";
 									}
 
@@ -1740,7 +1735,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 									if ( callasG.toLowerCase().contains( line.toLowerCase() ) ) {
 										// Fehlermeldung bereits erfasst -> keine Aktion
 									} else {
-										callasG = callasG + getTextResourceService().getText( MESSAGE_XML_MODUL_G_PDFA )
+										callasG = callasG
+												+ getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_PDFA )
 												+ "<Message>" + line + "</Message></Error>";
 									}
 
@@ -1757,7 +1753,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 									if ( callasF.toLowerCase().contains( line.toLowerCase() ) ) {
 										// Fehlermeldung bereits erfasst -> keine Aktion
 									} else {
-										callasF = callasF + getTextResourceService().getText( MESSAGE_XML_MODUL_F_PDFA )
+										callasF = callasF
+												+ getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_PDFA )
 												+ "<Message>" + line + "</Message></Error>";
 									}
 
@@ -1765,7 +1762,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 									if ( callasA.toLowerCase().contains( line.toLowerCase() ) ) {
 										// Fehlermeldung bereits erfasst -> keine Aktion
 									} else {
-										callasA = callasA + getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+										callasA = callasA
+												+ getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
 												+ "<Message>" + line + "</Message></Error>";
 									}
 								}
@@ -1775,7 +1773,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 								if ( callasA.toLowerCase().contains( line.toLowerCase() ) ) {
 									// Fehlermeldung bereits erfasst -> keine Aktion
 								} else {
-									callasA = callasA + getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+									callasA = callasA
+											+ getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
 											+ "<Message>" + line + "</Message></Error>";
 								}
 							} else if ( line.startsWith( "Error" ) ) {
@@ -1784,7 +1783,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 								if ( callasA.toLowerCase().contains( line.toLowerCase() ) ) {
 									// Fehlermeldung bereits erfasst -> keine Aktion
 								} else {
-									callasA = callasA + getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
+									callasA = callasA
+											+ getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
 											+ "<Message>" + line + "</Message></Error>";
 								}
 							}
@@ -1795,17 +1795,15 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 						br = null;
 					} catch ( FileNotFoundException e ) {
 						getMessageService()
-								.logError(
-										getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-												+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
-														"FileNotFoundException" ) );
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+										+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+												"FileNotFoundException" ) );
 						return false;
 					} catch ( Exception e ) {
 						getMessageService()
-								.logError(
-										getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-												+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
-														(e.getMessage() + " 1") ) ); //
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+										+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+												(e.getMessage() + " 1") ) ); //
 						return false;
 					}
 					if ( !callasA.equals( "" ) ) {
@@ -1814,17 +1812,19 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 				}
 
 				if ( exponent1 ) {
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-									+ getTextResourceService().getText( ERROR_XML_AI_1, "PDF Tools: iCategory_1" ) );
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+									+ getTextResourceService().getText( locale, ERROR_XML_AI_1,
+											"PDF Tools: iCategory_1" ) );
 				}
 				if ( exponent2 ) {
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-									+ getTextResourceService().getText( ERROR_XML_AI_2, "PDF Tools: iCategory_2" ) );
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+									+ getTextResourceService().getText( locale, ERROR_XML_AI_2,
+											"PDF Tools: iCategory_2" ) );
 					// Encrypt-Fileanlegen, damit in J nicht validiert wird
-					File encrypt = new File( pathToWorkDir + File.separator + valDatei.getName()
-							+ "_encrypt.txt" );
+					File encrypt = new File(
+							pathToWorkDir + File.separator + valDatei.getName() + "_encrypt.txt" );
 					if ( !encrypt.exists() ) {
 						try {
 							encrypt.createNewFile();
@@ -1841,19 +1841,22 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 					getMessageService().logError( callasB );
 				}
 				if ( exponent0 ) {
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_B_PDFA )
-									+ getTextResourceService().getText( ERROR_XML_AI_0, "PDF Tools: iCategory_0" ) );
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_PDFA )
+									+ getTextResourceService().getText( locale, ERROR_XML_AI_0,
+											"PDF Tools: iCategory_0" ) );
 				}
 				if ( exponent7 ) {
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_B_PDFA )
-									+ getTextResourceService().getText( ERROR_XML_AI_7, "PDF Tools: iCategory_7" ) );
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_PDFA )
+									+ getTextResourceService().getText( locale, ERROR_XML_AI_7,
+											"PDF Tools: iCategory_7" ) );
 				}
 				if ( exponent18 ) {
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_B_PDFA )
-									+ getTextResourceService().getText( ERROR_XML_AI_18, "PDF Tools: iCategory_18" ) );
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_PDFA )
+									+ getTextResourceService().getText( locale, ERROR_XML_AI_18,
+											"PDF Tools: iCategory_18" ) );
 				}
 				getMessageService().logError( pdftoolsB );
 
@@ -1862,24 +1865,28 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 					getMessageService().logError( callasC );
 				}
 				if ( exponent3 ) {
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_C_PDFA )
-									+ getTextResourceService().getText( ERROR_XML_AI_3, "PDF Tools: iCategory_3" ) );
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_PDFA )
+									+ getTextResourceService().getText( locale, ERROR_XML_AI_3,
+											"PDF Tools: iCategory_3" ) );
 				}
 				if ( exponent4 ) {
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_C_PDFA )
-									+ getTextResourceService().getText( ERROR_XML_AI_4, "PDF Tools: iCategory_4" ) );
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_PDFA )
+									+ getTextResourceService().getText( locale, ERROR_XML_AI_4,
+											"PDF Tools: iCategory_4" ) );
 				}
 				if ( exponent5 ) {
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_C_PDFA )
-									+ getTextResourceService().getText( ERROR_XML_AI_5, "PDF Tools: iCategory_5" ) );
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_PDFA )
+									+ getTextResourceService().getText( locale, ERROR_XML_AI_5,
+											"PDF Tools: iCategory_5" ) );
 				}
 				if ( exponent6 ) {
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_C_PDFA )
-									+ getTextResourceService().getText( ERROR_XML_AI_6, "PDF Tools: iCategory_6" ) );
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_PDFA )
+									+ getTextResourceService().getText( locale, ERROR_XML_AI_6,
+											"PDF Tools: iCategory_6" ) );
 				}
 				getMessageService().logError( pdftoolsC );
 
@@ -1888,14 +1895,16 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 					getMessageService().logError( callasD );
 				}
 				if ( exponent8 ) {
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_D_PDFA )
-									+ getTextResourceService().getText( ERROR_XML_AI_8, "PDF Tools: iCategory_8" ) );
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_PDFA )
+									+ getTextResourceService().getText( locale, ERROR_XML_AI_8,
+											"PDF Tools: iCategory_8" ) );
 				}
 				if ( exponent9 ) {
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_D_PDFA )
-									+ getTextResourceService().getText( ERROR_XML_AI_9, "PDF Tools: iCategory_9" ) );
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_PDFA )
+									+ getTextResourceService().getText( locale, ERROR_XML_AI_9,
+											"PDF Tools: iCategory_9" ) );
 				}
 				getMessageService().logError( pdftoolsD );
 
@@ -1904,9 +1913,10 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 					getMessageService().logError( callasE );
 				}
 				if ( exponent10 ) {
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_E_PDFA )
-									+ getTextResourceService().getText( ERROR_XML_AI_10, "PDF Tools: iCategory_10" ) );
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_PDFA )
+									+ getTextResourceService().getText( locale, ERROR_XML_AI_10,
+											"PDF Tools: iCategory_10" ) );
 				}
 				getMessageService().logError( pdftoolsE );
 
@@ -1915,24 +1925,28 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 					getMessageService().logError( callasF );
 				}
 				if ( exponent11 ) {
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_F_PDFA )
-									+ getTextResourceService().getText( ERROR_XML_AI_11, "PDF Tools: iCategory_11" ) );
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_PDFA )
+									+ getTextResourceService().getText( locale, ERROR_XML_AI_11,
+											"PDF Tools: iCategory_11" ) );
 				}
 				if ( exponent12 ) {
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_F_PDFA )
-									+ getTextResourceService().getText( ERROR_XML_AI_12, "PDF Tools: iCategory_12" ) );
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_PDFA )
+									+ getTextResourceService().getText( locale, ERROR_XML_AI_12,
+											"PDF Tools: iCategory_12" ) );
 				}
 				if ( exponent13 ) {
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_F_PDFA )
-									+ getTextResourceService().getText( ERROR_XML_AI_13, "PDF Tools: iCategory_13" ) );
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_PDFA )
+									+ getTextResourceService().getText( locale, ERROR_XML_AI_13,
+											"PDF Tools: iCategory_13" ) );
 				}
 				if ( exponent14 ) {
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_F_PDFA )
-									+ getTextResourceService().getText( ERROR_XML_AI_14, "PDF Tools: iCategory_14" ) );
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_PDFA )
+									+ getTextResourceService().getText( locale, ERROR_XML_AI_14,
+											"PDF Tools: iCategory_14" ) );
 				}
 				getMessageService().logError( pdftoolsF );
 
@@ -1941,9 +1955,10 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 					getMessageService().logError( callasG );
 				}
 				if ( exponent15 ) {
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_G_PDFA )
-									+ getTextResourceService().getText( ERROR_XML_AI_15, "PDF Tools: iCategory_15" ) );
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_PDFA )
+									+ getTextResourceService().getText( locale, ERROR_XML_AI_15,
+											"PDF Tools: iCategory_15" ) );
 				}
 				getMessageService().logError( pdftoolsG );
 
@@ -1952,9 +1967,10 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 					getMessageService().logError( callasH );
 				}
 				if ( exponent16 ) {
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_H_PDFA )
-									+ getTextResourceService().getText( ERROR_XML_AI_16, "PDF Tools: iCategory_16" ) );
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_PDFA )
+									+ getTextResourceService().getText( locale, ERROR_XML_AI_16,
+											"PDF Tools: iCategory_16" ) );
 				}
 				getMessageService().logError( pdftoolsH );
 
@@ -1963,9 +1979,10 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 					getMessageService().logError( callasI );
 				}
 				if ( exponent17 ) {
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_I_PDFA )
-									+ getTextResourceService().getText( ERROR_XML_AI_17, "PDF Tools: iCategory_17" ) );
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_I_PDFA )
+									+ getTextResourceService().getText( locale, ERROR_XML_AI_17,
+											"PDF Tools: iCategory_17" ) );
 				}
 				getMessageService().logError( pdftoolsI );
 
@@ -1987,9 +2004,9 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl impl
 				report.delete();
 			}
 		} catch ( Exception e ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-							+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 		}
 		docPdf.close();
 		// Destroy the object and set to null

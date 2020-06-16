@@ -20,6 +20,7 @@
 package ch.kostceco.tools.kostval.controller;
 
 import java.io.File;
+import java.util.Locale;
 import java.util.Map;
 
 import ch.kostceco.tools.kostval.exception.modulejp2.ValidationAjp2validationException;
@@ -30,7 +31,7 @@ import ch.kostceco.tools.kostval.validation.modulejp2.ValidationAvalidationAModu
 
 /** kostval -->
  * 
- * Der Controller ruft die ben�tigten Module zur Validierung der JPEG2000-Datei in der ben�tigten
+ * Der Controller ruft die benoetigten Module zur Validierung der JPEG2000-Datei in der benoetigten
  * Reihenfolge auf.
  * 
  * Die Validierungs-Module werden mittels Spring-Dependency-Injection eingebunden. */
@@ -65,27 +66,27 @@ public class Controllerjp2 implements MessageConstants
 	}
 
 	public boolean executeMandatory( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap )
+			Map<String, String> configMap, Locale locale )
 	{
 		boolean valid = true;
 
 		// Validation A
 		try {
-			if ( this.getValidationAvalidationAModule()
-					.validate( valDatei, directoryOfLogfile, configMap ) ) {
+			if ( this.getValidationAvalidationAModule().validate( valDatei, directoryOfLogfile, configMap,
+					locale ) ) {
 				this.getValidationAvalidationAModule().getMessageService().print();
 			} else {
 				this.getValidationAvalidationAModule().getMessageService().print();
 				return false;
 			}
 		} catch ( ValidationAjp2validationException e ) {
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_A_JP2 )
-					+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationAvalidationAModule().getMessageService().print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_A_JP2 )
-					+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 		return valid;

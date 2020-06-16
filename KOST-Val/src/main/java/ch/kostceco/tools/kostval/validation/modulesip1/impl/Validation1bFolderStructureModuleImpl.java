@@ -20,6 +20,7 @@
 package ch.kostceco.tools.kostval.validation.modulesip1.impl;
 
 import java.io.File;
+import java.util.Locale;
 import java.util.Map;
 
 import ch.kostceco.tools.kostval.exception.modulesip1.Validation1bFolderStructureException;
@@ -27,13 +28,13 @@ import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesip1.Validation1bFolderStructureModule;
 
 /** Besteht eine korrekte primäre Verzeichnisstruktur: /header/metadata.xml /header/xsd /content */
-public class Validation1bFolderStructureModuleImpl extends ValidationModuleImpl implements
-		Validation1bFolderStructureModule
+public class Validation1bFolderStructureModuleImpl extends ValidationModuleImpl
+		implements Validation1bFolderStructureModule
 {
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
-			throws Validation1bFolderStructureException
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
+			Locale locale ) throws Validation1bFolderStructureException
 	{
 		// Informationen zur Darstellung "onWork" holen
 		String onWork = configMap.get( "ShowProgressOnWork" );
@@ -44,7 +45,7 @@ public class Validation1bFolderStructureModuleImpl extends ValidationModuleImpl 
 			// keine Ausgabe
 		} else if ( onWork.startsWith( "Configuration-Error:" ) ) {
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_Ab_SIP ) + onWork );
+					getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ab_SIP ) + onWork );
 			return false;
 		} else {
 			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
@@ -55,34 +56,34 @@ public class Validation1bFolderStructureModuleImpl extends ValidationModuleImpl 
 		boolean isValid = true;
 		File content = new File( valDatei.getAbsolutePath() + File.separator + "content" );
 		File header = new File( valDatei.getAbsolutePath() + File.separator + "header" );
-		File xsd = new File( valDatei.getAbsolutePath() + File.separator + "header" + File.separator
-				+ "xsd" );
-		File metadata = new File( valDatei.getAbsolutePath() + File.separator + "header"
-				+ File.separator + "metadata.xml" );
+		File xsd = new File(
+				valDatei.getAbsolutePath() + File.separator + "header" + File.separator + "xsd" );
+		File metadata = new File(
+				valDatei.getAbsolutePath() + File.separator + "header" + File.separator + "metadata.xml" );
 
 		if ( !content.exists() ) {
 			isValid = false;
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_Ab_SIP )
-							+ getTextResourceService().getText( ERROR_XML_AB_CONTENT ) );
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ab_SIP )
+							+ getTextResourceService().getText( locale, ERROR_XML_AB_CONTENT ) );
 		}
 		if ( !header.exists() ) {
 			isValid = false;
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_Ab_SIP )
-							+ getTextResourceService().getText( ERROR_XML_AB_HEADER ) );
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ab_SIP )
+							+ getTextResourceService().getText( locale, ERROR_XML_AB_HEADER ) );
 		}
 		if ( !xsd.exists() ) {
 			isValid = false;
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_Ab_SIP )
-							+ getTextResourceService().getText( ERROR_XML_AB_XSD ) );
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ab_SIP )
+							+ getTextResourceService().getText( locale, ERROR_XML_AB_XSD ) );
 		}
 		if ( !metadata.exists() ) {
 			isValid = false;
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_Ab_SIP )
-							+ getTextResourceService().getText( ERROR_XML_AB_METADATA ) );
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ab_SIP )
+							+ getTextResourceService().getText( locale, ERROR_XML_AB_METADATA ) );
 		}
 		return isValid;
 	}

@@ -19,7 +19,9 @@
 
 package ch.kostceco.tools.kostval.validation.modulesip1.impl;
 
-import java.io.File; import java.util.Map;
+import java.io.File;
+import java.util.Locale;
+import java.util.Map;
 import java.io.FileInputStream;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -34,17 +36,18 @@ import ch.kostceco.tools.kostval.exception.modulesip1.Validation1eSipTypeExcepti
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesip1.Validation1eSipTypeModule;
 
-/** Der SIP Typ wird ermittelt: GEVER oder FILE (ermittelt aus dem metadata.xml, element ablieferung) */
-public class Validation1eSipTypeModuleImpl extends ValidationModuleImpl implements
-		Validation1eSipTypeModule
+/** Der SIP Typ wird ermittelt: GEVER oder FILE (ermittelt aus dem metadata.xml, element
+ * ablieferung) */
+public class Validation1eSipTypeModuleImpl extends ValidationModuleImpl
+		implements Validation1eSipTypeModule
 {
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
-			throws Validation1eSipTypeException
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
+			Locale locale ) throws Validation1eSipTypeException
 	{
 		// Informationen zur Darstellung "onWork" holen
-		String onWork = configMap.get( "ShowProgressOnWork");
+		String onWork = configMap.get( "ShowProgressOnWork" );
 		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
 		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
 		 * ref="configurationService" /> */
@@ -71,9 +74,9 @@ public class Validation1eSipTypeModuleImpl extends ValidationModuleImpl implemen
 			 * 
 			 * IO: ablieferung
 			 * 
-			 * NIO: v4:ablieferung 
+			 * NIO: v4:ablieferung
 			 * 
-			 * Wird neu in 1d kontrolliert*/
+			 * Wird neu in 1d kontrolliert */
 
 			NodeList layerConfigList = doc.getElementsByTagName( "ablieferung" );
 
@@ -86,16 +89,16 @@ public class Validation1eSipTypeModuleImpl extends ValidationModuleImpl implemen
 			} else if ( name.contains( "ablieferungFilesSIP" ) ) {
 				// FILE-SIP
 			} else {
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_Ae_SIP )
-								+ getTextResourceService().getText( ERROR_XML_AE_ABLIEFERUNGSTYPUNDEFINED ) );
+				getMessageService().logError( getTextResourceService().getText( locale,
+						MESSAGE_XML_MODUL_Ae_SIP )
+						+ getTextResourceService().getText( locale, ERROR_XML_AE_ABLIEFERUNGSTYPUNDEFINED ) );
 				return false;
 			}
 
 		} catch ( Exception e ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_Ae_SIP )
-							+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ae_SIP )
+							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 

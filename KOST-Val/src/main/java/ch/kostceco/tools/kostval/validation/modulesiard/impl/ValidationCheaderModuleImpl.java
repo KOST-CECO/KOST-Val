@@ -22,6 +22,7 @@ package ch.kostceco.tools.kostval.validation.modulesiard.impl;
 import java.io.BufferedReader;
 import java.io.File;
 import java.util.Enumeration;
+import java.util.Locale;
 import java.util.Map;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -48,21 +49,21 @@ import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationCheaderModule;
 
 /** Validierungsschritt C (Header-Validierung) Ist der header-Ordner valid? valid --> metadata.xml
- * valid zu metadata.xsd und beides vorhanden Bemerkung --> zusätzliche Ordner oder Dateien wie z.B.
- * metadata.xls sind im header-Ordner erlaubt ==> Bei den Module A, B, C und D wird die Validierung
- * abgebrochen, sollte das Resulat invalid sein!
+ * valid zu metadata.xsd und beides vorhanden Bemerkung --> zusätzliche Ordner oder Dateien wie
+ * z.B. metadata.xls sind im header-Ordner erlaubt ==> Bei den Module A, B, C und D wird die
+ * Validierung abgebrochen, sollte das Resulat invalid sein!
  * 
  * @author Rc Claire Roethlisberger, KOST-CECO */
 
-public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
-		ValidationCheaderModule
+public class ValidationCheaderModuleImpl extends ValidationModuleImpl
+		implements ValidationCheaderModule
 {
 
-	public static String	NEWLINE	= System.getProperty( "line.separator" );
+	public static String NEWLINE = System.getProperty( "line.separator" );
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
-			throws ValidationCheaderException
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
+			Locale locale ) throws ValidationCheaderException
 	{
 		boolean showOnWork = true;
 		int onWork = 410;
@@ -117,25 +118,25 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 			}
 			if ( metadataxml == null ) {
 				// keine metadata.xml = METADATA in der SIARD-Datei gefunden
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_C_SIARD )
-								+ getTextResourceService().getText( MESSAGE_XML_C_NOMETADATAFOUND ) );
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_SIARD )
+								+ getTextResourceService().getText( locale, MESSAGE_XML_C_NOMETADATAFOUND ) );
 				zipfile.close();
 				return false;
 			}
 			if ( metadataxsd == null ) {
 				// keine metadata.xsd = XSD_METADATA in der SIARD-Datei gefunden
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_C_SIARD )
-								+ getTextResourceService().getText( MESSAGE_XML_C_NOMETADATAXSD ) );
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_SIARD )
+								+ getTextResourceService().getText( locale, MESSAGE_XML_C_NOMETADATAXSD ) );
 				zipfile.close();
 				return false;
 			}
 			zipfile.close();
 		} catch ( Exception e ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_C_SIARD )
-							+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_SIARD )
+							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 									e.getMessage() + " xml und xsd" ) );
 			return false;
 		}
@@ -164,8 +165,8 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 			/* Das metadata.xml und sein xsd müssen in das Filesystem extrahiert werden, weil bei bei
 			 * Verwendung eines Inputstreams bei der Validierung ein Problem mit den xs:include Statements
 			 * besteht, die includes können so nicht aufgelöst werden. Es werden hier jedoch nicht nur
-			 * diese Files extrahiert, sondern gleich die ganze Zip-Datei, weil auch spätere Validierungen
-			 * nur mit den extrahierten Files arbeiten können. */
+			 * diese Files extrahiert, sondern gleich die ganze Zip-Datei, weil auch spätere
+			 * Validierungen nur mit den extrahierten Files arbeiten können. */
 			int BUFFER = 2048;
 			ZipFile zipfile = new ZipFile( valDatei.getAbsolutePath() );
 			Enumeration<? extends ZipEntry> entries = zipfile.entries();
@@ -235,19 +236,19 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 			String pathToWorkDir2 = pathToWorkDir + File.separator + "SIARD";
 			File metadataXml = new File( new StringBuilder( pathToWorkDir2 ).append( File.separator )
 					.append( "header" ).append( File.separator ).append( "metadata.xml" ).toString() );
-			Boolean version1 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" ).contains(
-					"http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
-			Boolean version2 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" ).contains(
-					"http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
+			Boolean version1 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" )
+					.contains( "http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
+			Boolean version2 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" )
+					.contains( "http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
 			if ( version1 ) {
 				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_FORMATVALIDATION_VL, "v1.0" ) );
+						getTextResourceService().getText( locale, MESSAGE_FORMATVALIDATION_VL, "v1.0" ) );
 			} else if ( version2 ) {
 				File versionDir = new File( pathToWorkDir2 + File.separator + "header" + File.separator
 						+ "siardversion" + File.separator + "2.1" );
 				if ( versionDir.exists() ) {
 					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_FORMATVALIDATION_VL, "v2.1" ) );
+							getTextResourceService().getText( locale, MESSAGE_FORMATVALIDATION_VL, "v2.1" ) );
 				}
 			}
 
@@ -280,9 +281,9 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 								String lineNode = line.substring( ns, end );
 								String lineNodeNS = line.substring( start, end );
 								// System.out.println( lineNode + " " + lineNodeNS );
-								getMessageService().logError(
-										getTextResourceService().getText( MESSAGE_XML_MODUL_C_SIARD )
-												+ getTextResourceService().getText( MESSAGE_XML_C_METADATA_NSFOUND,
+								getMessageService()
+										.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_SIARD )
+												+ getTextResourceService().getText( locale, MESSAGE_XML_C_METADATA_NSFOUND,
 														lineNode, lineNodeNS ) );
 								in.close();
 								// set to null
@@ -316,21 +317,21 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 						return false;
 					}
 				} catch ( java.io.IOException ioe ) {
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_C_SIARD )
-									+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_SIARD )
+									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 											ioe.getMessage() + " (IOException)" ) );
 					result = false;
 				} catch ( SAXException e ) {
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_C_SIARD )
-									+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_SIARD )
+									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 											e.getMessage() + " (SAXException)" ) );
 					result = false;
 				} catch ( ParserConfigurationException e ) {
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_C_SIARD )
-									+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_SIARD )
+									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 											e.getMessage() + " (ParserConfigurationException)" ) );
 					result = false;
 				}
@@ -339,9 +340,9 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 			// set to null
 			zipfile = null;
 		} catch ( Exception e ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_C_SIARD )
-							+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_SIARD )
+							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 		return result;
@@ -352,24 +353,26 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl implements
 		public boolean						validationError		= false;
 		public SAXParseException	saxParseException	= null;
 
-		public void error( SAXParseException exception ) throws SAXException
+		@SuppressWarnings("unused")
+		public void error( SAXParseException exception, Locale locale ) throws SAXException
 		{
 			validationError = true;
 			saxParseException = exception;
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_C_SIARD )
-							+ getTextResourceService().getText( MESSAGE_XML_C_METADATA_ERRORS,
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_SIARD )
+							+ getTextResourceService().getText( locale, MESSAGE_XML_C_METADATA_ERRORS,
 									saxParseException.getLineNumber(), saxParseException.getColumnNumber(),
 									saxParseException.getMessage() ) );
 		}
 
-		public void fatalError( SAXParseException exception ) throws SAXException
+		@SuppressWarnings("unused")
+		public void fatalError( SAXParseException exception, Locale locale ) throws SAXException
 		{
 			validationError = true;
 			saxParseException = exception;
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_C_SIARD )
-							+ getTextResourceService().getText( MESSAGE_XML_C_METADATA_ERRORS,
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_SIARD )
+							+ getTextResourceService().getText( locale, MESSAGE_XML_C_METADATA_ERRORS,
 									saxParseException.getLineNumber(), saxParseException.getColumnNumber(),
 									saxParseException.getMessage() ) );
 		}

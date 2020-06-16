@@ -20,20 +20,21 @@
 package ch.kostceco.tools.kostval.validation.modulejpeg;
 
 import java.io.File;
+import java.util.Locale;
 import java.util.Map;
 
 import ch.kostceco.tools.kostval.exception.modulejpeg.ValidationAjpegvalidationException;
 import ch.kostceco.tools.kostval.validation.ValidationModule;
 
-/** Ist die vorliegende JPEG-Datei eine valide JPEG-Datei? JPEG Validierungs mit Java Image IO (JIIO)
- * library.
+/** Ist die vorliegende JPEG-Datei eine valide JPEG-Datei? JPEG Validierungs mit Java Image IO
+ * (JIIO) library.
  * 
  * @author Rc Claire Roethlisberger, KOST-CECO */
 
 public interface ValidationAvalidationJpegModule extends ValidationModule
 {
 
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
-			throws ValidationAjpegvalidationException;
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
+			Locale locale ) throws ValidationAjpegvalidationException;
 
 }

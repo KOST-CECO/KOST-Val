@@ -26,6 +26,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.commons.io.FileUtils;
 import org.jdom2.Document;
@@ -43,16 +44,16 @@ import ch.kostceco.tools.kostval.validation.modulesiard.ValidationGtableModule;
  * 
  * @author Sp Peter Schneider, Staatsarchiv Aargau */
 
-public class ValidationGtableModuleImpl extends ValidationModuleImpl implements
-		ValidationGtableModule
+public class ValidationGtableModuleImpl extends ValidationModuleImpl
+		implements ValidationGtableModule
 {
 	Boolean	version1	= false;
 	Boolean	version2	= false;
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
-			throws ValidationGtableException
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
+			Locale locale ) throws ValidationGtableException
 	{
 		boolean showOnWork = true;
 		int onWork = 410;
@@ -96,10 +97,10 @@ public class ValidationGtableModuleImpl extends ValidationModuleImpl implements
 
 			/* read the document and for each schema and table entry verify existence in temporary
 			 * extracted structure */
-			version1 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" ).contains(
-					"http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
-			version2 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" ).contains(
-					"http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
+			version1 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" )
+					.contains( "http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
+			version2 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" )
+					.contains( "http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
 			Namespace ns = Namespace
 					.getNamespace( "http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
 			if ( version1 ) {
@@ -171,39 +172,39 @@ public class ValidationGtableModuleImpl extends ValidationModuleImpl implements
 			for ( Object value : listSchemas )
 				if ( !hashSchemas.add( value ) ) {
 					valid = false;
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_G_SIARD )
-									+ getTextResourceService().getText( MESSAGE_XML_G_DUPLICATE_SCHEMA, value ) );
+					getMessageService().logError( getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_G_SIARD )
+							+ getTextResourceService().getText( locale, MESSAGE_XML_G_DUPLICATE_SCHEMA, value ) );
 				}
 			HashSet hashTables = new HashSet(); // check for duplicate tables
 			for ( Object value : listTables )
 				if ( !hashTables.add( value ) ) {
 					valid = false;
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_G_SIARD )
-									+ getTextResourceService().getText( MESSAGE_XML_G_DUPLICATE_TABLE, value ) );
+					getMessageService().logError( getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_G_SIARD )
+							+ getTextResourceService().getText( locale, MESSAGE_XML_G_DUPLICATE_TABLE, value ) );
 				}
 			HashSet hashColumns = new HashSet(); // check for duplicate columns
 			for ( Object value : listColumns )
 				if ( !hashColumns.add( value ) ) {
 					valid = false;
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_G_SIARD )
-									+ getTextResourceService().getText( MESSAGE_XML_G_DUPLICATE_COLUMN, value ) );
+					getMessageService().logError( getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_G_SIARD )
+							+ getTextResourceService().getText( locale, MESSAGE_XML_G_DUPLICATE_COLUMN, value ) );
 				}
 
 		} catch ( java.io.IOException ioe ) {
 			valid = false;
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_G_SIARD )
-							+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_SIARD )
+							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 									ioe.getMessage() + " (IOException)" ) );
 
 		} catch ( JDOMException e ) {
 			valid = false;
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_G_SIARD )
-							+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_SIARD )
+							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 									e.getMessage() + " (JDOMException)" ) );
 			return valid;
 		}

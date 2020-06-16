@@ -21,6 +21,7 @@ package ch.kostceco.tools.kostval.validation.moduletiff2.impl;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.util.Locale;
 import java.util.Map;
 import java.io.FileReader;
 
@@ -36,22 +37,23 @@ import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationCcompressionVa
  * 
  * @author Rc Claire Roethlisberger, KOST-CECO */
 
-public class ValidationCcompressionValidationModuleImpl extends ValidationModuleImpl implements
-		ValidationCcompressionValidationModule
+public class ValidationCcompressionValidationModuleImpl extends ValidationModuleImpl
+		implements ValidationCcompressionValidationModule
 {
 
-	public static String	NEWLINE	= System.getProperty( "line.separator" );
+	public static String NEWLINE = System.getProperty( "line.separator" );
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
-			throws ValidationCcompressionValidationException
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
+			Locale locale ) throws ValidationCcompressionValidationException
 	{
 
 		boolean isValid = true;
 
 		// Informationen zum Logverzeichnis holen
 		String pathToExiftoolOutput = directoryOfLogfile.getAbsolutePath();
-		File exiftoolReport = new File( pathToExiftoolOutput, valDatei.getName() + ".exiftool-log.txt" );
+		File exiftoolReport = new File( pathToExiftoolOutput,
+				valDatei.getName() + ".exiftool-log.txt" );
 		pathToExiftoolOutput = exiftoolReport.getAbsolutePath();
 
 		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
@@ -68,43 +70,43 @@ public class ValidationCcompressionValidationModuleImpl extends ValidationModule
 		String com32773 = configMap.get( "AllowedCompression32773" );
 
 		if ( com1.startsWith( "Configuration-Error:" ) ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_C_TIFF ) + com1 );
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_TIFF ) + com1 );
 			return false;
 		}
 		if ( com2.startsWith( "Configuration-Error:" ) ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_C_TIFF ) + com2 );
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_TIFF ) + com2 );
 			return false;
 		}
 		if ( com3.startsWith( "Configuration-Error:" ) ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_C_TIFF ) + com3 );
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_TIFF ) + com3 );
 			return false;
 		}
 		if ( com4.startsWith( "Configuration-Error:" ) ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_C_TIFF ) + com4 );
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_TIFF ) + com4 );
 			return false;
 		}
 		if ( com5.startsWith( "Configuration-Error:" ) ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_C_TIFF ) + com5 );
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_TIFF ) + com5 );
 			return false;
 		}
 		if ( com7.startsWith( "Configuration-Error:" ) ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_C_TIFF ) + com7 );
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_TIFF ) + com7 );
 			return false;
 		}
 		if ( com8.startsWith( "Configuration-Error:" ) ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_C_TIFF ) + com8 );
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_TIFF ) + com8 );
 			return false;
 		}
 		if ( com32773.startsWith( "Configuration-Error:" ) ) {
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_C_TIFF ) + com32773 );
+					getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_TIFF ) + com32773 );
 			return false;
 		}
 
@@ -123,8 +125,9 @@ public class ValidationCcompressionValidationModuleImpl extends ValidationModule
 		 * dirOfJarPath + File.separator +
 		 * 
 		 * erweitern. */
-		String path = new java.io.File( KOSTVal.class.getProtectionDomain().getCodeSource()
-				.getLocation().getPath() ).getAbsolutePath();
+		String path = new java.io.File(
+				KOSTVal.class.getProtectionDomain().getCodeSource().getLocation().getPath() )
+						.getAbsolutePath();
 		path = path.substring( 0, path.lastIndexOf( "." ) );
 		path = path + System.getProperty( "java.class.path" );
 		String locationOfJarPath = path;
@@ -139,35 +142,33 @@ public class ValidationCcompressionValidationModuleImpl extends ValidationModule
 		String pathToIdentifyPl = fIdentifyPl.getAbsolutePath();
 		if ( !fIdentifyPl.exists() ) {
 			// exiftool.pl existiert nicht --> Abbruch
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_C_TIFF )
-							+ getTextResourceService().getText( MESSAGE_XML_CG_ET_MISSING, pathToIdentifyPl ) );
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_TIFF )
+							+ getTextResourceService().getText( locale, MESSAGE_XML_CG_ET_MISSING,
+									pathToIdentifyPl ) );
 			return false;
 		} else {
-			File fPerl = new File( dirOfJarPath + File.separator + "resources" + File.separator
-					+ "ExifTool-10.15" + File.separator + "Perl" + File.separator + "bin" + File.separator
-					+ "perl.exe" );
+			File fPerl = new File(
+					dirOfJarPath + File.separator + "resources" + File.separator + "ExifTool-10.15"
+							+ File.separator + "Perl" + File.separator + "bin" + File.separator + "perl.exe" );
 			String pathToPerl = fPerl.getAbsolutePath();
 			if ( !fPerl.exists() ) {
 				// Perl.exe existiert nicht --> Abbruch
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_C_TIFF )
-								+ getTextResourceService().getText( MESSAGE_XML_CG_ET_MISSING, pathToPerl ) );
+				getMessageService().logError( getTextResourceService().getText( locale,
+						MESSAGE_XML_MODUL_C_TIFF )
+						+ getTextResourceService().getText( locale, MESSAGE_XML_CG_ET_MISSING, pathToPerl ) );
 				return false;
 			} else {
 
 				try {
 
-					String command = "cmd /c \"\""
-							+ pathToPerl
-							+ "\" \""
-							+ pathToIdentifyPl
+					String command = "cmd /c \"\"" + pathToPerl + "\" \"" + pathToIdentifyPl
 							+ "\" -ver -a -s2 -FileName -Directory -Compression -PhotometricInterpretation"
 							+ " -PlanarConfiguration -BitsPerSample -StripByteCounts -RowsPerStrip -FileSize"
-							+ " -TileWidth -TileLength -TileDepth -G0:1 \""
-							+ valDatei.getAbsolutePath() + "\" >>\"" + pathToExiftoolOutput + "\"";
-					/* Das redirect Zeichen verunmöglicht eine direkte eingabe. mit dem geschachtellten Befehl
-					 * gehts: cmd /c\"urspruenlicher Befehl\" */
+							+ " -TileWidth -TileLength -TileDepth -G0:1 \"" + valDatei.getAbsolutePath()
+							+ "\" >>\"" + pathToExiftoolOutput + "\"";
+					/* Das redirect Zeichen verunmöglicht eine direkte eingabe. mit dem geschachtellten
+					 * Befehl gehts: cmd /c\"urspruenlicher Befehl\" */
 
 					Process proc = null;
 					Runtime rt = null;
@@ -199,15 +200,15 @@ public class ValidationCcompressionValidationModuleImpl extends ValidationModule
 						Util.switchOnConsole();
 						// Kontrolle ob der Report existiert
 						if ( !exiftoolReport.exists() ) {
-							getMessageService().logError(
-									getTextResourceService().getText( MESSAGE_XML_MODUL_C_TIFF )
-											+ getTextResourceService().getText( MESSAGE_XML_CG_ET_MISSING ) );
+							getMessageService()
+									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_TIFF )
+											+ getTextResourceService().getText( locale, MESSAGE_XML_CG_ET_MISSING ) );
 							return false;
 						}
 					} catch ( Exception e ) {
-						getMessageService().logError(
-								getTextResourceService().getText( MESSAGE_XML_MODUL_C_TIFF )
-										+ getTextResourceService().getText( MESSAGE_XML_CG_ET_SERVICEFAILED,
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_TIFF )
+										+ getTextResourceService().getText( locale, MESSAGE_XML_CG_ET_SERVICEFAILED,
 												e.getMessage() ) );
 						return false;
 					} finally {
@@ -221,9 +222,9 @@ public class ValidationCcompressionValidationModuleImpl extends ValidationModule
 					// Ende Exiftool direkt auszulösen
 
 				} catch ( Exception e ) {
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_C_TIFF )
-									+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_TIFF )
+									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 					return false;
 				}
 
@@ -251,9 +252,9 @@ public class ValidationCcompressionValidationModuleImpl extends ValidationModule
 								&& !line.equals( oldErrorLine3 ) && !line.equals( oldErrorLine4 )
 								&& !line.equals( oldErrorLine5 ) ) {
 							// neuer Fehler
-							getMessageService().logError(
-									getTextResourceService().getText( MESSAGE_XML_MODUL_C_TIFF )
-											+ getTextResourceService().getText( MESSAGE_XML_CG_INVALID, line ) );
+							getMessageService()
+									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_TIFF )
+											+ getTextResourceService().getText( locale, MESSAGE_XML_CG_INVALID, line ) );
 							if ( oldErrorLine1.equals( "" ) ) {
 								oldErrorLine1 = line;
 							} else if ( oldErrorLine2.equals( "" ) ) {
@@ -272,15 +273,15 @@ public class ValidationCcompressionValidationModuleImpl extends ValidationModule
 			if ( exiftoolio == 0 ) {
 				// Invalider Status
 				isValid = false;
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_C_TIFF )
-								+ getTextResourceService().getText( MESSAGE_XML_CG_ETNIO, "C" ) );
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_TIFF )
+								+ getTextResourceService().getText( locale, MESSAGE_XML_CG_ETNIO, "C" ) );
 			}
 			in.close();
 		} catch ( Exception e ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_C_TIFF )
-							+ getTextResourceService().getText( MESSAGE_XML_CG_CANNOTFINDETREPORT ) );
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_TIFF )
+							+ getTextResourceService().getText( locale, MESSAGE_XML_CG_CANNOTFINDETREPORT ) );
 			return false;
 		}
 		return isValid;

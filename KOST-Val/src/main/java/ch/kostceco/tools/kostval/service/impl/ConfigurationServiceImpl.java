@@ -25,6 +25,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -56,7 +57,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		this.textResourceService = textResourceService;
 	}
 
-	public Map<String, String> configMap()
+	public Map<String, String> configMap(Locale locale)
 	{
 		try {
 			File directoryOfConfigfile = new File( System.getenv( "USERPROFILE" ) + File.separator
@@ -267,48 +268,48 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			return configMap;
 
 		} catch ( FileNotFoundException e ) {
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
-					+ getTextResourceService().getText( MESSAGE_XML_CONFIGURATION_ERROR_1 ) );
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
-					+ getTextResourceService().getText( MESSAGE_XML_CONFIGURATION_ERROR_2 ) );
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
-					+ getTextResourceService().getText( MESSAGE_XML_CONFIGURATION_ERROR_3 ) );
+			LOGGER.logError( getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Ca_SIP )
+					+ getTextResourceService().getText(locale, MESSAGE_XML_CONFIGURATION_ERROR_1 ) );
+			LOGGER.logError( getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Ca_SIP )
+					+ getTextResourceService().getText(locale, MESSAGE_XML_CONFIGURATION_ERROR_2 ) );
+			LOGGER.logError( getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Ca_SIP )
+					+ getTextResourceService().getText(locale, MESSAGE_XML_CONFIGURATION_ERROR_3 ) );
 			String error = e.getMessage() + " (FileNotFoundException)";
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
-					+ getTextResourceService().getText( ERROR_XML_UNKNOWN, error ) );
+			LOGGER.logError( getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Ca_SIP )
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, error ) );
 			System.exit( 1 );
 		} catch ( ParserConfigurationException e ) {
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
-					+ getTextResourceService().getText( MESSAGE_XML_CONFIGURATION_ERROR_1 ) );
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
-					+ getTextResourceService().getText( MESSAGE_XML_CONFIGURATION_ERROR_2 ) );
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
-					+ getTextResourceService().getText( MESSAGE_XML_CONFIGURATION_ERROR_3 ) );
+			LOGGER.logError( getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Ca_SIP )
+					+ getTextResourceService().getText(locale, MESSAGE_XML_CONFIGURATION_ERROR_1 ) );
+			LOGGER.logError( getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Ca_SIP )
+					+ getTextResourceService().getText(locale, MESSAGE_XML_CONFIGURATION_ERROR_2 ) );
+			LOGGER.logError( getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Ca_SIP )
+					+ getTextResourceService().getText(locale, MESSAGE_XML_CONFIGURATION_ERROR_3 ) );
 			String error = e.getMessage() + " (ParserConfigurationException)";
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
-					+ getTextResourceService().getText( ERROR_XML_UNKNOWN, error ) );
+			LOGGER.logError( getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Ca_SIP )
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, error ) );
 			System.exit( 1 );
 		} catch ( SAXException e ) {
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
-					+ getTextResourceService().getText( MESSAGE_XML_CONFIGURATION_ERROR_1 ) );
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
-					+ getTextResourceService().getText( MESSAGE_XML_CONFIGURATION_ERROR_2 ) );
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
-					+ getTextResourceService().getText( MESSAGE_XML_CONFIGURATION_ERROR_3 ) );
+			LOGGER.logError( getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Ca_SIP )
+					+ getTextResourceService().getText(locale, MESSAGE_XML_CONFIGURATION_ERROR_1 ) );
+			LOGGER.logError( getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Ca_SIP )
+					+ getTextResourceService().getText(locale, MESSAGE_XML_CONFIGURATION_ERROR_2 ) );
+			LOGGER.logError( getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Ca_SIP )
+					+ getTextResourceService().getText(locale, MESSAGE_XML_CONFIGURATION_ERROR_3 ) );
 			String error = e.getMessage() + " (SAXException)";
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
-					+ getTextResourceService().getText( ERROR_XML_UNKNOWN, error ) );
+			LOGGER.logError( getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Ca_SIP )
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, error ) );
 			System.exit( 1 );
 		} catch ( IOException e ) {
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
-					+ getTextResourceService().getText( MESSAGE_XML_CONFIGURATION_ERROR_1 ) );
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
-					+ getTextResourceService().getText( MESSAGE_XML_CONFIGURATION_ERROR_2 ) );
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
-					+ getTextResourceService().getText( MESSAGE_XML_CONFIGURATION_ERROR_3 ) );
+			LOGGER.logError( getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Ca_SIP )
+					+ getTextResourceService().getText(locale, MESSAGE_XML_CONFIGURATION_ERROR_1 ) );
+			LOGGER.logError( getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Ca_SIP )
+					+ getTextResourceService().getText(locale, MESSAGE_XML_CONFIGURATION_ERROR_2 ) );
+			LOGGER.logError( getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Ca_SIP )
+					+ getTextResourceService().getText(locale, MESSAGE_XML_CONFIGURATION_ERROR_3 ) );
 			String error = e.getMessage() + " (IOException)";
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
-					+ getTextResourceService().getText( ERROR_XML_UNKNOWN, error ) );
+			LOGGER.logError( getTextResourceService().getText(locale, MESSAGE_XML_MODUL_Ca_SIP )
+					+ getTextResourceService().getText(locale, ERROR_XML_UNKNOWN, error ) );
 			System.exit( 1 );
 		}
 		return configMap;

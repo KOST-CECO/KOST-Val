@@ -24,6 +24,7 @@ import java.util.Map;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.commons.io.FileUtils;
 import org.jdom2.Document;
@@ -43,13 +44,13 @@ import ch.kostceco.tools.kostval.validation.modulesiard.ValidationDstructureModu
  * 
  * @author Christian Eugster */
 
-public class ValidationDstructureModuleImpl extends ValidationModuleImpl implements
-		ValidationDstructureModule
+public class ValidationDstructureModuleImpl extends ValidationModuleImpl
+		implements ValidationDstructureModule
 {
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
-			throws ValidationDstructureException
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
+			Locale locale ) throws ValidationDstructureException
 	{
 		boolean showOnWork = true;
 		int onWork = 410;
@@ -80,10 +81,10 @@ public class ValidationDstructureModuleImpl extends ValidationModuleImpl impleme
 
 			/* read the document and for each schema and table entry verify existence in temporary
 			 * extracted structure */
-			Boolean version1 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" ).contains(
-					"http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
-			Boolean version2 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" ).contains(
-					"http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
+			Boolean version1 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" )
+					.contains( "http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
+			Boolean version2 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" )
+					.contains( "http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
 			Namespace ns = Namespace
 					.getNamespace( "http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
 			if ( version1 ) {
@@ -93,16 +94,17 @@ public class ValidationDstructureModuleImpl extends ValidationModuleImpl impleme
 					ns = Namespace.getNamespace( "http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
 				} else {
 					valid = false;
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_D_SIARD )
-									+ getTextResourceService().getText( MESSAGE_XML_D_INVALID_XMLNS, metadataXml ) );
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_SIARD )
+									+ getTextResourceService().getText( locale, MESSAGE_XML_D_INVALID_XMLNS,
+											metadataXml ) );
 				}
 			}
 			// select schema elements and loop
 			List<Element> schemas = document.getRootElement().getChild( "schemas", ns )
 					.getChildren( "schema", ns );
 			for ( Element schema : schemas ) {
-				valid = validateSchema( schema, ns, pathToWorkDir, configMap );
+				valid = validateSchema( schema, ns, pathToWorkDir, configMap, locale );
 				if ( showOnWork ) {
 					if ( onWork == 410 ) {
 						onWork = 2;
@@ -127,15 +129,15 @@ public class ValidationDstructureModuleImpl extends ValidationModuleImpl impleme
 			}
 		} catch ( java.io.IOException ioe ) {
 			valid = false;
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_D_SIARD )
-							+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_SIARD )
+							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 									ioe.getMessage() + " (IOException)" ) );
 		} catch ( JDOMException e ) {
 			valid = false;
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_D_SIARD )
-							+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_SIARD )
+							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 									e.getMessage() + " (JDOMException)" ) );
 		}
 
@@ -143,7 +145,7 @@ public class ValidationDstructureModuleImpl extends ValidationModuleImpl impleme
 	}
 
 	private boolean validateSchema( Element schema, Namespace ns, String pathToWorkDir,
-			Map<String, String> configMap )
+			Map<String, String> configMap, Locale locale )
 	{
 		boolean showOnWork = true;
 		int onWork = 410;
@@ -165,7 +167,7 @@ public class ValidationDstructureModuleImpl extends ValidationModuleImpl impleme
 			if ( schema.getChild( "tables", ns ) != null ) {
 				List<Element> tables = schema.getChild( "tables", ns ).getChildren( "table", ns );
 				for ( Element table : tables ) {
-					valid = valid && validateTable( table, ns, pathToWorkDir, schemaPath );
+					valid = valid && validateTable( table, ns, pathToWorkDir, schemaPath, locale );
 					if ( showOnWork ) {
 						if ( onWork == 410 ) {
 							onWork = 2;
@@ -194,21 +196,22 @@ public class ValidationDstructureModuleImpl extends ValidationModuleImpl impleme
 		} else {
 			valid = false;
 			if ( schemaPath.exists() ) {
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_D_SIARD )
-								+ getTextResourceService().getText( MESSAGE_XML_D_INVALID_FOLDER, "content",
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_SIARD )
+								+ getTextResourceService().getText( locale, MESSAGE_XML_D_INVALID_FOLDER, "content",
 										schemaPath.getName() ) );
 			} else {
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_D_SIARD )
-								+ getTextResourceService().getText( MESSAGE_XML_D_MISSING_FOLDER, "content",
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_SIARD )
+								+ getTextResourceService().getText( locale, MESSAGE_XML_D_MISSING_FOLDER, "content",
 										schemaPath.getName() ) );
 			}
 		}
 		return valid;
 	}
 
-	private boolean validateTable( Element table, Namespace ns, String pathToWorkDir, File schemaPath )
+	private boolean validateTable( Element table, Namespace ns, String pathToWorkDir, File schemaPath,
+			Locale locale )
 	{
 		boolean valid = true;
 		Element tableFolder = table.getChild( "folder", ns );
@@ -217,42 +220,42 @@ public class ValidationDstructureModuleImpl extends ValidationModuleImpl impleme
 		if ( tablePath.isDirectory() ) {
 			File tableXml = new File( new StringBuilder( tablePath.getAbsolutePath() )
 					.append( File.separator ).append( tableFolder.getText() + ".xml" ).toString() );
-			valid = valid && validateFile( tableXml, tablePath );
+			valid = valid && validateFile( tableXml, tablePath, locale );
 			File tableXsd = new File( new StringBuilder( tablePath.getAbsolutePath() )
 					.append( File.separator ).append( tableFolder.getText() + ".xsd" ).toString() );
-			valid = valid && validateFile( tableXsd, tablePath );
+			valid = valid && validateFile( tableXsd, tablePath, locale );
 		} else {
 			valid = false;
 			if ( tablePath.exists() ) {
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_D_SIARD )
-								+ getTextResourceService().getText( MESSAGE_XML_D_INVALID_FOLDER,
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_SIARD )
+								+ getTextResourceService().getText( locale, MESSAGE_XML_D_INVALID_FOLDER,
 										schemaPath.getName(), tablePath.getName() ) );
 			} else {
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_D_SIARD )
-								+ getTextResourceService().getText( MESSAGE_XML_D_MISSING_FOLDER,
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_SIARD )
+								+ getTextResourceService().getText( locale, MESSAGE_XML_D_MISSING_FOLDER,
 										schemaPath.getName(), tablePath.getName() ) );
 			}
 		}
 		return valid;
 	}
 
-	private boolean validateFile( File file, File parent )
+	private boolean validateFile( File file, File parent, Locale locale )
 	{
 		boolean valid = true;
 		if ( !file.isFile() ) {
 			valid = false;
 			if ( file.exists() ) {
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_D_SIARD )
-								+ getTextResourceService().getText( MESSAGE_XML_D_INVALID_FILE, parent.getName(),
-										file.getName() ) );
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_SIARD )
+								+ getTextResourceService().getText( locale, MESSAGE_XML_D_INVALID_FILE,
+										parent.getName(), file.getName() ) );
 			} else {
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_D_SIARD )
-								+ getTextResourceService().getText( MESSAGE_XML_D_MISSING_FILE, parent.getName(),
-										file.getName() ) );
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_SIARD )
+								+ getTextResourceService().getText( locale, MESSAGE_XML_D_MISSING_FILE,
+										parent.getName(), file.getName() ) );
 			}
 		}
 		return valid;

@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Properties;
 import java.util.Set;
 
@@ -81,8 +82,8 @@ import ch.kostceco.tools.kostval.validation.modulesiard.ValidationEcolumnModule;
  * @author Do Olivier Debenath
  * @author Rc Claire Roethlisberger, KOST-CECO */
 
-public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
-		ValidationEcolumnModule
+public class ValidationEcolumnModuleImpl extends ValidationModuleImpl
+		implements ValidationEcolumnModule
 {
 	// TODO: schema1 aus Beispiel funktioniert noch nicht (null)
 	/* Validation Context */
@@ -109,8 +110,8 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 	 * @exception ValidationEcolumnException
 	 *              if the representation of the columns is invalid */
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
-			throws ValidationEcolumnException
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
+			Locale locale ) throws ValidationEcolumnException
 	{
 		configMapFinal = configMap;
 		// Informationen zur Darstellung "onWork" holen
@@ -132,100 +133,102 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 		boolean congruentColumnCount = false;
 		ValidationContext validationContext = new ValidationContext();
 		validationContext.setSiardArchive( valDatei );
-		this.setValidationContext( validationContext );
+		this.setValidationContext( validationContext, locale );
 		try {
 			try {
 				// Initialize the validation context
-				valid = (prepareValidation( this.getValidationContext() ) == false ? false : true);
+				valid = (prepareValidation( this.getValidationContext( locale ) ) == false ? false : true);
 			} catch ( Exception e ) {
 				valid = false;
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
-								+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
+								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 										e.getMessage() + " (Initialize the validation context)" ) );
 			}
 			try {
 				// Get the prepared SIARD tables from the validation context
-				valid = (this.getValidationContext().getSiardTables() == null ? false : true);
+				valid = (this.getValidationContext( locale ).getSiardTables() == null ? false : true);
 			} catch ( Exception e ) {
 				valid = false;
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
-								+ getTextResourceService()
-										.getText(
-												ERROR_XML_UNKNOWN,
-												e.getMessage()
-														+ " (Get the prepared SIARD tables from the validation context)" ) );
+				getMessageService().logError( getTextResourceService().getText( locale,
+						MESSAGE_XML_MODUL_E_SIARD )
+						+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+								e.getMessage() + " (Get the prepared SIARD tables from the validation context)" ) );
 			}
 			try {
 				// Validates the number of the attributes
-				congruentColumnCount = validateColumnCount( this.getValidationContext(), configMap );
+				congruentColumnCount = validateColumnCount( this.getValidationContext( locale ), configMap,
+						locale );
 				if ( congruentColumnCount == false ) {
 					valid = false;
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
-									+ getTextResourceService().getText( MESSAGE_XML_E_INVALID_ATTRIBUTE_COUNT,
-											this.getIncongruentColumnCount() ) );
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
+									+ getTextResourceService().getText( locale, MESSAGE_XML_E_INVALID_ATTRIBUTE_COUNT,
+											this.getIncongruentColumnCount( locale ) ) );
 				}
 			} catch ( Exception e ) {
 				valid = false;
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
-								+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
+								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 										e.getMessage() + " (Validates the number of the attributes)" ) );
 			}
 			try {
 				// Validates the nullable property in metadata.xml
-				if ( validateColumnOccurrence( this.getValidationContext(), configMap ) == false ) {
+				if ( validateColumnOccurrence( this.getValidationContext( locale ), configMap,
+						locale ) == false ) {
 					valid = false;
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
-									+ getTextResourceService().getText( MESSAGE_XML_E_INVALID_ATTRIBUTE_OCCURRENCE,
-											this.getIncongruentColumnOccurrence() ) );
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
+									+ getTextResourceService().getText( locale,
+											MESSAGE_XML_E_INVALID_ATTRIBUTE_OCCURRENCE,
+											this.getIncongruentColumnOccurrence( locale ) ) );
 				}
 			} catch ( Exception e ) {
 				valid = false;
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
-								+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
+								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 										e.getMessage() + " (Validates the nullable property in metadata.xml)" ) );
 			}
 			try {
 				// Validates the type of table attributes in metadata.xml
-				if ( validateColumnType( this.getValidationContext(), configMap ) == false ) {
+				if ( validateColumnType( this.getValidationContext( locale ), configMap,
+						locale ) == false ) {
 					valid = false;
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
-									+ getTextResourceService().getText( MESSAGE_XML_E_INVALID_ATTRIBUTE_TYPE,
-											this.getIncongruentColumnType() ) );
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
+									+ getTextResourceService().getText( locale, MESSAGE_XML_E_INVALID_ATTRIBUTE_TYPE,
+											this.getIncongruentColumnType( locale ) ) );
 					if ( udtColumn ) {
 						// UDT-Warning mit ausgeben wenn vorhanden: MESSAGE_XML_E_TYPE_NOT_VALIDATED
-						getMessageService().logError(
-								getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
-										+ getTextResourceService().getText( MESSAGE_XML_E_TYPE_NOT_VALIDATED,
-												this.getWarningColumnType() ) );
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
+										+ getTextResourceService().getText( locale, MESSAGE_XML_E_TYPE_NOT_VALIDATED,
+												this.getWarningColumnType( locale ) ) );
 					}
 				} else {
 					if ( udtColumn ) {
 						// UDT-Warning mit ausgeben wenn vorhanden: MESSAGE_XML_E_TYPE_NOT_VALIDATED
-						getMessageService().logError(
-								getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
-										+ getTextResourceService().getText( MESSAGE_XML_E_TYPE_NOT_VALIDATED,
-												this.getWarningColumnType() ) );
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
+										+ getTextResourceService().getText( locale, MESSAGE_XML_E_TYPE_NOT_VALIDATED,
+												this.getWarningColumnType( locale ) ) );
 					}
 				}
 			} catch ( Exception e ) {
 				valid = false;
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
-								+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
-										e.getMessage() + " (Validates the type of table attributes in metadata.xml)" ) );
+				getMessageService().logError( getTextResourceService().getText( locale,
+						MESSAGE_XML_MODUL_E_SIARD )
+						+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+								e.getMessage() + " (Validates the type of table attributes in metadata.xml)" ) );
 			}
 		} catch ( Exception e ) {
 			valid = false;
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
-							+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() + " (E)" ) );
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
+							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+									e.getMessage() + " (E)" ) );
 		}
 		return valid;
 	}
@@ -234,100 +237,101 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 	 * the validation context:- Getting the Properties- Initializing the SIARD path configuration-
 	 * Extracting the SIARD package- Pick up the metadata.xml- Prepares the XML Access (without
 	 * XPath)- Prepares the table information from metadata.xml */
-	@Override
-	public boolean prepareValidation( ValidationContext validationContext ) throws IOException,
-			JDOMException, Exception
+	public boolean prepareValidation( ValidationContext validationContext, Locale locale )
+			throws IOException, JDOMException, Exception
 	{
 		// All over preparation flag
 		boolean prepared = true;
 		try {
 			// Load the Java properties to the validation context
-			boolean propertiesLoaded = initializeProperties();
+			boolean propertiesLoaded = initializeProperties( locale );
 			if ( propertiesLoaded == false ) {
 				prepared = false;
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
-								+ getTextResourceService().getText( MESSAGE_XML_E_PROPERTIES_ERROR ) );
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
+								+ getTextResourceService().getText( locale, MESSAGE_XML_E_PROPERTIES_ERROR ) );
 			}
 		} catch ( Exception e ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
-							+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
+							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 									e.getMessage() + " (propertiesLoaded)" ) );
 		}
 		try {
 			// Initialize internal path configuration of the SIARD archive
-			boolean pathInitialized = initializePath( validationContext, configMapFinal );
+			boolean pathInitialized = initializePath( validationContext, configMapFinal, locale );
 			if ( pathInitialized == false ) {
 				prepared = false;
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
-								+ getTextResourceService().getText( MESSAGE_XML_E_PATH_ERROR ) );
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
+								+ getTextResourceService().getText( locale, MESSAGE_XML_E_PATH_ERROR ) );
 			}
 		} catch ( Exception e ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
-							+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
+							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 									e.getMessage() + " (pathInitialized)" ) );
 		}
 		try {
 			// Extract the SIARD archive and distribute the content to the validation context
-			boolean siardArchiveExtracted = extractSiardArchive( validationContext, configMapFinal );
+			boolean siardArchiveExtracted = extractSiardArchive( validationContext, configMapFinal,
+					locale );
 			if ( siardArchiveExtracted == false ) {
 				prepared = false;
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
-								+ getTextResourceService().getText( MESSAGE_XML_E_EXTRACT_ERROR ) );
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
+								+ getTextResourceService().getText( locale, MESSAGE_XML_E_EXTRACT_ERROR ) );
 			}
 		} catch ( Exception e ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
-							+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
+							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 									e.getMessage() + " (siardArchiveExtracted)" ) );
 		}
 		try {
 			// Pick the metadata.xml and load it to the validation context
-			boolean metadataXMLpicked = pickMetadataXML( validationContext, configMapFinal );
+			boolean metadataXMLpicked = pickMetadataXML( validationContext, configMapFinal, locale );
 			if ( metadataXMLpicked == false ) {
 				prepared = false;
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
-								+ getTextResourceService().getText( MESSAGE_XML_E_METADATA_ACCESS_ERROR ) );
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
+								+ getTextResourceService().getText( locale, MESSAGE_XML_E_METADATA_ACCESS_ERROR ) );
 			}
 		} catch ( Exception e ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
-							+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
+							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 									e.getMessage() + " (metadataXMLpicked)" ) );
 		}
 		try {
 			// Prepare the XML configuration and store it to the validation context
-			boolean xmlAccessPrepared = prepareXMLAccess( validationContext );
+			boolean xmlAccessPrepared = prepareXMLAccess( validationContext, locale );
 			if ( xmlAccessPrepared == false ) {
 				prepared = false;
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
-								+ getTextResourceService().getText( MESSAGE_XML_E_XML_ACCESS_ERROR ) );
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
+								+ getTextResourceService().getText( locale, MESSAGE_XML_E_XML_ACCESS_ERROR ) );
 			}
 		} catch ( Exception e ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
-							+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
+							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 									e.getMessage() + " (xmlAccessPrepared)" ) );
 		}
 		try {
 			// Prepare the data to be validated such as metadata.xml and the according XML schemas
-			boolean validationDataPrepared = prepareValidationData( validationContext, configMapFinal );
+			boolean validationDataPrepared = prepareValidationData( validationContext, configMapFinal,
+					locale );
 			if ( validationDataPrepared == false ) {
 				prepared = false;
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
-								+ getTextResourceService().getText( MESSAGE_XML_E_PREVALIDATION_ERROR ) );
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
+								+ getTextResourceService().getText( locale, MESSAGE_XML_E_PREVALIDATION_ERROR ) );
 			}
 		} catch ( Exception e ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
-							+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
+							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 									e.getMessage() + " (validationDataPrepared)" ) );
 		}
 		return prepared;
@@ -336,7 +340,7 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 	/* [E.1]Counts the columns in metadata.xml and compares it to the number of columns in the
 	 * according XML schema files */
 	private boolean validateColumnCount( ValidationContext validationContext,
-			Map<String, String> configMap ) throws Exception
+			Map<String, String> configMap, Locale locale ) throws Exception
 	{
 		boolean showOnWork = true;
 		int onWork = 410;
@@ -368,8 +372,8 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 				namesOfInvalidTables.append( siardTable.getTableName() );
 				namesOfInvalidTables.append( ".xsd" );
 				namesOfInvalidTables.append( "(" );
-				namesOfInvalidTables.append( (columnsDifference > 0 ? "+" + columnsDifference
-						: columnsDifference) );
+				namesOfInvalidTables
+						.append( (columnsDifference > 0 ? "+" + columnsDifference : columnsDifference) );
 				namesOfInvalidTables.append( ")" );
 			}
 			if ( showOnWork ) {
@@ -395,7 +399,7 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 			}
 		}
 		// Writing back error log
-		this.setIncongruentColumnCount( namesOfInvalidTables );
+		this.setIncongruentColumnCount( namesOfInvalidTables, locale );
 		// Return the current validation state
 		return validDatabase;
 	}
@@ -403,7 +407,7 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 	/* [E.2]Compares the <nullable> Element of the metadata.xml to the minOccurs attributesin the
 	 * according XML schemata */
 	private boolean validateColumnOccurrence( ValidationContext validationContext,
-			Map<String, String> configMap ) throws Exception
+			Map<String, String> configMap, Locale locale ) throws Exception
 	{
 		boolean showOnWork = true;
 		int onWork = 410;
@@ -510,13 +514,13 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 			}
 		}
 		// Writing back error log
-		this.setIncongruentColumnOccurrence( namesOfInvalidTables );
+		this.setIncongruentColumnOccurrence( namesOfInvalidTables, locale );
 		return validDatabase;
 	}
 
 	/* [E.3]Compares the column types in the metadata.xml to the accordingXML schemata */
 	private boolean validateColumnType( ValidationContext validationContext,
-			Map<String, String> configMap ) throws Exception
+			Map<String, String> configMap, Locale locale ) throws Exception
 	{
 		boolean showOnWork = true;
 		int onWork = 410;
@@ -612,12 +616,12 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 										if ( !array0.equalsIgnoreCase( arrays ) ) {
 											validTable = false;
 											validDatabase = false;
-											namesOfInvalidColumns.append( (namesOfInvalidColumns.length() > 0) ? ", "
-													: "" );
+											namesOfInvalidColumns
+													.append( (namesOfInvalidColumns.length() > 0) ? ", " : "" );
 											namesOfInvalidColumns.append( columnName );
 											getMessageService().logError(
-													getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
-															+ getTextResourceService().getText( MESSAGE_XML_E_ARRAY,
+													getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
+															+ getTextResourceService().getText( locale, MESSAGE_XML_E_ARRAY,
 																	(siardTable.getTableName() + ".xsd(" + columnName + ")") ) );
 										}
 									}
@@ -627,16 +631,16 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 					}
 					String delimiter = "(";
 					// Trim the column types - eliminates the brackets and specific numeric parameters
-					String trimmedExpectedType = trimLeftSideType( leftSide, delimiter );
+					String trimmedExpectedType = trimLeftSideType( leftSide, delimiter, locale );
 					// Designing expected column type in table.xsd, called "rightSide"
 					String pathToWorkDir = configMap.get( "PathToWorkDir" );
 					pathToWorkDir = pathToWorkDir + File.separator + "SIARD";
 					File metadataXml = new File( new StringBuilder( pathToWorkDir ).append( File.separator )
 							.append( "header" ).append( File.separator ).append( "metadata.xml" ).toString() );
-					Boolean version1 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" ).contains(
-							"http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
-					Boolean version2 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" ).contains(
-							"http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
+					Boolean version1 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" )
+							.contains( "http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
+					Boolean version2 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" )
+							.contains( "http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
 
 					/* Interval wird vereinfacht kontrolliert */
 					if ( trimmedExpectedType.startsWith( "INTERVAL" )
@@ -659,8 +663,8 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 						namesOfInvalidColumns.append( (namesOfInvalidColumns.length() > 0) ? ", " : "" );
 						namesOfInvalidColumns.append( columnName + "(" + trimmedExpectedType + "=?)" );
 					} else if ( !expectedType.equalsIgnoreCase( rightSide ) ) {
-						/* grössere strings dürfen auch als clob separat abgespeichert werden. Das gleiche für
-						 * hexBinarx als blob
+						/* grössere strings dürfen auch als clob separat abgespeichert werden. Das gleiche
+						 * für hexBinarx als blob
 						 * 
 						 * xs:hexBinary ~ blobType && xs:string ~ clobType */
 						if ( expectedType.equalsIgnoreCase( "xs:hexBinary" )
@@ -724,12 +728,12 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 				}
 			}
 		}
-		this.setIncongruentColumnType( namesOfInvalidTables );
-		this.setWarningColumnType( namesOfUdtTables );
+		this.setIncongruentColumnType( namesOfInvalidTables, locale );
+		this.setWarningColumnType( namesOfUdtTables, locale );
 		// Save the allover column elements for [E.4]
 		validationContext.setXmlElementsSequence( xmlElementSequence );
 		validationContext.setXsdElementsSequence( xsdElementSequence );
-		this.setValidationContext( validationContext );
+		this.setValidationContext( validationContext, locale );
 		Thread.sleep( 10 );
 		// Return the current validation state
 		return validDatabase;
@@ -737,9 +741,9 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 
 	/* Internal helper methods */
 	/* [E.0.1]Load the validation properties */
-	private boolean initializeProperties() throws IOException
+	private boolean initializeProperties( Locale locale ) throws IOException
 	{
-		ValidationContext validationContext = this.getValidationContext();
+		ValidationContext validationContext = this.getValidationContext( locale );
 		boolean successfullyCommitted = false;
 		// Initializing the validation context properties
 		String propertiesName = "/validation.properties";
@@ -759,8 +763,8 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 	}
 
 	/* [E.0.2]Initializes the SIARD path configuration */
-	private boolean initializePath( ValidationContext validationContext, Map<String, String> configMap )
-			throws Exception
+	private boolean initializePath( ValidationContext validationContext,
+			Map<String, String> configMap, Locale locale ) throws Exception
 	{
 		boolean successfullyCommitted = false;
 		StringBuilder headerPath = new StringBuilder();
@@ -779,18 +783,18 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 		validationContext.setContentPath( contentPath.toString() );
 		if ( validationContext.getHeaderPath() != null && validationContext.getContentPath() != null ) {
 			successfullyCommitted = true;
-			this.setValidationContext( validationContext );
+			this.setValidationContext( validationContext, locale );
 		} else {
 			successfullyCommitted = false;
-			this.setValidationContext( null );
+			this.setValidationContext( null, locale );
 			throw new Exception();
 		}
 		return successfullyCommitted;
 	}
 
 	/* [E.0.5]Prepares the XML access */
-	private boolean prepareXMLAccess( ValidationContext validationContext ) throws JDOMException,
-			IOException, Exception
+	private boolean prepareXMLAccess( ValidationContext validationContext, Locale locale )
+			throws JDOMException, IOException, Exception
 	{
 		boolean successfullyCommitted = false;
 		File metadataXML = validationContext.getMetadataXML();
@@ -815,26 +819,29 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 		if ( validationContext.getXmlNamespace() != null && validationContext.getXsdNamespace() != null
 				&& validationContext.getXmlPrefix() != null && validationContext.getXsdPrefix() != null
 				&& validationContext.getMetadataXMLDocument() != null ) {
-			this.setValidationContext( validationContext );
+			this.setValidationContext( validationContext, locale );
 			successfullyCommitted = true;
 		} else {
 			successfullyCommitted = false;
-			this.setValidationContext( null );
+			this.setValidationContext( null, locale );
 			throw new Exception();
 		}
 		return successfullyCommitted;
 	}
 
 	/* Trimming the search terms for column type validation */
-	private String trimLeftSideType( String leftside, String delimiter ) throws Exception
+	private String trimLeftSideType( String leftside, String delimiter, Locale locale )
+			throws Exception
 	{
-		return (leftside.indexOf( delimiter ) > -1) ? leftside.substring( 0,
-				leftside.indexOf( delimiter ) ) : leftside;
+		return (leftside.indexOf( delimiter ) > -1)
+				? leftside.substring( 0, leftside.indexOf( delimiter ) )
+				: leftside;
 	}
 
 	/* [E.0.3]Extracting the SIARD packages */
 	private boolean extractSiardArchive( ValidationContext validationContext,
-			Map<String, String> configMap ) throws FileNotFoundException, IOException, Exception
+			Map<String, String> configMap, Locale locale )
+			throws FileNotFoundException, IOException, Exception
 	{
 		boolean sucessfullyCommitted = false;
 		String pathToWorkDir = configMap.get( "PathToWorkDir" ) + File.separator + "SIARD";
@@ -860,10 +867,10 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 		validationContext.setSiardFiles( extractedSiardFiles );
 		// Checks whether the siard extraction succeeded or not
 		if ( validationContext.getSiardFiles() != null ) {
-			this.setValidationContext( validationContext );
+			this.setValidationContext( validationContext, locale );
 			sucessfullyCommitted = true;
 		} else {
-			this.setValidationContext( null );
+			this.setValidationContext( null, locale );
 			sucessfullyCommitted = false;
 			throw new Exception();
 		}
@@ -872,7 +879,7 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 
 	/* [E.0.4]Pick up the metadata.xml from the extracted SIARD package */
 	private boolean pickMetadataXML( ValidationContext validationContext,
-			Map<String, String> configMap ) throws Exception
+			Map<String, String> configMap, Locale locale ) throws Exception
 	{
 		boolean successfullyCommitted = false;
 		StringBuilder pathToMetadataXML = new StringBuilder();
@@ -888,10 +895,10 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 		validationContext.setMetadataXML( metadataXML );
 		// Checks whether the metadata.xml could be picked up
 		if ( validationContext.getMetadataXML() != null ) {
-			this.setValidationContext( validationContext );
+			this.setValidationContext( validationContext, locale );
 			successfullyCommitted = true;
 		} else {
-			this.setValidationContext( null );
+			this.setValidationContext( null, locale );
 			successfullyCommitted = false;
 			throw new Exception();
 		}
@@ -900,7 +907,7 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 
 	/* [E.0.6]Preparing the data to be validated */
 	private boolean prepareValidationData( ValidationContext validationContext,
-			Map<String, String> configMap ) throws JDOMException, IOException, Exception
+			Map<String, String> configMap, Locale locale ) throws JDOMException, IOException, Exception
 	{
 		boolean showOnWork = true;
 		int onWork = 410;
@@ -933,7 +940,8 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 				String schemaFolderName = siardSchemaElement.getChild( "folder", xmlNamespace ).getValue();
 				if ( siardSchemaElement.getChild( "tables", xmlNamespace ) != null ) {
 					Element siardTablesElement = siardSchemaElement.getChild( "tables", xmlNamespace );
-					List<Element> siardTableElements = siardTablesElement.getChildren( "table", xmlNamespace );
+					List<Element> siardTableElements = siardTablesElement.getChildren( "table",
+							xmlNamespace );
 					// Iterating over all containing table elements
 					for ( Element siardTableElement : siardTableElements ) {
 						Element siardColumnsElement = siardTableElement.getChild( "columns", xmlNamespace );
@@ -958,7 +966,8 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 						pathToTableSchema.append( siardTableFolderName.replaceAll( " ", "" ) );
 						pathToTableSchema.append( ".xsd" );
 						// Retrieve the according XML schema
-						File tableSchema = validationContext.getSiardFiles().get( pathToTableSchema.toString() );
+						File tableSchema = validationContext.getSiardFiles()
+								.get( pathToTableSchema.toString() );
 						SAXBuilder builder = new SAXBuilder();
 						Document tableSchemaDocument = builder.build( tableSchema );
 						Element tableSchemaRootElement = tableSchemaDocument.getRootElement();
@@ -1002,10 +1011,10 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 			}
 		}
 		if ( validationContext.getSiardTables().size() > 0 ) {
-			this.setValidationContext( validationContext );
+			this.setValidationContext( validationContext, locale );
 			successfullyCommitted = true;
 		} else {
-			this.setValidationContext( null );
+			this.setValidationContext( null, locale );
 			successfullyCommitted = false;
 			throw new Exception();
 		}
@@ -1015,80 +1024,89 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl implements
 	// Setter and Getter methods
 
 	/** @return the validationContext */
-	public ValidationContext getValidationContext()
+	public ValidationContext getValidationContext( Locale locale )
 	{
 		return validationContext;
 	}
 
 	/** @param validationContext
 	 *          the validationContext to set */
-	public void setValidationContext( ValidationContext validationContext )
+	public void setValidationContext( ValidationContext validationContext, Locale locale )
 	{
 		this.validationContext = validationContext;
 	}
 
 	/** @return the incongruentColumnCount */
-	public StringBuilder getIncongruentColumnCount()
+	public StringBuilder getIncongruentColumnCount( Locale locale )
 	{
 		return incongruentColumnCount;
 	}
 
 	/** @param incongruentColumnCount
 	 *          the incongruentColumnCount to set */
-	public void setIncongruentColumnCount( StringBuilder incongruentColumnCount )
+	public void setIncongruentColumnCount( StringBuilder incongruentColumnCount, Locale locale )
 	{
 		this.incongruentColumnCount = incongruentColumnCount;
 	}
 
 	/** @return the incongruentColumnOccurrence */
-	public StringBuilder getIncongruentColumnOccurrence()
+	public StringBuilder getIncongruentColumnOccurrence( Locale locale )
 	{
 		return incongruentColumnOccurrence;
 	}
 
 	/** @param incongruentColumnOccurrence
 	 *          the incongruentColumnOccurrence to set */
-	public void setIncongruentColumnOccurrence( StringBuilder incongruentColumnOccurrence )
+	public void setIncongruentColumnOccurrence( StringBuilder incongruentColumnOccurrence,
+			Locale locale )
 	{
 		this.incongruentColumnOccurrence = incongruentColumnOccurrence;
 	}
 
 	/** @return the incongruentColumnType */
-	public StringBuilder getIncongruentColumnType()
+	public StringBuilder getIncongruentColumnType( Locale locale )
 	{
 		return incongruentColumnType;
 	}
 
 	/** @param incongruentColumnType
 	 *          the incongruentColumnType to set */
-	public void setIncongruentColumnType( StringBuilder incongruentColumnType )
+	public void setIncongruentColumnType( StringBuilder incongruentColumnType, Locale locale )
 	{
 		this.incongruentColumnType = incongruentColumnType;
 	}
 
 	/** @return the warningColumnType */
-	public StringBuilder getWarningColumnType()
+	public StringBuilder getWarningColumnType( Locale locale )
 	{
 		return warningColumnType;
 	}
 
 	/** @param warningColumnType
 	 *          the warningColumnType to set */
-	public void setWarningColumnType( StringBuilder warningColumnType )
+	public void setWarningColumnType( StringBuilder warningColumnType, Locale locale )
 	{
 		this.warningColumnType = warningColumnType;
 	}
 
 	/** @return the incongruentColumnSequence */
-	public StringBuilder getIncongruentColumnSequence()
+	public StringBuilder getIncongruentColumnSequence( Locale locale )
 	{
 		return incongruentColumnSequence;
 	}
 
 	/** @param incongruentColumnSequence
 	 *          the incongruentColumnSequence to set */
-	public void setIncongruentColumnSequence( StringBuilder incongruentColumnSequence )
+	public void setIncongruentColumnSequence( StringBuilder incongruentColumnSequence, Locale locale )
 	{
 		this.incongruentColumnSequence = incongruentColumnSequence;
+	}
+
+	@Override
+	public boolean prepareValidation( ValidationContext validationContext )
+			throws IOException, JDOMException, Exception
+	{
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

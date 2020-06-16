@@ -29,6 +29,7 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -46,15 +47,15 @@ import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationJsurplusFilesModule;
 
-/** Validierungsschritt J (zusätzliche Primärdateien) Enthält der content-Ordner Dateien oder Ordner
- * die nicht in metadata.xml oder in table[Zahl].xml beschrieben sind ? invalid --> zusätzliche
- * Ordner oder Dateien im content-Ordner
+/** Validierungsschritt J (zusätzliche Primärdateien) Enthält der content-Ordner Dateien oder
+ * Ordner die nicht in metadata.xml oder in table[Zahl].xml beschrieben sind ? invalid -->
+ * zusätzliche Ordner oder Dateien im content-Ordner
  * 
  * @author Ec Christian Eugster
  * @author Rc Claire Roethlisberger, KOST-CECO */
 
-public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl implements
-		ValidationJsurplusFilesModule
+public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
+		implements ValidationJsurplusFilesModule
 {
 
 	Map<String, String>	filesInSiardUnsorted	= new HashMap<String, String>();
@@ -63,10 +64,9 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl impl
 	Map<String, String>	tablesToRemove				= new HashMap<String, String>();
 	Map<String, String>	filesToRemove					= new HashMap<String, String>();
 
-	
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
-			throws ValidationJsurplusFilesException
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
+			Locale locale ) throws ValidationJsurplusFilesException
 	{
 		filesInSiardUnsorted.clear();
 		filesInSiard.clear();
@@ -138,8 +138,9 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl impl
 			 * dirOfJarPath + File.separator +
 			 * 
 			 * erweitern. */
-			String path = new java.io.File( KOSTVal.class.getProtectionDomain().getCodeSource()
-					.getLocation().getPath() ).getAbsolutePath();
+			String path = new java.io.File(
+					KOSTVal.class.getProtectionDomain().getCodeSource().getLocation().getPath() )
+							.getAbsolutePath();
 			path = path.substring( 0, path.lastIndexOf( "." ) );
 			path = path + System.getProperty( "java.class.path" );
 			String locationOfJarPath = path;
@@ -162,41 +163,41 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl impl
 			String pathToSedExe = fSedExe.getAbsolutePath();
 			if ( !fSedExe.exists() ) {
 				// sed.exe existiert nicht --> Abbruch
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_J_SIARD )
-								+ getTextResourceService().getText( MESSAGE_XML_D_MISSING_FILE,
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
+								+ getTextResourceService().getText( locale, MESSAGE_XML_D_MISSING_FILE,
 										fSedExe.getAbsolutePath() ) );
 				return false;
 			}
 			if ( !msys20dll.exists() ) {
 				// existiert nicht --> Abbruch
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_J_SIARD )
-								+ getTextResourceService().getText( MESSAGE_XML_D_MISSING_FILE,
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
+								+ getTextResourceService().getText( locale, MESSAGE_XML_D_MISSING_FILE,
 										msys20dll.getAbsolutePath() ) );
 				return false;
 			}
 			if ( !msysgccs1dll.exists() ) {
 				// existiert nicht --> Abbruch
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_J_SIARD )
-								+ getTextResourceService().getText( MESSAGE_XML_D_MISSING_FILE,
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
+								+ getTextResourceService().getText( locale, MESSAGE_XML_D_MISSING_FILE,
 										msysgccs1dll.getAbsolutePath() ) );
 				return false;
 			}
 			if ( !msysiconv2dll.exists() ) {
 				// existiert nicht --> Abbruch
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_J_SIARD )
-								+ getTextResourceService().getText( MESSAGE_XML_D_MISSING_FILE,
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
+								+ getTextResourceService().getText( locale, MESSAGE_XML_D_MISSING_FILE,
 										msysiconv2dll.getAbsolutePath() ) );
 				return false;
 			}
 			if ( !msysintl8dll.exists() ) {
 				// existiert nicht --> Abbruch
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_J_SIARD )
-								+ getTextResourceService().getText( MESSAGE_XML_D_MISSING_FILE,
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
+								+ getTextResourceService().getText( locale, MESSAGE_XML_D_MISSING_FILE,
 										msysintl8dll.getAbsolutePath() ) );
 				return false;
 			}
@@ -214,10 +215,10 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl impl
 				// set to null
 				fin = null;
 
-				Boolean version1 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" ).contains(
-						"http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
-				Boolean version2 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" ).contains(
-						"http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
+				Boolean version1 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" )
+						.contains( "http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
+				Boolean version2 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" )
+						.contains( "http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
 				Namespace ns = Namespace
 						.getNamespace( "http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
 				if ( version1 ) {
@@ -227,9 +228,10 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl impl
 						ns = Namespace.getNamespace( "http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
 					} else {
 						valid = false;
-						getMessageService().logError(
-								getTextResourceService().getText( MESSAGE_XML_MODUL_J_SIARD )
-										+ getTextResourceService().getText( MESSAGE_XML_D_INVALID_XMLNS, metadataXml ) );
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
+										+ getTextResourceService().getText( locale, MESSAGE_XML_D_INVALID_XMLNS,
+												metadataXml ) );
 					}
 				}
 				// select schema elements and loop
@@ -261,15 +263,15 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl impl
 				}
 			} catch ( java.io.IOException ioe ) {
 				valid = false;
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_J_SIARD )
-								+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
+								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 										ioe.getMessage() + " (IOException)" ) );
 			} catch ( JDOMException e ) {
 				valid = false;
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_J_SIARD )
-								+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
+								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 										e.getMessage() + " (JDOMException)" ) );
 			}
 
@@ -315,7 +317,7 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl impl
 							String commandSed = "cmd /c \"\"" + pathToSedExe + "\" " + sed + sed2 + sed3 + sed4
 									+ "\"" + pathTofSearchtable + "\" > \"" + pathTofSearchtableTemp + "\"\"";
 
-							// String commandSed = "cmd /c \"\"pathToSedExe\"  's/row/R0W/g\' 'hallo row.'\"";
+							// String commandSed = "cmd /c \"\"pathToSedExe\" 's/row/R0W/g\' 'hallo row.'\"";
 							/* Das redirect Zeichen verunmöglicht eine direkte eingabe. mit dem geschachtellten
 							 * Befehl gehts: cmd /c\"urspruenlicher Befehl\" */
 
@@ -344,14 +346,15 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl impl
 
 									// Warte, bis wget fertig ist
 									procSed.waitFor();
-									Thread.sleep(10);
+									Thread.sleep( 10 );
 
 									Util.switchOnConsole();
 
 								} catch ( Exception e ) {
 									getMessageService().logError(
-											getTextResourceService().getText( MESSAGE_XML_MODUL_J_SIARD )
-													+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
+													+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+															e.getMessage() ) );
 									return false;
 								} finally {
 									if ( procSed != null ) {
@@ -398,15 +401,15 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl impl
 								// set to null
 								br = null;
 							} catch ( FileNotFoundException e ) {
-								getMessageService().logError(
-										getTextResourceService().getText( MESSAGE_XML_MODUL_J_SIARD )
-												+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+								getMessageService()
+										.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
+												+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 														"FileNotFoundException" ) );
 								return false;
 							} catch ( Exception e ) {
-								getMessageService().logError(
-										getTextResourceService().getText( MESSAGE_XML_MODUL_J_SIARD )
-												+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+								getMessageService()
+										.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
+												+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 														(e.getMessage() + " 1") ) ); //
 								return false;
 							} // table durch scannen
@@ -431,9 +434,10 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl impl
 						filesInSiard.remove( fileName );
 					}
 				} catch ( Exception e ) {
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_J_SIARD )
-									+ getTextResourceService().getText( ERROR_XML_UNKNOWN, (e.getMessage() + " 2") ) );
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
+									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+											(e.getMessage() + " 2") ) );
 					// return false;
 				}
 			}
@@ -441,18 +445,19 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl impl
 			// in filesInSiard sind jetzt noch die drinnen, welche nicht in table.xml erwaehnt wurden
 			if ( filesInSiard.size() > 0 ) {
 				valid = false;
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_J_SIARD )
-								+ getTextResourceService().getText( MESSAGE_XML_J_INVALID_ENTRY,
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
+								+ getTextResourceService().getText( locale, MESSAGE_XML_J_INVALID_ENTRY,
 										filesInSiard.keySet() ) );
 			} else {
 				valid = true;
 			}
 
 		} catch ( Exception e ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_J_SIARD )
-							+ getTextResourceService().getText( ERROR_XML_UNKNOWN, (e.getMessage() + " 3") ) );
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
+							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+									(e.getMessage() + " 3") ) );
 			// return false;
 		}
 		filesInSiardUnsorted.clear();

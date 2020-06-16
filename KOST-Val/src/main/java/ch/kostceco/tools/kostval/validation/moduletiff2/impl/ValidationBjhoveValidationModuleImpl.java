@@ -32,6 +32,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.Locale;
 import java.util.Set;
 
 import ch.kostceco.tools.kostval.KOSTVal;
@@ -48,15 +49,15 @@ import edu.harvard.hul.ois.jhove.Module;
  * 
  * @author Rc Claire Roethlisberger, KOST-CECO */
 
-public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl implements
-		ValidationBjhoveValidationModule
+public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
+		implements ValidationBjhoveValidationModule
 {
 
-	public static String	NEWLINE	= System.getProperty( "line.separator" );
+	public static String NEWLINE = System.getProperty( "line.separator" );
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
-			throws ValidationBjhoveValidationException
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
+			Locale locale ) throws ValidationBjhoveValidationException
 	{
 
 		boolean isValid = true;
@@ -73,8 +74,9 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl i
 		 * dirOfJarPath + File.separator +
 		 * 
 		 * erweitern. */
-		String path = new java.io.File( KOSTVal.class.getProtectionDomain().getCodeSource()
-				.getLocation().getPath() ).getAbsolutePath();
+		String path = new java.io.File(
+				KOSTVal.class.getProtectionDomain().getCodeSource().getLocation().getPath() )
+						.getAbsolutePath();
 		path = path.substring( 0, path.lastIndexOf( "." ) );
 		path = path + System.getProperty( "java.class.path" );
 		String locationOfJarPath = path;
@@ -158,9 +160,9 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl i
 			} catch ( Exception e ) {
 				System.out.println( "Jhove dispatch exception" );
 				e.printStackTrace();
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_B_TIFF )
-								+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_TIFF )
+								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 										"Jhove dispatch exception: " + e.getMessage() ) );
 			}
 
@@ -186,9 +188,9 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl i
 
 			} catch ( IOException e ) {
 				e.printStackTrace();
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_B_TIFF )
-								+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_TIFF )
+								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 										"Jhove copy report exception: " + e.getMessage() ) );
 			}
 			inStream.close();
@@ -196,9 +198,9 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl i
 			Util.deleteFile( jhoveReport );
 		} catch ( Exception e ) {
 			e.printStackTrace();
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_B_TIFF )
-							+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_TIFF )
+							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 									"Jhove exception: " + e.getMessage() ) );
 		}
 
@@ -232,9 +234,10 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl i
 						if ( statuscounter == 0 ) {
 							// Invalider Status & Status noch nicht ausgegeben
 							isValid = false;
-							getMessageService().logError(
-									getTextResourceService().getText( MESSAGE_XML_MODUL_B_TIFF )
-											+ getTextResourceService().getText( MESSAGE_XML_B_JHOVEINVALID, status ) );
+							getMessageService()
+									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_TIFF )
+											+ getTextResourceService().getText( locale, MESSAGE_XML_B_JHOVEINVALID,
+													status ) );
 							statuscounter = 1; // Marker Status Ausgegeben
 						}
 						/* Linie mit der Fehlermeldung auch mitausgeben, falls diese neu ist.
@@ -250,14 +253,15 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl i
 							counter = counter + 1;
 							// max 10 Meldungen im Modul B
 							if ( counter < 11 ) {
-								getMessageService().logError(
-										getTextResourceService().getText( MESSAGE_XML_MODUL_B_TIFF )
-												+ getTextResourceService().getText( MESSAGE_XML_B_JHOVEMESSAGE, line ) );
+								getMessageService()
+										.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_TIFF )
+												+ getTextResourceService().getText( locale, MESSAGE_XML_B_JHOVEMESSAGE,
+														line ) );
 								lines.add( line );
 							} else if ( counter == 11 ) {
-								getMessageService().logError(
-										getTextResourceService().getText( MESSAGE_XML_MODUL_B_TIFF )
-												+ getTextResourceService().getText( MESSAGE_XML_B_JHOVEMESSAGE,
+								getMessageService()
+										.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_TIFF )
+												+ getTextResourceService().getText( locale, MESSAGE_XML_B_JHOVEMESSAGE,
 														" ErrorMessage: . . ." ) );
 								lines.add( line );
 							} else {
@@ -272,16 +276,16 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl i
 			if ( (statuscounter == 0) && (ignorcounter == 0) && !status.equals( "" ) ) {
 				// Status noch nicht ausgegeben & keine Errors ignoriert & Invalider Status
 				isValid = false;
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_B_TIFF )
-								+ getTextResourceService().getText( MESSAGE_XML_B_JHOVEINVALID, status ) );
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_TIFF )
+								+ getTextResourceService().getText( locale, MESSAGE_XML_B_JHOVEINVALID, status ) );
 				statuscounter = 1; // Marker Status Ausgegeben
 			}
 			in.close();
 		} catch ( Exception e ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_B_TIFF )
-							+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_TIFF )
+							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
@@ -292,9 +296,9 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl i
 				out.write( concatenatedOutputs.toString() );
 				out.close();
 			} catch ( IOException e ) {
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_B_TIFF )
-								+ getTextResourceService().getText( MESSAGE_XML_B_CANNOTWRITEJHOVEREPORT ) );
+				getMessageService().logError( getTextResourceService().getText( locale,
+						MESSAGE_XML_MODUL_B_TIFF )
+						+ getTextResourceService().getText( locale, MESSAGE_XML_B_CANNOTWRITEJHOVEREPORT ) );
 				return false;
 			}
 		}

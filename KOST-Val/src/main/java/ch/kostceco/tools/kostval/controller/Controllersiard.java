@@ -20,6 +20,7 @@
 package ch.kostceco.tools.kostval.controller;
 
 import java.io.File;
+import java.util.Locale;
 import java.util.Map;
 
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationAzipException;
@@ -50,7 +51,7 @@ import ch.kostceco.tools.kostval.validation.modulesiard.ValidationWwarningModule
 
 /** kostval -->
  * 
- * Der Controller ruft die ben�tigten Module zur Validierung der SIARD-Datei in der ben�tigten
+ * Der Controller ruft die benoetigten Module zur Validierung der SIARD-Datei in der benoetigten
  * Reihenfolge auf.
  * 
  * Die Validierungs-Module werden mittels Spring-Dependency-Injection eingebunden. */
@@ -194,92 +195,95 @@ public class Controllersiard implements MessageConstants
 	}
 
 	public boolean executeMandatory( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap )
+			Map<String, String> configMap, Locale locale )
 	{
 		boolean valid = true;
 
 		// Validation Step A (Lesbarkeit)
 		try {
-			if ( this.getValidationAzipModule().validate( valDatei, directoryOfLogfile, configMap ) ) {
+			if ( this.getValidationAzipModule().validate( valDatei, directoryOfLogfile, configMap,
+					locale ) ) {
 				this.getValidationAzipModule().getMessageService().print();
 			} else {
-				// Ein negatives Validierungsresultat in diesem Schritt f�hrt zum Abbruch der weiteren
+				// Ein negatives Validierungsresultat in diesem Schritt fuehrt zum Abbruch der weiteren
 				// Verarbeitung
 				this.getValidationAzipModule().getMessageService().print();
 				return false;
 			}
 		} catch ( ValidationAzipException e ) {
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_A_SIARD )
-					+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationAzipModule().getMessageService().print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_A_SIARD )
-					+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
-		// Validation Step B (prim�re Verzeichnisstruktur)
+		// Validation Step B (primaere Verzeichnisstruktur)
 		try {
 			if ( this.getValidationBprimaryStructureModule().validate( valDatei, directoryOfLogfile,
-					configMap ) ) {
+					configMap, locale ) ) {
 				this.getValidationBprimaryStructureModule().getMessageService().print();
 			} else {
-				// Ein negatives Validierungsresultat in diesem Schritt f�hrt zum Abbruch der weiteren
+				// Ein negatives Validierungsresultat in diesem Schritt fuehrt zum Abbruch der weiteren
 				// Verarbeitung
 				this.getValidationBprimaryStructureModule().getMessageService().print();
 				return false;
 			}
 		} catch ( ValidationBprimaryStructureException e ) {
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_B_SIARD )
-					+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_SIARD )
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationBprimaryStructureModule().getMessageService().print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_B_SIARD )
-					+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_SIARD )
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
 		// Validation Step C (Header-Validierung)
 		try {
-			if ( this.getValidationCheaderModule().validate( valDatei, directoryOfLogfile, configMap ) ) {
+			if ( this.getValidationCheaderModule().validate( valDatei, directoryOfLogfile, configMap,
+					locale ) ) {
 				this.getValidationCheaderModule().getMessageService().print();
 			} else {
 				this.getValidationCheaderModule().getMessageService().print();
-				// Ein negatives Validierungsresultat in diesem Schritt f�hrt zum Abbruch der weiteren
+				// Ein negatives Validierungsresultat in diesem Schritt fuehrt zum Abbruch der weiteren
 				// Verarbeitung
 				return false;
 			}
 		} catch ( ValidationCheaderException e ) {
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_C_SIARD )
-					+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_SIARD )
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationCheaderModule().getMessageService().print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_C_SIARD )
-					+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_SIARD )
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
 		// Validation Step D (Struktur-Validierung)
 		try {
-			if ( this.getValidationDstructureModule().validate( valDatei, directoryOfLogfile, configMap ) ) {
+			if ( this.getValidationDstructureModule().validate( valDatei, directoryOfLogfile, configMap,
+					locale ) ) {
 				this.getValidationDstructureModule().getMessageService().print();
 			} else {
 				this.getValidationDstructureModule().getMessageService().print();
-				// Ein negatives Validierungsresultat in diesem Schritt f�hrt zum Abbruch der weiteren
+				// Ein negatives Validierungsresultat in diesem Schritt fuehrt zum Abbruch der weiteren
 				// Verarbeitung
 				return false;
 			}
 		} catch ( ValidationDstructureException e ) {
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_D_SIARD )
-					+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_SIARD )
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationDstructureModule().getMessageService().print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_D_SIARD )
-					+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_SIARD )
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
@@ -287,139 +291,144 @@ public class Controllersiard implements MessageConstants
 	}
 
 	public boolean executeOptional( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap )
+			Map<String, String> configMap, Locale locale )
 	{
 		boolean valid = true;
 
 		// Validation Step E (Spalten-Validierung)
 		try {
-			if ( this.getValidationEcolumnModule().validate( valDatei, directoryOfLogfile, configMap ) ) {
+			if ( this.getValidationEcolumnModule().validate( valDatei, directoryOfLogfile, configMap,
+					locale ) ) {
 				this.getValidationEcolumnModule().getMessageService().print();
 			} else {
 				this.getValidationEcolumnModule().getMessageService().print();
 				valid = false;
 			}
 		} catch ( ValidationEcolumnException e ) {
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
-					+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 		} catch ( Exception e ) {
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_E_SIARD )
-					+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
 		try {
-			if ( this.getValidationFrowModule().validate( valDatei, directoryOfLogfile, configMap ) ) {
+			if ( this.getValidationFrowModule().validate( valDatei, directoryOfLogfile, configMap,
+					locale ) ) {
 				this.getValidationFrowModule().getMessageService().print();
 			} else {
 				this.getValidationFrowModule().getMessageService().print();
 				valid = false;
 			}
 		} catch ( ValidationFrowException e ) {
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_F_SIARD )
-					+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_SIARD )
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationFrowModule().getMessageService().print();
 			valid = false;
 		} catch ( Exception e ) {
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_F_SIARD )
-					+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_SIARD )
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
 		// Validation Step G (Tabellen-Validierung)
 		try {
-			if ( this.getValidationGtableModule().validate( valDatei, directoryOfLogfile, configMap ) ) {
+			if ( this.getValidationGtableModule().validate( valDatei, directoryOfLogfile, configMap,
+					locale ) ) {
 				this.getValidationGtableModule().getMessageService().print();
 			} else {
 				this.getValidationGtableModule().getMessageService().print();
 				valid = false;
 			}
 		} catch ( ValidationGtableException e ) {
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_G_SIARD )
-					+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_SIARD )
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationGtableModule().getMessageService().print();
 			valid = false;
 		} catch ( Exception e ) {
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_G_SIARD )
-					+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_SIARD )
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
 		// Validation Step H (Content-Validierung)
 		try {
-			if ( this.getValidationHcontentModule().validate( valDatei, directoryOfLogfile, configMap ) ) {
+			if ( this.getValidationHcontentModule().validate( valDatei, directoryOfLogfile, configMap,
+					locale ) ) {
 				this.getValidationHcontentModule().getMessageService().print();
 			} else {
 				this.getValidationHcontentModule().getMessageService().print();
 				valid = false;
 			}
 		} catch ( ValidationHcontentException e ) {
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_H_SIARD )
-					+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationHcontentModule().getMessageService().print();
 			valid = false;
 		} catch ( Exception e ) {
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_H_SIARD )
-					+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
 		// Validation Step I (SIARD-Erkennung)
 		try {
-			if ( this.getValidationIrecognitionModule()
-					.validate( valDatei, directoryOfLogfile, configMap ) ) {
+			if ( this.getValidationIrecognitionModule().validate( valDatei, directoryOfLogfile, configMap,
+					locale ) ) {
 				this.getValidationIrecognitionModule().getMessageService().print();
 			} else {
 				this.getValidationIrecognitionModule().getMessageService().print();
 				valid = false;
 			}
 		} catch ( ValidationIrecognitionException e ) {
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_I_SIARD )
-					+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_I_SIARD )
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationIrecognitionModule().getMessageService().print();
 			valid = false;
 		} catch ( Exception e ) {
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_I_SIARD )
-					+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_I_SIARD )
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
-		// Validation Step J (Zus�tzliche Prim�rdateien)
+		// Validation Step J (Zusaetzliche Primaerdateien)
 		try {
 			if ( this.getValidationJsurplusFilesModule().validate( valDatei, directoryOfLogfile,
-					configMap ) ) {
+					configMap, locale ) ) {
 				this.getValidationJsurplusFilesModule().getMessageService().print();
 			} else {
 				this.getValidationJsurplusFilesModule().getMessageService().print();
 				valid = false;
 			}
 		} catch ( ValidationJsurplusFilesException e ) {
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_J_SIARD )
-					+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationJsurplusFilesModule().getMessageService().print();
 			valid = false;
 		} catch ( Exception e ) {
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_J_SIARD )
-					+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
 		// Validation W (Warnungen)
 		try {
-			if ( this.getValidationWwarningModule().validate( valDatei, directoryOfLogfile, configMap ) ) {
+			if ( this.getValidationWwarningModule().validate( valDatei, directoryOfLogfile, configMap,
+					locale ) ) {
 				this.getValidationWwarningModule().getMessageService().print();
 			} else {
 				this.getValidationWwarningModule().getMessageService().print();
 				valid = false;
 			}
 		} catch ( ValidationWwarningException e ) {
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_W_SIARD )
-					+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_W_SIARD )
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationWwarningModule().getMessageService().print();
 			valid = false;
 		} catch ( Exception e ) {
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_W_SIARD )
-					+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_W_SIARD )
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 

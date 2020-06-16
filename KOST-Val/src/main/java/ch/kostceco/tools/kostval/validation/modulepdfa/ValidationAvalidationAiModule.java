@@ -20,6 +20,7 @@
 package ch.kostceco.tools.kostval.validation.modulepdfa;
 
 import java.io.File;
+import java.util.Locale;
 import java.util.Map;
 
 import ch.kostceco.tools.kostval.exception.modulepdfa.ValidationApdfvalidationException;
@@ -28,9 +29,9 @@ import ch.kostceco.tools.kostval.validation.ValidationModule;
 /** Ist die vorliegende PDF-Datei eine valide PDFA-Datei? PDFA Validierungs mit PDFTron und oder
  * PDF-Tools.
  * 
- * Folgendes ist Konfigurierbar: Hauptvalidator sowie ob eine duale Validierung durchgef�hrt werden
- * soll oder nicht. Bei der dualen Validierung m�ssen beide Validatoren die Datei als invalide
- * betrachten, damit diese als invalid gilt. Bei Uneinigkeit gilt diese als valid.
+ * Folgendes ist Konfigurierbar: Hauptvalidator sowie ob eine duale Validierung durchgef�hrt
+ * werden soll oder nicht. Bei der dualen Validierung m�ssen beide Validatoren die Datei als
+ * invalide betrachten, damit diese als invalid gilt. Bei Uneinigkeit gilt diese als valid.
  * 
  * Es wird falls vorhanden die Vollversion von PDF-Tools verwendet. KOST-Val muss nicht angepasst
  * werden und verwendet automatisch den internen Schl�ssel, sollte keine Vollversion existieren.
@@ -43,7 +44,7 @@ import ch.kostceco.tools.kostval.validation.ValidationModule;
 public interface ValidationAvalidationAiModule extends ValidationModule
 {
 
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
-			throws ValidationApdfvalidationException;
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
+			Locale locale ) throws ValidationApdfvalidationException;
 
 }

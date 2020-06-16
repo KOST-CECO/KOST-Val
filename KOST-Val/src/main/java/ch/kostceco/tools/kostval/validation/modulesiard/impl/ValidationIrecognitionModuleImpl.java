@@ -20,6 +20,7 @@
 package ch.kostceco.tools.kostval.validation.modulesiard.impl;
 
 import java.io.File;
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
@@ -33,15 +34,15 @@ import ch.kostceco.tools.kostval.validation.modulesiard.ValidationIrecognitionMo
  * 
  * @author Rc Claire Roethlisberger, KOST-CECO */
 
-public class ValidationIrecognitionModuleImpl extends ValidationModuleImpl implements
-		ValidationIrecognitionModule
+public class ValidationIrecognitionModuleImpl extends ValidationModuleImpl
+		implements ValidationIrecognitionModule
 {
 	Boolean	version1	= false;
 	Boolean	version2	= false;
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
-			throws ValidationIrecognitionException
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
+			Locale locale ) throws ValidationIrecognitionException
 	{
 		// Informationen zur Darstellung "onWork" holen
 		String onWork = configMap.get( "ShowProgressOnWork" );
@@ -64,17 +65,17 @@ public class ValidationIrecognitionModuleImpl extends ValidationModuleImpl imple
 		try {
 			/** Validierung ob die Extension .siard lautet */
 			if ( !valDatei.getAbsolutePath().toLowerCase().endsWith( ".siard" ) ) {
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_I_SIARD )
-								+ getTextResourceService().getText( MESSAGE_XML_I_NOTALLOWEDEXT ) );
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_I_SIARD )
+								+ getTextResourceService().getText( locale, MESSAGE_XML_I_NOTALLOWEDEXT ) );
 				// Die SIARD-Datei wurde nicht als solche erkannt, weil sie keine .siard Extension hat.
 				valid = false;
 			}
 
-			version1 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" ).contains(
-					"http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
-			version2 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" ).contains(
-					"http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
+			version1 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" )
+					.contains( "http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
+			version2 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" )
+					.contains( "http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
 			if ( version1 ) {
 				// keine zusaetzliche kontrolle
 			} else if ( version2 ) {
@@ -86,24 +87,24 @@ public class ValidationIrecognitionModuleImpl extends ValidationModuleImpl imple
 				 * gelöscht wird und entsprechend bestehende Dateien gelöscht werden können */
 				if ( !version21.exists() ) {
 					valid = false;
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_I_SIARD )
-									+ getTextResourceService().getText( MESSAGE_XML_I_SIARDVERSION, "2.1",
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_I_SIARD )
+									+ getTextResourceService().getText( locale, MESSAGE_XML_I_SIARDVERSION, "2.1",
 											version21.getAbsolutePath() ) );
 				}
 
 			}
 		} catch ( java.io.IOException ioe ) {
 			valid = false;
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_I_SIARD )
-							+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_I_SIARD )
+							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 									ioe.getMessage() + " (IOException)" ) );
 		}
 
 		/** Validierung ob die PUID richtig erkannt wird (z.B mit DROID) => Auf diese Validierung kann
-		 * verzichtet werden, da bereits vorg�ngig gepr�ft wurde ob es ein unkomprimiertes ZIP mit dem
-		 * entsprechenden metadata.xml ist. */
+		 * verzichtet werden, da bereits vorg�ngig gepr�ft wurde ob es ein unkomprimiertes ZIP mit
+		 * dem entsprechenden metadata.xml ist. */
 
 		return valid;
 	}

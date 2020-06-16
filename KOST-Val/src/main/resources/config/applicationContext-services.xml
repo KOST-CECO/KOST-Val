@@ -220,6 +220,26 @@
 		<property name="textResourceService" ref="textResourceService" />
 	</bean>
 
+	<bean id="controllervalinit" class="ch.kostceco.tools.kostval.controller.Controllervalinit">
+		<property name="textResourceService" ref="textResourceService" />
+	</bean>
+
+	<bean id="controllervalinitlog" class="ch.kostceco.tools.kostval.controller.Controllervalinitlog">
+		<property name="textResourceService" ref="textResourceService" />
+	</bean>
+
+	<bean id="controllervalfile" class="ch.kostceco.tools.kostval.controller.Controllervalfile">
+		<property name="textResourceService" ref="textResourceService" />
+	</bean>
+
+	<bean id="controllervalfolder" class="ch.kostceco.tools.kostval.controller.Controllervalfolder">
+		<property name="textResourceService" ref="textResourceService" />
+	</bean>
+
+	<bean id="controllervalsip" class="ch.kostceco.tools.kostval.controller.Controllervalsip">
+		<property name="textResourceService" ref="textResourceService" />
+	</bean>
+
 	<bean id="controllertiff" class="ch.kostceco.tools.kostval.controller.Controllertiff">
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="validationArecognitionModule" ref="validationArecognitionModule" />

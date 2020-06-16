@@ -21,6 +21,7 @@ package ch.kostceco.tools.kostval.validation.moduletiff2.impl;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.util.Locale;
 import java.util.Map;
 import java.io.FileReader;
 
@@ -28,26 +29,28 @@ import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationDphotointerVali
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationDphotointerValidationModule;
 
-/** Validierungsschritt D (Farbraum-Validierung) Ist die TIFF-Datei gemäss Konfigurationsdatei valid?
+/** Validierungsschritt D (Farbraum-Validierung) Ist die TIFF-Datei gemäss Konfigurationsdatei
+ * valid?
  * 
  * @author Rc Claire Roethlisberger, KOST-CECO */
 
-public class ValidationDphotointerValidationModuleImpl extends ValidationModuleImpl implements
-		ValidationDphotointerValidationModule
+public class ValidationDphotointerValidationModuleImpl extends ValidationModuleImpl
+		implements ValidationDphotointerValidationModule
 {
 
-	public static String	NEWLINE	= System.getProperty( "line.separator" );
+	public static String NEWLINE = System.getProperty( "line.separator" );
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
-			throws ValidationDphotointerValidationException
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
+			Locale locale ) throws ValidationDphotointerValidationException
 	{
 
 		boolean isValid = true;
 
 		// Informationen zum Logverzeichnis holen
 		String pathToExiftoolOutput = directoryOfLogfile.getAbsolutePath();
-		File exiftoolReport = new File( pathToExiftoolOutput, valDatei.getName() + ".exiftool-log.txt" );
+		File exiftoolReport = new File( pathToExiftoolOutput,
+				valDatei.getName() + ".exiftool-log.txt" );
 		pathToExiftoolOutput = exiftoolReport.getAbsolutePath();
 
 		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
@@ -64,43 +67,43 @@ public class ValidationDphotointerValidationModuleImpl extends ValidationModuleI
 		String pi8 = configMap.get( "AllowedPhotointer8" );
 
 		if ( pi0.startsWith( "Configuration-Error:" ) ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_D_TIFF ) + pi0 );
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF ) + pi0 );
 			return false;
 		}
 		if ( pi1.startsWith( "Configuration-Error:" ) ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_D_TIFF ) + pi1 );
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF ) + pi1 );
 			return false;
 		}
 		if ( pi2.startsWith( "Configuration-Error:" ) ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_D_TIFF ) + pi2 );
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF ) + pi2 );
 			return false;
 		}
 		if ( pi3.startsWith( "Configuration-Error:" ) ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_D_TIFF ) + pi3 );
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF ) + pi3 );
 			return false;
 		}
 		if ( pi4.startsWith( "Configuration-Error:" ) ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_D_TIFF ) + pi4 );
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF ) + pi4 );
 			return false;
 		}
 		if ( pi5.startsWith( "Configuration-Error:" ) ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_D_TIFF ) + pi5 );
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF ) + pi5 );
 			return false;
 		}
 		if ( pi6.startsWith( "Configuration-Error:" ) ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_D_TIFF ) + pi6 );
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF ) + pi6 );
 			return false;
 		}
 		if ( pi8.startsWith( "Configuration-Error:" ) ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_D_TIFF ) + pi8 );
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF ) + pi8 );
 			return false;
 		}
 
@@ -134,9 +137,9 @@ public class ValidationDphotointerValidationModuleImpl extends ValidationModuleI
 								&& !line.equals( oldErrorLine3 ) && !line.equals( oldErrorLine4 )
 								&& !line.equals( oldErrorLine5 ) ) {
 							// neuer Fehler
-							getMessageService().logError(
-									getTextResourceService().getText( MESSAGE_XML_MODUL_D_TIFF )
-											+ getTextResourceService().getText( MESSAGE_XML_CG_INVALID, line ) );
+							getMessageService()
+									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF )
+											+ getTextResourceService().getText( locale, MESSAGE_XML_CG_INVALID, line ) );
 							if ( oldErrorLine1.equals( "" ) ) {
 								oldErrorLine1 = line;
 							} else if ( oldErrorLine2.equals( "" ) ) {
@@ -159,9 +162,9 @@ public class ValidationDphotointerValidationModuleImpl extends ValidationModuleI
 						} else {
 							// Invalider Status
 							isValid = false;
-							getMessageService().logError(
-									getTextResourceService().getText( MESSAGE_XML_MODUL_D_TIFF )
-											+ getTextResourceService().getText( MESSAGE_XML_CG_INVALID, line ) );
+							getMessageService()
+									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF )
+											+ getTextResourceService().getText( locale, MESSAGE_XML_CG_INVALID, line ) );
 						}
 					}
 				}
@@ -170,15 +173,15 @@ public class ValidationDphotointerValidationModuleImpl extends ValidationModuleI
 				// Invalider Status
 				isValid = false;
 				isValid = false;
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_D_TIFF )
-								+ getTextResourceService().getText( MESSAGE_XML_CG_ETNIO, "D" ) );
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF )
+								+ getTextResourceService().getText( locale, MESSAGE_XML_CG_ETNIO, "D" ) );
 			}
 			in.close();
 		} catch ( Exception e ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_D_TIFF )
-							+ getTextResourceService().getText( MESSAGE_XML_CG_CANNOTFINDETREPORT ) );
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF )
+							+ getTextResourceService().getText( locale, MESSAGE_XML_CG_CANNOTFINDETREPORT ) );
 			return false;
 		}
 		return isValid;

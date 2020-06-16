@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -46,13 +47,13 @@ import ch.kostceco.tools.kostval.validation.modulesip2.Validation2dGeverFileInte
  * (metadata.xml)/paket/ablieferung/ordnungsystem verzeichnet sind. Allfällige Inkonsistenzen
  * auflisten. ( //dokument[@id] => //datei[@id] ). */
 
-public class Validation2dGeverFileIntegrityModuleImpl extends ValidationModuleImpl implements
-		Validation2dGeverFileIntegrityModule
+public class Validation2dGeverFileIntegrityModuleImpl extends ValidationModuleImpl
+		implements Validation2dGeverFileIntegrityModule
 {
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
-			throws Validation2dGeverFileIntegrityException
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
+			Locale locale ) throws Validation2dGeverFileIntegrityException
 	{
 		boolean showOnWork = true;
 		int onWork = 410;
@@ -78,8 +79,8 @@ public class Validation2dGeverFileIntegrityModuleImpl extends ValidationModuleIm
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			// dbf.setValidating(false);
 			DocumentBuilder db = dbf.newDocumentBuilder();
-			Document doc = db.parse( new FileInputStream( new File( valDatei.getAbsolutePath()
-					+ "//header//metadata.xml" ) ) );
+			Document doc = db.parse( new FileInputStream(
+					new File( valDatei.getAbsolutePath() + "//header//metadata.xml" ) ) );
 			doc.getDocumentElement().normalize();
 			NodeList layerConfigList = doc.getElementsByTagName( "ablieferung" );
 			Node node = layerConfigList.item( 0 );
@@ -148,8 +149,8 @@ public class Validation2dGeverFileIntegrityModuleImpl extends ValidationModuleIm
 							NodeList nameNodes2 = dateiParentElement.getElementsByTagName( "name" );
 							Node contentName = nameNodes2.item( 0 );
 
-							dateiRefContent.put( id.getNodeValue(), "content/" + contentName.getTextContent()
-									+ "/" + titelNode.getTextContent() );
+							dateiRefContent.put( id.getNodeValue(),
+									"content/" + contentName.getTextContent() + "/" + titelNode.getTextContent() );
 						}
 					}
 					if ( showOnWork ) {
@@ -182,10 +183,10 @@ public class Validation2dGeverFileIntegrityModuleImpl extends ValidationModuleIm
 					String deleted = dateiRefOrdnungssystem.remove( keyContent );
 					if ( deleted == null ) {
 						if ( !titlePrinted ) {
-							getMessageService().logError(
-									getTextResourceService().getText( MESSAGE_XML_MODUL_Bd_SIP )
-											+ getTextResourceService().getText( MESSAGE_XML_BD_MISSINGINABLIEFERUNG,
-													keyContent ) );
+							getMessageService()
+									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bd_SIP )
+											+ getTextResourceService().getText( locale,
+													MESSAGE_XML_BD_MISSINGINABLIEFERUNG, keyContent ) );
 							titlePrinted = true;
 						}
 						valid = false;
@@ -219,10 +220,9 @@ public class Validation2dGeverFileIntegrityModuleImpl extends ValidationModuleIm
 					/* Die folgende DateiRef vorhanden in metadata/paket/ablieferung/ordnungssystem, aber
 					 * nicht in metadata/paket/inhaltsverzeichnis/content */
 					getMessageService()
-							.logError(
-									getTextResourceService().getText( MESSAGE_XML_MODUL_Bd_SIP )
-											+ getTextResourceService().getText( MESSAGE_XML_BD_MISSINGINABLIEFERUNG,
-													keyOrd ) );
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bd_SIP )
+									+ getTextResourceService().getText( locale, MESSAGE_XML_BD_MISSINGINABLIEFERUNG,
+											keyOrd ) );
 					valid = false;
 					if ( showOnWork ) {
 						if ( onWork == 410 ) {
@@ -253,9 +253,9 @@ public class Validation2dGeverFileIntegrityModuleImpl extends ValidationModuleIm
 			}
 
 		} catch ( Exception e ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_Bd_SIP )
-							+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bd_SIP )
+							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 		return valid;

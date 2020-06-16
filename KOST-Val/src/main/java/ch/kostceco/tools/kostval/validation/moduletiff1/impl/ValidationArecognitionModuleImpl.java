@@ -24,6 +24,7 @@ import java.io.File;
 import java.util.Map;
 import java.io.FileReader;
 import java.util.Arrays;
+import java.util.Locale;
 
 import uk.gov.nationalarchives.droid.core.signature.droid4.Droid;
 import uk.gov.nationalarchives.droid.core.signature.droid4.FileFormatHit;
@@ -40,24 +41,24 @@ import ch.kostceco.tools.kostval.validation.moduletiff1.ValidationArecognitionMo
  * Validierung abgebrochen, sollte das Resulat invalid sein!
  * 
  * @author Rc Claire Roethlisberger, KOST-CECO */
-public class ValidationArecognitionModuleImpl extends ValidationModuleImpl implements
-		ValidationArecognitionModule
+public class ValidationArecognitionModuleImpl extends ValidationModuleImpl
+		implements ValidationArecognitionModule
 {
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
-			throws ValidationArecognitionException
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
+			Locale locale ) throws ValidationArecognitionException
 	{
 		/* Eine TIFF Datei (.tiff / .tif / .tfx) muss entweder mit II*. [49492A00] oder mit MM.*
 		 * [4D4D002A] beginnen */
 
 		if ( valDatei.isDirectory() ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_A_TIFF )
-							+ getTextResourceService().getText( ERROR_XML_A_ISDIRECTORY ) );
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_TIFF )
+							+ getTextResourceService().getText( locale, ERROR_XML_A_ISDIRECTORY ) );
 			return false;
-		} else if ( (valDatei.getAbsolutePath().toLowerCase().endsWith( ".tiff" ) || valDatei
-				.getAbsolutePath().toLowerCase().endsWith( ".tif" )) ) {
+		} else if ( (valDatei.getAbsolutePath().toLowerCase().endsWith( ".tiff" )
+				|| valDatei.getAbsolutePath().toLowerCase().endsWith( ".tif" )) ) {
 
 			FileReader fr = null;
 
@@ -96,24 +97,27 @@ public class ValidationArecognitionModuleImpl extends ValidationModuleImpl imple
 				char[] charArray3 = new char[] { c2, c2, c4, c3 };
 
 				if ( Arrays.equals( charArray1, charArray2 ) ) {
-					/* h�chstwahrscheinlich ein TIFF da es mit 49492A00 respektive II*. beginnt valid = true; */
+					/* h�chstwahrscheinlich ein TIFF da es mit 49492A00 respektive II*. beginnt valid =
+					 * true; */
 				} else if ( Arrays.equals( charArray1, charArray3 ) ) {
-					/* h�chstwahrscheinlich ein TIFF da es mit 4D4D002A respektive MM.* beginnt valid = true; */
+					/* h�chstwahrscheinlich ein TIFF da es mit 4D4D002A respektive MM.* beginnt valid =
+					 * true; */
 				} else {
 					// Droid-Erkennung, damit Details ausgegeben werden k�nnen
 					String nameOfSignature = configMap.get( "PathToDroidSignatureFile" );
 					if ( nameOfSignature.startsWith( "Configuration-Error:" ) ) {
-						getMessageService().logError(
-								getTextResourceService().getText( MESSAGE_XML_MODUL_A_TIFF ) + nameOfSignature );
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_TIFF )
+										+ nameOfSignature );
 						read.close();
 						return false;
 					}
 					// existiert die SignatureFile am angebenen Ort?
 					File fnameOfSignature = new File( nameOfSignature );
 					if ( !fnameOfSignature.exists() ) {
-						getMessageService().logError(
-								getTextResourceService().getText( MESSAGE_XML_MODUL_A_TIFF )
-										+ getTextResourceService().getText( MESSAGE_XML_CA_DROID ) );
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_TIFF )
+										+ getTextResourceService().getText( locale, MESSAGE_XML_CA_DROID ) );
 						read.close();
 						return false;
 					}
@@ -129,9 +133,11 @@ public class ValidationArecognitionModuleImpl extends ValidationModuleImpl imple
 						droid.readSignatureFile( nameOfSignature );
 
 					} catch ( Exception e ) {
-						getMessageService().logError(
-								getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
-										+ getTextResourceService().getText( ERROR_XML_CANNOT_INITIALIZE_DROID ) );
+						getMessageService().logError( getTextResourceService().getText( locale,
+								MESSAGE_XML_MODUL_Ca_SIP )
+								+ getTextResourceService().getText( locale, ERROR_XML_CANNOT_INITIALIZE_DROID ) );
+						fr.close();
+						read.close();
 						return false;
 					} finally {
 						Util.switchOnConsole();
@@ -144,25 +150,25 @@ public class ValidationArecognitionModuleImpl extends ValidationModuleImpl imple
 						FileFormat ff = ffh.getFileFormat();
 						puid = ff.getPUID();
 					}
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_A_TIFF )
-									+ getTextResourceService().getText( ERROR_XML_A_INCORRECTFILE, puid ) );
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_TIFF )
+									+ getTextResourceService().getText( locale, ERROR_XML_A_INCORRECTFILE, puid ) );
 					read.close();
 					return false;
 				}
 				fr.close();
 				read.close();
 			} catch ( Exception e ) {
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_A_TIFF )
-								+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_TIFF )
+								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 				return false;
 			}
 		} else {
 			// die Datei endet nicht mit tiff oder tif -> Fehler
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_A_TIFF )
-							+ getTextResourceService().getText( ERROR_XML_A_INCORRECTFILEENDING ) );
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_TIFF )
+							+ getTextResourceService().getText( locale, ERROR_XML_A_INCORRECTFILEENDING ) );
 			return false;
 		}
 		return true;

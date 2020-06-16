@@ -28,6 +28,7 @@ import java.util.Arrays;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.List;
+import java.util.Locale;
 
 import ch.enterag.utils.zip.Zip64File;
 import ch.enterag.utils.zip.FileEntry;
@@ -46,8 +47,8 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 {
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
-			throws ValidationAzipException
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
+			Locale locale ) throws ValidationAzipException
 	{
 		// Informationen zur Darstellung "onWork" holen
 		String onWork = configMap.get( "ShowProgressOnWork" );
@@ -55,7 +56,7 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 			// keine Ausgabe
 		} else if ( onWork.startsWith( "Configuration-Error:" ) ) {
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_A_SIARD ) + onWork );
+					getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD ) + onWork );
 			return false;
 		} else {
 			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
@@ -69,9 +70,9 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 
 		// die Datei darf kein Directory sein
 		if ( valDatei.isDirectory() ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_A_SIARD )
-							+ getTextResourceService().getText( ERROR_XML_A_NOFILE ) );
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )
+							+ getTextResourceService().getText( locale, ERROR_XML_A_NOFILE ) );
 			// Die zu validierende SIARD-Datei ist ein Ordner und keine ZIP-Datei.
 			return false;
 		}
@@ -107,9 +108,9 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 				// h�chstwahrscheinlich ein ZIP da es mit 504B0304 respektive PK.. beginnt
 				valid = true;
 			} else {
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_A_SIARD )
-								+ getTextResourceService().getText( ERROR_XML_A_INCORRECTFILEENDING_SIARD ) );
+				getMessageService().logError( getTextResourceService().getText( locale,
+						MESSAGE_XML_MODUL_A_SIARD )
+						+ getTextResourceService().getText( locale, ERROR_XML_A_INCORRECTFILEENDING_SIARD ) );
 				// Die SIARD-Datei ist kein ZIP.
 				read.close();
 				// set to null
@@ -120,9 +121,9 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 			// set to null
 			read = null;
 		} catch ( Exception e ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_A_SIARD )
-							+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )
+							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
@@ -198,9 +199,9 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 							// store element
 						} else {
 							// weder store noch def
-							getMessageService().logError(
-									getTextResourceService().getText( MESSAGE_XML_MODUL_A_SIARD )
-											+ getTextResourceService().getText( ERROR_XML_A_DEFLATED, compressed ) );
+							getMessageService().logError( getTextResourceService().getText( locale,
+									MESSAGE_XML_MODUL_A_SIARD )
+									+ getTextResourceService().getText( locale, ERROR_XML_A_DEFLATED, compressed ) );
 							zf.close();
 							return false;
 						}
@@ -210,9 +211,10 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 					// set to null
 					zf = null;
 				} catch ( Exception e ) {
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_A_SIARD )
-									+ getTextResourceService().getText( ERROR_XML_A_INCORRECTZIP, e.getMessage() ) );
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )
+									+ getTextResourceService().getText( locale, ERROR_XML_A_INCORRECTZIP,
+											e.getMessage() ) );
 					read.close();
 					// set to null
 					read = null;
@@ -235,9 +237,9 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 							// store element
 						} else {
 							// weder store noch def
-							getMessageService().logError(
-									getTextResourceService().getText( MESSAGE_XML_MODUL_A_SIARD )
-											+ getTextResourceService().getText( ERROR_XML_A_DEFLATED, compressed ) );
+							getMessageService().logError( getTextResourceService().getText( locale,
+									MESSAGE_XML_MODUL_A_SIARD )
+									+ getTextResourceService().getText( locale, ERROR_XML_A_DEFLATED, compressed ) );
 							read.close();
 							// set to null
 							read = null;
@@ -249,9 +251,10 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 					// set to null
 					zfe = null;
 				} catch ( Exception ee ) {
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_A_SIARD )
-									+ getTextResourceService().getText( ERROR_XML_A_INCORRECTZIP, ee.getMessage() ) );
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )
+									+ getTextResourceService().getText( locale, ERROR_XML_A_INCORRECTZIP,
+											ee.getMessage() ) );
 					read.close();
 					// set to null
 					read = null;
@@ -259,9 +262,9 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 				}
 
 			} else {
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_A_SIARD )
-								+ getTextResourceService().getText( ERROR_XML_A_DEFLATED, dec8 ) );
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )
+								+ getTextResourceService().getText( locale, ERROR_XML_A_DEFLATED, dec8 ) );
 				read.close();
 				// set to null
 				read = null;
@@ -271,9 +274,9 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 			// set to null
 			read = null;
 		} catch ( Exception e ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_A_SIARD )
-							+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )
+							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 		return (valid);

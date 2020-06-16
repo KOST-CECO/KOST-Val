@@ -20,6 +20,7 @@
 package ch.kostceco.tools.kostval.validation.modulesiard.impl;
 
 import java.io.File;
+import java.util.Locale;
 import java.util.Map;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -47,14 +48,14 @@ import ch.kostceco.tools.kostval.validation.modulesiard.ValidationWwarningModule
  * 
  * @author Rc Claire Roethlisberger, KOST-CECO */
 
-public class ValidationWwarningModuleImpl extends ValidationModuleImpl implements
-		ValidationWwarningModule
+public class ValidationWwarningModuleImpl extends ValidationModuleImpl
+		implements ValidationWwarningModule
 
 {
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
-			throws ValidationWwarningException
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
+			Locale locale ) throws ValidationWwarningException
 	{
 		// Informationen zur Darstellung "onWork" holen
 		String onWork = configMap.get( "ShowProgressOnWork" );
@@ -90,8 +91,8 @@ public class ValidationWwarningModuleImpl extends ValidationModuleImpl implement
 			elementDataOwner = (Element) xpath.evaluate( "/siardArchive/dataOwner", doc,
 					XPathConstants.NODE );
 
-			elementDataOriginTimespan = (Element) xpath.evaluate( "/siardArchive/dataOriginTimespan",
-					doc, XPathConstants.NODE );
+			elementDataOriginTimespan = (Element) xpath.evaluate( "/siardArchive/dataOriginTimespan", doc,
+					XPathConstants.NODE );
 
 			elementDbName = (Element) xpath.evaluate( "/siardArchive/dbname", doc, XPathConstants.NODE );
 
@@ -100,10 +101,10 @@ public class ValidationWwarningModuleImpl extends ValidationModuleImpl implement
 				if ( dataOwnerValue.equals( "(...)" ) || dataOwnerValue.equals( "unspecified" ) ) {
 					/* Der Initialwert wurde nicht verändert respektive ausgef�llt, entsprechend wird eine
 					 * Warnung ausgegeben */
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_W_SIARD )
-									+ getTextResourceService().getText( MESSAGE_XML_W_WARNING_INITVALUE, "dataOwner",
-											dataOwnerValue ) );
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_W_SIARD )
+									+ getTextResourceService().getText( locale, MESSAGE_XML_W_WARNING_INITVALUE,
+											"dataOwner", dataOwnerValue ) );
 				}
 			}
 
@@ -112,9 +113,9 @@ public class ValidationWwarningModuleImpl extends ValidationModuleImpl implement
 				if ( dataOriginTimespanValue.equals( "(...)" ) ) {
 					/* Der Initialwert wurde nicht verändert respektive ausgef�llt, entsprechend wird eine
 					 * Warnung ausgegeben */
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_W_SIARD )
-									+ getTextResourceService().getText( MESSAGE_XML_W_WARNING_INITVALUE,
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_W_SIARD )
+									+ getTextResourceService().getText( locale, MESSAGE_XML_W_WARNING_INITVALUE,
 											"dataOriginTimespan", dataOriginTimespanValue ) );
 				}
 			}
@@ -124,17 +125,17 @@ public class ValidationWwarningModuleImpl extends ValidationModuleImpl implement
 				if ( dataDbNameValue.equals( "(...)" ) ) {
 					/* Der Initialwert wurde nicht verändert respektive ausgef�llt, entsprechend wird eine
 					 * Warnung ausgegeben */
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_W_SIARD )
-									+ getTextResourceService().getText( MESSAGE_XML_W_WARNING_INITVALUE, "dbname",
-											dataDbNameValue ) );
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_W_SIARD )
+									+ getTextResourceService().getText( locale, MESSAGE_XML_W_WARNING_INITVALUE,
+											"dbname", dataDbNameValue ) );
 				}
 			}
 
 		} catch ( Exception e ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_W_SIARD )
-							+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_W_SIARD )
+							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return true;
 		}
 
@@ -142,8 +143,8 @@ public class ValidationWwarningModuleImpl extends ValidationModuleImpl implement
 	}
 
 	@Override
-	public boolean prepareValidation( ValidationContext validationContext ) throws IOException,
-			JDOMException, Exception
+	public boolean prepareValidation( ValidationContext validationContext )
+			throws IOException, JDOMException, Exception
 	{
 		// TODO Auto-generated method stub
 		return false;

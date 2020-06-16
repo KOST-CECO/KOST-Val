@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -41,13 +42,13 @@ import ch.kostceco.tools.kostval.validation.modulesip2.Validation2aFileIntegrity
 /** Validierungsschritt 2a: Sind alle referenzierten Dateien vorhanden? von allen datei nodes den
  * subnode name holen und diesen mit der Struktur vergleichen */
 
-public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl implements
-		Validation2aFileIntegrityModule
+public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl
+		implements Validation2aFileIntegrityModule
 {
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
-			throws Validation2aFileIntegrityException
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
+			Locale locale ) throws Validation2aFileIntegrityException
 	{
 		boolean showOnWork = true;
 		int onWork = 410;
@@ -102,8 +103,8 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl im
 				DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 				// dbf.setValidating(false);
 				DocumentBuilder db = dbf.newDocumentBuilder();
-				Document doc = db.parse( new FileInputStream( new File( valDatei.getAbsolutePath()
-						+ "//header//metadata.xml" ) ) );
+				Document doc = db.parse( new FileInputStream(
+						new File( valDatei.getAbsolutePath() + "//header//metadata.xml" ) ) );
 				doc.getDocumentElement().normalize();
 				NodeList nodeLst = doc.getElementsByTagName( "datei" );
 				NodeList nodeLstO = doc.getElementsByTagName( "ordner" );
@@ -213,9 +214,9 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl im
 					String removedEntry = filesInSip.remove( name );
 					if ( removedEntry == null ) {
 						// Test von 2A
-						getMessageService().logError(
-								getTextResourceService().getText( MESSAGE_XML_MODUL_Ba_SIP )
-										+ getTextResourceService().getText( MESSAGE_XML_BA_FILEMISSING, name ) );
+						getMessageService().logError( getTextResourceService().getText( locale,
+								MESSAGE_XML_MODUL_Ba_SIP )
+								+ getTextResourceService().getText( locale, MESSAGE_XML_BA_FILEMISSING, name ) );
 						valid = false;
 					}
 					path = "";
@@ -293,9 +294,9 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl im
 				}
 
 			} catch ( Exception e ) {
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_Ba_SIP )
-								+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ba_SIP )
+								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 				valid = false;
 			}
 
@@ -306,22 +307,24 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl im
 					// header wird in 2c ignoriert
 				} else {
 					if ( entryName.endsWith( "/" ) ) {
-						getMessageService().logError(
-								getTextResourceService().getText( MESSAGE_XML_MODUL_Bb_SIP )
-										+ getTextResourceService().getText( MESSAGE_XML_BB_FILEMISSINGO, entryName ) );
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bb_SIP )
+										+ getTextResourceService().getText( locale, MESSAGE_XML_BB_FILEMISSINGO,
+												entryName ) );
 					} else {
-						getMessageService().logError(
-								getTextResourceService().getText( MESSAGE_XML_MODUL_Bb_SIP )
-										+ getTextResourceService().getText( MESSAGE_XML_BB_FILEMISSING, entryName ) );
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bb_SIP )
+										+ getTextResourceService().getText( locale, MESSAGE_XML_BB_FILEMISSING,
+												entryName ) );
 					}
 					valid = false;
 				}
 			}
 
 		} catch ( Exception e ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_Ba_SIP )
-							+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ba_SIP )
+							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 

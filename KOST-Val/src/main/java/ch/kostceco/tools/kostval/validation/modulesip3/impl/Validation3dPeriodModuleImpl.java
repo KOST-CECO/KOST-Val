@@ -28,6 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -46,8 +47,8 @@ import ch.kostceco.tools.kostval.validation.modulesip3.Validation3dPeriodModule;
 
 /** Stimmen die Zeitangaben in (metadata.xml)/ablieferung überein? */
 
-public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implements
-		Validation3dPeriodModule
+public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
+		implements Validation3dPeriodModule
 {
 
 	DateFormat	formatter1	= new SimpleDateFormat( "yyyy-MM-dd" );
@@ -55,8 +56,8 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 	DateFormat	formatter3	= new SimpleDateFormat( "yyyy" );
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
-			throws Validation3dPeriodException
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
+			Locale locale ) throws Validation3dPeriodException
 	{
 		boolean showOnWork = true;
 		int onWork = 410;
@@ -77,8 +78,8 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			// dbf.setValidating(false);
 			DocumentBuilder db = dbf.newDocumentBuilder();
-			Document doc = db.parse( new FileInputStream( new File( valDatei.getAbsolutePath()
-					+ "//header//metadata.xml" ) ) );
+			Document doc = db.parse( new FileInputStream(
+					new File( valDatei.getAbsolutePath() + "//header//metadata.xml" ) ) );
 			doc.normalize();
 
 			// Lesen der Werte vom Entstehungszeitraum der Ablieferung
@@ -88,11 +89,11 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 			Element elementAblCaVon = null;
 			Element elementAblCaBis = null;
 
-			elementAblDatumVon = (Element) xpath.evaluate(
-					"/paket/ablieferung/entstehungszeitraum/von/datum", doc, XPathConstants.NODE );
+			elementAblDatumVon = (Element) xpath
+					.evaluate( "/paket/ablieferung/entstehungszeitraum/von/datum", doc, XPathConstants.NODE );
 
-			elementAblDatumBis = (Element) xpath.evaluate(
-					"/paket/ablieferung/entstehungszeitraum/bis/datum", doc, XPathConstants.NODE );
+			elementAblDatumBis = (Element) xpath
+					.evaluate( "/paket/ablieferung/entstehungszeitraum/bis/datum", doc, XPathConstants.NODE );
 
 			elementAblCaVon = (Element) xpath.evaluate( "/paket/ablieferung/entstehungszeitraum/von/ca",
 					doc, XPathConstants.NODE );
@@ -120,9 +121,9 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 
 					// Umwandlung respektive Validierung fehlgeschlagen
 					valid = false;
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_Cd_SIP )
-									+ getTextResourceService().getText( ERROR_XML_CD_UNPARSEABLE_DATE ) );
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Cd_SIP )
+									+ getTextResourceService().getText( locale, ERROR_XML_CD_UNPARSEABLE_DATE ) );
 					return false;
 				}
 
@@ -139,19 +140,19 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 
 						// Umwandlung respektive Validierung fehlgeschlagen
 						valid = false;
-						getMessageService().logError(
-								getTextResourceService().getText( MESSAGE_XML_MODUL_Cd_SIP )
-										+ getTextResourceService().getText( ERROR_XML_CD_UNPARSEABLE_DATE ) );
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Cd_SIP )
+										+ getTextResourceService().getText( locale, ERROR_XML_CD_UNPARSEABLE_DATE ) );
 						return false;
 					}
 
 					/* der String datumVon respektive datumBis enthält die reelle Eingabe des
 					 * Entstehungszeitraums Von und Bis und wird für den allfälligen Fehlerlog benötigt */
-					String datumVon = ((elementAblCaVon != null && elementAblCaVon.getTextContent().equals(
-							"true" )) ? "ca. " : "")
+					String datumVon = ((elementAblCaVon != null
+							&& elementAblCaVon.getTextContent().equals( "true" )) ? "ca. " : "")
 							+ elementAblDatumVon.getTextContent();
-					String datumBis = ((elementAblCaBis != null && elementAblCaBis.getTextContent().equals(
-							"true" )) ? "ca. " : "")
+					String datumBis = ((elementAblCaBis != null
+							&& elementAblCaBis.getTextContent().equals( "true" )) ? "ca. " : "")
 							+ elementAblDatumBis.getTextContent();
 
 					/* Liegt eines der Daten in der Zukunft? calNow2 muss gesetzt und verwendet werden
@@ -170,9 +171,10 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 						dateAblieferungUseable = false;
 
 						// Log-Ausgabe mit dem Wert, welcher in der Zukunft liegt
-						getMessageService().logError(
-								getTextResourceService().getText( MESSAGE_XML_MODUL_Cd_SIP )
-										+ getTextResourceService().getText( ERROR_XML_CD_DATUM_IN_FUTURE, datumVon ) );
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Cd_SIP )
+										+ getTextResourceService().getText( locale, ERROR_XML_CD_DATUM_IN_FUTURE,
+												datumVon ) );
 					}
 
 					if ( calAblieferungBis.after( calNow2 ) ) {
@@ -186,9 +188,10 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 						dateAblieferungUseable = false;
 
 						// Log-Ausgabe mit dem Wert, welcher in der Zukunft liegt
-						getMessageService().logError(
-								getTextResourceService().getText( MESSAGE_XML_MODUL_Cd_SIP )
-										+ getTextResourceService().getText( ERROR_XML_CD_DATUM_IN_FUTURE, datumBis ) );
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Cd_SIP )
+										+ getTextResourceService().getText( locale, ERROR_XML_CD_DATUM_IN_FUTURE,
+												datumBis ) );
 					}
 
 					/* falls das Ablieferungs-Datum "Bis" vor dem Datum "Von" liegt, gehen wir davon aus, das
@@ -202,18 +205,18 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 						// Zusammenstellung der parameter die für den logreport gebraucht werden (die reellen
 						// Daten)
 						String[] params = new String[4];
-						params[0] = (elementAblCaVon != null && elementAblCaVon.getTextContent()
-								.equals( "true" )) ? "ca. " : "";
+						params[0] = (elementAblCaVon != null
+								&& elementAblCaVon.getTextContent().equals( "true" )) ? "ca. " : "";
 						params[1] = elementAblDatumVon.getTextContent();
-						params[2] = (elementAblCaBis != null && elementAblCaBis.getTextContent()
-								.equals( "true" )) ? "ca. " : "";
+						params[2] = (elementAblCaBis != null
+								&& elementAblCaBis.getTextContent().equals( "true" )) ? "ca. " : "";
 						params[3] = elementAblDatumBis.getTextContent();
 
 						// Log-Ausgabe mit den vertauschten Werte
-						getMessageService().logError(
-								getTextResourceService().getText( MESSAGE_XML_MODUL_Cd_SIP )
-										+ getTextResourceService().getText( ERROR_XML_CD_INVALID_ABLIEFERUNG_RANGE,
-												(Object[]) params ) );
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Cd_SIP )
+										+ getTextResourceService().getText( locale,
+												ERROR_XML_CD_INVALID_ABLIEFERUNG_RANGE, (Object[]) params ) );
 
 						// 3d wird auf invalid gesetzt
 						valid = false;
@@ -303,9 +306,9 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 					// Umwandlung respektive Validierung fehlgeschlagen
 					if ( date == null ) {
 						valid = false;
-						getMessageService().logError(
-								getTextResourceService().getText( MESSAGE_XML_MODUL_Cd_SIP )
-										+ getTextResourceService().getText( ERROR_XML_CD_UNPARSEABLE_DATE ) );
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Cd_SIP )
+										+ getTextResourceService().getText( locale, ERROR_XML_CD_UNPARSEABLE_DATE ) );
 						return false;
 					}
 
@@ -319,9 +322,9 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 					// Umwandlung respektive Validierung fehlgeschlagen
 					if ( date == null ) {
 						valid = false;
-						getMessageService().logError(
-								getTextResourceService().getText( MESSAGE_XML_MODUL_Cd_SIP )
-										+ getTextResourceService().getText( ERROR_XML_CD_UNPARSEABLE_DATE ) );
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Cd_SIP )
+										+ getTextResourceService().getText( locale, ERROR_XML_CD_UNPARSEABLE_DATE ) );
 						return false;
 					}
 
@@ -330,10 +333,12 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 
 					/* der String datumVonDos respektive datumBisDos enthält die reelle Eingabe des
 					 * Entstehungszeitraums Von und Bis und wird für den allfälligen Fehlerlog benötigt */
-					String datumVonDos = ((circaDossierVonNode != null && circaDossierVonNode
-							.getTextContent().equals( "true" )) ? "ca. " : "") + dateDossierVon;
-					String datumBisDos = ((circaDossierBisNode != null && circaDossierBisNode
-							.getTextContent().equals( "true" )) ? "ca. " : "") + dateDossierBis;
+					String datumVonDos = ((circaDossierVonNode != null
+							&& circaDossierVonNode.getTextContent().equals( "true" )) ? "ca. " : "")
+							+ dateDossierVon;
+					String datumBisDos = ((circaDossierBisNode != null
+							&& circaDossierBisNode.getTextContent().equals( "true" )) ? "ca. " : "")
+							+ dateDossierBis;
 
 					/* Liegt eines der Daten in der Zukunft? calNow3 muss gesetzt und verwendet werden
 					 * (=jetzt), weil ansonsten manchmal einen Fehler ausgegeben wird, weil ein andere
@@ -352,10 +357,9 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 
 						// Log-Ausgabe mit dem Wert, welcher in der Zukunft liegt
 						getMessageService()
-								.logError(
-										getTextResourceService().getText( MESSAGE_XML_MODUL_Cd_SIP )
-												+ getTextResourceService().getText( ERROR_XML_CD_DATUM_IN_FUTURE,
-														datumVonDos ) );
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Cd_SIP )
+										+ getTextResourceService().getText( locale, ERROR_XML_CD_DATUM_IN_FUTURE,
+												datumVonDos ) );
 					}
 
 					if ( calDossierBis.after( calNow3 ) ) {
@@ -370,10 +374,9 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 
 						// Log-Ausgabe mit dem Wert, welcher in der Zukunft liegt
 						getMessageService()
-								.logError(
-										getTextResourceService().getText( MESSAGE_XML_MODUL_Cd_SIP )
-												+ getTextResourceService().getText( ERROR_XML_CD_DATUM_IN_FUTURE,
-														datumBisDos ) );
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Cd_SIP )
+										+ getTextResourceService().getText( locale, ERROR_XML_CD_DATUM_IN_FUTURE,
+												datumBisDos ) );
 					}
 
 					/* falls das Dossier-Datum "Bis" vor dem Datum "Von" liegt, gehen wir davon aus, das eine
@@ -392,18 +395,18 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 						// Daten)
 						String[] params = new String[5];
 						params[0] = dossierId;
-						params[1] = (circaDossierVonNode != null && circaDossierVonNode.getTextContent()
-								.equals( "true" )) ? "ca. " : "";
+						params[1] = (circaDossierVonNode != null
+								&& circaDossierVonNode.getTextContent().equals( "true" )) ? "ca. " : "";
 						params[2] = dateDossierVon;
-						params[3] = (circaDossierBisNode != null && circaDossierBisNode.getTextContent()
-								.equals( "true" )) ? "ca. " : "";
+						params[3] = (circaDossierBisNode != null
+								&& circaDossierBisNode.getTextContent().equals( "true" )) ? "ca. " : "";
 						params[4] = dateDossierBis;
 
 						// Log-Ausgabe mit den vertauschten Werte
-						getMessageService().logError(
-								getTextResourceService().getText( MESSAGE_XML_MODUL_Cd_SIP )
-										+ getTextResourceService().getText( ERROR_XML_CD_INVALID_DOSSIER_RANGE_CA,
-												(Object[]) params ) );
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Cd_SIP )
+										+ getTextResourceService().getText( locale,
+												ERROR_XML_CD_INVALID_DOSSIER_RANGE_CA, (Object[]) params ) );
 
 						// 3d wird auf invalid gesetzt
 						valid = false;
@@ -429,8 +432,8 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 
 						/* Wenn DossierVon vor AblieferungVon oder DossierBis nach AblieferungBis liegt dann
 						 * liegt der Dossierzeitraum nicht innerhalb des Ablieferungszeitraums -> Fehler */
-						if ( (calDossierVon.before( calAblieferungVon ) || calDossierBis
-								.after( calAblieferungBis )) ) {
+						if ( (calDossierVon.before( calAblieferungVon )
+								|| calDossierBis.after( calAblieferungBis )) ) {
 
 							Element dossierElement = null;
 							dossierElement = (Element) dossierNode;
@@ -440,24 +443,24 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 							 * Daten) */
 							String[] params = new String[9];
 							params[0] = dossierId;
-							params[1] = (circaDossierVonNode != null && circaDossierVonNode.getTextContent()
-									.equals( "true" )) ? "ca. " : "";
+							params[1] = (circaDossierVonNode != null
+									&& circaDossierVonNode.getTextContent().equals( "true" )) ? "ca. " : "";
 							params[2] = dateDossierVon;
-							params[3] = (circaDossierBisNode != null && circaDossierBisNode.getTextContent()
-									.equals( "true" )) ? "ca. " : "";
+							params[3] = (circaDossierBisNode != null
+									&& circaDossierBisNode.getTextContent().equals( "true" )) ? "ca. " : "";
 							params[4] = dateDossierBis;
-							params[5] = (elementAblCaVon != null && elementAblCaVon.getTextContent().equals(
-									"true" )) ? "ca. " : "";
+							params[5] = (elementAblCaVon != null
+									&& elementAblCaVon.getTextContent().equals( "true" )) ? "ca. " : "";
 							params[6] = elementAblDatumVon.getTextContent();
-							params[7] = (elementAblCaBis != null && elementAblCaBis.getTextContent().equals(
-									"true" )) ? "ca. " : "";
+							params[7] = (elementAblCaBis != null
+									&& elementAblCaBis.getTextContent().equals( "true" )) ? "ca. " : "";
 							params[8] = elementAblDatumBis.getTextContent();
 
 							// Log-Ausgabe mit den entsprechenden Werte
-							getMessageService().logError(
-									getTextResourceService().getText( MESSAGE_XML_MODUL_Cd_SIP )
-											+ getTextResourceService().getText(
-													ERROR_XML_CD_INVALID_DOSSIER_RANGE_CA_ABL, (Object[]) params ) );
+							getMessageService()
+									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Cd_SIP )
+											+ getTextResourceService().getText( ERROR_XML_CD_INVALID_DOSSIER_RANGE_CA_ABL,
+													(Object[]) params ) );
 
 							dossierRangeOk = false;
 							// 3d wird auf invalid gesetzt
@@ -569,16 +572,17 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 								// Existiert das "Dokumentdatum Von"?
 								if ( nodeVon != null && nodeVon.getTextContent() != null ) {
 
-									/* dateDokVon existiert und wird gemäss dem Subprogramm parseDatumVon in ein Datum
-									 * umgewandelt und validiert */
+									/* dateDokVon existiert und wird gemäss dem Subprogramm parseDatumVon in ein
+									 * Datum umgewandelt und validiert */
 									dateDokVon = parseDatumVon( nodeVon.getTextContent() );
 									if ( dateDokVon == null ) {
 
 										// Umwandlung respektive Validierung fehlgeschlagen
 										valid = false;
 										getMessageService().logError(
-												getTextResourceService().getText( MESSAGE_XML_MODUL_Cd_SIP )
-														+ getTextResourceService().getText( ERROR_XML_CD_UNPARSEABLE_DATE ) );
+												getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Cd_SIP )
+														+ getTextResourceService().getText( locale,
+																ERROR_XML_CD_UNPARSEABLE_DATE ) );
 										return false;
 									}
 
@@ -593,16 +597,17 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 								// Existiert das "Dokumentdatum Bis"?
 								if ( nodeBis != null && nodeBis.getTextContent() != null ) {
 
-									/* dateDokBis existiert und wird gemäss dem Subprogramm parseDatumVon in ein Datum
-									 * umgewandelt und validiert */
+									/* dateDokBis existiert und wird gemäss dem Subprogramm parseDatumVon in ein
+									 * Datum umgewandelt und validiert */
 									dateDokBis = parseDatumBis( nodeBis.getTextContent() );
 									if ( dateDokBis == null ) {
 
 										// Umwandlung respektive Validierung fehlgeschlagen
 										valid = false;
 										getMessageService().logError(
-												getTextResourceService().getText( MESSAGE_XML_MODUL_Cd_SIP )
-														+ getTextResourceService().getText( ERROR_XML_CD_UNPARSEABLE_DATE ) );
+												getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Cd_SIP )
+														+ getTextResourceService().getText( locale,
+																ERROR_XML_CD_UNPARSEABLE_DATE ) );
 										return false;
 									}
 								}
@@ -630,7 +635,7 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 
 									// Log-Ausgabe mit dem Wert, welcher in der Zukunft liegt
 									getMessageService().logError(
-											getTextResourceService().getText( MESSAGE_XML_MODUL_Cd_SIP )
+											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Cd_SIP )
 													+ getTextResourceService().getText(
 															ERROR_XML_CD_DATUM_ENTSTEHUNG_IN_FUTURE, (Object[]) params ) );
 								}
@@ -650,14 +655,15 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 
 									// Log-Ausgabe mit dem Wert, welcher in der Zukunft liegt
 									getMessageService().logError(
-											getTextResourceService().getText( MESSAGE_XML_MODUL_Cd_SIP )
+											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Cd_SIP )
 													+ getTextResourceService().getText(
 															ERROR_XML_CD_DATUM_ENTSTEHUNG_IN_FUTURE, (Object[]) params ) );
 								}
 
 								/* falls das Dokument-Datum "Bis" vor dem Datum "Von" liegt, gehen wir davon aus,
 								 * das eine Verwechslung vorliegt, d.h. wir geben den Fehler aus, Schritt 3d ist
-								 * invalid und für die weiterverarbeitung tauschen die calDaten gegeneinander aus. */
+								 * invalid und für die weiterverarbeitung tauschen die calDaten gegeneinander
+								 * aus. */
 								if ( calDokBis.before( calDokVon ) ) {
 									Calendar calTmp = calDokBis;
 									calDokBis = calDokVon;
@@ -674,9 +680,9 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 
 									// Log-Ausgabe mit den vertauschten Werte
 									getMessageService().logError(
-											getTextResourceService().getText( MESSAGE_XML_MODUL_Cd_SIP )
-													+ getTextResourceService().getText(
-															ERROR_XML_CD_INVALID_DOSSIER_RANGE_CA, (Object[]) params ) );
+											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Cd_SIP )
+													+ getTextResourceService().getText( ERROR_XML_CD_INVALID_DOSSIER_RANGE_CA,
+															(Object[]) params ) );
 
 									// 3d wird auf invalid gesetzt
 									valid = false;
@@ -709,16 +715,16 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 										params[2] = nodeVon.getTextContent();
 										params[3] = nodeCaBis == null ? "" : "ca. ";
 										params[4] = nodeBis.getTextContent();
-										params[5] = (circaDossierVonNode != null && circaDossierVonNode
-												.getTextContent().equals( "true" )) ? "ca. " : "";
+										params[5] = (circaDossierVonNode != null
+												&& circaDossierVonNode.getTextContent().equals( "true" )) ? "ca. " : "";
 										params[6] = dateDossierVon;
-										params[7] = (circaDossierBisNode != null && circaDossierBisNode
-												.getTextContent().equals( "true" )) ? "ca. " : "";
+										params[7] = (circaDossierBisNode != null
+												&& circaDossierBisNode.getTextContent().equals( "true" )) ? "ca. " : "";
 										params[8] = dateDossierBis;
 
 										// Log-Ausgabe mit den entsprechenden Werte
 										getMessageService().logError(
-												getTextResourceService().getText( MESSAGE_XML_MODUL_Cd_SIP )
+												getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Cd_SIP )
 														+ getTextResourceService().getText(
 																ERROR_XML_CD_INVALID_DOKUMENT_RANGE_CA, (Object[]) params ) );
 
@@ -758,9 +764,9 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl implement
 			}
 
 		} catch ( Exception e ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_Cd_SIP )
-							+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Cd_SIP )
+							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 		return valid;

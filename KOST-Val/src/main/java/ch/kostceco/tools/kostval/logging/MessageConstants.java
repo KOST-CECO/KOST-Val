@@ -19,7 +19,7 @@
 
 package ch.kostceco.tools.kostval.logging;
 
-/** Interface für den Zugriff auf Resourcen aus dem ResourceBundle.
+/** Interface fuer den Zugriff auf Resourcen aus dem ResourceBundle.
  * 
  * @author Rc Claire Roethlisberger, KOST-CECO */
 public interface MessageConstants

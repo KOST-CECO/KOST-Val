@@ -20,6 +20,7 @@
 package ch.kostceco.tools.kostval.validation;
 
 import java.io.File;
+import java.util.Locale;
 import java.util.Map;
 
 import ch.kostceco.tools.kostval.exception.KOSTValException;
@@ -34,7 +35,7 @@ import ch.kostceco.tools.kostval.service.Service;
 public interface ValidationModule extends Service
 {
 
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale )
 			throws KOSTValException;
 
 	public MessageService getMessageService();

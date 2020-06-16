@@ -21,6 +21,7 @@ package ch.kostceco.tools.kostval.validation.moduletiff2.impl;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.util.Locale;
 import java.util.Map;
 import java.io.FileReader;
 
@@ -28,26 +29,28 @@ import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationGtilesValidatio
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationGtilesValidationModule;
 
-/** Validierungsschritt G (Kacheln-Validierung) Ist die TIFF-Datei gem�ss Konfigurationsdatei valid?
+/** Validierungsschritt G (Kacheln-Validierung) Ist die TIFF-Datei gem�ss Konfigurationsdatei
+ * valid?
  * 
  * @author Rc Claire Roethlisberger, KOST-CECO */
 
-public class ValidationGtilesValidationModuleImpl extends ValidationModuleImpl implements
-		ValidationGtilesValidationModule
+public class ValidationGtilesValidationModuleImpl extends ValidationModuleImpl
+		implements ValidationGtilesValidationModule
 {
 
-	public static String	NEWLINE	= System.getProperty( "line.separator" );
+	public static String NEWLINE = System.getProperty( "line.separator" );
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
-			throws ValidationGtilesValidationException
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
+			Locale locale ) throws ValidationGtilesValidationException
 	{
 
 		boolean isValid = true;
 
 		// Informationen zum Logverzeichnis holen
 		String pathToExiftoolOutput = directoryOfLogfile.getAbsolutePath();
-		File exiftoolReport = new File( pathToExiftoolOutput, valDatei.getName() + ".exiftool-log.txt" );
+		File exiftoolReport = new File( pathToExiftoolOutput,
+				valDatei.getName() + ".exiftool-log.txt" );
 		pathToExiftoolOutput = exiftoolReport.getAbsolutePath();
 
 		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
@@ -56,8 +59,8 @@ public class ValidationGtilesValidationModuleImpl extends ValidationModuleImpl i
 
 		String tiles = configMap.get( "AllowedTiles" );
 		if ( tiles.startsWith( "Configuration-Error:" ) ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_G_TIFF ) + tiles );
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_TIFF ) + tiles );
 			return false;
 		}
 
@@ -90,9 +93,9 @@ public class ValidationGtilesValidationModuleImpl extends ValidationModuleImpl i
 									&& !line.equals( oldErrorLine3 ) && !line.equals( oldErrorLine4 )
 									&& !line.equals( oldErrorLine5 ) ) {
 								// neuer Fehler
-								getMessageService().logError(
-										getTextResourceService().getText( MESSAGE_XML_MODUL_G_TIFF )
-												+ getTextResourceService().getText( MESSAGE_XML_CG_INVALID, line ) );
+								getMessageService().logError( getTextResourceService().getText( locale,
+										MESSAGE_XML_MODUL_G_TIFF )
+										+ getTextResourceService().getText( locale, MESSAGE_XML_CG_INVALID, line ) );
 								if ( oldErrorLine1.equals( "" ) ) {
 									oldErrorLine1 = line;
 								} else if ( oldErrorLine2.equals( "" ) ) {
@@ -111,15 +114,15 @@ public class ValidationGtilesValidationModuleImpl extends ValidationModuleImpl i
 				if ( exiftoolio == 0 ) {
 					// Invalider Status
 					isValid = false;
-					getMessageService().logError(
-							getTextResourceService().getText( MESSAGE_XML_MODUL_G_TIFF )
-									+ getTextResourceService().getText( MESSAGE_XML_CG_ETNIO, "G" ) );
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_TIFF )
+									+ getTextResourceService().getText( locale, MESSAGE_XML_CG_ETNIO, "G" ) );
 				}
 				in.close();
 			} catch ( Exception e ) {
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_G_TIFF )
-								+ getTextResourceService().getText( MESSAGE_XML_CG_CANNOTFINDETREPORT ) );
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_TIFF )
+								+ getTextResourceService().getText( locale, MESSAGE_XML_CG_CANNOTFINDETREPORT ) );
 				return false;
 			}
 		}

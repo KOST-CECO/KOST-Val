@@ -25,6 +25,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.commons.io.FileUtils;
 import org.jdom2.*;
@@ -68,8 +69,8 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements Va
 	private XMLReader					reader;
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
-			throws ValidationFrowException
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
+			Locale locale ) throws ValidationFrowException
 	{
 		boolean showOnWork = true;
 		int onWork = 410;
@@ -100,10 +101,10 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements Va
 
 			/* read the document and for each schema and table entry verify existence in temporary
 			 * extracted structure and compare the rownumber */
-			version1 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" ).contains(
-					"http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
-			version2 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" ).contains(
-					"http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
+			version1 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" )
+					.contains( "http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
+			version2 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" )
+					.contains( "http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
 			Namespace ns = Namespace
 					.getNamespace( "http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
 			if ( version1 ) {
@@ -115,7 +116,7 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements Va
 			List<Element> schemas = document.getRootElement().getChild( "schemas", ns )
 					.getChildren( "schema", ns );
 			for ( Element schema : schemas ) {
-				valid = validateSchema( schema, ns, pathToWorkDir, configMap );
+				valid = validateSchema( schema, ns, pathToWorkDir, configMap, locale );
 				if ( showOnWork ) {
 					if ( onWork == 410 ) {
 						onWork = 2;
@@ -140,15 +141,15 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements Va
 			}
 		} catch ( java.io.IOException ioe ) {
 			valid = false;
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_F_SIARD )
-							+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_SIARD )
+							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 									ioe.getMessage() + " (IOException)" ) );
 		} catch ( JDOMException e ) {
 			valid = false;
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_F_SIARD )
-							+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_SIARD )
+							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 									e.getMessage() + " (JDOMException)" ) );
 		}
 
@@ -162,7 +163,7 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements Va
 	}
 
 	private boolean validateSchema( Element schema, Namespace ns, String pathToWorkDir,
-			Map<String, String> configMap )
+			Map<String, String> configMap, Locale locale )
 	{
 		boolean showOnWork = true;
 		int onWork = 410;
@@ -190,7 +191,7 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements Va
 				for ( Element table : tables ) {
 					// Valid = True ansonsten validiert er nicht
 					validT = true;
-					validT = validT && validateTable( table, ns, pathToWorkDir, schemaPath );
+					validT = validT && validateTable( table, ns, pathToWorkDir, schemaPath, locale );
 					if ( showOnWork ) {
 						if ( onWork == 410 ) {
 							onWork = 2;
@@ -225,7 +226,8 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements Va
 		return valid;
 	}
 
-	private boolean validateTable( Element table, Namespace ns, String pathToWorkDir, File schemaPath )
+	private boolean validateTable( Element table, Namespace ns, String pathToWorkDir, File schemaPath,
+			Locale locale )
 	{
 		boolean valid = true;
 		boolean validR = true;
@@ -237,13 +239,13 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements Va
 				.append( File.separator ).append( tableFolder.getText() ).toString() );
 		File tableXsd = new File( new StringBuilder( tablePath.getAbsolutePath() )
 				.append( File.separator ).append( tableFolder.getText() + ".xsd" ).toString() );
-		validR = validateRow( tableXsd, rowmax );
+		validR = validateRow( tableXsd, rowmax, locale );
 		valid = valid && validR;
 
 		return valid;
 	}
 
-	private boolean validateRow( File tableXsd, int rowmax )
+	private boolean validateRow( File tableXsd, int rowmax, Locale locale )
 	{
 		boolean valid = false;
 		try {
@@ -267,24 +269,24 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements Va
 						valid = true;
 					} else {
 						valid = false;
-						getMessageService().logError(
-								getTextResourceService().getText( MESSAGE_XML_MODUL_F_SIARD )
-										+ getTextResourceService().getText( MESSAGE_XML_F_INVALID_TABLE_XML_FILES,
-												tableXsd ) );
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_SIARD )
+										+ getTextResourceService().getText( locale,
+												MESSAGE_XML_F_INVALID_TABLE_XML_FILES, tableXsd ) );
 					}
 				}
 			} catch ( IOException e ) {
 				valid = false;
-				getMessageService().logError(
-						getTextResourceService().getText( MESSAGE_XML_MODUL_F_SIARD )
-								+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_SIARD )
+								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 										e.getMessage() + " (IOException)" ) );
 			}
 		} catch ( SAXException e ) {
 			valid = false;
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_F_SIARD )
-							+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_SIARD )
+							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 									e.getMessage() + " (SAXException)" ) );
 		}
 		return valid;
@@ -308,7 +310,7 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements Va
 
 	private class RangeHandler extends DefaultHandler
 	{
-		private Range	range	= new Range();
+		private Range range = new Range();
 
 		@Override
 		public void startElement( String uri, String localName, String qName, Attributes attributes )
@@ -355,8 +357,8 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements Va
 		}
 	}
 
-	public boolean prepareValidation( ValidationContext validationContext ) throws IOException,
-			JDOMException, Exception
+	public boolean prepareValidation( ValidationContext validationContext )
+			throws IOException, JDOMException, Exception
 	{
 		return false;
 	}

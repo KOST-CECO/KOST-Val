@@ -19,7 +19,9 @@
 
 package ch.kostceco.tools.kostval.validation.moduletiff2;
 
-import java.io.File; import java.util.Map;
+import java.io.File;
+import java.util.Locale;
+import java.util.Map;
 
 import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationEbitspersampleValidationException;
 import ch.kostceco.tools.kostval.validation.ValidationModule;
@@ -32,7 +34,7 @@ import ch.kostceco.tools.kostval.validation.ValidationModule;
 public interface ValidationEbitspersampleValidationModule extends ValidationModule
 {
 
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
-			throws ValidationEbitspersampleValidationException;
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
+			Locale locale ) throws ValidationEbitspersampleValidationException;
 
 }

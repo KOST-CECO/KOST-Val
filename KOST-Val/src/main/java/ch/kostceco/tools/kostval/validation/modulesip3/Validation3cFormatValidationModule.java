@@ -19,7 +19,9 @@
 
 package ch.kostceco.tools.kostval.validation.modulesip3;
 
-import java.io.File; import java.util.Map;
+import java.io.File;
+import java.util.Locale;
+import java.util.Map;
 
 import ch.kostceco.tools.kostval.exception.modulesip3.Validation3cFormatValidationException;
 import ch.kostceco.tools.kostval.validation.ValidationModule;
@@ -35,7 +37,7 @@ import ch.kostceco.tools.kostval.validation.ValidationModule;
 public interface Validation3cFormatValidationModule extends ValidationModule
 {
 
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
-			throws Validation3cFormatValidationException;
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
+			Locale locale ) throws Validation3cFormatValidationException;
 
 }

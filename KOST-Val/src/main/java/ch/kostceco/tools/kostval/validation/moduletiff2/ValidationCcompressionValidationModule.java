@@ -19,7 +19,9 @@
 
 package ch.kostceco.tools.kostval.validation.moduletiff2;
 
-import java.io.File; import java.util.Map;
+import java.io.File;
+import java.util.Locale;
+import java.util.Map;
 
 import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationCcompressionValidationException;
 import ch.kostceco.tools.kostval.validation.ValidationModule;
@@ -32,7 +34,7 @@ import ch.kostceco.tools.kostval.validation.ValidationModule;
 public interface ValidationCcompressionValidationModule extends ValidationModule
 {
 
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
-			throws ValidationCcompressionValidationException;
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
+			Locale locale ) throws ValidationCcompressionValidationException;
 
 }

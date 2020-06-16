@@ -22,6 +22,7 @@ package ch.kostceco.tools.kostval.validation.modulesip3.impl;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -34,13 +35,13 @@ import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesip3.Validation3bUnspecifiedFormatModule;
 
-public class Validation3bUnspecifiedFormatModuleImpl extends ValidationModuleImpl implements
-		Validation3bUnspecifiedFormatModule
+public class Validation3bUnspecifiedFormatModuleImpl extends ValidationModuleImpl
+		implements Validation3bUnspecifiedFormatModule
 {
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
-			throws Validation3bUnspecifiedFormatException
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
+			Locale locale ) throws Validation3bUnspecifiedFormatException
 	{
 		boolean showOnWork = true;
 		int onWork = 410;
@@ -65,15 +66,15 @@ public class Validation3bUnspecifiedFormatModuleImpl extends ValidationModuleImp
 		String nameOfSignature = configMap.get( "PathToDroidSignatureFile" );
 		if ( nameOfSignature.startsWith( "Configuration-Error:" ) ) {
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_Cb_SIP ) + nameOfSignature );
+					getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Cb_SIP ) + nameOfSignature );
 			return false;
 		}
 		// existiert die SignatureFile am angebenen Ort?
 		File fnameOfSignature = new File( nameOfSignature );
 		if ( !fnameOfSignature.exists() ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_Cb_SIP )
-							+ getTextResourceService().getText( MESSAGE_XML_CA_DROID ) );
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Cb_SIP )
+							+ getTextResourceService().getText( locale, MESSAGE_XML_CA_DROID ) );
 			return false;
 		}
 
@@ -88,9 +89,9 @@ public class Validation3bUnspecifiedFormatModuleImpl extends ValidationModuleImp
 			droid.readSignatureFile( nameOfSignature );
 
 		} catch ( Exception e ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_Cb_SIP )
-							+ getTextResourceService().getText( ERROR_XML_CANNOT_INITIALIZE_DROID ) );
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Cb_SIP )
+							+ getTextResourceService().getText( locale, ERROR_XML_CANNOT_INITIALIZE_DROID ) );
 			return false;
 		} finally {
 			Util.switchOnConsole();
@@ -148,9 +149,9 @@ public class Validation3bUnspecifiedFormatModuleImpl extends ValidationModuleImp
 
 					if ( !allowedformats.contains( ffString ) ) {
 
-						getMessageService().logError(
-								getTextResourceService().getText( MESSAGE_XML_MODUL_Cb_SIP )
-										+ getTextResourceService().getText( MESSAGE_XML_CB_FORMAT, fileKey,
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Cb_SIP )
+										+ getTextResourceService().getText( locale, MESSAGE_XML_CB_FORMAT, fileKey,
 												ff.getPUID() + " Extension: " + ff.getExtension( x ) ) );
 						valid = false;
 

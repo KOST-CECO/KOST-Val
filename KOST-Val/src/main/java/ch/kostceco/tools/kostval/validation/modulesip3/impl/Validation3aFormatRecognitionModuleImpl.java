@@ -19,9 +19,10 @@
 
 package ch.kostceco.tools.kostval.validation.modulesip3.impl;
 
-import java.io.File; 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -34,15 +35,16 @@ import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesip3.Validation3aFormatRecognitionModule;
 
-public class Validation3aFormatRecognitionModuleImpl extends ValidationModuleImpl implements
-		Validation3aFormatRecognitionModule
+public class Validation3aFormatRecognitionModuleImpl extends ValidationModuleImpl
+		implements Validation3aFormatRecognitionModule
 {
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
-			throws Validation3aFormatRecognitionException
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
+			Locale locale ) throws Validation3aFormatRecognitionException
 	{
-		/* für die Geschwindigkeit von Droid ja nach SignatureFile zu messen kann dies verwendet werden:
+		/* für die Geschwindigkeit von Droid ja nach SignatureFile zu messen kann dies verwendet
+		 * werden:
 		 * 
 		 * java.util.Date nowStart = new java.util.Date();
 		 * 
@@ -56,7 +58,7 @@ public class Validation3aFormatRecognitionModuleImpl extends ValidationModuleImp
 		boolean showOnWork = true;
 		int onWork = 410;
 		// Informationen zur Darstellung "onWork" holen
-		String onWorkConfig = configMap.get( "ShowProgressOnWork");
+		String onWorkConfig = configMap.get( "ShowProgressOnWork" );
 		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
 		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
 		 * ref="configurationService" /> */
@@ -73,18 +75,18 @@ public class Validation3aFormatRecognitionModuleImpl extends ValidationModuleImp
 
 		Map<String, File> filesInSipFile = new HashMap<String, File>();
 
-		String nameOfSignature = configMap.get( "PathToDroidSignatureFile");
+		String nameOfSignature = configMap.get( "PathToDroidSignatureFile" );
 		if ( nameOfSignature.startsWith( "Configuration-Error:" ) ) {
 			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP ) + nameOfSignature );
+					getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ca_SIP ) + nameOfSignature );
 			return false;
 		}
 		// existiert die SignatureFile am angebenen Ort?
 		File fnameOfSignature = new File( nameOfSignature );
 		if ( !fnameOfSignature.exists() ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
-							+ getTextResourceService().getText( MESSAGE_XML_CA_DROID ) );
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ca_SIP )
+							+ getTextResourceService().getText( locale, MESSAGE_XML_CA_DROID ) );
 			return false;
 		}
 
@@ -99,9 +101,9 @@ public class Validation3aFormatRecognitionModuleImpl extends ValidationModuleImp
 			droid.readSignatureFile( nameOfSignature );
 
 		} catch ( Exception e ) {
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
-							+ getTextResourceService().getText( ERROR_XML_CANNOT_INITIALIZE_DROID ) );
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ca_SIP )
+							+ getTextResourceService().getText( locale, ERROR_XML_CANNOT_INITIALIZE_DROID ) );
 			return false;
 		} finally {
 			Util.switchOnConsole();
@@ -138,8 +140,8 @@ public class Validation3aFormatRecognitionModuleImpl extends ValidationModuleImp
 				}
 			}
 		}
-		String allowedformats = configMap.get( "allowedformats");
-		//Map<String, String> hPuids = getConfigurationService().getAllowedPuids();
+		String allowedformats = configMap.get( "allowedformats" );
+		// Map<String, String> hPuids = getConfigurationService().getAllowedPuids();
 		Map<String, Integer> counterPuid = new HashMap<String, Integer>();
 
 		Set<String> fileKeys = filesInSipFile.keySet();
@@ -154,7 +156,7 @@ public class Validation3aFormatRecognitionModuleImpl extends ValidationModuleImp
 				for ( int x = 0; x < ifile.getNumHits(); x++ ) {
 					FileFormatHit ffh = ifile.getHit( x );
 					FileFormat ff = ffh.getFileFormat();
-					String ffString=ff.getPUID()+"";
+					String ffString = ff.getPUID() + "";
 
 					if ( !allowedformats.contains( ffString ) ) {
 						valid = false;
@@ -197,12 +199,14 @@ public class Validation3aFormatRecognitionModuleImpl extends ValidationModuleImp
 		for ( Iterator<String> iterator = keysExt.iterator(); iterator.hasNext(); ) {
 			String keyExt = iterator.next();
 			Integer value = counterPuid.get( keyExt );
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_Ca_SIP )
-							+ getTextResourceService().getText( MESSAGE_XML_CA_FILES, keyExt, value.toString() ) );
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ca_SIP )
+							+ getTextResourceService().getText( locale, MESSAGE_XML_CA_FILES, keyExt,
+									value.toString() ) );
 			valid = false;
 		}
-		/* für die Geschwindigkeit von Droid ja nach SignatureFile zu messen kann dies verwendet werden:
+		/* für die Geschwindigkeit von Droid ja nach SignatureFile zu messen kann dies verwendet
+		 * werden:
 		 * 
 		 * java.util.Date nowEnd = new java.util.Date();
 		 * 

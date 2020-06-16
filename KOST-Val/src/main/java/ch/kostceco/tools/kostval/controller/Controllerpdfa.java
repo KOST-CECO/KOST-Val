@@ -20,6 +20,7 @@
 package ch.kostceco.tools.kostval.controller;
 
 import java.io.File;
+import java.util.Locale;
 import java.util.Map;
 
 import ch.kostceco.tools.kostval.exception.modulepdfa.ValidationApdfvalidationException;
@@ -32,7 +33,7 @@ import ch.kostceco.tools.kostval.validation.modulepdfa.ValidationAinitialisation
 
 /** kostval -->
  * 
- * Der Controller ruft die ben�tigten Module zur Validierung der PDFA-Datei in der ben�tigten
+ * Der Controller ruft die benoetigten Module zur Validierung der PDFA-Datei in der benoetigten
  * Reihenfolge auf.
  * 
  * Die Validierungs-Module werden mittels Spring-Dependency-Injection eingebunden. */
@@ -91,27 +92,27 @@ public class Controllerpdfa implements MessageConstants
 	}
 
 	public boolean executeMandatory( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap )
+			Map<String, String> configMap, Locale locale )
 	{
 		boolean valid = true;
 
 		// Initialisation PDF-Tools
 		try {
 			if ( this.getValidationAinitialisationModule().validate( valDatei, directoryOfLogfile,
-					configMap ) ) {
+					configMap, locale ) ) {
 				this.getValidationAinitialisationModule().getMessageService().print();
 			} else {
 				this.getValidationAinitialisationModule().getMessageService().print();
 				return false;
 			}
 		} catch ( ValidationApdfvalidationException e ) {
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-					+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationAinitialisationModule().getMessageService().print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-					+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
@@ -120,49 +121,49 @@ public class Controllerpdfa implements MessageConstants
 	}
 
 	public boolean executeOptional( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap )
+			Map<String, String> configMap, Locale locale )
 	{
 		boolean valid = true;
 
 		// Validation A - I
 		try {
 			if ( this.getValidationAvalidationAiModule().validate( valDatei, directoryOfLogfile,
-					configMap ) ) {
+					configMap, locale ) ) {
 				this.getValidationAvalidationAiModule().getMessageService().print();
 			} else {
 				this.getValidationAvalidationAiModule().getMessageService().print();
 				valid = false;
 			}
 		} catch ( ValidationApdfvalidationException e ) {
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-					+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationAvalidationAiModule().getMessageService().print();
 			valid = false;
 		} catch ( Exception e ) {
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_A_PDFA )
-					+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			valid = false;
 		}
 
 		// Validation J
-		try {
+/*		try {
 			if ( this.getValidationJimageValidationModule().validate( valDatei, directoryOfLogfile,
-					configMap ) ) {
+					configMap, locale ) ) {
 				this.getValidationJimageValidationModule().getMessageService().print();
 			} else {
 				this.getValidationJimageValidationModule().getMessageService().print();
 				valid = false;
 			}
 		} catch ( ValidationApdfvalidationException e ) {
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
-					+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationJimageValidationModule().getMessageService().print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_J_PDFA )
-					+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			valid = false;
-		}
+		}*/
 		return valid;
 	}
 

@@ -37,7 +37,7 @@
 		<pathelement location="lib/droid-report-5.0.3.jar" />
 		<pathelement location="lib/droid-report-interfaces-5.0.3.jar" />
 		<pathelement location="lib/droid-results-5.0.3.jar" />
-		<pathelement location="lib/VALA-6.3.1.5.RELEASE.jar" />
+		<pathelement location="lib/VALA-6.7.0.7.RELEASE.jar" />
 		<pathelement location="lib/badpeggy-2.0.jar" />
 		<pathelement location="lib/itextpdf-5.5.5.jar" />
 	</path>

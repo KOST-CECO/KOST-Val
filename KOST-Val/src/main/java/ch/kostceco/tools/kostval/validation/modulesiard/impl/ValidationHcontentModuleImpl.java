@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
@@ -56,8 +57,8 @@ import ch.kostceco.tools.kostval.validation.modulesiard.ValidationHcontentModule
  * @author Ec Christian Eugster
  * @author Rc Claire Roethlisberger, KOST-CECO */
 
-public class ValidationHcontentModuleImpl extends ValidationModuleImpl implements
-		ValidationHcontentModule
+public class ValidationHcontentModuleImpl extends ValidationModuleImpl
+		implements ValidationHcontentModule
 {
 	Boolean										version1	= false;
 	Boolean										version2	= false;
@@ -67,8 +68,8 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl implement
 	private XMLReader					reader;
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap )
-			throws ValidationHcontentException
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
+			Locale locale ) throws ValidationHcontentException
 	{
 		boolean showOnWork = true;
 		int onWork = 410;
@@ -99,10 +100,10 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl implement
 
 			/* read the document and for each schema and table entry verify existence in temporary
 			 * extracted structure */
-			version1 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" ).contains(
-					"http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
-			version2 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" ).contains(
-					"http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
+			version1 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" )
+					.contains( "http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
+			version2 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" )
+					.contains( "http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
 			Namespace ns = Namespace
 					.getNamespace( "http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
 			if ( version1 ) {
@@ -115,9 +116,9 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl implement
 					.getChildren( "schema", ns );
 			for ( Element schema : schemas ) {
 				Element schemaFolder = schema.getChild( "folder", ns );
-				File schemaPath = new File( new StringBuilder( pathToWorkDir ).append( File.separator )
-						.append( "content" ).append( File.separator ).append( schemaFolder.getText() )
-						.toString() );
+				File schemaPath = new File(
+						new StringBuilder( pathToWorkDir ).append( File.separator ).append( "content" )
+								.append( File.separator ).append( schemaFolder.getText() ).toString() );
 				if ( schemaPath.isDirectory() ) {
 					if ( schema.getChild( "tables", ns ) != null ) {
 
@@ -133,7 +134,7 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl implement
 								File tableXsd = new File( new StringBuilder( tablePath.getAbsolutePath() )
 										.append( File.separator ).append( tableFolder.getText() + ".xsd" ).toString() );
 								// hier erfolgt die Validerung
-								if ( verifyRowCount( tableXml, tableXsd ) ) {
+								if ( verifyRowCount( tableXml, tableXsd, locale ) ) {
 									// valid = validate1( tableXml, tableXsd ) && valid;
 
 									// cmd: resources\xmllint\xmllint --noout --stream --schema tableXsd tableXml
@@ -172,28 +173,32 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl implement
 										File fpathToxmllintDll3 = new File( pathToxmllintDll3 );
 										if ( !fpathToxmllintExe.exists() ) {
 											getMessageService().logError(
-													getTextResourceService().getText( MESSAGE_XML_MODUL_H_SIARD )
-															+ getTextResourceService().getText( ERROR_XML_XMLLINT1_MISSING ) );
+													getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
+															+ getTextResourceService().getText( locale,
+																	ERROR_XML_XMLLINT1_MISSING ) );
 											valid = false;
 										} else if ( !fpathToxmllintDll1.exists() ) {
 											getMessageService().logError(
-													getTextResourceService().getText( MESSAGE_XML_MODUL_H_SIARD )
-															+ getTextResourceService().getText( ERROR_XML_XMLLINT2_MISSING ) );
+													getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
+															+ getTextResourceService().getText( locale,
+																	ERROR_XML_XMLLINT2_MISSING ) );
 											valid = false;
 										} else if ( !fpathToxmllintDll2.exists() ) {
 											getMessageService().logError(
-													getTextResourceService().getText( MESSAGE_XML_MODUL_H_SIARD )
-															+ getTextResourceService().getText( ERROR_XML_XMLLINT3_MISSING ) );
+													getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
+															+ getTextResourceService().getText( locale,
+																	ERROR_XML_XMLLINT3_MISSING ) );
 											valid = false;
 										} else if ( !fpathToxmllintDll3.exists() ) {
 											getMessageService().logError(
-													getTextResourceService().getText( MESSAGE_XML_MODUL_H_SIARD )
-															+ getTextResourceService().getText( ERROR_XML_XMLLINT4_MISSING ) );
+													getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
+															+ getTextResourceService().getText( locale,
+																	ERROR_XML_XMLLINT4_MISSING ) );
 											valid = false;
 										} else {
-											StringBuffer command = new StringBuffer( "\"" + dirOfJarPath + File.separator
-													+ "resources" + File.separator + "xmllint" + File.separator
-													+ "xmllint\" " );
+											StringBuffer command = new StringBuffer(
+													"\"" + dirOfJarPath + File.separator + "resources" + File.separator
+															+ "xmllint" + File.separator + "xmllint\" " );
 											// command.append( "--noout --stream " );
 											command.append( "--noout --stream --nowarning" );
 											command.append( " --schema " );
@@ -235,10 +240,10 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl implement
 												if ( 2 < exitStatus ) {
 													// message.xml.h.invalid.xml = <Message>{0} ist invalid zu
 													// {1}</Message></Error>
-													getMessageService().logError(
-															getTextResourceService().getText( MESSAGE_XML_MODUL_H_SIARD )
-																	+ getTextResourceService().getText( MESSAGE_XML_H_INVALID_XML,
-																			tableXml.getName(), tableXsd.getName() ) );
+													getMessageService().logError( getTextResourceService().getText( locale,
+															MESSAGE_XML_MODUL_H_SIARD )
+															+ getTextResourceService().getText( locale, MESSAGE_XML_H_INVALID_XML,
+																	tableXml.getName(), tableXsd.getName() ) );
 													valid = false;
 
 													// Fehlermeldung aus outTableXml auslesen
@@ -262,18 +267,16 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl implement
 																	counter = counter + 1;
 																	// max 5 Meldungen pro Tabelle im Modul H
 																	if ( counter < 6 ) {
-																		getMessageService().logError(
-																				getTextResourceService()
-																						.getText( MESSAGE_XML_MODUL_H_SIARD )
-																						+ getTextResourceService().getText(
-																								MESSAGE_XML_H_INVALID_ERROR, linePrev ) );
+																		getMessageService().logError( getTextResourceService()
+																				.getText( locale, MESSAGE_XML_MODUL_H_SIARD )
+																				+ getTextResourceService()
+																						.getText( MESSAGE_XML_H_INVALID_ERROR, linePrev ) );
 																		lines.add( linePrev );
 																	} else if ( counter == 6 ) {
-																		getMessageService().logError(
-																				getTextResourceService()
-																						.getText( MESSAGE_XML_MODUL_H_SIARD )
-																						+ getTextResourceService().getText(
-																								MESSAGE_XML_H_INVALID_ERROR, " ERROR  . . ." ) );
+																		getMessageService().logError( getTextResourceService()
+																				.getText( locale, MESSAGE_XML_MODUL_H_SIARD )
+																				+ getTextResourceService().getText(
+																						MESSAGE_XML_H_INVALID_ERROR, " ERROR  . . ." ) );
 																		lines.add( linePrev );
 																	} else {
 																		// Tabellenauswertung abbrechen indem line=null
@@ -312,8 +315,8 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl implement
 
 											} catch ( Exception e ) {
 												getMessageService().logError(
-														getTextResourceService().getText( MESSAGE_XML_MODUL_H_SIARD )
-																+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+														getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
+																+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 																		e.getMessage() ) );
 												return false;
 											} finally {
@@ -381,21 +384,21 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl implement
 			fin = null;
 		} catch ( java.io.IOException ioe ) {
 			valid = false;
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_H_SIARD )
-							+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
+							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 									ioe.getMessage() + " (IOException)" ) );
 		} catch ( JDOMException e ) {
 			valid = false;
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_H_SIARD )
-							+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
+							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 									e.getMessage() + " (JDOMException)" ) );
 		} catch ( SAXException e ) {
 			valid = false;
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_H_SIARD )
-							+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
+							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 									e.getMessage() + " (SAXException)" ) );
 		}
 
@@ -411,16 +414,16 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl implement
 
 	/* Verify the number of rows in the table. If the xsd minOccurs = o and maxOccurs = unbounded the
 	 * validation of the numbers can't been executed. A Warning is given. */
-	private boolean verifyRowCount( File xmlFile, File schemaLocation ) throws SAXException,
-			IOException
+	private boolean verifyRowCount( File xmlFile, File schemaLocation, Locale locale )
+			throws SAXException, IOException
 	{
 		Range range = getRange( schemaLocation );
 		if ( range.min == 0 && range.max == UNBOUNDED ) {
 			/* die effektive Zahl in schemaLocation (Work) konnte im H nicht hereingeschrieben werden.
 			 * Eine Warnung wird herausgegeben */
-			getMessageService().logError(
-					getTextResourceService().getText( MESSAGE_XML_MODUL_H_SIARD )
-							+ getTextResourceService().getText( MESSAGE_XML_H_TABLE_NOT_VALIDATED1,
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
+							+ getTextResourceService().getText( locale, MESSAGE_XML_H_TABLE_NOT_VALIDATED1,
 									schemaLocation.getName() ) );
 			return true;
 		} else {
@@ -446,7 +449,7 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl implement
 
 	private class RangeHandler extends DefaultHandler
 	{
-		private Range	range	= new Range();
+		private Range range = new Range();
 
 		@Override
 		public void startElement( String uri, String localName, String qName, Attributes attributes )
@@ -485,6 +488,6 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl implement
 
 	private class BreakException extends SAXException
 	{
-		private static final long	serialVersionUID	= 1L;
+		private static final long serialVersionUID = 1L;
 	}
 }

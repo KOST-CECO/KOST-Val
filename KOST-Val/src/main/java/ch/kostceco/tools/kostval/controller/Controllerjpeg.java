@@ -20,6 +20,7 @@
 package ch.kostceco.tools.kostval.controller;
 
 import java.io.File;
+import java.util.Locale;
 import java.util.Map;
 
 import ch.kostceco.tools.kostval.exception.modulejpeg.ValidationAjpegvalidationException;
@@ -30,7 +31,7 @@ import ch.kostceco.tools.kostval.validation.modulejpeg.ValidationAvalidationJpeg
 
 /** kostval -->
  * 
- * Der Controller ruft die ben�tigten Module zur Validierung der JPEG-Datei in der ben�tigten
+ * Der Controller ruft die beoetigten Module zur Validierung der JPEG-Datei in der beoetigten
  * Reihenfolge auf.
  * 
  * Die Validierungs-Module werden mittels Spring-Dependency-Injection eingebunden. */
@@ -65,27 +66,27 @@ public class Controllerjpeg implements MessageConstants
 	}
 
 	public boolean executeMandatory( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap )
+			Map<String, String> configMap, Locale locale )
 	{
 		boolean valid = true;
 
 		// Validation A
 		try {
 			if ( this.getValidationAvalidationJpegModule().validate( valDatei, directoryOfLogfile,
-					configMap ) ) {
+					configMap, locale ) ) {
 				this.getValidationAvalidationJpegModule().getMessageService().print();
 			} else {
 				this.getValidationAvalidationJpegModule().getMessageService().print();
 				return false;
 			}
 		} catch ( ValidationAjpegvalidationException e ) {
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_A_JPEG )
-					+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JPEG )
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationAvalidationJpegModule().getMessageService().print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logError( getTextResourceService().getText( MESSAGE_XML_MODUL_A_JPEG )
-					+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JPEG )
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 		return valid;
