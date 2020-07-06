@@ -62,10 +62,8 @@ public class ValidationWwarningModuleImpl extends ValidationModuleImpl
 		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
 		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
 		 * ref="configurationService" /> */
-		if ( onWork.equals( "no" ) ) {
-			// keine Ausgabe
-		} else {
-			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
+		if ( onWork.equals( "yes" ) ) {
+			// Ausgabe Modul Ersichtlich das KOST-Val arbeitet
 			System.out.print( "W    " );
 			System.out.print( "\b\b\b\b\b" );
 		}

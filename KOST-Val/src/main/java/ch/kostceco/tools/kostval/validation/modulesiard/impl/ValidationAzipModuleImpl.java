@@ -52,14 +52,8 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 	{
 		// Informationen zur Darstellung "onWork" holen
 		String onWork = configMap.get( "ShowProgressOnWork" );
-		if ( onWork.equals( "no" ) ) {
-			// keine Ausgabe
-		} else if ( onWork.startsWith( "Configuration-Error:" ) ) {
-			getMessageService().logError(
-					getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD ) + onWork );
-			return false;
-		} else {
-			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
+		if ( onWork.equals( "yes" ) ) {
+			// Ausgabe Modul Ersichtlich das KOST-Val arbeitet
 			System.out.print( "A    " );
 			System.out.print( "\b\b\b\b\b" );
 		}
@@ -115,11 +109,13 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 				read.close();
 				// set to null
 				read = null;
+				fr.close();
 				return false;
 			}
 			read.close();
 			// set to null
 			read = null;
+			fr.close();
 		} catch ( Exception e ) {
 			getMessageService()
 					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )
@@ -218,6 +214,7 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 					read.close();
 					// set to null
 					read = null;
+					fr89.close();
 					return false;
 				}
 				// Versuche das ZIP file zu �ffnen
@@ -243,6 +240,7 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 							read.close();
 							// set to null
 							read = null;
+							fr89.close();
 							return false;
 						}
 					}
@@ -258,6 +256,7 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 					read.close();
 					// set to null
 					read = null;
+					fr89.close();
 					return false;
 				}
 
@@ -268,11 +267,13 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 				read.close();
 				// set to null
 				read = null;
+				fr89.close();
 				return false;
 			}
 			read.close();
 			// set to null
 			read = null;
+			fr89.close();
 		} catch ( Exception e ) {
 			getMessageService()
 					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )

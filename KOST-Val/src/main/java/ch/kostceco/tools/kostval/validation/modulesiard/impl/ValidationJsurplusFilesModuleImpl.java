@@ -73,18 +73,16 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 		tablesInSiard.clear();
 		tablesToRemove.clear();
 		filesToRemove.clear();
-		boolean showOnWork = true;
+		boolean showOnWork = false;
 		int onWork = 410;
 		// Informationen zur Darstellung "onWork" holen
 		String onWorkConfig = configMap.get( "ShowProgressOnWork" );
 		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
 		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
 		 * ref="configurationService" /> */
-		if ( onWorkConfig.equals( "no" ) ) {
-			// keine Ausgabe
-			showOnWork = false;
-		} else {
-			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
+		if ( onWorkConfig.equals( "yes" ) ) {
+			// Ausgabe Modul Ersichtlich das KOST-Val arbeitet
+			showOnWork = true;
 			System.out.print( "J    " );
 			System.out.print( "\b\b\b\b\b" );
 		}
@@ -141,11 +139,9 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 			String path = new java.io.File(
 					KOSTVal.class.getProtectionDomain().getCodeSource().getLocation().getPath() )
 							.getAbsolutePath();
-			path = path.substring( 0, path.lastIndexOf( "." ) );
-			path = path + System.getProperty( "java.class.path" );
 			String locationOfJarPath = path;
 			String dirOfJarPath = locationOfJarPath;
-			if ( locationOfJarPath.endsWith( ".jar" ) ) {
+			if ( locationOfJarPath.endsWith( ".jar" ) || locationOfJarPath.endsWith( ".exe" ) ) {
 				File file = new File( locationOfJarPath );
 				dirOfJarPath = file.getParent();
 			}

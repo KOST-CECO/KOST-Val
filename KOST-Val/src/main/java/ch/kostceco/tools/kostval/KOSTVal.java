@@ -20,8 +20,10 @@
 package ch.kostceco.tools.kostval;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.Locale;
 import java.util.Map;
 
@@ -30,7 +32,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.w3c.dom.Element;
 
@@ -79,23 +81,30 @@ public class KOSTVal implements MessageConstants
 		this.configurationService = configurationService;
 	}
 
-	/** Die Eingabe besteht aus 2 oder 3 Parameter: [0] Validierungstyp [1] Pfad zur Val-File [2]
-	 * option: Verbose
+	/** Die Eingabe besteht aus 4 Parameter:
+	 * 
+	 * args[0] Validierungstyp "--sip" / "--format" (TODO "--hotfolder")
+	 * 
+	 * args[1] Pfad zur Val-File
+	 * 
+	 * args[2] Sprache "--de" / "--fr" / "--en"
+	 * 
+	 * args[3] Logtyp "--xml" / "--min" (TODO nur valid oder invalid) / "--max" (= xml+verbose)
 	 * 
 	 * @param args
 	 * @throws IOException */
 
-	@SuppressWarnings("resource")
+	//@SuppressWarnings("resource")
 	public static boolean main( String[] args ) throws IOException
 	{
 		boolean mainBoolean = true;
 		// System.out.println( new Timestamp( System.currentTimeMillis() ) + " 107 Start " );
-		ApplicationContext context = new ClassPathXmlApplicationContext(
+		ConfigurableApplicationContext context = new ClassPathXmlApplicationContext(
 				"classpath:config/applicationContext.xml" );
 		// System.out.println( new Timestamp( System.currentTimeMillis() ) +
 		// " 110 Ende ApplicationContext " );
 
-		System.out.println( "KOST-Val" );
+		// System.out.println( "KOST-Val" );
 
 		// Zeitstempel Start
 		java.util.Date nowStart = new java.util.Date();
@@ -151,7 +160,8 @@ public class KOSTVal implements MessageConstants
 		}
 
 		// Konfigurations Map erstellen (Zeitgewinn)
-		Map<String, String> configMap = kostval.getConfigurationService().configMap( locale );
+		String logtype = args[2];
+		Map<String, String> configMap = kostval.getConfigurationService().configMap( locale, logtype );
 
 		Controllervalinit controller0 = (Controllervalinit) context.getBean( "controllervalinit" );
 		boolean valInit = controller0.valInit( args, configMap );
@@ -162,12 +172,9 @@ public class KOSTVal implements MessageConstants
 			// Ueberpruefung des Parameters (Log-Verzeichnis)
 		} else {
 			// Fehler: es wird abgebrochen
-			if ( args[3].equalsIgnoreCase( "--gui" ) || args[3].equalsIgnoreCase( "--hot" ) ) {
-				mainBoolean = false;
-				return mainBoolean;
-			} else {
-				System.exit( 1 );
-			}
+			context.close();
+			mainBoolean = false;
+			return mainBoolean;
 		}
 		String pathToLogfile = configMap.get( "PathToLogfile" );
 		File directoryOfLogfile = new File( pathToLogfile );
@@ -180,7 +187,7 @@ public class KOSTVal implements MessageConstants
 			locale = new Locale( "en" );
 		}
 
-		File valDatei = new File( args[4] );
+		File valDatei = new File( args[1] );
 		File logDatei = null;
 		logDatei = valDatei;
 
@@ -191,6 +198,35 @@ public class KOSTVal implements MessageConstants
 		File logFile = new File( logFileName );
 		// Ab hier kann ins log geschrieben werden...
 
+		// falls das File bereits existiert, z.B. von einem vorhergehenden Durchlauf, loeschen wir es
+		if ( logFile.exists() ) {
+			logFile.delete();
+		}
+		if ( logFile.exists() ) {
+			// file konnte nicht geloescht werden. Inhalt leeren
+			try {
+				FileWriter logWriter;
+				logWriter = new FileWriter( logFile, false );
+				// true fuegt inhalt dazu
+				// false ueberschreibt den Inhalt
+				logWriter.write( "" );
+				logWriter.close();
+			} catch ( IOException e ) {
+				e.printStackTrace();
+			}
+			logFile.delete();
+		}
+		// falls das File bereits existiert, z.B. von einem vorhergehenden Durchlauf, loeschen wir es
+		if ( logFile.exists() ) {
+			logFile.delete();
+		}
+		if ( logFile.exists() ) {
+			// file konnte nicht geloescht werden. Inhalt leeren
+			PrintWriter writer = new PrintWriter( logFile );
+			writer.print( "" );
+			writer.close();
+		}
+
 		Controllervalinitlog controller0log = (Controllervalinitlog) context
 				.getBean( "controllervalinitlog" );
 		boolean valInitlog = controller0log.valInitlog( args, configMap, directoryOfLogfile, locale,
@@ -198,21 +234,13 @@ public class KOSTVal implements MessageConstants
 		if ( valInitlog ) {
 			// ggf alte SIP-Validierung-Versions-Notiz loeschen
 			// ermitteln welche Formate validiert werden koennen respektive eingeschaltet sind
-			// Informationen zum Arbeitsverzeichnis holen
-			// bestehendes Workverzeichnis Abbruch wenn nicht leer, da am Schluss das Workverzeichnis
 			// Im Pfad keine Sonderzeichen xml-Validierung SIP 1d und SIARD C stuerzen ab
-			// die Anwendung muss mindestens unter Java 8 laufen
-			// Im workverzeichnis besteht kein Schreibrecht
-			// existiert configuration\jhove.conf
 			// Im Pfad keine Sonderzeichen xml-Validierung SIP 1d und SIARD C stuerzen ab
 		} else {
 			// Fehler: es wird abgebrochen
-			if ( args[3].equalsIgnoreCase( "--gui" ) || args[3].equalsIgnoreCase( "--hot" ) ) {
-				mainBoolean = false;
-				return mainBoolean;
-			} else {
-				System.exit( 1 );
-			}
+			context.close();
+			mainBoolean = false;
+			return mainBoolean;
 		}
 
 		// Informationen zum Arbeitsverzeichnis holen
@@ -222,7 +250,7 @@ public class KOSTVal implements MessageConstants
 		/* Ueberprüfung des optionalen Parameters (4 --max = xml + verbose --> im Verbose-mode werden
 		 * die originalen Logs nicht geloescht (Jhove & Co.) */
 		boolean verbose = false;
-		if ( (args[1].equals( "--max" )) ) {
+		if ( (args[3].equals( "--max" )) ) {
 			verbose = true;
 		}
 
@@ -267,24 +295,16 @@ public class KOSTVal implements MessageConstants
 					}
 
 					// Validierte Datei valide
-					if ( args[3].equalsIgnoreCase( "--gui" ) || args[3].equalsIgnoreCase( "--hot" ) ) {
-						mainBoolean = true;
-						return mainBoolean;
-					} else {
-						System.exit( 0 );
-					}
+					mainBoolean = true;
+					return mainBoolean;
 				} else {
 					// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
 					if ( tmpDir.exists() ) {
 						Util.deleteDir( tmpDir );
 					}
 					// Fehler in Validierte Datei --> invalide
-					if ( args[3].equalsIgnoreCase( "--gui" ) || args[3].equalsIgnoreCase( "--hot" ) ) {
-						mainBoolean = false;
-						return mainBoolean;
-					} else {
-						System.exit( 2 );
-					}
+					mainBoolean = false;
+					return mainBoolean;
 
 				}
 			} else {
@@ -311,24 +331,17 @@ public class KOSTVal implements MessageConstants
 					}
 
 					// Validierte Dateien valide
-					if ( args[3].equalsIgnoreCase( "--gui" ) || args[3].equalsIgnoreCase( "--hot" ) ) {
-						mainBoolean = true;
-						return mainBoolean;
-					} else {
-						System.exit( 0 );
-					}
+					mainBoolean = true;
+					return mainBoolean;
+
 				} else {
 					// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
 					if ( tmpDir.exists() ) {
 						Util.deleteDir( tmpDir );
 					}
 					// Fehler in Validierte Dateien --> invalide
-					if ( args[3].equalsIgnoreCase( "--gui" ) || args[3].equalsIgnoreCase( "--hot" ) ) {
-						mainBoolean = false;
-						return mainBoolean;
-					} else {
-						System.exit(2 );
-					}
+					mainBoolean = false;
+					return mainBoolean;
 				}
 			}
 
@@ -355,24 +368,18 @@ public class KOSTVal implements MessageConstants
 				}
 
 				// Validierte Dateien valide
-				if ( args[3].equalsIgnoreCase( "--gui" ) || args[3].equalsIgnoreCase( "--hot" ) ) {
-					mainBoolean = true;
-					return mainBoolean;
-				} else {
-					System.exit( 0 );
-				}
+				context.close();
+				mainBoolean = true;
+				return mainBoolean;
 			} else {
 				// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
 				if ( tmpDir.exists() ) {
 					Util.deleteDir( tmpDir );
 				}
 				// Fehler in Validierte Dateien --> invalide
-				if ( args[3].equalsIgnoreCase( "--gui" ) || args[3].equalsIgnoreCase( "--hot" ) ) {
-					mainBoolean = false;
-					return mainBoolean;
-				} else {
-					System.exit( 2 );
-				}
+				context.close();
+				mainBoolean = false;
+				return mainBoolean;
 			}
 
 		} else {
@@ -381,6 +388,7 @@ public class KOSTVal implements MessageConstants
 			 * 
 			 * in Controllerinit ueberprueft */
 		}
+		context.close();
 		return mainBoolean;
 	}
 

@@ -36,6 +36,7 @@ public class GuiApplication extends Application
 			root = FXMLLoader
 					.load( getClass().getResource( "GuiView.fxml" ) );
 			Scene scene = new Scene( root );
+			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			stage.setTitle( "KOST-Val" );
 			Image kostvalIcon = new Image( "file:"+dirOfJarPath + File.separator + "doc" + File.separator+"valicon.png" );
 			// Image kostvalIcon = new Image( "file:valicon.png" );

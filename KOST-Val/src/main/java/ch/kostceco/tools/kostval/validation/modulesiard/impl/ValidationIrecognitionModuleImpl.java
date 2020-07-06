@@ -53,10 +53,8 @@ public class ValidationIrecognitionModuleImpl extends ValidationModuleImpl
 		pathToWorkDir = pathToWorkDir + File.separator + "SIARD";
 		File metadataXml = new File( new StringBuilder( pathToWorkDir ).append( File.separator )
 				.append( "header" ).append( File.separator ).append( "metadata.xml" ).toString() );
-		if ( onWork.equals( "no" ) ) {
-			// keine Ausgabe
-		} else {
-			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
+		if ( onWork.equals( "yes" ) ) {
+			// Ausgabe Modul Ersichtlich das KOST-Val arbeitet
 			System.out.print( "I    " );
 			System.out.print( "\b\b\b\b\b" );
 		}

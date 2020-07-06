@@ -67,7 +67,7 @@ public class ValidationHsizeValidationModuleImpl extends ValidationModuleImpl
 
 		Integer exiftoolio = 0;
 
-		if ( size.contains( "1" ) ) {
+		if ( size.equalsIgnoreCase(  "yes" ) ) {
 			// Valider Status (Giga-Tiffs sind erlaubt)
 		} else {
 			// Giga-Tiffs sind nicht erlaubt -> analysieren

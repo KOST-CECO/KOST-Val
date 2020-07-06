@@ -216,7 +216,15 @@
 		<property name="configurationService" ref="configurationService" />
 	</bean>
 
+	<bean id="cmdkostval" class="ch.kostceco.tools.kostval.CmdKOSTVal">
+		<property name="textResourceService" ref="textResourceService" />
+	</bean>
+
 	<bean id="logconfigurator" class="ch.kostceco.tools.kostval.logging.LogConfigurator">
+		<property name="textResourceService" ref="textResourceService" />
+	</bean>
+
+	<bean id="controllerInit" class="ch.kostceco.tools.kostval.controller.ControllerInit">
 		<property name="textResourceService" ref="textResourceService" />
 	</bean>
 

@@ -73,7 +73,6 @@ public interface MessageConstants
 	String	MESSAGE_XML_VALERGEBNIS_VALID									= "message.xml.valergebnis.valid";
 	String	MESSAGE_XML_VALERGEBNIS_INVALID								= "message.xml.valergebnis.invalid";
 	String	MESSAGE_XML_VALERGEBNIS_CLOSE									= "message.xml.valergebnis.close";
-	String	MESSAGE_XML_LOG																= "message.xml.log";
 	String	MESSAGE_FORMATVALIDATION_DONE									= "message.formatvalidation.done";
 	String	MESSAGE_SIPVALIDATION_DONE										= "message.sipvalidation.done";
 

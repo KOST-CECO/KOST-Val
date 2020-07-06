@@ -77,11 +77,9 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 		String path = new java.io.File(
 				KOSTVal.class.getProtectionDomain().getCodeSource().getLocation().getPath() )
 						.getAbsolutePath();
-		path = path.substring( 0, path.lastIndexOf( "." ) );
-		path = path + System.getProperty( "java.class.path" );
 		String locationOfJarPath = path;
 		String dirOfJarPath = locationOfJarPath;
-		if ( locationOfJarPath.endsWith( ".jar" ) ) {
+		if ( locationOfJarPath.endsWith( ".jar" ) || locationOfJarPath.endsWith( ".exe" ) ) {
 			File file = new File( locationOfJarPath );
 			dirOfJarPath = file.getParent();
 		}

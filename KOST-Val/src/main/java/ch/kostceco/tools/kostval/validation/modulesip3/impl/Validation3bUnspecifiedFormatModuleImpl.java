@@ -43,18 +43,16 @@ public class Validation3bUnspecifiedFormatModuleImpl extends ValidationModuleImp
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
 			Locale locale ) throws Validation3bUnspecifiedFormatException
 	{
-		boolean showOnWork = true;
+		boolean showOnWork = false;
 		int onWork = 410;
 		// Informationen zur Darstellung "onWork" holen
 		String onWorkConfig = configMap.get( "ShowProgressOnWork" );
 		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
 		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
 		 * ref="configurationService" /> */
-		if ( onWorkConfig.equals( "no" ) ) {
-			// keine Ausgabe
-			showOnWork = false;
-		} else {
+		if ( onWorkConfig.equals( "yes" ) ) {
 			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
+			showOnWork = true;
 			System.out.print( "3B   " );
 			System.out.print( "\b\b\b\b\b" );
 		}

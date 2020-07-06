@@ -27,6 +27,6 @@ import java.util.Map;
  * @author Rc Claire Roethlisberger, KOST-CECO */
 public interface ConfigurationService extends Service
 {
-	Map<String, String> configMap(Locale locale);
+	Map<String, String> configMap( Locale locale, String logtype );
 
 }

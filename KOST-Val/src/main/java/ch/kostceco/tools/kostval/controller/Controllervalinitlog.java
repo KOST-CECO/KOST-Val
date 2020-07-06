@@ -71,13 +71,7 @@ public class Controllervalinitlog implements MessageConstants
 		}
 
 		// Informationen holen, welche Formate validiert werden sollen
-		String pdfaValidationPdftools = configMap.get( "pdftools" );
-		String pdfaValidationCallas = configMap.get( "callas" );
-		String pdfaValidation = "no";
-		if ( pdfaValidationPdftools.equalsIgnoreCase( "yes" )
-				|| pdfaValidationCallas.equalsIgnoreCase( "yes" ) ) {
-			pdfaValidation = "yes";
-		}
+		String pdfaValidation = configMap.get( "pdfavalidation" );
 		String siardValidation = configMap.get( "siardValidation" );
 		String tiffValidation = configMap.get( "tiffValidation" );
 		String jp2Validation = configMap.get( "jp2Validation" );
@@ -164,25 +158,6 @@ public class Controllervalinitlog implements MessageConstants
 
 		File tmpDir = new File( pathToWorkDir );
 
-		/* bestehendes Workverzeichnis Abbruch wenn nicht leer, da am Schluss das Workverzeichnis
-		 * geloescht wird und entsprechend bestehende Dateien geloescht werden koennen */
-		if ( tmpDir.exists() ) {
-			if ( tmpDir.isDirectory() ) {
-				// Get list of file in the directory. When its length is not zero the folder is not empty.
-				String[] files = tmpDir.list();
-				if ( files.length > 0 ) {
-					LOGGER.logError(
-							getTextResourceService().getText( locale, ERROR_IOE, getTextResourceService()
-									.getText( locale, ERROR_WORKDIRECTORY_EXISTS, pathToWorkDir ) ) );
-					System.out.println( getTextResourceService().getText( locale, ERROR_WORKDIRECTORY_EXISTS,
-							pathToWorkDir ) );
-					// logFile bereinigung (& End und ggf 3c)
-					Util.valEnd3cAmp( "", logFile );
-					System.exit( 1 );
-				}
-			}
-		}
-
 		// Im Pfad keine Sonderzeichen xml-Validierung SIP 1d und SIARD C stuerzen ab
 
 		String patternStr = "[^!#\\$%\\(\\)\\+,\\-_\\.=@\\[\\]\\{\\}\\~:\\\\a-zA-Z0-9 ]";
@@ -228,45 +203,6 @@ public class Controllervalinitlog implements MessageConstants
 				Util.valEnd3cAmp( "", logFile );
 				System.exit( 1 );
 			}
-		}
-
-		// die Anwendung muss mindestens unter Java 8 laufen
-		String javaRuntimeVersion = System.getProperty( "java.vm.version" );
-		if ( javaRuntimeVersion.compareTo( "1.8.0" ) < 0 ) {
-			LOGGER.logError( getTextResourceService().getText( locale, ERROR_IOE,
-					getTextResourceService().getText( locale, ERROR_WRONG_JRE ) ) );
-			System.out.println( getTextResourceService().getText( locale, ERROR_WRONG_JRE ) );
-			// logFile bereinigung (& End und ggf 3c)
-			Util.valEnd3cAmp( "", logFile );
-			System.exit( 1 );
-		}
-
-		// bestehendes Workverzeichnis wieder anlegen
-		if ( !tmpDir.exists() ) {
-			tmpDir.mkdir();
-		}
-
-		// Im workverzeichnis besteht kein Schreibrecht
-		if ( !tmpDir.canWrite() ) {
-			LOGGER.logError( getTextResourceService().getText( locale, ERROR_IOE,
-					getTextResourceService().getText( locale, ERROR_WORKDIRECTORY_NOTWRITABLE, tmpDir ) ) );
-			System.out.println(
-					getTextResourceService().getText( locale, ERROR_WORKDIRECTORY_NOTWRITABLE, tmpDir ) );
-			// logFile bereinigung (& End und ggf 3c)
-			Util.valEnd3cAmp( "", logFile );
-			System.exit( 1 );
-		}
-
-		/* Initialisierung TIFF-Modul B (JHove-Validierung) existiert configuration\jhove.conf */
-		File fJhoveConf = new File(
-				dirOfJarPath + File.separator + "configuration" + File.separator + "jhove.conf" );
-		if ( !fJhoveConf.exists() ) {
-			LOGGER.logError( getTextResourceService().getText( locale, ERROR_IOE,
-					getTextResourceService().getText( locale, ERROR_JHOVECONF_MISSING ) ) );
-			System.out.println( getTextResourceService().getText( locale, ERROR_JHOVECONF_MISSING ) );
-			// logFile bereinigung (& End und ggf 3c)
-			Util.valEnd3cAmp( "", logFile );
-			System.exit( 1 );
 		}
 
 		// Im Pfad keine Sonderzeichen xml-Validierung SIP 1d und SIARD C stuerzen ab

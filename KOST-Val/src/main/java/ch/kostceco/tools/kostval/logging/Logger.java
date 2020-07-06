@@ -23,7 +23,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.NDC;
 
-/** Logging Klasse. S�mtliche Log Aufrufe werden an Jakarta Commons Logging delegiert, welches diese
+/** Logging Klasse. Saemtliche Log Aufrufe werden an Jakarta Commons Logging delegiert, welches diese
  * wiederum an Log4j delegiert.
  * 
  * @author Rc Claire Roethlisberger, KOST-CECO */
@@ -34,7 +34,7 @@ public class Logger
 	private Log	log;
 
 	/** Instanzierung eines benannten Loggers. Der Name des Loggers entspricht dem Namen der
-	 * �bergebenen Klasse. Sinn: Beim Einsatz der Apache Log4j API k�nnen �ber das Konfig File Package
+	 * uebergebenen Klasse. Sinn: Beim Einsatz der Apache Log4j API koennen ueber das Konfig File Package
 	 * oder Klassenfilter gesetzt werden.
 	 * 
 	 * @param clazz
@@ -42,11 +42,11 @@ public class Logger
 	public Logger( Class<?> clazz )
 	{
 
-		// Log Instanz �ber Factory holen.
+		// Log Instanz ueber Factory holen.
 		this.log = LogFactory.getLog( clazz );
 	}
 
-	/** Logt einen Fehler der die Stabilit�t des Programms beeinflusst.
+	/** Logt einen Fehler der die Stabilitaet des Programms beeinflusst.
 	 * 
 	 * @param message
 	 *          Fehlermeldung. */
@@ -56,7 +56,7 @@ public class Logger
 
 	}
 
-	/** Logt einen Fehler der die Stabilit�t des Programms beeinflusst.
+	/** Logt einen Fehler der die Stabilitaet des Programms beeinflusst.
 	 * 
 	 * @param message
 	 *          Fehlermeldung.
@@ -87,7 +87,7 @@ public class Logger
 		this.log.error( message, t );
 	}
 
-	/** Logt einen Fehler, der behoben oder �bergangen werden konnte.
+	/** Logt einen Fehler, der behoben oder uebergangen werden konnte.
 	 * 
 	 * @param message
 	 *          Meldung. */
@@ -96,7 +96,7 @@ public class Logger
 		this.log.warn( message );
 	}
 
-	/** Logt einen Fehler, der behoben oder �bergangen werden konnte.
+	/** Logt einen Fehler, der behoben oder uebergangen werden konnte.
 	 * 
 	 * @param message
 	 *          Meldung.

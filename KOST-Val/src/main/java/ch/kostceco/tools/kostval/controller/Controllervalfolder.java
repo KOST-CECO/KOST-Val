@@ -88,13 +88,7 @@ public class Controllervalfolder implements MessageConstants
 				+ valDatei.getName() + ".kost-val.log.xml" );
 
 		// Informationen holen, welche Formate validiert werden sollen
-		String pdfaValidationPdftools = configMap.get( "pdftools" );
-		String pdfaValidationCallas = configMap.get( "callas" );
-		String pdfaValidation = "no";
-		if ( pdfaValidationPdftools.equalsIgnoreCase( "yes" )
-				|| pdfaValidationCallas.equalsIgnoreCase( "yes" ) ) {
-			pdfaValidation = "yes";
-		}
+		String pdfaValidation = configMap.get( "pdfavalidation" );
 		String siardValidation = configMap.get( "siardValidation" );
 		String tiffValidation = configMap.get( "tiffValidation" );
 		String jp2Validation = configMap.get( "jp2Validation" );
@@ -162,13 +156,7 @@ public class Controllervalfolder implements MessageConstants
 			Set<String> fileMapKeys = fileMap.keySet();
 			for ( Iterator<String> iterator = fileMapKeys.iterator(); iterator.hasNext(); ) {
 				// configmap neu auslesen im bereich pdf, da veraenderungen moeglich sind
-				pdfaValidationPdftools = configMap.get( "pdftools" );
-				pdfaValidationCallas = configMap.get( "callas" );
-				pdfaValidation = "no";
-				if ( pdfaValidationPdftools.equalsIgnoreCase( "yes" )
-						|| pdfaValidationCallas.equalsIgnoreCase( "yes" ) ) {
-					pdfaValidation = "yes";
-				}
+				pdfaValidation = configMap.get( "pdfavalidation" );
 
 				String entryName = iterator.next();
 				File newFile = fileMap.get( entryName );
@@ -367,9 +355,6 @@ public class Controllervalfolder implements MessageConstants
 			LOGGER.logError( getTextResourceService().getText( locale, ERROR_XML_OUTOFMEMORYMAIN ) );
 			System.out.println( "Exception: " + "OutOfMemoryError" );
 		}
-
-		System.out.print( getTextResourceService().getText( locale, MESSAGE_XML_LOG ) );
-		System.out.print( "\r" );
 
 		if ( countNio.equals( count ) ) {
 			// keine Dateien Validiert

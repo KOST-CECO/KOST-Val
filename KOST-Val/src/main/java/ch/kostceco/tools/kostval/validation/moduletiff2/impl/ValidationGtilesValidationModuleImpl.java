@@ -71,7 +71,7 @@ public class ValidationGtilesValidationModuleImpl extends ValidationModuleImpl
 		String oldErrorLine4 = "";
 		String oldErrorLine5 = "";
 
-		if ( tiles.contains( "1" ) ) {
+		if ( tiles.equalsIgnoreCase(  "yes" ) ) {
 			// Valider Status (Kacheln sind erlaubt)
 		} else {
 			try {

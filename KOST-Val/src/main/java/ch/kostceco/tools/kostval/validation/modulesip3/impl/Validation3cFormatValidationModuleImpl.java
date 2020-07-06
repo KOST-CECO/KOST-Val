@@ -43,9 +43,7 @@ public class Validation3cFormatValidationModuleImpl extends ValidationModuleImpl
 		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
 		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
 		 * ref="configurationService" /> */
-		if ( onWork.equals( "no" ) ) {
-			// keine Ausgabe
-		} else {
+		if ( onWork.equals( "yes" ) ) {
 			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
 			System.out.print( "3C   " );
 			System.out.print( "\b\b\b\b\b" );

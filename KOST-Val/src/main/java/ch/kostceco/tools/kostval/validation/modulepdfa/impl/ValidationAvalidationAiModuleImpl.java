@@ -107,11 +107,16 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 		PdfValidatorAPI docPdf = null;
 
 		// Version & Level herausfinden
-		String pdfa1 = configMap.get( "pdfa1" );
-		String pdfa2 = configMap.get( "pdfa2" );
+		String pdfa1a = configMap.get( "pdfa1a" );
+		String pdfa1b = configMap.get( "pdfa1b" );
+		String pdfa2a = configMap.get( "pdfa2a" );
+		String pdfa2b = configMap.get( "pdfa2b" );
+		String pdfa2u = configMap.get( "pdfa2u" );
 
 		Integer pdfaVer1 = 0;
 		Integer pdfaVer2 = 0;
+
+		String pdfaCl = "B";
 
 		String pathToLogDir = configMap.get( "PathToLogfile" );
 		String pathToWorkDir = pathToLogDir;
@@ -133,21 +138,24 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 		 * gibt mehre Moeglichkeiten das PDF in der gewuenschten Version zu testen - Unterscheidung
 		 * anhand DROID --> braucht viel Zeit auch mit KaD_Signaturefile - Unterscheidung anhand
 		 * PDF/A-Eintrag wie Droid aber selber programmiert --> ist viel schneller */
-		if ( pdfa2.equals( "2A" ) || pdfa2.equals( "2B" ) || pdfa2.equals( "2U" ) ) {
+		if ( pdfa2a.equals( "2A" ) || pdfa2b.equals( "2B" ) || pdfa2u.equals( "2U" ) ) {
 			// gueltiger Konfigurationseintrag und V2 erlaubt
 			pdfaVer2 = 2;
 		} else {
 			// v2 nicht erlaubt oder falscher eintrag
-			pdfa2 = "no";
+			pdfa2a = "no";
+			pdfa2b = "no";
+			pdfa2u = "no";
 		}
-		if ( pdfa1.equals( "1A" ) || pdfa1.equals( "1B" ) ) {
+		if ( pdfa1a.equals( "1A" ) || pdfa1b.equals( "1B" ) ) {
 			// gueltiger Konfigurationseintrag und V1 erlaubt
 			pdfaVer1 = 1;
 		} else {
 			// v1 nicht erlaubt oder falscher eintrag
-			pdfa1 = "no";
+			pdfa1a = "no";
+			pdfa1b = "no";
 		}
-		if ( pdfa1 == "no" && pdfa2 == "no" ) {
+		if ( pdfaVer1 == 0 && pdfaVer2 == 0 ) {
 			// keine Validierung moeglich. keine PDFA-Versionen konfiguriert
 			getMessageService()
 					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
@@ -158,68 +166,152 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 
 		String level = "no";
 		// Richtiges Level definieren
-		// TODO: <pdfaid:conformance>A< evtl mit beruecksichtigen
-		if ( pdfaVer1 != 1 ) {
-			// Level 1 nicht erlaubt --> Level 2
-			level = pdfa2;
-		} else if ( pdfaVer2 != 2 ) {
-			// Level 2 nicht erlaubt --> Level 1
-			level = pdfa1;
-		} else {
-			try {
-				// Beide sind moeglich --> Level je nach File auswaehlen
-				pdfaVer1 = 0;
-				pdfaVer2 = 0;
-				BufferedReader in = new BufferedReader( new FileReader( valDatei ) );
-				String line;
-				while ( (line = in.readLine()) != null ) {
-					// haeufige Partangaben: pdfaid:part>1< pdfaid:part='1' pdfaid:part="1"
-					if ( line.contains( "pdfaid:part" ) ) {
-						// pdfaid:part
-						if ( line.contains( "pdfaid:part>1<" ) ) {
-							level = pdfa1;
-							pdfaVer1 = 1;
-						} else if ( line.contains( "pdfaid:part='1'" ) ) {
-							level = pdfa1;
-							pdfaVer1 = 1;
-						} else if ( line.contains( "pdfaid:part=\"1\"" ) ) {
-							level = pdfa1;
-							pdfaVer1 = 1;
-						} else if ( line.contains( "pdfaid:part>2<" ) ) {
-							level = pdfa2;
-							pdfaVer2 = 2;
-						} else if ( line.contains( "pdfaid:part='2'" ) ) {
-							level = pdfa2;
-							pdfaVer2 = 2;
-						} else if ( line.contains( "pdfaid:part=\"2\"" ) ) {
-							level = pdfa2;
-							pdfaVer2 = 2;
-						} else if ( line.contains( "pdfaid:part" ) && line.contains( "1" ) ) {
-							// PDFA-Version = 1
-							level = pdfa1;
-							pdfaVer1 = 1;
-						} else if ( line.contains( "pdfaid:part" ) && line.contains( "2" ) ) {
-							// PDFA-Version = 2
-							level = pdfa2;
-							pdfaVer2 = 2;
-						}
-					}
-					if ( pdfaVer1 == 0 && pdfaVer2 == 0 ) {
-						// der Part wurde nicht gefunden --> Level 2
-						level = pdfa2;
+		try {
+			// Level je nach File auswaehlen
+			int pdfaVer = 0;
+			BufferedReader in = new BufferedReader( new FileReader( valDatei ) );
+			String line;
+			while ( (line = in.readLine()) != null ) {
+				// haeufige Partangaben: pdfaid:part>1< pdfaid:part='1' pdfaid:part="1"
+
+				// <pdfaid:part>2</pdfaid:part>
+				// <pdfaid:conformance>U</pdfaid:conformance>
+
+				if ( line.contains( "pdfaid:part" ) ) {
+					// pdfaid:part
+					if ( line.contains( "pdfaid:part>1<" ) || line.contains( "pdfaid:part='1'" )
+							|| line.contains( "pdfaid:part=\"1\"" ) ) {
+						pdfaVer = 1;
+					} else if ( line.contains( "pdfaid:part>2<" ) || line.contains( "pdfaid:part='2'" )
+							|| line.contains( "pdfaid:part=\"2\"" ) ) {
+						pdfaVer = 2;
+					} else if ( line.contains( "pdfaid:part" ) && line.contains( "1" ) ) {
+						// PDFA-Version = 1
+						pdfaVer = 1;
+					} else if ( line.contains( "pdfaid:part" ) && line.contains( "2" ) ) {
+						// PDFA-Version = 2
+						pdfaVer = 2;
 					}
 				}
-				in.close();
-				// set to null
-				in = null;
-
-			} catch ( Throwable e ) {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-										"Version " + e.getMessage() ) );
+				if ( line.contains( "pdfaid:conformance" ) ) {
+					// pdfaid:part
+					if ( line.contains( "pdfaid:conformance>A<" ) || line.contains( "pdfaid:conformance='A'" )
+							|| line.contains( "pdfaid:conformance=\"A\"" )
+							|| line.contains( "pdfaid:conformance>a<" )
+							|| line.contains( "pdfaid:conformance='a'" )
+							|| line.contains( "pdfaid:conformance=\"a\"" ) ) {
+						pdfaCl = "A";
+					} else if ( line.contains( "pdfaid:conformance>U<" )
+							|| line.contains( "pdfaid:conformance='U'" )
+							|| line.contains( "pdfaid:conformance=\"U\"" )
+							|| line.contains( "pdfaid:conformance>u<" )
+							|| line.contains( "pdfaid:conformance='u'" )
+							|| line.contains( "pdfaid:conformance=\"u\"" ) ) {
+						pdfaCl = "U";
+					} else {
+						pdfaCl = "B";
+					}
+				}
+				if ( pdfaVer == 0 ) {
+					// der Part wurde nicht gefunden --> Level 2B
+					pdfaVer = 2;
+				}
+				level = pdfaVer + pdfaCl;
+				if ( level == "1U" ) {
+					level = "1B";
+				}
 			}
+			if ( level == "1A" ) {
+				// wurde als 1A erkannt, wenn erlaubt als 1a validieren
+				if ( pdfa1a.equals( "1A" ) ) {
+					// erlaubt, Level bleibt
+				} else {
+					if ( pdfa1b.equals( "1B" ) ) {
+						level = "1B";
+					} else if ( pdfa2a.equals( "2A" ) ) {
+						level = "2A";
+					} else if ( pdfa2u.equals( "2U" ) ) {
+						level = "2U";
+					} else {
+						level = "2B";
+					}
+				}
+			}
+			if ( level == "1B" ) {
+				// wurde als 1B erkannt, wenn erlaubt als 1b validieren
+				if ( pdfa1b.equals( "1B" ) ) {
+					// erlaubt, Level bleibt
+				} else {
+					if ( pdfa1a.equals( "1A" ) ) {
+						level = "1A";
+					} else if ( pdfa2b.equals( "2B" ) ) {
+						level = "2B";
+					} else if ( pdfa2u.equals( "2U" ) ) {
+						level = "2U";
+					} else {
+						level = "2A";
+					}
+				}
+			}
+			if ( level == "2A" ) {
+				// wurde als 2A erkannt, wenn erlaubt als 2a validieren
+				if ( pdfa2a.equals( "2A" ) ) {
+					// erlaubt, Level bleibt
+				} else {
+					if ( pdfa2u.equals( "2U" ) ) {
+						level = "2U";
+					} else if ( pdfa2b.equals( "2B" ) ) {
+						level = "2B";
+					} else if ( pdfa1a.equals( "1A" ) ) {
+						level = "1A";
+					} else {
+						level = "1B";
+					}
+				}
+			}
+			if ( level == "2U" ) {
+				// wurde als 2U erkannt, wenn erlaubt als 2u validieren
+				if ( pdfa2u.equals( "2U" ) ) {
+					// erlaubt, Level bleibt
+				} else {
+					if ( pdfa2b.equals( "2B" ) ) {
+						level = "2B";
+					} else if ( pdfa2a.equals( "2A" ) ) {
+						level = "2A";
+					} else if ( pdfa1a.equals( "1A" ) ) {
+						level = "1A";
+					} else {
+						level = "1B";
+					}
+				}
+			}
+			if ( level == "2B" ) {
+				// wurde als 2B erkannt, wenn erlaubt als 2b validieren
+				if ( pdfa2u.equals( "2B" ) ) {
+					// erlaubt, Level bleibt
+				} else {
+					if ( pdfa2u.equals( "2U" ) ) {
+						level = "2U";
+					} else if ( pdfa2a.equals( "2A" ) ) {
+						level = "2A";
+					} else if ( pdfa1b.equals( "1B" ) ) {
+						level = "1B";
+					} else {
+						level = "1A";
+					}
+				}
+			}
+			in.close();
+			// set to null
+			in = null;
+
+		} catch ( Throwable e ) {
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+									"Version " + e.getMessage() ) );
 		}
+
 		getMessageService()
 				.logError( getTextResourceService().getText( locale, MESSAGE_FORMATVALIDATION_VL, level ) );
 
@@ -1246,14 +1338,12 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					String path = new java.io.File(
 							KOSTVal.class.getProtectionDomain().getCodeSource().getLocation().getPath() )
 									.getAbsolutePath();
-					path = path.substring( 0, path.lastIndexOf( "." ) );
-					path = path + System.getProperty( "java.class.path" );
 					String locationOfJarPath = path;
 					String dirOfJarPath = locationOfJarPath;
 					String folderCallas = "callas_pdfaPilotServer_Win_8.0.290_cli-a";
 					/* Update von Callas: CLI-Version herunterladen, odrner umbenennen alles ausser lizenz.txt
 					 * und N-Entry.kfpx ersetzen */
-					if ( locationOfJarPath.endsWith( ".jar" ) ) {
+					if ( locationOfJarPath.endsWith( ".jar" ) || locationOfJarPath.endsWith( ".exe" ) ) {
 						File file = new File( locationOfJarPath );
 						dirOfJarPath = file.getParent();
 					}

@@ -41,13 +41,7 @@ public class Validation1bFolderStructureModuleImpl extends ValidationModuleImpl
 		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
 		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
 		 * ref="configurationService" /> */
-		if ( onWork.equals( "no" ) ) {
-			// keine Ausgabe
-		} else if ( onWork.startsWith( "Configuration-Error:" ) ) {
-			getMessageService().logError(
-					getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ab_SIP ) + onWork );
-			return false;
-		} else {
+		if ( onWork.equals( "yes" ) ) {
 			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
 			System.out.print( "1B   " );
 			System.out.print( "\b\b\b\b\b" );

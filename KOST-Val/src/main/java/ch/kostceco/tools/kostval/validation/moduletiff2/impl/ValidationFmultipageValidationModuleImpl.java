@@ -68,7 +68,7 @@ public class ValidationFmultipageValidationModuleImpl extends ValidationModuleIm
 		Integer exiftoolio = 0;
 		Integer ifdCount = 0;
 		String ifdMsg;
-		if ( mp.contains( "1" ) ) {
+		if ( mp.equalsIgnoreCase(  "yes" ) ) {
 			// Valider Status (Multipage erlaubt)
 		} else {
 			try {

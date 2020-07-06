@@ -59,15 +59,13 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
 			Locale locale ) throws Validation3dPeriodException
 	{
-		boolean showOnWork = true;
+		boolean showOnWork = false;
 		int onWork = 410;
 		// Informationen zur Darstellung "onWork" holen
 		String onWorkConfig = configMap.get( "ShowProgressOnWork" );
-		if ( onWorkConfig.equals( "no" ) ) {
-			// keine Ausgabe
-			showOnWork = false;
-		} else {
+		if ( onWorkConfig.equals( "yes" ) ) {
 			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
+			showOnWork = true;
 			System.out.print( "3D   " );
 			System.out.print( "\b\b\b\b\b" );
 		}

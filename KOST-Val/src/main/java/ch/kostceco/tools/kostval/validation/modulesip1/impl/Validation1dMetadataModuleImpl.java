@@ -59,9 +59,7 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
 		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
 		 * ref="configurationService" /> */
-		if ( onWork.equals( "no" ) ) {
-			// keine Ausgabe
-		} else {
+		if ( onWork.equals( "yes" ) ) {
 			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
 			System.out.print( "1D   " );
 			System.out.print( "\b\b\b\b\b" );
@@ -129,11 +127,9 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 			String path = new java.io.File(
 					KOSTVal.class.getProtectionDomain().getCodeSource().getLocation().getPath() )
 							.getAbsolutePath();
-			path = path.substring( 0, path.lastIndexOf( "." ) );
-			path = path + System.getProperty( "java.class.path" );
 			String locationOfJarPath = path;
 			String dirOfJarPath = locationOfJarPath;
-			if ( locationOfJarPath.endsWith( ".jar" ) ) {
+			if ( locationOfJarPath.endsWith( ".jar" ) || locationOfJarPath.endsWith( ".exe" ) ) {
 				File file = new File( locationOfJarPath );
 				dirOfJarPath = file.getParent();
 			}
@@ -149,7 +145,9 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 			File xml11 = new File( dirOfJarPath + File.separator + "resources" + File.separator
 					+ "header_1d" + File.separator + "eCH-0160v1.1" + File.separator + "metadata.xml" );
 
-			System.out.println (dirOfJarPath+" "+xsd10.getAbsolutePath()+" "+xsd11.getAbsolutePath()+" "+xml10.getAbsolutePath()+" "+xml11.getAbsolutePath());
+			System.out
+					.println( dirOfJarPath + " " + xsd10.getAbsolutePath() + " " + xsd11.getAbsolutePath()
+							+ " " + xml10.getAbsolutePath() + " " + xml11.getAbsolutePath() );
 			File xmlIntern = xml10;
 			File xsdIntern = xsd10;
 

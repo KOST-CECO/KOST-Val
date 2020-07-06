@@ -106,7 +106,7 @@
 		<antcall target="build" />
 	</target>
 	<target name="KOST-Val">
-		<java classname="ch.kostceco.tools.kostval.KOSTVal" failonerror="true"
+		<java classname="ch.kostceco.tools.kostval.CmdKOSTVal" failonerror="true"
 			fork="yes">
 			<classpath refid="KOST-Val.classpath" />
 		</java>

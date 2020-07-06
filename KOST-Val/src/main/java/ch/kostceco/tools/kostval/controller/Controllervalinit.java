@@ -58,8 +58,8 @@ public class Controllervalinit implements MessageConstants
 		boolean valInit = true;
 		Locale locale = Locale.getDefault();
 
-		// Ist die Anzahl Parameter (5) korrekt?
-		if ( args.length != 5 ) {
+		// Ist die Anzahl Parameter (4) korrekt?
+		if ( args.length != 4 ) {
 			System.out.println( getTextResourceService().getText( locale, ERROR_PARAMETER_USAGE ) );
 			valInit = false;
 			return valInit;
@@ -80,41 +80,16 @@ public class Controllervalinit implements MessageConstants
 			valInit = false;
 			return valInit;
 		}
-		File init0File = new File( args[4] );
+		File init0File = new File( args[1] );
 		if ( !init0File.exists() ) {
 			System.out
 					.println( getTextResourceService().getText( locale, ERROR_VALFILE_FILENOTEXISTING ) );
 			valInit = false;
 			return valInit;
 		}
-		if ( !args[3].equalsIgnoreCase( "--hot" ) && !args[3].equalsIgnoreCase( "--gui" )
-				&& !args[3].equalsIgnoreCase( "--cmd" ) ) {
+		if ( !args[3].equalsIgnoreCase( "--xml" ) && !args[3].equalsIgnoreCase( "--min" )
+				&& !args[3].equalsIgnoreCase( "--max" ) ) {
 			System.out.println( getTextResourceService().getText( locale, ERROR_PARAMETER_USAGE ) );
-			valInit = false;
-			return valInit;
-		}
-		if ( !args[1].equalsIgnoreCase( "--xml" ) && !args[1].equalsIgnoreCase( "--min" )
-				&& !args[1].equalsIgnoreCase( "--max" ) ) {
-			System.out.println( getTextResourceService().getText( locale, ERROR_PARAMETER_USAGE ) );
-			valInit = false;
-			return valInit;
-		}
-
-		// Ueberpruefung des Parameters (Log-Verzeichnis)
-		String pathToLogfile = configMap.get( "PathToLogfile" );
-		File directoryOfLogfile = new File( pathToLogfile );
-		if ( !directoryOfLogfile.exists() ) {
-			directoryOfLogfile.mkdir();
-		}
-		if ( !directoryOfLogfile.canWrite() ) {
-			System.out.println( getTextResourceService().getText( locale, ERROR_LOGDIRECTORY_NOTWRITABLE,
-					directoryOfLogfile ) );
-			valInit = false;
-			return valInit;
-		}
-		if ( !directoryOfLogfile.isDirectory() ) {
-			System.out
-					.println( getTextResourceService().getText( locale, ERROR_LOGDIRECTORY_NODIRECTORY ) );
 			valInit = false;
 			return valInit;
 		}

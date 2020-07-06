@@ -734,9 +734,6 @@ public class Controllervalsip implements MessageConstants
 			}
 			Util.valSipversion( sipVersion, logFile );
 
-			System.out.print( getTextResourceService().getText( locale, MESSAGE_XML_LOG ) );
-			System.out.print( "\r" );
-
 			// bestehendes Workverzeichnis ggf. loeschen
 			if ( tmpDir.exists() ) {
 				Util.deleteDir( tmpDir );
