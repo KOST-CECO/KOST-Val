@@ -109,6 +109,30 @@ public class ValidationCcompressionValidationModuleImpl extends ValidationModule
 					getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_TIFF ) + com32773 );
 			return false;
 		}
+		if ( com1.equals( "" ) ) {
+			com1 = "DieseKompressionIstNichtErlaubt";
+		}
+		if ( com2.equals( "" ) ) {
+			com2 = "DieseKompressionIstNichtErlaubt";
+		}
+		if ( com3.equals( "" ) ) {
+			com3 = "DieseKompressionIstNichtErlaubt";
+		}
+		if ( com4.equals( "" ) ) {
+			com4 = "DieseKompressionIstNichtErlaubt";
+		}
+		if ( com5.equals( "" ) ) {
+			com5 = "DieseKompressionIstNichtErlaubt";
+		}
+		if ( com7.equals( "" ) ) {
+			com7 = "DieseKompressionIstNichtErlaubt";
+		}
+		if ( com8.equals( "" ) ) {
+			com8 = "DieseKompressionIstNichtErlaubt";
+		}
+		if ( com32773.equals( "" ) ) {
+			com32773 = "DieseKompressionIstNichtErlaubt";
+		}
 
 		Integer exiftoolio = 0;
 		String oldErrorLine1 = "";

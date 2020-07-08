@@ -80,11 +80,13 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl
 	int																jbig2Counter		= 0;
 	String														jbig2Obj				= "";
 	public static String							NEWLINE					= System.getProperty( "line.separator" );
+	public static Locale							locale					= null;
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
 			Locale locale ) throws ValidationApdfvalidationException
 	{
+		// System.out.print(  " "+locale.toString()+" " );
 		isValidJPEG = true;
 		isValidJP2 = true;
 		isValidJBIG2 = true;
@@ -117,7 +119,7 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl
 			// JBIG2 ist erlaubt
 			isAllowedJBIG2 = true;
 		}
-		if ( pdfaImage.equalsIgnoreCase( "yes" ) || !isAllowedJBIG2 ) {/*
+		if ( pdfaImage.equalsIgnoreCase( "yes" ) || !isAllowedJBIG2 ) {
 			// Optionale Bildvalidierung eingeschaltet und oder JBIG2 nicht erlaubt
 
 			// Informationen zum Arbeitsverzeichnis holen
@@ -128,29 +130,37 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl
 
 			String pathToLogDir = configMap.get( "PathToLogfile" );
 
-			File encrypt = new File(
-					pathToLogDir + File.separator + valDatei.getName() + "_encrypt.txt" );
+			File encrypt = new File( pathToLogDir + File.separator + valDatei.getName() + "_encrypt.txt" );
 
 			if ( encrypt.exists() ) {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
-								+ getTextResourceService().getText( locale, ERROR_XML_J_ENCRYPT ) );
+				getMessageService().logError(
+						getTextResourceService().getText( locale,MESSAGE_XML_MODUL_J_PDFA )
+								+ getTextResourceService().getText( locale,ERROR_XML_J_ENCRYPT ) );
 				valid = false;
 				Util.deleteFile( encrypt );
 			} else {
 				Util.deleteFile( encrypt );
-				try {
+				/* TODO ITEXT hat problem, im Moment J nicht moeglich. 
+				 * 
+				 * WARNING: An illegal reflective access operation has occurred
+				 * WARNING: Illegal reflective access by com.itextpdf.text.io.ByteBufferRandomAccessSource$1 (rsrc:itextpdf-5.5.5.jar) to method java.nio.DirectByteBuffer.cleaner()
+				 * WARNING: Please consider reporting this to the maintainers of com.itextpdf.text.io.ByteBufferRandomAccessSource$1
+				 * WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+				 * WARNING: All illegal access operations will be denied in a future release
+				 */
+				
+/*				try {
 					// Bildvalidierung anstossen
-					extractImages( srcPdf, destImage, configMap, locale );
+					extractImages( srcPdf, destImage, configMap );
 				} catch ( DocumentException e ) {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
-									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+					getMessageService().logError(
+							getTextResourceService().getText( locale,MESSAGE_XML_MODUL_J_PDFA )
+									+ getTextResourceService().getText( locale,ERROR_XML_UNKNOWN,
 											(e.getMessage() + " DocumentException") ) );
 				} catch ( IOException e ) {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
-									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+					getMessageService().logError(
+							getTextResourceService().getText( locale,MESSAGE_XML_MODUL_J_PDFA )
+									+ getTextResourceService().getText( locale,ERROR_XML_UNKNOWN,
 											(e.getMessage() + " IOException") ) );
 				} catch ( Exception e ) {
 					if ( jbig2Allowed.equalsIgnoreCase( "no" ) && pdfaImage.equalsIgnoreCase( "no" ) ) {
@@ -160,15 +170,15 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl
 							// Warnung wird nicht ausgegeben
 						} else {
 							System.out.println( e.getMessage() );
-							getMessageService()
-									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
-											+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+							getMessageService().logError(
+									getTextResourceService().getText( locale,MESSAGE_XML_MODUL_J_PDFA )
+											+ getTextResourceService().getText( locale,ERROR_XML_UNKNOWN,
 													(e.getMessage() + " Image-IOException 2") ) );
 						}
 					} else {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
-										+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+						getMessageService().logError(
+								getTextResourceService().getText( locale,MESSAGE_XML_MODUL_J_PDFA )
+										+ getTextResourceService().getText( locale,ERROR_XML_UNKNOWN,
 												(e.getMessage() + " Exception") ) );
 					}
 				}
@@ -178,41 +188,38 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl
 				} else {
 					if ( pdfaImage.equalsIgnoreCase( "yes" ) && !isValidJPEG ) {
 						// eingeschaltete Bildvalidierung nicht bestanden
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
-										+ getTextResourceService().getText( locale, ERROR_XML_J_INVALID_JPEG,
-												invalidJPEG, jpegCounter ) );
+						getMessageService().logError(
+								getTextResourceService().getText( locale,MESSAGE_XML_MODUL_J_PDFA )
+										+ getTextResourceService().getText( locale,ERROR_XML_J_INVALID_JPEG, invalidJPEG,
+												jpegCounter ) );
 						valid = false;
 					}
 					if ( pdfaImage.equalsIgnoreCase( "yes" ) && !isValidJP2 ) {
 						// eingeschaltete Bildvalidierung nicht bestanden
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
-										+ getTextResourceService().getText( locale, ERROR_XML_J_INVALID_JP2, invalidJP2,
+						getMessageService().logError(
+								getTextResourceService().getText( locale,MESSAGE_XML_MODUL_J_PDFA )
+										+ getTextResourceService().getText( locale,ERROR_XML_J_INVALID_JP2, invalidJP2,
 												jp2Counter ) );
 						valid = false;
 					}
 					if ( !isValidJBIG2 && !isAllowedJBIG2 ) {
 						// PDF enthält JBIG2, welches nicht erlaubt ist
 						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
-										+ getTextResourceService().getText( locale, ERROR_XML_J_JBIG2, jbig2Counter,
-												jbig2Obj ) );
+								.logError(
+										getTextResourceService().getText( locale,MESSAGE_XML_MODUL_J_PDFA )
+												+ getTextResourceService().getText( locale,ERROR_XML_J_JBIG2, jbig2Counter,
+														jbig2Obj ) );
 						valid = false;
 					}
-				}
+				}*/
 			}
-		*/} else {
+		} else {
 			// keine Bildvalidierung und JBIG2 erlaubt
 			String pathToLogDir = configMap.get( "PathToLogfile" );
-			File encrypt = new File(
-					pathToLogDir + File.separator + valDatei.getName() + "_encrypt.txt" );
+			File encrypt = new File( pathToLogDir + File.separator + valDatei.getName() + "_encrypt.txt" );
 
 			if ( encrypt.exists() ) {
-				/* getMessageService().logError( getTextResourceService().getText(locale,
-				 * MESSAGE_XML_MODUL_J_PDFA ) + getTextResourceService().getText(locale, ERROR_XML_J_ENCRYPT
-				 * ) ); */
-				valid = false;
+				// kein Fehler (Modul ist ausgeschaltet), aber File loeschen
 				Util.deleteFile( encrypt );
 			}
 			valid = true;
@@ -227,51 +234,52 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl
 	 *          the source PDF
 	 * @param dest
 	 *          the resulting PDF */
-	public void extractImages( String srcPdf, String destImage, Map<String, String> configMap,
-			Locale locale ) throws IOException, DocumentException
+	public void extractImages( String srcPdf, String destImage, Map<String, String> configMap )
+			throws IOException, DocumentException
 	{
 		try {
-/*			PdfReader reader = new PdfReader( srcPdf );
+			PdfReader reader = new PdfReader( srcPdf );
 			PdfReaderContentParser parser = new PdfReaderContentParser( reader );
-			MyImageRenderListener listener = new MyImageRenderListener( destImage, locale );
+			MyImageRenderListener listener = new MyImageRenderListener( destImage );
 			for ( int i = 1; i <= reader.getNumberOfPages(); i++ ) {
 				parser.processContent( i, listener );
 			}
 			reader.close();
-*/
+
 		} catch ( OutOfMemoryError e ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
-							+ getTextResourceService().getText( locale, ERROR_XML_OUTOFMEMORYERROR ) );
-			/*			} catch ( IOException e ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
-							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-									(e.getMessage() + " extractImages-IOException") ) );*/
+			getMessageService().logError(
+					getTextResourceService().getText( locale,MESSAGE_XML_MODUL_J_PDFA )
+							+ getTextResourceService().getText( locale,ERROR_XML_OUTOFMEMORYERROR ) );
+		} catch ( IOException e ) {
+			getMessageService().logError(
+					getTextResourceService().getText( locale,MESSAGE_XML_MODUL_J_PDFA )
+							+ getTextResourceService().getText( locale,ERROR_XML_UNKNOWN,
+									(e.getMessage() + " extractImages-IOException") ) );
 		}
 	}
 
-/*	public class MyImageRenderListener implements RenderListener, Callback
+	public class MyImageRenderListener implements RenderListener, Callback
 	{
-		String path = "";
+		String	path	= "";
 
 		/** Creates a RenderListener that will look for images. */
-	/*			public MyImageRenderListener( String path, Locale locale )
+		public MyImageRenderListener( String path )
 		{
 			this.path = path;
 		}
 
-		public void beginTextBlock( Locale locale )
+		public void beginTextBlock()
 		{
 		}
 
-		public void endTextBlock( Locale locale )
+		public void endTextBlock()
 		{
 		}
 
-		public void renderImage( ImageRenderInfo renderInfo, Locale locale )
+		public void renderImage( ImageRenderInfo renderInfo )
 		{
 			try {
+				System.out.print(  " "+locale.toString()+" " );
 				String filename;
 				File filePath = new File( path );
 				String filenamePath = filePath.getName();
@@ -295,7 +303,7 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl
 						 * 
 						 * Das JPEG wird im Logverzeichnis unter dem [PDF-Name].Obj[objNr].jpg gespeichert,
 						 * falls Bildvalidierung eingeschaltet ist. */
-	/*							if ( pdfaImage.equalsIgnoreCase( "yes" ) ) {
+						if ( pdfaImage.equalsIgnoreCase( "yes" ) ) {
 							filename = pathToLogDir + File.separator + filenamePath + ".Obj"
 									+ renderInfo.getRef().getNumber() + ".jpg";
 							os = new FileOutputStream( filename );
@@ -358,9 +366,9 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl
 									is.close();
 								} catch ( IOException ioe ) {
 									getMessageService().logError(
-											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
-													+ getTextResourceService().getText( locale,
-															ERROR_XML_A_JPEG_SERVICEFAILED, ioe.getMessage() ) );
+											getTextResourceService().getText( locale,MESSAGE_XML_MODUL_J_PDFA )
+													+ getTextResourceService().getText( locale,ERROR_XML_A_JPEG_SERVICEFAILED,
+															ioe.getMessage() ) );
 									isValidJPEG = false;
 									delFile = false;
 									invalidJPEG = invalidJPEG + "   " + filename;
@@ -377,9 +385,9 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl
 					} else if ( PdfName.JPXDECODE.equals( filter ) ) {
 						/* JP2 Bild:
 						 * 
-						 * Das JP2 wird im Logverzeichnis unter dem [PDF-Name].Obj[objNr].jp2 gespeichert, falls
-						 * Bildvalidierung eingeschaltet ist. */
-	/*							if ( pdfaImage.equalsIgnoreCase( "yes" ) ) {
+						 * Das JP2 wird im Logverzeichnis unter dem [PDF-Name].Obj[objNr].jp2 gespeichert,
+						 * falls Bildvalidierung eingeschaltet ist. */
+						if ( pdfaImage.equalsIgnoreCase( "yes" ) ) {
 							filename = pathToLogDir + File.separator + filenamePath + ".Obj"
 									+ renderInfo.getRef().getNumber() + ".jp2";
 							File fl = new File( filename );
@@ -467,7 +475,7 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl
 
 							/* die beiden charArrays (soll und ist) mit einander vergleichen IST =
 							 * c1c1c1c2c3c4c5c5c6c7 */
-	/*								char[] charArray1 = buffer;
+							char[] charArray1 = buffer;
 							char[] charArray2 = new char[] { c1, c1, c1, c2, c3, c4, c5, c5, c6, c7 };
 
 							if ( Arrays.equals( charArray1, charArray2 ) ) {
@@ -476,7 +484,7 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl
 								// System.out.println("es ist ein JP2 oder JPX ");
 
 								// auslesen der ersten 23 Zeiche der Datei
-	/*									FileReader fr23 = new FileReader( fl );
+								FileReader fr23 = new FileReader( fl );
 								@SuppressWarnings("resource")
 								BufferedReader read23 = new BufferedReader( fr23 );
 								int length23;
@@ -488,7 +496,7 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl
 
 								/* die beiden charArrays (soll und ist) mit einander vergleichen IST = c9, c10, c11,
 								 * c12, c3, c12, c13 */
-	/*									char[] charArray3 = buffer23;
+								char[] charArray3 = buffer23;
 								char[] charArray4 = new char[] { c9, c10, c11, c12, c3, c12, c13 };
 								String stringCharArray3 = String.valueOf( charArray3 );
 								String stringCharArray4 = String.valueOf( charArray4 );
@@ -503,15 +511,14 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl
 									 * dirOfJarPath + File.separator +
 									 * 
 									 * erweitern. */
-	/*										String path = new java.io.File(
-										KOSTVal.class.getProtectionDomain().getCodeSource().getLocation().getPath() )
-											.getAbsolutePath();
-										String locationOfJarPath = path;
-										String dirOfJarPath = locationOfJarPath;
-										if ( locationOfJarPath.endsWith( ".jar" ) || locationOfJarPath.endsWith( ".exe" ) ) {
-											File file = new File( locationOfJarPath );
-											dirOfJarPath = file.getParent();
-										}
+									String path = new java.io.File( KOSTVal.class.getProtectionDomain()
+											.getCodeSource().getLocation().getPath() ).getAbsolutePath();
+									String locationOfJarPath = path;
+									String dirOfJarPath = locationOfJarPath;
+									if ( locationOfJarPath.endsWith( ".jar" ) || locationOfJarPath.endsWith( ".exe" ) ) {
+										File file = new File( locationOfJarPath );
+										dirOfJarPath = file.getParent();
+									}
 
 									String pathToJpylyzerExe = dirOfJarPath + File.separator + "resources"
 											+ File.separator + "jpylyzer" + File.separator + "jpylyzer.exe";
@@ -519,9 +526,8 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl
 									File fJpylyzerExe = new File( pathToJpylyzerExe );
 									if ( !fJpylyzerExe.exists() ) {
 										getMessageService().logError(
-												getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
-														+ getTextResourceService().getText( locale,
-																ERROR_XML_A_JP2_JPYLYZER_MISSING ) );
+												getTextResourceService().getText( locale,MESSAGE_XML_MODUL_J_PDFA )
+														+ getTextResourceService().getText( locale,ERROR_XML_A_JP2_JPYLYZER_MISSING ) );
 									}
 
 									pathToJpylyzerExe = "\"" + pathToJpylyzerExe + "\"";
@@ -551,7 +557,7 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl
 
 												/* Das redirect Zeichen verunmöglicht eine direkte eingabe. mit dem
 												 * geschachtellten Befehl gehts: cmd /c\"urspruenlicher Befehl\" */
-	/*													String command = "cmd /c \"" + pathToJpylyzerExe + " \""
+												String command = "cmd /c \"" + pathToJpylyzerExe + " \""
 														+ fl.getAbsolutePath() + "\" > \"" + output.getAbsolutePath() + "\"\"";
 												proc = rt.exec( command.toString().split( " " ) );
 												// .split(" ") ist notwendig wenn in einem Pfad ein Doppelleerschlag
@@ -563,9 +569,9 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl
 
 											} catch ( Exception e ) {
 												getMessageService().logError(
-														getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
-																+ getTextResourceService().getText( locale,
-																		ERROR_XML_A_JP2_SERVICEFAILED, e.getMessage() ) );
+														getTextResourceService().getText( locale,MESSAGE_XML_MODUL_J_PDFA )
+																+ getTextResourceService().getText( locale,ERROR_XML_A_JP2_SERVICEFAILED,
+																		e.getMessage() ) );
 												isValidJP2 = false;
 												delFile = false;
 												invalidJP2 = invalidJP2 + "   " + filename;
@@ -577,7 +583,7 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl
 												 * 
 												 * if ( 0 != exitStatus ) { // invalide isValidJP2 = false; delFile = false;
 												 * invalidFile = invalidFile + filename + " "; } */
-	/*													if ( proc != null ) {
+												if ( proc != null ) {
 													proc.getOutputStream().close();
 													proc.getInputStream().close();
 													proc.getErrorStream().close();
@@ -587,8 +593,8 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl
 												// TODO: auswerten
 												Document doc = null;
 
-												BufferedInputStream bis = new BufferedInputStream(
-														new FileInputStream( pathToJpylyzerReport ) );
+												BufferedInputStream bis = new BufferedInputStream( new FileInputStream(
+														pathToJpylyzerReport ) );
 												DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 												DocumentBuilder db = dbf.newDocumentBuilder();
 												doc = db.parse( bis );
@@ -626,9 +632,8 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl
 											} else {
 												// Datei nicht angelegt...
 												getMessageService().logError(
-														getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
-																+ getTextResourceService().getText( locale,
-																		ERROR_XML_A_JP2_NOREPORT ) );
+														getTextResourceService().getText( locale,MESSAGE_XML_MODUL_J_PDFA )
+																+ getTextResourceService().getText( locale,ERROR_XML_A_JP2_NOREPORT ) );
 												isValidJP2 = false;
 												delFile = false;
 												invalidJP2 = invalidJP2 + "   " + filename;
@@ -636,8 +641,8 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl
 											}
 										} catch ( Exception e ) {
 											getMessageService().logError(
-													getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
-															+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+													getTextResourceService().getText( locale,MESSAGE_XML_MODUL_J_PDFA )
+															+ getTextResourceService().getText( locale,ERROR_XML_UNKNOWN,
 																	(e.getMessage() + " JP2-Exception") ) );
 											isValidJP2 = false;
 											delFile = false;
@@ -650,8 +655,8 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl
 
 									} catch ( Exception e ) {
 										getMessageService().logError(
-												getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
-														+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+												getTextResourceService().getText( locale,MESSAGE_XML_MODUL_J_PDFA )
+														+ getTextResourceService().getText( locale,ERROR_XML_UNKNOWN,
 																(e.getMessage() + " JP2-Exception2") ) );
 									}
 
@@ -661,7 +666,7 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl
 									// System.out.print("es ist ein JPX (extended JPEG2000 Part2)");
 
 									/* JPX wird nicht validiert, entsprechend File löschen */
-	/*										Util.deleteFile( fl );
+									Util.deleteFile( fl );
 								}
 
 							}
@@ -675,7 +680,7 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl
 						}
 					} else if ( PdfName.JBIG2DECODE.equals( filter ) ) {
 						/* Bild mit der JBIG2 Komprimierung */
-	/*							if ( jbig2Allowed.equalsIgnoreCase( "yes" ) ) {
+						if ( jbig2Allowed.equalsIgnoreCase( "yes" ) ) {
 							// JBIG2 Komprimierung erlaubt. Keine Meldung
 						} else {
 							isValidJBIG2 = false;
@@ -684,11 +689,11 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl
 						}
 					} else {
 						/* kein JPEG, JP2 oder JBIG2. Es wird entsprechend keine Validierung gemacht. */
-	/*						}
+					}
 				} catch ( IOException ioe ) {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
-									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+					getMessageService().logError(
+							getTextResourceService().getText( locale,MESSAGE_XML_MODUL_J_PDFA )
+									+ getTextResourceService().getText( locale,ERROR_XML_UNKNOWN,
 											(ioe.getMessage() + " Image-IOException") ) );
 				}
 			} catch ( IOException e ) {
@@ -706,24 +711,25 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl
 					// Warnung wird nicht ausgegeben
 				} else {
 					System.out.println( e.getMessage() );
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
-									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+					getMessageService().logError(
+							getTextResourceService().getText( locale,MESSAGE_XML_MODUL_J_PDFA )
+									+ getTextResourceService().getText( locale,ERROR_XML_UNKNOWN,
 											(e.getMessage() + " Image-IOException 2") ) );
 				}
 			}
 		}
 
-		public void renderText( TextRenderInfo renderInfo, Locale locale )
+		public void renderText( TextRenderInfo renderInfo )
 		{
 		}
 
-		public boolean onProgress( float percent, Locale locale )
+		@Override
+		public boolean onProgress( float percent )
 		{
 			// Muss auf return true sein, da ansonsten BadPeggy nicht funktioniert
 			return true;
 		}
 
-	}*/
+	}
 
 }

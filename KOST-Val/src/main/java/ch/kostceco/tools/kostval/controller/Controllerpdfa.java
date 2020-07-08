@@ -146,7 +146,7 @@ public class Controllerpdfa implements MessageConstants
 		}
 
 		// Validation J
-/*		try {
+		try {
 			if ( this.getValidationJimageValidationModule().validate( valDatei, directoryOfLogfile,
 					configMap, locale ) ) {
 				this.getValidationJimageValidationModule().getMessageService().print();
@@ -163,7 +163,7 @@ public class Controllerpdfa implements MessageConstants
 			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
 					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			valid = false;
-		}*/
+		}
 		return valid;
 	}
 

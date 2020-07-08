@@ -45,7 +45,7 @@ public class GuiController
 	 * --add-modules javafx.controls,javafx.fxml,javafx.graphics,javafx.base,javafx.web */
 	@FXML
 	private Button						buttonHelp, buttonFolder, buttonFile, buttonFormat, buttonSip,
-			buttonLicence, buttonChange, buttonShowConfig;
+			buttonLicence, buttonChange, buttonShowConfig, buttonPrint, buttonSave;
 
 	ObservableList<String>		langList		= FXCollections.observableArrayList( "Deutsch", "Français",
 			"English" ); // https://stackoverflow.com/questions/43910816/javafx-combobox-items-are-getting-cleared-on-selection
@@ -118,6 +118,8 @@ public class GuiController
 				buttonFile.setText( "fichier" );
 				buttonHelp.setText( "Aide ?" );
 				buttonLicence.setText( "Informations sur la licence" );
+				buttonSave.setText( "sauvegarder" );
+				buttonPrint.setText( "imprimer" );
 				Util.oldnewstring( "kostval-conf-DE.xsl", "kostval-conf-FR.xsl", configFile );
 				Util.oldnewstring( "kostval-conf-EN.xsl", "kostval-conf-FR.xsl", configFile );
 			} else if ( locale.toString().startsWith( "en" ) ) {
@@ -131,6 +133,8 @@ public class GuiController
 				buttonFile.setText( "file" );
 				buttonHelp.setText( "Help ?" );
 				buttonLicence.setText( "License information" );
+				buttonSave.setText( "save" );
+				buttonPrint.setText( "print" );
 				Util.oldnewstring( "kostval-conf-DE.xsl", "kostval-conf-EN.xsl", configFile );
 				Util.oldnewstring( "kostval-conf-FR.xsl", "kostval-conf-EN.xsl", configFile );
 			} else {
@@ -144,6 +148,8 @@ public class GuiController
 				buttonFile.setText( "Datei" );
 				buttonHelp.setText( "Hilfe ?" );
 				buttonLicence.setText( "Lizenzinformationen" );
+				buttonSave.setText( "speichern" );
+				buttonPrint.setText( "drucken" );
 				Util.oldnewstring( "kostval-conf-FR.xsl", "kostval-conf-DE.xsl", configFile );
 				Util.oldnewstring( "kostval-conf-EN.xsl", "kostval-conf-DE.xsl", configFile );
 			}
@@ -184,6 +190,11 @@ public class GuiController
 		// Format und Sip Validierung erst moeglich wenn fileFolder ausgefuellt
 		buttonSip.setDisable( true );
 		buttonFormat.setDisable( true );
+
+		// Speichern und drucken des Log erst bei anzeige des log moeglich
+		// TODO Speichern und drucken des Log noch nicht programiert
+		buttonPrint.setDisable( true );
+		buttonSave.setDisable( true );
 
 		lang.getItems().addAll( langList );
 
@@ -395,7 +406,6 @@ public class GuiController
 					 * 
 					 * Da es erfolgreich war (valid / invalid) kann der Log angezeigt werden */
 					engine.load( "file:///" + logFile.getAbsolutePath() );
-					System.out.println( "" );
 					scroll.setVvalue( 1.0 ); // 1.0 = letzte Zeile der Konsole
 				}
 			} );
@@ -441,6 +451,7 @@ public class GuiController
 				} catch ( IOException e ) {
 					e.printStackTrace();
 				}
+				System.out.println( "" );
 				return result;
 			}
 		};
@@ -711,6 +722,8 @@ public class GuiController
 				buttonShowConfig.setText( "zeige" );
 				labelStart.setText( "Starte" );
 				labelConfig.setText( "Konfiguration" );
+				buttonSave.setText( "speichern" );
+				buttonPrint.setText( "drucken" );
 				Util.oldnewstring( "kostval-conf-FR.xsl", "kostval-conf-DE.xsl", configFile );
 				Util.oldnewstring( "kostval-conf-EN.xsl", "kostval-conf-DE.xsl", configFile );
 				locale = new Locale( "de" );
@@ -726,6 +739,8 @@ public class GuiController
 				buttonShowConfig.setText( "show" );
 				labelStart.setText( "Start" );
 				labelConfig.setText( "Configuration" );
+				buttonSave.setText( "save" );
+				buttonPrint.setText( "print" );
 				Util.oldnewstring( "kostval-conf-DE.xsl", "kostval-conf-EN.xsl", configFile );
 				Util.oldnewstring( "kostval-conf-FR.xsl", "kostval-conf-EN.xsl", configFile );
 				locale = new Locale( "en" );
@@ -741,6 +756,8 @@ public class GuiController
 				buttonShowConfig.setText( "afficher" );
 				labelStart.setText( "Lancer" );
 				labelConfig.setText( "Configuration" );
+				buttonSave.setText( "sauvegarder" );
+				buttonPrint.setText( "imprimer" );
 				Util.oldnewstring( "kostval-conf-DE.xsl", "kostval-conf-FR.xsl", configFile );
 				Util.oldnewstring( "kostval-conf-EN.xsl", "kostval-conf-FR.xsl", configFile );
 				locale = new Locale( "fr" );

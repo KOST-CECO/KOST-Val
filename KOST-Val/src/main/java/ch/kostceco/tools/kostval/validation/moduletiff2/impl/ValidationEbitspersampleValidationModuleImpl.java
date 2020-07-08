@@ -94,6 +94,24 @@ public class ValidationEbitspersampleValidationModuleImpl extends ValidationModu
 					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_TIFF ) + bps32 );
 			return false;
 		}
+		if ( bps1.equals( "" ) ) {
+			bps1 = "DieseBitspersampleIstNichtErlaubt";
+		}
+		if ( bps2.equals( "" ) ) {
+			bps2 = "DieseBitspersampleIstNichtErlaubt";
+		}
+		if ( bps4.equals( "" ) ) {
+			bps4 = "DieseBitspersampleIstNichtErlaubt";
+		}
+		if ( bps8.equals( "" ) ) {
+			bps8 = "DieseBitspersampleIstNichtErlaubt";
+		}
+		if ( bps16.equals( "" ) ) {
+			bps16 = "DieseBitspersampleIstNichtErlaubt";
+		}
+		if ( bps32.equals( "" ) ) {
+			bps32 = "DieseBitspersampleIstNichtErlaubt";
+		}
 
 		Integer exiftoolio = 0;
 		String oldErrorLine1 = "";
@@ -113,17 +131,17 @@ public class ValidationEbitspersampleValidationModuleImpl extends ValidationModu
 				if ( line.contains( "BitsPerSample: " ) && line.contains( "[EXIF:IFD" ) ) {
 					exiftoolio = 1;
 					if ( ((line.contains( "BitsPerSample: 1 " ) || (line.contains( "BitsPerSample: 1," ))
-							|| (line.contains( "BitsPerSample: 1" ))) && bps1.contains( "1" ))
+							|| (line.endsWith( "BitsPerSample: 1" ))) && bps1.contains( "1" ))
 							|| ((line.contains( "BitsPerSample: 2 " ) || (line.contains( "BitsPerSample: 2," ))
-									|| (line.contains( "BitsPerSample: 2" ))) && bps2.contains( "2" ))
+									|| (line.endsWith( "BitsPerSample: 2" ))) && bps2.contains( "2" ))
 							|| ((line.contains( "BitsPerSample: 4 " ) || (line.contains( "BitsPerSample: 4," ))
-									|| (line.contains( "BitsPerSample: 4" ))) && bps4.contains( "4" ))
+									|| (line.endsWith( "BitsPerSample: 4" ))) && bps4.contains( "4" ))
 							|| ((line.contains( "BitsPerSample: 8 " ) || (line.contains( "BitsPerSample: 8," ))
-									|| (line.contains( "BitsPerSample: 8" ))) && bps8.contains( "8" ))
+									|| (line.endsWith( "BitsPerSample: 8" ))) && bps8.contains( "8" ))
 							|| ((line.contains( "BitsPerSample: 16 " ) || (line.contains( "BitsPerSample: 16," ))
-									|| (line.contains( "BitsPerSample: 16" ))) && bps16.contains( "16" ))
+									|| (line.endsWith( "BitsPerSample: 16" ))) && bps16.contains( "16" ))
 							|| ((line.contains( "BitsPerSample: 32 " ) || (line.contains( "BitsPerSample: 32," ))
-									|| (line.contains( "BitsPerSample: 32" ))) && bps32.contains( "32" )) ) {
+									|| (line.endsWith( "BitsPerSample: 32" ))) && bps32.contains( "32" )) ) {
 						// Valid
 					} else {
 						// Invalider Status

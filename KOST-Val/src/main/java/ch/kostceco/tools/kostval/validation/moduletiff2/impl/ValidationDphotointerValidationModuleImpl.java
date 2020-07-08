@@ -106,6 +106,30 @@ public class ValidationDphotointerValidationModuleImpl extends ValidationModuleI
 					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF ) + pi8 );
 			return false;
 		}
+		if ( pi0.equals( "" ) ) {
+			pi0 = "DiesePhotointerIstNichtErlaubt";
+		}
+		if ( pi1.equals( "" ) ) {
+			pi1 = "DiesePhotointerIstNichtErlaubt";
+		}
+		if ( pi2.equals( "" ) ) {
+			pi2 = "DiesePhotointerIstNichtErlaubt";
+		}
+		if ( pi3.equals( "" ) ) {
+			pi3 = "DiesePhotointerIstNichtErlaubt";
+		}
+		if ( pi4.equals( "" ) ) {
+			pi4 = "DiesePhotointerIstNichtErlaubt";
+		}
+		if ( pi5.equals( "" ) ) {
+			pi5 = "DiesePhotointerIstNichtErlaubt";
+		}
+		if ( pi6.equals( "" ) ) {
+			pi6 = "DiesePhotointerIstNichtErlaubt";
+		}
+		if ( pi8.equals( "" ) ) {
+			pi8 = "DiesePhotointerIstNichtErlaubt";
+		}
 
 		Integer exiftoolio = 0;
 		String oldErrorLine1 = "";

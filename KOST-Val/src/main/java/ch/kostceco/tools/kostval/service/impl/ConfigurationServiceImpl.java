@@ -101,9 +101,9 @@ public class ConfigurationServiceImpl implements ConfigurationService
 
 			/* Angabe ob dargestellt werden soll, dass KOST-Val noch laeuft --xml (=no) zaehler
 			 * anzeigen --max (=yes) auch "Windrad" --min (=nomin) zaehler anzeigen */
-			String showprogressonwork = "yes";
-			if ( logtype.equalsIgnoreCase( "--xml" ) ) {
-				showprogressonwork = "no";
+			String showprogressonwork = "no";
+			if ( logtype.equalsIgnoreCase( "--max" ) ) {
+				showprogressonwork = "yes";
 			} else if ( logtype.equalsIgnoreCase( "--min" ) ) {
 				showprogressonwork = "nomin";
 			}

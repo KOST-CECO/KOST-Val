@@ -17,19 +17,19 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.web.WebView?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="870.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.kostceco.tools.kostval.GuiController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.kostceco.tools.kostval.GuiController">
 
 	<children>
-		<BorderPane prefHeight="500.0" prefWidth="850.0">
+		<BorderPane prefHeight="500.0" prefWidth="900.0">
 			<top>
 				<GridPane maxHeight="90.0" minHeight="30.0" prefHeight="90.0" BorderPane.alignment="CENTER">
 					<columnConstraints>
 						<ColumnConstraints hgrow="SOMETIMES" maxWidth="130.0" minWidth="130.0" prefWidth="130.0" />
-						<ColumnConstraints hgrow="SOMETIMES" maxWidth="130.0" minWidth="130.0" prefWidth="139.0" />
-						<ColumnConstraints hgrow="SOMETIMES" maxWidth="130.0" minWidth="130.0" prefWidth="130.0" />
-						<ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="130.0" />
+						<ColumnConstraints hgrow="SOMETIMES" maxWidth="160.0" minWidth="160.0" prefWidth="160.0" />
+						<ColumnConstraints hgrow="SOMETIMES" maxWidth="160.0" minWidth="160.0" prefWidth="160.0" />
+						<ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="0.0" prefWidth="120.0" />
 						<ColumnConstraints hgrow="SOMETIMES" maxWidth="130.0" minWidth="10.0" prefWidth="130.0" />
-						<ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="160.0" minWidth="160.0" prefWidth="160.0" />
+						<ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="200.0" minWidth="200.0" prefWidth="200.0" />
 					</columnConstraints>
 					<rowConstraints>
 						<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -37,55 +37,65 @@
 						<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
 					</rowConstraints>
 					<children>
-						<Button fx:id="buttonFormat" alignment="TOP_LEFT" maxWidth="120.0" minHeight="26.0" mnemonicParsing="false" onAction="#valFormat" prefHeight="26.0" prefWidth="120.0" text="Formatvalidierung" GridPane.columnIndex="1">
+						<Button fx:id="buttonFormat" alignment="TOP_LEFT" maxWidth="150.0" minHeight="26.0" mnemonicParsing="false" onAction="#valFormat" prefHeight="26.0" prefWidth="150.0" style="-fx-border-color: LimeGreen;" text="Formatvalidierung" GridPane.columnIndex="1" GridPane.rowIndex="2">
 							<GridPane.margin>
 								<Insets left="10.0" />
 							</GridPane.margin>
 						</Button>
-						<Button fx:id="buttonSip" alignment="TOP_LEFT" maxWidth="120.0" minHeight="26.0" mnemonicParsing="false" onAction="#valSip" prefHeight="26.0" prefWidth="120.0" text="SIP-Validierung" GridPane.columnIndex="2">
+						<Button fx:id="buttonSip" alignment="TOP_LEFT" maxWidth="150.0" minHeight="26.0" mnemonicParsing="false" onAction="#valSip" prefHeight="26.0" prefWidth="150.0" style="-fx-border-color: LimeGreen;" text="SIP-Validierung" GridPane.columnIndex="2" GridPane.rowIndex="2">
                      <GridPane.margin>
                         <Insets left="10.0" />
                      </GridPane.margin></Button>
-						<Button fx:id="buttonHelp" alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" minHeight="26.0" mnemonicParsing="false" onAction="#showManual" prefHeight="26.0" text="Hilfe ?" GridPane.columnIndex="5">
+						<Button fx:id="buttonHelp" alignment="TOP_LEFT" maxWidth="80.0" minHeight="26.0" minWidth="80.0" mnemonicParsing="false" onAction="#showManual" prefHeight="26.0" prefWidth="80.0" text="Hilfe" GridPane.columnIndex="5" GridPane.halignment="LEFT">
+                     <GridPane.margin>
+                        <Insets left="120.0" />
+                     </GridPane.margin></Button>
+						<Button fx:id="buttonLicence" alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" minHeight="26.0" mnemonicParsing="false" onAction="#showLicence" prefHeight="26.0" text="zeige Lizenzinformationen" GridPane.columnIndex="5" GridPane.rowIndex="1">
                      <GridPane.margin>
                         <Insets left="10.0" />
                      </GridPane.margin></Button>
-						<Button fx:id="buttonLicence" alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" minHeight="26.0" mnemonicParsing="false" onAction="#showLicence" prefHeight="26.0" text="Lizenzinformationen" GridPane.columnIndex="5" GridPane.rowIndex="1">
-                     <GridPane.margin>
-                        <Insets left="10.0" />
-                     </GridPane.margin></Button>
-						<Button fx:id="buttonFolder" alignment="TOP_LEFT" maxWidth="120.0" minHeight="26.0" minWidth="40.0" mnemonicParsing="false" onAction="#chooseFolder" prefHeight="26.0" prefWidth="120.0" text="Ordner" GridPane.columnIndex="2" GridPane.rowIndex="2">
+						<Button fx:id="buttonFolder" alignment="TOP_LEFT" maxWidth="70.0" minHeight="26.0" minWidth="40.0" mnemonicParsing="false" onAction="#chooseFolder" prefHeight="26.0" prefWidth="70.0" text="Ordner" GridPane.columnIndex="1">
+							<GridPane.margin>
+								<Insets left="90.0" />
+							</GridPane.margin>
+						</Button>
+						<Button fx:id="buttonFile" alignment="TOP_LEFT" maxWidth="70.0" minHeight="26.0" minWidth="40.0" mnemonicParsing="false" onAction="#chooseFile" prefHeight="26.0" prefWidth="70.0" text="Datei" GridPane.columnIndex="1">
 							<GridPane.margin>
 								<Insets left="10.0" />
 							</GridPane.margin>
 						</Button>
-						<Button fx:id="buttonFile" alignment="TOP_LEFT" maxWidth="120.0" minHeight="26.0" minWidth="40.0" mnemonicParsing="false" onAction="#chooseFile" prefHeight="26.0" prefWidth="120.0" text="Datei" GridPane.columnIndex="1" GridPane.rowIndex="2">
-							<GridPane.margin>
-								<Insets left="10.0" />
-							</GridPane.margin>
-						</Button>
-						<Label fx:id="labelFileFolder" text="Wähle Datei / Ordner" GridPane.rowIndex="2" />
-						<TextField fx:id="fileFolder" minHeight="25.0" minWidth="40.0" onAction="#changeFileFolder" prefHeight="25.0" GridPane.columnIndex="3" GridPane.columnSpan="3" GridPane.rowIndex="2">
+						<Label fx:id="labelFileFolder" text="Wähle Datei / Ordner" />
+						<TextField fx:id="fileFolder" minHeight="25.0" minWidth="40.0" onAction="#changeFileFolder" prefHeight="25.0" GridPane.columnIndex="2" GridPane.columnSpan="3">
 							<GridPane.margin>
 								<Insets left="10.0" />
 							</GridPane.margin>
 						</TextField>
-						<ChoiceBox fx:id="lang" maxWidth="1.7976931348623157E308" minHeight="26.0" nodeOrientation="LEFT_TO_RIGHT" onAction="#changeLang" prefHeight="26.0" value="Deutsch" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+						<ChoiceBox fx:id="lang" maxWidth="100.0" minHeight="26.0" minWidth="100.0" nodeOrientation="LEFT_TO_RIGHT" onAction="#changeLang" prefHeight="26.0" prefWidth="100.0" value="Deutsch" GridPane.columnIndex="5" GridPane.halignment="LEFT">
                      <GridPane.margin>
                         <Insets left="10.0" />
                      </GridPane.margin></ChoiceBox>
-                  <Button fx:id="buttonChange" alignment="TOP_LEFT" maxHeight="26.0" maxWidth="120.0" minHeight="26.0" mnemonicParsing="false" onAction="#changeConfig" prefHeight="26.0" prefWidth="120.0" text="ändere" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                  <Button fx:id="buttonChange" alignment="TOP_LEFT" maxHeight="26.0" maxWidth="70.0" minHeight="26.0" mnemonicParsing="false" onAction="#changeConfig" prefHeight="26.0" prefWidth="70.0" text="ändere" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <GridPane.margin>
                         <Insets left="10.0" />
                      </GridPane.margin>
                   </Button>
-                  <Button fx:id="buttonShowConfig" alignment="TOP_LEFT" maxHeight="26.0" maxWidth="120.0" minHeight="26.0" mnemonicParsing="false" prefHeight="26.0" onAction="#showConfig" prefWidth="120.0" text="zeige" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                  <Button fx:id="buttonShowConfig" alignment="TOP_LEFT" maxHeight="26.0" maxWidth="70.0" minHeight="26.0" mnemonicParsing="false" onAction="#showConfig" prefHeight="26.0" prefWidth="70.0" text="zeige" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <GridPane.margin>
+                        <Insets left="90.0" />
+                     </GridPane.margin>
+                  </Button>
+                  <Label fx:id="labelStart" text="Starte" GridPane.rowIndex="2" />
+                  <Label fx:id="labelConfig" text="Konfiguration" GridPane.rowIndex="1" />
+                  <Button fx:id="buttonSave" alignment="TOP_LEFT" layoutX="150.0" layoutY="12.0" maxWidth="100.0" minHeight="26.0" minWidth="40.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="100.0" text="speichern" GridPane.columnIndex="5" GridPane.halignment="LEFT" GridPane.rowIndex="2">
                      <GridPane.margin>
                         <Insets left="10.0" />
                      </GridPane.margin>
                   </Button>
-                  <Label  fx:id="labelStart" text="Starte" />
-                  <Label fx:id="labelConfig"  text="Konfiguration" GridPane.rowIndex="1" />
+                  <Button fx:id="buttonPrint" alignment="TOP_LEFT" layoutX="810.0" layoutY="12.0" maxWidth="80.0" minHeight="26.0" minWidth="80.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="80.0" text="drucken" GridPane.columnIndex="5" GridPane.halignment="LEFT" GridPane.rowIndex="2">
+                     <GridPane.margin>
+                        <Insets left="120.0" />
+                     </GridPane.margin>
+                  </Button>
 					</children>
 					<BorderPane.margin>
 						<Insets />
