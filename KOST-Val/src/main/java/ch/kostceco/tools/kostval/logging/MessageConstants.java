@@ -184,6 +184,7 @@ public interface MessageConstants
 	String	MESSAGE_XML_C_METADATA_ERRORS									= "message.xml.c.metadata.errors";
 	String	MESSAGE_XML_C_METADATA_ORIGERRORS							= "message.xml.c.metadata.origerrors";
 	String	MESSAGE_XML_C_METADATA_NSFOUND								= "message.xml.c.metadata.nsfound";
+	String	MESSAGE_XML_C_INVALID_VERSION									= "message.xml.c.invalid.version";
 
 	// Modul D Meldungen
 	String	MESSAGE_XML_D_INVALID_FOLDER									= "message.xml.d.invalid.folder";

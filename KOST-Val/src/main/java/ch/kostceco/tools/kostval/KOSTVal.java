@@ -160,7 +160,7 @@ public class KOSTVal implements MessageConstants
 		}
 
 		// Konfigurations Map erstellen (Zeitgewinn)
-		String logtype = args[2];
+		String logtype = args[3];
 		Map<String, String> configMap = kostval.getConfigurationService().configMap( locale, logtype );
 
 		Controllervalinit controller0 = (Controllervalinit) context.getBean( "controllervalinit" );

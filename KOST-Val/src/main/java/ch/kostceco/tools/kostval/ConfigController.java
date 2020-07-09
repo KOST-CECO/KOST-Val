@@ -35,11 +35,11 @@ public class ConfigController
 	@FXML
 	private CheckBox					checkPdfa, checkPdftools, checkCallas, checkPdfa1a, checkPdfa2a,
 			checkFont, checkImage, checkJbig2, checkDetail, checkNentry, checkPdfa1b, checkPdfa2b,
-			checkFontTol, checkPdfa2u, checkSiard, checkJpeg2000, checkJpeg, checkTiff, checkComp1,
-			checkComp5, checkPi0, checkPi4, checkComp2, checkComp7, checkPi1, checkPi5, checkBps1,
-			checkBps8, checkMultipage, checkBps2, checkBps16, checkTiles, checkComp3, checkComp8,
-			checkPi2, checkPi6, checkBps4, checkBps32, checkSize, checkComp4, checkComp32773, checkPi3,
-			checkPi8, checkSip0160;
+			checkFontTol, checkPdfa2u, checkSiard, checkSiard10, checkSiard21, checkJpeg2000, checkJpeg,
+			checkTiff, checkComp1, checkComp5, checkPi0, checkPi4, checkComp2, checkComp7, checkPi1,
+			checkPi5, checkBps1, checkBps8, checkMultipage, checkBps2, checkBps16, checkTiles, checkComp3,
+			checkComp8, checkPi2, checkPi6, checkBps4, checkBps32, checkSize, checkComp4, checkComp32773,
+			checkPi3, checkPi8, checkSip0160;
 
 	private File							configFile	= new File( System.getenv( "USERPROFILE" ) + File.separator
 			+ ".kost-val" + File.separator + "configuration" + File.separator + "kostval.conf.xml" );
@@ -149,6 +149,8 @@ public class ConfigController
 			String noJpeg2000 = "<jp2validation>no</jp2validation>";
 			String noJpeg = "<jpegvalidation>no</jpegvalidation>";
 			String noSiard = "<siardvalidation>no</siardvalidation>";
+			String noSiard10 = "<siard10></siard10>";
+			String noSiard21 = "<siard21></siard21>";
 			String noTiff = "<tiffvalidation>no</tiffvalidation>";
 			String noComp1 = "<allowedcompression1></allowedcompression1>";
 			String noComp2 = "<allowedcompression2></allowedcompression2>";
@@ -233,6 +235,12 @@ public class ConfigController
 			}
 			if ( config.contains( noSiard ) ) {
 				checkSiard.setSelected( false );
+			}
+			if ( config.contains( noSiard10 ) ) {
+				checkSiard10.setSelected( false );
+			}
+			if ( config.contains( noSiard21 ) ) {
+				checkSiard21.setSelected( false );
 			}
 			if ( config.contains( noTiff ) ) {
 				checkTiff.setSelected( false );
@@ -376,7 +384,7 @@ public class ConfigController
 					+ "</allowedlengthofpaths>";
 			int lengthInt = 179;
 			try {
-				if ( textLength.getText().isBlank() ) {
+				if ( textLength.getText().isEmpty() ) {
 					textLength.setText( lengthIntInit );
 				}
 				lengthInt = Integer.parseInt( textLength.getText() );
@@ -411,7 +419,7 @@ public class ConfigController
 			doc = null;
 			String allowedsipname = "<allowedsipname>" + regexInit + "</allowedsipname>";
 			String regex = textName.getText();
-			if ( regex.isBlank() ) {
+			if ( regex.isEmpty() ) {
 				regex = regexInit;
 				textName.setText( regexInit );
 			}
@@ -439,7 +447,7 @@ public class ConfigController
 			doc = null;
 			String allowedformats = "<allowedformats>" + puidInit + "</allowedformats>";
 			String puid = textPuid.getText();
-			if ( puid.isBlank() ) {
+			if ( puid.isEmpty() ) {
 				puid = puidInit;
 				textPuid.setText( puidInit );
 			}
@@ -486,13 +494,6 @@ public class ConfigController
 		try {
 			if ( checkPdfa.isSelected() ) {
 				Util.oldnewstring( no, yes, configFile );
-				/* checkPdfa, checkPdftools, checkCallas, checkPdfa1a, checkPdfa2a, checkFont, checkImage,
-				 * checkJbig2, checkDetail, checkNentry, checkPdfa1b, checkPdfa2b, checkFontTol,
-				 * checkPdfa2u, checkSiard, checkJpeg2000, checkJpeg, checkTiff, checkComp1, checkComp5,
-				 * checkPi0, checkPi4, checkComp2, checkComp7, checkPi1, checkPi5, checkBps1, checkBps8,
-				 * checkMultipage, checkBps2, checkBps16, checkTiles, checkComp3, checkComp8, checkPi2,
-				 * checkPi6, checkBps4, checkBps32, checkSize, checkComp4, checkComp32773, checkPi3,
-				 * checkPi8, checkSip0160 */
 				checkPdftools.setDisable( false );
 				checkCallas.setDisable( false );
 				checkPdfa1a.setDisable( false );
@@ -540,16 +541,28 @@ public class ConfigController
 				checkDetail.setDisable( false );
 				checkFont.setDisable( false );
 				checkFontTol.setDisable( false );
+				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
-				Util.oldnewstring( yes, no, configFile );
-				checkDetail.setDisable( true );
-				checkFont.setDisable( true );
-				checkFontTol.setDisable( true );
+				// abwaehlen nur moeglich wenn noch eines selected
+				if ( !checkCallas.isSelected() ) {
+					String minOne = "Mindestens eine Variante muss erlaubt sein!";
+					if ( locale.toString().startsWith( "fr" ) ) {
+						minOne = "Au moins une variante doit être autorisée !";
+					} else if ( locale.toString().startsWith( "en" ) ) {
+						minOne = "At least one variant must be allowed!";
+					}
+					engine.loadContent( "<html><h2>" + minOne + "</h2></html>" );
+					checkPdftools.setSelected( true );
+				} else {
+					Util.oldnewstring( yes, no, configFile );
+					checkDetail.setDisable( true );
+					checkFont.setDisable( true );
+					checkFontTol.setDisable( true );
+				}
 			}
 		} catch ( IOException e ) {
 			e.printStackTrace();
 		}
-		engine.load( "file:///" + configFile.getAbsolutePath() );
 	}
 
 	/* checkDetail schaltet diese Details von PDF Tools in der Konfiguration ein oder aus */
@@ -580,14 +593,27 @@ public class ConfigController
 			if ( checkCallas.isSelected() ) {
 				Util.oldnewstring( no, yes, configFile );
 				checkNentry.setDisable( false );
+				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
-				Util.oldnewstring( yes, no, configFile );
-				checkNentry.setDisable( true );
+				// abwaehlen nur moeglich wenn noch eines selected
+				if ( !checkPdftools.isSelected() ) {
+					String minOne = "Mindestens eine Variante muss erlaubt sein!";
+					if ( locale.toString().startsWith( "fr" ) ) {
+						minOne = "Au moins une variante doit être autorisée !";
+					} else if ( locale.toString().startsWith( "en" ) ) {
+						minOne = "At least one variant must be allowed!";
+					}
+					engine.loadContent( "<html><h2>" + minOne + "</h2></html>" );
+					checkCallas.setSelected( true );
+				} else {
+					checkNentry.setDisable( true );
+					Util.oldnewstring( yes, no, configFile );
+					engine.load( "file:///" + configFile.getAbsolutePath() );
+				}
 			}
 		} catch ( IOException e ) {
 			e.printStackTrace();
 		}
-		engine.load( "file:///" + configFile.getAbsolutePath() );
 	}
 
 	/* checkNentry schaltet diese Nentry bei Callas in der Konfiguration ein (E) oder aus (W) */
@@ -854,13 +880,79 @@ public class ConfigController
 		try {
 			if ( checkSiard.isSelected() ) {
 				Util.oldnewstring( no, yes, configFile );
+				checkSiard10.setDisable( false );
+				checkSiard21.setDisable( false );
 			} else {
 				Util.oldnewstring( yes, no, configFile );
+				checkSiard10.setDisable( true );
+				checkSiard21.setDisable( true );
 			}
 		} catch ( IOException e ) {
 			e.printStackTrace();
 		}
 		engine.load( "file:///" + configFile.getAbsolutePath() );
+	}
+
+	/* checkSiard10 schaltet diese Version in der Konfiguration ein oder aus */
+	@FXML
+	void changeSiard10( ActionEvent event )
+	{
+		String yes = "<siard10>1.0</siard10>";
+		String no = "<siard10></siard10>";
+		try {
+			if ( checkSiard10.isSelected() ) {
+				Util.oldnewstring( no, yes, configFile );
+				engine.load( "file:///" + configFile.getAbsolutePath() );
+			} else {
+				// abwaehlen nur moeglich wenn noch eines selected
+				if ( !checkSiard21.isSelected() ) {
+					String minOne = "Mindestens eine Variante muss erlaubt sein!";
+					if ( locale.toString().startsWith( "fr" ) ) {
+						minOne = "Au moins une variante doit être autorisée !";
+					} else if ( locale.toString().startsWith( "en" ) ) {
+						minOne = "At least one variant must be allowed!";
+					}
+					engine.loadContent( "<html><h2>" + minOne + "</h2></html>" );
+					checkSiard10.setSelected( true );
+				} else {
+					Util.oldnewstring( yes, no, configFile );
+					engine.load( "file:///" + configFile.getAbsolutePath() );
+				}
+			}
+		} catch ( IOException e ) {
+			e.printStackTrace();
+		}
+	}
+
+	/* checkSiard21 schaltet diese Version in der Konfiguration ein oder aus */
+	@FXML
+	void changeSiard21( ActionEvent event )
+	{
+		String yes = "<siard21>2.1</siard21>";
+		String no = "<siard21></siard21>";
+		try {
+			if ( checkSiard21.isSelected() ) {
+				Util.oldnewstring( no, yes, configFile );
+				engine.load( "file:///" + configFile.getAbsolutePath() );
+			} else {
+				// abwaehlen nur moeglich wenn noch eines selected
+				if ( !checkSiard10.isSelected() ) {
+					String minOne = "Mindestens eine Variante muss erlaubt sein!";
+					if ( locale.toString().startsWith( "fr" ) ) {
+						minOne = "Au moins une variante doit être autorisée !";
+					} else if ( locale.toString().startsWith( "en" ) ) {
+						minOne = "At least one variant must be allowed!";
+					}
+					engine.loadContent( "<html><h2>" + minOne + "</h2></html>" );
+					checkSiard21.setSelected( true );
+				} else {
+					Util.oldnewstring( yes, no, configFile );
+					engine.load( "file:///" + configFile.getAbsolutePath() );
+				}
+			}
+		} catch ( IOException e ) {
+			e.printStackTrace();
+		}
 	}
 
 	/* checkJpeg2000 schaltet diese Validierung in der Konfiguration ein oder aus */
@@ -980,7 +1072,8 @@ public class ConfigController
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
 				if ( !checkComp5.isSelected() && !checkComp2.isSelected() && !checkComp7.isSelected()
-						&& !checkComp3.isSelected() && !checkComp8.isSelected() && !checkComp4.isSelected() && !checkComp32773.isSelected()) {
+						&& !checkComp3.isSelected() && !checkComp8.isSelected() && !checkComp4.isSelected()
+						&& !checkComp32773.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
 						minOne = "Au moins une variante doit être autorisée !";
@@ -1011,7 +1104,8 @@ public class ConfigController
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
 				if ( !checkComp5.isSelected() && !checkComp1.isSelected() && !checkComp7.isSelected()
-						&& !checkComp3.isSelected() && !checkComp8.isSelected() && !checkComp4.isSelected() && !checkComp32773.isSelected()) {
+						&& !checkComp3.isSelected() && !checkComp8.isSelected() && !checkComp4.isSelected()
+						&& !checkComp32773.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
 						minOne = "Au moins une variante doit être autorisée !";
@@ -1042,7 +1136,8 @@ public class ConfigController
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
 				if ( !checkComp5.isSelected() && !checkComp2.isSelected() && !checkComp7.isSelected()
-						&& !checkComp1.isSelected() && !checkComp8.isSelected() && !checkComp4.isSelected() && !checkComp32773.isSelected()) {
+						&& !checkComp1.isSelected() && !checkComp8.isSelected() && !checkComp4.isSelected()
+						&& !checkComp32773.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
 						minOne = "Au moins une variante doit être autorisée !";
@@ -1073,7 +1168,8 @@ public class ConfigController
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
 				if ( !checkComp5.isSelected() && !checkComp2.isSelected() && !checkComp7.isSelected()
-						&& !checkComp3.isSelected() && !checkComp8.isSelected() && !checkComp1.isSelected() && !checkComp32773.isSelected()) {
+						&& !checkComp3.isSelected() && !checkComp8.isSelected() && !checkComp1.isSelected()
+						&& !checkComp32773.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
 						minOne = "Au moins une variante doit être autorisée !";
@@ -1104,7 +1200,8 @@ public class ConfigController
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
 				if ( !checkComp1.isSelected() && !checkComp2.isSelected() && !checkComp7.isSelected()
-						&& !checkComp3.isSelected() && !checkComp8.isSelected() && !checkComp4.isSelected() && !checkComp32773.isSelected()) {
+						&& !checkComp3.isSelected() && !checkComp8.isSelected() && !checkComp4.isSelected()
+						&& !checkComp32773.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
 						minOne = "Au moins une variante doit être autorisée !";
@@ -1135,7 +1232,8 @@ public class ConfigController
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
 				if ( !checkComp5.isSelected() && !checkComp2.isSelected() && !checkComp1.isSelected()
-						&& !checkComp3.isSelected() && !checkComp8.isSelected() && !checkComp4.isSelected() && !checkComp32773.isSelected()) {
+						&& !checkComp3.isSelected() && !checkComp8.isSelected() && !checkComp4.isSelected()
+						&& !checkComp32773.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
 						minOne = "Au moins une variante doit être autorisée !";
@@ -1166,7 +1264,8 @@ public class ConfigController
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
 				if ( !checkComp5.isSelected() && !checkComp2.isSelected() && !checkComp7.isSelected()
-						&& !checkComp3.isSelected() && !checkComp1.isSelected() && !checkComp4.isSelected() && !checkComp32773.isSelected()) {
+						&& !checkComp3.isSelected() && !checkComp1.isSelected() && !checkComp4.isSelected()
+						&& !checkComp32773.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
 						minOne = "Au moins une variante doit être autorisée !";
@@ -1197,7 +1296,8 @@ public class ConfigController
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
 				if ( !checkComp5.isSelected() && !checkComp2.isSelected() && !checkComp7.isSelected()
-						&& !checkComp3.isSelected() && !checkComp8.isSelected() && !checkComp4.isSelected() && !checkComp1.isSelected()) {
+						&& !checkComp3.isSelected() && !checkComp8.isSelected() && !checkComp4.isSelected()
+						&& !checkComp1.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
 						minOne = "Au moins une variante doit être autorisée !";
@@ -1229,7 +1329,8 @@ public class ConfigController
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
 				if ( !checkPi1.isSelected() && !checkPi2.isSelected() && !checkPi3.isSelected()
-						&& !checkPi4.isSelected() && !checkPi5.isSelected() && !checkPi6.isSelected() && !checkPi8.isSelected()) {
+						&& !checkPi4.isSelected() && !checkPi5.isSelected() && !checkPi6.isSelected()
+						&& !checkPi8.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
 						minOne = "Au moins une variante doit être autorisée !";
@@ -1260,7 +1361,8 @@ public class ConfigController
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
 				if ( !checkPi0.isSelected() && !checkPi2.isSelected() && !checkPi3.isSelected()
-						&& !checkPi4.isSelected() && !checkPi5.isSelected() && !checkPi6.isSelected() && !checkPi8.isSelected()) {
+						&& !checkPi4.isSelected() && !checkPi5.isSelected() && !checkPi6.isSelected()
+						&& !checkPi8.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
 						minOne = "Au moins une variante doit être autorisée !";
@@ -1291,7 +1393,8 @@ public class ConfigController
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
 				if ( !checkPi1.isSelected() && !checkPi0.isSelected() && !checkPi3.isSelected()
-						&& !checkPi4.isSelected() && !checkPi5.isSelected() && !checkPi6.isSelected() && !checkPi8.isSelected()) {
+						&& !checkPi4.isSelected() && !checkPi5.isSelected() && !checkPi6.isSelected()
+						&& !checkPi8.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
 						minOne = "Au moins une variante doit être autorisée !";
@@ -1322,7 +1425,8 @@ public class ConfigController
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
 				if ( !checkPi1.isSelected() && !checkPi2.isSelected() && !checkPi0.isSelected()
-						&& !checkPi4.isSelected() && !checkPi5.isSelected() && !checkPi6.isSelected() && !checkPi8.isSelected()) {
+						&& !checkPi4.isSelected() && !checkPi5.isSelected() && !checkPi6.isSelected()
+						&& !checkPi8.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
 						minOne = "Au moins une variante doit être autorisée !";
@@ -1353,7 +1457,8 @@ public class ConfigController
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
 				if ( !checkPi1.isSelected() && !checkPi2.isSelected() && !checkPi3.isSelected()
-						&& !checkPi0.isSelected() && !checkPi5.isSelected() && !checkPi6.isSelected() && !checkPi8.isSelected()) {
+						&& !checkPi0.isSelected() && !checkPi5.isSelected() && !checkPi6.isSelected()
+						&& !checkPi8.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
 						minOne = "Au moins une variante doit être autorisée !";
@@ -1384,7 +1489,8 @@ public class ConfigController
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
 				if ( !checkPi1.isSelected() && !checkPi2.isSelected() && !checkPi3.isSelected()
-						&& !checkPi4.isSelected() && !checkPi0.isSelected() && !checkPi6.isSelected() && !checkPi8.isSelected()) {
+						&& !checkPi4.isSelected() && !checkPi0.isSelected() && !checkPi6.isSelected()
+						&& !checkPi8.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
 						minOne = "Au moins une variante doit être autorisée !";
@@ -1415,7 +1521,8 @@ public class ConfigController
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
 				if ( !checkPi1.isSelected() && !checkPi2.isSelected() && !checkPi3.isSelected()
-						&& !checkPi4.isSelected() && !checkPi5.isSelected() && !checkPi0.isSelected() && !checkPi8.isSelected()) {
+						&& !checkPi4.isSelected() && !checkPi5.isSelected() && !checkPi0.isSelected()
+						&& !checkPi8.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
 						minOne = "Au moins une variante doit être autorisée !";
@@ -1446,7 +1553,8 @@ public class ConfigController
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
 				if ( !checkPi1.isSelected() && !checkPi2.isSelected() && !checkPi3.isSelected()
-						&& !checkPi4.isSelected() && !checkPi5.isSelected() && !checkPi6.isSelected() && !checkPi0.isSelected()) {
+						&& !checkPi4.isSelected() && !checkPi5.isSelected() && !checkPi6.isSelected()
+						&& !checkPi0.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
 						minOne = "Au moins une variante doit être autorisée !";
@@ -1478,7 +1586,7 @@ public class ConfigController
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
 				if ( !checkBps2.isSelected() && !checkBps4.isSelected() && !checkBps8.isSelected()
-						&& !checkBps16.isSelected() && !checkBps32.isSelected()) {
+						&& !checkBps16.isSelected() && !checkBps32.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
 						minOne = "Au moins une variante doit être autorisée !";
@@ -1509,7 +1617,7 @@ public class ConfigController
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
 				if ( !checkBps1.isSelected() && !checkBps4.isSelected() && !checkBps8.isSelected()
-						&& !checkBps16.isSelected() && !checkBps32.isSelected()) {
+						&& !checkBps16.isSelected() && !checkBps32.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
 						minOne = "Au moins une variante doit être autorisée !";
@@ -1540,7 +1648,7 @@ public class ConfigController
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
 				if ( !checkBps2.isSelected() && !checkBps1.isSelected() && !checkBps8.isSelected()
-						&& !checkBps16.isSelected() && !checkBps32.isSelected()) {
+						&& !checkBps16.isSelected() && !checkBps32.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
 						minOne = "Au moins une variante doit être autorisée !";
@@ -1571,7 +1679,7 @@ public class ConfigController
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
 				if ( !checkBps2.isSelected() && !checkBps4.isSelected() && !checkBps1.isSelected()
-						&& !checkBps16.isSelected() && !checkBps32.isSelected()) {
+						&& !checkBps16.isSelected() && !checkBps32.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
 						minOne = "Au moins une variante doit être autorisée !";
@@ -1602,7 +1710,7 @@ public class ConfigController
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
 				if ( !checkBps2.isSelected() && !checkBps4.isSelected() && !checkBps8.isSelected()
-						&& !checkBps1.isSelected() && !checkBps32.isSelected()) {
+						&& !checkBps1.isSelected() && !checkBps32.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
 						minOne = "Au moins une variante doit être autorisée !";
@@ -1633,7 +1741,7 @@ public class ConfigController
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
 				if ( !checkBps2.isSelected() && !checkBps4.isSelected() && !checkBps8.isSelected()
-						&& !checkBps16.isSelected() && !checkBps1.isSelected()) {
+						&& !checkBps16.isSelected() && !checkBps1.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
 						minOne = "Au moins une variante doit être autorisée !";

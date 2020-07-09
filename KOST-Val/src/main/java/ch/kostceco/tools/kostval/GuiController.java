@@ -48,10 +48,13 @@ public class GuiController
 			buttonLicence, buttonChange, buttonShowConfig, buttonPrint, buttonSave;
 
 	ObservableList<String>		langList		= FXCollections.observableArrayList( "Deutsch", "Français",
-			"English" ); // https://stackoverflow.com/questions/43910816/javafx-combobox-items-are-getting-cleared-on-selection
+			"English" );
+	ObservableList<String>		logTypeList	= FXCollections.observableArrayList( "LogType: --xml",
+			"LogType: --max" );
+	// TODO "LogType: --min",
 
 	@FXML
-	private ChoiceBox<String>	lang;
+	private ChoiceBox<String>	lang, logType;
 
 	@FXML
 	private Label							labelFileFolder, labelStart, labelConfig, label;
@@ -72,7 +75,7 @@ public class GuiController
 	private File							configFile	= new File( System.getenv( "USERPROFILE" ) + File.separator
 			+ ".kost-val" + File.separator + "configuration" + File.separator + "kostval.conf.xml" );
 
-	private String						arg0, arg1, arg2, arg3, dirOfJarPath;
+	private String						arg0, arg1, arg2, arg3 = "--max", dirOfJarPath;
 
 	private Locale						locale			= Locale.getDefault();
 
@@ -84,7 +87,7 @@ public class GuiController
 	{
 		/* TODO
 		 * 
-		 * LogTyp
+		 * LogTyp --min programmieren
 		 * 
 		 * speichern drucken von log */
 
@@ -197,6 +200,7 @@ public class GuiController
 		buttonSave.setDisable( true );
 
 		lang.getItems().addAll( langList );
+		logType.getItems().addAll( logTypeList );
 
 		/* Kontrolle der wichtigsten Eigenschaften: Log-Verzeichnis, Arbeitsverzeichnis, Java, jhove
 		 * Configuration, Konfigurationsverzeichnis, path.tmp */
@@ -263,8 +267,8 @@ public class GuiController
 	@FXML
 	void showManual( ActionEvent e )
 	{
-		/* Kurzanleitung 1. Sprache wählen 2. Datei oder Ordner zur Validierung angeben / auswählen 3.
-		 * ggf. Konfiguration anpassen 4. Validierung starten */
+		/* Kurzanleitung 1. Datei oder Ordner zur Validierung angeben / auswählen 2. ggf. Konfiguration
+		 * und LogType anpassen 3. Validierung starten */
 		try {
 			// Bild mit einer Kurzanleitung zum GUI anzeigen
 			String pathImage = "file:///" + dirOfJarPath + File.separator + "doc" + File.separator
@@ -373,7 +377,6 @@ public class GuiController
 		 * 
 		 * 2 und 3 waeren optional werden aber mitgegeben */
 		arg0 = "--format";
-		arg3 = "--xml";
 		arg2 = "--" + locale.toString();
 		arg1 = fileFolder.getText();
 		File arg1File = new File( arg1 );
@@ -482,7 +485,6 @@ public class GuiController
 		 * 
 		 * 2 und 3 waeren optional werden aber mitgegeben */
 		arg0 = "--sip";
-		arg3 = "--xml";
 		arg2 = "--" + locale.toString();
 		arg1 = fileFolder.getText();
 		File arg1File = new File( arg1 );
@@ -703,6 +705,20 @@ public class GuiController
 	}
 
 	/* TODO --> ChoiceBox ================= */
+
+	// Mit changeLoType wird die Log umgestellt
+	@FXML
+	void changeLogType( ActionEvent event )
+	{
+		String selLogType = logType.getValue();
+		if ( selLogType.equals( "LogType: --min" ) ) {
+			arg3 = "--min";
+		} else if ( selLogType.equals( "LogType: --max" ) ) {
+			arg3 = "--max";
+		} else {
+			arg3 = "--xml";
+		}
+	}
 
 	// Mit changeLang wird die Sprache umgestellt
 	@FXML

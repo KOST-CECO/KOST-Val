@@ -177,6 +177,16 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String siardvalidation = doc.getElementsByTagName( "siardvalidation" ).item( 0 )
 					.getTextContent();
 			configMap.put( "siardValidation", siardvalidation );
+			
+			// Gibt an ob siard 1.0 validiert werden soll
+			String siard10 = doc.getElementsByTagName( "siard10" ).item( 0 )
+					.getTextContent();
+			configMap.put( "siard10", siard10 );
+			
+			// Gibt an ob siard 2.1 validiert werden soll
+			String siard21 = doc.getElementsByTagName( "siard21" ).item( 0 )
+					.getTextContent();
+			configMap.put( "siard21", siard21 );
 
 			// Gibt an ob jp2 validiert werden soll
 			String jp2validation = doc.getElementsByTagName( "jp2validation" ).item( 0 ).getTextContent();

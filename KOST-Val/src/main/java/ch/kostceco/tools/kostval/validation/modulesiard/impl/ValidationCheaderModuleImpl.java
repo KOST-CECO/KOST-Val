@@ -61,6 +61,7 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl
 
 	public static String NEWLINE = System.getProperty( "line.separator" );
 
+	@SuppressWarnings("resource")
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
 			Locale locale ) throws ValidationCheaderException
@@ -74,6 +75,17 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl
 			showOnWork = true;
 			System.out.print( "C    " );
 			System.out.print( "\b\b\b\b\b" );
+		}
+
+		boolean siard10 = false;
+		boolean siard21 = false;
+		String siard10St = configMap.get( "siard10" );
+		if ( siard10St.equals( "1.0" ) ) {
+			siard10 = true;
+		}
+		String siard21St = configMap.get( "siard21" );
+		if ( siard21St.equals( "2.1" ) ) {
+			siard21 = true;
 		}
 
 		boolean result = true;
@@ -239,14 +251,28 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl
 			Boolean version2 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" )
 					.contains( "http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
 			if ( version1 ) {
-				getMessageService().logError(
-						getTextResourceService().getText( locale, MESSAGE_FORMATVALIDATION_VL, "v1.0" ) );
-			} else if ( version2 ) {
-				File versionDir = new File( pathToWorkDir2 + File.separator + "header" + File.separator
-						+ "siardversion" + File.separator + "2.1" );
-				if ( versionDir.exists() ) {
+				if ( siard10 ) {
 					getMessageService().logError(
-							getTextResourceService().getText( locale, MESSAGE_FORMATVALIDATION_VL, "v2.1" ) );
+							getTextResourceService().getText( locale, MESSAGE_FORMATVALIDATION_VL, "v1.0" ) );
+				} else {
+					getMessageService().logError( getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_C_SIARD )
+							+ getTextResourceService().getText( locale, MESSAGE_XML_C_INVALID_VERSION, "1.0" ) );
+					return false;
+				}
+			} else if ( version2 ) {
+				if ( siard21 ) {
+					File versionDir = new File( pathToWorkDir2 + File.separator + "header" + File.separator
+							+ "siardversion" + File.separator + "2.1" );
+					if ( versionDir.exists() ) {
+						getMessageService().logError(
+								getTextResourceService().getText( locale, MESSAGE_FORMATVALIDATION_VL, "v2.1" ) );
+					}
+				} else {
+					getMessageService().logError( getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_C_SIARD )
+							+ getTextResourceService().getText( locale, MESSAGE_XML_C_INVALID_VERSION, "2.1" ) );
+					return false;
 				}
 			}
 

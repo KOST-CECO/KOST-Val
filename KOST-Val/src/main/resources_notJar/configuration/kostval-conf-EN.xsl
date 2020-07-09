@@ -119,6 +119,12 @@
 							<xsl:value-of select="configuration/siard/siardvalidation" />
 						</td>
 					</tr>
+					<tr  class="captioninfom">
+						<td>Specifies which SIARD versions are allowed [1.0, 2.1]:</td>
+						<td>
+							<xsl:value-of select="configuration/siard/siard10" />&#160; <xsl:value-of select="configuration/siard/siard21" />
+						</td>
+					</tr>
 
 					<tr  class="captioninfo">
 						<td>Specifies whether a JP2 validation should take place [yes]:</td>

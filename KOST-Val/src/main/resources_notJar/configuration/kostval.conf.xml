@@ -23,6 +23,8 @@
 	</pdfa>
 	<siard>
 		<siardvalidation>yes</siardvalidation><!--no verwenden wenn siard nicht validiert werden soll, ansonsten yes -->
+		<siard10>1.0</siard10><!--1.0 / / no -->
+		<siard21>2.1</siard21><!--2.1 / / no -->
 	</siard>
 	<jp2>
 		<jp2validation>yes</jp2validation><!--no verwenden wenn jp2 nicht validiert werden soll, ansonsten yes -->

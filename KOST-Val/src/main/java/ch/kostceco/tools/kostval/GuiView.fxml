@@ -96,6 +96,14 @@
                         <Insets left="120.0" />
                      </GridPane.margin>
                   </Button>
+                  <ChoiceBox fx:id="logType" layoutX="700.0" layoutY="12.0" maxWidth="150.0" minHeight="26.0" minWidth="150.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="26.0" prefWidth="150.0"  onAction="#changeLogType" value="LogType: --xml" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <GridPane.margin>
+                        <Insets left="10.0" />
+                     </GridPane.margin>
+                  </ChoiceBox>
 					</children>
 					<BorderPane.margin>
 						<Insets />

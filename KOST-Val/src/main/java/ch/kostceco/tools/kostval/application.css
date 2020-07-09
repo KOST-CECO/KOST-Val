@@ -21,7 +21,13 @@
 	-fx-border-color: LightGray ;
 	-fx-border-radius: 5;
 }
-
+.choice-box .menu-item:focused {
+  -fx-background-color: LimeGreen ;
+}
+.choice-box .context-menu {
+	-fx-mark-color: LimeGreen ;
+    -fx-background-color: LightGray ;
+}
 #wbv {
 	-fx-background-color: LightGray ;
 }

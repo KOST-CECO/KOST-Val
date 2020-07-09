@@ -75,7 +75,7 @@
 
 						<Line endX="960.0" stroke="LIGHTGRAY" GridPane.columnSpan="8" GridPane.rowIndex="5" />
 
-						<CheckBox fx:id="checkSiard" mnemonicParsing="false" onAction="#changeConfigSiard" selected="true" text="SIARD">
+						<CheckBox fx:id="checkSiard" mnemonicParsing="false" onAction="#changeConfigSiard" selected="true" text="SIARD" GridPane.rowIndex="4">
 							<font>
 								<Font name="System Bold" size="12.0" />
 							</font>
@@ -97,7 +97,7 @@
 							</GridPane.margin>
 						</Line>
 
-						<CheckBox fx:id="checkJpeg" mnemonicParsing="false" onAction="#changeConfigJpeg" selected="true" text="JPEG" GridPane.rowIndex="4">
+						<CheckBox fx:id="checkJpeg" mnemonicParsing="false" onAction="#changeConfigJpeg" selected="true" text="JPEG">
 							<font>
 								<Font name="System Bold" size="12.0" />
 							</font>
@@ -168,6 +168,8 @@
 							</GridPane.margin>
 						</TextField>
 						<ChoiceBox fx:id="lang" maxWidth="1.7976931348623157E308" minHeight="30.0" nodeOrientation="LEFT_TO_RIGHT" onAction="#changeLang" prefHeight="30.0" prefWidth="240.0" value="Deutsch" GridPane.columnIndex="6" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                  <CheckBox fx:id="checkSiard10" mnemonicParsing="false" onAction="#changeSiard10" selected="true" text="SIARD-1.0 (eCH-0165 v1)" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="4" />
+                  <CheckBox fx:id="checkSiard21" mnemonicParsing="false" onAction="#changeSiard21" selected="true" text="SIARD-2.1" GridPane.columnIndex="3" GridPane.rowIndex="4" />
 
 					</children>
 					<BorderPane.margin>
