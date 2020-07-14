@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?><?xml-stylesheet type="text/xsl" href="kostval-conf-DE.xsl"?>
-<configuration>
+<configuration><!-- kostval.conf.xml_v2.0.0 -->
 	<pdfa>
 		<pdfavalidation>yes</pdfavalidation><!--no verwenden wenn pdfa nicht validiert werden soll, ansonsten yes -->
 		<!-- sind pdftools und callas beide auf no wird keine pdfa Validierung durchgefuehrt -->

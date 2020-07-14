@@ -1,6 +1,26 @@
+/* == KOST-Val ==================================================================================
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
+ * Information Package (SIP). Copyright (C) 2012-2020 Claire Roethlisberger (KOST-CECO), Christian
+ * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
+ * Daniel Ludin (BEDAG AG)
+ * -----------------------------------------------------------------------------------------------
+ * KOST-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. This application
+ * is free software: you can redistribute it and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version. BEDAG AG and Daniel Ludin hereby disclaims all copyright
+ * interest in the program SIP-Val v0.2.0 written by Daniel Ludin (BEDAG AG). Switzerland, 1 March
+ * 2011. This application is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ * PURPOSE. See the follow GNU General Public License for more details. You should have received a
+ * copy of the GNU General Public License along with this program; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA or see
+ * <http://www.gnu.org/licenses/>.
+ * ============================================================================================== */
+
 package ch.kostceco.tools.kostval;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -22,6 +42,12 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.print.JobSettings;
+import javafx.print.PageLayout;
+import javafx.print.PageOrientation;
+import javafx.print.Paper;
+import javafx.print.Printer;
+import javafx.print.PrinterJob;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -72,10 +98,11 @@ public class GuiController
 
 	private WebEngine					engine;
 
-	private File							configFile	= new File( System.getenv( "USERPROFILE" ) + File.separator
-			+ ".kost-val" + File.separator + "configuration" + File.separator + "kostval.conf.xml" );
+	private File							logFile,
+			configFile = new File( System.getenv( "USERPROFILE" ) + File.separator + ".kost-val"
+					+ File.separator + "configuration" + File.separator + "kostval.conf.xml" );
 
-	private String						arg0, arg1, arg2, arg3 = "--max", dirOfJarPath;
+	private String						arg0, arg1, arg2, arg3 = "--xml", dirOfJarPath;
 
 	private Locale						locale			= Locale.getDefault();
 
@@ -89,7 +116,7 @@ public class GuiController
 		 * 
 		 * LogTyp --min programmieren
 		 * 
-		 * speichern drucken von log */
+		 *  */
 
 		// TODO --> initialize (wird einmalig am Anfang ausgefuehrt)
 
@@ -99,13 +126,50 @@ public class GuiController
 		// Copyright und Versionen ausgeben
 		String javaVersion = System.getProperty( "java.version" );
 		String javafxVersion = System.getProperty( "javafx.version" );
-		label.setText(
-				"Copyright © KOST/CECO          JavaFX " + javafxVersion + " & Java " + javaVersion + "." );
+		label.setText( "Copyright © KOST/CECO          KOST-Val v2.0.0.0          JavaFX "
+				+ javafxVersion + " & Java " + javaVersion + "." );
 
 		// PrintStream in Konsole umleiten
 		ps = new PrintStream( new Console( console ) );
 		System.setOut( ps );
 		System.setErr( ps );
+
+		// festhalten von wo die Applikation (exe) gestartet wurde
+		dirOfJarPath = "";
+		try {
+			/* dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist ein generelles TODO in
+			 * allen Modulen. Zuerst immer dirOfJarPath ermitteln und dann alle Pfade mit dirOfJarPath +
+			 * File.separator + erweitern. */
+			String path = new File( "" ).getAbsolutePath();
+			String locationOfJarPath = path;
+			dirOfJarPath = locationOfJarPath;
+			if ( locationOfJarPath.endsWith( ".jar" ) || locationOfJarPath.endsWith( ".exe" ) ) {
+				File file = new File( locationOfJarPath );
+				dirOfJarPath = file.getParent();
+			}
+			setLibraryPath( dirOfJarPath );
+		} catch ( Exception e1 ) {
+			e1.printStackTrace();
+		}
+
+		try {
+			File directoryOfConfigfile = new File( System.getenv( "USERPROFILE" ) + File.separator
+					+ ".kost-val" + File.separator + "configuration" );
+			File directoryOfConfigfileInit = new File( dirOfJarPath + File.separator + "configuration" );
+			if ( !directoryOfConfigfile.exists() ) {
+				directoryOfConfigfile.mkdirs();
+			}
+			File configFileInit = new File(
+					directoryOfConfigfileInit + File.separator + "kostval.conf.xml" );
+			File configFile = new File( directoryOfConfigfile + File.separator + "kostval.conf.xml" );
+			if ( !configFile.exists() ) {
+				Util.copyFile( configFileInit, configFile );
+			}
+		} catch ( FileNotFoundException e ) {
+			e.printStackTrace();
+		} catch ( IOException e ) {
+			e.printStackTrace();
+		}
 
 		// Sprache definieren
 		locale = Locale.getDefault();
@@ -160,24 +224,6 @@ public class GuiController
 			e1.printStackTrace();
 		}
 
-		// festhalten von wo die Applikation (exe) gestartet wurde
-		dirOfJarPath = "";
-		try {
-			/* dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist ein generelles TODO in
-			 * allen Modulen. Zuerst immer dirOfJarPath ermitteln und dann alle Pfade mit dirOfJarPath +
-			 * File.separator + erweitern. */
-			String path = new File( "" ).getAbsolutePath();
-			String locationOfJarPath = path;
-			dirOfJarPath = locationOfJarPath;
-			if ( locationOfJarPath.endsWith( ".jar" ) || locationOfJarPath.endsWith( ".exe" ) ) {
-				File file = new File( locationOfJarPath );
-				dirOfJarPath = file.getParent();
-			}
-			setLibraryPath( dirOfJarPath );
-		} catch ( Exception e1 ) {
-			e1.printStackTrace();
-		}
-
 		engine = wbv.getEngine();
 		// String strTxtUrl "file:///C:/Users/KOST/.kost-val/logs/doc.kost-val.log.xml" ;
 		// engine.load( strTxtUrl );
@@ -195,7 +241,6 @@ public class GuiController
 		buttonFormat.setDisable( true );
 
 		// Speichern und drucken des Log erst bei anzeige des log moeglich
-		// TODO Speichern und drucken des Log noch nicht programiert
 		buttonPrint.setDisable( true );
 		buttonSave.setDisable( true );
 
@@ -308,6 +353,8 @@ public class GuiController
 		} catch ( IOException eManual ) {
 			eManual.printStackTrace();
 		}
+		buttonPrint.setDisable( true );
+		buttonSave.setDisable( true );
 	}
 
 	@FXML
@@ -344,12 +391,79 @@ public class GuiController
 		String text = "<html>" + licence1 + licence2 + licence3 + licence4 + "<br/>" + licence5
 				+ "<br/>" + licence6 + "</html>";
 		engine.loadContent( text );
+		buttonPrint.setDisable( true );
+		buttonSave.setDisable( true );
+	}
+
+	@FXML
+	void printLog( ActionEvent e )
+	{
+		Printer defaultprinter = Printer.getDefaultPrinter();
+		Printer printerToUse = defaultprinter;
+		if ( printerToUse != null ) {
+			PrinterJob job = PrinterJob.createPrinterJob();
+			JobSettings jobSettings = job.getJobSettings();
+			PageLayout pageLayout = jobSettings.getPageLayout();
+			job.setPrinter( printerToUse );
+			pageLayout = printerToUse.createPageLayout( Paper.A4, PageOrientation.PORTRAIT,
+					Printer.MarginType.DEFAULT );
+			jobSettings.setPageLayout( pageLayout );
+			job.getJobSettings();
+			job.showPrintDialog( null );
+			// job.showPageSetupDialog(null);
+			if ( job != null ) {
+				engine.print( job );
+				job.endJob();
+			}
+		}
+	}
+
+	/* Wenn saveLog betaetigt wird, kann ein Ordner ausgewaehlt werden in welcher der log inkl xsl
+	 * gespeichert wird */
+	@FXML
+	void saveLog( ActionEvent e )
+	{
+		try {
+			DirectoryChooser folderChooser = new DirectoryChooser();
+			String copy = "Kopiere ";
+			if ( locale.toString().startsWith( "fr" ) ) {
+				folderChooser.setTitle( "choisissez le dossier dans lequel le log doit être sauvegardé" );
+				copy = "Copie ";
+			} else if ( locale.toString().startsWith( "en" ) ) {
+				folderChooser.setTitle( "choose the folder where the log should be saved" );
+				copy = "Copy ";
+			} else {
+				folderChooser
+						.setTitle( "wählen Sie den Ordner in welcher der Log gespeichert werden soll" );
+				copy = "Kopiere ";
+			}
+			File saveFolder = folderChooser.showDialog( new Stage() );
+			if ( saveFolder != null ) {
+				File logFileXsl = new File( System.getenv( "USERPROFILE" ) + File.separator + ".kost-val"
+						+ File.separator + "logs" + File.separator + "kost-val.xsl" );
+				File logFileXslNew = new File(
+						saveFolder.getAbsolutePath() + File.separator + "kost-val.xsl" );
+				File logFileNew = new File(
+						saveFolder.getAbsolutePath() + File.separator + logFile.getName() );
+				Util.copyFile( logFileXsl, logFileXslNew );
+				System.out.println();
+				System.out.println(
+						copy + logFileXsl.getAbsolutePath() + " > " + logFileXslNew.getAbsolutePath() );
+				Util.copyFile( logFile, logFileNew );
+				System.out
+						.println( copy + logFile.getAbsolutePath() + " > " + logFileNew.getAbsolutePath() );
+			}
+		} catch ( IOException eSave ) {
+			eSave.printStackTrace();
+		}
 	}
 
 	@FXML
 	void showConfig( ActionEvent e )
 	{
 		engine.load( "file:///" + configFile.getAbsolutePath() );
+		buttonPrint.setDisable( true );
+		buttonSave.setDisable( true );
 	}
 
 	/* Wenn valFormat betaetigt wird, wird die Formatvalidierung gestartet mit allen Parametern. */
@@ -381,7 +495,7 @@ public class GuiController
 		arg1 = fileFolder.getText();
 		File arg1File = new File( arg1 );
 		String[] args = new String[] { arg0, arg1, arg2, arg3 };
-		File logFile = new File( System.getenv( "USERPROFILE" ) + File.separator + ".kost-val"
+		logFile = new File( System.getenv( "USERPROFILE" ) + File.separator + ".kost-val"
 				+ File.separator + "logs" + File.separator + arg1File.getName() + ".kost-val.log.xml" );
 		// falls das File bereits existiert, z.B. von einem vorhergehenden Durchlauf, loeschen wir es
 		if ( logFile.exists() ) {
@@ -410,6 +524,8 @@ public class GuiController
 					 * Da es erfolgreich war (valid / invalid) kann der Log angezeigt werden */
 					engine.load( "file:///" + logFile.getAbsolutePath() );
 					scroll.setVvalue( 1.0 ); // 1.0 = letzte Zeile der Konsole
+					buttonPrint.setDisable( false );
+					buttonSave.setDisable( false );
 				}
 			} );
 			val.setOnFailed( new EventHandler<WorkerStateEvent>() {
@@ -518,6 +634,8 @@ public class GuiController
 					 * Da es erfolgreich war (valid / invalid) kann der Log angezeigt werden */
 					engine.load( "file:///" + logFile.getAbsolutePath() );
 					scroll.setVvalue( 1.0 ); // 1.0 = letzte Zeile der Konsole
+					buttonPrint.setDisable( false );
+					buttonSave.setDisable( false );
 				}
 			} );
 			val.setOnFailed( new EventHandler<WorkerStateEvent>() {
@@ -581,6 +699,8 @@ public class GuiController
 				buttonSip.setDisable( true );
 			}
 		}
+		buttonPrint.setDisable( true );
+		buttonSave.setDisable( true );
 	}
 
 	/* Wenn choseFoder betaetigt wird, kann ein Ordner ausgewaehlt werden */
@@ -609,6 +729,8 @@ public class GuiController
 			String textFolder = " --> " + valFolder.getAbsolutePath();
 			engine.loadContent( textFolder );
 		}
+		buttonPrint.setDisable( true );
+		buttonSave.setDisable( true );
 	}
 
 	/* Wenn changeConfig betaetigt wird, oeffnet sich das KonfigGui im neuen Fenster */
@@ -637,7 +759,8 @@ public class GuiController
 		} catch ( IOException e1 ) {
 			e1.printStackTrace();
 		}
-
+		buttonPrint.setDisable( true );
+		buttonSave.setDisable( true );
 	}
 
 	/* TODO --> TextField ================= */
@@ -702,6 +825,8 @@ public class GuiController
 				engine.loadContent( notexist );
 			}
 		}
+		buttonPrint.setDisable( true );
+		buttonSave.setDisable( true );
 	}
 
 	/* TODO --> ChoiceBox ================= */

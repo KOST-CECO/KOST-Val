@@ -92,6 +92,16 @@ public class Controllervalinit implements MessageConstants
 			System.out.println( getTextResourceService().getText( locale, ERROR_PARAMETER_USAGE ) );
 			valInit = false;
 			return valInit;
+		} else {
+			/* Angabe ob dargestellt werden soll, dass KOST-Val noch laeuft --xml (=no) zaehler
+			 * anzeigen --max (=yes) auch "Windrad" --min (=nomin) zaehler anzeigen */
+			String showprogressonwork = "no";
+			if ( args[3].equalsIgnoreCase( "--max" ) ) {
+				showprogressonwork = "yes";
+			} else if ( args[3].equalsIgnoreCase( "--min" ) ) {
+				showprogressonwork = "nomin";
+			}
+			configMap.put( "ShowProgressOnWork", showprogressonwork );
 		}
 
 		return valInit;

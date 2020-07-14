@@ -1,8 +1,8 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val v1.9.8 application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and
- * Submission Information Package (SIP). Copyright (C) 2012-2020 Claire Roethlisberger (KOST-CECO),
- * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
- * (coderslagoon), Daniel Ludin (BEDAG AG)
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
+ * Information Package (SIP). Copyright (C) 2012-2020 Claire Roethlisberger (KOST-CECO), Christian
+ * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
+ * Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
  * KOST-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. This application
  * is free software: you can redistribute it and/or modify it under the terms of the GNU General
@@ -130,23 +130,6 @@ public class KOSTVal implements MessageConstants
 			dirOfJarPath = file.getParent();
 		}
 
-		// Vorbereitung Konfiguration
-		File directoryOfConfigfile = new File( System.getenv( "USERPROFILE" ) + File.separator
-				+ ".kost-val" + File.separator + "configuration" );
-		File kadZip = new File( dirOfJarPath + File.separator + "configuration" + File.separator
-				+ "KaD_SignatureFile_V72.xml" );
-		File kadFile = new File( directoryOfConfigfile + File.separator + "KaD_SignatureFile_V72.xml" );
-		if ( !kadFile.exists() ) {
-			directoryOfConfigfile.mkdirs();
-			Util.copyFile( kadZip, kadFile );
-		}
-		File configFileZip = new File(
-				dirOfJarPath + File.separator + "configuration" + File.separator + "kostval.conf.xml" );
-		File configFile = new File( directoryOfConfigfile + File.separator + "kostval.conf.xml" );
-		if ( !configFile.exists() ) {
-			directoryOfConfigfile.mkdirs();
-			Util.copyFile( configFileZip, configFile );
-		}
 		Locale locale = Locale.getDefault();
 
 		if ( args[2].equalsIgnoreCase( "--de" ) ) {

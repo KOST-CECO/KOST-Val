@@ -1,3 +1,22 @@
+/* == KOST-Val ==================================================================================
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
+ * Information Package (SIP). Copyright (C) 2012-2020 Claire Roethlisberger (KOST-CECO), Christian
+ * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
+ * Daniel Ludin (BEDAG AG)
+ * -----------------------------------------------------------------------------------------------
+ * KOST-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. This application
+ * is free software: you can redistribute it and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version. BEDAG AG and Daniel Ludin hereby disclaims all copyright
+ * interest in the program SIP-Val v0.2.0 written by Daniel Ludin (BEDAG AG). Switzerland, 1 March
+ * 2011. This application is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ * PURPOSE. See the follow GNU General Public License for more details. You should have received a
+ * copy of the GNU General Public License along with this program; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA or see
+ * <http://www.gnu.org/licenses/>.
+ * ============================================================================================== */
+
 package ch.kostceco.tools.kostval;
 
 import java.io.BufferedInputStream;
@@ -22,12 +41,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import javafx.stage.Stage;
 
 public class ConfigController
 {
@@ -41,15 +62,23 @@ public class ConfigController
 			checkComp8, checkPi2, checkPi6, checkBps4, checkBps32, checkSize, checkComp4, checkComp32773,
 			checkPi3, checkPi8, checkSip0160;
 
-	private File							configFile	= new File( System.getenv( "USERPROFILE" ) + File.separator
-			+ ".kost-val" + File.separator + "configuration" + File.separator + "kostval.conf.xml" );
+	@FXML
+	private Button						buttonConfigApply, buttonConfigCancel;
+
+	private File							configFileBackup	= new File(
+			System.getenv( "USERPROFILE" ) + File.separator + ".kost-val" + File.separator
+					+ "configuration" + File.separator + "BACKUP.kostval.conf.xml" );
+
+	private File							configFile				= new File(
+			System.getenv( "USERPROFILE" ) + File.separator + ".kost-val" + File.separator
+					+ "configuration" + File.separator + "kostval.conf.xml" );
 
 	private String						dirOfJarPath;
 
-	private Locale						locale			= Locale.getDefault();
+	private Locale						locale						= Locale.getDefault();
 
-	ObservableList<String>		langList		= FXCollections.observableArrayList( "Deutsch", "Français",
-			"English" );
+	ObservableList<String>		langList					= FXCollections.observableArrayList( "Deutsch",
+			"Français", "English" );
 
 	@FXML
 	private ChoiceBox<String>	lang;
@@ -72,6 +101,13 @@ public class ConfigController
 
 		// TODO --> initialize (wird einmalig am Anfang ausgefuehrt)
 
+		// Original Config Kopieren
+		try {
+			Util.copyFile( configFile, configFileBackup );
+		} catch ( IOException e2 ) {
+			e2.printStackTrace();
+		}
+
 		// festhalten von wo die Applikation (exe) gestartet wurde
 		dirOfJarPath = "";
 		try {
@@ -90,40 +126,50 @@ public class ConfigController
 			e1.printStackTrace();
 		}
 
+		// Sprache anhand configFile (HauptGui) setzten
+		lang.getItems().addAll( langList );
 		try {
-			if ( locale.toString().startsWith( "fr" ) ) {
-				labelBps.setText( "Bits par échantillon (par canal)" );
-				labelComp.setText( "Algorithme de compression" );
-				labelOther.setText( "Divers" );
-				labelPi.setText( "Espace couleur" );
-				labelLength.setText( "Longueur du chemin" );
-				labelName.setText( "Nom du SIP" );
-				labelPuid.setText( "PUID" );
-				Util.oldnewstring( "kostval-conf-DE.xsl", "kostval-conf-FR.xsl", configFile );
-				Util.oldnewstring( "kostval-conf-EN.xsl", "kostval-conf-FR.xsl", configFile );
-			} else if ( locale.toString().startsWith( "en" ) ) {
-				labelBps.setText( "Bits per sample (per channel)" );
-				labelComp.setText( "Compression algorithm" );
-				labelOther.setText( "Other" );
-				labelPi.setText( "Color space" );
-				labelLength.setText( "Path length" );
-				labelName.setText( "SIP Name" );
-				labelPuid.setText( "PUID" );
-				Util.oldnewstring( "kostval-conf-DE.xsl", "kostval-conf-EN.xsl", configFile );
-				Util.oldnewstring( "kostval-conf-FR.xsl", "kostval-conf-EN.xsl", configFile );
-			} else {
-				labelBps.setText( "Bits per Sample (pro Kanal)" );
-				labelComp.setText( "Komprimierungsalgorithmus" );
-				labelOther.setText( "Sonstiges" );
-				labelPi.setText( "Farbraum" );
-				labelLength.setText( "Pfadlänge" );
-				labelName.setText( "SIP Name" );
-				labelPuid.setText( "PUID" );
-				Util.oldnewstring( "kostval-conf-FR.xsl", "kostval-conf-DE.xsl", configFile );
-				Util.oldnewstring( "kostval-conf-EN.xsl", "kostval-conf-DE.xsl", configFile );
+			if ( lang.getValue() != null ) {
+				if ( Util.stringInFile( "kostval-conf-DE.xsl", configFile ) ) {
+					labelBps.setText( "Bits per Sample (pro Kanal)" );
+					labelComp.setText( "Komprimierungsalgorithmus" );
+					labelOther.setText( "Sonstiges" );
+					labelPi.setText( "Farbraum" );
+					labelLength.setText( "Pfadlänge" );
+					labelName.setText( "SIP Name" );
+					labelPuid.setText( "PUID" );
+					locale = new Locale( "de" );
+					lang.setValue( "Deutsch" );
+					buttonConfigApply.setText( "anwenden" );
+					buttonConfigCancel.setText( "verwerfen" );
+				} else if ( Util.stringInFile( "kostval-conf-FR.xsl", configFile ) ) {
+					labelBps.setText( "Bits par échantillon (par canal)" );
+					labelComp.setText( "Algorithme de compression" );
+					labelOther.setText( "Divers" );
+					labelPi.setText( "Espace couleur" );
+					labelLength.setText( "Longueur du chemin" );
+					labelName.setText( "Nom du SIP" );
+					labelPuid.setText( "PUID" );
+					locale = new Locale( "fr" );
+					lang.setValue( "Français" );
+					buttonConfigApply.setText( "appliquer" );
+					buttonConfigCancel.setText( "annuler" );
+				} else {
+					labelBps.setText( "Bits per sample (per channel)" );
+					labelComp.setText( "Compression algorithm" );
+					labelOther.setText( "Other" );
+					labelPi.setText( "Color space" );
+					labelLength.setText( "Path length" );
+					labelName.setText( "SIP Name" );
+					labelPuid.setText( "PUID" );
+					locale = new Locale( "en" );
+					lang.setValue( "English" );
+					buttonConfigApply.setText( "apply" );
+					buttonConfigCancel.setText( "cancel" );
+				}
 			}
-		} catch ( IOException e1 ) {
-			e1.printStackTrace();
+		} catch ( Exception e ) {
+			e.printStackTrace();
 		}
 
 		// Werte aus Konfiguration lesen und Check-Box entsprechend setzten
@@ -181,15 +227,33 @@ public class ConfigController
 
 			if ( config.contains( noPdfa ) ) {
 				checkPdfa.setSelected( false );
+				checkPdftools.setDisable( true );
+				checkCallas.setDisable( true );
+				checkPdfa1a.setDisable( true );
+				checkPdfa2a.setDisable( true );
+				checkFont.setDisable( true );
+				checkImage.setDisable( true );
+				checkJbig2.setDisable( true );
+				checkDetail.setDisable( true );
+				checkNentry.setDisable( true );
+				checkPdfa1b.setDisable( true );
+				checkPdfa2b.setDisable( true );
+				checkFontTol.setDisable( true );
+				checkPdfa2u.setDisable( true );
 			}
 			if ( config.contains( noPdftools ) ) {
 				checkPdftools.setSelected( false );
+				checkFont.setDisable( true );
+				checkDetail.setDisable( true );
+				checkFontTol.setDisable( true );
 			}
 			if ( config.contains( noDetail ) ) {
 				checkDetail.setSelected( false );
 			}
 			if ( config.contains( noCallas ) ) {
 				checkCallas.setSelected( false );
+				checkNentry.setDisable( true );
+				checkPdfa1b.setDisable( true );
 			}
 			if ( config.contains( noNentry ) ) {
 				checkNentry.setSelected( false );
@@ -235,6 +299,8 @@ public class ConfigController
 			}
 			if ( config.contains( noSiard ) ) {
 				checkSiard.setSelected( false );
+				checkSiard10.setDisable( true );
+				checkSiard21.setDisable( true );
 			}
 			if ( config.contains( noSiard10 ) ) {
 				checkSiard10.setSelected( false );
@@ -244,6 +310,31 @@ public class ConfigController
 			}
 			if ( config.contains( noTiff ) ) {
 				checkTiff.setSelected( false );
+				checkComp1.setDisable( true );
+				checkComp5.setDisable( true );
+				checkPi0.setDisable( true );
+				checkPi4.setDisable( true );
+				checkComp2.setDisable( true );
+				checkComp7.setDisable( true );
+				checkPi1.setDisable( true );
+				checkPi5.setDisable( true );
+				checkBps1.setDisable( true );
+				checkBps8.setDisable( true );
+				checkMultipage.setDisable( true );
+				checkBps2.setDisable( true );
+				checkBps16.setDisable( true );
+				checkTiles.setDisable( true );
+				checkComp3.setDisable( true );
+				checkComp8.setDisable( true );
+				checkPi2.setDisable( true );
+				checkPi6.setDisable( true );
+				checkBps4.setDisable( true );
+				checkBps32.setDisable( true );
+				checkSize.setDisable( true );
+				checkComp4.setDisable( true );
+				checkComp32773.setDisable( true );
+				checkPi3.setDisable( true );
+				checkPi8.setDisable( true );
 			}
 			if ( config.contains( noComp1 ) ) {
 				checkComp1.setSelected( false );
@@ -322,6 +413,9 @@ public class ConfigController
 			}
 			if ( config.contains( noSip0160 ) ) {
 				checkSip0160.setSelected( false );
+			textLength.setDisable( true );
+			textName.setDisable( true );
+			textPuid.setDisable( true );
 			}
 
 			Document doc = null;
@@ -343,7 +437,6 @@ public class ConfigController
 		} catch ( IOException | SAXException | ParserConfigurationException e1 ) {
 			e1.printStackTrace();
 		}
-		lang.getItems().addAll( langList );
 
 		engine = wbv.getEngine();
 		engine.load( "file:///" + configFile.getAbsolutePath() );
@@ -361,6 +454,30 @@ public class ConfigController
 		final Field sysPathsField = ClassLoader.class.getDeclaredField( "sys_paths" );
 		sysPathsField.setAccessible( true );
 		sysPathsField.set( null, null );
+	}
+
+	/* TODO --> Button ================= */
+
+	@FXML
+	void configApply( ActionEvent e )
+	{
+		engine.loadContent( "Apply" );
+		Util.deleteFile( configFileBackup );
+		((Stage) (((Button) e.getSource()).getScene().getWindow())).close();
+	}
+
+	@FXML
+	void configCancel( ActionEvent e )
+	{
+		configFile.delete();
+		engine.loadContent( "Cancel" );
+		try {
+			Util.copyFile( configFileBackup, configFile );
+		} catch ( IOException e1 ) {
+			e1.printStackTrace();
+		}
+		Util.deleteFile( configFileBackup );
+		((Stage) (((Button) e.getSource()).getScene().getWindow())).close();
 	}
 
 	/* TODO --> TextField ================= */
@@ -1820,46 +1937,58 @@ public class ConfigController
 	@FXML
 	void changeLang( ActionEvent event )
 	{
-		String selLang = lang.getValue();
 		try {
-			if ( selLang.equals( "Deutsch" ) ) {
-				labelBps.setText( "Bits per Sample (pro Kanal)" );
-				labelComp.setText( "Komprimierungsalgorithmus" );
-				labelOther.setText( "Sonstiges" );
-				labelPi.setText( "Farbraum" );
-				labelLength.setText( "Pfadlänge" );
-				labelName.setText( "SIP Name" );
-				labelPuid.setText( "PUID" );
-				Util.oldnewstring( "kostval-conf-FR.xsl", "kostval-conf-DE.xsl", configFile );
-				Util.oldnewstring( "kostval-conf-EN.xsl", "kostval-conf-DE.xsl", configFile );
-				locale = new Locale( "de" );
-			} else if ( selLang.equals( "English" ) ) {
-				labelBps.setText( "Bits per sample (per channel)" );
-				labelComp.setText( "Compression algorithm" );
-				labelOther.setText( "Other" );
-				labelPi.setText( "Color space" );
-				labelLength.setText( "Path length" );
-				labelName.setText( "SIP Name" );
-				labelPuid.setText( "PUID" );
-				Util.oldnewstring( "kostval-conf-DE.xsl", "kostval-conf-EN.xsl", configFile );
-				Util.oldnewstring( "kostval-conf-FR.xsl", "kostval-conf-EN.xsl", configFile );
-				locale = new Locale( "en" );
-			} else {
-				labelBps.setText( "Bits par échantillon (par canal)" );
-				labelComp.setText( "Algorithme de compression" );
-				labelOther.setText( "Divers" );
-				labelPi.setText( "Espace couleur" );
-				labelLength.setText( "Longueur du chemin" );
-				labelName.setText( "Nom du SIP" );
-				labelPuid.setText( "PUID" );
-				Util.oldnewstring( "kostval-conf-DE.xsl", "kostval-conf-FR.xsl", configFile );
-				Util.oldnewstring( "kostval-conf-EN.xsl", "kostval-conf-FR.xsl", configFile );
-				locale = new Locale( "fr" );
+			if ( lang.getValue() != null ) {
+				String selLang = lang.getValue();
+				try {
+					if ( selLang.equals( "Deutsch" ) ) {
+						labelBps.setText( "Bits per Sample (pro Kanal)" );
+						labelComp.setText( "Komprimierungsalgorithmus" );
+						labelOther.setText( "Sonstiges" );
+						labelPi.setText( "Farbraum" );
+						labelLength.setText( "Pfadlänge" );
+						labelName.setText( "SIP Name" );
+						labelPuid.setText( "PUID" );
+						Util.oldnewstring( "kostval-conf-FR.xsl", "kostval-conf-DE.xsl", configFile );
+						Util.oldnewstring( "kostval-conf-EN.xsl", "kostval-conf-DE.xsl", configFile );
+						locale = new Locale( "de" );
+						buttonConfigApply.setText( "anwenden" );
+						buttonConfigCancel.setText( "verwerfen" );
+					} else if ( selLang.equals( "English" ) ) {
+						labelBps.setText( "Bits per sample (per channel)" );
+						labelComp.setText( "Compression algorithm" );
+						labelOther.setText( "Other" );
+						labelPi.setText( "Color space" );
+						labelLength.setText( "Path length" );
+						labelName.setText( "SIP Name" );
+						labelPuid.setText( "PUID" );
+						Util.oldnewstring( "kostval-conf-DE.xsl", "kostval-conf-EN.xsl", configFile );
+						Util.oldnewstring( "kostval-conf-FR.xsl", "kostval-conf-EN.xsl", configFile );
+						locale = new Locale( "en" );
+						buttonConfigApply.setText( "apply" );
+						buttonConfigCancel.setText( "cancel" );
+					} else {
+						labelBps.setText( "Bits par échantillon (par canal)" );
+						labelComp.setText( "Algorithme de compression" );
+						labelOther.setText( "Divers" );
+						labelPi.setText( "Espace couleur" );
+						labelLength.setText( "Longueur du chemin" );
+						labelName.setText( "Nom du SIP" );
+						labelPuid.setText( "PUID" );
+						Util.oldnewstring( "kostval-conf-DE.xsl", "kostval-conf-FR.xsl", configFile );
+						Util.oldnewstring( "kostval-conf-EN.xsl", "kostval-conf-FR.xsl", configFile );
+						locale = new Locale( "fr" );
+						buttonConfigApply.setText( "appliquer" );
+						buttonConfigCancel.setText( "annuler" );
+					}
+				} catch ( IOException e1 ) {
+					e1.printStackTrace();
+				}
 			}
-		} catch ( IOException e1 ) {
-			e1.printStackTrace();
+			engine.load( "file:///" + configFile.getAbsolutePath() );
+		} catch ( Exception e ) {
+			// e.printStackTrace();
 		}
-		engine.load( "file:///" + configFile.getAbsolutePath() );
 	}
 
 }

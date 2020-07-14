@@ -31,12 +31,12 @@ import ch.kostceco.tools.kostval.util.Util;
  * 
  * Kontrolle der Funktionsfaehigkeit von KOST-Val.
  * 
- *  Wird vor der Validierung einmal ausgefuehrt.*/
+ * Wird vor der Validierung einmal ausgefuehrt. */
 
 public class ControllerInit implements MessageConstants
 {
 
-	private static TextResourceService	textResourceService;
+	private static TextResourceService textResourceService;
 
 	public static TextResourceService getTextResourceService()
 	{
@@ -49,42 +49,41 @@ public class ControllerInit implements MessageConstants
 		this.textResourceService = textResourceService;
 	}
 
-	// TODO
 	public boolean init( Locale locale, String dirOfJarPath ) throws IOException
 	{
 		boolean init = true;
-			// Ueberpruefung des Parameters (Log-Verzeichnis)
-		 String logs = System.getenv( "USERPROFILE" ) + File.separator + ".kost-val" + File.separator	+ "logs";
-			String pathToLogfile = logs;
-			File directoryOfLogfile = new File( pathToLogfile );
-			if ( !directoryOfLogfile.exists() ) {
-				directoryOfLogfile.mkdir();
-			}
-			if ( !directoryOfLogfile.canWrite() ) {
-				System.out.println( getTextResourceService().getText( locale, ERROR_LOGDIRECTORY_NOTWRITABLE,
-						directoryOfLogfile ) );
-				init = false;
-				return init;
-			}
-			if ( !directoryOfLogfile.isDirectory() ) {
-				System.out
-						.println( getTextResourceService().getText( locale, ERROR_LOGDIRECTORY_NODIRECTORY ) );
-				init = false;
-				return init;
-			}
+		// Ueberpruefung des Parameters (Log-Verzeichnis)
+		String logs = System.getenv( "USERPROFILE" ) + File.separator + ".kost-val" + File.separator
+				+ "logs";
+		String pathToLogfile = logs;
+		File directoryOfLogfile = new File( pathToLogfile );
+		if ( !directoryOfLogfile.exists() ) {
+			directoryOfLogfile.mkdir();
+		}
+		if ( !directoryOfLogfile.canWrite() ) {
+			System.out.println( getTextResourceService().getText( locale, ERROR_LOGDIRECTORY_NOTWRITABLE,
+					directoryOfLogfile ) );
+			init = false;
+			return init;
+		}
+		if ( !directoryOfLogfile.isDirectory() ) {
+			System.out
+					.println( getTextResourceService().getText( locale, ERROR_LOGDIRECTORY_NODIRECTORY ) );
+			init = false;
+			return init;
+		}
 
-			File pathTmp =new File (logs+File.separator+"path.tmp");
-			if (pathTmp.exists()) {
-				Util.deleteFile( pathTmp );
-			}
-			
-			// Informationen zum Arbeitsverzeichnis holen
-			String pathToWorkDir = System.getenv( "USERPROFILE" ) + File.separator + ".kost-val"
-					+ File.separator + "temp_KOST-Val";
+		File pathTmp = new File( logs + File.separator + "path.tmp" );
+		if ( pathTmp.exists() ) {
+			Util.deleteFile( pathTmp );
+		}
+
+		// Informationen zum Arbeitsverzeichnis holen
+		String pathToWorkDir = System.getenv( "USERPROFILE" ) + File.separator + ".kost-val"
+				+ File.separator + "temp_KOST-Val";
 		File xslOrig = new File(
 				dirOfJarPath + File.separator + "resources" + File.separator + "kost-val.xsl" );
-		File xslCopy = new File(
-				logs + File.separator + "kost-val.xsl" );
+		File xslCopy = new File( logs + File.separator + "kost-val.xsl" );
 		if ( !xslCopy.exists() ) {
 			Util.copyFile( xslOrig, xslCopy );
 		}
@@ -128,6 +127,62 @@ public class ControllerInit implements MessageConstants
 					getTextResourceService().getText( locale, ERROR_WORKDIRECTORY_NOTWRITABLE, tmpDir ) );
 			init = false;
 			return init;
+		}
+
+		/* Vorbereitung Konfiguration
+		 * 
+		 * benoetigte Dateien in User config kopieren
+		 * 
+		 * wenn nicht vorhanden oder veraltete Version */
+		String version = "kostval.conf.xml_v2.0.0";
+		File directoryOfConfigfile = new File( System.getenv( "USERPROFILE" ) + File.separator
+				+ ".kost-val" + File.separator + "configuration" );
+		File directoryOfConfigfileInit = new File( dirOfJarPath + File.separator + "configuration" );
+		if ( !directoryOfConfigfile.exists() ) {
+			directoryOfConfigfile.mkdirs();
+		}
+		File configFileInit = new File(
+				directoryOfConfigfileInit + File.separator + "kostval.conf.xml" );
+		File configFile = new File( directoryOfConfigfile + File.separator + "kostval.conf.xml" );
+		if ( !configFile.exists() ) {
+			Util.copyFile( configFileInit, configFile );
+		} else {
+			if ( !Util.stringInFile( version, configFile ) ) {
+				Util.copyFile( configFileInit, configFile );
+			}
+		}
+		File xslDeInit = new File( directoryOfConfigfileInit + File.separator + "kostval-conf-DE.xsl" );
+		File xslDe = new File( directoryOfConfigfile + File.separator + "kostval-conf-DE.xsl" );
+		if ( !xslDe.exists() ) {
+			Util.copyFile( xslDeInit, xslDe );
+		} else {
+			if ( !Util.stringInFile( version, xslDe ) ) {
+				Util.copyFile( xslDeInit, xslDe );
+			}
+		}
+		File xslEnInit = new File( directoryOfConfigfileInit + File.separator + "kostval-conf-EN.xsl" );
+		File xslEn = new File( directoryOfConfigfile + File.separator + "kostval-conf-EN.xsl" );
+		if ( !xslEn.exists() ) {
+			Util.copyFile( xslEnInit, xslEn );
+		} else {
+			if ( !Util.stringInFile( version, xslEn ) ) {
+				Util.copyFile( xslEnInit, xslEn );
+			}
+		}
+		File xslFrInit = new File( directoryOfConfigfileInit + File.separator + "kostval-conf-FR.xsl" );
+		File xslFr = new File( directoryOfConfigfile + File.separator + "kostval-conf-FR.xsl" );
+		if ( !xslFr.exists() ) {
+			Util.copyFile( xslFrInit, xslFr );
+		} else {
+			if ( !Util.stringInFile( version, xslFr ) ) {
+				Util.copyFile( xslFrInit, xslFr );
+			}
+		}
+		File kadInit = new File(
+				directoryOfConfigfileInit + File.separator + "KaD_SignatureFile_V72.xml" );
+		File kadFile = new File( directoryOfConfigfile + File.separator + "KaD_SignatureFile_V72.xml" );
+		if ( !kadFile.exists() ) {
+			Util.copyFile( kadInit, kadFile );
 		}
 
 		/* Initialisierung TIFF-Modul B (JHove-Validierung) existiert configuration\jhove.conf */

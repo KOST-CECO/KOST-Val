@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 import ch.kostceco.tools.kostval.util.Util;
 
@@ -76,7 +77,7 @@ public class Util
 		}
 	}
 
-	/** Schaltet die Konsolen-Ausgabe in ein file um und beendet den Stream, damit dieser gelöscht
+	/** Schaltet die Konsolen-Ausgabe in ein file um und beendet den Stream, damit dieser geloescht
 	 * werden kann. */
 	public static void switchOffConsoleToTxtClose( File file ) throws FileNotFoundException
 	{
@@ -106,11 +107,11 @@ public class Util
 		System.setOut( original );
 	}
 
-	/** Löscht ein Verzeichnis rekursiv.
+	/** Loescht ein Verzeichnis rekursiv.
 	 * 
 	 * @param dir
-	 *          das zu löschende Verzeichnis
-	 * @return true wenn alle Files und Verzeichnisse gelöscht werden konnten */
+	 *          das zu loeschende Verzeichnis
+	 * @return true wenn alle Files und Verzeichnisse geloescht werden konnten */
 	public static boolean deleteDir( File dir )
 	{
 		if ( dir.isDirectory() ) {
@@ -149,6 +150,25 @@ public class Util
 			}
 		}
 		return file.delete();
+	}
+
+	/** Kontrolliert ob text in einer Linie im File vorkommt */
+	public static boolean stringInFile( String text, File file )
+	{
+		try {
+			Scanner scanner = new Scanner( file );
+			while ( scanner.hasNextLine() ) {
+				String line = scanner.nextLine();
+				if ( line.contains( text ) ) {
+					scanner.close();
+					return true;
+				}
+			}
+			scanner.close();
+			return false;
+		} catch ( FileNotFoundException e ) {
+			return false;
+		}
 	}
 
 	public static Map<String, File> getContent( File dir, HashMap<String, File> fileMap )
@@ -264,15 +284,15 @@ public class Util
 
 		File[] files = quelle.listFiles();
 		File newFile = null;
-		// in diesem Objekt wird für jedes File der Zielpfad gespeichert.
+		// in diesem Objekt wird fuer jedes File der Zielpfad gespeichert.
 		// 1. Der alte Zielpfad
 		// 2. Das systemspezifische Pfadtrennungszeichen
 		// 3. Der Name des aktuellen Ordners/der aktuellen Datei
-		ziel.mkdirs(); // erstellt alle benötigten Ordner
+		ziel.mkdirs(); // erstellt alle benoetigten Ordner
 		if ( files != null ) {
 			for ( int i = 0; i < files.length; i++ ) {
-				newFile = new File( ziel.getAbsolutePath() + System.getProperty( "file.separator" )
-						+ files[i].getName() );
+				newFile = new File(
+						ziel.getAbsolutePath() + System.getProperty( "file.separator" ) + files[i].getName() );
 				if ( files[i].isDirectory() ) {
 					copyDir( files[i], newFile );
 				} else {
@@ -290,7 +310,10 @@ public class Util
 	 *          die Ziel-Datei */
 	public static void copyFile( File file, File ziel ) throws FileNotFoundException, IOException
 	{
-
+		if ( ziel.exists() ) {
+			// Datei loeschen ansonsten wird Text hinzugefuegt
+			ziel.delete();
+		}
 		BufferedInputStream in = new BufferedInputStream( new FileInputStream( file ) );
 		BufferedOutputStream out = new BufferedOutputStream( new FileOutputStream( ziel, true ) );
 		int bytes = 0;
@@ -316,15 +339,17 @@ public class Util
 	 * sb.append( line ); sb.append( "\r\n" ); } oldtext= sb.toString();
 	 * 
 	 * verwendet werden. Dies insbesondere bei grossem Text massiv schneller. Da bei diesen
-	 * Ersetzungen meist der Output gelesen wird, kann dieser natürich gross sein. */
+	 * Ersetzungen meist der Output gelesen wird, kann dieser natuerlich gross sein. */
 
-/** Verändert [& mit &amp;], [ '<'  	mit  '&lt;' ] sowie [ '>'  mit  '&gt;' ] und ergänzt das XML-Element "<End></End>" mit dem ergebnis (stringEnd)
-	 * sowie <Message>3c</Message></Error> mit dem ergebnis (string3c) in dem kost-val.log.xml (file)
+	/** Veraendert [& mit &amp;], [ '<' mit '&lt;' ] sowie [ '>' mit '&gt;' ] und ergaenzt das
+	 * XML-Element "<End></End>" mit dem ergebnis (stringEnd) sowie <Message>3c</Message></Error> mit
+	 * dem ergebnis (string3c) in dem kost-val.log.xml (file)
 	 * 
-	 * ! Solche Ersetzungen dürfen nicht in einer Schleife gemacht werden sondern erst am Schluss, da
+	 * ! Solche Ersetzungen duerfen nicht in einer Schleife gemacht werden sondern erst am Schluss, da
 	 * diese sehr Zeitintensiv sind !!!
 	 * 
-	 * @throws IOException */
+	 * @throws IOException
+	 */
 	public static void valEnd3cAmp( String string3c, File file ) throws IOException
 	{
 		try {
@@ -364,12 +389,13 @@ public class Util
 		}
 	}
 
-	/** Ergänzt "Validierung: SIP" mit der Version (string) in dem kost-val.log.xml (file)
+	/** Ergaenzt "Validierung: SIP" mit der Version (string) in dem kost-val.log.xml (file)
 	 * 
-	 * ! Solche Ersetzungen dürfen nicht in einer Schleife gemacht werden sondern erst am Schluss, da
+	 * ! Solche Ersetzungen duerfen nicht in einer Schleife gemacht werden sondern erst am Schluss, da
 	 * diese sehr Zeitintensiv sind !!!
 	 * 
-	 * @throws IOException */
+	 * @throws IOException
+	 */
 	public static void valSipversion( String string, File file ) throws IOException
 	{
 		try {
@@ -397,12 +423,13 @@ public class Util
 		}
 	}
 
-	/** Verändert ersetzt oldstring mit newstring in file
+	/** Veraendert ersetzt oldstring mit newstring in file
 	 * 
-	 * ! Solche Ersetzungen dürfen nicht in einer Schleife gemacht werden sondern erst am Schluss, da
+	 * ! Solche Ersetzungen duerfen nicht in einer Schleife gemacht werden sondern erst am Schluss, da
 	 * diese sehr Zeitintensiv sind !!!
 	 * 
-	 * @throws IOException */
+	 * @throws IOException
+	 */
 	public static void oldnewstring( String oldstring, String newstring, File file )
 			throws IOException
 	{
