@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<devicelink>
+	<profile lang="CHS">
+		<header>美国卷筒胶印(SWOP)，降低到 280% 油墨限制(仅限服务器/CLI)</header>
+		<explanation>根据 Web Coated SWOP 2006 Grade 3 Paper，将最大油墨覆盖率降低到 280%</explanation>
+	</profile>
+	<profile lang="ENU">
+		<header>Web offset US (SWOP), reduce to 280% ink limit (Server/CLI only)</header>
+		<explanation>Reduction of maximum ink coverage to 280% based on Web Coated SWOP 2006 Grade 3 Paper</explanation>
+	</profile>
+	<profile lang="ESP">
+		<header>Offset de bobina de EE.UU. (SWOP), reducir a 280% el límite de tinta (sólo Server/CLI)</header>
+		<explanation>Reducción de la cobertura de tinta máxima a 280% en base a papel grado 3 SWOP 2006 estucado en bobina</explanation>
+	</profile>
+	<profile lang="FRA">
+		<header>Impression rotative offset USA (SWOP), réduction du taux de couverture d'encre à 280% (Server/CLI seulement)</header>
+		<explanation>Réduction du taux de couverture d'encre maximale à 280% selon Web Coated SWOP 2006 Grade 3 Paper</explanation>
+	</profile>
+	<profile lang="DEU">
+		<header>Rollenoffset US (SWOP), Gesamtfarbreduzierung auf 280% (nur Server/CLI)</header>
+		<explanation>Reduzierung des Gesamtfarbauftrags auf maximal 280% auf Basis von Web Coated SWOP 2006 Grade 3 Paper</explanation>
+	</profile>
+	<profile lang="ITA">
+		<header>Offset bobina US (SWOP), riduci limite inchiostro a 280% (solo Server/CLI)</header>
+		<explanation>Riduzione della copertura massima di inchiostro al 280% in base a Web Coated SWOP 2006 Grade 3 Paper</explanation>
+	</profile>
+	<profile lang="JPN">
+		<header>Web オフセット, インキ量を 280% に削減 (米国) (SWOP)(Server/CLI のみ)</header>
+		<explanation>Web Coated SWOP 2006 Grade 3 Paper を基にインキ総量を 280% に削減します</explanation>
+	</profile>
+</devicelink>

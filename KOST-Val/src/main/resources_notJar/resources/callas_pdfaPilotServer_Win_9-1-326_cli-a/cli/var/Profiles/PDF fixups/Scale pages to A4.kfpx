@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pdfpreflight version="8.0">
+	<package>
+		<id3>c813b39d08e81d6654ffbea0d70b0d5e</id3>
+		<pdfxoutintentlist>
+		</pdfxoutintentlist>
+		<iccprofilelist>
+		</iccprofilelist>
+		<ccpolicies>
+		</ccpolicies>
+		<occdsetups>
+		</occdsetups>
+		<curves>
+		</curves>
+		<fspolicies>
+		</fspolicies>
+		<conditions>
+		</conditions>
+		<rules>
+		</rules>
+		<rulesets>
+		</rulesets>
+		<fixups>
+			<fixup>
+				<id1>F70425f227e1f3daef0952760e145fb60</id1>
+				<id2>F63bd5fe1960fa5c6d2dc980e2546247e</id2>
+				<id3>1241b204221b274a83e52b343e4f501f</id3>
+				<id4>ba66d5d07f174dd1d7250810a1c66f16</id4>
+				<name>F_8_ScalepagestoA4</name>
+				<comment>F_8_ScalepagestoA4</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<fcfg>ScalePagesEx&#9;210&#9;297&#9;mm&#9;FitFromInside&#10;</fcfg>
+				<reportFailed></reportFailed>
+			</fixup>
+		</fixups>
+		<fixupsets>
+			<fixupset>
+				<id1>U974c7f509557b41ae57d521077b09bb2</id1>
+				<id2>U24a8df2c5fd64262b2a1fea8de590f3b</id2>
+				<id3>24016ee30859f0dc8924a4ebbec036f3</id3>
+				<id4>385fa121a4b20f8c467ba53558545047</id4>
+				<name>UUUU_FIXUPSET_DEF_NAME</name>
+				<comment>UUUU_FIXUPSET_DEF_NAME</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<fixups>
+					<fixup>F70425f227e1f3daef0952760e145fb60</fixup>
+				</fixups>
+			</fixupset>
+		</fixupsets>
+		<profiles>
+			<profile>
+				<id1>P7766d1a16fd9e6e2ec8d60ec694301fc</id1>
+				<id2>Pbc3d28af12d2dd9d6c7a084516244ead</id2>
+				<id3>12ed9e8c8f684c6162600ada4b2fc110</id3>
+				<id4>64ff0abc3adf407c142d9e6b460e7626</id4>
+				<name>P_8_ScalepagestoA4</name>
+				<comment>P_8_ScalepagestoA4</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<metalist>
+					<metadata>
+						<metakey>author</metakey>
+						<metavalue>callas pdfToolbox 4</metavalue>
+					</metadata>
+					<metadata>
+						<metakey>email</metakey>
+						<metavalue>support@callassoftware.com</metavalue>
+					</metadata>
+				</metalist>
+				<creation>D:20091022080156+01&apos;00&apos;</creation>
+				<modification>D:20091105115904+01&apos;00&apos;</modification>
+				<pdfstd>
+					<pdfx convert="0"></pdfx>
+					<pdfa convert="0"></pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond>Coated GRACoL 2006</outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+				</pdfstd>
+				<wizard>
+				</wizard>
+				<rulesets>
+				</rulesets>
+				<fixupsets>
+					<fixupset>U974c7f509557b41ae57d521077b09bb2</fixupset>
+				</fixupsets>
+			</profile>
+		</profiles>
+		<profgroups>
+		</profgroups>
+	</package>
+</pdfpreflight>

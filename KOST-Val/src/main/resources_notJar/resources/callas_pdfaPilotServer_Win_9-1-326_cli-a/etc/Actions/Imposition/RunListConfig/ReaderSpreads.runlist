@@ -1,0 +1,40 @@
+########################
+# ReaderSpreads Runlist
+#
+# callas software 20080530
+#
+########################
+# Environmanet vars
+#
+# "BOA_CROP_MARKS"
+# "BOA_CROP_MARK_LENGTH"
+# "BOA_CROP_MARK_GAP"
+# "BOA_CROP_MARK_WIDTH"
+# "COVER_PAGE"
+
+##########################
+# Cover page
+#
+
+If	ENVIRONMENT("COVER_PAGE")
+	NewSheet	1
+
+	PositionPage	FirstPage	Slot_2
+	Increment	FirstPage
+EndIf
+
+##########################
+# Loop
+
+Loop
+
+NewSheet	1
+
+PositionPage	FirstPage	Slot_1
+Increment	FirstPage
+
+PositionPage	FirstPage	Slot_2
+Increment	FirstPage
+
+###########################
+# EOF

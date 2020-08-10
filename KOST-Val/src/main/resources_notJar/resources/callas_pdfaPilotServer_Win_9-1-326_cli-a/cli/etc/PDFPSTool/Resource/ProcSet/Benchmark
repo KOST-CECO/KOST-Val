@@ -1,0 +1,662 @@
+%!PS-Adobe-3.0 Resource-ProcSet
+%%Title: Benchmarking tools
+%
+% (c) Copyright 1993-1994 Adobe Systems Incorporated.
+% All rights reserved.  All information contained herein is the property
+% of Adobe Systems Incorporated or its Licensors, and are protected trade
+% secrets and copyrights, and may be covered by U.S. and foreign patents
+% or patents pending and/or mask works. Any reproduction or dissemination
+% of any portion of this document or of software or other works derived
+% from it is strictly forbidden unless prior written permission is
+% obtained from Adobe Systems Incorporated.
+%
+% Patents Pending
+%
+% PostScript and Display PostScript are trademarks of Adobe Systems
+% Incorporated which may be registered in certain jurisdictions.
+%
+%%EndComments
+
+
+%%BeginResource: procset Benchmark 1 2
+%
+% Description:
+%
+% The Benchmark ProcSet exports a single procedure, BenchmarkFile, which is
+% used to collect performance information about the execution of a particular
+% PostScript file. For each page, the time to executed the page description
+% up to the showpage operator and the time to execute the showpage operator
+% itself are recorded separately so that the amount of time spent processing
+% a displaylist can be measured distinctly from the rest of the execution.
+% The file can be run a number of times to measure the performance change
+% due to caching of fonts, screens and so on as a side-effect of the first
+% run.
+%
+% A report is generated at the end which distinguishes the times for the
+% first run from the average time over the full set of runs. The report also
+% shows the page size produced for the first page in the job and the maximum
+% size for the overflowed display and source list files which may be needed
+% when using a band output device.
+%
+% The accuracy of the timings depends on the accuracy of the implementation
+% of the "realtime" operator in the PostScript interpreter.
+%
+% INSTRUCTIONS:
+%
+% To time a given file, create a small job like this:
+%
+%	%!
+%	(filename) n
+%	/Benchmark /ProcSet findresource begin
+%	  true setglobal			 % Include with optional lines
+%	  variables /reportFile (timing.log) put % Optional
+%	  false setglobal			 % Include with optional lines
+%	  //BenchmarkFile
+%	end
+%	exec
+%
+% where "n" is the number of times to repeat the timing. The report will be
+% written to "%stdout" unless the reportFile variable is changed to a disk
+% file name as shown above.
+%
+% HINTS:
+%
+% Performance degrades significantly when the disk is used to overflow the
+% display and source lists. After measuring one run and the report indicates
+% that either list overflowed to disk, adjust the /MaxDisplayList and
+% /MaxSourceList system parameters appropriately.
+%
+% Timings may fluctuate dramatically if any of the files involved in the job
+% are read across a network. Attempt to ensure that the file to be measured
+% as well as the display and source list overflow files are on a local disk.
+%
+% Operation:
+%
+% The basic mechanism is to record "realtime" at the beginning of a page,
+% again when the "showpage" operator is executed and again after "showpage"
+% completes. The differences between the two pairs of numbers gives the time
+% taken to interpret the page and then to render it. For a frame device the
+% showpage time is usually much less than with a band device which must
+% interpret its display list and rasterize graphic elements during showpage.
+% To eliminate the overhead of the benchmarking machinery, the time inside
+% showpage is handled by recording the time at first arrival in showpage and
+% again immediately before the original version of showpage is invoked. Any
+% time consumed between arriving at showpage and executing the original
+% showpage is therefore excluded from the formal measurements.
+%
+% The times are stored in the "results" array which is kept in the "variables"
+% dictionary in the ProcSet. Each entry in the results array corresponds to a
+% single page. The maximum number of pages recorded is set by the maxPages
+% variable in the variables dictionary. This variable may be changed before
+% the BenchmarkFile procedure is executed. Each entry in the results array
+% consists of four numbers. The first two correspond to the execution and
+% showpage times for the first run of the file. The second two numbers are
+% the sum of the execution and showpage times, respectively, for all other
+% runs (repetitions) of the file. All four numbers are kept in "realtime"
+% units. If realtime returns units other than one millisecond, the variable
+% realtimeUnits in the variables dictionary must be changed accordingly to
+% produce accurate numbers in the final report.
+%
+% When the "finalize" procedure is invoked by BenchmarkFile, the data in the
+% results array are processed to convert them to real numbers or to times as
+% needed for the report and to compute averages over the set of repetitions.
+%
+% In addition to recording times, a re-definition of showpage also records the
+% maximum length of the display and source list overflow files and the page
+% size so that these can be included in the overall report. This is important
+% because performance is degraded substantially if either of the disk overflow
+% files are used during the execution of a PostScript language program.
+
+currentglobal true setglobal	% In case not loaded via findresource
+currentpacking true setpacking
+
+<<
+  /variables <<
+    /reportFile (%stdout)	% File to which report is written
+    /maxPages 128		% Maximum number of pages measured
+    /pathSeparator		% Used to strip paths off filename for report
+    (\n) 0 get 10 eq {		% Guess we are on a Mac if (\n) is <cr>
+      (/)
+    } {
+      (:)
+    } ifelse	% "/" on Unix, ":" on Macintosh
+
+    /scratchFilePath
+
+    /CPSI /ProcSet findresource /variables get dup /scratchFilePath known {
+      /scratchFilePath get
+    }{
+      pop
+      (%%[ Warning: Customize the Benchmark variable "scratchFilePath" ]%%\r\n) print flush
+      (/tmp/)			% Customize this and remove warning message
+    } ifelse
+
+    /initialized false
+
+    /pointsPerInch 72.0
+    /realtimeUnits 1000.0
+
+    /repetitions null		% Number of times file is executed
+    /fileName null		% File to be executed
+    /results null		% Array of 4 element array per page
+    /page null
+    /fileReadTime null		% Time to read file from disk repetitions times
+
+    /pageWidth null		% Width of first page
+    /pageHeight null		% Height of first page
+
+    /maxPSdlist null		% Largest size of display list file
+    /maxPSslist null		% Largest size of source list file
+
+    /exStart null		% realtime at beginning of page
+    /exFinish null		% realtime on arrival at showpage
+    /spStart null		% realtime before executing original showpage
+    /spFinish null		% realtime upon completing original showpage
+  >>
+
+  /RealString
+  % num RealString string	Convert number to fixed-pattern string
+  {
+    4 dict begin
+      /pattern (    0.000) def		% The pattern for numbers
+      pattern (.) search pop		% Ignore boolean "true"
+      /beforedot exch length def	% Characters before "." in pattern
+      pop				% Discard other search results
+      /afterdot exch length def
+      pattern length 2 mul string cvs
+      /number exch def			% Basic number string
+      number (.) search
+      exch length beforedot exch sub
+      /position exch def
+      {
+        % If there is a "." in the number
+        pop
+        length afterdot sub dup 0 gt {
+          % Trim off extra digits in number after "."
+          number length exch sub number 0 3 -1 roll getinterval
+          /number exch def
+        } {
+          pop
+        } ifelse
+      } if
+      position 0 ge {
+        pattern dup length string copy dup position number putinterval
+      } {
+        (field overflow)
+      } ifelse
+    end
+  } bind
+
+  /IntegerString
+  % integer width IntegerString string	(width < 0 means pad with "0", not " ")
+  {
+    6 dict begin
+      /w exch def			% Result string width
+      /i exch def			% Number to represent
+      /is i =string cvs def		% Smallest string containing number
+      /il is length def			% Length of smallest string
+
+      w 0 lt {
+        /w w neg def
+        /pad (0) 0 get def
+      } {
+        /pad ( ) 0 get def
+      } ifelse
+
+      w il lt {
+        /w il def
+      } if
+
+      /s w string def
+
+      0 1 w 1 sub {
+        s exch pad put
+      } for
+
+      s w il sub is putinterval
+
+      s
+    end
+  } bind
+
+  /PrintResults
+  % -- PrintResults --
+  % Assumes both the ProcSet and its variables dictionaries on dict stack.
+  {
+    2 dict begin
+
+      mark {
+        reportFile (w) file
+        exch pop
+      } stopped {
+        cleartomark
+        (%%[ Warning: Cannot write report file; using %stdout instead ]%%\r\n)
+        print flush
+        (%stdout) (w) file
+      } if
+
+      /report exch def
+
+      [
+        (File: )
+        fileName {
+          pathSeparator search {
+            pop pop
+          } {
+            exit
+          } ifelse
+        } loop
+        ( at ) currentpagedevice /HWResolution get 0 get 5 string cvs (dpi \()
+        /PixelBurst /HWOptions resourcestatus {
+          pop pop
+          (hardware)
+        } {
+          (software)
+        } ifelse
+        (\)\n)
+
+        (\nPage        First Run)
+        repetitions 1 gt {
+          (                  Average over )
+          repetitions 2 string cvs
+          ( runs)
+        } if
+
+        (\n No.   execution showpage)
+        repetitions 1 gt {
+          (               execution showpage)
+        } if
+        (\n)
+      ] {
+        report exch writestring
+      } forall
+
+      /exFirst 0 def
+      /spFirst 0 def
+      /exAverage 0 def
+      /spAverage 0 def
+
+      0 1 page 1 sub {
+        /i exch def
+        [
+          i 1 add 3 IntegerString
+          ( )
+          results i get 0 2 getinterval aload pop
+          /sp exch def
+          /ex exch def
+          /exFirst exFirst ex add def
+          /spFirst spFirst sp add def
+          ex realtimeUnits div RealString
+          ( +)
+          sp realtimeUnits div RealString
+          ( =)
+          ex sp add realtimeUnits div RealString
+          repetitions 1 gt {
+            (  )
+            results i get 2 2 getinterval aload pop
+            /sp exch sp add def
+            /ex exch ex add def
+            /exAverage exAverage ex add def
+            /spAverage spAverage sp add def
+            ex realtimeUnits div repetitions div RealString
+            ( +)
+            sp realtimeUnits div repetitions div RealString
+            ( =)
+            ex sp add realtimeUnits div repetitions div RealString
+          } if
+          (\n)
+        ] {
+          report exch writestring
+        } forall
+      } for
+
+      [
+        (\nJob:)
+        exFirst realtimeUnits div RealString
+        ( +)
+        spFirst realtimeUnits div RealString
+        ( =)
+        exFirst spFirst add
+        dup /totalFirst exch def
+        realtimeUnits div RealString
+        repetitions 1 gt {
+          (  )
+          exAverage realtimeUnits div repetitions div RealString
+          ( +)
+          spAverage realtimeUnits div repetitions div RealString
+          ( =)
+          exAverage spAverage add
+          dup /totalAverage exch def
+          realtimeUnits div repetitions div RealString
+        } if
+
+        (\n\nTime:                        )
+
+        totalFirst realtimeUnits 2 div add realtimeUnits div
+        dup 60 div exch cvi 60 mod exch
+        cvi 2 IntegerString exch cvi -2 IntegerString (:) exch
+
+        repetitions 1 gt {
+          (                            )
+          totalAverage repetitions div realtimeUnits 2 div add	% Round
+          realtimeUnits div dup 60 div exch cvi 60 mod exch
+          cvi 2 IntegerString exch cvi -2 IntegerString (:) exch
+        } if
+
+        (\n)
+
+        (Pages-per-minute:         )
+        60 totalFirst realtimeUnits div page div div RealString
+
+        repetitions 1 gt {
+          (                        )
+          60 totalAverage repetitions div realtimeUnits div page div div
+	  RealString
+        } if
+        (\n\n)
+
+        (Version:        ) version (-) revision -2 IntegerString (\n)
+        (SerialNumber:   #) serialnumber 16 8 string cvrs (\n\n)
+
+        % Report time to read file
+
+        (File reading:   )
+        fileReadTime realtimeUnits div repetitions div 10 string cvs
+        (s)
+        repetitions 1 gt {
+          ( \(averaged\))
+        } if
+        (\n)
+
+        % Report page size
+
+        (PageSize:       )
+        pageWidth pointsPerInch div 10 string cvs
+        (" by )
+        pageHeight pointsPerInch div 10 string cvs
+        ("\n)
+
+        % Report interesting system parameters
+
+        maxPSdlist null ne {
+          (MaxDisplayList: )
+          currentsystemparams /MaxDisplayList get 10 string cvs
+          maxPSdlist 1024 sub currentsystemparams /MaxDisplayList get gt {
+            ( Overflowed.)
+          } if
+          (\nPSdlist:        )
+          maxPSdlist 10 string cvs
+          (\n)
+        } if
+
+        maxPSslist null ne {
+          (MaxSourceList:  )
+          currentsystemparams /MaxSourceList get 10 string cvs
+          ( Overflowed.\nPSslist:        )
+          maxPSslist 10 string cvs
+          (\n)
+        } if
+      ] {
+        report exch writestring
+      } forall
+
+      report
+      (\n--------------------------------------------------------------------\n)
+      writestring
+
+      report closefile
+    end
+  } bind
+
+  /ReadFileFromDisk
+  % -- ReadFileFromDisk --	Stores fileReadTime in variables dictionary
+  % Read the file identified by fileName in the variables dictionary and time
+  % how long it takes just to read the file into a 64K string.
+  {
+    /Benchmark /ProcSet findresource /variables get begin
+      realtime
+      1 dict begin
+        /s 64 1024 mul 1 sub string def
+        repetitions {
+          /f fileName (r) file def
+          {
+            f s readstring exch pop not {
+              exit
+            } if
+          } loop
+          f closefile
+        } repeat
+      end
+      realtime exch sub /fileReadTime exch def
+    end
+  } bind
+
+  /initialize {
+    count 2 lt {
+      //end
+      /BenchmarkFile errordict /stackunderflow get exec
+    } if
+
+    dup type /integertype ne 2 index type /stringtype ne or {
+      //end
+      /BenchmarkFile errordict /typecheck get exec
+    } if
+
+    dup 0 le {
+      //end
+      /BenchmarkFile errordict /rangecheck get exec
+    } if
+
+    1 index status not {
+      /BenchmarkFile errordict /undefinedfilename get exec
+    } {
+      4 {
+        pop
+      } repeat
+    } ifelse
+
+    variables begin
+      initialized {
+        //end
+        //end
+        (%%[ Error: ProcSet already initialized; OffendingCommand: initialize ]%%\r\n) print flush
+        stop
+      } if
+
+      /repetitions exch def
+
+      /repetition 0 def
+
+      currentglobal true setglobal
+      /fileName 2 index dup length string copy def
+
+      /results maxPages array def
+
+      0 1 maxPages 1 sub {
+        results exch 0 0 0 0 4 array astore put
+      } for
+      setglobal
+
+      /initialized true def
+    end
+  } bind
+
+  /finalize {
+    variables begin
+      initialized not {
+        //end //end
+        (%%[ Error: ProcSet not initialized; OffendingCommand: finalize ]%%\r\n)
+	print flush
+        stop
+      } if
+
+      page 0 gt {
+        ReadFileFromDisk
+        PrintResults
+      }{
+	(%%[ Error: Benchmark incomplete (no showpage); OffendingCommand: finalize ]%%\r\n)
+	print flush
+      } ifelse
+
+      /initialized false def
+    end
+  } bind
+
+  /showpage {
+    realtime
+    /Benchmark /ProcSet findresource /variables get begin
+      /exFinish exch def
+
+      repetition 0 eq {
+        currentpagedevice /PageSize get aload pop
+        /pageHeight exch def
+        /pageWidth exch def
+
+        [ [ /maxPSdlist (PSdlist) ] [ /maxPSslist (PSslist) ] ] {
+          aload pop
+          dup length scratchFilePath length add string
+          dup 0 scratchFilePath putinterval
+          dup scratchFilePath length 4 -1 roll putinterval
+          status {
+            pop pop exch pop	% name filesize
+            exch dup load null eq {
+              % filesize name
+              exch def
+            } {
+              dup load 3 -1 roll 2 copy lt {
+                % name oldsize filesize
+                exch
+              } if
+              pop def
+            } ifelse
+          } {
+            pop
+          } ifelse
+        } forall
+      } if
+
+      /spStart realtime def	% Note start of showpage
+    end
+
+    $benchmark_showpage$
+    realtime	% Note end of showpage
+
+    /Benchmark /ProcSet findresource /variables get begin
+      /spFinish exch def
+      page maxPages lt {
+        repetition 0 eq {
+          results page get 0 2 getinterval dup
+          0 exFinish exStart sub put
+          1 spFinish spStart sub put
+        } {
+          results page get 2 2 getinterval dup
+          dup 0 get exFinish exStart sub add 0 exch put
+          dup 1 get spFinish spStart sub add 1 exch put
+        } ifelse
+        /page page 1 add def
+      } {
+        (%%[ Warning: Maximum number of measured pages exceeded ]%%\r\n)
+        print flush
+      } ifelse
+
+      /exStart realtime def	% Note start of next page
+    end
+  } bind
+
+  /setpageparams
+  % width height margin orientation setpageparams --
+  % Partial emulation for applications which depend upon it.
+  {
+    1 ne {
+      (%%[ Error: Cannot handle rotated page; OffendingCommand: setpageparams )
+      print flush
+      stop
+    } if
+    pop
+    2 array astore << exch /PageSize exch>> setpagedevice
+  } bind
+
+  /setdefaulttimeouts
+  % int int int setdefaulttimesout
+  % Fake implementation to handle files captured from old Apple drivers.
+  {
+    % Omit check on VM save level
+    count 3 lt {
+      /setdefaulttimeouts errordict /stackunderflow get exec
+    } if
+    pop pop pop
+  } bind
+
+  /Letter
+  % Emulation for applications which depend upon it.
+  {
+    <<
+      /PageSize [ 792 612 ]
+      /Orientation 1
+      /Policies <<
+        /PageSize 7
+      >>
+    >> setpagedevice
+  } bind
+
+  /RunFile
+  % repetition RunFile --
+  {
+    /Benchmark /ProcSet findresource begin
+      variables begin
+        /repetition exch def
+        /page 0 def
+        fileName
+      end
+
+      variables
+      /showpage load
+    end
+    /$benchmark_save$ save def
+
+    /$benchmark_showpage$ /showpage load def
+    userdict /showpage 3 -1 roll put	% Install benchmarking showpage
+
+    statusdict /setpageparams known not {
+      % Often needed by Apple prologue and/or Quark XPress
+      statusdict /setpageparams
+      /Benchmark /ProcSet findresource /setpageparams get
+      put
+    } if
+
+    statusdict /setdefaulttimeouts
+    % Override with version which does not check VM status level
+    /Benchmark /ProcSet findresource /setdefaulttimeouts get
+    put
+
+    userdict /Letter known not {
+      userdict /Letter
+      /Benchmark /ProcSet findresource /Letter get
+      put
+    } if
+
+    /exStart realtime put	% Note beginning of page
+    run
+    clear
+    cleardictstack
+    $benchmark_save$ restore
+    2 vmreclaim
+  } bind
+
+  /BenchmarkFile
+  % filename repetitions BenchmarkFile --
+  {
+    /Benchmark /ProcSet findresource begin
+      initialize
+      0 1 variables /repetitions get 1 sub /RunFile load
+    end
+    for
+    /Benchmark /ProcSet findresource begin
+      finalize
+    end
+  } bind
+>> /Benchmark exch /ProcSet defineresource pop
+
+setpacking
+setglobal
+%%EndProcSet

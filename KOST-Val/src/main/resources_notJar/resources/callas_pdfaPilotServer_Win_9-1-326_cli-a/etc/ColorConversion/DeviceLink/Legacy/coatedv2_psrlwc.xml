@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<devicelink>
+	<profile lang="CHS">
+		<header>平板胶印到凹版印刷 LWC (欧洲) (仅限服务器/CLI)</header>
+		<explanation>从 ISO Coated v2 (ECI)转换为 PSR Gravure print LWC (最大油墨覆盖率为 360%)</explanation>
+	</profile>
+	<profile lang="ENU">
+		<header>Sheetfed offset to Gravure print LWC (Europe) (Server/CLI only)</header>
+		<explanation>Conversion from ISO Coated v2 (ECI) to PSR Gravure print LWC (max. 360% ink coverage)</explanation>
+	</profile>
+	<profile lang="ESP">
+		<header>Offset en bobina a papel estucado ligero de impresión huecograbado (Europa) (sólo Server/CLI)</header>
+		<explanation>Conversión de ISO estucado v2 (ECI) a papel estucado ligero de impresión huecograbado PSR (cobertura de tinta 360% máxima)</explanation>
+	</profile>
+	<profile lang="FRA">
+		<header>Offset à feuilles en Héliogravure LWC (Europe)</header>
+		<explanation>Conversion d’ISO Coated v2 (ECI) vers PSR Gravure print LWC (couverture d'encre de 360 % max.) (Server/CLI seulement)</explanation>
+	</profile>
+	<profile lang="DEU">
+		<header>Bogenoffset nach Tiefdruck LWC (Europa) (nur Server/CLI)</header>
+		<explanation>Konvertierung von ISO Coated v2 (ECI) nach PSR Gravure print LWC (max. 360% Gesamtfarbauftrag)</explanation>
+	</profile>
+	<profile lang="ITA">
+		<header>Da offset foglio a calcografia LWC (Europa) (solo Server/CLI)</header>
+		<explanation>Conversione da ISO Coated v2 (ECI) a PSR Gravure print LWC (max. 360% di copertura inchiostro)</explanation>
+	</profile>
+	<profile lang="JPN">
+		<header>シートフィードオフセットをグラビヤ印刷 LWC (欧州) に変換(Server/CLI のみ)</header>
+		<explanation>ISO Coated v2 (ECI) を PSR グラビヤ印刷  LWC (インキ総量 360%)に変換します</explanation>
+	</profile>
+</devicelink>

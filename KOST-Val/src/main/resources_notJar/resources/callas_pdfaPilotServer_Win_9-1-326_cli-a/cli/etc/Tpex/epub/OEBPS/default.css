@@ -1,0 +1,65 @@
+body
+{
+	padding-top:					2em;
+	font-family:					Helvetica, Arial, sans serif;
+	background-color:				#eee;
+	color:							#333;
+}
+
+th
+{
+	background-color:				#ddd;
+	border:							1px #444 dashed;
+}
+
+/* Standard für alle */
+
+body
+{
+	padding-top:					2em;
+}
+
+img
+{
+	max-width:						85%;
+}
+
+.lbl
+{
+	display:						none;
+}
+
+img
+{
+	max-width:							85%;	
+}
+
+.alt_from_image
+{
+	visibility:							visible;
+	font-style:							italic;
+	font-size:							80%;
+/* 	display:							none; */
+}
+
+.alt_from_image:before,
+.alt_from_image:after
+{
+	content:							' ';
+}
+
+.ausgeklappt:after
+{
+	content:							'[–]';
+}
+
+.eingeklappt
+{
+	opacity:							0.5;
+	background-color:					#0f0 !important;
+}
+
+.eingeklappt:after
+{
+	content:							'[+]';
+}

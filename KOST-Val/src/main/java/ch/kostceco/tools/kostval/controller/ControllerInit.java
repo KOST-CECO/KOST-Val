@@ -53,7 +53,7 @@ public class ControllerInit implements MessageConstants
 	{
 		boolean init = true;
 		// Ueberpruefung des Parameters (Log-Verzeichnis)
-		String logs = System.getenv( "USERPROFILE" ) + File.separator + ".kost-val" + File.separator
+		String logs = System.getenv( "USERPROFILE" ) + File.separator + ".kost-val_2x" + File.separator
 				+ "logs";
 		String pathToLogfile = logs;
 		File directoryOfLogfile = new File( pathToLogfile );
@@ -79,7 +79,7 @@ public class ControllerInit implements MessageConstants
 		}
 
 		// Informationen zum Arbeitsverzeichnis holen
-		String pathToWorkDir = System.getenv( "USERPROFILE" ) + File.separator + ".kost-val"
+		String pathToWorkDir = System.getenv( "USERPROFILE" ) + File.separator + ".kost-val_2x"
 				+ File.separator + "temp_KOST-Val";
 		File xslOrig = new File(
 				dirOfJarPath + File.separator + "resources" + File.separator + "kost-val.xsl" );
@@ -136,7 +136,7 @@ public class ControllerInit implements MessageConstants
 		 * wenn nicht vorhanden oder veraltete Version */
 		String version = "kostval.conf.xml_v2.0.0";
 		File directoryOfConfigfile = new File( System.getenv( "USERPROFILE" ) + File.separator
-				+ ".kost-val" + File.separator + "configuration" );
+				+ ".kost-val_2x" + File.separator + "configuration" );
 		File directoryOfConfigfileInit = new File( dirOfJarPath + File.separator + "configuration" );
 		if ( !directoryOfConfigfile.exists() ) {
 			directoryOfConfigfile.mkdirs();

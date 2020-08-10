@@ -1,0 +1,413 @@
+{
+  "id": "M358826e779c0d5dc68a2e004a3edaty4b",
+  "name": "New Process plan",
+  "comment": "some comment",
+  "email": "test@company.de",
+  "locked": false,
+  "password": "2c1af13117223b5c6187c1587e97b5a1",
+  "layout": {
+    "stepsLayout": {
+      "start": {
+        "position": {
+          "x": 10,
+          "y": 10
+        },
+        "size": {
+          "width": 120,
+          "height": 40
+        }
+      },
+      "0": {
+        "position": {
+          "x": 130,
+          "y": 100
+        },
+        "size": {
+         "width": 200,
+          "height": 40
+        }
+      },
+      "1": {
+        "position": {
+          "x": 300,
+          "y": 200
+        },
+        "size": {
+         "width": 200,
+          "height": 40
+        }
+      },
+      "2": {
+        "position": {
+          "x": 530,
+          "y": 280
+        },
+        "size": {
+         "width": 200,
+          "height": 40
+        }
+      },
+      "3": {
+        "position": {
+          "x": 450,
+          "y": 400
+        },
+        "size": {
+         "width": 200,
+          "height": 40
+        }
+      },
+      "4": {
+        "position": {
+          "x": 680,
+          "y": 500
+        },
+        "size": {
+         "width": 200,
+          "height": 40
+        }
+      },
+      "5": {
+        "position": {
+          "x": 770,
+          "y": 600
+        },
+        "size": {
+         "width": 200,
+          "height": 40
+        }
+      },
+      "6": {
+        "position": {
+          "x": 1000,
+          "y": 620
+        },
+        "size": {
+         "width": 200,
+          "height": 40
+        }
+      },
+      "7": {
+        "position": {
+          "x": 990,
+          "y": 710
+        },
+        "size": {
+         "width": 200,
+          "height": 40
+        }
+      },
+      "end": {
+        "position": {
+          "x": 1200,
+          "y": 800
+        },
+        "size": {
+          "width": 120,
+          "height": 40
+        }
+      }
+    },
+    "transitionsLayout": {
+      "start": [
+        {
+          "types": [
+            "out"
+          ],
+          "start": {
+            "position": "bottom"
+          },
+          "end": {
+            "position": "top"
+          }
+        }
+      ],
+      "0": [
+        {
+          "types": [
+            "on_error",
+            "else"
+          ],
+          "start": {
+            "position": "left"
+          },
+          "end": {
+            "position": "left"
+          }
+        }
+      ],
+      "1": [
+        {
+          "types": [
+            "on_error",
+            "on_success",
+            "on_warning",
+            "on_info"
+          ],
+          "start": {
+            "position": "right"
+          },
+          "end": {
+            "position": "bottom"
+          }
+        }
+      ],
+      "2": [
+        {
+          "types": [
+            "on_hit",
+            "on_success"
+          ],
+          "start": {
+            "position": "top"
+          },
+          "end": {
+            "position": "right"
+          }
+        }
+      ],
+      "3": [
+        {
+          "types": [
+            "on_failure",
+            "on_success"
+          ],
+          "start": {
+            "position": "bottom"
+          },
+          "end": {
+            "position": "left"
+          }
+        }
+      ],
+      "4": [
+        {
+          "types": [
+            "on_failure",
+            "on_success"
+          ],
+          "start": {
+            "position": "right"
+          },
+          "end": {
+            "position": "left"
+          }
+        }
+      ],
+      "5": [
+        {
+          "types": [
+            "on_failure",
+            "on_success"
+          ],
+          "start": {
+            "position": "right"
+          },
+          "end": {
+            "position": "top"
+          }
+        }
+      ],
+      "6": [
+        {
+          "types": [
+            "on_failure",
+            "on_success"
+          ],
+          "start": {
+            "position": "right"
+          },
+          "end": {
+            "position": "bottom"
+          }
+        }
+      ],
+      "7": [
+        {
+          "types": [
+            "on_failure",
+            "on_success"
+          ],
+          "start": {
+            "position": "left"
+          },
+          "end": {
+            "position": "top"
+          }
+        }
+      ]
+    }
+  },
+  "sequence": [
+    {
+      "type": "processplan",
+      "id": "M358826e779c0d5dc68a2e004a3edac4b",
+      "on_error": {
+        "next_step": -1
+      },
+      "else": {
+        "next_step": -1
+      }
+    },
+    {
+      "type": "profile",
+      "id": "P358826e779c0d5dc68a2e004a3edac4b",
+      "omit_fixups": false,
+      "on_error": {
+        "post_process": [
+          {
+            "type": "txt_report"
+          }
+        ],
+        "next_step": -1
+      },
+      "on_warning": {
+        "post_process": [
+          {
+            "type": "txt_report"
+          }
+        ],
+        "next_step": -1
+      },
+      "on_info": {
+        "post_process": [
+          {
+            "type": "txt_report"
+          }
+        ],
+        "next_step": -1
+      },
+      "on_success": {
+        "post_process": [
+          {
+            "type": "txt_report"
+          }
+        ],
+        "next_step": -1
+      }
+    },
+    {
+      "type": "check",
+      "id": "R358826e779c0d5dc68a2e004a3edac4b",
+      "on_hit": {
+        "post_process": [
+          {
+            "type": "txt_report"
+          }
+        ],
+        "next_step": -1
+      },
+      "on_success": {
+        "post_process": [
+          {
+            "type": "txt_report"
+          }
+        ],
+        "next_step": -1
+      }
+    },
+    {
+      "type": "fixup",
+      "id": "F358826e779c0d5dc68a2e004a3edac4b",
+      "on_success": {
+        "post_process": [
+          {
+            "type": "txt_report"
+          }
+        ],
+        "next_step": -1
+      },
+      "on_failure": {
+        "post_process": [
+          {
+            "type": "txt_report"
+          }
+        ],
+        "next_step": -1
+      }
+    },
+    {
+      "type": "action",
+      "id": "A358826e779c0d5dc68a2e004a3edac4b",
+      "on_success": {
+        "post_process": [
+          {
+            "type": "txt_report"
+          }
+        ],
+        "next_step": -1
+      },
+      "on_failure": {
+        "post_process": [
+          {
+            "type": "txt_report"
+          }
+        ],
+        "next_step": -1
+      }
+    },
+    {
+      "type": "variable",
+      "id": "V358826e779c0d5dc68a2e004a3edac4b",
+      "on_success": {
+        "post_process": [
+          {
+            "type": "txt_report"
+          }
+        ],
+        "next_step": -1
+      },
+      "on_failure": {
+        "post_process": [
+          {
+            "type": "txt_report"
+          }
+        ],
+        "next_step": -1
+      }
+    },
+    {
+      "type": "filepickup",
+      "index": 2,
+      "on_success": {
+        "post_process": [
+          {
+            "type": "txt_report"
+          }
+        ],
+        "next_step": -1
+      },
+      "on_failure": {
+        "post_process": [
+          {
+            "type": "txt_report"
+          }
+        ],
+        "next_step": -1
+      }
+    },
+    {
+      "type": "pdfcopy",
+      "suffix": "Suffix",
+      "prefix": "Prefix",
+      "folder": "Folder",
+      "overwrite_existing_file" : true,
+      "on_success": {
+        "post_process": [
+          {
+            "type": "txt_report"
+          }
+        ],
+        "next_step": -1
+      },
+      "on_failure": {
+        "post_process": [
+          {
+            "type": "txt_report"
+          }
+        ],
+        "next_step": -1
+      }
+    }
+  ]
+}

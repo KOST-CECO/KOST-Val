@@ -1,0 +1,118 @@
+{
+  "author" : "",
+  "dialogTemplate" : "",
+  "email" : "",
+  "group" : "Process plans",
+  "hasPassword" : false,
+  "id" : "Mff959273cffe08f92d26de03bc18357e",
+  "layout" :
+  {
+    "stepsLayout" :
+    {
+      "0" :
+      {
+        "position" :
+        {
+          "x" : 130.880,
+          "y" : 110.560
+        },
+        "size" :
+        {
+          "height" : 40,
+          "width" : 200
+        }
+      },
+      "end" :
+      {
+        "position" :
+        {
+          "x" : 333.8700000000001,
+          "y" : 182.210
+        },
+        "size" :
+        {
+          "height" : 40,
+          "width" : 120
+        }
+      },
+      "start" :
+      {
+        "position" :
+        {
+          "x" : 20,
+          "y" : 40
+        },
+        "size" :
+        {
+          "height" : 40,
+          "width" : 120
+        }
+      }
+    },
+    "transitionsLayout" :
+    {
+      "0" :
+      [
+
+        {
+          "end" :
+          {
+            "position" : "left"
+          },
+          "start" :
+          {
+            "position" : "bottom"
+          },
+          "types" : [ "on_error", "on_warning", "on_info", "on_success" ]
+        }
+      ],
+      "start" :
+      [
+
+        {
+          "end" :
+          {
+            "position" : "left"
+          },
+          "start" :
+          {
+            "position" : "bottom"
+          },
+          "types" : [ "out" ]
+        }
+      ]
+    }
+  },
+  "locked" : false,
+  "name" :
+  {
+    "value" : "New Process plan",
+    "vars" : []
+  },
+  "sequence" :
+  [
+
+    {
+      "enable_step" : true,
+      "id" : "P47c1d353ada5a4f6d3c49cc9f67e9a4f",
+      "omit_fixups" : false,
+      "on_error" :
+      {
+        "next_step" : -1
+      },
+      "on_info" :
+      {
+        "next_step" : -1
+      },
+      "on_success" :
+      {
+        "next_step" : -1
+      },
+      "on_warning" :
+      {
+        "next_step" : -1
+      },
+      "type" : "profile"
+    }
+  ]
+}

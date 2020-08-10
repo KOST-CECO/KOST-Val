@@ -1,0 +1,57 @@
+{
+  "id": "M358826e779c0d5dc68a2e004a3edac4b",
+  "name": "New Process plan",
+  "comment": "some comment",
+  "email": "test@company.de",
+  "locked": false,
+  "password": "2c1af13117223b5c6187c1587e97b5a1",
+  "sequence": [
+    {
+      "type": "processplan",
+      "id": "M358826e779c0d5dc68a2e004a3edac4b",
+      "on_error": {
+        "next_step": -1
+      },
+      "else": {
+        "next_step": -1
+      }
+    },
+    {
+      "type": "profile",
+      "id": "P000001e779q0d5ww68a2q004a3edaz4z",
+      "omit_fixups": false,
+      "on_error": {
+        "post_process": [
+          {
+            "type": "txt_report"
+          }
+        ],
+        "next_step": -1
+      },
+      "on_warning": {
+        "post_process": [
+          {
+            "type": "txt_report"
+          }
+        ],
+        "next_step": -1
+      },
+      "on_info": {
+        "post_process": [
+          {
+            "type": "txt_report"
+          }
+        ],
+        "next_step": -1
+      },
+      "on_success": {
+        "post_process": [
+          {
+            "type": "txt_report"
+          }
+        ],
+        "next_step": -1
+      }
+    }
+  ]
+}

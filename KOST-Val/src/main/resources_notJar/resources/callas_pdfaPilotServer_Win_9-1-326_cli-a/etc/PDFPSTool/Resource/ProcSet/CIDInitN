@@ -1,0 +1,206 @@
+%!PS-Adobe-3.0 Resource-ProcSet
+%%BeginResource: ProcSet (CIDInitN)
+%%Title: (ProcSet/CIDInitN)
+%%Version: 3010.01
+%%Copyright: ------------------------------------------------------------
+%%Copyright: Copyright 1990-1999 Adobe Systems Incorporated.
+%%Copyright: All rights reserved.
+%%Copyright:
+%%Copyright: Patents Pending
+%%Copyright:
+%%Copyright: NOTICE: All information contained herein is the property
+%%Copyright: of Adobe Systems Incorporated. Many of the intellectual
+%%Copyright: and technical concepts contained herein are proprietary
+%%Copyright: to Adobe, are protected as trade secrets, and are made
+%%Copyright: available only to Adobe licensees for their internal use.
+%%Copyright: Any reproduction or dissemination of this software is
+%%Copyright: strictly forbidden unless prior written permission is
+%%Copyright: obtained from Adobe.
+%%Copyright:
+%%Copyright: PostScript and Display PostScript are trademarks of
+%%Copyright: Adobe Systems Incorporated which may be registered in
+%%Copyright: certain jurisdictions.
+%%Copyright: ------------------------------------------------------------
+%%EndComments
+cid_extensions begin userdict/cid_vmstate currentglobal put userdict
+/cid_packingstate currentpacking put true setglobal true setpacking/CIDInitN
+/CIDInitN/ProcSet findresource dup length dict copy begin/cid_version 3010.01
+def/cid_revision 0 def/cid_versionName(CSL Native 3010.01)def
+/cid_CheckForCompatibleFont{/CIDInitC/ProcSet findresource
+/cid_CheckForCompatibleFont get exec}bind def/cid_CallCheckForCompatibleFont{
+/CIDInitC/ProcSet findresource/cid_CheckForCompatibleFont get exec}bind def
+/cid_composefont{/CIDInit/ProcSet findresource begin cid_ComposeFont end}bind
+def currentdict 1 dict begin/text 128 string def begin/cid_WriteResource{mark
+4 1 roll{dup/Category findresource begin 1 index//text ResourceFileName end(w)
+file dup(%!PS-Adobe-3.0 Resource-)writestring dup 2 index writestring dup
+(
+%%BeginResource: )writestring dup 2 index writestring dup( \()writestring dup
+3 index writestring dup(\)
+
+/)writestring dup 3 index writestring dup( )writestring dup 4 index maxlength
+//text cvs writestring dup( dict dup
+\tbegin
+)writestring 3 index{2 index(\t/)writestring exch//text cvs 2 index exch
+writestring 1 index( )writestring dup type dup/arraytype eq exch
+/packedarraytype eq or{1 index(
+\t\t[
+)writestring{1 index(\t\t/)writestring//text cvs 1 index exch writestring dup
+(
+)writestring}forall dup(\t\t])writestring}{//text cvs 1 index exch writestring
+}ifelse dup( def
+)writestring}forall dup(\tend
+)writestring dup(/)writestring dup 2 index writestring dup
+( defineresource pop
+
+%%EndResource
+%%EOF
+)writestring closefile}stopped{cleartomark false}{cleartomark true}ifelse}bind
+def/cid_TurnOnFontPreloading{/FontHits/FixCIDInitProcSet findresource dup
+maxlength dict copy dup/DynamicPreloadingEnabled true put(FontHits)
+(FixCIDInitProcSet)//cid_WriteResource exec not{mark{/FixCIDInitProcSet
+/Category findresource begin/FontHits//text ResourceFileName end deletefile}
+stopped cleartomark}if}bind def/cid_TurnOffFontPreloading{/FontHits
+/FixCIDInitProcSet findresource dup maxlength dict copy dup
+/DynamicPreloadingEnabled false put(FontHits)(FixCIDInitProcSet)
+//cid_WriteResource exec not{mark{/FixCIDInitProcSet/Category findresource
+begin/FontHits//text ResourceFileName end deletefile}stopped cleartomark}if}
+bind def/orig_cid_SetFontHits{cid_extensions/cid_fontHits 2 copy known{get mark 3 1
+roll{dup/? known not{(CID/FontHits)PrependRoot dup status{pop pop pop pop run
+pop cid_extensions/cid_fontHits get}{pop}ifelse dup/? true put}if exch 1 index
+exch 2 copy known{2 copy get 1 add}{1}ifelse put(CID/FontHits)PrependRoot dup
+status{pop pop pop pop dup{deletefile}stopped{pop}if}if(w)file dup
+(%!
+currentglobal true setglobal cid_extensions/cid_fontHits )writestring dup 2
+index maxlength//text cvs writestring dup( dict dup begin
+)writestring exch{1 index/? eq{pop pop}{2 index(/)writestring exch//text cvs 2
+index exch writestring 1 index( )writestring//text cvs 1 index exch
+writestring dup( def
+)writestring}ifelse}forall dup(end put setglobal
+)writestring closefile}stopped{cid_extensions/cid_fontHits undef}if
+cleartomark}{pop pop pop}ifelse}bind def 
+% disable FontHits
+  /cid_SetFontHits{ pop } bind def
+end end/cid_ComposeFont{
+cid_extensions/cid_streamedCIDFont false put 16 dict begin/cid_ffWIP 25 dict
+def currentdict cid_ffWIP begin/cid_l3 exch def 3 dict begin 2 copy/FontArray
+exch def/CMap exch def/CompatibleVM lib_extensions/lib_buildCompatibleVM get
+def currentdict end/BuildInfo exch def/cid_sstr1 80 string def/cid_sstrdf
+(DF000)readonly def/cid_l1 systemdict/findfont get def{3 copy
+cid_BuildComposedFont}cid_stopped{cid_extensions/cid_streamedCIDFont true put
+end end/cid_ComposeFont cid_reraise}if 4 1 roll pop pop pop dup length 1 add
+dict begin{1 index dup/FID ne exch/cid_ffWIP ne and{def}{pop pop}ifelse}forall
+FontName currentdict end dup/BuildInfo BuildInfo put definefont end end
+cid_extensions/cid_streamedCIDFont true put}bind def/cid_BuildComposedFont{dup
+type/arraytype ne{/cid_BuildComposedFont/typecheck cid_raise}if lib_extensions
+begin lib_nativeMode lib_buildCompatibleVM and{pureNativeMode not{1183615869
+internaldict/CIDRun known{lib_ToggleNativeMode/lib_CIDFontType/CIDFont def}if}
+if}if end dup length array/cid_s5 exch def 0 exch{{dup type dup/stringtype eq
+exch/nametype eq or{dup/CIDFont resourcestatus{pop pop/CIDFont}{/Font}ifelse
+findresource exit}if dup type/dicttype eq{exit}if/cid_BuildComposedFont
+/typecheck cid_raise}loop cid_s5 2 index 3 -1 roll put 1 add}forall pop
+lib_extensions begin lib_nativeMode lib_buildCompatibleVM and{pureNativeMode{
+1183615869 internaldict/CIDRun known{lib_ToggleNativeMode/lib_CIDFontType
+/CIDFontC def}if}if}if end{dup type dup/stringtype eq exch/nametype eq or{
+/CMap findresource exit}if dup type/dicttype eq{exit}if/cid_BuildComposedFont
+/typecheck cid_raise}loop/cid_s6 exch def{dup type/nametype eq{cid_sstr1 cvs
+exit}if dup type/stringtype eq{exit}if/cid_BuildComposedFont/typecheck
+cid_raise}loop dup length string copy cid_s6 cid_s5 cid_BuildCompositeFont}
+bind def/cid_BuildCompositeFont{7 dict begin/FDepVector exch def/CMap exch def
+/FontName exch cvn def/FontType 0 def/FontMatrix matrix def CMap/WMode known{
+/WMode CMap/WMode get def}{/WMode 0 def}ifelse CMap/UseMatrix known{CMap
+/UseMatrix get{exch dup FDepVector exch get 3 -1 roll makefont FDepVector 3 1
+roll put}forall}if/FMapType 9 def/Encoding FDepVector length array def
+Encoding length 1 sub -1 0{Encoding exch dup put}for FontName currentdict end
+definefont}bind def lib_extensions/lib_nativeMode get not{
+/beginrearrangedfont_atc{currentdict/CIDInit/ProcSet findresource eq{end}if
+/AdobeTypeComposer/ProcSet findresource begin beginrearrangedfont}bind def}if
+/cid_FindFixEntry{/FixCIDInitProcSet 2 copy resourcestatus{pop pop
+findresource exch 2 copy known{get true}{pop pop false}ifelse}{pop pop pop
+false}ifelse}bind def/cid_usefixcmap{{/FixCMapCategory findresource
+cid_usecmap}stopped{/usecmap cid_reraise}if}bind def/cid_GetMaxFontBBox{
+/FDepVector get{dup/FontType get 0 eq{/cid_GetMaxFontBBox cvx exec}{/FontBBox
+get 0 1 1{dup 3 index exch get exch dup 3 index exch get dup 4 -1 roll lt{3
+index 3 1 roll put}{pop pop}ifelse}for 2 1 3{dup 3 index exch get exch dup 3
+index exch get dup 4 -1 roll gt{3 index 3 1 roll put}{pop pop}ifelse}for pop}
+ifelse}forall}bind def/cid_BuildType3Font{10 dict begin/Encoding exch/Encoding
+findresource def/FontBBox exch def/CFont exch def/FontName exch def/FontType 3
+def/FontMatrix .001 dup matrix scale def/CDevProc/StandardCDevProc
+findcdevproc def/show_str1 1 string def/BuildChar{gsave exch begin show_str1
+exch 0 exch put CFont 1000 scalefont setfont show_str1 stringwidth 0 0 moveto
+show_str1 true charpath flattenpath pathbbox 5 index 5 index 0 0 currentdict
+/CDevProc known{show_str1 0 get CDevProc}if setcachedevice2 0 0 moveto
+show_str1 show end grestore}def FontName currentdict end definefont}bind def
+/cid_GetStatusInfo{cid_extensions begin cid_GetStatusInfo end}bind def
+/cid_ParseFile{cid_extensions begin cid_ParseFile end}bind def
+/beginrearrangedfont{lib_extensions begin/lib_fontDepth lib_fontDepth 1 add
+def end dup 0 get dup type/dicttype eq{/FontName get}if cid_extensions begin
+cid_IsComposedFont end{lib_extensions begin lib_fontDepth 1 eq
+lib_processingCF and{lib_EvalBuildCompatible exch pop}{pop pop pop false}
+ifelse end{currentdict/CIDInit/ProcSet findresource eq{end}if lib_extensions
+begin lib_ToggleNativeMode/lib_fontDepth lib_fontDepth 1 sub def
+/lib_buildCompatibleVM true def/lib_CMapType/CMapC def/lib_FixCMapCategoryType
+/FixCMapCategoryC def/lib_CIDFontType/CIDFontC def end/CIDInit/ProcSet
+findresource begin beginrearrangedfont}{6 dict begin{begincmap dup 0 get
+findfont dup/WMode known{/WMode get/WMode exch def}{pop}ifelse}stopped
+lib_extensions begin/lib_fontDepth lib_fontDepth 1 sub def end{end
+/beginrearrangedfont cid_reraise}if}ifelse}{pop 6 dict begin{begincmap dup 0
+get findfont dup/WMode known{/WMode get/WMode exch def}{pop}ifelse}stopped
+lib_extensions begin/lib_fontDepth lib_fontDepth 1 sub def end{end
+/beginrearrangedfont cid_reraise}if}ifelse}bind def/endrearrangedfont{mark{
+endcmap 2 index currentdict 3 index dup 0 get dup type/nametype eq{userdict
+/cid_str120 120 string put userdict/cid_str100 100 string put cid_str120 cvs
+userdict exch/cid_templatename exch put/FDepVector-RF/FixCIDInitProcSet 2 copy
+resourcestatus{pop pop findresource false exch{exch cid_str100 cvs
+cid_templatename exch search{pop pop length 0 eq{exch pop true exit}{pop}
+ifelse}{pop pop}ifelse}forall}{pop pop false}ifelse}{pop}ifelse{exec}{
+composefont}ifelse}stopped{cleartomark/endrearrangedfont cid_reraise}if pop
+pop pop pop end}bind def 20 dict begin/scratchLength 128 def/scratch
+scratchLength string def/a currentdict def/b{dup length 1 sub 8 idiv string 1
+index 0 get 7 and 0 1 1 5 index length 1 sub{4 index 1 index get 3 index 8 mod
+neg bitshift 1 and 2 index 1 bitshift add 3 1 roll dup 8 mod 0 eq{8 idiv 1 sub
+4 index exch 3 index put exch pop 0 exch pop}{pop pop}ifelse exch 5 index mul
+4 index mod exch}for pop pop exch 0 get -3 bitshift{dup 1 eq{pop 0 0 1 3{2
+index exch get exch 8 bitshift add}for exch exit}if exit}loop pop exch pop
+exch pop}bind def/c{dup 65535 and//a exch/e exch put -16 bitshift//a exch/d
+exch put}bind executeonly def/invalidfont{/Setup errordict/invalidfont get
+exec stop}bind executeonly def/_definefont{dup type/arraytype ne{stop}if dup
+length 2 lt{stop}if//a begin 263407485 c d e 2 index 0 get b CIDFontName ne{
+stop}if d e 2 index 1 get b systemdict/currentsystemparams get exec/LicenseID
+get ne{stop}if pop end}bind executeonly def/_setfont{dup type/arraytype ne{
+stop}if dup length 5 lt{stop}if//a begin 221066939 c d e 2 index 0 get b
+CIDFontName ne{stop}if d e 2 index 1 get b systemdict/serialnumber get exec ne
+{stop}if d e 2 index 2 get b dup 0 ne{systemdict/currentsystemparams get exec
+/LicenseID get ne{stop}if}{pop}ifelse d e 2 index 3 get b dup 0 ne{systemdict
+/product get ne{stop}if}{pop}ifelse d e 2 index 4 get b dup 0 ne{dup -16
+bitshift exch 65535 and gsave initgraphics 72 72 dtransform grestore abs exch
+abs 2 copy gt{exch}if pop exch 1 index lt{stop}if gt{stop}if}{pop}ifelse pop
+end}bind executeonly def/_makefont{dup type/arraytype ne{stop}if dup length 4
+lt{stop}if//a begin 780128085 c d e 2 index 0 get b CIDFontName ne{stop}if d e
+2 index 1 get b systemdict/currentsystemparams get exec/LicenseID get ne{stop}
+if d e 2 index 2 get b systemdict/serialnumber get exec ne{stop}if d e 2 index
+3 get b dup 0 ne{dup -16 bitshift exch 65535 and gsave initgraphics 72 72
+dtransform grestore abs exch abs 2 copy gt{exch}if pop exch 1 index lt{stop}if
+gt{stop}if}{pop}ifelse pop end}bind executeonly def/_scalefont{dup type
+/arraytype ne{stop}if dup length 3 lt{stop}if//a begin 1926854025 c d e 2
+index 0 get b CIDFontName ne{stop}if d e 2 index 1 get b systemdict
+/currentsystemparams get exec/LicenseID get ne{stop}if d e 2 index 2 get b dup
+0 ne{dup -16 bitshift exch 65535 and gsave initgraphics 72 72 dtransform
+grestore abs exch abs 2 copy gt{exch}if pop exch 1 index lt{stop}if gt{stop}if
+}{pop}ifelse pop end}bind executeonly def currentdict/cid_Setup known not{
+/cid_Setup{cid_extensions/systemdict get begin count 1 ge//systemdict
+/globaldict known{//systemdict/globaldict get}{userdict}ifelse/$PGFKeys known
+and{dup type/dicttype eq{dup/CIDFontName known{dup/CIDFontName get//systemdict
+/globaldict known{//systemdict/globaldict get}{userdict}ifelse/$PGFKeys get
+exch 2 copy known{get dup type/stringtype eq{false}{pop true}ifelse}{pop pop
+true}ifelse}{true}ifelse}{true}ifelse}{true}ifelse{end//invalidfont exec}if{
+eexec}stopped{end//invalidfont exec}if count 2 lt{end//invalidfont exec}if dup
+type/nametype ne{end//invalidfont exec}if//scratch 0(_)putinterval dup
+//scratch 1 127 getinterval cvs pop length 1 add//scratch exch 0 exch
+getinterval mark 3 1 roll{dup//a exch known{//a exch get exec}{stop}ifelse}
+stopped{cleartomark end//invalidfont exec}if cleartomark pop end}bind
+executeonly end def}{end}ifelse currentdict end/ProcSet defineresource/CIDInit
+exch/ProcSet defineresource userdict/cid_vmstate get setglobal userdict
+/cid_packingstate get setpacking userdict/cid_vmstate undef userdict
+/cid_packingstate undef end
+%%EndResource
+%%EOF

@@ -1,0 +1,45 @@
+%!PS-Adobe-3.0 Resource-Font
+%%BeginResource: font (NotDefFont)
+%%Title: (NotDefFont)
+%%Version: 3010.01
+%%Copyright: ------------------------------------------------------------
+%%Copyright: Copyright 1990-1998 Adobe Systems Incorporated.
+%%Copyright: All rights reserved.
+%%Copyright:
+%%Copyright: Patents Pending
+%%Copyright:
+%%Copyright: NOTICE: All information contained herein is the property
+%%Copyright: of Adobe Systems Incorporated. Many of the intellectual
+%%Copyright: and technical concepts contained herein are proprietary
+%%Copyright: to Adobe, are protected as trade secrets, and are made
+%%Copyright: available only to Adobe licensees for their internal use.
+%%Copyright: Any reproduction or dissemination of this software is
+%%Copyright: strictly forbidden unless prior written permission is
+%%Copyright: obtained from Adobe.
+%%Copyright:
+%%Copyright: PostScript and Display PostScript are trademarks of
+%%Copyright: Adobe Systems Incorporated which may be registered in
+%%Copyright: certain jurisdictions.
+%%Copyright: ------------------------------------------------------------
+%%EndComments
+13 dict begin/FontInfo 2 dict dup begin/version(004.001)readonly def/Notice
+(Copyright 1990-1998 Adobe Systems Incorporated. All Rights Reserved.)def end
+readonly def/FontBBox{0 0 1000 0}readonly def/Encoding/NotDefEncoding
+findencoding def/FontName/NotDefFont def/FontMatrix[.001 0 0 .001 0 0]readonly
+def/PaintType 0 def/CDevProc/StandardCDevProc findcdevproc def/FontType 1 def
+currentdict end currentfile eexec
+edd2f94501034aa3d3eac7f97285d5d71959e78c65810ffef4d92f7df336a5b3
+c10cd9b2ebdde02aff5e39d4e1e820e8c97586c0d222814ffb93ee99dc1e0136
+44864f09e1802b3f81b342b0ec3a37278edb4f84f112cd2d916a997d3fe9c0dc
+76f6d433f7cae3ed3109593a07f5320c45af53120e9a8af49343ac87eaac6e5a
+be2d1a7e97fb3b5168af8937c3037f5055a00252fcd126cf3782612eb8824e5c
+cf77ba59cd009cbf13cafd8a7d31ba652ddf424cc0ac6ce2dff7fdfe5307667c
+ed130bf9d1be272f65b8a91ca7e7debce5763cdf85d949ee81b944e874636fbf
+202659bb29b86dc0ad577e9000c1200b01531a434c4132034411558e0a6102eb
+2d55c974421ddcafcb2fefb1b59850fabe912f643b4ff236199b18c147d8b0c6
+03af7fbfa6ac212a7f86bbfc78f5c9c661827848e81856c8788965e74b9f6943
+4f59d9566e34a7b4e97456c0ada0604712407a949b38c32985041253f990234d
+6e4f2835ccd04a42728e9f3e50f9e7f873d42072ed144eddf0ab4fdd9ee588cc
+af8fc3680c94ca7b0bff2c95170780d45126ad01
+%%EndResource
+%%EOF

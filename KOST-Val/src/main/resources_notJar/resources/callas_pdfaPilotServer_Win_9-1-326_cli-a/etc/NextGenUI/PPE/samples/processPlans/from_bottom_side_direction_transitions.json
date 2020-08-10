@@ -1,0 +1,234 @@
+{
+  "id": "M35t8826e779c0d5dc68a2e004a3edac4b",
+  "name": "New Process plan",
+  "comment": "some comment",
+  "email": "test@company.de",
+  "locked": false,
+  "password": "2c1af13117y223b5c6187c1587e97b5a1",
+  "layout": {
+    "stepsLayout": {
+      "start": {
+        "position": {
+          "x": 60,
+          "y": 40
+        },
+        "size": {
+          "width": 120,
+          "height": 40
+        }
+      },
+      "0": {
+        "position": {
+          "x": 50,
+          "y": 160
+        },
+        "size": {
+         "width": 200,
+          "height": 40
+        }
+      },
+      "1": {
+        "position": {
+          "x": 350,
+          "y": 270
+        },
+        "size": {
+         "width": 200,
+          "height": 40
+        }
+      },
+      "2": {
+        "position": {
+          "x": 560,
+          "y": 440
+        },
+        "size": {
+         "width": 200,
+          "height": 40
+        }
+      },
+      "3": {
+        "position": {
+          "x": 830,
+          "y": 550
+        },
+        "size": {
+         "width": 200,
+          "height": 40
+        }
+      },
+      "end": {
+        "position": {
+          "x": 1030,
+          "y": 650
+        },
+        "size": {
+          "width": 120,
+          "height": 40
+        }
+      }
+    },
+    "transitionsLayout": {
+      "start": [
+        {
+          "types": [
+            "out"
+          ],
+          "start": {
+            "position": "bottom"
+          },
+          "end": {
+            "position": "top"
+          }
+        }
+      ],
+      "0": [
+        {
+          "types": [
+            "on_error",
+            "else"
+          ],
+          "start": {
+            "position": "bottom"
+          },
+          "end": {
+            "position": "left"
+          }
+        }
+      ],
+      "1": [
+        {
+          "types": [
+            "on_error",
+            "on_success",
+            "on_warning",
+            "on_info"
+          ],
+          "start": {
+            "position": "bottom"
+          },
+          "end": {
+            "position": "right"
+          }
+        }
+      ],
+      "2": [
+        {
+          "types": [
+            "on_hit",
+            "on_success"
+          ],
+          "start": {
+            "position": "bottom"
+          },
+          "end": {
+            "position": "bottom"
+          }
+        }
+      ],
+      "3": [
+        {
+          "types": [
+            "on_failure",
+            "on_success"
+          ],
+          "start": {
+            "position": "bottom"
+          },
+          "end": {
+            "position": "bottom"
+          }
+        }
+      ]
+    }
+  },
+  "sequence": [
+    {
+      "type": "processplan",
+      "id": "M358826e779c0d5dc68a2e004a3edac4b",
+      "on_error": {
+        "next_step": -1
+      },
+      "else": {
+        "next_step": -1
+      }
+    },
+    {
+      "type": "profile",
+      "id": "P358826e779c0d5dc68a2e004a3edac4b",
+      "omit_fixups": false,
+      "on_error": {
+        "post_process": [
+          {
+            "type": "txt_report"
+          }
+        ],
+        "next_step": -1
+      },
+      "on_warning": {
+        "post_process": [
+          {
+            "type": "txt_report"
+          }
+        ],
+        "next_step": -1
+      },
+      "on_info": {
+        "post_process": [
+          {
+            "type": "txt_report"
+          }
+        ],
+        "next_step": -1
+      },
+      "on_success": {
+        "post_process": [
+          {
+            "type": "txt_report"
+          }
+        ],
+        "next_step": -1
+      }
+    },
+    {
+      "type": "check",
+      "id": "R358826e779c0d5dc68a2e004a3edac4b",
+      "on_hit": {
+        "post_process": [
+          {
+            "type": "txt_report"
+          }
+        ],
+        "next_step": -1
+      },
+      "on_success": {
+        "post_process": [
+          {
+            "type": "txt_report"
+          }
+        ],
+        "next_step": -1
+      }
+    },
+    {
+      "type": "fixup",
+      "id": "F358826e779c0d5dc68a2e004a3edac4b",
+      "on_success": {
+        "post_process": [
+          {
+            "type": "txt_report"
+          }
+        ],
+        "next_step": -1
+      },
+      "on_failure": {
+        "post_process": [
+          {
+            "type": "txt_report"
+          }
+        ],
+        "next_step": -1
+      }
+    }
+  ]
+}

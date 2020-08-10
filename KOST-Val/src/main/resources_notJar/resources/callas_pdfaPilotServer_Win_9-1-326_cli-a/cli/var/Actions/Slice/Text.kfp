@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pdfpreflight version="6.0">
+	<package>
+		<id3>f38705ecf773a47d3dafb0f3fdb3487e</id3>
+		<pdfxoutintentlist>
+		</pdfxoutintentlist>
+		<iccprofilelist>
+		</iccprofilelist>
+		<conditions>
+			<condition>
+				<id1>Cf6f0456c46fd185295a5ec58947af38c</id1>
+				<id2>C689273266c62eec1b9ee8d6945415249</id2>
+				<id3>2ba28bc4294d1539c3558789c7122a0e</id3>
+				<id4>6292334d9f90b9fa18a27a28efef8b65</id4>
+				<name></name>
+				<comment></comment>
+				<flags edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CONTSTM</group>
+					<token>CONTSTM::IsText</token>
+					<operator>OP::is_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+		</conditions>
+		<rules>
+			<rule>
+				<id1>Rddb28c0ee2ccdfd023a44f1ce358c8c9</id1>
+				<id2>Re7caeb0f0c704fb7ab8e3f9cfd4dda17</id2>
+				<id3>720d1e7cda66a3a73db9450588a7c036</id3>
+				<id4>8f6a52be5fb4d3e073339c67e3c0778a</id4>
+				<name>Text</name>
+				<comment>Text</comment>
+				<flags analysis="1" condition_logic="0" ignore_objects="0" edit="1" visible="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>Cf6f0456c46fd185295a5ec58947af38c</condition>
+				</conditions>
+			</rule>
+		</rules>
+		<rulesets>
+			<ruleset>
+				<id1>Sd0743e12f9c859f270b311902ee9f616</id1>
+				<id2>S4b52e930d02f8c5a443488619b1d591c</id2>
+				<id3>f27992d02ca70bc96ce4752508404b22</id3>
+				<id4>8d01e76154e0bfa344c30dc5acd64e4c</id4>
+				<name>SSS_RULESET_DEF_NAME</name>
+				<comment>SSS_RULESET_DEF_NAME</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<rules>
+					<rule check_severity="3" check_timing="2">Rddb28c0ee2ccdfd023a44f1ce358c8c9</rule>
+				</rules>
+			</ruleset>
+		</rulesets>
+		<fixups>
+		</fixups>
+		<fixupsets>
+		</fixupsets>
+		<profiles>
+			<profile>
+				<id1>P7d8049ab55af09c77fa831fc019704ab</id1>
+				<id2>P1d35f159dc1d506c315c474fda3ebfb7</id2>
+				<id3>bfac58ac4f7d176630bd566b69c2ca2a</id3>
+				<id4>6755379892d9407f7149b6acfd9af1d2</id4>
+				<name>Text</name>
+				<comment></comment>
+				<flags edit="1" visible="1"></flags>
+				<metalist>
+					<metadata>
+						<metakey>author</metakey>
+						<metavalue>callas</metavalue>
+					</metadata>
+				</metalist>
+				<creation>D:20081009151817+02&apos;00&apos;</creation>
+				<modification>D:20081009152055+02&apos;00&apos;</modification>
+				<pdfstd>
+					<pdfx convert="0"></pdfx>
+					<pdfa convert="0"></pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond>Coated GRACoL 2006</outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+				</pdfstd>
+				<wizard>
+				</wizard>
+				<rulesets>
+					<ruleset>Sd0743e12f9c859f270b311902ee9f616</ruleset>
+				</rulesets>
+				<fixupsets>
+				</fixupsets>
+			</profile>
+		</profiles>
+		<profgroups>
+		</profgroups>
+	</package>
+</pdfpreflight>

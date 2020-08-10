@@ -1,0 +1,13 @@
+@charset "UTF-8";
+
+.grommet {
+	position: absolute;
+	margin: 0;
+	padding: 0;
+}
+
+#template_grommet {
+	position: absolute;
+	margin: 0;
+	padding: 0;
+}

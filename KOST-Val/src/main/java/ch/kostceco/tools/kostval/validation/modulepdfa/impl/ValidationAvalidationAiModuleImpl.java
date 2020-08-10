@@ -1143,6 +1143,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 							fontReportError.delete();
 						}
 						fontReportError.deleteOnExit();
+					} else {
+						isValidFont = true;
 					}
 				} catch ( Exception e ) {
 					getMessageService()
@@ -1312,6 +1314,9 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 						}
 					}
 				}
+			} else {
+				// ohne pdftools auch keine Font validierung
+				isValidFont = true;
 			}
 
 			// TODO: Validierung mit callas
@@ -1340,10 +1345,12 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 									.getAbsolutePath();
 					String locationOfJarPath = path;
 					String dirOfJarPath = locationOfJarPath;
-					String folderCallas = "callas_pdfaPilotServer_Win_8.0.290_cli-a";
-					/* Update von Callas: CLI-Version herunterladen, odrner umbenennen alles ausser lizenz.txt
-					 * und N-Entry.kfpx ersetzen */
-					if ( locationOfJarPath.endsWith( ".jar" ) || locationOfJarPath.endsWith( ".exe" ) ) {
+					String folderCallas = "callas_pdfaPilotServer_Win_9-1-326_cli-a";
+					/* Update von Callas: callas_pdfaPilotServer_Win_...-Version herunterladen, insallieren,
+					 * odner im Workbench umbenennen alle Dateine vom Ordner cli ersetzen aber lizenz.txt und
+					 * N-Entry.kfpx muessen die alten bleiben */
+					if ( locationOfJarPath.endsWith( ".jar" ) || locationOfJarPath.endsWith( ".exe" )
+							|| locationOfJarPath.endsWith( "." ) ) {
 						File file = new File( locationOfJarPath );
 						dirOfJarPath = file.getParent();
 					}
@@ -1384,10 +1391,12 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					 * 
 					 * 5) reportPath: Pfad zum Report */
 
+					String levelCallas = level.toLowerCase();
+
 					String profile = dirOfJarPath + File.separator + "resources" + File.separator
 							+ folderCallas + File.separator + "N-Entry.kfpx";
-					String analye = "-a --noprogress --nohits --level=" + level + " --profile=\"" + profile
-							+ "\"";
+					String analye = "-a --noprogress --nohits --level=" + levelCallas + " --profile=\""
+							+ profile + "\"";
 					String langConfig = getTextResourceService().getText( locale, MESSAGE_XML_LANGUAGE );
 					String lang = "-l=" + getTextResourceService().getText( locale, MESSAGE_XML_LANGUAGE );
 					String valPath = valDatei.getAbsolutePath();
@@ -1402,12 +1411,12 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 						if ( callasReturnCode == 0 ) {
 							/* 0 PDF is valid PDF/A-file additional checks wihtout problems
 							 * 
-							 * 1 PDF is valid PDF/A-file but additional checks with problems – severity info
+							 * 1 PDF is valid PDF/A-file but additional checks with problems severity info
 							 * 
-							 * 2 PDF is valid PDF/A-file but additional checks with problems – severity warning
+							 * 2 PDF is valid PDF/A-file but additional checks with problems severity warning
 							 * 
-							 * 3 PDF is valid PDF/A-file but additional checks with problems – severity error
-							 * --> N-Eintrag
+							 * 3 PDF is valid PDF/A-file but additional checks with problems severity error -->
+							 * N-Eintrag
 							 * 
 							 * 4 PDF is not a valid PDF/A-file */
 
@@ -1425,7 +1434,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 								report.delete();
 							}
 
-							if ( callasReturnCodeTest <= 3 ) {
+							if ( callasReturnCodeTest == 0 || callasReturnCodeTest == 1
+									|| callasReturnCodeTest == 2 || callasReturnCodeTest == 3 ) {
 								// Keine callas Validierung moeglich
 
 								// -callas_NO -Fileanlegen, damit in J nicht validiert wird
@@ -1471,7 +1481,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 								report.delete();
 							}
 
-							if ( callasReturnCodeTest <= 3 ) {
+							if ( callasReturnCodeTest == 0 || callasReturnCodeTest == 1
+									|| callasReturnCodeTest == 2 || callasReturnCodeTest == 3 ) {
 								// Keine callas Validierung moeglich
 
 								// -callas_NO -Fileanlegen, damit in J nicht validiert wird
@@ -2082,28 +2093,44 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 				/** Modul K **/
 				getMessageService().logError( errorK );
 
-				docPdf.close();
-				// Destroy the object
-				docPdf.destroyObject();
-
+				try {
+					docPdf.close();
+					// Destroy the object
+					docPdf.destroyObject();
+				} catch ( Exception ed1 ) {
+				}
 			} else {
-				// ggf Warning Modul K ausgeben
-				getMessageService().logError( errorK );
+				try {
+					docPdf.close();
+					// Destroy the object and set to null
+					docPdf.destroyObject();
+					docPdf = null;
+					PdfValidatorAPI.setLicenseKey( " " );
+				} catch ( Exception ed2 ) {
+				}
+				if ( errorK.isEmpty() ) {
+					// System.out.println( "errorK.isEmpty" );
+				} else {
+					// ggf Warning Modul K ausgeben
+					getMessageService().logError( errorK );
+				}
 			}
 			if ( report.exists() ) {
 				report.delete();
 			}
 		} catch ( Exception e ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			getMessageService().logError( getTextResourceService().getText( locale,
+					MESSAGE_XML_MODUL_A_PDFA )
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() + " _" ) );
 		}
-		docPdf.close();
-		// Destroy the object and set to null
-		docPdf.destroyObject();
-		docPdf = null;
-		PdfValidatorAPI.setLicenseKey( " " );
-
+		try {
+			docPdf.close();
+			// Destroy the object and set to null
+			docPdf.destroyObject();
+			docPdf = null;
+			PdfValidatorAPI.setLicenseKey( " " );
+		} catch ( Exception ed3 ) {
+		}
 		return isValid;
 	}
 

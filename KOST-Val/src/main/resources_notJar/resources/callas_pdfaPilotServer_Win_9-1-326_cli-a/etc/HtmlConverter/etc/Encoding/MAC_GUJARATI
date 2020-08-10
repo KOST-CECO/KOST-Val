@@ -1,0 +1,64 @@
+%!PS-Adobe-3.0 Resource-CMap
+%%DocumentNeededResources: ProcSet (CIDInit)
+%%IncludeResource: ProcSet (CIDInit)
+%%BeginResource: CMap (MAC_GUJARATI)
+%%Title: (MAC_GUJARATI 0)
+%%EndComments
+
+/CIDInit /ProcSet findresource begin
+
+12 dict begin
+
+begincmap
+
+/CMapName /MAC_GUJARATI def
+/CMapType 2 def
+
+1 begincodespacerange
+  <20> <FA>
+endcodespacerange
+
+17 beginbfchar
+  <80> <00D7>
+  <81> <2212>
+  <86> <2026>
+  <87> <2022>
+  <88> <00A9>
+  <89> <00AE>
+  <8A> <2122>
+  <90> <0965>
+  <AE> <0A8D>
+  <B2> <0A91>
+  <CF> <0AB0>
+  <D9> <200E>
+  <E3> <0AC5>
+  <E7> <0AC9>
+  <E8> <0ACD>
+  <E9> <0ABC>
+  <EA> <0964>
+endbfchar
+
+15 beginbfrange
+  <20> <7E> <0020>
+  <82> <83> <2013>
+  <84> <85> <2018>
+  <A1> <A3> <0A81>
+  <A4> <AA> <0A85>
+  <AC> <AD> <0A8F>
+  <B0> <B1> <0A93>
+  <B3> <C6> <0A95>
+  <C8> <CD> <0AAA>
+  <D1> <D2> <0AB2>
+  <D4> <D8> <0AB5>
+  <DA> <DF> <0ABE>
+  <E1> <E2> <0AC7>
+  <E5> <E6> <0ACB>
+  <F1> <FA> <0AE6>
+endbfrange
+endcmap
+CMapName currentdict /CMap defineresource pop
+end
+end
+
+%%EndResource
+%%EOF

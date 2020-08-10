@@ -1,0 +1,8 @@
+@import url(all.css);
+@import url(predefined.css);
+
+body {
+	background-color: #000;
+	color: white;
+	font-size: 150%;
+}

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pdfpreflight version="15.0">
+	<package>
+		<id3>1c5e5f741d3aaeecea52a0a599420968</id3>
+		<pdfxoutintentlist>
+		</pdfxoutintentlist>
+		<iccprofilelist>
+		</iccprofilelist>
+		<ccpolicies>
+		</ccpolicies>
+		<occdsetups>
+		</occdsetups>
+		<curves>
+		</curves>
+		<fspolicies>
+		</fspolicies>
+		<resources>
+		</resources>
+		<variables>
+		</variables>
+		<conditions>
+		</conditions>
+		<rules>
+		</rules>
+		<rulesets>
+		</rulesets>
+		<fixups>
+			<fixup>
+				<id1>F6ea7ca7dcf3b2d27fab6cf5e30bf145e</id1>
+				<id2>Fde944c1e90aea4b2cf9c90b69b407214</id2>
+				<id3>6fa7ebd18c1193bbed60dfad89f8e568</id3>
+				<id4>33a9b500b2ab10d252ba7b70deccb7bc</id4>
+				<name>F_13_Createaninvisibletextcopyforalltext</name>
+				<comment>F_13_Createaninvisibletextcopyforalltext</comment>
+				<flags user_units="1" scope="16" edit="1" visible="1" dict="1"></flags>
+				<fcfgs>
+					<fcfg>
+						<ffeat>DuplicateTextAsInvisible</ffeat>
+						<fparams>
+							<fparam>All</fparam>
+						</fparams>
+					</fcfg>
+					<fcfg>
+						<ffeat></ffeat>
+						<fparams>
+						</fparams>
+					</fcfg>
+					<fcfg>
+						<ffeat></ffeat>
+						<fparams>
+						</fparams>
+					</fcfg>
+				</fcfgs>
+				<reportFailed></reportFailed>
+			</fixup>
+			<fixup>
+				<id1>F5e15068171e64e34bb5413a6a82d4b38</id1>
+				<id2>F865b2dd077cdb7e2f42b50f5fc4b4b36</id2>
+				<id3>061995721eae2b9651bb19e922c9ff4c</id3>
+				<id4>1508a6c0ab55ec3eb02317d301d381c9</id4>
+				<name>F_15_ConvertpagecontentintoCMYKimage150ppihighJPEGquality</name>
+				<comment>F_15_ConvertpagecontentintoCMYKimage150ppihighJPEGquality</comment>
+				<flags user_units="1" scope="16" edit="1" visible="1" dict="1"></flags>
+				<fcfgs>
+					<fcfg>
+						<ffeat>RemoveContentByImage</ffeat>
+						<fparams>
+							<fparam>150</fparam>
+							<fparam>All</fparam>
+							<fparam>JPEGHigh</fparam>
+							<fparam>CMYK</fparam>
+							<fparam>LineArtTextImages</fparam>
+							<fparam>0</fparam>
+							<fparam>1</fparam>
+						</fparams>
+					</fcfg>
+				</fcfgs>
+				<reportFailed></reportFailed>
+			</fixup>
+		</fixups>
+		<fixupsets>
+			<fixupset>
+				<id1>U5619e2ab38ff559df9e9501d35407f68</id1>
+				<id2>Ueb92749661a07226404714003882739c</id2>
+				<id3>4d048acb72fb2b4d3c1dbe4aff4ab0a8</id3>
+				<id4>341f98af51bdeacdc41a6efa85bd5ea0</id4>
+				<name>UUUU_FIXUPSET_DEF_NAME</name>
+				<comment>UUUU_FIXUPSET_DEF_NAME</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<fixups>
+					<fixup>F6ea7ca7dcf3b2d27fab6cf5e30bf145e</fixup>
+					<fixup>F5e15068171e64e34bb5413a6a82d4b38</fixup>
+				</fixups>
+			</fixupset>
+		</fixupsets>
+		<actions>
+		</actions>
+		<profiles>
+			<profile>
+				<id1>P8dd53b9d7d6ca0307d02b6958d3a0225</id1>
+				<id2>P790b81ddd8199c126083993d5366328a</id2>
+				<id3>ed6c6987724b023d22c54cf0037d7a2e</id3>
+				<id4>12d5cfd958303d798e3839e111d0e815</id4>
+				<name>P_13_ConvertallpagesintoCMYKimagesandpreservetextinformation</name>
+				<comment>P_13_ConvertallpagesintoCMYKimagesandpreservetextinformation</comment>
+				<flags edit="0" visible="1" dict="1"></flags>
+				<metalist>
+					<metadata>
+						<metakey>author</metakey>
+						<metavalue>callas software</metavalue>
+					</metadata>
+					<metadata>
+						<metakey>email</metakey>
+						<metavalue>support@callassoftware.com</metavalue>
+					</metadata>
+				</metalist>
+				<creation>D:20140113143537+02&apos;00&apos;</creation>
+				<modification>D:20160629094742+02&apos;00&apos;</modification>
+				<pdfstd>
+					<pdfx convert="0"></pdfx>
+					<pdfa convert="0"></pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond>ISO Coated v2 (ECI)</outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+				</pdfstd>
+				<pdfstdemb>
+					<pdfx convert="0"></pdfx>
+					<pdfa convert="0"></pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond></outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+					<afrelationship set_relationship="0"></afrelationship>
+				</pdfstdemb>
+				<wizard>
+				</wizard>
+				<rulesets>
+				</rulesets>
+				<fixupsets>
+					<fixupset>U5619e2ab38ff559df9e9501d35407f68</fixupset>
+				</fixupsets>
+			</profile>
+		</profiles>
+		<metaprofs>
+		</metaprofs>
+		<profgroups>
+		</profgroups>
+	</package>
+</pdfpreflight>

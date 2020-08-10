@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pdfpreflight version="15.0">
+	<package>
+		<id3>ac20a3d043d03f9ea71de4e707207f63</id3>
+		<pdfxoutintentlist>
+		</pdfxoutintentlist>
+		<iccprofilelist>
+		</iccprofilelist>
+		<ccpolicies>
+		</ccpolicies>
+		<occdsetups>
+		</occdsetups>
+		<curves>
+		</curves>
+		<fspolicies>
+		</fspolicies>
+		<resources>
+		</resources>
+		<variables>
+		</variables>
+		<conditions>
+			<condition>
+				<id1>C76bcf6040391c9835774191e531b684d</id1>
+				<id2>C3910a92d3f4ab6a7d7550d47b7ea847e</id2>
+				<id3>5bbe9e0e4bfe6907885dd15acf63aa79</id3>
+				<id4>ccf8d657ffa7de3da74b0f006ff6de0e</id4>
+				<name></name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::OUTINTENTSA</group>
+					<token>OUTINTENTSA::NNotMatchICCProf</token>
+					<operator>OP::is_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+		</conditions>
+		<rules>
+			<rule>
+				<id1>Rc523fb2b4f987aa9145bca6114687421</id1>
+				<id2>R4481a2cbde9084532b597cde256c331d</id2>
+				<id3>462c05883ad7f0765635648b3cb79d5f</id3>
+				<id4>47f4c1afb1c46b4dd0379a444dd5c1bd</id4>
+				<name>R_15_NumberofcomponentsinICCprofiledictionariesNentrydoesnotmatchICCprofile</name>
+				<comment>R_15_NumberofcomponentsinICCprofiledictionariesNentrydoesnotmatchICCprofile</comment>
+				<flags analysis="17" condition_logic="0" ignore_objects="0" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>C76bcf6040391c9835774191e531b684d</condition>
+				</conditions>
+			</rule>
+		</rules>
+		<rulesets>
+			<ruleset>
+				<id1>Saa8b7a7da06261d60b97a425e3383236</id1>
+				<id2>Sa20e5e2a31f81dde6f227bc7422ac226</id2>
+				<id3>64b6c1f9af3ecc5fe9b529c85e08c292</id3>
+				<id4>b67de68c47bb360597c499fc86848622</id4>
+				<name>SSS_RULESET_DEF_NAME</name>
+				<comment>SSS_RULESET_DEF_NAME</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<rules>
+					<rule check_severity="3" check_timing="2">Rc523fb2b4f987aa9145bca6114687421</rule>
+				</rules>
+			</ruleset>
+		</rulesets>
+		<fixups>
+		</fixups>
+		<fixupsets>
+		</fixupsets>
+		<actions>
+		</actions>
+		<profiles>
+			<profile>
+				<id1>P1f9ee98fe6a488e375b27863574eee46</id1>
+				<id2>P363d9c5212e745259683624df938e710</id2>
+				<id3>02dbd7962165672ac14122910e39bcd7</id3>
+				<id4>13485801b8652ab33c85ceb5e1acfb2d</id4>
+				<name>N-Entry</name>
+				<comment>Das &quot;stream&quot;-Verzeichnis (Dictionary) eines ICC-Profils verfüg über einen &quot;N&quot;-Eintrag der die Anzahl an Farbkomponenten des Farbraumes angibt, welches das ICC-Profil beschreibt. Dieser Wert ist entweder 1, 3 oder 4, abhängig vom Typ des ICC-Profils.</comment>
+				<flags edit="1" visible="1"></flags>
+				<creation>D:20171010121301+02&apos;00&apos;</creation>
+				<modification>D:20171010121327+02&apos;00&apos;</modification>
+				<pdfstd>
+					<pdfx convert="0"></pdfx>
+					<pdfa convert="0"></pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond></outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+				</pdfstd>
+				<pdfstdemb>
+					<pdfx convert="0"></pdfx>
+					<pdfa convert="0"></pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond></outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+					<afrelationship set_relationship="0"></afrelationship>
+				</pdfstdemb>
+				<wizard>
+				</wizard>
+				<rulesets>
+					<ruleset>Saa8b7a7da06261d60b97a425e3383236</ruleset>
+				</rulesets>
+				<fixupsets>
+				</fixupsets>
+			</profile>
+		</profiles>
+		<metaprofs>
+		</metaprofs>
+		<profgroups>
+		</profgroups>
+	</package>
+</pdfpreflight>

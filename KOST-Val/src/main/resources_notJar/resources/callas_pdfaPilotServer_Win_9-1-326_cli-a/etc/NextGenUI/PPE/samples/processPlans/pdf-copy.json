@@ -1,0 +1,112 @@
+{
+    "id": "M358826e779c0d5dc68a2e004a3edac4b",
+    "name": "New Process plan",
+    "comment": "some comment",
+    "email": "test@company.de",
+    "locked": false,
+    "password": "2c1af13117223b5c6187c1587e97b5a1",
+    "layout": {
+        "stepsLayout": {
+            "0": {
+                "position": {
+                    "x": 508.9,
+                    "y": 197.39999999999998
+                },
+                "size": {
+                    "width": 200,
+                    "height": 40
+                }
+            },
+            "start": {
+                "position": {
+                    "x": 10,
+                    "y": 10
+                },
+                "size": {
+                    "width": 120,
+                    "height": 40
+                }
+            },
+            "end": {
+                "position": {
+                    "x": 900,
+                    "y": 400
+                },
+                "size": {
+                    "width": 120,
+                    "height": 40
+                }
+            }
+        },
+        "transitionsLayout": {
+            "0": [
+                {
+                    "start": {
+                        "position": "bottom"
+                    },
+                    "end": {
+                        "position": "left"
+                    },
+                    "types": [
+                        "on_success",
+                        "on_failure"
+                    ]
+                }
+            ],
+            "start": [
+                {
+                    "start": {
+                        "position": "right"
+                    },
+                    "end": {
+                        "position": "top"
+                    },
+                    "types": [
+                        "out"
+                    ]
+                }
+            ]
+        }
+    },
+    "sequence": [
+        {
+            "type": "pdfcopy",
+            "on_success": {
+                "next_step": -1
+            },
+            "on_failure": {
+                "next_step": -1
+            },
+            "prefix": {
+                "value": "test_0",
+                "vars": [
+                    {
+                        "id": "V358826e779c0d5dc68a2e004a3edac5b",
+                        "offset": 5,
+                        "length": 1
+                    }
+                ]
+            },
+            "suffix": {
+                "value": "_0",
+                "vars": [
+                    {
+                        "id": "V358826e779c0d5dc68a2e004a3edac4b",
+                        "offset": 1,
+                        "length": 1
+                    }
+                ]
+            },
+            "folder": {
+                "value": "300",
+                "vars": [
+                    {
+                        "id": "12345",
+                        "offset": 0,
+                        "length": 3
+                    }
+                ]
+            }
+        }
+    ]
+}

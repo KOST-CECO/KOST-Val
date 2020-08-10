@@ -1,0 +1,19 @@
+@charset "UTF-8";
+
+#gutterinfo_jobID_text {
+	position: absolute;
+	color: -cchip-cmyk('All', 1.0, 1.0, 1.0, 1.0);
+	font-family: FreeUniversal;
+	font-size: 12px;
+	margin: 0;
+}
+
+#gutterinfo_jobID_barcode {
+	position: absolute;
+	color: -cchip-cmyk('All', 1.0, 1.0, 1.0, 1.0);
+	font-family: FreeUniversal;
+	font-size: 8px;
+	width: 25mm;
+	height: 10mm;
+}
+

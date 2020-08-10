@@ -1,0 +1,106 @@
+{
+	"id": "M3f795a2bf60544479bf3744ddb3cd1ba",
+	"name": {
+		"value": "One Check - with text report",
+		"vars": []
+	},
+	"author": "",
+	"email": "",
+	"locked": false,
+	"group": "Gfa1f9d868792480ba21ff4f90779c52d",
+	"layout": {
+		"stepsLayout": {
+			"0": {
+				"position": {
+					"x": 163.1,
+					"y": 187.6
+				},
+				"size": {
+					"height": 40,
+					"width": 200
+				}
+			},
+			"end": {
+				"position": {
+					"x": 403.4999999999999,
+					"y": 336.8000000000002
+				},
+				"size": {
+					"height": 40,
+					"width": 120
+				}
+			},
+			"start": {
+				"position": {
+					"x": 10,
+					"y": 10
+				},
+				"size": {
+					"height": 40,
+					"width": 120
+				}
+			}
+		},
+		"transitionsLayout": {
+			"0": [
+				{
+					"start": {
+						"position": "right"
+					},
+					"end": {
+						"position": "top"
+					},
+					"types": [
+						"on_hit",
+						"on_success",
+						"if_disabled"
+					]
+				}
+			],
+			"start": [
+				{
+					"start": {
+						"position": "bottom"
+					},
+					"end": {
+						"position": "top"
+					},
+					"types": [
+						"out"
+					]
+				}
+			]
+		}
+	},
+	"sequence": [
+		{
+			"type": "check",
+			"id": "C000004e779q0d5ww68a2q004a3edaz4z",
+			"enable_step": true,
+			"on_hit": {
+				"next_step": -1,
+				"post_process": [
+					{
+						"type": "txt_report"
+					}
+				]
+			},
+			"on_success": {
+				"next_step": -1,
+				"post_process": [
+					{
+						"type": "txt_report"
+					}
+				]
+			},
+			"if_disabled": {
+				"next_step": -1,
+				"post_process": [
+					{
+						"type": "txt_report"
+					}
+				]
+			}
+		}
+	]
+}

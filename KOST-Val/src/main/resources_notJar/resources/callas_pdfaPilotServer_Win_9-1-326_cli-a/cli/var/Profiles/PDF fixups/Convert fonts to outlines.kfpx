@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pdfpreflight version="10.0">
+	<package>
+		<id3>58a601bed2d8b13a71db620ad423da77</id3>
+		<pdfxoutintentlist>
+		</pdfxoutintentlist>
+		<iccprofilelist>
+		</iccprofilelist>
+		<ccpolicies>
+		</ccpolicies>
+		<occdsetups>
+		</occdsetups>
+		<curves>
+		</curves>
+		<fspolicies>
+		</fspolicies>
+		<conditions>
+		</conditions>
+		<rules>
+		</rules>
+		<rulesets>
+		</rulesets>
+		<fixups>
+			<fixup>
+				<id1>Fb25319e919756220f66dba500762eddc</id1>
+				<id2>F7e845377a10ef24b03a3f5678b40dbcd</id2>
+				<id3>9a0af219702c0b7a3bf8e5d2a47b7f4f</id3>
+				<id4>af9327565d83fa41b6accce11b1ae4c8</id4>
+				<name>F_7_Convertfontstooutlines</name>
+				<comment>F_7_Convertfontstooutlines</comment>
+				<flags user_units="0" edit="1" visible="1" dict="1"></flags>
+				<fcfg>ConvertFontsToOutlines&#10;</fcfg>
+				<reportFailed></reportFailed>
+			</fixup>
+			<fixup>
+				<id1>F22762a134d08ceef379c8614060832d6</id1>
+				<id2>F47617c0e552cd0e1806f7ec70c39a668</id2>
+				<id3>c222cef1c0f229d0a2338d0003623aca</id3>
+				<id4>8e00c18eab58ac8ce00809e42af2c9ba</id4>
+				<name>F_7_Embedmissingfonts</name>
+				<comment>F_7_Embedmissingfonts</comment>
+				<flags user_units="0" edit="1" visible="1" dict="1"></flags>
+				<fcfg>EmbedMissingFonts&#9;All&#9;100&#9;1&#9;&#10;</fcfg>
+				<reportFailed></reportFailed>
+			</fixup>
+		</fixups>
+		<fixupsets>
+			<fixupset>
+				<id1>U6889a978afc0b7fa75ab9932065bfef1</id1>
+				<id2>U3036d7977b3a20e3dc3b920cf9fdd952</id2>
+				<id3>682ffe4f959925d648058f46d675f8e6</id3>
+				<id4>a835864da5cc3a15f1db086792808a1a</id4>
+				<name>UUUU_FIXUPSET_DEF_NAME</name>
+				<comment>UUUU_FIXUPSET_DEF_NAME</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<fixups>
+					<fixup>Fb25319e919756220f66dba500762eddc</fixup>
+					<fixup>F22762a134d08ceef379c8614060832d6</fixup>
+				</fixups>
+			</fixupset>
+		</fixupsets>
+		<profiles>
+			<profile>
+				<id1>P709b59631f25ebd0c124a3719c54ef51</id1>
+				<id2>P7618f3df789607bc6987efedaf64be8a</id2>
+				<id3>5e4597c0e8ef3ff51be2a229bb9c6bb7</id3>
+				<id4>22962348754a2aa7592700d01afad7a4</id4>
+				<name>P_7_Convertfontstooutlines</name>
+				<comment>P_7_Convertfontstooutlines</comment>
+				<flags edit="0" visible="1" dict="1"></flags>
+				<metalist>
+					<metadata>
+						<metakey>author</metakey>
+						<metavalue>callas software</metavalue>
+					</metadata>
+					<metadata>
+						<metakey>email</metakey>
+						<metavalue>support@callassoftware.com</metavalue>
+					</metadata>
+				</metalist>
+				<creation>D:20111020053612+02&apos;00&apos;</creation>
+				<modification>D:20111020070406+02&apos;00&apos;</modification>
+				<pdfstd>
+					<pdfx convert="0"></pdfx>
+					<pdfa convert="0"></pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond></outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+				</pdfstd>
+				<wizard>
+				</wizard>
+				<rulesets>
+				</rulesets>
+				<fixupsets>
+					<fixupset>U6889a978afc0b7fa75ab9932065bfef1</fixupset>
+				</fixupsets>
+			</profile>
+		</profiles>
+		<profgroups>
+		</profgroups>
+	</package>
+</pdfpreflight>

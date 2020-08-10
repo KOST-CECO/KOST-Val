@@ -1,0 +1,139 @@
+%!PS-Adobe-3.0 Resource-CMap
+%%DocumentNeededResources: ProcSet (CIDInit)
+%%IncludeResource: ProcSet (CIDInit)
+%%BeginResource: CMap (MAC_GREEK)
+%%Title: (MAC_GREEK 0)
+%%EndComments
+
+/CIDInit /ProcSet findresource begin
+
+12 dict begin
+
+begincmap
+
+/CMapName /MAC_GREEK def
+/CMapType 2 def
+
+1 begincodespacerange
+  <20> <FF>
+endcodespacerange
+
+88 beginbfchar
+  <80> <00C4>
+  <81> <00B9>
+  <82> <00B2>
+  <83> <00C9>
+  <84> <00B3>
+  <85> <00D6>
+  <86> <00DC>
+  <87> <0385>
+  <88> <00E0>
+  <89> <00E2>
+  <8A> <00E4>
+  <8B> <0384>
+  <8C> <00A8>
+  <8D> <00E7>
+  <8E> <00E9>
+  <8F> <00E8>
+  <92> <00A3>
+  <93> <2122>
+  <96> <2022>
+  <97> <00BD>
+  <98> <2030>
+  <99> <00F4>
+  <9A> <00F6>
+  <9B> <00A6>
+  <9C> <20AC>
+  <9D> <00F9>
+  <A0> <2020>
+  <A3> <0398>
+  <A4> <039B>
+  <A5> <039E>
+  <A6> <03A0>
+  <A7> <00DF>
+  <A8> <00AE>
+  <A9> <00A9>
+  <AA> <03A3>
+  <AB> <03AA>
+  <AC> <00A7>
+  <AD> <2260>
+  <AE> <00B0>
+  <AF> <00B7>
+  <B0> <0391>
+  <B1> <00B1>
+  <B4> <00A5>
+  <B5> <0392>
+  <BB> <039C>
+  <BC> <03A6>
+  <BD> <03AB>
+  <C0> <03AC>
+  <C1> <039D>
+  <C2> <00AC>
+  <C3> <039F>
+  <C4> <03A1>
+  <C5> <2248>
+  <C6> <03A4>
+  <C7> <00AB>
+  <C8> <00BB>
+  <C9> <2026>
+  <CA> <00A0>
+  <CB> <03A5>
+  <CC> <03A7>
+  <CD> <0386>
+  <CE> <0388>
+  <CF> <0153>
+  <D0> <2013>
+  <D1> <2015>
+  <D6> <00F7>
+  <D9> <038C>
+  <DA> <038E>
+  <DE> <03CC>
+  <DF> <038F>
+  <E0> <03CD>
+  <E3> <03C8>
+  <E6> <03C6>
+  <E7> <03B3>
+  <E8> <03B7>
+  <E9> <03B9>
+  <EA> <03BE>
+  <F1> <03CE>
+  <F2> <03C1>
+  <F5> <03B8>
+  <F6> <03C9>
+  <F7> <03C2>
+  <F8> <03C7>
+  <F9> <03C5>
+  <FA> <03B6>
+  <FD> <0390>
+  <FE> <03B0>
+  <FF> <00AD>
+endbfchar
+
+19 beginbfrange
+  <20> <7E> <0020>
+  <90> <91> <00EA>
+  <94> <95> <00EE>
+  <9E> <9F> <00FB>
+  <A1> <A2> <0393>
+  <B2> <B3> <2264>
+  <B6> <B8> <0395>
+  <B9> <BA> <0399>
+  <BE> <BF> <03A8>
+  <D2> <D3> <201C>
+  <D4> <D5> <2018>
+  <D7> <D8> <0389>
+  <DB> <DD> <03AD>
+  <E1> <E2> <03B1>
+  <E4> <E5> <03B4>
+  <EB> <EE> <03BA>
+  <EF> <F0> <03BF>
+  <F3> <F4> <03C3>
+  <FB> <FC> <03CA>
+endbfrange
+endcmap
+CMapName currentdict /CMap defineresource pop
+end
+end
+
+%%EndResource
+%%EOF

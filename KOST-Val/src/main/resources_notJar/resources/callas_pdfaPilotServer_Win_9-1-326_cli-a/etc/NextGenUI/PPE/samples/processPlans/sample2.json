@@ -1,0 +1,210 @@
+{
+  "id": "M358826e779c0d5dc68a2e004a3edac4b",
+  "name": "New Process plan",
+  "comment": "some comment",
+  "email": "test@company.de",
+  "locked": false,
+  "password": "2c1af13117223b5c6187c1587e97b5a1",
+  "layout": {
+    "stepsLayout": {
+      "start": {
+        "position": {
+          "x": 30,
+          "y": 10
+        },
+        "size": {
+          "width": 120,
+          "height": 40
+        }
+      },
+      "0": {
+        "position": {
+          "x": 450,
+          "y": 150
+        },
+        "size": {
+         "width": 200,
+          "height": 40
+        }
+      },
+      "1": {
+        "position": {
+          "x": 750,
+          "y": 300
+        },
+        "size": {
+         "width": 200,
+          "height": 40
+        }
+      },
+      "2": {
+        "position": {
+          "x": 900,
+          "y": 500
+        },
+        "size": {
+         "width": 200,
+          "height": 40
+        }
+      },
+      "end": {
+        "position": {
+          "x": 1100,
+          "y": 500
+        },
+        "size": {
+          "width": 120,
+          "height": 40
+        }
+      }
+    },
+    "transitionsLayout": {
+      "start": [
+        {
+          "types": [
+            "out"
+          ],
+          "start": {
+            "position": "right"
+          },
+          "end": {
+            "position": "top"
+          }
+        }
+      ],
+      "0": [
+        {
+          "types": [
+            "on_error",
+            "else"
+          ],
+          "start": {
+            "position": "right"
+          },
+          "end": {
+            "position": "top"
+          }
+        }
+      ],
+      "1": [
+        {
+          "types": [
+            "on_error"
+          ],
+          "start": {
+            "position": "right"
+          },
+          "end": {
+            "position": "top"
+          }
+        },
+        {
+          "types": [
+            "on_info"
+          ],
+          "start": {
+            "position": "left"
+          },
+          "end": {
+            "position": "bottom"
+          }
+        },
+        {
+          "types": [
+            "on_success",
+            "on_warning"
+          ],
+          "start": {
+            "position": "bottom"
+          },
+          "end": {
+            "position": "left"
+          }
+        }
+      ],
+      "2": [
+        {
+          "types": [
+            "on_hit",
+            "on_success"
+          ],
+          "start": {
+            "position": "right"
+          },
+          "end": {
+            "position": "left"
+          }
+        }
+      ]
+    }
+  },
+  "sequence": [
+    {
+      "type": "processplan",
+      "id": "M358826e779c0d5dc68a2e004a3edac4b",
+      "on_error": {
+        "next_step": -1
+      },
+      "else": {
+        "next_step": -1
+      }
+    },
+    {
+      "type": "profile",
+      "id": "P000001e779q0d5ww68a2q004a3edaz4z",
+      "omit_fixups": false,
+      "on_error": {
+        "post_process": [
+          {
+            "type": "txt_report"
+          }
+        ],
+        "next_step": -2
+      },
+      "on_warning": {
+        "post_process": [
+          {
+            "type": "txt_report"
+          }
+        ],
+        "next_step": -1
+      },
+      "on_info": {
+        "post_process": [
+          {
+            "type": "txt_report"
+          }
+        ],
+        "next_step": 0
+      },
+      "on_success": {
+        "post_process": [
+          {
+            "type": "txt_report"
+          }
+        ],
+        "next_step": -1
+      }
+    },
+    {
+      "type": "check",
+      "id": "C000009e779q0d5ww68a2q004a3edaz4z",
+      "on_hit": {
+        "post_process": [
+          {
+            "type": "txt_report"
+          }
+        ],
+        "next_step": -1
+      },
+      "on_success": {
+        "post_process": [
+          {
+            "type": "txt_report"
+          }
+        ],
+        "next_step": -1
+      }
+    }
+  ]
+}

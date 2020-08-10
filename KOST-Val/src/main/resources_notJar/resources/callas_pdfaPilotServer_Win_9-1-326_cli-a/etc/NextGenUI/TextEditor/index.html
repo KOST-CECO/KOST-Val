@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<title>Editor</title>
+		<style type="text/css">
+			*, *:before, *:after {
+				box-sizing: border-box;
+			}
+
+			body {
+				font-family: Arial, Helvetica, sans-serif;
+				margin: 0;
+				padding: 0;
+			}
+
+			.container {
+				display: flex;
+				flex-direction: column;
+				height: 100vh;
+				padding-bottom: 27px; /* height of #status-bar */
+			}
+
+			#editor {
+				position: relative;
+				width: 100%;
+				flex-grow: 1;
+			}
+
+			.error_widget_wrapper {
+				background: inherit;
+				color: inherit;
+				border: none;
+			}
+
+			.error_widget {
+				background-color: rgba(255, 51, 51, 0.25);
+				border-top: solid 1px;
+				border-bottom: solid 1px;
+				border-color: #ff3333;
+				margin: 5px 0 0 0;
+				padding: 5px 41px;
+				white-space: pre-wrap;
+				color: #ff3333;
+			}
+
+			.error_widget_arrow {
+				position: absolute;
+				border: solid 5px;
+				border-color: #ff3333;
+				border-top-color: transparent!important;
+				border-right-color: transparent!important;
+				border-left-color: transparent!important; 
+				top: -5px;
+			}
+
+			#status-bar {
+				position: fixed;
+				bottom: 0;
+				display: flex;
+				justify-content: space-between;
+				margin: 0;
+				padding: 0;
+				height: 27px;
+				width: 100%;
+				font-size: 15px;
+			}
+
+			#status-bar div {
+				display: flex;
+				align-items: center;
+				height: inherit;
+			}
+
+			#status-bar .ace_status-indicator {
+				color: inherit;
+				font-size: inherit;
+				user-select: none;
+				margin: 0 7px;
+			}
+
+			#status-bar .status-theme,
+			#status-bar .status-tabs {
+				width: 100px;
+				margin: 0 15px;
+				font-size: inherit;
+				color: inherit;
+				border: none;
+				outline: none;
+				background: none;
+				-webkit-appearance: none;
+				appearance: none;
+			}
+			.highlightError {
+				z-index: 9999;
+				position: absolute;
+				border: 1px solid #ff3333;
+				background-color: rgba(255, 51, 51, 0.25);
+			}
+		</style>
+		<script src="scripts/internal.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			if(typeof window.sendExtensionMessage === "function") { //CEF
+				backEventsHandlers["setErrorMarker"] = setErrorMarker;
+				backEventsHandlers["saveText"] = saveText;
+				backEventsHandlers["setText"] = setText;
+				backEventsHandlers["insertText"] = insertText;
+				registerEventCallback();
+
+				// loadSettings().then(function(response) {
+				// 	settings = response;
+				// });
+			}
+
+			(function() {
+				//This function prevents the text editor from flickering when starting.
+				//For this to work i need a list of the themes we offer with their background colors and a function that gives me the name of the theme used at the beginning.
+				var css = `body { background-color: #272822; }`,
+					head = document.head,
+					style = document.createElement('style');
+
+				head.appendChild(style);
+				style.type = 'text/css';
+				style.innerHTML = css;
+				// style.appendChild(document.createTextNode(css));
+			})();
+		</script>
+	</head>
+	<body>
+		<div class="container">
+			<div id="editor"></div>
+			
+			<div id="status-bar">
+				<div>
+					<select class="status-tabs">
+						<optgroup label="Tab Size">
+							<option value="1">Tab Width: 1</option>
+							<option value="2">Tab Width: 2</option>
+							<option value="3">Tab Width: 3</option>
+							<option value="4" selected="selected">Tab Width: 4</option>
+							<option value="5">Tab Width: 5</option>
+							<option value="6">Tab Width: 6</option>
+							<option value="7">Tab Width: 7</option>
+							<option value="8">Tab Width: 8</option>
+						</optgroup>
+						<optgroup label="Convert">
+							<option value="1">Convert Indentation to Spaces</option>
+							<option value="2">Convert Indentation to Tabs</option>
+						</optgroup>
+					</select>
+
+					<select class="status-theme">
+						<optgroup label="Theme">
+							<option value="monokai" selected="selected">Monokai</option>
+							<option value="tomorrow">Tomorrow</option>
+						</optgroup>
+					</select>
+
+					<!-- <img src="" alt=""> -->
+				</div>
+			</div>
+		</div>
+
+		<script src="scripts/ace.js" type="text/javascript" charset="utf-8"></script>
+		<script src="scripts/ext-searchbox.js" type="text/javascript" charset="utf-8"></script>
+		<script src="scripts/ext-statusbar.js" type="text/javascript" charset="utf-8"></script>
+		<script src="scripts/ext-language_tools.js" type="text/javascript" charset="utf-8"></script>
+		<script src="scripts/beautify.js" type="text/javascript" charset="utf-8"></script>
+		<script src="scripts/completerData.js" type="text/javascript" charset="utf-8"></script>
+		<script src="scripts/script.js" type="text/javascript" charset="utf-8"></script>
+	</body>
+</html>

@@ -1,0 +1,253 @@
+%!PS-Adobe-3.0 Resource-File
+%%BeginResource: file (FS/Level2CID)
+%%Title: (FS/Level2CID)
+%%Version: 3010.01
+%%Copyright: ------------------------------------------------------------
+%%Copyright: Copyright 1990-1998 Adobe Systems Incorporated.
+%%Copyright: All rights reserved.
+%%Copyright:
+%%Copyright: Patents Pending
+%%Copyright:
+%%Copyright: NOTICE: All information contained herein is the property
+%%Copyright: of Adobe Systems Incorporated. Many of the intellectual
+%%Copyright: and technical concepts contained herein are proprietary
+%%Copyright: to Adobe, are protected as trade secrets, and are made
+%%Copyright: available only to Adobe licensees for their internal use.
+%%Copyright: Any reproduction or dissemination of this software is
+%%Copyright: strictly forbidden unless prior written permission is
+%%Copyright: obtained from Adobe.
+%%Copyright:
+%%Copyright: PostScript and Display PostScript are trademarks of
+%%Copyright: Adobe Systems Incorporated which may be registered in
+%%Copyright: certain jurisdictions.
+%%Copyright: ------------------------------------------------------------
+%%EndComments
+lib_extensions begin true lib_vmSaveState false lib_packingSaveState end 10
+dict begin/anonymous currentdict def/cid_FS_SCRATCH 256 string def/raise{
+//systemdict/errordict get exch get exec stop}bind def/reraise{cvx//systemdict
+/$error get/errorname get dup null eq{pop/undefined}if//systemdict/errordict
+get exch get exec stop}bind def/clearerror{//systemdict/$error get/newerror
+//false put}bind def currentglobal true setglobal lib_extensions
+/lib_hasResourceForAllBug 1 dict dup begin mark{(*){pop stop}//cid_FS_SCRATCH
+/Category resourceforall}stopped cleartomark currentdict eq dup{end}if not put
+setglobal currentglobal mark true setglobal{
+/stevekelleyamerige-digbyhorner-stevehwang/Category resourcestatus}stopped{
+cleartomark dup setglobal true}{cleartomark dup currentglobal ne dup{pop dup
+setglobal true}if}ifelse dup lib_extensions/lib_hasResourceStatusBug 3 -1 roll
+put 3 dict begin/self currentdict def{/cid_resourcestatus/resourcestatus load
+def/resourcestatus{dup mark exch{/Category//self/cid_resourcestatus get exec}
+stopped{cleartomark//self/cid_resourcestatus get exec}{{cleartomark 1 index
+null eq{//self/cid_resourcestatus get exec}{lib_extensions begin currentglobal
+lib_vmSaveState end mark 3 1 roll{//self/cid_resourcestatus get exec}stopped{
+cleartomark false}{dup{4 -1 roll pop}{exch pop}ifelse}ifelse lib_extensions
+begin lib_vmRestoreState end}ifelse}{cleartomark//self/cid_resourcestatus get
+exec}ifelse}ifelse}bind end def}{end}ifelse setglobal userdict begin/RD{string
+currentfile exch readstring pop}bind executeonly def/ND{noaccess def}bind
+executeonly def/NP{noaccess put}bind executeonly def/-|/RD load def/|-/ND load
+def/|/NP load def end userdict begin/substfontdict 9 dict def substfontdict
+/subst{/b exch def/a exch def/str exch cvlit def str a search{/newstr b length
+a length sub str length add string def newstr copy length/cnt exch def pop
+newstr cnt b putinterval/cnt cnt b length add def newstr exch cnt exch
+putinterval newstr//true}{//false}ifelse}bind readonly put $error dup begin
+/SubstituteFont{//substfontdict begin currentglobal//true setglobal mark 2
+index{dup length string cvs(-Ext-SJ-)(-Ext-RKSJ-)subst not{stop}if cvn}stopped
+{cleartomark $error/newerror//false put setglobal end//SubstituteFont exec}{
+exch pop exch setglobal exch pop end}ifelse}end bind readonly put userdict
+/substfontdict undef end globaldict begin/getresfilename{/Category
+findresource begin//cid_FS_SCRATCH ResourceFileName end}bind executeonly def
+/cid_getresfilename//getresfilename def/execresfile{getresfilename run}bind
+executeonly def/cid_execresfile//execresfile def systemdict/findcdevproc known
+not globaldict/findcdevproc known not and userdict/findcdevproc known not and{
+/findcdevproc{currentglobal exch true setglobal dup/CDevProc{findresource}
+stopped{true setglobal pop userdict/CDevProcDirectory get exch known{dup
+userdict/CDevProcDirectory get exch get dup gcheck setglobal/CDevProc
+defineresource exch setglobal//clearerror exec}{exch setglobal/CDevProc stop}
+ifelse}{exch pop exch setglobal}ifelse}bind executeonly def}if systemdict
+/findcharstrings known not globaldict/findcharstrings known not and{userdict
+/CharStringsDirectory known not{currentglobal//false setglobal userdict
+/CharStringsDirectory 32 dict put setglobal}if/findcharstrings{currentglobal
+exch//false setglobal dup/Charstring{findresource}stopped{//false setglobal
+pop userdict/CharStringsDirectory get exch known{dup userdict
+/CharStringsDirectory get exch get dup gcheck setglobal/Charstring
+defineresource exch setglobal//clearerror exec}{exch setglobal/Charstring stop
+}ifelse}{exch pop exch setglobal}ifelse}bind executeonly def}if systemdict
+/findpgfont known not globaldict/findpgfont known not and{userdict
+/PGFontDirectory known not{currentglobal//false setglobal userdict
+/PGFontDirectory 32 dict put setglobal}if/findpgfont{lib_extensions begin true
+lib_vmSaveState end dup/PGFont{findresource}stopped{true setglobal pop dup
+type/savetype eq{restore pop pop pop}if userdict/PGFontDirectory get exch
+known{dup userdict/PGFontDirectory get exch get dup gcheck setglobal/PGFont
+defineresource lib_extensions begin lib_vmRestoreState end//clearerror exec}{
+lib_extensions begin lib_vmRestoreState end/invalidfont//raise exec}ifelse}{
+exch pop lib_extensions begin lib_vmRestoreState end}ifelse}bind executeonly
+def}if end/Font/Category findresource dup length 2 add dict copy dup
+/InstanceType/dicttype put/FontOriginal exch/Category defineresource dup begin
+dup length 2 add dict copy dup/InstanceType/dicttype put lib_extensions
+/lib_cidFS get not{dup/ResourceStatus{dup//ResourceStatus stopped{pop
+/ResourceStatus//reraise exec}if dup{4 -1 roll pop}{lib_extensions begin true
+lib_vmSaveState end pop cid_extensions begin cid_IsComposedFont end{pop pop
+pop 2 -1 true}{dup/CompatibleFont resourcestatus dup{pop pop pop
+lib_extensions begin false lib_vmSaveState end/CompatibleFonts/ProcSet
+findresource begin currentenable exch/CompatibleFont currentexception not and
+end lib_extensions begin lib_vmRestoreState end dup{pop 2 -1 true}if}{exch pop
+}ifelse}ifelse lib_extensions begin lib_vmRestoreState end}ifelse}bind put}if
+dup/FindResource{currentglobal{false}{FontDirectory exch 2 copy known{get true
+}{exch pop false}ifelse}ifelse{false}{GlobalFontDirectory exch 2 copy known{
+get false}{exch pop true}ifelse}ifelse{lib_extensions begin false
+lib_vmSaveState end cid_extensions begin cid_IsComposedFont end{lib_extensions
+begin lib_fontDepth 0 eq{2 copy lib_EvalBuildCompatible lib_buildCompatibleVM
+not and{lib_ToggleNativeMode/lib_buildCompatibleVM true def/lib_CMapType/CMapC
+def/lib_FixCMapCategoryType/FixCMapCategoryC def/lib_CIDFontType/CIDFontC def}
+if}if/lib_fontDepth lib_fontDepth 1 add def end/CIDInit/ProcSet findresource
+begin 2 index cid_SetFontHits 1 index lib_extensions/lib_buildCompatibleVM get
+{/FDepVector-C}{/FDepVector-N}ifelse cid_FindFixEntry{0 exch exec}{
+cid_ComposeFont}ifelse end lib_extensions begin/lib_fontDepth lib_fontDepth 1
+sub def lib_fontDepth 0 eq{lib_nativeMode lib_buildCompatibleVM and{
+lib_ToggleNativeMode/lib_buildCompatibleVM false def/lib_CMapType/CMap def
+/lib_FixCMapCategoryType/FixCMapCategory def/lib_CIDFontType/CIDFont def}if}if
+lib_vmRestoreState end}{lib_extensions begin lib_vmRestoreState end dup
+/FontOriginal cid_extensions/cid_SafeResourceStatus get exec{pop pop
+//FindResource exec}{dup/CompatibleFont resourcestatus{pop pop/CompatibleFont
+findresource}{//FindResource exec}ifelse}ifelse}ifelse}if}bind put
+lib_extensions/lib_cidFS get not{dup/ResourceForAll{count 3 lt{errordict
+/stackunderflow get exec stop}if 1 index xcheck not{errordict/typecheck get
+exec stop}if lib_extensions begin 3 copy/lib_s1 exch def/lib_s2 exch def
+/lib_s3 exch def end cid_extensions/cid_caughtExit false put currentglobal
+false setglobal 4 1 roll exch[exch cid_extensions/cid_caughtExit true
+systemdict/put get systemdict/exec get cid_extensions/cid_caughtExit false
+systemdict/put get]cvx exch 4 -1 roll
+setglobal//ResourceForAll exec cid_extensions/cid_caughtExit get not{
+lib_extensions begin/lib_dstr5(fonts/)lib_Strcpy lib_s3 lib_Strcat lib_Strget
+/lib_s2 load lib_s1 false end cid_extensions/cid_FontCategory currentdict put
+end cid_extensions/cid_CIDKeyedFontsForall get exec cid_extensions
+/cid_FontCategory get begin}if}bind put}if end lib_extensions begin/Font
+lib_SaveVMInstances end/Font exch/Category defineresource pop lib_extensions
+begin/Font lib_RestoreVMInstances end/FSupp/Generic/Category findresource dup
+length 2 add dict copy dup/ResourceFileName{{pop(fsupp/)AppendName PrependRoot
+exch pop}stopped{/ResourceFileName//reraise exec}if}bind executeonly put
+/Category defineresource pop/PGFSupp/Generic/Category findresource dup length
+2 add dict copy dup/ResourceFileName{{pop(pgfsupp/)AppendName PrependRoot exch
+pop}stopped{/ResourceFileName//reraise exec}if}bind executeonly put/Category
+defineresource pop/Sys/Generic/Category findresource dup length 2 add dict
+copy dup/ResourceFileName{{pop(Sys/)AppendName PrependRoot exch pop}stopped{
+/ResourceFileName//reraise exec}if}bind executeonly put/Category
+defineresource pop/CDevProc/Generic/Category findresource dup length 2 add
+dict copy dup/ResourceFileName{{pop(cdevprocs/)AppendName PrependRoot exch pop
+}stopped{/ResourceFileName//reraise exec}if}bind executeonly put/Category
+defineresource pop/Charstring/Generic/Category findresource dup length 2 add
+dict copy dup/InstanceType/dicttype put dup/ResourceFileName{{pop
+(charstrings/)AppendName PrependRoot exch pop}stopped{/ResourceFileName
+//reraise exec}if}bind executeonly put/Category defineresource pop/PGFont
+/Generic/Category findresource dup length 2 add dict copy dup/InstanceType
+/dicttype put dup/ResourceFileName{{pop(pgfonts/)AppendName PrependRoot exch
+pop}stopped{/ResourceFileName//reraise exec}if}bind executeonly put/Category
+defineresource pop userdict/EncodingDirectory known{userdict/EncodingDirectory
+get gcheck}{true}ifelse{currentglobal false setglobal userdict
+/EncodingDirectory 32 dict put setglobal}if/Encoding/Category resourcestatus{
+pop pop}{/Encoding/Generic/Category findresource dup length 2 add dict copy
+dup/InstanceType/arraytype put/Category defineresource pop}ifelse 1 dict begin
+/scratch 128 string def lib_extensions begin/Encoding lib_SaveVMInstances end
+/Encoding/Category findresource dup begin dup length dict copy dup
+/ResourceFileName{{pop(encodings/)AppendName PrependRoot exch pop}stopped{
+/ResourceFileName//reraise exec}if}bind put dup/LoadResource{dup mark exch
+//scratch ResourceFileName{run}stopped{{cleartomark}stopped{/LoadResource cvx
+/undefinedresource//raise exec}{mark exch currentglobal exch{userdict
+/EncodingDirectory get 1 index get dup gcheck setglobal/Encoding
+defineresource pop setglobal cleartomark}stopped{{cleartomark}stopped pop
+/LoadResource cvx/undefinedresource//raise exec}if}ifelse}{cleartomark pop}
+ifelse}bind put end/Encoding exch/Category defineresource pop lib_extensions
+begin/Encoding lib_RestoreVMInstances end end userdict/CDevProcDirectory known
+not{currentglobal false setglobal userdict/CDevProcDirectory 32 dict put true
+setglobal userdict/CDevProcDirectory get/StandardCDevProc 1183615869
+internaldict dup/stdCDevProc known{/stdCDevProc get}{pop{pop pop pop pop 0
+exch -1000 exch 2 div 880}bind}ifelse put userdict/CDevProcDirectory get
+/StandardCDevProc get/StandardCDevProc exch/CDevProc defineresource pop
+setglobal}if/NominalJISEncoding/Encoding resourcestatus{pop pop}{[/c00/c01/c02
+/c03/c04/c05/c06/c07/c08/c09/c0A/c0B/c0C/c0D/c0E/c0F/c10/c11/c12/c13/c14/c15
+/c16/c17/c18/c19/c1A/c1B/c1C/c1D/c1E/c1F/c20/c21/c22/c23/c24/c25/c26/c27/c28
+/c29/c2A/c2B/c2C/c2D/c2E/c2F/c30/c31/c32/c33/c34/c35/c36/c37/c38/c39/c3A/c3B
+/c3C/c3D/c3E/c3F/c40/c41/c42/c43/c44/c45/c46/c47/c48/c49/c4A/c4B/c4C/c4D/c4E
+/c4F/c50/c51/c52/c53/c54/c55/c56/c57/c58/c59/c5A/c5B/c5C/c5D/c5E/c5F/c60/c61
+/c62/c63/c64/c65/c66/c67/c68/c69/c6A/c6B/c6C/c6D/c6E/c6F/c70/c71/c72/c73/c74
+/c75/c76/c77/c78/c79/c7A/c7B/c7C/c7D/c7E/c7F/c80/c81/c82/c83/c84/c85/c86/c87
+/c88/c89/c8A/c8B/c8C/c8D/c8E/c8F/c90/c91/c92/c93/c94/c95/c96/c97/c98/c99/c9A
+/c9B/c9C/c9D/c9E/c9F/cA0/cA1/cA2/cA3/cA4/cA5/cA6/cA7/cA8/cA9/cAA/cAB/cAC/cAD
+/cAE/cAF/cB0/cB1/cB2/cB3/cB4/cB5/cB6/cB7/cB8/cB9/cBA/cBB/cBC/cBD/cBE/cBF/cC0
+/cC1/cC2/cC3/cC4/cC5/cC6/cC7/cC8/cC9/cCA/cCB/cCC/cCD/cCE/cCF/cD0/cD1/cD2/cD3
+/cD4/cD5/cD6/cD7/cD8/cD9/cDA/cDB/cDC/cDD/cDE/cDF/cE0/cE1/cE2/cE3/cE4/cE5/cE6
+/cE7/cE8/cE9/cEA/cEB/cEC/cED/cEE/cEF/cF0/cF1/cF2/cF3/cF4/cF5/cF6/cF7/cF8/cF9
+/cFA/cFB/cFC/cFD/cFE/cFF]/NominalJISEncoding exch/Encoding defineresource pop}
+ifelse/ProcSet/Category findresource dup/ResourceStatus get
+/cid_oldResourceStatus exch def dup length 1 add dict copy dup/ResourceStatus{
+dup/CIDInit eq{lib_extensions/lib_nativeMode get not{/AdobeTypeComposer
+/ProcSet resourcestatus{pop pop pop false}{//cid_oldResourceStatus exec}ifelse
+}{//cid_oldResourceStatus exec}ifelse}{//cid_oldResourceStatus exec}ifelse}
+bind executeonly put lib_extensions begin/ProcSet lib_SaveVMInstances end
+/ProcSet exch/Category defineresource pop lib_extensions begin/ProcSet
+lib_RestoreVMInstances end/CMap/Category resourcestatus{pop pop}{/CMap/Generic
+/Category findresource dup length 2 add dict copy dup/InstanceType/dicttype
+put/Category defineresource pop}ifelse 3 dict begin/scratch 128 string def
+/CMapCategory/CMap/Category findresource def/EXEC{dup 0 get type/operatortype
+eq{exec}{exec exec}ifelse}bind def/newdefineresource{dup/CMap eq{pop/CMapC}if{
+//defineresource}//EXEC exec}bind def/CMapC/Generic/Category findresource dup
+length 2 add dict copy dup/InstanceType/dicttype put dup/LoadResource{
+currentglobal exch true setglobal lib_extensions begin lib_cmapCDepth 0 eq{
+userdict/defineresource//newdefineresource put}if/lib_cmapCDepth
+lib_cmapCDepth 1 add def end//scratch ResourceFileName{run}stopped
+lib_extensions begin/lib_cmapCDepth lib_cmapCDepth 1 sub def lib_cmapCDepth 0
+eq{userdict/defineresource undef}if end{/LoadResource cvx/undefinedresource
+//raise exec}if setglobal}bind put dup/ResourceFileName{//CMapCategory begin
+ResourceFileName end}bind put/Category defineresource pop end/Generic/Category
+findresource dup length 2 add dict copy dup/InstanceType/dicttype put
+/FixCMapCategory exch/Category defineresource pop 3 dict begin/scratch 128
+string def/FixCMapCategoryCategory/FixCMapCategory/Category findresource def
+/EXEC{dup 0 get type/operatortype eq{exec}{exec exec}ifelse}bind def
+/newdefineresource{dup/FixCMapCategory eq{pop/FixCMapCategoryC}if{
+//defineresource}//EXEC exec}bind def/FixCMapCategoryC/Generic/Category
+findresource dup length 2 add dict copy dup/InstanceType/dicttype put dup
+/LoadResource{currentglobal exch true setglobal lib_extensions begin
+lib_fixCMapCategoryCDepth 0 eq{userdict/defineresource//newdefineresource put}
+if/lib_fixCMapCategoryCDepth lib_fixCMapCategoryCDepth 1 add def end//scratch
+ResourceFileName{run}stopped lib_extensions begin/lib_fixCMapCategoryCDepth
+lib_fixCMapCategoryCDepth 1 sub def lib_fixCMapCategoryCDepth 0 eq{userdict
+/defineresource undef}if end{/LoadResource cvx/undefinedresource//raise exec}
+if setglobal}bind put dup/ResourceFileName{//FixCMapCategoryCategory begin
+ResourceFileName end}bind put/Category defineresource pop end/CIDFont/Category
+resourcestatus{pop pop}{/CIDFont/Generic/Category findresource dup length 2
+add dict copy dup/InstanceType/dicttype put/Category defineresource pop}ifelse
+/CIDFont/Category findresource dup begin dup length dict copy dup/LoadResource
+{lib_extensions begin currentglobal lib_vmSaveState end cid_extensions
+/cid_streamedCIDFont false put//LoadResource stopped cid_extensions
+/cid_streamedCIDFont true put lib_extensions begin lib_vmRestoreState end{
+lib_extensions begin currentglobal lib_vmSaveState end{/LoadResource cvx
+/undefinedresource//raise exec}stopped pop lib_extensions begin
+lib_vmRestoreState end stop}if}bind put/CIDFont exch/Category defineresource
+pop end 3 dict begin/scratch 128 string def/CIDFontCategory/CIDFont/Category
+findresource def/EXEC{dup 0 get type/operatortype eq{exec}{exec exec}ifelse}
+bind def/newdefineresource{dup/CIDFont eq{pop/CIDFontC}if{//defineresource}
+//EXEC exec}bind def/CIDFontC/Generic/Category findresource dup length 2 add
+dict copy dup/InstanceType/dicttype put dup/LoadResource{currentglobal exch
+true setglobal lib_extensions begin lib_cidfontCDepth 0 eq{userdict
+/defineresource//newdefineresource put}if/lib_cidfontCDepth lib_cidfontCDepth
+1 add def end lib_extensions begin currentglobal lib_vmSaveState end
+cid_extensions/cid_streamedCIDFont false put//scratch ResourceFileName{run pop
+}stopped cid_extensions/cid_streamedCIDFont true put lib_extensions begin
+lib_vmRestoreState end lib_extensions begin/lib_cidfontCDepth
+lib_cidfontCDepth 1 sub def lib_cidfontCDepth 0 eq{userdict/defineresource
+undef}if end{/LoadResource cvx/undefinedresource//raise exec}if setglobal}bind
+put dup/ResourceFileName{//CIDFontCategory begin ResourceFileName end}bind put
+/Category defineresource pop end/Generic/Category findresource dup length 2
+add dict copy dup/InstanceType/dicttype put/FixCIDInitProcSet exch/Category
+defineresource pop/Generic/Category findresource dup length 2 add dict copy
+dup/InstanceType/dicttype put/CompatibleCIDFont exch/Category defineresource
+pop 1 dict begin/scratch 128 string def/CompatibleFont/Generic/Category
+findresource dup length 2 add dict copy dup/InstanceType/dicttype put/Category
+defineresource dup begin dup length dict copy dup/LoadResource{lib_extensions
+begin false lib_vmSaveState end lib_extensions/lib_processingCF true put mark
+1 index//scratch ResourceFileName{run}stopped cleartomark dup findfont
+/CompatibleFont defineresource pop lib_extensions/lib_processingCF false put
+lib_extensions begin lib_vmRestoreState end}bind put/CompatibleFont exch
+/Category defineresource pop end end end lib_extensions begin
+lib_vmRestoreState lib_packingRestoreState end
+%%EndResource
+%%EOF

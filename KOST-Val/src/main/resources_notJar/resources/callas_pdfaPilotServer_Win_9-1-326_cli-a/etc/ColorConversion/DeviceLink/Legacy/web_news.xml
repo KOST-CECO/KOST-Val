@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<devicelink>
+	<profile lang="CHS">
+		<header>卷筒胶印到新闻纸(IFRA)</header>
+		<explanation>从 ISO Web Coated (ECI) 转换为 ISO News print (26% 点增益，最大油墨覆盖率为 240%)</explanation>
+	</profile>
+	<profile lang="ENU">
+		<header>Web offset to Newspaper (IFRA)</header>
+		<explanation>Conversion from ISO Web Coated (ECI) to ISO News print (26% dotgain, max. 240% ink coverage)</explanation>
+	</profile>
+	<profile lang="ESP">
+		<header>Offset de bobina a papel de periódico</header>
+		<explanation>Conversión de ISO estucado en bobina (ECI) a ISO papel de periódico (26% ganancia de grano, cobertura de tinta 240% máxima)</explanation>
+	</profile>
+	<profile lang="FRA">
+		<header>Impression rotative offset en papier journal (IFRA)</header>
+		<explanation>Conversion d’ISO Web Coated (ECI) vers ISO News print (26% d'élargissement du point, couverture d'encre de 240% max.)</explanation>
+	</profile>
+	<profile lang="DEU">
+		<header>Rollenoffset nach Zeitung (IFRA)</header>
+		<explanation>Konvertierung von ISO Web Coated (ECI) nach ISO News print (26% Druckpunktzuwachs, max. 240% Gesamtfarbauftrag</explanation>
+	</profile>
+	<profile lang="ITA">
+		<header>Da offset bobina a quotidiano</header>
+		<explanation>Conversione da ISO Web Coated (ECI) a ISO News print (ingrossamento del punto del 26%, max. 240% di copertura inchiostro)</explanation>
+	</profile>
+	<profile lang="JPN">
+		<header>Web オフセット, 欧州を Newspaper (IFRA) に変換</header>
+		<explanation>ISO Web Coated (ECI) を ISO News print (Dot Gain 26%, インキ総量 240%) に変換します</explanation>
+	</profile>
+</devicelink>

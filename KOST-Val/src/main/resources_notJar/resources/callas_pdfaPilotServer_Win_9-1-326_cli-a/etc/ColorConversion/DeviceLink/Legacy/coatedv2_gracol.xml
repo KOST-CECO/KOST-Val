@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<devicelink>
+	<profile lang="CHS">
+		<header>平板胶印，欧洲到美国(GRACoL)</header>
+		<explanation>从欧洲 ISO Coated v2 (ECI) 转换为 GRACoL US 标准(最大油墨覆盖率为 300%)</explanation>
+	</profile>
+	<profile lang="ENU">
+		<header>Sheetfed offset, Europe to US (GRACoL)</header>
+		<explanation>Conversion from ISO Coated v2 (ECI) European to GRACoL US standard (max. 300% ink coverage)</explanation>
+	</profile>
+	<profile lang="ESP">
+		<header>Offset de alimentación por hojas, de Europa a EE.UU. (GRACoL)</header>
+		<explanation>Conversión de ISO estucado v2 (ECI) europeo a GRACoL EE.UU. estándar (cobertura de tinta 300% máxima)</explanation>
+	</profile>
+	<profile lang="FRA">
+		<header>Offset à feuilles, Europe vers USA (GRACoL)</header>
+		<explanation>Conversion d'ISO Coated v2 (ECI) en Europe vers la norme américaine GRACoL (couverture d'encre de 300 % maximum)</explanation>
+	</profile>
+	<profile lang="DEU">
+		<header>Bogenoffset, Europa nach US (GRACoL)</header>
+		<explanation>Konvertierung von ISO Coated v2 (ECI) zum amerikanischen GRACoL Standard (maximal 300% Gesamtfarbauftrag)</explanation>
+	</profile>
+	<profile lang="ITA">
+		<header>Offset foglio, da Europa a US (GRACoL)</header>
+		<explanation>Conversione da ISO Coated v2 (ECI) europeo a GRACoL US standard (max. 300% di copertura inchiostro)</explanation>
+	</profile>
+	<profile lang="JPN">
+		<header>シートフィードオフセット, 欧州を米国 (GRACoL) に変換</header>
+		<explanation>ISO Coated v2 (ECI) 欧州を CRACoL 米国標準 (インキ総量 300%)に変換します</explanation>
+	</profile>
+</devicelink>

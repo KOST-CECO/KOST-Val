@@ -75,6 +75,11 @@
 			<classpath refid="KOST-Val.classpath" />
 		</javac>
 		<javac includeantruntime="false" debug="true" debuglevel="${debuglevel}" destdir="target/classes"
+			source="${source}" target="${target}">
+			<src path="src/main/resources_notJar" />
+			<classpath refid="KOST-Val.classpath" />
+		</javac>
+		<javac includeantruntime="false" debug="true" debuglevel="${debuglevel}" destdir="target/classes"
 			source="${source}" target="${target}" encoding="${source_encoding}">
 			<src path="." />
 			<exclude name="src/" />

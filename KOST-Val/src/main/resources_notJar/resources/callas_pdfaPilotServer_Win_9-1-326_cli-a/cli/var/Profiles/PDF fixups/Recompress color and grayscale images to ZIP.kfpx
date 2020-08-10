@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pdfpreflight version="8.0">
+	<package>
+		<id3>4522aa78b1f13f9aac9060df41b4dde6</id3>
+		<pdfxoutintentlist>
+		</pdfxoutintentlist>
+		<iccprofilelist>
+		</iccprofilelist>
+		<ccpolicies>
+		</ccpolicies>
+		<occdsetups>
+		</occdsetups>
+		<curves>
+		</curves>
+		<fspolicies>
+		</fspolicies>
+		<conditions>
+		</conditions>
+		<rules>
+		</rules>
+		<rulesets>
+		</rulesets>
+		<fixups>
+			<fixup>
+				<id1>Ffaf346ac4f7f8ec253bce2bafffedfb6</id1>
+				<id2>F19318cb5441524e7762770fdaee71c54</id2>
+				<id3>0bed81fd05cd81b18b82e02afb0abbd2</id3>
+				<id4>c7fb1eba4481820752edb8a1e09cbf90</id4>
+				<name>F_8_RecompressallcolorimagestoZIP</name>
+				<comment>F_8_RecompressallcolorimagestoZIP</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<fcfg>DsRcmpClrImgs&#9;Off&#9;150&#9;225&#9;ZIP&#9;Min&#9;256&#10;</fcfg>
+				<reportFailed></reportFailed>
+			</fixup>
+			<fixup>
+				<id1>F349064d323f44aee54329fb8c84e9a4f</id1>
+				<id2>Ff0860e083ebdfe7c6e5d3d4e9bc56006</id2>
+				<id3>7190f0ba091d785a389f977579c201d1</id3>
+				<id4>6c4b48f9156d09bd0f83afdfb31ef441</id4>
+				<name>F_8_RecompressallgrayscaleimagestoZIP</name>
+				<comment>F_8_RecompressallgrayscaleimagestoZIP</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<fcfg>DsRcmpGscImgs&#9;Off&#9;150&#9;256&#9;ZIP&#9;Min&#9;0&#10;</fcfg>
+				<reportFailed></reportFailed>
+			</fixup>
+		</fixups>
+		<fixupsets>
+			<fixupset>
+				<id1>U1849679faaef8351f8e2f46e7e1927d4</id1>
+				<id2>U15e6f1d02532a3b9f068ee2eb1790c97</id2>
+				<id3>46f6dad5c84b2617a9f40f6cd77b1117</id3>
+				<id4>2b63c077152b4db5317d8a5aa0607071</id4>
+				<name>UUUU_FIXUPSET_DEF_NAME</name>
+				<comment>UUUU_FIXUPSET_DEF_NAME</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<fixups>
+					<fixup>Ffaf346ac4f7f8ec253bce2bafffedfb6</fixup>
+					<fixup>F349064d323f44aee54329fb8c84e9a4f</fixup>
+				</fixups>
+			</fixupset>
+		</fixupsets>
+		<profiles>
+			<profile>
+				<id1>Pef40d6bd559e6a3b499e7546e4b206a7</id1>
+				<id2>Pefb0c7e0ed83123153660a884c41a0ec</id2>
+				<id3>5f0543f24980f6f272e4b4c97c2edd6b</id3>
+				<id4>cb0c4cadb78c7682a699d43841d6d1ea</id4>
+				<name>P_8_RecompresscolorandgrayscaleimagestoZIP</name>
+				<comment>P_8_RecompresscolorandgrayscaleimagestoZIP</comment>
+				<flags edit="0" visible="1" dict="1"></flags>
+				<metalist>
+					<metadata>
+						<metakey>author</metakey>
+						<metavalue>callas pdfToolbox 4</metavalue>
+					</metadata>
+					<metadata>
+						<metakey>email</metakey>
+						<metavalue>support@callassoftware.com</metavalue>
+					</metadata>
+				</metalist>
+				<creation>D:20090513135020+02&apos;00&apos;</creation>
+				<modification>D:20090520142628+02&apos;00&apos;</modification>
+				<pdfstd>
+					<pdfx convert="0"></pdfx>
+					<pdfa convert="0"></pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond></outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+				</pdfstd>
+				<wizard>
+				</wizard>
+				<rulesets>
+				</rulesets>
+				<fixupsets>
+					<fixupset>U1849679faaef8351f8e2f46e7e1927d4</fixupset>
+				</fixupsets>
+			</profile>
+		</profiles>
+		<profgroups>
+		</profgroups>
+	</package>
+</pdfpreflight>

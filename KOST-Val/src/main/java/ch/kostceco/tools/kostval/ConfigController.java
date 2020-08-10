@@ -43,7 +43,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.web.WebEngine;
@@ -54,7 +53,7 @@ public class ConfigController
 {
 
 	@FXML
-	private CheckBox					checkPdfa, checkPdftools, checkCallas, checkPdfa1a, checkPdfa2a,
+	private CheckBox				checkPdfa, checkPdftools, checkCallas, checkPdfa1a, checkPdfa2a,
 			checkFont, checkImage, checkJbig2, checkDetail, checkNentry, checkPdfa1b, checkPdfa2b,
 			checkFontTol, checkPdfa2u, checkSiard, checkSiard10, checkSiard21, checkJpeg2000, checkJpeg,
 			checkTiff, checkComp1, checkComp5, checkPi0, checkPi4, checkComp2, checkComp7, checkPi1,
@@ -63,37 +62,34 @@ public class ConfigController
 			checkPi3, checkPi8, checkSip0160;
 
 	@FXML
-	private Button						buttonConfigApply, buttonConfigCancel;
+	private Button					buttonConfigApply, buttonConfigCancel;
 
-	private File							configFileBackup	= new File(
-			System.getenv( "USERPROFILE" ) + File.separator + ".kost-val" + File.separator
+	private File						configFileBackup	= new File(
+			System.getenv( "USERPROFILE" ) + File.separator + ".kost-val_2x" + File.separator
 					+ "configuration" + File.separator + "BACKUP.kostval.conf.xml" );
 
-	private File							configFile				= new File(
-			System.getenv( "USERPROFILE" ) + File.separator + ".kost-val" + File.separator
+	private File						configFile				= new File(
+			System.getenv( "USERPROFILE" ) + File.separator + ".kost-val_2x" + File.separator
 					+ "configuration" + File.separator + "kostval.conf.xml" );
 
-	private String						dirOfJarPath;
+	private String					dirOfJarPath;
 
-	private Locale						locale						= Locale.getDefault();
+	private Locale					locale						= Locale.getDefault();
 
-	ObservableList<String>		langList					= FXCollections.observableArrayList( "Deutsch",
+	ObservableList<String>	langList					= FXCollections.observableArrayList( "Deutsch",
 			"Français", "English" );
 
 	@FXML
-	private ChoiceBox<String>	lang;
-
-	@FXML
-	private Label							labelBps, labelComp, labelOther, labelPi, labelLength, labelName,
+	private Label						labelBps, labelComp, labelOther, labelPi, labelLength, labelName,
 			labelPuid;
 
 	@FXML
-	private WebView						wbv;
+	private WebView					wbv;
 
-	private WebEngine					engine;
+	private WebEngine				engine;
 
 	@FXML
-	private TextField					textLength, textName, textPuid;
+	private TextField				textLength, textName, textPuid;
 
 	@FXML
 	void initialize()
@@ -127,46 +123,40 @@ public class ConfigController
 		}
 
 		// Sprache anhand configFile (HauptGui) setzten
-		lang.getItems().addAll( langList );
 		try {
-			if ( lang.getValue() != null ) {
-				if ( Util.stringInFile( "kostval-conf-DE.xsl", configFile ) ) {
-					labelBps.setText( "Bits per Sample (pro Kanal)" );
-					labelComp.setText( "Komprimierungsalgorithmus" );
-					labelOther.setText( "Sonstiges" );
-					labelPi.setText( "Farbraum" );
-					labelLength.setText( "Pfadlänge" );
-					labelName.setText( "SIP Name" );
-					labelPuid.setText( "PUID" );
-					locale = new Locale( "de" );
-					lang.setValue( "Deutsch" );
-					buttonConfigApply.setText( "anwenden" );
-					buttonConfigCancel.setText( "verwerfen" );
-				} else if ( Util.stringInFile( "kostval-conf-FR.xsl", configFile ) ) {
-					labelBps.setText( "Bits par échantillon (par canal)" );
-					labelComp.setText( "Algorithme de compression" );
-					labelOther.setText( "Divers" );
-					labelPi.setText( "Espace couleur" );
-					labelLength.setText( "Longueur du chemin" );
-					labelName.setText( "Nom du SIP" );
-					labelPuid.setText( "PUID" );
-					locale = new Locale( "fr" );
-					lang.setValue( "Français" );
-					buttonConfigApply.setText( "appliquer" );
-					buttonConfigCancel.setText( "annuler" );
-				} else {
-					labelBps.setText( "Bits per sample (per channel)" );
-					labelComp.setText( "Compression algorithm" );
-					labelOther.setText( "Other" );
-					labelPi.setText( "Color space" );
-					labelLength.setText( "Path length" );
-					labelName.setText( "SIP Name" );
-					labelPuid.setText( "PUID" );
-					locale = new Locale( "en" );
-					lang.setValue( "English" );
-					buttonConfigApply.setText( "apply" );
-					buttonConfigCancel.setText( "cancel" );
-				}
+			if ( Util.stringInFile( "kostval-conf-DE.xsl", configFile ) ) {
+				labelBps.setText( "Bits per Sample (pro Kanal)" );
+				labelComp.setText( "Komprimierungsalgorithmus" );
+				labelOther.setText( "Sonstiges" );
+				labelPi.setText( "Farbraum" );
+				labelLength.setText( "Pfadlänge" );
+				labelName.setText( "SIP Name" );
+				labelPuid.setText( "PUID" );
+				locale = new Locale( "de" );
+				buttonConfigApply.setText( "anwenden" );
+				buttonConfigCancel.setText( "verwerfen" );
+			} else if ( Util.stringInFile( "kostval-conf-FR.xsl", configFile ) ) {
+				labelBps.setText( "Bits par échantillon (par canal)" );
+				labelComp.setText( "Algorithme de compression" );
+				labelOther.setText( "Divers" );
+				labelPi.setText( "Espace couleur" );
+				labelLength.setText( "Longueur du chemin" );
+				labelName.setText( "Nom du SIP" );
+				labelPuid.setText( "PUID" );
+				locale = new Locale( "fr" );
+				buttonConfigApply.setText( "appliquer" );
+				buttonConfigCancel.setText( "annuler" );
+			} else {
+				labelBps.setText( "Bits per sample (per channel)" );
+				labelComp.setText( "Compression algorithm" );
+				labelOther.setText( "Other" );
+				labelPi.setText( "Color space" );
+				labelLength.setText( "Path length" );
+				labelName.setText( "SIP Name" );
+				labelPuid.setText( "PUID" );
+				locale = new Locale( "en" );
+				buttonConfigApply.setText( "apply" );
+				buttonConfigCancel.setText( "cancel" );
 			}
 		} catch ( Exception e ) {
 			e.printStackTrace();
@@ -253,7 +243,6 @@ public class ConfigController
 			if ( config.contains( noCallas ) ) {
 				checkCallas.setSelected( false );
 				checkNentry.setDisable( true );
-				checkPdfa1b.setDisable( true );
 			}
 			if ( config.contains( noNentry ) ) {
 				checkNentry.setSelected( false );
@@ -413,9 +402,9 @@ public class ConfigController
 			}
 			if ( config.contains( noSip0160 ) ) {
 				checkSip0160.setSelected( false );
-			textLength.setDisable( true );
-			textName.setDisable( true );
-			textPuid.setDisable( true );
+				textLength.setDisable( true );
+				textName.setDisable( true );
+				textPuid.setDisable( true );
 			}
 
 			Document doc = null;
@@ -591,15 +580,28 @@ public class ConfigController
 				textName.setDisable( false );
 				textPuid.setDisable( false );
 			} else {
-				textLength.setDisable( true );
-				textName.setDisable( true );
-				textPuid.setDisable( true );
-				Util.oldnewstring( yes, no, configFile );
+				// abwaehlen nur moeglich wenn noch eines selected
+				if ( !checkJpeg2000.isSelected() && !checkSiard.isSelected() && !checkPdfa.isSelected()
+						&& !checkTiff.isSelected() && !checkJpeg.isSelected() ) {
+					String minOne = "Mindestens eine Variante muss erlaubt sein!";
+					if ( locale.toString().startsWith( "fr" ) ) {
+						minOne = "Au moins une variante doit être autorisée !";
+					} else if ( locale.toString().startsWith( "en" ) ) {
+						minOne = "At least one variant must be allowed!";
+					}
+					engine.loadContent( "<html><h2>" + minOne + "</h2></html>" );
+					checkSip0160.setSelected( true );
+				} else {
+					Util.oldnewstring( yes, no, configFile );
+					engine.load( "file:///" + configFile.getAbsolutePath() );
+					textLength.setDisable( true );
+					textName.setDisable( true );
+					textPuid.setDisable( true );
+				}
 			}
 		} catch ( IOException e ) {
 			e.printStackTrace();
 		}
-		engine.load( "file:///" + configFile.getAbsolutePath() );
 	}
 
 	/* checkPdfa schaltet diese Validierung in der Konfiguration ein oder aus */
@@ -625,25 +627,38 @@ public class ConfigController
 				checkFontTol.setDisable( false );
 				checkPdfa2u.setDisable( false );
 			} else {
-				Util.oldnewstring( yes, no, configFile );
-				checkPdftools.setDisable( true );
-				checkCallas.setDisable( true );
-				checkPdfa1a.setDisable( true );
-				checkPdfa2a.setDisable( true );
-				checkFont.setDisable( true );
-				checkImage.setDisable( true );
-				checkJbig2.setDisable( true );
-				checkDetail.setDisable( true );
-				checkNentry.setDisable( true );
-				checkPdfa1b.setDisable( true );
-				checkPdfa2b.setDisable( true );
-				checkFontTol.setDisable( true );
-				checkPdfa2u.setDisable( true );
+				// abwaehlen nur moeglich wenn noch eines selected
+				if ( !checkJpeg2000.isSelected() && !checkSiard.isSelected() && !checkJpeg.isSelected()
+						&& !checkTiff.isSelected() && !checkSip0160.isSelected() ) {
+					String minOne = "Mindestens eine Variante muss erlaubt sein!";
+					if ( locale.toString().startsWith( "fr" ) ) {
+						minOne = "Au moins une variante doit être autorisée !";
+					} else if ( locale.toString().startsWith( "en" ) ) {
+						minOne = "At least one variant must be allowed!";
+					}
+					engine.loadContent( "<html><h2>" + minOne + "</h2></html>" );
+					checkPdfa.setSelected( true );
+				} else {
+					Util.oldnewstring( yes, no, configFile );
+					engine.load( "file:///" + configFile.getAbsolutePath() );
+					checkPdftools.setDisable( true );
+					checkCallas.setDisable( true );
+					checkPdfa1a.setDisable( true );
+					checkPdfa2a.setDisable( true );
+					checkFont.setDisable( true );
+					checkImage.setDisable( true );
+					checkJbig2.setDisable( true );
+					checkDetail.setDisable( true );
+					checkNentry.setDisable( true );
+					checkPdfa1b.setDisable( true );
+					checkPdfa2b.setDisable( true );
+					checkFontTol.setDisable( true );
+					checkPdfa2u.setDisable( true );
+				}
 			}
 		} catch ( IOException e ) {
 			e.printStackTrace();
 		}
-		engine.load( "file:///" + configFile.getAbsolutePath() );
 	}
 
 	/* checkPdftools schaltet diese Validierung in der Konfiguration ein oder aus */
@@ -1000,14 +1015,28 @@ public class ConfigController
 				checkSiard10.setDisable( false );
 				checkSiard21.setDisable( false );
 			} else {
-				Util.oldnewstring( yes, no, configFile );
-				checkSiard10.setDisable( true );
-				checkSiard21.setDisable( true );
+
+				// abwaehlen nur moeglich wenn noch eines selected
+				if ( !checkJpeg2000.isSelected() && !checkJpeg.isSelected() && !checkPdfa.isSelected()
+						&& !checkTiff.isSelected() && !checkSip0160.isSelected() ) {
+					String minOne = "Mindestens eine Variante muss erlaubt sein!";
+					if ( locale.toString().startsWith( "fr" ) ) {
+						minOne = "Au moins une variante doit être autorisée !";
+					} else if ( locale.toString().startsWith( "en" ) ) {
+						minOne = "At least one variant must be allowed!";
+					}
+					engine.loadContent( "<html><h2>" + minOne + "</h2></html>" );
+					checkSiard.setSelected( true );
+				} else {
+					Util.oldnewstring( yes, no, configFile );
+					checkSiard10.setDisable( true );
+					checkSiard21.setDisable( true );
+					engine.load( "file:///" + configFile.getAbsolutePath() );
+				}
 			}
 		} catch ( IOException e ) {
 			e.printStackTrace();
 		}
-		engine.load( "file:///" + configFile.getAbsolutePath() );
 	}
 
 	/* checkSiard10 schaltet diese Version in der Konfiguration ein oder aus */
@@ -1082,12 +1111,25 @@ public class ConfigController
 			if ( checkJpeg2000.isSelected() ) {
 				Util.oldnewstring( no, yes, configFile );
 			} else {
-				Util.oldnewstring( yes, no, configFile );
+				// abwaehlen nur moeglich wenn noch eines selected
+				if ( !checkJpeg.isSelected() && !checkSiard.isSelected() && !checkPdfa.isSelected()
+						&& !checkTiff.isSelected() && !checkSip0160.isSelected() ) {
+					String minOne = "Mindestens eine Variante muss erlaubt sein!";
+					if ( locale.toString().startsWith( "fr" ) ) {
+						minOne = "Au moins une variante doit être autorisée !";
+					} else if ( locale.toString().startsWith( "en" ) ) {
+						minOne = "At least one variant must be allowed!";
+					}
+					engine.loadContent( "<html><h2>" + minOne + "</h2></html>" );
+					checkJpeg2000.setSelected( true );
+				} else {
+					Util.oldnewstring( yes, no, configFile );
+					engine.load( "file:///" + configFile.getAbsolutePath() );
+				}
 			}
 		} catch ( IOException e ) {
 			e.printStackTrace();
 		}
-		engine.load( "file:///" + configFile.getAbsolutePath() );
 	}
 
 	/* checkJpeg schaltet diese Validierung in der Konfiguration ein oder aus */
@@ -1100,12 +1142,25 @@ public class ConfigController
 			if ( checkJpeg.isSelected() ) {
 				Util.oldnewstring( no, yes, configFile );
 			} else {
-				Util.oldnewstring( yes, no, configFile );
+				// abwaehlen nur moeglich wenn noch eines selected
+				if ( !checkJpeg2000.isSelected() && !checkSiard.isSelected() && !checkPdfa.isSelected()
+						&& !checkTiff.isSelected() && !checkSip0160.isSelected() ) {
+					String minOne = "Mindestens eine Variante muss erlaubt sein!";
+					if ( locale.toString().startsWith( "fr" ) ) {
+						minOne = "Au moins une variante doit être autorisée !";
+					} else if ( locale.toString().startsWith( "en" ) ) {
+						minOne = "At least one variant must be allowed!";
+					}
+					engine.loadContent( "<html><h2>" + minOne + "</h2></html>" );
+					checkJpeg.setSelected( true );
+				} else {
+					Util.oldnewstring( yes, no, configFile );
+					engine.load( "file:///" + configFile.getAbsolutePath() );
+				}
 			}
 		} catch ( IOException e ) {
 			e.printStackTrace();
 		}
-		engine.load( "file:///" + configFile.getAbsolutePath() );
 	}
 
 	/* checkTiff schaltet diese Validierung in der Konfiguration ein oder aus */
@@ -1143,37 +1198,50 @@ public class ConfigController
 				checkPi3.setDisable( false );
 				checkPi8.setDisable( false );
 			} else {
-				Util.oldnewstring( yes, no, configFile );
-				checkComp1.setDisable( true );
-				checkComp5.setDisable( true );
-				checkPi0.setDisable( true );
-				checkPi4.setDisable( true );
-				checkComp2.setDisable( true );
-				checkComp7.setDisable( true );
-				checkPi1.setDisable( true );
-				checkPi5.setDisable( true );
-				checkBps1.setDisable( true );
-				checkBps8.setDisable( true );
-				checkMultipage.setDisable( true );
-				checkBps2.setDisable( true );
-				checkBps16.setDisable( true );
-				checkTiles.setDisable( true );
-				checkComp3.setDisable( true );
-				checkComp8.setDisable( true );
-				checkPi2.setDisable( true );
-				checkPi6.setDisable( true );
-				checkBps4.setDisable( true );
-				checkBps32.setDisable( true );
-				checkSize.setDisable( true );
-				checkComp4.setDisable( true );
-				checkComp32773.setDisable( true );
-				checkPi3.setDisable( true );
-				checkPi8.setDisable( true );
+				// abwaehlen nur moeglich wenn noch eines selected
+				if ( !checkJpeg2000.isSelected() && !checkSiard.isSelected() && !checkPdfa.isSelected()
+						&& !checkJpeg.isSelected() && !checkSip0160.isSelected() ) {
+					String minOne = "Mindestens eine Variante muss erlaubt sein!";
+					if ( locale.toString().startsWith( "fr" ) ) {
+						minOne = "Au moins une variante doit être autorisée !";
+					} else if ( locale.toString().startsWith( "en" ) ) {
+						minOne = "At least one variant must be allowed!";
+					}
+					engine.loadContent( "<html><h2>" + minOne + "</h2></html>" );
+					checkTiff.setSelected( true );
+				} else {
+					Util.oldnewstring( yes, no, configFile );
+					engine.load( "file:///" + configFile.getAbsolutePath() );
+					checkComp1.setDisable( true );
+					checkComp5.setDisable( true );
+					checkPi0.setDisable( true );
+					checkPi4.setDisable( true );
+					checkComp2.setDisable( true );
+					checkComp7.setDisable( true );
+					checkPi1.setDisable( true );
+					checkPi5.setDisable( true );
+					checkBps1.setDisable( true );
+					checkBps8.setDisable( true );
+					checkMultipage.setDisable( true );
+					checkBps2.setDisable( true );
+					checkBps16.setDisable( true );
+					checkTiles.setDisable( true );
+					checkComp3.setDisable( true );
+					checkComp8.setDisable( true );
+					checkPi2.setDisable( true );
+					checkPi6.setDisable( true );
+					checkBps4.setDisable( true );
+					checkBps32.setDisable( true );
+					checkSize.setDisable( true );
+					checkComp4.setDisable( true );
+					checkComp32773.setDisable( true );
+					checkPi3.setDisable( true );
+					checkPi8.setDisable( true );
+				}
 			}
 		} catch ( IOException e ) {
 			e.printStackTrace();
 		}
-		engine.load( "file:///" + configFile.getAbsolutePath() );
 	}
 
 	/* checkComp schaltet diese Compression in der Konfiguration ein oder aus */
@@ -1929,66 +1997,6 @@ public class ConfigController
 			e.printStackTrace();
 		}
 		engine.load( "file:///" + configFile.getAbsolutePath() );
-	}
-
-	/* TODO --> ChoiceBox ================= */
-
-	// Mit changeLang wird die Sprache umgestellt
-	@FXML
-	void changeLang( ActionEvent event )
-	{
-		try {
-			if ( lang.getValue() != null ) {
-				String selLang = lang.getValue();
-				try {
-					if ( selLang.equals( "Deutsch" ) ) {
-						labelBps.setText( "Bits per Sample (pro Kanal)" );
-						labelComp.setText( "Komprimierungsalgorithmus" );
-						labelOther.setText( "Sonstiges" );
-						labelPi.setText( "Farbraum" );
-						labelLength.setText( "Pfadlänge" );
-						labelName.setText( "SIP Name" );
-						labelPuid.setText( "PUID" );
-						Util.oldnewstring( "kostval-conf-FR.xsl", "kostval-conf-DE.xsl", configFile );
-						Util.oldnewstring( "kostval-conf-EN.xsl", "kostval-conf-DE.xsl", configFile );
-						locale = new Locale( "de" );
-						buttonConfigApply.setText( "anwenden" );
-						buttonConfigCancel.setText( "verwerfen" );
-					} else if ( selLang.equals( "English" ) ) {
-						labelBps.setText( "Bits per sample (per channel)" );
-						labelComp.setText( "Compression algorithm" );
-						labelOther.setText( "Other" );
-						labelPi.setText( "Color space" );
-						labelLength.setText( "Path length" );
-						labelName.setText( "SIP Name" );
-						labelPuid.setText( "PUID" );
-						Util.oldnewstring( "kostval-conf-DE.xsl", "kostval-conf-EN.xsl", configFile );
-						Util.oldnewstring( "kostval-conf-FR.xsl", "kostval-conf-EN.xsl", configFile );
-						locale = new Locale( "en" );
-						buttonConfigApply.setText( "apply" );
-						buttonConfigCancel.setText( "cancel" );
-					} else {
-						labelBps.setText( "Bits par échantillon (par canal)" );
-						labelComp.setText( "Algorithme de compression" );
-						labelOther.setText( "Divers" );
-						labelPi.setText( "Espace couleur" );
-						labelLength.setText( "Longueur du chemin" );
-						labelName.setText( "Nom du SIP" );
-						labelPuid.setText( "PUID" );
-						Util.oldnewstring( "kostval-conf-DE.xsl", "kostval-conf-FR.xsl", configFile );
-						Util.oldnewstring( "kostval-conf-EN.xsl", "kostval-conf-FR.xsl", configFile );
-						locale = new Locale( "fr" );
-						buttonConfigApply.setText( "appliquer" );
-						buttonConfigCancel.setText( "annuler" );
-					}
-				} catch ( IOException e1 ) {
-					e1.printStackTrace();
-				}
-			}
-			engine.load( "file:///" + configFile.getAbsolutePath() );
-		} catch ( Exception e ) {
-			// e.printStackTrace();
-		}
 	}
 
 }

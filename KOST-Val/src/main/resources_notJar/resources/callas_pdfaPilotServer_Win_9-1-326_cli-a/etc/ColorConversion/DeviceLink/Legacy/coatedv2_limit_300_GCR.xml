@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<devicelink>
+	<profile lang="CHS">
+		<header>平板胶印，通过 GCR 降低到 300% 油墨限制(欧洲) (仅限服务器/CLI)</header>
+		<explanation>根据 ISO Coated v2 (ECI)，通过 GCR 将最大油墨覆盖率降低到 300%</explanation>
+	</profile>
+	<profile lang="ENU">
+		<header>Sheetfed offset, reduce to 300% ink limit with GCR (Europe) (Server/CLI only)</header>
+		<explanation>Reduction of maximum ink coverage to 300% with GCR based on ISO Coated v2 (ECI)</explanation>
+	</profile>
+	<profile lang="ESP">
+		<header>Offset de alimentación por hojas, reducir a 300% el límite de tinta con GCR (Europa) (sólo Server/CLI)</header>
+		<explanation>Reducción de la cobertura de tinta máxima al 300% con GCR en base a ISO estucado v2 (ECI)</explanation>
+	</profile>
+	<profile lang="FRA">
+		<header>Offset à feuilles, réduction du taux de couverture d'encre à 300% avec GCR (Europe)</header>
+		<explanation>Réduction du taux de couverture d'encre maximale à 300% avec GCR selon ISO Coated v2 (ECI) (Server/CLI seulement)</explanation>
+	</profile>
+	<profile lang="DEU">
+		<header>Bogenoffset, Gesamtfarbreduzierung auf 300% mit GCR (ISO) (nur Server/CLI)</header>
+		<explanation>Reduzierung des Gesamtfarbauftrags auf maximal 300% mit GCR auf Basis von ISO Coated v2 (ECI)</explanation>
+	</profile>
+	<profile lang="ITA">
+		<header>Offset foglio, riduci limite inchiostro a 300% con GCR (Europa) (solo Server/CLI)</header>
+		<explanation>Riduzione della copertura massima di inchiostro al 300% con GCR in base a ISO Coated v2 (ECI)</explanation>
+	</profile>
+	<profile lang="JPN">
+		<header>シートフィードオフセット, GCR でインキ量を 300% に削減  (欧州) (Server/CLI のみ)</header>
+		<explanation>ISO Coated v2 (ECI) を基にした GCR でインキ総量を 300% に削減します</explanation>
+	</profile>
+</devicelink>

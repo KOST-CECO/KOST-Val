@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pdfpreflight version="10.0">
+	<package>
+		<id3>e50eca7c80c8e662758287bba392c773</id3>
+		<pdfxoutintentlist>
+		</pdfxoutintentlist>
+		<iccprofilelist>
+		</iccprofilelist>
+		<ccpolicies>
+		</ccpolicies>
+		<occdsetups>
+		</occdsetups>
+		<curves>
+		</curves>
+		<fspolicies>
+		</fspolicies>
+		<conditions>
+			<condition>
+				<id1>Cede20cbcf6b5f6d1d00ac499c464b1d6</id1>
+				<id2>C2fca6bf6da786771e05b4da93de3b208</id2>
+				<id3>620c68f9ba99e84bdf549977aa2feb86</id3>
+				<id4>cf008edf5d60feefa8af26bc16f400bd</id4>
+				<name></name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::PAGE</group>
+					<token>PAGE::PageSize</token>
+					<operator>OP::is_lower_or_narrower</operator>
+					<data>
+						<rect>
+							<width>298mm</width>
+							<height>421mm</height>
+							<tolerance>0mm</tolerance>
+							<ignore>1</ignore>
+						</rect>
+					</data>
+				</atom>
+			</condition>
+		</conditions>
+		<rules>
+			<rule>
+				<id1>Rd2aa7468afaefb0295bce0b5633bbdc3</id1>
+				<id2>Rceb7aebce418ca1a0a952c137cc32770</id2>
+				<id3>860b9d027c2a6896614800850de01ab9</id3>
+				<id4>1330e8c2eea623c66739c7358bc39e14</id4>
+				<name>R_10_PageisequalorsmallerA3</name>
+				<comment>R_10_PageisequalorsmallerA3</comment>
+				<flags analysis="31" condition_logic="0" ignore_objects="0" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>Cede20cbcf6b5f6d1d00ac499c464b1d6</condition>
+				</conditions>
+			</rule>
+		</rules>
+		<rulesets>
+		</rulesets>
+		<fixups>
+			<fixup>
+				<id1>Fb477bae73f2370c9e66ec8dd62e94452</id1>
+				<id2>Faabc384ee070b69f09dcf78dc906ac32</id2>
+				<id3>66eb6834bd0ab66347d0d6623ad3ddb4</id3>
+				<id4>4315c0749b1391649a2521ac2d671f40</id4>
+				<name>F_10_ScalepagestoA4ifnotlargerA3</name>
+				<comment>F_10_ScalepagestoA4ifnotlargerA3</comment>
+				<flags user_units="1" edit="1" visible="1" dict="1"></flags>
+				<fcfg>ScalePagesEx&#9;210&#9;297&#9;mm&#9;FitFromInside&#9;PRCCUSTOMCHECK&#10;</fcfg>
+				<reportFailed></reportFailed>
+				<rules>
+					<metalists>
+						<metalist metaid="M8aa7446d47febc48827225540541b47d">
+							<metadata>
+								<metakey>CALS_CLM_REFRULE_IDX</metakey>
+								<metavalue>0</metavalue>
+							</metadata>
+						</metalist>
+					</metalists>
+					<rule metaid="M8aa7446d47febc48827225540541b47d">Rd2aa7468afaefb0295bce0b5633bbdc3</rule>
+				</rules>
+			</fixup>
+		</fixups>
+		<fixupsets>
+			<fixupset>
+				<id1>U2073894d76aeaaf44f8ff3ce343713ea</id1>
+				<id2>U7befe7f032bef05b97b221cb4072f385</id2>
+				<id3>40686440a03749393e9e81da8f5295b7</id3>
+				<id4>98351b5cfb2473c6f31599e8d0c1237d</id4>
+				<name>UUUU_FIXUPSET_DEF_NAME</name>
+				<comment>UUUU_FIXUPSET_DEF_NAME</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<fixups>
+					<fixup>Fb477bae73f2370c9e66ec8dd62e94452</fixup>
+				</fixups>
+			</fixupset>
+		</fixupsets>
+		<profiles>
+			<profile>
+				<id1>Pa4e6988c4879b086b56c1045aa5c432c</id1>
+				<id2>Pd577ab137240ffd2667e67c4f297a214</id2>
+				<id3>24bad9567ea9fd6d57032424486d2af5</id3>
+				<id4>1a0e2761aa52ae26e7a8c57c00ff2fc3</id4>
+				<name>P_10_ScalepagestoA4ifnotlargerthanA3</name>
+				<comment>P_10_ScalepagestoA4ifnotlargerthanA3</comment>
+				<flags edit="0" visible="1" dict="1"></flags>
+				<metalist>
+					<metadata>
+						<metakey>author</metakey>
+						<metavalue>callas software</metavalue>
+					</metadata>
+					<metadata>
+						<metakey>email</metakey>
+						<metavalue>support@callassoftware.com</metavalue>
+					</metadata>
+				</metalist>
+				<creation>D:20110609093810+02&apos;00&apos;</creation>
+				<modification>D:20111020070646+02&apos;00&apos;</modification>
+				<pdfstd>
+					<pdfx convert="0"></pdfx>
+					<pdfa convert="0"></pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond></outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+				</pdfstd>
+				<wizard>
+				</wizard>
+				<rulesets>
+				</rulesets>
+				<fixupsets>
+					<fixupset>U2073894d76aeaaf44f8ff3ce343713ea</fixupset>
+				</fixupsets>
+			</profile>
+		</profiles>
+		<profgroups>
+		</profgroups>
+	</package>
+</pdfpreflight>

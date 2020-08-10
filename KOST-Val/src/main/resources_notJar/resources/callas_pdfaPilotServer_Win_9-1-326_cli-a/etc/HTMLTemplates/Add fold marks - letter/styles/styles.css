@@ -1,0 +1,14 @@
+@charset "UTF-8";
+
+p {
+	font-family: 'FreeUniversal';
+    color: -cchip-cmyk( 0.0, 0.0, 0.0, 1.0 );
+}
+
+.foldmark {
+  position: absolute;
+  height: 0.25mm;
+  width: 8mm;
+  background-color: -cchip-cmyk( 0, 0, 0, 0.65 );
+}
+

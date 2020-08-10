@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pdfpreflight version="15.0">
+	<package>
+		<id3>586d5ecbc8d2ed0f5b667baf90e26034</id3>
+		<pdfxoutintentlist>
+		</pdfxoutintentlist>
+		<iccprofilelist>
+		</iccprofilelist>
+		<ccpolicies>
+		</ccpolicies>
+		<occdsetups>
+		</occdsetups>
+		<curves>
+		</curves>
+		<fspolicies>
+		</fspolicies>
+		<resources>
+		</resources>
+		<variables>
+		</variables>
+		<conditions>
+			<condition>
+				<id1>C9e50fa5ea514062f4bb09b58ea447753</id1>
+				<id2>Ca3a72fde33bfa0026cfd1119738a9034</id2>
+				<id3>a5f2061d5580c60dec710bc43774e93d</id3>
+				<id4>dacd5fad7ec0f7431196eb32d548fad7</id4>
+				<name></name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSGST_S</group>
+					<token>CSGST_S::LineWidth</token>
+					<operator>OP::less_or_equal</operator>
+					<data>
+						<num>
+							<value>0.125</value>
+							<tolerance></tolerance>
+						</num>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>C65c13818c56cb32f01083d5d520af5dd</id1>
+				<id2>C45206f5c96294001a2b7dc28a5bbcfcb</id2>
+				<id3>e25e2ea84c0b2626dfcf9563b6aae656</id3>
+				<id4>be5b1de3001a3468df2a7cd5037ea6ec</id4>
+				<name> (Copy 11)</name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSGST_S</group>
+					<token>CSGST_S::LineWidth</token>
+					<operator>OP::less_or_equal</operator>
+					<data>
+						<num>
+							<value>0.25</value>
+							<tolerance></tolerance>
+						</num>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>C564faf8f5e3e8ba486e17f419b314634</id1>
+				<id2>C02ee6285b245b4cffbddcbfe0d0b584a</id2>
+				<id3>3b2496a0578fa96be93eb41995b477f7</id3>
+				<id4>77ae07fc82d871dcef9a831e59be018c</id4>
+				<name></name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSGST_S</group>
+					<token>CSGST_S::LineWidth</token>
+					<operator>OP::greater</operator>
+					<data>
+						<num>
+							<value>0.125</value>
+							<tolerance></tolerance>
+						</num>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>Ca2c81bfe2750277de462a46278e129c5</id1>
+				<id2>Cb5ac1f547ad578d4e1feaa7955eca593</id2>
+				<id3>d2cf34d748490a9dbd03cf85cf693d34</id3>
+				<id4>988089b5c2eb4d5e78c98306af8081ee</id4>
+				<name></name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSGST_S</group>
+					<token>CSGST_S::NumberOfColoraWhichAreNonZero</token>
+					<operator>OP::equal</operator>
+					<data>
+						<num>
+							<value>1</value>
+							<tolerance></tolerance>
+						</num>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>Cca56ac5a8af56c82f400a25b94efe3e0</id1>
+				<id2>C5a8e72a52c089d205154383ca7c8d9d6</id2>
+				<id3>0933f4d6aeb1d6ff163179245c81ba9c</id3>
+				<id4>372dbacd12c540d57069f637ebf641ee</id4>
+				<name></name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSCOLOR</group>
+					<token>CSCOLOR::ObjectHasNonZeroValuesAndLowe</token>
+					<operator>OP::greater_or_equal</operator>
+					<data>
+						<num>
+							<value>90</value>
+							<tolerance></tolerance>
+						</num>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>C23e6fac4b66d8e282a7e5a5bd3f2e844</id1>
+				<id2>Ce2ae05d2fd6fd8fed5d43645725db1d9</id2>
+				<id3>092f53db835c4a344eb137ad0bf5ceb1</id3>
+				<id4>6643963c089c7166b3aa407edbcb12b1</id4>
+				<name> (Copy 11)</name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSGST_S</group>
+					<token>CSGST_S::LineWidth</token>
+					<operator>OP::less_or_equal</operator>
+					<data>
+						<num>
+							<value>0.5</value>
+							<tolerance></tolerance>
+						</num>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>C91d85dda848b1a0953827c120ac9d848</id1>
+				<id2>Cd5b597810d6a6c4bebf7bcaa140742ba</id2>
+				<id3>63b480862f653ae83152c563be08b3a8</id3>
+				<id4>02a9b950eddf116fb09474dc24cdb223</id4>
+				<name> (Copy 11)</name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSGST_S</group>
+					<token>CSGST_S::LineWidth</token>
+					<operator>OP::greater</operator>
+					<data>
+						<num>
+							<value>0.25</value>
+							<tolerance></tolerance>
+						</num>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>C47510b1ee1626b54c5257971658d029e</id1>
+				<id2>Ce24f6cfb05f47450acb2a86f8aac4118</id2>
+				<id3>417f40050abf664c095514e75ce9c9f3</id3>
+				<id4>8e9b1e67b768feef4e96b9ad72513904</id4>
+				<name> (Copy 11)</name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSGST_S</group>
+					<token>CSGST_S::LineWidth</token>
+					<operator>OP::less_or_equal</operator>
+					<data>
+						<num>
+							<value>1</value>
+							<tolerance></tolerance>
+						</num>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>C983f8c4b36917bf98f25b1e51d24bea1</id1>
+				<id2>C18154a8954f642f45b3592094b213e3f</id2>
+				<id3>37515ad10ada55b7209ce6b7612162df</id3>
+				<id4>20a6889f34f15bc9250d42bfe5ed63fe</id4>
+				<name> (Copy 11)</name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSGST_S</group>
+					<token>CSGST_S::LineWidth</token>
+					<operator>OP::greater</operator>
+					<data>
+						<num>
+							<value>0.5</value>
+							<tolerance></tolerance>
+						</num>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>C59f6b1aff8cf6113d264e945f2e64dee</id1>
+				<id2>C056af7aea8f23c27b7b8d163d4c2c708</id2>
+				<id3>a322df487c5719888b4e706bc09b18fd</id3>
+				<id4>0ab6ffc832fc5db7628bd9ade3fa956a</id4>
+				<name> (Copy 11)</name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSCOLOR</group>
+					<token>CSCOLOR::ObjectHasNonZeroValuesAndLowe</token>
+					<operator>OP::less</operator>
+					<data>
+						<num>
+							<value>90</value>
+							<tolerance>0</tolerance>
+						</num>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>C792d3b0aec8e0e8471f6372164d9dc58</id1>
+				<id2>Cb6a113162e5fa4cbff3edd61ca9cf06f</id2>
+				<id3>246e558bc34f976c97b738b96f7662b2</id3>
+				<id4>678a7a507fb2f7360ade5bcd9cb89999</id4>
+				<name>CC_ObjectIsNotWhite</name>
+				<comment>CC_ObjectIsNotWhite</comment>
+				<flags user_units="1" edit="1" visible="1" dict="1"></flags>
+				<atom>
+					<group>Group::CSCOLOR</group>
+					<token>CSCOLOR::ObjectIsWhite</token>
+					<operator>OP::is_not_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>Cb061683a73ffe9d918c8d2f861ddd288</id1>
+				<id2>Caf6796dfaf9590083962cf83d7932c48</id2>
+				<id3>0ab8b06aeb2de51a80cdd4278b18086d</id3>
+				<id4>b3d67182b52ed131c1a5cf3027c87741</id4>
+				<name>Mehr als eine Farbkomponente</name>
+				<comment>Ermittelt, ob der aktuelle Farbraum mehr als eine Farbkomponente verwendet.</comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSCOLOR</group>
+					<token>CSCOLOR::NumberOfNonZeroComponents</token>
+					<operator>OP::greater</operator>
+					<data>
+						<num>
+							<value>1</value>
+							<tolerance>0</tolerance>
+						</num>
+					</data>
+				</atom>
+			</condition>
+		</conditions>
+		<rules>
+			<rule>
+				<id1>Rd4acf31102d872f029caa777b9ac3485</id1>
+				<id2>Rbdb70db0bbaeed57eb757c2214d43a40</id2>
+				<id3>852cf4c729c6dd7fabc753f3c12a140d</id3>
+				<id4>3b42b71b89637a133d89d653a4728452</id4>
+				<name>R_6_Hairline0125pt</name>
+				<comment>R_6_Hairline0125pt</comment>
+				<flags analysis="17" condition_logic="0" ignore_objects="2" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>C9e50fa5ea514062f4bb09b58ea447753</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>R3a0239ce4aefa9d04c1de1dfa177ed88</id1>
+				<id2>Ra445d4c11a155557671206f0c00b1a6d</id2>
+				<id3>ff929a0536e7ed899e5b3eefda65a99e</id3>
+				<id4>b8be255e8b1fc3065ba9b0462ec1979f</id4>
+				<name>R_6_Hairlinebetween0125and025pt</name>
+				<comment>R_6_Hairlinebetween0125and025pt</comment>
+				<flags analysis="17" condition_logic="0" ignore_objects="2" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>C65c13818c56cb32f01083d5d520af5dd</condition>
+					<condition>C564faf8f5e3e8ba486e17f419b314634</condition>
+					<condition>Ca2c81bfe2750277de462a46278e129c5</condition>
+					<condition>Cca56ac5a8af56c82f400a25b94efe3e0</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>R86b08d64d372afa16c8eb16c4b1408a3</id1>
+				<id2>Rf8e3380de4c7260bd86ef160b3352f0f</id2>
+				<id3>64a72b51cfa8dabc37184bda2f66e08c</id3>
+				<id4>2ecc413973752cc0ae5cf7e89178a58c</id4>
+				<name>R_6_Hairlinebetween025and05pt</name>
+				<comment>R_6_Hairlinebetween025and05pt</comment>
+				<flags analysis="17" condition_logic="0" ignore_objects="2" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>C23e6fac4b66d8e282a7e5a5bd3f2e844</condition>
+					<condition>C91d85dda848b1a0953827c120ac9d848</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>R7dfcba9d1e187069022482acfa9e71f4</id1>
+				<id2>R012035ea7a28e04c88ab3f762b896c80</id2>
+				<id3>ba6b6fa332f41c6ed70ba81c2199ba33</id3>
+				<id4>6a27fd91023fe5d27dd8c6de02fee6dc</id4>
+				<name>R_6_Hairlinebetween05and1pt</name>
+				<comment>R_6_Hairlinebetween05and1pt</comment>
+				<flags analysis="17" condition_logic="0" ignore_objects="2" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>C47510b1ee1626b54c5257971658d029e</condition>
+					<condition>C983f8c4b36917bf98f25b1e51d24bea1</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>R73bd1846cbede2e86891d90a54989944</id1>
+				<id2>R7b3a581a1f1c04fc3020832a8ff67703</id2>
+				<id3>bed03fc7c8064db4a17d7e248f174e2f</id3>
+				<id4>7ae3cdb8739cf9bc1dd9a291d15c879b</id4>
+				<name>R_6_Hairline025ptusescolorvaluesbelow0</name>
+				<comment>R_6_Hairline025ptusescolorvaluesbelow0</comment>
+				<flags analysis="17" condition_logic="0" ignore_objects="2" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>C65c13818c56cb32f01083d5d520af5dd</condition>
+					<condition>C59f6b1aff8cf6113d264e945f2e64dee</condition>
+					<condition>C792d3b0aec8e0e8471f6372164d9dc58</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>Rf524b641363c178aecccd97e62f1865a</id1>
+				<id2>R6dc765f258c4ef57f6c7060298a712d3</id2>
+				<id3>462ecf0d4cf5354b3db58f654b795276</id3>
+				<id4>475b2ed4e7b3d47539bbe6ede3e319c8</id4>
+				<name>R_6_Hairline025ptwithatleasttwocolorants</name>
+				<comment>R_6_Hairline025ptwithatleasttwocolorants</comment>
+				<flags analysis="17" condition_logic="0" ignore_objects="2" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>C65c13818c56cb32f01083d5d520af5dd</condition>
+					<condition>Cb061683a73ffe9d918c8d2f861ddd288</condition>
+				</conditions>
+			</rule>
+		</rules>
+		<rulesets>
+			<ruleset>
+				<id1>Sf48b1ee9f0c0403721025e0165895600</id1>
+				<id2>Sffb26415b6663b7af001b748350a9a01</id2>
+				<id3>f32e1a611366198ef16e97f4ffae0f18</id3>
+				<id4>6ab017c27eec5f631ae43aca445da580</id4>
+				<name>SSS_RULESET_DEF_NAME</name>
+				<comment>SSS_RULESET_DEF_NAME</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<rules>
+					<rule check_severity="3" check_timing="2">Rd4acf31102d872f029caa777b9ac3485</rule>
+					<rule check_severity="2" check_timing="2">R3a0239ce4aefa9d04c1de1dfa177ed88</rule>
+					<rule check_severity="1" check_timing="2">R86b08d64d372afa16c8eb16c4b1408a3</rule>
+					<rule check_severity="1" check_timing="2">R7dfcba9d1e187069022482acfa9e71f4</rule>
+					<rule check_severity="3" check_timing="2">R73bd1846cbede2e86891d90a54989944</rule>
+					<rule check_severity="3" check_timing="2">Rf524b641363c178aecccd97e62f1865a</rule>
+				</rules>
+			</ruleset>
+		</rulesets>
+		<fixups>
+		</fixups>
+		<fixupsets>
+		</fixupsets>
+		<actions>
+		</actions>
+		<profiles>
+			<profile>
+				<id1>P6f9df9e80b5119c69690e42ffa03adb2</id1>
+				<id2>P172ceeedfa9d9fd1dab286708cbdd404</id2>
+				<id3>d2fbfd172766e2f472a60d1208eadbb9</id3>
+				<id4>0921e190912043bee20e29e9a216dd7b</id4>
+				<name>P_6_Listallhairlines</name>
+				<comment>P_6_Listallhairlines</comment>
+				<flags edit="0" visible="1" dict="1"></flags>
+				<metalist>
+					<metadata>
+						<metakey>author</metakey>
+						<metavalue>callas software</metavalue>
+					</metadata>
+					<metadata>
+						<metakey>email</metakey>
+						<metavalue>support@callassoftware.com</metavalue>
+					</metadata>
+				</metalist>
+				<creation>D:20080107213634+02&apos;00&apos;</creation>
+				<modification>D:20160629094113+02&apos;00&apos;</modification>
+				<pdfstd>
+					<pdfx convert="0"></pdfx>
+					<pdfa convert="0"></pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond></outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+				</pdfstd>
+				<pdfstdemb>
+					<pdfx convert="0"></pdfx>
+					<pdfa convert="0"></pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond></outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+					<afrelationship set_relationship="0"></afrelationship>
+				</pdfstdemb>
+				<wizard>
+				</wizard>
+				<rulesets>
+					<ruleset>Sf48b1ee9f0c0403721025e0165895600</ruleset>
+				</rulesets>
+				<fixupsets>
+				</fixupsets>
+			</profile>
+		</profiles>
+		<metaprofs>
+		</metaprofs>
+		<profgroups>
+		</profgroups>
+	</package>
+</pdfpreflight>

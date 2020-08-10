@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<devicelink>
+	<profile lang="CHS">
+		<header>卷筒胶印，欧洲到美国(SWOP)</header>
+		<explanation>从 ISO Web Coated (ECI) 转换为 Web Coated SWOP 2006 Grade 3 Paper (热固，最大油墨覆盖率为 300%)</explanation>
+	</profile>
+	<profile lang="ENU">
+		<header>Web offset, Europe to US (SWOP)</header>
+		<explanation>Conversion from ISO Web Coated (ECI) to Web Coated SWOP 2006 Grade 3 Paper (heatset, max. 300% ink coverage)</explanation>
+	</profile>
+	<profile lang="ESP">
+		<header>Offset de bobina, de Europa a EE.UU. (SWOP)</header>
+		<explanation>Conversión de ISO estucado en bobina (ECI) a papel grado 3 SWOP 2006 estucado en bobina (secado por calor, cobertura de tinta 300% máxima)</explanation>
+	</profile>
+	<profile lang="FRA">
+		<header>Impression rotative offset, Europe vers USA (SWOP)</header>
+		<explanation>Conversion d’ISO Web Coated (ECI) vers Web Coated SWOP 2006 Grade 3 Paper (heat-set, couverture d'encre de 300% max.)</explanation>
+	</profile>
+	<profile lang="DEU">
+		<header>Rollenoffset, Europa nach US (SWOP)</header>
+		<explanation>Konvertierung von ISO Web Coated (ECI) zum Web Coated SWOP 2006 Grade 3 Paper (Heatset, 300% Gesamtfarbauftrag)</explanation>
+	</profile>
+	<profile lang="ITA">
+		<header>Offset bobina, da Europa a US (SWOP)</header>
+		<explanation>Conversione da ISO Web Coated (ECI) a Coated SWOP 2006 Grade 3 Paper (heatset, max. 300% di copertura inchiostro)</explanation>
+	</profile>
+	<profile lang="JPN">
+		<header>Web オフセット, 欧州を米国 (SWOP) に変換</header>
+		<explanation>ISO Web Coated (ECI) を Web Coated SWOP 2006 Grade 3 Paper (ヒートセット, インキ総量 300%) に変換します</explanation>
+	</profile>
+</devicelink>

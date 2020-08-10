@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pdfpreflight version="6.0">
+	<package>
+		<id3>a8dbddf478cf5d87886b0cb10282c230</id3>
+		<pdfxoutintentlist>
+		</pdfxoutintentlist>
+		<iccprofilelist>
+		</iccprofilelist>
+		<conditions>
+			<condition>
+				<id1>C45496720deb9e3e3c54143be1558307d</id1>
+				<id2>C198be70d166d37cc24074394a5b8a29e</id2>
+				<id3>5ac7e676b06d070185ef6ef0930605e6</id3>
+				<id4>32203d53b953e924ac940ef033475d1f</id4>
+				<name></name>
+				<comment></comment>
+				<flags edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CONTSTM</group>
+					<token>CONTSTM::IsVectorObject</token>
+					<operator>OP::is_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+		</conditions>
+		<rules>
+			<rule>
+				<id1>R8124d2500d13c0ba74b32316793f6a0c</id1>
+				<id2>R5f1b98371d3d0d673b77cdec7a870b0f</id2>
+				<id3>14956cc86a79c25931c242801f31fff3</id3>
+				<id4>03585cc6b7c8f184c6a6faa8a312d31f</id4>
+				<name>Vectors</name>
+				<comment></comment>
+				<flags analysis="1" condition_logic="0" ignore_objects="0" edit="1" visible="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>C45496720deb9e3e3c54143be1558307d</condition>
+				</conditions>
+			</rule>
+		</rules>
+		<rulesets>
+			<ruleset>
+				<id1>S389cb16a204f4e39a7258bd887d4934f</id1>
+				<id2>S4e24c1da8445722ab3001a307bd55925</id2>
+				<id3>77779473c440a22854e040490a2dc297</id3>
+				<id4>8975f83b8e020060da8539cde385e5f5</id4>
+				<name>SSS_RULESET_DEF_NAME</name>
+				<comment>SSS_RULESET_DEF_NAME</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<rules>
+					<rule check_severity="3" check_timing="2">R8124d2500d13c0ba74b32316793f6a0c</rule>
+				</rules>
+			</ruleset>
+		</rulesets>
+		<fixups>
+		</fixups>
+		<fixupsets>
+		</fixupsets>
+		<profiles>
+			<profile>
+				<id1>P202d65669845538abb41d8764cbe61e3</id1>
+				<id2>P47562540cf35ca02655e30d1095f7455</id2>
+				<id3>7eb3e957ba5339260c669220866f084e</id3>
+				<id4>680bc2f7725b318ceaea5082f22ca1e0</id4>
+				<name>Vectors</name>
+				<comment></comment>
+				<flags edit="1" visible="1"></flags>
+				<metalist>
+					<metadata>
+						<metakey>author</metakey>
+						<metavalue>callas</metavalue>
+					</metadata>
+				</metalist>
+				<creation>D:20081009152152+02&apos;00&apos;</creation>
+				<modification>D:20081009152246+02&apos;00&apos;</modification>
+				<pdfstd>
+					<pdfx convert="0"></pdfx>
+					<pdfa convert="0"></pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond>Coated GRACoL 2006</outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+				</pdfstd>
+				<wizard>
+				</wizard>
+				<rulesets>
+					<ruleset>S389cb16a204f4e39a7258bd887d4934f</ruleset>
+				</rulesets>
+				<fixupsets>
+				</fixupsets>
+			</profile>
+		</profiles>
+		<profgroups>
+		</profgroups>
+	</package>
+</pdfpreflight>

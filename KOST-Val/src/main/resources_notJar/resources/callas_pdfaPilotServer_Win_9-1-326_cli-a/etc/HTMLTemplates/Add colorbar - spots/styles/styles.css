@@ -1,0 +1,21 @@
+@charset "UTF-8";
+
+p {
+	font-family: 'FreeUniversal';
+    color: -cchip-cmyk( 0.0, 0.0, 0.0, 1.0 );
+}
+
+#main {
+  display: inline-block;
+}
+
+.patch {
+  width: 15pt;
+  height: 15pt;
+  float: left;
+  border: 1pt solid -cchip-cmyk(0.65,0.65,0.65,0.65);
+}
+
+.patch + .patch {
+  border-left: none;
+}

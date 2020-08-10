@@ -1,0 +1,53 @@
+%!PS-Adobe-3.0 Resource-CompatibleFont
+%%BeginResource: CompatibleFont (SIL-FangSong-)
+%%Title: (CompatibleFont/SIL-FangSong-)
+%%Copyright: -----------------------------------------------------------
+%%Copyright: Copyright 1997-1999 Adobe Systems Incorporated.
+%%Copyright: All rights reserved.
+%%Copyright:
+%%Copyright: Patents Pending
+%%Copyright:
+%%Copyright: NOTICE: All information contained herein is the property
+%%Copyright: of Adobe Systems Incorporated. Many of the intellectual
+%%Copyright: and technical concepts contained herein are proprietary
+%%Copyright: to Adobe, are protected as trade secrets, and are made
+%%Copyright: available only to Adobe licensees for their internal use.
+%%Copyright: Any reproduction or dissemination of this software is
+%%Copyright: strictly forbidden unless prior written permission is
+%%Copyright: obtained from Adobe.
+%%Copyright:
+%%Copyright: PostScript and Display PostScript are trademarks of
+%%Copyright: Adobe Systems Incorporated which may be registered in
+%%Copyright: certain jurisdictions.
+%%Copyright: -----------------------------------------------------------
+%%EndComments
+
+currentglobal
+true setglobal
+/SIL-FangSong- /CIDFont findresource
+dup length dict copy
+begin
+  currentdict /FID known
+    { currentdict /FID undef }
+  if
+  /FontInfo FontInfo dup length dict copy
+  dup /OrigCMap /GBpc-EUC-H put
+  dup /OrigFontName /SIL-FangSong- put
+  def
+  currentdict
+end
+/SIL-FangSong-YX1 exch /CIDFont defineresource pop
+setglobal
+
+/SIL-FangSong- /SIL-FangSong-YX1--GBpc-EUC-H findfont
+dup length dict copy
+begin
+currentdict
+/FID undef
+currentdict
+end
+definefont
+pop
+
+%%EndResource
+%%EOF

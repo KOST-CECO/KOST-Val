@@ -1,0 +1,86 @@
+%!PS-Adobe-3.0 Resource-CMap
+%%DocumentNeededResources: ProcSet (CIDInit)
+%%IncludeResource: ProcSet (CIDInit)
+%%BeginResource: CMap (MAC_ARABIC)
+%%Title: (MAC_ARABIC 0)
+%%EndComments
+
+/CIDInit /ProcSet findresource begin
+
+12 dict begin
+
+begincmap
+
+/CMapName /MAC_ARABIC def
+/CMapType 2 def
+
+1 begincodespacerange
+  <20> <FF>
+endcodespacerange
+
+40 beginbfchar
+  <80> <00C4>
+  <81> <00A0>
+  <82> <00C7>
+  <83> <00C9>
+  <84> <00D1>
+  <85> <00D6>
+  <86> <00DC>
+  <87> <00E1>
+  <88> <00E0>
+  <89> <00E2>
+  <8A> <00E4>
+  <8B> <06BA>
+  <8C> <00AB>
+  <8D> <00E7>
+  <8E> <00E9>
+  <8F> <00E8>
+  <92> <00ED>
+  <93> <2026>
+  <96> <00F1>
+  <97> <00F3>
+  <98> <00BB>
+  <99> <00F4>
+  <9C> <00FA>
+  <9D> <00F9>
+  <A5> <066A>
+  <AC> <060C>
+  <BA> <003A>
+  <BB> <061B>
+  <BF> <061F>
+  <C0> <274A>
+  <F3> <067E>
+  <F4> <0679>
+  <F5> <0686>
+  <F6> <06D5>
+  <F7> <06A4>
+  <F8> <06AF>
+  <F9> <0688>
+  <FA> <0691>
+  <FE> <0698>
+  <FF> <06D2>
+endbfchar
+
+14 beginbfrange
+  <20> <7E> <0020>
+  <90> <91> <00EA>
+  <94> <95> <00EE>
+  <9A> <9B> <00F6>
+  <9E> <9F> <00FB>
+  <A0> <A4> <0020>
+  <A6> <AB> <0026>
+  <AD> <AF> <002D>
+  <B0> <B9> <0660>
+  <BC> <BE> <003C>
+  <C1> <DA> <0621>
+  <DB> <DF> <005B>
+  <E0> <F2> <0640>
+  <FB> <FD> <007B>
+endbfrange
+endcmap
+CMapName currentdict /CMap defineresource pop
+end
+end
+
+%%EndResource
+%%EOF

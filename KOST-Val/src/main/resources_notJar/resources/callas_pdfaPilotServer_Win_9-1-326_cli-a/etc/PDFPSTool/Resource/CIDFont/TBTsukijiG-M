@@ -1,0 +1,771 @@
+%!PS-Adobe-3.0 Resource-CIDFont
+%%DocumentNeededResources: ProcSet (CIDInit)
+%%IncludeResource: ProcSet (CIDInit)
+%%BeginResource: CIDFont (TBTsukijiG-M)
+%%Title: (TBTsukijiG-M Adobe Japan1 1)
+%%Version: 3.010-W
+%  (C0E0A0)
+
+/CIDInit /ProcSet findresource begin
+
+20 dict begin
+
+/CIDFontName /TBTsukijiG-M def
+/CIDFontVersion 3.010 def
+/CIDFontType 0 def
+/WidthsOnly true def
+
+/CIDSystemInfo 3 dict dup begin
+  /Registry (Adobe)  def
+  /Ordering (Japan1) def
+  /Supplement 1 def
+end def
+
+/FontBBox [ 0 -120 1000 880 ] def
+
+/UIDBase 2475200 def
+/XUID [1 11 2475200] def
+
+/FontInfo 5 dict dup begin
+  /Notice (Copyright 1996-1998 Adobe Systems Incorporated. All Rights Reserved. 
+     ) readonly def
+  /Copyright
+    () readonly def
+  /FullName (TBTsukijiG-M) def
+  /FamilyName (TBTsukijiG) def
+  /Weight () def
+end readonly def
+  
+/CIDMapOffset 0 def
+
+/FDBytes 1 def
+/GDBytes 3 def
+/CIDCount 8359 def
+
+/FDArray        5 array
+dup 0
+
+%ADOBeginFontDict
+14 dict
+  begin
+  /FontName /TBTsukijiG-M-Alphabetic def
+  /FontType 1 def
+  /FontMatrix [ 0.001 0 0 0.001 0 0 ] def
+  /PaintType 0 def
+
+  %ADOBeginPrivateDict
+  /Private 25 dict dup
+    begin
+    /MinFeature {16 16} readonly def
+    /LanguageGroup 0 def
+    /BlueValues [ -18 0 700 718 475 493 ] def
+    /BlueScale 0.0396271 def
+    /BlueFuzz 1 def
+    /BlueShift 7 def
+    /StdHW [ 25 ] def
+    /StdVW [ 68 ] def
+    /StemSnapH [ 25 ] def
+    /StemSnapV [ 68 ] def
+    /lenIV -1 def
+    /lenBuildCharArray 32 def
+    /ForceBoldThreshold 0 def
+    /StrokeWidth 0 def
+    /ExpansionFactor 0.0599976 def
+
+    /OtherSubrs
+    [ { } { } { }
+      { systemdict /internaldict known not
+          { pop 3 }
+          { 1183615869 systemdict /internaldict get exec dup
+            /startlock known
+              { /startlock get exec }
+              { dup /strtlck known { /strtlck get exec } { pop 3 } ifelse }
+            ifelse
+          } ifelse
+      } bind
+      { } { } { } { } { } { } { } { } { }
+      { 2 {cvi { { pop 0 lt { exit } if } loop } repeat } repeat } bind
+      {} {} {}
+      {} {} {} {} {}
+      {} {}
+      {} {} {} {} {}
+    ] def
+
+    /Erode
+    { 8.5 dup 3 -1 roll 0.1 mul exch 0.5 sub mul cvi sub dup mul
+      68 0 dtransform dup mul exch dup mul add le
+        { pop pop 1.0 1.0 }
+        { pop pop 0.0 1.5 }
+      ifelse
+    } bind def
+
+    /password 5839 def
+
+    /SubrMapOffset      33440 def
+    /SDBytes 3 def
+    /SubrCount          1 def
+    end def
+  %ADOEndPrivateDict
+
+  currentdict
+  end
+%ADOEndFontDict
+
+put
+dup 1
+
+%ADOBeginFontDict
+14 dict
+  begin
+  /FontName /TBTsukijiG-M-Dingbats def
+  /FontType 1 def
+  /FontMatrix [ 0.001 0 0 0.001 0 0 ] def
+  /PaintType 0 def
+
+  %ADOBeginPrivateDict
+  /Private 25 dict dup
+    begin
+    /MinFeature {16 16} readonly def
+    /LanguageGroup 1 def
+    /BlueValues [ -250 -250 1100 1100 ] def
+    /BlueScale 0.0396271 def
+    /BlueFuzz 1 def
+    /BlueShift 7 def
+    /StdHW [ 25 ] def
+    /StdVW [ 25 ] def
+    /StemSnapH [ 25 ] def
+    /StemSnapV [ 25 ] def
+    /lenIV -1 def
+    /lenBuildCharArray 32 def
+    /ForceBoldThreshold 0 def
+    /StrokeWidth 0 def
+    /ExpansionFactor 0.0599976 def
+
+    /OtherSubrs
+    [ { } { } { }
+      { systemdict /internaldict known not
+          { pop 3 }
+          { 1183615869 systemdict /internaldict get exec dup
+            /startlock known
+              { /startlock get exec }
+              { dup /strtlck known { /strtlck get exec } { pop 3 } ifelse }
+            ifelse
+          } ifelse
+      } bind
+      { } { } { } { } { } { } { } { } { }
+      { 2 {cvi { { pop 0 lt { exit } if } loop } repeat } repeat } bind
+      {} {} {}
+      {} {} {} {} {}
+      {} {}
+      {} {} {} {} {}
+    ] def
+
+    /Erode
+    { 3.5 dup 3 -1 roll 0.1 mul exch 0.5 sub mul cvi sub dup mul
+      25 0 dtransform dup mul exch dup mul add le
+        { pop pop 1.0 1.0 }
+        { pop pop 0.0 1.5 }
+      ifelse
+    } bind def
+
+    /password 5839 def
+
+    /SubrMapOffset      33440 def
+    /SDBytes 3 def
+    /SubrCount          1 def
+    end def
+  %ADOEndPrivateDict
+
+  currentdict
+  end
+%ADOEndFontDict
+
+put
+dup 2
+
+%ADOBeginFontDict
+14 dict
+  begin
+  /FontName /TBTsukijiG-M-HKana def
+  /FontType 1 def
+  /FontMatrix [ 0.001 0 0 0.001 0 0 ] def
+  /PaintType 0 def
+
+  %ADOBeginPrivateDict
+  /Private 25 dict dup
+    begin
+    /MinFeature {16 16} readonly def
+    /LanguageGroup 1 def
+    /BlueValues [ -250 -250 1100 1100 ] def
+    /BlueScale 0.0396271 def
+    /BlueFuzz 1 def
+    /BlueShift 7 def
+    /StdHW [ 56 ] def
+    /StdVW [ 56 ] def
+    /StemSnapH [ 56 ] def
+    /StemSnapV [ 56 ] def
+    /lenIV -1 def
+    /lenBuildCharArray 32 def
+    /ForceBoldThreshold 0 def
+    /StrokeWidth 0 def
+    /ExpansionFactor 0.0599976 def
+
+    /OtherSubrs
+    [ { } { } { }
+      { systemdict /internaldict known not
+          { pop 3 }
+          { 1183615869 systemdict /internaldict get exec dup
+            /startlock known
+              { /startlock get exec }
+              { dup /strtlck known { /strtlck get exec } { pop 3 } ifelse }
+            ifelse
+          } ifelse
+      } bind
+      { } { } { } { } { } { } { } { } { }
+      { 2 {cvi { { pop 0 lt { exit } if } loop } repeat } repeat } bind
+      {} {} {}
+      {} {} {} {} {}
+      {} {}
+      {} {} {} {} {}
+    ] def
+
+    /Erode
+    { 7.5 dup 3 -1 roll 0.1 mul exch 0.5 sub mul cvi sub dup mul
+      56 0 dtransform dup mul exch dup mul add le
+        { pop pop 1.0 1.0 }
+        { pop pop 0.0 1.5 }
+      ifelse
+    } bind def
+
+    /password 5839 def
+
+    /SubrMapOffset      33440 def
+    /SDBytes 3 def
+    /SubrCount          1 def
+    end def
+  %ADOEndPrivateDict
+
+  currentdict
+  end
+%ADOEndFontDict
+
+put
+dup 3
+
+%ADOBeginFontDict
+14 dict
+  begin
+  /FontName /TBTsukijiG-M-HRoman def
+  /FontType 1 def
+  /FontMatrix [ 0.001 0 0 0.001 0 0 ] def
+  /PaintType 0 def
+
+  %ADOBeginPrivateDict
+  /Private 25 dict dup
+    begin
+    /MinFeature {16 16} readonly def
+    /LanguageGroup 0 def
+    /BlueValues [ -25 0 700 712 475 489 716 716 ] def
+    /BlueScale 0.0396271 def
+    /BlueFuzz 1 def
+    /BlueShift 7 def
+    /OtherBlues [ -150 -150 ] def
+    /StdHW [ 25 ] def
+    /StdVW [ 56 ] def
+    /StemSnapH [ 25 ] def
+    /StemSnapV [ 56 ] def
+    /lenIV -1 def
+    /lenBuildCharArray 32 def
+    /ForceBoldThreshold 0 def
+    /StrokeWidth 0 def
+    /ExpansionFactor 0.0599976 def
+
+    /OtherSubrs
+    [ { } { } { }
+      { systemdict /internaldict known not
+          { pop 3 }
+          { 1183615869 systemdict /internaldict get exec dup
+            /startlock known
+              { /startlock get exec }
+              { dup /strtlck known { /strtlck get exec } { pop 3 } ifelse }
+            ifelse
+          } ifelse
+      } bind
+      { } { } { } { } { } { } { } { } { }
+      { 2 {cvi { { pop 0 lt { exit } if } loop } repeat } repeat } bind
+      {} {} {}
+      {} {} {} {} {}
+      {} {}
+      {} {} {} {} {}
+    ] def
+
+    /Erode
+    { 7.5 dup 3 -1 roll 0.1 mul exch 0.5 sub mul cvi sub dup mul
+      56 0 dtransform dup mul exch dup mul add le
+        { pop pop 1.0 1.0 }
+        { pop pop 0.0 1.5 }
+      ifelse
+    } bind def
+
+    /password 5839 def
+
+    /SubrMapOffset      33440 def
+    /SDBytes 3 def
+    /SubrCount          1 def
+    end def
+  %ADOEndPrivateDict
+
+  currentdict
+  end
+%ADOEndFontDict
+
+put
+dup 4
+
+%ADOBeginFontDict
+14 dict
+  begin
+  /FontName /TBTsukijiG-M-Kana def
+  /FontType 1 def
+  /FontMatrix [ 0.001 0 0 0.001 0 0 ] def
+  /PaintType 0 def
+
+  %ADOBeginPrivateDict
+  /Private 25 dict dup
+    begin
+    /MinFeature {16 16} readonly def
+    /LanguageGroup 1 def
+    /BlueValues [ -250 -250 1100 1100 ] def
+    /BlueScale 0.0396271 def
+    /BlueFuzz 1 def
+    /BlueShift 7 def
+    /StdHW [ 73 ] def
+    /StdVW [ 84 ] def
+    /StemSnapH [ 73 ] def
+    /StemSnapV [ 84 ] def
+    /lenIV -1 def
+    /lenBuildCharArray 32 def
+    /ForceBoldThreshold 0 def
+    /StrokeWidth 0 def
+    /ExpansionFactor 0.0599976 def
+
+    /OtherSubrs
+    [ { } { } { }
+      { systemdict /internaldict known not
+          { pop 3 }
+          { 1183615869 systemdict /internaldict get exec dup
+            /startlock known
+              { /startlock get exec }
+              { dup /strtlck known { /strtlck get exec } { pop 3 } ifelse }
+            ifelse
+          } ifelse
+      } bind
+      { } { } { } { } { } { } { } { } { }
+      { 2 {cvi { { pop 0 lt { exit } if } loop } repeat } repeat } bind
+      {} {} {}
+      {} {} {} {} {}
+      {} {}
+      {} {} {} {} {}
+    ] def
+
+    /Erode
+    { 10.5 dup 3 -1 roll 0.1 mul exch 0.5 sub mul cvi sub dup mul
+      84 0 dtransform dup mul exch dup mul add le
+        { pop pop 1.0 1.0 }
+        { pop pop 0.0 1.5 }
+      ifelse
+    } bind def
+
+    /password 5839 def
+
+    /SubrMapOffset      33440 def
+    /SDBytes 3 def
+    /SubrCount          1 def
+    end def
+  %ADOEndPrivateDict
+
+  currentdict
+  end
+%ADOEndFontDict
+
+put
+def
+
+%%BeginData:      42099 Binary Bytes
+(Binary)      36279 StartData  ‚ёя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚їя ‚ї ‚ї ‚Зя ‚Оя ‚Оя ‚Оя ‚О ‚О ‚Х ‚Эя ‚дя ‚д ‚дя ‚л ‚л ‚т ‚щ ѓ  ѓ ѓ ѓ ѓ ѓ$ ѓ+ ѓ2 ѓ9 ѓ@ ѓHя ѓPя ѓPя ѓP ѓPя ѓWя ѓWя ѓWя ѓWя ѓWя ѓWя ѓWя ѓWя ѓWя ѓWя ѓWя ѓWя ѓWя ѓWя ѓWя ѓWя ѓWя ѓWя ѓWя ѓWя ѓWя ѓWя ѓWя ѓWя ѓWя ѓWя ѓW ѓWя ѓ_ ѓ_я ѓfя ѓf ѓfя ѓnя ѓnя ѓnя ѓnя ѓnя ѓnя ѓnя ѓnя ѓnя ѓnя ѓnя ѓnя ѓnя ѓnя ѓnя ѓnя ѓnя ѓnя ѓnя ѓnя ѓnя ѓnя ѓnя ѓnя ѓnя ѓnя ѓnя ѓnя ѓnя ѓn ѓn ѓu ѓ| ѓ„ ѓ‹ ѓ’я ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљя ѓљ ѓљ ѓЎ ѓ© ѓ° ѓ· ѓѕ ѓЕ ѓМ ѓУ ѓЪ ѓв ѓйя ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓря ѓр ѓр ѓч ѓю „ „ „ „ „# „+ „3я „;я „;я „;я „;я „;я „;я „;я „; „; „C „K „S „[я „cя „cя „c „c „j „qя „x „xя „ „ „†я „Ћ „Ћя „• „• „ќ „¤ „¬ „і „» „В „К „С „Щя „ая „а „а „и „п „ч „ю … … … … …$ …+ …3я …; …; …C …Kя …Sя …Sя …Sя …Sя …Sя …Sя …Sя …Sя …Sя …S …S …Zя …a …a …i …q …y …Ѓ …€ …ђ … … я …§я …§я …§ …§ …® …µ …ј …Г …К …Т …Ъ …б …и …п …ц …э † † † †я †#я †#я †#я †#я †#я †#я †#я †#я †#я †#я †#я †#я †#я †#я †#я †#я †#я †#я †#я †#я †#я †#я †#я †#я †#я †#я †#я †#я †#я †#я †#я †#я †#я †#я †#я †#я †#я †#я †#я †#  †#  †+  †3  †;  †C  †K  †S  †[  †c  †kя †sя †sя †sя †sя †sя †sя †sя †sя †sя †sя †sя †sя †sя †sя †sя †sя †sя †sя †sя †sя †sя †sя †sя †sя †sя †sя †sя †sя †sя †sя †sя †sя †sя †sя †sя †sя †sя †sя †sя †sя †sя †sя †sя †sя †sя †sя †sя †sя †sя †sя †sя †s †s †{ †ѓ †‹ †“ †› †Ј †« †і †» †В †Й †Р †Ш †а †и †р †ш ‡  ‡ ‡ ‡ ‡  ‡( ‡0 ‡7 ‡> ‡E ‡L ‡T ‡\ ‡c ‡j ‡r ‡z ‡‚ ‡‰ ‡ђ ‡— ‡ћ ‡¦ ‡® ‡¶ ‡ѕ ‡Е ‡М ‡Ф ‡Ь ‡д ‡м ‡ф ‡ь € € € € €  €' €. €6 €> €F €N €U €] €e €m €u €| €„ €Њ €” €њ €¤ €¬ €ґ €» €Г €Л €Т €Ъ €в €к €с €щ ‰ ‰	 ‰ ‰ ‰! ‰) ‰0 ‰8 ‰? ‰F ‰M ‰U ‰] ‰e ‰m ‰t ‰{ ‰ѓ ‰‹ ‰’ ‰™ ‰  ‰§ ‰® ‰µ ‰ј ‰Г ‰Л ‰У ‰Ы ‰г ‰к ‰с ‰щ Љ Љ	 Љ Љ Љ Љ' Љ. Љ5 Љ< ЉC ЉK ЉR ЉY Љ` Љh Љp Љx ЉЂ Љ€ Љђ Љ— Љћ ЉҐ Љ¬ Љі Љє ЉБ ЉЙ ЉР ЉЧ ЉЮ Љж Љн Љх Љь ‹ ‹ ‹ ‹ ‹# ‹+ ‹3 ‹; ‹C ‹J ‹Q ‹Y ‹a ‹i ‹qя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹yя ‹y ‹yя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђя ‹Ђ ‹Ђ ‹€я ‹ђя ‹ђ ‹ђ ‹я ‹  ‹  ‹Ёя ‹Ї ‹Їя ‹· ‹· ‹ѕ ‹Е ‹М ‹У ‹Ъя ‹бя ‹б ‹б ‹и ‹п ‹ц ‹э Њ Њ Њ Њ Њ"я Њ) Њ) Њ1 Њ9 ЊA ЊI ЊQ ЊY Њa Њi Њq Њy ЊЃ Њ‰ Њ‘ Њ™ ЊЎ Њ© Њ± Њ№ ЊБ ЊЙ ЊСя ЊЩя ЊЩя ЊЩя ЊЩя ЊЩя ЊЩя ЊЩя ЊЩя ЊЩя ЊЩя ЊЩя ЊЩя ЊЩя ЊЩя ЊЩя ЊЩя ЊЩя ЊЩ ЊЩ Њб Њйя Њся Њся Њся Њся Њся Њся Њся Њся Њся Њся Њся Њся Њся Њся Њся Њся Њся Њся Њся Њся Њся Њся Њся Њся Њся Њся Њся Њся Њся Њся Њся Њся Њся Њся Њся Њся Њся Њся Њся Њся Њся Њся Њся Њся Њся Њся Њся Њс Њс Њщ Ќ Ќ	 Ќ Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќя Ќ Ќя Ќ&я Ќ&я Ќ&я Ќ&я Ќ&я Ќ&я Ќ&я Ќ&я Ќ&я Ќ&я Ќ&я Ќ&я Ќ&я Ќ&я Ќ&я Ќ&я Ќ&я Ќ&я Ќ&я Ќ&я Ќ&я Ќ&я Ќ&я Ќ&я Ќ&я Ќ&я Ќ&я Ќ&я Ќ&я Ќ&я Ќ&я Ќ&я Ќ&я Ќ&я Ќ&я Ќ&я Ќ&я Ќ&я Ќ&я Ќ&я Ќ&я Ќ&я Ќ&я Ќ&я Ќ&я Ќ&я Ќ&я Ќ&я Ќ&я Ќ&я Ќ&я Ќ&я Ќ& Ќ& Ќ.я Ќ6я Ќ6 Ќ6я Ќ>я Ќ>я Ќ>я Ќ> Ќ> ЌF ЌN ЌU Ќ] Ќd Ќl Ќs Ќ{ Ќ‚ ЌЉя Ќ’я Ќ’я Ќ’я Ќ’я Ќ’я Ќ’я Ќ’я Ќ’я Ќ’я Ќ’я Ќ’я Ќ’я Ќ’я Ќ’я Ќ’я Ќ’я Ќ’я Ќ’я Ќ’я Ќ’я Ќ’я Ќ’я Ќ’ Ќ’я Ќ™я Ќ™я Ќ™я Ќ™я Ќ™ Ќ™ ЌЎ ЌЁ ЌЇя Ќ·я Ќ·я Ќ·я Ќ·я Ќ·я Ќ·я Ќ·я Ќ·я Ќ·я Ќ·я Ќ·я Ќ·я Ќ·я Ќ·я Ќ·я Ќ·я Ќ·я Ќ·я Ќ·я Ќ·я Ќ·я Ќ·я Ќ·я Ќ·я Ќ·я Ќ·я Ќ·я Ќ·я Ќ·я Ќ·я Ќ·я Ќ·я Ќ·я Ќ·я Ќ·я Ќ·я Ќ·я Ќ·я Ќ·я Ќ·я Ќ·я Ќ·я Ќ· ‚¦ ‚ё‹ ‹ыъ|ъ|ю|	‹ъ|‹
+чMш€‹
+Ѕш€‹
+Ѕш€‹
+ч#ш€‹
+Рш€‹
+Чш€‹
+аш€‹
+Ґш€‹
+ѕш€‹
+чш€‹
+­ш€‹
+Їш€‹
+џш€‹
+№ш€‹
+ёш€‹
+ёш€‹
+Єш€‹
+јш€‹
+чMш€‹
+ч@ш€‹
+ґш€‹
+чш€‹
+Цш€‹
+чіш€‹
+‹ш€‹
+ёш€‹
+ч ш€‹
+Цш€‹
+іш€‹
+чEш€‹
+Эш€‹
+ч;ъ|‹
+Цъ|‹
+¬ъ|‹
+їъ|‹
+ќъ|‹
+¦ъ|‹
+Мъ|‹
+Ѕъ|‹
+чRъ|‹
+Мъ|‹
+ёъ|‹
+‹ъ|‹
+іъ|‹
+ёъ|‹
+Чъ|‹
+аъ|‹
+ш?ъ|‹
+шGъ|‹
+ш:ъ|‹
+ч{ъ|‹
+шGъ|‹
+чЎъ|‹
+чЎъ|‹
+чШъ|‹
+чШъ|‹
+чЃъ|‹
+Ыъ|‹
+лъ|‹
+Съ|‹
+Аъ|‹
+пъ|‹
+чтъ|‹
+хъ|‹
+щ§ъ|‹
+Ѕъ|‹
+шЪъ|‹
+Ѕъ|‹
+щъ|‹
+Ръ|‹
+щ/ъ|‹
+Цъ|‹
+шцъ|‹
+Цъ|‹
+ш)ъ|‹
+Аъ|‹
+ч¤ъ|‹
+єъ|‹
+щъ|‹
+Цъ|‹
+шЙъ|‹
+Ѕъ|‹
+щFъ|‹
+Мъ|‹
+ч*ъ|‹
+ч*ъ|‹
+чDъ|‹
+ч*ъ|‹
+ч*ъ|‹
+Жъ|‹
+Жъ|‹
+чMъ|‹
+ч~ъ|‹
+чЉъ|‹
+ч,ъ|‹
+Ъъ|‹
+ч>ъ|‹
+ч?ъ|‹
+чXъ|‹
+фъ|‹
+Ыъ|‹
+Ыъ|‹
+Шъ|‹
+Ѕъ|‹
+Ѕъ|‹
+чъ|‹
+чъ|‹
+къ|‹
+къ|‹
+къ|‹
+къ|‹
+Яъ|‹
+ч%ъ|‹
+Съ|‹
+ёъ|‹
+чКъ|‹
+чКъ|‹
+чpъ|‹
+чгъ|‹
+ч|ъ|‹
+чhъ|‹
+чBъ|‹
+ч†ъ|‹
+ч‚ъ|‹
+ч‘ъ|‹
+чtъ|‹
+ч„ъ|‹
+чVъ|‹
+ч
+ъ|‹
+ч_ъ|‹
+чъ|‹
+чЎъ|‹
+чkъ|‹
+чъ|‹
+чAъ|‹
+чHъ|‹
+пъ|‹
+Жъ|‹
+Жъ|‹
+ч|ъ|‹
+ч|ъ|‹
+чЕъ|‹
+чЕъ|‹
+ч0ъ|‹
+ч0ъ|‹
+ч|ъ|‹
+ч|ъ|‹
+ч>ъ|‹
+ч>ъ|‹
+ч©ъ|‹
+ч©ъ|‹
+Чъ|‹
+Чъ|‹
+Їъ|‹
+Їъ|‹
+чъ|‹
+чъ|‹
+тъ|‹
+тъ|‹
+чTъ|‹
+чTъ|‹
+ч*ъ|‹
+Нъ|‹
+Нъ|‹
+аъ|‹
+аъ|‹
+чЇъ|‹
+чЇъ|‹
+ч ъ|‹
+чъ|‹
+мъ|‹
+Ръ|‹
+чъ|‹
+ч0ъ|‹
+ч0ъ|‹
+ч0ъ|‹
+ч!ъ|‹
+ч!ъ|‹
+ч!ъ|‹
+Ъъ|‹
+Ъъ|‹
+Ъъ|‹
+Ръ|‹
+Ръ|‹
+Ръ|‹
+чъ|‹
+чъ|‹
+чъ|‹
+чMъ|‹
+Мъ|‹
+чъ|‹
+чъ|‹
+ч_ъ|‹
+ч!ъ|‹
+Въ|‹
+чUъ|‹
+чъ|‹
+чЃъ|‹
+чFъ|‹
+ч–ъ|‹
+чИъ|‹
+ч7ъ|‹
+Гъ|‹
+ч&ъ|‹
+ч+ъ|‹
+Мъ|‹
+чъ|‹
+чъ|‹
+чJъ|‹
+нъ|‹
+ч`ъ|‹
+чъ|‹
+ч]ъ|‹
+чъ|‹
+ч ъ|‹
+чhъ|‹
+ч)ъ|‹
+Оъ|‹
+чFъ|‹
+ръ|‹
+Ьъ|‹
+Ьъ|‹
+чъ|‹
+чъ|‹
+ч	ъ|‹
+ч	ъ|‹
+въ|‹
+въ|‹
+чVъ|‹
+чVъ|‹
+Фъ|‹
+Фъ|‹
+бъ|‹
+бъ|‹
+Тъ|‹
+Тъ|‹
+Щъ|‹
+Щъ|‹
+ч2ъ|‹
+ч1ъ|‹
+чъ|‹
+чъ|‹
+аъ|‹
+аъ|‹
+чOъ|‹
+чъ|‹
+чъ|‹
+зъ|‹
+зъ|‹
+ш1ъ|‹
+ш1ъ|‹
+мъ|‹
+Къ|‹
+дъ|‹
+»ъ|‹
+ч	ъ|‹
+ћъ|‹
+ћъ|‹
+ћъ|‹
+чъ|‹
+чъ|‹
+чъ|‹
+ч=ъ|‹
+ч=ъ|‹
+ч=ъ|‹
+Къ|‹
+Къ|‹
+Къ|‹
+уъ|‹
+уъ|‹
+уъ|‹
+пъ|‹
+чwъ|‹
+ръ|‹
+бъ|‹
+Хъ|‹
+ч ъ|‹
+Дъ|‹
+ч*ъ|‹
+Съ|‹
+ч|ъ|‹
+ч?ъ|‹
+чdъ|‹
+чХъ|‹
+Іъ|‹
+ч]ъ|‹
+чuъ|‹
+ч’ъ|‹
+ч\ъ|‹
+Иъ|‹
+Иъ|‹
+ч?ъ|‹
+ч3ъ|‹
+чhъ|‹
+ч1ъ|‹
+ч7ъ|‹
+№ъ|‹
+щPъ|‹
+щ8ъ|‹
+шVъ|‹
+шZъ|‹
+шъ|‹
+‹ъ|‹
+шLъ|‹
+Ѕъ|‹
+Ѕъ|‹
+·ъ|‹
+·ъ|‹
+Ѕъ|‹
+Ѕъ|‹
+Ѕъ|‹
+Ѕъ|‹
+Ѕъ|‹
+Ѕъ|‹
+чpъ|‹
+Ѕъ|‹
+чpъ|‹
+Ѕъ|‹
+Ѕъ|‹
+Ѕъ|‹
+ч»ъ|‹
+чГъ|‹
+шъ|‹
+чгъ|‹
+ч­ъ|‹
+чЋъ|‹
+ч„ъ|‹
+ч№ъ|‹
+чиъ|‹
+чЏъ|‹
+чДъ|‹
+чГъ|‹
+шъ|‹
+чЏъ|‹
+чЁъ|‹
+ч°ъ|‹
+ч‡ъ|‹
+чЏъ|‹
+чгъ|‹
+чсъ|‹
+ч”ъ|‹
+чљъ|‹
+чkъ|‹
+ч(ъ|‹
+чtъ|‹
+чъ|‹
+чЉъ|‹
+чРъ|‹
+чРъ|‹
+»ъ|‹
+Къ|‹
+Зъ|‹
+чЊъ|‹
+чШъ|‹
+щ¬ъ|‹
+щ¬ъ|‹
+щёъ|‹
+Ѕъ|‹
+щ§ъ|‹
+Ѕъ|‹
+шЪъ|‹
+Ѕъ|‹
+шЪъ|‹
+Ѕъ|‹
+щ§ъ|‹
+щъ|‹
+Ръ|‹
+ч\ъ|‹
+Иъ|‹
+Иъ|‹
+ч?ъ|‹
+
+%%EndData
+%%EndResource
+%%EOF

@@ -1,0 +1,105 @@
+
+.infinite-tree {  }
+
+.infinite-tree-scroll {
+	overflow: auto;
+	min-height: 100vh;
+	max-height: 100vh;
+}
+.infinite-tree-table {
+	width: 100%;
+}
+.infinite-tree-content {
+	outline: 0;
+	position: relative;
+	padding-top: 5px;
+	padding-left: 5px;
+}
+.infinite-tree-content .infinite-tree-selected.infinite-tree-item .infinite-tree-title,
+.infinite-tree-content .infinite-tree-selected.infinite-tree-item:hover .infinite-tree-title,
+.infinite-tree-content .infinite-tree-selected.infinite-tree-item .infinite-tree-link,
+.infinite-tree-content .infinite-tree-selected.infinite-tree-item:hover .infinite-tree-link {
+	background: #cbe8f6;
+	box-shadow: 0 0 0 1px #26a0da;
+}
+.infinite-tree-content .infinite-tree-item {
+	font-size: 14px;
+	border: 1px solid transparent;
+	cursor: default;
+}
+.infinite-tree-content .infinite-tree-item:hover .infinite-tree-title,
+.infinite-tree-content .infinite-tree-item:hover .infinite-tree-link {
+	background: #eff9fe;
+	box-shadow: 0 0 0 1px #70c0e7;
+}
+.infinite-tree-content .infinite-tree-item:disabled,
+.infinite-tree-content .infinite-tree-item[disabled] {
+	cursor: not-allowed;
+	opacity: 0.5;
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+	filter: alpha(opacity=50);
+}
+.infinite-tree-content .infinite-tree-node {
+	position: relative;
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+}
+.infinite-tree-content .infinite-tree-toggler {
+	color: #666;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+.infinite-tree-content .infinite-tree-toggler:hover {
+	color: #333;
+	text-decoration: none;
+}
+.infinite-tree-toggler-icon {
+	user-select: none;
+}
+.infinite-tree-toggler-icon.sort {
+	width: 13px;
+	height: 13px;
+}
+.infinite-tree-toggler-icon.refresh {
+	display: block;
+	width: 13px;
+	height: 13px;
+	animation: rotating 2s linear infinite;
+}
+@keyframes rotating {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
+}
+.infinite-tree-icon {
+	width: 14px;
+	margin: 0 5px;
+}
+.infinite-tree-icon:first-child {
+	margin-left: 18px;
+}
+.infinite-tree-icon:before {
+	margin-right: 5px;
+}
+.infinite-tree-content .infinite-tree-title {
+	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	white-space: nowrap;
+	padding: 0 3px;
+}
+.infinite-tree-content .infinite-tree-link {
+	color: #0000ee;
+	cursor: pointer;
+}
+.infinite-tree-no-data {
+	text-align: center;
+}

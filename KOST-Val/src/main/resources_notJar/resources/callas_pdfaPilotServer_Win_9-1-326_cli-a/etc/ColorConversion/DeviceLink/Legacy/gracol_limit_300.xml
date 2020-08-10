@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<devicelink>
+	<profile lang="CHS">
+		<header>美国平板胶印，降低到 300% 油墨限制(GRACoL) (仅限服务器/CLI)</header>
+		<explanation>根据 GRACoL US，将最大油墨覆盖率降低到 300%</explanation>
+	</profile>
+	<profile lang="ENU">
+		<header>Sheetfed offset US, reduce to 300% ink limit (GRACoL) (Server/CLI only)</header>
+		<explanation>Reduction of maximum ink coverage to 300% based on GRACoL US</explanation>
+	</profile>
+	<profile lang="ESP">
+		<header>Offset de alimentación por hojas de EE.UU., reducir a 300% el límite de tinta (GRACoL) (sólo Server/CLI)</header>
+		<explanation>Reducción de la cobertura de tinta máxima a 300% en base a GRACoL EE.UU.</explanation>
+	</profile>
+	<profile lang="FRA">
+		<header>Offset à feuilles USA, réduction du taux de couverture d'encre à 300% (GRACoL) (Server/CLI seulement)</header>
+		<explanation>Réduction du taux de couverture d'encre maximale à 300% selon GRACoL US</explanation>
+	</profile>
+	<profile lang="DEU">
+		<header>Bogenoffset US, Gesamtfarbreduzierung auf 300% (GRACoL) (nur Server/CLI)</header>
+		<explanation>Reduzierung des Gesamtfarbauftrags auf maximal 300% auf Basis von GRACoL US</explanation>
+	</profile>
+	<profile lang="ITA">
+		<header>Offset foglio US, riduci limite inchiostro a 300% (GRACoL) (solo Server/CLI)</header>
+		<explanation>Riduzione della copertura massima di inchiostro al 300% in base a GRACoL US</explanation>
+	</profile>
+	<profile lang="JPN">
+		<header>シートフィードオフセット, インキ量を 300% に削減 (米国) (GRACoL) (Server/CLI のみ)</header>
+		<explanation>GRACoL US を基にしてインキ総量を 300% に削減します</explanation>
+	</profile>
+</devicelink>

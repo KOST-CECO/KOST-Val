@@ -1,0 +1,15 @@
+@charset "UTF-8";
+
+p {
+	font-family: 'FreeUniversal';
+    color: -cchip-cmyk( 0.0, 0.0, 0.0, 1.0 );
+}
+
+div.mark {
+  width: 10mm;
+  height: 10mm;
+  margin:0;
+  padding:0;
+  background-color: transparent;
+}
+

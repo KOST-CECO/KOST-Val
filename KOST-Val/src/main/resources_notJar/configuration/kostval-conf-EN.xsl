@@ -5,46 +5,25 @@
 		<html>
 			<head>
 				<style>
-					body {font-family: Verdana, Geneva, sans-serif; font-size:
-					10pt; }
-					table {font-family: Verdana, Geneva, sans-serif; font-size:
-					10pt; }
-					.logow {font-family: Verdana, Geneva, sans-serif;
-					background-color: #ffffff; font-weight:bold; font-size: 32pt;
-					color: #ffffff; }
-					.logoff {font-family: Verdana, Geneva, sans-serif;
-					background-color: #ffffff; font-weight:bold; font-size: 18pt;
-					color: #000000; }
-					.logo {font-family: Verdana, Geneva, sans-serif;
-					background-color: #000000; font-weight:bold; font-size: 32pt;
-					color: #ffffff; }
-					.logov {font-family: Verdana, Geneva, sans-serif;
-					background-color: #000000; font-weight:bold; font-size: 32pt;
-					color: #0cc10c; }
-					.logol {font-family: Verdana, Geneva, sans-serif;
-					background-color: #000000; font-weight:bold; font-size: 32pt;
-					color: #000000; }
-					h1 {font-family: Verdana, Geneva, sans-serif;
-					font-weight:bold; font-size: 18pt; color: #000000; }
-					h2
-					{font-family: Verdana, Geneva, sans-serif; font-weight:bold;
-					font-size: 14pt; color: #000000; }
-					h3 {font-family: Verdana, Geneva,
-					sans-serif; font-size: 10pt; color: #808080; }
-					.footer {font-family:
-					Verdana, Geneva, sans-serif; font-size: 10pt; color: #808080; }
-					h4
-					{font-family: Verdana, Geneva, sans-serif; font-weight:bold;
-					font-size: 10pt; color: #000000; }
-					tr
-					{background-color: #f0f0f0;}
-					tr.caption {background-color: #eeafaf;
-					font-weight:bold}
-					tr.captionm {background-color: #f8dfdf}
-					tr.captionio {background-color: #afeeaf; font-weight:bold}
-					tr.captioniom {background-color: #ccffcc}
-					tr.captioninfo {background-color: #b2b2c5}
-					tr.captioninfom {background-color: #e7e7ed}
+				    body {font-family: Verdana, Geneva, sans-serif; font-size: 10pt; -webkit-print-color-adjust: exact; }
+					table {font-family: Verdana, Geneva, sans-serif; font-size: 10pt; -webkit-print-color-adjust: exact; }
+					.logow {font-family: Verdana, Geneva, sans-serif; background-color: #ffffff; font-weight:bold; font-size: 32pt; color: #ffffff; -webkit-print-color-adjust: exact; }
+					.logoff {font-family: Verdana, Geneva, sans-serif; background-color: #ffffff; font-weight:bold; font-size: 18pt; color: #000000; -webkit-print-color-adjust: exact; }
+					.logo {font-family: Verdana, Geneva, sans-serif; background-color: #000000; font-weight:bold; font-size: 32pt; color: #ffffff; -webkit-print-color-adjust: exact; }
+					.logov {font-family: Verdana, Geneva, sans-serif; background-color: #000000; font-weight:bold; font-size: 32pt; color: #0cc10c; -webkit-print-color-adjust: exact; }
+					.logol {font-family: Verdana, Geneva, sans-serif; background-color: #000000; font-weight:bold; font-size: 32pt; color: #000000; -webkit-print-color-adjust: exact; }
+					h1 {font-family: Verdana, Geneva, sans-serif; font-weight:bold; font-size: 18pt; color: #000000; -webkit-print-color-adjust: exact; }
+					h2 {font-family: Verdana, Geneva, sans-serif; font-weight:bold; font-size: 14pt; color: #000000; -webkit-print-color-adjust: exact; }
+					h3 {font-family: Verdana, Geneva, sans-serif; font-size: 10pt; color: #808080; -webkit-print-color-adjust: exact; }
+					.footer {font-family: Verdana, Geneva, sans-serif; font-size: 10pt; color: #808080; -webkit-print-color-adjust: exact; }
+					h4 {font-family: Verdana, Geneva, sans-serif; font-weight:bold; font-size: 10pt; color: #000000; -webkit-print-color-adjust: exact; }
+					tr {background-color: #f0f0f0; -webkit-print-color-adjust: exact; }
+					tr.caption {background-color: #eeafaf; font-weight:bold }
+					tr.captionm {background-color: #f8dfdf }
+					tr.captionio {background-color: #afeeaf; font-weight:bold }
+					tr.captioniom {background-color: #ccffcc }
+					tr.captioninfo {background-color: #b2b2c5 }
+					tr.captioninfom {background-color: #e7e7ed }
 				</style>
 			</head>
 			<body>
@@ -58,6 +37,33 @@
 					<span class="logoff">Configuration</span>
 				</p>
 				<table >
+					<tr  class="captioninfo">
+						<td>Specifies whether a JPEG validation should take place [yes]:</td>
+						<td>
+							<xsl:value-of select="configuration/jpeg/jpegvalidation" />
+						</td>
+					</tr>
+
+					<tr  class="captioninfo">
+						<td>Specifies whether a JP2 validation should take place [yes]:</td>
+						<td>
+							<xsl:value-of select="configuration/jp2/jp2validation" />
+						</td>
+					</tr>
+
+					<tr  class="captioninfo">
+						<td>Specifies whether a SIARD validation should take place [yes]:</td>
+						<td>
+							<xsl:value-of select="configuration/siard/siardvalidation" />
+						</td>
+					</tr>
+					<tr  class="captioninfom">
+						<td>Specifies which SIARD versions are allowed [1.0, 2.1]:</td>
+						<td>
+							<xsl:value-of select="configuration/siard/siard10" />&#160; <xsl:value-of select="configuration/siard/siard21" />
+						</td>
+					</tr>
+
 					<tr  class="captioninfo">
 						<td>Information about PDF/A validation [yes]:</td>
 						<td>
@@ -110,33 +116,6 @@
 						<td>Specifies whether JBIG2 compression is allowed [yes]:</td>
 						<td>
 							<xsl:value-of select="configuration/pdfa/jbig2allowed" />
-						</td>
-					</tr>
-
-					<tr  class="captioninfo">
-						<td>Specifies whether a SIARD validation should take place [yes]:</td>
-						<td>
-							<xsl:value-of select="configuration/siard/siardvalidation" />
-						</td>
-					</tr>
-					<tr  class="captioninfom">
-						<td>Specifies which SIARD versions are allowed [1.0, 2.1]:</td>
-						<td>
-							<xsl:value-of select="configuration/siard/siard10" />&#160; <xsl:value-of select="configuration/siard/siard21" />
-						</td>
-					</tr>
-
-					<tr  class="captioninfo">
-						<td>Specifies whether a JP2 validation should take place [yes]:</td>
-						<td>
-							<xsl:value-of select="configuration/jp2/jp2validation" />
-						</td>
-					</tr>
-
-					<tr  class="captioninfo">
-						<td>Specifies whether a JPEG validation should take place [yes]:</td>
-						<td>
-							<xsl:value-of select="configuration/jpeg/jpegvalidation" />
 						</td>
 					</tr>
 

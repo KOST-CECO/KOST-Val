@@ -1,0 +1,19 @@
+@charset "UTF-8";
+
+/* Clean-up */
+* {
+	margin: 0;
+	padding: 0; 
+	box-sizing: border-box;	
+}
+
+/* Make sure we don't have a white background */
+body {
+	background-color: transparent;
+}
+
+/* The text that is added to the document */
+#decoration-text {
+	position: absolute;
+	word-wrap: break-word;
+}

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<devicelink>
+	<profile lang="CHS">
+		<header>卷筒胶印到平板胶印，降低到 300% 油墨限制(欧洲) (仅限服务器/CLI)</header>
+		<explanation>从 ISO Web Coated (ECI) 转换为 ISO Coated v2 (ECI) (最大油墨覆盖率为 300%)</explanation>
+	</profile>
+	<profile lang="ENU">
+		<header>Web offset to Sheetfed offset, reduce to 300% ink limit (Europe) (Server/CLI only)</header>
+		<explanation>Conversion from ISO Web Coated (ECI) to ISO Coated v2 (ECI) (maximum 300% ink coverage)</explanation>
+	</profile>
+	<profile lang="ESP">
+		<header>Offset de bobina a offset de alimentación por hojas, reducir al 300% el límite de tinta (Europa) (sólo Server/CLI)</header>
+		<explanation>Conversión de ISO estucado en bobina (ECI) a ISO estucado v2 (ECI) (cobertura de tinta 300% máxima)</explanation>
+	</profile>
+	<profile lang="FRA">
+		<header>Impression rotative offset en offset à feuilles, réduction du taux de couverture d'encre à 300% (Europe) (Server/CLI seulement)</header>
+		<explanation>Conversion d’ISO Web Coated (ECI) vers ISO Coated v2 (ECI) (couverture d'encre de 300% max.)</explanation>
+	</profile>
+	<profile lang="DEU">
+		<header>Rollenoffset nach Bogenoffset, Gesamtfarbreduzierung auf 300% (ISO) (nur Server/CLI)</header>
+		<explanation>Konvertierung von ISO Web Coated (ECI) nach ISO Coated v2 (ECI) (max. 300% Gesamtfarbauftrag)</explanation>
+	</profile>
+	<profile lang="ITA">
+		<header>Da offset bobina a offset foglio, riduci limite inchiostro a 300% (Europa) (solo Server/CLI)</header>
+		<explanation>Conversione da ISO Web Coated (ECI) a ISO Coated v2 (ECI) (massimo 300% di copertura inchiostro)</explanation>
+	</profile>
+	<profile lang="JPN">
+		<header>Web オフセットをシートフィードオフセットに変換, インキ量を 300% に削減 (欧州) (Server/CLI のみ)</header>
+		<explanation>ISO Web Coated (ECI) を ISO Coated v2 (ECI) (インキ総量 300%) に削減します</explanation>
+	</profile>
+</devicelink>

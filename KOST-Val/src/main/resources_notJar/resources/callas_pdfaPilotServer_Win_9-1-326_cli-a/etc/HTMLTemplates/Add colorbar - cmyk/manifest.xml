@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<manifest xmlns:x="http://www.callassoftware.com/cchip/template/manifest/">
+
+	<!--- The XML nodes inside of the "resources" node, will cause pdfToolbox to generate
+          additional information inside of the calsDocInfo JSON file. This information can
+          be used in your HTML template. -->
+	<x:resources>
+
+	 
+	</x:resources>
+</manifest>

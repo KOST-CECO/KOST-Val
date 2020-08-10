@@ -1,0 +1,63 @@
+%!PS-Adobe-3.0 Resource-CMap
+%%DocumentNeededResources: ProcSet (CIDInit)
+%%IncludeResource: ProcSet (CIDInit)
+%%BeginResource: CMap (MAC_DEVANAGA)
+%%Title: (MAC_DEVANAGA 0)
+%%EndComments
+
+/CIDInit /ProcSet findresource begin
+
+12 dict begin
+
+begincmap
+
+/CMapName /MAC_DEVANAGA def
+/CMapType 2 def
+
+1 begincodespacerange
+  <20> <FA>
+endcodespacerange
+
+18 beginbfchar
+  <80> <00D7>
+  <81> <2212>
+  <86> <2026>
+  <87> <2022>
+  <88> <00A9>
+  <89> <00AE>
+  <8A> <2122>
+  <90> <0965>
+  <91> <0970>
+  <AE> <090D>
+  <B2> <0911>
+  <CE> <095F>
+  <D9> <200E>
+  <E3> <0945>
+  <E7> <0949>
+  <E8> <094D>
+  <E9> <093C>
+  <EA> <0964>
+endbfchar
+
+13 beginbfrange
+  <20> <7E> <0020>
+  <82> <83> <2013>
+  <84> <85> <2018>
+  <A1> <A3> <0901>
+  <A4> <AA> <0905>
+  <AB> <AD> <090E>
+  <AF> <B1> <0912>
+  <B3> <CD> <0915>
+  <CF> <D8> <0930>
+  <DA> <DF> <093E>
+  <E0> <E2> <0946>
+  <E4> <E6> <094A>
+  <F1> <FA> <0966>
+endbfrange
+endcmap
+CMapName currentdict /CMap defineresource pop
+end
+end
+
+%%EndResource
+%%EOF

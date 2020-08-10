@@ -61,7 +61,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 	{
 		try {
 			File directoryOfConfigfile = new File( System.getenv( "USERPROFILE" ) + File.separator
-					+ ".kost-val" + File.separator + "configuration" );
+					+ ".kost-val_2x" + File.separator + "configuration" );
 			File configFile = new File( directoryOfConfigfile + File.separator + "kostval.conf.xml" );
 
 			Document doc = null;
@@ -74,8 +74,8 @@ public class ConfigurationServiceImpl implements ConfigurationService
 
 			Map<String, String> configMap = new HashMap<String, String>();
 
-			// Gibt den Pfad des Arbeitsverzeichnisses zurueck. = USERPROFILE/.kost-val/temp_KOST-Val
-			String pathtoworkdir = System.getenv( "USERPROFILE" ) + File.separator + ".kost-val"
+			// Gibt den Pfad des Arbeitsverzeichnisses zurueck. = USERPROFILE/.kost-val_2x/temp_KOST-Val
+			String pathtoworkdir = System.getenv( "USERPROFILE" ) + File.separator + ".kost-val_2x"
 					+ File.separator + "temp_KOST-Val";
 			File dir = new File( pathtoworkdir );
 			if ( !dir.exists() ) {
@@ -83,8 +83,8 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			}
 			configMap.put( "PathToWorkDir", pathtoworkdir );
 
-			// Gibt den Pfad des Logverzeichnisses zurueck. = USERPROFILE/.kost-val/logs
-			String logs = System.getenv( "USERPROFILE" ) + File.separator + ".kost-val" + File.separator
+			// Gibt den Pfad des Logverzeichnisses zurueck. = USERPROFILE/.kost-val_2x/logs
+			String logs = System.getenv( "USERPROFILE" ) + File.separator + ".kost-val_2x" + File.separator
 					+ "logs";
 			File dir1 = new File( logs );
 			if ( !dir1.exists() ) {
@@ -93,7 +93,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			configMap.put( "PathToLogfile", logs );
 
 			// Gibt den Namen des DROID Signature Files zurueck. =
-			// USERPROFILE/.kost-val/configuration/KaD...
+			// USERPROFILE/.kost-val_2x/configuration/KaD...
 			File droidFile = new File(
 					directoryOfConfigfile + File.separator + "KaD_SignatureFile_V72.xml" );
 			String droidPath = droidFile.getAbsolutePath();

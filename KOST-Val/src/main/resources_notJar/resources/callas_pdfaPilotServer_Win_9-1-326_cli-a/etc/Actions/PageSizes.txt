@@ -1,0 +1,42 @@
+####################
+# Page Sizes
+# Format : Tab delimited columns, encoding UTF-8
+# Columns:
+#    Kind  : enumeration: Predefined, User
+#    Name  : string, if kind is Predefined the name is considered to be localizable, display name otherwise 
+#    Width : numeric value
+#    Height: numeric value
+#    Unit  : enumeration: mm, inch
+#
+# New entries have to be added in the area "User defined values". The separate values has to be TAB-separated.
+# The hash "#" at the beginning of a line uncomments this line so it will not be parsed and therefore not show up in the Switchboard.
+# Changes to "PageSizes.txt" have to be done in the user-preferences folder (Subfolder ../Actions) and _not_ in the program installation folder.
+
+####################
+# Predefined values (do not change!)
+Predefined	BOAGUI_ValuePaperSizeLetter_long	8.5	11.0	inch
+Predefined	BOAGUI_ValuePaperSizeLegal_long	8.5	14.0	inch
+Predefined	BOAGUI_ValuePaperSizeA1_long	594.0	841.0	mm
+Predefined	BOAGUI_ValuePaperSizeA2_long	420.0	594.0	mm
+Predefined	BOAGUI_ValuePaperSizeA3_long	297.0	420.0	mm
+Predefined	BOAGUI_ValuePaperSizeA4_long	210.0	297.0	mm
+Predefined	BOAGUI_ValuePaperSizeA5_long	148.0	210.0	mm
+Predefined	BOAGUI_ValuePaperSizeSRA3_long	320.0	450.0	mm
+Predefined	BOAGUI_ValuePaperSizeJB4_long	257.0	364.0	mm
+Predefined	BOAGUI_ValuePaperSizeJB5_long	182.0	257.0	mm
+Predefined	BOAGUI_ValuePaperSizeTabloid_long	11.0	17.0	inch
+Predefined	BOAGUI_ValuePaperSizeExecutive_long	7.25	10.5	inch
+Predefined	BOAGUI_ValuePaperSizeStatement_long	5.5	8.5	inch
+Predefined	BOAGUI_ValuePaperSizeMonarchEnvelope_long	3.87	7.5	inch
+Predefined	BOAGUI_ValuePaperSize10Envelope_long	9.5	14.12	inch
+Predefined	BOAGUI_ValuePaperSizeDLEnvelope_long	110.0	220.0	mm
+Predefined	BOAGUI_ValuePaperSizeC5Envelope_long	162.0	229.0	mm
+Predefined	BOAGUI_ValuePaperSizeB5Envelope_long	176.0	250.0	mm
+
+
+####################
+# User defined values
+#User	Custom (100x200mm)	100	200	mm
+
+####################
+# EOF

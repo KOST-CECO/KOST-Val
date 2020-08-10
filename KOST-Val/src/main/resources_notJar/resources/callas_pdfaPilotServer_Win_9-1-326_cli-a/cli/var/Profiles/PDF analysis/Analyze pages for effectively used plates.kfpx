@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pdfpreflight version="16.0">
+	<package>
+		<id3>ac82f28ac53f28c7fde42599e4b4c423</id3>
+		<pdfxoutintentlist>
+		</pdfxoutintentlist>
+		<iccprofilelist>
+		</iccprofilelist>
+		<ccpolicies>
+		</ccpolicies>
+		<occdsetups>
+		</occdsetups>
+		<curves>
+		</curves>
+		<fspolicies>
+		</fspolicies>
+		<resources>
+		</resources>
+		<variables>
+			<variable>
+				<id1>V51e1b14971dad66f5d81365821a14556</id1>
+				<id2>V87485d7bc874180257cdcf9816cc1381</id2>
+				<id3>dfbbfcbd61abde7a5b86355a97e5a697</id3>
+				<id4>8accab083457096d9d84ff6d01e28a23</id4>
+				<id5>V87485d7bc874180257cdcf9816cc1381</id5>
+				<name>D_12_Minimuminkamountperplatepercent</name>
+				<comment>D_12_Minimuminkamountperplatepercent</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<creation>D:20180327093426+02&apos;00&apos;</creation>
+				<modification>D:20180405095859+02&apos;00&apos;</modification>
+				<varkey>eff_ink_amount_min</varkey>
+				<varvalue>1</varvalue>
+				<varlistvalues varval_type="0" varval_flags="0">
+				</varlistvalues>
+			</variable>
+		</variables>
+		<conditions>
+			<condition>
+				<id1>Ced607755d2103cf1286e13fa8e1c2cac</id1>
+				<id2>C63172dba8507117acf7cd7e01652d295</id2>
+				<id3>b22e09e0f40cc38c611d0e3133ebf340</id3>
+				<id4>ec8558fd2c12abc634624e6433475f42</id4>
+				<id5>C63172dba8507117acf7cd7e01652d295</id5>
+				<name></name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::PAGE</group>
+					<token>PAGE::PageUsesSpecificPlates</token>
+					<operator>OP::less</operator>
+					<data>
+						<list cust_type="5">
+							<item var_idx="0" var_pos="0" var_len="1">1</item>
+							<item>10mm</item>
+							<item>1</item>
+							<item>4</item>
+							<item>Cyan</item>
+							<item>Magenta</item>
+							<item>Yellow</item>
+							<item>@spot</item>
+						</list>
+				</data>
+				</atom>
+				<variables>
+					<variable var_idx="0">V51e1b14971dad66f5d81365821a14556</variable>
+				</variables>
+			</condition>
+			<condition>
+				<id1>C5233377aaada2bc1034fa208046c5335</id1>
+				<id2>C1ca2efb6bbb4074ab4ddffa7a4e18690</id2>
+				<id3>137270e908d84cf1cb500e0653ec8bd6</id3>
+				<id4>ce6832c2c3274247a382a24f40bbd0ff</id4>
+				<id5>C1ca2efb6bbb4074ab4ddffa7a4e18690</id5>
+				<name></name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::PAGE</group>
+					<token>PAGE::PageUsesSpecificPlates</token>
+					<operator>OP::greater</operator>
+					<data>
+						<list cust_type="5">
+							<item>0</item>
+							<item>10mm</item>
+							<item>1</item>
+							<item>1</item>
+							<item>Black</item>
+						</list>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>C5ccbda57080f775802a525f1b7c639c1</id1>
+				<id2>C37b54a554feaade8be299f2bb88c1fd4</id2>
+				<id3>bb28fbfc737efb701b60e27d3ef0aa68</id3>
+				<id4>37ef9b56bbf8f20c3bc45e19113b0363</id4>
+				<id5>C37b54a554feaade8be299f2bb88c1fd4</id5>
+				<name></name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::PAGE</group>
+					<token>PAGE::PageUsesSpecificPlates</token>
+					<operator>OP::greater</operator>
+					<data>
+						<list cust_type="5">
+							<item var_idx="0" var_pos="0" var_len="1">1</item>
+							<item>10mm</item>
+							<item>1</item>
+							<item>1</item>
+							<item>@spot</item>
+						</list>
+				</data>
+				</atom>
+				<variables>
+					<variable var_idx="0">V51e1b14971dad66f5d81365821a14556</variable>
+				</variables>
+			</condition>
+			<condition>
+				<id1>C81f620eeaa0a3c532a2fe939d08ddc82</id1>
+				<id2>Cb2568b2c9180bc56e0bb9996980d7eb3</id2>
+				<id3>4ed2ae7075e91b4c5efe59c8f67ff1f2</id3>
+				<id4>1d4721a927b95a679aee2d5c9171851d</id4>
+				<id5>Cb2568b2c9180bc56e0bb9996980d7eb3</id5>
+				<name></name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::PAGE</group>
+					<token>PAGE::PageUsesSpecificPlates</token>
+					<operator>OP::greater</operator>
+					<data>
+						<list cust_type="5">
+							<item var_idx="0" var_pos="0" var_len="1">1</item>
+							<item>10mm</item>
+							<item>1</item>
+							<item>3</item>
+							<item>Cyan</item>
+							<item>Magenta</item>
+							<item>Yellow</item>
+						</list>
+				</data>
+				</atom>
+				<variables>
+					<variable var_idx="0">V51e1b14971dad66f5d81365821a14556</variable>
+				</variables>
+			</condition>
+		</conditions>
+		<rules>
+			<rule>
+				<id1>Ra608697bb3dc5756823f83251399044e</id1>
+				<id2>R9cc0107d59f0f933867b12f7879cdd0b</id2>
+				<id3>5b93cd9661f4471e0a990495a2728be9</id3>
+				<id4>16cdfbfd7465f001efa431e367478a09</id4>
+				<id5>R3438961cb215bcaa855c2db0cacb5bfd</id5>
+				<name>R_12_PageusesonlyBlack</name>
+				<comment>R_12_PageusesonlyBlack</comment>
+				<flags analysis="17" condition_logic="0" ignore_objects="3" edit="1" visible="1" dict="1"></flags>
+				<creation>D:20180327093426+02&apos;00&apos;</creation>
+				<modification>D:20180424092517+02&apos;00&apos;</modification>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>Ced607755d2103cf1286e13fa8e1c2cac</condition>
+					<condition>C5233377aaada2bc1034fa208046c5335</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>R57959e633151b631d7eb8137b1b276c3</id1>
+				<id2>R0c7bf7a525bdfb58c8b37d9acd55ead5</id2>
+				<id3>75dfc95a4b5cde7a45031090ffd61209</id3>
+				<id4>c225ee7aec3b8a742c718dcc77c780eb</id4>
+				<id5>R2a78479eeeaae3a0dd85bfd2c232ff60</id5>
+				<name>R_12_Pageusesspotcolor</name>
+				<comment>R_12_Pageusesspotcolor</comment>
+				<flags analysis="17" condition_logic="0" ignore_objects="3" edit="1" visible="1" dict="1"></flags>
+				<creation>D:20180327093426+02&apos;00&apos;</creation>
+				<modification>D:20180424092517+02&apos;00&apos;</modification>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>C5ccbda57080f775802a525f1b7c639c1</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>R0b9557ab2e3943d44f96d305cd778ea9</id1>
+				<id2>R33658710f87633fcd2f067e7511c0ca2</id2>
+				<id3>8bb5c19bbe73fed3dcff71fc9ba43f27</id3>
+				<id4>b3f35bece8efa56e4ea51ce1cd5d57c8</id4>
+				<id5>R978bb0b0fb6f48b1e3fd2d804dc44f62</id5>
+				<name>R_12_PageusesCMYnotonlyBlackorspotcolor</name>
+				<comment>R_12_PageusesCMYnotonlyBlackorspotcolor</comment>
+				<flags analysis="17" condition_logic="0" ignore_objects="3" edit="1" visible="1" dict="1"></flags>
+				<creation>D:20180327093426+02&apos;00&apos;</creation>
+				<modification>D:20180424092517+02&apos;00&apos;</modification>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>C81f620eeaa0a3c532a2fe939d08ddc82</condition>
+				</conditions>
+			</rule>
+		</rules>
+		<rulesets>
+			<ruleset>
+				<id1>Sac41885dc5b1601ff0feeb76b083041d</id1>
+				<id2>S5d38391f49efdc797b96e598367a81e0</id2>
+				<id3>9c77e0ab065c7bc4bfed479d6d6f9894</id3>
+				<id4>7ed26d57c5ad6d36040eb16e856ffd46</id4>
+				<id5>Sa797e3bd1ae7b59e88f5eb6da4ecbec9</id5>
+				<name>SSS_RULESET_DEF_NAME</name>
+				<comment>SSS_RULESET_DEF_NAME</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<rules>
+					<rule check_severity="1" check_timing="2">Ra608697bb3dc5756823f83251399044e</rule>
+					<rule check_severity="1" check_timing="2">R57959e633151b631d7eb8137b1b276c3</rule>
+					<rule check_severity="1" check_timing="2">R0b9557ab2e3943d44f96d305cd778ea9</rule>
+				</rules>
+			</ruleset>
+		</rulesets>
+		<fixups>
+		</fixups>
+		<fixupsets>
+		</fixupsets>
+		<actions>
+		</actions>
+		<profiles>
+			<profile>
+				<id1>P2b8601bd30d741c4634852f1bf420e8b</id1>
+				<id2>Pf1827a5e9f0bccede45091284b6aecea</id2>
+				<id3>f5b1f2f06ea1530230e039a35fce0a76</id3>
+				<id4>a4b7cef0257a0cea1e17f5aba6aa68a6</id4>
+				<id5>Pab07e0fee3b4361ee7a88818f25d8667</id5>
+				<name>P_12_Analyzepagesforeffectivelyusedplates</name>
+				<comment>P_12_Analyzepagesforeffectivelyusedplates</comment>
+				<flags edit="0" visible="1" dict="1"></flags>
+				<metalist>
+					<metadata>
+						<metakey>author</metakey>
+						<metavalue>callas software</metavalue>
+					</metadata>
+					<metadata>
+						<metakey>email</metakey>
+						<metavalue>support@callassoftware.com</metavalue>
+					</metadata>
+				</metalist>
+				<creation>D:20160304065901+02&apos;00&apos;</creation>
+				<modification>D:20180424092517+02&apos;00&apos;</modification>
+				<pdfstd>
+					<pdfx convert="0"></pdfx>
+					<pdfa convert="0"></pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond>ISO Coated v2 (ECI)</outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+				</pdfstd>
+				<pdfstdemb>
+					<pdfx convert="0"></pdfx>
+					<pdfa convert="0"></pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond>ISO Coated v2 (ECI)</outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+					<afrelationship set_relationship="0"></afrelationship>
+				</pdfstdemb>
+				<wizard>
+					<check name="PRCWzDocu_SyntaxChecks" check_severity="0">
+					</check>
+				</wizard>
+				<rulesets>
+					<ruleset>Sac41885dc5b1601ff0feeb76b083041d</ruleset>
+				</rulesets>
+				<fixupsets>
+				</fixupsets>
+			</profile>
+		</profiles>
+		<metaprofs>
+		</metaprofs>
+		<profgroups>
+		</profgroups>
+	</package>
+</pdfpreflight>

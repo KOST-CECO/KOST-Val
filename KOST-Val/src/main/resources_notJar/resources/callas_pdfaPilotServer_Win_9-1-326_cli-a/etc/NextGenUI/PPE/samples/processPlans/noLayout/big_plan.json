@@ -1,0 +1,470 @@
+{
+	"id": "M358826e779c0d5dc68a2e004a3edac4b",
+	"name": "KonicaMinolta Ausschießablauf",
+	"comment": "some comment",
+	"email": "test@company.de",
+	"locked": false,
+	"password": "2c1af13117223b5c6187c1587e97b5a1",
+	"sequence": [
+		{
+			"id": "C000038e779q0d5ww68a2q004a3edaz4z",
+			"type": "check",
+			"on_hit": {
+				"next_step": -1
+			},
+			"on_success": {
+				"next_step": 2
+			}
+		},
+		{
+			"id": "C000039e779q0d5ww68a2q004a3edaz4z",
+			"type": "check",
+			"on_hit": {
+				"next_step": -1
+			},
+			"on_success": {
+				"next_step": 5
+			}
+		},
+		{
+			"id": "P000047e779q0d5ww68a2q004a3edaz4z",
+			"type": "profile",
+			"omit_fixups": null,
+			"on_error": {
+				"next_step": -1
+			},
+			"on_warning": {
+				"next_step": -2
+			},
+			"on_info": {
+				"next_step": -1
+			},
+			"on_success": {
+				"next_step": -1
+			}
+		},
+		{
+			"id": "F000033e779q0d5ww68a2q004a3edaz4z",
+			"type": "fixup",
+			"on_success": {
+				"next_step": -1
+			},
+			"on_failure": {
+				"next_step": -1
+			}
+		},
+		{
+			"id": "A000003e779q0d5ww68a2q004a3edaz4z",
+			"type": "action",
+			"on_success": {
+				"next_step": 36
+			},
+			"on_failure": {
+				"next_step": 36
+			}
+		},
+		{
+			"id": "C000040e779q0d5ww68a2q004a3edaz4z",
+			"type": "check",
+			"on_hit": {
+				"next_step": 7
+			},
+			"on_success": {
+				"next_step": -1
+			}
+		},
+		{
+			"id": "C000041e779q0d5ww68a2q004a3edaz4z",
+			"type": "check",
+			"on_hit": {
+				"next_step": -1
+			},
+			"on_success": {
+				"next_step": 10
+			}
+		},
+		{
+			"id": "P000047e779q0d5ww68a2q004a3edaz4z",
+			"type": "profile",
+			"omit_fixups": null,
+			"on_error": {
+				"next_step": 9
+			},
+			"on_warning": {
+				"next_step": -2
+			},
+			"on_info": {
+				"next_step": 9
+			},
+			"on_success": {
+				"next_step": 9
+			}
+		},
+		{
+			"id": "A000004e779q0d5ww68a2q004a3edaz4z",
+			"type": "action",
+			"on_success": {
+				"next_step": 38
+			},
+			"on_failure": {
+				"next_step": 38
+			}
+		},
+		{
+			"id": "F000034e779q0d5ww68a2q004a3edaz4z",
+			"type": "fixup",
+			"on_success": {
+				"next_step": 8
+			},
+			"on_failure": {
+				"next_step": 8
+			}
+		},
+		{
+			"id": "C000042e779q0d5ww68a2q004a3edaz4z",
+			"type": "check",
+			"on_hit": {
+				"next_step": 12
+			},
+			"on_success": {
+				"next_step": -1
+			}
+		},
+		{
+			"id": "C000043e779q0d5ww68a2q004a3edaz4z",
+			"type": "check",
+			"on_hit": {
+				"next_step": -1
+			},
+			"on_success": {
+				"next_step": 15
+			}
+		},
+		{
+			"id": "P000047e779q0d5ww68a2q004a3edaz4z",
+			"type": "profile",
+			"omit_fixups": null,
+			"on_error": {
+				"next_step": -1
+			},
+			"on_warning": {
+				"next_step": 27
+			},
+			"on_info": {
+				"next_step": -1
+			},
+			"on_success": {
+				"next_step": -1
+			}
+		},
+		{
+			"id": "F000033e779q0d5ww68a2q004a3edaz4z",
+			"type": "fixup",
+			"on_success": {
+				"next_step": -1
+			},
+			"on_failure": {
+				"next_step": -1
+			}
+		},
+		{
+			"id": "A000005e779q0d5ww68a2q004a3edaz4z",
+			"type": "action",
+			"on_success": {
+				"next_step": 38
+			},
+			"on_failure": {
+				"next_step": 38
+			}
+		},
+		{
+			"id": "C000044e779q0d5ww68a2q004a3edaz4z",
+			"type": "check",
+			"on_hit": {
+				"next_step": 17
+			},
+			"on_success": {
+				"next_step": -1
+			}
+		},
+		{
+			"id": "C000045e779q0d5ww68a2q004a3edaz4z",
+			"type": "check",
+			"on_hit": {
+				"next_step": -1
+			},
+			"on_success": {
+				"next_step": 20
+			}
+		},
+		{
+			"id": "P000047e779q0d5ww68a2q004a3edaz4z",
+			"type": "profile",
+			"omit_fixups": null,
+			"on_error": {
+				"next_step": -1
+			},
+			"on_warning": {
+				"next_step": -2
+			},
+			"on_info": {
+				"next_step": -1
+			},
+			"on_success": {
+				"next_step": -1
+			}
+		},
+		{
+			"id": "F000033e779q0d5ww68a2q004a3edaz4z",
+			"type": "fixup",
+			"on_success": {
+				"next_step": -1
+			},
+			"on_failure": {
+				"next_step": -1
+			}
+		},
+		{
+			"id": "A000006e779q0d5ww68a2q004a3edaz4z",
+			"type": "action",
+			"on_success": {
+				"next_step": 38
+			},
+			"on_failure": {
+				"next_step": 38
+			}
+		},
+		{
+			"id": "C000046e779q0d5ww68a2q004a3edaz4z",
+			"type": "check",
+			"on_hit": {
+				"next_step": 22
+			},
+			"on_success": {
+				"next_step": -1
+			}
+		},
+		{
+			"id": "C000047e779q0d5ww68a2q004a3edaz4z",
+			"type": "check",
+			"on_hit": {
+				"next_step": -1
+			},
+			"on_success": {
+				"next_step": 25
+			}
+		},
+		{
+			"id": "P000048e779q0d5ww68a2q004a3edaz4z",
+			"type": "profile",
+			"omit_fixups": null,
+			"on_error": {
+				"next_step": -1
+			},
+			"on_warning": {
+				"next_step": -2
+			},
+			"on_info": {
+				"next_step": -1
+			},
+			"on_success": {
+				"next_step": -1
+			}
+		},
+		{
+			"id": "F000034e779q0d5ww68a2q004a3edaz4z",
+			"type": "fixup",
+			"on_success": {
+				"next_step": -1
+			},
+			"on_failure": {
+				"next_step": -1
+			}
+		},
+		{
+			"id": "A000007e779q0d5ww68a2q004a3edaz4z",
+			"type": "action",
+			"on_success": {
+				"next_step": 37
+			},
+			"on_failure": {
+				"next_step": 37
+			}
+		},
+		{
+			"id": "C000042e779q0d5ww68a2q004a3edaz4z",
+			"type": "check",
+			"on_hit": {
+				"next_step": 27
+			},
+			"on_success": {
+				"next_step": -1
+			}
+		},
+		{
+			"id": "C000043e779q0d5ww68a2q004a3edaz4z",
+			"type": "check",
+			"on_hit": {
+				"next_step": -1
+			},
+			"on_success": {
+				"next_step": 30
+			}
+		},
+		{
+			"id": "P000048e779q0d5ww68a2q004a3edaz4z",
+			"type": "profile",
+			"omit_fixups": null,
+			"on_error": {
+				"next_step": -1
+			},
+			"on_warning": {
+				"next_step": -2
+			},
+			"on_info": {
+				"next_step": -1
+			},
+			"on_success": {
+				"next_step": -1
+			}
+		},
+		{
+			"id": "F000034e779q0d5ww68a2q004a3edaz4z",
+			"type": "fixup",
+			"on_success": {
+				"next_step": -1
+			},
+			"on_failure": {
+				"next_step": -1
+			}
+		},
+		{
+			"id": "A000008e779q0d5ww68a2q004a3edaz4z",
+			"type": "action",
+			"on_success": {
+				"next_step": 37
+			},
+			"on_failure": {
+				"next_step": 37
+			}
+		},
+		{
+			"id": "C000048e779q0d5ww68a2q004a3edaz4z",
+			"type": "check",
+			"on_hit": {
+				"next_step": 32
+			},
+			"on_success": {
+				"next_step": -1
+			}
+		},
+		{
+			"id": "C000049e779q0d5ww68a2q004a3edaz4z",
+			"type": "check",
+			"on_hit": {
+				"next_step": -1
+			},
+			"on_success": {
+				"next_step": 34
+			}
+		},
+		{
+			"id": "P000048e779q0d5ww68a2q004a3edaz4z",
+			"type": "profile",
+			"omit_fixups": null,
+			"on_error": {
+				"next_step": -1
+			},
+			"on_warning": {
+				"next_step": -2
+			},
+			"on_info": {
+				"next_step": -1
+			},
+			"on_success": {
+				"next_step": -1
+			}
+		},
+		{
+			"id": "A000009e779q0d5ww68a2q004a3edaz4z",
+			"type": "action",
+			"on_success": {
+				"next_step": 37
+			},
+			"on_failure": {
+				"next_step": 37
+			}
+		},
+		{
+			"id": "C000050e779q0d5ww68a2q004a3edaz4z",
+			"type": "check",
+			"on_hit": {
+				"next_step": -1
+			},
+			"on_success": {
+				"next_step": 38
+			}
+		},
+		{
+			"id": "F000035e779q0d5ww68a2q004a3edaz4z",
+			"type": "fixup",
+			"on_success": {
+				"next_step": 38
+			},
+			"on_failure": {
+				"next_step": 38
+			}
+		},
+		{
+			"id": "P000050e779q0d5ww68a2q004a3edaz4z",
+			"type": "profile",
+			"omit_fixups": null,
+			"on_error": {
+				"next_step": -2
+			},
+			"on_warning": {
+				"next_step": -2
+			},
+			"on_info": {
+				"next_step": -2
+			},
+			"on_success": {
+				"next_step": -2
+			}
+		},
+		{
+			"id": "P000051e779q0d5ww68a2q004a3edaz4z",
+			"type": "profile",
+			"omit_fixups": null,
+			"on_error": {
+				"next_step": -2
+			},
+			"on_warning": {
+				"next_step": -2
+			},
+			"on_info": {
+				"next_step": -2
+			},
+			"on_success": {
+				"next_step": -2
+			}
+		},
+		{
+			"id": "P000052e779q0d5ww68a2q004a3edaz4z",
+			"type": "profile",
+			"omit_fixups": null,
+			"on_error": {
+				"next_step": -1
+			},
+			"on_warning": {
+				"next_step": -1
+			},
+			"on_info": {
+				"next_step": -1
+			},
+			"on_success": {
+				"next_step": -1
+			}
+		}
+	]
+}

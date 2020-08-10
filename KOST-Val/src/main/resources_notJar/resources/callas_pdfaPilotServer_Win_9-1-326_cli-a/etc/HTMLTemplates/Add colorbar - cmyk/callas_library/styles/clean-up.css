@@ -1,0 +1,15 @@
+@charset "UTF-8";
+
+/* For all elements */
+* {
+	/* Wipe out margins and padding */
+	margin: 0;
+	padding: 0; 
+
+	/* Use the more logical box calculations */
+	box-sizing: border-box;	
+
+	/* Set all background elements to transparent (mainly to avoid RGB use) */
+	background-color: transparent;
+}
+

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<devicelink>
+	<profile lang="CHS">
+		<header>平板胶印，欧洲到日本</header>
+		<explanation>从 ISO Coated v2 (ECI) 转换为 Japan Color 2001 Coated</explanation>
+	</profile>
+	<profile lang="ENU">
+		<header>Sheetfed offset, Europe to Japan</header>
+		<explanation>Conversion from ISO Coated v2 (ECI) to Japan Color 2001 Coated</explanation>
+	</profile>
+	<profile lang="ESP">
+		<header>Offset de alimentación por hojas, de Europa a Japón</header>
+		<explanation>Conversión de ISO estucado v2 (ECI) a Japón color 2001 estucado</explanation>
+	</profile>
+	<profile lang="FRA">
+		<header>Offset à feuilles, Europe vers Japon</header>
+		<explanation>Conversion d’ISO Coated v2 (ECI) vers Japan Color 2001 Coated</explanation>
+	</profile>
+	<profile lang="DEU">
+		<header>Bogenoffset, Europa nach Japan</header>
+		<explanation>Konvertierung von ISO Coated v2 (ECI) nach Japan Color 2001 Coated</explanation>
+	</profile>
+	<profile lang="ITA">
+		<header>Offset foglio, da Europa a Giappone</header>
+		<explanation>Conversione da ISO Coated v2 (ECI) a Japan Color 2001 Coated</explanation>
+	</profile>
+	<profile lang="JPN">
+		<header>シートフィードオフセット, 欧州を日本に変換</header>
+		<explanation>ISO Coated v2 (ECI) を Japan Color 2001 Coated に変換します</explanation>
+	</profile>
+</devicelink>

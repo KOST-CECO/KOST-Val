@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<devicelink>
+	<profile lang="CHS">
+		<header>卷筒纸胶印, 卷筒纸胶印，降低最高油墨覆盖到 300% (PSO) (仅适用于 Server 与 CLI 版本)</header>
+		<explanation>降低最高油墨覆盖到 300%, 基于改良 PSO LWC (ECI)</explanation>
+	</profile>
+	<profile lang="ENU">
+		<header>Web offset, reduce to 300% ink limit (PSO) (Server/CLI only)</header>
+		<explanation>Reduction of maximum ink coverage to 300% based on PSO LWC improved (ECI)</explanation>
+	</profile>
+	<profile lang="ESP">
+		<header>Offset de bobina, reducir a 300% el límite de tinta (PSO) (sólo Server/CLI)</header>
+		<explanation>Reducción de la cobertura de tinta máxima al 300% en base a PSO LWC improved (ECI)</explanation>
+	</profile>
+	<profile lang="FRA">
+		<header>Impression rotative offset, réduction du taux de couverture d'encre à 300% (PSO) (Server/CLI seulement)</header>
+		<explanation>Réduction du taux de couverture d'encre maximale à 300% selon PSO LWC improved (ECI)</explanation>
+	</profile>
+	<profile lang="DEU">
+		<header>Rollenoffset, Gesamtfarbreduzierung auf 300% (PSO) (nur Server/CLI)</header>
+		<explanation>Reduzierung des Gesamtfarbauftrags auf maximal 300% auf Basis von PSO LWC improved (ECI)</explanation>
+	</profile>
+	<profile lang="ITA">
+		<header>Offset bobina, riduci limite inchiostro a 300% (PSO) (solo Server/CLI)</header>
+		<explanation>Riduzione della copertura massima di inchiostro al 300% in base a PSO LWC improved (ECI)</explanation>
+	</profile>
+	<profile lang="JPN">
+		<header>Web オフセット, インキ量を 300% に削減 (PSO) (Server/CLI のみ)</header>
+		<explanation>PSO LWC improved (ECI) を基にインキ総量を 300% に削減します</explanation>
+	</profile>
+</devicelink>

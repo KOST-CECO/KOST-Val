@@ -1,0 +1,776 @@
+%!PS-Adobe-3.0 Resource-CIDFont
+%%DocumentNeededResources: ProcSet (CIDInit)
+%%IncludeResource: ProcSet (CIDInit)
+%%BeginResource: CIDFont (TBKoudoukenG-DB)
+%%Title: (TBKoudoukenG-DB Adobe Japan1 1)
+%%Version: 3.010-W
+%  (C0E0A0)
+
+/CIDInit /ProcSet findresource begin
+
+20 dict begin
+
+/CIDFontName /TBKoudoukenG-DB def
+/CIDFontVersion 3.010 def
+/CIDFontType 0 def
+/WidthsOnly true def
+
+/CIDSystemInfo 3 dict dup begin
+  /Registry (Adobe)  def
+  /Ordering (Japan1) def
+  /Supplement 1 def
+end def
+
+/FontBBox [ 0 -120 1000 880 ] def
+
+/UIDBase 2478500 def
+/XUID [1 11 2478500] def
+
+/FontInfo 5 dict dup begin
+  /Notice (Copyright 1996-1998 Adobe Systems Incorporated. All Rights Reserved. 
+     ) readonly def
+  /Copyright
+    () readonly def
+  /FullName (TBKoudoukenG-DB) def
+  /FamilyName (TBKoudoukenG) def
+  /Weight () def
+end readonly def
+  
+/CIDMapOffset 0 def
+
+/FDBytes 1 def
+/GDBytes 3 def
+/CIDCount 8359 def
+
+/FDArray        5 array
+dup 0
+
+%ADOBeginFontDict
+14 dict
+  begin
+  /FontName /TBKoudoukenG-DB-Alphabetic def
+  /FontType 1 def
+  /FontMatrix [ 0.001 0 0 0.001 0 0 ] def
+  /PaintType 0 def
+
+  %ADOBeginPrivateDict
+  /Private 25 dict dup
+    begin
+    /MinFeature {16 16} readonly def
+    /LanguageGroup 0 def
+    /BlueValues [ 21 43 767 789 543 565 ] def
+    /BlueScale 0.0396271 def
+    /BlueFuzz 1 def
+    /BlueShift 7 def
+    /StdHW [ 100 ] def
+    /StdVW [ 108 ] def
+    /StemSnapH [ 100 ] def
+    /StemSnapV [ 108 ] def
+    /lenIV -1 def
+    /lenBuildCharArray 32 def
+    /ForceBoldThreshold 0 def
+    /StrokeWidth 0 def
+    /ExpansionFactor 0.0599976 def
+
+    /OtherSubrs
+    [ { } { } { }
+      { systemdict /internaldict known not
+          { pop 3 }
+          { 1183615869 systemdict /internaldict get exec dup
+            /startlock known
+              { /startlock get exec }
+              { dup /strtlck known { /strtlck get exec } { pop 3 } ifelse }
+            ifelse
+          } ifelse
+      } bind
+      { } { } { } { } { } { } { } { } { }
+      { 2 {cvi { { pop 0 lt { exit } if } loop } repeat } repeat } bind
+      {} {} {}
+      {} {} {} {} {}
+      {} {}
+      {} {} {} {} {}
+    ] def
+
+    /Erode
+    { 13.5 dup 3 -1 roll 0.1 mul exch 0.5 sub mul cvi sub dup mul
+      108 0 dtransform dup mul exch dup mul add le
+        { pop pop 1.0 1.0 }
+        { pop pop 0.0 1.5 }
+      ifelse
+    } bind def
+
+    /password 5839 def
+
+    /SubrMapOffset      33440 def
+    /SDBytes 3 def
+    /SubrCount          1 def
+    end def
+  %ADOEndPrivateDict
+
+  currentdict
+  end
+%ADOEndFontDict
+
+put
+dup 1
+
+%ADOBeginFontDict
+14 dict
+  begin
+  /FontName /TBKoudoukenG-DB-Dingbats def
+  /FontType 1 def
+  /FontMatrix [ 0.001 0 0 0.001 0 0 ] def
+  /PaintType 0 def
+
+  %ADOBeginPrivateDict
+  /Private 25 dict dup
+    begin
+    /MinFeature {16 16} readonly def
+    /LanguageGroup 1 def
+    /BlueValues [ -12 0 704 724 479 498 ] def
+    /BlueScale 0.0396271 def
+    /BlueFuzz 1 def
+    /BlueShift 7 def
+    /StdHW [ 66 ] def
+    /StdVW [ 42 ] def
+    /StemSnapH [ 66 ] def
+    /StemSnapV [ 42 ] def
+    /lenIV -1 def
+    /lenBuildCharArray 32 def
+    /ForceBoldThreshold 0 def
+    /StrokeWidth 0 def
+    /ExpansionFactor 0.0599976 def
+
+    /OtherSubrs
+    [ { } { } { }
+      { systemdict /internaldict known not
+          { pop 3 }
+          { 1183615869 systemdict /internaldict get exec dup
+            /startlock known
+              { /startlock get exec }
+              { dup /strtlck known { /strtlck get exec } { pop 3 } ifelse }
+            ifelse
+          } ifelse
+      } bind
+      { } { } { } { } { } { } { } { } { }
+      { 2 {cvi { { pop 0 lt { exit } if } loop } repeat } repeat } bind
+      {} {} {}
+      {} {} {} {} {}
+      {} {}
+      {} {} {} {} {}
+    ] def
+
+    /Erode
+    { 5.5 dup 3 -1 roll 0.1 mul exch 0.5 sub mul cvi sub dup mul
+      42 0 dtransform dup mul exch dup mul add le
+        { pop pop 1.0 1.0 }
+        { pop pop 0.0 1.5 }
+      ifelse
+    } bind def
+
+    /password 5839 def
+
+    /SubrMapOffset      33440 def
+    /SDBytes 3 def
+    /SubrCount          1 def
+    end def
+  %ADOEndPrivateDict
+
+  currentdict
+  end
+%ADOEndFontDict
+
+put
+dup 2
+
+%ADOBeginFontDict
+14 dict
+  begin
+  /FontName /TBKoudoukenG-DB-HKana def
+  /FontType 1 def
+  /FontMatrix [ 0.001 0 0 0.001 0 0 ] def
+  /PaintType 0 def
+
+  %ADOBeginPrivateDict
+  /Private 25 dict dup
+    begin
+    /MinFeature {16 16} readonly def
+    /LanguageGroup 1 def
+    /BlueValues [ -250 -250 1100 1100 ] def
+    /BlueScale 0.0396271 def
+    /BlueFuzz 1 def
+    /BlueShift 7 def
+    /StdHW [ 63 ] def
+    /StdVW [ 63 ] def
+    /StemSnapH [ 63 ] def
+    /StemSnapV [ 63 ] def
+    /lenIV -1 def
+    /lenBuildCharArray 32 def
+    /ForceBoldThreshold 0 def
+    /StrokeWidth 0 def
+    /ExpansionFactor 0.0599976 def
+
+    /OtherSubrs
+    [ { } { } { }
+      { systemdict /internaldict known not
+          { pop 3 }
+          { 1183615869 systemdict /internaldict get exec dup
+            /startlock known
+              { /startlock get exec }
+              { dup /strtlck known { /strtlck get exec } { pop 3 } ifelse }
+            ifelse
+          } ifelse
+      } bind
+      { } { } { } { } { } { } { } { } { }
+      { 2 {cvi { { pop 0 lt { exit } if } loop } repeat } repeat } bind
+      {} {} {}
+      {} {} {} {} {}
+      {} {}
+      {} {} {} {} {}
+    ] def
+
+    /Erode
+    { 7.5 dup 3 -1 roll 0.1 mul exch 0.5 sub mul cvi sub dup mul
+      63 0 dtransform dup mul exch dup mul add le
+        { pop pop 1.0 1.0 }
+        { pop pop 0.0 1.5 }
+      ifelse
+    } bind def
+
+    /password 5839 def
+
+    /SubrMapOffset      33440 def
+    /SDBytes 3 def
+    /SubrCount          1 def
+    end def
+  %ADOEndPrivateDict
+
+  currentdict
+  end
+%ADOEndFontDict
+
+put
+dup 3
+
+%ADOBeginFontDict
+14 dict
+  begin
+  /FontName /TBKoudoukenG-DB-HRoman def
+  /FontType 1 def
+  /FontMatrix [ 0.001 0 0 0.001 0 0 ] def
+  /PaintType 0 def
+
+  %ADOBeginPrivateDict
+  /Private 25 dict dup
+    begin
+    /MinFeature {16 16} readonly def
+    /LanguageGroup 0 def
+    /BlueValues [ -12 0 704 724 479 498 ] def
+    /BlueScale 0.0396271 def
+    /BlueFuzz 1 def
+    /BlueShift 7 def
+    /OtherBlues [ -125 -125 ] def
+    /StdHW [ 110 ] def
+    /StdVW [ 150 ] def
+    /StemSnapH [ 110 ] def
+    /StemSnapV [ 150 ] def
+    /lenIV -1 def
+    /lenBuildCharArray 32 def
+    /ForceBoldThreshold 0 def
+    /StrokeWidth 0 def
+    /ExpansionFactor 0.0599976 def
+
+    /OtherSubrs
+    [ { } { } { }
+      { systemdict /internaldict known not
+          { pop 3 }
+          { 1183615869 systemdict /internaldict get exec dup
+            /startlock known
+              { /startlock get exec }
+              { dup /strtlck known { /strtlck get exec } { pop 3 } ifelse }
+            ifelse
+          } ifelse
+      } bind
+      { } { } { } { } { } { } { } { } { }
+      { 2 {cvi { { pop 0 lt { exit } if } loop } repeat } repeat } bind
+      {} {} {}
+      {} {} {} {} {}
+      {} {}
+      {} {} {} {} {}
+    ] def
+
+    /Erode
+    { 18.5 dup 3 -1 roll 0.1 mul exch 0.5 sub mul cvi sub dup mul
+      150 0 dtransform dup mul exch dup mul add le
+        { pop pop 1.0 1.0 }
+        { pop pop 0.0 1.5 }
+      ifelse
+    } bind def
+
+    /password 5839 def
+
+    /SubrMapOffset      33440 def
+    /SDBytes 3 def
+    /SubrCount          1 def
+    end def
+  %ADOEndPrivateDict
+
+  currentdict
+  end
+%ADOEndFontDict
+
+put
+dup 4
+
+%ADOBeginFontDict
+14 dict
+  begin
+  /FontName /TBKoudoukenG-DB-Kana def
+  /FontType 1 def
+  /FontMatrix [ 0.001 0 0 0.001 0 0 ] def
+  /PaintType 0 def
+
+  %ADOBeginPrivateDict
+  /Private 25 dict dup
+    begin
+    /MinFeature {16 16} readonly def
+    /LanguageGroup 1 def
+    /BlueValues [ -250 -250 1100 1100 ] def
+    /BlueScale 0.0396271 def
+    /BlueFuzz 1 def
+    /BlueShift 7 def
+    /StdHW [ 106 ] def
+    /StdVW [ 105 ] def
+    /StemSnapH [ 106 ] def
+    /StemSnapV [ 105 ] def
+    /lenIV -1 def
+    /lenBuildCharArray 32 def
+    /ForceBoldThreshold 0 def
+    /StrokeWidth 0 def
+    /ExpansionFactor 0.0599976 def
+
+    /OtherSubrs
+    [ { } { } { }
+      { systemdict /internaldict known not
+          { pop 3 }
+          { 1183615869 systemdict /internaldict get exec dup
+            /startlock known
+              { /startlock get exec }
+              { dup /strtlck known { /strtlck get exec } { pop 3 } ifelse }
+            ifelse
+          } ifelse
+      } bind
+      { } { } { } { } { } { } { } { } { }
+      { 2 {cvi { { pop 0 lt { exit } if } loop } repeat } repeat } bind
+      {} {} {}
+      {} {} {} {} {}
+      {} {}
+      {} {} {} {} {}
+    ] def
+
+    /Erode
+    { 13.5 dup 3 -1 roll 0.1 mul exch 0.5 sub mul cvi sub dup mul
+      105 0 dtransform dup mul exch dup mul add le
+        { pop pop 1.0 1.0 }
+        { pop pop 0.0 1.5 }
+      ifelse
+    } bind def
+
+    /password 5839 def
+
+    /SubrMapOffset      33440 def
+    /SDBytes 3 def
+    /SubrCount          1 def
+    end def
+  %ADOEndPrivateDict
+
+  currentdict
+  end
+%ADOEndFontDict
+
+put
+def
+
+%%BeginData:      42097 Binary Bytes
+(Binary)      36277 StartData  ‚¸ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ÿ ‚¿ ‚¿ ‚Çÿ ‚Îÿ ‚Îÿ ‚Îÿ ‚Î ‚Î ‚Õ ‚İÿ ‚äÿ ‚ä ‚äÿ ‚ë ‚ë ‚ò ‚ù ƒ  ƒ ƒ ƒ ƒ ƒ# ƒ* ƒ1 ƒ8 ƒ? ƒGÿ ƒOÿ ƒOÿ ƒO ƒOÿ ƒVÿ ƒVÿ ƒVÿ ƒVÿ ƒVÿ ƒVÿ ƒVÿ ƒVÿ ƒVÿ ƒVÿ ƒVÿ ƒVÿ ƒVÿ ƒVÿ ƒVÿ ƒVÿ ƒVÿ ƒVÿ ƒVÿ ƒVÿ ƒVÿ ƒVÿ ƒVÿ ƒVÿ ƒVÿ ƒVÿ ƒV ƒVÿ ƒ^ ƒ^ÿ ƒeÿ ƒe ƒeÿ ƒmÿ ƒmÿ ƒmÿ ƒmÿ ƒmÿ ƒmÿ ƒmÿ ƒmÿ ƒmÿ ƒmÿ ƒmÿ ƒmÿ ƒmÿ ƒmÿ ƒmÿ ƒmÿ ƒmÿ ƒmÿ ƒmÿ ƒmÿ ƒmÿ ƒmÿ ƒmÿ ƒmÿ ƒmÿ ƒmÿ ƒmÿ ƒmÿ ƒmÿ ƒm ƒm ƒt ƒ{ ƒƒ ƒŠ ƒ‘ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ÿ ƒ™ ƒ™ ƒ  ƒ¨ ƒ¯ ƒ¶ ƒ½ ƒÄ ƒË ƒÒ ƒÙ ƒá ƒèÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒïÿ ƒï ƒï ƒö ƒı „ „ „ „ „" „* „2ÿ „:ÿ „:ÿ „:ÿ „:ÿ „:ÿ „:ÿ „:ÿ „: „: „B „J „R „Zÿ „bÿ „bÿ „b „b „i „pÿ „w „wÿ „~ „~ „…ÿ „ „ÿ „” „” „œ „£ „« „² „º „Á „É „Ğ „Øÿ „ßÿ „ß „ß „ç „î „ö „ı … … … … …# …* …2ÿ …: …: …B …Jÿ …Rÿ …Rÿ …Rÿ …Rÿ …Rÿ …Rÿ …Rÿ …Rÿ …Rÿ …R …R …Yÿ …` …` …h …p …x …€ …‡ … …— …Ÿÿ …¦ÿ …¦ÿ …¦ …¦ …­ …´ …» …Â …É …Ñ …Ù …à …ç …î …õ …ü † † † †ÿ †"ÿ †"ÿ †"ÿ †"ÿ †"ÿ †"ÿ †"ÿ †"ÿ †"ÿ †"ÿ †"ÿ †"ÿ †"ÿ †"ÿ †"ÿ †"ÿ †"ÿ †"ÿ †"ÿ †"ÿ †"ÿ †"ÿ †"ÿ †"ÿ †"ÿ †"ÿ †"ÿ †"ÿ †"ÿ †"ÿ †"ÿ †"ÿ †"ÿ †"ÿ †"ÿ †"ÿ †"ÿ †"ÿ †"ÿ †"  †"  †*  †2  †:  †B  †J  †R  †Z  †b  †jÿ †rÿ †rÿ †rÿ †rÿ †rÿ †rÿ †rÿ †rÿ †rÿ †rÿ †rÿ †rÿ †rÿ †rÿ †rÿ †rÿ †rÿ †rÿ †rÿ †rÿ †rÿ †rÿ †rÿ †rÿ †rÿ †rÿ †rÿ †rÿ †rÿ †rÿ †rÿ †rÿ †rÿ †rÿ †rÿ †rÿ †rÿ †rÿ †rÿ †rÿ †rÿ †rÿ †rÿ †rÿ †rÿ †rÿ †rÿ †rÿ †rÿ †rÿ †rÿ †r †r †z †‚ †Š †‘ †™ †¡ †© †± †¹ †À †Ç †Î †Ö †Ş †æ †î †ö †ş ‡ ‡ ‡ ‡ ‡& ‡. ‡5 ‡< ‡C ‡J ‡R ‡Z ‡b ‡j ‡r ‡z ‡‚ ‡‰ ‡ ‡˜ ‡  ‡¨ ‡° ‡¸ ‡À ‡Ç ‡Î ‡Ö ‡Ş ‡æ ‡î ‡õ ‡ü ˆ ˆ
+ ˆ ˆ ˆ ˆ& ˆ- ˆ5 ˆ= ˆE ˆM ˆT ˆ[ ˆb ˆj ˆr ˆy ˆ ˆ‰ ˆ‘ ˆ™ ˆ¡ ˆ© ˆ± ˆ¸ ˆÀ ˆÈ ˆĞ ˆ× ˆŞ ˆæ ˆí ˆõ ˆı ‰ ‰ ‰ ‰ ‰$ ‰+ ‰3 ‰: ‰A ‰H ‰O ‰V ‰^ ‰f ‰n ‰v ‰~ ‰† ‰ ‰” ‰› ‰¢ ‰© ‰° ‰· ‰¾ ‰Æ ‰Î ‰Ö ‰Ş ‰å ‰ì ‰ô ‰ü Š Š Š Š Š" Š) Š0 Š8 Š? ŠG ŠN ŠU Š\ Šd Šl Št Š| Š„ ŠŒ Š“ Šš Š¡ Š¨ Š¯ Š¶ Š¾ ŠÆ ŠÎ ŠÖ Šİ Šå Šì Šô Šû ‹ ‹ ‹ ‹ ‹" ‹* ‹2 ‹: ‹B ‹I ‹P ‹X ‹_ ‹g ‹oÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹wÿ ‹w ‹wÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ÿ ‹~ ‹~ ‹†ÿ ‹ÿ ‹ ‹ ‹–ÿ ‹ ‹ ‹¦ÿ ‹­ ‹­ÿ ‹µ ‹µ ‹¼ ‹Ã ‹Ê ‹Ñ ‹Øÿ ‹ßÿ ‹ß ‹ß ‹æ ‹í ‹ô ‹û Œ Œ
+ Œ Œ Œ ÿ Œ' Œ' Œ/ Œ7 Œ? ŒG ŒO ŒW Œ_ Œg Œo Œw Œ Œ‡ Œ Œ— ŒŸ Œ§ Œ¯ Œ· Œ¿ ŒÇ ŒÏÿ Œ×ÿ Œ×ÿ Œ×ÿ Œ×ÿ Œ×ÿ Œ×ÿ Œ×ÿ Œ×ÿ Œ×ÿ Œ×ÿ Œ×ÿ Œ×ÿ Œ×ÿ Œ×ÿ Œ×ÿ Œ×ÿ Œ×ÿ Œ× Œ× Œß Œçÿ Œïÿ Œïÿ Œïÿ Œïÿ Œïÿ Œïÿ Œïÿ Œïÿ Œïÿ Œïÿ Œïÿ Œïÿ Œïÿ Œïÿ Œïÿ Œïÿ Œïÿ Œïÿ Œïÿ Œïÿ Œïÿ Œïÿ Œïÿ Œïÿ Œïÿ Œïÿ Œïÿ Œïÿ Œïÿ Œïÿ Œïÿ Œïÿ Œïÿ Œïÿ Œïÿ Œïÿ Œïÿ Œïÿ Œïÿ Œïÿ Œïÿ Œïÿ Œïÿ Œïÿ Œïÿ Œïÿ Œïÿ Œï Œï Œ÷ Œÿ   ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ  ÿ $ÿ $ÿ $ÿ $ÿ $ÿ $ÿ $ÿ $ÿ $ÿ $ÿ $ÿ $ÿ $ÿ $ÿ $ÿ $ÿ $ÿ $ÿ $ÿ $ÿ $ÿ $ÿ $ÿ $ÿ $ÿ $ÿ $ÿ $ÿ $ÿ $ÿ $ÿ $ÿ $ÿ $ÿ $ÿ $ÿ $ÿ $ÿ $ÿ $ÿ $ÿ $ÿ $ÿ $ÿ $ÿ $ÿ $ÿ $ÿ $ÿ $ÿ $ÿ $ÿ $ $ ,ÿ 4ÿ 4 4ÿ <ÿ <ÿ <ÿ < < D L S [ b j q y € ˆÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ ÿ  ÿ —ÿ —ÿ —ÿ —ÿ — — Ÿ ¦ ­ÿ µÿ µÿ µÿ µÿ µÿ µÿ µÿ µÿ µÿ µÿ µÿ µÿ µÿ µÿ µÿ µÿ µÿ µÿ µÿ µÿ µÿ µÿ µÿ µÿ µÿ µÿ µÿ µÿ µÿ µÿ µÿ µÿ µÿ µÿ µÿ µÿ µÿ µÿ µÿ µÿ µÿ µÿ µ ‚¦ ‚¸‹ ‹ûú|ú|ş|	‹ú|‹
+÷Føˆ‹
+»øˆ‹
+½øˆ‹
+÷øˆ‹
+Íøˆ‹
+Óøˆ‹
+Ûøˆ‹
+¦øˆ‹
+ºøˆ‹
+ñøˆ‹
+¦øˆ‹
+©øˆ‹
+›øˆ‹
+³øˆ‹
+²øˆ‹
+´øˆ‹
+¤øˆ‹
+¶øˆ‹
+÷Gøˆ‹
+÷;øˆ‹
+­øˆ‹
+÷ øˆ‹
+Ñøˆ‹
+÷«øˆ‹
+‹øˆ‹
+¸øˆ‹
+÷øˆ‹
+Ñøˆ‹
+®øˆ‹
+÷>øˆ‹
+Òøˆ‹
+÷/ú|‹
+Ñú|‹
+¯ú|‹
+½ú|‹
+›ú|‹
+¡ú|‹
+¼ú|‹
+½ú|‹
+÷@ú|‹
+Ïú|‹
+³ú|‹
+‹ú|‹
+®ú|‹
+¸ú|‹
+Óú|‹
+Ûú|‹
+ø8ú|‹
+øAú|‹
+ø5ú|‹
+÷vú|‹
+ø@ú|‹
+÷§ú|‹
+÷§ú|‹
+÷Àú|‹
+÷Àú|‹
+÷uú|‹
+Úú|‹
+êú|‹
+Îú|‹
+¿ú|‹
+êú|‹
+÷çú|‹
+òú|‹
+ùŸú|‹
+½ú|‹
+øÏú|‹
+»ú|‹
+ùú|‹
+Íú|‹
+ù#ú|‹
+Ñú|‹
+øôú|‹
+Ñú|‹
+ø"ú|‹
+Àú|‹
+÷Œú|‹
+»ú|‹
+ù
+ú|‹
+Ñú|‹
+ø¹ú|‹
+½ú|‹
+ù4ú|‹
+Ïú|‹
+÷&ú|‹
+÷&ú|‹
+÷;ú|‹
+÷&ú|‹
+÷&ú|‹
+Éú|‹
+Éú|‹
+÷Bú|‹
+÷sú|‹
+÷‡ú|‹
+÷&ú|‹
+Óú|‹
+÷6ú|‹
+÷8ú|‹
+÷Sú|‹
+íú|‹
+×ú|‹
+×ú|‹
+Óú|‹
+½ú|‹
+½ú|‹
+÷ú|‹
+÷ú|‹
+äú|‹
+äú|‹
+äú|‹
+äú|‹
+Ùú|‹
+÷ ú|‹
+Ñú|‹
+¶ú|‹
+÷ºú|‹
+÷ºú|‹
+÷gú|‹
+÷Úú|‹
+÷tú|‹
+÷aú|‹
+÷?ú|‹
+÷~ú|‹
+÷yú|‹
+÷Œú|‹
+÷mú|‹
+÷|ú|‹
+÷rú|‹
+÷.ú|‹
+÷Fú|‹
+ïú|‹
+÷Ïú|‹
+÷£ú|‹
+÷cú|‹
+÷ú|‹
+÷Dú|‹
+ëú|‹
+Øú|‹
+Øú|‹
+÷ú|‹
+÷ú|‹
+÷¸ú|‹
+÷¸ú|‹
+÷8ú|‹
+÷8ú|‹
+÷‰ú|‹
+÷‰ú|‹
+÷ú|‹
+÷ú|‹
+÷^ú|‹
+÷^ú|‹
+ôú|‹
+ôú|‹
+³ú|‹
+³ú|‹
+÷wú|‹
+÷wú|‹
+÷ú|‹
+÷ú|‹
+÷Mú|‹
+÷Mú|‹
+÷$ú|‹
+Ãú|‹
+Ãú|‹
+÷#ú|‹
+÷#ú|‹
+÷€ú|‹
+÷€ú|‹
+÷Vú|‹
+÷ú|‹
+Ğú|‹
+åú|‹
+÷ú|‹
+÷ú|‹
+÷ú|‹
+÷ú|‹
+Õú|‹
+Õú|‹
+Õú|‹
+óú|‹
+óú|‹
+óú|‹
+Ãú|‹
+Ãú|‹
+Ãú|‹
+÷
+ú|‹
+÷
+ú|‹
+÷
+ú|‹
+÷^ú|‹
+Óú|‹
+öú|‹
+ôú|‹
+÷xú|‹
+÷ú|‹
+¶ú|‹
+÷Zú|‹
+÷ú|‹
+÷~ú|‹
+÷>ú|‹
+÷‰ú|‹
+÷Ìú|‹
+÷Mú|‹
+»ú|‹
+÷/ú|‹
+÷Zú|‹
+÷ú|‹
+äú|‹
+Øú|‹
+÷!ú|‹
+Ñú|‹
+÷wú|‹
+÷3ú|‹
+÷Dú|‹
+êú|‹
+÷¯ú|‹
+÷{ú|‹
+÷.ú|‹
+Îú|‹
+÷ú|‹
+ºú|‹
+İú|‹
+İú|‹
+Ùú|‹
+Ùú|‹
+÷+ú|‹
+÷+ú|‹
+÷ú|‹
+÷ú|‹
+÷Qú|‹
+÷Qú|‹
+Íú|‹
+Íú|‹
+Ûú|‹
+Ûú|‹
+áú|‹
+áú|‹
+¢ú|‹
+¢ú|‹
+÷)ú|‹
+÷)ú|‹
+÷ ú|‹
+÷ ú|‹
+İú|‹
+İú|‹
+÷wú|‹
+÷4ú|‹
+÷4ú|‹
+êú|‹
+êú|‹
+÷úú|‹
+÷úú|‹
+ïú|‹
+áú|‹
+÷ú|‹
+ßú|‹
+÷8ú|‹
+¬ú|‹
+¬ú|‹
+¬ú|‹
+÷eú|‹
+÷eú|‹
+÷eú|‹
+÷8ú|‹
+÷8ú|‹
+÷8ú|‹
+Áú|‹
+Áú|‹
+Áú|‹
+àú|‹
+àú|‹
+àú|‹
+÷ú|‹
+÷Âú|‹
+÷Eú|‹
+÷ú|‹
+Ğú|‹
+÷0ú|‹
+Òú|‹
+÷9ú|‹
+İú|‹
+÷‡ú|‹
+÷Gú|‹
+÷Xú|‹
+÷²ú|‹
+¶ú|‹
+÷Hú|‹
+÷hú|‹
+÷›ú|‹
+÷aú|‹
+Òú|‹
+¼ú|‹
+÷dú|‹
+Şú|‹
+÷{ú|‹
+÷8ú|‹
+÷Oú|‹
+·ú|‹
+ùAú|‹
+ù.ú|‹
+øJú|‹
+øSú|‹
+øú|‹
+‹ú|‹
+øIú|‹
+½ú|‹
+½ú|‹
+´ú|‹
+´ú|‹
+½ú|‹
+½ú|‹
+½ú|‹
+½ú|‹
+½ú|‹
+½ú|‹
+÷pú|‹
+½ú|‹
+÷pú|‹
+½ú|‹
+½ú|‹
+½ú|‹
+÷Öú|‹
+÷ªú|‹
+ø3ú|‹
+÷Çú|‹
+÷¨ú|‹
+÷ˆú|‹
+÷~ú|‹
+÷¾ú|‹
+÷âú|‹
+÷¾ú|‹
+÷Ûú|‹
+÷¨ú|‹
+øú|‹
+÷’ú|‹
+÷ú|‹
+÷Ûú|‹
+÷”ú|‹
+÷ú|‹
+÷ëú|‹
+÷ÿú|‹
+÷œú|‹
+÷³ú|‹
+÷£ú|‹
+÷5ú|‹
+÷zú|‹
+÷ú|‹
+÷‡ú|‹
+÷Éú|‹
+÷Éú|‹
+ºú|‹
+Çú|‹
+Çú|‹
+÷™ú|‹
+÷Şú|‹
+ù¦ú|‹
+ù ú|‹
+ù®ú|‹
+½ú|‹
+ùŸú|‹
+½ú|‹
+øÍú|‹
+½ú|‹
+øÍú|‹
+½ú|‹
+ùŸú|‹
+øöú|‹
+Êú|‹
+÷aú|‹
+Òú|‹
+¼ú|‹
+÷Vú|‹
+
+%%EndData
+%%EndResource
+%%EOF

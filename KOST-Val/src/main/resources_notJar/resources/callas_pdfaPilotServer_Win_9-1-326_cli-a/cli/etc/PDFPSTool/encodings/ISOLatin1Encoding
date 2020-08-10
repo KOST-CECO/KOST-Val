@@ -1,0 +1,30 @@
+%!PS-Adobe-3.0 Resource-Encoding
+%%BeginResource: Encoding (ISOLatin1Encoding)
+%%Title: (ISOLatin1Encoding)
+%%Version: 3010.01
+%%Copyright: ------------------------------------------------------------
+%%Copyright: Copyright 1990-1998 Adobe Systems Incorporated.
+%%Copyright: All rights reserved.
+%%Copyright:
+%%Copyright: Patents Pending
+%%Copyright:
+%%Copyright: NOTICE: All information contained herein is the property
+%%Copyright: of Adobe Systems Incorporated. Many of the intellectual
+%%Copyright: and technical concepts contained herein are proprietary
+%%Copyright: to Adobe, are protected as trade secrets, and are made
+%%Copyright: available only to Adobe licensees for their internal use.
+%%Copyright: Any reproduction or dissemination of this software is
+%%Copyright: strictly forbidden unless prior written permission is
+%%Copyright: obtained from Adobe.
+%%Copyright:
+%%Copyright: PostScript and Display PostScript are trademarks of
+%%Copyright: Adobe Systems Incorporated which may be registered in
+%%Copyright: certain jurisdictions.
+%%Copyright: ------------------------------------------------------------
+%%EndComments
+systemdict/ISOLatin1Encoding get userdict/EncodingDirectory get exch
+/ISOLatin1Encoding exch readonly put systemdict/defineresource known{userdict
+/EncodingDirectory get/ISOLatin1Encoding get/ISOLatin1Encoding exch/Encoding
+defineresource}if
+%%EndResource
+%%EOF

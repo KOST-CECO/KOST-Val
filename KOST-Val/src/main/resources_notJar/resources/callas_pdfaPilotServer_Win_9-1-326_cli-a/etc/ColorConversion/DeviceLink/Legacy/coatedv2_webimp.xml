@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<devicelink>
+	<profile lang="CHS">
+		<header>平板纸胶印转为改良 LWC 卷筒纸胶印</header>
+		<explanation>从 ISO 第二版涂层 (ECI) 到改良 PSO LWC (ECI) 转换 (LWC 纸, 最高油墨覆盖 300%)</explanation>
+	</profile>
+	<profile lang="ENU">
+		<header>Sheetfed offset to Web offset on improved LWC paper</header>
+		<explanation>Conversion from ISO Coated v2 (ECI) to PSO LWC improved (ECI) (LWC paper, max. 300% ink coverage)</explanation>
+	</profile>
+	<profile lang="ESP">
+		<header>Offset de alimentación por hojas a offset de bobina en papel estucado ligero mejorado</header>
+		<explanation>Conversión de ISO estucado v2 (ECI) a PSO LWC improved (ECI) (papel estucado ligero, cobertura de tinta 300% máxima)</explanation>
+	</profile>
+	<profile lang="FRA">
+		<header>Offset à feuilles en offset web sur papier couché léger amélioré</header>
+		<explanation>Conversion d'ISO Coated v2 (ECI) vers PSO LWC improved (ECI) (papier couché léger, couverture d'encre de 300% max.)</explanation>
+	</profile>
+	<profile lang="DEU">
+		<header>Bogenoffset nach Rollenoffset auf aufgebessertes LWC Papier</header>
+		<explanation>Konvertierung von ISO Coated v2 (ECI) nach PSO LWC improved (ECI) (LWC-Papier, maximal 300% Gesamtfarbauftrag)</explanation>
+	</profile>
+	<profile lang="ITA">
+		<header>Da offset foglio a offset bobina su carta LWC improved</header>
+		<explanation>Conversione da ISO Coated v2 (ECI) a PSO LWC improved (ECI) (carta LWC, max. 300% di copertura inchiostro)</explanation>
+	</profile>
+	<profile lang="JPN">
+		<header>シートフィードオフセット, 欧州を改善された LWC 紙 の Web オフセットに変換</header>
+		<explanation>ISO Coated v2 (ECI) を PSO LWC improved (ECI) (LWC 紙, インキ総量 300%)に変換します</explanation>
+	</profile>
+	<profile lang="POL">
+		<header>##Sheetfed offset to Web offset on improved LWC paper</header>
+		<explanation>##Conversion from ISO Coated v2 (ECI) to PSO LWC improved (ECI) (LWC paper, max. 300% ink coverage)</explanation>
+	</profile>
+</devicelink>

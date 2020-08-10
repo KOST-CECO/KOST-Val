@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pdfpreflight version="17.0">
+	<package>
+		<id3>0f50f0c68cf8054cbefbc0adac060361</id3>
+		<pdfxoutintentlist>
+		</pdfxoutintentlist>
+		<iccprofilelist>
+			<iccprofile>
+				<iccprofilename>Dot Gain 15%</iccprofilename>
+			</iccprofile>
+			<iccprofile>
+				<iccprofilename>ISO Coated v2 (ECI)</iccprofilename>
+			</iccprofile>
+			<iccprofile>
+				<iccprofilename>sRGB IEC61966-2.1</iccprofilename>
+			</iccprofile>
+		</iccprofilelist>
+		<ccpolicies>
+		</ccpolicies>
+		<occdsetups>
+		</occdsetups>
+		<curves>
+		</curves>
+		<fspolicies>
+		</fspolicies>
+		<resources>
+		</resources>
+		<variables>
+		</variables>
+		<conditions>
+		</conditions>
+		<rules>
+		</rules>
+		<rulesets>
+		</rulesets>
+		<fixups>
+			<fixup>
+				<id1>Ff7810ec30f96ddb82b23a65d53761fb4</id1>
+				<id2>F3033507007c1082899c86c654c1faa81</id2>
+				<id3>a22041395432be00194e22b308c2569f</id3>
+				<id4>4a46bd24b007094144ac330e334be7b5</id4>
+				<id5>F3033507007c1082899c86c654c1faa81</id5>
+				<name>F_11_Substitutecharactersusingnotdefglyphwithspacecharacters</name>
+				<comment>F_11_Substitutecharactersusingnotdefglyphwithspacecharacters</comment>
+				<flags user_units="0" scope="16" edit="1" visible="1" dict="1"></flags>
+				<creation>D:20180409084335+02&apos;00&apos;</creation>
+				<modification>D:20190927063533+02&apos;00&apos;</modification>
+				<fcfgs>
+					<fcfg>
+						<ffeat>RemoveNotdef</ffeat>
+						<fparams>
+							<fparam>IfEmpty</fparam>
+						</fparams>
+					</fcfg>
+					<fcfg>
+						<ffeat></ffeat>
+						<fparams>
+						</fparams>
+					</fcfg>
+				</fcfgs>
+				<reportFailed></reportFailed>
+			</fixup>
+			<fixup>
+				<id1>Fd31b46801272ebf7734d1b17d1b92abc</id1>
+				<id2>Fb19f0fa5c35e718baff7a5f809df18c5</id2>
+				<id3>fa7481e5a8122b349c3dccf89b8e1360</id3>
+				<id4>20b60ef671b69da4a10938e38db717b0</id4>
+				<id5>Fb19f0fa5c35e718baff7a5f809df18c5</id5>
+				<name>F_8_ConvertuncalibratedCMYKandspotcoloralternatestosRGB</name>
+				<comment>F_8_ConvertuncalibratedCMYKandspotcoloralternatestosRGB</comment>
+				<flags user_units="1" scope="16" edit="1" visible="1" dict="1"></flags>
+				<creation>D:20190904121659+02&apos;00&apos;</creation>
+				<modification>D:20190927063533+02&apos;00&apos;</modification>
+				<fcfgs>
+					<fcfg>
+						<ffeat>CCDestination</ffeat>
+						<fparams>
+							<fparam>sRGB IEC61966-2.1</fparam>
+							<fparam>0</fparam>
+							<fparam>EmbdAsSrcProf</fparam>
+							<fparam>sRGB IEC61966-2.1</fparam>
+							<fparam>ISO Coated v2 (ECI)</fparam>
+							<fparam>Dot Gain 15%</fparam>
+							<fparam>1</fparam>
+							<fparam>1</fparam>
+							<fparam>0</fparam>
+							<fparam></fparam>
+							<fparam>0</fparam>
+						</fparams>
+					</fcfg>
+					<fcfg>
+						<ffeat>CCSettings</ffeat>
+						<fparams>
+							<fparam>All</fparam>
+							<fparam>UncCMYK</fparam>
+							<fparam>ConvertToDest</fparam>
+							<fparam>UseFromDoc</fparam>
+						</fparams>
+					</fcfg>
+					<fcfg>
+						<ffeat>CCSettings</ffeat>
+						<fparams>
+							<fparam>All</fparam>
+							<fparam>Spot</fparam>
+							<fparam>ConvAltCSToDest</fparam>
+							<fparam>UseFromDoc</fparam>
+						</fparams>
+					</fcfg>
+					<fcfg>
+						<ffeat>CCPolicy</ffeat>
+						<fparams>
+							<fparam>DevNSepCMYKCMYKGraph</fparam>
+							<fparam>DevNSepCMYKON</fparam>
+						</fparams>
+					</fcfg>
+					<fcfg>
+						<ffeat>CCPolicy</ffeat>
+						<fparams>
+							<fparam>DevNSepCMYKCMYKImage</fparam>
+							<fparam>DevNSepCMYKON</fparam>
+						</fparams>
+					</fcfg>
+					<fcfg>
+						<ffeat>CCPolicy</ffeat>
+						<fparams>
+							<fparam>TrBlend</fparam>
+							<fparam>TrBlendWithoutProf</fparam>
+						</fparams>
+					</fcfg>
+				</fcfgs>
+				<reportFailed></reportFailed>
+			</fixup>
+		</fixups>
+		<fixupsets>
+			<fixupset>
+				<id1>U178197f9c6505bef9ea573e472c12d32</id1>
+				<id2>U4a51c6ad47abca91e5c4562f73623113</id2>
+				<id3>7cfe8fd2cc9416e577f46de8f4fc4d10</id3>
+				<id4>c870e874c4105ef8b1334552252b7996</id4>
+				<id5>U4a51c6ad47abca91e5c4562f73623113</id5>
+				<name>UUUU_FIXUPSET_DEF_NAME</name>
+				<comment>UUUU_FIXUPSET_DEF_NAME</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<fixups>
+					<fixup>Ff7810ec30f96ddb82b23a65d53761fb4</fixup>
+					<fixup>Fd31b46801272ebf7734d1b17d1b92abc</fixup>
+				</fixups>
+			</fixupset>
+		</fixupsets>
+		<actions>
+		</actions>
+		<profiles>
+			<profile>
+				<id1>P630dbbfc0fcdc03c67046b926128d7e1</id1>
+				<id2>P0f705cc943fdf72475cb044dc2cc553f</id2>
+				<id3>e3d269e73bdf9d7455fe46892c46bd30</id3>
+				<id4>3d4514701f1bbc58dbdd4df87f037e74</id4>
+				<id5>P0f705cc943fdf72475cb044dc2cc553f</id5>
+				<name>P_8_ConverttoPDFE1</name>
+				<comment>P_8_ConverttoPDFE1</comment>
+				<flags edit="0" visible="1" dict="1"></flags>
+				<metalist>
+					<metadata>
+						<metakey>author</metakey>
+						<metavalue>callas software</metavalue>
+					</metadata>
+					<metadata>
+						<metakey>email</metakey>
+						<metavalue>support@callassoftware.com</metavalue>
+					</metadata>
+					<metadata>
+						<metakey>PRC_UPDATE</metakey>
+						<metavalue>1</metavalue>
+					</metadata>
+				</metalist>
+				<creation>D:20091022080036+02&apos;00&apos;</creation>
+				<modification>D:20191002090005+02&apos;00&apos;</modification>
+				<pdfstd>
+					<pdfx convert="0"></pdfx>
+					<pdfa convert="0"></pdfa>
+					<pdfe convert="3" apply_fixups="1">0</pdfe>
+					<outcond>sRGB</outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+				</pdfstd>
+				<pdfstdemb>
+					<pdfx convert="0"></pdfx>
+					<pdfa convert="0"></pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond>ISO Coated v2 (ECI)</outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+					<afrelationship set_relationship="0"></afrelationship>
+				</pdfstdemb>
+				<wizard>
+					<check name="PRCWzDocu_SyntaxChecks" check_severity="0">
+					</check>
+					<check name="PRCWzXComp_PDFDocumentE" check_severity="0">
+						<data name="PDFE12008">1</data>
+					</check>
+				</wizard>
+				<rulesets>
+				</rulesets>
+				<fixupsets>
+					<fixupset>U178197f9c6505bef9ea573e472c12d32</fixupset>
+				</fixupsets>
+			</profile>
+		</profiles>
+		<metaprofs>
+		</metaprofs>
+		<profgroups>
+			<profgroup>
+				<id1>G11f754c5a77e174a0e080d9fd6f540f0</id1>
+				<id2>G48b63bd734b2071ca593abfd6d773c0c</id2>
+				<id3>d9e358063bb583d4a4f66700c89a96c4</id3>
+				<id4>49c3d4a87adc1c4531dc53003dcf51f6</id4>
+				<id5>G48b63bd734b2071ca593abfd6d773c0c</id5>
+				<name>G_6_PDFEcompliance_long</name>
+				<comment>G_6_PDFEcompliance_long</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<profiles>
+					<profile>P630dbbfc0fcdc03c67046b926128d7e1</profile>
+				</profiles>
+				<metaprofs>
+				</metaprofs>
+			</profgroup>
+		</profgroups>
+	</package>
+</pdfpreflight>

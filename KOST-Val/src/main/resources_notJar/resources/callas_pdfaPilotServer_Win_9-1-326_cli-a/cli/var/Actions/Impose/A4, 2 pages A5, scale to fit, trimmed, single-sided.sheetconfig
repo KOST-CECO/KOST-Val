@@ -1,0 +1,30 @@
+NAME	DICT_A42pagesA5scaletofittrimmedsinglesided
+SHEET	0'	0'	297mm	210mm
+PAGESIZE_FILTER	148mm	210mm	2mm	2mm	ANY
+
+#===================================
+# SLOT - List of slots for sheet configuration
+# name
+# eSlotNo
+# eSheetNo
+# eTrimBoxLeft
+# eTrimBoxBottom
+# eTrimBoxWidth
+# eTrimBoxHeight
+# eBleedOffsetLeft
+# eBleedOffsetBottom
+# eBleedOffsetRight
+# eBleedOffsetTop
+# eScaleX: -1: fit to slot
+# eScaleY: -1: fit to slot 
+# eRotation
+# ePlacement
+# eBindingMargin
+# eCropMarkStyleLeftBottom
+# eCropMarkStyleRightBottom
+# eCropMarkStyleRightTop
+# eCropMarkStyleLeftTop
+#===================================
+SLOT		1	1	"0,5mm"	0mm	148mm	210mm	0mm	0mm	0mm	0mm	-1	-1	0	CC	N	N	N	N	N
+SLOT		2	1	"148,5mm"	0mm	148mm	210mm	0mm	0mm	0mm	0mm	-1	-1	0	CC	N	N	N	N	N
+SLOT		101	1	0'	0'	0'	0'	0mm	0mm	0mm	0mm	100	100	90	RB	N	N	N	N	N

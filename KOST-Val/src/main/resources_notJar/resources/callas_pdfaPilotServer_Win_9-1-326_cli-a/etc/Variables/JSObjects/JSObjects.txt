@@ -1,0 +1,169 @@
+# Strings for "Insert JavaScript objects" Dialog
+# DEPRECATED Keys are not displayed
+#	Format: KEY -> <JS expression> -> <Help text>
+# The <Help text> may contain expressions which will be created line breaks in the dialog
+
+KEY	app	Returns the global application object
+DEPRECATED	app.getActiveDocs()	
+KEY	app.requires("key")	Defines a variable key with default value 0 that is required by the current script.\nExample: app.requires('myvar')
+KEY	app.requires("key",value)	Defines a variable key and its default value that is required by the current script.\nExample: app.requires('myvar',10)
+KEY	app.requires("key",value,"label")	Defines a variable key and its default value and a display name (label) that is required by the current script.\nExample: app.requires('myvar',10,'Input value for myvar')
+KEY	app.requires("key",value,"label",[<value_list>])	Defines a variable key and its default value and a display name (label) that is required by the current script. Additionally a value list is specified that limits the values that can be entered at runtime. Each element in the value list array musth be either a simple value (string, number or boolean) or an object containing a value and label property.\nExample: app.requires('myvar',10,'Input value for myvar',[10,20,{value:30,label:"thirty"}]);
+KEY	app.name	Returns the application name.
+KEY	app.version	Returns the application version string.
+KEY	app.vars	Returns the var objects containing all variables defined in the current context.
+KEY	app.vars.varkey	Returns the value of the variable 'varkey' if that exists in app.vars.\nExample: app.vars.varname
+
+KEY	app.doc	Retuns the doc object for the current PDF document or 'undefined' if no PDF is open.
+KEY	app.doc.info	Returns the docinfo object containing all document info entries of the current PDF document.
+KEY	app.doc.path	Returns the full platform dependent file path of the current pdf document.
+KEY	app.doc.documentFileName	Returns the file name of the current PDF document.
+KEY	app.doc.numPages	Returns the number of pages of the current PDF document.
+KEY	app.doc.getPageBox()	Returns an array containing the left, top, right and bottom coordinates of the CropBox of the first page in pt.
+KEY	app.doc.getPageBox(pageBox)	Returns an array containing the left, top, right and bottom coordinates of the specified page box of the first page in pt. 'pageBox' must be one of "Art", "Bleed", "Crop", "Trim" and  "Media".\nExample: app.doc.getPageBox('Trim')
+KEY	app.doc.getPageBox(pageBox,pageNumber)	Returns an array containing the left, top, right and bottom coordinates of the specified page box of the specified page in pt. 'pageBox' must be one of "Art", "Bleed", "Crop", "Trim" and  "Media".\nExample: app.doc.getPageBox('Trim',0)
+KEY	app.doc.getPageBox(pageBox,pageNumber,precision)	Returns an array containing the left, top, right and bottom coordinates of the specified page box of the specified page with the given precision in pt. 'pageBox' must be one of "Art", "Bleed", "Crop", "Trim" and  "Media".\nExample: app.doc.getPageBox('Trim',0,2)
+KEY	app.doc.hasPageBox()	Returns true if the CropBox is present otherwise false. \n Example: app.doc.pages[0].hasPageBox()
+KEY	app.doc.hasPageBox(pageBox)	Returns true if the specified page box of the first page is present otherwise false. 'pageBox' must be one of "Art", "Bleed", "Crop", "Trim" and  "Media".  \n Example: app.doc.hasPageBox('Trim')
+KEY	app.doc.hasPageBox(pageBox,pageNumber)	Returns true if the specified page box of the specified page is present otherwise false. 'pageBox' must be one of "Art", "Bleed", "Crop", "Trim" and  "Media".  \n Example: app.doc.hasPageBox('Trim',0)
+KEY	app.doc.getPageRotation()	Returns the page rotation of the first page.
+KEY	app.doc.getPageRotation(pageNumber)	Returns the page rotation of the specified page.\nExample: app.doc.getPageRotation(0)
+KEY	app.doc.pages	Returns an array with page objects for the current PDF document.
+KEY	app.doc.pages[i].inks	Returns an array of inks defined on the page.\n Example: app.doc.pages[0].inks
+KEY	app.doc.pages[i].inks[j].name	Returns the name of the ink.\n Example: app.doc.pages[0].inks[0].name
+KEY	app.doc.pages[i].getPageBox()	Returns an array containing the left, top, right and bottom coordinates of the CropBox of the specified page box in pt. \n Example: app.doc.pages[0].getPageBox()
+KEY	app.doc.pages[i].getPageBox(pageBox)	Returns an array containing the left, top, right and bottom coordinates of the specified page box in pt. 'pageBox' must be one of "Art", "Bleed", "Crop", "Trim" and  "Media".  \n Example: app.doc.pages[0].getPageBox('Trim')
+KEY	app.doc.pages[i].getPageBox(pageBox,precision)	Returns an array containing the left, top, right and bottom coordinates of the specified page box with the given precision in pt. 'pageBox' must be one of "Art", "Bleed", "Crop", "Trim" and  "Media". \n Example: app.doc.pages[0].getPageBox('Trim',2)
+KEY	app.doc.pages[i].getPageRotation()	Returns the page rotation of the page.
+KEY	app.doc.pages[i].hasPageBox()	Returns true if the CropBox of the specified page box is present otherwise false. \n Example: app.doc.pages[0].hasPageBox()
+KEY	app.doc.pages[i].hasPageBox(pageBox)	Returns true if the specified page box is present otherwise false. 'pageBox' must be one of "Art", "Bleed", "Crop", "Trim" and  "Media".  \n Example: app.doc.pages[0].hasPageBox('Trim')
+KEY	app.doc.pages[i].userUnit	Returns the user unit value of the page.
+KEY	app.doc.xmp	Returns a XMP object for the document XMP metadata of the current PDF document.
+KEY	app.doc.xmp.getProperty(ns,property)	Returns the value of the specified property in the specified namespace or 'undefined' if the property does not exists. 'ns' must be the full namespace uri. For namespaces defined in the XMP spec the predfeined namespace prefix can be used as well.\n Examples: \n app.doc.xmp.getProperty('http://purl.org/dc/elements/1.1/','format') \n app.doc.xmp.getProperty('dc','format')
+KEY	app.doc.metadata	Returns the document XMP metada as plain XML
+KEY	app.doc.result	Returns a preflight result object or 'undefined' if no preflight result is available. A preflight result is only available inside process plans if a profile or check was executed in a previous step.
+DEPRECATED	app.doc.result.hits	Returns information about a previous preflight result.
+DEPRECATED	app.doc.result.hits.numErrors	Returns the number of errors of a prvious preflight result.
+DEPRECATED	app.doc.result.hits.numWarnings	Returns the number of warnings of a prvious preflight result.
+DEPRECATED	app.doc.result.hits.numInfos	Returns the number of info hits of a prvious preflight result.
+
+KEY	app.doc.result.numErrors	Returns the number of errors of a previous preflight result.
+KEY	app.doc.result.numWarnings	Returns the number of warnings of a previous preflight result.
+KEY	app.doc.result.numInfos	Returns the number of info hits of a previous preflight result.
+
+DEPRECATED	app.doc.result.getCheckByID(checkID)	Returns a check object for the specified check ID. app.doc.result.checks[i].id should be used in the Script editor evaluation in order to identify the proper ID for a check. \n Example: app.doc.result.getCheckByID(Re29eb8cfa87a9b06ebac2ac1aa013a7b)
+KEY	app.doc.result.checks	Returns an array of Check objects for the previous preflight result.
+KEY	app.doc.result.checks.length	Returns the lenght of the array of Check objects for the previous preflight result.
+KEY	app.doc.result.checks[i].id	Returns the check ID of the specified check for the previous preflight result. \n Example: app.doc.result.checks[0].id
+KEY	app.doc.result.checks[i].customId	Returns the user defined custom ID of the specified check for the previous preflight result.\n Example: app.doc.result.checks[0].customId
+KEY	app.doc.result.checks[i].name	Returns the display name of the specified check of the previous preflight result.\n Example: app.doc.result.checks[0].name
+KEY	app.doc.result.checks[i].severity	Returns the severity of the specified check for the previous preflight result: 1: Info, 2: Warning, 3: Error.\n Example: app.doc.result.checks[0].severity
+KEY	app.doc.result.checks[i].numHits	Returns the number of hits of the specified check for the previous preflight result. \n Example: app.doc.result.checks[0].numHits
+KEY	app.doc.result.checks[i].pageNumbers	Returns an array of page numbers (starting with 0) for pages that had hits with the specified check for the previous preflight result. \n Example: app.doc.result.checks[0].pageNumbers
+
+KEY	app.doc.result.checks[i].conditions	Returns an array of conditions contained in the check.
+KEY	app.doc.result.checks[i].conditions[c].id	Returns the id of the check property used in condition c.
+KEY	app.doc.result.checks[i].conditions[c].name	Returns the localized name of the check property used in condition c.
+
+KEY	app.doc.result.checks[i].hits	Returns an array of hits produced by the check.
+KEY	app.doc.result.checks[i].hits[h].page	Returns the page number where this hit occurred; undefined if the check property does not refer to a specific page."
+KEY	app.doc.result.checks[i].hits[h].triggers	Returns an array of trigger values for the hit.
+KEY	app.doc.result.checks[i].hits[h].triggers[t]	Returns the trigger value for the hit related to app.doc.result.checks[i].conditions[t].
+KEY	app.doc.result.checks[i].hits[h].triggers[t].value	Returns the trigger value.
+KEY	app.doc.result.checks[i].hits[h].llx	Returns the lower left x coordinate of the bounding box of the snippet in pt.
+KEY	app.doc.result.checks[i].hits[h].lly	Returns the lower left y coordinate of the bounding box of the snippet in pt.
+KEY	app.doc.result.checks[i].hits[h].urx	Returns the upper right x coordinate of the bounding box of the snippet in pt.
+KEY	app.doc.result.checks[i].hits[h].ury	Returns the upper right y coordinate of the bounding box of the snippet in pt.
+KEY	app.doc.result.checks[i].hits[h].type	Returns the type of the snippet. Possible values are "Fill", "Stroke", "StrokeFill", "TextFill","TextOutline","TextOutlineFill","TextInvisible","InlineImage","XObj","Image","FormXObj","PostScript" and "Shade".
+
+KEY	app.doc.result.fixups	Returns an array of Fixup objects for the previous preflight run.
+KEY	app.doc.result.fixups.length	Returns the length of the array of Fixup objects for the previous preflight run.
+KEY	app.doc.result.fixups[i].id	Returns the fixup ID of the specified fixup for the previous preflight result run. \n Example: app.doc.result.fixups[0].id
+KEY	app.doc.result.fixups[i].customId	Returns the user defined custom ID of the specified fixup for the previous preflight result run. \n Example: app.doc.result.fixups[0].customId
+KEY	app.doc.result.fixups[i].numSucceeded	Returns the number of fixups that were executed successfully for the specified fixup for the previous preflight result run. \n Example: app.doc.result.fixups[0].numSucceeded
+KEY	app.doc.result.fixups[i].numFailed	Returns the number of fixups that failed for the specified fixup for the previous preflight result run. \n Example: app.doc.result.fixups[0].numSucceeded
+
+KEY	app.doc.pages[i].bleedBox	Returns the BleedBox for page i.
+KEY	app.doc.pages[i].bleedBox.exists	Returns true if a bleed box is present in the page.
+KEY	app.doc.pages[i].bleedBox.left	Returns the left coordinate of the BleedBox for page i.
+KEY	app.doc.pages[i].bleedBox.bottom	Returns the bottom coordinate of the BleedBox for page i.
+KEY	app.doc.pages[i].bleedBox.right	Returns the right coordinate of the BleedBox for page i.
+KEY	app.doc.pages[i].bleedBox.top	Returns the top coordinate of the BleedBox for page i.
+
+KEY	app.doc.pages[i].cropBox	Returns the CropBox for page i.
+KEY	app.doc.pages[i].cropBox.exists	Returns true if a crop box is present in the page.
+KEY	app.doc.pages[i].cropBox.left	Returns the left coordinate of the CropBox for page i.
+KEY	app.doc.pages[i].cropBox.bottom	Returns the bottom coordinate of the CropBox for page i.
+KEY	app.doc.pages[i].cropBox.right	Returns the right coordinate of the CropBox for page i.
+KEY	app.doc.pages[i].cropBox.top	Returns the top coordinate of the CropBox for page i.
+
+KEY	app.doc.pages[i].trimBox	Returns the TrimBox for page i.
+KEY	app.doc.pages[i].trimBox.exists	Returns true if a trim box is present in the page.
+KEY	app.doc.pages[i].trimBox.left	Returns the left coordinate of the TrimBox for page i.
+KEY	app.doc.pages[i].trimBox.bottom	Returns the bottom coordinate of the TrimBox for page i.
+KEY	app.doc.pages[i].trimBox.right	Returns the right coordinate of the TrimBox for page i.
+KEY	app.doc.pages[i].trimBox.top	Returns the top coordinate of the TrimBox for page i.
+
+KEY	app.doc.pages[i].mediaBox	Returns the MediaBox for page i.
+KEY	app.doc.pages[i].mediaBox.exists	Returns true if a media box is present in the page.
+KEY	app.doc.pages[i].mediaBox.left	Returns the left coordinate of the MediaBox for page i.
+KEY	app.doc.pages[i].mediaBox.bottom	Returns the bottom coordinate of the MediaBox for page i.
+KEY	app.doc.pages[i].mediaBox.right	Returns the right coordinate of the MediaBox for page i.
+KEY	app.doc.pages[i].mediaBox.top	Returns the top coordinate of the MediaBox for page i.
+
+KEY	app.doc.pages[i].artBox	Returns the ArtBox for page i.
+KEY	app.doc.pages[i].artBox.exists	Returns true if an art box is present in the page.
+KEY	app.doc.pages[i].artBox.left	Returns the left coordinate of the ArtBox for page i.
+KEY	app.doc.pages[i].artBox.bottom	Returns the bottom coordinate of the ArtBox for page i.
+KEY	app.doc.pages[i].artBox.right	Returns the right coordinate of the ArtBox for page i.
+KEY	app.doc.pages[i].artBox.top	Returns the top coordinate of the ArtBox for page i.
+
+KEY	app.doc.pages[i].rotate	Returns the rotate entry for page i.
+
+KEY	app.doc.result.reports	Returns an array of reports generated by the previous process plan step.
+KEY	app.doc.result.reports[i]	Returns a string containing the full platform path of the report.
+
+KEY	app.doc.result.resultFiles	Returns an array of result files generated by the previous process plan step.
+KEY	app.doc.result.resultFiles[i]	Returns a string containing the full platform path of the result file.
+
+KEY	app.doc.result.profile	Returns the name of the current profile (may be undefined in some contexts)
+KEY	app.doc.result.processplan	Returns the name of the current process plan (may be undefined in some contexts)
+
+
+KEY	app.env	Returns information about the execution environment.
+KEY	app.env.name	Returns the name of the computer the programm is running on.
+KEY	app.env.os	Returns information about the operating system (e.g. "Mac OS X 10.12.0").
+KEY	app.env.pathDelimiter	Returns the path delimiter for the current platform.
+KEY	app.env.platform	Returns the current platform ("Macintosh", "Windows", "SunOS", "AIX", "Linux")
+KEY	app.env.user	Returns the login user name.
+
+KEY	app.env.language	Returns the language code ("en", "de") 
+
+KEY	app.env.licenses	Returns an array of license informations.
+KEY	app.env.licenses[i]	Returns information for one license.
+KEY	app.env.licenses[i].full	Returns true if this is a full license.
+KEY	app.env.licenses[i].trial	Returns true if this is a trial license.
+KEY	app.env.licenses[i].timeLimited	Returns true if this is a time limited license.
+KEY	app.env.licenses[i].serialNumber	Returns the serial number of the license.
+KEY	app.env.licenses[i].type	Returns the type of the license. One of "Main", "DeviceLink AddOn" or "Dispatcher"
+KEY	app.env.licenses[i].expirationDate	Returns the expiration date for a time limited license.
+
+KEY	app.setTimeout(seconds)	Sets the timeout for the current script to a custom value. A timeout value of zero seconds disables the timeout. The default timeout is 60 seconds.\n Example: app.setTimeout(120);
+
+
+KEY	app.http	Returns the applications HTTP object.
+KEY	app.http.get(url)	Returns the response from a HTTP GET request for the given URL, 
+KEY	app.http.get(url, {timeout: 100} )	Returns the response from a HTTP GET request for the given URL with a timeout of 100ms.
+
+KEY	file = new File("path");	Creates a File object that allows for reading the file's contents. 
+KEY	file.read();	Returns the contents of file as string assuming UTF-8 encoding.
+KEY	file.name	Returns the file name.
+KEY	file.fullName	Returns the full platform path of the file.
+KEY	file.exists	Returns true if the file exists.
+KEY	file.lastModified	Returns a Date object representing the files modification date.
+
+KEY	xml = new XML("xml");	Creates an XML object from a string.
+KEY	xml.xpath("expression")	Returns an array of objects selected by the XPath expression.
+KEY	xml.registerNamespace("prefix","uri")	Registers a namespace prefix for a given namespace URI.
+
+#EOF

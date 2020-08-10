@@ -1,0 +1,70 @@
+%!PS-Adobe-3.0 Resource-CompatibleFont
+%%BeginResource: CompatibleFont (SMAgoT)
+%%Title: (CompatibleFont/SMAgoT)
+%%Version: 4.001
+%%DocumentNeededResources: ProcSet (AdobeTypeComposer)
+%%+ ProcSet (CompatibleFonts)
+%%+ Font (SMGothic-DemiBold-KSCpc-EUC-H)
+%%+ Font (SMFix)
+%%Copyright: -----------------------------------------------------------
+%%Copyright: Copyright 1990-1997 Adobe Systems Incorporated.
+%%Copyright: All rights reserved.
+%%Copyright:
+%%Copyright: Patents Pending
+%%Copyright:
+%%Copyright: NOTICE: All information contained herein is the property
+%%Copyright: of Adobe Systems Incorporated. Many of the intellectual
+%%Copyright: and technical concepts contained herein are proprietary
+%%Copyright: to Adobe, are protected as trade secrets, and are made
+%%Copyright: available only to Adobe licensees for their internal use.
+%%Copyright: Any reproduction or dissemination of this software is
+%%Copyright: strictly forbidden unless prior written permission is
+%%Copyright: obtained from Adobe.
+%%Copyright:
+%%Copyright: PostScript and Display PostScript are trademarks of
+%%Copyright: Adobe Systems Incorporated which may be registered in
+%%Copyright: certain jurisdictions.
+%%Copyright: -----------------------------------------------------------
+%%EndComments
+
+/SMAgoT dup
+
+/CIDInit /ProcSet resourcestatus
+{ pop pop /CIDInit /ProcSet findresource true
+}
+{ /AdobeTypeComposer /ProcSet resourcestatus
+  { pop pop /AdobeTypeComposer /ProcSet findresource true
+  }
+  { false
+  }
+  ifelse
+}
+ifelse
+
+{ begin	
+    [/SMGothic-DemiBold-KSCpc-EUC-H /SMGothic-DemiBold-KSCpc-EUC-H /SMFix] 
+    beginrearrangedfont
+    1 usefont
+    3 beginbfrange
+    <13> <13> <81>
+    <83> <83> <A1A1>
+    <84> <84> <A3DF>
+    endbfrange
+    2 usefont
+    4 beginbfrange
+    <11> <12> <11>
+    <14> <14> <14>
+    <60> <60> <60>
+    <81> <81> <27>
+    endbfrange
+    endrearrangedfont  
+  end	
+} 
+{ pop pop /findfont errordict /invalidfont get exec stop
+}
+ifelse
+
+/CompatibleFont defineresource pop
+
+%%EndResource
+%%EOF

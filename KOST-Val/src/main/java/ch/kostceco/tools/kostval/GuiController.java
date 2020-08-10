@@ -99,7 +99,7 @@ public class GuiController
 	private WebEngine					engine;
 
 	private File							logFile,
-			configFile = new File( System.getenv( "USERPROFILE" ) + File.separator + ".kost-val"
+			configFile = new File( System.getenv( "USERPROFILE" ) + File.separator + ".kost-val_2x"
 					+ File.separator + "configuration" + File.separator + "kostval.conf.xml" );
 
 	private String						arg0, arg1, arg2, arg3 = "--xml", dirOfJarPath;
@@ -114,9 +114,7 @@ public class GuiController
 	{
 		/* TODO
 		 * 
-		 * LogTyp --min programmieren
-		 * 
-		 *  */
+		 * LogTyp --min programmieren */
 
 		// TODO --> initialize (wird einmalig am Anfang ausgefuehrt)
 
@@ -154,7 +152,7 @@ public class GuiController
 
 		try {
 			File directoryOfConfigfile = new File( System.getenv( "USERPROFILE" ) + File.separator
-					+ ".kost-val" + File.separator + "configuration" );
+					+ ".kost-val_2x" + File.separator + "configuration" );
 			File directoryOfConfigfileInit = new File( dirOfJarPath + File.separator + "configuration" );
 			if ( !directoryOfConfigfile.exists() ) {
 				directoryOfConfigfile.mkdirs();
@@ -225,17 +223,24 @@ public class GuiController
 		}
 
 		engine = wbv.getEngine();
-		// String strTxtUrl "file:///C:/Users/KOST/.kost-val/logs/doc.kost-val.log.xml" ;
-		// engine.load( strTxtUrl );
-		// Bild mit einer Kurzanleitung zum GUI anzeigen
-		String pathImage = "file:///" + dirOfJarPath + File.separator + "doc" + File.separator
+
+		/* Bild mit einer Kurzanleitung zum GUI anzeigen
+		 * 
+		 * in Tabelle damit links */
+		String pathImage = "file:/" + dirOfJarPath + File.separator + "doc" + File.separator
 				+ "hilfe.jpg";
 		if ( locale.toString().startsWith( "fr" ) ) {
-			pathImage = "file:///" + dirOfJarPath + File.separator + "doc" + File.separator + "aide.jpg";
+			pathImage = "file:/" + dirOfJarPath + File.separator + "doc" + File.separator + "aide.jpg";
 		} else if ( locale.toString().startsWith( "en" ) ) {
-			pathImage = "file:///" + dirOfJarPath + File.separator + "doc" + File.separator + "help.jpg";
+			pathImage = "file:/" + dirOfJarPath + File.separator + "doc" + File.separator + "help.jpg";
 		}
-		engine.load( pathImage );
+		pathImage = pathImage.replace( "\\\\", "/" );
+		pathImage = pathImage.replace( "\\", "/" );
+		String helpImg = "<table  width=\"100%\"><tr><td><img  src='" + pathImage
+				+ "'></td></tr></table>";
+		String textImg = "<html><body>" + helpImg + "</body></html>";
+		engine.loadContent( textImg );
+
 		// Format und Sip Validierung erst moeglich wenn fileFolder ausgefuellt
 		buttonSip.setDisable( true );
 		buttonFormat.setDisable( true );
@@ -257,9 +262,9 @@ public class GuiController
 				// Fehler: es wird abgebrochen
 				String text = "Ein Fehler ist aufgetreten. Siehe Konsole.";
 				if ( locale.toString().startsWith( "fr" ) ) {
-					text = "Une erreur s`est produite. Voir Console.";
+					text = "Une erreur s`est produite. Voir console.";
 				} else if ( locale.toString().startsWith( "en" ) ) {
-					text = "An error has occurred. See Console.";
+					text = "An error has occurred. See console.";
 				}
 				engine.loadContent( "<html><h2>" + text + "</h2></html>" );
 			}
@@ -312,25 +317,33 @@ public class GuiController
 	@FXML
 	void showManual( ActionEvent e )
 	{
+		console.setText( " \n" );
 		/* Kurzanleitung 1. Datei oder Ordner zur Validierung angeben / auswählen 2. ggf. Konfiguration
 		 * und LogType anpassen 3. Validierung starten */
 		try {
-			// Bild mit einer Kurzanleitung zum GUI anzeigen
-			String pathImage = "file:///" + dirOfJarPath + File.separator + "doc" + File.separator
+			/* Bild mit einer Kurzanleitung zum GUI anzeigen
+			 * 
+			 * in Tabelle damit links */
+			String pathImage = "file:/" + dirOfJarPath + File.separator + "doc" + File.separator
 					+ "hilfe.jpg";
 			if ( locale.toString().startsWith( "fr" ) ) {
-				pathImage = "file:///" + dirOfJarPath + File.separator + "doc" + File.separator
-						+ "aide.jpg";
+				pathImage = "file:/" + dirOfJarPath + File.separator + "doc" + File.separator + "aide.jpg";
 			} else if ( locale.toString().startsWith( "en" ) ) {
-				pathImage = "file:///" + dirOfJarPath + File.separator + "doc" + File.separator
-						+ "help.jpg";
+				pathImage = "file:/" + dirOfJarPath + File.separator + "doc" + File.separator + "help.jpg";
 			}
-			engine.load( pathImage );
-			// Handbuch in externem Viewer oeffnen
+			pathImage = pathImage.replace( "\\\\", "/" );
+			pathImage = pathImage.replace( "\\", "/" );
+			String helpImg = "<table  width=\"100%\"><tr><td><img  src='" + pathImage
+					+ "'></td></tr></table>";
+			String text = "<html><body>" + helpImg + "</body></html>";
+			engine.loadContent( text );
+
+			// Handbuch in externem Viewer oeffnen dann kann parallel gearbeitet werden
 			String docPath = dirOfJarPath + File.separator + "doc" + File.separator
 					+ "KOST-Val_Anwendungshandbuch_v1.9.8.pdf";
-			// Spaeter in Center oeffnen, wenn WebView pdf unterstuetzt
 			File dirDoc = new File( "doc" );
+			Util.switchOffConsole();
+			// ansonsten wird 7x (Datei) ausgegeben
 			File[] docArray = dirDoc.listFiles();
 			if ( docArray != null ) { // Erforderliche Berechtigungen etc. sind vorhanden
 				for ( int i = 0; i < docArray.length; i++ ) {
@@ -349,6 +362,7 @@ public class GuiController
 					}
 				}
 			}
+			Util.switchOnConsole();
 			Runtime.getRuntime().exec( "rundll32 url.dll,FileProtocolHandler " + docPath );
 		} catch ( IOException eManual ) {
 			eManual.printStackTrace();
@@ -360,6 +374,7 @@ public class GuiController
 	@FXML
 	void showLicence( ActionEvent e )
 	{
+		console.setText( " \n" );
 		String licence1;
 		String licence2;
 		String licence3;
@@ -398,6 +413,7 @@ public class GuiController
 	@FXML
 	void printLog( ActionEvent e )
 	{
+		console.setText( " \n" );
 		Printer defaultprinter = Printer.getDefaultPrinter();
 		Printer printerToUse = defaultprinter;
 		if ( printerToUse != null ) {
@@ -423,23 +439,24 @@ public class GuiController
 	@FXML
 	void saveLog( ActionEvent e )
 	{
+		console.setText( " \n" );
 		try {
 			DirectoryChooser folderChooser = new DirectoryChooser();
 			String copy = "Kopiere ";
 			if ( locale.toString().startsWith( "fr" ) ) {
-				folderChooser.setTitle( "choisissez le dossier dans lequel le log doit être sauvegardé" );
+				folderChooser.setTitle( "Choisissez le dossier dans lequel le log doit être sauvegardé" );
 				copy = "Copie ";
 			} else if ( locale.toString().startsWith( "en" ) ) {
-				folderChooser.setTitle( "choose the folder where the log should be saved" );
+				folderChooser.setTitle( "Choose the folder where the log should be saved" );
 				copy = "Copy ";
 			} else {
 				folderChooser
-						.setTitle( "wählen Sie den Ordner in welcher der Log gespeichert werden soll" );
+						.setTitle( "Wählen Sie den Ordner in welcher der Log gespeichert werden soll" );
 				copy = "Kopiere ";
 			}
 			File saveFolder = folderChooser.showDialog( new Stage() );
 			if ( saveFolder != null ) {
-				File logFileXsl = new File( System.getenv( "USERPROFILE" ) + File.separator + ".kost-val"
+				File logFileXsl = new File( System.getenv( "USERPROFILE" ) + File.separator + ".kost-val_2x"
 						+ File.separator + "logs" + File.separator + "kost-val.xsl" );
 				File logFileXslNew = new File(
 						saveFolder.getAbsolutePath() + File.separator + "kost-val.xsl" );
@@ -461,6 +478,7 @@ public class GuiController
 	@FXML
 	void showConfig( ActionEvent e )
 	{
+		console.setText( " \n" );
 		engine.load( "file:///" + configFile.getAbsolutePath() );
 		buttonPrint.setDisable( true );
 		buttonSave.setDisable( true );
@@ -470,9 +488,10 @@ public class GuiController
 	@FXML
 	void valFormat( ActionEvent e )
 	{
-		String text = "<html><h2>Formatvalidierung wird durchgefuehrt. <br/><br/>Bitte warten ...</h2></html>";
+		console.setText( " \n" );
+		String text = "<html><h2>Formatvalidierung wird durchgeführt. <br/><br/>Bitte warten ...</h2></html>";
 		if ( locale.toString().startsWith( "fr" ) ) {
-			text = "<html><h2>La validation du format est effectuee. <br/><br/>Veuillez patienter ...</h2></html>";
+			text = "<html><h2>La validation du format est lancée. <br/><br/>Veuillez patienter ...</h2></html>";
 		} else if ( locale.toString().startsWith( "en" ) ) {
 			text = "<html><h2>Format validation is performed. <br/><br/>Please wait ...</h2></html>";
 		}
@@ -495,21 +514,19 @@ public class GuiController
 		arg1 = fileFolder.getText();
 		File arg1File = new File( arg1 );
 		String[] args = new String[] { arg0, arg1, arg2, arg3 };
-		logFile = new File( System.getenv( "USERPROFILE" ) + File.separator + ".kost-val"
+		logFile = new File( System.getenv( "USERPROFILE" ) + File.separator + ".kost-val_2x"
 				+ File.separator + "logs" + File.separator + arg1File.getName() + ".kost-val.log.xml" );
 		// falls das File bereits existiert, z.B. von einem vorhergehenden Durchlauf, loeschen wir es
 		if ( logFile.exists() ) {
 			logFile.delete();
 		}
 		if ( logFile.exists() ) {
-			String exist = "Wurde bereits validiert. Keine neue Validierung durchgefuehrt!";
+			String exist = "Wurde bereits validiert. Keine neue Validierung durchgeführt!";
 			if ( locale.toString().startsWith( "fr" ) ) {
-				exist = "A deja ete valide. Aucune nouvelle validation n'est effectuee !";
+				exist = "A déjà été validé. Aucune nouvelle validation n'a été lancée !";
 			} else if ( locale.toString().startsWith( "en" ) ) {
 				exist = "Has already been validated. No new validation performed!";
 			}
-			System.out.println( exist );
-			System.out.println( "" );
 			engine.loadContent( "<html><h2>" + exist + "</h2></html>" );
 		} else {
 			/* System.out.println( "cmd: " + args[0] + " " + args[1] + " " + args[2] + " " + args[3] ); */
@@ -519,13 +536,26 @@ public class GuiController
 				@Override
 				public void handle( WorkerStateEvent t )
 				{
-					/* Dieser handler wird bei einer erfolgreichen Validierung ausgefuehrt.
-					 * 
-					 * Da es erfolgreich war (valid / invalid) kann der Log angezeigt werden */
-					engine.load( "file:///" + logFile.getAbsolutePath() );
-					scroll.setVvalue( 1.0 ); // 1.0 = letzte Zeile der Konsole
-					buttonPrint.setDisable( false );
-					buttonSave.setDisable( false );
+					// kein Handler Problem
+					if ( logFile.exists() ) {
+						/* Dieser handler wird bei einer erfolgreichen Validierung ausgefuehrt.
+						 * 
+						 * Da es erfolgreich war (valid / invalid) kann der Log angezeigt werden */
+						engine.load( "file:///" + logFile.getAbsolutePath() );
+						scroll.setVvalue( 1.0 ); // 1.0 = letzte Zeile der Konsole
+						buttonPrint.setDisable( false );
+						buttonSave.setDisable( false );
+					} else {
+						// Da es nicht erfolgreich war kann der Log nicht angezeigt werden
+						String text = "Ein Fehler ist aufgetreten. Siehe Konsole.";
+						if ( locale.toString().startsWith( "fr" ) ) {
+							text = "Une erreur s`est produite. Voir console.";
+						} else if ( locale.toString().startsWith( "en" ) ) {
+							text = "An error has occurred. See console.";
+						}
+						scroll.setVvalue( 1.0 ); // 1.0 = letzte Zeile der Konsole
+						engine.loadContent( "<html><h2>" + text + "</h2></html>" );
+					}
 				}
 			} );
 			val.setOnFailed( new EventHandler<WorkerStateEvent>() {
@@ -542,7 +572,6 @@ public class GuiController
 					} else if ( locale.toString().startsWith( "en" ) ) {
 						text = "An unknown error has occurred.";
 					}
-					System.out.println( text );
 					scroll.setVvalue( 1.0 ); // 1.0 = letzte Zeile der Konsole
 					engine.loadContent( "<html><h2>" + text + "</h2></html>" );
 				}
@@ -580,11 +609,12 @@ public class GuiController
 	@FXML
 	void valSip( ActionEvent e )
 	{
-		String text = "<html><h2>Formatvalidierung wird durchgefuehrt. <br/><br/>Bitte warten ...</h2></html>";
+		console.setText( " \n" );
+		String text = "<html><h2>SIP-Validierung wird durchgeführt. <br/><br/>Bitte warten ...</h2></html>";
 		if ( locale.toString().startsWith( "fr" ) ) {
-			text = "<html><h2>La validation du format est effectuee. <br/><br/>Veuillez patienter ...</h2></html>";
+			text = "<html><h2>La validation du SIP est lancée. <br/><br/>Veuillez patienter ...</h2></html>";
 		} else if ( locale.toString().startsWith( "en" ) ) {
-			text = "<html><h2>Format validation is performed. <br/><br/>Please wait ...</h2></html>";
+			text = "<html><h2>SIP validation is performed. <br/><br/>Please wait ...</h2></html>";
 		}
 		engine.loadContent( text );
 		/* hier die diversen args an main uebergeben
@@ -605,7 +635,7 @@ public class GuiController
 		arg1 = fileFolder.getText();
 		File arg1File = new File( arg1 );
 		String[] args = new String[] { arg0, arg1, arg2, arg3 };
-		File logFile = new File( System.getenv( "USERPROFILE" ) + File.separator + ".kost-val"
+		File logFile = new File( System.getenv( "USERPROFILE" ) + File.separator + ".kost-val_2x"
 				+ File.separator + "logs" + File.separator + arg1File.getName() + ".kost-val.log.xml" );
 		// falls das File bereits existiert, z.B. von einem vorhergehenden Durchlauf, loeschen wir es
 		if ( logFile.exists() ) {
@@ -614,12 +644,10 @@ public class GuiController
 		if ( logFile.exists() ) {
 			String exist = "Wurde bereits validiert. Keine neue Validierung durchgefuehrt!";
 			if ( locale.toString().startsWith( "fr" ) ) {
-				exist = "A deja ete valide. Aucune nouvelle validation n'est effectuee !";
+				exist = "A déjà été validé. Aucune nouvelle validation n'a été lancée !";
 			} else if ( locale.toString().startsWith( "en" ) ) {
 				exist = "Has already been validated. No new validation performed!";
 			}
-			System.out.println( exist );
-			System.out.println( "" );
 			engine.loadContent( "<html><h2>" + exist + "</h2></html>" );
 		} else {
 			/* System.out.println( "cmd: " + args[0] + " " + args[1] + " " + args[2] + " " + args[3] ); */
@@ -629,13 +657,26 @@ public class GuiController
 				@Override
 				public void handle( WorkerStateEvent t )
 				{
-					/* Dieser handler wird bei einer erfolgreichen Validierung ausgefuehrt.
-					 * 
-					 * Da es erfolgreich war (valid / invalid) kann der Log angezeigt werden */
-					engine.load( "file:///" + logFile.getAbsolutePath() );
-					scroll.setVvalue( 1.0 ); // 1.0 = letzte Zeile der Konsole
-					buttonPrint.setDisable( false );
-					buttonSave.setDisable( false );
+					// kein Handler Problem
+					if ( logFile.exists() ) {
+						/* Dieser handler wird bei einer erfolgreichen Validierung ausgefuehrt.
+						 * 
+						 * Da es erfolgreich war (valid / invalid) kann der Log angezeigt werden */
+						engine.load( "file:///" + logFile.getAbsolutePath() );
+						scroll.setVvalue( 1.0 ); // 1.0 = letzte Zeile der Konsole
+						buttonPrint.setDisable( false );
+						buttonSave.setDisable( false );
+					} else {
+						// Da es nicht erfolgreich war kann der Log nicht angezeigt werden
+						String text = "Ein Fehler ist aufgetreten. Siehe Konsole.";
+						if ( locale.toString().startsWith( "fr" ) ) {
+							text = "Une erreur s`est produite. Voir console.";
+						} else if ( locale.toString().startsWith( "en" ) ) {
+							text = "An error has occurred. See console.";
+						}
+						scroll.setVvalue( 1.0 ); // 1.0 = letzte Zeile der Konsole
+						engine.loadContent( "<html><h2>" + text + "</h2></html>" );
+					}
 				}
 			} );
 			val.setOnFailed( new EventHandler<WorkerStateEvent>() {
@@ -652,7 +693,6 @@ public class GuiController
 					} else if ( locale.toString().startsWith( "en" ) ) {
 						text = "An unknown error has occurred.";
 					}
-					System.out.println( text );
 					scroll.setVvalue( 1.0 ); // 1.0 = letzte Zeile der Konsole
 					engine.loadContent( "<html><h2>" + text + "</h2></html>" );
 				}
@@ -665,36 +705,80 @@ public class GuiController
 	@FXML
 	void chooseFile( ActionEvent e )
 	{
+		console.setText( " \n" );
 		FileChooser fileChooser = new FileChooser();
 		if ( locale.toString().startsWith( "fr" ) ) {
-			fileChooser.setTitle( "choisissez le fichier" );
+			fileChooser.setTitle( "Choisissez le fichier" );
 		} else if ( locale.toString().startsWith( "en" ) ) {
-			fileChooser.setTitle( "choose the file" );
+			fileChooser.setTitle( "Choose the file" );
 		} else {
-			fileChooser.setTitle( "wählen Sie die Datei" );
+			fileChooser.setTitle( "Wählen Sie die Datei" );
 		}
 		File valFile = fileChooser.showOpenDialog( new Stage() );
 		if ( valFile != null ) {
 			fileFolder.clear();
 			fileFolder.setText( valFile.getAbsolutePath() );
 			// Anzeige in WebView wenn image
-			String pathImage = "file:///" + valFile.getAbsolutePath();
+			String pathDetail = "file:/" + valFile.getAbsolutePath();
+			pathDetail = pathDetail.replace( "\\\\", "/" );
+			pathDetail = pathDetail.replace( "\\", "/" );
+
 			String fileFolderName = valFile.getName();
 			String fileFolderExt = "." + FilenameUtils.getExtension( fileFolderName ).toLowerCase();
+			String sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Ausgewählte Datei: <br>"
+					+ valFile.getAbsolutePath() + "</h3></td></tr>";
+			String sel2 = "<tr><td><h3>2.</h3></td><td><h3>Ggf. Konfiguration und LogType anpassen </h3></td></tr>";
+			String sel3 = "<tr><td><h3>3.</h3></td><td><h3>Validierung starten </h3></td></tr></table>";
+			String selDetail = "<br/>";
 			if ( fileFolderExt.equals( ".jp2" ) || fileFolderExt.equals( ".jpeg" )
 					|| fileFolderExt.equals( ".jpg" ) || fileFolderExt.equals( ".tiff" )
 					|| fileFolderExt.equals( ".tif" ) || fileFolderExt.equals( ".png" )
 					|| fileFolderExt.equals( ".svg" ) ) {
-				engine.load( pathImage );
+				selDetail = "<table  width=\"100%\"><tr><td width=\"25%\"></td><td><img  src='" + pathDetail
+						+ "' width=\"300\" style=\"border:1px solid gray\" ></td><td width=\"25%\"></td></tr></table>";
 			} else {
 				// TODO: hier laufend weitere Viewer einbauen
-				String text = " --> " + valFile.getAbsolutePath();
-				engine.loadContent( text );
 			}
+			if ( locale.toString().startsWith( "fr" ) ) {
+				sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Fichier sélectionné : <br>"
+						+ valFile.getAbsolutePath() + "</h3></td></tr>";
+				sel2 = "<tr><td><h3>2.</h3></td><td><h3>Ajuster la configuration et le LogType si nécessaire </h3></td></tr>";
+				sel3 = "<tr><td><h3>3.</h3></td><td><h3>Démarrer la validation </h3></td></tr></table>";
+			} else if ( locale.toString().startsWith( "en" ) ) {
+				sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Selected file: <br>"
+						+ valFile.getAbsolutePath() + "</h3></td></tr>";
+				sel2 = "<tr><td><h3>2.</h3></td><td><h3>Adjust configuration and LogType if necessary </h3></td></tr>";
+				sel3 = "<tr><td><h3>3.</h3></td><td><h3>Start validation </h3></td></tr></table>";
+			} else {
+				sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Ausgewählte Datei: <br>"
+						+ valFile.getAbsolutePath() + "</h3></td></tr>";
+				sel2 = "<tr><td><h3>2.</h3></td><td><h3>Ggf. Konfiguration und LogType anpassen </h3></td></tr>";
+				sel3 = "<tr><td><h3>3.</h3></td><td><h3>Validierung starten </h3></td></tr></table>";
+			}
+			String text = "<html><body>" + sel1 + sel2 + sel3 + selDetail + "</body></html>";
+			engine.loadContent( text );
 			// Format und Sip Validierung erst moeglich wenn fileFolder ausgefuellt
-			buttonFormat.setDisable( false );
+			// und auch in der Config erlaubt
+			if ( Util.stringInFile( "<pdfavalidation>yes</", configFile ) ) {
+				buttonFormat.setDisable( false );
+			} else if ( Util.stringInFile( "<siardalidation>yes</", configFile ) ) {
+				buttonFormat.setDisable( false );
+			} else if ( Util.stringInFile( "<jp2validation>yes</", configFile ) ) {
+				buttonFormat.setDisable( false );
+			} else if ( Util.stringInFile( "<jpegvalidation>yes</", configFile ) ) {
+				buttonFormat.setDisable( false );
+			} else if ( Util.stringInFile( "<tiffvalidation>yes</", configFile ) ) {
+				buttonFormat.setDisable( false );
+			} else {
+				buttonFormat.setDisable( true );
+			}
 			if ( valFile.getName().startsWith( "SIP" ) ) {
-				buttonSip.setDisable( false );
+				String configSip0160 = "<ech0160validation>no</ech0160validation>";
+				if ( Util.stringInFile( configSip0160, configFile ) ) {
+					buttonSip.setDisable( true );
+				} else {
+					buttonSip.setDisable( false );
+				}
 			} else {
 				buttonSip.setDisable( true );
 			}
@@ -707,27 +791,66 @@ public class GuiController
 	@FXML
 	void chooseFolder( ActionEvent e )
 	{
+		console.setText( " \n" );
 		DirectoryChooser folderChooser = new DirectoryChooser();
 		if ( locale.toString().startsWith( "fr" ) ) {
-			folderChooser.setTitle( "choisissez le dossier" );
+			folderChooser.setTitle( "Choisissez le dossier" );
 		} else if ( locale.toString().startsWith( "en" ) ) {
-			folderChooser.setTitle( "choose the folder" );
+			folderChooser.setTitle( "Choose the folder" );
 		} else {
-			folderChooser.setTitle( "wählen Sie den Ordner" );
+			folderChooser.setTitle( "Wählen Sie den Ordner" );
 		}
 		File valFolder = folderChooser.showDialog( new Stage() );
 		if ( valFolder != null ) {
 			fileFolder.clear();
 			fileFolder.setText( valFolder.getAbsolutePath() );
 			// Format und Sip Validierung erst moeglich wenn fileFolder ausgefuellt
-			buttonFormat.setDisable( false );
+			// und auch in der Config erlaubt
+			if ( Util.stringInFile( "<pdfavalidation>yes</", configFile ) ) {
+				buttonFormat.setDisable( false );
+			} else if ( Util.stringInFile( "<siardalidation>yes</", configFile ) ) {
+				buttonFormat.setDisable( false );
+			} else if ( Util.stringInFile( "<jp2validation>yes</", configFile ) ) {
+				buttonFormat.setDisable( false );
+			} else if ( Util.stringInFile( "<jpegvalidation>yes</", configFile ) ) {
+				buttonFormat.setDisable( false );
+			} else if ( Util.stringInFile( "<tiffvalidation>yes</", configFile ) ) {
+				buttonFormat.setDisable( false );
+			} else {
+				buttonFormat.setDisable( true );
+			}
 			if ( valFolder.getName().startsWith( "SIP" ) ) {
-				buttonSip.setDisable( false );
+				String configSip0160 = "<ech0160validation>no</ech0160validation>";
+				if ( Util.stringInFile( configSip0160, configFile ) ) {
+					buttonSip.setDisable( true );
+				} else {
+					buttonSip.setDisable( false );
+				}
 			} else {
 				buttonSip.setDisable( true );
 			}
-			String textFolder = " --> " + valFolder.getAbsolutePath();
-			engine.loadContent( textFolder );
+			String sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Ausgewählter Ordner: <br>"
+					+ valFolder.getAbsolutePath() + "</h3></td></tr>";
+			String sel2 = "<tr><td><h3>2.</h3></td><td><h3>Ggf. Konfiguration und LogType anpassen </h3></td></tr>";
+			String sel3 = "<tr><td><h3>3.</h3></td><td><h3>Validierung starten </h3></td></tr></table>";
+			if ( locale.toString().startsWith( "fr" ) ) {
+				sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Dossier sélectionné : <br>"
+						+ valFolder.getAbsolutePath() + "</h3></td></tr>";
+				sel2 = "<tr><td><h3>2.</h3></td><td><h3>Ajuster la configuration et le LogType si nécessaire </h3></td></tr>";
+				sel3 = "<tr><td><h3>3.</h3></td><td><h3>Démarrer la validation </h3></td></tr></table>";
+			} else if ( locale.toString().startsWith( "en" ) ) {
+				sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Selected folder: <br>"
+						+ valFolder.getAbsolutePath() + "</h3></td></tr>";
+				sel2 = "<tr><td><h3>2.</h3></td><td><h3>Adjust configuration and LogType if necessary </h3></td></tr>";
+				sel3 = "<tr><td><h3>3.</h3></td><td><h3>Start validation </h3></td></tr></table>";
+			} else {
+				sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Ausgewählter Ordner: <br>"
+						+ valFolder.getAbsolutePath() + "</h3></td></tr>";
+				sel2 = "<tr><td><h3>2.</h3></td><td><h3>Ggf. Konfiguration und LogType anpassen </h3></td></tr>";
+				sel3 = "<tr><td><h3>3.</h3></td><td><h3>Validierung starten </h3></td></tr></table>";
+			}
+			String text = "<html><body>" + sel1 + sel2 + sel3 + "</body></html>";
+			engine.loadContent( text );
 		}
 		buttonPrint.setDisable( true );
 		buttonSave.setDisable( true );
@@ -737,6 +860,7 @@ public class GuiController
 	@FXML
 	void changeConfig( ActionEvent e )
 	{
+		console.setText( " \n" );
 		try {
 			StackPane configLayout = new StackPane();
 
@@ -755,27 +879,63 @@ public class GuiController
 			configStage.initModality( Modality.APPLICATION_MODAL );
 			configStage.getIcons().add( kostvalIcon );
 			configStage.setScene( configScene );
+			configStage.setOnCloseRequest( event -> {
+				File configFileBackup = new File(
+						System.getenv( "USERPROFILE" ) + File.separator + ".kost-val_2x" + File.separator
+								+ "configuration" + File.separator + "BACKUP.kostval.conf.xml" );
+				try {
+					Util.copyFile( configFileBackup, configFile );
+				} catch ( IOException e1 ) {
+					e1.printStackTrace();
+				}
+				configFileBackup.delete();
+				Util.deleteFile( configFileBackup );
+			} );
 			configStage.show();
+			configStage.setOnHiding( event -> {
+				// hier engeben was beim schliessen gemacht werden soll
+				engine.load( "file:///" + configFile.getAbsolutePath() );
+				buttonPrint.setDisable( true );
+				buttonSave.setDisable( true );
+			} );
 		} catch ( IOException e1 ) {
 			e1.printStackTrace();
 		}
-		buttonPrint.setDisable( true );
-		buttonSave.setDisable( true );
 	}
 
 	/* TODO --> TextField ================= */
 
+	@SuppressWarnings("unused")
 	/* Wenn Aenderungen an changeFileFolder gemacht wird, wird es ausgeloest */
 	@FXML
 	void changeFileFolder( ActionEvent event )
 	{
+		console.setText( " \n" );
 		String pathFileFolder = fileFolder.getText();
 		File valFileFolder = new File( pathFileFolder );
-		if ( valFileFolder.exists() ) {
-			// Format und Sip Validierung erst moeglich wenn fileFolder ausgefuellt
-			buttonFormat.setDisable( false );
+		if ( valFileFolder.exists() ) { // Format und Sip Validierung erst moeglich wenn fileFolder
+																		// ausgefuellt
+			// und auch in der Config erlaubt
+			if ( Util.stringInFile( "<pdfavalidation>yes</", configFile ) ) {
+				buttonFormat.setDisable( false );
+			} else if ( Util.stringInFile( "<siardalidation>yes</", configFile ) ) {
+				buttonFormat.setDisable( false );
+			} else if ( Util.stringInFile( "<jp2validation>yes</", configFile ) ) {
+				buttonFormat.setDisable( false );
+			} else if ( Util.stringInFile( "<jpegvalidation>yes</", configFile ) ) {
+				buttonFormat.setDisable( false );
+			} else if ( Util.stringInFile( "<tiffvalidation>yes</", configFile ) ) {
+				buttonFormat.setDisable( false );
+			} else {
+				buttonFormat.setDisable( true );
+			}
 			if ( valFileFolder.getName().startsWith( "SIP" ) ) {
-				buttonSip.setDisable( false );
+				String configSip0160 = "<ech0160validation>no</ech0160validation>";
+				if ( Util.stringInFile( configSip0160, configFile ) ) {
+					buttonSip.setDisable( true );
+				} else {
+					buttonSip.setDisable( false );
+				}
 			} else {
 				buttonSip.setDisable( true );
 			}
@@ -786,19 +946,52 @@ public class GuiController
 		}
 		// Anzeige in WebView wenn image
 		if ( valFileFolder.isFile() ) {
-			String pathImage = "file:///" + valFileFolder.getAbsolutePath();
-			String fileFolderName = valFileFolder.getName();
-			String fileFolderExt = "." + FilenameUtils.getExtension( fileFolderName ).toLowerCase();
-			if ( fileFolderExt.equals( ".jp2" ) || fileFolderExt.equals( ".jpeg" )
-					|| fileFolderExt.equals( ".jpg" ) || fileFolderExt.equals( ".tiff" )
-					|| fileFolderExt.equals( ".tif" ) || fileFolderExt.equals( ".png" )
-					|| fileFolderExt.equals( ".svg" ) ) {
-				engine.load( pathImage );
-			} else {
-				if ( valFileFolder.exists() ) {
-					// TODO: hier laufend weitere Viewer einbauen
-					String text = " --> " + valFileFolder.getAbsolutePath();
+			if ( valFileFolder.exists() ) {
+				if ( valFileFolder != null ) {
+					fileFolder.clear();
+					fileFolder.setText( valFileFolder.getAbsolutePath() );
+					// Anzeige in WebView wenn image
+					String pathDetail = "file:/" + valFileFolder.getAbsolutePath();
+					pathDetail = pathDetail.replace( "\\\\", "/" );
+					pathDetail = pathDetail.replace( "\\", "/" );
+
+					String fileFolderName = valFileFolder.getName();
+					String fileFolderExt = "." + FilenameUtils.getExtension( fileFolderName ).toLowerCase();
+					String sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Ausgewählte Datei: <br>"
+							+ valFileFolder.getAbsolutePath() + "</h3></td></tr>";
+					String sel2 = "<tr><td><h3>2.</h3></td><td><h3>Ggf. Konfiguration und LogType anpassen </h3></td></tr>";
+					String sel3 = "<tr><td><h3>3.</h3></td><td><h3>Validierung starten </h3></td></tr></table>";
+					String selDetail = "<br/>";
+					if ( fileFolderExt.equals( ".jp2" ) || fileFolderExt.equals( ".jpeg" )
+							|| fileFolderExt.equals( ".jpg" ) || fileFolderExt.equals( ".tiff" )
+							|| fileFolderExt.equals( ".tif" ) || fileFolderExt.equals( ".png" )
+							|| fileFolderExt.equals( ".svg" ) ) {
+						selDetail = "<table  width=\"100%\"><tr><td width=\"25%\"></td><td><img  src='"
+								+ pathDetail
+								+ "' width=\"300\" style=\"border:1px solid gray\" ></td><td width=\"25%\"></td></tr></table>";
+					} else {
+						// TODO: hier laufend weitere Viewer einbauen
+					}
+					if ( locale.toString().startsWith( "fr" ) ) {
+						sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Fichier sélectionné : <br>"
+								+ valFileFolder.getAbsolutePath() + "</h3></td></tr>";
+						sel2 = "<tr><td><h3>2.</h3></td><td><h3>Ajuster la configuration et le LogType si nécessaire </h3></td></tr>";
+						sel3 = "<tr><td><h3>3.</h3></td><td><h3>Démarrer la validation </h3></td></tr></table>";
+					} else if ( locale.toString().startsWith( "en" ) ) {
+						sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Selected file: <br>"
+								+ valFileFolder.getAbsolutePath() + "</h3></td></tr>";
+						sel2 = "<tr><td><h3>2.</h3></td><td><h3>Adjust configuration and LogType if necessary </h3></td></tr>";
+						sel3 = "<tr><td><h3>3.</h3></td><td><h3>Start validation </h3></td></tr></table>";
+					} else {
+						sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Ausgewählte Datei: <br>"
+								+ valFileFolder.getAbsolutePath() + "</h3></td></tr>";
+						sel2 = "<tr><td><h3>2.</h3></td><td><h3>Ggf. Konfiguration und LogType anpassen </h3></td></tr>";
+						sel3 = "<tr><td><h3>3.</h3></td><td><h3>Validierung starten </h3></td></tr></table>";
+					}
+					String text = "<html><body>" + sel1 + sel2 + sel3 + selDetail + "</body></html>";
 					engine.loadContent( text );
+					// Format und Sip Validierung erst moeglich wenn fileFolder ausgefuellt
+					buttonFormat.setDisable( false );
 				} else {
 					String notexist = "Ungültiger Pfad! " + valFileFolder.getAbsolutePath()
 							+ " existiert nicht.";
@@ -807,22 +1000,42 @@ public class GuiController
 					} else if ( locale.toString().startsWith( "en" ) ) {
 						notexist = "Illegal path! " + valFileFolder.getAbsolutePath() + " doesn't exist.";
 					}
-					engine.loadContent( notexist );
+					engine.loadContent( "<html><h2>" + notexist + "</h2></html>" );
 				}
 			}
 		} else {
 			if ( valFileFolder.exists() ) {
-				String text = " --> " + valFileFolder.getAbsolutePath();
+				String sel1Folder = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Ausgewählter Ordner: <br>"
+						+ valFileFolder.getAbsolutePath() + "</h3></td></tr>";
+				String sel2Folder = "<tr><td><h3>2.</h3></td><td><h3>Ggf. Konfiguration und LogType anpassen </h3></td></tr>";
+				String sel3Folder = "<tr><td><h3>3.</h3></td><td><h3>Validierung starten </h3></td></tr></table>";
+				if ( locale.toString().startsWith( "fr" ) ) {
+					sel1Folder = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Dossier sélectionné : <br>"
+							+ valFileFolder.getAbsolutePath() + "</h3></td></tr>";
+					sel2Folder = "<tr><td><h3>2.</h3></td><td><h3>Ajuster la configuration et le LogType si nécessaire </h3></td></tr>";
+					sel3Folder = "<tr><td><h3>3.</h3></td><td><h3>Démarrer la validation </h3></td></tr></table>";
+				} else if ( locale.toString().startsWith( "en" ) ) {
+					sel1Folder = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Selected folder: <br>"
+							+ valFileFolder.getAbsolutePath() + "</h3></td></tr>";
+					sel2Folder = "<tr><td><h3>2.</h3></td><td><h3>Adjust configuration and LogType if necessary </h3></td></tr>";
+					sel3Folder = "<tr><td><h3>3.</h3></td><td><h3>Start validation </h3></td></tr></table>";
+				} else {
+					sel1Folder = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Ausgewählter Ordner: <br>"
+							+ valFileFolder.getAbsolutePath() + "</h3></td></tr>";
+					sel2Folder = "<tr><td><h3>2.</h3></td><td><h3>Ggf. Konfiguration und LogType anpassen </h3></td></tr>";
+					sel3Folder = "<tr><td><h3>3.</h3></td><td><h3>Validierung starten </h3></td></tr></table>";
+				}
+				String text = "<html><body>" + sel1Folder + sel2Folder + sel3Folder + "</body></html>";
 				engine.loadContent( text );
 			} else {
 				String notexist = "Ungültiger Pfad! " + valFileFolder.getAbsolutePath()
-						+ "existiert nicht.";
+						+ " existiert nicht.";
 				if ( locale.toString().startsWith( "fr" ) ) {
 					notexist = "Lien invalide ! " + valFileFolder.getAbsolutePath() + " n'existe pas.";
 				} else if ( locale.toString().startsWith( "en" ) ) {
 					notexist = "Illegal path! " + valFileFolder.getAbsolutePath() + " doesn't exist.";
 				}
-				engine.loadContent( notexist );
+				engine.loadContent( "<html><h2>" + notexist + "</h2></html>" );
 			}
 		}
 		buttonPrint.setDisable( true );
@@ -835,6 +1048,7 @@ public class GuiController
 	@FXML
 	void changeLogType( ActionEvent event )
 	{
+		console.setText( " \n" );
 		String selLogType = logType.getValue();
 		if ( selLogType.equals( "LogType: --min" ) ) {
 			arg3 = "--min";
@@ -849,6 +1063,7 @@ public class GuiController
 	@FXML
 	void changeLang( ActionEvent event )
 	{
+		console.setText( " \n" );
 		String selLang = lang.getValue();
 		try {
 			if ( selLang.equals( "Deutsch" ) ) {

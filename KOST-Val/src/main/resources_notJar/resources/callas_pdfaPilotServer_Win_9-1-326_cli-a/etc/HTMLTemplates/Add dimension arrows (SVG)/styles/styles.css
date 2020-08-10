@@ -1,0 +1,24 @@
+@charset "UTF-8";
+
+p {
+	font-family: 'FreeUniversal';
+    color: -cchip-cmyk( 0.0, 0.0, 0.0, 1.0 );
+}
+
+#horizontal-dimension {
+	width: 20mm;
+	height: 10mm;
+	text-align: center;
+	line-height: 10mm;
+	vertical-align: middle;
+}
+
+#vertical-dimension {
+	width: 20mm;
+	height: 10mm;
+	text-align: center;
+    -webkit-transform: rotate(90deg); 
+    -webkit-transform-origin: 50% 50%; 
+	line-height: 10mm;
+	vertical-align: middle;
+}

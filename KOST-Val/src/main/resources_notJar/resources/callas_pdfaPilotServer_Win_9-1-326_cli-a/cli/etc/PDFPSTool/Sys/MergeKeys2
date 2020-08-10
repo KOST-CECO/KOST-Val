@@ -1,0 +1,63 @@
+%!PS-Adobe-3.0 Resource-File
+%%BeginResource: file (Sys/MergeKeys2)
+%%Title: (Sys/MergeKeys2)
+%%Version: 3010.01
+%%Copyright: ------------------------------------------------------------
+%%Copyright: Copyright 1990-1998 Adobe Systems Incorporated.
+%%Copyright: All rights reserved.
+%%Copyright:
+%%Copyright: Patents Pending
+%%Copyright:
+%%Copyright: NOTICE: All information contained herein is the property
+%%Copyright: of Adobe Systems Incorporated. Many of the intellectual
+%%Copyright: and technical concepts contained herein are proprietary
+%%Copyright: to Adobe, are protected as trade secrets, and are made
+%%Copyright: available only to Adobe licensees for their internal use.
+%%Copyright: Any reproduction or dissemination of this software is
+%%Copyright: strictly forbidden unless prior written permission is
+%%Copyright: obtained from Adobe.
+%%Copyright:
+%%Copyright: PostScript and Display PostScript are trademarks of
+%%Copyright: Adobe Systems Incorporated which may be registered in
+%%Copyright: certain jurisdictions.
+%%Copyright: ------------------------------------------------------------
+%%EndComments
+userdict/svobj save put userdict/PGFKeysSupp 200 dict put userdict/tstr 128
+string put userdict/d(Sys/PGFKeys.xxxxxxxx)serialnumber 16 2 index 12 8
+getinterval cvrs pop PrependRoot dup length string copy put globaldict
+/$PGFKeys known{PGFKeysSupp begin $PGFKeys{def}forall end}if d status{pop pop
+pop pop d{run}1183615869 internaldict/superexec get exec PGFKeysSupp begin
+/$PGFKeys where{pop $PGFKeys{def}forall}if end d(temp/OPGFKeys.xxxxxxxx)
+serialnumber 16 2 index 14 8 getinterval cvrs pop PrependRoot dup length
+string copy dup dup status{pop pop pop pop{deletefile}stopped{pop true
+setglobal}if}{pop}ifelse{{renamefile}stopped{pop{deletefile}stopped{pop}if
+true setglobal}if}1183615869 internaldict/superexec get exec}if userdict/s
+(temp/PGFKeys.xxxxxxxx)serialnumber 16 2 index 13 8 getinterval cvrs pop
+PrependRoot dup length string copy put s status{pop pop pop pop s run
+PGFKeysSupp begin $PGFKeys{{exch dup/Generic::FullWidth eq{pop pop exit}if dup
+/Generic::HalfWidth eq{pop pop exit}if exch def exit}loop}forall end s
+(temp/APGFKeys.xxxxxxxx)serialnumber 16 2 index 14 8 getinterval cvrs pop
+PrependRoot dup length string copy dup dup status{pop pop pop pop{deletefile}
+stopped{pop true setglobal}if}{pop}ifelse{renamefile}stopped{pop{deletefile}
+stopped{pop}if true setglobal}if}if d(w){{file}stopped{pop null}if}1183615869
+internaldict/superexec get exec dup null ne{globaldict/f 3 -1 roll put f
+(%!PS-Adobe-3.0 Resource-File
+)writestring f(%%BeginResource: File )writestring f d 4 16 getinterval dup 3 1
+roll writestring f(
+)writestring f(%%Title: \()writestring f exch writestring f(\)
+)writestring f PGFKeysSupp length tstr cvs writestring f( dict begin
+)writestring PGFKeysSupp{f(/)writestring exch tstr cvs f exch writestring f
+(
+<)writestring f exch writehexstring f(>
+readonly def
+)writestring}forall f(currentdict
+)writestring f(end
+)writestring f(systemdict/globaldict known
+)writestring f( { systemdict/globaldict get }
+)writestring f( { userdict } ifelse
+)writestring f(exch /$PGFKeys exch put
+)writestring f(%%EndResource
+)writestring f(%%EOF
+)writestring f closefile}{pop}ifelse userdict/svobj get restore
+%%EndResource
+%%EOF

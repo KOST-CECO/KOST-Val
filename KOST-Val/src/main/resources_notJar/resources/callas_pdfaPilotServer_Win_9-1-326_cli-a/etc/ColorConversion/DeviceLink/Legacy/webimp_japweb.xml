@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<devicelink>
+	<profile lang="CHS">
+		<header>卷筒纸胶印，改良 LWC 到日本标准</header>
+		<explanation>从改良 PSO LWC (ECI) 到日本卷筒涂层纸的转换 (广告用)</explanation>
+	</profile>
+	<profile lang="ENU">
+		<header>Web offset, LWC improved to Japan</header>
+		<explanation>Conversion from PSO LWC improved (ECI) to Japan Web Coated (Ad)</explanation>
+	</profile>
+	<profile lang="ESP">
+		<header>Offset de bobina, de LWC improved a Japón</header>
+		<explanation>Conversión de PSO LWC improved (ECI) a Japón estucado en bobina (Ad)</explanation>
+	</profile>
+	<profile lang="FRA">
+		<header>Impression rotative offset, LWC improved vers Japon</header>
+		<explanation>Conversion d’PSO LWC improved (ECI) vers Japan Web Coated (Ad)</explanation>
+	</profile>
+	<profile lang="DEU">
+		<header>Rollenoffset, LWC improved nach Japan</header>
+		<explanation>Konvertierung von PSO LWC improved (ECI) nach Japan Web Coated (Ad)</explanation>
+	</profile>
+	<profile lang="ITA">
+		<header>Offset bobina, da LWC improved a Giappone</header>
+		<explanation>Conversione da PSO LWC improved (ECI) a Japan Web Coated (annuncio pubblicitario)</explanation>
+	</profile>
+	<profile lang="JPN">
+		<header>Web オフセット, 改善された LWC を日本に変換</header>
+		<explanation>PSO LWC improved (ECI) を Japan Web Coated (Ad) に変換します</explanation>
+	</profile>
+</devicelink>

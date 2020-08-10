@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="ISO-8859-1"?><?xml-stylesheet type="text/xsl" href="kostval-conf-DE.xsl"?>
 <configuration><!-- kostval.conf.xml_v2.0.0 -->
+	<jpeg>
+		<jpegvalidation>yes</jpegvalidation><!--no verwenden wenn jpeg nicht validiert werden soll, ansonsten yes -->
+	</jpeg>
+	<jp2>
+		<jp2validation>yes</jp2validation><!--no verwenden wenn jp2 nicht validiert werden soll, ansonsten yes -->
+	</jp2>
+	<siard>
+		<siardvalidation>yes</siardvalidation><!--no verwenden wenn siard nicht validiert werden soll, ansonsten yes -->
+		<siard10>1.0</siard10><!--1.0 / / no -->
+		<siard21>2.1</siard21><!--2.1 / / no -->
+	</siard>
 	<pdfa>
 		<pdfavalidation>yes</pdfavalidation><!--no verwenden wenn pdfa nicht validiert werden soll, ansonsten yes -->
 		<!-- sind pdftools und callas beide auf no wird keine pdfa Validierung durchgefuehrt -->
@@ -21,17 +32,6 @@
 		<pdfaimage>no</pdfaimage><!--no verwenden wenn die Bilder in pdfa nicht validiert werden sollen, ansonsten yes -->
 		<jbig2allowed>yes</jbig2allowed><!--no verwenden wenn JBIG2 in pdfa nicht erlaubt werden sollen, ansonsten yes -->
 	</pdfa>
-	<siard>
-		<siardvalidation>yes</siardvalidation><!--no verwenden wenn siard nicht validiert werden soll, ansonsten yes -->
-		<siard10>1.0</siard10><!--1.0 / / no -->
-		<siard21>2.1</siard21><!--2.1 / / no -->
-	</siard>
-	<jp2>
-		<jp2validation>yes</jp2validation><!--no verwenden wenn jp2 nicht validiert werden soll, ansonsten yes -->
-	</jp2>
-	<jpeg>
-		<jpegvalidation>yes</jpegvalidation><!--no verwenden wenn jpeg nicht validiert werden soll, ansonsten yes -->
-	</jpeg>
 	<tiff>
 		<tiffvalidation>yes</tiffvalidation><!--no verwenden wenn tiff nicht validiert werden soll, ansonsten yes -->
 		<!--TIFF-Praezisierungen -->

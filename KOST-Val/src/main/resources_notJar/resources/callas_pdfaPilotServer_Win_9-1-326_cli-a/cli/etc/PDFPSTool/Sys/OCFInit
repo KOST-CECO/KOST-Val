@@ -1,0 +1,112 @@
+%!PS-Adobe-3.0 Resource-File
+%%BeginResource: file (Sys/OCFInit)
+%%Title: (Sys/OCFInit)
+%%Version: 3010.01
+%%Copyright: ------------------------------------------------------------
+%%Copyright: Copyright 1990-1998 Adobe Systems Incorporated.
+%%Copyright: All rights reserved.
+%%Copyright:
+%%Copyright: Patents Pending
+%%Copyright:
+%%Copyright: NOTICE: All information contained herein is the property
+%%Copyright: of Adobe Systems Incorporated. Many of the intellectual
+%%Copyright: and technical concepts contained herein are proprietary
+%%Copyright: to Adobe, are protected as trade secrets, and are made
+%%Copyright: available only to Adobe licensees for their internal use.
+%%Copyright: Any reproduction or dissemination of this software is
+%%Copyright: strictly forbidden unless prior written permission is
+%%Copyright: obtained from Adobe.
+%%Copyright:
+%%Copyright: PostScript and Display PostScript are trademarks of
+%%Copyright: Adobe Systems Incorporated which may be registered in
+%%Copyright: certain jurisdictions.
+%%Copyright: ------------------------------------------------------------
+%%EndComments
+currentdict systemdict ne{systemdict begin}if systemdict/currentpacking known{
+currentpacking true setpacking}if systemdict/currentglobal known{currentglobal
+false setglobal}if userdict/CDevProcDirectory known not{userdict begin
+/CDevProcDirectory 32 dict def CDevProcDirectory/StandardCDevProc{pop pop pop
+pop 0 exch -1000 exch 2 div 880}bind put/findcdevproc{dup userdict
+/CDevProcDirectory get exch known not{(cdevprocs/)AppendName PrependRoot run}
+if userdict/CDevProcDirectory get exch get}bind executeonly def end}if
+1183615869 internaldict dup begin/eCCRun known not{/eCCRun{{//systemdict
+/internaldict get 1183615869 exch exec/$strop2 get 907181848 exch exec}stopped
+{pop/BuildChar errordict/invalidfont get exec stop}if 1183615869 internaldict
+/CCRun get exec}bind executeonly def}if end systemdict/globaldict known{
+systemdict/globaldict get}{1183615869 internaldict}ifelse begin/$DiskPGFont 32
+dict def $DiskPGFont begin 1183615869 internaldict/compBuildChar known{
+/BuildChar 1183615869 internaldict/compBuildChar get def}{/BuildChar{userdict
+/$UDPGFont known not{userdict/$UDPGFont 22 dict dup/CurName()put dup/CurFile 0
+put dup/CurOpen false put dup/NameBuffer 64 string put dup/DataBuffer 500
+string put dup/c 0 put dup/fd 0 put dup/cn 0 put dup/co 0 put dup/pf 0 put dup
+/pd 0 put dup/po1 0 put dup/po2 0 put dup/pl 0 put dup/tn 0 put dup/ri 0 put
+put}if userdict/$UDPGFont get begin/c exch def/fd exch def/cn fd/Encoding get
+c get def fd/CharStrings get dup cn known{cn get}{/.notdef get}ifelse dup
+xcheck{//systemdict begin fd begin c exch exec end end}{/co exch fd
+/CharOffsets get exch 6 mul 6 getinterval def/pf co 0 get fd/PGFArray get exch
+get dup type/dicttype ne{findpgfont}if def/po1 co 1 get def/po2 co 2 get 8
+bitshift co 3 get add def/pl co 4 get 8 bitshift co 5 get add def fd c pf
+/CharStringsArray get dup type/stringtype eq{/CurOpen CurFile type/filetype ne
+{false}{CurFile status}ifelse def CurName ne CurOpen not or{CurOpen{CurFile
+closefile}if pf/CharStringsArray get length dup NameBuffer length gt{string
+/NameBuffer exch def}{pop}ifelse/CurName pf/CharStringsArray get NameBuffer
+copy def/CurFile CurName(r)file def}if CurFile po1 16 bitshift po2 add
+setfileposition pl DataBuffer length gt{/DataBuffer pl 1.1 mul cvi string def}
+if CurFile DataBuffer 0 pl getinterval readstring pop}{po1 get po2 pl
+getinterval}ifelse cvx/pd fd/Private get def fd/Private pf/Private get{dup
+/RunInt get/ri exch def put}//systemdict/internaldict get 1183615869 exch exec
+/superexec get exec ri/CCRun eq ri/BMRun eq or ri/eCCRun eq or{//systemdict
+/internaldict get 1183615869 exch exec ri get exec}{ri load exec}ifelse fd
+/Private pd{put}//systemdict/internaldict get 1183615869 exch exec/superexec
+get exec}ifelse end}bind executeonly def}ifelse/MDID 0 def/MDFV[]def/MDFS 1536
+string def/MDFF{FontDirectory 4 index known dup{pop 3 index findfont/Private
+get{/UniqueID get}//systemdict/internaldict get 1183615869 exch exec/superexec
+get exec 3 index eq}executeonly if{//$DiskPGFont/MDFS get exch 0 exch
+getinterval currentfile exch readstring pop pop pop pop findfont}executeonly{
+15 dict begin string currentfile exch readstring pop/CharOffsets exch readonly
+def//$DiskPGFont/MDFV get exch get dup 0 get/Encoding exch findencoding def
+dup 1 get/CharStrings exch findcharstrings def dup 2 get/FontBBox exch
+readonly def dup 3 get/PGFArray exch readonly def dup 4 get/FontMatrix exch
+readonly def 5 get dup null eq{pop}{/CDevProc exch findcdevproc def}ifelse dup
+true eq{pop//$DiskPGFont/MDID 2 copy get dup null eq{pop pop pop null}{dup 1
+add exch 4 1 roll put}ifelse}if dup null ne{/UniqueID 1 index def}if exch
+/FontName exch def/FontType 4 def/PaintType 0 def/BuildChar//$DiskPGFont
+/BuildChar get def/Private 2 dict dup begin/password 5839 def/UniqueID 4 -1
+roll dup false eq{pop null}if def end noaccess def currentdict end dup
+/FontName get exch definefont}executeonly ifelse}bind executeonly def end
+currentfile eexec
+2b9cd18755c89af79f1680e815f08c741741e45a2daf8b7cda6b1cc9ee14b5fe
+ff73be35af0e420e49075d552af685910231917cf87bccdae8d1702ebdfad506
+dfd322897eae0002196c3b1bd92dc1c2d821c7bfdaddaa07327201e67d1a391f
+a81b3fdfddb6e2e744d0bc8901fe373b5704b5dee90a890215d9efc1cc0f256b
+688d6b29ffd705bc24384917314e75261479c7071789c6d2f570ed88ba5d0221
+c50ca2d25751e9201e40484debba0ae3e640799984214afc45fb7f023cdc4ae0
+7c562b73aeaa5b49014747d81b9bc4312103dccbcec789f90b4ac823a3f4d075
+7ba934a29a83c08884df95c7e179fa3c0cd93137b0fb0ae30bf0d62b68de41f9
+df4d1da65607e8aac6eee7dc8b6bada8a8a0e85c337c1a0cc5840c4609c0fe82
+1f253100e4ee2d52a6fe17beffca6c8b6ab66609a763b654d97edb4f9040461a
+2e43a15bb27bb655fc9f7492fe9125017acd65ed6adc30f9d256c30a2dc99593
+94c9e9d1be10635f5867fd181312dfb297709191822366b3c1039ebb45e0a43b
+0e95b7f01c8b938168da43ee7a2dc227c1b521919261072e054584dd2e166b5f
+5fe81b1168e83ade307f6031e8bb0a67637d4a6a3d31b2f424505269ede45cf7
+d7b8e2e29ef3b0f8c9ebacb7196aa28468a20401173ccc4a880b316485d687e6
+744226b093c4315500eea44b0101068bcb764c05f61fcb4e483e3de60b4d62e1
+4f44851ad4e4652e2044b41ce3bc59d960216cc82552cbecf34feb944c541909
+711a4f928467b464a362bd00ceb23a4bc1648b7ae58191b921dadf55bc132451
+1d86f116dfe70417de391e320b6f439fbcfcbbbcf1aaa4090f9d06b6b3a40858
+73b82eb2734431841f7c9ecd714636f444dbeff7ff8ec546cbd7db4c8b9f4886
+db359dcf432c9f5a717d2d11608cb5928f242ae1db91bb19d86d1fa66283727e
+442b6e994f0d05624e6c6816e183f896ec41d1b2359403d897e9e35276372274
+dae83247b81935d309a9ca4684cfc0bf554c5ad20d65fbb2c8732f39b4918f3c
+1f079f6eeb33d22e4c28583206a2d0036cd325d9e4499ce9a4797fd2aadbd00c
+e77e7508c0f91bc5c75dcb90235d8a08464df3e7590cf2d895785a0abdcf6ec1
+89f7bc26bf52225f092ec277f8b688d8763021d52bea4d2730cfa0adf8997e3b
+b94720c6692ec685f7dae960e31f6cfc81c6042ba8e683e93e6c97dc56629f41
+d91dbd240ca164e9625d00845cc2b1142d3832951eda87fac6e24cf4c7406612
+99a873eeb27c5fc894f0de3dfb9f8346612154ac2a944c5887ffefde246cb025
+c1f60c64f5ec62debab8df07f8d0dee24385bdebd2db570c8ac27c8b0d722143
+80dd07e82e8cd549f625c087e4962d743c5253ad8fb6abb4 end end systemdict
+/currentpacking known{setpacking}if systemdict/currentglobal known{setglobal}
+if currentfile closefile
+%%EndResource
+%%EOF

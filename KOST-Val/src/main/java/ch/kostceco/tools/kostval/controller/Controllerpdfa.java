@@ -107,12 +107,12 @@ public class Controllerpdfa implements MessageConstants
 			}
 		} catch ( ValidationApdfvalidationException e ) {
 			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() +" init1") );
 			this.getValidationAinitialisationModule().getMessageService().print();
 			return false;
 		} catch ( Exception e ) {
 			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() +" init2" ) );
 			return false;
 		}
 
@@ -136,12 +136,12 @@ public class Controllerpdfa implements MessageConstants
 			}
 		} catch ( ValidationApdfvalidationException e ) {
 			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage()  +" A-I_1") );
 			this.getValidationAvalidationAiModule().getMessageService().print();
 			valid = false;
 		} catch ( Exception e ) {
 			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage()+" A-I_2" ) );
 			valid = false;
 		}
 
@@ -156,12 +156,12 @@ public class Controllerpdfa implements MessageConstants
 			}
 		} catch ( ValidationApdfvalidationException e ) {
 			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() +" J_1") );
 			this.getValidationJimageValidationModule().getMessageService().print();
 			return false;
 		} catch ( Exception e ) {
 			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage()+" J_2" ) );
 			valid = false;
 		}
 		return valid;

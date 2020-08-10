@@ -1,0 +1,95 @@
+{
+  "author" : "",
+  "comment" :
+  {
+    "value" : "Profile for QCQA processing\n\nInput: \n\nPDF file <NAME>.pdf\n\nAffiliated JSON files with the following filename(s) for all pages which contain Barcodes:\n\n<NAME>_<PAGE>.json\n\n<PAGE>: PAGE NUMBER (1 BASED)\n\nThe JSON file shall contain data for all barcodes on a particular page IN THE FOLLOWING FORMAT:\n\n{\n\t\"resolution\":72,\n\t\"width\": 1136,\n\t\"height\": 606,\n\t\"barcodes\":\n\t[\n\t\t{\n\t\t\t\"x\": 483,\n\t\t\t\"y\": 493,\n\t\t\t\"w\": 75,\n\t\t\t\"h\": 74\n\t\t}\n\t]\n}\n\n",
+    "vars" : []
+  },
+  "dialog" : "",
+  "email" : "",
+  "group" : "Gd22ab3c4d6812624a58654df703cbeae",
+  "hasPassword" : false,
+  "id" : "M0d18452e578b312ae629078787020e07",
+  "layout" : null,
+  "locked" : false,
+  "name" :
+  {
+    "value" : "barcode qcqa (Copy 1)",
+    "vars" : []
+  },
+  "sequence" :
+  [
+
+    {
+      "enable_step" : true,
+      "id" : "V8d486f0d7a8c8118a88cd05818a39fd8",
+      "if_disabled" :
+      {
+        "next_step" : 2
+      },
+      "on_failure" :
+      {
+        "next_step" : 2
+      },
+      "on_success" :
+      {
+        "next_step" : -1
+      },
+      "type" : "variable"
+    },
+
+    {
+      "enable_step" : true,
+      "id" : "R9e477028ab08c355dc2ba0e4e6cf3e66",
+      "if_disabled" :
+      {
+        "next_step" : -1
+      },
+      "on_hit" :
+      {
+        "next_step" : -1
+      },
+      "on_success" :
+      {
+        "next_step" : -1
+      },
+      "type" : "check"
+    },
+
+    {
+      "enable_step" : true,
+      "id" : "V5a2ca6a29ab4fbde838072d5f75c7e4c",
+      "if_disabled" :
+      {
+        "next_step" : -1
+      },
+      "on_failure" :
+      {
+        "next_step" : -1
+      },
+      "on_success" :
+      {
+        "next_step" : 0
+      },
+      "type" : "variable"
+    },
+
+    {
+      "enable_step" : true,
+      "id" : "V539ae5a6773a29c9556c695b3b50879b",
+      "if_disabled" :
+      {
+        "next_step" : -1
+      },
+      "on_failure" :
+      {
+        "next_step" : -1
+      },
+      "on_success" :
+      {
+        "next_step" : -1
+      },
+      "type" : "variable"
+    }
+  ]
+}

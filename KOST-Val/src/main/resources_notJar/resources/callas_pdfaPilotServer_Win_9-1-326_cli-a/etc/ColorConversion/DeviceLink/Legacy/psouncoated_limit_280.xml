@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<devicelink>
+	<profile lang="CHS">
+		<header>平板纸胶印，未涂层，降低最高油墨覆盖到 280% (欧洲标准) (仅适用于 Server 与 CLI 版本)</header>
+		<explanation>降低最高油墨覆盖到 280%, 基于 PSO 未涂层 (ECI)</explanation>
+	</profile>
+	<profile lang="ENU">
+		<header>Sheetfed offset, uncoated, reduce to 280% ink limit (PSO) (Server/CLI only)</header>
+		<explanation>Reduction of maximum ink coverage to 280% based on PSO Uncoated (ECI)</explanation>
+	</profile>
+	<profile lang="ESP">
+		<header>Offset de alimentación por hojas, sin estucar, reducir a 280% el límite de tinta (PSO) (sólo Server/CLI)</header>
+		<explanation>Reducción de la cobertura de tinta máxima al 280% en base a PSO sin estucar (ECI)</explanation>
+	</profile>
+	<profile lang="FRA">
+		<header>Offset à feuilles, papier non couché, réduction du taux de couverture d'encre à 280% (PSO) (Server/CLI seulement)</header>
+		<explanation>Réduction du taux de couverture d'encre maximale à 280% selon PSO Uncoated (ECI)</explanation>
+	</profile>
+	<profile lang="DEU">
+		<header>Bogenoffset, ungestrichen, Gesamtfarbreduzierung auf 280% (PSO) (nur Server/CLI)</header>
+		<explanation>Reduzierung des Gesamtfarbauftrags auf maximal 280% auf Basis von PSO Uncoated (ECI)</explanation>
+	</profile>
+	<profile lang="ITA">
+		<header>Offset foglio, non patinata, riduci limite inchiostro a 280% (PSO) (solo Server/CLI)</header>
+		<explanation>Riduzione della copertura massima di inchiostro al 280% in base a PSO Uncoated (ECI)</explanation>
+	</profile>
+	<profile lang="JPN">
+		<header>シートフィードオフセット, 上質紙, インキ量を 280% に削減 (PSO) (Server/CLI のみ)</header>
+		<explanation>PSO Uncoated (ECI) を基にインキ総量を 280% に削減します</explanation>
+	</profile>
+</devicelink>

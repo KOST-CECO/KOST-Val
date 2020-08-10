@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pdfpreflight version="17.0">
+	<package>
+		<id3>be3afe7e2cc6d9154bfd950c2666e5d7</id3>
+		<pdfxoutintentlist>
+		</pdfxoutintentlist>
+		<iccprofilelist>
+		</iccprofilelist>
+		<ccpolicies>
+		</ccpolicies>
+		<occdsetups>
+		</occdsetups>
+		<curves>
+		</curves>
+		<fspolicies>
+			<fspolicy>
+				<fspolicyname>020_SimilarFonts.cfg</fspolicyname>
+				<fspolicydata>DisplayName&#9;1&#9;FEATURE_FontSubstitutionPolicySimilarFonts_long&#10;&#10;SubstituteAll&#9;Arial&#9;Helvetica&#9;Helvetica Neue&#9;Futura&#9;Helvetica Neue&#9;Microsoft Sans Serif&#9;MS PGothic&#9;Trebuchet MS&#9;Verdana&#10;SubstituteAll&#9;Arial Bold&#9;Arial-Bold&#9;Helvetica Bold&#9;Futura-Bold&#9;Futura Bold&#9;Helvetica-Bold&#10;SubstituteAll&#9;Arial Italic&#9;Arial-Italic&#9;Helvetica Italic&#9;Helvetica-Italic&#9;Futura-Italic&#9;Futura Italic&#9;Arial Oblique&#9;Arial-Oblique&#9;Helvetica Oblique&#9;Helvetica-Oblique&#9;Futura-Oblique&#9;Futura Oblique&#10;SubstituteAll&#9;Arial Bold Italic&#9;Arial-Bold-Italic&#9;Helvetica Bold Italic&#9;Futura-Bold-Italic&#9;Futura Bold Italic&#9;Arial Bold Oblique&#9;Arial-Bold-Oblique&#9;Arial-BoldOblique&#9;Helvetica Bold Oblique&#9;Helvetica-BoldOblique&#9;Futura-Bold-Oblique&#9;Futura Bold Oblique&#10;SubstituteAll&#9;Arial Black&#9;Arial-Black&#9;Helvetica Black&#9;Helvetica-Black&#9;Futura-Bold&#9;Futura Bold&#9;Arial-Bold&#10;SubstituteAll&#9;Arial Narrow&#9;Helvetica Narrow&#10;SubstituteAll&#9;Arial Narrow Bold&#9;Helvetica Narrow Bold&#9;Arial Narrow Fett&#9;Helvetica Narrow Fett&#10;SubstituteAll&#9;Arial Narrow Bold Italic&#9;Helvetica Narrow Bold Italic&#9;Arial Narrow Fett Kursiv&#9;Helvetica Narrow Fett Kursiv&#10;SubstituteAll&#9;Times-Roman&#9;Times&#9;Times New Roman&#9;Garamond&#10;SubstituteAll&#9;Times-Bold&#9;Times-Roman Bold&#9;Times Bold&#9;Times New Roman Bold&#9;Times Fett&#9;Times New Roman Fett&#10;SubstituteAll&#9;Times-Italic&#9;Times-Roman Italic&#9;Times New Roman Italic&#9;Times Italic&#9;Times Kursiv&#9;Times New Roman Kursiv&#10;SubstituteAll&#9;Times-Bold-Italic&#9;Times-Roman Bold Italic&#9;Times Bold Italic&#9;Times New Roman Bold Italic&#9;Times Fett Kursiv&#9;Times New Roman Fett Kursiv&#10;SubstituteAll&#9;Courier&#9;Courier New&#9;Courier Std New&#9;Lucida Console&#9;MS Gothic&#10;SubstituteAll&#9;CourierStd-Bold&#9;Courier Std Bold&#9;Courier Bold&#9;Courier-Bold&#9;Courier New Bold&#9;Courier New-Bold&#10;SubstituteAll&#9;CourierStd-Oblique&#9;Courier Std Oblique&#9;CourierStd-Italic&#9;Courier Std Italic&#9;Courier Italic&#9;Courier-Italic&#9;Courier New Italic&#9;Courier New-Italic&#9;Courier Oblique&#9;Courier-Oblique&#9;Courier New Oblique&#9;Courier New-Oblique&#10;SubstituteAll&#9;CourierStd-BoldOblique&#9;Courier Std Bold Oblique&#9;Courier BoldItalic&#9;Courier-BoldItalic&#9;Courier New Bold Italic&#9;Courier New-Bold-Italic&#9;Courier BoldOblique&#9;Courier-BoldOblique&#9;Courier New Bold Oblique&#9;Courier New-Bold-Oblique</fspolicydata>
+			</fspolicy>
+		</fspolicies>
+		<resources>
+		</resources>
+		<variables>
+		</variables>
+		<conditions>
+		</conditions>
+		<rules>
+		</rules>
+		<rulesets>
+		</rulesets>
+		<fixups>
+			<fixup>
+				<id1>Fc52f4f178c571c5779a5fc928235c297</id1>
+				<id2>Fa94a1b1f8d0127b5ced632241851e010</id2>
+				<id3>056b4fc8f5f4c29515ab90a17948a4a6</id3>
+				<id4>7387155712469278227112173b0220ae</id4>
+				<id5>Fa94a1b1f8d0127b5ced632241851e010</id5>
+				<name>F_14_Embedmissingfontssubstitutesimilarfontsonlyforvisibletextcurrentandembeddedfiles</name>
+				<comment>F_14_Embedmissingfontssubstitutesimilarfontsonlyforvisibletextcurrentandembeddedfiles</comment>
+				<flags user_units="0" scope="48" edit="1" visible="1" dict="1"></flags>
+				<creation>D:20191118084238+01&apos;00&apos;</creation>
+				<modification>D:20191118084238+01&apos;00&apos;</modification>
+				<fcfgs>
+					<fcfg>
+						<ffeat>EmbedMissingFonts</ffeat>
+						<fparams>
+							<fparam>All</fparam>
+							<fparam>100</fparam>
+							<fparam>1</fparam>
+							<fparam></fparam>
+							<fparam>1</fparam>
+							<fparam>020_SimilarFonts.cfg</fparam>
+							<fparam>1</fparam>
+						</fparams>
+					</fcfg>
+					<fcfg>
+						<ffeat></ffeat>
+						<fparams>
+						</fparams>
+					</fcfg>
+				</fcfgs>
+				<reportFailed></reportFailed>
+			</fixup>
+			<fixup>
+				<id1>F30413349b6a3c87b00f47653fdb1e161</id1>
+				<id2>F3286faf114ca7f49d4190e12a47075db</id2>
+				<id3>35d40c50265ff805fb8857e36800f8ff</id3>
+				<id4>a7619eeca7329be024d98afea557c2e9</id4>
+				<id5>F3286faf114ca7f49d4190e12a47075db</id5>
+				<name>F_14_RemoveXMPMetadataifnotcompliantwithPDFA2Currentandembeddedfiles</name>
+				<comment>F_14_RemoveXMPMetadataifnotcompliantwithPDFA2Currentandembeddedfiles</comment>
+				<flags user_units="0" scope="48" edit="1" visible="1" dict="1"></flags>
+				<creation>D:20191118084238+01&apos;00&apos;</creation>
+				<modification>D:20191118084238+01&apos;00&apos;</modification>
+				<fcfgs>
+					<fcfg>
+						<ffeat>RemoveNonCompliantPDFAMetadata</ffeat>
+						<fparams>
+							<fparam>PDFA2</fparam>
+						</fparams>
+					</fcfg>
+					<fcfg>
+						<ffeat></ffeat>
+						<fparams>
+						</fparams>
+					</fcfg>
+				</fcfgs>
+				<reportFailed></reportFailed>
+			</fixup>
+		</fixups>
+		<fixupsets>
+			<fixupset>
+				<id1>Ud7146c6c87ea5685d86feb48576aeda6</id1>
+				<id2>Uf0ab57f98a899a9ef59d3eb9b8fe144e</id2>
+				<id3>0b76e604edb82c48634794bbef20391a</id3>
+				<id4>43074f2004cb123de214a6773f740089</id4>
+				<id5>Uf0ab57f98a899a9ef59d3eb9b8fe144e</id5>
+				<name>UUUU_FIXUPSET_DEF_NAME</name>
+				<comment>UUUU_FIXUPSET_DEF_NAME</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<fixups>
+					<fixup>Fc52f4f178c571c5779a5fc928235c297</fixup>
+					<fixup>F30413349b6a3c87b00f47653fdb1e161</fixup>
+				</fixups>
+			</fixupset>
+		</fixupsets>
+		<actions>
+		</actions>
+		<profiles>
+			<profile>
+				<id1>P0733232f4acb3ce9fcf11b652cfe9bd8</id1>
+				<id2>P83e090c8bafae1019ea046f40e29456e</id2>
+				<id3>0122361966dd4218e05b6a455514e250</id3>
+				<id4>417cd3eb00a8838b25f8c9334a910308</id4>
+				<id5>P83e090c8bafae1019ea046f40e29456e</id5>
+				<name>P_9_ConverttoPDFA2a</name>
+				<comment>P_9_ConverttoPDFA2a</comment>
+				<flags edit="0" visible="1" dict="1"></flags>
+				<metalist>
+					<metadata>
+						<metakey>author</metakey>
+						<metavalue>callas software</metavalue>
+					</metadata>
+					<metadata>
+						<metakey>email</metakey>
+						<metavalue>support@callassoftware.com</metavalue>
+					</metadata>
+				</metalist>
+				<creation>D:20120830104557+01&apos;00&apos;</creation>
+				<modification>D:20150622063654+01&apos;00&apos;</modification>
+				<pdfstd>
+					<pdfx convert="0"></pdfx>
+					<pdfa force_conv="256" force_conv_dpi="100" convert="3" apply_fixups="1">2</pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond></outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+				</pdfstd>
+				<pdfstdemb>
+					<pdfx convert="0"></pdfx>
+					<pdfa force_conv="256" force_conv_dpi="100" convert="3" apply_fixups="1">2</pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond></outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+					<afrelationship set_relationship="0"></afrelationship>
+				</pdfstdemb>
+				<wizard>
+					<check name="PRCWzDocu_SyntaxChecks" check_severity="0">
+					</check>
+					<check name="PRCWzXComp_PDFDocumentA" check_severity="0">
+						<data name="PDFA1a2005">0</data>
+						<data name="PDFA1b2005">0</data>
+						<data name="PDFA2a">1</data>
+						<data name="PDFA2b">0</data>
+						<data name="PDFA2u">0</data>
+						<data name="PDFA3ZFeRD">0</data>
+						<data name="PDFA3a">0</data>
+						<data name="PDFA3b">0</data>
+						<data name="PDFA3u">0</data>
+						<data name="PDFA4">0</data>
+						<data name="PDFA4e">0</data>
+						<data name="PDFA4f">0</data>
+					</check>
+					<check name="PRCWzXCompEmb_PDFDocumentA" check_severity="0">
+						<data name="PDFA1a2005">1</data>
+						<data name="PDFA1b2005">1</data>
+						<data name="PDFA2a">1</data>
+						<data name="PDFA2b">1</data>
+						<data name="PDFA2u">1</data>
+						<data name="PDFA3ZFeRD">0</data>
+						<data name="PDFA3a">0</data>
+						<data name="PDFA3b">0</data>
+						<data name="PDFA3u">0</data>
+						<data name="PDFA4">0</data>
+						<data name="PDFA4e">0</data>
+						<data name="PDFA4f">0</data>
+					</check>
+				</wizard>
+				<rulesets>
+				</rulesets>
+				<fixupsets>
+					<fixupset>Ud7146c6c87ea5685d86feb48576aeda6</fixupset>
+				</fixupsets>
+			</profile>
+		</profiles>
+		<metaprofs>
+		</metaprofs>
+		<profgroups>
+		</profgroups>
+	</package>
+</pdfpreflight>

@@ -1,0 +1,29 @@
+@charset "UTF-8";
+
+@font-face {
+    font-family: 'FreeUniversal';
+    src: url('../fonts/freeuniversal-regular.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'FreeUniversal';
+    src: url('../fonts/freeuniversal-bold.ttf');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'FreeUniversal';
+    src: url('../fonts/freeuniversal-italic.ttf');
+    font-weight: normal;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'FreeUniversal';
+    src: url('../fonts/freeuniversal-bolditalic.ttf');
+    font-weight: bold;
+    font-style: italic;
+}

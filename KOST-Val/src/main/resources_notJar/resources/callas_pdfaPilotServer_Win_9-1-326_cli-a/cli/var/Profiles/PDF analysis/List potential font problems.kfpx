@@ -1,0 +1,607 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pdfpreflight version="15.0">
+	<package>
+		<id3>5dc1813cb29dc432257b58575b911a0a</id3>
+		<pdfxoutintentlist>
+		</pdfxoutintentlist>
+		<iccprofilelist>
+		</iccprofilelist>
+		<ccpolicies>
+		</ccpolicies>
+		<occdsetups>
+		</occdsetups>
+		<curves>
+		</curves>
+		<fspolicies>
+		</fspolicies>
+		<resources>
+		</resources>
+		<variables>
+		</variables>
+		<conditions>
+			<condition>
+				<id1>C8b5f51c8097ba9d0211ed9e9e268089a</id1>
+				<id2>Cb680030a299b0e74b98db0851f2eee82</id2>
+				<id3>d8006cb10fbee8ad9837720ec379e327</id3>
+				<id4>b46ddd967ee99866843e47668200fe2e</id4>
+				<name>CC_GlyphMissingInSubsetFont</name>
+				<comment>CC_GlyphMissingInSubsetFont</comment>
+				<flags user_units="1" edit="1" visible="1" dict="1"></flags>
+				<atom>
+					<group>Group::CSFONT</group>
+					<token>CSFONT::FontSubsetContaiAllGlyphsUsed</token>
+					<operator>OP::is_not_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>C7d92b5e237197d403b044afbc1c0e250</id1>
+				<id2>C444accd79bb9e1f0e09ab08802e0bd84</id2>
+				<id3>bcc56eb9bb202fec2d76ad2de28628d6</id3>
+				<id4>5321914514e93b69f272914ae31ff612</id4>
+				<name> (Copy 10)</name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSFONT</group>
+					<token>CSFONT::FontNameIsUniqueThroughout</token>
+					<operator>OP::is_not_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>C06ebc683414266397c11e44d3a7350b5</id1>
+				<id2>Cd49e52c8e4d9ab30865dba0ce8f018cf</id2>
+				<id3>e9e92202e2c42dcb58e0ef7b7e92ae6a</id3>
+				<id4>e9055a0e6c4db2477b4d7732532cd116</id4>
+				<name>CC_FontNotEmbedded</name>
+				<comment>CC_FontNotEmbedded</comment>
+				<flags user_units="1" edit="1" visible="1" dict="1"></flags>
+				<atom>
+					<group>Group::CSFONT</group>
+					<token>CSFONT::isEmbedded</token>
+					<operator>OP::is_not_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>C80c5973d0d1c838ce2029a141ce80a87</id1>
+				<id2>C08bfa138f403d4bcb2e2a7d92e8b6a6a</id2>
+				<id3>85f25ba9cf557bc6e8858b0e1ed65e81</id3>
+				<id4>72b09cd36efc05f8c8f0f265e34f0390</id4>
+				<name></name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSFONT</group>
+					<token>CSFONT::GlyphWidthMatchesInEmbedFont</token>
+					<operator>OP::is_not_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>Cb541b565e9c53fa8303219d508039409</id1>
+				<id2>Cfc9ba8812b5b75c5ccac06ba12b459b1</id2>
+				<id3>629c9f690402ca82dd1b17bad9f8a193</id3>
+				<id4>1957783a9eea2e11c5f150cc59d476d5</id4>
+				<name>CC_Type2CidfontHasInvalidCidtigidmap</name>
+				<comment>CC_Type2CidfontHasInvalidCidtigidmap</comment>
+				<flags user_units="1" edit="1" visible="1" dict="1"></flags>
+				<atom>
+					<group>Group::CSFONT</group>
+					<token>CSFONT::CIDFonDictinContaiACIDToGWith</token>
+					<operator>OP::is_not_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>C25ceac32d91e88fd35c6d0c320d47d05</id1>
+				<id2>Ca475be325223020cc010fdb4ac77d307</id2>
+				<id3>0eeebcaced05d457dce67d9558dfa8f4</id3>
+				<id4>4b8f653ce6d04b84247f264071b71990</id4>
+				<name> (Kopie 4)</name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSFONT</group>
+					<token>CSFONT::CharacterRevertsToNotdef</token>
+					<operator>OP::is_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>C3af904b0451e4fed2387180d0a292422</id1>
+				<id2>C44cb263f99a92ad91729164442385caa</id2>
+				<id3>f7a72b6d0da3d8d8e44fe6b82e235aca</id3>
+				<id4>3577e15339003638e2be74a41307e1b5</id4>
+				<name> (Kopie 4)</name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSTEXT</group>
+					<token>CSTEXT::GlyphIsWhitespace</token>
+					<operator>OP::is_not_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>Cd208d196af67b5af6c7559948e1b8ba4</id1>
+				<id2>C166440c37177cf157004b8fee79b8aae</id2>
+				<id3>b3ee78e1989ef1cd3e25c4db3274d8c5</id3>
+				<id4>a80b7c3c230edecbc28f5ac1a8f5de67</id4>
+				<name> (Kopie 4)</name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSTEXT</group>
+					<token>CSTEXT::GlyphHasContour</token>
+					<operator>OP::is_not_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>C2427ab63dadf80c6214e5c55347bcf87</id1>
+				<id2>Cf674ba9c4e014c1da4c78d1d343f183a</id2>
+				<id3>35a1c134110fdba984ea2aaab7064b21</id3>
+				<id4>eeff2cb76a7df532c207967ee4397185</id4>
+				<name></name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSTEXT</group>
+					<token>CSTEXT::GlyphIsUndefined</token>
+					<operator>OP::is_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>C753840c50216618b9894f5f5147d1022</id1>
+				<id2>Cd31ad687ab823b5eecf1212b33c95947</id2>
+				<id3>fdec5a8f023e18e5155fc9af9d5ba860</id3>
+				<id4>172195f73c79c19d1b9c29733bd39a6c</id4>
+				<name>CC_EncodingEntryProhibitedForSymbolicTruetypeFont</name>
+				<comment>CC_EncodingEntryProhibitedForSymbolicTruetypeFont</comment>
+				<flags user_units="1" edit="1" visible="1" dict="1"></flags>
+				<atom>
+					<group>Group::CSFONT</group>
+					<token>CSFONT::SymbolTrueTyFontHasEncoodDict</token>
+					<operator>OP::is_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>C80115a37a58ac8b8a8adb807a6d25cca</id1>
+				<id2>C455c96ab203146ff360f19bde9664928</id2>
+				<id3>d4f5c4b6c37e709883dab6f794f8ebe4</id3>
+				<id4>5b509c6afeda1444b8f602796c7b0b1b</id4>
+				<name>CC_WrongEncodingForNonSymbolicTruetypeFont</name>
+				<comment>CC_WrongEncodingForNonSymbolicTruetypeFont</comment>
+				<flags user_units="1" edit="1" visible="1" dict="1"></flags>
+				<atom>
+					<group>Group::CSFONT</group>
+					<token>CSFONT::NonSymbolTrueTyFontSpecifMacR</token>
+					<operator>OP::is_not_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>C466a98ff179456b9618770163989540f</id1>
+				<id2>C0c3145b7a79c48eb99ab41db4feb3f78</id2>
+				<id3>b23ab19fc9f864e831a7a707093eae85</id3>
+				<id4>8c7093351cc8a3bd60b52b7b0adcb73b</id4>
+				<name></name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSFONT</group>
+					<token>CSFONT::FontTypeIsTrueType</token>
+					<operator>OP::is_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>Cf74c3ddaa3692020c69adbc3298ee9ee</id1>
+				<id2>C28a348a2510e7b653fa2f91d0d0f8077</id2>
+				<id3>1be169bbe413956e8949221815177320</id3>
+				<id4>eeab383cd8371eb93ca5be3bde4a8e9f</id4>
+				<name></name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSFONT</group>
+					<token>CSFONT::NumberOfEncodingsInCmapEntryOfEm</token>
+					<operator>OP::unequal</operator>
+					<data>
+						<num>
+							<value>1</value>
+							<tolerance>0</tolerance>
+						</num>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>Cd5344e722f1220ddee825e3f29440c2f</id1>
+				<id2>C0c141e07c1f4414f19c6e6f3bf8b2ea4</id2>
+				<id3>43269c613918f280a80d727e02ffb86d</id3>
+				<id4>3f8c302cfea79875d9f2eddc61abc4f3</id4>
+				<name></name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSFONT</group>
+					<token>CSFONT::FlagKeyisSympolic</token>
+					<operator>OP::is_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>Cc22b8b8a16f8a5bdff802dc6d2ed5273</id1>
+				<id2>Cf026550fb339657bb272c5bc13f662a1</id2>
+				<id3>4de74555f03a5d88ff1fa646da37a6c7</id3>
+				<id4>d55ea78bb979309b0a2f75c19d4b5712</id4>
+				<name> (Copy 10)</name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1" wizard="1"></flags>
+				<atom>
+					<group>Group::CSFONT</group>
+					<token>CSFONT::AllTextCanBeMappedToUnicode</token>
+					<operator>OP::is_not_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>C1a301b3016a0bbea9bd2e6fb00a3f4cb</id1>
+				<id2>Cb31fbe9e2ec0495a9a589e228f7f1c79</id2>
+				<id3>9c9112aeb3b7ae407aea5da1e52ea71f</id3>
+				<id4>920a9b4967efe60c567dba4792183fef</id4>
+				<name></name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSFONT</group>
+					<token>CSFONT::NumberOfEncodingsInCmapEntryOfEm</token>
+					<operator>OP::equal</operator>
+					<data>
+						<num>
+							<value>0</value>
+							<tolerance></tolerance>
+						</num>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>C17c7c5b6bd40c95c5122558695a7b02a</id1>
+				<id2>Cbc6a0e424cae16e0157e04d55a375cc0</id2>
+				<id3>1368ae71b0ece38e39832438a99d5001</id3>
+				<id4>3f3d79c8e0781b795cf33d0174752c0d</id4>
+				<name></name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSFONT</group>
+					<token>CSFONT::FontTypeIsCID</token>
+					<operator>OP::is_not_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+		</conditions>
+		<rules>
+			<rule>
+				<id1>Re64022c883cc95172f9518caf478becc</id1>
+				<id2>R9f4ab2be4ed80624377d8a808144397f</id2>
+				<id3>0108893ce88fd7ffcdef9361e6b14313</id3>
+				<id4>bb191eed4a6007aeef8c22b0395e21ca</id4>
+				<name>RR_GlyphInSubsetFontMissing</name>
+				<comment>RR_GlyphInSubsetFontMissing</comment>
+				<flags analysis="23" condition_logic="0" ignore_objects="0" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>C8b5f51c8097ba9d0211ed9e9e268089a</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>R2967f37022774d65b82d19c39d031e39</id1>
+				<id2>R9187cc3a73c8d89bff91b4f99d1be879</id2>
+				<id3>7ac2a821eae4e1f646253cc39ea099c3</id3>
+				<id4>d930cd22037ebc82e3c98495ff506fbb</id4>
+				<name>R_7_Fontnameisnotunique</name>
+				<comment>R_7_Fontnameisnotunique</comment>
+				<flags analysis="17" condition_logic="0" ignore_objects="0" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>C7d92b5e237197d403b044afbc1c0e250</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>Rd495ed7d4b90269bcac7d46ecbb56942</id1>
+				<id2>R30485d9f26a3a4e32f0eaae5451e7a85</id2>
+				<id3>3b4110ff4c3e5d2662a02f8eae591137</id3>
+				<id4>8176279f94d18a3c519af7a8e16a758f</id4>
+				<name>R_6_Fontnotembedded</name>
+				<comment>R_6_Fontnotembedded</comment>
+				<flags analysis="23" condition_logic="0" ignore_objects="0" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>C06ebc683414266397c11e44d3a7350b5</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>Ra6c2b60c76408d24bdf8ada1fd67a000</id1>
+				<id2>R34875b661f66cb44b8d207470e09aff4</id2>
+				<id3>40203f4bf5679b6655c0e73deb364176</id3>
+				<id4>d78cfdec850ea2ce4d7391495944ae98</id4>
+				<name>R_6_GlyphwidthinfoinPDFmatcheswidthinfoinembeddedfont</name>
+				<comment>R_6_GlyphwidthinfoinPDFmatcheswidthinfoinembeddedfont</comment>
+				<flags analysis="17" condition_logic="0" ignore_objects="0" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>C80c5973d0d1c838ce2029a141ce80a87</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>R64ed7489d64e481e95351241064874b7</id1>
+				<id2>Rf76e1ca4ef39fbc79bb4ee21dc231a08</id2>
+				<id3>9fdaa7c8f65d1edfc6aaf46d61c192ab</id3>
+				<id4>023d19a18817f31dbfe93ef82c7a1294</id4>
+				<name>RR_Type2CidfontHasInvalidCidtogidmap</name>
+				<comment>RR_Type2CidfontHasInvalidCidtogidmap</comment>
+				<flags analysis="23" condition_logic="0" ignore_objects="0" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>Cb541b565e9c53fa8303219d508039409</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>R5953debcb3ee7aa56c7cb69ba0858e0d</id1>
+				<id2>R17138e41fec33d94de852d59d2e1cffa</id2>
+				<id3>db14ace43f985a9e701fcdb7d3c05c7e</id3>
+				<id4>c0f09521767d24f2845ccad4eeed2efc</id4>
+				<name>R_7_Fontrevertstonotdefglyph</name>
+				<comment>R_7_Fontrevertstonotdefglyph</comment>
+				<flags analysis="23" condition_logic="0" ignore_objects="0" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>C25ceac32d91e88fd35c6d0c320d47d05</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>Rd691819c3062a2f67e24620a6270bd3e</id1>
+				<id2>R9f9b964474a8d2eae5044c947032f6ab</id2>
+				<id3>0efc9321ee2a9fd325e2f85f7f02a6c8</id3>
+				<id4>688cac7eca62c6eb438836df10359e95</id4>
+				<name>R_7_Characternotwhitespacebutglyphisempty</name>
+				<comment>R_7_Characternotwhitespacebutglyphisempty</comment>
+				<flags analysis="23" condition_logic="0" ignore_objects="0" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>C3af904b0451e4fed2387180d0a292422</condition>
+					<condition>Cd208d196af67b5af6c7559948e1b8ba4</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>Rb9060ca7164bc44879008216643888ad</id1>
+				<id2>R659f6eee2317bd5ef14fbfbac708b86c</id2>
+				<id3>2c96d2feedbb3d374707e93ccd4be9d1</id3>
+				<id4>ea20cc92d0b78b2a47e5656cfd31d4c1</id4>
+				<name>R_6_Characterreferencesnotdefglyph</name>
+				<comment>R_6_Characterreferencesnotdefglyph</comment>
+				<flags analysis="23" condition_logic="0" ignore_objects="0" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>C2427ab63dadf80c6214e5c55347bcf87</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>Rb92b2fdf8b328455dac200cbf3eee04b</id1>
+				<id2>R4dec414121a8a893ac53eba72a4606af</id2>
+				<id3>fcdb1b3215e38900a86969ad689ac9a1</id3>
+				<id4>4fa3c2e43933c6bbec880bc828838431</id4>
+				<name>RR_EncodingEntryProhibitedForSymbolicTruetypeFont</name>
+				<comment>RR_EncodingEntryProhibitedForSymbolicTruetypeFont</comment>
+				<flags analysis="23" condition_logic="0" ignore_objects="0" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>C753840c50216618b9894f5f5147d1022</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>R2dbb29a5cd7be5e244e7fedada86d86a</id1>
+				<id2>Rce96cb0b9c0920f020a7b7d8ffdd36dc</id2>
+				<id3>2c4a08240e99f6d03fb0a6acffbc946a</id3>
+				<id4>844e42fba9b1c2f7614831264da54351</id4>
+				<name>RR_WrongEncodingForNonSymbolicTruetypeFont</name>
+				<comment>RR_WrongEncodingForNonSymbolicTruetypeFont</comment>
+				<flags analysis="23" condition_logic="0" ignore_objects="0" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>C80115a37a58ac8b8a8adb807a6d25cca</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>Rbd6c9b0e5fa5ffc0c700731a4b2f8ff6</id1>
+				<id2>R328f3747469ea025b547b9d64a0cd809</id2>
+				<id3>c2944c09e6704a7409209d8c37e05d2c</id3>
+				<id4>bf8df89ba1502b082516274572e4b72c</id4>
+				<name>R_6_MorethanoneencodinginsymbolicTrueTypefontscmap</name>
+				<comment>R_6_MorethanoneencodinginsymbolicTrueTypefontscmap</comment>
+				<flags analysis="23" condition_logic="0" ignore_objects="0" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>C466a98ff179456b9618770163989540f</condition>
+					<condition>Cf74c3ddaa3692020c69adbc3298ee9ee</condition>
+					<condition>Cd5344e722f1220ddee825e3f29440c2f</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>Rbe8d7458e4c36e0aaa0a33f9427f6c35</id1>
+				<id2>R48aaa2e1a981dd1c09c68c420b7e6365</id2>
+				<id3>c22397ce0fe2ea5b989287979504ef2c</id3>
+				<id4>1e6e7aabaf8f437e7214483aa06d5d44</id4>
+				<name>R_6_TextcannotbemappedtoUnicode</name>
+				<comment>R_6_TextcannotbemappedtoUnicode</comment>
+				<flags analysis="23" condition_logic="0" ignore_objects="0" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>Cc22b8b8a16f8a5bdff802dc6d2ed5273</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>Rdbe1b03e6684090f38c40283a3a7ef64</id1>
+				<id2>R09e536ac62f8c144cb0ffedc9d161613</id2>
+				<id3>2005ab82daa8743d83180ccf422ff101</id3>
+				<id4>e1af98626d448c0981250ae81862c015</id4>
+				<name>R_14_NocmapentryinSimpleTrueTypefont</name>
+				<comment>R_14_NocmapentryinSimpleTrueTypefont</comment>
+				<flags analysis="17" condition_logic="0" ignore_objects="0" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>C1a301b3016a0bbea9bd2e6fb00a3f4cb</condition>
+					<condition>C17c7c5b6bd40c95c5122558695a7b02a</condition>
+				</conditions>
+			</rule>
+		</rules>
+		<rulesets>
+			<ruleset>
+				<id1>Sc0ed967e89fa39c1e2d7587db791cacb</id1>
+				<id2>S16f765079cf4c839c4004eb5ad34b129</id2>
+				<id3>7089fb41f72c5c63f9731842f93863f8</id3>
+				<id4>857d2af34d205ebc3fe780f2486f5b02</id4>
+				<name>SSS_RULESET_DEF_NAME</name>
+				<comment>SSS_RULESET_DEF_NAME</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<rules>
+					<rule check_severity="2" check_timing="2">Re64022c883cc95172f9518caf478becc</rule>
+					<rule check_severity="2" check_timing="2">R2967f37022774d65b82d19c39d031e39</rule>
+					<rule check_severity="2" check_timing="2">Rd495ed7d4b90269bcac7d46ecbb56942</rule>
+					<rule check_severity="2" check_timing="2">Ra6c2b60c76408d24bdf8ada1fd67a000</rule>
+					<rule check_severity="2" check_timing="2">R64ed7489d64e481e95351241064874b7</rule>
+					<rule check_severity="2" check_timing="2">R5953debcb3ee7aa56c7cb69ba0858e0d</rule>
+					<rule check_severity="2" check_timing="2">Rd691819c3062a2f67e24620a6270bd3e</rule>
+					<rule check_severity="2" check_timing="2">Rb9060ca7164bc44879008216643888ad</rule>
+					<rule check_severity="2" check_timing="2">Rb92b2fdf8b328455dac200cbf3eee04b</rule>
+					<rule check_severity="2" check_timing="2">R2dbb29a5cd7be5e244e7fedada86d86a</rule>
+					<rule check_severity="2" check_timing="2">Rbd6c9b0e5fa5ffc0c700731a4b2f8ff6</rule>
+					<rule check_severity="2" check_timing="2">Rbe8d7458e4c36e0aaa0a33f9427f6c35</rule>
+					<rule check_severity="2" check_timing="2">Rdbe1b03e6684090f38c40283a3a7ef64</rule>
+				</rules>
+			</ruleset>
+		</rulesets>
+		<fixups>
+		</fixups>
+		<fixupsets>
+		</fixupsets>
+		<actions>
+		</actions>
+		<profiles>
+			<profile>
+				<id1>P925d34312f02ea767b511d1924625c8e</id1>
+				<id2>Pbd86ba0ab7ce6f27e258646676b72b5d</id2>
+				<id3>6237b7579a7a9f83f7af39e4ca8da7da</id3>
+				<id4>cd7fff63c1513de2f71222114d31a112</id4>
+				<name>P_8_Listpotentialfontproblems</name>
+				<comment>P_8_Listpotentialfontproblems</comment>
+				<flags edit="0" visible="1" dict="1"></flags>
+				<metalist>
+					<metadata>
+						<metakey>author</metakey>
+						<metavalue>callas software</metavalue>
+					</metadata>
+					<metadata>
+						<metakey>email</metakey>
+						<metavalue>support@callassoftware.com</metavalue>
+					</metadata>
+				</metalist>
+				<creation>D:20150819072434+02&apos;00&apos;</creation>
+				<modification>D:20160629094113+02&apos;00&apos;</modification>
+				<pdfstd>
+					<pdfx convert="0"></pdfx>
+					<pdfa convert="0"></pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond>ISO Coated v2 (ECI)</outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+				</pdfstd>
+				<pdfstdemb>
+					<pdfx convert="0"></pdfx>
+					<pdfa convert="0"></pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond></outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+					<afrelationship set_relationship="0"></afrelationship>
+				</pdfstdemb>
+				<wizard>
+				</wizard>
+				<rulesets>
+					<ruleset>Sc0ed967e89fa39c1e2d7587db791cacb</ruleset>
+				</rulesets>
+				<fixupsets>
+				</fixupsets>
+			</profile>
+		</profiles>
+		<metaprofs>
+		</metaprofs>
+		<profgroups>
+		</profgroups>
+	</package>
+</pdfpreflight>

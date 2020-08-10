@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pdfpreflight version="15.0">
+	<package>
+		<id3>920d9b42cc0f27b9a43b1ccd61073efe</id3>
+		<pdfxoutintentlist>
+		</pdfxoutintentlist>
+		<iccprofilelist>
+		</iccprofilelist>
+		<ccpolicies>
+		</ccpolicies>
+		<occdsetups>
+		</occdsetups>
+		<curves>
+		</curves>
+		<fspolicies>
+		</fspolicies>
+		<resources>
+		</resources>
+		<variables>
+			<variable>
+				<id1>Ved2a24e8ee1793a6febf8da1e875e883</id1>
+				<id2>Vb758db1b4354f33c3cf843a04244c5b7</id2>
+				<id3>8b7b72618034a60fddf1870ef97acfee</id3>
+				<id4>37d3a7b97750405c838a93da90d2bae3</id4>
+				<name>V_15_Calculatedminimumresolutionforcolorimages</name>
+				<comment>V_15_Calculatedminimumresolutionforcolorimages</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<varkey>above_resolution_colorimages</varkey>
+				<varscript>app.requires(&quot;dest_resolution_images&quot;)&#10;app.vars.dest_resolution_images*1.5&#10;</varscript>
+			</variable>
+			<variable>
+				<id1>Vf44ee9df8d3cee368a76f883be33377c</id1>
+				<id2>Vcbb4a236912d7e72984bfe5077b77268</id2>
+				<id3>60b6cb746f48d0a777814aea58c42131</id3>
+				<id4>a3266e330808273a301c115f9b389a43</id4>
+				<name>V_15_Targetresolutionforimagesppi</name>
+				<comment>V_15_Targetresolutionforimagesppi</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<varkey>dest_resolution_images</varkey>
+				<varvalue>300</varvalue>
+			</variable>
+			<variable>
+				<id1>V9ba299e45293488ea93f1f5181809b2a</id1>
+				<id2>Vb5270b31a91e9b4420bb0c4623b2f164</id2>
+				<id3>5339848d635925e76ecc81590b3ee45d</id3>
+				<id4>a5798cbfa4f311114cba756229e2cd99</id4>
+				<name>V_15_Newresolutionforgrayscaleimages</name>
+				<comment>V_15_Newresolutionforgrayscaleimages</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<varkey>dest_resolution_grayscaleimages</varkey>
+				<varscript>app.requires(&quot;dest_resolution_images&quot;,300,&quot;Target resolution for images [ppi]&quot;)&#10;app.vars.dest_resolution_images</varscript>
+			</variable>
+			<variable>
+				<id1>V44ec5479537dcc341bff3e560ef8a720</id1>
+				<id2>V9d38f960409fe1b722166fdfb76847af</id2>
+				<id3>10ac1ddf21db953c525ed6a5c0ae599f</id3>
+				<id4>b2e032b3a4e8f41e7563243aa45c01e5</id4>
+				<name>V_15_Calculatedminimumresolutionforcolorimages</name>
+				<comment>V_15_Calculatedminimumresolutionforcolorimages</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<varkey>above_resolution_grayscaleimages</varkey>
+				<varscript>app.requires(&quot;dest_resolution_grayscaleimages&quot;)&#10;app.vars.dest_resolution_grayscaleimages*1.5</varscript>
+			</variable>
+			<variable>
+				<id1>Ve7b52da7b29a4a869770003bb1e4e236</id1>
+				<id2>V2cfbea4e0675a1050c18710998bb2bcf</id2>
+				<id3>ba4ecfb4b55a8b2d0501c65d1c27d299</id3>
+				<id4>6d1e9ac652ff6758a1f17655fd3ecdfb</id4>
+				<name>V_15_Resolutionthresholdforbitmapimages</name>
+				<comment>V_15_Resolutionthresholdforbitmapimages</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<varkey>above_resolution_bitmaps</varkey>
+				<varscript>//app.requires(&quot;dest_resolution_bitmapimages&quot;);&#10;app.vars.dest_resolution_bitmaps*1.5</varscript>
+			</variable>
+			<variable>
+				<id1>V8becf6de94910606f351026237fbb1ce</id1>
+				<id2>Ve21f1146772be027ec7b904d893aecb6</id2>
+				<id3>67fcf0324f0b240c8f4837f2e42ada0a</id3>
+				<id4>bc6a86c096ea69bcad16fdb4d723678b</id4>
+				<name>V_15_Destinationresolutionforbitmapimages</name>
+				<comment>V_15_Destinationresolutionforbitmapimages</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<varkey>dest_resolution_bitmaps</varkey>
+				<varscript>app.requires(&quot;dest_resolution_images&quot;,300,&quot;Target resolution for images [ppi]&quot;)&#10;app.vars.dest_resolution_images*3</varscript>
+			</variable>
+		</variables>
+		<conditions>
+		</conditions>
+		<rules>
+		</rules>
+		<rulesets>
+		</rulesets>
+		<fixups>
+			<fixup>
+				<id1>Fafcba84009727fc13f814dc8b38a568e</id1>
+				<id2>F191c00e1957d95d90f870add6fb97dd0</id2>
+				<id3>e08b216014821d85d6e92354456d5a99</id3>
+				<id4>dadc9c6663e945888d33d55284cb30cc</id4>
+				<name>F_8_DownsamplecolorimagestospecifiedvaluehighJPEGquality</name>
+				<comment>F_8_DownsamplecolorimagestospecifiedvaluehighJPEGquality</comment>
+				<flags user_units="1" scope="16" edit="1" visible="1" dict="1"></flags>
+				<fcfgs>
+					<fcfg>
+						<ffeat>DsRcmpClrImgs</ffeat>
+						<fparams>
+							<fparam>BicDownsampling</fparam>
+							<fparam var_idx="6" var_pos="0" var_len="3">300</fparam>
+							<fparam var_idx="5" var_pos="0" var_len="1">0</fparam>
+							<fparam>RetainExisting</fparam>
+							<fparam>Hgh</fparam>
+							<fparam>256</fparam>
+							<fparam>None</fparam>
+							<fparam>0</fparam>
+							<fparam>0</fparam>
+						</fparams>
+					</fcfg>
+				</fcfgs>
+				<reportFailed></reportFailed>
+				<variables>
+					<variable var_idx="5">Ved2a24e8ee1793a6febf8da1e875e883</variable>
+					<variable var_idx="6">Vf44ee9df8d3cee368a76f883be33377c</variable>
+				</variables>
+			</fixup>
+			<fixup>
+				<id1>F7b301827337f20a251860e9f03430cbf</id1>
+				<id2>F1bb77c35cd1bc63f9a6d0c2d06363df1</id2>
+				<id3>c42b5d10df652b6de4879b0f088d202e</id3>
+				<id4>625193e09dd729496a1b6dd35c8a0c07</id4>
+				<name>F_8_DownsamplegrayscaleimagestospecifiedvaluehighJPEGquality</name>
+				<comment>F_8_DownsamplegrayscaleimagestospecifiedvaluehighJPEGquality</comment>
+				<flags user_units="1" scope="16" edit="1" visible="1" dict="1"></flags>
+				<fcfgs>
+					<fcfg>
+						<ffeat>DsRcmpGscImgs</ffeat>
+						<fparams>
+							<fparam>BicDownsampling</fparam>
+							<fparam var_idx="2" var_pos="0" var_len="1">0</fparam>
+							<fparam var_idx="3" var_pos="0" var_len="1">0</fparam>
+							<fparam>RetainExisting</fparam>
+							<fparam>Hgh</fparam>
+							<fparam>256</fparam>
+							<fparam>None</fparam>
+							<fparam>0</fparam>
+							<fparam>0</fparam>
+						</fparams>
+					</fcfg>
+				</fcfgs>
+				<reportFailed></reportFailed>
+				<variables>
+					<variable var_idx="2">V9ba299e45293488ea93f1f5181809b2a</variable>
+					<variable var_idx="3">V44ec5479537dcc341bff3e560ef8a720</variable>
+				</variables>
+			</fixup>
+			<fixup>
+				<id1>Fb466d50e6a0ed12dd8be6ca61f3bfaec</id1>
+				<id2>F5deb507ebb03bf78837cac36953ed1bf</id2>
+				<id3>d6d355a3c229c2b4fd6b7849061d9e39</id3>
+				<id4>8ad9e0da0fece12a96414026ea546132</id4>
+				<name>F_8_DownsamplebitmapimagestospecifiedresolutionCCITT</name>
+				<comment>F_8_DownsamplebitmapimagestospecifiedresolutionCCITT</comment>
+				<flags user_units="1" scope="32" edit="1" visible="1" dict="1"></flags>
+				<fcfgs>
+					<fcfg>
+						<ffeat>DsRcmpMchImgs</ffeat>
+						<fparams>
+							<fparam>BicDownsampling</fparam>
+							<fparam var_idx="5" var_pos="0" var_len="1">0</fparam>
+							<fparam var_idx="3" var_pos="0" var_len="1">0</fparam>
+							<fparam>CCITTG4</fparam>
+							<fparam>Lossless</fparam>
+							<fparam>None</fparam>
+							<fparam>0</fparam>
+							<fparam>0</fparam>
+						</fparams>
+					</fcfg>
+				</fcfgs>
+				<reportFailed></reportFailed>
+				<variables>
+					<variable var_idx="3">Ve7b52da7b29a4a869770003bb1e4e236</variable>
+					<variable var_idx="5">V8becf6de94910606f351026237fbb1ce</variable>
+				</variables>
+			</fixup>
+		</fixups>
+		<fixupsets>
+			<fixupset>
+				<id1>U877e0364bc4712b95ad7df26432800cd</id1>
+				<id2>U18f27699b1caec98f0b3ed893e4a0822</id2>
+				<id3>5d567d269d458acad0399b6f23d1a615</id3>
+				<id4>7df97cdfaf26dbf69c88469da780bf59</id4>
+				<name>UUUU_FIXUPSET_DEF_NAME</name>
+				<comment>UUUU_FIXUPSET_DEF_NAME</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<fixups>
+					<fixup>Fafcba84009727fc13f814dc8b38a568e</fixup>
+					<fixup>F7b301827337f20a251860e9f03430cbf</fixup>
+					<fixup>Fb466d50e6a0ed12dd8be6ca61f3bfaec</fixup>
+				</fixups>
+			</fixupset>
+		</fixupsets>
+		<actions>
+		</actions>
+		<profiles>
+			<profile>
+				<id1>P6de3b7684c6b6bd668ea8e899bbf3946</id1>
+				<id2>Pe18118edd520cf16ab3977df9a67e659</id2>
+				<id3>b881f94015542909ecb0ee8570c5c9f3</id3>
+				<id4>a9abf0c9ac28fcb6193d419bab545223</id4>
+				<name>P_8_Downsampleimageresolutiontospecifiedvalue</name>
+				<comment>P_8_Downsampleimageresolutiontospecifiedvalue</comment>
+				<flags edit="0" visible="1" dict="1"></flags>
+				<metalist>
+					<metadata>
+						<metakey>author</metakey>
+						<metavalue>callas software</metavalue>
+					</metadata>
+					<metadata>
+						<metakey>email</metakey>
+						<metavalue>support@callassoftware.com</metavalue>
+					</metadata>
+				</metalist>
+				<creation>D:20160518140155+02&apos;00&apos;</creation>
+				<modification>D:20160629094742+02&apos;00&apos;</modification>
+				<pdfstd>
+					<pdfx convert="0"></pdfx>
+					<pdfa convert="0"></pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond>ISO Coated v2 (ECI)</outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+				</pdfstd>
+				<pdfstdemb>
+					<pdfx convert="0"></pdfx>
+					<pdfa convert="0"></pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond></outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+					<afrelationship set_relationship="0"></afrelationship>
+				</pdfstdemb>
+				<wizard>
+				</wizard>
+				<rulesets>
+				</rulesets>
+				<fixupsets>
+					<fixupset>U877e0364bc4712b95ad7df26432800cd</fixupset>
+				</fixupsets>
+			</profile>
+		</profiles>
+		<metaprofs>
+		</metaprofs>
+		<profgroups>
+		</profgroups>
+	</package>
+</pdfpreflight>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<devicelink>
+	<profile lang="CHS">
+		<header>日本平板胶印，降低到 330% 油墨限制(仅限服务器/CLI)</header>
+		<explanation>根据 Japan Color 2001 Coated，将最大油墨覆盖率降低到 330%</explanation>
+	</profile>
+	<profile lang="ENU">
+		<header>Sheetfed offset Japan, reduce to 330% ink limit (Server/CLI only)</header>
+		<explanation>Reduction of maximum ink coverage to 330% based on Japan Color 2001 Coated</explanation>
+	</profile>
+	<profile lang="ESP">
+		<header>Offset de alimentación por hojas de Japón, reducir a 330% el límite de tinta (sólo Server/CLI)</header>
+		<explanation>Reducción de la cobertura de tinta máxima a 330% en base a Japón color 2001 estucado</explanation>
+	</profile>
+	<profile lang="FRA">
+		<header>Offset à feuilles Japon, réduction du taux de couverture d'encre à 330% (Server/CLI seulement)</header>
+		<explanation>Réduction du taux de couverture d'encre maximale à 330% selon Japan Color 2001 Coated</explanation>
+	</profile>
+	<profile lang="DEU">
+		<header>Bogenoffset Japan, Gesamtfarbreduzierung auf 330% (nur Server/CLI)</header>
+		<explanation>Reduzierung des Gesamtfarbauftrags auf maximal 330% auf Basis von Japan Color 2001 Coated</explanation>
+	</profile>
+	<profile lang="ITA">
+		<header>Offset foglio Giappone, riduci limite inchiostro a 330% (solo Server/CLI)</header>
+		<explanation>Riduzione della copertura massima di inchiostro al 330% in base a Japan Color 2001 Coated</explanation>
+	</profile>
+	<profile lang="JPN">
+		<header> シートフィードオフセット, インキ量を 330% に削減 (日本) (Server/CLI のみ)</header>
+		<explanation>Japan Color 2001 Coated を基にインキ総量を 330% に削減します</explanation>
+	</profile>
+</devicelink>

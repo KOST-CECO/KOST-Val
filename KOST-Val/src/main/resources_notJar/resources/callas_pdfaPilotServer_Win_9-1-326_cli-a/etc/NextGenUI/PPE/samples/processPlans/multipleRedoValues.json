@@ -1,0 +1,168 @@
+{
+  "id": "M358826e779c0d5dc68a2e004a3edac4b",
+  "name": {
+    "value": "New Process plan011test text",
+    "vars": [
+      {
+        "id": "V0053c191b1779d0710a8e07bcf5235c4",
+        "offset": 16,
+        "length": 1
+      },
+      {
+        "id": "Vb634fb5eefc388bcddc29e256feaaa6c",
+        "offset": 17,
+        "length": 1
+      },
+      {
+        "id": "V9a30e38544f77e0d2359979699edb734",
+        "offset": 18,
+        "length": 1
+      }
+    ]
+  },
+  "author": "DualLab Team",
+  "comment": {
+    "value": "some comment0 \nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+    "vars": [
+      {
+        "id": "V0053c191b1779d0710a8e07bcf5235c4",
+        "offset": 12,
+        "length": 1
+      }
+    ]
+  },
+  "email": "test@company.de",
+  "locked": false,
+  "hasPassword": true,
+  "group": "Gfa1f9d868792480ba21ff4f90779c52d",
+  "dialog": "New template",
+  "layout": {
+    "stepsLayout": {
+      "0": {
+        "position": {
+          "x": 423.5000000000001,
+          "y": 191.79999999999998
+        },
+        "size": {
+          "width": 200,
+          "height": 40
+        }
+      },
+      "1": {
+        "position": {
+          "x": 681.0999999999997,
+          "y": 239.39999999999995
+        },
+        "size": {
+          "width": 200,
+          "height": 40
+        }
+      },
+      "start": {
+        "position": {
+          "x": 265.5,
+          "y": 54.799999999999805
+        },
+        "size": {
+          "width": 120,
+          "height": 40
+        }
+      },
+      "end": {
+        "position": {
+          "x": 745.9999999999997,
+          "y": 81.49999999999996
+        },
+        "size": {
+          "width": 120,
+          "height": 40
+        }
+      }
+    },
+    "transitionsLayout": {
+      "0": [
+        {
+          "start": {
+            "position": "top"
+          },
+          "end": {
+            "position": "bottom"
+          },
+          "types": [
+            "on_hit",
+            "if_disabled"
+          ]
+        },
+        {
+          "start": {
+            "position": "bottom"
+          },
+          "end": {
+            "position": "left"
+          },
+          "types": [
+            "on_success"
+          ]
+        }
+      ],
+      "1": [
+        {
+          "start": {
+            "position": "right"
+          },
+          "end": {
+            "position": "right"
+          },
+          "types": [
+            "on_error",
+            "else",
+            "if_disabled"
+          ]
+        }
+      ],
+      "start": [
+        {
+          "start": {
+            "position": "bottom"
+          },
+          "end": {
+            "position": "left"
+          },
+          "types": [
+            "out"
+          ]
+        }
+      ]
+    }
+  },
+  "sequence": [
+    {
+      "type": "check",
+      "id": "C000003e779q0d5ww68a2q004a3edaz4z",
+      "enable_step": true,
+      "on_hit": {
+        "next_step": -2
+      },
+      "on_success": {
+        "next_step": -1
+      },
+      "if_disabled": {
+        "next_step": -2
+      }
+    },
+    {
+      "type": "processplan",
+      "id": "Mf63fce0e8f5566ec9399aeeb95671988",
+      "enable_step": true,
+      "on_error": {
+        "next_step": -1
+      },
+      "else": {
+        "next_step": -1
+      },
+      "if_disabled": {
+        "next_step": -1
+      }
+    }
+  ]
+}

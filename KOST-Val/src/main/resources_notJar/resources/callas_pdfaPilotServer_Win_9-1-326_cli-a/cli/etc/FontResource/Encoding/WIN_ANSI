@@ -1,0 +1,63 @@
+%!PS-Adobe-3.0 Resource-CMap
+%%DocumentNeededResources: ProcSet (CIDInit)
+%%IncludeResource: ProcSet (CIDInit)
+%%BeginResource: CMap (WIN_ANSI)
+%%Title: (WIN_ANSI 0)
+%%EndComments
+
+/CIDInit /ProcSet findresource begin
+
+12 dict begin
+
+begincmap
+
+/CMapName /WIN_ANSI def
+/CMapType 2 def
+
+1 begincodespacerange
+  <20> <FF>
+endcodespacerange
+
+25 beginbfchar
+<7F> <2022>
+<80> <20AC>
+<81> <2022>
+<82> <201A>
+<83> <0192>
+<84> <201E>
+<85> <2026>
+<88> <02C6>
+<89> <2030>
+<8A> <0160>
+<8B> <2039>
+<8C> <0152>
+<8D> <2022>
+<8E> <017D>
+<8F> <2022>
+<90> <2022>
+<95> <2022>
+<98> <02DC>
+<99> <2122>
+<9A> <0161>
+<9B> <203A>
+<9C> <0153>
+<9D> <2022>
+<9E> <017E>
+<9F> <0178>
+endbfchar
+
+6 beginbfrange
+<20> <7E> <0020>
+<86> <87> <2020>
+<91> <92> <2018>
+<93> <94> <201C>
+<96> <97> <2013>
+<A0> <FF> <00A0>
+endbfrange
+endcmap
+CMapName currentdict /CMap defineresource pop
+end
+end
+
+%%EndResource
+%%EOF

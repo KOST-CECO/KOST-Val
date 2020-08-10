@@ -1,0 +1,565 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pdfpreflight version="17.0">
+	<package>
+		<id3>eb3164b1a0629e65f21141795fcd30b9</id3>
+		<pdfxoutintentlist>
+		</pdfxoutintentlist>
+		<iccprofilelist>
+			<iccprofile>
+				<iccprofilename>Dot Gain 15%</iccprofilename>
+			</iccprofile>
+			<iccprofile>
+				<iccprofilename>PSO Coated v3</iccprofilename>
+			</iccprofile>
+			<iccprofile>
+				<iccprofilename>sRGB IEC61966-2.1</iccprofilename>
+			</iccprofile>
+		</iccprofilelist>
+		<ccpolicies>
+		</ccpolicies>
+		<occdsetups>
+		</occdsetups>
+		<curves>
+		</curves>
+		<fspolicies>
+		</fspolicies>
+		<resources>
+		</resources>
+		<variables>
+			<variable>
+				<id1>Vbd4b9feddeb4818e6098fb77f3c58788</id1>
+				<id2>V3183b8b723c001defdb6882327b93c1b</id2>
+				<id3>06d7a0c1cc0fb4adbae86d4b9a030f36</id3>
+				<id4>43727c14d526812182152d43ccb6262b</id4>
+				<id5>V3183b8b723c001defdb6882327b93c1b</id5>
+				<name>V_15_DestinationICCprofile</name>
+				<comment>V_15_DestinationICCprofile</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<creation>D:20180409115624+02&apos;00&apos;</creation>
+				<modification>D:20190927064823+02&apos;00&apos;</modification>
+				<varkey>ICCdestination</varkey>
+				<varvalue>PSO Coated v3</varvalue>
+				<varlistvalues varval_type="0" varval_flags="0">
+				</varlistvalues>
+			</variable>
+			<variable>
+				<id1>V1e9eea11d54dedb5fff05f7a38294af2</id1>
+				<id2>V6606952c336c012d679bfa8319c3f377</id2>
+				<id3>f807b61b2c2dae1ea819bf275ed6a1a7</id3>
+				<id4>ce3980ce01c7658472d308b8d78c31c9</id4>
+				<id5>V94739b089dbaa6a8892719c98a2f73df</id5>
+				<name>V_17_Xoffset</name>
+				<comment>V_17_Xoffset</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<creation>D:20190924080007+02&apos;00&apos;</creation>
+				<modification>D:20190927064823+02&apos;00&apos;</modification>
+				<varkey>x-offset</varkey>
+				<varvalue>20</varvalue>
+				<varlistvalues varval_type="0" varval_flags="0">
+				</varlistvalues>
+			</variable>
+			<variable>
+				<id1>V074144a8518272525611e6b3c852156b</id1>
+				<id2>Ve6c10b58eedb2813019066902c8c5fae</id2>
+				<id3>3ee0cb3809829eaf0e8d2030036ec964</id3>
+				<id4>46487967f3e6cd5b45959551f2610916</id4>
+				<id5>Vaec2cc05602faecea034aa631aa26659</id5>
+				<name>V_17_Yoffset</name>
+				<comment>V_17_Yoffset</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<creation>D:20190924080040+02&apos;00&apos;</creation>
+				<modification>D:20190927064823+02&apos;00&apos;</modification>
+				<varkey>y_offset</varkey>
+				<varvalue>20</varvalue>
+				<varlistvalues varval_type="0" varval_flags="0">
+				</varlistvalues>
+			</variable>
+			<variable>
+				<id1>V9b5d1b393438a295e388137d34c1e9ad</id1>
+				<id2>V51c3f5cbd7fb5b1b00dfc6763c6f3a54</id2>
+				<id3>e7f34229ebc5c42d952bf6dce0511fdf</id3>
+				<id4>340540e0d123a24893eccecbcf10b41c</id4>
+				<id5>Vcf42fd17d030891a7ccb4deb091640a7</id5>
+				<name>V_17_Horizontaldiameterofthecirleellipse</name>
+				<comment>V_17_Horizontaldiameterofthecirleellipse</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<creation>D:20190924080452+02&apos;00&apos;</creation>
+				<modification>D:20190927064823+02&apos;00&apos;</modification>
+				<varkey>horizontal_diameter</varkey>
+				<varvalue>15</varvalue>
+				<varlistvalues varval_type="0" varval_flags="0">
+				</varlistvalues>
+			</variable>
+			<variable>
+				<id1>V523520f1dcabc62b3bd44fa106fabc09</id1>
+				<id2>Vfa29198811ce1c7aa2eb38e19c57a7ac</id2>
+				<id3>755f4a9f7a57fe4c44196a04e277bfbd</id3>
+				<id4>b2aec0852a895fc4b8573f29fac1eb06</id4>
+				<id5>V5ac11b574ae840150399452b1f5bd2fe</id5>
+				<name>V_17_Verticaldiameterofthecirleellipse</name>
+				<comment>V_17_Verticaldiameterofthecirleellipse</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<creation>D:20190924080521+02&apos;00&apos;</creation>
+				<modification>D:20190927064823+02&apos;00&apos;</modification>
+				<varkey>vertical_diameter</varkey>
+				<varvalue>15</varvalue>
+				<varlistvalues varval_type="0" varval_flags="0">
+				</varlistvalues>
+			</variable>
+			<variable>
+				<id1>Vbafdf6151e1995180bd7d4b9ea20bf35</id1>
+				<id2>V28639cfc05b4f66c574fe2edb9ca61eb</id2>
+				<id3>072964c186606475b22d25bf58454ed3</id3>
+				<id4>b8597cf5df6e9514ccf22ddcf91638df</id4>
+				<id5>V16e7b37798d031ccb691779347a43188</id5>
+				<name>V_17_Rotationofthecirleellipsedegrees</name>
+				<comment>V_17_Rotationofthecirleellipsedegrees</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<creation>D:20190924080545+02&apos;00&apos;</creation>
+				<modification>D:20190927064823+02&apos;00&apos;</modification>
+				<varkey>rotation_degrees</varkey>
+				<varvalue>0</varvalue>
+				<varlistvalues varval_type="0" varval_flags="0">
+				</varlistvalues>
+			</variable>
+			<variable>
+				<id1>V88fffb4e8f4db39fe5391d9f7ae1950d</id1>
+				<id2>V75ffeb2aba7c4f3bd6e92fe7fffaa09a</id2>
+				<id3>4e6a92259c260636c9a138b0821090dc</id3>
+				<id4>f90bbcebeeb57917f8db79889a1a5097</id4>
+				<id5>V2c5c3f447d8ea5cfa06a5861df42e546</id5>
+				<name>V_17_Unitmminchpt</name>
+				<comment>V_17_Unitmminchpt</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<creation>D:20190924105844+02&apos;00&apos;</creation>
+				<modification>D:20190927064823+02&apos;00&apos;</modification>
+				<varkey>unit</varkey>
+				<varvalue>mm</varvalue>
+				<varlistvalues varval_type="0" varval_flags="0">
+				</varlistvalues>
+			</variable>
+			<variable>
+				<id1>V5e245bf08e1c9652aba71f1407dacc73</id1>
+				<id2>Vcf34eb766cbad6f180d86ed43d92d9ed</id2>
+				<id3>15cd53a0a506f0bfda7ab4cff23c5350</id3>
+				<id4>b2907168f271a910dab1e7c64fa02cdc</id4>
+				<id5>V3626adb70dc66950b3cae23b3b596dd6</id5>
+				<name>V_17_StartpointX</name>
+				<comment>V_17_StartpointX</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<creation>D:20190924082547+02&apos;00&apos;</creation>
+				<modification>D:20190927064823+02&apos;00&apos;</modification>
+				<varkey>startpoint_x</varkey>
+				<varvalue>0</varvalue>
+				<varlistvalues varval_type="0" varval_flags="0">
+				</varlistvalues>
+			</variable>
+			<variable>
+				<id1>V64f99e1d1d0d400fe03285267ef483fe</id1>
+				<id2>V5cdaaf8514ceff0d1320c8e2f3e71828</id2>
+				<id3>167b0bfc78c89b523fa47191b7d48197</id3>
+				<id4>2a2c9e688a99986026ea28bc9d922d1f</id4>
+				<id5>Va347d4138cba039dffa8f033d2c10445</id5>
+				<name>V_17_StartpointY</name>
+				<comment>V_17_StartpointY</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<creation>D:20190924082610+02&apos;00&apos;</creation>
+				<modification>D:20190927064823+02&apos;00&apos;</modification>
+				<varkey>startpoint_y</varkey>
+				<varvalue>0</varvalue>
+				<varlistvalues varval_type="0" varval_flags="0">
+				</varlistvalues>
+			</variable>
+			<variable>
+				<id1>Vff73ee7a25d2d5efec5d1ca203615a5b</id1>
+				<id2>Vdfdcfb370f37e7659ca51e4af0ffe4fa</id2>
+				<id3>2719cb34ab4af7510c6ee3ffb787651c</id3>
+				<id4>6bc856ccf62cb46ea922ffdecb791e4b</id4>
+				<id5>V029bc44a746d3043077bbd9e663fd196</id5>
+				<name>V_17_EndpointX</name>
+				<comment>V_17_EndpointX</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<creation>D:20190924082647+02&apos;00&apos;</creation>
+				<modification>D:20190927064823+02&apos;00&apos;</modification>
+				<varkey>endpoint_x</varkey>
+				<varvalue>100</varvalue>
+				<varlistvalues varval_type="0" varval_flags="0">
+				</varlistvalues>
+			</variable>
+			<variable>
+				<id1>Ve267748034c459a518f7c1d10f62ecab</id1>
+				<id2>Vf216de903b4c9107098162c260cd17c7</id2>
+				<id3>232a842d8c0c39a8565e2afdba4c0acc</id3>
+				<id4>b832fcd9716bc90d2bea9072ec11c5a1</id4>
+				<id5>Vd510f062e9489b11092db3357a623cf4</id5>
+				<name>V_17_EndpointY</name>
+				<comment>V_17_EndpointY</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<creation>D:20190924082653+02&apos;00&apos;</creation>
+				<modification>D:20190927064823+02&apos;00&apos;</modification>
+				<varkey>endpoint_y</varkey>
+				<varvalue>100</varvalue>
+				<varlistvalues varval_type="0" varval_flags="0">
+				</varlistvalues>
+			</variable>
+			<variable>
+				<id1>Vc173a735b66a79cc23a60843f3ce2bf9</id1>
+				<id2>Vc4e3d9df99dee4b97064e14ca14d4071</id2>
+				<id3>5fc1e38f12662d500b62aa75082cb093</id3>
+				<id4>f273f31f9e19e9a344b5cab5eb1f331d</id4>
+				<id5>V19c86ecdb14aa0d92a8734d51cfc8882</id5>
+				<name>V_17_Rectanglewidth</name>
+				<comment>V_17_Rectanglewidth</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<creation>D:20190924081244+02&apos;00&apos;</creation>
+				<modification>D:20190927064823+02&apos;00&apos;</modification>
+				<varkey>rectangle_width</varkey>
+				<varvalue>10</varvalue>
+				<varlistvalues varval_type="0" varval_flags="0">
+				</varlistvalues>
+			</variable>
+			<variable>
+				<id1>V42f2383b4f60cd3eecedc9a2b50290bf</id1>
+				<id2>Ve8b043a75c14a65cebaaff211f894402</id2>
+				<id3>dc68acb2a267f16a2cd3caa273dd3f71</id3>
+				<id4>2cb6e95f533cffb135cd7189f46c59ed</id4>
+				<id5>Vc1ecd20b7bc1946a3ee1ca2286e9208b</id5>
+				<name>V_17_Rectangleheight</name>
+				<comment>V_17_Rectangleheight</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<creation>D:20190924081337+02&apos;00&apos;</creation>
+				<modification>D:20190927064823+02&apos;00&apos;</modification>
+				<varkey>rectangle_height</varkey>
+				<varvalue>10</varvalue>
+				<varlistvalues varval_type="0" varval_flags="0">
+				</varlistvalues>
+			</variable>
+			<variable>
+				<id1>V001b851f9d80931eb4116f4474c1dffa</id1>
+				<id2>Vd76070d783135cc79d3595d319a5dba2</id2>
+				<id3>be73bc5d03cdb8e15a6820819b0bd2ee</id3>
+				<id4>548611ac3800752ce38b72f3e6df5303</id4>
+				<id5>V66ee6841176885ccdd6e0d29219e7c98</id5>
+				<name>V_17_Roundedcornerradius</name>
+				<comment>V_17_Roundedcornerradius</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<creation>D:20190924081753+02&apos;00&apos;</creation>
+				<modification>D:20190927064823+02&apos;00&apos;</modification>
+				<varkey>rounded_corner_radius</varkey>
+				<varvalue>1</varvalue>
+				<varlistvalues varval_type="0" varval_flags="0">
+				</varlistvalues>
+			</variable>
+		</variables>
+		<conditions>
+		</conditions>
+		<rules>
+		</rules>
+		<rulesets>
+		</rulesets>
+		<fixups>
+			<fixup>
+				<id1>F1bbd9ceef7417b5a13d694ab38d2f1db</id1>
+				<id2>Fd984cb6c9fda7a1a9906c0053ddc0d72</id2>
+				<id3>03827a29503768731312932d2aa87e0b</id3>
+				<id4>361682722ccd3a98ad5383966a2eb32e</id4>
+				<id5>Fd984cb6c9fda7a1a9906c0053ddc0d72</id5>
+				<name>F_15_ConvertcolortospecifiedICCprofileconvertspotcolors</name>
+				<comment>F_15_ConvertcolortospecifiedICCprofileconvertspotcolors</comment>
+				<flags user_units="1" scope="16" edit="1" visible="1" dict="1"></flags>
+				<metalist>
+					<metadata>
+						<metakey>PRC_UPDATE</metakey>
+						<metavalue>1</metavalue>
+					</metadata>
+				</metalist>
+				<creation>D:20190925114941+02&apos;00&apos;</creation>
+				<modification>D:20191002100136+02&apos;00&apos;</modification>
+				<fcfgs>
+					<fcfg>
+						<ffeat>CCDestination</ffeat>
+						<fparams>
+							<fparam>PSO Coated v3</fparam>
+							<fparam>0</fparam>
+							<fparam>EmbdNone</fparam>
+							<fparam>sRGB IEC61966-2.1</fparam>
+							<fparam>PSO Coated v3</fparam>
+							<fparam>Dot Gain 15%</fparam>
+							<fparam>1</fparam>
+							<fparam>1</fparam>
+							<fparam>1</fparam>
+							<fparam></fparam>
+							<fparam>0</fparam>
+						</fparams>
+					</fcfg>
+					<fcfg>
+						<ffeat>CCSettings</ffeat>
+						<fparams>
+							<fparam>All</fparam>
+							<fparam>AnyColor</fparam>
+							<fparam>ConvertToDest</fparam>
+							<fparam>UseFromDoc</fparam>
+						</fparams>
+					</fcfg>
+					<fcfg>
+						<ffeat>CCSettings</ffeat>
+						<fparams>
+							<fparam>All</fparam>
+							<fparam>Spot</fparam>
+							<fparam>ConvertToDest</fparam>
+							<fparam>UseFromDoc</fparam>
+						</fparams>
+					</fcfg>
+					<fcfg>
+						<ffeat>CCPolicy</ffeat>
+						<fparams>
+							<fparam>DevNSepCMYKCMYKGraph</fparam>
+							<fparam>DevNSepCMYKON</fparam>
+						</fparams>
+					</fcfg>
+					<fcfg>
+						<ffeat>CCPolicy</ffeat>
+						<fparams>
+							<fparam>DevNSepCMYKCMYKImage</fparam>
+							<fparam>DevNSepCMYKON</fparam>
+						</fparams>
+					</fcfg>
+					<fcfg>
+						<ffeat>CCPolicy</ffeat>
+						<fparams>
+							<fparam>AdvGCCGrayGraph</fparam>
+							<fparam>AdvGCCAdjDotGain</fparam>
+						</fparams>
+					</fcfg>
+					<fcfg>
+						<ffeat>CCPolicy</ffeat>
+						<fparams>
+							<fparam>AdvGCCGrayImage</fparam>
+							<fparam>AdvGCCAdjDotGain</fparam>
+						</fparams>
+					</fcfg>
+					<fcfg>
+						<ffeat>CCPolicy</ffeat>
+						<fparams>
+							<fparam>TrBlend</fparam>
+							<fparam>TrBlendWithoutProf</fparam>
+						</fparams>
+					</fcfg>
+				</fcfgs>
+				<reportFailed></reportFailed>
+				<variables>
+					<variable var_idx="1">Vbd4b9feddeb4818e6098fb77f3c58788</variable>
+				</variables>
+			</fixup>
+			<fixup>
+				<id1>Fc9ce5b2c1d1b98edf5ba9902d2b73a2d</id1>
+				<id2>F8285e89ae82e48550d2903760a4a7adf</id2>
+				<id3>0740f13e29a35056ce75082930b529bd</id3>
+				<id4>ebdb9e1bb1262182aff06dd6dbc349d3</id4>
+				<id5>F8285e89ae82e48550d2903760a4a7adf</id5>
+				<name>F_17_Placeblackcircleatspecifiedposition</name>
+				<comment>F_17_Placeblackcircleatspecifiedposition</comment>
+				<flags user_units="1" scope="16" edit="1" visible="1" dict="1"></flags>
+				<metalist>
+					<metadata>
+						<metakey>PRC_UPDATE</metakey>
+						<metavalue>1</metavalue>
+					</metadata>
+				</metalist>
+				<creation>D:20190924075732+02&apos;00&apos;</creation>
+				<modification>D:20191002100136+02&apos;00&apos;</modification>
+				<fcfgs>
+					<fcfg>
+						<ffeat>PlaceCircle</ffeat>
+						<fparams>
+							<fparam>20</fparam>
+							<fparam>20</fparam>
+							<fparam>15</fparam>
+							<fparam>15</fparam>
+							<fparam>mm</fparam>
+							<fparam>LowerLeft</fparam>
+							<fparam>CropBox</fparam>
+							<fparam>0</fparam>
+							<fparam>CMYKPercent</fparam>
+							<fparam>0</fparam>
+							<fparam>0</fparam>
+							<fparam>0</fparam>
+							<fparam>100</fparam>
+							<fparam>0</fparam>
+							<fparam></fparam>
+							<fparam>100</fparam>
+							<fparam>On</fparam>
+							<fparam>100</fparam>
+							<fparam>Automatic</fparam>
+							<fparam>0</fparam>
+							<fparam>0</fparam>
+							<fparam>0</fparam>
+							<fparam>0</fparam>
+							<fparam>0</fparam>
+							<fparam></fparam>
+							<fparam>100</fparam>
+							<fparam>Off</fparam>
+							<fparam>100</fparam>
+							<fparam>1</fparam>
+							<fparam></fparam>
+							<fparam>Rel</fparam>
+							<fparam>Normal</fparam>
+							<fparam>0</fparam>
+							<fparam>All</fparam>
+							<fparam>All</fparam>
+						</fparams>
+					</fcfg>
+				</fcfgs>
+				<reportFailed></reportFailed>
+				<variables>
+					<variable var_idx="1">V1e9eea11d54dedb5fff05f7a38294af2</variable>
+					<variable var_idx="2">V074144a8518272525611e6b3c852156b</variable>
+					<variable var_idx="3">V9b5d1b393438a295e388137d34c1e9ad</variable>
+					<variable var_idx="4">V523520f1dcabc62b3bd44fa106fabc09</variable>
+					<variable var_idx="5">Vbafdf6151e1995180bd7d4b9ea20bf35</variable>
+					<variable var_idx="6">V88fffb4e8f4db39fe5391d9f7ae1950d</variable>
+				</variables>
+			</fixup>
+			<fixup>
+				<id1>F83b41a7a81e66d26f2cf5156262af973</id1>
+				<id2>F39f19a7bb7d37d46ad20a3ce20f986f2</id2>
+				<id3>e8c940acb5a5703c81ab6b4959858c6e</id3>
+				<id4>5dca68573ad3837858816792d66a3fee</id4>
+				<id5>F39f19a7bb7d37d46ad20a3ce20f986f2</id5>
+				<name>F_17_Placebluelineatspecifiedposition</name>
+				<comment>F_17_Placebluelineatspecifiedposition</comment>
+				<flags user_units="1" scope="16" edit="1" visible="1" dict="1"></flags>
+				<metalist>
+					<metadata>
+						<metakey>PRC_UPDATE</metakey>
+						<metavalue>1</metavalue>
+					</metadata>
+				</metalist>
+				<creation>D:20190924075830+02&apos;00&apos;</creation>
+				<modification>D:20191002100136+02&apos;00&apos;</modification>
+				<fcfgs>
+					<fcfg>
+						<ffeat>PlaceLine</ffeat>
+						<fparams>
+							<fparam>0</fparam>
+							<fparam>0</fparam>
+							<fparam>100</fparam>
+							<fparam>100</fparam>
+							<fparam>mm</fparam>
+							<fparam>LowerLeft</fparam>
+							<fparam>CropBox</fparam>
+							<fparam>CMYKPercent</fparam>
+							<fparam>100</fparam>
+							<fparam>40</fparam>
+							<fparam>0</fparam>
+							<fparam>0</fparam>
+							<fparam>0</fparam>
+							<fparam></fparam>
+							<fparam>100</fparam>
+							<fparam>On</fparam>
+							<fparam>100</fparam>
+							<fparam>1</fparam>
+							<fparam>Butt</fparam>
+							<fparam>Miter</fparam>
+							<fparam></fparam>
+							<fparam>Rel</fparam>
+							<fparam>Normal</fparam>
+							<fparam>0</fparam>
+							<fparam></fparam>
+							<fparam>All</fparam>
+						</fparams>
+					</fcfg>
+				</fcfgs>
+				<reportFailed></reportFailed>
+				<variables>
+					<variable var_idx="1">V5e245bf08e1c9652aba71f1407dacc73</variable>
+					<variable var_idx="2">V64f99e1d1d0d400fe03285267ef483fe</variable>
+					<variable var_idx="3">Vff73ee7a25d2d5efec5d1ca203615a5b</variable>
+					<variable var_idx="4">Ve267748034c459a518f7c1d10f62ecab</variable>
+					<variable var_idx="5">V88fffb4e8f4db39fe5391d9f7ae1950d</variable>
+				</variables>
+			</fixup>
+			<fixup>
+				<id1>F2794f9a37a1de47cb8375338db6f6038</id1>
+				<id2>Fe66fa2e6e6638279d4fdf9dfba207f6b</id2>
+				<id3>ae2afe2235d3492874c4c7727edf30c7</id3>
+				<id4>611cbda52b6f3ccfd443efc82b7f3a3d</id4>
+				<id5>Fe66fa2e6e6638279d4fdf9dfba207f6b</id5>
+				<name>F_17_Placeredrectangleatspecifiedposition</name>
+				<comment>F_17_Placeredrectangleatspecifiedposition</comment>
+				<flags user_units="1" scope="16" edit="1" visible="1" dict="1"></flags>
+				<metalist>
+					<metadata>
+						<metakey>PRC_UPDATE</metakey>
+						<metavalue>1</metavalue>
+					</metadata>
+				</metalist>
+				<creation>D:20190924075844+02&apos;00&apos;</creation>
+				<modification>D:20191002100136+02&apos;00&apos;</modification>
+				<fcfgs>
+					<fcfg>
+						<ffeat>PlaceRect</ffeat>
+						<fparams>
+							<fparam>20</fparam>
+							<fparam>20</fparam>
+							<fparam>10</fparam>
+							<fparam>10</fparam>
+							<fparam>1</fparam>
+							<fparam>mm</fparam>
+							<fparam>LowerLeft</fparam>
+							<fparam>CropBox</fparam>
+							<fparam>0</fparam>
+							<fparam>CMYKPercent</fparam>
+							<fparam>0</fparam>
+							<fparam>100</fparam>
+							<fparam>100</fparam>
+							<fparam>0</fparam>
+							<fparam>0</fparam>
+							<fparam></fparam>
+							<fparam>100</fparam>
+							<fparam>On</fparam>
+							<fparam>100</fparam>
+							<fparam>Automatic</fparam>
+							<fparam>0</fparam>
+							<fparam>0</fparam>
+							<fparam>0</fparam>
+							<fparam>0</fparam>
+							<fparam>0</fparam>
+							<fparam></fparam>
+							<fparam>100</fparam>
+							<fparam>Off</fparam>
+							<fparam>100</fparam>
+							<fparam>1</fparam>
+							<fparam></fparam>
+							<fparam>Rel</fparam>
+							<fparam>Normal</fparam>
+							<fparam>0</fparam>
+							<fparam>All</fparam>
+							<fparam>All</fparam>
+						</fparams>
+					</fcfg>
+				</fcfgs>
+				<reportFailed></reportFailed>
+				<variables>
+					<variable var_idx="3">Vc173a735b66a79cc23a60843f3ce2bf9</variable>
+					<variable var_idx="4">V42f2383b4f60cd3eecedc9a2b50290bf</variable>
+					<variable var_idx="5">V001b851f9d80931eb4116f4474c1dffa</variable>
+					<variable var_idx="7">V1e9eea11d54dedb5fff05f7a38294af2</variable>
+					<variable var_idx="8">V074144a8518272525611e6b3c852156b</variable>
+					<variable var_idx="9">V88fffb4e8f4db39fe5391d9f7ae1950d</variable>
+					<variable var_idx="10">Vbafdf6151e1995180bd7d4b9ea20bf35</variable>
+				</variables>
+			</fixup>
+		</fixups>
+		<fixupsets>
+		</fixupsets>
+		<actions>
+		</actions>
+		<profiles>
+		</profiles>
+		<metaprofs>
+		</metaprofs>
+		<profgroups>
+		</profgroups>
+	</package>
+</pdfpreflight>

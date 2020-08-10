@@ -1,0 +1,106 @@
+{
+  "id": "M2477bb56c52e27ba4fc7e979f45ab050",
+  "name": {
+    "value": "New Process plan",
+    "vars": []
+  },
+  "author": "",
+  "email": "",
+  "locked": false,
+  "group": "Process plans",
+  "layout": {
+    "stepsLayout": {
+      "0": {
+        "position": {
+          "x": 80,
+          "y": 100
+        },
+        "size": {
+          "height": 40,
+          "width": 200
+        }
+      },
+      "end": {
+        "position": {
+          "x": 180,
+          "y": 220
+        },
+        "size": {
+          "height": 40,
+          "width": 120
+        }
+      },
+      "start": {
+        "position": {
+          "x": 10,
+          "y": 10
+        },
+        "size": {
+          "height": 40,
+          "width": 120
+        }
+      }
+    },
+    "transitionsLayout": {
+      "0": [
+        {
+          "start": {
+            "position": "left"
+          },
+          "end": {
+            "position": "left"
+          },
+          "types": [
+            "on_error",
+            "on_info"
+          ]
+        },
+        {
+          "start": {
+            "position": "right"
+          },
+          "end": {
+            "position": "right"
+          },
+          "types": [
+            "on_warning",
+            "on_success"
+          ]
+        }
+      ],
+      "start": [
+        {
+          "start": {
+            "position": "bottom"
+          },
+          "end": {
+            "position": "top"
+          },
+          "types": [
+            "out"
+          ]
+        }
+      ]
+    }
+  },
+  "sequence": [
+    {
+      "type": "profile",
+      "id": "P000004e779q0d5ww68a2q004a3edaz4z",
+      "omit_fixups": false,
+      "enable_step": true,
+      "on_error": {
+        "next_step": -1
+      },
+      "on_warning": {
+        "next_step": -1
+      },
+      "on_info": {
+        "next_step": -1
+      },
+      "on_success": {
+        "next_step": -1
+      }
+    }
+  ]
+}

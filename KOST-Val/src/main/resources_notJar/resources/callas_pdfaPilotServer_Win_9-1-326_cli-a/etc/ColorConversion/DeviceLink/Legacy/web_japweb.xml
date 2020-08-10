@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<devicelink>
+	<profile lang="CHS">
+		<header>卷筒胶印，欧洲到日本</header>
+		<explanation>从 ISO Web Coated (ECI) 转换为 Japan Web Coated (Ad)</explanation>
+	</profile>
+	<profile lang="ENU">
+		<header>Web offset, Europe to Japan</header>
+		<explanation>Conversion from ISO Web Coated (ECI) to Japan Web Coated (Ad)</explanation>
+	</profile>
+	<profile lang="ESP">
+		<header>Offset de bobina, de Europa a Japón</header>
+		<explanation>Conversión de ISO estucado en bobina (ECI) a Japón estucado en bobina (Ad)</explanation>
+	</profile>
+	<profile lang="FRA">
+		<header>Impression rotative offset, Europe vers Japon</header>
+		<explanation>Conversion d’ISO Web Coated (ECI) vers Japan Web Coated (Ad)</explanation>
+	</profile>
+	<profile lang="DEU">
+		<header>Rollenoffset, Europa nach Japan</header>
+		<explanation>Konvertierung von ISO Web Coated (ECI) nach Japan Web Coated (Ad)</explanation>
+	</profile>
+	<profile lang="ITA">
+		<header>Offset bobina, da Europa a Giappone</header>
+		<explanation>Conversione da ISO Web Coated (ECI) a Japan Web Coated (annuncio pubblicitario)</explanation>
+	</profile>
+	<profile lang="JPN">
+		<header>Web オフセット, 欧州を日本に変換</header>
+		<explanation>ISO Web Coated (ECI) を Japan Web Coated (Ad) に変換します</explanation>
+	</profile>
+</devicelink>

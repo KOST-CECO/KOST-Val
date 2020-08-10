@@ -1,0 +1,32 @@
+@charset "UTF-8";
+
+/* Regular CSS mixin classes */
+
+.bold {
+    font-weight: bold;
+}
+
+.italic {
+    font-style: italic;
+}
+
+
+/* pdfChip color classes */
+
+.color-cmyk-black {
+    color: -cchip-cmyk( 0.0, 0.0, 0.0, 1.0 );
+}
+
+.background-color-cmyk-black {
+    background-color: -cchip-cmyk( 0.0, 0.0, 0.0, 1.0 );
+}
+
+.color-spot-red {
+    color: -cchip-cmyk( "Red", 0.0, 1.0, 1.0, 0.0 );
+}
+
+.color-spot-red-50 {
+    color: -cchip-cmyk( "Red", 0.0, 1.0, 1.0, 0.0, 0.5 );
+}
+
+

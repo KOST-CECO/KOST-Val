@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pdfpreflight version="8.0">
+	<package>
+		<id3>c39993e7e65f2d3bbdb63291db999b54</id3>
+		<pdfxoutintentlist>
+		</pdfxoutintentlist>
+		<iccprofilelist>
+		</iccprofilelist>
+		<ccpolicies>
+		</ccpolicies>
+		<occdsetups>
+		</occdsetups>
+		<curves>
+		</curves>
+		<fspolicies>
+		</fspolicies>
+		<conditions>
+			<condition>
+				<id1>C74000d73631ebd36b46e5aaafdaa52e5</id1>
+				<id2>Cad524996c6eb457b679950d5035c4421</id2>
+				<id3>1d1257f6d81472689cb191911a9e3314</id3>
+				<id4>3c5b06b857922e53dadec139fc4c55d3</id4>
+				<name>CC_AnnotationHasCaEntry</name>
+				<comment>CC_AnnotationHasCaEntry</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<atom>
+					<group>Group::ANNOT</group>
+					<token>ANNOT::AnnotaHasCAEntry</token>
+					<operator>OP::is_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>C151923d5fba5a32f4046f27356bad14e</id1>
+				<id2>C1d8e09ffca249790c15b12ac4f059757</id2>
+				<id3>c8663b7ce9159b2c763d1dc74c1be0cb</id3>
+				<id4>a3e1182f9b0c28e43899cfd3a3d532ee</id4>
+				<name> (Copy 5)</name>
+				<comment></comment>
+				<flags edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::ANNOT</group>
+					<token>ANNOT::ValueForCAEntryInAnnotation</token>
+					<operator>OP::less</operator>
+					<data>
+						<num>
+							<value>1</value>
+							<tolerance></tolerance>
+						</num>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>C53acd7e897324c2ba81e8dd2a825cbf0</id1>
+				<id2>Cd2e01f6e5ead54084012dce804532f5d</id2>
+				<id3>22cbe20e180aa486f0b6320e5c46cbc3</id3>
+				<id4>d9b64a5a0adc24bfb27f00d4b755a648</id4>
+				<name> (Copy 9)</name>
+				<comment></comment>
+				<flags edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSIMAGE</group>
+					<token>CSIMAGE::HasSMaskEntry</token>
+					<operator>OP::is_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>Cf609b7a5b28fcf068091b0893010439c</id1>
+				<id2>C5f6eda73eb63e98ea62d3a84cc8c5439</id2>
+				<id3>bf28f607bcbe7b05ac50f239ff5b8e01</id3>
+				<id4>f41b675b73147a9d7cdbf53b7da65c93</id4>
+				<name> (Copy 9)</name>
+				<comment></comment>
+				<flags edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSGST_F</group>
+					<token>CSGST_F::ConstantAlphaFill</token>
+					<operator>OP::less</operator>
+					<data>
+						<num>
+							<value>1.0</value>
+							<tolerance></tolerance>
+						</num>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>C9c82f3aeea8c004fa444ecd0624b9808</id1>
+				<id2>C87e229100480375c7be8ed5757dde364</id2>
+				<id3>de9392b9a66212c08cb916c532f7ef48</id3>
+				<id4>2857fc555b92d2d821729bc7d2a65d6b</id4>
+				<name> (Copy 9)</name>
+				<comment></comment>
+				<flags edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSGST_S</group>
+					<token>CSGST_S::ConstantAlphaStroke</token>
+					<operator>OP::less</operator>
+					<data>
+						<num>
+							<value>1.0</value>
+							<tolerance></tolerance>
+						</num>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>C086d2df5777b25be836efeed7a814eff</id1>
+				<id2>C3dc08eeb31a41b86d8c8bdb6b170281d</id2>
+				<id3>072c3baf9079d92b00eed5cc36cf31a5</id3>
+				<id4>a4b34494b89e3957d53ff4f9c77f1080</id4>
+				<name> (Copy 9)</name>
+				<comment></comment>
+				<flags edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSGST_G</group>
+					<token>CSGST_G::BlendMode</token>
+					<operator>OP::is_not_contained_in</operator>
+					<data>
+						<list>
+							<item>Normal</item>
+							<item>Compatible</item>
+						</list>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>C7a0e65d3d9740ea14e1d3da5f7500e05</id1>
+				<id2>C975a00a392f50c8c7cb77799fe868c47</id2>
+				<id3>3212c84d7681502fde4009d7cb6c0e6b</id3>
+				<id4>666c2d882a9a025579f24699caa09bfb</id4>
+				<name> (Copy 9)</name>
+				<comment></comment>
+				<flags edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSGST_G</group>
+					<token>CSGST_G::HasSMaskEntry</token>
+					<operator>OP::is_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>C1647ffdcc2aba88af9ff53fe788ede21</id1>
+				<id2>C0ccd5c103afd5c01c74c6b3b7bcbcf64</id2>
+				<id3>180cdd51115a5b438b393f7dd3ebd1f8</id3>
+				<id4>72c193b583ece198c9ab8665cabfb44f</id4>
+				<name> (Copy 9)</name>
+				<comment></comment>
+				<flags edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSGST_G</group>
+					<token>CSGST_G::HasSMaskEntryWithAValueOfNone</token>
+					<operator>OP::is_not_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>C4401482d1b7468c609cd22e576ee31ac</id1>
+				<id2>C5bd849c386a3bbe32a1d513b90c0f524</id2>
+				<id3>4517fee4d835d6f988f30545193cddac</id3>
+				<id4>350744b7be082004e439370e88788f61</id4>
+				<name> (Copy 9)</name>
+				<comment></comment>
+				<flags edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSGST_G</group>
+					<token>CSGST_G::BelongsToTransparencyGroup</token>
+					<operator>OP::is_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+		</conditions>
+		<rules>
+			<rule>
+				<id1>R4c072f0dd7dc2720219b7dfa730e706c</id1>
+				<id2>R3b89305a56134c6b98b37a57aef3ee81</id2>
+				<id3>c65f4cc4bf0222c94f051b6c93953dd5</id3>
+				<id4>69d58bceaa6ee6fa75b5cbd883aa1cf6</id4>
+				<name>R_6_TransparencyusedannotationhasCAvaluesmallerthan10</name>
+				<comment>R_6_TransparencyusedannotationhasCAvaluesmallerthan10</comment>
+				<flags analysis="15" condition_logic="0" ignore_objects="0" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>C74000d73631ebd36b46e5aaafdaa52e5</condition>
+					<condition>C151923d5fba5a32f4046f27356bad14e</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>Ra9ce76a40747f9cbadf3928d6f9c1d31</id1>
+				<id2>Rd6d94e3ca84d823337e262672b1690ea</id2>
+				<id3>1cd6110eaf68b59cbe98a12a4a542a82</id3>
+				<id4>b3aa89364d0b5431a9ef1d87377fa223</id4>
+				<name>R_6_Transparencyusedsoftmaskinimage</name>
+				<comment>R_6_Transparencyusedsoftmaskinimage</comment>
+				<flags analysis="15" condition_logic="0" ignore_objects="0" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>C53acd7e897324c2ba81e8dd2a825cbf0</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>R7c1881b1cd1abf15b90d7429a356c2f4</id1>
+				<id2>R85b9f6e3f69d32e8309dc802744b6343</id2>
+				<id3>75f3ed8be04ed26c6349b25b0c6fc6ea</id3>
+				<id4>27125dcfb2bb986b67947d2a0bb50c16</id4>
+				<name>R_6_Transparencyusedfilledobjectwithcavaluesmallerthan10</name>
+				<comment>R_6_Transparencyusedfilledobjectwithcavaluesmallerthan10</comment>
+				<flags analysis="15" condition_logic="0" ignore_objects="0" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>Cf609b7a5b28fcf068091b0893010439c</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>R086234df0eb5a838c67e14a3ab52d305</id1>
+				<id2>R4eb82ca4631b542567b9c22eb66efc10</id2>
+				<id3>74913cf467d800e09de9e99f56d69920</id3>
+				<id4>374518d9f7f928303f136dc074224a72</id4>
+				<name>R_6_TransparencyusedstrokedobjectwithCAvaluesmallerthan10</name>
+				<comment>R_6_TransparencyusedstrokedobjectwithCAvaluesmallerthan10</comment>
+				<flags analysis="15" condition_logic="0" ignore_objects="0" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>C9c82f3aeea8c004fa444ecd0624b9808</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>R8344c26de385cdebc11996e1a8dd1c8a</id1>
+				<id2>Rb13479ab8b419f5a722224e0fcde4661</id2>
+				<id3>f0361a92bae2e6615ef4c61551b70fe5</id3>
+				<id4>b75f6481f8d51d40562dc1198d04a8bd</id4>
+				<name>R_6_TransparencyusedblendmodenotNormalnorCompatible</name>
+				<comment>R_6_TransparencyusedblendmodenotNormalnorCompatible</comment>
+				<flags analysis="15" condition_logic="0" ignore_objects="0" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>C086d2df5777b25be836efeed7a814eff</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>R847aef62353a58b87c619db613130a80</id1>
+				<id2>R5d7a866f1d7c24645fe196905fe9acf2</id2>
+				<id3>a8491ee34b1859770e19da78e0906cce</id3>
+				<id4>11f0626fa4cb4f95b2b0ca2f6689c162</id4>
+				<name>R_6_Transparencyusedsoftmask</name>
+				<comment>R_6_Transparencyusedsoftmask</comment>
+				<flags analysis="15" condition_logic="0" ignore_objects="0" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>C7a0e65d3d9740ea14e1d3da5f7500e05</condition>
+					<condition>C1647ffdcc2aba88af9ff53fe788ede21</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>R9402747bcce0696ad53856f990984f5a</id1>
+				<id2>R2034d2a3cf2d845a767d01adddbfc526</id2>
+				<id3>b2b35ec4d5a01c687cfb81c29e4bd565</id3>
+				<id4>60520564d21811c4356e3ad5e4c022dd</id4>
+				<name>R_6_Transparencyusedtransparencygroup</name>
+				<comment>R_6_Transparencyusedtransparencygroup</comment>
+				<flags analysis="15" condition_logic="0" ignore_objects="0" edit="1" visible="1" dict="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>C4401482d1b7468c609cd22e576ee31ac</condition>
+				</conditions>
+			</rule>
+		</rules>
+		<rulesets>
+			<ruleset>
+				<id1>S0b2b6eeaa892f5ebf0158e52016ef6c7</id1>
+				<id2>S26401ef6b23201d7de36401f5d0bb1d0</id2>
+				<id3>3915a2ed5c3cc706b015d1a09c382c30</id3>
+				<id4>88bcec37c534050e0b33d4cee5758b2c</id4>
+				<name>SSS_RULESET_DEF_NAME</name>
+				<comment>SSS_RULESET_DEF_NAME</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<rules>
+					<rule check_severity="1" check_timing="2">R4c072f0dd7dc2720219b7dfa730e706c</rule>
+					<rule check_severity="1" check_timing="2">Ra9ce76a40747f9cbadf3928d6f9c1d31</rule>
+					<rule check_severity="1" check_timing="2">R7c1881b1cd1abf15b90d7429a356c2f4</rule>
+					<rule check_severity="1" check_timing="2">R086234df0eb5a838c67e14a3ab52d305</rule>
+					<rule check_severity="1" check_timing="2">R8344c26de385cdebc11996e1a8dd1c8a</rule>
+					<rule check_severity="1" check_timing="2">R847aef62353a58b87c619db613130a80</rule>
+					<rule check_severity="1" check_timing="2">R9402747bcce0696ad53856f990984f5a</rule>
+				</rules>
+			</ruleset>
+		</rulesets>
+		<fixups>
+		</fixups>
+		<fixupsets>
+		</fixupsets>
+		<profiles>
+			<profile>
+				<id1>P5c7912fe92bb1cd64e1720687db39043</id1>
+				<id2>P1c8b8dfb40a6e06ecb07bf9193ea15b7</id2>
+				<id3>3e656a8df0509923d3912e52569a008b</id3>
+				<id4>7c352b052bd5e8961781fe38bfe38730</id4>
+				<name>P_6_Listtransparentobjects</name>
+				<comment>P_6_Listtransparentobjects</comment>
+				<flags edit="0" visible="1" dict="1"></flags>
+				<metalist>
+					<metadata>
+						<metakey>author</metakey>
+						<metavalue>callas pdfToolbox 4</metavalue>
+					</metadata>
+					<metadata>
+						<metakey>email</metakey>
+						<metavalue>support@callassoftware.com</metavalue>
+					</metadata>
+				</metalist>
+				<creation>D:20060413135146+01&apos;00&apos;</creation>
+				<modification>D:20090218151918+01&apos;00&apos;</modification>
+				<pdfstd>
+					<pdfx convert="0"></pdfx>
+					<pdfa convert="0"></pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond></outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+				</pdfstd>
+				<wizard>
+				</wizard>
+				<rulesets>
+					<ruleset>S0b2b6eeaa892f5ebf0158e52016ef6c7</ruleset>
+				</rulesets>
+				<fixupsets>
+				</fixupsets>
+			</profile>
+		</profiles>
+		<profgroups>
+		</profgroups>
+	</package>
+</pdfpreflight>

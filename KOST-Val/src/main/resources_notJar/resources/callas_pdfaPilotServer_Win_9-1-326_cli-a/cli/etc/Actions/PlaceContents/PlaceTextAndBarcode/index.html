@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset='utf-8'>
+
+		<script type="text/javascript" src="js/lookup.js"></script>
+		<script type="text/javascript" src="js/layout.js"></script>
+		<script type="text/javascript" src="callas_tmp/data.js"></script>
+
+		<style>
+			*{
+				margin:0;
+				padding:0;
+				white-space:nowrap;
+			}
+			#c{
+				position: absolute;
+			}
+			#t,#b{
+				position: absolute;
+				left: 0;
+				top: 0;
+			}
+		</style>
+
+		<style id='clr'>	</style>
+
+		<style id='pr'>	@page{				size :400pt 400pt;			}		</style>
+
+
+		<style>
+			/*
+				added by ODr,  2018-10-15: include small set of fonts:
+					- install a small set of useful fonts inside the HTML template (Source Sans/Serif/Code Pro)
+					- include @font-face rules for them
+					- use "full font name" as font-family value
+					- for forced font loading see below  at <body onload="onLoad()">
+
+					- Assumptions:
+						- operating systems come with preinstalled fonts
+						- we can predict that certain fonts will likely be present on certain versions of macOS or Windows
+						- we focus on a handful of mainstream fonts (à la Times, Helvetica, Arial, ...)
+						- we use some fallback hacks, e.g if Arial is not present, use Helvetica, then Source Sans (see above))
+					- Core font set (each with Regular, Bold, Italic, Bold Italic faces):
+						- Arial / Helvetica
+							- fallbacks: Helvetica / Arial, Minion, Source Sans
+						- Times / Times New Roman
+							- fallbacks: Times New Roman / Times, Myriad, Source Serif
+						- Courier / Courier New
+							- fallbacks: Courier New / Courier, Source Code
+					- Windows - predictable font directories:
+						C:\Windows\Fonts
+					- macOS - predictable font directories:
+						/Library/Fonts
+						/System/Library/Fonts 
+					- Linux - only msttcorefonts (if present) is 'predictable'; 
+						/usr/share/fonts/truetype/msttcorefonts
+						- users should install msttcorefonts to avoid fallback to "Source Code Pro"
+
+			*/
+			@font-face { font-family: "Source Code Pro Regular"  			; src: url("fonts/SourceCodePro-Regular.ttf")			; }
+			@font-face { font-family: "Source Code Pro Bold"		 			; src: url("fonts/SourceCodePro-Bold.ttf")				; }
+			@font-face { font-family: "Source Code Pro Italic"	 			; src: url("fonts/SourceCodePro-It.ttf")					; }
+			@font-face { font-family: "Source Code Pro Bold Italic"		; src: url("fonts/SourceCodePro-BoldIt.ttf")			; }
+			@font-face { font-family: "Source Sans Pro Regular"	 			; src: url("fonts/SourceSansPro-Regular.ttf")			; }
+			@font-face { font-family: "Source Sans Pro Bold"	   			; src: url("fonts/SourceSansPro-Bold.ttf")				; }
+			@font-face { font-family: "Source Sans Pro Italic"   			; src: url("fonts/SourceSansPro-It.ttf")					; }
+			@font-face { font-family: "Source Sans Pro Bold Italic"   ; src: url("fonts/SourceSansPro-BoldIt.ttf")			; }
+			@font-face { font-family: "Source Serif Pro Regular" 			; src: url("fonts/SourceSansPro-Regular.ttf")			; }
+			@font-face { font-family: "Source Serif Pro Bold"    			; src: url("fonts/SourceSerifPro-Bold.ttf")				; }
+			@font-face { font-family: "Source Serif Pro Italic"  			; src: url("fonts/SourceSerifPro-It.ttf")					; }
+			@font-face { font-family: "Source Serif Pro Bold Italic"  ; src: url("fonts/SourceSerifPro-BoldIt.ttf")			; }
+
+
+			.Source_Code_Pro_Regular             {font-family: "Source Code Pro Regular";}
+			.Source_Code_Pro_Bold                {font-family: "Source Code Pro Bold";}
+			.Source_Code_Pro_Italic              {font-family: "Source Code Pro Italic";}
+			.Source_Code_Pro_Bold_Italic         {font-family: "Source Code Pro Bold Italic";}
+			.Source_Sans_Pro_Regular             {font-family: "Source Sans Pro Regular";}
+			.Source_Sans_Pro_Bold                {font-family: "Source Sans Pro Bold";}
+			.Source_Sans_Pro_Italic              {font-family: "Source Sans Pro Italic";}
+			.Source_Sans_Pro_Bold_Italic         {font-family: "Source Sans Pro Bold Italic" ;}
+			.Source_Serif_Pro_Regular            {font-family: "Source Serif Pro Regular";}
+			.Source_Serif_Pro_Bold               {font-family: "Source Serif Pro Bold";}
+			.Source_Serif_Pro_Italic             {font-family: "Source Serif Pro Italic";}
+			.Source_Serif_Pro_Bold_Italic        {font-family: "Source Serif Pro Bold Italic";}
+
+
+			/*
+				Note: 
+				- the regular type faces would normallt be referenced by just "Helvetica" or "Times" 
+				- until now that is the only approach that actually works ("Times Bold" does not work so far)
+				- in order to not disturb current uses of values such as "Helvetica" or "Times" we are using 
+				  uncommon references such as "Helvetica Regular" or "Times Regular" in this context.
+				- a user who wishes to use the new logic (including e.g. fallback to "Source Sans Pro")
+				  would thus have to use "Helvetica Regular" as opposed to just "Helvetica"
+			*/
+			
+			/* --- Arial + Arial Unicode--- */
+			@font-face { 	font-family: "Arial Regular"   ; src: url("fonts/SourceSansPro-Regular.ttf") ; }
+			@font-face { 	font-family: "Arial Regular"   ; src: url("/Library/Fonts/Arial.ttf") ; }
+			@font-face { 	font-family: "Arial Regular"   ; src: url("file:///C:/Windows/Fonts/arial.ttf") ; }
+			@font-face { 	font-family: "Arial Regular"   ; src: url("file:///C:/Windows/Fonts/helv.ttf") ; }
+			@font-face { 	font-family: "Arial Regular"   ; src: url("/usr/share/fonts/truetype/msttcorefonts/arial.ttf") ; }
+
+
+
+			@font-face { 	font-family: "Arial Bold"  ;  src:  url("fonts/SourceSansPro-Bold.ttf") ; }
+			@font-face { 	font-family: "Arial Bold"  ;  src:  url("/Library/Fonts/Arial Bold.ttf") ; }
+			@font-face { 	font-family: "Arial Bold"  ;  src:  url("file:///C:/Windows/Fonts/arialbd.ttf") ; }
+			@font-face { 	font-family: "Arial Bold"  ;  src:  url("file:///C:/Windows/Fonts/helvb.ttf") ; }
+			@font-face { 	font-family: "Arial Bold"  ;  src: url("/usr/share/fonts/truetype/msttcorefonts/arialbd.ttf") ; }
+
+			@font-face { 	font-family: "Arial Italic"  ;	src: url("fonts/SourceSansPro-Italic.ttf") ; }
+			@font-face { 	font-family: "Arial Italic"  ;	src: url("/Library/Fonts/Arial Italic.ttf") ; }
+			@font-face { 	font-family: "Arial Italic"  ;	src: url("file:///C:/Windows/Fonts/ariali.ttf") ; }
+			@font-face { 	font-family: "Arial Italic"  ;	src: url("file:///C:/Windows/Fonts/helvi.ttf") ; }
+			@font-face { 	font-family: "Arial Italic"  ;	src: url("/usr/share/fonts/truetype/msttcorefonts/ariali.ttf") ; }
+
+			@font-face { 	font-family: "Arial Bold Italic"    ;	src:  url("fonts/SourceSansPro-BoldIt.ttf") ; }
+			@font-face { 	font-family: "Arial Bold Italic"    ;	src:  url("/Library/Fonts/Arial Bold Italic.ttf") ; }
+			@font-face { 	font-family: "Arial Bold Italic"    ;	src:  url("file:///C:/Windows/Fonts/arialbi.ttf") ; }
+			@font-face { 	font-family: "Arial Bold Italic"    ;	src:  url("file:///C:/Windows/Fonts/helvbi.ttf") ; }
+			@font-face { 	font-family: "Arial Bold Italic"    ;	src: url("/usr/share/fonts/truetype/msttcorefonts/arialbi.ttf") ; }
+
+			@font-face { 	font-family: "Arial Unicode"      ;	src:   url("fonts/SourceSansPro-Regular.ttf") ; }
+			@font-face { 	font-family: "Arial Unicode"      ;	src:   url("/Library/Fonts/Arial Unicode.ttf") ; }
+			@font-face { 	font-family: "Arial Unicode"      ;	src:   url("file:///C:/Windows/Fonts/ARIALUNI.TTF") ; }
+			/* no predictable variant on Linux */
+
+
+			/* --- Helvetica --- */
+			@font-face { 	font-family: "Helvetica Regular"       ;	src:  url("fonts/SourceSansPro-Regular.ttf") ; }
+			@font-face { 	font-family: "Helvetica Regular"       ;	src:  url("/Library/Fonts/Arial.ttf") ; }
+			@font-face { 	font-family: "Helvetica Regular"       ;	src:  url("file:///C:/Windows/Fonts/helv.ttf") ; }
+			@font-face { 	font-family: "Helvetica Regular"       ;	src:  url("file:///C:/Windows/Fonts/arial.ttf") ; }
+			@font-face { 	font-family: "Helvetica Regular"       ;	src: url("/usr/share/fonts/truetype/msttcorefonts/arial.ttf") ; }
+
+			@font-face { 	font-family: "Helvetica Bold"       ;	src:  url("fonts/SourceSansPro-Bold.ttf") ; }
+			@font-face { 	font-family: "Helvetica Bold"       ;	src:  url("/Library/Fonts/Arial Bold.ttf") ; }
+			@font-face { 	font-family: "Helvetica Bold"       ;	src:  url("file:///C:/Windows/Fonts/helvbd.ttf") ; }
+			@font-face { 	font-family: "Helvetica Bold"       ;	src:  url("file:///C:/Windows/Fonts/arialbd.ttf") ; }
+			@font-face { 	font-family: "Helvetica Bold"       ;	src: url("/usr/share/fonts/truetype/msttcorefonts/arialbd.ttf") ; }
+
+			@font-face { 	font-family: "Helvetica Italic"       ;	src:  url("fonts/SourceSansPro-Italic.ttf") ; }
+			@font-face { 	font-family: "Helvetica Italic"       ;	src:  url("/Library/Fonts/Arial Italic.ttf") ; }
+			@font-face { 	font-family: "Helvetica Italic"       ;	src:  url("file:///C:/Windows/Fonts/helvi.ttf") ; }
+			@font-face { 	font-family: "Helvetica Italic"       ;	src:  url("file:///C:/Windows/Fonts/ariali.ttf") ; }
+			@font-face { 	font-family: "Helvetica Italic"       ;	src: url("/usr/share/fonts/truetype/msttcorefonts/ariali.ttf") ; }
+
+			@font-face { 	font-family: "Helvetica Bold Italic"       ;	src:  url("fonts/SourceSansPro-BoldIt.ttf") ; }
+			@font-face { 	font-family: "Helvetica Bold Italic"       ;	src:  url("/Library/Fonts/Arial Bold Italic.ttf") ; }
+			@font-face { 	font-family: "Helvetica Bold Italic"       ;	src:  url("file:///C:/Windows/Fonts/helvbi.ttf") ; }
+			@font-face { 	font-family: "Helvetica Bold Italic"       ;	src:  url("file:///C:/Windows/Fonts/arialbi.ttf") ; }
+			@font-face { 	font-family: "Helvetica Bold Italic"       ;	src: url("/usr/share/fonts/truetype/msttcorefonts/arialbi.ttf") ; }
+
+
+			/* --- Times --- */
+			@font-face { 	font-family: "Times Regular"       ;	src:  url("fonts/SourceSerifPro-Regular.ttf") ; }
+			@font-face { 	font-family: "Times Regular"       ;	src:  url("/Library/Fonts/Times New Roman.ttf") ; }
+			@font-face { 	font-family: "Times Regular"       ;	src:  url("file:///C:/Windows/Fonts/times.ttf") ; }
+			@font-face { 	font-family: "Times Regular"       ;	src: url("/usr/share/fonts/truetype/msttcorefonts/times.ttf") ; }
+
+			@font-face { 	font-family: "Times Bold"       ;	src:  url("fonts/SourceSerifPro-Bold.ttf") ; }
+			@font-face { 	font-family: "Times Bold"       ;	src:  url("/Library/Fonts/Times New Roman Bold.ttf") ; }
+			@font-face { 	font-family: "Times Bold"       ;	src:  url("file:///C:/Windows/Fonts/timesbd.ttf") ; }
+			@font-face { 	font-family: "Times Bold"       ;	src: url("/usr/share/fonts/truetype/msttcorefonts/timesbd.ttf") ; }
+
+			@font-face { 	font-family: "Times Italic"       ;	src:  url("fonts/SourceSerifPro-Italic.ttf") ; }
+			@font-face { 	font-family: "Times Italic"       ;	src:  url("/Library/Fonts/Times New Roman Italic.ttf") ; }
+			@font-face { 	font-family: "Times Italic"       ;	src:  url("file:///C:/Windows/Fonts/timesi.ttf") ; }
+			@font-face { 	font-family: "Times Italic"       ;	src: url("/usr/share/fonts/truetype/msttcorefonts/timesi.ttf") ; }
+
+			@font-face { 	font-family: "Times Bold Italic"       ;	src:  url("fonts/SourceSerifPro-BoldIt.ttf") ; }
+			@font-face { 	font-family: "Times Bold Italic"       ;	src:  url("/Library/Fonts/Times New Roman Bold Italic.ttf") ; }
+			@font-face { 	font-family: "Times Bold Italic"       ;	src:  url("file:///C:/Windows/Fonts/timesbi.ttf") ; }
+			@font-face { 	font-family: "Times Bold Italic"       ;	src: url("/usr/share/fonts/truetype/msttcorefonts/timesbi.ttf") ; }
+
+
+			/* --- Courier --- */
+			@font-face { 	font-family: "Courier Regular"       ;	src:  url("fonts/SourceCodePro-Regular.ttf") ; }
+			@font-face { 	font-family: "Courier Regular"       ;	src:  url("/Library/Fonts/Courier New.ttf") ; }
+			@font-face { 	font-family: "Courier Regular"       ;	src:  url("file:///C:/Windows/Fonts/cour.ttf") ; }
+			@font-face { 	font-family: "Courier Regular"       ;	src: url("/usr/share/fonts/truetype/msttcorefonts/cour.ttf") ; }
+
+			@font-face { 	font-family: "Courier Bold"       ;	src:  url("fonts/SourceCodePro-Bold.ttf") ; }
+			@font-face { 	font-family: "Courier Bold"       ;	src:  url("/Library/Fonts/Courier New Bold.ttf") ; }
+			@font-face { 	font-family: "Courier Bold"       ;	src:  url("file:///C:/Windows/Fonts/courbd.ttf") ; }
+			@font-face { 	font-family: "Courier Bold"       ;	src: url("/usr/share/fonts/truetype/msttcorefonts/courbd.ttf") ; }
+
+			@font-face { 	font-family: "Courier Italic"       ;	src:  url("fonts/SourceCodePro-Italic.ttf") ; }
+			@font-face { 	font-family: "Courier Italic"       ;	src:  url("/Library/Fonts/Courier New Italic.ttf") ; }
+			@font-face { 	font-family: "Courier Italic"       ;	src:  url("file:///C:/Windows/Fonts/couri.ttf") ; }
+			@font-face { 	font-family: "Courier Italic"       ;	src: url("/usr/share/fonts/truetype/msttcorefonts/couri.ttf") ; }
+
+			@font-face { 	font-family: "Courier Bold Italic"       ;	src:  url("fonts/SourceCodePro-BoldIt.ttf") ; }
+			@font-face { 	font-family: "Courier Bold Italic"       ;	src:  url("file:///C:/Windows/Fonts/courbi.ttf") ; }
+			@font-face { 	font-family: "Courier Bold Italic"       ;	src:  url("/Library/Fonts/Courier New Bold Italic.ttf") ; }
+			@font-face { 	font-family: "Courier Bold Italic"       ;	src: url("/usr/share/fonts/truetype/msttcorefonts/courbi.ttf") ; }
+
+
+
+			.Arial_Regular         {font-family: "Arial Regular"   ;}
+			.Arial_Bold            {font-family: "Arial Bold"   ;}
+			.Arial_Italic          {font-family: "Arial Italic"   ;}
+			.Arial_Bold_Italic     {font-family: "Arial Bold Italic"   ;}
+			.Arial_Unicode         {font-family: "Arial Unicode"   ;}
+			.Helvetica_Regular     {font-family: "Helvetica Regular"   ;}
+			.Helvetica_Bold        {font-family: "Helvetica Bold"   ;}
+			.Helvetica_Italic      {font-family: "Helvetica Italic"   ;}
+			.Helvetica_Bold_Italic {font-family: "Helvetica Bold Italic"   ;}
+			.Times_Regular         {font-family: "Times Regular"   ;}
+			.Times_Bold            {font-family: "Times Bold"   ;}
+			.Times_Italic          {font-family: "Times Italic"   ;}
+			.Times_Bold_Italic     {font-family: "Times Bold Italic"   ;}
+			.Courier_Regular       {font-family: "Courier Regular"   ;}
+			.Courier_Bold          {font-family: "Courier Bold"   ;}
+			.Courier_Italic        {font-family: "Courier Italic"   ;}
+			.Courier_Bold_Italic   {font-family: "Courier Bold Italic"   ;}
+
+			/*
+				END OF added by ODr,  2018-10-15: include small set of fonts:
+			*/
+
+		</style>
+
+
+	</head>
+
+	<!-- 
+		- onLoad/p id="loadfonts" added by ODr+UFr 2018-10-16: 
+			- force loading of needed fonts ref'ed via @font-family rules through onLoad
+			- <p id="loadfonts"> will be filled onLoad() 
+				with <span>s that trigger loading of the needed fonts by loadFonts() in layout.js
+			- the whole paragraph will be set do "display:none" right before 'printing'
+				by layout.js in the "cchipPrintLoop ()" function
+	-->
+	<body onload="onLoad()">
+		<p id="loadfonts">
+		</p>
+		<div id='c' >
+				<span id='t'>x</span>
+				<object id='b' type='application/barcode'>
+					<param id='bt' name='type' value='Code 128'/>
+					<param id='bd' name='data' value='Hello4711' />
+				</object>
+		</div>
+
+	</body>
+</html>
+

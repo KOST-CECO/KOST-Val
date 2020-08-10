@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pdfpreflight version="14.0">
+	<package>
+		<id3>a3764f923c1ad8d43c024718a8f1fadd</id3>
+		<pdfxoutintentlist>
+		</pdfxoutintentlist>
+		<iccprofilelist>
+		</iccprofilelist>
+		<ccpolicies>
+		</ccpolicies>
+		<occdsetups>
+		</occdsetups>
+		<curves>
+		</curves>
+		<fspolicies>
+		</fspolicies>
+		<resources>
+		</resources>
+		<conditions>
+		</conditions>
+		<rules>
+		</rules>
+		<rulesets>
+		</rulesets>
+		<fixups>
+			<fixup>
+				<id1>Fe070f7a54db46f2c69857db1670c7988</id1>
+				<id2>Fa809de4b6f66da1e51bba6ccd387414e</id2>
+				<id3>20df434e9fae6cb18c393b8bec5d1843</id3>
+				<id4>b50ae9acbd9c8c31b31fd1f8d47fc280</id4>
+				<name>F_14_RemovePDFUAinformation</name>
+				<comment>F_14_RemovePDFUAinformation</comment>
+				<flags user_units="1" scope="16" edit="1" visible="1" dict="1"></flags>
+				<fcfg>RemovePDFUAKeys&#10;&#10;</fcfg>
+				<reportFailed></reportFailed>
+			</fixup>
+		</fixups>
+		<fixupsets>
+			<fixupset>
+				<id1>U3f139fc46d4a6475ecb9c55aea9a245c</id1>
+				<id2>Ubeedf8913f8a65ab0cc8fb7d59235107</id2>
+				<id3>bcdb739db0a4c5efa27264bf6add162a</id3>
+				<id4>35def986c0637a9e6c3a123d3484a6aa</id4>
+				<name>UUUU_FIXUPSET_DEF_NAME</name>
+				<comment>UUUU_FIXUPSET_DEF_NAME</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<fixups>
+					<fixup>Fe070f7a54db46f2c69857db1670c7988</fixup>
+				</fixups>
+			</fixupset>
+		</fixupsets>
+		<actions>
+		</actions>
+		<profiles>
+			<profile>
+				<id1>P865669cc10280f1670589af9254b595f</id1>
+				<id2>P260c785b7dd7789538751953a767bda3</id2>
+				<id3>9db6b90c2e3b7cf97103a7a176d43b15</id3>
+				<id4>fd73c97b7e7871691d01e2c9dee3a8de</id4>
+				<name>P_14_RemovePDFUAinformation</name>
+				<comment>P_14_RemovePDFUAinformation</comment>
+				<flags edit="0" visible="1" dict="1"></flags>
+				<metalist>
+					<metadata>
+						<metakey>author</metakey>
+						<metavalue>callas software</metavalue>
+					</metadata>
+					<metadata>
+						<metakey>email</metakey>
+						<metavalue>support@callassoftware.com</metavalue>
+					</metadata>
+				</metalist>
+				<creation>D:20151201101848+01&apos;00&apos;</creation>
+				<modification>D:20151207103336+01&apos;00&apos;</modification>
+				<pdfstd>
+					<pdfx convert="0"></pdfx>
+					<pdfa convert="0"></pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond>ISO Coated v2 (ECI)</outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+				</pdfstd>
+				<pdfstdemb>
+					<pdfx convert="0"></pdfx>
+					<pdfa convert="0"></pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond>ISO Coated v2 (ECI)</outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+					<afrelationship set_relationship="0"></afrelationship>
+				</pdfstdemb>
+				<wizard>
+				</wizard>
+				<rulesets>
+				</rulesets>
+				<fixupsets>
+					<fixupset>U3f139fc46d4a6475ecb9c55aea9a245c</fixupset>
+				</fixupsets>
+			</profile>
+		</profiles>
+		<metaprofs>
+		</metaprofs>
+		<profgroups>
+		</profgroups>
+	</package>
+</pdfpreflight>

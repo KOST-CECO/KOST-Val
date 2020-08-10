@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<devicelink>
+	<profile lang="CHS">
+		<header>改良 LWC 卷筒纸胶印到新闻纸 (IFRA) </header>
+		<explanation>从改良 PSO LWC (ECI) 到 ISO 新闻印刷的转换 (26% 墨点扩散, 最高油墨覆盖 240%)</explanation>
+	</profile>
+	<profile lang="ENU">
+		<header>Web offset (LWC improved) to Newspaper (IFRA)</header>
+		<explanation>Conversion from PSO LWC improved (ECI) to ISO News print (26% dotgain, max. 240% ink coverage)</explanation>
+	</profile>
+	<profile lang="ESP">
+		<header>Offset de bobina (LWC improved) a papel de periódico</header>
+		<explanation>Conversión de PSO LWC improved (ECI) a ISO papel de periódico (26% ganancia de grano, cobertura de tinta 240% máxima)</explanation>
+	</profile>
+	<profile lang="FRA">
+		<header>Impression rotative offset (LWC improved) en papier journal (IFRA)</header>
+		<explanation>Conversion d’PSO LWC improved (ECI) vers ISO News print (26% d'élargissement du point, couverture d'encre de 240% max.)</explanation>
+	</profile>
+	<profile lang="DEU">
+		<header>Rollenoffset (LWC improved) nach Zeitung (IFRA)</header>
+		<explanation>Konvertierung von PSO LWC improved (ECI) nach ISO News print (26% Druckpunktzuwachs, max. 240% Gesamtfarbauftrag</explanation>
+	</profile>
+	<profile lang="ITA">
+		<header>Da offset bobina (LWC improved) a quotidiano</header>
+		<explanation>Conversione da PSO LWC improved (ECI) a ISO News print (ingrossamento del punto del 26%, max. 240% di copertura inchiostro)</explanation>
+	</profile>
+	<profile lang="JPN">
+		<header>Web オフセット, 改善された LWC を Newspaper (IFRA) に変換</header>
+		<explanation>PSO LWC improved (ECI) を ISO 新聞印刷 (Dot Gain 26%, インキ総量 240%) に変換します</explanation>
+	</profile>
+</devicelink>

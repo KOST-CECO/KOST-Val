@@ -1,0 +1,46 @@
+@charset "UTF-8";
+
+/* Clean-up */
+* {
+	margin: 0;
+	padding: 0; 
+	box-sizing: border-box;	
+}
+
+/* Make sure we don't have a white background */
+body {
+	background-color: transparent;
+	color: -cchip-cmyk( 0.0, 0.0, 0.0, 1.0 );
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 12pt;
+}
+
+#summary {
+	margin-top: 25mm;
+	margin-left: 20mm;
+}
+
+/* The title of the document */
+#document-title {
+}
+
+/* Creation date */
+#creation-date {
+}
+
+/* Modification date */
+#author {
+}
+
+/* Modification date */
+#number-of-pages {
+}
+
+/* Anything that is a key */
+.key {
+}
+
+/* Anything that is a value */
+.value {
+	font-weight: bold;
+}

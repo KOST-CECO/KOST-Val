@@ -1,0 +1,13 @@
+NAME	DICT_640x4504upA4
+SHEET	0'	0'	640mm	450mm
+PAGESIZE_FILTER	297mm	210mm	2mm	2mm	ANY
+
+TotalPagesMultipleOf	4
+
+
+#SLOT	Name	Slotnr	Sheetnr	x	y	Width	Heigth	Bleed Left	Bottom	Reight	Top	Scale x	y	Rotation	Magnet	Binding	Marks LeBo	ReBo	ReTo	LeTo
+SLOT		2	1	17mm	15mm	297mm	210mm	3mm	3mm	3mm	0mm	100	100	270	RT	T	LB	RB	R	L
+SLOT		4	1	326mm	15mm	297mm	210mm	3mm	3mm	3mm	0mm	100	100	90	LT	T	LB	RB	R	L
+SLOT		1	1	17mm	225mm	297mm	210mm	3mm	0mm	3mm	3mm	100	100	270	RB	B	L	R	RT	LT
+SLOT		3	1	326mm	225mm	297mm	210mm	3mm	0mm	3mm	3mm	100	100	90	LB	B	L	R	RT	LT
+SLOT		101	1	9mm	15mm	5mm	210mm	0mm	0mm	0mm	0mm	100	100	90	RB	B	N	N	N	N

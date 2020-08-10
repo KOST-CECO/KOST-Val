@@ -1,0 +1,579 @@
+%!PS-Adobe-3.0 Resource-File
+%%BeginResource: file (FS/FileUtils)
+%%Title: (FS/FileUtils)
+%%Version: 3010.01
+%%Copyright: ------------------------------------------------------------
+%%Copyright: Copyright 1990-1998 Adobe Systems Incorporated.
+%%Copyright: All rights reserved.
+%%Copyright:
+%%Copyright: Patents Pending
+%%Copyright:
+%%Copyright: NOTICE: All information contained herein is the property
+%%Copyright: of Adobe Systems Incorporated. Many of the intellectual
+%%Copyright: and technical concepts contained herein are proprietary
+%%Copyright: to Adobe, are protected as trade secrets, and are made
+%%Copyright: available only to Adobe licensees for their internal use.
+%%Copyright: Any reproduction or dissemination of this software is
+%%Copyright: strictly forbidden unless prior written permission is
+%%Copyright: obtained from Adobe.
+%%Copyright:
+%%Copyright: PostScript and Display PostScript are trademarks of
+%%Copyright: Adobe Systems Incorporated which may be registered in
+%%Copyright: certain jurisdictions.
+%%Copyright: ------------------------------------------------------------
+%%EndComments
+9 dict begin userdict/lprdict currentdict put/titlefont/Courier-Bold def
+/titlesize 10 def/titleposn 745 def/bodyfont/Courier def/bodysize 8 def
+/leading 1 def/xmargin 45 def/bmargin 25 def/linelength 108 def end 150 dict
+begin userdict/UtilDict currentdict put/NumWords 60 def/hadmsg null def/endb
+null def/endbsave null def/startb null def/filename null def/rfile null def
+/ofile null def/block null def/i null def/pageno null def/havemarks null def
+/title null def/yposn null def/j null def/havenl null def/curtime null def
+/numlines null def/reason null def/source null def/subuff null def/dest null
+def/adest null def/wc null def/lineeditfile null def/tsize 0 def/UFSRoot()def
+/UFSstrPR 128 string def/SuperUser false def/NumBytes NumWords 3 mul def
+/NumChars NumWords 4 mul def/input NumBytes string def/output NumChars string
+def/fstr 100 string def/buffer 256 string def/maxlines 22 def/beep<07>def/sp
+( )def/sp2(  )def/spop( \()def/op(\()def/cpsp(\) )def/spt( t)def/spf( f)def
+/colons( ::::::::: )def/outputgoesto( Output ==> )def/printer(printer)def
+/newline(
+)def/psp(p )def/astring(*)def/rootstr(~/)def/sostr(%stdout)def/prstr(%printer)
+def/percent(%)def/lineedit(%lineedit)def/deleting( deleting )def/backingup
+( backing up )def/sumchecking( sumchecking )def/testing( testing )def/NotKnown
+(** not known **)def/tstr 50 string def/sofstr 50 string def/NHLF
+(NastyHorridLittleFile)def/w(w)def/wplus(w+)def/r(r)def/rplus(r+)def/writeto
+( ==> )def/isstdout true def/sof sostr def/stdout sostr w file def/outfile
+stdout def/isprinter false def/execute{stopped clear//$error begin/newerror
+false def/errorname null def/command null def/ostack null def/estack null def
+/dstack null def end//UtilDict begin ofile type/filetype eq{ofile status{ofile
+closefile}if}if rfile type/filetype eq{rfile status{rfile closefile}if}if NHLF
+type/filetype eq{NHLF status{NHLF closefile}if}if cleardictstack}bind
+executeonly def/setcrtime{status pop 4 1 roll pop pop pop}bind executeonly def
+/dotitle{/havemarks exch store havemarks{{dup setcrtime}{0 string}ifelse
+/curtime exch store/title exch store/pageno 0 store}if/pageno pageno 1 add
+store lprdict begin xmargin titleposn moveto titlefont findfont titlesize
+scalefont setfont title show 200 titleposn moveto curtime tstr cvs show 300
+titleposn moveto pageno tstr cvs show/yposn titleposn titlesize 2 mul sub
+store bodyfont findfont bodysize scalefont setfont xmargin yposn moveto end}
+bind executeonly def/nextline{lprdict begin/yposn yposn bodysize sub leading
+sub store yposn bmargin lt{showpage false dotitle}if xmargin yposn moveto end}
+bind executeonly def/flushpage{isprinter or{havemarks{showpage}{erasepage}
+ifelse}if}bind executeonly def/outoutput{isstdout not{outputgoesto print sof
+print newline print flush}if isprinter{false true dotitle}{pop}ifelse}bind
+executeonly def/sdwriteto{newline print sp print filename print writeto print
+adest print flush}bind executeonly def/faction{isstdout{pop}{print filename
+print newline print flush}ifelse}bind executeonly def/prnt{isprinter{dup
+newline eq{pop nextline}{show/havemarks true def}ifelse}{outfile exch
+writestring outfile flushfile}ifelse}bind executeonly def/nprnt{newline prnt}
+bind executeonly def/cr{prnt nprnt}bind executeonly def/iprnt{tstr cvs prnt}
+bind executeonly def/xprnt{(16#)prnt 16 tstr cvrs prnt}bind executeonly def
+/icr{iprnt nprnt}bind executeonly def/xcr{xprnt nprnt}bind executeonly def
+/strconcat{/rstr exch def/bstr exch def/astr exch def astr rstr cvs length dup
+rstr exch rstr length 1 index sub getinterval bstr exch cvs length add rstr
+exch 0 exch getinterval}bind executeonly def/prepeat{1 index 0 gt{repeat}{pop
+pop}ifelse}bind executeonly def/ipr{exch tstr cvs dup length 3 -1 roll sub neg
+{sp prnt}prepeat prnt}bind executeonly def/cscheck{not{havenl not{nprnt}if
+(%    !! Cannot read from checksum file)cr stop}if}bind executeonly def
+/setcurtime{NHLF w file closefile/curtime NHLF setcrtime def NHLF deletefile}
+bind executeonly def/isoldenough{filename status pop 4 1 roll pop pop pop
+curtime lt}bind executeonly def/UPrependRoot{rootstr anchorsearch{pop UFSstrPR
+cvs}{dup percent anchorsearch{pop pop UFSstrPR cvs}{pop UFSRoot length 0 eq{
+UFSstrPR cvs}{UFSRoot UFSstrPR cvs length exch 2 copy length add UFSstrPR 4 2
+roll putinterval UFSstrPR exch 0 exch getinterval}ifelse}ifelse}ifelse}bind
+executeonly def/prdevstatus{nprnt dup devstatus{8 -1 4{-1 roll{spt}{spf}ifelse
+prnt}for 3 -1 roll 4 ipr sp prnt exch 7 ipr sp prnt 7 ipr sp2 prnt}{
+( *****  no such device  *****  )prnt}ifelse prnt}bind executeonly def/testif{
+{(*** Invalid file name )print print newline print flush stop}if}bind
+executeonly def/iswritable{dup dup length 1 sub 1 exch getinterval percent
+search{length 2 add exch pop exch length 0 gt{0 exch getinterval devstatus{pop
+pop pop pop 4 1 roll pop pop pop}{false}ifelse}{pop pop false}ifelse}{pop pop
+false}ifelse}bind executeonly def/testfn{dup 0 get 37 eq{dup sostr ne 1 index
+prstr ne and 1 index iswritable not and testif}if}bind executeonly def
+/getdestname{wc{source astring search pop length UFSRoot length add exch pop
+exch length filename length exch sub 1 index sub filename 3 1 roll getinterval
+dest astring search pop exch pop 3 -1 roll tstr strconcat exch tstr strconcat}
+{dest}ifelse UPrependRoot testfn}bind executeonly def/printbadfile{
+(%%BadFile: )prnt filename cr
+(%    !! File system too badly damaged to read file)cr spop prnt filename prnt
+cpsp prnt(badfile)cr}bind executeonly def/setaccess{//systemdict/internaldict
+get 1183615869 exch exec/accesson get SuperUser exch exec}bind executeonly def
+/synopsis(  synopsis:
+)def/description(  description:
+)def/examples(  examples:
+)def/helpsynopsis{synopsis print
+(    1.  help                                 or
+)print(    2.  help commandlist
+)print(      ? may be used instead of help
+
+)print description print(    prints out information about commands
+
+)print examples print(    help
+)print(      prints a brief summary of all commands
+)print(    ? bu cs tf
+)print(      prints out synopses for the bu, cs and tf commands
+
+)print flush}bind executeonly def/sosynopsis{synopsis print
+(    1.  \(filename\) so                        or
+)print(    2.  so
+
+)print description print
+(    redirects output to a file or to the standard output; output
+)print(    from help and pwd is not redirected
+
+)print examples print(    \(FS/datafile\) so
+)print(      causes all subsequent data output to go to FS/datafile
+)print(    \(%printer\) so
+)print(      causes all subsequent data output to go to the printer
+)print(    so
+)print(      equivalent to \(%stdout\) so
+
+)print flush}bind executeonly def/cdsynopsis{synopsis print
+(    1.  \(path\) cd                            or
+)print(    2.  cd
+
+)print description print(    sets the current directory
+
+)print examples print(    \(%disk2%\) cd
+)print(      sets the current directory to %disk2%
+)print(    \(FS\) cd
+)print(      then sets the current directory to %disk2%FS
+)print(    \(~/pgfonts\) cd
+)print(      sets the current directory to pgfonts
+)print(    cd
+)print(      sets the current directory to be the file system root
+
+)print flush}bind executeonly def/pinfosynopsis{synopsis print(    pinfo
+
+)print description print
+(    outputs information about the printer: the product, name, version
+)print
+(    and revision, the product build time and the filesystem current time,
+)print(    and VM status and current working directory
+
+)print(  example:
+)print(    pinfo
+
+)print flush}bind executeonly def/pwdsynopsis{synopsis print(    pwd
+
+)print description print
+(    outputs the current directory, the current redirection, if set,
+)print(    and a flag if in superuser state
+
+)print(  example:
+)print(    pwd
+
+)print flush}bind executeonly def/busynopsis{synopsis print
+(    1.  \(filename\) bu                       or
+)print(    2.  \(filename\) block bu                 or
+)print(    3.  \(filename\) startblock endblock bu
+)print(      file names containing wild cards are allowed
+
+)print description print(    outputs the contents of a file in backup format \
+for subsequent downloading
+
+)print examples print(    \(FS/Ryumin-Light\) bu
+)print(      backup the whole of file FS/Ryumin-Light
+)print(    \(FS/Ryumin-Light\) 10 bu
+)print(      backup block 10 only of file FS/Ryumin-Light
+)print(    \(FS/Ryumin-Light\) 21 40 bu
+)print(      backup blocks 21, 22 ..., 40 of file FS/Ryumin-Light
+)print(    \(fonts/*\) bu
+)print(      backup all the files in the fonts directory
+
+)print flush}bind executeonly def/cssynopsis{synopsis print
+(    1.  \(filename\) cs                        or
+)print(    2.  cs
+)print(      file names containing wild cards are allowed
+
+)print description print
+(    creates a checksum file for filename; this file is used by the
+)print(    tf command
+
+)print examples print(    \(FS/Ryumin-Light\) cs
+)print(      create a checksum file for FS/Ryumin-Light
+)print(    \(fonts/*\) cs
+)print(      create checksum files for whole of the fonts directory
+)print(    cs
+)print(      equivalent to \(*\) cs
+
+)print flush}bind executeonly def/tfsynopsis{synopsis print
+(    1.  \(filename\) tf                        or
+)print(    2.  tf
+)print(      file names containing wild cards are allowed
+
+)print description print
+(    compares filename with its checksum file and reports bad blocks
+
+)print examples print(    \(FS/Ryumin-Light\) tf
+)print(      tests file FS/Ryumin-Light against its checksum file
+)print(    \(fonts/*\) tf
+)print
+(      test all files in the fonts directory against their checksum files
+)print(    tf
+)print(      equivalent to \(*\) tf
+
+)print flush}bind executeonly def/dfsynopsis{synopsis print
+(    1.  \(devicename\) df                      or
+)print(    2.  df
+
+)print description print
+(    outputs information about the device: the values of searchable,
+)print(    writeable, hasnames, mounted and removable, indicated as t or f;
+)print(    the search order; and the current and maximum size in pages
+
+)print examples print(    \(%disk1%\) df
+)print(      prints the device data for device %disk1%
+)print(    df
+)print(      prints the device data for all devices
+
+)print flush}bind executeonly def/lssynopsis{synopsis print
+(    1.  \(filename\) ls                        or
+)print(    2.  ls
+)print(      file names containing wild cards are allowed
+
+)print description print
+(    outputs the creation time, access time and size in bytes of filename
+
+)print examples print(    \(FS/datafile\) ls
+)print(      prints the file information for datafile, if it exists
+)print(    \(FS/*\) ls
+)print(      prints the file information for all the files in directory FS
+)print(    ls
+)print(      equivalent to \(*\) ls
+
+)print flush}bind executeonly def/rmsynopsis{synopsis print
+(    \(filename\) rm
+)print(      file names containing wild cards are allowed
+
+)print description print(    deletes filename from the file system
+
+)print examples print(    \(FS/datafile\) rm
+)print(      deletes the file, if it exists
+)print(    \(FS/j*\) rm
+)print
+(      deletes all the files with names beginning with j in directory FS
+
+)print flush}bind executeonly def/moresynopsis{synopsis print
+(    \(filename\) more
+)print(      file names containing wild cards are allowed
+
+)print description print
+(    outputs the contents of the file; outputs first 20 lines, then type
+)print
+(    <sp> for next 20 lines, <cr> for next line, <del> for the next file
+
+)print examples print(    \(FS/datafile\) more
+)print(      outputs the contents of the file, if it exists
+)print(    \(FS/*\) more
+)print(      outputs the contents of all the files in directory FS
+
+)print flush}bind executeonly def/lprsynopsis{synopsis print
+(    \(filename\) lpr
+)print(      file names containing wild cards are allowed
+
+)print description print
+(    prints the contents of the file; the appearance is determined by
+)print
+(    several variables in lprdict: titlefont and bodyfont are font names,
+)print
+(    titlesize bodysize and leading are in points, titleposn xmargin and
+)print(    bmargin are in points, linelength is an integer
+
+)print examples print(    \(Usr/Idle\) lpr
+)print(      prints the contents of the file, if it exists
+)print(    \(demo/*\) lpr
+)print(      prints the contents of all the files in directory demo
+
+)print flush}bind executeonly def/cpsynopsis{synopsis print
+(    \(filename1\) \(filename2\) cp
+)print(      file names containing wild cards are allowed
+
+)print description print
+(    the contents of filename1 are copied to filename2
+
+)print examples print(    \(FS/datafile\) \(temp/newfile\) cp
+)print(      copies FS/datafile to temp/newfile
+)print(    \(%disk1%*\) \(%disk2%*\) cp
+)print(      copies all the files on %disk1% to %disk2%
+)print(    \(demo/*\) \(%printer\) cp
+)print(      copies all the files in the demo directory to the printer
+
+)print flush}bind executeonly def/mvsynopsis{synopsis print
+(    \(filename1\) \(filename2\) mv
+)print(      file names containing wild cards are allowed
+
+)print description print(    renames filename1 to filename2
+
+)print examples print(    \(FS/datafile\) \(temp/newfile\) mv
+)print(      renames FS/datafile to temp/newfile
+)print(    \(temp/*\) \(demo/*\) mv
+)print
+(      renames all the files in the temp directory to the demo directory
+
+)print flush}bind executeonly def/svsynopsis{synopsis print
+(    \(filename\) sv
+
+)print description print
+(    creates filename if necessary; all input up to ^C is appended to
+)print(    the file
+
+)print(  example:
+)print(    \(temp/myfile\) sv
+)print(      copies the input that is typed into the file temp/myfile
+
+)print flush}bind executeonly def/susynopsis{synopsis print(    password su
+
+)print description print(    password is the server password; allows access t\
+o all files on the disk
+
+)print(  example:
+)print(    0 su
+
+)print flush}bind executeonly def/qusynopsis{synopsis print(    qu
+
+)print description print
+(    if superuser then become normal user; if normal user then quit
+
+)print(  example:
+)print(    qu
+
+)print flush}bind executeonly def/syndict 20 dict def syndict/? currentdict
+/helpsynopsis get put syndict/bu currentdict/busynopsis get put syndict/cd
+currentdict/cdsynopsis get put syndict/cp currentdict/cpsynopsis get put
+syndict/cs currentdict/cssynopsis get put syndict/df currentdict/dfsynopsis
+get put syndict/help currentdict/helpsynopsis get put syndict/ls currentdict
+/lssynopsis get put syndict/lpr currentdict/lprsynopsis get put syndict/more
+currentdict/moresynopsis get put syndict/mv currentdict/mvsynopsis get put
+syndict/pinfo currentdict/pinfosynopsis get put syndict/pwd currentdict
+/pwdsynopsis get put syndict/qu currentdict/qusynopsis get put syndict/rm
+currentdict/rmsynopsis get put syndict/so currentdict/sosynopsis get put
+syndict/su currentdict/susynopsis get put syndict/sv currentdict/svsynopsis
+get put syndict/tf currentdict/tfsynopsis get put end userdict begin/so{{
+//UtilDict begin{dup type/stringtype ne{stop}if}stopped{sostr}if/i isstdout
+isprinter or not def dup sostr eq/isstdout exch def dup prstr eq/isprinter
+exch def isstdout isprinter or{/sof exch def isstdout{stdout}{null}ifelse}{
+UPrependRoot testfn dup/sof exch sofstr cvs def dup status{pop pop pop pop
+rplus}{wplus}ifelse file dup sof status pop pop pop exch pop setfileposition}
+ifelse i{outfile closefile}if/outfile exch def( Output directed to )print sof
+print newline print flush end}//UtilDict/execute get exec}bind executeonly def
+/cd{{//UtilDict begin{dup type/stringtype ne{stop}if UPrependRoot dup dup
+length dup 0 eq{stop}if 1 sub get 37 eq{/UFSRoot exch def}{dup length 1 add
+string/UFSRoot exch def UFSRoot copy length UFSRoot exch 47 put}ifelse}stopped
+{/UFSRoot()def}if end}//UtilDict/execute get exec}bind executeonly def/pinfo{{
+//UtilDict begin statusdict begin(product information)outoutput setcurtime
+nprnt( Product = )prnt product cr( Printer name = )prnt tstr printername cr
+( PostScript version = )prnt version cr( Revision = )prnt revision icr
+( Build time = )prnt{buildtime xcr}stopped{NotKnown cr}if
+( Printer serial number = )prnt{serialnumber xcr}stopped{NotKnown cr}if
+( Page count = )prnt pagecount icr( User disk percent = )prnt userdiskpercent
+iprnt percent cr( Disk size total = )prnt diskstatus 2 copy icr 1 index
+fcdbpercent mul 100 div .1 add cvi 3 1 roll sub 1 index sub
+(      user files = )prnt 5 ipr nprnt(      font cache = )prnt 5 ipr nprnt
+(      free space = )prnt 5 ipr nprnt( Current file system time = )prnt
+curtime xcr vmstatus( VM size = )prnt icr pop pop nprnt flush false flushpage
+end end}//UtilDict/execute get exec}bind executeonly def/pwd{{//UtilDict begin
+( Current path = )print UFSRoot length 0 eq{(<root>)}{UFSRoot}ifelse print
+isstdout not{(    Current output = )print sof print}if SuperUser{
+(    \(superuser\))print}if newline print flush end}//UtilDict/execute get
+exec}bind executeonly def/su{{//UtilDict begin{dup type/integertype ne{stop}if
+//statusdict/checkpassword get exec not{stop}if/SuperUser true def setaccess}
+stopped{(
+su: wrong parameter
+
+)print susynopsis stop}if end}//UtilDict/execute get exec}bind executeonly def
+/qu{{//UtilDict begin SuperUser{/SuperUser false def setaccess}{quit}ifelse
+end}//UtilDict/execute get exec}bind executeonly def/bu{{//UtilDict begin{dup
+type/stringtype eq{/endbsave 2147483647 def/startb 0 def}{1 index type
+/stringtype eq{/endbsave exch def/startb endbsave def}{2 index type/stringtype
+eq{/endbsave exch def/startb exch def}{stop}ifelse}ifelse}ifelse}stopped{
+(
+bu: wrong parameters
+
+)print busynopsis stop}if setcurtime NHLF w file closefile UPrependRoot dup
+outoutput end{//UtilDict begin/filename exch def{filename r file}stopped{end
+exit}if/rfile exch def/block startb def mark{rfile block NumBytes mul
+setfileposition isoldenough not{stop}if}stopped{rfile closefile cleartomark
+exit}{pop backingup faction(%!Backup: )prnt filename cr(%%Header)cr(/f \()prnt
+filename prnt(\) def)cr
+(/w f f status {pop pop pop pop \(r+\)} {\(w+\)} ifelse file def)cr
+(/e {print \( in block \) print \(          \) cvs print \(\\n\) print)cr
+(    $error /newerror false put stop} def)cr(/s {\(!! File too short\) e} def)
+cr(/r {currentfile token not {s} if} def)cr(/p )cr({ r)cr(  { dup )prnt
+NumBytes tstr cvs cr
+(    mul dup f status pop pop pop exch pop w 1 index setfileposition)cr
+(    sub dup 0 gt {{w 0 write} repeat} {pop} ifelse w exch setfileposition)cr
+(    0 )prnt NumWords tstr cvs cr(    { mark)cr<2020202020203020302034207b3934
+206d756c2063757272656e7466696c652072656164206e6f74207b737d20696620647570203420
+2d3120726f6c6c20786f722033203120726f6c6c20333220737562206164647d20726570656174>
+cr(      exch 4 -1 roll xor 3 1 roll)cr
+(      3 {dup 255 and exch -8 bitshift} repeat {w exch write} repeat)cr
+(      cleartomark)cr(    } repeat)cr
+(    r ne {\(!! Transmission error\) e} if)cr
+(  } stopped {\(!! Disk write error\) e} if)cr(  pop)cr(  w flushfile)cr
+(} bind def)cr(%%DataPackets: )prnt filename cr/endb endbsave def{psp prnt
+block iprnt sp prnt 0 NumWords{50331648 0 3{256 mul rfile read not{exch
+16777216 sub exch/rfile NHLF r file def/endb 0 def 32}if add}repeat add 4{dup
+94 mod 32 add exch 94 idiv}repeat 4{outfile 2 index write xor}repeat xor}
+repeat sp prnt tstr cvs cr/block block 1 add def block endb gt{exit}if}loop}
+ifelse rfile closefile(w closefile)cr(%%EndofBackup)cr flush end}//UtilDict
+/fstr get filenameforall//UtilDict begin NHLF deletefile isstdout not{newline
+print}if false flushpage end}//UtilDict/execute get exec}bind executeonly def
+/cs{{//UtilDict begin{dup type/stringtype ne{stop}if}stopped{astring}if
+setcurtime UPrependRoot dup outoutput(%!SumCheck)cr end{//UtilDict begin
+/filename exch def isoldenough{{filename r file}stopped{end exit}if/rfile exch
+def/ofile filename(.cs)tstr strconcat w file def sumchecking faction
+(%    Creating sumcheck file for )prnt filename cr ofile op writestring ofile
+filename writestring ofile cpsp writestring filename status{tstr cvs ofile
+exch writestring ofile sp writestring pop tstr cvs ofile exch writestring
+ofile sp writestring pop ofile newline writestring}{nprnt printbadfile rfile
+closefile ofile closefile end exit}ifelse{rfile input readstring exch 0 exch{
+xor}forall ofile exch write not{exit}if}loop rfile closefile ofile closefile}
+if flush end}//UtilDict/fstr get filenameforall//UtilDict begin
+(%%EndofSumCheck)cr NHLF deletefile isstdout not{newline print}if false
+flushpage end}//UtilDict/execute get exec}bind executeonly def/tf{{//UtilDict
+begin{dup type/stringtype ne{stop}if}stopped{astring}if UPrependRoot dup
+outoutput(.cs)tstr strconcat(%!TestFile)cr flush end{//UtilDict begin/source
+exch def/filename source dup length 0 exch 3 sub getinterval def mark{/rfile
+filename r file def}stopped{cleartomark end exit}if{/ofile source r file def}
+stopped{cleartomark rfile closefile end exit}if pop testing faction
+(%    Testing file )prnt filename prnt/havenl false def ofile token cscheck
+pop filename status{ofile token cscheck ne{havenl not{nprnt}if
+(%        Warning: file has been opened for writing since checksum)cr/havenl
+true def}if pop ofile token cscheck ne{havenl not{nprnt}if
+(%        Warning: file has changed size since checksum)cr/havenl true def}if
+pop}{havenl not{nprnt}if printbadfile rfile closefile ofile closefile end exit
+}ifelse ofile read cscheck pop/block 0 def/hadmsg false def{rfile input
+readstring exch 0 exch{xor}forall ofile read cscheck ne{hadmsg not{havenl not{
+nprnt}if(%%BadBlocks: )prnt filename cr( mark)prnt/i 0 def/j 0 def/hadmsg true
+def}if i 70 gt{(
+     )prnt/i 0 def}if sp prnt block tstr cvs dup length 1 add i add/i exch def
+prnt/j j 1 add def}if not{exit}if/block block 1 add def}loop hadmsg{i filename
+length add 58 gt{(
+     )prnt}if spop prnt filename prnt cpsp prnt(badblocks)cr(%        ... )
+prnt j iprnt j 1 eq{( bad block detected)cr}{( bad blocks detected)cr}ifelse}{
+havenl{(%       ...)prnt}if( done)cr}ifelse ofile closefile rfile closefile
+flush end}//UtilDict/fstr get filenameforall//UtilDict begin(%%EndofTestFile)
+cr NHLF deletefile isstdout not{newline print}if false flushpage end}
+//UtilDict/execute get exec}bind executeonly def/ls{{//UtilDict begin{dup type
+/stringtype ne{stop}if}stopped{astring}if/tsize 0 def/i 0 def UPrependRoot dup
+outoutput end{//UtilDict begin nprnt sp prnt dup status pop 10 ipr sp prnt 10
+ipr sp prnt dup tsize add/tsize exch def 7 ipr sp2 prnt pop prnt flush/i i 1
+add def end}//UtilDict/fstr get filenameforall//UtilDict begin nprnt
+( number of files = )prnt i iprnt(   total size = )prnt tsize iprnt nprnt
+nprnt false flushpage end}//UtilDict/execute get exec}bind executeonly def/df{
+{//UtilDict begin(device information)outoutput{dup type/stringtype ne{stop}if}
+stopped{{//UtilDict begin prdevstatus end}fstr devforall}{prdevstatus}ifelse
+nprnt nprnt false flushpage end}//UtilDict/execute get exec}bind executeonly
+def/rm{{//UtilDict begin{dup type/stringtype ne{stop}if}stopped{
+(
+rm: wrong parameter
+
+)print rmsynopsis stop}if UPrependRoot end{//UtilDict begin/filename exch def{
+filename r file}stopped{end exit}{closefile}ifelse newline print deleting
+print filename print flush filename deletefile end}//UtilDict/fstr get
+filenameforall//UtilDict begin newline print newline print end}//UtilDict
+/execute get exec}bind executeonly def/more{{//UtilDict begin{dup type
+/stringtype ne{stop}if}stopped{(
+more: wrong parameter
+
+)print moresynopsis stop}if UPrependRoot dup outoutput end{//UtilDict begin
+/filename exch def{filename r file}stopped{end exit}if/rfile exch def colons
+print filename print colons print newline print flush filename status pop pop
+pop/tsize exch def pop/stdin(%stdin)r file def/numlines 0 def/i 0 def{{rfile
+read not{/reason true def exit}if dup outfile exch write/i i 1 add def 10 eq{
+flush/numlines numlines 1 add def numlines maxlines eq{(--More--\()print i
+tsize div 100 mul .5 add cvi tstr cvs print(%\))print flush/reason false def
+exit}if}if}loop reason{exit}if{/j 127 stdin read{and}if def j 127 eq{exit}if j
+32 eq{/numlines 0 def exit}if j 10 eq{/numlines maxlines 1 sub def exit}if
+beep print flush}loop j 127 eq{exit}if(\r              \r)print}loop nprnt
+rfile closefile stdin closefile end}//UtilDict/fstr get filenameforall false
+//UtilDict/flushpage get exec}//UtilDict/execute get exec}bind executeonly def
+/lpr{{//UtilDict begin{dup type/stringtype ne{stop}if}stopped{
+(
+lpr: wrong parameter
+
+)print lprsynopsis stop}if UPrependRoot end{//UtilDict begin/filename exch def
+{filename r file}stopped{end exit}if/rfile exch def/adest prstr def/subuff
+buffer 0 lprdict/linelength get getinterval def sdwriteto filename true true
+dotitle{{rfile subuff readline exch}stopped{exch pop true exch}if show
+/havemarks true def{nextline}{exit}ifelse}loop true flushpage rfile closefile
+end}//UtilDict/fstr get filenameforall//UtilDict begin newline print newline
+print flush end}//UtilDict/execute get exec}bind executeonly def/cp{{
+//UtilDict begin{dup type/stringtype ne{stop}if/dest exch def dup type
+/stringtype ne{stop}if/source exch def/wc false def source astring search{pop
+pop pop dest astring search{pop pop pop/wc true def}if}if}stopped{
+(
+cp: wrong parameters
+
+)print cpsynopsis stop}if source UPrependRoot end{//UtilDict begin/filename
+exch def{filename r file}stopped{end exit}if/rfile exch def/adest getdestname
+def adest sostr eq{{{rfile buffer readstring exch print not{exit}if}stopped{
+exit}if}loop rfile closefile}{adest prstr eq{/subuff buffer 0 lprdict
+/linelength get getinterval def sdwriteto filename true true dotitle{{{rfile
+subuff readline exch}stopped{exch pop true exch}if show/havemarks true def{
+nextline}{exit}ifelse}stopped{exit}if}loop true flushpage rfile closefile}{{
+adest w file}stopped{rfile closefile end exit}if/ofile exch def sdwriteto{{
+rfile buffer readstring exch ofile exch writestring not{exit}if}stopped{exit}
+if}loop rfile closefile ofile closefile}ifelse}ifelse end}//UtilDict/fstr get
+filenameforall//UtilDict begin newline print newline print flush end}
+//UtilDict/execute get exec}bind executeonly def/mv{{//UtilDict begin{dup type
+/stringtype ne{stop}if/dest exch def dup type/stringtype ne{stop}if/source
+exch def/wc false def source astring search{pop pop pop dest astring search{
+pop pop pop/wc true def}if}if}stopped{(
+mv: wrong parameters
+
+)print mvsynopsis stop}if source UPrependRoot end{//UtilDict begin/filename
+exch def/adest getdestname def filename sostr eq adest sostr eq or{mark
+(
+mv: wrong parameters
+
+)print mvsynopsis stop}if filename adest ne{sdwriteto filename adest
+renamefile}if end}//UtilDict/fstr get filenameforall//UtilDict begin newline
+print newline print flush end}//UtilDict/execute get exec}bind executeonly def
+/sv{{//UtilDict begin{dup type/stringtype ne{stop}if}stopped{
+(
+sv: wrong parameter
+
+)print svsynopsis stop}if dup 0 get 37 eq testif/filename exch UPrependRoot
+def{filename status not{filename w file closefile}{pop pop pop pop}ifelse
+filename(r+)file}stopped not{/ofile exch def filename status pop pop pop ofile
+exch setfileposition pop(Finish with ^C
+)print flush{{/lineeditfile lineedit r file def{lineeditfile buffer readline
+pop}stopped{exch pop}if ofile exch writestring lineeditfile closefile ofile
+newline writestring}loop}stopped clear ofile closefile filename print
+( written
+)print flush}if end}//UtilDict/execute get exec}bind executeonly def/help{{
+//UtilDict begin currentfile buffer readline pop token not{(FileUtils provide\
+s a minimum collection of facilities for maintaining
+files on the printer disk, and for backing up and restoring files.
+
+The following procedures are provided.
+
+* `?' prints this message.  `? cmd-list' prints out synopses.
+* `bu' creates a backup copy of a file.  The backup copy is a PostScript
+   program which, when sent to the printer, recreates the original file.
+* `cd' changes the current working directory.
+* `cp' copies the contents of one file to another.
+* `cs' examines a file and creates a checksum file corresponding to it.
+* `df' prints out information about a device.
+* `help' prints this message.  `help cmd-list' prints out synopses.
+* `lpr' prints the contents of a file.
+* `ls' outputs the creation time, access time and size of a file.
+* `more' outputs the contents of a file.
+* `mv' renames a file.
+* `pinfo' prints out information about the printer.
+* `pwd' prints the current working directory.
+* `qu' logs out the superuser, or quits.
+* `rm' deletes a file from the disk.
+* `so' sets the name of the output file to which the output is directed.
+* `su' logs in as the superuser; access to Sys, FC and DB files is permitted.\
+
+* `sv' reads characters typed on %stdin and stores them in the named file.
+* `tf' compares a file and its checksum file.  It outputs a list of all
+   blocks that have been damaged; these blocks can be repaired using `bu'.
+)print flush}{syndict begin{dup tstr cvs print writeto print newline print{
+exec}stopped pop token not{exit}if newline print flush}loop end}ifelse}
+//UtilDict/execute get exec}bind executeonly def/?{help}bind executeonly def{}
+//UtilDict/execute get exec
+%%EndResource
+%%EOF

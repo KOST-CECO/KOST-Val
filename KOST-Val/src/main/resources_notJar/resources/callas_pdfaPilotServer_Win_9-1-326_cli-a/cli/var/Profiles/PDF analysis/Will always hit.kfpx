@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pdfpreflight version="8.0">
+	<package>
+		<id3>ca49d1e5c9a009f1db91f875126f1503</id3>
+		<pdfxoutintentlist>
+		</pdfxoutintentlist>
+		<iccprofilelist>
+		</iccprofilelist>
+		<ccpolicies>
+		</ccpolicies>
+		<occdsetups>
+		</occdsetups>
+		<curves>
+		</curves>
+		<fspolicies>
+		</fspolicies>
+		<conditions>
+			<condition>
+				<id1>C4fd3ca3a0ed0db3be91372cbebc0996e</id1>
+				<id2>C2da02cd94d1f8b5e668051bd8925b819</id2>
+				<id3>6f754d27a32b5a431d98eb4ba7560a20</id3>
+				<id4>8aaaf1b9c157c89f7ba12bcf015c9cd0</id4>
+				<name></name>
+				<comment></comment>
+				<flags edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::DOC</group>
+					<token>DOC::NumberOfPlates</token>
+					<operator>OP::unequal</operator>
+					<data>
+						<num>
+							<value>0</value>
+							<tolerance></tolerance>
+						</num>
+					</data>
+				</atom>
+			</condition>
+		</conditions>
+		<rules>
+			<rule>
+				<id1>Rdaa9974a2ab28d2177f80773ac2143c8</id1>
+				<id2>R0078cf579b5c687124ac6e3d1ea702e2</id2>
+				<id3>bcf7fa7640bf74fc4332c5dc1425ce8b</id3>
+				<id4>56c4c115047b20ba5dd53d532da3b518</id4>
+				<name>Document has more than 0 plates</name>
+				<comment>Document has more than 0 plates.</comment>
+				<flags analysis="1" condition_logic="0" ignore_objects="2" edit="1" visible="1"></flags>
+				<report_no_match></report_no_match>
+				<conditions>
+					<condition>C4fd3ca3a0ed0db3be91372cbebc0996e</condition>
+				</conditions>
+			</rule>
+		</rules>
+		<rulesets>
+			<ruleset>
+				<id1>S18d602038d2780745ef42b3bf3b42aa9</id1>
+				<id2>S3567d406f7226d2983326f8c542d873e</id2>
+				<id3>747b8afdd1d449e907e6f1692aa750fb</id3>
+				<id4>6cc829d0a29899729aecd52896b1fb9c</id4>
+				<name>SSS_RULESET_DEF_NAME</name>
+				<comment>SSS_RULESET_DEF_NAME</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<rules>
+					<rule check_severity="1" check_timing="2">Rdaa9974a2ab28d2177f80773ac2143c8</rule>
+				</rules>
+			</ruleset>
+		</rulesets>
+		<fixups>
+		</fixups>
+		<fixupsets>
+		</fixupsets>
+		<profiles>
+			<profile>
+				<id1>P91dd614422d23d5321b493224091c32e</id1>
+				<id2>Pfeb3704755e4c3cfcd21a82e55f0a29a</id2>
+				<id3>00aea43846558404aab24e2479afd730</id3>
+				<id4>e520ca132e5e2cd893b0c35523064279</id4>
+				<name>Will always hit</name>
+				<comment></comment>
+				<flags edit="1" visible="1"></flags>
+				<metalist>
+					<metadata>
+						<metakey>author</metakey>
+						<metavalue>callas pdfToolbox 4</metavalue>
+					</metadata>
+					<metadata>
+						<metakey>rating</metakey>
+						<metavalue>0</metavalue>
+					</metadata>
+					<metadata>
+						<metakey>email</metakey>
+						<metavalue>support@callassoftware.com</metavalue>
+					</metadata>
+				</metalist>
+				<creation>D:20050809103218+01&apos;00&apos;</creation>
+				<modification>D:20090227085302+01&apos;00&apos;</modification>
+				<pdfstd>
+					<pdfx convert="0"></pdfx>
+					<pdfa convert="0"></pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond></outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+				</pdfstd>
+				<wizard>
+				</wizard>
+				<rulesets>
+					<ruleset>S18d602038d2780745ef42b3bf3b42aa9</ruleset>
+				</rulesets>
+				<fixupsets>
+				</fixupsets>
+			</profile>
+		</profiles>
+		<profgroups>
+		</profgroups>
+	</package>
+</pdfpreflight>
