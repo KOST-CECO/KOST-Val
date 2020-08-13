@@ -190,7 +190,7 @@
 				</GridPane>
 			</top>
 			<bottom>
-				<Label maxHeight="20.0" minHeight="20.0" prefHeight="20.0" text="Copyright © KOST/CECO" textFill="LightGray" BorderPane.alignment="CENTER" />
+				<Label fx:id="labelConfig" maxHeight="20.0" minHeight="20.0" prefHeight="20.0" text="Copyright © KOST/CECO" textFill="LightGray" BorderPane.alignment="CENTER" />
 			</bottom>
 			<opaqueInsets>
 				<Insets />

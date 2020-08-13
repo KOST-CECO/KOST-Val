@@ -1708,20 +1708,65 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 						for ( String line = br.readLine(); line != null; line = br.readLine() ) {
 							int index = 0;
 
-							line = line.replace( "ü", "ue" );
-							line = line.replace( "ö", "oe" );
+							line = line.replace( "ÃŸ", "ss" );
+							line = line.replace( "ß", "ss" );
+
+							line = line.replace( "Ã„", "Ae" );
+							line = line.replace( "â€˜", "'" );
+							line = line.replace( "â€™", "'" );
+							line = line.replace( "Ã’", "O" );
+							line = line.replace( "Ã“", "O" );
+							line = line.replace( "Ã”", "O" );
+							line = line.replace( "Ã–", "Oe" );
+							line = line.replace( "Å“", "oe" );
+							line = line.replace( "Ãœ", "Ue" );
+							line = line.replace( "Ã¡", "a" );
+							line = line.replace( "Ã¢", "a" );
+							line = line.replace( "Ã¤", "ae" );
+							line = line.replace( "Ã§", "c" );
+							line = line.replace( "Ã¨", "e" );
+							line = line.replace( "Ã©", "e" );
+							line = line.replace( "Ãª", "e" );
+							line = line.replace( "Ã«", "e" );
+							line = line.replace( "Ã¬", "i" );
+							line = line.replace( "Ã­", "i" );
+							line = line.replace( "Ã®", "i" );
+							line = line.replace( "Ã¯", "i" );
+							line = line.replace( "Ã¶", "oe" );
+							line = line.replace( "Ã¹", "u" );
+							line = line.replace( "Ãº", "u" );
+							line = line.replace( "Ã»", "u" );
+							line = line.replace( "Ã¼", "ue" );
+							line = line.replace( "Ã", "a" );
+
+							line = line.replace( "Ä", "Ae" );
+							line = line.replace( "‘˜", "'" );
+							line = line.replace( "’", "'" );
+							line = line.replace( "Ò", "O" );
+							line = line.replace( "Ó", "O" );
+							line = line.replace( "Ô", "O" );
+							line = line.replace( "Ö", "Oe" );
+							line = line.replace( "œ", "oe" );
+							line = line.replace( "Ü", "Ue" );
+							line = line.replace( "á", "a" );
+							line = line.replace( "â", "a" );
 							line = line.replace( "ä", "ae" );
-							line = line.replace( "é", "e" );
+							line = line.replace( "ç", "c" );
 							line = line.replace( "è", "e" );
+							line = line.replace( "é", "e" );
 							line = line.replace( "ê", "e" );
 							line = line.replace( "ë", "e" );
-							line = line.replace( "à", "a" );
-							line = line.replace( "â", "a" );
-							line = line.replace( "û", "u" );
-							line = line.replace( "ô", "o" );
+							line = line.replace( "ì", "i" );
+							line = line.replace( "í", "i" );
 							line = line.replace( "î", "i" );
 							line = line.replace( "ï", "i" );
-							line = line.replace( "ß", "ss" );
+							line = line.replace( "ö", "oe" );
+							line = line.replace( "ù", "u" );
+							line = line.replace( "ú", "u" );
+							line = line.replace( "û", "u" );
+							line = line.replace( "ü", "ue" );
+							line = line.replace( "à", "a" );
+							line = line.replace( "a€™", "'" );
 
 							/* Die Linien (Fehlermeldung von Callas) anhand von Woerter den Modulen zuordnen
 							 * 
@@ -1747,7 +1792,22 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 									line = line + " [callas] ";
 								}
 
-								if ( line.toLowerCase().contains( "grafiken" )
+								if ( line.toLowerCase().contains( "schrift" )
+										|| line.toLowerCase().contains( "police" )
+										|| line.toLowerCase().contains( "font" ) || line.toLowerCase().contains( "gly" )
+										|| line.toLowerCase().contains( "truetype" )
+										|| line.toLowerCase().contains( "unicode" )
+										|| line.toLowerCase().contains( "cid" )
+										|| line.toLowerCase().contains( "charset" ) ) {
+									if ( callasD.toLowerCase().contains( line.toLowerCase() ) ) {
+										// Fehlermeldung bereits erfasst -> keine Aktion
+									} else {
+										callasD = callasD
+												+ getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_PDFA )
+												+ "<Message>" + line + "</Message></Error>";
+									}
+
+								} else if ( line.toLowerCase().contains( "grafiken" )
 										|| line.toLowerCase().contains( "graphique" )
 										|| line.toLowerCase().contains( "graphic" )
 										|| line.toLowerCase().contains( "image" )
@@ -1766,21 +1826,6 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 									} else {
 										callasC = callasC
 												+ getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_PDFA )
-												+ "<Message>" + line + "</Message></Error>";
-									}
-
-								} else if ( line.toLowerCase().contains( "schrift" )
-										|| line.toLowerCase().contains( "police" )
-										|| line.toLowerCase().contains( "font" ) || line.toLowerCase().contains( "gly" )
-										|| line.toLowerCase().contains( "truetype" )
-										|| line.toLowerCase().contains( "unicode" )
-										|| line.toLowerCase().contains( "cid" )
-										|| line.toLowerCase().contains( "charset" ) ) {
-									if ( callasD.toLowerCase().contains( line.toLowerCase() ) ) {
-										// Fehlermeldung bereits erfasst -> keine Aktion
-									} else {
-										callasD = callasD
-												+ getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_PDFA )
 												+ "<Message>" + line + "</Message></Error>";
 									}
 

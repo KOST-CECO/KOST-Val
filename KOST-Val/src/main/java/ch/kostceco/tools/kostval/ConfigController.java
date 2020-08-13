@@ -92,10 +92,19 @@ public class ConfigController
 	private TextField				textLength, textName, textPuid;
 
 	@FXML
+	private Label							labelConfig;
+
+	@FXML
 	void initialize()
 	{
 
 		// TODO --> initialize (wird einmalig am Anfang ausgefuehrt)
+
+		// Copyright und Versionen ausgeben
+		String javaVersion = System.getProperty( "java.version" );
+		String javafxVersion = System.getProperty( "javafx.version" );
+		labelConfig.setText( "Copyright © KOST/CECO          KOST-Val v2.0.0.alpha          JavaFX "
+				+ javafxVersion + "   &   Java " + javaVersion + "." );
 
 		// Original Config Kopieren
 		try {
@@ -579,6 +588,7 @@ public class ConfigController
 				textLength.setDisable( false );
 				textName.setDisable( false );
 				textPuid.setDisable( false );
+				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
 				if ( !checkJpeg2000.isSelected() && !checkSiard.isSelected() && !checkPdfa.isSelected()
@@ -626,6 +636,7 @@ public class ConfigController
 				checkPdfa2b.setDisable( false );
 				checkFontTol.setDisable( false );
 				checkPdfa2u.setDisable( false );
+				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
 				if ( !checkJpeg2000.isSelected() && !checkSiard.isSelected() && !checkJpeg.isSelected()
@@ -690,6 +701,7 @@ public class ConfigController
 					checkDetail.setDisable( true );
 					checkFont.setDisable( true );
 					checkFontTol.setDisable( true );
+					engine.load( "file:///" + configFile.getAbsolutePath() );
 				}
 			}
 		} catch ( IOException e ) {
@@ -1014,6 +1026,7 @@ public class ConfigController
 				Util.oldnewstring( no, yes, configFile );
 				checkSiard10.setDisable( false );
 				checkSiard21.setDisable( false );
+				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
 
 				// abwaehlen nur moeglich wenn noch eines selected
@@ -1110,6 +1123,7 @@ public class ConfigController
 		try {
 			if ( checkJpeg2000.isSelected() ) {
 				Util.oldnewstring( no, yes, configFile );
+				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
 				if ( !checkJpeg.isSelected() && !checkSiard.isSelected() && !checkPdfa.isSelected()
@@ -1141,6 +1155,7 @@ public class ConfigController
 		try {
 			if ( checkJpeg.isSelected() ) {
 				Util.oldnewstring( no, yes, configFile );
+				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
 				if ( !checkJpeg2000.isSelected() && !checkSiard.isSelected() && !checkPdfa.isSelected()
@@ -1197,6 +1212,7 @@ public class ConfigController
 				checkComp32773.setDisable( false );
 				checkPi3.setDisable( false );
 				checkPi8.setDisable( false );
+				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
 				if ( !checkJpeg2000.isSelected() && !checkSiard.isSelected() && !checkPdfa.isSelected()

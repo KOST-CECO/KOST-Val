@@ -124,8 +124,8 @@ public class GuiController
 		// Copyright und Versionen ausgeben
 		String javaVersion = System.getProperty( "java.version" );
 		String javafxVersion = System.getProperty( "javafx.version" );
-		label.setText( "Copyright © KOST/CECO          KOST-Val v2.0.0.0          JavaFX "
-				+ javafxVersion + " & Java " + javaVersion + "." );
+		label.setText( "Copyright © KOST/CECO          KOST-Val v2.0.0.alpha          JavaFX "
+				+ javafxVersion + "   &   Java " + javaVersion + "." );
 
 		// PrintStream in Konsole umleiten
 		ps = new PrintStream( new Console( console ) );
@@ -707,6 +707,13 @@ public class GuiController
 	{
 		console.setText( " \n" );
 		FileChooser fileChooser = new FileChooser();
+		if ( !fileFolder.getText().isEmpty() ) {
+			File dirFileFolder = new File( fileFolder.getText() );
+			if ( dirFileFolder.isFile() ) {
+				dirFileFolder = dirFileFolder.getParentFile();
+			}
+			fileChooser.setInitialDirectory( dirFileFolder );
+		}
 		if ( locale.toString().startsWith( "fr" ) ) {
 			fileChooser.setTitle( "Choisissez le fichier" );
 		} else if ( locale.toString().startsWith( "en" ) ) {
@@ -793,6 +800,13 @@ public class GuiController
 	{
 		console.setText( " \n" );
 		DirectoryChooser folderChooser = new DirectoryChooser();
+		if ( !fileFolder.getText().isEmpty() ) {
+			File dirFileFolder = new File( fileFolder.getText() );
+			if ( dirFileFolder.isFile() ) {
+				dirFileFolder = dirFileFolder.getParentFile();
+			}
+			folderChooser.setInitialDirectory( dirFileFolder );
+		}
 		if ( locale.toString().startsWith( "fr" ) ) {
 			folderChooser.setTitle( "Choisissez le dossier" );
 		} else if ( locale.toString().startsWith( "en" ) ) {
@@ -861,6 +875,13 @@ public class GuiController
 	void changeConfig( ActionEvent e )
 	{
 		console.setText( " \n" );
+		String text = "<html><h2>Die Konfiguration wird in einem neuen Fenster bearbeitet. <br/><br/>Bitte warten ...</h2></html>";
+		if ( locale.toString().startsWith( "fr" ) ) {
+			text = "<html><h2>La configuration est éditée dans une nouvelle fenêtre. <br/><br/>Veuillez patienter ...</h2></html>";
+		} else if ( locale.toString().startsWith( "en" ) ) {
+			text = "<html><h2>The configuration is edited in a new window. <br/><br/>Please wait ...</h2></html>";
+		}
+		engine.loadContent( text );
 		try {
 			StackPane configLayout = new StackPane();
 
@@ -892,12 +913,15 @@ public class GuiController
 				Util.deleteFile( configFileBackup );
 			} );
 			configStage.show();
+			console.setText( " \n" );
 			configStage.setOnHiding( event -> {
 				// hier engeben was beim schliessen gemacht werden soll
+				console.setText( " \n" );
 				engine.load( "file:///" + configFile.getAbsolutePath() );
 				buttonPrint.setDisable( true );
 				buttonSave.setDisable( true );
 			} );
+			console.setText( " \n" );
 		} catch ( IOException e1 ) {
 			e1.printStackTrace();
 		}
