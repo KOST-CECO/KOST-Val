@@ -21,9 +21,13 @@ package ch.kostceco.tools.kostval.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.context.ApplicationContext;
 
@@ -65,18 +69,20 @@ public class Controllervalfile implements MessageConstants
 		boolean valFile = false;
 		File pathTemp = new File( directoryOfLogfile, "path.tmp" );
 
-		// falls das File bereits existiert, z.B. von einem vorhergehenden Durchlauf, loeschen
-		// wir es
+		/* falls das File bereits existiert, z.B. von einem vorhergehenden Durchlauf, loeschen wir es */
 		if ( pathTemp.exists() ) {
 			pathTemp.delete();
 		}
-		try {
+		if ( pathTemp.exists() ) {
+			List<String> oldtextList = Files.readAllLines( pathTemp.toPath(), StandardCharsets.UTF_8 );
+			for ( int i = 0; i < oldtextList.size(); i++ ) {
+				String oldtext = (oldtextList.get( i ));
+				Util.oldnewstring( oldtext, "", pathTemp );
+			}
+		} else {
 			pathTemp.createNewFile();
-		} catch ( IOException e ) {
-			e.printStackTrace();
 		}
-
-		Util.oldnewstring( "", originalValName, pathTemp );
+		FileUtils.writeStringToFile( pathTemp, originalValName, "UTF-8" );
 
 		if ( (valDateiExt.equals( ".jp2" )) ) {
 			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS ) );

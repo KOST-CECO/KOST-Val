@@ -150,7 +150,8 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 										String locationOfJarPath = path;
 										String dirOfJarPath = locationOfJarPath;
 										if ( locationOfJarPath.endsWith( ".jar" )
-												|| locationOfJarPath.endsWith( ".exe" ) ) {
+												|| locationOfJarPath.endsWith( ".exe" )
+												|| locationOfJarPath.endsWith( "." ) ) {
 											File file = new File( locationOfJarPath );
 											dirOfJarPath = file.getParent();
 										}

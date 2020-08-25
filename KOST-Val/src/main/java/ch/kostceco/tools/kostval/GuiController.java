@@ -20,7 +20,6 @@
 package ch.kostceco.tools.kostval;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -28,6 +27,7 @@ import java.lang.reflect.Field;
 import java.util.Locale;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.log4j.Logger;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -122,10 +122,11 @@ public class GuiController
 				"classpath:config/applicationContext.xml" );
 
 		// Copyright und Versionen ausgeben
+		String java6432 = System.getProperty( "sun.arch.data.model" );
 		String javaVersion = System.getProperty( "java.version" );
 		String javafxVersion = System.getProperty( "javafx.version" );
-		label.setText( "Copyright © KOST/CECO          KOST-Val v2.0.0.alpha          JavaFX "
-				+ javafxVersion + "   &   Java " + javaVersion + "." );
+		label.setText( "Copyright © KOST/CECO          KOST-Val v2.0.0.alpha2          JavaFX "
+				+ javafxVersion + "   &   Java-" + java6432 + " " + javaVersion + "." );
 
 		// PrintStream in Konsole umleiten
 		ps = new PrintStream( new Console( console ) );
@@ -141,7 +142,8 @@ public class GuiController
 			String path = new File( "" ).getAbsolutePath();
 			String locationOfJarPath = path;
 			dirOfJarPath = locationOfJarPath;
-			if ( locationOfJarPath.endsWith( ".jar" ) || locationOfJarPath.endsWith( ".exe" ) ) {
+			if ( locationOfJarPath.endsWith( ".jar" ) || locationOfJarPath.endsWith( ".exe" )
+					|| locationOfJarPath.endsWith( "." ) ) {
 				File file = new File( locationOfJarPath );
 				dirOfJarPath = file.getParent();
 			}
@@ -150,24 +152,19 @@ public class GuiController
 			e1.printStackTrace();
 		}
 
-		try {
-			File directoryOfConfigfile = new File( System.getenv( "USERPROFILE" ) + File.separator
-					+ ".kost-val_2x" + File.separator + "configuration" );
-			File directoryOfConfigfileInit = new File( dirOfJarPath + File.separator + "configuration" );
-			if ( !directoryOfConfigfile.exists() ) {
-				directoryOfConfigfile.mkdirs();
-			}
-			File configFileInit = new File(
-					directoryOfConfigfileInit + File.separator + "kostval.conf.xml" );
-			File configFile = new File( directoryOfConfigfile + File.separator + "kostval.conf.xml" );
-			if ( !configFile.exists() ) {
-				Util.copyFile( configFileInit, configFile );
-			}
-		} catch ( FileNotFoundException e ) {
-			e.printStackTrace();
-		} catch ( IOException e ) {
-			e.printStackTrace();
-		}
+		/* try { File directoryOfKostvalFile = new File( System.getenv( "USERPROFILE" ) + File.separator
+		 * + ".kost-val_2x" ); if ( !directoryOfKostvalFile.exists() ) {
+		 * directoryOfKostvalFile.mkdirs(); } File directoryOfConfigfile = new File(
+		 * directoryOfKostvalFile + File.separator + "configuration" ); File directoryOfConfigfileInit =
+		 * new File( dirOfJarPath + File.separator + "configuration" ); if (
+		 * !directoryOfConfigfile.exists() ) { directoryOfConfigfile.mkdirs(); } File configFileInit =
+		 * new File( directoryOfConfigfileInit + File.separator + "kostval.conf.xml" ); File configFile
+		 * = new File( directoryOfConfigfile + File.separator + "kostval.conf.xml" ); if (
+		 * !configFile.exists() ) { Util.copyFile( configFileInit, configFile ); } File
+		 * configFileStandard = new File( directoryOfConfigfile + File.separator +
+		 * "STANDARD.kostval.conf.xml" ); if ( !configFileStandard.exists() ) { Util.copyFile(
+		 * configFileInit, configFileStandard ); } } catch ( FileNotFoundException e ) {
+		 * e.printStackTrace(); } catch ( IOException e ) { e.printStackTrace(); } */
 
 		// Sprache definieren
 		locale = Locale.getDefault();
@@ -520,64 +517,57 @@ public class GuiController
 		if ( logFile.exists() ) {
 			logFile.delete();
 		}
-		if ( logFile.exists() ) {
-			String exist = "Wurde bereits validiert. Keine neue Validierung durchgeführt!";
-			if ( locale.toString().startsWith( "fr" ) ) {
-				exist = "A déjà été validé. Aucune nouvelle validation n'a été lancée !";
-			} else if ( locale.toString().startsWith( "en" ) ) {
-				exist = "Has already been validated. No new validation performed!";
-			}
-			engine.loadContent( "<html><h2>" + exist + "</h2></html>" );
-		} else {
-			/* System.out.println( "cmd: " + args[0] + " " + args[1] + " " + args[2] + " " + args[3] ); */
-			// KOSTVal.main im Hintergrund Task (val) starten
-			final Task<Boolean> val = doVal( args );
-			val.setOnSucceeded( new EventHandler<WorkerStateEvent>() {
-				@Override
-				public void handle( WorkerStateEvent t )
-				{
-					// kein Handler Problem
-					if ( logFile.exists() ) {
-						/* Dieser handler wird bei einer erfolgreichen Validierung ausgefuehrt.
-						 * 
-						 * Da es erfolgreich war (valid / invalid) kann der Log angezeigt werden */
-						engine.load( "file:///" + logFile.getAbsolutePath() );
-						scroll.setVvalue( 1.0 ); // 1.0 = letzte Zeile der Konsole
-						buttonPrint.setDisable( false );
-						buttonSave.setDisable( false );
-					} else {
-						// Da es nicht erfolgreich war kann der Log nicht angezeigt werden
-						String text = "Ein Fehler ist aufgetreten. Siehe Konsole.";
-						if ( locale.toString().startsWith( "fr" ) ) {
-							text = "Une erreur s`est produite. Voir console.";
-						} else if ( locale.toString().startsWith( "en" ) ) {
-							text = "An error has occurred. See console.";
-						}
-						scroll.setVvalue( 1.0 ); // 1.0 = letzte Zeile der Konsole
-						engine.loadContent( "<html><h2>" + text + "</h2></html>" );
-					}
-				}
-			} );
-			val.setOnFailed( new EventHandler<WorkerStateEvent>() {
-				@Override
-				public void handle( WorkerStateEvent t )
-				{
-					/* Dieser handler wird ausgefuehrt wenn die Validierung nicht korrekt abgelaufen ist
-					 * (Fehler).
+		/* System.out.println( "cmd: " + args[0] + " " + args[1] + " " + args[2] + " " + args[3] ); */
+		// KOSTVal.main im Hintergrund Task (val) starten
+		final Task<Boolean> val = doVal( args );
+		val.setOnSucceeded( new EventHandler<WorkerStateEvent>() {
+			@Override
+			public void handle( WorkerStateEvent t )
+			{
+				// kein Handler Problem
+				if ( logFile.exists() ) {
+					/* Dieser handler wird bei einer erfolgreichen Validierung ausgefuehrt.
 					 * 
-					 * Da es nicht erfolgreich war kann der Log nicht angezeigt werden */
-					String text = "Ein unbekannter Fehler ist aufgetreten.";
+					 * Da es erfolgreich war (valid / invalid) kann der Log angezeigt werden */
+					engine.load( "file:///" + logFile.getAbsolutePath() );
+					scroll.setVvalue( 1.0 ); // 1.0 = letzte Zeile der Konsole
+					buttonPrint.setDisable( false );
+					buttonSave.setDisable( false );
+					// verherige logs entfernen (nicht weiterloggen in alte Logs)
+					Logger rootLogger = Logger.getRootLogger();
+					rootLogger.removeAllAppenders();
+				} else {
+					// Da es nicht erfolgreich war kann der Log nicht angezeigt werden
+					String text = "Ein Fehler ist aufgetreten. Siehe Konsole.";
 					if ( locale.toString().startsWith( "fr" ) ) {
-						text = "Une erreur inconnue s`est produite.";
+						text = "Une erreur s`est produite. Voir console.";
 					} else if ( locale.toString().startsWith( "en" ) ) {
-						text = "An unknown error has occurred.";
+						text = "An error has occurred. See console.";
 					}
 					scroll.setVvalue( 1.0 ); // 1.0 = letzte Zeile der Konsole
 					engine.loadContent( "<html><h2>" + text + "</h2></html>" );
 				}
-			} );
-			new Thread( val ).start();
-		}
+			}
+		} );
+		val.setOnFailed( new EventHandler<WorkerStateEvent>() {
+			@Override
+			public void handle( WorkerStateEvent t )
+			{
+				/* Dieser handler wird ausgefuehrt wenn die Validierung nicht korrekt abgelaufen ist
+				 * (Fehler).
+				 * 
+				 * Da es nicht erfolgreich war kann der Log nicht angezeigt werden */
+				String text = "Ein unbekannter Fehler ist aufgetreten.";
+				if ( locale.toString().startsWith( "fr" ) ) {
+					text = "Une erreur inconnue s`est produite.";
+				} else if ( locale.toString().startsWith( "en" ) ) {
+					text = "An unknown error has occurred.";
+				}
+				scroll.setVvalue( 1.0 ); // 1.0 = letzte Zeile der Konsole
+				engine.loadContent( "<html><h2>" + text + "</h2></html>" );
+			}
+		} );
+		new Thread( val ).start();
 	}
 
 	public Task<Boolean> doVal( String[] args )
@@ -641,64 +631,57 @@ public class GuiController
 		if ( logFile.exists() ) {
 			logFile.delete();
 		}
-		if ( logFile.exists() ) {
-			String exist = "Wurde bereits validiert. Keine neue Validierung durchgefuehrt!";
-			if ( locale.toString().startsWith( "fr" ) ) {
-				exist = "A déjà été validé. Aucune nouvelle validation n'a été lancée !";
-			} else if ( locale.toString().startsWith( "en" ) ) {
-				exist = "Has already been validated. No new validation performed!";
-			}
-			engine.loadContent( "<html><h2>" + exist + "</h2></html>" );
-		} else {
-			/* System.out.println( "cmd: " + args[0] + " " + args[1] + " " + args[2] + " " + args[3] ); */
-			// KOSTVal.main im Hintergrund Task (val) starten
-			final Task<Boolean> val = doVal( args );
-			val.setOnSucceeded( new EventHandler<WorkerStateEvent>() {
-				@Override
-				public void handle( WorkerStateEvent t )
-				{
-					// kein Handler Problem
-					if ( logFile.exists() ) {
-						/* Dieser handler wird bei einer erfolgreichen Validierung ausgefuehrt.
-						 * 
-						 * Da es erfolgreich war (valid / invalid) kann der Log angezeigt werden */
-						engine.load( "file:///" + logFile.getAbsolutePath() );
-						scroll.setVvalue( 1.0 ); // 1.0 = letzte Zeile der Konsole
-						buttonPrint.setDisable( false );
-						buttonSave.setDisable( false );
-					} else {
-						// Da es nicht erfolgreich war kann der Log nicht angezeigt werden
-						String text = "Ein Fehler ist aufgetreten. Siehe Konsole.";
-						if ( locale.toString().startsWith( "fr" ) ) {
-							text = "Une erreur s`est produite. Voir console.";
-						} else if ( locale.toString().startsWith( "en" ) ) {
-							text = "An error has occurred. See console.";
-						}
-						scroll.setVvalue( 1.0 ); // 1.0 = letzte Zeile der Konsole
-						engine.loadContent( "<html><h2>" + text + "</h2></html>" );
-					}
-				}
-			} );
-			val.setOnFailed( new EventHandler<WorkerStateEvent>() {
-				@Override
-				public void handle( WorkerStateEvent t )
-				{
-					/* Dieser handler wird ausgefuehrt wenn die Validierung nicht korrekt abgelaufen ist
-					 * (Fehler).
+		/* System.out.println( "cmd: " + args[0] + " " + args[1] + " " + args[2] + " " + args[3] ); */
+		// KOSTVal.main im Hintergrund Task (val) starten
+		final Task<Boolean> val = doVal( args );
+		val.setOnSucceeded( new EventHandler<WorkerStateEvent>() {
+			@Override
+			public void handle( WorkerStateEvent t )
+			{
+				// kein Handler Problem
+				if ( logFile.exists() ) {
+					/* Dieser handler wird bei einer erfolgreichen Validierung ausgefuehrt.
 					 * 
-					 * Da es nicht erfolgreich war kann der Log nicht angezeigt werden */
-					String text = "Ein unbekannter Fehler ist aufgetreten.";
+					 * Da es erfolgreich war (valid / invalid) kann der Log angezeigt werden */
+					engine.load( "file:///" + logFile.getAbsolutePath() );
+					scroll.setVvalue( 1.0 ); // 1.0 = letzte Zeile der Konsole
+					buttonPrint.setDisable( false );
+					buttonSave.setDisable( false );
+					// verherige logs entfernen (nicht weiterloggen in alte Logs)
+					Logger rootLogger = Logger.getRootLogger();
+					rootLogger.removeAllAppenders();
+				} else {
+					// Da es nicht erfolgreich war kann der Log nicht angezeigt werden
+					String text = "Ein Fehler ist aufgetreten. Siehe Konsole.";
 					if ( locale.toString().startsWith( "fr" ) ) {
-						text = "Une erreur inconnue s`est produite.";
+						text = "Une erreur s`est produite. Voir console.";
 					} else if ( locale.toString().startsWith( "en" ) ) {
-						text = "An unknown error has occurred.";
+						text = "An error has occurred. See console.";
 					}
 					scroll.setVvalue( 1.0 ); // 1.0 = letzte Zeile der Konsole
 					engine.loadContent( "<html><h2>" + text + "</h2></html>" );
 				}
-			} );
-			new Thread( val ).start();
-		}
+			}
+		} );
+		val.setOnFailed( new EventHandler<WorkerStateEvent>() {
+			@Override
+			public void handle( WorkerStateEvent t )
+			{
+				/* Dieser handler wird ausgefuehrt wenn die Validierung nicht korrekt abgelaufen ist
+				 * (Fehler).
+				 * 
+				 * Da es nicht erfolgreich war kann der Log nicht angezeigt werden */
+				String text = "Ein unbekannter Fehler ist aufgetreten.";
+				if ( locale.toString().startsWith( "fr" ) ) {
+					text = "Une erreur inconnue s`est produite.";
+				} else if ( locale.toString().startsWith( "en" ) ) {
+					text = "An unknown error has occurred.";
+				}
+				scroll.setVvalue( 1.0 ); // 1.0 = letzte Zeile der Konsole
+				engine.loadContent( "<html><h2>" + text + "</h2></html>" );
+			}
+		} );
+		new Thread( val ).start();
 	}
 
 	/* Wenn choseFile betaetigt wird, kann eine Datei ausgewaehlt werden */

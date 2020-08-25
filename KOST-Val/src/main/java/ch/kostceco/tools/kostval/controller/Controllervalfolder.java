@@ -21,7 +21,10 @@ package ch.kostceco.tools.kostval.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -414,9 +417,6 @@ public class Controllervalfolder implements MessageConstants
 		System.out.println( getTextResourceService().getText( locale, MESSAGE_FORMATVALIDATION_DONE,
 				summaryFormat, logFile.getAbsolutePath() ) );
 
-		System.out.print( "                                                                    " );
-		System.out.print( "\r" );
-
 		if ( countNio.equals( count ) ) {
 			// keine Dateien Validiert bestehendes Workverzeichnis ggf. loeschen
 			if ( tmpDir.exists() ) {
@@ -438,11 +438,18 @@ public class Controllervalfolder implements MessageConstants
 			}
 
 			File pathTemp = new File( directoryOfLogfile, "path.tmp" );
+			/* falls das File bereits existiert, z.B. von einem vorhergehenden Durchlauf, loeschen wir
+			 * es */
 			if ( pathTemp.exists() ) {
 				pathTemp.delete();
 			}
 			if ( pathTemp.exists() ) {
-				pathTemp.deleteOnExit();
+				// hat nicht funktioniert -> Inhalt leeren
+				List<String> oldtextList = Files.readAllLines( pathTemp.toPath(), StandardCharsets.UTF_8 );
+				for ( int i = 0; i < oldtextList.size(); i++ ) {
+					String oldtext = (oldtextList.get( i ));
+					Util.oldnewstring( oldtext, "", pathTemp );
+				}
 			}
 
 			// alle Validierten Dateien valide

@@ -189,7 +189,7 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 					char[] charArray4 = new char[] { c9, c10, c11, c12, c3, c12, c13 };
 					String stringCharArray3 = String.valueOf( charArray3 );
 					String stringCharArray4 = String.valueOf( charArray4 );
-					buffer23=null;
+					buffer23 = null;
 					read23.close();
 					fr23.close();
 					if ( stringCharArray3.endsWith( stringCharArray4 ) ) {
@@ -294,7 +294,8 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 						.getAbsolutePath();
 		String locationOfJarPath = path;
 		String dirOfJarPath = locationOfJarPath;
-		if ( locationOfJarPath.endsWith( ".jar" ) || locationOfJarPath.endsWith( ".exe" ) ) {
+		if ( locationOfJarPath.endsWith( ".jar" ) || locationOfJarPath.endsWith( ".exe" )
+				|| locationOfJarPath.endsWith( "." ) ) {
 			File file = new File( locationOfJarPath );
 			dirOfJarPath = file.getParent();
 		}

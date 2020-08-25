@@ -24,6 +24,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -92,9 +95,10 @@ public class KOSTVal implements MessageConstants
 	 * args[3] Logtyp "--xml" / "--min" (TODO nur valid oder invalid) / "--max" (= xml+verbose)
 	 * 
 	 * @param args
-	 * @throws IOException */
+	 * @throws IOException
+	 */
 
-	//@SuppressWarnings("resource")
+	// @SuppressWarnings("resource")
 	public static boolean main( String[] args ) throws IOException
 	{
 		boolean mainBoolean = true;
@@ -125,7 +129,8 @@ public class KOSTVal implements MessageConstants
 						.getAbsolutePath();
 		String locationOfJarPath = path;
 		String dirOfJarPath = locationOfJarPath;
-		if ( locationOfJarPath.endsWith( ".jar" ) || locationOfJarPath.endsWith( ".exe" ) ) {
+		if ( locationOfJarPath.endsWith( ".jar" ) || locationOfJarPath.endsWith( ".exe" )
+				|| locationOfJarPath.endsWith( "." ) ) {
 			File file = new File( locationOfJarPath );
 			dirOfJarPath = file.getParent();
 		}
@@ -274,6 +279,14 @@ public class KOSTVal implements MessageConstants
 						pathTemp.delete();
 					}
 					if ( pathTemp.exists() ) {
+						List<String> oldtextList = Files.readAllLines( pathTemp.toPath(),
+								StandardCharsets.UTF_8 );
+						for ( int i = 0; i < oldtextList.size(); i++ ) {
+							String oldtext = (oldtextList.get( i ));
+							Util.oldnewstring( oldtext, "", pathTemp );
+						}
+					}
+					if ( pathTemp.exists() ) {
 						pathTemp.deleteOnExit();
 					}
 
@@ -330,39 +343,82 @@ public class KOSTVal implements MessageConstants
 
 		} else if ( args[0].equals( "--sip" ) ) {
 			// TODO: Sipvalidierung --> erledigt --> nur Marker
-			Controllervalsip controller3 = (Controllervalsip) context.getBean( "controllervalsip" );
-			boolean valSip = controller3.valSip( valDatei, logFileName, directoryOfLogfile, verbose,
-					dirOfJarPath, configMap, context, locale );
-			if ( valSip ) {
-				// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
-				if ( tmpDir.exists() ) {
-					Util.deleteDir( tmpDir );
-				}
-				if ( tmpDir.exists() ) {
-					tmpDir.deleteOnExit();
-				}
+			if ( configMap.get( "ech0160validation" ).equals( "no" ) ) {
+				// SIP-Validierung in der Konfiguration ausgeschaltet.
+				System.out
+						.println( kostval.getTextResourceService().getText( locale, ERROR_XML_CONIG_SIP ) );
 
-				File pathTemp = new File( directoryOfLogfile, "path.tmp" );
-				if ( pathTemp.exists() ) {
-					pathTemp.delete();
-				}
-				if ( pathTemp.exists() ) {
-					pathTemp.deleteOnExit();
-				}
+				LOGGER.logError( kostval.getTextResourceService().getText( locale, MESSAGE_XML_SIP1 ) ); // =
+																																																	// <Sip>
+				LOGGER.logError(
+						kostval.getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS ) ); // =
+																																														// <Validation>
+				LOGGER.logError( kostval.getTextResourceService().getText( locale, MESSAGE_XML_VALTYPE,
+						kostval.getTextResourceService().getText( locale, MESSAGE_SIPVALIDATION ) ) ); // =
+																																														// <ValType>{0}</ValType>
+				LOGGER.logError( kostval.getTextResourceService().getText( locale, MESSAGE_XML_VALFILE,
+						valDatei.getAbsolutePath() ) ); // = <ValFile>{0}</ValFile>
+				LOGGER.logError(
+						kostval.getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Aa_SIP ) ); // =
+																																														// <Error><Modul>1A)
+																																														// Lesbarkeit</Modul>
+				LOGGER.logError(
+						"<Message>" + kostval.getTextResourceService().getText( locale, ERROR_XML_CONIG_SIP )
+								+ "</Message></Error>" ); // <Message>SIP-Validierung in der Konfiguration
+																					// ausgeschaltet.</Message></Error>
+				LOGGER.logError(
+						kostval.getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_INVALID ) ); // =
+																																																		// <Invalid>invalid</Invalid>
+				LOGGER.logError(
+						kostval.getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) ); // =
+																																																	// </Validation>
+				LOGGER.logError( kostval.getTextResourceService().getText( locale, MESSAGE_XML_SIP2 ) ); // =
+																																																	// </Sip>
+				LOGGER.logError( kostval.getTextResourceService().getText( locale, MESSAGE_XML_LOGEND ) ); // =
+																																																		// </KOSTValLog>
 
-				// Validierte Dateien valide
-				context.close();
-				mainBoolean = true;
-				return mainBoolean;
-			} else {
-				// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
-				if ( tmpDir.exists() ) {
-					Util.deleteDir( tmpDir );
-				}
-				// Fehler in Validierte Dateien --> invalide
+				// ggf. Fehlermeldung 3c ergaenzen Util.val3c(summary3c, logFile );
+				// logFile bereinigung (& End und ggf 3c)
+				Util.valEnd3cAmp( "", logFile );
+
 				context.close();
 				mainBoolean = false;
 				return mainBoolean;
+			} else {
+				Controllervalsip controller3 = (Controllervalsip) context.getBean( "controllervalsip" );
+				boolean valSip = controller3.valSip( valDatei, logFileName, directoryOfLogfile, verbose,
+						dirOfJarPath, configMap, context, locale );
+				if ( valSip ) {
+					// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
+					if ( tmpDir.exists() ) {
+						Util.deleteDir( tmpDir );
+					}
+					if ( tmpDir.exists() ) {
+						tmpDir.deleteOnExit();
+					}
+
+					File pathTemp = new File( directoryOfLogfile, "path.tmp" );
+					if ( pathTemp.exists() ) {
+						pathTemp.delete();
+					}
+					if ( pathTemp.exists() ) {
+						pathTemp.deleteOnExit();
+					}
+
+					// Validierte Dateien valide
+					context.close();
+					mainBoolean = true;
+					return mainBoolean;
+				} else {
+					// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
+					if ( tmpDir.exists() ) {
+						Util.deleteDir( tmpDir );
+					}
+					// Fehler in Validierte Dateien --> invalide
+					context.close();
+					mainBoolean = false;
+					return mainBoolean;
+				}
 			}
 
 		} else {

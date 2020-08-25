@@ -477,12 +477,17 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 			pdftools = true;
 		}
 
+		if ( !pdftools && !callas ) {
+			// pdf Validierung nicht moeglich
+			configMap.put( "pdfavalidation", "no" );
+		}
+
 		try {
 
 			/* TODO: Erledigt Start mit PDFTools
 			 * 
 			 * Wenn pdftools eingeschaltet ist, wird immer zuerst pdftools genommen, da dieser in KOST-Val
-			 * schneller ist alls callas */
+			 * schneller ist als callas */
 			if ( pdftools ) {
 				docPdf = new PdfValidatorAPI();
 
@@ -1437,6 +1442,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 							if ( callasReturnCodeTest == 0 || callasReturnCodeTest == 1
 									|| callasReturnCodeTest == 2 || callasReturnCodeTest == 3 ) {
 								// Keine callas Validierung moeglich
+								configMap.put( "callas", "no" );
 
 								// -callas_NO -Fileanlegen, damit in J nicht validiert wird
 								if ( !callasNo.exists() ) {
@@ -1845,6 +1851,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 									}
 
 								} else if ( line.toLowerCase().contains( "struktur" )
+										|| line.toLowerCase().contains( "ebenen" )
 										|| line.toLowerCase().contains( "structure" )
 										|| line.toLowerCase().contains( " eol" ) ) {
 									if ( callasB.toLowerCase().contains( line.toLowerCase() ) ) {

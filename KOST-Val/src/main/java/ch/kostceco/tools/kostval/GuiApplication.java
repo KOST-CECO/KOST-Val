@@ -39,28 +39,29 @@ public class GuiApplication extends Application
 			// festhalten von wo die Applikation (exe) gestartet wurde
 			String dirOfJarPath = "";
 
-				/* dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist ein generelles TODO in
-				 * allen Modulen. Zuerst immer dirOfJarPath ermitteln und dann alle Pfade mit dirOfJarPath +
-				 * File.separator + erweitern. */
-				String path = new File( "" ).getAbsolutePath();
-				String locationOfJarPath = path;
-				dirOfJarPath = locationOfJarPath;
-				if ( locationOfJarPath.endsWith( ".jar" ) || locationOfJarPath.endsWith( ".exe" ) ) {
-					File file = new File( locationOfJarPath );
-					dirOfJarPath = file.getParent();
-				}
+			/* dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist ein generelles TODO in
+			 * allen Modulen. Zuerst immer dirOfJarPath ermitteln und dann alle Pfade mit dirOfJarPath +
+			 * File.separator + erweitern. */
+			String path = new File( "" ).getAbsolutePath();
+			String locationOfJarPath = path;
+			dirOfJarPath = locationOfJarPath;
+			if ( locationOfJarPath.endsWith( ".jar" ) || locationOfJarPath.endsWith( ".exe" )
+					|| locationOfJarPath.endsWith( "." ) ) {
+				File file = new File( locationOfJarPath );
+				dirOfJarPath = file.getParent();
+			}
 
 			// Read file fxml and draw interface.
 			Parent root;
-			root = FXMLLoader
-					.load( getClass().getResource( "GuiView.fxml" ) );
+			root = FXMLLoader.load( getClass().getResource( "GuiView.fxml" ) );
 			Scene scene = new Scene( root );
-			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			scene.getStylesheets().add( getClass().getResource( "application.css" ).toExternalForm() );
 			stage.setTitle( "KOST-Val" );
-			Image kostvalIcon = new Image( "file:"+dirOfJarPath + File.separator + "doc" + File.separator+"valicon.png" );
+			Image kostvalIcon = new Image(
+					"file:" + dirOfJarPath + File.separator + "doc" + File.separator + "valicon.png" );
 			// Image kostvalIcon = new Image( "file:valicon.png" );
 			stage.getIcons().add( kostvalIcon );
-			stage.setScene(scene );
+			stage.setScene( scene );
 			stage.show();
 		} catch ( IOException e ) {
 			e.printStackTrace();

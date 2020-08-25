@@ -62,21 +62,25 @@ public class ConfigController
 			checkPi3, checkPi8, checkSip0160;
 
 	@FXML
-	private Button					buttonConfigApply, buttonConfigCancel;
+	private Button					buttonConfigApply, buttonConfigApplyStandard, buttonConfigCancel;
 
-	private File						configFileBackup	= new File(
+	private File						configFileBackup		= new File(
 			System.getenv( "USERPROFILE" ) + File.separator + ".kost-val_2x" + File.separator
 					+ "configuration" + File.separator + "BACKUP.kostval.conf.xml" );
 
-	private File						configFile				= new File(
+	private File						configFileStandard	= new File(
+			System.getenv( "USERPROFILE" ) + File.separator + ".kost-val_2x" + File.separator
+					+ "configuration" + File.separator + "STANDARD.kostval.conf.xml" );
+
+	private File						configFile					= new File(
 			System.getenv( "USERPROFILE" ) + File.separator + ".kost-val_2x" + File.separator
 					+ "configuration" + File.separator + "kostval.conf.xml" );
 
 	private String					dirOfJarPath;
 
-	private Locale					locale						= Locale.getDefault();
+	private Locale					locale							= Locale.getDefault();
 
-	ObservableList<String>	langList					= FXCollections.observableArrayList( "Deutsch",
+	ObservableList<String>	langList						= FXCollections.observableArrayList( "Deutsch",
 			"Français", "English" );
 
 	@FXML
@@ -92,7 +96,7 @@ public class ConfigController
 	private TextField				textLength, textName, textPuid;
 
 	@FXML
-	private Label							labelConfig;
+	private Label						labelConfig;
 
 	@FXML
 	void initialize()
@@ -101,10 +105,11 @@ public class ConfigController
 		// TODO --> initialize (wird einmalig am Anfang ausgefuehrt)
 
 		// Copyright und Versionen ausgeben
+		String java6432 = System.getProperty( "sun.arch.data.model" );
 		String javaVersion = System.getProperty( "java.version" );
 		String javafxVersion = System.getProperty( "javafx.version" );
-		labelConfig.setText( "Copyright © KOST/CECO          KOST-Val v2.0.0.alpha          JavaFX "
-				+ javafxVersion + "   &   Java " + javaVersion + "." );
+		labelConfig.setText( "Copyright © KOST/CECO          KOST-Val v2.0.0.alpha2          JavaFX "
+				+ javafxVersion + "   &   Java-" + java6432 + " " + javaVersion + "." );
 
 		// Original Config Kopieren
 		try {
@@ -122,7 +127,8 @@ public class ConfigController
 			String path = new File( "" ).getAbsolutePath();
 			String locationOfJarPath = path;
 			dirOfJarPath = locationOfJarPath;
-			if ( locationOfJarPath.endsWith( ".jar" ) || locationOfJarPath.endsWith( ".exe" ) ) {
+			if ( locationOfJarPath.endsWith( ".jar" ) || locationOfJarPath.endsWith( ".exe" )
+					|| locationOfJarPath.endsWith( "." ) ) {
 				File file = new File( locationOfJarPath );
 				dirOfJarPath = file.getParent();
 			}
@@ -143,6 +149,7 @@ public class ConfigController
 				labelPuid.setText( "PUID" );
 				locale = new Locale( "de" );
 				buttonConfigApply.setText( "anwenden" );
+				buttonConfigApplyStandard.setText( "Standard anwenden" );
 				buttonConfigCancel.setText( "verwerfen" );
 			} else if ( Util.stringInFile( "kostval-conf-FR.xsl", configFile ) ) {
 				labelBps.setText( "Bits par échantillon (par canal)" );
@@ -154,6 +161,7 @@ public class ConfigController
 				labelPuid.setText( "PUID" );
 				locale = new Locale( "fr" );
 				buttonConfigApply.setText( "appliquer" );
+				buttonConfigApplyStandard.setText( "appliquer le standard" );
 				buttonConfigCancel.setText( "annuler" );
 			} else {
 				labelBps.setText( "Bits per sample (per channel)" );
@@ -165,6 +173,7 @@ public class ConfigController
 				labelPuid.setText( "PUID" );
 				locale = new Locale( "en" );
 				buttonConfigApply.setText( "apply" );
+				buttonConfigApplyStandard.setText( "apply Standard" );
 				buttonConfigCancel.setText( "cancel" );
 			}
 		} catch ( Exception e ) {
@@ -461,6 +470,20 @@ public class ConfigController
 	{
 		engine.loadContent( "Apply" );
 		Util.deleteFile( configFileBackup );
+		((Stage) (((Button) e.getSource()).getScene().getWindow())).close();
+	}
+
+	@FXML
+	void configApplyStandard( ActionEvent e )
+	{
+		engine.loadContent( "Apply Standard" );
+		configFile.delete();
+		Util.deleteFile( configFileBackup );
+		try {
+			Util.copyFile( configFileStandard, configFile );
+		} catch ( IOException e1 ) {
+			e1.printStackTrace();
+		}
 		((Stage) (((Button) e.getSource()).getScene().getWindow())).close();
 	}
 

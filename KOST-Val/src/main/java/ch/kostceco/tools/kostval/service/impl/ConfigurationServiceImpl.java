@@ -84,8 +84,8 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			configMap.put( "PathToWorkDir", pathtoworkdir );
 
 			// Gibt den Pfad des Logverzeichnisses zurueck. = USERPROFILE/.kost-val_2x/logs
-			String logs = System.getenv( "USERPROFILE" ) + File.separator + ".kost-val_2x" + File.separator
-					+ "logs";
+			String logs = System.getenv( "USERPROFILE" ) + File.separator + ".kost-val_2x"
+					+ File.separator + "logs";
 			File dir1 = new File( logs );
 			if ( !dir1.exists() ) {
 				dir1.mkdirs();
@@ -99,8 +99,8 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String droidPath = droidFile.getAbsolutePath();
 			configMap.put( "PathToDroidSignatureFile", droidPath );
 
-			/* Angabe ob dargestellt werden soll, dass KOST-Val noch laeuft --xml (=no) zaehler
-			 * anzeigen --max (=yes) auch "Windrad" --min (=nomin) zaehler anzeigen */
+			/* Angabe ob dargestellt werden soll, dass KOST-Val noch laeuft --xml (=no) zaehler anzeigen
+			 * --max (=yes) auch "Windrad" --min (=nomin) zaehler anzeigen */
 			String showprogressonwork = "no";
 			if ( logtype.equalsIgnoreCase( "--max" ) ) {
 				showprogressonwork = "yes";
@@ -177,15 +177,13 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String siardvalidation = doc.getElementsByTagName( "siardvalidation" ).item( 0 )
 					.getTextContent();
 			configMap.put( "siardValidation", siardvalidation );
-			
+
 			// Gibt an ob siard 1.0 validiert werden soll
-			String siard10 = doc.getElementsByTagName( "siard10" ).item( 0 )
-					.getTextContent();
+			String siard10 = doc.getElementsByTagName( "siard10" ).item( 0 ).getTextContent();
 			configMap.put( "siard10", siard10 );
-			
+
 			// Gibt an ob siard 2.1 validiert werden soll
-			String siard21 = doc.getElementsByTagName( "siard21" ).item( 0 )
-					.getTextContent();
+			String siard21 = doc.getElementsByTagName( "siard21" ).item( 0 ).getTextContent();
 			configMap.put( "siard21", siard21 );
 
 			// Gibt an ob jp2 validiert werden soll
@@ -200,6 +198,11 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			// Gibt an welche Fehler ignoriert werden sollen
 			String ignore = doc.getElementsByTagName( "ignore" ).item( 0 ).getTextContent();
 			configMap.put( "ignore", ignore );
+
+			// Gibt an ob eCH-0160 validiert werden soll
+			String ech0160validation = doc.getElementsByTagName( "ech0160validation" ).item( 0 )
+					.getTextContent();
+			configMap.put( "ech0160validation", ech0160validation );
 
 			// Gibt eine Liste mit den PUIDs aus, welche im SIP vorkommen duerfen.
 			String allowedformats = doc.getElementsByTagName( "allowedformats" ).item( 0 )

@@ -79,7 +79,8 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 						.getAbsolutePath();
 		String locationOfJarPath = path;
 		String dirOfJarPath = locationOfJarPath;
-		if ( locationOfJarPath.endsWith( ".jar" ) || locationOfJarPath.endsWith( ".exe" ) ) {
+		if ( locationOfJarPath.endsWith( ".jar" ) || locationOfJarPath.endsWith( ".exe" )
+				|| locationOfJarPath.endsWith( "." ) ) {
 			File file = new File( locationOfJarPath );
 			dirOfJarPath = file.getParent();
 		}

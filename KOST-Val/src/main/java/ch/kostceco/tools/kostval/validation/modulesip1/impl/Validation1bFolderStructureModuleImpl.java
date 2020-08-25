@@ -66,18 +66,19 @@ public class Validation1bFolderStructureModuleImpl extends ValidationModuleImpl
 			getMessageService()
 					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ab_SIP )
 							+ getTextResourceService().getText( locale, ERROR_XML_AB_HEADER ) );
-		}
-		if ( !xsd.exists() ) {
-			isValid = false;
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ab_SIP )
-							+ getTextResourceService().getText( locale, ERROR_XML_AB_XSD ) );
-		}
-		if ( !metadata.exists() ) {
-			isValid = false;
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ab_SIP )
-							+ getTextResourceService().getText( locale, ERROR_XML_AB_METADATA ) );
+		} else {
+			if ( !xsd.exists() ) {
+				isValid = false;
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ab_SIP )
+								+ getTextResourceService().getText( locale, ERROR_XML_AB_XSD ) );
+			}
+			if ( !metadata.exists() ) {
+				isValid = false;
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ab_SIP )
+								+ getTextResourceService().getText( locale, ERROR_XML_AB_METADATA ) );
+			}
 		}
 		return isValid;
 	}

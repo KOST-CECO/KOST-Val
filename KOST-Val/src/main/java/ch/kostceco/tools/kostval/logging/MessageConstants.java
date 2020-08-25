@@ -30,6 +30,7 @@ public interface MessageConstants
 	String	ERROR_PARAMETER_USAGE													= "error.parameter.usage";
 	String	ERROR_LOGDIRECTORY_NODIRECTORY								= "error.logdirectory.nodirectory";
 	String	ERROR_LOGDIRECTORY_NOTWRITABLE								= "error.logdirectory.notwritable";
+	String	WARNING_JARDIRECTORY_NOTWRITABLE							= "warning.jardirectory.notwritable";
 	String	ERROR_WORKDIRECTORY_NOTDELETABLE							= "error.workdirectory.notdeletable";
 	String	ERROR_WORKDIRECTORY_NOTWRITABLE								= "error.workdirectory.notwritable";
 	String	ERROR_WORKDIRECTORY_EXISTS										= "error.workdirectory.exists";
@@ -43,6 +44,7 @@ public interface MessageConstants
 	String	ERROR_NOFILEENDINGS														= "error.nofileendings";
 	String	ERROR_WRONG_JRE																= "error.wrong.jdk";
 	String	ERROR_SPECIAL_CHARACTER												= "error.special.character";
+	String	ERROR_MISSING																	= "error.missing";
 
 	// Globale Meldungen
 	String	MESSAGE_XML_SUMMARY_3C												= "message.xml.summary.3c";
@@ -395,6 +397,7 @@ public interface MessageConstants
 	// Modul 1a Meldungen
 	String	ERROR_XML_AA_INCORRECTFILEENDING							= "error.xml.aa.incorrectfileending";
 	String	ERROR_XML_AA_CANNOTEXTRACTZIP									= "error.xml.aa.cannotextractzip";
+	String	ERROR_XML_CONIG_SIP														= "error.xml.config.sip";
 
 	// Modul 1b Meldungen
 	String	ERROR_XML_AB_CONTENT													= "error.xml.ab.content";

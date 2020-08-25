@@ -21,6 +21,9 @@ package ch.kostceco.tools.kostval.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.util.List;
 import java.util.Locale;
 
 import ch.kostceco.tools.kostval.logging.MessageConstants;
@@ -36,7 +39,9 @@ import ch.kostceco.tools.kostval.util.Util;
 public class ControllerInit implements MessageConstants
 {
 
-	private static TextResourceService textResourceService;
+	private static TextResourceService	textResourceService;
+	private String											pathToKostValDir	= System.getenv( "USERPROFILE" )
+			+ File.separator + ".kost-val_2x";
 
 	public static TextResourceService getTextResourceService()
 	{
@@ -52,9 +57,13 @@ public class ControllerInit implements MessageConstants
 	public boolean init( Locale locale, String dirOfJarPath ) throws IOException
 	{
 		boolean init = true;
+		File directoryOfKostValDir = new File( pathToKostValDir );
+		if ( !directoryOfKostValDir.exists() ) {
+			directoryOfKostValDir.mkdir();
+		}
+
 		// Ueberpruefung des Parameters (Log-Verzeichnis)
-		String logs = System.getenv( "USERPROFILE" ) + File.separator + ".kost-val_2x" + File.separator
-				+ "logs";
+		String logs = pathToKostValDir + File.separator + "logs";
 		String pathToLogfile = logs;
 		File directoryOfLogfile = new File( pathToLogfile );
 		if ( !directoryOfLogfile.exists() ) {
@@ -73,14 +82,21 @@ public class ControllerInit implements MessageConstants
 			return init;
 		}
 
+		// Enthaelt Pfad zu der zu Validierenden Datei (vorher)
 		File pathTmp = new File( logs + File.separator + "path.tmp" );
 		if ( pathTmp.exists() ) {
-			Util.deleteFile( pathTmp );
+			pathTmp.delete();
+		}
+		if ( pathTmp.exists() ) {
+			List<String> oldtextList = Files.readAllLines( pathTmp.toPath(), StandardCharsets.UTF_8 );
+			for ( int i = 0; i < oldtextList.size(); i++ ) {
+				String oldtext = (oldtextList.get( i ));
+				Util.oldnewstring( oldtext, "", pathTmp );
+			}
 		}
 
 		// Informationen zum Arbeitsverzeichnis holen
-		String pathToWorkDir = System.getenv( "USERPROFILE" ) + File.separator + ".kost-val_2x"
-				+ File.separator + "temp_KOST-Val";
+		String pathToWorkDir = pathToKostValDir + File.separator + "temp_KOST-Val";
 		File xslOrig = new File(
 				dirOfJarPath + File.separator + "resources" + File.separator + "kost-val.xsl" );
 		File xslCopy = new File( logs + File.separator + "kost-val.xsl" );
@@ -135,8 +151,7 @@ public class ControllerInit implements MessageConstants
 		 * 
 		 * wenn nicht vorhanden oder veraltete Version */
 		String version = "kostval.conf.xml_v2.0.0";
-		File directoryOfConfigfile = new File( System.getenv( "USERPROFILE" ) + File.separator
-				+ ".kost-val_2x" + File.separator + "configuration" );
+		File directoryOfConfigfile = new File( pathToKostValDir + File.separator + "configuration" );
 		File directoryOfConfigfileInit = new File( dirOfJarPath + File.separator + "configuration" );
 		if ( !directoryOfConfigfile.exists() ) {
 			directoryOfConfigfile.mkdirs();
@@ -150,6 +165,11 @@ public class ControllerInit implements MessageConstants
 			if ( !Util.stringInFile( version, configFile ) ) {
 				Util.copyFile( configFileInit, configFile );
 			}
+		}
+		File configFileStandard = new File(
+				directoryOfConfigfile + File.separator + "STANDARD.kostval.conf.xml" );
+		if ( !configFileStandard.exists() ) {
+			Util.copyFile( configFileInit, configFileStandard );
 		}
 		File xslDeInit = new File( directoryOfConfigfileInit + File.separator + "kostval-conf-DE.xsl" );
 		File xslDe = new File( directoryOfConfigfile + File.separator + "kostval-conf-DE.xsl" );

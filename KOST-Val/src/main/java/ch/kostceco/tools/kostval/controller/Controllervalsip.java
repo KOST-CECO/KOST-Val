@@ -26,8 +26,11 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -91,13 +94,7 @@ public class Controllervalsip implements MessageConstants
 		}
 
 		// Informationen holen, welche Formate validiert werden sollen
-		String pdfaValidationPdftools = configMap.get( "pdftools" );
-		String pdfaValidationCallas = configMap.get( "callas" );
-		String pdfaValidation = "no";
-		if ( pdfaValidationPdftools.equalsIgnoreCase( "yes" )
-				|| pdfaValidationCallas.equalsIgnoreCase( "yes" ) ) {
-			pdfaValidation = "yes";
-		}
+		String pdfaValidation = configMap.get( "pdfavalidation" );
 		String siardValidation = configMap.get( "siardValidation" );
 		String tiffValidation = configMap.get( "tiffValidation" );
 		String jp2Validation = configMap.get( "jp2Validation" );
@@ -398,13 +395,7 @@ public class Controllervalsip implements MessageConstants
 
 			for ( Iterator<String> iterator = fileMapKeys.iterator(); iterator.hasNext(); ) {
 				// configmap neu auslesen im bereich pdf, da veraenderungen moeglich sind
-				pdfaValidationPdftools = configMap.get( "pdftools" );
-				pdfaValidationCallas = configMap.get( "callas" );
-				pdfaValidation = "no";
-				if ( pdfaValidationPdftools.equalsIgnoreCase( "yes" )
-						|| pdfaValidationCallas.equalsIgnoreCase( "yes" ) ) {
-					pdfaValidation = "yes";
-				}
+				pdfaValidation = configMap.get( "pdfavalidation" );
 				String entryName = iterator.next();
 				File newFile = fileMap.get( entryName );
 
@@ -743,20 +734,24 @@ public class Controllervalsip implements MessageConstants
 			}
 
 			File pathTemp = new File( directoryOfLogfile, "path.tmp" );
+			/* falls das File bereits existiert, z.B. von einem vorhergehenden Durchlauf, loeschen wir
+			 * es */
 			if ( pathTemp.exists() ) {
 				pathTemp.delete();
 			}
 			if ( pathTemp.exists() ) {
-				pathTemp.deleteOnExit();
+				// hat nicht funktioniert -> Inhalt leeren
+				List<String> oldtextList = Files.readAllLines( pathTemp.toPath(), StandardCharsets.UTF_8 );
+				for ( int i = 0; i < oldtextList.size(); i++ ) {
+					String oldtext = (oldtextList.get( i ));
+					Util.oldnewstring( oldtext, "", pathTemp );
+				}
 			}
 
 			File callasNo = new File( directoryOfLogfile + File.separator + "_callas_NO.txt" );
 			if ( callasNo.exists() ) {
 				callasNo.delete();
 			}
-
-			System.out.print( "                                                                    " );
-			System.out.print( "\r" );
 
 			System.out.println( getTextResourceService().getText( locale, MESSAGE_SIPVALIDATION_DONE,
 					logFile.getAbsolutePath() ) );

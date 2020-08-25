@@ -63,7 +63,8 @@ public class CmdKOSTVal implements MessageConstants
 	 * 2 (--de) und 3 (--xml) sind beide optional (Standardwert)
 	 * 
 	 * @param args
-	 * @throws IOException */
+	 * @throws IOException
+	 */
 
 	public static void main( String[] args ) throws IOException
 	{
@@ -148,7 +149,8 @@ public class CmdKOSTVal implements MessageConstants
 							.getAbsolutePath();
 			String locationOfJarPath = path;
 			String dirOfJarPath = locationOfJarPath;
-			if ( locationOfJarPath.endsWith( ".jar" ) || locationOfJarPath.endsWith( ".exe" ) ) {
+			if ( locationOfJarPath.endsWith( ".jar" ) || locationOfJarPath.endsWith( ".exe" )
+					|| locationOfJarPath.endsWith( "." ) ) {
 				File file = new File( locationOfJarPath );
 				dirOfJarPath = file.getParent();
 			}

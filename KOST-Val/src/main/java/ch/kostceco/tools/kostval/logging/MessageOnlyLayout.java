@@ -28,7 +28,7 @@ import org.apache.log4j.spi.LoggingEvent;
 public class MessageOnlyLayout extends SimpleLayout
 {
 
-	StringBuffer	sbuf	= new StringBuffer( 128 );
+	StringBuffer sbuf = new StringBuffer( 128 );
 
 	@Override
 	public String format( LoggingEvent event )
