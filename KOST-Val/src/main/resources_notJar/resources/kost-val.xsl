@@ -22,7 +22,7 @@
 					tr.captionm {background-color: #f8dfdf }
 					tr.captionio {background-color: #afeeaf; font-weight:bold }
 					tr.captioniom {background-color: #ccffcc }
-					tr.captioninfo {background-color: #b2b2c5 }
+					tr.captioninfo {background-color: #b2b2c5; font-weight:bold }
 					tr.captioninfom {background-color: #e7e7ed }
 				</style>
 			</head>
@@ -35,6 +35,23 @@
 					<span class="logol">.</span>
 					<span class="logox"> - </span>
 				</p>
+				<xsl:for-each select="KOSTValLog/Init">
+					<div>
+						<table width="100%">
+							<tr class="captioninfo">
+								<td>
+									<xsl:value-of select="Warning" />
+								</td>
+							</tr>
+							<tr class="captioninfom">
+								<td>
+									<xsl:value-of select="Message" />
+								</td>
+							</tr>
+						</table>
+					</div>
+					<br />
+				</xsl:for-each>
 				<xsl:for-each select="KOSTValLog/IoExeption">
 					<h1>Error:</h1>
 					<div>

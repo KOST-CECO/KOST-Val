@@ -74,14 +74,42 @@ public class ConfigurationServiceImpl implements ConfigurationService
 
 			Map<String, String> configMap = new HashMap<String, String>();
 
-			// Gibt den Pfad des Arbeitsverzeichnisses zurueck. = USERPROFILE/.kost-val_2x/temp_KOST-Val
-			String pathtoworkdir = System.getenv( "USERPROFILE" ) + File.separator + ".kost-val_2x"
-					+ File.separator + "temp_KOST-Val";
-			File dir = new File( pathtoworkdir );
-			if ( !dir.exists() ) {
-				dir.mkdirs();
+			// Gibt den Pfad des Arbeitsverzeichnisses zurueck. wenn leer
+			// USERPROFILE/.kost-val_2x/temp_KOST-Val
+			Boolean work = false;
+			String pathtoworkdir = doc.getElementsByTagName( "pathtoworkdir" ).item( 0 ).getTextContent();
+			if ( !pathtoworkdir.isEmpty() ) {
+				File dir = new File( pathtoworkdir );
+				if ( dir.exists() ) {
+					if ( dir.canWrite() ) {
+						work = true;
+					}
+				}
+			}
+			if ( !work ) {
+				pathtoworkdir = System.getenv( "USERPROFILE" ) + File.separator + ".kost-val_2x"
+						+ File.separator + "temp_KOST-Val";
+				File dir = new File( pathtoworkdir );
+				if ( !dir.exists() ) {
+					dir.mkdirs();
+				}
 			}
 			configMap.put( "PathToWorkDir", pathtoworkdir );
+
+			// Gibt den Pfad des Standardinputs zurueck. wenn leer bleibt leer = "Dieser PC"
+			Boolean input = false;
+			String standardinputdir = doc.getElementsByTagName( "standardinputdir" ).item( 0 )
+					.getTextContent();
+			if ( !standardinputdir.isEmpty() ) {
+				File dir = new File( standardinputdir );
+				if ( dir.exists() ) {
+					input = true;
+				}
+			}
+			if ( !input ) {
+				standardinputdir = "";
+			}
+			configMap.put( "StandardInputDir", standardinputdir );
 
 			// Gibt den Pfad des Logverzeichnisses zurueck. = USERPROFILE/.kost-val_2x/logs
 			String logs = System.getenv( "USERPROFILE" ) + File.separator + ".kost-val_2x"

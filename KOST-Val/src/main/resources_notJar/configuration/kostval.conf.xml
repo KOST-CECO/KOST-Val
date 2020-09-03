@@ -77,6 +77,8 @@
 		<allowedformats>TXT PDFA1 PDFA2 TIFF JP2 JPEG WAVE MP3 MP4 MJ2 MPEG2 CSV SIARD WARC</allowedformats>
 		<!-- <allowedformats>SVG MPEG2 PRORES XML XSD XLS ARC HTML</allowedformats> -->
 	</sip>
+	<pathtoworkdir></pathtoworkdir><!--wenn leer wird "USERPROFILE/.kost-val_2x/temp_KOST-Val" verwendet -->
+	<standardinputdir></standardinputdir><!--wenn leer wird "Dieser PC" verwendet -->
 	<ignoreerror>
 		<!-- Zu ignorierende Fehlermeldungen. Aktuell nur details von pdftools unterstuetzt -->
 		<ignore>The document does not conform to the requested standard. [PDF Tools: 0x83410612]

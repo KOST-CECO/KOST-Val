@@ -31,6 +31,7 @@ public interface MessageConstants
 	String	ERROR_LOGDIRECTORY_NODIRECTORY								= "error.logdirectory.nodirectory";
 	String	ERROR_LOGDIRECTORY_NOTWRITABLE								= "error.logdirectory.notwritable";
 	String	WARNING_JARDIRECTORY_NOTWRITABLE							= "warning.jardirectory.notwritable";
+	String	WARNING_JARDIRECTORY_NOTWRITABLEXML						= "warning.jardirectory.notwritablexml";
 	String	ERROR_WORKDIRECTORY_NOTDELETABLE							= "error.workdirectory.notdeletable";
 	String	ERROR_WORKDIRECTORY_NOTWRITABLE								= "error.workdirectory.notwritable";
 	String	ERROR_WORKDIRECTORY_EXISTS										= "error.workdirectory.exists";

@@ -23,11 +23,11 @@
 
 	<children>
 		<BorderPane maxHeight="1.7976931348623157E308"
-			maxWidth="980.0" minHeight="500.0" minWidth="980.0"
-			prefHeight="700.0" prefWidth="980.0">
+			maxWidth="980.0" minHeight="700.0" minWidth="980.0"
+			prefHeight="800.0" prefWidth="980.0">
 			<top>
-				<GridPane maxHeight="445.0" minHeight="445.0"
-					prefHeight="445.0" BorderPane.alignment="CENTER">
+				<GridPane maxHeight="515.0" minHeight="515.0"
+					prefHeight="515.0" BorderPane.alignment="CENTER">
 					<columnConstraints>
 						<ColumnConstraints hgrow="SOMETIMES"
 							prefWidth="120.0" />
@@ -85,6 +85,14 @@
 							vgrow="SOMETIMES" />
 						<RowConstraints minHeight="10.0" prefHeight="30.0"
 							vgrow="SOMETIMES" />
+						<RowConstraints maxHeight="5.0" minHeight="5.0"
+							prefHeight="5.0" vgrow="SOMETIMES" />
+						<RowConstraints minHeight="10.0" prefHeight="30.0"
+							vgrow="SOMETIMES" />
+						<RowConstraints maxHeight="5.0" minHeight="5.0"
+							prefHeight="5.0" vgrow="SOMETIMES" />
+						<RowConstraints minHeight="10.0" prefHeight="30.0"
+							vgrow="SOMETIMES" />
 					</rowConstraints>
 					<children>
 						<CheckBox fx:id="checkPdfa" mnemonicParsing="false"
@@ -136,8 +144,8 @@
 							onAction="#changeFontTol" selected="true" text="Tolerant"
 							GridPane.columnIndex="5" GridPane.rowIndex="7" />
 
-						<Line endX="960.0" stroke="LIGHTGRAY" GridPane.columnSpan="8"
-							GridPane.rowIndex="5" />
+						<Line endX="960.0" stroke="WHITESMOKE"
+							GridPane.columnSpan="8" GridPane.rowIndex="5" />
 
 						<CheckBox fx:id="checkSiard" mnemonicParsing="false"
 							onAction="#changeConfigSiard" selected="true" text="SIARD"
@@ -153,8 +161,8 @@
 						<CheckBox fx:id="checkSiard21" mnemonicParsing="false"
 							onAction="#changeSiard21" selected="true" text="SIARD-2.1"
 							GridPane.columnIndex="3" GridPane.rowIndex="4" />
-						<Line endX="715.0" stroke="LIGHTGRAY" GridPane.columnSpan="8"
-							GridPane.rowIndex="1">
+						<Line endX="715.0" stroke="WHITESMOKE"
+							GridPane.columnSpan="8" GridPane.rowIndex="1">
 							<GridPane.margin>
 								<Insets />
 							</GridPane.margin>
@@ -167,8 +175,8 @@
 								<Font name="System Bold" size="12.0" />
 							</font>
 						</CheckBox>
-						<Line endX="715.0" stroke="LIGHTGRAY" GridPane.columnSpan="8"
-							GridPane.rowIndex="3">
+						<Line endX="715.0" stroke="WHITESMOKE"
+							GridPane.columnSpan="8" GridPane.rowIndex="3">
 							<GridPane.margin>
 								<Insets />
 							</GridPane.margin>
@@ -181,8 +189,8 @@
 							</font>
 						</CheckBox>
 
-						<Line endX="960.0" stroke="LIGHTGRAY" GridPane.columnSpan="8"
-							GridPane.rowIndex="9" />
+						<Line endX="960.0" stroke="WHITESMOKE"
+							GridPane.columnSpan="8" GridPane.rowIndex="9" />
 
 						<CheckBox fx:id="checkTiff" mnemonicParsing="false"
 							onAction="#changeConfigTiff" selected="true" text="TIFF"
@@ -271,8 +279,8 @@
 						<CheckBox fx:id="checkBps32" mnemonicParsing="false"
 							onAction="#changeBps32" selected="true" text="Bps 32"
 							GridPane.columnIndex="6" GridPane.rowIndex="13" />
-						<Line endX="960.0" stroke="LIGHTGRAY" GridPane.columnSpan="8"
-							GridPane.rowIndex="15" />
+						<Line endX="960.0" stroke="WHITESMOKE"
+							GridPane.columnSpan="8" GridPane.rowIndex="15" />
 
 						<CheckBox fx:id="checkMultipage" mnemonicParsing="false"
 							onAction="#changeMultipage" selected="true" text="Multipage"
@@ -283,8 +291,8 @@
 						<CheckBox fx:id="checkSize" mnemonicParsing="false"
 							onAction="#changeSize" selected="true" text="Size"
 							GridPane.columnIndex="7" GridPane.rowIndex="13" />
-						<Line endX="960.0" stroke="LIGHTGRAY" GridPane.columnSpan="8"
-							GridPane.rowIndex="15" />
+						<Line endX="960.0" stroke="WHITESMOKE"
+							GridPane.columnSpan="8" GridPane.rowIndex="19" />
 						<CheckBox fx:id="checkSip0160" mnemonicParsing="false"
 							onAction="#changeSip0160" selected="true" text="eCH-0160"
 							GridPane.rowIndex="16">
@@ -296,12 +304,12 @@
 							GridPane.columnIndex="1" GridPane.rowIndex="16" />
 						<TextField fx:id="textLength" maxWidth="50.0"
 							minWidth="50.0" onAction="#changeLength" prefWidth="50.0"
-							style="-fx-background-color: lightgray;" text=""
+							style="-fx-background-color: WHITESMOKE;" text=""
 							GridPane.columnIndex="2" GridPane.rowIndex="16" />
 						<Label fx:id="labelName" text="SIP Name"
 							GridPane.columnIndex="1" GridPane.rowIndex="17" />
 						<TextField fx:id="textName" onAction="#changeName"
-							style="-fx-background-color: lightgray;" text=""
+							style="-fx-background-color: WHITESMOKE;" text=""
 							GridPane.columnIndex="2" GridPane.columnSpan="6"
 							GridPane.rowIndex="17">
 							<opaqueInsets>
@@ -314,7 +322,7 @@
 						<Label fx:id="labelPuid" text="PUID"
 							GridPane.columnIndex="1" GridPane.rowIndex="18" />
 						<TextField fx:id="textPuid" onAction="#changePuid"
-							style="-fx-background-color: lightgray;" text=""
+							style="-fx-background-color: WHITESMOKE;" text=""
 							GridPane.columnIndex="2" GridPane.columnSpan="6"
 							GridPane.rowIndex="18">
 							<GridPane.margin>
@@ -349,6 +357,24 @@
 							prefWidth="240.0" style="-fx-border-color: LimeGreen;"
 							text="Standard anwenden" GridPane.columnIndex="6"
 							GridPane.columnSpan="2" GridPane.rowIndex="2" />
+						<Line endX="960.0" stroke="WHITESMOKE"
+							GridPane.columnSpan="8" GridPane.rowIndex="21" />
+						<Button fx:id="buttonWork" alignment="TOP_LEFT"
+							maxHeight="26.0" minHeight="26.0" mnemonicParsing="false"
+							onAction="#chooseWork" prefHeight="26.0" prefWidth="115.0"
+							style="-fx-border-color: WhiteSmoke; -fx-background-color: WhiteSmoke;"
+							text="Arbeitsverzeichnis" GridPane.rowIndex="20" />
+						<Button fx:id="buttonInput" alignment="TOP_LEFT"
+							maxHeight="26.0" minHeight="26.0" mnemonicParsing="false"
+							onAction="#chooseInput" prefHeight="26.0" prefWidth="115.0"
+							style="-fx-border-color: WhiteSmoke; -fx-background-color: WhiteSmoke;"
+							text="Inputverzeichnis" GridPane.rowIndex="22" />
+						<Label fx:id="labelWork" layoutX="131.0" layoutY="372.0"
+							text="(work)" GridPane.columnIndex="1" GridPane.columnSpan="7"
+							GridPane.rowIndex="20" />
+						<Label fx:id="labelInput" layoutX="131.0" layoutY="467.0"
+							text="(input)" GridPane.columnIndex="1" GridPane.columnSpan="7"
+							GridPane.rowIndex="22" />
 
 					</children>
 					<BorderPane.margin>
@@ -358,8 +384,8 @@
 			</top>
 			<bottom>
 				<Label fx:id="labelConfig" maxHeight="20.0" minHeight="20.0"
-					prefHeight="20.0" text="Copyright © KOST/CECO" textFill="LightGray"
-					BorderPane.alignment="CENTER" />
+					prefHeight="20.0" text="Copyright © KOST/CECO"
+					textFill="WHITESMOKE" BorderPane.alignment="CENTER" />
 			</bottom>
 			<opaqueInsets>
 				<Insets />

@@ -19,17 +19,25 @@
 
 package ch.kostceco.tools.kostval;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.lang.reflect.Field;
 import java.util.Locale;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 import ch.kostceco.tools.kostval.controller.ControllerInit;
 import ch.kostceco.tools.kostval.util.Util;
@@ -125,7 +133,7 @@ public class GuiController
 		String java6432 = System.getProperty( "sun.arch.data.model" );
 		String javaVersion = System.getProperty( "java.version" );
 		String javafxVersion = System.getProperty( "javafx.version" );
-		label.setText( "Copyright © KOST/CECO          KOST-Val v2.0.0.alpha2          JavaFX "
+		label.setText( "Copyright © KOST/CECO          KOST-Val v2.0.0.beta1          JavaFX "
 				+ javafxVersion + "   &   Java-" + java6432 + " " + javaVersion + "." );
 
 		// PrintStream in Konsole umleiten
@@ -180,6 +188,10 @@ public class GuiController
 				buttonFile.setText( "fichier" );
 				buttonHelp.setText( "Aide ?" );
 				buttonLicence.setText( "Informations sur la licence" );
+				buttonChange.setText( "changer" );
+				buttonShowConfig.setText( "afficher" );
+				labelStart.setText( "Lancer" );
+				labelConfig.setText( "Configuration" );
 				buttonSave.setText( "sauvegarder" );
 				buttonPrint.setText( "imprimer" );
 				Util.oldnewstring( "kostval-conf-DE.xsl", "kostval-conf-FR.xsl", configFile );
@@ -195,6 +207,10 @@ public class GuiController
 				buttonFile.setText( "file" );
 				buttonHelp.setText( "Help ?" );
 				buttonLicence.setText( "License information" );
+				buttonChange.setText( "change" );
+				buttonShowConfig.setText( "show" );
+				labelStart.setText( "Start" );
+				labelConfig.setText( "Configuration" );
 				buttonSave.setText( "save" );
 				buttonPrint.setText( "print" );
 				Util.oldnewstring( "kostval-conf-DE.xsl", "kostval-conf-EN.xsl", configFile );
@@ -210,6 +226,10 @@ public class GuiController
 				buttonFile.setText( "Datei" );
 				buttonHelp.setText( "Hilfe ?" );
 				buttonLicence.setText( "Lizenzinformationen" );
+				buttonChange.setText( "anpassen" );
+				buttonShowConfig.setText( "anzeigen" );
+				labelStart.setText( "Starte" );
+				labelConfig.setText( "Konfiguration" );
 				buttonSave.setText( "speichern" );
 				buttonPrint.setText( "drucken" );
 				Util.oldnewstring( "kostval-conf-FR.xsl", "kostval-conf-DE.xsl", configFile );
@@ -696,6 +716,21 @@ public class GuiController
 				dirFileFolder = dirFileFolder.getParentFile();
 			}
 			fileChooser.setInitialDirectory( dirFileFolder );
+		} else if ( !Util.stringInFile( "<standardinputdir></standardinputdir>", configFile ) ) {
+			try {
+				Document doc = null;
+				BufferedInputStream bis;
+				bis = new BufferedInputStream( new FileInputStream( configFile ) );
+				DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+				DocumentBuilder db = dbf.newDocumentBuilder();
+				doc = db.parse( bis );
+				doc.normalize();
+				String standardinputdir = doc.getElementsByTagName( "standardinputdir" ).item( 0 )
+						.getTextContent();
+				fileChooser.setInitialDirectory( new File( standardinputdir ) );
+			} catch ( ParserConfigurationException | SAXException | IOException e1 ) {
+				e1.printStackTrace();
+			}
 		}
 		if ( locale.toString().startsWith( "fr" ) ) {
 			fileChooser.setTitle( "Choisissez le fichier" );
@@ -789,6 +824,21 @@ public class GuiController
 				dirFileFolder = dirFileFolder.getParentFile();
 			}
 			folderChooser.setInitialDirectory( dirFileFolder );
+		} else if ( !Util.stringInFile( "<standardinputdir></standardinputdir>", configFile ) ) {
+			try {
+				Document doc = null;
+				BufferedInputStream bis;
+				bis = new BufferedInputStream( new FileInputStream( configFile ) );
+				DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+				DocumentBuilder db = dbf.newDocumentBuilder();
+				doc = db.parse( bis );
+				doc.normalize();
+				String standardinputdir = doc.getElementsByTagName( "standardinputdir" ).item( 0 )
+						.getTextContent();
+				folderChooser.setInitialDirectory( new File( standardinputdir ) );
+			} catch ( ParserConfigurationException | SAXException | IOException e1 ) {
+				e1.printStackTrace();
+			}
 		}
 		if ( locale.toString().startsWith( "fr" ) ) {
 			folderChooser.setTitle( "Choisissez le dossier" );
@@ -1081,8 +1131,8 @@ public class GuiController
 				buttonFile.setText( "Datei" );
 				buttonHelp.setText( "Hilfe ?" );
 				buttonLicence.setText( "Lizenzinformationen" );
-				buttonChange.setText( "ändere" );
-				buttonShowConfig.setText( "zeige" );
+				buttonChange.setText( "anpassen" );
+				buttonShowConfig.setText( "anzeigen" );
 				labelStart.setText( "Starte" );
 				labelConfig.setText( "Konfiguration" );
 				buttonSave.setText( "speichern" );

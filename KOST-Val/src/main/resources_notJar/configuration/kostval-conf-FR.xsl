@@ -186,6 +186,18 @@
 							<xsl:value-of select="configuration/sip/allowedformats" />
 						</td>
 					</tr>
+					<tr  class="captioninfom">
+						<td>Répertoire de travail []:</td>
+						<td>
+							<xsl:value-of select="configuration/pathtoworkdir" />
+						</td>
+					</tr>
+					<tr  class="captioninfom">
+						<td>Répertoire d'entrée []:</td>
+						<td>
+							<xsl:value-of select="configuration/standardinputdir" />
+						</td>
+					</tr>
 				</table>
 			</body>
 		</html>

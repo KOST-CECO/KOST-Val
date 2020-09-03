@@ -47,6 +47,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
 public class ConfigController
@@ -62,7 +63,8 @@ public class ConfigController
 			checkPi3, checkPi8, checkSip0160;
 
 	@FXML
-	private Button					buttonConfigApply, buttonConfigApplyStandard, buttonConfigCancel;
+	private Button					buttonConfigApply, buttonConfigApplyStandard, buttonConfigCancel,
+			buttonWork, buttonInput;
 
 	private File						configFileBackup		= new File(
 			System.getenv( "USERPROFILE" ) + File.separator + ".kost-val_2x" + File.separator
@@ -76,7 +78,7 @@ public class ConfigController
 			System.getenv( "USERPROFILE" ) + File.separator + ".kost-val_2x" + File.separator
 					+ "configuration" + File.separator + "kostval.conf.xml" );
 
-	private String					dirOfJarPath;
+	private String					dirOfJarPath, inputString, workString, config;
 
 	private Locale					locale							= Locale.getDefault();
 
@@ -85,7 +87,7 @@ public class ConfigController
 
 	@FXML
 	private Label						labelBps, labelComp, labelOther, labelPi, labelLength, labelName,
-			labelPuid;
+			labelPuid, labelWork, labelInput;
 
 	@FXML
 	private WebView					wbv;
@@ -108,7 +110,7 @@ public class ConfigController
 		String java6432 = System.getProperty( "sun.arch.data.model" );
 		String javaVersion = System.getProperty( "java.version" );
 		String javafxVersion = System.getProperty( "javafx.version" );
-		labelConfig.setText( "Copyright © KOST/CECO          KOST-Val v2.0.0.alpha2          JavaFX "
+		labelConfig.setText( "Copyright © KOST/CECO          KOST-Val v2.0.0.beta1          JavaFX "
 				+ javafxVersion + "   &   Java-" + java6432 + " " + javaVersion + "." );
 
 		// Original Config Kopieren
@@ -185,7 +187,7 @@ public class ConfigController
 		try {
 			byte[] encoded;
 			encoded = Files.readAllBytes( Paths.get( configFile.getAbsolutePath() ) );
-			String config = new String( encoded, StandardCharsets.UTF_8 );
+			config = new String( encoded, StandardCharsets.UTF_8 );
 			String noPdfa = "<pdfavalidation>no</pdfavalidation>";
 			String noPdftools = "<pdftools>no</pdftools>";
 			String noDetail = "<detail>no</detail>";
@@ -440,6 +442,10 @@ public class ConfigController
 			String allowedsipname = doc.getElementsByTagName( "allowedsipname" ).item( 0 )
 					.getTextContent();
 			textName.setText( allowedsipname );
+			workString = doc.getElementsByTagName( "pathtoworkdir" ).item( 0 ).getTextContent();
+			labelWork.setText( workString );
+			inputString = doc.getElementsByTagName( "standardinputdir" ).item( 0 ).getTextContent();
+			labelInput.setText( inputString );
 
 		} catch ( IOException | SAXException | ParserConfigurationException e1 ) {
 			e1.printStackTrace();
@@ -595,6 +601,84 @@ public class ConfigController
 			e1.printStackTrace();
 		}
 		engine.load( "file:///" + configFile.getAbsolutePath() );
+	}
+
+	/* Wenn chooseWork betaetigt wird, kann ein Ordner ausgewaehlt werden */
+	@FXML
+	void chooseWork( ActionEvent e )
+	{
+		try {
+			Document doc = null;
+			BufferedInputStream bis = new BufferedInputStream( new FileInputStream( configFile ) );
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+			DocumentBuilder db = dbf.newDocumentBuilder();
+			doc = db.parse( bis );
+			doc.normalize();
+			String workInit = "";
+			if ( !config.contains( "<pathtoworkdir></pathtoworkdir>" ) ) {
+				workInit = doc.getElementsByTagName( "pathtoworkdir" ).item( 0 ).getTextContent();
+			}
+			bis.close();
+			doc = null;
+			String pathtoworkdir = "<pathtoworkdir>" + workInit + "</pathtoworkdir>";
+			DirectoryChooser folderChooser = new DirectoryChooser();
+			if ( locale.toString().startsWith( "fr" ) ) {
+				folderChooser.setTitle( "Choisissez le dossier" );
+			} else if ( locale.toString().startsWith( "en" ) ) {
+				folderChooser.setTitle( "Choose the folder" );
+			} else {
+				folderChooser.setTitle( "Wählen Sie den Ordner" );
+			}
+			File workFolder = folderChooser.showDialog( new Stage() );
+			if ( workFolder != null ) {
+				labelWork.setText( workFolder.getAbsolutePath() );
+				String pathtoworkdirNew = "<pathtoworkdir>" + workFolder.getAbsolutePath()
+						+ "</pathtoworkdir>";
+				Util.oldnewstring( pathtoworkdir, pathtoworkdirNew, configFile );
+			}
+			engine.load( "file:///" + configFile.getAbsolutePath() );
+		} catch ( IOException | ParserConfigurationException | SAXException e1 ) {
+			e1.printStackTrace();
+		}
+	}
+
+	/* Wenn chooseInput betaetigt wird, kann ein Ordner ausgewaehlt werden */
+	@FXML
+	void chooseInput( ActionEvent e )
+	{
+		try {
+			Document doc = null;
+			BufferedInputStream bis = new BufferedInputStream( new FileInputStream( configFile ) );
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+			DocumentBuilder db = dbf.newDocumentBuilder();
+			doc = db.parse( bis );
+			doc.normalize();
+			String inputInit = "";
+			if ( !config.contains( "<standardinputdir></standardinputdir>" ) ) {
+				inputInit = doc.getElementsByTagName( "standardinputdir" ).item( 0 ).getTextContent();
+			}
+			bis.close();
+			doc = null;
+			String standardinputdir = "<standardinputdir>" + inputInit + "</standardinputdir>";
+			DirectoryChooser folderChooser = new DirectoryChooser();
+			if ( locale.toString().startsWith( "fr" ) ) {
+				folderChooser.setTitle( "Choisissez le dossier" );
+			} else if ( locale.toString().startsWith( "en" ) ) {
+				folderChooser.setTitle( "Choose the folder" );
+			} else {
+				folderChooser.setTitle( "Wählen Sie den Ordner" );
+			}
+			File inputFolder = folderChooser.showDialog( new Stage() );
+			if ( inputFolder != null ) {
+				labelInput.setText( inputFolder.getAbsolutePath() );
+				String standardinputdirNew = "<standardinputdir>" + inputFolder.getAbsolutePath()
+						+ "</standardinputdir>";
+				Util.oldnewstring( standardinputdir, standardinputdirNew, configFile );
+			}
+			engine.load( "file:///" + configFile.getAbsolutePath() );
+		} catch ( IOException | ParserConfigurationException | SAXException e1 ) {
+			e1.printStackTrace();
+		}
 	}
 
 	/* TODO --> CheckBox ================= */

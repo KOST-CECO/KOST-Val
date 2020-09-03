@@ -1,24 +1,24 @@
 /* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
 .root {
-	-fx-background-color: gray ;
+	-fx-background-color: Silver ;
 }
 .text-area .content {
- -fx-background-color: gray ;
+ -fx-background-color: Silver ;
 }
 .text-area   {
-    -fx-text-fill: LightGray;
+    -fx-text-fill: WhiteSmoke;
 }
 .check-box .box{
-	-fx-background-color: gray ;
-	-fx-border-color: LightGray ;
+	-fx-background-color: WhiteSmoke ;
+	-fx-border-color: WhiteSmoke ;
 	-fx-border-radius: 5;
 }
 .check-box:selected .mark {
 -fx-background-color: LimeGreen;
 }
 .choice-box{
-	-fx-background-color: gray ;
-	-fx-border-color: LightGray ;
+	-fx-background-color: Silver ;
+	-fx-border-color: WhiteSmoke ;
 	-fx-border-radius: 5;
 }
 .choice-box .menu-item:focused {
@@ -26,25 +26,25 @@
 }
 .choice-box .context-menu {
 	-fx-mark-color: LimeGreen ;
-    -fx-background-color: LightGray ;
+    -fx-background-color: WhiteSmoke ;
 }
 #wbv {
-	-fx-background-color: LightGray ;
+	-fx-background-color: WhiteSmoke ;
 }
 .button {
-	-fx-background-color: gray ;
-	-fx-border-color: LightGray ;
+	-fx-background-color: Silver ;
+	-fx-border-color: WhiteSmoke ;
 	-fx-border-radius: 5;
 }
 #fileFolder{
-	-fx-control-inner-background: LightGray ;
-	-fx-border-color: LightGray ;
+	-fx-control-inner-background: WhiteSmoke ;
+	-fx-border-color: WhiteSmoke ;
 	-fx-border-radius: 5;
 }
 
 .scroll-bar:horizontal .track,
 .scroll-bar:vertical .track{
-    -fx-background-color :LightGray;
+    -fx-background-color :WhiteSmoke;
     -fx-border-color :transparent;
     -fx-background-radius : 0.0em;
     -fx-border-radius :2.0em;
@@ -73,24 +73,26 @@
 }
 .scroll-bar:horizontal .thumb,
 .scroll-bar:vertical .thumb {
-    -fx-background-color :gray;
+    -fx-background-color : Silver ;
     -fx-background-insets : 2.0, 0.0, 0.0;
     -fx-background-radius : 2.0em;
 }
 
 .scroll-bar:horizontal .thumb:hover,
 .scroll-bar:vertical .thumb:hover {
-    -fx-background-color :Gray;
+    -fx-background-color : Silver ;
     -fx-background-insets : 2.0, 0.0, 0.0;
     -fx-background-radius : 2.0em;
 }
 .scroll-pane > .corner {    
-    -fx-background-color: LightGray ;
-    -fx-border-color :LightGray;
+    -fx-background-color: WhiteSmoke ;
+    -fx-border-color :WhiteSmoke;
 }
 /*  .scroll-pane > .viewport {
    -fx-background-color: transparent;
-}
-.scroll-pane {
-   -fx-background-color: gray;
 }*/
+.scroll-pane {
+	-fx-background-color: WhiteSmoke ;
+	-fx-border-color: WhiteSmoke ;
+	-fx-border-radius: 5;
+}

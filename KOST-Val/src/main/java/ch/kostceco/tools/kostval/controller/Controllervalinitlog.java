@@ -269,75 +269,101 @@ public class Controllervalinitlog implements MessageConstants
 		}
 		String length64 = PdfValidatorAPIDll64.length() + "";
 		// System.out.println( PdfValidatorAPIDll64.getAbsolutePath() + " " + length64 );
-		if ( java64 == "32" ) {
+		if ( java64.contains( "32" ) ) {
 			if ( !lengthNow.equals( length32 ) ) {
 				if ( !PdfValidatorAPIDll.getParentFile().canWrite() ) {
 					// kein Schreibrecht
 					// Installationsverzeichnis {0}; bestehende {3}-dll "{1}"; neu {4}-dll "{2}"
+					String warning32xml = getTextResourceService().getText( locale,
+							WARNING_JARDIRECTORY_NOTWRITABLEXML, PdfValidatorAPIDll.getParentFile(),
+							PdfValidatorAPIDll.getAbsolutePath(), PdfValidatorAPIDll32.getAbsolutePath(), "64",
+							java64 );
+					LOGGER.logError( warning32xml );
 					String warning32 = getTextResourceService().getText( locale,
 							WARNING_JARDIRECTORY_NOTWRITABLE, PdfValidatorAPIDll.getParentFile(),
 							PdfValidatorAPIDll.getAbsolutePath(), PdfValidatorAPIDll32.getAbsolutePath(), "64",
 							java64 );
-					LOGGER.logError( warning32 );
 					System.out.println( warning32 );
 					configMap.put( "pdftools", "no" );
 				} else {
 					Util.deleteFile( PdfValidatorAPIDll );
 					if ( PdfValidatorAPIDll.exists() ) {
 						// dll konnte nicht ersetzt werden
+						String warning32xml = getTextResourceService().getText( locale,
+								WARNING_JARDIRECTORY_NOTWRITABLEXML, PdfValidatorAPIDll.getParentFile(),
+								PdfValidatorAPIDll.getAbsolutePath(), PdfValidatorAPIDll32.getAbsolutePath(), "64",
+								java64 );
+						LOGGER.logError( warning32xml );
 						String warning32 = getTextResourceService().getText( locale,
 								WARNING_JARDIRECTORY_NOTWRITABLE, PdfValidatorAPIDll.getParentFile(),
 								PdfValidatorAPIDll.getAbsolutePath(), PdfValidatorAPIDll32.getAbsolutePath(), "64",
 								java64 );
-						LOGGER.logError( warning32 );
 						System.out.println( warning32 );
+						configMap.put( "pdftools", "no" );
 					} else {
 						Util.copyFile( PdfValidatorAPIDll32, PdfValidatorAPIDll );
 						lengthNow = PdfValidatorAPIDll.length() + "";
 						if ( !lengthNow.equals( length32 ) ) {
 							// dll konnte nicht ersetzt werden
+							String warning32xml = getTextResourceService().getText( locale,
+									WARNING_JARDIRECTORY_NOTWRITABLEXML, PdfValidatorAPIDll.getParentFile(),
+									PdfValidatorAPIDll.getAbsolutePath(), PdfValidatorAPIDll32.getAbsolutePath(),
+									"64", java64 );
+							LOGGER.logError( warning32xml );
 							String warning32 = getTextResourceService().getText( locale,
 									WARNING_JARDIRECTORY_NOTWRITABLE, PdfValidatorAPIDll.getParentFile(),
 									PdfValidatorAPIDll.getAbsolutePath(), PdfValidatorAPIDll32.getAbsolutePath(),
 									"64", java64 );
-							LOGGER.logError( warning32 );
 							System.out.println( warning32 );
 							configMap.put( "pdftools", "no" );
 						}
 					}
 				}
 			}
-		} else if ( java64 == "64" ) {
+		} else if ( java64.contains( "64" ) ) {
 			if ( !lengthNow.equals( length64 ) ) {
 				if ( !PdfValidatorAPIDll.getParentFile().canWrite() ) {
 					// kein Schreibrecht
+					String warning64xml = getTextResourceService().getText( locale,
+							WARNING_JARDIRECTORY_NOTWRITABLEXML, PdfValidatorAPIDll.getParentFile(),
+							PdfValidatorAPIDll.getAbsolutePath(), PdfValidatorAPIDll64.getAbsolutePath(), "32",
+							java64 );
+					LOGGER.logError( warning64xml );
 					String warning64 = getTextResourceService().getText( locale,
 							WARNING_JARDIRECTORY_NOTWRITABLE, PdfValidatorAPIDll.getParentFile(),
 							PdfValidatorAPIDll.getAbsolutePath(), PdfValidatorAPIDll64.getAbsolutePath(), "32",
 							java64 );
-					LOGGER.logError( warning64 );
 					System.out.println( warning64 );
 					configMap.put( "pdftools", "no" );
 				} else {
 					Util.deleteFile( PdfValidatorAPIDll );
 					if ( PdfValidatorAPIDll.exists() ) {
 						// dll konnte nicht ersetzt werden
+						String warning64xml = getTextResourceService().getText( locale,
+								WARNING_JARDIRECTORY_NOTWRITABLEXML, PdfValidatorAPIDll.getParentFile(),
+								PdfValidatorAPIDll.getAbsolutePath(), PdfValidatorAPIDll64.getAbsolutePath(), "32",
+								java64 );
+						LOGGER.logError( warning64xml );
 						String warning64 = getTextResourceService().getText( locale,
 								WARNING_JARDIRECTORY_NOTWRITABLE, PdfValidatorAPIDll.getParentFile(),
 								PdfValidatorAPIDll.getAbsolutePath(), PdfValidatorAPIDll64.getAbsolutePath(), "32",
 								java64 );
-						LOGGER.logError( warning64 );
 						System.out.println( warning64 );
+						configMap.put( "pdftools", "no" );
 					} else {
 						Util.copyFile( PdfValidatorAPIDll64, PdfValidatorAPIDll );
 						lengthNow = PdfValidatorAPIDll.length() + "";
 						if ( !lengthNow.equals( length32 ) ) {
 							// dll konnte nicht ersetzt werden
+							String warning64xml = getTextResourceService().getText( locale,
+									WARNING_JARDIRECTORY_NOTWRITABLEXML, PdfValidatorAPIDll.getParentFile(),
+									PdfValidatorAPIDll.getAbsolutePath(), PdfValidatorAPIDll64.getAbsolutePath(),
+									"32", java64 );
+							LOGGER.logError( warning64xml );
 							String warning64 = getTextResourceService().getText( locale,
 									WARNING_JARDIRECTORY_NOTWRITABLE, PdfValidatorAPIDll.getParentFile(),
 									PdfValidatorAPIDll.getAbsolutePath(), PdfValidatorAPIDll64.getAbsolutePath(),
 									"32", java64 );
-							LOGGER.logError( warning64 );
 							System.out.println( warning64 );
 							configMap.put( "pdftools", "no" );
 						}
