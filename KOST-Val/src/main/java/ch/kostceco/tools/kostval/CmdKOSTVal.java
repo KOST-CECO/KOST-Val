@@ -96,6 +96,8 @@ public class CmdKOSTVal implements MessageConstants
 		String arg2 = "";
 		String arg3 = "";
 
+		String versionKostVal = "2.0.0.beta3";
+
 		// Standardwerte bei fehlenden Parameter eingeben
 		if ( args.length == 2 ) {
 			arg2 = "--" + localeSt;
@@ -154,7 +156,7 @@ public class CmdKOSTVal implements MessageConstants
 				File file = new File( locationOfJarPath );
 				dirOfJarPath = file.getParent();
 			}
-			init = controllerInit.init( locale, dirOfJarPath );
+			init = controllerInit.init( locale, dirOfJarPath, versionKostVal );
 			if ( !init ) {
 				// Fehler: es wird abgebrochen
 				String text = "Ein Fehler ist aufgetreten. Siehe Konsole.";
@@ -172,7 +174,7 @@ public class CmdKOSTVal implements MessageConstants
 		}
 
 		// System.out.println( "args: " + args[0] + " " + args[1] + " " + args[2] + " " + args[3] );
-		if ( KOSTVal.main( args ) ) {
+		if ( KOSTVal.main( args, versionKostVal ) ) {
 			// Valid
 			// alle Validierten Dateien valide
 			context.close();

@@ -50,7 +50,7 @@
 			</fileset>
 		</copy>
 		<copy includeemptydirs="false" todir="target/classes">
-			<fileset dir="src/main/resources">
+			<fileset dir="src/main/KOST-Val_resources">
 				<exclude name="**/*.launch" />
 				<exclude name="**/*.java" />
 			</fileset>
@@ -71,12 +71,12 @@
 		</javac>
 		<javac includeantruntime="false" debug="true" debuglevel="${debuglevel}" destdir="target/classes"
 			source="${source}" target="${target}">
-			<src path="src/main/resources" />
+			<src path="src/main/KOST-Val_resources" />
 			<classpath refid="KOST-Val.classpath" />
 		</javac>
 		<javac includeantruntime="false" debug="true" debuglevel="${debuglevel}" destdir="target/classes"
 			source="${source}" target="${target}">
-			<src path="src/main/resources_notJar" />
+			<src path="src/main/KOST-Val_resources_notJar" />
 			<classpath refid="KOST-Val.classpath" />
 		</javac>
 		<javac includeantruntime="false" debug="true" debuglevel="${debuglevel}" destdir="target/classes"

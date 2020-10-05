@@ -56,7 +56,8 @@ public class Controllervalinitlog implements MessageConstants
 
 	// TODO
 	public boolean valInitlog( String[] args, Map<String, String> configMap, File directoryOfLogfile,
-			Locale locale, String ausgabeStart, File logFile, String dirOfJarPath ) throws IOException
+			Locale locale, String ausgabeStart, File logFile, String dirOfJarPath, String versionKostVal )
+			throws IOException
 	{
 		boolean valInitlog = true;
 		// ggf alte SIP-Validierung-Versions-Notiz loeschen
@@ -128,7 +129,7 @@ public class Controllervalinitlog implements MessageConstants
 		LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_END ) );
 		LOGGER.logError(
 				getTextResourceService().getText( locale, MESSAGE_XML_FORMATON, formatValOn, version ) );
-		LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_INFO ) );
+		LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_INFO, versionKostVal ) );
 		String config = "";
 		for ( String key : configMap.keySet() ) {
 			config = config + key + " " + configMap.get( key ) + "; ";

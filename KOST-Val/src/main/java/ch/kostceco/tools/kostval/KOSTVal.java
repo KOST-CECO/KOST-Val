@@ -99,7 +99,7 @@ public class KOSTVal implements MessageConstants
 	 */
 
 	// @SuppressWarnings("resource")
-	public static boolean main( String[] args ) throws IOException
+	public static boolean main( String[] args, String versionKostVal ) throws IOException
 	{
 		boolean mainBoolean = true;
 		// System.out.println( new Timestamp( System.currentTimeMillis() ) + " 107 Start " );
@@ -218,7 +218,7 @@ public class KOSTVal implements MessageConstants
 		Controllervalinitlog controller0log = (Controllervalinitlog) context
 				.getBean( "controllervalinitlog" );
 		boolean valInitlog = controller0log.valInitlog( args, configMap, directoryOfLogfile, locale,
-				ausgabeStart, logFile, dirOfJarPath );
+				ausgabeStart, logFile, dirOfJarPath, versionKostVal );
 		if ( valInitlog ) {
 			// ggf alte SIP-Validierung-Versions-Notiz loeschen
 			// ermitteln welche Formate validiert werden koennen respektive eingeschaltet sind

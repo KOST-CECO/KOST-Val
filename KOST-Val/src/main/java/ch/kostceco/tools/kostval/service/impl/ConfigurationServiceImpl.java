@@ -80,10 +80,14 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String pathtoworkdir = doc.getElementsByTagName( "pathtoworkdir" ).item( 0 ).getTextContent();
 			if ( !pathtoworkdir.isEmpty() ) {
 				File dir = new File( pathtoworkdir );
-				if ( dir.exists() ) {
-					if ( dir.canWrite() ) {
-						work = true;
-					}
+				if ( !dir.exists() ) {
+					dir.mkdirs();
+				}
+				pathtoworkdir = dir.getAbsolutePath()	+ File.separator + "temp_KOST-Val";
+				if ( dir.canWrite() ) {
+					work = true;
+					File tmpDir= new File (pathtoworkdir);
+					tmpDir.mkdirs();
 				}
 			}
 			if ( !work ) {

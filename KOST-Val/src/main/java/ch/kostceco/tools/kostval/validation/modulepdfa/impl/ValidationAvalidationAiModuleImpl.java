@@ -1174,6 +1174,11 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 							int errorCode = err.getErrorCode();
 							String errorCode0x = String.format( "0x%08X", errorCode );
 							String errorMsg = err.getMessage();
+
+							// aus errorMsg < und > entfernen --> Probleme mit XML
+							errorMsg = errorMsg.replace( "<", "'" );
+							errorMsg = errorMsg.replace( ">", "'" );
+
 							// Ausgabe
 							String errorMsgCode0xText = errorMsg + " [PDF Tools: " + errorCode0x + "]";
 							String errorMsgCode0x = " - " + errorMsgCode0xText;
@@ -2157,7 +2162,14 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					// Destroy the object and set to null
 					docPdf.destroyObject();
 					docPdf = null;
-					PdfValidatorAPI.setLicenseKey( " " );
+					PdfValidatorAPI.terminate();
+					File internLicenseFile = new File(
+							directoryOfLogfile + File.separator + ".useKOSTValLicense.txt" );
+					if ( internLicenseFile.exists() ) {
+						// interne Lizenz verwendet. Lizenz ueberschreiben
+						internLicenseFile.delete();
+						PdfValidatorAPI.setLicenseKey( " " );
+					}
 				} catch ( Exception ed2 ) {
 				}
 				if ( errorK.isEmpty() ) {
@@ -2180,7 +2192,14 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 			// Destroy the object and set to null
 			docPdf.destroyObject();
 			docPdf = null;
-			PdfValidatorAPI.setLicenseKey( " " );
+			PdfValidatorAPI.terminate();
+			File internLicenseFile = new File(
+					directoryOfLogfile + File.separator + ".useKOSTValLicense.txt" );
+			if ( internLicenseFile.exists() ) {
+				// interne Lizenz verwendet. Lizenz ueberschreiben
+				internLicenseFile.delete();
+				PdfValidatorAPI.setLicenseKey( " " );
+			}
 		} catch ( Exception ed3 ) {
 		}
 		return isValid;

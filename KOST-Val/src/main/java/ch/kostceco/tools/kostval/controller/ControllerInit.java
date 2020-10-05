@@ -54,7 +54,7 @@ public class ControllerInit implements MessageConstants
 		this.textResourceService = textResourceService;
 	}
 
-	public boolean init( Locale locale, String dirOfJarPath ) throws IOException
+	public boolean init( Locale locale, String dirOfJarPath, String versionKostVal ) throws IOException
 	{
 		boolean init = true;
 		File directoryOfKostValDir = new File( pathToKostValDir );
@@ -150,7 +150,7 @@ public class ControllerInit implements MessageConstants
 		 * benoetigte Dateien in User config kopieren
 		 * 
 		 * wenn nicht vorhanden oder veraltete Version */
-		String version = "kostval.conf.xml_v2.0.0";
+		String version = "kostval.conf.xml_v"+versionKostVal;
 		File directoryOfConfigfile = new File( pathToKostValDir + File.separator + "configuration" );
 		File directoryOfConfigfileInit = new File( dirOfJarPath + File.separator + "configuration" );
 		if ( !directoryOfConfigfile.exists() ) {

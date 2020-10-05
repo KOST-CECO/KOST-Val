@@ -25,7 +25,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.lang.reflect.Field;
 import java.util.Locale;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -73,17 +72,14 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class GuiController
-{/* VM arguments:
-	 *
-	 * --module-path "C:\Program Files\openjfx-14.0.1_windows-x64_bin-sdk\javafx-sdk-14.0.1\lib"
-	 * --add-modules javafx.controls,javafx.fxml,javafx.graphics,javafx.base,javafx.web */
+{
 	@FXML
 	private Button						buttonHelp, buttonFolder, buttonFile, buttonFormat, buttonSip,
 			buttonLicence, buttonChange, buttonShowConfig, buttonPrint, buttonSave;
 
-	ObservableList<String>		langList		= FXCollections.observableArrayList( "Deutsch", "Français",
-			"English" );
-	ObservableList<String>		logTypeList	= FXCollections.observableArrayList( "LogType: --xml",
+	ObservableList<String>		langList				= FXCollections.observableArrayList( "Deutsch",
+			"Français", "English" );
+	ObservableList<String>		logTypeList			= FXCollections.observableArrayList( "LogType: --xml",
 			"LogType: --max" );
 	// TODO "LogType: --min",
 
@@ -111,8 +107,18 @@ public class GuiController
 					+ File.separator + "configuration" + File.separator + "kostval.conf.xml" );
 
 	private String						arg0, arg1, arg2, arg3 = "--xml", dirOfJarPath;
+	private String						versionKostVal	= "2.0.0.beta3";
+	/* TODO: versionKostVal auch hier anpassen:
+	 * 
+	 * 2) cmdKOSTVal.java
+	 *
+	 * 3) ConfigController
+	 * 
+	 * 4) Konfigurationsdatei
+	 * 
+	 * 5) Start-Bild (make_exe) */
 
-	private Locale						locale			= Locale.getDefault();
+	private Locale						locale					= Locale.getDefault();
 
 	@FXML
 	private ScrollPane				scroll;
@@ -122,7 +128,9 @@ public class GuiController
 	{
 		/* TODO
 		 * 
-		 * LogTyp --min programmieren */
+		 * LogTyp --min programmieren
+		 * 
+		 * openjdk inkl javafx FULL-Version (https://bell-sw.com/pages/downloads/#/java-14-current) */
 
 		// TODO --> initialize (wird einmalig am Anfang ausgefuehrt)
 
@@ -133,8 +141,9 @@ public class GuiController
 		String java6432 = System.getProperty( "sun.arch.data.model" );
 		String javaVersion = System.getProperty( "java.version" );
 		String javafxVersion = System.getProperty( "javafx.version" );
-		label.setText( "Copyright © KOST/CECO          KOST-Val v2.0.0.beta1          JavaFX "
-				+ javafxVersion + "   &   Java-" + java6432 + " " + javaVersion + "." );
+		label
+				.setText( "Copyright © KOST/CECO          KOST-Val v" + versionKostVal + "          JavaFX "
+						+ javafxVersion + "   &   Java-" + java6432 + " " + javaVersion + "." );
 
 		// PrintStream in Konsole umleiten
 		ps = new PrintStream( new Console( console ) );
@@ -155,24 +164,9 @@ public class GuiController
 				File file = new File( locationOfJarPath );
 				dirOfJarPath = file.getParent();
 			}
-			setLibraryPath( dirOfJarPath );
 		} catch ( Exception e1 ) {
 			e1.printStackTrace();
 		}
-
-		/* try { File directoryOfKostvalFile = new File( System.getenv( "USERPROFILE" ) + File.separator
-		 * + ".kost-val_2x" ); if ( !directoryOfKostvalFile.exists() ) {
-		 * directoryOfKostvalFile.mkdirs(); } File directoryOfConfigfile = new File(
-		 * directoryOfKostvalFile + File.separator + "configuration" ); File directoryOfConfigfileInit =
-		 * new File( dirOfJarPath + File.separator + "configuration" ); if (
-		 * !directoryOfConfigfile.exists() ) { directoryOfConfigfile.mkdirs(); } File configFileInit =
-		 * new File( directoryOfConfigfileInit + File.separator + "kostval.conf.xml" ); File configFile
-		 * = new File( directoryOfConfigfile + File.separator + "kostval.conf.xml" ); if (
-		 * !configFile.exists() ) { Util.copyFile( configFileInit, configFile ); } File
-		 * configFileStandard = new File( directoryOfConfigfile + File.separator +
-		 * "STANDARD.kostval.conf.xml" ); if ( !configFileStandard.exists() ) { Util.copyFile(
-		 * configFileInit, configFileStandard ); } } catch ( FileNotFoundException e ) {
-		 * e.printStackTrace(); } catch ( IOException e ) { e.printStackTrace(); } */
 
 		// Sprache definieren
 		locale = Locale.getDefault();
@@ -274,7 +268,7 @@ public class GuiController
 		ControllerInit controllerInit = (ControllerInit) context.getBean( "controllerInit" );
 		boolean init;
 		try {
-			init = controllerInit.init( locale, dirOfJarPath );
+			init = controllerInit.init( locale, dirOfJarPath, versionKostVal );
 			if ( !init ) {
 				// Fehler: es wird abgebrochen
 				String text = "Ein Fehler ist aufgetreten. Siehe Konsole.";
@@ -296,15 +290,6 @@ public class GuiController
 	protected void updateEngine( String message )
 	{
 		engine.loadContent( message );
-	}
-
-	public static void setLibraryPath( String path ) throws Exception
-	{
-		System.setProperty( "java.library.path", path );
-		// set sys_paths to null so that java.library.path will be reevalueted next time it is needed
-		final Field sysPathsField = ClassLoader.class.getDeclaredField( "sys_paths" );
-		sysPathsField.setAccessible( true );
-		sysPathsField.set( null, null );
 	}
 
 	// Leitet die Konsole in die TextArea um
@@ -601,7 +586,7 @@ public class GuiController
 				System.out.println( "" );
 				System.out.println( "KOST-Val" );
 				try {
-					if ( KOSTVal.main( args ) ) {
+					if ( KOSTVal.main( args, versionKostVal ) ) {
 						result = true;
 					} else {
 						result = false;
