@@ -85,6 +85,8 @@ import ch.kostceco.tools.kostval.validation.modulesiard.ValidationEcolumnModule;
 public class ValidationEcolumnModuleImpl extends ValidationModuleImpl
 		implements ValidationEcolumnModule
 {
+	private boolean										min							= false;
+
 	// TODO: schema1 aus Beispiel funktioniert noch nicht (null)
 	/* Validation Context */
 	private ValidationContext					validationContext;
@@ -124,6 +126,8 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl
 			// Ausgabe Modul Ersichtlich das KOST-Val arbeitet
 			System.out.print( "E    " );
 			System.out.print( "\b\b\b\b\b" );
+		} else if ( onWork.equals( "nomin" ) ) {
+			min = true;
 		}
 
 		// All over validation flag
@@ -136,95 +140,134 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl
 		try {
 			try {
 				// Initialize the validation context
-				valid = (prepareValidation( this.getValidationContext(  ) ) == false ? false : true);
+				valid = (prepareValidation( this.getValidationContext() ) == false ? false : true);
 			} catch ( Exception e ) {
 				valid = false;
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
-								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-										e.getMessage() + " (Initialize the validation context)" ) );
+				if ( min ) {
+					return false;
+				} else {
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
+									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+											e.getMessage() + " (Initialize the validation context)" ) );
+				}
 			}
 			try {
 				// Get the prepared SIARD tables from the validation context
-				valid = (this.getValidationContext( ).getSiardTables() == null ? false : true);
+				valid = (this.getValidationContext().getSiardTables() == null ? false : true);
 			} catch ( Exception e ) {
 				valid = false;
-				getMessageService().logError( getTextResourceService().getText( locale,
-						MESSAGE_XML_MODUL_E_SIARD )
-						+ getTextResourceService().getText( ERROR_XML_UNKNOWN,
-								e.getMessage() + " (Get the prepared SIARD tables from the validation context)" ) );
+				if ( min ) {
+					return false;
+				} else {
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
+									+ getTextResourceService().getText( ERROR_XML_UNKNOWN, e.getMessage()
+											+ " (Get the prepared SIARD tables from the validation context)" ) );
+				}
 			}
 			try {
 				// Validates the number of the attributes
-				congruentColumnCount = validateColumnCount( this.getValidationContext(  ), configMap );
+				congruentColumnCount = validateColumnCount( this.getValidationContext(), configMap );
 				if ( congruentColumnCount == false ) {
 					valid = false;
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
-									+ getTextResourceService().getText( locale, MESSAGE_XML_E_INVALID_ATTRIBUTE_COUNT,
-											this.getIncongruentColumnCount(  ) ) );
+					if ( min ) {
+						return false;
+					} else {
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
+										+ getTextResourceService().getText( locale,
+												MESSAGE_XML_E_INVALID_ATTRIBUTE_COUNT, this.getIncongruentColumnCount() ) );
+					}
 				}
 			} catch ( Exception e ) {
 				valid = false;
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
-								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-										e.getMessage() + " (Validates the number of the attributes)" ) );
+				if ( min ) {
+					return false;
+				} else {
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
+									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+											e.getMessage() + " (Validates the number of the attributes)" ) );
+				}
 			}
 			try {
 				// Validates the nullable property in metadata.xml
-				if ( validateColumnOccurrence( this.getValidationContext(  ), configMap ) == false ) {
+				if ( validateColumnOccurrence( this.getValidationContext(), configMap ) == false ) {
 					valid = false;
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
-									+ getTextResourceService().getText( locale,
-											MESSAGE_XML_E_INVALID_ATTRIBUTE_OCCURRENCE,
-											this.getIncongruentColumnOccurrence(  ) ) );
+					if ( min ) {
+						return false;
+					} else {
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
+										+ getTextResourceService().getText( locale,
+												MESSAGE_XML_E_INVALID_ATTRIBUTE_OCCURRENCE,
+												this.getIncongruentColumnOccurrence() ) );
+					}
 				}
 			} catch ( Exception e ) {
 				valid = false;
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
-								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-										e.getMessage() + " (Validates the nullable property in metadata.xml)" ) );
+				if ( min ) {
+					return false;
+				} else {
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
+									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+											e.getMessage() + " (Validates the nullable property in metadata.xml)" ) );
+				}
 			}
 			try {
 				// Validates the type of table attributes in metadata.xml
-				if ( validateColumnType( this.getValidationContext(  ), configMap ) == false ) {
+				if ( validateColumnType( this.getValidationContext(), configMap ) == false ) {
 					valid = false;
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
-									+ getTextResourceService().getText( locale, MESSAGE_XML_E_INVALID_ATTRIBUTE_TYPE,
-											this.getIncongruentColumnType(  ) ) );
-					if ( udtColumn ) {
-						// UDT-Warning mit ausgeben wenn vorhanden: MESSAGE_XML_E_TYPE_NOT_VALIDATED
+					if ( min ) {
+						return false;
+					} else {
 						getMessageService()
 								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
-										+ getTextResourceService().getText( locale, MESSAGE_XML_E_TYPE_NOT_VALIDATED,
-												this.getWarningColumnType(  ) ) );
+										+ getTextResourceService().getText( locale,
+												MESSAGE_XML_E_INVALID_ATTRIBUTE_TYPE, this.getIncongruentColumnType() ) );
+						if ( udtColumn ) {
+							// UDT-Warning mit ausgeben wenn vorhanden: MESSAGE_XML_E_TYPE_NOT_VALIDATED
+							getMessageService()
+									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
+											+ getTextResourceService().getText( locale, MESSAGE_XML_E_TYPE_NOT_VALIDATED,
+													this.getWarningColumnType() ) );
+						}
 					}
 				} else {
 					if ( udtColumn ) {
 						// UDT-Warning mit ausgeben wenn vorhanden: MESSAGE_XML_E_TYPE_NOT_VALIDATED
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
-										+ getTextResourceService().getText( locale, MESSAGE_XML_E_TYPE_NOT_VALIDATED,
-												this.getWarningColumnType(  ) ) );
+						if ( min ) {
+						} else {
+							getMessageService()
+									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
+											+ getTextResourceService().getText( locale, MESSAGE_XML_E_TYPE_NOT_VALIDATED,
+													this.getWarningColumnType() ) );
+						}
 					}
 				}
 			} catch ( Exception e ) {
 				valid = false;
-				getMessageService().logError( getTextResourceService().getText( locale,
-						MESSAGE_XML_MODUL_E_SIARD )
-						+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-								e.getMessage() + " (Validates the type of table attributes in metadata.xml)" ) );
+				if ( min ) {
+					return false;
+				} else {
+					getMessageService().logError( getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_E_SIARD )
+							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+									e.getMessage() + " (Validates the type of table attributes in metadata.xml)" ) );
+				}
 			}
 		} catch ( Exception e ) {
 			valid = false;
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
-							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-									e.getMessage() + " (E)" ) );
+			if ( min ) {
+				return false;
+			} else {
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
+								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+										e.getMessage() + " (E)" ) );
+			}
 		}
 		return valid;
 	}
@@ -240,93 +283,141 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl
 		boolean prepared = true;
 		try {
 			// Load the Java properties to the validation context
-			boolean propertiesLoaded = initializeProperties(  );
+			boolean propertiesLoaded = initializeProperties();
 			if ( propertiesLoaded == false ) {
 				prepared = false;
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
-								+ getTextResourceService().getText( locale, MESSAGE_XML_E_PROPERTIES_ERROR ) );
+				if ( min ) {
+					return false;
+				} else {
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
+									+ getTextResourceService().getText( locale, MESSAGE_XML_E_PROPERTIES_ERROR ) );
+				}
 			}
 		} catch ( Exception e ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
-							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-									e.getMessage() + " (propertiesLoaded)" ) );
+			if ( min ) {
+				return false;
+			} else {
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
+								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+										e.getMessage() + " (propertiesLoaded)" ) );
+			}
 		}
 		try {
 			// Initialize internal path configuration of the SIARD archive
 			boolean pathInitialized = initializePath( validationContext, configMapFinal );
 			if ( pathInitialized == false ) {
 				prepared = false;
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
-								+ getTextResourceService().getText( locale, MESSAGE_XML_E_PATH_ERROR ) );
+				if ( min ) {
+					return false;
+				} else {
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
+									+ getTextResourceService().getText( locale, MESSAGE_XML_E_PATH_ERROR ) );
+				}
 			}
 		} catch ( Exception e ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
-							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-									e.getMessage() + " (pathInitialized)" ) );
+			if ( min ) {
+				return false;
+			} else {
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
+								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+										e.getMessage() + " (pathInitialized)" ) );
+			}
 		}
 		try {
 			// Extract the SIARD archive and distribute the content to the validation context
 			boolean siardArchiveExtracted = extractSiardArchive( validationContext, configMapFinal );
 			if ( siardArchiveExtracted == false ) {
 				prepared = false;
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
-								+ getTextResourceService().getText( locale, MESSAGE_XML_E_EXTRACT_ERROR ) );
+				if ( min ) {
+					return false;
+				} else {
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
+									+ getTextResourceService().getText( locale, MESSAGE_XML_E_EXTRACT_ERROR ) );
+				}
 			}
 		} catch ( Exception e ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
-							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-									e.getMessage() + " (siardArchiveExtracted)" ) );
+			if ( min ) {
+				return false;
+			} else {
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
+								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+										e.getMessage() + " (siardArchiveExtracted)" ) );
+			}
 		}
 		try {
 			// Pick the metadata.xml and load it to the validation context
 			boolean metadataXMLpicked = pickMetadataXML( validationContext, configMapFinal );
 			if ( metadataXMLpicked == false ) {
 				prepared = false;
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
-								+ getTextResourceService().getText( locale, MESSAGE_XML_E_METADATA_ACCESS_ERROR ) );
+				if ( min ) {
+					return false;
+				} else {
+					getMessageService().logError( getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_E_SIARD )
+							+ getTextResourceService().getText( locale, MESSAGE_XML_E_METADATA_ACCESS_ERROR ) );
+				}
 			}
 		} catch ( Exception e ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
-							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-									e.getMessage() + " (metadataXMLpicked)" ) );
+			if ( min ) {
+				return false;
+			} else {
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
+								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+										e.getMessage() + " (metadataXMLpicked)" ) );
+			}
 		}
 		try {
 			// Prepare the XML configuration and store it to the validation context
 			boolean xmlAccessPrepared = prepareXMLAccess( validationContext );
 			if ( xmlAccessPrepared == false ) {
 				prepared = false;
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
-								+ getTextResourceService().getText( locale, MESSAGE_XML_E_XML_ACCESS_ERROR ) );
+				if ( min ) {
+					return false;
+				} else {
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
+									+ getTextResourceService().getText( locale, MESSAGE_XML_E_XML_ACCESS_ERROR ) );
+				}
 			}
 		} catch ( Exception e ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
-							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-									e.getMessage() + " (xmlAccessPrepared)" ) );
+			if ( min ) {
+				return false;
+			} else {
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
+								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+										e.getMessage() + " (xmlAccessPrepared)" ) );
+			}
 		}
 		try {
 			// Prepare the data to be validated such as metadata.xml and the according XML schemas
 			boolean validationDataPrepared = prepareValidationData( validationContext, configMapFinal );
 			if ( validationDataPrepared == false ) {
 				prepared = false;
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
-								+ getTextResourceService().getText( locale, MESSAGE_XML_E_PREVALIDATION_ERROR ) );
+				if ( min ) {
+					return false;
+				} else {
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
+									+ getTextResourceService().getText( locale, MESSAGE_XML_E_PREVALIDATION_ERROR ) );
+				}
 			}
 		} catch ( Exception e ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
-							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-									e.getMessage() + " (validationDataPrepared)" ) );
+			if ( min ) {
+				return false;
+			} else {
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
+								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+										e.getMessage() + " (validationDataPrepared)" ) );
+			}
 		}
 		return prepared;
 	}
@@ -405,14 +496,20 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl
 		int onWork = 410;
 		// Informationen zur Darstellung "onWork" holen
 		String onWorkConfig = configMap.get( "ShowProgressOnWork" );
-		if ( onWorkConfig.equals( "no" ) ) {
+		if ( onWorkConfig.equals( "yes" ) ) {
+			// Ausgabe Modul Ersichtlich das KOST-Val arbeitet
+			showOnWork = true;
+			System.out.print( "E    " );
+			System.out.print( "\b\b\b\b\b" );
+		} else if ( onWorkConfig.equals( "nomin" ) ) {
+			min = true;
 			// keine Ausgabe
 			showOnWork = false;
 		} else {
-			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
-			System.out.print( "E    " );
-			System.out.print( "\b\b\b\b\b" );
+			// keine Ausgabe
+			showOnWork = false;
 		}
+
 		boolean validTable;
 		boolean validDatabase;
 		List<SiardTable> siardTables = validationContext.getSiardTables();
@@ -518,14 +615,20 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl
 		int onWork = 410;
 		// Informationen zur Darstellung "onWork" holen
 		String onWorkConfig = configMap.get( "ShowProgressOnWork" );
-		if ( onWorkConfig.equals( "no" ) ) {
+		if ( onWorkConfig.equals( "yes" ) ) {
+			// Ausgabe Modul Ersichtlich das KOST-Val arbeitet
+			showOnWork = true;
+			System.out.print( "E    " );
+			System.out.print( "\b\b\b\b\b" );
+		} else if ( onWorkConfig.equals( "nomin" ) ) {
+			min = true;
 			// keine Ausgabe
 			showOnWork = false;
 		} else {
-			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
-			System.out.print( "E    " );
-			System.out.print( "\b\b\b\b\b" );
+			// keine Ausgabe
+			showOnWork = false;
 		}
+
 		boolean validTable;
 		udtColumn = false;
 		boolean validDatabase;
@@ -611,10 +714,14 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl
 											namesOfInvalidColumns
 													.append( (namesOfInvalidColumns.length() > 0) ? ", " : "" );
 											namesOfInvalidColumns.append( columnName );
-											getMessageService().logError(
-													getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
-															+ getTextResourceService().getText( locale, MESSAGE_XML_E_ARRAY,
-																	(siardTable.getTableName() + ".xsd(" + columnName + ")") ) );
+											if ( min ) {
+												return false;
+											} else {
+												getMessageService().logError(
+														getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
+																+ getTextResourceService().getText( locale, MESSAGE_XML_E_ARRAY,
+																		(siardTable.getTableName() + ".xsd(" + columnName + ")") ) );
+											}
 										}
 									}
 								}
@@ -733,9 +840,9 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl
 
 	/* Internal helper methods */
 	/* [E.0.1]Load the validation properties */
-	private boolean initializeProperties( ) throws IOException
+	private boolean initializeProperties() throws IOException
 	{
-		ValidationContext validationContext = this.getValidationContext(  );
+		ValidationContext validationContext = this.getValidationContext();
 		boolean successfullyCommitted = false;
 		// Initializing the validation context properties
 		String propertiesName = "/validation.properties";
@@ -822,8 +929,7 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl
 	}
 
 	/* Trimming the search terms for column type validation */
-	private String trimLeftSideType( String leftside, String delimiter )
-			throws Exception
+	private String trimLeftSideType( String leftside, String delimiter ) throws Exception
 	{
 		return (leftside.indexOf( delimiter ) > -1)
 				? leftside.substring( 0, leftside.indexOf( delimiter ) )
@@ -832,8 +938,7 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl
 
 	/* [E.0.3]Extracting the SIARD packages */
 	private boolean extractSiardArchive( ValidationContext validationContext,
-			Map<String, String> configMap )
-			throws FileNotFoundException, IOException, Exception
+			Map<String, String> configMap ) throws FileNotFoundException, IOException, Exception
 	{
 		boolean sucessfullyCommitted = false;
 		String pathToWorkDir = configMap.get( "PathToWorkDir" ) + File.separator + "SIARD";
@@ -871,7 +976,7 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl
 
 	/* [E.0.4]Pick up the metadata.xml from the extracted SIARD package */
 	private boolean pickMetadataXML( ValidationContext validationContext,
-			Map<String, String> configMap) throws Exception
+			Map<String, String> configMap ) throws Exception
 	{
 		boolean successfullyCommitted = false;
 		StringBuilder pathToMetadataXML = new StringBuilder();
@@ -905,14 +1010,20 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl
 		int onWork = 410;
 		// Informationen zur Darstellung "onWork" holen
 		String onWorkConfig = configMap.get( "ShowProgressOnWork" );
-		if ( onWorkConfig.equals( "no" ) ) {
+		if ( onWorkConfig.equals( "yes" ) ) {
+			// Ausgabe Modul Ersichtlich das KOST-Val arbeitet
+			showOnWork = true;
+			System.out.print( "E    " );
+			System.out.print( "\b\b\b\b\b" );
+		} else if ( onWorkConfig.equals( "nomin" ) ) {
+			min = true;
 			// keine Ausgabe
 			showOnWork = false;
 		} else {
-			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
-			System.out.print( "E    " );
-			System.out.print( "\b\b\b\b\b" );
+			// keine Ausgabe
+			showOnWork = false;
 		}
+
 		boolean successfullyCommitted = false;
 		Namespace xmlNamespace = validationContext.getXmlNamespace();
 		// Gets the tables to be validated
@@ -1016,7 +1127,7 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl
 	// Setter and Getter methods
 
 	/** @return the validationContext */
-	public ValidationContext getValidationContext(  )
+	public ValidationContext getValidationContext()
 	{
 		return validationContext;
 	}
@@ -1029,7 +1140,7 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl
 	}
 
 	/** @return the incongruentColumnCount */
-	public StringBuilder getIncongruentColumnCount(  )
+	public StringBuilder getIncongruentColumnCount()
 	{
 		return incongruentColumnCount;
 	}
@@ -1042,7 +1153,7 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl
 	}
 
 	/** @return the incongruentColumnOccurrence */
-	public StringBuilder getIncongruentColumnOccurrence(  )
+	public StringBuilder getIncongruentColumnOccurrence()
 	{
 		return incongruentColumnOccurrence;
 	}
@@ -1055,7 +1166,7 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl
 	}
 
 	/** @return the incongruentColumnType */
-	public StringBuilder getIncongruentColumnType(  )
+	public StringBuilder getIncongruentColumnType()
 	{
 		return incongruentColumnType;
 	}
@@ -1068,7 +1179,7 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl
 	}
 
 	/** @return the warningColumnType */
-	public StringBuilder getWarningColumnType(  )
+	public StringBuilder getWarningColumnType()
 	{
 		return warningColumnType;
 	}
@@ -1081,7 +1192,7 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl
 	}
 
 	/** @return the incongruentColumnSequence */
-	public StringBuilder getIncongruentColumnSequence(  )
+	public StringBuilder getIncongruentColumnSequence()
 	{
 		return incongruentColumnSequence;
 	}

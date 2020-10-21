@@ -37,8 +37,10 @@ import ch.kostceco.tools.kostval.validation.modulesiard.ValidationIrecognitionMo
 public class ValidationIrecognitionModuleImpl extends ValidationModuleImpl
 		implements ValidationIrecognitionModule
 {
-	Boolean	version1	= false;
-	Boolean	version2	= false;
+	private boolean	min				= false;
+
+	Boolean					version1	= false;
+	Boolean					version2	= false;
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
@@ -57,17 +59,23 @@ public class ValidationIrecognitionModuleImpl extends ValidationModuleImpl
 			// Ausgabe Modul Ersichtlich das KOST-Val arbeitet
 			System.out.print( "I    " );
 			System.out.print( "\b\b\b\b\b" );
+		} else if ( onWork.equals( "nomin" ) ) {
+			min = true;
 		}
 
 		Boolean valid = true;
 		try {
 			/** Validierung ob die Extension .siard lautet */
 			if ( !valDatei.getAbsolutePath().toLowerCase().endsWith( ".siard" ) ) {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_I_SIARD )
-								+ getTextResourceService().getText( locale, MESSAGE_XML_I_NOTALLOWEDEXT ) );
-				// Die SIARD-Datei wurde nicht als solche erkannt, weil sie keine .siard Extension hat.
-				valid = false;
+				if ( min ) {
+					return false;
+				} else {
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_I_SIARD )
+									+ getTextResourceService().getText( locale, MESSAGE_XML_I_NOTALLOWEDEXT ) );
+					// Die SIARD-Datei wurde nicht als solche erkannt, weil sie keine .siard Extension hat.
+					valid = false;
+				}
 			}
 
 			version1 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" )
@@ -85,19 +93,26 @@ public class ValidationIrecognitionModuleImpl extends ValidationModuleImpl
 				 * gelöscht wird und entsprechend bestehende Dateien gelöscht werden können */
 				if ( !version21.exists() ) {
 					valid = false;
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_I_SIARD )
-									+ getTextResourceService().getText( locale, MESSAGE_XML_I_SIARDVERSION, "2.1",
-											version21.getAbsolutePath() ) );
+					if ( min ) {
+						return false;
+					} else {
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_I_SIARD )
+										+ getTextResourceService().getText( locale, MESSAGE_XML_I_SIARDVERSION, "2.1",
+												version21.getAbsolutePath() ) );
+					}
 				}
-
 			}
 		} catch ( java.io.IOException ioe ) {
 			valid = false;
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_I_SIARD )
-							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-									ioe.getMessage() + " (IOException)" ) );
+			if ( min ) {
+				return false;
+			} else {
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_I_SIARD )
+								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+										ioe.getMessage() + " (IOException)" ) );
+			}
 		}
 
 		/** Validierung ob die PUID richtig erkannt wird (z.B mit DROID) => Auf diese Validierung kann

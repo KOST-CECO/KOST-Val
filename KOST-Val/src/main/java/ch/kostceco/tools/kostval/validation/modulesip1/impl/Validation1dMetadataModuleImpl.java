@@ -40,6 +40,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import ch.kostceco.tools.kostval.KOSTVal;
 import ch.kostceco.tools.kostval.exception.modulesip1.Validation1dMetadataException;
+import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesip1.Validation1dMetadataModule;
 
@@ -54,7 +55,24 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
 			Locale locale ) throws Validation1dMetadataException
 	{
-		// Informationen zur Darstellung "onWork" holen
+		String pathToWorkDir = configMap.get( "PathToWorkDir" );
+		File pathToWorkDirFile=new File(pathToWorkDir+File.separator+"header");
+		if (!pathToWorkDirFile.exists()) {
+			pathToWorkDirFile.mkdirs();
+		}
+		try {
+			Util.copyDir( new File( valDatei.getAbsolutePath()
+						+ File.separator + "header"), pathToWorkDirFile );
+			Thread.sleep( 10000 );
+		} catch ( FileNotFoundException e1 ) {
+			e1.printStackTrace();
+		} catch ( IOException e1 ) {
+			e1.printStackTrace();
+		} catch ( InterruptedException e ) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	// Informationen zur Darstellung "onWork" holen
 		String onWork = configMap.get( "ShowProgressOnWork" );
 		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
 		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
@@ -73,12 +91,11 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			// dbf.setValidating(false);
 			DocumentBuilder db = dbf.newDocumentBuilder();
-			Document doc = db.parse( new FileInputStream( new File( valDatei.getAbsolutePath()
-					+ File.separator + "header" + File.separator + "metadata.xml" ) ) );
+			Document doc = db.parse( new FileInputStream( new File( pathToWorkDirFile.getAbsolutePath()
+					+ File.separator + "metadata.xml" ) ) );
 			doc.getDocumentElement().normalize();
 
-			BufferedReader in = new BufferedReader( new FileReader( new File( valDatei.getAbsolutePath()
-					+ File.separator + "header" + File.separator + "metadata.xml" ) ) );
+			BufferedReader in = new BufferedReader( new FileReader( new File( pathToWorkDirFile.getAbsolutePath() + File.separator + "metadata.xml" ) ) );
 			StringBuffer concatenatedOutputs = new StringBuffer();
 			String line;
 			while ( (line = in.readLine()) != null ) {
@@ -113,9 +130,9 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 			}
 			in.close();
 
-			File xmlToValidate = new File( valDatei.getAbsolutePath() + File.separator + "header"
+			File xmlToValidate = new File( pathToWorkDirFile.getAbsolutePath()
 					+ File.separator + "metadata.xml" );
-			File xsdToValidateEch160 = new File( valDatei.getAbsolutePath() + File.separator + "header"
+			File xsdToValidateEch160 = new File( pathToWorkDirFile.getAbsolutePath()
 					+ File.separator + "xsd" + File.separator + "arelda.xsd" );
 
 			/* dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist ein generelles TODO in

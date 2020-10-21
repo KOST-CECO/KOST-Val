@@ -45,18 +45,29 @@ public class ValidationArecognitionModuleImpl extends ValidationModuleImpl
 		implements ValidationArecognitionModule
 {
 
+	private boolean min = false;
+
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
 			Locale locale ) throws ValidationArecognitionException
 	{
+		String onWork = configMap.get( "ShowProgressOnWork" );
+		if ( onWork.equals( "nomin" ) ) {
+			min = true;
+		}
+
 		/* Eine TIFF Datei (.tiff / .tif / .tfx) muss entweder mit II*. [49492A00] oder mit MM.*
 		 * [4D4D002A] beginnen */
 
 		if ( valDatei.isDirectory() ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_TIFF )
-							+ getTextResourceService().getText( locale, ERROR_XML_A_ISDIRECTORY ) );
-			return false;
+			if ( min ) {
+				return false;
+			} else {
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_TIFF )
+								+ getTextResourceService().getText( locale, ERROR_XML_A_ISDIRECTORY ) );
+				return false;
+			}
 		} else if ( (valDatei.getAbsolutePath().toLowerCase().endsWith( ".tiff" )
 				|| valDatei.getAbsolutePath().toLowerCase().endsWith( ".tif" )) ) {
 
@@ -106,20 +117,28 @@ public class ValidationArecognitionModuleImpl extends ValidationModuleImpl
 					// Droid-Erkennung, damit Details ausgegeben werden k�nnen
 					String nameOfSignature = configMap.get( "PathToDroidSignatureFile" );
 					if ( nameOfSignature.startsWith( "Configuration-Error:" ) ) {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_TIFF )
-										+ nameOfSignature );
 						read.close();
-						return false;
+						if ( min ) {
+							return false;
+						} else {
+							getMessageService()
+									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_TIFF )
+											+ nameOfSignature );
+							return false;
+						}
 					}
 					// existiert die SignatureFile am angebenen Ort?
 					File fnameOfSignature = new File( nameOfSignature );
 					if ( !fnameOfSignature.exists() ) {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_TIFF )
-										+ getTextResourceService().getText( locale, MESSAGE_XML_CA_DROID ) );
 						read.close();
-						return false;
+						if ( min ) {
+							return false;
+						} else {
+							getMessageService()
+									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_TIFF )
+											+ getTextResourceService().getText( locale, MESSAGE_XML_CA_DROID ) );
+							return false;
+						}
 					}
 
 					Droid droid = null;
@@ -143,33 +162,45 @@ public class ValidationArecognitionModuleImpl extends ValidationModuleImpl
 						Util.switchOnConsole();
 					}
 					File file = valDatei;
-					String puid = "";
+					String puid = " ??? ";
 					IdentificationFile ifile = droid.identify( file.getAbsolutePath() );
 					for ( int x = 0; x < ifile.getNumHits(); x++ ) {
 						FileFormatHit ffh = ifile.getHit( x );
 						FileFormat ff = ffh.getFileFormat();
 						puid = ff.getPUID();
 					}
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_TIFF )
-									+ getTextResourceService().getText( locale, ERROR_XML_A_INCORRECTFILE, puid ) );
 					read.close();
-					return false;
+					if ( min ) {
+						return false;
+					} else {
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_TIFF )
+										+ getTextResourceService().getText( locale, ERROR_XML_A_INCORRECTFILE, puid ) );
+						return false;
+					}
 				}
 				fr.close();
 				read.close();
 			} catch ( Exception e ) {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_TIFF )
-								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
-				return false;
+				if ( min ) {
+					return false;
+				} else {
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_TIFF )
+									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+					return false;
+				}
 			}
 		} else {
 			// die Datei endet nicht mit tiff oder tif -> Fehler
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_TIFF )
-							+ getTextResourceService().getText( locale, ERROR_XML_A_INCORRECTFILEENDING ) );
-			return false;
+			if ( min ) {
+				return false;
+			} else {
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_TIFF )
+								+ getTextResourceService().getText( locale, ERROR_XML_A_INCORRECTFILEENDING ) );
+				return false;
+			}
 		}
 		return true;
 	}

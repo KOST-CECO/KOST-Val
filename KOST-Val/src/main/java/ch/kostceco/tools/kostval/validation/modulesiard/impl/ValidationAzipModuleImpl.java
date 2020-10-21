@@ -46,6 +46,8 @@ import ch.kostceco.tools.kostval.validation.modulesiard.ValidationAzipModule;
 public class ValidationAzipModuleImpl extends ValidationModuleImpl implements ValidationAzipModule
 {
 
+	private boolean min = false;
+
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
 			Locale locale ) throws ValidationAzipException
@@ -56,6 +58,8 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 			// Ausgabe Modul Ersichtlich das KOST-Val arbeitet
 			System.out.print( "A    " );
 			System.out.print( "\b\b\b\b\b" );
+		} else if ( onWork.equals( "nomin" ) ) {
+			min = true;
 		}
 
 		boolean valid = false;
@@ -64,11 +68,15 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 
 		// die Datei darf kein Directory sein
 		if ( valDatei.isDirectory() ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )
-							+ getTextResourceService().getText( locale, ERROR_XML_A_NOFILE ) );
-			// Die zu validierende SIARD-Datei ist ein Ordner und keine ZIP-Datei.
-			return false;
+			if ( min ) {
+				return false;
+			} else {
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )
+								+ getTextResourceService().getText( locale, ERROR_XML_A_NOFILE ) );
+				// Die zu validierende SIARD-Datei ist ein Ordner und keine ZIP-Datei.
+				return false;
+			}
 		}
 
 		// Die Datei muss mit PK.. beginnen
@@ -102,25 +110,33 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 				// h�chstwahrscheinlich ein ZIP da es mit 504B0304 respektive PK.. beginnt
 				valid = true;
 			} else {
-				getMessageService().logError( getTextResourceService().getText( locale,
-						MESSAGE_XML_MODUL_A_SIARD )
-						+ getTextResourceService().getText( locale, ERROR_XML_A_INCORRECTFILEENDING_SIARD ) );
-				// Die SIARD-Datei ist kein ZIP.
 				read.close();
 				// set to null
 				read = null;
 				fr.close();
-				return false;
+				if ( min ) {
+					return false;
+				} else {
+					getMessageService().logError( getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_A_SIARD )
+							+ getTextResourceService().getText( locale, ERROR_XML_A_INCORRECTFILEENDING_SIARD ) );
+					// Die SIARD-Datei ist kein ZIP.
+					return false;
+				}
 			}
 			read.close();
 			// set to null
 			read = null;
 			fr.close();
 		} catch ( Exception e ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )
-							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
-			return false;
+			if ( min ) {
+				return false;
+			} else {
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )
+								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+				return false;
+			}
 		}
 
 		// Die byte 8 und 9 müssen 00 00 STORE / 08 00 DEFLATE sein
@@ -195,11 +211,17 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 							// store element
 						} else {
 							// weder store noch def
-							getMessageService().logError( getTextResourceService().getText( locale,
-									MESSAGE_XML_MODUL_A_SIARD )
-									+ getTextResourceService().getText( locale, ERROR_XML_A_DEFLATED, compressed ) );
-							zf.close();
-							return false;
+							if ( min ) {
+								zf.close();
+								return false;
+							} else {
+								getMessageService()
+										.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )
+												+ getTextResourceService().getText( locale, ERROR_XML_A_DEFLATED,
+														compressed ) );
+								zf.close();
+								return false;
+							}
 						}
 					}
 					// und wenn es klappt, gleich wieder schliessen
@@ -207,15 +229,19 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 					// set to null
 					zf = null;
 				} catch ( Exception e ) {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )
-									+ getTextResourceService().getText( locale, ERROR_XML_A_INCORRECTZIP,
-											e.getMessage() ) );
 					read.close();
 					// set to null
 					read = null;
 					fr89.close();
-					return false;
+					if ( min ) {
+						return false;
+					} else {
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )
+										+ getTextResourceService().getText( locale, ERROR_XML_A_INCORRECTZIP,
+												e.getMessage() ) );
+						return false;
+					}
 				}
 				// Versuche das ZIP file zu �ffnen
 				Zip64File zfe = null;
@@ -234,14 +260,19 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 							// store element
 						} else {
 							// weder store noch def
-							getMessageService().logError( getTextResourceService().getText( locale,
-									MESSAGE_XML_MODUL_A_SIARD )
-									+ getTextResourceService().getText( locale, ERROR_XML_A_DEFLATED, compressed ) );
 							read.close();
 							// set to null
 							read = null;
 							fr89.close();
-							return false;
+							if ( min ) {
+								return false;
+							} else {
+								getMessageService()
+										.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )
+												+ getTextResourceService().getText( locale, ERROR_XML_A_DEFLATED,
+														compressed ) );
+								return false;
+							}
 						}
 					}
 					// und wenn es klappt, gleich wieder schliessen
@@ -249,36 +280,48 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 					// set to null
 					zfe = null;
 				} catch ( Exception ee ) {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )
-									+ getTextResourceService().getText( locale, ERROR_XML_A_INCORRECTZIP,
-											ee.getMessage() ) );
 					read.close();
 					// set to null
 					read = null;
 					fr89.close();
-					return false;
+					if ( min ) {
+						return false;
+					} else {
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )
+										+ getTextResourceService().getText( locale, ERROR_XML_A_INCORRECTZIP,
+												ee.getMessage() ) );
+						return false;
+					}
 				}
 
 			} else {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )
-								+ getTextResourceService().getText( locale, ERROR_XML_A_DEFLATED, dec8 ) );
 				read.close();
 				// set to null
 				read = null;
 				fr89.close();
-				return false;
+				if ( min ) {
+					return false;
+				} else {
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )
+									+ getTextResourceService().getText( locale, ERROR_XML_A_DEFLATED, dec8 ) );
+					return false;
+				}
 			}
 			read.close();
 			// set to null
 			read = null;
 			fr89.close();
 		} catch ( Exception e ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )
-							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
-			return false;
+			if ( min ) {
+				return false;
+			} else {
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )
+								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+				return false;
+			}
 		}
 		return (valid);
 	}

@@ -80,7 +80,7 @@ public class GuiController
 	ObservableList<String>		langList				= FXCollections.observableArrayList( "Deutsch",
 			"Français", "English" );
 	ObservableList<String>		logTypeList			= FXCollections.observableArrayList( "LogType: --xml",
-			"LogType: --max" );
+			"LogType: --min", "LogType: --max" );
 	// TODO "LogType: --min",
 
 	@FXML
@@ -107,7 +107,7 @@ public class GuiController
 					+ File.separator + "configuration" + File.separator + "kostval.conf.xml" );
 
 	private String						arg0, arg1, arg2, arg3 = "--xml", dirOfJarPath;
-	private String						versionKostVal	= "2.0.0.beta3";
+	private String						versionKostVal	= "2.0.0.gamma1";
 	/* TODO: versionKostVal auch hier anpassen:
 	 * 
 	 * 2) cmdKOSTVal.java
@@ -116,7 +116,9 @@ public class GuiController
 	 * 
 	 * 4) Konfigurationsdatei
 	 * 
-	 * 5) Start-Bild (make_exe) */
+	 * 5) Start-Bild (make_exe)
+	 * 
+	 * 6) launch_KOST-Val_exe.xml --> VersionInfo */
 
 	private Locale						locale					= Locale.getDefault();
 
@@ -562,14 +564,16 @@ public class GuiController
 				 * (Fehler).
 				 * 
 				 * Da es nicht erfolgreich war kann der Log nicht angezeigt werden */
-				String text = "Ein unbekannter Fehler ist aufgetreten.";
+				String text = "Ein unbekannter Fehler ist aufgetreten ";
+				String textArgs = "(WorkerStateEvent).<br/><br/>" + args[0] + " " + args[1] + " " + args[2]
+						+ " " + args[3];
 				if ( locale.toString().startsWith( "fr" ) ) {
-					text = "Une erreur inconnue s`est produite.";
+					text = "Une erreur inconnue s`est produite ";
 				} else if ( locale.toString().startsWith( "en" ) ) {
-					text = "An unknown error has occurred.";
+					text = "An unknown error has occurred ";
 				}
 				scroll.setVvalue( 1.0 ); // 1.0 = letzte Zeile der Konsole
-				engine.loadContent( "<html><h2>" + text + "</h2></html>" );
+				engine.loadContent( "<html><h2>" + text + textArgs + "</h2></html>" );
 			}
 		} );
 		new Thread( val ).start();
@@ -676,14 +680,16 @@ public class GuiController
 				 * (Fehler).
 				 * 
 				 * Da es nicht erfolgreich war kann der Log nicht angezeigt werden */
-				String text = "Ein unbekannter Fehler ist aufgetreten.";
+				String text = "Ein unbekannter Fehler ist aufgetreten ";
+				String textArgs = "(WorkerStateEvent).<br/><br/>" + args[0] + " " + args[1] + " " + args[2]
+						+ " " + args[3];
 				if ( locale.toString().startsWith( "fr" ) ) {
-					text = "Une erreur inconnue s`est produite.";
+					text = "Une erreur inconnue s`est produite ";
 				} else if ( locale.toString().startsWith( "en" ) ) {
-					text = "An unknown error has occurred.";
+					text = "An unknown error has occurred ";
 				}
 				scroll.setVvalue( 1.0 ); // 1.0 = letzte Zeile der Konsole
-				engine.loadContent( "<html><h2>" + text + "</h2></html>" );
+				engine.loadContent( "<html><h2>" + text + textArgs + "</h2></html>" );
 			}
 		} );
 		new Thread( val ).start();
@@ -698,6 +704,12 @@ public class GuiController
 		if ( !fileFolder.getText().isEmpty() ) {
 			File dirFileFolder = new File( fileFolder.getText() );
 			if ( dirFileFolder.isFile() ) {
+				dirFileFolder = dirFileFolder.getParentFile();
+			}
+			if ( !dirFileFolder.exists() ) {
+				dirFileFolder = dirFileFolder.getParentFile();
+			}
+			if ( !dirFileFolder.exists() ) {
 				dirFileFolder = dirFileFolder.getParentFile();
 			}
 			fileChooser.setInitialDirectory( dirFileFolder );
@@ -740,10 +752,8 @@ public class GuiController
 			String sel2 = "<tr><td><h3>2.</h3></td><td><h3>Ggf. Konfiguration und LogType anpassen </h3></td></tr>";
 			String sel3 = "<tr><td><h3>3.</h3></td><td><h3>Validierung starten </h3></td></tr></table>";
 			String selDetail = "<br/>";
-			if ( fileFolderExt.equals( ".jp2" ) || fileFolderExt.equals( ".jpeg" )
-					|| fileFolderExt.equals( ".jpg" ) || fileFolderExt.equals( ".tiff" )
-					|| fileFolderExt.equals( ".tif" ) || fileFolderExt.equals( ".png" )
-					|| fileFolderExt.equals( ".svg" ) ) {
+			if ( fileFolderExt.equals( ".jpeg" ) || fileFolderExt.equals( ".jpg" )
+					|| fileFolderExt.equals( ".png" ) || fileFolderExt.equals( ".svg" ) ) {
 				selDetail = "<table  width=\"100%\"><tr><td width=\"25%\"></td><td><img  src='" + pathDetail
 						+ "' width=\"300\" style=\"border:1px solid gray\" ></td><td width=\"25%\"></td></tr></table>";
 			} else {
@@ -806,6 +816,12 @@ public class GuiController
 		if ( !fileFolder.getText().isEmpty() ) {
 			File dirFileFolder = new File( fileFolder.getText() );
 			if ( dirFileFolder.isFile() ) {
+				dirFileFolder = dirFileFolder.getParentFile();
+			}
+			if ( !dirFileFolder.exists() ) {
+				dirFileFolder = dirFileFolder.getParentFile();
+			}
+			if ( !dirFileFolder.exists() ) {
 				dirFileFolder = dirFileFolder.getParentFile();
 			}
 			folderChooser.setInitialDirectory( dirFileFolder );
@@ -1004,10 +1020,8 @@ public class GuiController
 					String sel2 = "<tr><td><h3>2.</h3></td><td><h3>Ggf. Konfiguration und LogType anpassen </h3></td></tr>";
 					String sel3 = "<tr><td><h3>3.</h3></td><td><h3>Validierung starten </h3></td></tr></table>";
 					String selDetail = "<br/>";
-					if ( fileFolderExt.equals( ".jp2" ) || fileFolderExt.equals( ".jpeg" )
-							|| fileFolderExt.equals( ".jpg" ) || fileFolderExt.equals( ".tiff" )
-							|| fileFolderExt.equals( ".tif" ) || fileFolderExt.equals( ".png" )
-							|| fileFolderExt.equals( ".svg" ) ) {
+					if ( fileFolderExt.equals( ".jpeg" ) || fileFolderExt.equals( ".jpg" )
+							|| fileFolderExt.equals( ".png" ) || fileFolderExt.equals( ".svg" ) ) {
 						selDetail = "<table  width=\"100%\"><tr><td width=\"25%\"></td><td><img  src='"
 								+ pathDetail
 								+ "' width=\"300\" style=\"border:1px solid gray\" ></td><td width=\"25%\"></td></tr></table>";

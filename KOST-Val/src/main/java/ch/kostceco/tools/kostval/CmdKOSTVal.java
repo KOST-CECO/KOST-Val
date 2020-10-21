@@ -96,7 +96,7 @@ public class CmdKOSTVal implements MessageConstants
 		String arg2 = "";
 		String arg3 = "";
 
-		String versionKostVal = "2.0.0.beta3";
+		String versionKostVal = "2.0.0.gamma1";
 
 		// Standardwerte bei fehlenden Parameter eingeben
 		if ( args.length == 2 ) {

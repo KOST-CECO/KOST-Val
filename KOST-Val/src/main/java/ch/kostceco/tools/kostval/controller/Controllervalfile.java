@@ -31,6 +31,8 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.context.ApplicationContext;
 
+import com.pdftools.pdfvalidator.PdfValidatorAPI;
+
 import ch.kostceco.tools.kostval.logging.Logger;
 import ch.kostceco.tools.kostval.logging.MessageConstants;
 import ch.kostceco.tools.kostval.service.TextResourceService;
@@ -192,6 +194,7 @@ public class Controllervalfile implements MessageConstants
 			/* Ausgabe der Pfade zu den Jhove Reports, falls welche generiert wurden (-v) oder Jhove
 			 * Report loeschen */
 			File jhoveReport = new File( directoryOfLogfile, valDatei.getName() + ".jhove-log.txt" );
+			File exifReport = new File( directoryOfLogfile, valDatei.getName() + ".exiftool-log.txt" );
 
 			if ( jhoveReport.exists() ) {
 				if ( verbose ) {
@@ -199,6 +202,14 @@ public class Controllervalfile implements MessageConstants
 				} else {
 					// kein optionaler Parameter --> Jhove-Report loeschen!
 					jhoveReport.delete();
+				}
+			}
+			if ( exifReport.exists() ) {
+				if ( verbose ) {
+					// optionaler Parameter --> Exiftool-Report lassen
+				} else {
+					// kein optionaler Parameter --> Exiftool-Report loeschen!
+					exifReport.delete();
 				}
 			}
 
@@ -278,8 +289,8 @@ public class Controllervalfile implements MessageConstants
 				System.out.println( " = Invalid" );
 			}
 
-			/* Ausgabe der Pfade zu den _FontValidation.xml Reports, falls welche generiert wurden. Ggf
-			 * loeschen */
+			/* Ausgabe der Pfade zu den _FontValidation.xml und _FontValidation_Error.xml Reports, falls
+			 * welche generiert wurden. Ggf loeschen */
 			File fontValidationReport = new File( directoryOfLogfile,
 					valDatei.getName() + "_FontValidation.xml" );
 			// Test.pdf_FontValidation.xml
@@ -288,11 +299,29 @@ public class Controllervalfile implements MessageConstants
 					// optionaler Parameter --> fontValidationReport lassen
 				} else {
 					// kein optionaler Parameter --> fontValidationReport loeschen!
-					fontValidationReport.delete();
-					fontValidationReport.deleteOnExit();
-					Util.deleteFile( fontValidationReport );
+						Util.deleteFile( fontValidationReport );
 				}
 			}
+			File fontValidationErrorReport = new File( directoryOfLogfile,
+					valDatei.getName() + "_FontValidation_Error.xml" );
+			if ( fontValidationErrorReport.exists() ) {
+				// fontValidationErrorReport loeschen!
+				Util.deleteFile( fontValidationErrorReport );
+			}
+			PdfValidatorAPI.terminate();
+			File internLicenseFile = new File(
+					directoryOfLogfile + File.separator + ".useKOSTValLicense.txt" );
+			if ( internLicenseFile.exists() ) {
+				// interne Lizenz verwendet. Lizenz ueberschreiben
+				internLicenseFile.delete();
+				if ( internLicenseFile.exists() ) {
+					internLicenseFile.deleteOnExit();
+				}
+				if ( internLicenseFile.exists() ) {
+					Util.deleteFile( internLicenseFile );
+				}
+				PdfValidatorAPI.setLicenseKey( " " );
+						}
 
 		} else {
 			LOGGER.logError( getTextResourceService().getText( locale, ERROR_INCORRECTFILEENDING,

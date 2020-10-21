@@ -82,10 +82,17 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl
 	public static String							NEWLINE					= System.getProperty( "line.separator" );
 	public static Locale							locale					= null;
 
+	private boolean										min							= false;
+
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
 			Locale locale ) throws ValidationApdfvalidationException
 	{
+		String onWork = configMap.get( "ShowProgressOnWork" );
+		if ( onWork.equals( "nomin" ) ) {
+			min = true;
+		}
+
 		// System.out.print( " "+locale.toString()+" " );
 		isValidJPEG = true;
 		isValidJP2 = true;
@@ -105,15 +112,23 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl
 		// Optionale Bildvalidierung eingeschaltet?
 		String pdfaImage = configMap.get( "pdfaimage" );
 		if ( pdfaImage.startsWith( "Configuration-Error:" ) ) {
-			getMessageService().logError(
-					getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA ) + pdfaImage );
-			return false;
+			if ( min ) {
+				return false;
+			} else {
+				getMessageService().logError(
+						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA ) + pdfaImage );
+				return false;
+			}
 		}
 		String jbig2Allowed = configMap.get( "jbig2allowed" );
 		if ( jbig2Allowed.startsWith( "Configuration-Error:" ) ) {
-			getMessageService().logError(
-					getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA ) + jbig2Allowed );
-			return false;
+			if ( min ) {
+				return false;
+			} else {
+				getMessageService().logError(
+						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA ) + jbig2Allowed );
+				return false;
+			}
 		}
 		if ( jbig2Allowed.equalsIgnoreCase( "yes" ) ) {
 			// JBIG2 ist erlaubt
@@ -134,11 +149,15 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl
 					pathToLogDir + File.separator + valDatei.getName() + "_encrypt.txt" );
 
 			if ( encrypt.exists() ) {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
-								+ getTextResourceService().getText( locale, ERROR_XML_J_ENCRYPT ) );
-				valid = false;
-				Util.deleteFile( encrypt );
+				if ( min ) {
+					return false;
+				} else {
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
+									+ getTextResourceService().getText( locale, ERROR_XML_J_ENCRYPT ) );
+					valid = false;
+					Util.deleteFile( encrypt );
+				}
 			} else {
 				Util.deleteFile( encrypt );
 				/* TODO ITEXT hat problem, im Moment J nicht moeglich.
@@ -204,8 +223,8 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl
 	 *          the source PDF
 	 * @param dest
 	 *          the resulting PDF */
-	public void extractImages( String srcPdf, String destImage, Map<String, String> configMap )
-			throws IOException, DocumentException
+	public void extractImages( String srcPdf, String destImage, Map<String, String> configMap,
+			Boolean min ) throws IOException, DocumentException
 	{
 		try {
 			PdfReader reader = new PdfReader( srcPdf );
@@ -217,14 +236,23 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl
 			reader.close();
 
 		} catch ( OutOfMemoryError e ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
-							+ getTextResourceService().getText( locale, ERROR_XML_OUTOFMEMORYERROR ) );
+			if ( min ) {
+			} else {
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
+								+ getTextResourceService().getText( locale, ERROR_XML_OUTOFMEMORYERROR ) );
+			}
 		} catch ( IOException e ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
-							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-									(e.getMessage() + " extractImages-IOException") ) );
+			if ( min ) {
+			} else {
+				if ( min ) {
+				} else {
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
+									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+											(e.getMessage() + " extractImages-IOException") ) );
+				}
+			}
 		}
 	}
 
@@ -541,10 +569,13 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl
 												proc.waitFor();
 
 											} catch ( Exception e ) {
-												getMessageService().logError(
-														getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
-																+ getTextResourceService().getText( locale,
-																		ERROR_XML_A_JP2_SERVICEFAILED, e.getMessage() ) );
+												if ( min ) {
+												} else {
+													getMessageService().logError(
+															getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
+																	+ getTextResourceService().getText( locale,
+																			ERROR_XML_A_JP2_SERVICEFAILED, e.getMessage() ) );
+												}
 												isValidJP2 = false;
 												delFile = false;
 												invalidJP2 = invalidJP2 + "   " + filename;
@@ -604,20 +635,26 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl
 
 											} else {
 												// Datei nicht angelegt...
-												getMessageService().logError(
-														getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
-																+ getTextResourceService().getText( locale,
-																		ERROR_XML_A_JP2_NOREPORT ) );
+												if ( min ) {
+												} else {
+													getMessageService().logError(
+															getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
+																	+ getTextResourceService().getText( locale,
+																			ERROR_XML_A_JP2_NOREPORT ) );
+												}
 												isValidJP2 = false;
 												delFile = false;
 												invalidJP2 = invalidJP2 + "   " + filename;
 												jp2Counter = jp2Counter + 1;
 											}
 										} catch ( Exception e ) {
-											getMessageService().logError(
-													getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
-															+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-																	(e.getMessage() + " JP2-Exception") ) );
+											if ( min ) {
+											} else {
+												getMessageService().logError(
+														getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
+																+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+																		(e.getMessage() + " JP2-Exception") ) );
+											}
 											isValidJP2 = false;
 											delFile = false;
 											invalidJP2 = invalidJP2 + "   " + filename;
@@ -628,10 +665,13 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl
 										}
 
 									} catch ( Exception e ) {
-										getMessageService().logError(
-												getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
-														+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-																(e.getMessage() + " JP2-Exception2") ) );
+										if ( min ) {
+										} else {
+											getMessageService().logError(
+													getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
+															+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+																	(e.getMessage() + " JP2-Exception2") ) );
+										}
 									}
 
 									// End JP2 Validierung
@@ -665,10 +705,13 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl
 						/* kein JPEG, JP2 oder JBIG2. Es wird entsprechend keine Validierung gemacht. */
 					}
 				} catch ( IOException ioe ) {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
-									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-											(ioe.getMessage() + " Image-IOException") ) );
+					if ( min ) {
+					} else {
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
+										+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+												(ioe.getMessage() + " Image-IOException") ) );
+					}
 				}
 			} catch ( IOException e ) {
 				String input = e.getMessage();
@@ -684,11 +727,14 @@ public class ValidationJimageValidationModuleImpl extends ValidationModuleImpl
 				} else if ( input.contains( "Unexpected color space" ) ) {
 					// Warnung wird nicht ausgegeben
 				} else {
-					System.out.println( e.getMessage() );
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
-									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-											(e.getMessage() + " Image-IOException 2") ) );
+					if ( min ) {
+					} else {
+						System.out.println( e.getMessage() );
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
+										+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+												(e.getMessage() + " Image-IOException 2") ) );
+					}
 				}
 			}
 		}

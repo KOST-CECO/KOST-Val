@@ -52,7 +52,8 @@ import ch.kostceco.tools.kostval.validation.modulesiard.ValidationFrowModule;
  * 
  * @author Rc Claire Roethlisberger, KOST-CECO
  * @param <Range>
- * @param <RangeHandler> */
+ * @param <RangeHandler>
+ */
 
 public class ValidationFrowModuleImpl extends ValidationModuleImpl implements ValidationFrowModule
 /* public class ValidationFrowModuleImpl<Range, RangeHandler> extends ValidationModuleImpl
@@ -61,6 +62,8 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements Va
  * <Range, RangeHandler> bereitet Probleme beim Projekt-Build. Da es nicht benoetigt wird, wurde es
  * entfernt. */
 {
+	private boolean						min				= false;
+
 	Boolean										version1	= false;
 	Boolean										version2	= false;
 
@@ -81,6 +84,8 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements Va
 			showOnWork = true;
 			System.out.print( "F    " );
 			System.out.print( "\b\b\b\b\b" );
+		} else if ( onWorkConfig.equals( "nomin" ) ) {
+			min = true;
 		}
 
 		boolean valid = true;
@@ -139,16 +144,24 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements Va
 			}
 		} catch ( java.io.IOException ioe ) {
 			valid = false;
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_SIARD )
-							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-									ioe.getMessage() + " (IOException)" ) );
+			if ( min ) {
+				return false;
+			} else {
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_SIARD )
+								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+										ioe.getMessage() + " (IOException)" ) );
+			}
 		} catch ( JDOMException e ) {
 			valid = false;
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_SIARD )
-							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-									e.getMessage() + " (JDOMException)" ) );
+			if ( min ) {
+				return false;
+			} else {
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_SIARD )
+								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+										e.getMessage() + " (JDOMException)" ) );
+			}
 		}
 
 		return valid;
@@ -235,13 +248,13 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements Va
 				.append( File.separator ).append( tableFolder.getText() ).toString() );
 		File tableXsd = new File( new StringBuilder( tablePath.getAbsolutePath() )
 				.append( File.separator ).append( tableFolder.getText() + ".xsd" ).toString() );
-		validR = validateRow( tableXsd, rowmax, locale );
+		validR = validateRow( tableXsd, rowmax, locale, min );
 		valid = valid && validR;
 
 		return valid;
 	}
 
-	private boolean validateRow( File tableXsd, int rowmax, Locale locale )
+	private boolean validateRow( File tableXsd, int rowmax, Locale locale, Boolean min )
 	{
 		boolean valid = false;
 		try {
@@ -265,10 +278,14 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements Va
 						valid = true;
 					} else {
 						valid = false;
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_SIARD )
-										+ getTextResourceService().getText( locale,
-												MESSAGE_XML_F_INVALID_TABLE_XML_FILES, tableXsd ) );
+						if ( min ) {
+							return false;
+						} else {
+							getMessageService()
+									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_SIARD )
+											+ getTextResourceService().getText( locale,
+													MESSAGE_XML_F_INVALID_TABLE_XML_FILES, tableXsd ) );
+						}
 					}
 				}
 			} catch ( IOException e ) {
@@ -280,10 +297,14 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements Va
 			}
 		} catch ( SAXException e ) {
 			valid = false;
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_SIARD )
-							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-									e.getMessage() + " (SAXException)" ) );
+			if ( min ) {
+				return false;
+			} else {
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_SIARD )
+								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+										e.getMessage() + " (SAXException)" ) );
+			}
 		}
 		return valid;
 	}

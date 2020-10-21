@@ -57,6 +57,7 @@ import ch.kostceco.tools.kostval.validation.modulesiard.ValidationJsurplusFilesM
 public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 		implements ValidationJsurplusFilesModule
 {
+	private boolean			min										= false;
 
 	Map<String, String>	filesInSiardUnsorted	= new HashMap<String, String>();
 	Map<String, String>	filesInSiard					= new HashMap<String, String>();
@@ -85,6 +86,8 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 			showOnWork = true;
 			System.out.print( "J    " );
 			System.out.print( "\b\b\b\b\b" );
+		} else if ( onWorkConfig.equals( "nomin" ) ) {
+			min = true;
 		}
 
 		boolean valid = true;
@@ -160,43 +163,63 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 			String pathToSedExe = fSedExe.getAbsolutePath();
 			if ( !fSedExe.exists() ) {
 				// sed.exe existiert nicht --> Abbruch
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
-								+ getTextResourceService().getText( locale, MESSAGE_XML_D_MISSING_FILE,
-										fSedExe.getAbsolutePath() ) );
-				return false;
+				if ( min ) {
+					return false;
+				} else {
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
+									+ getTextResourceService().getText( locale, MESSAGE_XML_D_MISSING_FILE,
+											fSedExe.getAbsolutePath() ) );
+					return false;
+				}
 			}
 			if ( !msys20dll.exists() ) {
 				// existiert nicht --> Abbruch
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
-								+ getTextResourceService().getText( locale, MESSAGE_XML_D_MISSING_FILE,
-										msys20dll.getAbsolutePath() ) );
-				return false;
+				if ( min ) {
+					return false;
+				} else {
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
+									+ getTextResourceService().getText( locale, MESSAGE_XML_D_MISSING_FILE,
+											msys20dll.getAbsolutePath() ) );
+					return false;
+				}
 			}
 			if ( !msysgccs1dll.exists() ) {
 				// existiert nicht --> Abbruch
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
-								+ getTextResourceService().getText( locale, MESSAGE_XML_D_MISSING_FILE,
-										msysgccs1dll.getAbsolutePath() ) );
-				return false;
+				if ( min ) {
+					return false;
+				} else {
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
+									+ getTextResourceService().getText( locale, MESSAGE_XML_D_MISSING_FILE,
+											msysgccs1dll.getAbsolutePath() ) );
+					return false;
+				}
 			}
 			if ( !msysiconv2dll.exists() ) {
 				// existiert nicht --> Abbruch
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
-								+ getTextResourceService().getText( locale, MESSAGE_XML_D_MISSING_FILE,
-										msysiconv2dll.getAbsolutePath() ) );
-				return false;
+				if ( min ) {
+					return false;
+				} else {
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
+									+ getTextResourceService().getText( locale, MESSAGE_XML_D_MISSING_FILE,
+											msysiconv2dll.getAbsolutePath() ) );
+					return false;
+				}
 			}
 			if ( !msysintl8dll.exists() ) {
 				// existiert nicht --> Abbruch
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
-								+ getTextResourceService().getText( locale, MESSAGE_XML_D_MISSING_FILE,
-										msysintl8dll.getAbsolutePath() ) );
-				return false;
+				if ( min ) {
+					return false;
+				} else {
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
+									+ getTextResourceService().getText( locale, MESSAGE_XML_D_MISSING_FILE,
+											msysintl8dll.getAbsolutePath() ) );
+					return false;
+				}
 			}
 
 			try {
@@ -225,10 +248,14 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 						ns = Namespace.getNamespace( "http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
 					} else {
 						valid = false;
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
-										+ getTextResourceService().getText( locale, MESSAGE_XML_D_INVALID_XMLNS,
-												metadataXml ) );
+						if ( min ) {
+							return false;
+						} else {
+							getMessageService()
+									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
+											+ getTextResourceService().getText( locale, MESSAGE_XML_D_INVALID_XMLNS,
+													metadataXml ) );
+						}
 					}
 				}
 				// select schema elements and loop
@@ -260,16 +287,24 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 				}
 			} catch ( java.io.IOException ioe ) {
 				valid = false;
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
-								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-										ioe.getMessage() + " (IOException)" ) );
+				if ( min ) {
+					return false;
+				} else {
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
+									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+											ioe.getMessage() + " (IOException)" ) );
+				}
 			} catch ( JDOMException e ) {
 				valid = false;
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
-								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-										e.getMessage() + " (JDOMException)" ) );
+				if ( min ) {
+					return false;
+				} else {
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
+									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+											e.getMessage() + " (JDOMException)" ) );
+				}
 			}
 
 			if ( filesInSiard.size() > 0 ) {
@@ -348,11 +383,15 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 									Util.switchOnConsole();
 
 								} catch ( Exception e ) {
-									getMessageService().logError(
-											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
-													+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-															e.getMessage() ) );
-									return false;
+									if ( min ) {
+										return false;
+									} else {
+										getMessageService().logError(
+												getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
+														+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+																e.getMessage() ) );
+										return false;
+									}
 								} finally {
 									if ( procSed != null ) {
 										procSed.getOutputStream().close();
@@ -398,17 +437,25 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 								// set to null
 								br = null;
 							} catch ( FileNotFoundException e ) {
-								getMessageService()
-										.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
-												+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-														"FileNotFoundException" ) );
-								return false;
+								if ( min ) {
+									return false;
+								} else {
+									getMessageService().logError(
+											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
+													+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+															"FileNotFoundException" ) );
+									return false;
+								}
 							} catch ( Exception e ) {
-								getMessageService()
-										.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
-												+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-														(e.getMessage() + " 1") ) ); //
-								return false;
+								if ( min ) {
+									return false;
+								} else {
+									getMessageService().logError(
+											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
+													+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+															(e.getMessage() + " 1") ) ); //
+									return false;
+								}
 							} // table durch scannen
 							if ( !tableFile ) {
 								// tableName enthaelt keine file und wird aus liste geloescht
@@ -431,31 +478,40 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 						filesInSiard.remove( fileName );
 					}
 				} catch ( Exception e ) {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
-									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-											(e.getMessage() + " 2") ) );
-					// return false;
+					if ( min ) {
+					} else {
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
+										+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+												(e.getMessage() + " 2") ) );
+						// return false;
+					}
 				}
 			}
 
 			// in filesInSiard sind jetzt noch die drinnen, welche nicht in table.xml erwaehnt wurden
 			if ( filesInSiard.size() > 0 ) {
 				valid = false;
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
-								+ getTextResourceService().getText( locale, MESSAGE_XML_J_INVALID_ENTRY,
-										filesInSiard.keySet() ) );
+				if ( min ) {
+					return false;
+				} else {
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
+									+ getTextResourceService().getText( locale, MESSAGE_XML_J_INVALID_ENTRY,
+											filesInSiard.keySet() ) );
+				}
 			} else {
 				valid = true;
 			}
 
 		} catch ( Exception e ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
-							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-									(e.getMessage() + " 3") ) );
-			// return false;
+			if ( min ) {
+			} else {
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
+								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+										(e.getMessage() + " 3") ) );
+			} // return false;
 		}
 		filesInSiardUnsorted.clear();
 		filesInSiard.clear();
@@ -478,6 +534,10 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
 		 * ref="configurationService" /> */
 		if ( onWorkConfig.equals( "no" ) ) {
+			// keine Ausgabe
+			showOnWork = false;
+		} else if ( onWorkConfig.equals( "nomin" ) ) {
+			min = true;
 			// keine Ausgabe
 			showOnWork = false;
 		} else {

@@ -53,6 +53,8 @@ public class ValidationWwarningModuleImpl extends ValidationModuleImpl
 
 {
 
+	private boolean min = false;
+
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
 			Locale locale ) throws ValidationWwarningException
@@ -66,6 +68,10 @@ public class ValidationWwarningModuleImpl extends ValidationModuleImpl
 			// Ausgabe Modul Ersichtlich das KOST-Val arbeitet
 			System.out.print( "W    " );
 			System.out.print( "\b\b\b\b\b" );
+		} else if ( onWork.equals( "nomin" ) ) {
+			min = true;
+		} else if ( onWork.equals( "nomin" ) ) {
+			min = true;
 		}
 
 		try {
@@ -99,10 +105,13 @@ public class ValidationWwarningModuleImpl extends ValidationModuleImpl
 				if ( dataOwnerValue.equals( "(...)" ) || dataOwnerValue.equals( "unspecified" ) ) {
 					/* Der Initialwert wurde nicht verändert respektive ausgef�llt, entsprechend wird eine
 					 * Warnung ausgegeben */
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_W_SIARD )
-									+ getTextResourceService().getText( locale, MESSAGE_XML_W_WARNING_INITVALUE,
-											"dataOwner", dataOwnerValue ) );
+					if ( min ) {
+					} else {
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_W_SIARD )
+										+ getTextResourceService().getText( locale, MESSAGE_XML_W_WARNING_INITVALUE,
+												"dataOwner", dataOwnerValue ) );
+					}
 				}
 			}
 
@@ -111,10 +120,13 @@ public class ValidationWwarningModuleImpl extends ValidationModuleImpl
 				if ( dataOriginTimespanValue.equals( "(...)" ) ) {
 					/* Der Initialwert wurde nicht verändert respektive ausgef�llt, entsprechend wird eine
 					 * Warnung ausgegeben */
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_W_SIARD )
-									+ getTextResourceService().getText( locale, MESSAGE_XML_W_WARNING_INITVALUE,
-											"dataOriginTimespan", dataOriginTimespanValue ) );
+					if ( min ) {
+					} else {
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_W_SIARD )
+										+ getTextResourceService().getText( locale, MESSAGE_XML_W_WARNING_INITVALUE,
+												"dataOriginTimespan", dataOriginTimespanValue ) );
+					}
 				}
 			}
 
@@ -123,17 +135,23 @@ public class ValidationWwarningModuleImpl extends ValidationModuleImpl
 				if ( dataDbNameValue.equals( "(...)" ) ) {
 					/* Der Initialwert wurde nicht verändert respektive ausgef�llt, entsprechend wird eine
 					 * Warnung ausgegeben */
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_W_SIARD )
-									+ getTextResourceService().getText( locale, MESSAGE_XML_W_WARNING_INITVALUE,
-											"dbname", dataDbNameValue ) );
+					if ( min ) {
+					} else {
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_W_SIARD )
+										+ getTextResourceService().getText( locale, MESSAGE_XML_W_WARNING_INITVALUE,
+												"dbname", dataDbNameValue ) );
+					}
 				}
 			}
 
 		} catch ( Exception e ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_W_SIARD )
-							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			if ( min ) {
+			} else {
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_W_SIARD )
+								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			}
 			return true;
 		}
 

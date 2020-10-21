@@ -55,10 +55,16 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 		implements ValidationAvalidationAModule
 {
 
+	private boolean min = false;
+
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
 			Locale locale ) throws ValidationAjp2validationException
 	{
+		String onWork = configMap.get( "ShowProgressOnWork" );
+		if ( onWork.equals( "nomin" ) ) {
+			min = true;
+		}
 
 		// Start mit der Erkennung
 
@@ -76,17 +82,20 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 		 * 
 		 * JPM-BOF: 00 00 00 0C 6A 50 20 20 0D 0A 87 0A {4} 66 74 79 70 6A 70 6D */
 		if ( valDatei.isDirectory() ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
-							+ getTextResourceService().getText( locale, ERROR_XML_A_JP2_ISDIRECTORY ) );
-			return false;
+			if ( min ) {
+				return false;
+			} else {
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
+								+ getTextResourceService().getText( locale, ERROR_XML_A_JP2_ISDIRECTORY ) );
+				return false;
+			}
 		} else if ( (valDatei.getAbsolutePath().toLowerCase().endsWith( ".jp2" )) ) {
 
 			FileReader fr = null;
 
 			try {
 				fr = new FileReader( valDatei );
-				@SuppressWarnings("resource")
 				BufferedReader read = new BufferedReader( fr );
 
 				// wobei hier nur die ersten 23 Zeichen der Datei ausgelesen werden
@@ -168,13 +177,12 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 				char[] charArray2 = new char[] { c1, c1, c1, c2, c3, c4, c5, c5, c6, c7 };
 
 				if ( Arrays.equals( charArray1, charArray2 ) ) {
-					/* h√∂chstwahrscheinlich ein JP2 da es mit 0000000c6a5020200d0a respektive ....jP ..ÔøΩ
+					/* hoechstwahrscheinlich ein JP2 da es mit 0000000c6a5020200d0a respektive ....jP ..ÔøΩ
 					 * beginnt */
 					// System.out.println("es ist ein JP2 oder JPX ");
 
 					// auslesen der ersten 23 Zeiche der Datei
 					FileReader fr23 = new FileReader( valDatei );
-					@SuppressWarnings("resource")
 					BufferedReader read23 = new BufferedReader( fr23 );
 					int length23;
 					int i23;
@@ -196,86 +204,114 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 						// System.out.print("es ist ein JP2 (JPEG2000 Part1)");
 					} else {
 						// System.out.print("es ist ein JPX (Part2) / JPM (Part6)");
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
-										+ getTextResourceService().getText( locale, ERROR_XML_A_JP2_INCORRECTFILE,
-												"JPX/JPM" ) );
 						fr.close();
 						read.close();
-						return false;
+						if ( min ) {
+							return false;
+						} else {
+							getMessageService()
+									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
+											+ getTextResourceService().getText( locale, ERROR_XML_A_JP2_INCORRECTFILE,
+													"JPX/JPM" ) );
+							return false;
+						}
 					}
 
 				} else {
-					// Droid-Erkennung, damit Details ausgegeben werden k√∂nnen
+					// Droid-Erkennung, damit Details ausgegeben werden koennen
 
 					String nameOfSignature = configMap.get( "PathToDroidSignatureFile" );
 					if ( nameOfSignature.startsWith( "Configuration-Error:" ) ) {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
-										+ nameOfSignature );
 						fr.close();
 						read.close();
-						return false;
+						if ( min ) {
+							return false;
+						} else {
+							getMessageService()
+									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
+											+ nameOfSignature );
+							return false;
+						}
 					}
 					// existiert die SignatureFile am angebenen Ort?
 					File fnameOfSignature = new File( nameOfSignature );
 					if ( !fnameOfSignature.exists() ) {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
-										+ getTextResourceService().getText( locale, MESSAGE_XML_CA_DROID ) );
 						fr.close();
 						read.close();
-						return false;
+						if ( min ) {
+							return false;
+						} else {
+							getMessageService()
+									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
+											+ getTextResourceService().getText( locale, MESSAGE_XML_CA_DROID ) );
+							return false;
+						}
 					}
 
 					Droid droid = null;
 					try {
 						/* kleiner Hack, weil die Droid libraries irgendwo ein System.out drin haben, welche den
-						 * Output st√∂ren Util.switchOffConsole() als Kommentar markieren wenn man die
-						 * Fehlermeldung erhalten m√∂chte */
+						 * Output stoeren Util.switchOffConsole() als Kommentar markieren wenn man die
+						 * Fehlermeldung erhalten moechte */
 						Util.switchOffConsole();
 						droid = new Droid();
 
 						droid.readSignatureFile( nameOfSignature );
 
 					} catch ( Exception e ) {
-						getMessageService().logError( getTextResourceService().getText( locale,
-								MESSAGE_XML_MODUL_A_JP2 )
-								+ getTextResourceService().getText( locale, ERROR_XML_CANNOT_INITIALIZE_DROID ) );
 						fr.close();
 						read.close();
-						return false;
+						if ( min ) {
+							return false;
+						} else {
+							getMessageService().logError( getTextResourceService().getText( locale,
+									MESSAGE_XML_MODUL_A_JP2 )
+									+ getTextResourceService().getText( locale, ERROR_XML_CANNOT_INITIALIZE_DROID ) );
+							return false;
+						}
 					} finally {
 						Util.switchOnConsole();
 					}
 					File file = valDatei;
-					String puid = "";
+					String puid = " ??? ";
 					IdentificationFile ifile = droid.identify( file.getAbsolutePath() );
 					for ( int x = 0; x < ifile.getNumHits(); x++ ) {
 						FileFormatHit ffh = ifile.getHit( x );
 						FileFormat ff = ffh.getFileFormat();
 						puid = ff.getPUID();
 					}
-					getMessageService().logError( getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_A_JP2 )
-							+ getTextResourceService().getText( locale, ERROR_XML_A_JP2_INCORRECTFILE, puid ) );
 					fr.close();
 					read.close();
-					return false;
+					if ( min ) {
+						return false;
+					} else {
+						getMessageService().logError( getTextResourceService().getText( locale,
+								MESSAGE_XML_MODUL_A_JP2 )
+								+ getTextResourceService().getText( locale, ERROR_XML_A_JP2_INCORRECTFILE, puid ) );
+						return false;
+					}
 				}
 				read.close();
 			} catch ( Exception e ) {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
-								+ getTextResourceService().getText( locale, ERROR_XML_A_JP2_INCORRECTFILE ) );
-				return false;
+				if ( min ) {
+					return false;
+				} else {
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
+									+ getTextResourceService().getText( locale, ERROR_XML_A_JP2_INCORRECTFILE ) );
+					return false;
+				}
 			}
 		} else {
 			// die Datei endet nicht mit jp2 -> Fehler
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
-							+ getTextResourceService().getText( locale, ERROR_XML_A_JP2_INCORRECTFILEENDING ) );
-			return false;
+			if ( min ) {
+				return false;
+			} else {
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
+								+ getTextResourceService().getText( locale, ERROR_XML_A_JP2_INCORRECTFILEENDING ) );
+				return false;
+			}
 		}
 		// Ende der Erkennung
 
@@ -301,13 +337,17 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 		}
 
 		String pathToJpylyzerExe = dirOfJarPath + File.separator + "resources" + File.separator
-				+ "jpylyzer" + File.separator + "jpylyzer.exe";
+				+ "jpylyzer_2.0.0_win32" + File.separator + "jpylyzer.exe";
 
 		File fJpylyzerExe = new File( pathToJpylyzerExe );
 		if ( !fJpylyzerExe.exists() ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
-							+ getTextResourceService().getText( locale, ERROR_XML_A_JP2_JPYLYZER_MISSING ) );
+			if ( min ) {
+				return false;
+			} else {
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
+								+ getTextResourceService().getText( locale, ERROR_XML_A_JP2_JPYLYZER_MISSING ) );
+			}
 		}
 
 		pathToJpylyzerExe = "\"" + pathToJpylyzerExe + "\"";
@@ -328,13 +368,12 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 				try {
 					report = output;
 
-					// falls das File bereits existiert, z.B. von einem vorhergehenden Durchlauf, l√∂schen wir
-					// es
+					// falls das File von einem vorhergehenden Durchlauf bereits existiert, loeschen wir es
 					if ( report.exists() ) {
 						report.delete();
 					}
 
-					/* Das redirect Zeichen verunm√∂glicht eine direkte eingabe. mit dem geschachtellten
+					/* Das redirect Zeichen verunmoeglicht eine direkte eingabe. mit dem geschachtellten
 					 * Befehl gehts: cmd /c\"urspruenlicher Befehl\" */
 					String command = "cmd /c \"" + pathToJpylyzerExe + " \"" + valDatei.getAbsolutePath()
 							+ "\" > \"" + output.getAbsolutePath() + "\"\"";
@@ -345,11 +384,15 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 					proc.waitFor();
 
 				} catch ( Exception e ) {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_A_JP2_SERVICEFAILED,
-											e.getMessage() ) );
-					return false;
+					if ( min ) {
+						return false;
+					} else {
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
+										+ getTextResourceService().getText( locale, ERROR_XML_A_JP2_SERVICEFAILED,
+												e.getMessage() ) );
+						return false;
+					}
 				} finally {
 					if ( proc != null ) {
 						proc.getOutputStream().close();
@@ -361,13 +404,17 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 					// alles io
 				} else {
 					// Datei nicht angelegt...
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_A_JP2_NOREPORT ) );
-					return false;
+					if ( min ) {
+						return false;
+					} else {
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
+										+ getTextResourceService().getText( locale, ERROR_XML_A_JP2_NOREPORT ) );
+						return false;
+					}
 				}
 
-				// Ende Jpylyzer direkt auszul√∂sen
+				// Ende Jpylyzer direkt auszuloesen
 
 				// TODO: Erledigt - Ergebnis auslesen
 
@@ -378,9 +425,10 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 				doc = db.parse( bis );
 				doc.normalize();
 
-				NodeList nodeLstI = doc.getElementsByTagName( "isValidJP2" );
+				NodeList nodeLstI = doc.getElementsByTagName( "isValid" );
+				// <isValid format="jp2">True</isValid>
 
-				// Node isValidJP2 enth√§lt im TextNode das Resultat TextNode ist ein ChildNode
+				// Node isValidJP2 enthaelt im TextNode das Resultat TextNode ist ein ChildNode
 				for ( int s = 0; s < nodeLstI.getLength(); s++ ) {
 					Node resultNode = nodeLstI.item( s );
 					StringBuffer buf = new StringBuffer();
@@ -400,10 +448,14 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 						isValid = true;
 					} else {
 						// invalide
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
-										+ getTextResourceService().getText( locale, ERROR_XML_A_JP2_JPYLYZER_FAIL ) );
-						isValid = false;
+						if ( min ) {
+							return false;
+						} else {
+							getMessageService()
+									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
+											+ getTextResourceService().getText( locale, ERROR_XML_A_JP2_JPYLYZER_FAIL ) );
+							isValid = false;
+						}
 					}
 				}
 
@@ -417,59 +469,67 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 
 			if ( !isValid ) {
 				// Invalide JP2-Datei
+
+				/* neu werden die Fehler zusammengefasst, damit nicht bei jeder neuen Version das Mapping
+				 * der Pruefschritte zu den Fehlern komplett neu erstellt werden muss.
+				 * 
+				 * A Erkennung und Struktur
+				 * 
+				 * ï A SignatureBox ï A FileTypeBox ï A JP2HeaderBox ï A - ImageHeaderBox ï A -
+				 * ColourSpecificationBox ï A - BitsPerComponentBox ï A - PaletteBox ï A -
+				 * ComponentMappingBox ï A - ChannelDefinitionBox ï A - ResolutionBox
+				 * 
+				 * B Metadaten-Validierung
+				 * 
+				 * ï B XmlBox ï B UuidInfoBox ï B UuidBox ï B IntellectualProperty
+				 * 
+				 * C Bild-Validierung
+				 * 
+				 * ï C ContiguousCodestreamBox ï C - Siz = {0} {0} in the CC ï C - Coc = {0} {0} in the CC ï
+				 * C - Rgn = {0} {0} in the CC ï C - Qcd = {0} {0} in the CC ï C - Qcc = {0} {0} in the CC ï
+				 * C - Poc = {0} {0} in the CC ï C - Crg = {0} {0} in the CC ï C - Com = {0} {0} in the CC ï
+				 * C - tile = {0} {0} in the CC ï C - Soc = {0} {0} in the CC ï C - Eoc = {0} {0} in the CC
+				 * ï C - Cod = {0} {0} in the CC
+				 * 
+				 * D Sonstige Validierung
+				 * 
+				 * ï D ELSE nicht zugeordnet ({0}) */
 				int isignatureBox = 0;
 				int ifileTypeBox = 0;
+				int ijp2HeaderBox = 0;
 				int iimageHeaderBox = 0;
-				int ibitsPerComponentBox = 0;
 				int icolourSpecificationBox = 0;
+				int ibitsPerComponentBox = 0;
 				int ipaletteBox = 0;
 				int icomponentMappingBox = 0;
 				int ichannelDefinitionBox = 0;
 				int iresolutionBox = 0;
-				int itileParts = 0;
-				int isiz = 0;
-				int icod = 0;
-				int iqcd = 0;
-				int icoc = 0;
-				int icom = 0;
-				int iqcc = 0;
-				int irgn = 0;
-				int ipoc = 0;
-				int iplm = 0;
-				int ippm = 0;
-				int itlm = 0;
-				int icrg = 0;
-				int iplt = 0;
-				int ippt = 0;
-				int ixmlBox = 0;
-				int iuuidBox = 0;
-				int iuuidInfoBox = 0;
-				int iunknownBox = 0;
-				int icontainsImageHeaderBox = 0;
-				int icontainsColourSpecificationBox = 0;
-				int icontainsBitsPerComponentBox = 0;
-				int ifirstJP2HeaderBoxIsImageHeaderBox = 0;
-				int inoMoreThanOneImageHeaderBox = 0;
-				int inoMoreThanOneBitsPerComponentBox = 0;
-				int inoMoreThanOnePaletteBox = 0;
-				int inoMoreThanOneComponentMappingBox = 0;
-				int inoMoreThanOneChannelDefinitionBox = 0;
-				int inoMoreThanOneResolutionBox = 0;
-				int icolourSpecificationBoxesAreContiguous = 0;
-				int ipaletteAndComponentMappingBoxesOnlyTogether = 0;
 
-				int icodestreamStartsWithSOCMarker = 0;
-				int ifoundSIZMarker = 0;
-				int ifoundCODMarker = 0;
-				int ifoundQCDMarker = 0;
-				int iquantizationConsistentWithLevels = 0;
-				int ifoundExpectedNumberOfTiles = 0;
-				int ifoundExpectedNumberOfTileParts = 0;
-				int ifoundEOCMarker = 0;
+				int ixmlBox = 0;
+				int iuuidInfoBox = 0;
+				int iuuidBox = 0;
+				int iintellectualProperty = 0;
+
+				int icontiguousCodestreamBox = 0;
+				int isiz = 0;
+				int icoc = 0;
+				int irgn = 0;
+				int iqcd = 0;
+				int iqcc = 0;
+				int ipoc = 0;
+				int icrg = 0;
+				int icom = 0;
+				int itile = 0;
+				int isoc = 0;
+				int ieoc = 0;
+				int icod = 0;
+
+				int iunknown = 0;
+				String sunknown = "";
 
 				NodeList nodeLstTest = doc.getElementsByTagName( "tests" );
 
-				// Node test enth√§lt alle invaliden tests
+				// Node test enthaelt alle invaliden tests
 				for ( int s = 0; s < nodeLstTest.getLength(); s++ ) {
 					Node testNode = nodeLstTest.item( s );
 					NodeList children = testNode.getChildNodes();
@@ -481,131 +541,117 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 							} else if ( textChild.getNodeName().equals( "fileTypeBox" ) ) {
 								ifileTypeBox = ifileTypeBox + 1;
 							} else if ( textChild.getNodeName().equals( "jp2HeaderBox" ) ) {
+								ijp2HeaderBox = ijp2HeaderBox + 1;
 								NodeList childrenII = textChild.getChildNodes();
 								for ( int j = 0; j < childrenII.getLength(); j++ ) {
+									/* ï A - ImageHeaderBox ï A - ColourSpecificationBox ï A - BitsPerComponentBox ï A
+									 * - PaletteBox ï A - ComponentMappingBox ï A - ChannelDefinitionBox ï A -
+									 * ResolutionBox */
 									Node textChildII = childrenII.item( j );
 									if ( textChildII.getNodeType() == Node.ELEMENT_NODE ) {
-										if ( textChildII.getNodeName().equals( "imageHeaderBox" ) ) {
+										if ( textChildII.getNodeName().contains( "mageHeaderBox" ) ) {
 											iimageHeaderBox = iimageHeaderBox + 1;
-										} else if ( textChildII.getNodeName().equals( "bitsPerComponentBox" ) ) {
-											ibitsPerComponentBox = ibitsPerComponentBox + 1;
-										} else if ( textChildII.getNodeName().equals( "colourSpecificationBox" ) ) {
+										} else if ( textChildII.getNodeName().contains( "olourSpecificationBox" ) ) {
 											icolourSpecificationBox = icolourSpecificationBox + 1;
-										} else if ( textChildII.getNodeName().equals( "paletteBox" ) ) {
+										} else if ( textChildII.getNodeName().contains( "itsPerComponentBox" ) ) {
+											ibitsPerComponentBox = ibitsPerComponentBox + 1;
+										} else if ( textChildII.getNodeName().contains( "aletteBox" ) ) {
 											ipaletteBox = ipaletteBox + 1;
-										} else if ( textChildII.getNodeName().equals( "componentMappingBox" ) ) {
+										} else if ( textChildII.getNodeName().contains( "omponentMappingBox" ) ) {
 											icomponentMappingBox = icomponentMappingBox + 1;
-										} else if ( textChildII.getNodeName().equals( "channelDefinitionBox" ) ) {
+										} else if ( textChildII.getNodeName().contains( "hannelDefinitionBox" ) ) {
 											ichannelDefinitionBox = ichannelDefinitionBox + 1;
-										} else if ( textChildII.getNodeName().equals( "resolutionBox" ) ) {
+										} else if ( textChildII.getNodeName().contains( "esolutionBox" ) ) {
 											iresolutionBox = iresolutionBox + 1;
-										} else if ( textChildII.getNodeName().equals( "containsImageHeaderBox" ) ) {
-											icontainsImageHeaderBox = icontainsImageHeaderBox + 1;
-										} else if ( textChildII.getNodeName()
-												.equals( "containsColourSpecificationBox" ) ) {
-											icontainsColourSpecificationBox = icontainsColourSpecificationBox + 1;
-										} else if ( textChildII.getNodeName()
-												.equals( "containsBitsPerComponentBox" ) ) {
-											icontainsBitsPerComponentBox = icontainsBitsPerComponentBox + 1;
-										} else if ( textChildII.getNodeName()
-												.equals( "firstJP2HeaderBoxIsImageHeaderBox" ) ) {
-											ifirstJP2HeaderBoxIsImageHeaderBox = ifirstJP2HeaderBoxIsImageHeaderBox + 1;
-										} else if ( textChildII.getNodeName()
-												.equals( "noMoreThanOneImageHeaderBox" ) ) {
-											inoMoreThanOneImageHeaderBox = inoMoreThanOneImageHeaderBox + 1;
-										} else if ( textChildII.getNodeName()
-												.equals( "noMoreThanOneBitsPerComponentBox" ) ) {
-											inoMoreThanOneBitsPerComponentBox = inoMoreThanOneBitsPerComponentBox + 1;
-										} else if ( textChildII.getNodeName().equals( "noMoreThanOnePaletteBox" ) ) {
-											inoMoreThanOnePaletteBox = inoMoreThanOnePaletteBox + 1;
-										} else if ( textChildII.getNodeName()
-												.equals( "noMoreThanOneComponentMappingBox" ) ) {
-											inoMoreThanOneComponentMappingBox = inoMoreThanOneComponentMappingBox + 1;
-										} else if ( textChildII.getNodeName()
-												.equals( "noMoreThanOneChannelDefinitionBox" ) ) {
-											inoMoreThanOneChannelDefinitionBox = inoMoreThanOneChannelDefinitionBox + 1;
-										} else if ( textChildII.getNodeName().equals( "noMoreThanOneResolutionBox" ) ) {
-											inoMoreThanOneResolutionBox = inoMoreThanOneResolutionBox + 1;
-										} else if ( textChildII.getNodeName()
-												.equals( "colourSpecificationBoxesAreContiguous" ) ) {
-											icolourSpecificationBoxesAreContiguous = icolourSpecificationBoxesAreContiguous
-													+ 1;
-										} else if ( textChildII.getNodeName()
-												.equals( "paletteAndComponentMappingBoxesOnlyTogether" ) ) {
-											ipaletteAndComponentMappingBoxesOnlyTogether = ipaletteAndComponentMappingBoxesOnlyTogether
-													+ 1;
+										} else {
+											iunknown = iunknown + 1;
+											sunknown = sunknown + " " + textChildII.getNodeName();
 										}
 									}
 									continue;
 								}
+
+							} else if ( textChild.getNodeName().contains( "mlBox" ) ) {
+								ixmlBox = ixmlBox + 1;
+							} else if ( textChild.getNodeName().contains( "uidBox" ) ) {
+								iuuidBox = iuuidBox + 1;
+							} else if ( textChild.getNodeName().contains( "uidInfoBox" ) ) {
+								iuuidInfoBox = iuuidInfoBox + 1;
+							} else if ( textChild.getNodeName().contains( "ntellectualProperty" ) ) {
+								iintellectualProperty = iintellectualProperty + 1;
+
 							} else if ( textChild.getNodeName().equals( "contiguousCodestreamBox" ) ) {
+								icontiguousCodestreamBox = icontiguousCodestreamBox + 1;
 								NodeList childrenIII = textChild.getChildNodes();
 								for ( int k = 0; k < childrenIII.getLength(); k++ ) {
+									/* ï C - Siz = {0} {0} in the CC ï C - Coc = {0} {0} in the CC ï C - Rgn = {0} {0}
+									 * in the CC ï C - Qcd = {0} {0} in the CC ï C - Qcc = {0} {0} in the CC ï C - Poc
+									 * = {0} {0} in the CC ï C - Crg = {0} {0} in the CC ï C - Com = {0} {0} in the CC
+									 * ï C - tile = {0} {0} in the CC ï C - Soc = {0} {0} in the CC ï C - Eoc = {0}
+									 * {0} in the CC ï C - Cod = {0} {0} in the CC */
 									Node textChildIII = childrenIII.item( k );
 									if ( textChildIII.getNodeType() == Node.ELEMENT_NODE ) {
-										if ( textChildIII.getNodeName().equals( "tileParts" ) ) {
-											itileParts = itileParts + 1;
-										} else if ( textChildIII.getNodeName().equals( "siz" ) ) {
+										if ( textChildIII.getNodeName().contains( "siz" )
+												|| textChildIII.getNodeName().contains( "SIZ" )
+												|| textChildIII.getNodeName().contains( "Siz" ) ) {
 											isiz = isiz + 1;
-										} else if ( textChildIII.getNodeName().equals( "cod" ) ) {
-											icod = icod + 1;
-										} else if ( textChildIII.getNodeName().equals( "qcd" ) ) {
-											iqcd = iqcd + 1;
-										} else if ( textChildIII.getNodeName().equals( "coc" ) ) {
+										} else if ( textChildIII.getNodeName().contains( "coc" )
+												|| textChildIII.getNodeName().contains( "COC" )
+												|| textChildIII.getNodeName().contains( "Coc" ) ) {
 											icoc = icoc + 1;
-										} else if ( textChildIII.getNodeName().equals( "com" ) ) {
-											icom = icom + 1;
-										} else if ( textChildIII.getNodeName().equals( "qcc" ) ) {
-											iqcc = iqcc + 1;
-										} else if ( textChildIII.getNodeName().equals( "rgn" ) ) {
+										} else if ( textChildIII.getNodeName().contains( "rgn" )
+												|| textChildIII.getNodeName().contains( "RGN" )
+												|| textChildIII.getNodeName().contains( "Rgn" ) ) {
 											irgn = irgn + 1;
-										} else if ( textChildIII.getNodeName().equals( "poc" ) ) {
+										} else if ( textChildIII.getNodeName().contains( "qcd" )
+												|| textChildIII.getNodeName().contains( "QCD" )
+												|| textChildIII.getNodeName().contains( "Qcd" ) ) {
+											iqcd = iqcd + 1;
+										} else if ( textChildIII.getNodeName().contains( "qcc" )
+												|| textChildIII.getNodeName().contains( "QCC" )
+												|| textChildIII.getNodeName().contains( "Qcc" ) ) {
+											iqcc = iqcc + 1;
+										} else if ( textChildIII.getNodeName().contains( "poc" )
+												|| textChildIII.getNodeName().contains( "POC" )
+												|| textChildIII.getNodeName().contains( "Poc" ) ) {
 											ipoc = ipoc + 1;
-										} else if ( textChildIII.getNodeName().equals( "plm" ) ) {
-											iplm = iplm + 1;
-										} else if ( textChildIII.getNodeName().equals( "ppm" ) ) {
-											ippm = ippm + 1;
-										} else if ( textChildIII.getNodeName().equals( "tlm" ) ) {
-											itlm = itlm + 1;
-										} else if ( textChildIII.getNodeName().equals( "crg" ) ) {
+										} else if ( textChildIII.getNodeName().contains( "crg" )
+												|| textChildIII.getNodeName().contains( "CRG" )
+												|| textChildIII.getNodeName().contains( "Crg" ) ) {
 											icrg = icrg + 1;
-										} else if ( textChildIII.getNodeName().equals( "plt" ) ) {
-											iplt = iplt + 1;
-										} else if ( textChildIII.getNodeName().equals( "ppt" ) ) {
-											ippt = ippt + 1;
-										} else if ( textChildIII.getNodeName()
-												.equals( "codestreamStartsWithSOCMarker" ) ) {
-											icodestreamStartsWithSOCMarker = icodestreamStartsWithSOCMarker + 1;
-										} else if ( textChildIII.getNodeName().equals( "foundSIZMarker" ) ) {
-											ifoundSIZMarker = ifoundSIZMarker + 1;
-										} else if ( textChildIII.getNodeName().equals( "foundCODMarker" ) ) {
-											ifoundCODMarker = ifoundCODMarker + 1;
-										} else if ( textChildIII.getNodeName().equals( "foundQCDMarker" ) ) {
-											ifoundQCDMarker = ifoundQCDMarker + 1;
-										} else if ( textChildIII.getNodeName()
-												.equals( "quantizationConsistentWithLevels" ) ) {
-											iquantizationConsistentWithLevels = iquantizationConsistentWithLevels + 1;
-										} else if ( textChildIII.getNodeName()
-												.equals( "foundExpectedNumberOfTiles" ) ) {
-											ifoundExpectedNumberOfTiles = ifoundExpectedNumberOfTiles + 1;
-										} else if ( textChildIII.getNodeName()
-												.equals( "foundExpectedNumberOfTileParts" ) ) {
-											ifoundExpectedNumberOfTileParts = ifoundExpectedNumberOfTileParts + 1;
-										} else if ( textChildIII.getNodeName().equals( "foundEOCMarker" ) ) {
-											ifoundEOCMarker = ifoundEOCMarker + 1;
+										} else if ( textChildIII.getNodeName().contains( "com" )
+												|| textChildIII.getNodeName().contains( "COM" )
+												|| textChildIII.getNodeName().contains( "Com" ) ) {
+											icom = icom + 1;
+										} else if ( textChildIII.getNodeName().contains( "tile" )
+												|| textChildIII.getNodeName().contains( "TILE" )
+												|| textChildIII.getNodeName().contains( "Tile" ) ) {
+											itile = itile + 1;
+										} else if ( textChildIII.getNodeName().contains( "soc" )
+												|| textChildIII.getNodeName().contains( "SOC" )
+												|| textChildIII.getNodeName().contains( "Soc" ) ) {
+											isoc = isoc + 1;
+										} else if ( textChildIII.getNodeName().contains( "eoc" )
+												|| textChildIII.getNodeName().contains( "EOC" )
+												|| textChildIII.getNodeName().contains( "Eoc" ) ) {
+											ieoc = ieoc + 1;
+										} else if ( textChildIII.getNodeName().contains( "cod" )
+												|| textChildIII.getNodeName().contains( "COD" )
+												|| textChildIII.getNodeName().contains( "Cod" ) ) {
+											icod = icod + 1;
+										} else {
+											iunknown = iunknown + 1;
+											sunknown = sunknown + " " + textChildIII.getNodeName();
 										}
 									}
 									continue;
 								}
-							} else if ( textChild.getNodeName().equals( "xmlBox" ) ) {
-								ixmlBox = ixmlBox + 1;
-							} else if ( textChild.getNodeName().equals( "uuidBox" ) ) {
-								iuuidBox = iuuidBox + 1;
-							} else if ( textChild.getNodeName().equals( "uuidInfoBox" ) ) {
-								iuuidInfoBox = iuuidInfoBox + 1;
-							} else if ( textChild.getNodeName().equals( "unknownBox" ) ) {
-								iunknownBox = iunknownBox + 1;
+
+							} else {
+								iunknown = iunknown + 1;
+								sunknown = sunknown + " " + textChild.getNodeName();
 							}
+
 						}
 						continue;
 					}
@@ -622,168 +668,77 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
 									+ getTextResourceService().getText( locale, ERROR_XML_A_JP2_FILETYPE ) );
 				}
+				if ( ijp2HeaderBox >= 1 ) {
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
+									+ getTextResourceService().getText( locale, ERROR_XML_A_JP2_HEADER ) );
+				}
 				if ( iimageHeaderBox >= 1 ) {
 					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_B_JP2_IMAGE ) );
-				}
-				if ( ibitsPerComponentBox >= 1 ) {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_B_JP2_BITSPC ) );
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
+									+ getTextResourceService().getText( locale, ERROR_XML_A_JP2_IMAGE ) );
 				}
 				if ( icolourSpecificationBox >= 1 ) {
 					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_B_JP2_COLOUR ) );
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
+									+ getTextResourceService().getText( locale, ERROR_XML_A_JP2_COLOUR ) );
+				}
+				if ( ibitsPerComponentBox >= 1 ) {
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
+									+ getTextResourceService().getText( locale, ERROR_XML_A_JP2_BITSPC ) );
 				}
 				if ( ipaletteBox >= 1 ) {
 					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_B_JP2_PALETTE ) );
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
+									+ getTextResourceService().getText( locale, ERROR_XML_A_JP2_PALETTE ) );
 				}
 				if ( icomponentMappingBox >= 1 ) {
 					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_B_JP2_MAPPING ) );
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
+									+ getTextResourceService().getText( locale, ERROR_XML_A_JP2_MAPPING ) );
 				}
 				if ( ichannelDefinitionBox >= 1 ) {
 					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_B_JP2_CHANNEL ) );
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
+									+ getTextResourceService().getText( locale, ERROR_XML_A_JP2_CHANNEL ) );
 				}
 				if ( iresolutionBox >= 1 ) {
 					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_B_JP2_RESOLUTION ) );
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
+									+ getTextResourceService().getText( locale, ERROR_XML_A_JP2_RESOLUTION ) );
 				}
 
-				if ( icontainsImageHeaderBox >= 1 ) {
+				if ( ixmlBox >= 1 ) {
 					getMessageService()
 							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_B_JP2_NOIHB ) );
+									+ getTextResourceService().getText( locale, ERROR_XML_B_JP2_XML ) );
 				}
-				if ( icontainsColourSpecificationBox >= 1 ) {
+				if ( iuuidInfoBox >= 1 ) {
 					getMessageService()
 							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_B_JP2_NOCSB ) );
+									+ getTextResourceService().getText( locale, ERROR_XML_B_JP2_UUIDINFO ) );
 				}
-				if ( icontainsBitsPerComponentBox >= 1 ) {
+				if ( iuuidBox >= 1 ) {
 					getMessageService()
 							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_B_JP2_NBPCB ) );
+									+ getTextResourceService().getText( locale, ERROR_XML_B_JP2_UUID ) );
 				}
-				if ( ifirstJP2HeaderBoxIsImageHeaderBox >= 1 ) {
+				if ( iintellectualProperty >= 1 ) {
 					getMessageService()
 							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_B_JP2_IHBNF ) );
-				}
-				if ( inoMoreThanOneImageHeaderBox >= 1 ) {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_B_JP2_IHBMO ) );
-				}
-				if ( inoMoreThanOneBitsPerComponentBox >= 1 ) {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_B_JP2_OBPCMO ) );
-				}
-				if ( inoMoreThanOnePaletteBox >= 1 ) {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_B_JP2_OPBMO ) );
-				}
-				if ( inoMoreThanOneComponentMappingBox >= 1 ) {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_B_JP2_CMBMO ) );
-				}
-				if ( inoMoreThanOneChannelDefinitionBox >= 1 ) {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_B_JP2_CDBMO ) );
-				}
-				if ( inoMoreThanOneResolutionBox >= 1 ) {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_B_JP2_RBMO ) );
-				}
-				if ( icolourSpecificationBoxesAreContiguous >= 1 ) {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_B_JP2_CSBNC ) );
-				}
-				if ( ipaletteAndComponentMappingBoxesOnlyTogether >= 1 ) {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_B_JP2_PACMB ) );
+									+ getTextResourceService().getText( locale, ERROR_XML_B_JP2_INTELLECTUAL ) );
 				}
 
-				if ( icodestreamStartsWithSOCMarker >= 1 ) {
+				if ( icontiguousCodestreamBox >= 1 ) {
 					getMessageService()
 							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_C_JP2_SOC ) );
-				}
-				if ( ifoundSIZMarker >= 1 ) {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_C_JP2_FSIZ ) );
-				}
-				if ( ifoundCODMarker >= 1 ) {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_C_JP2_FCOD ) );
-				}
-				if ( ifoundQCDMarker >= 1 ) {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_C_JP2_FQCD ) );
-				}
-				if ( iquantizationConsistentWithLevels >= 1 ) {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_C_JP2_PQCD ) );
-				}
-				if ( ifoundExpectedNumberOfTiles >= 1 ) {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_C_JP2_NOTILES ) );
-				}
-				if ( ifoundExpectedNumberOfTileParts >= 1 ) {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_C_JP2_NOTILESPART ) );
-				}
-				if ( ifoundEOCMarker >= 1 ) {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_C_JP2_EOC ) );
-				}
-
-				if ( itileParts >= 1 ) {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_C_JP2_TILEPARTS ) );
+									+ getTextResourceService().getText( locale, ERROR_XML_C_JP2_CODEBOX ) );
 				}
 				if ( isiz >= 1 ) {
 					getMessageService()
 							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JP2 )
 									+ getTextResourceService().getText( locale, ERROR_XML_C_JP2_SIZ ) );
-				}
-				if ( icod >= 1 ) {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_C_JP2_COD ) );
-				}
-				if ( iqcd >= 1 ) {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_C_JP2_QCD ) );
-				}
-				if ( icom >= 1 ) {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_C_JP2_COM ) );
 				}
 				if ( icoc >= 1 ) {
 					getMessageService()
@@ -795,6 +750,11 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JP2 )
 									+ getTextResourceService().getText( locale, ERROR_XML_C_JP2_RGN ) );
 				}
+				if ( iqcd >= 1 ) {
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JP2 )
+									+ getTextResourceService().getText( locale, ERROR_XML_C_JP2_QCD ) );
+				}
 				if ( iqcc >= 1 ) {
 					getMessageService()
 							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JP2 )
@@ -805,56 +765,41 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JP2 )
 									+ getTextResourceService().getText( locale, ERROR_XML_C_JP2_POC ) );
 				}
-				if ( iplm >= 1 ) {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_C_JP2_PLM ) );
-				}
-				if ( ippm >= 1 ) {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_C_JP2_PPM ) );
-				}
-				if ( itlm >= 1 ) {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_C_JP2_TLM ) );
-				}
 				if ( icrg >= 1 ) {
 					getMessageService()
 							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JP2 )
 									+ getTextResourceService().getText( locale, ERROR_XML_C_JP2_CRG ) );
 				}
-				if ( iplt >= 1 ) {
+				if ( icom >= 1 ) {
 					getMessageService()
 							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_C_JP2_PLT ) );
+									+ getTextResourceService().getText( locale, ERROR_XML_C_JP2_COM ) );
 				}
-				if ( ippt >= 1 ) {
+				if ( itile >= 1 ) {
 					getMessageService()
 							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_C_JP2_PPT ) );
+									+ getTextResourceService().getText( locale, ERROR_XML_C_JP2_TILE ) );
+				}
+				if ( isoc >= 1 ) {
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JP2 )
+									+ getTextResourceService().getText( locale, ERROR_XML_C_JP2_SOC ) );
+				}
+				if ( ieoc >= 1 ) {
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JP2 )
+									+ getTextResourceService().getText( locale, ERROR_XML_C_JP2_EOC ) );
+				}
+				if ( icod >= 1 ) {
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JP2 )
+									+ getTextResourceService().getText( locale, ERROR_XML_C_JP2_COD ) );
 				}
 
-				if ( ixmlBox >= 1 ) {
+				if ( iunknown >= 1 ) {
 					getMessageService()
 							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_D_JP2_XML ) );
-				}
-				if ( iuuidBox >= 1 ) {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_D_JP2_UUID ) );
-				}
-				if ( iuuidInfoBox >= 1 ) {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_D_JP2_UUIDINFO ) );
-				}
-				if ( iunknownBox >= 1 ) {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_D_JP2_UNKNOWN ) );
+									+ getTextResourceService().getText( locale, ERROR_XML_D_JP2_UNKNOWN, sunknown ) );
 				}
 			}
 

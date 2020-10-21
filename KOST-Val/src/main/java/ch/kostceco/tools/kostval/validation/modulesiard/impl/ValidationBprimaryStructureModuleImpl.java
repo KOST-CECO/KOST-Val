@@ -42,6 +42,8 @@ public class ValidationBprimaryStructureModuleImpl extends ValidationModuleImpl
 		implements ValidationBprimaryStructureModule
 {
 
+	private boolean min = false;
+
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
 			Locale locale ) throws ValidationBprimaryStructureException
@@ -55,6 +57,8 @@ public class ValidationBprimaryStructureModuleImpl extends ValidationModuleImpl
 			showOnWork = true;
 			System.out.print( "B    " );
 			System.out.print( "\b\b\b\b\b" );
+		} else if ( onWorkConfig.equals( "nomin" ) ) {
+			min = true;
 		}
 
 		Integer bExistsHeaderFolder = 0;
@@ -82,12 +86,17 @@ public class ValidationBprimaryStructureModuleImpl extends ValidationModuleImpl
 						bExistsHeaderFolder = 1;
 					} else {
 						// keines der beiden validen M�glichkeiten -> Fehler
-						getMessageService().logError( getTextResourceService().getText( locale,
-								MESSAGE_XML_MODUL_B_SIARD )
-								+ getTextResourceService().getText( locale, MESSAGE_XML_B_NOTALLOWEDFILE, name ) );
-						// SIARD enthaelt ein File, das sich nicht dort befinden duerfte: {0}
 						zipfile.close();
-						return false;
+						if ( min ) {
+							return false;
+						} else {
+							getMessageService()
+									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_SIARD )
+											+ getTextResourceService().getText( locale, MESSAGE_XML_B_NOTALLOWEDFILE,
+													name ) );
+							// SIARD enthaelt ein File, das sich nicht dort befinden duerfte: {0}
+							return false;
+						}
 					}
 				}
 				if ( showOnWork ) {
@@ -115,24 +124,36 @@ public class ValidationBprimaryStructureModuleImpl extends ValidationModuleImpl
 			zipfile.close();
 			zipfile = null;
 			if ( bExistsContentFolder == 0 ) {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_SIARD )
-								+ getTextResourceService().getText( locale, MESSAGE_XML_B_CONTENT ) );
-				// SIARD enthaelt kein content-Ordner
-				return false;
+				if ( min ) {
+					return false;
+				} else {
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_SIARD )
+									+ getTextResourceService().getText( locale, MESSAGE_XML_B_CONTENT ) );
+					// SIARD enthaelt kein content-Ordner
+					return false;
+				}
 			}
 			if ( bExistsHeaderFolder == 0 ) {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_SIARD )
-								+ getTextResourceService().getText( locale, MESSAGE_XML_B_HEADER ) );
-				// SIARD enthaelt kein header-Ordner
-				return false;
+				if ( min ) {
+					return false;
+				} else {
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_SIARD )
+									+ getTextResourceService().getText( locale, MESSAGE_XML_B_HEADER ) );
+					// SIARD enthaelt kein header-Ordner
+					return false;
+				}
 			}
 		} catch ( Exception e ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_SIARD )
-							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
-			return false;
+			if ( min ) {
+				return false;
+			} else {
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_SIARD )
+								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+				return false;
+			}
 		}
 		return true;
 	}

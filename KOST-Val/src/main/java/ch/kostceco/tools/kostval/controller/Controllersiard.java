@@ -59,6 +59,8 @@ import ch.kostceco.tools.kostval.validation.modulesiard.ValidationWwarningModule
 public class Controllersiard implements MessageConstants
 {
 
+	private boolean														min			= false;
+
 	private static final Logger								LOGGER	= new Logger( Controllersiard.class );
 	private TextResourceService								textResourceService;
 
@@ -293,6 +295,11 @@ public class Controllersiard implements MessageConstants
 	public boolean executeOptional( File valDatei, File directoryOfLogfile,
 			Map<String, String> configMap, Locale locale )
 	{
+		String onWork = configMap.get( "ShowProgressOnWork" );
+		if ( onWork.equals( "nomin" ) ) {
+			min = true;
+		}
+
 		boolean valid = true;
 
 		// Validation Step E (Spalten-Validierung)
@@ -302,7 +309,11 @@ public class Controllersiard implements MessageConstants
 				this.getValidationEcolumnModule().getMessageService().print();
 			} else {
 				this.getValidationEcolumnModule().getMessageService().print();
-				valid = false;
+				if ( min ) {
+					return false;
+				} else {
+					valid = false;
+				}
 			}
 		} catch ( ValidationEcolumnException e ) {
 			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
@@ -319,13 +330,21 @@ public class Controllersiard implements MessageConstants
 				this.getValidationFrowModule().getMessageService().print();
 			} else {
 				this.getValidationFrowModule().getMessageService().print();
-				valid = false;
+				if ( min ) {
+					return false;
+				} else {
+					valid = false;
+				}
 			}
 		} catch ( ValidationFrowException e ) {
 			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_SIARD )
 					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationFrowModule().getMessageService().print();
-			valid = false;
+			if ( min ) {
+				return false;
+			} else {
+				valid = false;
+			}
 		} catch ( Exception e ) {
 			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_SIARD )
 					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
@@ -339,13 +358,21 @@ public class Controllersiard implements MessageConstants
 				this.getValidationGtableModule().getMessageService().print();
 			} else {
 				this.getValidationGtableModule().getMessageService().print();
-				valid = false;
+				if ( min ) {
+					return false;
+				} else {
+					valid = false;
+				}
 			}
 		} catch ( ValidationGtableException e ) {
 			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_SIARD )
 					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationGtableModule().getMessageService().print();
-			valid = false;
+			if ( min ) {
+				return false;
+			} else {
+				valid = false;
+			}
 		} catch ( Exception e ) {
 			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_SIARD )
 					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
@@ -359,13 +386,21 @@ public class Controllersiard implements MessageConstants
 				this.getValidationHcontentModule().getMessageService().print();
 			} else {
 				this.getValidationHcontentModule().getMessageService().print();
-				valid = false;
+				if ( min ) {
+					return false;
+				} else {
+					valid = false;
+				}
 			}
 		} catch ( ValidationHcontentException e ) {
 			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
 					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationHcontentModule().getMessageService().print();
-			valid = false;
+			if ( min ) {
+				return false;
+			} else {
+				valid = false;
+			}
 		} catch ( Exception e ) {
 			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
 					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
@@ -379,13 +414,21 @@ public class Controllersiard implements MessageConstants
 				this.getValidationIrecognitionModule().getMessageService().print();
 			} else {
 				this.getValidationIrecognitionModule().getMessageService().print();
-				valid = false;
+				if ( min ) {
+					return false;
+				} else {
+					valid = false;
+				}
 			}
 		} catch ( ValidationIrecognitionException e ) {
 			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_I_SIARD )
 					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationIrecognitionModule().getMessageService().print();
-			valid = false;
+			if ( min ) {
+				return false;
+			} else {
+				valid = false;
+			}
 		} catch ( Exception e ) {
 			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_I_SIARD )
 					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
@@ -399,13 +442,21 @@ public class Controllersiard implements MessageConstants
 				this.getValidationJsurplusFilesModule().getMessageService().print();
 			} else {
 				this.getValidationJsurplusFilesModule().getMessageService().print();
-				valid = false;
+				if ( min ) {
+					return false;
+				} else {
+					valid = false;
+				}
 			}
 		} catch ( ValidationJsurplusFilesException e ) {
 			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
 					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationJsurplusFilesModule().getMessageService().print();
-			valid = false;
+			if ( min ) {
+				return false;
+			} else {
+				valid = false;
+			}
 		} catch ( Exception e ) {
 			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
 					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
@@ -419,13 +470,21 @@ public class Controllersiard implements MessageConstants
 				this.getValidationWwarningModule().getMessageService().print();
 			} else {
 				this.getValidationWwarningModule().getMessageService().print();
-				valid = false;
+				if ( min ) {
+					return false;
+				} else {
+					valid = false;
+				}
 			}
 		} catch ( ValidationWwarningException e ) {
 			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_W_SIARD )
 					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationWwarningModule().getMessageService().print();
-			valid = false;
+			if ( min ) {
+				return false;
+			} else {
+				valid = false;
+			}
 		} catch ( Exception e ) {
 			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_W_SIARD )
 					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );

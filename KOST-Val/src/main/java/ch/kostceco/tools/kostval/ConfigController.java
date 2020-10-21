@@ -110,7 +110,7 @@ public class ConfigController
 		String java6432 = System.getProperty( "sun.arch.data.model" );
 		String javaVersion = System.getProperty( "java.version" );
 		String javafxVersion = System.getProperty( "javafx.version" );
-		labelConfig.setText( "Copyright © KOST/CECO          KOST-Val v2.0.0.beta2          JavaFX "
+		labelConfig.setText( "Copyright © KOST/CECO          KOST-Val v2.0.0.gamma1          JavaFX "
 				+ javafxVersion + "   &   Java-" + java6432 + " " + javaVersion + "." );
 
 		// Original Config Kopieren

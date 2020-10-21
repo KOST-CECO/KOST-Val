@@ -143,91 +143,17 @@ public class Controllervalinitlog implements MessageConstants
 			System.out.println( getTextResourceService().getText( locale, ERROR_NOFILEENDINGS ) );
 			// logFile bereinigung (& End und ggf 3c)
 			Util.valEnd3cAmp( "", logFile );
-			System.exit( 1 );
+			valInitlog = false;
+			return valInitlog;
 		}
 
 		// Informationen zum Arbeitsverzeichnis holen
-		String pathToWorkDir = configMap.get( "PathToWorkDir" );
-
 		File xslOrig = new File(
 				dirOfJarPath + File.separator + "resources" + File.separator + "kost-val.xsl" );
 		File xslCopy = new File(
 				directoryOfLogfile.getAbsolutePath() + File.separator + "kost-val.xsl" );
 		if ( !xslCopy.exists() ) {
 			Util.copyFile( xslOrig, xslCopy );
-		}
-
-		File tmpDir = new File( pathToWorkDir );
-
-		// Im Pfad keine Sonderzeichen xml-Validierung SIP 1d und SIARD C stuerzen ab
-
-		String patternStr = "[^!#\\$%\\(\\)\\+,\\-_\\.=@\\[\\]\\{\\}\\~:\\\\a-zA-Z0-9 ]";
-		Pattern pattern = Pattern.compile( patternStr );
-
-		String name = tmpDir.getAbsolutePath();
-
-		String[] pathElements = name.split( "/" );
-		for ( int i = 0; i < pathElements.length; i++ ) {
-			String element = pathElements[i];
-
-			Matcher matcher = pattern.matcher( element );
-
-			boolean matchFound = matcher.find();
-			if ( matchFound ) {
-				LOGGER
-						.logError( getTextResourceService().getText( locale, ERROR_IOE, getTextResourceService()
-								.getText( locale, ERROR_SPECIAL_CHARACTER, name, matcher.group( i ) ) ) );
-				System.console().printf( getTextResourceService().getText( locale, ERROR_SPECIAL_CHARACTER,
-						name, matcher.group( i ) ) );
-				// logFile bereinigung (& End und ggf 3c)
-				Util.valEnd3cAmp( "", logFile );
-				System.exit( 1 );
-			}
-		}
-
-		name = directoryOfLogfile.getAbsolutePath();
-
-		pathElements = name.split( "/" );
-		for ( int i = 0; i < pathElements.length; i++ ) {
-			String element = pathElements[i];
-
-			Matcher matcher = pattern.matcher( element );
-
-			boolean matchFound = matcher.find();
-			if ( matchFound ) {
-				LOGGER
-						.logError( getTextResourceService().getText( locale, ERROR_IOE, getTextResourceService()
-								.getText( locale, ERROR_SPECIAL_CHARACTER, name, matcher.group( i ) ) ) );
-				System.console().printf( getTextResourceService().getText( locale, ERROR_SPECIAL_CHARACTER,
-						name, matcher.group( i ) ) );
-				// logFile bereinigung (& End und ggf 3c)
-				Util.valEnd3cAmp( "", logFile );
-				System.exit( 1 );
-			}
-		}
-
-		// Im Pfad keine Sonderzeichen xml-Validierung SIP 1d und SIARD C stuerzen ab
-		File valDatei = new File( args[1] );
-
-		name = valDatei.getAbsolutePath();
-
-		pathElements = name.split( "/" );
-		for ( int i = 0; i < pathElements.length; i++ ) {
-			String element = pathElements[i];
-
-			Matcher matcher = pattern.matcher( element );
-
-			boolean matchFound = matcher.find();
-			if ( matchFound ) {
-				LOGGER
-						.logError( getTextResourceService().getText( locale, ERROR_IOE, getTextResourceService()
-								.getText( locale, ERROR_SPECIAL_CHARACTER, name, matcher.group( i ) ) ) );
-				System.console().printf( getTextResourceService().getText( locale, ERROR_SPECIAL_CHARACTER,
-						name, matcher.group( i ) ) );
-				// logFile bereinigung (& End und ggf 3c)
-				Util.valEnd3cAmp( "", logFile );
-				System.exit( 1 );
-			}
 		}
 
 		/* Java 64 oder 32 bit? bei 32 dll austauschen wenn nicht bereits geschehen Auch 64

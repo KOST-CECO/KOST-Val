@@ -38,12 +38,18 @@ public class ValidationFmultipageValidationModuleImpl extends ValidationModuleIm
 		implements ValidationFmultipageValidationModule
 {
 
-	public static String NEWLINE = System.getProperty( "line.separator" );
+	public static String	NEWLINE	= System.getProperty( "line.separator" );
+
+	private boolean				min			= false;
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
 			Locale locale ) throws ValidationFmultipageValidationException
 	{
+		String onWork = configMap.get( "ShowProgressOnWork" );
+		if ( onWork.equals( "nomin" ) ) {
+			min = true;
+		}
 
 		boolean isValid = true;
 
@@ -59,16 +65,24 @@ public class ValidationFmultipageValidationModuleImpl extends ValidationModuleIm
 
 		String mp = configMap.get( "AllowedMultipage" );
 		if ( mp.startsWith( "Configuration-Error:" ) ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_TIFF ) + mp );
-			return false;
+			if ( min ) {
+				/* exiftoolReport loeschen */
+				if ( exiftoolReport.exists() ) {
+					exiftoolReport.delete();
+				}
+				return false;
+			} else {
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_TIFF ) + mp );
+				return false;
+			}
 		}
 		// 0=Singelpage / 1=Multipage
 
 		Integer exiftoolio = 0;
 		Integer ifdCount = 0;
 		String ifdMsg;
-		if ( mp.equalsIgnoreCase(  "yes" ) ) {
+		if ( mp.equalsIgnoreCase( "yes" ) ) {
 			// Valider Status (Multipage erlaubt)
 		} else {
 			try {
@@ -86,9 +100,18 @@ public class ValidationFmultipageValidationModuleImpl extends ValidationModuleIm
 				if ( exiftoolio == 0 ) {
 					// Invalider Status
 					isValid = false;
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_TIFF )
-									+ getTextResourceService().getText( locale, MESSAGE_XML_CG_ETNIO, "F" ) );
+					if ( min ) {
+						in.close();
+						/* exiftoolReport loeschen */
+						if ( exiftoolReport.exists() ) {
+							exiftoolReport.delete();
+						}
+						return false;
+					} else {
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_TIFF )
+										+ getTextResourceService().getText( locale, MESSAGE_XML_CG_ETNIO, "F" ) );
+					}
 				}
 				if ( ifdCount == 1 ) {
 					// Valider Status (nur eine Seite)
@@ -96,16 +119,33 @@ public class ValidationFmultipageValidationModuleImpl extends ValidationModuleIm
 					// Invalider Status
 					ifdMsg = ("Multipage (" + ifdCount + " TIFFs)");
 					isValid = false;
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_TIFF )
-									+ getTextResourceService().getText( locale, MESSAGE_XML_CG_INVALID, ifdMsg ) );
+					if ( min ) {
+						in.close();
+						/* exiftoolReport loeschen */
+						if ( exiftoolReport.exists() ) {
+							exiftoolReport.delete();
+						}
+						return false;
+					} else {
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_TIFF )
+										+ getTextResourceService().getText( locale, MESSAGE_XML_CG_INVALID, ifdMsg ) );
+					}
 				}
 				in.close();
 			} catch ( Exception e ) {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_TIFF )
-								+ getTextResourceService().getText( locale, MESSAGE_XML_CG_CANNOTFINDETREPORT ) );
-				return false;
+				if ( min ) {
+					/* exiftoolReport loeschen */
+					if ( exiftoolReport.exists() ) {
+						exiftoolReport.delete();
+					}
+					return false;
+				} else {
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_TIFF )
+									+ getTextResourceService().getText( locale, MESSAGE_XML_CG_CANNOTFINDETREPORT ) );
+					return false;
+				}
 			}
 		}
 		return isValid;

@@ -41,6 +41,8 @@ import ch.kostceco.tools.kostval.validation.modulepdfa.ValidationAinitialisation
 public class Controllerpdfa implements MessageConstants
 {
 
+	private boolean														min			= false;
+
 	private static final Logger								LOGGER	= new Logger( Controllerpdfa.class );
 	private TextResourceService								textResourceService;
 
@@ -107,12 +109,14 @@ public class Controllerpdfa implements MessageConstants
 			}
 		} catch ( ValidationApdfvalidationException e ) {
 			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() +" init1") );
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+							e.getMessage() + " init1" ) );
 			this.getValidationAinitialisationModule().getMessageService().print();
 			return false;
 		} catch ( Exception e ) {
 			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() +" init2" ) );
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+							e.getMessage() + " init2" ) );
 			return false;
 		}
 
@@ -123,6 +127,11 @@ public class Controllerpdfa implements MessageConstants
 	public boolean executeOptional( File valDatei, File directoryOfLogfile,
 			Map<String, String> configMap, Locale locale )
 	{
+		String onWork = configMap.get( "ShowProgressOnWork" );
+		if ( onWork.equals( "nomin" ) ) {
+			min = true;
+		}
+
 		boolean valid = true;
 
 		// Validation A - I
@@ -132,17 +141,31 @@ public class Controllerpdfa implements MessageConstants
 				this.getValidationAvalidationAiModule().getMessageService().print();
 			} else {
 				this.getValidationAvalidationAiModule().getMessageService().print();
-				valid = false;
+				if ( min ) {
+					return false;
+				} else {
+					valid = false;
+				}
 			}
 		} catch ( ValidationApdfvalidationException e ) {
 			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage()  +" A-I_1") );
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+							e.getMessage() + " A-I_1" ) );
 			this.getValidationAvalidationAiModule().getMessageService().print();
-			valid = false;
+			if ( min ) {
+				return false;
+			} else {
+				valid = false;
+			}
 		} catch ( Exception e ) {
 			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage()+" A-I_2" ) );
-			valid = false;
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+							e.getMessage() + " A-I_2" ) );
+			if ( min ) {
+				return false;
+			} else {
+				valid = false;
+			}
 		}
 
 		// Validation J
@@ -152,17 +175,27 @@ public class Controllerpdfa implements MessageConstants
 				this.getValidationJimageValidationModule().getMessageService().print();
 			} else {
 				this.getValidationJimageValidationModule().getMessageService().print();
-				valid = false;
+				if ( min ) {
+					return false;
+				} else {
+					valid = false;
+				}
 			}
 		} catch ( ValidationApdfvalidationException e ) {
 			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() +" J_1") );
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+							e.getMessage() + " J_1" ) );
 			this.getValidationJimageValidationModule().getMessageService().print();
 			return false;
 		} catch ( Exception e ) {
 			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage()+" J_2" ) );
-			valid = false;
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+							e.getMessage() + " J_2" ) );
+			if ( min ) {
+				return false;
+			} else {
+				valid = false;
+			}
 		}
 		return valid;
 	}

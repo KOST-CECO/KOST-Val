@@ -59,7 +59,9 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl
 		implements ValidationCheaderModule
 {
 
-	public static String NEWLINE = System.getProperty( "line.separator" );
+	public static String	NEWLINE	= System.getProperty( "line.separator" );
+
+	private boolean				min			= false;
 
 	@SuppressWarnings("resource")
 	@Override
@@ -75,6 +77,8 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl
 			showOnWork = true;
 			System.out.print( "C    " );
 			System.out.print( "\b\b\b\b\b" );
+		} else if ( onWorkConfig.equals( "nomin" ) ) {
+			min = true;
 		}
 
 		boolean siard10 = false;
@@ -128,27 +132,39 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl
 			}
 			if ( metadataxml == null ) {
 				// keine metadata.xml = METADATA in der SIARD-Datei gefunden
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_SIARD )
-								+ getTextResourceService().getText( locale, MESSAGE_XML_C_NOMETADATAFOUND ) );
 				zipfile.close();
-				return false;
+				if ( min ) {
+					return false;
+				} else {
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_SIARD )
+									+ getTextResourceService().getText( locale, MESSAGE_XML_C_NOMETADATAFOUND ) );
+					return false;
+				}
 			}
 			if ( metadataxsd == null ) {
 				// keine metadata.xsd = XSD_METADATA in der SIARD-Datei gefunden
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_SIARD )
-								+ getTextResourceService().getText( locale, MESSAGE_XML_C_NOMETADATAXSD ) );
 				zipfile.close();
-				return false;
+				if ( min ) {
+					return false;
+				} else {
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_SIARD )
+									+ getTextResourceService().getText( locale, MESSAGE_XML_C_NOMETADATAXSD ) );
+					return false;
+				}
 			}
 			zipfile.close();
 		} catch ( Exception e ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_SIARD )
-							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-									e.getMessage() + " xml und xsd" ) );
-			return false;
+			if ( min ) {
+				return false;
+			} else {
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_SIARD )
+								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+										e.getMessage() + " xml und xsd" ) );
+				return false;
+			}
 		}
 
 		// Validierung metadata.xml mit metadata.xsd
@@ -255,10 +271,15 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl
 					getMessageService().logError(
 							getTextResourceService().getText( locale, MESSAGE_FORMATVALIDATION_VL, "v1.0" ) );
 				} else {
-					getMessageService().logError( getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_C_SIARD )
-							+ getTextResourceService().getText( locale, MESSAGE_XML_C_INVALID_VERSION, "1.0" ) );
-					return false;
+					if ( min ) {
+						return false;
+					} else {
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_SIARD )
+										+ getTextResourceService().getText( locale, MESSAGE_XML_C_INVALID_VERSION,
+												"1.0" ) );
+						return false;
+					}
 				}
 			} else if ( version2 ) {
 				if ( siard21 ) {
@@ -269,10 +290,15 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl
 								getTextResourceService().getText( locale, MESSAGE_FORMATVALIDATION_VL, "v2.1" ) );
 					}
 				} else {
-					getMessageService().logError( getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_C_SIARD )
-							+ getTextResourceService().getText( locale, MESSAGE_XML_C_INVALID_VERSION, "2.1" ) );
-					return false;
+					if ( min ) {
+						return false;
+					} else {
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_SIARD )
+										+ getTextResourceService().getText( locale, MESSAGE_XML_C_INVALID_VERSION,
+												"2.1" ) );
+						return false;
+					}
 				}
 			}
 
@@ -299,20 +325,24 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl
 						if ( line.contains( "dbname>" ) ) {
 							if ( !line.contains( "<dbname>" ) ) {
 								// Invalider Status
-								int start = line.indexOf( "<" ) + 1;
-								int ns = line.indexOf( ":" ) + 1;
-								int end = line.indexOf( ">" );
-								String lineNode = line.substring( ns, end );
-								String lineNodeNS = line.substring( start, end );
-								// System.out.println( lineNode + " " + lineNodeNS );
-								getMessageService()
-										.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_SIARD )
-												+ getTextResourceService().getText( locale, MESSAGE_XML_C_METADATA_NSFOUND,
-														lineNode, lineNodeNS ) );
-								in.close();
-								// set to null
-								in = null;
-								return false;
+								if ( min ) {
+									return false;
+								} else {
+									int start = line.indexOf( "<" ) + 1;
+									int ns = line.indexOf( ":" ) + 1;
+									int end = line.indexOf( ">" );
+									String lineNode = line.substring( ns, end );
+									String lineNodeNS = line.substring( start, end );
+									// System.out.println( lineNode + " " + lineNodeNS );
+									getMessageService().logError(
+											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_SIARD )
+													+ getTextResourceService().getText( locale,
+															MESSAGE_XML_C_METADATA_NSFOUND, lineNode, lineNodeNS ) );
+									in.close();
+									// set to null
+									in = null;
+									return false;
+								}
 							} else {
 								// valider Status
 								line = null;
@@ -341,33 +371,49 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl
 						return false;
 					}
 				} catch ( java.io.IOException ioe ) {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_SIARD )
-									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-											ioe.getMessage() + " (IOException)" ) );
-					result = false;
+					if ( min ) {
+						return false;
+					} else {
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_SIARD )
+										+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+												ioe.getMessage() + " (IOException)" ) );
+						result = false;
+					}
 				} catch ( SAXException e ) {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_SIARD )
-									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-											e.getMessage() + " (SAXException)" ) );
-					result = false;
+					if ( min ) {
+						return false;
+					} else {
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_SIARD )
+										+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+												e.getMessage() + " (SAXException)" ) );
+						result = false;
+					}
 				} catch ( ParserConfigurationException e ) {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_SIARD )
-									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-											e.getMessage() + " (ParserConfigurationException)" ) );
-					result = false;
+					if ( min ) {
+						return false;
+					} else {
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_SIARD )
+										+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+												e.getMessage() + " (ParserConfigurationException)" ) );
+						result = false;
+					}
 				}
 			}
 			zipfile.close();
 			// set to null
 			zipfile = null;
 		} catch ( Exception e ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_SIARD )
-							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
-			return false;
+			if ( min ) {
+				return false;
+			} else {
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_SIARD )
+								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+				return false;
+			}
 		}
 		return result;
 	}

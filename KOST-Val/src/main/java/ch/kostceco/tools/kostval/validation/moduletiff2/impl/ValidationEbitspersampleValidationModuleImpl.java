@@ -38,12 +38,18 @@ public class ValidationEbitspersampleValidationModuleImpl extends ValidationModu
 		implements ValidationEbitspersampleValidationModule
 {
 
-	public static String NEWLINE = System.getProperty( "line.separator" );
+	public static String	NEWLINE	= System.getProperty( "line.separator" );
+
+	private boolean				min			= false;
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
 			Locale locale ) throws ValidationEbitspersampleValidationException
 	{
+		String onWork = configMap.get( "ShowProgressOnWork" );
+		if ( onWork.equals( "nomin" ) ) {
+			min = true;
+		}
 
 		boolean isValid = true;
 
@@ -65,34 +71,58 @@ public class ValidationEbitspersampleValidationModuleImpl extends ValidationModu
 		String bps32 = configMap.get( "AllowedBitspersample32" );
 
 		if ( bps1.startsWith( "Configuration-Error:" ) ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_TIFF ) + bps1 );
-			return false;
+			if ( min ) {
+				return false;
+			} else {
+				getMessageService().logError(
+						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_TIFF ) + bps1 );
+				return false;
+			}
 		}
 		if ( bps2.startsWith( "Configuration-Error:" ) ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_TIFF ) + bps2 );
-			return false;
+			if ( min ) {
+				return false;
+			} else {
+				getMessageService().logError(
+						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_TIFF ) + bps2 );
+				return false;
+			}
 		}
 		if ( bps4.startsWith( "Configuration-Error:" ) ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_TIFF ) + bps4 );
-			return false;
+			if ( min ) {
+				return false;
+			} else {
+				getMessageService().logError(
+						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_TIFF ) + bps4 );
+				return false;
+			}
 		}
 		if ( bps8.startsWith( "Configuration-Error:" ) ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_TIFF ) + bps8 );
-			return false;
+			if ( min ) {
+				return false;
+			} else {
+				getMessageService().logError(
+						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_TIFF ) + bps8 );
+				return false;
+			}
 		}
 		if ( bps16.startsWith( "Configuration-Error:" ) ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_TIFF ) + bps16 );
-			return false;
+			if ( min ) {
+				return false;
+			} else {
+				getMessageService().logError(
+						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_TIFF ) + bps16 );
+				return false;
+			}
 		}
 		if ( bps32.startsWith( "Configuration-Error:" ) ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_TIFF ) + bps32 );
-			return false;
+			if ( min ) {
+				return false;
+			} else {
+				getMessageService().logError(
+						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_TIFF ) + bps32 );
+				return false;
+			}
 		}
 		if ( bps1.equals( "" ) ) {
 			bps1 = "DieseBitspersampleIstNichtErlaubt";
@@ -146,23 +176,28 @@ public class ValidationEbitspersampleValidationModuleImpl extends ValidationModu
 					} else {
 						// Invalider Status
 						isValid = false;
-						if ( !line.equals( oldErrorLine1 ) && !line.equals( oldErrorLine2 )
-								&& !line.equals( oldErrorLine3 ) && !line.equals( oldErrorLine4 )
-								&& !line.equals( oldErrorLine5 ) ) {
-							// neuer Fehler
-							getMessageService()
-									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_TIFF )
-											+ getTextResourceService().getText( locale, MESSAGE_XML_CG_INVALID, line ) );
-							if ( oldErrorLine1.equals( "" ) ) {
-								oldErrorLine1 = line;
-							} else if ( oldErrorLine2.equals( "" ) ) {
-								oldErrorLine2 = line;
-							} else if ( oldErrorLine3.equals( "" ) ) {
-								oldErrorLine3 = line;
-							} else if ( oldErrorLine4.equals( "" ) ) {
-								oldErrorLine4 = line;
-							} else if ( oldErrorLine5.equals( "" ) ) {
-								oldErrorLine5 = line;
+						if ( min ) {
+							in.close();
+							return false;
+						} else {
+							if ( !line.equals( oldErrorLine1 ) && !line.equals( oldErrorLine2 )
+									&& !line.equals( oldErrorLine3 ) && !line.equals( oldErrorLine4 )
+									&& !line.equals( oldErrorLine5 ) ) {
+								// neuer Fehler
+								getMessageService().logError( getTextResourceService().getText( locale,
+										MESSAGE_XML_MODUL_E_TIFF )
+										+ getTextResourceService().getText( locale, MESSAGE_XML_CG_INVALID, line ) );
+								if ( oldErrorLine1.equals( "" ) ) {
+									oldErrorLine1 = line;
+								} else if ( oldErrorLine2.equals( "" ) ) {
+									oldErrorLine2 = line;
+								} else if ( oldErrorLine3.equals( "" ) ) {
+									oldErrorLine3 = line;
+								} else if ( oldErrorLine4.equals( "" ) ) {
+									oldErrorLine4 = line;
+								} else if ( oldErrorLine5.equals( "" ) ) {
+									oldErrorLine5 = line;
+								}
 							}
 						}
 					}
@@ -181,10 +216,14 @@ public class ValidationEbitspersampleValidationModuleImpl extends ValidationModu
 			}
 			in.close();
 		} catch ( Exception e ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_TIFF )
-							+ getTextResourceService().getText( locale, MESSAGE_XML_CG_CANNOTFINDETREPORT ) );
-			return false;
+			if ( min ) {
+				return false;
+			} else {
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_TIFF )
+								+ getTextResourceService().getText( locale, MESSAGE_XML_CG_CANNOTFINDETREPORT ) );
+				return false;
+			}
 		}
 		return isValid;
 	}

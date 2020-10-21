@@ -72,6 +72,24 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 		Pattern pattern = Pattern.compile( patternStr );
 
 		try {
+			String entryNameI = valDatei.getName();
+			String nameI = entryNameI;
+
+			String[] pathElementsI = nameI.split( "/" );
+			for ( int i = 0; i < pathElementsI.length; i++ ) {
+				String elementI = pathElementsI[i];
+
+				Matcher matcherI = pattern.matcher( elementI );
+
+				boolean matchFoundI = matcherI.find();
+				if ( matchFoundI ) {
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ac_SIP )
+									+ getTextResourceService().getText( locale, MESSAGE_XML_AC_INVALIDCHARACTERS,
+											entryNameI, matcherI.group( i ) ) );
+					charIo = false;
+				}
+			}
 			Map<String, File> fileMap = Util.getFileMap( valDatei, true );
 			Set<String> fileMapKeys = fileMap.keySet();
 			for ( Iterator<String> iterator = fileMapKeys.iterator(); iterator.hasNext(); ) {
@@ -91,7 +109,7 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 						getMessageService()
 								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ac_SIP )
 										+ getTextResourceService().getText( locale, MESSAGE_XML_AC_INVALIDCHARACTERS,
-												element ) );
+												element, matcher.group( i ) ) );
 						charIo = false;
 					}
 				}

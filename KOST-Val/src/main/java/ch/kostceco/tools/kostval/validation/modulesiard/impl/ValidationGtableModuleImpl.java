@@ -47,8 +47,10 @@ import ch.kostceco.tools.kostval.validation.modulesiard.ValidationGtableModule;
 public class ValidationGtableModuleImpl extends ValidationModuleImpl
 		implements ValidationGtableModule
 {
-	Boolean	version1	= false;
-	Boolean	version2	= false;
+	private boolean	min				= false;
+
+	Boolean					version1	= false;
+	Boolean					version2	= false;
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
@@ -67,6 +69,8 @@ public class ValidationGtableModuleImpl extends ValidationModuleImpl
 			showOnWork = true;
 			System.out.print( "G    " );
 			System.out.print( "\b\b\b\b\b" );
+		} else if ( onWorkConfig.equals( "nomin" ) ) {
+			min = true;
 		}
 
 		boolean valid = true;
@@ -170,40 +174,62 @@ public class ValidationGtableModuleImpl extends ValidationModuleImpl
 			for ( Object value : listSchemas )
 				if ( !hashSchemas.add( value ) ) {
 					valid = false;
-					getMessageService().logError( getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_G_SIARD )
-							+ getTextResourceService().getText( locale, MESSAGE_XML_G_DUPLICATE_SCHEMA, value ) );
+					if ( min ) {
+						return false;
+					} else {
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_SIARD )
+										+ getTextResourceService().getText( locale, MESSAGE_XML_G_DUPLICATE_SCHEMA,
+												value ) );
+					}
 				}
 			HashSet hashTables = new HashSet(); // check for duplicate tables
 			for ( Object value : listTables )
 				if ( !hashTables.add( value ) ) {
 					valid = false;
-					getMessageService().logError( getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_G_SIARD )
-							+ getTextResourceService().getText( locale, MESSAGE_XML_G_DUPLICATE_TABLE, value ) );
+					if ( min ) {
+						return false;
+					} else {
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_SIARD )
+										+ getTextResourceService().getText( locale, MESSAGE_XML_G_DUPLICATE_TABLE,
+												value ) );
+					}
 				}
 			HashSet hashColumns = new HashSet(); // check for duplicate columns
 			for ( Object value : listColumns )
 				if ( !hashColumns.add( value ) ) {
 					valid = false;
-					getMessageService().logError( getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_G_SIARD )
-							+ getTextResourceService().getText( locale, MESSAGE_XML_G_DUPLICATE_COLUMN, value ) );
+					if ( min ) {
+						return false;
+					} else {
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_SIARD )
+										+ getTextResourceService().getText( locale, MESSAGE_XML_G_DUPLICATE_COLUMN,
+												value ) );
+					}
 				}
 
 		} catch ( java.io.IOException ioe ) {
 			valid = false;
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_SIARD )
-							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-									ioe.getMessage() + " (IOException)" ) );
-
+			if ( min ) {
+				return false;
+			} else {
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_SIARD )
+								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+										ioe.getMessage() + " (IOException)" ) );
+			}
 		} catch ( JDOMException e ) {
 			valid = false;
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_SIARD )
-							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-									e.getMessage() + " (JDOMException)" ) );
+			if ( min ) {
+				return false;
+			} else {
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_SIARD )
+								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+										e.getMessage() + " (JDOMException)" ) );
+			}
 			return valid;
 		}
 		return valid;

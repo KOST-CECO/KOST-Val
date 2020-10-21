@@ -53,12 +53,18 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 		implements ValidationBjhoveValidationModule
 {
 
-	public static String NEWLINE = System.getProperty( "line.separator" );
+	public static String	NEWLINE	= System.getProperty( "line.separator" );
+
+	private boolean				min			= false;
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
 			Locale locale ) throws ValidationBjhoveValidationException
 	{
+		String onWork = configMap.get( "ShowProgressOnWork" );
+		if ( onWork.equals( "nomin" ) ) {
+			min = true;
+		}
 
 		boolean isValid = true;
 
@@ -157,12 +163,16 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 				jhoveReport = newReport;
 				Util.switchOnConsole();
 			} catch ( Exception e ) {
-				System.out.println( "Jhove dispatch exception" );
-				e.printStackTrace();
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_TIFF )
-								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-										"Jhove dispatch exception: " + e.getMessage() ) );
+				if ( min ) {
+					return false;
+				} else {
+					System.out.println( "Jhove dispatch exception" );
+					e.printStackTrace();
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_TIFF )
+									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+											"Jhove dispatch exception: " + e.getMessage() ) );
+				}
 			}
 
 			InputStream inStream = null;
@@ -186,21 +196,29 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 				Util.deleteFile( afile );
 
 			} catch ( IOException e ) {
-				e.printStackTrace();
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_TIFF )
-								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-										"Jhove copy report exception: " + e.getMessage() ) );
+				if ( min ) {
+					return false;
+				} else {
+					e.printStackTrace();
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_TIFF )
+									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+											"Jhove copy report exception: " + e.getMessage() ) );
+				}
 			}
 			inStream.close();
 			outStream.close();
 			Util.deleteFile( jhoveReport );
 		} catch ( Exception e ) {
-			e.printStackTrace();
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_TIFF )
-							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-									"Jhove exception: " + e.getMessage() ) );
+			if ( min ) {
+				return false;
+			} else {
+				e.printStackTrace();
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_TIFF )
+								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+										"Jhove exception: " + e.getMessage() ) );
+			}
 		}
 
 		try {
@@ -232,11 +250,19 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 					} else {
 						if ( statuscounter == 0 ) {
 							// Invalider Status & Status noch nicht ausgegeben
-							isValid = false;
-							getMessageService()
-									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_TIFF )
-											+ getTextResourceService().getText( locale, MESSAGE_XML_B_JHOVEINVALID,
-													status ) );
+							if ( min ) {
+								in.close();
+								if ( jhoveReport.exists() ) {
+									jhoveReport.delete();
+								}
+								return false;
+							} else {
+								isValid = false;
+								getMessageService()
+										.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_TIFF )
+												+ getTextResourceService().getText( locale, MESSAGE_XML_B_JHOVEINVALID,
+														status ) );
+							}
 							statuscounter = 1; // Marker Status Ausgegeben
 						}
 						/* Linie mit der Fehlermeldung auch mitausgeben, falls diese neu ist.
@@ -248,25 +274,33 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 						if ( lines.contains( line ) ) {
 							// Diese Linie = Fehlermelung wurde bereits ausgegeben
 						} else {
-							// neue Fehlermeldung
-							counter = counter + 1;
-							// max 10 Meldungen im Modul B
-							if ( counter < 11 ) {
-								getMessageService()
-										.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_TIFF )
-												+ getTextResourceService().getText( locale, MESSAGE_XML_B_JHOVEMESSAGE,
-														line ) );
-								lines.add( line );
-							} else if ( counter == 11 ) {
-								getMessageService()
-										.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_TIFF )
-												+ getTextResourceService().getText( locale, MESSAGE_XML_B_JHOVEMESSAGE,
-														" ErrorMessage: . . ." ) );
-								lines.add( line );
-							} else {
-								// Modul B Abbrechen. Spart viel Zeit.
+							if ( min ) {
 								in.close();
+								if ( jhoveReport.exists() ) {
+									jhoveReport.delete();
+								}
 								return false;
+							} else {
+								// neue Fehlermeldung
+								counter = counter + 1;
+								// max 10 Meldungen im Modul B
+								if ( counter < 11 ) {
+									getMessageService().logError(
+											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_TIFF )
+													+ getTextResourceService().getText( locale, MESSAGE_XML_B_JHOVEMESSAGE,
+															line ) );
+									lines.add( line );
+								} else if ( counter == 11 ) {
+									getMessageService().logError(
+											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_TIFF )
+													+ getTextResourceService().getText( locale, MESSAGE_XML_B_JHOVEMESSAGE,
+															" ErrorMessage: . . ." ) );
+									lines.add( line );
+								} else {
+									// Modul B Abbrechen. Spart viel Zeit.
+									in.close();
+									return false;
+								}
 							}
 						}
 					}

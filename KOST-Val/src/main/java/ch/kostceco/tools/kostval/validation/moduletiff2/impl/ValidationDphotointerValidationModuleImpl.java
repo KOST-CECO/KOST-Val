@@ -38,12 +38,18 @@ public class ValidationDphotointerValidationModuleImpl extends ValidationModuleI
 		implements ValidationDphotointerValidationModule
 {
 
-	public static String NEWLINE = System.getProperty( "line.separator" );
+	public static String	NEWLINE	= System.getProperty( "line.separator" );
+
+	private boolean				min			= false;
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
 			Locale locale ) throws ValidationDphotointerValidationException
 	{
+		String onWork = configMap.get( "ShowProgressOnWork" );
+		if ( onWork.equals( "nomin" ) ) {
+			min = true;
+		}
 
 		boolean isValid = true;
 
@@ -67,44 +73,108 @@ public class ValidationDphotointerValidationModuleImpl extends ValidationModuleI
 		String pi8 = configMap.get( "AllowedPhotointer8" );
 
 		if ( pi0.startsWith( "Configuration-Error:" ) ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF ) + pi0 );
-			return false;
+			if ( min ) {
+				/* exiftoolReport loeschen */
+				if ( exiftoolReport.exists() ) {
+					exiftoolReport.delete();
+				}
+				return false;
+			} else {
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF ) + pi0 );
+				return false;
+			}
 		}
 		if ( pi1.startsWith( "Configuration-Error:" ) ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF ) + pi1 );
-			return false;
+			if ( min ) {
+				/* exiftoolReport loeschen */
+				if ( exiftoolReport.exists() ) {
+					exiftoolReport.delete();
+				}
+				return false;
+			} else {
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF ) + pi1 );
+				return false;
+			}
 		}
 		if ( pi2.startsWith( "Configuration-Error:" ) ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF ) + pi2 );
-			return false;
+			if ( min ) {
+				/* exiftoolReport loeschen */
+				if ( exiftoolReport.exists() ) {
+					exiftoolReport.delete();
+				}
+				return false;
+			} else {
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF ) + pi2 );
+				return false;
+			}
 		}
 		if ( pi3.startsWith( "Configuration-Error:" ) ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF ) + pi3 );
-			return false;
+			if ( min ) {
+				/* exiftoolReport loeschen */
+				if ( exiftoolReport.exists() ) {
+					exiftoolReport.delete();
+				}
+				return false;
+			} else {
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF ) + pi3 );
+				return false;
+			}
 		}
 		if ( pi4.startsWith( "Configuration-Error:" ) ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF ) + pi4 );
-			return false;
+			if ( min ) {
+				/* exiftoolReport loeschen */
+				if ( exiftoolReport.exists() ) {
+					exiftoolReport.delete();
+				}
+				return false;
+			} else {
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF ) + pi4 );
+				return false;
+			}
 		}
 		if ( pi5.startsWith( "Configuration-Error:" ) ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF ) + pi5 );
-			return false;
+			if ( min ) {
+				/* exiftoolReport loeschen */
+				if ( exiftoolReport.exists() ) {
+					exiftoolReport.delete();
+				}
+				return false;
+			} else {
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF ) + pi5 );
+				return false;
+			}
 		}
 		if ( pi6.startsWith( "Configuration-Error:" ) ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF ) + pi6 );
-			return false;
+			if ( min ) {
+				/* exiftoolReport loeschen */
+				if ( exiftoolReport.exists() ) {
+					exiftoolReport.delete();
+				}
+				return false;
+			} else {
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF ) + pi6 );
+				return false;
+			}
 		}
 		if ( pi8.startsWith( "Configuration-Error:" ) ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF ) + pi8 );
-			return false;
+			if ( min ) {
+				/* exiftoolReport loeschen */
+				if ( exiftoolReport.exists() ) {
+					exiftoolReport.delete();
+				}
+				return false;
+			} else {
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF ) + pi8 );
+				return false;
+			}
 		}
 		if ( pi0.equals( "" ) ) {
 			pi0 = "DiesePhotointerIstNichtErlaubt";
@@ -157,23 +227,32 @@ public class ValidationDphotointerValidationModuleImpl extends ValidationModuleI
 					} else {
 						// Invalider Status
 						isValid = false;
-						if ( !line.equals( oldErrorLine1 ) && !line.equals( oldErrorLine2 )
-								&& !line.equals( oldErrorLine3 ) && !line.equals( oldErrorLine4 )
-								&& !line.equals( oldErrorLine5 ) ) {
-							// neuer Fehler
-							getMessageService()
-									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF )
-											+ getTextResourceService().getText( locale, MESSAGE_XML_CG_INVALID, line ) );
-							if ( oldErrorLine1.equals( "" ) ) {
-								oldErrorLine1 = line;
-							} else if ( oldErrorLine2.equals( "" ) ) {
-								oldErrorLine2 = line;
-							} else if ( oldErrorLine3.equals( "" ) ) {
-								oldErrorLine3 = line;
-							} else if ( oldErrorLine4.equals( "" ) ) {
-								oldErrorLine4 = line;
-							} else if ( oldErrorLine5.equals( "" ) ) {
-								oldErrorLine5 = line;
+						if ( min ) {
+							in.close();
+							/* exiftoolReport loeschen */
+							if ( exiftoolReport.exists() ) {
+								exiftoolReport.delete();
+							}
+							return false;
+						} else {
+							if ( !line.equals( oldErrorLine1 ) && !line.equals( oldErrorLine2 )
+									&& !line.equals( oldErrorLine3 ) && !line.equals( oldErrorLine4 )
+									&& !line.equals( oldErrorLine5 ) ) {
+								// neuer Fehler
+								getMessageService().logError( getTextResourceService().getText( locale,
+										MESSAGE_XML_MODUL_D_TIFF )
+										+ getTextResourceService().getText( locale, MESSAGE_XML_CG_INVALID, line ) );
+								if ( oldErrorLine1.equals( "" ) ) {
+									oldErrorLine1 = line;
+								} else if ( oldErrorLine2.equals( "" ) ) {
+									oldErrorLine2 = line;
+								} else if ( oldErrorLine3.equals( "" ) ) {
+									oldErrorLine3 = line;
+								} else if ( oldErrorLine4.equals( "" ) ) {
+									oldErrorLine4 = line;
+								} else if ( oldErrorLine5.equals( "" ) ) {
+									oldErrorLine5 = line;
+								}
 							}
 						}
 					}
@@ -186,9 +265,18 @@ public class ValidationDphotointerValidationModuleImpl extends ValidationModuleI
 						} else {
 							// Invalider Status
 							isValid = false;
-							getMessageService()
-									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF )
-											+ getTextResourceService().getText( locale, MESSAGE_XML_CG_INVALID, line ) );
+							if ( min ) {
+								in.close();
+								/* exiftoolReport loeschen */
+								if ( exiftoolReport.exists() ) {
+									exiftoolReport.delete();
+								}
+								return false;
+							} else {
+								getMessageService().logError( getTextResourceService().getText( locale,
+										MESSAGE_XML_MODUL_D_TIFF )
+										+ getTextResourceService().getText( locale, MESSAGE_XML_CG_INVALID, line ) );
+							}
 						}
 					}
 				}
@@ -196,17 +284,33 @@ public class ValidationDphotointerValidationModuleImpl extends ValidationModuleI
 			if ( exiftoolio == 0 ) {
 				// Invalider Status
 				isValid = false;
-				isValid = false;
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF )
-								+ getTextResourceService().getText( locale, MESSAGE_XML_CG_ETNIO, "D" ) );
+				if ( min ) {
+					in.close();
+					/* exiftoolReport loeschen */
+					if ( exiftoolReport.exists() ) {
+						exiftoolReport.delete();
+					}
+					return false;
+				} else {
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF )
+									+ getTextResourceService().getText( locale, MESSAGE_XML_CG_ETNIO, "D" ) );
+				}
 			}
 			in.close();
 		} catch ( Exception e ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF )
-							+ getTextResourceService().getText( locale, MESSAGE_XML_CG_CANNOTFINDETREPORT ) );
-			return false;
+			if ( min ) {
+				/* exiftoolReport loeschen */
+				if ( exiftoolReport.exists() ) {
+					exiftoolReport.delete();
+				}
+				return false;
+			} else {
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF )
+								+ getTextResourceService().getText( locale, MESSAGE_XML_CG_CANNOTFINDETREPORT ) );
+				return false;
+			}
 		}
 		return isValid;
 	}

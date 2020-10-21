@@ -18,48 +18,7 @@
 			</fileset>
 		</copy>
 		<copy file="README.md" todir="KOST-Val/target/classes" />
-		<!-- erstelle cmdKOST-Val.jar -->
-		<!-- neu via Export -->
-		<!-- <jar destfile="../../KOST-Val/cmdKOST-Val.jar">
-			<manifest>
-				<attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
-				<attribute name="Rsrc-Main-Class" value="ch.kostceco.tools.kostval.KOSTVal"/>
-				<attribute name="Class-Path" value="."/>
-				<attribute name="Rsrc-Class-Path" value="./ log4j-1.2.12.jar spring-context-5.0.8.RELEASE.jar commons-logging-1.2.jar spring-beans-5.0.8.RELEASE.jar spring-core-5.0.8.RELEASE.jar spring-aop-5.0.8.RELEASE.jar spring-expression-5.0.8.RELEASE.jar spring-jdbc-5.0.8.RELEASE.jar spring-orm-5.0.8.RELEASE.jar spring-test-5.0.8.RELEASE.jar spring-tx-5.0.8.RELEASE.jar commons-io-2.6.jar xml-apis-2.7.1.jar zip64file-1.0.jar xercesImpl-2.7.1.jar junit-4.12.jar jdom-2.0.0.jar zip64-1.0.jar JhoveApp-1.5.jar droid-core-5.0.3.jar droid-export-5.0.3.jar droid-export-interfaces-5.0.3.jar droid-help-5.0.3.jar droid-interfaces-5.0.3.jar droid-report-5.0.3.jar droid-report-interfaces-5.0.3.jar droid-results-5.0.3.jar VALA-6.7.0.7.RELEASE.jar badpeggy-2.0.jar itextpdf-5.5.5.jar"/>
-			</manifest>
-			<zipfileset dir="KOST-Val/target/classes"/>
-			<zipfileset dir="KOST-Val/lib" includes="log4j-1.2.12.jar"/>
-			<zipfileset dir="KOST-Val/lib" includes="spring-context-5.0.8.RELEASE.jar"/>
-			<zipfileset dir="KOST-Val/lib" includes="commons-logging-1.2.jar"/>
-			<zipfileset dir="KOST-Val/lib" includes="spring-beans-5.0.8.RELEASE.jar"/>
-			<zipfileset dir="KOST-Val/lib" includes="spring-core-5.0.8.RELEASE.jar"/>
-			<zipfileset dir="KOST-Val/lib" includes="spring-aop-5.0.8.RELEASE.jar"/>
-			<zipfileset dir="KOST-Val/lib" includes="spring-expression-5.0.8.RELEASE.jar"/>
-			<zipfileset dir="KOST-Val/lib" includes="spring-jdbc-5.0.8.RELEASE.jar"/>
-			<zipfileset dir="KOST-Val/lib" includes="spring-orm-5.0.8.RELEASE.jar"/>
-			<zipfileset dir="KOST-Val/lib" includes="spring-test-5.0.8.RELEASE.jar"/>
-			<zipfileset dir="KOST-Val/lib" includes="spring-tx-5.0.8.RELEASE.jar"/>
-			<zipfileset dir="KOST-Val/lib" includes="commons-io-2.6.jar"/>
-			<zipfileset dir="KOST-Val/lib" includes="xml-apis-2.7.1.jar"/>
-			<zipfileset dir="KOST-Val/lib" includes="zip64file-1.0.jar"/>
-			<zipfileset dir="KOST-Val/lib" includes="xercesImpl-2.7.1.jar"/>
-			<zipfileset dir="KOST-Val/lib" includes="junit-4.12.jar"/>
-			<zipfileset dir="KOST-Val/lib" includes="jdom-2.0.0.jar"/>
-			<zipfileset dir="KOST-Val/lib" includes="zip64-1.0.jar"/>
-			<zipfileset dir="KOST-Val/lib" includes="JhoveApp-1.5.jar"/>
-			<zipfileset dir="KOST-Val/lib" includes="droid-core-5.0.3.jar"/>
-			<zipfileset dir="KOST-Val/lib" includes="droid-export-5.0.3.jar"/>
-			<zipfileset dir="KOST-Val/lib" includes="droid-export-interfaces-5.0.3.jar"/>
-			<zipfileset dir="KOST-Val/lib" includes="droid-help-5.0.3.jar"/>
-			<zipfileset dir="KOST-Val/lib" includes="droid-interfaces-5.0.3.jar"/>
-			<zipfileset dir="KOST-Val/lib" includes="droid-report-5.0.3.jar"/>
-			<zipfileset dir="KOST-Val/lib" includes="droid-report-interfaces-5.0.3.jar"/>
-			<zipfileset dir="KOST-Val/lib" includes="droid-results-5.0.3.jar"/>
-			<zipfileset dir="KOST-Val/lib" includes="VALA-6.7.0.7.RELEASE.jar"/>
-			<zipfileset dir="KOST-Val/lib" includes="badpeggy-2.0.jar"/>
-			<zipfileset dir="KOST-Val/lib" includes="itextpdf-5.5.5.jar"/>
-		</jar> -->
-		<!--Kopiere alle benoetigten Ordner und Dokumente in KOST-Val_TEST-->
+		<!--Kopiere alle benoetigten Ordner und Dokumente in ../../KOST-Val-->
 		<copy overwrite="true" todir="../../KOST-Val/configuration">
 			<fileset dir="KOST-Val/src/main/resources_notJar/configuration"/>
 		</copy>
@@ -69,10 +28,10 @@
 		<copy overwrite="true" todir="../../KOST-Val/license">
 			<fileset dir="KOST-Val/src/main/resources_notJar/license"/>
 		</copy>
-		<!-- Kommentar fuer schnellernen build 
+		<!-- Kommentar fuer schnellernen build-->  
 		<copy overwrite="true" todir="../../KOST-Val/resources">
 			<fileset dir="KOST-Val/src/main/resources_notJar/resources"/>
-		</copy> -->
+		</copy>
 		<copy file="KOST-Val/src/main/resources_notJar/PdfValidatorAPI.dll" overwrite="true" todir="../../KOST-Val"/>
 	</target>
 </project>

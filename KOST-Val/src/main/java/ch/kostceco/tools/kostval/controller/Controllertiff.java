@@ -52,6 +52,8 @@ import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationHsizeValidatio
 public class Controllertiff implements MessageConstants
 {
 
+	private boolean																		min			= false;
+
 	private static final Logger												LOGGER	= new Logger( Controllertiff.class );
 
 	private ValidationArecognitionModule							validationArecognitionModule;
@@ -195,6 +197,11 @@ public class Controllertiff implements MessageConstants
 	public boolean executeOptional( File valDatei, File directoryOfLogfile,
 			Map<String, String> configMap, Locale locale )
 	{
+		String onWork = configMap.get( "ShowProgressOnWork" );
+		if ( onWork.equals( "nomin" ) ) {
+			min = true;
+		}
+
 		boolean valid = true;
 		// Validation Step B
 		try {
@@ -203,7 +210,11 @@ public class Controllertiff implements MessageConstants
 				this.getValidationBjhoveValidationModule().getMessageService().print();
 			} else {
 				this.getValidationBjhoveValidationModule().getMessageService().print();
-				valid = false;
+				if ( min ) {
+					return false;
+				} else {
+					valid = false;
+				}
 			}
 		} catch ( ValidationBjhoveValidationException e ) {
 			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_TIFF )
@@ -223,7 +234,11 @@ public class Controllertiff implements MessageConstants
 				this.getValidationCcompressionValidationModule().getMessageService().print();
 			} else {
 				this.getValidationCcompressionValidationModule().getMessageService().print();
-				valid = false;
+				if ( min ) {
+					return false;
+				} else {
+					valid = false;
+				}
 			}
 		} catch ( ValidationCcompressionValidationException e ) {
 			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_TIFF )
@@ -243,7 +258,11 @@ public class Controllertiff implements MessageConstants
 				this.getValidationDphotointerValidationModule().getMessageService().print();
 			} else {
 				this.getValidationDphotointerValidationModule().getMessageService().print();
-				valid = false;
+				if ( min ) {
+					return false;
+				} else {
+					valid = false;
+				}
 			}
 		} catch ( ValidationDphotointerValidationException e ) {
 			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF )
@@ -263,7 +282,11 @@ public class Controllertiff implements MessageConstants
 				this.getValidationEbitspersampleValidationModule().getMessageService().print();
 			} else {
 				this.getValidationEbitspersampleValidationModule().getMessageService().print();
-				valid = false;
+				if ( min ) {
+					return false;
+				} else {
+					valid = false;
+				}
 			}
 		} catch ( ValidationEbitspersampleValidationException e ) {
 			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_TIFF )
@@ -283,7 +306,11 @@ public class Controllertiff implements MessageConstants
 				this.getValidationFmultipageValidationModule().getMessageService().print();
 			} else {
 				this.getValidationFmultipageValidationModule().getMessageService().print();
-				valid = false;
+				if ( min ) {
+					return false;
+				} else {
+					valid = false;
+				}
 			}
 		} catch ( ValidationFmultipageValidationException e ) {
 			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_TIFF )
@@ -303,7 +330,11 @@ public class Controllertiff implements MessageConstants
 				this.getValidationGtilesValidationModule().getMessageService().print();
 			} else {
 				this.getValidationGtilesValidationModule().getMessageService().print();
-				valid = false;
+				if ( min ) {
+					return false;
+				} else {
+					valid = false;
+				}
 			}
 		} catch ( ValidationGtilesValidationException e ) {
 			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_TIFF )
@@ -323,7 +354,11 @@ public class Controllertiff implements MessageConstants
 				this.getValidationHsizeValidationModule().getMessageService().print();
 			} else {
 				this.getValidationHsizeValidationModule().getMessageService().print();
-				valid = false;
+				if ( min ) {
+					return false;
+				} else {
+					valid = false;
+				}
 			}
 		} catch ( ValidationHsizeValidationException e ) {
 			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_TIFF )

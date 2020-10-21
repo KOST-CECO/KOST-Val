@@ -47,6 +47,8 @@ import ch.kostceco.tools.kostval.util.Util;
 public class Controllervalfolder implements MessageConstants
 {
 
+	private boolean											min			= false;
+
 	private static final Logger					LOGGER	= new Logger( Controllervalfolder.class );
 	private static TextResourceService	textResourceService;
 
@@ -65,6 +67,10 @@ public class Controllervalfolder implements MessageConstants
 			boolean verbose, String dirOfJarPath, Map<String, String> configMap,
 			ApplicationContext context, Locale locale ) throws IOException
 	{
+		String onWork = configMap.get( "ShowProgressOnWork" );
+		if ( onWork.equals( "nomin" ) ) {
+			min = true;
+		}
 		// Formatvalidierung ueber ein Ordner
 
 		boolean valFolder = false;
@@ -326,8 +332,11 @@ public class Controllervalfolder implements MessageConstants
 						}
 					} else {
 						countNio = countNio + 1;
-						countNioDetail = countNioDetail + "</Message></Info><Info><Message> - "
-								+ valDatei.getAbsolutePath();
+						if ( min ) {
+						} else {
+							countNioDetail = countNioDetail + "</Message></Info><Info><Message> - "
+									+ valDatei.getAbsolutePath();
+						}
 						if ( countNioExtension == "" ) {
 							countNioExtension = valDateiExt;
 						} else {

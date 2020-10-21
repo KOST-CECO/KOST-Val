@@ -60,6 +60,8 @@ import ch.kostceco.tools.kostval.validation.modulesiard.ValidationHcontentModule
 public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 		implements ValidationHcontentModule
 {
+	private boolean						min				= false;
+
 	Boolean										version1	= false;
 	Boolean										version2	= false;
 
@@ -83,6 +85,8 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 			showOnWork = true;
 			System.out.print( "H    " );
 			System.out.print( "\b\b\b\b\b" );
+		} else if ( onWorkConfig.equals( "nomin" ) ) {
+			min = true;
 		}
 
 		boolean valid = true;
@@ -170,29 +174,45 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 										File fpathToxmllintDll2 = new File( pathToxmllintDll2 );
 										File fpathToxmllintDll3 = new File( pathToxmllintDll3 );
 										if ( !fpathToxmllintExe.exists() ) {
-											getMessageService().logError(
-													getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
-															+ getTextResourceService().getText( locale,
-																	ERROR_XML_XMLLINT1_MISSING ) );
-											valid = false;
+											if ( min ) {
+												return false;
+											} else {
+												getMessageService().logError(
+														getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
+																+ getTextResourceService().getText( locale,
+																		ERROR_XML_XMLLINT1_MISSING ) );
+												valid = false;
+											}
 										} else if ( !fpathToxmllintDll1.exists() ) {
-											getMessageService().logError(
-													getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
-															+ getTextResourceService().getText( locale,
-																	ERROR_XML_XMLLINT2_MISSING ) );
-											valid = false;
+											if ( min ) {
+												return false;
+											} else {
+												getMessageService().logError(
+														getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
+																+ getTextResourceService().getText( locale,
+																		ERROR_XML_XMLLINT2_MISSING ) );
+												valid = false;
+											}
 										} else if ( !fpathToxmllintDll2.exists() ) {
-											getMessageService().logError(
-													getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
-															+ getTextResourceService().getText( locale,
-																	ERROR_XML_XMLLINT3_MISSING ) );
-											valid = false;
+											if ( min ) {
+												return false;
+											} else {
+												getMessageService().logError(
+														getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
+																+ getTextResourceService().getText( locale,
+																		ERROR_XML_XMLLINT3_MISSING ) );
+												valid = false;
+											}
 										} else if ( !fpathToxmllintDll3.exists() ) {
-											getMessageService().logError(
-													getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
-															+ getTextResourceService().getText( locale,
-																	ERROR_XML_XMLLINT4_MISSING ) );
-											valid = false;
+											if ( min ) {
+												return false;
+											} else {
+												getMessageService().logError(
+														getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
+																+ getTextResourceService().getText( locale,
+																		ERROR_XML_XMLLINT4_MISSING ) );
+												valid = false;
+											}
 										} else {
 											StringBuffer command = new StringBuffer(
 													"\"" + dirOfJarPath + File.separator + "resources" + File.separator
@@ -236,65 +256,70 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 												Util.switchOnConsole();
 
 												if ( 2 < exitStatus ) {
-													// message.xml.h.invalid.xml = <Message>{0} ist invalid zu
-													// {1}</Message></Error>
-													getMessageService().logError( getTextResourceService().getText( locale,
-															MESSAGE_XML_MODUL_H_SIARD )
-															+ getTextResourceService().getText( locale, MESSAGE_XML_H_INVALID_XML,
-																	tableXml.getName(), tableXsd.getName() ) );
-													valid = false;
+													if ( min ) {
+														return false;
+													} else {
+														// message.xml.h.invalid.xml = <Message>{0} ist invalid zu
+														// {1}</Message></Error>
+														getMessageService().logError( getTextResourceService().getText( locale,
+																MESSAGE_XML_MODUL_H_SIARD )
+																+ getTextResourceService().getText( locale,
+																		MESSAGE_XML_H_INVALID_XML, tableXml.getName(),
+																		tableXsd.getName() ) );
+														valid = false;
 
-													// Fehlermeldung aus outTableXml auslesen
-													BufferedReader br = new BufferedReader( new FileReader( outTableXml ) );
-													Set<String> lines = new LinkedHashSet<String>( 100000 ); // evtl
-																																										// vergroessern
-													int counter = 0;
-													try {
-														String line = br.readLine();
-														String linePrev = null;
-														/* Fehlermeldungen holen, ausser die letzte, die besagt, dass es
-														 * invalide ist (wurde bereits oben in D, F,E ausgegeben */
-														while ( line != null ) {
-															if ( linePrev != null ) {
-																/* Nur neue Fehlermeldungen ausgeben und diese auf maximal 10
-																 * beschraenken */
-																if ( lines.contains( linePrev ) ) {
-																	// Diese Linie = Fehlermelung wurde bereits ausgegeben
-																} else {
-																	// neue Fehlermeldung
-																	counter = counter + 1;
-																	// max 5 Meldungen pro Tabelle im Modul H
-																	if ( counter < 6 ) {
-																		getMessageService().logError( getTextResourceService()
-																				.getText( locale, MESSAGE_XML_MODUL_H_SIARD )
-																				+ getTextResourceService()
-																						.getText( MESSAGE_XML_H_INVALID_ERROR, linePrev ) );
-																		lines.add( linePrev );
-																	} else if ( counter == 6 ) {
-																		getMessageService().logError( getTextResourceService()
-																				.getText( locale, MESSAGE_XML_MODUL_H_SIARD )
-																				+ getTextResourceService().getText(
-																						MESSAGE_XML_H_INVALID_ERROR, " ERROR  . . ." ) );
-																		lines.add( linePrev );
+														// Fehlermeldung aus outTableXml auslesen
+														BufferedReader br = new BufferedReader( new FileReader( outTableXml ) );
+														Set<String> lines = new LinkedHashSet<String>( 100000 ); // evtl
+																																											// vergroessern
+														int counter = 0;
+														try {
+															String line = br.readLine();
+															String linePrev = null;
+															/* Fehlermeldungen holen, ausser die letzte, die besagt, dass es
+															 * invalide ist (wurde bereits oben in D, F,E ausgegeben */
+															while ( line != null ) {
+																if ( linePrev != null ) {
+																	/* Nur neue Fehlermeldungen ausgeben und diese auf maximal 10
+																	 * beschraenken */
+																	if ( lines.contains( linePrev ) ) {
+																		// Diese Linie = Fehlermelung wurde bereits ausgegeben
 																	} else {
-																		// Tabellenauswertung abbrechen indem line=null
-																		line = null;
+																		// neue Fehlermeldung
+																		counter = counter + 1;
+																		// max 5 Meldungen pro Tabelle im Modul H
+																		if ( counter < 6 ) {
+																			getMessageService().logError( getTextResourceService()
+																					.getText( locale, MESSAGE_XML_MODUL_H_SIARD )
+																					+ getTextResourceService()
+																							.getText( MESSAGE_XML_H_INVALID_ERROR, linePrev ) );
+																			lines.add( linePrev );
+																		} else if ( counter == 6 ) {
+																			getMessageService().logError( getTextResourceService()
+																					.getText( locale, MESSAGE_XML_MODUL_H_SIARD )
+																					+ getTextResourceService().getText(
+																							MESSAGE_XML_H_INVALID_ERROR, " ERROR  . . ." ) );
+																			lines.add( linePrev );
+																		} else {
+																			// Tabellenauswertung abbrechen indem line=null
+																			line = null;
+																		}
 																	}
 																}
+																linePrev = line;
+																line = br.readLine();
 															}
-															linePrev = line;
-															line = br.readLine();
+														} finally {
+															br.close();
+															// set to null
+															br = null;
+															/* Konsole zuerst einmal noch umleiten und die Streams beenden, damit
+															 * die dateien geloescht werden koennen */
+															Util.switchOffConsoleToTxtClose( outTableXml );
+															System.out.println( " . " );
+															Util.switchOnConsole();
+															Util.deleteFile( outTableXml );
 														}
-													} finally {
-														br.close();
-														// set to null
-														br = null;
-														/* Konsole zuerst einmal noch umleiten und die Streams beenden, damit
-														 * die dateien geloescht werden koennen */
-														Util.switchOffConsoleToTxtClose( outTableXml );
-														System.out.println( " . " );
-														Util.switchOnConsole();
-														Util.deleteFile( outTableXml );
 													}
 												} else {
 													/* Konsole zuerst einmal noch umleiten und die Streams beenden, damit die
@@ -382,22 +407,34 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 			fin = null;
 		} catch ( java.io.IOException ioe ) {
 			valid = false;
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
-							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-									ioe.getMessage() + " (IOException)" ) );
+			if ( min ) {
+				return false;
+			} else {
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
+								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+										ioe.getMessage() + " (IOException)" ) );
+			}
 		} catch ( JDOMException e ) {
 			valid = false;
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
-							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-									e.getMessage() + " (JDOMException)" ) );
+			if ( min ) {
+				return false;
+			} else {
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
+								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+										e.getMessage() + " (JDOMException)" ) );
+			}
 		} catch ( SAXException e ) {
 			valid = false;
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
-							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-									e.getMessage() + " (SAXException)" ) );
+			if ( min ) {
+				return false;
+			} else {
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
+								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+										e.getMessage() + " (SAXException)" ) );
+			}
 		}
 
 		return valid;
@@ -419,10 +456,13 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 		if ( range.min == 0 && range.max == UNBOUNDED ) {
 			/* die effektive Zahl in schemaLocation (Work) konnte im H nicht hereingeschrieben werden.
 			 * Eine Warnung wird herausgegeben */
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
-							+ getTextResourceService().getText( locale, MESSAGE_XML_H_TABLE_NOT_VALIDATED1,
-									schemaLocation.getName() ) );
+			if ( min ) {
+			} else {
+				getMessageService()
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
+								+ getTextResourceService().getText( locale, MESSAGE_XML_H_TABLE_NOT_VALIDATED1,
+										schemaLocation.getName() ) );
+			}
 			return true;
 		} else {
 			return true;

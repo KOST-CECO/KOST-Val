@@ -39,12 +39,18 @@ public class ValidationHsizeValidationModuleImpl extends ValidationModuleImpl
 		implements ValidationHsizeValidationModule
 {
 
-	public static String NEWLINE = System.getProperty( "line.separator" );
+	public static String	NEWLINE	= System.getProperty( "line.separator" );
+
+	private boolean				min			= false;
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
 			Locale locale ) throws ValidationHsizeValidationException
 	{
+		String onWork = configMap.get( "ShowProgressOnWork" );
+		if ( onWork.equals( "nomin" ) ) {
+			min = true;
+		}
 
 		boolean isValid = true;
 
@@ -60,14 +66,21 @@ public class ValidationHsizeValidationModuleImpl extends ValidationModuleImpl
 
 		String size = configMap.get( "AllowedSize" );
 		if ( size.startsWith( "Configuration-Error:" ) ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_TIFF ) + size );
-			return false;
+			if ( min ) {
+				/* exiftoolReport loeschen */
+				if ( exiftoolReport.exists() ) {
+					exiftoolReport.delete();
+				}
+				return false;
+			} else {
+				getMessageService().logError(
+						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_TIFF ) + size );
+			}
 		}
 
 		Integer exiftoolio = 0;
 
-		if ( size.equalsIgnoreCase(  "yes" ) ) {
+		if ( size.equalsIgnoreCase( "yes" ) ) {
 			// Valider Status (Giga-Tiffs sind erlaubt)
 		} else {
 			// Giga-Tiffs sind nicht erlaubt -> analysieren
@@ -88,16 +101,34 @@ public class ValidationHsizeValidationModuleImpl extends ValidationModuleImpl
 								/* Invalider Status (Giga-Tiffs sind nicht erlaubt und zuviele Stellen und keine
 								 * Kommastelle) */
 								isValid = false;
-								getMessageService().logError( getTextResourceService().getText( locale,
-										MESSAGE_XML_MODUL_H_TIFF )
-										+ getTextResourceService().getText( locale, MESSAGE_XML_CG_INVALID, line ) );
+								if ( min ) {
+									in.close();
+									/* exiftoolReport loeschen */
+									if ( exiftoolReport.exists() ) {
+										exiftoolReport.delete();
+									}
+									return false;
+								} else {
+									getMessageService().logError( getTextResourceService().getText( locale,
+											MESSAGE_XML_MODUL_H_TIFF )
+											+ getTextResourceService().getText( locale, MESSAGE_XML_CG_INVALID, line ) );
+								}
 							}
 						} else {
 							// Invalider Status (unbekannte Grösse)
 							isValid = false;
-							getMessageService()
-									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_TIFF )
-											+ getTextResourceService().getText( locale, MESSAGE_XML_CG_INVALID, line ) );
+							if ( min ) {
+								in.close();
+								/* exiftoolReport loeschen */
+								if ( exiftoolReport.exists() ) {
+									exiftoolReport.delete();
+								}
+								return false;
+							} else {
+								getMessageService().logError( getTextResourceService().getText( locale,
+										MESSAGE_XML_MODUL_H_TIFF )
+										+ getTextResourceService().getText( locale, MESSAGE_XML_CG_INVALID, line ) );
+							}
 						}
 					}
 				}
@@ -105,22 +136,38 @@ public class ValidationHsizeValidationModuleImpl extends ValidationModuleImpl
 				if ( exiftoolio == 0 ) {
 					// Invalider Status
 					isValid = false;
-					isValid = false;
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_TIFF )
-									+ getTextResourceService().getText( locale, MESSAGE_XML_CG_ETNIO, "H" ) );
+					if ( min ) {
+						in.close();
+						/* exiftoolReport loeschen */
+						if ( exiftoolReport.exists() ) {
+							exiftoolReport.delete();
+						}
+						return false;
+					} else {
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_TIFF )
+										+ getTextResourceService().getText( locale, MESSAGE_XML_CG_ETNIO, "H" ) );
+					}
 				}
 				in.close();
 
 			} catch ( Exception e ) {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_TIFF )
-								+ getTextResourceService().getText( locale, MESSAGE_XML_CG_CANNOTFINDETREPORT ) );
-				/* exiftoolReport löschen */
-				if ( exiftoolReport.exists() ) {
-					exiftoolReport.delete();
+				if ( min ) {
+					/* exiftoolReport loeschen */
+					if ( exiftoolReport.exists() ) {
+						exiftoolReport.delete();
+					}
+					return false;
+				} else {
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_TIFF )
+									+ getTextResourceService().getText( locale, MESSAGE_XML_CG_CANNOTFINDETREPORT ) );
+					/* exiftoolReport loeschen */
+					if ( exiftoolReport.exists() ) {
+						exiftoolReport.delete();
+					}
+					return false;
 				}
-				return false;
 			}
 		}
 		String pathToWorkDir = configMap.get( "PathToWorkDir" );
