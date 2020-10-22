@@ -48,6 +48,7 @@ public interface MessageConstants
 
 	// Globale Meldungen
 	String	MESSAGE_XML_SUMMARY_3C												= "message.xml.summary.3c";
+	String	MESSAGE_XML_SUMMARY_NO3C												= "message.xml.summary.no3c";
 	String	MESSAGE_XML_SUMMARY_FORMAT										= "message.xml.summary.format";
 	String	MESSAGE_XML_SUMMARY														= "message.xml.summary";
 	String	MESSAGE_XML_SUMMARYDETAIL											= "message.xml.summarydetail";

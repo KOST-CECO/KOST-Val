@@ -75,7 +75,7 @@ public class GuiController
 {
 	@FXML
 	private Button						buttonHelp, buttonFolder, buttonFile, buttonFormat, buttonSip,
-			buttonLicence, buttonChange, buttonShowConfig, buttonPrint, buttonSave;
+			buttonOnlySip, buttonLicence, buttonChange, buttonShowConfig, buttonPrint, buttonSave;
 
 	ObservableList<String>		langList				= FXCollections.observableArrayList( "Deutsch",
 			"Français", "English" );
@@ -107,7 +107,7 @@ public class GuiController
 					+ File.separator + "configuration" + File.separator + "kostval.conf.xml" );
 
 	private String						arg0, arg1, arg2, arg3 = "--xml", dirOfJarPath;
-	private String						versionKostVal	= "2.0.0.gamma1";
+	private String						versionKostVal	= "2.0.0.gamma2";
 	/* TODO: versionKostVal auch hier anpassen:
 	 * 
 	 * 2) cmdKOSTVal.java
@@ -179,6 +179,7 @@ public class GuiController
 				lang.setValue( "Français" );
 				buttonFormat.setText( "Validation du format" );
 				buttonSip.setText( "Validation du SIP" );
+				buttonOnlySip.setText( "Validation du SIP pure" );
 				labelFileFolder.setText( "Sélectionnez" );
 				buttonFolder.setText( "dossier" );
 				buttonFile.setText( "fichier" );
@@ -198,6 +199,7 @@ public class GuiController
 				lang.setValue( "English" );
 				buttonFormat.setText( "Format validation" );
 				buttonSip.setText( "SIP Validation" );
+				buttonOnlySip.setText( "Only SIP Validation" );
 				labelFileFolder.setText( "Select file / folder" );
 				buttonFolder.setText( "folder" );
 				buttonFile.setText( "file" );
@@ -217,6 +219,7 @@ public class GuiController
 				lang.setValue( "Deutsch" );
 				buttonFormat.setText( "Formatvalidierung" );
 				buttonSip.setText( "SIP-Validierung" );
+				buttonOnlySip.setText( "Reine SIP-Validierung" );
 				labelFileFolder.setText( "Wähle Datei / Ordner" );
 				buttonFolder.setText( "Ordner" );
 				buttonFile.setText( "Datei" );
@@ -256,6 +259,7 @@ public class GuiController
 
 		// Format und Sip Validierung erst moeglich wenn fileFolder ausgefuellt
 		buttonSip.setDisable( true );
+		buttonOnlySip.setDisable( true );
 		buttonFormat.setDisable( true );
 
 		// Speichern und drucken des Log erst bei anzeige des log moeglich
@@ -695,6 +699,97 @@ public class GuiController
 		new Thread( val ).start();
 	}
 
+	/* Wenn valOnlySip betaetigt wird, wird die SIP-Validierung gestartet mit allen Parametern. */
+	@FXML
+	void valOnlySip( ActionEvent e )
+	{
+		console.setText( " \n" );
+		String text = "<html><h2>Eine reine SIP-Validierung wird durchgeführt. <br/><br/>Bitte warten ...</h2></html>";
+		if ( locale.toString().startsWith( "fr" ) ) {
+			text = "<html><h2>La validation du SIP pure est lancée. <br/><br/>Veuillez patienter ...</h2></html>";
+		} else if ( locale.toString().startsWith( "en" ) ) {
+			text = "<html><h2>A pure SIP validation is performed. <br/><br/>Please wait ...</h2></html>";
+		}
+		engine.loadContent( text );
+		/* hier die diversen args an main uebergeben
+		 * 
+		 * main( String[] args )
+		 * 
+		 * args[0] "--onlysip"
+		 * 
+		 * args[1] Pfad zur Val-File
+		 * 
+		 * args[2] "--de" / "--fr" / "--en"
+		 * 
+		 * args[3] "--xml" / "--min" (TODO nur valid oder invalid) / "--max" (= xml+verbose TODO GUI)
+		 * 
+		 * 2 und 3 waeren optional werden aber mitgegeben */
+		arg0 = "--onlysip";
+		arg2 = "--" + locale.toString();
+		arg1 = fileFolder.getText();
+		File arg1File = new File( arg1 );
+		String[] args = new String[] { arg0, arg1, arg2, arg3 };
+		File logFile = new File( System.getenv( "USERPROFILE" ) + File.separator + ".kost-val_2x"
+				+ File.separator + "logs" + File.separator + arg1File.getName() + ".kost-val.log.xml" );
+		// falls das File bereits existiert, z.B. von einem vorhergehenden Durchlauf, loeschen wir es
+		if ( logFile.exists() ) {
+			logFile.delete();
+		}
+		/* System.out.println( "cmd: " + args[0] + " " + args[1] + " " + args[2] + " " + args[3] ); */
+		// KOSTVal.main im Hintergrund Task (val) starten
+		final Task<Boolean> val = doVal( args );
+		val.setOnSucceeded( new EventHandler<WorkerStateEvent>() {
+			@Override
+			public void handle( WorkerStateEvent t )
+			{
+				// kein Handler Problem
+				if ( logFile.exists() ) {
+					/* Dieser handler wird bei einer erfolgreichen Validierung ausgefuehrt.
+					 * 
+					 * Da es erfolgreich war (valid / invalid) kann der Log angezeigt werden */
+					engine.load( "file:///" + logFile.getAbsolutePath() );
+					scroll.setVvalue( 1.0 ); // 1.0 = letzte Zeile der Konsole
+					buttonPrint.setDisable( false );
+					buttonSave.setDisable( false );
+					// verherige logs entfernen (nicht weiterloggen in alte Logs)
+					Logger rootLogger = Logger.getRootLogger();
+					rootLogger.removeAllAppenders();
+				} else {
+					// Da es nicht erfolgreich war kann der Log nicht angezeigt werden
+					String text = "Ein Fehler ist aufgetreten. Siehe Konsole.";
+					if ( locale.toString().startsWith( "fr" ) ) {
+						text = "Une erreur s`est produite. Voir console.";
+					} else if ( locale.toString().startsWith( "en" ) ) {
+						text = "An error has occurred. See console.";
+					}
+					scroll.setVvalue( 1.0 ); // 1.0 = letzte Zeile der Konsole
+					engine.loadContent( "<html><h2>" + text + "</h2></html>" );
+				}
+			}
+		} );
+		val.setOnFailed( new EventHandler<WorkerStateEvent>() {
+			@Override
+			public void handle( WorkerStateEvent t )
+			{
+				/* Dieser handler wird ausgefuehrt wenn die Validierung nicht korrekt abgelaufen ist
+				 * (Fehler).
+				 * 
+				 * Da es nicht erfolgreich war kann der Log nicht angezeigt werden */
+				String text = "Ein unbekannter Fehler ist aufgetreten ";
+				String textArgs = "(WorkerStateEvent).<br/><br/>" + args[0] + " " + args[1] + " " + args[2]
+						+ " " + args[3];
+				if ( locale.toString().startsWith( "fr" ) ) {
+					text = "Une erreur inconnue s`est produite ";
+				} else if ( locale.toString().startsWith( "en" ) ) {
+					text = "An unknown error has occurred ";
+				}
+				scroll.setVvalue( 1.0 ); // 1.0 = letzte Zeile der Konsole
+				engine.loadContent( "<html><h2>" + text + textArgs + "</h2></html>" );
+			}
+		} );
+		new Thread( val ).start();
+	}
+
 	/* Wenn choseFile betaetigt wird, kann eine Datei ausgewaehlt werden */
 	@FXML
 	void chooseFile( ActionEvent e )
@@ -796,11 +891,14 @@ public class GuiController
 				String configSip0160 = "<ech0160validation>no</ech0160validation>";
 				if ( Util.stringInFile( configSip0160, configFile ) ) {
 					buttonSip.setDisable( true );
+					buttonOnlySip.setDisable( true );
 				} else {
 					buttonSip.setDisable( false );
+					buttonOnlySip.setDisable( false );
 				}
 			} else {
 				buttonSip.setDisable( true );
+				buttonOnlySip.setDisable( true );
 			}
 		}
 		buttonPrint.setDisable( true );
@@ -871,11 +969,14 @@ public class GuiController
 				String configSip0160 = "<ech0160validation>no</ech0160validation>";
 				if ( Util.stringInFile( configSip0160, configFile ) ) {
 					buttonSip.setDisable( true );
+					buttonOnlySip.setDisable( true );
 				} else {
 					buttonSip.setDisable( false );
+					buttonOnlySip.setDisable( false );
 				}
 			} else {
 				buttonSip.setDisable( true );
+				buttonOnlySip.setDisable( true );
 			}
 			String sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Ausgewählter Ordner: <br>"
 					+ valFolder.getAbsolutePath() + "</h3></td></tr>";
@@ -991,15 +1092,19 @@ public class GuiController
 				String configSip0160 = "<ech0160validation>no</ech0160validation>";
 				if ( Util.stringInFile( configSip0160, configFile ) ) {
 					buttonSip.setDisable( true );
+					buttonOnlySip.setDisable( true );
 				} else {
 					buttonSip.setDisable( false );
+					buttonOnlySip.setDisable( false );
 				}
 			} else {
 				buttonSip.setDisable( true );
+				buttonOnlySip.setDisable( true );
 			}
 		} else {
 			// Format und Sip Validierung erst moeglich wenn valFileFolder existiert
 			buttonSip.setDisable( true );
+			buttonOnlySip.setDisable( true );
 			buttonFormat.setDisable( true );
 		}
 		// Anzeige in WebView wenn image
@@ -1125,6 +1230,7 @@ public class GuiController
 			if ( selLang.equals( "Deutsch" ) ) {
 				buttonFormat.setText( "Formatvalidierung" );
 				buttonSip.setText( "SIP-Validierung" );
+				buttonOnlySip.setText( "Reine SIP-Validierung" );
 				labelFileFolder.setText( "Wähle Datei / Ordner" );
 				buttonFolder.setText( "Ordner" );
 				buttonFile.setText( "Datei" );
@@ -1142,6 +1248,7 @@ public class GuiController
 			} else if ( selLang.equals( "English" ) ) {
 				buttonFormat.setText( "Format validation" );
 				buttonSip.setText( "SIP Validation" );
+				buttonOnlySip.setText( "Only SIP Validation" );
 				labelFileFolder.setText( "Select file / folder" );
 				buttonFolder.setText( "folder" );
 				buttonFile.setText( "file" );
@@ -1159,6 +1266,7 @@ public class GuiController
 			} else {
 				buttonFormat.setText( "Validation du format" );
 				buttonSip.setText( "Validation du SIP" );
+				buttonOnlySip.setText( "Validation du SIP pure" );
 				labelFileFolder.setText( "Sélectionnez" );
 				buttonFolder.setText( "dossier" );
 				buttonFile.setText( "fichier" );

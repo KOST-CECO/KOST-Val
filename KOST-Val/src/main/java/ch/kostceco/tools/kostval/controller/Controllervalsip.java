@@ -72,7 +72,7 @@ public class Controllervalsip implements MessageConstants
 
 	public boolean valSip( File valDatei, String logFileName, File directoryOfLogfile,
 			boolean verbose, String dirOfJarPath, Map<String, String> configMap,
-			ApplicationContext context, Locale locale ) throws IOException
+			ApplicationContext context, Locale locale, Boolean onlySip ) throws IOException
 	{
 		// SIP-Validierung
 
@@ -101,50 +101,53 @@ public class Controllervalsip implements MessageConstants
 		String jpegValidation = configMap.get( "jpegValidation" );
 
 		String formatValOn = "";
-		// ermitteln welche Formate validiert werden koennen respektive eingeschaltet sind
-		if ( pdfaValidation.equals( "yes" ) ) {
-			formatValOn = "PDF/A";
-			if ( tiffValidation.equals( "yes" ) ) {
-				formatValOn = formatValOn + ", TIFF";
+		if ( !onlySip ) {
+			// ermitteln welche Formate validiert werden koennen respektive eingeschaltet sind
+			if ( pdfaValidation.equals( "yes" ) ) {
+				formatValOn = "PDF/A";
+				if ( tiffValidation.equals( "yes" ) ) {
+					formatValOn = formatValOn + ", TIFF";
+				}
+				if ( jp2Validation.equals( "yes" ) ) {
+					formatValOn = formatValOn + ", JP2";
+				}
+				if ( siardValidation.equals( "yes" ) ) {
+					formatValOn = formatValOn + ", SIARD";
+				}
+				if ( jpegValidation.equals( "yes" ) ) {
+					formatValOn = formatValOn + ", JPEG";
+				}
+			} else if ( tiffValidation.equals( "yes" ) ) {
+				formatValOn = "TIFF";
+				if ( jp2Validation.equals( "yes" ) ) {
+					formatValOn = formatValOn + ", JP2";
+				}
+				if ( siardValidation.equals( "yes" ) ) {
+					formatValOn = formatValOn + ", SIARD";
+				}
+				if ( jpegValidation.equals( "yes" ) ) {
+					formatValOn = formatValOn + ", JPEG";
+				}
+			} else if ( jp2Validation.equals( "yes" ) ) {
+				formatValOn = "JP2";
+				if ( siardValidation.equals( "yes" ) ) {
+					formatValOn = formatValOn + ", SIARD";
+				}
+				if ( jpegValidation.equals( "yes" ) ) {
+					formatValOn = formatValOn + ", JPEG";
+				}
+			} else if ( siardValidation.equals( "yes" ) ) {
+				formatValOn = "SIARD";
+				if ( jpegValidation.equals( "yes" ) ) {
+					formatValOn = formatValOn + ", JPEG";
+				}
+			} else if ( jpegValidation.equals( "yes" ) ) {
+				formatValOn = "JPEG";
 			}
-			if ( jp2Validation.equals( "yes" ) ) {
-				formatValOn = formatValOn + ", JP2";
-			}
-			if ( siardValidation.equals( "yes" ) ) {
-				formatValOn = formatValOn + ", SIARD";
-			}
-			if ( jpegValidation.equals( "yes" ) ) {
-				formatValOn = formatValOn + ", JPEG";
-			}
-		} else if ( tiffValidation.equals( "yes" ) ) {
-			formatValOn = "TIFF";
-			if ( jp2Validation.equals( "yes" ) ) {
-				formatValOn = formatValOn + ", JP2";
-			}
-			if ( siardValidation.equals( "yes" ) ) {
-				formatValOn = formatValOn + ", SIARD";
-			}
-			if ( jpegValidation.equals( "yes" ) ) {
-				formatValOn = formatValOn + ", JPEG";
-			}
-		} else if ( jp2Validation.equals( "yes" ) ) {
-			formatValOn = "JP2";
-			if ( siardValidation.equals( "yes" ) ) {
-				formatValOn = formatValOn + ", SIARD";
-			}
-			if ( jpegValidation.equals( "yes" ) ) {
-				formatValOn = formatValOn + ", JPEG";
-			}
-		} else if ( siardValidation.equals( "yes" ) ) {
-			formatValOn = "SIARD";
-			if ( jpegValidation.equals( "yes" ) ) {
-				formatValOn = formatValOn + ", JPEG";
-			}
-		} else if ( jpegValidation.equals( "yes" ) ) {
-			formatValOn = "JPEG";
 		}
 		LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_FORMAT1 ) );
 
+		// TODO Sip fuer Validierung vorbereiten
 		try {
 			boolean validFormat = false;
 			File originalSipFile = valDatei;
@@ -387,7 +390,7 @@ public class Controllervalsip implements MessageConstants
 				// SIP ist ein Ordner valDatei bleibt unveraendert
 			}
 
-			// Vorgaengige Formatvalidierung (Schritt 3c)
+			// TODO Vorgaengige Formatvalidierung (Schritt 3c)
 			Map<String, File> fileUnsortedMap = Util.getFileMapFile( valDatei );
 			Map<String, File> fileMap = new TreeMap<String, File>( fileUnsortedMap );
 			int numberInFileMap = fileMap.size();
@@ -411,7 +414,9 @@ public class Controllervalsip implements MessageConstants
 					 * if ( lastIndexOf == -1 ) { // empty extension extension = "other"; } else { extension =
 					 * extension.substring( lastIndexOf ); } */
 
-					if ( valDateiExt.equals( ".pdf" ) || valDateiExt.equals( ".pdfa" ) ) {
+					if ( onlySip ) {
+						// keine Formatvalidierung
+					} else if ( valDateiExt.equals( ".pdf" ) || valDateiExt.equals( ".pdfa" ) ) {
 						if ( pdfaValidation.equals( "yes" ) ) {
 							// Validierung durchfuehren
 							int countToValidated = numberInFileMap - countProgress;
@@ -617,9 +622,13 @@ public class Controllervalsip implements MessageConstants
 						countNioDetail, countNioExtension );
 			} else {
 				// ohne Detail weil countNio == 0
-				summary = getTextResourceService().getText( locale, MESSAGE_XML_SUMMARY, count,
-						countSummaryIo, countSummaryNio, countNio, countSummaryIoP, countSummaryNioP,
-						countNioP );
+				if ( onlySip ) {
+					summary = getTextResourceService().getText( locale, MESSAGE_XML_SUMMARY_NO3C );
+				} else {
+					summary = getTextResourceService().getText( locale, MESSAGE_XML_SUMMARY, count,
+							countSummaryIo, countSummaryNio, countNio, countSummaryIoP, countSummaryNioP,
+							countNioP );
+				}
 			}
 
 			if ( countSummaryNio == 0 ) {
@@ -649,8 +658,7 @@ public class Controllervalsip implements MessageConstants
 
 			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_FORMAT2 ) );
 
-			// Start Normale SIP-Validierung mit auswertung Format-Val. im 3c
-
+			// TODO Start Normale SIP-Validierung mit auswertung Format-Val. im 3c
 			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_SIP1 ) );
 			valDatei = unSipFile;
 			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS ) );
@@ -705,7 +713,6 @@ public class Controllervalsip implements MessageConstants
 			System.gc();
 
 			// Bereinigungen und ergaenzungen durchfuehren
-
 			// Ergaenzung Format Summary
 			newFormat = "<Format>" + summary;
 			Util.oldnewstring( "<Format>", newFormat, logFile );

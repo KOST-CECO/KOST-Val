@@ -86,7 +86,7 @@ public class KOSTVal implements MessageConstants
 
 	/** Die Eingabe besteht aus 4 Parameter:
 	 * 
-	 * args[0] Validierungstyp "--sip" / "--format" (TODO "--hotfolder")
+	 * args[0] Validierungstyp "--sip" / "--format" / "--onlysip" (TODO "--hotfolder")
 	 * 
 	 * args[1] Pfad zur Val-File
 	 * 
@@ -242,7 +242,7 @@ public class KOSTVal implements MessageConstants
 			verbose = true;
 		}
 
-		if ( args[0].equals( "--format" ) ) {
+		if ( args[0].equalsIgnoreCase( "--format" ) ) {
 			LOGGER.logError( kostval.getTextResourceService().getText( locale, MESSAGE_XML_FORMAT1 ) );
 
 			// TODO: Formatvalidierung an einer Datei --> erledigt --> nur Marker
@@ -341,8 +341,12 @@ public class KOSTVal implements MessageConstants
 				}
 			}
 
-		} else if ( args[0].equals( "--sip" ) ) {
+		} else if ( args[0].equalsIgnoreCase( "--sip" ) || args[0].equalsIgnoreCase( "--onlysip" ) ) {
 			// TODO: Sipvalidierung --> erledigt --> nur Marker
+			Boolean onlySip = false;
+			if ( args[0].equalsIgnoreCase( "--onlysip" ) ) {
+				onlySip = true;
+			}
 			if ( configMap.get( "ech0160validation" ).equals( "no" ) ) {
 				// SIP-Validierung in der Konfiguration ausgeschaltet.
 				System.out
@@ -387,7 +391,7 @@ public class KOSTVal implements MessageConstants
 			} else {
 				Controllervalsip controller3 = (Controllervalsip) context.getBean( "controllervalsip" );
 				boolean valSip = controller3.valSip( valDatei, logFileName, directoryOfLogfile, verbose,
-						dirOfJarPath, configMap, context, locale );
+						dirOfJarPath, configMap, context, locale, onlySip );
 				if ( valSip ) {
 					// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
 					if ( tmpDir.exists() ) {

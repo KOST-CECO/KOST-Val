@@ -52,7 +52,7 @@ public class CmdKOSTVal implements MessageConstants
 
 	/** Die Eingabe besteht aus 2 bis 4 Parameter:
 	 * 
-	 * args[0] Validierungstyp "--sip" / "--format" (TODO "--hotfolder")
+	 * args[0] Validierungstyp "--sip" / "--format" / "--onlysip" (TODO "--hotfolder")
 	 * 
 	 * args[1] Pfad zur Val-File
 	 * 
@@ -96,7 +96,7 @@ public class CmdKOSTVal implements MessageConstants
 		String arg2 = "";
 		String arg3 = "";
 
-		String versionKostVal = "2.0.0.gamma1";
+		String versionKostVal = "2.0.0.gamma2";
 
 		// Standardwerte bei fehlenden Parameter eingeben
 		if ( args.length == 2 ) {

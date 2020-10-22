@@ -75,7 +75,7 @@ public class Controllervalinit implements MessageConstants
 			valInit = false;
 			return valInit;
 		}
-		if ( !args[0].equalsIgnoreCase( "--format" ) && !args[0].equalsIgnoreCase( "--sip" ) ) {
+		if ( !args[0].equalsIgnoreCase( "--format" ) && !args[0].equalsIgnoreCase( "--sip" )&& !args[0].equalsIgnoreCase( "--onlysip" ) ) {
 			System.out.println( getTextResourceService().getText( locale, ERROR_PARAMETER_USAGE ) );
 			valInit = false;
 			return valInit;

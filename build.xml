@@ -28,7 +28,7 @@
 		<copy overwrite="true" todir="../../KOST-Val/license">
 			<fileset dir="KOST-Val/src/main/resources_notJar/license"/>
 		</copy>
-		<!-- Kommentar fuer schnellernen build-->  
+		<!-- Kommentar fuer schnellernen build --> 
 		<copy overwrite="true" todir="../../KOST-Val/resources">
 			<fileset dir="KOST-Val/src/main/resources_notJar/resources"/>
 		</copy>
