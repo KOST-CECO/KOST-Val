@@ -123,7 +123,7 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl
 					 * ref="configurationService" /> */
 					String nameOfSignature = configMap.get( "PathToDroidSignatureFile" );
 					if ( nameOfSignature.startsWith( "Configuration-Error:" ) ) {
-							read.close();
+						read.close();
 						if ( min ) {
 							return false;
 						} else {
@@ -136,7 +136,7 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl
 					// existiert die SignatureFile am angebenen Ort?
 					File fnameOfSignature = new File( nameOfSignature );
 					if ( !fnameOfSignature.exists() ) {
-							read.close();
+						read.close();
 						if ( min ) {
 							return false;
 						} else {
@@ -158,7 +158,7 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl
 						droid.readSignatureFile( nameOfSignature );
 
 					} catch ( Exception e ) {
-							read.close();
+						read.close();
 						if ( min ) {
 							return false;
 						} else {
@@ -178,7 +178,7 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl
 						FileFormat ff = ffh.getFileFormat();
 						puid = ff.getPUID();
 					}
-						read.close();
+					read.close();
 					if ( min ) {
 						return false;
 					} else {

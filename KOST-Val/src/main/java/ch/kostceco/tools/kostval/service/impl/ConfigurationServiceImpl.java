@@ -197,10 +197,6 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String pdfafont = doc.getElementsByTagName( "pdfafont" ).item( 0 ).getTextContent();
 			configMap.put( "pdfafont", pdfafont );
 
-			// Gibt an ob die Bilder in pdfa validiert werden soll
-			String pdfaimage = doc.getElementsByTagName( "pdfaimage" ).item( 0 ).getTextContent();
-			configMap.put( "pdfaimage", pdfaimage );
-
 			// Gibt an ob JBIG2 erlaubt ist oder nicht
 			String jbig2allowed = doc.getElementsByTagName( "jbig2allowed" ).item( 0 ).getTextContent();
 			configMap.put( "jbig2allowed", jbig2allowed );

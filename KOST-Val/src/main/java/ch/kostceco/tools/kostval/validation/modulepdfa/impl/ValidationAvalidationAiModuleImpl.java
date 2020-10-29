@@ -478,6 +478,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 		// Ende der Erkennung
 
 		boolean isValid = false;
+		boolean isValidJ = true;
 		boolean isValidFont = true;
 		boolean ignorUndefinied = false;
 		// String undefiniedWarningString = "";
@@ -548,16 +549,6 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 								getMessageService().logError( getTextResourceService().getText( locale,
 										MESSAGE_XML_MODUL_A_PDFA )
 										+ getTextResourceService().getText( locale, ERROR_XML_A_PDFTOOLS_ENCRYPTED ) );
-								// Encrypt-Fileanlegen, damit in J nicht validiert wird
-								File encrypt = new File(
-										pathToWorkDir + File.separator + valDatei.getName() + "_encrypt.txt" );
-								if ( !encrypt.exists() ) {
-									try {
-										encrypt.createNewFile();
-									} catch ( IOException e ) {
-										e.printStackTrace();
-									}
-								}
 								return false;
 							}
 						}
@@ -594,7 +585,11 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					}
 
 					docPdf = new PdfValidatorAPI();
-					docPdf.setStopOnError( false );
+					if ( min ) {
+						docPdf.setStopOnError( true );
+					} else {
+						docPdf.setStopOnError( false );
+					}
 					docPdf.setReportingLevel( 2 );
 
 					/* ePDFA1a 5122 ePDFA1b 5121 ePDFA2a 5891 ePDFA2b 5889 ePDFA2u 5890 */
@@ -1638,6 +1633,41 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 				}
 			}
 
+			/** Modul J **/
+			String jbig2allowed = configMap.get( "jbig2allowed" );
+			if ( jbig2allowed.contentEquals( "yes" ) ) {
+				// JBIG2 erlaubt kein Fehler moeglich und auch kein Test noetig
+			} else {
+				try {
+					BufferedReader in = new BufferedReader( new FileReader( valDatei ) );
+					String line;
+					while ( (line = in.readLine()) != null ) {
+						if ( line.contains( "JBIG2Decode" ) || line.contains( "jbig2decode" )
+								|| line.contains( "Jbig2decode" ) ) {
+							isValidJ = false;
+							if ( min ) {
+								in.close();
+								return false;
+							} else {
+								break;
+							}
+						}
+					}
+					in.close();
+					// set to null
+					in = null;
+
+				} catch ( Throwable e ) {
+					if ( min ) {
+					} else {
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+										+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+												" Modul J " + e.getMessage() ) );
+					}
+				}
+			}
+
 			// TODO: Erledigt: Fehler Auswertung
 			if ( !isValid ) {
 				if ( min ) {
@@ -2230,7 +2260,11 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					getMessageService().logError( pdftoolsI );
 
 					/** Modul J **/
-					// neu sind die Interaktionen (J) bei den Aktionen (G)
+					if ( !isValidJ ) {
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
+										+ getTextResourceService().getText( locale, ERROR_XML_J_JBIG2 ) );
+					}
 
 					/** Modul K **/
 					getMessageService().logError( errorK );
@@ -2247,6 +2281,12 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 				if ( min ) {
 					return false;
 				} else {
+					/** Modul J **/
+					if ( !isValidJ ) {
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
+										+ getTextResourceService().getText( locale, ERROR_XML_J_JBIG2 ) );
+					}
 
 					/** Modul K **/
 					getMessageService().logError( errorK );
@@ -2259,6 +2299,19 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					}
 				}
 			} else {
+				// Modul J noch ueberpruefen
+				/** Modul J **/
+				if ( !isValidJ ) {
+					isValid = false;
+					if ( min ) {
+						return false;
+					} else {
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
+										+ getTextResourceService().getText( locale, ERROR_XML_J_JBIG2 ) );
+					}
+				}
+
 				try {
 					docPdf.close();
 					// Destroy the object and set to null

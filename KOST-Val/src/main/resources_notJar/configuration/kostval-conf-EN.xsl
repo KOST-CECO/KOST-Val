@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-	<xsl:template match="/"><!-- kostval.conf.xml_v2.0.0 -->
+	<xsl:template match="/"><!-- kostval.conf.xml_v2.0.1 -->
 		<html>
 			<head>
 				<style>
@@ -104,12 +104,6 @@
 						<td>Specifies whether a font validation (search and extractability) should take place [tolerant]:</td>
 						<td>
 							<xsl:value-of select="configuration/pdfa/pdfafont" />
-						</td>
-					</tr>
-					<tr  class="captioninfom">
-						<td>Specifies whether image validation (JPEG and JP2) should take place [no]:</td>
-						<td>
-							<xsl:value-of select="configuration/pdfa/pdfaimage" />
 						</td>
 					</tr>
 					<tr  class="captioninfom">

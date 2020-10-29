@@ -17,17 +17,17 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.web.WebView?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.kostceco.tools.kostval.GuiController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.kostceco.tools.kostval.GuiController">
 
 	<children>
-		<BorderPane prefHeight="500.0" prefWidth="1060.0">
+		<BorderPane prefHeight="600.0" prefWidth="1160.0">
 			<top>
 				<GridPane maxHeight="90.0" minHeight="30.0" prefHeight="90.0" BorderPane.alignment="CENTER">
 					<columnConstraints>
 						<ColumnConstraints hgrow="SOMETIMES" maxWidth="130.0" minWidth="130.0" prefWidth="130.0" />
 						<ColumnConstraints hgrow="SOMETIMES" maxWidth="160.0" minWidth="160.0" prefWidth="160.0" />
 						<ColumnConstraints hgrow="SOMETIMES" maxWidth="160.0" minWidth="160.0" prefWidth="160.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="160.0" minWidth="160.0" prefWidth="160.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="170.0" minWidth="170.0" prefWidth="170.0" />
 						<ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="0.0" prefWidth="10.0" />
 						<ColumnConstraints hgrow="SOMETIMES" maxWidth="130.0" minWidth="10.0" prefWidth="130.0" />
 						<ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="200.0" minWidth="200.0" prefWidth="200.0" />
@@ -65,7 +65,7 @@
 								<Insets left="90.0" />
 							</GridPane.margin>
 						</Button>
-						<ChoiceBox fx:id="logType" layoutX="700.0" layoutY="12.0" maxWidth="150.0" minHeight="26.0" minWidth="150.0" nodeOrientation="LEFT_TO_RIGHT" onAction="#changeLogType" prefHeight="26.0" prefWidth="150.0" value="LogType: --xml" GridPane.columnIndex="2" GridPane.rowIndex="1">
+						<ChoiceBox fx:id="logType" layoutX="700.0" layoutY="12.0" maxWidth="150.0" minHeight="26.0" minWidth="150.0" nodeOrientation="LEFT_TO_RIGHT" onAction="#changeLogType" prefHeight="26.0" prefWidth="150.0" value="LogType: --xml" GridPane.columnIndex="3" GridPane.rowIndex="1">
 							<opaqueInsets>
 								<Insets />
 							</opaqueInsets>
@@ -73,13 +73,13 @@
 								<Insets left="10.0" />
 							</GridPane.margin>
 						</ChoiceBox>
-						<Label fx:id="labelStart" text="Starte" GridPane.rowIndex="2" />
-						<Button fx:id="buttonFormat" alignment="TOP_LEFT" maxWidth="150.0" minHeight="26.0" mnemonicParsing="false" onAction="#valFormat" prefHeight="26.0" prefWidth="150.0" style="-fx-border-color: LimeGreen;" text="Formatvalidierung" GridPane.columnIndex="1" GridPane.rowIndex="2">
+						<Label fx:id="labelStart" text="Starte Validierung" GridPane.rowIndex="2" />
+						<Button fx:id="buttonFormat" alignment="TOP_LEFT" maxWidth="150.0" minHeight="26.0" mnemonicParsing="false" onAction="#valFormat" prefHeight="26.0" prefWidth="150.0" style="-fx-border-color: LimeGreen;" text="nur Formate" GridPane.columnIndex="1" GridPane.rowIndex="2">
 							<GridPane.margin>
 								<Insets left="10.0" />
 							</GridPane.margin>
 						</Button>
-						<Button fx:id="buttonSip" alignment="TOP_LEFT" maxWidth="150.0" minHeight="26.0" mnemonicParsing="false" onAction="#valSip" prefHeight="26.0" prefWidth="150.0" style="-fx-border-color: LimeGreen;" text="SIP-Validierung" GridPane.columnIndex="2" GridPane.rowIndex="2">
+						<Button fx:id="buttonSip" alignment="TOP_LEFT" maxWidth="150.0" minHeight="26.0" mnemonicParsing="false" onAction="#valSip" prefHeight="26.0" prefWidth="150.0" style="-fx-border-color: LimeGreen;" text="SIP und Formate" GridPane.columnIndex="2" GridPane.rowIndex="2">
 							<GridPane.margin>
 								<Insets left="10.0" />
 							</GridPane.margin>
@@ -109,11 +109,16 @@
 								<Insets left="120.0" />
 							</GridPane.margin>
 						</Button>
-                  <Button fx:id="buttonOnlySip" alignment="TOP_LEFT" layoutX="310.0" layoutY="72.0" maxWidth="150.0" minHeight="26.0" mnemonicParsing="false" onAction="#valOnlySip" prefHeight="26.0" prefWidth="150.0" style="-fx-border-color: LimeGreen;" text="reine SIP-Validierung" GridPane.columnIndex="3" GridPane.rowIndex="2">
+                  <Button fx:id="buttonOnlySip" alignment="TOP_LEFT" layoutX="310.0" layoutY="72.0" maxWidth="150.0" minHeight="26.0" mnemonicParsing="false" onAction="#valOnlySip" prefHeight="26.0" prefWidth="150.0" style="-fx-border-color: LimeGreen;" text="nur SIP" GridPane.columnIndex="3" GridPane.rowIndex="2">
                      <GridPane.margin>
                         <Insets left="10.0" />
                      </GridPane.margin>
                   </Button>
+                  <Label layoutX="10.0" layoutY="47.0" text="LogType" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                     <GridPane.margin>
+                        <Insets left="10.0" />
+                     </GridPane.margin>
+                  </Label>
 					</children>
 					<BorderPane.margin>
 						<Insets />

@@ -54,7 +54,8 @@ public class ControllerInit implements MessageConstants
 		this.textResourceService = textResourceService;
 	}
 
-	public boolean init( Locale locale, String dirOfJarPath, String versionKostVal ) throws IOException
+	public boolean init( Locale locale, String dirOfJarPath, String versionKostVal )
+			throws IOException
 	{
 		boolean init = true;
 		File directoryOfKostValDir = new File( pathToKostValDir );
@@ -150,7 +151,7 @@ public class ControllerInit implements MessageConstants
 		 * benoetigte Dateien in User config kopieren
 		 * 
 		 * wenn nicht vorhanden oder veraltete Version */
-		String version = "kostval.conf.xml_v"+versionKostVal;
+		String version = "kostval.conf.xml_v" + versionKostVal;
 		File directoryOfConfigfile = new File( pathToKostValDir + File.separator + "configuration" );
 		File directoryOfConfigfileInit = new File( dirOfJarPath + File.separator + "configuration" );
 		if ( !directoryOfConfigfile.exists() ) {
@@ -159,17 +160,36 @@ public class ControllerInit implements MessageConstants
 		File configFileInit = new File(
 				directoryOfConfigfileInit + File.separator + "kostval.conf.xml" );
 		File configFile = new File( directoryOfConfigfile + File.separator + "kostval.conf.xml" );
+		File configFileDeInit = new File(
+				directoryOfConfigfileInit + File.separator + "kostval-conf-DE.xsl" );
+		File configFileDe = new File( directoryOfConfigfile + File.separator + "kostval-conf-DE.xsl" );
+		File configFileFrInit = new File(
+				directoryOfConfigfileInit + File.separator + "kostval-conf-FR.xsl" );
+		File configFileFr = new File( directoryOfConfigfile + File.separator + "kostval-conf-FR.xsl" );
+		File configFileEnInit = new File(
+				directoryOfConfigfileInit + File.separator + "kostval-conf-EN.xsl" );
+		File configFileEn = new File( directoryOfConfigfile + File.separator + "kostval-conf-EN.xsl" );
 		if ( !configFile.exists() ) {
 			Util.copyFile( configFileInit, configFile );
+			Util.copyFile( configFileDeInit, configFileDe );
+			Util.copyFile( configFileFrInit, configFileFr );
+			Util.copyFile( configFileEnInit, configFileEn );
 		} else {
 			if ( !Util.stringInFile( version, configFile ) ) {
 				Util.copyFile( configFileInit, configFile );
+				Util.copyFile( configFileDeInit, configFileDe );
+				Util.copyFile( configFileFrInit, configFileFr );
+				Util.copyFile( configFileEnInit, configFileEn );
 			}
 		}
 		File configFileStandard = new File(
 				directoryOfConfigfile + File.separator + "STANDARD.kostval.conf.xml" );
 		if ( !configFileStandard.exists() ) {
 			Util.copyFile( configFileInit, configFileStandard );
+		} else {
+			if ( !Util.stringInFile( version, configFileStandard ) ) {
+				Util.copyFile( configFile, configFileStandard );
+			}
 		}
 		File xslDeInit = new File( directoryOfConfigfileInit + File.separator + "kostval-conf-DE.xsl" );
 		File xslDe = new File( directoryOfConfigfile + File.separator + "kostval-conf-DE.xsl" );

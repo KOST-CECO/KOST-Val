@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?><?xml-stylesheet type="text/xsl" href="kostval-conf-DE.xsl"?>
-<configuration><!-- kostval.conf.xml_v2.0.0.gamma2 -->
+<configuration><!-- kostval.conf.xml_v2.0.1 -->
 	<jpeg>
 		<jpegvalidation>yes</jpegvalidation><!--no verwenden wenn jpeg nicht validiert werden soll, ansonsten yes -->
 	</jpeg>
@@ -29,7 +29,6 @@
 		<pdfa2b>2B</pdfa2b><!--2B / / no -->
 		<pdfa2u>2U</pdfa2u><!--2U / / no -->
 		<pdfafont>tolerant</pdfafont><!--no verwenden wenn die Schriften in pdfa nicht validiert werden sollen, ansonsten tolerant oder strict-->
-		<pdfaimage>no</pdfaimage><!--no verwenden wenn die Bilder in pdfa nicht validiert werden sollen, ansonsten yes -->
 		<jbig2allowed>yes</jbig2allowed><!--no verwenden wenn JBIG2 in pdfa nicht erlaubt werden sollen, ansonsten yes -->
 	</pdfa>
 	<tiff>

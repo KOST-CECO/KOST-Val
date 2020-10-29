@@ -278,10 +278,7 @@ public interface MessageConstants
 
 	String	ERROR_XML_AI_TRANSLATE												= "error.xml.ai.translate";
 
-	String	ERROR_XML_J_INVALID_JPEG											= "error.xml.j.invalid.jpeg";
-	String	ERROR_XML_J_INVALID_JP2												= "error.xml.j.invalid.jp2";
 	String	ERROR_XML_J_JBIG2															= "error.xml.j.jbig2";
-	String	ERROR_XML_J_ENCRYPT														= "error.xml.j.encrypt";
 
 	String	ERROR_XML_K_OVERVIEW													= "error.xml.k.overview";
 	String	ERROR_XML_K_OVERVIEW2													= "error.xml.k.overview2";

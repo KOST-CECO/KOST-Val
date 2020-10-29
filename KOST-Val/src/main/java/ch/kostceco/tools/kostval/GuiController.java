@@ -79,8 +79,8 @@ public class GuiController
 
 	ObservableList<String>		langList				= FXCollections.observableArrayList( "Deutsch",
 			"Français", "English" );
-	ObservableList<String>		logTypeList			= FXCollections.observableArrayList( "LogType: --xml",
-			"LogType: --min", "LogType: --max" );
+	ObservableList<String>		logTypeList			= FXCollections.observableArrayList( " --xml (default)",
+			" --min (valid/invalid)", " --max (verbose)" );
 	// TODO "LogType: --min",
 
 	@FXML
@@ -107,7 +107,7 @@ public class GuiController
 					+ File.separator + "configuration" + File.separator + "kostval.conf.xml" );
 
 	private String						arg0, arg1, arg2, arg3 = "--xml", dirOfJarPath;
-	private String						versionKostVal	= "2.0.0.gamma2";
+	private String						versionKostVal	= "2.0.1";
 	/* TODO: versionKostVal auch hier anpassen:
 	 * 
 	 * 2) cmdKOSTVal.java
@@ -177,9 +177,9 @@ public class GuiController
 				locale = new Locale( "fr" );
 				arg2 = locale.toString();
 				lang.setValue( "Français" );
-				buttonFormat.setText( "Validation du format" );
-				buttonSip.setText( "Validation du SIP" );
-				buttonOnlySip.setText( "Validation du SIP pure" );
+				buttonFormat.setText( "format uniquement" );
+				buttonSip.setText( "SIP incl. formats" );
+				buttonOnlySip.setText( "SIP uniquement" );
 				labelFileFolder.setText( "Sélectionnez" );
 				buttonFolder.setText( "dossier" );
 				buttonFile.setText( "fichier" );
@@ -187,7 +187,7 @@ public class GuiController
 				buttonLicence.setText( "Informations sur la licence" );
 				buttonChange.setText( "changer" );
 				buttonShowConfig.setText( "afficher" );
-				labelStart.setText( "Lancer" );
+				labelStart.setText( "Lancer la validation" );
 				labelConfig.setText( "Configuration" );
 				buttonSave.setText( "sauvegarder" );
 				buttonPrint.setText( "imprimer" );
@@ -197,9 +197,9 @@ public class GuiController
 				locale = new Locale( "en" );
 				arg2 = locale.toString();
 				lang.setValue( "English" );
-				buttonFormat.setText( "Format validation" );
-				buttonSip.setText( "SIP Validation" );
-				buttonOnlySip.setText( "Only SIP Validation" );
+				buttonFormat.setText( "Format only" );
+				buttonSip.setText( "SIP incl. Format" );
+				buttonOnlySip.setText( "SIP only" );
 				labelFileFolder.setText( "Select file / folder" );
 				buttonFolder.setText( "folder" );
 				buttonFile.setText( "file" );
@@ -207,7 +207,7 @@ public class GuiController
 				buttonLicence.setText( "License information" );
 				buttonChange.setText( "change" );
 				buttonShowConfig.setText( "show" );
-				labelStart.setText( "Start" );
+				labelStart.setText( "Start validation" );
 				labelConfig.setText( "Configuration" );
 				buttonSave.setText( "save" );
 				buttonPrint.setText( "print" );
@@ -217,9 +217,9 @@ public class GuiController
 				locale = new Locale( "de" );
 				arg2 = locale.toString();
 				lang.setValue( "Deutsch" );
-				buttonFormat.setText( "Formatvalidierung" );
-				buttonSip.setText( "SIP-Validierung" );
-				buttonOnlySip.setText( "Reine SIP-Validierung" );
+				buttonFormat.setText( "nur Formate" );
+				buttonSip.setText( "SIP inkl. Formate" );
+				buttonOnlySip.setText( "nur SIP" );
 				labelFileFolder.setText( "Wähle Datei / Ordner" );
 				buttonFolder.setText( "Ordner" );
 				buttonFile.setText( "Datei" );
@@ -227,7 +227,7 @@ public class GuiController
 				buttonLicence.setText( "Lizenzinformationen" );
 				buttonChange.setText( "anpassen" );
 				buttonShowConfig.setText( "anzeigen" );
-				labelStart.setText( "Starte" );
+				labelStart.setText( "Starte Validierung" );
 				labelConfig.setText( "Konfiguration" );
 				buttonSave.setText( "speichern" );
 				buttonPrint.setText( "drucken" );
@@ -1211,9 +1211,9 @@ public class GuiController
 	{
 		console.setText( " \n" );
 		String selLogType = logType.getValue();
-		if ( selLogType.equals( "LogType: --min" ) ) {
+		if ( selLogType.contains(  "--min" ) ) {
 			arg3 = "--min";
-		} else if ( selLogType.equals( "LogType: --max" ) ) {
+		} else if ( selLogType.contains( "--max" ) ) {
 			arg3 = "--max";
 		} else {
 			arg3 = "--xml";
@@ -1228,9 +1228,9 @@ public class GuiController
 		String selLang = lang.getValue();
 		try {
 			if ( selLang.equals( "Deutsch" ) ) {
-				buttonFormat.setText( "Formatvalidierung" );
-				buttonSip.setText( "SIP-Validierung" );
-				buttonOnlySip.setText( "Reine SIP-Validierung" );
+				buttonFormat.setText( "nur Formate" );
+				buttonSip.setText( "SIP inkl. Formate" );
+				buttonOnlySip.setText( "nur SIP" );
 				labelFileFolder.setText( "Wähle Datei / Ordner" );
 				buttonFolder.setText( "Ordner" );
 				buttonFile.setText( "Datei" );
@@ -1238,7 +1238,7 @@ public class GuiController
 				buttonLicence.setText( "Lizenzinformationen" );
 				buttonChange.setText( "anpassen" );
 				buttonShowConfig.setText( "anzeigen" );
-				labelStart.setText( "Starte" );
+				labelStart.setText( "Starte Validierung" );
 				labelConfig.setText( "Konfiguration" );
 				buttonSave.setText( "speichern" );
 				buttonPrint.setText( "drucken" );
@@ -1246,9 +1246,9 @@ public class GuiController
 				Util.oldnewstring( "kostval-conf-EN.xsl", "kostval-conf-DE.xsl", configFile );
 				locale = new Locale( "de" );
 			} else if ( selLang.equals( "English" ) ) {
-				buttonFormat.setText( "Format validation" );
-				buttonSip.setText( "SIP Validation" );
-				buttonOnlySip.setText( "Only SIP Validation" );
+				buttonFormat.setText( "Format only" );
+				buttonSip.setText( "SIP incl. Format" );
+				buttonOnlySip.setText( "SIP only" );
 				labelFileFolder.setText( "Select file / folder" );
 				buttonFolder.setText( "folder" );
 				buttonFile.setText( "file" );
@@ -1256,7 +1256,7 @@ public class GuiController
 				buttonLicence.setText( "License information" );
 				buttonChange.setText( "change" );
 				buttonShowConfig.setText( "show" );
-				labelStart.setText( "Start" );
+				labelStart.setText( "Start validation" );
 				labelConfig.setText( "Configuration" );
 				buttonSave.setText( "save" );
 				buttonPrint.setText( "print" );
@@ -1264,9 +1264,9 @@ public class GuiController
 				Util.oldnewstring( "kostval-conf-FR.xsl", "kostval-conf-EN.xsl", configFile );
 				locale = new Locale( "en" );
 			} else {
-				buttonFormat.setText( "Validation du format" );
-				buttonSip.setText( "Validation du SIP" );
-				buttonOnlySip.setText( "Validation du SIP pure" );
+				buttonFormat.setText( "format uniquement" );
+				buttonSip.setText( "SIP incl. formats" );
+				buttonOnlySip.setText( "SIP uniquement" );
 				labelFileFolder.setText( "Sélectionnez" );
 				buttonFolder.setText( "dossier" );
 				buttonFile.setText( "fichier" );
@@ -1274,7 +1274,7 @@ public class GuiController
 				buttonLicence.setText( "Informations sur la licence" );
 				buttonChange.setText( "changer" );
 				buttonShowConfig.setText( "afficher" );
-				labelStart.setText( "Lancer" );
+				labelStart.setText( "Lancer la validation" );
 				labelConfig.setText( "Configuration" );
 				buttonSave.setText( "sauvegarder" );
 				buttonPrint.setText( "imprimer" );

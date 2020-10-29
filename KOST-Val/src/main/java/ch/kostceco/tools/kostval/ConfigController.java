@@ -55,7 +55,7 @@ public class ConfigController
 
 	@FXML
 	private CheckBox				checkPdfa, checkPdftools, checkCallas, checkPdfa1a, checkPdfa2a,
-			checkFont, checkImage, checkJbig2, checkDetail, checkNentry, checkPdfa1b, checkPdfa2b,
+			checkFont, checkJbig2, checkDetail, checkNentry, checkPdfa1b, checkPdfa2b,
 			checkFontTol, checkPdfa2u, checkSiard, checkSiard10, checkSiard21, checkJpeg2000, checkJpeg,
 			checkTiff, checkComp1, checkComp5, checkPi0, checkPi4, checkComp2, checkComp7, checkPi1,
 			checkPi5, checkBps1, checkBps8, checkMultipage, checkBps2, checkBps16, checkTiles, checkComp3,
@@ -110,7 +110,7 @@ public class ConfigController
 		String java6432 = System.getProperty( "sun.arch.data.model" );
 		String javaVersion = System.getProperty( "java.version" );
 		String javafxVersion = System.getProperty( "javafx.version" );
-		labelConfig.setText( "Copyright © KOST/CECO          KOST-Val v2.0.0.gamma2          JavaFX "
+		labelConfig.setText( "Copyright © KOST/CECO          KOST-Val v2.0.1          JavaFX "
 				+ javafxVersion + "   &   Java-" + java6432 + " " + javaVersion + "." );
 
 		// Original Config Kopieren
@@ -200,8 +200,7 @@ public class ConfigController
 			String noPdfa2u = "<pdfa2u></pdfa2u>";
 			String pdfaFont = "<pdfafont>strict</pdfafont>"; // tolerant oder strict-->
 			String pdfaFontTolerant = "<pdfafont>tolerant</pdfafont>"; // tolerant oder strict-->
-			String noPdfaImage = "<pdfaimage>no</pdfaimage>";
-			String noPdfaJbig2 = "<jbig2allowed>yes</jbig2allowed>";
+			String noPdfaJbig2 = "<jbig2allowed>no</jbig2allowed>";
 			String noJpeg2000 = "<jp2validation>no</jp2validation>";
 			String noJpeg = "<jpegvalidation>no</jpegvalidation>";
 			String noSiard = "<siardvalidation>no</siardvalidation>";
@@ -242,7 +241,6 @@ public class ConfigController
 				checkPdfa1a.setDisable( true );
 				checkPdfa2a.setDisable( true );
 				checkFont.setDisable( true );
-				checkImage.setDisable( true );
 				checkJbig2.setDisable( true );
 				checkDetail.setDisable( true );
 				checkNentry.setDisable( true );
@@ -293,9 +291,6 @@ public class ConfigController
 			} else {
 				checkFont.setSelected( false );
 				checkFontTol.setSelected( false );
-			}
-			if ( config.contains( noPdfaImage ) ) {
-				checkImage.setSelected( false );
 			}
 			if ( config.contains( noPdfaJbig2 ) ) {
 				checkJbig2.setSelected( false );
@@ -735,7 +730,6 @@ public class ConfigController
 				checkPdfa1a.setDisable( false );
 				checkPdfa2a.setDisable( false );
 				checkFont.setDisable( false );
-				checkImage.setDisable( false );
 				checkJbig2.setDisable( false );
 				checkDetail.setDisable( false );
 				checkNentry.setDisable( false );
@@ -764,7 +758,6 @@ public class ConfigController
 					checkPdfa1a.setDisable( true );
 					checkPdfa2a.setDisable( true );
 					checkFont.setDisable( true );
-					checkImage.setDisable( true );
 					checkJbig2.setDisable( true );
 					checkDetail.setDisable( true );
 					checkNentry.setDisable( true );
@@ -1086,25 +1079,7 @@ public class ConfigController
 		engine.load( "file:///" + configFile.getAbsolutePath() );
 	}
 
-	/* checkImage schaltet diese Font-Validierung in der Konfiguration ein oder aus */
-	@FXML
-	void changeImage( ActionEvent event )
-	{
-		String yes = "<pdfaimage>yes</pdfaimage>";
-		String no = "<pdfaimage>no</pdfaimage>";
-		try {
-			if ( checkImage.isSelected() ) {
-				Util.oldnewstring( no, yes, configFile );
-			} else {
-				Util.oldnewstring( yes, no, configFile );
-			}
-		} catch ( IOException e ) {
-			e.printStackTrace();
-		}
-		engine.load( "file:///" + configFile.getAbsolutePath() );
-	}
-
-	/* checkJbig2 schaltet diese Font-Validierung in der Konfiguration ein oder aus */
+	/* checkJbig2 schaltet diese Validierung in der Konfiguration ein oder aus */
 	@FXML
 	void changeJbig2( ActionEvent event )
 	{

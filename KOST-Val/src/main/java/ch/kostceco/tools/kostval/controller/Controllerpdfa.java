@@ -28,7 +28,6 @@ import ch.kostceco.tools.kostval.logging.Logger;
 import ch.kostceco.tools.kostval.logging.MessageConstants;
 import ch.kostceco.tools.kostval.service.TextResourceService;
 import ch.kostceco.tools.kostval.validation.modulepdfa.ValidationAvalidationAiModule;
-import ch.kostceco.tools.kostval.validation.modulepdfa.ValidationJimageValidationModule;
 import ch.kostceco.tools.kostval.validation.modulepdfa.ValidationAinitialisationModule;
 
 /** kostval -->
@@ -47,7 +46,6 @@ public class Controllerpdfa implements MessageConstants
 	private TextResourceService								textResourceService;
 
 	private ValidationAvalidationAiModule			validationAvalidationAiModule;
-	private ValidationJimageValidationModule	validationJimageValidationModule;
 	private ValidationAinitialisationModule		validationAinitialisationModule;
 
 	public ValidationAvalidationAiModule getValidationAvalidationAiModule()
@@ -59,17 +57,6 @@ public class Controllerpdfa implements MessageConstants
 			ValidationAvalidationAiModule validationAvalidationAiModule )
 	{
 		this.validationAvalidationAiModule = validationAvalidationAiModule;
-	}
-
-	public ValidationJimageValidationModule getValidationJimageValidationModule()
-	{
-		return validationJimageValidationModule;
-	}
-
-	public void setValidationJimageValidationModule(
-			ValidationJimageValidationModule validationJimageValidationModule )
-	{
-		this.validationJimageValidationModule = validationJimageValidationModule;
 	}
 
 	public ValidationAinitialisationModule getValidationAinitialisationModule()
@@ -161,36 +148,6 @@ public class Controllerpdfa implements MessageConstants
 			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
 					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 							e.getMessage() + " A-I_2" ) );
-			if ( min ) {
-				return false;
-			} else {
-				valid = false;
-			}
-		}
-
-		// Validation J
-		try {
-			if ( this.getValidationJimageValidationModule().validate( valDatei, directoryOfLogfile,
-					configMap, locale ) ) {
-				this.getValidationJimageValidationModule().getMessageService().print();
-			} else {
-				this.getValidationJimageValidationModule().getMessageService().print();
-				if ( min ) {
-					return false;
-				} else {
-					valid = false;
-				}
-			}
-		} catch ( ValidationApdfvalidationException e ) {
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-							e.getMessage() + " J_1" ) );
-			this.getValidationJimageValidationModule().getMessageService().print();
-			return false;
-		} catch ( Exception e ) {
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-							e.getMessage() + " J_2" ) );
 			if ( min ) {
 				return false;
 			} else {
