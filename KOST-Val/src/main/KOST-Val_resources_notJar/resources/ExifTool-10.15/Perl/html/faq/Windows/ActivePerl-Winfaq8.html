@@ -1,0 +1,355 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+
+<head>
+<title>ActivePerl FAQ - General programming</title>
+<link rel="STYLESHEET" href="../../Active.css" type="text/css" media="screen">
+</head>
+
+<body>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#EAE2BB">
+<tr> 
+<td width="57"><a target=_blank href="http://www.ActiveState.com/ActivePerl/">
+<img src="../../images/activeperl_logo.gif" width="57" height="48" border="0" alt="ActivePerl"></a></td>
+<td><div align="center" class="heading">ActivePerl User Guide</div></td>
+<td width="112"><a target=_blank  href="http://www.ActiveState.com">
+<img src="../../images/AS_logo.gif" width="112" height="48" border="0"  alt="ActiveState" /></a></td>
+</tr>
+<tr>
+<td class="lineColour" colspan="3"></td>
+</tr>
+</table>
+
+<h1>General programming</h1>
+
+<ul>
+  <li><a class="doc" href="#NAME">NAME</a></li>
+  <li><a class="doc" href="#DESCRIPTION">DESCRIPTION</a>
+    <ul>
+      <li><a class="doc" href="#How_do_I_change_the_Win32_Regist">How do I change the Win32
+        Registry?</a></li>
+      <li><a class="doc" href="#How_do_I_read_from_write_to_a_na">How do I read from/write
+        to a named pipe?</a></li>
+      <li><a class="doc" href="#How_do_I_write_socket_scripts_">How do I write socket
+        scripts?</a></li>
+      <li><a class="doc" href="#What_s_all_this_I_hear_about_not">What's all this I hear
+        about not being able to use a socket as a</a></li>
+      <li><a class="doc" href="#How_do_I_write_a_sockets_server_">How do I write a sockets
+        server in ActivePerl?</a></li>
+      <li><a class="doc" href="#How_do_I_send_or_receive_files_b">How do I send or receive
+        files by FTP?</a></li>
+      <li><a class="doc" href="#How_do_I_send_or_receive_files_b">How do I send or receive
+        files by HTTP?</a></li>
+      <li><a class="doc" href="#How_do_I_manage_user_accounts_wi">How do I manage user
+        accounts with ActivePerl?</a></li>
+      <li><a class="doc" href="#How_do_I_read_from_and_write_to_">How do I read from and
+        write to serial ports?</a></li>
+      <li><a class="doc" href="#Why_doesn_t_the_d_operator_work">Why doesn't the -d operator
+        work?</a></li>
+      <li><a class="doc" href="#Reading_from_and_writing_to_file">Reading from and writing
+        to files mysteriously fails. What's wrong?</a></li>
+      <li><a class="doc" href="#When_I_try_to_open_a_file_I_get">When I try to open a file,
+        I get a &quot;bad argument&quot; error.</a></li>
+      <li><a class="doc" href="#Why_do_I_get_an_error_using_Perl">Why do I get an error
+        using Perl's here-doc syntax (&lt;&lt;), that</a></li>
+    </ul>
+  </li>
+  <li><a class="doc" href="#AUTHOR_AND_COPYRIGHT">AUTHOR AND COPYRIGHT</a></li>
+</ul>
+ 
+<h2><a name="NAME">NAME</a></h2>
+<p>ActivePerl-faq8 - General programming</p>
+ 
+<h2><a name="DESCRIPTION">DESCRIPTION</a></h2>
+<p>General programming questions about ActivePerl</p>
+ 
+<h2><a name="How_do_I_change_the_Win32_Regist">How do I change the Win32
+Registry?</a></h2>
+<p>There are several Win32 Registry functions provided with ActivePerl. Check
+the win32mod document provided with ActivePerl.</p>
+<p>If you don't understand how the Registry works, remember that a Registry <em>key</em>
+is like a directory, and a Registry <em>value</em> is like a file. There are
+several <em>top level keys</em>, and these are kind of like drives.</p>
+<p>If you really don't fully understand the Registry, it's probably in your best
+interest not to mess around with it.</p>
+ 
+<h2><a name="How_do_I_read_from_write_to_a_na">How do I read from/write to a
+named pipe?</a></h2>
+<p>Named pipes are a interprocess communcations mechanism, mainly used with
+Microsoft operating systems (like Win32 platforms). A named pipe can be
+addressed just like a file.</p>
+<p>The name of a named pipe is a UNC (Universal Naming Convention) name, and
+looks like <em>\\servername\pipe\pipename</em>. <code>servername</code> is the
+name of the server you're connecting to, or <code>.</code> for the current
+computer. <code>pipe</code> is a constant, and <code>pipename</code> is the name
+of the pipe, such as sql for Microsoft SQL Server.</p>
+<p>You can use <code>open(),</code> <code>close(),</code> <code>read(),</code>
+and <code>print()</code> on a named pipe just like a file. However, you can't
+use <code>sysread()</code> or <code>syswrite()</code> on one, because they
+aren't really files.</p>
+<p>There's a program called Win32Pipe on the CPAN archive that can be used to
+create a named pipe.</p>
+<p>If you're starting from scratch, and you have a TCP/IP infrastructure,
+consider using sockets rather than named pipes for your IPC mechanism.</p>
+ 
+<h2><a name="How_do_I_write_socket_scripts_">How do I write socket scripts?</a></h2>
+<p>There are several examples of socket scripts that are distributed with
+ActivePerl. They're in the <em>eg</em> subdirectory of your perl directory.</p>
+<p>See <a class="doc" href="#How_do_I_write_a_sockets_server_">How do I write a sockets
+server in Perl for Win32?</a> for information about sockets servers.</p>
+ 
+<h2><a name="What_s_all_this_I_hear_about_not">What's all this I hear about not
+being able to use a socket as a filehandle?</a></h2>
+<p>Early versions of Perl for Win32 didn't allow you to read or write to a
+socket as if it were a filehandle. The current versions fully support this, and
+you shouldn't worry about it too much. If the version that you're using doesn't
+work well, get the latest build from ActiveState (see <a class="doc" href="../ActivePerl-faq1.html#Where_is_the_Perl_for_Win32_inte">Where
+is the ActivePerl interpreter available?</a>).</p>
+<p>You don't have to specify <code>USE_SOCKETS_AS_FILEHANDLES</code> when
+building Perl for Win32 to get sockets to work like filehandles. It doesn't <em>hurt</em>,
+but it's not necessary.</p>
+ 
+<h2><a name="How_do_I_write_a_sockets_server_">How do I write a sockets server
+in Perl for Win32?</a></h2>
+<p>There's an example of a socket server, TCP-SERVER, in the <em>eg</em>
+directory of your perl directory. In general, information on socket programming
+for UNIX is applicable to ActivePerl. See especially the perlipc page of the
+documentation.</p>
+<p>If you need to develop a server that can service multiple clients at once,
+take a look at the IO::Select module. This module allows you to write servers
+that can manage open connections from multiple clients. Individual requests on a
+connection are queued up, so if your server can provide quick responses, this
+approach may work well for you. Here's an example, adapted from Erik Olson's
+Programming with Perl Modules (one of the volumes in O'Reilly's Win32 Perl
+Resource Kit):</p>
+<pre>
+    use IO::Socket;
+    use IO::Select;
+    
+    # Create a socket to listen on.
+    #
+    my $listener = 
+      IO::Socket::INET-&gt;new( LocalPort =&gt; 8008, Listen =&gt; 5, Reuse =&gt; 1 );
+    
+    die &quot;Can't create socket for listening: $!&quot; unless $listener;
+    print &quot;Listening for connections on port 8008\n&quot;;
+    
+    my $readable = IO::Select-&gt;new;     # Create a new IO::Select object
+    $readable-&gt;add($listener);          # Add the listener to it
+    
+    while(1) {
+    
+        # Get a list of sockets that are ready to talk to us.
+        #
+        my ($ready) = IO::Select-&gt;select($readable, undef, undef, undef);
+        foreach my $s (@$ready) {
+            
+            # Is it a new connection?
+            #
+            if($s == $listener) {
+            
+                # Accept the connection and add it to our readable list.
+                #
+                my $new_sock = $listener-&gt;accept;
+                $readable-&gt;add($new_sock) if $new_sock;
+                
+                print $new_sock &quot;Welcome!\r\n&quot;;
+                
+            } else {  # It's an established connection
+            
+                my $buf = &lt;$s&gt;;   # Try to read a line
+                
+                # Was there anyone on the other end?
+                #
+                if( defined $buf ) {
+                    
+                    # If they said goodbye, close the socket. If not,
+                    # echo what they said to us.
+                    #
+                    if ($buf =~ /goodbye/i) {
+                        print $s &quot;See you later!\n&quot;;
+                        $readable-&gt;remove($s);
+                        $s-&gt;close;
+                    } else {
+                        print $s &quot;You said: $buf\n&quot;;
+                    }
+                    
+                } else { # The client disconnected.
+                
+                    $readable-&gt;remove($s);
+                    $s-&gt;close;
+                    print STDERR &quot;Client Connection closed\n&quot;;
+                    
+                }
+            }
+        }
+    }
+</pre>
+<p>For more information, see the IO::Socket and IO::Select documentation. It is
+also possible to write a multithreaded server using ActivePerl, if threads are
+enabled in the version of Perl you are using. However, threading is still
+somewhat experimental in Perl 5.005, so use this feature with caution.</p>
+ 
+<h2><a name="How_do_I_send_or_receive_files_b">How do I send or receive files by
+FTP?</a></h2>
+<p>See the Net::FTP module. Net::FTP is part of the libnet bundle, which is
+available from CPAN, and can be installed using the Perl Package Manager (PPM).</p>
+<p>Aldo Calpini has developed a ActivePerl extension to do FTP and HTTP using
+the WININET library. It's in alpha testing and is available on his web page at <a class="doc" href="http://dada.perl.it/">http://</a><a class="doc" href="http://dada.perl.it">dada.perl.it/</a></p>
+ 
+<h2><a name="How_do_I_send_or_receive_files_b">How do I send or receive files by
+HTTP?</a></h2>
+<p>The libwww-perl bundle (LWP) is a collection of modules for WWW access in
+Perl. LWP is available from CPAN in source form, or you can install it using the
+Perl Package Manager (PPM). LWP may also be included with future binary releases
+of Perl.</p>
+<p>Aldo Calpini has developed a ActivePerl extension to do FTP and HTTP using
+the WININET library. It's in alpha testing and is available on his web page at <a class="doc" href="http://dada.perl.it">http://dada.perl.it/</a></p>
+ 
+<h2><a name="How_do_I_manage_user_accounts_wi">How do I manage user accounts
+with ActivePerl?</a></h2>
+<p>There's an extension called Win32::NetAdmin distributed with ActivePerl. It
+has a pretty low-level interface, but it is very possible to manage users and
+groups with this module.</p>
+ 
+<h2><a name="How_do_I_read_from_and_write_to_">How do I read from and write to
+serial ports?</a></h2>
+<p>Serial ports can be opened just like files in ActivePerl. To open <em>COM1</em>,
+just do this:</p>
+<pre>
+    open( PORT, &quot;+&gt;COM1&quot; ) or die &quot;Can't open COM1: $!&quot;;
+</pre>
+<p>You should be able to read from and write to the file handle using the
+standard I/O functions (read() and <code>print()),</code> but not the system
+functions (sysread() and <code>syswrite()).</code></p>
+<p>It has been noted (but not tested) that modems that use the Hayes command set
+require a carriage return (\r) rather than a line feed (\n) at the end of the
+command.</p>
+ 
+<h2><a name="Why_doesn_t_the_d_operator_work">Why doesn't the -d operator work?</a></h2>
+<p>It does, in fact, work. However, people tend to use it incorrectly and get
+bad results. To check for all the subdirectories in a directory, try code like
+this:</p>
+<pre>
+    $path = shift;
+    $path = &quot;.&quot; unless $path;
+    
+    opendir( DIR, $path )
+        or die &quot;Can't open $path: $!&quot;;
+    
+    while ( $entry = readdir( DIR ) ) {
+        $type = ( -d &quot;$path\\$entry&quot; ) ? &quot;dir&quot; : &quot;file&quot;; # $path is crucial!
+        print &quot;$type\t$entry\n&quot;;
+    }
+    
+    closedir( DIR );
+</pre>
+<p>It's a common mistake to leave out the <code>$path</code> from the <code>-d</code>
+check. If you do this, perl thinks you're talking about files in the current
+directory. Since the dirs don't <code>-e</code> in your current directory, they
+definitely don't <code>-d</code>. Exceptions are <em>.</em> and <em>..</em>,
+which exist in every directory.</p>
+ 
+<h2><a name="Reading_from_and_writing_to_file">Reading from and writing to files
+mysteriously fails. What's wrong?</a></h2>
+<p>On Win32 platforms, there's a big difference between text files and binary
+files. For text files, the \r\n characters are translated into \n when read from
+disk, and the ^Z character is read as an end-of-file marker. For binary files,
+no such translation is used.</p>
+<p>Although this works great for text files, it really messes things up when
+you're trying to read and write binary files. If the read or write does not
+abort prematurely because a ^Z was found in the file, you will almost definitely
+get incorrect bytes in the file due to \n -&gt; \r\n translation.</p>
+<p>The problem is that ActivePerl, and the C runtime library it uses, open file
+in text mode by default. For each file handle you use in Perl for binary data,
+you need to specify that the file handle is in binary mode. Fortunately, there's
+a function, binmode, that does just that. See the perlfunc documentation file
+for details.</p>
+<p>This script copies one binary file to another. Note its use of binmode to set
+the mode of the file handle.</p>
+<pre>
+    open( INFILE, &quot;&lt;$infile&quot; );
+    open( OUTFILE, &quot;&gt;$outfile&quot; );
+    
+    binmode( INFILE ); binmode( OUTFILE ); # crucial for binary files!
+    
+    while ( read( INFILE, $buffer, 1024 ) ) {
+        print OUTFILE $buffer;
+    }
+    
+    close( INFILE ); 
+    close( OUTFILE );
+</pre>
+ 
+<h2><a name="When_I_try_to_open_a_file_I_get">When I try to open a file, I get a
+&quot;bad argument&quot; error.</a></h2>
+<p>Win32 platforms use the '\' character as a delimiter for paths in a file name
+(C:\like\this). However, Perl uses the '\' character as an escape code, to
+symbolize a special character like the line feed character (\n) or the tab
+character (\t).</p>
+<p>So, if you try and open a file like this:</p>
+<pre>
+    open( MYFILE, &quot;C:\temp\newfile.txt&quot; );
+</pre>
+<p>you'll get an error. One solution is to replace each '\' with a double-'\',
+to show that you really mean to use that character, not an escape:</p>
+<pre>
+   open( MYFILE, &quot;C:\\temp\\newfile.txt&quot; );
+</pre>
+<p>Another solution is to use non-interpolating single quote strings, which lets
+Perl know not to use any special characters:</p>
+<pre>
+   open( MYFILE, 'C:\temp\newfile.txt' );
+</pre>
+<p>Finally, you can also use the / character to separate directory components in
+pathnames. You must avoid using this in calls to external programs, because some
+programs tend to treat / as the option-prefix instead of directory separator.
+However, ActivePerl (and in fact, all of the Win32 API) understands that / is a
+directory separator, so using / allows you to more easily port scripts between
+UNIX and Win32:</p>
+<pre>
+   open( MYFILE, '/temp/newfile.txt' );
+</pre>
+<p>See the perlop documentation page for more information on the differences
+between single quotes (') and double quotes (``).</p>
+ 
+<h2><a name="Why_do_I_get_an_error_using_Perl">Why do I get an error using
+Perl's here-doc syntax (&lt;&lt;), that says &quot;Can't find string terminator
+anywhere before EOF&quot;?</a></h2>
+<p>This is a weird error that occurs when your string terminator is on the last
+line of your script. With a script like:</p>
+<pre>
+    print &lt;&lt;&quot;END&quot;;
+    The snake is old, and his skin is cold.
+    END
+</pre>
+<p>perl is looking for the word END on a line by itself, followed by a line-feed
+character (\n). If the END is the last line of your script, you have to remember
+to hit &lt;Enter&gt; after the word END, so that Perl can recognize it as the
+string terminator.</p>
+<p>Most UNIX text editors will do this automatically. Most Windows text editors
+won't. Thus the problem.</p>
+<p>Note that this can also cause a problem with Perl formats, since these are
+terminated with a single . on a line by itself. However, it's much more rare,
+since programmers often specify the format for output at the top rather than at
+the bottom of a file.</p>
+ 
+<h2><a name="AUTHOR_AND_COPYRIGHT">AUTHOR AND COPYRIGHT</a></h2>
+<p>This FAQ was originally assembled and maintained by Evangelo Prodromou. It
+has been revised and updated by Brian Jepson of O'Reilly &amp; Associates, David
+Grove, David Dmytryshyn and David Sparks of ActiveState.</p>
+<p>This FAQ is in the public domain. If you use it, however, please ensure that
+you give credit to the original authors.</p>
+                       
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+  <tr>
+    <td class="block" valign="MIDDLE" width="100%" bgcolor="#cccccc"><strong>
+      <p class="block">&nbsp;ActivePerl FAQ - General programming</p>
+      </strong></td>
+  </tr>
+</table>
+
+</body>
+
+</html>

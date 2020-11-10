@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Tk::clipboard - Manipulate Tk clipboard</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::clipboard - Manipulate Tk clipboard</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#keywords">KEYWORDS</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Tk::clipboard - Manipulate Tk clipboard</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p><em>$widget</em>-&gt;<strong>clipboard</strong><em>Option</em>?(<em>args</em>)?</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>This command provides an interface to the Tk clipboard,
+which stores data for later retrieval using the selection mechanism.
+In order to copy data into the clipboard, <strong>clipboardClear</strong> must
+be called, followed by a sequence of one or more calls to
+<strong>clipboardAppend</strong>.  To ensure that the clipboard is updated atomically, all
+appends should be completed before returning to the event loop.</p>
+<p>The following methods are currently supported:</p>
+<dl>
+<dt><strong><a name="item_clipboardclear"><em>$widget</em>-&gt;<strong>clipboardClear</strong></a></strong><br />
+</dt>
+<dd>
+Claims ownership of the clipboard on <em>$widget</em>'s display and removes
+any previous contents.   Returns an empty string.
+</dd>
+<p></p>
+<dt><strong><a name="item_clipboardappend"><em>$widget</em>-&gt;<strong>clipboardAppend</strong>(?<strong>-format</strong>=&gt;<em>format</em>?,?<strong>-type</strong>=&gt;<em>type</em>?,?<strong>--</strong>?,<em>data</em>)</a></strong><br />
+</dt>
+<dd>
+Appends <em>data</em> to the clipboard on $widget's
+display in the form given by <em>type</em> with the representation given
+by <em>format</em> and claims ownership of the clipboard on $widget's
+display.
+</dd>
+<p><em>Type</em> specifies the form in which the selection is to be returned
+(the desired ``target'' for conversion, in ICCCM terminology), and
+should be an atom name such as STRING or FILE_NAME; see the
+Inter-Client Communication Conventions Manual for complete details.
+<em>Type</em> defaults to STRING.</p>
+<p>The <em>format</em> argument specifies the representation that should be
+used to transmit the selection to the requester (the second column of
+Table 2 of the ICCCM), and defaults to STRING.  If <em>format</em> is
+STRING, the selection is transmitted as 8-bit ASCII characters.
+See the <a href="../../../Tk/Selection.html">the Tk::Selection manpage</a> documentation for explanation of what happens
+if <em>format</em> is not STRING.
+Note that arguments passed to
+<strong>clipboardAppend</strong> are concatenated before conversion, so the
+caller must take care to ensure appropriate spacing across string
+boundaries.  All items appended to the clipboard with the same
+<em>type</em> must have the same <em>format</em>.</p>
+<p>A <strong>--</strong> argument may be specified to mark the end of options:  the
+next argument will always be used as <em>data</em>.
+This feature may be convenient if, for example, <em>data</em> starts
+with a <strong>-</strong>.</p>
+</dl>
+<dl>
+<dt><strong><a name="item_clipboardget"><em>$widget</em>-&gt;<strong>clipboardGet</strong>( ?-type? );</a></strong><br />
+</dt>
+<dd>
+Retrieve data from the clipboard on  <em>widget</em>'s  display.
+<em>-type</em> specifies the form in which the data is
+to be returned and should be an atom  name  such  as  STRING  or
+FILE_NAME.  Type defaults to STRING.  This command is equivalent 
+to <code>selectionGet( -selection =&gt; 'CLIPBOARD' )</code>.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="keywords">KEYWORDS</a></h1>
+<p>clear, format, clipboard, append, selection, type</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::clipboard - Manipulate Tk clipboard</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

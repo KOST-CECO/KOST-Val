@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>XMLRPC::Lite - client and server implementation of XML-RPC protocol</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;XMLRPC::Lite - client and server implementation of XML-RPC protocol</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#dependencies">DEPENDENCIES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#credits">CREDITS</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>XMLRPC::Lite - client and server implementation of XML-RPC protocol</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<dl>
+<dt><strong><a name="item_client">Client</a></strong><br />
+</dt>
+<dd>
+<pre>
+  use XMLRPC::Lite;
+  print XMLRPC::Lite
+      -&gt; proxy('<a href="http://betty.userland.com/RPC2">http://betty.userland.com/RPC2</a>')
+      -&gt; call('examples.getStateStruct', {state1 =&gt; 12, state2 =&gt; 28})
+      -&gt; result;</pre>
+</dd>
+<dt><strong><a name="item_cgi_server">CGI server</a></strong><br />
+</dt>
+<dd>
+<pre>
+  use XMLRPC::Transport::HTTP;</pre>
+</dd>
+<dd>
+<pre>
+  my $server = XMLRPC::Transport::HTTP::CGI
+    -&gt; dispatch_to('methodName')
+    -&gt; handle
+  ;</pre>
+</dd>
+<dt><strong><a name="item_daemon_server">Daemon server</a></strong><br />
+</dt>
+<dd>
+<pre>
+  use XMLRPC::Transport::HTTP;</pre>
+</dd>
+<dd>
+<pre>
+  my $daemon = XMLRPC::Transport::HTTP::Daemon
+    -&gt; new (LocalPort =&gt; 80)
+    -&gt; dispatch_to('methodName')
+  ;
+  print &quot;Contact to XMLRPC server at &quot;, $daemon-&gt;url, &quot;\n&quot;;
+  $daemon-&gt;handle;</pre>
+</dd>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>XMLRPC::Lite is a Perl modules which provides a simple nterface to the
+XML-RPC protocol both on client and server side. Based on SOAP::Lite module,
+it gives you access to all features and transports available in that module.</p>
+<p>See <em>t/26-xmlrpc.t</em> for client examples and <em>examples/XMLRPC/*</em> for server 
+implementations.</p>
+<p>
+</p>
+<hr />
+<h1><a name="dependencies">DEPENDENCIES</a></h1>
+<pre>
+ SOAP::Lite</pre>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<pre>
+ SOAP::Lite</pre>
+<p>
+</p>
+<hr />
+<h1><a name="credits">CREDITS</a></h1>
+<p>The <strong>XML-RPC</strong> standard is Copyright (c) 1998-2001, UserLand Software, Inc.
+See &lt;http://www.xmlrpc.com&gt; for more information about the <strong>XML-RPC</strong> 
+specification.</p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright (C) 2000-2001 Paul Kulchenko. All rights reserved.</p>
+<p>This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.</p>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Paul Kulchenko (<a href="mailto:paulclinger@yahoo.com">paulclinger@yahoo.com</a>)</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;XMLRPC::Lite - client and server implementation of XML-RPC protocol</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

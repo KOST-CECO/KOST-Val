@@ -1,0 +1,53 @@
+<HTML>
+
+<HEAD><TITLE>PerlScript sample:  Mouse tracking</TITLE>
+<link rel="stylesheet" type="text/css" href="../HTML/Active.css">
+</HEAD>
+					  
+<!-- 
+	ActiveState PerlScript sample 
+	PerlScript:  The easiest, most powerful way to program custom web solutions. 
+-->
+
+<BODY>
+<TABLE CELLPADDING=0 BORDER=3 CELLSPACING=0>
+<TR VALIGN=TOP ><TD>
+<A HREF="index.htm" NAME="Image"><IMG SRC="PSBWlogo.gif" WIDTH=400 HEIGHT=48 ALT="The power of PerlScript!" BORDER=5></A><P>
+</TD></TR>
+<FORM method="POST" NAME="MyForm1">
+<TR VALIGN=MIDDLE><TD VALIGN=MIDDLE ALIGN=CENTER>
+<INPUT TYPE="text" NAME="TxtLinkDescription" SIZE=50>
+</TD></TR>
+</TABLE>
+</FORM>
+<HR>
+
+<P>
+&nbsp;<P> Move your mouse over the PerlScript logo to see Image_MouseMove event parameters.
+
+
+<SCRIPT language="PerlScript">
+sub Image_MouseMove {
+    my ($x,$y, $s, $b) = @_;
+    $window->document->MyForm1->TxtLinkDescription->{'Value'} = "MouseMove s:$s b:$b x:$x y:$y";
+}
+
+sub Image_mousemove {
+    Image_MouseMove(@_);
+}
+
+sub Image_onmousemove {
+    my $e = $window->event;
+    my ($x,$y, $s, $b) = ($e->X, $e->Y, $e->OffsetX, $e->OffsetY);
+    $window->document->MyForm1->TxtLinkDescription->{'Value'}
+        = "MouseMove [X=$x Y=$y relX=$s relY=$b]";
+}
+  </SCRIPT>
+<P>
+
+
+<!-- Horizontal line -->
+<HR>
+
+</BODY>
+</HTML>

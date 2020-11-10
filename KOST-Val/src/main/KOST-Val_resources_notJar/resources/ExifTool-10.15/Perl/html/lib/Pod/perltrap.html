@@ -1,0 +1,1514 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>perltrap - Perl traps for the unwary</title>
+<link rel="stylesheet" href="../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;perltrap - Perl traps for the unwary</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<ul>
+
+		<li><a href="#awk_traps">Awk Traps</a></li>
+		<li><a href="#c_c___traps">C/C++ Traps</a></li>
+		<li><a href="#sed_traps">Sed Traps</a></li>
+		<li><a href="#shell_traps">Shell Traps</a></li>
+		<li><a href="#perl_traps">Perl Traps</a></li>
+		<li><a href="#perl4_to_perl5_traps">Perl4 to Perl5 Traps</a></li>
+		<li><a href="#discontinuance__deprecation__and_bugfix_traps">Discontinuance, Deprecation, and BugFix traps</a></li>
+		<li><a href="#parsing_traps">Parsing Traps</a></li>
+		<li><a href="#numerical_traps">Numerical Traps</a></li>
+		<li><a href="#general_data_type_traps">General data type traps</a></li>
+		<li><a href="#context_traps__scalar__list_contexts">Context Traps - scalar, list contexts</a></li>
+		<li><a href="#precedence_traps">Precedence Traps</a></li>
+		<li><a href="#general_regular_expression_traps_using_s_____etc_">General Regular Expression Traps using s///, etc.</a></li>
+		<li><a href="#subroutine__signal__sorting_traps">Subroutine, Signal, Sorting Traps</a></li>
+		<li><a href="#os_traps">OS Traps</a></li>
+		<li><a href="#interpolation_traps">Interpolation Traps</a></li>
+		<li><a href="#dbm_traps">DBM Traps</a></li>
+		<li><a href="#unclassified_traps">Unclassified Traps</a></li>
+	</ul>
+
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>perltrap - Perl traps for the unwary</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The biggest trap of all is forgetting to <code>use warnings</code> or use the <strong>-w</strong>
+switch; see <a href="../../lib/Pod/perllexwarn.html">the perllexwarn manpage</a> and <a href="../../lib/Pod/perlrun.html">the perlrun manpage</a>. The second biggest trap is not
+making your entire program runnable under <code>use strict</code>.  The third biggest
+trap is not reading the list of changes in this version of Perl; see
+<a href="../../lib/Pod/perldelta.html">the perldelta manpage</a>.</p>
+<p>
+</p>
+<h2><a name="awk_traps">Awk Traps</a></h2>
+<p>Accustomed <strong>awk</strong> users should take special note of the following:</p>
+<ul>
+<li></li>
+A Perl program executes only once, not once for each input line.  You can
+do an implicit loop with <a href="../../lib/Pod/perlrun.html#item__2dn"><code>-n</code></a> or <a href="../../lib/Pod/perlrun.html#item__2dp"><code>-p</code></a>.
+<p></p>
+<li></li>
+The English module, loaded via
+<pre>
+    use English;</pre>
+<p>allows you to refer to special variables (like <a href="../../lib/Pod/perlvar.html#item__24_2f"><code>$/</code></a>) with names (like
+$RS), as though they were in <strong>awk</strong>; see <a href="../../lib/Pod/perlvar.html">the perlvar manpage</a> for details.</p>
+<p></p>
+<li></li>
+Semicolons are required after all simple statements in Perl (except
+at the end of a block).  Newline is not a statement delimiter.
+<p></p>
+<li></li>
+Curly brackets are required on <code>if</code>s and <code>while</code>s.
+<p></p>
+<li></li>
+Variables begin with ``$'', ``@'' or ``%'' in Perl.
+<p></p>
+<li></li>
+Arrays index from 0.  Likewise string positions in <a href="../../lib/Pod/perlvar.html#item_substr"><code>substr()</code></a> and
+index().
+<p></p>
+<li></li>
+You have to decide whether your array has numeric or string indices.
+<p></p>
+<li></li>
+Hash values do not spring into existence upon mere reference.
+<p></p>
+<li></li>
+You have to decide whether you want to use string or numeric
+comparisons.
+<p></p>
+<li></li>
+Reading an input line does not split it for you.  You get to split it
+to an array yourself.  And the <a href="../../lib/Pod/perlfunc.html#item_split"><code>split()</code></a> operator has different
+arguments than <strong>awk</strong>'s.
+<p></p>
+<li></li>
+The current input line is normally in $_, not $0.  It generally does
+not have the newline stripped.  ($0 is the name of the program
+executed.)  See <a href="../../lib/Pod/perlvar.html">the perlvar manpage</a>.
+<p></p>
+<li></li>
+$&lt;<em>digit</em>&gt; does not refer to fields--it refers to substrings matched
+by the last match pattern.
+<p></p>
+<li></li>
+The <a href="../../lib/Pod/perlfunc.html#item_print"><code>print()</code></a> statement does not add field and record separators unless
+you set <a href="../../lib/Pod/perlvar.html#item__24_2c"><code>$,</code></a> and <a href="../../lib/Pod/perlvar.html#item__24_5c"><code>$\</code></a>.  You can set $OFS and $ORS if you're using
+the English module.
+<p></p>
+<li></li>
+You must open your files before you print to them.
+<p></p>
+<li></li>
+The range operator is ``..'', not comma.  The comma operator works as in
+C.
+<p></p>
+<li></li>
+The match operator is ``=~'', not ``~''.  (``~'' is the one's complement
+operator, as in C.)
+<p></p>
+<li></li>
+The exponentiation operator is ``**'', not ``^''.  ``^'' is the XOR
+operator, as in C.  (You know, one could get the feeling that <strong>awk</strong> is
+basically incompatible with C.)
+<p></p>
+<li></li>
+The concatenation operator is ``.'', not the null string.  (Using the
+null string would render <code>/pat/ /pat/</code> unparsable, because the third slash
+would be interpreted as a division operator--the tokenizer is in fact
+slightly context sensitive for operators like ``/'', ``?'', and ``&gt;''.
+And in fact, ``.'' itself can be the beginning of a number.)
+<p></p>
+<li></li>
+The <a href="../../lib/Pod/perlfunc.html#item_next"><code>next</code></a>, <a href="../../lib/Pod/perlfunc.html#item_exit"><code>exit</code></a>, and <a href="../../lib/Pod/perlfunc.html#item_continue"><code>continue</code></a> keywords work differently.
+<p></p>
+<li></li>
+The following variables work differently:
+<pre>
+      Awk       Perl
+      ARGC      scalar @ARGV (compare with $#ARGV)
+      ARGV[0]   $0
+      FILENAME  $ARGV
+      FNR       $. - something
+      FS        (whatever you like)
+      NF        $#Fld, or some such
+      NR        $.
+      OFMT      $#
+      OFS       $,
+      ORS       $\
+      RLENGTH   length($&amp;)
+      RS        $/
+      RSTART    length($`)
+      SUBSEP    $;</pre>
+<p></p>
+<li></li>
+You cannot set $RS to a pattern, only a string.
+<p></p>
+<li></li>
+When in doubt, run the <strong>awk</strong> construct through <strong>a2p</strong> and see what it
+gives you.
+<p></p></ul>
+<p>
+</p>
+<h2><a name="c_c___traps">C/C++ Traps</a></h2>
+<p>Cerebral C and C++ programmers should take note of the following:</p>
+<ul>
+<li></li>
+Curly brackets are required on <code>if</code>'s and <code>while</code>'s.
+<p></p>
+<li></li>
+You must use <code>elsif</code> rather than <code>else if</code>.
+<p></p>
+<li></li>
+The <code>break</code> and <a href="../../lib/Pod/perlfunc.html#item_continue"><code>continue</code></a> keywords from C become in Perl <a href="../../lib/Pod/perlfunc.html#item_last"><code>last</code></a>
+and <a href="../../lib/Pod/perlfunc.html#item_next"><code>next</code></a>, respectively.  Unlike in C, these do <em>not</em> work within a
+<code>do { } while</code> construct.  See <a href="../../lib/Pod/perlsyn.html#loop_control">Loop Control in the perlsyn manpage</a>.
+<p></p>
+<li></li>
+There's no switch statement.  (But it's easy to build one on the fly,
+see <a href="../../lib/Pod/perlsyn.html#basic_blocks_and_switch_statements">Basic BLOCKs and Switch Statements in the perlsyn manpage</a>)
+<p></p>
+<li></li>
+Variables begin with ``$'', ``@'' or ``%'' in Perl.
+<p></p>
+<li></li>
+Comments begin with ``#'', not ``/*'' or ``//''.  Perl may interpret C/C++
+comments as division operators, unterminated regular expressions or
+the defined-or operator.
+<p></p>
+<li></li>
+You can't take the address of anything, although a similar operator
+in Perl is the backslash, which creates a reference.
+<p></p>
+<li></li>
+<a href="../../lib/Pod/perlvar.html#item_argv"><code>ARGV</code></a> must be capitalized.  <code>$ARGV[0]</code> is C's <code>argv[1]</code>, and <code>argv[0]</code>
+ends up in <a href="../../lib/Pod/perlvar.html#item__240"><code>$0</code></a>.
+<p></p>
+<li></li>
+System calls such as link(), unlink(), rename(), etc. return nonzero for
+success, not 0. (system(), however, returns zero for success.)
+<p></p>
+<li></li>
+Signal handlers deal with signal names, not numbers.  Use <code>kill -l</code>
+to find their names on your system.
+<p></p></ul>
+<p>
+</p>
+<h2><a name="sed_traps">Sed Traps</a></h2>
+<p>Seasoned <strong>sed</strong> programmers should take note of the following:</p>
+<ul>
+<li></li>
+A Perl program executes only once, not once for each input line.  You can
+do an implicit loop with <a href="../../lib/Pod/perlrun.html#item__2dn"><code>-n</code></a> or <a href="../../lib/Pod/perlrun.html#item__2dp"><code>-p</code></a>.
+<p></p>
+<li></li>
+Backreferences in substitutions use ``$'' rather than ``\''.
+<p></p>
+<li></li>
+The pattern matching metacharacters ``('', ``)'', and ``|'' do not have backslashes
+in front.
+<p></p>
+<li></li>
+The range operator is <code>...</code>, rather than comma.
+<p></p></ul>
+<p>
+</p>
+<h2><a name="shell_traps">Shell Traps</a></h2>
+<p>Sharp shell programmers should take note of the following:</p>
+<ul>
+<li></li>
+The backtick operator does variable interpolation without regard to
+the presence of single quotes in the command.
+<p></p>
+<li></li>
+The backtick operator does no translation of the return value, unlike <strong>csh</strong>.
+<p></p>
+<li></li>
+Shells (especially <strong>csh</strong>) do several levels of substitution on each
+command line.  Perl does substitution in only certain constructs
+such as double quotes, backticks, angle brackets, and search patterns.
+<p></p>
+<li></li>
+Shells interpret scripts a little bit at a time.  Perl compiles the
+entire program before executing it (except for <code>BEGIN</code> blocks, which
+execute at compile time).
+<p></p>
+<li></li>
+The arguments are available via @ARGV, not $1, $2, etc.
+<p></p>
+<li></li>
+The environment is not automatically made available as separate scalar
+variables.
+<p></p></ul>
+<p>
+</p>
+<h2><a name="perl_traps">Perl Traps</a></h2>
+<p>Practicing Perl Programmers should take note of the following:</p>
+<ul>
+<li></li>
+Remember that many operations behave differently in a list
+context than they do in a scalar one.  See <a href="../../lib/Pod/perldata.html">the perldata manpage</a> for details.
+<p></p>
+<li></li>
+Avoid barewords if you can, especially all lowercase ones.
+You can't tell by just looking at it whether a bareword is
+a function or a string.  By using quotes on strings and
+parentheses on function calls, you won't ever get them confused.
+<p></p>
+<li></li>
+You cannot discern from mere inspection which builtins
+are unary operators (like <a href="../../lib/Pod/perlfunc.html#item_chop"><code>chop()</code></a> and <a href="../../lib/Pod/perlfunc.html#item_chdir"><code>chdir())</code></a>
+and which are list operators (like <a href="../../lib/Pod/perlfunc.html#item_print"><code>print()</code></a> and unlink()).
+(Unless prototyped, user-defined subroutines can <strong>only</strong> be list
+operators, never unary ones.)  See <a href="../../lib/Pod/perlop.html">the perlop manpage</a> and <a href="../../lib/Pod/perlsub.html">the perlsub manpage</a>.
+<p></p>
+<li></li>
+People have a hard time remembering that some functions
+default to $_, or @ARGV, or whatever, but that others which
+you might expect to do not.
+<p></p>
+<li></li>
+The &lt;FH&gt; construct is not the name of the filehandle, it is a readline
+operation on that handle.  The data read is assigned to $_ only if the
+file read is the sole condition in a while loop:
+<pre>
+    while (&lt;FH&gt;)      { }
+    while (defined($_ = &lt;FH&gt;)) { }..
+    &lt;FH&gt;;  # data discarded!</pre>
+<p></p>
+<li></li>
+Remember not to use <code>=</code> when you need <code>=~</code>;
+these two constructs are quite different:
+<pre>
+    $x =  /foo/;
+    $x =~ /foo/;</pre>
+<p></p>
+<li></li>
+The <a href="../../lib/Pod/perlfunc.html#item_do"><code>do {}</code></a> construct isn't a real loop that you can use
+loop control on.
+<p></p>
+<li></li>
+Use <a href="../../lib/Pod/perlfunc.html#item_my"><code>my()</code></a> for local variables whenever you can get away with
+it (but see <a href="../../lib/Pod/perlform.html">the perlform manpage</a> for where you can't).
+Using <a href="../../lib/Pod/perlfunc.html#item_local"><code>local()</code></a> actually gives a local value to a global
+variable, which leaves you open to unforeseen side-effects
+of dynamic scoping.
+<p></p>
+<li></li>
+If you localize an exported variable in a module, its exported value will
+not change.  The local name becomes an alias to a new value but the
+external name is still an alias for the original.
+<p></p></ul>
+<p>
+</p>
+<h2><a name="perl4_to_perl5_traps">Perl4 to Perl5 Traps</a></h2>
+<p>Practicing Perl4 Programmers should take note of the following
+Perl4-to-Perl5 specific traps.</p>
+<p>They're crudely ordered according to the following list:</p>
+<dl>
+<dt><strong><a name="item_discontinuance_2c_deprecation_2c_and_bugfix_traps">Discontinuance, Deprecation, and BugFix traps</a></strong><br />
+</dt>
+<dd>
+Anything that's been fixed as a perl4 bug, removed as a perl4 feature
+or deprecated as a perl4 feature with the intent to encourage usage of
+some other perl5 feature.
+</dd>
+<p></p>
+<dt><strong><a name="item_parsing_traps">Parsing Traps</a></strong><br />
+</dt>
+<dd>
+Traps that appear to stem from the new parser.
+</dd>
+<p></p>
+<dt><strong><a name="item_numerical_traps">Numerical Traps</a></strong><br />
+</dt>
+<dd>
+Traps having to do with numerical or mathematical operators.
+</dd>
+<p></p>
+<dt><strong><a name="item_general_data_type_traps">General data type traps</a></strong><br />
+</dt>
+<dd>
+Traps involving perl standard data types.
+</dd>
+<p></p>
+<dt><strong><a name="item_context_traps__2d_scalar_2c_list_contexts">Context Traps - scalar, list contexts</a></strong><br />
+</dt>
+<dd>
+Traps related to context within lists, scalar statements/declarations.
+</dd>
+<p></p>
+<dt><strong><a name="item_precedence_traps">Precedence Traps</a></strong><br />
+</dt>
+<dd>
+Traps related to the precedence of parsing, evaluation, and execution of
+code.
+</dd>
+<p></p>
+<dt><strong><a name="item_general_regular_expression_traps_using_s_2f_2f_2f_">General Regular Expression Traps using s///, etc.</a></strong><br />
+</dt>
+<dd>
+Traps related to the use of pattern matching.
+</dd>
+<p></p>
+<dt><strong><a name="item_subroutine_2c_signal_2c_sorting_traps">Subroutine, Signal, Sorting Traps</a></strong><br />
+</dt>
+<dd>
+Traps related to the use of signals and signal handlers, general subroutines,
+and sorting, along with sorting subroutines.
+</dd>
+<p></p>
+<dt><strong><a name="item_os_traps">OS Traps</a></strong><br />
+</dt>
+<dd>
+OS-specific traps.
+</dd>
+<p></p>
+<dt><strong><a name="item_dbm_traps">DBM Traps</a></strong><br />
+</dt>
+<dd>
+Traps specific to the use of <a href="../../lib/Pod/perlfunc.html#item_dbmopen"><code>dbmopen()</code></a>, and specific dbm implementations.
+</dd>
+<p></p>
+<dt><strong><a name="item_unclassified_traps">Unclassified Traps</a></strong><br />
+</dt>
+<dd>
+Everything else.
+</dd>
+<p></p></dl>
+<p>If you find an example of a conversion trap that is not listed here,
+please submit it to &lt;<em><a href="mailto:perlbug@perl.org">perlbug@perl.org</a></em>&gt; for inclusion.
+Also note that at least some of these can be caught with the
+<code>use warnings</code> pragma or the <strong>-w</strong> switch.</p>
+<p>
+</p>
+<h2><a name="discontinuance__deprecation__and_bugfix_traps">Discontinuance, Deprecation, and BugFix traps</a></h2>
+<p>Anything that has been discontinued, deprecated, or fixed as
+a bug from perl4.</p>
+<ul>
+<li><strong><a name="item_discontinuance">Discontinuance</a></strong><br />
+</li>
+Symbols starting with ``_'' are no longer forced into package main, except
+for <a href="../../lib/Pod/perlvar.html#item__24_"><code>$_</code></a> itself (and <a href="../../lib/Pod/perlvar.html#item__40_"><code>@_</code></a>, etc.).
+<pre>
+    package test;
+    $_legacy = 1;</pre>
+<pre>
+    package main;
+    print &quot;\$_legacy is &quot;,$_legacy,&quot;\n&quot;;</pre>
+<pre>
+    # perl4 prints: $_legacy is 1
+    # perl5 prints: $_legacy is</pre>
+<p></p>
+<li><strong><a name="item_deprecation">Deprecation</a></strong><br />
+</li>
+Double-colon is now a valid package separator in a variable name.  Thus these
+behave differently in perl4 vs. perl5, because the packages don't exist.
+<pre>
+    $a=1;$b=2;$c=3;$var=4;
+    print &quot;$a::$b::$c &quot;;
+    print &quot;$var::abc::xyz\n&quot;;</pre>
+<pre>
+    # perl4 prints: 1::2::3 4::abc::xyz
+    # perl5 prints: 3</pre>
+<p>Given that <code>::</code> is now the preferred package delimiter, it is debatable
+whether this should be classed as a bug or not.
+(The older package delimiter, ' ,is used here)</p>
+<pre>
+    $x = 10 ;
+    print &quot;x=${'x}\n&quot; ;</pre>
+<pre>
+    # perl4 prints: x=10
+    # perl5 prints: Can't find string terminator &quot;'&quot; anywhere before EOF</pre>
+<p>You can avoid this problem, and remain compatible with perl4, if you
+always explicitly include the package name:</p>
+<pre>
+    $x = 10 ;
+    print &quot;x=${main'x}\n&quot; ;</pre>
+<p>Also see precedence traps, for parsing <a href="../../lib/Pod/perlvar.html#item__24_3a"><code>$:</code></a>.</p>
+<p></p>
+<li><strong><a name="item_bugfix">BugFix</a></strong><br />
+</li>
+The second and third arguments of <a href="../../lib/Pod/perlfunc.html#item_splice"><code>splice()</code></a> are now evaluated in scalar
+context (as the Camel says) rather than list context.
+<pre>
+    sub sub1{return(0,2) }          # return a 2-element list
+    sub sub2{ return(1,2,3)}        # return a 3-element list
+    @a1 = (&quot;a&quot;,&quot;b&quot;,&quot;c&quot;,&quot;d&quot;,&quot;e&quot;);
+    @a2 = splice(@a1,&amp;sub1,&amp;sub2);
+    print join(' ',@a2),&quot;\n&quot;;</pre>
+<pre>
+    # perl4 prints: a b
+    # perl5 prints: c d e</pre>
+<p></p>
+<li><strong>Discontinuance</strong><br />
+</li>
+You can't do a <a href="../../lib/Pod/perlfunc.html#item_goto"><code>goto</code></a> into a block that is optimized away.  Darn.
+<pre>
+    goto marker1;</pre>
+<pre>
+    for(1){
+    marker1:
+        print &quot;Here I is!\n&quot;;
+    }</pre>
+<pre>
+    # perl4 prints: Here I is!
+    # perl5 errors: Can't &quot;goto&quot; into the middle of a foreach loop</pre>
+<p></p>
+<li><strong>Discontinuance</strong><br />
+</li>
+It is no longer syntactically legal to use whitespace as the name
+of a variable, or as a delimiter for any kind of quote construct.
+Double darn.
+<pre>
+    $a = (&quot;foo bar&quot;);
+    $b = q baz ;
+    print &quot;a is $a, b is $b\n&quot;;</pre>
+<pre>
+    # perl4 prints: a is foo bar, b is baz
+    # perl5 errors: Bareword found where operator expected</pre>
+<p></p>
+<li><strong>Discontinuance</strong><br />
+</li>
+The archaic while/if BLOCK BLOCK syntax is no longer supported.
+<pre>
+    if { 1 } {
+        print &quot;True!&quot;;
+    }
+    else {
+        print &quot;False!&quot;;
+    }</pre>
+<pre>
+    # perl4 prints: True!
+    # perl5 errors: syntax error at test.pl line 1, near &quot;if {&quot;</pre>
+<p></p>
+<li><strong>BugFix</strong><br />
+</li>
+The <code>**</code> operator now binds more tightly than unary minus.
+It was documented to work this way before, but didn't.
+<pre>
+    print -4**2,&quot;\n&quot;;</pre>
+<pre>
+    # perl4 prints: 16
+    # perl5 prints: -16</pre>
+<p></p>
+<li><strong>Discontinuance</strong><br />
+</li>
+The meaning of <code>foreach{}</code> has changed slightly when it is iterating over a
+list which is not an array.  This used to assign the list to a
+temporary array, but no longer does so (for efficiency).  This means
+that you'll now be iterating over the actual values, not over copies of
+the values.  Modifications to the loop variable can change the original
+values.
+<pre>
+    @list = ('ab','abc','bcd','def');
+    foreach $var (grep(/ab/,@list)){
+        $var = 1;
+    }
+    print (join(':',@list));</pre>
+<pre>
+    # perl4 prints: ab:abc:bcd:def
+    # perl5 prints: 1:1:bcd:def</pre>
+<p>To retain Perl4 semantics you need to assign your list
+explicitly to a temporary array and then iterate over that.  For
+example, you might need to change</p>
+<pre>
+    foreach $var (grep(/ab/,@list)){</pre>
+<p>to</p>
+<pre>
+    foreach $var (@tmp = grep(/ab/,@list)){</pre>
+<p>Otherwise changing $var will clobber the values of @list.  (This most often
+happens when you use <a href="../../lib/Pod/perlvar.html#item__24_"><code>$_</code></a> for the loop variable, and call subroutines in
+the loop that don't properly localize <a href="../../lib/Pod/perlvar.html#item__24_"><code>$_</code></a>.)</p>
+<p></p>
+<li><strong>Discontinuance</strong><br />
+</li>
+<a href="../../lib/Pod/perlfunc.html#item_split"><code>split</code></a> with no arguments now behaves like <code>split ' '</code> (which doesn't
+return an initial null field if $_ starts with whitespace), it used to
+behave like <code>split /\s+/</code> (which does).
+<pre>
+    $_ = ' hi mom';
+    print join(':', split);</pre>
+<pre>
+    # perl4 prints: :hi:mom
+    # perl5 prints: hi:mom</pre>
+<p></p>
+<li><strong>BugFix</strong><br />
+</li>
+Perl 4 would ignore any text which was attached to an <strong>-e</strong> switch,
+always taking the code snippet from the following arg.  Additionally, it
+would silently accept an <strong>-e</strong> switch without a following arg.  Both of
+these behaviors have been fixed.
+<pre>
+    perl -e'print &quot;attached to -e&quot;' 'print &quot;separate arg&quot;'</pre>
+<pre>
+    # perl4 prints: separate arg
+    # perl5 prints: attached to -e</pre>
+<pre>
+    perl -e</pre>
+<pre>
+    # perl4 prints:
+    # perl5 dies: No code specified for -e.</pre>
+<p></p>
+<li><strong>Discontinuance</strong><br />
+</li>
+In Perl 4 the return value of <a href="../../lib/Pod/perlfunc.html#item_push"><code>push</code></a> was undocumented, but it was
+actually the last value being pushed onto the target list.  In Perl 5
+the return value of <a href="../../lib/Pod/perlfunc.html#item_push"><code>push</code></a> is documented, but has changed, it is the
+number of elements in the resulting list.
+<pre>
+    @x = ('existing');
+    print push(@x, 'first new', 'second new');</pre>
+<pre>
+    # perl4 prints: second new
+    # perl5 prints: 3</pre>
+<p></p>
+<li><strong>Deprecation</strong><br />
+</li>
+Some error messages will be different.
+<p></p>
+<li><strong>Discontinuance</strong><br />
+</li>
+In Perl 4, if in list context the delimiters to the first argument of
+<a href="../../lib/Pod/perlfunc.html#item_split"><code>split()</code></a> were <code>??</code>, the result would be placed in <a href="../../lib/Pod/perlvar.html#item__40_"><code>@_</code></a> as well as
+being returned.   Perl 5 has more respect for your subroutine arguments.
+<p></p>
+<li><strong>Discontinuance</strong><br />
+</li>
+Some bugs may have been inadvertently removed.  :-)
+<p></p></ul>
+<p>
+</p>
+<h2><a name="parsing_traps">Parsing Traps</a></h2>
+<p>Perl4-to-Perl5 traps from having to do with parsing.</p>
+<ul>
+<li><strong><a name="item_parsing">Parsing</a></strong><br />
+</li>
+Note the space between . and =
+<pre>
+    $string . = &quot;more string&quot;;
+    print $string;</pre>
+<pre>
+    # perl4 prints: more string
+    # perl5 prints: syntax error at - line 1, near &quot;. =&quot;</pre>
+<p></p>
+<li><strong>Parsing</strong><br />
+</li>
+Better parsing in perl 5
+<pre>
+    sub foo {}
+    &amp;foo
+    print(&quot;hello, world\n&quot;);</pre>
+<pre>
+    # perl4 prints: hello, world
+    # perl5 prints: syntax error</pre>
+<p></p>
+<li><strong>Parsing</strong><br />
+</li>
+``if it looks like a function, it is a function'' rule.
+<pre>
+  print
+    ($foo == 1) ? &quot;is one\n&quot; : &quot;is zero\n&quot;;</pre>
+<pre>
+    # perl4 prints: is zero
+    # perl5 warns: &quot;Useless use of a constant in void context&quot; if using -w</pre>
+<p></p>
+<li><strong>Parsing</strong><br />
+</li>
+String interpolation of the <code>$#array</code> construct differs when braces
+are to used around the name.
+<pre>
+    @a = (1..3);
+    print &quot;${#a}&quot;;</pre>
+<pre>
+    # perl4 prints: 2
+    # perl5 fails with syntax error</pre>
+<pre>
+    @ = (1..3);
+    print &quot;$#{a}&quot;;</pre>
+<pre>
+    # perl4 prints: {a}
+    # perl5 prints: 2</pre>
+<p></p>
+<li><strong>Parsing</strong><br />
+</li>
+When perl sees <code>map {</code> (or <code>grep {</code>), it has to guess whether the <code>{</code>
+starts a BLOCK or a hash reference. If it guesses wrong, it will report
+a syntax error near the <code>}</code> and the missing (or unexpected) comma.
+<p>Use unary <code>+</code> before <code>{</code> on a hash reference, and unary <code>+</code> applied
+to the first thing in a BLOCK (after <code>{</code>), for perl to guess right all
+the time. (See <a href="../../lib/Pod/perlfunc.html#map">map in the perlfunc manpage</a>.)</p>
+<p></p></ul>
+<p>
+</p>
+<h2><a name="numerical_traps">Numerical Traps</a></h2>
+<p>Perl4-to-Perl5 traps having to do with numerical operators,
+operands, or output from same.</p>
+<ul>
+<li><strong><a name="item_numerical">Numerical</a></strong><br />
+</li>
+Formatted output and significant digits.  In general, Perl 5
+tries to be more precise.  For example, on a Solaris Sparc:
+<pre>
+    print 7.373504 - 0, &quot;\n&quot;;
+    printf &quot;%20.18f\n&quot;, 7.373504 - 0;</pre>
+<pre>
+    # Perl4 prints:
+    7.3750399999999996141
+    7.375039999999999614</pre>
+<pre>
+    # Perl5 prints:
+    7.373504
+    7.375039999999999614</pre>
+<p>Notice how the first result looks better in Perl 5.</p>
+<p>Your results may vary, since your floating point formatting routines
+and even floating point format may be slightly different.</p>
+<p></p>
+<li><strong>Numerical</strong><br />
+</li>
+This specific item has been deleted.  It demonstrated how the auto-increment
+operator would not catch when a number went over the signed int limit.  Fixed
+in version 5.003_04.  But always be wary when using large integers.
+If in doubt:
+<pre>
+   use Math::BigInt;</pre>
+<p></p>
+<li><strong>Numerical</strong><br />
+</li>
+Assignment of return values from numeric equality tests
+does not work in perl5 when the test evaluates to false (0).
+Logical tests now return a null, instead of 0
+<pre>
+    $p = ($test == 1);
+    print $p,&quot;\n&quot;;</pre>
+<pre>
+    # perl4 prints: 0
+    # perl5 prints:</pre>
+<p>Also see <a href="#general_regular_expression_traps_using_s_____etc_">General Regular Expression Traps using s///, etc.</a>
+for another example of this new feature...</p>
+<p></p>
+<li><strong><a name="item_bitwise_string_ops">Bitwise string ops</a></strong><br />
+</li>
+When bitwise operators which can operate upon either numbers or
+strings (<code>&amp; | ^ ~</code>) are given only strings as arguments, perl4 would
+treat the operands as bitstrings so long as the program contained a call
+to the <a href="../../lib/Pod/perlfunc.html#item_vec"><code>vec()</code></a> function. perl5 treats the string operands as bitstrings.
+(See <a href="../../lib/Pod/perlop.html#bitwise_string_operators">Bitwise String Operators in the perlop manpage</a> for more details.)
+<pre>
+    $fred = &quot;10&quot;;
+    $barney = &quot;12&quot;;
+    $betty = $fred &amp; $barney;
+    print &quot;$betty\n&quot;;
+    # Uncomment the next line to change perl4's behavior
+    # ($dummy) = vec(&quot;dummy&quot;, 0, 0);</pre>
+<pre>
+    # Perl4 prints:
+    8</pre>
+<pre>
+    # Perl5 prints:
+    10</pre>
+<pre>
+    # If vec() is used anywhere in the program, both print:
+    10</pre>
+<p></p></ul>
+<p>
+</p>
+<h2><a name="general_data_type_traps">General data type traps</a></h2>
+<p>Perl4-to-Perl5 traps involving most data-types, and their usage
+within certain expressions and/or context.</p>
+<ul>
+<li><strong><a name="item__28arrays_29">(Arrays)</a></strong><br />
+</li>
+Negative array subscripts now count from the end of the array.
+<pre>
+    @a = (1, 2, 3, 4, 5);
+    print &quot;The third element of the array is $a[3] also expressed as $a[-2] \n&quot;;</pre>
+<pre>
+    # perl4 prints: The third element of the array is 4 also expressed as
+    # perl5 prints: The third element of the array is 4 also expressed as 4</pre>
+<p></p>
+<li><strong>(Arrays)</strong><br />
+</li>
+Setting <code>$#array</code> lower now discards array elements, and makes them
+impossible to recover.
+<pre>
+    @a = (a,b,c,d,e);
+    print &quot;Before: &quot;,join('',@a);
+    $#a =1;
+    print &quot;, After: &quot;,join('',@a);
+    $#a =3;
+    print &quot;, Recovered: &quot;,join('',@a),&quot;\n&quot;;</pre>
+<pre>
+    # perl4 prints: Before: abcde, After: ab, Recovered: abcd
+    # perl5 prints: Before: abcde, After: ab, Recovered: ab</pre>
+<p></p>
+<li><strong><a name="item__28hashes_29">(Hashes)</a></strong><br />
+</li>
+Hashes get defined before use
+<pre>
+    local($s,@a,%h);
+    die &quot;scalar \$s defined&quot; if defined($s);
+    die &quot;array \@a defined&quot; if defined(@a);
+    die &quot;hash \%h defined&quot; if defined(%h);</pre>
+<pre>
+    # perl4 prints:
+    # perl5 dies: hash %h defined</pre>
+<p>Perl will now generate a warning when it sees <a href="../../lib/Pod/perlfunc.html#item_defined"><code>defined(@a)</code></a> and
+defined(%h).</p>
+<p></p>
+<li><strong><a name="item__28globs_29">(Globs)</a></strong><br />
+</li>
+glob assignment from variable to variable will fail if the assigned
+variable is localized subsequent to the assignment
+<pre>
+    @a = (&quot;This is Perl 4&quot;);
+    *b = *a;
+    local(@a);
+    print @b,&quot;\n&quot;;</pre>
+<pre>
+    # perl4 prints: This is Perl 4
+    # perl5 prints:</pre>
+<p></p>
+<li><strong>(Globs)</strong><br />
+</li>
+Assigning <a href="../../lib/Pod/perlfunc.html#item_undef"><code>undef</code></a> to a glob has no effect in Perl 5.   In Perl 4
+it undefines the associated scalar (but may have other side effects
+including SEGVs). Perl 5 will also warn if <a href="../../lib/Pod/perlfunc.html#item_undef"><code>undef</code></a> is assigned to a
+typeglob. (Note that assigning <a href="../../lib/Pod/perlfunc.html#item_undef"><code>undef</code></a> to a typeglob is different
+than calling the <a href="../../lib/Pod/perlfunc.html#item_undef"><code>undef</code></a> function on a typeglob (<code>undef *foo</code>), which
+has quite a few effects.
+<pre>
+    $foo = &quot;bar&quot;;
+    *foo = undef;
+    print $foo;</pre>
+<pre>
+    # perl4 prints:
+    # perl4 warns: &quot;Use of uninitialized variable&quot; if using -w
+    # perl5 prints: bar
+    # perl5 warns: &quot;Undefined value assigned to typeglob&quot; if using -w</pre>
+<p></p>
+<li><strong><a name="item__28scalar_string_29">(Scalar String)</a></strong><br />
+</li>
+Changes in unary negation (of strings)
+This change effects both the return value and what it
+does to auto(magic)increment.
+<pre>
+    $x = &quot;aaa&quot;;
+    print ++$x,&quot; : &quot;;
+    print -$x,&quot; : &quot;;
+    print ++$x,&quot;\n&quot;;</pre>
+<pre>
+    # perl4 prints: aab : -0 : 1
+    # perl5 prints: aab : -aab : aac</pre>
+<p></p>
+<li><strong><a name="item__28constants_29">(Constants)</a></strong><br />
+</li>
+perl 4 lets you modify constants:
+<pre>
+    $foo = &quot;x&quot;;
+    &amp;mod($foo);
+    for ($x = 0; $x &lt; 3; $x++) {
+        &amp;mod(&quot;a&quot;);
+    }
+    sub mod {
+        print &quot;before: $_[0]&quot;;
+        $_[0] = &quot;m&quot;;
+        print &quot;  after: $_[0]\n&quot;;
+    }</pre>
+<pre>
+    # perl4:
+    # before: x  after: m
+    # before: a  after: m
+    # before: m  after: m
+    # before: m  after: m</pre>
+<pre>
+    # Perl5:
+    # before: x  after: m
+    # Modification of a read-only value attempted at foo.pl line 12.
+    # before: a</pre>
+<p></p>
+<li><strong><a name="item__28scalars_29">(Scalars)</a></strong><br />
+</li>
+The behavior is slightly different for:
+<pre>
+    print &quot;$x&quot;, defined $x</pre>
+<pre>
+    # perl 4: 1
+    # perl 5: &lt;no output, $x is not called into existence&gt;</pre>
+<p></p>
+<li><strong><a name="item__28variable_suicide_29">(Variable Suicide)</a></strong><br />
+</li>
+Variable suicide behavior is more consistent under Perl 5.
+Perl5 exhibits the same behavior for hashes and scalars,
+that perl4 exhibits for only scalars.
+<pre>
+    $aGlobal{ &quot;aKey&quot; } = &quot;global value&quot;;
+    print &quot;MAIN:&quot;, $aGlobal{&quot;aKey&quot;}, &quot;\n&quot;;
+    $GlobalLevel = 0;
+    &amp;test( *aGlobal );</pre>
+<pre>
+    sub test {
+        local( *theArgument ) = @_;
+        local( %aNewLocal ); # perl 4 != 5.001l,m
+        $aNewLocal{&quot;aKey&quot;} = &quot;this should never appear&quot;;
+        print &quot;SUB: &quot;, $theArgument{&quot;aKey&quot;}, &quot;\n&quot;;
+        $aNewLocal{&quot;aKey&quot;} = &quot;level $GlobalLevel&quot;;   # what should print
+        $GlobalLevel++;
+        if( $GlobalLevel&lt;4 ) {
+            &amp;test( *aNewLocal );
+        }
+    }</pre>
+<pre>
+    # Perl4:
+    # MAIN:global value
+    # SUB: global value
+    # SUB: level 0
+    # SUB: level 1
+    # SUB: level 2</pre>
+<pre>
+    # Perl5:
+    # MAIN:global value
+    # SUB: global value
+    # SUB: this should never appear
+    # SUB: this should never appear
+    # SUB: this should never appear</pre>
+<p></p></ul>
+<p>
+</p>
+<h2><a name="context_traps__scalar__list_contexts">Context Traps - scalar, list contexts</a></h2>
+<ul>
+<li><strong><a name="item__28list_context_29">(list context)</a></strong><br />
+</li>
+The elements of argument lists for formats are now evaluated in list
+context.  This means you can interpolate list values now.
+<pre>
+    @fmt = (&quot;foo&quot;,&quot;bar&quot;,&quot;baz&quot;);
+    format STDOUT=
+    @&lt;&lt;&lt;&lt;&lt; @||||| @&gt;&gt;&gt;&gt;&gt;
+    @fmt;
+    .
+    write;</pre>
+<pre>
+    # perl4 errors:  Please use commas to separate fields in file
+    # perl5 prints: foo     bar      baz</pre>
+<p></p>
+<li><strong><a name="item__28scalar_context_29">(scalar context)</a></strong><br />
+</li>
+The <a href="../../lib/Pod/perlfunc.html#item_caller"><code>caller()</code></a> function now returns a false value in a scalar context
+if there is no caller.  This lets library files determine if they're
+being required.
+<pre>
+    caller() ? (print &quot;You rang?\n&quot;) : (print &quot;Got a 0\n&quot;);</pre>
+<pre>
+    # perl4 errors: There is no caller
+    # perl5 prints: Got a 0</pre>
+<p></p>
+<li><strong>(scalar context)</strong><br />
+</li>
+The comma operator in a scalar context is now guaranteed to give a
+scalar context to its arguments.
+<pre>
+    @y= ('a','b','c');
+    $x = (1, 2, @y);
+    print &quot;x = $x\n&quot;;</pre>
+<pre>
+    # Perl4 prints:  x = c   # Thinks list context interpolates list
+    # Perl5 prints:  x = 3   # Knows scalar uses length of list</pre>
+<p></p>
+<li><strong><a name="item__28list_2c_builtin_29">(list, builtin)</a></strong><br />
+</li>
+<a href="../../lib/Pod/perlfunc.html#item_sprintf"><code>sprintf()</code></a> is prototyped as ($;@), so its first argument is given scalar
+context. Thus, if passed an array, it will probably not do what you want,
+unlike Perl 4:
+<pre>
+    @z = ('%s%s', 'foo', 'bar');
+    $x = sprintf(@z);
+    print $x;</pre>
+<pre>
+    # perl4 prints: foobar
+    # perl5 prints: 3</pre>
+<p><a href="../../lib/Pod/perlfunc.html#item_printf"><code>printf()</code></a> works the same as it did in Perl 4, though:</p>
+<pre>
+    @z = ('%s%s', 'foo', 'bar');
+    printf STDOUT (@z);</pre>
+<pre>
+    # perl4 prints: foobar
+    # perl5 prints: foobar</pre>
+<p></p></ul>
+<p>
+</p>
+<h2><a name="precedence_traps">Precedence Traps</a></h2>
+<p>Perl4-to-Perl5 traps involving precedence order.</p>
+<p>Perl 4 has almost the same precedence rules as Perl 5 for the operators
+that they both have.  Perl 4 however, seems to have had some
+inconsistencies that made the behavior differ from what was documented.</p>
+<ul>
+<li><strong><a name="item_precedence">Precedence</a></strong><br />
+</li>
+LHS vs. RHS of any assignment operator.  LHS is evaluated first
+in perl4, second in perl5; this can affect the relationship
+between side-effects in sub-expressions.
+<pre>
+    @arr = ( 'left', 'right' );
+    $a{shift @arr} = shift @arr;
+    print join( ' ', keys %a );</pre>
+<pre>
+    # perl4 prints: left
+    # perl5 prints: right</pre>
+<p></p>
+<li><strong>Precedence</strong><br />
+</li>
+These are now semantic errors because of precedence:
+<pre>
+    @list = (1,2,3,4,5);
+    %map = (&quot;a&quot;,1,&quot;b&quot;,2,&quot;c&quot;,3,&quot;d&quot;,4);
+    $n = shift @list + 2;   # first item in list plus 2
+    print &quot;n is $n, &quot;;
+    $m = keys %map + 2;     # number of items in hash plus 2
+    print &quot;m is $m\n&quot;;</pre>
+<pre>
+    # perl4 prints: n is 3, m is 6
+    # perl5 errors and fails to compile</pre>
+<p></p>
+<li><strong>Precedence</strong><br />
+</li>
+The precedence of assignment operators is now the same as the precedence
+of assignment.  Perl 4 mistakenly gave them the precedence of the associated
+operator.  So you now must parenthesize them in expressions like
+<pre>
+    /foo/ ? ($a += 2) : ($a -= 2);</pre>
+<p>Otherwise</p>
+<pre>
+    /foo/ ? $a += 2 : $a -= 2</pre>
+<p>would be erroneously parsed as</p>
+<pre>
+    (/foo/ ? $a += 2 : $a) -= 2;</pre>
+<p>On the other hand,</p>
+<pre>
+    $a += /foo/ ? 1 : 2;</pre>
+<p>now works as a C programmer would expect.</p>
+<p></p>
+<li><strong>Precedence</strong><br />
+</li>
+<pre>
+    open FOO || die;</pre>
+<p>is now incorrect.  You need parentheses around the filehandle.
+Otherwise, perl5 leaves the statement as its default precedence:</p>
+<pre>
+    open(FOO || die);</pre>
+<pre>
+    # perl4 opens or dies
+    # perl5 opens FOO, dying only if 'FOO' is false, i.e. never</pre>
+<li><strong>Precedence</strong><br />
+</li>
+perl4 gives the special variable, <a href="../../lib/Pod/perlvar.html#item__24_3a"><code>$:</code></a> precedence, where perl5
+treats <code>$::</code> as main <a href="../../lib/Pod/perlfunc.html#item_package"><code>package</code></a>
+<pre>
+    $a = &quot;x&quot;; print &quot;$::a&quot;;</pre>
+<pre>
+    # perl 4 prints: -:a
+    # perl 5 prints: x</pre>
+<p></p>
+<li><strong>Precedence</strong><br />
+</li>
+perl4 had buggy precedence for the file test operators vis-a-vis
+the assignment operators.  Thus, although the precedence table
+for perl4 leads one to believe <code>-e $foo .= &quot;q&quot;</code> should parse as
+<code>((-e $foo) .= &quot;q&quot;)</code>, it actually parses as <code>(-e ($foo .= &quot;q&quot;))</code>.
+In perl5, the precedence is as documented.
+<pre>
+    -e $foo .= &quot;q&quot;</pre>
+<pre>
+    # perl4 prints: no output
+    # perl5 prints: Can't modify -e in concatenation</pre>
+<p></p>
+<li><strong>Precedence</strong><br />
+</li>
+In perl4, keys(), <a href="../../lib/Pod/perlfunc.html#item_each"><code>each()</code></a> and <a href="../../lib/Pod/perlfunc.html#item_values"><code>values()</code></a> were special high-precedence operators
+that operated on a single hash, but in perl5, they are regular named unary
+operators.  As documented, named unary operators have lower precedence
+than the arithmetic and concatenation operators <code>+ - .</code>, but the perl4
+variants of these operators actually bind tighter than <code>+ - .</code>.
+Thus, for:
+<pre>
+    %foo = 1..10;
+    print keys %foo - 1</pre>
+<pre>
+    # perl4 prints: 4
+    # perl5 prints: Type of arg 1 to keys must be hash (not subtraction)</pre>
+<p>The perl4 behavior was probably more useful, if less consistent.</p>
+<p></p></ul>
+<p>
+</p>
+<h2><a name="general_regular_expression_traps_using_s_____etc_">General Regular Expression Traps using s///, etc.</a></h2>
+<p>All types of RE traps.</p>
+<ul>
+<li><strong><a name="item_regular_expression">Regular Expression</a></strong><br />
+</li>
+<code>s'$lhs'$rhs'</code> now does no interpolation on either side.  It used to
+interpolate $lhs but not $rhs.  (And still does not match a literal
+'$' in string)
+<pre>
+    $a=1;$b=2;
+    $string = '1 2 $a $b';
+    $string =~ s'$a'$b';
+    print $string,&quot;\n&quot;;</pre>
+<pre>
+    # perl4 prints: $b 2 $a $b
+    # perl5 prints: 1 2 $a $b</pre>
+<p></p>
+<li><strong>Regular Expression</strong><br />
+</li>
+<a href="../../lib/Pod/perlfunc.html#item_m_"><code>m//g</code></a> now attaches its state to the searched string rather than the
+regular expression.  (Once the scope of a block is left for the sub, the
+state of the searched string is lost)
+<pre>
+    $_ = &quot;ababab&quot;;
+    while(m/ab/g){
+        &amp;doit(&quot;blah&quot;);
+    }
+    sub doit{local($_) = shift; print &quot;Got $_ &quot;}</pre>
+<pre>
+    # perl4 prints: Got blah Got blah Got blah Got blah
+    # perl5 prints: infinite loop blah...</pre>
+<p></p>
+<li><strong>Regular Expression</strong><br />
+</li>
+Currently, if you use the <a href="../../lib/Pod/perlfunc.html#item_m_"><code>m//o</code></a> qualifier on a regular expression
+within an anonymous sub, <em>all</em> closures generated from that anonymous
+sub will use the regular expression as it was compiled when it was used
+the very first time in any such closure.  For instance, if you say
+<pre>
+    sub build_match {
+        my($left,$right) = @_;
+        return sub { $_[0] =~ /$left stuff $right/o; };
+    }
+    $good = build_match('foo','bar');
+    $bad = build_match('baz','blarch');
+    print $good-&gt;('foo stuff bar') ? &quot;ok\n&quot; : &quot;not ok\n&quot;;
+    print $bad-&gt;('baz stuff blarch') ? &quot;ok\n&quot; : &quot;not ok\n&quot;;
+    print $bad-&gt;('foo stuff bar') ? &quot;not ok\n&quot; : &quot;ok\n&quot;;</pre>
+<p>For most builds of Perl5, this will print:
+ok
+not ok
+not ok</p>
+<p><code>build_match()</code> will always return a sub which matches the contents of
+$left and $right as they were the <em>first</em> time that <code>build_match()</code>
+was called, not as they are in the current call.</p>
+<p></p>
+<li><strong>Regular Expression</strong><br />
+</li>
+If no parentheses are used in a match, Perl4 sets <a href="../../lib/Pod/perlvar.html#item__24_2b"><code>$+</code></a> to
+the whole match, just like <a href="../../lib/Pod/perlvar.html#item__24_26"><code>$&amp;</code></a>. Perl5 does not.
+<pre>
+    &quot;abcdef&quot; =~ /b.*e/;
+    print &quot;\$+ = $+\n&quot;;</pre>
+<pre>
+    # perl4 prints: bcde
+    # perl5 prints:</pre>
+<p></p>
+<li><strong>Regular Expression</strong><br />
+</li>
+substitution now returns the null string if it fails
+<pre>
+    $string = &quot;test&quot;;
+    $value = ($string =~ s/foo//);
+    print $value, &quot;\n&quot;;</pre>
+<pre>
+    # perl4 prints: 0
+    # perl5 prints:</pre>
+<p>Also see <a href="#numerical_traps">Numerical Traps</a> for another example of this new feature.</p>
+<p></p>
+<li><strong>Regular Expression</strong><br />
+</li>
+<code>s`lhs`rhs`</code> (using backticks) is now a normal substitution, with no
+backtick expansion
+<pre>
+    $string = &quot;&quot;;
+    $string =~ s`^`hostname`;
+    print $string, &quot;\n&quot;;</pre>
+<pre>
+    # perl4 prints: &lt;the local hostname&gt;
+    # perl5 prints: hostname</pre>
+<p></p>
+<li><strong>Regular Expression</strong><br />
+</li>
+Stricter parsing of variables used in regular expressions
+<pre>
+    s/^([^$grpc]*$grpc[$opt$plus$rep]?)//o;</pre>
+<pre>
+    # perl4: compiles w/o error
+    # perl5: with Scalar found where operator expected ..., near &quot;$opt$plus&quot;</pre>
+<p>an added component of this example, apparently from the same script, is
+the actual value of the s'd string after the substitution.
+<code>[$opt]</code> is a character class in perl4 and an array subscript in perl5</p>
+<pre>
+    $grpc = 'a';
+    $opt  = 'r';
+    $_ = 'bar';
+    s/^([^$grpc]*$grpc[$opt]?)/foo/;
+    print ;</pre>
+<pre>
+    # perl4 prints: foo
+    # perl5 prints: foobar</pre>
+<p></p>
+<li><strong>Regular Expression</strong><br />
+</li>
+Under perl5, <code>m?x?</code> matches only once, like <code>?x?</code>. Under perl4, it matched
+repeatedly, like <code>/x/</code> or <code>m!x!</code>.
+<pre>
+    $test = &quot;once&quot;;
+    sub match { $test =~ m?once?; }
+    &amp;match();
+    if( &amp;match() ) {
+        # m?x? matches more then once
+        print &quot;perl4\n&quot;;
+    } else {
+        # m?x? matches only once
+        print &quot;perl5\n&quot;;
+    }</pre>
+<pre>
+    # perl4 prints: perl4
+    # perl5 prints: perl5</pre>
+<p></p>
+<li><strong>Regular Expression</strong><br />
+</li>
+Unlike in Ruby, failed matches in Perl do not reset the match variables
+($1, $2, ..., <a href="../../lib/Pod/perlvar.html#item__24_60"><code>$`</code></a>, ...).
+<p></p></ul>
+<p>
+</p>
+<h2><a name="subroutine__signal__sorting_traps">Subroutine, Signal, Sorting Traps</a></h2>
+<p>The general group of Perl4-to-Perl5 traps having to do with
+Signals, Sorting, and their related subroutines, as well as
+general subroutine traps.  Includes some OS-Specific traps.</p>
+<ul>
+<li><strong><a name="item__28signals_29">(Signals)</a></strong><br />
+</li>
+Barewords that used to look like strings to Perl will now look like subroutine
+calls if a subroutine by that name is defined before the compiler sees them.
+<pre>
+    sub SeeYa { warn&quot;Hasta la vista, baby!&quot; }
+    $SIG{'TERM'} = SeeYa;
+    print &quot;SIGTERM is now $SIG{'TERM'}\n&quot;;</pre>
+<pre>
+    # perl4 prints: SIGTERM is now main'SeeYa
+    # perl5 prints: SIGTERM is now main::1 (and warns &quot;Hasta la vista, baby!&quot;)</pre>
+<p>Use <strong>-w</strong> to catch this one</p>
+<p></p>
+<li><strong><a name="item__28sort_subroutine_29">(Sort Subroutine)</a></strong><br />
+</li>
+reverse is no longer allowed as the name of a sort subroutine.
+<pre>
+    sub reverse{ print &quot;yup &quot;; $a &lt;=&gt; $b }
+    print sort reverse (2,1,3);</pre>
+<pre>
+    # perl4 prints: yup yup 123
+    # perl5 prints: 123
+    # perl5 warns (if using -w): Ambiguous call resolved as CORE::reverse()</pre>
+<p></p>
+<li><strong><a name="item_warn"><code>warn()</code> won't let you specify a filehandle.</a></strong><br />
+</li>
+Although it _always_ printed to STDERR, <a href="#item_warn"><code>warn()</code></a> would let you specify a
+filehandle in perl4.  With perl5 it does not.
+<pre>
+    warn STDERR &quot;Foo!&quot;;</pre>
+<pre>
+    # perl4 prints: Foo!
+    # perl5 prints: String found where operator expected</pre>
+<p></p></ul>
+<p>
+</p>
+<h2><a name="os_traps">OS Traps</a></h2>
+<ul>
+<li><strong><a name="item__28sysv_29">(SysV)</a></strong><br />
+</li>
+Under HPUX, and some other SysV OSes, one had to reset any signal handler,
+within  the signal handler function, each time a signal was handled with
+perl4.  With perl5, the reset is now done correctly.  Any code relying
+on the handler _not_ being reset will have to be reworked.
+<p>Since version 5.002, Perl uses <code>sigaction()</code> under SysV.</p>
+<pre>
+    sub gotit {
+        print &quot;Got @_... &quot;;
+    }
+    $SIG{'INT'} = 'gotit';</pre>
+<pre>
+    $| = 1;
+    $pid = fork;
+    if ($pid) {
+        kill('INT', $pid);
+        sleep(1);
+        kill('INT', $pid);
+    } else {
+        while (1) {sleep(10);}
+    }</pre>
+<pre>
+    # perl4 (HPUX) prints: Got INT...
+    # perl5 (HPUX) prints: Got INT... Got INT...</pre>
+<p></p>
+<li><strong>(SysV)</strong><br />
+</li>
+Under SysV OSes, <a href="../../lib/Pod/perlfunc.html#item_seek"><code>seek()</code></a> on a file opened to append <code>&gt;&gt;</code> now does
+the right thing w.r.t. the <code>fopen()</code> manpage. e.g., - When a file is opened
+for append,  it  is  impossible to overwrite information already in
+the file.
+<pre>
+    open(TEST,&quot;&gt;&gt;seek.test&quot;);
+    $start = tell TEST ;
+    foreach(1 .. 9){
+        print TEST &quot;$_ &quot;;
+    }
+    $end = tell TEST ;
+    seek(TEST,$start,0);
+    print TEST &quot;18 characters here&quot;;</pre>
+<pre>
+    # perl4 (solaris) seek.test has: 18 characters here
+    # perl5 (solaris) seek.test has: 1 2 3 4 5 6 7 8 9 18 characters here</pre>
+<p></p></ul>
+<p>
+</p>
+<h2><a name="interpolation_traps">Interpolation Traps</a></h2>
+<p>Perl4-to-Perl5 traps having to do with how things get interpolated
+within certain expressions, statements, contexts, or whatever.</p>
+<ul>
+<li><strong><a name="item_interpolation">Interpolation</a></strong><br />
+</li>
+@ now always interpolates an array in double-quotish strings.
+<pre>
+    print &quot;To: someone@somewhere.com\n&quot;;</pre>
+<pre>
+    # perl4 prints: To:someone@somewhere.com
+    # perl &lt; 5.6.1, error : In string, @somewhere now must be written as \@somewhere
+    # perl &gt;= 5.6.1, warning : Possible unintended interpolation of @somewhere in string</pre>
+<p></p>
+<li><strong>Interpolation</strong><br />
+</li>
+Double-quoted strings may no longer end with an unescaped $.
+<pre>
+    $foo = &quot;foo$&quot;;
+    print &quot;foo is $foo\n&quot;;</pre>
+<pre>
+    # perl4 prints: foo is foo$
+    # perl5 errors: Final $ should be \$ or $name</pre>
+<p>Note: perl5 DOES NOT error on the terminating @ in $bar</p>
+<p></p>
+<li><strong>Interpolation</strong><br />
+</li>
+Perl now sometimes evaluates arbitrary expressions inside braces that occur
+within double quotes (usually when the opening brace is preceded by <code>$</code>
+or <code>@</code>).
+<pre>
+    @www = &quot;buz&quot;;
+    $foo = &quot;foo&quot;;
+    $bar = &quot;bar&quot;;
+    sub foo { return &quot;bar&quot; };
+    print &quot;|@{w.w.w}|${main'foo}|&quot;;</pre>
+<pre>
+    # perl4 prints: |@{w.w.w}|foo|
+    # perl5 prints: |buz|bar|</pre>
+<p>Note that you can <code>use strict;</code> to ward off such trappiness under perl5.</p>
+<p></p>
+<li><strong>Interpolation</strong><br />
+</li>
+The construct ``this is $$x'' used to interpolate the pid at that point, but
+now tries to dereference $x.  <a href="../../lib/Pod/perlvar.html#item__24_24"><code>$$</code></a> by itself still works fine, however.
+<pre>
+    $s = &quot;a reference&quot;;
+    $x = *s;
+    print &quot;this is $$x\n&quot;;</pre>
+<pre>
+    # perl4 prints: this is XXXx   (XXX is the current pid)
+    # perl5 prints: this is a reference</pre>
+<p></p>
+<li><strong>Interpolation</strong><br />
+</li>
+Creation of hashes on the fly with <code>eval &quot;EXPR&quot;</code> now requires either both
+<code>$</code>'s to be protected in the specification of the hash name, or both curlies
+to be protected.  If both curlies are protected, the result will be compatible
+with perl4 and perl5.  This is a very common practice, and should be changed
+to use the block form of <a href="../../lib/Pod/perlfunc.html#item_eval"><code>eval{}</code></a>  if possible.
+<pre>
+    $hashname = &quot;foobar&quot;;
+    $key = &quot;baz&quot;;
+    $value = 1234;
+    eval &quot;\$$hashname{'$key'} = q|$value|&quot;;
+    (defined($foobar{'baz'})) ?  (print &quot;Yup&quot;) : (print &quot;Nope&quot;);</pre>
+<pre>
+    # perl4 prints: Yup
+    # perl5 prints: Nope</pre>
+<p>Changing</p>
+<pre>
+    eval &quot;\$$hashname{'$key'} = q|$value|&quot;;</pre>
+<p>to</p>
+<pre>
+    eval &quot;\$\$hashname{'$key'} = q|$value|&quot;;</pre>
+<p>causes the following result:</p>
+<pre>
+    # perl4 prints: Nope
+    # perl5 prints: Yup</pre>
+<p>or, changing to</p>
+<pre>
+    eval &quot;\$$hashname\{'$key'\} = q|$value|&quot;;</pre>
+<p>causes the following result:</p>
+<pre>
+    # perl4 prints: Yup
+    # perl5 prints: Yup
+    # and is compatible for both versions</pre>
+<p></p>
+<li><strong>Interpolation</strong><br />
+</li>
+perl4 programs which unconsciously rely on the bugs in earlier perl versions.
+<pre>
+    perl -e '$bar=q/not/; print &quot;This is $foo{$bar} perl5&quot;'</pre>
+<pre>
+    # perl4 prints: This is not perl5
+    # perl5 prints: This is perl5</pre>
+<p></p>
+<li><strong>Interpolation</strong><br />
+</li>
+You also have to be careful about array and hash brackets during
+interpolation.
+<pre>
+    print &quot;$foo[&quot;</pre>
+<pre>
+    perl 4 prints: [
+    perl 5 prints: syntax error</pre>
+<pre>
+    print &quot;$foo{&quot;</pre>
+<pre>
+    perl 4 prints: {
+    perl 5 prints: syntax error</pre>
+<p>Perl 5 is expecting to find an index or key name following the respective
+brackets, as well as an ending bracket of the appropriate type.  In order
+to mimic the behavior of Perl 4, you must escape the bracket like so.</p>
+<pre>
+    print &quot;$foo\[&quot;;
+    print &quot;$foo\{&quot;;</pre>
+<p></p>
+<li><strong>Interpolation</strong><br />
+</li>
+Similarly, watch out for:
+<pre>
+    $foo = &quot;baz&quot;;
+    print &quot;\$$foo{bar}\n&quot;;</pre>
+<pre>
+    # perl4 prints: $baz{bar}
+    # perl5 prints: $</pre>
+<p>Perl 5 is looking for <code>$foo{bar}</code> which doesn't exist, but perl 4 is
+happy just to expand $foo to ``baz'' by itself.  Watch out for this
+especially in <a href="../../lib/Pod/perlfunc.html#item_eval"><code>eval</code></a>'s.</p>
+<p></p>
+<li><strong>Interpolation</strong><br />
+</li>
+<code>qq()</code> string passed to <a href="../../lib/Pod/perlfunc.html#item_eval"><code>eval</code></a>
+<pre>
+    eval qq(
+        foreach \$y (keys %\$x\) {
+            \$count++;
+        }
+    );</pre>
+<pre>
+    # perl4 runs this ok
+    # perl5 prints: Can't find string terminator &quot;)&quot;</pre>
+<p></p></ul>
+<p>
+</p>
+<h2><a name="dbm_traps">DBM Traps</a></h2>
+<p>General DBM traps.</p>
+<ul>
+<li><strong><a name="item_dbm">DBM</a></strong><br />
+</li>
+Existing dbm databases created under perl4 (or any other dbm/ndbm tool)
+may cause the same script, run under perl5, to fail.  The build of perl5
+must have been linked with the same dbm/ndbm as the default for <a href="../../lib/Pod/perlfunc.html#item_dbmopen"><code>dbmopen()</code></a>
+to function properly without <a href="../../lib/Pod/perlfunc.html#item_tie"><code>tie</code></a>'ing to an extension dbm implementation.
+<pre>
+    dbmopen (%dbm, &quot;file&quot;, undef);
+    print &quot;ok\n&quot;;</pre>
+<pre>
+    # perl4 prints: ok
+    # perl5 prints: ok (IFF linked with -ldbm or -lndbm)</pre>
+<p></p>
+<li><strong>DBM</strong><br />
+</li>
+Existing dbm databases created under perl4 (or any other dbm/ndbm tool)
+may cause the same script, run under perl5, to fail.  The error generated
+when exceeding the limit on the key/value size will cause perl5 to exit
+immediately.
+<pre>
+    dbmopen(DB, &quot;testdb&quot;,0600) || die &quot;couldn't open db! $!&quot;;
+    $DB{'trap'} = &quot;x&quot; x 1024;  # value too large for most dbm/ndbm
+    print &quot;YUP\n&quot;;</pre>
+<pre>
+    # perl4 prints:
+    dbm store returned -1, errno 28, key &quot;trap&quot; at - line 3.
+    YUP</pre>
+<pre>
+    # perl5 prints:
+    dbm store returned -1, errno 28, key &quot;trap&quot; at - line 3.</pre>
+<p></p></ul>
+<p>
+</p>
+<h2><a name="unclassified_traps">Unclassified Traps</a></h2>
+<p>Everything else.</p>
+<ul>
+<li><strong><a name="item_require_2fdo_trap_using_returned_value"><a href="../../lib/Pod/perlfunc.html#item_require"><code>require</code></a>/<a href="../../lib/Pod/perlfunc.html#item_do"><code>do</code></a> trap using returned value</a></strong><br />
+</li>
+If the file doit.pl has:
+<pre>
+    sub foo {
+        $rc = do &quot;./do.pl&quot;;
+        return 8;
+    }
+    print &amp;foo, &quot;\n&quot;;</pre>
+<p>And the do.pl file has the following single line:</p>
+<pre>
+    return 3;</pre>
+<p>Running doit.pl gives the following:</p>
+<pre>
+    # perl 4 prints: 3 (aborts the subroutine early)
+    # perl 5 prints: 8</pre>
+<p>Same behavior if you replace <a href="../../lib/Pod/perlfunc.html#item_do"><code>do</code></a> with <a href="../../lib/Pod/perlfunc.html#item_require"><code>require</code></a>.</p>
+<p></p>
+<li><strong><a name="item_split_on_empty_string_with_limit_specified"><a href="../../lib/Pod/perlfunc.html#item_split"><code>split</code></a> on empty string with LIMIT specified</a></strong><br />
+</li>
+<pre>
+    $string = '';
+    @list = split(/foo/, $string, 2)</pre>
+<p>Perl4 returns a one element list containing the empty string but Perl5
+returns an empty list.</p>
+</ul>
+<p>As always, if any of these are ever officially declared as bugs,
+they'll be fixed and removed.</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;perltrap - Perl traps for the unwary</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

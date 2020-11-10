@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Tk::MainWindow - Root widget of a widget tree</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::MainWindow - Root widget of a widget tree</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#methods">METHODS</a></li>
+	<li><a href="#missing">MISSING</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Tk::MainWindow - Root widget of a widget tree</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+    use Tk;</pre>
+<pre>
+    my $mw = MainWindow-&gt;new( ... options ... );</pre>
+<pre>
+    my $this = $mw-&gt;ThisWidget -&gt; pack ;
+    my $that = $mw-&gt;ThatWidget;
+    ...</pre>
+<pre>
+    MainLoop;</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>Perl/Tk applications (which have windows associated with them) create
+one or more <strong>MainWindow</strong>s which act as the containers and parents
+of the other widgets.</p>
+<p><strong>Tk::MainWindow</strong> is a special kind of <a href="../../../site/lib/Tk/Toplevel.html">Toplevel</a> widget. It is
+the root of a widget tree. Therefore <code>$mw-&gt;Parent</code> returns
+<a href="../../../lib/Pod/perlfunc.html#item_undef"><code>undef</code></a>.</p>
+<p>The default title of a MainWindow is the basename of the script
+(actually the Class name used for options lookup, i.e. with basename
+with inital caps) or 'Ptk' as the fallback value.  If more than one MainWindow is created
+or several instances of the script are running at the same time the
+string <code>&quot; #n&quot;</code> is appended where the number <a href="../../../lib/Pod/perlguts.html#item_n"><code>n</code></a> is set to get
+a unique value.</p>
+<p>Unlike the standard Tcl/Tk's wish, perl/Tk allows you to create
+several MainWindows.  When the <em>last</em> <strong>MainWindow</strong> is destroyed
+the Tk eventloop exits (the eventloop is entered with the call of
+<code>MainLoop</code>). Various resources (bindings, fonts, images, colors) are
+maintained or cached for each MainWindow, so each MainWindow consumes more
+resources than a Toplevel. However multiple MainWindows can make sense when
+the user can destroy them independently.</p>
+<p>
+</p>
+<hr />
+<h1><a name="methods">METHODS</a></h1>
+<p>You can apply all methods that a <a href="../../../site/lib/Tk/Toplevel.html">Toplevel</a> widget accepts.</p>
+<p>The method <em>$w</em>-&gt;<strong>MainWindow</strong> applied to any widget will return the
+<strong>MainWindow</strong> to which the widget belongs (the  MainWindow belongs to itself).</p>
+<p>
+</p>
+<hr />
+<h1><a name="missing">MISSING</a></h1>
+<p>Documentation is incomplete.
+Here are <em>some</em> missing items that should be explained in
+more detail:</p>
+<ul>
+<li></li>
+The new mechanism for MainWindows is slightly different to
+other widgets.
+<p></p>
+<li></li>
+There no explanation about what resources are bound
+to a MainWindow (e.g., ClassInit done per MainWindow)
+<p></p>
+<li></li>
+Passing of command line options to override or augment
+arguments of the <code>new</code> method (see <a href="../../../site/lib/Tk/CmdLine.html">the Tk::CmdLine manpage</a>).
+<p></p></ul>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../../../site/lib/Tk/Toplevel.html">Tk::Toplevel</a>
+<a href="../../../site/lib/Tk/CmdLine.html">Tk::CmdLine</a></p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::MainWindow - Root widget of a widget tree</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

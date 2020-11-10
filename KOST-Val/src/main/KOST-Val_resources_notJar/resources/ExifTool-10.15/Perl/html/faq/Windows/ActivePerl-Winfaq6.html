@@ -1,0 +1,690 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+
+<head>
+<title>ActivePerl FAQ - Web Server Information</title>
+<link rel="STYLESHEET" href="../../Active.css" type="text/css" media="screen">
+</head>
+
+<body>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#EAE2BB">
+<tr> 
+<td width="57"><a target=_blank href="http://www.ActiveState.com/ActivePerl/">
+<img src="../../images/activeperl_logo.gif" width="57" height="48" border="0" alt="ActivePerl"></a></td>
+<td><div align="center" class="heading">ActivePerl User Guide</div></td>
+<td width="112"><a target=_blank  href="http://www.ActiveState.com">
+<img src="../../images/AS_logo.gif" width="112" height="48" border="0"  alt="ActiveState" /></a></td>
+</tr>
+<tr>
+<td class="lineColour" colspan="3"></td>
+</tr>
+</table>
+
+<h1>Web Server Information</h1>
+
+<ul>
+  <li><a class="doc" href="#NAME">NAME</a></li>
+  <li><a class="doc" href="#DESCRIPTION">DESCRIPTION</a>
+    <ul>
+      <li><a class="doc" href="#What_HTTP_servers_support_Perl_f">What HTTP servers support
+        ActivePerl?</a></li>
+      <li><a class="doc" href="#How_do_I_use_Perl_for_Win32_unde">How do I use ActivePerl
+        under Apache?</a></li>
+<!--      <li><a class="doc" href="#How_do_I_configure_the_EMWAC_htt">How do I configure the
+        EMWAC https server to support ActivePerl?</a></li>-->
+      <li><a class="doc" href="#How_do_I_configure_IIS_3_0_or_lo">How do I configure IIS 3.0
+        or lower to support Perl?</a></li>
+      <li><a class="doc" href="#How_do_I_configure_Microsoft_IIS">How do I configure
+        Microsoft IIS 4.0/IIS 5.0 to support Perl?</a></li>
+        <li><a class="doc" href="#How_do_I_configure_IIS_6">How do I configure IIS 6
+        to support Perl?</a></li>
+      <li><a class="doc" href="#How_do_I_configure_iPlanet_web_">How do I configure
+        iPlanet web servers to support ActivePerl?</a></li>
+<!--      <li><a class="doc" href="#How_do_I_configure_WebSite_1_0_t">How do I configure WebSite
+        1.0 to support ActivePerl?</a></li>
+      <li><a class="doc" href="#How_do_I_configure_WebSite_Profe">How do I configure WebSite
+        Professional to support ActivePerl?</a></li>-->
+      <li><a class="doc" href="#How_do_I_configure_Microsoft_Per">How do I configure
+        Microsoft Personal Web Server 1.0x for Windows 95?</a></li>
+      <li><a class="doc" href="#How_do_I_configure_other_web_ser">How do I configure other
+        web servers to support ActivePerl?</a></li>
+      <li><a class="doc" href="#My_program_runs_fine_from_the_co">My program runs from
+        the command line, but not as a CGI</a></li>
+      <li><a class="doc" href="#This_is_all_such_a_hassle_why_c">This is all such a hassle;
+        why can't I just put perl.exe in my CGI?</a></li>
+    </ul>
+  </li>
+  <li><a class="doc" href="#AUTHOR_AND_COPYRIGHT">AUTHOR AND COPYRIGHT</a></li>
+</ul>
+ 
+<h2><a name="NAME">NAME</a></h2>
+<p>ActivePerl-faq6 - Web server information</p>
+ 
+<h2><a name="DESCRIPTION">DESCRIPTION</a></h2>
+<p>ActivePerl Web Server Configuration and Troubleshooting</p>
+ 
+<h2><a name="What_HTTP_servers_support_Perl_f">What HTTP servers support
+ActivePerl?</a></h2>
+
+<p>Most Windows web servers that use the CGI standard or ISAPI
+will run ActivePerl scripts. The following servers are known to work with
+ActivePerl (known protocols in brackets):</p>
+<dl>
+  <dt><h3><a name="item_Apache">Apache for Win32 [CGI, mod_perl]</a></h3></dt>
+  <dd>
+    <pre>    <a class="doc" href="http://www.apache.org">http://www.apache.org</a>
+    mod_perl home page: <a class="doc" href="http://perl.apache.org">http://perl.apache.org</a>
+</pre>
+  </dd>
+  <dt><h3><a name="item_Microsoft">Microsoft Internet Information Server
+    [CGI, ISAPI]</a></h3></dt>
+  <dd>
+    <pre>    <a class="doc" href="http://www.microsoft.com/iis/">http://www.microsoft.com/iis/</a>
+</pre>
+  </dd>
+  <dt><h3><a name="item_iPlanet">iPlanet Enterprise and FastTrack Server [CGI]</a></h3></dt>
+  <dd>
+    <pre>    <a class="doc" href="http://www.iplanet.com/">http://www.iplanet.com/</a>
+</pre>
+</dl>
+ 
+<h2><a name="How_do_I_use_Perl_for_Win32_unde">How do I use ActivePerl under
+Apache?</a></h2>
+<p>If you want to put all of your CGI scripts into one directory, add the
+following line to your <i>srm.conf</i> file (You can choose any directory
+you'd like, but make sure it exists):</p>
+<pre>
+    ScriptAlias /cgi-bin/ &quot;C:/Program Files/Apache Group/Apache/cgi-bin/&quot;
+</pre>
+<p>After you have made this change, stop and restart the Apache service.</p>
+<p>Apache provides an emulation of the UNIX shebang (#!/path/to/perl) syntax, so
+the next step is easy. You can put you Perl scripts into your <i>cgi-bin</i>
+directory, as long as you have a path to a valid interpreter at the top. For
+example:</p>
+<pre>
+    #!C:\PERL\5.00464\bin\MSWin32-x86\perl.exe
+     
+    use CGI qw(:standard) ;
+    print header();
+    print &quot;Hello, world&quot;;
+</pre>
+<p>If you want to enable CGI scripts based on an extension, such as <i>.pl</i>,
+you need to add the following line to <i>srm.conf</i>:</p>
+<pre>
+    AddHandler cgi-script .pl
+</pre>
+<p>By default, CGI scripts are not allowed in your DocumentRoot directory, but
+they are allowed in other document directories. Document directories are created
+with the Alias command in <i>srm.conf</i>:</p>
+<pre>
+    Alias /ResourceKit/ &quot;E:/utilsamp/&quot;
+</pre>
+<p>You can then include files that end in <i>.pl</i> within a document
+directory. You will still need to include the #! line with the full path to the <i>perl.exe</i>
+interpreter, as shown earlier.</p>
+<p>If you want to allow CGI scripts in the DocumentRoot directory, add the
+ExecCGI option to the Options directive between the &lt;Directory&gt; and
+&lt;/Directory&gt; entry for your DocumentRoot in <i>access.conf</i> (these
+appear directly after the comment titled:</p>
+<pre>
+    # This should be changed to whatever you set DocumentRoot to.
+</pre>    
+<p>After you have updated it, your Options directive may look something like:
+<pre>
+    Options Indexes FollowSymLinks ExecCGI
+</pre>
+ 
+<h2><a name="How_do_I_configure_IIS_3_0_or_lo">How do I configure IIS 3.0 or
+lower to support ActivePerl?</a></h2>
+<p>By default, the ActivePerl installation maps the <i>.plx</i> extension to
+Perl for ISAPI. You can override the extension used during installation. Because
+the installation does this only when IIS is already installed, you must install
+IIS first, then install ActivePerl. If you need to reconfigure these settings,
+or if you must set these by hand, the instructions in this section will prove
+useful.</p>
+<p>Microsoft Internet Information Server (IIS) ships with Windows NT Server.
+Peer Web Services (PWS) ships with Windows NT Workstation. Configuring the
+products is essentially the same. First, you should consult Chapter 8,
+Publishing Information and Applications, in the IIS documentation.</p>
+<p>You need to follow these steps to get ActivePerl scripts to run under IIS:</p>
+<ol>
+  <li>
+    <p>Associate the extension for your scripts with the appropriate interpreter
+    in the script map for IIS. This is under the Registry key HKEY_LOCAL_SYSTEM,
+    with the sub-key ``System\CurrentControlSet\Services\W3SVC\Parameters\Script
+    Map''. Many people map two extensions: one to <i>perl.exe %s</i> (for
+    example, <i>.pl</i>) and another to <i>PerlIS.dll</i> (for example, <i>.plx</i>).
+    Note that mapping an extension in the script map is <i>not</i> the same as
+    associating the extension in Explorer. Use the full paths to the executable
+    files in the script map.</p>
+  </li>
+  <li>
+    <p>Put your scripts in a virtual directory on the server that has Execute
+    access but not Read access. You can add virtual directories or view their
+    access with the Internet Service Manager. Remember that the URLs for your
+    virtual directories can't overlap with URLs to directories in the WWW root
+    directory. For example, You can't have a <i>cgi-bin</i> virtual directory
+    and a real <i>cgi-bin</i> subdirectory of the WWW root.</p>
+  </li>
+  <li>
+    <p>Ensure that your scripts are readable by the account used by the IIS
+    server. You set this account in Internet Service Manager; it is set to
+    IUSR_[your server name] by default. See also <a class="doc" href="ActivePerl-Winfaq4.html#What_is_a_Windows_NT2000_service_">What
+    is a Windows NT service?</a> and <a class="doc" href="ActivePerl-Winfaq4.html#How_do_I_set_permissions_on_a_fi">How
+    do I set permissions on a file?</a>.</p>
+  </li>
+  <li>
+    <p>Ensure that all supporting files, like the perl binary files, the perl
+    library files, and the modules that you use, are all readable by the account
+    used by the IIS server. See also <a class="doc" href="ActivePerl-Winfaq4.html#What_is_a_Windows_NT2000_service_">What
+    is a Windows NT service?</a> and <a class="doc" href="ActivePerl-Winfaq4.html#How_do_I_set_permissions_on_a_fi">How
+    do I set permissions on a file?</a>.</p>
+  </li>
+</ol>
+<p>You need to restart the web service after making the Registry changes or
+installing Perl.</p>
+<p>Because IIS runs as a service (see <a class="doc" href="ActivePerl-Winfaq4.html#What_is_a_Windows_NT2000_service_">What
+is a Windows NT service?</a>), you need to take special steps to make sure that
+files and environment variables are available to it.</p>
+ 
+<h2><a name="How_do_I_configure_Microsoft_IIS">How do I configure Microsoft IIS
+4.0/IIS 5.0 to support ActivePerl?</a></h2>
+
+<p>Microsoft IIS 4.0 ships with Windows NT Server 5.0, and PWS 4.0 ships with Windows NT Workstation 5.0.
+Both IIS and PWS are available as part of the Microsoft Windows NT 4.0 Option Pack. You can find a link to the
+Option Pack at <a class="doc" href="http://www.microsoft.com/iis/">http://www.microsoft.com/iis/</a></p>
+
+<p>Microsoft IIS 5.0 is not automatically installed on all Windows 2000 systems. Check your Windows 2000 
+documentation on
+how to install IIS 5.0.
+
+<p>To configure IIS or PWS 4.0 to run Perl scripts:</p>
+<ol>
+  <li>
+    <p>Open the Internet Service Manager. This will bring up the
+    Microsoft Management Console with the Internet Service Manager snap-in
+    already selected.</p>
+  </li>
+  <li>
+    <p>From the tree display on the left, select the level at which to apply the
+    mappings. You can choose an entire server, web site, or a given virtual
+    directory.</p>
+  </li>
+  <li>
+    <p>Select Properties from the Action menu.</p>
+  </li>
+  <li>
+    <p>If you chose to administer the properties for the entire server, the
+    Server Properties dialog will appear. Select WWW Service from the Master
+    Properties pull-down menu and click the Edit button under Master Properties.
+    This opens WWW Service Master Properties. Select the Home Directory tab and
+    proceed to step 7.</p>
+  </li>
+  <li>
+    <p>If you chose to administer the properties for an entire web site, the Web
+    Site Properties sheet appears. Select the Home Directory tab and proceed to
+    step 7.</p>
+  </li>
+  <li>
+    <p>If you chose to administer the properties for a virtual directory, the
+    Virtual Directory Properties sheet appears. Select the Virtual Directory tab
+    and proceed to step 7.</p>
+  </li>
+  <li>
+    <p>Click the Configuration button. This opens the Application Configuration
+    dialog.</p>
+  </li>
+  <li>
+    <p>Select the App Mappings tab and click the Add button. You see the
+    Add/Edit Application Extension Mapping dialog.</p>
+  </li>
+  <li>
+    <p>To run Perl as a CGI application, type the full path to <i>Perl.exe</i>
+    followed by <code>%s %s</code>. When a script is executed, the first <code>%s</code>
+    will be replaced by the full path to the script, and the second <code>%s</code>
+    will be replaced by the script parameters.</p>
+  </li>
+  <li>
+    <p>To run Perl for ISAPI, type the full path to <i>PerlIS.dll</i>. The <code>%s
+    %s</code> is not required for ISAPI DLLs.</p>
+  </li>
+  <li>
+    <p>In the Extension field, type <i>.pl</i> or <i>.plx</i> (or whatever
+    extension you want to use).</p>
+  </li>
+  <li>
+    <p>The application mapping is now complete. Click the OK button and click OK
+    to dismiss any remaining dialogs/property sheets.</p>
+  </li>
+  <li>
+    <p>Close the IIS Internet Service Manager.</p>
+  </li>
+</ol>
+<p>Because IIS runs as a service (see <a class="doc" href="ActivePerl-Winfaq4.html#What_is_a_Windows_NT2000_service_">What
+is a Windows NT service?</a>), you need to take special steps to make sure that
+files and environment variables are available to it.</p>
+
+<h2><a name="How_do_I_configure_IIS_6">How do I configure IIS 6
+to support Perl?</a></h2>
+
+<p>To configure ActivePerl to work with IIS 6 on Windows 2003:</p>
+
+<ol>
+  <li><p>Load the <strong>Internet Information Services (IIS) Manager</strong>
+  applet from Window's <strong>Administrative Tools</strong> menu.</p></li>
+  
+  <li><p>Select the desired system, then select <strong>Web Service
+  Extensions</strong>. Click <strong>Add new Web service extension</strong>.</p></li>
+  
+  <li><p>Enter a descriptive <strong>Extension name</strong> (such as "Perl
+  CGI"), then enter the following string in the <strong>Required files</strong>
+  field:</p>
+  
+  <pre><blockquote>C:\Perl\bin\perl.exe "%s" %s</blockquote></pre>
+  
+  <p>As necessary, modify the path to the Perl executable on the selected system.
+  Check <strong>Set extension status to Allowed</strong>. Click
+  <strong>OK</strong>.</p></li>
+  
+  <li><p>Expand the <strong>Web Sites</strong> folder in the IIS Manager and
+  right-click <strong>Default Web Site</strong>. Select <strong>New |
+  Virtual Directory...</strong>. Use the wizard to specify the location
+  of your Perl CGI programs. On the <strong>Access Permissions</strong>
+  page, ensure that <strong>Read</strong>, <strong>Run scripts</strong>
+  and <strong>Execute</strong> are enabled.</p></li>
+  
+  <li><p>Right-click the new virtual directory and select <strong>Properties</strong>.
+  On the <strong>Mappings</strong> tab of the <strong>Application
+  Configuration</strong> page, ensure that ".pl" extensions are mapped to the
+  Perl interpreter specified above. (Enter the same string in the
+  <strong>Executable Path</strong> field as shown in step 3.)</p></li>
+  
+  <li><p>In order to run ASP scripts, ensure that <strong>Active
+  Server Pages</strong> are "allowed". Under the <strong>Web Service
+  Extensions</strong> folder, select <strong>Active Server Pages</strong>.
+  Change the status from "Prohibited" to "Allowed".</p></li>
+  
+</ol>
+
+ 
+  
+ 
+<h2><a name="How_do_I_configure_iPlanet_web_">How do I configure iPlanet web
+servers to support ActivePerl?</a></h2>
+<p>To set up ActivePerl to run on FastTrack Server, follow these steps:</p>
+<ol>
+  <li>
+    <p>Install FastTrack Server, and make sure you can retrieve HTML pages.</p>
+  </li>
+  <li>
+    <p>Associate Perl scripts with the perl interpreter, if you haven't already.
+    See <a class="doc" href="ActivePerl-Winfaq4.html#How_do_I_associate_Perl_scripts_">How
+    do I associate Perl scripts with perl?</a> for how to do this. Re-start the server after making the association.</p>
+  </li>
+  <li>
+    <p>Set up a Shell CGI directory to run Perl scripts. A regular CGI directory
+    will not work -- that is only for executable files. You set this up with the
+    FastTrack Administrator; see the documentation for details.</p>
+  </li>
+</ol>
+<p>If you would like to access Perl CGI scripts in other directories, you need
+to associate an extension, such as <i>.pl</i>, with the shellcgi MIME type.
+Before you follow these steps, you must add at least one Shell CGI directory -
+this will enable shellcgi on your server (you can delete this directory, and
+shellcgi will remain enabled). Follow these steps to associate <i>.pl</i> with
+the shellcgi MIME type:</p>
+<ol>
+  <li>
+    <p>In the Server Administrator, click Server Preferences, then select MIME
+    Types from the frame on the left.</p>
+  </li>
+  <li>
+    <p>If you want to use <i>.pl</i> as the extension for Perl scripts, find
+    and remove the application/x-perl MIME type (this is mapped to <i>.pl</i>
+    by default).</p>
+  </li>
+  <li>
+    <p>Add a new MIME Type with magnus-internal/shellcgi as the Content Type,
+    and pl as the File Suffix. If a type for magnus-internal/shellcgi already
+    exists, simply add pl to the list of File Suffixes. Don't include the
+    leading dot on the file suffix.</p>
+  </li>
+  <li>
+    <p>Save and apply these changes, then re-start the server. You should be able to put a Perl CGI script
+    in any directory, provided the script ends with the <i>.pl</i> suffix.</p>
+  </li>
+</ol>
+<p>If you are having trouble running Perl scripts on your iPlanet server, check
+the following:</p>
+<ul>
+  <li>
+    <p>Ensure that the script is readable by the account used by the iPlanet
+    service. Generally, this means you should make the script readable by the
+    Everyone group.</p>
+  </li>
+  <li>
+    <p>Ensure that all supporting files, like the perl binary files, the perl
+    library files, and the modules that you use, are all readable by the account
+    used by the iPlanet service (i.e., the Everyone group).</p>
+  </li>
+</ul>
+<p>One nice thing about FastTrack server is that the Error Log will give
+detailed reasons why your CGI script isn't running, so this is a good thing to
+check first when you are having configuration problems.</p>
+<p>Because iPlanet servers run as services (see <a class="doc" href="ActivePerl-Winfaq4.html#What_is_a_Windows_NT2000_service_">What
+is a Windows NT service?</a>), you need to take special steps to make sure that
+files and environment variables are available to them.</p>
+<p>Some people have reported problems with handling POST'ed data with Perl
+programs with iPlanet servers. Since iPlanet apparently uses associations to
+run scripts, and POST'ed data is sent on STDIN to a program. This may be related
+to the problems with redirection.</p>
+ 
+<!-- <h2><a name="How_do_I_configure_WebSite_1_0_t">How do I configure WebSite 1.0 to
+support ActivePerl?</a></h2>
+<p>The following information is for setting up O'Reilly WebSite to use
+ActivePerl for standard CGI (not PerlIS).</p>
+<ol>
+  <li>
+    <p>Install WebSite. Make sure you can retrieve HTML pages before continuing.</p>
+  </li>
+  <li>
+    <p>Associate Perl scripts with the perl interpreter, if you haven't already.
+    See <a class="doc" href="ActivePerl-Winfaq4.html#How_do_I_associate_Perl_scripts_">How
+    do I associate Perl scripts with perl?</a> for how to do this. You may need
+    to re-start the server after making the association.</p>
+  </li>
+  <li>
+    <p>Set up a Standard CGI directory to hold your Perl scripts. You can use
+    the Server Properties dialog box do to this.</p>
+  </li>
+  <li>
+    <p>Ensure that the script is readable by the account used by the WebSite
+    service. Generally, this means you should make the script readable by the
+    Everyone group.</p>
+  </li>
+  <li>
+    <p>Ensure that all supporting files, like the perl binary files, the perl
+    library files, and the modules that you use, are all readable by the account
+    used by the WebSite service (i.e., the Everyone group).</p>
+  </li>
+</ol>
+<p>Because WebSite servers run as services (see <a class="doc" href="ActivePerl-Winfaq4.html#What_is_a_Windows_NT_service_">What
+is a Windows NT service?</a>), you need to take special steps to make sure that
+files and environment variables are available to them.</p>
+ 
+<h2><a name="How_do_I_configure_WebSite_Profe">How do I configure WebSite
+Professional to support ActivePerl?</a></h2>
+<p>The following information is for setting up O'Reilly WebSite Professional to
+use ActivePerl CGI (not PerlIS).</p>
+<ol>
+  <li>
+    <p>Install WebSite Professional. Make sure you can retrieve HTML pages
+    before continuing.</p>
+  </li>
+  <li>
+    <p>Open Server Properties and click the Mapping tab. Server Properties is in
+    the WebSite Professional folder on the Start menu.</p>
+  </li>
+  <li>
+    <p>From the List Selector on the Mapping tab, choose Content Types.</p>
+  </li>
+  <li>
+    <p>If there is an existing mapping for the extension you want to use (such
+    as <i>.pl</i>), highlight the mapping and click Delete. Click Apply to
+    immediately apply the change.</p>
+  </li>
+  <li>
+    <p>Choose a file extension for Perl, such as <i>.pl</i>, and type it into
+    the File Extension field. Make sure you include the leading period/full stop
+    (.) in the file extension.</p>
+  </li>
+  <li>
+    <p>Type wwwserver/shellcgi in the Media or Server-Side Content Type field.</p>
+  </li>
+  <li>
+    <p>Click Add. Click Apply to immediately apply the change.</p>
+  </li>
+  <li>
+    <p>Change the List Selector to Associations.</p>
+  </li>
+  <li>
+    <p>If there is an existing mapping for the extension you want to use (such
+    as <i>.pl</i>), highlight the mapping and click Delete. Click Apply to
+    immediately apply the change.</p>
+  </li>
+  <li>
+    <p>Type the file extension you chose in step 5 in the File Extension field.
+    Make sure you include the leading period/full stop (.) in the file
+    extension.</p>
+  </li>
+  <li>
+    <p>Type the full path to Perl.exe, such as <i>C:\Perl\5.00500\bin\MSWin32-x86\Perl.exe</i>,
+    in the Associated EXE or DLL field.</p>
+  </li>
+  <li>
+    <p>Click Add. Click Apply to immediately apply the change.</p>
+  </li>
+  <li>
+    <p>Close Server Properties. Reply appropriately to ``Terminate active
+    connections and update the server settings?''. The server is now configured
+    to execute Perl CGI scripts in directories marked as cgi-bin as well as
+    document directories.</p>
+  </li>
+</ol>
+<p>If you have trouble running scripts, ensure that the script is readable by
+the account used by the WebSite service. Generally, this means you should make
+the script readable by the Everyone group. Also, ensure that all supporting
+files, like the perl binary files, the perl library files, and the modules that
+you use, are all readable by the account used by the WebSite service (i.e., the
+Everyone group).</p>
+<p>Because WebSite servers run as services (see <a class="doc" href="ActivePerl-Winfaq4.html#What_is_a_Windows_NT_service_">What
+is a Windows NT service?</a>), you need to take special steps to make sure that
+files and environment variables are available to them.</p>
+ -->
+ 
+<h2><a name="How_do_I_configure_Microsoft_Per">How do I configure Microsoft
+Personal Web Server 1.0x for Windows 95 to support ActivePerl?</a></h2>
+<p>Microsoft Personal Web Server for Windows 95 is a scaled-down version of
+Microsoft Internet Information Server. Although it is not documented, it appears
+that the method used to support ActivePerl with IIS will also work with Personal
+Web Server. See <a class="doc" href="#How_do_I_configure_IIS_3_0_or_lo">How do I configure
+IIS 3.0 or lower to support ActivePerl?</a>.</p>
+ 
+<h2><a name="How_do_I_configure_other_web_ser">How do I configure other web
+servers to support ActivePerl?</a></h2>
+<p>If your web server isn't listed, check the server's documentation on how to
+set up a CGI interpreter. In general the process is as follows:</p>
+<ul>
+  <li>
+    <p>Associate a file extension like <i>.pl</i> with the perl binary, and
+    let the server know where the binary is. This may be a shell association,
+    (see <a class="doc" href="ActivePerl-Winfaq4.html#How_do_I_associate_Perl_scripts_">How
+    do I associate Perl scripts with perl?</a>), or a custom association.</p>
+  </li>
+  <li>
+    <p>Set up a directory where executable scripts go, and put your Perl script
+    there.</p>
+  </li>
+  <li>
+    <p>Ensure that the user account that the web server uses can read the script
+    as well as any ancillary files (perl binary files, library files, modules,
+    etc.). This usually means making the files available to the Everyone group.</p>
+  </li>
+</ul>
+<p>Because most web servers run as services (see <a class="doc" href="#How_do_I_configure_IIS_3_0_or_lo">How
+do I configure IIS 3.0 or lower to support ActivePerl?</a>), you need to take
+special steps to make sure that files and environment variables are available to
+them.</p>
+ 
+<h2><a name="My_program_runs_fine_from_the_co">My program runs fine from the
+command line, but bombs out when run as a CGI script.</a></h2>
+<p>Usually, this means one of two things: either you have misconfigured your
+system, or your script does not output the right stuff to be a CGI script.</p>
+<p>Before you do anything else, check this list:</p>
+<ul>
+  <li>
+    <p>Make sure you have correctly configured your server for <i>perl.exe</i>
+    or <i>PerlIS.dll</i>. This is often accomplished by mapping a specific
+    extension, such as <i>.pl</i> or <i>.plx</i>, to <i>perl.exe</i> or <i>
+    PerlIS.dll</i>.
+    Usually, web servers rely on their own mappings, rather than the Windows
+    command-line mappings.</p>
+  </li>
+  <li>
+    <p>If your web server depends on the <code>PATH</code> variable to find <i>perl.exe</i>,
+    make sure that you put <i>perl.exe</i> in your system <code>PATH</code>,
+    not just your user <code>PATH</code>. This only applies to Windows NT/2000.</p>
+  </li>
+  <li>
+    <p>If your web server requires directories to be marked as executable, make
+    sure the directory that contains the script is marked as such.</p>
+  </li>
+  <li>
+    <p>Since the web server can be configured to run as a local user, be sure
+    that the user has access to the script file and the Perl binaries and
+    libraries. Many web servers run as the ``Local System'' account, which
+    generally has sufficient permissions.</p>
+  </li>
+  <li>
+    <p>If <i>Perl.exe</i> or Perl for ISAPI fail to work as expected check
+    your event logs for clues.</p>
+  </li>
+  
+  <li>
+    <p>Ensure that HTTP headers are being output correctly. Use the following
+    script as a test:
+    
+    <pre>
+    #!C:\perl\bin\perl.exe
+    # previous line added to support Apache 1/2
+    # please adjust to your own Perl path!
+    use strict;
+    use CGI;
+
+    my $page = new CGI;
+    my $msg = "Hello from ActivePerl CGI!";
+
+    # print header and start the markup output
+    print $page->header( "text/html" ),$page->start_html( $msg );
+    print $page->h2($msg);
+    print $page->end_html;
+    # end code
+    </pre>
+
+
+</ul>
+<p>Check the information above with a script that you know produces the right
+output for the CGI protocol (scripts in this FAQ are a good first choice). Try
+it with your own script after you're sure the test script will work.</p>
+<p>If you are sure the server is running the script, but it only generates error
+messages in your browser, there are some tools that may help you out. CGI::Carp
+is used to send debugging information to the browser or log file. Even if your
+script has a compilation error, it can usually intercept and report errors. To
+use CGI::Carp, include the following lines in your program:</p>
+<pre>
+    # The stuff in the BEGIN block will be executed very early
+    # on, even before the rest of this script is parsed.
+    #
+    BEGIN {
+        
+        # Use the CGI::Carp module and import the carpout() function.
+        #
+        use CGI::Carp qw(carpout);
+        
+        # Send warnings and die messages to the browser.
+        #
+        carpout(STDOUT);
+        
+    }
+</pre>
+<p>If your script has an error, you may see something like this in the browser:</p>
+<pre>
+    [Wed Jun 3 09:32:28 1998] C:\inetpub\scripts\test.pl: Error message! at
+    C:\inetpub\scripts\test.pl line 38. 
+</pre>
+<p>Sometimes, it can be helpful to put yourself in somebody else's position. The
+libwww-perl bundle (LWP) is available from CPAN, but you can install it using
+the Perl Package Manager (PPM). LWP may be included with future releases of
+ActivePerl.</p>
+<p>LWP includes the powerful <i>lwp-request</i> script, which lets you see
+things from the browser's perspective. Invoke <i>lwp-request</i> with the name
+of a URL to see the content of the response, as in <code>lwp-request
+http://localhost</code>. To inspect the headers of an HTTP response, invoke <i>lwp-request</i>
+with the <code>-de</code> switch:</p>
+<pre>
+    C:\&gt;lwp-request -de http://localhost
+    Date: Wed, 03 Jun 1998 13:37:31 GMT
+    Accept-Ranges: bytes
+    Server: Microsoft-IIS/4.0
+    Content-Length: 4325
+    Content-Location: http://localhost/Default.htm
+    Content-Type: text/html
+    ETag: &quot;0c1e58b063bd1:1237&quot;
+    Last-Modified: Thu, 09 Apr 1998 12:09:28 GMT
+    Client-Date: Wed, 03 Jun 1998 13:37:31 GMT
+    Client-Peer: 127.0.0.1:0
+</pre>
+<p>This tool can be very helpful in figuring out exactly what your scripts are
+doing. Whatever you do, don't give up hope. It is, in fact, possible to get a
+Perl script running on your web server. Really.</p>
+ 
+<h2><a name="This_is_all_such_a_hassle_why_c">This is all such a hassle; why
+can't I just put perl.exe in my CGI directory and use it in my URL?</a></h2>
+<p>First, the warning: DON'T DO THIS. REALLY. EVEN IF YOU DON'T UNDERSTAND WHY
+NOT, DON'T.</p>
+<p>Now the explanation: the idea here is to put <i>perl.exe</i> in your CGI
+directory (however you configure that on your server), and use URL syntax like
+the following:</p>
+<pre>
+    http://soon.to.be.a.victim.net/cgi-bin/perl.exe?myscript.pl
+</pre>
+<p>to run <i>myscript.pl</i>. This keeps you from having to figure out how to
+configure your server to associate extensions like <i>.pl</i> with an
+interpreter like <i>perl.exe</i>.</p>
+<p>In fact, on some early Win32-based web servers (iPlanet 1.x servers in
+particular), it was impossible to associate a script file with an interpreter.
+This method was recommended by vendors as a viable approach to running Perl
+scripts on your web server.</p>
+<p>Anyone with a devious mind and a little knowledge of Perl can see that with
+this configuration, hackers could start doing all kinds of horrible things on
+the server. All they'd have to do is send made-up URLs, using the <code>-e</code>
+command line switch in <i>perl.exe</i>, in order to do stuff like delete all
+files on a drive:</p>
+<pre>
+    http://aaaugh.that.hurts.net/cgi-bin/perl.exe?-e?'del%20c:\*.*%20/S%20/Q'
+</pre>
+<p>Of course, a true computer criminal would never do something so crude and
+obvious, but would instead use this as a launching point to cause irreparable
+harm to your organization.</p>
+<p>The following URL covers this issue in more depth:</p>
+<pre>
+    <a class="doc" href="http://www.cert.org/advisories/CA-1996-11.html">http://www.cert.org/advisories/CA-1996-11.html</a>
+</pre>
+<p>Tom Christiansen has also written a good discussion of the subject:</p>
+<pre>
+    <a class="doc" href="http://www.perl.com/perl/news/latro-announce.html">http://www.perl.com/perl/news/latro-announce.html</a>
+</pre>
+<p>Note that one suggested solution to this problem is wrapping your Perl script
+in a batch file using pl2bat or your own custom batch code. THIS IS ALSO NOT
+GOOD. Most of the primitive servers that won't allow file associations are also
+susceptible to a bug that allows a user to enter any DOS command after the bat
+file. </p>
+ 
+<h2><a name="AUTHOR_AND_COPYRIGHT">AUTHOR AND COPYRIGHT</a></h2>
+<p>This FAQ was originally assembled and maintained by Evangelo Prodromou.
+It has been revised and updated by Brian Jepson of O'Reilly and Associates, and
+David Grove and David Dmytryshyn of ActiveState.</p>
+<p>This FAQ is in the public domain. If you use it, however, please ensure that
+you give credit to the original authors.</p>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+  <tr>
+    <td class="block" valign="MIDDLE" width="100%" bgcolor="#cccccc"><h3>
+      <p class="block">&nbsp;ActivePerl FAQ - Web Server Information</p>
+      </h3></td>
+  </tr>
+</table>
+
+</body>
+
+</html>

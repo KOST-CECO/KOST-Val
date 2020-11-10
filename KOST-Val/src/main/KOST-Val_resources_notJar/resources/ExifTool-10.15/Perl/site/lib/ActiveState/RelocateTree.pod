@@ -1,0 +1,260 @@
+=pod
+
+=head1 NAME
+
+ActiveState::RelocateTree - Relocate a Perl tree, substituting paths at the
+same time.
+
+=head1 SYNOPSIS
+
+   use ActiveState::RelocateTree qw(relocate);
+   relocate(from => 'C:\Perl', to => 'D:\lang\perl');
+
+=head1 DESCRIPTION
+
+ActiveState::RelocateTree relocates a Perl distribution wholesale into a new
+distribution. It comes with the script I<reloc_perl>, which is used to install
+the ActivePerl distribution into the final install location.
+
+Perl can't just be copied into a new location without relocating some files.
+In Windows this is less of a problem because the executable knows its actual
+location and uses that to find its library tree. On Unix, the location of the
+libraries must be encoded within the perl binary. Most scripts also contain a
+"shebang" line of the form C<#!/path/to/perl>, which points at the absolute
+path of the Perl executable.
+
+=head1 Using ActiveState::RelocateTree
+
+The module exports four functions you can use to relocate Perl trees. You can
+also use these functions to search for and replace arbitrary strings in all
+files in a directory tree.
+
+=head2 The relocate() Function
+
+   relocate(%options);
+
+This is the main entry point that applications will use. It has reasonable
+defaults, so in most cases you probably just call it like this:
+
+   relocate(to => $to_path);
+
+The following are all recognized options:
+
+=over 4
+
+=item F<to>
+
+The tree which must be transformed. Unless the I<inplace> option is true, it
+will copy the tree at I<from> to I<to> before transforming it. This option is
+required.
+
+=item F<from>
+
+The path from which to copy the Perl tree. Defaults to C<$Config{prefix}>, the
+home of the currently executing perl interpreter.
+
+=item F<search>
+
+This is the path which will be searched for and replaced in I<to>. This
+defaults to the value of I<from>.
+
+=item F<replace>
+
+The replacement value for I<search>. This defaults to the value of I<to>.
+
+=item F<inplace>
+
+If the tree at I<to> already exists and you just want to transform it in-situ,
+use this option. It skips the copying step and just transforms the tree.
+If I<from> equals I<to>, it is set to true and cannot be unset. Otherwise it
+defaults to false.
+
+=item F<killorig>
+
+If you're really moving the tree, this option will remove I<from> after
+copying and transforming I<to>. Use with care! Defaults to false.
+
+=item F<bak>
+
+While relocating the tree, relocate() creates a backup file for each file
+being edited. This option allows you to specify the extension of backup files.
+Defaults to C<.~1~>.
+
+=item F<savebaks>
+
+Normally relocate() deletes the backup files before returning. I<savebaks>
+skips that step, leaving the backup files alone. Defaults to false (backups
+are deleted).
+
+=item F<textonly>
+
+Normally relocate() edits both text and binary files. Text files are replaced
+using a normal search-and-replace algorithm, but binary files are NULL-padded
+so that all offsets remain the same. By default, I<textonly> is false, i.e.
+relocate() operates on both text and binary files.
+
+=item F<ranlib>
+
+If I<ranlib> is true, relocate() will call C<ranlib> on binary files which
+look like library files (have the C<$Config{_a}> extension). Defaults to true.
+
+=item F<verbose>
+
+If I<verbose> is true, relocate() emits warning messages as it performs
+certain operations. This may be useful for debugging, or for command-line
+tools, where user feedback is a good thing.
+
+=item F<quiet>
+
+Normally, relocate() prints out some status messages even with I<verbose>
+disabled. If I<quiet> is true, all messages (except error messages) are
+temporarily silenced. This option overrides I<verbose>, so there isn't much
+point calling relocate() with both I<quiet> and I<verbose> set. By default,
+I<quiet> is false.
+
+=item F<filelist>
+
+If specified, relocate() will write a list of the files modified to
+I<filelist>, one filename per line.
+
+=back
+
+=head2 The move_tree() Function
+
+   move_tree($from, $to, $delete_after, $verbose);
+
+This is the function used to copy the tree from one place to another. It
+accepts the following parameters:
+
+=over 4
+
+=item $from
+
+The source tree.
+
+=item $to
+
+The destination tree.
+
+=item $delete_after
+
+A boolean: if true, the tree at $from will be removed.
+
+=item $verbose
+
+A boolean: if true, it will print out a message when deleting the $from tree.
+
+=back
+
+=head2 The check() Function
+
+   check($file, $regexp, $is_binary);
+
+check() checks for occurrences of $from in $file. It is used by relocate() to
+search for files which should be edited. It accepts the following parameters:
+
+=over 4
+
+=item $file
+
+The file to check.
+
+=item $regexp
+
+The regular expression to search for in the file.
+
+=item $is_binary
+
+A boolean: if true, check() uses binmode() on the filehandle before reading
+chunks of the file.
+
+=back
+
+=head2 The edit() Function
+
+   edit($regexp, $from, $dest, $bak, $are_binary, @files);
+
+edit() is designed to rip though a set of files, efficiently replacing $from
+with $dest. It operates on the whole set of files, which all need to be of the
+same type (binary or text). It accepts the following parameters:
+
+=over 4
+
+=item $regexp
+
+The regular expression to search for. Matching text will be replaced with
+$dest.
+
+=item $from
+
+The path to search for and replace. If $are_binary is true, this is used to
+calculate the amount of NUL-padding required to preserve the length of strings.
+It is not used otherwise.
+
+=item $dest
+
+The replacement string. If $are_binary is true and $dest is shorter than
+$from, then it inserts a NULL-pad to preserve the original length of the
+strings.
+
+=item $bak
+
+The extension to use when storing backup files.
+
+=item $are_binary
+
+A boolean: if true, the files are edited with binary semantics: the
+filehandles are set to binmode, and strings are NULL-padded. Otherwise
+a plain-old substitution occurs.
+
+=item @files
+
+A list of files to edit.
+
+=back
+
+=head2 The spongedir() Function
+
+   spongedir($name)
+
+The spongedir() function returns the spongedir associated with a particular
+product. Currently, it only knows about PPM's spongedir.
+
+=over 4
+
+=item $name
+
+The name of the spongedir you're interested in. It's case-insensitive, so you
+can ask for 'PPM', 'Ppm', or 'ppm', too.
+
+The following spongedirs are defined:
+
+=over 4
+
+=item ppm
+
+The sponge directory for PPM.
+
+=item thisperl
+
+The original directory in which this copy of Perl was built. This allows
+relocate() to detect when a replacement path will not fit into the binary.
+
+=back
+
+=back
+
+=head1 SEE ALSO
+
+See also L<reloc_perl>.
+
+=head1 AUTHOR
+
+ActiveState Corporation (support@ActiveState.com)
+
+=head1 COPYRIGHT
+
+Copyright (c) 2002, ActiveState Corp. All Rights Reserved.
+ActiveState is a devision of Sophos.
+
+=cut

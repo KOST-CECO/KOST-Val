@@ -1,0 +1,227 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>ActiveState::Rx::Info -- An object-oriented interface to the Regular Expression debugger.</title>
+<link rel="stylesheet" href="../../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;ActiveState::Rx::Info -- An object-oriented interface to the Regular Expression debugger.</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#api">API</a></li>
+	<ul>
+
+		<li><a href="#new_regex___modifiers__">new(regex[, modifiers])</a></li>
+		<li><a href="#regex__"><code>regex()</code></a></li>
+		<li><a href="#modifiers__"><code>modifiers()</code></a></li>
+		<li><a href="#groupcount__"><code>groupCount()</code></a></li>
+		<li><a href="#nodeid_offset_"><code>nodeId(offset)</code></a></li>
+		<li><a href="#maxlevel_nodeid_"><code>maxLevel(nodeId)</code></a></li>
+		<li><a href="#match_target_"><code>match(target)</code></a></li>
+		<li><a href="#nodetip_nodeid_"><code>nodeTip(nodeId)</code></a></li>
+		<li><a href="#noderange_nodeid_"><code>nodeRange(nodeId)</code></a></li>
+		<li><a href="#childnodesrange_nodeid_"><code>childNodesRange(nodeId)</code></a></li>
+		<li><a href="#groupid_nodeid_"><code>groupId(nodeId)</code></a></li>
+		<li><a href="#matchid_nodeid_"><code>matchId(nodeId)</code></a></li>
+		<li><a href="#findnode_criteria_"><code>findnode(criteria)</code></a></li>
+	</ul>
+
+	<li><a href="#author">AUTHOR</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>ActiveState::Rx::Info -- An object-oriented interface to the Regular Expression debugger.</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+  use ActiveState::Rx::Info;</pre>
+<pre>
+  my $obj = ActiveState::Rx::Info-&gt;new('(.*)(\d+)');
+  print &quot;Matched!&quot; if ($obj-&gt;match('testing 123'));
+  print &quot;The number of groups in this regex is: $obj-&gt;groupCount\n&quot;;
+  my $nid = $obj-&gt;findnode(TYPE =&gt; 'OPEN', ARGS =&gt; 1);
+  print &quot;The start of group 1 is at offset: &quot;, 
+    $obj-&gt;nodeRange($nid), &quot;\n&quot;;</pre>
+<p>This complete program prints out:</p>
+<pre>
+  Matched!
+  The number of groups in this regex is: 2
+  The start of group 1 is at offset: 0</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>ActiveState::Rx::Info is designed to provide a higher level
+abstraction of the regular expression debugger than does
+ActiveState::Rx. The modified compiler and executor are kept in
+ActiveState::Rx, but ActiveState::Rx::Info makes it easier to use.</p>
+<p>
+</p>
+<hr />
+<h1><a name="api">API</a></h1>
+<p>The following sections document the methods available from
+ActiveState::Rx::Info.</p>
+<p>
+</p>
+<h2><a name="new_regex___modifiers__">new(regex[, modifiers])</a></h2>
+<p>Creates a ActiveState::Rx::Info object. 'regex' is the regular
+expression to generate information about, and 'modifiers' is an
+optional parameter containing perl modifiers g, i, s, m, o, and x.</p>
+<p>
+</p>
+<h2><a name="regex__"><code>regex()</code></a></h2>
+<p>Returns the string form of the regular expression stored in the object.</p>
+<p>
+</p>
+<h2><a name="modifiers__"><code>modifiers()</code></a></h2>
+<p>Returns the string form of the modifiers stored in the object.</p>
+<p>
+</p>
+<h2><a name="groupcount__"><code>groupCount()</code></a></h2>
+<p>Returns the number of groups found in the regex. For example,</p>
+<pre>
+  use ActiveState::Rx::Info;
+  my $gc = ActiveState::Rx::Info-&gt;new('(abc*)')-&gt;groupCount;</pre>
+<p>In this example, <code>$gc</code> will be set to 1.</p>
+<p>
+</p>
+<h2><a name="nodeid_offset_"><code>nodeId(offset)</code></a></h2>
+<p>Returns the 'node id' of the node found at the given offset into the
+regular expression string. Most API functions in ActiveState::Rx::Info
+operate on a node id, since that is how regular expressions are
+manipulated internally.</p>
+<p>
+</p>
+<h2><a name="maxlevel_nodeid_"><code>maxLevel(nodeId)</code></a></h2>
+<p>Returns the maximum 'level' of the node. Level is an abstract concept
+-- so abstract it hasn't even been nailed down. Yet. This function
+currently doesn't do anything except return 0.</p>
+<p>
+</p>
+<h2><a name="match_target_"><code>match(target)</code></a></h2>
+<p>Attempts to apply the regular expression to the target string. Returns
+a list of offsets in the target string, designed to aid highlighting
+the parts of the string which corresponded to groups in the regular
+expression.</p>
+<p>Here is an example:</p>
+<pre>
+  use ActiveState::Rx::Info;
+  my @m = ActiveState::Rx::Info-&gt;new('(.*)(\d+)')-&gt;match('testing123');</pre>
+<p>In this example, <code>@m</code> is set to (0, 9, 0, 8, 9, 9). These numbers
+represent three pairs of numbers: (0, 9), (0, 8), and (9, 9). <em>These</em>
+pairs represent substrings of the target string corresponding to
+matches. The first pair is always the substring <a href="../../../../lib/Pod/perlvar.html#item__24_26"><code>$&amp;</code></a>, or the extents
+of the match. The remaining pairs all refer to <code>$1</code>, <code>$2</code>, and so
+on. If global matching is turned on, then there will be <em>one</em> <a href="../../../../lib/Pod/perlvar.html#item__24_26"><code>$&amp;</code></a>
+at the beginning, and one pair for each iteration of the match.</p>
+<p>If no string was matched by the particular pair, they are both undef.</p>
+<p>
+</p>
+<h2><a name="nodetip_nodeid_"><code>nodeTip(nodeId)</code></a></h2>
+<p>Returns a node tip corresponding to the given regular expression
+node. For example:</p>
+<pre>
+  use ActiveState::Rx::Info; 
+  my $o = ActiveState::Rx::Info-&gt;new('abc*'); 
+  print $o-&gt;nodeTip($o-&gt;nodeId(0));</pre>
+<p>will print <em>Match 'ab'</em>.</p>
+<p>
+</p>
+<h2><a name="noderange_nodeid_"><code>nodeRange(nodeId)</code></a></h2>
+<p>Returns the range of the node in the regular expression string. For example:
+
+</p>
+<pre>
+  use ActiveState::Rx::Info;
+  my $o = ActiveState::Rx::Info-&gt;new('abc*');
+  print join ', ', $o-&gt;nodeRange($o-&gt;nodeId(0));
+
+</pre>
+<p>will print <em>0, 1</em>. 
+
+</p>
+<p>
+</p>
+<h2><a name="childnodesrange_nodeid_"><code>childNodesRange(nodeId)</code></a></h2>
+<p>Returns the range of any children of the given node. Some nodes do not have
+children; they will return an empty list.
+
+</p>
+<p>
+</p>
+<h2><a name="groupid_nodeid_"><code>groupId(nodeId)</code></a></h2>
+<p>Returns the group number that nodeId refers to. Only supported if nodeId 
+is either an OPEN or CLOSE node. 
+
+</p>
+<p>
+</p>
+<h2><a name="matchid_nodeid_"><code>matchId(nodeId)</code></a></h2>
+<p>Returns the nodeId of a node which ``matches'' the given node. Currently only
+implemented if nodeId refers to a OPEN or CLOSE node. If nodeId returns to 
+an OPEN node, it returns the node id of the corresponding CLOSE, and vice 
+versa.
+
+</p>
+<p>
+</p>
+<h2><a name="findnode_criteria_"><code>findnode(criteria)</code></a></h2>
+<p>Searches the nodes in the regular expression for a matching node. Returns the
+node id of the matching node structure. For example:
+
+</p>
+<pre>
+  use ActiveState::Rx::Info;
+  my $o = ActiveState::Rx::Info-&gt;new('ab(c*)');
+  my $nid = $o-&gt;findnode(TYPE =&gt; OPEN, ARGS =&gt; 1);
+
+</pre>
+<p>This example set <code>$nid</code> to the node id referring to the first OPEN node
+in the regular expression. 
+
+</p>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Neil Watkiss &lt;<a href="mailto:neilw@ActiveState.com">neilw@ActiveState.com</a>&gt;
+ActiveState Corporation
+
+</p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright (c) 2001, ActiveState Corp. All rights reserved.
+ActiveState is a devision of Sophos.
+
+</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;ActiveState::Rx::Info -- An object-oriented interface to the Regular Expression debugger.</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

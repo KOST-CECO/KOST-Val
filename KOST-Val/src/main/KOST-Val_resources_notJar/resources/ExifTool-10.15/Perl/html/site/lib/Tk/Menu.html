@@ -1,0 +1,1018 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Tk::Menu - Create and manipulate Menu widgets</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::Menu - Create and manipulate Menu widgets</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#standard_options">STANDARD OPTIONS</a></li>
+	<li><a href="#widgetspecific_options">WIDGET-SPECIFIC OPTIONS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<ul>
+
+		<li><a href="#command_entries">COMMAND ENTRIES</a></li>
+		<li><a href="#separator_entries">SEPARATOR ENTRIES</a></li>
+		<li><a href="#checkbutton_entries">CHECKBUTTON ENTRIES</a></li>
+		<li><a href="#radiobutton_entries">RADIOBUTTON ENTRIES</a></li>
+		<li><a href="#cascade_entries">CASCADE ENTRIES</a></li>
+		<li><a href="#tearoff_entries">TEAR-OFF ENTRIES</a></li>
+		<li><a href="#menubars">MENUBARS</a></li>
+		<li><a href="#special_menus_in_menubars">SPECIAL MENUS IN MENUBARS</a></li>
+		<li><a href="#clones">CLONES</a></li>
+		<li><a href="#widget_methods">WIDGET METHODS</a></li>
+	</ul>
+
+	<li><a href="#menu_configurations">MENU CONFIGURATIONS</a></li>
+	<li><a href="#default_bindings">DEFAULT BINDINGS</a></li>
+	<li><a href="#bugs">BUGS</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#keywords">KEYWORDS</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Tk::Menu - Create and manipulate Menu widgets</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>$menu</em> = <em>$parent</em>-&gt;<strong>Menu</strong>(?<em>options</em>?);</p>
+<p>
+</p>
+<hr />
+<h1><a name="standard_options">STANDARD OPTIONS</a></h1>
+<p><table cellspacing="0" cellpadding="0"><tr><td><strong>-activebackground</strong><td><strong>-background</strong><td><strong>-disabledforeground</strong><td><strong>-relief</strong>
+<tr><td><strong>-activeborderwidth</strong><td><strong>-borderwidth</strong><td><strong>-font</strong><td><strong>-takefocus</strong>
+<tr><td><strong>-activeforeground</strong><td><strong>-cursor</strong><td><strong>-foreground</strong></table></p>
+<p>See <a href="../../../site/lib/Tk/options.html">the Tk::options manpage</a> for details of the standard options.</p>
+<p>
+</p>
+<hr />
+<h1><a name="widgetspecific_options">WIDGET-SPECIFIC OPTIONS</a></h1>
+<dl>
+<dt><strong><a name="item_name_3a_postcommand">Name:	<strong>postCommand</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_command">Class:	<strong>Command</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dpostcommand">Switch:	<strong>-postcommand</strong></a></strong><br />
+</dt>
+<dd>
+If this option is specified then it provides a <a href="../../../site/lib/Tk/callbacks.html">callback</a> to execute
+each time the menu is posted.  The callback is invoked by the <strong>post</strong>
+method before posting the menu. Note that in 8.0 on Macintosh
+and Windows, all commands in a menu systems are executed before any
+are posted. This is due to the limitations in the individual platforms'
+menu managers.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_selectcolor">Name:	<strong>selectColor</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_background">Class:	<strong>Background</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dselectcolor">Switch:	<strong>-selectcolor</strong></a></strong><br />
+</dt>
+<dd>
+For menu entries that are check buttons or radio buttons, this option
+specifies the color to display in the indicator when the check button
+or radio button is selected.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_tearoff">Name:	<strong>tearOff</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_tearoff">Class:	<strong>TearOff</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dtearoff">Switch:	<strong>-tearoff</strong></a></strong><br />
+</dt>
+<dd>
+This option must have a proper boolean value, which specifies
+whether or not the menu should include a tear-off entry at the
+top.  If so, it will exist as entry 0 of the menu and the other
+entries will number starting at 1.  The default
+menu bindings arrange for the menu to be torn off when the tear-off
+entry is invoked.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_tearoffcommand">Name:	<strong>tearOffCommand</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_tearoffcommand">Class:	<strong>TearOffCommand</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dtearoffcommand">Switch:	<strong>-tearoffcommand</strong></a></strong><br />
+</dt>
+<dd>
+If this option has a non-empty value, then it specifies a <a href="../../../site/lib/Tk/callbacks.html">perl/Tk callback</a>
+to invoke whenever the menu is torn off.  The actual command will
+consist of the value of this option, followed by a space, followed
+by the name of the menu window, followed by a space, followed by
+the name of the name of the torn off menu window.  For example, if
+the option's is ``<strong>a b</strong>'' and menu <strong>.x.y</strong> is torn off to
+create a new menu <strong>.x.tearoff1</strong>, then the command
+``<strong>a b .x.y .x.tearoff1</strong>'' will be invoked.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_title">Name:	<strong>title</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_title">Class:	<strong>Title</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dtitle">Switch:	<strong>-title</strong></a></strong><br />
+</dt>
+<dd>
+The string will be used to title the window created when this menu is
+torn off. If the title is NULL, then the window will have the title
+of the menubutton or the text of the cascade item from which this menu
+was invoked.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_type">Name:	<strong>type</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_type">Class:	<strong>Type</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dtype">Switch:	<strong>-type</strong></a></strong><br />
+</dt>
+<dd>
+This option can be one of <strong>menubar</strong>, <strong>tearoff</strong>, or
+<strong>normal</strong>, and is set when the menu is created. While the string
+returned by the configuration database will change if this option is
+changed, this does not affect the menu widget's behavior. This is used
+by the cloning mechanism and is not normally set outside of the Tk
+library.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The <strong>Menu</strong> method creates a new top-level window (given
+by the $widget argument) and makes it into a menu widget.
+Additional
+options, described above, may be specified on the command line
+or in the option database
+to configure aspects of the menu such as its colors and font.
+The <strong>menu</strong> command returns its
+$widget argument.  At the time this command is invoked,
+there must not exist a window named $widget, but
+$widget's parent must exist.</p>
+<p>A menu is a widget that displays a collection of one-line entries arranged
+in one or more columns.  There exist several different types of entries,
+each with different properties.  Entries of different types may be
+combined in a single menu.  Menu entries are not the same as
+entry widgets.  In fact, menu entries are not even distinct widgets;
+the entire menu is one widget.</p>
+<p>Menu entries are displayed with up to three separate fields.
+The main field is a label in the form of a text string,
+a bitmap, or an image, controlled by the <strong>-label</strong>,
+<strong>-bitmap</strong>, and <strong>-image</strong> options for the entry.
+If the  <strong>-accelerator</strong> option is specified for an entry then a second
+textual field is displayed to the right of the label.  The accelerator
+typically describes a keystroke sequence that may be typed in the
+application to cause the same result as invoking the menu entry.
+The third field is an <em>indicator</em>.  The indicator is present only for
+checkbutton or radiobutton entries.  It indicates whether the entry
+is selected or not, and is displayed to the left of the entry's
+string.</p>
+<p>In normal use, an entry becomes active (displays itself differently)
+whenever the mouse pointer is over the entry.  If a mouse
+button is released over the entry then the entry is <em>invoked</em>.
+The effect of invocation is different for each type of entry;
+these effects are described below in the sections on individual
+entries.</p>
+<p>Entries may be <em>disabled</em>, which causes their labels
+and accelerators to be displayed
+with dimmer colors.
+The default menu bindings will not allow
+a disabled entry to be activated or invoked.
+Disabled entries may be re-enabled, at which point it becomes
+possible to activate and invoke them again.</p>
+<p>Whenever a menu's active entry is changed, a &lt;&lt;MenuSelect&gt;&gt; virtual
+event is sent to the menu. The active item can then be queried from
+the menu, and an action can be taken, such as setting
+context-sensitive help text for the entry.</p>
+<p>
+</p>
+<h2><a name="command_entries">COMMAND ENTRIES</a></h2>
+<p>The most common kind of menu entry is a command entry, which
+behaves much like a button widget.  When a command entry is
+invoked, a callback is executed.  The callback
+is specified with the <strong>-command</strong> option.</p>
+<p>
+</p>
+<h2><a name="separator_entries">SEPARATOR ENTRIES</a></h2>
+<p>A separator is an entry that is displayed as a horizontal dividing
+line.  A separator may not be activated or invoked, and it has
+no behavior other than its display appearance.</p>
+<p>
+</p>
+<h2><a name="checkbutton_entries">CHECKBUTTON ENTRIES</a></h2>
+<p>A checkbutton menu entry behaves much like a checkbutton widget.
+When it is invoked it toggles back and forth between the selected
+and deselected states.  When the entry is selected, a particular
+value is stored in a particular global variable (as determined by
+the <strong>-onvalue</strong> and <strong>-variable</strong> options for the entry);  when
+the entry is deselected another value (determined by the
+<strong>-offvalue</strong> option) is stored in the global variable.
+An indicator box is displayed to the left of the label in a checkbutton
+entry.  If the entry is selected then the indicator's center is displayed
+in the color given by the <strong>-selectcolor</strong> option for the entry;
+otherwise the indicator's center is displayed in the background color for
+the menu.  If a <strong>-command</strong> option is specified for a checkbutton
+entry, then its value is evaluated each time the entry
+is invoked;  this happens after toggling the entry's
+selected state.</p>
+<p>
+</p>
+<h2><a name="radiobutton_entries">RADIOBUTTON ENTRIES</a></h2>
+<p>A radiobutton menu entry behaves much like a radiobutton widget.
+Radiobutton entries are organized in groups of which only one
+entry may be selected at a time.  Whenever a particular entry
+becomes selected it stores a particular value into a particular
+global variable (as determined by the <strong>-value</strong> and
+<strong>-variable</strong> options for the entry).  This action
+causes any previously-selected entry in the same group
+to deselect itself.
+Once an entry has become selected, any change to the entry's
+associated variable will cause the entry to deselect itself.
+Grouping of radiobutton entries is determined by their
+associated variables:  if two entries have the same associated
+variable then they are in the same group.
+An indicator diamond is displayed to the left of the label in each
+radiobutton entry.  If the entry is selected then the indicator's
+center is displayed in the color given by the <strong>-selectcolor</strong> option
+for the entry;
+otherwise the indicator's center is displayed in the background color for
+the menu.  If a <strong>-command</strong> option is specified for a radiobutton
+entry, then its value is evaluated each time the entry
+is invoked;  this happens after selecting the entry.</p>
+<p>
+</p>
+<h2><a name="cascade_entries">CASCADE ENTRIES</a></h2>
+<p>A cascade entry is one with an associated menu (determined
+by the <strong>-menu</strong> option).  Cascade entries allow the construction
+of cascading menus.
+The <strong>postcascade</strong> method can be used to post and unpost
+the associated menu just next to of the cascade entry.
+The associated menu must be a child of the menu containing
+the cascade entry (this is needed in order for menu traversal to
+work correctly).</p>
+<p>A cascade entry posts its associated menu by invoking</p>
+<p><em>$menu</em>-&gt;<strong>post</strong>(<em>x,y</em>)</p>
+<p>where <em>menu</em> is the path name of the associated menu, and <em>x</em>
+and <em>y</em> are the root-window coordinates of the upper-right
+corner of the cascade entry.
+On Unix, the lower-level menu is unposted by executing</p>
+<p><em>$menu</em>-&gt;<strong>unpost</strong></p>
+<p>where <em>menu</em> is the name of the associated menu.
+On other platforms, the platform's native code takes care of unposting the
+menu.</p>
+<p>If a <strong>-command</strong> option is specified for a cascade entry then it is
+evaluated whenever the entry is invoked. This is not supported on Windows.</p>
+<p>
+</p>
+<h2><a name="tearoff_entries">TEAR-OFF ENTRIES</a></h2>
+<p>A tear-off entry appears at the top of the menu if enabled with the
+<strong>tearOff</strong> option.  It is not like other menu entries in that
+it cannot be created with the <strong>add</strong> method and
+cannot be deleted with the <strong>delete</strong> method.
+When a tear-off entry is created it appears as a dashed line at
+the top of the menu.  Under the default bindings, invoking the
+tear-off entry causes a torn-off copy to be made of the menu and
+all of its submenus.</p>
+<p>
+</p>
+<h2><a name="menubars">MENUBARS</a></h2>
+<p>Any menu can be set as a menubar for a toplevel window (see the
+<a href="../../../site/lib/Tk/Toplevel.html">Toplevel</a> constructor for syntax). On the Macintosh, whenever the
+toplevel is in front, this menu's cascade items will appear in the
+menubar across the top of the main monitor. On Windows and Unix, this
+menu's items will be displayed in a menubar accross the top of the
+window. These menus will behave according to the interface guidelines
+of their platforms. For every menu set as a menubar, a clone menu is
+made. See <a href="#clones">CLONES</a> for more information.</p>
+<p>As noted, menubars may behave differently on different platforms.   One
+example  of this concerns the handling of checkbuttons and radiobuttons
+within the menu.  While it is permitted to put these menu  elements  on
+menubars,  they may not be drawn with indicators on some platforms, due
+to system restrictions.</p>
+<p>
+</p>
+<h2><a name="special_menus_in_menubars">SPECIAL MENUS IN MENUBARS</a></h2>
+<p>Certain menus in a menubar will be treated specially.  On the Macintosh,
+access to the special Apple and Help menus is provided. On Windows,
+access to the Windows System menu in each window is provided. On X Windows,
+a special right-justified help menu is provided. In all cases, these
+menus must be created with the command name of the menubar menu concatenated
+with the special name. So for a menubar named .menubar, on the Macintosh,
+the special menus would be .menubar.apple and .menubar.help; on Windows,
+the special menu would be .menubar.system; on X Windows, the help
+menu would be .menubar.help.</p>
+<p>When Tk sees an Apple menu on the Macintosh, that menu's contents make
+up the first items of the Apple menu on the screen whenever the window
+containing the menubar is in front. The menu is the
+first one that the user sees and has a title which is an Apple logo.
+After all of the Tk-defined items, the menu will have a separator,
+followed by all of the items in the user's Apple Menu Items folder.
+Since the System uses a different menu definition procedure for
+the Apple menu than Tk uses for its menus, and the system APIs do
+not fully support everything Tk tries to do, the menu item will only
+have its text displayed. No font attributes, images, bitmaps, or colors
+will be displayed. In addition, a menu with a tearoff item will have
+the tearoff item displayed as ``(TearOff)''.</p>
+<p>When Tk see a Help menu on the Macintosh, the menu's contents are
+appended to the standard help menu on the right of the user's menubar
+whenever the user's menubar is in front. The first items in the menu
+are provided by Apple. Similar to the Apple Menu, cusomization in this
+menu is limited to what the system provides.</p>
+<p>When Tk sees a System menu on Windows, its items are appended to the
+system menu that the menubar is attached to. This menu has an icon
+representing a spacebar, and can be invoked with the mouse or by typing
+Alt+Spacebar.  Due to limitations in the Windows API, any font changes,
+colors, images, bitmaps, or tearoff images will not appear in the
+system menu.</p>
+<p>When Tk see a Help menu on X Windows, the menu is moved to be last in
+the menubar and is right justified.</p>
+<p>
+</p>
+<h2><a name="clones">CLONES</a></h2>
+<p>When a menu is set as a menubar for a toplevel window, or when a menu
+is torn off, a clone of the menu is made. This clone is a menu widget
+in its own right, but it is a child of the original. Changes in the
+configuration of the original are reflected in the
+clone. Additionally, any cascades that are pointed to are also cloned
+so that menu traversal will work right. Clones are destroyed when
+either the tearoff or menubar goes away, or when the original menu is
+destroyed.</p>
+<p>
+</p>
+<h2><a name="widget_methods">WIDGET METHODS</a></h2>
+<p>The <strong>Menu</strong> method creates a widget object.
+This object supports the <strong>configure</strong> and <strong>cget</strong> methods
+described in <a href="../../../site/lib/Tk/options.html">the Tk::options manpage</a> which can be used to enquire and
+modify the options described above.
+The widget also inherits all the methods provided by the generic
+<a href="../../../site/lib/Tk/Widget.html">Tk::Widget</a> class, and the <a href="../../../site/lib/Tk/Wm.html">Tk::Wm</a> class.</p>
+<p>Many of the methods for a menu take as one argument an
+indicator of which entry of the menu to operate on.  These
+indicators are called <em>index</em>es and may be specified in
+any of the following forms:</p>
+<dl>
+<dt><strong><a name="item_number"><em>number</em></a></strong><br />
+</dt>
+<dd>
+Specifies the entry numerically, where 0 corresponds
+to the top-most entry of the menu, 1 to the entry below it, and
+so on.
+</dd>
+<p></p>
+<dt><strong><a name="item_active"><strong>active</strong></a></strong><br />
+</dt>
+<dd>
+Indicates the entry that is currently active.  If no entry is
+active then this form is equivalent to <strong>none</strong>.  This form may
+not be abbreviated.
+</dd>
+<p></p>
+<dt><strong><a name="item_end"><strong>end</strong></a></strong><br />
+</dt>
+<dd>
+Indicates the bottommost entry in the menu.  If there are no
+entries in the menu then this form is equivalent to <strong>none</strong>.
+This form may not be abbreviated.
+</dd>
+<p></p>
+<dt><strong><a name="item_last"><strong>last</strong></a></strong><br />
+</dt>
+<dd>
+Same as <strong>end</strong>.
+</dd>
+<p></p>
+<dt><strong><a name="item_none"><strong>none</strong></a></strong><br />
+</dt>
+<dd>
+Indicates ``no entry at all'';  this is used most commonly with
+the <strong>activate</strong> option to deactivate all the entries in the
+menu.  In most cases the specification of <strong>none</strong> causes
+nothing to happen in the method.
+This form may not be abbreviated.
+</dd>
+<p></p>
+<dt><strong><a name="item__40number"><strong>@</strong><em>number</em></a></strong><br />
+</dt>
+<dd>
+In this form, <em>number</em> is treated as a y-coordinate in the
+menu's window;  the entry closest to that y-coordinate is used.
+For example, ``<strong>@0</strong>'' indicates the top-most entry in the
+window.
+</dd>
+<p></p>
+<dt><strong><a name="item_pattern"><em>pattern</em></a></strong><br />
+</dt>
+<dd>
+If the index doesn't satisfy one of the above forms then this
+form is used.  <em>Pattern</em> is pattern-matched against the label of
+each entry in the menu, in order from the top down, until a
+matching entry is found.
+(In perl/Tk the matching is under review, but exact match
+should work.)
+</dd>
+<p></p></dl>
+<p>The following methods are possible for menu widgets:</p>
+<dl>
+<dt><strong><a name="item_activate"><em>$menu</em>-&gt;<strong>activate</strong>(<em>index</em>)</a></strong><br />
+</dt>
+<dd>
+Change the state of the entry indicated by <em>index</em> to <strong>active</strong>
+and redisplay it using its active colors.
+Any previously-active entry is deactivated.  If <em>index</em>
+is specified as <strong>none</strong>, or if the specified entry is
+disabled, then the menu ends up with no active entry.
+Returns an empty string.
+</dd>
+<p></p>
+<dt><strong><a name="item_add"><em>$menu</em>-&gt;<strong>add</strong>(<em>type, </em>?<em>option, value, option, value, ...</em>?)</a></strong><br />
+</dt>
+<dd>
+Add a new entry to the bottom of the menu.  The new entry's type
+is given by <em>type</em> and must be one of <strong>cascade</strong>,
+<strong>checkbutton</strong>, <strong>command</strong>, <strong>radiobutton</strong>, or <strong>separator</strong>,
+or a unique abbreviation of one of the above.  If additional arguments
+are present, they specify any of the following options:
+</dd>
+<dl>
+<dt><strong><a name="item__2dactivebackground__3d_3e_value"><strong>-activebackground</strong> =&gt; <em>value</em></a></strong><br />
+</dt>
+<dd>
+Specifies a background color to use for displaying this entry when it
+is active.
+If this option is specified as an empty string (the default), then the
+<strong>activeBackground</strong> option for the overall menu is used.
+If the <strong>$Tk::strictMotif</strong> variable has been set to request strict
+Motif compliance, then this option is ignored and the <strong>-background</strong>
+option is used in its place.
+This option is not available for separator or tear-off entries.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dactiveforeground__3d_3e_value"><strong>-activeforeground</strong> =&gt; <em>value</em></a></strong><br />
+</dt>
+<dd>
+Specifies a foreground color to use for displaying this entry when it
+is active.
+If this option is specified as an empty string (the default), then the
+<strong>activeForeground</strong> option for the overall menu is used.
+This option is not available for separator or tear-off entries.
+</dd>
+<p></p>
+<dt><strong><a name="item__2daccelerator__3d_3e_value"><strong>-accelerator</strong> =&gt; <em>value</em></a></strong><br />
+</dt>
+<dd>
+Specifies a string to display at the right side of the menu entry.
+Normally describes an accelerator keystroke sequence that may be
+typed to invoke the same function as the menu entry.  This option
+is not available for separator or tear-off entries.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dbackground__3d_3e_value"><strong>-background</strong> =&gt; <em>value</em></a></strong><br />
+</dt>
+<dd>
+Specifies a background color to use for displaying this entry when it
+is in the normal state (neither active nor disabled).
+If this option is specified as an empty string (the default), then the
+<strong>background</strong> option for the overall menu is used.
+This option is not available for separator or tear-off entries.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dbitmap__3d_3e_value"><strong>-bitmap</strong> =&gt; <em>value</em></a></strong><br />
+</dt>
+<dd>
+Specifies a bitmap to display in the menu instead of a textual
+label, in any of the forms accepted by <strong>Tk_GetBitmap</strong>.
+This option overrides the <strong>-label</strong> option but may be reset
+to an empty string to enable a textual label to be displayed.
+If a <strong>-image</strong> option has been specified, it overrides
+<strong>-bitmap</strong>.
+This option is not available for separator or tear-off entries.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dcolumnbreak__3d_3e_value"><strong>-columnbreak</strong> =&gt; <em>value</em></a></strong><br />
+</dt>
+<dd>
+When this option is zero, the appears below the previous entry. When
+this option is one, the menu appears at the top of a new column in the
+menu.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dcompound__3d_3e_value"><strong>-compound</strong> =&gt; <em>value</em></a></strong><br />
+</dt>
+<dd>
+Specifies whether the button should display both an image and text,
+and if so, where the image should be placed relative to the text.
+Valid values for this option are <strong>bottom</strong>, <strong>center</strong>, <strong>left</strong>,
+<strong>none</strong>, <strong>right</strong> and <strong>top</strong>.  The default value is <strong>none</strong>, meaning
+that the button will display either an image or text, depending on the
+values of the -image and -bitmap options.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dcommand__3d_3e_value"><strong>-command</strong> =&gt; <em>value</em></a></strong><br />
+</dt>
+<dd>
+For command, checkbutton, and radiobutton entries, specifies a
+callback to execute when the menu entry is invoked.
+For cascade entries, specifies a callback to execute
+when the entry is activated (i.e. just before its submenu is
+posted).
+Not available for separator or tear-off entries.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dfont__3d_3e_value"><strong>-font</strong> =&gt; <em>value</em></a></strong><br />
+</dt>
+<dd>
+Specifies the font to use when drawing the label or accelerator
+string in this entry.
+If this option is specified as an empty string (the default) then
+the <strong>font</strong> option for the overall menu is used.
+This option is not available for separator or tear-off entries.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dforeground__3d_3e_value"><strong>-foreground</strong> =&gt; <em>value</em></a></strong><br />
+</dt>
+<dd>
+Specifies a foreground color to use for displaying this entry when it
+is in the normal state (neither active nor disabled).
+If this option is specified as an empty string (the default), then the
+<strong>foreground</strong> option for the overall menu is used.
+This option is not available for separator or tear-off entries.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dhidemargin__3d_3e_value"><strong>-hidemargin</strong> =&gt; <em>value</em></a></strong><br />
+</dt>
+<dd>
+Specifies whether the standard margins should be drawn for this menu
+entry. This is useful when creating palette with images in them, i.e.,
+color palettes, pattern palettes, etc. 1 indicates that the margin for
+the entry is hidden; 0 means that the margin is used.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dimage__3d_3e_value"><strong>-image</strong> =&gt; <em>value</em></a></strong><br />
+</dt>
+<dd>
+Specifies an image to display in the menu instead of a text string
+or bitmap
+The image must have been created by some previous invocation of
+<strong>image create</strong>.
+This option overrides the <strong>-label</strong> and <strong>-bitmap</strong> options
+but may be reset to an empty string to enable a textual or
+bitmap label to be displayed.
+This option is not available for separator or tear-off entries.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dindicatoron__3d_3e_value"><strong>-indicatoron</strong> =&gt; <em>value</em></a></strong><br />
+</dt>
+<dd>
+Available only for checkbutton and radiobutton entries.
+<em>Value</em> is a boolean that determines whether or not the
+indicator should be displayed.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dlabel__3d_3e_value"><strong>-label</strong> =&gt; <em>value</em></a></strong><br />
+</dt>
+<dd>
+Specifies a string to display as an identifying label in the menu
+entry.  Not available for separator or tear-off entries.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dmenu__3d_3e_value"><strong>-menu</strong> =&gt; <em>value</em></a></strong><br />
+</dt>
+<dd>
+Available only for cascade entries.  Specifies the path name of
+the submenu associated with this entry.
+The submenu must be a child of the menu.
+</dd>
+<p></p>
+<dt><strong><a name="item__2doffvalue__3d_3e_value"><strong>-offvalue</strong> =&gt; <em>value</em></a></strong><br />
+</dt>
+<dd>
+Available only for checkbutton entries.  Specifies the value to
+store in the entry's associated variable when the entry is
+deselected.
+</dd>
+<p></p>
+<dt><strong><a name="item__2donvalue__3d_3e_value"><strong>-onvalue</strong> =&gt; <em>value</em></a></strong><br />
+</dt>
+<dd>
+Available only for checkbutton entries.  Specifies the value to
+store in the entry's associated variable when the entry is selected.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dselectcolor__3d_3e_value"><strong>-selectcolor</strong> =&gt; <em>value</em></a></strong><br />
+</dt>
+<dd>
+Available only for checkbutton and radiobutton entries.
+Specifies the color to display in the indicator when the entry is
+selected.
+If the value is an empty string (the default) then the <strong>selectColor</strong>
+option for the menu determines the indicator color.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dselectimage__3d_3e_value"><strong>-selectimage</strong> =&gt; <em>value</em></a></strong><br />
+</dt>
+<dd>
+Available only for checkbutton and radiobutton entries.
+Specifies an image to display in the entry (in place of
+the <strong>-image</strong> option) when it is selected.
+<em>Value</em> is the name of an image, which must have been created
+by some previous invocation of <strong>image create</strong>.
+This option is ignored unless the <strong>-image</strong> option has
+been specified.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dstate__3d_3e_value"><strong>-state</strong> =&gt; <em>value</em></a></strong><br />
+</dt>
+<dd>
+Specifies one of three states for the entry:  <strong>normal</strong>, <strong>active</strong>,
+or <strong>disabled</strong>.  In normal state the entry is displayed using the
+<strong>foreground</strong> option for the menu and the <strong>background</strong>
+option from the entry or the menu.
+The active state is typically used when the pointer is over the entry.
+In active state the entry is displayed using the <strong>activeForeground</strong>
+option for the menu along with the <strong>activebackground</strong> option from
+the entry.  Disabled state means that the entry
+should be insensitive:  the default bindings will refuse to activate
+or invoke the entry.
+In this state the entry is displayed according to the
+<strong>disabledForeground</strong> option for the menu and the
+<strong>background</strong> option from the entry.
+This option is not available for separator entries.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dunderline__3d_3e_value"><strong>-underline</strong> =&gt; <em>value</em></a></strong><br />
+</dt>
+<dd>
+Specifies the integer index of a character to underline in the entry.
+This option is also queried by the default bindings and used to
+implement keyboard traversal.
+0 corresponds to the first character of the text displayed in the entry,
+1 to the next character, and so on.
+If a bitmap or image is displayed in the entry then this option is ignored.
+This option is not available for separator or tear-off entries.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dvalue__3d_3e_value"><strong>-value</strong> =&gt; <em>value</em></a></strong><br />
+</dt>
+<dd>
+Available only for radiobutton entries.  Specifies the value to
+store in the entry's associated variable when the entry is selected.
+If an empty string is specified, then the <strong>-label</strong> option
+for the entry as the value to store in the variable.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dvariable__3d_3e_value"><strong>-variable</strong> =&gt; <em>value</em></a></strong><br />
+</dt>
+<dd>
+Available only for checkbutton and radiobutton entries.  Specifies
+the name of a global value to set when the entry is selected.
+For checkbutton entries the variable is also set when the entry
+is deselected.  For radiobutton entries, changing the variable
+causes the currently-selected entry to deselect itself.
+</dd>
+<p></p></dl>
+<p>The <strong>add</strong> method returns an empty string.</p>
+<dt><strong><a name="item_clone"><em>$menu</em>-&gt;<strong>clone</strong>(<em>$parent</em> ?, <em>cloneType?</em>)</a></strong><br />
+</dt>
+<dd>
+Makes a clone of the current menu as a child of <em>$parent</em>. This clone
+is a menu in its own right, but any changes to the clone are
+propogated to the original menu and vice versa. <em>cloneType</em> can be
+<strong>normal</strong>, <strong>menubar</strong>, or <strong>tearoff</strong>. Should not normally be
+called outside of the Tk library. See <a href="#clones">CLONES</a> for
+more information.
+</dd>
+<p></p>
+<dt><strong><a name="item_delete"><em>$menu</em>-&gt;<strong>delete</strong>(<em>index1</em>?, <em>index2</em>?)</a></strong><br />
+</dt>
+<dd>
+Delete all of the menu entries between <em>index1</em> and
+<em>index2</em> inclusive.
+If <em>index2</em> is omitted then it defaults to <em>index1</em>.
+Attempts to delete a tear-off menu entry are ignored (instead, you
+should change the <strong>tearOff</strong> option to remove the tear-off entry).
+</dd>
+<p></p>
+<dt><strong><a name="item_entrycget"><em>$menu</em>-&gt;<strong>entrycget</strong>(<em>index, option</em>)</a></strong><br />
+</dt>
+<dd>
+Returns the current value of a configuration option for
+the entry given by <em>index</em>.
+<em>Option</em> may have any of the values accepted by the <strong>add</strong>
+method.
+</dd>
+<p></p>
+<dt><strong><a name="item_entryconfigure"><em>$menu</em>-&gt;<strong>entryconfigure</strong>(<em>index</em> ?,<em>options</em>?)</a></strong><br />
+</dt>
+<dd>
+This method is similar to the <strong>configure</strong> method, except that
+it applies to the options for an individual entry, whereas <strong>configure</strong>
+applies to the options for the menu as a whole.
+<em>Options</em> may have any of the values accepted by the <strong>add</strong>
+method.  If <em>options</em> are specified, options are modified
+as indicated
+in the method call and the method returns an empty string.
+If no <em>options</em> are specified, returns a list describing
+the current options for entry <em>index</em> (see <a href="../../../site/lib/Tk/options.html">the Tk::options manpage</a> for
+information on the format of this list).
+</dd>
+<p></p>
+<dt><strong><a name="item_index"><em>$menu</em>-&gt;<strong>index</strong>(<em>index</em>)</a></strong><br />
+</dt>
+<dd>
+Returns the numerical index corresponding to <em>index</em>, or
+<strong>none</strong> if <em>index</em> was specified as <strong>none</strong>.
+</dd>
+<p></p>
+<dt><strong><a name="item_insert"><em>$menu</em>-&gt;<strong>insert</strong>(<em>index, type</em>?, <em>-option</em>=&gt;<em>value</em>, ...?)</a></strong><br />
+</dt>
+<dd>
+Same as the <strong>add</strong> method except that it inserts the new
+entry just before the entry given by <em>index</em>, instead of appending
+to the end of the menu.  The <em>type</em>, <em>-option</em>, and <em>value</em>
+arguments have the same interpretation as for the <strong>add</strong> widget
+method.  It is not possible to insert new menu entries before the
+tear-off entry, if the menu has one.
+</dd>
+<p></p>
+<dt><strong><a name="item_invoke"><em>$menu</em>-&gt;<strong>invoke</strong>(<em>index</em>)</a></strong><br />
+</dt>
+<dd>
+Invoke the action of the menu entry.  See the sections on the
+individual entries above for details on what happens.  If the
+menu entry is disabled then nothing happens.  If the
+entry has a callback associated with it then the result of that
+callback is returned as the result of the <strong>invoke</strong> widget
+method.  Otherwise the result is an empty string.  Note:  invoking
+a menu entry does not automatically unpost the menu;  the default
+bindings normally take care of this before invoking the <strong>invoke</strong>
+method.
+</dd>
+<p></p>
+<dt><strong><a name="item_post"><em>$menu</em>-&gt;<strong>post</strong>(<em>x, y</em>)</a></strong><br />
+</dt>
+<dd>
+Arrange for the menu to be displayed on the screen at the root-window
+coordinates given by <em>x</em> and <em>y</em>.  These coordinates are
+adjusted if necessary to guarantee that the entire menu is visible on
+the screen.  This method normally returns an empty string.
+If the <strong>postCommand</strong> option has been specified, then its value is
+executed before posting the menu and the result of
+that callback is returned as the result of the <strong>post</strong> widget
+method.
+If an error returns while executing the method, then the error is
+returned without posting the menu.
+</dd>
+<p></p>
+<dt><strong><a name="item_postcascade"><em>$menu</em>-&gt;<strong>postcascade</strong>(<em>index</em>)</a></strong><br />
+</dt>
+<dd>
+Posts the submenu associated with the cascade entry given by
+<em>index</em>, and unposts any previously posted submenu.
+If <em>index</em> doesn't correspond to a cascade entry,
+or if <em>$menu</em> isn't posted,
+the method has no effect except to unpost any currently posted
+submenu.
+</dd>
+<p></p>
+<dt><strong><a name="item_type"><em>$menu</em>-&gt;<strong>type</strong>(<em>index</em>)</a></strong><br />
+</dt>
+<dd>
+Returns the type of the menu entry given by <em>index</em>.
+This is the <em>type</em> argument passed to the <strong>add</strong> widget
+method when the entry was created, such as <strong>command</strong>
+or <strong>separator</strong>, or <strong>tearoff</strong> for a tear-off entry.
+</dd>
+<p></p>
+<dt><strong><a name="item_unpost"><em>$menu</em>-&gt;<strong>unpost</strong></a></strong><br />
+</dt>
+<dd>
+Unmap the window so that it is no longer displayed.  If a
+lower-level cascaded menu is posted, unpost that menu.  Returns an
+empty string. This method does not work on Windows and the
+Macintosh, as those platforms have their own way of unposting menus.
+</dd>
+<p></p>
+<dt><strong><a name="item_yposition"><em>$menu</em>-&gt;<strong>yposition</strong>(<em>index</em>)</a></strong><br />
+</dt>
+<dd>
+Returns a decimal string giving the y-coordinate within the menu
+window of the topmost pixel in the entry specified by <em>index</em>.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="menu_configurations">MENU CONFIGURATIONS</a></h1>
+<p>The default bindings support four different ways of using menus:</p>
+<dl>
+<dt><strong><a name="item_pulldown_menus_in_menubar"><strong>Pulldown Menus in Menubar</strong></a></strong><br />
+</dt>
+<dd>
+This is the most command case. You create a menu widget that will become the
+menu bar. You then add cascade entries to this menu, specifying the
+pull down menus you wish to use in your menu bar. You then create all
+of the pulldowns. Once you have done this, specify the menu using the
+<strong>-menu</strong> option of the toplevel's method. See the
+<strong>toplevel</strong> manual entry for details.
+</dd>
+<p></p>
+<dt><strong><a name="item_pulldown_menus_in_menu_buttons"><strong>Pulldown Menus in Menu Buttons</strong></a></strong><br />
+</dt>
+<dd>
+This is the compatable way to do menu bars.  You create one menubutton
+widget for each top-level menu, and typically you arrange a series of
+menubuttons in a row in a menubar window.  You also create the top-level menus
+and any cascaded submenus, and tie them together with <strong>-menu</strong>
+options in menubuttons and cascade menu entries.  The top-level menu must
+be a child of the menubutton, and each submenu must be a child of the
+menu that refers to it.  Once you have done this, the default bindings
+will allow users to traverse and invoke the tree of menus via its
+menubutton;  see the <strong>menubutton</strong> documentation for details.
+</dd>
+<p></p>
+<dt><strong><a name="item_popup_menus"><strong>Popup Menus</strong></a></strong><br />
+</dt>
+<dd>
+Popup menus typically post in response to a mouse button press or
+keystroke.  You create the popup menus and any cascaded submenus,
+then you call the <strong>Post</strong> method at the appropriate time
+to post the top-level menu.
+</dd>
+<dd>
+<p><em>$menu</em>-&gt;<strong>Post</strong>(<em>$x</em>,<em>$y</em>?,<em>$entry</em>?)</p>
+</dd>
+<dd>
+<p><em>$x</em> and <em>$y</em> are the root window coordinates at which the <em>$menu</em>
+will be displayed. If <em>$entry</em> is specified then that entry is centred
+on that point, otherwise the top-left corner of the <em>$menu</em> is placed
+at that point.</p>
+</dd>
+<dd>
+<p><strong>Menu</strong> also inherits methods from <a href="../../../site/lib/Tk/Wm.html">the Tk::Wm manpage</a> and so the method
+<strong>Popup</strong> can be used to position menu relative to other windows, the
+mouse cursor or the screen.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item_option_menus"><strong>Option Menus</strong></a></strong><br />
+</dt>
+<dd>
+An option menu consists of a menubutton with an associated menu
+that allows you to select one of several values.  The current value
+is displayed in the menubutton and is also stored in a global
+variable.  Use the <a href="../../../site/lib/Tk/Optionmenu.html">the Tk::Optionmenu manpage</a> class to create option
+menubuttons and their menus.
+</dd>
+<p></p>
+<dt><strong><a name="item_torn_2doff_menus"><strong>Torn-off Menus</strong></a></strong><br />
+</dt>
+<dd>
+You create a torn-off menu by invoking the tear-off entry at
+the top of an existing menu.  The default bindings will create a new menu
+that is a copy of the original menu and leave it permanently
+posted as a top-level window.  The torn-off menu behaves just
+the same as the original menu.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="default_bindings">DEFAULT BINDINGS</a></h1>
+<p>Tk automatically creates class bindings for menus that give them
+the following default behavior:</p>
+<dl>
+<dt><strong><a name="item__5b1_5d">[1]</a></strong><br />
+</dt>
+<dd>
+When the mouse enters a menu, the entry underneath the mouse
+cursor activates;  as the mouse moves around the menu, the active
+entry changes to track the mouse.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b2_5d">[2]</a></strong><br />
+</dt>
+<dd>
+When the mouse leaves a menu all of the entries in the menu
+deactivate, except in the special case where the mouse moves from
+a menu to a cascaded submenu.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b3_5d">[3]</a></strong><br />
+</dt>
+<dd>
+When a button is released over a menu, the active entry (if any) is invoked.
+The menu also unposts unless it is a torn-off menu.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b4_5d">[4]</a></strong><br />
+</dt>
+<dd>
+The Space and Return keys invoke the active entry and
+unpost the menu.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b5_5d">[5]</a></strong><br />
+</dt>
+<dd>
+If any of the entries in a menu have letters underlined with
+with <strong>-underline</strong> option, then pressing one of the underlined
+letters (or its upper-case or lower-case equivalent) invokes that
+entry and unposts the menu.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b6_5d">[6]</a></strong><br />
+</dt>
+<dd>
+The Escape key aborts a menu selection in progress without invoking any
+entry.  It also unposts the menu unless it is a torn-off menu.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b7_5d">[7]</a></strong><br />
+</dt>
+<dd>
+The Up and Down keys activate the next higher or lower entry
+in the menu.  When one end of the menu is reached, the active
+entry wraps around to the other end.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b8_5d">[8]</a></strong><br />
+</dt>
+<dd>
+The Left key moves to the next menu to the left.
+If the current menu is a cascaded submenu, then the submenu is
+unposted and the current menu entry becomes the cascade entry
+in the parent.
+If the current menu is a top-level menu posted from a
+menubutton, then the current menubutton is unposted and the
+next menubutton to the left is posted.
+Otherwise the key has no effect.
+The left-right order of menubuttons is determined by their stacking
+order:  Tk assumes that the lowest menubutton (which by default
+is the first one created) is on the left.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b9_5d">[9]</a></strong><br />
+</dt>
+<dd>
+The Right key moves to the next menu to the right.
+If the current entry is a cascade entry, then the submenu is
+posted and the  current menu entry becomes the first entry
+in the submenu.
+Otherwise, if the current menu was posted from a
+menubutton, then the current menubutton is unposted and the
+next menubutton to the right is posted.
+</dd>
+<dd>
+<p>Disabled menu entries are non-responsive:  they don't activate and
+they ignore mouse button presses and releases.</p>
+</dd>
+<dd>
+<p>The behavior of menus can be changed by defining new bindings for
+individual widgets or by redefining the class bindings.</p>
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="bugs">BUGS</a></h1>
+<p>At present it isn't possible to use the
+option database to specify values for the options to individual
+entries.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../../../site/lib/Tk/callbacks.html">Tk::callbacks</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="keywords">KEYWORDS</a></h1>
+<p>menu, widget</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::Menu - Create and manipulate Menu widgets</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

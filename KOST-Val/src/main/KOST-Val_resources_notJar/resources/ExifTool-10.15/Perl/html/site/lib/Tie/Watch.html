@@ -1,0 +1,286 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Tie::Watch - place watchpoints on Perl variables.</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tie::Watch - place watchpoints on Perl variables.</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#methods">METHODS</a></li>
+	<li><a href="#efficiency_considerations">EFFICIENCY CONSIDERATIONS</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+	<li><a href="#history">HISTORY</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<pre>
+ Tie::Watch - place watchpoints on Perl variables.</pre>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ use Tie::Watch;</pre>
+<pre>
+ $watch = Tie::Watch-&gt;new(
+     -variable =&gt; \$frog,
+     -debug    =&gt; 1,
+     -shadow   =&gt; 0,
+     -fetch    =&gt; [\&amp;fetch, 'arg1', 'arg2', ..., 'argn'],
+     -store    =&gt; \&amp;store,
+     -destroy  =&gt; sub {print &quot;Final value=$frog.\n&quot;},
+ }
+ %vinfo = $watch-&gt;Info;
+ $args  = $watch-&gt;Args(-fetch);
+ $val   = $watch-&gt;Fetch;
+ print &quot;val=&quot;, $watch-&gt;Say($val), &quot;.\n&quot;;
+ $watch-&gt;Store('Hello');
+ $watch-&gt;Unwatch;</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>This class module binds one or more subroutines of your devising to a
+Perl variable.  All variables can have <strong>FETCH</strong>, <strong>STORE</strong> and
+<strong>DESTROY</strong> callbacks.  Additionally, arrays can define <strong>CLEAR</strong>, <strong>EXTEND</strong>,
+<strong>FETCHSIZE</strong>, <strong>POP</strong>, <strong>PUSH</strong>, <strong>SHIFT</strong>, <strong>SPLICE</strong>, <strong>STORESIZE</strong> and
+<strong>UNSHIFT</strong> callbacks, and hashes can define <strong>CLEAR</strong>, <strong>DELETE</strong>, <strong>EXISTS</strong>,
+<strong>FIRSTKEY</strong> and <strong>NEXTKEY</strong> callbacks.  If these term are unfamiliar to you,
+I <em>really</em> suggest you read <a href="../../../lib/Pod/perltie.html">the perltie manpage</a>.</p>
+<p>With Tie::Watch you can:</p>
+<pre>
+ . alter a variable's value
+ . prevent a variable's value from being changed
+ . invoke a Perl/Tk callback when a variable changes
+ . trace references to a variable</pre>
+<p>Callback format is patterned after the Perl/Tk scheme: supply either a
+code reference, or, supply an array reference and pass the callback
+code reference in the first element of the array, followed by callback
+arguments.  (See examples in the Synopsis, above.)</p>
+<p>Tie::Watch provides default callbacks for any that you fail to
+specify.  Other than negatively impacting performance, they perform
+the standard action that you'd expect, so the variable behaves
+``normally''.  Once you override a default callback, perhaps to insert
+debug code like print statements, your callback normally finishes by
+calling the underlying (overridden) method.  But you don't have to!</p>
+<p>To map a tied method name to a default callback name simply lowercase
+the tied method name and uppercase its first character.  So FETCH
+becomes Fetch, NEXTKEY becomes Nextkey, etcetera.</p>
+<p>Here are two callbacks for a scalar. The <strong>FETCH</strong> (read) callback does
+nothing other than illustrate the fact that it returns the value to
+assign the variable.  The <strong>STORE</strong> (write) callback uppercases the
+variable and returns it.  In all cases the callback <em>must</em> return the
+correct read or write value - typically, it does this by invoking the
+underlying method.</p>
+<pre>
+ my $fetch_scalar = sub {
+     my($self) = @_;
+     $self-&gt;Fetch;
+ };</pre>
+<pre>
+ my $store_scalar = sub {
+     my($self, $new_val) = @_;
+     $self-&gt;Store(uc $new_val);
+ };</pre>
+<p>Here are <strong>FETCH</strong> and <strong>STORE</strong> callbacks for either an array or hash.
+They do essentially the same thing as the scalar callbacks, but
+provide a little more information.</p>
+<pre>
+ my $fetch = sub {
+     my($self, $key) = @_;
+     my $val = $self-&gt;Fetch($key);
+     print &quot;In fetch callback, key=$key, val=&quot;, $self-&gt;Say($val);
+     my $args = $self-&gt;Args(-fetch);
+     print &quot;, args=('&quot;, join(&quot;', '&quot;,  @$args), &quot;')&quot; if $args;
+     print &quot;.\n&quot;;
+     $val;
+ };</pre>
+<pre>
+ my $store = sub {
+     my($self, $key, $new_val) = @_;
+     my $val = $self-&gt;Fetch($key);
+     $new_val = uc $new_val;
+     $self-&gt;Store($key, $new_val);
+     print &quot;In store callback, key=$key, val=&quot;, $self-&gt;Say($val),
+       &quot;, new_val=&quot;, $self-&gt;Say($new_val);
+     my $args = $self-&gt;Args(-store);
+     print &quot;, args=('&quot;, join(&quot;', '&quot;,  @$args), &quot;')&quot; if $args;
+     print &quot;.\n&quot;;
+     $new_val;
+ };</pre>
+<p>In all cases, the first parameter is a reference to the Watch object,
+used to invoke the following class methods.</p>
+<p>
+</p>
+<hr />
+<h1><a name="methods">METHODS</a></h1>
+<dl>
+<dt><strong><a name="item_new">$watch = Tie::Watch-&gt;new(-options =&gt; values);</a></strong><br />
+</dt>
+<dd>
+The watchpoint constructor method that accepts option/value pairs to
+create and configure the Watch object.  The only required option is
+<strong>-variable</strong>.
+</dd>
+<dd>
+<p><strong>-variable</strong> is a <em>reference</em> to a scalar, array or hash variable.</p>
+</dd>
+<dd>
+<p><strong>-debug</strong> (default 0) is 1 to activate debug print statements internal
+to Tie::Watch.</p>
+</dd>
+<dd>
+<p><strong>-shadow</strong> (default 1) is 0 to disable array and hash shadowing.  To
+prevent infinite recursion Tie::Watch maintains parallel variables for
+arrays and hashes.  When the watchpoint is created the parallel shadow
+variable is initialized with the watched variable's contents, and when
+the watchpoint is deleted the shadow variable is copied to the original
+variable.  Thus, changes made during the watch process are not lost.
+Shadowing is on my default.  If you disable shadowing any changes made
+to an array or hash are lost when the watchpoint is deleted.</p>
+</dd>
+<dd>
+<p>Specify any of the following relevant callback parameters, in the
+format described above: <strong>-fetch</strong>, <strong>-store</strong>, <strong>-destroy</strong>.
+Additionally for arrays: <strong>-clear</strong>, <strong>-extend</strong>, <strong>-fetchsize</strong>,
+<strong>-pop</strong>, <strong>-push</strong>, <strong>-shift</strong>, <strong>-splice</strong>, <strong>-storesize</strong> and
+<strong>-unshift</strong>.  Additionally for hashes: <strong>-clear</strong>, <strong>-delete</strong>,
+<strong>-exists</strong>, <strong>-firstkey</strong> and <strong>-nextkey</strong>.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item_args">$args = $watch-&gt;Args(-fetch);</a></strong><br />
+</dt>
+<dd>
+Returns a reference to a list of arguments for the specified callback,
+or undefined if none.
+</dd>
+<p></p>
+<dt><strong><a name="item_fetch">$watch-&gt;Fetch();  $watch-&gt;Fetch($key);</a></strong><br />
+</dt>
+<dd>
+Returns a variable's current value.  $key is required for an array or
+hash.
+</dd>
+<p></p>
+<dt><strong><a name="item_info">%vinfo = $watch-&gt;Info();</a></strong><br />
+</dt>
+<dd>
+Returns a hash detailing the internals of the Watch object, with these
+keys:
+</dd>
+<dd>
+<pre>
+ %vinfo = {
+     -variable =&gt;  SCALAR(0x200737f8)
+     -debug    =&gt;  '0'
+     -shadow   =&gt;  '1'
+     -value    =&gt;  'HELLO SCALAR'
+     -destroy  =&gt;  ARRAY(0x200f86cc)
+     -fetch    =&gt;  ARRAY(0x200f8558)
+     -store    =&gt;  ARRAY(0x200f85a0)
+     -legible  =&gt;  above data formatted as a list of string, for printing
+ }</pre>
+</dd>
+<dd>
+<p>For array and hash Watch objects, the <strong>-value</strong> key is replaced with a
+<strong>-ptr</strong> key which is a reference to the parallel array or hash.
+Additionally, for an array or hash, there are key/value pairs for
+all the variable specific callbacks.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item_say">$watch-&gt;Say($val);</a></strong><br />
+</dt>
+<dd>
+Used mainly for debugging, it returns $val in quotes if required, or
+the string ``undefined'' for undefined values.
+</dd>
+<p></p>
+<dt><strong><a name="item_store">$watch-&gt;Store($new_val);  $watch-&gt;Store($key, $new_val);</a></strong><br />
+</dt>
+<dd>
+Store a variable's new value.  $key is required for an array or hash.
+</dd>
+<p></p>
+<dt><strong><a name="item_unwatch">$watch-&gt;Unwatch();</a></strong><br />
+</dt>
+<dd>
+Stop watching the variable.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="efficiency_considerations">EFFICIENCY CONSIDERATIONS</a></h1>
+<p>If you can live using the class methods provided, please do so.  You
+can meddle with the object hash directly and improved watch
+performance, at the risk of your code breaking in the future.</p>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p><a href="mailto:Stephen.O.Lidie@Lehigh.EDU">Stephen.O.Lidie@Lehigh.EDU</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="history">HISTORY</a></h1>
+<pre>
+ lusol@Lehigh.EDU, LUCC, 96/05/30
+ . Original version 0.92 release, based on the Trace module from Hans Mulder,
+   and ideas from Tim Bunce.</pre>
+<pre>
+ lusol@Lehigh.EDU, LUCC, 96/12/25
+ . Version 0.96, release two inner references detected by Perl 5.004.</pre>
+<pre>
+ lusol@Lehigh.EDU, LUCC, 97/01/11
+ . Version 0.97, fix Makefile.PL and MANIFEST (thanks Andreas Koenig).
+   Make sure test.pl doesn't fail if Tk isn't installed.</pre>
+<pre>
+ Stephen.O.Lidie@Lehigh.EDU, Lehigh University Computing Center, 97/10/03
+ . Version 0.98, implement -shadow option for arrays and hashes.</pre>
+<pre>
+ Stephen.O.Lidie@Lehigh.EDU, Lehigh University Computing Center, 98/02/11
+ . Version 0.99, finally, with Perl 5.004_57, we can completely watch arrays.
+   With tied array support this module is essentially complete, so its been
+   optimized for speed at the expense of clarity - sorry about that. The
+   Delete() method has been renamed Unwatch() because it conflicts with the
+   builtin delete().</pre>
+<pre>
+ Stephen.O.Lidie@Lehigh.EDU, Lehigh University Computing Center, 99/04/04
+ . Version 1.0, for Perl 5.005_03, update Makefile.PL for ActiveState, and
+   add two examples (one for Perl/Tk).</pre>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright (C) 1996 - 1999 Stephen O. Lidie. All rights reserved.</p>
+<p>This program is free software; you can redistribute it and/or modify it under
+the same terms as Perl itself.</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tie::Watch - place watchpoints on Perl variables.</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

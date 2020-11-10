@@ -1,0 +1,350 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Tk::Compound - Create multi-line compound images.</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::Compound - Create multi-line compound images.</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#creating_compound_images">CREATING COMPOUND IMAGES</a></li>
+	<li><a href="#image_command">IMAGE COMMAND</a></li>
+	<li><a href="#example">EXAMPLE</a></li>
+	<li><a href="#keywords">KEYWORDS</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Tk::Compound - Create multi-line compound images.</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;use Tk::Compound;
+&nbsp;&nbsp;&nbsp;&nbsp;<em>$image</em> = <em>$widget</em>-&gt;<strong>Compound</strong>?(<em>name</em>??,<em>options</em>?)
+&nbsp;&nbsp;&nbsp;&nbsp;<em>$image</em>-&gt;<strong>Line</strong>?(<em>options</em>?)
+&nbsp;&nbsp;&nbsp;&nbsp;<em>$image</em>-&gt;<strong>Text</strong>?(<em>options</em>?)
+&nbsp;&nbsp;&nbsp;&nbsp;<em>$image</em>-&gt;<strong>Bitmap</strong>?(<em>options</em>?)
+&nbsp;&nbsp;&nbsp;&nbsp;<em>$image</em>-&gt;<strong>Image</strong>?(<em>options</em>?)
+&nbsp;&nbsp;&nbsp;&nbsp;<em>$image</em>-&gt;<strong>Space</strong>?(<em>options</em>?)</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>Compound image types can be used to create images that consists of
+multiple horizontal lines; each line is composed of a series of items
+(texts, bitmaps, images or spaces) arranged from left to
+right. Compound images are mainly used to embed complex drawings into
+widgets that support the <strong>-image</strong> option. As shown in the EXAMPLE
+section below, a compound image can be used to display a bitmap and a
+text string simutaneously in a Tk <strong>Button</strong> widget.</p>
+<p>Compound images can only be used on windows on the same display as, and
+with the same pixel depth and visual as the <em>$widget</em> used to create them.</p>
+<p>
+</p>
+<hr />
+<h1><a name="creating_compound_images">CREATING COMPOUND IMAGES</a></h1>
+<p>Compounds are created using <em>$widget</em>-&gt;<strong>Compound</strong>.
+Compounds support the following <em>options</em>:</p>
+<dl>
+<dt><strong><a name="item__2dbackground__3d_3e_color"><strong>-background</strong> =&gt; <em>color</em></a></strong><br />
+</dt>
+<dd>
+Specifies the background color of the compound image. This color is
+also used as the default background color for the bitmap items in the
+compound image.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dborderwidth__3d_3e_pixels"><strong>-borderwidth</strong> =&gt; <em>pixels</em></a></strong><br />
+</dt>
+<dd>
+Specifies a non-negative value indicating the width of the 3-D border
+drawn around the compound image.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dfont__3d_3e_font"><strong>-font</strong> =&gt; <em>font</em></a></strong><br />
+</dt>
+<dd>
+Specifies the default font for the text items in the compound image.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dforeground__3d_3e_color"><strong>-foreground</strong> =&gt; <em>color</em></a></strong><br />
+</dt>
+<dd>
+Specifies the default foreground color for the bitmap and text items
+in the compound image.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dpadx__3d_3e_value"><strong>-padx</strong> =&gt; <em>value</em></a></strong><br />
+</dt>
+<dd>
+Specifies a non-negative value indicating how much extra space to
+request for the compound image in the X-direction. The <em>value</em> may
+have any of the forms acceptable to <strong>Tk_GetPixels(3)</strong>.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dpady__3d_3e_value"><strong>-pady</strong> =&gt; <em>value</em></a></strong><br />
+</dt>
+<dd>
+Specifies a non-negative value indicating how much extra space to
+request for the compound image in the Y-direction.
+</dd>
+<p></p>
+<dt><strong><a name="item__2drelief__3d_3e_value"><strong>-relief</strong> =&gt; <em>value</em></a></strong><br />
+</dt>
+<dd>
+Specifies the 3-D effect desired for the background of the compound
+image. Acceptable values are <strong>raised</strong>, <strong>sunken</strong>, <strong>flat</strong>,
+<strong>ridge</strong>, and <strong>groove</strong>.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dshowbackground__3d_3e_value"><strong>-showbackground</strong> =&gt; <em>value</em></a></strong><br />
+</dt>
+<dd>
+Specifies whether the background and the 3D borders should be drawn.
+Must be a valid boolean value. By default the background is not drawn
+and the compound image appears to have a transparent background.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="image_command">IMAGE COMMAND</a></h1>
+<p>When a compound image is created, Tk also creates a new object.
+This object supports the <strong>configure</strong> and <strong>cget</strong> methods
+described in <a href="../../../site/lib/Tk/options.html">the Tk::options manpage</a> which can be used to enquire and
+modify the options described above.</p>
+<p>The object also supports the following methods:</p>
+<dl>
+<dt><strong><a name="item_line"><em>$compound</em>-&gt;<strong>Line</strong>?(<em>option =</em> value ...&gt;)?</a></strong><br />
+</dt>
+<dd>
+Creates a new line at the bottom of the compound image. Lines support
+the following <em>options</em>:
+</dd>
+<dl>
+<dt><strong><a name="item__2danchor_value"><strong>-anchor</strong> value</a></strong><br />
+</dt>
+<dd>
+Specifies how the line should be aligned along the horizontal axis.
+When the values are <strong>w</strong>, <strong>sw</strong> or <strong>nw</strong>, the line is aligned
+to the left. When the values are <strong>c</strong>, <strong>s</strong> or <strong>n</strong>, the line
+is aligned to the middle.  When the values are <strong>e</strong>, <strong>se</strong> or
+<strong>ne</strong>, the line is aligned to the right.
+</dd>
+<p></p>
+<dt><strong><strong>-padx</strong> =&gt; <em>value</em></strong><br />
+</dt>
+<dd>
+Specifies a non-negative value indicating how much extra space to
+request for this line in the X-direction.
+</dd>
+<p></p></dl>
+<dt><strong><a name="item_itemtype"><em>$compound</em>-&gt;<em>Itemtype</em>?(<em>option =</em> value ...&gt;)?</a></strong><br />
+</dt>
+<dd>
+Creates a new item of the type <em>Itemtype</em> at the end of the last
+line of the compound image. All types of items support
+these following common <em>options</em>:
+</dd>
+<dl>
+<dt><strong><strong>-anchor</strong> value</strong><br />
+</dt>
+<dd>
+Specifies how the item should be aligned along the vertical axis. When
+the values are <strong>n</strong>, <strong>nw</strong> or <strong>ne</strong>, the item is aligned to
+the top of the line. When the values are <strong>c</strong>, <strong>w</strong> or <strong>e</strong>,
+the item is aligned to the middle of the line.  When the values are
+<strong>s</strong>, <strong>se</strong> or <strong>sw</strong>, the item is aligned to the bottom of
+the line.
+</dd>
+<p></p>
+<dt><strong><strong>-padx</strong> =&gt; <em>value</em></strong><br />
+</dt>
+<dd>
+Specifies a non-negative value indicating how much extra space to
+request for this item in the X-direction.
+</dd>
+<p></p>
+<dt><strong><strong>-pady</strong> =&gt; <em>value</em></strong><br />
+</dt>
+<dd>
+Specifies a non-negative value indicating how much extra space to
+request for this item in the Y-direction.
+</dd>
+<p></p>
+<dt><strong><a name="item_item_2dtype_can_be_any_of_the_following_3a"><em>item-type</em> can be any of the following:</a></strong><br />
+</dt>
+</dl>
+<dt><strong><a name="item_bitmap"><em>$compound</em>-&gt;<strong>Bitmap</strong>?(<em>option =</em> value ...&gt;)?</a></strong><br />
+</dt>
+<dd>
+Creates a new bitmap item of at the end of the last
+line of the compound image. Additional <em>options</em> accepted by the
+bitmap type are:
+</dd>
+<dl>
+<dt><strong><strong>-background</strong> =&gt; <em>color</em></strong><br />
+</dt>
+<dd>
+Specifies the background color of the bitmap item.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dbitmap__3d_3e_name"><strong>-bitmap</strong> =&gt; <em>name</em></a></strong><br />
+</dt>
+<dd>
+Specifies a bitmap to display in this item, in any of the forms
+acceptable to <strong>Tk_GetBitmap(3)</strong>.
+</dd>
+<p></p>
+<dt><strong><strong>-foreground</strong> =&gt; <em>color</em></strong><br />
+</dt>
+<dd>
+Specifies the foreground color of the bitmap item.
+</dd>
+<p></p></dl>
+<dt><strong><a name="item_image"><em>$compound</em>-&gt;<strong>Image</strong>?(<em>option =</em> value ...&gt;)?</a></strong><br />
+</dt>
+<dd>
+Creates a new image item of at the end of the last
+line of the compound image. Additional <em>options</em> accepted by the
+image type are:
+</dd>
+<dl>
+<dt><strong><a name="item__2dimage__3d_3e_name"><strong>-image</strong> =&gt; <em>name</em></a></strong><br />
+</dt>
+<dd>
+Specifies an image to display in this item. <em>name</em>
+must have been created with the <strong>image create</strong> command.
+</dd>
+<p></p></dl>
+<dt><strong><a name="item_space"><em>$compound</em>-&gt;<strong>Space</strong>?(<em>option =</em> value ...&gt;)?</a></strong><br />
+</dt>
+<dd>
+Creates a new space item of at the end of the last line of the
+compound image. Space items do not display anything. They just acts as
+space holders that add additional spaces between items inside a
+compound image. Additional <em>options</em> accepted by the image type
+are:
+</dd>
+<dl>
+<dt><strong><a name="item__2dwidth__3d_3e_value"><strong>-width</strong> =&gt; <em>value</em></a></strong><br />
+</dt>
+<dd>
+Specifies the width of this space. The <em>value</em> may have any of the
+forms acceptable to <strong>Tk_GetPixels(3)</strong>.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dheight__3d_3e_value"><strong>-height</strong> =&gt; <em>value</em></a></strong><br />
+</dt>
+<dd>
+Specifies the height of this space. The <em>value</em> may have any of
+the forms acceptable to <strong>Tk_GetPixels(3)</strong>.
+</dd>
+<p></p></dl>
+<dt><strong><a name="item_text"><em>$compound</em>-&gt;<strong>Text</strong>?(<em>option =</em> value ...&gt;)?</a></strong><br />
+</dt>
+<dd>
+Creates a new text item of at the end of the last line of the compound
+image. Additional <em>options</em> accepted by the text type are:
+</dd>
+<dl>
+<dt><strong><strong>-background</strong> =&gt; <em>color</em></strong><br />
+</dt>
+<dd>
+Specifies the background color of the text item.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dfont__3d_3e_name"><strong>-font</strong> =&gt; <em>name</em></a></strong><br />
+</dt>
+<dd>
+Specifies the font to be used for this text item.
+</dd>
+<p></p>
+<dt><strong><strong>-foreground</strong> =&gt; <em>color</em></strong><br />
+</dt>
+<dd>
+Specifies the foreground color of the text item.
+</dd>
+<p></p>
+<dt><strong><a name="item__2djustify_value"><strong>-justify</strong> <em>value</em></a></strong><br />
+</dt>
+<dd>
+When there are multiple lines of text displayed in a text item, this
+option determines how the lines line up with each other. <em>value</em>
+must be one of <strong>left</strong>, <strong>center</strong>, or <strong>right</strong>.  <strong>Left</strong>
+means that the lines' left edges all line up, <strong>center</strong> means that
+the lines' centers are aligned, and <strong>right</strong> means that the lines'
+right edges line up.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dtext__3d_3e_string"><strong>-text</strong> =&gt; <em>string</em></a></strong><br />
+</dt>
+<dd>
+Specifies a text string to display in this text item.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dunderline_value"><strong>-underline</strong> <em>value</em></a></strong><br />
+</dt>
+<dd>
+Specifies the integer index of a character to underline in the text
+item. 0 corresponds to the first character of the text displayed in
+the text item, 1 to the next character, and so on.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dwraplength_value"><strong>-wraplength</strong> <em>value</em></a></strong><br />
+</dt>
+<dd>
+This option specifies the maximum line length of the label string on
+this text item. If the line length of the label string exceeds this
+length, it is wrapped onto the next line, so that no line is longer
+than the specified length. The value may be specified in any of the
+standard forms for screen distances. If this value is less than or
+equal to 0 then no wrapping is done: lines will break only at newline
+characters in the text.
+</dd>
+<p></p></dl>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="example">EXAMPLE</a></h1>
+<p>The following example creates a compound image with a bitmap and a
+text string and places this image into a <strong>Button(n)</strong>
+widget. Notice that the image must be created using the widget
+that it resides in.</p>
+<pre>
+  my $b = $parent-&gt;Button;
+  my $c = $b-&gt;Compound;
+  $b-&gt;configure(-image =&gt; $c);
+  $c-&gt;Line;
+  $c-&gt;Bitmap(-bitmap =&gt; 'warning');
+  $c-&gt;Space(-width =&gt; 8);
+  $c-&gt;Text(-text =&gt; &quot;Warning&quot;, -underline =&gt; 0);
+  $b-&gt;pack;</pre>
+<p>
+</p>
+<hr />
+<h1><a name="keywords">KEYWORDS</a></h1>
+<p>image(n), <code>Tix(n)</code></p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::Compound - Create multi-line compound images.</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>XML::Parser::Style::Stream - Stream style for XML::Parser</title>
+<link rel="stylesheet" href="../../../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;XML::Parser::Style::Stream - Stream style for XML::Parser</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>XML::Parser::Style::Stream - Stream style for XML::Parser</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+  use XML::Parser;
+  my $p = XML::Parser-&gt;new(Style =&gt; 'Stream', Pkg =&gt; 'MySubs');
+  $p-&gt;parsefile('foo.xml');
+  
+  {
+    package MySubs;
+    
+    sub StartTag {
+      my ($e, $name) = @_;
+      # do something with start tags
+    }
+    
+    sub EndTag {
+      my ($e, $name) = @_;
+      # do something with end tags
+    }
+    
+    sub Characters {
+      my ($e, $data) = @_;
+      # do something with text nodes
+    }
+  }</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>This style uses the Pkg option to find subs in a given package to call for each event.
+If none of the subs that this
+style looks for is there, then the effect of parsing with this style is
+to print a canonical copy of the document without comments or declarations.
+All the subs receive as their 1st parameter the Expat instance for the
+document they're parsing.</p>
+<p>It looks for the following routines:</p>
+<ul>
+<li><strong><a name="item_startdocument">StartDocument</a></strong><br />
+</li>
+Called at the start of the parse .
+<p></p>
+<li><strong><a name="item_starttag">StartTag</a></strong><br />
+</li>
+Called for every start tag with a second parameter of the element type. The $_
+variable will contain a copy of the tag and the %_ variable will contain
+attribute values supplied for that element.
+<p></p>
+<li><strong><a name="item_endtag">EndTag</a></strong><br />
+</li>
+Called for every end tag with a second parameter of the element type. The $_
+variable will contain a copy of the end tag.
+
+
+<p></p>
+<li><strong><a name="item_text">Text</a></strong><br />
+</li>
+Called just before start or end tags with accumulated non-markup text in
+the $_ variable.
+
+
+<p></p>
+<li><strong><a name="item_pi">PI</a></strong><br />
+</li>
+Called for processing instructions. The $_ variable will contain a copy of
+the PI and the target and data are sent as 2nd and 3rd parameters
+respectively.
+
+
+<p></p>
+<li><strong><a name="item_enddocument">EndDocument</a></strong><br />
+</li>
+Called at conclusion of the parse.
+
+
+<p></p></ul>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;XML::Parser::Style::Stream - Stream style for XML::Parser</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

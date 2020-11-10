@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>reloc_perl - relocate a perl installation</title>
+<link rel="stylesheet" href="../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;reloc_perl - relocate a perl installation</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>reloc_perl - relocate a perl installation</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+  reloc_perl [-a] [-b] [-d] [-e destpath] [-f file] [-i] [-t] [-r] [-v]
+             topath [frompath]</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>This tool will move a perl installation wholesale to a new location.</p>
+<p>Edits path names in binaries (e.g., a2p, perl, libperl.a) to reflect the
+new location, but preserves the size of strings by null padding them as
+necessary.</p>
+<p>Edits text files by simple substitution.</p>
+<p>'destpath' cannot be longer than 'frompath'.</p>
+<p>If 'frompath' is not found in any files, no changes whatsoever are made.</p>
+<p>Running the tool without arguments provides more help.</p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>(c) 1999-2001 ActiveState Tool Corp.  All rights reserved.</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;reloc_perl - relocate a perl installation</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

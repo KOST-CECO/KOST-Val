@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Digest::MD2 - Perl interface to the MD2 Algorithm</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Digest::MD2 - Perl interface to the MD2 Algorithm</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Digest::MD2 - Perl interface to the MD2 Algorithm</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ # Functional style
+ use Digest::MD2  qw(md2 md2_hex md2_base64);</pre>
+<pre>
+ $digest = md2($data);
+ $digest = md2_hex($data);
+ $digest = md2_base64($data);</pre>
+<pre>
+ # OO style
+ use Digest::MD2;</pre>
+<pre>
+ $ctx = Digest::MD2-&gt;new;</pre>
+<pre>
+ $ctx-&gt;add($data);
+ $ctx-&gt;addfile(*FILE);</pre>
+<pre>
+ $digest = $ctx-&gt;digest;
+ $digest = $ctx-&gt;hexdigest;
+ $digest = $ctx-&gt;b64digest;</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The <code>Digest::MD2</code> module allows you to use the RSA Data Security
+Inc. MD2 Message Digest algorithm from within Perl programs.  The
+algorithm takes as input a message of arbitrary length and produces as
+output a 128-bit ``fingerprint'' or ``message digest'' of the input.</p>
+<p>The <code>Digest::MD2</code> programming interface is identical to the interface
+of <code>Digest::MD5</code>.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../../../lib/Digest/MD5.html">the Digest::MD5 manpage</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>This library is free software; you can redistribute it and/or
+modify it under the same terms as Perl itself.</p>
+<pre>
+ Copyright 1998-2003 Gisle Aas.
+ Copyright 1990-1992 RSA Data Security, Inc.</pre>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Gisle Aas &lt;<a href="mailto:gisle@aas.no">gisle@aas.no</a>&gt;</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Digest::MD2 - Perl interface to the MD2 Algorithm</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

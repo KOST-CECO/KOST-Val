@@ -1,0 +1,235 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>perl573delta - what's new for perl v5.7.3</title>
+<link rel="stylesheet" href="../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;perl573delta - what's new for perl v5.7.3</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#changes">Changes</a></li>
+	<li><a href="#reporting_bugs">Reporting Bugs</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#history">HISTORY</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>perl573delta - what's new for perl v5.7.3</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>This document describes differences between the 5.7.2 release and the
+5.7.3 release.</p>
+<p>(To view the differences between the 5.6.0 release and the 5.7.0
+release, see <a href="../../lib/Pod/perl570delta.html">the perl570delta manpage</a>.  To view the differences between the
+5.7.0 release and the 5.7.1 release, see <a href="../../lib/Pod/perl571delta.html">the perl571delta manpage</a>.  To view
+the differences between the 5.7.1 release and the 5.7.2 release,
+see <a href="../../lib/Pod/perl572delta.html">the perl572delta manpage</a>.)</p>
+<p>
+</p>
+<hr />
+<h1><a name="changes">Changes</a></h1>
+<p>This is just a selected list of some of the more notable changes.
+The numbers refer to the Perl repository change numbers; see
+<em>Changes58</em> (or <em>Changes</em> in Perl 5.8.1).  In addition to these
+changes, lots of work took place in integrating threads, PerlIO, and
+Unicode; general code cleanup; and last but not least porting to
+non-UNIX lands such as Win32, VMS, Cygwin, DJGPP, VOS, MacOS Classic,
+and EBCDIC.</p>
+<ol>
+<li></li>
+add LC_MESSAGES to POSIX :locale_h export tag
+<p></p>
+<li></li>
+add DEL to [:cntrl:]
+<p></p>
+<li></li>
+make h2ph understand constants like 1234L and 5678LL
+<p></p>
+<li></li>
+Win32: fix bugs in handling of the virtualized environment
+<p></p>
+<li></li>
+fix a bug in the security taint checking of <a href="../../lib/Pod/perlfunc.html#item_open"><code>open()</code></a>
+<p></p>
+<li></li>
+make perl <a href="../../lib/Pod/perlfunc.html#item_fork"><code>fork()</code></a> safe even on platforms that don't have <code>pthread_atfork()</code>
+<p></p>
+<li></li>
+make switching optimization and debugging levels during Perl builds
+easier via the OPTIMIZE environment variable
+<p></p>
+<li></li>
+make split()'s unused captures to be undef, not ''
+<p></p>
+<li></li>
+Search::Dict: allow transforming lines before comparing
+<p></p>
+<li></li>
+allow installing extra modules or bundles when building Perl
+<p></p>
+<li></li>
+add -Wall in cflags when compiling with gcc to weed out dubious
+C practices
+<p></p>
+<li></li>
+pluggable optimizer
+<p></p>
+<li></li>
+WinCE: integrate the port
+<p></p>
+<li></li>
+Win32: 4-arg select was broken
+<p></p>
+<li></li>
+introduce the perlivp utility for verifying the Perl installation
+(IVP = Installation Verification Procedure)
+<p></p>
+<li></li>
+rename lib/unicode to lib/unicore to avoid case-insensitivity problems
+with lib/Unicode
+<p></p>
+<li></li>
+remove Time::Piece
+<p></p>
+<li></li>
+document that use utf8 is not the right way most of the time
+<p></p>
+<li></li>
+allow builing perl with -DUSE_UTF8_SCRIPTS which makes UTF-8
+the default script encoding (not the default since that would
+break all scripts having legacy eight-bit data in them)
+<p></p>
+<li></li>
+division preserving 64-bit integers
+<p></p>
+<li></li>
+document the coderef-in-@INC feature
+<p></p>
+<li></li>
+modulo (%) preserving 64-bit integers
+<p></p>
+<li></li>
+update to Unicode 3.1.1
+<p></p>
+<li></li>
+add the \[$@%&amp;*] prototype support
+<p></p>
+<li></li>
+<a href="../../lib/Pod/perlfunc.html#item_oct"><code>oct()</code></a> and <a href="../../lib/Pod/perlfunc.html#item_hex"><code>hex()</code></a> in glorious 64 bit
+<p></p>
+<li></li>
+Class::Struct: allow recursive classes
+<p></p>
+<li></li>
+fix unpack U to be the reverse of pack U
+<p></p>
+<li></li>
+VMS: waitpid enhancements
+<p></p>
+<li></li>
+unpack(``Z*Z*'', pack(``Z*Z*'', ..)) was broken
+<p></p>
+<li></li>
+Devel::Peek: display UTF-8 SVs also also as \x{...}
+<p></p>
+<li></li>
+Data::Dumper: option to sort hashes
+<p></p>
+<li></li>
+add perlpodspec
+<p></p>
+<li></li>
+threadsafe DynaLoader, re, Opcode, File::Glob, and B
+<p></p>
+<li></li>
+support BeOS better
+<p></p>
+<li></li>
+read-only hashes (user-level interface is Hash::Util)
+<p></p>
+<li></li>
+add Devel::PPPort
+<p></p>
+<li></li>
+add the sort pragma
+<p></p>
+<li></li>
+VMS: fix perl -P
+<p></p>
+<li></li>
+add perlpacktut
+<p></p>
+<li></li>
+SUPER-UX: add hints file
+<p></p>
+<li></li>
+Win32: non-blocking <a href="../../lib/Pod/perlfunc.html#item_waitpid"><code>waitpid(-1,WNOHANG)</code></a>
+<p></p>
+<li></li>
+introduce the -t option for gentler taint checking
+<p></p>
+<li></li>
+add the if pragma
+<p></p>
+<li></li>
+implement IV/UV/NV/long double un/packing with j/J/F/D
+<p></p>
+<li></li>
+document the new taint behaviour of exec LIST and system LIST
+<p></p></ol>
+<p>
+</p>
+<hr />
+<h1><a name="reporting_bugs">Reporting Bugs</a></h1>
+<p>If you find what you think is a bug, you might check the articles
+recently posted to the comp.lang.perl.misc newsgroup and the perl
+bug database at <a href="http://bugs.perl.org.">http://bugs.perl.org.</a>  There may also be
+information at <a href="http://www.perl.com/,">http://www.perl.com/,</a> the Perl Home Page.</p>
+<p>If you believe you have an unreported bug, please run the <strong>perlbug</strong>
+program included with your release.  Be sure to trim your bug down
+to a tiny but sufficient test case.  Your bug report, along with the
+output of <code>perl -V</code>, will be sent off to <a href="mailto:perlbug@perl.org">perlbug@perl.org</a> to be
+analysed by the Perl porting team.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p>The <em>Changes</em> file for exhaustive details on what changed.</p>
+<p>The <em>INSTALL</em> file for how to build Perl.</p>
+<p>The <em>README</em> file for general stuff.</p>
+<p>The <em>Artistic</em> and <em>Copying</em> files for copyright information.</p>
+<p>
+</p>
+<hr />
+<h1><a name="history">HISTORY</a></h1>
+<p>Written by Jarkko Hietaniemi &lt;<em><a href="mailto:jhi@iki.fi">jhi@iki.fi</a></em>&gt;, with many contributions
+from The Perl Porters and Perl Users submitting feedback and patches.</p>
+<p>Send omissions or corrections to &lt;<em><a href="mailto:perlbug@perl.org">perlbug@perl.org</a></em>&gt;.</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;perl573delta - what's new for perl v5.7.3</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

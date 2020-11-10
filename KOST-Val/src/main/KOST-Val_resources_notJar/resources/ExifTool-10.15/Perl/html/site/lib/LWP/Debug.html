@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>LWP::Debug - debug routines for the libwww-perl library</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;LWP::Debug - debug routines for the libwww-perl library</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>LWP::Debug - debug routines for the libwww-perl library</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ use LWP::Debug qw(+ -conns);</pre>
+<pre>
+ # Used internally in the library
+ LWP::Debug::trace('send()');
+ LWP::Debug::debug('url ok');
+ LWP::Debug::conns(&quot;read $n bytes: $data&quot;);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>LWP::Debug provides tracing facilities. The trace(), <a href="#item_debug"><code>debug()</code></a> and
+<a href="#item_conns"><code>conns()</code></a> function are called within the library and they log
+information at increasing levels of detail. Which level of detail is
+actually printed is controlled with the <a href="#item_level"><code>level()</code></a> function.</p>
+<p>The following functions are available:</p>
+<dl>
+<dt><strong><a name="item_level"><code>level(...)</code></a></strong><br />
+</dt>
+<dd>
+The <a href="#item_level"><code>level()</code></a> function controls the level of detail being
+logged. Passing '+' or '-' indicates full and no logging
+respectively. Individual levels can switched on and of by passing the
+name of the level with a '+' or '-' prepended.  The levels are:
+</dd>
+<dd>
+<pre>
+  trace   : trace function calls
+  debug   : print debug messages
+  conns   : show all data transfered over the connections</pre>
+</dd>
+<dd>
+<p>The LWP::Debug module provide a special <a href="../../../lib/Pod/perlfunc.html#item_import"><code>import()</code></a> method that allows
+you to pass the <a href="#item_level"><code>level()</code></a> arguments with initial use statement.  If a
+use argument start with '+' or '-' then it is passed to the level
+function, else the name is exported as usual.  The following two
+statements are thus equivalent (if you ignore that the second pollutes
+your namespace):</p>
+</dd>
+<dd>
+<pre>
+  use LWP::Debug qw(+);
+  use LWP::Debug qw(level); level('+');</pre>
+</dd>
+<p></p>
+<dt><strong><a name="item_trace"><code>trace($msg)</code></a></strong><br />
+</dt>
+<dd>
+The <a href="#item_trace"><code>trace()</code></a> function is used for tracing function
+calls. The package and calling subroutine name is
+printed along with the passed argument. This should
+be called at the start of every major function.
+</dd>
+<p></p>
+<dt><strong><a name="item_debug"><code>debug($msg)</code></a></strong><br />
+</dt>
+<dd>
+The <a href="#item_debug"><code>debug()</code></a> function is used for high-granularity
+reporting of state in functions.
+</dd>
+<p></p>
+<dt><strong><a name="item_conns"><code>conns($msg)</code></a></strong><br />
+</dt>
+<dd>
+The <a href="#item_conns"><code>conns()</code></a> function is used to show data being
+transferred over the connections. This may generate
+considerable output.
+</dd>
+<p></p></dl>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;LWP::Debug - debug routines for the libwww-perl library</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

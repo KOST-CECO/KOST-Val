@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>podchecker - check the syntax of POD format documentation files</title>
+<link rel="stylesheet" href="../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;podchecker - check the syntax of POD format documentation files</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#options_and_arguments">OPTIONS AND ARGUMENTS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#return_value">RETURN VALUE</a></li>
+	<li><a href="#errors">ERRORS</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#authors">AUTHORS</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>podchecker - check the syntax of POD format documentation files</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p><strong>podchecker</strong> [<strong>-help</strong>] [<strong>-man</strong>] [<strong>-(no)warnings</strong>] [<em>file</em>&nbsp;...]</p>
+<p>
+</p>
+<hr />
+<h1><a name="options_and_arguments">OPTIONS AND ARGUMENTS</a></h1>
+<dl>
+<dt><strong><a name="item__2dhelp"><strong>-help</strong></a></strong><br />
+</dt>
+<dd>
+Print a brief help message and exit.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dman"><strong>-man</strong></a></strong><br />
+</dt>
+<dd>
+Print the manual page and exit.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dwarnings__2dnowarnings"><strong>-warnings</strong> <strong>-nowarnings</strong></a></strong><br />
+</dt>
+<dd>
+Turn on/off printing of warnings. Repeating <strong>-warnings</strong> increases the
+warning level, i.e. more warnings are printed. Currently increasing to
+level two causes flagging of unescaped ``&lt;,&gt;'' characters.
+</dd>
+<p></p>
+<dt><strong><a name="item_file"><em>file</em></a></strong><br />
+</dt>
+<dd>
+The pathname of a POD file to syntax-check (defaults to standard input).
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p><strong>podchecker</strong> will read the given input files looking for POD
+syntax errors in the POD documentation and will print any errors
+it find to STDERR. At the end, it will print a status message
+indicating the number of errors found.</p>
+<p>Directories are ignored, an appropriate warning message is printed.</p>
+<p><strong>podchecker</strong> invokes the <strong>podchecker()</strong> function exported by <strong>Pod::Checker</strong>
+Please see <a href="../lib/Pod/Checker.html#podchecker__">podchecker() in the Pod::Checker manpage</a> for more details.</p>
+<p>
+</p>
+<hr />
+<h1><a name="return_value">RETURN VALUE</a></h1>
+<p><strong>podchecker</strong> returns a 0 (zero) exit status if all specified
+POD files are ok.</p>
+<p>
+</p>
+<hr />
+<h1><a name="errors">ERRORS</a></h1>
+<p><strong>podchecker</strong> returns the exit status 1 if at least one of
+the given POD files has syntax errors.</p>
+<p>The status 2 indicates that at least one of the specified 
+files does not contain <em>any</em> POD commands.</p>
+<p>Status 1 overrides status 2. If you want unambigouus
+results, call <strong>podchecker</strong> with one single argument only.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../lib/Pod/Parser.html">the Pod::Parser manpage</a> and <a href="../lib/Pod/Checker.html">the Pod::Checker manpage</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="authors">AUTHORS</a></h1>
+<p>Brad Appleton &lt;<a href="mailto:bradapp@enteract.com">bradapp@enteract.com</a>&gt;,
+Marek Rouchal &lt;<a href="mailto:marek@saftsack.fs.uni-bayreuth.de">marek@saftsack.fs.uni-bayreuth.de</a>&gt;</p>
+<p>Based on code for <strong>Pod::Text::pod2text(1)</strong> written by
+Tom Christiansen &lt;<a href="mailto:tchrist@mox.perl.com">tchrist@mox.perl.com</a>&gt;</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;podchecker - check the syntax of POD format documentation files</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

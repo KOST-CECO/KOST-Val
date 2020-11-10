@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>WidgetDemo - create a standard widget demonstration window.</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;WidgetDemo - create a standard widget demonstration window.</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+	<li><a href="#history">HISTORY</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p><code>WidgetDemo()</code> - create a standard widget demonstration window.</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ use WidgetDemo;
+ my $TOP = $MW-&gt;WidgetDemo(
+     -name             =&gt; $demo,
+     -text             =&gt; 'Learn how to write a widget demonstration!',
+     -title            =&gt; 'WidgetDemo Demonstration',
+     -iconname         =&gt; 'WidgetDemo',
+     -geometry_manager =&gt; 'grid',
+     -font             =&gt; $FONT,
+ );</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>This constructor builds a standard widget demonstration window, composed of
+three frames.  The top frame contains descriptive demonstration text.  The
+bottom frame contains the ``Dismiss'' and ``See Code'' buttons.  The middle frame
+is demonstration container, which came be managed by either the pack or grid
+geometry manager.</p>
+<p>The -text attribute is supplied to a Label widget, which is left-adjusted
+with -wraplength set to 4 inches.  If you require different specifications
+then pass an array to -text; the first element is the text string and
+the remaining array elements are standard Label widget attributes - WidgetDemo
+will rearrange things as required..</p>
+<pre>
+    -text =&gt; ['Hello World!', qw/-wraplength 6i/],</pre>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Steve Lidie &lt;<a href="mailto:Stephen.O.Lidie@Lehigh.EDU">Stephen.O.Lidie@Lehigh.EDU</a>&gt;</p>
+<p>
+</p>
+<hr />
+<h1><a name="history">HISTORY</a></h1>
+<p><a href="mailto:lusol@Lehigh.EDU,">lusol@Lehigh.EDU,</a> LUCC, 97/02/11
+<a href="mailto:lusol@Lehigh.EDU,">lusol@Lehigh.EDU,</a> LUCC, 97/06/07
+<a href="mailto:Stephen.O.Lidie@Lehigh.EDU,">Stephen.O.Lidie@Lehigh.EDU,</a> LUCC, 97/06/07
+ . Add <code>Delegates()</code> call that obviates the need for Top().  Many thanks to
+   Achim Bohnet for this patch.
+ . Fix -title so that it works.</p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright (C) 1997 - 1998 Stephen O. Lidie. All rights reserved.</p>
+<p>This program is free software; you can redistribute it and/or modify it under
+the same terms as Perl itself.</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;WidgetDemo - create a standard widget demonstration window.</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        elementFormDefault="qualified"
+        attributeFormDefault="unqualified">
+
+  <xs:include schemaLocation="base.xsd"/>
+  <xs:simpleType name="aktenzeichen">
+    <xs:annotation>
+      <xs:documentation xml:lang="de">Identifikation und Ordnungsmerkmal des Dossiers. Das Aktenzeichen erlaubt es, das Dossier innerhalb eines bestimmten Ablagesystems einer eindeutigen Position (Rubrik) des OS zuzuordnen.</xs:documentation>
+      <xs:documentation xml:lang="en">Identification and classification feature of the dossier. The file reference allows the dossier to be assigned to an unambiguous position (rubric) of the CS within a specific archive system.</xs:documentation>
+      <xs:documentation xml:lang="fr">Identification et caractéristique de classement du dossier. La référence permet d'attribuer le dossier dans un système de classement déterminé à une position univoque (rubrique) du système de classement.</xs:documentation>
+      <xs:documentation xml:lang="it"/>
+    </xs:annotation>
+    <xs:restriction base="text2"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="zusatzmerkmal">
+    <xs:annotation>
+      <xs:documentation xml:lang="de">Angaben über zusätzliche Merkmale, welche das Dossier identifizieren. Hier kann z.B. die Bandnummer eines Dossiers vermerkt werden, als Unterscheidungs- und Reihungsmerkmal von Fortsetzungsdossiers mit demselben Dossier-Titel und mit demselben Aktenzeichen erfasst.</xs:documentation>
+      <xs:documentation xml:lang="en">Information on additional characteristics that identify the dossier. For example the volume number of a dossier can be indicated here to differentiate and sequence in respect of consecutive dossiers with the same dossier title and the same file reference.</xs:documentation>
+      <xs:documentation xml:lang="fr">Informations sur des composants additionnels qui servent à l'identification du dossier. Ici peut, par exemple, être mentionné le numéro de volume d'un dossier, qui constitue une caractéristique de différenciation des dossiers successifs avec le même titre et la même référence.</xs:documentation>
+      <xs:documentation xml:lang="it"/>
+    </xs:annotation>
+    <xs:restriction base="text2"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="titelDossier">
+    <xs:annotation>
+      <xs:documentation xml:lang="de">Bezeichnung des Dossiers.
+        GEVER: Kurzbeschreibung des Geschäftsfalls (bei Seriendossierbildung) oder des Sachbetreffs (bei Sachdossierbildung) zu welchem Dokumente im Dossier abgelegt werden. 
+        FILES: Kurzbeschreibung des Inhalts der Datensammlung und der Dokumentation (falls vorhanden)</xs:documentation>
+      <xs:documentation xml:lang="en">"Designation of the dossier.
+        GEVER: Brief description of the business event (when creating serial dossiers) or matter (when creating dossiers for specific matters) in respect of which documents are archived in the dossier. 
+        FILES: Brief description of the content of the data collection and the documentation (if present)"</xs:documentation>
+      <xs:documentation xml:lang="fr">"Désignation du dossier ou du groupe de documents.
+        GEVER: brève description de l'affaire (dans le cas de la formation des dossiers en série) ou des objets (dans le cas de la formation de dossiers) auxquels appartiennent les documents classés dans le dossier.
+        FILES: brève description du contenu de la collection de données et de la documentation (si elle existe)."</xs:documentation>
+      <xs:documentation xml:lang="it"/>
+    </xs:annotation>
+    <xs:restriction base="text4"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="inhalt">
+    <xs:annotation>
+      <xs:documentation xml:lang="de">Inhaltlicher Schwerpunkt der Datensammlung sofern dies nicht aus dem Feld "Titel" hervorgeht.</xs:documentation>
+      <xs:documentation xml:lang="en">Main content focus of the data collection, if not clear from the "title" field.</xs:documentation>
+      <xs:documentation xml:lang="fr">Sujet principal du contenu de la collection de données, si celui-ci n'apparaît pas dans le champ "Titre".</xs:documentation>
+      <xs:documentation xml:lang="it"/>
+    </xs:annotation>
+    <xs:restriction base="text4"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="formInhalt">
+    <xs:annotation>
+      <xs:documentation xml:lang="de">Angabe des Mediums (Fotos, Tondokumente, schriftliche Unterlagen usw.)</xs:documentation>
+      <xs:documentation xml:lang="en">Indication of the medium (photos, sound documents, written documents, etc.)</xs:documentation>
+      <xs:documentation xml:lang="fr">Indication du support (photos, documents sonores, documents manuscrits, etc.)</xs:documentation>
+      <xs:documentation xml:lang="it"/>
+    </xs:annotation>
+    <xs:restriction base="text4"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="umfang">
+    <xs:annotation>
+      <xs:documentation xml:lang="de">Anzahl der Dateien des Dossiers und Umfang in MBytes zum Zeitpunkt der Ablieferung. Bei Datenbanken: Anzahl Datensätze der vorliegenden Datensammlung zum Zeitpunkt der Ablieferung. Als Datensatz gilt das Ensemble von Zeilen einer oder mehrerer miteinander verknüpften Tabellen (zentrale logische Einheit). Die Anzahl Datensätze ist zusammen mit der Bezeichnung der zentralen logischen Einheit zu nennen. Diese hängt vom Hauptfokus der Datensammlung ab. Bei Unklarheit muss mit einem Zusatztext erklärt werden, wie viele Datensätze welchen Typs vorliegen.</xs:documentation>
+      <xs:documentation xml:lang="en">Number of files in the dossier and size in MBytes at the time of submission. For databases: number of datasets in the present data collection at the time of submission. A dataset is a set of lines of one or more interlinked tables (central logical unit). The number of datasets must be named along with the designation of the central logical unit. This depends on the main focus of the data collection. Where there is uncertainty, an additional text must be supplied to explain how many datasets of which type are present.</xs:documentation>
+      <xs:documentation xml:lang="fr">Nombre de fichiers dans le dossier et volume en MBytes au moment du versement. Pour les bases de données: nombre de données dans la collection de données au moment du versement. La notion donnée s'applique à l'ensemble des lignes d'un ou de plusieurs tableaux liés l'un à l'autre (unité logique centrale). Le nombre de données est à mentionner avec la désignation de l'unité logique centrale. Ceci dépend du sujet principal de la collection de données. En cas de manque de clarté doit être indiqué combien de données existent pour chaque type.</xs:documentation>
+      <xs:documentation xml:lang="it"/>
+    </xs:annotation>
+    <xs:restriction base="text4"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="idDossier">
+    <xs:annotation>
+      <xs:documentation xml:lang="de">Paketweit eindeutige ID. Sie wird im AIS im Modul Verzeichnungseinheiten auf Dossierstufe verzeichnet.</xs:documentation>
+      <xs:documentation xml:lang="en">Unambiguous ID for the whole package. It is described in the units of description module of the AIS at dossier level.</xs:documentation>
+      <xs:documentation xml:lang="fr">ID univoque pour tout le paquet. Elle est enregistrée dans AIS dans le module Unité de description au niveau des dossiers.</xs:documentation>
+      <xs:documentation xml:lang="it"/>
+    </xs:annotation>
+    <xs:restriction base="xs:ID">
+      <xs:minLength value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="erscheinungsformDossier">
+    <xs:annotation>
+      <xs:documentation xml:lang="de">Angaben darüber, ob das Dossier digitale, nicht-digitale (Papier, audiovisuell) oder sowohl digitale als auch nicht-digitale Dokumente enthält.</xs:documentation>
+      <xs:documentation xml:lang="en">Indication of whether the dossier contains digital, non-digital (paper, audiovisual) or both digital and non-digital documents.</xs:documentation>
+      <xs:documentation xml:lang="fr">Indiquer si le dossier contient des documents numériques, non numériques (papier, audiovisuel) </xs:documentation>
+      <xs:documentation xml:lang="it"/>
+    </xs:annotation>
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="keine Angabe"/>
+      <xs:enumeration value="digital"/>
+      <xs:enumeration value="nicht digital"/>
+      <xs:enumeration value="gemischt"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="federfuehrendeOrganisationseinheitDossier">
+    <xs:annotation>
+      <xs:documentation xml:lang="de">Bestimmung der für die Erledigung des Geschäftes zuständigen federführenden Organisationseinheit.</xs:documentation>
+      <xs:documentation xml:lang="en">Name of the lead organisational unit responsible for dealing with the business matter.</xs:documentation>
+      <xs:documentation xml:lang="fr">Désignation de l'unité organisationnelle responsable pour le traitement d'une affaire.</xs:documentation>
+      <xs:documentation xml:lang="it"/>
+    </xs:annotation>
+    <xs:restriction base="text2"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="entstehungszeitraumAnmerkung">
+    <xs:annotation>
+      <xs:documentation xml:lang="de">Zusätzliche Informationen, welche für die Ermittlung des Entstehungszeitraums relevant sind. Hier können Angaben über allfällige Löschungen und Mutationen an der Datensammlung eingetragen werden (für FILES relevant). Falls der Entstehungszeitraum geschätzt wurde, ist hier das Kriterium für die Schätzung zu nennen.</xs:documentation>
+      <xs:documentation xml:lang="en">Additional information relevant for determining the creation period. Information on any deletions and changes in the data collection can be entered here (relevant for FILES). If the creation period has been estimated, the criterion for the estimate is to be named here.</xs:documentation>
+      <xs:documentation xml:lang="fr">Informations complémentaires qui sont importantes pour la détermination de la période de création. Ici peuvent être reportées les informations sur les effacements et les mutations de la collection de données (important pour FILES). Si la période de création a été estimée, le critère d'estimation est à mentionner ici.</xs:documentation>
+      <xs:documentation xml:lang="it"/>
+    </xs:annotation>
+    <xs:restriction base="text4"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="schutzfristenkategorieDossier">
+    <xs:annotation>
+      <xs:documentation xml:lang="de">Artikel des Gesetzes, der die Schutzfrist festhält, die das Amt im Formular „Meldung von Unterlagen mit besonderer Schutzfrist und öffentlich zugänglichen Unterlagen“ gemeldet hat und vom Archiv auf ihre formale Korrektheit und Vollständigkeit kontrolliert worden ist.</xs:documentation>
+      <xs:documentation xml:lang="en">Article of the law stipulating the closure period reported by the authority in the "Notification of documents subject to a special closure period and publicly accessible documents" form and checked for formal correctness and completeness by the archive.</xs:documentation>
+      <xs:documentation xml:lang="fr">Article de la loi qui fixe le délai de protection que l’administration a annoncé dans le formulaire "Annonce de documents avec un délai de protection particulier et de documents consultables par le public" et dont les archives ont contrôlé l’exactitude et l’intégralité.</xs:documentation>
+      <xs:documentation xml:lang="it"/>
+    </xs:annotation>
+    <xs:restriction base="text1"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="schutzfristDossier">
+    <xs:annotation>
+      <xs:documentation xml:lang="de">Dauer der Schutzfrist in Jahren, die das Amt im Formular „Meldung von Unterlagen mit besonderer Schutzfrist und öffentlich zugänglichen Unterlagen“ gemeldet hat und vom Archiv auf ihre formale Korrektheit und Vollständigkeit kontrolliert worden ist.</xs:documentation>
+      <xs:documentation xml:lang="en">Length of the closure period in years reported by the authority in the "Notification of documents subject to a special closure period and publicly accessible documents" form and checked for formal correctness and completeness by the archive.</xs:documentation>
+      <xs:documentation xml:lang="fr">Durée en années du délai de protection que l’administration a annoncé dans le formulaire "Annonce de documents avec un délai de protection particulier et de documents consultables par le public" et dont les archives ont contrôlé l’exactitude et l’intégralité.</xs:documentation>
+      <xs:documentation xml:lang="it"/>
+    </xs:annotation>
+    <xs:restriction base="text1">
+      <xs:pattern value="[0-9]*"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="schutzfristenBegruendungDossier">
+    <xs:annotation>
+      <xs:documentation xml:lang="de">Erläuterung der Begründung für eine verlängerte Schutzfrist für Unterlagen, die nach Personennamen erschlossen sind und schützenswerte Personendaten gemäss DSG enthalten (z.B. Art. 11 BGA), und für bestimmte Kategorien oder für einzelne Dossiers, die überwiegend schutzwürdige öffentliche oder private Interessen tangieren (z.B. Art. 12 Abs. 1 BGA und Art. 12 Abs. 2 BGA).</xs:documentation>
+      <xs:documentation xml:lang="en">Explanation of the reasons for an extended closure period for documents that are catalogued by individuals"™ names and contain sensitive personal data in accordance with the DPA (Art. 11 ArchA) and for certain categories or individual dossiers that touch on matters where there is an overriding public or private interest in preventing consultation (Art. 12 para. 1 ArchA and Art. 12 para. 2 ArchA).</xs:documentation>
+      <xs:documentation xml:lang="fr">Explication du motif de prolongation du délai de protection pour les documents classés selon des noms de personnes et contenant des données personnelles sensibles selon la LPD (par exemple art. 11 LAr) et pour des catégories définies ou pour certains dossiers qui touchent un intérêt public ou privé prépondérant, digne de protection (par exemple art. 12 al. 1 LAr et art. 12 al. 2 LAr)</xs:documentation>
+      <xs:documentation xml:lang="it"/>
+    </xs:annotation>
+    <xs:restriction base="text4"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="klassifizierungskategorieDossier">
+    <xs:annotation>
+      <xs:documentation xml:lang="de">Grad, in dem das Dossier und die enthaltenen Dokumente und Dateien vor unberechtigter Einsicht geschützt werden müssen. Referenz: Verordnung vom 10.12.1990 über die Klassifizierung und Behandlung von Informationen im zivilen Verwaltungsbereich ([SR 172.015]) und Verordnung vom 1.5.1990 über den Schutz militärischer Informationen ([SR 510.411]).</xs:documentation>
+      <xs:documentation xml:lang="en">Degree to which the dossier and the documents and files it contains must be protected against unauthorised access. Reference: Ordinance of 10.12.1990 on the Classification and Treatment of Information in the Civil Administration ([SR 172.015]) and Ordinance of 1.5.1990 on the Protection of Military Information ([SR 510.411]).</xs:documentation>
+      <xs:documentation xml:lang="fr">Degré dans lequel le dossier et les documents et fichiers qu'il contient doivent être protégés d'une consultation non autorisée. Référence: Ordonnance du 10.12.1990 sur la classification et le traitement d'informations de l'administration civile  ([SR 172.015]) et ordonnance du 1.5.1990 sur la protection des informations militaires ([SR 510.411]).</xs:documentation>
+      <xs:documentation xml:lang="it"/>
+    </xs:annotation>
+    <xs:restriction base="text2"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="datenschutzDossier">
+    <xs:annotation>
+      <xs:documentation xml:lang="de">Markierung, die angibt, ob sich in den Dokumenten des Dossiers besonders schützenswerten Personendaten oder Persönlichkeitsprofilen gemäss Datenschutzrecht.</xs:documentation>
+      <xs:documentation xml:lang="en">Marking indicating whether documents in the dossier contain sensitive personal data or personal profiles under the Data Protection Act.</xs:documentation>
+      <xs:documentation xml:lang="fr">Marque qui précise si des documents du dossier contiennent des données sensibles ou des profils de la personnalité selon la loi sur la protection des données</xs:documentation>
+      <xs:documentation xml:lang="it"/>
+    </xs:annotation>
+    <xs:restriction base="xs:boolean"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="oeffentlichkeitsstatusDossier">
+    <xs:annotation>
+      <xs:documentation xml:lang="de">Angabe, ob das Dossier gemäss [BGÖ] schützenswerte Dokumente oder Dateien enthält oder nicht.</xs:documentation>
+      <xs:documentation xml:lang="en">Indication of whether or not the dossier contains sensitive documents or files.</xs:documentation>
+      <xs:documentation xml:lang="fr">Indiquer le dossier contient ou non des documents dignes de protection selon la [LTrans].</xs:documentation>
+      <xs:documentation xml:lang="it"/>
+    </xs:annotation>
+    <xs:restriction base="text2"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="oeffentlichkeitsstatusBegruendungDossier">
+    <xs:annotation>
+      <xs:documentation xml:lang="de">Argumente gegen die öffentliche Zugänglichkeit gemäss [BGÖ]. Gemäss Entwurf [BGÖ] muss begründet werden, warum Unterlagen nicht öffentlich zugänglich gemacht werden können.</xs:documentation>
+      <xs:documentation xml:lang="en">Arguments against public access. Reasons why documents cannot be made publicly accessible must be stated.</xs:documentation>
+      <xs:documentation xml:lang="fr">Arguments contre l'accès public selon la [LTrans]. Selon le projet de [LTrans], il faut donner les raisons pour lesquelles des documents ne peuvent être accessibles au public.</xs:documentation>
+      <xs:documentation xml:lang="it"/>
+    </xs:annotation>
+    <xs:restriction base="text4"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="sonstigeBestimmungenDossier">
+    <xs:annotation>
+      <xs:documentation xml:lang="de">Angaben über sonstige rechtliche Auflagen, denen das Dossier unterstellt ist.</xs:documentation>
+      <xs:documentation xml:lang="en">Indication of other legal conditions to which the dossier is subject.</xs:documentation>
+      <xs:documentation xml:lang="fr">Informations sur d'autres éventuelles conditions légales auxquelles est soumis le dossier.</xs:documentation>
+      <xs:documentation xml:lang="it"/>
+    </xs:annotation>
+    <xs:restriction base="text4"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="vorgang">
+    <xs:annotation>
+      <xs:documentation xml:lang="de">Angaben über Tätigkeiten, die an Dokumenten des Dossiers durchgeführt wurden. Es können z.B. Angaben zu Tätigkeiten sein, die im Rahmen eines Auftragssubdossiers durchgeführt wurden.</xs:documentation>
+      <xs:documentation xml:lang="en">Information on activities that have been carried out on the documents in the dossier. These may include e.g. information on activities carried out as part of a mandate subdossier.</xs:documentation>
+      <xs:documentation xml:lang="fr">Informations sur les activités qui sont effectuées avec les documents du dossier. Ce peut être, par exemple, des informations sur les activités qui sont effectuées dans le cadre d'un mandat.</xs:documentation>
+      <xs:documentation xml:lang="it"/>
+    </xs:annotation>
+    <xs:restriction base="text4"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="bemerkungDossier">
+    <xs:annotation>
+      <xs:documentation xml:lang="de">Zusätzliche Informationen, welche das Dossier oder die Datensammlung betreffen. Hier können nähere Angaben zur Sprache und zu speziellen technischen Anforderungen eingetragen werden, welche den Zugang der Daten einschränken könnten.</xs:documentation>
+      <xs:documentation xml:lang="en">Additional information relating to the dossier or the data collection. Further information on the language and special technical requirements that may restrict access to the data may be entered here.</xs:documentation>
+      <xs:documentation xml:lang="fr">Informations complémentaires qui concernent le dossier ou la collection de données. Ici peuvent être reportées les précisions sur la langue et sur les exigences techniques qui peuvent limiter l'accès aux données.</xs:documentation>
+      <xs:documentation xml:lang="it"/>
+    </xs:annotation>
+    <xs:restriction base="text4"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="orderVorgang">
+    <xs:annotation>
+      <xs:documentation xml:lang="de">Ordnungszahl welche die Reihenfolge von Vorgängen innerhalb eines Dossiers festlegt, muss innerhalb des selben Dossier eindeutig sein.</xs:documentation>
+      <xs:documentation xml:lang="en">Atomic number which defines the sequence of operations within a dossier, must be unique within the same dossier.</xs:documentation>
+      <xs:documentation xml:lang="fr">Numéro qui définit l'ordre des activités au sein d'un dossier. Doit être univoque au sein du même dossier.</xs:documentation>
+      <xs:documentation xml:lang="it"/>
+    </xs:annotation>
+    <xs:restriction base="xs:integer"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="titelVorgang">
+    <xs:annotation>
+      <xs:documentation xml:lang="de">Benennung von Tätigkeit und Gegenstand des Geschäftsvorfalles.</xs:documentation>
+      <xs:documentation xml:lang="en">Description of activity and object of the transaction.</xs:documentation>
+      <xs:documentation xml:lang="fr">Dénomination de l'activité et de l'objet du processus de l'activité.</xs:documentation>
+      <xs:documentation xml:lang="it"/>
+    </xs:annotation>
+    <xs:restriction base="text3"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="arbeitsanweisungVorgang">
+    <xs:annotation>
+      <xs:documentation xml:lang="de">Arbeitsanweisung, bzw.Auftragsbeschreibung: Vorgaben und Hinweise für die Durchführung und Erledigung.</xs:documentation>
+      <xs:documentation xml:lang="en">Instruction, guidelines and suggestions for implementation and completion.</xs:documentation>
+      <xs:documentation xml:lang="fr">Instruction de travail ou description du mandat: directives et remarques pour l'exécution et la liquidation.</xs:documentation>
+      <xs:documentation xml:lang="it"/>
+    </xs:annotation>
+    <xs:restriction base="text4"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="federfuehrungVorgang">
+    <xs:annotation>
+      <xs:documentation xml:lang="de">Akteur, der für die korrekte Durchführung des Geschäftsvorfalls verantwortlich ist.</xs:documentation>
+      <xs:documentation xml:lang="en">Player who is responsible for the correct execution of the transaction.</xs:documentation>
+      <xs:documentation xml:lang="fr">Acteur qui est responsable de la bonne exécution du processus de l'activité.</xs:documentation>
+      <xs:documentation xml:lang="it"/>
+    </xs:annotation>
+    <xs:restriction base="text3"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="verweisVorgang">
+    <xs:annotation>
+      <xs:documentation xml:lang="de">Referenz auf andere Ordnungssystempositionen, Dossiers oder Vorgänge, die in enger Beziehung mit dem Vorgang stehen ohne direkt mit ihm verknüpft zu sein.</xs:documentation>
+      <xs:documentation xml:lang="en">Reference to other classification system positions, dossier or processes that are directly linked  or in close relationship with the process.</xs:documentation>
+      <xs:documentation xml:lang="fr">Référence à d'autres positions de système de classement, dossiers ou processus qui sont en relation étroite avec le processus sans être en ligne hiérarchique directe avec lui.</xs:documentation>
+      <xs:documentation xml:lang="it"/>
+    </xs:annotation>
+    <xs:restriction base="text4"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="bemerkungVorgang">
+    <xs:annotation>
+      <xs:documentation xml:lang="de">Ergänzende Information zum Vorgang.</xs:documentation>
+      <xs:documentation xml:lang="en">Supplementary information of the transaction.</xs:documentation>
+      <xs:documentation xml:lang="fr">Des renseignements supplémentaires du processus de l'activité.</xs:documentation>
+      <xs:documentation xml:lang="it"/>
+    </xs:annotation>
+    <xs:restriction base="text4"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="orderAktivitaet">
+    <xs:annotation>
+      <xs:documentation xml:lang="de">Ordnungszahl welche die Reihenfolge der Aktivitäten innerhalb eines Vorgangs festlegt, muss innerhalb des selben Vorgangs eindeutig sein.</xs:documentation>
+      <xs:documentation xml:lang="en">Atomic number which defines the sequence of activities within a process, must be unique within the same process.</xs:documentation>
+      <xs:documentation xml:lang="fr">Numéro qui définit l'ordre des activités au sein d'un processus. Doit être univoque au sein du même processus.</xs:documentation>
+      <xs:documentation xml:lang="it"/>
+    </xs:annotation>
+    <xs:restriction base="xs:integer"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="vorschreibungAktivitaet">
+    <xs:annotation>
+      <xs:documentation xml:lang="de">Beschreibung der Tätigkeit, die ausgeführt werden soll (Standardanweisungen).</xs:documentation>
+      <xs:documentation xml:lang="en">Description of the activity to be performed (standard instructions).</xs:documentation>
+      <xs:documentation xml:lang="fr">Description de l'activité qui doit être effectuée (Instructions standard).</xs:documentation>
+      <xs:documentation xml:lang="it"/>
+    </xs:annotation>
+    <xs:restriction base="text3"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="anweisungAktivitaet">
+    <xs:annotation>
+      <xs:documentation xml:lang="de">Freitext für die Eingabe der Anweisung zu einer Aktivität.</xs:documentation>
+      <xs:documentation xml:lang="en">Detailed description of the activity to be performed.</xs:documentation>
+      <xs:documentation xml:lang="fr">Description détaillée de l'activité qui doit être effectuée.</xs:documentation>
+      <xs:documentation xml:lang="it"/>
+    </xs:annotation>
+    <xs:restriction base="text4"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="bearbeiterAktivitaet">
+    <xs:annotation>
+      <xs:documentation xml:lang="de">Akteur, welcher die Aktivität durchführt. Im Organigramm bzw. den Organisationsvorschriften der Verwaltungseinheit aufgeführte Rollen bzw. Personen.</xs:documentation>
+      <xs:documentation xml:lang="en">Player which performs the activity. In the organization or the organizational rules of the administrative unit specified roles or persons.</xs:documentation>
+      <xs:documentation xml:lang="fr">Acteur qui exécute l'activité. Rôles ou personnes mentionnés dans l'organigramme ou les directives d'organisation de l'unité administrative.</xs:documentation>
+      <xs:documentation xml:lang="it"/>
+    </xs:annotation>
+    <xs:restriction base="text3"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="abschlussdatumAktivitaet">
+    <xs:annotation>
+      <xs:documentation xml:lang="de">Tag, an dem die Aktivität abgeschlossen worden ist.</xs:documentation>
+      <xs:documentation xml:lang="en">Day on which the activity has been completed.</xs:documentation>
+      <xs:documentation xml:lang="fr">Jour de clôture de l'activité</xs:documentation>
+      <xs:documentation xml:lang="it"/>
+    </xs:annotation>
+    <xs:union memberTypes="datumTypB"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="verweisAktivitaet">
+    <xs:annotation>
+      <xs:documentation xml:lang="de">Referenz auf andere Ordnungssystempositionen, Dossiers, Vorgänge oder Aktivitäten, die in enger Beziehung zu der Aktivität stehen ohne direkt mit ihr verknüpft zu sein.</xs:documentation>
+      <xs:documentation xml:lang="en">Reference to other classification system positions, dossier or processes that are directly linked  or in close relationship with the process.</xs:documentation>
+      <xs:documentation xml:lang="fr">Référence à d'autres positions de système de classement, dossiers ou processus qui sont en relation étroite avec le processus sans être en ligne hiérarchique directe avec lui.</xs:documentation>
+      <xs:documentation xml:lang="it"/>
+    </xs:annotation>
+    <xs:restriction base="text4"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="bemerkungAktivitaet">
+    <xs:annotation>
+      <xs:documentation xml:lang="de">Informationen, die für die Aktivität von Bedeutung sind.</xs:documentation>
+      <xs:documentation xml:lang="en">Information of significance for the activity.</xs:documentation>
+      <xs:documentation xml:lang="fr">Informations importantes pour l'activité</xs:documentation>
+      <xs:documentation xml:lang="it"/>
+    </xs:annotation>
+    <xs:restriction base="text4"/>
+  </xs:simpleType>
+
+</xs:schema>

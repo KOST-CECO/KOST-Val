@@ -1,0 +1,1031 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+
+<head>
+<title>ActivePerl User Guide - Table of Contents</title>
+<base target="PerlDoc">
+<link rel="STYLESHEET" href="Active.css" type="text/css">
+</head>
+
+<body>
+
+<h1>Table of Contents</h1>
+<!-- This is disabled due to a bug somewhere, current suspect is PerlScript
+<script language='PerlScript'>
+
+#
+# An embedded Web server in an HTML page using PerlScript
+# This allows HTML documents stored on a hard drive to
+# be able to search themselves (on Internet explorer).
+#
+# Contributed by John Holdsworth (c) 2001.
+# patched by http://www.openpsp.org
+#
+# This code is distriubuted under the 
+# "Artistic" license a copy of which 
+# is distributed with perl.
+#
+
+$ID = q$Id: perltoc.pl,v 3.7 2002/02/14 21:50:54 johnh Exp $;
+
+use ActivePerl::DocTools::PSP::Searcher;
+use vars qw($window);
+use IO::File;
+use strict;
+
+# required for open to work
+close STDIN;
+close STDOUT;
+close STDERR;
+
+# log errors to temporary file
+my $tmp = (grep -d $_, ($ENV{TEMP}, $ENV{TMP}, "/tmp", "c:\\temp", "c:\\"))[0];
+open STDERR, "> $tmp\\perltoc.log" or alert( "Could not open log file in $tmp: $!" );
+select STDERR; $| = 1;
+
+# server available on this port
+my $sock = ActivePerl::DocTools::PSP::Searcher->new( Listen=>5,
+	Reuse=>1, LocalPort=>7329, Timeout=>0.000001 )
+	    or warn "Could not open Socket";
+# a zero second timeout is not possible
+# using IO::Socket
+
+my $port = $sock->sockport();
+
+    $window->{document}->write( <<HTML );
+<form name='search' method='get' action='http://127.0.0.1:$port/' onsubmit='onsub();'>
+<b >Search:</b> <input name='pattern' type='textfield' size='20'
+title='Enter a regular expression to search the documentation for.'>
+</form>
+HTML
+
+    $window->{document}{search}{pattern}->focus();
+
+# warn "Initialised, \$base: '$base' \$furl: '$furl'";
+
+#
+# This function is called periodically 
+# to poll for incomming connections.
+#
+sub poll {
+    # This will not block as a timeout
+    # has been set on the socket.
+    $sock->poll(); $@ = '';
+
+    # poll again in 100ms using timeout
+    $window->setTimeout( "poll()", 100 );
+}
+
+# start polling for connections
+# poll itself calls a timeout so
+# a trial accept() is performed
+# repeatedly. 
+
+poll();
+
+sub sendResponse {
+    ActivePerl::DocTools::PSP::Searcher::sendResponse();
+}
+
+sub cb {
+    ActivePerl::DocTools::PSP::Searcher::cb();
+}
+
+</script>
+-->
+<div nowrap>
+
+<p><strong>Getting Started</strong><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*">
+<a class="doc" href="perlmain.html">Welcome To ActivePerl</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*">
+<a class="doc" href="RELEASE.html">Release Notes</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*">
+<a class="doc" href="install.html">Installation Guide</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*">
+<a class="doc" href="readme.html">Getting Started</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*">
+<a class="doc" href="CHANGES58.html">ActivePerl 5.8 Change Log</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*">
+<a class="doc" href="CHANGES56.html">ActivePerl 5.6 Change Log</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*">
+<a class="doc" href="resources.html">More Resources</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*">
+<a class="doc" href="Copyright.html">License and Copyright</a><br>
+
+
+<strong>ActivePerl Components</strong><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*">
+<a class="doc" href="Components/Descriptions.html">Overview</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*">
+<a class="doc" href="faq/ActivePerl-faq2.html">PPM</a><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;<strong>Windows Specific</strong><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*">
+<a class="doc" href="OLE-Browser/Browser.html" target="_blank">OLE Browser</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*">
+<a class="doc" href="Components/Windows/PerlScript.html">PerlScript</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*">
+<a class="doc" href="../eg/IEExamples/index.htm">PerlScript Examples</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*">
+<a class="doc" href="Components/Windows/PerlISAPI.html">Perl for ISAPI</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*">
+<a class="doc" href="Components/Windows/PerlEz.html">PerlEz</a><br>
+
+<strong>ActivePerl FAQ</strong><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*">
+<a class="doc" href="faq/ActivePerl-faq.html">Introduction</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*">
+<a class="doc" href="faq/ActivePerl-faq1.html">Availability &amp; Install</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*">
+<a class="doc" href="faq/ActivePerl-faq2.html">Using PPM</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*">
+<a class="doc" href="faq/ActivePerl-faq3.html">Docs &amp; Support</a><br>
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;<strong>Windows Specific</strong><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*">
+<a class="doc" href="faq/Windows/ActivePerl-Winfaq2.html">Perl for ISAPI</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*">
+<a class="doc" href="faq/Windows/ActivePerl-Winfaq4.html">Windows 9X/NT/2000</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*">
+<a class="doc" href="faq/Windows/ActivePerl-Winfaq5.html">Windows Quirks</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*">
+<a class="doc" href="faq/Windows/ActivePerl-Winfaq6.html">Web Server Config</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*">
+<a class="doc" href="faq/Windows/ActivePerl-Winfaq7.html">Web Programming</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*">
+<a class="doc" href="faq/Windows/ActivePerl-Winfaq8.html">Windows Programming</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*">
+<a class="doc" href="faq/Windows/ActivePerl-Winfaq9.html">Modules &amp; Samples</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*">
+<a class="doc" href="faq/Windows/ActivePerl-Winfaq10.html">Embedding &amp; Extending</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*">
+<a class="doc" href="faq/Windows/ActivePerl-Winfaq12.html">Using OLE with Perl</a><br>
+
+<strong>Windows Scripting</strong><br>
+
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*">
+<a class="doc" href="Windows/ActiveServerPages.html">Active Server Pages</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*">
+<a class="doc" href="Windows/WindowsScriptHost.html">Windows Script Host</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*">
+<a class="doc" href="Windows/WindowsScriptComponents.html">Windows Script Components</a></p>
+
+
+<hr><p>
+<h4>Perl Core Documentation</h4>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perl.html">perl</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlintro.html">perlintro</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perltoc.html">perltoc</a><br>
+<br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlreftut.html">perlreftut</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perldsc.html">perldsc</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perllol.html">perllol</a><br>
+<br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlrequick.html">perlrequick</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlretut.html">perlretut</a><br>
+<br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlboot.html">perlboot</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perltoot.html">perltoot</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perltooc.html">perltooc</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlbot.html">perlbot</a><br>
+<br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlstyle.html">perlstyle</a><br>
+<br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlcheat.html">perlcheat</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perltrap.html">perltrap</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perldebtut.html">perldebtut</a><br>
+<br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlfaq1.html">perlfaq1</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlfaq2.html">perlfaq2</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlfaq3.html">perlfaq3</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlfaq4.html">perlfaq4</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlfaq5.html">perlfaq5</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlfaq6.html">perlfaq6</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlfaq7.html">perlfaq7</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlfaq8.html">perlfaq8</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlfaq9.html">perlfaq9</a><br>
+<br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlsyn.html">perlsyn</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perldata.html">perldata</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlop.html">perlop</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlsub.html">perlsub</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlfunc.html">perlfunc</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlopentut.html">perlopentut</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlpacktut.html">perlpacktut</a><br>
+<br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlpod.html">perlpod</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlpodspec.html">perlpodspec</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlrun.html">perlrun</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perldiag.html">perldiag</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perllexwarn.html">perllexwarn</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perldebug.html">perldebug</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlvar.html">perlvar</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlre.html">perlre</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlreref.html">perlreref</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlref.html">perlref</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlform.html">perlform</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlobj.html">perlobj</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perltie.html">perltie</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perldbmfilter.html">perldbmfilter</a><br>
+<br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlipc.html">perlipc</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlfork.html">perlfork</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlnumber.html">perlnumber</a><br>
+<br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlthrtut.html">perlthrtut</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlothrtut.html">perlothrtut</a><br>
+<br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlport.html">perlport</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perllocale.html">perllocale</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perluniintro.html">perluniintro</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlunicode.html">perlunicode</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlebcdic.html">perlebcdic</a><br>
+<br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlsec.html">perlsec</a><br>
+<br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlmod.html">perlmod</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlmodlib.html">perlmodlib</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlmodstyle.html">perlmodstyle</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlmodinstall.html">perlmodinstall</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlnewmod.html">perlnewmod</a><br>
+<br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlutil.html">perlutil</a><br>
+<br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlcompile.html">perlcompile</a><br>
+<br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlfilter.html">perlfilter</a><br>
+<br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlembed.html">perlembed</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perldebguts.html">perldebguts</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlxstut.html">perlxstut</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlxs.html">perlxs</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlclib.html">perlclib</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlguts.html">perlguts</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlcall.html">perlcall</a><br>
+<br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlapi.html">perlapi</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlintern.html">perlintern</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perliol.html">perliol</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlapio.html">perlapio</a><br>
+<br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlhack.html">perlhack</a><br>
+<br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlbook.html">perlbook</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perltodo.html">perltodo</a><br>
+<br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlhist.html">perlhist</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perl584delta.html">perl584delta</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perl583delta.html">perl583delta</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perl582delta.html">perl582delta</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perl581delta.html">perl581delta</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perl58delta.html">perl58delta</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perl573delta.html">perl573delta</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perl572delta.html">perl572delta</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perl571delta.html">perl571delta</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perl570delta.html">perl570delta</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perl561delta.html">perl561delta</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perl56delta.html">perl56delta</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perl5005delta.html">perl5005delta</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perl5004delta.html">perl5004delta</a><br>
+<br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlcn.html">perlcn</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perljp.html">perljp</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlko.html">perlko</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perltw.html">perltw</a><br>
+<br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlaix.html">perlaix</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlamiga.html">perlamiga</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlapollo.html">perlapollo</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlbeos.html">perlbeos</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlbs2000.html">perlbs2000</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlce.html">perlce</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlcygwin.html">perlcygwin</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perldgux.html">perldgux</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perldos.html">perldos</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlepoc.html">perlepoc</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlfreebsd.html">perlfreebsd</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlhpux.html">perlhpux</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlhurd.html">perlhurd</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlirix.html">perlirix</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlmachten.html">perlmachten</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlmacos.html">perlmacos</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlmacosx.html">perlmacosx</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlmint.html">perlmint</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlmpeix.html">perlmpeix</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlnetware.html">perlnetware</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlos2.html">perlos2</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlos390.html">perlos390</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlos400.html">perlos400</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlplan9.html">perlplan9</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlqnx.html">perlqnx</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlsolaris.html">perlsolaris</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perltru64.html">perltru64</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perluts.html">perluts</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlvmesa.html">perlvmesa</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlvms.html">perlvms</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlvos.html">perlvos</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/perlwin32.html">perlwin32</a><br>
+<hr><p>
+<h4>Programs</h4>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="bin/GET.html">GET</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="bin/HEAD.html">HEAD</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="bin/POST.html">POST</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="bin/SOAPsh.html">SOAPsh</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="bin/XMLRPCsh.html">XMLRPCsh</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="bin/c2ph.html">c2ph</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="bin/cpan.html">cpan</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="bin/dprofpp.html">dprofpp</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="bin/enc2xs.html">enc2xs</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="bin/exetype.html">exetype</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="bin/find2perl.html">find2perl</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="bin/h2ph.html">h2ph</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="bin/h2xs.html">h2xs</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="bin/libnetcfg.html">libnetcfg</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="bin/lwp-download.html">lwp-download</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="bin/lwp-mirror.html">lwp-mirror</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="bin/lwp-request.html">lwp-request</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="bin/lwp-rget.html">lwp-rget</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="bin/perlbug.html">perlbug</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="bin/perlcc.html">perlcc</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="bin/perlglob.html">perlglob</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="bin/perlivp.html">perlivp</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="bin/piconv.html">piconv</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="bin/pl2bat.html">pl2bat</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="bin/pl2pm.html">pl2pm</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="bin/pod2html.html">pod2html</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="bin/pod2latex.html">pod2latex</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="bin/pod2man.html">pod2man</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="bin/pod2text.html">pod2text</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="bin/pod2usage.html">pod2usage</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="bin/podchecker.html">podchecker</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="bin/podselect.html">podselect</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="bin/ppm.html">ppm</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="bin/ppm3.html">ppm3</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="bin/ppm3-bin.html">ppm3-bin</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="bin/prove.html">prove</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="bin/psed.html">psed</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="bin/pstruct.html">pstruct</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="bin/ptked.html">ptked</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="bin/ptksh.html">ptksh</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="bin/reloc_perl.html">reloc_perl</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="bin/runperl.html">runperl</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="bin/s2p.html">s2p</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="bin/splain.html">splain</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="bin/tkjpeg.html">tkjpeg</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="bin/widget.html">widget</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="bin/xsubpp.html">xsubpp</a><br>
+<hr><p>
+<h4>Pragmas</h4>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/attributes.html">attributes</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/attrs.html">attrs</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/autouse.html">autouse</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/base.html">base</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/bigint.html">bigint</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/bignum.html">bignum</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/bigrat.html">bigrat</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/blib.html">blib</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/bytes.html">bytes</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/charnames.html">charnames</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/constant.html">constant</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/diagnostics.html">diagnostics</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/encoding.html">encoding</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/fields.html">fields</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/filetest.html">filetest</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/if.html">if</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/integer.html">integer</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/less.html">less</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/lib.html">lib</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/locale.html">locale</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/open.html">open</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/ops.html">ops</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/overload.html">overload</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/perl5db.html">perl5db</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/re.html">re</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/sigtrap.html">sigtrap</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/sort.html">sort</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/strict.html">strict</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/subs.html">subs</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/threads.html">threads</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/threads/shared.html">threads::shared</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/utf8.html">utf8</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/vars.html">vars</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/vmsish.html">vmsish</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/warnings.html">warnings</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/warnings/register.html">warnings::register</a><br>
+<hr><p>
+<h4>Modules</h4>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/AnyDBM_File.html">AnyDBM_File</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> Apache<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Apache/SOAP.html">SOAP</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> XMLRPC<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Apache/XMLRPC/Lite.html">Lite</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> Archive<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Archive/Tar.html">Tar</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Archive/Tar/File.html">File</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Archive/Zip.html">Zip</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Archive/Zip/FAQ.html">FAQ</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Archive/Zip/MemberRead.html">MemberRead</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Archive/Zip/Tree.html">Tree</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> Attribute<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Attribute/Handlers.html">Handlers</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/AutoLoader.html">AutoLoader</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/AutoSplit.html">AutoSplit</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/B.html">B</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/B/Asmdata.html">Asmdata</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/B/Assembler.html">Assembler</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/B/Bblock.html">Bblock</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/B/Bytecode.html">Bytecode</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/B/C.html">C</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/B/CC.html">CC</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/B/Concise.html">Concise</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/B/Debug.html">Debug</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/B/Deparse.html">Deparse</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/B/Disassembler.html">Disassembler</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/B/Lint.html">Lint</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/B/Showlex.html">Showlex</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/B/Stackobj.html">Stackobj</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/B/Stash.html">Stash</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/B/Terse.html">Terse</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/B/Xref.html">Xref</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Benchmark.html">Benchmark</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> Bundle<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Bundle/LWP.html">LWP</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/ByteLoader.html">ByteLoader</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Carp.html">Carp</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Carp/Heavy.html">Heavy</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/CGI.html">CGI</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/CGI/Apache.html">Apache</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/CGI/Carp.html">Carp</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/CGI/Cookie.html">Cookie</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/CGI/Fast.html">Fast</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/CGI/Pretty.html">Pretty</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/CGI/Push.html">Push</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/CGI/Switch.html">Switch</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/CGI/Util.html">Util</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> Class<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Class/ISA.html">ISA</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Class/Struct.html">Struct</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> Compress<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Compress/Zlib.html">Zlib</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Config.html">Config</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/CPAN.html">CPAN</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/CPAN/FirstTime.html">FirstTime</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/CPAN/Nox.html">Nox</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Cwd.html">Cwd</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> Data<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Data/Dump.html">Dump</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Data/Dumper.html">Dumper</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/DB.html">DB</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/DBM_Filter.html">DBM_Filter</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/DBM_Filter/compress.html">compress</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/DBM_Filter/encode.html">encode</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/DBM_Filter/int32.html">int32</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/DBM_Filter/null.html">null</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/DBM_Filter/utf8.html">utf8</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> Devel<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Devel/DProf.html">DProf</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Devel/Peek.html">Peek</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Devel/PPPort.html">PPPort</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Devel/SelfStubber.html">SelfStubber</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Digest.html">Digest</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Digest/base.html">base</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Digest/HMAC.html">HMAC</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Digest/HMAC_MD5.html">HMAC_MD5</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Digest/HMAC_SHA1.html">HMAC_SHA1</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Digest/MD2.html">MD2</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Digest/MD4.html">MD4</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Digest/MD5.html">MD5</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Digest/SHA1.html">SHA1</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/DirHandle.html">DirHandle</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Dumpvalue.html">Dumpvalue</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/DynaLoader.html">DynaLoader</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Encode.html">Encode</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Encode/Alias.html">Alias</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Encode/Byte.html">Byte</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Encode/CJKConstants.html">CJKConstants</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Encode/CN.html">CN</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Encode/CN/HZ.html">HZ</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Encode/Config.html">Config</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Encode/EBCDIC.html">EBCDIC</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Encode/Encoder.html">Encoder</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Encode/Encoding.html">Encoding</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Encode/Guess.html">Guess</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Encode/JP.html">JP</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Encode/JP/H2Z.html">H2Z</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Encode/JP/JIS7.html">JIS7</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Encode/KR.html">KR</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Encode/KR/2022_KR.html">2022_KR</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> MIME<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Encode/MIME/Header.html">Header</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Encode/PerlIO.html">PerlIO</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Encode/Supported.html">Supported</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Encode/Symbol.html">Symbol</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Encode/TW.html">TW</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Encode/Unicode.html">Unicode</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Encode/Unicode/UTF7.html">UTF7</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/English.html">English</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Env.html">Env</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Errno.html">Errno</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Exporter.html">Exporter</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Exporter/Heavy.html">Heavy</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> ExtUtils<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/ExtUtils/Command.html">Command</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/ExtUtils/Command/MM.html">MM</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/ExtUtils/Constant.html">Constant</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/ExtUtils/Embed.html">Embed</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/ExtUtils/Install.html">Install</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/ExtUtils/Installed.html">Installed</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/ExtUtils/Liblist.html">Liblist</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/ExtUtils/MakeMaker.html">MakeMaker</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/ExtUtils/MakeMaker/bytes.html">bytes</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/ExtUtils/MakeMaker/FAQ.html">FAQ</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/ExtUtils/MakeMaker/Tutorial.html">Tutorial</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/ExtUtils/MakeMaker/vmsish.html">vmsish</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/ExtUtils/Manifest.html">Manifest</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/ExtUtils/Miniperl.html">Miniperl</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/ExtUtils/Mkbootstrap.html">Mkbootstrap</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/ExtUtils/Mksymlists.html">Mksymlists</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/ExtUtils/MM.html">MM</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/ExtUtils/MM_Any.html">MM_Any</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/ExtUtils/MM_BeOS.html">MM_BeOS</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/ExtUtils/MM_Cygwin.html">MM_Cygwin</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/ExtUtils/MM_DOS.html">MM_DOS</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/ExtUtils/MM_MacOS.html">MM_MacOS</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/ExtUtils/MM_NW5.html">MM_NW5</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/ExtUtils/MM_OS2.html">MM_OS2</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/ExtUtils/MM_Unix.html">MM_Unix</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/ExtUtils/MM_UWIN.html">MM_UWIN</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/ExtUtils/MM_VMS.html">MM_VMS</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/ExtUtils/MM_Win32.html">MM_Win32</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/ExtUtils/MM_Win95.html">MM_Win95</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/ExtUtils/MY.html">MY</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/ExtUtils/Packlist.html">Packlist</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/ExtUtils/testlib.html">testlib</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Fatal.html">Fatal</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Fcntl.html">Fcntl</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> File<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/File/Basename.html">Basename</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/File/CheckTree.html">CheckTree</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/File/Compare.html">Compare</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/File/Copy.html">Copy</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/File/CounterFile.html">CounterFile</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/File/DosGlob.html">DosGlob</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/File/Find.html">Find</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/File/Glob.html">Glob</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/File/Listing.html">Listing</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/File/Path.html">Path</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/File/Spec.html">Spec</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/File/Spec/Cygwin.html">Cygwin</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/File/Spec/Epoc.html">Epoc</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/File/Spec/Functions.html">Functions</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/File/Spec/Mac.html">Mac</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/File/Spec/OS2.html">OS2</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/File/Spec/Unix.html">Unix</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/File/Spec/VMS.html">VMS</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/File/Spec/Win32.html">Win32</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/File/stat.html">stat</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/File/Temp.html">Temp</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/FileCache.html">FileCache</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/FileHandle.html">FileHandle</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> Filter<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Filter/Simple.html">Simple</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> Util<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Filter/Util/Call.html">Call</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/FindBin.html">FindBin</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> Font<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Font/AFM.html">AFM</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> Getopt<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Getopt/Long.html">Long</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Getopt/Std.html">Std</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> Hash<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Hash/Util.html">Util</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> HTML<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/HTML/AsSubs.html">AsSubs</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/HTML/Element.html">Element</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/HTML/Element/traverse.html">traverse</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/HTML/Entities.html">Entities</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/HTML/Filter.html">Filter</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/HTML/Form.html">Form</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/HTML/HeadParser.html">HeadParser</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/HTML/LinkExtor.html">LinkExtor</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/HTML/Parse.html">Parse</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/HTML/Parser.html">Parser</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/HTML/PullParser.html">PullParser</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/HTML/Tagset.html">Tagset</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/HTML/TokeParser.html">TokeParser</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/HTML/Tree.html">Tree</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/HTML/Tree/AboutObjects.html">AboutObjects</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/HTML/Tree/AboutTrees.html">AboutTrees</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/HTML/Tree/Scanning.html">Scanning</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/HTML/TreeBuilder.html">TreeBuilder</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> HTTP<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/HTTP/Cookies.html">Cookies</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/HTTP/Cookies/Microsoft.html">Microsoft</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/HTTP/Cookies/Netscape.html">Netscape</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/HTTP/Daemon.html">Daemon</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/HTTP/Date.html">Date</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/HTTP/Headers.html">Headers</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/HTTP/Headers/Util.html">Util</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/HTTP/Message.html">Message</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/HTTP/Negotiate.html">Negotiate</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/HTTP/Request.html">Request</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/HTTP/Request/Common.html">Common</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/HTTP/Response.html">Response</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/HTTP/Status.html">Status</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> I18N<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/I18N/Collate.html">Collate</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/I18N/LangTags.html">LangTags</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/I18N/LangTags/List.html">List</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/IO.html">IO</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/IO/Dir.html">Dir</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/IO/File.html">File</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/IO/Handle.html">Handle</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/IO/Pipe.html">Pipe</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/IO/Poll.html">Poll</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/IO/Seekable.html">Seekable</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/IO/Select.html">Select</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/IO/Socket.html">Socket</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/IO/Socket/INET.html">INET</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/IO/Socket/UNIX.html">UNIX</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/IO/Zlib.html">Zlib</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> IPC<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/IPC/Open2.html">Open2</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/IPC/Open3.html">Open3</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> List<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/List/Util.html">Util</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> Locale<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Locale/Constants.html">Constants</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Locale/Country.html">Country</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Locale/Currency.html">Currency</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Locale/Language.html">Language</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Locale/Maketext.html">Maketext</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Locale/Maketext/TPJ13.html">TPJ13</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Locale/Script.html">Script</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/LWP.html">LWP</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> Authen<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/LWP/Authen/Ntlm.html">Ntlm</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/LWP/ConnCache.html">ConnCache</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/LWP/Debug.html">Debug</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/LWP/DebugFile.html">DebugFile</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/LWP/MediaTypes.html">MediaTypes</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/LWP/MemberMixin.html">MemberMixin</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/LWP/Protocol.html">Protocol</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/LWP/RobotUA.html">RobotUA</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/LWP/Simple.html">Simple</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/LWP/UserAgent.html">UserAgent</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/lwpcook.html">lwpcook</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/lwptut.html">lwptut</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> Math<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Math/BigFloat.html">BigFloat</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Math/BigInt.html">BigInt</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Math/BigInt/Calc.html">Calc</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Math/BigInt/CalcEmu.html">CalcEmu</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Math/BigRat.html">BigRat</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Math/Complex.html">Complex</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Math/Trig.html">Trig</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/MD5.html">MD5</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Memoize.html">Memoize</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Memoize/AnyDBM_File.html">AnyDBM_File</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Memoize/Expire.html">Expire</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Memoize/ExpireFile.html">ExpireFile</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Memoize/ExpireTest.html">ExpireTest</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Memoize/NDBM_File.html">NDBM_File</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Memoize/SDBM_File.html">SDBM_File</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Memoize/Storable.html">Storable</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> MIME<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/MIME/Base64.html">Base64</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/MIME/QuotedPrint.html">QuotedPrint</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> Net<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Net/Cmd.html">Cmd</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Net/Config.html">Config</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Net/Domain.html">Domain</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Net/FTP.html">FTP</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Net/hostent.html">hostent</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Net/HTTP.html">HTTP</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Net/HTTP/NB.html">NB</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Net/libnetFAQ.html">libnetFAQ</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Net/netent.html">netent</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Net/Netrc.html">Netrc</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Net/NNTP.html">NNTP</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Net/Ping.html">Ping</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Net/POP3.html">POP3</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Net/protoent.html">protoent</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Net/servent.html">servent</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Net/SMTP.html">SMTP</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Net/Time.html">Time</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/NEXT.html">NEXT</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/O.html">O</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Opcode.html">Opcode</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/PerlIO.html">PerlIO</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/PerlIO/encoding.html">encoding</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/PerlIO/scalar.html">scalar</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/PerlIO/via.html">via</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/PerlIO/via/QuotedPrint.html">QuotedPrint</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/perllocal.html">perllocal</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> Pod<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/a2p.html">a2p</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/Checker.html">Checker</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/Find.html">Find</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/Functions.html">Functions</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/Html.html">Html</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/InputObjects.html">InputObjects</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/LaTeX.html">LaTeX</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/Man.html">Man</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/ParseLink.html">ParseLink</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/Parser.html">Parser</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/ParseUtils.html">ParseUtils</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> Perldoc<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/Perldoc/ToChecker.html">ToChecker</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/Perldoc/ToMan.html">ToMan</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/Perldoc/ToNroff.html">ToNroff</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/Perldoc/ToPod.html">ToPod</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/Perldoc/ToRtf.html">ToRtf</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/Perldoc/ToText.html">ToText</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/Perldoc/ToTk.html">ToTk</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/Perldoc/ToXml.html">ToXml</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/Plainer.html">Plainer</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/PlainText.html">PlainText</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/Select.html">Select</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/Text.html">Text</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/Text/Color.html">Color</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/Text/Overstrike.html">Overstrike</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/Text/Termcap.html">Termcap</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Pod/Usage.html">Usage</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/POSIX.html">POSIX</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Safe.html">Safe</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> Scalar<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Scalar/Util.html">Util</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/SDBM_File.html">SDBM_File</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> Search<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Search/Dict.html">Dict</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/SelectSaver.html">SelectSaver</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/SelfLoader.html">SelfLoader</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Shell.html">Shell</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> SOAP<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/SOAP/Lite.html">Lite</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/SOAP/Test.html">Test</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> Transport<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/SOAP/Transport/FTP.html">FTP</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/SOAP/Transport/HTTP.html">HTTP</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/SOAP/Transport/IO.html">IO</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/SOAP/Transport/JABBER.html">JABBER</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/SOAP/Transport/LOCAL.html">LOCAL</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/SOAP/Transport/MAILTO.html">MAILTO</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/SOAP/Transport/MQ.html">MQ</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/SOAP/Transport/POP3.html">POP3</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/SOAP/Transport/TCP.html">TCP</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Socket.html">Socket</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Storable.html">Storable</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Switch.html">Switch</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Symbol.html">Symbol</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> Sys<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Sys/Hostname.html">Hostname</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> Term<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Term/ANSIColor.html">ANSIColor</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Term/Cap.html">Cap</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Term/Complete.html">Complete</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Term/ReadLine.html">ReadLine</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Test.html">Test</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Test/Builder.html">Builder</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Test/Harness.html">Harness</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Test/Harness/Assert.html">Assert</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Test/Harness/Iterator.html">Iterator</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Test/Harness/Straps.html">Straps</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Test/More.html">More</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Test/Simple.html">Simple</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Test/Tutorial.html">Tutorial</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> Text<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Text/Abbrev.html">Abbrev</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Text/Autoformat.html">Autoformat</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Text/Balanced.html">Balanced</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Text/ParseWords.html">ParseWords</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Text/Reform.html">Reform</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Text/Soundex.html">Soundex</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Text/Tabs.html">Tabs</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Text/Wrap.html">Wrap</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Thread.html">Thread</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Thread/Queue.html">Queue</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Thread/Semaphore.html">Semaphore</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Thread/Signal.html">Signal</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Thread/Specific.html">Specific</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> Tie<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Tie/Array.html">Array</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Tie/File.html">File</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Tie/Handle.html">Handle</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Tie/Hash.html">Hash</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Tie/Memoize.html">Memoize</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Tie/RefHash.html">RefHash</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Tie/Scalar.html">Scalar</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Tie/SubstrHash.html">SubstrHash</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tie/Watch.html">Watch</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> Time<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Time/gmtime.html">gmtime</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Time/HiRes.html">HiRes</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Time/Local.html">Local</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Time/localtime.html">localtime</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Time/tm.html">tm</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk.html">Tk</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/804delta.html">804delta</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/Adjuster.html">Adjuster</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/after.html">after</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/Animation.html">Animation</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/Balloon.html">Balloon</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/bind.html">bind</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/bindtags.html">bindtags</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/Bitmap.html">Bitmap</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/BrowseEntry.html">BrowseEntry</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/Button.html">Button</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/callbacks.html">callbacks</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/Canvas.html">Canvas</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/Checkbutton.html">Checkbutton</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/chooseColor.html">chooseColor</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/chooseDirectory.html">chooseDirectory</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/Clipboard.html">Clipboard</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/CmdLine.html">CmdLine</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/ColorEditor.html">ColorEditor</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/Common.html">Common</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/composite.html">composite</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/Compound.html">Compound</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/ConfigSpecs.html">ConfigSpecs</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> demos<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> widget_lib<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/demos/widget_lib/slide.html">slide</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/demos/widget_lib/trace2.html">trace2</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/Derived.html">Derived</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/Dialog.html">Dialog</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/DialogBox.html">DialogBox</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/DirTree.html">DirTree</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/DItem.html">DItem</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/DropSite.html">DropSite</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/Entry.html">Entry</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/Error.html">Error</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/event.html">event</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/Eventloop.html">Eventloop</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/exit.html">exit</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/FBox.html">FBox</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/fileevent.html">fileevent</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/FileSelect.html">FileSelect</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/focus.html">focus</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/Font.html">Font</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/form.html">form</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/Frame.html">Frame</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/getOpenFile.html">getOpenFile</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/grab.html">grab</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/grid.html">grid</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/HList.html">HList</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/IconList.html">IconList</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/Image.html">Image</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/InputO.html">InputO</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/Internals.html">Internals</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/IO.html">IO</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/Item.html">Item</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/JPEG.html">JPEG</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/Label.html">Label</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/Labelframe.html">Labelframe</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/LabFrame.html">LabFrame</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/Listbox.html">Listbox</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/MainWindow.html">MainWindow</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/mega.html">mega</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/Menu.html">Menu</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/Menubutton.html">Menubutton</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/Message.html">Message</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/messageBox.html">messageBox</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/Mwm.html">Mwm</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/NoteBook.html">NoteBook</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/option.html">option</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/Optionmenu.html">Optionmenu</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/options.html">options</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/overview.html">overview</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/pack.html">pack</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/palette.html">palette</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/Pane.html">Pane</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/Panedwindow.html">Panedwindow</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/Photo.html">Photo</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/Pixmap.html">Pixmap</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/place.html">place</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/PNG.html">PNG</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/Popup.html">Popup</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/ProgressBar.html">ProgressBar</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/pTk.html">pTk</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/Radiobutton.html">Radiobutton</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/Reindex.html">Reindex</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/ROText.html">ROText</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/Scale.html">Scale</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/Scrollbar.html">Scrollbar</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/Scrolled.html">Scrolled</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/selection.html">selection</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/send.html">send</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/Spinbox.html">Spinbox</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/Submethods.html">Submethods</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/SunConst.html">SunConst</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/Table.html">Table</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/Tcl-perl.html">Tcl-perl</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/Text.html">Text</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/TextUndo.html">TextUndo</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/Tiler.html">Tiler</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/TixGrid.html">TixGrid</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/tixWm.html">tixWm</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/tkvars.html">tkvars</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/TList.html">TList</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/Toplevel.html">Toplevel</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/Trace.html">Trace</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/Tree.html">Tree</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/UserGuide.html">UserGuide</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/Widget.html">Widget</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/WidgetDemo.html">WidgetDemo</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/widgets.html">widgets</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/Wm.html">Wm</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/X.html">X</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/X11Font.html">X11Font</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Tk/Xrm.html">Xrm</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> UDDI<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/UDDI/Lite.html">Lite</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> Unicode<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Unicode/CharName.html">CharName</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Unicode/Collate.html">Collate</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Unicode/Normalize.html">Normalize</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Unicode/String.html">String</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Unicode/UCD.html">UCD</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/UNIVERSAL.html">UNIVERSAL</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/URI.html">URI</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/URI/data.html">data</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/URI/Escape.html">Escape</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/URI/file.html">file</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/URI/Heuristic.html">Heuristic</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/URI/ldap.html">ldap</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/URI/QueryParam.html">QueryParam</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/URI/Split.html">Split</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/URI/URL.html">URL</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/URI/WithBase.html">WithBase</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> User<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/User/grent.html">grent</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/User/pwent.html">pwent</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/Win32.html">Win32</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Win32/AuthenticateUser.html">AuthenticateUser</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Win32/ChangeNotify.html">ChangeNotify</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Win32/Clipboard.html">Clipboard</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Win32/Console.html">Console</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Win32/Event.html">Event</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Win32/EventLog.html">EventLog</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Win32/File.html">File</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Win32/FileSecurity.html">FileSecurity</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Win32/Internet.html">Internet</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Win32/IPC.html">IPC</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Win32/Job.html">Job</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Win32/Mutex.html">Mutex</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Win32/NetAdmin.html">NetAdmin</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Win32/NetResource.html">NetResource</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Win32/ODBC.html">ODBC</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Win32/OLE.html">OLE</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Win32/OLE/Const.html">Const</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Win32/OLE/Enum.html">Enum</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Win32/OLE/NEWS.html">NEWS</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Win32/OLE/NLS.html">NLS</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Win32/OLE/TPJ.html">TPJ</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Win32/OLE/Variant.html">Variant</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Win32/PerfLib.html">PerfLib</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Win32/Pipe.html">Pipe</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Win32/Process.html">Process</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Win32/Registry.html">Registry</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Win32/Semaphore.html">Semaphore</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Win32/Service.html">Service</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Win32/Sound.html">Sound</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Win32/TieRegistry.html">TieRegistry</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> Win32API<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Win32API/File.html">File</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Win32API/Net.html">Net</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/Win32API/Registry.html">Registry</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> WWW<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/WWW/RobotRules.html">RobotRules</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/WWW/RobotRules/AnyDBM_File.html">AnyDBM_File</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> XML<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/XML/Parser.html">Parser</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/XML/Parser/Expat.html">Expat</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/XML/Parser/Lite.html">Lite</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> Style<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/XML/Parser/Style/Debug.html">Debug</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/XML/Parser/Style/Objects.html">Objects</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/XML/Parser/Style/Stream.html">Stream</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/XML/Parser/Style/Subs.html">Subs</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/XML/Parser/Style/Tree.html">Tree</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/XML/Simple.html">Simple</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/XML/Simple/FAQ.html">FAQ</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> XMLRPC<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/XMLRPC/Lite.html">Lite</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/XMLRPC/Test.html">Test</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> Transport<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/XMLRPC/Transport/HTTP.html">HTTP</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/XMLRPC/Transport/POP3.html">POP3</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="site/lib/XMLRPC/Transport/TCP.html">TCP</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> XS<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/XS/APItest.html">APItest</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/XS/Typemap.html">Typemap</a><br>
+<img src="images/greysmallbullet.gif" width="5" height="5" alt="*"> <a class="doc" href="lib/XSLoader.html">XSLoader</a><br>
+</div></body></html>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SOFTPKG NAME="SOAP-Lite" VERSION="0,55,0,0">
+<TITLE>SOAP-Lite</TITLE>
+<ABSTRACT>Library for Simple Object Access Protocol (SOAP) clients and servers in Perl</ABSTRACT>
+<AUTHOR>Paul Kulchenko &lt;paulclinger@yahoo.com&gt;</AUTHOR>
+<IMPLEMENTATION>
+<DEPENDENCY NAME="URI" VERSION="" />
+<DEPENDENCY NAME="libwww-perl" VERSION="" />
+<DEPENDENCY NAME="XML-Parser" VERSION="" />
+<DEPENDENCY NAME="MIME-Tools" VERSION="" />
+<CODEBASE HREF="http://ppm.ActiveState.com/PPMPackages/5.8-windows/MSWin32-x86-multi-thread-5.8/SOAP-Lite.tar.gz" />
+<INSTALL />
+<UNINSTALL />
+</IMPLEMENTATION>
+</SOFTPKG>

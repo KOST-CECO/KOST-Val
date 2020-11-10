@@ -1,0 +1,175 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>grab - Confine pointer and keyboard events to a window sub-tree</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;grab - Confine pointer and keyboard events to a window sub-tree</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#bugs">BUGS</a></li>
+	<li><a href="#keywords">KEYWORDS</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>grab - Confine pointer and keyboard events to a window sub-tree</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p><em>$widget</em>-&gt;<strong>grab</strong></p>
+<p><em>$widget</em>-&gt;<strong>grab</strong><em>Option</em></p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>This set of methods implement simple pointer and keyboard grabs for Tk.
+Tk's grabs are different than the grabs
+described in the Xlib documentation.
+When a grab is set for a particular window, Tk restricts all pointer
+events to the grab window and its descendants in Tk's window hierarchy.
+Whenever the pointer is within the grab window's subtree, the pointer
+will behave exactly the same as if there had been no grab at all
+and all events will be reported in the normal fashion.
+When the pointer is outside <em>$widget</em>'s tree, button presses and
+releases and
+mouse motion events are reported to <em>$widget</em>, and window entry
+and window exit events are ignored.
+The grab subtree ``owns'' the pointer:
+windows outside the grab subtree will be visible on the screen
+but they will be insensitive until the grab is released.
+The tree of windows underneath the grab window can include top-level
+windows, in which case all of those top-level windows
+and their descendants will continue to receive mouse events
+during the grab.</p>
+<p>Two forms of grabs are possible:  local and global.
+A local grab affects only the grabbing application:  events will
+be reported to other applications as if the grab had never occurred.
+Grabs are local by default.
+A global grab locks out all applications on the screen,
+so that only the given subtree of the grabbing application will be
+sensitive to pointer events (mouse button presses, mouse button releases,
+pointer motions, window entries, and window exits).
+During global grabs the window manager will not receive pointer
+events either.</p>
+<p>During local grabs, keyboard events (key presses and key releases)
+are delivered as usual:  the window
+manager controls which application receives keyboard events, and
+if they are sent to any window in the grabbing application then they are
+redirected to the focus window.
+During a global grab Tk grabs the keyboard so that all keyboard events
+are always sent to the grabbing application.
+The <strong>focus</strong> method is still used to determine which window in the
+application receives the keyboard events.
+The keyboard grab is released when the grab is released.</p>
+<p>Grabs apply to particular displays.  If an application has windows
+on multiple displays then it can establish a separate grab on each
+display.
+The grab on a particular display affects only the windows on
+that display.
+It is possible for different applications on a single display to have
+simultaneous local grabs, but only one application can have a global
+grab on a given display at once.</p>
+<p>The <strong>grab</strong> methods take any of the following forms:</p>
+<dl>
+<dt><strong><a name="item_grabcurrent"><em>$widget</em>-&gt;<strong>grabCurrent</strong></a></strong><br />
+</dt>
+<dd>
+Returns the current grab
+window in this application for <em>$widget</em>'s display, or an empty
+string if there is no such window.
+</dd>
+<p></p>
+<dt><strong><a name="item_grabs"><em>$widget</em>-&gt;<strong>grabs</strong></a></strong><br />
+</dt>
+<dd>
+Returns a list whose elements
+are all of the windows grabbed by this application for all displays,
+or an empty string if the application has no grabs.
+</dd>
+<dd>
+<p><em>Not implemented yet!</em></p>
+</dd>
+<p></p>
+<dt><strong><a name="item_grabrelease"><em>$widget</em>-&gt;<strong>grabRelease</strong></a></strong><br />
+</dt>
+<dd>
+Releases the grab on <em>$widget</em> if there is one, otherwise does
+nothing.  Returns an empty string.
+</dd>
+<p></p>
+<dt><strong><a name="item_grab"><em>$widget</em>-&gt;<strong>grab</strong></a></strong><br />
+</dt>
+<dd>
+Sets a local grab on <em>$widget</em>.
+If a grab was already in effect for this application on
+<em>$widget</em>'s display then it is automatically released.
+If there is already a local grab on <em>$widget</em>, then the command
+does nothing.  Returns an empty string.
+</dd>
+<p></p>
+<dt><strong><a name="item_grabglobal"><em>$widget</em>-&gt;<strong>grabGlobal</strong></a></strong><br />
+</dt>
+<dd>
+Sets a global grab on <em>$widget</em>.
+If a grab was already in effect for this application on
+<em>$widget</em>'s display then it is automatically released.
+If there is already a global grab on <em>$widget</em>,
+then the command does nothing.  Returns an empty string.
+</dd>
+<p></p>
+<dt><strong><a name="item_grabstatus"><em>$widget</em>-&gt;<strong>grabStatus</strong></a></strong><br />
+</dt>
+<dd>
+Returns <strong>none</strong> if no grab is currently set on <em>$widget</em>,
+<strong>local</strong> if a local grab is set on <em>$widget</em>, and
+<strong>global</strong> if a global grab is set.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="bugs">BUGS</a></h1>
+<p>It took an incredibly complex and gross implementation to produce
+the simple grab effect described above.
+Given the current implementation, it isn't safe for applications
+to use the Xlib grab facilities at all except through the Tk grab
+procedures.
+If applications try to manipulate X's grab mechanisms directly,
+things will probably break.</p>
+<p>If a single process is managing several different Tk applications,
+only one of those applications can have a local grab for a given
+display at any given time.  If the applications are in different
+processes, this restriction doesn't exist.</p>
+<p>
+</p>
+<hr />
+<h1><a name="keywords">KEYWORDS</a></h1>
+<p>grab, keyboard events, pointer events, window</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;grab - Confine pointer and keyboard events to a window sub-tree</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

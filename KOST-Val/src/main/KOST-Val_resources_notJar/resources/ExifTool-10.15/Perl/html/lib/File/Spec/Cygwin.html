@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>File::Spec::Cygwin - methods for Cygwin file specs</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;File::Spec::Cygwin - methods for Cygwin file specs</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>File::Spec::Cygwin - methods for Cygwin file specs</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ require File::Spec::Cygwin; # Done internally by File::Spec if needed</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>See <a href="../../../lib/File/Spec.html">the File::Spec manpage</a> and <a href="../../../lib/File/Spec/Unix.html">the File::Spec::Unix manpage</a>.  This package overrides the
+implementation of these methods, not the semantics.</p>
+<p>This module is still in beta.  Cygwin-knowledgeable folks are invited
+to offer patches and suggestions.</p>
+<dl>
+<dt><strong><a name="item_canonpath">canonpath</a></strong><br />
+</dt>
+<dd>
+Any <code>\</code> (backslashes) are converted to <code>/</code> (forward slashes),
+and then File::Spec::Unix <a href="#item_canonpath"><code>canonpath()</code></a> is called on the result.
+</dd>
+<p></p>
+<dt><strong><a name="item_file_name_is_absolute">file_name_is_absolute</a></strong><br />
+</dt>
+<dd>
+True is returned if the file name begins with <code>drive_letter:</code>,
+and if not, File::Spec::Unix <a href="#item_file_name_is_absolute"><code>file_name_is_absolute()</code></a> is called.
+</dd>
+<p></p>
+<dt><strong><a name="item_tmpdir">tmpdir (override)</a></strong><br />
+</dt>
+<dd>
+Returns a string representation of the first existing directory
+from the following list:
+</dd>
+<dd>
+<pre>
+    $ENV{TMPDIR}
+    /tmp
+    C:/temp</pre>
+</dd>
+<dd>
+<p>Since Perl 5.8.0, if running under taint mode, and if the environment
+variables are tainted, they are not used.</p>
+</dd>
+<p></p></dl>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;File::Spec::Cygwin - methods for Cygwin file specs</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

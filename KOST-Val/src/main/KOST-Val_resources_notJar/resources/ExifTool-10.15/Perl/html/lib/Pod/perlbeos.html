@@ -1,0 +1,142 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>README.beos - Perl version 5 on BeOS</title>
+<link rel="stylesheet" href="../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;README.beos - Perl version 5 on BeOS</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<ul>
+
+		<li><a href="#general_issues_with_perl_on_beos">General Issues with Perl on BeOS</a></li>
+		<li><a href="#beos_releasespecific_notes">BeOS Release-specific Notes</a></li>
+		<li><a href="#contact_information">Contact Information</a></li>
+		<li><a href="#update_20020530">Update 2002-05-30</a></li>
+	</ul>
+
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>README.beos - Perl version 5 on BeOS</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>Notes for building Perl under BeOS.</p>
+<p>
+</p>
+<h2><a name="general_issues_with_perl_on_beos">General Issues with Perl on BeOS</a></h2>
+<p>To compile perl under BeOS R4 x86:</p>
+<pre>
+        ./Configure -d</pre>
+<p>and hit ^C when it asks you if you want to make changes to config.sh;
+edit config.sh and do the following:
+change d_socket='define' to ='undef';
+remove SDBM, Errno, and Socket from dynamic_ext= and nonxs_ext=;
+add '#define bool short' to x2p/a2p.h;</p>
+<pre>
+        ../Configure -S; make; make install</pre>
+<pre>
+        cd ~/config/lib; ln -s 5.00502/BeOS-BePC/CORE/libperl.so .</pre>
+<p>(substitute 5.00502 with the appropriate filename)</p>
+<p>
+</p>
+<h2><a name="beos_releasespecific_notes">BeOS Release-specific Notes</a></h2>
+<dl>
+<dt><strong><a name="item_r4_x86">R4 x86</a></strong><br />
+</dt>
+<dd>
+Dynamic loading finally works! Yay! This means you can compile your
+own modules into perl. However, Sockets and Errno still don't work.
+(Hopefully, sockets will at least work by R5, if not sooner.)
+</dd>
+<p></p>
+<dt><strong><a name="item_r4_ppc">R4 PPC</a></strong><br />
+</dt>
+<dd>
+I have not tested this. I rather severely doubt that dynamic loading
+will work. (My BeBox is in pieces right now, following a nasty disk
+crash.) You may have to disable dynamic loading to get the thing to
+compile at all. (use `./Configure` without -d, and say 'no' to 'Build
+a shared libperl.so'.)
+</dd>
+<p></p></dl>
+<p>
+</p>
+<h2><a name="contact_information">Contact Information</a></h2>
+<p>If you have comments, problem reports, or even patches or bugfixes (gasp!)
+please email me.</p>
+<p>28 Jan 1999
+Tom Spindler
+<a href="mailto:dogcow@isi.net">dogcow@isi.net</a></p>
+<p>
+</p>
+<h2><a name="update_20020530">Update 2002-05-30</a></h2>
+<p>The following tests fail on 5.8.0 Perl in BeOS Personal 5.03:</p>
+<pre>
+ t/op/lfs............................FAILED at test 17
+ t/op/magic..........................FAILED at test 24
+ ext/Fcntl/t/syslfs..................FAILED at test 17
+ ext/File/Glob/t/basic...............FAILED at test 3
+ ext/POSIX/t/sigaction...............FAILED at test 13
+ ext/POSIX/t/waitpid.................FAILED at test 1</pre>
+<p>The reasons for the failures are as follows:</p>
+<ul>
+<li></li>
+The t/op/lfs and ext/Fcntl/t/syslfs failures indicate that the
+LFS (large file support, files larger than 2 gigabytes) doesn't
+work from Perl (BeFS itself is well capable of supporting large
+files).  What fails is that trying to position the file pointer
+past 2 gigabytes doesn't work right, the position gets truncated
+to its lower 32 bits.
+<p></p>
+<li></li>
+The op/magic failures look like something funny going on with $0 and
+$^X that I can't now figure out: none of the generated pathnames are
+wrong as such, they just seem to accumulate ``./'' prefixes and infixes
+in ways that define logic.
+<p></p>
+<li></li>
+The Glob/t/basic indicates a bug in the getpw*() functions:
+they do not always return the correct user db entries.
+<p></p>
+<li></li>
+The sigaction #13 means that signal mask doesn't get properly restored
+if sigaction returns early.
+<p></p>
+<li></li>
+The waitpid failure means that after there are no more child
+processes, waitpid is supposed to start returning -1 (and set
+errno to ECHILD).  In BeOS, it doesn't seem to.
+<p></p></ul>
+<p>Disclaimer: I just installed BeOS Personal Edition 5.0 and the
+Developer Tools, that is the whole extent of my BeOS expertise,
+so please don't ask me for further help in BeOS Perl problems.</p>
+<p><a href="mailto:jhi@iki.fi">jhi@iki.fi</a></p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;README.beos - Perl version 5 on BeOS</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

@@ -17,21 +17,25 @@
 				<exclude name="**/*.java" />
 			</fileset>
 		</copy>
-		<copy file="README.md" todir="KOST-Val/target/classes" />
+		<copy includeemptydirs="false" overwrite="true" todir="KOST-Val/target/classes">
+			<fileset dir="KOST-Val/src/main/KOST-Val_resources_notJar"></fileset>
+		</copy>
+		<copy file="KOST-Val_README.md" todir="KOST-Val/target/classes" />
+		<copy file="KOST-Val/src/main/KOST-Val_resources_notJar/PdfValidatorAPI.dll" overwrite="true" todir="KOST-Val/target/classes"/>
 		<!--Kopiere alle benoetigten Ordner und Dokumente in ../../KOST-Val-->
 		<copy overwrite="true" todir="../../KOST-Val/configuration">
-			<fileset dir="KOST-Val/src/main/resources_notJar/configuration"/>
+			<fileset dir="KOST-Val/src/main/KOST-Val_resources_notJar/configuration"/>
 		</copy>
 		<copy overwrite="true" todir="../../KOST-Val/doc">
-			<fileset dir="KOST-Val/src/main/resources_notJar/doc"/>
+			<fileset dir="KOST-Val/src/main/KOST-Val_resources_notJar/doc"/>
 		</copy>
 		<copy overwrite="true" todir="../../KOST-Val/license">
-			<fileset dir="KOST-Val/src/main/resources_notJar/license"/>
+			<fileset dir="KOST-Val/src/main/KOST-Val_resources_notJar/license"/>
 		</copy>
 		<!-- Kommentar fuer schnellernen build --> 
 		<copy overwrite="true" todir="../../KOST-Val/resources">
-			<fileset dir="KOST-Val/src/main/resources_notJar/resources"/>
+			<fileset dir="KOST-Val/src/main/KOST-Val_resources_notJar/resources"/>
 		</copy> 
-		<copy file="KOST-Val/src/main/resources_notJar/PdfValidatorAPI.dll" overwrite="true" todir="../../KOST-Val"/>
+		<copy file="KOST-Val/src/main/KOST-Val_resources_notJar/PdfValidatorAPI.dll" overwrite="true" todir="../../KOST-Val"/>
 	</target>
 </project>

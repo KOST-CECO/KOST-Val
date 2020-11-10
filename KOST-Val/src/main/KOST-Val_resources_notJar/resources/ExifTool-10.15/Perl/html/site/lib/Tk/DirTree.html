@@ -1,0 +1,202 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Tk::DirTree - Create and manipulate DirTree widgets</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::DirTree - Create and manipulate DirTree widgets</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#superclass">SUPER-CLASS</a></li>
+	<li><a href="#standard_options">STANDARD OPTIONS</a></li>
+	<li><a href="#widgetspecific_options">WIDGET-SPECIFIC OPTIONS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#widget_methods">WIDGET METHODS</a></li>
+	<li><a href="#bindings">BINDINGS</a></li>
+	<li><a href="#keywords">KEYWORDS</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Tk::DirTree - Create and manipulate DirTree widgets</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<strong>use Tk::DirTree;</strong></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>$dirtree</em> = <em>$parent</em>-&gt;<strong>DirTree</strong>(?<em>options</em>?);</p>
+<p>
+</p>
+<hr />
+<h1><a name="superclass">SUPER-CLASS</a></h1>
+<p>The <strong>DirTree</strong> class is derived from the <a href="../../../site/lib/Tk/Tree.html">Tree</a> class and inherits
+all the methods, options and subwidgets of its super-class.</p>
+<p>
+</p>
+<hr />
+<h1><a name="standard_options">STANDARD OPTIONS</a></h1>
+<p><strong>Tree</strong> supports all the standard options of a Tree widget.  See
+<a href="../../../site/lib/Tk/options.html">the Tk::options manpage</a> for details on the standard options.</p>
+<p>
+</p>
+<hr />
+<h1><a name="widgetspecific_options">WIDGET-SPECIFIC OPTIONS</a></h1>
+<dl>
+<dt><strong><a name="item_name_3a_browsecmd">Name:		<strong>browseCmd</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_browsecmd">Class:		<strong>BrowseCmd</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dbrowsecmd">Switch:		<strong>-browsecmd</strong></a></strong><br />
+</dt>
+<dd>
+Specifies a <a href="../../../site/lib/Tk/callbacks.html">callback</a> to call whenever the user browses on a directory
+(usually by single-clicking on the name of the directory). The callback
+is called with one argument, the complete pathname of the directory.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_command">Name:		<strong>command</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_command">Class:		<strong>Command</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dcommand">Switch:		<strong>-command</strong></a></strong><br />
+</dt>
+<dd>
+Specifies the <a href="../../../site/lib/Tk/callbacks.html">callback</a> to be called when the user activates on a directory
+(usually by double-clicking on the name of the directory). The callback
+is called with one argument, the complete pathname of the directory.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_dircmd">Name:		<strong>dircmd</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_dircmd">Class:		<strong>DirCmd</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2ddircmd">Switch:		<strong>-dircmd</strong></a></strong><br />
+</dt>
+<dd>
+Specifies the <a href="../../../site/lib/Tk/callbacks.html">callback</a> to be called when a directory listing is needed
+for a particular directory. If this option is not specified, by
+default the DirTree widget will attempt to read the directory as a
+Unix directory. On special occasions, the application programmer may
+want to supply a special method for reading directories: for example,
+when he needs to list remote directories. In this case, the <strong>-dircmd</strong>
+option can be used. The specified callback accepts two arguments: the
+first is the name of the directory to be listed; the second is a
+Boolean value indicating whether hidden sub-directories should be
+listed. This callback returns a list of names of the sub-directories of
+this directory. For example:
+</dd>
+<dd>
+<pre>
+    sub read_dir {
+        my( $dir, $showhidden ) = @_;
+        return( qw/DOS NORTON WINDOWS/ ) if $dir eq &quot;C:\\&quot;;
+        return();
+    }</pre>
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_showhidden">Name:		<strong>showHidden</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_showhidden">Class:		<strong>ShowHidden</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dshowhidden">Switch:		<strong>-showhidden</strong></a></strong><br />
+</dt>
+<dd>
+Specifies whether hidden directories should be shown. By default, a
+directory name starting with a period ``.'' is considered as a hidden
+directory. This rule can be overridden by supplying an alternative
+<strong>-dircmd</strong> option.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_directory">Name:		<strong>directory</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_directory">Class:		<strong>Directory</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2ddirectory">Switch:		<strong>-directory</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_alias_3a__2dvalue">Alias:		<strong>-value</strong></a></strong><br />
+</dt>
+<dd>
+Specifies the name of the current directory to be displayed in the
+DirTree widget.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The <strong>DirTree</strong> constructor method creates a new window (given by the $dirtree
+argument) and makes it into a DirTree widget.  Additional options,
+described above, may be specified on the command line or in the
+option database to configure aspects of the DirTree such as its
+cursor and relief.  The DirTree widget displays a list view of a
+directory, its previous directories and its sub-directories. The
+user can choose one of the directories displayed in the list or
+change to another directory.</p>
+<p>
+</p>
+<hr />
+<h1><a name="widget_methods">WIDGET METHODS</a></h1>
+<p>The <strong>DirTree</strong> method creates a widget object.
+This object supports the <strong>configure</strong> and <strong>cget</strong> methods
+described in <a href="../../../site/lib/Tk/options.html">the Tk::options manpage</a> which can be used to enquire and
+modify the options described above.
+The widget also inherits all the methods provided by the generic
+<a href="../../../site/lib/Tk/Widget.html">Tk::Widget</a> class.</p>
+<p>The following additional methods are available for DirTree widgets:</p>
+<dl>
+<dt><strong><a name="item_chdir"><em>$dirtree</em>-&gt;<strong>chdir</strong>(<em>dir</em>)</a></strong><br />
+</dt>
+<dd>
+Change the current directory to <em>dir</em>.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="bindings">BINDINGS</a></h1>
+<p>The mouse and keyboard bindings of the DirTree widget are the same as
+the bindings of the <a href="../../../site/lib/Tk/Tree.html">Tree</a> widget.</p>
+<p>
+</p>
+<hr />
+<h1><a name="keywords">KEYWORDS</a></h1>
+<p>directory, tree, tix</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../../../site/lib/Tk/Tree.html">Tk::Tree</a>
+<a href="../../../site/lib/Tk/HList.html">Tk::HList</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Perl/TK version by Chris Dean &lt;<a href="mailto:ctdean@cogit.com">ctdean@cogit.com</a>&gt;.  Original Tcl/Tix
+version by Ioi Kim Lam.</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::DirTree - Create and manipulate DirTree widgets</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

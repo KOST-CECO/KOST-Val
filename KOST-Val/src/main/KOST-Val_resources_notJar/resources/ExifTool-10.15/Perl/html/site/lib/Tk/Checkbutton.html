@@ -1,0 +1,396 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Tk::Checkbutton - Create and manipulate Checkbutton widgets</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::Checkbutton - Create and manipulate Checkbutton widgets</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#standard_options">STANDARD OPTIONS</a></li>
+	<li><a href="#widgetspecific_options">WIDGET-SPECIFIC OPTIONS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#widget_methods">WIDGET METHODS</a></li>
+	<li><a href="#bindings">BINDINGS</a></li>
+	<li><a href="#keywords">KEYWORDS</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Tk::Checkbutton - Create and manipulate Checkbutton widgets</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p><em>$checkbutton</em> = <em>$parent</em>-&gt;<strong>Checkbutton</strong>(?<em>options</em>?);</p>
+<p>
+</p>
+<hr />
+<h1><a name="standard_options">STANDARD OPTIONS</a></h1>
+<p><table cellspacing="0" cellpadding="0"><tr><td><strong>-activebackground</strong><td><strong>-cursor</strong><td><strong>-highlightthickness</strong><td><strong>-takefocus</strong>
+<tr><td><strong>-activeforeground</strong><td><strong>-disabledforeground</strong><td><strong>-image</strong><td><strong>-text</strong>
+<tr><td><strong>-anchor</strong><td><strong>-font</strong><td><strong>-justify</strong><td><strong>-textvariable</strong>
+<tr><td><strong>-background</strong><td><strong>-foreground</strong><td><strong>-padx</strong><td><strong>-underline</strong>
+<tr><td><strong>-bitmap</strong><td><strong>-highlightbackground</strong><td><strong>-pady</strong><td><strong>-wraplength</strong>
+<tr><td><strong>-borderwidth</strong><td><strong>-highlightcolor</strong><td><strong>-relief</strong></table></p>
+<p>See <a href="../../../site/lib/Tk/options.html">the Tk::options manpage</a> for details of the standard options.</p>
+<p>
+</p>
+<hr />
+<h1><a name="widgetspecific_options">WIDGET-SPECIFIC OPTIONS</a></h1>
+<dl>
+<dt><strong><a name="item_name_3a_command">Name:	<strong>command</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_command">Class:	<strong>Command</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dcommand">Switch:	<strong>-command</strong></a></strong><br />
+</dt>
+<dd>
+Specifies a <a href="../../../site/lib/Tk/callbacks.html">perl/Tk callback</a> to associate with the button.  This command
+is typically invoked when mouse button 1 is released over the button
+window.  The button's global variable (<strong>-variable</strong> option) will
+be updated before the command is invoked.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_height">Name:	<strong>height</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_height">Class:	<strong>Height</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dheight">Switch:	<strong>-height</strong></a></strong><br />
+</dt>
+<dd>
+Specifies a desired height for the button.
+If an image or bitmap is being displayed in the button then the value is in
+screen units (i.e. any of the forms acceptable to <strong>Tk_GetPixels</strong>);
+for text it is in lines of text.
+If this option isn't specified, the button's desired height is computed
+from the size of the image or bitmap or text being displayed in it.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_indicatoron">Name:	<strong>indicatorOn</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_indicatoron">Class:	<strong>IndicatorOn</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dindicatoron">Switch:	<strong>-indicatoron</strong></a></strong><br />
+</dt>
+<dd>
+Specifies whether or not the indicator should be drawn.  Must be a
+proper boolean value.  If false, the <strong>relief</strong> option is
+ignored and the widget's relief is always sunken if the widget is
+selected and raised otherwise.
+</dd>
+<p></p>
+<dt><strong><a name="item_command_2dline_name_3a__2doffrelief">Command-Line Name: <strong>-offrelief</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_database_name_3a_offrelief">Database Name:  <strong>offRelief</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_database_class_3a_offrelief">Database Class: <strong>OffRelief</strong></a></strong><br />
+</dt>
+<dd>
+Specifies the relief for the checkbutton when the indicator is not
+drawn and the checkbutton is off.  The default value is <strong>raised</strong>.  By
+setting this option to <strong>flat</strong> and setting
+<strong>-indicatoron false -overrelief raised</strong>, the effect is achieved of
+having a flat button
+that raises on mouse-over and which is depressed when activated.  This
+is the behavior typically exhibited by the Bold, Italic, and
+Underline checkbuttons on the toolbar of a word-processor, for
+example.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_offvalue">Name:	<strong>offValue</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_value">Class:	<strong>Value</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2doffvalue">Switch:	<strong>-offvalue</strong></a></strong><br />
+</dt>
+<dd>
+Specifies value to store in the button's associated variable whenever
+this button is deselected.  Defaults to ``0''.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_onvalue">Name:	<strong>onValue</strong></a></strong><br />
+</dt>
+<dt><strong>Class:	<strong>Value</strong></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2donvalue">Switch:	<strong>-onvalue</strong></a></strong><br />
+</dt>
+<dd>
+Specifies value to store in the button's associated variable whenever
+this button is selected.  Defaults to ``1''.
+</dd>
+<p></p>
+<dt><strong><a name="item_command_2dline_name_3a__2doverrelief">Command-Line Name: <strong>-overrelief</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_database_name_3a_overrelief">Database Name:  <strong>overRelief</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_database_class_3a_overrelief">Database Class: <strong>OverRelief</strong></a></strong><br />
+</dt>
+<dd>
+Specifies  an alternative relief for the button, to be used when
+the mouse cursor is over the widget.  This option can be used to
+make  toolbar  buttons,  by configuring <strong>-relief flat -overrelief
+raised</strong>.  If the value of this option is the empty  string,  then
+no  alternative relief is used when the mouse cursor is over the
+button.  The empty string is the default value.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_selectcolor">Name:	<strong>selectColor</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_background">Class:	<strong>Background</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dselectcolor">Switch:	<strong>-selectcolor</strong></a></strong><br />
+</dt>
+<dd>
+Specifies a background color to use when the button is selected.
+If <strong>indicatorOn</strong> is true then the color applies to the indicator.
+Under Windows, this color is used as the background for the indicator
+regardless of the select state.
+If <strong>indicatorOn</strong> is false, this color is used as the background
+for the entire widget, in place of <strong>background</strong> or <strong>activeBackground</strong>,
+whenever the widget is selected.
+If specified as an empty string then no special color is used for
+displaying when the widget is selected.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_selectimage">Name:	<strong>selectImage</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_selectimage">Class:	<strong>SelectImage</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dselectimage">Switch:	<strong>-selectimage</strong></a></strong><br />
+</dt>
+<dd>
+Specifies an image to display (in place of the <strong>image</strong> option)
+when the checkbutton is selected.
+This option is ignored unless the <strong>image</strong> option has been
+specified.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_state">Name:	<strong>state</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_state">Class:	<strong>State</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dstate">Switch:	<strong>-state</strong></a></strong><br />
+</dt>
+<dd>
+Specifies one of three states for the checkbutton:  <strong>normal</strong>, <strong>active</strong>,
+or <strong>disabled</strong>.  In normal state the checkbutton is displayed using the
+<strong>foreground</strong> and <strong>background</strong> options.  The active state is
+typically used when the pointer is over the checkbutton.  In active state
+the checkbutton is displayed using the <strong>activeForeground</strong> and
+<strong>activeBackground</strong> options.  Disabled state means that the checkbutton
+should be insensitive:  the default bindings will refuse to activate
+the widget and will ignore mouse button presses.
+In this state the <strong>disabledForeground</strong> and
+<strong>background</strong> options determine how the checkbutton is displayed.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_variable">Name:	<strong>variable</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_variable">Class:	<strong>Variable</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dvariable">Switch:	<strong>-variable</strong></a></strong><br />
+</dt>
+<dd>
+Specifies reference to a variable to set to indicate whether
+or not this button is selected.  Defaults to <code>\$widget-&gt;{'Value'}</code>
+member of the widget's hash. In general perl variables are <a href="../../../lib/Pod/perlfunc.html#item_undef"><code>undef</code></a> unless
+specifically initialized which will not match either default <strong>-onvalue</strong> or
+default <strong>-offvalue</strong>.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_width">Name:	<strong>width</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_width">Class:	<strong>Width</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dwidth">Switch:	<strong>-width</strong></a></strong><br />
+</dt>
+<dd>
+Specifies a desired width for the button.
+If an image or bitmap is being displayed in the button then the value is in
+screen units (i.e. any of the forms acceptable to <strong>Tk_GetPixels</strong>);
+for text it is in characters.
+If this option isn't specified, the button's desired width is computed
+from the size of the image or bitmap or text being displayed in it.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The <strong>Checkbutton</strong> method creates a new window (given by the
+$widget argument) and makes it into a checkbutton widget.
+Additional
+options, described above, may be specified on the command line
+or in the option database
+to configure aspects of the checkbutton such as its colors, font,
+text, and initial relief.  The <strong>checkbutton</strong> command returns its
+$widget argument.  At the time this command is invoked,
+there must not exist a window named $widget, but
+$widget's parent must exist.</p>
+<p>A checkbutton is a widget
+that displays a textual string, bitmap or image
+and a square called an <em>indicator</em>.
+If text is displayed, it must all be in a single font, but it
+can occupy multiple lines on the screen (if it contains newlines
+or if wrapping occurs because of the <strong>wrapLength</strong> option) and
+one of the characters may optionally be underlined using the
+<strong>underline</strong> option.
+A checkbutton has
+all of the behavior of a simple button, including the
+following: it can display itself in either of three different
+ways, according to the <strong>state</strong> option;
+it can be made to appear
+raised, sunken, or flat; it can be made to flash; and it invokes
+a <a href="../../../site/lib/Tk/callbacks.html">perl/Tk callback</a> whenever mouse button 1 is clicked over the
+checkbutton.</p>
+<p>In addition, checkbuttons can be <em>selected</em>.
+If a checkbutton is selected then the indicator is normally
+drawn with a selected appearance, and
+a Tcl variable associated with the checkbutton is set to a particular
+value (normally 1).
+Under Unix, the indicator is drawn with a sunken relief and a special
+color.  Under Windows, the indicator is drawn with a check mark inside.
+If the checkbutton is not selected, then the indicator is drawn with a
+deselected appearance, and the associated variable is
+set to a different value (typically 0).
+Under Unix, the indicator is drawn with a raised relief and no special
+color.  Under Windows, the indicator is drawn without a check mark inside.
+By default, the name of the variable associated with a checkbutton is the
+same as the <em>name</em> used to create the checkbutton.
+The variable name, and the ``on'' and ``off'' values stored in it,
+may be modified with options on the command line or in the option
+database.
+Configuration options may also be used to modify the way the
+indicator is displayed (or whether it is displayed at all).
+By default a checkbutton is configured to select and deselect
+itself on alternate button clicks.
+In addition, each checkbutton monitors its associated variable and
+automatically selects and deselects itself when the variables value
+changes to and from the button's ``on'' value.</p>
+<p>
+</p>
+<hr />
+<h1><a name="widget_methods">WIDGET METHODS</a></h1>
+<p>The <strong>Checkbutton</strong> method creates a widget object.
+This object supports the <strong>configure</strong> and <strong>cget</strong> methods
+described in <a href="../../../site/lib/Tk/options.html">the Tk::options manpage</a> which can be used to enquire and
+modify the options described above.
+The widget also inherits all the methods provided by the generic
+<a href="../../../site/lib/Tk/Widget.html">Tk::Widget</a> class.</p>
+<p>The following additional methods are available for checkbutton widgets:</p>
+<dl>
+<dt><strong><a name="item_deselect"><em>$checkbutton</em>-&gt;<strong>deselect</strong></a></strong><br />
+</dt>
+<dd>
+Deselects the checkbutton and sets the associated variable to its ``off''
+value.
+</dd>
+<p></p>
+<dt><strong><a name="item_flash"><em>$checkbutton</em>-&gt;<strong>flash</strong></a></strong><br />
+</dt>
+<dd>
+Flashes the checkbutton.  This is accomplished by redisplaying the checkbutton
+several times, alternating between active and normal colors.  At
+the end of the flash the checkbutton is left in the same normal/active
+state as when the command was invoked.
+This command is ignored if the checkbutton's state is <strong>disabled</strong>.
+</dd>
+<p></p>
+<dt><strong><a name="item_invoke"><em>$checkbutton</em>-&gt;<strong>invoke</strong></a></strong><br />
+</dt>
+<dd>
+Does just what would have happened if the user invoked the checkbutton
+with the mouse: toggle the selection state of the button and invoke
+the <a href="../../../site/lib/Tk/callbacks.html">perl/Tk callback</a> associated with the checkbutton, if there is one.
+The return value is the return value from the <a href="../../../site/lib/Tk/callbacks.html">perl/Tk callback</a>, or an
+empty string if there is no command associated with the checkbutton.
+This command is ignored if the checkbutton's state is <strong>disabled</strong>.
+</dd>
+<p></p>
+<dt><strong><a name="item_select"><em>$checkbutton</em>-&gt;<strong>select</strong></a></strong><br />
+</dt>
+<dd>
+Selects the checkbutton and sets the associated variable to its ``on''
+value.
+</dd>
+<p></p>
+<dt><strong><a name="item_toggle"><em>$checkbutton</em>-&gt;<strong>toggle</strong></a></strong><br />
+</dt>
+<dd>
+Toggles the selection state of the button, redisplaying it and
+modifying its associated variable to reflect the new state.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="bindings">BINDINGS</a></h1>
+<p>Tk automatically creates class bindings for checkbuttons that give them
+the following default behavior:</p>
+<dl>
+<dt><strong><a name="item__5b1_5d">[1]</a></strong><br />
+</dt>
+<dd>
+On Unix systems, a checkbutton activates whenever the mouse passes
+over it and deactivates whenever the mouse leaves the checkbutton.  On
+Mac and Windows systems, when mouse button 1 is pressed over a
+checkbutton, the button activates whenever the mouse pointer is inside
+the button, and deactivates whenever the mouse pointer leaves the
+button.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b2_5d">[2]</a></strong><br />
+</dt>
+<dd>
+When mouse button 1 is pressed over a checkbutton, it is invoked (its
+selection state toggles and the command associated with the button is
+invoked, if there is one).
+</dd>
+<p></p>
+<dt><strong><a name="item__5b3_5d">[3]</a></strong><br />
+</dt>
+<dd>
+When a checkbutton has the input focus, the space key causes the checkbutton
+to be invoked.  Under Windows, there are additional key bindings; plus
+(+) and equal (=) select the button, and minus (-) deselects the button.
+</dd>
+<dd>
+<p>If the checkbutton's state is <strong>disabled</strong> then none of the above
+actions occur:  the checkbutton is completely non-responsive.</p>
+</dd>
+<dd>
+<p>The behavior of checkbuttons can be changed by defining new bindings for
+individual widgets or by redefining the class bindings.</p>
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="keywords">KEYWORDS</a></h1>
+<p>checkbutton, widget</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::Checkbutton - Create and manipulate Checkbutton widgets</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

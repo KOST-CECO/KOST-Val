@@ -1,0 +1,497 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Tk::event - Miscellaneous event facilities: define virtual events and generate events</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::event - Miscellaneous event facilities: define virtual events and generate events</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#event_fields">EVENT FIELDS</a></li>
+	<li><a href="#virtual_event_examples">VIRTUAL EVENT EXAMPLES</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#keywords">KEYWORDS</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Tk::event - Miscellaneous event facilities: define virtual events and generate events</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p><em>$widget</em>-&gt;<strong>event</strong><em>Action</em>(?<em>arg, arg, ...</em>?);</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The <strong>event</strong><em>Action</em> methods provides several facilities for dealing with
+window system events, such as defining virtual events and synthesizing
+events.  Virtual events are shared by all widgets of the same
+<strong>MainWindow</strong>.  Different <a href="../../../site/lib/Tk/MainWindow.html">MainWindow</a>s can have different
+virtual event.</p>
+<p>The following methods are currently supported:</p>
+<dl>
+<dt><strong><a name="item_eventadd"><em>$widget</em>-&gt;<strong>eventAdd</strong>(<strong>'&lt;&lt;</strong><em>virtual</em><strong>&gt;&gt;'</strong><em>, sequence </em>?,<em>sequence, ...</em>?)</a></strong><br />
+</dt>
+<dd>
+Associates the virtual event <em>virtual</em> with the physical
+event <code>sequence(s)</code> given by the <em>sequence</em> arguments, so that
+the virtual event will trigger whenever any one of the <em>sequence</em>s
+occurs.
+<em>Virtual</em> may be any string value and <em>sequence</em> may have
+any of the values allowed for the <em>sequence</em> argument to the
+<a href="../../../site/lib/Tk/bind.html">bind</a> method.
+If <em>virtual</em> is already defined, the new physical event sequences
+add to the existing sequences for the event.
+</dd>
+<p></p>
+<dt><strong><a name="item_eventdelete"><em>$widget</em>-&gt;<strong>eventDelete</strong>(<strong>'&lt;&lt;</strong><em>virtual</em><strong>&gt;&gt;'</strong> ?,<em>sequence,</em> <em>sequence, ...</em>?)</a></strong><br />
+</dt>
+<dd>
+Deletes each of the <em>sequence</em>s from those associated with
+the virtual event given by <em>virtual</em>.
+<em>Virtual</em> may be any string value and <em>sequence</em> may have
+any of the values allowed for the <em>sequence</em> argument to the
+<a href="../../../site/lib/Tk/bind.html">bind</a> method.
+Any <em>sequence</em>s not currently associated with <em>virtual</em>
+are ignored.
+If no <em>sequence</em> argument is provided, all physical event sequences
+are removed for <em>virtual</em>, so that the virtual event will not
+trigger anymore.
+</dd>
+<p></p>
+<dt><strong><a name="item_eventgenerate"><em>$widget</em>-&gt;<strong>eventGenerate</strong>(<em>event</em> ?,<em>option =&gt; value, option =&gt; value, ...</em>?)</a></strong><br />
+</dt>
+<dd>
+Generates a window event and arranges for it to be processed just as if
+it had come from the window system.
+<em>$window</em> is a reference to the window for which the event
+will be generated.
+<em>Event</em> provides a basic description of
+the event, such as <strong>&lt;Shift-Button-2&gt;</strong> or <strong>&lt;&lt;Paste&gt;&gt;</strong>.
+If <em>Window</em> is empty the whole screen is meant, and coordinates
+are relative to the screen.
+<em>Event</em> may have any of the forms allowed for the <em>sequence</em>
+argument of the <a href="../../../site/lib/Tk/bind.html">bind</a> method except that it must consist
+of a single event pattern, not a sequence.
+<em>Option-value</em> pairs may be used to specify additional
+attributes of the event, such as the x and y mouse position;
+see <a href="#event_fields">EVENT FIELDS</a> below.  If the <strong>-when</strong> option is not specified, the
+event is processed immediately:  all of the handlers for the event
+will complete before the <strong>eventGenerate</strong> method returns.
+If the <strong>-when</strong> option is specified then it determines when the
+event is processed.
+</dd>
+<p></p>
+<dt><strong><a name="item_eventinfo"><em>$widget</em>-&gt;<strong>eventInfo</strong>(?'<strong>&lt;&lt;</strong><em>virtual</em><strong>&gt;&gt;'</strong>?)</a></strong><br />
+</dt>
+<dd>
+Returns information about virtual events.
+If the <strong>&lt;&lt;</strong><em>virtual</em><strong>&gt;&gt;</strong> argument is omitted, the return value
+is a list of all the virtual events that are currently defined.
+If <strong>&lt;&lt;</strong><em>virtual</em><strong>&gt;&gt;</strong> is specified then the return value is
+a list whose elements are the physical event sequences currently
+defined for the given virtual event;  if the virtual event is
+not defined then <strong>undef</strong> is returned.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="event_fields">EVENT FIELDS</a></h1>
+<p>The following options are supported for the <strong>eventGenerate</strong>
+method.  These correspond to the ``%'' expansions
+allowed in binding callback for the <a href="../../../site/lib/Tk/bind.html">bind</a> method.</p>
+<dl>
+<dt><strong><a name="item__2dabove__3d_3e_window"><strong>-above</strong> =&gt; <em>window</em></a></strong><br />
+</dt>
+<dd>
+<em>Window</em> specifies the <em>above</em> field for the event,
+either as a window path name or as an integer window id.
+Valid for <strong>Configure</strong> events.
+Corresponds to the <a href="../../../site/lib/Tk/bind.html#_a_">%a</a> substitution for binding scripts.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dborderwidth__3d_3e_size"><strong>-borderwidth</strong> =&gt; <em>size</em></a></strong><br />
+</dt>
+<dd>
+<em>Size</em> must be a screen distance;  it specifies the
+<em>border_width</em> field for the event.
+Valid for <strong>Configure</strong> events.
+Corresponds to the <a href="../../../site/lib/Tk/bind.html#_b_">%B</a> substitution for binding scripts.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dbutton__3d_3e_number"><strong>-button</strong> =&gt; <em>number</em></a></strong><br />
+</dt>
+<dd>
+<em>Number</em> must be an integer;  it specifies the <em>detail</em> field
+for a <strong>ButtonPress</strong> or <strong>ButtonRelease</strong> event, overriding
+any button  number provided in the base <em>event</em> argument.
+Corresponds to the <a href="../../../site/lib/Tk/bind.html#_b_">%b</a> substitution for binding scripts.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dcount__3d_3e_number"><strong>-count</strong> =&gt; <em>number</em></a></strong><br />
+</dt>
+<dd>
+<em>Number</em> must be an integer;  it specifies the <em>count</em> field
+for the event.  Valid for <strong>Expose</strong> events.
+Corresponds to the <a href="../../../site/lib/Tk/bind.html#_c_">%c</a> substitution for binding scripts.
+</dd>
+<p></p>
+<dt><strong><a name="item__2ddelta__3d_3e_number"><strong>-delta</strong> =&gt; <em>number</em></a></strong><br />
+</dt>
+<dd>
+<strong>number</strong> must be an integer; it specifies the <strong>delta</strong> field for the
+<strong>MouseWheel</strong> event.  The delta refers to the direction and magnitude the
+mouse wheel was rotated.  Note the value is not a screen distance but
+are units of motion in the mouse wheel.  Typically these values are
+multiples of 120.  For example, 120 should scroll the text widget up 4
+lines and -240 would scroll the text widget down 8 lines.  Of course,
+other widgets may define different behaviors for mouse wheel motion.
+This field corresponds to the %D substitution for binding scripts.
+</dd>
+<p></p>
+<dt><strong><a name="item__2ddetail__3d_3e_detail"><strong>-detail</strong> =&gt; <em>detail</em></a></strong><br />
+</dt>
+<dd>
+<em>Detail</em> specifies the <em>detail</em> field for the event
+and must be one of the following:
+</dd>
+<pre>
+ NotifyAncestor         NotifyNonlinearVirtual
+ NotifyDetailNone       NotifyPointer
+ NotifyInferior         NotifyPointerRoot
+ NotifyNonlinear        NotifyVirtual</pre>
+<p>Valid for <strong>Enter</strong>, <strong>Leave</strong>, <strong>FocusIn</strong> and
+<strong>FocusOut</strong> events.
+Corresponds to the <a href="../../../site/lib/Tk/bind.html#_d_">%d</a> substitution for binding scripts.</p>
+<dt><strong><a name="item__2dfocus_boolean"><strong>-focus</strong><em> boolean</em></a></strong><br />
+</dt>
+<dd>
+<em>Boolean</em> must be a boolean value;  it specifies the <em>focus</em>
+field for the event.
+Valid for <strong>Enter</strong> and <strong>Leave</strong> events.
+Corresponds to the <a href="../../../site/lib/Tk/bind.html#_f_">%f</a> substitution for binding scripts.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dheight_size"><strong>-height</strong><em> size</em></a></strong><br />
+</dt>
+<dd>
+<em>Size</em> must be a screen distance;  it specifies the <em>height</em>
+field for the event.  Valid for <strong>Configure</strong> events.
+Corresponds to the <a href="../../../site/lib/Tk/bind.html#_h_">%h</a> substitution for binding scripts.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dkeycode_number"><strong>-keycode</strong><em> number</em></a></strong><br />
+</dt>
+<dd>
+<em>Number</em>  must be an integer;  it specifies the <em>keycode</em>
+field for the event.
+Valid for <strong>KeyPress</strong> and <strong>KeyRelease</strong> events.
+Corresponds to the <a href="../../../site/lib/Tk/bind.html#_k_">%k</a> substitution for binding scripts.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dkeysym_name"><strong>-keysym</strong><em> name</em></a></strong><br />
+</dt>
+<dd>
+<em>Name</em> must be the name of a valid keysym, such as <strong>g</strong>,
+<strong>space</strong>, or <strong>Return</strong>;  its corresponding
+keycode value is used as the <em>keycode</em> field for event, overriding
+any detail specified in the base <em>event</em> argument.
+Valid for <strong>KeyPress</strong> and <strong>KeyRelease</strong> events.
+Corresponds to the <a href="../../../site/lib/Tk/bind.html#_k_">%K</a> substitution for binding scripts.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dmode_notify"><strong>-mode</strong><em> notify</em></a></strong><br />
+</dt>
+<dd>
+<em>Notify</em> specifies the <em>mode</em> field for the event and must be
+one of <strong>NotifyNormal</strong>, <strong>NotifyGrab</strong>, <strong>NotifyUngrab</strong>, or
+<strong>NotifyWhileGrabbed</strong>.
+Valid for <strong>Enter</strong>, <strong>Leave</strong>, <strong>FocusIn</strong>, and
+<strong>FocusOut</strong> events.
+Corresponds to the <a href="../../../site/lib/Tk/bind.html#_m_">%m</a> substitution for binding scripts.
+</dd>
+<p></p>
+<dt><strong><a name="item__2doverride_boolean"><strong>-override</strong><em> boolean</em></a></strong><br />
+</dt>
+<dd>
+<em>Boolean</em> must be a boolean value;  it specifies the
+<em>override_redirect</em> field for the event.
+Valid for <strong>Map</strong>, <strong>Reparent</strong>, and <strong>Configure</strong> events.
+Corresponds to the <a href="../../../site/lib/Tk/bind.html#_o_">%o</a> substitution for binding scripts.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dplace_where"><strong>-place</strong><em> where</em></a></strong><br />
+</dt>
+<dd>
+<em>Where</em> specifies the <em>place</em> field for the event;  it must be
+either <strong>PlaceOnTop</strong> or <strong>PlaceOnBottom</strong>.
+Valid for <strong>Circulate</strong> events.
+Corresponds to the <a href="../../../site/lib/Tk/bind.html#_p_">%p</a> substitution for binding scripts.
+</dd>
+<p></p>
+<dt><strong><a name="item__2droot_window"><strong>-root</strong><em> window</em></a></strong><br />
+</dt>
+<dd>
+<em>Window</em> must be either a window path name or an integer window
+identifier;  it specifies the <em>root</em> field for the event.
+Valid for <strong>KeyPress</strong>, <strong>KeyRelease</strong>, <strong>ButtonPress</strong>,
+<strong>ButtonRelease</strong>, <strong>Enter</strong>, <strong>Leave</strong>, and <strong>Motion</strong>
+events.
+Corresponds to the <a href="../../../site/lib/Tk/bind.html#_r_">%R</a> substitution for binding scripts.
+</dd>
+<p></p>
+<dt><strong><a name="item__2drootx_coord"><strong>-rootx</strong><em> coord</em></a></strong><br />
+</dt>
+<dd>
+<em>Coord</em> must be a screen distance;  it specifies the <em>x_root</em>
+field for the event.
+Valid for <strong>KeyPress</strong>, <strong>KeyRelease</strong>, <strong>ButtonPress</strong>,
+<strong>ButtonRelease</strong>, <strong>Enter</strong>, <strong>Leave</strong>, and <strong>Motion</strong>
+events.  Corresponds to the <a href="../../../site/lib/Tk/bind.html#_x_">%X</a> substitution for binding scripts.
+</dd>
+<p></p>
+<dt><strong><a name="item__2drooty_coord"><strong>-rooty</strong><em> coord</em></a></strong><br />
+</dt>
+<dd>
+<em>Coord</em> must be a screen distance;  it specifies the <em>y_root</em>
+field for the event.
+Valid for <strong>KeyPress</strong>, <strong>KeyRelease</strong>, <strong>ButtonPress</strong>,
+<strong>ButtonRelease</strong>, <strong>Enter</strong>, <strong>Leave</strong>, and <strong>Motion</strong>
+events.
+Corresponds to the <a href="../../../site/lib/Tk/bind.html#_y_">%Y</a> substitution for binding scripts.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dsendevent_boolean"><strong>-sendevent</strong><em> boolean</em></a></strong><br />
+</dt>
+<dd>
+<strong>Boolean</strong> must be a boolean value;  it specifies the <em>send_event</em>
+field for the event.  Valid for all events.  Corresponds to the
+<a href="../../../site/lib/Tk/bind.html#_e_">%E</a> substitution for binding scripts.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dserial_number"><strong>-serial</strong><em> number</em></a></strong><br />
+</dt>
+<dd>
+<em>Number</em> must be an integer;  it specifies the <em>serial</em> field
+for the event.  Valid for all events.
+Corresponds to the <a href="../../../site/lib/Tk/bind.html#___">%#</a> substitution for binding scripts.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dstate_state"><strong>-state</strong><em> state</em></a></strong><br />
+</dt>
+<dd>
+<em>State</em> specifies the <em>state</em> field for the event.
+For <strong>KeyPress</strong>, <strong>KeyRelease</strong>, <strong>ButtonPress</strong>,
+<strong>ButtonRelease</strong>, <strong>Enter</strong>, <strong>Leave</strong>, and <strong>Motion</strong> events
+it must be an integer value.
+For <strong>Visibility</strong> events it must be one of <strong>VisibilityUnobscured</strong>,
+<strong>VisibilityPartiallyObscured</strong>, or <strong>VisibilityFullyObscured</strong>.
+This option overrides any modifiers such as <strong>Meta</strong> or <strong>Control</strong>
+specified in the base <em>event</em>.
+Corresponds to the <a href="../../../site/lib/Tk/bind.html#_s_">%s</a> substitution for binding scripts.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dsubwindow_window"><strong>-subwindow</strong><em> window</em></a></strong><br />
+</dt>
+<dd>
+<em>Window</em> specifies the <em>subwindow</em> field for the event, either
+as a path name for a Tk widget or as an integer window identifier.
+Valid for <strong>KeyPress</strong>, <strong>KeyRelease</strong>, <strong>ButtonPress</strong>,
+<strong>ButtonRelease</strong>, <strong>Enter</strong>, <strong>Leave</strong>, and <strong>Motion</strong> events.
+Similar to <a href="../../../site/lib/Tk/bind.html#_s_">%S</a> substitution for binding scripts.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dtime_integer"><strong>-time</strong><em> integer</em></a></strong><br />
+</dt>
+<dd>
+<em>Integer</em> must be an integer value;  it specifies the <em>time</em> field
+for the event.
+Valid for <strong>KeyPress</strong>, <strong>KeyRelease</strong>, <strong>ButtonPress</strong>,
+<strong>ButtonRelease</strong>, <strong>Enter</strong>, <strong>Leave</strong>, <strong>Motion</strong>,
+and <strong>Property</strong> events.
+Corresponds to the <a href="../../../site/lib/Tk/bind.html#_t_">%t</a> substitution for binding scripts.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dwarp_boolean"><strong>-warp</strong><em> boolean</em></a></strong><br />
+</dt>
+<dd>
+<em>boolean</em> must be a boolean value;  it specifies whether
+the screen pointer should be warped as well.
+Valid for <strong>KeyPress</strong>, <strong>KeyRelease</strong>, <strong>ButtonPress</strong>,
+<strong>ButtonRelease</strong>, and <strong>Motion</strong> events.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dwidth_size"><strong>-width</strong><em> size</em></a></strong><br />
+</dt>
+<dd>
+<em>Size</em> must be a screen distance;  it specifies the <em>width</em> field
+for the event.
+Valid for <strong>Configure</strong> events.
+Corresponds to the <a href="../../../site/lib/Tk/bind.html#_w_">%w</a> substitution for binding scripts.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dwhen_when"><strong>-when</strong><em> when</em></a></strong><br />
+</dt>
+<dd>
+<em>When</em> determines when the event will be processed;  it must have one
+of the following values:
+</dd>
+<dl>
+<dt><strong><a name="item_now"><strong>now</strong></a></strong><br />
+</dt>
+<dd>
+Process the event immediately, before the command returns.
+This also happens if the <strong>-when</strong> option is omitted.
+</dd>
+<p></p>
+<dt><strong><a name="item_tail"><strong>tail</strong></a></strong><br />
+</dt>
+<dd>
+Place the event on perl/Tk's event queue behind any events already
+queued for this application.
+</dd>
+<p></p>
+<dt><strong><a name="item_head"><strong>head</strong></a></strong><br />
+</dt>
+<dd>
+Place the event at the front of perl/Tk's event queue, so that it
+will be handled before any other events already queued.
+</dd>
+<p></p>
+<dt><strong><a name="item_mark"><strong>mark</strong></a></strong><br />
+</dt>
+<dd>
+Place the event at the front of perl/Tk's event queue but behind any
+other events already queued with <strong>-when mark</strong>.
+This option is useful when generating a series of events that should
+be processed in order but at the front of the queue.
+</dd>
+<p></p></dl>
+<dt><strong><a name="item__2dx_coord"><strong>-x</strong><em> coord</em></a></strong><br />
+</dt>
+<dd>
+<em>Coord</em> must be a screen distance;  it specifies the <em>x</em> field
+for the event.
+Valid for <strong>KeyPress</strong>, <strong>KeyRelease</strong>, <strong>ButtonPress</strong>,
+<strong>ButtonRelease</strong>, <strong>Motion</strong>, <strong>Enter</strong>, <strong>Leave</strong>,
+<strong>Expose</strong>, <strong>Configure</strong>, <strong>Gravity</strong>, and <strong>Reparent</strong>
+events.
+Corresponds to the the <a href="../../../site/lib/Tk/bind.html#_x_">%x</a> substitution for binding scripts.
+If <em>Window</em> is empty the coordinate is relative to the
+screen, and this option corresponds to the <a href="../../../site/lib/Tk/bind.html#_x_">%X</a> substitution
+for binding scripts.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dy_coord"><strong>-y</strong><em> coord</em></a></strong><br />
+</dt>
+<dd>
+<em>Coord</em> must be a screen distance;  it specifies the <em>y</em>
+field for the event.
+Valid for <strong>KeyPress</strong>, <strong>KeyRelease</strong>, <strong>ButtonPress</strong>,
+<strong>ButtonRelease</strong>, <strong>Motion</strong>, <strong>Enter</strong>, <strong>Leave</strong>,
+<strong>Expose</strong>, <strong>Configure</strong>, <strong>Gravity</strong>, and <strong>Reparent</strong>
+events.
+Corresponds to the the <a href="../../../site/lib/Tk/bind.html#_y_">%y</a> substitution for binding scripts.
+If <em>Window</em> is empty the coordinate is relative to the
+screen, and this option corresponds to the <a href="../../../site/lib/Tk/bind.html#_y_">%Y</a> substitution
+for binding scripts.
+</dd>
+<dd>
+<p>Any options that are not specified when generating an event are filled
+with the value 0, except for <em>serial</em>, which is filled with the
+next X event serial number.</p>
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="virtual_event_examples">VIRTUAL EVENT EXAMPLES</a></h1>
+<p>In order for a virtual event binding to trigger, two things must
+happen.  First, the virtual event must be defined with the
+<strong>eventAdd</strong> method.  Second, a binding must be created for
+the virtual event with the <strong>bind</strong> method.
+Consider the following virtual event definitions:</p>
+<pre>
+ $widget-&gt;eventAdd('&lt;&lt;Paste&gt;&gt;' =&gt; '&lt;Control-y&gt;');
+ $widget-&gt;eventAdd('&lt;&lt;Paste&gt;&gt;' =&gt; '&lt;Button-2&gt;');
+ $widget-&gt;eventAdd('&lt;&lt;Save&gt;&gt;' =&gt; '&lt;Control-X&gt;&lt;Control-S&gt;');
+ $widget-&gt;eventAdd('&lt;&lt;Save&gt;&gt;' =&gt; '&lt;Shift-F12&gt;');</pre>
+<p>In the <strong>bind</strong> method, a virtual event can be bound like any other
+builtin event type as follows:</p>
+<pre>
+ $entry-&gt;bind('Tk::Entry', '&lt;&lt;Paste&gt;&gt;' =&gt; sub {
+                $entry-&gt;Insert($entry-&gt;selectionGet) });</pre>
+<p>The double angle brackets are used to specify that a virtual event is being
+bound.  If the user types Control-y or presses button 2, or if
+a <strong>&lt;&lt;Paste&gt;&gt;</strong> virtual event is synthesized with <strong>eventGenerate</strong>,
+then the <strong>&lt;&lt;Paste&gt;&gt;</strong> binding will be invoked.</p>
+<p>If a virtual binding has the exact same sequence as a separate
+physical binding, then the physical binding will take precedence.
+Consider the following example:</p>
+<pre>
+ $mw-&gt;eventAdd('&lt;&lt;Paste&gt;&gt;' =&gt; '&lt;Control-y&gt;','&lt;Meta-Control-y&gt;');
+ $mw-&gt;bind('Tk::Entry', '&lt;Control-y&gt;' =&gt; sub{print 'Control-y'});
+ $mw-&gt;bind('Tk::Entry', '&lt;&lt;Paste&gt;&gt;'   =&gt; sub{print 'Paste'});</pre>
+<p>When the user types Control-y the <strong>&lt;Control-y&gt;</strong> binding
+will be invoked, because a physical event is considered
+more specific than a virtual event, all other things being equal.
+However, when the user types Meta-Control-y the
+<strong>&lt;&lt;Paste&gt;&gt;</strong> binding will be invoked, because the
+<strong>Meta</strong> modifier in the physical pattern associated with the
+virtual binding is more specific than the <strong>&lt;Control-y</strong>&gt; sequence for
+the physical event.</p>
+<p>Bindings on a virtual event may be created before the virtual event exists.
+Indeed, the virtual event never actually needs to be defined, for instance,
+on platforms where the specific virtual event would meaningless or
+ungeneratable.</p>
+<p>When a definition of a virtual event changes at run time, all windows
+will respond immediately to the new definition.
+Starting from the preceding example, if the following code is executed:</p>
+<pre>
+ $entry-&gt;bind(ref($entry), '&lt;Control-y&gt;' =&gt; undef);
+ $entry-&gt;eventAdd('&lt;&lt;Paste&gt;&gt;' =&gt; '&lt;Key-F6&gt;');</pre>
+<p>the behavior will change such in two ways.  First, the shadowed
+<strong>&lt;&lt;Paste&gt;&gt;</strong> binding will emerge.
+Typing Control-y will no longer invoke the <strong>&lt;Control-y&gt;</strong> binding,
+but instead invoke the virtual event <strong>&lt;&lt;Paste&gt;&gt;</strong>.  Second,
+pressing the F6 key will now also invoke the <strong>&lt;&lt;Paste&gt;&gt;</strong> binding.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../../../site/lib/Tk/bind.html">Tk::bind</a>
+<a href="../../../site/lib/Tk/callbacks.html">Tk::callbacks</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="keywords">KEYWORDS</a></h1>
+<p>event, binding, define, handle, virtual event</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::event - Miscellaneous event facilities: define virtual events and generate events</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

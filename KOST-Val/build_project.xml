@@ -39,7 +39,6 @@
 		<pathelement location="lib/droid-results-5.0.3.jar" />
 		<pathelement location="lib/VALA-6.11.0.7.RELEASE.jar" />
 		<pathelement location="lib/badpeggy-2.0.jar" />
-		<pathelement location="lib/itextpdf-5.5.5.jar" />
 	</path>
 	<target name="init">
 		<mkdir dir="target/classes" />
@@ -55,7 +54,7 @@
 				<exclude name="**/*.java" />
 			</fileset>
 		</copy>
-		<copy file="../README.md" todir="target/classes" />
+		<copy file="../KOST-Val_README.md" todir="target/classes" />
 	</target>
 	<target name="clean">
 		<delete dir="target/classes" />

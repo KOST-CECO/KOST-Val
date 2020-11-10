@@ -1,0 +1,209 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Digest::MD4 - Perl interface to the RSA Data Security Inc. MD4 Message-Digest Algorithm</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Digest::MD4 - Perl interface to the RSA Data Security Inc. MD4 Message-Digest Algorithm</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#examples">EXAMPLES</a></li>
+	<li><a href="#note">NOTE</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Digest::MD4 - Perl interface to the RSA Data Security Inc. MD4 Message-Digest Algorithm</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+    use Digest::MD4;
+    
+    $context = new Digest::MD4;
+    $context-&gt;reset();
+    
+    $context-&gt;add(LIST);
+    $context-&gt;addfile(HANDLE);
+    
+    $digest = $context-&gt;digest();
+    $string = $context-&gt;hexdigest();</pre>
+<pre>
+    $digest = Digest::MD4-&gt;hash(SCALAR);
+    $string = Digest::MD4-&gt;hexhash(SCALAR);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The <strong>Digest::MD4</strong> module allows you to use the RSA Data Security Inc. MD4
+Message Digest algorithm from within Perl programs.</p>
+<p>A new MD4 context object is created with the <strong>new</strong> operation.
+Multiple simultaneous digest contexts can be maintained, if desired.
+The context is updated with the <strong>add</strong> operation which adds the
+strings contained in the <em>LIST</em> parameter. Note, however, that
+<code>add('foo', 'bar')</code>, <code>add('foo')</code> followed by <code>add('bar')</code> and
+<code>add('foobar')</code> should all give the same result.</p>
+<p>The final message digest value is returned by the <strong>digest</strong> operation
+as a 16-byte binary string. This operation delivers the result of
+<strong>add</strong> operations since the last <strong>new</strong> or <strong>reset</strong> operation. Note
+that the <strong>digest</strong> operation is effectively a destructive, read-once
+operation. Once it has been performed, the context must be <strong>reset</strong>
+before being used to calculate another digest value.</p>
+<p>Several convenience functions are also provided. The <strong>addfile</strong>
+operation takes an open file-handle and reads it until end-of file in
+1024 byte blocks adding the contents to the context. The file-handle
+can either be specified by name or passed as a type-glob reference, as
+shown in the examples below. The <strong>hexdigest</strong> operation calls
+<strong>digest</strong> and returns the result as a printable string of hexdecimal
+digits. This is exactly the same operation as performed by the
+<strong>unpack</strong> operation in the examples below.</p>
+<p>The <strong>hash</strong> operation can act as either a static member function (ie
+you invoke it on the MD4 class as in the synopsis above) or as a
+normal virtual function. In both cases it performs the complete MD4
+cycle (reset, add, digest) on the supplied scalar value. This is
+convenient for handling small quantities of data. When invoked on the
+class a temporary context is created. When invoked through an already
+created context object, this context is used. The latter form is
+slightly more efficient. The <strong>hexhash</strong> operation is analogous to
+<strong>hexdigest</strong>.</p>
+<p>
+</p>
+<hr />
+<h1><a name="examples">EXAMPLES</a></h1>
+<pre>
+    use Digest::MD4;
+    
+    $md4 = new Digest::MD4;
+    $md4-&gt;add('foo', 'bar');
+    $md4-&gt;add('baz');
+    $digest = $md4-&gt;digest();
+    
+    print(&quot;Digest is &quot; . unpack(&quot;H*&quot;, $digest) . &quot;\n&quot;);</pre>
+<p>The above example would print out the message</p>
+<pre>
+    Digest is 6df23dc03f9b54cc38a0fc1483df6e21</pre>
+<p>provided that the implementation is working correctly.</p>
+<p>Remembering the Perl motto (``There's more than one way to do it''), the
+following should all give the same result:</p>
+<pre>
+    use Digest::MD4;
+    $md4 = new Digest::MD4;</pre>
+<pre>
+    die &quot;Can't open /etc/passwd ($!)\n&quot; unless open(P, &quot;/etc/passwd&quot;);</pre>
+<pre>
+    seek(P, 0, 0);
+    $md4-&gt;reset;
+    $md4-&gt;addfile(P);
+    $d = $md4-&gt;hexdigest;
+    print &quot;addfile (handle name) = $d\n&quot;;</pre>
+<pre>
+    seek(P, 0, 0);
+    $md4-&gt;reset;
+    $md4-&gt;addfile(\*P);
+    $d = $md4-&gt;hexdigest;
+    print &quot;addfile (type-glob reference) = $d\n&quot;;</pre>
+<pre>
+    seek(P, 0, 0);
+    $md4-&gt;reset;
+    while (&lt;P&gt;)
+    {
+        $md4-&gt;add($_);
+    }
+    $d = $md4-&gt;hexdigest;
+    print &quot;Line at a time = $d\n&quot;;</pre>
+<pre>
+    seek(P, 0, 0);
+    $md4-&gt;reset;
+    $md4-&gt;add(&lt;P&gt;);
+    $d = $md4-&gt;hexdigest;
+    print &quot;All lines at once = $d\n&quot;;</pre>
+<pre>
+    seek(P, 0, 0);
+    $md4-&gt;reset;
+    while (read(P, $data, (rand % 128) + 1))
+    {
+        $md4-&gt;add($data);
+    }
+    $d = $md4-&gt;hexdigest;
+    print &quot;Random chunks = $d\n&quot;;</pre>
+<pre>
+    seek(P, 0, 0);
+    $md4-&gt;reset;
+    undef $/;
+    $data = &lt;P&gt;;
+    $d = $md4-&gt;hexhash($data);
+    print &quot;Single string = $d\n&quot;;</pre>
+<pre>
+    close(P);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="note">NOTE</a></h1>
+<p>The MD4 extension may be redistributed under the same terms as Perl.
+The MD4 algorithm is defined in RFC1320. The basic C code implementing
+the algorithm is derived from that in the RFC and is covered by the
+following copyright:</p>
+<pre>
+   Copyright (C) 1990-2, RSA Data Security, Inc. All rights reserved.</pre>
+<pre>
+   License to copy and use this software is granted provided that it
+   is identified as the &quot;RSA Data Security, Inc. MD4 Message-Digest
+   Algorithm&quot; in all material mentioning or referencing this software
+   or this function.</pre>
+<pre>
+   License is also granted to make and use derivative works provided
+   that such works are identified as &quot;derived from the RSA Data
+   Security, Inc. MD4 Message-Digest Algorithm&quot; in all material
+   mentioning or referencing the derived work.</pre>
+<pre>
+   RSA Data Security, Inc. makes no representations concerning either
+   the merchantability of this software or the suitability of this
+   software for any particular purpose. It is provided &quot;as is&quot;
+   without express or implied warranty of any kind.</pre>
+<pre>
+   These notices must be retained in any copies of any part of this
+   documentation and/or software.</pre>
+<p>This copyright does not prohibit distribution of any version of Perl
+containing this extension under the terms of the GNU or Artistic
+licences.</p>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>The MD4 interface was adapted by Mike McCauley
+(<code>mikem@open.com.au</code>), based entirely on MD5-1.7, written by Neil Winton
+(<code>N.Winton@axion.bt.co.uk</code>).</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p>perl(1).</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Digest::MD4 - Perl interface to the RSA Data Security Inc. MD4 Message-Digest Algorithm</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

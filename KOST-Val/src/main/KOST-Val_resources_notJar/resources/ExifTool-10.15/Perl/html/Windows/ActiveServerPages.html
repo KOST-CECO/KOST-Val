@@ -1,0 +1,917 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+
+<head>
+<title>Active Server Pages</title>
+<link rel="STYLESHEET" href="../Active.css" type="text/css">
+</head>
+
+<body>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#EAE2BB">
+<tr> 
+<td width="57"><a target=_blank href="http://www.ActiveState.com/ActivePerl/">
+<img src="../images/activeperl_logo.gif" width="57" height="48" border="0" alt="ActivePerl"></a></td>
+<td><div align="center" class="heading">ActivePerl User Guide</div></td>
+<td width="112"><a target=_blank  href="http://www.ActiveState.com">
+<img src="../images/AS_logo.gif" width="112" height="48" border="0"  alt="ActiveState" /></a></td>
+</tr>
+<tr>
+<td class="lineColour" colspan="3"></td>
+</tr>
+</table>
+
+<h1>Active Server Pages</h1>
+
+<ul>
+  <li><a class="doc" href="#introduction">Active Server Pages</a>
+    <ul>
+      <li><a class="doc" href="#thescriptdelimiters">The Script Delimiters</a></li>
+      <li><a class="doc" href="#thescriptinghost">The Scripting Host</a></li>
+      <li><a class="doc" href="#aquickexample">Creating An ASP Page</a></li>
+    </ul>
+  </li>
+  <li><a class="doc" href="#asp_api">The ASP Interface</a>
+    <ul>
+      <li><a class="doc" href="#theaspobjects">The ASP Intrinsic Objects</a></li>
+      <ul>
+        <li><a class="doc" href="#application">The Application Object</a></li>
+        <li><a class="doc" href="#asperror">The ASPError Object</a></li>
+        <li><a class="doc" href="#objectcontext">The ObjectContext Object</a></li>
+        <li><a class="doc" href="#request">The Request Object</a></li>
+        <li><a class="doc" href="#response">The Response Object</a></li>
+        <li><a class="doc" href="#server">The Server Object</a></li>
+        <li><a class="doc" href="#session">The Session Object</a></li>
+      </ul>
+    </ul>
+  <li><a class="doc" href="#aspsamples">Active Server Pages Samples</a>
+    <ul>
+      <li><a class="doc" href="#hw">Say &quot;Hello World!&quot;</a></li>
+      <li><a class="doc" href="#sv">Accessing HTTP Server Variables</a></li>
+      <li><a class="doc" href="#qs">Reading the QueryString</a></li>
+      <li><a class="doc" href="#wf">Interactive Web Forms</a></li>
+      <li><a class="doc" href="#dc">Database Connections (ADO and ASP)</a></li>
+    </ul>
+  <li><a class="doc" href="#bindata">Variants and Binary Data</a>
+    <ul>
+      <li><a class="doc" href="#readblob">To Read And Display Binary Large Objects (ADO and
+        ASP)</a></li>
+    </ul>
+  <li><a class="doc" href="#appa">Appendix A</a>
+    <ul>
+      <li><a class="doc" href="#appasysdsn">How To Set Up A System DSN</a>
+      <li><a class="doc" href="#appanosysdsn">Why Not To Use A System DSN</a>
+      <li><a class="doc" href="#appaoledb">How To Use The Native OLE DB Provider</a>
+    </ul>
+  <li><a class="doc" href="#appb">Appendix B</a>
+    <ul>
+      <li><a class="doc" href="#appbbook">Book Resources</a>
+      <li><a class="doc" href="#appbonline">Online Resources</a>
+    </ul>
+  <li><a class="doc" href="#author and copyright">AUTHOR AND COPYRIGHT</a></li>
+</ul>
+ 
+<h2><a name="introduction">Active Server Pages (ASP)</a></h2>
+<p>Introduced in 1996, Active Server Pages (ASP) is an easy to learn server-side
+technology from Microsoft that has taken the web by storm. ASP is implemented as
+a set of objects with built-in features for fast and simple access to common
+services provided by the web-server for the Internet. As we will see, there are
+versatile reasons for using ASP as a server-side technology with ActivePerl.</p>
+
+<p>To begin, if you in general are unfamiliar with server-side technologies, let's
+start at the core by describing the need-to-know about ASP. ASP is a feature
+that installs with Microsoft's Internet Information Services (IIS) web-server.
+No special interaction or configuration is needed afterwards, and it should run
+out of the box just as easily as IIS. Fundamentally, a server-side technology
+such as ASP puts no requirements on the client or browser, and, as a result, no
+browser-compatibility issues will ever occur, no browser plug-ins have to be
+installed, and the client does not need a local installation of ActivePerl.</p>
+
+<p>Since there are no client requirements for ASP, it needs something on the
+server-side that tells it what to do with its features. A special implementation
+of a scripting language is therefore installed on the server and used in order
+to control and program ASP; PerlScript, which installs with ActivePerl, is
+suitable for the role as scripting language because it brings the power of Perl
+into the environment of ASP and there merges it with the services provided by
+ASP. There are only two things that you either may already know or will need to
+learn while using PerlScript:</p>
+<ul>
+  <li>The Active Server Pages Object Model
+  <li>How Perl Works with Objects
+</ul>
+<p>On the Internet, ASP serves documents of its own filetype as opposed to
+familiar document types like HTML documents. This is so that the ASP document
+can be processed on the server side before returned to the client's browser. An
+ASP document has the file extension .asp, and it provides both existing features
+derived from ASP and the ability to execute script commands within the document.
+The file extension is by the webserver recognized in a special way which results
+in the underlying technology executing script commands that are within the file
+and treat other markup such as HTML in a standard fashion. The source code of
+your saved file's PerlScript script commands will by default never be available
+to the user when choosing to view the document source in the browser, so any
+script that you write can not be copied. The reason for this is because
+everything is processed on the server side and what is returned to the browser
+is a standard format such as HTML.</p>
+
+<p>For a closure, it deserves to be repeated that if you are unfamiliar with
+object-oriented programming in Perl, it is strongly recommended that you
+sometime browse the Perl documentation on object-oriented programming to get a
+basic understanding of the aspects of an object and its origin. Next up, let's
+look at how to embed PerlScript commands within an ASP document.</p>
+
+
+<h2><a name="thescriptdelimiters">The Script Delimiters</a></h2>
+<p>To successfully execute the script commands within an ASP file, you must specify
+what scripting language ASP should use to interpret the script commands. You can
+do this within the .asp document by either setting a default scripting language
+in which all script commands within the script-delimiters &lt;% and %&gt;    will be
+executed by the specified scripting language. Either you can apply that setting
+within the Microsoft Management Console's IIS snap-in or you can use what
+ASP recognizes as a page command, which is indicated by the special directive @.
+The following example is for illustrational purposes only and it shows you how
+to set the default scripting language for the ASP file to PerlScript; as a
+result, all commands will be treated by the PerlScript engine; however, please
+note that no actual output or result is being displayed by the script, so if you
+run the code shown in the example below, you won't see an output although the
+code is being executed and interpreted.</p>
+<ul>
+  <code><br>
+  &lt;%@ Language=PerlScript %&gt;<br>
+  &lt;%<br>
+  for($i=0; $i&lt;=10; $i++) {<br>
+  #<br>
+  # Your Perl code here<br>
+  #<br>
+  }<br>
+  %&gt;</code>
+</ul>
+
+<p>In addition to page-commands, you can set the scripting language for a defined
+scope by using the <code>&lt;SCRIPT Language=PerlScript RUNAT=Server&gt;</code>
+and <code>&lt;/SCRIPT&gt;</code> delimiters. This results in the scripting
+language only executing the code within the &lt;script&gt; elements regardless
+of what the default scripting language is set to for a language by the webserver
+or by an ASP page command for the current document.</p>
+<ul>
+  <code><br>
+  &lt;SCRIPT Language=PerlScript RUNAT=Server&gt;<br>
+  for($i=0; $i&lt;=10; $i++) {<br>
+  #<br>
+  # Your Perl code here<br>
+  #<br>
+  }<br>
+  &lt;/SCRIPT&gt;</code>
+</ul>
+
+<h2><a name="thescriptinghost">The Scripting Host</a></h2>
+<p>When Active Server Pages acts as the scripting host for PerlScript, it is
+initalized as a host first when an ASP file on the web-server is requested by
+the way of a URL (such as http://www.domain.com/home.asp). The web-server
+locates the file, and the scripting host locates the script commands that are
+within the script delimiters. The chunks of code found within the delimiters are
+passed on to PerlScript, which creates a Perl interpreter that treats the code.
+Afterwards, it returns to the scripting host, which waits for the next incoming
+call. Certain rules apply to when you write code to interact with scripting
+hosts such as ASP, and let's look at one of those necessary things to know by
+illustrating it as a parallel to writing a command-line Perl script. When you
+began programming Perl, among the first things you probably learned was how to
+print text to the screen, and it is not unusual that such a script looks as
+follows.</p>
+<ul>
+  <code>print &quot;Hello World&quot;;</code>
+</ul>
+
+<p>As seen, the <code>&quot;print()&quot;</code>-function of Perl outputs the
+string &quot;Hello World&quot; to what is known as the Standard Output.
+PerlScript, too, will send any output to what it knows as Standard Output, and
+when executed within the ASP scripting host, the PerlScript engine will use the
+features of the host's object-model in order to reach the standard output.
+Essentially, the host provides a set of features, and you pick the scripting
+language in which you wish to write your application to interact with the host.
+In ASP, you need to know the host because it decides what method and what object
+you need to deploy of the host's in order to output a string. A scripting
+language would become extremely bloated if it had to keep track of all those
+things. In contrast, the scripter needs to keep track of such features. :-) To
+send &quot;Hello World&quot; to the client's browser by using ASP, you call the
+&quot;<code>Write()</code>&quot;-method of the Response object as in the next
+example.</p>
+<ul>
+  <code>$Response-&gt;Write(&quot;Hello World&quot;);</code>
+</ul>
+
+<p>In essence, it is of most importance that you know the object-model of the ASP
+scripting host within which you use PerlScript so that you know what object to
+call and how to get the best performance out of your application.</p>
+
+<h2><a name="aquickexample">Creating An ASP Page</a></h2>
+<p>When looking back, the little we've seen about ASP so far is that it contains a
+set of objects that you can use for your programming. It also requires a
+scripting language that is used to access these objects, and for that purpose,
+PerlScript can be used to execute Perl commands that are mixed and embedded
+within the HTML of your Active Server Pages document. Lastly, the ASP document
+has its own file extension .asp which is recognized by the web server as a
+document parsed for first script commands and then HTML tags.</p>
+<ul>
+  1) Create a file named PerlScript.asp<br>
+  2) Edit it and enter &quot;<code>&lt;HTML&gt; Hello World &lt;/HTML&gt;</code>&quot;<br>
+  3) Save the file where you can access it by a URL such as <i>http://localhost/</i>.
+  On IIS, the following path is often valid <i>&lt;device&gt;:\inetpub\wwwroot\</i>
+  where &lt;device&gt; is a hard-disk such as C:\ or D:\<br>
+  4) Run the file in your browser by entering the URL pointing to PerlScript.asp;
+  for example, <i>http://localhost/PerlScript.asp</i>
+</ul>
+
+<p>If it instead of finding the file reports an error such as &quot;File Not
+Found,&quot; you need to open Windows Explorer and reassure yourself of that the
+file is saved with the .asp file-extension and in the correct physical location
+for being accessible by the browser. If the browser finds the file and
+&quot;Hello World&quot; is outputted, you can place a few script commands in the
+file and rest assured that ASP will execute everything as for which it was
+built. Edit the file so that is looks as follows.</p>
+<ul>
+  <code>&lt;%@Language=PerlScript%&gt;<br>
+  &lt;HTML&gt;<br>
+  &lt;TITLE&gt; PerlScript Test &lt;/TITLE&gt;<br>
+  &lt;%<br>
+  for($i=0; $i&lt;=10; $i+=2) {</code>
+  <ul>
+    <code>$Response-&gt;Write(&quot;&lt;FONT SIZE=$i COLOR=#000000&gt;&quot;);<br>
+    $Response-&gt;Write(&quot;Hello World! &lt;/FONT&gt; &lt;BR&gt;&quot;);</code>
+  </ul>
+  <code>}<br>
+  %&gt;<br>
+  &lt;/HTML&gt;<br>
+  </code>
+</ul>
+  
+<p>The script shown is used only to output HTML and text. Essentially, the Response
+object's &quot;<code>Write()</code>&quot;-method sends the HTML and variable
+value of <code>$i</code> to the browser. However, <code>$i</code> is a part of
+the HTML Font element, so the result is that the font size is increased by 2 for
+each time &quot;Hello World&quot; is sent to the client's browser. You could
+also write the script this way:</p>
+<ul>
+  <code>&lt;HTML&gt;<br>
+  &lt;TITLE&gt; PerlScript Example &lt;/TITLE&gt;<br>
+  &lt;script language=perlscript runat=server&gt;<br>
+  for($i=0; $i&lt;=10; $i+=2) {</code>
+  <ul>
+    <code>$Response-&gt;Write(&quot;&lt;FONT SIZE=$i COLOR=#000000&gt;&quot;);<br>
+    $Response-&gt;Write(&quot;Hello World! &lt;/FONT&gt; &lt;BR&gt;&quot;);</code>
+  </ul>
+  <code>}<br>
+  &lt;/script&gt;<br>
+  &lt;/HTML&gt;<br>
+  </code>
+</ul>
+
+<p>A closure to this example, there is a shorthand for writing <code>$Response-&gt;Write($variable)</code>,
+and it is not available when already within script delimiters; however, to
+easily mix variables with HTML you can automatically call the mentioned method
+by <code>&lt;%=$variable%&gt;</code> where the equal-sign automatically
+translates into <code>$Response-&gt;Write()</code>. For example:</p>
+<ul>
+  <code>&lt;HTML&gt;<br>
+  &lt;TITLE&gt; PerlScript Example &lt;/TITLE&gt;<br>
+  &lt;% @Language=PerlScript %&gt;<br>
+  &lt;% for($i=0; $i&lt;=10; $i+=2) {<br>
+  %&gt;<br>
+  &lt;FONT SIZE=&lt;%=$i%&gt; COLOR=#000000&gt;<br>
+  Hello World!<br>
+  &lt;/FONT&gt;<br>
+  &lt;BR&gt;<br>
+  &lt;% } &gt;%<br>
+  &lt;/HTML&gt;<br>
+  </code>
+</ul>
+  
+<h2><a name="asp_api">The ASP Programming Interface</a></h2>
+<p>Providing an interface to common tasks for a web programmer, ASP simplifies
+web-programming by making the simple tasks even easier. The features of ASP are
+implemented and exposed as objects, and, in addition, a scripting language is
+enabled to not only use those features of the ASP host, the language can
+certainly use its own features, too.</p>
+  
+<h2><a name="theaspobjects">The ASP Intrinsic Objects</a></h2>
+<p>In object-oriented programming as we know it, the programmer is required to
+create an instance of the object she wishes to use. The ASP objects, on the
+other hand, are &quot;intrinsic&quot;, which means that they are already
+instantiated and available to your scripting language engine. No pre-work at all
+is associated with these objects and you can access them at any time. Now, each
+object encapsulate a set of very specific services and provides shorthand access
+to common tasks for the web developer such as reading the data submitted from a
+web-form, reading and writing cookies, redirecting the client's browser, and
+also extended functionality such as the ability to identify each user as a
+unique client and associate private server-side variables with her. Before
+diving into the syntax, these are the objects as of ASP 3.0:</p>
+
+<h3><a name="application">Application</a></h3>
+<p>The Application Object an object that is a place-holder for global variables
+stored on the server side. A global variable in this sense is a variable that is
+global to what is known as the IIS application. The IIS application defines the
+physical space of a webserver such as the range on the hard disk for the URL
+http://members.someperlsite.com/. A webserver can have more than one IIS
+application, but there is only one ASP application object per IIS application.
+Confused? Hang on a minute. The Application object, like the Session object, has
+what is called a collection. The collection contains variables created by you.
+Whenever you want to create a variable, the variable must be put on the contents
+collection, and the following is one way of doing it.
+<ul>
+  <code># Set an application variable<br>
+  #<br>
+  $Application-&gt;Contents-&gt;SetProperty('Item', 'myName', 'Tobias');</code>
+</ul>
+
+<p>The contents collection can store scalar variables, arrays, or objects that
+somehow are associated with all users; for example, a visitor counter or a
+connection-string used to connect to a database through the Microsoft universal
+ADO application-programming interface. The variable can be accessed easily, too.
+<ul>
+  <code># Access an application variable<br>
+  #<br>
+  $Application-&gt;Contents-&gt;Item('myName');</code>
+</ul>
+
+<p>However, when you're comfortable within the Microsoft Management Console and can
+set and define your own IIS applications, you will notice that there is only one
+ASP Application object per IIS Applcation and the variables placed in the
+Contents colleciton are only available within that IIS application and no other.
+If it's a bit confusing, it's guaranteed to have cleared out after playing
+around with this for a while. It's the most abstract part about ASP if you are
+not used to defining IIS applications. On the downside, Personal Web Server does
+not enable you to define more than one IIS application.</p>
+
+<h3><a name="asperror">ASPError</a></h3>
+<p>The ASPError object is the only new object that shipped with ASP 3.0. It
+contains detailed information about an error which occured during the processing
+of an ASP page. Unless told otherwise by the administrator, ASP 3.0 redirects
+the client to a page named 500-100.asp when an error occurs, and in that page,
+the ASPError object is deployed to show detailed descriptions about the error.
+You can with PerlScript easily also extend the use the 500-100.asp page to
+perform custom tasks such as emailing you a formatted page of the contents of
+the ASPError object on an arror or writing it to a special log. Some of its
+useful properties include: SourceCode for returning the source code of the part
+of a script that generated the error, Category for tracking down the categoru of
+the error to ASP, scripting language, or an object, File for the name of the
+file processed when error was generated, and Description to return a description
+of the error; however, please note that ASPError objects are only returned by
+the Server object's GetLastError method.</p>
+<ul>
+  <code><br>
+  # Return the ASPError object<br>
+  #<br>
+  $ASPError = $Server-&gt;GetLastError();<br>
+  <br>
+  # Output the error's description<br>
+  #<br>
+  $Response-&gt;Write( $ASPError-&gt;{Description} );</code>
+</ul><br>
+
+<h3><a name="objectcontext">ObjectContext</a></h3>
+<p>The ObjectContext object is used for a page that is run as a transaction. This
+object enables you to commit or abort a transaction, which is an important
+functionality for deployed business applications. Its only methods are SetAbort()
+and SetComplete(). They are used to commit or abort the transaction. Before this
+can be used, your page must include a <code>@TRANSACTION</code> page command in
+the page, whereas you are enabled only to define @ once per file; however, you
+can use multiple directives within the @ such as <code>&lt;%@directiveA=something
+directiveB=somethingelse%&gt;</code>. If you use PerlScript a lot, you are
+better off setting it as the default language in the Microsoft Management
+Console. Setting the default language in the MMC is unfortunately not an option
+for Personal Web Server. PWS is good for practicing a scripting language and
+ASP, but it is not good for tailormaking your webservice in terms of IIS
+applications and other tasks that are administrative. For example, it does not
+have the Microsoft Management Console. What PWS mainly does is to allow you to
+publish and develop Active Server Pages within reson while it hides the
+administrative tasks.</p>
+
+<h3><a name="request">Request</a></h3>
+<p>For good reason, the Request object is a widely used object. It contains a
+collection of information such as form-data or cookies gathered from the client.
+With this object you can gather the contents submitted from any type of
+web-form, read server variables or the contents of a digital client certificate.
+You can also read binary data such as an uploaded file by first determining the
+number of bytes sent with the <code>TotalBytes</code>-property and then read it
+with the <code>BinaryRead($bytes_to_read)</code> method.</p>
+<ul>
+  <code><br>
+  # Get the number of total bytes in the request<br>
+  #<br>
+  $bytes_to_read = $Request-&gt;{TotalBytes};<br>
+  <br>
+  # Read and return a variant array of type VT_U1<br>
+  #<br>
+  $read_bytes=$Request-&gt;BinaryRead( $bytes_to_read );</code>
+</ul>
+
+<p>In the Request object, collections that you can read includes <code>ClientCertificate</code>
+for digital certificated, <code>Cookies</code> for cookies sent with the HTTP
+request, <code>Form</code> for data posted by a web form using the POST method, <code>QueryString</code>
+for data passed with the QueryString or GET method from a web form, and <code>ServerVariables</code>
+for HTTP environment variables such as the server software or the users browser.</p>
+<ul>
+  <code># Let's see what's in the ALL_HTTP variable<br>
+  #<br>
+  $Response-&gt;Write( $Request-&gt;ServerVariables('ALL_HTTP')-&gt;Item() );</code>
+</ul><br>
+
+<h3><a name="response">Response</a></h3>
+<p>The Response Object is responsible for sending data from the client to the
+server. For example, you can print strings such as HTML or scalar variables, and
+you can also print binary data such as images, set cookies, control cache,
+character sets, and content-types, plus send the client status headers, append
+data to the log, set PICS labels, and see if the client is still connected. A
+cookie can contain the attributed Domain, Expires, HasKeys, Path, and Secure,
+and you first declare a cookie before setting these attributes.</p>
+<ul>
+  <code># Ask the client's browser if it wants a cookie</code><br>
+  #<br>
+  $Response-&gt;Cookies-&gt;SetProperty(
+  <ul>
+    <ul>
+      <ul>
+        <ul>
+          <ul>
+            <ul>
+              <code>'Item',<br>
+              'someCookie',<br>
+              'Hi! This is a cookie!'<br>
+              );
+            </ul>
+          </ul>
+        </ul>
+      </ul>
+    </ul>
+  </ul>
+  <br>
+  <br>
+  # ==================================================<br>
+  # Let's set some attributes of the cookie!<br>
+  # ==================================================<br>
+  <br>
+  # This is the domain that can read the cookie; to specify it further,<br>
+  # use the Path-attribute to define a more complete URL<br>
+  #<br>
+  $Response-&gt;Cookies('someCookie')-&gt;{Domain} = 'somesite.com';<br>
+  <br>
+  # The expiration date for the cookie<br>
+  #<br>
+  $Response-&gt;Cookies('someCookie')-&gt;{Expires} = 'January 1, 1999';<br>
+  <br>
+  # Not a secure cookie; 1 defines it as secure<br>
+  #<br>
+  $Response-&gt;Cookies('someCookie')-&gt;{Secure} = 0;</code>
+</ul>
+<br>
+
+<h3><a name="server">Server</a></h3>
+<p>The Server object provides certain server-side functions. Its only property is <code>Timeout</code>
+which defines for how many seconds a script should try executing before
+returning an error. This setting can also be set in the Microsoft Management
+Console. In terms of methods, you can create instances of COM objects in your
+page, encoding HTML and URL's, mapping the physical path to a file by providing
+its URL, execute other .asp files, and seamlessly transfer the client to a new
+page while maintaining the state of the current ASP objects, which means that
+any form data that was gathered can be transferred between pages.</p>
+<ul>
+  <code># Open the file in the virtual path /scripts/forum.asp/<br>
+  #<br>
+  open( FILE, $Server-&gt;MapPath('/scripts/forum.asp') );</code>
+</ul>
+
+<p>You can use <code>CreateObject('ProgID')</code> to return a valid COM object to
+the Active Server Page. For example, to instantiate an ADO object, you'd do the
+following:</p>
+<ul>
+  <code># Create an ADO Connection object<br>
+  #<br>
+  $ADOConnObj = $Server-&gt;CreateObject('ADODB.Connection');</code>
+</ul>
+
+<p>When using strings, <code>HTMLEncode($string)</code> encodes charaters such as
+greater than and less than into its valid character represenation within an HTML
+page. This prevents, for example, users to post HTML to a chatroom or
+messageboard. The <code>URLEncode($string)</code>-method encodes a string for
+valid represenation as a URL. New in IIS 5, you can <code>Execute('/scripts/page.asp')</code>
+ASP scripts in other files, and to transfer the user without losing the state of
+the Request object's existing variables such as the contents of the
+Form-collection you can use the Transfer-method.</p>
+<ul>
+  <code># Transfer the user to a different page<br>
+  #<br>
+  $Server-&gt;Transfer('/step2.asp');</code>
+</ul>
+<p>Worth noting about the transfer method is that it takes place on the server
+side. There is never a request sent to the users browser telling the browser to
+redirect, thus a roundtrip is spared.</p>
+
+<h3><a name="session">Session</a></h3>
+<p>The Session object enables you to associate variables with each unique client
+and keep the variables stored until she leaves the domain. It has the same
+abilities as the Application object, but with the important difference that
+these variables will only be available to the single user and the script engine, making it
+ideal for applications such as shopping carts. The syntax is the same as the
+Application object in terms of adding entities to the Contents collection. In
+addition, you can set the <code>Timeout</code>-property to the number of minutes
+that you wish the Session to last before it is ended or you can deliberately end
+the Session by calling the <code>Abandon</code>-method and then redirect to a
+new page. The redirection is very important! Other properties that you can use
+is <code>CodePage</code> which is used for Symbol Mapping, <code>LCID</code> for
+the locale identifier, and <code>SessionID</code> which uniquely identifies the
+client.</p>
+
+<p>For both the Session and Application object, the Contents collections contain a <code>Remove()</code>
+and <code>RemoveAll()</code> method. <code>Remove()</code> takes either an index
+or a keyname for the variable in the Collection to remove, and <code>RemoveAll()</code>
+removes all variables stored in the collection. In example, consider that you
+have stores a property called &quot;myName&quot; in the Session s Contents
+collection, you would remove it as follows:</p>
+<ul>
+  <code>$Session-&gt;Contents-&gt;Remove('myName');</code>
+</ul>
+
+<p>Earlier than IIS 5, <code>Remove()</code> and <code>RemoveAll()</code> are not
+available, so you will have to use the Perl built-in function <code>undef()</code>,.
+
+<h2><a name="aspsamples">The Active Server Pages Samples</a></h2>
+<p>The following examples are taken from the \eg\aspsamples\ directory, which will
+be installed on your machine if you installed the example files with ActivePerl.
+In addition to these examples, there are useful and advanced examples in the \eg\aspsamples\
+directory.</p>
+
+
+<h2><a name="hw">Say &quot;Hello World!&quot;</a></h2>
+<h3>File Location: [\eg\aspsamples\hello.asp]</h3>
+<p>In this example, a for-loop is used to print a series of &quot;Hello
+World!&quot; strings of increasing font-size. Notice the <code>&lt;%=$i%&gt;</code>
+call, which is shorthand for writing $Response-&gt;write($i).</p>
+<ul>
+  <code><br>
+  &lt;%<br>
+  for ($i = 3; $i &lt; 8; $i++) {<br>
+  %&gt;<br>
+  &lt;font size=&lt;%= $i %&gt;&gt;<br>
+  &quot;Hello World!&quot;<br>
+  &lt;/font&gt;<br>
+  &lt;BR&gt;<br>
+  &lt;%<br>
+  }<br>
+  %&gt;
+  </ul>
+</code>
+<br>
+
+<h2><a name="sv">Accessing HTTP Server Variables</a></h2>
+<h3>File Location: [\eg\aspsamples\srvvar.asp]</h3>
+<p>The HyperText Transfer Protocol (HTTP) variables that are sent with each request
+can be retrieved from the Request object. You need to specify that you want the
+server variables, and then call a method named &quot;Item&quot; in order to
+return the value.
+<ul>
+  <code>&lt;%= $Request-&gt;ServerVariables('SERVER_SOFTWARE')-&gt;Item() %&gt;</code>
+</ul>
+
+
+<h2><a name="qs">Reading the QueryString</a></h2>
+<h3>File Location: [\eg\aspsamples\qstring.asp]</h3>
+<p>The QueryString can be either manufactured by handcoding it, or it is
+automatically generated for form-fields if you use a HTML form that uses the GET
+method for submitting its data. The following is one way you can use it.</p>
+<ul>
+  <code>
+  &lt;a class="doc" href=&quot;&lt;%=$Request-&gt;ServerVariables('PATH_INFO')-&gt;item()%&gt;?Size=Medium&amp;Color=Yellow&quot;&gt;<br>
+  This link will demonstrate the Request object's QueryString collection.<br>
+  &lt;/A&gt;<br>
+  <br>
+  The current value of Size is<br>
+  &lt;%= $Request-&gt;QueryString('Size')-&gt;item() %&gt;<br>
+  <br>
+  &lt;BR&gt;<br>
+  <br>
+  The current value of Color is<br>
+  &lt;%= $Request-&gt;QueryString('Color')-&gt;item() %&gt;
+  </ul>
+</code>
+
+<h2><a name="wf">Interactive Web Forms</a></h2>
+<h3>File Location: [\eg\aspsamples\wform.asp]</h3>
+<p>In this example, the POST method is used to submit a form. The Request object
+gathers data by calling the Form-element by its name in <code>$Request-&gt;Form('name')-&gt;Item()</code>
+instead of in <code>$Request-&gt;QueryString('name')-&gt;Item()</code> as it is
+passed when the method is GET.</p>
+
+<p>Once fetched, the &quot;<code>$Server-&gt;HTMLEncode()</code>&quot;-method is
+called to correctly translate HTML tags into proper encoding so that no HTML
+tags can be submitted.</p>
+<ul>
+  <code>
+  &lt;%<br>
+  my($name) = $Request-&gt;Form('Yourname')-&gt;Item();<br>
+  $name = $Server-&gt;HTMLEncode($name);<br>
+  %&gt;<br>
+  <br>
+  &lt;%<br>
+  if($name eq 'Enter Your name here') {<br>
+  $Response-&gt;Write(&quot;Please type your name in the box below and then
+  press the button&quot;);<br>
+  }<br>
+  else {<br>
+  $Response-&gt;Write(&quot;Hello $name&quot;);<br>
+  }<br>
+  %&gt;<br>
+  <br>
+  &lt;CENTER&gt;<br>
+  &lt;FORM ACTION=&quot;wform.asp&quot; METHOD=&quot;POST&quot;&gt;<br>
+  &lt;INPUT TYPE=&quot;Textfield&quot; NAME=&quot;Yourname&quot; MAXLENGTH=&quot;30&quot;
+  VALUE=&quot;Enter Your Name Here&quot;&gt;<br>
+  &lt;INPUT TYPE=&quot;SUBMIT&quot; VALUE=&quot;Click Me&quot;&gt;<br>
+  &lt;/FORM&gt;<br>
+  &lt;/CENTER&gt;</code>
+</ul>
+
+<h2><a name="dc">Database Connections (ADO and ASP)</a></h2>
+<h3>File Location: [\eg\aspsamples\ado1.asp]</h3>
+<p>This database example requires the ActiveX Data Objects from the Microsoft Data
+Access Components, available at <a class="doc" href="http://www.microsoft.com/data/">http://www.microsoft.com/data/</a>.<br>
+<br>
+<ul>
+  <code>
+  &lt;%<br>
+  # Create an instance of the ADO Connection object<br>
+  #<br>
+  $Conn = $Server-&gt;CreateObject(&quot;ADODB.Connection&quot;);<br>
+  <br>
+  # Open a system DSN<br>
+  #<br>
+  $Conn-&gt;Open( &quot;ADOSamples&quot; );<br>
+  <br>
+  # Execute an SQL Query<br>
+  #<br>
+  $RS = $Conn-&gt;Execute( &quot;SELECT * FROM Orders&quot; );<br>
+  <br>
+  # Read a property to get the number of columns<br>
+  # present in the Recordset returned from the<br>
+  # query.<br>
+  #<br>
+  $count = $RS-&gt;Fields-&gt;{Count};<br>
+  <br>
+  # Print out the names of each column<br>
+  #<br>
+  for ( $i = 0; $i &lt; $count; $i++ ) {<br>
+  $Response-&gt;Write( $RS-&gt;Fields($i)-&gt;Name );<br>
+  $Response-&gt;Write(&quot;&lt;BR&gt;&quot;);<br>
+  };<br>
+  <br>
+  # Loop the Recordset until there are no more records<br>
+  #<br>
+  while ( ! $RS-&gt;{EOF} ) {<br>
+  for ( $i = 0; $i &lt; $count; $i++ ) {<br>
+  $Response-&gt;Write(&quot;&nbsp;&quot;);<br>
+  $Response-&gt;Write($RS-&gt;Fields($i)-&gt;{Value});<br>
+  $Response-&gt;Write(&quot;&lt;BR&gt;&quot;);<br>
+  };<br>
+  <br>
+  # Move to the next record<br>
+  #<br>
+  $RS-&gt;MoveNext();<br>
+  };<br>
+  <br>
+  # Close the Recordset<br>
+  #<br>
+  $RS-&gt;Close();<br>
+  $Conn-&gt;Close();<br>
+  %&gt;</code>
+</ul>
+
+<p>As an important note, the ActiveX Data Objects is an easy-to-use and
+easy-to-learn set of objects that provides universal data access. Regardless of
+what language you use ADO from within, the application-level programming
+interface of ADO remains the same.</p>
+
+<p>Moreover, not only can you access relational databases such as MS Access, SQL
+Server, or Oracle with these components, you can access non-relational data such
+as video, filesystems, and email systems -- all from one single interface. It is
+the post-ODBC industry standard for accessing data stores, and a fast and
+powerful way to get your databases out on the Internet.</p>
+
+<h2><a name="bindata">Variants and Binary Data</a></h2>
+<p>At times, you will be working with binary data that is passed to PerlScript
+from a COM object or passed from PerlScript to a COM object. In Windows Script,
+the data comes in a data type called a Variant. The Variant resembles Perl's
+scalar variables because it was designed for holding most types of data. And
+most of the time, Perl is able to determine what type of Variant that is being
+returned to it from a COM object; however, with binary data, it sometimes
+becomes necessary to define what the variant is exactly for a type, so the
+&quot;<code>Win32::OLE::Variant</code>&quot;-module provides functionality for
+this conversion and much more. For example, if you have a GIF image stored in
+the variable <code>$image</code>, and you want to output it to the screen by
+using the Response object's &quot;<code>BinaryWrite()</code>&quot;-method, you
+must convert it to a VT_UI1 variant before it is passed to the &quot;<code>BinaryWrite()</code>&quot;-method
+simply because a VT_UI1 variant is expected by the method.<br>
+<ul>
+  <code>use Win32::OLE::Variant;<br>
+  <br>
+  # Tell the browser a GIF image is on its way<br>
+  #<br>
+  $Response-&gt;{ContentType} = &quot;image/GIF&quot;;<br>
+  <br>
+  # Send the GIF as a VT_UI1 Variant<br>
+  #<br>
+  $Response-&gt;BinaryWrite(Win32::OLE-&gt;Variant(VT_UI1, $image));<br>
+  </code>
+</ul>
+<p>An issue of needing to convert to the accurate type of Variant occurs most of
+the time when working with binary data; two concrete examples are binary large
+objects (BLOBs) returned from SQL Server and binary data being output through
+the ASP Response object's &quot;<code>BinaryWrite()</code>&quot;-method. The
+&quot;<code>BinaryWrite()</code>&quot;-method expects a Variant of the type
+VT_UI1, and that is the same type which is returned when reading a BLOB from SQL
+Server. However, as the variant is returned to PerlScript, it converts it into
+the type of scalar that most resembles the variant, and although that is an
+accurate conversion for use in Perl, you will need to convert data if it's used
+in a VT_UI1 context.</p>
+
+<h2><a name="readblob">To Read And Display Binary Large Objects (ADO and ASP)</a></h2>
+<p>The following example will demonstrate how ADO can be used to read a Binary
+Large Object from SQL Server, and how ASP is used to output the BLOB as an
+image.
+<ul>
+  <code>&lt;%@Language=PerlScript%&gt; &lt;%<br>
+  use Win32::OLE::Variant;<br>
+  <br>
+  # One note, 40 as bytes to read per GetChunk()-call is not<br>
+  # a good number to choose for a real application. I emphasize<br>
+  # _not_. Instead, whatever you choose depends much on your<br>
+  # system and the power of it; however, 4000 is a much more<br>
+  # realistic real-world number compared to 32.<br>
+  #<br>
+  my($blob_size, $read_size, $bytes_to_read) = (0, 0, 32);<br>
+  <br>
+  # Let's create the Connection object used to establish the connection<br>
+  #<br>
+  $conn = $Server-&gt;CreateObject('ADODB.Connection');<br>
+  <br>
+  # Open a connection using the SQL Server OLE DB Provider<br>
+  #<br>
+  $conn-&gt;Open(&lt;&lt;EOF);<br>
+  Provider=SQLOLEDB;<br>
+  Persist Security Info=False;<br>
+  User ID=sa;Initial Catalog=pubs<br>
+  EOF<br>
+  <br>
+  # Execute the query which returns the BLOB from our database<br>
+  #<br>
+  $rs = $conn-&gt;Execute(&quot;SELECT logo FROM pub_info WHERE pub_id='0736'&quot;);<br>
+  <br>
+  # Get the size of the BLOB<br>
+  #<br>
+  $blob_size = $rs-&gt;FieldS('logo')-&gt;{ActualSize};<br>
+  <br>
+  # And here's the routine for reading in the blob. Alternatively you can<br>
+  # make a control statement that says if the $blob_size is less than<br>
+  # 4096, it should just swallow it in one chunk, but the routine below<br>
+  # is good to have handy<br>
+  #<br>
+  while($read_size &lt; $blob_size) {</code>
+  <ul>
+   <code> $buffer .= $rs-&gt;Fields('logo')-&gt;GetChunk($bytes_to_read);<br>
+    $read_size += $bytes_to_read;<br>
+    if($read_size+$bytes_to_read &gt; $ blob_size) {
+    <ul>
+      $bytes_to_read = $blob_size - $read_size;
+    </ul>
+    }
+  </ul>
+  }<br>
+  <br>
+  # Make a VT_UI1 variant of the retrieved Chunks<br>
+  #<br>
+  $image = new Win32::OLE::Variant(VT_UI1, $buffer);<br>
+  <br>
+  # Tell the browser that the content coming is an image of the type GIF<br>
+  #<br>
+  $Response-&gt;{ContentType}=&quot;image/gif&quot;;<br>
+  <br>
+  # Do a binarywrite of the VT_UI1 variant image<br>
+  #<br>
+  $Response-&gt;BinaryWrite($image);<br>
+  %&gt;</code>
+</ul>
+
+ 
+<h2><a name="appa">Appendix A</a></h2>
+
+<h3><a name="appasysdsn">How To Set Up A System DSN</a></h3>
+<p>The System Data Source Name is information stored in the Windows-registry.
+The information is used by your application to connect to a database. To create
+a SystemDSN you must have a database ready to be used by your application and
+know the path to the database. When the information above is gathered you open
+&quot;32 Bit ODBC&quot; from the control-panel andclick on the &quot;SystemDSN&quot;-tab.
+Choose to &quot;Add&quot; a new SystemDSN and select the driver for your
+database. Enter the &quot;Data Source Name&quot; that you will call on the
+database by from your application, then click on the &quot;Select&quot;-button
+and browse to your database-file. Okay everything, then close the program. You'll
+now be able to call on your database by the Data Source Name you entered for it
+as follows:
+<ul>
+  <code>$Conn = $Server-&gt;CreateObject(&quot;ADODB.Connection&quot;);<br>
+  $Conn-&gt;Open(&quot;Name&quot;);</code>
+</ul>
+
+<h3><a name="appanosysdsn">Why Not To Use A System DSN</a></h3>
+<p>With the ActiveX Data Objects (ADO), the layer that connectes to a database
+is called the OLE DB layer. It is the very closest to the physical database, and
+directly connecting to OLE DB is ADO. Most databases will have what is called an
+OLE DB Provider, and if you have worked with ODBC, the OLE DB provider is OLE
+DB's equivalent of the ODBC driver. In ADO, ideally you should connect via ADO
+directly to OLE DB and from OLE DB directly to the physical database or other
+data store. A System DSN is for ODBC data sources and it causes OLE DB to wrap
+an ODBC driver within itself, which adds an overhead and reduces performance.
+
+<h3><a name="appaoledb">How To Use The Native OLE DB Provider</a></h3>
+<p>There are a number of things you can do to get the native provider set up.
+When you have it set up, you simply replace the name of the system DSN with the
+string that has been produced in order to connect to the data store using the
+native OLE DB provider. First, try to create an Universal Data Link file by
+doing the following:
+<ol>
+  <li><p>Create a file named connectionstring.udl.</p></li>
+  <li><p>Right-click on it.</p></li>
+  <li><p>Choose Properties.</p></li>
+  <li><p>Choose the OLE DB Provider to use.</p></li>
+  <li><p>Define what source to connect to and possibly a username and password.</p></li>
+  <li><p>Click &quot;Test Connection&quot;.</p></li>
+  <li><p>Open the file in &quot;Notepad&quot;.</p></li>
+  <li><p>Highlight the connectionstring and press CTRL+C to copy it into memory.</p></li>
+  <li><p>Paste it into your ADO application by pressing CTRL+V.</p></li>
+</ol>
+<p>If you are not lucky enough to have .udl, locate a friend who has it or dig
+around for the connectionstrings. It is more than feasible that there are texts
+on it available on the Internet, too. To give an example, this is what a typical
+connectionstring looks like for an Access database:
+<ul>
+  <code>Provider=Microsoft.Jet.OLEDB.4.0;<br>
+  User ID=Somebody;<br>
+  Data Source=c:\\access.mdb;<br>
+  Persist Security Info=False</code>
+</ul>
+<p>And here's one for SQL Server:
+<ul>
+  <code>Provider=SQLOLEDB;<br>
+  Persist Security Info=False;<br>
+  User ID=sa;<br>
+  Initial Catalog=Northwind</code>
+</ul>
+
+<h2><a name="appb">Appendix B</a></h2>
+
+<h3><a name="appbbook">Books Resources</a></h3>
+<ul>
+  <code>ActivePerl with ASP and ADO:<br>
+  by Tobias Martinsson<br>
+  ISBN 0471383147<br>
+  URL: <a class="doc" href="http://www.wiley.com/compbooks/">http://www.wiley.com/compbooks/</a></code>
+</ul>
+
+<h3><a name="appbonline">Online Resources</a></h3>
+<ul>
+  <li><a class="doc" href="http://www.microsoft.com/data/">Microsoft Data Access
+  Components</a>; MDAC includes ADO, OLE DB, and every component needed for
+  getting your databases out on the Internet.
+<li>Windows 95 users will have to download the NT Option Pack from <a class="doc" href="http://www.microsoft.com/">Microsoft</a>
+  and install Personal Web Server which ships with it. Win 98 already has it on
+  its CD.
+<li>The <a class="doc" href="http://www.asplists.com/asplists/aspperlscript.asp">ASP
+  PerlScript</a> mailing list is pretty much where the most questions and answers
+  on PerlScript and ASP circulate.
+<li><a class="doc" href="http://www.deja.com/~perlscript/">PerlScript Community</a> is a
+  Deja community for users who want to find users that PerlScript.
+<li><a class="doc" href="http://www.fastnetltd.ndirect.co.uk/Perl/perl-win32-asp.html">The
+  Perl-Win32-ASP FAQ.</a> Maintained by Matthew Sergeant.</li>
+</ul>
+ 
+<h2><a name="author and copyright">AUTHOR AND COPYRIGHT</a></h2>
+<p>Copyright (c) 2000 Tobias Martinsson. All Rights Reserved.</p>
+<p>When included as part of the Standard Version of Perl, or as part of its
+complete documentation whether printed or otherwise, this work may be
+distributed only under the terms of Perl's Artistic License. Any distribution of
+this file or derivatives thereof <em>outside</em> of that package require that
+special arrangements be made with copyright holder.</p>
+<p>Irrespective of its distribution, all code examples in this file are hereby
+placed into the public domain. You are permitted and encouraged to use this code
+in your own programs for fun or for profit as you see fit. A simple comment in
+the code giving credit would be courteous but is not required.</p>
+<p>Active Server Pages is copyright (c) Microsoft Corporation. All rights
+reserved.</p>
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+  <tr>
+    <td class="block" valign="MIDDLE" width="100%" bgcolor="#cccccc"><strong>
+      <p class="block">&nbsp;Active Server Pages</p>
+      </strong></td>
+  </tr>
+</table>
+
+</body>
+
+</html>

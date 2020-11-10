@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        elementFormDefault="qualified"
+        attributeFormDefault="unqualified">
+
+  <xs:include schemaLocation="base.xsd"/>
+  <xs:simpleType name="nameOrdnungssystem">
+    <xs:annotation>
+      <xs:documentation xml:lang="de">Eindeutige Bezeichnung des Ordnungssystems, welche den Geltungsbereich des Ordnungssystems wiedergibt. Enthält in der Regel als Element die Bezeichnung der Verwaltungseinheit oder des Aufgabenbereichs, in welchem das Ordnungssystem angewandt wird.</xs:documentation>
+      <xs:documentation xml:lang="en">Unambiguous designation of the classification system indicating the scope of validity of the classification system. Generally contains as an element the designation of the administrative unit or area of responsibility in which the classification system is used.</xs:documentation>
+      <xs:documentation xml:lang="fr">Désignation univoque du système de classement, laquelle restitue le champ d'application du système de classement. Contient normalement comme élément la désignation de l'unité administrative ou le secteur d'activités, dans lequel est employé le système de classement.</xs:documentation>
+      <xs:documentation xml:lang="it"/>
+    </xs:annotation>
+    <xs:restriction base="text2"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="generation">
+    <xs:annotation>
+      <xs:documentation xml:lang="de">Versionsbezeichnung des Ordnungssystems. Dient zur Verknüpfung und Unterscheidung von zeitlich aufeinander folgenden OS desselben Typs mit demselben Geltungsbereich.</xs:documentation>
+      <xs:documentation xml:lang="en">version of the classification system. Serves to link and differentiate chronologically sequential CSs of the same type with the same scope of validity.</xs:documentation>
+      <xs:documentation xml:lang="fr">Désignation de la version du système de classement. Sert à relier et à différencier des systèmes de classement du même type qui se suivent dans le temps avec le même domaine d’application.</xs:documentation>
+      <xs:documentation xml:lang="it"/>
+    </xs:annotation>
+    <xs:restriction base="text1"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="mitbenutzung">
+    <xs:annotation>
+      <xs:documentation xml:lang="de">Weitere Organisationseinheiten, ausserhalb des Aktenbildners, welche das Ordnungssystem mitbenutzen oder mitbenutzt haben.</xs:documentation>
+      <xs:documentation xml:lang="en">Further organisational units outside the records creator that also use or have used the classification system.</xs:documentation>
+      <xs:documentation xml:lang="fr">Autres unités organisationnelles, en dehors du producteur de dossiers, qui utilisent ou ont utilisé le système de classement.</xs:documentation>
+      <xs:documentation xml:lang="it"/>
+    </xs:annotation>
+    <xs:restriction base="text4"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="bemerkungOrdnungssysstem">
+    <xs:annotation>
+      <xs:documentation xml:lang="de">Zusätzliche Informationen, welche das Ordnungssystem betreffen.</xs:documentation>
+      <xs:documentation xml:lang="en">Additional information relating to the classification system.</xs:documentation>
+      <xs:documentation xml:lang="fr">Informations complémentaires qui concernent le système de classement.</xs:documentation>
+      <xs:documentation xml:lang="it"/>
+    </xs:annotation>
+    <xs:restriction base="text4"/>
+  </xs:simpleType>
+
+</xs:schema>

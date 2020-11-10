@@ -1,0 +1,440 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+
+<head>
+<title>ActivePerl FAQ - Using OLE with Perl</title>
+<link rel="STYLESHEET" href="../../Active.css" type="text/css" media="screen">
+</head>
+
+<body>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#EAE2BB">
+<tr> 
+<td width="57"><a target=_blank href="http://www.ActiveState.com/ActivePerl/">
+<img src="../../images/activeperl_logo.gif" width="57" height="48" border="0" alt="ActivePerl"></a></td>
+<td><div align="center" class="heading">ActivePerl User Guide</div></td>
+<td width="112"><a target=_blank  href="http://www.ActiveState.com">
+<img src="../../images/AS_logo.gif" width="112" height="48" border="0"  alt="ActiveState" /></a></td>
+</tr>
+<tr>
+<td class="lineColour" colspan="3"></td>
+</tr>
+</table>
+
+<h1>Using OLE with Perl</h1>
+
+<ul>
+  <li><a class="doc" href="#NAME">NAME</a>
+  <li><a class="doc" href="#DESCRIPTION">DESCRIPTION</a>
+    <ul>
+      <li><a class="doc" href="#use_ole">Can I use OLE with Perl?</a>
+      <li><a class="doc" href="#changed_by_4xx">What has changed with OLE since build 3xx</a>
+      <li><a class="doc" href="#print_word">How do I print a Microsoft Word document?</a>
+      <li><a class="doc" href="#extract_cells">How do I extract a series of cells from
+        Microsoft Excel?</a>
+      <li><a class="doc" href="#make_chart">How do I make a chart in Microsoft Excel?</a>
+      <li><a class="doc" href="#save_chart">How do I save a chart from Microsoft Excel as
+        GIF/JPEG/PNG?</a>
+      <li><a class="doc" href="#run_macro">How do I run a macro in Microsoft Excel?</a>
+      <li><a class="doc" href="#set_name_cell">How do I set the name of a cell in Microsoft
+        Excel?</a>
+      <li><a class="doc" href="#create_new_folder">How do I create a new folder in Outlook?</a>
+      <li><a class="doc" href="#use_ado">How do I use ADO?</a>
+      <li><a class="doc" href="#use_notes">How do I use Lotus Notes?</a>
+      <li><a class="doc" href="#set_printer">How do I set the printer?</a>
+      <li><a class="doc" href="#convert_vba">How do I convert a VBA macro to Perl?</a>
+      <li><a class="doc" href="#find_docs">Where do I find documentation for the object
+        models?</a>
+      <li><a class="doc" href="#find_constants">OK, but can I at least find the constants
+        that are exported from Win32::OLE::Const?</a>
+      <li><a class="doc" href="#errors">Why doesn't $! get set with the error message I am
+        generating?</a>
+      <li><a class="doc" href="#odbc_ole">Why do I get an error when using ODBC and OLE?</a>
+      <li><a class="doc" href="#strict">Why doesn't it work - even after all this?</a>
+    </ul>
+  <li><a class="doc" href="#AUTHOR_AND_COPYRIGHT">AUTHOR AND COPYRIGHT</a>
+</ul>
+ 
+<h2><a name="NAME">NAME</a></h2>
+<p>ActivePerl-faq12 - Using OLE with Perl</p>
+ 
+<h2><a name="DESCRIPTION">DESCRIPTION</a></h2>
+<p>How to use OLE automation with Perl - through the Win32::OLE module</p>
+ 
+<h2><a name="use_ole">Can I use OLE with Perl?</a></h2>
+<p>Yes - otherwise this FAQ wouldn't have been a separate FAQ. ;-)</p>
+<p>If you want to use OLE with Perl you need the Win32::OLE module. And you need
+to read the documentation that comes with it.</p>
+<p><code>use Win32::OLE</code> doesn't export any variables and functions to the
+main namespace, so if you want easy access to the <code>in</code> and <code>with</code>
+functions you should load the module with</p>
+<blockquote>
+  <p><code>use Win32::OLE qw(in with);</code></p>
+</blockquote>
+
+<h2><a name="changed_by_4xx">What has changed with OLE since build 3xx</a></h2>
+<p>A lot - Gurusamy Sarathy and then Jan Dubois redesigned the code and added a
+bundle of enhancements. Old scripts should run with little or no modifications.
+When writing new scripts there is no excuse for not using the new Win32::OLE
+module options.</p>
+<p>Look at the Win::OLE module documentation (under Incompatibilities) and in
+particular the <a class="doc" href="release-old.html#Whats_Changed">'What's changed from
+300 series builds'</a> in the release notes.</p>
+
+<h2><a name="print_word">How do I print a Microsoft Word document?</a></h2>
+<p>Use the method PrintOut on a document object, for example:</p>
+<blockquote>
+  <p><code>use strict;<br>
+  use Win32::OLE;<br>
+  use Win32::OLE::Const 'Microsoft Word';<br>
+  <br>
+  my $Word = Win32::OLE-&gt;new('Word.Application', 'Quit');<br>
+  # $Word-&gt;{'Visible'} = 1;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#
+  if you want to see what's going on<br>
+  $Word-&gt;Documents-&gt;Open(&quot;C:\\DOCUMENTS\\test.doc&quot;)<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;|| die(&quot;Unable to open document &quot;,
+  Win32::OLE-&gt;LastError());<br>
+  $Word-&gt;ActiveDocument-&gt;PrintOut({<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Background&nbsp;=&gt; 0,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Append&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; 0,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Range&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt;
+  wdPrintAllDocument,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Item&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt;
+  wdPrintDocumentContent,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Copies&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=&gt; 1,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;PageType&nbsp;&nbsp;&nbsp;=&gt; wdPrintAllPages,<br>
+  });</code></p>
+</blockquote>
+<p>or simply</p>
+<blockquote>
+  <p><code>$Word-&gt;ActiveDocument-&gt;PrintOut;</code></p>
+</blockquote>
+
+<h2><a name="extract_cells">How do I extract a series of cells from Microsoft Excel?</a></h2>
+<p>If you have a sheet object you can extract the values of a series of cells
+through $Sheet-&gt;Range-&gt;{'Value'}, for example:</p>
+<blockquote>
+  <p><code>my $array = $Sheet-&gt;Range(&quot;A8:B9&quot;)-&gt;{'Value'};</code></p>
+</blockquote>
+<p>Now $array[0][0] contains the value of cell A8, $array[0][1] the value of
+cell B8, $array[1][0] the value of cell A9 and $array[1][1] the value of cell
+B9.</p>
+<p>What is returned is an two-dimensional array (OK, an array with references to
+arrays) that contains the values of the requested cells.</p>
+<p>A complete example is here:</p>
+<blockquote>
+  <code>use strict;<br>
+  use Win32::OLE qw(in with);<br>
+  use Win32::OLE::Const 'Microsoft Excel';<br>
+  $Win32::OLE::Warn = 3;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#
+  die on errors...<br>
+  my $Excel = Win32::OLE-&gt;GetActiveObject('Excel.Application')<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;|| Win32::OLE-&gt;new('Excel.Application', 'Quit');&nbsp;&nbsp;#
+  get already active Excel<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#
+  application or open new<br>
+  my $Book = $Excel-&gt;Workbooks-&gt;Open(&quot;C:\\DOCUMENTS\\test.xls&quot;);&nbsp;#
+  open Excel file<br>
+  my $Sheet = $Book-&gt;Worksheets(1);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#
+  select worksheet number 1<br>
+  my $array = $Sheet-&gt;Range(&quot;A8:B9&quot;)-&gt;{'Value'};&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#
+  get the contents<br>
+  $Book-&gt;Close;<br>
+  foreach my $ref_array (@$array) {&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#
+  loop through the array<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#
+  referenced by $array<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;foreach my $scalar (@$ref_array) {<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print &quot;$scalar\t&quot;;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;print &quot;\n&quot;;<br>
+  }</code>
+</blockquote>
+<p>To retrieve the formatted value of a cell you should use the <code>{'Text'}</code>
+property instead of the <code>{'Value'}</code> property. This returns exactly
+what is being displayed on the screen though! If the column is not wide enough,
+you get a value of '######':</p>
+<blockquote>
+  <p><code>my $array = $Sheet-&gt;Range(&quot;A8:B9&quot;)-&gt;{'Text'};</code></p>
+</blockquote>
+ 
+<h2><a name="make_chart">How do I make a chart in Microsoft Excel?</a></h2>
+<p>A good idea would be to record a macro in Microsoft Excel and then <a class="doc" href="#convert_vba">convert
+it to Perl</a>. But here is a complete example:</p>
+<blockquote>
+  <p><code>use strict;<br>
+  use Win32::OLE;<br>
+  use Win32::OLE::Const 'Microsoft Excel';<br>
+  <br>
+  my $Excel = Win32::OLE-&gt;new(&quot;Excel.Application&quot;);<br>
+  $Excel-&gt;{Visible} = 1;<br>
+  <br>
+  my $Book = $Excel-&gt;Workbooks-&gt;Add;<br>
+  my $Sheet = $Book-&gt;Worksheets(1);<br>
+  my $Range = $Sheet-&gt;Range(&quot;A2:C7&quot;);<br>
+  $Range-&gt;{Value} =<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;[['Delivered', 'En route', 'To be shipped'],<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[504, 102, 86],<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[670, 150, 174],<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[891, 261, 201],<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[1274, 471, 321],<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[1563, 536, 241]];<br>
+  <br>
+  my $Chart = $Excel-&gt;Charts-&gt;Add;<br>
+  $Chart-&gt;{ChartType} = xlAreaStacked;<br>
+  $Chart-&gt;SetSourceData({Source =&gt; $Range, PlotBy =&gt; xlColumns});<br>
+  $Chart-&gt;{HasTitle} = 1;<br>
+  $Chart-&gt;ChartTitle-&gt;{Text} = &quot;Items delivered, en route and to be
+  shipped&quot;;</code></p>
+</blockquote>
+
+ 
+<h2><a name="save_chart">How do I save a chart from Microsoft Excel as GIF/JPEG/PNG?</a></h2>
+<p>You can use the Export method of a chart. If you have a chartobject the code
+looks like this</p>
+<blockquote>
+  <p><code>$ChartObj-&gt;Chart-&gt;Export({<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;FileName&nbsp;&nbsp;&nbsp;&nbsp;=&gt;
+  &quot;$graphics_filename&quot;,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;FilterName&nbsp;&nbsp;=&gt; 'GIF',<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;Interactive&nbsp;=&gt; 0});</code></p>
+</blockquote>
+<p>A complete example that opens an Excel workbook, loops through all the charts
+and saves them as GIFs and then closes the Excel workbook is here:</p>
+<blockquote>
+  <p><code>use strict;<br>
+  use Win32::OLE qw(in with);<br>
+  use Win32::OLE::Const;<br>
+  use Win32::OLE::Const 'Microsoft Excel';<br>
+  $Win32::OLE::Warn = 3;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# die on
+  errors...<br>
+  <br>
+  my $filename = 'c:\\documents\\test.xls';<br>
+  my $filter = 'GIF';&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#
+  can be GIF, JPG, JPEG or PNG<br>
+  my $count = 0;<br>
+  <br>
+  my $Excel = Win32::OLE-&gt;GetActiveObject('Excel.Application')<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;|| Win32::OLE-&gt;new('Excel.Application', 'Quit');&nbsp;&nbsp;#
+  use the Excel application if it's open, otherwise open new<br>
+  my $Book = $Excel-&gt;Workbooks-&gt;Open( $filename );&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#
+  open the file<br>
+  foreach my $Sheet (in $Book-&gt;Sheets) {&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#
+  loop through all sheets<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;foreach my $ChartObj (in $Sheet-&gt;ChartObjects) {&nbsp;&nbsp;#
+  loop through all chartobjects in the sheet<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;my $savename =
+  &quot;$filename.&quot; . $count++ . &quot;.$filter&quot;;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$ChartObj-&gt;Chart-&gt;Export({<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FileName&nbsp;&nbsp;&nbsp;&nbsp;=&gt;
+  $savename,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FilterName&nbsp;&nbsp;=&gt;
+  $filter,<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Interactive&nbsp;=&gt;
+  0});<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+  }<br>
+  $Book-&gt;Close;</code></p>
+</blockquote>
+
+<h2><a name="run_macro">How do I run a macro in Microsoft Excel?</a></h2>
+<p>Macros in Microsoft Excel can be run by using the $Excel-&gt;Run method, for
+example:</p>
+<blockquote>
+  <p><code>$Excel-&gt;Run(&quot;PrintPDFFile&quot;);</code></p>
+</blockquote>
+<p>In order to do this, you of course need to have a macro in Excel that's
+called 'PrintPDFFile'...</p>
+
+ 
+<h2><a name="set_name_cell">How do I set the name of a cell in Microsoft Excel?</a></h2>
+<p>Use the Names-&gt;Add method on a sheet, giving it a name and a range object
+to apply the name to, for example:</p>
+<blockquote>
+  <p><code>$Sheet-&gt;Names-&gt;Add({Name =&gt; 'NetCost', RefersTo =&gt;
+  $Sheet-&gt;Range('$B$10')});</code></p>
+</blockquote>
+
+<h2><a name="create_new_folder">How do I create a new folder in Outlook?</a></h2>
+<p>Again, an example :-)</p>
+<blockquote>
+  <p><code>use strict;<br>
+  use Win32::OLE;<br>
+  use Win32::OLE::Const 'Microsoft Outlook';<br>
+  <br>
+  my $Outlook = Win32::OLE-&gt;new('Outlook.Application', 'Quit');<br>
+  my $ol = Win32::OLE::Const-&gt;Load($Outlook);<br>
+  <br>
+  my $namespace = $Outlook-&gt;GetNamespace(&quot;MAPI&quot;);<br>
+  my $Folder = $namespace-&gt;GetDefaultFolder(olFolderInbox);<br>
+  my $NewFolder = $Folder-&gt;Folders-&gt;Add(&quot;Test1&quot;);</code></p>
+</blockquote>
+
+<h2><a name="use_ado">How do I use ADO?</a></h2>
+<p>In order to use ActiveX Data Objects (ADO) you can just</p>
+<blockquote>
+  <p><code>use strict;<br>
+  use Win32::OLE;<br>
+  use Win32::OLE::Const 'Microsoft ActiveX Data Objects';<br>
+  my $Conn = Win32::OLE-&gt;new('ADODB.Connection');&nbsp;# creates a connection
+  object<br>
+  my $RS = Win32::OLE-&gt;new('ADODB.Recordset');&nbsp;&nbsp;&nbsp;&nbsp;#
+  creates a recordset object<br>
+  $Conn-&gt;Open('DBname');&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#
+  opens the database connection<br>
+  <br>
+  my $Fields = ['Id', 'Name', 'Phone'];<br>
+  my $Values = [1, 'Joe Doe', '555-1234'];<br>
+  $RS-&gt;AddNew($Fields, $Values);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#
+  adds a record<br>
+  <br>
+  print &quot;This didn't go well: &quot;, Win32::OLE-&gt;LastError(),
+  &quot;\n&quot;;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;if (Win32::OLE-&gt;LastError());<br>
+  <br>
+  $RS-&gt;Close;<br>
+  $Conn-&gt;Close;</code></p>
+</blockquote>
+<p>To get further than this you should have a look at the ADO FAQ at 
+<a class="doc" href="http://www.fastnetltd.ndirect.co.uk/Perl/perl-win32-database.html">http://www.fastnetltd.ndirect.co.uk/Perl/perl-win32-database.html</a>
+or Jan Dubois article in TPJ#10 (visit The Perl Journal at <a class="doc" href="http://tpj.com/">http://tpj.com/</a>).</p>
+
+ 
+<h2><a name="use_notes">How do I use Lotus Notes?</a></h2>
+<p>Lotus Notes can be accessed through OLE, for example like this:</p>
+<blockquote>
+  <p><code>use strict;<br>
+  use Win32::OLE;<br>
+  my $Notes = Win32::OLE-&gt;new('Notes.NotesSession')<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;or die &quot;Cannot start Lotus Notes Session
+  object.\n&quot;;<br>
+  my ($Version) = ($Notes-&gt;{NotesVersion} =~ /\s*(.*\S)\s*$/);<br>
+  print &quot;The current user is $Notes-&gt;{UserName}.\n&quot;;<br>
+  print &quot;Running Notes \&quot;$Version\&quot; on
+  \&quot;$Notes-&gt;{Platform}\&quot;.\n&quot;;<br>
+  my $Database = $Notes-&gt;GetDatabase('', 'help4.nsf');<br>
+  my $AllDocuments = $Database-&gt;AllDocuments;<br>
+  my $Count = $AllDocuments-&gt;Count;<br>
+  print &quot;There are $Count documents in the database.\n&quot;;<br>
+  for (my $Index = 1 ; $Index &lt;= $Count ; ++$Index) {<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;my $Document =
+  $AllDocuments-&gt;GetNthDocument($Index);<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;printf &quot;$Index. %s\n&quot;,
+  $Document-&gt;GetFirstItem('Subject')-&gt;{Text};<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;my $Values =
+  $Document-&gt;GetItemValue('Index_Entries');<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;foreach my $Value (@$Values) {<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print &quot; Index:
+  $Value\n&quot;;<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;last unless $Index &lt; 5;<br>
+  }</code></p>
+</blockquote>
+<p>You can access all objects that are accessible to LotusScript, and the
+LotusScript classes can be seen at <a class="doc" href="http://www.lotus.com/products/lotusscript.nsf">http://www.lotus.com/products/lotusscript.nsf</a>.
+A good idea would also be to read Jan Dubois article in TPJ#10 (visit The Perl
+Journal at <a class="doc" href="http://tpj.com/">http://tpj.com/</a>)</p>
+
+<h2><a name="set_printer">How do I set the printer in Word?</a></h2>
+<p>The active printer can be set and retrieved through the word application
+object with <code>$Word-&gt;{ActivePrinter} = $printername</code>.</p>
+
+<h2><a name="convert_vba">How do I convert a VBA macro to Perl?</a></h2>
+<p>If you record a macro in Microsoft Office, this can often be translated
+directly into Perl. In Visual Basic for Applications (VBA) the syntax is like
+this:</p>
+<blockquote>
+  <p><code>object.method(argument).property = value</code></p>
+</blockquote>
+<p>In Perl this becomes</p>
+<blockquote>
+  <p><code>object-&gt;method(argument)-&gt;{property} = value;</code></p>
+</blockquote>
+<p>So for example this code from VBA:</p>
+<blockquote>
+  <p><code>ActiveChart.Axes(xlCategory, xlPrimary).CategoryType =
+  xlCategoryScale</code></p>
+</blockquote>
+<p>becomes this in Perl:</p>
+<blockquote>
+  <p><code>$Chart-&gt;Axes(xlCategory, xlPrimary)-&gt;{CategoryType} =
+  xlCategoryScale;</code></p>
+</blockquote>
+
+<h2><a name="find_docs">Where do I find documentation for the object models?</a></h2>
+<p>The best way to learn about methods/properties would be through an OLE type
+browser if the documentation is unavailable.</p>
+<p>If you have Microsoft Excel or Microsoft Word available, go into the Visual
+Basic Editor (Alt+F11). Now you can open the object browser window (F2) and see
+what you find.</p>
+<p>There is also an OleView program (various names and versions) included in
+Microsoft Visual C++ / Microsoft Visual Studio if you don't have Office. Or you
+can download it from the Microsoft COM website (<a class="doc" href="http://www.microsoft.com/com/">http://www.microsoft.com/com/</a>).</p>
+<p>But it is still possible that Notes doesn't reveal anything; objects are not
+required to provide type info support. For example Lotus Notes doesn't reveal
+nothing about it's internal constants, methods and properties; you have to look
+them up in the documentation.</p>
+<p>For Lotus Notes look at <a class="doc" href="http://www.lotus.com/products/lotusscript.nsf">http://www.lotus.com/products/lotusscript.nsf</a>.</p>
+
+ 
+<h2><a name="find_constants">OK, but can I at least find the constants that are exported from
+Win32::OLE::Const?</a></h2>
+<p>Yes, you can use the following code example to view all the constants - you
+really shouldn't need this, but if you want to know what's going on, it might
+help:</p>
+<blockquote>
+  <p><code>use strict;<br>
+  use Win32::OLE;<br>
+  use Win32::OLE::Const;<br>
+  <br>
+  my $xl = Win32::OLE::Const-&gt;Load(&quot;Microsoft Excel&quot;);<br>
+  printf &quot;Excel type library contains %d constants:\n&quot;, scalar keys
+  %$xl;<br>
+  foreach my $Key (sort keys %$xl) {<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;print &quot;$Key = $xl-&gt;{$Key}\n&quot;;<br>
+  }</code></p>
+</blockquote>
+<p>Generally you should look at the documentation for Win32::OLE::Const.</p>
+
+<h2><a name="errors">Why doesn't $! get set with the error message I am generating?</a></h2>
+<p>Error messages from Win32::OLE doesn't go to the $! variable, but can be
+accessed as <code>Win32::OLE-&gt;LastError()</code></p>
+
+<h2><a name="odbc_ole">Why do I get an error when using ODBC and OLE?</a></h2>
+<p>For some reason you get an 'OleInitialize' error if you open an OLE
+application first and then open an ODBC connection to the Access ODBC driver. If
+you do it the other way around, there is no problem with this.</p>
+<p>It looks like the Access ODBC driver calls OleInitialize(). This fails when
+Win32::OLE already initialized the COM subsystem as &quot;apartment
+threaded&quot;.</p>
+<p>In order to remove the error either start the ODBC driver before the OLE
+application or, better yet, initialize the OLE system with <code>Win32::OLE-&gt;Initialize(Win32::OLE::COINIT_OLEINITIALIZE);</code></p>
+
+<h2><a name="strict">Why doesn't it work - even after all this?</a></h2>
+<p>Execute your scripts with <code>perl -w</code> and <code>use strict</code> -
+this catches most of your errors. Apart from this, read the documentation for
+Win32::OLE (a good start) and possibly the documentation for the object you are
+trying to use.</p>
+<p>In the case of Microsoft Office 97, make sure that you have at least updated
+to Service Release 1 - much of the OLE in Microsoft Office 97 is broken without
+this update.</p>
+ 
+<h2><a name="AUTHOR_AND_COPYRIGHT">AUTHOR AND COPYRIGHT</a></h2>
+<p>This FAQ was compiled by Henning Michael Møller-Nielsen of RTO based on
+examples by many people, especially Jan Dubois. It is maintained by Henning
+Michael Møller-Nielsen, Philip Martin, Kevin Meltzer and Eric Smith at <a class="doc" href="mailto:perlwin32faq@rto.dk">perlwin32faq@rto.dk</a>.
+<p>This FAQ is in the public domain. If you use it, however, please ensure that
+you give credit to the original authors.</p>
+
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+  <tr>
+    <td class="block" valign="MIDDLE" width="100%" bgcolor="#cccccc"><strong>
+      <p class="block">&nbsp;ActivePerl FAQ - Using OLE with Perl</p>
+      </strong></td>
+  </tr>
+</table>
+
+</body>
+
+</html>

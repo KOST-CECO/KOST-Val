@@ -1,0 +1,263 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Tk::Tree - Create and manipulate Tree widgets</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::Tree - Create and manipulate Tree widgets</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#superclass">SUPER-CLASS</a></li>
+	<li><a href="#standard_options">STANDARD OPTIONS</a></li>
+	<li><a href="#widgetspecific_options">WIDGET-SPECIFIC OPTIONS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#widget_methods">WIDGET METHODS</a></li>
+	<li><a href="#bindings">BINDINGS</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+	<li><a href="#acknowledgements">ACKNOWLEDGEMENTS</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Tk::Tree - Create and manipulate Tree widgets</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<strong>use Tk::Tree;</strong></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>$tree</em> = <em>$parent</em>-&gt;<strong>Tree</strong>(?<em>options</em>?);</p>
+<p>
+</p>
+<hr />
+<h1><a name="superclass">SUPER-CLASS</a></h1>
+<p>The <strong>Tree</strong> class is derived from the <a href="../../../site/lib/Tk/HList.html">HList</a> class and inherits all
+the methods, options and subwidgets of its super-class.  A <strong>Tree</strong> widget is
+not scrolled by default.</p>
+<p>
+</p>
+<hr />
+<h1><a name="standard_options">STANDARD OPTIONS</a></h1>
+<p><strong>Tree</strong> supports all the standard options of an HList widget.
+See <a href="../../../site/lib/Tk/options.html">the Tk::options manpage</a> for details on the standard options.</p>
+<p>
+</p>
+<hr />
+<h1><a name="widgetspecific_options">WIDGET-SPECIFIC OPTIONS</a></h1>
+<dl>
+<dt><strong><a name="item_name_3a_browsecmd">Name:		<strong>browseCmd</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_browsecmd">Class:		<strong>BrowseCmd</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dbrowsecmd">Switch:		<strong>-browsecmd</strong></a></strong><br />
+</dt>
+<dd>
+Specifies a <a href="../../../site/lib/Tk/callbacks.html">callback</a> to call whenever the user browses on an entry
+(usually by single-clicking on the entry). The callback is called with
+one argument, the pathname of the entry.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_closecmd">Name:		<strong>closeCmd</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_closecmd">Class:		<strong>CloseCmd</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dclosecmd">Switch:		<strong>-closecmd</strong></a></strong><br />
+</dt>
+<dd>
+Specifies a <a href="../../../site/lib/Tk/callbacks.html">callback</a> to call whenever an entry needs to be closed (See
+<a href="#bindings">BINDINGS</a> below). This method is called with one argument,
+the pathname of the entry. This method should perform appropriate
+actions to close the specified entry. If the <strong>-closecmd</strong> option
+is not specified, the default closing action is to hide all child
+entries of the specified entry.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_command">Name:		<strong>command</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_command">Class:		<strong>Command</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dcommand">Switch:		<strong>-command</strong></a></strong><br />
+</dt>
+<dd>
+Specifies a <a href="../../../site/lib/Tk/callbacks.html">callback</a> to call whenever the user activates an entry
+(usually by double-clicking on the entry). The callback
+is called with one argument, the pathname of the entry.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_ignoreinvoke">Name:		<strong>ignoreInvoke</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_ignoreinvoke">Class:		<strong>IgnoreInvoke</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dignoreinvoke">Switch:		<strong>-ignoreinvoke</strong></a></strong><br />
+</dt>
+<dd>
+A Boolean value that specifies when a branch should be opened or
+closed. A branch will always be opened or closed when the user presses
+the (+) and (-) indicators. However, when the user invokes a branch
+(by doublc-clicking or pressing &lt;Return&gt;), the branch will be opened
+or closed only if <strong>-ignoreinvoke</strong> is set to false (the default
+setting).
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_opencmd">Name:		<strong>openCmd</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_opencmd">Class:		<strong>OpenCmd</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dopencmd">Switch:		<strong>-opencmd</strong></a></strong><br />
+</dt>
+<dd>
+Specifies a <a href="../../../site/lib/Tk/callbacks.html">callback</a> to call whenever an entry needs to be opened (See
+<a href="#bindings">BINDINGS</a> below). This method is called with one argument,
+the pathname of the entry. This method should perform appropriate
+actions to open the specified entry. If the <strong>-opencmd</strong> option
+is not specified, the default opening action is to show all the child
+entries of the specified entry.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The <strong>Tree</strong> method creates a new window and makes it into a Tree widget
+and return a reference to it.  Additional options, described above, may
+be specified on the command line or in the option database to configure
+aspects of the Tree widget such as its cursor and relief.</p>
+<p>The Tree widget can be used to display hierarchical data in a tree
+form. The user can adjust the view of the tree by opening or closing
+parts of the tree.</p>
+<p>To display a static tree structure, you can add the entries into the
+Tree widget and hide any entries as desired. Then you can call
+the <strong>autosetmode</strong> method. This will set up the Tree widget so that it
+handles all the <em>open</em> and <em>close</em> events automatically.
+the demonstration program <em>Tixish/examples/perl-tix-tree</em>).</p>
+<p>The above method is not applicable if you want to maintain a dynamic tree
+structure, i.e, you do not know all the entries in the tree and you need
+to add or delete entries subsequently. To do this, you should first create
+the entries in the Tree widget. Then, use the <strong>setmode</strong> method to
+indicate the entries that can be opened or closed, and use the <strong>-opencmd</strong>
+and <strong>-closecmd</strong> options to handle the opening and closing events. (Please
+see the demonstration program <em>Tixish/examples/perl-tix-dyntree</em>).</p>
+<p>Use either</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>$parent</em>-&gt;<strong>Scrolled</strong>(<strong>'Tree'</strong>, ... );</p>
+<p>or</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>$parent</em>-&gt;<strong>ScrlTree</strong>( ... );</p>
+<p>to create a scrolled <strong>Tree</strong>. See <a href="../../../site/lib/Tk/Scrolled.html">the Tk::Scrolled manpage</a> for details.</p>
+<p>
+</p>
+<hr />
+<h1><a name="widget_methods">WIDGET METHODS</a></h1>
+<p>The <strong>Tree</strong> method creates a widget object.
+This object supports the <strong>configure</strong> and <strong>cget</strong> methods
+described in <a href="../../../site/lib/Tk/options.html">the Tk::options manpage</a> which can be used to enquire and
+modify the options described above.
+The widget also inherits all the methods provided by the generic
+<a href="../../../site/lib/Tk/Widget.html">Tk::Widget</a> class.</p>
+<p>The following additional methods are available for Tree widgets:</p>
+<dl>
+<dt><strong><a name="item_autosetmode"><em>$tree</em>-&gt;<strong>autosetmode</strong></a></strong><br />
+</dt>
+<dd>
+This method calls the <strong>setmode</strong> method for all the entries in
+this Tree widget: if an entry has no child entries, its mode is set to
+<strong>none</strong>. Otherwise, if the entry has any hidden child entries, its
+mode is set to <strong>open</strong>; otherwise its mode is set to <strong>close</strong>.
+</dd>
+<p></p>
+<dt><strong><a name="item_close"><em>$tree</em>-&gt;<strong>close</strong>(<em>entryPath</em>)</a></strong><br />
+</dt>
+<dd>
+Close the entry given by <em>entryPath</em> if its <em>mode</em> is <strong>close</strong>.
+</dd>
+<p></p>
+<dt><strong><a name="item_getmode"><em>$tree</em>-&gt;<strong>getmode</strong>(<em>entryPath</em>)</a></strong><br />
+</dt>
+<dd>
+Returns the current <em>mode</em> of the entry given by <em>entryPath</em>.
+</dd>
+<p></p>
+<dt><strong><a name="item_open"><em>$tree</em>-&gt;<strong>open</strong>(<em>entryPath</em>)</a></strong><br />
+</dt>
+<dd>
+Open the entry given by <em>entryPath</em> if its <em>mode</em> is <strong>open</strong>.
+</dd>
+<p></p>
+<dt><strong><a name="item_setmode"><em>$tree</em>-&gt;<strong>setmode</strong>(<em>entryPath, mode</em>)</a></strong><br />
+</dt>
+<dd>
+This method is used to indicate whether the entry given by
+<em>entryPath</em> has children entries and whether the children are
+visible. <em>mode</em> must be one of <strong>open</strong>,
+<strong>close</strong> or <strong>none</strong>. If <em>mode</em> is set to <strong>open</strong>, a (+)
+indicator is drawn next the the entry. If <em>mode</em> is set to
+<strong>close</strong>, a (-) indicator is drawn next the the entry. If
+<em>mode</em> is set to <strong>none</strong>, no indicators will be drawn for this
+entry. The default <em>mode</em> is none. The <strong>open</strong> mode indicates
+the entry has hidden children and this entry can be opened by the
+user. The <strong>close</strong> mode indicates that all the children of the entry
+are now visible and the entry can be closed by the user.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="bindings">BINDINGS</a></h1>
+<p>The basic mouse and keyboard bindings of the Tree widget are the same
+as the <a href="../../../site/lib/Tk/HList.html#bindings">bindings of the HList</a> widget.
+In addition, the entries can be opened or closed under the following
+conditions:</p>
+<dl>
+<dt><strong><a name="item__5b1_5d">[1]</a></strong><br />
+</dt>
+<dd>
+If the <em>mode</em> of the entry is <strong>open</strong>, it can be opened by clicking
+on its (+) indicator.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b2_5d">[2]</a></strong><br />
+</dt>
+<dd>
+If the <em>mode</em> of the entry is <strong>close</strong>, it can be closed by clicking
+on its (-) indicator.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../../../site/lib/Tk/HList.html">Tk::HList</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Perl/TK version by Chris Dean &lt;<a href="mailto:ctdean@cogit.com">ctdean@cogit.com</a>&gt;.  Original Tcl/Tix
+version by Ioi Kim Lam.</p>
+<p>
+</p>
+<hr />
+<h1><a name="acknowledgements">ACKNOWLEDGEMENTS</a></h1>
+<p>Thanks to Achim Bohnet &lt;<a href="mailto:ach@mpe.mpg.de">ach@mpe.mpg.de</a>&gt; for all his help.</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::Tree - Create and manipulate Tree widgets</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

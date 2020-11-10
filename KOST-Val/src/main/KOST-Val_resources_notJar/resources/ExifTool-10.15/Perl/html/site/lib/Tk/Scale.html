@@ -1,0 +1,441 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Tk::Scale - Create and manipulate Scale widgets</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::Scale - Create and manipulate Scale widgets</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#standard_options">STANDARD OPTIONS</a></li>
+	<li><a href="#widgetspecific_options">WIDGET-SPECIFIC OPTIONS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#widget_methods">WIDGET METHODS</a></li>
+	<li><a href="#bindings">BINDINGS</a></li>
+	<li><a href="#keywords">KEYWORDS</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Tk::Scale - Create and manipulate Scale widgets</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p><em>$scale</em> = <em>$parent</em>-&gt;<strong>Scale</strong>(?<em>options</em>?);</p>
+<p>
+</p>
+<hr />
+<h1><a name="standard_options">STANDARD OPTIONS</a></h1>
+<p><table cellspacing="0" cellpadding="0"><tr><td><strong>-activebackground</strong><td><strong>-font</strong><td><strong>-highlightthickness</strong><td><strong>-repeatinterval</strong>
+<tr><td><strong>-background</strong><td><strong>-foreground</strong><td><strong>-orient</strong><td><strong>-takefocus</strong>
+<tr><td><strong>-borderwidth</strong><td><strong>-highlightbackground</strong><td><strong>-relief</strong><td><strong>-troughcolor</strong>
+<tr><td><strong>-cursor</strong><td><strong>-highlightcolor</strong><td><strong>-repeatdelay</strong></table></p>
+<p>See <a href="../../../site/lib/Tk/options.html">the Tk::options manpage</a> for details of the standard options.</p>
+<p>
+</p>
+<hr />
+<h1><a name="widgetspecific_options">WIDGET-SPECIFIC OPTIONS</a></h1>
+<dl>
+<dt><strong><a name="item_name_3a_bigincrement">Name:	<strong>bigIncrement</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_bigincrement">Class:	<strong>BigIncrement</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dbigincrement">Switch:	<strong>-bigincrement</strong></a></strong><br />
+</dt>
+<dd>
+Some interactions with the scale cause its value to change by
+``large'' increments;  this option specifies the size of the
+large increments.  If specified as 0, the large increments default
+to 1/10 the range of the scale.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_command">Name:	<strong>command</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_command">Class:	<strong>Command</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dcommand">Switch:	<strong>-command</strong></a></strong><br />
+</dt>
+<dd>
+Specifies the prefix of a <a href="../../../site/lib/Tk/callbacks.html">perl/Tk callback</a> to invoke whenever the scale's
+value is changed via a method.
+The actual command consists
+of this option followed by a space and a real number indicating the
+new value of the scale.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_digits">Name:	<strong>digits</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_digits">Class:	<strong>Digits</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2ddigits">Switch:	<strong>-digits</strong></a></strong><br />
+</dt>
+<dd>
+An integer specifying how many significant digits should be retained
+when converting the value of the scale to a string.
+If the number is less than or equal to zero, then the scale picks
+the smallest value that guarantees that every possible slider
+position prints as a different string.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_from">Name:	<strong>from</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_from">Class:	<strong>From</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dfrom">Switch:	<strong>-from</strong></a></strong><br />
+</dt>
+<dd>
+A real value corresponding to the left or top end of the scale.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_label">Name:	<strong>label</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_label">Class:	<strong>Label</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dlabel">Switch:	<strong>-label</strong></a></strong><br />
+</dt>
+<dd>
+A string to display as a label for the scale.  For
+vertical scales the label is displayed just to the right of the
+top end of the scale.  For horizontal scales the label is displayed
+just above the left end of the scale.  If the option is specified
+as an empty string, no label is displayed.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_length">Name:	<strong>length</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_length">Class:	<strong>Length</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dlength">Switch:	<strong>-length</strong></a></strong><br />
+</dt>
+<dd>
+Specifies the desired long dimension of the scale in screen units
+(i.e. any of the forms acceptable to <strong>Tk_GetPixels</strong>).
+For vertical scales this is the scale's height;  for horizontal scales
+it is the scale's width.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_resolution">Name:	<strong>resolution</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_resolution">Class:	<strong>Resolution</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dresolution">Switch:	<strong>-resolution</strong></a></strong><br />
+</dt>
+<dd>
+A real value specifying the resolution for the scale.
+If this value is greater than zero then the scale's value will always be
+rounded to an even multiple of this value, as will tick marks and
+the endpoints of the scale.  If the value is less than zero then no
+rounding occurs.  Defaults to 1 (i.e., the value will be integral).
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_showvalue">Name:	<strong>showValue</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_showvalue">Class:	<strong>ShowValue</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dshowvalue">Switch:	<strong>-showvalue</strong></a></strong><br />
+</dt>
+<dd>
+Specifies a boolean value indicating whether or not the current
+value of the scale is to be displayed.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_sliderlength">Name:	<strong>sliderLength</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_sliderlength">Class:	<strong>SliderLength</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dsliderlength">Switch:	<strong>-sliderlength</strong></a></strong><br />
+</dt>
+<dd>
+Specfies the size of the slider, measured in screen units along the slider's
+long dimension.  The value may be specified in any of the forms acceptable
+to <strong>Tk_GetPixels</strong>.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_sliderrelief">Name:	<strong>sliderRelief</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_sliderrelief">Class:	<strong>SliderRelief</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dsliderrelief">Switch:	<strong>-sliderrelief</strong></a></strong><br />
+</dt>
+<dd>
+Specifies the relief to use when drawing the slider, such as <strong>raised</strong>
+or <strong>sunken</strong>.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_state">Name:	<strong>state</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_state">Class:	<strong>State</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dstate">Switch:	<strong>-state</strong></a></strong><br />
+</dt>
+<dd>
+Specifies one of three states for the scale:  <strong>normal</strong>,
+<strong>active</strong>, or <strong>disabled</strong>.
+If the scale is disabled then the value may not be changed and the scale
+won't activate.
+If the scale is active, the slider is displayed using the color
+specified by the <strong>activeBackground</strong> option.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_tickinterval">Name:	<strong>tickInterval</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_tickinterval">Class:	<strong>TickInterval</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dtickinterval">Switch:	<strong>-tickinterval</strong></a></strong><br />
+</dt>
+<dd>
+Must be a real value.
+Determines the spacing between numerical
+tick marks displayed below or to the left of the slider.
+If 0, no tick marks will be displayed.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_to">Name:	<strong>to</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_to">Class:	<strong>To</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dto">Switch:	<strong>-to</strong></a></strong><br />
+</dt>
+<dd>
+Specifies a real value corresponding
+to the right or bottom end of the scale.
+This value may be either less than or greater than the <strong>from</strong> option.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_variable">Name:	<strong>variable</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_variable">Class:	<strong>Variable</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dvariable">Switch:	<strong>-variable</strong></a></strong><br />
+</dt>
+<dd>
+Specifies the name of a global variable to link to the scale.  Whenever the
+value of the variable changes, the scale will update to reflect this
+value.
+Whenever the scale is manipulated interactively, the variable
+will be modified to reflect the scale's new value.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_width">Name:	<strong>width</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_width">Class:	<strong>Width</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dwidth">Switch:	<strong>-width</strong></a></strong><br />
+</dt>
+<dd>
+Specifies the desired narrow dimension of the trough in screen units
+(i.e. any of the forms acceptable to <strong>Tk_GetPixels</strong>).
+For vertical scales this is the trough's width;  for horizontal scales
+this is the trough's height.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The <strong>Scale</strong> method creates a new window (given by the
+$widget argument) and makes it into a scale widget.
+Additional
+options, described above, may be specified on the command line
+or in the option database
+to configure aspects of the scale such as its colors, orientation,
+and relief.  The <strong>scale</strong> command returns its
+$widget argument.  At the time this command is invoked,
+there must not exist a window named $widget, but
+$widget's parent must exist.</p>
+<p>A scale is a widget that displays a rectangular <em>trough</em> and a
+small <em>slider</em>.  The trough corresponds to a range
+of real values (determined by the <strong>from</strong>, <strong>to</strong>, and
+<strong>resolution</strong> options),
+and the position of the slider selects a particular real value.
+The slider's position (and hence the scale's value) may be adjusted
+with the mouse or keyboard as described in
+the <a href="#bindings">BINDINGS</a> section below.  Whenever the scale's value is changed, a Tcl
+command is invoked (using the <strong>command</strong> option) to notify
+other interested widgets of the change.
+In addition, the value
+of the scale can be linked to a Tcl variable (using the <strong>variable</strong>
+option), so that changes in either are reflected in the other.</p>
+<p>Three annotations may be displayed in a scale widget:  a label
+appearing at the top right of the widget (top left for horizontal
+scales), a number displayed just to the left of the slider
+(just above the slider for horizontal scales), and a collection
+of numerical tick marks just to the left of the current value
+(just below the trough for horizontal scales).  Each of these three
+annotations may be enabled or disabled using the
+configuration options.</p>
+<p>
+</p>
+<hr />
+<h1><a name="widget_methods">WIDGET METHODS</a></h1>
+<p>The <strong>Scale</strong> method creates a widget object.
+This object supports the <strong>configure</strong> and <strong>cget</strong> methods
+described in <a href="../../../site/lib/Tk/options.html">the Tk::options manpage</a> which can be used to enquire and
+modify the options described above.
+The widget also inherits all the methods provided by the generic
+<a href="../../../site/lib/Tk/Widget.html">Tk::Widget</a> class.</p>
+<p>The following additional methods are available for scale widgets:</p>
+<dl>
+<dt><strong><a name="item_coords"><em>$scale</em>-&gt;<strong>coords</strong>(?<em>value</em>?)</a></strong><br />
+</dt>
+<dd>
+Returns a list whose elements are the x and y coordinates of
+the point along the centerline of the trough that corresponds
+to <em>value</em>.
+If <em>value</em> is omitted then the scale's current value is used.
+</dd>
+<p></p>
+<dt><strong><a name="item_get"><em>$scale</em>-&gt;<strong>get</strong>(?<em>x, y</em>?)</a></strong><br />
+</dt>
+<dd>
+If <em>x</em> and <em>y</em> are omitted, returns the current value
+of the scale.  If <em>x</em> and <em>y</em> are specified, they give
+pixel coordinates within the widget;  the command returns
+the scale value corresponding to the given pixel.
+Only one of <em>x</em> or <em>y</em> is used:  for horizontal scales
+<em>y</em> is ignored, and for vertical scales <em>x</em> is ignored.
+</dd>
+<p></p>
+<dt><strong><a name="item_identify"><em>$scale</em>-&gt;<strong>identify</strong>(<em>x, y</em>)</a></strong><br />
+</dt>
+<dd>
+Returns a string indicating what part of the scale lies under
+the coordinates given by <em>x</em> and <em>y</em>.
+A return value of <strong>slider</strong> means that the point is over
+the slider;  <strong>trough1</strong> means that the point is over the
+portion of the slider above  or to the left of the slider;
+and <strong>trough2</strong> means that the point is over the portion
+of the slider below or to the right of the slider.
+If the point isn't over one of these elements, an empty string
+is returned.
+</dd>
+<p></p>
+<dt><strong><a name="item_set"><em>$scale</em>-&gt;<strong>set</strong>(<em>value</em>)</a></strong><br />
+</dt>
+<dd>
+This command is invoked to change the current value of the scale,
+and hence the position at which the slider is displayed.  <em>Value</em>
+gives the new value for the scale.
+The command has no effect if the scale is disabled.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="bindings">BINDINGS</a></h1>
+<p>Tk automatically creates class bindings for scales that give them
+the following default behavior.
+Where the behavior is different for vertical and horizontal scales,
+the horizontal behavior is described in parentheses.</p>
+<dl>
+<dt><strong><a name="item__5b1_5d">[1]</a></strong><br />
+</dt>
+<dd>
+If button 1 is pressed in the trough, the scale's value will
+be incremented or decremented by the value of the <strong>resolution</strong>
+option so that the slider moves in the direction of the cursor.
+If the button is held down, the action auto-repeats.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b2_5d">[2]</a></strong><br />
+</dt>
+<dd>
+If button 1 is pressed over the slider, the slider can be dragged
+with the mouse.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b3_5d">[3]</a></strong><br />
+</dt>
+<dd>
+If button 1 is pressed in the trough with the Control key down,
+the slider moves all the way to the end of its range, in the
+direction towards the mouse cursor.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b4_5d">[4]</a></strong><br />
+</dt>
+<dd>
+If button 2 is pressed, the scale's value is set to the mouse
+position.  If the mouse is dragged with button 2 down, the scale's
+value changes with the drag.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b5_5d">[5]</a></strong><br />
+</dt>
+<dd>
+The Up and Left keys move the slider up (left) by the value
+of the <strong>resolution</strong> option.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b6_5d">[6]</a></strong><br />
+</dt>
+<dd>
+The Down and Right keys move the slider down (right) by the value
+of the <strong>resolution</strong> option.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b7_5d">[7]</a></strong><br />
+</dt>
+<dd>
+Control-Up and Control-Left move the slider up (left) by the
+value of the <strong>bigIncrement</strong> option.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b8_5d">[8]</a></strong><br />
+</dt>
+<dd>
+Control-Down and Control-Right move the slider down (right) by the
+value of the <strong>bigIncrement</strong> option.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b9_5d">[9]</a></strong><br />
+</dt>
+<dd>
+Home moves the slider to the top (left) end of its range.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b10_5d">[10]</a></strong><br />
+</dt>
+<dd>
+End moves the slider to the bottom (right) end of its range.
+</dd>
+<dd>
+<p>If the scale is disabled using the <strong>state</strong> option then
+none of the above bindings have any effect.</p>
+</dd>
+<dd>
+<p>The behavior of scales can be changed by defining new bindings for
+individual widgets or by redefining the class bindings.</p>
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="keywords">KEYWORDS</a></h1>
+<p>scale, slider, trough, widget</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::Scale - Create and manipulate Scale widgets</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

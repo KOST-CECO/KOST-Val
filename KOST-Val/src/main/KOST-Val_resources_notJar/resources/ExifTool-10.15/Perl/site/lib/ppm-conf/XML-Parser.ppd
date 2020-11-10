@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SOFTPKG NAME="XML-Parser" VERSION="2,34,0,0">
+<TITLE>XML-Parser</TITLE>
+<ABSTRACT>A Perl module for parsing XML documents</ABSTRACT>
+<AUTHOR>Clark Cooper &lt;coopercc@netheaven.com&gt;</AUTHOR>
+<IMPLEMENTATION>
+<CODEBASE HREF="http://ppm.ActiveState.com/PPMPackages/5.8-windows/MSWin32-x86-multi-thread-5.8/XML-Parser.tar.gz" />
+<INSTALL />
+<UNINSTALL />
+</IMPLEMENTATION>
+</SOFTPKG>

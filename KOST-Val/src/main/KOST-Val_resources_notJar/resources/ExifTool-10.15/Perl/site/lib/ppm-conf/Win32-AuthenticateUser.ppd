@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SOFTPKG NAME="Win32-AuthenticateUser" VERSION="0,02,0,0">
+<TITLE>Win32-AuthenticateUser</TITLE>
+<ABSTRACT>Win32 User authentication for domains</ABSTRACT>
+<AUTHOR>ActiveState &lt;support@ActiveState.com&gt;</AUTHOR>
+<IMPLEMENTATION>
+<CODEBASE HREF="http://ppm.ActiveState.com/PPMPackages/5.8-windows/MSWin32-x86-multi-thread-5.8/Win32-AuthenticateUser.tar.gz" />
+<INSTALL />
+<UNINSTALL />
+</IMPLEMENTATION>
+</SOFTPKG>

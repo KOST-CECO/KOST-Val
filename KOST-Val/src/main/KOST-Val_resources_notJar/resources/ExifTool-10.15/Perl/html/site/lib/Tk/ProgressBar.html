@@ -1,0 +1,240 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Tk::ProgressBar - A graphical progress bar</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::ProgressBar - A graphical progress bar</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#standard_options">STANDARD OPTIONS</a></li>
+	<li><a href="#widgetspecific_options">WIDGET-SPECIFIC OPTIONS</a></li>
+	<li><a href="#widget_methods">WIDGET METHODS</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Tk::ProgressBar - A graphical progress bar</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+    use Tk::ProgressBar;</pre>
+<pre>
+    $progress = $parent-&gt;ProgressBar(
+        -width =&gt; 200,
+        -length =&gt; 20,
+        -anchor =&gt; 's',
+        -from =&gt; 0,
+        -to =&gt; 100,
+        -blocks =&gt; 10,
+        -colors =&gt; [0, 'green', 50, 'yellow' , 80, 'red'],
+        -variable =&gt; \$percent_done
+    );</pre>
+<pre>
+    $progress-&gt;value($position);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p><strong>Tk::ProgressBar</strong> provides a widget which will show a graphical representation
+of a value, given maximum and minimum reference values.</p>
+<p>
+</p>
+<hr />
+<h1><a name="standard_options">STANDARD OPTIONS</a></h1>
+<p>The following standard widget options are supported:</p>
+<dl>
+<dt><strong><a name="item__2dborderwidth"><strong>-borderwidth</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item__2dhighlightthickness"><strong>-highlightthickness</strong></a></strong><br />
+</dt>
+<dd>
+Defaults to 0.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dpadx"><strong>-padx</strong></a></strong><br />
+</dt>
+<dd>
+Defaults to 0.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dpady"><strong>-pady</strong></a></strong><br />
+</dt>
+<dd>
+Defaults to 0.
+</dd>
+<p></p>
+<dt><strong><a name="item__2drelief"><strong>-relief</strong></a></strong><br />
+</dt>
+<dd>
+Defaults to <code>sunken</code>
+</dd>
+<p></p>
+<dt><strong><a name="item__2dtroughcolor"><strong>-troughcolor</strong></a></strong><br />
+</dt>
+<dd>
+The color to be used for the background (trough) of the progress bar.
+Default is to use grey55.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="widgetspecific_options">WIDGET-SPECIFIC OPTIONS</a></h1>
+<dl>
+<dt><strong><a name="item__2danchor"><strong>-anchor</strong></a></strong><br />
+</dt>
+<dd>
+This can be used to position the start point of the bar. Default
+is 'w' (horizontal bar starting from the left). A vertical bar can be
+configured by using either 's' or 'n'.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dblocks"><strong>-blocks</strong></a></strong><br />
+</dt>
+<dd>
+This controls the number of blocks to be used to construct the progress
+bar. The default is to break the bar into 10 blocks.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dcolors"><strong>-colors</strong></a></strong><br />
+</dt>
+<dd>
+Controls the colors to be used for different positions of the progress bar.
+The colors should be supplied as a reference to an array containing pairs
+of positions and colors.
+</dd>
+<dd>
+<pre>
+  -colors =&gt; [ 0, 'green', 50, 'red' ]</pre>
+</dd>
+<dd>
+<p>means that for the range 0 to 50 the progress bar should be green
+and for higher values it should be red.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item__2dfrom"><strong>-from</strong></a></strong><br />
+</dt>
+<dd>
+This sets the lower limit of the progress bar.  If the bar is set to a
+value below the lower limt no bar will be displayed. Defaults to 0.
+See the <a href="#item__2dto"><code>-to</code></a> description for more information.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dgap"><strong>-gap</strong></a></strong><br />
+</dt>
+<dd>
+This is the spacing (in pixels) between each block. Defaults to 1.
+Use 0 to get a continuous bar.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dlength"><strong>-length</strong></a></strong><br />
+</dt>
+<dd>
+Specifies the desired long dimension of the ProgressBar in screen
+units (i.e. any of the forms acceptable to Tk_GetPixels). For vertical
+ProgressBars this is the ProgressBars height; for horizontal scales it
+is the ProgressBars width.  The default length is calculated from the
+values of <a href="#item__2dpadx"><code>-padx</code></a>, <a href="#item__2dborderwidth"><code>-borderwidth</code></a>, <a href="#item__2dhighlightthickness"><code>-highlightthickness</code></a> and the
+difference between <a href="#item__2dfrom"><code>-from</code></a> and <a href="#item__2dto"><code>-to</code></a>.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dresolution"><strong>-resolution</strong></a></strong><br />
+</dt>
+<dd>
+A real value specifying the resolution for the scale. If this value is greater
+than zero then the scale's value will always be rounded to an even multiple of
+this value, as will tick marks and the endpoints of the scale. If the value is
+less than zero then no rounding occurs. Defaults to 1 (i.e., the value will be
+integral).
+</dd>
+<p></p>
+<dt><strong><a name="item__2dto"><strong>-to</strong></a></strong><br />
+</dt>
+<dd>
+This sets the upper limit of the progress bar. If a value is specified
+(for example, using the <a href="#item_value"><code>value</code></a> method) that lies above this value the
+full progress bar will be displayed. Defaults to 100.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dvariable"><strong>-variable</strong></a></strong><br />
+</dt>
+<dd>
+Specifies the reference to a scalar variable to link to the ProgressBar.
+Whenever the value of the variable changes, the ProgressBar will upate
+to reflect this value. (See also the <strong>value</strong> method below.)
+</dd>
+<p></p>
+<dt><strong><a name="item__2dvalue"><strong>-value</strong></a></strong><br />
+</dt>
+<dd>
+The can be used to set the current position of the progress bar
+when used in conjunction with the standard <code>configure</code>. It is
+usually recommended to use the <strong>value</strong> method instead.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dwidth"><strong>-width</strong></a></strong><br />
+</dt>
+<dd>
+Specifies the desired narrow dimension of the ProgressBar in screen
+units (i.e.  any of the forms acceptable to Tk_GetPixels). For
+vertical ProgressBars this is the ProgressBars width; for horizontal
+bars this is the ProgressBars height.  The default width is derived
+from the values of <a href="#item__2dborderwidth"><code>-borderwidth</code></a> and <a href="#item__2dpady"><code>-pady</code></a> and <a href="#item__2dhighlightthickness"><code>-highlightthickness</code></a>.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="widget_methods">WIDGET METHODS</a></h1>
+<dl>
+<dt><strong><a name="item_value"><em>$ProgressBar</em>-&gt;<strong>value</strong>(?<em>value</em>?)</a></strong><br />
+</dt>
+<dd>
+If <em>value</em> is omitted, returns the current value of the ProgressBar.  If
+<em>value</em> is given, the value of the ProgressBar is set. If <em>$value</em> is
+given but undefined the value of the option <strong>-from</strong> is used.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Graham Barr &lt;<em><a href="mailto:gbarr@pobox.com">gbarr@pobox.com</a></em>&gt;</p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright (c) 1997-1998 Graham Barr. All rights reserved.
+This program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::ProgressBar - A graphical progress bar</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

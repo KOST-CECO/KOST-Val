@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>perlglob.bat - a more capable perlglob.exe replacement</title>
+<link rel="stylesheet" href="../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;perlglob.bat - a more capable perlglob.exe replacement</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>perlglob.bat - a more capable perlglob.exe replacement</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+    @perlfiles = glob  &quot;..\\pe?l/*.p?&quot;;
+    print &lt;..\\pe?l/*.p?&gt;;</pre>
+<pre>
+    # more efficient version
+    &gt; perl -MFile::DosGlob=glob -e &quot;print &lt;../pe?l/*.p?&gt;&quot;</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>This file is a portable replacement for perlglob.exe.  It
+is largely compatible with perlglob.exe (the Microsoft setargv.obj
+version) in all but one respect--it understands wildcards in
+directory components.</p>
+<p>It prints null-separated filenames to standard output.</p>
+<p>For details of the globbing features implemented, see
+<a href="../lib/File/DosGlob.html">the File::DosGlob manpage</a>.</p>
+<p>While one may replace perlglob.exe with this, usage by overriding
+CORE::glob with File::DosGlob::glob should be much more efficient,
+because it avoids launching a separate process, and is therefore
+strongly recommended.  See <a href="../lib/Pod/perlsub.html">the perlsub manpage</a> for details of overriding
+builtins.</p>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Gurusamy Sarathy &lt;<a href="mailto:gsar@activestate.com">gsar@activestate.com</a>&gt;</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p>perl</p>
+<p>File::DosGlob</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;perlglob.bat - a more capable perlglob.exe replacement</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

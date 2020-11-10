@@ -1,0 +1,338 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>ActivePerl 5.8 Change Log</title>
+<link rel="stylesheet" href="Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+<!--
+
+<ul>
+
+	<li><a href="#activeperl_5_8_change_log">ActivePerl 5.8 Change Log</a></li>
+	<ul>
+
+		<li><a href="#build_810_monday__jun_7__2004">Build 810 Monday, Jun 7, 2004</a></li>
+		<li><a href="#build_809_monday__feb_2__2004">Build 809 Monday, Feb 2, 2004</a></li>
+		<li><a href="#build_808_thursday__dec_6__2003">Build 808 Thursday, Dec 6, 2003</a></li>
+		<li><a href="#build_807_thursday__nov_6__2003">Build 807 Thursday, Nov 6, 2003</a></li>
+		<li><a href="#build_806_monday__march_31__2003">Build 806 Monday, March 31, 2003</a></li>
+		<li><a href="#build_805_thursday__feb_6__2003">Build 805 Thursday, Feb 6, 2003</a></li>
+		<li><a href="#build_804_friday__nov_29__2002">Build 804 Friday, Nov 29, 2002</a></li>
+	</ul>
+
+</ul>
+-->
+<!-- INDEX END -->
+
+<p>
+</p>
+<h1><a name="activeperl_5_8_change_log">ActivePerl 5.8 Change Log</a></h1>
+<p>For the latest information on ActivePerl, please see:</p>
+<pre>
+    <a href="http://www.ActiveState.com/ActivePerl/">http://www.ActiveState.com/ActivePerl/</a></pre>
+<p>
+</p>
+<h2><a name="build_810_monday__jun_7__2004">Build 810 Monday, Jun 7, 2004</a></h2>
+<p>Build 810 is based on Perl 5.8.4.</p>
+<p><em>Bug Fixes and Changes</em></p>
+<ul>
+<li></li>
+Perl 5.8.4 has been incorporated.  See <em>perl584delta</em> for a list
+of changes.
+<p></p>
+<li></li>
+Many bundled modules have been updated to their latest versions:
+<pre>
+    Archive-Tar-1.08
+    Compress-Zlib-1.33
+    Data-Dump-1.03
+    Digest-1.08
+    Digest-MD5-2.33
+    Digest-SHA1-2.10
+    File-CounterFile-1.04
+    Font-AFM-1.19
+    HTML-Parser-3.36
+    MD5-2.03
+    MIME-Base64-3.01
+    Tk-804.027
+    URI-1.30
+    XML-Simple-2.12
+    XML-XSLT-0.48 (only for HP-UX))
+    libnet-1.18
+    libwww-perl-5.79
+    perl-ldap-0.31 (only for HP-UX))</pre>
+<p></p></ul>
+<p>
+</p>
+<h2><a name="build_809_monday__feb_2__2004">Build 809 Monday, Feb 2, 2004</a></h2>
+<p>Build 809 is based on Perl 5.8.3.</p>
+<p><em>Bug Fixes and Changes</em></p>
+<ul>
+<li></li>
+Perl 5.8.3 has been incorporated.  See <em>perl583delta</em> for a list
+of changes.
+<p></p>
+<li></li>
+The Win32 module now includes the Win32::IsAdminUser() function that
+checks if the current interpreter runs with Administrator privileges.
+<p></p>
+<li></li>
+The access violations of detached threads on thread exit have been
+fixed.
+<p></p>
+<li></li>
+Time::HiRes now provides high resolution on Windows too.
+<p></p></ul>
+<p>
+</p>
+<h2><a name="build_808_thursday__dec_6__2003">Build 808 Thursday, Dec 6, 2003</a></h2>
+<p>Build 808 is based on Perl 5.8.2.</p>
+<p><em>Changes</em></p>
+<ul>
+<li></li>
+Perl 5.8.2 has been incorporated.  See <em>perl582delta</em> for a list of
+changes.
+<p>ActivePerl build 808 is still being compiled with the
+<code>-DNO_HASH_SEED</code> option to maintain binary compatibility with earlier
+releases.  Perl 5.8.2 implements a new rehashing scheme that will kick
+in dynamically based on the actual data being stored in a hash.  This
+new scheme is backwards compatible and is enabled in ActivePerl build
+808.</p>
+<p></p>
+<li></li>
+The following modules are bundled with ActivePerl for HP-UX and have
+been updated to their latest versions:
+<pre>
+    Convert-ASN1-0.18
+    XML-DOM-1.43
+    XML-XPath-1.13
+    XML-XSLT-0.45
+    perl-ldap-0.30</pre>
+<p></p></ul>
+<p>
+</p>
+<h2><a name="build_807_thursday__nov_6__2003">Build 807 Thursday, Nov 6, 2003</a></h2>
+<p>Build 807 is based on Perl 5.8.1.  This is the first release of ActivePerl
+based on this new maintenance release of Perl.  This release is meant for
+use in production systems.  However, owing to the sheer volume of changes
+between Perl 5.8.0 and 5.8.1 that have been incorporated, please be sure
+to test it thoroughly in a non-critical environment before you upgrade
+your production systems.</p>
+<p>Please check <em>perl581delta</em> for a list of the major changes in Perl.
+Only additional changes specific to ActivePerl are mentioned here.</p>
+<p><em>Bug Fixes and Changes</em></p>
+<ul>
+<li></li>
+Perl 5.8.1 has been incorporated.  See <em>perl581delta</em> for a list of changes.
+<p><strong>Important note:</strong> The new <em>Hash Randomisation</em> feature has been
+disabled in ActivePerl because it is not compatible with Perl 5.8.0.
+If we enabled this feature then some modules compiled with 5.8.0 would
+not work correctly with 5.8.1 and most modules compiled with 5.8.1
+would not work at all with Perl 5.8.0.  This would require maintaining
+separate PPM module repositories for 5.8.0 and 5.8.1.</p>
+<p>To enable the <em>Hash Randomisation</em> feature you must recompile
+ActivePerl from source and remove the <code>-DNO_HASH_SEED</code> definition
+from the C compiler options.  In that case you must compile all CPAN
+modules yourself too because the PPM repository binaries will not be
+compatible.</p>
+<p></p>
+<li></li>
+Windows 2003 Server is now officially supported.  The installer adds
+entries to the IIS6 ``Web Services Extensions'' list for both ``Perl CGI''
+and ``Perl ISAPI''.  Both are set to ``Prohibited'' by default and must
+be explicitly changed to ``Allow'' in the IIS Manager.
+<p>Win32::GetOSName() detects the release version of Windows 2003
+correctly.</p>
+<p></p>
+<li></li>
+ActiveState::Rx module has been included.  This module is necessary to
+use the Rx Toolkit in ActiveState Visual Perl.  You must upgrade
+Visual Perl to version 1.8.1 to use the Rx Toolkit with Perl 5.8.
+<p></p>
+<li></li>
+Many bundled modules have been updated to their latest versions:
+<pre>
+    Archive-Tar-1.07
+    Compress-Zlib-1.22
+    Data-Dump-1.01
+    Digest-MD2-2.03
+    Digest-MD5-2.30
+    Digest-SHA1-2.06
+    File-CounterFile-1.01
+    HTML-Parser-3.34
+    HTML-Tree-3.18
+    URI-1.27
+    XML-Parser-2.34
+    XML-Simple-2.09
+    libwin32-0.21
+    libwww-perl-5.75</pre>
+<p>In addition, IO::Zlib version 1.01 is now included with ActivePerl.</p>
+<p></p></ul>
+<p><em>PPM</em></p>
+<ul>
+<li></li>
+The <em>upgrade</em> command has been fixed.
+<p></p>
+<li></li>
+It is now possible to install from a file URL while not being
+connected to the internet.
+<p></p>
+<li></li>
+PPM now works on Windows even when the Term::InKey module is
+installed.
+<p></p></ul>
+<p><em>Perl for ISAPI</em></p>
+<ul>
+<li></li>
+Perl for ISAPI no longer uses line buffering for STDOUT.  This is
+especially important for running under IIS6 which bypasses TCP/IP
+nagling and directly sends every packet individually.
+<p></p>
+<li></li>
+Perl for ISAPI used to close all open file handles before shutting
+down the Perl interpreter.  The intention was to prevent file handle
+leaks from buggy Perl scripts while running inside the IIS process.
+Unfortunately Perl may still execute END blocks or call DESTROY
+methods during final destruction and some file handles may get closed
+twice in this scenario.
+<p>This creates a race condition: the file handle may already have been
+re-opened by a different thread before the second close happens.  Perl
+then closes a file handle it doesn't own anymore.  This may cause a
+different page request to fail.</p>
+<p>To avoid this race condition Perl for ISAPI will no longer try to
+automatically close open file handles.  Therefore it is possible that
+broken Perl applications will now start leaking file handles if they
+don't close them correctly themselves.</p>
+<p></p></ul>
+<p>
+</p>
+<h2><a name="build_806_monday__march_31__2003">Build 806 Monday, March 31, 2003</a></h2>
+<p><em>Bug Fixes and Changes</em></p>
+<ul>
+<li></li>
+Several bug fixes and other improvements have been merged from the
+Perl development track.  In particular, many of these fixes address
+problems in the PerlIO implementation.  See the ActivePerl source
+code diff for the complete list of included changes.
+<p></p>
+<li></li>
+Other minor bug fixes and documentation updates.
+<p></p></ul>
+<p><em>PPM</em></p>
+<p>PPM has been upgraded to version 3.1.  It fixes most of the known
+problems, including:</p>
+<ul>
+<li></li>
+PPM 3.1 now provides all the functionality of PPM 2.0 and 3.0.
+PPM 2.0 is therefore no longer included in ActivePerl 5.8.
+<p></p>
+<li></li>
+PPM now works correctly through a proxy server requiring basic
+authentication.  Previous versions of PPM 3.0 only supported
+proxy servers that did not require authentication.
+<p></p>
+<li></li>
+PPM is now more robust in handling user-defined repository URLs.
+For instance, URLs with a trailing slash no longer result in
+fatal errors.
+<p></p>
+<li></li>
+Support for ASPN Perl profiles has been much improved.  However,
+at the time of this writing, the ActivePerl 5.8 repositories
+do not yet support profiles.  This is expected to become available
+shortly.
+<p></p>
+<li></li>
+In previous versions of PPM 3, incorrect search results from the
+repository (such as package names that do not have corresponding
+PPD files) could crash the PPM3 client.  PPM now generates meaningful
+error messages under these circumstances.
+<p></p></ul>
+<p>
+</p>
+<h2><a name="build_805_thursday__feb_6__2003">Build 805 Thursday, Feb 6, 2003</a></h2>
+<p><em>Bug Fixes and Changes</em></p>
+<ul>
+<li></li>
+Several bug fixes and other improvements have been merged from the
+Perl development track.  In particular, many of these fixes address
+weaknesses in Unicode support.  See the ActivePerl source code diff
+for the complete list of included changes.
+<p></p>
+<li></li>
+Bugs in the Perl 5.8 integration of Perl for ISAPI and PerlScript
+that resulted in failure to flush output correctly at the termination
+of the script have been fixed.
+<p></p>
+<li></li>
+On Windows, <code>system()</code> and backticks could return invalid status when
+running under environments where the process has to handle Windows
+messages.  PerlScript and Perl for ISAPI fall under this category.
+The problem has been corrected.
+<p></p>
+<li></li>
+On Windows, PerlScript and Perl for ISAPI were affected by a reentrancy
+problem, which meant that recursive invocation of these two engines
+could fail.  This problem has been corrected.
+<p></p>
+<li></li>
+Tk and libwww-perl has been updated to their latest versions.
+<p></p>
+<li></li>
+Win32::Shortcut no longer calls <code>CoUninitialize()</code> within an END block.
+This avoids random coredumps from this module when its DESTROY methods
+happen to get called after the END block executes.
+<p></p>
+<li></li>
+PPM v2 and v3 can now optionally generate HTML documentation when
+installing packages if POD documentation is found in the package.
+This is controlled by the rebuildhtml option in PPM v2 and the
+rebuild-html option in PPM v3.
+<p></p>
+<li></li>
+Other minor bug fixes and documentation updates.
+<p></p></ul>
+<p>
+</p>
+<h2><a name="build_804_friday__nov_29__2002">Build 804 Friday, Nov 29, 2002</a></h2>
+<p><em>What's new in the 800 Series</em></p>
+<ul>
+<li></li>
+This build corresponds to the Perl 5.8.0 source code release.
+<p></p>
+<li></li>
+The 800 series builds of ActivePerl are not binary compatible with
+builds in the 500 or 600 series.  Any extensions built using binaries
+from the ActivePerl 500 or 600 series will need to be recompiled.
+Note especially that this applies to PPM packages that may have been
+built for 500 or 600 series builds.
+<p></p>
+<li></li>
+Significant changes that have occurred in the 5.8.0 release
+are documented in <em>perl58delta</em>.
+<p></p>
+<li></li>
+Support has been enabled for large file access on all platforms,
+meaning that file manipulation facilities within perl can cope with
+files larger than 2GB or 4GB.
+<p></p>
+<li></li>
+Many new modules are included as a standard part of perl 5.8.0.  See
+``Modules and Pragmata'' in <em>perl58delta</em> for a detailed list.
+In addition, the Data::Dump module is now included with ActivePerl.
+Many other modules have been updated to their latest versions.
+<p></p>
+<li></li>
+PPM v3 is now included as the default <code>ppm</code> executable.  PPM v2
+continues to be available, and can be executed as <code>ppm2</code>.
+<p></p></ul>
+
+</body>
+
+</html>

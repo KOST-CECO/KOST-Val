@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SOFTPKG NAME="XML-Simple" VERSION="2,09,0,0">
+<TITLE>XML-Simple</TITLE>
+<ABSTRACT>Easy API to read/write XML (esp config files)</ABSTRACT>
+<AUTHOR>Grant McLean &lt;grantm@cpan.org&gt;</AUTHOR>
+<IMPLEMENTATION>
+<CODEBASE HREF="http://ppm.ActiveState.com/PPMPackages/5.8-windows/MSWin32-x86-multi-thread-5.8/XML-Simple.tar.gz" />
+<INSTALL />
+<UNINSTALL />
+</IMPLEMENTATION>
+</SOFTPKG>

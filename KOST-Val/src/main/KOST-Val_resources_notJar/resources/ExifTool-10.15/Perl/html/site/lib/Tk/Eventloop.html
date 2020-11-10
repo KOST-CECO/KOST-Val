@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Tk::Event - ToolKit for Events</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::Event - ToolKit for Events</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Tk::Event - ToolKit for Events</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ use Tk::Event;</pre>
+<pre>
+ Tk::Event-&gt;fileevent(\*FH, 'readable' =&gt; callback);</pre>
+<pre>
+ Tk::Event-&gt;lineavail(\*FH, callback);</pre>
+<pre>
+ use Tk::Event::Signal qw(INT);</pre>
+<pre>
+ $SIG{'INT'} = callback;</pre>
+<pre>
+ use Tk::Event::process;</pre>
+<pre>
+ Tk::Event-&gt;proc($pid, callback);</pre>
+<pre>
+ QueueEvent(callback [, position])</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>That is better than nothing but still hard to use. Most scripts want higher
+level result (a line, a ``block'' of data etc.)</p>
+<p>So it has occured to me that we could use new-ish TIEHANDLE thus:</p>
+<p>my $obj = tie SOMEHANDLE,Tk::Event::IO;</p>
+<p>while (&lt;SOMEHANDLE&gt;)
+ {
+ }</p>
+<p>Then the READLINE routine registers a callback and looks something like:</p>
+<p>sub READLINE
+ {
+  my $obj = shift;
+  Event-&gt;io(*$obj,'readable',sub { <a href="../../../lib/Pod/perlfunc.html#item_sysread"><code>sysread(*$obj,${*$obj},1,length(${*$obj})</code></a> });
+  my $pos;
+  while (($pos = <a href="../../../lib/Pod/perlfunc.html#item_index"><code>index(${*$obj},$/)</code></a> &lt; 0)
+   {
+    DoOneEvent();
+   }
+  Event-&gt;io(*$obj,'readable',''); # unregister
+  $pos += length($/);
+  my $result = substr(${*$obj},0,$pos);
+  <a href="../../../lib/Pod/perlvar.html#item_substr"><code>substr(${*$obj},0,$pos)</code></a> = '';
+  return $result;
+ }</p>
+<p>This is using the scalar part of the glob representing the _inner_ IO
+as a buffer in which to accumulate chars.</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::Event - ToolKit for Events</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

@@ -1,0 +1,285 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+
+<head>
+<title>Implementation Quirks</title>
+<link rel="STYLESHEET" href="../../Active.css" type="text/css" media="screen">
+</head>
+
+<body>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#EAE2BB">
+<tr> 
+<td width="57"><a target=_blank href="http://www.ActiveState.com/ActivePerl/">
+<img src="../../images/activeperl_logo.gif" width="57" height="48" border="0" alt="ActivePerl"></a></td>
+<td><div align="center" class="heading">ActivePerl User Guide</div></td>
+<td width="112"><a target=_blank  href="http://www.ActiveState.com">
+<img src="../../images/AS_logo.gif" width="112" height="48" border="0"  alt="ActiveState" /></a></td>
+</tr>
+<tr>
+<td class="lineColour" colspan="3"></td>
+</tr>
+</table>
+
+<h1>Implementation Quirks</h1>
+
+<ul>
+  <li><a class="doc" href="#NAME">NAME</a></li>
+  <li><a class="doc" href="#DESCRIPTION">DESCRIPTION</a>
+    <ul>
+      <li><a class="doc" href="#Certain_functions_don_t_seem_to_">Certain functions don't
+        seem to work on ActivePerl.</a></li>
+      <li><a class="doc" href="#The_exec_function_doesn_t_seem_t">The exec function doesn't
+        seem to work under Perl for ISAPI, Perl for WebSite, or PerlScript. Why
+        not?</a></li>
+      <li><a class="doc" href="#What_s_the_difference_between_Pe">What's the history of
+        ActivePerl?</a></li>
+      <li><a class="doc" href="#What_s_the_difference_between_ru">What's the difference
+        between running ActivePerl on Windows NT/2000</a></li>
+      <li><a class="doc" href="#Why_don_t_the_examples_from_the_">Why don't the examples
+        from the Camel book work?</a></li>
+      <li><a class="doc" href="#Why_don_t_certain_standard_libra">Why don't certain standard
+        library modules work?</a></li>
+      <li><a class="doc" href="#How_do_I_make_a_UNIX_based_scrip">How do I make a UNIX-based
+        script work?</a></li>
+      <li><a class="doc" href="#How_does_the_chmod_function_work">How does the chmod
+        function work on Win32 platforms?</a></li>
+      <li><a class="doc" href="#4DOS_doesn_t_recognize_on_the">4DOS doesn't recognize
+        \&quot; on the command line.</a></li>
+      <li><a class="doc" href="#STDIN_and_STDOUT_and_Piping_don">STDIN and STDOUT, and
+        Piping don't always work on NT.</a></li>
+      <li><a class="doc" href="#Signal_Handling">Why doesn't signal handling work on
+        Windows.</a></li>
+    </ul>
+  </li>
+  <li><a class="doc" href="#AUTHOR_AND_COPYRIGHT">AUTHOR AND COPYRIGHT</a></li>
+</ul>
+ 
+<h2><a name="NAME">NAME</a></h2>
+<p>ActivePerl-faq5 - Implementation Quirks</p>
+ 
+<h2><a name="DESCRIPTION">DESCRIPTION</a></h2>
+<p>Issues specific to ActivePerl.</p>
+ 
+<h2><a name="Certain_functions_don_t_seem_to_">Certain functions don't seem to
+work on ActivePerl.</a></h2>
+<p>There are several functions that are unimplemented in the ActivePerl system.
+Here is a complete list of unimplemented functions:</p>
+<dl>
+  <dt><h3>Functions for processes and process groups</h3></dt>
+  <dd>
+    <p><code>alarm(), getpgrp(), getppid(), getpriority(), setpgrp(), setpriority()</code></p>
+  </dd>
+  <dt><h3><a name="item_Fetching">Fetching user and group info</a></h3></dt>
+  <dd>
+    <p><code>endgrent(), endpwent(), getgrent(), getgrgid(), getgrnam(), getpwent(),
+    getpwnam(), getpwuid(), setgrent(),  setpwent()</code></p>
+  </dd>
+  <dt><h3><a name="item_System">System V interprocess communication
+    functions</a></h3></dt>
+  <dd>
+    <p><code>msgctl(), msgget(), msgrcv(), msgsnd(), semctl(), semget(), semop(), shmctl(),
+    shmget(), shmread(), shmwrite()</code></p>
+  </dd>
+  <dt><h3>Functions for filehandles, files, or directories</h3></dt>
+  <dd>
+    <p><code>link(), symlink(), chroot()</code></p>
+  </dd>
+  <dt><h3><a name="item_Input">Input and output functions</a></h3></dt>
+  <dd>
+    <p><code>syscall()</code></p>
+  </dd>
+  <dt><h3>Fetching network info</h3></dt>
+  <dd>
+    <p><code>getnetbyname(), getnetbyaddr(), getnetent(), getprotoent(), getservent(), sethostent(),
+    setnetent(), setprotoent(), setservent(), endhostent(), endnetent(), endprotoent(), endservent(),
+    socketpair()</code></p>
+  </dd>
+</dl>
+<p>See the perlport and Win32 documentation pages for more information on the
+portability of builtin functions in ActivePerl.</p>
+ 
+<h2><a name="The_exec_function_doesn_t_seem_t">The exec function doesn't seem to
+work under Perl for ISAPI or PerlScript. Why not?</a></h2>
+<p>Perl for ISAPI and PerlScript share a process space with the web server and
+any number of other extensions. As a result, the <code>exec()</code> function is
+unimplemented, because it would cause the web server to terminate (the <code>exec()</code>
+function executes a system command and never returns).</p>
+ 
+<h2><a name="What_s_the_difference_between_Pe">What's the history of ActivePerl
+on Windows?</a></h2>
+<p>At one time, Perl on the Win32 platform was found in two versions, Gurusamy
+Sarathy's port, and the ActiveState port. The ActiveState port of Perl included
+such tools as Perl for ISAPI and PerlScript, at the expense of exposing Perl's
+internals in a slightly different fashion than standard Perl. Sarathy's port
+featured a high degree of compatibility with standard Perl, which enabled users
+of Sarathy's port to use many modules that were not compatible with ActiveState
+Perl.</p>
+<p>The oneperl effort brought both ports of Perl together, and ActivePerl is the
+standard perl distribution for the Win32 system. All modules that can be used on
+Win32 can be used with this port. You no longer have to worry about whose perl
+the module is for. Just grab it, compile it (if needed), and use it.</p>
+ 
+<h2><a name="What_s_the_difference_between_ru">What's the difference between
+running ActivePerl on Windows NT versus running it on Windows 95?</a></h2>
+<p>There should be little difference between running Perl on the two operating
+systems. You should watch for the following, though:</p>
+<ul>
+  <li>
+    <p>The Win32::NetAdmin, Win32::NetResource, and Win32::EventLog modules will
+    not run on Windows 95.</p>
+  </li>
+  <li>
+    <p>Some functions that work on Windows NT/2000 reportedly do not work or are
+    buggy on Windows 95. An example is <code>flock().</code></p>
+  </li>
+  <li>
+    <p>Finally, many helpful programs that are available on Windows NT/2000 are not
+    there on Windows 95. <code>hostname</code>, for example, is not available on
+    Windows 95.</p>
+  </li>
+</ul>
+<p>If you're worried about using a feature from one or the other, check the
+result of the function Win32::IsWinNT() to see what OS you're running on. See <a class="doc" href="ActivePerl-Winfaq9.html#What_modules_come_with_the_Perl_">What
+modules come with the ActivePerl distribution?</a>.</p>
+ 
+<h2><a name="Why_don_t_the_examples_from_the_">Why don't the examples from the
+Camel book work?</a></h2>
+<p>The Camel book (aka <i>Programming Perl</i> (3rd edition), Wall et.al., O'Reilly &amp;
+Associates 2000) was written by UNIX people for, in general, UNIX people.</p>
+<p>Some of the examples in the Camel book will work. Some will not. If they
+fail, it's because either the functions used are not available, the external
+tools used are not available, or the modules used are not available. Usually,
+for small scripts, it's not too hard to fiddle with them until they come out
+correct (see <a class="doc" href="#How_do_I_make_a_UNIX_based_scrip">How do I make a
+UNIX-based script work?</a>).</p>
+<p>The Camel and Llama books are good learning tools. However, one of the things
+you learn as a ActivePerl programmer is how to port UNIX-targeted scripts and
+modules to ActivePerl.</p>
+<p>For better examples of using ActivePerl, you may want to look at the Gecko
+book, ``Learning Perl on Win32 Systems,'' published by O'Reilly.</p>
+ 
+<h2><a name="Why_don_t_certain_standard_libra">Why don't certain standard
+library modules work?</a></h2>
+<p>With ActivePerl, almost all modules will work with ActivePerl as long as they
+can be built to run on Win32. The problems that existed with the 3xx versions of
+Perl for Win32 no longer exist: modules work on Win32, not just this port or
+that port of Perl for the Win32 platform!</p>
+<p>If a module doesn't work, it may be because the functions it uses are
+specific to UNIX and won't work on Win32, or specific to NT/2000 and won't work on
+Windows 95 or Windows 98.</p>
+ 
+<h2><a name="How_do_I_make_a_UNIX_based_scrip">How do I make a UNIX-based script
+work?</a></h2>
+<p>First, make extra-super sure that you are using the script or module in the
+way it was intended. Many of us are quick to blame the module, the operating
+system, or the interpreter when, in reality, it is our own code that isn't
+working right.</p>
+<p>If you're sure that it's not a problem in your code, the best way to make a
+UNIX-based script work is to desk-check it before running it. Look for some of
+the following things:</p>
+<ul>
+  <li>
+    <p>Calls to functions unimplemented in ActivePerl. For a list, see <a class="doc" href="#Certain_functions_don_t_seem_to_">Certain
+    functions don't seem to work on ActivePerl.</a>.</p>
+  </li>
+  <li>
+    <p>Calls to standard library modules or CPAN modules that aren't available
+    on ActivePerl, or that don't work.</p>
+  </li>
+  <li>
+    <p><code>system()</code> or backtick (``) calls to system tools that aren't
+    available on ActivePerl.</p>
+  </li>
+  <li>
+    <p>Reading and writing files that may be binary. See <a class="doc" href="ActivePerl-Winfaq8.html#Reading_from_and_writing_to_file">Reading
+    from and writing to files mysteriously fails. What's wrong?</a>.</p>
+  </li>
+  <li>
+    <p>File-system dependent path names and path name parsing. Watch for
+    hard-coded UNIX paths like <i>/usr/lib</i>.</p>
+  </li>
+  <li>
+    <p>The module or script may require a specific version of Perl or another
+    module. Watch out for things like <code>require 5.003;</code> or <code>require
+    Sockets 1.03;</code> Check to see if the script or module really requires
+    the new version.</p>
+  </li>
+</ul>
+<p>Of course, it should go without saying that for everything you take out
+you'll have to put in a work-around.</p>
+<p>Once you've worked around UNIX dependencies in the script or module, try
+running it through the debugger to see if what you did helps. If the script or
+module comes with a <i>.t</i> test file, try using that to test your changed
+version.</p>
+<p>If you do make a change to a UNIX-based script or module, please let the
+author know. Sometimes the author will be gracious enough to make changes that
+will let the program run on ActivePerl. If the author won't change the program,
+ask if you can make the altered version available to other users.</p>
+ 
+<h2><a name="How_does_the_chmod_function_work">How does the chmod function work
+on Win32 platforms?</a></h2>
+<p><code>chmod()</code> is supported in ActivePerl. However, it can only be used
+for setting &quot;owner&quot; read/write access. (The &quot;group&quot; and
+&quot;other&quot; bits are ignored.)</p>
+<p>UNIX-style security for files is not applicable to files on Win32 systems.
+Win32 systems inherit from DOS four possible file attributes: archived (A),
+read-only (R), hidden (H), and system (S). These can be checked and set with the
+Win32::File::Get/SetAttributes().</p>
+<p>Windows NT/2000 systems using NTFS can also have more specific permissions granted
+on individual files to users and groups. For builds 300 and above, and the Perl
+Resource Kit for Win32, you can use the Win32::FileSecurity module to maintain
+file permissions.</p>
+ 
+<h2><a name="4DOS_doesn_t_recognize_on_the">4DOS doesn't recognize \&quot; on
+the command line.</a></h2>
+<p>4DOS doesn't recognize the escaped quote on the command line, because all
+double-quote characters are seen as delimiters for command line parameters. This
+is one of the few points (if not the only one) where 4DOS doesn't quite match up
+to <i>COMMAND.COM</i>.</p>
+<p>To get around this, you can enter</p>
+<pre>    perl -e &quot;print \&quot;Hello, World\n\&quot;&quot;
+</pre>
+<p>as</p>
+<pre>    perl -e &quot;print qq(Hello, World\n)&quot;
+</pre>
+<p>using Perl's alternative quoting mechanism. The alternative quotes are <code>qq()</code>
+for double quotes, <code>q()</code> for single quotes, <code>qx()</code> for
+backquotes, and <code>qw()</code> for list quotes. The parentheses can be
+substituted for just about anything (like + or | or {} or &lt;&gt; or #), but
+that looks weird.</p>
+ 
+<h2><a name="STDIN_and_STDOUT_and_Piping_don">STDIN and STDOUT, and Piping don't
+always work on NT/2000.</a></h2>
+<p>You may get unexpected results when you try to redirect the output of files
+that use Windows NT/2000's file association feature. You can use 
+<a class="doc" href="http://www.ActiveState.com/Products/Productivity/Perl_Dev_Kit/index.html">PerlApp</a> or pl2bat to
+convert a Perl script to an executable or a batch file. This should solve any
+problems you may have with redirection.</p>
+ 
+<h2><a name="Signal_Handling">Why doesn't signal handling work on Windows?</a></h2>
+<p>Signals are unsupported by the Win32 API. The C Runtime provides crude
+support for signals, but there are serious caveats, such as inability to die()
+or exit() from a signal handler. Perl itself does not guarantee that signal
+handlers will not interrupt critical operations such as memory allocation, which
+means signal invocation may throw perl internals into disarray. For these
+reasons, signals are unsupported at this time.</p>
+ 
+<h2><a name="AUTHOR_AND_COPYRIGHT">AUTHOR AND COPYRIGHT</a></h2>
+<p>This FAQ was originally assembled and maintained by Evangelo Prodromou. It
+has been revised and updated by Brian Jepson of O'Reilly and Associates, and
+David Grove, David Dmytryshyn, and David Sparks of ActiveState.</p>
+<p>This FAQ is in the public domain. If you use it, however, please ensure that
+you give credit to the original authors.</p>
+
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+  <tr>
+    <td class="block" valign="MIDDLE" width="100%" bgcolor="#cccccc"><h3>
+      <p class="block">&nbsp;ActivePerl FAQ - Implementation Quirks</p>
+      </h3></td>
+  </tr>
+</table>
+
+</body>
+
+</html>

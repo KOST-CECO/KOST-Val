@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>exetype - Change executable subsystem type between &quot;Console&quot; and &quot;Windows&quot;</title>
+<link rel="stylesheet" href="../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;exetype - Change executable subsystem type between &quot;Console&quot; and &quot;Windows&quot;</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>exetype - Change executable subsystem type between ``Console'' and ``Windows''</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+        C:\perl\bin&gt; copy perl.exe guiperl.exe
+        C:\perl\bin&gt; exetype guiperl.exe windows</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>This program edits an executable file to indicate which subsystem the
+operating system must invoke for execution.</p>
+<p>You can specify any of the following subsystems:</p>
+<dl>
+<dt><strong><a name="item_console">CONSOLE</a></strong><br />
+</dt>
+<dd>
+The CONSOLE subsystem handles a Win32 character-mode application that
+use a console supplied by the operating system.
+</dd>
+<p></p>
+<dt><strong><a name="item_windows">WINDOWS</a></strong><br />
+</dt>
+<dd>
+The WINDOWS subsystem handles an application that does not require a
+console and creates its own windows, if required.
+</dd>
+<p></p>
+<dt><strong><a name="item_native">NATIVE</a></strong><br />
+</dt>
+<dd>
+The NATIVE subsystem handles a Windows NT device driver.
+</dd>
+<p></p>
+<dt><strong><a name="item_windowsce">WINDOWSCE</a></strong><br />
+</dt>
+<dd>
+The WINDOWSCE subsystem handles Windows CE consumer electronics
+applications.
+</dd>
+<p></p>
+<dt><strong><a name="item_posix">POSIX</a></strong><br />
+</dt>
+<dd>
+The POSIX subsystem handles a POSIX application in Windows NT.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Jan Dubois &lt;<a href="mailto:jand@activestate.com">jand@activestate.com</a>&gt;</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;exetype - Change executable subsystem type between &quot;Console&quot; and &quot;Windows&quot;</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

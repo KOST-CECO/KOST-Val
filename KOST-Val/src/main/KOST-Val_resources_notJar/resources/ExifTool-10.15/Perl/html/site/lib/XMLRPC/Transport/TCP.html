@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>XMLRPC::Transport::TCP - Server/Client side TCP support for XMLRPC::Lite</title>
+<link rel="stylesheet" href="../../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;XMLRPC::Transport::TCP - Server/Client side TCP support for XMLRPC::Lite</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>XMLRPC::Transport::TCP - Server/Client side TCP support for XMLRPC::Lite</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+  use XMLRPC::Transport::TCP;</pre>
+<pre>
+  my $daemon = XMLRPC::Transport::TCP::Server
+    -&gt; new (LocalAddr =&gt; 'localhost', LocalPort =&gt; 82, Listen =&gt; 5, Reuse =&gt; 1)
+    -&gt; objects_by_reference(qw(My::PersistentIterator My::SessionIterator My::Chat))
+    -&gt; dispatch_to('/Your/Path/To/Deployed/Modules', 'Module::Name', 'Module::method') 
+  ;
+  print &quot;Contact to XMLRPC server at &quot;, join(':', $daemon-&gt;sockhost, $daemon-&gt;sockport), &quot;\n&quot;;
+  $daemon-&gt;handle;</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright (C) 2000-2001 Paul Kulchenko. All rights reserved.</p>
+<p>This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.</p>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Paul Kulchenko (<a href="mailto:paulclinger@yahoo.com">paulclinger@yahoo.com</a>)</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;XMLRPC::Transport::TCP - Server/Client side TCP support for XMLRPC::Lite</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>URI::URL - Uniform Resource Locators</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;URI::URL - Uniform Resource Locators</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>URI::URL - Uniform Resource Locators</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ $u1 = URI::URL-&gt;new($str, $base);
+ $u2 = $u1-&gt;abs;</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>This module is provided for backwards compatibility with modules that
+depend on the interface provided by the <code>URI::URL</code> class that used to
+be distributed with the libwww-perl library.</p>
+<p>The following differences exist compared to the <code>URI</code> class interface:</p>
+<ul>
+<li></li>
+The URI::URL module exports the <code>url()</code> function as an alternate
+constructor interface.
+<p></p>
+<li></li>
+The constructor takes an optional $base argument.  The <code>URI::URL</code>
+class is a subclass of <code>URI::WithBase</code>.
+<p></p>
+<li></li>
+The URI::URL-&gt;newlocal class method is the same as URI::file-&gt;new_abs.
+<p></p>
+<li></li>
+URI::URL::strict(1)
+<p></p>
+<li></li>
+$url-&gt;print_on method
+<p></p>
+<li></li>
+$url-&gt;crack method
+<p></p>
+<li></li>
+$url-&gt;full_path: same as ($uri-&gt;abs_path || ``/'')
+<p></p>
+<li></li>
+$url-&gt;netloc: same as $uri-&gt;authority
+<p></p>
+<li></li>
+$url-&gt;epath, $url-&gt;equery: same as $uri-&gt;path, $uri-&gt;query
+<p></p>
+<li></li>
+$url-&gt;path and $url-&gt;query pass unescaped strings.
+<p></p>
+<li></li>
+$url-&gt;path_components: same as $uri-&gt;path_segments (if you don't
+consider path segment parameters)
+<p></p>
+<li></li>
+$url-&gt;params and $url-&gt;eparams methods
+<p></p>
+<li></li>
+$url-&gt;base method.  See <a href="../../../site/lib/URI/WithBase.html">the URI::WithBase manpage</a>.
+<p></p>
+<li></li>
+$url-&gt;abs and $url-&gt;rel have an optional $base argument.  See
+<a href="../../../site/lib/URI/WithBase.html">the URI::WithBase manpage</a>.
+<p></p>
+<li></li>
+$url-&gt;frag: same as $uri-&gt;fragment
+<p></p>
+<li></li>
+$url-&gt;keywords: same as $uri-&gt;query_keywords
+<p></p>
+<li></li>
+$url-&gt;localpath and friends map to $uri-&gt;file.
+<p></p>
+<li></li>
+$url-&gt;address and $url-&gt;encoded822addr: same as $uri-&gt;to for mailto URI
+<p></p>
+<li></li>
+$url-&gt;groupart method for news URI
+<p></p>
+<li></li>
+$url-&gt;article: same as $uri-&gt;message
+<p></p></ul>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../../../site/lib/URI.html">the URI manpage</a>, <a href="../../../site/lib/URI/WithBase.html">the URI::WithBase manpage</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 1998-2000 Gisle Aas.</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;URI::URL - Uniform Resource Locators</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        elementFormDefault="qualified"
+        attributeFormDefault="unqualified">
+
+  <xs:include schemaLocation="base.xsd"/>
+  <xs:simpleType name="aktenbildnerName">
+    <xs:annotation>
+      <xs:documentation xml:lang="de">Bezeichnung der Stelle, der Organisationseinheit oder der Person(en), welche die Unterlagen oder die Datensammlung erstellt oder geführt hat. Falls der Aktenbildner unbekannt ist, muss die Angabe "Aktenbildner unbekannt" eingetragen werden.</xs:documentation>
+      <xs:documentation xml:lang="en">Designation of the authority, organisational unit or person(s) that created or managed the documents or the data collection. If the records creator is unknown, the information "Records creator unknown" must be entered.</xs:documentation>
+      <xs:documentation xml:lang="fr">Désignation du service, de l'unité organisationnelle ou de la (des) personne(s), qui a créé ou géré les documents ou la collection de données. Dans le cas où le producteur de dossiers est inconnu, l'indication "producteur de dossiers inconnu" doit être inscrite.</xs:documentation>
+      <xs:documentation xml:lang="it"/>
+    </xs:annotation>
+    <xs:restriction base="text2"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="systemName">
+    <xs:annotation>
+      <xs:documentation xml:lang="de">Name des Informationssystems, aus dem die abgelieferten Daten (FILES), Dossiers und Dokumente (GEVER) stammen.</xs:documentation>
+      <xs:documentation xml:lang="en">Name of the information system from which the data (FILES), dossiers and documents (GEVER) submitted come.</xs:documentation>
+      <xs:documentation xml:lang="fr">Nom du système d'information duquel proviennent les données (FILES), les dossiers et les documents (GEVER) versés.</xs:documentation>
+      <xs:documentation xml:lang="it"/>
+    </xs:annotation>
+    <xs:restriction base="text3"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="systemBeschreibung">
+    <xs:annotation>
+      <xs:documentation xml:lang="de">Knappe Beschreibung des Informationssystems, aus dem die abgelieferten Daten (FILES) stammen. Die Beschreibung gibt Auskunft über den Zweck (inkl. Angabe der gesetzlichen Grundlagen), die Architektur, die Entwicklung und über relevante Ergänzungen und Änderungen des Systems. Zudem können hier Angaben zur Datenerhebung und zu den Organisationseinheiten gemacht werden, die neben dem Aktenbildner das System verwenden.</xs:documentation>
+      <xs:documentation xml:lang="en">Brief description of the information system from which the data (FILES) submitted come. The description provides information on the purpose (including an indication of the legal bases), architecture and development of the system as well as relevant additions and changes. Information on data gathering and the organisational units that use the system in addition to the records creator can also be supplied here.</xs:documentation>
+      <xs:documentation xml:lang="fr">Description concise du système d'information duquel proviennent les données (FILES) versées. La description renseigne sur le but (y compris l'indication des bases légales), l'architecture, le développement et sur les compléments et modifications importants du système. En outre, les indications sur la collecte des données et sur les unités organisationnelles, qui emploient le système en dehors du producteur de dossiers, peuvent être données ici.</xs:documentation>
+      <xs:documentation xml:lang="it"/>
+    </xs:annotation>
+    <xs:restriction base="text4"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="verwandteSysteme">
+    <xs:annotation>
+      <xs:documentation xml:lang="de">Systeme, die mit dem beschriebenen System Daten ausgetauscht haben und damit Subsysteme, Parallelsysteme oder übergeordnete Systeme sind. Hier werden die Bezeichnungen der Systeme und die Art der Verwandtschaft eingetragen.</xs:documentation>
+      <xs:documentation xml:lang="en">Brief description of the information system from which the data (FILES) submitted come. The description provides information on the purpose (including an indication of the legal bases), architecture and development of the system as well as relevant additions and changes. Information on data gathering and the organisational units that use the system in addition to the records creator can also be supplied here.</xs:documentation>
+      <xs:documentation xml:lang="fr">Systèmes qui ont échangé des données avec le système décrit et qui sont ainsi des sous-systèmes, des systèmes parallèles ou des systèmes supérieurs. Ici sont reportées les désignations des systèmes et leur relation.</xs:documentation>
+      <xs:documentation xml:lang="it"/>
+    </xs:annotation>
+    <xs:restriction base="text4"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="archivierungsmodusLoeschvorschriften">
+    <xs:annotation>
+      <xs:documentation xml:lang="de">Angaben darüber, auf welche Weise die Daten aus dem System archiviert werden, allfällige Löschvorschriften, Angaben darüber, welche Funktionalitäten des Originalsystems nicht archiviert werden konnten, und vereinbartes Intervall der Ablieferungen sind hier zu nennen.</xs:documentation>
+      <xs:documentation xml:lang="en">Information about the way in which the data from the system are archived, any rules on deletion, information about which functionalities of the original system could not be archived, and the agreed interval for submissions are to be indicated here.</xs:documentation>
+      <xs:documentation xml:lang="fr">Informations sur la manière dont sont archivées les données du système, sur les éventuelles directives d'effacement, sur la fonctionnalité du système original qui ne peut pas être archivée, et sur l'intervalle convenu de versement sont ici à indiquer.</xs:documentation>
+      <xs:documentation xml:lang="it"/>
+    </xs:annotation>
+    <xs:restriction base="text4"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="registratur">
+    <xs:annotation>
+      <xs:documentation xml:lang="de">Name der Ablage, für welche das primäre Ordnungssystem verwendet wird und die einem Mandanten im System entspricht. Eine aktenbildende Stelle kann im Prinzip mehr als eine Registratur führen. Pro Registratur gibt es allerdings nur ein primäres Ordnungssystem.</xs:documentation>
+      <xs:documentation xml:lang="en">Name of the archive for which the primary classification system is used and that corresponds to a client in the system. In principle, a records-creating authority may maintain more than one registry. However, there is only one primary classification system for each registry.</xs:documentation>
+      <xs:documentation xml:lang="fr">Nom de l’archivage pour lequel le système de classement primaire est utilisé et qui correspond à un mandant dans le système. Un service qui crée des dossiers peut, en principe, gérer plus qu’un enregistrement. Par enregistrement toutefois, il n’y a qu’un système de classement primaire.</xs:documentation>
+      <xs:documentation xml:lang="it"/>
+    </xs:annotation>
+    <xs:restriction base="text2"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="geschichteAktenbildner">
+    <xs:annotation>
+      <xs:documentation xml:lang="de">Allgemeiner Überblick über die Geschichte des Aktenbildners und Angaben über Vorgänger und Nachfolgerorganisationen.</xs:documentation>
+      <xs:documentation xml:lang="en">General overview of the history of the records creator and information about predecessor and successor organisations.</xs:documentation>
+      <xs:documentation xml:lang="fr">Aperçu général sur l'histoire du service producteur de documents et indications sur les prédécesseurs et les organisations ayant pris la suite.</xs:documentation>
+      <xs:documentation xml:lang="it"/>
+    </xs:annotation>
+    <xs:restriction base="text4"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="bemerkungProvenienz">
+    <xs:annotation>
+      <xs:documentation xml:lang="de">Zusätzliche Informationen, die den Aktenbildner und die Herkunft der Unterlagen oder der Datensammlung betreffen.</xs:documentation>
+      <xs:documentation xml:lang="en">Additional information relating to the records creator and the origin of the documents or the data collection.</xs:documentation>
+      <xs:documentation xml:lang="fr">Informations complémentaires, qui concernent le producteur de dossiers et la provenance des documents ou de la collection de données.</xs:documentation>
+      <xs:documentation xml:lang="it"/>
+    </xs:annotation>
+    <xs:restriction base="text4"/>
+  </xs:simpleType>
+
+</xs:schema>

@@ -1,0 +1,553 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<HTML>
+<HEAD>
+<TITLE>ActivePerl 5.8.4.810 -- Installation Guide</TITLE>
+<LINK REL="stylesheet" HREF="Active.css" TYPE="text/css">
+</HEAD>
+
+<BODY>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#EAE2BB">
+<tr> 
+<td width="57"><a target=_blank href="http://www.ActiveState.com/ActivePerl/">
+<img src="images/activeperl_logo.gif" width="57" height="48" border="0" alt="ActivePerl"></a></td>
+<td><div align="center" class="heading">ActivePerl User Guide</div></td>
+<td width="112"><a target=_blank  href="http://www.ActiveState.com">
+<img src="images/AS_logo.gif" width="112" height="48" border="0"  alt="ActiveState" /></a></td>
+</tr>
+<tr>
+<td class="lineColour" colspan="3"></td>
+</tr>
+</table>
+
+<h1>Installing ActivePerl</h1>
+
+<A NAME="__index__"></A>
+<!-- INDEX BEGIN -->
+
+<UL>
+
+	<LI><A HREF="#activeperl 5.8.4.810  installation guide">ActivePerl 5.8.4.810 - Installation Guide</A></LI>
+	<UL>
+
+		<LI><A HREF="#installing activeperl on linux (x86)">Installing ActivePerl on Linux (x86)</A></LI>
+		<UL>
+
+			<LI><A HREF="#linux prerequisites">Linux Prerequisites</A></LI>
+			<LI><A HREF="#linux installers">Linux Installers</A></LI>
+			<LI><A HREF="#linux configuration">Linux Configuration</A></LI>
+			<LI><A HREF="#uninstalling activeperl on linux">Uninstalling ActivePerl on Linux</A></LI>
+		</UL>
+
+		<LI><A HREF="#installing activeperl on solaris (sparc)">Installing ActivePerl on Solaris (sparc)</A></LI>
+		<UL>
+
+			<LI><A HREF="#solaris prerequisites">Solaris Prerequisites</A></LI>
+			<LI><A HREF="#solaris installers">Solaris Installers</A></LI>
+			<LI><A HREF="#solaris configuration">Solaris Configuration</A></LI>
+			<LI><A HREF="#uninstalling activeperl on solaris">Uninstalling ActivePerl on Solaris</A></LI>
+		</UL>
+
+		<LI><A HREF="#installing activeperl on windows (x86)">Installing ActivePerl on Windows (x86)</A></LI>
+		<UL>
+
+			<LI><A HREF="#windows prerequisites">Windows Prerequisites</A></LI>
+      <li><a href="#upgrade_56">Upgrading from ActivePerl 5.6.x</a></li>
+      <li><a href="#upgrade_58">Upgrading from ActivePerl 5.8.x</a></li>
+			<LI><A HREF="#windows installers">Windows Installers</A></LI>
+			<LI><A HREF="#windows configuration">Windows Configuration</A></LI>
+			<LI><A HREF="#uninstalling activeperl on windows">Uninstalling ActivePerl on Windows</A></LI>
+		</UL>
+
+	</UL>
+
+</UL>
+<!-- INDEX END -->
+
+<HR>
+<P>
+
+<P>Welcome, and thanks for downloading ActivePerl.  This release corresponds
+to Perl version 5.8.1.</P>
+<P>Please note that ActivePerl 800 series builds are NOT binary-compatible with
+the older 600 and 500 series builds.  In particular, do not attempt to use extensions
+or PPM packages built for the 500 and 600 series builds with ActivePerl 800 series
+builds and vice versa.</P>
+<P>Binaries for the following platforms are available:</P>
+<UL>
+<LI>
+Linux x86 for Red Hat 6.2 or later
+<P></P>
+<LI>
+Linux x86 for Debian 2.2 or later
+<P></P>
+<LI>
+Solaris sparc for Solaris 2.6 or later
+<P></P>
+<LI>
+Windows x86 for Windows 9x, NT, Me, 2000 and 2003
+<P></P></UL>
+<P>
+<H2><A NAME="installing activeperl on linux (x86)">Installing ActivePerl on Linux (x86)</A></H2>
+<P>
+<H3><A NAME="linux prerequisites">Linux Prerequisites</A></H3>
+<UL>
+<LI>
+Hardware: 75 MB hard disk space for typical install
+<P></P>
+<LI>
+Operating System: Red Hat 6.2 or later, Debian 2.2 or later
+<P></P>
+<LI>
+Online Help: Web browser
+<P></P>
+<LI>
+Perl Environment Variables: if you have set Perl environment variables such 
+as <CODE>PERLLIB</CODE>, <CODE>PERL5LIB</CODE> or <CODE>PERL5OPT</CODE>, you should unset them before 
+installing ActivePerl.  Otherwise, these variables may cause incompatible 
+versions of Perl modules to be used during the installation process.
+<P></P></UL>
+<P>
+<H3><A NAME="linux installers">Linux Installers</A></H3>
+<DL>
+<DT><STRONG><A NAME="item_RPM_Package_for_Red_Hat_6%2E2_or_later">RPM Package for Red Hat 6.2 or later</A></STRONG><BR>
+<DD>
+The Red Hat compatible package is in RPM format.  This should be installed
+as root, using the following command:
+<PRE>
+    % rpm -i ActivePerl-5.8.4.810-i686-linux.rpm</PRE>
+<P>This will install ActivePerl into /usr/local/ActivePerl-5.8.  If you
+wish to change the default install location, use the <CODE>--prefix</CODE> option 
+as follows:</P>
+<PRE>
+    % rpm -i --prefix /opt/ActivePerl-5.8 ActivePerl-5.8.4.810-i686-linux.rpm</PRE>
+<P>To uninstall Activeperl, run:</P>
+<PRE>
+    % rpm -e ActivePerl</PRE>
+<P>The RPM package has only been tested with Red Hat 6.2, but is expected to be
+compatible with other Red Hat 6.2 compatible installations as well.</P>
+<P></P>
+<DT><STRONG><A NAME="item_DPKG_Package_for_Debian_2%2E2_or_later">DPKG Package for Debian 2.2 or later</A></STRONG><BR>
+<DD>
+The Debian-compatible package is in dpkg format.  This should be installed
+as root, using the following command:
+<PRE>
+    % dpkg -i ActivePerl-5.8.4.810-i686-linux.deb</PRE>
+<P>This will install ActivePerl into /usr/local/ActivePerl-5.8.  The dpkg
+installation package has no mechanism to change the default installation
+location.  Consider installing ActivePerl using the ActivePerl Generic
+Installer or the RPM package if you need this.</P>
+<P>To uninstall ActivePerl, run:</P>
+<PRE>
+    % dpkg -r ActivePerl</PRE>
+<P>The Debian package has only been tested with Debian 2.2, but is expected
+to be compatible with other Debian 2.2 compatible installations as well.</P>
+<P></P>
+<DT><STRONG><A NAME="item_Generic_AS_Package_for_Linux">Generic AS Package for Linux</A></STRONG><BR>
+<DD>
+The generic installer allows installation as an unprivileged user 
+into a user-specified path. GNU tar is required for extracting the files.
+See ``Known Issues'' in the ActivePerl Release Notes for details.
+<P>Download the distribution to a temporary directory, extract the files,
+chdir to the ActivePerl directory and then run the script ``install.sh''.
+The installation script will prompt you for the target installation
+directory.</P>
+<PRE>
+    % tar zxf ActivePerl-5.8.4.810-i686-linux.tar.gz
+    % cd ActivePerl-5.8.4.810
+    % ./install.sh</PRE>
+<P></P></DL>
+<P>
+<H3><A NAME="linux configuration">Linux Configuration</A></H3>
+<P>The Red Hat and Debian packages are installed into the
+/usr/local/ActivePerl-5.8 directory.  Add the /usr/local/ActivePerl-5.8/bin
+directory to your PATH environment variable to conveniently access it.
+For example, in the C shell:</P>
+<PRE>
+    % setenv PATH /usr/local/ActivePerl-5.8/bin:$PATH</PRE>
+<P>The ActivePerl Generic installer allows you to install the package anywhere
+that the user has write permission.  Add the bin directory to your PATH
+environment variable to conveniently access it.  For example, in the
+C shell (assuming you installed into /home/larry/ActivePerl-5.8):</P>
+<PRE>
+    % setenv PATH /home/larry/ActivePerl-5.8/bin:$PATH</PRE>
+<P>
+<H3><A NAME="uninstalling activeperl on linux">Uninstalling ActivePerl on Linux</A></H3>
+<DL>
+<DT><STRONG><A NAME="item_Debian_Package">Debian Package</A></STRONG><BR>
+<DD>
+If you installed ActivePerl using the DPKG format installer, uninstall 
+as follows:
+<PRE>
+    dpkg -r ActivePerl</PRE>
+<P></P>
+<DT><STRONG><A NAME="item_RPM_Package">RPM Package</A></STRONG><BR>
+<DD>
+If you installed ActivePerl using the RPM format installer, uninstall 
+as follows:
+<PRE>
+    rpm -e ActivePerl</PRE>
+<P></P>
+<DT><STRONG><A NAME="item_AS_Package">AS Package</A></STRONG><BR>
+<DD>
+If you installed ActivePerl using the AS format installer, remove the directory 
+into which ActivePerl was installed. For example:
+<PRE>
+    /bin/rm -rf /usr/local/ActivePerl-5.8</PRE>
+<P></P></DL>
+<P>
+<H2><A NAME="installing activeperl on solaris (sparc)">Installing ActivePerl on Solaris (sparc)</A></H2>
+<P>
+<H3><A NAME="solaris prerequisites">Solaris Prerequisites</A></H3>
+<UL>
+<LI>
+Hardware: 75 MB hard disk space for typical install
+<P></P>
+<LI>
+Operating System: Solaris 2.6 or later
+<P></P>
+<LI>
+Online Help: Web browser
+<P></P>
+<LI>
+Perl Environment Variables: if you have set Perl environment variables such 
+as <CODE>PERLLIB</CODE>, <CODE>PERL5LIB</CODE> or <CODE>PERL5OPT</CODE>, you should unset them before 
+installing ActivePerl.  Otherwise, these variables may cause incompatible 
+versions of Perl modules to be used during the installation process.
+<P></P></UL>
+<P>
+<H3><A NAME="solaris installers">Solaris Installers</A></H3>
+<DL>
+<DT><STRONG><A NAME="item_PKGADD_Package">PKGADD Package</A></STRONG><BR>
+<DD>
+The Solaris package is in pkgadd format.  This should be installed
+as root, using the following commands:
+<PRE>
+    % gunzip ActivePerl-5.8.4.810-sun4-solaris.pkg.gz
+    % pkgadd -d ActivePerl-5.8.4.810-sun4-solaris.pkg</PRE>
+<P>pkgadd will query you for the installation location, which can be
+changed from the default of /usr/local/ActivePerl-5.8.</P>
+<P>To uninstall ActivePerl, run:</P>
+<PRE>
+    % pkgrm ASperl</PRE>
+<P>This package has only been tested with Solaris 2.6, but is expected to be
+compatible with other Solaris 2.6 compatible installations as well,
+including Solaris 2.7 and Solaris 2.8.</P>
+<P></P>
+<DT><STRONG><A NAME="item_Generic_AS_Package_for_Solaris">Generic AS Package for Solaris</A></STRONG><BR>
+<DD>
+The Generic Installer allows installation as an unprivileged user, and
+into a user-specified path. GNU tar is required for extracting the files. 
+See ``Known Issues'' in the ActivePerl Release Notes for details.
+<P>Download the distribution to a temporary directory, extract the files,
+chdir to the ActivePerl directory and then run the script ``install.sh''.
+The installation script will prompt you for the target installation
+directory.</P>
+<PRE>
+    % tar zxf ActivePerl-5.8.4.810-sun4-solaris.tar.gz
+    % cd ActivePerl-5.8.4.810
+    % ./install.sh</PRE>
+<P></P></DL>
+<P>
+<H3><A NAME="solaris configuration">Solaris Configuration</A></H3>
+<P>The Solaris package is installed into the /usr/local/ActivePerl-5.8 directory.  
+Add the /usr/local/ActivePerl-5.8/bin directory to your PATH environment 
+variable to conveniently access it. For example, in the C shell:</P>
+<PRE>
+    % setenv PATH /usr/local/ActivePerl-5.8/bin:$PATH</PRE>
+<P>The ActivePerl Generic installer allows you to install the package anywhere
+that the user has write permission.  Add the bin directory to your PATH
+environment variable to conveniently access it.  For example, in the
+C shell (assuming you installed into /home/larry/ActivePerl-5.8):</P>
+<PRE>
+    % setenv PATH /home/larry/ActivePerl-5.8/bin:$PATH</PRE>
+<P>
+<H3><A NAME="uninstalling activeperl on solaris">Uninstalling ActivePerl on Solaris</A></H3>
+<DL>
+<DT><STRONG>PKGADD Package</STRONG><BR>
+<DD>
+If you installed ActivePerl using the PKGADD format installer, 
+uninstall as follows:
+<PRE>
+    pkgrm -d ASperl</PRE>
+<P></P>
+<DT><STRONG>AS Package</STRONG><BR>
+<DD>
+If you installed ActivePerl using the AS format installer, remove the 
+directory into which ActivePerl was installed. For example:
+<PRE>
+    /bin/rm -rf /usr/local/ActivePerl-5.8</PRE>
+<P></P></DL>
+<P>
+<H2><A NAME="installing activeperl on windows (x86)">Installing ActivePerl on Windows (x86)</A></H2>
+<P>
+<H3><A NAME="windows prerequisites">Windows Prerequisites</A></H3>
+<UL>
+<LI>
+<STRONG>Hardware</STRONG>: 75 MB hard disk space for typical install
+<P></P>
+<LI>
+<STRONG>Perl for ISAPI</STRONG>: requires an ISAPI-compatible web server, such as IIS 4.0 
+or greater, or PWS 4.0 or greater
+<P></P>
+<LI>
+<STRONG>PerlScript</STRONG>: requires an ActiveX scripting host such as Internet Explorer 
+4.0 or greater or Windows Scripting Host
+<P></P>
+<LI>
+<STRONG>Perl Environment Variables</STRONG>: if Perl environment variables such as <CODE>PERLLIB</CODE>, 
+<CODE>PERL5LIB</CODE> or <CODE>PERL5OPT</CODE> have been set on your system, you should unset them 
+before installing ActivePerl.  Otherwise, these variables may cause incompatible 
+versions of Perl modules to be used during the installation process.
+<P></P>
+<LI>
+<STRONG>System Account</STRONG>: (MSI Installer only) Do not launch the installation package 
+from a directory for which the ``System'' account does not have read permission.  
+If you do, the Windows Installer Service will not be able to access the MSI 
+file in order to perform the installation.  You may get an error message to this 
+effect, or it may fail mysteriously.
+<P></P>
+<LI>
+<STRONG>Administrative Rights</STRONG>: If you are installing Perl on behalf of other users, 
+we recommend running the installer while logged in with an account that has 
+administrative privileges (Windows NT/2000/XP/2003).  Running without administrative 
+privileges results in the following limitations:
+<UL>
+<LI>
+The PerlScript feature will be unavailable.
+<P></P>
+<LI>
+ActivePerl applications will not write messages to the event log.
+<P></P>
+<LI>
+Environment variables are set only for the current user.
+<P></P>
+<LI>
+The option to create a file association for Perl files is disabled.
+<P></P>
+<LI>
+Registry entries are created under HKEY_CURRENT_USER and not under
+HKEY_LOCAL_MACHINE.
+<P></P></UL>
+</UL>
+<UL>
+<LI>
+<STRONG>Windows XP / Windows 2003 Server</STRONG>: no additional requirements
+<P></P>
+<LI>
+<STRONG>Windows 2000</STRONG>
+<UL>
+<LI>
+(MSI Installer only) Microsoft Windows Installer 2.0 or greater, available from:
+<A HREF="http://downloads.ActiveState.com/contrib/Microsoft/MSI2.0/NT/InstMsiW.exe">http://downloads.ActiveState.com/contrib/Microsoft/MSI2.0/NT/InstMsiW.exe</A>
+<P></P></UL>
+<LI>
+<STRONG>Windows Me</STRONG>
+<UL>
+<LI>
+(MSI Installer only) Microsoft Windows Installer 2.0 or greater, available from:
+<A HREF="http://downloads.ActiveState.com/contrib/Microsoft/MSI2.0/9x/InstMsiA.exe">http://downloads.ActiveState.com/contrib/Microsoft/MSI2.0/9x/InstMsiA.exe</A>
+<P></P></UL>
+<LI>
+<STRONG>Windows NT</STRONG>
+<UL>
+<LI>
+Service Pack 5 or greater
+<P></P>
+<LI>
+(MSI Installer only) Microsoft Windows Installer 2.0 or greater, available from:
+<A HREF="http://downloads.ActiveState.com/contrib/Microsoft/MSI2.0/NT/InstMsiW.exe">http://downloads.ActiveState.com/contrib/Microsoft/MSI2.0/NT/InstMsiW.exe</A>
+<P></P>
+<LI>
+(for the ActiveX Scripting Engine) Internet Explorer 5 or greater, available from:
+    <A HREF="http://windowsupdate.microsoft.com">http://windowsupdate.microsoft.com</A>
+<P></P></UL>
+<LI>
+<STRONG>Windows 9x</STRONG>
+<UL>
+<LI>
+(MSI Installer only) Microsoft Windows Installer 2.0 or greater, available from:
+<A HREF="http://downloads.ActiveState.com/contrib/Microsoft/MSI2.0/9x/InstMsiA.exe">http://downloads.ActiveState.com/contrib/Microsoft/MSI2.0/9x/InstMsiA.exe</A>
+<P></P>
+<LI>
+(for the ActiveX Scripting Engine) Internet Explorer 5 or greater available from:
+    <A HREF="http://windowsupdate.microsoft.com">http://windowsupdate.microsoft.com</A>
+<P></P>
+<LI>
+(for the ActiveX Scripting Engine) DCOM for Windows 9x, available from:
+    <A HREF="http://www.microsoft.com/com/resources/downloads.asp">http://www.microsoft.com/com/resources/downloads.asp</A>
+<P></P>
+<LI>
+MSVCRT (Windows 95 only), available from:
+    <A HREF="ftp://ftp.microsoft.com/softlib/mslfiles/mxvcrt.exe">ftp://ftp.microsoft.com/softlib/mslfiles/mxvcrt.exe</A>
+<P></P></UL>
+</UL>
+<P>
+
+<h3><a name="upgrade_56">Upgrading from ActivePerl 5.6.x</a></h3>
+
+<p>When upgrading from ActivePerl version 5.6, additional packages
+that were installed using PPM must be manually reinstalled for 
+ActivePerl 5.8. Before performing the upgrade, generate a list of modules by
+running the following command at a command prompt:</p>
+
+<pre>
+dir /b c:\perl\site\lib\ppm-conf\*.ppd > c:\ppm_modules.txt
+</pre>
+
+<p>This will write a list of the modules installed via PPM to the file
+<code>ppm_modules.txt</code>. Alter the command as necessary to suit your
+installation.</p>
+
+<p>After uninstalling the old version of ActivePerl, manually delete the
+<code>c:\perl</code> directory, then install ActivePerl 5.8.x. Use the
+version of PPM installed with ActivePerl 5.8 to re-install the modules listed
+in <code>ppm_modules.txt</code>.</p>
+
+<h3><a name="upgrade_58">Upgrading from ActivePerl 5.8.x</a></h3>
+
+<p>If you have installed modules using the PPM included with earlier versions
+of ActivePerl 5.8, use the following steps to upgrade ActivePerl. PPM modules can
+only be migrated to later ActivePerl builds if you installed ActivePerl using
+the <a href="#windows installers">MSI Installer</a>.</p>
+
+<ol>
+  <li>Use Window's <strong>Add / Remove Programs</strong> applet (accessible
+  from the <strong>Control Panel</strong>) to uninstall ActivePerl.</li>
+  
+  <li>Manually delete all directories beneath the Perl installation directory
+  (by default <code>C:\Perl</code>) except the <code>site\lib</code> directory.</li>
+  
+  <li>Install ActivePerl to the same directory (i.e., <code>C:\Perl</code>).</li>
+  
+  <li>Use the <strong>ppm upgrade</strong> command to check for module updates.</li>
+</ol>
+  
+
+
+
+<H3><A NAME="windows installers">Windows Installers</A></H3>
+
+<p>If you are using ActivePerl to serve CGI / ASP scripts using IIS or
+another Web server, stop the Web server before installing ActivePerl.</p>
+
+<DL>
+<DT><STRONG><A NAME="item_MSI_Installer_Package">MSI Installer Package</A></STRONG><BR>
+<DD>
+To install the MSI package double-click on the MSI file in Windows Explorer.
+<P>Do not install over a 500 or 600 series build of ActivePerl.  This package must be 
+installed into a separate directory.</P>
+<DL>
+<DT><STRONG><A NAME="item_MSI_Package_Installation_from_the_Command_Line">MSI Package Installation from the Command Line</A></STRONG><BR>
+<DD>
+You can install ActivePerl from the command line using the 'msiexec'
+program. For example:
+<PRE>
+    msiexec /i msi_file.msi</PRE>
+<P>The ADDLOCAL command line property is used to specify which features should 
+be installed. (If ADDLOCAL is not specified, all features are installed.) 
+For example:</P>
+<PRE>
+    msiexec /i msi_file.msi ADDLOCAL=&quot;PERL_FEATURE,PERLIS&quot;</PRE>
+<P>The following features may be specified with the ADDLOCAL switch:</P>
+<UL>
+<LI>
+PERL_FEATURE (the Perl core)
+<P></P>
+<LI>
+PPM (the Programmer's Package Manager)
+<P></P>
+<LI>
+PERLIS (the Perl for ISAPI interpreter)
+<P></P>
+<LI>
+PERLSE (the Perl ActiveX Scripting Engine)
+<P></P>
+<LI>
+EXAMPLES (some simple examples)
+<P></P>
+<LI>
+DOCUMENTATION (the ActivePerl documentation)
+<P></P></UL>
+<P>A set of command-line properties can be used to configure the installation. 
+For example:</P>
+<PRE>
+    msiexec /i msi_file.msi TARGETDIR=&quot;c:\perl&quot; PERL_PATH=&quot;Yes&quot;</PRE>
+<UL>
+<LI>
+TARGETDIR: Used to specify the absolute path where ActivePerl will be 
+installed. If not specified, ActivePerl will be installed in a default 
+location on the same drive as the Windows operating system.
+If this option is used, a value is required.
+<P></P>
+<LI>
+PL_IISMAP: If this option is set to 'Yes', the installer will create a 
+global IIS script mapping for '.pl' and Perl. By default, the installation 
+does not create the script mapping.
+<P></P>
+<LI>
+PLX_IISMAP: If this option is set to 'Yes', the installer will create
+a global IIS script mapping for '.plx' and PerlIS. By default, the installation 
+does not create the script mapping.
+<P></P>
+<LI>
+PERL_PATH: If this option is set to 'Yes', the Perl/bin directory
+will be added to the system PATH environment variable. By default, 
+the directory is not added to the path.
+<P></P></UL>
+<P>The following command-line switches can be used:</P>
+<DL>
+<DT><STRONG><A NAME="item_Silent_Mode">Silent Mode</A></STRONG><BR>
+<DD>
+To run in silent mode, specify the '/q' command line option. The installer 
+will run with no UI.
+<P></P>
+<DT><STRONG><A NAME="item_Logging">Logging</A></STRONG><BR>
+<DD>
+To log the installation process, specify the '/l' command line option and 
+the name of the log file.  For example:
+<PRE>
+    msiexec /i msi_file.msi /l log.txt</PRE>
+<P>To enable verbose logging, use the '*v' modifier with the '/l' command 
+line option.  For example:</P>
+<PRE>
+    msiexec /i msi_file.msi /l*v log.txt</PRE>
+<P></P></DL>
+</DL>
+<DT><STRONG><A NAME="item_AS_Installer_Package">AS Installer Package</A></STRONG><BR>
+<DD>
+The AS package is a generic installation package that can be used on 
+systems where the MSI package is not supported. The AS package provides 
+no uninstall functionality. To install using the AS package, double-click 
+the the installer file and follow the prompts.
+<P></P></DL>
+<P>
+<H3><A NAME="windows configuration">Windows Configuration</A></H3>
+<P>If you run Perl at the command prompt, the script will be executed by the first 
+Perl.exe it encounters in the list of paths in the PATH environment variable. 
+To ensure the script is executed by the Perl interpeter you want it to be executed
+by, you can specify the complete path to the Perl.exe you want to use. 
+(typing perl -v at the command prompt will tell you which version 
+of Perl is currently first in your PATH)</P>
+<P>Installing ActivePerl will change your Path environment variable and may change 
+registry settings, such as file associations, which may affect your Web server. 
+If you want to use a previously installed copy of Perl, you will need to
+modify these settings.</P>
+<P>
+<H3><A NAME="uninstalling activeperl on windows">Uninstalling ActivePerl on Windows</A></H3>
+<DL>
+<DT><STRONG><A NAME="item_MSI_Package">MSI Package</A></STRONG><BR>
+<DD>
+If you installed ActivePerl using the MSI installer, uninstall using the 
+Windows <STRONG>Add / Remove Programs</STRONG> applet.
+<P></P>
+<DT><STRONG>AS Package</STRONG><BR>
+<DD>
+If you installed ActivePerl using the AS installer, uninstall by deleting 
+the directory in which ActivePerl was installed.
+<P></P></DL>
+
+</BODY>
+
+</HTML>

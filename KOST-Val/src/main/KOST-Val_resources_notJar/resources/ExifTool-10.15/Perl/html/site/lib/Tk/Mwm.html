@@ -1,0 +1,165 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Tk::Mwm - Communicate with the Motif window manager.</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::Mwm - Communicate with the Motif window manager.</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#methods">METHODS</a></li>
+	<li><a href="#bugs">BUGS</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#keywords">KEYWORDS</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Tk::Mwm - Communicate with the <code>Motif(tm)</code> window manager.</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<strong>use Tk::Mwm;</strong></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>$toplevel</em>-&gt;<strong>mwm</strong><em>Option</em>?(<em>args</em>)?</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>$toplevel</em>-&gt;<strong>mwm</strong>(<em>option</em> ?,<em>args</em>?)</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>Interface to special extentions supported by mwm.</p>
+<p>
+</p>
+<hr />
+<h1><a name="methods">METHODS</a></h1>
+<dl>
+<dt><strong><a name="item_mwmdecoration"><em>$toplevel</em>-&gt;<strong>mwmDecoration</strong>?(?option??=&gt;value? ?,...?)?</a></strong><br />
+</dt>
+<dd>
+When no options are given, this method returns the values of all the
+decorations options for the toplevel window with the <em>$toplevel</em>.
+When only one option is given without specifying the value, the
+current value of that option is returned.
+When more than one ``option-value'' pairs are passed to this method,
+the specified values will be assigned to the corresponding options. As
+a result, the appearance of the Motif decorations around the toplevel
+window will be changed.
+Possible options are: <strong>-border</strong>, <strong>-menu</strong>, <strong>-maximize</strong>,
+<strong>-minimize</strong>, <strong>-resizeh</strong> and <strong>-title</strong>. The value must be a
+Boolean value. The values returned by this command are undefined when
+the window is not managed by mwm.
+</dd>
+<p></p>
+<dt><strong><a name="item_mwmismwmrunning"><em>$toplevel</em>-&gt;<strong>mwmIsmwmrunning</strong></a></strong><br />
+</dt>
+<dd>
+This returns value is true if mwm is running on the screen where the specified
+window is located, false otherwise.
+</dd>
+<p></p>
+<dt><strong><a name="item_mwmprotocol"><em>$toplevel</em>-&gt;<strong>mwmProtocol</strong></a></strong><br />
+</dt>
+<dd>
+When no additional options are given, this method returns all
+protocols associated with this toplevel window.
+</dd>
+<p></p>
+<dt><strong><em>$toplevel</em>-&gt;<strong>mwmProtocol</strong>(<strong>activate</strong> =&gt; <em>protocol_name</em>)</strong><br />
+</dt>
+<dd>
+Activate the mwm protocol message in mwm's menu.
+</dd>
+<p></p>
+<dt><strong><a name="item_mwmprotocol"><em>$toplevel</em>-&gt;<strong>MwmProtocol</strong>(<strong>add</strong> =&gt; <em>protocol_name</em>, <em>menu_message</em>)</a></strong><br />
+</dt>
+<dd>
+Add a new mwm protocol message for this toplevel window. The
+message is identified by the string name specified in
+<em>protocol_name</em>.  A menu item will be added into mwm's menu as
+specified by <em>menu_message</em>.  Once a new mwm protocol message is
+added to a toplevel, it can be caught by the TK <strong>protocol</strong>
+method. Here is an example:
+</dd>
+<dd>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>$toplevel</em>-&gt;<strong>mwmProtocol</strong>(<strong>'add'</strong> =&gt; 'MY_PRINT_HELLO', '``Print Hello''  _H Ctrl&lt;Key&gt;H');</p>
+</dd>
+<dd>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>$toplevel</em>-&gt;<strong>protocol</strong>(<strong>'MY_PRINT_HELLO'</strong> =&gt; sub {print ``Hello''});</p>
+</dd>
+<p></p>
+<dt><strong><em>$toplevel</em>-&gt;<strong>mwmProtocol</strong>(<strong>'deactivate'</strong> =&gt; <em>protocol_name</em>)</strong><br />
+</dt>
+<dd>
+Deactivate the mwm protocol message in mwm's menu.
+</dd>
+<p></p>
+<dt><strong><em>$toplevel</em>-&gt;<strong>mwmProtocol</strong>(<strong>'delete'</strong> =&gt; <em>protocol_name</em>)</strong><br />
+</dt>
+<dd>
+Delete the mwm protocol message from mwm's menu. Please note that the
+window manager protocol handler associated with this protocol (by the
+<strong>protocol</strong> method) is not deleted automatically. You have to
+delete the protocol handle explicitly.  E.g.:
+</dd>
+<dd>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>$mw</em>-&gt;<strong>mwmProtocol</strong>(<strong>'delete'</strong> =&gt; 'MY_PRINT_HELLO');</p>
+</dd>
+<dd>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>$mw</em>-&gt;<strong>protocol</strong>(<strong>'MY_PRINT_HELLO'</strong> =&gt; '');</p>
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="bugs">BUGS</a></h1>
+<p>This is a Tix extension which perl/Tk has adopted. It has not been
+tested as perl/Tk's author has not got round to installing a Motif Window
+Manager.</p>
+<p>On some versions of mwm, the <strong>-border</strong> will not disappear unless
+<strong>-resizeh</strong> is turned off. Also, the <strong>-title</strong> will not disappear
+unless all of <strong>-title</strong>, <strong>-menu</strong>, <strong>-maximize</strong> and
+<strong>-minimize</strong> are turned off.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../../../site/lib/Tk/Wm.html">Tk::Wm</a>
+<a href="../../../site/lib/Tk/tixWm.html">Tk::tixWm</a>
+<a href="../../../site/lib/Tk/Toplevel.html">Tk::Toplevel</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="keywords">KEYWORDS</a></h1>
+<p>window manager, mwm, TIX</p>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Ioi Kim Lam - <a href="mailto:ioi@graphics.cis.upenn.edu">ioi@graphics.cis.upenn.edu</a></p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::Mwm - Communicate with the Motif window manager.</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

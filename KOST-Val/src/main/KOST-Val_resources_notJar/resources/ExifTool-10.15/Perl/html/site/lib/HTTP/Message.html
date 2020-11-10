@@ -1,0 +1,276 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>HTTP::Message - HTTP style message</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;HTTP::Message - HTTP style message</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>HTTP::Message - HTTP style message (base class)</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ use base 'HTTP::Message';</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>An <code>HTTP::Message</code> object contains some headers and a content body.
+The following methods are available:</p>
+<dl>
+<dt><strong><a name="item_new">$mess = HTTP::Message-&gt;new</a></strong><br />
+</dt>
+<dt><strong>$mess = HTTP::Message-&gt;new( $headers )</strong><br />
+</dt>
+<dt><strong>$mess = HTTP::Message-&gt;new( $headers, $content )</strong><br />
+</dt>
+<dd>
+This constructs a new message object.  Normally you would want
+construct <code>HTTP::Request</code> or <code>HTTP::Response</code> objects instead.
+</dd>
+<dd>
+<p>The optional $header argument should be a reference to an
+<code>HTTP::Headers</code> object or a plain array reference of key/value pairs.
+If an <code>HTTP::Headers</code> object is provided then a copy of it will be
+embedded into the constructed message, i.e. it will not be owned and
+can be modified afterwards without affecting the message.</p>
+</dd>
+<dd>
+<p>The optional $content argument should be a string of bytes.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item_parse">$mess = HTTP::Message-&gt;parse( $str )</a></strong><br />
+</dt>
+<dd>
+This constructs a new message object by parsing the given string.
+</dd>
+<p></p>
+<dt><strong><a name="item_headers">$mess-&gt;headers</a></strong><br />
+</dt>
+<dd>
+Returns the embedded <code>HTTP::Headers</code> object.
+</dd>
+<p></p>
+<dt><strong><a name="item_headers_as_string">$mess-&gt;headers_as_string</a></strong><br />
+</dt>
+<dt><strong>$mess-&gt;headers_as_string( $eol )</strong><br />
+</dt>
+<dd>
+Call the <a href="#item_as_string"><code>as_string()</code></a> method for the headers in the
+message.  This will be the same as
+</dd>
+<dd>
+<pre>
+    $mess-&gt;headers-&gt;as_string</pre>
+</dd>
+<dd>
+<p>but it will make your program a whole character shorter :-)</p>
+</dd>
+<p></p>
+<dt><strong><a name="item_content">$mess-&gt;content</a></strong><br />
+</dt>
+<dt><strong>$mess-&gt;content( $content )</strong><br />
+</dt>
+<dd>
+The <a href="#item_content"><code>content()</code></a> method sets the content if an argument is given.  If no
+argument is given the content is not touched.  In either case the
+original content is returned.
+</dd>
+<dd>
+<p>Note that the content should be a string of bytes.  Strings in perl
+can contain characters outside the range of a byte.  The <code>Encode</code>
+module can be used to turn such strings into a string of bytes.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item_add_content">$mess-&gt;add_content( $data )</a></strong><br />
+</dt>
+<dd>
+The <a href="#item_add_content"><code>add_content()</code></a> methods appends more data to the end of the current
+content buffer.
+</dd>
+<p></p>
+<dt><strong><a name="item_content_ref">$mess-&gt;content_ref</a></strong><br />
+</dt>
+<dd>
+The <a href="#item_content_ref"><code>content_ref()</code></a> method will return a reference to content buffer string.
+It can be more efficient to access the content this way if the content
+is huge, and it can even be used for direct manipulation of the content,
+for instance:
+</dd>
+<dd>
+<pre>
+  ${$res-&gt;content_ref} =~ s/\bfoo\b/bar/g;</pre>
+</dd>
+<dd>
+<p>This example would modify the content buffer in-place.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item_parts">$mess-&gt;parts</a></strong><br />
+</dt>
+<dt><strong>$mess-&gt;parts( @parts )</strong><br />
+</dt>
+<dt><strong>$mess-&gt;parts( \@parts )</strong><br />
+</dt>
+<dd>
+Messages can be composite, i.e. contain other messages.  The composite
+messages have a content type of <code>multipart/*</code> or <code>message/*</code>.  This
+method give access to the contained messages.
+</dd>
+<dd>
+<p>The argumentless form will return a list of <code>HTTP::Message</code> objects.
+If the content type of $msg is not <code>multipart/*</code> or <code>message/*</code> then
+this will return the empty list.  In scalar context only the first
+object is returned.  The returned message parts should be regarded as
+are read only (future versions of this library might make it possible
+to modify the parent by modifying the parts).</p>
+</dd>
+<dd>
+<p>If the content type of $msg is <code>message/*</code> then there will only be
+one part returned.</p>
+</dd>
+<dd>
+<p>If the content type is <code>message/http</code>, then the return value will be
+either an <code>HTTP::Request</code> or an <code>HTTP::Response</code> object.</p>
+</dd>
+<dd>
+<p>If an @parts argument is given, then the content of the message will
+modified. The array reference form is provided so that an empty list
+can be provided.  The @parts array should contain <code>HTTP::Message</code>
+objects.  The @parts objects are owned by $mess after this call and
+should not be modified or made part of other messages.</p>
+</dd>
+<dd>
+<p>When updating the message with this method and the old content type of
+$mess is not <code>multipart/*</code> or <code>message/*</code>, then the content type is
+set to <code>multipart/mixed</code> and all other content headers are cleared.</p>
+</dd>
+<dd>
+<p>This method will croak if the content type is <code>message/*</code> and more
+than one part is provided.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item_add_part">$mess-&gt;add_part( $part )</a></strong><br />
+</dt>
+<dd>
+This will add a part to a message.  The $part argument should be
+another <code>HTTP::Message</code> object.  If the previous content type of
+$mess is not <code>multipart/*</code> then the old content (together with all
+content headers) will be made part #1 and the content type made
+<code>multipart/mixed</code> before the new part is added.  The $part object is
+owned by $mess after this call and should not be modified or made part
+of other messages.
+</dd>
+<dd>
+<p>There is no return value.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item_clear">$mess-&gt;clear</a></strong><br />
+</dt>
+<dd>
+Will clear the headers and set the content to the empty string.  There
+is no return value
+</dd>
+<p></p>
+<dt><strong><a name="item_protocol">$mess-&gt;protocol</a></strong><br />
+</dt>
+<dt><strong>$mess-&gt;protocol( $proto )</strong><br />
+</dt>
+<dd>
+Sets the HTTP protocol used for the message.  The <a href="#item_protocol"><code>protocol()</code></a> is a string
+like <code>HTTP/1.0</code> or <code>HTTP/1.1</code>.
+</dd>
+<p></p>
+<dt><strong><a name="item_clone">$mess-&gt;clone</a></strong><br />
+</dt>
+<dd>
+Returns a copy of the message object.
+</dd>
+<p></p>
+<dt><strong><a name="item_as_string">$mess-&gt;as_string</a></strong><br />
+</dt>
+<dt><strong>$mess-&gt;as_string( $eol )</strong><br />
+</dt>
+<dd>
+Returns the message formatted as a single string.
+</dd>
+<dd>
+<p>The optional $eol parameter specifies the line ending sequence to use.
+The default is ``\n''.  If no $eol is given then as_string will ensure
+that the returned string is newline terminated (even when the message
+content is not).  No extra newline is appended if an explicit $eol is
+passed.</p>
+</dd>
+<p></p></dl>
+<p>All methods unknown to <code>HTTP::Message</code> itself are delegated to the
+<code>HTTP::Headers</code> object that is part of every message.  This allows
+convenient access to these methods.  Refer to <a href="../../../site/lib/HTTP/Headers.html">the HTTP::Headers manpage</a> for
+details of these methods:</p>
+<pre>
+    $mess-&gt;header( $field =&gt; $val )
+    $mess-&gt;push_header( $field =&gt; $val )
+    $mess-&gt;init_header( $field =&gt; $val )
+    $mess-&gt;remove_header( $field )
+    $mess-&gt;remove_content_headers
+    $mess-&gt;header_field_names
+    $mess-&gt;scan( \&amp;doit )</pre>
+<pre>
+    $mess-&gt;date
+    $mess-&gt;expires
+    $mess-&gt;if_modified_since
+    $mess-&gt;if_unmodified_since
+    $mess-&gt;last_modified
+    $mess-&gt;content_type
+    $mess-&gt;content_encoding
+    $mess-&gt;content_length
+    $mess-&gt;content_language
+    $mess-&gt;title
+    $mess-&gt;user_agent
+    $mess-&gt;server
+    $mess-&gt;from
+    $mess-&gt;referer
+    $mess-&gt;www_authenticate
+    $mess-&gt;authorization
+    $mess-&gt;proxy_authorization
+    $mess-&gt;authorization_basic
+    $mess-&gt;proxy_authorization_basic</pre>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 1995-2004 Gisle Aas.</p>
+<p>This library is free software; you can redistribute it and/or
+modify it under the same terms as Perl itself.</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;HTTP::Message - HTTP style message</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

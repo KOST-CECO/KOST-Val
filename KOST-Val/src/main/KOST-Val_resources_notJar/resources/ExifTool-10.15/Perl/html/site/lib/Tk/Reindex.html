@@ -1,0 +1,142 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Tk::Reindex - change the base index of Text-like widgets</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::Reindex - change the base index of Text-like widgets</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#standard_options">STANDARD OPTIONS</a></li>
+	<li><a href="#widgetspecific_options">WIDGET-SPECIFIC OPTIONS</a></li>
+	<li><a href="#class_methods">CLASS METHODS</a></li>
+	<li><a href="#bugs">BUGS</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Tk::Reindex - change the base index of Text-like widgets</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+    use Tk::ReindexedText;
+    $t1=$w-&gt;ReindexedText(-linestart =&gt; 2);</pre>
+<pre>
+    use Tk::ReindexedROText;
+    $t2=$w-&gt;ReindexedROText(-linestart =&gt; 0);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>Creates a new widget class based on <strong>Text</strong>-like widgets that can
+redefine the line number base (normally <strong>Text</strong> widgets start line
+numbers at 1), or possibly other manipulations on indexes.</p>
+<p>
+</p>
+<hr />
+<h1><a name="standard_options">STANDARD OPTIONS</a></h1>
+<p>The newly-defined widget takes all the same options as the base
+widget, which defaults to <strong>Text</strong>.</p>
+<p>
+</p>
+<hr />
+<h1><a name="widgetspecific_options">WIDGET-SPECIFIC OPTIONS</a></h1>
+<dl>
+<dt><strong><a name="item_name_3a_linestart">Name:   <strong>lineStart</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_linestart">Class:  <strong>LineStart</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dlinestart">Switch: <strong>-linestart</strong></a></strong><br />
+</dt>
+<dd>
+Sets the line number of the first line in the <strong>Text</strong> widget. The
+default <strong>-toindexcmd</strong> and <strong>-fromindexcmd</strong> use this configuration
+option.
+</dd>
+<dd>
+<p>-item Name:   <strong>toIndexCmd</strong>  <strong>fromIndexCmd</strong></p>
+</dd>
+<dd>
+<p>-item Class:  <strong>ToIndexCmd</strong>  <strong>FromIndexCmd</strong></p>
+</dd>
+<dd>
+<p>-item Switch: <strong>-toindexcmd</strong> <strong>-fromindexcmd</strong></p>
+</dd>
+<dd>
+<p>These two options specify callbacks that are called with a list of
+indexes and are responsible for translating them to/from indexes that
+the base <strong>Text</strong> widget can understand. The callback is passed the
+widget followed by a list of indexes, and should return a list of
+translated indexes. <strong>-toindexcmd</strong> should translate from 'user'
+indexes to 'native' <strong>Text</strong>-compatible indexes, and <strong>-fromindexcmd</strong>
+should translate from 'native' indexes to 'user' indexes.</p>
+</dd>
+<dd>
+<p>The default callbacks simply add/subtract the offset given by the
+<strong>-linestart</strong> option for all indexes in 'line.character' format.</p>
+</dd>
+<dd>
+<p>It would probably be prudent to make these functions inverses of each
+other.</p>
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="class_methods">CLASS METHODS</a></h1>
+<dl>
+<dt><strong><a name="item_import">import</a></strong><br />
+</dt>
+<dd>
+To make new Reindex widgets, this function should be called via <strong>use</strong>
+with the name of the Text-like base class that you are extending with
+``Reindex'' capability.  'use base(Tk::Reindex Tk::nameofbasewidget)'
+should also be specified for that widget.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="bugs">BUGS</a></h1>
+<p>I've used the word ``indexes'' instead of ``indices'' throughout the
+documentation.</p>
+<p>All the built-in perl code for widget bindings &amp; methods will use the
+new 'user' indexes.  Which means all this index manipulation might
+might break code that is trying to parse/manipulate indexes. Or even
+assume that '1.0' is the beginning index.  <strong>Tk::Text::Contents</strong> comes
+to mind.</p>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Andrew Allen &lt;<a href="mailto:ada@fc.hp.com">ada@fc.hp.com</a>&gt;</p>
+<p>This code may be distributed under the same conditions as Perl.</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::Reindex - change the base index of Text-like widgets</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

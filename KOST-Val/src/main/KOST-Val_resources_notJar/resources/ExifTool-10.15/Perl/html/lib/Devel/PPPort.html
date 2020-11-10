@@ -1,0 +1,196 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Devel::PPPort - Perl/Pollution/Portability</title>
+<link rel="stylesheet" href="../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Devel::PPPort - Perl/Pollution/Portability</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<ul>
+
+		<li><a href="#writefile">WriteFile</a></li>
+	</ul>
+
+	<li><a href="#ppport_h">ppport.h</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Devel::PPPort - Perl/Pollution/Portability</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+    Devel::PPPort::WriteFile() ; # defaults to ./ppport.h
+    Devel::PPPort::WriteFile('someheader.h') ;</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>Perl has changed over time, gaining new features, new functions,
+increasing its flexibility, and reducing the impact on the C namespace
+environment (reduced pollution). The header file, typicaly <code>ppport.h</code>,
+written by this module attempts to bring some of the newer Perl
+features to older versions of Perl, so that you can worry less about
+keeping track of old releases, but users can still reap the benefit.
+</p>
+<pre>
+
+Why you should use C&lt;ppport.h&gt; in modern code: so that your code will work
+with the widest range of Perl interpreters possible, without significant
+additional work.</pre>
+<p>Why you should attempt older code to fully use <code>ppport.h</code>: because
+the reduced pollution of newer Perl versions is an important thing, so
+important that the old polluting ways of original Perl modules will not be
+supported very far into the future, and your module will almost certainly
+break! By adapting to it now, you'll gained compatibility and a sense of
+having done the electronic ecology some good.</p>
+<p>How to use ppport.h: Don't direct the user to download <code>Devel::PPPort</code>,
+and don't make <code>ppport.h</code> optional. Rather, just take the most recent
+copy of <code>ppport.h</code> that you can find (probably in <code>Devel::PPPort</code>
+on CPAN), copy it into your project, adjust your project to use it,
+and distribute the header along with your module.</p>
+<p><code>Devel::PPPort</code> contains a single function, called <code>WriteFile</code>. It's
+purpose is to write a 'C' header file that is used when writing XS
+modules. The file contains a series of macros that allow XS modules to
+be built using older versions of Perl.</p>
+<p>This module is used by h2xs to write the file <em>ppport.h</em>.</p>
+<p>
+</p>
+<h2><a name="writefile">WriteFile</a></h2>
+<p><code>WriteFile</code> takes a zero or one parameters. When called with one
+parameter it expects to be passed a filename. When called with no
+parameters, it defults to the filename <code>./pport.h</code>.</p>
+<p>The function returns TRUE if the file was written successfully. Otherwise
+it returns FALSE.</p>
+<p>
+</p>
+<hr />
+<h1><a name="ppport_h">ppport.h</a></h1>
+<p>The file written by this module, typically <code>ppport.h</code>, provides access
+to the following Perl API if not already available (and in some cases [*]
+even if available, access to a fixed interface):</p>
+<pre>
+    aMY_CXT
+    aMY_CXT_
+    _aMY_CXT
+    aTHX
+    aTHX_
+    AvFILLp
+    boolSV(b)
+    call_argv
+    call_method
+    call_pv
+    call_sv
+    dAX
+    DEFSV
+    dITEMS
+    dMY_CXT     
+    dMY_CXT_SV
+    dNOOP
+    dTHR
+    dTHX
+    dTHXa
+    dTHXoa
+    ERRSV
+    get_av
+    get_cv
+    get_hv
+    get_sv
+    grok_hex
+    grok_oct
+    grok_bin
+    grok_number
+    grok_numeric_radix
+    gv_stashpvn(str,len,flags)
+    INT2PTR(type,int)
+    IVdf
+    MY_CXT
+    MY_CXT_INIT
+    newCONSTSUB(stash,name,sv)
+    newRV_inc(sv)
+    newRV_noinc(sv)
+    newSVpvn(data,len)
+    NOOP
+    NV 
+    NVef
+    NVff
+    NVgf
+    PERL_REVISION
+    PERL_SUBVERSION
+    PERL_UNUSED_DECL
+    PERL_VERSION
+    PL_compiling
+    PL_copline
+    PL_curcop
+    PL_curstash
+    PL_defgv
+    PL_dirty
+    PL_hints
+    PL_na
+    PL_perldb
+    PL_rsfp_filters
+    PL_rsfpv
+    PL_stdingv
+    PL_Sv
+    PL_sv_no
+    PL_sv_undef
+    PL_sv_yes
+    pMY_CXT
+    pMY_CXT_
+    _pMY_CXT
+    pTHX
+    pTHX_
+    PTR2IV(ptr)
+    PTR2NV(ptr)
+    PTR2ul(ptr)
+    PTR2UV(ptr)
+    SAVE_DEFSV
+    START_MY_CXT
+    SvPVbyte(sv,lp) [*]
+    UVof
+    UVSIZE
+    UVuf
+    UVxf
+    UVXf</pre>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Version 1.x of Devel::PPPort was written by Kenneth Albanowski.</p>
+<p>Version 2.x was ported to the Perl core by Paul Marquess.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p>See <em>h2xs</em>.</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Devel::PPPort - Perl/Pollution/Portability</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

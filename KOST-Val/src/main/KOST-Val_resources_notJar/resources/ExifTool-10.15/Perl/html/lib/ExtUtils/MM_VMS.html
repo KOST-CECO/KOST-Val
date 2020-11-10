@@ -1,0 +1,489 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>ExtUtils::MM_VMS - methods to override UN*X behaviour in ExtUtils::MakeMaker</title>
+<link rel="stylesheet" href="../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;ExtUtils::MM_VMS - methods to override UN*X behaviour in ExtUtils::MakeMaker</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<ul>
+
+		<li><a href="#methods_always_loaded">Methods always loaded</a></li>
+		<li><a href="#methods">Methods</a></li>
+	</ul>
+
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>ExtUtils::MM_VMS - methods to override UN*X behaviour in ExtUtils::MakeMaker</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+  Do not use this directly.
+  Instead, use ExtUtils::MM and it will figure out which MM_*
+  class to use for you.</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>See ExtUtils::MM_Unix for a documentation of the methods provided
+there. This package overrides the implementation of these methods, not
+the semantics.</p>
+<p>
+</p>
+<h2><a name="methods_always_loaded">Methods always loaded</a></h2>
+<dl>
+<dt><strong><a name="item_wraplist">wraplist</a></strong><br />
+</dt>
+<dd>
+Converts a list into a string wrapped at approximately 80 columns.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<h2><a name="methods">Methods</a></h2>
+<p>Those methods which override default MM_Unix methods are marked
+``(override)'', while methods unique to MM_VMS are marked ``(specific)''.
+For overridden methods, documentation is limited to an explanation
+of why this method overrides the MM_Unix method; see the ExtUtils::MM_Unix
+documentation for more details.</p>
+<dl>
+<dt><strong><a name="item_guess_name">guess_name (override)</a></strong><br />
+</dt>
+<dd>
+Try to determine name of extension being built.  We begin with the name
+of the current directory.  Since VMS filenames are case-insensitive,
+however, we look for a <em>.pm</em> file whose name matches that of the current
+directory (presumably the 'main' <em>.pm</em> file for this extension), and try
+to find a <a href="../../lib/Pod/perlfunc.html#item_package"><code>package</code></a> statement from which to obtain the Mixed::Case
+package name.
+</dd>
+<p></p>
+<dt><strong><a name="item_find_perl">find_perl (override)</a></strong><br />
+</dt>
+<dd>
+Use VMS file specification syntax and CLI commands to find and
+invoke Perl images.
+</dd>
+<p></p>
+<dt><strong><a name="item_maybe_command">maybe_command (override)</a></strong><br />
+</dt>
+<dd>
+Follows VMS naming conventions for executable files.
+If the name passed in doesn't exactly match an executable file,
+appends <em>.Exe</em> (or equivalent) to check for executable image, and <em>.Com</em>
+to check for DCL procedure.  If this fails, checks directories in DCL$PATH
+and finally <em>Sys$System:</em> for an executable file having the name specified,
+with or without the <em>.Exe</em>-equivalent suffix.
+</dd>
+<p></p>
+<dt><strong><a name="item_perl_script">perl_script (override)</a></strong><br />
+</dt>
+<dd>
+If name passed in doesn't specify a readable file, appends <em>.com</em> or
+<em>.pl</em> and tries again, since it's customary to have file types on all files
+under VMS.
+</dd>
+<p></p>
+<dt><strong><a name="item_replace_manpage_separator">replace_manpage_separator</a></strong><br />
+</dt>
+<dd>
+Use as separator a character which is legal in a VMS-syntax file name.
+</dd>
+<p></p>
+<dt><strong><a name="item_init_dest">init_DEST</a></strong><br />
+</dt>
+<dd>
+(override) Because of the difficulty concatenating VMS filepaths we
+must pre-expand the DEST* variables.
+</dd>
+<p></p>
+<dt><strong><a name="item_init_dirfilesep">init_DIRFILESEP</a></strong><br />
+</dt>
+<dd>
+No seperator between a directory path and a filename on VMS.
+</dd>
+<p></p>
+<dt><strong><a name="item_init_main">init_main (override)</a></strong><br />
+</dt>
+<dt><strong><a name="item_init_others">init_others (override)</a></strong><br />
+</dt>
+<dd>
+Provide VMS-specific forms of various utility commands, then hand
+off to the default MM_Unix method.
+</dd>
+<dd>
+<p>DEV_NULL should probably be overriden with something.</p>
+</dd>
+<dd>
+<p>Also changes EQUALIZE_TIMESTAMP to set revision date of target file to
+one second later than source file, since MMK interprets precisely
+equal revision dates for a source and target file as a sign that the
+target needs to be updated.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item_init_platform">init_platform (override)</a></strong><br />
+</dt>
+<dd>
+Add PERL_VMS, MM_VMS_REVISION and MM_VMS_VERSION.
+</dd>
+<dd>
+<p>MM_VMS_REVISION is for backwards compatibility before MM_VMS had a
+$VERSION.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item_platform_constants">platform_constants</a></strong><br />
+</dt>
+<dt><strong><a name="item_init_version">init_VERSION (override)</a></strong><br />
+</dt>
+<dd>
+Override the *DEFINE_VERSION macros with VMS semantics.  Translate the
+MAKEMAKER filepath to VMS style.
+</dd>
+<p></p>
+<dt><strong><a name="item_constants">constants (override)</a></strong><br />
+</dt>
+<dd>
+Fixes up numerous file and directory macros to insure VMS syntax
+regardless of input syntax.  Also makes lists of files
+comma-separated.
+</dd>
+<p></p>
+<dt><strong><a name="item_special_targets">special_targets</a></strong><br />
+</dt>
+<dd>
+Clear the default .SUFFIXES and put in our own list.
+</dd>
+<p></p>
+<dt><strong><a name="item_cflags">cflags (override)</a></strong><br />
+</dt>
+<dd>
+Bypass shell script and produce qualifiers for CC directly (but warn
+user if a shell script for this extension exists).  Fold multiple
+/Defines into one, since some C compilers pay attention to only one
+instance of this qualifier on the command line.
+</dd>
+<p></p>
+<dt><strong><a name="item_const_cccmd">const_cccmd (override)</a></strong><br />
+</dt>
+<dd>
+Adds directives to point C preprocessor to the right place when
+handling #include &lt;sys/foo.h&gt; directives.  Also constructs CC
+command line a bit differently than MM_Unix method.
+</dd>
+<p></p>
+<dt><strong><a name="item_tool_sxubpp">tool_sxubpp (override)</a></strong><br />
+</dt>
+<dd>
+Use VMS-style quoting on xsubpp command line.
+</dd>
+<p></p>
+<dt><strong><a name="item_tools_other">tools_other (override)</a></strong><br />
+</dt>
+<dd>
+Throw in some dubious extra macros for Makefile args.
+</dd>
+<dd>
+<p>Also keep around the old $(SAY) macro in case somebody's using it.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item_init_dist">init_dist (override)</a></strong><br />
+</dt>
+<dd>
+VMSish defaults for some values.
+</dd>
+<dd>
+<pre>
+  macro         description                     default</pre>
+</dd>
+<dd>
+<pre>
+  ZIPFLAGS      flags to pass to ZIP            -Vu</pre>
+</dd>
+<dd>
+<pre>
+  COMPRESS      compression command to          gzip
+                use for tarfiles
+  SUFFIX        suffix to put on                -gz 
+                compressed files</pre>
+</dd>
+<dd>
+<pre>
+  SHAR          shar command to use             vms_share</pre>
+</dd>
+<dd>
+<pre>
+  DIST_DEFAULT  default target to use to        tardist
+                create a distribution</pre>
+</dd>
+<dd>
+<pre>
+  DISTVNAME     Use VERSION_SYM instead of      $(DISTNAME)-$(VERSION_SYM)
+                VERSION for the name</pre>
+</dd>
+<p></p>
+<dt><strong><a name="item_c_o">c_o (override)</a></strong><br />
+</dt>
+<dd>
+Use VMS syntax on command line.  In particular, $(DEFINE) and
+$(PERL_INC) have been pulled into $(CCCMD).  Also use MM[SK] macros.
+</dd>
+<p></p>
+<dt><strong><a name="item_xs_c">xs_c (override)</a></strong><br />
+</dt>
+<dd>
+Use MM[SK] macros.
+</dd>
+<p></p>
+<dt><strong><a name="item_xs_o">xs_o (override)</a></strong><br />
+</dt>
+<dd>
+Use MM[SK] macros, and VMS command line for C compiler.
+</dd>
+<p></p>
+<dt><strong><a name="item_dlsyms">dlsyms (override)</a></strong><br />
+</dt>
+<dd>
+Create VMS linker options files specifying universal symbols for this
+extension's shareable image, and listing other shareable images or 
+libraries to which it should be linked.
+</dd>
+<p></p>
+<dt><strong><a name="item_dynamic_lib">dynamic_lib (override)</a></strong><br />
+</dt>
+<dd>
+Use VMS Link command.
+</dd>
+<p></p>
+<dt><strong><a name="item_dynamic_bs">dynamic_bs (override)</a></strong><br />
+</dt>
+<dd>
+Use VMS-style quoting on Mkbootstrap command line.
+</dd>
+<p></p>
+<dt><strong><a name="item_static_lib">static_lib (override)</a></strong><br />
+</dt>
+<dd>
+Use VMS commands to manipulate object library.
+</dd>
+<p></p>
+<dt><strong><a name="item_processpl">processPL (override)</a></strong><br />
+</dt>
+<dd>
+Use VMS-style quoting on command line.
+</dd>
+<p></p>
+<dt><strong><a name="item_installbin">installbin (override)</a></strong><br />
+</dt>
+<dd>
+Stay under DCL's 255 character command line limit once again by
+splitting potentially long list of files across multiple lines
+in <a href="#item_realclean"><code>realclean</code></a> target.
+</dd>
+<p></p>
+<dt><strong><a name="item_subdir_x">subdir_x (override)</a></strong><br />
+</dt>
+<dd>
+Use VMS commands to change default directory.
+</dd>
+<p></p>
+<dt><strong><a name="item_clean">clean (override)</a></strong><br />
+</dt>
+<dd>
+Split potentially long list of files across multiple commands (in
+order to stay under the magic command line limit).  Also use MM[SK]
+commands for handling subdirectories.
+</dd>
+<p></p>
+<dt><strong><a name="item_clean_subdirs_target">clean_subdirs_target</a></strong><br />
+</dt>
+<dd>
+<pre>
+  my $make_frag = $MM-&gt;clean_subdirs_target;</pre>
+</dd>
+<dd>
+<p>VMS semantics for changing directories and rerunning make very different.</p>
+</dd>
+<dt><strong><a name="item_realclean">realclean (override)</a></strong><br />
+</dt>
+<dd>
+Guess what we're working around?  Also, use MM[SK] for subdirectories.
+</dd>
+<p></p>
+<dt><strong><a name="item_zipfile_target">zipfile_target (o)</a></strong><br />
+</dt>
+<dt><strong><a name="item_tarfile_target">tarfile_target (o)</a></strong><br />
+</dt>
+<dt><strong><a name="item_shdist_target">shdist_target (o)</a></strong><br />
+</dt>
+<dd>
+Syntax for invoking shar, tar and zip differs from that for Unix.
+</dd>
+<p></p>
+<dt><strong><a name="item_dist_test">dist_test (override)</a></strong><br />
+</dt>
+<dd>
+Use VMS commands to change default directory, and use VMS-style
+quoting on command line.
+</dd>
+<p></p>
+<dt><strong><a name="item_install">install (override)</a></strong><br />
+</dt>
+<dd>
+Work around DCL's 255 character limit several times,and use
+VMS-style command line quoting in a few cases.
+</dd>
+<p></p>
+<dt><strong><a name="item_perldepend">perldepend (override)</a></strong><br />
+</dt>
+<dd>
+Use VMS-style syntax for files; it's cheaper to just do it directly here
+than to have the MM_Unix method call <code>catfile</code> repeatedly.  Also, if
+we have to rebuild Config.pm, use MM[SK] to do it.
+</dd>
+<p></p>
+<dt><strong><a name="item_makefile">makefile (override)</a></strong><br />
+</dt>
+<dd>
+Use VMS commands and quoting.
+</dd>
+<p></p>
+<dt><strong><a name="item_find_tests">find_tests (override)</a></strong><br />
+</dt>
+<dt><strong><a name="item_test">test (override)</a></strong><br />
+</dt>
+<dd>
+Use VMS commands for handling subdirectories.
+</dd>
+<p></p>
+<dt><strong><a name="item_makeaperl">makeaperl (override)</a></strong><br />
+</dt>
+<dd>
+Undertake to build a new set of Perl images using VMS commands.  Since
+VMS does dynamic loading, it's not necessary to statically link each
+extension into the Perl image, so this isn't the normal build path.
+Consequently, it hasn't really been tested, and may well be incomplete.
+</dd>
+<p></p>
+<dt><strong><a name="item_nicetext">nicetext (override)</a></strong><br />
+</dt>
+<dd>
+Insure that colons marking targets are preceded by space, in order
+to distinguish the target delimiter from a colon appearing as
+part of a filespec.
+</dd>
+<p></p>
+<dt><strong><a name="item_prefixify">prefixify (override)</a></strong><br />
+</dt>
+<dd>
+prefixifying on VMS is simple.  Each should simply be:
+</dd>
+<dd>
+<pre>
+    perl_root:[some.dir]</pre>
+</dd>
+<dd>
+<p>which can just be converted to:</p>
+</dd>
+<dd>
+<pre>
+    volume:[your.prefix.some.dir]</pre>
+</dd>
+<dd>
+<p>otherwise you get the default layout.</p>
+</dd>
+<dd>
+<p>In effect, your search prefix is ignored and $Config{vms_prefix} is
+used instead.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item_oneliner">oneliner (o)</a></strong><br />
+</dt>
+<dt><strong><a name="item_echo"><strong>echo</strong> (o)</a></strong><br />
+</dt>
+<dd>
+perl trips up on ``&lt;foo&gt;'' thinking it's an input redirect.  So we use the
+native Write command instead.  Besides, its faster.
+</dd>
+<p></p>
+<dt><strong><a name="item_quote_literal">quote_literal</a></strong><br />
+</dt>
+<dt><strong><a name="item_escape_newlines">escape_newlines</a></strong><br />
+</dt>
+<dt><strong><a name="item_max_exec_len">max_exec_len</a></strong><br />
+</dt>
+<dd>
+256 characters.
+</dd>
+<p></p>
+<dt><strong><a name="item_init_linker">init_linker (o)</a></strong><br />
+</dt>
+<dt><strong><a name="item_eliminate_macros">eliminate_macros</a></strong><br />
+</dt>
+<dd>
+Expands MM[KS]/Make macros in a text string, using the contents of
+identically named elements of <code>%$self</code>, and returns the result
+as a file specification in Unix syntax.
+</dd>
+<dd>
+<p>NOTE:  This is the canonical version of the method.  The version in
+File::Spec::VMS is deprecated.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item_fixpath">fixpath</a></strong><br />
+</dt>
+<dd>
+Catchall routine to clean up problem MM[SK]/Make macros.  Expands macros
+in any directory specification, in order to avoid juxtaposing two
+VMS-syntax directories when MM[SK] is run.  Also expands expressions which
+are all macro, so that we can tell how long the expansion is, and avoid
+overrunning DCL's command buffer when MM[KS] is running.
+</dd>
+<dd>
+<p>If optional second argument has a TRUE value, then the return string is
+a VMS-syntax directory specification, if it is FALSE, the return string
+is a VMS-syntax file specification, and if it is not specified, <a href="#item_fixpath"><code>fixpath()</code></a>
+checks to see whether it matches the name of a directory in the current
+default directory, and returns a directory or file specification accordingly.</p>
+</dd>
+<dd>
+<p>NOTE:  This is the canonical version of the method.  The version in
+File::Spec::VMS is deprecated.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item_os_flavor">os_flavor</a></strong><br />
+</dt>
+<dd>
+VMS is VMS.
+</dd>
+<p></p></dl>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;ExtUtils::MM_VMS - methods to override UN*X behaviour in ExtUtils::MakeMaker</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

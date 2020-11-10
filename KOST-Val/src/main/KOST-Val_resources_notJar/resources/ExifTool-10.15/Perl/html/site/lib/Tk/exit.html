@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Tk::exit - End the application</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::exit - End the application</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#keywords">KEYWORDS</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Tk::exit - End the application</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+    use Tk qw(exit);
+    ...
+    B&lt;exit&gt;?(I&lt;returnCode&gt;)?;</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>Terminate the process, returning <em>returnCode</em> to the
+system as the exit status.
+If <em>returnCode</em> isn't specified then it defaults
+to 0.</p>
+<p>If calling <a href="../../../lib/Pod/perlfunc.html#item_exit"><code>exit</code></a> from code invoked via a Tk callback then
+this Tk version of <a href="../../../lib/Pod/perlfunc.html#item_exit"><code>exit</code></a> cleans up more reliably than using
+the perl <a href="../../../lib/Pod/perlfunc.html#item_exit"><code>exit</code></a>.</p>
+<p>
+</p>
+<hr />
+<h1><a name="keywords">KEYWORDS</a></h1>
+<p>exit, process</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::exit - End the application</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

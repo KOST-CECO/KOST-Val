@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Tk::Label - Create and manipulate Label widgets</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::Label - Create and manipulate Label widgets</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#standard_options">STANDARD OPTIONS</a></li>
+	<li><a href="#widgetspecific_options">WIDGET-SPECIFIC OPTIONS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#widget_methods">WIDGET METHODS</a></li>
+	<li><a href="#bindings">BINDINGS</a></li>
+	<li><a href="#keywords">KEYWORDS</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Tk::Label - Create and manipulate Label widgets</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p><em>$label</em> = <em>$parent</em>-&gt;<strong>Label</strong>(?<em>options</em>?);</p>
+<p>
+</p>
+<hr />
+<h1><a name="standard_options">STANDARD OPTIONS</a></h1>
+<p><table cellspacing="0" cellpadding="0"><tr><td><strong>-anchor</strong><td><strong>-font</strong><td><strong>-image</strong><td><strong>-takefocus</strong>
+<tr><td><strong>-background</strong><td><strong>-foreground</strong><td><strong>-justify</strong><td><strong>-text</strong>
+<tr><td><strong>-bitmap</strong><td><strong>-highlightbackground</strong><td><strong>-padx</strong><td><strong>-textvariable</strong>
+<tr><td><strong>-borderwidth</strong><td><strong>-highlightcolor</strong><td><strong>-pady</strong><td><strong>-underline</strong>
+<tr><td><strong>-cursor</strong><td><strong>-highlightthickness</strong><td><strong>-relief</strong><td><strong>-wraplength</strong></table></p>
+<p>See <a href="../../../site/lib/Tk/options.html">the Tk::options manpage</a> for details of the standard options.</p>
+<p>
+</p>
+<hr />
+<h1><a name="widgetspecific_options">WIDGET-SPECIFIC OPTIONS</a></h1>
+<dl>
+<dt><strong><a name="item_name_3a_height">Name:	<strong>height</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_height">Class:	<strong>Height</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dheight">Switch:	<strong>-height</strong></a></strong><br />
+</dt>
+<dd>
+Specifies a desired height for the label.
+If an image or bitmap is being displayed in the label then the value is in
+screen units (i.e. any of the forms acceptable to <strong>Tk_GetPixels</strong>);
+for text it is in lines of text.
+If this option isn't specified, the label's desired height is computed
+from the size of the image or bitmap or text being displayed in it.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_width">Name:	<strong>width</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_width">Class:	<strong>Width</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dwidth">Switch:	<strong>-width</strong></a></strong><br />
+</dt>
+<dd>
+Specifies a desired width for the label.
+If an image or bitmap is being displayed in the label then the value is in
+screen units (i.e. any of the forms acceptable to <strong>Tk_GetPixels</strong>);
+for text it is in characters.
+If this option isn't specified, the label's desired width is computed
+from the size of the image or bitmap or text being displayed in it.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The <strong>Label</strong> method creates a new window (given by the
+$widget argument) and makes it into a label widget.
+Additional
+options, described above, may be specified on the command line
+or in the option database
+to configure aspects of the label such as its colors, font,
+text, and initial relief.  The <strong>label</strong> command returns its
+$widget argument.  At the time this command is invoked,
+there must not exist a window named $widget, but
+$widget's parent must exist.</p>
+<p>A label is a widget that displays a textual string, bitmap or image.
+If text is displayed, it must all be in a single font, but it
+can occupy multiple lines on the screen (if it contains newlines
+or if wrapping occurs because of the <strong>wrapLength</strong> option) and
+one of the characters may optionally be underlined using the
+<strong>underline</strong> option.
+The label can be manipulated in a few simple ways, such as
+changing its relief or text, using the commands described below.</p>
+<p>
+</p>
+<hr />
+<h1><a name="widget_methods">WIDGET METHODS</a></h1>
+<p>The <strong>Label</strong> method creates a widget object.
+This object supports the <strong>configure</strong> and <strong>cget</strong> methods
+described in <a href="../../../site/lib/Tk/options.html">the Tk::options manpage</a> which can be used to enquire and
+modify the options described above.
+The widget also inherits all the methods provided by the generic
+<a href="../../../site/lib/Tk/Widget.html">Tk::Widget</a> class.</p>
+<p>
+</p>
+<hr />
+<h1><a name="bindings">BINDINGS</a></h1>
+<p>When a new label is created, it has no default event bindings:
+labels are not intended to be interactive.</p>
+<p>
+</p>
+<hr />
+<h1><a name="keywords">KEYWORDS</a></h1>
+<p>label, widget</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::Label - Create and manipulate Label widgets</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

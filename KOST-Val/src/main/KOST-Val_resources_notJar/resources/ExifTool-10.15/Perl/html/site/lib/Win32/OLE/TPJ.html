@@ -1,0 +1,798 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>#10 - Win32::OLE by Jan Dubois</title>
+<link rel="stylesheet" href="../../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;#10 - Win32::OLE by Jan Dubois</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#introduction">INTRODUCTION</a></li>
+	<li><a href="#the_ole_mindset">THE OLE MINDSET</a></li>
+	<li><a href="#working_with_win32__ole">WORKING WITH WIN32::OLE</a></li>
+	<ul>
+
+		<li><a href="#the_first_step__creating_an_ole_server_object">THE FIRST STEP: CREATING AN OLE SERVER OBJECT</a></li>
+		<li><a href="#method_calls">METHOD CALLS</a></li>
+		<li><a href="#properties">PROPERTIES</a></li>
+		<li><a href="#sample_application">SAMPLE APPLICATION</a></li>
+		<li><a href="#downloading_a_web_page_with_lwp">DOWNLOADING A WEB PAGE WITH LWP</a></li>
+		<li><a href="#microsoft_access">MICROSOFT ACCESS</a></li>
+		<li><a href="#microsoft_excel">MICROSOFT EXCEL</a></li>
+		<li><a href="#activex_data_objects">ACTIVEX DATA OBJECTS</a></li>
+		<li><a href="#lotus_notes">LOTUS NOTES</a></li>
+	</ul>
+
+	<li><a href="#variants">VARIANTS</a></li>
+	<li><a href="#further_information">FURTHER INFORMATION</a></li>
+	<ul>
+
+		<li><a href="#documentation_and_example_code">DOCUMENTATION AND EXAMPLE CODE</a></li>
+		<li><a href="#ole_automation_on_other_platforms">OLE AUTOMATION ON OTHER PLATFORMS</a></li>
+	</ul>
+
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<hr />
+<h1><a name="name">NAME</a></h1>
+<p>The Perl Journal #10 - Win32::OLE by Jan Dubois</p>
+<p>
+</p>
+<hr />
+<h1><a name="introduction">INTRODUCTION</a></h1>
+<p>Suppose you're composing a document with Microsoft Word. You want to
+include an Excel spreadsheet. You could save the spreadsheet in some
+image format that Word can understand, and import it into your
+document. But if the spreadsheet changes, your document will be out of
+date.</p>
+<p>Microsoft's OLE (Object Linking and Embedding, pronounced ``olay'') lets
+one program use objects from another. In the above scenario, the
+spreadsheet is the object. As long as Excel makes that spreadsheet
+available as an OLE object, and Word knows to treat it like one, your
+document will always be current.</p>
+<p>You can control OLE objects from Perl with the Win32::OLE module, and
+that's what this article is about. First, I'll show you how to ``think
+OLE,'' which mostly involves a lot of jargon. Next, I'll show you the
+mechanics involved in using Win32::OLE. Then we'll go through a Perl
+program that uses OLE to manipulate Microsoft Excel, Microsoft Access,
+and Lotus Notes. Finally, I'll talk about Variants, an internal OLE
+data type.</p>
+<p>
+</p>
+<hr />
+<h1><a name="the_ole_mindset">THE OLE MINDSET</a></h1>
+<p>When an application makes an OLE object available for other
+applications to use, that's called OLE <em>automation</em>. The program
+using the object is called the <em>controller</em>, and the application
+providing the object is called the <em>server</em>. OLE automation is guided
+by the OLE Component Object Model (COM) which specifies how those
+objects must behave if they are to be used by other processes and
+machines.</p>
+<p>There are two different types of OLE automation servers. <em>In-process</em>
+servers are implemented as dynamic link libraries (DLLs) and run in
+the same process space as the controller. <em>Out-of-process</em> servers
+are more interesting; they are standalone executables that exist as
+separate processes - possibly on a different computer.</p>
+<p>The Win32::OLE module lets your Perl program act as an OLE
+controller. It allows Perl to be used in place of other languages like
+Visual Basic or Java to control OLE objects. This makes all OLE
+automation servers immediately available as Perl modules.</p>
+<p>Don't confuse ActiveState OLE with Win32::OLE. ActiveState OLE is
+completely different, although future builds of ActiveState Perl (500
+and up) will work with Win32::OLE.</p>
+<p>Objects can expose OLE methods, properties, and events to the outside
+world. Methods are functions that the controller can call to make the
+object do something; properties describe the state of the object; and
+events let the controller know about external events affecting the
+object, such as the user clicking on a button. Since events involve
+asynchronous communication with their objects, they require either
+threads or an event loop. They are not yet supported by the Win32::OLE
+module, and for the same reason ActiveX controls (OCXs) are currently
+unsupported as well.</p>
+<p>
+</p>
+<hr />
+<h1><a name="working_with_win32__ole">WORKING WITH WIN32::OLE</a></h1>
+<p>The Win32::OLE module doesn't let your Perl program create OLE
+objects. What it does do is let your Perl program act like a remote
+control for other applications-it lets your program be an OLE
+controller. You can take an OLE object from another application
+(Access, Notes, Excel, or anything else that speaks OLE) and invoke
+its methods or manipulate its properties.</p>
+<p>
+</p>
+<h2><a name="the_first_step__creating_an_ole_server_object">THE FIRST STEP: CREATING AN OLE SERVER OBJECT</a></h2>
+<p>First, we need to create a Perl object to represent the OLE
+server. This is a weird idea; what it amounts to is that if we want to
+control OLE objects produced by, say, Excel, we have to create a Perl
+object that represents Excel. So even though our program is an OLE
+controller, it'll contain objects that represent OLE servers.</p>
+<p>You can create a new OLE <em>server object</em> with <code>Win32::OLE-&gt;new</code>.
+This takes a program ID (a human readable string like
+<code>'Speech.VoiceText'</code>) and returns a server object:</p>
+<pre>
+  my $server = Win32::OLE-&gt;new('Excel.Application', 'Quit');</pre>
+<p>Some server objects (particularly those for Microsoft Office
+applications) don't automatically terminate when your program no
+longer needs them. They need some kind of Quit method, and that's just
+what our second argument is. It can be either a code reference or a
+method name to be invoked when the object is destroyed. This lets you
+ensure that objects will be properly cleaned up even when the Perl
+program dies abnormally.</p>
+<p>To access a server object on a different computer, replace the first
+argument with a reference to a list of the server name and program ID:</p>
+<pre>
+  my $server = Win32::OLE-&gt;new(['foo.bar.com',
+                                'Excel.Application']);</pre>
+<p>(To get the requisite permissions, you'll need to configure your
+security settings with <em>DCOMCNFG.EXE</em>.)</p>
+<p>You can also directly attach your program to an already running OLE
+server:</p>
+<pre>
+  my $server = Win32::OLE-&gt;GetActiveObject('Excel.Application');</pre>
+<p>This fails (returning <a href="../../../../lib/Pod/perlfunc.html#item_undef"><code>undef</code></a>) if no server exists, or if the server
+refuses the connection for some reason. It is also possible to use a
+persistent object moniker (usually a filename) to start the associated
+server and load the object into memory:</p>
+<pre>
+  my $doc = Win32::OLE-&gt;GetObject(&quot;MyDocument.Doc&quot;);</pre>
+<p>
+</p>
+<h2><a name="method_calls">METHOD CALLS</a></h2>
+<p>Once you've created one of these server objects, you need to call its
+methods to make the OLE objects sing and dance. OLE methods are
+invoked just like normal Perl object methods:</p>
+<pre>
+  $server-&gt;Foo(@Arguments);</pre>
+<p>This is a Perl method call - but it also triggers an OLE method call
+in the object. After your program executes this statement, the
+<code>$server</code> object will execute its <code>Foo()</code> method. The available methods
+are typically documented in the application's <em>object model</em>.</p>
+<p><strong>Parameters.</strong> By default, all parameters are positional
+(e.g. <code>foo($first, $second, $third)</code>) rather than named (e.g.
+<code>foo(-name =&gt; &quot;Yogi&quot;, -title =&gt; &quot;Coach&quot;)</code>). The required parameters
+come first, followed by the optional parameters; if you need to
+provide a dummy value for an optional parameter, use undef.</p>
+<p>Positional parameters get cumbersome if a method takes a lot of
+them. You can use named arguments instead if you go to a little extra
+trouble - when the last argument is a reference to a hash, the
+key/value pairs of the hash are treated as named parameters:</p>
+<pre>
+  $server-&gt;Foo($Pos1, $Pos2, {Name1 =&gt; $Value1,
+                              Name2 =&gt; $Value2});</pre>
+<p><strong>Foreign Languages and Default Methods.</strong> Sometimes OLE servers use
+method and property names that are specific to a non-English
+locale. That means they might have non-ASCII characters, which aren't
+allowed in Perl variable names. In German, you might see <code>Öffnen</code> used
+instead of <code>Open</code>. In these cases, you can use the <code>Invoke()</code> method:</p>
+<pre>
+  $server-&gt;Invoke('Öffnen', @Arguments);</pre>
+<p>This is necessary because <code>$Server-&gt;Öffnen(@Arguments)</code> is a syntax
+error in current versions of Perl.</p>
+<p>
+</p>
+<h2><a name="properties">PROPERTIES</a></h2>
+<p>As I said earlier, objects can expose three things to the outside
+world: methods, properties, and events. We've covered methods, and
+Win32::OLE can't handle events. That leaves properties. But as it
+turns out, properties and events are largely interchangeable. Most
+methods have corresponding properties, and vice versa.</p>
+<p>An object's properties can be accessed with a hash reference:</p>
+<pre>
+  $server-&gt;{Bar} = $value;
+  $value = $server-&gt;{Bar};</pre>
+<p>This example sets and queries the value of the property named
+<code>Bar</code>. You could also have called the object's <code>Bar()</code> method to
+achieve the same effect:</p>
+<pre>
+  $value = $server-&gt;Bar;</pre>
+<p>However, you can't write the first line as <code>$server-&gt;Bar = $value</code>,
+because you can't assign to the return value of a method call. In
+Visual Basic, OLE automation distinguishes between assigning the name
+of an object and assigning its value:</p>
+<pre>
+  Set Object = OtherObject</pre>
+<pre>
+  Let Value = Object</pre>
+<p>The <code>Set</code> statement shown here makes <code>Object</code> refer to the same object as
+<code>OtherObject</code>. The <code>Let</code> statement copies the value instead. (The value of
+an OLE object is what you get when you call the object's default
+method.</p>
+<p>In Perl, saying <code>$server1 = $server2</code> always creates another reference,
+just like the <code>Set</code> in Visual Basic. If you want to assign the value
+instead, use the <code>valof()</code> function:</p>
+<pre>
+  my $value = valof $server;</pre>
+<p>This is equivalent to</p>
+<pre>
+  my $value = $server-&gt;Invoke('');</pre>
+<p>
+</p>
+<h2><a name="sample_application">SAMPLE APPLICATION</a></h2>
+<p>Let's look at how all of this might be used. In Listing: 1 you'll see
+<em>T-Bond.pl</em>, a program that uses Win32::OLE for an almost-real world
+application.</p>
+<p>The developer of this application, Mary Lynch, is a financial futures
+broker. Every afternoon, she connects to the Chicago Board of Trade
+(CBoT) web site at <a href="http://www.cbot.com">http://www.cbot.com</a> and collects the time and sales
+information for U.S. T-bond futures. She wants her program to create a
+chart that depicts the data in 15-minute intervals, and then she wants
+to record the data in a database for later analysis. Then she wants
+her program to send mail to her clients.</p>
+<p>Mary's program will use Microsoft Access as a database, Microsoft
+Excel to produce the chart, and Lotus Notes to send the mail. It will
+all be controlled from a single Perl program using OLE automation. In
+this section, we'll go through T-Bond. pl step by step so you can see
+how Win32::OLE lets you control these applications.</p>
+<p>
+</p>
+<h2><a name="downloading_a_web_page_with_lwp">DOWNLOADING A WEB PAGE WITH LWP</a></h2>
+<p>However, Mary first needs to amass the raw T-bond data by having her
+Perl program automatically download and parse a web page. That's the
+perfect job for LWP, the libwww-perl bundle available on the CPAN. LWP
+has nothing to do with OLE. But this is a real-world application, and
+it's just what Mary needs to download her data from the Chicago Board
+of Trade.</p>
+<pre>
+  use LWP::Simple;
+  my $URL = '<a href="http://www.cbot.com/mplex/quotes/tsfut">http://www.cbot.com/mplex/quotes/tsfut</a>';
+  my $text = get(&quot;$URL/tsf$Contract.htm&quot;);</pre>
+<p>She could also have used the Win32::Internet module:</p>
+<pre>
+  use Win32::Internet;
+  my $URL = '<a href="http://www.cbot.com/mplex/quotes/tsfut">http://www.cbot.com/mplex/quotes/tsfut</a>';
+  my $text = $Win32::Internet-&gt;new-&gt;FetchURL(&quot;$URL/tsf$Contract.htm&quot;);</pre>
+<p>Mary wants to condense the ticker data into 15 minute bars. She's
+interested only in lines that look like this:</p>
+<pre>
+  03/12/1998 US 98Mar 12116 15:28:34 Open</pre>
+<p>A regular expression can be used to determine whether a line looks
+like this. If it does, the regex can split it up into individual
+fields. The price quoted above, <code>12116</code>, really means 121 16/32, and
+needs to be converted to 121.5. The data is then condensed into 15
+minute intervals and only the first, last, highest, and lowest price
+during each interval are kept. The time series is stored in the array
+<code>@Bars</code>. Each entry in <code>@Bars</code> is a reference to a list of 5 elements:
+Time, Open, High, Low, and Close.</p>
+<pre>
+  foreach (split &quot;\n&quot;, $text) {
+      # 03/12/1998 US 98Mar 12116 15:28:34 Open
+      my ($Date,$Price,$Hour,$Min,$Sec,$Ind) =
+           m|^\s*(\d+/\d+/\d+) # &quot; 03/12/1998&quot;
+              \s+US\s+\S+\s+(\d+) # &quot; US 98Mar 12116&quot;
+              \s+(\d+):(\d+):(\d+) # &quot; 12:42:40&quot;
+              \s*(.*)$|x; # &quot; Ask&quot;
+      next unless defined $Date;
+      $Day = $Date;</pre>
+<pre>
+      # Convert from fractional to decimal format
+      $Price = int($Price/100) + ($Price%100)/32;</pre>
+<pre>
+      # Round up time to next multiple of 15 minutes
+      my $NewTime = int(($Sec+$Min*60+$Hour*3600)/900+1)*900;
+      unless (defined $Time &amp;&amp; $NewTime == $Time) {
+          push @Bars, [$hhmm, $Open, $High, $Low, $Close]
+                                            if defined $Time;
+          $Open = $High = $Low = $Close = undef;
+          $Time = $NewTime;
+          my $Hour = int($Time/3600);
+          $hhmm = sprintf &quot;%02d:%02d&quot;, $Hour, $Time/60-$Hour*60;
+      }</pre>
+<pre>
+      # Update 15 minute bar values
+      $Close = $Price;
+      $Open = $Price unless defined $Open;
+      $High = $Price unless defined $High &amp;&amp; $High &gt; $Price;
+      $Low = $Price unless defined $Low &amp;&amp; $Low &gt; $Price;
+  }</pre>
+<pre>
+  die &quot;No data found&quot; unless defined $Time;
+  push @Bars, [$hhmm, $Open, $High, $Low, $Close];</pre>
+<p>
+</p>
+<h2><a name="microsoft_access">MICROSOFT ACCESS</a></h2>
+<p>Now that Mary has her T-bond quotes, she's ready to use Win32::OLE to
+store them into a Microsoft Access database. This has the advantage
+that she can copy the database to her lap-top and work with it on her
+long New York commute. She's able to create an Access database as
+follows:</p>
+<pre>
+  use Win32::ODBC;
+  use Win32::OLE;</pre>
+<pre>
+  # Include the constants for the Microsoft Access
+  # &quot;Data Access Object&quot;.</pre>
+<pre>
+  use Win32::OLE::Const 'Microsoft DAO';</pre>
+<pre>
+  my $DSN      = 'T-Bonds';
+  my $Driver   = 'Microsoft Access Driver (*.mdb)';
+  my $Desc     = 'US T-Bond Quotes';
+  my $Dir      = 'i:\tmp\tpj';
+  my $File     = 'T-Bonds.mdb';
+  my $Fullname = &quot;$Dir\\$File&quot;;</pre>
+<pre>
+  # Remove old database and dataset name
+  unlink $Fullname if -f $Fullname;
+  Win32::ODBC::ConfigDSN(ODBC_REMOVE_DSN, $Driver, &quot;DSN=$DSN&quot;)
+                         if Win32::ODBC::DataSources($DSN);</pre>
+<pre>
+  # Create new database
+  my $Access = Win32::OLE-&gt;new('Access.Application', 'Quit');
+  my $Workspace = $Access-&gt;DBEngine-&gt;CreateWorkspace('', 'Admin', '');
+  my $Database = $Workspace-&gt;CreateDatabase($Fullname, dbLangGeneral);</pre>
+<pre>
+  # Add new database name
+  Win32::ODBC::ConfigDSN(ODBC_ADD_DSN, $Driver,
+          &quot;DSN=$DSN&quot;, &quot;Description=$Desc&quot;, &quot;DBQ=$Fullname&quot;,
+          &quot;DEFAULTDIR=$Dir&quot;, &quot;UID=&quot;, &quot;PWD=&quot;);</pre>
+<p>This uses Win32::ODBC (described in TPJ #9) to remove and create
+<em>T-Bonds.mdb</em>. This lets Mary use the same script on her workstation
+and on her laptop even when the database is stored in different
+locations on each. The program also uses Win32::OLE to make Microsoft
+Access create an empty database.</p>
+<p>Every OLE server has some constants that your Perl program will need
+to use, made accessible by the Win32::OLE::Const module. For instance,
+to grab the Excel constants, say <code>use Win32::OLE::Const 'Microsoft
+Excel'</code>.</p>
+<p>In the above example, we imported the Data Access Object con-stants
+just so we could use <code>dbLangGeneral</code>.</p>
+<p>
+</p>
+<h2><a name="microsoft_excel">MICROSOFT EXCEL</a></h2>
+<p>Now Mary uses Win32::OLE a second time, to have Microsoft Excel create
+the chart shown below.</p>
+<pre>
+  Figure 1: T-Bond data generated by MicroSoft Excel via Win32::OLE</pre>
+<pre>
+  # Start Excel and create new workbook with a single sheet
+  use Win32::OLE qw(in valof with);
+  use Win32::OLE::Const 'Microsoft Excel';
+  use Win32::OLE::NLS qw(:DEFAULT :LANG :SUBLANG);</pre>
+<pre>
+  my $lgid = MAKELANGID(LANG_ENGLISH, SUBLANG_DEFAULT);
+  $Win32::OLE::LCID = MAKELCID($lgid);</pre>
+<pre>
+  $Win32::OLE::Warn = 3;</pre>
+<p>Here, Mary sets the locale to American English, which lets her do
+things like use American date formats (e.g. <code>&quot;12-30-98&quot;</code> rather than
+<code>&quot;30-12-98&quot;</code>) in her program. It will continue to work even when she's
+visiting one of her international customers and has to run this
+program on their computers.</p>
+<p>The value of <code>$Win32::OLE::Warn</code> determines what happens when an OLE
+error occurs. If it's 0, the error is ignored. If it's 2, or if it's 1
+and the script is running under <a href="../../../../lib/Pod/perlrun.html#item__2dw"><code>-w</code></a>, the Win32::OLE module invokes
+<code>Carp::carp()</code>. If <code>$Win32::OLE::Warn</code> is set to 3, <code>Carp::croak()</code>
+is invoked and the program dies immediately.</p>
+<p>Now the data can be put into an Excel spreadsheet to produce the
+chart. The following section of the program launches Excel and creates
+a new workbook with a single worksheet. It puts the column titles
+('Time', 'Open', 'High', 'Low', and 'Close') in a bold font on the
+first row of the sheet. The first column displays the timestamp in
+<em>hh:mm</em> format; the next four display prices.</p>
+<pre>
+  my $Excel = Win32::OLE-&gt;new('Excel.Application', 'Quit');
+  $Excel-&gt;{SheetsInNewWorkbook} = 1;
+  my $Book = $Excel-&gt;Workbooks-&gt;Add;
+  my $Sheet = $Book-&gt;Worksheets(1);
+  $Sheet-&gt;{Name} = 'Candle';</pre>
+<pre>
+  # Insert column titles
+  my $Range = $Sheet-&gt;Range(&quot;A1:E1&quot;);
+  $Range-&gt;{Value} = [qw(Time Open High Low Close)];
+  $Range-&gt;Font-&gt;{Bold} = 1;</pre>
+<pre>
+  $Sheet-&gt;Columns(&quot;A:A&quot;)-&gt;{NumberFormat} = &quot;h:mm&quot;;
+  # Open/High/Low/Close to be displayed in 32nds
+  $Sheet-&gt;Columns(&quot;B:E&quot;)-&gt;{NumberFormat} = &quot;# ?/32&quot;;</pre>
+<pre>
+  # Add 15 minute data to spreadsheet
+  print &quot;Add data\n&quot;;
+  $Range = $Sheet-&gt;Range(sprintf &quot;A2:E%d&quot;, 2+$#Bars);
+  $Range-&gt;{Value} = \@Bars;</pre>
+<p>The last statement shows how to pass arrays to OLE objects. The
+Win32::OLE module automatically translates each array reference to a
+<code>SAFEARRAY</code>, the internal OLE array data type. This translation first
+determines the maximum nesting level used by the Perl array, and then
+creates a <code>SAFEARRAY</code> of the same dimension. The <code>@Bars</code> array
+already contains the data in the correct form for the spreadsheet:</p>
+<pre>
+  ([Time1, Open1, High1, Low1, Close1],
+  ...
+  [TimeN, OpenN, HighN, LowN, CloseN])</pre>
+<p>Now the table in the spreadsheet can be used to create a candle stick
+chart from our bars. Excel automatically chooses the time axis labels
+if they are selected before the chart is created:</p>
+<pre>
+  # Create candle stick chart as new object on worksheet
+  $Sheet-&gt;Range(&quot;A:E&quot;)-&gt;Select;</pre>
+<pre>
+  my $Chart = $Book-&gt;Charts-&gt;Add;
+  $Chart-&gt;{ChartType} = xlStockOHLC;
+  $Chart-&gt;Location(xlLocationAsObject, $Sheet-&gt;{Name});
+  # Excel bug: the old $Chart is now invalid!
+  $Chart = $Excel-&gt;ActiveChart;</pre>
+<p>We can change the type of the chart from a separate sheet to a chart
+object on the spreadsheet page with the <code>$Chart-&gt;Location</code>
+method. (This invalidates the chart object handle, which might be
+considered a bug in Excel.) Fortunately, this new chart is still the
+'active' chart, so an object handle to it can be reclaimed simply by
+asking Excel.</p>
+<p>At this point, our chart still needs a title, the legend is
+meaningless, and the axis has decimals instead of fractions. We can
+fix those with the following code:</p>
+<pre>
+  # Add title, remove legend
+  with($Chart, HasLegend =&gt; 0, HasTitle =&gt; 1);
+  $Chart-&gt;ChartTitle-&gt;Characters-&gt;{Text} = &quot;US T-Bond&quot;;</pre>
+<pre>
+  # Set up daily statistics
+  $Open  = $Bars[0][1];
+  $High  = $Sheet-&gt;Evaluate(&quot;MAX(C:C)&quot;);
+  $Low   = $Sheet-&gt;Evaluate(&quot;MIN(D:D)&quot;);
+  $Close = $Bars[$#Bars][4];</pre>
+<p>The <code>with()</code> function partially mimics the Visual Basic With statement,
+but allows only property assignments. It's a convenient shortcut for
+this:</p>
+<pre>
+  { # open new scope
+    my $Axis = $Chart-&gt;Axes(xlValue);
+    $Axis-&gt;{HasMajorGridlines} = 1;
+    $Axis-&gt;{HasMinorGridlines} = 1;
+    # etc ...
+  }</pre>
+<p>The <code>$High</code> and <code>$Low</code> for the day are needed to determine the
+minimum and maximum scaling levels. MIN and MAX are spreadsheet
+functions, and aren't automatically available as methods. However,
+Excel provides an <code>Evaluate()</code> method to calculate arbitrary spreadsheet
+functions, so we can use that.</p>
+<p>We want the chart to show major gridlines at every fourth tick and
+minor gridlines at every second tick. The minimum and maximum are
+chosen to be whatever multiples of 1/16 we need to do that.</p>
+<pre>
+  # Change tickmark spacing from decimal to fractional
+  with($Chart-&gt;Axes(xlValue),
+      HasMajorGridlines =&gt; 1,
+      HasMinorGridlines =&gt; 1,
+      MajorUnit =&gt; 1/8,
+      MinorUnit =&gt; 1/16,
+      MinimumScale =&gt; int($Low*16)/16,
+      MaximumScale =&gt; int($High*16+1)/16
+  );</pre>
+<pre>
+  # Fat candles with only 5% gaps
+  $Chart-&gt;ChartGroups(1)-&gt;{GapWidth} = 5;</pre>
+<pre>
+  sub RGB { $_[0] | ($_[1] &gt;&gt; 8) | ($_[2] &gt;&gt; 16) }</pre>
+<pre>
+  # White background with a solid border</pre>
+<pre>
+  $Chart-&gt;PlotArea-&gt;Border-&gt;{LineStyle} = xlContinuous;
+  $Chart-&gt;PlotArea-&gt;Border-&gt;{Color} = RGB(0,0,0);
+  $Chart-&gt;PlotArea-&gt;Interior-&gt;{Color} = RGB(255,255,255);</pre>
+<pre>
+  # Add 1 hour moving average of the Close series
+  my $MovAvg = $Chart-&gt;SeriesCollection(4)-&gt;Trendlines
+        -&gt;Add({Type =&gt; xlMovingAvg, Period =&gt; 4});
+  $MovAvg-&gt;Border-&gt;{Color} = RGB(255,0,0);</pre>
+<p>Now the finished workbook can be saved to disk as
+<em>i:\tmp\tpj\data.xls</em>. That file most likely still exists from when the
+program ran yesterday, so we'll remove it. (Otherwise, Excel would pop
+up a dialog with a warning, because the <code>SaveAs()</code> method doesn't like
+to overwrite files.)</p>
+<pre>
+  # Save workbook to file my $Filename = 'i:\tmp\tpj\data.xls';
+  unlink $Filename if -f $Filename;
+  $Book-&gt;SaveAs($Filename);
+  $Book-&gt;Close;</pre>
+<p>
+</p>
+<h2><a name="activex_data_objects">ACTIVEX DATA OBJECTS</a></h2>
+<p>Mary stores the daily prices in her T-bonds database, keeping the data
+for the different contracts in separate tables. After creating an ADO
+(ActiveX Data Object) connection to the database, she tries to connect
+a record set to the table for the current contract. If this fails, she
+assumes that the table doesn't exists yet and tries to create it:</p>
+<pre>
+  use Win32::OLE::Const 'Microsoft ActiveX Data Objects';</pre>
+<pre>
+  my $Connection = Win32::OLE-&gt;new('ADODB.Connection');
+  my $Recordset = Win32::OLE-&gt;new('ADODB.Recordset');
+  $Connection-&gt;Open('T-Bonds');</pre>
+<pre>
+  # Open a record set for the table of this contract
+  {
+    local $Win32::OLE::Warn = 0;
+    $Recordset-&gt;Open($Contract, $Connection, adOpenKeyset,
+                         adLockOptimistic, adCmdTable);
+  }</pre>
+<pre>
+  # Create table and index if it doesn't exist yet
+  if (Win32::OLE-&gt;LastError) {
+      $Connection-&gt;Execute(&gt;&gt;&quot;SQL&quot;);
+        CREATE TABLE $Contract
+        (
+          Day DATETIME,
+          Open DOUBLE, High DOUBLE, Low DOUBLE, Close DOUBLE
+        )
+  SQL
+      $Connection-&gt;Execute(&gt;&gt;&quot;SQL&quot;);
+        CREATE INDEX $Contract
+        ON $Contract (Day) WITH PRIMARY
+  SQL
+      $Recordset-&gt;Open($Contract, $Connection, adOpenKeyset,
+                                adLockOptimistic, adCmdTable);
+  }</pre>
+<p><code>$Win32::OLE::Warn</code> is temporarily set to zero, so that if
+<code>$Recordset-</code>Open&gt; fails, the failure will be recorded silently without
+terminating the program. <code>Win32::OLE-</code>LastError&gt; shows whether the Open
+failed or not. <code>LastError</code> returns the OLE error code in a numeric
+context and the OLE error message in a string context, just like
+Perl's <a href="../../../../lib/Pod/perlvar.html#item__24_21"><code>$!</code></a> variable.</p>
+<p>Now Mary can add today's data:</p>
+<pre>
+  # Add new record to table
+  use Win32::OLE::Variant;
+  $Win32::OLE::Variant::LCID = $Win32::OLE::LCID;</pre>
+<pre>
+  my $Fields = [qw(Day Open High Low Close)];
+  my $Values = [Variant(VT_DATE, $Day),
+                $Open, $High, $Low, $Close];</pre>
+<p>Mary uses the Win32::OLE::Variant module to store <code>$Day</code> as a date
+instead of a mere string. She wants to make sure that it's stored as
+an American-style date, so in the third line shown here she sets the
+locale ID of the Win32::OLE::Variant module to match the Win32::OLE
+module. (<code>$Win32::OLE::LCID</code> had been set earlier to English, since
+that's what the Chicago Board of Trade uses.)</p>
+<pre>
+  {
+      local $Win32::OLE::Warn = 0;
+      $Recordset-&gt;AddNew($Fields, $Values);
+  }</pre>
+<pre>
+  # Replace existing record
+  if (Win32::OLE-&gt;LastError) {
+      $Recordset-&gt;CancelUpdate;
+      $Recordset-&gt;Close;
+      $Recordset-&gt;Open(&gt;&gt;&quot;SQL&quot;,
+                       $Connection, adOpenDynamic);
+          SELECT * FROM $Contract
+          WHERE Day = #$Day#
+  SQL
+      $Recordset-&gt;Update($Fields, $Values);
+  }</pre>
+<pre>
+  $Recordset-&gt;Close;
+  $Connection-&gt;Close;</pre>
+<p>The program expects to be able to add a new record to the table. It
+fails if a record for this date already exists, because the Day field
+is the primary index and therefore must be unique. If an error occurs,
+the update operation started by <code>AddNew()</code> must first be cancelled with
+<code>$Recordset-&gt;CancelUpdate</code>; otherwise the record set won't close.</p>
+<p>
+</p>
+<h2><a name="lotus_notes">LOTUS NOTES</a></h2>
+<p>Now Mary can use Lotus Notes to mail updates to all her customers
+interested in the T-bond data. (Lotus Notes doesn't provide its
+constants in the OLE type library, so Mary had to determine them by
+playing around with LotusScript.) The actual task is quite simple: A
+Notes session must be started, the mail database must be opened and
+the mail message must be created. The body of the message is created
+as a rich text field, which lets her mix formatted text with object
+attachments.</p>
+<p>In her program, Mary extracts the email addresses from her customer
+database and sends separate message to each. Here, we've simplified it
+somewhat.</p>
+<pre>
+  sub EMBED_ATTACHMENT {1454;}     # from LotusScript</pre>
+<pre>
+  my $Notes = Win32::OLE-&gt;new('Notes.NotesSession');
+  my $Database = $Notes-&gt;GetDatabase('', '');
+  $Database-&gt;OpenMail;
+  my $Document = $Database-&gt;CreateDocument;</pre>
+<pre>
+  $Document-&gt;{Form} = 'Memo';
+  $Document-&gt;{SendTo} = ['Jon Orwant &gt;orwant@tpj.com&gt;',
+                         'Jan Dubois &gt;jan.dubois@ibm.net&gt;'];
+  $Document-&gt;{Subject} = &quot;US T-Bonds Chart for $Day&quot;;</pre>
+<pre>
+  my $Body = $Document-&gt;CreateRichtextItem('Body');
+  $Body-&gt;AppendText(&gt;&gt;&quot;EOT&quot;);
+  I\'ve attached the latest US T-Bond data and chart for $Day.
+  The daily statistics were:</pre>
+<pre>
+  \tOpen\t$Open
+  \tHigh\t$High
+  \tLow\t$Low
+  \tClose\t$Close</pre>
+<pre>
+  Kind regards,</pre>
+<pre>
+  Mary
+  EOT</pre>
+<pre>
+  $Body-&gt;EmbedObject(EMBED_ATTACHMENT, '', $Filename);</pre>
+<pre>
+  $Document-&gt;Send(0);</pre>
+<p>
+</p>
+<hr />
+<h1><a name="variants">VARIANTS</a></h1>
+<p>In this final section, I'll talk about Variants, which are the data
+types that you use to talk to OLE objects. We talked about this line
+earlier:</p>
+<pre>
+  my $Values = [Variant(VT_DATE, $Day),
+                $Open, $High, $Low, $Close];</pre>
+<p>Here, the <code>Variant()</code> function creates a Variant object, of type <code>VT_DATE</code>
+and with the value <code>$Day</code>. Variants are similar in many ways to Perl
+scalars. Arguments to OLE methods are transparently converted from
+their internal Perl representation to Variants and back again by the
+Win32::OLE module.</p>
+<p>OLE automation uses a generic <code>VARIANT</code> data type to pass
+parameters. This data type contains type information in addition to
+the actual data value. Only the following data types are valid for OLE
+automation:</p>
+<pre>
+  B&lt;Data Type     Meaning&gt;
+  VT_EMPTY      Not specified
+  VT_NULL       Null
+  VT_I2         2 byte signed integer
+  VT_I4         4 byte signed integer
+  VT_R4         4 byte real
+  VT_R8         8 byte real
+  VT_CY         Currency
+  VT_DATE       Date
+  VT_BSTR       Unicode string
+  VT_DISPATCH   OLE automation interface
+  VT_ERROR      Error
+  VT_BOOL       Boolean
+  VT_VARIANT    (only valid with VT_BYREF)
+  VT_UNKNOWN    Generic COM interface
+  VT_UI1        Unsigned character</pre>
+<p>The following two flags can also be used:</p>
+<pre>
+  VT_ARRAY      Array of values
+  VT_BYREF      Pass by reference (instead of by value)</pre>
+<p><strong>The Perl to Variant transformation.</strong> The following conversions are
+performed automatically whenever a Perl value must be translated into
+a Variant:</p>
+<pre>
+  Perl value                  Variant
+  Integer values              VT_I4
+  Real values                 VT_R8
+  Strings                     VT_BSTR
+  undef                       VT_ERROR (DISP_E_PARAMNOTFOUND)
+  Array reference             VT_VARIANT | VT_ARRAY
+  Win32::OLE object           VT_DISPATCH
+  Win32::OLE::Variant object  Type of the Variant object</pre>
+<p>What if your Perl value is a list of lists? Those can be irregularly
+shaped in Perl; that is, the subsidiary lists needn't have the same
+number of elements. In this case, the structure will be converted to a
+``rectangular'' <code>SAFEARRAY</code> of Variants, with unused slots set to
+<code>VT_EMPTY</code>. Consider this Perl 2-D array:</p>
+<pre>
+  [ [&quot;Perl&quot; ],            # one element
+    [1, 3.1215, undef]    # three elements
+  ]</pre>
+<p>This will be translated to a 2 by 3 <code>SAFEARRAY</code> that looks like this:</p>
+<pre>
+  VT_BSTR(&quot;Perl&quot;) VT_EMPTY      VT_EMPTY
+  VT_I4(1) VT_R8(3.1415)        VT_ERROR(DISP_E_PARAMNOTFOUND)</pre>
+<p><strong>The Variant To Perl Transformation.</strong> Automatic conversion from Variants
+to Perl values happens as follows:</p>
+<pre>
+  Variant                Perl value
+  VT_BOOL, VT_ERROR      Integer
+  VT_UI1, VT_I2, VT_I4   Integer
+  VT_R4, VT_R8           Float value
+  VT_BSTR                String
+  VT_DISPATCH            Win32::OLE object</pre>
+<p><strong>The Win32::OLE::Variant module.</strong> This module provides access to the
+Variant data type, which gives you more control over how these
+arguments to OLE methods are encoded. (This is rarely necessary if you
+have a good grasp of the default conversion rules.) A Variant object
+can be created with the <code>Win32::OLE::Variant-&gt;new</code> method or the
+equivalent <code>Variant()</code> function:</p>
+<pre>
+  use Win32::OLE::Variant;
+  my $var1 = Win32::OLE::Variant-&gt;new(VT_DATE, 'Jan 1,1970');
+  my $var2 = Variant(VT_BSTR, 'This is an Unicode string');</pre>
+<p>Several methods let you inspect and manipulate Variant objects: The
+<code>Type()</code> and <code>Value()</code> methods return the variant type and value; the <code>As()</code>
+method returns the value after converting it to a different variant
+type; <code>ChangeType()</code> coerces the Variant into a different type; and
+<code>Unicode()</code> returns the value of a Variant object as an object of the
+Unicode::String class.</p>
+<p>These conversions are more interesting if they can be applied directly
+to the return value of an OLE method call without first mutilating the
+value with default conversions. This is possible with the following
+trick:</p>
+<pre>
+  my $RetVal = Variant(VT_EMPTY, undef);
+  $Object-&gt;Dispatch($Method, $RetVal, @Arguments);</pre>
+<p>Normally, you wouldn't call <code>Dispatch()</code> directly; it's executed
+implicitly by either <code>AUTOLOAD()</code> or Invoke(). If <code>Dispatch()</code> realizes
+that the return value is already a Win32::OLE::Variant object, the
+return value is not translated into a Perl representation but rather
+copied verbatim into the Variant object.</p>
+<p>Whenever a Win32::OLE::Variant object is used in a numeric or string
+context it is automatically converted into the corresponding format.</p>
+<pre>
+  printf &quot;Number: %f and String: %s\n&quot;,
+         $Var, $Var;</pre>
+<p>This is equivalent to:</p>
+<pre>
+  printf &quot;Number: %f and String: %s\n&quot;,
+         $Var-&gt;As(VT_R8), $Var-&gt;As(VT_BSTR);</pre>
+<p>For methods that modify their arguments, you need to use the <code>VT_BYREF</code>
+flag. This lets you create number and string Variants that can be
+modified by OLE methods. Here, Corel's <code>GetSize()</code> method takes two
+integers and stores the <a href="../../../../lib/Pod/perlguts.html#item_x"><code>x</code></a> and <code>y</code> dimensions in them:</p>
+<pre>
+  my $x = Variant( VT_I4 | VT_BYREF, 0);
+  my $y = Variant( VT_I4 | VT_BYREF, 0);
+  $Corel-&gt;GetSize($x, $y);</pre>
+<p><code>VT_BYREF</code> support for other Variant types might appear in future
+releases of Win32::OLE.</p>
+<p>
+</p>
+<hr />
+<h1><a name="further_information">FURTHER INFORMATION</a></h1>
+<p>
+</p>
+<h2><a name="documentation_and_example_code">DOCUMENTATION AND EXAMPLE CODE</a></h2>
+<p>More information about the OLE modules can be found in the
+documentation bundled with Win32::OLE. The distribution also contains
+other code samples.</p>
+<p>The object model for Microsoft Office applications can be found in the
+Visual Basic Reference for Microsoft Access, Excel, Word, or
+PowerPoint. These help files are not installed by default, but they
+can be added later by rerunning <em>setup.exe</em> and choosing <em>custom
+setup</em>. The object model for Microsoft Outlook can be found on the
+Microsoft Office Developer Forum at:
+<a href="http://www.microsoft.com/OutlookDev/.">http://www.microsoft.com/OutlookDev/.</a></p>
+<p>Information about the LotusScript object model can be found at:
+<a href="http://www.lotus.com/products/lotusscript.nsf.">http://www.lotus.com/products/lotusscript.nsf.</a></p>
+<p>
+</p>
+<h2><a name="ole_automation_on_other_platforms">OLE AUTOMATION ON OTHER PLATFORMS</a></h2>
+<p>Microsoft also makes OLE technology available for the Mac. DCOM is
+already included in Windows NT 4.0 and can be downloaded for Windows
+95. MVS and some Unix systems can use EntireX to get OLE
+functionality; see
+<a href="http://www.softwareag.com/corporat/solutions/entirex/entirex.htm.">http://www.softwareag.com/corporat/solutions/entirex/entirex.htm.</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 1998 <em>The Perl Journal</em>. <a href="http://www.tpj.com">http://www.tpj.com</a></p>
+<p>This article originally appeared in <em>The Perl Journal</em> #10.  It
+appears courtesy of Jon Orwant and <em>The Perl Journal</em>.  This document
+may be distributed under the same terms as Perl itself.</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;#10 - Win32::OLE by Jan Dubois</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

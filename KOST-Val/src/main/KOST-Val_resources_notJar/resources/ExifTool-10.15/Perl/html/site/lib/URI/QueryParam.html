@@ -1,0 +1,161 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>URI::QueryParam - Additional query methods for URIs</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;URI::QueryParam - Additional query methods for URIs</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>URI::QueryParam - Additional query methods for URIs</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+  use URI;
+  use URI::QueryParam;</pre>
+<pre>
+  $u = URI-&gt;new(&quot;&quot;, &quot;http&quot;);
+  $u-&gt;query_param(foo =&gt; 1, 2, 3);
+  print $u-&gt;query;    # prints foo=1&amp;foo=2&amp;foo=3</pre>
+<pre>
+  for my $key ($u-&gt;query_param) {
+      print &quot;$key: &quot;, join(&quot;, &quot;, $u-&gt;query_param($key)), &quot;\n&quot;;
+  }</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>Loading the <code>URI::QueryParam</code> module adds some extra methods to
+URIs that support query methods.  These methods provide an alternative
+interface to the $u-&gt;query_form data.</p>
+<p>The query_param_* methods have deliberately been made identical to the
+interface of the corresponding <code>CGI.pm</code> methods.</p>
+<p>The following additional methods are made available:</p>
+<dl>
+<dt><strong><a name="item_query_param">@keys = $u-&gt;query_param</a></strong><br />
+</dt>
+<dt><strong>@values = $u-&gt;query_param( $key )</strong><br />
+</dt>
+<dt><strong>$first_value = $u-&gt;query_param( $key )</strong><br />
+</dt>
+<dt><strong>$u-&gt;query_param( $key, $value,... )</strong><br />
+</dt>
+<dd>
+If $u-&gt;query_param is called with no arguments, it returns all the
+distinct parameter keys of the URI.  In a scalar context it returns the
+number of distinct keys.
+</dd>
+<dd>
+<p>When a $key argument is given, the method returns the parameter values with the
+given key.  In a scalar context, only the first parameter value is
+returned.</p>
+</dd>
+<dd>
+<p>If additional arguments are given, they are used to update successive
+parameters with the given key.  If any of the values provided are
+array references, then the array is dereferenced to get the actual
+values.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item_query_param_append">$u-&gt;query_param_append($key, $value,...)</a></strong><br />
+</dt>
+<dd>
+Adds new parameters with the given
+key without touching any old parameters with the same key.  It
+can be explained as a more efficient version of:
+</dd>
+<dd>
+<pre>
+   $u-&gt;query_param($key,
+                   $u-&gt;query_param($key),
+                   $value,...);</pre>
+</dd>
+<dd>
+<p>One difference is that this expression would return the old values
+of $key, whereas the <a href="#item_query_param_append"><code>query_param_append()</code></a> method does not.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item_query_param_delete">@values = $u-&gt;<code>query_param_delete($key)</code></a></strong><br />
+</dt>
+<dt><strong>$first_value = $u-&gt;<code>query_param_delete($key)</code></strong><br />
+</dt>
+<dd>
+Deletes all key/value pairs with the given key.
+The old values are returned.  In a scalar context, only the first value
+is returned.
+</dd>
+<dd>
+<p>Using the <a href="#item_query_param_delete"><code>query_param_delete()</code></a> method is slightly more efficient than
+the equivalent:</p>
+</dd>
+<dd>
+<pre>
+   $u-&gt;query_param($key, []);</pre>
+</dd>
+<p></p>
+<dt><strong><a name="item_query_form_hash">$hashref = $u-&gt;query_form_hash</a></strong><br />
+</dt>
+<dt><strong>$u-&gt;query_form_hash( \%new_form )</strong><br />
+</dt>
+<dd>
+Returns a reference to a hash that represents the
+query form's key/value pairs.  If a key occurs multiple times, then the hash
+value becomes an array reference.
+</dd>
+<dd>
+<p>Note that sequence information is lost.  This means that:</p>
+</dd>
+<dd>
+<pre>
+   $u-&gt;query_form_hash($u-&gt;query_form_hash)</pre>
+</dd>
+<dd>
+<p>is not necessarily a no-op, as it may reorder the key/value pairs.
+The values returned by the <a href="#item_query_param"><code>query_param()</code></a> method should stay the same
+though.</p>
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../../../site/lib/URI.html">the URI manpage</a>, <a href="../../../lib/CGI.html">the CGI manpage</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 2002 Gisle Aas.</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;URI::QueryParam - Additional query methods for URIs</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

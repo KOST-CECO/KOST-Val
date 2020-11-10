@@ -1,0 +1,321 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Tk::place - Geometry manager for fixed or rubber-sheet placement</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::place - Geometry manager for fixed or rubber-sheet placement</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#fine_points">FINE POINTS</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#keywords">KEYWORDS</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Tk::place - Geometry manager for fixed or rubber-sheet placement</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p>&nbsp;&nbsp;&nbsp;<em>$widget</em>-&gt;<strong>place</strong>?(<em>-option</em>=&gt;<em>value</em>?, <em>-option</em>=&gt;<em>value</em>, ...)?</p>
+<p>&nbsp;&nbsp;&nbsp;<em>$widget</em>-&gt;<strong>placeForget</strong></p>
+<p>&nbsp;&nbsp;&nbsp;<em>$widget</em>-&gt;<strong>placeInfo</strong></p>
+<p>&nbsp;&nbsp;&nbsp;<em>$master</em>-&gt;<strong>placeSlaves</strong></p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The placer is a geometry manager for Tk.
+It provides simple fixed placement of windows, where you specify
+the exact size and location of one window, called the <em>slave</em>,
+within another window, called the <em>$master</em>.
+The placer also provides rubber-sheet placement, where you specify the
+size and location of the slave in terms of the dimensions of
+the master, so that the slave changes size and location
+in response to changes in the size of the master.
+Lastly, the placer allows you to mix these styles of placement so
+that, for example, the slave has a fixed width and height but is
+centered inside the master.</p>
+<dl>
+<dt><strong><a name="item_place"><em>$slave</em>-&gt;<strong>place</strong>?(<em>-option</em>=&gt;<em>value</em>?, <em>-option</em>=&gt;<em>value</em>, ...?)?</a></strong><br />
+</dt>
+<dd>
+The <strong>place</strong> method arranges for the placer
+to manage the geometry of <em>$slave</em>.
+The remaining arguments consist of one or more <em>-option</em>=&gt;<em>value</em>
+pairs that specify the way in which <em>$slave</em>'s
+geometry is managed.
+If the placer is already managing <em>$slave</em>, then the
+<em>-option</em>=&gt;<em>value</em> pairs modify the configuration for <em>$slave</em>.
+The <strong>place</strong> method returns an empty string as result.
+The following <em>-option</em>=&gt;<em>value</em> pairs are supported:
+</dd>
+<dl>
+<dt><strong><a name="item__2din__3d_3e__24master"><strong>-in</strong> =&gt; <em>$master</em></a></strong><br />
+</dt>
+<dd>
+<em>$master</em> is the reference to the window relative
+to which <em>$slave</em> is to be placed.
+<em>$master</em> must either be <em>$slave</em>'s parent or a descendant
+of <em>$slave</em>'s parent.
+In addition, <em>$master</em> and <em>$slave</em> must both be descendants
+of the same top-level window.
+These restrictions are necessary to guarantee
+that <em>$slave</em> is visible whenever <em>$master</em> is visible.
+If this option isn't specified then the master defaults to
+<em>$slave</em>'s parent.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dx__3d_3e_location"><strong>-x</strong> =&gt; <em>location</em></a></strong><br />
+</dt>
+<dd>
+<em>Location</em> specifies the x-coordinate within the master window
+of the anchor point for <em>$slave</em> widget.
+The location is specified in screen units (i.e. any of the forms
+accepted by <strong>Tk_GetPixels</strong>) and need not lie within the bounds
+of the master window.
+</dd>
+<p></p>
+<dt><strong><a name="item__2drelx__3d_3e_location"><strong>-relx</strong> =&gt; <em>location</em></a></strong><br />
+</dt>
+<dd>
+<em>Location</em> specifies the x-coordinate within the master window
+of the anchor point for <em>$slave</em> widget.
+In this case the location is specified in a relative fashion
+as a floating-point number:  0.0 corresponds to the left edge
+of the master and 1.0 corresponds to the right edge of the master.
+<em>Location</em> need not be in the range 0.0-1.0.
+If both <strong>-x</strong> and <strong>-relx</strong> are specified for a slave
+then their values are summed.  For example, ``<strong>-relx</strong>=&gt;0.5, <strong>-x</strong>=-2''
+positions the left edge of the slave 2 pixels to the left of the
+center of its master.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dy__3d_3e_location"><strong>-y</strong> =&gt; <em>location</em></a></strong><br />
+</dt>
+<dd>
+<em>Location</em> specifies the y-coordinate within the master window
+of the anchor point for <em>$slave</em> widget.
+The location is specified in screen units (i.e. any of the forms
+accepted by <strong>Tk_GetPixels</strong>) and need not lie within the bounds
+of the master window.
+</dd>
+<p></p>
+<dt><strong><a name="item__2drely__3d_3e_location"><strong>-rely</strong> =&gt; <em>location</em></a></strong><br />
+</dt>
+<dd>
+<em>Location</em> specifies the y-coordinate within the master window
+of the anchor point for <em>$slave</em> widget.
+In this case the value is specified in a relative fashion
+as a floating-point number:  0.0 corresponds to the top edge
+of the master and 1.0 corresponds to the bottom edge of the master.
+<em>Location</em> need not be in the range 0.0-1.0.
+If both <strong>-y</strong> and <strong>-rely</strong> are specified for a slave
+then their values are summed.  For example, <strong>-rely</strong>=&gt;0.5, <strong>-x</strong>=&gt;3
+positions the top edge of the slave 3 pixels below the
+center of its master.
+</dd>
+<p></p>
+<dt><strong><a name="item__2danchor__3d_3e_where"><strong>-anchor</strong> =&gt; <em>where</em></a></strong><br />
+</dt>
+<dd>
+<em>Where</em> specifies which point of <em>$slave</em> is to be positioned
+at the (x,y) location selected by the <strong>-x</strong>, <strong>-y</strong>,
+<strong>-relx</strong>, and <strong>-rely</strong> options.
+The anchor point is in terms of the outer area of <em>$slave</em>
+including its border, if any.
+Thus if <em>where</em> is <strong>se</strong> then the lower-right corner of
+<em>$slave</em>'s border will appear at the given (x,y) location
+in the master.
+The anchor position defaults to <strong>nw</strong>.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dwidth__3d_3e_size"><strong>-width</strong> =&gt; <em>size</em></a></strong><br />
+</dt>
+<dd>
+<em>Size</em> specifies the width for <em>$slave</em> in screen units
+(i.e. any of the forms accepted by <strong>Tk_GetPixels</strong>).
+The width will be the outer width of <em>$slave</em> including its
+border, if any.
+If <em>size</em> is an empty string, or if no <strong>-width</strong>
+or <strong>-relwidth</strong> option is specified, then the width requested
+internally by the window will be used.
+</dd>
+<p></p>
+<dt><strong><a name="item__2drelwidth__3d_3e_size"><strong>-relwidth</strong> =&gt; <em>size</em></a></strong><br />
+</dt>
+<dd>
+<em>Size</em> specifies the width for <em>$slave</em>.
+In this case the width is specified as a floating-point number
+relative to the width of the master: 0.5 means <em>$slave</em> will
+be half as wide as the master, 1.0 means <em>$slave</em> will have
+the same width as the master, and so on.
+If both <strong>-width</strong> and <strong>-relwidth</strong> are specified for a slave,
+their values are summed.  For example, <strong>-relwidth</strong>=&gt;1.0, <strong>-width</strong>=&gt;5
+makes the slave 5 pixels wider than the master.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dheight__3d_3e_size"><strong>-height</strong> =&gt; <em>size</em></a></strong><br />
+</dt>
+<dd>
+<em>Size</em> specifies the height for <em>$slave</em> in screen units
+(i.e. any of the forms accepted by <strong>Tk_GetPixels</strong>).
+The height will be the outer dimension of <em>$slave</em> including its
+border, if any.
+If <em>size</em> is an empty string, or if no <strong>-height</strong> or
+<strong>-relheight</strong> option is specified, then the height requested
+internally by the window will be used.
+</dd>
+<p></p>
+<dt><strong><a name="item__2drelheight__3d_3e_size"><strong>-relheight</strong> =&gt; <em>size</em></a></strong><br />
+</dt>
+<dd>
+<em>Size</em> specifies the height for <em>$slave</em>.
+In this case the height is specified as a floating-point number
+relative to the height of the master: 0.5 means <em>$slave</em> will
+be half as high as the master, 1.0 means <em>$slave</em> will have
+the same height as the master, and so on.
+If both <strong>-height</strong> and <strong>-relheight</strong> are specified for a slave,
+their values are summed.  For example, <strong>-relheight</strong>=&gt;1.0, <strong>-height</strong>=&gt;-2
+makes the slave 2 pixels shorter than the master.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dbordermode__3d_3e_mode"><strong>-bordermode</strong> =&gt; <em>mode</em></a></strong><br />
+</dt>
+<dd>
+<em>Mode</em> determines the degree to which borders within the
+master are used in determining the placement of the slave.
+The default and most common value is <strong>inside</strong>.
+In this case the placer considers the area of the master to
+be the innermost area of the master, inside any border:
+an option of <strong>-x</strong>=&gt;<strong>0</strong> corresponds to an x-coordinate just
+inside the border and an option of <strong>-relwidth</strong>=&gt;1.0
+means <em>$slave</em> will fill the area inside the master's
+border.
+If <em>mode</em> is <strong>outside</strong> then the placer considers
+the area of the master to include its border;
+this mode is typically used when placing <em>$slave</em>
+outside its master, as with the options
+<strong>-x</strong>=&gt;<strong>0</strong>, <strong>-y</strong>=&gt;<strong>0</strong>, <strong>-anchor</strong>=&gt;<strong>ne</strong>.
+Lastly, <em>mode</em> may be specified as <strong>ignore</strong>, in which
+case borders are ignored:  the area of the master is considered
+to be its official X area, which includes any internal border but
+no external border.  A bordermode of <strong>ignore</strong> is probably
+not very useful.
+</dd>
+<dd>
+<p>If the same value is specified separately with
+two different options, such as <strong>-x</strong> and <strong>-relx</strong>, then
+the most recent option is used and the older one is ignored.</p>
+</dd>
+<p></p></dl>
+<dt><strong><a name="item_placeslaves"><em>$slave</em>-&gt;<strong>placeSlaves</strong></a></strong><br />
+</dt>
+<dd>
+The <strong>placeSlaves</strong> method returns a list of all the slave
+windows for which <em>$master</em> is the master.
+If there are no slaves for <em>$master</em> then an empty list is
+returned.
+</dd>
+<p></p>
+<dt><strong><a name="item_placeforget"><em>$slave</em>-&gt;<strong>placeForget</strong></a></strong><br />
+</dt>
+<dd>
+The <strong>placeForget</strong> method causes the placer to stop managing
+the geometry of <em>$slave</em>.  As a side effect of this method call
+<em>$slave</em> will be unmapped so that it doesn't appear on the
+screen.
+If <em>$slave</em> isn't currently managed by the placer then the
+method call has no effect.
+<strong>placeForget</strong> returns an empty string as result.
+</dd>
+<p></p>
+<dt><strong><a name="item_placeinfo"><em>$slave</em>-&gt;<strong>placeInfo</strong></a></strong><br />
+</dt>
+<dd>
+The <strong>placeInfo</strong> method returns a list giving the current
+configuration of <em>$slave</em>.
+The list consists of <em>-option</em>=&gt;<em>value</em> pairs in exactly the
+same form as might be specified to the <strong>place</strong>
+method.
+If the configuration of a window has been retrieved with
+<strong>placeInfo</strong>, that configuration can be restored later by
+first using <strong>placeForget</strong> to erase any existing information
+for the window and then invoking <strong>place</strong> with
+the saved information.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="fine_points">FINE POINTS</a></h1>
+<p>It is not necessary for the master window to be the parent
+of the slave window.
+This feature is useful in at least two situations.
+First, for complex window layouts it means you can create a
+hierarchy of subwindows whose only purpose
+is to assist in the layout of the parent.
+The ``<em>real children</em>'' of the parent (i.e. the windows that
+are significant for the application's user interface) can be
+children of the parent yet be placed inside the windows
+of the geometry-management hierarchy.
+This means that the path names of the ``<em>real children</em>''
+don't reflect the geometry-management hierarchy and users
+can specify options for the real children
+without being aware of the structure of the geometry-management
+hierarchy.</p>
+<p>A second reason for having a master different than the slave's
+parent is to tie two siblings together.
+For example, the placer can be used to force a window always to
+be positioned centered just below one of its
+siblings by specifying the configuration</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<strong>-in</strong>=&gt;<em>$sibling</em>, <strong>-relx</strong>=&gt;0.5, <strong>-rely</strong>=&gt;1.0,
+<strong>-anchor</strong>=&gt;'n', <strong>-bordermode</strong>=&gt;'outside'</p>
+<p>Whenever the <em>$sibling</em> widget is repositioned in the future, the slave
+will be repositioned as well.</p>
+<p>Unlike many other geometry managers (such as the packer)
+the placer does not make any attempt to manipulate the geometry of
+the master windows or the parents of slave windows (i.e. it doesn't
+set their requested sizes).
+To control the sizes of these windows, make them windows like
+frames and canvases that provide configuration options for this purpose.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../../../site/lib/Tk/form.html">Tk::form</a>
+<a href="../../../site/lib/Tk/grid.html">Tk::grid</a>
+<a href="../../../site/lib/Tk/pack.html">Tk::pack</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="keywords">KEYWORDS</a></h1>
+<p>geometry manager, height, location, master, place, rubber sheet, slave, width</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::place - Geometry manager for fixed or rubber-sheet placement</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

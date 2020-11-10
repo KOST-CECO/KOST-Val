@@ -1,0 +1,836 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Tk::Entry - Create and manipulate Entry widgets</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::Entry - Create and manipulate Entry widgets</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#standard_options">STANDARD OPTIONS</a></li>
+	<li><a href="#widgetspecific_options">WIDGET-SPECIFIC OPTIONS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#validation">VALIDATION</a></li>
+	<li><a href="#widget_methods">WIDGET METHODS</a></li>
+	<li><a href="#default_bindings">DEFAULT BINDINGS</a></li>
+	<li><a href="#keywords">KEYWORDS</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Tk::Entry - Create and manipulate Entry widgets</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>$entry</em> = <em>$parent</em>-&gt;<strong>Entry</strong>(?<em>options</em>?);</p>
+<p>
+</p>
+<hr />
+<h1><a name="standard_options">STANDARD OPTIONS</a></h1>
+<p><table cellspacing="0" cellpadding="0"><tr><td><strong>-background</strong><td><strong>-highlightbackground</strong><td><strong>-insertontime</strong><td><strong>-selectforeground</strong>
+<tr><td><strong>-borderwidth</strong><td><strong>-highlightcolor</strong><td><strong>-insertwidth</strong><td><strong>-takefocus</strong>
+<tr><td><strong>-cursor</strong><td><strong>-highlightthickness</strong><td><strong>-justify</strong><td><strong>-textvariable</strong>
+<tr><td><strong>-exportselection</strong><td><strong>-insertbackground</strong><td><strong>-relief</strong><td><strong>-xscrollcommand</strong>
+<tr><td><strong>-font</strong><td><strong>-insertborderwidth</strong><td><strong>-selectbackground</strong>
+<tr><td><strong>-foreground</strong><td><strong>-insertofftime</strong><td><strong>-selectborderwidth</strong></table></p>
+<p>
+</p>
+<hr />
+<h1><a name="widgetspecific_options">WIDGET-SPECIFIC OPTIONS</a></h1>
+<dl>
+<dt><strong><a name="item_command_2dline_name_3a__2ddisabledbackground">Command-Line Name: <strong>-disabledbackground</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_database_name_3a_disabledbackground">Database Name:  <strong>disabledBackground</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_database_class_3a_disabledbackground">Database Class: <strong>DisabledBackground</strong></a></strong><br />
+</dt>
+<dd>
+Specifies the background color to use when the entry is disabled.  If
+this option is the empty string, the normal background color is used.
+</dd>
+<p></p>
+<dt><strong><a name="item_command_2dline_name_3a__2ddisabledforeground">Command-Line Name: <strong>-disabledforeground</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_database_name_3a_disabledforeground">Database Name:  <strong>disabledForeground</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_database_class_3a_disabledforeground">Database Class: <strong>DisabledForeground</strong></a></strong><br />
+</dt>
+<dd>
+Specifies the foreground color to use when the entry is disabled.  If
+this option is the empty string, the normal foreground color is used.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_invalidcommand">Name:	<strong>invalidCommand</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_invalidcommand">Class:	<strong>InvalidCommand</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dinvalidcommand">Switch:	<strong>-invalidcommand</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_alias_3a__2dinvcmd">Alias:	<strong>-invcmd</strong></a></strong><br />
+</dt>
+<dd>
+Specifies a script to eval when <strong>validateCommand</strong> returns 0.
+Setting it to &lt;undef&gt; disables this feature (the default).  The best use
+of this option is to set it to <em>bell</em>.  See <strong>Validation</strong>
+below for more information.
+</dd>
+<p></p>
+<dt><strong><a name="item_command_2dline_name_3a__2dreadonlybackground">Command-Line Name: <strong>-readonlybackground</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_database_name_3a_readonlybackground">Database Name:  <strong>readonlyBackground</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_database_class_3a_readonlybackground">Database Class: <strong>ReadonlyBackground</strong></a></strong><br />
+</dt>
+<dd>
+Specifies the background color to use when the entry is read-only.  If
+this option is the empty string, the normal background color is used.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_show">Name:	<strong>show</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_show">Class:	<strong>Show</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dshow">Switch:	<strong>-show</strong></a></strong><br />
+</dt>
+<dd>
+If this option is specified, then the true contents of the entry
+are not displayed in the window.
+Instead, each character in the entry's value will be displayed as
+the first character in the value of this option, such as ``*''.
+This is useful, for example, if the entry is to be used to enter
+a password.
+If characters in the entry are selected and copied elsewhere, the
+information copied will be what is displayed, not the true contents
+of the entry.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_state">Name:	<strong>state</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_state">Class:	<strong>State</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dstate">Switch:	<strong>-state</strong></a></strong><br />
+</dt>
+<dd>
+Specifies one of three states for the entry: <strong>normal</strong>, <strong>disabled</strong>, or
+<strong>readonly</strong>.  If the entry is <strong>readonly</strong>, then the value may not be changed
+using widget commands and no insertion cursor will be displayed, even
+if the input focus is in the widget; the contents of the widget may
+still be selected.  If the entry is <strong>disabled</strong>, the value may not be
+changed, no insertion cursor will be displayed, the contents will not
+be selectable, and the entry may be displayed in a different color,
+depending on the values of the <strong>-disabledforeground</strong> and
+<strong>-disabledbackground</strong> options.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_validate">Name:	<strong>validate</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_validate">Class:	<strong>Validate</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dvalidate">Switch:	<strong>-validate</strong></a></strong><br />
+</dt>
+<dd>
+Specifies the mode in which validation should operate: <strong>none</strong>,
+<strong>focus</strong>, <strong>focusin</strong>, <strong>focusout</strong>, <strong>key</strong>, or <strong>all</strong>.
+It defaults to <strong>none</strong>.  When you want validation, you must explicitly
+state which mode you wish to use.  See <strong>Validation</strong> below for more.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_validatecommand">Name:	<strong>validateCommand</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_validatecommand">Class:	<strong>ValidateCommand</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dvalidatecommand">Switch:	<strong>-validatecommand</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_alias_3a__2dvcmd">Alias:	<strong>-vcmd</strong></a></strong><br />
+</dt>
+<dd>
+Specifies a script to eval when you want to validate the input into
+the entry widget.  Setting it to <a href="../../../lib/Pod/perlfunc.html#item_undef"><code>undef</code></a> disables this feature (the default).
+This command must return a valid boolean value.  If it returns 0 (or
+the valid boolean equivalent) then it means you reject the new edition
+and it will not occur and the <strong>invalidCommand</strong> will be evaluated if it
+is set. If it returns 1, then the new edition occurs.
+See <strong>Validation</strong> below for more information.
+</dd>
+<p></p>
+<dt><strong><a name="item_name_3a_width">Name:	<strong>width</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_width">Class:	<strong>Width</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_switch_3a__2dwidth">Switch:	<strong>-width</strong></a></strong><br />
+</dt>
+<dd>
+Specifies an integer value indicating the desired width of the entry window,
+in average-size characters of the widget's font.
+If the value is less than or equal to zero, the widget picks a
+size just large enough to hold its current text.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The <strong>Entry</strong> method creates a new window (given by the
+$entry argument) and makes it into an entry widget.
+Additional options, described above, may be specified on the
+command line or in the option database
+to configure aspects of the entry such as its colors, font,
+and relief.  The <strong>entry</strong> command returns its
+$entry argument.  At the time this command is invoked,
+there must not exist a window named $entry, but
+$entry's parent must exist.</p>
+<p>An entry is a widget that displays a one-line text string and
+allows that string to be edited using methods described below, which
+are typically bound to keystrokes and mouse actions.
+When first created, an entry's string is empty.
+A portion of the entry may be selected as described below.
+If an entry is exporting its selection (see the <strong>exportSelection</strong>
+option), then it will observe the standard X11 protocols for handling the
+selection;  entry selections are available as type <strong>STRING</strong>.
+Entries also observe the standard Tk rules for dealing with the
+input focus.  When an entry has the input focus it displays an
+<em>insertion cursor</em> to indicate where new characters will be
+inserted.</p>
+<p>Entries are capable of displaying strings that are too long to
+fit entirely within the widget's window.  In this case, only a
+portion of the string will be displayed;  methods described below
+may be used to change the view in the window.  Entries use
+the standard <strong>xScrollCommand</strong> mechanism for interacting with
+scrollbars (see the description of the <strong>-xscrollcommand</strong> option
+for details).  They also support scanning, as described below.</p>
+<p>
+</p>
+<hr />
+<h1><a name="validation">VALIDATION</a></h1>
+<p>Validation of entry widgets is derived from part of the patch written by
+<a href="mailto:jhobbs@cs.uoregon.edu.">jhobbs@cs.uoregon.edu.</a>  This works by setting the <strong>validateCommand</strong>
+option to a callback which will be evaluated according to the <strong>validate</strong>
+option as follows:</p>
+<dl>
+<dt><strong><a name="item_none"><strong>none</strong></a></strong><br />
+</dt>
+<dd>
+Default.  This means no validation will occur.
+</dd>
+<p></p>
+<dt><strong><a name="item_focus"><strong>focus</strong></a></strong><br />
+</dt>
+<dd>
+<strong>validateCommand</strong> will be called when the entry receives or
+loses focus.
+</dd>
+<p></p>
+<dt><strong><a name="item_focusin"><strong>focusin</strong></a></strong><br />
+</dt>
+<dd>
+<strong>validateCommand</strong> will be called when the entry receives focus.
+</dd>
+<p></p>
+<dt><strong><a name="item_focusout"><strong>focusout</strong></a></strong><br />
+</dt>
+<dd>
+<strong>validateCommand</strong> will be called when the entry loses focus.
+</dd>
+<p></p>
+<dt><strong><a name="item_key"><strong>key</strong></a></strong><br />
+</dt>
+<dd>
+<strong>validateCommand</strong> will be called when the entry is edited.
+</dd>
+<p></p>
+<dt><strong><a name="item_all"><strong>all</strong></a></strong><br />
+</dt>
+<dd>
+<strong>validateCommand</strong> will be called for all above conditions.
+</dd>
+<p></p></dl>
+<p>The <strong>validateCommand</strong> and <strong>invalidCommand</strong> are called with the following
+arguments:</p>
+<ul>
+<li><strong><a name="item_the_proposed_value_of_the_entry_2e_if_you_are_conf">The proposed value of the entry.  If you are configuring the
+entry widget to have a new textvariable, this will be the value of that
+textvariable.</a></strong><br />
+</li>
+<li><strong><a name="item_added">The characters to be added (or deleted). This will be <a href="../../../lib/Pod/perlfunc.html#item_undef"><code>undef</code></a>
+if validation is due to focus, explcit call to validate or if change
+is due to <code>-textvariable</code> changing.</a></strong><br />
+</li>
+<li><strong><a name="item_the_current_value_of_entry_i_2ee_2e_before_the_pro">The current value of entry i.e. before the proposed change.</a></strong><br />
+</li>
+<li><strong><a name="item_index_of_char_string_to_be_added_2fdeleted_2c_if_a">index of char string to be added/deleted, if any. -1 otherwise</a></strong><br />
+</li>
+<li><strong><a name="item_type_of_action_2e_1__3d_3d_insert_2c_0__3d_3d_dele">type of action. 1 == INSERT, 0 == DELETE,
+-1 if it's a forced validation or textvariable validation</a></strong><br />
+</li>
+</ul>
+<p>In general, the <strong>textVariable</strong> and <strong>validateCommand</strong> can be
+dangerous to mix. If you try set the <strong>textVariable</strong>
+to something that the <strong>validateCommand</strong> will not accept it will
+be set back to the value of the entry widget.
+Using the <strong>textVariable</strong> for read-only purposes will never cause problems.</p>
+<p>The <strong>validateCommand</strong> will turn itself off by setting
+<strong>validate</strong> to <strong>none</strong> when an error occurs, for example
+when the <strong>validateCommand</strong> or <strong>invalidCommand</strong> encounters
+an error in its script while evaluating, or
+<strong>validateCommand</strong> does not return a valid boolean value.</p>
+<p>With the perl/Tk version <strong>validate</strong> option is supposed to be
+``suspended'' while executing the <strong>validateCommand</strong> or the <strong>invalidCommand</strong>.
+This is experimental but in theory either callback can ``correct'' the
+value of the widget, and override the proposed change. (<strong>validateCommand</strong>
+should still return false to inhibit the change from happening when
+it returns.)</p>
+<p>
+</p>
+<hr />
+<h1><a name="widget_methods">WIDGET METHODS</a></h1>
+<p>The <strong>Entry</strong> method creates a widget object.
+This object supports the <strong>configure</strong> and <strong>cget</strong> methods
+described in <a href="../../../site/lib/Tk/options.html">the Tk::options manpage</a> which can be used to enquire and
+modify the options described above.
+The widget also inherits all the methods provided by the generic
+<a href="../../../site/lib/Tk/Widget.html">Tk::Widget</a> class.</p>
+<p>Many of the additional methods for entries take one or more indices as
+arguments.  An index specifies a particular character in the entry's
+string, in any of the following ways:</p>
+<dl>
+<dt><strong><a name="item_number"><em>number</em></a></strong><br />
+</dt>
+<dd>
+Specifies the character as a numerical index, where 0 corresponds
+to the first character in the string.
+</dd>
+<p></p>
+<dt><strong><a name="item_anchor"><strong>anchor</strong></a></strong><br />
+</dt>
+<dd>
+Indicates the anchor point for the selection, which is set with the
+<strong>selectionFrom</strong> and <strong>selectionAdjust</strong> methods.
+</dd>
+<p></p>
+<dt><strong><a name="item_end"><strong>end</strong></a></strong><br />
+</dt>
+<dd>
+Indicates the character just after the last one in the entry's string.
+This is equivalent to specifying a numerical index equal to the length
+of the entry's string.
+</dd>
+<p></p>
+<dt><strong><a name="item_insert"><strong>insert</strong></a></strong><br />
+</dt>
+<dd>
+Indicates the character adjacent to and immediately following the
+insertion cursor.
+</dd>
+<p></p>
+<dt><strong><a name="item_sel_2efirst"><strong>sel.first</strong></a></strong><br />
+</dt>
+<dd>
+Indicates the first character in the selection.  It is an error to
+use this form if the selection isn't in the entry window.
+</dd>
+<p></p>
+<dt><strong><a name="item_sel_2elast"><strong>sel.last</strong></a></strong><br />
+</dt>
+<dd>
+Indicates the character just after the last one in the selection.
+It is an error to use this form if the selection isn't in the
+entry window.
+</dd>
+<p></p>
+<dt><strong><a name="item__40number"><strong>@</strong><em>number</em></a></strong><br />
+</dt>
+<dd>
+In this form, <em>number</em> is treated as an x-coordinate in the
+entry's window;  the character spanning that x-coordinate is used.
+For example, ``<strong>@0</strong>'' indicates the left-most character in the
+window.
+</dd>
+<p></p></dl>
+<p>Abbreviations may be used for any of the forms above, e.g. ``<strong>e</strong>''
+or ``<strong>sel.f</strong>''.  In general, out-of-range indices are automatically
+rounded to the nearest legal value.</p>
+<p>The following additional methods are available for entry widgets:</p>
+<dl>
+<dt><strong><a name="item_bbox"><em>$entry</em>-&gt;<strong>bbox</strong>(<em>index</em>)</a></strong><br />
+</dt>
+<dd>
+Returns a list of four numbers describing the bounding box of the
+character given by <em>index</em>.
+The first two elements of the list give the x and y coordinates of
+the upper-left corner of the screen area covered by the character
+(in pixels relative to the widget) and the last two elements give
+the width and height of the character, in pixels.
+The bounding box may refer to a region outside the visible area
+of the window.
+</dd>
+<p></p>
+<dt><strong><a name="item_delete"><em>$entry</em>-&gt;<strong>delete</strong>(<em>first, </em>?<em>last</em>?)</a></strong><br />
+</dt>
+<dd>
+Returns the current value of the configuration option given
+by <em>option</em>.
+<em>Option</em> may have any of the values accepted by the <strong>entry</strong>
+command.
+</dd>
+<p></p>
+<dt><strong><a name="item_configure"><em>$entry</em>-&gt;<strong>configure</strong>(?<em>option</em>?, ?<em>value, option, value, ...</em>?)</a></strong><br />
+</dt>
+<dd>
+Query or modify the configuration options of the widget.
+If no <em>option</em> is specified, returns a list describing all of
+the available options for $entry (see <a href="../../../Tk/configure.html">the Tk::configure manpage</a> for
+information on the format of this list).  If <em>option</em> is specified
+with no <em>value</em>, then the command returns a list describing the
+one named option (this list will be identical to the corresponding
+sublist of the value returned if no <em>option</em> is specified).  If
+one or more <em>option-value</em> pairs are specified, then the command
+modifies the given widget <code>option(s)</code> to have the given value(s);  in
+this case the command returns an empty string.
+<em>Option</em> may have any of the values accepted by the <strong>entry</strong>
+command.
+</dd>
+<p></p>
+<dt><strong><em>$entry</em>-&gt;<strong>delete</strong>(<em>first, </em>?<em>last</em>?)</strong><br />
+</dt>
+<dd>
+Delete one or more elements of the entry.
+<em>First</em> is the index of the first character to delete, and
+<em>last</em> is the index of the character just after the last
+one to delete.
+If <em>last</em> isn't specified it defaults to <em>first</em>+1,
+i.e. a single character is deleted.
+This method returns an empty string.
+</dd>
+<p></p>
+<dt><strong><a name="item_get"><em>$entry</em>-&gt;<strong>get</strong></a></strong><br />
+</dt>
+<dd>
+Returns the entry's string.
+</dd>
+<p></p>
+<dt><strong><a name="item_icursor"><em>$entry</em>-&gt;<strong>icursor</strong>(<em>index</em>)</a></strong><br />
+</dt>
+<dd>
+Arrange for the insertion cursor to be displayed just before the character
+given by <em>index</em>.  Returns an empty string.
+</dd>
+<p></p>
+<dt><strong><a name="item_index"><em>$entry</em>-&gt;<strong>index</strong>(<em>index</em>)</a></strong><br />
+</dt>
+<dd>
+Returns the numerical index corresponding to <em>index</em>.
+</dd>
+<p></p>
+<dt><strong><em>$entry</em>-&gt;<strong>insert</strong>(<em>index, string</em>)</strong><br />
+</dt>
+<dd>
+Insert the characters of <em>string</em> just before the character
+indicated by <em>index</em>.  Returns an empty string.
+</dd>
+<p></p>
+<dt><strong><a name="item_scan"><em>$entry</em>-&gt;<strong>scan</strong>(<em>option, args</em>)</a></strong><br />
+</dt>
+<dt><strong><a name="item_scanoption"><em>$entry</em>-&gt;<strong>scan</strong><em>Option</em>(<em>args</em>)</a></strong><br />
+</dt>
+<dd>
+This method is used to implement scanning on entries.  It has
+two forms, depending on <em>Option</em>:
+</dd>
+<dl>
+<dt><strong><a name="item_scanmark"><em>$entry</em>-&gt;<strong>scanMark</strong>(<em>x</em>)</a></strong><br />
+</dt>
+<dd>
+Records <em>x</em> and the current view in the entry widget;  used in
+conjunction with later <strong>scanDragto</strong> methods.  Typically this
+method is associated with a mouse button press in the widget.  It
+returns an empty string.
+</dd>
+<p></p>
+<dt><strong><a name="item_scandragto"><em>$entry</em>-&gt;<strong>scanDragto</strong>(<em>x</em>)</a></strong><br />
+</dt>
+<dd>
+This method computes the difference between its <em>x</em> argument
+and the <em>x</em> argument to the last <strong>scanMark</strong> method for
+the widget.  It then adjusts the view left or right by 10 times the
+difference in x-coordinates.  This method is typically associated
+with mouse motion events in the widget, to produce the effect of
+dragging the entry at high speed through the widget.  The return
+value is an empty string.
+</dd>
+<p></p></dl>
+<dt><strong><a name="item_selection"><em>$entry</em>-&gt;<strong>selection</strong>(<em>option, arg</em>)</a></strong><br />
+</dt>
+<dt><strong><a name="item_selectionoption"><em>$entry</em>-&gt;<strong>selection</strong><em>Option</em>(<em>arg</em>)</a></strong><br />
+</dt>
+<dd>
+This method is used to adjust the selection within an entry.  It
+has several forms, depending on <em>Option</em>:
+</dd>
+<dl>
+<dt><strong><a name="item_selectionadjust"><em>$entry</em>-&gt;<strong>selectionAdjust</strong>(<em>index</em>)</a></strong><br />
+</dt>
+<dd>
+Locate the end of the selection nearest to the character given by
+<em>index</em>, and adjust that end of the selection to be at <em>index</em>
+(i.e including but not going beyond <em>index</em>).  The other
+end of the selection is made the anchor point for future
+<strong>selectionTo</strong> methods.  If the selection
+isn't currently in the entry, then a new selection is created to
+include the characters between <em>index</em> and the most recent
+selection anchor point, inclusive.
+Returns an empty string.
+</dd>
+<p></p>
+<dt><strong><a name="item_selectionclear"><em>$entry</em>-&gt;<strong>selectionClear</strong></a></strong><br />
+</dt>
+<dd>
+Clear the selection if it is currently in this widget.  If the
+selection isn't in this widget then the method has no effect.
+Returns an empty string.
+</dd>
+<p></p>
+<dt><strong><a name="item_selectionfrom"><em>$entry</em>-&gt;<strong>selectionFrom</strong>(<em>index</em>)</a></strong><br />
+</dt>
+<dd>
+Set the selection anchor point to just before the character
+given by <em>index</em>.  Doesn't change the selection.
+Returns an empty string.
+</dd>
+<p></p>
+<dt><strong><a name="item_selectionpresent"><em>$entry</em>-&gt;<strong>selectionPresent</strong></a></strong><br />
+</dt>
+<dd>
+Returns 1 if there is are characters selected in the entry,
+0 if nothing is selected.
+</dd>
+<p></p>
+<dt><strong><a name="item_selectionrange"><em>$entry</em>-&gt;<strong>selectionRange</strong>(<em>start, </em><em>end</em>)</a></strong><br />
+</dt>
+<dd>
+Sets the selection to include the characters starting with
+the one indexed by <em>start</em> and ending with the one just
+before <em>end</em>.
+If <em>end</em> refers to the same character as <em>start</em> or an
+earlier one, then the entry's selection is cleared.
+</dd>
+<p></p>
+<dt><strong><a name="item_selectionto"><em>$entry</em>-&gt;<strong>selectionTo</strong>(<em>index</em>)</a></strong><br />
+</dt>
+<dd>
+If <em>index</em> is before the anchor point, set the selection
+to the characters from <em>index</em> up to but not including
+the anchor point.
+If <em>index</em> is the same as the anchor point, do nothing.
+If <em>index</em> is after the anchor point, set the selection
+to the characters from the anchor point up to but not including
+<em>index</em>.
+The anchor point is determined by the most recent <strong>selectionFrom</strong>
+or <strong>selectionAdjust</strong> method in this widget.
+If the selection isn't in this widget then a new selection is
+created using the most recent anchor point specified for the widget.
+Returns an empty string.
+</dd>
+<p></p></dl>
+<dt><strong><a name="item_validate"><em>$entry</em>-&gt;<strong>validate</strong></a></strong><br />
+</dt>
+<dd>
+This command is used to force an evaluation of the <strong>validateCommand</strong>
+independent of the conditions specified by the <strong>validate</strong> option.  It
+returns 0 or 1.
+</dd>
+<p></p>
+<dt><strong><a name="item_xview"><em>$entry</em>-&gt;<strong>xview</strong>(<em>args</em>)</a></strong><br />
+</dt>
+<dd>
+This command is used to query and change the horizontal position of the
+text in the widget's window.  It can take any of the following
+forms:
+</dd>
+<dl>
+<dt><strong><em>$entry</em>-&gt;<strong>xview</strong></strong><br />
+</dt>
+<dd>
+Returns a list containing two elements.
+Each element is a real fraction between 0 and 1;  together they describe
+the horizontal span that is visible in the window.
+For example, if the first element is .2 and the second element is .7,
+20% of the entry's text is off-screen to the left, the middle 50% is visible
+in the window, and 30% of the text is off-screen to the right.
+These are the same values passed to scrollbars via the <strong>-xscrollcommand</strong>
+option.
+</dd>
+<p></p>
+<dt><strong><em>$entry</em>-&gt;<strong>xview</strong>(<em>index</em>)</strong><br />
+</dt>
+<dd>
+Adjusts the view in the window so that the character given by <em>index</em>
+is displayed at the left edge of the window.
+</dd>
+<p></p>
+<dt><strong><a name="item_xviewmoveto"><em>$entry</em>-&gt;<strong>xviewMoveto</strong>(<em>fraction</em>)</a></strong><br />
+</dt>
+<dd>
+Adjusts the view in the window so that the character <em>fraction</em> of the
+way through the text appears at the left edge of the window.
+<em>Fraction</em> must be a fraction between 0 and 1.
+</dd>
+<p></p>
+<dt><strong><a name="item_xviewscroll"><em>$entry</em>-&gt;<strong>xviewScroll</strong>(<em>number, what</em>)</a></strong><br />
+</dt>
+<dd>
+This method shifts the view in the window left or right according to
+<em>number</em> and <em>what</em>.
+<em>Number</em> must be an integer.
+<em>What</em> must be either <strong>units</strong> or <strong>pages</strong> or an abbreviation
+of one of these.
+If <em>what</em> is <strong>units</strong>, the view adjusts left or right by
+<em>number</em> average-width characters on the display;  if it is
+<strong>pages</strong> then the view adjusts by <em>number</em> screenfuls.
+If <em>number</em> is negative then characters farther to the left
+become visible;  if it is positive then characters farther to the right
+become visible.
+</dd>
+<p></p></dl>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="default_bindings">DEFAULT BINDINGS</a></h1>
+<p>Tk automatically creates class bindings for entries that give them
+the following default behavior.
+In the descriptions below, ``word'' refers to a contiguous group
+of letters, digits, or ``_'' characters, or any single character
+other than these.</p>
+<dl>
+<dt><strong><a name="item__5b1_5d">[1]</a></strong><br />
+</dt>
+<dd>
+Clicking mouse button 1 positions the insertion cursor
+just before the character underneath the mouse cursor, sets the
+input focus to this widget, and clears any selection in the widget.
+Dragging with mouse button 1 strokes out a selection between
+the insertion cursor and the character under the mouse.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b2_5d">[2]</a></strong><br />
+</dt>
+<dd>
+Double-clicking with mouse button 1 selects the word under the mouse
+and positions the insertion cursor at the beginning of the word.
+Dragging after a double click will stroke out a selection consisting
+of whole words.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b3_5d">[3]</a></strong><br />
+</dt>
+<dd>
+Triple-clicking with mouse button 1 selects all of the text in the
+entry and positions the insertion cursor before the first character.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b4_5d">[4]</a></strong><br />
+</dt>
+<dd>
+The ends of the selection can be adjusted by dragging with mouse
+button 1 while the Shift key is down;  this will adjust the end
+of the selection that was nearest to the mouse cursor when button
+1 was pressed.
+If the button is double-clicked before dragging then the selection
+will be adjusted in units of whole words.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b5_5d">[5]</a></strong><br />
+</dt>
+<dd>
+Clicking mouse button 1 with the Control key down will position the
+insertion cursor in the entry without affecting the selection.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b6_5d">[6]</a></strong><br />
+</dt>
+<dd>
+If any normal printing characters are typed in an entry, they are
+inserted at the point of the insertion cursor.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b7_5d">[7]</a></strong><br />
+</dt>
+<dd>
+The view in the entry can be adjusted by dragging with mouse button 2.
+If mouse button 2 is clicked without moving the mouse, the selection
+is copied into the entry at the position of the mouse cursor.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b8_5d">[8]</a></strong><br />
+</dt>
+<dd>
+If the mouse is dragged out of the entry on the left or right sides
+while button 1 is pressed, the entry will automatically scroll to
+make more text visible (if there is more text off-screen on the side
+where the mouse left the window).
+</dd>
+<p></p>
+<dt><strong><a name="item__5b9_5d">[9]</a></strong><br />
+</dt>
+<dd>
+The Left and Right keys move the insertion cursor one character to the
+left or right;  they also clear any selection in the entry and set
+the selection anchor.
+If Left or Right is typed with the Shift key down, then the insertion
+cursor moves and the selection is extended to include the new character.
+Control-Left and Control-Right move the insertion cursor by words, and
+Control-Shift-Left and Control-Shift-Right move the insertion cursor
+by words and also extend the selection.
+Control-b and Control-f behave the same as Left and Right, respectively.
+Meta-b and Meta-f behave the same as Control-Left and Control-Right,
+respectively.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b10_5d">[10]</a></strong><br />
+</dt>
+<dd>
+The Home key, or Control-a, will move the insertion cursor to the
+beginning of the entry and clear any selection in the entry.
+Shift-Home moves the insertion cursor to the beginning of the entry
+and also extends the selection to that point.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b11_5d">[11]</a></strong><br />
+</dt>
+<dd>
+The End key, or Control-e, will move the insertion cursor to the
+end of the entry and clear any selection in the entry.
+Shift-End moves the cursor to the end and extends the selection
+to that point.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b12_5d">[12]</a></strong><br />
+</dt>
+<dd>
+The Select key and Control-Space set the selection anchor to the position
+of the insertion cursor.  They don't affect the current selection.
+Shift-Select and Control-Shift-Space adjust the selection to the
+current position of the insertion cursor, selecting from the anchor
+to the insertion cursor if there was not any selection previously.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b13_5d">[13]</a></strong><br />
+</dt>
+<dd>
+Control-/ selects all the text in the entry.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b14_5d">[14]</a></strong><br />
+</dt>
+<dd>
+Control-\ clears any selection in the entry.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b15_5d">[15]</a></strong><br />
+</dt>
+<dd>
+The F16 key (labelled Copy on many Sun workstations) or Meta-w
+copies the selection in the widget to the clipboard, if there is a selection.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b16_5d">[16]</a></strong><br />
+</dt>
+<dd>
+The F20 key (labelled Cut on many Sun workstations) or Control-w
+copies the selection in the widget to the clipboard and deletes
+the selection.
+If there is no selection in the widget then these keys have no effect.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b17_5d">[17]</a></strong><br />
+</dt>
+<dd>
+The F18 key (labelled Paste on many Sun workstations) or Control-y
+inserts the contents of the clipboard at the position of the
+insertion cursor.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b18_5d">[18]</a></strong><br />
+</dt>
+<dd>
+The Delete key deletes the selection, if there is one in the entry.
+If there is no selection, it deletes the character to the right of
+the insertion cursor.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b19_5d">[19]</a></strong><br />
+</dt>
+<dd>
+The BackSpace key and Control-h delete the selection, if there is one
+in the entry.
+If there is no selection, it deletes the character to the left of
+the insertion cursor.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b20_5d">[20]</a></strong><br />
+</dt>
+<dd>
+Control-d deletes the character to the right of the insertion cursor.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b21_5d">[21]</a></strong><br />
+</dt>
+<dd>
+Meta-d deletes the word to the right of the insertion cursor.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b22_5d">[22]</a></strong><br />
+</dt>
+<dd>
+Control-k deletes all the characters to the right of the insertion
+cursor.
+</dd>
+<p></p>
+<dt><strong><a name="item__5b23_5d">[23]</a></strong><br />
+</dt>
+<dd>
+Control-t reverses the order of the two characters to the right of
+the insertion cursor.
+</dd>
+<dd>
+<p>If the entry is disabled using the <strong>-state</strong> option, then the entry's
+view can still be adjusted and text in the entry can still be selected,
+but no insertion cursor will be displayed and no text modifications will
+take place.</p>
+</dd>
+<dd>
+<p>The behavior of entries can be changed by defining new bindings for
+individual widgets or by redefining the class bindings.</p>
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="keywords">KEYWORDS</a></h1>
+<p>entry, widget</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::Entry - Create and manipulate Entry widgets</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

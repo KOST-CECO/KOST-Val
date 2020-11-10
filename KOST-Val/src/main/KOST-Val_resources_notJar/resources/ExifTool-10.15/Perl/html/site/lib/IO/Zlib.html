@@ -1,0 +1,218 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>IO::Zlib - IO:: style interface to L&lt;Compress::Zlib&gt;</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;IO::Zlib - IO:: style interface to L&lt;Compress::Zlib&gt;</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#constructor">CONSTRUCTOR</a></li>
+	<li><a href="#methods">METHODS</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#history">HISTORY</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>IO::Zlib - IO:: style interface to <a href="../../../site/lib/Compress/Zlib.html">the Compress::Zlib manpage</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p>With any version of Perl 5 you can use the basic OO interface:</p>
+<pre>
+    use IO::Zlib;</pre>
+<pre>
+    $fh = new IO::Zlib;
+    if ($fh-&gt;open(&quot;file.gz&quot;, &quot;rb&quot;)) {
+        print &lt;$fh&gt;;
+        $fh-&gt;close;
+    }</pre>
+<pre>
+    $fh = IO::Zlib-&gt;new(&quot;file.gz&quot;, &quot;wb9&quot;);
+    if (defined $fh) {
+        print $fh &quot;bar\n&quot;;
+        $fh-&gt;close;
+    }</pre>
+<pre>
+    $fh = IO::Zlib-&gt;new(&quot;file.gz&quot;, &quot;rb&quot;);
+    if (defined $fh) {
+        print &lt;$fh&gt;;
+        undef $fh;       # automatically closes the file
+    }</pre>
+<p>With Perl 5.004 you can also use the TIEHANDLE interface to access
+compressed files just like ordinary files:</p>
+<pre>
+    use IO::Zlib;</pre>
+<pre>
+    tie *FILE, 'IO::Zlib', &quot;file.gz&quot;, &quot;wb&quot;;
+    print FILE &quot;line 1\nline2\n&quot;;</pre>
+<pre>
+    tie *FILE, 'IO::Zlib', &quot;file.gz&quot;, &quot;rb&quot;;
+    while (&lt;FILE&gt;) { print &quot;LINE: &quot;, $_ };</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p><code>IO::Zlib</code> provides an IO:: style interface to <a href="../../../site/lib/Compress/Zlib.html">the Compress::Zlib manpage</a> and
+hence to gzip/zlib compressed files. It provides many of the same methods
+as the <a href="../../../lib/IO/Handle.html">the IO::Handle manpage</a> interface.</p>
+<p>
+</p>
+<hr />
+<h1><a name="constructor">CONSTRUCTOR</a></h1>
+<dl>
+<dt><strong><a name="item_new">new ( [ARGS] )</a></strong><br />
+</dt>
+<dd>
+Creates an <code>IO::Zlib</code> object. If it receives any parameters, they are
+passed to the method <a href="#item_open"><code>open</code></a>; if the open fails, the object is destroyed.
+Otherwise, it is returned to the caller.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="methods">METHODS</a></h1>
+<dl>
+<dt><strong><a name="item_open">open ( FILENAME, MODE )</a></strong><br />
+</dt>
+<dd>
+<a href="#item_open"><code>open</code></a> takes two arguments. The first is the name of the file to open
+and the second is the open mode. The mode can be anything acceptable to
+<a href="../../../site/lib/Compress/Zlib.html">the Compress::Zlib manpage</a> and by extension anything acceptable to <em>zlib</em> (that
+basically means POSIX <code>fopen()</code> style mode strings plus an optional number
+to indicate the compression level).
+</dd>
+<p></p>
+<dt><strong><a name="item_opened">opened</a></strong><br />
+</dt>
+<dd>
+Returns true if the object currently refers to a opened file.
+</dd>
+<p></p>
+<dt><strong><a name="item_close">close</a></strong><br />
+</dt>
+<dd>
+Close the file associated with the object and disassociate
+the file from the handle.
+Done automatically on destroy.
+</dd>
+<p></p>
+<dt><strong><a name="item_getc">getc</a></strong><br />
+</dt>
+<dd>
+Return the next character from the file, or undef if none remain.
+</dd>
+<p></p>
+<dt><strong><a name="item_getline">getline</a></strong><br />
+</dt>
+<dd>
+Return the next line from the file, or undef on end of string.
+Can safely be called in an array context.
+Currently ignores $/ ($INPUT_RECORD_SEPARATOR or $RS when <a href="../../../lib/English.html">the English manpage</a>
+is in use) and treats lines as delimited by ``\n''.
+</dd>
+<p></p>
+<dt><strong><a name="item_getlines">getlines</a></strong><br />
+</dt>
+<dd>
+Get all remaining lines from the file.
+It will <code>croak()</code> if accidentally called in a scalar context.
+</dd>
+<p></p>
+<dt><strong><a name="item_print">print ( ARGS... )</a></strong><br />
+</dt>
+<dd>
+Print ARGS to the  file.
+</dd>
+<p></p>
+<dt><strong><a name="item_read">read ( BUF, NBYTES, [OFFSET] )</a></strong><br />
+</dt>
+<dd>
+Read some bytes from the file.
+Returns the number of bytes actually read, 0 on end-of-file, undef on error.
+</dd>
+<p></p>
+<dt><strong><a name="item_eof">eof</a></strong><br />
+</dt>
+<dd>
+Returns true if the handle is currently positioned at end of file?
+</dd>
+<p></p>
+<dt><strong><a name="item_seek">seek ( OFFSET, WHENCE )</a></strong><br />
+</dt>
+<dd>
+Seek to a given position in the stream.
+Not yet supported.
+</dd>
+<p></p>
+<dt><strong><a name="item_tell">tell</a></strong><br />
+</dt>
+<dd>
+Return the current position in the stream, as a numeric offset.
+Not yet supported.
+</dd>
+<p></p>
+<dt><strong><a name="item_setpos">setpos ( POS )</a></strong><br />
+</dt>
+<dd>
+Set the current position, using the opaque value returned by <a href="#item_getpos"><code>getpos()</code></a>.
+Not yet supported.
+</dd>
+<p></p>
+<dt><strong><a name="item_getpos">getpos ( POS )</a></strong><br />
+</dt>
+<dd>
+Return the current position in the string, as an opaque object.
+Not yet supported.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../../../lib/Pod/perlfunc.html">the perlfunc manpage</a>,
+<a href="../../../lib/Pod/perlop.html#i_o_operators">I/O Operators in the perlop manpage</a>,
+<a href="../../../lib/IO/Handle.html">the IO::Handle manpage</a>,
+<a href="../../../site/lib/Compress/Zlib.html">the Compress::Zlib manpage</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="history">HISTORY</a></h1>
+<p>Created by Tom Hughes &lt;<em><a href="mailto:tom@compton.nu">tom@compton.nu</a></em>&gt;.</p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright (c) 1998-2001 Tom Hughes &lt;<em><a href="mailto:tom@compton.nu">tom@compton.nu</a></em>&gt;.
+All rights reserved. This program is free software; you can redistribute
+it and/or modify it under the same terms as Perl itself.</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;IO::Zlib - IO:: style interface to L&lt;Compress::Zlib&gt;</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

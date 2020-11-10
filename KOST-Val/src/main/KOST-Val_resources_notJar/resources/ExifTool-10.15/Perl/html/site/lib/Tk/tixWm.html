@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Tk::tixWm - Tix's addition to the standard TK wm command.</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::tixWm - Tix's addition to the standard TK wm command.</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#methods">METHODS</a></li>
+	<li><a href="#bugs">BUGS</a></li>
+	<li><a href="#authors">AUTHORS</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#keywords">KEYWORDS</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Tk::tixWm - Tix's addition to the standard TK wm command.</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>$widget</em>-&gt;<strong>wmCapture</strong></p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;<em>$widget</em>-&gt;<strong>wmRelease</strong></p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The <strong>wmCapture</strong> and the <strong>wmRelease</strong> methods change the
+toplevel attribute of Tk widgets.</p>
+<p>
+</p>
+<hr />
+<h1><a name="methods">METHODS</a></h1>
+<dl>
+<dt><strong><a name="item_wmcapture"><em>$widget</em>-&gt;<strong>wmCapture</strong></a></strong><br />
+</dt>
+<dd>
+Converts the toplevel window specified by <em>$widget</em> into a non-toplevel
+widget. Normally this command is called to convert a <a href="../../../site/lib/Tk/Toplevel.html">Toplevel</a> widget
+into a <a href="../../../site/lib/Tk/Frame.html">Frame</a> widget. The newly-converted frame widget is
+un-mapped from the screen. To make it appear inside its parent, you
+must call a geometry manager (e.g. grid or pack) explictly.
+</dd>
+<p></p>
+<dt><strong><a name="item_wmrelease"><em>$widget</em>-&gt;<strong>wmRelease</strong></a></strong><br />
+</dt>
+<dd>
+Makes the non-toplevel window specified by <em>$widget</em> into a toplevel
+widget. Normally this command is called to convert a <a href="../../../site/lib/Tk/Frame.html">Frame</a> widget
+into a <a href="../../../site/lib/Tk/Toplevel.html">Toplevel</a> widget, but it can also be used on any
+non-toplevel widget (e.g, label). The newly-converted toplevel window
+is in a <strong>withdrawn</strong> state. To make it appear on the screen, you must call
+<strong>deiconify</strong> after calling <strong>wmRelease</strong>.
+</dd>
+<dd>
+<p>Any data associated with <em>$widget</em> via <strong>wm</strong> methods (icon, protocol,
+command etc.) are released, and must be re-established if window is later
+re-captured.</p>
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="bugs">BUGS</a></h1>
+<p><strong>wmCapture</strong> does not exist in the Win32 window manager code.</p>
+<p>How these methods interact with perl/Tk's class hierarchy is not yet clear.
+In particular a <strong>wmRelease</strong>d window will not automatically ``<em>inherit</em>''
+the <strong>Tk::Wm</strong> methods, however a <strong>wmCapture</strong>d window still will.
+(A <strong>release</strong>d <strong>Label</strong> might make a good candidate for an <strong>Icon</strong>.)</p>
+<p>
+</p>
+<hr />
+<h1><a name="authors">AUTHORS</a></h1>
+<p>Ioi Kim Lam - <a href="mailto:ioi@graphics.cis.upenn.edu">ioi@graphics.cis.upenn.edu</a> wrote original Tix version.
+Updated for tk8.0, Win32 and perl by Nick Ing-Simmons.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../../../site/lib/Tk/Wm.html">Tk::Wm</a>
+<a href="../../../site/lib/Tk/Mwm.html">Tk::Mwm</a>
+<a href="../../../site/lib/Tk/Frame.html">Tk::Frame</a>
+<a href="../../../site/lib/Tk/Toplevel.html">Tk::Toplevel</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="keywords">KEYWORDS</a></h1>
+<p>window manager, wm, TIX</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::tixWm - Tix's addition to the standard TK wm command.</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

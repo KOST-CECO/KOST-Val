@@ -1,0 +1,690 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Tk - a graphical user interface toolkit for Perl</title>
+<link rel="stylesheet" href="../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk - a graphical user interface toolkit for Perl</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<ul>
+
+		<li><a href="#introduction">Introduction</a></li>
+		<li><a href="#tk_geometry_management">Tk Geometry Management</a></li>
+		<li><a href="#binding_events_and_callbacks">Binding Events and Callbacks</a></li>
+		<li><a href="#tk_image_classes">Tk Image Classes</a></li>
+		<li><a href="#tix_extensions">Tix Extensions</a></li>
+		<li><a href="#tk_widget_classes">Tk Widget Classes</a></li>
+		<li><a href="#tk_generic_methods">Tk Generic Methods</a></li>
+		<li><a href="#user_interaction">User Interaction</a></li>
+		<li><a href="#creating_and_configuring_widgets">Creating and Configuring Widgets</a></li>
+		<li><a href="#popups_and_dialogs">Popups and Dialogs</a></li>
+		<li><a href="#derived_widgets">Derived Widgets</a></li>
+		<li><a href="#c_programming">C Programming</a></li>
+		<li><a href="#implementation">Implementation</a></li>
+		<li><a href="#experimental_modules">Experimental Modules</a></li>
+		<li><a href="#other_modules_and_languages">Other Modules and Languages</a></li>
+	</ul>
+
+	<li><a href="#author">AUTHOR</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Tk - a graphical user interface toolkit for Perl</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+    use Tk;
+    $top = new MainWindow;
+    MainLoop;</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The Perl/Tk manual is split up into a number of sections:</p>
+<p>
+</p>
+<h2><a name="introduction">Introduction</a></h2>
+<ul>
+<li></li>
+<a href="../../site/lib/Tk/overview.html">Tk::overview</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/UserGuide.html">Tk::UserGuide</a>
+<p></p></ul>
+<p>
+</p>
+<h2><a name="tk_geometry_management">Tk Geometry Management</a></h2>
+<ul>
+<li></li>
+<a href="../../site/lib/Tk/Adjuster.html">Tk::Adjuster</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/form.html">Tk::form</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/grid.html">Tk::grid</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/pack.html">Tk::pack</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/place.html">Tk::place</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/Table.html">Tk::Table</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/Tiler.html">Tk::Tiler</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/Wm.html">Tk::Wm</a>
+<p></p></ul>
+<p>
+</p>
+<h2><a name="binding_events_and_callbacks">Binding Events and Callbacks</a></h2>
+<ul>
+<li></li>
+<a href="../../site/lib/Tk/After.html">Tk::After</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/bind.html">Tk::bind</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/bindtags.html">Tk::bindtags</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/callbacks.html">Tk::callbacks</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/Error.html">Tk::Error</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/event.html">Tk::event</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/exit.html">Tk::exit</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/fileevent.html">Tk::fileevent</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/IO.html">Tk::IO</a>
+<p></p></ul>
+<p>
+</p>
+<h2><a name="tk_image_classes">Tk Image Classes</a></h2>
+<ul>
+<li></li>
+<a href="../../site/lib/Tk/Animation.html">Tk::Animation</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/Bitmap.html">Tk::Bitmap</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/Compound.html">Tk::Compound</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/Image.html">Tk::Image</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/Photo.html">Tk::Photo</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/Pixmap.html">Tk::Pixmap</a>
+<p></p></ul>
+<p>
+</p>
+<h2><a name="tix_extensions">Tix Extensions</a></h2>
+<ul>
+<li></li>
+<a href="../../site/lib/Tk/Balloon.html">Tk::Balloon</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/BrowseEntry.html">Tk::BrowseEntry</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/DialogBox.html">Tk::DialogBox</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/DirTree.html">Tk::DirTree</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/DItem.html">Tk::DItem</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/InputO.html">Tk::InputO</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/LabFrame.html">Tk::LabFrame</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/Mwm.html">Tk::Mwm</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/NoteBook.html">Tk::NoteBook</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/TixGrid.html">Tk::TixGrid</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/tixWm.html">Tk::tixWm</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/TList.html">Tk::TList</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/Tree.html">Tk::Tree</a>
+<p></p></ul>
+<p>
+</p>
+<h2><a name="tk_widget_classes">Tk Widget Classes</a></h2>
+<ul>
+<li></li>
+<a href="../../site/lib/Tk/Button.html">Tk::Button</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/Canvas.html">Tk::Canvas</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/Checkbutton.html">Tk::Checkbutton</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/Entry.html">Tk::Entry</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/Frame.html">Tk::Frame</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/HList.html">Tk::HList</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/Label.html">Tk::Label</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/Listbox.html">Tk::Listbox</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/Menu.html">Tk::Menu</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/Menubutton.html">Tk::Menubutton</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/Message.html">Tk::Message</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/Optionmenu.html">Tk::Optionmenu</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/Radiobutton.html">Tk::Radiobutton</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/Scale.html">Tk::Scale</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/Scrollbar.html">Tk::Scrollbar</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/Text.html">Tk::Text</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/Toplevel.html">Tk::Toplevel</a>
+<p></p></ul>
+<p>
+</p>
+<h2><a name="tk_generic_methods">Tk Generic Methods</a></h2>
+<ul>
+<li></li>
+<a href="../../site/lib/Tk/Font.html">Tk::Font</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/send.html">Tk::send</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/tkvars.html">Tk::tkvars</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/Widget.html">Tk::Widget</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/X11Font.html">Tk::X11Font</a>
+<p></p></ul>
+<p>
+</p>
+<h2><a name="user_interaction">User Interaction</a></h2>
+<ul>
+<li></li>
+<a href="../../site/lib/Tk/DropSite.html">Tk::DropSite</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/Clipboard.html">Tk::Clipboard</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/focus.html">Tk::focus</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/grab.html">Tk::grab</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/selection.html">Tk::selection</a>
+<p></p></ul>
+<p>
+</p>
+<h2><a name="creating_and_configuring_widgets">Creating and Configuring Widgets</a></h2>
+<ul>
+<li></li>
+<a href="../../site/lib/Tk/CmdLine.html">Tk::CmdLine</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/MainWindow.html">Tk::MainWindow</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/option.html">Tk::option</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/options.html">Tk::options</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/palette.html">Tk::palette</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/Xrm.html">Tk::Xrm</a>
+<p></p></ul>
+<p>
+</p>
+<h2><a name="popups_and_dialogs">Popups and Dialogs</a></h2>
+<ul>
+<li></li>
+<a href="../../site/lib/Tk/chooseColor.html">Tk::chooseColor</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/ColorEditor.html">Tk::ColorEditor</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/Dialog.html">Tk::Dialog</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/Dialog.html">Tk::Dialog</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/FileSelect.html">Tk::FileSelect</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/getOpenFile.html">Tk::getOpenFile</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/messageBox.html">Tk::messageBox</a>
+<p></p></ul>
+<p>
+</p>
+<h2><a name="derived_widgets">Derived Widgets</a></h2>
+<ul>
+<li></li>
+<a href="../../site/lib/Tk/composite.html">Tk::composite</a>
+<p></p>
+<li></li>
+<a href="../../Tk/configspec.html">Tk::configspec</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/Derived.html">Tk::Derived</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/mega.html">Tk::mega</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/ROText.html">Tk::ROText</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/Scrolled.html">Tk::Scrolled</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/TextUndo.html">Tk::TextUndo</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/Reindex.html">Tk::Reindex</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/Pane.html">Tk::Pane</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/ProgressBar.html">Tk::ProgressBar</a>
+<p></p></ul>
+<p>
+</p>
+<h2><a name="c_programming">C Programming</a></h2>
+<ul>
+<li></li>
+Internals
+<p></p>
+<li></li>
+pTk
+<p></p>
+<li></li>
+3DBorder
+<p></p>
+<li></li>
+BackgdErr
+<p></p>
+<li></li>
+BindTable
+<p></p>
+<li></li>
+CanvPsY
+<p></p>
+<li></li>
+CanvTkwin
+<p></p>
+<li></li>
+CanvTxtInfo
+<p></p>
+<li></li>
+Clipboard
+<p></p>
+<li></li>
+ClrSelect
+<p></p>
+<li></li>
+ConfigWidg
+<p></p>
+<li></li>
+ConfigWind
+<p></p>
+<li></li>
+CoordToWin
+<p></p>
+<li></li>
+CrtErrHdlr
+<p></p>
+<li></li>
+CrtGenHdlr
+<p></p>
+<li></li>
+CrtImgType
+<p></p>
+<li></li>
+CrtItemType
+<p></p>
+<li></li>
+CrtMainWin
+<p></p>
+<li></li>
+CrtPhImgFmt
+<p></p>
+<li></li>
+CrtSelHdlr
+<p></p>
+<li></li>
+CrtWindow
+<p></p>
+<li></li>
+DeleteImg
+<p></p>
+<li></li>
+DoOneEvent
+<p></p>
+<li></li>
+DoWhenIdle
+<p></p>
+<li></li>
+DrawFocHlt
+<p></p>
+<li></li>
+EventHndlr
+<p></p>
+<li></li>
+EventInit
+<p></p>
+<li></li>
+FileHndlr
+<p></p>
+<li></li>
+FindPhoto
+<p></p>
+<li></li>
+FontId
+<p></p>
+<li></li>
+FreeXId
+<p></p>
+<li></li>
+GeomReq
+<p></p>
+<li></li>
+GetAnchor
+<p></p>
+<li></li>
+GetBitmap
+<p></p>
+<li></li>
+GetCapStyl
+<p></p>
+<li></li>
+GetClrmap
+<p></p>
+<li></li>
+GetColor
+<p></p>
+<li></li>
+GetCursor
+<p></p>
+<li></li>
+GetFont
+<p></p>
+<li></li>
+GetFontStr
+<p></p>
+<li></li>
+GetGC
+<p></p>
+<li></li>
+GetImage
+<p></p>
+<li></li>
+GetJoinStl
+<p></p>
+<li></li>
+GetJustify
+<p></p>
+<li></li>
+GetOption
+<p></p>
+<li></li>
+GetPixels
+<p></p>
+<li></li>
+GetPixmap
+<p></p>
+<li></li>
+GetRelief
+<p></p>
+<li></li>
+GetRootCrd
+<p></p>
+<li></li>
+GetScroll
+<p></p>
+<li></li>
+GetSelect
+<p></p>
+<li></li>
+GetUid
+<p></p>
+<li></li>
+GetVisual
+<p></p>
+<li></li>
+GetVRoot
+<p></p>
+<li></li>
+HandleEvent
+<p></p>
+<li></li>
+IdToWindow
+<p></p>
+<li></li>
+ImgChanged
+<p></p>
+<li></li>
+InternAtom
+<p></p>
+<li></li>
+MainLoop
+<p></p>
+<li></li>
+MaintGeom
+<p></p>
+<li></li>
+MainWin
+<p></p>
+<li></li>
+ManageGeom
+<p></p>
+<li></li>
+MapWindow
+<p></p>
+<li></li>
+MeasureChar
+<p></p>
+<li></li>
+MoveToplev
+<p></p>
+<li></li>
+Name
+<p></p>
+<li></li>
+NameOfImg
+<p></p>
+<li></li>
+OwnSelect
+<p></p>
+<li></li>
+ParseArgv
+<p></p>
+<li></li>
+Preserve
+<p></p>
+<li></li>
+QWinEvent
+<p></p>
+<li></li>
+Restack
+<p></p>
+<li></li>
+RestrictEv
+<p></p>
+<li></li>
+SetAppName
+<p></p>
+<li></li>
+SetClass
+<p></p>
+<li></li>
+SetGrid
+<p></p>
+<li></li>
+SetVisual
+<p></p>
+<li></li>
+Sleep
+<p></p>
+<li></li>
+StrictMotif
+<p></p>
+<li></li>
+TextLayout
+<p></p>
+<li></li>
+TimerHndlr
+<p></p>
+<li></li>
+Tk_Init
+<p></p>
+<li></li>
+WindowId
+<p></p></ul>
+<p>
+</p>
+<h2><a name="implementation">Implementation</a></h2>
+<ul>
+<li></li>
+<a href="../../site/lib/Tk/Eventloop.html">Tk::Eventloop</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/Item.html">Tk::Item</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/Submethods.html">Tk::Submethods</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/WidgetDemo.html">Tk::WidgetDemo</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/widgets.html">Tk::widgets</a>
+<p></p></ul>
+<p>
+</p>
+<h2><a name="experimental_modules">Experimental Modules</a></h2>
+<ul>
+<li></li>
+<a href="../../site/lib/Tk/Common.html">Tk::Common</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/SunConst.html">Tk::SunConst</a>
+<p></p>
+<li></li>
+<a href="../../Tk/WinPhoto.html">Tk::WinPhoto</a>
+<p></p></ul>
+<p>
+</p>
+<h2><a name="other_modules_and_languages">Other Modules and Languages</a></h2>
+<ul>
+<li></li>
+<a href="../../Tk/Compile.html">Tk::Compile</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/Tcl-perl.html">Tk::Tcl-perl</a>
+<p></p>
+<li></li>
+<a href="../../site/lib/Tk/X.html">Tk::X</a>
+<p></p></ul>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Nick Ing-Simmons</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="../../lib/Pod/perl.html">perl(1)</a>, <em>wish(1)</em>.</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk - a graphical user interface toolkit for Perl</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

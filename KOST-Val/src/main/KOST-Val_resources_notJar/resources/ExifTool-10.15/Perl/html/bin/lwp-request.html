@@ -1,0 +1,248 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>lwp-request - Simple command line user agent</title>
+<link rel="stylesheet" href="../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;lwp-request - Simple command line user agent</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>lwp-request - Simple command line user agent</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ lwp-request [-aeEdvhx] [-m method] [-b &lt;base URL&gt;] [-t &lt;timeout&gt;]
+             [-i &lt;if-modified-since&gt;] [-c &lt;content-type&gt;] [-C &lt;credentials&gt;]
+             [-p &lt;proxy-url&gt;] [-o &lt;format&gt;] &lt;url&gt;...</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>This program can be used to send requests to WWW servers and your
+local file system. The request content for POST and PUT
+methods is read from stdin.  The content of the response is printed on
+stdout.  Error messages are printed on stderr.  The program returns a
+status value indicating the number of URLs that failed.</p>
+<p>The options are:</p>
+<dl>
+<dt><strong><a name="item__2dm__3cmethod_3e">-m &lt;method&gt;</a></strong><br />
+</dt>
+<dd>
+Set which method to use for the request.  If this option is not used,
+then the method is derived from the name of the program.
+</dd>
+<p></p>
+<dt><strong><a name="item__2df">-f</a></strong><br />
+</dt>
+<dd>
+Force request through, even if the program believes that the method is
+illegal.  The server might reject the request eventually.
+</dd>
+<p></p>
+<dt><strong><a name="item__2db__3curi_3e">-b &lt;uri&gt;</a></strong><br />
+</dt>
+<dd>
+This URI will be used as the base URI for resolving all relative URIs
+given as argument.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dt__3ctimeout_3e">-t &lt;timeout&gt;</a></strong><br />
+</dt>
+<dd>
+Set the timeout value for the requests.  The timeout is the amount of
+time that the program will wait for a response from the remote server
+before it fails.  The default unit for the timeout value is seconds.
+You might append ``m'' or ``h'' to the timeout value to make it minutes or
+hours, respectively.  The default timeout is '3m', i.e. 3 minutes.
+</dd>
+<p></p>
+<dt><strong><a name="item__2di__3ctime_3e">-i &lt;time&gt;</a></strong><br />
+</dt>
+<dd>
+Set the If-Modified-Since header in the request. If <em>time</em> is the
+name of a file, use the modification timestamp for this file. If
+<em>time</em> is not a file, it is parsed as a literal date. Take a look at
+<a href="../site/lib/HTTP/Date.html">the HTTP::Date manpage</a> for recognized formats.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dc__3ccontent_2dtype_3e">-c &lt;content-type&gt;</a></strong><br />
+</dt>
+<dd>
+Set the Content-Type for the request.  This option is only allowed for
+requests that take a content, i.e. POST and PUT.  You can
+force methods to take content by using the <a href="#item__2df"><code>-f</code></a> option together with
+<a href="../lib/Pod/perlrun.html#item__2dc"><code>-c</code></a>.  The default Content-Type for POST is
+<code>application/x-www-form-urlencoded</code>.  The default Content-type for
+the others is <code>text/plain</code>.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dp__3cproxy_2durl_3e">-p &lt;proxy-url&gt;</a></strong><br />
+</dt>
+<dd>
+Set the proxy to be used for the requests.  The program also loads
+proxy settings from the environment.  You can disable this with the
+<a href="../lib/Pod/perlrun.html#item__2dp"><code>-P</code></a> option.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dh__3cheader_3e">-H &lt;header&gt;</a></strong><br />
+</dt>
+<dd>
+Send this HTTP header with each request. You can specify several, e.g.:
+</dd>
+<dd>
+<pre>
+    lwp-request \
+        -H 'Referer: <a href="http://other.url/">http://other.url/</a>' \
+        -H 'Host: somehost' \
+        <a href="http://this.url/">http://this.url/</a></pre>
+</dd>
+<p></p>
+<dt><strong><a name="item__2dc__3cusername_3e_3a_3cpassword_3e">-C &lt;username&gt;:&lt;password&gt;</a></strong><br />
+</dt>
+<dd>
+Provide credentials for documents that are protected by Basic
+Authentication.  If the document is protected and you did not specify
+the username and password with this option, then you will be prompted
+to provide these values.
+</dd>
+<p></p></dl>
+<p>The following options controls what is displayed by the program:</p>
+<dl>
+<dt><strong><a name="item__2du">-u</a></strong><br />
+</dt>
+<dd>
+Print request method and absolute URL as requests are made.
+</dd>
+<p></p>
+<dt><strong><a name="item__2du">-U</a></strong><br />
+</dt>
+<dd>
+Print request headers in addition to request method and absolute URL.
+</dd>
+<p></p>
+<dt><strong><a name="item__2ds">-s</a></strong><br />
+</dt>
+<dd>
+Print response status code.  This option is always on for HEAD requests.
+</dd>
+<p></p>
+<dt><strong><a name="item__2ds">-S</a></strong><br />
+</dt>
+<dd>
+Print response status chain. This shows redirect and authorization
+requests that are handled by the library.
+</dd>
+<p></p>
+<dt><strong><a name="item__2de">-e</a></strong><br />
+</dt>
+<dd>
+Print response headers.  This option is always on for HEAD requests.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dd">-d</a></strong><br />
+</dt>
+<dd>
+Do <strong>not</strong> print the content of the response.
+</dd>
+<p></p>
+<dt><strong><a name="item__2do__3cformat_3e">-o &lt;format&gt;</a></strong><br />
+</dt>
+<dd>
+Process HTML content in various ways before printing it.  If the
+content type of the response is not HTML, then this option has no
+effect.  The legal format values are; <em>text</em>, <em>ps</em>, <em>links</em>,
+<em>html</em> and <em>dump</em>.
+</dd>
+<dd>
+<p>If you specify the <em>text</em> format then the HTML will be formatted as
+plain latin1 text.  If you specify the <em>ps</em> format then it will be
+formatted as Postscript.</p>
+</dd>
+<dd>
+<p>The <em>links</em> format will output all links found in the HTML document.
+Relative links will be expanded to absolute ones.</p>
+</dd>
+<dd>
+<p>The <em>html</em> format will reformat the HTML code and the <em>dump</em> format
+will just dump the HTML syntax tree.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item__2dv">-v</a></strong><br />
+</dt>
+<dd>
+Print the version number of the program and quit.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dh">-h</a></strong><br />
+</dt>
+<dd>
+Print usage message and quit.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dx">-x</a></strong><br />
+</dt>
+<dd>
+Extra debugging output.
+</dd>
+<p></p>
+<dt><strong><a name="item__2da">-a</a></strong><br />
+</dt>
+<dd>
+Set <code>text(ascii)</code> mode for content input and output.  If this option is not
+used, content input and output is done in binary mode.
+</dd>
+<p></p></dl>
+<p>Because this program is implemented using the LWP library, it will
+only support the protocols that LWP supports.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><em>lwp-mirror</em>, <a href="../site/lib/LWP.html">the LWP manpage</a></p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright 1995-1999 Gisle Aas.</p>
+<p>This library is free software; you can redistribute it and/or
+modify it under the same terms as Perl itself.</p>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Gisle Aas &lt;<a href="mailto:gisle@aas.no">gisle@aas.no</a>&gt;</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;lwp-request - Simple command line user agent</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

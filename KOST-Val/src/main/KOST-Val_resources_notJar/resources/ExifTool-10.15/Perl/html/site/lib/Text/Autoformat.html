@@ -1,0 +1,582 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Text::Autoformat - Automatic text wrapping and reformatting</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Text::Autoformat - Automatic text wrapping and reformatting</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#version">VERSION</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#background">BACKGROUND</a></li>
+	<ul>
+
+		<li><a href="#the_problem">The problem</a></li>
+		<li><a href="#the_solution">The solution</a></li>
+	</ul>
+
+	<li><a href="#description">DESCRIPTION</a></li>
+	<ul>
+
+		<li><a href="#paragraphs">Paragraphs</a></li>
+		<li><a href="#bulleting_and__re_numbering">Bulleting and (re-)numbering</a></li>
+		<li><a href="#quoting">Quoting</a></li>
+		<li><a href="#widow_control">Widow control</a></li>
+		<li><a href="#justification">Justification</a></li>
+		<li><a href="#implicit_centring">Implicit centring</a></li>
+		<li><a href="#case_transformations">Case transformations</a></li>
+		<li><a href="#selective_reformatting">Selective reformatting</a></li>
+	</ul>
+
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+	<li><a href="#bugs">BUGS</a></li>
+	<li><a href="#copyright">COPYRIGHT</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Text::Autoformat - Automatic text wrapping and reformatting</p>
+<p>
+</p>
+<hr />
+<h1><a name="version">VERSION</a></h1>
+<p>This document describes version 1.12 of Text::Autoformat,
+released May 27, 2003.</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+ # Minimal use: read from STDIN, format to STDOUT...</pre>
+<pre>
+        use Text::Autoformat;
+        autoformat;</pre>
+<pre>
+ # In-memory formatting...</pre>
+<pre>
+        $formatted = autoformat $rawtext;</pre>
+<pre>
+ # Configuration...</pre>
+<pre>
+        $formatted = autoformat $rawtext, { %options };</pre>
+<pre>
+ # Margins (1..72 by default)...</pre>
+<pre>
+        $formatted = autoformat $rawtext, { left=&gt;8, right=&gt;70 };</pre>
+<pre>
+ # Justification (left by default)...</pre>
+<pre>
+        $formatted = autoformat $rawtext, { justify =&gt; 'left' };
+        $formatted = autoformat $rawtext, { justify =&gt; 'right' };
+        $formatted = autoformat $rawtext, { justify =&gt; 'full' };
+        $formatted = autoformat $rawtext, { justify =&gt; 'centre' };</pre>
+<pre>
+ # Filling (does so by default)...</pre>
+<pre>
+        $formatted = autoformat $rawtext, { fill=&gt;0 };</pre>
+<pre>
+ # Squeezing whitespace (does so by default)...</pre>
+<pre>
+        $formatted = autoformat $rawtext, { squeeze=&gt;0 };</pre>
+<pre>
+ # Case conversions...</pre>
+<pre>
+        $formatted = autoformat $rawtext, { case =&gt; 'lower' };
+        $formatted = autoformat $rawtext, { case =&gt; 'upper' };
+        $formatted = autoformat $rawtext, { case =&gt; 'sentence' };
+        $formatted = autoformat $rawtext, { case =&gt; 'title' };
+        $formatted = autoformat $rawtext, { case =&gt; 'highlight' };</pre>
+<pre>
+ # Selective reformatting</pre>
+<pre>
+        $formatted = autoformat $rawtext, { ignore=&gt;qr/^\t/ };</pre>
+<p>
+</p>
+<hr />
+<h1><a name="background">BACKGROUND</a></h1>
+<p>
+</p>
+<h2><a name="the_problem">The problem</a></h2>
+<p>Perl plaintext formatters just aren't smart enough. Given a typical
+piece of plaintext in need of formatting:</p>
+<pre>
+        In comp.lang.perl.misc you wrote:
+        : &gt; &lt;CN = Clooless Noobie&gt; writes:
+        : &gt; CN&gt; PERL sux because:
+        : &gt; CN&gt;    * It doesn't have a switch statement and you have to put $
+        : &gt; CN&gt;signs in front of everything
+        : &gt; CN&gt;    * There are too many OR operators: having |, || and 'or'
+        : &gt; CN&gt;operators is confusing
+        : &gt; CN&gt;    * VB rools, yeah!!!!!!!!!
+        : &gt; CN&gt; So anyway, how can I stop reloads on a web page?
+        : &gt; CN&gt; Email replies only, thanks - I don't read this newsgroup.
+        : &gt;
+        : &gt; Begone, sirrah! You are a pathetic, Bill-loving, microcephalic
+        : &gt; script-infant.
+        : Sheesh, what's with this group - ask a question, get toasted! And how
+        : *dare* you accuse me of Ianuphilia!</pre>
+<p>both the venerable Unix <em>fmt</em> tool and Perl's standard Text::Wrap module
+produce:</p>
+<pre>
+        In comp.lang.perl.misc you wrote:  : &gt; &lt;CN = Clooless Noobie&gt;
+        writes:  : &gt; CN&gt; PERL sux because:  : &gt; CN&gt;    * It doesn't
+        have a switch statement and you have to put $ : &gt; CN&gt;signs in
+        front of everything : &gt; CN&gt;    * There are too many OR
+        operators: having |, || and 'or' : &gt; CN&gt;operators is confusing
+        : &gt; CN&gt;    * VB rools, yeah!!!!!!!!!  : &gt; CN&gt; So anyway, how
+        can I stop reloads on a web page?  : &gt; CN&gt; Email replies only,
+        thanks - I don't read this newsgroup.  : &gt; : &gt; Begone, sirrah!
+        You are a pathetic, Bill-loving, microcephalic : &gt;
+        script-infant.  : Sheesh, what's with this group - ask a
+        question, get toasted! And how : *dare* you accuse me of
+        Ianuphilia!</pre>
+<p>Other formatting modules -- such as Text::Correct and Text::Format --
+provide more control over their output, but produce equally poor results
+when applied to arbitrary input. They simply don't understand the
+structural conventions of the text they're reformatting.</p>
+<p>
+</p>
+<h2><a name="the_solution">The solution</a></h2>
+<p>The Text::Autoformat module provides a subroutine named <code>autoformat</code> that
+wraps text to specified margins. However, <code>autoformat</code> reformats its
+input by analysing the text's structure, so it wraps the above example
+like so:</p>
+<pre>
+        In comp.lang.perl.misc you wrote:
+        : &gt; &lt;CN = Clooless Noobie&gt; writes:
+        : &gt; CN&gt; PERL sux because:
+        : &gt; CN&gt;    * It doesn't have a switch statement and you
+        : &gt; CN&gt;      have to put $ signs in front of everything
+        : &gt; CN&gt;    * There are too many OR operators: having |, ||
+        : &gt; CN&gt;      and 'or' operators is confusing
+        : &gt; CN&gt;    * VB rools, yeah!!!!!!!!! So anyway, how can I
+        : &gt; CN&gt;      stop reloads on a web page? Email replies
+        : &gt; CN&gt;      only, thanks - I don't read this newsgroup.
+        : &gt;
+        : &gt; Begone, sirrah! You are a pathetic, Bill-loving,
+        : &gt; microcephalic script-infant.
+        : Sheesh, what's with this group - ask a question, get toasted!
+        : And how *dare* you accuse me of Ianuphilia!</pre>
+<p>Note that the various quoting conventions have been observed. In fact,
+their structure has been used to determine where some paragraphs begin.
+Furthermore <code>autoformat</code> correctly distinguished between the leading
+'*' bullets of the nested list (which were outdented) and the leading
+emphatic '*' of ``*dare*'' (which was inlined).</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>
+</p>
+<h2><a name="paragraphs">Paragraphs</a></h2>
+<p>The fundamental task of the <code>autoformat</code> subroutine is to identify and
+rearrange independent paragraphs in a text. Paragraphs typically consist
+of a series of lines containing at least one non-whitespace character,
+followed by one or more lines containing only optional whitespace.
+This is a more liberal definition than many other formatters
+use: most require an empty line to terminate a paragraph. Paragraphs may
+also be denoted by bulleting, numbering, or quoting (see the following
+sections).</p>
+<p>Once a paragraph has been isolated, <code>autoformat</code> fills and re-wraps its
+lines according to the margins that are specified in its argument list.
+These are placed after the text to be formatted, in a hash reference:</p>
+<pre>
+        $tidied = autoformat($messy, {left=&gt;20, right=&gt;60});</pre>
+<p>By default, <code>autoformat</code> uses a left margin of 1 (first column) and a
+right margin of 72.</p>
+<p>You can also control whether (and how) <code>autoformat</code> breaks words at the
+end of a line, using the <code>'break'</code> option:</p>
+<pre>
+        # Turn off all hyphenation
+        use Text::Autoformat qw(autoformat break_wrap);
+        $tidied = autoformat($messy, {break=&gt;break_wrap});</pre>
+<pre>
+        # Default hyphenation
+        use Text::Autoformat qw(autoformat break_at);
+        $tidied = autoformat($messy, {break=&gt;break_at('-')});</pre>
+<pre>
+        # Use TeX::Hyphen module's hyphenation (module must be installed)
+        use Text::Autoformat qw(autoformat break_TeX);
+        $tidied = autoformat($messy, {break=&gt;break_TeX});</pre>
+<p>Normally, <code>autoformat</code> only reformats the first paragraph it encounters,
+and leaves the remainder of the text unaltered. This behaviour is useful
+because it allows a one-liner invoking the subroutine to be mapped
+onto a convenient keystroke in a text editor, to provide 
+one-paragraph-at-a-time reformatting:</p>
+<pre>
+        % cat .exrc</pre>
+<pre>
+        map f !Gperl -MText::Autoformat -e'autoformat'</pre>
+<p>(Note that to facilitate such one-liners, if <code>autoformat</code> is called
+in a void context without any text data, it takes its text from
+<code>STDIN</code> and writes its result to <code>STDOUT</code>).</p>
+<p>To enable <code>autoformat</code> to rearrange the entire input text at once, the
+<code>all</code> argument is used:</p>
+<pre>
+        $tidied_all = autoformat($messy, {left=&gt;20, right=&gt;60, all=&gt;1});</pre>
+<p><code>autoformat</code> can also be directed to selectively reformat paragraphs,
+using the <code>ignore</code> argument:</p>
+<pre>
+        $tidied_some = autoformat($messy, {ignore=&gt;qr/^[ \t]/});</pre>
+<p>The value for <code>ignore</code> may be a <code>qr</code>'d regex, a subroutine reference,
+or the special string <code>'indented'</code>.</p>
+<p>If a regex is specified, any paragraph whose original text matches that
+regex will not be reformatted (i.e. it will be printed verbatim).</p>
+<p>If a subroutine is specified, that subroutine will be called once for
+each paragraph (with <a href="../../../lib/Pod/perlvar.html#item__24_"><code>$_</code></a> set to the paragraph's text). The subroutine is
+expected to return a true or false value. If it returns true, the
+paragraph will not be reformatted.</p>
+<p>If the value of the <code>ignore</code> option is the string <code>'indented'</code>,
+<code>autoformat</code> will ignore any paragraph in which <em>every</em> line begins with a
+whitespace.</p>
+<p>
+</p>
+<h2><a name="bulleting_and__re_numbering">Bulleting and (re-)numbering</a></h2>
+<p>Often plaintext will include lists that are either:</p>
+<pre>
+        * bulleted,
+        * simply numbered (i.e. 1., 2., 3., etc.), or
+        * hierarchically numbered (1, 1.1, 1.2, 1.3, 2, 2.1. and so forth).</pre>
+<p>In such lists, each bulleted item is implicitly a separate paragraph,
+and is formatted individually, with the appropriate indentation:</p>
+<pre>
+        * bulleted,
+        * simply numbered (i.e. 1., 2., 3.,
+          etc.), or
+        * hierarchically numbered (1, 1.1,
+          1.2, 1.3, 2, 2.1. and so forth).</pre>
+<p>More importantly, if the points are numbered, the numbering is
+checked and reordered. For example, a list whose points have been
+rearranged:</p>
+<pre>
+        2. Analyze problem
+        3. Design algorithm
+        1. Code solution
+        5. Test
+        4. Ship</pre>
+<p>would be renumbered automatically by <code>autoformat</code>:</p>
+<pre>
+        1. Analyze problem
+        2. Design algorithm
+        3. Code solution
+        4. Ship
+        5. Test</pre>
+<p>The same reordering would be performed if the ``numbering'' was by letters
+(<code>a.</code> <code>b.</code> <code>c.</code> etc.) or Roman numerals (<code>i.</code> <code>ii.</code> <code>iii.)</code> or by
+some combination of these (<code>1a.</code> <code>1b.</code> <code>2a.</code> <code>2b.</code> etc.) Handling
+disordered lists of letters and Roman numerals presents an interesting
+challenge. A list such as:</p>
+<pre>
+        C. Put cat in box.
+        D. Close lid.
+        E. Activate Geiger counter.</pre>
+<p>should be reordered as <code>A.</code> <code>B.</code> <code>C.,</code> whereas:</p>
+<pre>
+        C. Put cat in box.
+        D. Close lid.
+        XLI. Activate Geiger counter.</pre>
+<p>should be reordered <code>I.</code> <code>II.</code> <code>III.</code></p>
+<p>The <code>autoformat</code> subroutine solves this problem by always interpreting 
+alphabetic bullets as being letters, unless the full list consists
+only of valid Roman numerals, at least one of which is two or
+more characters long.</p>
+<p>If automatic renumbering isn't wanted, just specify the <code>'renumber'</code>
+option with a false value.</p>
+<p>Note that numbers above 1000 at the start of a line are no longer
+considered to be paragraph numbering. Numbered paragraphs running that
+high are exceptionally rare, and much rarer than paragraphs that look
+like this:</p>
+<pre>
+        Although it has long been popular (especially in the year
+        2001) to point out that we now live in the Future, many
+        of the promised miracles of Future Life have failed to
+        eventuate. This is a new phenomenon (it didn't happen in
+        1001) because the idea that the future might be different
+        is a new phenomenon.</pre>
+<p>which the former numbering rules caused to be formatted like this:</p>
+<pre>
+        Although it has long been popular (especially in the year</pre>
+<pre>
+        2001) to point out that we now live in the Future, many of the
+              promised miracles of Future Life have failed to eventuate.
+              This is a new phenomenon (it didn't happen in</pre>
+<pre>
+        2002) because the idea that the future might be different is a
+              new phenomenon.</pre>
+<p>but which are now formatted:</p>
+<pre>
+        Although it has long been popular (especially in the year 2001)
+        to point out that we now live in the Future, many of the
+        promised miracles of Future Life have failed to eventuate. This
+        is a new phenomenon (it didn't happen in 1001) because the idea
+        that the future might be different is a new phenomenon.</pre>
+<p>
+</p>
+<h2><a name="quoting">Quoting</a></h2>
+<p>Another case in which contiguous lines may be interpreted as belonging
+to different paragraphs, is where they are quoted with distinct quoters.
+For example:</p>
+<pre>
+        : &gt; CN&gt; So anyway, how can I stop reloads on a web page? Email
+        : &gt; CN&gt; replies only, thanks - I don't read this newsgroup.
+        : &gt; Begone, sirrah! You are a pathetic, Bill-loving,
+        : &gt; microcephalic script-infant.
+        : Sheesh, what's with this group - ask a question, get toasted!
+        : And how *dare* you accuse me of Ianuphilia!</pre>
+<p><code>autoformat</code> recognizes the various quoting conventions used in this
+example and treats it as three paragraphs to be independently
+reformatted.</p>
+<p>Block quotations present a different challenge. A typical formatter
+would render the following quotation:</p>
+<pre>
+        &quot;We are all of us in the gutter, but some of us are looking at
+         the stars&quot;
+                                -- Oscar Wilde</pre>
+<p>like so:</p>
+<pre>
+        &quot;We are all of us in the gutter, but some of us are looking at
+        the stars&quot; -- Oscar Wilde</pre>
+<p><code>autoformat</code> recognizes the quotation structure by matching the
+following regular expression against the text component of each
+paragraph:</p>
+<pre>
+        / \A(\s*) # leading whitespace for quotation ([&quot;']|``) # opening
+        quotemark (.*) # quotation (''|\2) # closing quotemark \s*?\n #
+        trailing whitespace after quotation (\1[ ]+) # leading
+        whitespace for attribution
+                                #   (must be indented more than
+                                #   quotation)
+          (--|-) # attribution introducer ([^\n]*?\n) # first
+          attribution line ((\5[^\n]*?$)*) # other attribution lines
+                                #   (indented no less than first line)
+          \s*\Z # optional whitespace to end of paragraph /xsm</pre>
+<p>When reformatted (see below), the indentation and the attribution
+structure will be preserved:</p>
+<pre>
+        &quot;We are all of us in the gutter, but some of us are looking at
+         the stars&quot;
+                                -- Oscar Wilde</pre>
+<p>
+</p>
+<h2><a name="widow_control">Widow control</a></h2>
+<p>Note that in the last example, <code>autoformat</code> broke the line at column
+68, four characters earlier than it should have. It did so because, if
+the full margin width had been used, the formatting would have left the
+last two words by themselves on an oddly short last line:</p>
+<pre>
+        &quot;We are all of us in the gutter, but some of us are looking at
+        the stars&quot;</pre>
+<p>This phenomenon is known as ``widowing'' and is heavily frowned upon in
+typesetting circles. It looks ugly in plaintext too, so <code>autoformat</code>
+avoids it by stealing extra words from earlier lines in a paragraph, so
+as to leave enough for a reasonable last line. The heuristic used is
+that final lines must be at least 10 characters long (though this number
+may be adjusted by passing a <code>widow =&gt; minlength</code> argument to
+<code>autoformat</code>).</p>
+<p>If the last line is too short, the paragraph's right margin is reduced
+by one column, and the paragraph is reformatted. This process iterates
+until either the last line exceeds nine characters or the margins have
+been narrowed by 10% of their original separation. In the latter case,
+the reformatter gives up and uses its original formatting.</p>
+<p>
+</p>
+<h2><a name="justification">Justification</a></h2>
+<p>The <code>autoformat</code> subroutine also takes a named argument: <code>{justify
+=E&lt;gt&gt; I&lt;type&gt;}</code>, which specifies how each paragraph is to be justified.
+The options are: <code>'left'</code> (the default), <code>'right',</code> <code>'centre'</code> (or
+<code>'center'</code>), and <code>'full'</code>. These act on the complete paragraph text
+(but <em>not</em> on any quoters before that text). For example, with
+<code>'right'</code> justification:</p>
+<pre>
+         R3&gt;     Now is the Winter of our discontent made
+         R4&gt; glorious Summer by this son of York. And all
+         R5&gt; the clouds that lour'd upon our house In the
+         R6&gt;              deep bosom of the ocean buried.</pre>
+<p>Full justification is interesting in a fixed-width medium like plaintext
+because it usually results in uneven spacing between words. Typically,
+formatters provide this by distributing the extra spaces into the first
+available gaps of each line:</p>
+<pre>
+         R7&gt; Now is the Winter of our discontent made
+         R8&gt; glorious Summer by this son of York. And all
+         R9&gt; the clouds that lour'd upon our house In
+        R10&gt; the deep bosom of the ocean buried.</pre>
+<p>This produces a rather jarring visual effect, so <code>autoformat</code> reverses
+the strategy and inserts extra spaces at the end of lines:</p>
+<pre>
+        R11&gt; Now is the Winter of our discontent made
+        R12&gt; glorious Summer by this son of York. And all
+        R13&gt; the clouds that lour'd upon our house In
+        R14&gt; the deep bosom of the ocean buried.</pre>
+<p>Most readers find this less disconcerting.</p>
+<p>
+</p>
+<h2><a name="implicit_centring">Implicit centring</a></h2>
+<p>Even if explicit centring is not specified, <code>autoformat</code> will attempt
+to automatically detect centred paragraphs and preserve their
+justification. It does this by examining each line of the paragraph and
+asking: ``if this line were part of a centred paragraph, where would the
+centre line have been?''</p>
+<p>The answer can be determined by adding the length of leading whitespace
+before the first word, plus half the length of the full set of words on
+the line. That is, for a single line:</p>
+<pre>
+        $line =~ /^(\s*)(.*?)(\s*)$/ $centre =
+        length($1)+0.5*length($2);</pre>
+<p>By making the same estimate for every line, and then comparing the
+estimates, it is possible to deduce whether all the lines are centred
+with respect to the same axis of symmetry (with an allowance of
+&plusmn;1 to cater for the inevitable rounding when the centre
+positions of even-length rows were originally computed). If a common
+axis of symmetry is detected, <code>autoformat</code> assumes that the lines are
+supposed to be centred, and switches to centre-justification mode for
+that paragraph.</p>
+<p>Note that this behaviour can to switched off entirely by setting the
+<code>&quot;autocentre&quot;</code> argument false.</p>
+<p>
+</p>
+<h2><a name="case_transformations">Case transformations</a></h2>
+<p>The <code>autoformat</code> subroutine can also optionally perform case
+conversions on the text it processes. The <code>{case =&gt; type}</code>
+argument allows the user to specify five different conversions:</p>
+<dl>
+<dt><strong><a name="item__27upper_27"><code>'upper'</code></a></strong><br />
+</dt>
+<dd>
+This mode unconditionally converts every letter in the reformatted text
+to upper-case;
+</dd>
+<p></p>
+<dt><strong><a name="item__27lower_27"><code>'lower'</code></a></strong><br />
+</dt>
+<dd>
+This mode unconditionally converts every letter in the reformatted text
+to lower-case;
+</dd>
+<p></p>
+<dt><strong><a name="item__27sentence_27"><code>'sentence'</code></a></strong><br />
+</dt>
+<dd>
+This mode attempts to generate correctly-cased sentences from the input
+text. That is, the first letter after a sentence-terminating punctuator
+is converted to upper-case. Then, each subsequent word in the sentence
+is converted to lower-case, unless that word is originally mixed-case or
+contains punctuation. For example, under <code>{case =&gt; 'sentence'}</code>:
+</dd>
+<dd>
+<pre>
+        'POVERTY, MISERY, ETC. are the lot of the PhD candidate. alas!'</pre>
+</dd>
+<dd>
+<p>becomes:</p>
+</dd>
+<dd>
+<pre>
+        'Poverty, misery, etc. are the lot of the PhD candidate. Alas!'</pre>
+</dd>
+<dd>
+<p>Note that <code>autoformat</code> is clever enough to recognize that the period
+after abbreviations such as <code>etc.</code> is not a sentence terminator.</p>
+</dd>
+<dd>
+<p>If the argument is specified as <code>'sentence '</code> (with one or more
+trailing whitespace characters) those characters are used to replace the
+single space that appears at the end of the sentence. For example,
+<code>autoformat($text, {case=&gt;'sentence '}</code>) would produce:</p>
+</dd>
+<dd>
+<pre>
+        'Poverty, misery, etc. are the lot of the PhD candidate. Alas!'</pre>
+</dd>
+<p></p>
+<dt><strong><a name="item__27title_27"><code>'title'</code></a></strong><br />
+</dt>
+<dd>
+This mode behaves like <a href="#item__27sentence_27"><code>'sentence'</code></a> except that the first letter of
+<em>every</em> word is capitalized:
+</dd>
+<dd>
+<pre>
+        'What I Did On My Summer Vacation In Monterey'</pre>
+</dd>
+<p></p>
+<dt><strong><a name="item__27highlight_27"><code>'highlight'</code></a></strong><br />
+</dt>
+<dd>
+This mode behaves like <a href="#item__27title_27"><code>'title'</code></a> except that trivial words are not
+capitalized:
+</dd>
+<dd>
+<pre>
+        'What I Did on my Summer Vacation in Monterey'</pre>
+</dd>
+<p></p></dl>
+<p>
+</p>
+<h2><a name="selective_reformatting">Selective reformatting</a></h2>
+<p>You can select which paragraphs <code>autoformat</code> actually reformats (or,
+rather, those it <em>doesn't</em> reformat) using the <code>&quot;ignore&quot;</code> flag.</p>
+<p>For example:</p>
+<pre>
+        # Reformat all paras except those containing &quot;verbatim&quot;...
+        print autoformat { all =&gt; 1, ignore =&gt; qr/verbatim/i }, $text;</pre>
+<pre>
+        # Reformat all paras except those less that 3 lines long...
+        print autoformat { all =&gt; 1, ignore =&gt; sub { tr/\n/\n/ &lt; 3
+        } }, $text;</pre>
+<pre>
+        # Reformat all paras except those that are indented...
+        print autoformat { all =&gt; 1, ignore =&gt; qr/^\s/m }, $text;</pre>
+<pre>
+        # Reformat all paras except those that are indented (easier)...
+        print autoformat { all =&gt; 1, ignore =&gt; 'indented' }, $text;</pre>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p>The Text::Reform module</p>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Damian Conway (<a href="mailto:damian@conway.org">damian@conway.org</a>)</p>
+<p>
+</p>
+<hr />
+<h1><a name="bugs">BUGS</a></h1>
+<p>There are undoubtedly serious bugs lurking somewhere in code this funky
+:-) Bug reports and other feedback are most welcome.</p>
+<p>
+</p>
+<hr />
+<h1><a name="copyright">COPYRIGHT</a></h1>
+<p>Copyright (c) 1997-2000, Damian Conway. All Rights Reserved. This module
+is free software. It may be used, redistributed and/or modified under
+the terms of the Perl Artistic License (see
+<a href="http://www.perl.com/perl/misc/Artistic.html)">http://www.perl.com/perl/misc/Artistic.html)</a></p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Text::Autoformat - Automatic text wrapping and reformatting</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

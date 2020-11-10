@@ -1,0 +1,409 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Tk::Panedwindow - Create and manipulate Panedwindow widgets</title>
+<link rel="stylesheet" href="../../../Active.css" type="text/css" />
+<link rev="made" href="mailto:" />
+</head>
+
+<body>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::Panedwindow - Create and manipulate Panedwindow widgets</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#widgetspecific_options">WIDGET-SPECIFIC OPTIONS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#widget_methods">WIDGET METHODS</a></li>
+	<li><a href="#resizing_panes">RESIZING PANES</a></li>
+	<li><a href="#keywords">KEYWORDS</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Tk::Panedwindow - Create and manipulate Panedwindow widgets</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p><em>$panedwindow</em> = <em>$parent</em>-&gt;<strong>Panedwindow</strong>(?<em>options</em>?);</p>
+<pre>
+ -background    -height  -width
+ -borderwidth   -orient
+ -cursor        -relief</pre>
+<p>
+</p>
+<hr />
+<h1><a name="widgetspecific_options">WIDGET-SPECIFIC OPTIONS</a></h1>
+<dl>
+<dt><strong><a name="item_option_3a__2dhandlepad">Option:	<strong>-handlepad</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_name_3a_handlepad">Name:	<strong>handlePad</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_handlepad">Class:	<strong>HandlePad</strong></a></strong><br />
+</dt>
+<dd>
+When sash handles are drawn, specifies the distance from the top or
+left end of the sash (depending on the orientation of the widget) at
+which to draw the handle.  May be any value accepted by <strong>Tk_GetPixels</strong>.
+</dd>
+<p></p>
+<dt><strong><a name="item_option_3a__2dhandlesize">Option:	<strong>-handlesize</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_name_3a_handlesize">Name:	<strong>handleSize</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_handlesize">Class:	<strong>HandleSize</strong></a></strong><br />
+</dt>
+<dd>
+Specifies the side length of a sash handle.  Handles are always
+drawn as squares.  May be any value accepted by <strong>Tk_GetPixels</strong>.
+</dd>
+<p></p>
+<dt><strong><a name="item_option_3a__2dopaqueresize">Option:	<strong>-opaqueresize</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_name_3a_opaqueresize">Name:	<strong>opaqueResize</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_opaqueresize">Class:	<strong>OpaqueResize</strong></a></strong><br />
+</dt>
+<dd>
+Specifies whether panes should be resized as a sash is moved (true),
+or if resizing should be deferred until the sash is placed (false).
+</dd>
+<p></p>
+<dt><strong><a name="item_option_3a__2dsashcursor">Option:	<strong>-sashcursor</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_name_3a_sashcursor">Name:	<strong>sashCursor</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_sashcursor">Class:	<strong>SashCursor</strong></a></strong><br />
+</dt>
+<dd>
+Mouse cursor to use when over a sash.  If null,
+<strong>sb_h_double_arrow</strong> will be used for horizontal Panedwindows, and
+<strong>sb_v_double_arrow</strong> will be used for vertical Panedwindows.
+</dd>
+<p></p>
+<dt><strong><a name="item_option_3a__2dsashpad">Option:	<strong>-sashpad</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_name_3a_sashpad">Name:	<strong>sashPad</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_sashpad">Class:	<strong>SashPad</strong></a></strong><br />
+</dt>
+<dd>
+Specifies the amount of padding to leave of each side of a sash.  May
+be any value accepted by <strong>Tk_GetPixels</strong>.
+</dd>
+<p></p>
+<dt><strong><a name="item_option_3a__2dsashrelief">Option:	<strong>-sashrelief</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_name_3a_sashrelief">Name:	<strong>sashRelief</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_sashrelief">Class:	<strong>SashRelief</strong></a></strong><br />
+</dt>
+<dd>
+Relief to use when drawing a sash.  May be any of the standard Tk
+relief values.
+</dd>
+<p></p>
+<dt><strong><a name="item_option_3a__2dsashwidth">Option:	<strong>-sashwidth</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_name_3a_sashwidth">Name:	<strong>sashWidth</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_sashwidth">Class:	<strong>SashWidth</strong></a></strong><br />
+</dt>
+<dd>
+Specifies the width of each sash.  May be any value accepted by
+<strong>Tk_GetPixels</strong>.
+</dd>
+<p></p>
+<dt><strong><a name="item_option_3a__2dshowhandle">Option:	<strong>-showhandle</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_name_3a_showhandle">Name:	<strong>showHandle</strong></a></strong><br />
+</dt>
+<dt><strong><a name="item_class_3a_showhandle">Class:	<strong>ShowHandle</strong></a></strong><br />
+</dt>
+<dd>
+Specifies whether sash handles should be shown.  May be any valid
+boolean value.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>The <strong>Panedwindow</strong> method creates a new window (given by the
+$panedwindow argument) and makes it into a Panedwindow widget.
+Additional options, described above, may be specified on the command
+line or in the option database to configure aspects of the Panedwindow
+such as its default background color and relief.</p>
+<p>A Panedwindow widget contains any number of panes, arranged
+horizontally or vertically, according to the value of the
+<strong>-orient</strong> option.  Each pane contains one widget, and each pair of
+panes is separated by a moveable (via mouse movements) sash.  Moving a
+sash causes the widgets on either side of the sash to be resized.</p>
+<p>
+</p>
+<hr />
+<h1><a name="widget_methods">WIDGET METHODS</a></h1>
+<p>The <strong>Panedwindow</strong> method
+may be used to invoke various operations on the widget.  It has the
+following general form:</p>
+<pre>
+ $widget-&gt;method(?arg arg ...?);</pre>
+<p>The following
+commands are possible for Panedwindow widgets:</p>
+<dl>
+<dt><strong><a name="item_add"><em>$widget</em>-&gt;<strong>add</strong>(?window ...? ?option value ...?);</a></strong><br />
+</dt>
+<dd>
+Add one or more windows to the Panedwindow, each in a separate pane.
+The arguments consist of the names of one or more windows
+followed by pairs of arguments that specify how to manage the windows.
+<em>Option</em> may have any of the values accepted by the
+<strong>configure</strong> subcommand.
+</dd>
+<p></p>
+<dt><strong><a name="item_cget"><em>$widget</em>-&gt;<strong>cget</strong>(<em>option</em>);</a></strong><br />
+</dt>
+<dd>
+Returns the current value of the configuration option given by
+<em>option</em>.  <em>Option</em> may have any of the values accepted by the
+<strong>Panedwindow</strong> command.
+</dd>
+<p></p>
+<dt><strong><a name="item_configure"><em>$widget</em>-&gt;<strong>configure</strong>(<em>?option?, ?value, option, value, ...?</em>);</a></strong><br />
+</dt>
+<dd>
+Query or modify the configuration options of the widget.  If no
+<em>option</em> is specified, returns a list describing all of the
+available options for $widget (see <a href="../../../Tk/configure.html">the Tk::configure manpage</a> for
+information on the format of this list).  If <em>option</em> is specified
+with no <em>value</em>, then the command returns a list describing the
+one named option (this list will be identical to the corresponding
+sublist of the value returned if no <em>option</em> is specified).  If
+one or more <em>option-value</em> pairs are specified, then the command
+modifies the given widget <code>option(s)</code> to have the given value(s);  in
+this case the command returns an empty string. <em>Option</em> may have
+any of the values accepted by the <strong>Panedwindow</strong> command.
+</dd>
+<p></p>
+<dt><strong><a name="item_forget"><em>$widget</em>-&gt;<strong>forget</strong>(?window ...?);</a></strong><br />
+</dt>
+<dd>
+Remove the pane containing $widget from the Panedwindow.  All
+geometry management options for $widget will be forgotten.
+</dd>
+<p></p>
+<dt><strong><a name="item_identify"><em>$widget</em>-&gt;<strong>identify</strong>(<em>x, y</em>);</a></strong><br />
+</dt>
+<dd>
+Identify the Panedwindow component underneath the point given by
+<em>x</em> and <em>y</em>, in window coordinates.  If the point is over a
+sash or a sash handle, the result is a two element list containing the
+index of the sash or handle, and a word indicating whether it is over
+a sash or a handle, such as [0, 'sash'] or [2, 'handle'].  If the point is
+over any other part of the Panedwindow, the result is an empty list.
+</dd>
+<p></p>
+<dt><strong><a name="item_proxy"><em>$widget</em>-&gt;<strong>proxy</strong>(<em>?args?</em>);</a></strong><br />
+</dt>
+<dd>
+This command is used to query and change the position of the sash
+proxy, used for rubberband-style pane resizing. It can take any of
+the following forms:
+</dd>
+<dl>
+<dt><strong><a name="item_proxycoord"><em>$widget</em>-&gt;<strong>proxyCoord</strong>;</a></strong><br />
+</dt>
+<dd>
+Return a list containing the x and y coordinates of the most recent
+proxy location.
+</dd>
+<p></p>
+<dt><strong><a name="item_proxyforget"><em>$widget</em>-&gt;<strong>proxyForget</strong>;</a></strong><br />
+</dt>
+<dd>
+Remove the proxy from the display.
+</dd>
+<p></p>
+<dt><strong><a name="item_proxyplace"><em>$widget</em>-&gt;<strong>proxyPlace</strong>(<em>x, y</em>);</a></strong><br />
+</dt>
+<dd>
+Place the proxy at the given <em>x</em> and <em>y</em> coordinates.
+</dd>
+<p></p></dl>
+<dt><strong><a name="item_sash"><em>$widget</em>-&gt;<strong>sash</strong>(<em>?args?</em>);</a></strong><br />
+</dt>
+<dd>
+This command is used to query and change the position of sashes in the
+Panedwindow.  It can take any of the following forms:
+</dd>
+<dl>
+<dt><strong><a name="item_sashcoord"><em>$widget</em>-&gt;<strong>sashCoord</strong>(<em>index</em>);</a></strong><br />
+</dt>
+<dd>
+Return the current x and y coordinate pair for the sash given by
+<em>index</em>.  <em>Index</em> must be an integer between 0 and 1 less than
+the number of panes in the Panedwindow.  The coordinates given are
+those of the top left corner of the region containing the sash.
+<em>$widget</em>-&gt;<strong>sashDragto</strong>(<em>index, x, y</em>)
+This command computes the difference between the given coordinates and the
+coordinates given to the last <strong>sash coord</strong> command for the given
+sash.  It then moves that sash the computed difference.  The return
+value is the empty string.
+</dd>
+<p></p>
+<dt><strong><a name="item_sashmark"><em>$widget</em>-&gt;<strong>sashMark</strong>(<em>index, x, y</em>);</a></strong><br />
+</dt>
+<dd>
+Records <em>x</em> and <em>y</em> for the sash given by <em>index</em>; used in
+conjunction with later dragto commands to move the sash.
+</dd>
+<p></p>
+<dt><strong><a name="item_sashplace"><em>$widget</em>-&gt;<strong>sashPlace</strong>(<em>index, x, y</em>);</a></strong><br />
+</dt>
+<dd>
+Place the sash given by <em>index</em> at the given coordinates.
+</dd>
+<p></p></dl>
+<dt><strong><a name="item_panecget">$widget <em>$widget</em>-&gt;<strong>panecget</strong>(option);</a></strong><br />
+</dt>
+<dd>
+Query a management option for $widget.  <em>Option</em> may be any
+value allowed by the <strong>paneconfigure</strong> subcommand.
+</dd>
+<p></p>
+<dt><strong><a name="item_paneconfigure">$widget <em>$widget</em>-&gt;<strong>paneconfigure</strong>(?option? ?value option value ...?);</a></strong><br />
+</dt>
+<dd>
+Query or modify the management options for $widget.  If no
+<em>option</em> is specified, returns a list describing all of the
+available options for $widget (see <a href="../../../Tk/configure.html">the Tk::configure manpage</a> for
+information on the format of this list).  If <em>option</em> is specified
+with no <em>value</em>, then the command returns a list describing the
+one named option (this list will be identical to the corresponding
+sublist of the value returned if no <em>option</em> is specified).  If
+one or more <em>option-value</em> pairs are specified, then the command
+modifies the given widget <code>option(s)</code> to have the given value(s);  in
+this case the command returns an empty string.  The following options
+are supported:
+</dd>
+<dl>
+<dt><strong><a name="item__2dafter__3d_3e__24widget"><strong>-after</strong> =&gt; $widget</a></strong><br />
+</dt>
+<dd>
+Insert the window after the window specified.  $widget should be the
+name of a window already managed by $widget.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dbefore__3d_3e__24widget"><strong>-before</strong> =&gt; $widget</a></strong><br />
+</dt>
+<dd>
+Insert the window before the window specified.  $widget should be
+the name of a window already managed by $widget.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dheight__3d_3e_size"><strong>-height</strong> =&gt; <em>size</em></a></strong><br />
+</dt>
+<dd>
+Specify a height for the window.  The height will be the outer
+dimension of the window including its border, if any.  If <em>size</em>
+is an empty string, or if <strong>-height</strong> is not specified, then the
+height requested internally by the window will be used initially; the
+height may later be adjusted by the movement of sashes in the
+Panedwindow.  <em>Size</em> may be any value accepted by <strong>Tk_GetPixels</strong>.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dminsize__3d_3e_n"><strong>-minsize</strong> =&gt; <em>n</em></a></strong><br />
+</dt>
+<dd>
+Specifies that the size of the window cannot be made less than
+<em>n</em>.  This constraint only affects the size of the widget in the
+paned dimension -- the x dimension for horizontal Panedwindows, the y
+dimension for vertical Panedwindows.  May be any value accepted by
+<strong>Tk_GetPixels</strong>.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dpadx__3d_3e_n"><strong>-padx</strong> =&gt; <em>n</em></a></strong><br />
+</dt>
+<dd>
+Specifies a non-negative value indicating how much extra space to
+leave on each side of the window in the X-direction.  The value may
+have any of the forms accepted by <strong>Tk_GetPixels</strong>.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dpady__3d_3e_n"><strong>-pady</strong> =&gt; <em>n</em></a></strong><br />
+</dt>
+<dd>
+Specifies a non-negative value indicating how much extra space to
+leave on each side of the window in the Y-direction.  The value may
+have any of the forms accepted by <strong>Tk_GetPixels</strong>.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dsticky__3d_3e_style"><strong>-sticky</strong> =&gt; <em>style</em></a></strong><br />
+</dt>
+<dd>
+If a window's pane is larger than the requested dimensions of the
+window, this option may be used to position (or stretch) the window
+within its pane.  <em>Style</em>  is a string that contains zero or more
+of the characters <strong>n</strong>, <strong>s</strong>, <strong>e</strong> or <strong>w</strong>.  The string
+can optionally contains spaces or commas, but they are ignored.  Each
+letter refers to a side (north, south, east, or west) that the window
+will ``stick'' to.  If both <strong>n</strong> and <strong>s</strong> (or <strong>e</strong> and <strong>w</strong>)
+are specified, the window will be stretched to fill the entire height
+(or width) of its cavity.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dwidth__3d_3e_size"><strong>-width</strong> =&gt; <em>size</em></a></strong><br />
+</dt>
+<dd>
+Specify a width for the window.  The width will be the outer
+dimension of the window including its border, if any.  If <em>size</em>
+is an empty string, or if <strong>-width</strong> is not specified, then the
+width requested internally by the window will be used initially; the
+width may later be adjusted by the movement of sashes in the
+Panedwindow.  <em>Size</em> may be any value accepted by <strong>Tk_GetPixels</strong>.
+</dd>
+<p></p></dl>
+<dt><strong><a name="item_panes"><em>$widget</em>-&gt;<strong>panes</strong>;</a></strong><br />
+</dt>
+<dd>
+Returns an ordered list of the widgets managed by $widget.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="resizing_panes">RESIZING PANES</a></h1>
+<p>A pane is resized by grabbing the sash (or sash handle if present) and
+dragging with the mouse.  This is accomplished via mouse motion
+bindings on the widget.  When a sash is moved, the sizes of the panes
+on each side of the sash, and thus the widgets in those panes, are
+adjusted.</p>
+<p>When a pane is resized from outside (eg, it is packed to expand and
+fill, and the containing toplevel is resized), space is added to the final
+(rightmost or bottommost) pane in the window.</p>
+<p>
+</p>
+<hr />
+<h1><a name="keywords">KEYWORDS</a></h1>
+<p>Panedwindow, widget, geometry management</p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" valign="middle">
+<big><strong><span class="block">&nbsp;Tk::Panedwindow - Create and manipulate Panedwindow widgets</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>
