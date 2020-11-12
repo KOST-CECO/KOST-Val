@@ -1,0 +1,44 @@
+[Config]
+Relative path=1
+Compilator.SaveAll=0
+Compilator.Capture=0
+Compilator.HideOutput=0
+DefaultDir=P:\KOST\Tools\simpleGUI\_KOST-Val_GUI
+DefaultCPIndex=4
+LogtoEnd=1
+DontOpen=0
+FileFormat=0
+[Project tree]
+SIARDexcerpt
+	+_workbench
+		SIARDexcerpt_de.nsi
+		langSIARDexcerpt_de.nsh
+		langSIARDexcerpt_fr.nsh
+		langSIARDexcerpt_en.nsh
+		SIARDexcerpt.ini
+		getJavaHome.nsh
+		val.ico
+		make_SIARDexcerpt.bat
+		SIARDexcerpt_fr.script
+		SIARDexcerpt_en.script
+		test.bat
+[Open project files]
+0=SIARDexcerpt_de.nsi
+1=SIARDexcerpt.ini
+2=langSIARDexcerpt_fr.nsh
+3=langSIARDexcerpt_en.nsh
+[Selected Project Files]
+Main=SIARDexcerpt_de.nsi
+Selected=SIARDexcerpt_de.nsi
+[SIARDexcerpt_de.nsi]
+TopLine=287
+Caret=5,297
+[SIARDexcerpt.ini]
+TopLine=111
+Caret=15,130
+[langSIARDexcerpt_fr.nsh]
+TopLine=15
+Caret=18,34
+[langSIARDexcerpt_en.nsh]
+TopLine=15
+Caret=32,34

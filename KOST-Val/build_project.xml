@@ -49,12 +49,12 @@
 			</fileset>
 		</copy>
 		<copy includeemptydirs="false" todir="target/classes">
-			<fileset dir="src/main/KOST-Val_resources">
+			<fileset dir="src/main/resources">
 				<exclude name="**/*.launch" />
 				<exclude name="**/*.java" />
 			</fileset>
 		</copy>
-		<copy file="../KOST-Val_README.md" todir="target/classes" />
+		<copy file="../README.md" todir="target/classes" />
 	</target>
 	<target name="clean">
 		<delete dir="target/classes" />
@@ -70,7 +70,7 @@
 		</javac>
 		<javac includeantruntime="false" debug="true" debuglevel="${debuglevel}" destdir="target/classes"
 			source="${source}" target="${target}">
-			<src path="src/main/KOST-Val_resources" />
+			<src path="src/main/resources" />
 			<classpath refid="KOST-Val.classpath" />
 		</javac>
 		<javac includeantruntime="false" debug="true" debuglevel="${debuglevel}" destdir="target/classes"

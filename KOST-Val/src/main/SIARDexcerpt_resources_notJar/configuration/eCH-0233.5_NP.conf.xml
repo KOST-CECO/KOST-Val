@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<pathtoxsl>resources\eCH-0233.5_NP.xsl</pathtoxsl>
+	<pathtoxslsearch>resources\SIARDexcerptSearch.xsl</pathtoxslsearch>
+	<archive>Staatsarchiv</archive>
+	<insensitive>yes</insensitive>
+	<sed>no</sed>
+	<maintable>
+		<mfolder>table13</mfolder>
+		<mname>taxDeclarationMainForm</mname>
+		<mtitle>Suchergebnis aus den Veranlagungsdaten:</mtitle>
+		<mpkname>Steuer-ID P1</mpkname>
+		<mpkcell>c13</mpkcell>
+		<mschemaname>tax0</mschemaname>
+		<mschemafolder>schema0</mschemafolder>
+		<mc1name>Name P1</mc1name>
+		<mc1number>c8</mc1number>
+		<mc2name>Ledigname P1</mc2name>
+		<mc2number>c10</mc2number>
+		<mc3name>Vorname P1</mc3name>
+		<mc3number>c9</mc3number>
+		<mc4name>Geburtsdatum P1</mc4name>
+		<mc4number>c12</mc4number>
+		<mc5name>Strasse P1</mc5name>
+		<mc5number>c19</mc5number>
+		<mc6name>Hausnummer P1</mc6name>
+		<mc6number>c20</mc6number>
+		<mc7name>Ort P1</mc7name>
+		<mc7number>c22</mc7number>
+		<mc8name>Name P2</mc8name>
+		<mc8number>c31</mc8number>
+		<mc9name>Ledigname P2</mc9name>
+		<mc9number>c33</mc9number>
+		<mc10name>Vorname P2</mc10name>
+		<mc10number>c32</mc10number>
+		<mc11name>Geburtsdatum P2</mc11name>
+		<mc11number>c35</mc11number>
+	</maintable>
+	<subtables>
+		<subtable1>
+			<st1keyname>Steuer-ID P1</st1keyname>
+			<st1name>businessLiabilitiesListing</st1name>
+			<st1folder>table0</st1folder>
+			<st1fkcell>c1</st1fkcell>
+			<st1schemafolder>schema0</st1schemafolder>
+			<st1schemaname>tax0</st1schemaname>
+		</subtable1>
+		<subtable2>
+			<st2keyname>Steuer-ID P1</st2keyname>
+			<st2name>businessQualifiedInvestment</st2name>
+			<st2folder>table1</st2folder>
+			<st2fkcell>c1</st2fkcell>
+			<st2schemafolder>schema0</st2schemafolder>
+			<st2schemaname>tax0</st2schemaname>
+		</subtable2>
+		<subtable3>
+			<st3keyname>Steuer-ID P1</st3keyname>
+			<st3name>childData</st3name>
+			<st3folder>table2</st3folder>
+			<st3fkcell>c1</st3fkcell>
+			<st3schemafolder>schema0</st3schemafolder>
+			<st3schemaname>tax0</st3schemaname>
+		</subtable3>
+		<subtable4>
+			<st4keyname>Steuer-ID P1</st4keyname>
+			<st4name>disabledPersonSupport</st4name>
+			<st4folder>table3</st4folder>
+			<st4fkcell>c1</st4fkcell>
+			<st4schemafolder>schema0</st4schemafolder>
+			<st4schemaname>tax0</st4schemaname>
+		</subtable4>
+		<subtable5>
+			<st5keyname>Steuer-ID P1</st5keyname>
+			<st5name>movablePropertyLifeInsurance</st5name>
+			<st5folder>table4</st5folder>
+			<st5fkcell>c1</st5fkcell>
+			<st5schemafolder>schema0</st5schemafolder>
+			<st5schemaname>tax0</st5schemaname>
+		</subtable5>
+		<subtable6>
+			<st6keyname>Steuer-ID P1</st6keyname>
+			<st6name>movablePropertyVehicle</st6name>
+			<st6folder>table5</st6folder>
+			<st6fkcell>c1</st6fkcell>
+			<st6schemafolder>schema0</st6schemafolder>
+			<st6schemaname>tax0</st6schemaname>
+		</subtable6>
+		<subtable7>
+			<st7keyname>Steuer-ID P1</st7keyname>
+			<st7name>paidOut</st7name>
+			<st7folder>table6</st7folder>
+			<st7fkcell>c1</st7fkcell>
+			<st7schemafolder>schema0</st7schemafolder>
+			<st7schemaname>tax0</st7schemaname>
+		</subtable7>
+		<subtable8>
+			<st8keyname>Steuer-ID P1</st8keyname>
+			<st8name>payment</st8name>
+			<st8folder>table7</st8folder>
+			<st8fkcell>c1</st8fkcell>
+			<st8schemafolder>schema0</st8schemafolder>
+			<st8schemaname>tax0</st8schemaname>
+		</subtable8>
+		<subtable9>
+			<st9keyname>Steuer-ID P1</st9keyname>
+			<st9name>paymentReceived</st9name>
+			<st9folder>table8</st9folder>
+			<st9fkcell>c1</st9fkcell>
+			<st9schemafolder>schema0</st9schemafolder>
+			<st9schemaname>tax0</st9schemaname>
+		</subtable9>
+		<subtable10>
+			<st10keyname>Steuer-ID P1</st10keyname>
+			<st10name>privateLiabilitiesListing</st10name>
+			<st10folder>table9</st10folder>
+			<st10fkcell>c1</st10fkcell>
+			<st10schemafolder>schema0</st10schemafolder>
+			<st10schemaname>tax0</st10schemaname>
+		</subtable10>
+		<subtable11>
+			<st11keyname>Steuer-ID P1</st11keyname>
+			<st11name>privateQualifiedInvestments</st11name>
+			<st11folder>table10</st11folder>
+			<st11fkcell>c1</st11fkcell>
+			<st11schemafolder>schema0</st11schemafolder>
+			<st11schemaname>tax0</st11schemaname>
+		</subtable11>
+		<subtable12>
+			<st12keyname>Steuer-ID P1</st12keyname>
+			<st12name>propertyHouseOrFlat</st12name>
+			<st12folder>table11</st12folder>
+			<st12fkcell>c1</st12fkcell>
+			<st12schemafolder>schema0</st12schemafolder>
+			<st12schemaname>tax0</st12schemaname>
+		</subtable12>
+		<subtable13>
+			<st13keyname>Steuer-ID P1</st13keyname>
+			<st13name>securityEntry</st13name>
+			<st13folder>table12</st13folder>
+			<st13fkcell>c1</st13fkcell>
+			<st13schemafolder>schema0</st13schemafolder>
+			<st13schemaname>tax0</st13schemaname>
+		</subtable13>
+	</subtables>
+</configuration>

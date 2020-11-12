@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:template match="/"><html>
+ <head>
+  <style>
+   body {font-family: Verdana, Geneva, sans-serif; font-size: 10pt; }
+   table {font-family: Verdana, Geneva, sans-serif; font-size: 10pt; border: 2px solid #ffffff; border-collapse: collapse}
+   .logow {font-family: Verdana, Geneva, sans-serif; background-color: #ffffff; font-weight:bold; font-size: 32pt; color: #ffffff; }
+   .logoff {font-family: Verdana, Geneva, sans-serif; background-color: #ffffff; font-weight:bold; font-size: 18pt; color: #000000; }
+   .logo {font-family: Verdana, Geneva, sans-serif; background-color: #000000; font-weight:bold; font-size: 32pt; color: #ffffff; }
+   .logov {font-family: Verdana, Geneva, sans-serif; background-color: #000000; font-weight:bold; font-size: 32pt; color: #0cc10c; }
+   .logol {font-family: Verdana, Geneva, sans-serif; background-color: #000000; font-weight:bold; font-size: 32pt; color: #000000; }
+   h1 {font-family: Verdana, Geneva, sans-serif; font-weight:bold; font-size: 20pt; color: #000000; }
+   h2 {font-family: Verdana, Geneva, sans-serif; font-weight:bold; font-size: 14pt; color: #000000; }
+   h3 {font-family: Verdana, Geneva, sans-serif; font-weight:bold; font-size: 10pt; color: #000000; }
+   h4 {font-family: Verdana, Geneva, sans-serif; font-size: 10pt; color: #808080; }
+   .footer {font-family: Verdana, Geneva, sans-serif; font-size: 10pt; color: #808080; }
+   tr {background-color: #d8d8d8}
+   tr.caption {background-color: #ffffff}
+   tr.captionb {background-color: #ffffff; font-weight:bold}
+   tr.captionm {background-color: #f8dfdf}
+   tr.captionio {background-color: #afeeaf; font-weight:bold}
+   tr.captioniom {background-color: #ccffcc}
+   tr.captioninfo {background-color: #b2b2c5}
+   td {background-color: #d8d8d8; border: 2px solid #ffffff; border-collapse: collapse}
+   td.caption {background-color: #ffffff; border: 2px solid #d8d8d8; border-collapse: collapse}
+   td.captionb {background-color: #ffffff; font-weight:bold}
+   td.captionkey {font-weight:bold}
+   td.right {text-align: right}
+  </style>
+ </head>
+ <body>
+  <p class="logow">
+   <span class="logol">.</span>
+   <span class="logo">SIARD</span>
+   <span class="logov">excerpt</span>
+   <span class="logol">.</span>
+   <span class="logow">.</span>
+   <span class="logoff"> <xsl:value-of select="table/Infos/keyexcerpt"/></span>
+  </p>
+  <br/>
+  <h1><xsl:value-of select="table/Infos/dbname"/> [<xsl:value-of select="table/Infos/dataOriginTimespan"/>]</h1>
+  <h3><xsl:value-of select="table/Infos/dbdescription"/></h3>
+  <br/>
+</body></html></xsl:template></xsl:stylesheet>

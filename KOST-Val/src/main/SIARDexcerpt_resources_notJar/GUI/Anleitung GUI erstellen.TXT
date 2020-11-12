@@ -1,0 +1,15 @@
+Alles ist in src\main\resources_notJar\GUI
+++++++++++++++++++++++++++++++++++++++++++++++++++
+.nsi	-	Das ist das NullSoft Hauptdokument; dieses zieht die anderen Dateien an z.B. ini, nsn ...
+.ini	-	Layout der Fenster
+.nsn	-	NullSoft Module (entweder lokal oder in NSIS\Include)
+
+
+SIARDexcerpt.exes erstellen:
+-------------------------
+make_SIARDexcerpt.bat aufrufen
+
+
+nicht beachten
+--------------
+1 warning: Page instfiles not used, no sections will be executed!

@@ -7,6 +7,7 @@
        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
 
+	<!-- KOST-Val -->
 	<!-- Common Services -->
 
 	<bean id="textResourceService"
@@ -301,6 +302,66 @@
 		<property name="validation3bUnspecifiedFormatModule" ref="validation3bUnspecifiedFormatModule" />
 		<property name="validation3cFormatValidationModule" ref="validation3cFormatValidationModule" />
 		<property name="validation3dPeriodModule" ref="validation3dPeriodModule" />
+	</bean>
+
+	<!-- SIARDexcerpt -->
+	<!-- Common Services -->
+
+	<bean id="textResourceServiceExc"
+		class="ch.kostceco.tools.siardexcerpt.service.impl.TextResourceServiceExcImpl">
+	</bean>
+
+	<bean id="configurationServiceExc"
+		class="ch.kostceco.tools.siardexcerpt.service.impl.ConfigurationServiceExcImpl">
+		<property name="textResourceServiceExc" ref="textResourceServiceExc" />
+	</bean>
+
+	<bean id="messageServiceExc"
+		class="ch.kostceco.tools.siardexcerpt.service.impl.MessageServiceExcImpl">
+	</bean>
+
+
+	<!-- Validation Services -->
+
+
+
+	<bean id="excerptAZipModule"
+		class="ch.kostceco.tools.siardexcerpt.excerption.moduleexcerpt.impl.ExcerptAZipModuleImpl">
+		<property name="textResourceServiceExc" ref="textResourceServiceExc" />
+		<property name="messageServiceExc" ref="messageServiceExc" />
+	</bean>
+	<bean id="excerptAConfigModule"
+		class="ch.kostceco.tools.siardexcerpt.excerption.moduleexcerpt.impl.ExcerptAConfigModuleImpl">
+		<property name="textResourceServiceExc" ref="textResourceServiceExc" />
+		<property name="messageServiceExc" ref="messageServiceExc" />
+	</bean>
+	<bean id="excerptBSearchModule"
+		class="ch.kostceco.tools.siardexcerpt.excerption.moduleexcerpt.impl.ExcerptBSearchModuleImpl">
+		<property name="textResourceServiceExc" ref="textResourceServiceExc" />
+		<property name="messageServiceExc" ref="messageServiceExc" />
+	</bean>
+	<bean id="excerptCGrepModule"
+		class="ch.kostceco.tools.siardexcerpt.excerption.moduleexcerpt.impl.ExcerptCGrepModuleImpl">
+		<property name="textResourceServiceExc" ref="textResourceServiceExc" />
+		<property name="messageServiceExc" ref="messageServiceExc" />
+	</bean>
+
+
+	<bean id="siardexcerpt" class="ch.kostceco.tools.siardexcerpt.SIARDexcerpt">
+		<property name="textResourceServiceExc" ref="textResourceServiceExc" />
+		<property name="configurationServiceExc" ref="configurationServiceExc" />
+	</bean>
+
+	<bean id="logconfiguratorExc" class="ch.kostceco.tools.siardexcerpt.logging.LogConfigurator">
+		<property name="textResourceServiceExc" ref="textResourceServiceExc" />
+	</bean>
+
+	<bean id="controllerexcerpt" class="ch.kostceco.tools.siardexcerpt.controller.Controllerexcerpt">
+		<property name="textResourceServiceExc" ref="textResourceServiceExc" />
+		<property name="excerptAZipModule" ref="excerptAZipModule" /> 
+		<property name="excerptAConfigModule" ref="excerptAConfigModule" /> 
+		<property name="excerptBSearchModule" ref="excerptBSearchModule" />
+		<property name="excerptCGrepModule" ref="excerptCGrepModule" />
 	</bean>
 
 </beans>

@@ -1,0 +1,4 @@
+s/SIARDexcerpt_de/SIARDexcerpt_en/g
+s/langSIARDexcerpt_de.nsh/langSIARDexcerpt_en.nsh/g
+s/siardexcerpt_de.jar/siardexcerpt_en.jar/g
+s/SIARDexcerpt_Anwendungshandbuch/SIARDexcerpt_Manual/g

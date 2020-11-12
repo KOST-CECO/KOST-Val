@@ -1,9 +1,8 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project default="create_run_jar_de_fr_en" name="Create Runnable Jar for Project KOST-Val DE, FR, EN">
+<project default="create_run_jar_de_fr_en" name="Create Runnable Jar for Project KOST-Val SIARDexcerpt DE, FR, EN">
 	<!--ANT 1.7 is required                                        -->
 	<target name="create_run_jar_de_fr_en">
-        <mkdir dir="../../KOST-Val"/>
-		<!--Erstelle target, damit die Jars auf dem aktuellen Code erstellt werden-->
+		<!--Erstelle target, damit die Jars und Run auf dem aktuellen Code erstellt werden-->
 		<mkdir dir="KOST-Val/target/classes" />
 		<copy includeemptydirs="false" overwrite="true" todir="KOST-Val/target/classes">
 			<fileset dir="KOST-Val/src/main/java">
@@ -11,31 +10,39 @@
 				<exclude name="**/*.java" />
 			</fileset>
 		</copy>
+		<!-- .. KOST-Val .. -->
 		<copy includeemptydirs="false" overwrite="true" todir="KOST-Val/target/classes">
-			<fileset dir="KOST-Val/src/main/KOST-Val_resources">
+			<fileset dir="KOST-Val/src/main/resources">
 				<exclude name="**/*.launch" />
 				<exclude name="**/*.java" />
 			</fileset>
 		</copy>
 		<copy includeemptydirs="false" overwrite="true" todir="KOST-Val/target/classes">
-			<fileset dir="KOST-Val/src/main/KOST-Val_resources_notJar"></fileset>
+			<fileset dir="KOST-Val/src/main/KOST-Val_resources_notJar">
+				<!-- fuer schnellernen build, ggf aufkommentieren --> 
+				<exclude name="**/callas_pdfaPilotServer_Win_9-1-326_cli-a/**" />
+			</fileset>
 		</copy>
 		<copy file="KOST-Val_README.md" todir="KOST-Val/target/classes" />
 		<copy file="KOST-Val/src/main/KOST-Val_resources_notJar/PdfValidatorAPI.dll" overwrite="true" todir="KOST-Val/target/classes"/>
-		<!--Kopiere alle benoetigten Ordner und Dokumente in ../../KOST-Val-->
-		<copy overwrite="true" todir="../../KOST-Val/configuration">
-			<fileset dir="KOST-Val/src/main/KOST-Val_resources_notJar/configuration"/>
+		<!-- .. SIARDexcerpt .. -->
+		<copy includeemptydirs="false" overwrite="true" todir="KOST-Val/target/classes">
+			<fileset dir="KOST-Val/src/main/SIARDexcerpt_resources_notJar">
+			</fileset>
 		</copy>
-		<copy overwrite="true" todir="../../KOST-Val/doc">
-			<fileset dir="KOST-Val/src/main/KOST-Val_resources_notJar/doc"/>
-		</copy>
-		<copy overwrite="true" todir="../../KOST-Val/license">
-			<fileset dir="KOST-Val/src/main/KOST-Val_resources_notJar/license"/>
-		</copy>
-		<!-- Kommentar fuer schnellernen build --> 
-		<copy overwrite="true" todir="../../KOST-Val/resources">
-			<fileset dir="KOST-Val/src/main/KOST-Val_resources_notJar/resources"/>
+		<copy file="SIARDexcerpt_README.md" todir="KOST-Val/target/classes" />
+		<!--Kopiere alle benoetigten Ordner und Dokumente von KOST-Val_resources_notJar in ../../KOST-Val-->
+        <mkdir dir="../../KOST-Val"/>
+		<copy overwrite="true" todir="../../KOST-Val">
+			<fileset dir="KOST-Val/src/main/KOST-Val_resources_notJar">
+				<!-- fuer schnellernen build, ggf aufkommentieren --> 
+				<exclude name="**/callas_pdfaPilotServer_Win_9-1-326_cli-a/**" />
+			</fileset>
 		</copy> 
-		<copy file="KOST-Val/src/main/KOST-Val_resources_notJar/PdfValidatorAPI.dll" overwrite="true" todir="../../KOST-Val"/>
+		<!--Kopiere alle benötigten Ordner und Dokumente von SIARDexcerpt_resources_notJar in ../../SIARDexcerpt--> 
+        <mkdir dir="../../SIARDexcerpt"/>
+		<copy overwrite="true" todir="../../SIARDexcerpt">
+			<fileset dir="KOST-Val/src/main/SIARDexcerpt_resources_notJar"/>
+		</copy>
 	</target>
 </project>
