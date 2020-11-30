@@ -3,7 +3,7 @@ SIARDexcerpt
 
 SIARDexcerpt is a Java-based application that searches and extracts individual records of SIARD files, then converts them into a human readable form using a user-specific or a generic stylesheet.
 
-SIARDexcerpt, Copyright (C) 2016-2019 Claire Roethlisberger (KOST-CECO)
+SIARDexcerpt, Copyright (C) 2016-2020 Claire Roethlisberger (KOST-CECO)
 
 This program comes with ABSOLUTELY NO WARRANTY.
 This is free software, and you are welcome to redistribute it under 

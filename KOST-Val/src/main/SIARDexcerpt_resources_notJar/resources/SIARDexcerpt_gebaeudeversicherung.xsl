@@ -3,30 +3,30 @@
 <xsl:template match="/"><html>
  <head>
   <style>
-   body {font-family: Verdana, Geneva, sans-serif; font-size: 10pt; }
-   table {font-family: Verdana, Geneva, sans-serif; font-size: 10pt; border: 2px solid #ffffff; border-collapse: collapse}
-   .logow {font-family: Verdana, Geneva, sans-serif; background-color: #ffffff; font-weight:bold; font-size: 32pt; color: #ffffff; }
-   .logoff {font-family: Verdana, Geneva, sans-serif; background-color: #ffffff; font-weight:bold; font-size: 18pt; color: #000000; }
-   .logo {font-family: Verdana, Geneva, sans-serif; background-color: #000000; font-weight:bold; font-size: 32pt; color: #ffffff; }
-   .logov {font-family: Verdana, Geneva, sans-serif; background-color: #000000; font-weight:bold; font-size: 32pt; color: #0cc10c; }
-   .logol {font-family: Verdana, Geneva, sans-serif; background-color: #000000; font-weight:bold; font-size: 32pt; color: #000000; }
-   h1 {font-family: Verdana, Geneva, sans-serif; font-weight:bold; font-size: 20pt; color: #000000; }
-   h2 {font-family: Verdana, Geneva, sans-serif; font-weight:bold; font-size: 14pt; color: #000000; }
-   h3 {font-family: Verdana, Geneva, sans-serif; font-weight:bold; font-size: 10pt; color: #000000; }
-   h4 {font-family: Verdana, Geneva, sans-serif; font-size: 10pt; color: #808080; }
-   .footer {font-family: Verdana, Geneva, sans-serif; font-size: 10pt; color: #808080; }
-   tr {background-color: #ffffff}
+   body {font-family: Verdana, Geneva, sans-serif; font-size: 10pt; -webkit-print-color-adjust: exact; }
+   table {font-family: Verdana, Geneva, sans-serif; font-size: 10pt; border: 2px solid #ffffff; border-collapse: collapse; -webkit-print-color-adjust: exact;}
+   .logow {font-family: Verdana, Geneva, sans-serif; background-color: #ffffff; font-weight:bold; font-size: 32pt; color: #ffffff; -webkit-print-color-adjust: exact;}
+   .logoff {font-family: Verdana, Geneva, sans-serif; background-color: #ffffff; font-weight:bold; font-size: 18pt; color: #000000; -webkit-print-color-adjust: exact; }
+   .logo {font-family: Verdana, Geneva, sans-serif; background-color: #000000; font-weight:bold; font-size: 32pt; color: #ffffff; -webkit-print-color-adjust: exact;}
+   .logov {font-family: Verdana, Geneva, sans-serif; background-color: #000000; font-weight:bold; font-size: 32pt; color: #0cc10c; -webkit-print-color-adjust: exact; }
+   .logol {font-family: Verdana, Geneva, sans-serif; background-color: #000000; font-weight:bold; font-size: 32pt; color: #000000; -webkit-print-color-adjust: exact; }
+   h1 {font-family: Verdana, Geneva, sans-serif; font-weight:bold; font-size: 20pt; color: #000000; -webkit-print-color-adjust: exact; }
+   h2 {font-family: Verdana, Geneva, sans-serif; font-weight:bold; font-size: 14pt; color: #000000; -webkit-print-color-adjust: exact; }
+   h3 {font-family: Verdana, Geneva, sans-serif; font-weight:bold; font-size: 10pt; color: #000000; -webkit-print-color-adjust: exact; }
+   h4 {font-family: Verdana, Geneva, sans-serif; font-size: 10pt; color: #808080; -webkit-print-color-adjust: exact; }
+   .footer {font-family: Verdana, Geneva, sans-serif; font-size: 10pt; color: #808080; -webkit-print-color-adjust: exact; }
+   tr {background-color: #ffffff; -webkit-print-color-adjust: exact;}
    tr.caption {background-color: #ffffff}
    tr.captionb {background-color: #ffffff; font-weight:bold}
    tr.captionm {background-color: #f8dfdf}
    tr.captionio {background-color: #afeeaf; font-weight:bold}
    tr.captioniom {background-color: #ccffcc}
-   tr.captioninfo {background-color: #b2b2c5}
-   td {background-color: #ffffff; border: 2px solid #ffffff; border-collapse: collapse}
-   td.caption {background-color: #ffffff; border: 2px solid #ffffff; border-collapse: collapse}
-   td.captionb {background-color: #ffffff; font-weight:bold}
-   td.captionkey {font-weight:bold}
-   td.right {text-align: right}
+   tr.captioninfo {background-color: #b2b2c5; -webkit-print-color-adjust: exact;}
+   td {background-color: #ffffff; border: 2px solid #ffffff; border-collapse: collapse; -webkit-print-color-adjust: exact;}
+   td.caption {background-color: #ffffff; border: 2px solid #ffffff; border-collapse: collapse; -webkit-print-color-adjust: exact;}
+   td.captionb {background-color: #ffffff; font-weight:bold; -webkit-print-color-adjust: exact;}
+   td.captionkey {font-weight:bold; -webkit-print-color-adjust: exact;}
+   td.right {text-align: right; -webkit-print-color-adjust: exact;}
   </style>
  </head>
  <body>

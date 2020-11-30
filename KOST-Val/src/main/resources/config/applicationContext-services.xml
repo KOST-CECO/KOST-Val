@@ -364,4 +364,24 @@
 		<property name="excerptCGrepModule" ref="excerptCGrepModule" />
 	</bean>
 
+	<bean id="controllerExcInit" class="ch.kostceco.tools.siardexcerpt.controller.ControllerExcInit">
+		<property name="textResourceServiceExc" ref="textResourceServiceExc" />
+		<property name="configurationServiceExc" ref="configurationServiceExc" />
+	</bean>
+
+	<bean id="controllerExcSearch" class="ch.kostceco.tools.siardexcerpt.controller.ControllerExcSearch">
+		<property name="textResourceServiceExc" ref="textResourceServiceExc" />
+		<property name="configurationServiceExc" ref="configurationServiceExc" />
+	</bean>
+
+	<bean id="controllerExcExcerpt" class="ch.kostceco.tools.siardexcerpt.controller.ControllerExcExcerpt">
+		<property name="textResourceServiceExc" ref="textResourceServiceExc" />
+		<property name="configurationServiceExc" ref="configurationServiceExc" />
+	</bean>
+
+	<bean id="controllerExcFinish" class="ch.kostceco.tools.siardexcerpt.controller.ControllerExcFinish">
+		<property name="textResourceServiceExc" ref="textResourceServiceExc" />
+		<property name="configurationServiceExc" ref="configurationServiceExc" />
+	</bean>
+
 </beans>

@@ -1,6 +1,6 @@
 /* == SIARDexcerpt ==============================================================================
  * The SIARDexcerpt application is used for excerpt a record from a SIARD-File. Copyright (C)
- * 2016-2019 Claire Roethlisberger (KOST-CECO)
+ * 2016-2020 Claire Roethlisberger (KOST-CECO)
  * -----------------------------------------------------------------------------------------------
  * SIARDexcerpt is a development of the KOST-CECO. All rights rest with the KOST-CECO. This
  * application is free software: you can redistribute it and/or modify it under the terms of the GNU
@@ -37,7 +37,7 @@ import ch.kostceco.tools.siardexcerpt.util.Util;
 public class ExcerptAConfigModuleImpl extends ValidationModuleImpl implements ExcerptAConfigModule
 {
 
-	public static String	NEWLINE	= System.getProperty( "line.separator" );
+	public static String NEWLINE = System.getProperty( "line.separator" );
 
 	@Override
 	public boolean validate( File siardDatei, File configFileHard, String inputMainname,
@@ -89,8 +89,8 @@ public class ExcerptAConfigModuleImpl extends ValidationModuleImpl implements Ex
 			 * 
 			 * 6 fuer "BINARY VARYING", "BINARY", "BIT VARYING", "BIT" und "XML".
 			 * 
-			 * 7 fuer "BINARY LARGE OBJECT", "BOOLEAN", "CHARACTER LARGE OBJECT",
-			 * "NATIONAL CHARACTER LARGE OBJECT" und ggf andere */
+			 * 7 fuer "BINARY LARGE OBJECT", "BOOLEAN", "CHARACTER LARGE OBJECT", "NATIONAL CHARACTER
+			 * LARGE OBJECT" und ggf andere */
 
 			Boolean boolMainname = false;
 			Boolean boolPKname = false;
@@ -147,8 +147,8 @@ public class ExcerptAConfigModuleImpl extends ValidationModuleImpl implements Ex
 				docConfig.getDocumentElement().normalize();
 				dbfConfig.setFeature( "http://xml.org/sax/features/namespaces", false );
 
-				/* columns.column werden mit number erweitert, damit die Zuordnung nicht jedesmal via Zaehler
-				 * erfolgen muss */
+				/* columns.column werden mit number erweitert, damit die Zuordnung nicht jedesmal via
+				 * Zaehler erfolgen muss */
 				NodeList nlColumns = docConfig.getElementsByTagName( "columns" );
 				for ( int x = 0; x < nlColumns.getLength(); x++ ) {
 					// System.out.println( "Anzahl Columns: " + nlColumns.getLength() );
@@ -218,16 +218,27 @@ public class ExcerptAConfigModuleImpl extends ValidationModuleImpl implements Ex
 											x0MainTable = x0;
 											x0 = nlTables.getLength();
 
-											// Schema name und folder herauslesen
+											// mainfolder herauslesen
 											Node mainTables = nodeDetail.getParentNode();
 											NodeList nlTablesChild = mainTables.getChildNodes();
 											for ( int x2 = 0; x2 < nlTablesChild.getLength(); x2++ ) {
 												// fuer jedes Subelement der Tabelle (name, folder, description...) ...
 												Node subNode = nlTablesChild.item( x2 );
-												if ( subNode.getNodeName().equals( "name" ) ) {
-													mainschemaname = subNode.getTextContent();
-												} else if ( subNode.getNodeName().equals( "folder" ) ) {
-													mainschemafolder = subNode.getTextContent();
+												if ( subNode.getNodeName().equals( "folder" ) ) {
+													mainfolder = subNode.getTextContent();
+												}
+											}
+
+											// Schema name und folder herauslesen
+											Node parentMainTables = mainTables.getParentNode().getParentNode();
+											NodeList nlSchemaChild = parentMainTables.getChildNodes();
+											for ( int x3 = 0; x3 < nlSchemaChild.getLength(); x3++ ) {
+												// fuer jedes Subelement der Tabelle (name, folder, description...) ...
+												Node subNode3 = nlSchemaChild.item( x3 );
+												if ( subNode3.getNodeName().equals( "name" ) ) {
+													mainschemaname = subNode3.getTextContent();
+												} else if ( subNode3.getNodeName().equals( "folder" ) ) {
+													mainschemafolder = subNode3.getTextContent();
 												}
 											}
 
@@ -339,7 +350,8 @@ public class ExcerptAConfigModuleImpl extends ValidationModuleImpl implements Ex
 								 * 7 fuer "BINARY LARGE OBJECT", "BOOLEAN", "CHARACTER LARGE OBJECT",
 								 * "NATIONAL CHARACTER LARGE OBJECT" und ggf andere */
 
-								if ( !numberProv.equals( "" ) || !nameProv.equals( "" ) || !typeProv.equals( "" ) ) {
+								if ( !numberProv.equals( "" ) || !nameProv.equals( "" )
+										|| !typeProv.equals( "" ) ) {
 									/* System.out.println( "Name: " + nameProv + " / Number: " + numberProv +
 									 * " / Type: " + typeProv ); */
 									if ( numberProv.equals( primarykeycell ) ) {
@@ -467,7 +479,8 @@ public class ExcerptAConfigModuleImpl extends ValidationModuleImpl implements Ex
 							}
 							/* die verschiedenen Prio zusammenfassen. p1 mit p2 erweitern, dann p3, dann p4...
 							 * 
-							 * beim array84 werden die leerstellen geloescht respektive mit dem Nachfolger ersetzt */
+							 * beim array84 werden die leerstellen geloescht respektive mit dem Nachfolger
+							 * ersetzt */
 							int yArray = 0;
 							for ( int x = 0; x < 83; x++ ) {
 								// System.out.println( Arrays.toString( array84number ) );
@@ -514,8 +527,8 @@ public class ExcerptAConfigModuleImpl extends ValidationModuleImpl implements Ex
 					// System.out.println( "(..) oder tabelle hat nicht existiert -> boolMainname=false" );
 					if ( nlPK.getLength() == 0 ) {
 						/* kein Primaerschluessel. if pkInt = 0 dann jene Tabelle mit den meisten column. Der
-						 * Schluessel ist die erste Spalte, welche nicht Nullable sein darf oder die erste. Keine
-						 * Verknuepfung mit anderen Tabellen. */
+						 * Schluessel ist die erste Spalte, welche nicht Nullable sein darf oder die erste.
+						 * Keine Verknuepfung mit anderen Tabellen. */
 						int tableX2 = 0;
 						int tableColNum = 0;
 
@@ -684,7 +697,8 @@ public class ExcerptAConfigModuleImpl extends ValidationModuleImpl implements Ex
 									typeProv = "";
 								} else if ( typeProv.startsWith( "TIMESTAMP WITH TIME ZONE" )
 										|| typeProv.startsWith( "TIMESTAMP" )
-										|| typeProv.startsWith( "TIME WITH TIME ZONE" ) || typeProv.startsWith( "TIME" ) ) {
+										|| typeProv.startsWith( "TIME WITH TIME ZONE" )
+										|| typeProv.startsWith( "TIME" ) ) {
 									// 48-59 = Prio5 "TIME", "TIME WITH TIME ZONE", "TIMESTAMP" und
 									// "TIMESTAMP WITH TIME ZONE"
 									for ( int z = 48; z < 60; z++ ) {
@@ -773,7 +787,8 @@ public class ExcerptAConfigModuleImpl extends ValidationModuleImpl implements Ex
 						}
 						/* die verschiedenen Prio zusammenfassen. p1 mit p2 erweitern, dann p3, dann p4...
 						 * 
-						 * beim array84 werden die leerstellen geloescht respektive mit dem Nachfolger ersetzt */
+						 * beim array84 werden die leerstellen geloescht respektive mit dem Nachfolger
+						 * ersetzt */
 						int yArray = 0;
 						for ( int x = 0; x < 83; x++ ) {
 							// System.out.println( Arrays.toString( array84number ) );
@@ -851,13 +866,13 @@ public class ExcerptAConfigModuleImpl extends ValidationModuleImpl implements Ex
 							String refTabValue9 = "";
 							int refTabHalf = 0;
 
-							/* eine nodelist mit referencedTable erstellen, Treffer anzahl auslesen und die Haelfte
-							 * bestimmen. Wert der 1. Referenced Tablename herauslesen & zaehler =1. Dann der
-							 * zweite Wert herauslesen, wenn gleich zaehler erhoehen, ansonsten nr merken. Den 3.
-							 * und ff Wert herauslesen und ggf zaehler erhoehen. Wenn Zaehler am Ende Hoeher/= der
-							 * haelfte ist, ist es der meistverwendete Primaerschluessel. Ansonsten wert speichern
-							 * und mit anderen Werten gleich weiterfahren. Wenn keiner die Haelfte erreicht,
-							 * herausfinder welcher die meisten treffer hat. */
+							/* eine nodelist mit referencedTable erstellen, Treffer anzahl auslesen und die
+							 * Haelfte bestimmen. Wert der 1. Referenced Tablename herauslesen & zaehler =1. Dann
+							 * der zweite Wert herauslesen, wenn gleich zaehler erhoehen, ansonsten nr merken. Den
+							 * 3. und ff Wert herauslesen und ggf zaehler erhoehen. Wenn Zaehler am Ende Hoeher/=
+							 * der haelfte ist, ist es der meistverwendete Primaerschluessel. Ansonsten wert
+							 * speichern und mit anderen Werten gleich weiterfahren. Wenn keiner die Haelfte
+							 * erreicht, herausfinder welcher die meisten treffer hat. */
 
 							NodeList nlRT = docConfig.getElementsByTagName( "referencedTable" );
 							// System.out.println( "Anzahl ReferencedTable: " + (nlRT.getLength() + 1) / 2 );
@@ -1374,7 +1389,8 @@ public class ExcerptAConfigModuleImpl extends ValidationModuleImpl implements Ex
 							}
 
 						} else {
-							// TODO: MARKER -> nur ein Primaerschluessel, entsprechend ist dies der Hauptschluessel
+							// TODO: MARKER -> nur ein Primaerschluessel, entsprechend ist dies der
+							// Hauptschluessel
 							// oder die erste Tabelle mit einem Primaerschluessel wen keine Fremdschluessel
 							// existieren.
 							// */
@@ -1630,7 +1646,7 @@ public class ExcerptAConfigModuleImpl extends ValidationModuleImpl implements Ex
 				}
 
 				// TODO Config maintable erstellen
-				title = getTextResourceServiceExc().getText( locale,MESSAGE_XML_TITLE, mainname );
+				title = getTextResourceServiceExc().getText( locale, MESSAGE_XML_TITLE, mainname );
 				title = "<mtitle>" + title + "</mtitle>";
 				String valueMainname = mainname;
 				mainname = "<mname>" + mainname + "</mname>";
@@ -1820,8 +1836,8 @@ public class ExcerptAConfigModuleImpl extends ValidationModuleImpl implements Ex
 														+ "name>";
 												subFolder = "<st" + stcounter + "folder>" + subFolder + "</st" + stcounter
 														+ "folder>";
-												subKeyCell = "<st" + stcounter + "fkcell>" + subKeyCell + "</st"
-														+ stcounter + "fkcell>";
+												subKeyCell = "<st" + stcounter + "fkcell>" + subKeyCell + "</st" + stcounter
+														+ "fkcell>";
 
 												// Schema name und folder herauslesen
 												Node mainTables = nodeParentFKs.getParentNode();
@@ -1887,23 +1903,23 @@ public class ExcerptAConfigModuleImpl extends ValidationModuleImpl implements Ex
 					}
 
 				} catch ( Exception e ) {
-					getMessageServiceExc().logError(
-							getTextResourceServiceExc().getText( locale,MESSAGE_XML_MODUL_A )
-									+ getTextResourceServiceExc().getText( locale,ERROR_XML_UNKNOWN, e.getMessage() ) );
+					getMessageServiceExc().logError( getTextResourceServiceExc().getText( locale,
+							MESSAGE_XML_MODUL_A )
+							+ getTextResourceServiceExc().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 					return false;
 				}
 
 			} catch ( Exception e ) {
-				getMessageServiceExc().logError(
-						getTextResourceServiceExc().getText( locale,MESSAGE_XML_MODUL_A )
-								+ getTextResourceServiceExc().getText( locale,ERROR_XML_UNKNOWN, e.getMessage() ) );
+				getMessageServiceExc().logError( getTextResourceServiceExc().getText( locale,
+						MESSAGE_XML_MODUL_A )
+						+ getTextResourceServiceExc().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 				return false;
 			}
 
 		} catch ( Exception e ) {
-			getMessageServiceExc().logError(
-					getTextResourceServiceExc().getText( locale,MESSAGE_XML_MODUL_A )
-							+ getTextResourceServiceExc().getText( locale,ERROR_XML_UNKNOWN, e.getMessage() ) );
+			getMessageServiceExc()
+					.logError( getTextResourceServiceExc().getText( locale, MESSAGE_XML_MODUL_A )
+							+ getTextResourceServiceExc().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 		return result;

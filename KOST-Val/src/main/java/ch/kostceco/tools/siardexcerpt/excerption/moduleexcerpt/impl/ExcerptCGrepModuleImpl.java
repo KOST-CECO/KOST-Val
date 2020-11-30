@@ -1,6 +1,6 @@
-/* == SIARDexcerpt ==============================================================================
+﻿/* == SIARDexcerpt ==============================================================================
  * The SIARDexcerpt application is used for excerpt a record from a SIARD-File. Copyright (C)
- * 2016-2019 Claire Roethlisberger (KOST-CECO)
+ * 2016-2020 Claire Roethlisberger (KOST-CECO)
  * -----------------------------------------------------------------------------------------------
  * SIARDexcerpt is a development of the KOST-CECO. All rights rest with the KOST-CECO. This
  * application is free software: you can redistribute it and/or modify it under the terms of the GNU
@@ -37,7 +37,7 @@ import ch.kostceco.tools.siardexcerpt.util.Util;
 public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements ExcerptCGrepModule
 {
 
-	public static String	NEWLINE	= System.getProperty( "line.separator" );
+	public static String NEWLINE = System.getProperty( "line.separator" );
 
 	@Override
 	public boolean validate( File siardDatei, File outFile, String excerptString,
@@ -57,71 +57,71 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 		String pathToGrepExe = fGrepExe.getAbsolutePath();
 		if ( !fGrepExe.exists() ) {
 			// grep.exe existiert nicht --> Abbruch
-			getMessageServiceExc().logError(
-					getTextResourceServiceExc().getText( locale,MESSAGE_XML_MODUL_C )
-							+ getTextResourceServiceExc().getText( locale,ERROR_XML_C_MISSINGFILE,
+			getMessageServiceExc()
+					.logError( getTextResourceServiceExc().getText( locale, MESSAGE_XML_MODUL_C )
+							+ getTextResourceServiceExc().getText( locale, ERROR_XML_C_MISSINGFILE,
 									fGrepExe.getAbsolutePath() ) );
 			return false;
 		} else {
-			File fMsys10dll = new File( "resources" + File.separator + "grep" + File.separator
-					+ "msys-1.0.dll" );
+			File fMsys10dll = new File(
+					"resources" + File.separator + "grep" + File.separator + "msys-1.0.dll" );
 			if ( !fMsys10dll.exists() ) {
 				// msys-1.0.dll existiert nicht --> Abbruch
-				getMessageServiceExc().logError(
-						getTextResourceServiceExc().getText( locale,MESSAGE_XML_MODUL_C )
-								+ getTextResourceServiceExc().getText( locale,ERROR_XML_C_MISSINGFILE,
+				getMessageServiceExc()
+						.logError( getTextResourceServiceExc().getText( locale, MESSAGE_XML_MODUL_C )
+								+ getTextResourceServiceExc().getText( locale, ERROR_XML_C_MISSINGFILE,
 										fMsys10dll.getAbsolutePath() ) );
 				return false;
 			}
 		}
 
 		File fSedExe = new File( "resources" + File.separator + "sed" + File.separator + "sed.exe" );
-		File msys20dll = new File( "resources" + File.separator + "sed" + File.separator
-				+ "msys-2.0.dll" );
-		File msysgccs1dll = new File( "resources" + File.separator + "sed" + File.separator
-				+ "msys-gcc_s-1.dll" );
-		File msysiconv2dll = new File( "resources" + File.separator + "sed" + File.separator
-				+ "msys-iconv-2.dll" );
-		File msysintl8dll = new File( "resources" + File.separator + "sed" + File.separator
-				+ "msys-intl-8.dll" );
+		File msys20dll = new File(
+				"resources" + File.separator + "sed" + File.separator + "msys-2.0.dll" );
+		File msysgccs1dll = new File(
+				"resources" + File.separator + "sed" + File.separator + "msys-gcc_s-1.dll" );
+		File msysiconv2dll = new File(
+				"resources" + File.separator + "sed" + File.separator + "msys-iconv-2.dll" );
+		File msysintl8dll = new File(
+				"resources" + File.separator + "sed" + File.separator + "msys-intl-8.dll" );
 		String pathToSedExe = fSedExe.getAbsolutePath();
 		if ( !fSedExe.exists() ) {
 			// sed.exe existiert nicht --> Abbruch
-			getMessageServiceExc().logError(
-					getTextResourceServiceExc().getText( locale,MESSAGE_XML_MODUL_C )
-							+ getTextResourceServiceExc().getText( locale,ERROR_XML_C_MISSINGFILE,
+			getMessageServiceExc()
+					.logError( getTextResourceServiceExc().getText( locale, MESSAGE_XML_MODUL_C )
+							+ getTextResourceServiceExc().getText( locale, ERROR_XML_C_MISSINGFILE,
 									fSedExe.getAbsolutePath() ) );
 			return false;
 		}
 		if ( !msys20dll.exists() ) {
 			// existiert nicht --> Abbruch
-			getMessageServiceExc().logError(
-					getTextResourceServiceExc().getText( locale,MESSAGE_XML_MODUL_C )
-							+ getTextResourceServiceExc().getText( locale,ERROR_XML_C_MISSINGFILE,
+			getMessageServiceExc()
+					.logError( getTextResourceServiceExc().getText( locale, MESSAGE_XML_MODUL_C )
+							+ getTextResourceServiceExc().getText( locale, ERROR_XML_C_MISSINGFILE,
 									msys20dll.getAbsolutePath() ) );
 			return false;
 		}
 		if ( !msysgccs1dll.exists() ) {
 			// existiert nicht --> Abbruch
-			getMessageServiceExc().logError(
-					getTextResourceServiceExc().getText( locale,MESSAGE_XML_MODUL_C )
-							+ getTextResourceServiceExc().getText( locale,ERROR_XML_C_MISSINGFILE,
+			getMessageServiceExc()
+					.logError( getTextResourceServiceExc().getText( locale, MESSAGE_XML_MODUL_C )
+							+ getTextResourceServiceExc().getText( locale, ERROR_XML_C_MISSINGFILE,
 									msysgccs1dll.getAbsolutePath() ) );
 			return false;
 		}
 		if ( !msysiconv2dll.exists() ) {
 			// existiert nicht --> Abbruch
-			getMessageServiceExc().logError(
-					getTextResourceServiceExc().getText( locale,MESSAGE_XML_MODUL_C )
-							+ getTextResourceServiceExc().getText( locale,ERROR_XML_C_MISSINGFILE,
+			getMessageServiceExc()
+					.logError( getTextResourceServiceExc().getText( locale, MESSAGE_XML_MODUL_C )
+							+ getTextResourceServiceExc().getText( locale, ERROR_XML_C_MISSINGFILE,
 									msysiconv2dll.getAbsolutePath() ) );
 			return false;
 		}
 		if ( !msysintl8dll.exists() ) {
 			// existiert nicht --> Abbruch
-			getMessageServiceExc().logError(
-					getTextResourceServiceExc().getText( locale,MESSAGE_XML_MODUL_C )
-							+ getTextResourceServiceExc().getText( locale,ERROR_XML_C_MISSINGFILE,
+			getMessageServiceExc()
+					.logError( getTextResourceServiceExc().getText( locale, MESSAGE_XML_MODUL_C )
+							+ getTextResourceServiceExc().getText( locale, ERROR_XML_C_MISSINGFILE,
 									msysintl8dll.getAbsolutePath() ) );
 			return false;
 		}
@@ -151,12 +151,12 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 			String schemaname = configMap.get( "MschemaName" );
 			if ( folder.startsWith( "Configuration-Error:" ) ) {
 				getMessageServiceExc().logError(
-						getTextResourceServiceExc().getText( locale,MESSAGE_XML_MODUL_B ) + folder );
+						getTextResourceServiceExc().getText( locale, MESSAGE_XML_MODUL_B ) + folder );
 				return false;
 			}
 			if ( cell.startsWith( "Configuration-Error:" ) ) {
-				getMessageServiceExc().logError(
-						getTextResourceServiceExc().getText( locale,MESSAGE_XML_MODUL_B ) + cell );
+				getMessageServiceExc()
+						.logError( getTextResourceServiceExc().getText( locale, MESSAGE_XML_MODUL_B ) + cell );
 				return false;
 			}
 			String tabfolder = "";
@@ -168,8 +168,8 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 
 			File fSchema = new File( siardDatei.getAbsolutePath() + File.separator + "content"
 					+ File.separator + schemafolder );
-			File fMaintable = new File( fSchema.getAbsolutePath() + File.separator + folder
-					+ File.separator + folder + ".xml" );
+			File fMaintable = new File(
+					fSchema.getAbsolutePath() + File.separator + folder + File.separator + folder + ".xml" );
 			File fMaintableTemp = new File( fSchema.getAbsolutePath() + File.separator + folder
 					+ File.separator + folder + "_Temp.xml" );
 			String pathTofMaintable = fMaintable.getAbsolutePath();
@@ -193,7 +193,7 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 						+ " 's/\\d060\\d047table/\\n\\d060\\d047table/g' " + pathTofMaintableTemp + " > "
 						+ pathTofMaintable + "\"";
 
-				// String commandSed = "cmd /c \"\"pathToSedExe\"  's/row/R0W/g\' 'hallo row.'\"";
+				// String commandSed = "cmd /c \"\"pathToSedExe\" 's/row/R0W/g\' 'hallo row.'\"";
 				/* Das redirect Zeichen verunmöglicht eine direkte eingabe. mit dem geschachtellten Befehl
 				 * gehts: cmd /c\"urspruenlicher Befehl\" */
 
@@ -235,7 +235,8 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 					StreamGobbler errorGobblerSed2 = new StreamGobbler( procSed2.getErrorStream(), "ERROR" );
 
 					// Output holen
-					StreamGobbler outputGobblerSed2 = new StreamGobbler( procSed2.getInputStream(), "OUTPUT" );
+					StreamGobbler outputGobblerSed2 = new StreamGobbler( procSed2.getInputStream(),
+							"OUTPUT" );
 
 					// Threads starten
 					errorGobblerSed2.start();
@@ -254,7 +255,8 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 					StreamGobbler errorGobblerSed3 = new StreamGobbler( procSed3.getErrorStream(), "ERROR" );
 
 					// Output holen
-					StreamGobbler outputGobblerSed3 = new StreamGobbler( procSed3.getInputStream(), "OUTPUT" );
+					StreamGobbler outputGobblerSed3 = new StreamGobbler( procSed3.getInputStream(),
+							"OUTPUT" );
 
 					// Threads starten
 					errorGobblerSed3.start();
@@ -273,7 +275,8 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 					StreamGobbler errorGobblerSed4 = new StreamGobbler( procSed4.getErrorStream(), "ERROR" );
 
 					// Output holen
-					StreamGobbler outputGobblerSed4 = new StreamGobbler( procSed4.getInputStream(), "OUTPUT" );
+					StreamGobbler outputGobblerSed4 = new StreamGobbler( procSed4.getInputStream(),
+							"OUTPUT" );
 
 					// Threads starten
 					errorGobblerSed4.start();
@@ -287,9 +290,9 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 					Util.switchOnConsole();
 
 				} catch ( Exception e ) {
-					getMessageServiceExc().logError(
-							getTextResourceServiceExc().getText( locale,MESSAGE_XML_MODUL_C )
-									+ getTextResourceServiceExc().getText( locale,ERROR_XML_UNKNOWN, e.getMessage() ) );
+					getMessageServiceExc().logError( getTextResourceServiceExc().getText( locale,
+							MESSAGE_XML_MODUL_C )
+							+ getTextResourceServiceExc().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 					return false;
 				} finally {
 					if ( procSed != null ) {
@@ -337,8 +340,8 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 				Process proc = null;
 				Runtime rt = null;
 
-				getMessageServiceExc().logError(
-						getTextResourceServiceExc().getText( locale,MESSAGE_XML_ELEMENT_OPEN, schemaname + "_" + name ) );
+				getMessageServiceExc().logError( getTextResourceServiceExc().getText( locale,
+						MESSAGE_XML_ELEMENT_OPEN, schemaname + "_" + name ) );
 
 				// Informationen zur Tabelle aus metadata.xml herausholen
 
@@ -420,16 +423,15 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 				// tabfolder+" "+tabdescription+" "+cellname+" "+celldescription);
 
 				getMessageServiceExc().logError(
-						getTextResourceServiceExc().getText( locale,MESSAGE_XML_TEXT, tabname, "tabname" ) );
+						getTextResourceServiceExc().getText( locale, MESSAGE_XML_TEXT, tabname, "tabname" ) );
+				getMessageServiceExc().logError( getTextResourceServiceExc().getText( locale,
+						MESSAGE_XML_TEXT, schemafolder + "/" + tabfolder, "tabfolder" ) );
+				getMessageServiceExc().logError( getTextResourceServiceExc().getText( locale,
+						MESSAGE_XML_TEXT, tabdescription, "tabdescription" ) );
 				getMessageServiceExc().logError(
-						getTextResourceServiceExc().getText( locale,MESSAGE_XML_TEXT, schemafolder + "/" + tabfolder,
-								"tabfolder" ) );
-				getMessageServiceExc().logError(
-						getTextResourceServiceExc().getText( locale,MESSAGE_XML_TEXT, tabdescription, "tabdescription" ) );
-				getMessageServiceExc().logError(
-						getTextResourceServiceExc().getText( locale,MESSAGE_XML_TEXT, cellname, "name" ) );
-				getMessageServiceExc().logError(
-						getTextResourceServiceExc().getText( locale,MESSAGE_XML_TEXT, celldescription, "description" ) );
+						getTextResourceServiceExc().getText( locale, MESSAGE_XML_TEXT, cellname, "name" ) );
+				getMessageServiceExc().logError( getTextResourceServiceExc().getText( locale,
+						MESSAGE_XML_TEXT, celldescription, "description" ) );
 
 				try {
 					Util.switchOffConsole();
@@ -453,9 +455,9 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 					Util.switchOnConsole();
 
 				} catch ( Exception e ) {
-					getMessageServiceExc().logError(
-							getTextResourceServiceExc().getText( locale,MESSAGE_XML_MODUL_C )
-									+ getTextResourceServiceExc().getText( locale,ERROR_XML_UNKNOWN, e.getMessage() ) );
+					getMessageServiceExc().logError( getTextResourceServiceExc().getText( locale,
+							MESSAGE_XML_MODUL_C )
+							+ getTextResourceServiceExc().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 					return false;
 				} finally {
 					if ( proc != null ) {
@@ -476,9 +478,9 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 				scanner.close();
 
 				getMessageServiceExc().logError(
-						getTextResourceServiceExc().getText( locale,MESSAGE_XML_ELEMENT_CONTENT, content ) );
-				getMessageServiceExc().logError(
-						getTextResourceServiceExc().getText( locale,MESSAGE_XML_ELEMENT_CLOSE, schemaname + "_" + name ) );
+						getTextResourceServiceExc().getText( locale, MESSAGE_XML_ELEMENT_CONTENT, content ) );
+				getMessageServiceExc().logError( getTextResourceServiceExc().getText( locale,
+						MESSAGE_XML_ELEMENT_CLOSE, schemaname + "_" + name ) );
 
 				if ( tempOutFile.exists() ) {
 					tempOutFile.delete();
@@ -495,16 +497,16 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 				// Ende Grep
 
 			} catch ( Exception e ) {
-				getMessageServiceExc().logError(
-						getTextResourceServiceExc().getText( locale,MESSAGE_XML_MODUL_C )
-								+ getTextResourceServiceExc().getText( locale,ERROR_XML_UNKNOWN, e.getMessage() ) );
+				getMessageServiceExc().logError( getTextResourceServiceExc().getText( locale,
+						MESSAGE_XML_MODUL_C )
+						+ getTextResourceServiceExc().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 				return false;
 			}
 
 		} catch ( Exception e ) {
-			getMessageServiceExc().logError(
-					getTextResourceServiceExc().getText( locale,MESSAGE_XML_MODUL_C )
-							+ getTextResourceServiceExc().getText( locale,ERROR_XML_UNKNOWN, e.getMessage() ) );
+			getMessageServiceExc()
+					.logError( getTextResourceServiceExc().getText( locale, MESSAGE_XML_MODUL_C )
+							+ getTextResourceServiceExc().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
@@ -570,7 +572,7 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 								+ " 's/\\d060\\d047table/\\n\\d060\\d047table/g' " + pathTofSubtableTemp + " > "
 								+ pathTofSubtable + "\"";
 
-						// String commandSed = "cmd /c \"\"pathToSedExe\"  's/row/R0W/g\' 'hallo row.'\"";
+						// String commandSed = "cmd /c \"\"pathToSedExe\" 's/row/R0W/g\' 'hallo row.'\"";
 						/* Das redirect Zeichen verunmöglicht eine direkte eingabe. mit dem geschachtellten
 						 * Befehl gehts: cmd /c\"urspruenlicher Befehl\" */
 
@@ -590,7 +592,8 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 							// .split(" ") ist notwendig wenn in einem Pfad ein Doppelleerschlag vorhanden ist!
 
 							// Fehleroutput holen
-							StreamGobbler errorGobblerSed = new StreamGobbler( procSed.getErrorStream(), "ERROR" );
+							StreamGobbler errorGobblerSed = new StreamGobbler( procSed.getErrorStream(),
+									"ERROR" );
 
 							// Output holen
 							StreamGobbler outputGobblerSed = new StreamGobbler( procSed.getInputStream(),
@@ -671,9 +674,10 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 							Util.switchOnConsole();
 
 						} catch ( Exception e ) {
-							getMessageServiceExc().logError(
-									getTextResourceServiceExc().getText( locale,MESSAGE_XML_MODUL_C )
-											+ getTextResourceServiceExc().getText( locale,ERROR_XML_UNKNOWN, e.getMessage() ) );
+							getMessageServiceExc()
+									.logError( getTextResourceServiceExc().getText( locale, MESSAGE_XML_MODUL_C )
+											+ getTextResourceServiceExc().getText( locale, ERROR_XML_UNKNOWN,
+													e.getMessage() ) );
 							return false;
 						} finally {
 							if ( procSed != null ) {
@@ -720,9 +724,8 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 						Process proc = null;
 						Runtime rt = null;
 
-						getMessageServiceExc().logError(
-								getTextResourceServiceExc()
-										.getText( locale,MESSAGE_XML_ELEMENT_OPEN, schemaname + "_" + name ) );
+						getMessageServiceExc().logError( getTextResourceServiceExc().getText( locale,
+								MESSAGE_XML_ELEMENT_OPEN, schemaname + "_" + name ) );
 						// TODO Start Wie maintable
 						// Informationen zur Tabelle aus metadata.xml herausholen
 
@@ -802,8 +805,8 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 																// System.out.println( cellname );
 															} else if ( subNodeIII.getNodeName().equals( "description" ) ) {
 																celldescription = celldescription + "<c" + cellNumber + ">"
-																		+ new String( subNodeIII.getTextContent() ) + "</c"
-																		+ cellNumber + ">";
+																		+ new String( subNodeIII.getTextContent() ) + "</c" + cellNumber
+																		+ ">";
 															}
 														}
 													}
@@ -815,21 +818,18 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 							}
 							if ( i == nlTable.getLength() ) {
 								// Ausgabe für jede Tabelle
-								getMessageServiceExc().logError(
-										getTextResourceServiceExc().getText( locale,MESSAGE_XML_TEXT, tabname, "tabname" ) );
-								getMessageServiceExc().logError(
-										getTextResourceServiceExc().getText( locale,MESSAGE_XML_TEXT,
-												(tabschema + "/" + tabfolder), "tabfolder" ) );
-								getMessageServiceExc().logError(
-										getTextResourceServiceExc().getText( locale,MESSAGE_XML_TEXT, tabkeyname, "tabkeyname" ) );
-								getMessageServiceExc().logError(
-										getTextResourceServiceExc().getText( locale,MESSAGE_XML_TEXT, tabdescription,
-												"tabdescription" ) );
-								getMessageServiceExc().logError(
-										getTextResourceServiceExc().getText( locale,MESSAGE_XML_TEXT, cellname, "name" ) );
-								getMessageServiceExc().logError(
-										getTextResourceServiceExc().getText( locale,MESSAGE_XML_TEXT, celldescription,
-												"description" ) );
+								getMessageServiceExc().logError( getTextResourceServiceExc().getText( locale,
+										MESSAGE_XML_TEXT, tabname, "tabname" ) );
+								getMessageServiceExc().logError( getTextResourceServiceExc().getText( locale,
+										MESSAGE_XML_TEXT, (tabschema + "/" + tabfolder), "tabfolder" ) );
+								getMessageServiceExc().logError( getTextResourceServiceExc().getText( locale,
+										MESSAGE_XML_TEXT, tabkeyname, "tabkeyname" ) );
+								getMessageServiceExc().logError( getTextResourceServiceExc().getText( locale,
+										MESSAGE_XML_TEXT, tabdescription, "tabdescription" ) );
+								getMessageServiceExc().logError( getTextResourceServiceExc().getText( locale,
+										MESSAGE_XML_TEXT, cellname, "name" ) );
+								getMessageServiceExc().logError( getTextResourceServiceExc().getText( locale,
+										MESSAGE_XML_TEXT, celldescription, "description" ) );
 							}
 						}
 						// TODO End Wie maintable
@@ -856,9 +856,10 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 							Util.switchOnConsole();
 
 						} catch ( Exception e ) {
-							getMessageServiceExc().logError(
-									getTextResourceServiceExc().getText( locale,MESSAGE_XML_MODUL_C )
-											+ getTextResourceServiceExc().getText( locale,ERROR_XML_UNKNOWN, e.getMessage() ) );
+							getMessageServiceExc()
+									.logError( getTextResourceServiceExc().getText( locale, MESSAGE_XML_MODUL_C )
+											+ getTextResourceServiceExc().getText( locale, ERROR_XML_UNKNOWN,
+													e.getMessage() ) );
 							return false;
 						} finally {
 							if ( proc != null ) {
@@ -878,11 +879,10 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 						}
 						scanner.close();
 
-						getMessageServiceExc().logError(
-								getTextResourceServiceExc().getText( locale,MESSAGE_XML_ELEMENT_CONTENT, content ) );
-						getMessageServiceExc().logError(
-								getTextResourceServiceExc().getText( locale,MESSAGE_XML_ELEMENT_CLOSE,
-										schemaname + "_" + name ) );
+						getMessageServiceExc().logError( getTextResourceServiceExc().getText( locale,
+								MESSAGE_XML_ELEMENT_CONTENT, content ) );
+						getMessageServiceExc().logError( getTextResourceServiceExc().getText( locale,
+								MESSAGE_XML_ELEMENT_CLOSE, schemaname + "_" + name ) );
 
 						if ( tempOutFile.exists() ) {
 							tempOutFile.delete();
@@ -899,9 +899,10 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 						// Ende Grep
 
 					} catch ( Exception e ) {
-						getMessageServiceExc().logError(
-								getTextResourceServiceExc().getText( locale,MESSAGE_XML_MODUL_C )
-										+ getTextResourceServiceExc().getText( locale,ERROR_XML_UNKNOWN, e.getMessage() ) );
+						getMessageServiceExc()
+								.logError( getTextResourceServiceExc().getText( locale, MESSAGE_XML_MODUL_C )
+										+ getTextResourceServiceExc().getText( locale, ERROR_XML_UNKNOWN,
+												e.getMessage() ) );
 						return false;
 					}
 
@@ -930,9 +931,9 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 			System.out.print( "   " );
 			System.out.print( "\r" );
 		} catch ( Exception e ) {
-			getMessageServiceExc().logError(
-					getTextResourceServiceExc().getText( locale,MESSAGE_XML_MODUL_C )
-							+ getTextResourceServiceExc().getText( locale,ERROR_XML_UNKNOWN, e.getMessage() ) );
+			getMessageServiceExc()
+					.logError( getTextResourceServiceExc().getText( locale, MESSAGE_XML_MODUL_C )
+							+ getTextResourceServiceExc().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 		return isValid;

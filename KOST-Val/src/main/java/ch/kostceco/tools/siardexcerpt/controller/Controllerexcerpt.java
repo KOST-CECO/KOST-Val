@@ -1,6 +1,6 @@
 /* == SIARDexcerpt ==============================================================================
- * The SIARDexcerpt application is used for excerpt a record from a SIARD-File. Copyright (C) 2016-2019
- * Claire Roethlisberger (KOST-CECO)
+ * The SIARDexcerpt application is used for excerpt a record from a SIARD-File. Copyright (C)
+ * 2016-2019 Claire Roethlisberger (KOST-CECO)
  * -----------------------------------------------------------------------------------------------
  * SIARDexcerpt is a development of the KOST-CECO. All rights rest with the KOST-CECO. This
  * application is free software: you can redistribute it and/or modify it under the terms of the GNU
@@ -38,16 +38,16 @@ import ch.kostceco.tools.siardexcerpt.service.TextResourceServiceExc;
 public class Controllerexcerpt implements MessageConstants
 {
 
-	private static final Logger		LOGGER	= new Logger( Controllerexcerpt.class );
+	private static final Logger			LOGGER	= new Logger( Controllerexcerpt.class );
 
-	private ExcerptAZipModule			excerptAZipModule;
-	private ExcerptAConfigModule	excerptAConfigModule;
+	private ExcerptAZipModule				excerptAZipModule;
+	private ExcerptAConfigModule		excerptAConfigModule;
 
-	private ExcerptBSearchModule	excerptBSearchModule;
+	private ExcerptBSearchModule		excerptBSearchModule;
 
-	private ExcerptCGrepModule		excerptCGrepModule;
+	private ExcerptCGrepModule			excerptCGrepModule;
 
-	private TextResourceServiceExc		textResourceServiceExc;
+	private TextResourceServiceExc	textResourceServiceExc;
 
 	public ExcerptAZipModule getExcerptAZipModule()
 	{
@@ -104,23 +104,24 @@ public class Controllerexcerpt implements MessageConstants
 	{
 		boolean valid = true;
 
-		// Excerpt Step A (SIARD-Datei ins Workverzeichnis extrahieren)
+		// TODO-Marker Excerpt Step A (SIARD-Datei ins Workverzeichnis extrahieren)
 
 		try {
-			if ( this.getExcerptAZipModule().validate( siardDatei, siardDateiNew, noString, configMap, locale ) ) {
+			if ( this.getExcerptAZipModule().validate( siardDatei, siardDateiNew, noString, configMap,
+					locale ) ) {
 				this.getExcerptAZipModule().getMessageServiceExc().print();
 			} else {
 				this.getExcerptAZipModule().getMessageServiceExc().print();
 				valid = false;
 			}
 		} catch ( ExcerptAZipException e ) {
-			LOGGER.logError( getTextResourceServiceExc().getText( locale,MESSAGE_XML_MODUL_A )
-					+ getTextResourceServiceExc().getText( locale,ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceServiceExc().getText( locale, MESSAGE_XML_MODUL_A )
+					+ getTextResourceServiceExc().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getExcerptAZipModule().getMessageServiceExc().print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logError( getTextResourceServiceExc().getText( locale,MESSAGE_XML_MODUL_A )
-					+ getTextResourceServiceExc().getText( locale,ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceServiceExc().getText( locale, MESSAGE_XML_MODUL_A )
+					+ getTextResourceServiceExc().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
@@ -129,27 +130,28 @@ public class Controllerexcerpt implements MessageConstants
 	}
 
 	public boolean executeAConfig( File siardDatei, File configFileHard, String noString,
-			Map<String, String> configMap , Locale locale )
+			Map<String, String> configMap, Locale locale )
 	{
 		boolean valid = true;
 
-		// Excerpt Step A Config (Config Datei ausfüllen)
+		// Excerpt Step A Config (Config Datei ausfuellen)
 
 		try {
-			if ( this.getExcerptAConfigModule().validate( siardDatei, configFileHard, noString, configMap, locale  ) ) {
+			if ( this.getExcerptAConfigModule().validate( siardDatei, configFileHard, noString, configMap,
+					locale ) ) {
 				this.getExcerptAConfigModule().getMessageServiceExc().print();
 			} else {
 				this.getExcerptAConfigModule().getMessageServiceExc().print();
 				valid = false;
 			}
 		} catch ( ExcerptAConfigException e ) {
-			LOGGER.logError( getTextResourceServiceExc().getText( locale,MESSAGE_XML_MODUL_A )
-					+ getTextResourceServiceExc().getText( locale,ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceServiceExc().getText( locale, MESSAGE_XML_MODUL_A )
+					+ getTextResourceServiceExc().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getExcerptAConfigModule().getMessageServiceExc().print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logError( getTextResourceServiceExc().getText( locale,MESSAGE_XML_MODUL_A )
-					+ getTextResourceServiceExc().getText( locale,ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceServiceExc().getText( locale, MESSAGE_XML_MODUL_A )
+					+ getTextResourceServiceExc().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
@@ -158,25 +160,26 @@ public class Controllerexcerpt implements MessageConstants
 	}
 
 	public boolean executeB( File siardDatei, File outFileSearch, String searchString,
-			Map<String, String> configMap, Locale locale  )
+			Map<String, String> configMap, Locale locale )
 	{
 		boolean valid = true;
-		// Excerpt Step B (Suche)
+		// TODO-Marker Excerpt Step B (Suche)
 		try {
-			if ( this.getExcerptBSearchModule().validate( siardDatei, outFileSearch, searchString, configMap,  locale ) ) {
+			if ( this.getExcerptBSearchModule().validate( siardDatei, outFileSearch, searchString,
+					configMap, locale ) ) {
 				this.getExcerptBSearchModule().getMessageServiceExc().print();
 			} else {
 				this.getExcerptBSearchModule().getMessageServiceExc().print();
 				valid = false;
 			}
 		} catch ( ExcerptBSearchException e ) {
-			LOGGER.logError( getTextResourceServiceExc().getText( locale,MESSAGE_XML_MODUL_B )
-					+ getTextResourceServiceExc().getText( locale,ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceServiceExc().getText( locale, MESSAGE_XML_MODUL_B )
+					+ getTextResourceServiceExc().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getExcerptBSearchModule().getMessageServiceExc().print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logError( getTextResourceServiceExc().getText( locale,MESSAGE_XML_MODUL_B )
-					+ getTextResourceServiceExc().getText( locale,ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceServiceExc().getText( locale, MESSAGE_XML_MODUL_B )
+					+ getTextResourceServiceExc().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
@@ -185,25 +188,26 @@ public class Controllerexcerpt implements MessageConstants
 	}
 
 	public boolean executeC( File siardDatei, File outFile, String excerptString,
-			Map<String, String> configMap, Locale locale  )
+			Map<String, String> configMap, Locale locale )
 	{
 		boolean valid = true;
-		// Excerpt Step C (Extraktion)
+		// TODO-Marker Excerpt Step C (Extraktion)
 		try {
-			if ( this.getExcerptCGrepModule().validate( siardDatei, outFile, excerptString, configMap,  locale ) ) {
+			if ( this.getExcerptCGrepModule().validate( siardDatei, outFile, excerptString, configMap,
+					locale ) ) {
 				this.getExcerptCGrepModule().getMessageServiceExc().print();
 			} else {
 				this.getExcerptCGrepModule().getMessageServiceExc().print();
 				valid = false;
 			}
 		} catch ( ExcerptCGrepException e ) {
-			LOGGER.logError( getTextResourceServiceExc().getText( locale,MESSAGE_XML_MODUL_C )
-					+ getTextResourceServiceExc().getText( locale,ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceServiceExc().getText( locale, MESSAGE_XML_MODUL_C )
+					+ getTextResourceServiceExc().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getExcerptCGrepModule().getMessageServiceExc().print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logError( getTextResourceServiceExc().getText( locale,MESSAGE_XML_MODUL_C )
-					+ getTextResourceServiceExc().getText( locale,ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceServiceExc().getText( locale, MESSAGE_XML_MODUL_C )
+					+ getTextResourceServiceExc().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 

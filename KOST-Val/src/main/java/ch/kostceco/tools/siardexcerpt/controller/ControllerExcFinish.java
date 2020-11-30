@@ -13,7 +13,7 @@
  * 02110-1301 USA or see <http://www.gnu.org/licenses/>.
  * ============================================================================================== */
 
-package ch.kostceco.tools.siardexcerpt;
+package ch.kostceco.tools.siardexcerpt.controller;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,20 +29,17 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.w3c.dom.Element;
 
-import ch.kostceco.tools.siardexcerpt.controller.ControllerExcExcerpt;
-import ch.kostceco.tools.siardexcerpt.controller.ControllerExcFinish;
-import ch.kostceco.tools.siardexcerpt.controller.ControllerExcInit;
-import ch.kostceco.tools.siardexcerpt.controller.ControllerExcSearch;
 import ch.kostceco.tools.siardexcerpt.logging.MessageConstants;
 import ch.kostceco.tools.siardexcerpt.service.ConfigurationServiceExc;
 import ch.kostceco.tools.siardexcerpt.service.TextResourceServiceExc;
+import ch.kostceco.tools.siardexcerpt.util.Util;
 
 /** Dies ist die Starter-Klasse, verantwortlich fuer das Initialisieren des Controllers, des
  * Loggings und das Parsen der Start-Parameter.
  * 
  * @author Rc Claire Roethlisberger, KOST-CECO */
 
-public class SIARDexcerpt implements MessageConstants
+public class ControllerExcFinish implements MessageConstants
 {
 
 	private TextResourceServiceExc	textResourceServiceExc;
@@ -79,8 +76,9 @@ public class SIARDexcerpt implements MessageConstants
 	 * @throws IOException
 	 */
 
-	public static void main( String[] args ) throws IOException
+	public static boolean mainFinish( String[] args ) throws IOException
 	{
+		boolean finish = true;
 		@SuppressWarnings("resource")
 		ApplicationContext context = new ClassPathXmlApplicationContext(
 				"classpath:config/applicationContext.xml" );
@@ -99,7 +97,8 @@ public class SIARDexcerpt implements MessageConstants
 		/* TODO: siehe Bemerkung im applicationContext-services.xml bezueglich Injection in der
 		 * Superklasse aller Impl-Klassen ValidationModuleImpl validationModuleImpl =
 		 * (ValidationModuleImpl) context.getBean("validationmoduleimpl"); */
-		SIARDexcerpt siardexcerpt = (SIARDexcerpt) context.getBean( "siardexcerpt" );
+		ControllerExcFinish controllerExcFinish = (ControllerExcFinish) context
+				.getBean( "controllerExcFinish" );
 
 		Locale locale = Locale.getDefault();
 
@@ -122,12 +121,10 @@ public class SIARDexcerpt implements MessageConstants
 
 		// Ist die Anzahl Parameter (mind 4) korrekt?
 		if ( args.length < 4 ) {
-			System.out.println(
-					siardexcerpt.getTextResourceServiceExc().getText( locale, ERROR_PARAMETER_USAGE ) );
-			System.exit( 1 );
+			System.out.println( controllerExcFinish.getTextResourceServiceExc().getText( locale,
+					ERROR_PARAMETER_USAGE ) );
+			return false;
 		}
-
-		String module = new String( args[3] );
 
 		/* arg 1 gibt den Pfad zur configdatei an. Da dieser in ConfigurationServiceImpl hartcodiert
 		 * ist, wird diese nach ".siardexcerpt/configuration/SIARDexcerpt.conf.xml" kopiert. */
@@ -142,64 +139,38 @@ public class SIARDexcerpt implements MessageConstants
 			config1.mkdirs();
 		}
 
-		boolean initExc = false;
-		boolean searchExc = false;
-		boolean excerptExc = false;
-		boolean finishExc = false;
+		File configFileHard = new File( config + File.separator + "SIARDexcerpt.conf.xml" );
+
+		String pathToWorkDir = System.getenv( "USERPROFILE" ) + File.separator + ".siardexcerpt"
+				+ File.separator + "temp_SIARDexcerpt";
+		File tmpDir = new File( pathToWorkDir );
 
 		// die Anwendung muss mindestens unter Java 8 laufen
 		String javaRuntimeVersion = System.getProperty( "java.vm.version" );
 		if ( javaRuntimeVersion.compareTo( "1.8.0" ) < 0 ) {
-			System.out
-					.println( siardexcerpt.getTextResourceServiceExc().getText( locale, ERROR_WRONG_JRE ) );
-			System.exit( 1 );
+			System.out.println(
+					controllerExcFinish.getTextResourceServiceExc().getText( locale, ERROR_WRONG_JRE ) );
+			return false;
 		}
 
 		System.out.println( "" );
 
-		if ( module.equalsIgnoreCase( "--init" ) ) {
-			initExc = ControllerExcInit.mainInit( args );
-			if ( !initExc ) {
-				// Fehler bei der Initialisierung --> invalide
-				System.exit( 2 );
-			} else {
-				// Initialisierung konnte durchgefuehrt werden
-				System.exit( 0 );
-			}
-		} // End init
+		/** 4) finish: Config-Kopie sowie Workverzeichnis loeschen
+		 * 
+		 * TODO: Erledigt */
 
-		if ( module.equalsIgnoreCase( "--search" ) ) {
-			searchExc = ControllerExcSearch.mainSearch( args );
-			if ( !searchExc ) {
-				// Fehler bei der Suche --> invalide
-				System.exit( 2 );
-			} else {
-				// Suche konnte durchgefuehrt werden
-				System.exit( 0 );
-			}
-		} // End search
+		System.out.println( "SIARDexcerpt: finish" );
 
-		if ( module.equalsIgnoreCase( "--excerpt" ) ) {
-			excerptExc = ControllerExcExcerpt.mainExcerpt( args );
-			if ( !excerptExc ) {
-				// Fehler bei der Extraktion --> invalide
-				System.exit( 2 );
-			} else {
-				// Extraktion konnte durchgefuehrt werden
-				System.exit( 0 );
-			}
-		} // End extract
-
-		if ( module.equalsIgnoreCase( "--finish" ) ) {
-			finishExc = ControllerExcFinish.mainFinish( args );
-			if ( !finishExc ) {
-				// Fehler bei der Beendingung --> invalide
-				System.exit( 2 );
-			} else {
-				// Beendigung konnte durchgefuehrt werden
-				System.exit( 0 );
-			}
-		} // End finish
+		// Loeschen des Arbeitsverzeichnisses und confiFileHard, falls eines angelegt wurde
+		if ( tmpDir.exists() ) {
+			Util.deleteDir( tmpDir );
+		}
+		if ( configFileHard.exists() ) {
+			Util.deleteDir( configFileHard );
+		}
+		finish = true;
+		// End finish
+		return finish;
 
 	}
 

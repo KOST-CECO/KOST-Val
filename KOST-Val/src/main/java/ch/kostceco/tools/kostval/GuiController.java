@@ -630,7 +630,7 @@ public class GuiController
 		 * 
 		 * args[2] "--de" / "--fr" / "--en"
 		 * 
-		 * args[3] "--xml" / "--min" (TODO nur valid oder invalid) / "--max" (= xml+verbose TODO GUI)
+		 * args[3] "--xml" / "--min" / "--max" (= xml+verbose TODO GUI)
 		 * 
 		 * 2 und 3 waeren optional werden aber mitgegeben */
 		arg0 = "--sip";

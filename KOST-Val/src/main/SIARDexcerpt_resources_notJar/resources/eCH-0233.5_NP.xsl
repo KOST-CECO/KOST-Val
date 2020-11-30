@@ -219,9 +219,14 @@
 								<td><xsl:value-of select="c49" /></td>
 							</tr>
 							<tr>
-								<td class="caption">Zahlung 2. Saeule:</td>
-								<td><xsl:value-of select="c28" /></td>
-								<td><xsl:value-of select="c50" /></td>
+								<td><xsl:choose >
+										<xsl:when test="c28 = true">Ja</xsl:when>
+										<xsl:when test="c28 = false">Nein</xsl:when>
+									</xsl:choose></td>
+								<td><xsl:choose >
+										<xsl:when test="c50 = true">Ja</xsl:when>
+										<xsl:when test="c50 = false">Nein</xsl:when>
+									</xsl:choose></td>
 							</tr>
 							<tr>
 								<td class="caption">Steuergemeinde:</td>
@@ -266,8 +271,14 @@
 										<xsl:when test="c5 = 3">unbestimmt</xsl:when>
 									</xsl:choose></td>
 								<td><xsl:value-of select="c6"/></td>
-								<td><xsl:value-of select="c15"/></td>
-								<td><xsl:value-of select="c17"/></td>
+								<td><xsl:choose >
+										<xsl:when test="c15 = true">Ja</xsl:when>
+										<xsl:when test="c15 = false">Nein</xsl:when>
+									</xsl:choose></td>
+								<td><xsl:choose >
+										<xsl:when test="c17 = true">Ja</xsl:when>
+										<xsl:when test="c17 = false">Nein</xsl:when>
+									</xsl:choose></td>
 								<td><xsl:value-of select="c11"/>&#xA0;<xsl:value-of select="c12"/>&#xA0;<xsl:value-of select="c13"/>&#xA0;<xsl:value-of select="c14"/></td>
 								<td><xsl:value-of select="c7"/>&#xA0;<xsl:value-of select="c8"/>&#xA0;<xsl:value-of select="c9"/>&#xA0;<xsl:value-of select="c10"/></td>
 								<td><xsl:value-of select="c16"/></td>
@@ -308,7 +319,10 @@
 										<xsl:when test="c5 = 3">unbestimmt</xsl:when>
 									</xsl:choose></td>
 								<td><xsl:value-of select="c6"/></td>
-								<td><xsl:value-of select="c15"/></td>
+								<td><xsl:choose >
+										<xsl:when test="c15 = true">Ja</xsl:when>
+										<xsl:when test="c15 = false">Nein</xsl:when>
+									</xsl:choose></td>
 								<td><xsl:value-of select="c11"/>&#xA0;<xsl:value-of select="c12"/>&#xA0;<xsl:value-of select="c13"/>&#xA0;<xsl:value-of select="c14"/></td>
 								<td><xsl:value-of select="c7"/>&#xA0;<xsl:value-of select="c8"/>&#xA0;<xsl:value-of select="c9"/>&#xA0;<xsl:value-of select="c10"/></td>
 								<td class="right"><xsl:value-of select="c16"/></td>
@@ -380,9 +394,15 @@
 									<tr>
 										<td width="50%" class="caption">AHV- / IV-Renten:</td>
 										<td class="caption">Type P1</td>
-										<td><xsl:value-of select="table/tax0_taxDeclarationMainForm/row/c67" /></td>
+										<td><xsl:choose >
+											<xsl:when test="table/tax0_taxDeclarationMainForm/row/c67 = 0">AHV</xsl:when>
+											<xsl:when test="table/tax0_taxDeclarationMainForm/row/c67 = 1">IV</xsl:when>
+										</xsl:choose></td>
 										<td class="caption">Type P2</td>
-										<td><xsl:value-of select="table/tax0_taxDeclarationMainForm/row/c68" /></td>
+										<td><xsl:choose >
+											<xsl:when test="table/tax0_taxDeclarationMainForm/row/c68 = 0">AHV</xsl:when>
+											<xsl:when test="table/tax0_taxDeclarationMainForm/row/c68 = 1">IV</xsl:when>
+										</xsl:choose></td>
 									</tr>
 								</table>
 							</td>
@@ -1087,6 +1107,33 @@
 							</tr>
 						</xsl:for-each>
 					</table>		
+					<br />
+					<table width="50%">
+						<tr class="caption">
+							<td width="33%">Legende Code:</td>
+							<td width="33%"></td>
+						</tr>
+						<tr>
+							<td>0</td>
+							<td>Geschäftsvermögen</td>
+						</tr>
+						<tr>
+							<td>1</td>
+							<td>Nutzniessungsvermögen</td>
+						</tr>
+						<tr>
+							<td>2</td>
+							<td>Wertschriften aus Erbschaften</td>
+						</tr>
+						<tr>
+							<td>3</td>
+							<td>Schenkung</td>
+						</tr>
+						<tr>
+							<td>4</td>
+							<td>Qualifizierte Beteiligung</td>
+						</tr>
+					</table>
 				</div>
 				<br />
 				<br />
