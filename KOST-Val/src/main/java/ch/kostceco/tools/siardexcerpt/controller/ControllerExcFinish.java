@@ -122,7 +122,7 @@ public class ControllerExcFinish implements MessageConstants
 		// Ist die Anzahl Parameter (mind 4) korrekt?
 		if ( args.length < 4 ) {
 			System.out.println( controllerExcFinish.getTextResourceServiceExc().getText( locale,
-					ERROR_PARAMETER_USAGE ) );
+					EXC_ERROR_PARAMETER_USAGE ) );
 			return false;
 		}
 
@@ -149,7 +149,7 @@ public class ControllerExcFinish implements MessageConstants
 		String javaRuntimeVersion = System.getProperty( "java.vm.version" );
 		if ( javaRuntimeVersion.compareTo( "1.8.0" ) < 0 ) {
 			System.out.println(
-					controllerExcFinish.getTextResourceServiceExc().getText( locale, ERROR_WRONG_JRE ) );
+					controllerExcFinish.getTextResourceServiceExc().getText( locale, EXC_ERROR_WRONG_JRE ) );
 			return false;
 		}
 

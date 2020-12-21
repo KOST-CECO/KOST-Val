@@ -267,7 +267,7 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements Va
 					String newstring = "minOccurs=\"" + rowmax + "\" maxOccurs=\"" + rowmax;
 					Util.oldnewstring( oldstring, newstring, tableXsd );
 
-					// in einigen F�llen ist zuerst max und dann min
+					// in einigen Faellen ist zuerst max und dann min
 					oldstring = "maxOccurs=\"unbounded\" minOccurs=\"0";
 					newstring = "maxOccurs=\"" + rowmax + "\" minOccurs=\"" + rowmax;
 					Util.oldnewstring( oldstring, newstring, tableXsd );

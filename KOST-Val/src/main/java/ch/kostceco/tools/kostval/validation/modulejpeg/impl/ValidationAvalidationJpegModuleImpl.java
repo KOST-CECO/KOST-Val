@@ -114,9 +114,9 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl
 				char[] charArray2 = new char[] { c1, c2, c1 };
 
 				if ( Arrays.equals( charArray1, charArray2 ) ) {
-					/* höchstwahrscheinlich ein JPEG da es mit FFD8FF respektive ÿØÿ beginnt */
+					/* hoechstwahrscheinlich ein JPEG da es mit FFD8FF respektive ÿØÿ beginnt */
 				} else {
-					// Droid-Erkennung, damit Details ausgegeben werden können
+					// Droid-Erkennung, damit Details ausgegeben werden koennen
 
 					/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
 					 * entsprechenden Modul die property anzugeben: <property name="configurationService"
@@ -150,8 +150,8 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl
 					Droid droid = null;
 					try {
 						/* kleiner Hack, weil die Droid libraries irgendwo ein System.out drin haben, welche den
-						 * Output stören Util.switchOffConsole() als Kommentar markieren wenn man die
-						 * Fehlermeldung erhalten möchte */
+						 * Output stoeren Util.switchOffConsole() als Kommentar markieren wenn man die
+						 * Fehlermeldung erhalten moechte */
 						Util.switchOffConsole();
 						droid = new Droid();
 

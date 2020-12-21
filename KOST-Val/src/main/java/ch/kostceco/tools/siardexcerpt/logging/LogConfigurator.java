@@ -60,8 +60,8 @@ public class LogConfigurator implements MessageConstants
 			rootLogger.addAppender( logfile );
 
 		} catch ( IOException e ) {
-			LOGGER.logError( getTextResourceServiceExc().getText( ERROR_IOE,
-					getTextResourceServiceExc().getText( ERROR_LOGGING_NOFILEAPPENDER ) ) );
+			LOGGER.logError( getTextResourceServiceExc().getText( EXC_ERROR_IOE,
+					getTextResourceServiceExc().getText( EXC_ERROR_LOGGING_NOFILEAPPENDER ) ) );
 		}
 
 		return logFileName;

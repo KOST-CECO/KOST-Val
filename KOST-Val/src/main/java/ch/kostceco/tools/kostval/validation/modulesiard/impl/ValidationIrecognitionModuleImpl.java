@@ -90,7 +90,7 @@ public class ValidationIrecognitionModuleImpl extends ValidationModuleImpl
 						.append( File.separator ).append( "2.1" ).toString() );
 
 				/* bestehendes Workverzeichnis Abbruch wenn nicht leer, da am Schluss das Workverzeichnis
-				 * gelöscht wird und entsprechend bestehende Dateien gelöscht werden können */
+				 * geloescht wird und entsprechend bestehende Dateien geloescht werden koennen */
 				if ( !version21.exists() ) {
 					valid = false;
 					if ( min ) {
@@ -116,7 +116,7 @@ public class ValidationIrecognitionModuleImpl extends ValidationModuleImpl
 		}
 
 		/** Validierung ob die PUID richtig erkannt wird (z.B mit DROID) => Auf diese Validierung kann
-		 * verzichtet werden, da bereits vorg�ngig gepr�ft wurde ob es ein unkomprimiertes ZIP mit
+		 * verzichtet werden, da bereits vorgaengig geprueft wurde ob es ein unkomprimiertes ZIP mit
 		 * dem entsprechenden metadata.xml ist. */
 
 		return valid;

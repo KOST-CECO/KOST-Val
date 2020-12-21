@@ -234,10 +234,12 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					level = "1B";
 				}
 			}
-			if ( level == "1A" ) {
+			// System.out.println( " " );
+			// System.out.print( " Level " + level + " geaendert ... " );
+			if ( level.toLowerCase().contains( "1a" ) ) {
 				// wurde als 1A erkannt, wenn erlaubt als 1a validieren
 				if ( pdfa1a.equals( "1A" ) ) {
-					// erlaubt, Level bleibt
+					// 1A erlaubt, Level 1A bleibt
 				} else {
 					if ( pdfa1b.equals( "1B" ) ) {
 						level = "1B";
@@ -250,10 +252,10 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					}
 				}
 			}
-			if ( level == "1B" ) {
+			if ( level.toLowerCase().contains( "1b" ) ) {
 				// wurde als 1B erkannt, wenn erlaubt als 1b validieren
 				if ( pdfa1b.equals( "1B" ) ) {
-					// erlaubt, Level bleibt
+					// 1B erlaubt, Level 1B bleibt
 				} else {
 					if ( pdfa1a.equals( "1A" ) ) {
 						level = "1A";
@@ -266,10 +268,10 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					}
 				}
 			}
-			if ( level == "2A" ) {
+			if ( level.toLowerCase().contains( "2a" ) ) {
 				// wurde als 2A erkannt, wenn erlaubt als 2a validieren
 				if ( pdfa2a.equals( "2A" ) ) {
-					// erlaubt, Level bleibt
+					// 2A erlaubt, Level 2A bleibt
 				} else {
 					if ( pdfa2u.equals( "2U" ) ) {
 						level = "2U";
@@ -282,10 +284,10 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					}
 				}
 			}
-			if ( level == "2U" ) {
+			if ( level.toLowerCase().contains( "2u" ) ) {
 				// wurde als 2U erkannt, wenn erlaubt als 2u validieren
 				if ( pdfa2u.equals( "2U" ) ) {
-					// erlaubt, Level bleibt
+					// 2U erlaubt, Level 2U bleibt
 				} else {
 					if ( pdfa2b.equals( "2B" ) ) {
 						level = "2B";
@@ -298,10 +300,10 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					}
 				}
 			}
-			if ( level == "2B" ) {
+			if ( level.toLowerCase().contains( "2b" ) ) {
 				// wurde als 2B erkannt, wenn erlaubt als 2b validieren
-				if ( pdfa2u.equals( "2B" ) ) {
-					// erlaubt, Level bleibt
+				if ( pdfa2b.equals( "2B" ) ) {
+					// 2B erlaubt, Level 2B bleibt
 				} else {
 					if ( pdfa2u.equals( "2U" ) ) {
 						level = "2U";
@@ -314,6 +316,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					}
 				}
 			}
+			// System.out.println( " --> " + level + "!" );
 			in.close();
 			// set to null
 			in = null;
@@ -1278,6 +1281,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 										|| errorMsgCode0x.toLowerCase().contains( "outputintent" )
 										|| errorMsgCode0x.toLowerCase().contains( "jpeg2000" )
 										|| errorMsgCode0x.toLowerCase().contains( "devicegray" )
+										|| errorMsgCode0x.toLowerCase().contains( "key 'tr'." )
 										|| errorMsgCode0x.toLowerCase().contains( "tr2" ) ) {
 									if ( pdftoolsC.toLowerCase().contains( errorMsgCode0x.toLowerCase() ) ) {
 										// Fehlermeldung bereits erfasst -> keine Aktion
@@ -1293,6 +1297,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 										|| errorMsgCode0x.toLowerCase().contains( "truetype" )
 										|| errorMsgCode0x.toLowerCase().contains( "unicode" )
 										|| errorMsgCode0x.toLowerCase().contains( "cid" )
+										|| errorMsgCode0x.toLowerCase().contains( "encoding" )
 										|| errorMsgCode0x.toLowerCase().contains( "charset" ) ) {
 									if ( pdftoolsD.toLowerCase().contains( errorMsgCode0x.toLowerCase() ) ) {
 										// Fehlermeldung bereits erfasst -> keine Aktion
@@ -1307,6 +1312,9 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 										|| errorMsgCode0x.toLowerCase().contains( "markinfo" )
 										|| errorMsgCode0x.toLowerCase().contains( "structree" )
 										|| errorMsgCode0x.toLowerCase().contains( "structure tree root" )
+										|| errorMsgCode0x.toLowerCase().contains( " cross reference " )
+										|| errorMsgCode0x.toLowerCase()
+												.contains( " but must be a standard type. [PDF Tools: 0x00418607]" )
 										|| errorMsgCode0x.toLowerCase().contains( "strukturbaum" ) ) {
 									if ( pdftoolsI.toLowerCase().contains( errorMsgCode0x.toLowerCase() ) ) {
 										// Fehlermeldung bereits erfasst -> keine Aktion
@@ -1317,6 +1325,9 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 									}
 
 								} else if ( errorMsgCode0x.toLowerCase().contains( "structure" )
+										|| errorMsgCode0x.toLowerCase().contains( " ocproperties" )
+										|| errorMsgCode0x.toLowerCase().contains( " lzw" )
+										|| errorMsgCode0x.toLowerCase().contains( " structelem" )
 										|| errorMsgCode0x.toLowerCase().contains( " eol" ) ) {
 									if ( pdftoolsB.toLowerCase().contains( errorMsgCode0x.toLowerCase() ) ) {
 										// Fehlermeldung bereits erfasst -> keine Aktion
@@ -1328,7 +1339,11 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 
 								} else if ( errorMsgCode0x.toLowerCase().contains( "metad" )
 										|| errorMsgCode0x.toLowerCase().contains( "xmp" )
-										|| errorMsgCode0x.toLowerCase().contains( "key 'Filter'." )
+										|| errorMsgCode0x.toLowerCase().contains( "xml" )
+										|| errorMsgCode0x.toLowerCase().contains( "key 'filter'." )
+										|| errorMsgCode0x.toLowerCase().contains( "schema description for namespace" )
+										|| errorMsgCode0x.toLowerCase()
+												.contains( "multiple occurrences of property 'pdf:" )
 										|| errorMsgCode0x.toLowerCase().contains( "is not defined in schema" ) ) {
 									if ( pdftoolsH.toLowerCase().contains( errorMsgCode0x.toLowerCase() ) ) {
 										// Fehlermeldung bereits erfasst -> keine Aktion
@@ -1973,6 +1988,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 									} else if ( line.toLowerCase().contains( "struktur" )
 											|| line.toLowerCase().contains( "ebenen" )
 											|| line.toLowerCase().contains( "structure" )
+											|| line.toLowerCase().contains( "lzw" )
 											|| line.toLowerCase().contains( " eol" ) ) {
 										if ( callasB.toLowerCase().contains( line.toLowerCase() ) ) {
 											// Fehlermeldung bereits erfasst -> keine Aktion

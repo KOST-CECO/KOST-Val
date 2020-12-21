@@ -49,7 +49,7 @@ import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationCheaderModule;
 
 /** Validierungsschritt C (Header-Validierung) Ist der header-Ordner valid? valid --> metadata.xml
- * valid zu metadata.xsd und beides vorhanden Bemerkung --> zusätzliche Ordner oder Dateien wie
+ * valid zu metadata.xsd und beides vorhanden Bemerkung --> zusaetzliche Ordner oder Dateien wie
  * z.B. metadata.xls sind im header-Ordner erlaubt ==> Bei den Module A, B, C und D wird die
  * Validierung abgebrochen, sollte das Resulat invalid sein!
  * 
@@ -188,11 +188,11 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl
 				tmpDir.mkdir();
 			}
 
-			/* Das metadata.xml und sein xsd müssen in das Filesystem extrahiert werden, weil bei bei
+			/* Das metadata.xml und sein xsd muessen in das Filesystem extrahiert werden, weil bei bei
 			 * Verwendung eines Inputstreams bei der Validierung ein Problem mit den xs:include Statements
-			 * besteht, die includes können so nicht aufgelöst werden. Es werden hier jedoch nicht nur
-			 * diese Files extrahiert, sondern gleich die ganze Zip-Datei, weil auch spätere
-			 * Validierungen nur mit den extrahierten Files arbeiten können. */
+			 * besteht, die includes koennen so nicht aufgeloest werden. Es werden hier jedoch nicht nur
+			 * diese Files extrahiert, sondern gleich die ganze Zip-Datei, weil auch spaetere
+			 * Validierungen nur mit den extrahierten Files arbeiten koennen. */
 			int BUFFER = 2048;
 			ZipFile zipfile = new ZipFile( valDatei.getAbsolutePath() );
 			Enumeration<? extends ZipEntry> entries = zipfile.entries();

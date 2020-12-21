@@ -39,7 +39,7 @@ import ch.kostceco.tools.kostval.exception.modulesiard.ValidationGtableException
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationGtableModule;
 
-/** Validierungsschritt G (Tabellen-Validierung) pr�ft, ob Spaltennamen innerhalb der Tabelle(n)
+/** Validierungsschritt G (Tabellen-Validierung) prueft, ob Spaltennamen innerhalb der Tabelle(n)
  * resp. Tabellennamen innerhalb der Schema(s) und Schemanamen einmalig sind.
  * 
  * @author Sp Peter Schneider, Staatsarchiv Aargau */

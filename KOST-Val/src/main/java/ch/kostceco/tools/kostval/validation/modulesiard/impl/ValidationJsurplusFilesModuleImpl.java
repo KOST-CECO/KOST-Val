@@ -47,9 +47,9 @@ import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationJsurplusFilesModule;
 
-/** Validierungsschritt J (zusätzliche Primärdateien) Enthält der content-Ordner Dateien oder
+/** Validierungsschritt J (zusaetzliche Primaerdateien) Enthaelt der content-Ordner Dateien oder
  * Ordner die nicht in metadata.xml oder in table[Zahl].xml beschrieben sind ? invalid -->
- * zusätzliche Ordner oder Dateien im content-Ordner
+ * zusaetzliche Ordner oder Dateien im content-Ordner
  * 
  * @author Ec Christian Eugster
  * @author Rc Claire Roethlisberger, KOST-CECO */
@@ -329,11 +329,11 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 							File fSearchtableTemp = new File( fSearchtable.getAbsolutePath() + "_Temp.xml" );
 							String pathTofSearchtable = fSearchtable.getAbsolutePath();
 							String pathTofSearchtableTemp = fSearchtableTemp.getAbsolutePath();
-							/* mit Util.oldnewstring respektive replace können sehr grosse files nicht bearbeitet
+							/* mit Util.oldnewstring respektive replace koennen sehr grosse files nicht bearbeitet
 							 * werden!
 							 * 
 							 * Entsprechend wurde sed verwendet. die einzelnen Aktionen werden in Serie (-e)
-							 * ausgeführt:
+							 * ausgefuehrt:
 							 * 
 							 * sed -e 's/a/A/g' -e 's/b/B/g' 1.txt */
 
@@ -350,7 +350,7 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 									+ "\"" + pathTofSearchtable + "\" > \"" + pathTofSearchtableTemp + "\"\"";
 
 							// String commandSed = "cmd /c \"\"pathToSedExe\" 's/row/R0W/g\' 'hallo row.'\"";
-							/* Das redirect Zeichen verunmöglicht eine direkte eingabe. mit dem geschachtellten
+							/* Das redirect Zeichen verunmoeglicht eine direkte eingabe. mit dem geschachtellten
 							 * Befehl gehts: cmd /c\"urspruenlicher Befehl\" */
 
 							Process procSed = null;
@@ -408,7 +408,7 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 								InputStream fis = new FileInputStream( tableXml );
 								BufferedReader br = new BufferedReader( new InputStreamReader( fis ) );
 
-								// Datei Zeile für Zeile lesen und ermitteln ob "file=" darin enthalten ist
+								// Datei Zeile fuer Zeile lesen und ermitteln ob "file=" darin enthalten ist
 
 								for ( String line = br.readLine(); line != null; line = br.readLine() ) {
 									if ( line.contains( " file=" ) ) {

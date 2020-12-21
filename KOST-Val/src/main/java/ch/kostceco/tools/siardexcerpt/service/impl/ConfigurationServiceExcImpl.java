@@ -38,8 +38,8 @@ import ch.kostceco.tools.siardexcerpt.service.TextResourceServiceExc;
 public class ConfigurationServiceExcImpl implements ConfigurationServiceExc
 {
 
-	private static final Logger	LOGGER		= new Logger( ConfigurationServiceExcImpl.class );
-	Map<String, String>					configMap	= null;
+	private static final Logger			LOGGER		= new Logger( ConfigurationServiceExcImpl.class );
+	Map<String, String>							configMap	= null;
 	private TextResourceServiceExc	textResourceServiceExc;
 
 	public TextResourceServiceExc getTextResourceServiceExc()
@@ -57,7 +57,8 @@ public class ConfigurationServiceExcImpl implements ConfigurationServiceExc
 		try {
 			File directoryOfConfigfile = new File( System.getenv( "USERPROFILE" ) + File.separator
 					+ ".siardexcerpt" + File.separator + "configuration" );
-			File configFile = new File( directoryOfConfigfile + File.separator + "siardexcerpt.conf.xml" );
+			File configFile = new File(
+					directoryOfConfigfile + File.separator + "siardexcerpt.conf.xml" );
 			Document doc = null;
 
 			BufferedInputStream bis = new BufferedInputStream( new FileInputStream( configFile ) );
@@ -272,23 +273,23 @@ public class ConfigurationServiceExcImpl implements ConfigurationServiceExc
 			return configMap;
 
 		} catch ( FileNotFoundException e ) {
-			LOGGER.logError( getTextResourceServiceExc().getText( MESSAGE_XML_MODUL_A )
-					+ getTextResourceServiceExc().getText( ERROR_XML_UNKNOWN, e ) );
+			LOGGER.logError( getTextResourceServiceExc().getText( EXC_MESSAGE_XML_MODUL_A )
+					+ getTextResourceServiceExc().getText( EXC_ERROR_XML_UNKNOWN, e ) );
 			System.exit( 1 );
 		} catch ( ParserConfigurationException e ) {
 			String error = e.getMessage() + " (ParserConfigurationException)";
-			LOGGER.logError( getTextResourceServiceExc().getText( MESSAGE_XML_MODUL_A )
-					+ getTextResourceServiceExc().getText( ERROR_XML_UNKNOWN, error ) );
+			LOGGER.logError( getTextResourceServiceExc().getText( EXC_MESSAGE_XML_MODUL_A )
+					+ getTextResourceServiceExc().getText( EXC_ERROR_XML_UNKNOWN, error ) );
 			System.exit( 1 );
 		} catch ( SAXException e ) {
 			String error = e.getMessage() + " (SAXException)";
-			LOGGER.logError( getTextResourceServiceExc().getText( MESSAGE_XML_MODUL_A )
-					+ getTextResourceServiceExc().getText( ERROR_XML_UNKNOWN, error ) );
+			LOGGER.logError( getTextResourceServiceExc().getText( EXC_MESSAGE_XML_MODUL_A )
+					+ getTextResourceServiceExc().getText( EXC_ERROR_XML_UNKNOWN, error ) );
 			System.exit( 1 );
 		} catch ( IOException e ) {
 			String error = e.getMessage() + " (IOException)";
-			LOGGER.logError( getTextResourceServiceExc().getText( MESSAGE_XML_MODUL_A )
-					+ getTextResourceServiceExc().getText( ERROR_XML_UNKNOWN, error ) );
+			LOGGER.logError( getTextResourceServiceExc().getText( EXC_MESSAGE_XML_MODUL_A )
+					+ getTextResourceServiceExc().getText( EXC_ERROR_XML_UNKNOWN, error ) );
 			System.exit( 1 );
 		}
 		return configMap;

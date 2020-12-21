@@ -38,7 +38,7 @@ import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationDstructureModule;
 
 /** Validierungsschritt D (Struktur-Validierung) Stimmt die Struktur aus metadata.xml mit der
- * Datei-Struktur von content überein? valid --> schema0/table3 in metadata.xml ==
+ * Datei-Struktur von content ueberein? valid --> schema0/table3 in metadata.xml ==
  * schema0/table3/tabe3.xsd und table3.xml in content ==> Bei den Module A, B, C und D wird die
  * Validierung abgebrochen, sollte das Resulat invalid sein!
  * 

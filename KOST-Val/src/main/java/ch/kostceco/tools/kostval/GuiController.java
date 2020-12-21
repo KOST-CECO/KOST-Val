@@ -107,7 +107,7 @@ public class GuiController
 					+ File.separator + "configuration" + File.separator + "kostval.conf.xml" );
 
 	private String						arg0, arg1, arg2, arg3 = "--xml", dirOfJarPath;
-	private String						versionKostVal	= "2.0.1";
+	private String						versionKostVal	= "2.0.2";
 	/* TODO: versionKostVal auch hier anpassen:
 	 * 
 	 * 2) cmdKOSTVal.java
@@ -1211,7 +1211,7 @@ public class GuiController
 	{
 		console.setText( " \n" );
 		String selLogType = logType.getValue();
-		if ( selLogType.contains(  "--min" ) ) {
+		if ( selLogType.contains( "--min" ) ) {
 			arg3 = "--min";
 		} else if ( selLogType.contains( "--max" ) ) {
 			arg3 = "--max";

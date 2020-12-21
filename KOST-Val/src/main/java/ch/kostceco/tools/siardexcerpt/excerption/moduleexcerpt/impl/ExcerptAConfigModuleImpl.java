@@ -1646,7 +1646,7 @@ public class ExcerptAConfigModuleImpl extends ValidationModuleImpl implements Ex
 				}
 
 				// TODO Config maintable erstellen
-				title = getTextResourceServiceExc().getText( locale, MESSAGE_XML_TITLE, mainname );
+				title = getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_TITLE, mainname );
 				title = "<mtitle>" + title + "</mtitle>";
 				String valueMainname = mainname;
 				mainname = "<mname>" + mainname + "</mname>";
@@ -1903,23 +1903,25 @@ public class ExcerptAConfigModuleImpl extends ValidationModuleImpl implements Ex
 					}
 
 				} catch ( Exception e ) {
-					getMessageServiceExc().logError( getTextResourceServiceExc().getText( locale,
-							MESSAGE_XML_MODUL_A )
-							+ getTextResourceServiceExc().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+					getMessageServiceExc()
+							.logError( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_A )
+									+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN,
+											e.getMessage() ) );
 					return false;
 				}
 
 			} catch ( Exception e ) {
-				getMessageServiceExc().logError( getTextResourceServiceExc().getText( locale,
-						MESSAGE_XML_MODUL_A )
-						+ getTextResourceServiceExc().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+				getMessageServiceExc()
+						.logError( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_A )
+								+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN,
+										e.getMessage() ) );
 				return false;
 			}
 
 		} catch ( Exception e ) {
-			getMessageServiceExc()
-					.logError( getTextResourceServiceExc().getText( locale, MESSAGE_XML_MODUL_A )
-							+ getTextResourceServiceExc().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			getMessageServiceExc().logError( getTextResourceServiceExc().getText( locale,
+					EXC_MESSAGE_XML_MODUL_A )
+					+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 		return result;

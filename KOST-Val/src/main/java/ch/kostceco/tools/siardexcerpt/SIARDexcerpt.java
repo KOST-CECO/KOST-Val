@@ -103,6 +103,7 @@ public class SIARDexcerpt implements MessageConstants
 
 		Locale locale = Locale.getDefault();
 
+		if (!args[2].isEmpty()) {
 		if ( args[2].equalsIgnoreCase( "--de" ) ) {
 			locale = new Locale( "de" );
 		} else if ( args[2].equalsIgnoreCase( "--fr" ) ) {
@@ -119,11 +120,42 @@ public class SIARDexcerpt implements MessageConstants
 				locale = new Locale( "de" );
 			}
 		}
-
+		}
 		// Ist die Anzahl Parameter (mind 4) korrekt?
-		if ( args.length < 4 ) {
+		int argsLength = args.length;
+		if ( argsLength < 4 ) {
+			// Fehler zu wenige args
+      int i=0;
+      while(i<argsLength){
+          System.out.println(i);
+        	// args[i] auf locale kontrollieren
+    			if ( args[i].equalsIgnoreCase( "--de" ) ) {
+    				locale = new Locale( "de" );
+            System.out.println(locale);
+    			} else if ( args[i].equalsIgnoreCase( "--fr" ) ) {
+    				locale = new Locale( "fr" );
+            System.out.println(locale);
+   			} else if ( args[i].equalsIgnoreCase( "--en" ) ) {
+    				locale = new Locale( "en" );
+            System.out.println(locale);
+    			} else {
+    				// ungueltige Eingabe Fehler wird ignoriert und default oder de wird angenommen
+    				if ( locale.toString().startsWith( "fr" ) ) {
+    					locale = new Locale( "fr" );
+    				} else if ( locale.toString().startsWith( "en" ) ) {
+    					locale = new Locale( "en" );
+    				} else {
+    					locale = new Locale( "de" );
+    				}
+    			}
+         i++;
+      }
+      System.out.println("locale= "+locale);
+			
+			
+
 			System.out.println(
-					siardexcerpt.getTextResourceServiceExc().getText( locale, ERROR_PARAMETER_USAGE ) );
+					siardexcerpt.getTextResourceServiceExc().getText( locale, EXC_ERROR_PARAMETER_USAGE ) );
 			System.exit( 1 );
 		}
 
@@ -151,7 +183,7 @@ public class SIARDexcerpt implements MessageConstants
 		String javaRuntimeVersion = System.getProperty( "java.vm.version" );
 		if ( javaRuntimeVersion.compareTo( "1.8.0" ) < 0 ) {
 			System.out
-					.println( siardexcerpt.getTextResourceServiceExc().getText( locale, ERROR_WRONG_JRE ) );
+					.println( siardexcerpt.getTextResourceServiceExc().getText( locale, EXC_ERROR_WRONG_JRE ) );
 			System.exit( 1 );
 		}
 

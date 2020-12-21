@@ -45,7 +45,7 @@ import ch.kostceco.tools.kostval.validation.bean.ValidationContext;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationEcolumnModule;
 
 /** Validierungsschritt E (Spalten-Validierung) Wurden die Angaben aus metadata.xml korrekt in die
- * tableZ.xsd-Dateien �bertragen? valid --> gleiche Spaltendefinitionen (Anzahl, Type, Nullable)
+ * tableZ.xsd-Dateien uebertragen? valid --> gleiche Spaltendefinitionen (Anzahl, Type, Nullable)
  * 
  * 
  * The module <code>ValidationEcolumnModule</code> validates the columns specified in the file
@@ -675,14 +675,14 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl
 						|| xmlElement.getChild( xmlTypeElementName, xmlNamespace ).getValue() == null ) {
 					/* TODO: bei UDT stehen beide typen in den subelementen (beide null). UDT koennen wiederum
 					 * Array oder UDT enthalen und diese mehrfach. Entsprechend wird das noch nicht
-					 * unterstützt! */
+					 * unterstuetzt! */
 					udtColumn = true;
-					// validDatabase = unverändert -> nur Warnung
+					// validDatabase = unveraendert -> nur Warnung
 					namesOfUdtColumns.append( (namesOfUdtColumns.length() > 0) ? ", " : "" );
 					namesOfUdtColumns.append( columnName );
 					// Keine Typenvalidierung dieser Spalte
 				} else {
-					// Typenvalidierung der Spalte möglich
+					// Typenvalidierung der Spalte moeglich
 
 					// Retrieve the original column type from metadata.xml
 					leftSide = xmlElement.getChild( xmlTypeElementName, xmlNamespace ).getValue();
@@ -707,7 +707,7 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl
 										array0 = arrays;
 										rightSide = array0;
 									} else {
-										// alle arrys müssen den gleichen Typ haben
+										// alle arrys muessen den gleichen Typ haben
 										if ( !array0.equalsIgnoreCase( arrays ) ) {
 											validTable = false;
 											validDatabase = false;
@@ -762,8 +762,8 @@ public class ValidationEcolumnModuleImpl extends ValidationModuleImpl
 						namesOfInvalidColumns.append( (namesOfInvalidColumns.length() > 0) ? ", " : "" );
 						namesOfInvalidColumns.append( columnName + "(" + trimmedExpectedType + "=?)" );
 					} else if ( !expectedType.equalsIgnoreCase( rightSide ) ) {
-						/* grössere strings dürfen auch als clob separat abgespeichert werden. Das gleiche
-						 * für hexBinarx als blob
+						/* groessere strings duerfen auch als clob separat abgespeichert werden. Das gleiche
+						 * fuer hexBinarx als blob
 						 * 
 						 * xs:hexBinary ~ blobType && xs:string ~ clobType */
 						if ( expectedType.equalsIgnoreCase( "xs:hexBinary" )

@@ -115,13 +115,13 @@ public class Controllerexcerpt implements MessageConstants
 				valid = false;
 			}
 		} catch ( ExcerptAZipException e ) {
-			LOGGER.logError( getTextResourceServiceExc().getText( locale, MESSAGE_XML_MODUL_A )
-					+ getTextResourceServiceExc().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_A )
+					+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getExcerptAZipModule().getMessageServiceExc().print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logError( getTextResourceServiceExc().getText( locale, MESSAGE_XML_MODUL_A )
-					+ getTextResourceServiceExc().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_A )
+					+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
@@ -145,13 +145,13 @@ public class Controllerexcerpt implements MessageConstants
 				valid = false;
 			}
 		} catch ( ExcerptAConfigException e ) {
-			LOGGER.logError( getTextResourceServiceExc().getText( locale, MESSAGE_XML_MODUL_A )
-					+ getTextResourceServiceExc().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_A )
+					+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getExcerptAConfigModule().getMessageServiceExc().print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logError( getTextResourceServiceExc().getText( locale, MESSAGE_XML_MODUL_A )
-					+ getTextResourceServiceExc().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_A )
+					+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
@@ -173,13 +173,13 @@ public class Controllerexcerpt implements MessageConstants
 				valid = false;
 			}
 		} catch ( ExcerptBSearchException e ) {
-			LOGGER.logError( getTextResourceServiceExc().getText( locale, MESSAGE_XML_MODUL_B )
-					+ getTextResourceServiceExc().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_B )
+					+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getExcerptBSearchModule().getMessageServiceExc().print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logError( getTextResourceServiceExc().getText( locale, MESSAGE_XML_MODUL_B )
-					+ getTextResourceServiceExc().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_B )
+					+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
@@ -201,13 +201,13 @@ public class Controllerexcerpt implements MessageConstants
 				valid = false;
 			}
 		} catch ( ExcerptCGrepException e ) {
-			LOGGER.logError( getTextResourceServiceExc().getText( locale, MESSAGE_XML_MODUL_C )
-					+ getTextResourceServiceExc().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_C )
+					+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getExcerptCGrepModule().getMessageServiceExc().print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logError( getTextResourceServiceExc().getText( locale, MESSAGE_XML_MODUL_C )
-					+ getTextResourceServiceExc().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_C )
+					+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 

@@ -79,6 +79,14 @@ public class Controllervalsip implements MessageConstants
 		boolean valSip = false;
 		String pathToWorkDir = configMap.get( "PathToWorkDir" );
 		File tmpDir = new File( pathToWorkDir );
+		try {
+			if ( !tmpDir.exists() ) {
+				tmpDir.createNewFile();
+			}
+		} catch ( IOException e ) {
+			e.printStackTrace();
+			System.out.println( tmpDir.getAbsolutePath() );
+		}
 		File logFile = new File( directoryOfLogfile.getAbsolutePath() + File.separator
 				+ valDatei.getName() + ".kost-val.log.xml" );
 
@@ -153,7 +161,7 @@ public class Controllervalsip implements MessageConstants
 			File originalSipFile = valDatei;
 			File unSipFile = valDatei;
 			File outputFile3c = null;
-			String fileName3c = null;
+			String fileName3c = "3c_Invalide.txt";
 			File tmpDirZip = null;
 			String valDateiName = valDatei.getName();
 			String valDateiExt = "." + FilenameUtils.getExtension( valDateiName ).toLowerCase();
@@ -643,7 +651,12 @@ public class Controllervalsip implements MessageConstants
 			// outputFile3c = new File( directoryOfLogfile + fileName3c );
 			outputFile3c = new File( pathToWorkDir + File.separator + fileName3c );
 			try {
-				outputFile3c.createNewFile();
+				if ( !outputFile3c.exists() ) {
+					if ( !tmpDir.exists() ) {
+						tmpDir.createNewFile();
+					}
+					outputFile3c.createNewFile();
+				}
 			} catch ( IOException e ) {
 				e.printStackTrace();
 			}

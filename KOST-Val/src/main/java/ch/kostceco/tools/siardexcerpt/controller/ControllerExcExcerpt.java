@@ -133,7 +133,7 @@ public class ControllerExcExcerpt implements MessageConstants
 		// Ist die Anzahl Parameter (mind 4) korrekt?
 		if ( args.length == 4 ) {
 			System.out.println( controllerExcExcerpt.getTextResourceServiceExc().getText( locale,
-					ERROR_PARAMETER_USAGE ) );
+					EXC_ERROR_PARAMETER_USAGE ) );
 			return false;
 		}
 
@@ -167,7 +167,7 @@ public class ControllerExcExcerpt implements MessageConstants
 		String javaRuntimeVersion = System.getProperty( "java.vm.version" );
 		if ( javaRuntimeVersion.compareTo( "1.8.0" ) < 0 ) {
 			System.out.println(
-					controllerExcExcerpt.getTextResourceServiceExc().getText( locale, ERROR_WRONG_JRE ) );
+					controllerExcExcerpt.getTextResourceServiceExc().getText( locale, EXC_ERROR_WRONG_JRE ) );
 			return false;
 		}
 
@@ -204,7 +204,7 @@ public class ControllerExcExcerpt implements MessageConstants
 		// System.out.println( " a) Ist die Anzahl Parameter (mind 5) korrekt? arg4 = Schluessel" );
 		if ( args.length < 5 ) {
 			System.out.println( controllerExcExcerpt.getTextResourceServiceExc().getText( locale,
-					ERROR_PARAMETER_USAGE ) );
+					EXC_ERROR_PARAMETER_USAGE ) );
 			return false;
 		}
 
@@ -213,7 +213,7 @@ public class ControllerExcExcerpt implements MessageConstants
 					tmpDir.getAbsolutePath() + File.separator + siardDatei.getName() );
 			if ( !siardDateiNew.exists() ) {
 				System.out.println(
-						controllerExcExcerpt.getTextResourceServiceExc().getText( locale, ERROR_NOINIT ) );
+						controllerExcExcerpt.getTextResourceServiceExc().getText( locale, EXC_ERROR_NOINIT ) );
 				return false;
 			} else {
 				siardDatei = siardDateiNew;
@@ -274,7 +274,7 @@ public class ControllerExcExcerpt implements MessageConstants
 			File xsltxt = new File( "resources" + File.separator + "SIARDexcerptAutoXSL.txt" );
 			if ( !xsltxt.exists() ) {
 				System.out.println( controllerExcExcerpt.getTextResourceServiceExc().getText( locale,
-						ERROR_CONFIGFILE_FILENOTEXISTING, xsltxt.getAbsolutePath() ) );
+						EXC_ERROR_CONFIGFILE_FILENOTEXISTING, xsltxt.getAbsolutePath() ) );
 				return false;
 			}
 			xslCopy = new File( directoryOfOutput.getAbsolutePath() + File.separator
@@ -332,26 +332,27 @@ public class ControllerExcExcerpt implements MessageConstants
 							if ( subNode.getNodeName().equals( "name" ) ) {
 								tableName = subNode.getTextContent();
 								// System.out.println( tableFolder + ": " + (counterColumn-1) + " Spalten." );
-								Util.oldnewstring( provEndXSL, controllerExcExcerpt.getTextResourceServiceExc()
-										.getText( locale, AUTO_XSL_TABLE_START, schemaName + "_" + tableName ),
+								Util.oldnewstring( provEndXSL,
+										controllerExcExcerpt.getTextResourceServiceExc().getText( locale,
+												EXC_AUTO_XSL_TABLE_START,
+												schemaName.replace( " ", "" ) + "_" + tableName.replace( " ", "" ) ),
 										xslCopy );
 								for ( int z = 1; z < counterColumn; z++ ) {
 									Util.oldnewstring( provEndXSL, controllerExcExcerpt.getTextResourceServiceExc()
-											.getText( locale, AUTO_XSL_COLUMN, z ), xslCopy );
+											.getText( locale, EXC_AUTO_XSL_COLUMN, z ), xslCopy );
 								}
 								Util.oldnewstring( provEndXSL, controllerExcExcerpt.getTextResourceServiceExc()
-										.getText( locale, AUTO_XSL_TABLE_END ), xslCopy );
+										.getText( locale, EXC_AUTO_XSL_TABLE_END ), xslCopy );
 							}
 						}
 					}
-					Util.oldnewstring( provEndXSL,
-							controllerExcExcerpt.getTextResourceServiceExc().getText( locale, AUTO_XSL_FOOTER ),
-							xslCopy );
+					Util.oldnewstring( provEndXSL, controllerExcExcerpt.getTextResourceServiceExc()
+							.getText( locale, EXC_AUTO_XSL_FOOTER ), xslCopy );
 				} catch ( Exception e ) {
 					LOGGER.logError( "<Error>" + controllerExcExcerpt.getTextResourceServiceExc()
-							.getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+							.getText( locale, EXC_ERROR_XML_UNKNOWN, e.getMessage() ) );
 					LOGGER.logError( controllerExcExcerpt.getTextResourceServiceExc().getText( locale,
-							MESSAGE_XML_LOGEND ) );
+							EXC_MESSAGE_XML_LOGEND ) );
 					System.out.println( "Exception: " + e.getMessage() );
 					return false;
 				}
@@ -409,29 +410,29 @@ public class ControllerExcExcerpt implements MessageConstants
 
 		} catch ( Exception e ) {
 			LOGGER.logError( "<Error>" + controllerExcExcerpt.getTextResourceServiceExc().getText( locale,
-					ERROR_XML_UNKNOWN, e.getMessage() ) );
-			LOGGER.logError(
-					controllerExcExcerpt.getTextResourceServiceExc().getText( locale, MESSAGE_XML_LOGEND ) );
+					EXC_ERROR_XML_UNKNOWN, e.getMessage() ) );
+			LOGGER.logError( controllerExcExcerpt.getTextResourceServiceExc().getText( locale,
+					EXC_MESSAGE_XML_LOGEND ) );
 			System.out.println( "Exception: " + e.getMessage() );
 			return false;
 		}
 
 		LOGGER.logError( controllerExcExcerpt.getTextResourceServiceExc().getText( locale,
-				MESSAGE_XML_HEADER, xslCopy.getName() ) );
+				EXC_MESSAGE_XML_HEADER, xslCopy.getName() ) );
 		LOGGER.logError( controllerExcExcerpt.getTextResourceServiceExc().getText( locale,
-				MESSAGE_XML_START, ausgabeStart ) );
+				EXC_MESSAGE_XML_START, ausgabeStart ) );
 		LOGGER.logError( controllerExcExcerpt.getTextResourceServiceExc().getText( locale,
-				MESSAGE_XML_TEXT, archive, "Archive" ) );
+				EXC_MESSAGE_XML_TEXT, archive, "Archive" ) );
 		LOGGER.logError( controllerExcExcerpt.getTextResourceServiceExc().getText( locale,
-				MESSAGE_XML_TEXT, dbname, "dbname" ) );
+				EXC_MESSAGE_XML_TEXT, dbname, "dbname" ) );
 		LOGGER.logError( controllerExcExcerpt.getTextResourceServiceExc().getText( locale,
-				MESSAGE_XML_TEXT, dataOriginTimespan, "dataOriginTimespan" ) );
+				EXC_MESSAGE_XML_TEXT, dataOriginTimespan, "dataOriginTimespan" ) );
 		LOGGER.logError( controllerExcExcerpt.getTextResourceServiceExc().getText( locale,
-				MESSAGE_XML_TEXT, dbdescription, "dbdescription" ) );
+				EXC_MESSAGE_XML_TEXT, dbdescription, "dbdescription" ) );
 		LOGGER.logError( controllerExcExcerpt.getTextResourceServiceExc().getText( locale,
-				MESSAGE_XML_TEXT, keyexcerpt, "keyexcerpt" ) );
+				EXC_MESSAGE_XML_TEXT, keyexcerpt, "keyexcerpt" ) );
 		LOGGER.logError(
-				controllerExcExcerpt.getTextResourceServiceExc().getText( locale, MESSAGE_XML_INFO ) );
+				controllerExcExcerpt.getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_INFO ) );
 
 		/** c) extraktion: dies ist in einem eigenen Modul realisiert */
 		Controllerexcerpt controllerexcerpt = (Controllerexcerpt) context
@@ -442,14 +443,14 @@ public class ControllerExcExcerpt implements MessageConstants
 		/** d) Ausgabe und exitcode */
 		if ( !okC ) {
 			// Record konnte nicht extrahiert werden
-			LOGGER.logError(
-					controllerExcExcerpt.getTextResourceServiceExc().getText( locale, MESSAGE_XML_MODUL_C ) );
 			LOGGER.logError( controllerExcExcerpt.getTextResourceServiceExc().getText( locale,
-					ERROR_XML_C_CANNOTEXTRACTRECORD ) );
-			LOGGER.logError(
-					controllerExcExcerpt.getTextResourceServiceExc().getText( locale, MESSAGE_XML_LOGEND ) );
+					EXC_MESSAGE_XML_MODUL_C ) );
+			LOGGER.logError( controllerExcExcerpt.getTextResourceServiceExc().getText( locale,
+					EXC_ERROR_XML_C_CANNOTEXTRACTRECORD ) );
+			LOGGER.logError( controllerExcExcerpt.getTextResourceServiceExc().getText( locale,
+					EXC_MESSAGE_XML_LOGEND ) );
 			System.out.println( controllerExcExcerpt.getTextResourceServiceExc().getText( locale,
-					MESSAGE_C_EXCERPT_NOK, outFileName ) );
+					EXC_MESSAGE_C_EXCERPT_NOK, outFileName ) );
 
 			// Loeschen des Arbeitsverzeichnisses und configFileHard erfolgt erst bei schritt 4 finish
 
@@ -457,8 +458,8 @@ public class ControllerExcExcerpt implements MessageConstants
 			return false;
 		} else {
 			// Record konnte extrahiert werden
-			LOGGER.logError(
-					controllerExcExcerpt.getTextResourceServiceExc().getText( locale, MESSAGE_XML_LOGEND ) );
+			LOGGER.logError( controllerExcExcerpt.getTextResourceServiceExc().getText( locale,
+					EXC_MESSAGE_XML_LOGEND ) );
 
 			// Die Konfiguration hereinkopieren
 			/* try { DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -495,7 +496,7 @@ public class ControllerExcExcerpt implements MessageConstants
 
 			// Record konnte extrahiert werden
 			System.out.println( controllerExcExcerpt.getTextResourceServiceExc().getText( locale,
-					MESSAGE_C_EXCERPT_OK, outFileName ) );
+					EXC_MESSAGE_C_EXCERPT_OK, outFileName ) );
 			excerpt = true;
 			return excerpt;
 

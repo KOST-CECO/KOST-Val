@@ -40,9 +40,9 @@ import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.bean.ValidationContext;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationWwarningModule;
 
-/** Validierungsschritt W (Warnungen) Wurden dataOwner und dataOriginTimespan ausgef�llt und nicht
+/** Validierungsschritt W (Warnungen) Wurden dataOwner und dataOriginTimespan ausgefuellt und nicht
  * auf (...) belassen? <dataOwner>(...)</dataOwner> <dataOriginTimespan>(...)</dataOriginTimespan>
- * ab 1.8 auch <dbname>(...)</dbname> plus dito für unspecified
+ * ab 1.8 auch <dbname>(...)</dbname> plus dito fuer unspecified
  * 
  * nur Messeage ausgeben aber immer valid
  * 
@@ -103,7 +103,7 @@ public class ValidationWwarningModuleImpl extends ValidationModuleImpl
 			if ( elementDataOwner != null ) {
 				String dataOwnerValue = elementDataOwner.getTextContent();
 				if ( dataOwnerValue.equals( "(...)" ) || dataOwnerValue.equals( "unspecified" ) ) {
-					/* Der Initialwert wurde nicht verändert respektive ausgef�llt, entsprechend wird eine
+					/* Der Initialwert wurde nicht veraendert respektive ausgefuellt, entsprechend wird eine
 					 * Warnung ausgegeben */
 					if ( min ) {
 					} else {
@@ -118,7 +118,7 @@ public class ValidationWwarningModuleImpl extends ValidationModuleImpl
 			if ( elementDataOriginTimespan != null ) {
 				String dataOriginTimespanValue = elementDataOriginTimespan.getTextContent();
 				if ( dataOriginTimespanValue.equals( "(...)" ) ) {
-					/* Der Initialwert wurde nicht verändert respektive ausgef�llt, entsprechend wird eine
+					/* Der Initialwert wurde nicht veraendert respektive ausgefuellt, entsprechend wird eine
 					 * Warnung ausgegeben */
 					if ( min ) {
 					} else {
@@ -133,7 +133,7 @@ public class ValidationWwarningModuleImpl extends ValidationModuleImpl
 			if ( elementDbName != null ) {
 				String dataDbNameValue = elementDbName.getTextContent();
 				if ( dataDbNameValue.equals( "(...)" ) ) {
-					/* Der Initialwert wurde nicht verändert respektive ausgef�llt, entsprechend wird eine
+					/* Der Initialwert wurde nicht veraendert respektive ausgefuellt, entsprechend wird eine
 					 * Warnung ausgegeben */
 					if ( min ) {
 					} else {

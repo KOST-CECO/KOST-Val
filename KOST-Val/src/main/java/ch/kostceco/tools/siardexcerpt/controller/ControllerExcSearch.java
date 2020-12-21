@@ -134,7 +134,7 @@ public class ControllerExcSearch implements MessageConstants
 		// Ist die Anzahl Parameter (mind 4) korrekt?
 		if ( args.length == 4 ) {
 			System.out.println( controllerExcSearch.getTextResourceServiceExc().getText( locale,
-					ERROR_PARAMETER_USAGE ) );
+					EXC_ERROR_PARAMETER_USAGE ) );
 			return false;
 		}
 
@@ -168,7 +168,7 @@ public class ControllerExcSearch implements MessageConstants
 		String javaRuntimeVersion = System.getProperty( "java.vm.version" );
 		if ( javaRuntimeVersion.compareTo( "1.8.0" ) < 0 ) {
 			System.out.println(
-					controllerExcSearch.getTextResourceServiceExc().getText( locale, ERROR_WRONG_JRE ) );
+					controllerExcSearch.getTextResourceServiceExc().getText( locale, EXC_ERROR_WRONG_JRE ) );
 			return false;
 		}
 
@@ -215,7 +215,7 @@ public class ControllerExcSearch implements MessageConstants
 		// System.out.println( " a) Ist die Anzahl Parameter (mind 5) korrekt? arg4 = Suchtext " );
 		if ( args.length < 5 ) {
 			System.out.println( controllerExcSearch.getTextResourceServiceExc().getText( locale,
-					ERROR_PARAMETER_USAGE ) );
+					EXC_ERROR_PARAMETER_USAGE ) );
 			return false;
 		}
 
@@ -224,7 +224,7 @@ public class ControllerExcSearch implements MessageConstants
 					tmpDir.getAbsolutePath() + File.separator + siardDatei.getName() );
 			if ( !siardDateiNew.exists() ) {
 				System.out.println(
-						controllerExcSearch.getTextResourceServiceExc().getText( locale, ERROR_NOINIT ) );
+						controllerExcSearch.getTextResourceServiceExc().getText( locale, EXC_ERROR_NOINIT ) );
 				return false;
 			} else {
 				siardDatei = siardDateiNew;
@@ -290,13 +290,13 @@ public class ControllerExcSearch implements MessageConstants
 		}
 
 		LOGGER.logError( controllerExcSearch.getTextResourceServiceExc().getText( locale,
-				MESSAGE_XML_HEADER, xslCopyS.getName() ) );
+				EXC_MESSAGE_XML_HEADER, xslCopyS.getName() ) );
 		LOGGER.logError( controllerExcSearch.getTextResourceServiceExc().getText( locale,
-				MESSAGE_XML_START, ausgabeStartS ) );
+				EXC_MESSAGE_XML_START, ausgabeStartS ) );
 		LOGGER.logError( controllerExcSearch.getTextResourceServiceExc().getText( locale,
-				MESSAGE_XML_TEXT, archiveS, "Archive" ) );
+				EXC_MESSAGE_XML_TEXT, archiveS, "Archive" ) );
 		LOGGER.logError(
-				controllerExcSearch.getTextResourceServiceExc().getText( locale, MESSAGE_XML_INFO ) );
+				controllerExcSearch.getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_INFO ) );
 
 		/** d) search: dies ist in einem eigenen Modul realisiert */
 		// System.out.println( " d) search: dies ist in einem eigenen Modul realisiert " );
@@ -310,21 +310,21 @@ public class ControllerExcSearch implements MessageConstants
 		// System.out.println( " e) Ausgabe und exitcode " );
 		if ( !search ) {
 			// Suche konnte nicht erfolgen
-			LOGGER.logError(
-					controllerExcSearch.getTextResourceServiceExc().getText( locale, MESSAGE_XML_MODUL_B ) );
 			LOGGER.logError( controllerExcSearch.getTextResourceServiceExc().getText( locale,
-					ERROR_XML_B_CANNOTSEARCHRECORD ) );
-			LOGGER.logError(
-					controllerExcSearch.getTextResourceServiceExc().getText( locale, MESSAGE_XML_LOGEND ) );
-			System.out.println(
-					controllerExcSearch.getTextResourceServiceExc().getText( locale, MESSAGE_B_SEARCH_NOK ) );
+					EXC_MESSAGE_XML_MODUL_B ) );
+			LOGGER.logError( controllerExcSearch.getTextResourceServiceExc().getText( locale,
+					EXC_ERROR_XML_B_CANNOTSEARCHRECORD ) );
+			LOGGER.logError( controllerExcSearch.getTextResourceServiceExc().getText( locale,
+					EXC_MESSAGE_XML_LOGEND ) );
+			System.out.println( controllerExcSearch.getTextResourceServiceExc().getText( locale,
+					EXC_MESSAGE_B_SEARCH_NOK ) );
 			// Loeschen der temporaeren Suchergebnisse
 			File outFileSearchTmp = new File( outFileSearch.getAbsolutePath() + ".tmp" );
 			if ( outFileSearchTmp.exists() ) {
 				Util.deleteFile( outFileSearchTmp );
 			}
 			String noResult = controllerExcSearch.getTextResourceServiceExc().getText( locale,
-					MESSAGE_B_SEARCH_NOK );
+					EXC_MESSAGE_B_SEARCH_NOK );
 			if ( outFileSearchTmp.exists() ) {
 				Util.replaceAllChar( outFileSearchTmp, noResult );
 			}
@@ -339,8 +339,8 @@ public class ControllerExcSearch implements MessageConstants
 		} else {
 			// Suche konnte durchgefuehrt werden
 
-			LOGGER.logError(
-					controllerExcSearch.getTextResourceServiceExc().getText( locale, MESSAGE_XML_LOGEND ) );
+			LOGGER.logError( controllerExcSearch.getTextResourceServiceExc().getText( locale,
+					EXC_MESSAGE_XML_LOGEND ) );
 
 			// Die Konfiguration hereinkopieren
 			try {
@@ -368,13 +368,13 @@ public class ControllerExcSearch implements MessageConstants
 
 				// Der Header wird dabei leider verschossen, wieder zurueck aendern
 				String newstring = controllerExcSearch.getTextResourceServiceExc().getText( locale,
-						MESSAGE_XML_HEADER, xslCopyS.getName() );
+						EXC_MESSAGE_XML_HEADER, xslCopyS.getName() );
 				String oldstring = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><table>";
 				Util.oldnewstring( oldstring, newstring, outFileSearch );
 
 			} catch ( Exception e ) {
 				LOGGER.logError( "<Error>" + controllerExcSearch.getTextResourceServiceExc()
-						.getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+						.getText( locale, EXC_ERROR_XML_UNKNOWN, e.getMessage() ) );
 				System.out.println( "Exception: " + e.getMessage() );
 				return false;
 			}
@@ -383,7 +383,7 @@ public class ControllerExcSearch implements MessageConstants
 
 			// Record konnte extrahiert werden
 			System.out.println( controllerExcSearch.getTextResourceServiceExc().getText( locale,
-					MESSAGE_B_SEARCH_OK, outFileNameS ) );
+					EXC_MESSAGE_B_SEARCH_OK, outFileNameS ) );
 			// search = true;
 			return search;
 

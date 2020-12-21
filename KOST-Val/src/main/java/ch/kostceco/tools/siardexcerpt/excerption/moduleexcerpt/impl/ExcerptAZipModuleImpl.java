@@ -16,14 +16,15 @@
 package ch.kostceco.tools.siardexcerpt.excerption.moduleexcerpt.impl;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.InputStream;
+import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Map;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
+import java.util.zip.ZipFile;
 
 import ch.kostceco.tools.siardexcerpt.exception.moduleexcerpt.ExcerptAZipException;
 import ch.kostceco.tools.siardexcerpt.excerption.ValidationModuleImpl;
@@ -34,7 +35,7 @@ import ch.kostceco.tools.siardexcerpt.util.Util;
 public class ExcerptAZipModuleImpl extends ValidationModuleImpl implements ExcerptAZipModule
 {
 
-	public static String	NEWLINE	= System.getProperty( "line.separator" );
+	public static String NEWLINE = System.getProperty( "line.separator" );
 
 	@Override
 	public boolean validate( File siardDatei, File siardDateiNew, String noString,
@@ -59,55 +60,47 @@ public class ExcerptAZipModuleImpl extends ValidationModuleImpl implements Excer
 				siardDateiNew.mkdir();
 			}
 
-			FileInputStream fis = null;
-			ZipInputStream zipfile = null;
-			ZipEntry zEntry = null;
-			fis = new FileInputStream( siardDatei );
-			zipfile = new ZipInputStream( new BufferedInputStream( fis ) );
+			int BUFFER = 2048;
+			ZipFile zipfile = new ZipFile( siardDatei.getAbsolutePath() );
+			Enumeration<? extends ZipEntry> entries = zipfile.entries();
 
-			while ( (zEntry = zipfile.getNextEntry()) != null ) {
-				try {
-					if ( !zEntry.isDirectory() ) {
-						byte[] tmp = new byte[4 * 1024];
-						FileOutputStream fos = null;
-						String opFilePath = siardDateiNew + File.separator + zEntry.getName();
-						File newFile = new File( opFilePath );
-						File parent = newFile.getParentFile();
-						if ( !parent.exists() ) {
-							parent.mkdirs();
-						}
-						// System.out.println( "Extracting file to " + newFile.getAbsolutePath() );
-						fos = new FileOutputStream( opFilePath );
-						int size = 0;
-						while ( (size = zipfile.read( tmp )) != -1 ) {
-							fos.write( tmp, 0, size );
-						}
-						fos.flush();
-						fos.close();
-					} else {
-						/* Scheibe den Ordner wenn noch nicht vorhanden an den richtigen Ort respektive in den
-						 * richtigen Ordner der ggf angelegt werden muss. Dies muss gemacht werden, damit auch
-						 * leere Ordner ins Work geschrieben werden. Diese werden danach im J als Fehler
-						 * angegeben */
-						File newFolder = new File( siardDateiNew, zEntry.getName() );
-						if ( !newFolder.exists() ) {
-							File parent = newFolder.getParentFile();
-							if ( !parent.exists() ) {
-								parent.mkdirs();
-							}
-							newFolder.mkdirs();
-						}
+			// jeden entry durchgechen
+			while ( entries.hasMoreElements() ) {
+				ZipEntry entry = (ZipEntry) entries.nextElement();
+				String entryName = entry.getName();
+				File destFile = new File( siardDateiNew, entryName );
+				// System.out.println( entryName + " - " + destFile.getAbsolutePath() );
+
+				// erstelle den Ueberordner
+				File destinationParent = destFile.getParentFile();
+				destinationParent.mkdirs();
+				if ( !entry.isDirectory() ) {
+					InputStream stream = zipfile.getInputStream( entry );
+					BufferedInputStream is = new BufferedInputStream( stream );
+					int currentByte;
+
+					// erstellung Buffer zum schreiben der Dateien
+					byte data[] = new byte[BUFFER];
+
+					// schreibe die aktuelle Datei an den geuenschten Ort
+					FileOutputStream fos = new FileOutputStream( destFile );
+					BufferedOutputStream dest = new BufferedOutputStream( fos, BUFFER );
+					while ( (currentByte = is.read( data, 0, BUFFER )) != -1 ) {
+						dest.write( data, 0, currentByte );
 					}
-				} catch ( IOException e ) {
-					System.out.println( e.getMessage() );
+					dest.flush();
+					dest.close();
+					is.close();
+					stream.close();
+				} else {
+					destFile.mkdirs();
 				}
 			}
-
 			zipfile.close();
 		} catch ( Exception e ) {
-			getMessageServiceExc().logError(
-					getTextResourceServiceExc().getText( locale,MESSAGE_XML_MODUL_A )
-							+ getTextResourceServiceExc().getText( locale,ERROR_XML_UNKNOWN, e.getMessage() ) );
+			getMessageServiceExc().logError( getTextResourceServiceExc().getText( locale,
+					EXC_MESSAGE_XML_MODUL_A )
+					+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 		return result;

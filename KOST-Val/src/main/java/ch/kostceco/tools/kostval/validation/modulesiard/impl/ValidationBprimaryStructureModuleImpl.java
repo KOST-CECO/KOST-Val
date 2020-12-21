@@ -73,7 +73,7 @@ public class ValidationBprimaryStructureModuleImpl extends ValidationModuleImpl
 			Enumeration<? extends ZipEntry> entries = zipfile.entries();
 			while ( entries.hasMoreElements() ) {
 				ZipEntry entry = entries.nextElement();
-				/* nur valid wenn es mit header oder content anf�ngt dies schliesst auch
+				/* nur valid wenn es mit header oder content anfaengt dies schliesst auch
 				 * [Name].siard/[Name]/header und [Name].siard/[Name]/content mit ein */
 				String name = entry.getName();
 				// System.out.println( "Entry: " + name );
@@ -85,7 +85,7 @@ public class ValidationBprimaryStructureModuleImpl extends ValidationModuleImpl
 						// erlaubter Inhalt header/...
 						bExistsHeaderFolder = 1;
 					} else {
-						// keines der beiden validen M�glichkeiten -> Fehler
+						// keines der beiden validen Moeglichkeiten -> Fehler
 						zipfile.close();
 						if ( min ) {
 							return false;

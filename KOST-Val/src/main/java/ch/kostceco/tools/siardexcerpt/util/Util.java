@@ -1,6 +1,6 @@
 /* == SIARDexcerpt ==============================================================================
- * The SIARDexcerpt application is used for excerpt a record from a SIARD-File. Copyright (C) 2016-2019
- * Claire Roethlisberger (KOST-CECO)
+ * The SIARDexcerpt application is used for excerpt a record from a SIARD-File. Copyright (C)
+ * 2016-2019 Claire Roethlisberger (KOST-CECO)
  * -----------------------------------------------------------------------------------------------
  * SIARDexcerpt is a development of the KOST-CECO. All rights rest with the KOST-CECO. This
  * application is free software: you can redistribute it and/or modify it under the terms of the GNU
@@ -69,7 +69,7 @@ public class Util
 		}
 	}
 
-	/** Schaltet die Konsolen-Ausgabe in ein file um und beendet den Stream, damit dieser gelöscht
+	/** Schaltet die Konsolen-Ausgabe in ein file um und beendet den Stream, damit dieser geloescht
 	 * werden kann. */
 	public static void switchOffConsoleToTxtClose( File file ) throws FileNotFoundException
 	{
@@ -96,11 +96,11 @@ public class Util
 		System.setOut( original );
 	}
 
-	/** Löscht ein Verzeichnis rekursiv.
+	/** Loescht ein Verzeichnis rekursiv.
 	 * 
 	 * @param dir
-	 *          das zu löschende Verzeichnis
-	 * @return true wenn alle Files und Verzeichnisse gelöscht werden konnten */
+	 *          das zu loeschende Verzeichnis
+	 * @return true wenn alle Files und Verzeichnisse geloescht werden konnten */
 	public static boolean deleteDir( File dir )
 	{
 		if ( dir.isDirectory() ) {
@@ -121,11 +121,11 @@ public class Util
 		return dir.delete();
 	}
 
-	/** Löscht ein Verzeichnis rekursiv.
+	/** Loescht ein Verzeichnis rekursiv.
 	 * 
 	 * @param dir
-	 *          das zu löschende Verzeichnis
-	 * @return true wenn alle Files und Verzeichnisse gelöscht werden konnten */
+	 *          das zu loeschende Verzeichnis
+	 * @return true wenn alle Files und Verzeichnisse geloescht werden konnten */
 	public static boolean deleteDirWithoutOnExit( File dir )
 	{
 		if ( dir.isDirectory() ) {
@@ -233,15 +233,15 @@ public class Util
 
 		File[] files = quelle.listFiles();
 		File newFile = null;
-		// in diesem Objekt wird für jedes File der Zielpfad gespeichert.
+		// in diesem Objekt wird fuer jedes File der Zielpfad gespeichert.
 		// 1. Der alte Zielpfad
 		// 2. Das systemspezifische Pfadtrennungszeichen
 		// 3. Der Name des aktuellen Ordners/der aktuellen Datei
-		ziel.mkdirs(); // erstellt alle benötigten Ordner
+		ziel.mkdirs(); // erstellt alle benoetigten Ordner
 		if ( files != null ) {
 			for ( int i = 0; i < files.length; i++ ) {
-				newFile = new File( ziel.getAbsolutePath() + System.getProperty( "file.separator" )
-						+ files[i].getName() );
+				newFile = new File(
+						ziel.getAbsolutePath() + System.getProperty( "file.separator" ) + files[i].getName() );
 				if ( files[i].isDirectory() ) {
 					copyDir( files[i], newFile );
 				} else {
@@ -272,7 +272,7 @@ public class Util
 
 	/** Kontrolliert ob String existiert in file
 	 * 
-	 * Solche Sachen dürfen nicht in einer Schleife gemacht werden, da diese sehr Zeitintensiv sind!
+	 * Solche Sachen duerfen nicht in einer Schleife gemacht werden, da diese sehr Zeitintensiv sind!
 	 * 
 	 * @return true wenn String im File vorhanden @throws IOException */
 	public static boolean stringInFile( String string, File file ) throws IOException
@@ -295,7 +295,8 @@ public class Util
 
 	/** ersetzt alle Zeichen mit ""
 	 * 
-	 * @throws IOException */
+	 * @throws IOException
+	 */
 	public static void replaceAllChar( File file, String newString ) throws IOException
 	{
 		try {
@@ -309,12 +310,13 @@ public class Util
 		}
 	}
 
-	/** Verändert ersetzt oldstring mit newstring in file
+	/** Veraendert ersetzt oldstring mit newstring in file
 	 * 
-	 * ! Solche Ersetzungen dürfen nicht in einer Schleife gemacht werden sondern erst am Schluss, da
+	 * ! Solche Ersetzungen duerfen nicht in einer Schleife gemacht werden sondern erst am Schluss, da
 	 * diese sehr Zeitintensiv sind !!!
 	 * 
-	 * @throws IOException */
+	 * @throws IOException
+	 */
 	public static void oldnewstring( String oldstring, String newstring, File file )
 			throws IOException
 	{
@@ -338,12 +340,13 @@ public class Util
 		}
 	}
 
-	/** Verändert & mit &amp;
+	/** Veraendert & mit &amp;
 	 * 
-	 * ! Solche Ersetzungen dürfen nicht in einer Schleife gemacht werden sondern erst am Schluss, da
+	 * ! Solche Ersetzungen duerfen nicht in einer Schleife gemacht werden sondern erst am Schluss, da
 	 * diese sehr Zeitintensiv sind !!!
 	 * 
-	 * @throws IOException */
+	 * @throws IOException
+	 */
 	public static void amp( File file ) throws IOException
 	{
 		try {

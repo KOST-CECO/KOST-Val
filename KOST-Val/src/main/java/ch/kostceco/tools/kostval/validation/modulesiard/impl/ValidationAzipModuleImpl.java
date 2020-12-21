@@ -37,7 +37,7 @@ import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationAzipModule;
 
 /** Validierungsschritt A (Lesbarkeit) Kann die SIARD-Datei gelesen werden? valid --> lesbare und
- * nicht passwortgesch�tzte ZIP-Datei oder ZIP64-Datei valid --> unkomprimierte ZIP64-Datei oder
+ * nicht passwortgeschuetzte ZIP-Datei oder ZIP64-Datei valid --> unkomprimierte ZIP64-Datei oder
  * unkomprimierte ZIP-Datei, seit dem Addendum auch Deflate-Komprimierung erlaubt ==> Bei den Module
  * A, B, C und D wird die Validierung abgebrochen, sollte das Resulat invalid sein!
  * 
@@ -107,7 +107,7 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 			char[] charArray2 = new char[] { 'P', 'K', c3, c4 };
 
 			if ( Arrays.equals( charArray1, charArray2 ) ) {
-				// h�chstwahrscheinlich ein ZIP da es mit 504B0304 respektive PK.. beginnt
+				// hoechstwahrscheinlich ein ZIP da es mit 504B0304 respektive PK.. beginnt
 				valid = true;
 			} else {
 				read.close();
@@ -187,14 +187,14 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 				// def: DEFLATED -> validC = true seit Addendum 1 durch ist
 				validC = true;
 			} else if ( Arrays.equals( charArray1, charArray2 ) ) {
-				// h�chstwahrscheinlich ein unkomprimiertes ZIP
+				// hoechstwahrscheinlich ein unkomprimiertes ZIP
 				validC = true;
 			} else {
 				validC = false;
 			}
 
 			if ( validC ) {
-				// Versuche das ZIP file zu �ffnen
+				// Versuche das ZIP file zu oeffnen
 				// Zuerst mit Java.util.zip und dann Zip64_1.0
 				try {
 					Integer compressed = 1000;
@@ -243,7 +243,7 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 						return false;
 					}
 				}
-				// Versuche das ZIP file zu �ffnen
+				// Versuche das ZIP file zu oeffnen
 				Zip64File zfe = null;
 				try {
 					Integer compressed = 0;

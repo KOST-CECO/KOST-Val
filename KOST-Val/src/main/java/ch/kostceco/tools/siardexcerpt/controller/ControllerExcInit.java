@@ -124,8 +124,8 @@ public class ControllerExcInit implements MessageConstants
 
 		// Ist die Anzahl Parameter (mind 4) korrekt?
 		if ( args.length < 4 ) {
-			System.out.println(
-					controllerExcInit.getTextResourceServiceExc().getText( locale, ERROR_PARAMETER_USAGE ) );
+			System.out.println( controllerExcInit.getTextResourceServiceExc().getText( locale,
+					EXC_ERROR_PARAMETER_USAGE ) );
 			return false;
 		}
 
@@ -165,7 +165,7 @@ public class ControllerExcInit implements MessageConstants
 		String javaRuntimeVersion = System.getProperty( "java.vm.version" );
 		if ( javaRuntimeVersion.compareTo( "1.8.0" ) < 0 ) {
 			System.out.println(
-					controllerExcInit.getTextResourceServiceExc().getText( locale, ERROR_WRONG_JRE ) );
+					controllerExcInit.getTextResourceServiceExc().getText( locale, EXC_ERROR_WRONG_JRE ) );
 			return false;
 		}
 
@@ -197,7 +197,7 @@ public class ControllerExcInit implements MessageConstants
 
 		if ( !configFile.exists() ) {
 			System.out.println( controllerExcInit.getTextResourceServiceExc().getText( locale,
-					ERROR_CONFIGFILE_FILENOTEXISTING, configFile.getAbsolutePath() ) );
+					EXC_ERROR_CONFIGFILE_FILENOTEXISTING, configFile.getAbsolutePath() ) );
 			return false;
 		}
 
@@ -209,7 +209,7 @@ public class ControllerExcInit implements MessageConstants
 		}
 		if ( configFileHard.exists() ) {
 			System.out.println( controllerExcInit.getTextResourceServiceExc().getText( locale,
-					ERROR_CONFIGFILEHARD_FILEEXISTING ) );
+					EXC_ERROR_CONFIGFILEHARD_FILEEXISTING ) );
 			return false;
 		}
 		Util.copyFile( configFile, configFileHard );
@@ -227,7 +227,7 @@ public class ControllerExcInit implements MessageConstants
 		// Im Logverzeichnis besteht kein Schreibrecht
 		if ( !directoryOfOutput.canWrite() ) {
 			System.out.println( controllerExcInit.getTextResourceServiceExc().getText( locale,
-					ERROR_LOGDIRECTORY_NOTWRITABLE, directoryOfOutput ) );
+					EXC_ERROR_LOGDIRECTORY_NOTWRITABLE, directoryOfOutput ) );
 			// Loeschen des configFileHard, falls eines angelegt wurde
 			if ( configFileHard.exists() ) {
 				Util.deleteDir( configFileHard );
@@ -237,7 +237,7 @@ public class ControllerExcInit implements MessageConstants
 
 		if ( !directoryOfOutput.isDirectory() ) {
 			System.out.println( controllerExcInit.getTextResourceServiceExc().getText( locale,
-					ERROR_LOGDIRECTORY_NODIRECTORY ) );
+					EXC_ERROR_LOGDIRECTORY_NODIRECTORY ) );
 			// Loeschen des configFileHard, falls eines angelegt wurde
 			if ( configFileHard.exists() ) {
 				Util.deleteDir( configFileHard );
@@ -260,7 +260,7 @@ public class ControllerExcInit implements MessageConstants
 				String[] files = tmpDir.list();
 				if ( files.length > 0 ) {
 					System.out.println( controllerExcInit.getTextResourceServiceExc().getText( locale,
-							ERROR_WORKDIRECTORY_EXISTS, pathToWorkDir ) );
+							EXC_ERROR_WORKDIRECTORY_EXISTS, pathToWorkDir ) );
 					return false;
 				}
 			}
@@ -273,7 +273,7 @@ public class ControllerExcInit implements MessageConstants
 		// Im Workverzeichnis besteht kein Schreibrecht
 		if ( !tmpDir.canWrite() ) {
 			System.out.println( controllerExcInit.getTextResourceServiceExc().getText( locale,
-					ERROR_WORKDIRECTORY_NOTWRITABLE, pathToWorkDir ) );
+					EXC_ERROR_WORKDIRECTORY_NOTWRITABLE, pathToWorkDir ) );
 			// Loeschen des configFileHard, falls eines angelegt wurde
 			if ( configFileHard.exists() ) {
 				Util.deleteDir( configFileHard );
@@ -300,7 +300,7 @@ public class ControllerExcInit implements MessageConstants
 						// Leerschlag ab v0.0.9 OK
 					} else {
 						System.console().printf( controllerExcInit.getTextResourceServiceExc().getText( locale,
-								ERROR_SPECIAL_CHARACTER, name, matcher.group( i ) ) );
+								EXC_ERROR_SPECIAL_CHARACTER, name, matcher.group( i ) ) );
 						Thread.sleep( 5000 );
 						return false;
 					}
@@ -320,7 +320,7 @@ public class ControllerExcInit implements MessageConstants
 						// Leerschlag ab v0.0.9 OK
 					} else {
 						System.console().printf( controllerExcInit.getTextResourceServiceExc().getText( locale,
-								ERROR_SPECIAL_CHARACTER, name, matcher.group( i ) ) );
+								EXC_ERROR_SPECIAL_CHARACTER, name, matcher.group( i ) ) );
 						Thread.sleep( 5000 );
 						return false;
 					}
@@ -340,7 +340,7 @@ public class ControllerExcInit implements MessageConstants
 						// Leerschlag ab v0.0.9 OK
 					} else {
 						System.console().printf( controllerExcInit.getTextResourceServiceExc().getText( locale,
-								ERROR_SPECIAL_CHARACTER, name, matcher.group( i ) ) );
+								EXC_ERROR_SPECIAL_CHARACTER, name, matcher.group( i ) ) );
 						Thread.sleep( 5000 );
 						return false;
 					}
@@ -356,7 +356,7 @@ public class ControllerExcInit implements MessageConstants
 		if ( !siardDatei.exists() ) {
 			// SIARD-Datei existiert nicht
 			System.out.println( controllerExcInit.getTextResourceServiceExc().getText( locale,
-					ERROR_SIARDFILE_FILENOTEXISTING, siardDatei.getAbsolutePath() ) );
+					EXC_ERROR_SIARDFILE_FILENOTEXISTING, siardDatei.getAbsolutePath() ) );
 			// Loeschen des configFileHard, falls eines angelegt wurde
 			if ( configFileHard.exists() ) {
 				Util.deleteDir( configFileHard );
@@ -378,11 +378,11 @@ public class ControllerExcInit implements MessageConstants
 			okA = controllerexcerpt.executeA( siardDatei, siardDateiNew, "", configMap, locale );
 
 			if ( !okA ) {
-				// SIARD Datei konte nicht entpackt werden
-				System.out.println(
-						controllerExcInit.getTextResourceServiceExc().getText( locale, MESSAGE_XML_MODUL_A ) );
+				// System.out.println(" SIARD Datei konnte nicht entpackt werden");
 				System.out.println( controllerExcInit.getTextResourceServiceExc().getText( locale,
-						ERROR_XML_A_CANNOTEXTRACTZIP ) );
+						EXC_MESSAGE_XML_MODUL_A ) );
+				System.out.println( controllerExcInit.getTextResourceServiceExc().getText( locale,
+						EXC_ERROR_XML_A_CANNOTEXTRACTZIP ) );
 
 				// Loeschen des Arbeitsverzeichnisses und configFileHard, falls eines angelegt wurde
 				if ( tmpDir.exists() ) {
@@ -392,10 +392,11 @@ public class ControllerExcInit implements MessageConstants
 					Util.deleteDir( configFileHard );
 				}
 				// Fehler Extraktion --> invalide
-				System.out.println(
-						controllerExcInit.getTextResourceServiceExc().getText( locale, MESSAGE_A_INIT_NOK ) );
+				System.out.println( controllerExcInit.getTextResourceServiceExc().getText( locale,
+						EXC_MESSAGE_A_INIT_NOK ) );
 				return false;
 			} else {
+				// System.out.println(" SIARD Datei konnte entpackt werden "+siardDatei.getAbsolutePath());
 				@SuppressWarnings("unused")
 				File siardDateiOld = siardDatei;
 				siardDatei = siardDateiNew;
@@ -420,8 +421,8 @@ public class ControllerExcInit implements MessageConstants
 				+ File.separator + "metadata.xml" );
 
 		if ( !header.exists() || !xsd.exists() || !metadata.exists() ) {
-			System.out.println(
-					controllerExcInit.getTextResourceServiceExc().getText( locale, ERROR_XML_B_STRUCTURE ) );
+			System.out.println( controllerExcInit.getTextResourceServiceExc().getText( locale,
+					EXC_ERROR_XML_B_STRUCTURE ) );
 			// Loeschen des Arbeitsverzeichnisses und configFileHard, falls eines angelegt wurde
 			if ( tmpDir.exists() ) {
 				Util.deleteDir( tmpDir );
@@ -431,7 +432,7 @@ public class ControllerExcInit implements MessageConstants
 			}
 			// Fehler Extraktion --> invalide
 			System.out.println(
-					controllerExcInit.getTextResourceServiceExc().getText( locale, MESSAGE_A_INIT_NOK ) );
+					controllerExcInit.getTextResourceServiceExc().getText( locale, EXC_MESSAGE_A_INIT_NOK ) );
 			return false;
 		} else {
 			// Struktur sieht plausibel aus
@@ -453,13 +454,13 @@ public class ControllerExcInit implements MessageConstants
 				}
 				// Fehler beim Ausfuellen der Config --> invalide
 				System.out.println( controllerExcInit.getTextResourceServiceExc().getText( locale,
-						MESSAGE_A_INIT_NOK_CONFIG ) );
+						EXC_MESSAGE_A_INIT_NOK_CONFIG ) );
 				return false;
 			}
 		}
 		// Initialisierung konnte durchgefuehrt werden
 		System.out.println(
-				controllerExcInit.getTextResourceServiceExc().getText( locale, MESSAGE_A_INIT_OK ) );
+				controllerExcInit.getTextResourceServiceExc().getText( locale, EXC_MESSAGE_A_INIT_OK ) );
 		init = true;
 
 		return init;

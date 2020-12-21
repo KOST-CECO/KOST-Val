@@ -16,13 +16,21 @@
 package ch.kostceco.tools.siardexcerpt;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -55,11 +63,11 @@ import javafx.print.Printer;
 import javafx.print.PrinterJob;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TextInputDialog;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.DirectoryChooser;
@@ -100,13 +108,17 @@ public class ExcGuiController
 	private WebEngine					engine;
 
 	private File							outputFile, outputFileXsl, siardFile,
-			outputFolder = new File( System.getenv( "USERPROFILE" ) + File.separator + ".siardexcerpt"
-					+ File.separator + "Output" ),
-			configFile = new File( System.getenv( "USERPROFILE" ) + File.separator + ".siardexcerpt"
-					+ File.separator + "configuration" + File.separator + "SIARDexcerpt.conf.xml" );
+			siardexcerptFolder = new File(
+					System.getenv( "USERPROFILE" ) + File.separator + ".siardexcerpt" ),
+			outputFolder = new File( siardexcerptFolder.getAbsolutePath() + File.separator + "Output" ),
+			configFile = new File( siardexcerptFolder.getAbsolutePath() + File.separator + "configuration"
+					+ File.separator + "SIARDexcerpt.conf.xml" ),
+			tempFile = new File(
+					siardexcerptFolder.getAbsolutePath() + File.separator + "temp_SIARDexcerpt" );
 
-	private String						arg0, arg1, arg2, arg3 = "--init", arg4 = "*", dirOfJarPath;
-	private String						versionSiardExcerpt	= "0.9.1";
+	private String						arg0, arg1, arg2, arg3 = "--init", arg4 = "*", dirOfJarPath,
+			initInstructionsDe, initInstructionsFr, initInstructionsEn;
+	private String						versionSiardExcerpt	= "1.0.0";
 	/* TODO: version auch hier anpassen:
 	 * 
 	 * 2) messages_xx.properties (de, fr, en)
@@ -229,29 +241,13 @@ public class ExcGuiController
 
 		engine = wbv.getEngine();
 
-		/* Bild mit einer Kurzanleitung zum GUI anzeigen
-		 * 
-		 * in Tabelle damit links */
-		String pathImage = "file:/" + dirOfJarPath + File.separator + "doc" + File.separator
-				+ "hilfe.jpg";
-		if ( locale.toString().startsWith( "fr" ) ) {
-			pathImage = "file:/" + dirOfJarPath + File.separator + "doc" + File.separator + "aide.jpg";
-		} else if ( locale.toString().startsWith( "en" ) ) {
-			pathImage = "file:/" + dirOfJarPath + File.separator + "doc" + File.separator + "help.jpg";
-		}
-		pathImage = pathImage.replace( "\\\\", "/" );
-		pathImage = pathImage.replace( "\\", "/" );
-		String helpImg = "<table  width=\"100%\"><tr><td><img  src='" + pathImage
-				+ "'></td></tr></table>";
-		String textImg = "<html><body>" + helpImg + "</body></html>";
-		engine.loadContent( textImg );
-
 		// Inaktiv vor Initialisierung
 		searchExcerptString.setDisable( true );
 		buttonSearchExcerpt.setDisable( true );
 		buttonInit.setDisable( true );
-		buttonFinish.setDisable( true );
+		buttonFinish.setDisable( false );
 		searchExcerptChoice.setDisable( true );
+		configChoice.setDisable( true );
 
 		// Speichern und drucken des Log erst bei anzeige des log moeglich
 		buttonPrint.setDisable( true );
@@ -261,28 +257,45 @@ public class ExcGuiController
 		configChoice.getItems().addAll( ConfigTypeList );
 		searchExcerptChoice.getItems().addAll( SearchExcerptList );
 
-		String help1, help2, help3, help4, help5;
+		/* Kurzanleitung zum GUI anzeigen */
+		String help1, help2, help3, help4, help4a, help4b, help4c, help5;
+		help1 = " <h2>Brèves instructions</h2> ";
+		help2 = "<hr>";
+		help3 = "<h4>1) Sélectionnez le fichier SIARD</h4>";
+		help4 = "<h4>2) Définir la configuration</h4>";
+		help4a = "<h4><BLOCKQUOTE>- pas de défaut (..) ne fonctionne qu'avec les petits fichiers SIARD</BLOCKQUOTE></h4>";
+		help4b = "<h4><BLOCKQUOTE>- sélectionnez le nom de la table principale existante</BLOCKQUOTE></h4>";
+		help4c = "<h4><BLOCKQUOTE>- sélectionnez le fichier de configuration existant</BLOCKQUOTE></h4>";
+		help5 = "<h4>3) Démarrer l'initialisation</h4>";
+		initInstructionsFr = "<html>" + help1 + help2 + help3 + help4 + help4a + help4b + help4c + help5
+				+ "<br/></html>";
+		help1 = "<h2>Brief instructions</h2>";
+		help3 = "<h4>1) Select SIARD file</h4>";
+		help4 = "<h4>2) Set configuration</h4>";
+		help4a = "<h4><BLOCKQUOTE>- no default (..) works only with smaller SIARD files</BLOCKQUOTE></h4>";
+		help4b = "<h4><BLOCKQUOTE>- select existing main table name</BLOCKQUOTE></h4>";
+		help4c = "<h4><BLOCKQUOTE>- select existing config file</BLOCKQUOTE></h4>";
+		help5 = "<h4>3) Start initialisation</h4>";
+		initInstructionsEn = "<html>" + help1 + help2 + help3 + help4 + help4a + help4b + help4c + help5
+				+ "<br/></html>";
+		help1 = "<h2>Kurzanleitung</h2>";
+		help3 = "<h4>1) SIARD-Datei auswählen</h4>";
+		help4 = "<h4>2) Konfiguration festlegen</h4>";
+		help4a = "<h4><BLOCKQUOTE>- keine Vorgabe (..) funktioniert nur bei kleineren SIARD-Dateien</BLOCKQUOTE></h4>";
+		help4b = "<h4><BLOCKQUOTE>- existierende Haupttabellename auswählen</BLOCKQUOTE></h4>";
+		help4c = "<h4><BLOCKQUOTE>- bestehende Konfigurationsdatei auswählen</BLOCKQUOTE></h4>";
+		help5 = "<h4>3) Initialisierung starten</h4>";
+		initInstructionsDe = "<html>" + help1 + help2 + help3 + help4 + help4a + help4b + help4c + help5
+				+ "<br/></html>";
+		String initInstructions = initInstructionsDe;
 		if ( locale.toString().startsWith( "fr" ) ) {
-			help1 = " <h2>Brèves instructions</h2> ";
-			help2 = "<hr>";
-			help3 = "<h4>1) Sélectionnez le fichier SIARD</h4>";
-			help4 = "<h4>2) Définir la configuration</h4>";
-			help5 = "<h4>3) Démarrer l'initialisation</h4>";
+			initInstructions = initInstructionsFr;
 		} else if ( locale.toString().startsWith( "en" ) ) {
-			help1 = "<h2>Brief instructions</h2>";
-			help2 = "<hr>";
-			help3 = "<h4>1) Select SIARD file</h4>";
-			help4 = "<h4>2) Set configuration</h4>";
-			help5 = "<h4>3) Start initialisation</h4>";
+			initInstructions = initInstructionsEn;
 		} else {
-			help1 = "<h2>Kurzanleitung</h2>";
-			help2 = "<hr>";
-			help3 = "<h4>1) SIARD-Datei auswählen</h4>";
-			help4 = "<h4>2) Konfiguration festlegen</h4>";
-			help5 = "<h4>3) Initialisierung starten</h4>";
+			initInstructions = initInstructionsDe;
 		}
-		String text = "<html>" + help1 + help2 + help3 + help4 + help5 + "<br/></html>";
-		engine.loadContent( text );
+		engine.loadContent( initInstructions );
 
 		context.close();
 
@@ -324,28 +337,15 @@ public class ExcGuiController
 		/* Kurzanleitung 1. Datei oder Ordner zur Validierung angeben / auswählen 2. ggf. Konfiguration
 		 * und LogType anpassen 3. Validierung starten */
 		try {
-			String help1, help2, help3, help4, help5;
+			String initInstructions = initInstructionsDe;
 			if ( locale.toString().startsWith( "fr" ) ) {
-				help1 = " <h2>Brèves instructions</h2> ";
-				help2 = "<hr>";
-				help3 = "<h4>1) Sélectionnez le fichier SIARD</h4>";
-				help4 = "<h4>2) Définir la configuration</h4>";
-				help5 = "<h4>3) Démarrer l'initialisation</h4>";
+				initInstructions = initInstructionsFr;
 			} else if ( locale.toString().startsWith( "en" ) ) {
-				help1 = "<h2>Brief instructions</h2>";
-				help2 = "<hr>";
-				help3 = "<h4>1) Select SIARD file</h4>";
-				help4 = "<h4>2) Set configuration</h4>";
-				help5 = "<h4>3) Start initialisation</h4>";
+				initInstructions = initInstructionsEn;
 			} else {
-				help1 = "<h2>Kurzanleitung</h2>";
-				help2 = "<hr>";
-				help3 = "<h4>1) SIARD-Datei auswählen</h4>";
-				help4 = "<h4>2) Konfiguration festlegen</h4>";
-				help5 = "<h4>3) Initialisierung starten</h4>";
+				initInstructions = initInstructionsDe;
 			}
-			String text = "<html>" + help1 + help2 + help3 + help4 + help5 + "<br/></html>";
-			engine.loadContent( text );
+			engine.loadContent( initInstructions );
 
 			// Handbuch in externem Viewer oeffnen dann kann parallel gearbeitet werden
 			String docPath = dirOfJarPath + File.separator + "doc" + File.separator
@@ -490,6 +490,20 @@ public class ExcGuiController
 		console.setText( " \n" );
 		// bestehende SIARD-Datei auswaehlen
 		FileChooser fileChooser = new FileChooser();
+		if ( !labelFileSiard.getText().isEmpty() ) {
+			// setInitialDirectory mit vorgaeniger Auswahl (Ordner)
+			File dirFileFolder = new File( labelFileSiard.getText() );
+			if ( dirFileFolder.isFile() ) {
+				dirFileFolder = dirFileFolder.getParentFile();
+			}
+			if ( !dirFileFolder.exists() ) {
+				dirFileFolder = dirFileFolder.getParentFile();
+			}
+			if ( !dirFileFolder.exists() ) {
+				dirFileFolder = dirFileFolder.getParentFile();
+			}
+			fileChooser.setInitialDirectory( dirFileFolder );
+		}
 		// Set extension filter
 		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(
 				"SIARD files (*.siard)", "*.siard" );
@@ -503,6 +517,7 @@ public class ExcGuiController
 		siardFile = fileChooser.showOpenDialog( new Stage() );
 		arg0 = siardFile.getAbsolutePath();
 		labelFileSiard.setText( arg0 );
+		configChoice.setDisable( false );
 	}
 
 	/* Wenn buttonInit betaetigt wird, wird die excInit gestartet mit allen Parametern. */
@@ -546,22 +561,46 @@ public class ExcGuiController
 				// <Label "mainFolderName" ausgeben
 				Boolean initMain = true;
 				try {
-					Document doc = null;
-					BufferedInputStream bis;
-					bis = new BufferedInputStream( new FileInputStream( configFile ) );
-					DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-					DocumentBuilder db = dbf.newDocumentBuilder();
-					doc = db.parse( bis );
-					doc.normalize();
-					String mfolder = doc.getElementsByTagName( "mfolder" ).item( 0 ).getTextContent();
-					String mschemaname = doc.getElementsByTagName( "mschemaname" ).item( 0 ).getTextContent();
-					if ( mfolder.isEmpty() || mschemaname.isEmpty() ) {
-						initMain = false;
+					if ( initMain ) {
+						// Zusätzliche Kontrolle config, temp, mtable
+						File tempSiardFolder = new File(
+								tempFile.getAbsolutePath() + File.separator + siardFile.getName() );
+						if ( !configFile.exists() ) {
+							initMain = false;
+						} else if ( !tempSiardFolder.exists() ) {
+							initMain = false;
+						} else {
+							Document doc = null;
+							BufferedInputStream bis;
+							bis = new BufferedInputStream( new FileInputStream( configFile ) );
+							DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+							DocumentBuilder db = dbf.newDocumentBuilder();
+							doc = db.parse( bis );
+							doc.normalize();
+							String mfolder = doc.getElementsByTagName( "mfolder" ).item( 0 ).getTextContent();
+							String mschemafolder = doc.getElementsByTagName( "mschemafolder" ).item( 0 )
+									.getTextContent();
+							String mname = doc.getElementsByTagName( "mname" ).item( 0 ).getTextContent();
+							String mschemaname = doc.getElementsByTagName( "mschemaname" ).item( 0 )
+									.getTextContent();
+							if ( mfolder.isEmpty() || mschemaname.isEmpty() ) {
+								initMain = false;
+							}
+							// mschemaname/mname (mschemafolder/mfolder)
+							mainFolderName.setText(
+									mschemaname + "/" + mname + " (" + mschemafolder + "/" + mfolder + ")" );
+							if ( mainFolderName.getText().equals( "/ (/)" ) ) {
+								initMain = false;
+							} else if ( mainFolderName.getText().contains( "(..)" ) ) {
+								initMain = false;
+							}
+
+							bis.close();
+						}
 					}
-					mainFolderName.setText( mschemaname + "/" + mfolder );
-					bis.close();
 				} catch ( ParserConfigurationException | SAXException | IOException e ) {
 					e.printStackTrace();
+					initMain = false;
 				}
 
 				if ( initMain ) {
@@ -686,9 +725,13 @@ public class ExcGuiController
 	{
 		console.setText( " \n" );
 		String text = "<html><h2>Suche/Extraktion wird durchgeführt. <br/><br/>Bitte warten ...</h2></html>";
+		String newarg4=arg4;
+		if (arg4.contains( "*" )) {
+			newarg4 = arg4.replace( "*", "_" );
+		}
 		if ( arg3.equals( "--search" ) ) {
 			outputFile = new File(
-					outputFolder + File.separator + siardFile.getName() + "_" + arg4 + "_SIARDsearch.xml" );
+					outputFolder + File.separator + siardFile.getName() + "_" + newarg4 + "_SIARDsearch.xml" );
 			if ( locale.toString().startsWith( "fr" ) ) {
 				text = "<html><h2>La recherche est lancée. <br/><br/>Veuillez patienter ...</h2></html>";
 			} else if ( locale.toString().startsWith( "en" ) ) {
@@ -698,7 +741,7 @@ public class ExcGuiController
 			}
 		} else {
 			outputFile = new File(
-					outputFolder + File.separator + siardFile.getName() + "_" + arg4 + "_SIARDexcerpt.xml" );
+					outputFolder + File.separator + siardFile.getName() + "_" + newarg4 + "_SIARDexcerpt.xml" );
 			if ( locale.toString().startsWith( "fr" ) ) {
 				text = "<html><h2>L'extraction est lancée. <br/><br/>Veuillez patienter ...</h2></html>";
 			} else if ( locale.toString().startsWith( "en" ) ) {
@@ -875,22 +918,8 @@ public class ExcGuiController
 				buttonPrint.setDisable( true );
 				buttonSave.setDisable( true );
 
-				// <Label "mainFolderName" ausgeben
-				try {
-					Document doc = null;
-					BufferedInputStream bis;
-					bis = new BufferedInputStream( new FileInputStream( configFile ) );
-					DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-					DocumentBuilder db = dbf.newDocumentBuilder();
-					doc = db.parse( bis );
-					doc.normalize();
-					String mfolder = doc.getElementsByTagName( "mfolder" ).item( 0 ).getTextContent();
-					String mschemaname = doc.getElementsByTagName( "mschemaname" ).item( 0 ).getTextContent();
-					mainFolderName.setText( mschemaname + "/" + mfolder );
-					bis.close();
-				} catch ( ParserConfigurationException | SAXException | IOException e ) {
-					e.printStackTrace();
-				}
+				// <Label "mainFolderName" leeren
+				mainFolderName.setText( "" );
 
 				// kein Output bei der Initialisierung welcher angezeigt werden kann
 				String text = "<html><h2>Initialisierung wurde zurückgesetzt. </h2></html>";
@@ -900,28 +929,29 @@ public class ExcGuiController
 					text = "<html><h2>Initialisation is reset.</h2></html>";
 				}
 				scroll.setVvalue( 1.0 ); // 1.0 = letzte Zeile der Konsole
-				String help1, help2, help3, help4, help5;
+				String initInstructions = initInstructionsDe;
 				if ( locale.toString().startsWith( "fr" ) ) {
-					help1 = " <h2>Brèves instructions</h2> ";
-					help2 = "<hr>";
-					help3 = "<h4>1) Sélectionnez le fichier SIARD</h4>";
-					help4 = "<h4>2) Définir la configuration</h4>";
-					help5 = "<h4>3) Démarrer l'initialisation</h4>";
+					initInstructions = initInstructionsFr;
 				} else if ( locale.toString().startsWith( "en" ) ) {
-					help1 = "<h2>Brief instructions</h2>";
-					help2 = "<hr>";
-					help3 = "<h4>1) Select SIARD file</h4>";
-					help4 = "<h4>2) Set configuration</h4>";
-					help5 = "<h4>3) Start initialisation</h4>";
+					initInstructions = initInstructionsEn;
 				} else {
-					help1 = "<h2>Kurzanleitung</h2>";
-					help2 = "<hr>";
-					help3 = "<h4>1) SIARD-Datei auswählen</h4>";
-					help4 = "<h4>2) Konfiguration festlegen</h4>";
-					help5 = "<h4>3) Initialisierung starten</h4>";
+					initInstructions = initInstructionsDe;
 				}
-				String textHelp = help1 + help2 + help3 + help4 + help5;
-				engine.loadContent( "<html><h2>" + text + "</h2>" + textHelp + "</html>" );
+				String textHelp = initInstructions;
+				engine.loadContent( "<html><h2>" + text + "</h2></html>" + textHelp );
+				arg1 = "(..)";
+				configResult.setText( "" );
+				mainFolderName.setText( "" );
+				if ( locale.toString().startsWith( "fr" ) ) {
+					ConfigTypeList = FXCollections.observableArrayList( "pas de défaut (..)",
+							"nom de la table principale", "configuration existante" );
+				} else if ( locale.toString().startsWith( "en" ) ) {
+					ConfigTypeList = FXCollections.observableArrayList( "no defaults (..)",
+							"Name of the main table", "existing configuration" );
+				} else {
+					ConfigTypeList = FXCollections.observableArrayList( "keine Vorgaben (..)",
+							"Name der Haupttabelle", "bestehende Konfiguration" );
+				}
 			}
 		} );
 		finish.setOnFailed( new EventHandler<WorkerStateEvent>() {
@@ -942,6 +972,20 @@ public class ExcGuiController
 				}
 				scroll.setVvalue( 1.0 ); // 1.0 = letzte Zeile der Konsole
 				engine.loadContent( "<html><h2>" + text + textArgs + "</h2></html>" );
+				arg1 = "(..)";
+				configResult.setText( "" );
+				mainFolderName.setText( "" );
+				configChoice.valueProperty().set( null );
+				if ( locale.toString().startsWith( "fr" ) ) {
+					ConfigTypeList = FXCollections.observableArrayList( "pas de défaut (..)",
+							"nom de la table principale", "configuration existante" );
+				} else if ( locale.toString().startsWith( "en" ) ) {
+					ConfigTypeList = FXCollections.observableArrayList( "no defaults (..)",
+							"Name of the main table", "existing configuration" );
+				} else {
+					ConfigTypeList = FXCollections.observableArrayList( "keine Vorgaben (..)",
+							"Name der Haupttabelle", "bestehende Konfiguration" );
+				}
 			}
 		} );
 		new Thread( finish ).start();
@@ -1026,6 +1070,7 @@ public class ExcGuiController
 	void changeConfigType( ActionEvent event )
 	{
 		console.setText( " \n" );
+
 		String selConfigChoice = configChoice.getValue();
 		if ( selConfigChoice.contains( "(..)" ) ) {
 			// keine Vorgaben (..)
@@ -1055,30 +1100,70 @@ public class ExcGuiController
 			File configFile = fileChooser.showOpenDialog( new Stage() );
 			arg1 = configFile.getAbsolutePath();
 		} else {
+			List<String> list = new ArrayList<String>();
+			try {
+				ZipFile zipFile = new ZipFile( arg0 );
+				Enumeration<? extends ZipEntry> entries = zipFile.entries();
+				while ( entries.hasMoreElements() ) {
+					String result = "";
+					ZipEntry entry = entries.nextElement();
+					String name = entry.getName();
+					if ( name.contains( "metadata.xml" ) ) {
+						InputStream in = zipFile.getInputStream( entry );
+						BufferedReader reader = new BufferedReader( new InputStreamReader( in ) );
+						String line;
+						boolean table = false;
+						while ( (line = reader.readLine()) != null ) {
+							// <table>
+							// <name>Journal</name>
+							if ( table ) {
+								result = line.substring( line.indexOf( "<name>" ) + "</name>".length() - 1,
+										line.length() );
+								// zuvieles loeschen
+								result = result.substring( 0, result.indexOf( "</name>" ) );
+								list.add( result );
+							}
+							if ( line.contains( "<table>" ) ) {
+								table = true;
+							} else {
+								table = false;
+							}
+						}
+					}
+				}
+				zipFile.close();
+			} catch ( IOException e ) {
+				e.printStackTrace();
+			}
+
 			// Name der Haupttabelle
-			TextInputDialog dialog = new TextInputDialog();
+			String[] tablenames = list.toArray( new String[0] );
+
+			// create a choice dialog mit allen moeglichen Tabellennamen
+			ChoiceDialog<String> dialogC = new ChoiceDialog<String>( tablenames[0], tablenames );
+
 			// Set title & header text
 			if ( locale.toString().startsWith( "fr" ) ) {
-				dialog.setTitle( "Nom de la table principale" );
-				dialog.setHeaderText( "Quel est le nom de la table principale" );
+				dialogC.setTitle( "Nom de la table principale" );
+				dialogC.setHeaderText( "Quel est le nom de la table principale?" );
 			} else if ( locale.toString().startsWith( "en" ) ) {
-				dialog.setTitle( "Name of the main table" );
-				dialog.setHeaderText( "What is the name of the main table" );
+				dialogC.setTitle( "Name of the main table" );
+				dialogC.setHeaderText( "What is the name of the main table?" );
 			} else {
-				dialog.setTitle( "Name der Haupttabelle" );
-				dialog.setHeaderText( "Wie lautet der Name der Haupttabelle" );
+				dialogC.setTitle( "Name der Haupttabelle" );
+				dialogC.setHeaderText( "Wie lautet der Name der Haupttabelle?" );
 			}
 
 			// Show the dialog and capture the result.
-			Optional<String> result = dialog.showAndWait();
+			Optional<String> resultC = dialogC.showAndWait();
 
 			// If the "Okay" button was clicked, the result will contain our String in the get() method
-			if ( result.isPresent() ) {
-				arg1 = result.get();
+			if ( resultC.isPresent() ) {
+				arg1 = resultC.get();
 			} else {
 				arg1 = "(..)";
 			}
-			// mainFolderName.setText( arg1 );
+			console.setText( " \n" );
 		}
 		configResult.setText( arg1 );
 		// Initialisierung moeglich; Button aktivieren
