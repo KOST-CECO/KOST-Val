@@ -146,6 +146,12 @@
 		<property name="messageService" ref="messageService" />
 	</bean>
 
+	<bean id="validationAvalidationPngModule"
+		class="ch.kostceco.tools.kostval.validation.modulepng.impl.ValidationAvalidationPngModuleImpl">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="messageService" ref="messageService" />
+	</bean>
+
 	<bean id="validation1bFolderStructureModule"
 		class="ch.kostceco.tools.kostval.validation.modulesip1.impl.Validation1bFolderStructureModuleImpl">
 		<property name="textResourceService" ref="textResourceService" />
@@ -288,6 +294,11 @@
 		<property name="validationAvalidationJpegModule" ref="validationAvalidationJpegModule" />
 	</bean>
 
+	<bean id="controllerpng" class="ch.kostceco.tools.kostval.controller.Controllerpng">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="validationAvalidationPngModule" ref="validationAvalidationPngModule" />
+	</bean>
+
 	<bean id="controllersip" class="ch.kostceco.tools.kostval.controller.Controllersip">
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="validation1bFolderStructureModule" ref="validation1bFolderStructureModule" />
@@ -303,6 +314,7 @@
 		<property name="validation3cFormatValidationModule" ref="validation3cFormatValidationModule" />
 		<property name="validation3dPeriodModule" ref="validation3dPeriodModule" />
 	</bean>
+
 
 	<!-- SIARDexcerpt -->
 	<!-- Common Services -->
@@ -322,9 +334,7 @@
 
 
 	<!-- Validation Services -->
-
-
-
+	
 	<bean id="excerptAZipModule"
 		class="ch.kostceco.tools.siardexcerpt.excerption.moduleexcerpt.impl.ExcerptAZipModuleImpl">
 		<property name="textResourceServiceExc" ref="textResourceServiceExc" />

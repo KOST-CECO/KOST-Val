@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="ISO-8859-1"?><?xml-stylesheet type="text/xsl" href="kostval-conf-DE.xsl"?>
-<configuration><!-- kostval.conf.xml_v2.0.2 -->
+<configuration><!-- kostval.conf.xml_v2.0.3 -->
 	<jpeg>
 		<jpegvalidation>yes</jpegvalidation><!--no verwenden wenn jpeg nicht validiert werden soll, ansonsten yes -->
 	</jpeg>
 	<jp2>
 		<jp2validation>yes</jp2validation><!--no verwenden wenn jp2 nicht validiert werden soll, ansonsten yes -->
 	</jp2>
+	<png>
+		<pngvalidation>yes</pngvalidation><!--no verwenden wenn png nicht validiert werden soll, ansonsten yes -->
+	</png>
 	<siard>
 		<siardvalidation>yes</siardvalidation><!--no verwenden wenn siard nicht validiert werden soll, ansonsten yes -->
 		<siard10>1.0</siard10><!--1.0 / / no -->
@@ -73,7 +76,7 @@
 		<ech0160validation>yes</ech0160validation><!--no verwenden wenn eCH-0160 nicht validiert werden soll, ansonsten yes -->
 		<allowedlengthofpaths>179</allowedlengthofpaths>
 		<allowedsipname>SIP_[1-2][0-9]{3}[0-1][0-9][0-3][0-9]_\w{3}</allowedsipname>
-		<allowedformats>TXT PDFA1 PDFA2 TIFF JP2 JPEG WAVE MP3 MP4 MJ2 MPEG2 CSV SIARD WARC</allowedformats>
+		<allowedformats>TXT PDFA1 PDFA2 TIFF JP2 JPEG PNG WAVE FLAC MP3 MP4 MJ2 MPEG2 CSV SIARD WARC</allowedformats>
 		<!-- <allowedformats>SVG MPEG2 PRORES XML XSD XLS ARC HTML</allowedformats> -->
 	</sip>
 	<pathtoworkdir></pathtoworkdir><!--wenn leer wird "USERPROFILE/.kost-val_2x/temp_KOST-Val" verwendet -->

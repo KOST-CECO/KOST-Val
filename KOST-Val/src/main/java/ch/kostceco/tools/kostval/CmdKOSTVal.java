@@ -1,8 +1,8 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
- * Information Package (SIP). Copyright (C) 2012-2020 Claire Roethlisberger (KOST-CECO), Christian
- * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
- * Daniel Ludin (BEDAG AG)
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
+ * Submission Information Package (SIP). Copyright (C) 2012-2021 Claire Roethlisberger (KOST-CECO),
+ * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
+ * (coderslagoon), Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
  * KOST-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. This application
  * is free software: you can redistribute it and/or modify it under the terms of the GNU General
@@ -96,7 +96,7 @@ public class CmdKOSTVal implements MessageConstants
 		String arg2 = "";
 		String arg3 = "";
 
-		String versionKostVal = "2.0.2";
+		String versionKostVal = "2.0.3";
 
 		// Standardwerte bei fehlenden Parameter eingeben
 		if ( args.length == 2 ) {

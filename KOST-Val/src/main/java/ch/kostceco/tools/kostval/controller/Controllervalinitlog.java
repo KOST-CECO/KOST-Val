@@ -1,8 +1,8 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
- * Information Package (SIP). Copyright (C) 2012-2020 Claire Roethlisberger (KOST-CECO), Christian
- * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
- * Daniel Ludin (BEDAG AG)
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
+ * Submission Information Package (SIP). Copyright (C) 2012-2021 Claire Roethlisberger (KOST-CECO),
+ * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
+ * (coderslagoon), Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
  * KOST-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. This application
  * is free software: you can redistribute it and/or modify it under the terms of the GNU General
@@ -75,6 +75,7 @@ public class Controllervalinitlog implements MessageConstants
 		String tiffValidation = configMap.get( "tiffValidation" );
 		String jp2Validation = configMap.get( "jp2Validation" );
 		String jpegValidation = configMap.get( "jpegValidation" );
+		String pngValidation = configMap.get( "pngValidation" );
 
 		String version = "";
 
@@ -94,6 +95,9 @@ public class Controllervalinitlog implements MessageConstants
 			if ( jpegValidation.equals( "yes" ) ) {
 				formatValOn = formatValOn + ", JPEG";
 			}
+			if ( pngValidation.equals( "yes" ) ) {
+				formatValOn = formatValOn + ", PNG";
+			}
 		} else if ( tiffValidation.equals( "yes" ) ) {
 			formatValOn = "TIFF";
 			if ( jp2Validation.equals( "yes" ) ) {
@@ -105,6 +109,9 @@ public class Controllervalinitlog implements MessageConstants
 			if ( jpegValidation.equals( "yes" ) ) {
 				formatValOn = formatValOn + ", JPEG";
 			}
+			if ( pngValidation.equals( "yes" ) ) {
+				formatValOn = formatValOn + ", PNG";
+			}
 		} else if ( jp2Validation.equals( "yes" ) ) {
 			formatValOn = "JP2";
 			if ( siardValidation.equals( "yes" ) ) {
@@ -113,13 +120,24 @@ public class Controllervalinitlog implements MessageConstants
 			if ( jpegValidation.equals( "yes" ) ) {
 				formatValOn = formatValOn + ", JPEG";
 			}
+			if ( pngValidation.equals( "yes" ) ) {
+				formatValOn = formatValOn + ", PNG";
+			}
 		} else if ( siardValidation.equals( "yes" ) ) {
 			formatValOn = "SIARD";
 			if ( jpegValidation.equals( "yes" ) ) {
 				formatValOn = formatValOn + ", JPEG";
 			}
+			if ( pngValidation.equals( "yes" ) ) {
+				formatValOn = formatValOn + ", PNG";
+			}
 		} else if ( jpegValidation.equals( "yes" ) ) {
 			formatValOn = "JPEG";
+			if ( pngValidation.equals( "yes" ) ) {
+				formatValOn = formatValOn + ", PNG";
+			}
+		} else if ( pngValidation.equals( "yes" ) ) {
+			formatValOn = "PNG";
 		}
 
 		LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_HEADER ) );

@@ -1,0 +1,28 @@
+
+                               WARNING
+
+  I have compiled these binaries using the mingw32 cross-compiler on Linux,
+  i.e., "blindly"--I no longer have the ability to test Win32 executables,
+  so I have no clue whether they actually work.  (I have no strong reason
+  to believe they _don't_ work other than the fact that they've never been
+  tested; perhaps there are Unix-specific assumptions baked into the source
+  code.  That appears to be true for five printf() statements that use the
+  "%td" format for ptrdiff_t--i.e., pointer differences, i.e., subtraction--
+  which doesn't seem to be supported under Windows.  And color mode may require
+  ANSI.SYS or its modern equivalent to be loaded.)
+
+  Anyway, YOU'RE ON YOUR OWN!  But feel free to let me know if they either work
+  or don't work; I _might_ be able to fix things, as long as I have sufficient
+  information and someone willing to be the guinea pig and, oh yes, spare time
+  and interest in and general awareness of your email. ;-)
+
+
+See the main README file for basic instructions on compiling and running the
+programs.  See http://www.libpng.org/pub/png/apps/pngcheck.html for further
+information and for links to the source code.  Makefile.mingw32 and
+Makefile.mingw64 (new since the 2.3.0 and 3.0.2 releases, respectively) are
+included for reference.
+
+Greg Roelofs
+31 January 2021
+http://gregroelofs.com/greg_contact.html

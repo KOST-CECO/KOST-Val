@@ -1,8 +1,8 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
- * Information Package (SIP). Copyright (C) 2012-2020 Claire Roethlisberger (KOST-CECO), Christian
- * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
- * Daniel Ludin (BEDAG AG)
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
+ * Submission Information Package (SIP). Copyright (C) 2012-2021 Claire Roethlisberger (KOST-CECO),
+ * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
+ * (coderslagoon), Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
  * KOST-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. This application
  * is free software: you can redistribute it and/or modify it under the terms of the GNU General
@@ -232,7 +232,7 @@ public class Controllersip implements MessageConstants
 	{
 		boolean valid = true;
 
-		// Validation Step Aa (wurde vor der Formatvalidierung in KOSTVal.jar bereits durchgef�hrt)
+		// Validation Step Aa (wurde vor der Formatvalidierung in KOSTVal.jar bereits durchgefuehrt)
 
 		// Validation Step Ab
 		try {
@@ -240,7 +240,7 @@ public class Controllersip implements MessageConstants
 					configMap, locale ) ) {
 				this.getValidation1bFolderStructureModule().getMessageService().print();
 			} else {
-				// Ein negatives Validierungsresultat in diesem Schritt f�hrt zum Abbruch der weiteren
+				// Ein negatives Validierungsresultat in diesem Schritt fuehrt zum Abbruch der weiteren
 				// Verarbeitung
 				this.getValidation1bFolderStructureModule().getMessageService().print();
 				return false;
@@ -263,7 +263,7 @@ public class Controllersip implements MessageConstants
 				this.getValidation1cNamingModule().getMessageService().print();
 			} else {
 				this.getValidation1cNamingModule().getMessageService().print();
-				// Ein negatives Validierungsresultat in diesem Schritt f�hrt zum Abbruch der weiteren
+				// Ein negatives Validierungsresultat in diesem Schritt fuehrt zum Abbruch der weiteren
 				// Verarbeitung
 				return false;
 			}
@@ -285,7 +285,7 @@ public class Controllersip implements MessageConstants
 				this.getValidation1dMetadataModule().getMessageService().print();
 			} else {
 				this.getValidation1dMetadataModule().getMessageService().print();
-				// Ein negatives Validierungsresultat in diesem Schritt f�hrt zum Abbruch der weiteren
+				// Ein negatives Validierungsresultat in diesem Schritt fuehrt zum Abbruch der weiteren
 				// Verarbeitung
 				return false;
 			}
@@ -368,7 +368,7 @@ public class Controllersip implements MessageConstants
 			return false;
 		}
 
-		// Validation Step Bb (wurde zusammen mit Ba (2a) durchgef�hrt)
+		// Validation Step Bb (wurde zusammen mit Ba (2a) durchgefuehrt)
 
 		// Validation Step Bc
 		try {

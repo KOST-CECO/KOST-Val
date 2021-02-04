@@ -1,8 +1,8 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
- * Information Package (SIP). Copyright (C) 2012-2020 Claire Roethlisberger (KOST-CECO), Christian
- * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
- * Daniel Ludin (BEDAG AG)
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
+ * Submission Information Package (SIP). Copyright (C) 2012-2021 Claire Roethlisberger (KOST-CECO),
+ * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
+ * (coderslagoon), Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
  * KOST-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. This application
  * is free software: you can redistribute it and/or modify it under the terms of the GNU General
@@ -91,6 +91,8 @@ public class Controllervalfolder implements MessageConstants
 		Integer jp2CountNio = 0;
 		Integer jpegCountIo = 0;
 		Integer jpegCountNio = 0;
+		Integer pngCountIo = 0;
+		Integer pngCountNio = 0;
 		String pathToWorkDir = configMap.get( "PathToWorkDir" );
 		File tmpDir = new File( pathToWorkDir );
 		File logFile = new File( directoryOfLogfile.getAbsolutePath() + File.separator
@@ -102,6 +104,7 @@ public class Controllervalfolder implements MessageConstants
 		String tiffValidation = configMap.get( "tiffValidation" );
 		String jp2Validation = configMap.get( "jp2Validation" );
 		String jpegValidation = configMap.get( "jpegValidation" );
+		String pngValidation = configMap.get( "pngValidation" );
 
 		String formatValOn = "";
 		// ermitteln welche Formate validiert werden koennen respektive eingeschaltet sind
@@ -119,6 +122,9 @@ public class Controllervalfolder implements MessageConstants
 			if ( jpegValidation.equals( "yes" ) ) {
 				formatValOn = formatValOn + ", JPEG";
 			}
+			if ( pngValidation.equals( "yes" ) ) {
+				formatValOn = formatValOn + ", PNG";
+			}
 		} else if ( tiffValidation.equals( "yes" ) ) {
 			formatValOn = "TIFF";
 			if ( jp2Validation.equals( "yes" ) ) {
@@ -130,6 +136,9 @@ public class Controllervalfolder implements MessageConstants
 			if ( jpegValidation.equals( "yes" ) ) {
 				formatValOn = formatValOn + ", JPEG";
 			}
+			if ( pngValidation.equals( "yes" ) ) {
+				formatValOn = formatValOn + ", PNG";
+			}
 		} else if ( jp2Validation.equals( "yes" ) ) {
 			formatValOn = "JP2";
 			if ( siardValidation.equals( "yes" ) ) {
@@ -138,13 +147,24 @@ public class Controllervalfolder implements MessageConstants
 			if ( jpegValidation.equals( "yes" ) ) {
 				formatValOn = formatValOn + ", JPEG";
 			}
+			if ( pngValidation.equals( "yes" ) ) {
+				formatValOn = formatValOn + ", PNG";
+			}
 		} else if ( siardValidation.equals( "yes" ) ) {
 			formatValOn = "SIARD";
 			if ( jpegValidation.equals( "yes" ) ) {
 				formatValOn = formatValOn + ", JPEG";
 			}
+			if ( pngValidation.equals( "yes" ) ) {
+				formatValOn = formatValOn + ", PNG";
+			}
 		} else if ( jpegValidation.equals( "yes" ) ) {
 			formatValOn = "JPEG";
+			if ( pngValidation.equals( "yes" ) ) {
+				formatValOn = formatValOn + ", PNG";
+			}
+		} else if ( pngValidation.equals( "yes" ) ) {
+			formatValOn = "PNG";
 		}
 
 		if ( formatValOn.equals( "" ) ) {
@@ -231,6 +251,36 @@ public class Controllervalfolder implements MessageConstants
 							}
 						} else {
 							jpegCountNio = jpegCountNio + 1;
+							// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
+							if ( tmpDir.exists() ) {
+								Util.deleteDir( tmpDir );
+							}
+						}
+					} else if ( ((valDateiExt.equals( ".png" )))
+							&& pngValidation.equals( "yes" ) ) {
+						int countToValidated = numberInFileMap - countProgress;
+						System.out
+								.print( countToValidated + " " + "PNG:  " + valDatei.getAbsolutePath() + " " );
+
+						/* boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
+						 * dirOfJarPath, configMap, context ); */
+						Controllervalfile controller1 = (Controllervalfile) context
+								.getBean( "controllervalfile" );
+						boolean valFile = controller1.valFile( valDatei, logFileName, directoryOfLogfile,
+								verbose, dirOfJarPath, configMap, context, locale );
+
+						// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
+						if ( tmpDir.exists() ) {
+							Util.deleteDir( tmpDir );
+						}
+						if ( valFile ) {
+							pngCountIo = pngCountIo + 1;
+							// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
+							if ( tmpDir.exists() ) {
+								Util.deleteDir( tmpDir );
+							}
+						} else {
+							pngCountNio = pngCountNio + 1;
 							// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
 							if ( tmpDir.exists() ) {
 								Util.deleteDir( tmpDir );
@@ -391,8 +441,8 @@ public class Controllervalfolder implements MessageConstants
 		// logFile bereinigung (& End und ggf 3c)
 		Util.valEnd3cAmp( "", logFile );
 
-		countSummaryNio = pdfaCountNio + siardCountNio + tiffCountNio + jp2CountNio + jpegCountNio;
-		countSummaryIo = pdfaCountIo + siardCountIo + tiffCountIo + jp2CountIo + jpegCountIo;
+		countSummaryNio = pdfaCountNio + siardCountNio + tiffCountNio + jp2CountNio + jpegCountNio + pngCountNio;
+		countSummaryIo = pdfaCountIo + siardCountIo + tiffCountIo + jp2CountIo + jpegCountIo + pngCountIo;
 
 		/* Summary ueber Formatvaliderung herausgeben analog 3c.
 		 * 

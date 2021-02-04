@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-	<xsl:template match="/"><!-- kostval.conf.xml_v2.0.2 -->
+	<xsl:template match="/"><!-- kostval.conf.xml_v2.0.3 -->
 		<html>
 			<head>
 				<style>
@@ -48,6 +48,13 @@
 						<td>Précise si une validation JP2 doit avoir lieu [yes]:</td>
 						<td>
 							<xsl:value-of select="configuration/jp2/jp2validation" />
+						</td>
+					</tr>
+
+					<tr  class="captioninfo">
+						<td>Précise si une validation PNG doit avoir lieu [yes]:</td>
+						<td>
+							<xsl:value-of select="configuration/png/pngvalidation" />
 						</td>
 					</tr>
 
@@ -175,7 +182,7 @@
 						</td>
 					</tr>
 					<tr  class="captioninfom">
-						<td>Liste des formats de fichiers autorisés [TXT, PDFA1, PDFA2, TIFF, JP2, JPEG, WAVE, MP3, MP4, MJ2, CSV, SIARD, WARC]:</td>
+						<td>Liste des formats de fichiers autorisés [TXT, PDFA1, PDFA2, TIFF, JP2, JPEG, PNG, WAVE, MP3, MP4, MJ2, CSV, SIARD, WARC]:</td>
 						<td>
 							<xsl:value-of select="configuration/sip/allowedformats" />
 						</td>

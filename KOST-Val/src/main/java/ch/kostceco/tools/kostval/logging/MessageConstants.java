@@ -1,8 +1,8 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
- * Information Package (SIP). Copyright (C) 2012-2020 Claire Roethlisberger (KOST-CECO), Christian
- * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
- * Daniel Ludin (BEDAG AG)
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
+ * Submission Information Package (SIP). Copyright (C) 2012-2021 Claire Roethlisberger (KOST-CECO),
+ * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
+ * (coderslagoon), Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
  * KOST-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. This application
  * is free software: you can redistribute it and/or modify it under the terms of the GNU General
@@ -65,6 +65,7 @@ public interface MessageConstants
 	String	MESSAGE_FORMATVALIDATION_VL										= "val.message.formatvalidation.vl";
 	String	MESSAGE_JP2VALIDATION													= "val.message.jp2validation";
 	String	MESSAGE_JPEGVALIDATION												= "val.message.jpegvalidation";
+	String	MESSAGE_PNGVALIDATION													= "val.message.pngvalidation";
 	String	MESSAGE_SIPVALIDATION													= "val.message.sipvalidation";
 	String	MESSAGE_XML_VALERGEBNIS												= "val.message.xml.valergebnis";
 	String	MESSAGE_XML_VALTYPE														= "val.message.xml.valtype";
@@ -121,6 +122,13 @@ public interface MessageConstants
 	String	MESSAGE_XML_MODUL_B_JPEG											= "val.message.xml.modul.b.jpeg";
 	String	MESSAGE_XML_MODUL_C_JPEG											= "val.message.xml.modul.c.jpeg";
 	String	MESSAGE_XML_MODUL_D_JPEG											= "val.message.xml.modul.d.jpeg";
+
+	String	MESSAGE_XML_MODUL_A_PNG												= "val.message.xml.modul.a.png";
+	String	MESSAGE_XML_MODUL_B_PNG												= "val.message.xml.modul.b.png";
+	String	MESSAGE_XML_MODUL_C_PNG												= "val.message.xml.modul.c.png";
+	String	MESSAGE_XML_MODUL_D_PNG												= "val.message.xml.modul.d.png";
+	String	MESSAGE_XML_MODUL_E_PNG												= "val.message.xml.modul.e.png";
+	String	MESSAGE_XML_MODUL_F_PNG												= "val.message.xml.modul.f.png";
 
 	String	MESSAGE_XML_MODUL_Aa_SIP											= "val.message.xml.modul.aa.sip";
 	String	MESSAGE_XML_MODUL_Ab_SIP											= "val.message.xml.modul.ab.sip";
@@ -371,6 +379,21 @@ public interface MessageConstants
 	String	ERROR_XML_B_INVALID_ICC												= "val.error.xml.b.invalid.icc";
 
 	String	ERROR_XML_C_TRANSLATE													= "val.error.xml.c.translate";
+
+	// *************PNG-Meldungen*************************************************************************
+	// Modul A Meldungen
+	String	ERROR_XML_A_PNG_INCORRECTFILEENDING						= "val.error.xml.a.png.incorrectfileending";
+	String	ERROR_XML_A_PNG_INCORRECTFILE									= "val.error.xml.a.png.incorrectfile";
+	String	ERROR_XML_A_PNG_ISDIRECTORY										= "val.error.xml.a.png.isdirectory";
+	String	ERROR_XML_A_PNG_SERVICEFAILED									= "val.error.xml.a.png.servicefailed";
+	String	ERROR_XML_A_PNG_PNGCHECK_MISSING							= "val.error.xml.a.png.pngcheck.missing";
+	String	ERROR_XML_A_PNG_PNGCHECK_FAIL									= "val.error.xml.a.png.pngcheck.fail";
+	String	ERROR_XML_A_PNG_NOREPORT											= "val.error.xml.a.png.noreport";
+	String	ERROR_XML_A_PNG_SPECIAL_CHARACTER							= "val.error.xml.a.png.special.character";
+
+	// Modul A-F Meldungen
+	String	ERROR_XML_AF_PNG_ERROR												= "val.error.xml.af.png.error";
+	String	ERROR_XML_AF_PNG_TRANSLATE										= "val.error.xml.af.png.translate";
 
 	// *************SIP-Meldungen*************************************************************************
 	// Modul 1a Meldungen

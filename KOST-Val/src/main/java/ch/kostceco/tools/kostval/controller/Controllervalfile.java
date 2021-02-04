@@ -1,8 +1,8 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
- * Information Package (SIP). Copyright (C) 2012-2020 Claire Roethlisberger (KOST-CECO), Christian
- * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
- * Daniel Ludin (BEDAG AG)
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
+ * Submission Information Package (SIP). Copyright (C) 2012-2021 Claire Roethlisberger (KOST-CECO),
+ * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
+ * (coderslagoon), Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
  * KOST-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. This application
  * is free software: you can redistribute it and/or modify it under the terms of the GNU General
@@ -135,6 +135,33 @@ public class Controllervalfile implements MessageConstants
 			LOGGER.logError(
 					getTextResourceService().getText( locale, MESSAGE_XML_VALFILE, originalValName ) );
 			Controllerjpeg controller1 = (Controllerjpeg) context.getBean( "controllerjpeg" );
+			boolean okMandatory = controller1.executeMandatory( valDatei, directoryOfLogfile, configMap,
+					locale );
+			valFile = okMandatory;
+
+			if ( okMandatory ) {
+				// Validierte Datei valide
+				LOGGER
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_VALID ) );
+				LOGGER
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) );
+				System.out.println( " = Valid" );
+			} else {
+				// Fehler in Validierte Datei --> invalide
+				LOGGER.logError(
+						getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_INVALID ) );
+				LOGGER
+						.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) );
+				System.out.println( " = Invalid" );
+			}
+
+		} else if ( (valDateiExt.equals( ".png" )) ) {
+			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS ) );
+			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALTYPE,
+					getTextResourceService().getText( locale, MESSAGE_PNGVALIDATION ) ) );
+			LOGGER.logError(
+					getTextResourceService().getText( locale, MESSAGE_XML_VALFILE, originalValName ) );
+			Controllerpng controller1 = (Controllerpng) context.getBean( "controllerpng" );
 			boolean okMandatory = controller1.executeMandatory( valDatei, directoryOfLogfile, configMap,
 					locale );
 			valFile = okMandatory;
@@ -299,7 +326,7 @@ public class Controllervalfile implements MessageConstants
 					// optionaler Parameter --> fontValidationReport lassen
 				} else {
 					// kein optionaler Parameter --> fontValidationReport loeschen!
-						Util.deleteFile( fontValidationReport );
+					Util.deleteFile( fontValidationReport );
 				}
 			}
 			File fontValidationErrorReport = new File( directoryOfLogfile,
@@ -321,7 +348,7 @@ public class Controllervalfile implements MessageConstants
 					Util.deleteFile( internLicenseFile );
 				}
 				PdfValidatorAPI.setLicenseKey( " " );
-						}
+			}
 
 		} else {
 			LOGGER.logError( getTextResourceService().getText( locale, ERROR_INCORRECTFILEENDING,

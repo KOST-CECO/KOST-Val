@@ -1,8 +1,8 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
- * Information Package (SIP). Copyright (C) 2012-2020 Claire Roethlisberger (KOST-CECO), Christian
- * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
- * Daniel Ludin (BEDAG AG)
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
+ * Submission Information Package (SIP). Copyright (C) 2012-2021 Claire Roethlisberger (KOST-CECO),
+ * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
+ * (coderslagoon), Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
  * KOST-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. This application
  * is free software: you can redistribute it and/or modify it under the terms of the GNU General
@@ -28,6 +28,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Locale;
+import java.util.Optional;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -44,7 +45,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.DirectoryChooser;
@@ -55,8 +56,8 @@ public class ConfigController
 
 	@FXML
 	private CheckBox				checkPdfa, checkPdftools, checkCallas, checkPdfa1a, checkPdfa2a,
-			checkFont, checkJbig2, checkDetail, checkNentry, checkPdfa1b, checkPdfa2b,
-			checkFontTol, checkPdfa2u, checkSiard, checkSiard10, checkSiard21, checkJpeg2000, checkJpeg,
+			checkFont, checkJbig2, checkDetail, checkNentry, checkPdfa1b, checkPdfa2b, checkFontTol,
+			checkPdfa2u, checkSiard, checkSiard10, checkSiard21, checkJpeg2000, checkJpeg, checkPng,
 			checkTiff, checkComp1, checkComp5, checkPi0, checkPi4, checkComp2, checkComp7, checkPi1,
 			checkPi5, checkBps1, checkBps8, checkMultipage, checkBps2, checkBps16, checkTiles, checkComp3,
 			checkComp8, checkPi2, checkPi6, checkBps4, checkBps32, checkSize, checkComp4, checkComp32773,
@@ -64,7 +65,7 @@ public class ConfigController
 
 	@FXML
 	private Button					buttonConfigApply, buttonConfigApplyStandard, buttonConfigCancel,
-			buttonWork, buttonInput;
+			buttonWork, buttonInput, buttonLength, buttonName, buttonPuid;
 
 	private File						configFileBackup		= new File(
 			System.getenv( "USERPROFILE" ) + File.separator + ".kost-val_2x" + File.separator
@@ -78,7 +79,8 @@ public class ConfigController
 			System.getenv( "USERPROFILE" ) + File.separator + ".kost-val_2x" + File.separator
 					+ "configuration" + File.separator + "kostval.conf.xml" );
 
-	private String					dirOfJarPath, inputString, workString, config;
+	private String					dirOfJarPath, inputString, workString, config, stringName, stringPuid,
+			stringLength;
 
 	private Locale					locale							= Locale.getDefault();
 
@@ -87,15 +89,12 @@ public class ConfigController
 
 	@FXML
 	private Label						labelBps, labelComp, labelOther, labelPi, labelLength, labelName,
-			labelPuid, labelWork, labelInput;
+			labelPuid,  labelWork, labelInput;
 
 	@FXML
 	private WebView					wbv;
 
 	private WebEngine				engine;
-
-	@FXML
-	private TextField				textLength, textName, textPuid;
 
 	@FXML
 	private Label						labelConfig;
@@ -110,7 +109,7 @@ public class ConfigController
 		String java6432 = System.getProperty( "sun.arch.data.model" );
 		String javaVersion = System.getProperty( "java.version" );
 		String javafxVersion = System.getProperty( "javafx.version" );
-		labelConfig.setText( "Copyright © KOST/CECO          KOST-Val v2.0.2          JavaFX "
+		labelConfig.setText( "Copyright © KOST/CECO          KOST-Val v2.0.3          JavaFX "
 				+ javafxVersion + "   &   Java-" + java6432 + " " + javaVersion + "." );
 
 		// Original Config Kopieren
@@ -153,6 +152,11 @@ public class ConfigController
 				buttonConfigApply.setText( "anwenden" );
 				buttonConfigApplyStandard.setText( "Standard anwenden" );
 				buttonConfigCancel.setText( "verwerfen" );
+				buttonLength.setText( "ändern" );
+				buttonName.setText( "ändern" );
+				buttonPuid.setText( "ändern" );
+				buttonWork.setText( "Arbeitsverzeichnis" );
+				buttonInput.setText( "Inputverzeichnis" );
 			} else if ( Util.stringInFile( "kostval-conf-FR.xsl", configFile ) ) {
 				labelBps.setText( "Bits par échantillon (par canal)" );
 				labelComp.setText( "Algorithme de compression" );
@@ -165,6 +169,11 @@ public class ConfigController
 				buttonConfigApply.setText( "appliquer" );
 				buttonConfigApplyStandard.setText( "appliquer le standard" );
 				buttonConfigCancel.setText( "annuler" );
+				buttonLength.setText( "modifier" );
+				buttonName.setText( "modifier" );
+				buttonPuid.setText( "modifier" );
+				buttonWork.setText( "Répertoire de travail" );
+				buttonInput.setText( "Répertoire d'entrée" );
 			} else {
 				labelBps.setText( "Bits per sample (per channel)" );
 				labelComp.setText( "Compression algorithm" );
@@ -177,13 +186,18 @@ public class ConfigController
 				buttonConfigApply.setText( "apply" );
 				buttonConfigApplyStandard.setText( "apply Standard" );
 				buttonConfigCancel.setText( "cancel" );
+				buttonLength.setText( "change" );
+				buttonName.setText( "change" );
+				buttonPuid.setText( "change" );
+				buttonWork.setText( "Working directory" );
+				buttonInput.setText( "Input directory" );
 			}
 		} catch ( Exception e ) {
 			e.printStackTrace();
 		}
 
 		// Werte aus Konfiguration lesen und Check-Box entsprechend setzten
-		// checkPdfa, checkJpeg2000, checkJpeg, checkTiff, checkSiard;
+		// checkPdfa, checkJpeg2000, checkJpeg, checkPng, checkTiff, checkSiard;
 		try {
 			byte[] encoded;
 			encoded = Files.readAllBytes( Paths.get( configFile.getAbsolutePath() ) );
@@ -203,6 +217,7 @@ public class ConfigController
 			String noPdfaJbig2 = "<jbig2allowed>no</jbig2allowed>";
 			String noJpeg2000 = "<jp2validation>no</jp2validation>";
 			String noJpeg = "<jpegvalidation>no</jpegvalidation>";
+			String noPng = "<pngvalidation>no</pngvalidation>";
 			String noSiard = "<siardvalidation>no</siardvalidation>";
 			String noSiard10 = "<siard10></siard10>";
 			String noSiard21 = "<siard21></siard21>";
@@ -300,6 +315,9 @@ public class ConfigController
 			}
 			if ( config.contains( noJpeg ) ) {
 				checkJpeg.setSelected( false );
+			}
+			if ( config.contains( noPng ) ) {
+				checkPng.setSelected( false );
 			}
 			if ( config.contains( noSiard ) ) {
 				checkSiard.setSelected( false );
@@ -417,9 +435,9 @@ public class ConfigController
 			}
 			if ( config.contains( noSip0160 ) ) {
 				checkSip0160.setSelected( false );
-				textLength.setDisable( true );
-				textName.setDisable( true );
-				textPuid.setDisable( true );
+				buttonLength.setDisable( true );
+				buttonName.setDisable( true );
+				buttonPuid.setDisable( true );
 			}
 
 			Document doc = null;
@@ -430,13 +448,13 @@ public class ConfigController
 			doc.normalize();
 			String allowedformats = doc.getElementsByTagName( "allowedformats" ).item( 0 )
 					.getTextContent();
-			textPuid.setText( allowedformats );
 			String allowedlengthofpaths = doc.getElementsByTagName( "allowedlengthofpaths" ).item( 0 )
 					.getTextContent();
-			textLength.setText( allowedlengthofpaths );
 			String allowedsipname = doc.getElementsByTagName( "allowedsipname" ).item( 0 )
 					.getTextContent();
-			textName.setText( allowedsipname );
+			buttonLength.setText( allowedlengthofpaths );
+			buttonName.setText( allowedsipname );
+			buttonPuid.setText( allowedformats );
 			workString = doc.getElementsByTagName( "pathtoworkdir" ).item( 0 ).getTextContent();
 			labelWork.setText( workString );
 			inputString = doc.getElementsByTagName( "standardinputdir" ).item( 0 ).getTextContent();
@@ -502,100 +520,139 @@ public class ConfigController
 		((Stage) (((Button) e.getSource()).getScene().getWindow())).close();
 	}
 
-	/* TODO --> TextField ================= */
-
 	/* Wenn Aenderungen an changeLength gemacht wird, wird es ausgeloest */
 	@FXML
 	void changeLength( ActionEvent event )
 	{
-		try {
-			Document doc = null;
-			BufferedInputStream bis = new BufferedInputStream( new FileInputStream( configFile ) );
-			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-			DocumentBuilder db = dbf.newDocumentBuilder();
-			doc = db.parse( bis );
-			doc.normalize();
-			String lengthIntInit = doc.getElementsByTagName( "allowedlengthofpaths" ).item( 0 )
-					.getTextContent();
-			bis.close();
-			doc = null;
-			String allowedlengthofpaths = "<allowedlengthofpaths>" + lengthIntInit
-					+ "</allowedlengthofpaths>";
-			int lengthInt = 179;
-			try {
-				if ( textLength.getText().isEmpty() ) {
-					textLength.setText( lengthIntInit );
-				}
-				lengthInt = Integer.parseInt( textLength.getText() );
-			} catch ( NumberFormatException e ) {
-				lengthInt = Integer.parseInt( lengthIntInit );
-				String message = e.getMessage();
-				engine.loadContent( message );
-				textLength.setText( lengthIntInit );
-			}
-			String allowedlengthofpathsNew = "<allowedlengthofpaths>" + lengthInt
-					+ "</allowedlengthofpaths>";
-			Util.oldnewstring( allowedlengthofpaths, allowedlengthofpathsNew, configFile );
-		} catch ( IOException | SAXException | ParserConfigurationException e1 ) {
-			e1.printStackTrace();
+		stringLength = buttonLength.getText();
+		// create a TextInputDialog mit der Texteingabe der Laenge
+		TextInputDialog dialog = new TextInputDialog( stringLength );
+
+		// Set title & header text
+		String lengthIntInit = stringLength;
+
+		dialog.setTitle( "KOST-Val - Configuration" );
+		String headerDeFrEn = "Geben sie die erlaubte maximale Anzahl Zeichen in Pfadlängen ein [179]:";
+		if ( locale.toString().startsWith( "fr" ) ) {
+			headerDeFrEn = "Entrez le nombre maximum de caractères autorisés dans la longueur du chemin [179]:";
+		} else if ( locale.toString().startsWith( "en" ) ) {
+			headerDeFrEn = "Enter the allowed maximum number of characters in path lengths [179]:";
 		}
-		engine.load( "file:///" + configFile.getAbsolutePath() );
+		dialog.setHeaderText( headerDeFrEn );
+		dialog.setContentText( "" );
+
+		// Show the dialog and capture the result.
+		Optional<String> result = dialog.showAndWait();
+
+		// If the "Okay" button was clicked, the result will contain our String in the get() method
+		String stringLengthNew = "";
+		if ( result.isPresent() ) {
+			try {
+				stringLengthNew = result.get();
+				stringLength = stringLengthNew;
+				buttonLength.setText( stringLength);
+
+				String allowedlengthofpaths = "<allowedlengthofpaths>" + lengthIntInit
+						+ "</allowedlengthofpaths>";
+				String allowedlengthofpathsNew = "<allowedlengthofpaths>" + stringLengthNew
+						+ "</allowedlengthofpaths>";
+				Util.oldnewstring( allowedlengthofpaths, allowedlengthofpathsNew, configFile );
+				engine.load( "file:///" + configFile.getAbsolutePath() );
+			} catch ( NumberFormatException | IOException eInt ) {
+				String message = eInt.getMessage();
+				engine.loadContent( message );
+			}
+		} else {
+			// Keine Aktion
+		}
 	}
 
 	/* Wenn Aenderungen an changeName gemacht wird, wird es ausgeloest */
 	@FXML
 	void changeName( ActionEvent event )
 	{
-		try {
-			Document doc = null;
-			BufferedInputStream bis = new BufferedInputStream( new FileInputStream( configFile ) );
-			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-			DocumentBuilder db = dbf.newDocumentBuilder();
-			doc = db.parse( bis );
-			doc.normalize();
-			String regexInit = doc.getElementsByTagName( "allowedsipname" ).item( 0 ).getTextContent();
-			bis.close();
-			doc = null;
-			String allowedsipname = "<allowedsipname>" + regexInit + "</allowedsipname>";
-			String regex = textName.getText();
-			if ( regex.isEmpty() ) {
-				regex = regexInit;
-				textName.setText( regexInit );
-			}
-			String allowedsipnameNew = "<allowedsipname>" + regex + "</allowedsipname>";
-			Util.oldnewstring( allowedsipname, allowedsipnameNew, configFile );
-		} catch ( IOException | SAXException | ParserConfigurationException e1 ) {
-			e1.printStackTrace();
+		stringName = buttonName.getText();
+		// create a TextInputDialog mit der Texteingabe der Namen
+		TextInputDialog dialog = new TextInputDialog( stringName );
+
+		// Set title & header text
+		String nameIntInit = stringName;
+
+		dialog.setTitle( "KOST-Val - Configuration" );
+		String headerDeFrEn = "Geben Sie die Vorgaben zum Aufbau des SIP-Namens ein [ SIP_[1-2][0-9]{3}[0-1][0-9][0-3][0-9]_\\\\w{3} ]:";
+		if ( locale.toString().startsWith( "fr" ) ) {
+			headerDeFrEn = "Entrez les valeurs par défaut pour construire le nom du SIP [ SIP_[1-2][0-9]{3}[0-1][0-9][0-3][0-9]_\\\\w{3} ] :";
+		} else if ( locale.toString().startsWith( "en" ) ) {
+			headerDeFrEn = "Enter the defaults to build the SIP name [SIP_[1-2][0-9]{3}[0-1][0-9][0-3][0-9]_\\\\w{3} ]:";
 		}
-		engine.load( "file:///" + configFile.getAbsolutePath() );
+		dialog.setHeaderText( headerDeFrEn );
+		dialog.setContentText( "" );
+
+		// Show the dialog and capture the result.
+		Optional<String> result = dialog.showAndWait();
+
+		// If the "Okay" button was clicked, the result will contain our String in the get() method
+		String stringNameNew = "";
+		if ( result.isPresent() ) {
+			try {
+				stringNameNew = result.get();
+				stringName = stringNameNew;
+				buttonName.setText( stringName );
+				String allowedsipname = "<allowedsipname>" + nameIntInit + "</allowedsipname>";
+				String allowedsipnameNew = "<allowedsipname>" + stringNameNew + "</allowedsipname>";
+				Util.oldnewstring( allowedsipname, allowedsipnameNew, configFile );
+				engine.load( "file:///" + configFile.getAbsolutePath() );
+			} catch ( NumberFormatException | IOException eInt ) {
+				String message = eInt.getMessage();
+				engine.loadContent( message );
+			}
+		} else {
+			// Keine Aktion
+		}
 	}
 
 	/* Wenn Aenderungen an changePuid gemacht wird, wird es ausgeloest */
 	@FXML
 	void changePuid( ActionEvent event )
 	{
-		try {
-			Document doc = null;
-			BufferedInputStream bis = new BufferedInputStream( new FileInputStream( configFile ) );
-			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-			DocumentBuilder db = dbf.newDocumentBuilder();
-			doc = db.parse( bis );
-			doc.normalize();
-			String puidInit = doc.getElementsByTagName( "allowedformats" ).item( 0 ).getTextContent();
-			bis.close();
-			doc = null;
-			String allowedformats = "<allowedformats>" + puidInit + "</allowedformats>";
-			String puid = textPuid.getText();
-			if ( puid.isEmpty() ) {
-				puid = puidInit;
-				textPuid.setText( puidInit );
-			}
-			String allowedformatsNew = "<allowedformats>" + puid + "</allowedformats>";
-			Util.oldnewstring( allowedformats, allowedformatsNew, configFile );
-		} catch ( IOException | SAXException | ParserConfigurationException e1 ) {
-			e1.printStackTrace();
+		stringPuid = buttonPuid.getText();
+		// create a TextInputDialog mit der Texteingabe der Puid
+		TextInputDialog dialog = new TextInputDialog( stringPuid );
+
+		// Set title & header text
+		String puidIntInit = stringPuid;
+
+		dialog.setTitle( "KOST-Val - Configuration" );
+		String headerDeFrEn = "Auflistung der erlaubten Dateiformate [TXT PDFA1 PDFA2 TIFF JP2 JPEG PNG WAVE MP3 MP4 MJ2 CSV SIARD WARC]:";
+		if ( locale.toString().startsWith( "fr" ) ) {
+			headerDeFrEn = "Liste des formats de fichiers autorisés [TXT PDFA1 PDFA2 TIFF JP2 JPEG PNG WAVE MP3 MP4 MJ2 CSV SIARD WARC] :";
+		} else if ( locale.toString().startsWith( "en" ) ) {
+			headerDeFrEn = "List of allowed file formats [TXT PDFA1 PDFA2 TIFF JP2 JPEG PNG WAVE MP3 MP4 MJ2 CSV SIARD WARC]:";
 		}
-		engine.load( "file:///" + configFile.getAbsolutePath() );
+		dialog.setHeaderText( headerDeFrEn );
+		dialog.setContentText( "" );
+
+		// Show the dialog and capture the result.
+		Optional<String> result = dialog.showAndWait();
+
+		// If the "Okay" button was clicked, the result will contain our String in the get() method
+		String stringPuidNew = "";
+		if ( result.isPresent() ) {
+			try {
+				stringPuidNew = result.get();
+				stringPuid = stringPuidNew;
+				buttonPuid.setText( stringPuid );
+				String allowedformats = "<allowedformats>" + puidIntInit + "</allowedformats>";
+				String allowedformatsNew = "<allowedformats>" + stringPuidNew + "</allowedformats>";
+				Util.oldnewstring( allowedformats, allowedformatsNew, configFile );
+				engine.load( "file:///" + configFile.getAbsolutePath() );
+			} catch ( NumberFormatException | IOException eInt ) {
+				String message = eInt.getMessage();
+				engine.loadContent( message );
+			}
+		} else {
+			// Keine Aktion
+		}
 	}
 
 	/* Wenn chooseWork betaetigt wird, kann ein Ordner ausgewaehlt werden */
@@ -687,14 +744,14 @@ public class ConfigController
 		try {
 			if ( checkSip0160.isSelected() ) {
 				Util.oldnewstring( no, yes, configFile );
-				textLength.setDisable( false );
-				textName.setDisable( false );
-				textPuid.setDisable( false );
+				buttonLength.setDisable( false );
+				buttonName.setDisable( false );
+				buttonPuid.setDisable( false );
 				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
 				if ( !checkJpeg2000.isSelected() && !checkSiard.isSelected() && !checkPdfa.isSelected()
-						&& !checkTiff.isSelected() && !checkJpeg.isSelected() ) {
+						&& !checkTiff.isSelected() && !checkJpeg.isSelected() && !checkPng.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
 						minOne = "Au moins une variante doit être autorisée !";
@@ -706,9 +763,9 @@ public class ConfigController
 				} else {
 					Util.oldnewstring( yes, no, configFile );
 					engine.load( "file:///" + configFile.getAbsolutePath() );
-					textLength.setDisable( true );
-					textName.setDisable( true );
-					textPuid.setDisable( true );
+					buttonLength.setDisable( true );
+					buttonName.setDisable( true );
+					buttonPuid.setDisable( true );
 				}
 			}
 		} catch ( IOException e ) {
@@ -741,7 +798,7 @@ public class ConfigController
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
 				if ( !checkJpeg2000.isSelected() && !checkSiard.isSelected() && !checkJpeg.isSelected()
-						&& !checkTiff.isSelected() && !checkSip0160.isSelected() ) {
+						&& !checkPng.isSelected() && !checkTiff.isSelected() && !checkSip0160.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
 						minOne = "Au moins une variante doit être autorisée !";
@@ -1112,8 +1169,8 @@ public class ConfigController
 			} else {
 
 				// abwaehlen nur moeglich wenn noch eines selected
-				if ( !checkJpeg2000.isSelected() && !checkJpeg.isSelected() && !checkPdfa.isSelected()
-						&& !checkTiff.isSelected() && !checkSip0160.isSelected() ) {
+				if ( !checkJpeg2000.isSelected() && !checkJpeg.isSelected() && !checkPng.isSelected()
+						&& !checkPdfa.isSelected() && !checkTiff.isSelected() && !checkSip0160.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
 						minOne = "Au moins une variante doit être autorisée !";
@@ -1208,8 +1265,8 @@ public class ConfigController
 				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
-				if ( !checkJpeg.isSelected() && !checkSiard.isSelected() && !checkPdfa.isSelected()
-						&& !checkTiff.isSelected() && !checkSip0160.isSelected() ) {
+				if ( !checkJpeg.isSelected() && !checkPng.isSelected() && !checkSiard.isSelected()
+						&& !checkPdfa.isSelected() && !checkTiff.isSelected() && !checkSip0160.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
 						minOne = "Au moins une variante doit être autorisée !";
@@ -1240,8 +1297,8 @@ public class ConfigController
 				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
-				if ( !checkJpeg2000.isSelected() && !checkSiard.isSelected() && !checkPdfa.isSelected()
-						&& !checkTiff.isSelected() && !checkSip0160.isSelected() ) {
+				if ( !checkJpeg2000.isSelected() && !checkPng.isSelected() && !checkSiard.isSelected()
+						&& !checkPdfa.isSelected() && !checkTiff.isSelected() && !checkSip0160.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
 						minOne = "Au moins une variante doit être autorisée !";
@@ -1250,6 +1307,38 @@ public class ConfigController
 					}
 					engine.loadContent( "<html><h2>" + minOne + "</h2></html>" );
 					checkJpeg.setSelected( true );
+				} else {
+					Util.oldnewstring( yes, no, configFile );
+					engine.load( "file:///" + configFile.getAbsolutePath() );
+				}
+			}
+		} catch ( IOException e ) {
+			e.printStackTrace();
+		}
+	}
+
+	/* checkPng schaltet diese Validierung in der Konfiguration ein oder aus */
+	@FXML
+	void changeConfigPng( ActionEvent event )
+	{
+		String yes = "<pngvalidation>yes</pngvalidation>";
+		String no = "<pngvalidation>no</pngvalidation>";
+		try {
+			if ( checkPng.isSelected() ) {
+				Util.oldnewstring( no, yes, configFile );
+				engine.load( "file:///" + configFile.getAbsolutePath() );
+			} else {
+				// abwaehlen nur moeglich wenn noch eines selected
+				if ( !checkJpeg.isSelected() && !checkJpeg2000.isSelected() && !checkSiard.isSelected()
+						&& !checkPdfa.isSelected() && !checkTiff.isSelected() && !checkSip0160.isSelected() ) {
+					String minOne = "Mindestens eine Variante muss erlaubt sein!";
+					if ( locale.toString().startsWith( "fr" ) ) {
+						minOne = "Au moins une variante doit être autorisée !";
+					} else if ( locale.toString().startsWith( "en" ) ) {
+						minOne = "At least one variant must be allowed!";
+					}
+					engine.loadContent( "<html><h2>" + minOne + "</h2></html>" );
+					checkPng.setSelected( true );
 				} else {
 					Util.oldnewstring( yes, no, configFile );
 					engine.load( "file:///" + configFile.getAbsolutePath() );
@@ -1298,7 +1387,7 @@ public class ConfigController
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
 				if ( !checkJpeg2000.isSelected() && !checkSiard.isSelected() && !checkPdfa.isSelected()
-						&& !checkJpeg.isSelected() && !checkSip0160.isSelected() ) {
+						&& !checkJpeg.isSelected() && !checkPng.isSelected() && !checkSip0160.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
 						minOne = "Au moins une variante doit être autorisée !";
@@ -1892,7 +1981,7 @@ public class ConfigController
 	void changeBps2( ActionEvent event )
 	{
 		String yes = "<allowedbitspersample2>2</allowedbitspersample2>";
-		String no = "<allowedbitspersample1>2</allowedbitspersample2>";
+		String no = "<allowedbitspersample2></allowedbitspersample2>";
 		try {
 			if ( checkBps2.isSelected() ) {
 				Util.oldnewstring( no, yes, configFile );

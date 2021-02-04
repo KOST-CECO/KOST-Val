@@ -1,8 +1,8 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG-Files and Submission
- * Information Package (SIP). Copyright (C) 2012-2020 Claire Roethlisberger (KOST-CECO), Christian
- * Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn (coderslagoon),
- * Daniel Ludin (BEDAG AG)
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
+ * Submission Information Package (SIP). Copyright (C) 2012-2021 Claire Roethlisberger (KOST-CECO),
+ * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
+ * (coderslagoon), Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
  * KOST-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. This application
  * is free software: you can redistribute it and/or modify it under the terms of the GNU General
@@ -106,15 +106,16 @@ public class GuiController
 			configFile = new File( System.getenv( "USERPROFILE" ) + File.separator + ".kost-val_2x"
 					+ File.separator + "configuration" + File.separator + "kostval.conf.xml" );
 
-	private String						arg0, arg1, arg2, arg3 = "--xml", dirOfJarPath;
-	private String						versionKostVal	= "2.0.2";
+	private String						arg0, arg1, arg2, arg3 = "--xml", dirOfJarPath, initInstructionsDe,
+			initInstructionsFr, initInstructionsEn;
+	private String						versionKostVal	= "2.0.3";
 	/* TODO: versionKostVal auch hier anpassen:
 	 * 
 	 * 2) cmdKOSTVal.java
 	 *
 	 * 3) ConfigController
 	 * 
-	 * 4) Konfigurationsdatei
+	 * 4) Konfigurationsdatei inkl 3x xsl
 	 * 
 	 * 5) Start-Bild (make_exe)
 	 * 
@@ -289,6 +290,34 @@ public class GuiController
 			e.printStackTrace();
 		}
 
+		/* Kurzanleitung zum GUI anzeigen */
+		String help1, help2, help3, help4, help5;
+		help1 = " <h2>Brèves instructions</h2> ";
+		help2 = "<hr>";
+		help3 = "<h3>1. Précisez / sélectionnez le fichier ou le dossier à valider</h3>";
+		help4 = "<h3>2. Ajuster la configuration et le LogType si nécessaire</h3>";
+		help5 = "<h3>3. Commencer la validation</h3>";
+		initInstructionsFr = "<html>" + help1 + help2 + help3 + help4 + help5 + "<br/></html>";
+		help1 = "<h2>Brief instructions</h2>";
+		help3 = "<h3>1. Specify / select file or folder for validation</h3>";
+		help4 = "<h3>2. Adjust configuration and LogType if necessary</h3>";
+		help5 = "<h3>3. Start validation</h3>";
+		initInstructionsEn = "<html>" + help1 + help2 + help3 + help4 + help5 + "<br/></html>";
+		help1 = "<h2>Kurzanleitung</h2>";
+		help3 = "<h3>1. Datei oder Ordner zur Validierung angeben / auswählen</h3>";
+		help4 = "<h3>2. Ggf. Konfiguration und LogType anpassen</h3>";
+		help5 = "<h3>3. Validierung starten</h3>";
+		initInstructionsDe = "<html>" + help1 + help2 + help3 + help4 + help5 + "<br/></html>";
+		String initInstructions = initInstructionsDe;
+		if ( locale.toString().startsWith( "fr" ) ) {
+			initInstructions = initInstructionsFr;
+		} else if ( locale.toString().startsWith( "en" ) ) {
+			initInstructions = initInstructionsEn;
+		} else {
+			initInstructions = initInstructionsDe;
+		}
+		engine.loadContent( initInstructions );
+
 		context.close();
 
 	}
@@ -329,22 +358,15 @@ public class GuiController
 		/* Kurzanleitung 1. Datei oder Ordner zur Validierung angeben / auswählen 2. ggf. Konfiguration
 		 * und LogType anpassen 3. Validierung starten */
 		try {
-			/* Bild mit einer Kurzanleitung zum GUI anzeigen
-			 * 
-			 * in Tabelle damit links */
-			String pathImage = "file:/" + dirOfJarPath + File.separator + "doc" + File.separator
-					+ "hilfe.jpg";
+			String initInstructions = initInstructionsDe;
 			if ( locale.toString().startsWith( "fr" ) ) {
-				pathImage = "file:/" + dirOfJarPath + File.separator + "doc" + File.separator + "aide.jpg";
+				initInstructions = initInstructionsFr;
 			} else if ( locale.toString().startsWith( "en" ) ) {
-				pathImage = "file:/" + dirOfJarPath + File.separator + "doc" + File.separator + "help.jpg";
+				initInstructions = initInstructionsEn;
+			} else {
+				initInstructions = initInstructionsDe;
 			}
-			pathImage = pathImage.replace( "\\\\", "/" );
-			pathImage = pathImage.replace( "\\", "/" );
-			String helpImg = "<table  width=\"100%\"><tr><td><img  src='" + pathImage
-					+ "'></td></tr></table>";
-			String text = "<html><body>" + helpImg + "</body></html>";
-			engine.loadContent( text );
+			engine.loadContent( initInstructions );
 
 			// Handbuch in externem Viewer oeffnen dann kann parallel gearbeitet werden
 			String docPath = dirOfJarPath + File.separator + "doc" + File.separator
@@ -882,6 +904,8 @@ public class GuiController
 				buttonFormat.setDisable( false );
 			} else if ( Util.stringInFile( "<jpegvalidation>yes</", configFile ) ) {
 				buttonFormat.setDisable( false );
+			} else if ( Util.stringInFile( "<pngvalidation>yes</", configFile ) ) {
+				buttonFormat.setDisable( false );
 			} else if ( Util.stringInFile( "<tiffvalidation>yes</", configFile ) ) {
 				buttonFormat.setDisable( false );
 			} else {
@@ -959,6 +983,8 @@ public class GuiController
 			} else if ( Util.stringInFile( "<jp2validation>yes</", configFile ) ) {
 				buttonFormat.setDisable( false );
 			} else if ( Util.stringInFile( "<jpegvalidation>yes</", configFile ) ) {
+				buttonFormat.setDisable( false );
+			} else if ( Util.stringInFile( "<pngvalidation>yes</", configFile ) ) {
 				buttonFormat.setDisable( false );
 			} else if ( Util.stringInFile( "<tiffvalidation>yes</", configFile ) ) {
 				buttonFormat.setDisable( false );
@@ -1082,6 +1108,8 @@ public class GuiController
 			} else if ( Util.stringInFile( "<jp2validation>yes</", configFile ) ) {
 				buttonFormat.setDisable( false );
 			} else if ( Util.stringInFile( "<jpegvalidation>yes</", configFile ) ) {
+				buttonFormat.setDisable( false );
+			} else if ( Util.stringInFile( "<pngvalidation>yes</", configFile ) ) {
 				buttonFormat.setDisable( false );
 			} else if ( Util.stringInFile( "<tiffvalidation>yes</", configFile ) ) {
 				buttonFormat.setDisable( false );
