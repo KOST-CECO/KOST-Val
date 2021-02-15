@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.Locale;
+import java.util.Optional;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -58,6 +59,7 @@ import javafx.print.PrinterJob;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
@@ -70,6 +72,7 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class GuiController
 {
@@ -446,21 +449,51 @@ public class GuiController
 		console.setText( " \n" );
 		Printer defaultprinter = Printer.getDefaultPrinter();
 		Printer printerToUse = defaultprinter;
+		String strHeaderText = "Wählen Sie einen Drucker aus den verfügbaren Druckern";
+		String strTitle = "Druckerauswahl";
+		String strNoPrinter = "Kein Drucker. Es ist kein Drucker auf Ihrem System installiert.";
+		if ( locale.toString().startsWith( "fr" ) ) {
+			strHeaderText = "Choisissez une imprimante parmi les imprimantes disponibles";
+			strTitle = "Choix de l'imprimante";
+			strNoPrinter = "Pas d'imprimante. Aucune imprimante n'est installée sur votre système";
+		} else if ( locale.toString().startsWith( "en" ) ) {
+			strHeaderText = "Choose a printer from available printers";
+			strTitle = "Printer Choice";
+			strNoPrinter = "No printer. There is no printer installed on your system.";
+		}
 		if ( printerToUse != null ) {
-			PrinterJob job = PrinterJob.createPrinterJob();
-			JobSettings jobSettings = job.getJobSettings();
-			PageLayout pageLayout = jobSettings.getPageLayout();
-			job.setPrinter( printerToUse );
-			pageLayout = printerToUse.createPageLayout( Paper.A4, PageOrientation.PORTRAIT,
-					Printer.MarginType.DEFAULT );
-			jobSettings.setPageLayout( pageLayout );
-			job.getJobSettings();
-			job.showPrintDialog( null );
-			// job.showPageSetupDialog(null);
-			if ( job != null ) {
-				engine.print( job );
-				job.endJob();
+
+			ChoiceDialog<Printer> dialog = new ChoiceDialog<Printer>( defaultprinter,
+					Printer.getAllPrinters() );
+			dialog.initStyle( StageStyle.UTILITY ); // Title ohne icon
+			dialog.setHeaderText( strHeaderText );
+			dialog.setContentText( null );
+			dialog.setTitle( strTitle );
+			Optional<Printer> opt = dialog.showAndWait();
+			if ( opt.isPresent() ) {
+				// ein Drucker wurde ausgewaehlt
+				printerToUse = opt.get();
+				// start printing ...
+				PrinterJob job = PrinterJob.createPrinterJob();
+				JobSettings jobSettings = job.getJobSettings();
+				PageLayout pageLayout = jobSettings.getPageLayout();
+				job.setPrinter( printerToUse );
+				pageLayout = printerToUse.createPageLayout( Paper.A4, PageOrientation.PORTRAIT,
+						Printer.MarginType.DEFAULT );
+				jobSettings.setPageLayout( pageLayout );
+				job.getJobSettings();
+				/* showPrintDialog nicht verwenden, da ansonsten nicht zuverlaessig abgebrochen werden kann.
+				 * Besser ist es über einen ChoiceDialog den Drucker auszuwaehlen und wenn einer ausgewaehlt
+				 * wurde zu drucken! */
+				if ( job != null ) {
+					engine.print( job );
+					job.endJob();
+				}
+			} else {
+				// System.out.println("Kein Drucker ausgewaehlt. [Abbrechen] gedrueckt");
 			}
+		} else {
+			System.out.println( strNoPrinter );
 		}
 	}
 

@@ -21,8 +21,10 @@ package ch.kostceco.tools.kostval.validation.modulepng.impl;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.Map;
 
@@ -60,6 +62,8 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl
 
 		// Start mit der Erkennung
 
+		Boolean reco = false;
+
 		// Eine PNG Datei (.png) muss mit 89 50 4e 47 0d 0a 1a 0a (hex) beginnen
 		if ( valDatei.isDirectory() ) {
 			if ( min ) {
@@ -78,47 +82,54 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl
 				fr = new FileReader( valDatei );
 				BufferedReader read = new BufferedReader( fr );
 
-				// wobei hier nur die ersten 4 Zeichen der Datei ausgelesen werden
-				// 1 ignoriert
+				// die ersten 4 Zeichen einer PNG Datei
+
+				// 1 89
 				// 2 50
 				// 3 4e
 				// 4 47
 
-				// Hex 50 in Char umwandeln
-				String str2 = "50";
-				int i2 = Integer.parseInt( str2, 16 );
-				char c2 = (char) i2;
-				// Hex 4e in Char umwandeln
-				String str3 = "4e";
-				int i3 = Integer.parseInt( str3, 16 );
-				char c3 = (char) i3;
-				// Hex 47 in Char umwandeln
-				String str4 = "47";
-				int i4 = Integer.parseInt( str4, 16 );
-				char c4 = (char) i4;
+				// Open the file using FileInputStream
+				try (FileInputStream fis = new FileInputStream( valDatei )) {
+					// A variable to hold a single byte of the file data
+					int i = 0;
 
-				// auslesen der ersten 4 Zeichen der Datei
-				int length;
-				int i;
-				char[] buffer = new char[4];
-				length = read.read( buffer );
-				for ( i = 0; i != length; i++ )
-					;
+					// A counter to print a new line every 16 bytes read.
+					int cnt = 0;
 
-				/* die beiden charArrays (soll und ist) mit einander vergleichen IST = c1c2c3c4 */
-				char[] charArray1 = buffer;
-				char[] charArray2 = new char[] { c2, c3, c4 };
+					// Read till the end of the file and print the byte in hexadecimal valueS.
+					StringBuilder sb = new StringBuilder();
+					String sb2str1 = "";
+					String sb2str2 = "";
+					String sb2str3 = "";
+					String sb2str4 = "";
+					String sb1234 = "";
+					while ( (i = fis.read()) != -1 ) {
+						// System.out.printf("%02X ", i);
+						sb.append( String.format( "%02X ", i ) );
+						if ( sb2str1 == "" ) {
+							sb2str1 = sb + "";
+						} else if ( sb2str2 == "" ) {
+							sb2str2 = sb + "";
+						} else if ( sb2str3 == "" ) {
+							sb2str3 = sb + "";
+						} else if ( sb2str4 == "" ) {
+							sb2str4 = sb + "";
+							sb1234 = sb + "";
+							break;
+						}
+						cnt++;
+						if ( cnt == 16 ) {
+							cnt = 0;
+						}
+					}
+					if ( sb1234.contains( "89 50 4E 47" ) ) {
+						reco = true;
+					}
+				}
 
-				byte[] bytes1 = new String( charArray1 ).getBytes( StandardCharsets.UTF_8 );
-				String hex1 = javax.xml.bind.DatatypeConverter.printHexBinary( bytes1 );
-				byte[] bytes2 = new String( charArray2 ).getBytes( StandardCharsets.UTF_8 );
-				String hex2 = javax.xml.bind.DatatypeConverter.printHexBinary( bytes2 );
-
-				/* System.out.println( "charArray1 (IST) = " + hex1 + "     charArray2 (SOLL) = " + hex2
-				 * ); */
-
-				if ( hex1.contains( hex2 ) ) {
-					/* hoechstwahrscheinlich ein PNG da es mit 504E47 beginnt */
+				if ( reco ) {
+					/* hoechstwahrscheinlich ein PNG da es mit 89504E47 beginnt */
 				} else {
 					// Droid-Erkennung, damit Details ausgegeben werden koennen
 
@@ -631,7 +642,7 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl
 										msg = msg.replace( "(trying to skip",
 												"A general structural problem has arisen (" );
 									}
-								} else if ( msg.contains( "zlib" ) && msg.contains( "(data error)" )) {
+								} else if ( msg.contains( "zlib" ) && msg.contains( "(data error)" ) ) {
 									// zlib: inflate error = -3 (data error)
 									modul = getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PNG );
 									if ( locale.toString().startsWith( "de" ) ) {
@@ -646,8 +657,7 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl
 									}
 									/* TODO: Hier neue zu uebersetztende Fehlemeldungen eintragen
 									 * 
-									 * Gemeldete Fehler:
-									 */
+									 * Gemeldete Fehler: */
 
 								} else if ( msg.contains( "no " ) && msg.contains( " chunks" ) ) {
 									// no IDAT chunks
@@ -661,9 +671,9 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl
 									} else {
 										msg = msg.replace( "no", "no" );
 									}
-								}else{
+								} else {
 									// Fehler noch nicht uebersetzt (DE und FR)
-									msg= getTextResourceService().getText( locale, ERROR_XML_AF_PNG_TRANSLATE, msg); 
+									msg = getTextResourceService().getText( locale, ERROR_XML_AF_PNG_TRANSLATE, msg );
 								}
 
 								// System.out.println(modul+" "+msg);
