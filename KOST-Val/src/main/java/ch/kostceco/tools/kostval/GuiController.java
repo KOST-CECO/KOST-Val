@@ -26,7 +26,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
+import java.util.TreeMap;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -125,6 +127,8 @@ public class GuiController
 	 * 6) launch_KOST-Val_exe.xml --> VersionInfo */
 
 	private Locale						locale					= Locale.getDefault();
+
+	boolean										booSip					= false;
 
 	@FXML
 	private ScrollPane				scroll;
@@ -559,6 +563,24 @@ public class GuiController
 			text = "<html><h2>Format validation is performed. <br/><br/>Please wait ...</h2></html>";
 		}
 		engine.loadContent( text );
+
+		// Keine Eingabe während der Validierung
+		buttonHelp.setDisable( true );
+		buttonFolder.setDisable( true );
+		buttonFile.setDisable( true );
+		buttonFormat.setDisable( true );
+		if ( !buttonSip.isDisable() ) {
+			booSip = true;
+		}
+		buttonSip.setDisable( true );
+		buttonOnlySip.setDisable( true );
+		buttonLicence.setDisable( true );
+		buttonChange.setDisable( true );
+		buttonShowConfig.setDisable( true );
+		fileFolder.setDisable( true );
+		lang.setDisable( true );
+		logType.setDisable( true );
+
 		/* hier die diversen args an main uebergeben
 		 * 
 		 * main( String[] args )
@@ -590,6 +612,22 @@ public class GuiController
 			@Override
 			public void handle( WorkerStateEvent t )
 			{
+				// Validierung beeindet Buttons freigeben
+				buttonHelp.setDisable( false );
+				buttonFolder.setDisable( false );
+				buttonFile.setDisable( false );
+				buttonFormat.setDisable( false );
+				if ( booSip ) {
+					buttonSip.setDisable( false );
+					buttonOnlySip.setDisable( false );
+				}
+				buttonLicence.setDisable( false );
+				buttonChange.setDisable( false );
+				buttonShowConfig.setDisable( false );
+				fileFolder.setDisable( false );
+				lang.setDisable( false );
+				logType.setDisable( false );
+
 				// kein Handler Problem
 				if ( logFile.exists() ) {
 					/* Dieser handler wird bei einer erfolgreichen Validierung ausgefuehrt.
@@ -619,6 +657,22 @@ public class GuiController
 			@Override
 			public void handle( WorkerStateEvent t )
 			{
+				// Validierung beeindet Buttons freigeben
+				buttonHelp.setDisable( false );
+				buttonFolder.setDisable( false );
+				buttonFile.setDisable( false );
+				buttonFormat.setDisable( false );
+				if ( booSip ) {
+					buttonSip.setDisable( false );
+					buttonOnlySip.setDisable( false );
+				}
+				buttonLicence.setDisable( false );
+				buttonChange.setDisable( false );
+				buttonShowConfig.setDisable( false );
+				fileFolder.setDisable( false );
+				lang.setDisable( false );
+				logType.setDisable( false );
+
 				/* Dieser handler wird ausgefuehrt wenn die Validierung nicht korrekt abgelaufen ist
 				 * (Fehler).
 				 * 
@@ -675,6 +729,21 @@ public class GuiController
 			text = "<html><h2>SIP validation is performed. <br/><br/>Please wait ...</h2></html>";
 		}
 		engine.loadContent( text );
+
+		// Keine Eingabe während der Validierung
+		buttonHelp.setDisable( true );
+		buttonFolder.setDisable( true );
+		buttonFile.setDisable( true );
+		buttonFormat.setDisable( true );
+		buttonSip.setDisable( true );
+		buttonOnlySip.setDisable( true );
+		buttonLicence.setDisable( true );
+		buttonChange.setDisable( true );
+		buttonShowConfig.setDisable( true );
+		fileFolder.setDisable( true );
+		lang.setDisable( true );
+		logType.setDisable( true );
+
 		/* hier die diversen args an main uebergeben
 		 * 
 		 * main( String[] args )
@@ -706,6 +775,20 @@ public class GuiController
 			@Override
 			public void handle( WorkerStateEvent t )
 			{
+				// Validierung beeindet Buttons freigeben
+				buttonHelp.setDisable( false );
+				buttonFolder.setDisable( false );
+				buttonFile.setDisable( false );
+				buttonFormat.setDisable( false );
+				buttonSip.setDisable( false );
+				buttonOnlySip.setDisable( false );
+				buttonLicence.setDisable( false );
+				buttonChange.setDisable( false );
+				buttonShowConfig.setDisable( false );
+				fileFolder.setDisable( false );
+				lang.setDisable( false );
+				logType.setDisable( false );
+
 				// kein Handler Problem
 				if ( logFile.exists() ) {
 					/* Dieser handler wird bei einer erfolgreichen Validierung ausgefuehrt.
@@ -735,6 +818,20 @@ public class GuiController
 			@Override
 			public void handle( WorkerStateEvent t )
 			{
+				// Validierung beeindet Buttons freigeben
+				buttonHelp.setDisable( false );
+				buttonFolder.setDisable( false );
+				buttonFile.setDisable( false );
+				buttonFormat.setDisable( false );
+				buttonSip.setDisable( false );
+				buttonOnlySip.setDisable( false );
+				buttonLicence.setDisable( false );
+				buttonChange.setDisable( false );
+				buttonShowConfig.setDisable( false );
+				fileFolder.setDisable( false );
+				lang.setDisable( false );
+				logType.setDisable( false );
+
 				/* Dieser handler wird ausgefuehrt wenn die Validierung nicht korrekt abgelaufen ist
 				 * (Fehler).
 				 * 
@@ -766,6 +863,21 @@ public class GuiController
 			text = "<html><h2>A pure SIP validation is performed. <br/><br/>Please wait ...</h2></html>";
 		}
 		engine.loadContent( text );
+
+		// Keine Eingabe während der Validierung
+		buttonHelp.setDisable( true );
+		buttonFolder.setDisable( true );
+		buttonFile.setDisable( true );
+		buttonFormat.setDisable( true );
+		buttonSip.setDisable( true );
+		buttonOnlySip.setDisable( true );
+		buttonLicence.setDisable( true );
+		buttonChange.setDisable( true );
+		buttonShowConfig.setDisable( true );
+		fileFolder.setDisable( true );
+		lang.setDisable( true );
+		logType.setDisable( true );
+
 		/* hier die diversen args an main uebergeben
 		 * 
 		 * main( String[] args )
@@ -797,6 +909,20 @@ public class GuiController
 			@Override
 			public void handle( WorkerStateEvent t )
 			{
+				// Validierung beeindet Buttons freigeben
+				buttonHelp.setDisable( false );
+				buttonFolder.setDisable( false );
+				buttonFile.setDisable( false );
+				buttonFormat.setDisable( false );
+				buttonSip.setDisable( false );
+				buttonOnlySip.setDisable( false );
+				buttonLicence.setDisable( false );
+				buttonChange.setDisable( false );
+				buttonShowConfig.setDisable( false );
+				fileFolder.setDisable( false );
+				lang.setDisable( false );
+				logType.setDisable( false );
+
 				// kein Handler Problem
 				if ( logFile.exists() ) {
 					/* Dieser handler wird bei einer erfolgreichen Validierung ausgefuehrt.
@@ -826,6 +952,20 @@ public class GuiController
 			@Override
 			public void handle( WorkerStateEvent t )
 			{
+				// Validierung beeindet Buttons freigeben
+				buttonHelp.setDisable( false );
+				buttonFolder.setDisable( false );
+				buttonFile.setDisable( false );
+				buttonFormat.setDisable( false );
+				buttonSip.setDisable( false );
+				buttonOnlySip.setDisable( false );
+				buttonLicence.setDisable( false );
+				buttonChange.setDisable( false );
+				buttonShowConfig.setDisable( false );
+				fileFolder.setDisable( false );
+				lang.setDisable( false );
+				logType.setDisable( false );
+
 				/* Dieser handler wird ausgefuehrt wenn die Validierung nicht korrekt abgelaufen ist
 				 * (Fehler).
 				 * 
@@ -919,11 +1059,6 @@ public class GuiController
 						+ valFile.getAbsolutePath() + "</h3></td></tr>";
 				sel2 = "<tr><td><h3>2.</h3></td><td><h3>Adjust configuration and LogType if necessary </h3></td></tr>";
 				sel3 = "<tr><td><h3>3.</h3></td><td><h3>Start validation </h3></td></tr></table>";
-			} else {
-				sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Ausgewählte Datei: <br>"
-						+ valFile.getAbsolutePath() + "</h3></td></tr>";
-				sel2 = "<tr><td><h3>2.</h3></td><td><h3>Ggf. Konfiguration und LogType anpassen </h3></td></tr>";
-				sel3 = "<tr><td><h3>3.</h3></td><td><h3>Validierung starten </h3></td></tr></table>";
 			}
 			String text = "<html><body>" + sel1 + sel2 + sel3 + selDetail + "</body></html>";
 			engine.loadContent( text );
@@ -1037,25 +1172,24 @@ public class GuiController
 				buttonSip.setDisable( true );
 				buttonOnlySip.setDisable( true );
 			}
-			String sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Ausgewählter Ordner: <br>"
-					+ valFolder.getAbsolutePath() + "</h3></td></tr>";
+			Map<String, File> fileMap = Util.getFileMapFile( valFolder );
+			int numberFile = fileMap.size();
+			String numberInFileMap = String.format("%,d", numberFile);
+
+			String sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br><br>&nbsp;</h3></td><td><h3>Ausgewählter Ordner: <br>"
+					+ valFolder.getAbsolutePath() + "<br>(" + numberInFileMap + " Dateien)</h3></td></tr>";
 			String sel2 = "<tr><td><h3>2.</h3></td><td><h3>Ggf. Konfiguration und LogType anpassen </h3></td></tr>";
 			String sel3 = "<tr><td><h3>3.</h3></td><td><h3>Validierung starten </h3></td></tr></table>";
 			if ( locale.toString().startsWith( "fr" ) ) {
-				sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Dossier sélectionné : <br>"
-						+ valFolder.getAbsolutePath() + "</h3></td></tr>";
+				sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br><br>&nbsp;</h3></td><td><h3>Dossier sélectionné : <br>"
+						+ valFolder.getAbsolutePath() + "<br>(" + numberInFileMap + " fichier)</h3></td></tr>";
 				sel2 = "<tr><td><h3>2.</h3></td><td><h3>Ajuster la configuration et le LogType si nécessaire </h3></td></tr>";
 				sel3 = "<tr><td><h3>3.</h3></td><td><h3>Démarrer la validation </h3></td></tr></table>";
 			} else if ( locale.toString().startsWith( "en" ) ) {
-				sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Selected folder: <br>"
-						+ valFolder.getAbsolutePath() + "</h3></td></tr>";
+				sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br><br>&nbsp;</h3></td><td><h3>Selected folder: <br>"
+						+ valFolder.getAbsolutePath() + "<br>(" + numberInFileMap + " files)</h3></td></tr>";
 				sel2 = "<tr><td><h3>2.</h3></td><td><h3>Adjust configuration and LogType if necessary </h3></td></tr>";
 				sel3 = "<tr><td><h3>3.</h3></td><td><h3>Start validation </h3></td></tr></table>";
-			} else {
-				sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Ausgewählter Ordner: <br>"
-						+ valFolder.getAbsolutePath() + "</h3></td></tr>";
-				sel2 = "<tr><td><h3>2.</h3></td><td><h3>Ggf. Konfiguration und LogType anpassen </h3></td></tr>";
-				sel3 = "<tr><td><h3>3.</h3></td><td><h3>Validierung starten </h3></td></tr></table>";
 			}
 			String text = "<html><body>" + sel1 + sel2 + sel3 + "</body></html>";
 			engine.loadContent( text );
@@ -1227,25 +1361,27 @@ public class GuiController
 			}
 		} else {
 			if ( valFileFolder.exists() ) {
-				String sel1Folder = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Ausgewählter Ordner: <br>"
-						+ valFileFolder.getAbsolutePath() + "</h3></td></tr>";
+				Map<String, File> fileMap = Util.getFileMapFile( valFileFolder );
+				int numberFile = fileMap.size();
+				String numberInFileMap = String.format("%,d", numberFile);
+
+				String sel1Folder = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br><br>&nbsp;</h3></td><td><h3>Ausgewählter Ordner: <br>"
+						+ valFileFolder.getAbsolutePath() + "<br>(" + numberInFileMap
+						+ " Dateien)</h3></td></tr>";
 				String sel2Folder = "<tr><td><h3>2.</h3></td><td><h3>Ggf. Konfiguration und LogType anpassen </h3></td></tr>";
 				String sel3Folder = "<tr><td><h3>3.</h3></td><td><h3>Validierung starten </h3></td></tr></table>";
 				if ( locale.toString().startsWith( "fr" ) ) {
-					sel1Folder = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Dossier sélectionné : <br>"
-							+ valFileFolder.getAbsolutePath() + "</h3></td></tr>";
+					sel1Folder = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br><br>&nbsp;</h3></td><td><h3>Dossier sélectionné : <br>"
+							+ valFileFolder.getAbsolutePath() + "<br>(" + numberInFileMap
+							+ " fichier)</h3></td></tr>";
 					sel2Folder = "<tr><td><h3>2.</h3></td><td><h3>Ajuster la configuration et le LogType si nécessaire </h3></td></tr>";
 					sel3Folder = "<tr><td><h3>3.</h3></td><td><h3>Démarrer la validation </h3></td></tr></table>";
 				} else if ( locale.toString().startsWith( "en" ) ) {
-					sel1Folder = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Selected folder: <br>"
-							+ valFileFolder.getAbsolutePath() + "</h3></td></tr>";
+					sel1Folder = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br><br>&nbsp;</h3></td><td><h3>Selected folder: <br>"
+							+ valFileFolder.getAbsolutePath() + "<br>(" + numberInFileMap
+							+ " files)</h3></td></tr>";
 					sel2Folder = "<tr><td><h3>2.</h3></td><td><h3>Adjust configuration and LogType if necessary </h3></td></tr>";
 					sel3Folder = "<tr><td><h3>3.</h3></td><td><h3>Start validation </h3></td></tr></table>";
-				} else {
-					sel1Folder = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Ausgewählter Ordner: <br>"
-							+ valFileFolder.getAbsolutePath() + "</h3></td></tr>";
-					sel2Folder = "<tr><td><h3>2.</h3></td><td><h3>Ggf. Konfiguration und LogType anpassen </h3></td></tr>";
-					sel3Folder = "<tr><td><h3>3.</h3></td><td><h3>Validierung starten </h3></td></tr></table>";
 				}
 				String text = "<html><body>" + sel1Folder + sel2Folder + sel3Folder + "</body></html>";
 				engine.loadContent( text );
