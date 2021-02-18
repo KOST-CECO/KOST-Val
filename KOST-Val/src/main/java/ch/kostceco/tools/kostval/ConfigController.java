@@ -89,7 +89,8 @@ public class ConfigController
 
 	@FXML
 	private Label						labelBps, labelComp, labelOther, labelPi, labelLength, labelName,
-			labelPuid,  labelWork, labelInput;
+			labelPuid, labelWork, labelInput, labelOtherPdfa, labelVersion, labelCallas, labelPdftools,
+			labelEr, labelEr1, labelEr2, labelEr3;
 
 	@FXML
 	private WebView					wbv;
@@ -109,7 +110,7 @@ public class ConfigController
 		String java6432 = System.getProperty( "sun.arch.data.model" );
 		String javaVersion = System.getProperty( "java.version" );
 		String javafxVersion = System.getProperty( "javafx.version" );
-		labelConfig.setText( "Copyright © KOST/CECO          KOST-Val v2.0.3          JavaFX "
+		labelConfig.setText( "Copyright © KOST/CECO          KOST-Val v2.0.4          JavaFX "
 				+ javafxVersion + "   &   Java-" + java6432 + " " + javaVersion + "." );
 
 		// Original Config Kopieren
@@ -148,6 +149,8 @@ public class ConfigController
 				labelLength.setText( "Pfadlänge" );
 				labelName.setText( "SIP Name" );
 				labelPuid.setText( "PUID" );
+				labelOtherPdfa.setText( "Sonstiges" );
+				labelVersion.setText( "Versionen" );
 				locale = new Locale( "de" );
 				buttonConfigApply.setText( "anwenden" );
 				buttonConfigApplyStandard.setText( "Standard anwenden" );
@@ -165,6 +168,8 @@ public class ConfigController
 				labelLength.setText( "Longueur du chemin" );
 				labelName.setText( "Nom du SIP" );
 				labelPuid.setText( "PUID" );
+				labelOtherPdfa.setText( "Divers" );
+				labelVersion.setText( "Versions" );
 				locale = new Locale( "fr" );
 				buttonConfigApply.setText( "appliquer" );
 				buttonConfigApplyStandard.setText( "appliquer le standard" );
@@ -182,6 +187,8 @@ public class ConfigController
 				labelLength.setText( "Path length" );
 				labelName.setText( "SIP Name" );
 				labelPuid.setText( "PUID" );
+				labelOtherPdfa.setText( "Other" );
+				labelVersion.setText( "Versions" );
 				locale = new Locale( "en" );
 				buttonConfigApply.setText( "apply" );
 				buttonConfigApplyStandard.setText( "apply Standard" );
@@ -550,7 +557,7 @@ public class ConfigController
 			try {
 				stringLengthNew = result.get();
 				stringLength = stringLengthNew;
-				buttonLength.setText( stringLength);
+				buttonLength.setText( stringLength );
 
 				String allowedlengthofpaths = "<allowedlengthofpaths>" + lengthIntInit
 						+ "</allowedlengthofpaths>";

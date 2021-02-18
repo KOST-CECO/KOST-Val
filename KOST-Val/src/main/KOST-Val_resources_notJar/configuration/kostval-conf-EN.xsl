@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-	<xsl:template match="/"><!-- kostval.conf.xml_v2.0.3 -->
+	<xsl:template match="/"><!-- kostval.conf.xml_v2.0.4 -->
 		<html>
 			<head>
 				<style>
@@ -90,6 +90,12 @@
 						</td>
 					</tr>
 					<tr  class="captioninfom">
+						<td>Specifies whether a font validation (search and extractability) should take place [tolerant]:</td>
+						<td>
+							<xsl:value-of select="configuration/pdfa/pdfafont" />
+						</td>
+					</tr>
+					<tr  class="captioninfom">
 						<td>Specifies whether a PDF/A validation with callas should take place [yes]:</td>
 						<td>
 							<xsl:value-of select="configuration/pdfa/callas" />
@@ -105,12 +111,6 @@
 						<td>Specifies which PDF/A versions are allowed [1A, 1B, 2A, 2B, 2U]:</td>
 						<td>
 							<xsl:value-of select="configuration/pdfa/pdfa1a" />&#160; <xsl:value-of select="configuration/pdfa/pdfa1b" />&#160; <xsl:value-of select="configuration/pdfa/pdfa2a" />&#160;<xsl:value-of select="configuration/pdfa/pdfa2b" />&#160; <xsl:value-of select="configuration/pdfa/pdfa2u" />
-						</td>
-					</tr>
-					<tr  class="captioninfom">
-						<td>Specifies whether a font validation (search and extractability) should take place [tolerant]:</td>
-						<td>
-							<xsl:value-of select="configuration/pdfa/pdfafont" />
 						</td>
 					</tr>
 					<tr  class="captioninfom">

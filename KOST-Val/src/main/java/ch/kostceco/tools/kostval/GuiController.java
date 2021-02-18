@@ -28,7 +28,6 @@ import java.io.PrintStream;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
-import java.util.TreeMap;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -113,7 +112,7 @@ public class GuiController
 
 	private String						arg0, arg1, arg2, arg3 = "--xml", dirOfJarPath, initInstructionsDe,
 			initInstructionsFr, initInstructionsEn;
-	private String						versionKostVal	= "2.0.3";
+	private String						versionKostVal	= "2.0.4";
 	/* TODO: versionKostVal auch hier anpassen:
 	 * 
 	 * 2) cmdKOSTVal.java
@@ -1174,7 +1173,7 @@ public class GuiController
 			}
 			Map<String, File> fileMap = Util.getFileMapFile( valFolder );
 			int numberFile = fileMap.size();
-			String numberInFileMap = String.format("%,d", numberFile);
+			String numberInFileMap = String.format( "%,d", numberFile );
 
 			String sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br><br>&nbsp;</h3></td><td><h3>Ausgewählter Ordner: <br>"
 					+ valFolder.getAbsolutePath() + "<br>(" + numberInFileMap + " Dateien)</h3></td></tr>";
@@ -1363,7 +1362,7 @@ public class GuiController
 			if ( valFileFolder.exists() ) {
 				Map<String, File> fileMap = Util.getFileMapFile( valFileFolder );
 				int numberFile = fileMap.size();
-				String numberInFileMap = String.format("%,d", numberFile);
+				String numberInFileMap = String.format( "%,d", numberFile );
 
 				String sel1Folder = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br><br>&nbsp;</h3></td><td><h3>Ausgewählter Ordner: <br>"
 						+ valFileFolder.getAbsolutePath() + "<br>(" + numberInFileMap
