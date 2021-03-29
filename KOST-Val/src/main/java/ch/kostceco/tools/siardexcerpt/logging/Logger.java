@@ -1,6 +1,6 @@
 /* == SIARDexcerpt ==============================================================================
- * The SIARDexcerpt application is used for excerpt a record from a SIARD-File. Copyright (C) 2016-2019
- * Claire Roethlisberger (KOST-CECO)
+ * The SIARDexcerpt application is used for excerpt a record from a SIARD-File. Copyright (C)
+ * 2016-2021 Claire Roethlisberger (KOST-CECO)
  * -----------------------------------------------------------------------------------------------
  * SIARDexcerpt is a development of the KOST-CECO. All rights rest with the KOST-CECO. This
  * application is free software: you can redistribute it and/or modify it under the terms of the GNU
@@ -19,15 +19,15 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.NDC;
 
-/** Logging Klasse. Sämtliche Log Aufrufe werden an Jakarta Commons Logging delegiert, welches diese
- * wiederum an Log4j delegiert.
+/** Logging Klasse. Saemtliche Log Aufrufe werden an Jakarta Commons Logging delegiert, welches
+ * diese wiederum an Log4j delegiert.
  * 
  * @author Rc Claire Roethlisberger, KOST-CECO */
 public class Logger
 {
 
 	/** Apache Commons Log. */
-	private Log	log;
+	private Log log;
 
 	/** Instanzierung eines benannten Loggers. Der Name des Loggers entspricht dem Namen der
 	 * übergebenen Klasse. Sinn: Beim Einsatz der Apache Log4j API können über das Konfig File Package

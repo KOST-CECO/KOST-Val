@@ -1,6 +1,6 @@
 /* == SIARDexcerpt ==============================================================================
- * The SIARDexcerpt application is used for excerpt a record from a SIARD-File. Copyright (C) 2016-2019
- * Claire Roethlisberger (KOST-CECO)
+ * The SIARDexcerpt application is used for excerpt a record from a SIARD-File. Copyright (C)
+ * 2016-2021 Claire Roethlisberger (KOST-CECO)
  * -----------------------------------------------------------------------------------------------
  * SIARDexcerpt is a development of the KOST-CECO. All rights rest with the KOST-CECO. This
  * application is free software: you can redistribute it and/or modify it under the terms of the GNU
@@ -27,7 +27,7 @@ import ch.kostceco.tools.siardexcerpt.excerption.ValidationModule;
 public interface ExcerptBSearchModule extends ValidationModule
 {
 
-	public boolean validate( File siardDatei, File outFile, String excerptString, Map<String, String> configMap, Locale locale  )
-			throws ExcerptBSearchException;
+	public boolean validate( File siardDatei, File outFile, String excerptString,
+			Map<String, String> configMap, Locale locale ) throws ExcerptBSearchException;
 
 }

@@ -1,6 +1,6 @@
 /* == SIARDexcerpt ==============================================================================
- * The SIARDexcerpt application is used for excerpt a record from a SIARD-File. Copyright (C) 2016-2019
- * Claire Roethlisberger (KOST-CECO)
+ * The SIARDexcerpt application is used for excerpt a record from a SIARD-File. Copyright (C)
+ * 2016-2021 Claire Roethlisberger (KOST-CECO)
  * -----------------------------------------------------------------------------------------------
  * SIARDexcerpt is a development of the KOST-CECO. All rights rest with the KOST-CECO. This
  * application is free software: you can redistribute it and/or modify it under the terms of the GNU
@@ -24,7 +24,7 @@ import org.apache.log4j.spi.LoggingEvent;
 public class MessageOnlyLayout extends SimpleLayout
 {
 
-	StringBuffer	sbuf	= new StringBuffer( 128 );
+	StringBuffer sbuf = new StringBuffer( 128 );
 
 	@Override
 	public String format( LoggingEvent event )

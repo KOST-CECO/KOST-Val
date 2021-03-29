@@ -1,6 +1,6 @@
 /* == SIARDexcerpt ==============================================================================
  * The SIARDexcerpt v0.9.0 application is used for excerpt a record from a SIARD-File. Copyright (C)
- * 2016-2020 Claire Roethlisberger (KOST-CECO)
+ * 2016-2021 Claire Roethlisberger (KOST-CECO)
  * -----------------------------------------------------------------------------------------------
  * SIARDexcerpt is a development of the KOST-CECO. All rights rest with the KOST-CECO. This
  * application is free software: you can redistribute it and/or modify it under the terms of the GNU
@@ -67,12 +67,13 @@ import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class ExcGuiController
 {
@@ -82,20 +83,15 @@ public class ExcGuiController
 
 	ObservableList<String>		langList						= FXCollections.observableArrayList( "Deutsch",
 			"Français", "English" );
-	ObservableList<String>		ConfigTypeList			= FXCollections
-			.observableArrayList( "keine Vorgabe   (..)", "Haupttabellename", "bestehende Konfig" );
-	ObservableList<String>		SearchExcerptList		= FXCollections
-			.observableArrayList( "Suche   (--search)", "Extraktion   (--excerpt)" );
+	ObservableList<String>		ConfigTypeList;
+	ObservableList<String>		SearchExcerptList;
 
 	@FXML
 	private ChoiceBox<String>	lang, configChoice, searchExcerptChoice;
 
 	@FXML
 	private Label							labelFileFolder, labelConfig, labelMainFolderName, mainFolderName,
-			labelSearchExcerpt, configResult, label, labelFileSiard;
-
-	@FXML
-	private TextField					searchExcerptString;
+			labelSearchExcerpt, labelSearchExcerptDetail, configResult, label, labelFileSiard;
 
 	@FXML
 	private TextArea					console;
@@ -107,7 +103,8 @@ public class ExcGuiController
 
 	private WebEngine					engine;
 
-	private File							outputFile, outputFileXsl, siardFile,
+	// private File outputFileXsl;
+	private File							outputFile, siardFile,
 			siardexcerptFolder = new File(
 					System.getenv( "USERPROFILE" ) + File.separator + ".siardexcerpt" ),
 			outputFolder = new File( siardexcerptFolder.getAbsolutePath() + File.separator + "Output" ),
@@ -139,6 +136,8 @@ public class ExcGuiController
 		labelFileSiard.setText( "" );
 		configResult.setText( "" );
 		mainFolderName.setText( "" );
+		labelSearchExcerptDetail.setText( "" );
+		buttonFile.setText( "..." );
 
 		ConfigurableApplicationContext context = new ClassPathXmlApplicationContext(
 				"classpath:config/applicationContext.xml" );
@@ -184,7 +183,7 @@ public class ExcGuiController
 			labelConfig.setText( "Configuration" );
 			labelMainFolderName.setText( "Nom de la table principale" );
 			labelSearchExcerpt.setText( "Recherche / Extraction" );
-			buttonFile.setText( "sélectionnez" );
+			// buttonFile.setText( "sélectionnez" );
 			buttonInit.setText( "initialiser" );
 			buttonFinish.setText( "Effacer l'initialisation" );
 			buttonHelp.setText( "Aide ?" );
@@ -204,8 +203,7 @@ public class ExcGuiController
 			labelConfig.setText( "Configuration" );
 			labelMainFolderName.setText( "Name of the main table" );
 			labelSearchExcerpt.setText( "Search / Extract" );
-			labelSearchExcerpt.setText( "Search / Extract" );
-			buttonFile.setText( "select" );
+			// buttonFile.setText( "select" );
 			buttonInit.setText( "initialize" );
 			buttonFinish.setText( "Clear initialization" );
 			buttonHelp.setText( "Help ?" );
@@ -225,7 +223,7 @@ public class ExcGuiController
 			labelConfig.setText( "Konfiguration" );
 			labelMainFolderName.setText( "Name der Haupttabelle" );
 			labelSearchExcerpt.setText( "Suchen / Extrahieren" );
-			buttonFile.setText( "auswählen" );
+			// buttonFile.setText( "auswählen" );
 			buttonInit.setText( "initialisieren" );
 			buttonFinish.setText( "Initialisierung löschen" );
 			buttonHelp.setText( "Hilfe ?" );
@@ -242,19 +240,25 @@ public class ExcGuiController
 		engine = wbv.getEngine();
 
 		// Inaktiv vor Initialisierung
-		searchExcerptString.setDisable( true );
-		buttonSearchExcerpt.setDisable( true );
-		buttonInit.setDisable( true );
-		buttonFinish.setDisable( false );
 		searchExcerptChoice.setDisable( true );
+		searchExcerptChoice.setVisible( false );
 		configChoice.setDisable( true );
+		configChoice.setVisible( true );
+		buttonSearchExcerpt.setDisable( true );
+		buttonSearchExcerpt.setVisible( false );
+		buttonInit.setDisable( true );
+		buttonInit.setVisible( true );
+		buttonFinish.setDisable( true );
+		buttonFinish.setVisible( false );
 
 		// Speichern und drucken des Log erst bei anzeige des log moeglich
 		buttonPrint.setDisable( true );
 		buttonSave.setDisable( true );
 
 		lang.getItems().addAll( langList );
+		configChoice.getItems().clear();
 		configChoice.getItems().addAll( ConfigTypeList );
+		searchExcerptChoice.getItems().clear();
 		searchExcerptChoice.getItems().addAll( SearchExcerptList );
 
 		/* Kurzanleitung zum GUI anzeigen */
@@ -425,21 +429,51 @@ public class ExcGuiController
 		console.setText( " \n" );
 		Printer defaultprinter = Printer.getDefaultPrinter();
 		Printer printerToUse = defaultprinter;
+		String strHeaderText = "Wählen Sie einen Drucker aus den verfügbaren Druckern";
+		String strTitle = "Druckerauswahl";
+		String strNoPrinter = "Kein Drucker. Es ist kein Drucker auf Ihrem System installiert.";
+		if ( locale.toString().startsWith( "fr" ) ) {
+			strHeaderText = "Choisissez une imprimante parmi les imprimantes disponibles";
+			strTitle = "Choix de l'imprimante";
+			strNoPrinter = "Pas d'imprimante. Aucune imprimante n'est installée sur votre système";
+		} else if ( locale.toString().startsWith( "en" ) ) {
+			strHeaderText = "Choose a printer from available printers";
+			strTitle = "Printer Choice";
+			strNoPrinter = "No printer. There is no printer installed on your system.";
+		}
 		if ( printerToUse != null ) {
-			PrinterJob job = PrinterJob.createPrinterJob();
-			JobSettings jobSettings = job.getJobSettings();
-			PageLayout pageLayout = jobSettings.getPageLayout();
-			job.setPrinter( printerToUse );
-			pageLayout = printerToUse.createPageLayout( Paper.A4, PageOrientation.PORTRAIT,
-					Printer.MarginType.DEFAULT );
-			jobSettings.setPageLayout( pageLayout );
-			job.getJobSettings();
-			job.showPrintDialog( null );
-			// job.showPageSetupDialog(null);
-			if ( job != null ) {
-				engine.print( job );
-				job.endJob();
+
+			ChoiceDialog<Printer> dialog = new ChoiceDialog<Printer>( defaultprinter,
+					Printer.getAllPrinters() );
+			dialog.initStyle( StageStyle.UTILITY ); // Title ohne icon
+			dialog.setHeaderText( strHeaderText );
+			dialog.setContentText( null );
+			dialog.setTitle( strTitle );
+			Optional<Printer> opt = dialog.showAndWait();
+			if ( opt.isPresent() ) {
+				// ein Drucker wurde ausgewaehlt
+				printerToUse = opt.get();
+				// start printing ...
+				PrinterJob job = PrinterJob.createPrinterJob();
+				JobSettings jobSettings = job.getJobSettings();
+				PageLayout pageLayout = jobSettings.getPageLayout();
+				job.setPrinter( printerToUse );
+				pageLayout = printerToUse.createPageLayout( Paper.A4, PageOrientation.PORTRAIT,
+						Printer.MarginType.DEFAULT );
+				jobSettings.setPageLayout( pageLayout );
+				job.getJobSettings();
+				/* showPrintDialog nicht verwenden, da ansonsten nicht zuverlaessig abgebrochen werden kann.
+				 * Besser ist es über einen ChoiceDialog den Drucker auszuwaehlen und wenn einer ausgewaehlt
+				 * wurde zu drucken! */
+				if ( job != null ) {
+					engine.print( job );
+					job.endJob();
+				}
+			} else {
+				// System.out.println("Kein Drucker ausgewaehlt. [Abbrechen] gedrueckt");
 			}
+		} else {
+			System.out.println( strNoPrinter );
 		}
 	}
 
@@ -466,14 +500,13 @@ public class ExcGuiController
 			}
 			File saveFolder = folderChooser.showDialog( new Stage() );
 			if ( saveFolder != null ) {
-				File outputFileXslNew = new File(
-						saveFolder.getAbsolutePath() + File.separator + outputFileXsl.getName() );
 				File outputFileNew = new File(
 						saveFolder.getAbsolutePath() + File.separator + outputFile.getName() );
-				Util.copyFile( outputFileXsl, outputFileXslNew );
 				System.out.println();
-				System.out.println(
-						copy + outputFileXsl.getAbsolutePath() + " > " + outputFileXslNew.getAbsolutePath() );
+				/* File outputFileXslNew = new File( saveFolder.getAbsolutePath() + File.separator +
+				 * outputFileXsl.getName() ); Util.copyFile( outputFileXsl, outputFileXslNew );
+				 * System.out.println( copy + outputFileXsl.getAbsolutePath() + " > " +
+				 * outputFileXslNew.getAbsolutePath() ); */
 				Util.copyFile( outputFile, outputFileNew );
 				System.out.println(
 						copy + outputFile.getAbsolutePath() + " > " + outputFileNew.getAbsolutePath() );
@@ -606,13 +639,19 @@ public class ExcGuiController
 				if ( initMain ) {
 					// Deaktivieren: Initialisierung; Datei auswaehlen; Configtyp
 					buttonFile.setDisable( true );
+					buttonFile.setVisible( false );
 					buttonInit.setDisable( true );
+					buttonInit.setVisible( false );
 					configChoice.setDisable( true );
+					configChoice.setVisible( false );
 
 					// Aktivierung SucheExtraktion; arg4; finish
-					searchExcerptChoice.setDisable( false );
-					searchExcerptString.setDisable( false );
+					buttonSearchExcerpt.setDisable( true );
+					buttonSearchExcerpt.setVisible( true );
 					buttonFinish.setDisable( false );
+					buttonFinish.setVisible( true );
+					searchExcerptChoice.setDisable( false );
+					searchExcerptChoice.setVisible( true );
 
 					// kein Output bei der Initialisierung welcher angezeigt werden kann
 					String text = "Initialisierung durchgeführt. <br/><br/>Ab jetzt kann gesucht oder extrahiert werden.";
@@ -626,19 +665,19 @@ public class ExcGuiController
 						help1 = "<h2>Brèves instructions</h2>";
 						help2 = "<hr>";
 						help3 = "<h4>1) Précisez s'il faut rechercher ou extraire</h4>";
-						help4 = "<h4>2) Entrez le texte de recherche ou la clé d'extraction et confirmez avec Enter</h4>";
+						help4 = "<h4>2) Entrez le texte de recherche ou la clé d'extraction</h4>";
 						help5 = "<h4>3) Démarrer la recherche ou l'extraction</h4>";
 					} else if ( locale.toString().startsWith( "en" ) ) {
 						help1 = "<h2>Brief instructions</h2>";
 						help2 = "<hr>";
 						help3 = "<h4>1) Specify whether to search or extract</h4>";
-						help4 = "<h4>2) Enter the search text or extraction key and confirm with Enter</h4>";
+						help4 = "<h4>2) Enter the search text or extraction key</h4>";
 						help5 = "<h4>3) Start search or extraction</h4>";
 					} else {
 						help1 = "<h2>Kurzanleitung</h2>";
 						help2 = "<hr>";
 						help3 = "<h4>1) Festlegen ob gesucht oder extrahiert werden soll</h4>";
-						help4 = "<h4>2) Suchtext respektive Extraktionsschlüssel eintragen und mit Enter bestätigen</h4>";
+						help4 = "<h4>2) Suchtext respektive Extraktionsschlüssel eintragen</h4>";
 						help5 = "<h4>3) Suche oder Extraktion starten</h4>";
 					}
 					String textHelp = help1 + help2 + help3 + help4 + help5 + "<br/>";
@@ -649,10 +688,10 @@ public class ExcGuiController
 
 					// Aktivieren: finish
 					buttonFinish.setDisable( false );
+					buttonFinish.setVisible( true );
 
 					// Deaktivierung SucheExtraktion; arg4; Initialisierung; Datei auswaehlen; Configtyp
 					searchExcerptChoice.setDisable( true );
-					searchExcerptString.setDisable( true );
 					buttonFile.setDisable( true );
 					buttonInit.setDisable( true );
 					configChoice.setDisable( true );
@@ -725,13 +764,13 @@ public class ExcGuiController
 	{
 		console.setText( " \n" );
 		String text = "<html><h2>Suche/Extraktion wird durchgeführt. <br/><br/>Bitte warten ...</h2></html>";
-		String newarg4=arg4;
-		if (arg4.contains( "*" )) {
+		String newarg4 = arg4;
+		if ( arg4.contains( "*" ) ) {
 			newarg4 = arg4.replace( "*", "_" );
 		}
 		if ( arg3.equals( "--search" ) ) {
-			outputFile = new File(
-					outputFolder + File.separator + siardFile.getName() + "_" + newarg4 + "_SIARDsearch.xml" );
+			outputFile = new File( outputFolder + File.separator + siardFile.getName() + "_" + newarg4
+					+ "_SIARDsearch.xml" );
 			if ( locale.toString().startsWith( "fr" ) ) {
 				text = "<html><h2>La recherche est lancée. <br/><br/>Veuillez patienter ...</h2></html>";
 			} else if ( locale.toString().startsWith( "en" ) ) {
@@ -740,8 +779,8 @@ public class ExcGuiController
 				text = "<html><h2>Suche wird durchgeführt. <br/><br/>Bitte warten ...</h2></html>";
 			}
 		} else {
-			outputFile = new File(
-					outputFolder + File.separator + siardFile.getName() + "_" + newarg4 + "_SIARDexcerpt.xml" );
+			outputFile = new File( outputFolder + File.separator + siardFile.getName() + "_" + newarg4
+					+ "_SIARDexcerpt.xml" );
 			if ( locale.toString().startsWith( "fr" ) ) {
 				text = "<html><h2>L'extraction est lancée. <br/><br/>Veuillez patienter ...</h2></html>";
 			} else if ( locale.toString().startsWith( "en" ) ) {
@@ -883,7 +922,6 @@ public class ExcGuiController
 		arg2 = "--" + locale.toString();
 		arg3 = "--finish";
 		arg4 = "*";
-		searchExcerptString.setText( "" );
 		if ( locale.toString().startsWith( "fr" ) ) {
 			buttonSearchExcerpt.setText( "recherche / extraction" );
 		} else if ( locale.toString().startsWith( "en" ) ) {
@@ -904,15 +942,23 @@ public class ExcGuiController
 
 				// Aktivieren: Initialisierung; Datei auswaehlen; Configtyp
 				buttonFile.setDisable( false );
+				buttonFile.setVisible( true );
 				buttonInit.setDisable( false );
+				buttonInit.setVisible( true );
 				configChoice.setDisable( false );
+				configChoice.setVisible( true );
 
 				// Inaktiv vor Initialisierung
-				searchExcerptString.setDisable( true );
 				buttonSearchExcerpt.setDisable( true );
+				buttonSearchExcerpt.setVisible( false );
 				buttonFinish.setDisable( true );
+				buttonFinish.setVisible( false );
 				searchExcerptChoice.setDisable( true );
+				searchExcerptChoice.setVisible( false );
 				mainFolderName.setText( "" );
+				arg3 = "";
+				arg4 = "";
+				labelSearchExcerptDetail.setText( "" );
 
 				// Speichern und drucken des Log erst bei anzeige des log moeglich
 				buttonPrint.setDisable( true );
@@ -942,16 +988,6 @@ public class ExcGuiController
 				arg1 = "(..)";
 				configResult.setText( "" );
 				mainFolderName.setText( "" );
-				if ( locale.toString().startsWith( "fr" ) ) {
-					ConfigTypeList = FXCollections.observableArrayList( "pas de défaut (..)",
-							"nom de la table principale", "configuration existante" );
-				} else if ( locale.toString().startsWith( "en" ) ) {
-					ConfigTypeList = FXCollections.observableArrayList( "no defaults (..)",
-							"Name of the main table", "existing configuration" );
-				} else {
-					ConfigTypeList = FXCollections.observableArrayList( "keine Vorgaben (..)",
-							"Name der Haupttabelle", "bestehende Konfiguration" );
-				}
 			}
 		} );
 		finish.setOnFailed( new EventHandler<WorkerStateEvent>() {
@@ -976,16 +1012,6 @@ public class ExcGuiController
 				configResult.setText( "" );
 				mainFolderName.setText( "" );
 				configChoice.valueProperty().set( null );
-				if ( locale.toString().startsWith( "fr" ) ) {
-					ConfigTypeList = FXCollections.observableArrayList( "pas de défaut (..)",
-							"nom de la table principale", "configuration existante" );
-				} else if ( locale.toString().startsWith( "en" ) ) {
-					ConfigTypeList = FXCollections.observableArrayList( "no defaults (..)",
-							"Name of the main table", "existing configuration" );
-				} else {
-					ConfigTypeList = FXCollections.observableArrayList( "keine Vorgaben (..)",
-							"Name der Haupttabelle", "bestehende Konfiguration" );
-				}
 			}
 		} );
 		new Thread( finish ).start();
@@ -1014,19 +1040,6 @@ public class ExcGuiController
 		};
 	}
 
-	/* TODO --> TextField ================= */
-
-	/* Wenn Aenderungen an changeSearchExcerpt gemacht wird, wird es ausgeloest */
-	@FXML
-	void changeSearchExcerpt( ActionEvent event )
-	{
-		console.setText( " \n" );
-		arg4 = searchExcerptString.getText();
-		buttonSearchExcerpt.setDisable( false );
-		buttonPrint.setDisable( true );
-		buttonSave.setDisable( true );
-	}
-
 	/* TODO --> ChoiceBox ================= */
 
 	// Mit changeSearchExcerpt wird die Suche oder Extraktion ausgewaehlt
@@ -1050,18 +1063,102 @@ public class ExcGuiController
 		if ( selSearchExcerptChoice.contains( "(--search)" ) ) {
 			// suche
 			arg3 = "--search";
-			searchExcerptString.setDisable( false );
 			buttonSearchExcerpt.setText( locSearch );
+
+			arg4 = "";
+			// create a TextInputDialog mit der Texteingabe der Laenge
+			TextInputDialog dialog = new TextInputDialog( arg4 );
+
+			// Set title & header text
+			dialog.setTitle( "SIARDexcerpt - " + locSearch );
+			String headerDeFrEn = "Die gesuchten Werte eingeben. Dabei müssen die einzelnen Werte mit der Wildcard * getrennt werden. \n\nDie Reihenfolge wird übernommen. \nLeerschläge und andere Sonderzeichen müssen durch die Wildcard * ersetzt werden.";
+			if ( locale.toString().startsWith( "fr" ) ) {
+				headerDeFrEn = "Rentrer les valeurs recherchées en séparant les valeurs individuelles avec le caractère générique *. \n\nL’ordre est significatif. \nRemplacer les espaces et autres caractères spéciaux par le caractère générique *.";
+			} else if ( locale.toString().startsWith( "en" ) ) {
+				headerDeFrEn = "Input the values to be searched. Individual values must be separated with the wild-card character *. \n\nThe values’ order is significant. \nSpaces and special characters must be replaced by the wild-card character *.";
+			}
+			dialog.setHeaderText( headerDeFrEn );
+			dialog.setContentText( "" );
+
+			// Show the dialog and capture the result.
+			Optional<String> result = dialog.showAndWait();
+
+			// If the "Okay" button was clicked, the result will contain our String in the get() method
+			if ( result.isPresent() ) {
+				try {
+					arg4 = result.get();
+					labelSearchExcerptDetail.setText( arg3 + " " + arg4 );
+					buttonSearchExcerpt.setText( locSearch );
+					buttonSearchExcerpt.setDisable( false );
+				} catch ( NumberFormatException eInt ) {
+					arg3 = "";
+					arg4 = "";
+					labelSearchExcerptDetail.setText( "" );
+					buttonSearchExcerpt.setText( locSearch + "/" + locExcerpt );
+					buttonSearchExcerpt.setDisable( true );
+				}
+			} else {
+				// Keine Aktion
+				arg3 = "";
+				arg4 = "";
+				labelSearchExcerptDetail.setText( "" );
+				buttonSearchExcerpt.setText( locSearch + "/" + locExcerpt );
+				buttonSearchExcerpt.setDisable( true );
+			}
 
 		} else if ( selSearchExcerptChoice.contains( "(--excerpt)" ) ) {
 			// Extraktion
 			arg3 = "--excerpt";
-			searchExcerptString.setDisable( false );
 			buttonSearchExcerpt.setText( locExcerpt );
+
+			arg4 = "";
+			// create a TextInputDialog mit der Texteingabe der Laenge
+			TextInputDialog dialog = new TextInputDialog( arg4 );
+
+			// Set title & header text
+			dialog.setTitle( "SIARDexcerpt - " + locExcerpt );
+			String headerDeFrEn = "Den Extraktionsschlüssel eingeben. \nLeerschläge und andere Sonderzeichen müssen durch die Wildcard * ersetzt werden.";
+			if ( locale.toString().startsWith( "fr" ) ) {
+				headerDeFrEn = "Rentrer la clé primaire, en remplaçant les espaces et \nautres caractères spéciaux par le caractère générique *.";
+			} else if ( locale.toString().startsWith( "en" ) ) {
+				headerDeFrEn = "Input the primary key. \nSpaces and other special signs must be replaced by the wild-card character *.";
+			}
+			dialog.setHeaderText( headerDeFrEn );
+			dialog.setContentText( "" );
+
+			// Show the dialog and capture the result.
+			Optional<String> result = dialog.showAndWait();
+
+			// If the "Okay" button was clicked, the result will contain our String in the get() method
+			if ( result.isPresent() ) {
+				try {
+					arg4 = result.get();
+					labelSearchExcerptDetail.setText( arg3 + " " + arg4 );
+					buttonSearchExcerpt.setText( locExcerpt );
+					buttonSearchExcerpt.setDisable( false );
+				} catch ( NumberFormatException eInt ) {
+					arg3 = "";
+					arg4 = "";
+					labelSearchExcerptDetail.setText( "" );
+					buttonSearchExcerpt.setText( locSearch + "/" + locExcerpt );
+					buttonSearchExcerpt.setDisable( true );
+				}
+			} else {
+				// Keine Aktion
+				arg3 = "";
+				arg4 = "";
+				labelSearchExcerptDetail.setText( "" );
+				buttonSearchExcerpt.setText( locSearch + "/" + locExcerpt );
+				buttonSearchExcerpt.setDisable( true );
+			}
+
 		} else {
-			arg3 = "--init";
-			searchExcerptString.setDisable( true );
+			// Keine Aktion
+			arg3 = "";
+			arg4 = "";
+			labelSearchExcerptDetail.setText( "" );
 			buttonSearchExcerpt.setText( locSearch + "/" + locExcerpt );
+			buttonSearchExcerpt.setDisable( true );
 		}
 	}
 
@@ -1184,7 +1281,7 @@ public class ExcGuiController
 			labelConfig.setText( "Configuration" );
 			labelMainFolderName.setText( "Nom de la table principale" );
 			labelSearchExcerpt.setText( "Recherche / Extraction" );
-			buttonFile.setText( "sélectionnez" );
+			// buttonFile.setText( "sélectionnez" );
 			buttonInit.setText( "initialiser" );
 			buttonFinish.setText( "Effacer l'initialisation" );
 			buttonHelp.setText( "Aide ?" );
@@ -1205,7 +1302,7 @@ public class ExcGuiController
 			labelMainFolderName.setText( "Name of the main table" );
 			labelSearchExcerpt.setText( "Search / Extract" );
 			labelSearchExcerpt.setText( "Search / Extract" );
-			buttonFile.setText( "select" );
+			// buttonFile.setText( "select" );
 			buttonInit.setText( "initialize" );
 			buttonFinish.setText( "Clear initialization" );
 			buttonHelp.setText( "Help ?" );
@@ -1225,7 +1322,7 @@ public class ExcGuiController
 			labelConfig.setText( "Konfiguration" );
 			labelMainFolderName.setText( "Name der Haupttabelle" );
 			labelSearchExcerpt.setText( "Suchen / Extrahieren" );
-			buttonFile.setText( "auswählen" );
+			// buttonFile.setText( "auswählen" );
 			buttonInit.setText( "initialisieren" );
 			buttonFinish.setText( "Initialisierung löschen" );
 			buttonHelp.setText( "Hilfe ?" );
@@ -1238,6 +1335,10 @@ public class ExcGuiController
 			SearchExcerptList = FXCollections.observableArrayList( "Suchen (--search)",
 					"Extraktion (--excerpt)" );
 		}
+		configChoice.getItems().clear();
+		configChoice.getItems().addAll( ConfigTypeList );
+		searchExcerptChoice.getItems().clear();
+		searchExcerptChoice.getItems().addAll( SearchExcerptList );
 	}
 
 }

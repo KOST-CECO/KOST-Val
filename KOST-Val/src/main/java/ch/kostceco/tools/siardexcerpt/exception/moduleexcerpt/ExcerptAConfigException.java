@@ -1,6 +1,6 @@
 /* == SIARDexcerpt ==============================================================================
- * The SIARDexcerpt application is used for excerpt a record from a SIARD-File. Copyright (C) 2016-2019
- * Claire Roethlisberger (KOST-CECO)
+ * The SIARDexcerpt application is used for excerpt a record from a SIARD-File. Copyright (C)
+ * 2016-2021 Claire Roethlisberger (KOST-CECO)
  * -----------------------------------------------------------------------------------------------
  * SIARDexcerpt is a development of the KOST-CECO. All rights rest with the KOST-CECO. This
  * application is free software: you can redistribute it and/or modify it under the terms of the GNU
@@ -20,7 +20,7 @@ import ch.kostceco.tools.siardexcerpt.exception.SIARDexcerptException;
 public class ExcerptAConfigException extends SIARDexcerptException
 {
 
-	private static final long	serialVersionUID	= -8816841335398903517L;
+	private static final long serialVersionUID = -8816841335398903517L;
 
 	public ExcerptAConfigException( String message )
 	{

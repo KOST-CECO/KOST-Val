@@ -6,7 +6,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -25,8 +24,8 @@
 				<GridPane maxHeight="120.0" minHeight="40.0" prefHeight="120.0" BorderPane.alignment="CENTER">
 					<columnConstraints>
 						<ColumnConstraints hgrow="SOMETIMES" maxWidth="160.0" minWidth="160.0" prefWidth="160.0" />
-						<ColumnConstraints hgrow="SOMETIMES" maxWidth="160.0" minWidth="160.0" prefWidth="160.0" />
-						<ColumnConstraints hgrow="SOMETIMES" maxWidth="160.0" minWidth="160.0" prefWidth="160.0" />
+						<ColumnConstraints hgrow="SOMETIMES" maxWidth="40.0" minWidth="40.0" prefWidth="40.0" />
+						<ColumnConstraints hgrow="SOMETIMES" maxWidth="280.0" minWidth="280.0" prefWidth="280.0" />
 						<ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="0.0" prefWidth="10.0" />
 						<ColumnConstraints hgrow="SOMETIMES" maxWidth="170.0" minWidth="170.0" prefWidth="170.0" />
 						<ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="200.0" minWidth="200.0" prefWidth="200.0" />
@@ -39,13 +38,13 @@
 					</rowConstraints>
 					<children>
 						<Label fx:id="labelFileFolder" text="SIARD-Datei" />
-						<Button fx:id="buttonFile" alignment="TOP_LEFT" maxWidth="150.0" minHeight="26.0" minWidth="150.0" mnemonicParsing="false" onAction="#chooseFile" prefHeight="26.0" prefWidth="150.0" text="auswählen" GridPane.columnIndex="1">
+						<Button fx:id="buttonFile" alignment="TOP_LEFT" maxWidth="26.0" minHeight="26.0" minWidth="26.0" mnemonicParsing="false" onAction="#chooseFile" prefHeight="26.0" prefWidth="26.0" text="..." GridPane.columnIndex="1">
 							<GridPane.margin>
 								<Insets left="10.0" />
 							</GridPane.margin>
 						</Button>
 						<Label fx:id="labelConfig" text="Konfiguration" GridPane.rowIndex="1" />
-						<ChoiceBox fx:id="configChoice" layoutX="700.0" layoutY="12.0" maxWidth="150.0" minHeight="26.0" minWidth="150.0" nodeOrientation="LEFT_TO_RIGHT" onAction="#changeConfigType" prefHeight="26.0" prefWidth="150.0" value="keine Vorgabe   (..)" GridPane.columnIndex="1" GridPane.rowIndex="1">
+						<ChoiceBox fx:id="configChoice" layoutX="700.0" layoutY="12.0" maxWidth="26.0" minHeight="26.0" minWidth="26.0" nodeOrientation="LEFT_TO_RIGHT" onAction="#changeConfigType" prefHeight="26.0" prefWidth="26.0" value="keine Vorgabe   (..)" GridPane.columnIndex="1" GridPane.rowIndex="1">
 							<opaqueInsets>
 								<Insets />
 							</opaqueInsets>
@@ -94,12 +93,12 @@
                         <Insets right="20.0" />
                      </GridPane.margin>
                   </Button>
-                  <Label fx:id="mainFolderName" layoutX="10.0" layoutY="47.0" text="Schemaname/Tabellenname" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="2">
+                  <Label fx:id="mainFolderName" layoutX="10.0" layoutY="47.0" text="Schemaname/Tabellenname" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="2">
                      <GridPane.margin>
                         <Insets left="10.0" right="10.0" />
                      </GridPane.margin>
                   </Label>
-                  <ChoiceBox fx:id="searchExcerptChoice" layoutX="150.0" layoutY="42.0" maxWidth="150.0" minHeight="26.0" minWidth="150.0" nodeOrientation="LEFT_TO_RIGHT" onAction="#choiceSearchExcerpt" prefHeight="26.0" prefWidth="150.0" value="Suche   (--search)" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                  <ChoiceBox fx:id="searchExcerptChoice" layoutX="150.0" layoutY="42.0" maxWidth="26.0" minHeight="26.0" minWidth="26.0" nodeOrientation="LEFT_TO_RIGHT" onAction="#choiceSearchExcerpt" prefHeight="26.0" prefWidth="26.0" value="Suche   (--search)" GridPane.columnIndex="1" GridPane.rowIndex="3">
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>
@@ -108,19 +107,19 @@
                      </GridPane.margin>
                   </ChoiceBox>
                   <Label fx:id="labelSearchExcerpt" layoutX="10.0" layoutY="47.0" text="Suche / Extraktion" GridPane.rowIndex="3" />
-                  <TextField fx:id="searchExcerptString" layoutX="340.0" layoutY="13.0" onAction="#changeSearchExcerpt" minHeight="25.0" minWidth="40.0" prefHeight="25.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="3">
-                     <GridPane.margin>
-                        <Insets left="10.0" right="10.0" />
-                     </GridPane.margin>
-                  </TextField>
-                  <Label fx:id="configResult" layoutX="180.0" layoutY="77.0" text="gewählte Konfiguration" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="1">
+                  <Label fx:id="configResult" layoutX="180.0" layoutY="77.0" text="gewählte Konfiguration" textOverrun="LEADING_ELLIPSIS" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="1">
                      <GridPane.margin>
                         <Insets left="10.0" right="10.0" />
                      </GridPane.margin>
                   </Label>
-                  <Label fx:id="labelFileSiard" layoutX="180.0" layoutY="77.0" text="Schemaname/Tabellenname" GridPane.columnIndex="2" GridPane.columnSpan="3">
+                  <Label fx:id="labelFileSiard" layoutX="180.0" layoutY="77.0" text="Schemaname/Tabellenname" textOverrun="LEADING_ELLIPSIS" GridPane.columnIndex="2" GridPane.columnSpan="3">
                      <GridPane.margin>
                         <Insets left="10.0" right="20.0" />
+                     </GridPane.margin>
+                  </Label>
+                  <Label fx:id="labelSearchExcerptDetail" text="Details" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="3">
+                     <GridPane.margin>
+                        <Insets left="10.0" />
                      </GridPane.margin>
                   </Label>
 					</children>
