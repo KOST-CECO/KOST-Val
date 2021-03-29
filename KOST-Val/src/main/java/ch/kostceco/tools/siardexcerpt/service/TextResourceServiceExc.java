@@ -1,6 +1,6 @@
 /* == SIARDexcerpt ==============================================================================
- * The SIARDexcerpt application is used for excerpt a record from a SIARD-File. Copyright (C) 2016-2019
- * Claire Roethlisberger (KOST-CECO)
+ * The SIARDexcerpt application is used for excerpt a record from a SIARD-File. Copyright (C)
+ * 2016-2021 Claire Roethlisberger (KOST-CECO)
  * -----------------------------------------------------------------------------------------------
  * SIARDexcerpt is a development of the KOST-CECO. All rights rest with the KOST-CECO. This
  * application is free software: you can redistribute it and/or modify it under the terms of the GNU
@@ -17,7 +17,7 @@ package ch.kostceco.tools.siardexcerpt.service;
 
 import java.util.Locale;
 
-/** Service Interface für Text Ressourcen.
+/** Service Interface fuer Text Ressourcen.
  * 
  * @author Rc Claire Roethlisberger, KOST-CECO */
 public interface TextResourceServiceExc extends ServiceExc
@@ -29,9 +29,9 @@ public interface TextResourceServiceExc extends ServiceExc
 	 * Resource mit den Werten aus aValues ersetzt.
 	 * 
 	 * @param aKey
-	 *          der Resourcenschlüssel
+	 *          der Resourcenschluessel
 	 * @param values
-	 *          die Werte für die Platzhalter
+	 *          die Werte fuer die Platzhalter
 	 * @return das formatierte Ergebnis */
 	String getText( String aKey, Object... values );
 
@@ -43,9 +43,9 @@ public interface TextResourceServiceExc extends ServiceExc
 	 * @param locale
 	 *          zu verwendende Locale
 	 * @param aKey
-	 *          der Resourcenschlüssel
+	 *          der Resourcenschluessel
 	 * @param values
-	 *          die Werte für die Platzhalter
+	 *          die Werte fuer die Platzhalter
 	 * @return das formatierte Ergebnis */
 	String getText( Locale locale, String aKey, Object... values );
 }

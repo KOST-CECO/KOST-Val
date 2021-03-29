@@ -1,6 +1,6 @@
 /* == SIARDexcerpt ==============================================================================
- * The SIARDexcerpt application is used for excerpt a record from a SIARD-File. Copyright (C) 2016-2019
- * Claire Roethlisberger (KOST-CECO)
+ * The SIARDexcerpt application is used for excerpt a record from a SIARD-File. Copyright (C)
+ * 2016-2021 Claire Roethlisberger (KOST-CECO)
  * -----------------------------------------------------------------------------------------------
  * SIARDexcerpt is a development of the KOST-CECO. All rights rest with the KOST-CECO. This
  * application is free software: you can redistribute it and/or modify it under the terms of the GNU
@@ -26,11 +26,11 @@ import ch.kostceco.tools.siardexcerpt.service.TextResourceServiceExc;
  * @author Rc Claire Roethlisberger, KOST-CECO */
 public class TextResourceServiceExcImpl implements TextResourceServiceExc
 {
-	// Per Default ist es dieser Name, kann jedoch auch mittels Dependency Injection überschrieben
+	// Per Default ist es dieser Name, kann jedoch auch mittels Dependency Injection ueberschrieben
 	// werden.
-	private String	bundleBaseName	= "messages";
+	private String bundleBaseName = "messages";
 
-	/** Gibt den Wert des Attributs <code>bundleBaseName</code> zurück.
+	/** Gibt den Wert des Attributs <code>bundleBaseName</code> zurueck.
 	 * 
 	 * @return Wert des Attributs bundleBaseName. */
 	public String getBundleBaseName()
@@ -41,7 +41,7 @@ public class TextResourceServiceExcImpl implements TextResourceServiceExc
 	/** Setzt den Wert des Attributs <code>bundleBaseName</code>.
 	 * 
 	 * @param bundleBaseName
-	 *          Wert für das Attribut bundleBaseName. */
+	 *          Wert fuer das Attribut bundleBaseName. */
 	public void setBundleBaseName( String bundleBaseName )
 	{
 		this.bundleBaseName = bundleBaseName;
