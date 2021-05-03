@@ -54,7 +54,6 @@
 				<exclude name="**/*.java" />
 			</fileset>
 		</copy>
-		<copy file="../README.md" todir="target/classes" />
 	</target>
 	<target name="clean">
 		<delete dir="target/classes" />
