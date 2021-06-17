@@ -24,8 +24,10 @@ import java.io.File;
 import java.util.Map;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FilenameFilter;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -317,12 +319,15 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 					Set<String> filesInSiardKeys = filesInSiard.keySet();
 					for ( Iterator<String> iterator = filesInSiardKeys.iterator(); iterator.hasNext(); ) {
 						String entryName = iterator.next();
+						File entryNameFile = new File( entryName );
+						String entryNameParent = entryNameFile.getParent();
 						// System.out.println( "gesucht: " + entryName );
 						Set<String> tablesInSiardKeys = tablesInSiard.keySet();
 						for ( Iterator<String> iteratorTables = tablesInSiardKeys.iterator(); iteratorTables
 								.hasNext(); ) {
 							String tableName = iteratorTables.next();
 							File tableXml = new File( tableName );
+							String tableNameParent = tableXml.getParent();
 							boolean tableFile = false;
 
 							File fSearchtable = tableXml;
@@ -408,26 +413,69 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 								InputStream fis = new FileInputStream( tableXml );
 								BufferedReader br = new BufferedReader( new InputStreamReader( fis ) );
 
+								File folderTable = tableXml.getParentFile();
+								// File file = new File("/path/to/directory");
+								String lobName = "nichts";
+								String[] directories = folderTable.list( new FilenameFilter() {
+									@Override
+									public boolean accept( File current, String lobName )
+									{
+										return new File( current, lobName ).isDirectory();
+									}
+								} );
+								lobName = Arrays.toString( directories ).toString();
+								lobName = lobName.substring( 1, lobName.length() - 1 );
+								// System.out.println( "lobName: " + lobName );
+
 								// Datei Zeile fuer Zeile lesen und ermitteln ob "file=" darin enthalten ist
 
 								for ( String line = br.readLine(); line != null; line = br.readLine() ) {
 									if ( line.contains( " file=" ) ) {
+										// System.out.println( "file in table.xml: " + line );
 										tableFile = true;
 										String newEntryName = entryName.substring( entryName.indexOf( "content" ),
 												entryName.length() );
+										String relEntryName = newEntryName;
+										int lobLength = lobName.length() + 1;
+										int lobLengthEntryName = entryName.indexOf( lobName ) + lobLength;
+										if ( lobLengthEntryName < entryName.length() ) {
+											relEntryName = entryName.substring( lobLengthEntryName, entryName.length() );
+										}
+										// System.out.println( "lobLength: " + lobLength );
+										/* System.out.println( "entryName: " + entryName + " -->  newEntryName: " +
+										 * newEntryName + " -->  relEntryName: " + relEntryName ); */
 										if ( line.contains( newEntryName ) ) {
 											// entryName ist in der Tabelle enthalten und wird spaeter aus liste geloescht
 											filesToRemove.put( entryName, entryName );
+											filesToRemove.put( entryNameParent, entryNameParent );
+											// System.out.println( "gefunden (1)" );
 											break;
 										} else {
 											newEntryName = newEntryName.replace( "\\", "/" );
 											if ( line.contains( newEntryName ) ) {
 												// entryName ist in Tabelle enthalten und wird spaeter aus liste geloescht
 												filesToRemove.put( entryName, entryName );
-												// System.out.println( "gefunden" );
+												filesToRemove.put( entryNameParent, entryNameParent );
+												// System.out.println( "gefunden (2)" );
+												break;
+											} else if ( line.contains( relEntryName ) ) {
+												// entryName ist in der Tabelle enthalten und wird spaeter aus liste
+												// geloescht
+												filesToRemove.put( entryName, entryName );
+												filesToRemove.put( entryNameParent, entryNameParent );
+												// System.out.println( "gefunden (3)" );
 												break;
 											} else {
-												// entryName wurde nicht in dieser Zeile gefunden keine Aktion
+												relEntryName = relEntryName.replace( "\\", "/" );
+												if ( line.contains( relEntryName ) ) {
+													// entryName ist in Tabelle enthalten und wird spaeter aus liste geloescht
+													filesToRemove.put( entryName, entryName );
+													filesToRemove.put( entryNameParent, entryNameParent );
+													// System.out.println( "gefunden (4)" );
+													break;
+												} else {
+													// entryName wurde nicht in dieser Zeile gefunden keine Aktion
+												}
 											}
 										}
 									}
@@ -460,6 +508,7 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 							if ( !tableFile ) {
 								// tableName enthaelt keine file und wird aus liste geloescht
 								tablesToRemove.put( tableName, tableName );
+								tablesToRemove.put( tableNameParent, tableNameParent );
 							}
 						} // tablesInSiard durchgehen
 						// tablesInSiard mit tablesToRemove bereinigen

@@ -27,6 +27,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -832,7 +834,7 @@ public class RanGuiController
 				DocumentBuilderFactory dbfTable = DocumentBuilderFactory.newInstance();
 				DocumentBuilder dbTable = dbfTable.newDocumentBuilder();
 				Document docTable;
-				docTable = dbTable.parse( new FileInputStream( metadataXml ), "UTF8" );
+				docTable = dbTable.parse( new FileInputStream( metadataXml ), "UTF-8" );
 				docTable.getDocumentElement().normalize();
 				dbfTable.setFeature( "http://xml.org/sax/features/namespaces", false );
 				NodeList nlTables = docTable.getElementsByTagName( "tables" );
@@ -869,25 +871,57 @@ public class RanGuiController
 												 * Adresse</description><cellno>c1</cellno></column><column><name>CountryId<
 												 * /name><description>Land</description><cellno>c14</cellno></column></
 												 * legend> */
+												int cellNoInt = 1;
 												NodeList nlColumn = subNode.getChildNodes();
-												for ( int xC = 1; xC < nlColumn.getLength(); xC = xC + 2 ) {
-													String cellNo = "c" + (xC + 1) / 2;
-													cellNoXml = cellNoXml + System.lineSeparator() + "<column><cellno>"
-															+ cellNo + "</cellno>";
+												for ( int xC = 1; xC < nlColumn.getLength(); xC++ ) {
 													Node nodeColumn = nlColumn.item( xC );
 													NodeList nlColumnDetail = nodeColumn.getChildNodes();
-													for ( int xCD = 0; xCD < nlColumnDetail.getLength(); xCD++ ) {
-														Node nodeColumnDetail = nlColumnDetail.item( xCD );
-														if ( nodeColumnDetail.getNodeName().equals( "name" ) ) {
-															cellNoXml = cellNoXml + "<name>" + nodeColumnDetail.getTextContent()
-																	+ "</name>";
+													if ( nlColumnDetail.getLength() > 0 ) {
+														String cellNo = "c" + cellNoInt;
+														cellNoXml = cellNoXml + System.lineSeparator() + "<column><cellno>"
+																+ cellNo + "</cellno>";
+														cellNoInt++;
+														for ( int xCD = 0; xCD < nlColumnDetail.getLength(); xCD++ ) {
+															Node nodeColumnDetail = nlColumnDetail.item( xCD );
+															String rawString = nodeColumnDetail.getTextContent();
+															ByteBuffer buffer = StandardCharsets.UTF_8.encode( rawString );
+															String utf8EncodedString = StandardCharsets.UTF_8.decode( buffer )
+																	.toString();
+															String newString = utf8EncodedString.replace( "\u00c0", "A" )
+																	.replace( "\u00c1", "A" ).replace( "\u00c2", "A" )
+																	.replace( "\u00c4", "Ae" ).replace( "\u00c6", "Ae" )
+																	.replace( "\u00c8", "E" ).replace( "\u00c9", "E" )
+																	.replace( "\u00ca", "E" ).replace( "\u00cb", "E" )
+																	.replace( "\u00cc", "I" ).replace( "\u00cd", "I" )
+																	.replace( "\u00ce", "I" ).replace( "\u00cf", "I" )
+																	.replace( "\u00d2", "O" ).replace( "\u00d3", "O" )
+																	.replace( "\u00d4", "O" ).replace( "\u00d6", "Oe" )
+																	.replace( "\u00d9", "U" ).replace( "\u00da", "U" )
+																	.replace( "\u00db", "U" ).replace( "\u00dc", "Ue" )
+																	.replace( "\u00df", "ss" ).replace( "\u00e0", "a" )
+																	.replace( "\u00e1", "a" ).replace( "\u00e2", "a" )
+																	.replace( "\u00e4", "ae" ).replace( "\u00e6", "ae" )
+																	.replace( "\u00e7", "c" ).replace( "\u00e8", "e" )
+																	.replace( "\u00e9", "e" ).replace( "\u00ea", "e" )
+																	.replace( "\u00eb", "e" ).replace( "\u00ec", "i" )
+																	.replace( "\u00ed", "i" ).replace( "\u00ee", "i" )
+																	.replace( "\u00ef", "i" ).replace( "\u00f2", "o" )
+																	.replace( "\u00f3", "o" ).replace( "\u00f4", "o" )
+																	.replace( "\u00f6", "oe" ).replace( "\u00f9", "u" )
+																	.replace( "\u00fa", "u" ).replace( "\u00fb", "u" )
+																	.replace( "\u00fc", "ue" );
+															// https://www.utf8-zeichentabelle.de/unicode-utf8-table.pl?number=1024&htmlent=1
+															if ( nodeColumnDetail.getNodeName().equals( "name" ) ) {
+																cellNoXml = cellNoXml + "<name>" + newString + "</name>";
+															}
+															if ( nodeColumnDetail.getNodeName().equals( "description" ) ) {
+																// String textNode = nodeColumnDetail.getTextContent();
+																cellNoXml = cellNoXml + "<description>" + newString
+																		+ "</description>";
+															}
 														}
-														if ( nodeColumnDetail.getNodeName().equals( "description" ) ) {
-															cellNoXml = cellNoXml + "<description>"
-																	+ nodeColumnDetail.getTextContent() + "</description>";
-														}
+														cellNoXml = cellNoXml + "</column>";
 													}
-													cellNoXml = cellNoXml + "</column>";
 												}
 											}
 										}
@@ -1252,7 +1286,7 @@ public class RanGuiController
 					DocumentBuilderFactory dbfTable = DocumentBuilderFactory.newInstance();
 					DocumentBuilder dbTable = dbfTable.newDocumentBuilder();
 					Document docTable;
-					docTable = dbTable.parse( new FileInputStream( tableXml ), "UTF8" );
+					docTable = dbTable.parse( new FileInputStream( tableXml ), "UTF-8" );
 					docTable.getDocumentElement().normalize();
 					dbfTable.setFeature( "http://xml.org/sax/features/namespaces", false );
 					NodeList nlRows = docTable.getElementsByTagName( "row" );
@@ -1323,7 +1357,7 @@ public class RanGuiController
 					DocumentBuilderFactory dbfLegend = DocumentBuilderFactory.newInstance();
 					DocumentBuilder dbLegend = dbfLegend.newDocumentBuilder();
 					Document docLegend;
-					docLegend = dbLegend.parse( new FileInputStream( tableXmlRed1 ), "UTF8" );
+					docLegend = dbLegend.parse( new FileInputStream( tableXmlRed1 ), "UTF-8" );
 					docLegend.getDocumentElement().normalize();
 					dbfLegend.setFeature( "http://xml.org/sax/features/namespaces", false );
 					NodeList nlColumn = docLegend.getElementsByTagName( "cellno" );
@@ -1372,12 +1406,12 @@ public class RanGuiController
 							noLayerint = Integer.parseInt( noLayerString ) + 1;
 						} else if ( lineL.contains( "layer" ) ) {
 							for ( int noL = 1; noL < noLayerint; noL++ ) {
-								int noL1 = noL ;
+								int noL1 = noL;
 								// System.out.println( "Layer = " + noL1 );
 								String lineLayer = "layer" + noL1 + ":";
 								if ( lineL.contains( lineLayer ) ) {
 									lineLayer = lineL.replace( lineLayer, "" );
-									//System.out.println( lineLayer );
+									// System.out.println( lineLayer );
 									String newLineLayer = "<layer" + noL1 + "></layer" + noL1 + ">" + lineLayer;
 									Util.oldnewstring( lineLayer, newLineLayer, tableXmlRed );
 								}
@@ -1474,90 +1508,92 @@ public class RanGuiController
 					// do sel6 tableXmlRed pro Layer inkl 0
 					for ( int noL = 0; noL < noLayerint; noL++ ) {
 
-
 						try {
-						DocumentBuilderFactory dbfTable = DocumentBuilderFactory.newInstance();
-						DocumentBuilder dbTable;
+							DocumentBuilderFactory dbfTable = DocumentBuilderFactory.newInstance();
+							DocumentBuilder dbTable;
 							dbTable = dbfTable.newDocumentBuilder();
-						Document docTable;
-						docTable = dbTable.parse( new FileInputStream( tableXmlRed ), "UTF8" );
-						docTable.getDocumentElement().normalize();
-						dbfTable.setFeature( "http://xml.org/sax/features/namespaces", false );
-						NodeList nlLayer = docTable.getElementsByTagName( "layer"+noL );
-						rowCounter = nlLayer.getLength();
+							Document docTable;
+							docTable = dbTable.parse( new FileInputStream( tableXmlRed ), "UTF-8" );
+							docTable.getDocumentElement().normalize();
+							dbfTable.setFeature( "http://xml.org/sax/features/namespaces", false );
+							NodeList nlLayer = docTable.getElementsByTagName( "layer" + noL );
+							rowCounter = nlLayer.getLength();
 						} catch ( ParserConfigurationException | SAXException e ) {
 							// Auto-generated catch block
 							e.printStackTrace();
 						}
 
-					int n = rowCounter;
-					double d1 = (n - 384);
-					double d2 = (n - 1);
-					double d = d1 / d2;
-					double sqrtD = Math.sqrt( d );
-					double sampleCount = sqrtD * 384;
-					double c = n / sampleCount;
-					// System.out.println( " n="+n + " d1="+d1+" d2="+d2+" d="+d+" sqrtD="+sqrtD);
-					// System.out.println( " sampleCount="+ sampleCount +" c="+ c );
+						int n = rowCounter;
+						double d1 = (n - 384);
+						double d2 = (n - 1);
+						double d = d1 / d2;
+						double sqrtD = Math.sqrt( d );
+						double sampleCount = sqrtD * 384;
+						double c = n / sampleCount;
+						// System.out.println( " n="+n + " d1="+d1+" d2="+d2+" d="+d+" sqrtD="+sqrtD);
+						// System.out.println( " sampleCount="+ sampleCount +" c="+ c );
 
-					int counter = 1;
-					int counterSel6 = 1;
-					int dot = 0;
-					try {
-						BufferedReader reader = new BufferedReader( new FileReader( tableXmlRed ) );
-						String line6 = "";
-						while ( (line6 = reader.readLine()) != null ) {
-							/* Vorher <?xml version="1.0" encoding="utf-8" standalone="no"?><table
-							 * xmlns="http://www.admin.ch/xmlns/siard/1.0/schema0/table4.xsd"
-							 * xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:
-							 * schemaLocation="http://www.admin.ch/xmlns/siard/1.0/schema0/table4.xsd table4.xsd"
-							 * > */
+						int counter = 1;
+						int counterSel6 = 1;
+						int dot = 0;
+						try {
+							BufferedReader reader = new BufferedReader( new FileReader( tableXmlRed ) );
+							String line6 = "";
+							while ( (line6 = reader.readLine()) != null ) {
+								/* Vorher <?xml version="1.0" encoding="utf-8" standalone="no"?><table
+								 * xmlns="http://www.admin.ch/xmlns/siard/1.0/schema0/table4.xsd"
+								 * xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:
+								 * schemaLocation="http://www.admin.ch/xmlns/siard/1.0/schema0/table4.xsd table4.xsd"
+								 * > */
 
-							/* Nachher <?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xsl"
-							 * href="kost-ran.xsl"?><table><Infos><Start>08.04.2021</Start><Info>KOST-Ran v0.0.1,
-							 * Copyright (C) 2021 Claire Roethlisberger (KOST-CECO). This program comes with
-							 * ABSOLUTELY NO WARRANTY. This is free software, and you are welcome to redistribute
-							 * it under certain conditions; see GPL-3.0_COPYING.txt for details</Info></Infos> */
+								/* Nachher <?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xsl"
+								 * href="kost-ran.xsl"?><table><Infos><Start>08.04.2021</Start><Info>KOST-Ran
+								 * v0.0.1, Copyright (C) 2021 Claire Roethlisberger (KOST-CECO). This program comes
+								 * with ABSOLUTELY NO WARRANTY. This is free software, and you are welcome to
+								 * redistribute it under certain conditions; see GPL-3.0_COPYING.txt for
+								 * details</Info></Infos> */
 
-							java.util.Date nowStart = new java.util.Date();
-							java.text.SimpleDateFormat sdfStart = new java.text.SimpleDateFormat( "dd.MM.yyyy" );
-							String ausgabeStart = sdfStart.format( nowStart );
-							String header = "<?xml version=\"1.0\" encoding=\"utf-8\"?><?xml-stylesheet type=\"text/xsl\" href=\"kost-ran_"
-									+ fileSiard.getName() + "_" + fileList.getName() + ".xsl\"?><table><Infos><Start>"
-									+ ausgabeStart + "</Start><Info>KOST-Ran v" + versionKostRan
-									+ ", Copyright (C) 2021 Claire Roethlisberger (KOST-CECO). This program comes with ABSOLUTELY NO WARRANTY. This is free software, and you are welcome to redistribute it under certain conditions; see GPL-3.0_COPYING.txt for details</Info></Infos>";
-							/* String header =
-							 * "<?xml version=\"1.0\" encoding=\"utf-8\"?><?xml-stylesheet type=\"text/xsl\" href=\"kost-ran.xsl\"?><table><Infos><Start>"
-							 * + ausgabeStart + "</Start><Info>KOST-Ran v" + versionKostRan +
-							 * ", Copyright (C) 2021 Claire Roethlisberger (KOST-CECO). This program comes with ABSOLUTELY NO WARRANTY. This is free software, and you are welcome to redistribute it under certain conditions; see GPL-3.0_COPYING.txt for details</Info></Infos>"
-							 * ; */
-							// System.out.print( counter+" " );
-							if ( line6.contains( "<?xml version=" ) ) {
-								Util.oldnewstring( line6, header, tableXmlRed );
-							} else if ( line6.contains( "<layer"+noL+">" ) ) {
-								double cMulti6 = c * counterSel6;
-								if ( counter == cMulti6 || counter > cMulti6 ) {
-									if ( dot == 10 ) {
-										System.out.print( "." );
-										dot = 0;
+								java.util.Date nowStart = new java.util.Date();
+								java.text.SimpleDateFormat sdfStart = new java.text.SimpleDateFormat(
+										"dd.MM.yyyy" );
+								String ausgabeStart = sdfStart.format( nowStart );
+								String header = "<?xml version=\"1.0\" encoding=\"utf-8\"?><?xml-stylesheet type=\"text/xsl\" href=\"kost-ran_"
+										+ fileSiard.getName() + "_" + fileList.getName()
+										+ ".xsl\"?><table><Infos><Start>" + ausgabeStart + "</Start><Info>KOST-Ran v"
+										+ versionKostRan
+										+ ", Copyright (C) 2021 Claire Roethlisberger (KOST-CECO). This program comes with ABSOLUTELY NO WARRANTY. This is free software, and you are welcome to redistribute it under certain conditions; see GPL-3.0_COPYING.txt for details</Info></Infos>";
+								/* String header =
+								 * "<?xml version=\"1.0\" encoding=\"utf-8\"?><?xml-stylesheet type=\"text/xsl\" href=\"kost-ran.xsl\"?><table><Infos><Start>"
+								 * + ausgabeStart + "</Start><Info>KOST-Ran v" + versionKostRan +
+								 * ", Copyright (C) 2021 Claire Roethlisberger (KOST-CECO). This program comes with ABSOLUTELY NO WARRANTY. This is free software, and you are welcome to redistribute it under certain conditions; see GPL-3.0_COPYING.txt for details</Info></Infos>"
+								 * ; */
+								// System.out.print( counter+" " );
+								if ( line6.contains( "<?xml version=" ) ) {
+									Util.oldnewstring( line6, header, tableXmlRed );
+								} else if ( line6.contains( "<layer" + noL + ">" ) ) {
+									double cMulti6 = c * counterSel6;
+									if ( counter == cMulti6 || counter > cMulti6 ) {
+										if ( dot == 10 ) {
+											System.out.print( "." );
+											dot = 0;
+										} else {
+											dot++;
+										}
+										String newLineSel6 = line6.replace( "<row>", "<row><sel6>L" + noL + "</sel6>" );
+										Util.oldnewstring( line6, newLineSel6, tableXmlRed );
+										++counterSel6;
+										++counter;
 									} else {
-										dot++;
+										++counter;
 									}
-									String newLineSel6 = line6.replace( "<row>", "<row><sel6>L"+noL+"</sel6>" );
-									Util.oldnewstring( line6, newLineSel6, tableXmlRed );
-									++counterSel6;
-									++counter;
-								} else {
-									++counter;
 								}
 							}
+							reader.close();
+						} catch ( IOException ioe ) {
+							ioe.printStackTrace();
 						}
-						reader.close();
-					} catch ( IOException ioe ) {
-						ioe.printStackTrace();
 					}
-					}
-					
+
 					Util.oldnewstring( "<sel1>X</sel1><sel1>X</sel1>", "<sel1>X</sel1>", tableXmlRed );
 					Util.oldnewstring( "<sel2>X</sel2><sel2>X</sel2>", "<sel2>X</sel2>", tableXmlRed );
 					Util.oldnewstring( "<sel3>X</sel3><sel3>X</sel3>", "<sel3>X</sel3>", tableXmlRed );
@@ -1565,10 +1601,11 @@ public class RanGuiController
 					Util.oldnewstring( "<sel5>X</sel5><sel5>X</sel5>", "<sel5>X</sel5>", tableXmlRed );
 					Util.oldnewstring( "</sel6><sel6>", "", tableXmlRed );
 
-				/*	Util.oldnewstring( "<sel6>X</sel6>  <row>", "  <row><sel6>X</sel6>", tableXmlRed );
-					Util.oldnewstring( "<sel6>X</sel6> <row>", " <row><sel6>X</sel6>", tableXmlRed );
-					Util.oldnewstring( "<sel6>X</sel6><row>", "<row><sel6>X</sel6>", tableXmlRed );
-					Util.oldnewstring( "<sel6>X</sel6>   <row>", "   <row><sel6>X</sel6>", tableXmlRed );*/
+					/* Util.oldnewstring( "<sel6>X</sel6>  <row>", "  <row><sel6>X</sel6>", tableXmlRed );
+					 * Util.oldnewstring( "<sel6>X</sel6> <row>", " <row><sel6>X</sel6>", tableXmlRed );
+					 * Util.oldnewstring( "<sel6>X</sel6><row>", "<row><sel6>X</sel6>", tableXmlRed );
+					 * Util.oldnewstring( "<sel6>X</sel6>   <row>", "   <row><sel6>X</sel6>", tableXmlRed
+					 * ); */
 
 				} catch ( IOException | TransformerFactoryConfigurationError e1 ) {
 					// Auto-generated catch block

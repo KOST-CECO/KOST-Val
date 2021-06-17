@@ -112,7 +112,7 @@ public class GuiController
 
 	private String						arg0, arg1, arg2, arg3 = "--xml", dirOfJarPath, initInstructionsDe,
 			initInstructionsFr, initInstructionsEn;
-	private String						versionKostVal	= "2.0.4";
+	private String						versionKostVal	= "2.0.5";
 	/* TODO: versionKostVal auch hier anpassen:
 	 * 
 	 * 2) cmdKOSTVal.java
@@ -376,17 +376,15 @@ public class GuiController
 
 			// Handbuch in externem Viewer oeffnen dann kann parallel gearbeitet werden
 			String docPath = dirOfJarPath + File.separator + "doc" + File.separator
-					+ "KOST-Val_Anwendungshandbuch_v1.9.8.pdf";
+					+ "Anwendungshandbuch.pdf";
 			File dirDoc = new File( "doc" );
-			Util.switchOffConsole();
-			// ansonsten wird 7x (Datei) ausgegeben
 			File[] docArray = dirDoc.listFiles();
 			if ( docArray != null ) { // Erforderliche Berechtigungen etc. sind vorhanden
 				for ( int i = 0; i < docArray.length; i++ ) {
 					if ( docArray[i].isDirectory() ) {
-						System.out.print( " (Ordner)\n" );
+						// System.out.print( " (Ordner)\n" );
 					} else {
-						System.out.print( " (Datei)\n" );
+						// System.out.print( " (Datei)\n" );
 						String docName = docArray[i].getName();
 						if ( docName.contains( "andbuch" ) && locale.toString().startsWith( "de" ) ) {
 							docPath = docArray[i].getAbsolutePath();
@@ -398,7 +396,6 @@ public class GuiController
 					}
 				}
 			}
-			Util.switchOnConsole();
 			Runtime.getRuntime().exec( "rundll32 url.dll,FileProtocolHandler " + docPath );
 		} catch ( IOException eManual ) {
 			eManual.printStackTrace();
