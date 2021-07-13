@@ -256,8 +256,7 @@ public class Controllervalfolder implements MessageConstants
 								Util.deleteDir( tmpDir );
 							}
 						}
-					} else if ( ((valDateiExt.equals( ".png" )))
-							&& pngValidation.equals( "yes" ) ) {
+					} else if ( ((valDateiExt.equals( ".png" ))) && pngValidation.equals( "yes" ) ) {
 						int countToValidated = numberInFileMap - countProgress;
 						System.out
 								.print( countToValidated + " " + "PNG:  " + valDatei.getAbsolutePath() + " " );
@@ -366,19 +365,8 @@ public class Controllervalfolder implements MessageConstants
 						}
 						if ( valFile ) {
 							pdfaCountIo = pdfaCountIo + 1;
-							// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
-							if ( tmpDir.exists() ) {
-								Util.deleteDir( tmpDir );
-							}
 						} else {
 							pdfaCountNio = pdfaCountNio + 1;
-							// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
-							if ( tmpDir.exists() ) {
-								Util.deleteDir( tmpDir );
-							}
-						}
-						if ( tmpDir.exists() ) {
-							tmpDir.deleteOnExit();
 						}
 					} else {
 						countNio = countNio + 1;
@@ -441,8 +429,10 @@ public class Controllervalfolder implements MessageConstants
 		// logFile bereinigung (& End und ggf 3c)
 		Util.valEnd3cAmp( "", logFile );
 
-		countSummaryNio = pdfaCountNio + siardCountNio + tiffCountNio + jp2CountNio + jpegCountNio + pngCountNio;
-		countSummaryIo = pdfaCountIo + siardCountIo + tiffCountIo + jp2CountIo + jpegCountIo + pngCountIo;
+		countSummaryNio = pdfaCountNio + siardCountNio + tiffCountNio + jp2CountNio + jpegCountNio
+				+ pngCountNio;
+		countSummaryIo = pdfaCountIo + siardCountIo + tiffCountIo + jp2CountIo + jpegCountIo
+				+ pngCountIo;
 
 		/* Summary ueber Formatvaliderung herausgeben analog 3c.
 		 * 
@@ -481,9 +471,6 @@ public class Controllervalfolder implements MessageConstants
 			if ( tmpDir.exists() ) {
 				Util.deleteDir( tmpDir );
 			}
-			if ( tmpDir.exists() ) {
-				tmpDir.deleteOnExit();
-			}
 			// System.exit( 1 );
 			valFolder = true;
 			return valFolder;
@@ -491,9 +478,6 @@ public class Controllervalfolder implements MessageConstants
 			// bestehendes Workverzeichnis ggf. loeschen
 			if ( tmpDir.exists() ) {
 				Util.deleteDir( tmpDir );
-			}
-			if ( tmpDir.exists() ) {
-				tmpDir.deleteOnExit();
 			}
 
 			File pathTemp = new File( directoryOfLogfile, "path.tmp" );

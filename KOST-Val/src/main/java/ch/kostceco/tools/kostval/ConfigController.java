@@ -930,12 +930,17 @@ public class ConfigController
 	{
 		String yes = "<nentry>E</nentry>";
 		String no = "<nentry>W</nentry>";
+		String ignorePt = "</ignore>";
+		String nkeyPt = "The value of the key N is 4 but must be 3. [PDF Tools: 0x80410607]";
 		try {
 			if ( checkNentry.isSelected() ) {
 				Util.oldnewstring( no, yes, configFile );
+				Util.oldnewstring( nkeyPt, " ", configFile );
 			} else {
 				Util.oldnewstring( yes, no, configFile );
-			}
+				if (!Util.stringInFile( nkeyPt, configFile )) {
+				Util.oldnewstring(ignorePt, nkeyPt+ignorePt, configFile );
+			}}
 		} catch ( IOException e ) {
 			e.printStackTrace();
 		}

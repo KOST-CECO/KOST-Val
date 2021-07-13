@@ -123,9 +123,11 @@ public class Controllervalfile implements MessageConstants
 					// optionaler Parameter --> Jpylyzer-Report lassen
 				} else {
 					// kein optionaler Parameter --> Jpylyzer-Report loeschen!
-					JpylyzerReport.delete();
+					Util.deleteFile( JpylyzerReport );
 				}
 			}
+			String pathToWorkDir = configMap.get( "PathToWorkDir" );
+			Util.deleteDir( new File(pathToWorkDir) );
 
 		} else if ( (valDateiExt.equals( ".jpeg" ) || valDateiExt.equals( ".jpg" )
 				|| valDateiExt.equals( ".jpe" )) ) {
@@ -154,6 +156,8 @@ public class Controllervalfile implements MessageConstants
 						.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) );
 				System.out.println( " = Invalid" );
 			}
+			String pathToWorkDir = configMap.get( "PathToWorkDir" );
+			Util.deleteDir( new File(pathToWorkDir) );
 
 		} else if ( (valDateiExt.equals( ".png" )) ) {
 			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS ) );
@@ -181,6 +185,8 @@ public class Controllervalfile implements MessageConstants
 						.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) );
 				System.out.println( " = Invalid" );
 			}
+			String pathToWorkDir = configMap.get( "PathToWorkDir" );
+			Util.deleteDir( new File(pathToWorkDir) );
 
 		} else if ( (valDateiExt.equals( ".tiff" ) || valDateiExt.equals( ".tif" )) ) {
 			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS ) );
@@ -223,22 +229,20 @@ public class Controllervalfile implements MessageConstants
 			File jhoveReport = new File( directoryOfLogfile, valDatei.getName() + ".jhove-log.txt" );
 			File exifReport = new File( directoryOfLogfile, valDatei.getName() + ".exiftool-log.txt" );
 
-			if ( jhoveReport.exists() ) {
-				if ( verbose ) {
-					// optionaler Parameter --> Jhove-Report lassen
-				} else {
+			if ( verbose ) {
+				// optionaler Parameter --> Reports lassen
+			} else {
+				if ( jhoveReport.exists() ) {
 					// kein optionaler Parameter --> Jhove-Report loeschen!
-					jhoveReport.delete();
+					Util.deleteFile( jhoveReport );
 				}
-			}
-			if ( exifReport.exists() ) {
-				if ( verbose ) {
-					// optionaler Parameter --> Exiftool-Report lassen
-				} else {
+				if ( exifReport.exists() ) {
 					// kein optionaler Parameter --> Exiftool-Report loeschen!
-					exifReport.delete();
+					Util.deleteFile( exifReport );
 				}
 			}
+			String pathToWorkDir = configMap.get( "PathToWorkDir" );
+			Util.deleteDir( new File(pathToWorkDir) );
 
 		} else if ( (valDateiExt.equals( ".siard" )) ) {
 			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS ) );
@@ -276,6 +280,8 @@ public class Controllervalfile implements MessageConstants
 						.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) );
 				System.out.println( " = Invalid" );
 			}
+			String pathToWorkDir = configMap.get( "PathToWorkDir" );
+			Util.deleteDir( new File(pathToWorkDir) );
 
 		} else if ( (valDateiExt.equals( ".pdf" ) || valDateiExt.equals( ".pdfa" )) ) {
 			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS ) );
@@ -316,6 +322,8 @@ public class Controllervalfile implements MessageConstants
 				System.out.println( " = Invalid" );
 			}
 
+			PdfValidatorAPI.terminate();
+			
 			/* Ausgabe der Pfade zu den _FontValidation.xml und _FontValidation_Error.xml Reports, falls
 			 * welche generiert wurden. Ggf loeschen */
 			File fontValidationReport = new File( directoryOfLogfile,
@@ -335,20 +343,21 @@ public class Controllervalfile implements MessageConstants
 				// fontValidationErrorReport loeschen!
 				Util.deleteFile( fontValidationErrorReport );
 			}
-			PdfValidatorAPI.terminate();
+			File callasTEMPreport = new File( directoryOfLogfile,
+					 "callasTEMPreport.txt" );
+			if ( callasTEMPreport.exists() ) {
+				// callasTEMPreport loeschen!
+				Util.deleteFile( callasTEMPreport );
+			}
 			File internLicenseFile = new File(
 					directoryOfLogfile + File.separator + ".useKOSTValLicense.txt" );
 			if ( internLicenseFile.exists() ) {
 				// interne Lizenz verwendet. Lizenz ueberschreiben
-				internLicenseFile.delete();
-				if ( internLicenseFile.exists() ) {
-					internLicenseFile.deleteOnExit();
-				}
-				if ( internLicenseFile.exists() ) {
-					Util.deleteFile( internLicenseFile );
-				}
+				Util.deleteFile( internLicenseFile );
 				PdfValidatorAPI.setLicenseKey( " " );
 			}
+			String pathToWorkDir = configMap.get( "PathToWorkDir" );
+			Util.deleteDir( new File(pathToWorkDir) );
 
 		} else {
 			LOGGER.logError( getTextResourceService().getText( locale, ERROR_INCORRECTFILEENDING,

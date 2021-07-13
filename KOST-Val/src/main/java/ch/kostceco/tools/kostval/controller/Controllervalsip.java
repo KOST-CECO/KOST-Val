@@ -299,9 +299,6 @@ public class Controllervalsip implements MessageConstants
 					if ( tmpDir.exists() ) {
 						Util.deleteDir( tmpDir );
 					}
-					if ( tmpDir.exists() ) {
-						tmpDir.deleteOnExit();
-					}
 					System.exit( 1 );
 
 				} else {
@@ -396,9 +393,6 @@ public class Controllervalsip implements MessageConstants
 							// bestehendes Workverzeichnis ggf. loeschen
 							if ( tmpDir.exists() ) {
 								Util.deleteDir( tmpDir );
-							}
-							if ( tmpDir.exists() ) {
-								tmpDir.deleteOnExit();
 							}
 							System.exit( 1 );
 						}
@@ -665,8 +659,10 @@ public class Controllervalsip implements MessageConstants
 				}
 			}
 
-			countSummaryNio = pdfaCountNio + siardCountNio + tiffCountNio + jp2CountNio + jpegCountNio+ pngCountNio;
-			countSummaryIo = pdfaCountIo + siardCountIo + tiffCountIo + jp2CountIo + jpegCountIo + pngCountIo;
+			countSummaryNio = pdfaCountNio + siardCountNio + tiffCountNio + jp2CountNio + jpegCountNio
+					+ pngCountNio;
+			countSummaryIo = pdfaCountIo + siardCountIo + tiffCountIo + jp2CountIo + jpegCountIo
+					+ pngCountIo;
 			float countSummaryIoP = 100 / (float) count * (float) countSummaryIo;
 			float countSummaryNioP = 100 / (float) count * (float) countSummaryNio;
 			float countNioP = 100 / (float) count * (float) countNio;
@@ -800,9 +796,6 @@ public class Controllervalsip implements MessageConstants
 			if ( tmpDir.exists() ) {
 				Util.deleteDir( tmpDir );
 			}
-			if ( tmpDir.exists() ) {
-				tmpDir.deleteOnExit();
-			}
 
 			File pathTemp = new File( directoryOfLogfile, "path.tmp" );
 			/* falls das File bereits existiert, z.B. von einem vorhergehenden Durchlauf, loeschen wir
@@ -832,18 +825,12 @@ public class Controllervalsip implements MessageConstants
 				if ( tmpDir.exists() ) {
 					Util.deleteDir( tmpDir );
 				}
-				if ( tmpDir.exists() ) {
-					tmpDir.deleteOnExit();
-				}
 				valSip = true;
 				return valSip;
 			} else {
 				// bestehendes Workverzeichnis ggf. loeschen
 				if ( tmpDir.exists() ) {
 					Util.deleteDir( tmpDir );
-				}
-				if ( tmpDir.exists() ) {
-					tmpDir.deleteOnExit();
 				}
 				valSip = false;
 				return valSip;
@@ -856,7 +843,7 @@ public class Controllervalsip implements MessageConstants
 					+ getTextResourceService().getText( locale, MESSAGE_XML_LOGEND ) );
 			System.out.println( "Exception: " + e.getMessage() );
 			if ( tmpDir.exists() ) {
-				tmpDir.deleteOnExit();
+				Util.deleteDir( tmpDir );
 			}
 			valSip = false;
 			return valSip;
@@ -864,7 +851,7 @@ public class Controllervalsip implements MessageConstants
 			LOGGER.logError( getTextResourceService().getText( locale, ERROR_XML_STACKOVERFLOWMAIN ) );
 			System.out.println( "Exception: " + "StackOverflowError" );
 			if ( tmpDir.exists() ) {
-				tmpDir.deleteOnExit();
+				Util.deleteDir( tmpDir );
 			}
 			valSip = false;
 			return valSip;
@@ -872,7 +859,7 @@ public class Controllervalsip implements MessageConstants
 			LOGGER.logError( getTextResourceService().getText( locale, ERROR_XML_OUTOFMEMORYMAIN ) );
 			System.out.println( "Exception: " + "OutOfMemoryError" );
 			if ( tmpDir.exists() ) {
-				tmpDir.deleteOnExit();
+				Util.deleteDir( tmpDir );
 			}
 			valSip = false;
 			return valSip;

@@ -149,9 +149,6 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 				if ( newReport.exists() ) {
 					Util.deleteFile( newReport );
 				}
-				if ( newReport.exists() ) {
-					newReport.delete();
-				}
 				String outputFile = newReport.getAbsolutePath();
 				String[] dirFileOrUri = { valDatei.getAbsolutePath() };
 				je.dispatch( app, module, null, handler, outputFile, dirFileOrUri );
@@ -192,8 +189,8 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 				}
 				inStream.close();
 				outStream.close();
-				Util.deleteFile( jhoveReport );
-				Util.deleteFile( afile );
+				// jhoveReport Kann noch nicht geloescht werden, da noch aktiv
+				// jhoveReport / temp wird in Controllervalfile geloescht
 
 			} catch ( IOException e ) {
 				if ( min ) {
@@ -208,7 +205,6 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 			}
 			inStream.close();
 			outStream.close();
-			Util.deleteFile( jhoveReport );
 		} catch ( Exception e ) {
 			if ( min ) {
 				return false;
@@ -244,17 +240,21 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 						 * konnten */
 					}
 				}
+
+				// Ignore macht nur Sinn wenn Jhove immer zu ende validiert,
+				// entsprechend noch nicht umgesetz
+				// String detailIgnore = configMap.get( "ignore" );
+
 				if ( line.contains( "ErrorMessage:" ) ) {
 					if ( line.contains( " out of sequence" ) ) {
 						ignorcounter = ignorcounter + 1;
+						// } else if (detailIgnore.contains(line)){
+						// ignorcounter = ignorcounter + 1;
 					} else {
 						if ( statuscounter == 0 ) {
 							// Invalider Status & Status noch nicht ausgegeben
 							if ( min ) {
 								in.close();
-								if ( jhoveReport.exists() ) {
-									jhoveReport.delete();
-								}
 								return false;
 							} else {
 								isValid = false;
@@ -276,9 +276,6 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 						} else {
 							if ( min ) {
 								in.close();
-								if ( jhoveReport.exists() ) {
-									jhoveReport.delete();
-								}
 								return false;
 							} else {
 								// neue Fehlermeldung
@@ -335,14 +332,7 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 				return false;
 			}
 		}
-		// bestehendes Workverzeichnis löschen
-		if ( jhoveReport.exists() ) {
-			Util.deleteFile( jhoveReport );
-		}
-		if ( jhoveReport.exists() ) {
-			jhoveReport.delete();
-		}
-		jhoveReport.deleteOnExit();
+		// jhoveReport / temp wird in Controllervalfile geloescht
 
 		return isValid;
 	}

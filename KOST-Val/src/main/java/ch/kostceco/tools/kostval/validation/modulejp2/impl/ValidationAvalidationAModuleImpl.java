@@ -458,6 +458,7 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 						}
 					}
 				}
+				bis.close();
 
 			} catch ( Exception e ) {
 				getMessageService()
@@ -802,6 +803,7 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 									+ getTextResourceService().getText( locale, ERROR_XML_D_JP2_UNKNOWN, sunknown ) );
 				}
 			}
+		 doc = null;
 
 		} catch ( Exception e ) {
 			getMessageService()

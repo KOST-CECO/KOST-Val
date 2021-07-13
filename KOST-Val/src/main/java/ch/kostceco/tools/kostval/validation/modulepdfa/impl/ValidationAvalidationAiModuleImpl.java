@@ -563,16 +563,6 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 								getMessageService().logError( getTextResourceService().getText( locale,
 										MESSAGE_XML_MODUL_A_PDFA )
 										+ getTextResourceService().getText( locale, ERROR_XML_A_PDFTOOLS_ENCRYPTED ) );
-								// Encrypt-Fileanlegen, damit in J nicht validiert wird
-								File encrypt = new File(
-										pathToWorkDir + File.separator + valDatei.getName() + "_encrypt.txt" );
-								if ( !encrypt.exists() ) {
-									try {
-										encrypt.createNewFile();
-									} catch ( IOException e ) {
-										e.printStackTrace();
-									}
-								}
 								return false;
 							}
 						} else {
@@ -1218,10 +1208,12 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 						bis.close();
 						// set to null
 						bis = null;
+						doc = null;
+						docError = null;
 						if ( fontReportError.exists() ) {
-							fontReportError.delete();
+							// Kann noch nicht geloescht werden, da noch aktiv
+							// fontReportError wird in Controllervalfile geloescht (je nach verbose)
 						}
-						fontReportError.deleteOnExit();
 					} else {
 						isValidFont = true;
 					}
@@ -1657,8 +1649,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					BufferedReader in = new BufferedReader( new FileReader( valDatei ) );
 					String line;
 					while ( (line = in.readLine()) != null ) {
-						if ( line.contains( "JBIG2Decode" ) || line.contains( "jbig2decode" )
-								|| line.contains( "Jbig2decode" ) ) {
+						line = line.toLowerCase();
+						if ( line.contains( "jbig2decode" ) ) {
 							isValidJ = false;
 							if ( min ) {
 								in.close();
@@ -2111,16 +2103,6 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
 										+ getTextResourceService().getText( locale, ERROR_XML_AI_2,
 												"PDF Tools: iCategory_2" ) );
-						// Encrypt-Fileanlegen, damit in J nicht validiert wird
-						File encrypt = new File(
-								pathToWorkDir + File.separator + valDatei.getName() + "_encrypt.txt" );
-						if ( !encrypt.exists() ) {
-							try {
-								encrypt.createNewFile();
-							} catch ( IOException e ) {
-								e.printStackTrace();
-							}
-						}
 						return false;
 					}
 					getMessageService().logError( pdftoolsA );
@@ -2368,11 +2350,11 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() + " _" ) );
 		}
 		try {
+			PdfValidatorAPI.terminate();
 			docPdf.close();
 			// Destroy the object and set to null
 			docPdf.destroyObject();
 			docPdf = null;
-			PdfValidatorAPI.terminate();
 			File internLicenseFile = new File(
 					directoryOfLogfile + File.separator + ".useKOSTValLicense.txt" );
 			if ( internLicenseFile.exists() ) {

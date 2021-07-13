@@ -130,9 +130,10 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl
 					}
 				}
 			}
+			entries = null;
+			zipfile.close();
 			if ( metadataxml == null ) {
 				// keine metadata.xml = METADATA in der SIARD-Datei gefunden
-				zipfile.close();
 				if ( min ) {
 					return false;
 				} else {
@@ -144,7 +145,6 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl
 			}
 			if ( metadataxsd == null ) {
 				// keine metadata.xsd = XSD_METADATA in der SIARD-Datei gefunden
-				zipfile.close();
 				if ( min ) {
 					return false;
 				} else {
@@ -154,7 +154,6 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl
 					return false;
 				}
 			}
-			zipfile.close();
 		} catch ( Exception e ) {
 			if ( min ) {
 				return false;
@@ -222,7 +221,7 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl
 					// erstellung Buffer zum schreiben der Dateien
 					byte data[] = new byte[BUFFER];
 
-					// schreibe die aktuelle Datei an den geuenschten Ort
+					// schreibe die aktuelle Datei an den gewuenschten Ort
 					FileOutputStream fos = new FileOutputStream( destFile );
 					BufferedOutputStream dest = new BufferedOutputStream( fos, BUFFER );
 					while ( (currentByte = is.read( data, 0, BUFFER )) != -1 ) {
@@ -232,6 +231,10 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl
 					dest.close();
 					is.close();
 					stream.close();
+					fos.close();
+					fos = null;
+					is = null;
+					stream = null;
 				} else {
 					destFile.mkdirs();
 				}
@@ -256,7 +259,9 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl
 						onWork = onWork + 1;
 					}
 				}
+				entry = null;
 			}
+
 			// Thread.sleep( 100 );
 			// Ausgabe der SIARD-Version
 			String pathToWorkDir2 = pathToWorkDir + File.separator + "SIARD";
@@ -352,6 +357,10 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl
 					in.close();
 					// set to null
 					in = null;
+					dbf = null;
+					db = null;
+					doc = null;
+					concatenatedOutputs = null;
 
 					// Validierung von metadata.xml und metadata.xsd mit dem (private class) Validator
 					System.setProperty( "javax.xml.parsers.DocumentBuilderFactory",
@@ -370,6 +379,8 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl
 					if ( handler.validationError == true ) {
 						return false;
 					}
+					factory = null;
+					builder = null;
 				} catch ( java.io.IOException ioe ) {
 					if ( min ) {
 						return false;
@@ -405,6 +416,7 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl
 			zipfile.close();
 			// set to null
 			zipfile = null;
+
 		} catch ( Exception e ) {
 			if ( min ) {
 				return false;

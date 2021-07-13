@@ -12,7 +12,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.web.WebView?>
 
-<StackPane maxHeight="820.0" maxWidth="1.7976931348623157E308" minHeight="750.0" minWidth="1200.0" prefHeight="820.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.kostceco.tools.kostval.ConfigController">
+<StackPane maxHeight="820.0" maxWidth="1.7976931348623157E308" minHeight="750.0" minWidth="1200.0" prefHeight="820.0" xmlns="http://javafx.com/javafx/8.0.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.kostceco.tools.kostval.ConfigController">
 	<children>
 		<GridPane maxHeight="1.7976931348623157E308" minHeight="730.0">
 			<columnConstraints>

@@ -24,9 +24,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -270,24 +267,10 @@ public class KOSTVal implements MessageConstants
 					if ( tmpDir.exists() ) {
 						Util.deleteDir( tmpDir );
 					}
-					if ( tmpDir.exists() ) {
-						tmpDir.deleteOnExit();
-					}
 
 					File pathTemp = new File( directoryOfLogfile, "path.tmp" );
 					if ( pathTemp.exists() ) {
-						pathTemp.delete();
-					}
-					if ( pathTemp.exists() ) {
-						List<String> oldtextList = Files.readAllLines( pathTemp.toPath(),
-								StandardCharsets.UTF_8 );
-						for ( int i = 0; i < oldtextList.size(); i++ ) {
-							String oldtext = (oldtextList.get( i ));
-							Util.oldnewstring( oldtext, "", pathTemp );
-						}
-					}
-					if ( pathTemp.exists() ) {
-						pathTemp.deleteOnExit();
+						Util.deleteFile( pathTemp );
 					}
 
 					// Validierte Datei valide
@@ -298,6 +281,12 @@ public class KOSTVal implements MessageConstants
 					if ( tmpDir.exists() ) {
 						Util.deleteDir( tmpDir );
 					}
+
+					File pathTemp = new File( directoryOfLogfile, "path.tmp" );
+					if ( pathTemp.exists() ) {
+						Util.deleteFile( pathTemp );
+					}
+
 					// Fehler in Validierte Datei --> invalide
 					mainBoolean = false;
 					return mainBoolean;
@@ -314,16 +303,10 @@ public class KOSTVal implements MessageConstants
 					if ( tmpDir.exists() ) {
 						Util.deleteDir( tmpDir );
 					}
-					if ( tmpDir.exists() ) {
-						tmpDir.deleteOnExit();
-					}
 
 					File pathTemp = new File( directoryOfLogfile, "path.tmp" );
 					if ( pathTemp.exists() ) {
-						pathTemp.delete();
-					}
-					if ( pathTemp.exists() ) {
-						pathTemp.deleteOnExit();
+						Util.deleteFile( pathTemp );
 					}
 
 					// Validierte Dateien valide
@@ -335,6 +318,12 @@ public class KOSTVal implements MessageConstants
 					if ( tmpDir.exists() ) {
 						Util.deleteDir( tmpDir );
 					}
+
+					File pathTemp = new File( directoryOfLogfile, "path.tmp" );
+					if ( pathTemp.exists() ) {
+						Util.deleteFile( pathTemp );
+					}
+
 					// Fehler in Validierte Dateien --> invalide
 					mainBoolean = false;
 					return mainBoolean;
@@ -397,16 +386,10 @@ public class KOSTVal implements MessageConstants
 					if ( tmpDir.exists() ) {
 						Util.deleteDir( tmpDir );
 					}
-					if ( tmpDir.exists() ) {
-						tmpDir.deleteOnExit();
-					}
 
 					File pathTemp = new File( directoryOfLogfile, "path.tmp" );
 					if ( pathTemp.exists() ) {
-						pathTemp.delete();
-					}
-					if ( pathTemp.exists() ) {
-						pathTemp.deleteOnExit();
+						Util.deleteFile( pathTemp );
 					}
 
 					// Validierte Dateien valide
@@ -418,6 +401,12 @@ public class KOSTVal implements MessageConstants
 					if ( tmpDir.exists() ) {
 						Util.deleteDir( tmpDir );
 					}
+
+					File pathTemp = new File( directoryOfLogfile, "path.tmp" );
+					if ( pathTemp.exists() ) {
+						Util.deleteFile( pathTemp );
+					}
+
 					// Fehler in Validierte Dateien --> invalide
 					context.close();
 					mainBoolean = false;

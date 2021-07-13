@@ -69,10 +69,12 @@ public class Util
 			FileOutputStream fos = new FileOutputStream( file );
 			PrintStream ps = new PrintStream( fos );
 			System.setOut( ps );
+			fos.close();
 			ps.close();
 			// set to null
+			fos = null;
 			ps = null;
-		} catch ( FileNotFoundException e ) {
+		} catch ( IOException e ) {
 			e.printStackTrace();
 		}
 	}
@@ -114,42 +116,52 @@ public class Util
 	 * @return true wenn alle Files und Verzeichnisse geloescht werden konnten */
 	public static boolean deleteDir( File dir )
 	{
-		if ( dir.isDirectory() ) {
-			String[] children = dir.list();
-			for ( int i = 0; i < children.length; i++ ) {
-				boolean success = deleteFile( new File( dir, children[i] ) );
-				if ( !success ) {
-					// return false;
-					dir.deleteOnExit();
+		if ( dir.exists() ) {
+			if ( dir.isDirectory() ) {
+				String[] children = dir.list();
+				for ( int i = 0; i < children.length; i++ ) {
+					boolean success = deleteFile( new File( dir, children[i] ) );
+					if ( !success ) {
+						// return false;
+						dir.deleteOnExit();
+					}
 				}
 			}
+			dir.delete();
+			if ( !dir.delete() ) {
+				dir.deleteOnExit();
+			}
+			// The directory is now empty so delete it
+			return dir.delete();
+		} else {
+			// existiert nicht, im Vorfeld geloescht, true
+			return true;
 		}
-		dir.delete();
-		if ( !dir.delete() ) {
-			dir.deleteOnExit();
-		}
-		// The directory is now empty so delete it
-		return dir.delete();
 	}
 
 	public static boolean deleteFile( File file )
 	{
-		if ( file.isDirectory() ) {
-			String[] children = file.list();
-			for ( int i = 0; i < children.length; i++ ) {
-				boolean success = deleteFile( new File( file, children[i] ) );
-				if ( !success ) {
-					// return false;
+		if ( file.exists() ) {
+			if ( file.isDirectory() ) {
+				String[] children = file.list();
+				for ( int i = 0; i < children.length; i++ ) {
+					boolean success = deleteFile( new File( file, children[i] ) );
+					if ( !success ) {
+						// return false;
+						file.deleteOnExit();
+					}
+				}
+			} else {
+				file.delete();
+				if ( !file.delete() ) {
 					file.deleteOnExit();
 				}
 			}
+			return file.delete();
 		} else {
-			file.delete();
-			if ( !file.delete() ) {
-				file.deleteOnExit();
-			}
+			// existiert nicht, im Vorfeld geloescht, true
+			return true;
 		}
-		return file.delete();
 	}
 
 	/** Kontrolliert ob text in einer Linie im File vorkommt */
