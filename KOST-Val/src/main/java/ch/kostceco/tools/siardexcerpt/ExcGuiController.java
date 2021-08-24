@@ -353,17 +353,15 @@ public class ExcGuiController
 
 			// Handbuch in externem Viewer oeffnen dann kann parallel gearbeitet werden
 			String docPath = dirOfJarPath + File.separator + "doc" + File.separator
-					+ "SIARDexcerpt_Anwendungshandbuch_v0.0.6.pdf";
+					+ "Anwendungshandbuch.pdf";
 			File dirDoc = new File( "doc" );
-			Util.switchOffConsole();
-			// ansonsten wird 7x (Datei) ausgegeben
 			File[] docArray = dirDoc.listFiles();
 			if ( docArray != null ) { // Erforderliche Berechtigungen etc. sind vorhanden
 				for ( int i = 0; i < docArray.length; i++ ) {
 					if ( docArray[i].isDirectory() ) {
-						System.out.print( " (Ordner)\n" );
+						// System.out.print( " (Ordner)\n" );
 					} else {
-						System.out.print( " (Datei)\n" );
+						// System.out.print( " (Datei)\n" );
 						String docName = docArray[i].getName();
 						if ( docName.contains( "andbuch" ) && locale.toString().startsWith( "de" ) ) {
 							docPath = docArray[i].getAbsolutePath();
@@ -375,7 +373,6 @@ public class ExcGuiController
 					}
 				}
 			}
-			Util.switchOnConsole();
 			Runtime.getRuntime().exec( "rundll32 url.dll,FileProtocolHandler " + docPath );
 		} catch ( IOException eManual ) {
 			eManual.printStackTrace();

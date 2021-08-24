@@ -413,7 +413,18 @@ public class Controllervalsip implements MessageConstants
 			}
 
 			// TODO Vorgaengige Formatvalidierung (Schritt 3c)
-			Map<String, File> fileUnsortedMap = Util.getFileMapFile( valDatei );
+			File sipSipContent = new File( valDatei.getAbsolutePath() + File.separator
+					+ valDatei.getName() + File.separator + "content" );
+			File sipContent = new File( valDatei.getAbsolutePath() + File.separator + "content" );
+			File valDateiContent = valDatei;
+			if ( sipSipContent.exists() ) {
+				valDateiContent = sipSipContent;
+			} else if ( sipContent.exists() ) {
+				valDateiContent = sipContent;
+			} else {
+				valDateiContent = valDatei;
+			}
+			Map<String, File> fileUnsortedMap = Util.getFileMapFile( valDateiContent );
 			Map<String, File> fileMap = new TreeMap<String, File>( fileUnsortedMap );
 			int numberInFileMap = fileMap.size();
 			Set<String> fileMapKeys = fileMap.keySet();

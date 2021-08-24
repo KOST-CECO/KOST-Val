@@ -232,7 +232,7 @@ public class KOSTVal implements MessageConstants
 		String pathToWorkDir = configMap.get( "PathToWorkDir" );
 		File tmpDir = new File( pathToWorkDir );
 
-		/* Ueberprüfung des optionalen Parameters (4 --max = xml + verbose --> im Verbose-mode werden
+		/* Ueberpruefung des optionalen Parameters (4 --max = xml + verbose --> im Verbose-mode werden
 		 * die originalen Logs nicht geloescht (Jhove & Co.) */
 		boolean verbose = false;
 		if ( (args[3].equals( "--max" )) ) {
@@ -262,31 +262,20 @@ public class KOSTVal implements MessageConstants
 				// logFile bereinigung (& End und ggf 3c)
 				Util.valEnd3cAmp( "", logFile );
 
+				// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
+				if ( tmpDir.exists() ) {
+					Util.deleteDir( tmpDir );
+				}
+				File pathTemp = new File( directoryOfLogfile, "path.tmp" );
+				if ( pathTemp.exists() ) {
+					Util.deleteFile( pathTemp );
+				}
+
 				if ( valFile ) {
-					// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
-					if ( tmpDir.exists() ) {
-						Util.deleteDir( tmpDir );
-					}
-
-					File pathTemp = new File( directoryOfLogfile, "path.tmp" );
-					if ( pathTemp.exists() ) {
-						Util.deleteFile( pathTemp );
-					}
-
 					// Validierte Datei valide
 					mainBoolean = true;
 					return mainBoolean;
 				} else {
-					// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
-					if ( tmpDir.exists() ) {
-						Util.deleteDir( tmpDir );
-					}
-
-					File pathTemp = new File( directoryOfLogfile, "path.tmp" );
-					if ( pathTemp.exists() ) {
-						Util.deleteFile( pathTemp );
-					}
-
 					// Fehler in Validierte Datei --> invalide
 					mainBoolean = false;
 					return mainBoolean;
@@ -298,32 +287,22 @@ public class KOSTVal implements MessageConstants
 						.getBean( "controllervalfolder" );
 				boolean valFolder = controller2.valFolder( valDatei, logFileName, directoryOfLogfile,
 						verbose, dirOfJarPath, configMap, context, locale );
+
+				// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
+				if ( tmpDir.exists() ) {
+					Util.deleteDir( tmpDir );
+				}
+				File pathTemp = new File( directoryOfLogfile, "path.tmp" );
+				if ( pathTemp.exists() ) {
+					Util.deleteFile( pathTemp );
+				}
+
 				if ( valFolder ) {
-					// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
-					if ( tmpDir.exists() ) {
-						Util.deleteDir( tmpDir );
-					}
-
-					File pathTemp = new File( directoryOfLogfile, "path.tmp" );
-					if ( pathTemp.exists() ) {
-						Util.deleteFile( pathTemp );
-					}
-
 					// Validierte Dateien valide
 					mainBoolean = true;
 					return mainBoolean;
 
 				} else {
-					// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
-					if ( tmpDir.exists() ) {
-						Util.deleteDir( tmpDir );
-					}
-
-					File pathTemp = new File( directoryOfLogfile, "path.tmp" );
-					if ( pathTemp.exists() ) {
-						Util.deleteFile( pathTemp );
-					}
-
 					// Fehler in Validierte Dateien --> invalide
 					mainBoolean = false;
 					return mainBoolean;
@@ -381,32 +360,23 @@ public class KOSTVal implements MessageConstants
 				Controllervalsip controller3 = (Controllervalsip) context.getBean( "controllervalsip" );
 				boolean valSip = controller3.valSip( valDatei, logFileName, directoryOfLogfile, verbose,
 						dirOfJarPath, configMap, context, locale, onlySip );
+
+				// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
+				if ( tmpDir.exists() ) {
+					Util.deleteDir( tmpDir );
+				}
+				File pathTemp = new File( directoryOfLogfile, "path.tmp" );
+				if ( pathTemp.exists() ) {
+					Util.deleteFile( pathTemp );
+				}
+
 				if ( valSip ) {
 					// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
-					if ( tmpDir.exists() ) {
-						Util.deleteDir( tmpDir );
-					}
-
-					File pathTemp = new File( directoryOfLogfile, "path.tmp" );
-					if ( pathTemp.exists() ) {
-						Util.deleteFile( pathTemp );
-					}
-
 					// Validierte Dateien valide
 					context.close();
 					mainBoolean = true;
 					return mainBoolean;
 				} else {
-					// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
-					if ( tmpDir.exists() ) {
-						Util.deleteDir( tmpDir );
-					}
-
-					File pathTemp = new File( directoryOfLogfile, "path.tmp" );
-					if ( pathTemp.exists() ) {
-						Util.deleteFile( pathTemp );
-					}
-
 					// Fehler in Validierte Dateien --> invalide
 					context.close();
 					mainBoolean = false;

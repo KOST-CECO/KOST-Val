@@ -126,8 +126,6 @@ public class Controllervalfile implements MessageConstants
 					Util.deleteFile( JpylyzerReport );
 				}
 			}
-			String pathToWorkDir = configMap.get( "PathToWorkDir" );
-			Util.deleteDir( new File(pathToWorkDir) );
 
 		} else if ( (valDateiExt.equals( ".jpeg" ) || valDateiExt.equals( ".jpg" )
 				|| valDateiExt.equals( ".jpe" )) ) {
@@ -156,8 +154,6 @@ public class Controllervalfile implements MessageConstants
 						.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) );
 				System.out.println( " = Invalid" );
 			}
-			String pathToWorkDir = configMap.get( "PathToWorkDir" );
-			Util.deleteDir( new File(pathToWorkDir) );
 
 		} else if ( (valDateiExt.equals( ".png" )) ) {
 			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS ) );
@@ -185,8 +181,6 @@ public class Controllervalfile implements MessageConstants
 						.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) );
 				System.out.println( " = Invalid" );
 			}
-			String pathToWorkDir = configMap.get( "PathToWorkDir" );
-			Util.deleteDir( new File(pathToWorkDir) );
 
 		} else if ( (valDateiExt.equals( ".tiff" ) || valDateiExt.equals( ".tif" )) ) {
 			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS ) );
@@ -241,8 +235,6 @@ public class Controllervalfile implements MessageConstants
 					Util.deleteFile( exifReport );
 				}
 			}
-			String pathToWorkDir = configMap.get( "PathToWorkDir" );
-			Util.deleteDir( new File(pathToWorkDir) );
 
 		} else if ( (valDateiExt.equals( ".siard" )) ) {
 			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS ) );
@@ -280,8 +272,6 @@ public class Controllervalfile implements MessageConstants
 						.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) );
 				System.out.println( " = Invalid" );
 			}
-			String pathToWorkDir = configMap.get( "PathToWorkDir" );
-			Util.deleteDir( new File(pathToWorkDir) );
 
 		} else if ( (valDateiExt.equals( ".pdf" ) || valDateiExt.equals( ".pdfa" )) ) {
 			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS ) );
@@ -356,8 +346,6 @@ public class Controllervalfile implements MessageConstants
 				Util.deleteFile( internLicenseFile );
 				PdfValidatorAPI.setLicenseKey( " " );
 			}
-			String pathToWorkDir = configMap.get( "PathToWorkDir" );
-			Util.deleteDir( new File(pathToWorkDir) );
 
 		} else {
 			LOGGER.logError( getTextResourceService().getText( locale, ERROR_INCORRECTFILEENDING,
