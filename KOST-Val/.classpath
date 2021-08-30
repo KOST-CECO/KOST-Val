@@ -32,7 +32,7 @@
 	<classpathentry kind="lib" path="lib/droid-results-5.0.3.jar"/>
 	<classpathentry kind="lib" path="lib/xercesImpl-2.7.1.jar" sourcepath="external-sources/xercesImpl-2.7.1-sources.jar"/>
 	<classpathentry kind="lib" path="lib/xml-apis-2.7.1.jar"/>
-	<classpathentry kind="lib" path="lib/VALA-6.16.0.2.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/VALA-6.17.2.4.RELEASE.jar"/>
 	<classpathentry kind="lib" path="lib/jhove-apps-1.24.1.jar"/>
 	<classpathentry kind="lib" path="lib/tiff-hul-1.9.2.jar"/>
 	<classpathentry kind="output" path="target/classes"/>

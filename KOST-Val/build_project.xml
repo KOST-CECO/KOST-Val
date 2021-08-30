@@ -38,7 +38,7 @@
 		<pathelement location="lib/droid-report-5.0.3.jar" />
 		<pathelement location="lib/droid-report-interfaces-5.0.3.jar" />
 		<pathelement location="lib/droid-results-5.0.3.jar" />
-		<pathelement location="lib/VALA-6.16.0.2.RELEASE.jar" />
+		<pathelement location="lib/VALA-6.17.2.4.RELEASE.jar" />
 		<pathelement location="lib/badpeggy-2.0.jar" />
 	</path>
 	<target name="init">
