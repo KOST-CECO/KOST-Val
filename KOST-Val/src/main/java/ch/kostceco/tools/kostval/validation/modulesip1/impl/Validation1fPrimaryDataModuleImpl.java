@@ -34,8 +34,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import ch.kostceco.tools.kosttools.util.Util;
 import ch.kostceco.tools.kostval.exception.modulesip1.Validation1fPrimaryDataException;
-import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesip1.Validation1fPrimaryDataModule;
 

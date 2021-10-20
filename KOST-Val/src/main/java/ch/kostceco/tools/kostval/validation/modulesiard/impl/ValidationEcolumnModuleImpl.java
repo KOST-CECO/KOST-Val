@@ -37,8 +37,8 @@ import org.apache.commons.io.FileUtils;
 import org.jdom2.*;
 import org.jdom2.input.SAXBuilder;
 
+import ch.kostceco.tools.kosttools.util.Util;
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationEcolumnException;
-import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.bean.SiardTable;
 import ch.kostceco.tools.kostval.validation.bean.ValidationContext;

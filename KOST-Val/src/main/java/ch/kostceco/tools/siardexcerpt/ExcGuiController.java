@@ -46,7 +46,7 @@ import ch.kostceco.tools.siardexcerpt.controller.ControllerExcExcerpt;
 import ch.kostceco.tools.siardexcerpt.controller.ControllerExcFinish;
 import ch.kostceco.tools.siardexcerpt.controller.ControllerExcInit;
 import ch.kostceco.tools.siardexcerpt.controller.ControllerExcSearch;
-import ch.kostceco.tools.siardexcerpt.util.Util;
+import ch.kostceco.tools.kosttools.util.Util;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

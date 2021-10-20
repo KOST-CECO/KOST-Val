@@ -1,15 +1,12 @@
-/* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
- * Submission Information Package (SIP). Copyright (C) 2012-2021 Claire Roethlisberger (KOST-CECO),
- * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
- * (coderslagoon), Daniel Ludin (BEDAG AG)
+/* == KOST-Tools ================================================================================
+ * KOST-Tools. Copyright (C) KOST-CECO. 2012-2021
  * -----------------------------------------------------------------------------------------------
- * KOST-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. This application
- * is free software: you can redistribute it and/or modify it under the terms of the GNU General
- * Public License as published by the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version. BEDAG AG and Daniel Ludin hereby disclaims all copyright
- * interest in the program SIP-Val v0.2.0 written by Daniel Ludin (BEDAG AG). Switzerland, 1 March
- * 2011. This application is distributed in the hope that it will be useful, but WITHOUT ANY
+ * KOST-Tools is a development of the KOST-CECO. All rights rest with the KOST-CECO. This
+ * application is free software: you can redistribute it and/or modify it under the terms of the GNU
+ * General Public License as published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version. BEDAG AG and Daniel Ludin hereby disclaims all
+ * copyright interest in the program SIP-Val v0.2.0 written by Daniel Ludin (BEDAG AG). Switzerland,
+ * 1 March 2011. This application is distributed in the hope that it will be useful, but WITHOUT ANY
  * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
  * PURPOSE. See the follow GNU General Public License for more details. You should have received a
  * copy of the GNU General Public License along with this program; if not, write to the Free
@@ -17,7 +14,7 @@
  * <http://www.gnu.org/licenses/>.
  * ============================================================================================== */
 
-package ch.kostceco.tools.kostval.util;
+package ch.kostceco.tools.kosttools.util;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -34,7 +31,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-import ch.kostceco.tools.kostval.util.Util;
+import ch.kostceco.tools.kosttools.util.Util;
 
 /** @author Rc Claire Roethlisberger, KOST-CECO */
 
@@ -165,7 +162,7 @@ public class Util
 	}
 
 	/** Kontrolliert ob text in einer Linie im File vorkommt */
-	public static boolean stringInFile( String text, File file )
+	public static boolean stringInFileLine( String text, File file )
 	{
 		try {
 			Scanner scanner = new Scanner( file );
@@ -181,6 +178,29 @@ public class Util
 		} catch ( FileNotFoundException e ) {
 			return false;
 		}
+	}
+
+	/** Kontrolliert ob String existiert in file
+	 * 
+	 * Solche Sachen duerfen nicht in einer Schleife gemacht werden, da diese sehr Zeitintensiv sind!
+	 * 
+	 * @return true wenn String im File vorhanden @throws IOException */
+	public static boolean stringInFile( String string, File file ) throws IOException
+	{
+		boolean stringInFile = false;
+		try {
+			BufferedReader reader = new BufferedReader( new FileReader( file ) );
+			String line = "";
+			while ( (line = reader.readLine()) != null ) {
+				if ( line.contains( string ) ) {
+					stringInFile = true;
+				}
+			}
+			reader.close();
+		} catch ( IOException ioe ) {
+			ioe.printStackTrace();
+		}
+		return stringInFile;
 	}
 
 	public static Map<String, File> getContent( File dir, HashMap<String, File> fileMap )
@@ -464,6 +484,52 @@ public class Util
 			writer.close();
 			// set to null
 			writer = null;
+		} catch ( IOException ioe ) {
+			ioe.printStackTrace();
+		}
+	}
+
+	/** ersetzt alle Zeichen mit ""
+	 * 
+	 * @throws IOException
+	 */
+	public static void replaceAllChar( File file, String newString ) throws IOException
+	{
+		try {
+			BufferedReader reader = new BufferedReader( new FileReader( file ) );
+			reader.close();
+			FileWriter writer = new FileWriter( file );
+			writer.write( newString );
+			writer.close();
+		} catch ( IOException ioe ) {
+			ioe.printStackTrace();
+		}
+	}
+
+	/** Veraendert & mit &amp;
+	 * 
+	 * ! Solche Ersetzungen duerfen nicht in einer Schleife gemacht werden sondern erst am Schluss, da
+	 * diese sehr Zeitintensiv sind !!!
+	 * 
+	 * @throws IOException
+	 */
+	public static void amp( File file ) throws IOException
+	{
+		try {
+			BufferedReader reader = new BufferedReader( new FileReader( file ) );
+			String line = "", oldtext = "";
+			StringBuilder sb = new StringBuilder();
+			while ( (line = reader.readLine()) != null ) {
+				sb.append( line );
+				sb.append( "\r\n" );
+			}
+			oldtext = sb.toString();
+			reader.close();
+			String newtext = oldtext.replace( "&", "&amp;" );
+			newtext = newtext.replace( (char) 0, (char) 32 );
+			FileWriter writer = new FileWriter( file );
+			writer.write( newtext );
+			writer.close();
 		} catch ( IOException ioe ) {
 			ioe.printStackTrace();
 		}

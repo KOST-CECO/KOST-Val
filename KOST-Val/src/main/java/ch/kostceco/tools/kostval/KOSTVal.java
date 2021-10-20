@@ -36,6 +36,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.w3c.dom.Element;
 
+import ch.kostceco.tools.kosttools.util.Util;
 import ch.kostceco.tools.kostval.controller.Controllervalfile;
 import ch.kostceco.tools.kostval.controller.Controllervalfolder;
 import ch.kostceco.tools.kostval.controller.Controllervalinit;
@@ -46,7 +47,6 @@ import ch.kostceco.tools.kostval.logging.Logger;
 import ch.kostceco.tools.kostval.logging.MessageConstants;
 import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.service.TextResourceService;
-import ch.kostceco.tools.kostval.util.Util;
 
 /** Dies ist die Starter-Klasse, verantwortlich fuer das Initialisieren des Controllers, des
  * Loggings und das Parsen der Start-Parameter.

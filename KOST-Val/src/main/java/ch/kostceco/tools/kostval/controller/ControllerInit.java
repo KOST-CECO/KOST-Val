@@ -26,9 +26,9 @@ import java.nio.file.Files;
 import java.util.List;
 import java.util.Locale;
 
+import ch.kostceco.tools.kosttools.util.Util;
 import ch.kostceco.tools.kostval.logging.MessageConstants;
 import ch.kostceco.tools.kostval.service.TextResourceService;
-import ch.kostceco.tools.kostval.util.Util;
 
 /** kostval --> ControllerInit
  * 
@@ -175,7 +175,7 @@ public class ControllerInit implements MessageConstants
 			Util.copyFile( configFileFrInit, configFileFr );
 			Util.copyFile( configFileEnInit, configFileEn );
 		} else {
-			if ( !Util.stringInFile( version, configFile ) ) {
+			if ( !Util.stringInFileLine( version, configFile ) ) {
 				Util.copyFile( configFileInit, configFile );
 				Util.copyFile( configFileDeInit, configFileDe );
 				Util.copyFile( configFileFrInit, configFileFr );
@@ -187,7 +187,7 @@ public class ControllerInit implements MessageConstants
 		if ( !configFileStandard.exists() ) {
 			Util.copyFile( configFileInit, configFileStandard );
 		} else {
-			if ( !Util.stringInFile( version, configFileStandard ) ) {
+			if ( !Util.stringInFileLine( version, configFileStandard ) ) {
 				Util.copyFile( configFile, configFileStandard );
 			}
 		}
@@ -196,7 +196,7 @@ public class ControllerInit implements MessageConstants
 		if ( !xslDe.exists() ) {
 			Util.copyFile( xslDeInit, xslDe );
 		} else {
-			if ( !Util.stringInFile( version, xslDe ) ) {
+			if ( !Util.stringInFileLine( version, xslDe ) ) {
 				Util.copyFile( xslDeInit, xslDe );
 			}
 		}
@@ -205,7 +205,7 @@ public class ControllerInit implements MessageConstants
 		if ( !xslEn.exists() ) {
 			Util.copyFile( xslEnInit, xslEn );
 		} else {
-			if ( !Util.stringInFile( version, xslEn ) ) {
+			if ( !Util.stringInFileLine( version, xslEn ) ) {
 				Util.copyFile( xslEnInit, xslEn );
 			}
 		}
@@ -214,7 +214,7 @@ public class ControllerInit implements MessageConstants
 		if ( !xslFr.exists() ) {
 			Util.copyFile( xslFrInit, xslFr );
 		} else {
-			if ( !Util.stringInFile( version, xslFr ) ) {
+			if ( !Util.stringInFileLine( version, xslFr ) ) {
 				Util.copyFile( xslFrInit, xslFr );
 			}
 		}

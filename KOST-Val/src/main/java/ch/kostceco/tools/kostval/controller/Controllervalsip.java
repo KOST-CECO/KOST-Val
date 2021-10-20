@@ -41,11 +41,11 @@ import java.util.zip.ZipInputStream;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.context.ApplicationContext;
 
+import ch.kostceco.tools.kosttools.util.Util;
+import ch.kostceco.tools.kosttools.util.Zip64Archiver;
 import ch.kostceco.tools.kostval.logging.Logger;
 import ch.kostceco.tools.kostval.logging.MessageConstants;
 import ch.kostceco.tools.kostval.service.TextResourceService;
-import ch.kostceco.tools.kostval.util.Util;
-import ch.kostceco.tools.kostval.util.Zip64Archiver;
 
 /** kostval --> Controllervalsip
  * 

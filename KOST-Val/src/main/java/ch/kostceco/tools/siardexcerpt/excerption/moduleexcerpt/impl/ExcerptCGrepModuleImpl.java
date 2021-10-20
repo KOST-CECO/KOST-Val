@@ -30,8 +30,8 @@ import org.w3c.dom.NodeList;
 import ch.kostceco.tools.siardexcerpt.exception.moduleexcerpt.ExcerptCGrepException;
 import ch.kostceco.tools.siardexcerpt.excerption.ValidationModuleImpl;
 import ch.kostceco.tools.siardexcerpt.excerption.moduleexcerpt.ExcerptCGrepModule;
-import ch.kostceco.tools.siardexcerpt.util.StreamGobbler;
-import ch.kostceco.tools.siardexcerpt.util.Util;
+import ch.kostceco.tools.kosttools.util.StreamGobbler;
+import ch.kostceco.tools.kosttools.util.Util;
 
 /** 3) extract: mit den Keys anhand der config einen Records herausziehen und anzeigen */
 public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements ExcerptCGrepModule

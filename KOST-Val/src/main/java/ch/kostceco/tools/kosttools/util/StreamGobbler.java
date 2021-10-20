@@ -1,15 +1,12 @@
-/* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
- * Submission Information Package (SIP). Copyright (C) 2012-2021 Claire Roethlisberger (KOST-CECO),
- * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
- * (coderslagoon), Daniel Ludin (BEDAG AG)
+/* == KOST-Tools ================================================================================
+ * KOST-Tools. Copyright (C) KOST-CECO. 2012-2021
  * -----------------------------------------------------------------------------------------------
- * KOST-Val is a development of the KOST-CECO. All rights rest with the KOST-CECO. This application
- * is free software: you can redistribute it and/or modify it under the terms of the GNU General
- * Public License as published by the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version. BEDAG AG and Daniel Ludin hereby disclaims all copyright
- * interest in the program SIP-Val v0.2.0 written by Daniel Ludin (BEDAG AG). Switzerland, 1 March
- * 2011. This application is distributed in the hope that it will be useful, but WITHOUT ANY
+ * KOST-Tools is a development of the KOST-CECO. All rights rest with the KOST-CECO. This
+ * application is free software: you can redistribute it and/or modify it under the terms of the GNU
+ * General Public License as published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version. BEDAG AG and Daniel Ludin hereby disclaims all
+ * copyright interest in the program SIP-Val v0.2.0 written by Daniel Ludin (BEDAG AG). Switzerland,
+ * 1 March 2011. This application is distributed in the hope that it will be useful, but WITHOUT ANY
  * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
  * PURPOSE. See the follow GNU General Public License for more details. You should have received a
  * copy of the GNU General Public License along with this program; if not, write to the Free
@@ -17,7 +14,7 @@
  * <http://www.gnu.org/licenses/>.
  * ============================================================================================== */
 
-package ch.kostceco.tools.kostval.util;
+package ch.kostceco.tools.kosttools.util;
 
 import java.io.BufferedReader;
 import java.io.IOException;

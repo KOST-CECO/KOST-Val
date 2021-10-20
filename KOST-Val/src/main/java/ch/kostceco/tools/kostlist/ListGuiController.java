@@ -19,7 +19,6 @@ import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -43,7 +42,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
-import ch.kostceco.tools.kostlist.util.Util;
+import ch.kostceco.tools.kosttools.util.Util;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -90,7 +89,7 @@ public class ListGuiController
 
 	private WebEngine		engine;
 
-	private File				testfilesFolder, fileTodo, fileFolderTodo, md5sumExe;
+	private File				testfilesFolder, fileTodo, fileFolderTodo;
 
 	/* private File configFile = new File( kostRanFolder.getAbsolutePath() + File.separator +
 	 * "configuration" + File.separator + "SIARDexcerpt.conf.xml" ); */

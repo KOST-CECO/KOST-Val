@@ -29,7 +29,7 @@ import java.util.zip.ZipFile;
 import ch.kostceco.tools.siardexcerpt.exception.moduleexcerpt.ExcerptAZipException;
 import ch.kostceco.tools.siardexcerpt.excerption.ValidationModuleImpl;
 import ch.kostceco.tools.siardexcerpt.excerption.moduleexcerpt.ExcerptAZipModule;
-import ch.kostceco.tools.siardexcerpt.util.Util;
+import ch.kostceco.tools.kosttools.util.Util;
 
 /** SIARD-Datei entpacken */
 public class ExcerptAZipModuleImpl extends ValidationModuleImpl implements ExcerptAZipModule

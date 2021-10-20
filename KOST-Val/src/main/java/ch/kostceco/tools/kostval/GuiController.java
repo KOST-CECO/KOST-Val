@@ -40,8 +40,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
+import ch.kostceco.tools.kosttools.util.Util;
 import ch.kostceco.tools.kostval.controller.ControllerInit;
-import ch.kostceco.tools.kostval.util.Util;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -999,7 +999,7 @@ public class GuiController
 				dirFileFolder = dirFileFolder.getParentFile();
 			}
 			fileChooser.setInitialDirectory( dirFileFolder );
-		} else if ( !Util.stringInFile( "<standardinputdir></standardinputdir>", configFile ) ) {
+		} else if ( !Util.stringInFileLine( "<standardinputdir></standardinputdir>", configFile ) ) {
 			try {
 				Document doc = null;
 				BufferedInputStream bis;
@@ -1060,24 +1060,24 @@ public class GuiController
 			engine.loadContent( text );
 			// Format und Sip Validierung erst moeglich wenn fileFolder ausgefuellt
 			// und auch in der Config erlaubt
-			if ( Util.stringInFile( "<pdfavalidation>yes</", configFile ) ) {
+			if ( Util.stringInFileLine( "<pdfavalidation>yes</", configFile ) ) {
 				buttonFormat.setDisable( false );
-			} else if ( Util.stringInFile( "<siardalidation>yes</", configFile ) ) {
+			} else if ( Util.stringInFileLine( "<siardalidation>yes</", configFile ) ) {
 				buttonFormat.setDisable( false );
-			} else if ( Util.stringInFile( "<jp2validation>yes</", configFile ) ) {
+			} else if ( Util.stringInFileLine( "<jp2validation>yes</", configFile ) ) {
 				buttonFormat.setDisable( false );
-			} else if ( Util.stringInFile( "<jpegvalidation>yes</", configFile ) ) {
+			} else if ( Util.stringInFileLine( "<jpegvalidation>yes</", configFile ) ) {
 				buttonFormat.setDisable( false );
-			} else if ( Util.stringInFile( "<pngvalidation>yes</", configFile ) ) {
+			} else if ( Util.stringInFileLine( "<pngvalidation>yes</", configFile ) ) {
 				buttonFormat.setDisable( false );
-			} else if ( Util.stringInFile( "<tiffvalidation>yes</", configFile ) ) {
+			} else if ( Util.stringInFileLine( "<tiffvalidation>yes</", configFile ) ) {
 				buttonFormat.setDisable( false );
 			} else {
 				buttonFormat.setDisable( true );
 			}
 			if ( valFile.getName().startsWith( "SIP" ) ) {
 				String configSip0160 = "<ech0160validation>no</ech0160validation>";
-				if ( Util.stringInFile( configSip0160, configFile ) ) {
+				if ( Util.stringInFileLine( configSip0160, configFile ) ) {
 					buttonSip.setDisable( true );
 					buttonOnlySip.setDisable( true );
 				} else {
@@ -1111,7 +1111,7 @@ public class GuiController
 				dirFileFolder = dirFileFolder.getParentFile();
 			}
 			folderChooser.setInitialDirectory( dirFileFolder );
-		} else if ( !Util.stringInFile( "<standardinputdir></standardinputdir>", configFile ) ) {
+		} else if ( !Util.stringInFileLine( "<standardinputdir></standardinputdir>", configFile ) ) {
 			try {
 				Document doc = null;
 				BufferedInputStream bis;
@@ -1140,24 +1140,24 @@ public class GuiController
 			fileFolder.setText( valFolder.getAbsolutePath() );
 			// Format und Sip Validierung erst moeglich wenn fileFolder ausgefuellt
 			// und auch in der Config erlaubt
-			if ( Util.stringInFile( "<pdfavalidation>yes</", configFile ) ) {
+			if ( Util.stringInFileLine( "<pdfavalidation>yes</", configFile ) ) {
 				buttonFormat.setDisable( false );
-			} else if ( Util.stringInFile( "<siardalidation>yes</", configFile ) ) {
+			} else if ( Util.stringInFileLine( "<siardalidation>yes</", configFile ) ) {
 				buttonFormat.setDisable( false );
-			} else if ( Util.stringInFile( "<jp2validation>yes</", configFile ) ) {
+			} else if ( Util.stringInFileLine( "<jp2validation>yes</", configFile ) ) {
 				buttonFormat.setDisable( false );
-			} else if ( Util.stringInFile( "<jpegvalidation>yes</", configFile ) ) {
+			} else if ( Util.stringInFileLine( "<jpegvalidation>yes</", configFile ) ) {
 				buttonFormat.setDisable( false );
-			} else if ( Util.stringInFile( "<pngvalidation>yes</", configFile ) ) {
+			} else if ( Util.stringInFileLine( "<pngvalidation>yes</", configFile ) ) {
 				buttonFormat.setDisable( false );
-			} else if ( Util.stringInFile( "<tiffvalidation>yes</", configFile ) ) {
+			} else if ( Util.stringInFileLine( "<tiffvalidation>yes</", configFile ) ) {
 				buttonFormat.setDisable( false );
 			} else {
 				buttonFormat.setDisable( true );
 			}
 			if ( valFolder.getName().startsWith( "SIP" ) ) {
 				String configSip0160 = "<ech0160validation>no</ech0160validation>";
-				if ( Util.stringInFile( configSip0160, configFile ) ) {
+				if ( Util.stringInFileLine( configSip0160, configFile ) ) {
 					buttonSip.setDisable( true );
 					buttonOnlySip.setDisable( true );
 				} else {
@@ -1264,24 +1264,24 @@ public class GuiController
 		if ( valFileFolder.exists() ) { // Format und Sip Validierung erst moeglich wenn fileFolder
 																		// ausgefuellt
 			// und auch in der Config erlaubt
-			if ( Util.stringInFile( "<pdfavalidation>yes</", configFile ) ) {
+			if ( Util.stringInFileLine( "<pdfavalidation>yes</", configFile ) ) {
 				buttonFormat.setDisable( false );
-			} else if ( Util.stringInFile( "<siardalidation>yes</", configFile ) ) {
+			} else if ( Util.stringInFileLine( "<siardalidation>yes</", configFile ) ) {
 				buttonFormat.setDisable( false );
-			} else if ( Util.stringInFile( "<jp2validation>yes</", configFile ) ) {
+			} else if ( Util.stringInFileLine( "<jp2validation>yes</", configFile ) ) {
 				buttonFormat.setDisable( false );
-			} else if ( Util.stringInFile( "<jpegvalidation>yes</", configFile ) ) {
+			} else if ( Util.stringInFileLine( "<jpegvalidation>yes</", configFile ) ) {
 				buttonFormat.setDisable( false );
-			} else if ( Util.stringInFile( "<pngvalidation>yes</", configFile ) ) {
+			} else if ( Util.stringInFileLine( "<pngvalidation>yes</", configFile ) ) {
 				buttonFormat.setDisable( false );
-			} else if ( Util.stringInFile( "<tiffvalidation>yes</", configFile ) ) {
+			} else if ( Util.stringInFileLine( "<tiffvalidation>yes</", configFile ) ) {
 				buttonFormat.setDisable( false );
 			} else {
 				buttonFormat.setDisable( true );
 			}
 			if ( valFileFolder.getName().startsWith( "SIP" ) ) {
 				String configSip0160 = "<ech0160validation>no</ech0160validation>";
-				if ( Util.stringInFile( configSip0160, configFile ) ) {
+				if ( Util.stringInFileLine( configSip0160, configFile ) ) {
 					buttonSip.setDisable( true );
 					buttonOnlySip.setDisable( true );
 				} else {

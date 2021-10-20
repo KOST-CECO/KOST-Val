@@ -38,8 +38,8 @@ import uk.gov.nationalarchives.droid.core.signature.droid4.signaturefile.FileFor
 import coderslagoon.badpeggy.scanner.ImageFormat;
 import coderslagoon.badpeggy.scanner.ImageScanner;
 import coderslagoon.badpeggy.scanner.ImageScanner.Callback;
+import ch.kostceco.tools.kosttools.util.Util;
 import ch.kostceco.tools.kostval.exception.modulejpeg.ValidationAjpegvalidationException;
-import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulejpeg.ValidationAvalidationJpegModule;
 

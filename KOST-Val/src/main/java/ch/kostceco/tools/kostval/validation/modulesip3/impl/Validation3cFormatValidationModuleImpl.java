@@ -23,8 +23,8 @@ import java.io.File;
 import java.util.Locale;
 import java.util.Map;
 
+import ch.kostceco.tools.kosttools.util.Util;
 import ch.kostceco.tools.kostval.exception.modulesip3.Validation3cFormatValidationException;
-import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesip3.Validation3cFormatValidationModule;
 

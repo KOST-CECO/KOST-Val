@@ -26,9 +26,9 @@ import java.io.FileReader;
 import java.util.Locale;
 import java.util.Map;
 
+import ch.kostceco.tools.kosttools.util.Util;
 import ch.kostceco.tools.kostval.KOSTVal;
 import ch.kostceco.tools.kostval.exception.modulepng.ValidationApngvalidationException;
-import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulepng.ValidationAvalidationPngModule;
 import coderslagoon.badpeggy.scanner.ImageScanner.Callback;

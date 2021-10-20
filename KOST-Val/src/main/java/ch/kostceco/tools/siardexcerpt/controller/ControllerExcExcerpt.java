@@ -41,7 +41,7 @@ import ch.kostceco.tools.siardexcerpt.logging.Logger;
 import ch.kostceco.tools.siardexcerpt.logging.MessageConstants;
 import ch.kostceco.tools.siardexcerpt.service.ConfigurationServiceExc;
 import ch.kostceco.tools.siardexcerpt.service.TextResourceServiceExc;
-import ch.kostceco.tools.siardexcerpt.util.Util;
+import ch.kostceco.tools.kosttools.util.Util;
 
 /** Dies ist die Starter-Klasse, verantwortlich fuer das Initialisieren des Controllers, des
  * Loggings und das Parsen der Start-Parameter.

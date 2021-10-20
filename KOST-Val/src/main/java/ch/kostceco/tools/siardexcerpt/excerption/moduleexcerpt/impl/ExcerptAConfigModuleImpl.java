@@ -31,7 +31,7 @@ import org.w3c.dom.NodeList;
 import ch.kostceco.tools.siardexcerpt.exception.moduleexcerpt.ExcerptAConfigException;
 import ch.kostceco.tools.siardexcerpt.excerption.ValidationModuleImpl;
 import ch.kostceco.tools.siardexcerpt.excerption.moduleexcerpt.ExcerptAConfigModule;
-import ch.kostceco.tools.siardexcerpt.util.Util;
+import ch.kostceco.tools.kosttools.util.Util;
 
 /** Config Datei ausfuellen */
 public class ExcerptAConfigModuleImpl extends ValidationModuleImpl implements ExcerptAConfigModule

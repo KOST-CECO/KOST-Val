@@ -66,11 +66,11 @@ import com.pdftools.*;
 import com.pdftools.pdfvalidator.PdfError;
 import com.pdftools.pdfvalidator.PdfValidatorAPI;
 
+import ch.kostceco.tools.kosttools.util.Util;
+import ch.kostceco.tools.kosttools.util.UtilCallas;
+import ch.kostceco.tools.kosttools.util.UtilCharacter;
 import ch.kostceco.tools.kostval.KOSTVal;
 import ch.kostceco.tools.kostval.exception.modulepdfa.ValidationApdfvalidationException;
-import ch.kostceco.tools.kostval.util.Util;
-import ch.kostceco.tools.kostval.util.UtilCallas;
-import ch.kostceco.tools.kostval.util.UtilCharacter;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulepdfa.ValidationAvalidationAiModule;
 

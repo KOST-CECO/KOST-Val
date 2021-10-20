@@ -44,10 +44,10 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
+import ch.kostceco.tools.kosttools.util.StreamGobbler;
+import ch.kostceco.tools.kosttools.util.Util;
 import ch.kostceco.tools.kostval.KOSTVal;
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationHcontentException;
-import ch.kostceco.tools.kostval.util.StreamGobbler;
-import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationHcontentModule;
 

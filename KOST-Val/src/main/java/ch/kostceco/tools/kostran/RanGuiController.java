@@ -57,7 +57,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import ch.kostceco.tools.kostran.util.Util;
+import ch.kostceco.tools.kosttools.util.Util;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -1662,11 +1662,11 @@ public class RanGuiController
 			outputFile = new File( outputFolder.getAbsolutePath() + File.separator + ausgabeStart + "_"
 					+ fileSiard.getName() + "_" + fileList.getName() + ".xml" );
 			if ( outputFile.exists() ) {
-				Util.deleteFileWithoutOnExit( outputFile );
+				Util.deleteFile( outputFile );
 				outputFile.mkdirs();
 			}
 
-			ch.kostceco.tools.siardexcerpt.util.Util.copyFile( tableXmlRed, outputFile );
+			ch.kostceco.tools.kosttools.util.Util.copyFile( tableXmlRed, outputFile );
 
 			if ( outputFile.exists() ) {
 				System.out.println( outputFile.getAbsolutePath() );

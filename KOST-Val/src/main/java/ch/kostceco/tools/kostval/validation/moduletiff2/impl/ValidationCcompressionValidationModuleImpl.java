@@ -25,10 +25,10 @@ import java.util.Locale;
 import java.util.Map;
 import java.io.FileReader;
 
+import ch.kostceco.tools.kosttools.util.StreamGobbler;
+import ch.kostceco.tools.kosttools.util.Util;
 import ch.kostceco.tools.kostval.KOSTVal;
 import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationCcompressionValidationException;
-import ch.kostceco.tools.kostval.util.StreamGobbler;
-import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationCcompressionValidationModule;
 

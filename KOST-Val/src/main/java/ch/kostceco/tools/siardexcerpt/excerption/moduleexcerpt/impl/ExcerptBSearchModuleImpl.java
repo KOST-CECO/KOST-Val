@@ -30,8 +30,8 @@ import org.w3c.dom.NodeList;
 import ch.kostceco.tools.siardexcerpt.exception.moduleexcerpt.ExcerptBSearchException;
 import ch.kostceco.tools.siardexcerpt.excerption.ValidationModuleImpl;
 import ch.kostceco.tools.siardexcerpt.excerption.moduleexcerpt.ExcerptBSearchModule;
-import ch.kostceco.tools.siardexcerpt.util.StreamGobbler;
-import ch.kostceco.tools.siardexcerpt.util.Util;
+import ch.kostceco.tools.kosttools.util.StreamGobbler;
+import ch.kostceco.tools.kosttools.util.Util;
 
 /** 2) search: gemäss config die Tabelle mit Suchtext befragen und Ausgabe des Resultates */
 public class ExcerptBSearchModuleImpl extends ValidationModuleImpl implements ExcerptBSearchModule

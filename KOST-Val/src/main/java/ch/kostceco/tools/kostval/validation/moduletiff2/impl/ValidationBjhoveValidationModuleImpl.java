@@ -35,9 +35,9 @@ import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Set;
 
+import ch.kostceco.tools.kosttools.util.Util;
 import ch.kostceco.tools.kostval.KOSTVal;
 import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationBjhoveValidationException;
-import ch.kostceco.tools.kostval.util.Util;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationBjhoveValidationModule;
 import edu.harvard.hul.ois.jhove.*;

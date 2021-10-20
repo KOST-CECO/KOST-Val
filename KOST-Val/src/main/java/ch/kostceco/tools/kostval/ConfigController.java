@@ -37,7 +37,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
-import ch.kostceco.tools.kostval.util.Util;
+import ch.kostceco.tools.kosttools.util.Util;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -141,7 +141,7 @@ public class ConfigController
 
 		// Sprache anhand configFile (HauptGui) setzten
 		try {
-			if ( Util.stringInFile( "kostval-conf-DE.xsl", configFile ) ) {
+			if ( Util.stringInFileLine( "kostval-conf-DE.xsl", configFile ) ) {
 				labelBps.setText( "Bits per Sample (pro Kanal)" );
 				labelComp.setText( "Komprimierungsalgorithmus" );
 				labelOther.setText( "Sonstiges" );
@@ -160,7 +160,7 @@ public class ConfigController
 				buttonPuid.setText( "ändern" );
 				buttonWork.setText( "Arbeitsverzeichnis" );
 				buttonInput.setText( "Inputverzeichnis" );
-			} else if ( Util.stringInFile( "kostval-conf-FR.xsl", configFile ) ) {
+			} else if ( Util.stringInFileLine( "kostval-conf-FR.xsl", configFile ) ) {
 				labelBps.setText( "Bits par échantillon (par canal)" );
 				labelComp.setText( "Algorithme de compression" );
 				labelOther.setText( "Divers" );
@@ -938,7 +938,7 @@ public class ConfigController
 				Util.oldnewstring( nkeyPt, " ", configFile );
 			} else {
 				Util.oldnewstring( yes, no, configFile );
-				if (!Util.stringInFile( nkeyPt, configFile )) {
+				if (!Util.stringInFileLine( nkeyPt, configFile )) {
 				Util.oldnewstring(ignorePt, nkeyPt+ignorePt, configFile );
 			}}
 		} catch ( IOException e ) {

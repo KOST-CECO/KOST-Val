@@ -33,10 +33,10 @@ import org.springframework.context.ApplicationContext;
 
 import com.pdftools.pdfvalidator.PdfValidatorAPI;
 
+import ch.kostceco.tools.kosttools.util.Util;
 import ch.kostceco.tools.kostval.logging.Logger;
 import ch.kostceco.tools.kostval.logging.MessageConstants;
 import ch.kostceco.tools.kostval.service.TextResourceService;
-import ch.kostceco.tools.kostval.util.Util;
 
 /** kostval --> Controllervalfile
  * 
