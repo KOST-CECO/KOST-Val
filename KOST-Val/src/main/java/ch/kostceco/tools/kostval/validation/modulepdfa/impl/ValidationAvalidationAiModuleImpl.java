@@ -33,12 +33,13 @@ import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
@@ -48,8 +49,6 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
@@ -57,15 +56,14 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import uk.gov.nationalarchives.droid.core.signature.droid4.Droid;
-import uk.gov.nationalarchives.droid.core.signature.droid4.FileFormatHit;
-import uk.gov.nationalarchives.droid.core.signature.droid4.IdentificationFile;
-import uk.gov.nationalarchives.droid.core.signature.droid4.signaturefile.FileFormat;
-
-import com.pdftools.*;
+import com.pdftools.FileStream;
+import com.pdftools.NativeLibrary;
+import com.pdftools.Stream;
 import com.pdftools.pdfvalidator.PdfError;
 import com.pdftools.pdfvalidator.PdfValidatorAPI;
 
+import ch.kostceco.tools.kosttools.fileservice.DroidPuid;
+import ch.kostceco.tools.kosttools.fileservice.Magic;
 import ch.kostceco.tools.kosttools.util.Util;
 import ch.kostceco.tools.kosttools.util.UtilCallas;
 import ch.kostceco.tools.kosttools.util.UtilCharacter;
@@ -349,113 +347,50 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 		} else if ( (valDatei.getAbsolutePath().toLowerCase().endsWith( ".pdf" )
 				|| valDatei.getAbsolutePath().toLowerCase().endsWith( ".pdfa" )) ) {
 
-			FileReader fr = null;
-
 			try {
-				fr = new FileReader( valDatei );
-				BufferedReader read = new BufferedReader( fr );
-
-				// Hex 25 in Char umwandeln
-				String str1 = "25";
-				int i1 = Integer.parseInt( str1, 16 );
-				char c1 = (char) i1;
-				// Hex 50 in Char umwandeln
-				String str2 = "50";
-				int i2 = Integer.parseInt( str2, 16 );
-				char c2 = (char) i2;
-				// Hex 44 in Char umwandeln
-				String str3 = "44";
-				int i3 = Integer.parseInt( str3, 16 );
-				char c3 = (char) i3;
-				// Hex 46 in Char umwandeln
-				String str4 = "46";
-				int i4 = Integer.parseInt( str4, 16 );
-				char c4 = (char) i4;
-
-				// auslesen der ersten 4 Zeichen der Datei
-				int length;
-				int i;
-				char[] buffer = new char[4];
-				length = read.read( buffer );
-				read.close();
-				// set to null
-				read = null;
-				for ( i = 0; i != length; i++ )
-					;
-
-				// die beiden charArrays (soll und ist) mit einander vergleichen IST = c1c2c3c4
-				char[] charArray1 = buffer;
-				char[] charArray2 = new char[] { c1, c2, c3, c4 };
-
-				if ( Arrays.equals( charArray1, charArray2 ) ) {
+				// System.out.println("ueberpruefe Magic number pdf...");
+				if ( Magic.magicPdf( valDatei ) ) {
+					// System.out.println(" -> es ist eine Pdf-Datei");
 					// hoechstwahrscheinlich ein PDF da es mit 25504446 respektive %PDF beginnt
 					valid = true;
-				} else {
-					// Droid-Erkennung, damit Details ausgegeben werden koennen
-					String nameOfSignature = configMap.get( "PathToDroidSignatureFile" );
-					if ( nameOfSignature == null ) {
-						if ( min ) {
-							return false;
-						} else {
-							getMessageService()
-									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-											+ getTextResourceService().getText( locale,
-													MESSAGE_XML_CONFIGURATION_ERROR_NO_SIGNATURE ) );
-							return false;
+								} else {
+					// System.out.println(" -> es ist KEINE Pdf-Datei");
+					if ( min ) {
+						return false;
+					} else {
+						// Droid-Erkennung, damit Details ausgegeben werden koennen
+						// existiert die SignatureFile am angebenen Ort?
+						String nameOfSignature = configMap.get( "PathToDroidSignatureFile" );
+						if ( !new File( nameOfSignature ).exists() ) {
+							if ( min ) {
+								return false;
+							} else {
+								getMessageService()
+										.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+												+ getTextResourceService().getText( locale, MESSAGE_XML_CA_DROID ) );
+								return false;
+							}
 						}
-					}
-					// existiert die SignatureFile am angebenen Ort?
-					File fnameOfSignature = new File( nameOfSignature );
-					if ( !fnameOfSignature.exists() ) {
+
+						// Ermittle die DROID-PUID der valDatei mit hilfe der nameOfSignature
+						String puid = (DroidPuid.getPuid( valDatei, nameOfSignature ));
 						if ( min ) {
 							return false;
-						} else {
-							getMessageService()
-									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-											+ getTextResourceService().getText( locale, MESSAGE_XML_CA_DROID ) );
-							return false;
-						}
-					}
-
-					Droid droid = null;
-					try {
-						/* kleiner Hack, weil die Droid libraries irgendwo ein System.out drin haben, welche den
-						 * Output stoeren Util.switchOffConsole() als Kommentar markieren wenn man die
-						 * Fehlermeldung erhalten moechte */
-						Util.switchOffConsole();
-						droid = new Droid();
-
-						droid.readSignatureFile( nameOfSignature );
-
-					} catch ( Exception e ) {
-						if ( min ) {
-							return false;
-						} else {
+						} else if ( puid.equals( " ERROR " ) ) {
+							// Probleme bei der Initialisierung von DROID
 							getMessageService().logError( getTextResourceService().getText( locale,
 									MESSAGE_XML_MODUL_A_PDFA )
 									+ getTextResourceService().getText( locale, ERROR_XML_CANNOT_INITIALIZE_DROID ) );
 							return false;
+						} else {
+							// Erkennungsergebnis ausgeben
+							getMessageService()
+									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+											+ getTextResourceService().getText( locale, ERROR_XML_A_PDFA_INCORRECTFILE,
+													puid ) );
+							return false;
 						}
-					} finally {
-						Util.switchOnConsole();
-					}
-					File file = valDatei;
-					String puid = " ??? ";
-					IdentificationFile ifile = droid.identify( file.getAbsolutePath() );
-					for ( int x = 0; x < ifile.getNumHits(); x++ ) {
-						FileFormatHit ffh = ifile.getHit( x );
-						FileFormat ff = ffh.getFileFormat();
-						puid = ff.getPUID();
-					}
-					if ( min ) {
-						return false;
-					} else {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-										+ getTextResourceService().getText( locale, ERROR_XML_A_PDFA_INCORRECTFILE,
-												puid ) );
-						return false;
-					}
+					} 
 				}
 			} catch ( Exception e ) {
 				if ( min ) {

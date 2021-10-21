@@ -19,18 +19,12 @@
 
 package ch.kostceco.tools.kostval.validation.moduletiff1.impl;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.util.Map;
-import java.io.FileReader;
-import java.util.Arrays;
 import java.util.Locale;
+import java.util.Map;
 
-import uk.gov.nationalarchives.droid.core.signature.droid4.Droid;
-import uk.gov.nationalarchives.droid.core.signature.droid4.FileFormatHit;
-import uk.gov.nationalarchives.droid.core.signature.droid4.IdentificationFile;
-import uk.gov.nationalarchives.droid.core.signature.droid4.signaturefile.FileFormat;
-import ch.kostceco.tools.kosttools.util.Util;
+import ch.kostceco.tools.kosttools.fileservice.DroidPuid;
+import ch.kostceco.tools.kosttools.fileservice.Magic;
 import ch.kostceco.tools.kostval.exception.moduletiff1.ValidationArecognitionException;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.moduletiff1.ValidationArecognitionModule;
@@ -70,116 +64,49 @@ public class ValidationArecognitionModuleImpl extends ValidationModuleImpl
 		} else if ( (valDatei.getAbsolutePath().toLowerCase().endsWith( ".tiff" )
 				|| valDatei.getAbsolutePath().toLowerCase().endsWith( ".tif" )) ) {
 
-			FileReader fr = null;
-
 			try {
-				fr = new FileReader( valDatei );
-				BufferedReader read = new BufferedReader( fr );
-
-				// Hex 49 in Char umwandeln
-				String str1 = "49";
-				int i1 = Integer.parseInt( str1, 16 );
-				char c1 = (char) i1;
-				// Hex 4D in Char umwandeln
-				String str2 = "4D";
-				int i2 = Integer.parseInt( str2, 16 );
-				char c2 = (char) i2;
-				// Hex 2A in Char umwandeln
-				String str3 = "2A";
-				int i3 = Integer.parseInt( str3, 16 );
-				char c3 = (char) i3;
-				// Hex 00 in Char umwandeln
-				String str4 = "00";
-				int i4 = Integer.parseInt( str4, 16 );
-				char c4 = (char) i4;
-
-				// auslesen der ersten 4 Zeichen der Datei
-				int length;
-				int i;
-				char[] buffer = new char[4];
-				length = read.read( buffer );
-				for ( i = 0; i != length; i++ )
-					;
-
-				/* die beiden charArrays (soll und ist) mit einander vergleichen IST = c1c1c3c4 /c2c2c4c3 */
-				char[] charArray1 = buffer;
-				char[] charArray2 = new char[] { c1, c1, c3, c4 };
-				char[] charArray3 = new char[] { c2, c2, c4, c3 };
-
-				if ( Arrays.equals( charArray1, charArray2 ) ) {
-					/* h�chstwahrscheinlich ein TIFF da es mit 49492A00 respektive II*. beginnt valid =
-					 * true; */
-				} else if ( Arrays.equals( charArray1, charArray3 ) ) {
-					/* h�chstwahrscheinlich ein TIFF da es mit 4D4D002A respektive MM.* beginnt valid =
-					 * true; */
+				// System.out.println("ueberpruefe Magic number tiff...");
+				if ( Magic.magicTiff( valDatei ) ) {
+					// System.out.println(" -> es ist eine Tiff-Datei");
 				} else {
-					// Droid-Erkennung, damit Details ausgegeben werden k�nnen
-					String nameOfSignature = configMap.get( "PathToDroidSignatureFile" );
-					if ( nameOfSignature.startsWith( "Configuration-Error:" ) ) {
-						read.close();
-						if ( min ) {
-							return false;
-						} else {
-							getMessageService()
-									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_TIFF )
-											+ nameOfSignature );
-							return false;
-						}
-					}
-					// existiert die SignatureFile am angebenen Ort?
-					File fnameOfSignature = new File( nameOfSignature );
-					if ( !fnameOfSignature.exists() ) {
-						read.close();
-						if ( min ) {
-							return false;
-						} else {
-							getMessageService()
-									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_TIFF )
-											+ getTextResourceService().getText( locale, MESSAGE_XML_CA_DROID ) );
-							return false;
-						}
-					}
-
-					Droid droid = null;
-					try {
-						/* kleiner Hack, weil die Droid libraries irgendwo ein System.out drin haben, welche den
-						 * Output st�ren Util.switchOffConsole() als Kommentar markieren wenn man die
-						 * Fehlermeldung erhalten m�chte */
-						Util.switchOffConsole();
-						droid = new Droid();
-
-						droid.readSignatureFile( nameOfSignature );
-
-					} catch ( Exception e ) {
-						getMessageService().logError( getTextResourceService().getText( locale,
-								MESSAGE_XML_MODUL_Ca_SIP )
-								+ getTextResourceService().getText( locale, ERROR_XML_CANNOT_INITIALIZE_DROID ) );
-						fr.close();
-						read.close();
-						return false;
-					} finally {
-						Util.switchOnConsole();
-					}
-					File file = valDatei;
-					String puid = " ??? ";
-					IdentificationFile ifile = droid.identify( file.getAbsolutePath() );
-					for ( int x = 0; x < ifile.getNumHits(); x++ ) {
-						FileFormatHit ffh = ifile.getHit( x );
-						FileFormat ff = ffh.getFileFormat();
-						puid = ff.getPUID();
-					}
-					read.close();
+					// System.out.println(" -> es ist KEINE Tiff-Datei");
 					if ( min ) {
 						return false;
 					} else {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_TIFF )
-										+ getTextResourceService().getText( locale, ERROR_XML_A_INCORRECTFILE, puid ) );
-						return false;
-					}
+						// Droid-Erkennung, damit Details ausgegeben werden koennen
+						// existiert die SignatureFile am angebenen Ort?
+						String nameOfSignature = configMap.get( "PathToDroidSignatureFile" );
+						if ( !new File( nameOfSignature ).exists() ) {
+							if ( min ) {
+								return false;
+							} else {
+								getMessageService()
+										.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_TIFF )
+												+ getTextResourceService().getText( locale, MESSAGE_XML_CA_DROID ) );
+								return false;
+							}
+						}
+
+						// Ermittle die DROID-PUID der valDatei mit hilfe der nameOfSignature
+						String puid = (DroidPuid.getPuid( valDatei, nameOfSignature ));
+						if ( min ) {
+							return false;
+						} else if ( puid.equals( " ERROR " ) ) {
+							// Probleme bei der Initialisierung von DROID
+							getMessageService().logError( getTextResourceService().getText( locale,
+									MESSAGE_XML_MODUL_A_TIFF )
+									+ getTextResourceService().getText( locale, ERROR_XML_CANNOT_INITIALIZE_DROID ) );
+							return false;
+						} else {
+							// Erkennungsergebnis ausgeben
+							getMessageService()
+									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_TIFF )
+											+ getTextResourceService().getText( locale, ERROR_XML_A_INCORRECTFILE,
+													puid ) );
+							return false;
+						}
+					} 
 				}
-				fr.close();
-				read.close();
 			} catch ( Exception e ) {
 				if ( min ) {
 					return false;

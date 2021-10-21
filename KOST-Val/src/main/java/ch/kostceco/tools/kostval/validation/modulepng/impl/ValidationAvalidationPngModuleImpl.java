@@ -21,21 +21,17 @@ package ch.kostceco.tools.kostval.validation.modulepng.impl;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileReader;
 import java.util.Locale;
 import java.util.Map;
 
-import ch.kostceco.tools.kosttools.util.Util;
+import ch.kostceco.tools.kosttools.fileservice.DroidPuid;
+import ch.kostceco.tools.kosttools.fileservice.Magic;
 import ch.kostceco.tools.kostval.KOSTVal;
 import ch.kostceco.tools.kostval.exception.modulepng.ValidationApngvalidationException;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulepng.ValidationAvalidationPngModule;
 import coderslagoon.badpeggy.scanner.ImageScanner.Callback;
-import uk.gov.nationalarchives.droid.core.signature.droid4.Droid;
-import uk.gov.nationalarchives.droid.core.signature.droid4.FileFormatHit;
-import uk.gov.nationalarchives.droid.core.signature.droid4.IdentificationFile;
-import uk.gov.nationalarchives.droid.core.signature.droid4.signaturefile.FileFormat;
 
 /** Ist die vorliegende PNG-Datei eine valide PNG-Datei? PNG Validierungs mit pngcheck.
  * 
@@ -60,9 +56,7 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl
 
 		// Start mit der Erkennung
 
-		Boolean reco = false;
-
-		// Eine PNG Datei (.png) muss mit 89 50 4e 47 0d 0a 1a 0a (hex) beginnen
+		// Eine PNG Datei (.png) muss mit 89504E47 -> ‰PNG beginnen
 		if ( valDatei.isDirectory() ) {
 			if ( min ) {
 				return false;
@@ -74,134 +68,50 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl
 			}
 		} else if ( (valDatei.getAbsolutePath().toLowerCase().endsWith( ".png" )) ) {
 
-			FileReader fr = null;
-
 			try {
-				fr = new FileReader( valDatei );
-				BufferedReader read = new BufferedReader( fr );
-
-				// die ersten 4 Zeichen einer PNG Datei
-
-				// 1 89
-				// 2 50
-				// 3 4e
-				// 4 47
-
-				// Open the file using FileInputStream
-				try (FileInputStream fis = new FileInputStream( valDatei )) {
-					// A variable to hold a single byte of the file data
-					int i = 0;
-
-					// A counter to print a new line every 16 bytes read.
-					int cnt = 0;
-
-					// Read till the end of the file and print the byte in hexadecimal valueS.
-					StringBuilder sb = new StringBuilder();
-					String sb2str1 = "";
-					String sb2str2 = "";
-					String sb2str3 = "";
-					String sb2str4 = "";
-					String sb1234 = "";
-					while ( (i = fis.read()) != -1 ) {
-						// System.out.printf("%02X ", i);
-						sb.append( String.format( "%02X ", i ) );
-						if ( sb2str1 == "" ) {
-							sb2str1 = sb + "";
-						} else if ( sb2str2 == "" ) {
-							sb2str2 = sb + "";
-						} else if ( sb2str3 == "" ) {
-							sb2str3 = sb + "";
-						} else if ( sb2str4 == "" ) {
-							sb2str4 = sb + "";
-							sb1234 = sb + "";
-							break;
-						}
-						cnt++;
-						if ( cnt == 16 ) {
-							cnt = 0;
-						}
-					}
-					if ( sb1234.contains( "89 50 4E 47" ) ) {
-						reco = true;
-					}
-				}
-
-				if ( reco ) {
-					/* hoechstwahrscheinlich ein PNG da es mit 89504E47 beginnt */
+				// System.out.println("ueberpruefe Magic number png...");
+				if ( Magic.magicPng( valDatei ) ) {
+					// System.out.println(" -> es ist eine Png-Datei");
+					/* hoechstwahrscheinlich ein Png da es mit 89504E47 respektive ‰PNG beginnt */
 				} else {
-					// Droid-Erkennung, damit Details ausgegeben werden koennen
-
-					/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
-					 * entsprechenden Modul die property anzugeben: <property name="configurationService"
-					 * ref="configurationService" /> */
-					String nameOfSignature = configMap.get( "PathToDroidSignatureFile" );
-					if ( nameOfSignature.startsWith( "Configuration-Error:" ) ) {
-						read.close();
-						if ( min ) {
-							return false;
-						} else {
-							getMessageService()
-									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PNG )
-											+ nameOfSignature );
-							return false;
+					// System.out.println(" -> es ist KEINE Png-Datei");
+					if ( min ) {
+						return false;
+					} else {
+						// Droid-Erkennung, damit Details ausgegeben werden koennen
+						// existiert die SignatureFile am angebenen Ort?
+						String nameOfSignature = configMap.get( "PathToDroidSignatureFile" );
+						if ( !new File( nameOfSignature ).exists() ) {
+							if ( min ) {
+								return false;
+							} else {
+								getMessageService()
+										.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PNG )
+												+ getTextResourceService().getText( locale, MESSAGE_XML_CA_DROID ) );
+								return false;
+							}
 						}
-					}
-					// existiert die SignatureFile am angebenen Ort?
-					File fnameOfSignature = new File( nameOfSignature );
-					if ( !fnameOfSignature.exists() ) {
-						read.close();
+
+						// Ermittle die DROID-PUID der valDatei mit hilfe der nameOfSignature
+						String puid = (DroidPuid.getPuid( valDatei, nameOfSignature ));
 						if ( min ) {
 							return false;
-						} else {
-							getMessageService()
-									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PNG )
-											+ getTextResourceService().getText( locale, MESSAGE_XML_CA_DROID ) );
-							return false;
-						}
-					}
-
-					Droid droid = null;
-					try {
-						/* kleiner Hack, weil die Droid libraries irgendwo ein System.out drin haben, welche den
-						 * Output stoeren Util.switchOffConsole() als Kommentar markieren wenn man die
-						 * Fehlermeldung erhalten moechte */
-						Util.switchOffConsole();
-						droid = new Droid();
-
-						droid.readSignatureFile( nameOfSignature );
-
-					} catch ( Exception e ) {
-						read.close();
-						if ( min ) {
-							return false;
-						} else {
+						} else if ( puid.equals( " ERROR " ) ) {
+							// Probleme bei der Initialisierung von DROID
 							getMessageService().logError( getTextResourceService().getText( locale,
 									MESSAGE_XML_MODUL_A_PNG )
 									+ getTextResourceService().getText( locale, ERROR_XML_CANNOT_INITIALIZE_DROID ) );
 							return false;
+						} else {
+							// Erkennungsergebnis ausgeben
+							getMessageService()
+									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PNG )
+											+ getTextResourceService().getText( locale, ERROR_XML_A_PNG_INCORRECTFILE,
+													puid ) );
+							return false;
 						}
-					} finally {
-						Util.switchOnConsole();
-					}
-					File file = valDatei;
-					String puid = " ??? ";
-					IdentificationFile ifile = droid.identify( file.getAbsolutePath() );
-					for ( int x = 0; x < ifile.getNumHits(); x++ ) {
-						FileFormatHit ffh = ifile.getHit( x );
-						FileFormat ff = ffh.getFileFormat();
-						puid = ff.getPUID();
-					}
-					read.close();
-					if ( min ) {
-						return false;
-					} else {
-						getMessageService().logError( getTextResourceService().getText( locale,
-								MESSAGE_XML_MODUL_A_PNG )
-								+ getTextResourceService().getText( locale, ERROR_XML_A_PNG_INCORRECTFILE, puid ) );
-						return false;
 					}
 				}
-				read.close();
 			} catch ( Exception e ) {
 				getMessageService()
 						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PNG )

@@ -20,15 +20,12 @@
 package ch.kostceco.tools.kostval.controller;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -41,6 +38,7 @@ import java.util.zip.ZipInputStream;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.context.ApplicationContext;
 
+import ch.kostceco.tools.kosttools.fileservice.Magic;
 import ch.kostceco.tools.kosttools.util.Util;
 import ch.kostceco.tools.kosttools.util.Zip64Archiver;
 import ch.kostceco.tools.kostval.logging.Logger;
@@ -211,53 +209,13 @@ public class Controllervalsip implements MessageConstants
 				// Eine ZIP Datei muss mit PK.. beginnen
 				if ( (valDateiExt.equals( ".zip" )
 						|| valDatei.getAbsolutePath().toLowerCase().endsWith( ".zip64" )) ) {
-
-					FileReader fr = null;
-					BufferedReader read = null;
-
-					try {
-						fr = new FileReader( valDatei );
-						read = new BufferedReader( fr );
-
-						// Hex 03 in Char umwandeln
-						String str3 = "03";
-						int i3 = Integer.parseInt( str3, 16 );
-						char c3 = (char) i3;
-						// Hex 04 in Char umwandeln
-						String str4 = "04";
-						int i4 = Integer.parseInt( str4, 16 );
-						char c4 = (char) i4;
-
-						// auslesen der ersten 4 Zeichen der Datei
-						int length;
-						int i;
-						char[] buffer = new char[4];
-						length = read.read( buffer );
-						for ( i = 0; i != length; i++ )
-							;
-
-						// die beiden charArrays (soll und ist) mit einander vergleichen
-						char[] charArray1 = buffer;
-						char[] charArray2 = new char[] { 'P', 'K', c3, c4 };
-
-						if ( Arrays.equals( charArray1, charArray2 ) ) {
-							// hoechstwahrscheinlich ein ZIP da es mit 504B0304 respektive PK.. beginnt
-							zip = true;
-						}
-						read.close();
-						fr.close();
-						// set to null
-						read = null;
-						fr = null;
-					} catch ( Exception e ) {
-						LOGGER.logError( "<Error>" + getTextResourceService().getText( locale,
-								ERROR_XML_UNKNOWN, "ZIP-Header-Exception: " + e.getMessage() ) );
-						System.out.println( "Exception: " + e.getMessage() );
-						read.close();
-						fr.close();
-						// set to null
-						read = null;
-						fr = null;
+					// System.out.println("ueberpruefe Magic number zip...");
+					if ( Magic.magicZip( valDatei ) ) {
+						// System.out.println(" -> es ist eine Zip-Datei");
+						zip = true;
+					} else {
+						// System.out.println(" -> es ist KEINE Zip-Datei");
+						zip = false;
 					}
 				}
 

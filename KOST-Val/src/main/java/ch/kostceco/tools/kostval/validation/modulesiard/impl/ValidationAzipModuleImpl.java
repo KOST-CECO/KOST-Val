@@ -32,6 +32,7 @@ import java.util.Locale;
 
 import ch.enterag.utils.zip.Zip64File;
 import ch.enterag.utils.zip.FileEntry;
+import ch.kostceco.tools.kosttools.fileservice.Magic;
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationAzipException;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationAzipModule;
@@ -80,40 +81,14 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 		}
 
 		// Die Datei muss mit PK.. beginnen
-		FileReader fr = null;
 		try {
-			fr = new FileReader( valDatei );
-			BufferedReader read = new BufferedReader( fr );
-
-			// Hex 03 in Char umwandeln
-			String str3 = "03";
-			int i3 = Integer.parseInt( str3, 16 );
-			char c3 = (char) i3;
-			// Hex 04 in Char umwandeln
-			String str4 = "04";
-			int i4 = Integer.parseInt( str4, 16 );
-			char c4 = (char) i4;
-
-			// auslesen der ersten 4 Zeichen der Datei
-			int length;
-			int i;
-			char[] buffer = new char[4];
-			length = read.read( buffer );
-			for ( i = 0; i != length; i++ )
-				;
-
-			// die beiden charArrays (soll und ist) mit einander vergleichen
-			char[] charArray1 = buffer;
-			char[] charArray2 = new char[] { 'P', 'K', c3, c4 };
-
-			if ( Arrays.equals( charArray1, charArray2 ) ) {
-				// hoechstwahrscheinlich ein ZIP da es mit 504B0304 respektive PK.. beginnt
+			// System.out.println("ueberpruefe Magic number zip...");
+			if ( Magic.magicZip( valDatei ) ) {
+				// System.out.println(" -> es ist eine Zip-Datei");
 				valid = true;
 			} else {
-				read.close();
-				// set to null
-				read = null;
-				fr.close();
+				// System.out.println(" -> es ist KEINE Zip-Datei");
+				valid = false;
 				if ( min ) {
 					return false;
 				} else {
@@ -124,10 +99,6 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 					return false;
 				}
 			}
-			read.close();
-			// set to null
-			read = null;
-			fr.close();
 		} catch ( Exception e ) {
 			if ( min ) {
 				return false;

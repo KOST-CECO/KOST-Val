@@ -21,27 +21,22 @@ package ch.kostceco.tools.kostval.validation.modulejpeg.impl;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.util.Map;
-import java.io.FileReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.Arrays;
 import java.util.Locale;
+import java.util.Map;
 
-import uk.gov.nationalarchives.droid.core.signature.droid4.Droid;
-import uk.gov.nationalarchives.droid.core.signature.droid4.FileFormatHit;
-import uk.gov.nationalarchives.droid.core.signature.droid4.IdentificationFile;
-import uk.gov.nationalarchives.droid.core.signature.droid4.signaturefile.FileFormat;
-import coderslagoon.badpeggy.scanner.ImageFormat;
-import coderslagoon.badpeggy.scanner.ImageScanner;
-import coderslagoon.badpeggy.scanner.ImageScanner.Callback;
-import ch.kostceco.tools.kosttools.util.Util;
+import ch.kostceco.tools.kosttools.fileservice.DroidPuid;
+import ch.kostceco.tools.kosttools.fileservice.Magic;
 import ch.kostceco.tools.kostval.exception.modulejpeg.ValidationAjpegvalidationException;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulejpeg.ValidationAvalidationJpegModule;
+import coderslagoon.badpeggy.scanner.ImageFormat;
+import coderslagoon.badpeggy.scanner.ImageScanner;
+import coderslagoon.badpeggy.scanner.ImageScanner.Callback;
 
 /** Ist die vorliegende JPEG-Datei eine valide JPEG-Datei? JPEG Validierungs mit BadPeggy.
  * 
@@ -81,115 +76,51 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl
 				|| valDatei.getAbsolutePath().toLowerCase().endsWith( ".jpg" )
 				|| valDatei.getAbsolutePath().toLowerCase().endsWith( ".jpe" )) ) {
 
-			FileReader fr = null;
 
 			try {
-				fr = new FileReader( valDatei );
-				BufferedReader read = new BufferedReader( fr );
-
-				// wobei hier nur die ersten 3 Zeichen der Datei ausgelesen werden
-				// 1 FF
-				// 2 D8
-				// 3 FF = 1
-
-				// Hex FF in Char umwandeln
-				String str1 = "FF";
-				int i1 = Integer.parseInt( str1, 16 );
-				char c1 = (char) i1;
-				// Hex D8 in Char umwandeln
-				String str2 = "D8";
-				int i2 = Integer.parseInt( str2, 16 );
-				char c2 = (char) i2;
-
-				// auslesen der ersten 3 Zeichen der Datei
-				int length;
-				int i;
-				char[] buffer = new char[3];
-				length = read.read( buffer );
-				for ( i = 0; i != length; i++ )
-					;
-
-				/* die beiden charArrays (soll und ist) mit einander vergleichen IST = c1c2c1 */
-				char[] charArray1 = buffer;
-				char[] charArray2 = new char[] { c1, c2, c1 };
-
-				if ( Arrays.equals( charArray1, charArray2 ) ) {
+				// System.out.println("ueberpruefe Magic number jpeg...");
+				if ( Magic.magicJpeg( valDatei ) ) {
+					// System.out.println(" -> es ist eine Jpeg-Datei");
 					/* hoechstwahrscheinlich ein JPEG da es mit FFD8FF respektive ÿØÿ beginnt */
 				} else {
-					// Droid-Erkennung, damit Details ausgegeben werden koennen
-
-					/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
-					 * entsprechenden Modul die property anzugeben: <property name="configurationService"
-					 * ref="configurationService" /> */
-					String nameOfSignature = configMap.get( "PathToDroidSignatureFile" );
-					if ( nameOfSignature.startsWith( "Configuration-Error:" ) ) {
-						read.close();
-						if ( min ) {
-							return false;
-						} else {
-							getMessageService()
-									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JPEG )
-											+ nameOfSignature );
-							return false;
+					// System.out.println(" -> es ist KEINE Jpeg-Datei");
+					if ( min ) {
+						return false;
+					} else {
+						// Droid-Erkennung, damit Details ausgegeben werden koennen
+						// existiert die SignatureFile am angebenen Ort?
+						String nameOfSignature = configMap.get( "PathToDroidSignatureFile" );
+						if ( !new File( nameOfSignature ).exists() ) {
+							if ( min ) {
+								return false;
+							} else {
+								getMessageService()
+										.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JPEG )
+												+ getTextResourceService().getText( locale, MESSAGE_XML_CA_DROID ) );
+								return false;
+							}
 						}
-					}
-					// existiert die SignatureFile am angebenen Ort?
-					File fnameOfSignature = new File( nameOfSignature );
-					if ( !fnameOfSignature.exists() ) {
-						read.close();
+
+						// Ermittle die DROID-PUID der valDatei mit hilfe der nameOfSignature
+						String puid = (DroidPuid.getPuid( valDatei, nameOfSignature ));
 						if ( min ) {
 							return false;
-						} else {
-							getMessageService()
-									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JPEG )
-											+ getTextResourceService().getText( locale, MESSAGE_XML_CA_DROID ) );
-							return false;
-						}
-					}
-
-					Droid droid = null;
-					try {
-						/* kleiner Hack, weil die Droid libraries irgendwo ein System.out drin haben, welche den
-						 * Output stoeren Util.switchOffConsole() als Kommentar markieren wenn man die
-						 * Fehlermeldung erhalten moechte */
-						Util.switchOffConsole();
-						droid = new Droid();
-
-						droid.readSignatureFile( nameOfSignature );
-
-					} catch ( Exception e ) {
-						read.close();
-						if ( min ) {
-							return false;
-						} else {
+						} else if ( puid.equals( " ERROR " ) ) {
+							// Probleme bei der Initialisierung von DROID
 							getMessageService().logError( getTextResourceService().getText( locale,
 									MESSAGE_XML_MODUL_A_JPEG )
 									+ getTextResourceService().getText( locale, ERROR_XML_CANNOT_INITIALIZE_DROID ) );
 							return false;
+						} else {
+							// Erkennungsergebnis ausgeben
+							getMessageService()
+									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JPEG )
+											+ getTextResourceService().getText( locale, ERROR_XML_A_JPEG_INCORRECTFILE,
+													puid ) );
+							return false;
 						}
-					} finally {
-						Util.switchOnConsole();
-					}
-					File file = valDatei;
-					String puid = " ??? ";
-					IdentificationFile ifile = droid.identify( file.getAbsolutePath() );
-					for ( int x = 0; x < ifile.getNumHits(); x++ ) {
-						FileFormatHit ffh = ifile.getHit( x );
-						FileFormat ff = ffh.getFileFormat();
-						puid = ff.getPUID();
-					}
-					read.close();
-					if ( min ) {
-						return false;
-					} else {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JPEG )
-										+ getTextResourceService().getText( locale, ERROR_XML_A_JPEG_INCORRECTFILE,
-												puid ) );
-						return false;
-					}
+					} 
 				}
-				read.close();
 			} catch ( Exception e ) {
 				getMessageService()
 						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JPEG )
