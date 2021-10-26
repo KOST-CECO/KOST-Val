@@ -19,17 +19,13 @@
 
 package ch.kostceco.tools.kostval.validation.modulesiard.impl;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.util.Map;
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
+import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.jdom2.Document;
@@ -44,8 +40,7 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-import ch.kostceco.tools.kosttools.util.StreamGobbler;
-import ch.kostceco.tools.kosttools.util.Util;
+import ch.kostceco.tools.kosttools.fileservice.Xmllint;
 import ch.kostceco.tools.kostval.KOSTVal;
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationHcontentException;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
@@ -94,6 +89,7 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 			/* Extract the metadata.xml from the temporary work folder and build a jdom document */
 			String pathToWorkDir = configMap.get( "PathToWorkDir" );
 			pathToWorkDir = pathToWorkDir + File.separator + "SIARD";
+			File workDir=new File(pathToWorkDir);
 			File metadataXml = new File( new StringBuilder( pathToWorkDir ).append( File.separator )
 					.append( "header" ).append( File.separator ).append( "metadata.xml" ).toString() );
 			InputStream fin = new FileInputStream( metadataXml );
@@ -139,9 +135,7 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 								if ( verifyRowCount( tableXml, tableXsd, locale ) ) {
 									// valid = validate1( tableXml, tableXsd ) && valid;
 
-									// cmd: resources\xmllint\xmllint --noout --stream --schema tableXsd tableXml
 									try {
-										// Pfad zum Programm xmllint existiert die Dateien?
 										/* dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist ein
 										 * generelles TODO in allen Modulen. Zuerst immer dirOfJarPath ermitteln und
 										 * dann alle Pfade mit
@@ -160,193 +154,58 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 											dirOfJarPath = file.getParent();
 										}
 
-										String pathToxmllintExe = dirOfJarPath + File.separator + "resources"
-												+ File.separator + "xmllint" + File.separator + "xmllint.exe";
-										String pathToxmllintDll1 = dirOfJarPath + File.separator + "resources"
-												+ File.separator + "xmllint" + File.separator + "iconv.dll";
-										String pathToxmllintDll2 = dirOfJarPath + File.separator + "resources"
-												+ File.separator + "xmllint" + File.separator + "libxml2.dll";
-										String pathToxmllintDll3 = dirOfJarPath + File.separator + "resources"
-												+ File.separator + "xmllint" + File.separator + "zlib1.dll";
-
-										File fpathToxmllintExe = new File( pathToxmllintExe );
-										File fpathToxmllintDll1 = new File( pathToxmllintDll1 );
-										File fpathToxmllintDll2 = new File( pathToxmllintDll2 );
-										File fpathToxmllintDll3 = new File( pathToxmllintDll3 );
-										if ( !fpathToxmllintExe.exists() ) {
+										// Pfad zum Programm xmllint existiert die Dateien?
+										String checkXmllint = Xmllint.checkXmllint( dirOfJarPath );
+										// System.out.println("checkXmllint: "+checkXmllint);
+										if ( !checkXmllint.equals( "OK" ) ) {
+											// mindestens eine Datei fehlt fuer die Validierung
 											if ( min ) {
 												return false;
 											} else {
 												getMessageService().logError(
 														getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
 																+ getTextResourceService().getText( locale,
-																		ERROR_XML_XMLLINT1_MISSING ) );
-												valid = false;
-											}
-										} else if ( !fpathToxmllintDll1.exists() ) {
-											if ( min ) {
-												return false;
-											} else {
-												getMessageService().logError(
-														getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
-																+ getTextResourceService().getText( locale,
-																		ERROR_XML_XMLLINT2_MISSING ) );
-												valid = false;
-											}
-										} else if ( !fpathToxmllintDll2.exists() ) {
-											if ( min ) {
-												return false;
-											} else {
-												getMessageService().logError(
-														getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
-																+ getTextResourceService().getText( locale,
-																		ERROR_XML_XMLLINT3_MISSING ) );
-												valid = false;
-											}
-										} else if ( !fpathToxmllintDll3.exists() ) {
-											if ( min ) {
-												return false;
-											} else {
-												getMessageService().logError(
-														getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
-																+ getTextResourceService().getText( locale,
-																		ERROR_XML_XMLLINT4_MISSING ) );
+																		ERROR_XML_XMLLINT_MISSING, checkXmllint, dirOfJarPath ) );
 												valid = false;
 											}
 										} else {
-											StringBuffer command = new StringBuffer(
-													"\"" + dirOfJarPath + File.separator + "resources" + File.separator
-															+ "xmllint" + File.separator + "xmllint\" " );
-											// command.append( "--noout --stream " );
-											command.append( "--noout --stream --nowarning" );
-											command.append( " --schema " );
-											command.append( " " );
-											command.append( "\"" );
-											command.append( tableXsd.getAbsolutePath() );
-											command.append( "\"" );
-											command.append( " " );
-											command.append( "\"" );
-											command.append( tableXml.getAbsolutePath() );
-											command.append( "\"" );
-
-											Process proc = null;
-											Runtime rt = null;
+											// System.out.println("Validierung mit xmllint: ");
 											try {
-												File outTableXml = new File( pathToWorkDir + File.separator + "SIARD_H_"
-														+ tableXml.getName() + ".txt" );
-												Util.switchOffConsoleToTxt( outTableXml );
-												rt = Runtime.getRuntime();
-												proc = rt.exec( command.toString().split( " " ) );
-												/* .split(" ") ist notwendig wenn in einem Pfad ein Doppelleerschlag
-												 * vorhanden ist! */
-												// Fehleroutput holen
-												StreamGobbler errorGobbler = new StreamGobbler( proc.getErrorStream(),
-														"ERROR-" + tableXml.getName() );
-												// Output holen
-												StreamGobbler outputGobbler = new StreamGobbler( proc.getInputStream(),
-														"OUTPUT-" + tableXml.getName() );
-												// Threads starten
-												errorGobbler.start();
-												outputGobbler.start();
-												// Warte, bis wget fertig ist 0 = Alles io
-												int exitStatus = proc.waitFor();
-												// 50ms warten bis die Konsole umgeschaltet wird, damit wirklich alles im
-												// file landet
-												Thread.sleep( 50 );
-												Util.switchOnConsole();
-
-												if ( 2 < exitStatus ) {
+												String resultExec = Xmllint.execXmllint( tableXml, tableXsd, 
+														workDir, dirOfJarPath );
+												if ( !resultExec.equals( "OK" ) ) {
+													// System.out.println("Validierung NICHT bestanden");
 													if ( min ) {
 														return false;
 													} else {
-														// message.xml.h.invalid.xml = <Message>{0} ist invalid zu
+														valid = false;
+														String tableXmlShortString = tableXml.getAbsolutePath().replace(workDir.getAbsolutePath(),"");
+														String tableXsdShortString = tableXsd.getAbsolutePath().replace(workDir.getAbsolutePath(),"");
+														// val.message.xml.h.invalid.xml = <Message>{0} ist invalid zu
 														// {1}</Message></Error>
+														// val.message.xml.h.invalid.error = <Message>{0}</Message></Error>
 														getMessageService().logError( getTextResourceService().getText( locale,
 																MESSAGE_XML_MODUL_H_SIARD )
 																+ getTextResourceService().getText( locale,
-																		MESSAGE_XML_H_INVALID_XML, tableXml.getName(),
-																		tableXsd.getName() ) );
-														valid = false;
-
-														// Fehlermeldung aus outTableXml auslesen
-														BufferedReader br = new BufferedReader( new FileReader( outTableXml ) );
-														Set<String> lines = new LinkedHashSet<String>( 100000 ); // evtl
-																																											// vergroessern
-														int counter = 0;
-														try {
-															String line = br.readLine();
-															String linePrev = null;
-															/* Fehlermeldungen holen, ausser die letzte, die besagt, dass es
-															 * invalide ist (wurde bereits oben in D, F,E ausgegeben */
-															while ( line != null ) {
-																if ( linePrev != null ) {
-																	/* Nur neue Fehlermeldungen ausgeben und diese auf maximal 10
-																	 * beschraenken */
-																	if ( lines.contains( linePrev ) ) {
-																		// Diese Linie = Fehlermelung wurde bereits ausgegeben
-																	} else {
-																		// neue Fehlermeldung
-																		counter = counter + 1;
-																		// max 5 Meldungen pro Tabelle im Modul H
-																		if ( counter < 6 ) {
-																			getMessageService().logError( getTextResourceService()
-																					.getText( locale, MESSAGE_XML_MODUL_H_SIARD )
-																					+ getTextResourceService()
-																							.getText( MESSAGE_XML_H_INVALID_ERROR, linePrev ) );
-																			lines.add( linePrev );
-																		} else if ( counter == 6 ) {
-																			getMessageService().logError( getTextResourceService()
-																					.getText( locale, MESSAGE_XML_MODUL_H_SIARD )
-																					+ getTextResourceService().getText(
-																							MESSAGE_XML_H_INVALID_ERROR, " ERROR  . . ." ) );
-																			lines.add( linePrev );
-																		} else {
-																			// Tabellenauswertung abbrechen indem line=null
-																			line = null;
-																		}
-																	}
-																}
-																linePrev = line;
-																line = br.readLine();
-															}
-														} finally {
-															br.close();
-															// set to null
-															br = null;
-															/* Konsole zuerst einmal noch umleiten und die Streams beenden, damit
-															 * die dateien geloescht werden koennen */
-															Util.switchOffConsoleToTxtClose( outTableXml );
-															System.out.println( " . " );
-															Util.switchOnConsole();
-															Util.deleteFile( outTableXml );
-														}
+																		MESSAGE_XML_H_INVALID_XML, tableXmlShortString, tableXsdShortString ) );
+														getMessageService().logError( getTextResourceService().getText( locale,
+																MESSAGE_XML_MODUL_H_SIARD )
+																+ getTextResourceService().getText( locale,
+																		MESSAGE_XML_H_INVALID_ERROR, resultExec ) );
 													}
 												} else {
-													/* Konsole zuerst einmal noch umleiten und die Streams beenden, damit die
-													 * dateien geloescht werden koennen */
-													Util.switchOffConsoleToTxtClose( outTableXml );
-													System.out.println( " . " );
-													Util.switchOnConsole();
-													Util.deleteFile( outTableXml );
+													// System.out.println("Validierung bestanden");
 												}
-												/* Konsole zuerst einmal noch umleiten und die Streams beenden, damit die
-												 * dateien geloescht werden koennen */
-												Util.switchOffConsoleToTxtClose( outTableXml );
-												System.out.println( " . " );
-												Util.switchOnConsole();
-												Util.deleteFile( outTableXml );
-
-											} catch ( Exception e ) {
-												getMessageService().logError(
-														getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
-																+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-																		e.getMessage() ) );
-												return false;
-											} finally {
-												if ( proc != null ) {
-													proc.getOutputStream().close();
-													proc.getInputStream().close();
-													proc.getErrorStream().close();
+											} catch ( InterruptedException e1 ) {
+												valid = false;
+												if ( min ) {
+													return false;
+												} else {
+													getMessageService().logError(
+															getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
+																	+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+																			e1.getMessage()
+																					+ " (InterruptedException Xmllint.execXmllint)" ) );
 												}
 											}
 										}
