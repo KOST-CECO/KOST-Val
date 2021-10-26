@@ -32,8 +32,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import ch.kostceco.tools.kosttools.fileservice.Magic;
 import ch.kostceco.tools.kosttools.fileservice.DroidPuid;
+import ch.kostceco.tools.kosttools.fileservice.Jpylyzer;
+import ch.kostceco.tools.kosttools.fileservice.Magic;
 import ch.kostceco.tools.kostval.KOSTVal;
 import ch.kostceco.tools.kostval.exception.modulejp2.ValidationAjp2validationException;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
@@ -58,6 +59,11 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 		String onWork = configMap.get( "ShowProgressOnWork" );
 		if ( onWork.equals( "nomin" ) ) {
 			min = true;
+		}
+		String pathToWorkDir = configMap.get( "PathToWorkDir" );
+		File workDir=new File(pathToWorkDir);
+		if ( !workDir.exists() ) {
+			workDir.mkdir();
 		}
 
 		// Start mit der Erkennung
@@ -195,8 +201,7 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 		String pathToJpylyzerExe = dirOfJarPath + File.separator + "resources" + File.separator
 				+ "jpylyzer_2.0.0_win32" + File.separator + "jpylyzer.exe";
 
-		File fJpylyzerExe = new File( pathToJpylyzerExe );
-		if ( !fJpylyzerExe.exists() ) {
+		if ( !Jpylyzer.checkJpylyzer( dirOfJarPath )) {
 			if ( min ) {
 				return false;
 			} else {
@@ -209,7 +214,6 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 		pathToJpylyzerExe = "\"" + pathToJpylyzerExe + "\"";
 
 		try {
-			File report;
 			Document doc = null;
 
 			try {
@@ -218,58 +222,30 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 				String outputName = File.separator + valDatei.getName() + ".jpylyzer-log.xml";
 				String pathToJpylyzerReport = outputPath + outputName;
 				File output = new File( pathToJpylyzerReport );
-				Runtime rt = Runtime.getRuntime();
-				Process proc = null;
 
-				try {
-					report = output;
-
-					// falls das File von einem vorhergehenden Durchlauf bereits existiert, loeschen wir es
-					if ( report.exists() ) {
-						report.delete();
-					}
-
-					/* Das redirect Zeichen verunmoeglicht eine direkte eingabe. mit dem geschachtellten
-					 * Befehl gehts: cmd /c\"urspruenlicher Befehl\" */
-					String command = "cmd /c \"" + pathToJpylyzerExe + " \"" + valDatei.getAbsolutePath()
-							+ "\" > \"" + output.getAbsolutePath() + "\"\"";
-					proc = rt.exec( command.toString().split( " " ) );
-					// .split(" ") ist notwendig wenn in einem Pfad ein Doppelleerschlag vorhanden ist!
-
-					// Warte, bis proc fertig ist
-					proc.waitFor();
-
-				} catch ( Exception e ) {
-					if ( min ) {
-						return false;
-					} else {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
-										+ getTextResourceService().getText( locale, ERROR_XML_A_JP2_SERVICEFAILED,
-												e.getMessage() ) );
-						return false;
-					}
-				} finally {
-					if ( proc != null ) {
-						proc.getOutputStream().close();
-						proc.getInputStream().close();
-						proc.getErrorStream().close();
-					}
-				}
-				if ( report.exists() ) {
-					// alles io
-				} else {
-					// Datei nicht angelegt...
-					if ( min ) {
-						return false;
-					} else {
-						getMessageService()
+					String resultExec = Jpylyzer.execJpylyzer( valDatei, output, 
+							workDir, dirOfJarPath );
+					if ( !resultExec.equals( "OK" ) ) {
+						// Exception oder Report existiert nicht
+						if ( min ) {
+							return false;
+						} else {
+							if ( resultExec.equals( "NoReport" ) ) {
+								// Report existiert nicht
+								getMessageService()
 								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
 										+ getTextResourceService().getText( locale, ERROR_XML_A_JP2_NOREPORT ) );
 						return false;
+							}else {						
+								// Exception 
+							getMessageService()
+									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
+											+ getTextResourceService().getText( locale, ERROR_XML_A_JP2_SERVICEFAILED,
+													resultExec) );
+							return false;
+							}
+						}
 					}
-				}
-
 				// Ende Jpylyzer direkt auszuloesen
 
 				// TODO: Erledigt - Ergebnis auslesen
