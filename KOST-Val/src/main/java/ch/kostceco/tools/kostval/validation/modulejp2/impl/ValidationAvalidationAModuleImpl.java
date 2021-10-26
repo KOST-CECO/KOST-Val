@@ -198,9 +198,6 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 			dirOfJarPath = file.getParent();
 		}
 
-		String pathToJpylyzerExe = dirOfJarPath + File.separator + "resources" + File.separator
-				+ "jpylyzer_2.0.0_win32" + File.separator + "jpylyzer.exe";
-
 		if ( !Jpylyzer.checkJpylyzer( dirOfJarPath )) {
 			if ( min ) {
 				return false;
@@ -210,8 +207,6 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 								+ getTextResourceService().getText( locale, ERROR_XML_A_JP2_JPYLYZER_MISSING ) );
 			}
 		}
-
-		pathToJpylyzerExe = "\"" + pathToJpylyzerExe + "\"";
 
 		try {
 			Document doc = null;

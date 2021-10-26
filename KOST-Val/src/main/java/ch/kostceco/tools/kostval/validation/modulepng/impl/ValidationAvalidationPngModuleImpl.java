@@ -27,6 +27,7 @@ import java.util.Map;
 
 import ch.kostceco.tools.kosttools.fileservice.DroidPuid;
 import ch.kostceco.tools.kosttools.fileservice.Magic;
+import ch.kostceco.tools.kosttools.fileservice.Pngcheck;
 import ch.kostceco.tools.kostval.KOSTVal;
 import ch.kostceco.tools.kostval.exception.modulepng.ValidationApngvalidationException;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
@@ -52,6 +53,11 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl
 		String onWork = configMap.get( "ShowProgressOnWork" );
 		if ( onWork.equals( "nomin" ) ) {
 			min = true;
+		}
+		String pathToWorkDir = configMap.get( "PathToWorkDir" );
+		File workDir=new File(pathToWorkDir);
+		if ( !workDir.exists() ) {
+			workDir.mkdir();
 		}
 
 		// Start mit der Erkennung
@@ -209,68 +215,51 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl
 								+ getTextResourceService().getText( locale, ERROR_XML_A_PNG_PNGCHECK_MISSING ) );
 			}
 		}
+		if ( !Pngcheck.checkPngcheck( dirOfJarPath )) {
+			if ( min ) {
+				return false;
+			} else {
+				getMessageService()
+				.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PNG )
+						+ getTextResourceService().getText( locale, ERROR_XML_A_PNG_PNGCHECK_MISSING ) );
+			}
+		}
 
 		pathToPngcheckExe = "\"" + pathToPngcheckExe + "\"";
 
 		try {
 			File report;
 			try {
+				// Pngcheck-Befehl: pathToPngcheckExe valDatei > valDatei.Pngcheck.txt
 				String outputPath = directoryOfLogfile.getAbsolutePath();
-				String outputName = File.separator + valDatei.getName() + ".Pngcheck.txt";
-				String pathToPngcheckReport = outputPath + outputName;
-				File output = new File( pathToPngcheckReport );
-				Runtime rt = Runtime.getRuntime();
-				Process proc = null;
+			String outputName = File.separator + valDatei.getName() + ".Pngcheck.txt";
+			String pathToPngcheckReport = outputPath + outputName;
+			File output = new File( pathToPngcheckReport );
 
-				try {
-					report = output;
-
-					// falls das File von einem vorhergehenden Durchlauf bereits existiert, loeschen wir es
-					if ( report.exists() ) {
-						report.delete();
-					}
-
-					/* Das redirect Zeichen verunmoeglicht eine direkte eingabe. mit dem geschachtellten
-					 * Befehl gehts: cmd /c\"urspruenlicher Befehl\" */
-					String command = "cmd /c \"" + pathToPngcheckExe + " \"" + valDatei.getAbsolutePath()
-							+ "\" > \"" + output.getAbsolutePath() + "\"\"";
-					proc = rt.exec( command.toString().split( " " ) );
-					// .split(" ") ist notwendig wenn in einem Pfad ein Doppelleerschlag vorhanden ist!
-
-					// Warte, bis proc fertig ist
-					proc.waitFor();
-
-				} catch ( Exception e ) {
-					if ( min ) {
-						return false;
-					} else {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PNG )
-										+ getTextResourceService().getText( locale, ERROR_XML_A_PNG_SERVICEFAILED,
-												e.getMessage() ) );
-						return false;
-					}
-				} finally {
-					if ( proc != null ) {
-						proc.getOutputStream().close();
-						proc.getInputStream().close();
-						proc.getErrorStream().close();
-					}
-				}
-				if ( report.exists() ) {
-					// alles io
-				} else {
-					// Datei nicht angelegt...
-					if ( min ) {
-						return false;
-					} else {
-						getMessageService()
+					String resultExec = Pngcheck.execPngcheck( valDatei, output, 
+							workDir, dirOfJarPath );
+					if ( !resultExec.equals( "OK" ) ) {
+						// Exception oder Report existiert nicht
+						if ( min ) {
+							return false;
+						} else {
+							if ( resultExec.equals( "NoReport" ) ) {
+								// Report existiert nicht
+								getMessageService()
 								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PNG )
 										+ getTextResourceService().getText( locale, ERROR_XML_A_PNG_NOREPORT ) );
 						return false;
+							}else {						
+								// Exception 
+							getMessageService()
+									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PNG )
+											+ getTextResourceService().getText( locale, ERROR_XML_A_PNG_SERVICEFAILED,
+													resultExec) );
+							return false;
+							}
+						}
 					}
-				}
-
+					report = output;
 				// Ende Pngcheck direkt auszuloesen
 
 				// TODO: Erledigt - Ergebnis auslesen

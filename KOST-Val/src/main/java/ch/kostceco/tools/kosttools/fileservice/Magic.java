@@ -274,7 +274,7 @@ public class Magic
 
 			if ( reco ) {
 				// hoechstwahrscheinlich ein PNG da es mit 89504E47 respektive ‰PNG beginnt
-				System.out.println( "wahrscheinlich ein PNG da es mit 89504E47 respektive ‰PNG beginnt" );
+				// System.out.println( "wahrscheinlich ein PNG da es mit 89504E47 respektive ‰PNG beginnt" );
 				mnPng = true;
 			}
 			read.close();
@@ -333,7 +333,7 @@ public class Magic
 
 			if ( Arrays.equals( charArray1, charArray2 ) ) {
 				// hoechstwahrscheinlich ein JPEG da es mit FFD8FF respektive ÿØÿ beginnt
-				System.out.println( "wahrscheinlich ein JPEG da es mit FFD8FF respektive ÿØÿ beginnt" );
+				// System.out.println( "wahrscheinlich ein JPEG da es mit FFD8FF respektive ÿØÿ beginnt" );
 				mnJpeg = true;
 			}
 			read.close();
