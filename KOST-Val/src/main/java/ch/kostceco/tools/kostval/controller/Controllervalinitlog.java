@@ -59,11 +59,15 @@ public class Controllervalinitlog implements MessageConstants
 	{
 		boolean valInitlog = true;
 		// ggf alte SIP-Validierung-Versions-Notiz loeschen
+		File ECH160_1_2 = new File(
+				directoryOfLogfile.getAbsolutePath() + File.separator + "ECH160_1.2.txt" );
 		File ECH160_1_1 = new File(
 				directoryOfLogfile.getAbsolutePath() + File.separator + "ECH160_1.1.txt" );
 		File ECH160_1_0 = new File(
 				directoryOfLogfile.getAbsolutePath() + File.separator + "ECH160_1.0.txt" );
-		if ( ECH160_1_1.exists() ) {
+		if ( ECH160_1_2.exists() ) {
+			Util.deleteFile( ECH160_1_2 );
+		} else if ( ECH160_1_1.exists() ) {
 			Util.deleteFile( ECH160_1_1 );
 		} else if ( ECH160_1_0.exists() ) {
 			Util.deleteFile( ECH160_1_0 );

@@ -21,23 +21,20 @@ package ch.kostceco.tools.kostval.validation.modulesip1.impl;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.util.Locale;
-import java.util.Map;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Scanner;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.helpers.DefaultHandler;
 
+import ch.kostceco.tools.kosttools.fileservice.Xmllint;
 import ch.kostceco.tools.kosttools.util.Util;
 import ch.kostceco.tools.kostval.KOSTVal;
 import ch.kostceco.tools.kostval.exception.modulesip1.Validation1dMetadataException;
@@ -84,7 +81,7 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 			System.out.print( "\b\b\b\b\b" );
 		}
 
-		boolean result = false;
+		boolean result = true;
 		String sipVer = "ECH160_1.0.txt";
 		File sipVersionFile;
 
@@ -160,10 +157,15 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 			File xsd11 = new File( dirOfJarPath + File.separator + "resources" + File.separator
 					+ "header_1d" + File.separator + "eCH-0160v1.1" + File.separator + "xsd" + File.separator
 					+ "arelda.xsd" );
+			File xsd12 = new File( dirOfJarPath + File.separator + "resources" + File.separator
+					+ "header_1d" + File.separator + "eCH-0160v1.2" + File.separator + "xsd" + File.separator
+					+ "arelda.xsd" );
 			File xml10 = new File( dirOfJarPath + File.separator + "resources" + File.separator
 					+ "header_1d" + File.separator + "eCH-0160v1.0" + File.separator + "metadata.xml" );
 			File xml11 = new File( dirOfJarPath + File.separator + "resources" + File.separator
 					+ "header_1d" + File.separator + "eCH-0160v1.1" + File.separator + "metadata.xml" );
+			File xml12 = new File( dirOfJarPath + File.separator + "resources" + File.separator
+					+ "header_1d" + File.separator + "eCH-0160v1.2" + File.separator + "metadata.xml" );
 
 			/* System.out .println( dirOfJarPath + " " + xsd10.getAbsolutePath() + " " +
 			 * xsd11.getAbsolutePath() + " " + xml10.getAbsolutePath() + " " + xml11.getAbsolutePath()
@@ -174,20 +176,38 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 			if ( (xmlToValidate.exists() && xsdToValidateEch160.exists()) ) {
 				/* eCH-0160_v1.1 enthält in arelda.xsd neu "vorgangAktivitaet" */
 				try {
-					Scanner scanner = new Scanner( xsdToValidateEch160 );
+					Scanner scanner = new Scanner( xmlToValidate );
 
-					// Datei Zeile für Zeile lesen und ermitteln ob "vorgangAktivitaet" darin enthalten ist
+					// Datei Zeile für Zeile lesen und "schemaVersion=" herauslesen
 					while ( scanner.hasNextLine() ) {
-						String lineArelda = scanner.nextLine();
-						if ( lineArelda.contains( "vorgangAktivitaet" ) ) {
-							// es ist eine eCH-0160 v1.1
-							xmlIntern = xml11;
-							xsdIntern = xsd11;
-							sipVer = "ECH160_1.1.txt";
+						String lineXml = scanner.nextLine();
+						if ( lineXml.contains( "schemaVersion=" ) ) {
+							// richtige Zeile
+							if ( lineXml.contains( "schemaVersion=\"5.0\"" ) ) {
+								// es ist eine eCH-0160 v1.2
+								xmlIntern = xml12;
+								xsdIntern = xsd12;
+								sipVer = "ECH160_1.2.txt";
+								break;
+							} else if ( lineXml.contains( "schemaVersion=\"4.1\"" ) ) {
+								// es ist eine eCH-0160 v1.1
+								xmlIntern = xml11;
+								xsdIntern = xsd11;
+								sipVer = "ECH160_1.1.txt";
+								break;
+							} else {
+								// dann validieren wir nach eCH-0160 v1.0
+								xmlIntern = xml10;
+								xsdIntern = xsd10;
+								sipVer = "ECH160_1.0.txt";
+								break;
+							}
 						}
 					}
 					scanner.close();
 
+					// System.out.println("sipVer: "+sipVer+ " "+xmlIntern.getAbsolutePath()+ "
+					// "+xsdIntern.getAbsolutePath());
 					// ins log eine txt anlegen mit der Version
 					sipVersionFile = new File(
 							directoryOfLogfile.getAbsolutePath() + File.separator + sipVer );
@@ -210,113 +230,102 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 					return false;
 				}
 
-				try {
-					// Start Validierung SIP-xml mit SIP-xsd [ss]
-					System.setProperty( "javax.xml.parsers.DocumentBuilderFactory",
-							"org.apache.xerces.jaxp.DocumentBuilderFactoryImpl" );
-					DocumentBuilderFactory factoryMss = DocumentBuilderFactory.newInstance();
-					factoryMss.setNamespaceAware( true );
-					factoryMss.setValidating( true );
-					factoryMss.setAttribute( "http://java.sun.com/xml/jaxp/properties/schemaLanguage",
-							"http://www.w3.org/2001/XMLSchema" );
-					// XSD-Variable
-					factoryMss.setAttribute( "http://java.sun.com/xml/jaxp/properties/schemaSource",
-							xsdToValidateEch160.getAbsolutePath() );
-					DocumentBuilder builderMss = factoryMss.newDocumentBuilder();
-					// Validator-Variable
-					ValidatorMss handler = new ValidatorMss();
-					builderMss.setErrorHandler( handler );
-					// XML-Variable
-					builderMss.parse( xmlToValidate.getAbsolutePath() );
-					if ( handler.validationErrorMss == true ) {
-						/* Validierungsfehler [ss]. invalide.
-						 * 
-						 * es braucht keine zusätzliche Validierung mit den internen xml und xsd */
-
-						builderMss.reset();
-						result = false;
-					} else {
-						// [ss] valide. jetzt erfolgt die Validierung mit den interen xsd und xml
-						builderMss.reset();
-
-						// [si] SIP-xml mit Intern-xsd
-						System.setProperty( "javax.xml.parsers.DocumentBuilderFactory",
-								"org.apache.xerces.jaxp.DocumentBuilderFactoryImpl" );
-						DocumentBuilderFactory factoryMsi = DocumentBuilderFactory.newInstance();
-						factoryMsi.setNamespaceAware( true );
-						factoryMsi.setValidating( true );
-						factoryMsi.setAttribute( "http://java.sun.com/xml/jaxp/properties/schemaLanguage",
-								"http://www.w3.org/2001/XMLSchema" );
-						// XSD-Variable
-						factoryMsi.setAttribute( "http://java.sun.com/xml/jaxp/properties/schemaSource",
-								xsdIntern.getAbsolutePath() );
-						DocumentBuilder builderMsi = factoryMsi.newDocumentBuilder();
-						// Validator-Variable
-						ValidatorMsi handlerMsi = new ValidatorMsi();
-						builderMsi.setErrorHandler( handlerMsi );
-						// XML-Variable
-						builderMsi.parse( xmlToValidate.getAbsolutePath() );
-						if ( handlerMsi.validationErrorMsi == true ) {
-							/* Validierungsfehler [si]. invalide.
-							 * 
-							 * es braucht keine zusätzliche Validierung mit den internen xml */
-							builderMsi.reset();
+				// Variante Xmllint
+				File workDir = new File( pathToWorkDir );
+				if ( !workDir.exists() ) {
+					workDir.mkdir();
+				}
+				// Pfad zum Programm xmllint existiert die Dateien?
+				String checkXmllint = Xmllint.checkXmllint( dirOfJarPath );
+				// System.out.println("checkXmllint: "+checkXmllint);
+				if ( !checkXmllint.equals( "OK" ) ) {
+					// mindestens eine Datei fehlt fuer die Validierung
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
+									+ getTextResourceService().getText( locale, ERROR_XML_XMLLINT_MISSING,
+											checkXmllint, dirOfJarPath ) );
+					result = false;
+				} else {
+					// System.out.println("Validierung mit xmllint: ");
+					try {
+						// XML-SIP gegen XSD-SIP
+						String resultExecSS = Xmllint.execXmllint( xmlToValidate, xsdToValidateEch160, workDir,
+								dirOfJarPath );
+						if ( !resultExecSS.equals( "OK" ) ) {
+							// System.out.println("Validierung NICHT bestanden");
 							result = false;
+							String tableXmlShortString = xmlToValidate.getAbsolutePath()
+									.replace( workDir.getAbsolutePath(), "" );
+							String tableXsdShortString = xsdToValidateEch160.getAbsolutePath()
+									.replace( workDir.getAbsolutePath(), "" );
+							// val.message.xml.h.invalid.xml = <Message>{0} ist invalid zu
+							// {1}</Message></Error>
+							// val.message.xml.h.invalid.error = <Message>{0}</Message></Error>
+							getMessageService()
+									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
+											+ getTextResourceService().getText( locale, MESSAGE_XML_H_INVALID_XML,
+													tableXmlShortString, tableXsdShortString ) );
+							getMessageService()
+									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
+											+ getTextResourceService().getText( locale, MESSAGE_XML_H_INVALID_ERROR,
+													resultExecSS ) );
 						} else {
-							builderMsi.reset();
+							// System.out.println("Validierung SS bestanden");
 
-							// [is] Intern-xml mit SIP-xsd
-							System.setProperty( "javax.xml.parsers.DocumentBuilderFactory",
-									"org.apache.xerces.jaxp.DocumentBuilderFactoryImpl" );
-							DocumentBuilderFactory factoryMis = DocumentBuilderFactory.newInstance();
-							factoryMis.setNamespaceAware( true );
-							factoryMis.setValidating( true );
-							factoryMis.setAttribute( "http://java.sun.com/xml/jaxp/properties/schemaLanguage",
-									"http://www.w3.org/2001/XMLSchema" );
-							// XSD-Variable
-							factoryMis.setAttribute( "http://java.sun.com/xml/jaxp/properties/schemaSource",
-									xsdToValidateEch160.getAbsolutePath() );
-							DocumentBuilder builderMis = factoryMis.newDocumentBuilder();
-							// Validator-Variable
-							ValidatorMis handlerMis = new ValidatorMis();
-							builderMis.setErrorHandler( handlerMis );
-							// XML-Variable
-							builderMis.parse( xmlIntern.getAbsolutePath() );
-							if ( handlerMis.validationErrorMis == true ) {
-								/* Validierungsfehler [is]. invalide. */
-								builderMis.reset();
+							// XML-SIP gegen XSD-Intern
+							String resultExecSI = Xmllint.execXmllint( xmlToValidate, xsdIntern, workDir,
+									dirOfJarPath );
+							if ( !resultExecSI.equals( "OK" ) ) {
+								// System.out.println("Validierung NICHT bestanden");
 								result = false;
+								String tableXmlShortString = xmlToValidate.getAbsolutePath()
+										.replace( workDir.getAbsolutePath(), "" );
+								String tableXsdShortString = xsdIntern.getAbsolutePath();
+								// val.message.xml.h.invalid.xml = <Message>{0} ist invalid zu
+								// {1}</Message></Error>
+								// val.message.xml.h.invalid.error = <Message>{0}</Message></Error>
+								getMessageService()
+										.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
+												+ getTextResourceService().getText( locale, MESSAGE_XML_H_INVALID_XML,
+														tableXmlShortString, tableXsdShortString ) );
+								getMessageService()
+										.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
+												+ getTextResourceService().getText( locale, MESSAGE_XML_H_INVALID_ERROR,
+														resultExecSI ) );
 							} else {
-								/* valide. */
-								builderMis.reset();
-								result = true;
+								// System.out.println("Validierung SI bestanden");
+								// XML-Intern gegen XSD-SIP
+								String resultExecIS = Xmllint.execXmllint( xmlIntern, xsdToValidateEch160, workDir,
+										dirOfJarPath );
+								if ( !resultExecIS.equals( "OK" ) ) {
+									// System.out.println("Validierung NICHT bestanden");
+									result = false;
+									String tableXmlShortString = xmlIntern.getAbsolutePath();
+									String tableXsdShortString = xsdToValidateEch160.getAbsolutePath()
+											.replace( workDir.getAbsolutePath(), "" );
+									// val.message.xml.h.invalid.xml = <Message>{0} ist invalid zu
+									// {1}</Message></Error>
+									// val.message.xml.h.invalid.error = <Message>{0}</Message></Error>
+									getMessageService().logError(
+											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
+													+ getTextResourceService().getText( locale, MESSAGE_XML_H_INVALID_XML,
+															tableXmlShortString, tableXsdShortString ) );
+									getMessageService().logError(
+											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
+													+ getTextResourceService().getText( locale, MESSAGE_XML_H_INVALID_ERROR,
+															resultExecIS ) );
+								} else {
+									// System.out.println("Validierung bestanden");
+								}
 							}
-							// Ende is
 						}
-						// Ende si
-
+					} catch ( InterruptedException e1 ) {
+						result = false;
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
+										+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+												e1.getMessage() + " (InterruptedException Xmllint.execXmllint)" ) );
 					}
-					// Ende ss
-
-				} catch ( java.io.IOException ioe ) {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
-									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-											ioe.getMessage() + " (IOException)" ) );
-					result = false;
-				} catch ( SAXException e ) {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
-									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-											e.getMessage() + " (SAXException)" ) );
-					result = false;
-				} catch ( ParserConfigurationException e ) {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
-
-									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-											e.getMessage() + " (ParserConfigurationException)" ) );
-					result = false;
 				}
 			}
 		} catch ( Exception e ) {
@@ -327,109 +336,4 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 		}
 		return result;
 	}
-
-	private class ValidatorMss extends DefaultHandler
-	{
-		public boolean						validationErrorMss		= false;
-
-		public SAXParseException	saxParseExceptionMss	= null;
-
-		@SuppressWarnings("unused")
-		public void error( SAXParseException exceptionMss, Locale locale ) throws SAXException
-		{
-			validationErrorMss = true;
-			saxParseExceptionMss = exceptionMss;
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
-							+ getTextResourceService().getText( locale, ERROR_XML_AD_METADATA_ERRORS,
-									saxParseExceptionMss.getLineNumber(),
-									saxParseExceptionMss.getMessage() + " (Mss)" ) );
-
-		}
-
-		@SuppressWarnings("unused")
-		public void fatalError( SAXParseException exceptionMss, Locale locale ) throws SAXException
-		{
-			validationErrorMss = true;
-			saxParseExceptionMss = exceptionMss;
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
-							+ getTextResourceService().getText( locale, ERROR_XML_AD_METADATA_ERRORS,
-									saxParseExceptionMss.getLineNumber(),
-									saxParseExceptionMss.getMessage() + " (Mss)" ) );
-		}
-
-		public void warning( SAXParseException exceptionMss ) throws SAXException
-		{
-		}
-	}
-
-	private class ValidatorMsi extends DefaultHandler
-	{
-		public boolean						validationErrorMsi		= false;
-
-		public SAXParseException	saxParseExceptionMsi	= null;
-
-		@SuppressWarnings("unused")
-		public void error( SAXParseException exceptionMsi, Locale locale ) throws SAXException
-		{
-			validationErrorMsi = true;
-			saxParseExceptionMsi = exceptionMsi;
-			getMessageService().logError( getTextResourceService().getText( locale,
-					MESSAGE_XML_MODUL_Ad_SIP )
-					+ getTextResourceService().getText( locale, ERROR_XML_AD_METADATA_ERRORS,
-							saxParseExceptionMsi.getLineNumber(), saxParseExceptionMsi.getMessage() + " (si)" ) );
-
-		}
-
-		@SuppressWarnings("unused")
-		public void fatalError( SAXParseException exceptionMsi, Locale locale ) throws SAXException
-		{
-			validationErrorMsi = true;
-			saxParseExceptionMsi = exceptionMsi;
-			getMessageService().logError( getTextResourceService().getText( locale,
-					MESSAGE_XML_MODUL_Ad_SIP )
-					+ getTextResourceService().getText( locale, ERROR_XML_AD_METADATA_ERRORS,
-							saxParseExceptionMsi.getLineNumber(), saxParseExceptionMsi.getMessage() + " (si)" ) );
-		}
-
-		public void warning( SAXParseException exceptionMsi ) throws SAXException
-		{
-		}
-	}
-
-	private class ValidatorMis extends DefaultHandler
-	{
-		public boolean						validationErrorMis		= false;
-
-		public SAXParseException	saxParseExceptionMis	= null;
-
-		@SuppressWarnings("unused")
-		public void error( SAXParseException exceptionMis, Locale locale ) throws SAXException
-		{
-			validationErrorMis = true;
-			saxParseExceptionMis = exceptionMis;
-			getMessageService().logError( getTextResourceService().getText( locale,
-					MESSAGE_XML_MODUL_Ad_SIP )
-					+ getTextResourceService().getText( locale, ERROR_XML_AD_METADATA_ERRORS,
-							saxParseExceptionMis.getLineNumber(), saxParseExceptionMis.getMessage() + " (is)" ) );
-
-		}
-
-		@SuppressWarnings("unused")
-		public void fatalError( SAXParseException exceptionMis, Locale locale ) throws SAXException
-		{
-			validationErrorMis = true;
-			saxParseExceptionMis = exceptionMis;
-			getMessageService().logError( getTextResourceService().getText( locale,
-					MESSAGE_XML_MODUL_Ad_SIP )
-					+ getTextResourceService().getText( locale, ERROR_XML_AD_METADATA_ERRORS,
-							saxParseExceptionMis.getLineNumber(), saxParseExceptionMis.getMessage() + " (is)" ) );
-		}
-
-		public void warning( SAXParseException exception ) throws SAXException
-		{
-		}
-	}
-
 }

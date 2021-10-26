@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:include schemaLocation="base.xsd"/>
+	<xs:simpleType name="paketTyp">
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="SIP"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="schemaVersion">
+		<xs:restriction base="text1">
+			<xs:enumeration value="5.0"/>
+			<xs:enumeration value="4.1">
+				<xs:annotation>
+					<xs:documentation>DEPRECATED!</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="4.0">
+				<xs:annotation>
+					<xs:documentation>DEPRECATED!</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

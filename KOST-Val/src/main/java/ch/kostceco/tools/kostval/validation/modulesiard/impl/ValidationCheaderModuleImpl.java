@@ -19,17 +19,17 @@
 
 package ch.kostceco.tools.kostval.validation.modulesiard.impl;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.util.Enumeration;
-import java.util.Locale;
-import java.util.Map;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.InputStream;
+import java.util.Enumeration;
+import java.util.Locale;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -40,10 +40,10 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.commons.io.FileUtils;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.helpers.DefaultHandler;
 
+import ch.kostceco.tools.kosttools.fileservice.Xmllint;
 import ch.kostceco.tools.kosttools.util.Util;
+import ch.kostceco.tools.kostval.KOSTVal;
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationCheaderException;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationCheaderModule;
@@ -362,25 +362,76 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl
 					doc = null;
 					concatenatedOutputs = null;
 
-					// Validierung von metadata.xml und metadata.xsd mit dem (private class) Validator
-					System.setProperty( "javax.xml.parsers.DocumentBuilderFactory",
-							"org.apache.xerces.jaxp.DocumentBuilderFactoryImpl" );
-					DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-					factory.setNamespaceAware( true );
-					factory.setValidating( true );
-					factory.setAttribute( "http://java.sun.com/xml/jaxp/properties/schemaLanguage",
-							"http://www.w3.org/2001/XMLSchema" );
-					factory.setAttribute( "http://java.sun.com/xml/jaxp/properties/schemaSource",
-							xsdToValidate.getAbsolutePath() );
-					DocumentBuilder builder = factory.newDocumentBuilder();
-					Validator handler = new Validator();
-					builder.setErrorHandler( handler );
-					builder.parse( xmlToValidate.getAbsolutePath() );
-					if ( handler.validationError == true ) {
-						return false;
+					// Variante Xmllint 
+					String path = new java.io.File( KOSTVal.class.getProtectionDomain()
+							.getCodeSource().getLocation().getPath() ).getAbsolutePath();
+					String locationOfJarPath = path;
+					String dirOfJarPath = locationOfJarPath;
+					if ( locationOfJarPath.endsWith( ".jar" )
+							|| locationOfJarPath.endsWith( ".exe" )
+							|| locationOfJarPath.endsWith( "." ) ) {
+						File file = new File( locationOfJarPath );
+						dirOfJarPath = file.getParent();
 					}
-					factory = null;
-					builder = null;
+					File workDir = new File( pathToWorkDir );
+					if ( !workDir.exists() ) {
+						workDir.mkdir();
+					}
+					// Pfad zum Programm xmllint existiert die Dateien?
+					String checkXmllint = Xmllint.checkXmllint( dirOfJarPath );
+					// System.out.println("checkXmllint: "+checkXmllint);
+					if ( !checkXmllint.equals( "OK" ) ) {
+						// mindestens eine Datei fehlt fuer die Validierung
+						if ( min ) {
+							return false;
+						} else {
+							getMessageService().logError(
+									getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_SIARD )
+											+ getTextResourceService().getText( locale,
+													ERROR_XML_XMLLINT_MISSING, checkXmllint, dirOfJarPath ) );
+							result = false;
+						}
+					} else {
+						// System.out.println("Validierung mit xmllint: ");
+						try {
+							String resultExec = Xmllint.execXmllint( xmlToValidate, xsdToValidate, 
+									workDir, dirOfJarPath );
+							if ( !resultExec.equals( "OK" ) ) {
+								// System.out.println("Validierung NICHT bestanden");
+								if ( min ) {
+									return false;
+								} else {
+									result = false;
+									String tableXmlShortString = xmlToValidate.getAbsolutePath().replace(workDir.getAbsolutePath(),"");
+									String tableXsdShortString = xsdToValidate.getAbsolutePath().replace(workDir.getAbsolutePath(),"");
+									// val.message.xml.h.invalid.xml = <Message>{0} ist invalid zu
+									// {1}</Message></Error>
+									// val.message.xml.h.invalid.error = <Message>{0}</Message></Error>
+									getMessageService().logError( getTextResourceService().getText( locale,
+											MESSAGE_XML_MODUL_C_SIARD )
+											+ getTextResourceService().getText( locale,
+													MESSAGE_XML_H_INVALID_XML, tableXmlShortString, tableXsdShortString ) );
+									getMessageService().logError( getTextResourceService().getText( locale,
+											MESSAGE_XML_MODUL_C_SIARD )
+											+ getTextResourceService().getText( locale,
+													MESSAGE_XML_H_INVALID_ERROR, resultExec ) );
+								}
+							} else {
+								// System.out.println("Validierung bestanden");
+							}
+						} catch ( InterruptedException e1 ) {
+							result = false;
+							if ( min ) {
+								return false;
+							} else {
+								getMessageService().logError(
+										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_SIARD )
+												+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+														e1.getMessage()
+																+ " (InterruptedException Xmllint.execXmllint)" ) );
+							}
+						}
+					}
 				} catch ( java.io.IOException ioe ) {
 					if ( min ) {
 						return false;
@@ -428,40 +479,5 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl
 			}
 		}
 		return result;
-	}
-
-	private class Validator extends DefaultHandler
-	{
-		public boolean						validationError		= false;
-		public SAXParseException	saxParseException	= null;
-
-		@SuppressWarnings("unused")
-		public void error( SAXParseException exception, Locale locale ) throws SAXException
-		{
-			validationError = true;
-			saxParseException = exception;
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_SIARD )
-							+ getTextResourceService().getText( locale, MESSAGE_XML_C_METADATA_ERRORS,
-									saxParseException.getLineNumber(), saxParseException.getColumnNumber(),
-									saxParseException.getMessage() ) );
-		}
-
-		@SuppressWarnings("unused")
-		public void fatalError( SAXParseException exception, Locale locale ) throws SAXException
-		{
-			validationError = true;
-			saxParseException = exception;
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_SIARD )
-							+ getTextResourceService().getText( locale, MESSAGE_XML_C_METADATA_ERRORS,
-									saxParseException.getLineNumber(), saxParseException.getColumnNumber(),
-									saxParseException.getMessage() ) );
-		}
-
-		public void warning( SAXParseException exception ) throws SAXException
-		{
-			// Warnungen werden nicht ausgegeben
-		}
 	}
 }

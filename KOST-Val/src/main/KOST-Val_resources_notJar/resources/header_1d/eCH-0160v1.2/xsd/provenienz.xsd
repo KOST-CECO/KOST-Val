@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:include schemaLocation="base.xsd"/>
+	<xs:simpleType name="aktenbildnerName">
+		<xs:restriction base="text2"/>
+	</xs:simpleType>
+	<xs:simpleType name="systemName">
+		<xs:restriction base="text3"/>
+	</xs:simpleType>
+	<xs:simpleType name="systemBeschreibung">
+		<xs:restriction base="text4"/>
+	</xs:simpleType>
+	<xs:simpleType name="verwandteSysteme">
+		<xs:restriction base="text4"/>
+	</xs:simpleType>
+	<xs:simpleType name="archivierungsmodusLoeschvorschriften">
+		<xs:restriction base="text4"/>
+	</xs:simpleType>
+	<xs:simpleType name="registratur">
+		<xs:restriction base="text2"/>
+	</xs:simpleType>
+	<xs:simpleType name="geschichteAktenbildner">
+		<xs:restriction base="text4"/>
+	</xs:simpleType>
+	<xs:simpleType name="bemerkungProvenienz">
+		<xs:restriction base="text4"/>
+	</xs:simpleType>
+</xs:schema>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:include schemaLocation="base.xsd"/>
+	<xs:simpleType name="nameDatei">
+		<xs:restriction base="text2"/>
+	</xs:simpleType>
+	<xs:simpleType name="originalName">
+		<xs:restriction base="text4"/>
+	</xs:simpleType>
+	<xs:simpleType name="idDatei">
+		<xs:restriction base="xs:ID"/>
+	</xs:simpleType>
+	<xs:simpleType name="dateiVersion">
+		<xs:union memberTypes="xs:integer xs:string xs:date"/>
+	</xs:simpleType>
+	<xs:simpleType name="dateiRepraesentation">
+		<xs:union memberTypes="xs:string"/>
+	</xs:simpleType>
+	<xs:simpleType name="dateiInformation">
+		<xs:union memberTypes="xs:string"/>
+	</xs:simpleType>
+	<xs:simpleType name="dateiReihung">
+		<xs:union memberTypes="xs:integer xs:string xs:date"/>
+	</xs:simpleType>
+	<xs:simpleType name="pruefalgorithmus">
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="MD5"/>
+			<xs:enumeration value="SHA-1"/>
+			<xs:enumeration value="SHA-256"/>
+			<xs:enumeration value="SHA-512"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="pruefsumme">
+		<xs:restriction base="text3"/>
+	</xs:simpleType>
+	<xs:simpleType name="eigenschaft">
+		<xs:restriction base="text4"/>
+	</xs:simpleType>
+</xs:schema>
