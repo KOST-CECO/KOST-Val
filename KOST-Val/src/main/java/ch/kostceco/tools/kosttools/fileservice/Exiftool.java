@@ -22,16 +22,21 @@ import ch.kostceco.tools.kosttools.runtime.Cmd;
 
 /** @author Rc Claire Roethlisberger, KOST-CECO */
 
-public class Pngcheck
+public class Exiftool
 {
-	private static String resourcesPngcheckExe = "resources" + File.separator + "pngcheck-3.0.2-win32"
-			+ File.separator + "pngcheck.win32.exe";
+	private static String	resourcesExiftoolExe	= "resources" + File.separator + "ExifTool-10.15";
+	private static String	identifyPl						= resourcesExiftoolExe + File.separator
+			+ "exiftool.pl";
+	private static String	perl									= resourcesExiftoolExe + File.separator + "Perl"
+			+ File.separator + "bin" + File.separator + "perl.exe";
 
-	/** fuehrt eine Validierung mit Pngcheck via cmd durch und speichert das Ergebnis in ein File
+	/** fuehrt eine Validierung mit Exiftool via cmd durch und speichert das Ergebnis in ein File
 	 * (Report). Gibt zurueck ob Report existiert oder nicht
 	 * 
-	 * @param pngFile
-	 *          png-Datei, welche validiert werden soll
+	 * @param options
+	 *          Option wie exiftool angesprochen werden soll
+	 * @param tiffFile
+	 *          tiff-Datei, welche validiert werden soll
 	 * @param report
 	 *          Datei fuer den Report
 	 * @param workDir
@@ -39,23 +44,27 @@ public class Pngcheck
 	 * @param dirOfJarPath
 	 *          String mit dem Pfad von wo das Programm gestartet wurde
 	 * @return String ob Report existiert oder nicht ggf Exception */
-	public static String execPngcheck( File pngFile, File report, File workDir, String dirOfJarPath )
-			throws InterruptedException
+	public static String execExiftool( String options, File tiffFile, File report, File workDir,
+			String dirOfJarPath ) throws InterruptedException
 	{
-		boolean out = false;
-		File exeFile = new File( dirOfJarPath + File.separator + resourcesPngcheckExe );
+		boolean out = true;
+		File fIdentifyPl = new File( dirOfJarPath + File.separator + identifyPl );
+		File fPerl = new File( dirOfJarPath + File.separator + perl );
 		// falls das File von einem vorhergehenden Durchlauf bereits existiert, loeschen wir es
 		if ( report.exists() ) {
 			report.delete();
 		}
 
-		// Pngcheck-Befehl: pathToPngcheckExe pngFile > report
-		String command = "\"\"" + exeFile.getAbsolutePath() + "\" \"" + pngFile.getAbsolutePath()
-				+ "\" > \"" + report.getAbsolutePath() + "\"\"";
+		// Exiftool-Befehl: pathToPerl pathToExiftoolExe options tiffFile >> report
+		String command = "\"\"" + fPerl.getAbsolutePath() + "\" \"" + fIdentifyPl.getAbsolutePath()
+				+ "\" " + options + " \"" + tiffFile.getAbsolutePath() + "\" >>\""
+				+ report.getAbsolutePath() + "\"\"";
+
+		// System.out.println( "command: " + command );
 
 		String resultExec = Cmd.execToString( command, out, workDir );
 
-		// Pngcheck gibt keine Info raus, die replaced oder ignoriert werden muss
+		// Exiftool gibt keine Info raus, die replaced oder ignoriert werden muss
 
 		// System.out.println( "resultExec: " + resultExec );
 		/* Folgender Error Output ist keiner sondern nur Info und kann mit OK ersetzt werden: ERROR:
@@ -81,20 +90,34 @@ public class Pngcheck
 		return resultExec;
 	}
 
-	/** fuehrt eine Kontrolle aller benoetigten Dateien von Pngcheck durch und gibt das Ergebnis als
-	 * boolean zurueck
+	/** fuehrt eine Kontrolle aller benoetigten Dateien von Exiftool durch und gibt das Ergebnis als
+	 * String zurueck
 	 * 
 	 * @param dirOfJarPath
 	 *          String mit dem Pfad von wo das Programm gestartet wurde
-	 * @return Boolean mit Kontrollergebnis */
-	public static boolean checkPngcheck( String dirOfJarPath )
+	 * @return String mit Kontrollergebnis */
+	public static String checkExiftool( String dirOfJarPath )
 	{
-		String pathToPngcheckExe = dirOfJarPath + File.separator + resourcesPngcheckExe;
-		File fPngcheckExe = new File( pathToPngcheckExe );
-		if ( fPngcheckExe.exists() ) {
-			return true;
-		} else {
-			return false;
+		String result = "";
+		boolean checkFiles = true;
+		// Pfad zum Programm xmllint existiert die Dateien?
+
+		File fIdentifyPl = new File( dirOfJarPath + File.separator + identifyPl );
+		File fPerl = new File( dirOfJarPath + File.separator + perl );
+
+		if ( !fPerl.exists() ) {
+			if ( !fIdentifyPl.exists() ) {
+				result = result + " " + fIdentifyPl.getName();
+				checkFiles = false;
+			} else if ( !fPerl.exists() ) {
+				result = result + " " + fPerl.getName();
+				checkFiles = false;
+			}
 		}
+
+		if ( checkFiles ) {
+			result = "OK";
+		}
+		return result;
 	}
 }

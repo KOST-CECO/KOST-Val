@@ -21,12 +21,11 @@ package ch.kostceco.tools.kostval.validation.moduletiff2.impl;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.util.Locale;
 import java.util.Map;
-import java.io.FileReader;
 
-import ch.kostceco.tools.kosttools.util.StreamGobbler;
-import ch.kostceco.tools.kosttools.util.Util;
+import ch.kostceco.tools.kosttools.fileservice.Exiftool;
 import ch.kostceco.tools.kostval.KOSTVal;
 import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationCcompressionValidationException;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
@@ -52,6 +51,11 @@ public class ValidationCcompressionValidationModuleImpl extends ValidationModule
 		String onWork = configMap.get( "ShowProgressOnWork" );
 		if ( onWork.equals( "nomin" ) ) {
 			min = true;
+		}
+		String pathToWorkDir = configMap.get( "PathToWorkDir" );
+		File workDir = new File( pathToWorkDir );
+		if ( !workDir.exists() ) {
+			workDir.mkdir();
 		}
 
 		boolean isValid = true;
@@ -230,193 +234,55 @@ public class ValidationCcompressionValidationModuleImpl extends ValidationModule
 			dirOfJarPath = file.getParent();
 		}
 
-		File fIdentifyPl = new File( dirOfJarPath + File.separator + "resources" + File.separator
-				+ "ExifTool-10.15" + File.separator + "exiftool.pl" );
-		String pathToIdentifyPl = fIdentifyPl.getAbsolutePath();
-		if ( !fIdentifyPl.exists() ) {
-			// exiftool.pl existiert nicht --> Abbruch
+		// Pfad zum Programm xmllint existiert die Dateien?
+		String checkExiftool = Exiftool.checkExiftool( dirOfJarPath );
+		// System.out.println("checkExiftool: "+checkExiftool);
+		if ( !checkExiftool.equals( "OK" ) ) {
+			// mindestens eine Datei fehlt fuer die Validierung
 			if ( min ) {
-				/* exiftoolReport loeschen */
-				if ( exiftoolReport.exists() ) {
-					exiftoolReport.delete();
-				}
 				return false;
 			} else {
 				getMessageService()
 						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_TIFF )
 								+ getTextResourceService().getText( locale, MESSAGE_XML_CG_ET_MISSING,
-										pathToIdentifyPl ) );
-				return false;
+										checkExiftool ) );
+				isValid = false;
 			}
 		} else {
-			File fPerl = new File(
-					dirOfJarPath + File.separator + "resources" + File.separator + "ExifTool-10.15"
-							+ File.separator + "Perl" + File.separator + "bin" + File.separator + "perl.exe" );
-			String pathToPerl = fPerl.getAbsolutePath();
-			if ( !fPerl.exists() ) {
-				// Perl.exe existiert nicht --> Abbruch
-				if ( min ) {
-					/* exiftoolReport loeschen */
-					if ( exiftoolReport.exists() ) {
-						exiftoolReport.delete();
-					}
-					return false;
-				} else {
-					getMessageService().logError( getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_C_TIFF )
-							+ getTextResourceService().getText( locale, MESSAGE_XML_CG_ET_MISSING, pathToPerl ) );
-					return false;
-				}
-			} else {
+			try {
+				String options = "-ver -a -s2 -FileName -Directory -Compression -PhotometricInterpretation"
+						+ " -PlanarConfiguration -BitsPerSample -StripByteCounts -RowsPerStrip -FileSize"
+						+ " -TileWidth -TileLength -TileDepth -G0:1";
 
-				try {
+				// Exiftool-Befehl: pathToPerl pathToExiftoolExe options tiffFile >> report
 
-					String command = "cmd /c \"\"" + pathToPerl + "\" \"" + pathToIdentifyPl
-							+ "\" -ver -a -s2 -FileName -Directory -Compression -PhotometricInterpretation"
-							+ " -PlanarConfiguration -BitsPerSample -StripByteCounts -RowsPerStrip -FileSize"
-							+ " -TileWidth -TileLength -TileDepth -G0:1 \"" + valDatei.getAbsolutePath()
-							+ "\" >>\"" + pathToExiftoolOutput + "\"";
-					/* Das redirect Zeichen verunmöglicht eine direkte eingabe. mit dem geschachtellten
-					 * Befehl gehts: cmd /c\"urspruenlicher Befehl\" */
-
-					Process proc = null;
-					Runtime rt = null;
-
-					try {
-						/* falls das File exiftoolReport bereits existiert, z.B. von einem vorhergehenden
-						 * Durchlauf, löschen wir es */
-						if ( exiftoolReport.exists() ) {
-							exiftoolReport.delete();
-						}
-						Util.switchOffConsole();
-						rt = Runtime.getRuntime();
-						proc = rt.exec( command.toString().split( " " ) );
-						// .split(" ") ist notwendig wenn in einem Pfad ein Doppelleerschlag vorhanden ist!
-
-						// Fehleroutput holen
-						StreamGobbler errorGobbler = new StreamGobbler( proc.getErrorStream(), "ERROR" );
-
-						// Output holen
-						StreamGobbler outputGobbler = new StreamGobbler( proc.getInputStream(), "OUTPUT" );
-
-						// Threads starten
-						errorGobbler.start();
-						outputGobbler.start();
-
-						// Warte, bis wget fertig ist
-						proc.waitFor();
-
-						Util.switchOnConsole();
-						// Kontrolle ob der Report existiert
-						if ( !exiftoolReport.exists() ) {
-							if ( min ) {
-								/* exiftoolReport loeschen */
-								if ( exiftoolReport.exists() ) {
-									exiftoolReport.delete();
-								}
-								return false;
-							} else {
-								getMessageService()
-										.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_TIFF )
-												+ getTextResourceService().getText( locale, MESSAGE_XML_CG_ET_MISSING ) );
-								return false;
-							}
-						}
-					} catch ( Exception e ) {
-						if ( min ) {
-							/* exiftoolReport loeschen */
-							if ( exiftoolReport.exists() ) {
-								exiftoolReport.delete();
-							}
+				String resultExec = Exiftool.execExiftool( options, valDatei, exiftoolReport, workDir,
+						dirOfJarPath );
+				if ( !resultExec.equals( "OK" ) ) {
+					// Exception oder Report existiert nicht
+					if ( min ) {
+						return false;
+					} else {
+						if ( resultExec.equals( "NoReport" ) ) {
+							// Report existiert nicht
+							getMessageService()
+									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_TIFF )
+											+ getTextResourceService().getText( locale, MESSAGE_XML_CG_ET_MISSING  ) );
 							return false;
 						} else {
+							// Exception
 							getMessageService()
 									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_TIFF )
 											+ getTextResourceService().getText( locale, MESSAGE_XML_CG_ET_SERVICEFAILED,
-													e.getMessage() ) );
+													resultExec ) );
 							return false;
-						}
-					} finally {
-						if ( proc != null ) {
-							proc.getOutputStream().close();
-							proc.getInputStream().close();
-							proc.getErrorStream().close();
-						}
-					}
-
-					// Ende Exiftool direkt auszulösen
-
-				} catch ( Exception e ) {
-					if ( min ) {
-						/* exiftoolReport loeschen */
-						if ( exiftoolReport.exists() ) {
-							exiftoolReport.delete();
-						}
-						return false;
-					} else {
-						getMessageService().logError( getTextResourceService().getText( locale,
-								MESSAGE_XML_MODUL_C_TIFF )
-								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
-						return false;
-					}
-				}
-
-			}
-		}
-
-		try {
-			BufferedReader in = new BufferedReader( new FileReader( exiftoolReport ) );
-			String line;
-			while ( (line = in.readLine()) != null ) {
-				/* zu analysierende TIFF-IFD-Zeile die CompressionScheme-Zeile enthält einer dieser
-				 * Freitexte der Komprimierungsart */
-				if ( line.contains( "Compression: " ) && line.contains( "[EXIF:IFD" ) ) {
-					exiftoolio = 1;
-					if ( line.contains( "Compression: " + com1 ) || line.contains( "Compression: " + com2 )
-							|| line.contains( "Compression: " + com3 ) || line.contains( "Compression: " + com4 )
-							|| line.contains( "Compression: " + com5 ) || line.contains( "Compression: " + com7 )
-							|| line.contains( "Compression: " + com8 )
-							|| line.contains( "Compression: " + com32773 ) ) {
-						// Valider Status
-					} else {
-						// Invalider Status
-						isValid = false;
-						if ( min ) {
-							in.close();
-							/* exiftoolReport loeschen */
-							if ( exiftoolReport.exists() ) {
-								exiftoolReport.delete();
-							}
-							return false;
-						} else {
-							if ( !line.equals( oldErrorLine1 ) && !line.equals( oldErrorLine2 )
-									&& !line.equals( oldErrorLine3 ) && !line.equals( oldErrorLine4 )
-									&& !line.equals( oldErrorLine5 ) ) {
-								// neuer Fehler
-								getMessageService().logError( getTextResourceService().getText( locale,
-										MESSAGE_XML_MODUL_C_TIFF )
-										+ getTextResourceService().getText( locale, MESSAGE_XML_CG_INVALID, line ) );
-								if ( oldErrorLine1.equals( "" ) ) {
-									oldErrorLine1 = line;
-								} else if ( oldErrorLine2.equals( "" ) ) {
-									oldErrorLine2 = line;
-								} else if ( oldErrorLine3.equals( "" ) ) {
-									oldErrorLine3 = line;
-								} else if ( oldErrorLine4.equals( "" ) ) {
-									oldErrorLine4 = line;
-								} else if ( oldErrorLine5.equals( "" ) ) {
-									oldErrorLine5 = line;
-								}
-							}
 						}
 					}
 				}
-			}
-			if ( exiftoolio == 0 ) {
-				// Invalider Status
-				isValid = false;
+				// Ende Exiftool direkt auszuloesen
+
+			} catch ( Exception e ) {
 				if ( min ) {
-					in.close();
 					/* exiftoolReport loeschen */
 					if ( exiftoolReport.exists() ) {
 						exiftoolReport.delete();
@@ -425,22 +291,91 @@ public class ValidationCcompressionValidationModuleImpl extends ValidationModule
 				} else {
 					getMessageService()
 							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_TIFF )
-									+ getTextResourceService().getText( locale, MESSAGE_XML_CG_ETNIO, "C" ) );
+									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+					return false;
 				}
 			}
-			in.close();
-		} catch ( Exception e ) {
-			if ( min ) {
-				/* exiftoolReport loeschen */
-				if ( exiftoolReport.exists() ) {
-					exiftoolReport.delete();
+
+			try {
+				BufferedReader in = new BufferedReader( new FileReader( exiftoolReport ) );
+				String line;
+				while ( (line = in.readLine()) != null ) {
+					/* zu analysierende TIFF-IFD-Zeile die CompressionScheme-Zeile enthält einer dieser
+					 * Freitexte der Komprimierungsart */
+					if ( line.contains( "Compression: " ) && line.contains( "[EXIF:IFD" ) ) {
+						exiftoolio = 1;
+						if ( line.contains( "Compression: " + com1 ) || line.contains( "Compression: " + com2 )
+								|| line.contains( "Compression: " + com3 )
+								|| line.contains( "Compression: " + com4 )
+								|| line.contains( "Compression: " + com5 )
+								|| line.contains( "Compression: " + com7 )
+								|| line.contains( "Compression: " + com8 )
+								|| line.contains( "Compression: " + com32773 ) ) {
+							// Valider Status
+						} else {
+							// Invalider Status
+							isValid = false;
+							if ( min ) {
+								in.close();
+								/* exiftoolReport loeschen */
+								if ( exiftoolReport.exists() ) {
+									exiftoolReport.delete();
+								}
+								return false;
+							} else {
+								if ( !line.equals( oldErrorLine1 ) && !line.equals( oldErrorLine2 )
+										&& !line.equals( oldErrorLine3 ) && !line.equals( oldErrorLine4 )
+										&& !line.equals( oldErrorLine5 ) ) {
+									// neuer Fehler
+									getMessageService().logError( getTextResourceService().getText( locale,
+											MESSAGE_XML_MODUL_C_TIFF )
+											+ getTextResourceService().getText( locale, MESSAGE_XML_CG_INVALID, line ) );
+									if ( oldErrorLine1.equals( "" ) ) {
+										oldErrorLine1 = line;
+									} else if ( oldErrorLine2.equals( "" ) ) {
+										oldErrorLine2 = line;
+									} else if ( oldErrorLine3.equals( "" ) ) {
+										oldErrorLine3 = line;
+									} else if ( oldErrorLine4.equals( "" ) ) {
+										oldErrorLine4 = line;
+									} else if ( oldErrorLine5.equals( "" ) ) {
+										oldErrorLine5 = line;
+									}
+								}
+							}
+						}
+					}
 				}
-				return false;
-			} else {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_TIFF )
-								+ getTextResourceService().getText( locale, MESSAGE_XML_CG_CANNOTFINDETREPORT ) );
-				return false;
+				if ( exiftoolio == 0 ) {
+					// Invalider Status
+					isValid = false;
+					if ( min ) {
+						in.close();
+						/* exiftoolReport loeschen */
+						if ( exiftoolReport.exists() ) {
+							exiftoolReport.delete();
+						}
+						return false;
+					} else {
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_TIFF )
+										+ getTextResourceService().getText( locale, MESSAGE_XML_CG_ETNIO, "C" ) );
+					}
+				}
+				in.close();
+			} catch ( Exception e ) {
+				if ( min ) {
+					/* exiftoolReport loeschen */
+					if ( exiftoolReport.exists() ) {
+						exiftoolReport.delete();
+					}
+					return false;
+				} else {
+					getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_TIFF )
+									+ getTextResourceService().getText( locale, MESSAGE_XML_CG_CANNOTFINDETREPORT ) );
+					return false;
+				}
 			}
 		}
 		return isValid;
