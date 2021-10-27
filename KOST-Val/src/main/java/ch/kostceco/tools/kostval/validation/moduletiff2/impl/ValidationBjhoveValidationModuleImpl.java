@@ -20,31 +20,19 @@
 package ch.kostceco.tools.kostval.validation.moduletiff2.impl;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.util.Map;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
-import ch.kostceco.tools.kosttools.util.Util;
-import ch.kostceco.tools.kostval.KOSTVal;
+import ch.kostceco.tools.kosttools.fileservice.Jhove;
 import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationBjhoveValidationException;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationBjhoveValidationModule;
-import edu.harvard.hul.ois.jhove.*;
-import edu.harvard.hul.ois.jhove.module.TiffModule;
-import edu.harvard.hul.ois.jhove.Module;
 
-/** Validierungsschritt B (Jhove-Validierung) Ist die TIFF-Datei gemäss Jhove valid? valid -->
+/** Validierungsschritt B (Jhove-Validierung) Ist die TIFF-Datei gemaess Jhove valid? valid -->
  * Status: "Well-Formed and valid"
  * 
  * @author Rc Claire Roethlisberger, KOST-CECO */
@@ -67,172 +55,58 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 		}
 
 		boolean isValid = true;
+		// Informationen zum Jhove-Logverzeichnis holen
+		String pathToJhoveOutput2 = directoryOfLogfile.getAbsolutePath();
+		/* Jhove schreibt ins Work-Verzeichnis, damit danach eine Kopie ins Log-Verzeichnis abgelegt
+		 * werden kann, welche auch geloescht werden kann. */
+		File jhoveLog = new File( pathToJhoveOutput2, valDatei.getName() + ".jhove-log.txt" );
+		String pathToWorkDir = configMap.get( "PathToWorkDir" );
 
 		String toplevelDir = valDatei.getName();
 		int lastDotIdx = toplevelDir.lastIndexOf( "." );
 		toplevelDir = toplevelDir.substring( 0, lastDotIdx );
 
-		// Vorbereitungen: valDatei an die JHove Applikation übergeben
-
-		/* dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist ein generelles TODO in
-		 * allen Modulen. Zuerst immer dirOfJarPath ermitteln und dann alle Pfade mit
-		 * 
-		 * dirOfJarPath + File.separator +
-		 * 
-		 * erweitern. */
-		String path = new java.io.File(
-				KOSTVal.class.getProtectionDomain().getCodeSource().getLocation().getPath() )
-						.getAbsolutePath();
-		String locationOfJarPath = path;
-		String dirOfJarPath = locationOfJarPath;
-		if ( locationOfJarPath.endsWith( ".jar" ) || locationOfJarPath.endsWith( ".exe" )
-				|| locationOfJarPath.endsWith( "." ) ) {
-			File file = new File( locationOfJarPath );
-			dirOfJarPath = file.getParent();
-		}
-
-		File jhoveReport = null;
-		StringBuffer concatenatedOutputs = new StringBuffer();
-		String pathToJhoveConfig = dirOfJarPath + File.separator + "configuration" + File.separator
-				+ "jhove.conf";
-		String pathToWorkDir = configMap.get( "PathToWorkDir" );
-
-		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
-		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
-		 * ref="configurationService" /> */
-
-		// Informationen zum Jhove-Logverzeichnis holen
-		String pathToJhoveOutput = System.getProperty( "java.io.tmpdir" );
-		String pathToJhoveOutput2 = directoryOfLogfile.getAbsolutePath();
-		/* Jhove schreibt ins Work-Verzeichnis, damit danach eine Kopie ins Log-Verzeichnis abgelegt
-		 * werden kann, welche auch gelöscht werden kann. */
-		File jhoveLog = new File( pathToJhoveOutput2, valDatei.getName() + ".jhove-log.txt" );
-
-		File jhoveDir = new File( pathToJhoveOutput );
-		if ( !jhoveDir.exists() ) {
-			jhoveDir.mkdir();
-		}
-
-		// Jhove direkt ansprechen via dispatch
-		try {
-			String NAME = new String( "Jhove" );
-			String RELEASE = new String( "1.5" );
-			int[] DATE = new int[] { 2009, 12, 19 };
-			String USAGE = new String( "no usage" );
-			String RIGHTS = new String( "LGPL v2.1" );
-			App app = new App( NAME, RELEASE, DATE, USAGE, RIGHTS );
-			JhoveBase je = new JhoveBase();
-			OutputHandler handler = je.getHandler( "XML" );
-
-			// check all modules => null oder new TiffModule ();
-			Module module = new TiffModule();
-			module.init( "" );
-			module.setDefaultParams( new ArrayList<String>() );
-
-			String logLevel = null;
-			// null = SEVERE, WARNING, INFO, FINE, FINEST
-			// Ausgabe in Konsole --> kein Einfluss auf Report
-			je.setLogLevel( logLevel );
-			String saxClass = null;
-			String configFile = pathToJhoveConfig;
-			je.init( configFile, saxClass );
-
-			je.setEncoding( "utf-8" );
-			je.setTempDirectory( pathToWorkDir + "/jhove" );
-			je.setBufferSize( 4096 );
-			je.setChecksumFlag( false );
-			je.setShowRawFlag( false );
-			je.setSignatureFlag( false );
-			try {
-				Util.switchOffConsole();
-				File newReport = new File( pathToJhoveOutput, valDatei.getName() + ".jhove-log.txt" );
-				if ( newReport.exists() ) {
-					Util.deleteFile( newReport );
-				}
-				String outputFile = newReport.getAbsolutePath();
-				String[] dirFileOrUri = { valDatei.getAbsolutePath() };
-				je.dispatch( app, module, null, handler, outputFile, dirFileOrUri );
-				/* TODO: beim Ausführen von je.dispatch gibt es in seltenen Fällen einen Fehler:
-				 * 
-				 * [Fatal Error] :174:20: Content is not allowed in trailing section.
-				 * 
-				 * Der Log wird aber korrekt erstellt und der Error kann auch nicht unterdrückt werden */
-				jhoveReport = newReport;
-				Util.switchOnConsole();
-			} catch ( Exception e ) {
-				if ( min ) {
-					return false;
+		// Vorbereitungen: valDatei an die JHove Applikation übergeben	
+			String jhoveString=Jhove.valTiff( valDatei, jhoveLog, pathToWorkDir );
+			if ( jhoveString.equals( "OK" ) ) {
+				if ( jhoveLog.exists() ) {
+					isValid = true;
 				} else {
-					System.out.println( "Jhove dispatch exception" );
-					e.printStackTrace();
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_TIFF )
-									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-											"Jhove dispatch exception: " + e.getMessage() ) );
+					isValid = false;
+					if ( min ) {
+						return false;
+					} else {
+							getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_TIFF )
+										+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+												"No Jhove report." ) );
+						return false;		}
 				}
-			}
-
-			InputStream inStream = null;
-			OutputStream outStream = null;
-
-			try {
-				// umkopieren, damit es gelöscht werden kann
-				File afile = jhoveReport;
-				File bfile = jhoveLog;
-				inStream = new FileInputStream( afile );
-				outStream = new FileOutputStream( bfile );
-				byte[] buffer = new byte[1024];
-				int length;
-				// copy the file content in bytes
-				while ( (length = inStream.read( buffer )) > 0 ) {
-					outStream.write( buffer, 0, length );
-				}
-				inStream.close();
-				outStream.close();
-				// jhoveReport Kann noch nicht geloescht werden, da noch aktiv
-				// jhoveReport / temp wird in Controllervalfile geloescht
-
-			} catch ( IOException e ) {
-				if ( min ) {
-					return false;
-				} else {
-					e.printStackTrace();
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_TIFF )
-									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-											"Jhove copy report exception: " + e.getMessage() ) );
-				}
-			}
-			inStream.close();
-			outStream.close();
-		} catch ( Exception e ) {
-			if ( min ) {
-				return false;
 			} else {
-				e.printStackTrace();
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_TIFF )
-								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-										"Jhove exception: " + e.getMessage() ) );
+				isValid = false;
+				if ( min ) {
+					return false;
+				} else {
+						getMessageService()
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_TIFF )
+									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+											jhoveString ) );
+					return false;		}
 			}
-		}
 
+			// Report auswerten
 		try {
 			BufferedReader in = new BufferedReader( new FileReader( jhoveLog ) );
 			String line;
-			Set<String> lines = new LinkedHashSet<String>( 100000 ); // evtl vergrössern
+			Set<String> lines = new LinkedHashSet<String>( 100000 ); // evtl vergroessern
 			int counter = 0;
 			String status = "";
 			int statuscounter = 0;
 			int ignorcounter = 0;
 			while ( (line = in.readLine()) != null ) {
-
-				concatenatedOutputs.append( line );
-				concatenatedOutputs.append( NEWLINE );
-
-				/* die Status-Zeile enthält diese Möglichkeiten: Valider Status: "Well-Formed and valid"
-				 * Invalider Status: "Not well-formed" oder "Well-Formed, but not valid" möglicherweise
-				 * existieren weitere Ausgabemöglichkeiten */
+				/* die Status-Zeile enthaelt diese Moeglichkeiten: Valider Status: "Well-Formed and valid"
+				 * Invalider Status: "Not well-formed" oder "Well-Formed, but not valid" moeglicherweise
+				 * existieren weitere Ausgabemoeglichkeiten */
 				if ( line.contains( "Status:" ) ) {
 					if ( !line.contains( "Well-Formed and valid" ) ) {
 						status = line;
@@ -318,22 +192,7 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
-
-		// die im StringBuffer JHove-Outputs wieder in das Output-File zurückschreiben
-		if ( jhoveReport != null ) {
-			try {
-				BufferedWriter out = new BufferedWriter( new FileWriter( jhoveReport ) );
-				out.write( concatenatedOutputs.toString() );
-				out.close();
-			} catch ( IOException e ) {
-				getMessageService().logError( getTextResourceService().getText( locale,
-						MESSAGE_XML_MODUL_B_TIFF )
-						+ getTextResourceService().getText( locale, MESSAGE_XML_B_CANNOTWRITEJHOVEREPORT ) );
-				return false;
-			}
-		}
-		// jhoveReport / temp wird in Controllervalfile geloescht
-
+		// jhoveReport / temp wird in Controllervalfile geloescht */
 		return isValid;
 	}
 }
