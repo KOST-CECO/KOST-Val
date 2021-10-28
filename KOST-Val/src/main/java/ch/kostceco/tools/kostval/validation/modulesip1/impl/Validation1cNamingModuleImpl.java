@@ -143,11 +143,6 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 
 		// II.) Validierung des Formats des Dateinamen
 		patternStr = configMap.get( "AllowedSipName" );
-		if ( patternStr.startsWith( "Configuration-Error:" ) ) {
-			getMessageService().logError(
-					getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ac_SIP ) + patternStr );
-			return false;
-		}
 		Pattern p = Pattern.compile( patternStr );
 		Matcher matcher = p.matcher( fileName );
 

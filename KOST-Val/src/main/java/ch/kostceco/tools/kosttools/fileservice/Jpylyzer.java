@@ -24,8 +24,9 @@ import ch.kostceco.tools.kosttools.runtime.Cmd;
 
 public class Jpylyzer
 {
-	private static String resourcesJpylyzerExe = "resources" + File.separator + "jpylyzer_2.0.0_win32"
-			+ File.separator + "jpylyzer.exe";
+	private static String	exeDir								= "resources" + File.separator
+			+ "jpylyzer_2.0.0_win32";
+	private static String	resourcesJpylyzerExe	= exeDir + File.separator + "jpylyzer.exe";
 
 	/** fuehrt eine Validierung mit jpylyzer via cmd durch und speichert das Ergebnis in ein File
 	 * (Report). Gibt zurueck ob Report existiert oder nicht
@@ -56,7 +57,8 @@ public class Jpylyzer
 		String resultExec = Cmd.execToString( command, out, workDir );
 
 		// System.out.println( "resultExec: " + resultExec );
-		/* Folgender Error Output ist keiner sondern nur Info und kann mit OK ersetzt werden: ERROR: User warning: ignoring unknown box */
+		/* Folgender Error Output ist keiner sondern nur Info und kann mit OK ersetzt werden: ERROR:
+		 * User warning: ignoring unknown box */
 		String ignor = "ERROR: User warning: ignoring unknown box";
 		if ( resultExec.equals( ignor ) ) {
 			resultExec = "OK";
@@ -66,10 +68,9 @@ public class Jpylyzer
 			 * expected.</Message><Message>ERROR:
 			 * C:\Users\X60014195\.kost-val_2x\temp_KOST-Val\SIARD\content\schema0\table2\table2.xml fails
 			 * to validate */
-/*			String replaceInfo = "</Message><Message>ERROR: " + jp2File.getAbsolutePath()
-					+ " fails to validate";
-			resultExec = resultExec.replace( replaceInfo, "" );*/
-			
+			/* String replaceInfo = "</Message><Message>ERROR: " + jp2File.getAbsolutePath() +
+			 * " fails to validate"; resultExec = resultExec.replace( replaceInfo, "" ); */
+
 			// Jpylyzer gibt keine Info raus, die replaced werden muss
 		}
 
@@ -90,14 +91,27 @@ public class Jpylyzer
 	 * @param dirOfJarPath
 	 *          String mit dem Pfad von wo das Programm gestartet wurde
 	 * @return Boolean mit Kontrollergebnis */
-	public static boolean checkJpylyzer( String dirOfJarPath )
+	public static String checkJpylyzer( String dirOfJarPath )
 	{
-		String pathToJpylyzerExe = dirOfJarPath + File.separator + resourcesJpylyzerExe;
-		File fJpylyzerExe = new File( pathToJpylyzerExe );
-		if ( fJpylyzerExe.exists() ) {
-			return true;
-		} else {
-			return false;
+		String result = "";
+		boolean checkFiles = true;
+		// Pfad zum Programm existiert die Dateien?
+
+		String jpylyzerExe = dirOfJarPath + File.separator + resourcesJpylyzerExe;
+		File fjpylyzerExe = new File( jpylyzerExe );
+		if ( !fjpylyzerExe.exists() ) {
+			if ( checkFiles ) {
+				// erste fehlende Datei
+				result = " " + exeDir + ": " + jpylyzerExe;
+				checkFiles = false;
+			} else {
+				result = result + ", " + jpylyzerExe;
+				checkFiles = false;
+			}
 		}
+		if ( checkFiles ) {
+			result = "OK";
+		}
+		return result;
 	}
 }

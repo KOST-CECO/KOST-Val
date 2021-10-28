@@ -21,7 +21,6 @@ package ch.kostceco.tools.kostval.validation.modulesiard.impl;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.util.Map;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
@@ -32,6 +31,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -42,7 +42,7 @@ import org.jdom2.JDOMException;
 import org.jdom2.Namespace;
 import org.jdom2.input.SAXBuilder;
 
-import ch.kostceco.tools.kosttools.util.StreamGobbler;
+import ch.kostceco.tools.kosttools.fileservice.Sed;
 import ch.kostceco.tools.kosttools.util.Util;
 import ch.kostceco.tools.kostval.KOSTVal;
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationJsurplusFilesException;
@@ -152,74 +152,17 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 				dirOfJarPath = file.getParent();
 			}
 
-			File fSedExe = new File( dirOfJarPath + File.separator + "resources" + File.separator + "sed"
-					+ File.separator + "sed.exe" );
-			File msys20dll = new File( dirOfJarPath + File.separator + "resources" + File.separator
-					+ "sed" + File.separator + "msys-2.0.dll" );
-			File msysgccs1dll = new File( dirOfJarPath + File.separator + "resources" + File.separator
-					+ "sed" + File.separator + "msys-gcc_s-1.dll" );
-			File msysiconv2dll = new File( dirOfJarPath + File.separator + "resources" + File.separator
-					+ "sed" + File.separator + "msys-iconv-2.dll" );
-			File msysintl8dll = new File( dirOfJarPath + File.separator + "resources" + File.separator
-					+ "sed" + File.separator + "msys-intl-8.dll" );
-			String pathToSedExe = fSedExe.getAbsolutePath();
-			if ( !fSedExe.exists() ) {
-				// sed.exe existiert nicht --> Abbruch
+			// Pfad zum Programm existiert die Dateien?
+			String checkTool = Sed.checkSed( dirOfJarPath );
+			if ( !checkTool.equals( "OK" ) ) {
+				// mindestens eine Datei fehlt fuer die Validierung
 				if ( min ) {
 					return false;
 				} else {
 					getMessageService()
 							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
-									+ getTextResourceService().getText( locale, MESSAGE_XML_D_MISSING_FILE,
-											fSedExe.getAbsolutePath() ) );
-					return false;
-				}
-			}
-			if ( !msys20dll.exists() ) {
-				// existiert nicht --> Abbruch
-				if ( min ) {
-					return false;
-				} else {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
-									+ getTextResourceService().getText( locale, MESSAGE_XML_D_MISSING_FILE,
-											msys20dll.getAbsolutePath() ) );
-					return false;
-				}
-			}
-			if ( !msysgccs1dll.exists() ) {
-				// existiert nicht --> Abbruch
-				if ( min ) {
-					return false;
-				} else {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
-									+ getTextResourceService().getText( locale, MESSAGE_XML_D_MISSING_FILE,
-											msysgccs1dll.getAbsolutePath() ) );
-					return false;
-				}
-			}
-			if ( !msysiconv2dll.exists() ) {
-				// existiert nicht --> Abbruch
-				if ( min ) {
-					return false;
-				} else {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
-									+ getTextResourceService().getText( locale, MESSAGE_XML_D_MISSING_FILE,
-											msysiconv2dll.getAbsolutePath() ) );
-					return false;
-				}
-			}
-			if ( !msysintl8dll.exists() ) {
-				// existiert nicht --> Abbruch
-				if ( min ) {
-					return false;
-				} else {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
-									+ getTextResourceService().getText( locale, MESSAGE_XML_D_MISSING_FILE,
-											msysintl8dll.getAbsolutePath() ) );
+									+ getTextResourceService().getText( locale, MESSAGE_XML_MISSING_FILE, checkTool,
+											getTextResourceService().getText( locale, ABORTED ) ) );
 					return false;
 				}
 			}
@@ -332,8 +275,6 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 
 							File fSearchtable = tableXml;
 							File fSearchtableTemp = new File( fSearchtable.getAbsolutePath() + "_Temp.xml" );
-							String pathTofSearchtable = fSearchtable.getAbsolutePath();
-							String pathTofSearchtableTemp = fSearchtableTemp.getAbsolutePath();
 							/* mit Util.oldnewstring respektive replace koennen sehr grosse files nicht bearbeitet
 							 * werden!
 							 * 
@@ -351,59 +292,38 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 							String sed4 = "-e 's/\\d060\\d047table/\\n\\d060\\d047table/g' ";
 
 							// Bringt alles auf eine Zeile
-							String commandSed = "cmd /c \"\"" + pathToSedExe + "\" " + sed + sed2 + sed3 + sed4
-									+ "\"" + pathTofSearchtable + "\" > \"" + pathTofSearchtableTemp + "\"\"";
+							String options = sed + sed2 + sed3 + sed4;
 
-							// String commandSed = "cmd /c \"\"pathToSedExe\" 's/row/R0W/g\' 'hallo row.'\"";
-							/* Das redirect Zeichen verunmoeglicht eine direkte eingabe. mit dem geschachtellten
-							 * Befehl gehts: cmd /c\"urspruenlicher Befehl\" */
+							File workDir = new File( pathToWorkDir );
 
-							Process procSed = null;
-							Runtime rtSed = null;
 							if ( !fSearchtableTemp.exists() ) {
-
-								try {
-									Util.switchOffConsole();
-									rtSed = Runtime.getRuntime();
-									procSed = rtSed.exec( commandSed.toString().split( " " ) );
-									// .split(" ") ist notwendig wenn in einem Pfad ein Doppelleerschlag vorhanden
-									// ist!
-
-									// Fehleroutput holen
-									StreamGobbler errorGobblerSed = new StreamGobbler( procSed.getErrorStream(),
-											"ERROR" );
-
-									// Output holen
-									StreamGobbler outputGobblerSed = new StreamGobbler( procSed.getInputStream(),
-											"OUTPUT" );
-
-									// Threads starten
-									errorGobblerSed.start();
-									outputGobblerSed.start();
-
-									// Warte, bis wget fertig ist
-									procSed.waitFor();
-									Thread.sleep( 10 );
-
-									Util.switchOnConsole();
-
-								} catch ( Exception e ) {
+								// Sed-Befehl: pathToSedExe options fSearchtable > fSearchtableTemp
+								String resultExec = Sed.execSed( options, fSearchtable, fSearchtableTemp, workDir,
+										dirOfJarPath );
+								if ( !resultExec.equals( "OK" ) ) {
+									// Exception oder Report existiert nicht
 									if ( min ) {
 										return false;
 									} else {
-										getMessageService().logError(
-												getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
-														+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-																e.getMessage() ) );
-										return false;
-									}
-								} finally {
-									if ( procSed != null ) {
-										procSed.getOutputStream().close();
-										procSed.getInputStream().close();
-										procSed.getErrorStream().close();
+										if ( resultExec.equals( "NoReport" ) ) {
+											// Report existiert nicht
+											getMessageService().logError(
+													getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
+															+ getTextResourceService().getText( locale,
+																	MESSAGE_XML_MISSING_REPORT ) );
+											return false;
+										} else {
+											// Exception
+											getMessageService().logError(
+													getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
+															+ getTextResourceService().getText( locale,
+																	MESSAGE_XML_CG_ET_SERVICEFAILED, resultExec ) );
+											return false;
+										}
 									}
 								}
+								// Ende Sed direkt auszuloesen
+
 								tableXml = fSearchtableTemp;
 							} else {
 								tableXml = fSearchtableTemp;
@@ -544,10 +464,17 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 				if ( min ) {
 					return false;
 				} else {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
-									+ getTextResourceService().getText( locale, MESSAGE_XML_J_INVALID_ENTRY,
-											filesInSiard.keySet() ) );
+					String noPretty = filesInSiard.keySet() + "";
+					/* [C:\Users\X60014195\.kost-val_2x\temp_KOST-Val\SIARD\content\schema0\newOrdnerS0,
+					 * C:\Users\X60014195\.kost-val_2x\temp_KOST-Val\SIARD\content\schema0\newOrdnerS1,
+					 * C:\Users\X60014195\.kost-val_2x\temp_KOST-Val\SIARD\content\schema0\table7\
+					 * newOrdner7] */
+					String pretty = noPretty.replace( "[", "</Message><Message>" );
+					 pretty = pretty.replace( "]", "" );
+					pretty = pretty.replace( ", ", "</Message><Message>" );
+					getMessageService().logError( getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_J_SIARD )
+							+ getTextResourceService().getText( locale, MESSAGE_XML_J_INVALID_ENTRY, pretty ) );
 				}
 			} else {
 				valid = true;

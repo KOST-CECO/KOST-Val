@@ -89,7 +89,7 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 			/* Extract the metadata.xml from the temporary work folder and build a jdom document */
 			String pathToWorkDir = configMap.get( "PathToWorkDir" );
 			pathToWorkDir = pathToWorkDir + File.separator + "SIARD";
-			File workDir=new File(pathToWorkDir);
+			File workDir = new File( pathToWorkDir );
 			File metadataXml = new File( new StringBuilder( pathToWorkDir ).append( File.separator )
 					.append( "header" ).append( File.separator ).append( "metadata.xml" ).toString() );
 			InputStream fin = new FileInputStream( metadataXml );
@@ -154,10 +154,9 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 											dirOfJarPath = file.getParent();
 										}
 
-										// Pfad zum Programm xmllint existiert die Dateien?
-										String checkXmllint = Xmllint.checkXmllint( dirOfJarPath );
-										// System.out.println("checkXmllint: "+checkXmllint);
-										if ( !checkXmllint.equals( "OK" ) ) {
+										// Pfad zum Programm existiert die Dateien?
+										String checkTool = Xmllint.checkXmllint( dirOfJarPath );
+										if ( !checkTool.equals( "OK" ) ) {
 											// mindestens eine Datei fehlt fuer die Validierung
 											if ( min ) {
 												return false;
@@ -165,29 +164,33 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 												getMessageService().logError(
 														getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
 																+ getTextResourceService().getText( locale,
-																		ERROR_XML_XMLLINT_MISSING, checkXmllint, dirOfJarPath ) );
+																		MESSAGE_XML_MISSING_FILE, checkTool,
+																		getTextResourceService().getText( locale, ABORTED, "XML-" ) ) );
 												valid = false;
 											}
 										} else {
 											// System.out.println("Validierung mit xmllint: ");
 											try {
-												String resultExec = Xmllint.execXmllint( tableXml, tableXsd, 
-														workDir, dirOfJarPath );
+												String resultExec = Xmllint.execXmllint( tableXml, tableXsd, workDir,
+														dirOfJarPath );
 												if ( !resultExec.equals( "OK" ) ) {
 													// System.out.println("Validierung NICHT bestanden");
 													if ( min ) {
 														return false;
 													} else {
 														valid = false;
-														String tableXmlShortString = tableXml.getAbsolutePath().replace(workDir.getAbsolutePath(),"");
-														String tableXsdShortString = tableXsd.getAbsolutePath().replace(workDir.getAbsolutePath(),"");
+														String tableXmlShortString = tableXml.getAbsolutePath()
+																.replace( workDir.getAbsolutePath(), "" );
+														String tableXsdShortString = tableXsd.getAbsolutePath()
+																.replace( workDir.getAbsolutePath(), "" );
 														// val.message.xml.h.invalid.xml = <Message>{0} ist invalid zu
 														// {1}</Message></Error>
 														// val.message.xml.h.invalid.error = <Message>{0}</Message></Error>
 														getMessageService().logError( getTextResourceService().getText( locale,
 																MESSAGE_XML_MODUL_H_SIARD )
 																+ getTextResourceService().getText( locale,
-																		MESSAGE_XML_H_INVALID_XML, tableXmlShortString, tableXsdShortString ) );
+																		MESSAGE_XML_H_INVALID_XML, tableXmlShortString,
+																		tableXsdShortString ) );
 														getMessageService().logError( getTextResourceService().getText( locale,
 																MESSAGE_XML_MODUL_H_SIARD )
 																+ getTextResourceService().getText( locale,

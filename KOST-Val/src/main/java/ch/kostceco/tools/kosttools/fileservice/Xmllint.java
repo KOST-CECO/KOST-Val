@@ -24,6 +24,11 @@ import ch.kostceco.tools.kosttools.runtime.Cmd;
 
 public class Xmllint
 {
+	private static String	exeDir						= "resources" + File.separator + "xmllint";
+	private static String	pathToxmllintExe	= exeDir + File.separator + "xmllint.exe";
+	private static String	pathToxmllintDll1	= exeDir + File.separator + "iconv.dll";
+	private static String	pathToxmllintDll2	= exeDir + File.separator + "libxml2.dll";
+	private static String	pathToxmllintDll3	= exeDir + File.separator + "zlib1.dll";
 
 	/** fuehrt eine Validierung mit xmllint via cmd durch und gibt das Ergebnis als String zurueck
 	 * 
@@ -36,12 +41,11 @@ public class Xmllint
 	 * @param dirOfJarPath
 	 *          String mit dem Pfad von wo das Programm gestartet wurde
 	 * @return String mit Validierungsergebnis ("OK" oder den Fehler. */
-	public static String execXmllint( File xmlFile, File xsdFile, File workDir,
-			String dirOfJarPath ) throws InterruptedException
+	public static String execXmllint( File xmlFile, File xsdFile, File workDir, String dirOfJarPath )
+			throws InterruptedException
 	{
-		boolean out=false;
-		File exeFile = new File( dirOfJarPath + File.separator + "resources" + File.separator
-				+ "xmllint" + File.separator + "xmllint.exe" );
+		boolean out = false;
+		File exeFile = new File( dirOfJarPath + File.separator + pathToxmllintExe );
 
 		String command = "\"\"" + exeFile.getAbsolutePath() + "\""
 				+ " --noout --stream --nowarning --schema " + "\"" + xsdFile.getAbsolutePath() + "\"" + " "
@@ -77,36 +81,51 @@ public class Xmllint
 	{
 		String result = "";
 		boolean checkFiles = true;
-		// Pfad zum Programm xmllint existiert die Dateien?
+		// Pfad zum Programm existiert die Dateien?
 
-		// File file = new File( locationOfJarPath );
-		// File dirOfJarPath = file.getParent();
-
-		String pathToxmllintExe = dirOfJarPath + File.separator + "resources" + File.separator
-				+ "xmllint" + File.separator + "xmllint.exe";
-		String pathToxmllintDll1 = dirOfJarPath + File.separator + "resources" + File.separator
-				+ "xmllint" + File.separator + "iconv.dll";
-		String pathToxmllintDll2 = dirOfJarPath + File.separator + "resources" + File.separator
-				+ "xmllint" + File.separator + "libxml2.dll";
-		String pathToxmllintDll3 = dirOfJarPath + File.separator + "resources" + File.separator
-				+ "xmllint" + File.separator + "zlib1.dll";
-
-		File fpathToxmllintExe = new File( pathToxmllintExe );
-		File fpathToxmllintDll1 = new File( pathToxmllintDll1 );
-		File fpathToxmllintDll2 = new File( pathToxmllintDll2 );
-		File fpathToxmllintDll3 = new File( pathToxmllintDll3 );
+		File fpathToxmllintExe = new File( dirOfJarPath + File.separator + pathToxmllintExe );
+		File fpathToxmllintDll1 = new File( dirOfJarPath + File.separator + pathToxmllintDll1 );
+		File fpathToxmllintDll2 = new File( dirOfJarPath + File.separator + pathToxmllintDll2 );
+		File fpathToxmllintDll3 = new File( dirOfJarPath + File.separator + pathToxmllintDll3 );
 		if ( !fpathToxmllintExe.exists() ) {
-			result = result + " " + fpathToxmllintExe.getName();
-			checkFiles = false;
-		} else if ( !fpathToxmllintDll1.exists() ) {
-			result = result + " " + fpathToxmllintDll1.getName();
-			checkFiles = false;
-		} else if ( !fpathToxmllintDll2.exists() ) {
-			result = result + " " + fpathToxmllintDll2.getName();
-			checkFiles = false;
-		} else if ( !fpathToxmllintDll3.exists() ) {
-			result = result + " " + fpathToxmllintDll3.getName();
-			checkFiles = false;
+			if ( checkFiles ) {
+				// erste fehlende Datei
+				result = " " + exeDir + ": " + pathToxmllintExe;
+				checkFiles = false;
+			} else {
+				result = result + ", " + pathToxmllintExe;
+				checkFiles = false;
+			}
+		}
+		if ( !fpathToxmllintDll1.exists() ) {
+			if ( checkFiles ) {
+				// erste fehlende Datei
+				result = " " + exeDir + ": " + pathToxmllintDll1;
+				checkFiles = false;
+			} else {
+				result = result + ", " + pathToxmllintDll1;
+				checkFiles = false;
+			}
+		}
+		if ( !fpathToxmllintDll2.exists() ) {
+			if ( checkFiles ) {
+				// erste fehlende Datei
+				result = " " + exeDir + ": " + pathToxmllintDll2;
+				checkFiles = false;
+			} else {
+				result = result + ", " + pathToxmllintDll2;
+				checkFiles = false;
+			}
+		}
+		if ( !fpathToxmllintDll3.exists() ) {
+			if ( checkFiles ) {
+				// erste fehlende Datei
+				result = " " + exeDir + ": " + pathToxmllintDll3;
+				checkFiles = false;
+			} else {
+				result = result + ", " + pathToxmllintDll3;
+				checkFiles = false;
+			}
 		}
 
 		if ( checkFiles ) {

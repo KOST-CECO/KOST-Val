@@ -17,24 +17,27 @@
 package ch.kostceco.tools.kosttools.fileservice;
 
 import java.io.File;
-import java.io.IOException;
 
 import ch.kostceco.tools.kosttools.runtime.Cmd;
-import ch.kostceco.tools.kosttools.util.Util;
 
 /** @author Rc Claire Roethlisberger, KOST-CECO */
 
-public class Pngcheck
+public class Sed
 {
-	private static String	exeDir								= "resources" + File.separator
-			+ "pngcheck-3.0.2-win32";
-	private static String	resourcesPngcheckExe	= exeDir + File.separator + "pngcheck.win32.exe";
+	private static String	exeDir				= "resources" + File.separator + "sed";
+	private static String	sedExe				= exeDir + File.separator + "sed.exe";
+	private static String	msys20dll			= exeDir + File.separator + "msys-2.0.dll";
+	private static String	msysgccs1dll	= exeDir + File.separator + "msys-gcc_s-1.dll";
+	private static String	msysiconv2dll	= exeDir + File.separator + "msys-iconv-2.dll";
+	private static String	msysintl8dll	= exeDir + File.separator + "msys-intl-8.dll";
 
-	/** fuehrt eine Validierung mit Pngcheck via cmd durch und speichert das Ergebnis in ein File
+	/** fuehrt eine Validierung mit Exiftool via cmd durch und speichert das Ergebnis in ein File
 	 * (Report). Gibt zurueck ob Report existiert oder nicht
 	 * 
-	 * @param pngFile
-	 *          png-Datei, welche validiert werden soll
+	 * @param options
+	 *          Option wie exiftool angesprochen werden soll
+	 * @param tiffFile
+	 *          tiff-Datei, welche validiert werden soll
 	 * @param report
 	 *          Datei fuer den Report
 	 * @param workDir
@@ -42,29 +45,26 @@ public class Pngcheck
 	 * @param dirOfJarPath
 	 *          String mit dem Pfad von wo das Programm gestartet wurde
 	 * @return String ob Report existiert oder nicht ggf Exception */
-	public static String execPngcheck( File pngFile, File report, File workDir, String dirOfJarPath )
-			throws InterruptedException
+	public static String execSed( String options, File fileToSed, File output, File workDir,
+			String dirOfJarPath ) throws InterruptedException
 	{
-		boolean out = false;
-		File exeFile = new File( dirOfJarPath + File.separator + resourcesPngcheckExe );
+		boolean out = true;
+		File fsedExe = new File( dirOfJarPath + File.separator + sedExe );
 		// falls das File von einem vorhergehenden Durchlauf bereits existiert, loeschen wir es
-		if ( report.exists() ) {
-			report.delete();
+		if ( output.exists() ) {
+			output.delete();
 		}
-		File pngFileNormalisiert= new File (workDir+ File.separator +"PNG.png");
-				try {
-					Util.copyFile( pngFile, pngFileNormalisiert );
-				} catch ( IOException e ) {
-					// Normalisierung fehlgeschlagen es wird ohne versucht
-					pngFileNormalisiert=pngFile;				}
 
-		// Pngcheck-Befehl: pathToPngcheckExe pngFile > report
-		String command = "\"\"" + exeFile.getAbsolutePath() + "\" \"" + pngFileNormalisiert.getAbsolutePath()
-				+ "\" > \"" + report.getAbsolutePath() + "\"\"";
+		// Sed-Befehl: pathToSedExe options fileToSed > output
+		String command = "\"\"" + fsedExe.getAbsolutePath()
+				+ "\" " + options + " \"" + fileToSed.getAbsolutePath() + "\" > \""
+				+ output.getAbsolutePath() + "\"\"";
+
+		// System.out.println( "command: " + command );
 
 		String resultExec = Cmd.execToString( command, out, workDir );
-		Util.deleteFile( pngFileNormalisiert );
-		// Pngcheck gibt keine Info raus, die replaced oder ignoriert werden muss
+
+		// Sed gibt keine Info raus, die replaced oder ignoriert werden muss
 
 		// System.out.println( "resultExec: " + resultExec );
 		/* Folgender Error Output ist keiner sondern nur Info und kann mit OK ersetzt werden: ERROR:
@@ -80,7 +80,7 @@ public class Pngcheck
 		 * " fails to validate"; resultExec = resultExec.replace( replaceInfo, "" ); } */
 
 		if ( resultExec.equals( "OK" ) ) {
-			if ( report.exists() ) {
+			if ( output.exists() ) {
 				// alles io bleibt bei OK
 			} else {
 				// Datei nicht angelegt...
@@ -90,30 +90,75 @@ public class Pngcheck
 		return resultExec;
 	}
 
-	/** fuehrt eine Kontrolle aller benoetigten Dateien von Pngcheck durch und gibt das Ergebnis als
-	 * boolean zurueck
+	/** fuehrt eine Kontrolle aller benoetigten Dateien von Exiftool durch und gibt das Ergebnis als
+	 * String zurueck
 	 * 
 	 * @param dirOfJarPath
 	 *          String mit dem Pfad von wo das Programm gestartet wurde
-	 * @return Boolean mit Kontrollergebnis */
-	public static String checkPngcheck( String dirOfJarPath )
+	 * @return String mit Kontrollergebnis */
+	public static String checkSed( String dirOfJarPath )
 	{
 		String result = "";
 		boolean checkFiles = true;
 		// Pfad zum Programm existiert die Dateien?
 
-		String pngcheckExe = dirOfJarPath + File.separator + resourcesPngcheckExe;
-		File fpngcheckExe = new File( pngcheckExe );
-		if ( !fpngcheckExe.exists() ) {
+		File fsedExe = new File( dirOfJarPath + File.separator + sedExe );
+		File fmsys20dll = new File( dirOfJarPath + File.separator + msys20dll );
+		File fmsysgccs1dll = new File( dirOfJarPath + File.separator + msysgccs1dll );
+		File fmsysiconv2dll = new File( dirOfJarPath + File.separator + msysiconv2dll );
+		File fmsysintl8dll = new File( dirOfJarPath + File.separator + msysintl8dll );
+
+		if ( !fsedExe.exists() ) {
 			if ( checkFiles ) {
 				// erste fehlende Datei
-				result = " " + exeDir + ": " + pngcheckExe;
+				result = " " + exeDir + ": " + sedExe;
 				checkFiles = false;
 			} else {
-				result = result + ", " + pngcheckExe;
+				result = result + ", " + sedExe;
 				checkFiles = false;
 			}
 		}
+		if ( !fmsys20dll.exists() ) {
+			if ( checkFiles ) {
+				// erste fehlende Datei
+				result = " " + exeDir + ": " + msys20dll;
+				checkFiles = false;
+			} else {
+				result = result + ", " + msys20dll;
+				checkFiles = false;
+			}
+		}
+		if ( !fmsysgccs1dll.exists() ) {
+			if ( checkFiles ) {
+				// erste fehlende Datei
+				result = " " + exeDir + ": " + msysgccs1dll;
+				checkFiles = false;
+			} else {
+				result = result + ", " + msysgccs1dll;
+				checkFiles = false;
+			}
+		}
+		if ( !fmsysiconv2dll.exists() ) {
+			if ( checkFiles ) {
+				// erste fehlende Datei
+				result = " " + exeDir + ": " + msysiconv2dll;
+				checkFiles = false;
+			} else {
+				result = result + ", " + msysiconv2dll;
+				checkFiles = false;
+			}
+		}
+		if ( !fmsysintl8dll.exists() ) {
+			if ( checkFiles ) {
+				// erste fehlende Datei
+				result = " " + exeDir + ": " + msysintl8dll;
+				checkFiles = false;
+			} else {
+				result = result + ", " + msysintl8dll;
+				checkFiles = false;
+			}
+		}
+
 		if ( checkFiles ) {
 			result = "OK";
 		}

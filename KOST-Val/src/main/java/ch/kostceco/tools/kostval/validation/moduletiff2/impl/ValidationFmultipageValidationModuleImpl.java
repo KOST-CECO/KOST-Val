@@ -59,95 +59,92 @@ public class ValidationFmultipageValidationModuleImpl extends ValidationModuleIm
 				valDatei.getName() + ".exiftool-log.txt" );
 		pathToExiftoolOutput = exiftoolReport.getAbsolutePath();
 
-		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
-		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
-		 * ref="configurationService" /> */
-
-		String mp = configMap.get( "AllowedMultipage" );
-		if ( mp.startsWith( "Configuration-Error:" ) ) {
-			if ( min ) {
-				/* exiftoolReport loeschen */
-				if ( exiftoolReport.exists() ) {
-					exiftoolReport.delete();
-				}
-				return false;
-			} else {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_TIFF ) + mp );
-				return false;
-			}
-		}
-		// 0=Singelpage / 1=Multipage
-
-		Integer exiftoolio = 0;
-		Integer ifdCount = 0;
-		String ifdMsg;
-		if ( mp.equalsIgnoreCase( "yes" ) ) {
-			// Valider Status (Multipage erlaubt)
+		if ( !exiftoolReport.exists() ) {
+			// Report existiert nicht
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_TIFF )
+							+ getTextResourceService().getText( locale, MESSAGE_XML_MISSING_REPORT,
+									exiftoolReport.getAbsolutePath(),
+									getTextResourceService().getText( locale, ABORTED ) ) );
+			return false;
 		} else {
-			try {
-				BufferedReader in = new BufferedReader( new FileReader( exiftoolReport ) );
-				String line;
-				while ( (line = in.readLine()) != null ) {
+			/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
+			 * entsprechenden Modul die property anzugeben: <property name="configurationService"
+			 * ref="configurationService" /> */
 
-					// Number und IFD: enthalten auch Exif Eintr�ge. Ensprechend muss "Type: TIFF" gez�hlt
-					// werden
-					if ( line.contains( "Compression: " ) && line.contains( "[EXIF:IFD" ) ) {
-						exiftoolio = 1;
-						ifdCount = ifdCount + 1;
+			String mp = configMap.get( "AllowedMultipage" );
+			// 0=Singelpage / 1=Multipage
+
+			Integer exiftoolio = 0;
+			Integer ifdCount = 0;
+			String ifdMsg;
+			if ( mp.equalsIgnoreCase( "yes" ) ) {
+				// Valider Status (Multipage erlaubt)
+			} else {
+				try {
+					BufferedReader in = new BufferedReader( new FileReader( exiftoolReport ) );
+					String line;
+					while ( (line = in.readLine()) != null ) {
+
+						// Number und IFD: enthalten auch Exif Eintraege. Ensprechend muss "Type: TIFF" gezaehlt
+						// werden
+						if ( line.contains( "Compression: " ) && line.contains( "[EXIF:IFD" ) ) {
+							exiftoolio = 1;
+							ifdCount = ifdCount + 1;
+						}
 					}
-				}
-				if ( exiftoolio == 0 ) {
-					// Invalider Status
-					isValid = false;
+					if ( exiftoolio == 0 ) {
+						// Invalider Status
+						isValid = false;
+						if ( min ) {
+							in.close();
+							/* exiftoolReport loeschen */
+							if ( exiftoolReport.exists() ) {
+								exiftoolReport.delete();
+							}
+							return false;
+						} else {
+							getMessageService()
+									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_TIFF )
+											+ getTextResourceService().getText( locale, MESSAGE_XML_CG_ETNIO, "F" ) );
+						}
+					}
+					if ( ifdCount == 1 ) {
+						// Valider Status (nur eine Seite)
+					} else {
+						// Invalider Status
+						ifdMsg = ("Multipage (" + ifdCount + " TIFFs)");
+						isValid = false;
+						if ( min ) {
+							in.close();
+							/* exiftoolReport loeschen */
+							if ( exiftoolReport.exists() ) {
+								exiftoolReport.delete();
+							}
+							return false;
+						} else {
+							getMessageService().logError( getTextResourceService().getText( locale,
+									MESSAGE_XML_MODUL_F_TIFF )
+									+ getTextResourceService().getText( locale, MESSAGE_XML_CG_INVALID, ifdMsg ) );
+						}
+					}
+					in.close();
+				} catch ( Exception e ) {
 					if ( min ) {
-						in.close();
 						/* exiftoolReport loeschen */
 						if ( exiftoolReport.exists() ) {
 							exiftoolReport.delete();
 						}
 						return false;
 					} else {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_TIFF )
-										+ getTextResourceService().getText( locale, MESSAGE_XML_CG_ETNIO, "F" ) );
-					}
-				}
-				if ( ifdCount == 1 ) {
-					// Valider Status (nur eine Seite)
-				} else {
-					// Invalider Status
-					ifdMsg = ("Multipage (" + ifdCount + " TIFFs)");
-					isValid = false;
-					if ( min ) {
-						in.close();
-						/* exiftoolReport loeschen */
-						if ( exiftoolReport.exists() ) {
-							exiftoolReport.delete();
-						}
+						getMessageService().logError( getTextResourceService().getText( locale,
+								MESSAGE_XML_MODUL_F_TIFF )
+								+ getTextResourceService().getText( locale, MESSAGE_XML_CG_CANNOTFINDETREPORT ) );
 						return false;
-					} else {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_TIFF )
-										+ getTextResourceService().getText( locale, MESSAGE_XML_CG_INVALID, ifdMsg ) );
 					}
-				}
-				in.close();
-			} catch ( Exception e ) {
-				if ( min ) {
-					/* exiftoolReport loeschen */
-					if ( exiftoolReport.exists() ) {
-						exiftoolReport.delete();
-					}
-					return false;
-				} else {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_TIFF )
-									+ getTextResourceService().getText( locale, MESSAGE_XML_CG_CANNOTFINDETREPORT ) );
-					return false;
 				}
 			}
+			return isValid;
 		}
-		return isValid;
 	}
 }

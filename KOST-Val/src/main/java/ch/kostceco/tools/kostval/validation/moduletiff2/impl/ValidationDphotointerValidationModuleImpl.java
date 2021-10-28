@@ -59,208 +59,75 @@ public class ValidationDphotointerValidationModuleImpl extends ValidationModuleI
 				valDatei.getName() + ".exiftool-log.txt" );
 		pathToExiftoolOutput = exiftoolReport.getAbsolutePath();
 
-		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
-		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
-		 * ref="configurationService" /> */
+		if ( !exiftoolReport.exists() ) {
+			// Report existiert nicht
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF )
+							+ getTextResourceService().getText( locale, MESSAGE_XML_MISSING_REPORT,
+									exiftoolReport.getAbsolutePath(),
+									getTextResourceService().getText( locale, ABORTED ) ) );
+			return false;
+		} else {
+			/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
+			 * entsprechenden Modul die property anzugeben: <property name="configurationService"
+			 * ref="configurationService" /> */
 
-		String pi0 = configMap.get( "AllowedPhotointer0" );
-		String pi1 = configMap.get( "AllowedPhotointer1" );
-		String pi2 = configMap.get( "AllowedPhotointer2" );
-		String pi3 = configMap.get( "AllowedPhotointer3" );
-		String pi4 = configMap.get( "AllowedPhotointer4" );
-		String pi5 = configMap.get( "AllowedPhotointer5" );
-		String pi6 = configMap.get( "AllowedPhotointer6" );
-		String pi8 = configMap.get( "AllowedPhotointer8" );
+			String pi0 = configMap.get( "AllowedPhotointer0" );
+			String pi1 = configMap.get( "AllowedPhotointer1" );
+			String pi2 = configMap.get( "AllowedPhotointer2" );
+			String pi3 = configMap.get( "AllowedPhotointer3" );
+			String pi4 = configMap.get( "AllowedPhotointer4" );
+			String pi5 = configMap.get( "AllowedPhotointer5" );
+			String pi6 = configMap.get( "AllowedPhotointer6" );
+			String pi8 = configMap.get( "AllowedPhotointer8" );
 
-		if ( pi0.startsWith( "Configuration-Error:" ) ) {
-			if ( min ) {
-				/* exiftoolReport loeschen */
-				if ( exiftoolReport.exists() ) {
-					exiftoolReport.delete();
-				}
-				return false;
-			} else {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF ) + pi0 );
-				return false;
+			if ( pi0.equals( "" ) ) {
+				pi0 = "DiesePhotointerIstNichtErlaubt";
 			}
-		}
-		if ( pi1.startsWith( "Configuration-Error:" ) ) {
-			if ( min ) {
-				/* exiftoolReport loeschen */
-				if ( exiftoolReport.exists() ) {
-					exiftoolReport.delete();
-				}
-				return false;
-			} else {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF ) + pi1 );
-				return false;
+			if ( pi1.equals( "" ) ) {
+				pi1 = "DiesePhotointerIstNichtErlaubt";
 			}
-		}
-		if ( pi2.startsWith( "Configuration-Error:" ) ) {
-			if ( min ) {
-				/* exiftoolReport loeschen */
-				if ( exiftoolReport.exists() ) {
-					exiftoolReport.delete();
-				}
-				return false;
-			} else {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF ) + pi2 );
-				return false;
+			if ( pi2.equals( "" ) ) {
+				pi2 = "DiesePhotointerIstNichtErlaubt";
 			}
-		}
-		if ( pi3.startsWith( "Configuration-Error:" ) ) {
-			if ( min ) {
-				/* exiftoolReport loeschen */
-				if ( exiftoolReport.exists() ) {
-					exiftoolReport.delete();
-				}
-				return false;
-			} else {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF ) + pi3 );
-				return false;
+			if ( pi3.equals( "" ) ) {
+				pi3 = "DiesePhotointerIstNichtErlaubt";
 			}
-		}
-		if ( pi4.startsWith( "Configuration-Error:" ) ) {
-			if ( min ) {
-				/* exiftoolReport loeschen */
-				if ( exiftoolReport.exists() ) {
-					exiftoolReport.delete();
-				}
-				return false;
-			} else {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF ) + pi4 );
-				return false;
+			if ( pi4.equals( "" ) ) {
+				pi4 = "DiesePhotointerIstNichtErlaubt";
 			}
-		}
-		if ( pi5.startsWith( "Configuration-Error:" ) ) {
-			if ( min ) {
-				/* exiftoolReport loeschen */
-				if ( exiftoolReport.exists() ) {
-					exiftoolReport.delete();
-				}
-				return false;
-			} else {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF ) + pi5 );
-				return false;
+			if ( pi5.equals( "" ) ) {
+				pi5 = "DiesePhotointerIstNichtErlaubt";
 			}
-		}
-		if ( pi6.startsWith( "Configuration-Error:" ) ) {
-			if ( min ) {
-				/* exiftoolReport loeschen */
-				if ( exiftoolReport.exists() ) {
-					exiftoolReport.delete();
-				}
-				return false;
-			} else {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF ) + pi6 );
-				return false;
+			if ( pi6.equals( "" ) ) {
+				pi6 = "DiesePhotointerIstNichtErlaubt";
 			}
-		}
-		if ( pi8.startsWith( "Configuration-Error:" ) ) {
-			if ( min ) {
-				/* exiftoolReport loeschen */
-				if ( exiftoolReport.exists() ) {
-					exiftoolReport.delete();
-				}
-				return false;
-			} else {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF ) + pi8 );
-				return false;
+			if ( pi8.equals( "" ) ) {
+				pi8 = "DiesePhotointerIstNichtErlaubt";
 			}
-		}
-		if ( pi0.equals( "" ) ) {
-			pi0 = "DiesePhotointerIstNichtErlaubt";
-		}
-		if ( pi1.equals( "" ) ) {
-			pi1 = "DiesePhotointerIstNichtErlaubt";
-		}
-		if ( pi2.equals( "" ) ) {
-			pi2 = "DiesePhotointerIstNichtErlaubt";
-		}
-		if ( pi3.equals( "" ) ) {
-			pi3 = "DiesePhotointerIstNichtErlaubt";
-		}
-		if ( pi4.equals( "" ) ) {
-			pi4 = "DiesePhotointerIstNichtErlaubt";
-		}
-		if ( pi5.equals( "" ) ) {
-			pi5 = "DiesePhotointerIstNichtErlaubt";
-		}
-		if ( pi6.equals( "" ) ) {
-			pi6 = "DiesePhotointerIstNichtErlaubt";
-		}
-		if ( pi8.equals( "" ) ) {
-			pi8 = "DiesePhotointerIstNichtErlaubt";
-		}
 
-		Integer exiftoolio = 0;
-		String oldErrorLine1 = "";
-		String oldErrorLine2 = "";
-		String oldErrorLine3 = "";
-		String oldErrorLine4 = "";
-		String oldErrorLine5 = "";
+			Integer exiftoolio = 0;
+			String oldErrorLine1 = "";
+			String oldErrorLine2 = "";
+			String oldErrorLine3 = "";
+			String oldErrorLine4 = "";
+			String oldErrorLine5 = "";
 
-		try {
-			BufferedReader in = new BufferedReader( new FileReader( exiftoolReport ) );
-			String line;
-			while ( (line = in.readLine()) != null ) {
-				// die PhotometricInterpretation-Zeile enthält einer dieser Freitexte der Farbraumart
-				if ( line.contains( "PhotometricInterpretation: " ) && line.contains( "[EXIF:IFD" ) ) {
-					exiftoolio = 1;
-					if ( line.contains( "PhotometricInterpretation: " + pi0 )
-							|| line.contains( "PhotometricInterpretation: " + pi1 )
-							|| line.contains( "PhotometricInterpretation: " + pi2 )
-							|| line.contains( "PhotometricInterpretation: " + pi3 )
-							|| line.contains( "PhotometricInterpretation: " + pi4 )
-							|| line.contains( "PhotometricInterpretation: " + pi5 )
-							|| line.contains( "PhotometricInterpretation: " + pi6 )
-							|| line.contains( "PhotometricInterpretation: " + pi8 ) ) {
-						// Valider Status
-					} else {
-						// Invalider Status
-						isValid = false;
-						if ( min ) {
-							in.close();
-							/* exiftoolReport loeschen */
-							if ( exiftoolReport.exists() ) {
-								exiftoolReport.delete();
-							}
-							return false;
-						} else {
-							if ( !line.equals( oldErrorLine1 ) && !line.equals( oldErrorLine2 )
-									&& !line.equals( oldErrorLine3 ) && !line.equals( oldErrorLine4 )
-									&& !line.equals( oldErrorLine5 ) ) {
-								// neuer Fehler
-								getMessageService().logError( getTextResourceService().getText( locale,
-										MESSAGE_XML_MODUL_D_TIFF )
-										+ getTextResourceService().getText( locale, MESSAGE_XML_CG_INVALID, line ) );
-								if ( oldErrorLine1.equals( "" ) ) {
-									oldErrorLine1 = line;
-								} else if ( oldErrorLine2.equals( "" ) ) {
-									oldErrorLine2 = line;
-								} else if ( oldErrorLine3.equals( "" ) ) {
-									oldErrorLine3 = line;
-								} else if ( oldErrorLine4.equals( "" ) ) {
-									oldErrorLine4 = line;
-								} else if ( oldErrorLine5.equals( "" ) ) {
-									oldErrorLine5 = line;
-								}
-							}
-						}
-					}
-					/* die PlanarConfiguration-Zeile muss Chunkey sein, da ansonsten nicht Baseline. Planar
-					 * wird kaum unterstützt */
-					if ( line.contains( "PlanarConfiguration: " ) && line.contains( "[EXIF:IFD" ) ) {
+			try {
+				BufferedReader in = new BufferedReader( new FileReader( exiftoolReport ) );
+				String line;
+				while ( (line = in.readLine()) != null ) {
+					// die PhotometricInterpretation-Zeile enthält einer dieser Freitexte der Farbraumart
+					if ( line.contains( "PhotometricInterpretation: " ) && line.contains( "[EXIF:IFD" ) ) {
 						exiftoolio = 1;
-						if ( line.contains( "Chunky" ) ) {
+						if ( line.contains( "PhotometricInterpretation: " + pi0 )
+								|| line.contains( "PhotometricInterpretation: " + pi1 )
+								|| line.contains( "PhotometricInterpretation: " + pi2 )
+								|| line.contains( "PhotometricInterpretation: " + pi3 )
+								|| line.contains( "PhotometricInterpretation: " + pi4 )
+								|| line.contains( "PhotometricInterpretation: " + pi5 )
+								|| line.contains( "PhotometricInterpretation: " + pi6 )
+								|| line.contains( "PhotometricInterpretation: " + pi8 ) ) {
 							// Valider Status
 						} else {
 							// Invalider Status
@@ -273,19 +140,71 @@ public class ValidationDphotointerValidationModuleImpl extends ValidationModuleI
 								}
 								return false;
 							} else {
-								getMessageService().logError( getTextResourceService().getText( locale,
-										MESSAGE_XML_MODUL_D_TIFF )
-										+ getTextResourceService().getText( locale, MESSAGE_XML_CG_INVALID, line ) );
+								if ( !line.equals( oldErrorLine1 ) && !line.equals( oldErrorLine2 )
+										&& !line.equals( oldErrorLine3 ) && !line.equals( oldErrorLine4 )
+										&& !line.equals( oldErrorLine5 ) ) {
+									// neuer Fehler
+									getMessageService().logError( getTextResourceService().getText( locale,
+											MESSAGE_XML_MODUL_D_TIFF )
+											+ getTextResourceService().getText( locale, MESSAGE_XML_CG_INVALID, line ) );
+									if ( oldErrorLine1.equals( "" ) ) {
+										oldErrorLine1 = line;
+									} else if ( oldErrorLine2.equals( "" ) ) {
+										oldErrorLine2 = line;
+									} else if ( oldErrorLine3.equals( "" ) ) {
+										oldErrorLine3 = line;
+									} else if ( oldErrorLine4.equals( "" ) ) {
+										oldErrorLine4 = line;
+									} else if ( oldErrorLine5.equals( "" ) ) {
+										oldErrorLine5 = line;
+									}
+								}
+							}
+						}
+						/* die PlanarConfiguration-Zeile muss Chunkey sein, da ansonsten nicht Baseline. Planar
+						 * wird kaum unterstützt */
+						if ( line.contains( "PlanarConfiguration: " ) && line.contains( "[EXIF:IFD" ) ) {
+							exiftoolio = 1;
+							if ( line.contains( "Chunky" ) ) {
+								// Valider Status
+							} else {
+								// Invalider Status
+								isValid = false;
+								if ( min ) {
+									in.close();
+									/* exiftoolReport loeschen */
+									if ( exiftoolReport.exists() ) {
+										exiftoolReport.delete();
+									}
+									return false;
+								} else {
+									getMessageService().logError( getTextResourceService().getText( locale,
+											MESSAGE_XML_MODUL_D_TIFF )
+											+ getTextResourceService().getText( locale, MESSAGE_XML_CG_INVALID, line ) );
+								}
 							}
 						}
 					}
 				}
-			}
-			if ( exiftoolio == 0 ) {
-				// Invalider Status
-				isValid = false;
+				if ( exiftoolio == 0 ) {
+					// Invalider Status
+					isValid = false;
+					if ( min ) {
+						in.close();
+						/* exiftoolReport loeschen */
+						if ( exiftoolReport.exists() ) {
+							exiftoolReport.delete();
+						}
+						return false;
+					} else {
+						getMessageService()
+								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF )
+										+ getTextResourceService().getText( locale, MESSAGE_XML_CG_ETNIO, "D" ) );
+					}
+				}
+				in.close();
+			} catch ( Exception e ) {
 				if ( min ) {
-					in.close();
 					/* exiftoolReport loeschen */
 					if ( exiftoolReport.exists() ) {
 						exiftoolReport.delete();
@@ -294,24 +213,11 @@ public class ValidationDphotointerValidationModuleImpl extends ValidationModuleI
 				} else {
 					getMessageService()
 							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF )
-									+ getTextResourceService().getText( locale, MESSAGE_XML_CG_ETNIO, "D" ) );
+									+ getTextResourceService().getText( locale, MESSAGE_XML_CG_CANNOTFINDETREPORT ) );
+					return false;
 				}
 			}
-			in.close();
-		} catch ( Exception e ) {
-			if ( min ) {
-				/* exiftoolReport loeschen */
-				if ( exiftoolReport.exists() ) {
-					exiftoolReport.delete();
-				}
-				return false;
-			} else {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF )
-								+ getTextResourceService().getText( locale, MESSAGE_XML_CG_CANNOTFINDETREPORT ) );
-				return false;
-			}
+			return isValid;
 		}
-		return isValid;
 	}
 }

@@ -55,7 +55,7 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl
 			min = true;
 		}
 		String pathToWorkDir = configMap.get( "PathToWorkDir" );
-		File workDir=new File(pathToWorkDir);
+		File workDir = new File( pathToWorkDir );
 		if ( !workDir.exists() ) {
 			workDir.mkdir();
 		}
@@ -141,49 +141,7 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl
 
 		// TODO: Erledigt: PNG Validierung
 
-		if ( valDatei.getName().contains( "*" ) ) {
-			if ( min ) {
-				return false;
-			} else {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PNG )
-								+ getTextResourceService().getText( locale, ERROR_XML_A_PNG_SPECIAL_CHARACTER,
-										valDatei.getName(), "*" ) );
-				return false;
-			}
-		} else if ( valDatei.getName().contains( "?" ) ) {
-			if ( min ) {
-				return false;
-			} else {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PNG )
-								+ getTextResourceService().getText( locale, ERROR_XML_A_PNG_SPECIAL_CHARACTER,
-										valDatei.getName(), "?" ) );
-				return false;
-			}
-		} else if ( valDatei.getName().contains( "<" ) || valDatei.getName().contains( ">" ) ) {
-			if ( min ) {
-				return false;
-			} else {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PNG )
-								+ getTextResourceService().getText( locale, ERROR_XML_A_PNG_SPECIAL_CHARACTER,
-										valDatei.getName(), "<" ) );
-				return false;
-			}
-		} else if ( valDatei.getName().contains( ">" ) ) {
-			if ( min ) {
-				return false;
-			} else {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PNG )
-								+ getTextResourceService().getText( locale, ERROR_XML_A_PNG_SPECIAL_CHARACTER,
-										valDatei.getName(), ">" ) );
-				return false;
-			}
-		}
-
-		// TODO: Erledigt - Initialisierung pngcheck -> existiert pngcheck?
+		// - Initialisierung pngcheck -> existiert pngcheck?
 
 		/* dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist ein generelles TODO in
 		 * allen Modulen. Zuerst immer dirOfJarPath ermitteln und dann alle Pfade mit
@@ -202,64 +160,53 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl
 			dirOfJarPath = file.getParent();
 		}
 
-		String pathToPngcheckExe = dirOfJarPath + File.separator + "resources" + File.separator
-				+ "pngcheck-3.0.2-win32" + File.separator + "pngcheck.win32.exe";
-
-		File fPngcheckExe = new File( pathToPngcheckExe );
-		if ( !fPngcheckExe.exists() ) {
+		// Pfad zum Programm existiert die Dateien?
+		String checkTool = Pngcheck.checkPngcheck( dirOfJarPath );
+		if ( !checkTool.equals( "OK" ) ) {
 			if ( min ) {
 				return false;
 			} else {
 				getMessageService()
 						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PNG )
-								+ getTextResourceService().getText( locale, ERROR_XML_A_PNG_PNGCHECK_MISSING ) );
+								+ getTextResourceService().getText( locale, MESSAGE_XML_MISSING_FILE, checkTool,
+										getTextResourceService().getText( locale, ABORTED ) ) );
 			}
 		}
-		if ( !Pngcheck.checkPngcheck( dirOfJarPath )) {
-			if ( min ) {
-				return false;
-			} else {
-				getMessageService()
-				.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PNG )
-						+ getTextResourceService().getText( locale, ERROR_XML_A_PNG_PNGCHECK_MISSING ) );
-			}
-		}
-
-		pathToPngcheckExe = "\"" + pathToPngcheckExe + "\"";
 
 		try {
 			File report;
 			try {
 				// Pngcheck-Befehl: pathToPngcheckExe valDatei > valDatei.Pngcheck.txt
 				String outputPath = directoryOfLogfile.getAbsolutePath();
-			String outputName = File.separator + valDatei.getName() + ".Pngcheck.txt";
-			String pathToPngcheckReport = outputPath + outputName;
-			File output = new File( pathToPngcheckReport );
+				String outputName = File.separator + valDatei.getName() + ".Pngcheck.txt";
+				String pathToPngcheckReport = outputPath + outputName;
+				File output = new File( pathToPngcheckReport );
 
-					String resultExec = Pngcheck.execPngcheck( valDatei, output, 
-							workDir, dirOfJarPath );
-					if ( !resultExec.equals( "OK" ) ) {
-						// Exception oder Report existiert nicht
-						if ( min ) {
+				String resultExec = Pngcheck.execPngcheck( valDatei, output, workDir, dirOfJarPath );
+				if ( !resultExec.equals( "OK" ) ) {
+					// Exception oder Report existiert nicht
+					if ( min ) {
+						return false;
+					} else {
+						if ( resultExec.equals( "NoReport" ) ) {
+							// Report existiert nicht
+							getMessageService()
+									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PNG )
+											+ getTextResourceService().getText( locale, MESSAGE_XML_MISSING_REPORT,
+													output.getAbsolutePath(),
+													getTextResourceService().getText( locale, ABORTED ) ) );
 							return false;
 						} else {
-							if ( resultExec.equals( "NoReport" ) ) {
-								// Report existiert nicht
-								getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PNG )
-										+ getTextResourceService().getText( locale, ERROR_XML_A_PNG_NOREPORT ) );
-						return false;
-							}else {						
-								// Exception 
+							// Exception
 							getMessageService()
 									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PNG )
 											+ getTextResourceService().getText( locale, ERROR_XML_A_PNG_SERVICEFAILED,
-													resultExec) );
+													resultExec ) );
 							return false;
-							}
 						}
 					}
-					report = output;
+				}
+				report = output;
 				// Ende Pngcheck direkt auszuloesen
 
 				// TODO: Erledigt - Ergebnis auslesen

@@ -43,8 +43,7 @@ public class Validation3aFormatRecognitionModuleImpl extends ValidationModuleImp
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
 			Locale locale ) throws Validation3aFormatRecognitionException
 	{
-		/* für die Geschwindigkeit von Droid ja nach SignatureFile zu messen kann dies verwendet
-		 * werden:
+		/* für die Geschwindigkeit von Droid ja nach SignatureFile zu messen kann dies verwendet werden:
 		 * 
 		 * java.util.Date nowStart = new java.util.Date();
 		 * 
@@ -74,11 +73,6 @@ public class Validation3aFormatRecognitionModuleImpl extends ValidationModuleImp
 		Map<String, File> filesInSipFile = new HashMap<String, File>();
 
 		String nameOfSignature = configMap.get( "PathToDroidSignatureFile" );
-		if ( nameOfSignature.startsWith( "Configuration-Error:" ) ) {
-			getMessageService().logError(
-					getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ca_SIP ) + nameOfSignature );
-			return false;
-		}
 		// existiert die SignatureFile am angebenen Ort?
 		File fnameOfSignature = new File( nameOfSignature );
 		if ( !fnameOfSignature.exists() ) {
@@ -203,8 +197,7 @@ public class Validation3aFormatRecognitionModuleImpl extends ValidationModuleImp
 									value.toString() ) );
 			valid = false;
 		}
-		/* für die Geschwindigkeit von Droid ja nach SignatureFile zu messen kann dies verwendet
-		 * werden:
+		/* für die Geschwindigkeit von Droid ja nach SignatureFile zu messen kann dies verwendet werden:
 		 * 
 		 * java.util.Date nowEnd = new java.util.Date();
 		 * 

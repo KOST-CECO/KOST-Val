@@ -79,110 +79,6 @@ public class ValidationCcompressionValidationModuleImpl extends ValidationModule
 		String com8 = configMap.get( "AllowedCompression8" );
 		String com32773 = configMap.get( "AllowedCompression32773" );
 
-		if ( com1.startsWith( "Configuration-Error:" ) ) {
-			if ( min ) {
-				/* exiftoolReport loeschen */
-				if ( exiftoolReport.exists() ) {
-					exiftoolReport.delete();
-				}
-				return false;
-			} else {
-				getMessageService().logError(
-						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_TIFF ) + com1 );
-				return false;
-			}
-		}
-		if ( com2.startsWith( "Configuration-Error:" ) ) {
-			if ( min ) {
-				/* exiftoolReport loeschen */
-				if ( exiftoolReport.exists() ) {
-					exiftoolReport.delete();
-				}
-				return false;
-			} else {
-				getMessageService().logError(
-						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_TIFF ) + com2 );
-				return false;
-			}
-		}
-		if ( com3.startsWith( "Configuration-Error:" ) ) {
-			if ( min ) {
-				/* exiftoolReport loeschen */
-				if ( exiftoolReport.exists() ) {
-					exiftoolReport.delete();
-				}
-				return false;
-			} else {
-				getMessageService().logError(
-						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_TIFF ) + com3 );
-				return false;
-			}
-		}
-		if ( com4.startsWith( "Configuration-Error:" ) ) {
-			if ( min ) {
-				/* exiftoolReport loeschen */
-				if ( exiftoolReport.exists() ) {
-					exiftoolReport.delete();
-				}
-				return false;
-			} else {
-				getMessageService().logError(
-						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_TIFF ) + com4 );
-				return false;
-			}
-		}
-		if ( com5.startsWith( "Configuration-Error:" ) ) {
-			if ( min ) {
-				/* exiftoolReport loeschen */
-				if ( exiftoolReport.exists() ) {
-					exiftoolReport.delete();
-				}
-				return false;
-			} else {
-				getMessageService().logError(
-						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_TIFF ) + com5 );
-				return false;
-			}
-		}
-		if ( com7.startsWith( "Configuration-Error:" ) ) {
-			if ( min ) {
-				/* exiftoolReport loeschen */
-				if ( exiftoolReport.exists() ) {
-					exiftoolReport.delete();
-				}
-				return false;
-			} else {
-				getMessageService().logError(
-						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_TIFF ) + com7 );
-				return false;
-			}
-		}
-		if ( com8.startsWith( "Configuration-Error:" ) ) {
-			if ( min ) {
-				/* exiftoolReport loeschen */
-				if ( exiftoolReport.exists() ) {
-					exiftoolReport.delete();
-				}
-				return false;
-			} else {
-				getMessageService().logError(
-						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_TIFF ) + com8 );
-				return false;
-			}
-		}
-		if ( com32773.startsWith( "Configuration-Error:" ) ) {
-			if ( min ) {
-				/* exiftoolReport loeschen */
-				if ( exiftoolReport.exists() ) {
-					exiftoolReport.delete();
-				}
-				return false;
-			} else {
-				getMessageService().logError(
-						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_TIFF ) + com32773 );
-				return false;
-			}
-		}
 		if ( com1.equals( "" ) ) {
 			com1 = "DieseKompressionIstNichtErlaubt";
 		}
@@ -234,18 +130,17 @@ public class ValidationCcompressionValidationModuleImpl extends ValidationModule
 			dirOfJarPath = file.getParent();
 		}
 
-		// Pfad zum Programm xmllint existiert die Dateien?
-		String checkExiftool = Exiftool.checkExiftool( dirOfJarPath );
-		// System.out.println("checkExiftool: "+checkExiftool);
-		if ( !checkExiftool.equals( "OK" ) ) {
+		// Pfad zum Programm existiert die Dateien?
+		String checkTool = Exiftool.checkExiftool( dirOfJarPath );
+		if ( !checkTool.equals( "OK" ) ) {
 			// mindestens eine Datei fehlt fuer die Validierung
 			if ( min ) {
 				return false;
 			} else {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_TIFF )
-								+ getTextResourceService().getText( locale, MESSAGE_XML_CG_ET_MISSING,
-										checkExiftool ) );
+				getMessageService().logError( getTextResourceService().getText( locale,
+						MESSAGE_XML_MODUL_C_TIFF )
+						+ getTextResourceService().getText( locale, MESSAGE_XML_MISSING_FILE, checkTool,
+								getTextResourceService().getText( locale, ABORTED ) ) );
 				isValid = false;
 			}
 		} else {
@@ -266,8 +161,10 @@ public class ValidationCcompressionValidationModuleImpl extends ValidationModule
 						if ( resultExec.equals( "NoReport" ) ) {
 							// Report existiert nicht
 							getMessageService()
-									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_TIFF )
-											+ getTextResourceService().getText( locale, MESSAGE_XML_CG_ET_MISSING  ) );
+									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_TIFF )
+											+ getTextResourceService().getText( locale, MESSAGE_XML_MISSING_REPORT,
+													exiftoolReport.getAbsolutePath(),
+													getTextResourceService().getText( locale, ABORTED ) ) );
 							return false;
 						} else {
 							// Exception

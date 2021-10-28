@@ -219,12 +219,12 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 
 				} catch ( FileNotFoundException e ) {
 					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
 									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 											"FileNotFoundException" ) );
 				} catch ( Exception e ) {
 					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
+							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
 									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 											(e.getMessage() + " 1") ) ); //
 					return false;
@@ -235,15 +235,14 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 				if ( !workDir.exists() ) {
 					workDir.mkdir();
 				}
-				// Pfad zum Programm xmllint existiert die Dateien?
-				String checkXmllint = Xmllint.checkXmllint( dirOfJarPath );
-				// System.out.println("checkXmllint: "+checkXmllint);
-				if ( !checkXmllint.equals( "OK" ) ) {
+				// Pfad zum Programm existiert die Dateien?
+				String checkTool = Xmllint.checkXmllint( dirOfJarPath );
+				if ( !checkTool.equals( "OK" ) ) {
 					// mindestens eine Datei fehlt fuer die Validierung
 					getMessageService()
 							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
-									+ getTextResourceService().getText( locale, ERROR_XML_XMLLINT_MISSING,
-											checkXmllint, dirOfJarPath ) );
+									+ getTextResourceService().getText( locale, MESSAGE_XML_MISSING_FILE, checkTool,
+											getTextResourceService().getText( locale, ABORTED ) ) );
 					result = false;
 				} else {
 					// System.out.println("Validierung mit xmllint: ");

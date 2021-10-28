@@ -377,18 +377,18 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl
 					if ( !workDir.exists() ) {
 						workDir.mkdir();
 					}
-					// Pfad zum Programm xmllint existiert die Dateien?
-					String checkXmllint = Xmllint.checkXmllint( dirOfJarPath );
-					// System.out.println("checkXmllint: "+checkXmllint);
-					if ( !checkXmllint.equals( "OK" ) ) {
+					// Pfad zum Programm existiert die Dateien?
+					String checkTool = Xmllint.checkXmllint( dirOfJarPath );
+					if ( !checkTool.equals( "OK" ) ) {
 						// mindestens eine Datei fehlt fuer die Validierung
 						if ( min ) {
 							return false;
 						} else {
 							getMessageService().logError(
 									getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_SIARD )
-											+ getTextResourceService().getText( locale,
-													ERROR_XML_XMLLINT_MISSING, checkXmllint, dirOfJarPath ) );
+											+  getTextResourceService().getText( locale,
+													MESSAGE_XML_MISSING_FILE, checkTool,
+													getTextResourceService().getText( locale, ABORTED ) ) );
 							result = false;
 						}
 					} else {

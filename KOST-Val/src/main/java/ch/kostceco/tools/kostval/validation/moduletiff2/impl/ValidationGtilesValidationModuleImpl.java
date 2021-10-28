@@ -29,8 +29,7 @@ import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationGtilesValidatio
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationGtilesValidationModule;
 
-/** Validierungsschritt G (Kacheln-Validierung) Ist die TIFF-Datei gem�ss Konfigurationsdatei
- * valid?
+/** Validierungsschritt G (Kacheln-Validierung) Ist die TIFF-Datei gem�ss Konfigurationsdatei valid?
  * 
  * @author Rc Claire Roethlisberger, KOST-CECO */
 
@@ -59,113 +58,111 @@ public class ValidationGtilesValidationModuleImpl extends ValidationModuleImpl
 				valDatei.getName() + ".exiftool-log.txt" );
 		pathToExiftoolOutput = exiftoolReport.getAbsolutePath();
 
-		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
-		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
-		 * ref="configurationService" /> */
-
-		String tiles = configMap.get( "AllowedTiles" );
-		if ( tiles.startsWith( "Configuration-Error:" ) ) {
-			if ( min ) {
-				/* exiftoolReport loeschen */
-				if ( exiftoolReport.exists() ) {
-					exiftoolReport.delete();
-				}
-				return false;
-			} else {
-				getMessageService().logError(
-						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_TIFF ) + tiles );
-				return false;
-			}
-		}
-
-		Integer exiftoolio = 0;
-		String oldErrorLine1 = "";
-		String oldErrorLine2 = "";
-		String oldErrorLine3 = "";
-		String oldErrorLine4 = "";
-		String oldErrorLine5 = "";
-
-		if ( tiles.equalsIgnoreCase( "yes" ) ) {
-			// Valider Status (Kacheln sind erlaubt)
+		if ( !exiftoolReport.exists() ) {
+			// Report existiert nicht
+			getMessageService()
+					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_TIFF )
+							+ getTextResourceService().getText( locale, MESSAGE_XML_MISSING_REPORT,
+									exiftoolReport.getAbsolutePath(),
+									getTextResourceService().getText( locale, ABORTED ) ) );
+			return false;
 		} else {
-			try {
-				BufferedReader in = new BufferedReader( new FileReader( exiftoolReport ) );
-				String line;
-				while ( (line = in.readLine()) != null ) {
-					/* zu analysierende TIFF-IFD-Zeile die StripOffsets- oder TileOffsets-Zeile gibt Auskunft
-					 * �ber die Aufteilungsart
-					 * 
-					 * -StripByteCounts -RowsPerStrip -FileSize -TileWidth -TileLength -TileDepth */
-					if ( (line.contains( "StripByteCounts: " ) && line.contains( "[EXIF:IFD" ))
-							|| (line.contains( "RowsPerStrip: " ) && line.contains( "[EXIF:IFD" ))
-							|| (line.contains( "Tile" ) && line.contains( "[EXIF:IFD" )) ) {
-						exiftoolio = 1;
-						if ( line.contains( "Tile" ) ) {
-							// Invalider Status (Kacheln sind nicht erlaubt)
-							isValid = false;
-							if ( min ) {
-								in.close();
-								/* exiftoolReport loeschen */
-								if ( exiftoolReport.exists() ) {
-									exiftoolReport.delete();
-								}
-								return false;
-							} else {
-								if ( !line.equals( oldErrorLine1 ) && !line.equals( oldErrorLine2 )
-										&& !line.equals( oldErrorLine3 ) && !line.equals( oldErrorLine4 )
-										&& !line.equals( oldErrorLine5 ) ) {
-									// neuer Fehler
-									getMessageService().logError( getTextResourceService().getText( locale,
-											MESSAGE_XML_MODUL_G_TIFF )
-											+ getTextResourceService().getText( locale, MESSAGE_XML_CG_INVALID, line ) );
-									if ( oldErrorLine1.equals( "" ) ) {
-										oldErrorLine1 = line;
-									} else if ( oldErrorLine2.equals( "" ) ) {
-										oldErrorLine2 = line;
-									} else if ( oldErrorLine3.equals( "" ) ) {
-										oldErrorLine3 = line;
-									} else if ( oldErrorLine4.equals( "" ) ) {
-										oldErrorLine4 = line;
-									} else if ( oldErrorLine5.equals( "" ) ) {
-										oldErrorLine5 = line;
+			/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
+			 * entsprechenden Modul die property anzugeben: <property name="configurationService"
+			 * ref="configurationService" /> */
+
+			String tiles = configMap.get( "AllowedTiles" );
+
+			Integer exiftoolio = 0;
+			String oldErrorLine1 = "";
+			String oldErrorLine2 = "";
+			String oldErrorLine3 = "";
+			String oldErrorLine4 = "";
+			String oldErrorLine5 = "";
+
+			if ( tiles.equalsIgnoreCase( "yes" ) ) {
+				// Valider Status (Kacheln sind erlaubt)
+			} else {
+				try {
+					BufferedReader in = new BufferedReader( new FileReader( exiftoolReport ) );
+					String line;
+					while ( (line = in.readLine()) != null ) {
+						/* zu analysierende TIFF-IFD-Zeile die StripOffsets- oder TileOffsets-Zeile gibt
+						 * Auskunft ueber die Aufteilungsart
+						 * 
+						 * -StripByteCounts -RowsPerStrip -FileSize -TileWidth -TileLength -TileDepth */
+						if ( (line.contains( "StripByteCounts: " ) && line.contains( "[EXIF:IFD" ))
+								|| (line.contains( "RowsPerStrip: " ) && line.contains( "[EXIF:IFD" ))
+								|| (line.contains( "Tile" ) && line.contains( "[EXIF:IFD" )) ) {
+							exiftoolio = 1;
+							if ( line.contains( "Tile" ) ) {
+								// Invalider Status (Kacheln sind nicht erlaubt)
+								isValid = false;
+								if ( min ) {
+									in.close();
+									/* exiftoolReport loeschen */
+									if ( exiftoolReport.exists() ) {
+										exiftoolReport.delete();
+									}
+									return false;
+								} else {
+									if ( !line.equals( oldErrorLine1 ) && !line.equals( oldErrorLine2 )
+											&& !line.equals( oldErrorLine3 ) && !line.equals( oldErrorLine4 )
+											&& !line.equals( oldErrorLine5 ) ) {
+										// neuer Fehler
+										getMessageService().logError(
+												getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_TIFF )
+														+ getTextResourceService().getText( locale, MESSAGE_XML_CG_INVALID,
+																line ) );
+										if ( oldErrorLine1.equals( "" ) ) {
+											oldErrorLine1 = line;
+										} else if ( oldErrorLine2.equals( "" ) ) {
+											oldErrorLine2 = line;
+										} else if ( oldErrorLine3.equals( "" ) ) {
+											oldErrorLine3 = line;
+										} else if ( oldErrorLine4.equals( "" ) ) {
+											oldErrorLine4 = line;
+										} else if ( oldErrorLine5.equals( "" ) ) {
+											oldErrorLine5 = line;
+										}
 									}
 								}
 							}
 						}
 					}
-				}
-				if ( exiftoolio == 0 ) {
-					// Invalider Status
-					isValid = false;
+					if ( exiftoolio == 0 ) {
+						// Invalider Status
+						isValid = false;
+						if ( min ) {
+							in.close();
+							/* exiftoolReport loeschen */
+							if ( exiftoolReport.exists() ) {
+								exiftoolReport.delete();
+							}
+							return false;
+						} else {
+							getMessageService()
+									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_TIFF )
+											+ getTextResourceService().getText( locale, MESSAGE_XML_CG_ETNIO, "G" ) );
+						}
+					}
+					in.close();
+				} catch ( Exception e ) {
 					if ( min ) {
-						in.close();
 						/* exiftoolReport loeschen */
 						if ( exiftoolReport.exists() ) {
 							exiftoolReport.delete();
 						}
 						return false;
 					} else {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_TIFF )
-										+ getTextResourceService().getText( locale, MESSAGE_XML_CG_ETNIO, "G" ) );
+						getMessageService().logError( getTextResourceService().getText( locale,
+								MESSAGE_XML_MODUL_G_TIFF )
+								+ getTextResourceService().getText( locale, MESSAGE_XML_CG_CANNOTFINDETREPORT ) );
+						return false;
 					}
-				}
-				in.close();
-			} catch ( Exception e ) {
-				if ( min ) {
-					/* exiftoolReport loeschen */
-					if ( exiftoolReport.exists() ) {
-						exiftoolReport.delete();
-					}
-					return false;
-				} else {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_TIFF )
-									+ getTextResourceService().getText( locale, MESSAGE_XML_CG_CANNOTFINDETREPORT ) );
-					return false;
 				}
 			}
+			return isValid;
 		}
-		return isValid;
 	}
 }

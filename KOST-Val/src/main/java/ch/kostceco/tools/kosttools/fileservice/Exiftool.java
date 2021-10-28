@@ -24,11 +24,10 @@ import ch.kostceco.tools.kosttools.runtime.Cmd;
 
 public class Exiftool
 {
-	private static String	resourcesExiftoolExe	= "resources" + File.separator + "ExifTool-10.15";
-	private static String	identifyPl						= resourcesExiftoolExe + File.separator
-			+ "exiftool.pl";
-	private static String	perl									= resourcesExiftoolExe + File.separator + "Perl"
-			+ File.separator + "bin" + File.separator + "perl.exe";
+	private static String	exeDir			= "resources" + File.separator + "ExifTool-10.15";
+	private static String	identifyPl	= exeDir + File.separator + "exiftool.pl";
+	private static String	perl				= exeDir + File.separator + "Perl" + File.separator + "bin"
+			+ File.separator + "perl.exe";
 
 	/** fuehrt eine Validierung mit Exiftool via cmd durch und speichert das Ergebnis in ein File
 	 * (Report). Gibt zurueck ob Report existiert oder nicht
@@ -100,17 +99,28 @@ public class Exiftool
 	{
 		String result = "";
 		boolean checkFiles = true;
-		// Pfad zum Programm xmllint existiert die Dateien?
+		// Pfad zum Programm existiert die Dateien?
 
 		File fIdentifyPl = new File( dirOfJarPath + File.separator + identifyPl );
 		File fPerl = new File( dirOfJarPath + File.separator + perl );
 
-		if ( !fPerl.exists() ) {
-			if ( !fIdentifyPl.exists() ) {
-				result = result + " " + fIdentifyPl.getName();
+		if ( !fIdentifyPl.exists() ) {
+			if ( checkFiles ) {
+				// erste fehlende Datei
+				result = " " + exeDir + ": " + identifyPl;
 				checkFiles = false;
-			} else if ( !fPerl.exists() ) {
-				result = result + " " + fPerl.getName();
+			} else {
+				result = result + ", " + identifyPl;
+				checkFiles = false;
+			}
+		}
+		if ( !fPerl.exists() ) {
+			if ( checkFiles ) {
+				// erste fehlende Datei
+				result = " " + exeDir + ": " + perl;
+				checkFiles = false;
+			} else {
+				result = result + ", " + perl;
 				checkFiles = false;
 			}
 		}

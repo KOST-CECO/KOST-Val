@@ -62,11 +62,6 @@ public class Validation3bUnspecifiedFormatModuleImpl extends ValidationModuleImp
 		Map<String, File> filesInSipFile = new HashMap<String, File>();
 
 		String nameOfSignature = configMap.get( "PathToDroidSignatureFile" );
-		if ( nameOfSignature.startsWith( "Configuration-Error:" ) ) {
-			getMessageService().logError(
-					getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Cb_SIP ) + nameOfSignature );
-			return false;
-		}
 		// existiert die SignatureFile am angebenen Ort?
 		File fnameOfSignature = new File( nameOfSignature );
 		if ( !fnameOfSignature.exists() ) {

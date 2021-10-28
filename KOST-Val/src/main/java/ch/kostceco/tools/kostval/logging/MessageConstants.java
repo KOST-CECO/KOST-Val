@@ -148,6 +148,9 @@ public interface MessageConstants
 	String	MESSAGE_XML_CONFIGURATION_ERROR_1							= "val.message.xml.configuration.error.1";
 	String	MESSAGE_XML_CONFIGURATION_ERROR_2							= "val.message.xml.configuration.error.2";
 	String	MESSAGE_XML_CONFIGURATION_ERROR_3							= "val.message.xml.configuration.error.3";
+	String	MESSAGE_XML_MISSING_FILE											= "val.message.xml.missing.file";
+	String	MESSAGE_XML_MISSING_REPORT										= "val.message.xml.missing.report";
+	String	ABORTED																				= "val.aborted";
 
 	String	MESSAGE_XML_LANGUAGE													= "val.message.xml.language";
 
@@ -174,7 +177,6 @@ public interface MessageConstants
 	String	MESSAGE_XML_CG_CANNOTFINDETREPORT							= "val.message.xml.cg.cannotfindetreport";
 	String	MESSAGE_XML_CG_INVALID												= "val.message.xml.cg.invalid";
 	String	MESSAGE_XML_CG_ETNIO													= "val.message.xml.cg.etnio";
-	String	MESSAGE_XML_CG_ET_MISSING											= "val.message.xml.cg.et.missing";
 	String	MESSAGE_XML_CG_ET_SERVICEFAILED								= "val.message.xml.cg.et.servicefailed";
 
 	// *************SIARD-Meldungen*************************************************************************
@@ -232,7 +234,6 @@ public interface MessageConstants
 	String	MESSAGE_XML_H_INVALID_XML											= "val.message.xml.h.invalid.xml";
 	String	MESSAGE_XML_H_INVALID_ERROR										= "val.message.xml.h.invalid.error";
 	String	MESSAGE_XML_H_TABLE_NOT_VALIDATED1						= "val.message.xml.h.table.not.validated1";
-	String	ERROR_XML_XMLLINT_MISSING										= "val.error.xml.xmllint.missing";
 
 	// Modul I Meldungen
 	String	MESSAGE_XML_I_NOTALLOWEDEXT										= "val.message.xml.i.notallowedext";
@@ -295,9 +296,7 @@ public interface MessageConstants
 	String	ERROR_XML_A_JP2_INCORRECTFILE									= "val.error.xml.a.jp2.incorrectfile";
 	String	ERROR_XML_A_JP2_ISDIRECTORY										= "val.error.xml.a.jp2.isdirectory";
 	String	ERROR_XML_A_JP2_SERVICEFAILED									= "val.error.xml.a.jp2.servicefailed";
-	String	ERROR_XML_A_JP2_JPYLYZER_MISSING							= "val.error.xml.a.jp2.jpylyzer.missing";
 	String	ERROR_XML_A_JP2_JPYLYZER_FAIL									= "val.error.xml.a.jp2.jpylyzer.fail";
-	String	ERROR_XML_A_JP2_NOREPORT											= "val.error.xml.a.jp2.noreport";
 
 	// Modul A-D Meldungen (Zusammengefasste Jylyzer-Meldungen)
 	String	ERROR_XML_A_JP2_SIGNATURE											= "val.error.xml.a.jp2.signature";
@@ -383,10 +382,7 @@ public interface MessageConstants
 	String	ERROR_XML_A_PNG_INCORRECTFILE									= "val.error.xml.a.png.incorrectfile";
 	String	ERROR_XML_A_PNG_ISDIRECTORY										= "val.error.xml.a.png.isdirectory";
 	String	ERROR_XML_A_PNG_SERVICEFAILED									= "val.error.xml.a.png.servicefailed";
-	String	ERROR_XML_A_PNG_PNGCHECK_MISSING							= "val.error.xml.a.png.pngcheck.missing";
 	String	ERROR_XML_A_PNG_PNGCHECK_FAIL									= "val.error.xml.a.png.pngcheck.fail";
-	String	ERROR_XML_A_PNG_NOREPORT											= "val.error.xml.a.png.noreport";
-	String	ERROR_XML_A_PNG_SPECIAL_CHARACTER							= "val.error.xml.a.png.special.character";
 
 	// Modul A-F Meldungen
 	String	ERROR_XML_AF_PNG_ERROR												= "val.error.xml.af.png.error";

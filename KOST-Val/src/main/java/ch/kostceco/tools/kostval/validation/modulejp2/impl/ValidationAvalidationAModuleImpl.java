@@ -61,7 +61,7 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 			min = true;
 		}
 		String pathToWorkDir = configMap.get( "PathToWorkDir" );
-		File workDir=new File(pathToWorkDir);
+		File workDir = new File( pathToWorkDir );
 		if ( !workDir.exists() ) {
 			workDir.mkdir();
 		}
@@ -198,13 +198,16 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 			dirOfJarPath = file.getParent();
 		}
 
-		if ( !Jpylyzer.checkJpylyzer( dirOfJarPath )) {
+		// Pfad zum Programm existiert die Dateien?
+		String checkTool = Jpylyzer.checkJpylyzer( dirOfJarPath );
+		if ( !checkTool.equals( "OK" ) ) {
 			if ( min ) {
 				return false;
 			} else {
 				getMessageService()
 						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
-								+ getTextResourceService().getText( locale, ERROR_XML_A_JP2_JPYLYZER_MISSING ) );
+								+ getTextResourceService().getText( locale, MESSAGE_XML_MISSING_FILE, checkTool,
+										getTextResourceService().getText( locale, ABORTED ) ) );
 			}
 		}
 
@@ -218,29 +221,30 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 				String pathToJpylyzerReport = outputPath + outputName;
 				File output = new File( pathToJpylyzerReport );
 
-					String resultExec = Jpylyzer.execJpylyzer( valDatei, output, 
-							workDir, dirOfJarPath );
-					if ( !resultExec.equals( "OK" ) ) {
-						// Exception oder Report existiert nicht
-						if ( min ) {
+				String resultExec = Jpylyzer.execJpylyzer( valDatei, output, workDir, dirOfJarPath );
+				if ( !resultExec.equals( "OK" ) ) {
+					// Exception oder Report existiert nicht
+					if ( min ) {
+						return false;
+					} else {
+						if ( resultExec.equals( "NoReport" ) ) {
+							// Report existiert nicht
+							getMessageService()
+									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
+											+ getTextResourceService().getText( locale, MESSAGE_XML_MISSING_REPORT,
+													output.getAbsolutePath(),
+													getTextResourceService().getText( locale, ABORTED ) ) );
 							return false;
 						} else {
-							if ( resultExec.equals( "NoReport" ) ) {
-								// Report existiert nicht
-								getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
-										+ getTextResourceService().getText( locale, ERROR_XML_A_JP2_NOREPORT ) );
-						return false;
-							}else {						
-								// Exception 
+							// Exception
 							getMessageService()
 									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
 											+ getTextResourceService().getText( locale, ERROR_XML_A_JP2_SERVICEFAILED,
-													resultExec) );
+													resultExec ) );
 							return false;
-							}
 						}
 					}
+				}
 				// Ende Jpylyzer direkt auszuloesen
 
 				// TODO: Erledigt - Ergebnis auslesen
