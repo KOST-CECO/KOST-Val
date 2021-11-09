@@ -82,7 +82,13 @@
 			<xs:extension base="ablieferungSIP">
 				<xs:sequence>
 					<xs:element name="provenienz" type="provenienzFiles"/>
-					<xs:element name="ordnungssystem" type="ordnungssystemFiles"/>
+					<xs:element name="ordnungssystem" type="ordnungssystemFiles" minOccurs="0"/>
+					<xs:element name="mappe" type="mappeDokumentDateiFiles" minOccurs="0" maxOccurs="unbounded">
+						<xs:unique name="uniqueDateiRefAblieferungMappeFiles">
+							<xs:selector xpath="./arelda:dateiRef"/>
+							<xs:field xpath="."/>
+						</xs:unique>
+					</xs:element>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -145,7 +151,7 @@
 				<xs:sequence>
 					<xs:element name="name" type="nameOrdnungssystem" minOccurs="0"/>
 					<xs:element name="ordnungssystemposition" type="ordnungssystempositionFiles" minOccurs="0" maxOccurs="unbounded"/>
-					<xs:element name="mappe" type="mappeFiles" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element name="mappe" type="mappeOrdnungssystempositionFiles" minOccurs="0" maxOccurs="unbounded"/>
 					<xs:element name="archivischeNotiz" type="archivischeNotiz" minOccurs="0" maxOccurs="unbounded"/>
 				</xs:sequence>
 			</xs:extension>
@@ -174,6 +180,7 @@
 					<xs:element name="schutzfristenBegruendung" type="schutzfristenBegruendungOrdnungssystemposition" minOccurs="0"/>
 					<xs:element name="ordnungssystemposition" type="ordnungssystempositionGever" minOccurs="0" maxOccurs="unbounded"/>
 					<xs:element name="dossier" type="dossierGever" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element name="mappe" type="mappeDossierGever" minOccurs="0" maxOccurs="unbounded"/>
 					<xs:element name="archivischeNotiz" type="archivischeNotiz" minOccurs="0" maxOccurs="unbounded"/>
 				</xs:sequence>
 				<xs:attribute name="id" type="idOrdnungssystemposition" use="required"/>
@@ -196,7 +203,7 @@
 							<xs:field xpath="."/>
 						</xs:unique>
 					</xs:element>
-					<xs:element name="mappe" type="mappeFiles" minOccurs="0" maxOccurs="unbounded">
+					<xs:element name="mappe" type="mappeDossierFiles" minOccurs="0" maxOccurs="unbounded">
 						<xs:unique name="uniqueDateiRefOspMappeFiles">
 							<xs:selector xpath="./arelda:dateiRef"/>
 							<xs:field xpath="."/>
@@ -241,7 +248,7 @@
 					<xs:element name="schutzfrist" type="schutzfristDossier" minOccurs="0"/>
 					<xs:element name="schutzfristenBegruendung" type="schutzfristenBegruendungDossier" minOccurs="0"/>
 					<xs:element name="dossier" type="dossierGever" minOccurs="0" maxOccurs="unbounded"/>
-					<xs:element name="mappe" type="mappeGever" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element name="mappe" type="mappeDokumentGever" minOccurs="0" maxOccurs="unbounded"/>
 					<xs:element name="dokument" type="dokumentGever" minOccurs="0" maxOccurs="unbounded"/>
 					<xs:element name="archivischeNotiz" type="archivischeNotiz" minOccurs="0" maxOccurs="unbounded"/>
 				</xs:sequence>
@@ -262,7 +269,7 @@
 							<xs:field xpath="."/>
 						</xs:unique>
 					</xs:element>
-					<xs:element name="mappe" type="mappeFiles" minOccurs="0" maxOccurs="unbounded">
+					<xs:element name="mappe" type="mappeDokumentDateiFiles" minOccurs="0" maxOccurs="unbounded">
 						<xs:unique name="uniqueDateiRefDossierMappeFiles">
 							<xs:selector xpath="./arelda:dateiRef"/>
 							<xs:field xpath="."/>
@@ -330,34 +337,51 @@
 		<xs:attribute name="id" type="idMappe" use="required"/>
 		<xs:attribute name="reihung" type="reihungElemente" use="optional"/>
 	</xs:complexType>
-	<xs:complexType name="mappeGever">
+	<xs:complexType name="mappeDossierGever">
 		<xs:complexContent>
 			<xs:extension base="mappe">
 				<xs:sequence>
 					<xs:element name="dossier" type="dossierGever" minOccurs="0" maxOccurs="unbounded"/>
-					<xs:element name="mappe" type="mappeGever" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="mappeDokumentGever">
+		<xs:complexContent>
+			<xs:extension base="mappe">
+				<xs:sequence>
 					<xs:element name="dokument" type="dokumentGever" minOccurs="0" maxOccurs="unbounded"/>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:complexType name="mappeFiles">
+	<xs:complexType name="mappeOrdnungssystempositionFiles">
 		<xs:complexContent>
 			<xs:extension base="mappe">
 				<xs:sequence>
 					<xs:element name="ordnungssystemposition" type="ordnungssystempositionFiles" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="mappeDossierFiles">
+		<xs:complexContent>
+			<xs:extension base="mappe">
+				<xs:sequence>
 					<xs:element name="dossier" type="dossierFiles" minOccurs="0" maxOccurs="unbounded">
 						<xs:unique name="uniqueDateiRefMappeDossierFiles">
 							<xs:selector xpath="./arelda:dateiRef"/>
 							<xs:field xpath="."/>
 						</xs:unique>
 					</xs:element>
-					<xs:element name="mappe" type="mappeFiles" minOccurs="0" maxOccurs="unbounded">
-						<xs:unique name="uniqueDateiRefSubmappeFiles">
-							<xs:selector xpath="./arelda:dateiRef"/>
-							<xs:field xpath="."/>
-						</xs:unique>
-					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="mappeDokumentDateiFiles">
+		<xs:complexContent>
+			<xs:extension base="mappe">
+				<xs:sequence>
 					<xs:element name="dokument" type="dokumentFiles" minOccurs="0" maxOccurs="unbounded">
 						<xs:unique name="uniqueDateiRefMappeDokumentFiles">
 							<xs:selector xpath="./arelda:dateiRef"/>

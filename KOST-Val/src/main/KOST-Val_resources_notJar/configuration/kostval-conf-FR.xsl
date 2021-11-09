@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-	<xsl:template match="/"><!-- kostval.conf.xml_v2.0.5.2 -->
+	<xsl:template match="/"><!-- kostval.conf.xml_v2.1.0.0 -->
 		<html>
 			<head>
 				<style>

@@ -42,51 +42,49 @@ public class Pngcheck
 	 * @param dirOfJarPath
 	 *          String mit dem Pfad von wo das Programm gestartet wurde
 	 * @return String ob Report existiert oder nicht ggf Exception */
-	public static String execPngcheck( File pngFile, File report, File workDir, String dirOfJarPath )
+	public static String execPngcheck( File pngFile, File workDir, String dirOfJarPath )
 			throws InterruptedException
 	{
-		boolean out = false;
+		boolean out = true;
 		File exeFile = new File( dirOfJarPath + File.separator + resourcesPngcheckExe );
-		// falls das File von einem vorhergehenden Durchlauf bereits existiert, loeschen wir es
-		if ( report.exists() ) {
-			report.delete();
+
+		// Pngcheck unterstuetzt nicht alle Zeichen
+		File pngFileNormalisiert = new File( workDir + File.separator + "PNG.png" );
+		try {
+			Util.copyFile( pngFile, pngFileNormalisiert );
+		} catch ( IOException e ) {
+			// Normalisierung fehlgeschlagen es wird ohne versucht
+			pngFileNormalisiert = pngFile;
 		}
-		File pngFileNormalisiert= new File (workDir+ File.separator +"PNG.png");
-				try {
-					Util.copyFile( pngFile, pngFileNormalisiert );
-				} catch ( IOException e ) {
-					// Normalisierung fehlgeschlagen es wird ohne versucht
-					pngFileNormalisiert=pngFile;				}
+		if ( !pngFileNormalisiert.exists() ) {
+			pngFileNormalisiert = pngFile;
+		}
 
 		// Pngcheck-Befehl: pathToPngcheckExe pngFile > report
-		String command = "\"\"" + exeFile.getAbsolutePath() + "\" \"" + pngFileNormalisiert.getAbsolutePath()
-				+ "\" > \"" + report.getAbsolutePath() + "\"\"";
+		String command = "\"\"" + exeFile.getAbsolutePath() + "\" \""
+				+ pngFileNormalisiert.getAbsolutePath() + "\"";
 
 		String resultExec = Cmd.execToString( command, out, workDir );
-		Util.deleteFile( pngFileNormalisiert );
-		// Pngcheck gibt keine Info raus, die replaced oder ignoriert werden muss
+		Util.deleteFile( new File( workDir + File.separator + "PNG.png" ) );
+		// System.out.println("resultExec: "+ resultExec );
 
-		// System.out.println( "resultExec: " + resultExec );
-		/* Folgender Error Output ist keiner sondern nur Info und kann mit OK ersetzt werden: ERROR:
-		 * User warning: ignoring unknown box String ignor =
-		 * "ERROR: User warning: ignoring unknown box"; if ( resultExec.equals( ignor ) ) { resultExec =
-		 * "OK"; } else { /* ERROR: Schemas validity error : Element
-		 * '{http://www.admin.ch/xmlns/siard/1.0/schema0/table2.xsd}row': This element is not
-		 * expected.</Message><Message>ERROR:
-		 * C:\Users\X60014195\.kost-val_2x\temp_KOST-Val\SIARD\content\schema0\table2\table2.xml fails
-		 * to validate */
-
-		/* String replaceInfo = "</Message><Message>ERROR: " + jp2File.getAbsolutePath() +
-		 * " fails to validate"; resultExec = resultExec.replace( replaceInfo, "" ); } */
-
+		/* Folgender Output ist keiner sondern nur Info und kann mit OK ersetzt werden:
+		 * 
+		 * OK: C:\Users\X60014195\.kost-val_2x\temp_KOST-Val\PNG.png (DETAILS ...
+		 * 
+		 * Wenn OK zurueckgegeben wird konnte der PNGCHECK nicht korrekt gemacht werden */
 		if ( resultExec.equals( "OK" ) ) {
-			if ( report.exists() ) {
-				// alles io bleibt bei OK
-			} else {
-				// Datei nicht angelegt...
-				resultExec = "NoReport";
-			}
+			resultExec = "FAIL Pngcheck";
+		} else if ( resultExec.startsWith( "OK: " ) ) {
+			resultExec = "OK";
+		} else {
+			// {Dateipfad} invalid IHDR image type (1) ERROR: {Dateipfad}
+			resultExec = resultExec
+					.replace( "</Message><Message>ERROR: " + pngFileNormalisiert.getAbsolutePath(), "" );
+			resultExec = resultExec.replace( pngFileNormalisiert.getAbsolutePath() + "  ", "" );
+			resultExec = resultExec.replace( pngFileNormalisiert.getAbsolutePath() + " ", "" );
 		}
+		// System.out.println("resultExec: "+ resultExec );
 		return resultExec;
 	}
 
