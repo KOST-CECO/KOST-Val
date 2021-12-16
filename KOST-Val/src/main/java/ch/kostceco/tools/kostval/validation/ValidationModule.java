@@ -35,9 +35,8 @@ import ch.kostceco.tools.kostval.service.Service;
 public interface ValidationModule extends Service
 {
 
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale )
-			throws KOSTValException;
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
+			Locale locale, File logFile ) throws KOSTValException;
 
 	public MessageService getMessageService();
-
 }

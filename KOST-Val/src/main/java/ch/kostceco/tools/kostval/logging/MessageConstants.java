@@ -36,7 +36,6 @@ public interface MessageConstants
 	String	ERROR_WORKDIRECTORY_NOTWRITABLE								= "val.error.workdirectory.notwritable";
 	String	ERROR_WORKDIRECTORY_EXISTS										= "val.error.workdirectory.exists";
 	String	ERROR_VALFILE_FILENOTEXISTING									= "val.error.valfile.filenotexisting";
-	String	ERROR_LOGGING_NOFILEAPPENDER									= "val.error.logging.nofileappender";
 	String	ERROR_CANNOTCREATEZIP													= "val.error.cannotcreatezip";
 	String	ERROR_JHOVECONF_MISSING												= "val.error.jhoveconf.missing";
 	String	ERROR_PARAMETER_OPTIONAL_1										= "val.error.parameter.optional.1";

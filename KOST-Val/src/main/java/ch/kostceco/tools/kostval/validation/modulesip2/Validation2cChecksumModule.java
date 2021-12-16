@@ -34,6 +34,6 @@ public interface Validation2cChecksumModule extends ValidationModule
 {
 
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale ) throws Validation2cChecksumException;
+			Locale locale, File logFile ) throws Validation2cChecksumException;
 
 }

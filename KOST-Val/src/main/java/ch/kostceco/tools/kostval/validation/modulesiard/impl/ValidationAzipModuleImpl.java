@@ -36,6 +36,7 @@ import ch.kostceco.tools.kosttools.fileservice.Magic;
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationAzipException;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationAzipModule;
+import ch.kostceco.tools.kostval.logging.Logtxt;
 
 /** Validierungsschritt A (Lesbarkeit) Kann die SIARD-Datei gelesen werden? valid --> lesbare und
  * nicht passwortgeschuetzte ZIP-Datei oder ZIP64-Datei valid --> unkomprimierte ZIP64-Datei oder
@@ -51,7 +52,7 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale ) throws ValidationAzipException
+			Locale locale, File logFile ) throws ValidationAzipException
 	{
 		// Informationen zur Darstellung "onWork" holen
 		String onWork = configMap.get( "ShowProgressOnWork" );
@@ -72,8 +73,9 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 			if ( min ) {
 				return false;
 			} else {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )
+
+				Logtxt.logtxt( logFile,
+						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )
 								+ getTextResourceService().getText( locale, ERROR_XML_A_NOFILE ) );
 				// Die zu validierende SIARD-Datei ist ein Ordner und keine ZIP-Datei.
 				return false;
@@ -92,9 +94,10 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 				if ( min ) {
 					return false;
 				} else {
-					getMessageService().logError( getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_A_SIARD )
-							+ getTextResourceService().getText( locale, ERROR_XML_A_INCORRECTFILEENDING_SIARD ) );
+					Logtxt.logtxt( logFile,
+							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )
+									+ getTextResourceService().getText( locale,
+											ERROR_XML_A_INCORRECTFILEENDING_SIARD ) );
 					// Die SIARD-Datei ist kein ZIP.
 					return false;
 				}
@@ -103,8 +106,9 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 			if ( min ) {
 				return false;
 			} else {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )
+
+				Logtxt.logtxt( logFile,
+						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )
 								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 				return false;
 			}
@@ -186,8 +190,9 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 								zf.close();
 								return false;
 							} else {
-								getMessageService()
-										.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )
+
+								Logtxt.logtxt( logFile,
+										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )
 												+ getTextResourceService().getText( locale, ERROR_XML_A_DEFLATED,
 														compressed ) );
 								zf.close();
@@ -207,8 +212,9 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 					if ( min ) {
 						return false;
 					} else {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )
+
+						Logtxt.logtxt( logFile,
+								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )
 										+ getTextResourceService().getText( locale, ERROR_XML_A_INCORRECTZIP,
 												e.getMessage() ) );
 						return false;
@@ -238,8 +244,9 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 							if ( min ) {
 								return false;
 							} else {
-								getMessageService()
-										.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )
+
+								Logtxt.logtxt( logFile,
+										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )
 												+ getTextResourceService().getText( locale, ERROR_XML_A_DEFLATED,
 														compressed ) );
 								return false;
@@ -258,8 +265,9 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 					if ( min ) {
 						return false;
 					} else {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )
+
+						Logtxt.logtxt( logFile,
+								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )
 										+ getTextResourceService().getText( locale, ERROR_XML_A_INCORRECTZIP,
 												ee.getMessage() ) );
 						return false;
@@ -274,8 +282,9 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 				if ( min ) {
 					return false;
 				} else {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )
+
+					Logtxt.logtxt( logFile,
+							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )
 									+ getTextResourceService().getText( locale, ERROR_XML_A_DEFLATED, dec8 ) );
 					return false;
 				}
@@ -288,8 +297,9 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 			if ( min ) {
 				return false;
 			} else {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )
+
+				Logtxt.logtxt( logFile,
+						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )
 								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 				return false;
 			}

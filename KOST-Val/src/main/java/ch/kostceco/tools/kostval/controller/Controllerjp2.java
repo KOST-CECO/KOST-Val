@@ -24,7 +24,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import ch.kostceco.tools.kostval.exception.modulejp2.ValidationAjp2validationException;
-import ch.kostceco.tools.kostval.logging.Logger;
+import ch.kostceco.tools.kostval.logging.Logtxt;
 import ch.kostceco.tools.kostval.logging.MessageConstants;
 import ch.kostceco.tools.kostval.service.TextResourceService;
 import ch.kostceco.tools.kostval.validation.modulejp2.ValidationAvalidationAModule;
@@ -39,7 +39,6 @@ import ch.kostceco.tools.kostval.validation.modulejp2.ValidationAvalidationAModu
 public class Controllerjp2 implements MessageConstants
 {
 
-	private static final Logger						LOGGER	= new Logger( Controllerjp2.class );
 	private TextResourceService						textResourceService;
 
 	private ValidationAvalidationAModule	validationAvalidationAModule;
@@ -66,26 +65,26 @@ public class Controllerjp2 implements MessageConstants
 	}
 
 	public boolean executeMandatory( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale )
+			Map<String, String> configMap, Locale locale, File logFile )
 	{
 		boolean valid = true;
 
 		// Validation A
 		try {
 			if ( this.getValidationAvalidationAModule().validate( valDatei, directoryOfLogfile, configMap,
-					locale ) ) {
+					locale, logFile ) ) {
 				this.getValidationAvalidationAModule().getMessageService().print();
 			} else {
 				this.getValidationAvalidationAModule().getMessageService().print();
 				return false;
 			}
 		} catch ( ValidationAjp2validationException e ) {
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
 					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationAvalidationAModule().getMessageService().print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
 					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}

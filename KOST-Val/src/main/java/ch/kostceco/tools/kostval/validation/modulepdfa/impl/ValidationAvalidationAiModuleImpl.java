@@ -71,6 +71,7 @@ import ch.kostceco.tools.kostval.KOSTVal;
 import ch.kostceco.tools.kostval.exception.modulepdfa.ValidationApdfvalidationException;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulepdfa.ValidationAvalidationAiModule;
+import ch.kostceco.tools.kostval.logging.Logtxt;
 
 /** Ist die vorliegende PDF-Datei eine valide PDFA-Datei? PDFA Validierungs mit callas und oder
  * PDF-Tools.
@@ -98,7 +99,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale ) throws ValidationApdfvalidationException
+			Locale locale, File logFile ) throws ValidationApdfvalidationException
 	{
 		String onWork = configMap.get( "ShowProgressOnWork" );
 		if ( onWork.equals( "nomin" ) ) {
@@ -167,9 +168,9 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 			if ( min ) {
 				return false;
 			} else {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-								+ getTextResourceService().getText( locale, ERROR_XML_A_PDFA_NOCONFIG ) );
+
+				Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+						+ getTextResourceService().getText( locale, ERROR_XML_A_PDFA_NOCONFIG ) );
 				valid = false;
 				return false;
 			}
@@ -322,15 +323,16 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 		} catch ( Throwable e ) {
 			if ( min ) {
 			} else {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+
+				Logtxt.logtxt( logFile,
+						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
 								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 										"Version " + e.getMessage() ) );
 			}
 		}
 
-		getMessageService()
-				.logError( getTextResourceService().getText( locale, MESSAGE_FORMATVALIDATION_VL, level ) );
+		Logtxt.logtxt( logFile,
+				getTextResourceService().getText( locale, MESSAGE_FORMATVALIDATION_VL, level ) );
 
 		// Start mit der Erkennung
 
@@ -339,9 +341,9 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 			if ( min ) {
 				return false;
 			} else {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-								+ getTextResourceService().getText( locale, ERROR_XML_A_PDFA_ISDIRECTORY ) );
+
+				Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+						+ getTextResourceService().getText( locale, ERROR_XML_A_PDFA_ISDIRECTORY ) );
 				return false;
 			}
 		} else if ( (valDatei.getAbsolutePath().toLowerCase().endsWith( ".pdf" )
@@ -353,7 +355,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					// System.out.println(" -> es ist eine Pdf-Datei");
 					// hoechstwahrscheinlich ein PDF da es mit 25504446 respektive %PDF beginnt
 					valid = true;
-								} else {
+				} else {
 					// System.out.println(" -> es ist KEINE Pdf-Datei");
 					if ( min ) {
 						return false;
@@ -365,8 +367,9 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 							if ( min ) {
 								return false;
 							} else {
-								getMessageService()
-										.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+
+								Logtxt.logtxt( logFile,
+										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
 												+ getTextResourceService().getText( locale, MESSAGE_XML_CA_DROID ) );
 								return false;
 							}
@@ -378,26 +381,29 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 							return false;
 						} else if ( puid.equals( " ERROR " ) ) {
 							// Probleme bei der Initialisierung von DROID
-							getMessageService().logError( getTextResourceService().getText( locale,
-									MESSAGE_XML_MODUL_A_PDFA )
-									+ getTextResourceService().getText( locale, ERROR_XML_CANNOT_INITIALIZE_DROID ) );
+							Logtxt.logtxt( logFile,
+									getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+											+ getTextResourceService().getText( locale,
+													ERROR_XML_CANNOT_INITIALIZE_DROID ) );
 							return false;
 						} else {
 							// Erkennungsergebnis ausgeben
-							getMessageService()
-									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+
+							Logtxt.logtxt( logFile,
+									getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
 											+ getTextResourceService().getText( locale, ERROR_XML_A_PDFA_INCORRECTFILE,
 													puid ) );
 							return false;
 						}
-					} 
+					}
 				}
 			} catch ( Exception e ) {
 				if ( min ) {
 					return false;
 				} else {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+
+					Logtxt.logtxt( logFile,
+							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
 									+ getTextResourceService().getText( locale, ERROR_XML_A_PDFA_INCORRECTFILE ) );
 					return false;
 				}
@@ -407,8 +413,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 			if ( min ) {
 				return false;
 			} else {
-				getMessageService().logError( getTextResourceService().getText( locale,
-						MESSAGE_XML_MODUL_A_PDFA )
+				Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
 						+ getTextResourceService().getText( locale, ERROR_XML_A_PDFA_INCORRECTFILEENDING ) );
 				return false;
 			}
@@ -484,9 +489,10 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 							if ( min ) {
 								return false;
 							} else {
-								getMessageService().logError( getTextResourceService().getText( locale,
-										MESSAGE_XML_MODUL_A_PDFA )
-										+ getTextResourceService().getText( locale, ERROR_XML_A_PDFTOOLS_ENCRYPTED ) );
+								Logtxt.logtxt( logFile,
+										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+												+ getTextResourceService().getText( locale,
+														ERROR_XML_A_PDFTOOLS_ENCRYPTED ) );
 								return false;
 							}
 						}
@@ -495,18 +501,20 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 							if ( min ) {
 								return false;
 							} else {
-								getMessageService().logError( getTextResourceService().getText( locale,
-										MESSAGE_XML_MODUL_A_PDFA )
-										+ getTextResourceService().getText( locale, ERROR_XML_A_PDFTOOLS_ENCRYPTED ) );
+								Logtxt.logtxt( logFile,
+										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+												+ getTextResourceService().getText( locale,
+														ERROR_XML_A_PDFTOOLS_ENCRYPTED ) );
 								return false;
 							}
 						} else {
 							if ( min ) {
 								return false;
 							} else {
-								getMessageService().logError( getTextResourceService().getText( locale,
-										MESSAGE_XML_MODUL_A_PDFA )
-										+ getTextResourceService().getText( locale, ERROR_XML_A_PDFTOOLS_DAMAGED ) );
+								Logtxt.logtxt( logFile,
+										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+												+ getTextResourceService().getText( locale,
+														ERROR_XML_A_PDFTOOLS_DAMAGED ) );
 								return false;
 							}
 						}
@@ -635,8 +643,9 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 							fis = null;
 							fos = null;
 						} catch ( Exception e ) {
-							getMessageService()
-									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+
+							Logtxt.logtxt( logFile,
+									getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
 											+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 													"Exec PDF Tools FileChannel: " + e.getMessage() ) );
 							return false;
@@ -698,7 +707,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 								// <docInfo> und <characterCount> auf eine Zeile ausgeben
 								if ( min ) {
 								} else {
-									getMessageService().logError( docInfoCharacterCount );
+									Logtxt.logtxt( logFile, docInfoCharacterCount );
 								}
 							}
 						} else {
@@ -736,7 +745,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 										 * <docInfo> und <characterCount> auf eine Zeile ausgeben */
 										if ( min ) {
 										} else {
-											getMessageService().logError( docInfoCharacterCount );
+											Logtxt.logtxt( logFile, docInfoCharacterCount );
 										}
 									} else {
 										double tolerance = 20.000;
@@ -760,7 +769,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 											 * <docInfo> und <characterCount> auf eine Zeile ausgeben */
 											if ( min ) {
 											} else {
-												getMessageService().logError( docInfoCharacterCount );
+												Logtxt.logtxt( logFile, docInfoCharacterCount );
 											}
 										} else {
 											// weiter auswerten
@@ -972,7 +981,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 												// <docInfo> und <characterCount> auf eine Zeile ausgeben
 												if ( min ) {
 												} else {
-													getMessageService().logError( docInfoCharacterCount );
+													Logtxt.logtxt( logFile, docInfoCharacterCount );
 												}
 											}
 											bisError.close();
@@ -1122,7 +1131,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 										// <docInfo> und <characterCount> auf eine Zeile ausgeben
 										if ( min ) {
 										} else {
-											getMessageService().logError( docInfoCharacterCount );
+											Logtxt.logtxt( logFile, docInfoCharacterCount );
 										}
 									}
 									bisError.close();
@@ -1133,8 +1142,9 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 
 								}
 							} catch ( Exception e ) {
-								getMessageService()
-										.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+
+								Logtxt.logtxt( logFile,
+										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
 												+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 														"Exec PDF Tools Font: " + e.getMessage() ) );
 								return false;
@@ -1153,8 +1163,9 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 						isValidFont = true;
 					}
 				} catch ( Exception e ) {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+
+					Logtxt.logtxt( logFile,
+							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
 									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 											"Exec PDF Tools: " + e.getMessage() ) );
 					return false;
@@ -1387,14 +1398,16 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 						 * 3-Heights(TM)_PDFA_Validator_API_LICENSE.pdf -> invalid */
 						if ( pdftools ) {
 							callas = false;
-							getMessageService()
-									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+
+							Logtxt.logtxt( logFile,
+									getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
 											+ getTextResourceService().getText( locale, ERROR_XML_CALLAS_MISSING2,
 													fpdfapilotExe.getAbsolutePath() ) );
 							isValid = false;
 						} else {
-							getMessageService()
-									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+
+							Logtxt.logtxt( logFile,
+									getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
 											+ getTextResourceService().getText( locale, ERROR_XML_CALLAS_MISSING,
 													fpdfapilotExe.getAbsolutePath() ) );
 							return false;
@@ -1478,13 +1491,13 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 
 								if ( pdftools ) {
 									callas = false;
-									getMessageService().logError(
+									Logtxt.logtxt( logFile,
 											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
 													+ getTextResourceService().getText( locale, ERROR_XML_CALLAS_FATAL2,
 															fpdfapilotExe.getAbsolutePath() ) );
 									isValid = false;
 								} else {
-									getMessageService().logError(
+									Logtxt.logtxt( logFile,
 											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
 													+ getTextResourceService().getText( locale, ERROR_XML_CALLAS_FATAL,
 															fpdfapilotExe.getAbsolutePath() ) );
@@ -1525,13 +1538,13 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 
 								if ( pdftools ) {
 									callas = false;
-									getMessageService().logError(
+									Logtxt.logtxt( logFile,
 											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
 													+ getTextResourceService().getText( locale, ERROR_XML_CALLAS_FATAL2,
 															fpdfapilotExe.getAbsolutePath() ) );
 									isValid = false;
 								} else {
-									getMessageService().logError(
+									Logtxt.logtxt( logFile,
 											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
 													+ getTextResourceService().getText( locale, ERROR_XML_CALLAS_FATAL,
 															fpdfapilotExe.getAbsolutePath() ) );
@@ -1555,8 +1568,9 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 								} else {
 									warning = "Warning: Number of components in PDF/A OutputIntent N entry does not match ICC profile. [callas] ";
 								}
-								getMessageService()
-										.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_PDFA )
+
+								Logtxt.logtxt( logFile,
+										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_PDFA )
 												+ "<Message>" + warning + "</Message></Error>" );
 							}
 						} else {
@@ -1567,8 +1581,9 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 						// Ende callas direkt auszuloesen
 					}
 				} catch ( Exception e ) {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+
+					Logtxt.logtxt( logFile,
+							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
 									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 											"Exec pdfaPilot: " + e.getMessage() ) );
 					return false;
@@ -1602,8 +1617,9 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 				} catch ( Throwable e ) {
 					if ( min ) {
 					} else {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+
+						Logtxt.logtxt( logFile,
+								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
 										+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 												" Modul J " + e.getMessage() ) );
 					}
@@ -1749,8 +1765,9 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					String callasI = "";
 					if ( callas ) {
 						if ( callasServiceFailed ) {
-							getMessageService()
-									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+
+							Logtxt.logtxt( logFile,
+									getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
 											+ getTextResourceService().getText( locale, ERROR_XML_A_CALLAS_SERVICEFAILED,
 													callasReturnCode ) );
 						}
@@ -2010,197 +2027,219 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 							// set to null
 							br = null;
 						} catch ( FileNotFoundException e ) {
-							getMessageService()
-									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+
+							Logtxt.logtxt( logFile,
+									getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
 											+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 													"FileNotFoundException" ) );
 							return false;
 						} catch ( Exception e ) {
-							getMessageService()
-									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+
+							Logtxt.logtxt( logFile,
+									getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
 											+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 													(e.getMessage() + " 1") ) ); //
 							return false;
 						}
 						if ( !callasA.equals( "" ) ) {
-							getMessageService().logError( callasA );
+							Logtxt.logtxt( logFile, callasA );
 						}
 					}
 
 					if ( exponent1 ) {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+
+						Logtxt.logtxt( logFile,
+								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
 										+ getTextResourceService().getText( locale, ERROR_XML_AI_1,
 												"PDF Tools: iCategory_1" ) );
 					}
 					if ( exponent2 ) {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+
+						Logtxt.logtxt( logFile,
+								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
 										+ getTextResourceService().getText( locale, ERROR_XML_AI_2,
 												"PDF Tools: iCategory_2" ) );
 						return false;
 					}
-					getMessageService().logError( pdftoolsA );
+					Logtxt.logtxt( logFile, pdftoolsA );
 
 					/** Modul B **/
 					if ( callas && !callasB.equals( "" ) ) {
-						getMessageService().logError( callasB );
+						Logtxt.logtxt( logFile, callasB );
 					}
 					if ( exponent0 ) {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_PDFA )
+
+						Logtxt.logtxt( logFile,
+								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_PDFA )
 										+ getTextResourceService().getText( locale, ERROR_XML_AI_0,
 												"PDF Tools: iCategory_0" ) );
 					}
 					if ( exponent7 ) {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_PDFA )
+
+						Logtxt.logtxt( logFile,
+								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_PDFA )
 										+ getTextResourceService().getText( locale, ERROR_XML_AI_7,
 												"PDF Tools: iCategory_7" ) );
 					}
 					if ( exponent18 ) {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_PDFA )
+
+						Logtxt.logtxt( logFile,
+								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_PDFA )
 										+ getTextResourceService().getText( locale, ERROR_XML_AI_18,
 												"PDF Tools: iCategory_18" ) );
 					}
-					getMessageService().logError( pdftoolsB );
+					Logtxt.logtxt( logFile, pdftoolsB );
 
 					/** Modul C **/
 					if ( callas && !callasC.equals( "" ) ) {
-						getMessageService().logError( callasC );
+						Logtxt.logtxt( logFile, callasC );
 					}
 					if ( exponent3 ) {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_PDFA )
+
+						Logtxt.logtxt( logFile,
+								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_PDFA )
 										+ getTextResourceService().getText( locale, ERROR_XML_AI_3,
 												"PDF Tools: iCategory_3" ) );
 					}
 					if ( exponent4 ) {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_PDFA )
+
+						Logtxt.logtxt( logFile,
+								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_PDFA )
 										+ getTextResourceService().getText( locale, ERROR_XML_AI_4,
 												"PDF Tools: iCategory_4" ) );
 					}
 					if ( exponent5 ) {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_PDFA )
+
+						Logtxt.logtxt( logFile,
+								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_PDFA )
 										+ getTextResourceService().getText( locale, ERROR_XML_AI_5,
 												"PDF Tools: iCategory_5" ) );
 					}
 					if ( exponent6 ) {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_PDFA )
+
+						Logtxt.logtxt( logFile,
+								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_PDFA )
 										+ getTextResourceService().getText( locale, ERROR_XML_AI_6,
 												"PDF Tools: iCategory_6" ) );
 					}
-					getMessageService().logError( pdftoolsC );
+					Logtxt.logtxt( logFile, pdftoolsC );
 
 					/** Modul D **/
 					if ( callas && !callasD.equals( "" ) ) {
-						getMessageService().logError( callasD );
+						Logtxt.logtxt( logFile, callasD );
 					}
 					if ( exponent8 ) {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_PDFA )
+
+						Logtxt.logtxt( logFile,
+								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_PDFA )
 										+ getTextResourceService().getText( locale, ERROR_XML_AI_8,
 												"PDF Tools: iCategory_8" ) );
 					}
 					if ( exponent9 ) {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_PDFA )
+
+						Logtxt.logtxt( logFile,
+								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_PDFA )
 										+ getTextResourceService().getText( locale, ERROR_XML_AI_9,
 												"PDF Tools: iCategory_9" ) );
 					}
-					getMessageService().logError( pdftoolsD );
+					Logtxt.logtxt( logFile, pdftoolsD );
 
 					/** Modul E **/
 					if ( callas && !callasE.equals( "" ) ) {
-						getMessageService().logError( callasE );
+						Logtxt.logtxt( logFile, callasE );
 					}
 					if ( exponent10 ) {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_PDFA )
+
+						Logtxt.logtxt( logFile,
+								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_PDFA )
 										+ getTextResourceService().getText( locale, ERROR_XML_AI_10,
 												"PDF Tools: iCategory_10" ) );
 					}
-					getMessageService().logError( pdftoolsE );
+					Logtxt.logtxt( logFile, pdftoolsE );
 
 					/** Modul F **/
 					if ( callas && !callasF.equals( "" ) ) {
-						getMessageService().logError( callasF );
+						Logtxt.logtxt( logFile, callasF );
 					}
 					if ( exponent11 ) {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_PDFA )
+
+						Logtxt.logtxt( logFile,
+								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_PDFA )
 										+ getTextResourceService().getText( locale, ERROR_XML_AI_11,
 												"PDF Tools: iCategory_11" ) );
 					}
 					if ( exponent12 ) {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_PDFA )
+
+						Logtxt.logtxt( logFile,
+								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_PDFA )
 										+ getTextResourceService().getText( locale, ERROR_XML_AI_12,
 												"PDF Tools: iCategory_12" ) );
 					}
 					if ( exponent13 ) {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_PDFA )
+
+						Logtxt.logtxt( logFile,
+								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_PDFA )
 										+ getTextResourceService().getText( locale, ERROR_XML_AI_13,
 												"PDF Tools: iCategory_13" ) );
 					}
 					if ( exponent14 ) {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_PDFA )
+
+						Logtxt.logtxt( logFile,
+								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_PDFA )
 										+ getTextResourceService().getText( locale, ERROR_XML_AI_14,
 												"PDF Tools: iCategory_14" ) );
 					}
-					getMessageService().logError( pdftoolsF );
+					Logtxt.logtxt( logFile, pdftoolsF );
 
 					/** Modul G **/
 					if ( callas && !callasG.equals( "" ) ) {
-						getMessageService().logError( callasG );
+						Logtxt.logtxt( logFile, callasG );
 					}
 					if ( exponent15 ) {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_PDFA )
+
+						Logtxt.logtxt( logFile,
+								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_PDFA )
 										+ getTextResourceService().getText( locale, ERROR_XML_AI_15,
 												"PDF Tools: iCategory_15" ) );
 					}
-					getMessageService().logError( pdftoolsG );
+					Logtxt.logtxt( logFile, pdftoolsG );
 
 					/** Modul H **/
 					if ( callas && !callasH.equals( "" ) ) {
-						getMessageService().logError( callasH );
+						Logtxt.logtxt( logFile, callasH );
 					}
 					if ( exponent16 ) {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_PDFA )
+
+						Logtxt.logtxt( logFile,
+								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_PDFA )
 										+ getTextResourceService().getText( locale, ERROR_XML_AI_16,
 												"PDF Tools: iCategory_16" ) );
 					}
-					getMessageService().logError( pdftoolsH );
+					Logtxt.logtxt( logFile, pdftoolsH );
 
 					/** Modul I **/
 					if ( callas && !callasI.equals( "" ) ) {
-						getMessageService().logError( callasI );
+						Logtxt.logtxt( logFile, callasI );
 					}
 					if ( exponent17 ) {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_I_PDFA )
+
+						Logtxt.logtxt( logFile,
+								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_I_PDFA )
 										+ getTextResourceService().getText( locale, ERROR_XML_AI_17,
 												"PDF Tools: iCategory_17" ) );
 					}
-					getMessageService().logError( pdftoolsI );
+					Logtxt.logtxt( logFile, pdftoolsI );
 
 					/** Modul J **/
 					if ( !isValidJ ) {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
+
+						Logtxt.logtxt( logFile,
+								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
 										+ getTextResourceService().getText( locale, ERROR_XML_J_JBIG2 ) );
 					}
 
 					/** Modul K **/
-					getMessageService().logError( errorK );
+					Logtxt.logtxt( logFile, errorK );
 
 					try {
 						docPdf.close();
@@ -2216,13 +2255,14 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 				} else {
 					/** Modul J **/
 					if ( !isValidJ ) {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
+
+						Logtxt.logtxt( logFile,
+								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
 										+ getTextResourceService().getText( locale, ERROR_XML_J_JBIG2 ) );
 					}
 
 					/** Modul K **/
-					getMessageService().logError( errorK );
+					Logtxt.logtxt( logFile, errorK );
 
 					try {
 						docPdf.close();
@@ -2239,8 +2279,9 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					if ( min ) {
 						return false;
 					} else {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
+
+						Logtxt.logtxt( logFile,
+								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
 										+ getTextResourceService().getText( locale, ERROR_XML_J_JBIG2 ) );
 					}
 				}
@@ -2270,7 +2311,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					// System.out.println( "errorK.isEmpty" );
 				} else {
 					// ggf Warning Modul K ausgeben
-					getMessageService().logError( errorK );
+					Logtxt.logtxt( logFile, errorK );
 				}
 			}
 			if ( report.exists() ) {
@@ -2280,8 +2321,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 				reportOriginal.delete();
 			}
 		} catch ( Exception e ) {
-			getMessageService().logError( getTextResourceService().getText( locale,
-					MESSAGE_XML_MODUL_A_PDFA )
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
 					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() + " _" ) );
 		}
 		try {

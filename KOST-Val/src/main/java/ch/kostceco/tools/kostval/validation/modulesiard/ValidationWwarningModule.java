@@ -41,7 +41,7 @@ public interface ValidationWwarningModule extends ValidationModule
 {
 
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale ) throws ValidationWwarningException;
+			Locale locale, File logFile ) throws ValidationWwarningException;
 
 	public boolean prepareValidation( ValidationContext validationContext )
 			throws IOException, JDOMException, Exception;

@@ -38,6 +38,6 @@ public interface Validation3cFormatValidationModule extends ValidationModule
 {
 
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale ) throws Validation3cFormatValidationException;
+			Locale locale, File logFile ) throws Validation3cFormatValidationException;
 
 }

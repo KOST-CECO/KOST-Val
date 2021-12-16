@@ -29,6 +29,7 @@ import ch.kostceco.tools.kosttools.util.Util;
 import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationHsizeValidationException;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationHsizeValidationModule;
+import ch.kostceco.tools.kostval.logging.Logtxt;
 
 /** Validierungsschritt H (Groessen-Validierung) Ist die TIFF-Datei gemäss Konfigurationsdatei
  * valid?
@@ -45,7 +46,7 @@ public class ValidationHsizeValidationModuleImpl extends ValidationModuleImpl
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale ) throws ValidationHsizeValidationException
+			Locale locale, File logFile ) throws ValidationHsizeValidationException
 	{
 		String onWork = configMap.get( "ShowProgressOnWork" );
 		if ( onWork.equals( "nomin" ) ) {
@@ -62,8 +63,9 @@ public class ValidationHsizeValidationModuleImpl extends ValidationModuleImpl
 
 		if ( !exiftoolReport.exists() ) {
 			// Report existiert nicht
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_TIFF )
+
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_TIFF )
 							+ getTextResourceService().getText( locale, MESSAGE_XML_MISSING_REPORT,
 									exiftoolReport.getAbsolutePath(),
 									getTextResourceService().getText( locale, ABORTED ) ) );
@@ -106,7 +108,7 @@ public class ValidationHsizeValidationModuleImpl extends ValidationModuleImpl
 										}
 										return false;
 									} else {
-										getMessageService().logError(
+										Logtxt.logtxt( logFile,
 												getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_TIFF )
 														+ getTextResourceService().getText( locale, MESSAGE_XML_CG_INVALID,
 																line ) );
@@ -123,9 +125,10 @@ public class ValidationHsizeValidationModuleImpl extends ValidationModuleImpl
 									}
 									return false;
 								} else {
-									getMessageService().logError( getTextResourceService().getText( locale,
-											MESSAGE_XML_MODUL_H_TIFF )
-											+ getTextResourceService().getText( locale, MESSAGE_XML_CG_INVALID, line ) );
+									Logtxt.logtxt( logFile,
+											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_TIFF )
+													+ getTextResourceService().getText( locale, MESSAGE_XML_CG_INVALID,
+															line ) );
 								}
 							}
 						}
@@ -142,8 +145,9 @@ public class ValidationHsizeValidationModuleImpl extends ValidationModuleImpl
 							}
 							return false;
 						} else {
-							getMessageService()
-									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_TIFF )
+
+							Logtxt.logtxt( logFile,
+									getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_TIFF )
 											+ getTextResourceService().getText( locale, MESSAGE_XML_CG_ETNIO, "H" ) );
 						}
 					}
@@ -157,9 +161,10 @@ public class ValidationHsizeValidationModuleImpl extends ValidationModuleImpl
 						}
 						return false;
 					} else {
-						getMessageService().logError( getTextResourceService().getText( locale,
-								MESSAGE_XML_MODUL_H_TIFF )
-								+ getTextResourceService().getText( locale, MESSAGE_XML_CG_CANNOTFINDETREPORT ) );
+						Logtxt.logtxt( logFile,
+								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_TIFF )
+										+ getTextResourceService().getText( locale,
+												MESSAGE_XML_CG_CANNOTFINDETREPORT ) );
 						/* exiftoolReport loeschen */
 						if ( exiftoolReport.exists() ) {
 							exiftoolReport.delete();

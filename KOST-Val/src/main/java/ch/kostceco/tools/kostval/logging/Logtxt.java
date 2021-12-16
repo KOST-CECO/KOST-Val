@@ -19,24 +19,34 @@
 
 package ch.kostceco.tools.kostval.logging;
 
-import org.apache.log4j.SimpleLayout;
-import org.apache.log4j.spi.LoggingEvent;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 
-/** Erzeugt ein vollkommen "nacktes" Layout, welches nichts als die eigentliche Message enthält.
+/** Logging Klasse.
  * 
  * @author Rc Claire Roethlisberger, KOST-CECO */
-public class MessageOnlyLayout extends SimpleLayout
+public class Logtxt
 {
 
-	StringBuffer sbuf = new StringBuffer( 128 );
-
-	@Override
-	public String format( LoggingEvent event )
+	public static void logtxt( File logFile, String error )
 	{
-		sbuf.setLength( 0 );
-		sbuf.append( event.getRenderedMessage() );
-		sbuf.append( LINE_SEP );
-		return sbuf.toString();
+
+		try {
+			if ( !logFile.exists() ) {
+				logFile.getParentFile().mkdirs();
+				logFile.createNewFile();
+			}
+			
+
+			PrintWriter out = new PrintWriter( new BufferedWriter( new FileWriter( logFile, true ) ) );
+			out.println( error );
+			out.close();
+		} catch ( IOException e ) {
+			 System.out.println( "Logtxt: " + e );
+		}
 	}
 
 }

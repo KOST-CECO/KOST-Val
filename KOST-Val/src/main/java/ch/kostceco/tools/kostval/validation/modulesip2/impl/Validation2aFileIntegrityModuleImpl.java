@@ -38,6 +38,7 @@ import ch.kostceco.tools.kosttools.util.Util;
 import ch.kostceco.tools.kostval.exception.modulesip2.Validation2aFileIntegrityException;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesip2.Validation2aFileIntegrityModule;
+import ch.kostceco.tools.kostval.logging.Logtxt;
 
 /** Validierungsschritt 2a: Sind alle referenzierten Dateien vorhanden? von allen datei nodes den
  * subnode name holen und diesen mit der Struktur vergleichen */
@@ -48,7 +49,7 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale ) throws Validation2aFileIntegrityException
+			Locale locale, File logFile ) throws Validation2aFileIntegrityException
 	{
 		boolean showOnWork = false;
 		int onWork = 410;
@@ -212,7 +213,7 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl
 					String removedEntry = filesInSip.remove( name );
 					if ( removedEntry == null ) {
 						// Test von 2A
-						getMessageService().logError( getTextResourceService().getText( locale,
+						Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
 								MESSAGE_XML_MODUL_Ba_SIP )
 								+ getTextResourceService().getText( locale, MESSAGE_XML_BA_FILEMISSING, name ) );
 						valid = false;
@@ -292,8 +293,8 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl
 				}
 
 			} catch ( Exception e ) {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ba_SIP )
+				
+						Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ba_SIP )
 								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 				valid = false;
 			}
@@ -305,13 +306,13 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl
 					// header wird in 2c ignoriert
 				} else {
 					if ( entryName.endsWith( "/" ) ) {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bb_SIP )
+						
+								Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bb_SIP )
 										+ getTextResourceService().getText( locale, MESSAGE_XML_BB_FILEMISSINGO,
 												entryName ) );
 					} else {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bb_SIP )
+						
+								Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bb_SIP )
 										+ getTextResourceService().getText( locale, MESSAGE_XML_BB_FILEMISSING,
 												entryName ) );
 					}
@@ -320,8 +321,8 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl
 			}
 
 		} catch ( Exception e ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ba_SIP )
+			
+					Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ba_SIP )
 							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}

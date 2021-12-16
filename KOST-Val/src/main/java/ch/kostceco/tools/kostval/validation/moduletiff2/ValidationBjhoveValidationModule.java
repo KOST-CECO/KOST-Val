@@ -38,6 +38,6 @@ public interface ValidationBjhoveValidationModule extends ValidationModule
 {
 
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale ) throws ValidationBjhoveValidationException;
+			Locale locale, File logFile ) throws ValidationBjhoveValidationException;
 
 }

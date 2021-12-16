@@ -33,7 +33,7 @@ import ch.kostceco.tools.kostval.validation.ValidationModule;
 public interface ValidationAvalidationAModule extends ValidationModule
 {
 
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale )
+	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale, File logFile )
 			throws ValidationAjp2validationException;
 
 }

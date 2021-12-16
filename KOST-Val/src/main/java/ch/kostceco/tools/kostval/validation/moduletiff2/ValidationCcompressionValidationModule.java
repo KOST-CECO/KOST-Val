@@ -35,6 +35,6 @@ public interface ValidationCcompressionValidationModule extends ValidationModule
 {
 
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale ) throws ValidationCcompressionValidationException;
+			Locale locale, File logFile ) throws ValidationCcompressionValidationException;
 
 }

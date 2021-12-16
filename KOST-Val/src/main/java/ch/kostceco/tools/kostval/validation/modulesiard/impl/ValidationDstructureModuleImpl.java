@@ -36,6 +36,7 @@ import org.jdom2.input.SAXBuilder;
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationDstructureException;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationDstructureModule;
+import ch.kostceco.tools.kostval.logging.Logtxt;
 
 /** Validierungsschritt D (Struktur-Validierung) Stimmt die Struktur aus metadata.xml mit der
  * Datei-Struktur von content ueberein? valid --> schema0/table3 in metadata.xml ==
@@ -52,7 +53,7 @@ public class ValidationDstructureModuleImpl extends ValidationModuleImpl
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale ) throws ValidationDstructureException
+			Locale locale, File logFile ) throws ValidationDstructureException
 	{
 		boolean showOnWork = false;
 		int onWork = 410;
@@ -99,8 +100,9 @@ public class ValidationDstructureModuleImpl extends ValidationModuleImpl
 					if ( min ) {
 						return false;
 					} else {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_SIARD )
+
+						Logtxt.logtxt( logFile,
+								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_SIARD )
 										+ getTextResourceService().getText( locale, MESSAGE_XML_D_INVALID_XMLNS,
 												metadataXml ) );
 					}
@@ -110,7 +112,7 @@ public class ValidationDstructureModuleImpl extends ValidationModuleImpl
 			List<Element> schemas = document.getRootElement().getChild( "schemas", ns )
 					.getChildren( "schema", ns );
 			for ( Element schema : schemas ) {
-				valid = validateSchema( schema, ns, pathToWorkDir, configMap, locale );
+				valid = validateSchema( schema, ns, pathToWorkDir, configMap, locale, logFile );
 				if ( showOnWork ) {
 					if ( onWork == 410 ) {
 						onWork = 2;
@@ -138,8 +140,9 @@ public class ValidationDstructureModuleImpl extends ValidationModuleImpl
 			if ( min ) {
 				return false;
 			} else {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_SIARD )
+
+				Logtxt.logtxt( logFile,
+						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_SIARD )
 								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 										ioe.getMessage() + " (IOException)" ) );
 			}
@@ -148,8 +151,9 @@ public class ValidationDstructureModuleImpl extends ValidationModuleImpl
 			if ( min ) {
 				return false;
 			} else {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_SIARD )
+
+				Logtxt.logtxt( logFile,
+						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_SIARD )
 								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 										e.getMessage() + " (JDOMException)" ) );
 			}
@@ -159,7 +163,7 @@ public class ValidationDstructureModuleImpl extends ValidationModuleImpl
 	}
 
 	private boolean validateSchema( Element schema, Namespace ns, String pathToWorkDir,
-			Map<String, String> configMap, Locale locale )
+			Map<String, String> configMap, Locale locale, File logFile )
 	{
 		boolean showOnWork = true;
 		int onWork = 410;
@@ -187,7 +191,8 @@ public class ValidationDstructureModuleImpl extends ValidationModuleImpl
 			if ( schema.getChild( "tables", ns ) != null ) {
 				List<Element> tables = schema.getChild( "tables", ns ).getChildren( "table", ns );
 				for ( Element table : tables ) {
-					valid = valid && validateTable( table, ns, pathToWorkDir, schemaPath, locale, min );
+					valid = valid
+							&& validateTable( table, ns, pathToWorkDir, schemaPath, locale, min, logFile );
 					if ( showOnWork ) {
 						if ( onWork == 410 ) {
 							onWork = 2;
@@ -219,13 +224,15 @@ public class ValidationDstructureModuleImpl extends ValidationModuleImpl
 				return false;
 			} else {
 				if ( schemaPath.exists() ) {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_SIARD )
+
+					Logtxt.logtxt( logFile,
+							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_SIARD )
 									+ getTextResourceService().getText( locale, MESSAGE_XML_D_INVALID_FOLDER,
 											"content", schemaPath.getName() ) );
 				} else {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_SIARD )
+
+					Logtxt.logtxt( logFile,
+							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_SIARD )
 									+ getTextResourceService().getText( locale, MESSAGE_XML_D_MISSING_FOLDER,
 											"content", schemaPath.getName() ) );
 				}
@@ -235,7 +242,7 @@ public class ValidationDstructureModuleImpl extends ValidationModuleImpl
 	}
 
 	private boolean validateTable( Element table, Namespace ns, String pathToWorkDir, File schemaPath,
-			Locale locale, Boolean min )
+			Locale locale, Boolean min, File logFile )
 	{
 		boolean valid = true;
 		Element tableFolder = table.getChild( "folder", ns );
@@ -244,23 +251,25 @@ public class ValidationDstructureModuleImpl extends ValidationModuleImpl
 		if ( tablePath.isDirectory() ) {
 			File tableXml = new File( new StringBuilder( tablePath.getAbsolutePath() )
 					.append( File.separator ).append( tableFolder.getText() + ".xml" ).toString() );
-			valid = valid && validateFile( tableXml, tablePath, locale, min );
+			valid = valid && validateFile( tableXml, tablePath, locale, min, logFile );
 			File tableXsd = new File( new StringBuilder( tablePath.getAbsolutePath() )
 					.append( File.separator ).append( tableFolder.getText() + ".xsd" ).toString() );
-			valid = valid && validateFile( tableXsd, tablePath, locale, min );
+			valid = valid && validateFile( tableXsd, tablePath, locale, min, logFile );
 		} else {
 			valid = false;
 			if ( min ) {
 				return false;
 			} else {
 				if ( tablePath.exists() ) {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_SIARD )
+
+					Logtxt.logtxt( logFile,
+							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_SIARD )
 									+ getTextResourceService().getText( locale, MESSAGE_XML_D_INVALID_FOLDER,
 											schemaPath.getName(), tablePath.getName() ) );
 				} else {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_SIARD )
+
+					Logtxt.logtxt( logFile,
+							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_SIARD )
 									+ getTextResourceService().getText( locale, MESSAGE_XML_D_MISSING_FOLDER,
 											schemaPath.getName(), tablePath.getName() ) );
 				}
@@ -269,7 +278,7 @@ public class ValidationDstructureModuleImpl extends ValidationModuleImpl
 		return valid;
 	}
 
-	private boolean validateFile( File file, File parent, Locale locale, Boolean min )
+	private boolean validateFile( File file, File parent, Locale locale, Boolean min, File logFile )
 	{
 		boolean valid = true;
 		if ( !file.isFile() ) {
@@ -278,13 +287,15 @@ public class ValidationDstructureModuleImpl extends ValidationModuleImpl
 				return false;
 			} else {
 				if ( file.exists() ) {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_SIARD )
+
+					Logtxt.logtxt( logFile,
+							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_SIARD )
 									+ getTextResourceService().getText( locale, MESSAGE_XML_D_INVALID_FILE,
 											parent.getName(), file.getName() ) );
 				} else {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_SIARD )
+
+					Logtxt.logtxt( logFile,
+							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_SIARD )
 									+ getTextResourceService().getText( locale, MESSAGE_XML_D_MISSING_FILE,
 											parent.getName(), file.getName() ) );
 				}

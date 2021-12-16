@@ -35,6 +35,7 @@ import org.w3c.dom.NodeList;
 import ch.kostceco.tools.kostval.exception.modulesip1.Validation1eSipTypeException;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesip1.Validation1eSipTypeModule;
+import ch.kostceco.tools.kostval.logging.Logtxt;
 
 /** Der SIP Typ wird ermittelt: GEVER oder FILE (ermittelt aus dem metadata.xml, element
  * ablieferung) */
@@ -44,7 +45,7 @@ public class Validation1eSipTypeModuleImpl extends ValidationModuleImpl
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale ) throws Validation1eSipTypeException
+			Locale locale, File logFile ) throws Validation1eSipTypeException
 	{
 		// Informationen zur Darstellung "onWork" holen
 		String onWork = configMap.get( "ShowProgressOnWork" );
@@ -87,16 +88,15 @@ public class Validation1eSipTypeModuleImpl extends ValidationModuleImpl
 			} else if ( name.contains( "ablieferungFilesSIP" ) ) {
 				// FILE-SIP
 			} else {
-				getMessageService().logError( getTextResourceService().getText( locale,
-						MESSAGE_XML_MODUL_Ae_SIP )
+				Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ae_SIP )
 						+ getTextResourceService().getText( locale, ERROR_XML_AE_ABLIEFERUNGSTYPUNDEFINED ) );
 				return false;
 			}
 
 		} catch ( Exception e ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ae_SIP )
-							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ae_SIP )
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 

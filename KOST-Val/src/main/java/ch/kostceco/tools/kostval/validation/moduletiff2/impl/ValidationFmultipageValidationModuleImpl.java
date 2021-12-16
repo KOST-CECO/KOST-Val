@@ -28,6 +28,7 @@ import java.io.FileReader;
 import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationFmultipageValidationException;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationFmultipageValidationModule;
+import ch.kostceco.tools.kostval.logging.Logtxt;
 
 /** Validierungsschritt F (Multipage-Validierung) Ist die TIFF-Datei gem�ss Konfigurationsdatei
  * valid?
@@ -44,7 +45,7 @@ public class ValidationFmultipageValidationModuleImpl extends ValidationModuleIm
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale ) throws ValidationFmultipageValidationException
+			Locale locale, File logFile ) throws ValidationFmultipageValidationException
 	{
 		String onWork = configMap.get( "ShowProgressOnWork" );
 		if ( onWork.equals( "nomin" ) ) {
@@ -61,8 +62,9 @@ public class ValidationFmultipageValidationModuleImpl extends ValidationModuleIm
 
 		if ( !exiftoolReport.exists() ) {
 			// Report existiert nicht
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_TIFF )
+
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_TIFF )
 							+ getTextResourceService().getText( locale, MESSAGE_XML_MISSING_REPORT,
 									exiftoolReport.getAbsolutePath(),
 									getTextResourceService().getText( locale, ABORTED ) ) );
@@ -104,8 +106,9 @@ public class ValidationFmultipageValidationModuleImpl extends ValidationModuleIm
 							}
 							return false;
 						} else {
-							getMessageService()
-									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_TIFF )
+
+							Logtxt.logtxt( logFile,
+									getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_TIFF )
 											+ getTextResourceService().getText( locale, MESSAGE_XML_CG_ETNIO, "F" ) );
 						}
 					}
@@ -123,9 +126,10 @@ public class ValidationFmultipageValidationModuleImpl extends ValidationModuleIm
 							}
 							return false;
 						} else {
-							getMessageService().logError( getTextResourceService().getText( locale,
-									MESSAGE_XML_MODUL_F_TIFF )
-									+ getTextResourceService().getText( locale, MESSAGE_XML_CG_INVALID, ifdMsg ) );
+							Logtxt.logtxt( logFile,
+									getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_TIFF )
+											+ getTextResourceService().getText( locale, MESSAGE_XML_CG_INVALID,
+													ifdMsg ) );
 						}
 					}
 					in.close();
@@ -137,9 +141,10 @@ public class ValidationFmultipageValidationModuleImpl extends ValidationModuleIm
 						}
 						return false;
 					} else {
-						getMessageService().logError( getTextResourceService().getText( locale,
-								MESSAGE_XML_MODUL_F_TIFF )
-								+ getTextResourceService().getText( locale, MESSAGE_XML_CG_CANNOTFINDETREPORT ) );
+						Logtxt.logtxt( logFile,
+								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_TIFF )
+										+ getTextResourceService().getText( locale,
+												MESSAGE_XML_CG_CANNOTFINDETREPORT ) );
 						return false;
 					}
 				}

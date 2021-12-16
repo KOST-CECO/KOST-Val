@@ -36,6 +36,6 @@ public interface Validation3aFormatRecognitionModule extends ValidationModule
 {
 
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale ) throws Validation3aFormatRecognitionException;
+			Locale locale, File logFile ) throws Validation3aFormatRecognitionException;
 
 }

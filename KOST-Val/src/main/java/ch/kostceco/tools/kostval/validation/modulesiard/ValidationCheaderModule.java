@@ -37,6 +37,6 @@ public interface ValidationCheaderModule extends ValidationModule
 {
 
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale ) throws ValidationCheaderException;
+			Locale locale, File logFile ) throws ValidationCheaderException;
 
 }

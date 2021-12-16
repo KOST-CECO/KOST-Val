@@ -35,6 +35,6 @@ public interface Validation1cNamingModule extends ValidationModule
 {
 
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale ) throws Validation1cNamingException;
+			Locale locale, File logFile ) throws Validation1cNamingException;
 
 }

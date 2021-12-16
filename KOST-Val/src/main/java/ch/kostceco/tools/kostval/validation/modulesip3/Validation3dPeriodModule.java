@@ -37,6 +37,6 @@ public interface Validation3dPeriodModule extends ValidationModule
 {
 
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale ) throws Validation3dPeriodException;
+			Locale locale, File logFile ) throws Validation3dPeriodException;
 
 }

@@ -19,23 +19,18 @@
 
 package ch.kostceco.tools.kostval.logging;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
-
-import org.apache.log4j.FileAppender;
-import org.apache.log4j.Logger;
+import java.io.PrintWriter;
 
 import ch.kostceco.tools.kostval.service.TextResourceService;
 
 public class LogConfigurator implements MessageConstants
 {
 
-	/** @author Rc Claire Roethlisberger, KOST-CECO */
-
-	private static final ch.kostceco.tools.kostval.logging.Logger	LOGGER	= new ch.kostceco.tools.kostval.logging.Logger(
-																																						LogConfigurator.class );
-
-	private TextResourceService																		textResourceService;
+	private TextResourceService textResourceService;
 
 	public TextResourceService getTextResourceService()
 	{
@@ -51,21 +46,17 @@ public class LogConfigurator implements MessageConstants
 	{
 
 		String logFileName = directoryOfLogfile + File.separator + nameOfLogfile + ".kost-val.log.xml";
-		// String logFileName = directoryOfLogfile + File.separator +"kostval-TEST.log";
-		Logger rootLogger = Logger.getRootLogger();
+		File logFile = new File( logFileName );
 
-		MessageOnlyLayout layout = new MessageOnlyLayout();
+		// MessageOnlyLayout layout = new MessageOnlyLayout();
+
 		try {
-			FileAppender logfile = new FileAppender( layout, logFileName );
-			logfile.setName( "logfile" );
-			logfile.setAppend( false );
-			logfile.activateOptions();
 
-			rootLogger.addAppender( logfile );
+			PrintWriter out = new PrintWriter( new BufferedWriter( new FileWriter( logFile, true ) ) );
+			out.close();
 
 		} catch ( IOException e ) {
-			LOGGER.logError( getTextResourceService().getText( ERROR_IOE,
-					getTextResourceService().getText( ERROR_LOGGING_NOFILEAPPENDER ) ) );
+			Logtxt.logtxt( logFile, getTextResourceService().getText( ERROR_IOE, e + " (LogConfig)" ) );
 		}
 
 		return logFileName;

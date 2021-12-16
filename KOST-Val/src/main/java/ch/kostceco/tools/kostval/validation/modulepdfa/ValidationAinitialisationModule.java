@@ -27,8 +27,8 @@ import ch.kostceco.tools.kostval.exception.modulepdfa.ValidationApdfvalidationEx
 import ch.kostceco.tools.kostval.validation.ValidationModule;
 
 /** Initialisierung PDF-Tools Kontrolle ob ein Schl�ssel vorhanden ist (Vollversion) wenn nicht,
- * wird die eingeschr�nkte Version verwendet Da der Schl�ssel nur f�r KOST-Val verwendet
- * werden darf, wird er nicht publiziert
+ * wird die eingeschr�nkte Version verwendet Da der Schl�ssel nur f�r KOST-Val verwendet werden
+ * darf, wird er nicht publiziert
  * 
  * @author Rc Claire Roethlisberger, KOST-CECO */
 
@@ -36,6 +36,6 @@ public interface ValidationAinitialisationModule extends ValidationModule
 {
 
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale ) throws ValidationApdfvalidationException;
+			Locale locale, File logFile ) throws ValidationApdfvalidationException;
 
 }

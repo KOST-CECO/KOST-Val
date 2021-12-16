@@ -24,7 +24,6 @@ import java.io.IOException;
 import java.util.Locale;
 import java.util.Map;
 
-import ch.kostceco.tools.kostval.logging.Logger;
 import ch.kostceco.tools.kostval.logging.MessageConstants;
 import ch.kostceco.tools.kostval.service.TextResourceService;
 
@@ -37,8 +36,6 @@ import ch.kostceco.tools.kostval.service.TextResourceService;
 public class Controllervalinit implements MessageConstants
 {
 
-	@SuppressWarnings("unused")
-	private static final Logger					LOGGER	= new Logger( Controllervalinit.class );
 	private static TextResourceService	textResourceService;
 
 	public static TextResourceService getTextResourceService()

@@ -42,7 +42,7 @@ public interface ValidationFrowModule extends ValidationModule
 {
 
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale ) throws ValidationFrowException;
+			Locale locale, File logFile ) throws ValidationFrowException;
 
 	public boolean prepareValidation( ValidationContext validationContext )
 			throws IOException, JDOMException, Exception;

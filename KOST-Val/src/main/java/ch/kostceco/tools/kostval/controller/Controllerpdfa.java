@@ -24,7 +24,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import ch.kostceco.tools.kostval.exception.modulepdfa.ValidationApdfvalidationException;
-import ch.kostceco.tools.kostval.logging.Logger;
+import ch.kostceco.tools.kostval.logging.Logtxt;
 import ch.kostceco.tools.kostval.logging.MessageConstants;
 import ch.kostceco.tools.kostval.service.TextResourceService;
 import ch.kostceco.tools.kostval.validation.modulepdfa.ValidationAvalidationAiModule;
@@ -40,13 +40,12 @@ import ch.kostceco.tools.kostval.validation.modulepdfa.ValidationAinitialisation
 public class Controllerpdfa implements MessageConstants
 {
 
-	private boolean														min			= false;
+	private boolean													min	= false;
 
-	private static final Logger								LOGGER	= new Logger( Controllerpdfa.class );
-	private TextResourceService								textResourceService;
+	private TextResourceService							textResourceService;
 
-	private ValidationAvalidationAiModule			validationAvalidationAiModule;
-	private ValidationAinitialisationModule		validationAinitialisationModule;
+	private ValidationAvalidationAiModule		validationAvalidationAiModule;
+	private ValidationAinitialisationModule	validationAinitialisationModule;
 
 	public ValidationAvalidationAiModule getValidationAvalidationAiModule()
 	{
@@ -81,29 +80,31 @@ public class Controllerpdfa implements MessageConstants
 	}
 
 	public boolean executeMandatory( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale )
+			Map<String, String> configMap, Locale locale, File logFile )
 	{
 		boolean valid = true;
 
 		// Initialisation PDF-Tools
 		try {
 			if ( this.getValidationAinitialisationModule().validate( valDatei, directoryOfLogfile,
-					configMap, locale ) ) {
+					configMap, locale, logFile ) ) {
 				this.getValidationAinitialisationModule().getMessageService().print();
 			} else {
 				this.getValidationAinitialisationModule().getMessageService().print();
 				return false;
 			}
 		} catch ( ValidationApdfvalidationException e ) {
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-							e.getMessage() + " init1" ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+									e.getMessage() + " init1" ) );
 			this.getValidationAinitialisationModule().getMessageService().print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-							e.getMessage() + " init2" ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+									e.getMessage() + " init2" ) );
 			return false;
 		}
 
@@ -112,7 +113,7 @@ public class Controllerpdfa implements MessageConstants
 	}
 
 	public boolean executeOptional( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale )
+			Map<String, String> configMap, Locale locale, File logFile )
 	{
 		String onWork = configMap.get( "ShowProgressOnWork" );
 		if ( onWork.equals( "nomin" ) ) {
@@ -124,7 +125,7 @@ public class Controllerpdfa implements MessageConstants
 		// Validation A - I
 		try {
 			if ( this.getValidationAvalidationAiModule().validate( valDatei, directoryOfLogfile,
-					configMap, locale ) ) {
+					configMap, locale, logFile ) ) {
 				this.getValidationAvalidationAiModule().getMessageService().print();
 			} else {
 				this.getValidationAvalidationAiModule().getMessageService().print();
@@ -135,9 +136,10 @@ public class Controllerpdfa implements MessageConstants
 				}
 			}
 		} catch ( ValidationApdfvalidationException e ) {
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-							e.getMessage() + " A-I_1" ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+									e.getMessage() + " A-I_1" ) );
 			this.getValidationAvalidationAiModule().getMessageService().print();
 			if ( min ) {
 				return false;
@@ -145,9 +147,10 @@ public class Controllerpdfa implements MessageConstants
 				valid = false;
 			}
 		} catch ( Exception e ) {
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-							e.getMessage() + " A-I_2" ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+									e.getMessage() + " A-I_2" ) );
 			if ( min ) {
 				return false;
 			} else {

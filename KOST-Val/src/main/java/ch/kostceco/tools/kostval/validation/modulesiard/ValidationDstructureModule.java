@@ -37,6 +37,6 @@ public interface ValidationDstructureModule extends ValidationModule
 {
 
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale ) throws ValidationDstructureException;
+			Locale locale, File logFile ) throws ValidationDstructureException;
 
 }

@@ -26,6 +26,7 @@ import java.util.Locale;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import ch.kostceco.tools.kosttools.util.Util;
 import ch.kostceco.tools.kostval.controller.ControllerInit;
 import ch.kostceco.tools.kostval.logging.MessageConstants;
 import ch.kostceco.tools.kostval.service.TextResourceService;
@@ -68,9 +69,11 @@ public class CmdKOSTVal implements MessageConstants
 
 	public static void main( String[] args ) throws IOException
 	{
+		Util.switchOffConsole();
 		ConfigurableApplicationContext context = new ClassPathXmlApplicationContext(
 				"classpath:config/applicationContext.xml" );
 		CmdKOSTVal cmdkostval = (CmdKOSTVal) context.getBean( "cmdkostval" );
+		Util.switchOnConsole();
 
 		System.out.println( "KOST-Val" );
 
@@ -96,7 +99,7 @@ public class CmdKOSTVal implements MessageConstants
 		String arg2 = "";
 		String arg3 = "";
 
-		String versionKostVal = "2.1.0.0";
+		String versionKostVal = "2.1.1.0";
 
 		// Standardwerte bei fehlenden Parameter eingeben
 		if ( args.length == 2 ) {

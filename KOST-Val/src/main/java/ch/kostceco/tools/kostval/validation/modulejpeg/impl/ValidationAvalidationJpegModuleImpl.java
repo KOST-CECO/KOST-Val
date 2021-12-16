@@ -34,6 +34,7 @@ import ch.kostceco.tools.kosttools.fileservice.Magic;
 import ch.kostceco.tools.kostval.exception.modulejpeg.ValidationAjpegvalidationException;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulejpeg.ValidationAvalidationJpegModule;
+import ch.kostceco.tools.kostval.logging.Logtxt;
 import coderslagoon.badpeggy.scanner.ImageFormat;
 import coderslagoon.badpeggy.scanner.ImageScanner;
 import coderslagoon.badpeggy.scanner.ImageScanner.Callback;
@@ -53,7 +54,7 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale ) throws ValidationAjpegvalidationException
+			Locale locale, File logFile ) throws ValidationAjpegvalidationException
 	{
 		String onWork = configMap.get( "ShowProgressOnWork" );
 		if ( onWork.equals( "nomin" ) ) {
@@ -67,15 +68,14 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl
 			if ( min ) {
 				return false;
 			} else {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JPEG )
-								+ getTextResourceService().getText( locale, ERROR_XML_A_JPEG_ISDIRECTORY ) );
+
+				Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JPEG )
+						+ getTextResourceService().getText( locale, ERROR_XML_A_JPEG_ISDIRECTORY ) );
 				return false;
 			}
 		} else if ( (valDatei.getAbsolutePath().toLowerCase().endsWith( ".jpeg" )
 				|| valDatei.getAbsolutePath().toLowerCase().endsWith( ".jpg" )
 				|| valDatei.getAbsolutePath().toLowerCase().endsWith( ".jpe" )) ) {
-
 
 			try {
 				// System.out.println("ueberpruefe Magic number jpeg...");
@@ -94,8 +94,9 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl
 							if ( min ) {
 								return false;
 							} else {
-								getMessageService()
-										.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JPEG )
+
+								Logtxt.logtxt( logFile,
+										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JPEG )
 												+ getTextResourceService().getText( locale, MESSAGE_XML_CA_DROID ) );
 								return false;
 							}
@@ -107,24 +108,26 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl
 							return false;
 						} else if ( puid.equals( " ERROR " ) ) {
 							// Probleme bei der Initialisierung von DROID
-							getMessageService().logError( getTextResourceService().getText( locale,
-									MESSAGE_XML_MODUL_A_JPEG )
-									+ getTextResourceService().getText( locale, ERROR_XML_CANNOT_INITIALIZE_DROID ) );
+							Logtxt.logtxt( logFile,
+									getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JPEG )
+											+ getTextResourceService().getText( locale,
+													ERROR_XML_CANNOT_INITIALIZE_DROID ) );
 							return false;
 						} else {
 							// Erkennungsergebnis ausgeben
-							getMessageService()
-									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JPEG )
+
+							Logtxt.logtxt( logFile,
+									getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JPEG )
 											+ getTextResourceService().getText( locale, ERROR_XML_A_JPEG_INCORRECTFILE,
 													puid ) );
 							return false;
 						}
-					} 
+					}
 				}
 			} catch ( Exception e ) {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JPEG )
-								+ getTextResourceService().getText( locale, ERROR_XML_A_JPEG_INCORRECTFILE ) );
+
+				Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JPEG )
+						+ getTextResourceService().getText( locale, ERROR_XML_A_JPEG_INCORRECTFILE ) );
 				return false;
 			}
 		} else {
@@ -132,8 +135,7 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl
 			if ( min ) {
 				return false;
 			} else {
-				getMessageService().logError( getTextResourceService().getText( locale,
-						MESSAGE_XML_MODUL_A_JPEG )
+				Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JPEG )
 						+ getTextResourceService().getText( locale, ERROR_XML_A_JPEG_INCORRECTFILEENDING ) );
 				return false;
 			}
@@ -157,12 +159,12 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl
 			} else {
 				// System.err.println( "file type not supported" );
 				// invalide
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JPEG )
-								+ getTextResourceService().getText( locale, ERROR_XML_A_JPEG_JIIO_FAIL ) );
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JPEG )
-								+ getTextResourceService().getText( locale, ERROR_XML_A_JPEG_JIIO_FILETYPE ) );
+
+				Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JPEG )
+						+ getTextResourceService().getText( locale, ERROR_XML_A_JPEG_JIIO_FAIL ) );
+
+				Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JPEG )
+						+ getTextResourceService().getText( locale, ERROR_XML_A_JPEG_JIIO_FILETYPE ) );
 				isValid = false;
 				return isValid;
 			}
@@ -180,11 +182,13 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl
 				if ( min ) {
 					return false;
 				} else {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JPEG )
+
+					Logtxt.logtxt( logFile,
+							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JPEG )
 									+ getTextResourceService().getText( locale, ERROR_XML_A_JPEG_JIIO_FAIL ) );
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JPEG )
+
+					Logtxt.logtxt( logFile,
+							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JPEG )
 									+ getTextResourceService().getText( locale, ERROR_XML_A_JPEG_JIIO_SCANFAILED ) );
 					// invalide
 					isValid = false;
@@ -206,8 +210,9 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl
 						if ( !min ) {
 							// Unsupported Image Type => ERROR_XML_A_UNS_IMAGE, msg
 							msg = msg.substring( 19 );
-							getMessageService()
-									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JPEG )
+
+							Logtxt.logtxt( logFile,
+									getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JPEG )
 											+ getTextResourceService().getText( locale, ERROR_XML_A_UNS_IMAGE, msg ) );
 						}
 					} else {
@@ -218,8 +223,9 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl
 
 							if ( isValid ) {
 								// Erster Fehler! Meldung A ausgeben und invalid setzten
-								getMessageService()
-										.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JPEG )
+
+								Logtxt.logtxt( logFile,
+										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JPEG )
 												+ getTextResourceService().getText( locale, ERROR_XML_A_JPEG_JIIO_FAIL ) );
 								isValid = false;
 							}
@@ -509,38 +515,43 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl
 								// Corrupt JPEG data: premature end of data segment => ERROR_XML_A_HIT_MARKER, msg -
 								// "Corrupt JPEG data: "
 								msg = msg.substring( 19 );
-								getMessageService()
-										.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_JPEG )
+
+								Logtxt.logtxt( logFile,
+										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_JPEG )
 												+ getTextResourceService().getText( locale, ERROR_XML_A_HIT_MARKER, msg ) );
 							} else if ( msg.startsWith( "Corrupt JPEG data: found marker " ) ) {
 								// Corrupt JPEG data: found marker 0x%02x instead of RST%d =>
 								// ERROR_XML_A_MUST_RESYNC,
 								// msg - "Corrupt JPEG data: "
 								msg = msg.substring( 19 );
-								getMessageService().logError( getTextResourceService().getText( locale,
-										MESSAGE_XML_MODUL_B_JPEG )
-										+ getTextResourceService().getText( locale, ERROR_XML_A_MUST_RESYNC, msg ) );
+								Logtxt.logtxt( logFile,
+										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_JPEG )
+												+ getTextResourceService().getText( locale, ERROR_XML_A_MUST_RESYNC,
+														msg ) );
 							} else if ( msg.startsWith( "Corrupt JPEG data: bad arithmetic code" ) ) {
 								// Corrupt JPEG data: bad arithmetic code => ERROR_XML_A_ARITH_BAD_CODE, msg -
 								// "Corrupt JPEG data: "
 								msg = msg.substring( 19 );
-								getMessageService().logError( getTextResourceService().getText( locale,
-										MESSAGE_XML_MODUL_B_JPEG )
-										+ getTextResourceService().getText( locale, ERROR_XML_A_ARITH_BAD_CODE, msg ) );
+								Logtxt.logtxt( logFile,
+										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_JPEG )
+												+ getTextResourceService().getText( locale, ERROR_XML_A_ARITH_BAD_CODE,
+														msg ) );
 							} else if ( msg.startsWith( "Corrupt JPEG data: bad Huffman code" ) ) {
 								// Corrupt JPEG data: bad Huffman code => ERROR_XML_A_HUFF_BAD_CODE, msg -
 								// "Corrupt JPEG data: "
 								msg = msg.substring( 19 );
-								getMessageService().logError( getTextResourceService().getText( locale,
-										MESSAGE_XML_MODUL_B_JPEG )
-										+ getTextResourceService().getText( locale, ERROR_XML_A_HUFF_BAD_CODE, msg ) );
+								Logtxt.logtxt( logFile,
+										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_JPEG )
+												+ getTextResourceService().getText( locale, ERROR_XML_A_HUFF_BAD_CODE,
+														msg ) );
 							} else if ( msg.startsWith( "Corrupt JPEG data:" ) ) {
 								// Alle anderen "Corrupt JPEG data:" bereits abgefangen...
 								// Corrupt JPEG data: %u extraneous bytes before marker 0x%02x =>
 								// ERROR_XML_A_EXTRANEOUS_DATA, msg - "Corrupt JPEG data: "
 								msg = msg.substring( 19 );
-								getMessageService()
-										.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_JPEG )
+
+								Logtxt.logtxt( logFile,
+										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_JPEG )
 												+ getTextResourceService().getText( locale, ERROR_XML_A_EXTRANEOUS_DATA,
 														msg ) );
 							} else if ( msg
@@ -548,30 +559,35 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl
 								// Warning: thumbnail image size does not match data length %u =>
 								// ERROR_XML_A_BADTHUMBNAILSIZE, msg - "Warning: "
 								msg = msg.substring( 9 );
-								getMessageService()
-										.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_JPEG )
+
+								Logtxt.logtxt( logFile,
+										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_JPEG )
 												+ getTextResourceService().getText( locale, ERROR_XML_A_BADTHUMBNAILSIZE,
 														msg ) );
 							} else if ( msg.startsWith( "Premature end of input file" ) ) {
 								// Premature end of input file => ERROR_XML_A_INPUT_EOF, msg
-								getMessageService()
-										.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_JPEG )
+
+								Logtxt.logtxt( logFile,
+										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_JPEG )
 												+ getTextResourceService().getText( locale, ERROR_XML_A_INPUT_EOF, msg ) );
 							} else if ( msg.startsWith( "Premature end of JPEG file" ) ) {
 								// Premature end of JPEG file => ERROR_XML_A_JPEG_EOF, msg
-								getMessageService()
-										.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_JPEG )
+
+								Logtxt.logtxt( logFile,
+										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_JPEG )
 												+ getTextResourceService().getText( locale, ERROR_XML_A_JPEG_EOF, msg ) );
 							} else if ( msg.startsWith( "Missing Huffman code table entry" ) ) {
 								// Missing Huffman code table entry => ERROR_XML_A_HUFF_MISSING_CODE, msg
-								getMessageService()
-										.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_JPEG )
+
+								Logtxt.logtxt( logFile,
+										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_JPEG )
 												+ getTextResourceService().getText( locale, ERROR_XML_A_HUFF_MISSING_CODE,
 														msg ) );
 							} else if ( msg.startsWith( "JPEG datastream contains no image" ) ) {
 								// JPEG datastream contains no image => ERROR_XML_A_NO_IMAGE, msg
-								getMessageService()
-										.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_JPEG )
+
+								Logtxt.logtxt( logFile,
+										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_JPEG )
 												+ getTextResourceService().getText( locale, ERROR_XML_A_NO_IMAGE, msg ) );
 
 								// Modul C
@@ -579,114 +595,134 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl
 								// Invalid JPEG file structure: SOS before SOF => ERROR_XML_B_SOS_NO_SOF, msg -
 								// "Invalid JPEG file structure: "
 								msg = msg.substring( 29 );
-								getMessageService()
-										.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JPEG )
+
+								Logtxt.logtxt( logFile,
+										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JPEG )
 												+ getTextResourceService().getText( locale, ERROR_XML_B_SOS_NO_SOF, msg ) );
 							} else if ( msg.startsWith( "Invalid JPEG file structure: two SOI markers" ) ) {
 								// Invalid JPEG file structure: two SOI markers => ERROR_XML_B_SOI_DUPLICATE, msg -
 								// "Invalid JPEG file structure: "
 								msg = msg.substring( 29 );
-								getMessageService().logError( getTextResourceService().getText( locale,
-										MESSAGE_XML_MODUL_C_JPEG )
-										+ getTextResourceService().getText( locale, ERROR_XML_B_SOI_DUPLICATE, msg ) );
+								Logtxt.logtxt( logFile,
+										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JPEG )
+												+ getTextResourceService().getText( locale, ERROR_XML_B_SOI_DUPLICATE,
+														msg ) );
 							} else if ( msg.startsWith( "Invalid JPEG file structure: missing SOS marker" ) ) {
 								// Invalid JPEG file structure: missing SOS marker => ERROR_XML_B_SOF_NO_SOS, msg -
 								// "Invalid JPEG file structure: "
 								msg = msg.substring( 29 );
-								getMessageService()
-										.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JPEG )
+
+								Logtxt.logtxt( logFile,
+										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JPEG )
 												+ getTextResourceService().getText( locale, ERROR_XML_B_SOF_NO_SOS, msg ) );
 							} else if ( msg.startsWith( "Invalid JPEG file structure: two SOF markers" ) ) {
 								// Invalid JPEG file structure: two SOF markers => ERROR_XML_B_SOF_DUPLICATE, msg -
 								// "Invalid JPEG file structure: "
 								msg = msg.substring( 29 );
-								getMessageService().logError( getTextResourceService().getText( locale,
-										MESSAGE_XML_MODUL_C_JPEG )
-										+ getTextResourceService().getText( locale, ERROR_XML_B_SOF_DUPLICATE, msg ) );
+								Logtxt.logtxt( logFile,
+										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JPEG )
+												+ getTextResourceService().getText( locale, ERROR_XML_B_SOF_DUPLICATE,
+														msg ) );
 							} else if ( msg.startsWith( "Invalid SOS parameters for sequential JPEG" ) ) {
 								// Invalid SOS parameters for sequential JPEG => ERROR_XML_B_NOT_SEQUENTIAL, msg
-								getMessageService().logError( getTextResourceService().getText( locale,
-										MESSAGE_XML_MODUL_C_JPEG )
-										+ getTextResourceService().getText( locale, ERROR_XML_B_NOT_SEQUENTIAL, msg ) );
+								Logtxt.logtxt( logFile,
+										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JPEG )
+												+ getTextResourceService().getText( locale, ERROR_XML_B_NOT_SEQUENTIAL,
+														msg ) );
 							} else if ( msg.startsWith( "Not a JPEG file: starts with" ) ) {
 								// Not a JPEG file: starts with 0x%02x 0x%02x => ERROR_XML_B_NO_SOI, msg
-								getMessageService()
-										.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JPEG )
+
+								Logtxt.logtxt( logFile,
+										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JPEG )
 												+ getTextResourceService().getText( locale, ERROR_XML_B_NO_SOI, msg ) );
 							} else if ( msg.startsWith( "No SOI and EOI marker" ) ) {
 								// No SOI and EOI marker => ERROR_XML_B_KC_NO_SOI_EOI, msg
-								getMessageService().logError( getTextResourceService().getText( locale,
-										MESSAGE_XML_MODUL_C_JPEG )
-										+ getTextResourceService().getText( locale, ERROR_XML_B_KC_NO_SOI_EOI, msg ) );
+								Logtxt.logtxt( logFile,
+										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JPEG )
+												+ getTextResourceService().getText( locale, ERROR_XML_B_KC_NO_SOI_EOI,
+														msg ) );
 							} else if ( msg.startsWith( "No SOI marker" ) ) {
 								// No SOI marker => ERROR_XML_B_KC_NO_SOI, msg
-								getMessageService()
-										.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JPEG )
+
+								Logtxt.logtxt( logFile,
+										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JPEG )
 												+ getTextResourceService().getText( locale, ERROR_XML_B_KC_NO_SOI, msg ) );
 							} else if ( msg.startsWith( "No EOI marker" ) ) {
 								// No EOI marker => ERROR_XML_B_KC_NO_EOI, msg
-								getMessageService()
-										.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JPEG )
+
+								Logtxt.logtxt( logFile,
+										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JPEG )
 												+ getTextResourceService().getText( locale, ERROR_XML_B_KC_NO_EOI, msg ) );
 							} else if ( msg.startsWith( "Missing SOI marker" ) ) {
 								// Missing SOI marker => ERROR_XML_B_KC_MISS_SOI, msg
-								getMessageService().logError( getTextResourceService().getText( locale,
-										MESSAGE_XML_MODUL_C_JPEG )
-										+ getTextResourceService().getText( locale, ERROR_XML_B_KC_MISS_SOI, msg ) );
+								Logtxt.logtxt( logFile,
+										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JPEG )
+												+ getTextResourceService().getText( locale, ERROR_XML_B_KC_MISS_SOI,
+														msg ) );
 							} else if ( msg.startsWith( "Missing EOI marker" ) ) {
 								// Missing EOI marker => ERROR_XML_B_KC_MISS_EOI, msg
-								getMessageService().logError( getTextResourceService().getText( locale,
-										MESSAGE_XML_MODUL_C_JPEG )
-										+ getTextResourceService().getText( locale, ERROR_XML_B_KC_MISS_EOI, msg ) );
+								Logtxt.logtxt( logFile,
+										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JPEG )
+												+ getTextResourceService().getText( locale, ERROR_XML_B_KC_MISS_EOI,
+														msg ) );
 							} else if ( msg.startsWith( "Missing SOI between two EOI thumbnail markers" ) ) {
 								// Missing SOI between two EOI thumbnail markers => ERROR_XML_B_KC_EOI_EOI, msg
-								getMessageService()
-										.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JPEG )
+
+								Logtxt.logtxt( logFile,
+										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JPEG )
 												+ getTextResourceService().getText( locale, ERROR_XML_B_KC_EOI_EOI, msg ) );
 							} else if ( msg.startsWith( "Empty JPEG image " ) ) {
 								// Empty JPEG image (DNL not supported) => ERROR_XML_B_EMPTY_IMAGE, msg
-								getMessageService().logError( getTextResourceService().getText( locale,
-										MESSAGE_XML_MODUL_C_JPEG )
-										+ getTextResourceService().getText( locale, ERROR_XML_B_EMPTY_IMAGE, msg ) );
+								Logtxt.logtxt( logFile,
+										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JPEG )
+												+ getTextResourceService().getText( locale, ERROR_XML_B_EMPTY_IMAGE,
+														msg ) );
 							} else if ( msg.startsWith( "Invalid component ID " ) ) {
 								// Invalid component ID %d in SOS => ERROR_XML_B_BAD_COMPONENT_ID, msg
-								getMessageService()
-										.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JPEG )
+
+								Logtxt.logtxt( logFile,
+										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JPEG )
 												+ getTextResourceService().getText( locale, ERROR_XML_B_BAD_COMPONENT_ID,
 														msg ) );
 							} else if ( msg.startsWith( "Arithmetic table " ) ) {
 								// Arithmetic table 0x%02x was not defined => ERROR_XML_B_NO_ARITH_TABLE, msg
-								getMessageService().logError( getTextResourceService().getText( locale,
-										MESSAGE_XML_MODUL_C_JPEG )
-										+ getTextResourceService().getText( locale, ERROR_XML_B_NO_ARITH_TABLE, msg ) );
+								Logtxt.logtxt( logFile,
+										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JPEG )
+												+ getTextResourceService().getText( locale, ERROR_XML_B_NO_ARITH_TABLE,
+														msg ) );
 							} else if ( msg.startsWith( "Huffman table " ) ) {
 								// Huffman table 0x%02x was not defined => ERROR_XML_B_NO_HUFF_TABLE, msg
-								getMessageService().logError( getTextResourceService().getText( locale,
-										MESSAGE_XML_MODUL_C_JPEG )
-										+ getTextResourceService().getText( locale, ERROR_XML_B_NO_HUFF_TABLE, msg ) );
+								Logtxt.logtxt( logFile,
+										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JPEG )
+												+ getTextResourceService().getText( locale, ERROR_XML_B_NO_HUFF_TABLE,
+														msg ) );
 							} else if ( msg.startsWith( "Truncated File - Missing EOI marker" ) ) {
 								// Truncated File - Missing EOI marker => ERROR_XML_B_NO_EOI, msg
-								getMessageService()
-										.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_JPEG )
+
+								Logtxt.logtxt( logFile,
+										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_JPEG )
 												+ getTextResourceService().getText( locale, ERROR_XML_B_NO_EOI, msg ) );
 							} else if ( msg.startsWith( "JFIF markers not allowed in JFIF JPEG thumbnail" ) ) {
 								// JFIF markers not allowed in JFIF JPEG thumbnail; ignored =>
 								// ERROR_XML_B_NO_JFIF_IN_THUMB, msg
-								getMessageService()
-										.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JPEG )
+
+								Logtxt.logtxt( logFile,
+										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JPEG )
 												+ getTextResourceService().getText( locale, ERROR_XML_B_NO_JFIF_IN_THUMB,
 														msg ) );
 							} else if ( msg.startsWith( "Embedded color profile is invalid" ) ) {
 								// Embedded color profile is invalid; ignored => ERROR_XML_B_INVALID_ICC, msg
-								getMessageService().logError( getTextResourceService().getText( locale,
-										MESSAGE_XML_MODUL_B_JPEG )
-										+ getTextResourceService().getText( locale, ERROR_XML_B_INVALID_ICC, msg ) );
+								Logtxt.logtxt( logFile,
+										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_JPEG )
+												+ getTextResourceService().getText( locale, ERROR_XML_B_INVALID_ICC,
+														msg ) );
 
 								// Modul D
 							} else {
 								// Fehlermeldung noch nicht übersetzt und zugeordnet
-								getMessageService()
-										.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_JPEG )
+
+								Logtxt.logtxt( logFile,
+										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_JPEG )
 												+ getTextResourceService().getText( locale, ERROR_XML_C_TRANSLATE, msg ) );
 
 								/* TODO: folgende Fehlermeldungen sind es bereits:
@@ -700,11 +736,12 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl
 			}
 			is.close();
 		} catch ( IOException ioe ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JPEG )
-							+ getTextResourceService().getText( locale, ERROR_XML_A_JPEG_JIIO_FAIL ) );
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JPEG )
+
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JPEG )
+					+ getTextResourceService().getText( locale, ERROR_XML_A_JPEG_JIIO_FAIL ) );
+
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JPEG )
 							+ getTextResourceService().getText( locale, ERROR_XML_A_JPEG_SERVICEFAILED,
 									ioe.getMessage() ) );
 			isValid = false;

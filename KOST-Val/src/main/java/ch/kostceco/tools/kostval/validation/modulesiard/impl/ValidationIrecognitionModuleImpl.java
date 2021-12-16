@@ -28,6 +28,7 @@ import org.apache.commons.io.FileUtils;
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationIrecognitionException;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationIrecognitionModule;
+import ch.kostceco.tools.kostval.logging.Logtxt;
 
 /** Validierungsschritt I (SIARD-Erkennung) Wird die SIARD-Datei als SIARD erkannt? valid -->
  * Extension = .siard
@@ -44,7 +45,7 @@ public class ValidationIrecognitionModuleImpl extends ValidationModuleImpl
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale ) throws ValidationIrecognitionException
+			Locale locale, File logFile ) throws ValidationIrecognitionException
 	{
 		// Informationen zur Darstellung "onWork" holen
 		String onWork = configMap.get( "ShowProgressOnWork" );
@@ -70,8 +71,9 @@ public class ValidationIrecognitionModuleImpl extends ValidationModuleImpl
 				if ( min ) {
 					return false;
 				} else {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_I_SIARD )
+
+					Logtxt.logtxt( logFile,
+							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_I_SIARD )
 									+ getTextResourceService().getText( locale, MESSAGE_XML_I_NOTALLOWEDEXT ) );
 					// Die SIARD-Datei wurde nicht als solche erkannt, weil sie keine .siard Extension hat.
 					valid = false;
@@ -96,8 +98,9 @@ public class ValidationIrecognitionModuleImpl extends ValidationModuleImpl
 					if ( min ) {
 						return false;
 					} else {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_I_SIARD )
+
+						Logtxt.logtxt( logFile,
+								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_I_SIARD )
 										+ getTextResourceService().getText( locale, MESSAGE_XML_I_SIARDVERSION, "2.1",
 												version21.getAbsolutePath() ) );
 					}
@@ -108,16 +111,17 @@ public class ValidationIrecognitionModuleImpl extends ValidationModuleImpl
 			if ( min ) {
 				return false;
 			} else {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_I_SIARD )
+
+				Logtxt.logtxt( logFile,
+						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_I_SIARD )
 								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 										ioe.getMessage() + " (IOException)" ) );
 			}
 		}
 
 		/** Validierung ob die PUID richtig erkannt wird (z.B mit DROID) => Auf diese Validierung kann
-		 * verzichtet werden, da bereits vorgaengig geprueft wurde ob es ein unkomprimiertes ZIP mit
-		 * dem entsprechenden metadata.xml ist. */
+		 * verzichtet werden, da bereits vorgaengig geprueft wurde ob es ein unkomprimiertes ZIP mit dem
+		 * entsprechenden metadata.xml ist. */
 
 		return valid;
 	}

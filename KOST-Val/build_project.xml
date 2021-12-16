@@ -9,7 +9,6 @@
 	<property name="source_encoding" value="ISO-8859-1" />
 	<path id="KOST-Val.classpath">
 		<pathelement location="target/classes" />
-		<pathelement location="lib/log4j-1.2.12.jar" />
 		<pathelement location="lib/spring-context-3.0.0.RELEASE.jar" />
 		<pathelement location="lib/commons-logging-1.2.jar" />
 		<pathelement location="lib/commons-lang3-3.7.jar" />

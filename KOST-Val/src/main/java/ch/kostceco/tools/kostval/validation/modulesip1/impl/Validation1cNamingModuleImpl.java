@@ -32,6 +32,7 @@ import ch.kostceco.tools.kosttools.util.Util;
 import ch.kostceco.tools.kostval.exception.modulesip1.Validation1cNamingException;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesip1.Validation1cNamingModule;
+import ch.kostceco.tools.kostval.logging.Logtxt;
 
 /** Diverse Validierungen zu den Namen der Files und Ordner, erlaubte L�ngen, verwendete Zeichen
  * usw. */
@@ -41,7 +42,7 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale ) throws Validation1cNamingException
+			Locale locale, File logFile ) throws Validation1cNamingException
 	{
 		boolean showOnWork = false;
 		int onWork = 410;
@@ -83,8 +84,9 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 
 				boolean matchFoundI = matcherI.find();
 				if ( matchFoundI ) {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ac_SIP )
+
+					Logtxt.logtxt( logFile,
+							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ac_SIP )
 									+ getTextResourceService().getText( locale, MESSAGE_XML_AC_INVALIDCHARACTERS,
 											entryNameI, matcherI.group( i ) ) );
 					charIo = false;
@@ -106,8 +108,9 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 
 					boolean matchFound = matcher.find();
 					if ( matchFound ) {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ac_SIP )
+
+						Logtxt.logtxt( logFile,
+								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ac_SIP )
 										+ getTextResourceService().getText( locale, MESSAGE_XML_AC_INVALIDCHARACTERS,
 												element, matcher.group( i ) ) );
 						charIo = false;
@@ -136,9 +139,9 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 				}
 			}
 		} catch ( Exception e ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ac_SIP )
-							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ac_SIP )
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 		}
 
 		// II.) Validierung des Formats des Dateinamen
@@ -148,9 +151,9 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 
 		boolean matchFound = matcher.find();
 		if ( !matchFound ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ac_SIP )
-							+ getTextResourceService().getText( locale, MESSAGE_XML_AC_INVALIDFILENAME ) );
+
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ac_SIP )
+					+ getTextResourceService().getText( locale, MESSAGE_XML_AC_INVALIDFILENAME ) );
 			sipIo = false;
 		}
 
@@ -166,9 +169,10 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 				// toplevel ordner nur content oder header ist erlaubt
 				if ( !(name.equals( "content" ) || name.equals( "header" )) ) {
 
-					getMessageService().logError( getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_Ac_SIP )
-							+ getTextResourceService().getText( locale, MESSAGE_XML_AC_NOTALLOWEDFILE, name ) );
+					Logtxt.logtxt( logFile,
+							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ac_SIP )
+									+ getTextResourceService().getText( locale, MESSAGE_XML_AC_NOTALLOWEDFILE,
+											name ) );
 					tlIo = false;
 				}
 				if ( showOnWork ) {
@@ -194,9 +198,9 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 				}
 			}
 		} catch ( Exception e ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ac_SIP )
-							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ac_SIP )
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
@@ -211,8 +215,9 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 				String name = file.getName();
 				// header ordner nur metadata.xml oder xsd ist erlaubt
 				if ( !(name.equals( "metadata.xml" ) || name.equals( "xsd" )) ) {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ac_SIP )
+
+					Logtxt.logtxt( logFile,
+							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ac_SIP )
 									+ getTextResourceService().getText( locale, MESSAGE_XML_AC_NOTALLOWEDFILE,
 											"header/" + name ) );
 					tlIo = false;
@@ -240,9 +245,9 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 				}
 			}
 		} catch ( Exception e ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ac_SIP )
-							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ac_SIP )
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
@@ -311,8 +316,9 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 
 					String removedEntry = allowedXsdFiles.remove( name );
 					if ( removedEntry == null ) {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ac_SIP )
+
+						Logtxt.logtxt( logFile,
+								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ac_SIP )
 										+ getTextResourceService().getText( locale, MESSAGE_XML_AC_NOTALLOWEDFILE,
 												"header/xsd/" + name ) );
 						valid = false;
@@ -343,8 +349,9 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 				Set<String> keys = allowedXsdFiles.keySet();
 				for ( Iterator<String> iterator = keys.iterator(); iterator.hasNext(); ) {
 					String string = iterator.next();
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ac_SIP )
+
+					Logtxt.logtxt( logFile,
+							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ac_SIP )
 									+ getTextResourceService().getText( locale, MESSAGE_XML_AC_MISSINGFILE,
 											"header/xsd/" + string ) );
 					valid = false;
@@ -372,9 +379,9 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 				}
 			}
 		} catch ( Exception e ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ac_SIP )
-							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ac_SIP )
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 
 			return false;
 		}
@@ -392,8 +399,9 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 				String name = valDatei.getName() + "/" + entryName;
 
 				if ( name.length() > maxPathLength.intValue() ) {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ac_SIP )
+
+					Logtxt.logtxt( logFile,
+							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ac_SIP )
 									+ getTextResourceService().getText( locale, MESSAGE_XML_AC_PATHTOOLONG, name ) );
 					lengthIo = false;
 				}
@@ -421,9 +429,9 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 				}
 			}
 		} catch ( Exception e ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ac_SIP )
-							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ac_SIP )
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 
 			return false;
 

@@ -36,6 +36,6 @@ public interface ValidationAvalidationPngModule extends ValidationModule
 {
 
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale ) throws ValidationApngvalidationException;
+			Locale locale, File logFile ) throws ValidationApngvalidationException;
 
 }

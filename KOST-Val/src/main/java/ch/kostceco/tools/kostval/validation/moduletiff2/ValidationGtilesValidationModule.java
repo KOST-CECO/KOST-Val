@@ -34,6 +34,6 @@ public interface ValidationGtilesValidationModule extends ValidationModule
 {
 
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale ) throws ValidationGtilesValidationException;
+			Locale locale, File logFile ) throws ValidationGtilesValidationException;
 
 }

@@ -21,21 +21,17 @@ package ch.kostceco.tools.kostval.logging;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.log4j.NDC;
 
-/** Logging Klasse. Saemtliche Log Aufrufe werden an Jakarta Commons Logging delegiert, welches diese
- * wiederum an Log4j delegiert.
- * 
- * @author Rc Claire Roethlisberger, KOST-CECO */
+/** @author Rc Claire Roethlisberger, KOST-CECO */
 public class Logger
 {
 
 	/** Apache Commons Log. */
-	private Log	log;
+	private Log log;
 
 	/** Instanzierung eines benannten Loggers. Der Name des Loggers entspricht dem Namen der
-	 * uebergebenen Klasse. Sinn: Beim Einsatz der Apache Log4j API koennen ueber das Konfig File Package
-	 * oder Klassenfilter gesetzt werden.
+	 * uebergebenen Klasse. Sinn: Beim Einsatz der Apache Log4j API koennen ueber das Konfig File
+	 * Package oder Klassenfilter gesetzt werden.
 	 * 
 	 * @param clazz
 	 *          Class for which a log name will be derived. */
@@ -111,41 +107,27 @@ public class Logger
 	 * 
 	 * @param message
 	 *          Meldung. */
-	public void logInfo( String message )
-	{
-		this.log.info( message );
-	}
-
-	/** Logt eine Information zum Programmablauf.
+	/* public void logInfo( String message ) { // this.log.info( message ); this.log.info( "" ); }
 	 * 
-	 * @param message
-	 *          Meldung.
-	 * @param t
-	 *          Ursache. */
-	public void logInfo( String message, Throwable t )
-	{
-		this.log.info( message, t );
-	}
-
-	/** Logt eine Information zum Nachvollziehen des Programmstatus.
+	 * /** Logt eine Information zum Programmablauf.
 	 * 
-	 * @param message
-	 *          Meldung. */
-	public void logDebug( String message )
-	{
-		this.log.debug( message );
-	}
-
-	/** Logt eine Information zum Nachvollziehen des Programmstatus.
+	 * @param message Meldung.
 	 * 
-	 * @param message
-	 *          Meldung.
-	 * @param t
-	 *          Ursache. */
-	public void logDebug( String message, Throwable t )
-	{
-		this.log.debug( message, t );
-	}
+	 * @param t Ursache. */
+	/* public void logInfo( String message, Throwable t ) { // this.log.info( message, t );
+	 * this.log.info( "" ); }
+	 * 
+	 * /** Logt eine Information zum Nachvollziehen des Programmstatus.
+	 * 
+	 * @param message Meldung. */
+	/* public void logDebug( String message ) { this.log.debug( message ); }
+	 * 
+	 * /** Logt eine Information zum Nachvollziehen des Programmstatus.
+	 * 
+	 * @param message Meldung.
+	 * 
+	 * @param t Ursache. */
+	/* public void logDebug( String message, Throwable t ) { this.log.debug( message, t ); } */
 
 	/** Ist Logging auf Level Fatal aktiv?
 	 * 
@@ -174,33 +156,13 @@ public class Logger
 	/** Ist Logging auf Level Info aktiv?
 	 * 
 	 * @return true, falls aktiv, ansonsten false. */
-	public boolean isInfoEnabled()
-	{
-		return this.log.isInfoEnabled();
-	}
-
-	/** Ist Logging auf Level Debug aktiv?
+	/* public boolean isInfoEnabled() { // return this.log.isInfoEnabled(); return true; }
+	 * 
+	 * /** Ist Logging auf Level Debug aktiv?
 	 * 
 	 * @return true, falls aktiv, ansonsten false. */
-	public boolean isDebugEnabled()
-	{
-		return this.log.isDebugEnabled();
-	}
-
-	/** Setzen des aktuellen Debug - Contextes ( Log4J ).
-	 * 
-	 * @param theRemoteUser
-	 *          das aktuell angemeldete Benutzer */
-	public void setDebugContext( String theRemoteUser )
-	{
-		NDC.push( theRemoteUser );
-	}
-
-	/** Freigabe des aktuellen Debug - Contextes ( Log4J ). */
-	public void unsetDebugContext()
-	{
-		NDC.pop();
-		NDC.remove();
-	}
+	/* public boolean isDebugEnabled() { // return this.log.isDebugEnabled(); return true; } /** Ist
+	 * Logging auf Level Debug wird nicht mehr angeboten, da es als einziges noch log4j benoetigte und
+	 * es sicherheitsprobleme gibt respektive gab */
 
 }

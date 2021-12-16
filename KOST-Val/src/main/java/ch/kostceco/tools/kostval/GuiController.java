@@ -34,7 +34,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.log4j.Logger;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.w3c.dom.Document;
@@ -112,7 +111,7 @@ public class GuiController
 
 	private String						arg0, arg1, arg2, arg3 = "--xml", dirOfJarPath, initInstructionsDe,
 			initInstructionsFr, initInstructionsEn;
-	private String						versionKostVal	= "2.1.0.0";
+	private String						versionKostVal	= "2.1.1.0";
 	/* TODO: versionKostVal auch hier anpassen:
 	 * 
 	 * 2) cmdKOSTVal.java
@@ -143,8 +142,10 @@ public class GuiController
 
 		// TODO --> initialize (wird einmalig am Anfang ausgefuehrt)
 
+		Util.switchOffConsole();
 		ConfigurableApplicationContext context = new ClassPathXmlApplicationContext(
 				"classpath:config/applicationContext.xml" );
+		Util.switchOnConsole();
 
 		// Copyright und Versionen ausgeben
 		String java6432 = System.getProperty( "sun.arch.data.model" );
@@ -633,9 +634,6 @@ public class GuiController
 					scroll.setVvalue( 1.0 ); // 1.0 = letzte Zeile der Konsole
 					buttonPrint.setDisable( false );
 					buttonSave.setDisable( false );
-					// verherige logs entfernen (nicht weiterloggen in alte Logs)
-					Logger rootLogger = Logger.getRootLogger();
-					rootLogger.removeAllAppenders();
 				} else {
 					// Da es nicht erfolgreich war kann der Log nicht angezeigt werden
 					String text = "Ein Fehler ist aufgetreten. Siehe Konsole.";
@@ -794,9 +792,6 @@ public class GuiController
 					scroll.setVvalue( 1.0 ); // 1.0 = letzte Zeile der Konsole
 					buttonPrint.setDisable( false );
 					buttonSave.setDisable( false );
-					// verherige logs entfernen (nicht weiterloggen in alte Logs)
-					Logger rootLogger = Logger.getRootLogger();
-					rootLogger.removeAllAppenders();
 				} else {
 					// Da es nicht erfolgreich war kann der Log nicht angezeigt werden
 					String text = "Ein Fehler ist aufgetreten. Siehe Konsole.";
@@ -928,9 +923,6 @@ public class GuiController
 					scroll.setVvalue( 1.0 ); // 1.0 = letzte Zeile der Konsole
 					buttonPrint.setDisable( false );
 					buttonSave.setDisable( false );
-					// verherige logs entfernen (nicht weiterloggen in alte Logs)
-					Logger rootLogger = Logger.getRootLogger();
-					rootLogger.removeAllAppenders();
 				} else {
 					// Da es nicht erfolgreich war kann der Log nicht angezeigt werden
 					String text = "Ein Fehler ist aufgetreten. Siehe Konsole.";

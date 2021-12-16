@@ -25,7 +25,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import ch.kostceco.tools.kosttools.util.Util;
-import ch.kostceco.tools.kostval.logging.Logger;
+import ch.kostceco.tools.kostval.logging.Logtxt;
 import ch.kostceco.tools.kostval.logging.MessageConstants;
 import ch.kostceco.tools.kostval.service.TextResourceService;
 
@@ -38,7 +38,6 @@ import ch.kostceco.tools.kostval.service.TextResourceService;
 public class Controllervalinitlog implements MessageConstants
 {
 
-	private static final Logger					LOGGER	= new Logger( Controllervalinitlog.class );
 	private static TextResourceService	textResourceService;
 
 	public static TextResourceService getTextResourceService()
@@ -144,21 +143,21 @@ public class Controllervalinitlog implements MessageConstants
 			formatValOn = "PNG";
 		}
 
-		LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_HEADER ) );
-		LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_START, ausgabeStart ) );
-		LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_END ) );
-		LOGGER.logError(
+		Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_HEADER ) );
+		Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_START, ausgabeStart ) );
+		Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_END ) );
+		Logtxt.logtxt( logFile, 
 				getTextResourceService().getText( locale, MESSAGE_XML_FORMATON, formatValOn, version ) );
-		LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_INFO, versionKostVal ) );
+		Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_INFO, versionKostVal ) );
 		String config = "";
 		for ( String key : configMap.keySet() ) {
 			config = config + key + " " + configMap.get( key ) + "; ";
 		}
-		LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_CONFIG, config ) );
+		Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_CONFIG, config ) );
 
 		if ( args[0].equals( "--format" ) && formatValOn.equals( "" ) ) {
 			// Formatvalidierung aber alle Formate ausgeschlossen
-			LOGGER.logError( getTextResourceService().getText( locale, ERROR_IOE,
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, ERROR_IOE,
 					getTextResourceService().getText( locale, ERROR_NOFILEENDINGS ) ) );
 			System.out.println( getTextResourceService().getText( locale, ERROR_NOFILEENDINGS ) );
 			// logFile bereinigung (& End und ggf 3c)
@@ -183,7 +182,7 @@ public class Controllervalinitlog implements MessageConstants
 		if ( !PdfValidatorAPIDll.exists() ) {
 			String dll = (getTextResourceService().getText( locale, ERROR_MISSING,
 					PdfValidatorAPIDll.getAbsolutePath() ));
-			LOGGER.logError( dll );
+			Logtxt.logtxt( logFile, dll );
 			System.out.println( dll );
 			valInitlog = false;
 			return valInitlog;
@@ -196,7 +195,7 @@ public class Controllervalinitlog implements MessageConstants
 		if ( !PdfValidatorAPIDll32.exists() ) {
 			String dll32 = (getTextResourceService().getText( locale, ERROR_MISSING,
 					PdfValidatorAPIDll32.getAbsolutePath() ));
-			LOGGER.logError( dll32 );
+			Logtxt.logtxt( logFile, dll32 );
 			System.out.println( dll32 );
 			valInitlog = false;
 			return valInitlog;
@@ -209,7 +208,7 @@ public class Controllervalinitlog implements MessageConstants
 		if ( !PdfValidatorAPIDll64.exists() ) {
 			String dll64 = (getTextResourceService().getText( locale, ERROR_MISSING,
 					PdfValidatorAPIDll64.getAbsolutePath() ));
-			LOGGER.logError( dll64 );
+			Logtxt.logtxt( logFile, dll64 );
 			System.out.println( dll64 );
 			valInitlog = false;
 			return valInitlog;
@@ -225,7 +224,7 @@ public class Controllervalinitlog implements MessageConstants
 							WARNING_JARDIRECTORY_NOTWRITABLEXML, PdfValidatorAPIDll.getParentFile(),
 							PdfValidatorAPIDll.getAbsolutePath(), PdfValidatorAPIDll32.getAbsolutePath(), "64",
 							java64 );
-					LOGGER.logError( warning32xml );
+					Logtxt.logtxt( logFile, warning32xml );
 					String warning32 = getTextResourceService().getText( locale,
 							WARNING_JARDIRECTORY_NOTWRITABLE, PdfValidatorAPIDll.getParentFile(),
 							PdfValidatorAPIDll.getAbsolutePath(), PdfValidatorAPIDll32.getAbsolutePath(), "64",
@@ -240,7 +239,7 @@ public class Controllervalinitlog implements MessageConstants
 								WARNING_JARDIRECTORY_NOTWRITABLEXML, PdfValidatorAPIDll.getParentFile(),
 								PdfValidatorAPIDll.getAbsolutePath(), PdfValidatorAPIDll32.getAbsolutePath(), "64",
 								java64 );
-						LOGGER.logError( warning32xml );
+						Logtxt.logtxt( logFile, warning32xml );
 						String warning32 = getTextResourceService().getText( locale,
 								WARNING_JARDIRECTORY_NOTWRITABLE, PdfValidatorAPIDll.getParentFile(),
 								PdfValidatorAPIDll.getAbsolutePath(), PdfValidatorAPIDll32.getAbsolutePath(), "64",
@@ -256,7 +255,7 @@ public class Controllervalinitlog implements MessageConstants
 									WARNING_JARDIRECTORY_NOTWRITABLEXML, PdfValidatorAPIDll.getParentFile(),
 									PdfValidatorAPIDll.getAbsolutePath(), PdfValidatorAPIDll32.getAbsolutePath(),
 									"64", java64 );
-							LOGGER.logError( warning32xml );
+							Logtxt.logtxt( logFile, warning32xml );
 							String warning32 = getTextResourceService().getText( locale,
 									WARNING_JARDIRECTORY_NOTWRITABLE, PdfValidatorAPIDll.getParentFile(),
 									PdfValidatorAPIDll.getAbsolutePath(), PdfValidatorAPIDll32.getAbsolutePath(),
@@ -275,7 +274,7 @@ public class Controllervalinitlog implements MessageConstants
 							WARNING_JARDIRECTORY_NOTWRITABLEXML, PdfValidatorAPIDll.getParentFile(),
 							PdfValidatorAPIDll.getAbsolutePath(), PdfValidatorAPIDll64.getAbsolutePath(), "32",
 							java64 );
-					LOGGER.logError( warning64xml );
+					Logtxt.logtxt( logFile, warning64xml );
 					String warning64 = getTextResourceService().getText( locale,
 							WARNING_JARDIRECTORY_NOTWRITABLE, PdfValidatorAPIDll.getParentFile(),
 							PdfValidatorAPIDll.getAbsolutePath(), PdfValidatorAPIDll64.getAbsolutePath(), "32",
@@ -290,7 +289,7 @@ public class Controllervalinitlog implements MessageConstants
 								WARNING_JARDIRECTORY_NOTWRITABLEXML, PdfValidatorAPIDll.getParentFile(),
 								PdfValidatorAPIDll.getAbsolutePath(), PdfValidatorAPIDll64.getAbsolutePath(), "32",
 								java64 );
-						LOGGER.logError( warning64xml );
+						Logtxt.logtxt( logFile, warning64xml );
 						String warning64 = getTextResourceService().getText( locale,
 								WARNING_JARDIRECTORY_NOTWRITABLE, PdfValidatorAPIDll.getParentFile(),
 								PdfValidatorAPIDll.getAbsolutePath(), PdfValidatorAPIDll64.getAbsolutePath(), "32",
@@ -306,7 +305,7 @@ public class Controllervalinitlog implements MessageConstants
 									WARNING_JARDIRECTORY_NOTWRITABLEXML, PdfValidatorAPIDll.getParentFile(),
 									PdfValidatorAPIDll.getAbsolutePath(), PdfValidatorAPIDll64.getAbsolutePath(),
 									"32", java64 );
-							LOGGER.logError( warning64xml );
+							Logtxt.logtxt( logFile, warning64xml );
 							String warning64 = getTextResourceService().getText( locale,
 									WARNING_JARDIRECTORY_NOTWRITABLE, PdfValidatorAPIDll.getParentFile(),
 									PdfValidatorAPIDll.getAbsolutePath(), PdfValidatorAPIDll64.getAbsolutePath(),

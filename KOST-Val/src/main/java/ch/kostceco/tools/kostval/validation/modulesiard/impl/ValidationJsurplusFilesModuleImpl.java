@@ -48,6 +48,7 @@ import ch.kostceco.tools.kostval.KOSTVal;
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationJsurplusFilesException;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationJsurplusFilesModule;
+import ch.kostceco.tools.kostval.logging.Logtxt;
 
 /** Validierungsschritt J (zusaetzliche Primaerdateien) Enthaelt der content-Ordner Dateien oder
  * Ordner die nicht in metadata.xml oder in table[Zahl].xml beschrieben sind ? invalid -->
@@ -69,7 +70,7 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale ) throws ValidationJsurplusFilesException
+			Locale locale, File logFile ) throws ValidationJsurplusFilesException
 	{
 		filesInSiardUnsorted.clear();
 		filesInSiard.clear();
@@ -159,8 +160,9 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 				if ( min ) {
 					return false;
 				} else {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
+
+					Logtxt.logtxt( logFile,
+							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
 									+ getTextResourceService().getText( locale, MESSAGE_XML_MISSING_FILE, checkTool,
 											getTextResourceService().getText( locale, ABORTED ) ) );
 					return false;
@@ -196,8 +198,9 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 						if ( min ) {
 							return false;
 						} else {
-							getMessageService()
-									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
+
+							Logtxt.logtxt( logFile,
+									getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
 											+ getTextResourceService().getText( locale, MESSAGE_XML_D_INVALID_XMLNS,
 													metadataXml ) );
 						}
@@ -235,8 +238,9 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 				if ( min ) {
 					return false;
 				} else {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
+
+					Logtxt.logtxt( logFile,
+							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
 									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 											ioe.getMessage() + " (IOException)" ) );
 				}
@@ -245,8 +249,9 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 				if ( min ) {
 					return false;
 				} else {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
+
+					Logtxt.logtxt( logFile,
+							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
 									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 											e.getMessage() + " (JDOMException)" ) );
 				}
@@ -307,14 +312,14 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 									} else {
 										if ( resultExec.equals( "NoReport" ) ) {
 											// Report existiert nicht
-											getMessageService().logError(
+											Logtxt.logtxt( logFile,
 													getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
 															+ getTextResourceService().getText( locale,
 																	MESSAGE_XML_MISSING_REPORT ) );
 											return false;
 										} else {
 											// Exception
-											getMessageService().logError(
+											Logtxt.logtxt( logFile,
 													getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
 															+ getTextResourceService().getText( locale,
 																	MESSAGE_XML_CG_ET_SERVICEFAILED, resultExec ) );
@@ -408,7 +413,7 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 								if ( min ) {
 									return false;
 								} else {
-									getMessageService().logError(
+									Logtxt.logtxt( logFile,
 											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
 													+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 															"FileNotFoundException" ) );
@@ -418,7 +423,7 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 								if ( min ) {
 									return false;
 								} else {
-									getMessageService().logError(
+									Logtxt.logtxt( logFile,
 											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
 													+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 															(e.getMessage() + " 1") ) ); //
@@ -449,8 +454,9 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 				} catch ( Exception e ) {
 					if ( min ) {
 					} else {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
+
+						Logtxt.logtxt( logFile,
+								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
 										+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 												(e.getMessage() + " 2") ) );
 						// return false;
@@ -470,11 +476,12 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 					 * C:\Users\X60014195\.kost-val_2x\temp_KOST-Val\SIARD\content\schema0\table7\
 					 * newOrdner7] */
 					String pretty = noPretty.replace( "[", "</Message><Message>" );
-					 pretty = pretty.replace( "]", "" );
+					pretty = pretty.replace( "]", "" );
 					pretty = pretty.replace( ", ", "</Message><Message>" );
-					getMessageService().logError( getTextResourceService().getText( locale,
-							MESSAGE_XML_MODUL_J_SIARD )
-							+ getTextResourceService().getText( locale, MESSAGE_XML_J_INVALID_ENTRY, pretty ) );
+					Logtxt.logtxt( logFile,
+							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
+									+ getTextResourceService().getText( locale, MESSAGE_XML_J_INVALID_ENTRY,
+											pretty ) );
 				}
 			} else {
 				valid = true;
@@ -483,8 +490,9 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 		} catch ( Exception e ) {
 			if ( min ) {
 			} else {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
+
+				Logtxt.logtxt( logFile,
+						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
 								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 										(e.getMessage() + " 3") ) );
 			} // return false;

@@ -40,6 +40,7 @@ import ch.kostceco.tools.kostval.KOSTVal;
 import ch.kostceco.tools.kostval.exception.modulesip1.Validation1dMetadataException;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesip1.Validation1dMetadataModule;
+import ch.kostceco.tools.kostval.logging.Logtxt;
 
 public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 		implements Validation1dMetadataModule
@@ -50,7 +51,7 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 	final int							BUFFER	= 2048;
 
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale ) throws Validation1dMetadataException
+			Locale locale, File logFile ) throws Validation1dMetadataException
 	{
 		String pathToWorkDir = configMap.get( "PathToWorkDir" );
 		File pathToWorkDirFile = new File( pathToWorkDir + File.separator + "header" );
@@ -115,8 +116,9 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 						int end = line.indexOf( ">" );
 						String lineNode = line.substring( ns, end );
 						String lineNodeNS = line.substring( start, end );
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
+
+						Logtxt.logtxt( logFile,
+								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
 										+ getTextResourceService().getText( locale, ERROR_XML_AD_NSFOUND, lineNode,
 												lineNodeNS ) );
 						in.close();
@@ -218,13 +220,15 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 					}
 
 				} catch ( FileNotFoundException e ) {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
+
+					Logtxt.logtxt( logFile,
+							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
 									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 											"FileNotFoundException" ) );
 				} catch ( Exception e ) {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
+
+					Logtxt.logtxt( logFile,
+							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
 									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 											(e.getMessage() + " 1") ) ); //
 					return false;
@@ -239,8 +243,9 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 				String checkTool = Xmllint.checkXmllint( dirOfJarPath );
 				if ( !checkTool.equals( "OK" ) ) {
 					// mindestens eine Datei fehlt fuer die Validierung
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
+
+					Logtxt.logtxt( logFile,
+							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
 									+ getTextResourceService().getText( locale, MESSAGE_XML_MISSING_FILE, checkTool,
 											getTextResourceService().getText( locale, ABORTED ) ) );
 					result = false;
@@ -260,12 +265,14 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 							// val.message.xml.h.invalid.xml = <Message>{0} ist invalid zu
 							// {1}</Message></Error>
 							// val.message.xml.h.invalid.error = <Message>{0}</Message></Error>
-							getMessageService()
-									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
+
+							Logtxt.logtxt( logFile,
+									getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
 											+ getTextResourceService().getText( locale, MESSAGE_XML_H_INVALID_XML,
 													tableXmlShortString, tableXsdShortString ) );
-							getMessageService()
-									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
+
+							Logtxt.logtxt( logFile,
+									getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
 											+ getTextResourceService().getText( locale, MESSAGE_XML_H_INVALID_ERROR,
 													resultExecSS ) );
 						} else {
@@ -283,12 +290,14 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 								// val.message.xml.h.invalid.xml = <Message>{0} ist invalid zu
 								// {1}</Message></Error>
 								// val.message.xml.h.invalid.error = <Message>{0}</Message></Error>
-								getMessageService()
-										.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
+
+								Logtxt.logtxt( logFile,
+										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
 												+ getTextResourceService().getText( locale, MESSAGE_XML_H_INVALID_XML,
 														tableXmlShortString, tableXsdShortString ) );
-								getMessageService()
-										.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
+
+								Logtxt.logtxt( logFile,
+										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
 												+ getTextResourceService().getText( locale, MESSAGE_XML_H_INVALID_ERROR,
 														resultExecSI ) );
 							} else {
@@ -305,11 +314,11 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 									// val.message.xml.h.invalid.xml = <Message>{0} ist invalid zu
 									// {1}</Message></Error>
 									// val.message.xml.h.invalid.error = <Message>{0}</Message></Error>
-									getMessageService().logError(
+									Logtxt.logtxt( logFile,
 											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
 													+ getTextResourceService().getText( locale, MESSAGE_XML_H_INVALID_XML,
 															tableXmlShortString, tableXsdShortString ) );
-									getMessageService().logError(
+									Logtxt.logtxt( logFile,
 											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
 													+ getTextResourceService().getText( locale, MESSAGE_XML_H_INVALID_ERROR,
 															resultExecIS ) );
@@ -320,17 +329,18 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 						}
 					} catch ( InterruptedException e1 ) {
 						result = false;
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
+
+						Logtxt.logtxt( logFile,
+								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
 										+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 												e1.getMessage() + " (InterruptedException Xmllint.execXmllint)" ) );
 					}
 				}
 			}
 		} catch ( Exception e ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
-							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 		return result;

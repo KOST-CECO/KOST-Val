@@ -41,7 +41,7 @@ import org.springframework.context.ApplicationContext;
 import ch.kostceco.tools.kosttools.fileservice.Magic;
 import ch.kostceco.tools.kosttools.util.Util;
 import ch.kostceco.tools.kosttools.util.Zip64Archiver;
-import ch.kostceco.tools.kostval.logging.Logger;
+import ch.kostceco.tools.kostval.logging.Logtxt;
 import ch.kostceco.tools.kostval.logging.MessageConstants;
 import ch.kostceco.tools.kostval.service.TextResourceService;
 
@@ -54,8 +54,7 @@ import ch.kostceco.tools.kostval.service.TextResourceService;
 public class Controllervalsip implements MessageConstants
 {
 
-	private static final Logger					LOGGER	= new Logger( Controllervalsip.class );
-	private static TextResourceService	textResourceService;
+	private static TextResourceService textResourceService;
 
 	public static TextResourceService getTextResourceService()
 	{
@@ -70,7 +69,7 @@ public class Controllervalsip implements MessageConstants
 
 	public boolean valSip( File valDatei, String logFileName, File directoryOfLogfile,
 			boolean verbose, String dirOfJarPath, Map<String, String> configMap,
-			ApplicationContext context, Locale locale, Boolean onlySip ) throws IOException
+			ApplicationContext context, Locale locale, Boolean onlySip, File logFile ) throws IOException
 	{
 		// SIP-Validierung
 
@@ -85,8 +84,6 @@ public class Controllervalsip implements MessageConstants
 			e.printStackTrace();
 			System.out.println( tmpDir.getAbsolutePath() );
 		}
-		File logFile = new File( directoryOfLogfile.getAbsolutePath() + File.separator
-				+ valDatei.getName() + ".kost-val.log.xml" );
 
 		// ggf alte SIP-Validierung-Versions-Notiz loeschen
 		File ECH160_1_2 = new File(
@@ -173,7 +170,7 @@ public class Controllervalsip implements MessageConstants
 				formatValOn = "PNG";
 			}
 		}
-		LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_FORMAT1 ) );
+		Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_FORMAT1 ) );
 
 		// TODO Sip fuer Validierung vorbereiten
 		try {
@@ -227,32 +224,34 @@ public class Controllervalsip implements MessageConstants
 				if ( (!(valDateiExt.equals( ".zip" )
 						|| valDatei.getAbsolutePath().toLowerCase().endsWith( ".zip64" ))) || zip == false ) {
 					// Abbruch! D.h. Sip message beginnen, Meldung und Beenden ab hier bis System.exit( 1 );
-					LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_FORMAT2 ) );
-					LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_SIP1 ) );
+					Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_FORMAT2 ) );
+					Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_SIP1 ) );
 					valDatei = originalSipFile;
-					LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS ) );
-					LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALTYPE,
+					Logtxt.logtxt( logFile,
+							getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS ) );
+					Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_VALTYPE,
 							getTextResourceService().getText( locale, MESSAGE_SIPVALIDATION ) ) );
-					LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALFILE,
+					Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_VALFILE,
 							valDatei.getAbsolutePath() ) );
 					System.out.println( "" );
 					System.out.println( "SIP:   " + valDatei.getAbsolutePath() );
 
 					// die eigentliche Fehlermeldung
-					LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Aa_SIP )
-							+ getTextResourceService().getText( locale, ERROR_XML_AA_INCORRECTFILEENDING ) );
+					Logtxt.logtxt( logFile,
+							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Aa_SIP )
+									+ getTextResourceService().getText( locale, ERROR_XML_AA_INCORRECTFILEENDING ) );
 					System.out.println(
 							getTextResourceService().getText( locale, ERROR_XML_AA_INCORRECTFILEENDING ) );
 
 					// Fehler im Validierten SIP --> invalide & Abbruch
-					LOGGER.logError(
+					Logtxt.logtxt( logFile,
 							getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_INVALID ) );
-					LOGGER.logError(
+					Logtxt.logtxt( logFile,
 							getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) );
 					System.out.println( "Invalid" );
 					System.out.println( "" );
-					LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_SIP2 ) );
-					LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_LOGEND ) );
+					Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_SIP2 ) );
+					Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_LOGEND ) );
 
 					// logFile bereinigung (& End und ggf 3c)
 					Util.valEnd3cAmp( "", logFile );
@@ -321,33 +320,38 @@ public class Controllervalsip implements MessageConstants
 							Zip64Archiver.unzip64( valDatei, tmpDirZip );
 						} catch ( Exception e1 ) {
 							// Abbruch! D.h. Sip message beginnen, Meldung und Beenden ab hier bis System.exit
-							LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_FORMAT2 ) );
-							LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_SIP1 ) );
+							Logtxt.logtxt( logFile,
+									getTextResourceService().getText( locale, MESSAGE_XML_FORMAT2 ) );
+							Logtxt.logtxt( logFile,
+									getTextResourceService().getText( locale, MESSAGE_XML_SIP1 ) );
 							valDatei = originalSipFile;
-							LOGGER
-									.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS ) );
-							LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALTYPE,
+							Logtxt.logtxt( logFile,
+									getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS ) );
+							Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_VALTYPE,
 									getTextResourceService().getText( locale, MESSAGE_SIPVALIDATION ) ) );
-							LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALFILE,
+							Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_VALFILE,
 									valDatei.getAbsolutePath() ) );
 							System.out.println( "" );
 							System.out.println( "SIP:   " + valDatei.getAbsolutePath() );
 
 							// die eigentliche Fehlermeldung
-							LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Aa_SIP )
-									+ getTextResourceService().getText( locale, ERROR_XML_AA_CANNOTEXTRACTZIP ) );
+							Logtxt.logtxt( logFile,
+									getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Aa_SIP )
+											+ getTextResourceService().getText( locale, ERROR_XML_AA_CANNOTEXTRACTZIP ) );
 							System.out.println(
 									getTextResourceService().getText( locale, ERROR_XML_AA_CANNOTEXTRACTZIP ) );
 
 							// Fehler im Validierten SIP --> invalide & Abbruch
-							LOGGER.logError(
+							Logtxt.logtxt( logFile,
 									getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_INVALID ) );
-							LOGGER.logError(
+							Logtxt.logtxt( logFile,
 									getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) );
 							System.out.println( "Invalid" );
 							System.out.println( "" );
-							LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_SIP2 ) );
-							LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_LOGEND ) );
+							Logtxt.logtxt( logFile,
+									getTextResourceService().getText( locale, MESSAGE_XML_SIP2 ) );
+							Logtxt.logtxt( logFile,
+									getTextResourceService().getText( locale, MESSAGE_XML_LOGEND ) );
 
 							// logFile bereinigung (& End und ggf 3c)
 							Util.valEnd3cAmp( "", logFile );
@@ -421,7 +425,7 @@ public class Controllervalsip implements MessageConstants
 							Controllervalfile controller1 = (Controllervalfile) context
 									.getBean( "controllervalfile" );
 							boolean valFile = controller1.valFile( valDatei, logFileName, directoryOfLogfile,
-									verbose, dirOfJarPath, configMap, context, locale );
+									verbose, dirOfJarPath, configMap, context, locale, logFile );
 							if ( valFile ) {
 								pdfaCountIo = pdfaCountIo + 1;
 							} else {
@@ -453,7 +457,7 @@ public class Controllervalsip implements MessageConstants
 							Controllervalfile controller1 = (Controllervalfile) context
 									.getBean( "controllervalfile" );
 							boolean valFile = controller1.valFile( valDatei, logFileName, directoryOfLogfile,
-									verbose, dirOfJarPath, configMap, context, locale );
+									verbose, dirOfJarPath, configMap, context, locale, logFile );
 							if ( valFile ) {
 								tiffCountIo = tiffCountIo + 1;
 							} else {
@@ -495,7 +499,7 @@ public class Controllervalsip implements MessageConstants
 							Controllervalfile controller1 = (Controllervalfile) context
 									.getBean( "controllervalfile" );
 							boolean valFile = controller1.valFile( valDatei, logFileName, directoryOfLogfile,
-									verbose, dirOfJarPath, configMap, context, locale );
+									verbose, dirOfJarPath, configMap, context, locale, logFile );
 							if ( valFile ) {
 								siardCountIo = siardCountIo + 1;
 							} else {
@@ -527,7 +531,7 @@ public class Controllervalsip implements MessageConstants
 							Controllervalfile controller1 = (Controllervalfile) context
 									.getBean( "controllervalfile" );
 							boolean valFile = controller1.valFile( valDatei, logFileName, directoryOfLogfile,
-									verbose, dirOfJarPath, configMap, context, locale );
+									verbose, dirOfJarPath, configMap, context, locale, logFile );
 							if ( valFile ) {
 								jpegCountIo = jpegCountIo + 1;
 							} else {
@@ -558,7 +562,7 @@ public class Controllervalsip implements MessageConstants
 							Controllervalfile controller1 = (Controllervalfile) context
 									.getBean( "controllervalfile" );
 							boolean valFile = controller1.valFile( valDatei, logFileName, directoryOfLogfile,
-									verbose, dirOfJarPath, configMap, context, locale );
+									verbose, dirOfJarPath, configMap, context, locale, logFile );
 							if ( valFile ) {
 								pngCountIo = pngCountIo + 1;
 							} else {
@@ -590,7 +594,7 @@ public class Controllervalsip implements MessageConstants
 							Controllervalfile controller1 = (Controllervalfile) context
 									.getBean( "controllervalfile" );
 							boolean valFile = controller1.valFile( valDatei, logFileName, directoryOfLogfile,
-									verbose, dirOfJarPath, configMap, context, locale );
+									verbose, dirOfJarPath, configMap, context, locale, logFile );
 							if ( valFile ) {
 								jp2CountIo = jp2CountIo + 1;
 							} else {
@@ -683,28 +687,29 @@ public class Controllervalsip implements MessageConstants
 
 			if ( countNio == count ) {
 				// keine Dateien Validiert
-				LOGGER.logError(
+				Logtxt.logtxt( logFile,
 						getTextResourceService().getText( locale, ERROR_INCORRECTFILEENDINGS, formatValOn ) );
 				System.out.println(
 						getTextResourceService().getText( locale, ERROR_INCORRECTFILEENDINGS, formatValOn ) );
 			}
 
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_FORMAT2 ) );
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_FORMAT2 ) );
 
 			// TODO Start Normale SIP-Validierung mit auswertung Format-Val. im 3c
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_SIP1 ) );
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_SIP1 ) );
 			valDatei = unSipFile;
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS ) );
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALTYPE,
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS ) );
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_VALTYPE,
 					getTextResourceService().getText( locale, MESSAGE_SIPVALIDATION ) ) );
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALFILE,
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_VALFILE,
 					originalSipFile.getAbsolutePath() ) );
 			System.out.println( "" );
 			System.out.println( "SIP:   " + valDatei.getAbsolutePath() );
 
 			Controllersip controller = (Controllersip) context.getBean( "controllersip" );
 			boolean okMandatory = false;
-			okMandatory = controller.executeMandatory( valDatei, directoryOfLogfile, configMap, locale );
+			okMandatory = controller.executeMandatory( valDatei, directoryOfLogfile, configMap, locale,
+					logFile );
 			boolean ok = false;
 
 			/* die Validierungen 1a - 1d sind obligatorisch, wenn sie bestanden wurden, koennen die
@@ -714,29 +719,29 @@ public class Controllervalsip implements MessageConstants
 			 * 1a wurde bereits getestet (vor der Formatvalidierung entsprechend faengt der Controller mit
 			 * 1b an */
 			if ( okMandatory ) {
-				ok = controller.executeOptional( valDatei, directoryOfLogfile, configMap, locale );
+				ok = controller.executeOptional( valDatei, directoryOfLogfile, configMap, locale, logFile );
 			}
 			// Formatvalidierung validFormat
 			ok = (ok && okMandatory && validFormat);
 
 			if ( ok ) {
 				// Validiertes SIP valide
-				LOGGER
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_VALID ) );
-				LOGGER
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) );
-				LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_SIP2 ) );
-				LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_LOGEND ) );
+				Logtxt.logtxt( logFile,
+						getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_VALID ) );
+				Logtxt.logtxt( logFile,
+						getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) );
+				Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_SIP2 ) );
+				Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_LOGEND ) );
 				System.out.println( "Valid" );
 				System.out.println( "" );
 			} else {
 				// Fehler im Validierten SIP --> invalide
-				LOGGER.logError(
+				Logtxt.logtxt( logFile,
 						getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_INVALID ) );
-				LOGGER
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) );
-				LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_SIP2 ) );
-				LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_LOGEND ) );
+				Logtxt.logtxt( logFile,
+						getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) );
+				Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_SIP2 ) );
+				Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_LOGEND ) );
 				System.out.println( "Invalid" );
 				System.out.println( "" );
 
@@ -812,11 +817,12 @@ public class Controllervalsip implements MessageConstants
 				return valSip;
 			}
 		} catch ( Exception e ) {
-			LOGGER.logError( "<Error>"
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-							"SIP-ValidationException: " + e.getMessage() )
-					+ getTextResourceService().getText( locale, MESSAGE_XML_SIP2 )
-					+ getTextResourceService().getText( locale, MESSAGE_XML_LOGEND ) );
+			Logtxt.logtxt( logFile,
+					"<Error>"
+							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+									"SIP-ValidationException: " + e.getMessage() )
+							+ getTextResourceService().getText( locale, MESSAGE_XML_SIP2 )
+							+ getTextResourceService().getText( locale, MESSAGE_XML_LOGEND ) );
 			System.out.println( "Exception: " + e.getMessage() );
 			if ( tmpDir.exists() ) {
 				Util.deleteDir( tmpDir );
@@ -824,7 +830,8 @@ public class Controllervalsip implements MessageConstants
 			valSip = false;
 			return valSip;
 		} catch ( StackOverflowError eso ) {
-			LOGGER.logError( getTextResourceService().getText( locale, ERROR_XML_STACKOVERFLOWMAIN ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale, ERROR_XML_STACKOVERFLOWMAIN ) );
 			System.out.println( "Exception: " + "StackOverflowError" );
 			if ( tmpDir.exists() ) {
 				Util.deleteDir( tmpDir );
@@ -832,7 +839,8 @@ public class Controllervalsip implements MessageConstants
 			valSip = false;
 			return valSip;
 		} catch ( OutOfMemoryError eoom ) {
-			LOGGER.logError( getTextResourceService().getText( locale, ERROR_XML_OUTOFMEMORYMAIN ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale, ERROR_XML_OUTOFMEMORYMAIN ) );
 			System.out.println( "Exception: " + "OutOfMemoryError" );
 			if ( tmpDir.exists() ) {
 				Util.deleteDir( tmpDir );

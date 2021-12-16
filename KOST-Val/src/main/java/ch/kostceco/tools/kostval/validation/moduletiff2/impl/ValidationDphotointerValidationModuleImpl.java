@@ -28,6 +28,7 @@ import java.io.FileReader;
 import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationDphotointerValidationException;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationDphotointerValidationModule;
+import ch.kostceco.tools.kostval.logging.Logtxt;
 
 /** Validierungsschritt D (Farbraum-Validierung) Ist die TIFF-Datei gemäss Konfigurationsdatei
  * valid?
@@ -44,7 +45,7 @@ public class ValidationDphotointerValidationModuleImpl extends ValidationModuleI
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale ) throws ValidationDphotointerValidationException
+			Locale locale, File logFile ) throws ValidationDphotointerValidationException
 	{
 		String onWork = configMap.get( "ShowProgressOnWork" );
 		if ( onWork.equals( "nomin" ) ) {
@@ -61,8 +62,9 @@ public class ValidationDphotointerValidationModuleImpl extends ValidationModuleI
 
 		if ( !exiftoolReport.exists() ) {
 			// Report existiert nicht
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF )
+
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF )
 							+ getTextResourceService().getText( locale, MESSAGE_XML_MISSING_REPORT,
 									exiftoolReport.getAbsolutePath(),
 									getTextResourceService().getText( locale, ABORTED ) ) );
@@ -144,9 +146,10 @@ public class ValidationDphotointerValidationModuleImpl extends ValidationModuleI
 										&& !line.equals( oldErrorLine3 ) && !line.equals( oldErrorLine4 )
 										&& !line.equals( oldErrorLine5 ) ) {
 									// neuer Fehler
-									getMessageService().logError( getTextResourceService().getText( locale,
-											MESSAGE_XML_MODUL_D_TIFF )
-											+ getTextResourceService().getText( locale, MESSAGE_XML_CG_INVALID, line ) );
+									Logtxt.logtxt( logFile,
+											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF )
+													+ getTextResourceService().getText( locale, MESSAGE_XML_CG_INVALID,
+															line ) );
 									if ( oldErrorLine1.equals( "" ) ) {
 										oldErrorLine1 = line;
 									} else if ( oldErrorLine2.equals( "" ) ) {
@@ -178,9 +181,10 @@ public class ValidationDphotointerValidationModuleImpl extends ValidationModuleI
 									}
 									return false;
 								} else {
-									getMessageService().logError( getTextResourceService().getText( locale,
-											MESSAGE_XML_MODUL_D_TIFF )
-											+ getTextResourceService().getText( locale, MESSAGE_XML_CG_INVALID, line ) );
+									Logtxt.logtxt( logFile,
+											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF )
+													+ getTextResourceService().getText( locale, MESSAGE_XML_CG_INVALID,
+															line ) );
 								}
 							}
 						}
@@ -197,8 +201,9 @@ public class ValidationDphotointerValidationModuleImpl extends ValidationModuleI
 						}
 						return false;
 					} else {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF )
+
+						Logtxt.logtxt( logFile,
+								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF )
 										+ getTextResourceService().getText( locale, MESSAGE_XML_CG_ETNIO, "D" ) );
 					}
 				}
@@ -211,8 +216,9 @@ public class ValidationDphotointerValidationModuleImpl extends ValidationModuleI
 					}
 					return false;
 				} else {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF )
+
+					Logtxt.logtxt( logFile,
+							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF )
 									+ getTextResourceService().getText( locale, MESSAGE_XML_CG_CANNOTFINDETREPORT ) );
 					return false;
 				}

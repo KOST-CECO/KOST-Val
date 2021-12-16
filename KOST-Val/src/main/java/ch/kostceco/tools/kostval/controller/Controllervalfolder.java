@@ -34,7 +34,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.springframework.context.ApplicationContext;
 
 import ch.kostceco.tools.kosttools.util.Util;
-import ch.kostceco.tools.kostval.logging.Logger;
+import ch.kostceco.tools.kostval.logging.Logtxt;
 import ch.kostceco.tools.kostval.logging.MessageConstants;
 import ch.kostceco.tools.kostval.service.TextResourceService;
 
@@ -49,7 +49,6 @@ public class Controllervalfolder implements MessageConstants
 
 	private boolean											min			= false;
 
-	private static final Logger					LOGGER	= new Logger( Controllervalfolder.class );
 	private static TextResourceService	textResourceService;
 
 	public static TextResourceService getTextResourceService()
@@ -65,7 +64,7 @@ public class Controllervalfolder implements MessageConstants
 
 	public boolean valFolder( File valDatei, String logFileName, File directoryOfLogfile,
 			boolean verbose, String dirOfJarPath, Map<String, String> configMap,
-			ApplicationContext context, Locale locale ) throws IOException
+			ApplicationContext context, Locale locale, File logFile ) throws IOException
 	{
 		String onWork = configMap.get( "ShowProgressOnWork" );
 		if ( onWork.equals( "nomin" ) ) {
@@ -95,8 +94,6 @@ public class Controllervalfolder implements MessageConstants
 		Integer pngCountNio = 0;
 		String pathToWorkDir = configMap.get( "PathToWorkDir" );
 		File tmpDir = new File( pathToWorkDir );
-		File logFile = new File( directoryOfLogfile.getAbsolutePath() + File.separator
-				+ valDatei.getName() + ".kost-val.log.xml" );
 
 		// Informationen holen, welche Formate validiert werden sollen
 		String pdfaValidation = configMap.get( "pdfavalidation" );
@@ -169,7 +166,7 @@ public class Controllervalfolder implements MessageConstants
 
 		if ( formatValOn.equals( "" ) ) {
 			// Formatvalidierung aber alle Formate ausgeschlossen
-			LOGGER.logError( getTextResourceService().getText( ERROR_IOE,
+			Logtxt.logtxt( logFile, getTextResourceService().getText( ERROR_IOE,
 					getTextResourceService().getText( locale, ERROR_NOFILEENDINGS ) ) );
 			System.out.println( getTextResourceService().getText( locale, ERROR_NOFILEENDINGS ) );
 			// logFile bereinigung (& End und ggf 3c)
@@ -206,7 +203,7 @@ public class Controllervalfolder implements MessageConstants
 						Controllervalfile controller1 = (Controllervalfile) context
 								.getBean( "controllervalfile" );
 						boolean valFile = controller1.valFile( valDatei, logFileName, directoryOfLogfile,
-								verbose, dirOfJarPath, configMap, context, locale );
+								verbose, dirOfJarPath, configMap, context, locale,  logFile );
 
 						// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
 						if ( tmpDir.exists() ) {
@@ -237,7 +234,7 @@ public class Controllervalfolder implements MessageConstants
 						Controllervalfile controller1 = (Controllervalfile) context
 								.getBean( "controllervalfile" );
 						boolean valFile = controller1.valFile( valDatei, logFileName, directoryOfLogfile,
-								verbose, dirOfJarPath, configMap, context, locale );
+								verbose, dirOfJarPath, configMap, context, locale,  logFile );
 
 						// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
 						if ( tmpDir.exists() ) {
@@ -266,7 +263,7 @@ public class Controllervalfolder implements MessageConstants
 						Controllervalfile controller1 = (Controllervalfile) context
 								.getBean( "controllervalfile" );
 						boolean valFile = controller1.valFile( valDatei, logFileName, directoryOfLogfile,
-								verbose, dirOfJarPath, configMap, context, locale );
+								verbose, dirOfJarPath, configMap, context, locale,  logFile );
 
 						// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
 						if ( tmpDir.exists() ) {
@@ -297,7 +294,7 @@ public class Controllervalfolder implements MessageConstants
 						Controllervalfile controller1 = (Controllervalfile) context
 								.getBean( "controllervalfile" );
 						boolean valFile = controller1.valFile( valDatei, logFileName, directoryOfLogfile,
-								verbose, dirOfJarPath, configMap, context, locale );
+								verbose, dirOfJarPath, configMap, context, locale,  logFile );
 
 						// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
 						if ( tmpDir.exists() ) {
@@ -326,7 +323,7 @@ public class Controllervalfolder implements MessageConstants
 						Controllervalfile controller1 = (Controllervalfile) context
 								.getBean( "controllervalfile" );
 						boolean valFile = controller1.valFile( valDatei, logFileName, directoryOfLogfile,
-								verbose, dirOfJarPath, configMap, context, locale );
+								verbose, dirOfJarPath, configMap, context, locale,  logFile );
 
 						// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
 						if ( tmpDir.exists() ) {
@@ -357,7 +354,7 @@ public class Controllervalfolder implements MessageConstants
 						Controllervalfile controller1 = (Controllervalfile) context
 								.getBean( "controllervalfile" );
 						boolean valFile = controller1.valFile( valDatei, logFileName, directoryOfLogfile,
-								verbose, dirOfJarPath, configMap, context, locale );
+								verbose, dirOfJarPath, configMap, context, locale,  logFile );
 
 						// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
 						if ( tmpDir.exists() ) {
@@ -392,31 +389,31 @@ public class Controllervalfolder implements MessageConstants
 				}
 			}
 		} catch ( Exception e ) {
-			LOGGER.logError( "<Error>"
+			Logtxt.logtxt( logFile, "<Error>"
 					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 							"Formatvalidation: " + e.getMessage() )
 					+ getTextResourceService().getText( locale, MESSAGE_XML_FORMAT2 )
 					+ getTextResourceService().getText( locale, MESSAGE_XML_LOGEND ) );
 			System.out.println( "Exception: " + e.getMessage() );
 		} catch ( StackOverflowError eso ) {
-			LOGGER.logError( getTextResourceService().getText( locale, ERROR_XML_STACKOVERFLOWMAIN ) );
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, ERROR_XML_STACKOVERFLOWMAIN ) );
 			System.out.println( "Exception: " + "StackOverflowError" );
 		} catch ( OutOfMemoryError eoom ) {
-			LOGGER.logError( getTextResourceService().getText( locale, ERROR_XML_OUTOFMEMORYMAIN ) );
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, ERROR_XML_OUTOFMEMORYMAIN ) );
 			System.out.println( "Exception: " + "OutOfMemoryError" );
 		}
 
 		if ( countNio.equals( count ) ) {
 			// keine Dateien Validiert
-			LOGGER.logError(
+			Logtxt.logtxt( logFile, 
 					getTextResourceService().getText( locale, ERROR_INCORRECTFILEENDINGS, formatValOn ) );
 			System.out.println(
 					getTextResourceService().getText( locale, ERROR_INCORRECTFILEENDINGS, formatValOn ) );
 		}
 
-		LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_FORMAT2 ) );
+		Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_FORMAT2 ) );
 
-		LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_LOGEND ) );
+		Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_LOGEND ) );
 
 		File callasNo = new File( directoryOfLogfile + File.separator + "_callas_NO.txt" );
 		if ( callasNo.exists() ) {

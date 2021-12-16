@@ -38,8 +38,8 @@ import ch.kostceco.tools.kostval.validation.bean.ValidationContext;
 public interface ValidationEcolumnModule extends ValidationModule
 {
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale ) throws ValidationEcolumnException;
+			Locale locale, File logFile ) throws ValidationEcolumnException;
 
-	public boolean prepareValidation( ValidationContext validationContext )
+	public boolean prepareValidation( ValidationContext validationContext, File logFile )
 			throws IOException, JDOMException, Exception;
 }

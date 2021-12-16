@@ -31,6 +31,7 @@ import ch.kostceco.tools.kosttools.fileservice.Jhove;
 import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationBjhoveValidationException;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationBjhoveValidationModule;
+import ch.kostceco.tools.kostval.logging.Logtxt;
 
 /** Validierungsschritt B (Jhove-Validierung) Ist die TIFF-Datei gemaess Jhove valid? valid -->
  * Status: "Well-Formed and valid"
@@ -47,7 +48,7 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale ) throws ValidationBjhoveValidationException
+			Locale locale, File logFile ) throws ValidationBjhoveValidationException
 	{
 		String onWork = configMap.get( "ShowProgressOnWork" );
 		if ( onWork.equals( "nomin" ) ) {
@@ -66,35 +67,37 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 		int lastDotIdx = toplevelDir.lastIndexOf( "." );
 		toplevelDir = toplevelDir.substring( 0, lastDotIdx );
 
-		// Vorbereitungen: valDatei an die JHove Applikation übergeben	
-			String jhoveString=Jhove.valTiff( valDatei, jhoveLog, pathToWorkDir );
-			if ( jhoveString.equals( "OK" ) ) {
-				if ( jhoveLog.exists() ) {
-					isValid = true;
-				} else {
-					isValid = false;
-					if ( min ) {
-						return false;
-					} else {
-							getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_TIFF )
-										+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-												"No Jhove report." ) );
-						return false;		}
-				}
+		// Vorbereitungen: valDatei an die JHove Applikation übergeben
+		String jhoveString = Jhove.valTiff( valDatei, jhoveLog, pathToWorkDir );
+		if ( jhoveString.equals( "OK" ) ) {
+			if ( jhoveLog.exists() ) {
+				isValid = true;
 			} else {
 				isValid = false;
 				if ( min ) {
 					return false;
 				} else {
-						getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_TIFF )
-									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-											jhoveString ) );
-					return false;		}
-			}
 
-			// Report auswerten
+					Logtxt.logtxt( logFile,
+							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_TIFF )
+									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+											"No Jhove report." ) );
+					return false;
+				}
+			}
+		} else {
+			isValid = false;
+			if ( min ) {
+				return false;
+			} else {
+
+				Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_TIFF )
+						+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, jhoveString ) );
+				return false;
+			}
+		}
+
+		// Report auswerten
 		try {
 			BufferedReader in = new BufferedReader( new FileReader( jhoveLog ) );
 			String line;
@@ -132,8 +135,9 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 								return false;
 							} else {
 								isValid = false;
-								getMessageService()
-										.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_TIFF )
+
+								Logtxt.logtxt( logFile,
+										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_TIFF )
 												+ getTextResourceService().getText( locale, MESSAGE_XML_B_JHOVEINVALID,
 														status ) );
 							}
@@ -156,13 +160,13 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 								counter = counter + 1;
 								// max 10 Meldungen im Modul B
 								if ( counter < 11 ) {
-									getMessageService().logError(
+									Logtxt.logtxt( logFile,
 											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_TIFF )
 													+ getTextResourceService().getText( locale, MESSAGE_XML_B_JHOVEMESSAGE,
 															line ) );
 									lines.add( line );
 								} else if ( counter == 11 ) {
-									getMessageService().logError(
+									Logtxt.logtxt( logFile,
 											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_TIFF )
 													+ getTextResourceService().getText( locale, MESSAGE_XML_B_JHOVEMESSAGE,
 															" ErrorMessage: . . ." ) );
@@ -180,16 +184,16 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 			if ( (statuscounter == 0) && (ignorcounter == 0) && !status.equals( "" ) ) {
 				// Status noch nicht ausgegeben & keine Errors ignoriert & Invalider Status
 				isValid = false;
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_TIFF )
-								+ getTextResourceService().getText( locale, MESSAGE_XML_B_JHOVEINVALID, status ) );
+
+				Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_TIFF )
+						+ getTextResourceService().getText( locale, MESSAGE_XML_B_JHOVEINVALID, status ) );
 				statuscounter = 1; // Marker Status Ausgegeben
 			}
 			in.close();
 		} catch ( Exception e ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_TIFF )
-							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_TIFF )
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 		// jhoveReport / temp wird in Controllervalfile geloescht */

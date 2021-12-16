@@ -34,7 +34,7 @@ import org.springframework.context.ApplicationContext;
 import com.pdftools.pdfvalidator.PdfValidatorAPI;
 
 import ch.kostceco.tools.kosttools.util.Util;
-import ch.kostceco.tools.kostval.logging.Logger;
+import ch.kostceco.tools.kostval.logging.Logtxt;
 import ch.kostceco.tools.kostval.logging.MessageConstants;
 import ch.kostceco.tools.kostval.service.TextResourceService;
 
@@ -47,8 +47,7 @@ import ch.kostceco.tools.kostval.service.TextResourceService;
 public class Controllervalfile implements MessageConstants
 {
 
-	private static final Logger					LOGGER	= new Logger( Controllervalfile.class );
-	private static TextResourceService	textResourceService;
+	private static TextResourceService textResourceService;
 
 	public static TextResourceService getTextResourceService()
 	{
@@ -63,7 +62,7 @@ public class Controllervalfile implements MessageConstants
 
 	public boolean valFile( File valDatei, String logFileName, File directoryOfLogfile,
 			boolean verbose, String dirOfJarPath, Map<String, String> configMap,
-			ApplicationContext context, Locale locale ) throws IOException
+			ApplicationContext context, Locale locale, File logFile ) throws IOException
 	{
 		String originalValName = valDatei.getAbsolutePath();
 		String valDateiName = valDatei.getName();
@@ -87,29 +86,29 @@ public class Controllervalfile implements MessageConstants
 		FileUtils.writeStringToFile( pathTemp, originalValName, "UTF-8" );
 
 		if ( (valDateiExt.equals( ".jp2" )) ) {
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS ) );
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALTYPE,
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS ) );
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_VALTYPE,
 					getTextResourceService().getText( locale, MESSAGE_JP2VALIDATION ) ) );
-			LOGGER.logError(
+			Logtxt.logtxt( logFile,
 					getTextResourceService().getText( locale, MESSAGE_XML_VALFILE, originalValName ) );
 			Controllerjp2 controller1 = (Controllerjp2) context.getBean( "controllerjp2" );
 			boolean okMandatory = controller1.executeMandatory( valDatei, directoryOfLogfile, configMap,
-					locale );
+					locale, logFile );
 			valFile = okMandatory;
 
 			if ( okMandatory ) {
 				// Validierte Datei valide
-				LOGGER
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_VALID ) );
-				LOGGER
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) );
+				Logtxt.logtxt( logFile,
+						getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_VALID ) );
+				Logtxt.logtxt( logFile,
+						getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) );
 				System.out.println( " = Valid" );
 			} else {
 				// Fehler in Validierte Datei --> invalide
-				LOGGER.logError(
+				Logtxt.logtxt( logFile,
 						getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_INVALID ) );
-				LOGGER
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) );
+				Logtxt.logtxt( logFile,
+						getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) );
 				System.out.println( " = Invalid" );
 			}
 
@@ -129,74 +128,75 @@ public class Controllervalfile implements MessageConstants
 
 		} else if ( (valDateiExt.equals( ".jpeg" ) || valDateiExt.equals( ".jpg" )
 				|| valDateiExt.equals( ".jpe" )) ) {
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS ) );
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALTYPE,
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS ) );
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_VALTYPE,
 					getTextResourceService().getText( locale, MESSAGE_JPEGVALIDATION ) ) );
-			LOGGER.logError(
+			Logtxt.logtxt( logFile,
 					getTextResourceService().getText( locale, MESSAGE_XML_VALFILE, originalValName ) );
 			Controllerjpeg controller1 = (Controllerjpeg) context.getBean( "controllerjpeg" );
 			boolean okMandatory = controller1.executeMandatory( valDatei, directoryOfLogfile, configMap,
-					locale );
+					locale, logFile );
 			valFile = okMandatory;
 
 			if ( okMandatory ) {
 				// Validierte Datei valide
-				LOGGER
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_VALID ) );
-				LOGGER
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) );
+				Logtxt.logtxt( logFile,
+						getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_VALID ) );
+				Logtxt.logtxt( logFile,
+						getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) );
 				System.out.println( " = Valid" );
 			} else {
 				// Fehler in Validierte Datei --> invalide
-				LOGGER.logError(
+				Logtxt.logtxt( logFile,
 						getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_INVALID ) );
-				LOGGER
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) );
+				Logtxt.logtxt( logFile,
+						getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) );
 				System.out.println( " = Invalid" );
 			}
 
 		} else if ( (valDateiExt.equals( ".png" )) ) {
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS ) );
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALTYPE,
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS ) );
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_VALTYPE,
 					getTextResourceService().getText( locale, MESSAGE_PNGVALIDATION ) ) );
-			LOGGER.logError(
+			Logtxt.logtxt( logFile,
 					getTextResourceService().getText( locale, MESSAGE_XML_VALFILE, originalValName ) );
 			Controllerpng controller1 = (Controllerpng) context.getBean( "controllerpng" );
 			boolean okMandatory = controller1.executeMandatory( valDatei, directoryOfLogfile, configMap,
-					locale );
+					locale, logFile );
 			valFile = okMandatory;
 
 			if ( okMandatory ) {
 				// Validierte Datei valide
-				LOGGER
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_VALID ) );
-				LOGGER
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) );
+				Logtxt.logtxt( logFile,
+						getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_VALID ) );
+				Logtxt.logtxt( logFile,
+						getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) );
 				System.out.println( " = Valid" );
 			} else {
 				// Fehler in Validierte Datei --> invalide
-				LOGGER.logError(
+				Logtxt.logtxt( logFile,
 						getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_INVALID ) );
-				LOGGER
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) );
+				Logtxt.logtxt( logFile,
+						getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) );
 				System.out.println( " = Invalid" );
 			}
 
 		} else if ( (valDateiExt.equals( ".tiff" ) || valDateiExt.equals( ".tif" )) ) {
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS ) );
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALTYPE,
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS ) );
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_VALTYPE,
 					getTextResourceService().getText( locale, MESSAGE_TIFFVALIDATION ) ) );
-			LOGGER.logError(
+			Logtxt.logtxt( logFile,
 					getTextResourceService().getText( locale, MESSAGE_XML_VALFILE, originalValName ) );
 			Controllertiff controller1 = (Controllertiff) context.getBean( "controllertiff" );
 			boolean okMandatory = controller1.executeMandatory( valDatei, directoryOfLogfile, configMap,
-					locale );
+					locale, logFile );
 			boolean ok = false;
 
 			/* die Validierungen A sind obligatorisch, wenn sie bestanden wurden, koennen die restlichen
 			 * Validierungen, welche nicht zum Abbruch der Applikation fuehren, ausgefuehrt werden. */
 			if ( okMandatory ) {
-				ok = controller1.executeOptional( valDatei, directoryOfLogfile, configMap, locale );
+				ok = controller1.executeOptional( valDatei, directoryOfLogfile, configMap, locale,
+						logFile );
 			}
 
 			ok = (ok && okMandatory);
@@ -204,17 +204,17 @@ public class Controllervalfile implements MessageConstants
 
 			if ( ok ) {
 				// Validierte Datei valide
-				LOGGER
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_VALID ) );
-				LOGGER
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) );
+				Logtxt.logtxt( logFile,
+						getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_VALID ) );
+				Logtxt.logtxt( logFile,
+						getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) );
 				System.out.println( " = Valid" );
 			} else {
 				// Fehler in Validierte Datei --> invalide
-				LOGGER.logError(
+				Logtxt.logtxt( logFile,
 						getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_INVALID ) );
-				LOGGER
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) );
+				Logtxt.logtxt( logFile,
+						getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) );
 				System.out.println( " = Invalid" );
 			}
 
@@ -237,20 +237,21 @@ public class Controllervalfile implements MessageConstants
 			}
 
 		} else if ( (valDateiExt.equals( ".siard" )) ) {
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS ) );
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALTYPE,
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS ) );
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_VALTYPE,
 					getTextResourceService().getText( locale, MESSAGE_SIARDVALIDATION ) ) );
-			LOGGER.logError(
+			Logtxt.logtxt( logFile,
 					getTextResourceService().getText( locale, MESSAGE_XML_VALFILE, originalValName ) );
 			Controllersiard controller2 = (Controllersiard) context.getBean( "controllersiard" );
 			boolean okMandatory = controller2.executeMandatory( valDatei, directoryOfLogfile, configMap,
-					locale );
+					locale, logFile );
 			boolean ok = false;
 
 			/* die Validierungen A-D sind obligatorisch, wenn sie bestanden wurden, koennen die restlichen
 			 * Validierungen, welche nicht zum Abbruch der Applikation fuehren, ausgefuehrt werden. */
 			if ( okMandatory ) {
-				ok = controller2.executeOptional( valDatei, directoryOfLogfile, configMap, locale );
+				ok = controller2.executeOptional( valDatei, directoryOfLogfile, configMap, locale,
+						logFile );
 				// Ausfuehren der optionalen Schritte
 			}
 
@@ -259,37 +260,38 @@ public class Controllervalfile implements MessageConstants
 
 			if ( ok ) {
 				// Validierte Datei valide
-				LOGGER
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_VALID ) );
-				LOGGER
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) );
+				Logtxt.logtxt( logFile,
+						getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_VALID ) );
+				Logtxt.logtxt( logFile,
+						getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) );
 				System.out.println( " = Valid" );
 			} else {
 				// Fehler in Validierte Datei --> invalide
-				LOGGER.logError(
+				Logtxt.logtxt( logFile,
 						getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_INVALID ) );
-				LOGGER
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) );
+				Logtxt.logtxt( logFile,
+						getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) );
 				System.out.println( " = Invalid" );
 			}
 
 		} else if ( (valDateiExt.equals( ".pdf" ) || valDateiExt.equals( ".pdfa" )) ) {
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS ) );
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALTYPE,
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS ) );
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_VALTYPE,
 					getTextResourceService().getText( locale, MESSAGE_PDFAVALIDATION ) ) );
-			LOGGER.logError(
+			Logtxt.logtxt( logFile,
 					getTextResourceService().getText( locale, MESSAGE_XML_VALFILE, originalValName ) );
 			Controllerpdfa controller3 = (Controllerpdfa) context.getBean( "controllerpdfa" );
 
 			boolean okMandatory = controller3.executeMandatory( valDatei, directoryOfLogfile, configMap,
-					locale );
+					locale, logFile );
 			boolean ok = false;
 
 			/* die Initialisierung ist obligatorisch, wenn sie bestanden wurden, koennen die restlichen
 			 * Validierungen, welche nicht zum Abbruch der Applikation fuehren, ausgefuehrt werden. */
 
 			if ( okMandatory ) {
-				ok = controller3.executeOptional( valDatei, directoryOfLogfile, configMap, locale );
+				ok = controller3.executeOptional( valDatei, directoryOfLogfile, configMap, locale,
+						logFile );
 				// Ausfuehren der validierung und optionalen Bildvalidierung
 			}
 
@@ -298,22 +300,22 @@ public class Controllervalfile implements MessageConstants
 
 			if ( valFile ) {
 				// Validierte Datei valide
-				LOGGER
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_VALID ) );
-				LOGGER
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) );
+				Logtxt.logtxt( logFile,
+						getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_VALID ) );
+				Logtxt.logtxt( logFile,
+						getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) );
 				System.out.println( " = Valid" );
 			} else {
 				// Validierte Datei invalide
-				LOGGER.logError(
+				Logtxt.logtxt( logFile,
 						getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_INVALID ) );
-				LOGGER
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) );
+				Logtxt.logtxt( logFile,
+						getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) );
 				System.out.println( " = Invalid" );
 			}
 
 			PdfValidatorAPI.terminate();
-			
+
 			/* Ausgabe der Pfade zu den _FontValidation.xml und _FontValidation_Error.xml Reports, falls
 			 * welche generiert wurden. Ggf loeschen */
 			File fontValidationReport = new File( directoryOfLogfile,
@@ -333,8 +335,7 @@ public class Controllervalfile implements MessageConstants
 				// fontValidationErrorReport loeschen!
 				Util.deleteFile( fontValidationErrorReport );
 			}
-			File callasTEMPreport = new File( directoryOfLogfile,
-					 "callasTEMPreport.txt" );
+			File callasTEMPreport = new File( directoryOfLogfile, "callasTEMPreport.txt" );
 			if ( callasTEMPreport.exists() ) {
 				// callasTEMPreport loeschen!
 				Util.deleteFile( callasTEMPreport );
@@ -348,7 +349,7 @@ public class Controllervalfile implements MessageConstants
 			}
 
 		} else {
-			LOGGER.logError( getTextResourceService().getText( locale, ERROR_INCORRECTFILEENDING,
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, ERROR_INCORRECTFILEENDING,
 					valDatei.getName() ) );
 			System.out.println( getTextResourceService().getText( locale, ERROR_INCORRECTFILEENDING,
 					valDatei.getName() ) );

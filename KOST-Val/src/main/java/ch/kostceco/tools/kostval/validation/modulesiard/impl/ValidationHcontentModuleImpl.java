@@ -45,6 +45,7 @@ import ch.kostceco.tools.kostval.KOSTVal;
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationHcontentException;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationHcontentModule;
+import ch.kostceco.tools.kostval.logging.Logtxt;
 
 /** Validierungsschritt H (Content-Validierung) Sind die XML-Dateien im content valid zu ihrer
  * Schema-Definition (XSD-Dateien)? valid --> tableZ.xml valid zu tableZ.xsd
@@ -66,7 +67,7 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale ) throws ValidationHcontentException
+			Locale locale, File logFile ) throws ValidationHcontentException
 	{
 		boolean showOnWork = false;
 		int onWork = 410;
@@ -132,7 +133,7 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 								File tableXsd = new File( new StringBuilder( tablePath.getAbsolutePath() )
 										.append( File.separator ).append( tableFolder.getText() + ".xsd" ).toString() );
 								// hier erfolgt die Validerung
-								if ( verifyRowCount( tableXml, tableXsd, locale ) ) {
+								if ( verifyRowCount( tableXml, tableXsd, locale, logFile ) ) {
 									// valid = validate1( tableXml, tableXsd ) && valid;
 
 									try {
@@ -161,7 +162,7 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 											if ( min ) {
 												return false;
 											} else {
-												getMessageService().logError(
+												Logtxt.logtxt( logFile,
 														getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
 																+ getTextResourceService().getText( locale,
 																		MESSAGE_XML_MISSING_FILE, checkTool,
@@ -186,15 +187,17 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 														// val.message.xml.h.invalid.xml = <Message>{0} ist invalid zu
 														// {1}</Message></Error>
 														// val.message.xml.h.invalid.error = <Message>{0}</Message></Error>
-														getMessageService().logError( getTextResourceService().getText( locale,
-																MESSAGE_XML_MODUL_H_SIARD )
-																+ getTextResourceService().getText( locale,
-																		MESSAGE_XML_H_INVALID_XML, tableXmlShortString,
-																		tableXsdShortString ) );
-														getMessageService().logError( getTextResourceService().getText( locale,
-																MESSAGE_XML_MODUL_H_SIARD )
-																+ getTextResourceService().getText( locale,
-																		MESSAGE_XML_H_INVALID_ERROR, resultExec ) );
+														Logtxt.logtxt( logFile,
+																getTextResourceService().getText( locale,
+																		MESSAGE_XML_MODUL_H_SIARD )
+																		+ getTextResourceService().getText( locale,
+																				MESSAGE_XML_H_INVALID_XML, tableXmlShortString,
+																				tableXsdShortString ) );
+														Logtxt.logtxt( logFile,
+																getTextResourceService().getText( locale,
+																		MESSAGE_XML_MODUL_H_SIARD )
+																		+ getTextResourceService().getText( locale,
+																				MESSAGE_XML_H_INVALID_ERROR, resultExec ) );
 													}
 												} else {
 													// System.out.println("Validierung bestanden");
@@ -204,7 +207,7 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 												if ( min ) {
 													return false;
 												} else {
-													getMessageService().logError(
+													Logtxt.logtxt( logFile,
 															getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
 																	+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 																			e1.getMessage()
@@ -272,8 +275,9 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 			if ( min ) {
 				return false;
 			} else {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
+
+				Logtxt.logtxt( logFile,
+						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
 								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 										ioe.getMessage() + " (IOException)" ) );
 			}
@@ -282,8 +286,9 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 			if ( min ) {
 				return false;
 			} else {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
+
+				Logtxt.logtxt( logFile,
+						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
 								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 										e.getMessage() + " (JDOMException)" ) );
 			}
@@ -292,8 +297,9 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 			if ( min ) {
 				return false;
 			} else {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
+
+				Logtxt.logtxt( logFile,
+						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
 								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 										e.getMessage() + " (SAXException)" ) );
 			}
@@ -311,7 +317,7 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 
 	/* Verify the number of rows in the table. If the xsd minOccurs = o and maxOccurs = unbounded the
 	 * validation of the numbers can't been executed. A Warning is given. */
-	private boolean verifyRowCount( File xmlFile, File schemaLocation, Locale locale )
+	private boolean verifyRowCount( File xmlFile, File schemaLocation, Locale locale, File logFile )
 			throws SAXException, IOException
 	{
 		Range range = getRange( schemaLocation );
@@ -320,8 +326,9 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 			 * Eine Warnung wird herausgegeben */
 			if ( min ) {
 			} else {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
+
+				Logtxt.logtxt( logFile,
+						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
 								+ getTextResourceService().getText( locale, MESSAGE_XML_H_TABLE_NOT_VALIDATED1,
 										schemaLocation.getName() ) );
 			}

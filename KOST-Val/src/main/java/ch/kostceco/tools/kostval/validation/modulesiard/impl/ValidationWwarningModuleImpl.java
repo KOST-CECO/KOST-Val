@@ -39,6 +39,7 @@ import ch.kostceco.tools.kostval.exception.modulesiard.ValidationWwarningExcepti
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.bean.ValidationContext;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationWwarningModule;
+import ch.kostceco.tools.kostval.logging.Logtxt;
 
 /** Validierungsschritt W (Warnungen) Wurden dataOwner und dataOriginTimespan ausgefuellt und nicht
  * auf (...) belassen? <dataOwner>(...)</dataOwner> <dataOriginTimespan>(...)</dataOriginTimespan>
@@ -57,7 +58,7 @@ public class ValidationWwarningModuleImpl extends ValidationModuleImpl
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale ) throws ValidationWwarningException
+			Locale locale, File logFile ) throws ValidationWwarningException
 	{
 		// Informationen zur Darstellung "onWork" holen
 		String onWork = configMap.get( "ShowProgressOnWork" );
@@ -107,8 +108,9 @@ public class ValidationWwarningModuleImpl extends ValidationModuleImpl
 					 * Warnung ausgegeben */
 					if ( min ) {
 					} else {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_W_SIARD )
+
+						Logtxt.logtxt( logFile,
+								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_W_SIARD )
 										+ getTextResourceService().getText( locale, MESSAGE_XML_W_WARNING_INITVALUE,
 												"dataOwner", dataOwnerValue ) );
 					}
@@ -122,8 +124,9 @@ public class ValidationWwarningModuleImpl extends ValidationModuleImpl
 					 * Warnung ausgegeben */
 					if ( min ) {
 					} else {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_W_SIARD )
+
+						Logtxt.logtxt( logFile,
+								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_W_SIARD )
 										+ getTextResourceService().getText( locale, MESSAGE_XML_W_WARNING_INITVALUE,
 												"dataOriginTimespan", dataOriginTimespanValue ) );
 					}
@@ -137,8 +140,9 @@ public class ValidationWwarningModuleImpl extends ValidationModuleImpl
 					 * Warnung ausgegeben */
 					if ( min ) {
 					} else {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_W_SIARD )
+
+						Logtxt.logtxt( logFile,
+								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_W_SIARD )
 										+ getTextResourceService().getText( locale, MESSAGE_XML_W_WARNING_INITVALUE,
 												"dbname", dataDbNameValue ) );
 					}
@@ -148,8 +152,9 @@ public class ValidationWwarningModuleImpl extends ValidationModuleImpl
 		} catch ( Exception e ) {
 			if ( min ) {
 			} else {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_W_SIARD )
+
+				Logtxt.logtxt( logFile,
+						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_W_SIARD )
 								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			}
 			return true;

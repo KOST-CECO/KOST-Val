@@ -35,6 +35,6 @@ public interface Validation2dGeverFileIntegrityModule extends ValidationModule
 {
 
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale ) throws Validation2dGeverFileIntegrityException;
+			Locale locale, File logFile ) throws Validation2dGeverFileIntegrityException;
 
 }

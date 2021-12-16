@@ -34,6 +34,7 @@ import ch.kostceco.tools.kosttools.util.Util;
 import ch.kostceco.tools.kostval.exception.modulesip3.Validation3bUnspecifiedFormatException;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesip3.Validation3bUnspecifiedFormatModule;
+import ch.kostceco.tools.kostval.logging.Logtxt;
 
 public class Validation3bUnspecifiedFormatModuleImpl extends ValidationModuleImpl
 		implements Validation3bUnspecifiedFormatModule
@@ -41,7 +42,7 @@ public class Validation3bUnspecifiedFormatModuleImpl extends ValidationModuleImp
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale ) throws Validation3bUnspecifiedFormatException
+			Locale locale, File logFile ) throws Validation3bUnspecifiedFormatException
 	{
 		boolean showOnWork = false;
 		int onWork = 410;
@@ -65,9 +66,9 @@ public class Validation3bUnspecifiedFormatModuleImpl extends ValidationModuleImp
 		// existiert die SignatureFile am angebenen Ort?
 		File fnameOfSignature = new File( nameOfSignature );
 		if ( !fnameOfSignature.exists() ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Cb_SIP )
-							+ getTextResourceService().getText( locale, MESSAGE_XML_CA_DROID ) );
+
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Cb_SIP )
+					+ getTextResourceService().getText( locale, MESSAGE_XML_CA_DROID ) );
 			return false;
 		}
 
@@ -82,9 +83,9 @@ public class Validation3bUnspecifiedFormatModuleImpl extends ValidationModuleImp
 			droid.readSignatureFile( nameOfSignature );
 
 		} catch ( Exception e ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Cb_SIP )
-							+ getTextResourceService().getText( locale, ERROR_XML_CANNOT_INITIALIZE_DROID ) );
+
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Cb_SIP )
+					+ getTextResourceService().getText( locale, ERROR_XML_CANNOT_INITIALIZE_DROID ) );
 			return false;
 		} finally {
 			Util.switchOnConsole();
@@ -142,8 +143,8 @@ public class Validation3bUnspecifiedFormatModuleImpl extends ValidationModuleImp
 
 					if ( !allowedformats.contains( ffString ) ) {
 
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Cb_SIP )
+						Logtxt.logtxt( logFile,
+								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Cb_SIP )
 										+ getTextResourceService().getText( locale, MESSAGE_XML_CB_FORMAT, fileKey,
 												ff.getPUID() + " Extension: " + ff.getExtension( x ) ) );
 						valid = false;

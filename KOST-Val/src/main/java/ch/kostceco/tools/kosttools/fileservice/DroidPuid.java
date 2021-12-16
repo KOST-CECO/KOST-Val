@@ -31,13 +31,13 @@ public class DroidPuid
 
 	public static String getPuid( File file, String nameOfSignature )
 	{
+		/* kleiner Hack, weil die Droid libraries irgendwo ein System.out drin haben, welche den Output
+		 * stoeren Util.switchOffConsole() als Kommentar markieren wenn man die Fehlermeldung erhalten
+		 * moechte */
+		Util.switchOffConsole();
 		String puid = " ??? ";
 		try {
 			Droid droid = null;
-			/* kleiner Hack, weil die Droid libraries irgendwo ein System.out drin haben, welche den
-			 * Output stoeren Util.switchOffConsole() als Kommentar markieren wenn man die Fehlermeldung
-			 * erhalten moechte */
-			Util.switchOffConsole();
 			droid = new Droid();
 
 			droid.readSignatureFile( nameOfSignature );

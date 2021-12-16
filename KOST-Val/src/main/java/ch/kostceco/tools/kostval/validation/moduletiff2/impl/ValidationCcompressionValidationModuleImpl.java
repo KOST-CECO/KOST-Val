@@ -30,6 +30,7 @@ import ch.kostceco.tools.kostval.KOSTVal;
 import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationCcompressionValidationException;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationCcompressionValidationModule;
+import ch.kostceco.tools.kostval.logging.Logtxt;
 
 /** Validierungsschritt C (Komprimierung-Validierung) Ist die TIFF-Datei gemäss Konfigurationsdatei
  * valid?
@@ -46,7 +47,7 @@ public class ValidationCcompressionValidationModuleImpl extends ValidationModule
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale ) throws ValidationCcompressionValidationException
+			Locale locale, File logFile ) throws ValidationCcompressionValidationException
 	{
 		String onWork = configMap.get( "ShowProgressOnWork" );
 		if ( onWork.equals( "nomin" ) ) {
@@ -137,10 +138,10 @@ public class ValidationCcompressionValidationModuleImpl extends ValidationModule
 			if ( min ) {
 				return false;
 			} else {
-				getMessageService().logError( getTextResourceService().getText( locale,
-						MESSAGE_XML_MODUL_C_TIFF )
-						+ getTextResourceService().getText( locale, MESSAGE_XML_MISSING_FILE, checkTool,
-								getTextResourceService().getText( locale, ABORTED ) ) );
+				Logtxt.logtxt( logFile,
+						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_TIFF )
+								+ getTextResourceService().getText( locale, MESSAGE_XML_MISSING_FILE, checkTool,
+										getTextResourceService().getText( locale, ABORTED ) ) );
 				isValid = false;
 			}
 		} else {
@@ -160,16 +161,18 @@ public class ValidationCcompressionValidationModuleImpl extends ValidationModule
 					} else {
 						if ( resultExec.equals( "NoReport" ) ) {
 							// Report existiert nicht
-							getMessageService()
-									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_TIFF )
+
+							Logtxt.logtxt( logFile,
+									getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_TIFF )
 											+ getTextResourceService().getText( locale, MESSAGE_XML_MISSING_REPORT,
 													exiftoolReport.getAbsolutePath(),
 													getTextResourceService().getText( locale, ABORTED ) ) );
 							return false;
 						} else {
 							// Exception
-							getMessageService()
-									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_TIFF )
+
+							Logtxt.logtxt( logFile,
+									getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_TIFF )
 											+ getTextResourceService().getText( locale, MESSAGE_XML_CG_ET_SERVICEFAILED,
 													resultExec ) );
 							return false;
@@ -186,8 +189,9 @@ public class ValidationCcompressionValidationModuleImpl extends ValidationModule
 					}
 					return false;
 				} else {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_TIFF )
+
+					Logtxt.logtxt( logFile,
+							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_TIFF )
 									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 					return false;
 				}
@@ -224,9 +228,10 @@ public class ValidationCcompressionValidationModuleImpl extends ValidationModule
 										&& !line.equals( oldErrorLine3 ) && !line.equals( oldErrorLine4 )
 										&& !line.equals( oldErrorLine5 ) ) {
 									// neuer Fehler
-									getMessageService().logError( getTextResourceService().getText( locale,
-											MESSAGE_XML_MODUL_C_TIFF )
-											+ getTextResourceService().getText( locale, MESSAGE_XML_CG_INVALID, line ) );
+									Logtxt.logtxt( logFile,
+											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_TIFF )
+													+ getTextResourceService().getText( locale, MESSAGE_XML_CG_INVALID,
+															line ) );
 									if ( oldErrorLine1.equals( "" ) ) {
 										oldErrorLine1 = line;
 									} else if ( oldErrorLine2.equals( "" ) ) {
@@ -254,8 +259,9 @@ public class ValidationCcompressionValidationModuleImpl extends ValidationModule
 						}
 						return false;
 					} else {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_TIFF )
+
+						Logtxt.logtxt( logFile,
+								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_TIFF )
 										+ getTextResourceService().getText( locale, MESSAGE_XML_CG_ETNIO, "C" ) );
 					}
 				}
@@ -268,8 +274,9 @@ public class ValidationCcompressionValidationModuleImpl extends ValidationModule
 					}
 					return false;
 				} else {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_TIFF )
+
+					Logtxt.logtxt( logFile,
+							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_TIFF )
 									+ getTextResourceService().getText( locale, MESSAGE_XML_CG_CANNOTFINDETREPORT ) );
 					return false;
 				}

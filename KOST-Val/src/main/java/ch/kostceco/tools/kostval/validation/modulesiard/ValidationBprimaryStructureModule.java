@@ -38,6 +38,6 @@ public interface ValidationBprimaryStructureModule extends ValidationModule
 {
 
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale ) throws ValidationBprimaryStructureException;
+			Locale locale, File logFile ) throws ValidationBprimaryStructureException;
 
 }

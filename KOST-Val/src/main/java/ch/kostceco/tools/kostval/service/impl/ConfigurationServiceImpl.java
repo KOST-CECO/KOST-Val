@@ -35,14 +35,13 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
-import ch.kostceco.tools.kostval.logging.Logger;
+import ch.kostceco.tools.kostval.logging.Logtxt;
 import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.service.TextResourceService;
 
 public class ConfigurationServiceImpl implements ConfigurationService
 {
 
-	private static final Logger	LOGGER		= new Logger( ConfigurationServiceImpl.class );
 	Map<String, String>					configMap	= null;
 	// TODO Hier alle Werte definieren, bei getConfig fuellen und dann nur noch Wert gleichsetzen
 	private TextResourceService	textResourceService;
@@ -57,8 +56,10 @@ public class ConfigurationServiceImpl implements ConfigurationService
 		this.textResourceService = textResourceService;
 	}
 
-	public Map<String, String> configMap( Locale locale, String logtype )
+	public Map<String, String> configMap( Locale locale, String logtype, File valDatei )
 	{
+		File logFile = new File("LOGS.kost-val.log.xml");
+
 		try {
 			File directoryOfConfigfile = new File( System.getenv( "USERPROFILE" ) + File.separator
 					+ ".kost-val_2x" + File.separator + "configuration" );
@@ -83,10 +84,10 @@ public class ConfigurationServiceImpl implements ConfigurationService
 				if ( !dir.exists() ) {
 					dir.mkdirs();
 				}
-				pathtoworkdir = dir.getAbsolutePath()	+ File.separator + "temp_KOST-Val";
+				pathtoworkdir = dir.getAbsolutePath() + File.separator + "temp_KOST-Val";
 				if ( dir.canWrite() ) {
 					work = true;
-					File tmpDir= new File (pathtoworkdir);
+					File tmpDir = new File( pathtoworkdir );
 					tmpDir.mkdirs();
 				}
 			}
@@ -123,6 +124,8 @@ public class ConfigurationServiceImpl implements ConfigurationService
 				dir1.mkdirs();
 			}
 			configMap.put( "PathToLogfile", logs );
+			 logFile = new File( logs +File.separator +valDatei.getName()+ ".kost-val.log.xml");
+
 
 			// Gibt den Namen des DROID Signature Files zurueck. =
 			// USERPROFILE/.kost-val_2x/configuration/KaD...
@@ -224,8 +227,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			configMap.put( "jpegValidation", jpegvalidation );
 
 			// Gibt an ob png validiert werden soll
-			String pngvalidation = doc.getElementsByTagName( "pngvalidation" ).item( 0 )
-					.getTextContent();
+			String pngvalidation = doc.getElementsByTagName( "pngvalidation" ).item( 0 ).getTextContent();
 			configMap.put( "pngValidation", pngvalidation );
 
 			// Gibt an welche Fehler ignoriert werden sollen
@@ -413,47 +415,47 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			return configMap;
 
 		} catch ( FileNotFoundException e ) {
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ca_SIP )
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ca_SIP )
 					+ getTextResourceService().getText( locale, MESSAGE_XML_CONFIGURATION_ERROR_1 ) );
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ca_SIP )
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ca_SIP )
 					+ getTextResourceService().getText( locale, MESSAGE_XML_CONFIGURATION_ERROR_2 ) );
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ca_SIP )
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ca_SIP )
 					+ getTextResourceService().getText( locale, MESSAGE_XML_CONFIGURATION_ERROR_3 ) );
 			String error = e.getMessage() + " (FileNotFoundException)";
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ca_SIP )
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ca_SIP )
 					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, error ) );
 			System.exit( 1 );
 		} catch ( ParserConfigurationException e ) {
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ca_SIP )
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ca_SIP )
 					+ getTextResourceService().getText( locale, MESSAGE_XML_CONFIGURATION_ERROR_1 ) );
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ca_SIP )
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ca_SIP )
 					+ getTextResourceService().getText( locale, MESSAGE_XML_CONFIGURATION_ERROR_2 ) );
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ca_SIP )
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ca_SIP )
 					+ getTextResourceService().getText( locale, MESSAGE_XML_CONFIGURATION_ERROR_3 ) );
 			String error = e.getMessage() + " (ParserConfigurationException)";
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ca_SIP )
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ca_SIP )
 					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, error ) );
 			System.exit( 1 );
 		} catch ( SAXException e ) {
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ca_SIP )
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ca_SIP )
 					+ getTextResourceService().getText( locale, MESSAGE_XML_CONFIGURATION_ERROR_1 ) );
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ca_SIP )
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ca_SIP )
 					+ getTextResourceService().getText( locale, MESSAGE_XML_CONFIGURATION_ERROR_2 ) );
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ca_SIP )
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ca_SIP )
 					+ getTextResourceService().getText( locale, MESSAGE_XML_CONFIGURATION_ERROR_3 ) );
 			String error = e.getMessage() + " (SAXException)";
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ca_SIP )
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ca_SIP )
 					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, error ) );
 			System.exit( 1 );
 		} catch ( IOException e ) {
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ca_SIP )
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ca_SIP )
 					+ getTextResourceService().getText( locale, MESSAGE_XML_CONFIGURATION_ERROR_1 ) );
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ca_SIP )
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ca_SIP )
 					+ getTextResourceService().getText( locale, MESSAGE_XML_CONFIGURATION_ERROR_2 ) );
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ca_SIP )
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ca_SIP )
 					+ getTextResourceService().getText( locale, MESSAGE_XML_CONFIGURATION_ERROR_3 ) );
 			String error = e.getMessage() + " (IOException)";
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ca_SIP )
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ca_SIP )
 					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, error ) );
 			System.exit( 1 );
 		}

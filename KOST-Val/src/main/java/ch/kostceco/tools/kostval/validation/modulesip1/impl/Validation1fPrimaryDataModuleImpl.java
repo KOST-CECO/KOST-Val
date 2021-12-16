@@ -38,6 +38,7 @@ import ch.kostceco.tools.kosttools.util.Util;
 import ch.kostceco.tools.kostval.exception.modulesip1.Validation1fPrimaryDataException;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesip1.Validation1fPrimaryDataModule;
+import ch.kostceco.tools.kostval.logging.Logtxt;
 
 /** Diese Validierung gibt true (OK) zur�ck, wenn keine Primärdateien im Verzeichnis content
  * vorhanden sind, der Ablieferungstyp aber GEVER ist. Sind keine Primärdateien im Verzeichnis
@@ -49,7 +50,7 @@ public class Validation1fPrimaryDataModuleImpl extends ValidationModuleImpl
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale ) throws Validation1fPrimaryDataException
+			Locale locale, File logFile ) throws Validation1fPrimaryDataException
 	{
 		boolean showOnWork = false;
 		int onWork = 410;
@@ -114,8 +115,9 @@ public class Validation1fPrimaryDataModuleImpl extends ValidationModuleImpl
 
 				if ( name.equals( "ablieferungFilesSIP" ) ) {
 					// FILE-SIP
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Af_SIP )
+
+					Logtxt.logtxt( logFile,
+							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Af_SIP )
 									+ getTextResourceService().getText( locale,
 											ERROR_XML_AF_FILESIPWITHOUTPRIMARYDATA ) );
 					return false;
@@ -123,9 +125,9 @@ public class Validation1fPrimaryDataModuleImpl extends ValidationModuleImpl
 			}
 
 		} catch ( Exception e ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Af_SIP )
-							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Af_SIP )
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 		return true;

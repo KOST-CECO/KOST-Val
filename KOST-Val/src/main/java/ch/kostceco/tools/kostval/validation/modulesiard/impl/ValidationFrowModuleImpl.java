@@ -42,6 +42,7 @@ import ch.kostceco.tools.kostval.exception.modulesiard.ValidationFrowException;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.bean.ValidationContext;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationFrowModule;
+import ch.kostceco.tools.kostval.logging.Logtxt;
 
 /** Validierungsschritt F (Zeilen-Validierung) Wurden die Angaben aus metadata.xml korrekt in die
  * tableZ.xsd-Dateienuebertragen? valid --> gleiche Zeilenzahl (rows in metadata.xml = max =
@@ -73,7 +74,7 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements Va
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale ) throws ValidationFrowException
+			Locale locale, File logFile ) throws ValidationFrowException
 	{
 		boolean showOnWork = false;
 		int onWork = 410;
@@ -119,7 +120,7 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements Va
 			List<Element> schemas = document.getRootElement().getChild( "schemas", ns )
 					.getChildren( "schema", ns );
 			for ( Element schema : schemas ) {
-				valid = validateSchema( schema, ns, pathToWorkDir, configMap, locale );
+				valid = validateSchema( schema, ns, pathToWorkDir, configMap, locale, logFile );
 				if ( showOnWork ) {
 					if ( onWork == 410 ) {
 						onWork = 2;
@@ -147,8 +148,9 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements Va
 			if ( min ) {
 				return false;
 			} else {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_SIARD )
+
+				Logtxt.logtxt( logFile,
+						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_SIARD )
 								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 										ioe.getMessage() + " (IOException)" ) );
 			}
@@ -157,8 +159,9 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements Va
 			if ( min ) {
 				return false;
 			} else {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_SIARD )
+
+				Logtxt.logtxt( logFile,
+						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_SIARD )
 								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 										e.getMessage() + " (JDOMException)" ) );
 			}
@@ -174,7 +177,7 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements Va
 	}
 
 	private boolean validateSchema( Element schema, Namespace ns, String pathToWorkDir,
-			Map<String, String> configMap, Locale locale )
+			Map<String, String> configMap, Locale locale, File logFile )
 	{
 		boolean showOnWork = false;
 		int onWork = 410;
@@ -200,7 +203,7 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements Va
 				for ( Element table : tables ) {
 					// Valid = True ansonsten validiert er nicht
 					validT = true;
-					validT = validT && validateTable( table, ns, pathToWorkDir, schemaPath, locale );
+					validT = validT && validateTable( table, ns, pathToWorkDir, schemaPath, locale, logFile );
 					if ( showOnWork ) {
 						if ( onWork == 410 ) {
 							onWork = 2;
@@ -236,7 +239,7 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements Va
 	}
 
 	private boolean validateTable( Element table, Namespace ns, String pathToWorkDir, File schemaPath,
-			Locale locale )
+			Locale locale, File logFile )
 	{
 		boolean valid = true;
 		boolean validR = true;
@@ -248,13 +251,13 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements Va
 				.append( File.separator ).append( tableFolder.getText() ).toString() );
 		File tableXsd = new File( new StringBuilder( tablePath.getAbsolutePath() )
 				.append( File.separator ).append( tableFolder.getText() + ".xsd" ).toString() );
-		validR = validateRow( tableXsd, rowmax, locale, min );
+		validR = validateRow( tableXsd, rowmax, locale, min, logFile );
 		valid = valid && validR;
 
 		return valid;
 	}
 
-	private boolean validateRow( File tableXsd, int rowmax, Locale locale, Boolean min )
+	private boolean validateRow( File tableXsd, int rowmax, Locale locale, Boolean min, File logFile )
 	{
 		boolean valid = false;
 		try {
@@ -281,8 +284,9 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements Va
 						if ( min ) {
 							return false;
 						} else {
-							getMessageService()
-									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_SIARD )
+
+							Logtxt.logtxt( logFile,
+									getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_SIARD )
 											+ getTextResourceService().getText( locale,
 													MESSAGE_XML_F_INVALID_TABLE_XML_FILES, tableXsd ) );
 						}
@@ -290,8 +294,9 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements Va
 				}
 			} catch ( IOException e ) {
 				valid = false;
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_SIARD )
+
+				Logtxt.logtxt( logFile,
+						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_SIARD )
 								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 										e.getMessage() + " (IOException)" ) );
 			}
@@ -300,8 +305,9 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl implements Va
 			if ( min ) {
 				return false;
 			} else {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_SIARD )
+
+				Logtxt.logtxt( logFile,
+						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_SIARD )
 								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 										e.getMessage() + " (SAXException)" ) );
 			}

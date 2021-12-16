@@ -31,7 +31,7 @@ import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationEbitspersampleV
 import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationFmultipageValidationException;
 import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationGtilesValidationException;
 import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationHsizeValidationException;
-import ch.kostceco.tools.kostval.logging.Logger;
+import ch.kostceco.tools.kostval.logging.Logtxt;
 import ch.kostceco.tools.kostval.logging.MessageConstants;
 import ch.kostceco.tools.kostval.service.TextResourceService;
 // import ch.kostceco.tools.kostval.util.Util;
@@ -52,9 +52,7 @@ import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationHsizeValidatio
 public class Controllertiff implements MessageConstants
 {
 
-	private boolean																		min			= false;
-
-	private static final Logger												LOGGER	= new Logger( Controllertiff.class );
+	private boolean																		min	= false;
 
 	private ValidationArecognitionModule							validationArecognitionModule;
 	private ValidationBjhoveValidationModule					validationBjhoveValidationModule;
@@ -166,13 +164,13 @@ public class Controllertiff implements MessageConstants
 	}
 
 	public boolean executeMandatory( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale )
+			Map<String, String> configMap, Locale locale, File logFile )
 	{
 		boolean valid = true;
 		// Validation Step A
 		try {
 			if ( this.getValidationArecognitionModule().validate( valDatei, directoryOfLogfile, configMap,
-					locale ) ) {
+					locale, logFile ) ) {
 				this.getValidationArecognitionModule().getMessageService().print();
 			} else {
 				// Ein negatives Validierungsresultat in diesem Schritt fuehrt zum Abbruch der weiteren
@@ -181,13 +179,13 @@ public class Controllertiff implements MessageConstants
 				return false;
 			}
 		} catch ( ValidationArecognitionException e ) {
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_TIFF )
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_TIFF )
 					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationArecognitionModule().getMessageService().print();
 			return false;
 
 		} catch ( Exception e ) {
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_TIFF )
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_TIFF )
 					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
@@ -195,7 +193,7 @@ public class Controllertiff implements MessageConstants
 	}
 
 	public boolean executeOptional( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale )
+			Map<String, String> configMap, Locale locale, File logFile )
 	{
 		String onWork = configMap.get( "ShowProgressOnWork" );
 		if ( onWork.equals( "nomin" ) ) {
@@ -206,7 +204,7 @@ public class Controllertiff implements MessageConstants
 		// Validation Step B
 		try {
 			if ( this.getValidationBjhoveValidationModule().validate( valDatei, directoryOfLogfile,
-					configMap, locale ) ) {
+					configMap, locale, logFile ) ) {
 				this.getValidationBjhoveValidationModule().getMessageService().print();
 			} else {
 				this.getValidationBjhoveValidationModule().getMessageService().print();
@@ -217,12 +215,12 @@ public class Controllertiff implements MessageConstants
 				}
 			}
 		} catch ( ValidationBjhoveValidationException e ) {
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_TIFF )
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_TIFF )
 					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationBjhoveValidationModule().getMessageService().print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_TIFF )
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_TIFF )
 					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
@@ -230,7 +228,7 @@ public class Controllertiff implements MessageConstants
 		// Validation Step C
 		try {
 			if ( this.getValidationCcompressionValidationModule().validate( valDatei, directoryOfLogfile,
-					configMap, locale ) ) {
+					configMap, locale, logFile ) ) {
 				this.getValidationCcompressionValidationModule().getMessageService().print();
 			} else {
 				this.getValidationCcompressionValidationModule().getMessageService().print();
@@ -241,12 +239,12 @@ public class Controllertiff implements MessageConstants
 				}
 			}
 		} catch ( ValidationCcompressionValidationException e ) {
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_TIFF )
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_TIFF )
 					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationCcompressionValidationModule().getMessageService().print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_TIFF )
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_TIFF )
 					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
@@ -254,7 +252,7 @@ public class Controllertiff implements MessageConstants
 		// Validation Step D
 		try {
 			if ( this.getValidationDphotointerValidationModule().validate( valDatei, directoryOfLogfile,
-					configMap, locale ) ) {
+					configMap, locale, logFile ) ) {
 				this.getValidationDphotointerValidationModule().getMessageService().print();
 			} else {
 				this.getValidationDphotointerValidationModule().getMessageService().print();
@@ -265,12 +263,12 @@ public class Controllertiff implements MessageConstants
 				}
 			}
 		} catch ( ValidationDphotointerValidationException e ) {
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF )
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF )
 					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationDphotointerValidationModule().getMessageService().print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF )
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF )
 					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
@@ -278,7 +276,7 @@ public class Controllertiff implements MessageConstants
 		// Validation Step E
 		try {
 			if ( this.getValidationEbitspersampleValidationModule().validate( valDatei,
-					directoryOfLogfile, configMap, locale ) ) {
+					directoryOfLogfile, configMap, locale, logFile ) ) {
 				this.getValidationEbitspersampleValidationModule().getMessageService().print();
 			} else {
 				this.getValidationEbitspersampleValidationModule().getMessageService().print();
@@ -289,12 +287,12 @@ public class Controllertiff implements MessageConstants
 				}
 			}
 		} catch ( ValidationEbitspersampleValidationException e ) {
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_TIFF )
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_TIFF )
 					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationEbitspersampleValidationModule().getMessageService().print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_TIFF )
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_TIFF )
 					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
@@ -302,7 +300,7 @@ public class Controllertiff implements MessageConstants
 		// Validation Step F
 		try {
 			if ( this.getValidationFmultipageValidationModule().validate( valDatei, directoryOfLogfile,
-					configMap, locale ) ) {
+					configMap, locale, logFile ) ) {
 				this.getValidationFmultipageValidationModule().getMessageService().print();
 			} else {
 				this.getValidationFmultipageValidationModule().getMessageService().print();
@@ -313,12 +311,12 @@ public class Controllertiff implements MessageConstants
 				}
 			}
 		} catch ( ValidationFmultipageValidationException e ) {
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_TIFF )
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_TIFF )
 					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationFmultipageValidationModule().getMessageService().print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_TIFF )
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_TIFF )
 					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
@@ -326,7 +324,7 @@ public class Controllertiff implements MessageConstants
 		// Validation Step G
 		try {
 			if ( this.getValidationGtilesValidationModule().validate( valDatei, directoryOfLogfile,
-					configMap, locale ) ) {
+					configMap, locale, logFile ) ) {
 				this.getValidationGtilesValidationModule().getMessageService().print();
 			} else {
 				this.getValidationGtilesValidationModule().getMessageService().print();
@@ -337,12 +335,12 @@ public class Controllertiff implements MessageConstants
 				}
 			}
 		} catch ( ValidationGtilesValidationException e ) {
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_TIFF )
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_TIFF )
 					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationGtilesValidationModule().getMessageService().print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_TIFF )
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_TIFF )
 					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
@@ -350,7 +348,7 @@ public class Controllertiff implements MessageConstants
 		// Validation Step H
 		try {
 			if ( this.getValidationHsizeValidationModule().validate( valDatei, directoryOfLogfile,
-					configMap, locale ) ) {
+					configMap, locale, logFile ) ) {
 				this.getValidationHsizeValidationModule().getMessageService().print();
 			} else {
 				this.getValidationHsizeValidationModule().getMessageService().print();
@@ -361,12 +359,12 @@ public class Controllertiff implements MessageConstants
 				}
 			}
 		} catch ( ValidationHsizeValidationException e ) {
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_TIFF )
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_TIFF )
 					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationHsizeValidationModule().getMessageService().print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_TIFF )
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_TIFF )
 					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}

@@ -43,7 +43,7 @@ import ch.kostceco.tools.kostval.controller.Controllervalinit;
 import ch.kostceco.tools.kostval.controller.Controllervalinitlog;
 import ch.kostceco.tools.kostval.controller.Controllervalsip;
 import ch.kostceco.tools.kostval.logging.LogConfigurator;
-import ch.kostceco.tools.kostval.logging.Logger;
+import ch.kostceco.tools.kostval.logging.Logtxt;
 import ch.kostceco.tools.kostval.logging.MessageConstants;
 import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.service.TextResourceService;
@@ -55,8 +55,6 @@ import ch.kostceco.tools.kostval.service.TextResourceService;
 
 public class KOSTVal implements MessageConstants
 {
-
-	private static final Logger		LOGGER	= new Logger( KOSTVal.class );
 
 	private TextResourceService		textResourceService;
 	private ConfigurationService	configurationService;
@@ -100,8 +98,10 @@ public class KOSTVal implements MessageConstants
 	{
 		boolean mainBoolean = true;
 		// System.out.println( new Timestamp( System.currentTimeMillis() ) + " 107 Start " );
+		Util.switchOffConsole();
 		ConfigurableApplicationContext context = new ClassPathXmlApplicationContext(
 				"classpath:config/applicationContext.xml" );
+		Util.switchOnConsole();
 		// System.out.println( new Timestamp( System.currentTimeMillis() ) +
 		// " 110 Ende ApplicationContext " );
 
@@ -146,7 +146,9 @@ public class KOSTVal implements MessageConstants
 
 		// Konfigurations Map erstellen (Zeitgewinn)
 		String logtype = args[3];
-		Map<String, String> configMap = kostval.getConfigurationService().configMap( locale, logtype );
+		File valDatei = new File( args[1] );
+		Map<String, String> configMap = kostval.getConfigurationService().configMap( locale, logtype,
+				valDatei );
 
 		Controllervalinit controller0 = (Controllervalinit) context.getBean( "controllervalinit" );
 		boolean valInit = controller0.valInit( args, configMap );
@@ -172,15 +174,16 @@ public class KOSTVal implements MessageConstants
 			locale = new Locale( "en" );
 		}
 
-		File valDatei = new File( args[1] );
 		File logDatei = null;
 		logDatei = valDatei;
 
 		// Konfiguration des Loggings, ein File Logger wird zusaetzlich erstellt
+		Util.switchOffConsole();
 		LogConfigurator logConfigurator = (LogConfigurator) context.getBean( "logconfigurator" );
 		String logFileName = logConfigurator.configure( directoryOfLogfile.getAbsolutePath(),
 				logDatei.getName() );
 		File logFile = new File( logFileName );
+		Util.switchOnConsole();
 		// Ab hier kann ins log geschrieben werden...
 
 		// falls das File bereits existiert, z.B. von einem vorhergehenden Durchlauf, loeschen wir es
@@ -240,7 +243,8 @@ public class KOSTVal implements MessageConstants
 		}
 
 		if ( args[0].equalsIgnoreCase( "--format" ) ) {
-			LOGGER.logError( kostval.getTextResourceService().getText( locale, MESSAGE_XML_FORMAT1 ) );
+			Logtxt.logtxt( logFile,
+					kostval.getTextResourceService().getText( locale, MESSAGE_XML_FORMAT1 ) );
 
 			// TODO: Formatvalidierung an einer Datei --> erledigt --> nur Marker
 			if ( !valDatei.isDirectory() ) {
@@ -249,16 +253,18 @@ public class KOSTVal implements MessageConstants
 				 * dirOfJarPath, configMap, context ); */
 				Controllervalfile controller1 = (Controllervalfile) context.getBean( "controllervalfile" );
 				boolean valFile = controller1.valFile( valDatei, logFileName, directoryOfLogfile, verbose,
-						dirOfJarPath, configMap, context, locale );
+						dirOfJarPath, configMap, context, locale, logFile );
 
-				LOGGER.logError( kostval.getTextResourceService().getText( locale, MESSAGE_XML_FORMAT2 ) );
+				Logtxt.logtxt( logFile,
+						kostval.getTextResourceService().getText( locale, MESSAGE_XML_FORMAT2 ) );
 
 				// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
 				if ( tmpDir.exists() ) {
 					Util.deleteDir( tmpDir );
 				}
 
-				LOGGER.logError( kostval.getTextResourceService().getText( locale, MESSAGE_XML_LOGEND ) );
+				Logtxt.logtxt( logFile,
+						kostval.getTextResourceService().getText( locale, MESSAGE_XML_LOGEND ) );
 				// logFile bereinigung (& End und ggf 3c)
 				Util.valEnd3cAmp( "", logFile );
 
@@ -286,7 +292,7 @@ public class KOSTVal implements MessageConstants
 				Controllervalfolder controller2 = (Controllervalfolder) context
 						.getBean( "controllervalfolder" );
 				boolean valFolder = controller2.valFolder( valDatei, logFileName, directoryOfLogfile,
-						verbose, dirOfJarPath, configMap, context, locale );
+						verbose, dirOfJarPath, configMap, context, locale, logFile );
 
 				// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
 				if ( tmpDir.exists() ) {
@@ -320,34 +326,38 @@ public class KOSTVal implements MessageConstants
 				System.out
 						.println( kostval.getTextResourceService().getText( locale, ERROR_XML_CONIG_SIP ) );
 
-				LOGGER.logError( kostval.getTextResourceService().getText( locale, MESSAGE_XML_SIP1 ) ); // =
-																																																	// <Sip>
-				LOGGER.logError(
+				Logtxt.logtxt( logFile,
+						kostval.getTextResourceService().getText( locale, MESSAGE_XML_SIP1 ) ); // =
+				// <Sip>
+				Logtxt.logtxt( logFile,
 						kostval.getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS ) ); // =
 																																														// <Validation>
-				LOGGER.logError( kostval.getTextResourceService().getText( locale, MESSAGE_XML_VALTYPE,
-						kostval.getTextResourceService().getText( locale, MESSAGE_SIPVALIDATION ) ) ); // =
-																																														// <ValType>{0}</ValType>
-				LOGGER.logError( kostval.getTextResourceService().getText( locale, MESSAGE_XML_VALFILE,
-						valDatei.getAbsolutePath() ) ); // = <ValFile>{0}</ValFile>
-				LOGGER.logError(
+				Logtxt.logtxt( logFile,
+						kostval.getTextResourceService().getText( locale, MESSAGE_XML_VALTYPE,
+								kostval.getTextResourceService().getText( locale, MESSAGE_SIPVALIDATION ) ) ); // =
+																																																// <ValType>{0}</ValType>
+				Logtxt.logtxt( logFile, kostval.getTextResourceService().getText( locale,
+						MESSAGE_XML_VALFILE, valDatei.getAbsolutePath() ) ); // = <ValFile>{0}</ValFile>
+				Logtxt.logtxt( logFile,
 						kostval.getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Aa_SIP ) ); // =
 																																														// <Error><Modul>1A)
 																																														// Lesbarkeit</Modul>
-				LOGGER.logError(
+				Logtxt.logtxt( logFile,
 						"<Message>" + kostval.getTextResourceService().getText( locale, ERROR_XML_CONIG_SIP )
 								+ "</Message></Error>" ); // <Message>SIP-Validierung in der Konfiguration
 																					// ausgeschaltet.</Message></Error>
-				LOGGER.logError(
+				Logtxt.logtxt( logFile,
 						kostval.getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_INVALID ) ); // =
 																																																		// <Invalid>invalid</Invalid>
-				LOGGER.logError(
+				Logtxt.logtxt( logFile,
 						kostval.getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) ); // =
 																																																	// </Validation>
-				LOGGER.logError( kostval.getTextResourceService().getText( locale, MESSAGE_XML_SIP2 ) ); // =
-																																																	// </Sip>
-				LOGGER.logError( kostval.getTextResourceService().getText( locale, MESSAGE_XML_LOGEND ) ); // =
-																																																		// </KOSTValLog>
+				Logtxt.logtxt( logFile,
+						kostval.getTextResourceService().getText( locale, MESSAGE_XML_SIP2 ) ); // =
+				// </Sip>
+				Logtxt.logtxt( logFile,
+						kostval.getTextResourceService().getText( locale, MESSAGE_XML_LOGEND ) ); // =
+				// </KOSTValLog>
 
 				// ggf. Fehlermeldung 3c ergaenzen Util.val3c(summary3c, logFile );
 				// logFile bereinigung (& End und ggf 3c)
@@ -359,7 +369,7 @@ public class KOSTVal implements MessageConstants
 			} else {
 				Controllervalsip controller3 = (Controllervalsip) context.getBean( "controllervalsip" );
 				boolean valSip = controller3.valSip( valDatei, logFileName, directoryOfLogfile, verbose,
-						dirOfJarPath, configMap, context, locale, onlySip );
+						dirOfJarPath, configMap, context, locale, onlySip, logFile );
 
 				// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
 				if ( tmpDir.exists() ) {

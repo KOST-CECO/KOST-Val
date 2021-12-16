@@ -41,6 +41,7 @@ import org.w3c.dom.NodeList;
 import ch.kostceco.tools.kostval.exception.modulesip2.Validation2dGeverFileIntegrityException;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesip2.Validation2dGeverFileIntegrityModule;
+import ch.kostceco.tools.kostval.logging.Logtxt;
 
 /** Validierungsschritt 2d Bei GEVER und Files SIP pruefen, ob alle in (metadata.xml)
  * /paket/inhaltsverzeichnis/content referenzierten Dateien auch in
@@ -53,7 +54,7 @@ public class Validation2dGeverFileIntegrityModuleImpl extends ValidationModuleIm
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale ) throws Validation2dGeverFileIntegrityException
+			Locale locale, File logFile ) throws Validation2dGeverFileIntegrityException
 	{
 		boolean showOnWork = false;
 		int onWork = 410;
@@ -176,8 +177,8 @@ public class Validation2dGeverFileIntegrityModuleImpl extends ValidationModuleIm
 				String deleted = dateiRefOrdnungssystem.remove( keyContent );
 				if ( deleted == null ) {
 					if ( !titlePrinted ) {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bd_SIP )
+						
+								Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bd_SIP )
 										+ getTextResourceService().getText( locale, MESSAGE_XML_BD_MISSINGINABLIEFERUNG,
 												keyContent ) );
 						titlePrinted = true;
@@ -212,8 +213,8 @@ public class Validation2dGeverFileIntegrityModuleImpl extends ValidationModuleIm
 				String keyOrd = iterator.next();
 				/* Die folgende DateiRef vorhanden in metadata/paket/ablieferung/ordnungssystem, aber nicht
 				 * in metadata/paket/inhaltsverzeichnis/content */
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bd_SIP )
+				
+						Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bd_SIP )
 								+ getTextResourceService().getText( locale, MESSAGE_XML_BD_MISSINGINABLIEFERUNG,
 										keyOrd ) );
 				valid = false;
@@ -240,8 +241,8 @@ public class Validation2dGeverFileIntegrityModuleImpl extends ValidationModuleIm
 				}
 			}
 		} catch ( Exception e ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bd_SIP )
+			
+					Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bd_SIP )
 							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}

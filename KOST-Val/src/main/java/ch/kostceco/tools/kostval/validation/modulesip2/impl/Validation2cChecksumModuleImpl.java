@@ -37,6 +37,7 @@ import ch.kostceco.tools.kostval.exception.modulesip2.Validation2cChecksumExcept
 import ch.kostceco.tools.kostval.service.ConfigurationService;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesip2.Validation2cChecksumModule;
+import ch.kostceco.tools.kostval.logging.Logtxt;
 
 /** Validierungsschritt 2c: Stimmen die Pr�fsummen der Dateien mit Pr�fsumme überein?
  * metadata.xml: pruefsumme, pruefalgorithmus und name pro Datei auslesen pfad ermitteln, l�nge
@@ -60,7 +61,7 @@ public class Validation2cChecksumModuleImpl extends ValidationModuleImpl
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale ) throws Validation2cChecksumException
+			Locale locale, File logFile ) throws Validation2cChecksumException
 	{
 		boolean showOnWork = false;
 		int onWork = 410;
@@ -159,8 +160,8 @@ public class Validation2cChecksumModuleImpl extends ValidationModuleImpl
 					if ( pruefsumme.length() != 32 ) {
 						valid = false;
 
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bc_SIP )
+						
+								Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bc_SIP )
 										+ getTextResourceService().getText( locale, MESSAGE_XML_BC_WRONGMD5, path ) );
 
 					} else {
@@ -192,7 +193,7 @@ public class Validation2cChecksumModuleImpl extends ValidationModuleImpl
 								try {
 									fileInput.close();
 								} catch ( IOException e ) {
-									getMessageService().logError(
+									Logtxt.logtxt( logFile,
 											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bc_SIP )
 													+ getTextResourceService().getText( locale,
 															ERROR_XML_BC_CANNOTCLOSESTREAMMD5 ) );
@@ -205,13 +206,13 @@ public class Validation2cChecksumModuleImpl extends ValidationModuleImpl
 								} else {
 									valid = false;
 
-									getMessageService().logError(
+									Logtxt.logtxt( logFile,
 											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bc_SIP )
 													+ getTextResourceService().getText( locale, MESSAGE_XML_BC_WRONGMD5,
 															path + ": " + pruefsumme + " ~ " + output ) );
 								}
 							} catch ( IOException e ) {
-								getMessageService().logError( getTextResourceService().getText( locale,
+								Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
 										MESSAGE_XML_MODUL_Bc_SIP )
 										+ getTextResourceService().getText( locale, ERROR_XML_BC_CANNOTPROCESSMD5 ) );
 								return false;
@@ -228,8 +229,8 @@ public class Validation2cChecksumModuleImpl extends ValidationModuleImpl
 					if ( pruefsumme.length() != 40 ) {
 						valid = false;
 
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bc_SIP )
+						
+								Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bc_SIP )
 										+ getTextResourceService().getText( locale, MESSAGE_XML_BC_WRONGMD5, path ) );
 
 					} else {
@@ -261,7 +262,7 @@ public class Validation2cChecksumModuleImpl extends ValidationModuleImpl
 								try {
 									fileInput.close();
 								} catch ( IOException e ) {
-									getMessageService().logError(
+									Logtxt.logtxt( logFile,
 											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bc_SIP )
 													+ getTextResourceService().getText( locale,
 															ERROR_XML_BC_CANNOTCLOSESTREAMMD5 ) );
@@ -272,13 +273,13 @@ public class Validation2cChecksumModuleImpl extends ValidationModuleImpl
 								if ( !output.equalsIgnoreCase( pruefsumme ) ) {
 									valid = false;
 
-									getMessageService().logError(
+									Logtxt.logtxt( logFile,
 											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bc_SIP )
 													+ getTextResourceService().getText( locale, MESSAGE_XML_BC_WRONGMD5,
 															path + ": " + pruefsumme + " ~ " + output ) );
 								}
 							} catch ( IOException e ) {
-								getMessageService().logError( getTextResourceService().getText( locale,
+								Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
 										MESSAGE_XML_MODUL_Bc_SIP )
 										+ getTextResourceService().getText( locale, ERROR_XML_BC_CANNOTPROCESSMD5 ) );
 								return false;
@@ -296,8 +297,8 @@ public class Validation2cChecksumModuleImpl extends ValidationModuleImpl
 					if ( pruefsumme.length() != 64 ) {
 						valid = false;
 
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bc_SIP )
+						
+								Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bc_SIP )
 										+ getTextResourceService().getText( locale, MESSAGE_XML_BC_WRONGMD5, path ) );
 
 					} else {
@@ -329,7 +330,7 @@ public class Validation2cChecksumModuleImpl extends ValidationModuleImpl
 								try {
 									fileInput.close();
 								} catch ( IOException e ) {
-									getMessageService().logError(
+									Logtxt.logtxt( logFile,
 											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bc_SIP )
 													+ getTextResourceService().getText( locale,
 															ERROR_XML_BC_CANNOTCLOSESTREAMMD5 ) );
@@ -340,13 +341,13 @@ public class Validation2cChecksumModuleImpl extends ValidationModuleImpl
 								if ( !output.equalsIgnoreCase( pruefsumme ) ) {
 									valid = false;
 
-									getMessageService().logError(
+									Logtxt.logtxt( logFile,
 											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bc_SIP )
 													+ getTextResourceService().getText( locale, MESSAGE_XML_BC_WRONGMD5,
 															path + ": " + pruefsumme + " ~ " + output ) );
 								}
 							} catch ( IOException e ) {
-								getMessageService().logError( getTextResourceService().getText( locale,
+								Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
 										MESSAGE_XML_MODUL_Bc_SIP )
 										+ getTextResourceService().getText( locale, ERROR_XML_BC_CANNOTPROCESSMD5 ) );
 								return false;
@@ -364,8 +365,8 @@ public class Validation2cChecksumModuleImpl extends ValidationModuleImpl
 					if ( pruefsumme.length() != 128 ) {
 						valid = false;
 
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bc_SIP )
+						
+								Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bc_SIP )
 										+ getTextResourceService().getText( locale, MESSAGE_XML_BC_WRONGMD5, path ) );
 
 					} else {
@@ -397,7 +398,7 @@ public class Validation2cChecksumModuleImpl extends ValidationModuleImpl
 								try {
 									fileInput.close();
 								} catch ( IOException e ) {
-									getMessageService().logError(
+									Logtxt.logtxt( logFile,
 											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bc_SIP )
 													+ getTextResourceService().getText( locale,
 															ERROR_XML_BC_CANNOTCLOSESTREAMMD5 ) );
@@ -408,13 +409,13 @@ public class Validation2cChecksumModuleImpl extends ValidationModuleImpl
 								if ( !output.equalsIgnoreCase( pruefsumme ) ) {
 									valid = false;
 
-									getMessageService().logError(
+									Logtxt.logtxt( logFile,
 											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bc_SIP )
 													+ getTextResourceService().getText( locale, MESSAGE_XML_BC_WRONGMD5,
 															path + ": " + pruefsumme + " ~ " + output ) );
 								}
 							} catch ( IOException e ) {
-								getMessageService().logError( getTextResourceService().getText( locale,
+								Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
 										MESSAGE_XML_MODUL_Bc_SIP )
 										+ getTextResourceService().getText( locale, ERROR_XML_BC_CANNOTPROCESSMD5 ) );
 								return false;
@@ -448,8 +449,8 @@ public class Validation2cChecksumModuleImpl extends ValidationModuleImpl
 				}
 			}
 		} catch ( Exception e ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bc_SIP )
+			
+					Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bc_SIP )
 							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			valid = false;
 		}

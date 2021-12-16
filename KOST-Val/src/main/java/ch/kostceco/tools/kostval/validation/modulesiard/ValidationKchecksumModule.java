@@ -35,6 +35,6 @@ public interface ValidationKchecksumModule extends ValidationModule
 {
 
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale ) throws ValidationKchecksumException;
+			Locale locale, File logFile ) throws ValidationKchecksumException;
 
 }

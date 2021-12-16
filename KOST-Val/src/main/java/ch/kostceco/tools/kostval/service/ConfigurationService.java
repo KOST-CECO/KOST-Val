@@ -19,6 +19,7 @@
 
 package ch.kostceco.tools.kostval.service;
 
+import java.io.File;
 import java.util.Locale;
 import java.util.Map;
 
@@ -27,6 +28,6 @@ import java.util.Map;
  * @author Rc Claire Roethlisberger, KOST-CECO */
 public interface ConfigurationService extends Service
 {
-	Map<String, String> configMap( Locale locale, String logtype );
+	Map<String, String> configMap( Locale locale, String logtype, File valDatei );
 
 }

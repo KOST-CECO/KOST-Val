@@ -28,6 +28,7 @@ import java.io.FileReader;
 import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationGtilesValidationException;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationGtilesValidationModule;
+import ch.kostceco.tools.kostval.logging.Logtxt;
 
 /** Validierungsschritt G (Kacheln-Validierung) Ist die TIFF-Datei gem�ss Konfigurationsdatei valid?
  * 
@@ -43,7 +44,7 @@ public class ValidationGtilesValidationModuleImpl extends ValidationModuleImpl
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale ) throws ValidationGtilesValidationException
+			Locale locale, File logFile ) throws ValidationGtilesValidationException
 	{
 		String onWork = configMap.get( "ShowProgressOnWork" );
 		if ( onWork.equals( "nomin" ) ) {
@@ -60,8 +61,9 @@ public class ValidationGtilesValidationModuleImpl extends ValidationModuleImpl
 
 		if ( !exiftoolReport.exists() ) {
 			// Report existiert nicht
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_TIFF )
+
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_TIFF )
 							+ getTextResourceService().getText( locale, MESSAGE_XML_MISSING_REPORT,
 									exiftoolReport.getAbsolutePath(),
 									getTextResourceService().getText( locale, ABORTED ) ) );
@@ -110,7 +112,7 @@ public class ValidationGtilesValidationModuleImpl extends ValidationModuleImpl
 											&& !line.equals( oldErrorLine3 ) && !line.equals( oldErrorLine4 )
 											&& !line.equals( oldErrorLine5 ) ) {
 										// neuer Fehler
-										getMessageService().logError(
+										Logtxt.logtxt( logFile,
 												getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_TIFF )
 														+ getTextResourceService().getText( locale, MESSAGE_XML_CG_INVALID,
 																line ) );
@@ -141,8 +143,9 @@ public class ValidationGtilesValidationModuleImpl extends ValidationModuleImpl
 							}
 							return false;
 						} else {
-							getMessageService()
-									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_TIFF )
+
+							Logtxt.logtxt( logFile,
+									getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_TIFF )
 											+ getTextResourceService().getText( locale, MESSAGE_XML_CG_ETNIO, "G" ) );
 						}
 					}
@@ -155,9 +158,10 @@ public class ValidationGtilesValidationModuleImpl extends ValidationModuleImpl
 						}
 						return false;
 					} else {
-						getMessageService().logError( getTextResourceService().getText( locale,
-								MESSAGE_XML_MODUL_G_TIFF )
-								+ getTextResourceService().getText( locale, MESSAGE_XML_CG_CANNOTFINDETREPORT ) );
+						Logtxt.logtxt( logFile,
+								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_TIFF )
+										+ getTextResourceService().getText( locale,
+												MESSAGE_XML_CG_CANNOTFINDETREPORT ) );
 						return false;
 					}
 				}

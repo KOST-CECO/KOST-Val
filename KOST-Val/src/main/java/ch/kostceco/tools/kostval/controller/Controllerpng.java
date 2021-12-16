@@ -24,7 +24,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import ch.kostceco.tools.kostval.exception.modulepng.ValidationApngvalidationException;
-import ch.kostceco.tools.kostval.logging.Logger;
+import ch.kostceco.tools.kostval.logging.Logtxt;
 import ch.kostceco.tools.kostval.logging.MessageConstants;
 import ch.kostceco.tools.kostval.service.TextResourceService;
 import ch.kostceco.tools.kostval.validation.modulepng.ValidationAvalidationPngModule;
@@ -39,7 +39,6 @@ import ch.kostceco.tools.kostval.validation.modulepng.ValidationAvalidationPngMo
 public class Controllerpng implements MessageConstants
 {
 
-	private static final Logger							LOGGER	= new Logger( Controllerpng.class );
 	private TextResourceService							textResourceService;
 
 	private ValidationAvalidationPngModule	validationAvalidationPngModule;
@@ -66,26 +65,26 @@ public class Controllerpng implements MessageConstants
 	}
 
 	public boolean executeMandatory( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale )
+			Map<String, String> configMap, Locale locale, File logFile )
 	{
 		boolean valid = true;
 
 		// Validation A
 		try {
 			if ( this.getValidationAvalidationPngModule().validate( valDatei, directoryOfLogfile,
-					configMap, locale ) ) {
+					configMap, locale, logFile ) ) {
 				this.getValidationAvalidationPngModule().getMessageService().print();
 			} else {
 				this.getValidationAvalidationPngModule().getMessageService().print();
 				return false;
 			}
 		} catch ( ValidationApngvalidationException e ) {
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PNG )
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PNG )
 					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationAvalidationPngModule().getMessageService().print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PNG )
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PNG )
 					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}

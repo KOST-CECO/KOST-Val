@@ -28,6 +28,7 @@ import java.io.FileReader;
 import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationEbitspersampleValidationException;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationEbitspersampleValidationModule;
+import ch.kostceco.tools.kostval.logging.Logtxt;
 
 /** Validierungsschritt E (BitsPerSample-Validierung) Ist die TIFF-Datei gem�ss Konfigurationsdatei
  * valid?
@@ -44,7 +45,7 @@ public class ValidationEbitspersampleValidationModuleImpl extends ValidationModu
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale ) throws ValidationEbitspersampleValidationException
+			Locale locale, File logFile ) throws ValidationEbitspersampleValidationException
 	{
 		String onWork = configMap.get( "ShowProgressOnWork" );
 		if ( onWork.equals( "nomin" ) ) {
@@ -61,8 +62,9 @@ public class ValidationEbitspersampleValidationModuleImpl extends ValidationModu
 
 		if ( !exiftoolReport.exists() ) {
 			// Report existiert nicht
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_TIFF )
+
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_TIFF )
 							+ getTextResourceService().getText( locale, MESSAGE_XML_MISSING_REPORT,
 									exiftoolReport.getAbsolutePath(),
 									getTextResourceService().getText( locale, ABORTED ) ) );
@@ -146,9 +148,10 @@ public class ValidationEbitspersampleValidationModuleImpl extends ValidationModu
 										&& !line.equals( oldErrorLine3 ) && !line.equals( oldErrorLine4 )
 										&& !line.equals( oldErrorLine5 ) ) {
 									// neuer Fehler
-									getMessageService().logError( getTextResourceService().getText( locale,
-											MESSAGE_XML_MODUL_E_TIFF )
-											+ getTextResourceService().getText( locale, MESSAGE_XML_CG_INVALID, line ) );
+									Logtxt.logtxt( logFile,
+											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_TIFF )
+													+ getTextResourceService().getText( locale, MESSAGE_XML_CG_INVALID,
+															line ) );
 									if ( oldErrorLine1.equals( "" ) ) {
 										oldErrorLine1 = line;
 									} else if ( oldErrorLine2.equals( "" ) ) {
@@ -171,8 +174,9 @@ public class ValidationEbitspersampleValidationModuleImpl extends ValidationModu
 						// Valid
 					} else {
 						line = "Default BitsPerSample 1";
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_TIFF )
+
+						Logtxt.logtxt( logFile,
+								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_TIFF )
 										+ getTextResourceService().getText( locale, MESSAGE_XML_CG_INVALID, line ) );
 					}
 				}
@@ -185,8 +189,9 @@ public class ValidationEbitspersampleValidationModuleImpl extends ValidationModu
 					}
 					return false;
 				} else {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_TIFF )
+
+					Logtxt.logtxt( logFile,
+							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_TIFF )
 									+ getTextResourceService().getText( locale, MESSAGE_XML_CG_CANNOTFINDETREPORT ) );
 					return false;
 				}

@@ -28,6 +28,7 @@ import ch.kostceco.tools.kosttools.fileservice.Magic;
 import ch.kostceco.tools.kosttools.fileservice.Pngcheck;
 import ch.kostceco.tools.kostval.KOSTVal;
 import ch.kostceco.tools.kostval.exception.modulepng.ValidationApngvalidationException;
+import ch.kostceco.tools.kostval.logging.Logtxt;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulepng.ValidationAvalidationPngModule;
 import coderslagoon.badpeggy.scanner.ImageScanner.Callback;
@@ -46,7 +47,7 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale ) throws ValidationApngvalidationException
+			Locale locale, File logFile ) throws ValidationApngvalidationException
 	{
 		String onWork = configMap.get( "ShowProgressOnWork" );
 		if ( onWork.equals( "nomin" ) ) {
@@ -65,9 +66,8 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl
 			if ( min ) {
 				return false;
 			} else {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PNG )
-								+ getTextResourceService().getText( locale, ERROR_XML_A_PNG_ISDIRECTORY ) );
+				Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PNG )
+						+ getTextResourceService().getText( locale, ERROR_XML_A_PNG_ISDIRECTORY ) );
 				return false;
 			}
 		} else if ( (valDatei.getAbsolutePath().toLowerCase().endsWith( ".png" )) ) {
@@ -89,8 +89,8 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl
 							if ( min ) {
 								return false;
 							} else {
-								getMessageService()
-										.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PNG )
+								Logtxt.logtxt( logFile,
+										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PNG )
 												+ getTextResourceService().getText( locale, MESSAGE_XML_CA_DROID ) );
 								return false;
 							}
@@ -102,14 +102,15 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl
 							return false;
 						} else if ( puid.equals( " ERROR " ) ) {
 							// Probleme bei der Initialisierung von DROID
-							getMessageService().logError( getTextResourceService().getText( locale,
-									MESSAGE_XML_MODUL_A_PNG )
-									+ getTextResourceService().getText( locale, ERROR_XML_CANNOT_INITIALIZE_DROID ) );
+							Logtxt.logtxt( logFile,
+									getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PNG )
+											+ getTextResourceService().getText( locale,
+													ERROR_XML_CANNOT_INITIALIZE_DROID ) );
 							return false;
 						} else {
 							// Erkennungsergebnis ausgeben
-							getMessageService()
-									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PNG )
+							Logtxt.logtxt( logFile,
+									getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PNG )
 											+ getTextResourceService().getText( locale, ERROR_XML_A_PNG_INCORRECTFILE,
 													puid ) );
 							return false;
@@ -117,9 +118,8 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl
 					}
 				}
 			} catch ( Exception e ) {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PNG )
-								+ getTextResourceService().getText( locale, ERROR_XML_A_PNG_INCORRECTFILE ) );
+				Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PNG )
+						+ getTextResourceService().getText( locale, ERROR_XML_A_PNG_INCORRECTFILE ) );
 				return false;
 			}
 		} else {
@@ -127,9 +127,8 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl
 			if ( min ) {
 				return false;
 			} else {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PNG )
-								+ getTextResourceService().getText( locale, ERROR_XML_A_PNG_INCORRECTFILEENDING ) );
+				Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PNG )
+						+ getTextResourceService().getText( locale, ERROR_XML_A_PNG_INCORRECTFILEENDING ) );
 				return false;
 			}
 		}
@@ -164,8 +163,8 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl
 			if ( min ) {
 				return false;
 			} else {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PNG )
+				Logtxt.logtxt( logFile,
+						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PNG )
 								+ getTextResourceService().getText( locale, MESSAGE_XML_MISSING_FILE, checkTool,
 										getTextResourceService().getText( locale, ABORTED ) ) );
 			}
@@ -180,8 +179,8 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl
 				} else {
 					isValid = false;
 					// Erster Fehler! Meldung A ausgeben und invalid setzten
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PNG )
+					Logtxt.logtxt( logFile,
+							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PNG )
 									+ getTextResourceService().getText( locale, ERROR_XML_A_PNG_PNGCHECK_FAIL ) );
 					// Linie mit der Fehlermeldung
 					String errorMsgOrig = resultExec;
@@ -461,7 +460,7 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl
 					}
 
 					// System.out.println(modul+" "+msg);
-					getMessageService().logError(
+					Logtxt.logtxt( logFile,
 							modul + getTextResourceService().getText( locale, ERROR_XML_AF_PNG_ERROR, msg ) );
 					isValid = false;
 				}
@@ -471,9 +470,8 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl
 			}
 
 		} catch ( Exception e ) {
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PNG )
-							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PNG )
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 		// TODO: Erledigt: Fehler Auswertung

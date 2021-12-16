@@ -24,7 +24,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import ch.kostceco.tools.kostval.exception.modulejpeg.ValidationAjpegvalidationException;
-import ch.kostceco.tools.kostval.logging.Logger;
+import ch.kostceco.tools.kostval.logging.Logtxt;
 import ch.kostceco.tools.kostval.logging.MessageConstants;
 import ch.kostceco.tools.kostval.service.TextResourceService;
 import ch.kostceco.tools.kostval.validation.modulejpeg.ValidationAvalidationJpegModule;
@@ -39,7 +39,6 @@ import ch.kostceco.tools.kostval.validation.modulejpeg.ValidationAvalidationJpeg
 public class Controllerjpeg implements MessageConstants
 {
 
-	private static final Logger							LOGGER	= new Logger( Controllerjpeg.class );
 	private TextResourceService							textResourceService;
 
 	private ValidationAvalidationJpegModule	validationAvalidationJpegModule;
@@ -66,26 +65,26 @@ public class Controllerjpeg implements MessageConstants
 	}
 
 	public boolean executeMandatory( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale )
+			Map<String, String> configMap, Locale locale, File logFile )
 	{
 		boolean valid = true;
 
 		// Validation A
 		try {
 			if ( this.getValidationAvalidationJpegModule().validate( valDatei, directoryOfLogfile,
-					configMap, locale ) ) {
+					configMap, locale, logFile ) ) {
 				this.getValidationAvalidationJpegModule().getMessageService().print();
 			} else {
 				this.getValidationAvalidationJpegModule().getMessageService().print();
 				return false;
 			}
 		} catch ( ValidationAjpegvalidationException e ) {
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JPEG )
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JPEG )
 					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationAvalidationJpegModule().getMessageService().print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JPEG )
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JPEG )
 					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}

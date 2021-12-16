@@ -35,6 +35,6 @@ public interface ValidationEbitspersampleValidationModule extends ValidationModu
 {
 
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale ) throws ValidationEbitspersampleValidationException;
+			Locale locale, File logFile ) throws ValidationEbitspersampleValidationException;
 
 }

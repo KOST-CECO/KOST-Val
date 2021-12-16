@@ -33,6 +33,6 @@ public interface Validation2aFileIntegrityModule extends ValidationModule
 {
 
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale ) throws Validation2aFileIntegrityException;
+			Locale locale, File logFile ) throws Validation2aFileIntegrityException;
 
 }

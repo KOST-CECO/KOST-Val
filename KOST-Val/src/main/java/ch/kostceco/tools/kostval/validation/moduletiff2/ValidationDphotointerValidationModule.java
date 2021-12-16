@@ -35,6 +35,6 @@ public interface ValidationDphotointerValidationModule extends ValidationModule
 {
 
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale ) throws ValidationDphotointerValidationException;
+			Locale locale, File logFile ) throws ValidationDphotointerValidationException;
 
 }

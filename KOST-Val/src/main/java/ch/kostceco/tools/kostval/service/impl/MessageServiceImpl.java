@@ -34,11 +34,8 @@ public class MessageServiceImpl implements MessageService
 
 	List<String[]>							stack		= new LinkedList<String[]>();
 
-	@Override
-	public void logDebug( String message )
-	{
-		this.stack.add( new String[] { MessageService.DEBUG, message } );
-	}
+	/* @Override public void logDebug( String message ) { this.stack.add( new String[] {
+	 * MessageService.DEBUG, message } ); } */
 
 	@Override
 	public void logError( String message )
@@ -52,11 +49,8 @@ public class MessageServiceImpl implements MessageService
 		this.stack.add( new String[] { MessageService.FATAL, message } );
 	}
 
-	@Override
-	public void logInfo( String message )
-	{
-		this.stack.add( new String[] { MessageService.INFO, message } );
-	}
+	/* @Override public void logInfo( String message ) { this.stack.add( new String[] {
+	 * MessageService.INFO, message } ); } */
 
 	@Override
 	public void logWarning( String message )
@@ -77,7 +71,7 @@ public class MessageServiceImpl implements MessageService
 		while ( it.hasNext() ) {
 			String[] message = (String[]) it.next();
 			if ( message[0].equals( MessageService.DEBUG ) ) {
-				LOGGER.logDebug( message[1] );
+				// LOGGER.logDebug( message[1] );
 			}
 			if ( message[0].equals( MessageService.ERROR ) ) {
 				LOGGER.logError( message[1] );
@@ -86,7 +80,7 @@ public class MessageServiceImpl implements MessageService
 				LOGGER.logFatal( message[1] );
 			}
 			if ( message[0].equals( MessageService.INFO ) ) {
-				LOGGER.logInfo( message[1] );
+				// LOGGER.logInfo( message[1] );
 			}
 			if ( message[0].equals( MessageService.WARN ) ) {
 				LOGGER.logWarning( message[1] );

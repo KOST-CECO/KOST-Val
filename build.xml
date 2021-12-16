@@ -41,8 +41,8 @@
         <mkdir dir="../../KOST-Val"/>
 		<copy overwrite="true" todir="../../KOST-Val">
 			<fileset dir="KOST-Val/src/main/KOST-Val_resources_notJar">
-				<!-- fuer schnellernen build, ggf aufkommentieren 
-				<exclude name="**/callas_pdfaPilotServer_Win_9-1-326_cli-a/**" /> -->
+				<!-- fuer schnellernen build, ggf aufkommentieren -->
+				<exclude name="**/callas_pdfaPilotServer_Win_9-1-326_cli-a/**" /> 
 			</fileset>
 		</copy> 
 		<!--Kopiere alle benötigten Ordner und Dokumente von SIARDexcerpt_resources_notJar in ../../SIARDexcerpt--> 

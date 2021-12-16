@@ -27,6 +27,7 @@ import ch.kostceco.tools.kosttools.util.Util;
 import ch.kostceco.tools.kostval.exception.modulesip3.Validation3cFormatValidationException;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesip3.Validation3cFormatValidationModule;
+import ch.kostceco.tools.kostval.logging.Logtxt;
 
 public class Validation3cFormatValidationModuleImpl extends ValidationModuleImpl
 		implements Validation3cFormatValidationModule
@@ -36,7 +37,7 @@ public class Validation3cFormatValidationModuleImpl extends ValidationModuleImpl
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale ) throws Validation3cFormatValidationException
+			Locale locale, File logFile ) throws Validation3cFormatValidationException
 	{
 		// Informationen zur Darstellung "onWork" holen
 		String onWork = configMap.get( "ShowProgressOnWork" );
@@ -70,9 +71,9 @@ public class Validation3cFormatValidationModuleImpl extends ValidationModuleImpl
 		} else {
 			Util.deleteDir( outputFile3cNio );
 			isValid = false;
-			getMessageService()
-					.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Cc_SIP )
-							+ getTextResourceService().getText( locale, MESSAGE_XML_CC_INVALID ) );
+
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Cc_SIP )
+					+ getTextResourceService().getText( locale, MESSAGE_XML_CC_INVALID ) );
 
 		}
 		return isValid;

@@ -28,6 +28,7 @@ import ch.kostceco.tools.kosttools.fileservice.Magic;
 import ch.kostceco.tools.kostval.exception.moduletiff1.ValidationArecognitionException;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.moduletiff1.ValidationArecognitionModule;
+import ch.kostceco.tools.kostval.logging.Logtxt;
 
 /** Validierungsschritt A (Erkennung) Ist es eine TIFF-Datei? valid --> Extension: tiff / tif / tfx
  * valid --> beginnt mit II*. [49492A00] oder mit MM.* [4D4D002A] ==> Bei dem Modul A wird die
@@ -42,7 +43,7 @@ public class ValidationArecognitionModuleImpl extends ValidationModuleImpl
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale ) throws ValidationArecognitionException
+			Locale locale, File logFile ) throws ValidationArecognitionException
 	{
 		String onWork = configMap.get( "ShowProgressOnWork" );
 		if ( onWork.equals( "nomin" ) ) {
@@ -56,9 +57,9 @@ public class ValidationArecognitionModuleImpl extends ValidationModuleImpl
 			if ( min ) {
 				return false;
 			} else {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_TIFF )
-								+ getTextResourceService().getText( locale, ERROR_XML_A_ISDIRECTORY ) );
+
+				Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_TIFF )
+						+ getTextResourceService().getText( locale, ERROR_XML_A_ISDIRECTORY ) );
 				return false;
 			}
 		} else if ( (valDatei.getAbsolutePath().toLowerCase().endsWith( ".tiff" )
@@ -80,8 +81,9 @@ public class ValidationArecognitionModuleImpl extends ValidationModuleImpl
 							if ( min ) {
 								return false;
 							} else {
-								getMessageService()
-										.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_TIFF )
+
+								Logtxt.logtxt( logFile,
+										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_TIFF )
 												+ getTextResourceService().getText( locale, MESSAGE_XML_CA_DROID ) );
 								return false;
 							}
@@ -93,26 +95,29 @@ public class ValidationArecognitionModuleImpl extends ValidationModuleImpl
 							return false;
 						} else if ( puid.equals( " ERROR " ) ) {
 							// Probleme bei der Initialisierung von DROID
-							getMessageService().logError( getTextResourceService().getText( locale,
-									MESSAGE_XML_MODUL_A_TIFF )
-									+ getTextResourceService().getText( locale, ERROR_XML_CANNOT_INITIALIZE_DROID ) );
+							Logtxt.logtxt( logFile,
+									getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_TIFF )
+											+ getTextResourceService().getText( locale,
+													ERROR_XML_CANNOT_INITIALIZE_DROID ) );
 							return false;
 						} else {
 							// Erkennungsergebnis ausgeben
-							getMessageService()
-									.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_TIFF )
+
+							Logtxt.logtxt( logFile,
+									getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_TIFF )
 											+ getTextResourceService().getText( locale, ERROR_XML_A_INCORRECTFILE,
 													puid ) );
 							return false;
 						}
-					} 
+					}
 				}
 			} catch ( Exception e ) {
 				if ( min ) {
 					return false;
 				} else {
-					getMessageService()
-							.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_TIFF )
+
+					Logtxt.logtxt( logFile,
+							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_TIFF )
 									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 					return false;
 				}
@@ -122,9 +127,9 @@ public class ValidationArecognitionModuleImpl extends ValidationModuleImpl
 			if ( min ) {
 				return false;
 			} else {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_TIFF )
-								+ getTextResourceService().getText( locale, ERROR_XML_A_INCORRECTFILEENDING ) );
+
+				Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_TIFF )
+						+ getTextResourceService().getText( locale, ERROR_XML_A_INCORRECTFILEENDING ) );
 				return false;
 			}
 		}

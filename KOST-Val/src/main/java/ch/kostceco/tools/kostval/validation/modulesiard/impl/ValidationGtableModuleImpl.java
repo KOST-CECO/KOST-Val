@@ -38,6 +38,7 @@ import org.jdom2.input.SAXBuilder;
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationGtableException;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationGtableModule;
+import ch.kostceco.tools.kostval.logging.Logtxt;
 
 /** Validierungsschritt G (Tabellen-Validierung) prueft, ob Spaltennamen innerhalb der Tabelle(n)
  * resp. Tabellennamen innerhalb der Schema(s) und Schemanamen einmalig sind.
@@ -55,7 +56,7 @@ public class ValidationGtableModuleImpl extends ValidationModuleImpl
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale ) throws ValidationGtableException
+			Locale locale, File logFile ) throws ValidationGtableException
 	{
 		boolean showOnWork = false;
 		int onWork = 410;
@@ -177,8 +178,9 @@ public class ValidationGtableModuleImpl extends ValidationModuleImpl
 					if ( min ) {
 						return false;
 					} else {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_SIARD )
+
+						Logtxt.logtxt( logFile,
+								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_SIARD )
 										+ getTextResourceService().getText( locale, MESSAGE_XML_G_DUPLICATE_SCHEMA,
 												value ) );
 					}
@@ -190,8 +192,9 @@ public class ValidationGtableModuleImpl extends ValidationModuleImpl
 					if ( min ) {
 						return false;
 					} else {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_SIARD )
+
+						Logtxt.logtxt( logFile,
+								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_SIARD )
 										+ getTextResourceService().getText( locale, MESSAGE_XML_G_DUPLICATE_TABLE,
 												value ) );
 					}
@@ -203,8 +206,9 @@ public class ValidationGtableModuleImpl extends ValidationModuleImpl
 					if ( min ) {
 						return false;
 					} else {
-						getMessageService()
-								.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_SIARD )
+
+						Logtxt.logtxt( logFile,
+								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_SIARD )
 										+ getTextResourceService().getText( locale, MESSAGE_XML_G_DUPLICATE_COLUMN,
 												value ) );
 					}
@@ -215,8 +219,9 @@ public class ValidationGtableModuleImpl extends ValidationModuleImpl
 			if ( min ) {
 				return false;
 			} else {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_SIARD )
+
+				Logtxt.logtxt( logFile,
+						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_SIARD )
 								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 										ioe.getMessage() + " (IOException)" ) );
 			}
@@ -225,8 +230,9 @@ public class ValidationGtableModuleImpl extends ValidationModuleImpl
 			if ( min ) {
 				return false;
 			} else {
-				getMessageService()
-						.logError( getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_SIARD )
+
+				Logtxt.logtxt( logFile,
+						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_SIARD )
 								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
 										e.getMessage() + " (JDOMException)" ) );
 			}

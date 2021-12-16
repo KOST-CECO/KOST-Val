@@ -31,9 +31,9 @@ public interface MessageService extends Service
 	final static String	WARN	= "3";
 	final static String	DEBUG	= "4";
 
-	void logInfo( String message );
+//	void logInfo( String message );
 
-	void logDebug( String message );
+//	void logDebug( String message );
 
 	void logWarning( String message );
 
