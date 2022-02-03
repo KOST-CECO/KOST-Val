@@ -1,6 +1,6 @@
 ﻿/* == SIARDexcerpt ==============================================================================
  * The SIARDexcerpt application is used for excerpt a record from a SIARD-File. Copyright (C)
- * 2016-2021 Claire Roethlisberger (KOST-CECO)
+ * 2016-2022 Claire Roethlisberger (KOST-CECO)
  * -----------------------------------------------------------------------------------------------
  * SIARDexcerpt is a development of the KOST-CECO. All rights rest with the KOST-CECO. This
  * application is free software: you can redistribute it and/or modify it under the terms of the GNU
@@ -17,6 +17,7 @@ package ch.kostceco.tools.siardexcerpt.excerption.moduleexcerpt.impl;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Scanner;
@@ -24,14 +25,16 @@ import java.util.Scanner;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import ch.kostceco.tools.kosttools.util.StreamGobbler;
+import ch.kostceco.tools.kosttools.util.Util;
+import ch.kostceco.tools.kostval.logging.Logtxt;
 import ch.kostceco.tools.siardexcerpt.exception.moduleexcerpt.ExcerptCGrepException;
 import ch.kostceco.tools.siardexcerpt.excerption.ValidationModuleImpl;
 import ch.kostceco.tools.siardexcerpt.excerption.moduleexcerpt.ExcerptCGrepModule;
-import ch.kostceco.tools.kosttools.util.StreamGobbler;
-import ch.kostceco.tools.kosttools.util.Util;
 
 /** 3) extract: mit den Keys anhand der config einen Records herausziehen und anzeigen */
 public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements ExcerptCGrepModule
@@ -57,8 +60,8 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 		String pathToGrepExe = fGrepExe.getAbsolutePath();
 		if ( !fGrepExe.exists() ) {
 			// grep.exe existiert nicht --> Abbruch
-			getMessageServiceExc()
-					.logError( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_C )
+			Logtxt.logtxt( outFile,
+					getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_C )
 							+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_C_MISSINGFILE,
 									fGrepExe.getAbsolutePath() ) );
 			return false;
@@ -67,8 +70,8 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 					"resources" + File.separator + "grep" + File.separator + "msys-1.0.dll" );
 			if ( !fMsys10dll.exists() ) {
 				// msys-1.0.dll existiert nicht --> Abbruch
-				getMessageServiceExc()
-						.logError( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_C )
+				Logtxt.logtxt( outFile,
+						getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_C )
 								+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_C_MISSINGFILE,
 										fMsys10dll.getAbsolutePath() ) );
 				return false;
@@ -87,45 +90,46 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 		String pathToSedExe = fSedExe.getAbsolutePath();
 		if ( !fSedExe.exists() ) {
 			// sed.exe existiert nicht --> Abbruch
-			getMessageServiceExc()
-					.logError( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_C )
+			Logtxt.logtxt( outFile,
+					getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_C )
 							+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_C_MISSINGFILE,
 									fSedExe.getAbsolutePath() ) );
 			return false;
 		}
 		if ( !msys20dll.exists() ) {
 			// existiert nicht --> Abbruch
-			getMessageServiceExc()
-					.logError( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_C )
+			Logtxt.logtxt( outFile,
+					getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_C )
 							+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_C_MISSINGFILE,
 									msys20dll.getAbsolutePath() ) );
 			return false;
 		}
 		if ( !msysgccs1dll.exists() ) {
 			// existiert nicht --> Abbruch
-			getMessageServiceExc()
-					.logError( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_C )
+			Logtxt.logtxt( outFile,
+					getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_C )
 							+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_C_MISSINGFILE,
 									msysgccs1dll.getAbsolutePath() ) );
 			return false;
 		}
 		if ( !msysiconv2dll.exists() ) {
 			// existiert nicht --> Abbruch
-			getMessageServiceExc()
-					.logError( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_C )
+			Logtxt.logtxt( outFile,
+					getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_C )
 							+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_C_MISSINGFILE,
 									msysiconv2dll.getAbsolutePath() ) );
 			return false;
 		}
 		if ( !msysintl8dll.exists() ) {
 			// existiert nicht --> Abbruch
-			getMessageServiceExc()
-					.logError( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_C )
+			Logtxt.logtxt( outFile,
+					getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_C )
 							+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_C_MISSINGFILE,
 									msysintl8dll.getAbsolutePath() ) );
 			return false;
 		}
 
+		File tempOutFileMt = new File( outFile.getAbsolutePath() + ".tmpMt" );
 		File tempOutFile = new File( outFile.getAbsolutePath() + ".tmp" );
 		File xmlExtracted = new File( siardDatei.getAbsolutePath() + File.separator + "header"
 				+ File.separator + "metadata.xml" );
@@ -133,6 +137,16 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 
 		// TODO: Record aus Maintable herausholen
 		try {
+			if ( tempOutFileMt.exists() ) {
+				tempOutFileMt.delete();
+				if ( tempOutFileMt.exists() ) {
+					Util.replaceAllChar( tempOutFileMt, "" );
+				}
+				/* Util.deleteDir( tempOutFile );
+				 * 
+				 * wird nicht verwendet, da es jetzt gelöscht werden muss und nicht spätestens bei exit.
+				 * wenn es nicht gelöchscht werden kann wird es geleert. */
+			}
 			if ( tempOutFile.exists() ) {
 				tempOutFile.delete();
 				if ( tempOutFile.exists() ) {
@@ -150,12 +164,12 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 			String schemafolder = configMap.get( "MschemaFolder" );
 			String schemaname = configMap.get( "MschemaName" );
 			if ( folder.startsWith( "Configuration-Error:" ) ) {
-				getMessageServiceExc().logError(
+				Logtxt.logtxt( outFile,
 						getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_B ) + folder );
 				return false;
 			}
 			if ( cell.startsWith( "Configuration-Error:" ) ) {
-				getMessageServiceExc().logError(
+				Logtxt.logtxt( outFile,
 						getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_B ) + cell );
 				return false;
 			}
@@ -170,158 +184,6 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 					+ File.separator + schemafolder );
 			File fMaintable = new File(
 					fSchema.getAbsolutePath() + File.separator + folder + File.separator + folder + ".xml" );
-			File fMaintableTemp = new File( fSchema.getAbsolutePath() + File.separator + folder
-					+ File.separator + folder + "_Temp.xml" );
-			String pathTofMaintable = fMaintable.getAbsolutePath();
-			String pathTofMaintableTemp = fMaintableTemp.getAbsolutePath();
-			/* mit Util.oldnewstring respektive replace können sehr grosse files nicht bearbeitet werden!
-			 * 
-			 * Entsprechend wurde sed verwendet. */
-
-			String sed = configMap.get( "Sed" );
-			if ( sed.equalsIgnoreCase( "yes" ) ) {
-				// Bringt alles auf eine Zeile
-				String commandSed = "cmd /c \"" + pathToSedExe + " 's/\\n/ /g' " + pathTofMaintable + " > "
-						+ pathTofMaintableTemp + "\"";
-				String commandSed2 = "cmd /c \"" + pathToSedExe + " ':a;N;$!ba;s/\\n/ /g' "
-						+ pathTofMaintableTemp + " > " + pathTofMaintable + "\"";
-				// Trennt ><row. Nur eine row auf einer Zeile
-				String commandSed3 = "cmd /c \"" + pathToSedExe + " 's/\\d060row/\\n\\d060row/g' "
-						+ pathTofMaintable + " > " + pathTofMaintableTemp + "\"";
-				// Trennt ><table. <table auf eine neue Zeile
-				String commandSed4 = "cmd /c \"" + pathToSedExe
-						+ " 's/\\d060\\d047table/\\n\\d060\\d047table/g' " + pathTofMaintableTemp + " > "
-						+ pathTofMaintable + "\"";
-
-				// String commandSed = "cmd /c \"\"pathToSedExe\" 's/row/R0W/g\' 'hallo row.'\"";
-				/* Das redirect Zeichen verunmöglicht eine direkte eingabe. mit dem geschachtellten Befehl
-				 * gehts: cmd /c\"urspruenlicher Befehl\" */
-
-				Process procSed = null;
-				Runtime rtSed = null;
-				Process procSed2 = null;
-				Runtime rtSed2 = null;
-				Process procSed3 = null;
-				Runtime rtSed3 = null;
-				Process procSed4 = null;
-				Runtime rtSed4 = null;
-
-				try {
-					Util.switchOffConsole();
-					rtSed = Runtime.getRuntime();
-					procSed = rtSed.exec( commandSed.toString().split( " " ) );
-					// .split(" ") ist notwendig wenn in einem Pfad ein Doppelleerschlag vorhanden ist!
-
-					// Fehleroutput holen
-					StreamGobbler errorGobblerSed = new StreamGobbler( procSed.getErrorStream(), "ERROR" );
-
-					// Output holen
-					StreamGobbler outputGobblerSed = new StreamGobbler( procSed.getInputStream(), "OUTPUT" );
-
-					// Threads starten
-					errorGobblerSed.start();
-					outputGobblerSed.start();
-
-					// Warte, bis wget fertig ist
-					procSed.waitFor();
-
-					// ---------------------------
-
-					rtSed2 = Runtime.getRuntime();
-					procSed2 = rtSed2.exec( commandSed2.toString().split( " " ) );
-					// .split(" ") ist notwendig wenn in einem Pfad ein Doppelleerschlag vorhanden ist!
-
-					// Fehleroutput holen
-					StreamGobbler errorGobblerSed2 = new StreamGobbler( procSed2.getErrorStream(), "ERROR" );
-
-					// Output holen
-					StreamGobbler outputGobblerSed2 = new StreamGobbler( procSed2.getInputStream(),
-							"OUTPUT" );
-
-					// Threads starten
-					errorGobblerSed2.start();
-					outputGobblerSed2.start();
-
-					// Warte, bis wget fertig ist
-					procSed2.waitFor();
-
-					// ---------------------------
-
-					rtSed3 = Runtime.getRuntime();
-					procSed3 = rtSed3.exec( commandSed3.toString().split( " " ) );
-					// .split(" ") ist notwendig wenn in einem Pfad ein Doppelleerschlag vorhanden ist!
-
-					// Fehleroutput holen
-					StreamGobbler errorGobblerSed3 = new StreamGobbler( procSed3.getErrorStream(), "ERROR" );
-
-					// Output holen
-					StreamGobbler outputGobblerSed3 = new StreamGobbler( procSed3.getInputStream(),
-							"OUTPUT" );
-
-					// Threads starten
-					errorGobblerSed3.start();
-					outputGobblerSed3.start();
-
-					// Warte, bis wget fertig ist
-					procSed3.waitFor();
-
-					// ---------------------------
-
-					rtSed4 = Runtime.getRuntime();
-					procSed4 = rtSed4.exec( commandSed4.toString().split( " " ) );
-					// .split(" ") ist notwendig wenn in einem Pfad ein Doppelleerschlag vorhanden ist!
-
-					// Fehleroutput holen
-					StreamGobbler errorGobblerSed4 = new StreamGobbler( procSed4.getErrorStream(), "ERROR" );
-
-					// Output holen
-					StreamGobbler outputGobblerSed4 = new StreamGobbler( procSed4.getInputStream(),
-							"OUTPUT" );
-
-					// Threads starten
-					errorGobblerSed4.start();
-					outputGobblerSed4.start();
-
-					// Warte, bis wget fertig ist
-					procSed4.waitFor();
-
-					// ---------------------------
-
-					Util.switchOnConsole();
-
-				} catch ( Exception e ) {
-					getMessageServiceExc()
-							.logError( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_C )
-									+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN,
-											e.getMessage() ) );
-					return false;
-				} finally {
-					if ( procSed != null ) {
-						procSed.getOutputStream().close();
-						procSed.getInputStream().close();
-						procSed.getErrorStream().close();
-					}
-					if ( procSed2 != null ) {
-						procSed2.getOutputStream().close();
-						procSed2.getInputStream().close();
-						procSed2.getErrorStream().close();
-					}
-					if ( procSed3 != null ) {
-						procSed3.getOutputStream().close();
-						procSed3.getInputStream().close();
-						procSed3.getErrorStream().close();
-					}
-					if ( procSed4 != null ) {
-						procSed4.getOutputStream().close();
-						procSed4.getInputStream().close();
-						procSed4.getErrorStream().close();
-					}
-				}
-			}
-
-			if ( fMaintableTemp.exists() ) {
-				Util.deleteDir( fMaintableTemp );
-			}
 
 			try {
 				/* Der excerptString kann Leerschläge enthalten, welche bei grep Problem verursachen.
@@ -332,7 +194,7 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 				excerptStringM = "<" + cell + ">" + excerptStringM + "</" + cell + ">";
 				// grep "<c11>7561234567890</c11>" table13.xml >> output.txt
 				String command = "cmd /c \"\"" + pathToGrepExe + "\" -E \"" + excerptStringM + "\" \""
-						+ fMaintable.getAbsolutePath() + "\" >> \"" + tempOutFile.getAbsolutePath() + "\"\"";
+						+ fMaintable.getAbsolutePath() + "\" >> \"" + tempOutFileMt.getAbsolutePath() + "\"\"";
 				/* Das redirect Zeichen verunmöglicht eine direkte eingabe. mit dem geschachtellten Befehl
 				 * gehts: cmd /c\"urspruenlicher Befehl\" */
 
@@ -341,18 +203,17 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 				Process proc = null;
 				Runtime rt = null;
 
-				getMessageServiceExc()
-						.logError( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_ELEMENT_OPEN,
+				Logtxt.logtxt( outFile,
+						getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_ELEMENT_OPEN,
 								schemaname.replace( " ", "" ) + "_" + name.replace( " ", "" ) ) );
 
-				// Informationen zur Tabelle aus metadata.xml herausholen
-
+				// Informationen zur Tabelle aus metadata.xml (UTF8) herausholen
+				// mit grep zu xmlExtracted (normales txt file)
 				DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-				// dbf.setValidating(false);
 				DocumentBuilder db = dbf.newDocumentBuilder();
-				org.w3c.dom.Document doc = db.parse( new FileInputStream( xmlExtracted ), "UTF8" );
+				// Document doc = db.parse( new FileInputStream( xmlExtracted ));
+				Document doc = db.parse( new FileInputStream( xmlExtracted ), "UTF8" );
 				doc.getDocumentElement().normalize();
-
 				dbf.setFeature( "http://xml.org/sax/features/namespaces", false );
 
 				NodeList nlTable = doc.getElementsByTagName( "table" );
@@ -377,8 +238,11 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 							// System.out.println( subNodeI.getNodeName()+": "+subNodeI.getTextContent() );
 							tabname = subNodeI.getTextContent();
 						} else if ( subNodeI.getNodeName().equals( "description" ) ) {
-							// System.out.println( subNodeI.getNodeName()+": "+subNodeI.getTextContent() );
 							tabdescriptionProv = new String( subNodeI.getTextContent() );
+							// Umlaute konnte nicht korrekt in UTF-8 wiedergegeben werden --> normalisieren
+							tabdescriptionProv = Util.umlaute( tabdescriptionProv );
+							tabdescriptionProv = new String( tabdescriptionProv.getBytes(),
+									StandardCharsets.UTF_8 );
 							/* in der description generiert mit csv2siard wird nach "word" der Select Befehl
 							 * angehängt. Dieser soll nicht mit ausgegeben werden. */
 							String word = "\\u000A";
@@ -412,8 +276,11 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 											// System.out.println(
 											// subNodeIII.getNodeName()+": "+subNodeIII.getTextContent()
 											// );
+											String celldescriptionProv = new String( subNodeIII.getTextContent() );
+											celldescriptionProv = Util.umlaute( celldescriptionProv );
 											celldescription = celldescription + "<c" + cellNumber + ">"
-													+ new String( subNodeIII.getTextContent() ) + "</c" + cellNumber + ">";
+													+ new String( celldescriptionProv.getBytes(), StandardCharsets.UTF_8 )
+													+ "</c" + cellNumber + ">";
 										}
 									}
 								}
@@ -424,16 +291,16 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 				// System.out.println(tabname+" "+
 				// tabfolder+" "+tabdescription+" "+cellname+" "+celldescription);
 
-				getMessageServiceExc().logError( getTextResourceServiceExc().getText( locale,
-						EXC_MESSAGE_XML_TEXT, tabname, "tabname" ) );
-				getMessageServiceExc().logError( getTextResourceServiceExc().getText( locale,
-						EXC_MESSAGE_XML_TEXT, schemafolder + "/" + tabfolder, "tabfolder" ) );
-				getMessageServiceExc().logError( getTextResourceServiceExc().getText( locale,
-						EXC_MESSAGE_XML_TEXT, tabdescription, "tabdescription" ) );
-				getMessageServiceExc().logError(
+				Logtxt.logtxt( outFile, getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_TEXT,
+						tabname, "tabname" ) );
+				Logtxt.logtxt( outFile, getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_TEXT,
+						schemafolder + "/" + tabfolder, "tabfolder" ) );
+				Logtxt.logtxt( outFile, getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_TEXT,
+						tabdescription, "tabdescription" ) );
+				Logtxt.logtxt( outFile,
 						getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_TEXT, cellname, "name" ) );
-				getMessageServiceExc().logError( getTextResourceServiceExc().getText( locale,
-						EXC_MESSAGE_XML_TEXT, celldescription, "description" ) );
+				Logtxt.logtxt( outFile, getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_TEXT,
+						celldescription, "description" ) );
 
 				try {
 					Util.switchOffConsole();
@@ -457,8 +324,8 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 					Util.switchOnConsole();
 
 				} catch ( Exception e ) {
-					getMessageServiceExc()
-							.logError( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_C )
+					Logtxt.logtxt( outFile,
+							getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_C )
 									+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN,
 											e.getMessage() ) );
 					return false;
@@ -470,7 +337,9 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 					}
 				}
 
-				Scanner scanner = new Scanner( tempOutFile, "UTF-8" );
+				// liest das tempOutFile (UTF-8) ein
+				// Scanner scanner = new Scanner( tempOutFile, "UTF-8" );
+				Scanner scanner = new Scanner( tempOutFileMt );
 				content = "";
 				try {
 					content = scanner.useDelimiter( "\\Z" ).next();
@@ -480,16 +349,16 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 				}
 				scanner.close();
 
-				getMessageServiceExc().logError( getTextResourceServiceExc().getText( locale,
+				Logtxt.logtxt( outFile, getTextResourceServiceExc().getText( locale,
 						EXC_MESSAGE_XML_ELEMENT_CONTENT, content ) );
-				getMessageServiceExc()
-						.logError( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_ELEMENT_CLOSE,
+				Logtxt.logtxt( outFile,
+						getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_ELEMENT_CLOSE,
 								schemaname.replace( " ", "" ) + "_" + name.replace( " ", "" ) ) );
 
-				if ( tempOutFile.exists() ) {
-					tempOutFile.delete();
-					if ( tempOutFile.exists() ) {
-						Util.replaceAllChar( tempOutFile, "" );
+				if ( tempOutFileMt.exists() ) {
+					tempOutFileMt.delete();
+					if ( tempOutFileMt.exists() ) {
+						Util.replaceAllChar( tempOutFileMt, "" );
 					}
 					/* Util.deleteDir( tempOutFile );
 					 * 
@@ -501,16 +370,15 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 				// Ende Grep
 
 			} catch ( Exception e ) {
-				getMessageServiceExc()
-						.logError( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_C )
+				Logtxt.logtxt( outFile,
+						getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_C )
 								+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN,
 										e.getMessage() ) );
 				return false;
 			}
 
 		} catch ( Exception e ) {
-			getMessageServiceExc().logError( getTextResourceServiceExc().getText( locale,
-					EXC_MESSAGE_XML_MODUL_C )
+			Logtxt.logtxt( outFile, getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_C )
 					+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
@@ -679,8 +547,8 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 							Util.switchOnConsole();
 
 						} catch ( Exception e ) {
-							getMessageServiceExc()
-									.logError( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_C )
+							Logtxt.logtxt( outFile,
+									getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_C )
 											+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN,
 													e.getMessage() ) );
 							return false;
@@ -729,18 +597,16 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 						Process proc = null;
 						Runtime rt = null;
 
-						getMessageServiceExc().logError(
+						Logtxt.logtxt( outFile,
 								getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_ELEMENT_OPEN,
 										schemaname.replace( " ", "" ) + "_" + name.replace( " ", "" ) ) );
+
 						// TODO Start Wie maintable
-						// Informationen zur Tabelle aus metadata.xml herausholen
-
+						// Informationen zur Tabelle aus metadata.xml (UTF8) herausholen
 						DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-						// dbf.setValidating(false);
 						DocumentBuilder db = dbf.newDocumentBuilder();
-						org.w3c.dom.Document doc = db.parse( new FileInputStream( xmlExtracted ), "UTF8" );
+						Document doc = db.parse( new FileInputStream( xmlExtracted ) );
 						doc.getDocumentElement().normalize();
-
 						dbf.setFeature( "http://xml.org/sax/features/namespaces", false );
 
 						NodeList nlTable = doc.getElementsByTagName( "table" );
@@ -783,6 +649,9 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 												tabname = subNodeI.getTextContent();
 											} else if ( subNodeI.getNodeName().equals( "description" ) ) {
 												tabdescriptionProv = new String( subNodeI.getTextContent() );
+												tabdescriptionProv = Util.umlaute( tabdescriptionProv );
+												tabdescriptionProv = new String( tabdescriptionProv.getBytes(),
+														StandardCharsets.UTF_8 );
 												/* in der description generiert mit csv2siard wird nach "word" der Select
 												 * Befehl angehängt. Dieser soll nicht mit ausgegeben werden. */
 												String word = "\\u000A";
@@ -810,9 +679,13 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 																		+ subNodeIII.getTextContent() + "</c" + cellNumber + ">";
 																// System.out.println( cellname );
 															} else if ( subNodeIII.getNodeName().equals( "description" ) ) {
+																String celldescriptionProv = new String(
+																		subNodeIII.getTextContent() );
+																celldescriptionProv = Util.umlaute( celldescriptionProv );
 																celldescription = celldescription + "<c" + cellNumber + ">"
-																		+ new String( subNodeIII.getTextContent() ) + "</c" + cellNumber
-																		+ ">";
+																		+ new String( celldescriptionProv.getBytes(),
+																				StandardCharsets.UTF_8 )
+																		+ "</c" + cellNumber + ">";
 															}
 														}
 													}
@@ -824,24 +697,24 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 							}
 							if ( i == nlTable.getLength() ) {
 								// Ausgabe für jede Tabelle
-								getMessageServiceExc().logError( getTextResourceServiceExc().getText( locale,
+								Logtxt.logtxt( outFile, getTextResourceServiceExc().getText( locale,
 										EXC_MESSAGE_XML_TEXT, tabname, "tabname" ) );
-								getMessageServiceExc().logError( getTextResourceServiceExc().getText( locale,
+								Logtxt.logtxt( outFile, getTextResourceServiceExc().getText( locale,
 										EXC_MESSAGE_XML_TEXT, (tabschema + "/" + tabfolder), "tabfolder" ) );
-								getMessageServiceExc().logError( getTextResourceServiceExc().getText( locale,
+								Logtxt.logtxt( outFile, getTextResourceServiceExc().getText( locale,
 										EXC_MESSAGE_XML_TEXT, tabkeyname, "tabkeyname" ) );
-								getMessageServiceExc().logError( getTextResourceServiceExc().getText( locale,
+								Logtxt.logtxt( outFile, getTextResourceServiceExc().getText( locale,
 										EXC_MESSAGE_XML_TEXT, tabdescription, "tabdescription" ) );
-								getMessageServiceExc().logError( getTextResourceServiceExc().getText( locale,
+								Logtxt.logtxt( outFile, getTextResourceServiceExc().getText( locale,
 										EXC_MESSAGE_XML_TEXT, cellname, "name" ) );
-								getMessageServiceExc().logError( getTextResourceServiceExc().getText( locale,
+								Logtxt.logtxt( outFile, getTextResourceServiceExc().getText( locale,
 										EXC_MESSAGE_XML_TEXT, celldescription, "description" ) );
 							}
 						}
 						// TODO End Wie maintable
 
 						try {
-							Util.switchOffConsole();
+							// Util.switchOffConsole();
 							rt = Runtime.getRuntime();
 							proc = rt.exec( command.toString().split( " " ) );
 							// .split(" ") ist notwendig wenn in einem Pfad ein Doppelleerschlag vorhanden ist!
@@ -859,11 +732,11 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 							// Warte, bis wget fertig ist
 							proc.waitFor();
 
-							Util.switchOnConsole();
+							// Util.switchOnConsole();
 
 						} catch ( Exception e ) {
-							getMessageServiceExc()
-									.logError( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_C )
+							Logtxt.logtxt( outFile,
+									getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_C )
 											+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN,
 													e.getMessage() ) );
 							return false;
@@ -875,7 +748,8 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 							}
 						}
 
-						Scanner scanner = new Scanner( tempOutFile, "UTF-8" );
+						// liest das tempOutFile (UTF-8) ein
+						Scanner scanner = new Scanner( tempOutFile );
 						content = "";
 						try {
 							content = scanner.useDelimiter( "\\Z" ).next();
@@ -885,9 +759,9 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 						}
 						scanner.close();
 
-						getMessageServiceExc().logError( getTextResourceServiceExc().getText( locale,
+						Logtxt.logtxt( outFile, getTextResourceServiceExc().getText( locale,
 								EXC_MESSAGE_XML_ELEMENT_CONTENT, content ) );
-						getMessageServiceExc().logError(
+						Logtxt.logtxt( outFile,
 								getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_ELEMENT_CLOSE,
 										schemaname.replace( " ", "" ) + "_" + name.replace( " ", "" ) ) );
 
@@ -906,8 +780,8 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 						// Ende Grep
 
 					} catch ( Exception e ) {
-						getMessageServiceExc()
-								.logError( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_C )
+						Logtxt.logtxt( outFile,
+								getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_C )
 										+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN,
 												e.getMessage() ) );
 						return false;
@@ -938,8 +812,7 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 			System.out.print( "   " );
 			System.out.print( "\r" );
 		} catch ( Exception e ) {
-			getMessageServiceExc().logError( getTextResourceServiceExc().getText( locale,
-					EXC_MESSAGE_XML_MODUL_C )
+			Logtxt.logtxt( outFile, getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_C )
 					+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}

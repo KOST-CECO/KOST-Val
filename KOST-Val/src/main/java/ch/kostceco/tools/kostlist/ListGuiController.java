@@ -1,6 +1,6 @@
 /* == KOST-Ran ==================================================================================
  * The KOST-Ran application is used for excerpt a random sample with metadata from a SIARD-File.
- * Copyright (C) 2021 Claire Roethlisberger (KOST-CECO)
+ * Copyright (C) 2021-2022 Claire Roethlisberger (KOST-CECO)
  * -----------------------------------------------------------------------------------------------
  * KOST-Ran is a development of the KOST-CECO. All rights rest with the KOST-CECO. This application
  * is free software: you can redistribute it and/or modify it under the terms of the GNU General
@@ -115,9 +115,8 @@ public class ListGuiController
 		String java6432 = System.getProperty( "sun.arch.data.model" );
 		String javaVersion = System.getProperty( "java.version" );
 		String javafxVersion = System.getProperty( "javafx.version" );
-		label
-				.setText( "Copyright © KOST/CECO          KOST-List v" + versionList + "          JavaFX "
-						+ javafxVersion + "   &   Java-" + java6432 + " " + javaVersion + "." );
+		label.setText( "Copyright © KOST/CECO          KOST-List v" + versionList + "          JavaFX "
+				+ javafxVersion + "   &   Java-" + java6432 + " " + javaVersion + "." );
 
 		// PrintStream in Konsole umleiten
 		ps = new PrintStream( new Console( console ) );
@@ -349,12 +348,12 @@ public class ListGuiController
 				File newFile = fileMap.get( entryName );
 				File fileTodoXml;
 				File fileTodoTmp;
-					fileTodo = newFile;
-					fileTodoXml = new File( fileTodo.getParentFile().getAbsolutePath() + File.separator + "_"
-							+ fileTodo.getName() + "_.xml" );
-					fileTodoTmp = new File( fileTodo.getParentFile().getAbsolutePath() + File.separator + "_"
-							+ fileTodo.getName() + "_.tmp" );
-					String fileTodoName = fileTodo.getName();
+				fileTodo = newFile;
+				fileTodoXml = new File( fileTodo.getParentFile().getAbsolutePath() + File.separator + "_"
+						+ fileTodo.getName() + "_.xml" );
+				fileTodoTmp = new File( fileTodo.getParentFile().getAbsolutePath() + File.separator + "_"
+						+ fileTodo.getName() + "_.tmp" );
+				String fileTodoName = fileTodo.getName();
 				if ( !newFile.isDirectory() ) {
 					// console.setText( fileTodoName+" \n" );
 					String fileTodoExt = "." + FilenameUtils.getExtension( fileTodoName ).toLowerCase();
@@ -443,11 +442,11 @@ public class ListGuiController
 					File newFile = fileMap.get( entryName );
 					File fileTodoXml;
 					File fileTodoTmp;
-						fileTodo = newFile;
-						fileTodoXml = new File( fileTodo.getParentFile().getAbsolutePath() + File.separator + "_"
-								+ fileTodo.getName() + "_.xml" );
-						fileTodoTmp = new File( fileTodo.getParentFile().getAbsolutePath() + File.separator + "_"
-								+ fileTodo.getName() + "_.tmp" );
+					fileTodo = newFile;
+					fileTodoXml = new File( fileTodo.getParentFile().getAbsolutePath() + File.separator + "_"
+							+ fileTodo.getName() + "_.xml" );
+					fileTodoTmp = new File( fileTodo.getParentFile().getAbsolutePath() + File.separator + "_"
+							+ fileTodo.getName() + "_.tmp" );
 					if ( !newFile.isDirectory() ) {
 						String fileTodoName = fileTodo.getName();
 						// console.setText( fileTodoName+" \n" );
@@ -555,6 +554,8 @@ public class ListGuiController
 	void doChart( ActionEvent e )
 	{
 		// (In)aktiv bei der Beschreibung
+		// setDisable( true ) = inaktiv
+		// setDisable( false ) = aktiv, kann ausgewaehlt werden
 		buttonDel.setDisable( true );
 		buttonSkrip.setDisable( true );
 		buttonChart.setDisable( true );
@@ -566,6 +567,8 @@ public class ListGuiController
 		buttonNext.setDisable( false );
 
 		// (un)sichtbar bei der Beschreibung
+		// setVisible( false ) = unsichtbar
+		// setVisible( true ) = sichtbar, wird angezeigt
 		buttonDel.setVisible( false );
 		buttonSkrip.setVisible( false );
 		buttonChart.setVisible( false );
@@ -603,6 +606,8 @@ public class ListGuiController
 			if ( fileTodoTmp.exists() ) {
 				Util.deleteFile( fileTodoTmp );
 			}
+			File fileTodoImport = new File( fileTodo.getParentFile().getAbsolutePath() + File.separator
+					+ "_" + fileTodo.getName() + "_.import" );
 			File outputFileTodo = new File( fileTodo.getParentFile().getAbsolutePath() + File.separator
 					+ "_" + fileTodo.getName() + "_.xml" );
 			if ( !outputFileTodo.exists() ) {
@@ -648,9 +653,41 @@ public class ListGuiController
 					/* <OriginalSourceLicense></OriginalSourceLicense> <Description></Description>
 					 * <Modificationdescription></Modificationdescription> <Exiftool></Exiftool>
 					 * <KOST-Val></KOST-Val> <JHOVE></JHOVE> </KOST-List> */
-					out.println( "<OriginalSourceLicense></OriginalSourceLicense>" );
-					out.println( "<Description></Description>" );
-					out.println( "<Modificationdescription></Modificationdescription>" );
+					if ( fileTodoImport.exists() ) {
+						Scanner scanner = new Scanner( fileTodoImport );
+						while ( scanner.hasNextLine() ) {
+							String line = scanner.nextLine();
+							if ( line.contains( "<OriginalSourceLicense>" ) ) {
+								out.println( line );
+								String folderOriginalSourceLicense = line.replaceFirst( "<OriginalSourceLicense>",
+										"" );
+								folderOriginalSourceLicense = folderOriginalSourceLicense
+										.replaceFirst( "</OriginalSourceLicense>", "" );
+								buttonOriginalSourceLicense.setText( folderOriginalSourceLicense );
+							}
+							if ( line.contains( "<Description>" ) ) {
+								out.println( line );
+								String folderOriginalSourceLicense = line.replaceFirst( "<Description>", "" );
+								folderOriginalSourceLicense = folderOriginalSourceLicense
+										.replaceFirst( "</Description>", "" );
+								buttonDescription.setText( folderOriginalSourceLicense );
+							}
+							if ( line.contains( "<Modificationdescription>" ) ) {
+								out.println( line );
+								String folderOriginalSourceLicense = line.replaceFirst( "<Modificationdescription>",
+										"" );
+								folderOriginalSourceLicense = folderOriginalSourceLicense
+										.replaceFirst( "</Modificationdescription>", "" );
+								buttonModificationdescription.setText( folderOriginalSourceLicense );
+							}
+						}
+						scanner.close();
+						Util.deleteFile( fileTodoImport );
+					} else {
+						out.println( "<OriginalSourceLicense></OriginalSourceLicense>" );
+						out.println( "<Description></Description>" );
+						out.println( "<Modificationdescription></Modificationdescription>" );
+					}
 					out.println( "<Exiftool></Exiftool>" );
 					out.println( "<KOST-Val></KOST-Val>" );
 					out.println( "<JHOVE></JHOVE>" );

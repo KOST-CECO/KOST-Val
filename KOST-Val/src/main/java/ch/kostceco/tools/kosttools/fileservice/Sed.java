@@ -1,5 +1,5 @@
 /* == KOST-Tools ================================================================================
- * KOST-Tools. Copyright (C) KOST-CECO. 2012-2021
+ * KOST-Tools. Copyright (C) KOST-CECO. 2012-2022
  * -----------------------------------------------------------------------------------------------
  * KOST-Tools is a development of the KOST-CECO. All rights rest with the KOST-CECO. This
  * application is free software: you can redistribute it and/or modify it under the terms of the GNU
@@ -65,19 +65,6 @@ public class Sed
 		String resultExec = Cmd.execToString( command, out, workDir );
 
 		// Sed gibt keine Info raus, die replaced oder ignoriert werden muss
-
-		// System.out.println( "resultExec: " + resultExec );
-		/* Folgender Error Output ist keiner sondern nur Info und kann mit OK ersetzt werden: ERROR:
-		 * User warning: ignoring unknown box String ignor =
-		 * "ERROR: User warning: ignoring unknown box"; if ( resultExec.equals( ignor ) ) { resultExec =
-		 * "OK"; } else { /* ERROR: Schemas validity error : Element
-		 * '{http://www.admin.ch/xmlns/siard/1.0/schema0/table2.xsd}row': This element is not
-		 * expected.</Message><Message>ERROR:
-		 * C:\Users\X60014195\.kost-val_2x\temp_KOST-Val\SIARD\content\schema0\table2\table2.xml fails
-		 * to validate */
-
-		/* String replaceInfo = "</Message><Message>ERROR: " + jp2File.getAbsolutePath() +
-		 * " fails to validate"; resultExec = resultExec.replace( replaceInfo, "" ); } */
 
 		if ( resultExec.equals( "OK" ) ) {
 			if ( output.exists() ) {

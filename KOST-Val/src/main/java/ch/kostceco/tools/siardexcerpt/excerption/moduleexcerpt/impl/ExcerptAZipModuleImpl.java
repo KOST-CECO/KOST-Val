@@ -1,6 +1,6 @@
 /* == SIARDexcerpt ==============================================================================
  * The SIARDexcerpt application is used for excerpt a record from a SIARD-File. Copyright (C)
- * 2016-2021 Claire Roethlisberger (KOST-CECO)
+ * 2016-2022 Claire Roethlisberger (KOST-CECO)
  * -----------------------------------------------------------------------------------------------
  * SIARDexcerpt is a development of the KOST-CECO. All rights rest with the KOST-CECO. This
  * application is free software: you can redistribute it and/or modify it under the terms of the GNU
@@ -98,9 +98,9 @@ public class ExcerptAZipModuleImpl extends ValidationModuleImpl implements Excer
 			}
 			zipfile.close();
 		} catch ( Exception e ) {
-			getMessageServiceExc().logError( getTextResourceServiceExc().getText( locale,
-					EXC_MESSAGE_XML_MODUL_A )
-					+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN, e.getMessage() ) );
+			System.out.println( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_A ) );
+			System.out.println(
+					getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 		return result;

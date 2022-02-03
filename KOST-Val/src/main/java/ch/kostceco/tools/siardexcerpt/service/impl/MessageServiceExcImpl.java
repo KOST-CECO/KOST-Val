@@ -1,6 +1,6 @@
 /* == SIARDexcerpt ==============================================================================
  * The SIARDexcerpt application is used for excerpt a record from a SIARD-File. Copyright (C)
- * 2016-2021 Claire Roethlisberger (KOST-CECO)
+ * 2016-2022 Claire Roethlisberger (KOST-CECO)
  * -----------------------------------------------------------------------------------------------
  * SIARDexcerpt is a development of the KOST-CECO. All rights rest with the KOST-CECO. This
  * application is free software: you can redistribute it and/or modify it under the terms of the GNU
@@ -19,7 +19,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import ch.kostceco.tools.siardexcerpt.logging.Logger;
+import ch.kostceco.tools.kostval.logging.Logger;
 import ch.kostceco.tools.siardexcerpt.service.MessageServiceExc;
 
 public class MessageServiceExcImpl implements MessageServiceExc
@@ -30,11 +30,8 @@ public class MessageServiceExcImpl implements MessageServiceExc
 
 	List<String[]>							stack		= new LinkedList<String[]>();
 
-	@Override
-	public void logDebug( String message )
-	{
-		this.stack.add( new String[] { MessageServiceExc.DEBUG, message } );
-	}
+	/* @Override public void logDebug( String message ) { this.stack.add( new String[] {
+	 * MessageServiceExc.DEBUG, message } ); } */
 
 	@Override
 	public void logError( String message )
@@ -48,11 +45,8 @@ public class MessageServiceExcImpl implements MessageServiceExc
 		this.stack.add( new String[] { MessageServiceExc.FATAL, message } );
 	}
 
-	@Override
-	public void logInfo( String message )
-	{
-		this.stack.add( new String[] { MessageServiceExc.INFO, message } );
-	}
+	/* @Override public void logInfo( String message ) { this.stack.add( new String[] {
+	 * MessageServiceExc.INFO, message } ); } */
 
 	@Override
 	public void logWarning( String message )
@@ -73,7 +67,7 @@ public class MessageServiceExcImpl implements MessageServiceExc
 		while ( it.hasNext() ) {
 			String[] message = (String[]) it.next();
 			if ( message[0].equals( MessageServiceExc.DEBUG ) ) {
-				LOGGER.logDebug( message[1] );
+				// LOGGER.logDebug( message[1] );
 			}
 			if ( message[0].equals( MessageServiceExc.ERROR ) ) {
 				LOGGER.logError( message[1] );
@@ -82,7 +76,7 @@ public class MessageServiceExcImpl implements MessageServiceExc
 				LOGGER.logFatal( message[1] );
 			}
 			if ( message[0].equals( MessageServiceExc.INFO ) ) {
-				LOGGER.logInfo( message[1] );
+				// LOGGER.logInfo( message[1] );
 			}
 			if ( message[0].equals( MessageServiceExc.WARN ) ) {
 				LOGGER.logWarning( message[1] );

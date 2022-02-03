@@ -1,6 +1,6 @@
 ﻿/* == SIARDexcerpt ==============================================================================
  * The SIARDexcerpt application is used for excerpt a record from a SIARD-File. Copyright (C)
- * 2016-2021 Claire Roethlisberger (KOST-CECO)
+ * 2016-2022 Claire Roethlisberger (KOST-CECO)
  * -----------------------------------------------------------------------------------------------
  * SIARDexcerpt is a development of the KOST-CECO. All rights rest with the KOST-CECO. This
  * application is free software: you can redistribute it and/or modify it under the terms of the GNU
@@ -30,6 +30,9 @@ import org.w3c.dom.NodeList;
 import ch.kostceco.tools.siardexcerpt.exception.moduleexcerpt.ExcerptBSearchException;
 import ch.kostceco.tools.siardexcerpt.excerption.ValidationModuleImpl;
 import ch.kostceco.tools.siardexcerpt.excerption.moduleexcerpt.ExcerptBSearchModule;
+import ch.kostceco.tools.siardexcerpt.logging.Logtxt;
+import ch.kostceco.tools.siardexcerpt.SIARDexcerpt;
+import ch.kostceco.tools.kosttools.fileservice.Sed;
 import ch.kostceco.tools.kosttools.util.StreamGobbler;
 import ch.kostceco.tools.kosttools.util.Util;
 
@@ -78,54 +81,31 @@ public class ExcerptBSearchModuleImpl extends ValidationModuleImpl implements Ex
 			}
 		}
 
-		File fSedExe = new File( "resources" + File.separator + "sed" + File.separator + "sed.exe" );
-		File msys20dll = new File(
-				"resources" + File.separator + "sed" + File.separator + "msys-2.0.dll" );
-		File msysgccs1dll = new File(
-				"resources" + File.separator + "sed" + File.separator + "msys-gcc_s-1.dll" );
-		File msysiconv2dll = new File(
-				"resources" + File.separator + "sed" + File.separator + "msys-iconv-2.dll" );
-		File msysintl8dll = new File(
-				"resources" + File.separator + "sed" + File.separator + "msys-intl-8.dll" );
-		String pathToSedExe = fSedExe.getAbsolutePath();
-		if ( !fSedExe.exists() ) {
-			// sed.exe existiert nicht --> Abbruch
-			getMessageServiceExc()
-					.logError( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_B )
-							+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_C_MISSINGFILE,
-									fSedExe.getAbsolutePath() ) );
-			return false;
+		/* dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist ein generelles TODO in
+		 * allen Modulen. Zuerst immer dirOfJarPath ermitteln und dann alle Pfade mit
+		 * 
+		 * dirOfJarPath + File.separator +
+		 * 
+		 * erweitern. */
+		String path = new File(
+				SIARDexcerpt.class.getProtectionDomain().getCodeSource().getLocation().getPath() )
+						.getAbsolutePath();
+		String locationOfJarPath = path;
+		String dirOfJarPath = locationOfJarPath;
+		if ( locationOfJarPath.endsWith( ".jar" ) || locationOfJarPath.endsWith( ".exe" )
+				|| locationOfJarPath.endsWith( "." ) ) {
+			File file = new File( locationOfJarPath );
+			dirOfJarPath = file.getParent();
 		}
-		if ( !msys20dll.exists() ) {
-			// existiert nicht --> Abbruch
-			getMessageServiceExc()
-					.logError( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_B )
+
+		// Pfad zum Programm existiert die Dateien?
+		String checkTool = Sed.checkSed( dirOfJarPath );
+		if ( !checkTool.equals( "OK" ) ) {
+			// mindestens eine Datei fehlt --> Abbruch
+			Logtxt.logtxt( outFileSearch,
+					getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_B )
 							+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_C_MISSINGFILE,
-									msys20dll.getAbsolutePath() ) );
-			return false;
-		}
-		if ( !msysgccs1dll.exists() ) {
-			// existiert nicht --> Abbruch
-			getMessageServiceExc()
-					.logError( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_B )
-							+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_C_MISSINGFILE,
-									msysgccs1dll.getAbsolutePath() ) );
-			return false;
-		}
-		if ( !msysiconv2dll.exists() ) {
-			// existiert nicht --> Abbruch
-			getMessageServiceExc()
-					.logError( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_B )
-							+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_C_MISSINGFILE,
-									msysiconv2dll.getAbsolutePath() ) );
-			return false;
-		}
-		if ( !msysintl8dll.exists() ) {
-			// existiert nicht --> Abbruch
-			getMessageServiceExc()
-					.logError( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_B )
-							+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_C_MISSINGFILE,
-									msysintl8dll.getAbsolutePath() ) );
+									checkTool ) );
 			return false;
 		}
 
@@ -148,14 +128,14 @@ public class ExcerptBSearchModuleImpl extends ValidationModuleImpl implements Ex
 			String folder = configMap.get( "MaintableFolder" );
 			String folderSchema = configMap.get( "MschemaFolder" );
 			if ( folder.startsWith( "Configuration-Error:" ) ) {
-				getMessageServiceExc().logError(
+				Logtxt.logtxt( outFileSearch,
 						getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_B ) + folder );
 				return false;
 			}
 			String insensitiveOption = "";
 			String insensitive = configMap.get( "Insensitive" );
 			if ( insensitive.startsWith( "Configuration-Error:" ) ) {
-				getMessageServiceExc().logError(
+				Logtxt.logtxt( outFileSearch,
 						getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_B ) + insensitive );
 				return false;
 			} else if ( insensitive.equalsIgnoreCase( "yes" ) ) {
@@ -165,159 +145,112 @@ public class ExcerptBSearchModuleImpl extends ValidationModuleImpl implements Ex
 					+ File.separator + folderSchema );
 			File fSearchtable = new File(
 					fSchema.getAbsolutePath() + File.separator + folder + File.separator + folder + ".xml" );
-			File fSearchtableTemp = new File( fSchema.getAbsolutePath() + File.separator + folder
-					+ File.separator + folder + "_Temp.xml" );
-			String pathTofSearchtable = fSearchtable.getAbsolutePath();
-			String pathTofSearchtableTemp = fSearchtableTemp.getAbsolutePath();
+			File fSearchtableTemp1 = new File( fSchema.getAbsolutePath() + File.separator + folder
+					+ File.separator + folder + "_Temp1.xml" );
+			File fSearchtableTemp2 = new File( fSchema.getAbsolutePath() + File.separator + folder
+					+ File.separator + folder + "_Temp2.xml" );
+			File fSearchtableTemp3 = new File( fSchema.getAbsolutePath() + File.separator + folder
+					+ File.separator + folder + "_Temp3.xml" );
 
-			// System.out.println("pathTofSearchtable: "+pathTofSearchtable);
+			// System.out.println("pathTofSearchtable: "+fSearchtable.getAbsolutePath());
 			/* mit Util.oldnewstring respektive replace koennen sehr grosse files nicht bearbeitet werden!
 			 * 
 			 * Entsprechend wurde sed verwendet. */
 
 			String sed = configMap.get( "Sed" );
 			if ( sed.equalsIgnoreCase( "yes" ) ) {
+
 				// Bringt alles auf eine Zeile
-				String commandSed = "cmd /c \"" + pathToSedExe + " 's/\\n/ /g' " + pathTofSearchtable
-						+ " > " + pathTofSearchtableTemp + "\"";
-				String commandSed2 = "cmd /c \"" + pathToSedExe + " ':a;N;$!ba;s/\\n/ /g' "
-						+ pathTofSearchtableTemp + " > " + pathTofSearchtable + "\"";
+				String sed1 = "-e 's/\\n/ /g' ";
+				String sed2 = "-e ':a;N;$!ba;s/\\n/ /g' ";
 				// Trennt ><row. Nur eine row auf einer Zeile
-				String commandSed3 = "cmd /c \"" + pathToSedExe + " 's/\\d060row/\\n\\d060row/g' "
-						+ pathTofSearchtable + " > " + pathTofSearchtableTemp + "\"";
+				String sed3 = "-e 's/\\d060row/\\n\\d060row/g' ";
 				// Trennt ><table. <table auf eine neue Zeile
-				String commandSed4 = "cmd /c \"" + pathToSedExe
-						+ " 's/\\d060\\d047table/\\n\\d060\\d047table/g' " + pathTofSearchtableTemp + " > "
-						+ pathTofSearchtable + "\"";
+				String sed4 = "-e 's/\\d060\\d047table/\\n\\d060\\d047table/g' ";
 
-				// String commandSed = "cmd /c \"\"pathToSedExe\" 's/row/R0W/g\' 'hallo row.'\"";
-				/* Das redirect Zeichen verunmoeglicht eine direkte eingabe. mit dem geschachtellten Befehl
-				 * gehts: cmd /c\"urspruenlicher Befehl\" */
+				/* // Bringt alles auf eine Zeile String options = sed1 + sed2 + sed3 + sed4;
+				 * 
+				 * String pathToWorkDir = configMap.get( "PathToWorkDir" ); File workDir = new File(
+				 * pathToWorkDir );
+				 * 
+				 * // Sed-Befehl: pathToSedExe options fSearchtable > fSearchtableTemp String resultExec =
+				 * Sed.execSed( options, fSearchtable, fSearchtableTemp, workDir, dirOfJarPath ); if (
+				 * !resultExec.equals( "OK" ) ) { // Exception oder Report existiert nicht Logtxt.logtxt(
+				 * outFileSearch, getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_C ) +
+				 * getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN, " (execSed)" ) ); }
+				 * Util.copyFile( fSearchtableTemp, fSearchtable ); // Ende Sed direkt auszuloesen */
 
-				Process procSed = null;
-				Runtime rtSed = null;
-				Process procSed2 = null;
-				Runtime rtSed2 = null;
-				Process procSed3 = null;
-				Runtime rtSed3 = null;
-				Process procSed4 = null;
-				Runtime rtSed4 = null;
+				String pathToWorkDir = configMap.get( "PathToWorkDir" );
+				File workDir = new File( pathToWorkDir );
+				long sleepLong = fSearchtable.length() / 100000;
+				// System.out.println( "wait: " + sleepLong );
 
-				try {
-					Util.switchOffConsole();
-					rtSed = Runtime.getRuntime();
-					procSed = rtSed.exec( commandSed.toString().split( " " ) );
-					// .split(" ") ist notwendig wenn in einem Pfad ein Doppelleerschlag vorhanden ist!
-
-					// Fehleroutput holen
-					StreamGobbler errorGobblerSed = new StreamGobbler( procSed.getErrorStream(), "ERROR" );
-
-					// Output holen
-					StreamGobbler outputGobblerSed = new StreamGobbler( procSed.getInputStream(), "OUTPUT" );
-
-					// Threads starten
-					errorGobblerSed.start();
-					outputGobblerSed.start();
-
-					// Warte, bis wget fertig ist
-					procSed.waitFor();
-
-					// ---------------------------
-
-					rtSed2 = Runtime.getRuntime();
-					procSed2 = rtSed2.exec( commandSed2.toString().split( " " ) );
-					// .split(" ") ist notwendig wenn in einem Pfad ein Doppelleerschlag vorhanden ist!
-
-					// Fehleroutput holen
-					StreamGobbler errorGobblerSed2 = new StreamGobbler( procSed2.getErrorStream(), "ERROR" );
-
-					// Output holen
-					StreamGobbler outputGobblerSed2 = new StreamGobbler( procSed2.getInputStream(),
-							"OUTPUT" );
-
-					// Threads starten
-					errorGobblerSed2.start();
-					outputGobblerSed2.start();
-
-					// Warte, bis wget fertig ist
-					procSed2.waitFor();
-
-					// ---------------------------
-
-					rtSed3 = Runtime.getRuntime();
-					procSed3 = rtSed3.exec( commandSed3.toString().split( " " ) );
-					// .split(" ") ist notwendig wenn in einem Pfad ein Doppelleerschlag vorhanden ist!
-
-					// Fehleroutput holen
-					StreamGobbler errorGobblerSed3 = new StreamGobbler( procSed3.getErrorStream(), "ERROR" );
-
-					// Output holen
-					StreamGobbler outputGobblerSed3 = new StreamGobbler( procSed3.getInputStream(),
-							"OUTPUT" );
-
-					// Threads starten
-					errorGobblerSed3.start();
-					outputGobblerSed3.start();
-
-					// Warte, bis wget fertig ist
-					procSed3.waitFor();
-
-					// ---------------------------
-
-					rtSed4 = Runtime.getRuntime();
-					procSed4 = rtSed4.exec( commandSed4.toString().split( " " ) );
-					// .split(" ") ist notwendig wenn in einem Pfad ein Doppelleerschlag vorhanden ist!
-
-					// Fehleroutput holen
-					StreamGobbler errorGobblerSed4 = new StreamGobbler( procSed4.getErrorStream(), "ERROR" );
-
-					// Output holen
-					StreamGobbler outputGobblerSed4 = new StreamGobbler( procSed4.getInputStream(),
-							"OUTPUT" );
-
-					// Threads starten
-					errorGobblerSed4.start();
-					outputGobblerSed4.start();
-
-					// Warte, bis wget fertig ist
-					procSed4.waitFor();
-
-					// ---------------------------
-
-					Util.switchOnConsole();
-
-				} catch ( Exception e ) {
-					getMessageServiceExc()
-							.logError( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_C )
-									+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN,
-											e.getMessage() ) );
-					return false;
-				} finally {
-					if ( procSed != null ) {
-						procSed.getOutputStream().close();
-						procSed.getInputStream().close();
-						procSed.getErrorStream().close();
+				// Sed-Befehl: pathToSedExe options fSearchtable > fSearchtableTemp
+				String resultExec = Sed.execSed( sed1, fSearchtable, fSearchtableTemp1, workDir,
+						dirOfJarPath );
+				Thread.sleep( sleepLong );
+				if ( !fSearchtableTemp1.exists() ) {
+					// System.out.println( "wait 1" );
+					Thread.sleep( 10000 );
+				}
+				if ( fSearchtableTemp1.length() == 0 ) {
+					// System.out.println( "wait 1 0" );
+					resultExec = Sed.execSed( sed1, fSearchtable, fSearchtableTemp1, workDir, dirOfJarPath );
+					Thread.sleep( sleepLong * 5 );
+				}
+				if ( resultExec.equals( "OK" ) ) {
+					resultExec = Sed.execSed( sed2, fSearchtableTemp1, fSearchtableTemp2, workDir,
+							dirOfJarPath );
+					Thread.sleep( sleepLong );
+					if ( !fSearchtableTemp2.exists() ) {
+						// System.out.println( "2" );
+						Thread.sleep( 10000 );
 					}
-					if ( procSed2 != null ) {
-						procSed2.getOutputStream().close();
-						procSed2.getInputStream().close();
-						procSed2.getErrorStream().close();
+					if ( fSearchtableTemp2.length() == 0 ) {
+						// System.out.println( "wait 2 0" );
+						resultExec = Sed.execSed( sed2, fSearchtableTemp1, fSearchtableTemp2, workDir,
+								dirOfJarPath );
+						Thread.sleep( sleepLong * 5 );
 					}
-					if ( procSed3 != null ) {
-						procSed3.getOutputStream().close();
-						procSed3.getInputStream().close();
-						procSed3.getErrorStream().close();
-					}
-					if ( procSed4 != null ) {
-						procSed4.getOutputStream().close();
-						procSed4.getInputStream().close();
-						procSed4.getErrorStream().close();
+					if ( resultExec.equals( "OK" ) ) {
+						resultExec = Sed.execSed( sed3, fSearchtableTemp2, fSearchtableTemp3, workDir,
+								dirOfJarPath );
+						Thread.sleep( sleepLong );
+						if ( !fSearchtableTemp3.exists() ) {
+							// System.out.println( "wait 3" );
+							Thread.sleep( 10000 );
+						}
+						if ( fSearchtableTemp3.length() == 0 ) {
+							// System.out.println( "wait 3 0" );
+							resultExec = Sed.execSed( sed3, fSearchtableTemp2, fSearchtableTemp3, workDir,
+									dirOfJarPath );
+							Thread.sleep( sleepLong * 5 );
+						}
+						if ( resultExec.equals( "OK" ) ) {
+							resultExec = Sed.execSed( sed4, fSearchtableTemp3, fSearchtable, workDir,
+									dirOfJarPath );
+							Thread.sleep( sleepLong );
+							if ( fSearchtable.length() == 0 ) {
+								// System.out.println( "wait 0" );
+								resultExec = Sed.execSed( sed4, fSearchtableTemp3, fSearchtable, workDir,
+										dirOfJarPath );
+								Thread.sleep( sleepLong * 5 );
+							}
+						}
 					}
 				}
+				if ( !resultExec.equals( "OK" ) || fSearchtable.length() == 0 ) {
+					// sed hat nicht funktioniert, ueberspringen
+				}
 			}
-
-			if ( fSearchtableTemp.exists() ) {
-				Util.deleteDir( fSearchtableTemp );
+			if ( fSearchtableTemp1.exists() ) {
+				Util.deleteDir( fSearchtableTemp1 );
+			}
+			if ( fSearchtableTemp2.exists() ) {
+				Util.deleteDir( fSearchtableTemp2 );
+			}
+			if ( fSearchtableTemp3.exists() ) {
+				Util.deleteDir( fSearchtableTemp3 );
 			}
 
 			/* Der SearchString soll nur über <row>...</row> durchgeführt werden
@@ -344,7 +277,7 @@ public class ExcerptBSearchModuleImpl extends ValidationModuleImpl implements Ex
 				Process proc = null;
 				Runtime rt = null;
 
-				getMessageServiceExc().logError(
+				Logtxt.logtxt( outFileSearch,
 						getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_ELEMENT_OPEN, name ) );
 				if ( time ) {
 					nowTime = new java.util.Date();
@@ -379,8 +312,8 @@ public class ExcerptBSearchModuleImpl extends ValidationModuleImpl implements Ex
 					}
 
 				} catch ( Exception e ) {
-					getMessageServiceExc()
-							.logError( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_B )
+					Logtxt.logtxt( outFileSearch,
+							getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_B )
 									+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN,
 											e.getMessage() ) );
 					isValid = false;
@@ -398,7 +331,8 @@ public class ExcerptBSearchModuleImpl extends ValidationModuleImpl implements Ex
 					System.out.println( stringNowTime + " Start der Bereinigung" );
 				}
 
-				Scanner scanner = new Scanner( tempOutFile, "UTF-8" );
+				// liest das tempOutFile (UTF-8) ein
+				Scanner scanner = new Scanner( tempOutFile, "UTF-8"  );
 				contentAll = "";
 				content = "";
 				contentAll = scanner.useDelimiter( "\\Z" ).next();
@@ -419,62 +353,62 @@ public class ExcerptBSearchModuleImpl extends ValidationModuleImpl implements Ex
 				String nr10 = configMap.get( "CellNumber10" );
 				String nr11 = configMap.get( "CellNumber11" );
 				if ( nr0.startsWith( "Configuration-Error:" ) ) {
-					getMessageServiceExc().logError(
+					Logtxt.logtxt( outFileSearch,
 							getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_B ) + nr0 );
 					return false;
 				}
 				if ( nr1.startsWith( "Configuration-Error:" ) ) {
-					getMessageServiceExc().logError(
+					Logtxt.logtxt( outFileSearch,
 							getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_B ) + nr1 );
 					return false;
 				}
 				if ( nr2.startsWith( "Configuration-Error:" ) ) {
-					getMessageServiceExc().logError(
+					Logtxt.logtxt( outFileSearch,
 							getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_B ) + nr2 );
 					return false;
 				}
 				if ( nr3.startsWith( "Configuration-Error:" ) ) {
-					getMessageServiceExc().logError(
+					Logtxt.logtxt( outFileSearch,
 							getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_B ) + nr3 );
 					return false;
 				}
 				if ( nr4.startsWith( "Configuration-Error:" ) ) {
-					getMessageServiceExc().logError(
+					Logtxt.logtxt( outFileSearch,
 							getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_B ) + nr4 );
 					return false;
 				}
 				if ( nr5.startsWith( "Configuration-Error:" ) ) {
-					getMessageServiceExc().logError(
+					Logtxt.logtxt( outFileSearch,
 							getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_B ) + nr5 );
 					return false;
 				}
 				if ( nr6.startsWith( "Configuration-Error:" ) ) {
-					getMessageServiceExc().logError(
+					Logtxt.logtxt( outFileSearch,
 							getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_B ) + nr6 );
 					return false;
 				}
 				if ( nr7.startsWith( "Configuration-Error:" ) ) {
-					getMessageServiceExc().logError(
+					Logtxt.logtxt( outFileSearch,
 							getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_B ) + nr7 );
 					return false;
 				}
 				if ( nr8.startsWith( "Configuration-Error:" ) ) {
-					getMessageServiceExc().logError(
+					Logtxt.logtxt( outFileSearch,
 							getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_B ) + nr8 );
 					return false;
 				}
 				if ( nr9.startsWith( "Configuration-Error:" ) ) {
-					getMessageServiceExc().logError(
+					Logtxt.logtxt( outFileSearch,
 							getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_B ) + nr9 );
 					return false;
 				}
 				if ( nr10.startsWith( "Configuration-Error:" ) ) {
-					getMessageServiceExc().logError(
+					Logtxt.logtxt( outFileSearch,
 							getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_B ) + nr10 );
 					return false;
 				}
 				if ( nr11.startsWith( "Configuration-Error:" ) ) {
-					getMessageServiceExc().logError(
+					Logtxt.logtxt( outFileSearch,
 							getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_B ) + nr11 );
 					return false;
 				}
@@ -572,9 +506,16 @@ public class ExcerptBSearchModuleImpl extends ValidationModuleImpl implements Ex
 					}
 					if ( col0 && col1 && col2 && col3 && col4 && col5 && col6 && col7 && col8 && col9 && col10
 							&& col11 ) {
-						int j = i + 1;
-						String deletString = "<c" + j + ">" + ".*" + "</row>";
-						content = content.replaceAll( deletString, "</row>" );
+						// die restlichen <cNr> koennen geloescht werden
+						content = content.replaceAll( "<c1" + ".*" + "</row>", "</row>" );
+						content = content.replaceAll( "<c2" + ".*" + "</row>", "</row>" );
+						content = content.replaceAll( "<c3" + ".*" + "</row>", "</row>" );
+						content = content.replaceAll( "<c4" + ".*" + "</row>", "</row>" );
+						content = content.replaceAll( "<c5" + ".*" + "</row>", "</row>" );
+						content = content.replaceAll( "<c6" + ".*" + "</row>", "</row>" );
+						content = content.replaceAll( "<c7" + ".*" + "</row>", "</row>" );
+						content = content.replaceAll( "<c8" + ".*" + "</row>", "</row>" );
+						content = content.replaceAll( "<c9" + ".*" + "</row>", "</row>" );
 						break;
 					}
 				}
@@ -585,9 +526,9 @@ public class ExcerptBSearchModuleImpl extends ValidationModuleImpl implements Ex
 					System.out.println( stringNowTime + " Ende der Bereinigung" );
 				}
 
-				getMessageServiceExc().logError( getTextResourceServiceExc().getText( locale,
+				Logtxt.logtxt( outFileSearch, getTextResourceServiceExc().getText( locale,
 						EXC_MESSAGE_XML_ELEMENT_CONTENT, content ) );
-				getMessageServiceExc().logError(
+				Logtxt.logtxt( outFileSearch,
 						getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_ELEMENT_CLOSE, name ) );
 
 				if ( tempOutFile.exists() ) {
@@ -599,17 +540,18 @@ public class ExcerptBSearchModuleImpl extends ValidationModuleImpl implements Ex
 				// Ende Grep
 
 			} catch ( Exception e ) {
-				getMessageServiceExc()
-						.logError( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_B )
+				Logtxt.logtxt( outFileSearch,
+						getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_B )
 								+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN,
 										e.getMessage() ) );
 				return false;
 			}
 
 		} catch ( Exception e ) {
-			getMessageServiceExc().logError( getTextResourceServiceExc().getText( locale,
-					EXC_MESSAGE_XML_MODUL_B )
-					+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( outFileSearch,
+					getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_B )
+							+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN,
+									e.getMessage() ) );
 			return false;
 		}
 

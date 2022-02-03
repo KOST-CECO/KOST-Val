@@ -1,6 +1,6 @@
 ﻿/* == SIARDexcerpt ==============================================================================
  * The SIARDexcerpt application is used for excerpt a record from a SIARD-File. Copyright (C)
- * 2016-2021 Claire Roethlisberger (KOST-CECO)
+ * 2016-2022 Claire Roethlisberger (KOST-CECO)
  * -----------------------------------------------------------------------------------------------
  * SIARDexcerpt is a development of the KOST-CECO. All rights rest with the KOST-CECO. This
  * application is free software: you can redistribute it and/or modify it under the terms of the GNU
@@ -15,6 +15,7 @@
 
 package ch.kostceco.tools.siardexcerpt.service;
 
+import java.util.Locale;
 import java.util.Map;
 
 /** Service Interface für die Konfigurationsdatei.
@@ -22,5 +23,5 @@ import java.util.Map;
  * @author Rc Claire Roethlisberger, KOST-CECO */
 public interface ConfigurationServiceExc extends ServiceExc
 {
-	Map<String, String> configMap();
+	Map<String, String> configMap(Locale locale);
 }

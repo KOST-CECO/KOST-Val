@@ -1,6 +1,6 @@
 /* == SIARDexcerpt ==============================================================================
  * The SIARDexcerpt v0.9.0 application is used for excerpt a record from a SIARD-File. Copyright (C)
- * 2016-2021 Claire Roethlisberger (KOST-CECO)
+ * 2016-2022 Claire Roethlisberger (KOST-CECO)
  * -----------------------------------------------------------------------------------------------
  * SIARDexcerpt is a development of the KOST-CECO. All rights rest with the KOST-CECO. This
  * application is free software: you can redistribute it and/or modify it under the terms of the GNU
@@ -36,7 +36,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.log4j.Logger;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.w3c.dom.Document;
@@ -115,7 +114,7 @@ public class ExcGuiController
 
 	private String						arg0, arg1, arg2, arg3 = "--init", arg4 = "*", dirOfJarPath,
 			initInstructionsDe, initInstructionsFr, initInstructionsEn;
-	private String						versionSiardExcerpt	= "1.0.0";
+	private String						versionSiardExcerpt	= "1.0.1.0";
 	/* TODO: version auch hier anpassen:
 	 * 
 	 * 2) messages_xx.properties (de, fr, en)
@@ -139,8 +138,10 @@ public class ExcGuiController
 		labelSearchExcerptDetail.setText( "" );
 		buttonFile.setText( "..." );
 
+		Util.switchOffConsole();
 		ConfigurableApplicationContext context = new ClassPathXmlApplicationContext(
 				"classpath:config/applicationContext.xml" );
+		Util.switchOnConsole();
 
 		// Copyright und Versionen ausgeben
 		String java6432 = System.getProperty( "sun.arch.data.model" );
@@ -821,9 +822,6 @@ public class ExcGuiController
 					scroll.setVvalue( 1.0 ); // 1.0 = letzte Zeile der Konsole
 					buttonPrint.setDisable( false );
 					buttonSave.setDisable( false );
-					// vorherige logs entfernen (nicht weiterloggen in alte Logs)
-					Logger rootLogger = Logger.getRootLogger();
-					rootLogger.removeAllAppenders();
 				} else {
 					// Da es nicht erfolgreich war kann der Log nicht angezeigt werden
 					String text = "Ein Fehler ist aufgetreten. Siehe Konsole.";
@@ -1056,44 +1054,101 @@ public class ExcGuiController
 			locSearch = "suchen";
 			locExcerpt = "extrahieren";
 		}
-		String selSearchExcerptChoice = searchExcerptChoice.getValue();
-		if ( selSearchExcerptChoice.contains( "(--search)" ) ) {
-			// suche
-			arg3 = "--search";
-			buttonSearchExcerpt.setText( locSearch );
+		try {
+			String selSearchExcerptChoice = "";
+			selSearchExcerptChoice = searchExcerptChoice.getValue();
+			if ( selSearchExcerptChoice.contains( "(--search)" ) ) {
+				// suche
+				arg3 = "--search";
+				buttonSearchExcerpt.setText( locSearch );
 
-			arg4 = "";
-			// create a TextInputDialog mit der Texteingabe der Laenge
-			TextInputDialog dialog = new TextInputDialog( arg4 );
+				arg4 = "";
+				// create a TextInputDialog mit der Texteingabe der Laenge
+				TextInputDialog dialog = new TextInputDialog( arg4 );
 
-			// Set title & header text
-			dialog.setTitle( "SIARDexcerpt - " + locSearch );
-			String headerDeFrEn = "Die gesuchten Werte eingeben. Dabei müssen die einzelnen Werte mit der Wildcard * getrennt werden. \n\nDie Reihenfolge wird übernommen. \nLeerschläge und andere Sonderzeichen müssen durch die Wildcard * ersetzt werden.";
-			if ( locale.toString().startsWith( "fr" ) ) {
-				headerDeFrEn = "Rentrer les valeurs recherchées en séparant les valeurs individuelles avec le caractère générique *. \n\nL’ordre est significatif. \nRemplacer les espaces et autres caractères spéciaux par le caractère générique *.";
-			} else if ( locale.toString().startsWith( "en" ) ) {
-				headerDeFrEn = "Input the values to be searched. Individual values must be separated with the wild-card character *. \n\nThe values’ order is significant. \nSpaces and special characters must be replaced by the wild-card character *.";
-			}
-			dialog.setHeaderText( headerDeFrEn );
-			dialog.setContentText( "" );
+				// Set title & header text
+				dialog.setTitle( "SIARDexcerpt - " + locSearch );
+				String headerDeFrEn = "Die gesuchten Werte eingeben. Dabei müssen die einzelnen Werte mit der Wildcard \".\" getrennt werden. \n\nDie Reihenfolge wird übernommen. \nLeerschläge und andere Sonderzeichen müssen durch die Wildcard \".\" ersetzt werden.";
+				if ( locale.toString().startsWith( "fr" ) ) {
+					headerDeFrEn = "Rentrer les valeurs recherchées en séparant les valeurs individuelles avec le caractère générique \".\". \n\nL’ordre est significatif. \nRemplacer les espaces et autres caractères spéciaux par le caractère générique \".\".";
+				} else if ( locale.toString().startsWith( "en" ) ) {
+					headerDeFrEn = "Input the values to be searched. Individual values must be separated with the wild-card character \".\". \n\nThe values’ order is significant. \nSpaces and special characters must be replaced by the wild-card character \".\".";
+				}
+				dialog.setHeaderText( headerDeFrEn );
+				dialog.setContentText( "" );
 
-			// Show the dialog and capture the result.
-			Optional<String> result = dialog.showAndWait();
+				// Show the dialog and capture the result.
+				Optional<String> result = dialog.showAndWait();
 
-			// If the "Okay" button was clicked, the result will contain our String in the get() method
-			if ( result.isPresent() ) {
-				try {
-					arg4 = result.get();
-					labelSearchExcerptDetail.setText( arg3 + " " + arg4 );
-					buttonSearchExcerpt.setText( locSearch );
-					buttonSearchExcerpt.setDisable( false );
-				} catch ( NumberFormatException eInt ) {
+				// If the "Okay" button was clicked, the result will contain our String in the get() method
+				if ( result.isPresent() ) {
+					try {
+						arg4 = result.get();
+						labelSearchExcerptDetail.setText( arg3 + " " + arg4 );
+						buttonSearchExcerpt.setText( locSearch );
+						buttonSearchExcerpt.setDisable( false );
+					} catch ( NumberFormatException eInt ) {
+						arg3 = "";
+						arg4 = "";
+						labelSearchExcerptDetail.setText( "" );
+						buttonSearchExcerpt.setText( locSearch + "/" + locExcerpt );
+						buttonSearchExcerpt.setDisable( true );
+					}
+				} else {
+					// Keine Aktion
 					arg3 = "";
 					arg4 = "";
 					labelSearchExcerptDetail.setText( "" );
 					buttonSearchExcerpt.setText( locSearch + "/" + locExcerpt );
 					buttonSearchExcerpt.setDisable( true );
 				}
+
+			} else if ( selSearchExcerptChoice.contains( "(--excerpt)" ) ) {
+				// Extraktion
+				arg3 = "--excerpt";
+				buttonSearchExcerpt.setText( locExcerpt );
+
+				arg4 = "";
+				// create a TextInputDialog mit der Texteingabe der Laenge
+				TextInputDialog dialog = new TextInputDialog( arg4 );
+
+				// Set title & header text
+				dialog.setTitle( "SIARDexcerpt - " + locExcerpt );
+				String headerDeFrEn = "Den Extraktionsschlüssel eingeben. \nLeerschläge und andere Sonderzeichen müssen durch die Wildcard \".\" ersetzt werden.";
+				if ( locale.toString().startsWith( "fr" ) ) {
+					headerDeFrEn = "Rentrer la clé primaire, en remplaçant les espaces et \nautres caractères spéciaux par le caractère générique \".\".";
+				} else if ( locale.toString().startsWith( "en" ) ) {
+					headerDeFrEn = "Input the primary key. \nSpaces and other special signs must be replaced by the wild-card character \".\".";
+				}
+				dialog.setHeaderText( headerDeFrEn );
+				dialog.setContentText( "" );
+
+				// Show the dialog and capture the result.
+				Optional<String> result = dialog.showAndWait();
+
+				// If the "Okay" button was clicked, the result will contain our String in the get() method
+				if ( result.isPresent() ) {
+					try {
+						arg4 = result.get();
+						labelSearchExcerptDetail.setText( arg3 + " " + arg4 );
+						buttonSearchExcerpt.setText( locExcerpt );
+						buttonSearchExcerpt.setDisable( false );
+					} catch ( NumberFormatException eInt ) {
+						arg3 = "";
+						arg4 = "";
+						labelSearchExcerptDetail.setText( "" );
+						buttonSearchExcerpt.setText( locSearch + "/" + locExcerpt );
+						buttonSearchExcerpt.setDisable( true );
+					}
+				} else {
+					// Keine Aktion
+					arg3 = "";
+					arg4 = "";
+					labelSearchExcerptDetail.setText( "" );
+					buttonSearchExcerpt.setText( locSearch + "/" + locExcerpt );
+					buttonSearchExcerpt.setDisable( true );
+				}
+
 			} else {
 				// Keine Aktion
 				arg3 = "";
@@ -1102,60 +1157,14 @@ public class ExcGuiController
 				buttonSearchExcerpt.setText( locSearch + "/" + locExcerpt );
 				buttonSearchExcerpt.setDisable( true );
 			}
-
-		} else if ( selSearchExcerptChoice.contains( "(--excerpt)" ) ) {
-			// Extraktion
-			arg3 = "--excerpt";
-			buttonSearchExcerpt.setText( locExcerpt );
-
-			arg4 = "";
-			// create a TextInputDialog mit der Texteingabe der Laenge
-			TextInputDialog dialog = new TextInputDialog( arg4 );
-
-			// Set title & header text
-			dialog.setTitle( "SIARDexcerpt - " + locExcerpt );
-			String headerDeFrEn = "Den Extraktionsschlüssel eingeben. \nLeerschläge und andere Sonderzeichen müssen durch die Wildcard * ersetzt werden.";
-			if ( locale.toString().startsWith( "fr" ) ) {
-				headerDeFrEn = "Rentrer la clé primaire, en remplaçant les espaces et \nautres caractères spéciaux par le caractère générique *.";
-			} else if ( locale.toString().startsWith( "en" ) ) {
-				headerDeFrEn = "Input the primary key. \nSpaces and other special signs must be replaced by the wild-card character *.";
-			}
-			dialog.setHeaderText( headerDeFrEn );
-			dialog.setContentText( "" );
-
-			// Show the dialog and capture the result.
-			Optional<String> result = dialog.showAndWait();
-
-			// If the "Okay" button was clicked, the result will contain our String in the get() method
-			if ( result.isPresent() ) {
-				try {
-					arg4 = result.get();
-					labelSearchExcerptDetail.setText( arg3 + " " + arg4 );
-					buttonSearchExcerpt.setText( locExcerpt );
-					buttonSearchExcerpt.setDisable( false );
-				} catch ( NumberFormatException eInt ) {
-					arg3 = "";
-					arg4 = "";
-					labelSearchExcerptDetail.setText( "" );
-					buttonSearchExcerpt.setText( locSearch + "/" + locExcerpt );
-					buttonSearchExcerpt.setDisable( true );
-				}
-			} else {
-				// Keine Aktion
-				arg3 = "";
-				arg4 = "";
-				labelSearchExcerptDetail.setText( "" );
-				buttonSearchExcerpt.setText( locSearch + "/" + locExcerpt );
-				buttonSearchExcerpt.setDisable( true );
-			}
-
-		} else {
-			// Keine Aktion
-			arg3 = "";
-			arg4 = "";
-			labelSearchExcerptDetail.setText( "" );
-			buttonSearchExcerpt.setText( locSearch + "/" + locExcerpt );
-			buttonSearchExcerpt.setDisable( true );
+			Util.switchOffConsole();
+			searchExcerptChoice.getItems().clear();
+			searchExcerptChoice.getItems().addAll( SearchExcerptList );
+			Util.switchOnConsole();
+			console.setText( " \n" );
+		} catch ( NullPointerException e ) {
+			// keinen Fehler ausgeben
+			console.setText( " \n" );
 		}
 	}
 

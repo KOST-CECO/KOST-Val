@@ -1,6 +1,6 @@
 /* == SIARDexcerpt ==============================================================================
  * The SIARDexcerpt application is used for excerpt a record from a SIARD-File. Copyright (C)
- * 2016-2021 Claire Roethlisberger (KOST-CECO)
+ * 2016-2022 Claire Roethlisberger (KOST-CECO)
  * -----------------------------------------------------------------------------------------------
  * SIARDexcerpt is a development of the KOST-CECO. All rights rest with the KOST-CECO. This
  * application is free software: you can redistribute it and/or modify it under the terms of the GNU
@@ -27,7 +27,7 @@ import ch.kostceco.tools.siardexcerpt.excerption.moduleexcerpt.ExcerptAZipModule
 import ch.kostceco.tools.siardexcerpt.excerption.moduleexcerpt.ExcerptAConfigModule;
 import ch.kostceco.tools.siardexcerpt.excerption.moduleexcerpt.ExcerptBSearchModule;
 import ch.kostceco.tools.siardexcerpt.excerption.moduleexcerpt.ExcerptCGrepModule;
-import ch.kostceco.tools.siardexcerpt.logging.Logger;
+import ch.kostceco.tools.siardexcerpt.logging.Logtxt;
 import ch.kostceco.tools.siardexcerpt.logging.MessageConstants;
 import ch.kostceco.tools.siardexcerpt.service.TextResourceServiceExc;
 
@@ -37,8 +37,6 @@ import ch.kostceco.tools.siardexcerpt.service.TextResourceServiceExc;
 
 public class Controllerexcerpt implements MessageConstants
 {
-
-	private static final Logger			LOGGER	= new Logger( Controllerexcerpt.class );
 
 	private ExcerptAZipModule				excerptAZipModule;
 	private ExcerptAConfigModule		excerptAConfigModule;
@@ -115,13 +113,15 @@ public class Controllerexcerpt implements MessageConstants
 				valid = false;
 			}
 		} catch ( ExcerptAZipException e ) {
-			LOGGER.logError( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_A )
-					+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN, e.getMessage() ) );
+			System.out.println( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_A ) );
+			System.out.println(
+					getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getExcerptAZipModule().getMessageServiceExc().print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logError( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_A )
-					+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN, e.getMessage() ) );
+			System.out.println( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_A ) );
+			System.out.println(
+					getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
@@ -145,13 +145,15 @@ public class Controllerexcerpt implements MessageConstants
 				valid = false;
 			}
 		} catch ( ExcerptAConfigException e ) {
-			LOGGER.logError( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_A )
-					+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN, e.getMessage() ) );
+			System.out.println( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_A ) );
+			System.out.println(
+					getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getExcerptAConfigModule().getMessageServiceExc().print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logError( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_A )
-					+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN, e.getMessage() ) );
+			System.out.println( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_A ) );
+			System.out.println(
+					getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
@@ -173,13 +175,17 @@ public class Controllerexcerpt implements MessageConstants
 				valid = false;
 			}
 		} catch ( ExcerptBSearchException e ) {
-			LOGGER.logError( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_B )
-					+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( outFileSearch,
+					getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_B )
+							+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN,
+									e.getMessage() ) );
 			this.getExcerptBSearchModule().getMessageServiceExc().print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logError( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_B )
-					+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( outFileSearch,
+					getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_B )
+							+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN,
+									e.getMessage() ) );
 			return false;
 		}
 
@@ -201,12 +207,12 @@ public class Controllerexcerpt implements MessageConstants
 				valid = false;
 			}
 		} catch ( ExcerptCGrepException e ) {
-			LOGGER.logError( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_C )
+			Logtxt.logtxt( outFile, getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_C )
 					+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getExcerptCGrepModule().getMessageServiceExc().print();
 			return false;
 		} catch ( Exception e ) {
-			LOGGER.logError( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_C )
+			Logtxt.logtxt( outFile, getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_C )
 					+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}

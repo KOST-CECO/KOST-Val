@@ -1,5 +1,5 @@
 /* == KOST-Tools ================================================================================
- * KOST-Tools. Copyright (C) KOST-CECO. 2012-2021
+ * KOST-Tools. Copyright (C) KOST-CECO. 2012-2022
  * -----------------------------------------------------------------------------------------------
  * KOST-Tools is a development of the KOST-CECO. All rights rest with the KOST-CECO. This
  * application is free software: you can redistribute it and/or modify it under the terms of the GNU
@@ -453,6 +453,18 @@ public class Util
 		} catch ( IOException ioe ) {
 			ioe.printStackTrace();
 		}
+	}
+
+	/** Umlaute normalisieren */
+	public static String umlaute( String oldstring )
+	{
+		String newstring = oldstring.replaceAll( "ü", "ue" );
+		newstring = newstring.replaceAll( "ö", "oe" );
+		newstring = newstring.replaceAll( "ä", "ae" );
+		newstring = newstring.replaceAll( "Ü", "Ue" );
+		newstring = newstring.replaceAll( "Ö", "Oe" );
+		newstring = newstring.replaceAll( "Ä", "Ae" );
+		return newstring;
 	}
 
 	/** Veraendert ersetzt oldstring mit newstring in file

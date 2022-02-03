@@ -1,6 +1,6 @@
 /* == SIARDexcerpt ==============================================================================
  * The SIARDexcerpt v0.9.0 application is used for excerpt a record from a SIARD-File. Copyright (C)
- * 2016-2021 Claire Roethlisberger (KOST-CECO)
+ * 2016-2022 Claire Roethlisberger (KOST-CECO)
  * -----------------------------------------------------------------------------------------------
  * SIARDexcerpt is a development of the KOST-CECO. All rights rest with the KOST-CECO. This
  * application is free software: you can redistribute it and/or modify it under the terms of the GNU
@@ -214,7 +214,8 @@ public class ControllerExcInit implements MessageConstants
 		}
 		Util.copyFile( configFile, configFileHard );
 
-		Map<String, String> configMap = controllerExcInit.getConfigurationServiceExc().configMap();
+		Map<String, String> configMap = controllerExcInit.getConfigurationServiceExc()
+				.configMap( locale );
 
 		/** b) Excerptverzeichnis mit schreibrechte und ggf anlegen */
 		// System.out.println( " b) Excerptverzeichnis mit schreibrechte und ggf anlegen " );

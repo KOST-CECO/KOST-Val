@@ -1,6 +1,6 @@
 /* == SIARDexcerpt ==============================================================================
  * The SIARDexcerpt v0.9.0 application is used for excerpt a record from a SIARD-File. Copyright (C)
- * 2016-2021 Claire Roethlisberger (KOST-CECO)
+ * 2016-2022 Claire Roethlisberger (KOST-CECO)
  * -----------------------------------------------------------------------------------------------
  * SIARDexcerpt is a development of the KOST-CECO. All rights rest with the KOST-CECO. This
  * application is free software: you can redistribute it and/or modify it under the terms of the GNU
@@ -18,7 +18,10 @@ package ch.kostceco.tools.siardexcerpt.controller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.Reader;
 import java.util.Locale;
 import java.util.Map;
 
@@ -35,13 +38,14 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 
+import ch.kostceco.tools.kosttools.util.Util;
 import ch.kostceco.tools.siardexcerpt.logging.LogConfigurator;
-import ch.kostceco.tools.siardexcerpt.logging.Logger;
+import ch.kostceco.tools.siardexcerpt.logging.Logtxt;
 import ch.kostceco.tools.siardexcerpt.logging.MessageConstants;
 import ch.kostceco.tools.siardexcerpt.service.ConfigurationServiceExc;
 import ch.kostceco.tools.siardexcerpt.service.TextResourceServiceExc;
-import ch.kostceco.tools.kosttools.util.Util;
 
 /** Dies ist die Starter-Klasse, verantwortlich fuer das Initialisieren des Controllers, des
  * Loggings und das Parsen der Start-Parameter.
@@ -50,8 +54,6 @@ import ch.kostceco.tools.kosttools.util.Util;
 
 public class ControllerExcExcerpt implements MessageConstants
 {
-
-	private static final Logger			LOGGER	= new Logger( ControllerExcExcerpt.class );
 
 	private TextResourceServiceExc	textResourceServiceExc;
 	private ConfigurationServiceExc	configurationServiceExc;
@@ -185,7 +187,8 @@ public class ControllerExcExcerpt implements MessageConstants
 
 		System.out.println( "SIARDexcerpt: extract" );
 
-		Map<String, String> configMap = controllerExcExcerpt.getConfigurationServiceExc().configMap();
+		Map<String, String> configMap = controllerExcExcerpt.getConfigurationServiceExc()
+				.configMap( locale );
 
 		if ( pathToWorkDir.startsWith( "Configuration-Error:" ) ) {
 			System.out.println( pathToWorkDir );
@@ -293,9 +296,14 @@ public class ControllerExcExcerpt implements MessageConstants
 
 				try {
 
+					InputStream inputStreamConfig = new FileInputStream( xmlExtracted );
+					Reader readerConfig = new InputStreamReader( inputStreamConfig, "UTF-8" );
+					InputSource isConfig = new InputSource( readerConfig );
+					isConfig.setEncoding( "UTF-8" );
+
 					DocumentBuilderFactory dbfConfig = DocumentBuilderFactory.newInstance();
 					DocumentBuilder dbConfig = dbfConfig.newDocumentBuilder();
-					Document docConfig = dbConfig.parse( new FileInputStream( xmlExtracted ), "UTF8" );
+					Document docConfig = dbConfig.parse( isConfig );
 					docConfig.getDocumentElement().normalize();
 					dbfConfig.setFeature( "http://xml.org/sax/features/namespaces", false );
 
@@ -349,9 +357,9 @@ public class ControllerExcExcerpt implements MessageConstants
 					Util.oldnewstring( provEndXSL, controllerExcExcerpt.getTextResourceServiceExc()
 							.getText( locale, EXC_AUTO_XSL_FOOTER ), xslCopy );
 				} catch ( Exception e ) {
-					LOGGER.logError( "<Error>" + controllerExcExcerpt.getTextResourceServiceExc()
+					Logtxt.logtxt( outFile, "<Error>" + controllerExcExcerpt.getTextResourceServiceExc()
 							.getText( locale, EXC_ERROR_XML_UNKNOWN, e.getMessage() ) );
-					LOGGER.logError( controllerExcExcerpt.getTextResourceServiceExc().getText( locale,
+					Logtxt.logtxt( outFile, controllerExcExcerpt.getTextResourceServiceExc().getText( locale,
 							EXC_MESSAGE_XML_LOGEND ) );
 					System.out.println( "Exception: " + e.getMessage() );
 					return false;
@@ -373,14 +381,11 @@ public class ControllerExcExcerpt implements MessageConstants
 
 		try {
 
+			// Informationen zur Tabelle aus metadata.xml (UTF8) herausholen
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-			// dbf.setValidating(false);
 			DocumentBuilder db = dbf.newDocumentBuilder();
-
-			Document doc = db.parse( new FileInputStream( xmlExtracted ), "UTF8" );
-
+			Document doc = db.parse( new FileInputStream( xmlExtracted ) );
 			doc.getDocumentElement().normalize();
-
 			dbf.setFeature( "http://xml.org/sax/features/namespaces", false );
 
 			NodeList nlDbname = doc.getElementsByTagName( "dbname" );
@@ -409,29 +414,29 @@ public class ControllerExcExcerpt implements MessageConstants
 			keyexcerpt = primarykeyname + " = " + excerptString;
 
 		} catch ( Exception e ) {
-			LOGGER.logError( "<Error>" + controllerExcExcerpt.getTextResourceServiceExc().getText( locale,
-					EXC_ERROR_XML_UNKNOWN, e.getMessage() ) );
-			LOGGER.logError( controllerExcExcerpt.getTextResourceServiceExc().getText( locale,
+			Logtxt.logtxt( outFile, "<Error>" + controllerExcExcerpt.getTextResourceServiceExc()
+					.getText( locale, EXC_ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( outFile, controllerExcExcerpt.getTextResourceServiceExc().getText( locale,
 					EXC_MESSAGE_XML_LOGEND ) );
 			System.out.println( "Exception: " + e.getMessage() );
 			return false;
 		}
 
-		LOGGER.logError( controllerExcExcerpt.getTextResourceServiceExc().getText( locale,
+		Logtxt.logtxt( outFile, controllerExcExcerpt.getTextResourceServiceExc().getText( locale,
 				EXC_MESSAGE_XML_HEADER, xslCopy.getName() ) );
-		LOGGER.logError( controllerExcExcerpt.getTextResourceServiceExc().getText( locale,
+		Logtxt.logtxt( outFile, controllerExcExcerpt.getTextResourceServiceExc().getText( locale,
 				EXC_MESSAGE_XML_START, ausgabeStart ) );
-		LOGGER.logError( controllerExcExcerpt.getTextResourceServiceExc().getText( locale,
+		Logtxt.logtxt( outFile, controllerExcExcerpt.getTextResourceServiceExc().getText( locale,
 				EXC_MESSAGE_XML_TEXT, archive, "Archive" ) );
-		LOGGER.logError( controllerExcExcerpt.getTextResourceServiceExc().getText( locale,
+		Logtxt.logtxt( outFile, controllerExcExcerpt.getTextResourceServiceExc().getText( locale,
 				EXC_MESSAGE_XML_TEXT, dbname, "dbname" ) );
-		LOGGER.logError( controllerExcExcerpt.getTextResourceServiceExc().getText( locale,
+		Logtxt.logtxt( outFile, controllerExcExcerpt.getTextResourceServiceExc().getText( locale,
 				EXC_MESSAGE_XML_TEXT, dataOriginTimespan, "dataOriginTimespan" ) );
-		LOGGER.logError( controllerExcExcerpt.getTextResourceServiceExc().getText( locale,
+		Logtxt.logtxt( outFile, controllerExcExcerpt.getTextResourceServiceExc().getText( locale,
 				EXC_MESSAGE_XML_TEXT, dbdescription, "dbdescription" ) );
-		LOGGER.logError( controllerExcExcerpt.getTextResourceServiceExc().getText( locale,
+		Logtxt.logtxt( outFile, controllerExcExcerpt.getTextResourceServiceExc().getText( locale,
 				EXC_MESSAGE_XML_TEXT, keyexcerpt, "keyexcerpt" ) );
-		LOGGER.logError(
+		Logtxt.logtxt( outFile,
 				controllerExcExcerpt.getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_INFO ) );
 
 		/** c) extraktion: dies ist in einem eigenen Modul realisiert */
@@ -443,11 +448,11 @@ public class ControllerExcExcerpt implements MessageConstants
 		/** d) Ausgabe und exitcode */
 		if ( !okC ) {
 			// Record konnte nicht extrahiert werden
-			LOGGER.logError( controllerExcExcerpt.getTextResourceServiceExc().getText( locale,
+			Logtxt.logtxt( outFile, controllerExcExcerpt.getTextResourceServiceExc().getText( locale,
 					EXC_MESSAGE_XML_MODUL_C ) );
-			LOGGER.logError( controllerExcExcerpt.getTextResourceServiceExc().getText( locale,
+			Logtxt.logtxt( outFile, controllerExcExcerpt.getTextResourceServiceExc().getText( locale,
 					EXC_ERROR_XML_C_CANNOTEXTRACTRECORD ) );
-			LOGGER.logError( controllerExcExcerpt.getTextResourceServiceExc().getText( locale,
+			Logtxt.logtxt( outFile, controllerExcExcerpt.getTextResourceServiceExc().getText( locale,
 					EXC_MESSAGE_XML_LOGEND ) );
 			System.out.println( controllerExcExcerpt.getTextResourceServiceExc().getText( locale,
 					EXC_MESSAGE_C_EXCERPT_NOK, outFileName ) );
@@ -458,7 +463,7 @@ public class ControllerExcExcerpt implements MessageConstants
 			return false;
 		} else {
 			// Record konnte extrahiert werden
-			LOGGER.logError( controllerExcExcerpt.getTextResourceServiceExc().getText( locale,
+			Logtxt.logtxt( outFile, controllerExcExcerpt.getTextResourceServiceExc().getText( locale,
 					EXC_MESSAGE_XML_LOGEND ) );
 
 			// Die Konfiguration hereinkopieren

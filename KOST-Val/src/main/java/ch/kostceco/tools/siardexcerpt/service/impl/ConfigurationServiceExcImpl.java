@@ -1,6 +1,6 @@
 ﻿/* == SIARDexcerpt ==============================================================================
  * The SIARDexcerpt application is used for excerpt a record from a SIARD-File. Copyright (C)
- * 2016-2021 Claire Roethlisberger (KOST-CECO)
+ * 2016-2022 Claire Roethlisberger (KOST-CECO)
  * -----------------------------------------------------------------------------------------------
  * SIARDexcerpt is a development of the KOST-CECO. All rights rest with the KOST-CECO. This
  * application is free software: you can redistribute it and/or modify it under the terms of the GNU
@@ -21,6 +21,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -31,14 +32,12 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import ch.kostceco.tools.siardexcerpt.service.impl.ConfigurationServiceExcImpl;
-import ch.kostceco.tools.siardexcerpt.logging.Logger;
 import ch.kostceco.tools.siardexcerpt.service.ConfigurationServiceExc;
 import ch.kostceco.tools.siardexcerpt.service.TextResourceServiceExc;
 
 public class ConfigurationServiceExcImpl implements ConfigurationServiceExc
 {
 
-	private static final Logger			LOGGER		= new Logger( ConfigurationServiceExcImpl.class );
 	Map<String, String>							configMap	= null;
 	private TextResourceServiceExc	textResourceServiceExc;
 
@@ -52,7 +51,7 @@ public class ConfigurationServiceExcImpl implements ConfigurationServiceExc
 		this.textResourceServiceExc = textResourceServiceExc;
 	}
 
-	public Map<String, String> configMap()
+	public Map<String, String> configMap( Locale locale )
 	{
 		try {
 			File directoryOfConfigfile = new File( System.getenv( "USERPROFILE" ) + File.separator
@@ -273,23 +272,27 @@ public class ConfigurationServiceExcImpl implements ConfigurationServiceExc
 			return configMap;
 
 		} catch ( FileNotFoundException e ) {
-			LOGGER.logError( getTextResourceServiceExc().getText( EXC_MESSAGE_XML_MODUL_A )
-					+ getTextResourceServiceExc().getText( EXC_ERROR_XML_UNKNOWN, e ) );
+			System.out.println( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_A ) );
+			System.out.println(
+					getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN, e.getMessage() ) );
 			System.exit( 1 );
 		} catch ( ParserConfigurationException e ) {
 			String error = e.getMessage() + " (ParserConfigurationException)";
-			LOGGER.logError( getTextResourceServiceExc().getText( EXC_MESSAGE_XML_MODUL_A )
-					+ getTextResourceServiceExc().getText( EXC_ERROR_XML_UNKNOWN, error ) );
+			System.out.println( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_A ) );
+			System.out
+					.println( getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN, error ) );
 			System.exit( 1 );
 		} catch ( SAXException e ) {
 			String error = e.getMessage() + " (SAXException)";
-			LOGGER.logError( getTextResourceServiceExc().getText( EXC_MESSAGE_XML_MODUL_A )
-					+ getTextResourceServiceExc().getText( EXC_ERROR_XML_UNKNOWN, error ) );
+			System.out.println( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_A ) );
+			System.out
+					.println( getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN, error ) );
 			System.exit( 1 );
 		} catch ( IOException e ) {
 			String error = e.getMessage() + " (IOException)";
-			LOGGER.logError( getTextResourceServiceExc().getText( EXC_MESSAGE_XML_MODUL_A )
-					+ getTextResourceServiceExc().getText( EXC_ERROR_XML_UNKNOWN, error ) );
+			System.out.println( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_A ) );
+			System.out
+					.println( getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN, error ) );
 			System.exit( 1 );
 		}
 		return configMap;

@@ -1,6 +1,6 @@
 /* == SIARDexcerpt ==============================================================================
  * The SIARDexcerpt application is used for excerpt a record from a SIARD-File. Copyright (C)
- * 2016-2021 Claire Roethlisberger (KOST-CECO)
+ * 2016-2022 Claire Roethlisberger (KOST-CECO)
  * -----------------------------------------------------------------------------------------------
  * SIARDexcerpt is a development of the KOST-CECO. All rights rest with the KOST-CECO. This
  * application is free software: you can redistribute it and/or modify it under the terms of the GNU
@@ -17,12 +17,8 @@ package ch.kostceco.tools.siardexcerpt.logging;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.log4j.NDC;
 
-/** Logging Klasse. Saemtliche Log Aufrufe werden an Jakarta Commons Logging delegiert, welches
- * diese wiederum an Log4j delegiert.
- * 
- * @author Rc Claire Roethlisberger, KOST-CECO */
+/** @author Rc Claire Roethlisberger, KOST-CECO */
 public class Logger
 {
 
@@ -30,19 +26,18 @@ public class Logger
 	private Log log;
 
 	/** Instanzierung eines benannten Loggers. Der Name des Loggers entspricht dem Namen der
-	 * übergebenen Klasse. Sinn: Beim Einsatz der Apache Log4j API können über das Konfig File Package
-	 * oder Klassenfilter gesetzt werden.
+	 * uebergebenen Klasse.
 	 * 
 	 * @param clazz
 	 *          Class for which a log name will be derived. */
 	public Logger( Class<?> clazz )
 	{
 
-		// Log Instanz über Factory holen.
+		// Log Instanz ueber Factory holen.
 		this.log = LogFactory.getLog( clazz );
 	}
 
-	/** Logt einen Fehler der die Stabilität des Programms beeinflusst.
+	/** Logt einen Fehler der die Stabilitaet des Programms beeinflusst.
 	 * 
 	 * @param message
 	 *          Fehlermeldung. */
@@ -52,7 +47,7 @@ public class Logger
 
 	}
 
-	/** Logt einen Fehler der die Stabilität des Programms beeinflusst.
+	/** Logt einen Fehler der die Stabilitaet des Programms beeinflusst.
 	 * 
 	 * @param message
 	 *          Fehlermeldung.
@@ -83,7 +78,7 @@ public class Logger
 		this.log.error( message, t );
 	}
 
-	/** Logt einen Fehler, der behoben oder übergangen werden konnte.
+	/** Logt einen Fehler, der behoben oder uebergangen werden konnte.
 	 * 
 	 * @param message
 	 *          Meldung. */
@@ -92,7 +87,7 @@ public class Logger
 		this.log.warn( message );
 	}
 
-	/** Logt einen Fehler, der behoben oder übergangen werden konnte.
+	/** Logt einen Fehler, der behoben oder uebergangen werden konnte.
 	 * 
 	 * @param message
 	 *          Meldung.
@@ -101,46 +96,6 @@ public class Logger
 	public void logWarning( String message, Throwable t )
 	{
 		this.log.warn( message, t );
-	}
-
-	/** Logt eine Information zum Programmablauf.
-	 * 
-	 * @param message
-	 *          Meldung. */
-	public void logInfo( String message )
-	{
-		this.log.info( message );
-	}
-
-	/** Logt eine Information zum Programmablauf.
-	 * 
-	 * @param message
-	 *          Meldung.
-	 * @param t
-	 *          Ursache. */
-	public void logInfo( String message, Throwable t )
-	{
-		this.log.info( message, t );
-	}
-
-	/** Logt eine Information zum Nachvollziehen des Programmstatus.
-	 * 
-	 * @param message
-	 *          Meldung. */
-	public void logDebug( String message )
-	{
-		this.log.debug( message );
-	}
-
-	/** Logt eine Information zum Nachvollziehen des Programmstatus.
-	 * 
-	 * @param message
-	 *          Meldung.
-	 * @param t
-	 *          Ursache. */
-	public void logDebug( String message, Throwable t )
-	{
-		this.log.debug( message, t );
 	}
 
 	/** Ist Logging auf Level Fatal aktiv?
@@ -166,37 +121,4 @@ public class Logger
 	{
 		return this.log.isWarnEnabled();
 	}
-
-	/** Ist Logging auf Level Info aktiv?
-	 * 
-	 * @return true, falls aktiv, ansonsten false. */
-	public boolean isInfoEnabled()
-	{
-		return this.log.isInfoEnabled();
-	}
-
-	/** Ist Logging auf Level Debug aktiv?
-	 * 
-	 * @return true, falls aktiv, ansonsten false. */
-	public boolean isDebugEnabled()
-	{
-		return this.log.isDebugEnabled();
-	}
-
-	/** Setzen des aktuellen Debug - Contextes ( Log4J ).
-	 * 
-	 * @param theRemoteUser
-	 *          das aktuell angemeldete Benutzer */
-	public void setDebugContext( String theRemoteUser )
-	{
-		NDC.push( theRemoteUser );
-	}
-
-	/** Freigabe des aktuellen Debug - Contextes ( Log4J ). */
-	public void unsetDebugContext()
-	{
-		NDC.pop();
-		NDC.remove();
-	}
-
 }

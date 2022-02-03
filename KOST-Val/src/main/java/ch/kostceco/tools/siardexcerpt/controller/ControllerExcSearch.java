@@ -1,6 +1,6 @@
 /* == SIARDexcerpt ==============================================================================
  * The SIARDexcerpt v0.9.0 application is used for excerpt a record from a SIARD-File. Copyright (C)
- * 2016-2021 Claire Roethlisberger (KOST-CECO)
+ * 2016-2022 Claire Roethlisberger (KOST-CECO)
  * -----------------------------------------------------------------------------------------------
  * SIARDexcerpt is a development of the KOST-CECO. All rights rest with the KOST-CECO. This
  * application is free software: you can redistribute it and/or modify it under the terms of the GNU
@@ -15,15 +15,13 @@
 
 package ch.kostceco.tools.siardexcerpt.controller;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Scanner;
 
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -31,18 +29,14 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
-import ch.kostceco.tools.siardexcerpt.controller.Controllerexcerpt;
+import ch.kostceco.tools.kosttools.util.Util;
 import ch.kostceco.tools.siardexcerpt.logging.LogConfigurator;
-import ch.kostceco.tools.siardexcerpt.logging.Logger;
+import ch.kostceco.tools.siardexcerpt.logging.Logtxt;
 import ch.kostceco.tools.siardexcerpt.logging.MessageConstants;
 import ch.kostceco.tools.siardexcerpt.service.ConfigurationServiceExc;
 import ch.kostceco.tools.siardexcerpt.service.TextResourceServiceExc;
-import ch.kostceco.tools.kosttools.util.Util;
 
 /** Dies ist die Starter-Klasse, verantwortlich fuer das Initialisieren des Controllers, des
  * Loggings und das Parsen der Start-Parameter.
@@ -51,8 +45,6 @@ import ch.kostceco.tools.kosttools.util.Util;
 
 public class ControllerExcSearch implements MessageConstants
 {
-
-	private static final Logger			LOGGER	= new Logger( ControllerExcSearch.class );
 
 	private TextResourceServiceExc	textResourceServiceExc;
 	private ConfigurationServiceExc	configurationServiceExc;
@@ -196,7 +188,8 @@ public class ControllerExcSearch implements MessageConstants
 
 		System.out.println( "SIARDexcerpt: search" );
 
-		Map<String, String> configMap = controllerExcSearch.getConfigurationServiceExc().configMap();
+		Map<String, String> configMap = controllerExcSearch.getConfigurationServiceExc()
+				.configMap( locale );
 
 		if ( pathToWorkDir.startsWith( "Configuration-Error:" ) ) {
 			System.out.println( pathToWorkDir );
@@ -289,13 +282,13 @@ public class ControllerExcSearch implements MessageConstants
 			Util.copyFile( xslOrigS, xslCopyS );
 		}
 
-		LOGGER.logError( controllerExcSearch.getTextResourceServiceExc().getText( locale,
+		Logtxt.logtxt( outFileSearch, controllerExcSearch.getTextResourceServiceExc().getText( locale,
 				EXC_MESSAGE_XML_HEADER, xslCopyS.getName() ) );
-		LOGGER.logError( controllerExcSearch.getTextResourceServiceExc().getText( locale,
+		Logtxt.logtxt( outFileSearch, controllerExcSearch.getTextResourceServiceExc().getText( locale,
 				EXC_MESSAGE_XML_START, ausgabeStartS ) );
-		LOGGER.logError( controllerExcSearch.getTextResourceServiceExc().getText( locale,
+		Logtxt.logtxt( outFileSearch, controllerExcSearch.getTextResourceServiceExc().getText( locale,
 				EXC_MESSAGE_XML_TEXT, archiveS, "Archive" ) );
-		LOGGER.logError(
+		Logtxt.logtxt( outFileSearch,
 				controllerExcSearch.getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_INFO ) );
 
 		/** d) search: dies ist in einem eigenen Modul realisiert */
@@ -310,11 +303,11 @@ public class ControllerExcSearch implements MessageConstants
 		// System.out.println( " e) Ausgabe und exitcode " );
 		if ( !search ) {
 			// Suche konnte nicht erfolgen
-			LOGGER.logError( controllerExcSearch.getTextResourceServiceExc().getText( locale,
+			Logtxt.logtxt( outFileSearch, controllerExcSearch.getTextResourceServiceExc().getText( locale,
 					EXC_MESSAGE_XML_MODUL_B ) );
-			LOGGER.logError( controllerExcSearch.getTextResourceServiceExc().getText( locale,
+			Logtxt.logtxt( outFileSearch, controllerExcSearch.getTextResourceServiceExc().getText( locale,
 					EXC_ERROR_XML_B_CANNOTSEARCHRECORD ) );
-			LOGGER.logError( controllerExcSearch.getTextResourceServiceExc().getText( locale,
+			Logtxt.logtxt( outFileSearch, controllerExcSearch.getTextResourceServiceExc().getText( locale,
 					EXC_MESSAGE_XML_LOGEND ) );
 			System.out.println( controllerExcSearch.getTextResourceServiceExc().getText( locale,
 					EXC_MESSAGE_B_SEARCH_NOK ) );
@@ -339,45 +332,30 @@ public class ControllerExcSearch implements MessageConstants
 		} else {
 			// Suche konnte durchgefuehrt werden
 
-			LOGGER.logError( controllerExcSearch.getTextResourceServiceExc().getText( locale,
+			// Die Konfiguration hereinkopieren
+			Scanner scanner = new Scanner( configFileHard );
+			String contentAll = "";
+			String content = "";
+			contentAll = scanner.useDelimiter( "\\Z" ).next();
+			scanner.close();
+			content = contentAll;
+			/* im contentAll ist jetzt der Gesamtstring, dieser soll anschliessend nur noch aus
+			 * <configuration> .* </configuration> bestehen. alles vor <configuration> loeschen */
+
+			// <?xml version="1.0" encoding="UTF-8"?>
+			String deletString = "<\\?xml version=\"1\\.0\" encoding=\"UTF-8\"\\?>";
+			content = content.replaceAll( deletString, "" );
+			deletString = ".*<configuration>";
+			content = content.replaceAll( deletString, "<configuration>" );
+
+			Logtxt.logtxt( outFileSearch, controllerExcSearch.getTextResourceServiceExc().getText( locale,
+					EXC_MESSAGE_XML_ELEMENT_CONTENT, content ) );
+
+			Logtxt.logtxt( outFileSearch, controllerExcSearch.getTextResourceServiceExc().getText( locale,
 					EXC_MESSAGE_XML_LOGEND ) );
 
-			// Die Konfiguration hereinkopieren
-			try {
-				DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-				factory.setValidating( false );
-
-				factory.setExpandEntityReferences( false );
-
-				Document docConfig = factory.newDocumentBuilder().parse( configFileHard );
-				NodeList list = docConfig.getElementsByTagName( "configuration" );
-				Element element = (Element) list.item( 0 );
-
-				Document docLog = factory.newDocumentBuilder().parse( outFileSearch );
-
-				Node dup = docLog.importNode( element, true );
-
-				docLog.getDocumentElement().appendChild( dup );
-				FileWriter writer = new FileWriter( outFileSearch );
-
-				ByteArrayOutputStream baos = new ByteArrayOutputStream();
-				ElementToStream( docLog.getDocumentElement(), baos );
-				String stringDoc2 = new String( baos.toByteArray() );
-				writer.write( stringDoc2 );
-				writer.close();
-
-				// Der Header wird dabei leider verschossen, wieder zurueck aendern
-				String newstring = controllerExcSearch.getTextResourceServiceExc().getText( locale,
-						EXC_MESSAGE_XML_HEADER, xslCopyS.getName() );
-				String oldstring = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><table>";
-				Util.oldnewstring( oldstring, newstring, outFileSearch );
-
-			} catch ( Exception e ) {
-				LOGGER.logError( "<Error>" + controllerExcSearch.getTextResourceServiceExc()
-						.getText( locale, EXC_ERROR_XML_UNKNOWN, e.getMessage() ) );
-				System.out.println( "Exception: " + e.getMessage() );
-				return false;
-			}
+			contentAll = "";
+			content = "";
 
 			// Loeschen des Arbeitsverzeichnisses und configFileHard erfolgt erst bei schritt 4 finish
 

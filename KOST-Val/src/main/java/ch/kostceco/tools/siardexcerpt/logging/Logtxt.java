@@ -17,46 +17,58 @@ package ch.kostceco.tools.siardexcerpt.logging;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 
-import ch.kostceco.tools.siardexcerpt.service.TextResourceServiceExc;
-
-public class LogConfigurator implements MessageConstants
+/** Logging Klasse.
+ * 
+ * @author Rc Claire Roethlisberger, KOST-CECO */
+public class Logtxt
 {
 
-	private TextResourceServiceExc textResourceServiceExc;
-
-	public TextResourceServiceExc getTextResourceServiceExc()
+	public static void logtxt( File logFile, String txt )
 	{
-		return textResourceServiceExc;
-	}
-
-	public void setTextResourceServiceExc( TextResourceServiceExc textResourceServiceExc )
-	{
-		this.textResourceServiceExc = textResourceServiceExc;
-	}
-
-	public String configure( String directoryOfLogfile, String nameOfLogfile )
-	{
-
-		String logFileName = directoryOfLogfile + File.separator + nameOfLogfile;
-		File logFile = new File( logFileName );
-
-		// MessageOnlyLayout layout = new MessageOnlyLayout();
-
 		try {
+			if ( !logFile.exists() ) {
+				logFile.getParentFile().mkdirs();
+				logFile.createNewFile();
+			}
+			
 
 			PrintWriter out = new PrintWriter( new BufferedWriter( new FileWriter( logFile, true ) ) );
+			/* kann nicht direkt ausgegeben werden, es ist UTF-8
+			 * 
+			out.println( txt );*/
+			 byte[] byteTxt = txt.getBytes( StandardCharsets.UTF_8 );
+			 String txtByte = new String( byteTxt );
+				out.println( txtByte );
+			 
 			out.close();
-
 		} catch ( IOException e ) {
-			Logtxt.logtxt( logFile,
-					getTextResourceServiceExc().getText( EXC_ERROR_IOE, e + " (LogConfig)" ) );
+			 System.out.println( "Logtxt: " + e );
 		}
+	
+		// oeffnet das UTF-8 logFile, welches nicht ueberschrieben wird (=true)
+/*		try (FileOutputStream fos = new FileOutputStream( logFile, true );
+				OutputStreamWriter osw = new OutputStreamWriter( fos, StandardCharsets.UTF_8 );
+				BufferedWriter writer = new BufferedWriter( osw )) {
+			// txt ist standard UTF-16
+			 byte[] byteTxt = txt.getBytes();
+			// byte[] byteTxt = txt.getBytes( StandardCharsets.UTF_8 );
+			String txtByte = new String( byteTxt );
+			// fuegt den utf8 txt hinten an und erstellt eine neue Zeile
+			writer.append( txt );
+			writer.newLine();
+			writer.append( txtByte );
+			writer.newLine();
+		} catch ( IOException e ) {
+			e.printStackTrace();
+		}*/
 
-		return logFileName;
 	}
 
 }
