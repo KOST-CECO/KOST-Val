@@ -2,15 +2,15 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<xs:include schemaLocation="base.xsd"/>
 	<xs:simpleType name="vorgangstyp">
-		<xs:restriction base="text1"/>
+		<xs:restriction base="text1m"/>
 	</xs:simpleType>
 	<xs:simpleType name="beschreibung">
-		<xs:restriction base="text4"/>
+		<xs:restriction base="text4m"/>
 	</xs:simpleType>
 	<xs:simpleType name="bearbeiter">
-		<xs:restriction base="text2"/>
+		<xs:restriction base="text2m"/>
 	</xs:simpleType>
 	<xs:simpleType name="referenzUebernahmedossier">
-		<xs:restriction base="text1"/>
+		<xs:restriction base="text1m"/>
 	</xs:simpleType>
 </xs:schema>

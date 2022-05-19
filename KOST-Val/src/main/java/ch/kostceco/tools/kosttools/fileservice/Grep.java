@@ -22,48 +22,49 @@ import ch.kostceco.tools.kosttools.runtime.Cmd;
 
 /** @author Rc Claire Roethlisberger, KOST-CECO */
 
-public class Sed
+public class Grep
 {
-	private static String	exeDir				= "resources" + File.separator + "sed";
-	private static String	sedExe				= exeDir + File.separator + "sed.exe";
-	private static String	msys20dll			= exeDir + File.separator + "msys-2.0.dll";
-	private static String	msysgccs1dll	= exeDir + File.separator + "msys-gcc_s-1.dll";
-	private static String	msysiconv2dll	= exeDir + File.separator + "msys-iconv-2.dll";
-	private static String	msysintl8dll	= exeDir + File.separator + "msys-intl-8.dll";
+	private static String	exeDir		= "resources" + File.separator + "grep";
+	private static String	grepExe		= exeDir + File.separator + "grep.exe";
+	private static String	msys10dll	= exeDir + File.separator + "msys-1.0.dll";
 
-	/** fuehrt eine Veraenderung mit sed via cmd durch und speichert das Ergebnis in ein File
-	 * (output). Gibt zurueck ob Outpur existiert oder nicht
+	/** fuehrt eine Suche mit Grep via cmd durch und speichert das Ergebnis in ein File (Output). Gibt
+	 * zurueck ob Output existiert oder nicht
 	 * 
-	 * @param options
-	 *          Option wie sed angesprochen werden soll
-	 * @param fileToSed
-	 *          Datei, welche veraendert werden soll
+	 * @param insensitiveOption
+	 *          Option betreffend Gross- und Kleinschreibung
+	 * @param searchString
+	 *          gesuchter Text
+	 * @param fileToGrep
+	 *          Datei in welcher gesucht werden soll
 	 * @param output
-	 *          Datei fuer den output
+	 *          Ausgabe des Resultates
 	 * @param workDir
 	 *          Temporaeres Verzeichnis
 	 * @param dirOfJarPath
 	 *          String mit dem Pfad von wo das Programm gestartet wurde
 	 * @return String ob Report existiert oder nicht ggf Exception */
-	public static String execSed( String options, File fileToSed, File output, File workDir,
-			String dirOfJarPath ) throws InterruptedException
+	public static String execGrep( String insensitiveOption, String searchString, File fileToGrep,
+			File output, File workDir, String dirOfJarPath ) throws InterruptedException
 	{
 		boolean out = true;
-		File fsedExe = new File( dirOfJarPath + File.separator + sedExe );
+		File fgrepExe = new File( dirOfJarPath + File.separator + grepExe );
 		// falls das File von einem vorhergehenden Durchlauf bereits existiert, loeschen wir es
 		if ( output.exists() ) {
 			output.delete();
 		}
 
-		// Sed-Befehl: pathToSedExe options fileToSed > output
-		String command = "\"\"" + fsedExe.getAbsolutePath() + "\" " + options + " \""
-				+ fileToSed.getAbsolutePath() + "\" > \"" + output.getAbsolutePath() + "\"\"";
+		// grep -E "REGEX-Suchbegriff" table13.xml >> output.txt
+		String command = "\"\"" + fgrepExe.getAbsolutePath() + "\" -E" + insensitiveOption + " \""
+				+ searchString + "\" \"" + fileToGrep.getAbsolutePath() + "\" >> \""
+				+ output.getAbsolutePath() + "\"\"";
 
 		// System.out.println( "command: " + command );
 
 		String resultExec = Cmd.execToString( command, out, workDir );
+		// System.out.println( "resultExec: " + resultExec );
 
-		// Sed gibt keine Info raus, die replaced oder ignoriert werden muss
+		// Grep gibt keine Info raus, die replaced oder ignoriert werden muss
 
 		if ( resultExec.equals( "OK" ) ) {
 			if ( output.exists() ) {
@@ -82,65 +83,32 @@ public class Sed
 	 * @param dirOfJarPath
 	 *          String mit dem Pfad von wo das Programm gestartet wurde
 	 * @return String mit Kontrollergebnis */
-	public static String checkSed( String dirOfJarPath )
+	public static String checkGrep( String dirOfJarPath )
 	{
 		String result = "";
 		boolean checkFiles = true;
 		// Pfad zum Programm existiert die Dateien?
 
-		File fsedExe = new File( dirOfJarPath + File.separator + sedExe );
-		File fmsys20dll = new File( dirOfJarPath + File.separator + msys20dll );
-		File fmsysgccs1dll = new File( dirOfJarPath + File.separator + msysgccs1dll );
-		File fmsysiconv2dll = new File( dirOfJarPath + File.separator + msysiconv2dll );
-		File fmsysintl8dll = new File( dirOfJarPath + File.separator + msysintl8dll );
+		File fgrepExe = new File( dirOfJarPath + File.separator + grepExe );
+		File fmsys10dll = new File( dirOfJarPath + File.separator + msys10dll );
 
-		if ( !fsedExe.exists() ) {
+		if ( !fgrepExe.exists() ) {
 			if ( checkFiles ) {
 				// erste fehlende Datei
-				result = " " + exeDir + ": " + sedExe;
+				result = " " + exeDir + ": " + grepExe;
 				checkFiles = false;
 			} else {
-				result = result + ", " + sedExe;
+				result = result + ", " + grepExe;
 				checkFiles = false;
 			}
 		}
-		if ( !fmsys20dll.exists() ) {
+		if ( !fmsys10dll.exists() ) {
 			if ( checkFiles ) {
 				// erste fehlende Datei
-				result = " " + exeDir + ": " + msys20dll;
+				result = " " + exeDir + ": " + msys10dll;
 				checkFiles = false;
 			} else {
-				result = result + ", " + msys20dll;
-				checkFiles = false;
-			}
-		}
-		if ( !fmsysgccs1dll.exists() ) {
-			if ( checkFiles ) {
-				// erste fehlende Datei
-				result = " " + exeDir + ": " + msysgccs1dll;
-				checkFiles = false;
-			} else {
-				result = result + ", " + msysgccs1dll;
-				checkFiles = false;
-			}
-		}
-		if ( !fmsysiconv2dll.exists() ) {
-			if ( checkFiles ) {
-				// erste fehlende Datei
-				result = " " + exeDir + ": " + msysiconv2dll;
-				checkFiles = false;
-			} else {
-				result = result + ", " + msysiconv2dll;
-				checkFiles = false;
-			}
-		}
-		if ( !fmsysintl8dll.exists() ) {
-			if ( checkFiles ) {
-				// erste fehlende Datei
-				result = " " + exeDir + ": " + msysintl8dll;
-				checkFiles = false;
-			} else {
-				result = result + ", " + msysintl8dll;
+				result = result + ", " + msys10dll;
 				checkFiles = false;
 			}
 		}

@@ -7,7 +7,7 @@
 		<xs:annotation>
 			<xs:documentation>Klassifizierung des Vorgangs.</xs:documentation>
 		</xs:annotation>
-		<xs:restriction base="text1">
+		<xs:restriction base="text1m">
 		</xs:restriction>
 	</xs:simpleType>
 
@@ -16,7 +16,7 @@
 			<xs:documentation>Nachweis und Resultat der durchgeführten Tätigkeit.
 			</xs:documentation>
 		</xs:annotation>
-		<xs:restriction base="text4" />
+		<xs:restriction base="text4m" />
 	</xs:simpleType>
 
 	<xs:simpleType name="bearbeiter">
@@ -24,7 +24,7 @@
 			<xs:documentation>Name der Person, die den archivischen Vorgang
 				durchgeführt hat.</xs:documentation>
 		</xs:annotation>
-		<xs:restriction base="text2" />
+		<xs:restriction base="text2m" />
 	</xs:simpleType>
 
 	<xs:simpleType name="referenzUebernahmedossier">

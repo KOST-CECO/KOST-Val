@@ -2,7 +2,7 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<xs:include schemaLocation="base.xsd"/>
 	<xs:simpleType name="nameDatei">
-		<xs:restriction base="text2"/>
+		<xs:restriction base="text2m"/>
 	</xs:simpleType>
 	<xs:simpleType name="originalName">
 		<xs:restriction base="text4"/>
@@ -31,7 +31,7 @@
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:simpleType name="pruefsumme">
-		<xs:restriction base="text3"/>
+		<xs:restriction base="text3m"/>
 	</xs:simpleType>
 	<xs:simpleType name="eigenschaft">
 		<xs:restriction base="text4"/>

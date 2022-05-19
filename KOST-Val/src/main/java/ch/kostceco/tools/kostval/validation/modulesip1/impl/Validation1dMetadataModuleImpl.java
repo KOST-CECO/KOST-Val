@@ -31,8 +31,12 @@ import java.util.Scanner;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathFactory;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import ch.kostceco.tools.kosttools.fileservice.Xmllint;
 import ch.kostceco.tools.kosttools.util.Util;
@@ -268,17 +272,26 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 
 							Logtxt.logtxt( logFile,
 									getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
-											+ getTextResourceService().getText( locale, MESSAGE_XML_H_INVALID_XML,
+											+ getTextResourceService().getText( locale, ERROR_XML_AD_INVALID_XML,
 													tableXmlShortString, tableXsdShortString ) );
 
 							Logtxt.logtxt( logFile,
 									getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
-											+ getTextResourceService().getText( locale, MESSAGE_XML_H_INVALID_ERROR,
+											+ getTextResourceService().getText( locale, ERROR_XML_AD_INVALID_ERROR,
 													resultExecSS ) );
 						} else {
 							// System.out.println("Validierung SS bestanden");
 
 							// XML-SIP gegen XSD-Intern
+							/* Bei den Internen XSD wurde die Mindestlaenge bei den obligatorischen Feldern bei
+							 * text 1-4 auf 1 gesetzt. Ansonsten wird ein muss-Feld nicht bemaengelt, wenn es
+							 * existiert aber leer ist.
+							 * 
+							 * TODO: bei den neueren xsd (base.xsd)
+							 * 
+							 * - ERROR: Schemas validity error : Element
+							 * '{http://bar.admin.ch/arelda/v4}aktenbildnerName': [facet 'minLength'] The value
+							 * has a length of '0'; this underruns the allowed minimum length of '1'. */
 							String resultExecSI = Xmllint.execXmllint( xmlToValidate, xsdIntern, workDir,
 									dirOfJarPath );
 							if ( !resultExecSI.equals( "OK" ) ) {
@@ -290,15 +303,25 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 								// val.message.xml.h.invalid.xml = <Message>{0} ist invalid zu
 								// {1}</Message></Error>
 								// val.message.xml.h.invalid.error = <Message>{0}</Message></Error>
+								
+								/*- ERROR: Schemas validity error : Element '{http://bar.admin.ch/arelda/v4}aktenbildnerName': [facet 'minLength'] The value has a length of '0'; this underruns the allowed minimum length of '1'.
+								 * 
+								 * umschreiben nach
+								 * 
+								 * - ERROR: Schemas validity error : Element '{http://bar.admin.ch/arelda/v4}aktenbildnerName': It does not contain a value; The element is empty.
+								 */
+								String oldstring=" [facet 'minLength'] The value has a length of '0'; this underruns the allowed minimum length of '1'.";
+								String newstring=" It does not contain a value; The element is empty.";
+								resultExecSI = resultExecSI.replace( oldstring, newstring );
 
 								Logtxt.logtxt( logFile,
 										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
-												+ getTextResourceService().getText( locale, MESSAGE_XML_H_INVALID_XML,
+												+ getTextResourceService().getText( locale, ERROR_XML_AD_INVALID_XML,
 														tableXmlShortString, tableXsdShortString ) );
 
 								Logtxt.logtxt( logFile,
 										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
-												+ getTextResourceService().getText( locale, MESSAGE_XML_H_INVALID_ERROR,
+												+ getTextResourceService().getText( locale, ERROR_XML_AD_INVALID_ERROR,
 														resultExecSI ) );
 							} else {
 								// System.out.println("Validierung SI bestanden");
@@ -316,11 +339,11 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 									// val.message.xml.h.invalid.error = <Message>{0}</Message></Error>
 									Logtxt.logtxt( logFile,
 											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
-													+ getTextResourceService().getText( locale, MESSAGE_XML_H_INVALID_XML,
+													+ getTextResourceService().getText( locale, ERROR_XML_AD_INVALID_XML,
 															tableXmlShortString, tableXsdShortString ) );
 									Logtxt.logtxt( logFile,
 											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
-													+ getTextResourceService().getText( locale, MESSAGE_XML_H_INVALID_ERROR,
+													+ getTextResourceService().getText( locale, ERROR_XML_AD_INVALID_ERROR,
 															resultExecIS ) );
 								} else {
 									// System.out.println("Validierung bestanden");
@@ -337,8 +360,102 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 					}
 				}
 			}
-		} catch ( Exception e ) {
 
+			if ( result ) {
+				// System.out.println("Kontrolle ob OSP in OS vorhanden ist");
+				XPath xpath = XPathFactory.newInstance().newXPath();
+				Element elementOS, elementOSP, elementOSPm = null;
+
+				elementOS = (Element) xpath.evaluate( "/*/*/ordnungssystem", doc, XPathConstants.NODE );
+
+				elementOSP = (Element) xpath.evaluate( "/*/*/*/ordnungssystemposition", doc,
+						XPathConstants.NODE );
+
+				elementOSPm = (Element) xpath.evaluate( "/*/*/*/*/ordnungssystemposition", doc,
+						XPathConstants.NODE );
+
+				/* OSP kann direkt bei FILES in OS angezogen werden oder via Mappe. OSP muss aber immer
+				 * mindestens einmal in OS vorhanden sein. Kann nicht mit xsd kontrolliert werden */
+				if ( elementOS != null ) {
+
+					// System.out.println("Das elementOS existiert und entsprechend muss auch OSP
+					// existieren");
+					if ( elementOSP == null && elementOSPm == null ) {
+						// System.out.println("Kein OSP > Validierung fehlgeschlagen");
+						result = false;
+
+						Logtxt.logtxt( logFile,
+								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
+										+ getTextResourceService().getText( locale, ERROR_XML_AD_NOOSP ) );
+					}
+				}
+			}
+
+			// unstrukturierterAnhang ist veraltet und soll nicht mehr verwendet werden
+			// System.out.println( "Kontrolle ob unstrukturierterAnhang vorhanden ist" );
+			XPath xpathUA = XPathFactory.newInstance().newXPath();
+
+			Element elementUA = null;
+			String uaPath = "/*/*/unstrukturierterAnhang";
+			elementUA = (Element) xpathUA.evaluate( uaPath, doc, XPathConstants.NODE );
+			if ( elementUA != null ) {
+				// System.out.println( "existiert und entsprechend Fehler ausgeben" );
+				result = false;
+				Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
+						+ getTextResourceService().getText( locale, ERROR_XML_AD_UADEP ) );
+			}
+
+			/* Warnung ausgeben wenn Archivischer Vorgang und oder Archivische Notiz enthalten ist. Die
+			 * Anzahl der archivischen Notizen sowie Archivischer Vorgang in einem SIP einer abliefernden
+			 * Stelle vor dem Transfer sollte immer 0 betragen. */
+
+			// System.out.println( "Kontrolle ob Archivischer Vorgang vorhanden ist" );
+			XPath xpathAV = XPathFactory.newInstance().newXPath();
+
+			Element elementAV = null;
+			String avPath = "/paket/archivischerVorgang";
+			elementAV = (Element) xpathAV.evaluate( avPath, doc, XPathConstants.NODE );
+			if ( elementAV != null ) {
+				// System.out.println( "existiert und entsprechend Warnung ausgeben" );
+				Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
+						+ getTextResourceService().getText( locale, ERROR_XML_AD_AVAN_WARNING, avPath ) );
+			}
+
+			String anPath = "archivischeNotiz";
+
+			Element elementAN1, elementAN2, elementAN3, elementAN4, elementAN5, elementAN6, elementAN7,
+					elementAN8, elementAN9, elementAN10, elementAN11 = null;
+			String an1Path = "/*/archivischeNotiz";
+			elementAN1 = (Element) xpathAV.evaluate( an1Path, doc, XPathConstants.NODE );
+			String an2Path = "/*/*/archivischeNotiz";
+			elementAN2 = (Element) xpathAV.evaluate( an2Path, doc, XPathConstants.NODE );
+			String an3Path = "/*/*/*/archivischeNotiz";
+			elementAN3 = (Element) xpathAV.evaluate( an3Path, doc, XPathConstants.NODE );
+			String an4Path = "*/*/*/*/archivischeNotiz";
+			elementAN4 = (Element) xpathAV.evaluate( an4Path, doc, XPathConstants.NODE );
+			String an5Path = "*/*/*/*/*/archivischeNotiz";
+			elementAN5 = (Element) xpathAV.evaluate( an5Path, doc, XPathConstants.NODE );
+			String an6Path = "*/*/*/*/*/*/archivischeNotiz";
+			elementAN6 = (Element) xpathAV.evaluate( an6Path, doc, XPathConstants.NODE );
+			String an7Path = "*/*/*/*/*/*/*/archivischeNotiz";
+			elementAN7 = (Element) xpathAV.evaluate( an7Path, doc, XPathConstants.NODE );
+			String an8Path = "*/*/*/*/*/*/*/*/archivischeNotiz";
+			elementAN8 = (Element) xpathAV.evaluate( an8Path, doc, XPathConstants.NODE );
+			String an9Path = "*/*/*/*/*/*/*/*/*/archivischeNotiz";
+			elementAN9 = (Element) xpathAV.evaluate( an9Path, doc, XPathConstants.NODE );
+			String an10Path = "*/*/*/*/*/*/*/*/*/*/archivischeNotiz";
+			elementAN10 = (Element) xpathAV.evaluate( an10Path, doc, XPathConstants.NODE );
+			String an11Path = "*/*/*/*/*/*/*/*/*/*/*/archivischeNotiz";
+			elementAN11 = (Element) xpathAV.evaluate( an11Path, doc, XPathConstants.NODE );
+			if ( elementAN1 != null || elementAN2 != null || elementAN3 != null || elementAN4 != null
+					|| elementAN5 != null || elementAN6 != null || elementAN7 != null || elementAN8 != null
+					|| elementAN9 != null || elementAN10 != null || elementAN11 != null ) {
+				// System.out.println( "existiert und entsprechend Warnung ausgeben" );
+				Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
+						+ getTextResourceService().getText( locale, ERROR_XML_AD_AVAN_WARNING, anPath ) );
+			}
+
+		} catch ( Exception e ) {
 			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
 					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;

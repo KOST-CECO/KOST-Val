@@ -11,7 +11,7 @@
       <xs:documentation xml:lang="fr">Brève description de l'objet traité dans le document.</xs:documentation>
       <xs:documentation xml:lang="it"/>
     </xs:annotation>
-    <xs:restriction base="text4"/>
+    <xs:restriction base="text4m"/>
   </xs:simpleType>
 
   <xs:simpleType name="idDokument">

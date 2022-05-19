@@ -4,8 +4,14 @@
 	<xs:simpleType name="nummer">
 		<xs:restriction base="text1"/>
 	</xs:simpleType>
+	<xs:simpleType name="nummerM">
+		<xs:restriction base="text1m"/>
+	</xs:simpleType>
 	<xs:simpleType name="titelOrdnungssystemposition">
 		<xs:restriction base="text2"/>
+	</xs:simpleType>
+	<xs:simpleType name="titelOrdnungssystempositionM">
+		<xs:restriction base="text2m"/>
 	</xs:simpleType>
 	<xs:simpleType name="idOrdnungssystemposition">
 		<xs:restriction base="xs:ID"/>

@@ -4,11 +4,14 @@
 	<xs:simpleType name="aktenzeichen">
 		<xs:restriction base="text2"/>
 	</xs:simpleType>
+	<xs:simpleType name="aktenzeichenM">
+		<xs:restriction base="text2m"/>
+	</xs:simpleType>
 	<xs:simpleType name="zusatzmerkmal">
 		<xs:restriction base="text2"/>
 	</xs:simpleType>
 	<xs:simpleType name="titelDossier">
-		<xs:restriction base="text4"/>
+		<xs:restriction base="text4m"/>
 	</xs:simpleType>
 	<xs:simpleType name="inhalt">
 		<xs:restriction base="text4"/>
@@ -70,7 +73,7 @@
 		<xs:restriction base="text4"/>
 	</xs:simpleType>
 	<xs:simpleType name="titelVorgang">
-		<xs:restriction base="text3"/>
+		<xs:restriction base="text3m"/>
 	</xs:simpleType>
 	<xs:simpleType name="arbeitsanweisungVorgang">
 		<xs:restriction base="text4"/>
@@ -85,7 +88,7 @@
 		<xs:restriction base="text4"/>
 	</xs:simpleType>
 	<xs:simpleType name="vorschreibungAktivitaet">
-		<xs:restriction base="text3"/>
+		<xs:restriction base="text3m"/>
 	</xs:simpleType>
 	<xs:simpleType name="anweisungAktivitaet">
 		<xs:restriction base="text4"/>
@@ -103,7 +106,7 @@
 		<xs:restriction base="text4"/>
 	</xs:simpleType>
 	<xs:simpleType name="titelMappe">
-		<xs:restriction base="text4"/>
+		<xs:restriction base="text4m"/>
 	</xs:simpleType>
 	<xs:simpleType name="idMappe">
 		<xs:restriction base="xs:ID">

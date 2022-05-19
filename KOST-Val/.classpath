@@ -2,7 +2,11 @@
 <classpath>
 	<classpathentry excluding="ch/kostceco/tools/kostval/validation/moduletiff2/impl/ch/kostceco/tools/kostval/validation/moduletiff2/impl/" kind="src" path="src/main/java"/>
 	<classpathentry kind="src" path="src/main/resources"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="con" path="org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JavaFX14"/>
 	<classpathentry kind="lib" path="lib/zip64file-1.0.jar" sourcepath="external-sources/Zip64File-sources.jar"/>
@@ -12,15 +16,6 @@
 	<classpathentry kind="lib" path="lib/commons-logging-1.2.jar" sourcepath="external-sources/commons-logging-1.1.1-sources.jar"/>
 	<classpathentry kind="lib" path="lib/commons-io-2.6.jar" sourcepath="external-sources/commons-io-2.6-sources.jar"/>
 	<classpathentry kind="lib" path="lib/junit-4.12.jar" sourcepath="external-sources/junit-4.4-sources.jar"/>
-	<classpathentry kind="lib" path="lib/spring-beans-5.0.8.RELEASE.jar" sourcepath="external-sources/spring-beans-5.0.8.RELEASE-sources.jar"/>
-	<classpathentry kind="lib" path="lib/spring-context-5.0.8.RELEASE.jar" sourcepath="external-sources/spring-context-5.0.8.RELEASE-sources.jar"/>
-	<classpathentry kind="lib" path="lib/spring-core-5.0.8.RELEASE.jar" sourcepath="external-sources/spring-core-5.0.8.RELEASE-sources.jar"/>
-	<classpathentry kind="lib" path="lib/spring-expression-5.0.8.RELEASE.jar" sourcepath="external-sources/spring-expression-5.0.8.RELEASE-sources.jar"/>
-	<classpathentry kind="lib" path="lib/spring-aop-5.0.8.RELEASE.jar" sourcepath="external-sources/spring-aop-5.0.8.RELEASE-sources.jar"/>
-	<classpathentry kind="lib" path="lib/spring-jdbc-5.0.8.RELEASE.jar" sourcepath="external-sources/spring-jdbc-5.0.8.RELEASE-sources.jar"/>
-	<classpathentry kind="lib" path="lib/spring-orm-5.0.8.RELEASE.jar" sourcepath="external-sources/spring-orm-5.0.8.RELEASE-sources.jar"/>
-	<classpathentry kind="lib" path="lib/spring-tx-5.0.8.RELEASE.jar" sourcepath="external-sources/spring-tx-5.0.8.RELEASE-sources.jar"/>
-	<classpathentry kind="lib" path="lib/spring-test-5.0.8.RELEASE.jar" sourcepath="external-sources/spring-test-5.0.8.RELEASE-sources.jar"/>
 	<classpathentry kind="lib" path="lib/droid-core-5.0.3.jar"/>
 	<classpathentry kind="lib" path="lib/droid-export-5.0.3.jar"/>
 	<classpathentry kind="lib" path="lib/droid-export-interfaces-5.0.3.jar"/>
@@ -34,5 +29,15 @@
 	<classpathentry kind="lib" path="lib/VALA-6.17.2.4.RELEASE.jar"/>
 	<classpathentry kind="lib" path="lib/jhove-apps-1.24.1.jar"/>
 	<classpathentry kind="lib" path="lib/tiff-hul-1.9.2.jar"/>
+	<classpathentry kind="lib" path="lib/spring-aop-5.3.19.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring-beans-5.3.19.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring-context-5.3.19.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring-core-5.3.19.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring-expression-5.3.19.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring-jcl-5.3.19.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring-jdbc-5.3.19.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring-orm-5.3.19.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring-test-5.3.19.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring-tx-5.3.19.RELEASE.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

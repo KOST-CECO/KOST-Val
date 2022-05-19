@@ -153,7 +153,7 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 		if ( !matchFound ) {
 
 			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ac_SIP )
-					+ getTextResourceService().getText( locale, MESSAGE_XML_AC_INVALIDFILENAME ) );
+					+ getTextResourceService().getText( locale, MESSAGE_XML_AC_INVALIDFILENAME, patternStr ) );
 			sipIo = false;
 		}
 

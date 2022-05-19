@@ -71,6 +71,10 @@ public class Validation2dGeverFileIntegrityModuleImpl extends ValidationModuleIm
 		}
 		Map<String, String> dateiRefContent = new HashMap<String, String>();
 		Map<String, String> dateiRefOrdnungssystem = new HashMap<String, String>();
+		Map<String, String> dateiRef = new HashMap<String, String>();
+		Map<String, String> dokRef = new HashMap<String, String>();
+		Map<String, String> dosRef = new HashMap<String, String>();
+		Map<String, String> mapRef = new HashMap<String, String>();
 
 		boolean valid = true;
 
@@ -86,6 +90,7 @@ public class Validation2dGeverFileIntegrityModuleImpl extends ValidationModuleIm
 			XPath xpath = XPathFactory.newInstance().newXPath();
 
 			NodeList nodeLst = doc.getElementsByTagName( "dateiRef" );
+			NodeList nodeLstDateiRef = nodeLst;
 
 			for ( int s = 0; s < nodeLst.getLength(); s++ ) {
 				Node fstNode = nodeLst.item( s );
@@ -97,6 +102,7 @@ public class Validation2dGeverFileIntegrityModuleImpl extends ValidationModuleIm
 
 				Node titelNode = titelList.item( 0 );
 				dateiRefOrdnungssystem.put( fstNode.getTextContent(), titelNode.getTextContent() );
+				dateiRef.put( fstNode.getTextContent(), titelNode.getTextContent() );
 				if ( showOnWork ) {
 					if ( onWork == 410 ) {
 						onWork = 2;
@@ -145,6 +151,8 @@ public class Validation2dGeverFileIntegrityModuleImpl extends ValidationModuleIm
 
 						dateiRefContent.put( id.getNodeValue(),
 								"content/" + contentName.getTextContent() + "/" + titelNode.getTextContent() );
+						dateiRef.put( id.getNodeValue(),
+								"content/" + contentName.getTextContent() + "/" + titelNode.getTextContent() );
 					}
 				}
 				if ( showOnWork ) {
@@ -177,8 +185,9 @@ public class Validation2dGeverFileIntegrityModuleImpl extends ValidationModuleIm
 				String deleted = dateiRefOrdnungssystem.remove( keyContent );
 				if ( deleted == null ) {
 					if ( !titlePrinted ) {
-						
-								Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bd_SIP )
+
+						Logtxt.logtxt( logFile,
+								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bd_SIP )
 										+ getTextResourceService().getText( locale, MESSAGE_XML_BD_MISSINGINABLIEFERUNG,
 												keyContent ) );
 						titlePrinted = true;
@@ -213,10 +222,11 @@ public class Validation2dGeverFileIntegrityModuleImpl extends ValidationModuleIm
 				String keyOrd = iterator.next();
 				/* Die folgende DateiRef vorhanden in metadata/paket/ablieferung/ordnungssystem, aber nicht
 				 * in metadata/paket/inhaltsverzeichnis/content */
-				
-						Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bd_SIP )
-								+ getTextResourceService().getText( locale, MESSAGE_XML_BD_MISSINGINABLIEFERUNG,
-										keyOrd ) );
+
+				Logtxt.logtxt( logFile,
+						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bd_SIP )
+								+ getTextResourceService().getText( locale,
+										MESSAGE_XML_BD_MISSINGININHALTSVERZEICHNIS, keyOrd ) );
 				valid = false;
 				if ( showOnWork ) {
 					if ( onWork == 410 ) {
@@ -240,10 +250,95 @@ public class Validation2dGeverFileIntegrityModuleImpl extends ValidationModuleIm
 					}
 				}
 			}
+
+			NodeList nodeLstDok = doc.getElementsByTagName( "dokument" );
+			for ( int x = 0; x < nodeLstDok.getLength(); x++ ) {
+				Node dokNode = nodeLstDok.item( x );
+				Node id = dokNode.getAttributes().getNamedItem( "id" );
+				dokRef.put( id.getNodeValue(), "dokument" );
+			}
+			NodeList nodeLstDos = doc.getElementsByTagName( "dossier" );
+			for ( int x = 0; x < nodeLstDos.getLength(); x++ ) {
+				Node dosNode = nodeLstDos.item( x );
+				Node id = dosNode.getAttributes().getNamedItem( "id" );
+				dokRef.put( id.getNodeValue(), "dossier" );
+			}
+			NodeList nodeLstMap = doc.getElementsByTagName( "mappe" );
+			for ( int x = 0; x < nodeLstMap.getLength(); x++ ) {
+				Node mapNode = nodeLstMap.item( x );
+				Node id = mapNode.getAttributes().getNamedItem( "id" );
+				mapRef.put( id.getNodeValue(), "mappe" );
+			}
+
+			// Kontrolle ob IDs von information und repraesentation in dateiRef existieren
+			// System.out.println( "2g Attribute der dateiRef auslesen..." );
+
+			for ( int i = 0, len = nodeLstDateiRef.getLength(); i < len; i++ ) {
+				Element elm = (Element) nodeLstDateiRef.item( i );
+				if ( elm.hasAttribute( "information" ) ) {
+					String info = elm.getAttribute( "information" );
+					// System.out.println( "information: " + info );
+					if ( dateiRef.containsKey( info ) || dokRef.containsKey( info )
+							|| dosRef.containsKey( info ) || mapRef.containsKey( info ) ) {
+						// System.out.println( "information vorhanden (Key): " + info );
+					} else {
+						// System.out.println( "information trennen: " + info );
+						// mehrere IDs werden mit Leerschlag getrennt.
+						String[] parts = info.split( " " );
+						for ( int j = 0, lenJ = parts.length; j < lenJ; j++ ) {
+							String infoPart = parts[j];
+
+							if ( dateiRef.containsKey( infoPart ) || dokRef.containsKey( infoPart )
+									|| dosRef.containsKey( infoPart ) || mapRef.containsKey( infoPart ) ) {
+								// System.out.println( "information (part) vorhanden (Key): " + infoPart );
+							} else {
+								// System.out.println( "information fehlt: " + infoPart );
+								Logtxt.logtxt( logFile,
+										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bd_SIP )
+												+ getTextResourceService().getText( locale,
+														MESSAGE_XML_BD_WARNINGMISSINGINFOID, infoPart ) );
+							}
+						}
+					}
+				}
+				if ( elm.hasAttribute( "repraesentation" ) ) {
+					String rep = elm.getAttribute( "repraesentation" );
+					// System.out.println( "repraesentation: " + rep );
+					if ( dateiRef.containsKey( rep ) || dokRef.containsKey( rep ) || dosRef.containsKey( rep )
+							|| mapRef.containsKey( rep ) ) {
+						// System.out.println( "repraesentation vorhanden (Key): " + rep );
+					} else {
+						// System.out.println( "repraesentation trennen: " + rep );
+						// mehrere IDs werden mit Leerschlag getrennt.
+						String[] parts = rep.split( " " );
+						for ( int j = 0, lenJ = parts.length; j < lenJ; j++ ) {
+							String repPart = parts[j];
+
+							if ( dateiRef.containsKey( repPart ) || dokRef.containsKey( repPart )
+									|| dosRef.containsKey( repPart ) || mapRef.containsKey( repPart ) ) {
+								// System.out.println( "repraesentation (part) vorhanden (Key): " + repPart );
+							} else {
+								// System.out.println( "repraesentation fehlt: " + repPart );
+								Logtxt.logtxt( logFile,
+										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bd_SIP )
+												+ getTextResourceService().getText( locale,
+														MESSAGE_XML_BD_WARNINGMISSINGREPID, repPart ) );
+							}
+						}
+					}
+				}
+			}
+
+			// System.out.println("information:
+			// "+nodeLstDateiRef.item(x).getAttributes().getNamedItem("information").getNodeValue());
+			// System.out.println("repraesentation:
+			// "+nodeLstDateiRef.item(x).getAttributes().getNamedItem("repraesentation").getNodeValue());
+			// rep
+
 		} catch ( Exception e ) {
-			
-					Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bd_SIP )
-							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bd_SIP )
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 		return valid;

@@ -32,8 +32,8 @@ import ch.kostceco.tools.siardexcerpt.excerption.ValidationModuleImpl;
 import ch.kostceco.tools.siardexcerpt.excerption.moduleexcerpt.ExcerptBSearchModule;
 import ch.kostceco.tools.siardexcerpt.logging.Logtxt;
 import ch.kostceco.tools.siardexcerpt.SIARDexcerpt;
+import ch.kostceco.tools.kosttools.fileservice.Grep;
 import ch.kostceco.tools.kosttools.fileservice.Sed;
-import ch.kostceco.tools.kosttools.util.StreamGobbler;
 import ch.kostceco.tools.kosttools.util.Util;
 
 /** 2) search: gemäss config die Tabelle mit Suchtext befragen und Ausgabe des Resultates */
@@ -59,28 +59,6 @@ public class ExcerptBSearchModuleImpl extends ValidationModuleImpl implements Ex
 			System.out.println( stringNowTime + " Start der Suche" );
 		}
 
-		File fGrepExe = new File( "resources" + File.separator + "grep" + File.separator + "grep.exe" );
-		String pathToGrepExe = fGrepExe.getAbsolutePath();
-		if ( !fGrepExe.exists() ) {
-			// grep.exe existiert nicht --> Abbruch
-			getMessageServiceExc()
-					.logError( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_B )
-							+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_C_MISSINGFILE,
-									fGrepExe.getAbsolutePath() ) );
-			return false;
-		} else {
-			File fMsys10dll = new File(
-					"resources" + File.separator + "grep" + File.separator + "msys-1.0.dll" );
-			if ( !fMsys10dll.exists() ) {
-				// msys-1.0.dll existiert nicht --> Abbruch
-				getMessageServiceExc()
-						.logError( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_B )
-								+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_C_MISSINGFILE,
-										fMsys10dll.getAbsolutePath() ) );
-				return false;
-			}
-		}
-
 		/* dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist ein generelles TODO in
 		 * allen Modulen. Zuerst immer dirOfJarPath ermitteln und dann alle Pfade mit
 		 * 
@@ -98,7 +76,11 @@ public class ExcerptBSearchModuleImpl extends ValidationModuleImpl implements Ex
 			dirOfJarPath = file.getParent();
 		}
 
+		String pathToWorkDir = configMap.get( "PathToWorkDir" );
+		File workDir = new File( pathToWorkDir );
+
 		// Pfad zum Programm existiert die Dateien?
+		String sed = configMap.get( "Sed" );
 		String checkTool = Sed.checkSed( dirOfJarPath );
 		if ( !checkTool.equals( "OK" ) ) {
 			// mindestens eine Datei fehlt --> Abbruch
@@ -106,6 +88,17 @@ public class ExcerptBSearchModuleImpl extends ValidationModuleImpl implements Ex
 					getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_B )
 							+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_C_MISSINGFILE,
 									checkTool ) );
+			sed = "nok";
+		}
+
+		// Pfad zum Programm existiert die Dateien?
+		String checkToolGrep = Grep.checkGrep( dirOfJarPath );
+		if ( !checkToolGrep.equals( "OK" ) ) {
+			// mindestens eine Datei fehlt --> Abbruch
+			Logtxt.logtxt( outFileSearch,
+					getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_B )
+							+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_C_MISSINGFILE,
+									checkToolGrep ) );
 			return false;
 		}
 
@@ -157,85 +150,33 @@ public class ExcerptBSearchModuleImpl extends ValidationModuleImpl implements Ex
 			 * 
 			 * Entsprechend wurde sed verwendet. */
 
-			String sed = configMap.get( "Sed" );
 			if ( sed.equalsIgnoreCase( "yes" ) ) {
 
 				// Bringt alles auf eine Zeile
-				String sed1 = "-e 's/\\n/ /g' ";
-				String sed2 = "-e ':a;N;$!ba;s/\\n/ /g' ";
+				String sed1 = " 's/\\n/ /g' ";
+				String sed2 = " ':a;N;$!ba;s/\\n/ /g' ";
 				// Trennt ><row. Nur eine row auf einer Zeile
-				String sed3 = "-e 's/\\d060row/\\n\\d060row/g' ";
+				String sed3 = " 's/\\d060row/\\n\\d060row/g' ";
 				// Trennt ><table. <table auf eine neue Zeile
-				String sed4 = "-e 's/\\d060\\d047table/\\n\\d060\\d047table/g' ";
+				String sed4 = " 's/\\d060\\d047table/\\n\\d060\\d047table/g' ";
 
-				/* // Bringt alles auf eine Zeile String options = sed1 + sed2 + sed3 + sed4;
-				 * 
-				 * String pathToWorkDir = configMap.get( "PathToWorkDir" ); File workDir = new File(
-				 * pathToWorkDir );
-				 * 
-				 * // Sed-Befehl: pathToSedExe options fSearchtable > fSearchtableTemp String resultExec =
-				 * Sed.execSed( options, fSearchtable, fSearchtableTemp, workDir, dirOfJarPath ); if (
-				 * !resultExec.equals( "OK" ) ) { // Exception oder Report existiert nicht Logtxt.logtxt(
-				 * outFileSearch, getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_C ) +
-				 * getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN, " (execSed)" ) ); }
-				 * Util.copyFile( fSearchtableTemp, fSearchtable ); // Ende Sed direkt auszuloesen */
-
-				String pathToWorkDir = configMap.get( "PathToWorkDir" );
-				File workDir = new File( pathToWorkDir );
 				long sleepLong = fSearchtable.length() / 100000;
-				// System.out.println( "wait: " + sleepLong );
 
 				// Sed-Befehl: pathToSedExe options fSearchtable > fSearchtableTemp
 				String resultExec = Sed.execSed( sed1, fSearchtable, fSearchtableTemp1, workDir,
 						dirOfJarPath );
 				Thread.sleep( sleepLong );
-				if ( !fSearchtableTemp1.exists() ) {
-					// System.out.println( "wait 1" );
-					Thread.sleep( 10000 );
-				}
-				if ( fSearchtableTemp1.length() == 0 ) {
-					// System.out.println( "wait 1 0" );
-					resultExec = Sed.execSed( sed1, fSearchtable, fSearchtableTemp1, workDir, dirOfJarPath );
-					Thread.sleep( sleepLong * 5 );
-				}
 				if ( resultExec.equals( "OK" ) ) {
 					resultExec = Sed.execSed( sed2, fSearchtableTemp1, fSearchtableTemp2, workDir,
 							dirOfJarPath );
 					Thread.sleep( sleepLong );
-					if ( !fSearchtableTemp2.exists() ) {
-						// System.out.println( "2" );
-						Thread.sleep( 10000 );
-					}
-					if ( fSearchtableTemp2.length() == 0 ) {
-						// System.out.println( "wait 2 0" );
-						resultExec = Sed.execSed( sed2, fSearchtableTemp1, fSearchtableTemp2, workDir,
-								dirOfJarPath );
-						Thread.sleep( sleepLong * 5 );
-					}
 					if ( resultExec.equals( "OK" ) ) {
 						resultExec = Sed.execSed( sed3, fSearchtableTemp2, fSearchtableTemp3, workDir,
 								dirOfJarPath );
-						Thread.sleep( sleepLong );
-						if ( !fSearchtableTemp3.exists() ) {
-							// System.out.println( "wait 3" );
-							Thread.sleep( 10000 );
-						}
-						if ( fSearchtableTemp3.length() == 0 ) {
-							// System.out.println( "wait 3 0" );
-							resultExec = Sed.execSed( sed3, fSearchtableTemp2, fSearchtableTemp3, workDir,
-									dirOfJarPath );
-							Thread.sleep( sleepLong * 5 );
-						}
 						if ( resultExec.equals( "OK" ) ) {
 							resultExec = Sed.execSed( sed4, fSearchtableTemp3, fSearchtable, workDir,
 									dirOfJarPath );
 							Thread.sleep( sleepLong );
-							if ( fSearchtable.length() == 0 ) {
-								// System.out.println( "wait 0" );
-								resultExec = Sed.execSed( sed4, fSearchtableTemp3, fSearchtable, workDir,
-										dirOfJarPath );
-								Thread.sleep( sleepLong * 5 );
-							}
 						}
 					}
 				}
@@ -265,64 +206,18 @@ public class ExcerptBSearchModuleImpl extends ValidationModuleImpl implements Ex
 			searchString = searchString.replaceAll( "\\.", "\\.*" );
 
 			try {
-				// grep -E "REGEX-Suchbegriff" table13.xml >> output.txt
-				String command = "cmd /c \"\"" + pathToGrepExe + "\" -E" + insensitiveOption + " \""
-						+ searchString + "\" \"" + fSearchtable.getAbsolutePath() + "\" >> \""
-						+ tempOutFile.getAbsolutePath() + "\"\"";
-				/* Das redirect Zeichen verunmoeglicht eine direkte eingabe. mit dem geschachtellten Befehl
-				 * gehts: cmd /c\"urspruenlicher Befehl\" */
-
-				// System.out.println( command );
-
-				Process proc = null;
-				Runtime rt = null;
-
+				String resultExec = Grep.execGrep( insensitiveOption, searchString, fSearchtable,
+						tempOutFile, workDir, dirOfJarPath );
 				Logtxt.logtxt( outFileSearch,
 						getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_ELEMENT_OPEN, name ) );
-				if ( time ) {
-					nowTime = new java.util.Date();
-					stringNowTime = sdfStartS.format( nowTime );
-					System.out.println( stringNowTime + " Ende der Initialisierung" );
-				}
 
-				try {
-					Util.switchOffConsole();
-					rt = Runtime.getRuntime();
-					proc = rt.exec( command.toString().split( " " ) );
-					// .split(" ") ist notwendig wenn in einem Pfad ein Doppelleerschlag vorhanden ist!
-
-					// Fehleroutput holen
-					StreamGobbler errorGobbler = new StreamGobbler( proc.getErrorStream(), "ERROR" );
-
-					// Output holen
-					StreamGobbler outputGobbler = new StreamGobbler( proc.getInputStream(), "OUTPUT" );
-
-					// Threads starten
-					errorGobbler.start();
-					outputGobbler.start();
-
-					// Warte, bis wget fertig ist
-					proc.waitFor();
-
-					Util.switchOnConsole();
-					if ( time ) {
-						nowTime = new java.util.Date();
-						stringNowTime = sdfStartS.format( nowTime );
-						System.out.println( stringNowTime + " Ende der Ausführung von GREP" );
-					}
-
-				} catch ( Exception e ) {
+				if ( !resultExec.equals( "OK" ) ) {
+					// grep hat nicht funktioniert
 					Logtxt.logtxt( outFileSearch,
 							getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_B )
 									+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN,
-											e.getMessage() ) );
+											resultExec ) );
 					isValid = false;
-				} finally {
-					if ( proc != null ) {
-						proc.getOutputStream().close();
-						proc.getInputStream().close();
-						proc.getErrorStream().close();
-					}
 				}
 
 				if ( time ) {
@@ -332,7 +227,7 @@ public class ExcerptBSearchModuleImpl extends ValidationModuleImpl implements Ex
 				}
 
 				// liest das tempOutFile (UTF-8) ein
-				Scanner scanner = new Scanner( tempOutFile, "UTF-8"  );
+				Scanner scanner = new Scanner( tempOutFile, "UTF-8" );
 				contentAll = "";
 				content = "";
 				contentAll = scanner.useDelimiter( "\\Z" ).next();

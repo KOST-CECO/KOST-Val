@@ -44,7 +44,7 @@
       <xs:documentation xml:lang="fr">Unité organisationnelle qui prépare les documents à verser (le nom est écrit en toutes lettres, sans abréviation) et nom de la personne qui est responsable du versement.</xs:documentation>
       <xs:documentation xml:lang="it"/>
     </xs:annotation>
-    <xs:restriction base="text2"/>
+    <xs:restriction base="text2m"/>
   </xs:simpleType>
 
   <xs:simpleType name="referenzBewertungsentscheid">

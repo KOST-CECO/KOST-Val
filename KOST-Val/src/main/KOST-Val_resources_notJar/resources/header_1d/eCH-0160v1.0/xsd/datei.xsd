@@ -8,7 +8,7 @@
 			<xs:documentation>Name der Datei, wie dieser im SIP/AIP/DIP erscheint
 				(z.B. "p000001_Machbarkeitsanaly.pdf").</xs:documentation>
 		</xs:annotation>
-		<xs:restriction base="text2" />
+		<xs:restriction base="text2m" />
 	</xs:simpleType>
 
 	<xs:simpleType name="physischerName">
@@ -58,7 +58,7 @@
 			<xs:documentation>Prüfsummenwert (abhängig vom verwendeten
 				Prüfalgorithmus).</xs:documentation>
 		</xs:annotation>
-		<xs:restriction base="text3" />
+		<xs:restriction base="text3m" />
 	</xs:simpleType>
 
 	<xs:simpleType name="eigenschaft">

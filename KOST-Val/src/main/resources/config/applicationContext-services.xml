@@ -177,6 +177,11 @@
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="messageService" ref="messageService" />
 	</bean>
+	<bean id="validation1gPackageSizeFilesModule"
+		class="ch.kostceco.tools.kostval.validation.modulesip1.impl.Validation1gPackageSizeFilesModuleImpl">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="messageService" ref="messageService" />
+	</bean>
 	<bean id="validation2aFileIntegrityModule"
 		class="ch.kostceco.tools.kostval.validation.modulesip2.impl.Validation2aFileIntegrityModuleImpl">
 		<property name="textResourceService" ref="textResourceService" />
@@ -306,6 +311,7 @@
 		<property name="validation1dMetadataModule" ref="validation1dMetadataModule" />
 		<property name="validation1eSipTypeModule" ref="validation1eSipTypeModule" />
 		<property name="validation1fPrimaryDataModule" ref="validation1fPrimaryDataModule" />
+		<property name="validation1gPackageSizeFilesModule" ref="validation1gPackageSizeFilesModule" />
 		<property name="validation2aFileIntegrityModule" ref="validation2aFileIntegrityModule" />
 		<property name="validation2cChecksumModule" ref="validation2cChecksumModule" />
 		<property name="validation2dGeverFileIntegrityModule" ref="validation2dGeverFileIntegrityModule" />

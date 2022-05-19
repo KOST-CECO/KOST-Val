@@ -11,7 +11,7 @@
       <xs:documentation xml:lang="fr">Classification de l'activité</xs:documentation>
       <xs:documentation xml:lang="it"/>
     </xs:annotation>
-    <xs:restriction base="text1"/>
+    <xs:restriction base="text1m"/>
   </xs:simpleType>
 
   <xs:simpleType name="beschreibung">
@@ -21,7 +21,7 @@
       <xs:documentation xml:lang="fr">Justification et résultat de l'activité effectuée</xs:documentation>
       <xs:documentation xml:lang="it"/>
     </xs:annotation>
-    <xs:restriction base="text4"/>
+    <xs:restriction base="text4m"/>
   </xs:simpleType>
 
   <xs:simpleType name="bearbeiter">
@@ -31,7 +31,7 @@
       <xs:documentation xml:lang="fr">Nom de la personne qui a effectué l'activité archivistique</xs:documentation>
       <xs:documentation xml:lang="it"/>
     </xs:annotation>
-    <xs:restriction base="text2"/>
+    <xs:restriction base="text2m"/>
   </xs:simpleType>
 
   <xs:simpleType name="referenzUebernahmedossier">

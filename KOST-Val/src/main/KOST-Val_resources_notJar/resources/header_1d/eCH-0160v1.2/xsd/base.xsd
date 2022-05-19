@@ -49,7 +49,7 @@
 		<xs:restriction base="text1"/>
 	</xs:simpleType>
 	<xs:simpleType name="notizBeschreibung">
-		<xs:restriction base="text4"/>
+		<xs:restriction base="text4m"/>
 	</xs:simpleType>
 	<xs:simpleType name="text1">
 		<xs:restriction base="xs:string">
@@ -68,5 +68,28 @@
 	</xs:simpleType>
 	<xs:simpleType name="text4">
 		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	<xs:simpleType name="text1m">
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="100"/>
+			<xs:minLength value="1"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="text2m">
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="200"/>
+			<xs:minLength value="1"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="text3m">
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="1000"/>
+			<xs:minLength value="1"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="text4m">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+		</xs:restriction>
 	</xs:simpleType>
 </xs:schema>

@@ -14,6 +14,17 @@
 		<xs:restriction base="text2" />
 	</xs:simpleType>
 
+	<xs:simpleType name="nameOrdnungssystemM">
+		<xs:annotation>
+			<xs:documentation>Eindeutige Bezeichnung des Ordnungssystems, welche
+				den Geltungsbereich des Ordnungssystems wiedergibt. Enthält in der
+				Regel als Element die Bezeichnung der Verwaltungseinheit oder des
+				Aufgabenbereichs, in welchem das Ordnungssystem angewandt wird.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="text2m" />
+	</xs:simpleType>
+
 	<xs:simpleType name="generation">
 		<xs:annotation>
 			<xs:documentation>Versionsbezeichnung des Ordnungssystems. Dient zur

@@ -14,7 +14,7 @@
 		<xs:restriction base="text1"/>
 	</xs:simpleType>
 	<xs:simpleType name="ablieferndeStelle">
-		<xs:restriction base="text2"/>
+		<xs:restriction base="text2m"/>
 	</xs:simpleType>
 	<xs:simpleType name="referenzBewertungsentscheid">
 		<xs:restriction base="text1"/>

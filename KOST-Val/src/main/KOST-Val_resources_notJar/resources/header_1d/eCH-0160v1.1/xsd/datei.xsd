@@ -11,7 +11,7 @@
       <xs:documentation xml:lang="fr">Nom du fichier comme il apparaît dans le SIP/AIP/DIP (p. ex.: "p000001_Machbarkeitsanaly.pdf").</xs:documentation>
       <xs:documentation xml:lang="it"/>
     </xs:annotation>
-    <xs:restriction base="text2"/>
+    <xs:restriction base="text2m"/>
   </xs:simpleType>
 
   <xs:simpleType name="physischerName">
@@ -66,7 +66,7 @@
       <xs:documentation xml:lang="fr">Valeur de la somme de contrôle (dépendant de l'algorithme de contrôle utilisé).</xs:documentation>
       <xs:documentation xml:lang="it"/>
     </xs:annotation>
-    <xs:restriction base="text3"/>
+    <xs:restriction base="text3m"/>
   </xs:simpleType>
 
   <xs:simpleType name="eigenschaft">

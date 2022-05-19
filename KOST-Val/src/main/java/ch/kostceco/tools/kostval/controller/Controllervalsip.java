@@ -260,7 +260,8 @@ public class Controllervalsip implements MessageConstants
 					if ( tmpDir.exists() ) {
 						Util.deleteDir( tmpDir );
 					}
-					System.exit( 1 );
+					// System.exit( 2 );
+					return false;
 
 				} else {
 					// geziptes SIP --> in temp dir entzipen
@@ -360,7 +361,8 @@ public class Controllervalsip implements MessageConstants
 							if ( tmpDir.exists() ) {
 								Util.deleteDir( tmpDir );
 							}
-							System.exit( 1 );
+							// System.exit( 2 );
+							return false;
 						}
 					}
 					valDatei = tmpDirZip;

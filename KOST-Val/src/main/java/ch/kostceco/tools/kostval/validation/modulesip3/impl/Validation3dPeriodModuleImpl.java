@@ -772,6 +772,29 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 					}
 				}
 			}
+			
+			boolean noCaAnmerkung = false;
+			NodeList nodeLstCa = doc.getElementsByTagName( "ca" );
+			for ( int s = 0; s < nodeLstCa.getLength(); s++ ) {
+				noCaAnmerkung = true;
+				Node caNode = nodeLstCa.item( s );
+				Node caNodeVonBis=caNode.getParentNode();
+				Node caNodeEzr=caNodeVonBis.getParentNode();
+				Node caNodeEzrPar=caNodeEzr.getParentNode();
+				NodeList childNodesEzrPar = caNodeEzrPar.getChildNodes();
+				for ( int y = 0; y < childNodesEzrPar.getLength(); y++ ) {
+					Node subNodeEzrPar = childNodesEzrPar.item( y );
+					if ( subNodeEzrPar.getNodeName().equals( "entstehungszeitraumAnmerkung" ) ) {
+						noCaAnmerkung = false;
+					break;
+					}
+				}
+			}
+				if (noCaAnmerkung) {
+					Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Cd_SIP )
+							+ getTextResourceService().getText( locale, 
+									ERROR_XML_CD_WARNING_ANMERKUNG_CA ) );
+				}
 
 		} catch ( Exception e ) {
 

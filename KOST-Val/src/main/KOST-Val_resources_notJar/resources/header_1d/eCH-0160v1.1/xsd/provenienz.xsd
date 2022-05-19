@@ -11,7 +11,7 @@
       <xs:documentation xml:lang="fr">Désignation du service, de l'unité organisationnelle ou de la (des) personne(s), qui a créé ou géré les documents ou la collection de données. Dans le cas où le producteur de dossiers est inconnu, l'indication "producteur de dossiers inconnu" doit être inscrite.</xs:documentation>
       <xs:documentation xml:lang="it"/>
     </xs:annotation>
-    <xs:restriction base="text2"/>
+    <xs:restriction base="text2m"/>
   </xs:simpleType>
 
   <xs:simpleType name="systemName">
@@ -62,6 +62,16 @@
       <xs:documentation xml:lang="it"/>
     </xs:annotation>
     <xs:restriction base="text2"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="registraturM">
+    <xs:annotation>
+      <xs:documentation xml:lang="de">Name der Ablage, für welche das primäre Ordnungssystem verwendet wird und die einem Mandanten im System entspricht. Eine aktenbildende Stelle kann im Prinzip mehr als eine Registratur führen. Pro Registratur gibt es allerdings nur ein primäres Ordnungssystem.</xs:documentation>
+      <xs:documentation xml:lang="en">Name of the archive for which the primary classification system is used and that corresponds to a client in the system. In principle, a records-creating authority may maintain more than one registry. However, there is only one primary classification system for each registry.</xs:documentation>
+      <xs:documentation xml:lang="fr">Nom de l’archivage pour lequel le système de classement primaire est utilisé et qui correspond à un mandant dans le système. Un service qui crée des dossiers peut, en principe, gérer plus qu’un enregistrement. Par enregistrement toutefois, il n’y a qu’un système de classement primaire.</xs:documentation>
+      <xs:documentation xml:lang="it"/>
+    </xs:annotation>
+    <xs:restriction base="text2m"/>
   </xs:simpleType>
 
   <xs:simpleType name="geschichteAktenbildner">

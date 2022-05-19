@@ -135,6 +135,7 @@ public interface MessageConstants
 	String	MESSAGE_XML_MODUL_Ad_SIP											= "val.message.xml.modul.ad.sip";
 	String	MESSAGE_XML_MODUL_Ae_SIP											= "val.message.xml.modul.ae.sip";
 	String	MESSAGE_XML_MODUL_Af_SIP											= "val.message.xml.modul.af.sip";
+	String	MESSAGE_XML_MODUL_Ag_SIP											= "val.message.xml.modul.ag.sip";
 	String	MESSAGE_XML_MODUL_Ba_SIP											= "val.message.xml.modul.ba.sip";
 	String	MESSAGE_XML_MODUL_Bb_SIP											= "val.message.xml.modul.bb.sip";
 	String	MESSAGE_XML_MODUL_Bc_SIP											= "val.message.xml.modul.bc.sip";
@@ -410,10 +411,12 @@ public interface MessageConstants
 	String	MESSAGE_XML_AC_INVALIDFILENAME								= "val.message.xml.ac.invalidfilename";
 
 	// Modul 1d Meldungen
-	String	ERROR_XML_AD_WRONGNUMBEROFXSDS								= "val.error.xml.ad.wrongnumberofxsds";
-	String	ERROR_XML_AD_CONTENTB4HEADER									= "val.error.xml.ad.contentB4header";
-	String	ERROR_XML_AD_METADATA_ERRORS									= "val.error.xml.ad.metadata.errors";
+	String	ERROR_XML_AD_INVALID_XML											= "val.error.xml.ad.invalid.xml";
+	String	ERROR_XML_AD_INVALID_ERROR										= "val.error.xml.ad.invalid.error";
 	String	ERROR_XML_AD_NSFOUND													= "val.error.xml.ad.nsfound";
+	String	ERROR_XML_AD_NOOSP														= "val.error.xml.ad.noosp";
+	String	ERROR_XML_AD_UADEP														= "val.error.xml.ad.uadep";
+	String	ERROR_XML_AD_AVAN_WARNING											= "val.error.xml.ad.avan.warning";
 
 	// Modul 1e Meldungen
 	String	ERROR_XML_AE_NOMETADATAFOUND									= "val.error.xml.ae.nometadatafound";
@@ -421,6 +424,11 @@ public interface MessageConstants
 
 	// Modul 1f Meldungen
 	String	ERROR_XML_AF_FILESIPWITHOUTPRIMARYDATA				= "val.error.xml.af.filesipwithoutprimarydata";
+
+	// Modul 1g Meldungen
+	String	ERROR_XML_AG_WARNINGBIGSIP										= "val.error.xml.ag.warningbigsip";
+	String	ERROR_XML_AG_TOOMANYFILESFOLDER								= "val.error.xml.ag.toomanyfilesfolder";
+	String	ERROR_XML_AG_TOOMANYFILESSIP									= "val.error.xml.ag.toomanyfilessip";
 
 	// Modul 2a Meldungen
 	String	MESSAGE_XML_BA_FILEMISSING										= "val.message.xml.ba.filemissing";
@@ -436,6 +444,9 @@ public interface MessageConstants
 
 	// Modul 2d Meldungen
 	String	MESSAGE_XML_BD_MISSINGINABLIEFERUNG						= "val.message.xml.bd.missinginablieferung";
+	String	MESSAGE_XML_BD_MISSINGININHALTSVERZEICHNIS		= "val.message.xml.bd.missingininhaltsverzeichnis";
+	String	MESSAGE_XML_BD_WARNINGMISSINGINFOID						= "val.message.xml.bd.warningmissinginfoid";
+	String	MESSAGE_XML_BD_WARNINGMISSINGREPID						= "val.message.xml.bd.warningmissingrepid";
 
 	// Modul 3a Meldungen
 	String	MESSAGE_XML_CA_FILES													= "val.message.xml.ca.files";
@@ -456,4 +467,5 @@ public interface MessageConstants
 	String	ERROR_XML_CD_INVALID_DOSSIER_RANGE_CA_ABL			= "val.error.xml.cd.invalid.dossier.range.ca.abl";
 	String	ERROR_XML_CD_INVALID_DOKUMENT_RANGE_CA				= "val.error.xml.cd.invalid.dokument.range.ca";
 	String	ERROR_XML_CD_UNPARSEABLE_DATE									= "val.error.xml.cd.unparseable.date";
+	String	ERROR_XML_CD_WARNING_ANMERKUNG_CA							= "val.error.xml.cd.warning.anmerkung.ca";
 }

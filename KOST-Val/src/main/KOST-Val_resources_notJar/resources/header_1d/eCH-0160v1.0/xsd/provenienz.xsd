@@ -11,7 +11,7 @@
 				muss die Angabe "Aktenbildner unbekannt" eingetragen werden.
 			</xs:documentation>
 		</xs:annotation>
-		<xs:restriction base="text2" />
+		<xs:restriction base="text2m" />
 	</xs:simpleType>
 
 	<xs:simpleType name="systemName">
@@ -67,6 +67,17 @@
 				primäres Ordnungssystem.</xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="text2" />
+	</xs:simpleType>
+
+	<xs:simpleType name="registraturM">
+		<xs:annotation>
+			<xs:documentation>Name der Ablage, für welche das primäre
+				Ordnungssystem verwendet wird und die einem Mandanten im System
+				entspricht. Eine aktenbildende Stelle kann im Prinzip mehr als eine
+				Registratur führen. Pro Registratur gibt es allerdings nur ein
+				primäres Ordnungssystem.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="text2m" />
 	</xs:simpleType>
 
 	<xs:simpleType name="geschichteAktenbildner">

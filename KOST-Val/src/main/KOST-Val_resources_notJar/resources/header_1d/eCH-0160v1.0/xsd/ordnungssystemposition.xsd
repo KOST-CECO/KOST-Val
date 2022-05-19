@@ -11,12 +11,28 @@
 		<xs:restriction base="text1" />
 	</xs:simpleType>
 
+	<xs:simpleType name="nummerM">
+		<xs:annotation>
+			<xs:documentation>Eindeutige Identifikation und Ordnungsmerkmal der
+				Ordnungssystemposition.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="text1m" />
+	</xs:simpleType>
+
 	<xs:simpleType name="titelOrdnungssystemposition">
 		<xs:annotation>
 			<xs:documentation>Bezeichnung des Aufgabenbereichs, dem die
 				Ordnungssystemposition zugewiesen ist.</xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="text2" />
+	</xs:simpleType>
+
+	<xs:simpleType name="titelOrdnungssystempositionM">
+		<xs:annotation>
+			<xs:documentation>Bezeichnung des Aufgabenbereichs, dem die
+				Ordnungssystemposition zugewiesen ist.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="text2m" />
 	</xs:simpleType>
 
 	<xs:simpleType name="idOrdnungssystemposition">

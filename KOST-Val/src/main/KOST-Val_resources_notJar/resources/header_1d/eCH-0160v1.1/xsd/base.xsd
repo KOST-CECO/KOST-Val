@@ -163,7 +163,7 @@
       <xs:documentation xml:lang="fr">Notice au sens strict, c.-à-d. description. Champ obligatoire</xs:documentation>
       <xs:documentation xml:lang="it"/>
     </xs:annotation>
-    <xs:restriction base="text4"/>
+    <xs:restriction base="text4m"/>
   </xs:simpleType>
 
   <xs:simpleType name="text1">
@@ -186,6 +186,33 @@
 
   <xs:simpleType name="text4">
     <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="text1m">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="100"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="text2m">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="200"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="text3m">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="1000"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="text4m">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+    </xs:restriction>
   </xs:simpleType>
 
 </xs:schema>

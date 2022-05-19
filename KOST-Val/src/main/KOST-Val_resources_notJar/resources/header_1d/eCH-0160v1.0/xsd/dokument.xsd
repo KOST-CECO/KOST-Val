@@ -8,7 +8,7 @@
 			<xs:documentation>Kurze Beschreibung des im Dokument behandelten
 				Gegenstandes.</xs:documentation>
 		</xs:annotation>
-		<xs:restriction base="text4" />
+		<xs:restriction base="text4m" />
 	</xs:simpleType>
 
 	<xs:simpleType name="idDokument">

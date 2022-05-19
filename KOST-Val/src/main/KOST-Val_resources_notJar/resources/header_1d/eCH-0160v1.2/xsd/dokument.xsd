@@ -2,7 +2,7 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<xs:include schemaLocation="base.xsd"/>
 	<xs:simpleType name="titelDokument">
-		<xs:restriction base="text4"/>
+		<xs:restriction base="text4m"/>
 	</xs:simpleType>
 	<xs:simpleType name="idDokument">
 		<xs:restriction base="xs:ID">

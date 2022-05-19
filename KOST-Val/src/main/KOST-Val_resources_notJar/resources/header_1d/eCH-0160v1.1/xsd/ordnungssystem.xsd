@@ -14,6 +14,16 @@
     <xs:restriction base="text2"/>
   </xs:simpleType>
 
+  <xs:simpleType name="nameOrdnungssystemM">
+    <xs:annotation>
+      <xs:documentation xml:lang="de">Eindeutige Bezeichnung des Ordnungssystems, welche den Geltungsbereich des Ordnungssystems wiedergibt. Enthält in der Regel als Element die Bezeichnung der Verwaltungseinheit oder des Aufgabenbereichs, in welchem das Ordnungssystem angewandt wird.</xs:documentation>
+      <xs:documentation xml:lang="en">Unambiguous designation of the classification system indicating the scope of validity of the classification system. Generally contains as an element the designation of the administrative unit or area of responsibility in which the classification system is used.</xs:documentation>
+      <xs:documentation xml:lang="fr">Désignation univoque du système de classement, laquelle restitue le champ d'application du système de classement. Contient normalement comme élément la désignation de l'unité administrative ou le secteur d'activités, dans lequel est employé le système de classement.</xs:documentation>
+      <xs:documentation xml:lang="it"/>
+    </xs:annotation>
+    <xs:restriction base="text2m"/>
+  </xs:simpleType>
+
   <xs:simpleType name="generation">
     <xs:annotation>
       <xs:documentation xml:lang="de">Versionsbezeichnung des Ordnungssystems. Dient zur Verknüpfung und Unterscheidung von zeitlich aufeinander folgenden OS desselben Typs mit demselben Geltungsbereich.</xs:documentation>

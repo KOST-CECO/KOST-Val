@@ -9,7 +9,9 @@
 				Ordner des Pakets hierarchisch auf. Für die Ordner wird der
 				Ordnername eingesetzt.</xs:documentation>
 		</xs:annotation>
-		<xs:restriction base="xs:string" />
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+		</xs:restriction>
 	</xs:simpleType>
 
 

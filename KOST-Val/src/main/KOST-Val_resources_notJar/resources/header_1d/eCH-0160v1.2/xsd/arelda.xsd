@@ -83,7 +83,7 @@
 				<xs:sequence>
 					<xs:element name="provenienz" type="provenienzFiles"/>
 					<xs:element name="ordnungssystem" type="ordnungssystemFiles" minOccurs="0"/>
-					<xs:element name="mappe" type="mappeDokumentDateiFiles" minOccurs="0" maxOccurs="unbounded">
+					<xs:element name="mappe" type="mappeDokumentDateiFilesAblieferung" minOccurs="0" maxOccurs="unbounded">
 						<xs:unique name="uniqueDateiRefAblieferungMappeFiles">
 							<xs:selector xpath="./arelda:dateiRef"/>
 							<xs:field xpath="."/>
@@ -107,7 +107,7 @@
 		<xs:complexContent>
 			<xs:extension base="provenienz">
 				<xs:sequence>
-					<xs:element name="registratur" type="registratur"/>
+					<xs:element name="registratur" type="registraturM"/>
 					<xs:element name="archivischeNotiz" type="archivischeNotiz" minOccurs="0" maxOccurs="unbounded"/>
 				</xs:sequence>
 			</xs:extension>
@@ -138,7 +138,7 @@
 		<xs:complexContent>
 			<xs:extension base="ordnungssystem">
 				<xs:sequence>
-					<xs:element name="name" type="nameOrdnungssystem"/>
+					<xs:element name="name" type="nameOrdnungssystemM"/>
 					<xs:element name="ordnungssystemposition" type="ordnungssystempositionGever" maxOccurs="unbounded"/>
 					<xs:element name="archivischeNotiz" type="archivischeNotiz" minOccurs="0" maxOccurs="unbounded"/>
 				</xs:sequence>
@@ -173,8 +173,8 @@
 		<xs:complexContent>
 			<xs:extension base="ordnungssystemposition">
 				<xs:sequence>
-					<xs:element name="nummer" type="nummer"/>
-					<xs:element name="titel" type="titelOrdnungssystemposition"/>
+					<xs:element name="nummer" type="nummerM"/>
+					<xs:element name="titel" type="titelOrdnungssystempositionM"/>
 					<xs:element name="schutzfristenkategorie" type="schutzfristenkategorieOrdnungssystemposition" minOccurs="0"/>
 					<xs:element name="schutzfrist" type="schutzfristOrdnungssystemposition" minOccurs="0"/>
 					<xs:element name="schutzfristenBegruendung" type="schutzfristenBegruendungOrdnungssystemposition" minOccurs="0"/>
@@ -240,7 +240,7 @@
 		<xs:complexContent>
 			<xs:extension base="dossier">
 				<xs:sequence>
-					<xs:element name="aktenzeichen" type="aktenzeichen"/>
+					<xs:element name="aktenzeichen" type="aktenzeichenM"/>
 					<xs:element name="eroeffnungsdatum" type="historischerZeitpunkt" minOccurs="0"/>
 					<xs:element name="abschlussdatum" type="historischerZeitpunkt" minOccurs="0"/>
 					<xs:element name="vorgang" type="vorgangAktivitaet" minOccurs="0" maxOccurs="unbounded"/>
@@ -269,7 +269,7 @@
 							<xs:field xpath="."/>
 						</xs:unique>
 					</xs:element>
-					<xs:element name="mappe" type="mappeDokumentDateiFiles" minOccurs="0" maxOccurs="unbounded">
+					<xs:element name="mappe" type="mappeDokumentDateiFilesDossier" minOccurs="0" maxOccurs="unbounded">
 						<xs:unique name="uniqueDateiRefDossierMappeFiles">
 							<xs:selector xpath="./arelda:dateiRef"/>
 							<xs:field xpath="."/>
@@ -330,7 +330,6 @@
 			<xs:element name="inhalt" type="inhalt" minOccurs="0"/>
 			<xs:element name="eroeffnungsdatum" type="historischerZeitpunkt" minOccurs="0"/>
 			<xs:element name="erscheinungsform" type="erscheinungsformDossier" minOccurs="0"/>
-			<xs:element name="umfang" type="umfang" minOccurs="0"/>
 			<xs:element name="bemerkung" type="bemerkungMappe" minOccurs="0"/>
 			<xs:element name="zusatzDaten" type="zusatzDaten" minOccurs="0"/>
 		</xs:sequence>
@@ -359,7 +358,7 @@
 		<xs:complexContent>
 			<xs:extension base="mappe">
 				<xs:sequence>
-					<xs:element name="ordnungssystemposition" type="ordnungssystempositionFiles" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element name="ordnungssystemposition" type="ordnungssystempositionFiles" maxOccurs="unbounded"/>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
@@ -378,17 +377,38 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	<xs:complexType name="mappeDokumentDateiFiles">
+	<xs:complexType name="mappeDokumentDateiFilesDossier">
 		<xs:complexContent>
 			<xs:extension base="mappe">
 				<xs:sequence>
 					<xs:element name="dokument" type="dokumentFiles" minOccurs="0" maxOccurs="unbounded">
-						<xs:unique name="uniqueDateiRefMappeDokumentFiles">
+						<xs:unique name="uniqueDateiRefMappeDokumentFilesDossier">
 							<xs:selector xpath="./arelda:dateiRef"/>
 							<xs:field xpath="."/>
 						</xs:unique>
 					</xs:element>
 					<xs:element name="dateiRef" type="dateiRef" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="mappeDokumentDateiFilesAblieferung">
+		<xs:complexContent>
+			<xs:extension base="mappe">
+				<xs:sequence>
+					<xs:element name="dokument" type="dokumentFiles" minOccurs="0" maxOccurs="unbounded">
+						<xs:unique name="uniqueDateiRefMappeDokumentFilesAblieferung">
+							<xs:selector xpath="./arelda:dateiRef"/>
+							<xs:field xpath="."/>
+						</xs:unique>
+					</xs:element>
+					<xs:element name="dateiRef" type="dateiRef" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element name="mappe" type="mappeDokumentDateiFilesAblieferung" minOccurs="0" maxOccurs="unbounded">
+						<xs:unique name="uniqueDateiRefAblieferungMappeSubmappeFiles">
+							<xs:selector xpath="./arelda:dateiRef"/>
+							<xs:field xpath="."/>
+						</xs:unique>
+					</xs:element>
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>

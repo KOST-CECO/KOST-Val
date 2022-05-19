@@ -28,6 +28,7 @@ import ch.kostceco.tools.kostval.exception.modulesip1.Validation1cNamingExceptio
 import ch.kostceco.tools.kostval.exception.modulesip1.Validation1dMetadataException;
 import ch.kostceco.tools.kostval.exception.modulesip1.Validation1eSipTypeException;
 import ch.kostceco.tools.kostval.exception.modulesip1.Validation1fPrimaryDataException;
+import ch.kostceco.tools.kostval.exception.modulesip1.Validation1gPackageSizeFilesException;
 import ch.kostceco.tools.kostval.exception.modulesip2.Validation2aFileIntegrityException;
 // import ch.kostceco.tools.kostval.exception.modulesip2.Validation2bSurplusFilesException;
 import ch.kostceco.tools.kostval.exception.modulesip2.Validation2cChecksumException;
@@ -45,6 +46,7 @@ import ch.kostceco.tools.kostval.validation.modulesip1.Validation1cNamingModule;
 import ch.kostceco.tools.kostval.validation.modulesip1.Validation1dMetadataModule;
 import ch.kostceco.tools.kostval.validation.modulesip1.Validation1eSipTypeModule;
 import ch.kostceco.tools.kostval.validation.modulesip1.Validation1fPrimaryDataModule;
+import ch.kostceco.tools.kostval.validation.modulesip1.Validation1gPackageSizeFilesModule;
 import ch.kostceco.tools.kostval.validation.modulesip2.Validation2aFileIntegrityModule;
 // import ch.kostceco.tools.kostval.validation.modulesip2.Validation2bSurplusFilesModule;
 import ch.kostceco.tools.kostval.validation.modulesip2.Validation2cChecksumModule;
@@ -71,6 +73,8 @@ public class Controllersip implements MessageConstants
 	private Validation1eSipTypeModule							validation1eSipTypeModule;
 
 	private Validation1fPrimaryDataModule					validation1fPrimaryDataModule;
+
+	private Validation1gPackageSizeFilesModule					validation1gPackageSizeFilesModule;
 
 	private Validation2aFileIntegrityModule				validation2aFileIntegrityModule;
 
@@ -138,6 +142,17 @@ public class Controllersip implements MessageConstants
 			Validation1fPrimaryDataModule validation1fPrimaryDataModule )
 	{
 		this.validation1fPrimaryDataModule = validation1fPrimaryDataModule;
+	}
+
+	public Validation1gPackageSizeFilesModule getValidation1gPackageSizeFilesModule()
+	{
+		return validation1gPackageSizeFilesModule;
+	}
+
+	public void setValidation1gPackageSizeFilesModule(
+			Validation1gPackageSizeFilesModule validation1gPackageSizeFilesModule )
+	{
+		this.validation1gPackageSizeFilesModule = validation1gPackageSizeFilesModule;
 	}
 
 	public Validation2aFileIntegrityModule getValidation2aFileIntegrityModule()
@@ -339,6 +354,26 @@ public class Controllersip implements MessageConstants
 			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Af_SIP )
 					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidation1fPrimaryDataModule().getMessageService().print();
+			valid = false;
+		} catch ( Exception e ) {
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Af_SIP )
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			return false;
+		}
+
+		// Validation Step Ag
+		try {
+			if ( this.getValidation1gPackageSizeFilesModule().validate( valDatei, directoryOfLogfile,
+					configMap, locale, logFile ) ) {
+				this.getValidation1gPackageSizeFilesModule().getMessageService().print();
+			} else {
+				this.getValidation1gPackageSizeFilesModule().getMessageService().print();
+				valid = false;
+			}
+		} catch ( Validation1gPackageSizeFilesException e ) {
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Af_SIP )
+					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			this.getValidation1gPackageSizeFilesModule().getMessageService().print();
 			valid = false;
 		} catch ( Exception e ) {
 			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Af_SIP )

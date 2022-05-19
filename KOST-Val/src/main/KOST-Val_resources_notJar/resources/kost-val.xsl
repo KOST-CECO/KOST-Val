@@ -108,8 +108,10 @@
 										<xsl:value-of select="ValFile" />
 									</td>
 								</tr>
+							</table>
+							<table width="100%">
 								<xsl:for-each select="Error">
-									<tr class="captionio">
+									<tr class="captioniom">
 										<td width="25%">
 											<xsl:value-of select="Modul" />
 										</td>

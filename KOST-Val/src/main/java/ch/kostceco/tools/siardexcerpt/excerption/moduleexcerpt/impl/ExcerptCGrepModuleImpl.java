@@ -29,9 +29,11 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import ch.kostceco.tools.kosttools.util.StreamGobbler;
+import ch.kostceco.tools.kosttools.fileservice.Grep;
+import ch.kostceco.tools.kosttools.fileservice.Sed;
 import ch.kostceco.tools.kosttools.util.Util;
 import ch.kostceco.tools.kostval.logging.Logtxt;
+import ch.kostceco.tools.siardexcerpt.SIARDexcerpt;
 import ch.kostceco.tools.siardexcerpt.exception.moduleexcerpt.ExcerptCGrepException;
 import ch.kostceco.tools.siardexcerpt.excerption.ValidationModuleImpl;
 import ch.kostceco.tools.siardexcerpt.excerption.moduleexcerpt.ExcerptCGrepModule;
@@ -51,81 +53,44 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 
 		boolean isValid = true;
 
-		/* // Schema herausfinden File fSchema = new File( siardDatei.getAbsolutePath() + File.separator
-		 * + "content" + File.separator + "schema0" ); for ( int s = 0; s < 9999999; s++ ) { fSchema =
-		 * new File( siardDatei.getAbsolutePath() + File.separator + "content" + File.separator +
-		 * "schema" + s ); if ( fSchema.exists() ) { break; } } */
-
-		File fGrepExe = new File( "resources" + File.separator + "grep" + File.separator + "grep.exe" );
-		String pathToGrepExe = fGrepExe.getAbsolutePath();
-		if ( !fGrepExe.exists() ) {
-			// grep.exe existiert nicht --> Abbruch
-			Logtxt.logtxt( outFile,
-					getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_C )
-							+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_C_MISSINGFILE,
-									fGrepExe.getAbsolutePath() ) );
-			return false;
-		} else {
-			File fMsys10dll = new File(
-					"resources" + File.separator + "grep" + File.separator + "msys-1.0.dll" );
-			if ( !fMsys10dll.exists() ) {
-				// msys-1.0.dll existiert nicht --> Abbruch
-				Logtxt.logtxt( outFile,
-						getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_C )
-								+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_C_MISSINGFILE,
-										fMsys10dll.getAbsolutePath() ) );
-				return false;
-			}
+		/* dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist ein generelles TODO in
+		 * allen Modulen. Zuerst immer dirOfJarPath ermitteln und dann alle Pfade mit
+		 * 
+		 * dirOfJarPath + File.separator +
+		 * 
+		 * erweitern. */
+		String path = new File(
+				SIARDexcerpt.class.getProtectionDomain().getCodeSource().getLocation().getPath() )
+						.getAbsolutePath();
+		String locationOfJarPath = path;
+		String dirOfJarPath = locationOfJarPath;
+		if ( locationOfJarPath.endsWith( ".jar" ) || locationOfJarPath.endsWith( ".exe" )
+				|| locationOfJarPath.endsWith( "." ) ) {
+			File file = new File( locationOfJarPath );
+			dirOfJarPath = file.getParent();
 		}
 
-		File fSedExe = new File( "resources" + File.separator + "sed" + File.separator + "sed.exe" );
-		File msys20dll = new File(
-				"resources" + File.separator + "sed" + File.separator + "msys-2.0.dll" );
-		File msysgccs1dll = new File(
-				"resources" + File.separator + "sed" + File.separator + "msys-gcc_s-1.dll" );
-		File msysiconv2dll = new File(
-				"resources" + File.separator + "sed" + File.separator + "msys-iconv-2.dll" );
-		File msysintl8dll = new File(
-				"resources" + File.separator + "sed" + File.separator + "msys-intl-8.dll" );
-		String pathToSedExe = fSedExe.getAbsolutePath();
-		if ( !fSedExe.exists() ) {
-			// sed.exe existiert nicht --> Abbruch
-			Logtxt.logtxt( outFile,
-					getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_C )
-							+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_C_MISSINGFILE,
-									fSedExe.getAbsolutePath() ) );
-			return false;
+		String pathToWorkDir = configMap.get( "PathToWorkDir" );
+		File workDir = new File( pathToWorkDir );
+
+		String sed = configMap.get( "Sed" );
+
+		// Pfad zum Programm existiert die Dateien?
+		String checkTool = Sed.checkSed( dirOfJarPath );
+		if ( !checkTool.equals( "OK" ) ) {
+			// mindestens eine Datei fehlt --> Abbruch
+			Logtxt.logtxt( outFile, getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_C )
+					+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_C_MISSINGFILE, checkTool ) );
+			sed = "nok";
 		}
-		if ( !msys20dll.exists() ) {
-			// existiert nicht --> Abbruch
+		// Pfad zum Programm existiert die Dateien?
+		String checkToolGrep = Grep.checkGrep( dirOfJarPath );
+		if ( !checkToolGrep.equals( "OK" ) ) {
+			// mindestens eine Datei fehlt --> Abbruch
 			Logtxt.logtxt( outFile,
 					getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_C )
 							+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_C_MISSINGFILE,
-									msys20dll.getAbsolutePath() ) );
-			return false;
-		}
-		if ( !msysgccs1dll.exists() ) {
-			// existiert nicht --> Abbruch
-			Logtxt.logtxt( outFile,
-					getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_C )
-							+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_C_MISSINGFILE,
-									msysgccs1dll.getAbsolutePath() ) );
-			return false;
-		}
-		if ( !msysiconv2dll.exists() ) {
-			// existiert nicht --> Abbruch
-			Logtxt.logtxt( outFile,
-					getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_C )
-							+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_C_MISSINGFILE,
-									msysiconv2dll.getAbsolutePath() ) );
-			return false;
-		}
-		if ( !msysintl8dll.exists() ) {
-			// existiert nicht --> Abbruch
-			Logtxt.logtxt( outFile,
-					getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_C )
-							+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_C_MISSINGFILE,
-									msysintl8dll.getAbsolutePath() ) );
+									checkToolGrep ) );
 			return false;
 		}
 
@@ -192,16 +157,6 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 				excerptStringM = excerptStringM.replaceAll( "\\*", "\\." );
 				excerptStringM = excerptStringM.replaceAll( "\\.", "\\.*" );
 				excerptStringM = "<" + cell + ">" + excerptStringM + "</" + cell + ">";
-				// grep "<c11>7561234567890</c11>" table13.xml >> output.txt
-				String command = "cmd /c \"\"" + pathToGrepExe + "\" -E \"" + excerptStringM + "\" \""
-						+ fMaintable.getAbsolutePath() + "\" >> \"" + tempOutFileMt.getAbsolutePath() + "\"\"";
-				/* Das redirect Zeichen verunmöglicht eine direkte eingabe. mit dem geschachtellten Befehl
-				 * gehts: cmd /c\"urspruenlicher Befehl\" */
-
-				// System.out.println( command );
-
-				Process proc = null;
-				Runtime rt = null;
 
 				Logtxt.logtxt( outFile,
 						getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_ELEMENT_OPEN,
@@ -302,39 +257,17 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 				Logtxt.logtxt( outFile, getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_TEXT,
 						celldescription, "description" ) );
 
-				try {
-					Util.switchOffConsole();
-					rt = Runtime.getRuntime();
-					proc = rt.exec( command.toString().split( " " ) );
-					// .split(" ") ist notwendig wenn in einem Pfad ein Doppelleerschlag vorhanden ist!
+				// grep "<c11>7561234567890</c11>" table13.xml >> output.txt
+				String resultExec = Grep.execGrep( " -E ", excerptStringM, fMaintable, tempOutFileMt,
+						workDir, dirOfJarPath );
 
-					// Fehleroutput holen
-					StreamGobbler errorGobbler = new StreamGobbler( proc.getErrorStream(), "ERROR" );
-
-					// Output holen
-					StreamGobbler outputGobbler = new StreamGobbler( proc.getInputStream(), "OUTPUT" );
-
-					// Threads starten
-					errorGobbler.start();
-					outputGobbler.start();
-
-					// Warte, bis wget fertig ist
-					proc.waitFor();
-
-					Util.switchOnConsole();
-
-				} catch ( Exception e ) {
+				if ( !resultExec.equals( "OK" ) ) {
+					// grep hat nicht funktioniert
 					Logtxt.logtxt( outFile,
 							getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_C )
 									+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN,
-											e.getMessage() ) );
-					return false;
-				} finally {
-					if ( proc != null ) {
-						proc.getOutputStream().close();
-						proc.getInputStream().close();
-						proc.getErrorStream().close();
-					}
+											resultExec ) );
+					isValid = false;
 				}
 
 				// liest das tempOutFile (UTF-8) ein
@@ -421,163 +354,60 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 							+ File.separator + schemafolder );
 					File fSubtable = new File( fSchema.getAbsolutePath() + File.separator + folder
 							+ File.separator + folder + ".xml" );
-					File fSubtableTemp = new File( fSchema.getAbsolutePath() + File.separator + folder
-							+ File.separator + folder + "_Temp.xml" );
-					String pathTofSubtable = fSubtable.getAbsolutePath();
-					String pathTofSubtableTemp = fSubtableTemp.getAbsolutePath();
+					File fSubtableTemp1 = new File( fSchema.getAbsolutePath() + File.separator + folder
+							+ File.separator + folder + "_Temp1.xml" );
+					File fSubtableTemp2 = new File( fSchema.getAbsolutePath() + File.separator + folder
+							+ File.separator + folder + "_Temp2.xml" );
+					File fSubtableTemp3 = new File( fSchema.getAbsolutePath() + File.separator + folder
+							+ File.separator + folder + "_Temp3.xml" );
 					/* mit Util.oldnewstring respektive replace können sehr grosse files nicht bearbeitet
 					 * werden!
 					 * 
 					 * Entsprechend wurde sed verwendet. */
 
-					String sed = configMap.get( "Sed" );
 					if ( sed.equalsIgnoreCase( "yes" ) ) {
 						// Bringt alles auf eine Zeile
-						String commandSed = "cmd /c \"" + pathToSedExe + " 's/\\n/ /g' " + pathTofSubtable
-								+ " > " + pathTofSubtableTemp + "\"";
-						String commandSed2 = "cmd /c \"" + pathToSedExe + " ':a;N;$!ba;s/\\n/ /g' "
-								+ pathTofSubtableTemp + " > " + pathTofSubtable + "\"";
+						String sed1 = " 's/\\n/ /g' ";
+						String sed2 = " ':a;N;$!ba;s/\\n/ /g' ";
 						// Trennt ><row. Nur eine row auf einer Zeile
-						String commandSed3 = "cmd /c \"" + pathToSedExe + " 's/\\d060row/\\n\\d060row/g' "
-								+ pathTofSubtable + " > " + pathTofSubtableTemp + "\"";
+						String sed3 = " 's/\\d060row/\\n\\d060row/g' ";
 						// Trennt ><table. <table auf eine neue Zeile
-						String commandSed4 = "cmd /c \"" + pathToSedExe
-								+ " 's/\\d060\\d047table/\\n\\d060\\d047table/g' " + pathTofSubtableTemp + " > "
-								+ pathTofSubtable + "\"";
+						String sed4 = " 's/\\d060\\d047table/\\n\\d060\\d047table/g' ";
 
-						// String commandSed = "cmd /c \"\"pathToSedExe\" 's/row/R0W/g\' 'hallo row.'\"";
-						/* Das redirect Zeichen verunmöglicht eine direkte eingabe. mit dem geschachtellten
-						 * Befehl gehts: cmd /c\"urspruenlicher Befehl\" */
+						long sleepLong = fSubtable.length() / 1000000;
 
-						Process procSed = null;
-						Runtime rtSed = null;
-						Process procSed2 = null;
-						Runtime rtSed2 = null;
-						Process procSed3 = null;
-						Runtime rtSed3 = null;
-						Process procSed4 = null;
-						Runtime rtSed4 = null;
-
-						try {
-							Util.switchOffConsole();
-							rtSed = Runtime.getRuntime();
-							procSed = rtSed.exec( commandSed.toString().split( " " ) );
-							// .split(" ") ist notwendig wenn in einem Pfad ein Doppelleerschlag vorhanden ist!
-
-							// Fehleroutput holen
-							StreamGobbler errorGobblerSed = new StreamGobbler( procSed.getErrorStream(),
-									"ERROR" );
-
-							// Output holen
-							StreamGobbler outputGobblerSed = new StreamGobbler( procSed.getInputStream(),
-									"OUTPUT" );
-
-							// Threads starten
-							errorGobblerSed.start();
-							outputGobblerSed.start();
-
-							// Warte, bis wget fertig ist
-							procSed.waitFor();
-
-							// ---------------------------
-
-							rtSed2 = Runtime.getRuntime();
-							procSed2 = rtSed2.exec( commandSed2.toString().split( " " ) );
-							// .split(" ") ist notwendig wenn in einem Pfad ein Doppelleerschlag vorhanden ist!
-
-							// Fehleroutput holen
-							StreamGobbler errorGobblerSed2 = new StreamGobbler( procSed2.getErrorStream(),
-									"ERROR" );
-
-							// Output holen
-							StreamGobbler outputGobblerSed2 = new StreamGobbler( procSed2.getInputStream(),
-									"OUTPUT" );
-
-							// Threads starten
-							errorGobblerSed2.start();
-							outputGobblerSed2.start();
-
-							// Warte, bis wget fertig ist
-							procSed2.waitFor();
-
-							// ---------------------------
-
-							rtSed3 = Runtime.getRuntime();
-							procSed3 = rtSed3.exec( commandSed3.toString().split( " " ) );
-							// .split(" ") ist notwendig wenn in einem Pfad ein Doppelleerschlag vorhanden ist!
-
-							// Fehleroutput holen
-							StreamGobbler errorGobblerSed3 = new StreamGobbler( procSed3.getErrorStream(),
-									"ERROR" );
-
-							// Output holen
-							StreamGobbler outputGobblerSed3 = new StreamGobbler( procSed3.getInputStream(),
-									"OUTPUT" );
-
-							// Threads starten
-							errorGobblerSed3.start();
-							outputGobblerSed3.start();
-
-							// Warte, bis wget fertig ist
-							procSed3.waitFor();
-
-							// ---------------------------
-
-							rtSed4 = Runtime.getRuntime();
-							procSed4 = rtSed4.exec( commandSed4.toString().split( " " ) );
-							// .split(" ") ist notwendig wenn in einem Pfad ein Doppelleerschlag vorhanden ist!
-
-							// Fehleroutput holen
-							StreamGobbler errorGobblerSed4 = new StreamGobbler( procSed4.getErrorStream(),
-									"ERROR" );
-
-							// Output holen
-							StreamGobbler outputGobblerSed4 = new StreamGobbler( procSed4.getInputStream(),
-									"OUTPUT" );
-
-							// Threads starten
-							errorGobblerSed4.start();
-							outputGobblerSed4.start();
-
-							// Warte, bis wget fertig ist
-							procSed4.waitFor();
-
-							// ---------------------------
-
-							Util.switchOnConsole();
-
-						} catch ( Exception e ) {
-							Logtxt.logtxt( outFile,
-									getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_C )
-											+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN,
-													e.getMessage() ) );
-							return false;
-						} finally {
-							if ( procSed != null ) {
-								procSed.getOutputStream().close();
-								procSed.getInputStream().close();
-								procSed.getErrorStream().close();
+						// Sed-Befehl: pathToSedExe options fSearchtable > fSearchtableTemp
+						String resultExec = Sed.execSed( sed1, fSubtable, fSubtableTemp1, workDir,
+								dirOfJarPath );
+						Thread.sleep( sleepLong );
+						if ( resultExec.equals( "OK" ) ) {
+							resultExec = Sed.execSed( sed2, fSubtableTemp1, fSubtableTemp2, workDir,
+									dirOfJarPath );
+							Thread.sleep( sleepLong );
+							if ( resultExec.equals( "OK" ) ) {
+								resultExec = Sed.execSed( sed3, fSubtableTemp2, fSubtableTemp3, workDir,
+										dirOfJarPath );
+								Thread.sleep( sleepLong );
+								if ( resultExec.equals( "OK" ) ) {
+									resultExec = Sed.execSed( sed4, fSubtableTemp3, fSubtable, workDir,
+											dirOfJarPath );
+									Thread.sleep( sleepLong );
+								}
 							}
-							if ( procSed2 != null ) {
-								procSed2.getOutputStream().close();
-								procSed2.getInputStream().close();
-								procSed2.getErrorStream().close();
-							}
-							if ( procSed3 != null ) {
-								procSed3.getOutputStream().close();
-								procSed3.getInputStream().close();
-								procSed3.getErrorStream().close();
-							}
-							if ( procSed4 != null ) {
-								procSed4.getOutputStream().close();
-								procSed4.getInputStream().close();
-								procSed4.getErrorStream().close();
-							}
+						}
+						if ( !resultExec.equals( "OK" ) || fSubtable.length() == 0 ) {
+							// sed hat nicht funktioniert, ueberspringen
 						}
 					}
 
-					if ( fSubtableTemp.exists() ) {
-						Util.deleteDir( fSubtableTemp );
+					if ( fSubtableTemp1.exists() ) {
+						Util.deleteDir( fSubtableTemp1 );
+					}
+					if ( fSubtableTemp2.exists() ) {
+						Util.deleteDir( fSubtableTemp2 );
+					}
+					if ( fSubtableTemp3.exists() ) {
+						Util.deleteDir( fSubtableTemp3 );
 					}
 
 					try {
@@ -586,16 +416,6 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 						String excerptStringM = excerptString.replaceAll( " ", "." );
 						excerptStringM = excerptStringM.replaceAll( "\\.", "\\.*" );
 						excerptStringM = "<" + cell + ">" + excerptStringM + "</" + cell + ">";
-						// grep "<c11>7561234567890</c11>" table13.xml >> output.txt
-						String command = "cmd /c \"\"" + pathToGrepExe + "\" -E \"" + excerptStringM + "\" \""
-								+ fSubtable.getAbsolutePath() + "\" >> \"" + tempOutFile.getAbsolutePath() + "\"\"";
-						/* Das redirect Zeichen verunmöglicht eine direkte eingabe. mit dem geschachtellten
-						 * Befehl gehts: cmd /c\"urspruenlicher Befehl\" */
-
-						// System.out.println( command );
-
-						Process proc = null;
-						Runtime rt = null;
 
 						Logtxt.logtxt( outFile,
 								getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_ELEMENT_OPEN,
@@ -713,39 +533,17 @@ public class ExcerptCGrepModuleImpl extends ValidationModuleImpl implements Exce
 						}
 						// TODO End Wie maintable
 
-						try {
-							// Util.switchOffConsole();
-							rt = Runtime.getRuntime();
-							proc = rt.exec( command.toString().split( " " ) );
-							// .split(" ") ist notwendig wenn in einem Pfad ein Doppelleerschlag vorhanden ist!
+						// grep "<c11>7561234567890</c11>" table13.xml >> output.txt
+						String resultExec = Grep.execGrep( " -E ", excerptStringM, fSubtable, tempOutFile,
+								workDir, dirOfJarPath );
 
-							// Fehleroutput holen
-							StreamGobbler errorGobbler = new StreamGobbler( proc.getErrorStream(), "ERROR" );
-
-							// Output holen
-							StreamGobbler outputGobbler = new StreamGobbler( proc.getInputStream(), "OUTPUT" );
-
-							// Threads starten
-							errorGobbler.start();
-							outputGobbler.start();
-
-							// Warte, bis wget fertig ist
-							proc.waitFor();
-
-							// Util.switchOnConsole();
-
-						} catch ( Exception e ) {
+						if ( !resultExec.equals( "OK" ) ) {
+							// grep hat nicht funktioniert
 							Logtxt.logtxt( outFile,
-									getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_C )
+									getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_B )
 											+ getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN,
-													e.getMessage() ) );
-							return false;
-						} finally {
-							if ( proc != null ) {
-								proc.getOutputStream().close();
-								proc.getInputStream().close();
-								proc.getErrorStream().close();
-							}
+													resultExec ) );
+							isValid = false;
 						}
 
 						// liest das tempOutFile (UTF-8) ein

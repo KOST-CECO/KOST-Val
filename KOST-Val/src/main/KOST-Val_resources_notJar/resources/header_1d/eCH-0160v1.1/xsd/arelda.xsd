@@ -252,7 +252,7 @@
     <xs:complexContent>
       <xs:extension base="provenienz">
         <xs:sequence>
-          <xs:element name="registratur" type="registratur"/>
+          <xs:element name="registratur" type="registraturM"/>
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -347,7 +347,7 @@
     <xs:complexContent>
       <xs:extension base="ordnungssystem">
         <xs:sequence>
-          <xs:element name="name" type="nameOrdnungssystem"/>
+          <xs:element name="name" type="nameOrdnungssystemM"/>
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -443,8 +443,8 @@
     <xs:complexContent>
       <xs:extension base="ordnungssystemposition">
         <xs:sequence>
-          <xs:element name="nummer" type="nummer"/>
-          <xs:element name="titel" type="titelOrdnungssystemposition"/>
+          <xs:element name="nummer" type="nummerM"/>
+          <xs:element name="titel" type="titelOrdnungssystempositionM"/>
         </xs:sequence>
         <xs:attribute name="id" type="idOrdnungssystemposition" use="required"/>
       </xs:extension>
@@ -610,7 +610,7 @@
     <xs:complexContent>
       <xs:extension base="dossier">
         <xs:sequence>
-          <xs:element name="aktenzeichen" type="aktenzeichen"/>
+          <xs:element name="aktenzeichen" type="aktenzeichenM"/>
           <xs:element name="eroeffnungsdatum" type="historischerZeitpunkt" minOccurs="0">
             <xs:annotation>
               <xs:documentation xml:lang="de">Zeitpunkt, an dem das Dossier eröffnet worden ist.</xs:documentation>
@@ -1077,7 +1077,7 @@
         <xs:documentation xml:lang="it"/>
       </xs:annotation>
       <xs:element name="dateiRef" type="dateiRef" minOccurs="0"/>
-      <xs:element name="dateiBeschreibung" type="text4">
+      <xs:element name="dateiBeschreibung" type="text4m">
         <xs:annotation>
           <xs:documentation xml:lang="de">Zusätzliche unstrukturierte Informationen, welche der Ablieferung fakultativ mitgegeben werden können.</xs:documentation>
           <xs:documentation xml:lang="en">Additional unstructured information that may optionally be included with the submission.</xs:documentation>

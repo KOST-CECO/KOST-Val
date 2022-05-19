@@ -111,7 +111,7 @@ public class GuiController
 
 	private String						arg0, arg1, arg2, arg3 = "--xml", dirOfJarPath, initInstructionsDe,
 			initInstructionsFr, initInstructionsEn;
-	private String						versionKostVal	= "2.1.1.0";
+	private String						versionKostVal	= "2.1.1.1";
 	/* TODO: versionKostVal auch hier anpassen:
 	 * 
 	 * 2) cmdKOSTVal.java
@@ -199,8 +199,10 @@ public class GuiController
 				labelConfig.setText( "Configuration" );
 				buttonSave.setText( "sauvegarder" );
 				buttonPrint.setText( "imprimer" );
-				Util.oldnewstring( "kostval-conf-DE.xsl", "kostval-conf-FR.xsl", configFile );
-				Util.oldnewstring( "kostval-conf-EN.xsl", "kostval-conf-FR.xsl", configFile );
+				if ( configFile.exists() ) {
+					Util.oldnewstring( "kostval-conf-DE.xsl", "kostval-conf-FR.xsl", configFile );
+					Util.oldnewstring( "kostval-conf-EN.xsl", "kostval-conf-FR.xsl", configFile );
+				}
 			} else if ( locale.toString().startsWith( "en" ) ) {
 				locale = new Locale( "en" );
 				arg2 = locale.toString();
@@ -219,8 +221,10 @@ public class GuiController
 				labelConfig.setText( "Configuration" );
 				buttonSave.setText( "save" );
 				buttonPrint.setText( "print" );
-				Util.oldnewstring( "kostval-conf-DE.xsl", "kostval-conf-EN.xsl", configFile );
-				Util.oldnewstring( "kostval-conf-FR.xsl", "kostval-conf-EN.xsl", configFile );
+				if ( configFile.exists() ) {
+					Util.oldnewstring( "kostval-conf-DE.xsl", "kostval-conf-EN.xsl", configFile );
+					Util.oldnewstring( "kostval-conf-FR.xsl", "kostval-conf-EN.xsl", configFile );
+				}
 			} else {
 				locale = new Locale( "de" );
 				arg2 = locale.toString();
@@ -239,8 +243,10 @@ public class GuiController
 				labelConfig.setText( "Konfiguration" );
 				buttonSave.setText( "speichern" );
 				buttonPrint.setText( "drucken" );
-				Util.oldnewstring( "kostval-conf-FR.xsl", "kostval-conf-DE.xsl", configFile );
-				Util.oldnewstring( "kostval-conf-EN.xsl", "kostval-conf-DE.xsl", configFile );
+				if ( configFile.exists() ) {
+					Util.oldnewstring( "kostval-conf-FR.xsl", "kostval-conf-DE.xsl", configFile );
+					Util.oldnewstring( "kostval-conf-EN.xsl", "kostval-conf-DE.xsl", configFile );
+				}
 			}
 		} catch ( IOException e1 ) {
 			e1.printStackTrace();
@@ -280,18 +286,27 @@ public class GuiController
 		/* Kontrolle der wichtigsten Eigenschaften: Log-Verzeichnis, Arbeitsverzeichnis, Java, jhove
 		 * Configuration, Konfigurationsverzeichnis, path.tmp */
 		ControllerInit controllerInit = (ControllerInit) context.getBean( "controllerInit" );
-		boolean init;
+		boolean init, init2;
 		try {
 			init = controllerInit.init( locale, dirOfJarPath, versionKostVal );
 			if ( !init ) {
-				// Fehler: es wird abgebrochen
-				String text = "Ein Fehler ist aufgetreten. Siehe Konsole.";
-				if ( locale.toString().startsWith( "fr" ) ) {
-					text = "Une erreur s`est produite. Voir console.";
-				} else if ( locale.toString().startsWith( "en" ) ) {
-					text = "An error has occurred. See console.";
+				// zweiter Versuch
+				console.setText( " \n" );
+				init2 = controllerInit.init( locale, dirOfJarPath, versionKostVal );
+				if ( !init2 ) {
+					// Fehler: es wird abgebrochen
+					String text = "Ein Fehler ist aufgetreten. Siehe Konsole.";
+					if ( locale.toString().startsWith( "fr" ) ) {
+						text = "Une erreur s`est produite. Voir console.";
+					} else if ( locale.toString().startsWith( "en" ) ) {
+						text = "An error has occurred. See console.";
+					}
+					engine.loadContent( "<html><h2>" + text + "</h2></html>" );
+				} else {
+					console.setText( " \n" );
 				}
-				engine.loadContent( "<html><h2>" + text + "</h2></html>" );
+			} else {
+				console.setText( " \n" );
 			}
 		} catch ( IOException e ) {
 			e.printStackTrace();
@@ -1427,8 +1442,10 @@ public class GuiController
 				labelConfig.setText( "Konfiguration" );
 				buttonSave.setText( "speichern" );
 				buttonPrint.setText( "drucken" );
-				Util.oldnewstring( "kostval-conf-FR.xsl", "kostval-conf-DE.xsl", configFile );
-				Util.oldnewstring( "kostval-conf-EN.xsl", "kostval-conf-DE.xsl", configFile );
+				if ( configFile.exists() ) {
+					Util.oldnewstring( "kostval-conf-FR.xsl", "kostval-conf-DE.xsl", configFile );
+					Util.oldnewstring( "kostval-conf-EN.xsl", "kostval-conf-DE.xsl", configFile );
+				}
 				locale = new Locale( "de" );
 			} else if ( selLang.equals( "English" ) ) {
 				buttonFormat.setText( "Format only" );
@@ -1445,8 +1462,10 @@ public class GuiController
 				labelConfig.setText( "Configuration" );
 				buttonSave.setText( "save" );
 				buttonPrint.setText( "print" );
-				Util.oldnewstring( "kostval-conf-DE.xsl", "kostval-conf-EN.xsl", configFile );
-				Util.oldnewstring( "kostval-conf-FR.xsl", "kostval-conf-EN.xsl", configFile );
+				if ( configFile.exists() ) {
+					Util.oldnewstring( "kostval-conf-DE.xsl", "kostval-conf-EN.xsl", configFile );
+					Util.oldnewstring( "kostval-conf-FR.xsl", "kostval-conf-EN.xsl", configFile );
+				}
 				locale = new Locale( "en" );
 			} else {
 				buttonFormat.setText( "format uniquement" );
@@ -1463,8 +1482,10 @@ public class GuiController
 				labelConfig.setText( "Configuration" );
 				buttonSave.setText( "sauvegarder" );
 				buttonPrint.setText( "imprimer" );
-				Util.oldnewstring( "kostval-conf-DE.xsl", "kostval-conf-FR.xsl", configFile );
-				Util.oldnewstring( "kostval-conf-EN.xsl", "kostval-conf-FR.xsl", configFile );
+				if ( configFile.exists() ) {
+					Util.oldnewstring( "kostval-conf-DE.xsl", "kostval-conf-FR.xsl", configFile );
+					Util.oldnewstring( "kostval-conf-EN.xsl", "kostval-conf-FR.xsl", configFile );
+				}
 				locale = new Locale( "fr" );
 			}
 		} catch ( IOException e1 ) {

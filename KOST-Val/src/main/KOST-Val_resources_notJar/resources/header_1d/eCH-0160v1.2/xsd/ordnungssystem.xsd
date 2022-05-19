@@ -4,6 +4,9 @@
 	<xs:simpleType name="nameOrdnungssystem">
 		<xs:restriction base="text2"/>
 	</xs:simpleType>
+	<xs:simpleType name="nameOrdnungssystemM">
+		<xs:restriction base="text2m"/>
+	</xs:simpleType>
 	<xs:simpleType name="generation">
 		<xs:restriction base="text1"/>
 	</xs:simpleType>

@@ -2,6 +2,8 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<xs:include schemaLocation="base.xsd"/>
 	<xs:simpleType name="nameOrdner">
-		<xs:restriction base="xs:string"/>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+		</xs:restriction>
 	</xs:simpleType>
 </xs:schema>

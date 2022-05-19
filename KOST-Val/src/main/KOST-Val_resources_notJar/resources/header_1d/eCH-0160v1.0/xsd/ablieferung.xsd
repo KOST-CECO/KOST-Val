@@ -39,7 +39,7 @@
 				Abkürzung), und Name der Person, die für die Ablieferung zuständig
 				ist.</xs:documentation>
 		</xs:annotation>
-		<xs:restriction base="text2" />
+		<xs:restriction base="text2m" />
 	</xs:simpleType>
 
 	<xs:simpleType name="referenzBewertungsentscheid">

@@ -11,7 +11,9 @@
       <xs:documentation xml:lang="fr">La table des matières dresse une liste hiérarchique de tous les fichiers et répertoires du paquet. Pour le répertoire est utilisé le nom du répertoire.</xs:documentation>
       <xs:documentation xml:lang="it"/>
     </xs:annotation>
-    <xs:restriction base="xs:string"/>
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+    </xs:restriction>
   </xs:simpleType>
 
   <xs:simpleType name="idOrdner">
