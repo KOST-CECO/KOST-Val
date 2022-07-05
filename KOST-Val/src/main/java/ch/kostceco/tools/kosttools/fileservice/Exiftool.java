@@ -24,59 +24,76 @@ import ch.kostceco.tools.kosttools.runtime.Cmd;
 
 public class Exiftool
 {
-	private static String	exeDir			= "resources" + File.separator + "ExifTool-10.15";
-	private static String	identifyPl	= exeDir + File.separator + "exiftool.pl";
-	private static String	perl				= exeDir + File.separator + "Perl" + File.separator + "bin"
-			+ File.separator + "perl.exe";
+	private static String	exeDir		= "resources" + File.separator
+			+ "ExifTool-10.15";
+	private static String	identifyPl	= exeDir + File.separator
+			+ "exiftool.pl";
+	private static String	perl		= exeDir + File.separator + "Perl"
+			+ File.separator + "bin" + File.separator + "perl.exe";
 
-	/** fuehrt eine Validierung mit Exiftool via cmd durch und speichert das Ergebnis in ein File
-	 * (Report). Gibt zurueck ob Report existiert oder nicht
+	/**
+	 * fuehrt eine Validierung mit Exiftool via cmd durch und speichert das
+	 * Ergebnis in ein File (Report). Gibt zurueck ob Report existiert oder
+	 * nicht
 	 * 
 	 * @param options
-	 *          Option wie exiftool angesprochen werden soll
+	 *            Option wie exiftool angesprochen werden soll
 	 * @param tiffFile
-	 *          tiff-Datei, welche validiert werden soll
+	 *            tiff-Datei, welche validiert werden soll
 	 * @param report
-	 *          Datei fuer den Report
+	 *            Datei fuer den Report
 	 * @param workDir
-	 *          Temporaeres Verzeichnis
+	 *            Temporaeres Verzeichnis
 	 * @param dirOfJarPath
-	 *          String mit dem Pfad von wo das Programm gestartet wurde
-	 * @return String ob Report existiert oder nicht ggf Exception */
-	public static String execExiftool( String options, File tiffFile, File report, File workDir,
-			String dirOfJarPath ) throws InterruptedException
+	 *            String mit dem Pfad von wo das Programm gestartet wurde
+	 * @return String ob Report existiert oder nicht ggf Exception
+	 */
+	public static String execExiftool( String options, File tiffFile,
+			File report, File workDir, String dirOfJarPath )
+			throws InterruptedException
 	{
 		boolean out = true;
-		File fIdentifyPl = new File( dirOfJarPath + File.separator + identifyPl );
+		File fIdentifyPl = new File(
+				dirOfJarPath + File.separator + identifyPl );
 		File fPerl = new File( dirOfJarPath + File.separator + perl );
-		// falls das File von einem vorhergehenden Durchlauf bereits existiert, loeschen wir es
+		// falls das File von einem vorhergehenden Durchlauf bereits existiert,
+		// loeschen wir es
 		if ( report.exists() ) {
 			report.delete();
 		}
 
-		// Exiftool-Befehl: pathToPerl pathToExiftoolExe options tiffFile >> report
-		String command = "\"\"" + fPerl.getAbsolutePath() + "\" \"" + fIdentifyPl.getAbsolutePath()
-				+ "\" " + options + " \"" + tiffFile.getAbsolutePath() + "\" >>\""
+		// Exiftool-Befehl: pathToPerl pathToExiftoolExe options tiffFile >>
+		// report
+		String command = "\"\"" + fPerl.getAbsolutePath() + "\" \""
+				+ fIdentifyPl.getAbsolutePath() + "\" " + options + " \""
+				+ tiffFile.getAbsolutePath() + "\" >>\""
 				+ report.getAbsolutePath() + "\"\"";
 
 		// System.out.println( "command: " + command );
 
 		String resultExec = Cmd.execToString( command, out, workDir );
 
-		// Exiftool gibt keine Info raus, die replaced oder ignoriert werden muss
+		// Exiftool gibt keine Info raus, die replaced oder ignoriert werden
+		// muss
 
 		// System.out.println( "resultExec: " + resultExec );
-		/* Folgender Error Output ist keiner sondern nur Info und kann mit OK ersetzt werden: ERROR:
-		 * User warning: ignoring unknown box String ignor =
-		 * "ERROR: User warning: ignoring unknown box"; if ( resultExec.equals( ignor ) ) { resultExec =
-		 * "OK"; } else { /* ERROR: Schemas validity error : Element
-		 * '{http://www.admin.ch/xmlns/siard/1.0/schema0/table2.xsd}row': This element is not
-		 * expected.</Message><Message>ERROR:
-		 * C:\Users\X60014195\.kost-val_2x\temp_KOST-Val\SIARD\content\schema0\table2\table2.xml fails
-		 * to validate */
+		/*
+		 * Folgender Error Output ist keiner sondern nur Info und kann mit OK
+		 * ersetzt werden: ERROR: User warning: ignoring unknown box String
+		 * ignor = "ERROR: User warning: ignoring unknown box"; if (
+		 * resultExec.equals( ignor ) ) { resultExec = "OK"; } else { /* ERROR:
+		 * Schemas validity error : Element
+		 * '{http://www.admin.ch/xmlns/siard/1.0/schema0/table2.xsd}row': This
+		 * element is not expected.</Message><Message>ERROR:
+		 * C:\Users\X60014195\.kost-val_2x\temp_KOST-Val\SIARD\content\schema0\
+		 * table2\table2.xml fails to validate
+		 */
 
-		/* String replaceInfo = "</Message><Message>ERROR: " + jp2File.getAbsolutePath() +
-		 * " fails to validate"; resultExec = resultExec.replace( replaceInfo, "" ); } */
+		/*
+		 * String replaceInfo = "</Message><Message>ERROR: " +
+		 * jp2File.getAbsolutePath() + " fails to validate"; resultExec =
+		 * resultExec.replace( replaceInfo, "" ); }
+		 */
 
 		if ( resultExec.equals( "OK" ) ) {
 			if ( report.exists() ) {
@@ -89,19 +106,22 @@ public class Exiftool
 		return resultExec;
 	}
 
-	/** fuehrt eine Kontrolle aller benoetigten Dateien von Exiftool durch und gibt das Ergebnis als
-	 * String zurueck
+	/**
+	 * fuehrt eine Kontrolle aller benoetigten Dateien von Exiftool durch und
+	 * gibt das Ergebnis als String zurueck
 	 * 
 	 * @param dirOfJarPath
-	 *          String mit dem Pfad von wo das Programm gestartet wurde
-	 * @return String mit Kontrollergebnis */
+	 *            String mit dem Pfad von wo das Programm gestartet wurde
+	 * @return String mit Kontrollergebnis
+	 */
 	public static String checkExiftool( String dirOfJarPath )
 	{
 		String result = "";
 		boolean checkFiles = true;
 		// Pfad zum Programm existiert die Dateien?
 
-		File fIdentifyPl = new File( dirOfJarPath + File.separator + identifyPl );
+		File fIdentifyPl = new File(
+				dirOfJarPath + File.separator + identifyPl );
 		File fPerl = new File( dirOfJarPath + File.separator + perl );
 
 		if ( !fIdentifyPl.exists() ) {

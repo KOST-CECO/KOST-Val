@@ -24,7 +24,7 @@ package ch.kostceco.tools.kostval.exception;
 public class SystemException extends Exception
 {
 
-	private static final long	serialVersionUID	= -5675144395744241578L;
+	private static final long serialVersionUID = -5675144395744241578L;
 
 	public SystemException()
 	{

@@ -24,19 +24,20 @@ public abstract class ValidationModuleImpl
 {
 
 	protected final String			UNZIPDIRECTORY	= "unzipped";
-	protected final String			METADATA				= "metadata.xml";
-	protected final String			XSD_ARELDA			= "arelda_v3.13.2.xsd";
-	protected final String			XSD_METADATA		= "metadata.xsd";
+	protected final String			METADATA		= "metadata.xml";
+	protected final String			XSD_ARELDA		= "arelda_v3.13.2.xsd";
+	protected final String			XSD_METADATA	= "metadata.xsd";
 
 	private TextResourceServiceExc	textResourceServiceExc;
-	private MessageServiceExc			messageServiceExc;
+	private MessageServiceExc		messageServiceExc;
 
 	public TextResourceServiceExc getTextResourceServiceExc()
 	{
 		return textResourceServiceExc;
 	}
 
-	public void setTextResourceServiceExc( TextResourceServiceExc textResourceServiceExc )
+	public void setTextResourceServiceExc(
+			TextResourceServiceExc textResourceServiceExc )
 	{
 		this.textResourceServiceExc = textResourceServiceExc;
 	}

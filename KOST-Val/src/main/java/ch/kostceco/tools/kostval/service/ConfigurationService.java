@@ -23,11 +23,14 @@ import java.io.File;
 import java.util.Locale;
 import java.util.Map;
 
-/** Service Interface für die Konfigurationsdatei.
+/**
+ * Service Interface für die Konfigurationsdatei.
  * 
- * @author Rc Claire Roethlisberger, KOST-CECO */
+ * @author Rc Claire Roethlisberger, KOST-CECO
+ */
 public interface ConfigurationService extends Service
 {
-	Map<String, String> configMap( Locale locale, String logtype, File valDatei );
+	Map<String, String> configMap( Locale locale, String logtype,
+			File valDatei );
 
 }

@@ -25,7 +25,7 @@ public class Validation2cChecksumException extends KOSTValException
 {
 
 	/** @author razm Daniel Ludin, Bedag AG @version 0.2.0 */
-	private static final long	serialVersionUID	= 3673372931705173414L;
+	private static final long serialVersionUID = 3673372931705173414L;
 
 	public Validation2cChecksumException()
 	{

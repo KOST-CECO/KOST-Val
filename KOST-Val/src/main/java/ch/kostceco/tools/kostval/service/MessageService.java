@@ -19,9 +19,11 @@
 
 package ch.kostceco.tools.kostval.service;
 
-/** Interface für den Message Stack Service.
+/**
+ * Interface fï¿½r den Message Stack Service.
  * 
- * @author Rc Claire Roethlisberger, KOST-CECO */
+ * @author Rc Claire Roethlisberger, KOST-CECO
+ */
 public interface MessageService extends Service
 {
 
@@ -31,9 +33,9 @@ public interface MessageService extends Service
 	final static String	WARN	= "3";
 	final static String	DEBUG	= "4";
 
-//	void logInfo( String message );
+	// void logInfo( String message );
 
-//	void logDebug( String message );
+	// void logDebug( String message );
 
 	void logWarning( String message );
 

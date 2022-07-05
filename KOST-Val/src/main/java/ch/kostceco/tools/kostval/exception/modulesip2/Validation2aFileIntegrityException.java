@@ -25,7 +25,7 @@ public class Validation2aFileIntegrityException extends KOSTValException
 {
 
 	/** @author razm Daniel Ludin, Bedag AG @version 0.2.0 */
-	private static final long	serialVersionUID	= 3435323778572249040L;
+	private static final long serialVersionUID = 3435323778572249040L;
 
 	public Validation2aFileIntegrityException()
 	{

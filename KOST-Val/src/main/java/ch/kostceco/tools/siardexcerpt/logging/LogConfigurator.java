@@ -33,7 +33,8 @@ public class LogConfigurator implements MessageConstants
 		return textResourceServiceExc;
 	}
 
-	public void setTextResourceServiceExc( TextResourceServiceExc textResourceServiceExc )
+	public void setTextResourceServiceExc(
+			TextResourceServiceExc textResourceServiceExc )
 	{
 		this.textResourceServiceExc = textResourceServiceExc;
 	}
@@ -41,19 +42,21 @@ public class LogConfigurator implements MessageConstants
 	public String configure( String directoryOfLogfile, String nameOfLogfile )
 	{
 
-		String logFileName = directoryOfLogfile + File.separator + nameOfLogfile;
+		String logFileName = directoryOfLogfile + File.separator
+				+ nameOfLogfile;
 		File logFile = new File( logFileName );
 
 		// MessageOnlyLayout layout = new MessageOnlyLayout();
 
 		try {
 
-			PrintWriter out = new PrintWriter( new BufferedWriter( new FileWriter( logFile, true ) ) );
+			PrintWriter out = new PrintWriter(
+					new BufferedWriter( new FileWriter( logFile, true ) ) );
 			out.close();
 
 		} catch ( IOException e ) {
-			Logtxt.logtxt( logFile,
-					getTextResourceServiceExc().getText( EXC_ERROR_IOE, e + " (LogConfig)" ) );
+			Logtxt.logtxt( logFile, getTextResourceServiceExc()
+					.getText( EXC_ERROR_IOE, e + " (LogConfig)" ) );
 		}
 
 		return logFileName;

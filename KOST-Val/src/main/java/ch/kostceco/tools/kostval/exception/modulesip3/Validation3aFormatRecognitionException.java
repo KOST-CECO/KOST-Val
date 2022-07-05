@@ -25,7 +25,7 @@ public class Validation3aFormatRecognitionException extends KOSTValException
 {
 
 	/** @author razm Daniel Ludin, Bedag AG @version 0.2.0 */
-	private static final long	serialVersionUID	= 5060094531057249403L;
+	private static final long serialVersionUID = 5060094531057249403L;
 
 	public Validation3aFormatRecognitionException()
 	{

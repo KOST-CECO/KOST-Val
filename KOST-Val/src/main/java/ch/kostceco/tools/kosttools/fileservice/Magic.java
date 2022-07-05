@@ -28,7 +28,6 @@ import java.util.Arrays;
 public class Magic
 {
 
-
 	public static boolean magicZip( File file ) throws IOException
 	{
 
@@ -63,8 +62,10 @@ public class Magic
 			char[] charArray2 = new char[] { 'P', 'K', c3, c4 };
 
 			if ( Arrays.equals( charArray1, charArray2 ) ) {
-				// hoechstwahrscheinlich ein ZIP da es mit 504B0304 respektive PK.. beginnt
-				// System.out.println("wahrscheinlich ein ZIP da es mit 504B0304 respektive PK.. beginnt");
+				// hoechstwahrscheinlich ein ZIP da es mit 504B0304 respektive
+				// PK.. beginnt
+				// System.out.println("wahrscheinlich ein ZIP da es mit 504B0304
+				// respektive PK.. beginnt");
 				mnZip = true;
 			}
 			read.close();
@@ -120,13 +121,16 @@ public class Magic
 			for ( i = 0; i != length; i++ )
 				;
 
-			// die beiden charArrays (soll und ist) mit einander vergleichen IST = c1c2c3c4
+			// die beiden charArrays (soll und ist) mit einander vergleichen IST
+			// = c1c2c3c4
 			char[] charArray1 = buffer;
 			char[] charArray2 = new char[] { c1, c2, c3, c4 };
 
 			if ( Arrays.equals( charArray1, charArray2 ) ) {
-				// hoechstwahrscheinlich ein PDF da es mit 25504446 respektive %PDF beginnt
-				// System.out.println("wahrscheinlich ein PDF da es mit 25504446 respektive %PDF beginnt");
+				// hoechstwahrscheinlich ein PDF da es mit 25504446 respektive
+				// %PDF beginnt
+				// System.out.println("wahrscheinlich ein PDF da es mit 25504446
+				// respektive %PDF beginnt");
 				mnPdf = true;
 			}
 			read.close();
@@ -153,8 +157,10 @@ public class Magic
 		boolean mnTiff = false;
 
 		try {
-			/* Eine TIFF Datei (.tiff / .tif / .tfx) muss entweder mit II*. [49492A00] oder mit MM.*
-			 * [4D4D002A] beginnen */
+			/*
+			 * Eine TIFF Datei (.tiff / .tif / .tfx) muss entweder mit II*.
+			 * [49492A00] oder mit MM.* [4D4D002A] beginnen
+			 */
 			fr = new FileReader( file );
 			read = new BufferedReader( fr );
 
@@ -183,18 +189,25 @@ public class Magic
 			for ( i = 0; i != length; i++ )
 				;
 
-			/* die beiden charArrays (soll und ist) mit einander vergleichen IST = c1c1c3c4 /c2c2c4c3 */
+			/*
+			 * die beiden charArrays (soll und ist) mit einander vergleichen IST
+			 * = c1c1c3c4 /c2c2c4c3
+			 */
 			char[] charArray1 = buffer;
 			char[] charArray2 = new char[] { c1, c1, c3, c4 };
 			char[] charArray3 = new char[] { c2, c2, c4, c3 };
 
 			if ( Arrays.equals( charArray1, charArray2 ) ) {
-				// hoechstwahrscheinlich ein TIFF da es mit 49492A00 respektive II*. beginnt
-				// System.out.println("wahrscheinlich ein TIFF da es mit 49492A00 respektive II*. beginnt");
+				// hoechstwahrscheinlich ein TIFF da es mit 49492A00 respektive
+				// II*. beginnt
+				// System.out.println("wahrscheinlich ein TIFF da es mit
+				// 49492A00 respektive II*. beginnt");
 				mnTiff = true;
 			} else if ( Arrays.equals( charArray1, charArray3 ) ) {
-				// hoechstwahrscheinlich ein TIFF da es mit 4D4D002A respektive MM.* beginnt
-				// System.out.println("wahrscheinlich ein TIFF da es mit 4D4D002A respektive MM.* beginnt");
+				// hoechstwahrscheinlich ein TIFF da es mit 4D4D002A respektive
+				// MM.* beginnt
+				// System.out.println("wahrscheinlich ein TIFF da es mit
+				// 4D4D002A respektive MM.* beginnt");
 				mnTiff = true;
 			}
 			read.close();
@@ -203,7 +216,8 @@ public class Magic
 			read = null;
 			fr = null;
 		} catch ( Exception e ) {
-			System.out.println( "Exception magic file tiff: " + e.getMessage() );
+			System.out
+					.println( "Exception magic file tiff: " + e.getMessage() );
 			read.close();
 			fr.close();
 			// set to null
@@ -221,7 +235,7 @@ public class Magic
 		boolean mnPng = false;
 
 		try {
-			// Eine JPEG Datei (.png) muss mit 89504E47 -> ‰PNG beginnen
+			// Eine JPEG Datei (.png) muss mit 89504E47 -> ï¿½PNG beginnen
 			fr = new FileReader( file );
 			read = new BufferedReader( fr );
 
@@ -241,7 +255,8 @@ public class Magic
 				// A counter to print a new line every 16 bytes read.
 				int cnt = 0;
 
-				// Read till the end of the file and print the byte in hexadecimal valueS.
+				// Read till the end of the file and print the byte in
+				// hexadecimal valueS.
 				StringBuilder sb = new StringBuilder();
 				String sb2str1 = "";
 				String sb2str2 = "";
@@ -273,8 +288,10 @@ public class Magic
 			}
 
 			if ( reco ) {
-				// hoechstwahrscheinlich ein PNG da es mit 89504E47 respektive ‰PNG beginnt
-				// System.out.println( "wahrscheinlich ein PNG da es mit 89504E47 respektive ‰PNG beginnt" );
+				// hoechstwahrscheinlich ein PNG da es mit 89504E47 respektive
+				// ï¿½PNG beginnt
+				// System.out.println( "wahrscheinlich ein PNG da es mit
+				// 89504E47 respektive ï¿½PNG beginnt" );
 				mnPng = true;
 			}
 			read.close();
@@ -301,7 +318,7 @@ public class Magic
 		boolean mnJpeg = false;
 
 		try {
-			// Eine JPEG Datei (.jpg / .jpeg) muss mit FFD8FF -> ÿØÿ beginnen
+			// Eine JPEG Datei (.jpg / .jpeg) muss mit FFD8FF -> ï¿½ï¿½ï¿½ beginnen
 			fr = new FileReader( file );
 			read = new BufferedReader( fr );
 
@@ -327,13 +344,18 @@ public class Magic
 			for ( i = 0; i != length; i++ )
 				;
 
-			/* die beiden charArrays (soll und ist) mit einander vergleichen IST = c1c2c1 */
+			/*
+			 * die beiden charArrays (soll und ist) mit einander vergleichen IST
+			 * = c1c2c1
+			 */
 			char[] charArray1 = buffer;
 			char[] charArray2 = new char[] { c1, c2, c1 };
 
 			if ( Arrays.equals( charArray1, charArray2 ) ) {
-				// hoechstwahrscheinlich ein JPEG da es mit FFD8FF respektive ÿØÿ beginnt
-				// System.out.println( "wahrscheinlich ein JPEG da es mit FFD8FF respektive ÿØÿ beginnt" );
+				// hoechstwahrscheinlich ein JPEG da es mit FFD8FF respektive
+				// ï¿½ï¿½ï¿½ beginnt
+				// System.out.println( "wahrscheinlich ein JPEG da es mit FFD8FF
+				// respektive ï¿½ï¿½ï¿½ beginnt" );
 				mnJpeg = true;
 			}
 			read.close();
@@ -342,7 +364,8 @@ public class Magic
 			read = null;
 			fr = null;
 		} catch ( Exception e ) {
-			System.out.println( "Exception magic file jpeg: " + e.getMessage() );
+			System.out
+					.println( "Exception magic file jpeg: " + e.getMessage() );
 			read.close();
 			fr.close();
 			// set to null
@@ -360,7 +383,8 @@ public class Magic
 		boolean mnJp2 = false;
 
 		try {
-			// Eine JP2 Datei (.jp2 / .jpeg) muss mit 0000000c6a5020200d0a -> ....jP ..ï¿½ beginnen
+			// Eine JP2 Datei (.jp2 / .jpeg) muss mit 0000000c6a5020200d0a ->
+			// ....jP ..ï¿½ beginnen
 			fr = new FileReader( file );
 			read = new BufferedReader( fr );
 
@@ -410,14 +434,21 @@ public class Magic
 			for ( i = 0; i != length; i++ )
 				;
 
-			/* die beiden charArrays (soll und ist) mit einander vergleichen IST = c1c1c1c2c3c4c5c5c6c7 */
+			/*
+			 * die beiden charArrays (soll und ist) mit einander vergleichen IST
+			 * = c1c1c1c2c3c4c5c5c6c7
+			 */
 			char[] charArray1 = buffer;
-			char[] charArray2 = new char[] { c1, c1, c1, c2, c3, c4, c5, c5, c6, c7 };
+			char[] charArray2 = new char[] { c1, c1, c1, c2, c3, c4, c5, c5, c6,
+					c7 };
 
 			if ( Arrays.equals( charArray1, charArray2 ) ) {
-				/* hoechstwahrscheinlich ein JP2 da es mit 0000000c6a5020200d0a respektive ....jP ..ï¿½
-				 * beginnt */
-				// System.out.println("wahrscheinlich ein JP2 oder JPX da es mit 0000000c6a5020200d0a
+				/*
+				 * hoechstwahrscheinlich ein JP2 da es mit 0000000c6a5020200d0a
+				 * respektive ....jP ..ï¿½ beginnt
+				 */
+				// System.out.println("wahrscheinlich ein JP2 oder JPX da es mit
+				// 0000000c6a5020200d0a
 				// respektive ....jP ..ï¿½ beginnt");
 				mnJp2 = true;
 			}
@@ -445,29 +476,41 @@ public class Magic
 		boolean mnJp2p1 = false;
 
 		try {
-			/* Eine JP2 Datei (.jp2) muss mit ....jP ..ï¿½.ftypjp2 [0000000c6a5020200d0a870a] beginnen */
+			/*
+			 * Eine JP2 Datei (.jp2) muss mit ....jP ..ï¿½.ftypjp2
+			 * [0000000c6a5020200d0a870a] beginnen
+			 */
 			// Test Magic.magicJpeg
 
-			/* Sicherstellen, dass es ein JP2 (Part1) und kein JPX/JPM (Part2) ist. Jpylyzer kann nur JP2
-			 * und gibt sonst keine korrekte Fehlermeldung raus.
+			/*
+			 * Sicherstellen, dass es ein JP2 (Part1) und kein JPX/JPM (Part2)
+			 * ist. Jpylyzer kann nur JP2 und gibt sonst keine korrekte
+			 * Fehlermeldung raus.
 			 * 
-			 * JP2-BOF: 00 00 00 0C 6A 50 20 20 0D 0A 87 0A {4} 66 74 79 70 6A 70 32
+			 * JP2-BOF: 00 00 00 0C 6A 50 20 20 0D 0A 87 0A {4} 66 74 79 70 6A
+			 * 70 32
 			 * 
 			 * 1 2 3 4 5 6 7 8 9 10 11 12 17 18 19 20 21 22 23
 			 * 
-			 * JPX-BOF: 00 00 00 0C 6A 50 20 20 0D 0A 87 0A {4} 66 74 79 70 6A 70 78
+			 * JPX-BOF: 00 00 00 0C 6A 50 20 20 0D 0A 87 0A {4} 66 74 79 70 6A
+			 * 70 78
 			 * 
-			 * JPM-BOF: 00 00 00 0C 6A 50 20 20 0D 0A 87 0A {4} 66 74 79 70 6A 70 6D */
+			 * JPM-BOF: 00 00 00 0C 6A 50 20 20 0D 0A 87 0A {4} 66 74 79 70 6A
+			 * 70 6D
+			 */
 
 			if ( Magic.magicJp2( file ) ) {
-				/* hoechstwahrscheinlich ein JP2 da es mit 0000000c6a5020200d0a respektive ....jP ..ï¿½
-				 * beginnt */
+				/*
+				 * hoechstwahrscheinlich ein JP2 da es mit 0000000c6a5020200d0a
+				 * respektive ....jP ..ï¿½ beginnt
+				 */
 				// System.out.println("es ist ein JP2 oder JPX ");
 
 				fr = new FileReader( file );
 				read = new BufferedReader( fr );
 
-				// wobei hier nur die Zeichen 17-23 der Datei verglichen werden (Part-Teil)
+				// wobei hier nur die Zeichen 17-23 der Datei verglichen werden
+				// (Part-Teil)
 				// 3 6a 21
 				// 9 66 17
 				// 10 74 18
@@ -508,20 +551,28 @@ public class Magic
 				for ( i23 = 0; i23 != length23; i23++ )
 					;
 
-				/* die beiden charArrays (soll und ist) mit einander vergleichen IST = c9, c10, c11, c12,
-				 * c3, c12, c13 */
+				/*
+				 * die beiden charArrays (soll und ist) mit einander vergleichen
+				 * IST = c9, c10, c11, c12, c3, c12, c13
+				 */
 				char[] charArray3 = buffer23;
-				char[] charArray4 = new char[] { c9, c10, c11, c12, c3, c12, c13 };
+				char[] charArray4 = new char[] { c9, c10, c11, c12, c3, c12,
+						c13 };
 				String stringCharArray3 = String.valueOf( charArray3 );
 				String stringCharArray4 = String.valueOf( charArray4 );
 				buffer23 = null;
 				read.close();
 				fr.close();
 				if ( stringCharArray3.endsWith( stringCharArray4 ) ) {
-					/* hoechstwahrscheinlich ein JP2 (JPEG2000 Part1) da es mit 0000000c6a5020200d0a
-					 * respektive ....jP ..ï¿½ beginnt gefolgt von {4} 66 74 79 70 6A 70 32 */
-					// System.out.println("wahrscheinlich ein JP2 (JPEG2000 Part1) da es mit
-					// 0000000c6a5020200d0a respektive ....jP ..ï¿½ beginnt gefolgt von {4} 66 74 79 70 6A 70
+					/*
+					 * hoechstwahrscheinlich ein JP2 (JPEG2000 Part1) da es mit
+					 * 0000000c6a5020200d0a respektive ....jP ..ï¿½ beginnt
+					 * gefolgt von {4} 66 74 79 70 6A 70 32
+					 */
+					// System.out.println("wahrscheinlich ein JP2 (JPEG2000
+					// Part1) da es mit
+					// 0000000c6a5020200d0a respektive ....jP ..ï¿½ beginnt
+					// gefolgt von {4} 66 74 79 70 6A 70
 					// 32 ");
 					mnJp2p1 = true;
 					// System.out.print("es ist ein JP2 (JPEG2000 Part1)");
@@ -536,7 +587,8 @@ public class Magic
 			read = null;
 			fr = null;
 		} catch ( Exception e ) {
-			System.out.println( "Exception magic file jp2 part1: " + e.getMessage() );
+			System.out.println(
+					"Exception magic file jp2 part1: " + e.getMessage() );
 			read.close();
 			fr.close();
 			// set to null

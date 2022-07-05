@@ -15,9 +15,11 @@
 
 package ch.kostceco.tools.siardexcerpt.service;
 
-/** Interface für den Message Stack Service.
+/**
+ * Interface fï¿½r den Message Stack Service.
  * 
- * @author Rc Claire Roethlisberger, KOST-CECO */
+ * @author Rc Claire Roethlisberger, KOST-CECO
+ */
 public interface MessageServiceExc extends ServiceExc
 {
 

@@ -55,50 +55,57 @@ public class ConfigController
 {
 
 	@FXML
-	private CheckBox				checkPdfa, checkPdftools, checkCallas, checkPdfa1a, checkPdfa2a,
-			checkFont, checkJbig2, checkDetail, checkNentry, checkPdfa1b, checkPdfa2b, checkFontTol,
-			checkPdfa2u, checkSiard, checkSiard10, checkSiard21, checkJpeg2000, checkJpeg, checkPng,
-			checkTiff, checkComp1, checkComp5, checkPi0, checkPi4, checkComp2, checkComp7, checkPi1,
-			checkPi5, checkBps1, checkBps8, checkMultipage, checkBps2, checkBps16, checkTiles, checkComp3,
-			checkComp8, checkPi2, checkPi6, checkBps4, checkBps32, checkSize, checkComp4, checkComp32773,
-			checkPi3, checkPi8, checkSip0160;
+	private CheckBox		checkPdfa, checkPdftools, checkCallas, checkPdfa1a,
+			checkPdfa2a, checkFont, checkJbig2, checkDetail, checkNentry,
+			checkPdfa1b, checkPdfa2b, checkFontTol, checkPdfa2u, checkSiard,
+			checkSiard10, checkSiard21, checkJpeg2000, checkJpeg, checkPng,
+			checkTiff, checkComp1, checkComp5, checkPi0, checkPi4, checkComp2,
+			checkComp7, checkPi1, checkPi5, checkBps1, checkBps8,
+			checkMultipage, checkBps2, checkBps16, checkTiles, checkComp3,
+			checkComp8, checkPi2, checkPi6, checkBps4, checkBps32, checkSize,
+			checkComp4, checkComp32773, checkPi3, checkPi8, checkSip0160;
 
 	@FXML
-	private Button					buttonConfigApply, buttonConfigApplyStandard, buttonConfigCancel,
-			buttonWork, buttonInput, buttonLength, buttonName, buttonPuid;
+	private Button			buttonConfigApply, buttonConfigApplyStandard,
+			buttonConfigCancel, buttonWork, buttonInput, buttonLength,
+			buttonName, buttonPuid;
 
-	private File						configFileBackup		= new File(
-			System.getenv( "USERPROFILE" ) + File.separator + ".kost-val_2x" + File.separator
-					+ "configuration" + File.separator + "BACKUP.kostval.conf.xml" );
+	private File			configFileBackup	= new File(
+			System.getenv( "USERPROFILE" ) + File.separator + ".kost-val_2x"
+					+ File.separator + "configuration" + File.separator
+					+ "BACKUP.kostval.conf.xml" );
 
-	private File						configFileStandard	= new File(
-			System.getenv( "USERPROFILE" ) + File.separator + ".kost-val_2x" + File.separator
-					+ "configuration" + File.separator + "STANDARD.kostval.conf.xml" );
+	private File			configFileStandard	= new File(
+			System.getenv( "USERPROFILE" ) + File.separator + ".kost-val_2x"
+					+ File.separator + "configuration" + File.separator
+					+ "STANDARD.kostval.conf.xml" );
 
-	private File						configFile					= new File(
-			System.getenv( "USERPROFILE" ) + File.separator + ".kost-val_2x" + File.separator
-					+ "configuration" + File.separator + "kostval.conf.xml" );
+	private File			configFile			= new File(
+			System.getenv( "USERPROFILE" ) + File.separator + ".kost-val_2x"
+					+ File.separator + "configuration" + File.separator
+					+ "kostval.conf.xml" );
 
-	private String					dirOfJarPath, inputString, workString, config, stringName, stringPuid,
-			stringLength;
+	private String			dirOfJarPath, inputString, workString, config,
+			stringName, stringPuid, stringLength;
 
-	private Locale					locale							= Locale.getDefault();
+	private Locale			locale				= Locale.getDefault();
 
-	ObservableList<String>	langList						= FXCollections.observableArrayList( "Deutsch",
-			"Français", "English" );
-
-	@FXML
-	private Label						labelBps, labelComp, labelOther, labelPi, labelLength, labelName,
-			labelPuid, labelWork, labelInput, labelOtherPdfa, labelVersion, labelCallas, labelPdftools,
-			labelEr, labelEr1, labelEr2, labelEr3;
-
-	@FXML
-	private WebView					wbv;
-
-	private WebEngine				engine;
+	ObservableList<String>	langList			= FXCollections
+			.observableArrayList( "Deutsch", "Franï¿½ais", "English" );
 
 	@FXML
-	private Label						labelConfig;
+	private Label			labelBps, labelComp, labelOther, labelPi,
+			labelLength, labelName, labelPuid, labelWork, labelInput,
+			labelOtherPdfa, labelVersion, labelCallas, labelPdftools, labelEr,
+			labelEr1, labelEr2, labelEr3;
+
+	@FXML
+	private WebView			wbv;
+
+	private WebEngine		engine;
+
+	@FXML
+	private Label			labelConfig;
 
 	@FXML
 	void initialize()
@@ -110,8 +117,10 @@ public class ConfigController
 		String java6432 = System.getProperty( "sun.arch.data.model" );
 		String javaVersion = System.getProperty( "java.version" );
 		String javafxVersion = System.getProperty( "javafx.version" );
-		labelConfig.setText( "Copyright © KOST/CECO          KOST-Val v2.1.2.0          JavaFX "
-				+ javafxVersion + "   &   Java-" + java6432 + " " + javaVersion + "." );
+		labelConfig.setText(
+				"Copyright ï¿½ KOST/CECO          KOST-Val v2.1.2.0          JavaFX "
+						+ javafxVersion + "   &   Java-" + java6432 + " "
+						+ javaVersion + "." );
 
 		// Original Config Kopieren
 		try {
@@ -123,13 +132,17 @@ public class ConfigController
 		// festhalten von wo die Applikation (exe) gestartet wurde
 		dirOfJarPath = "";
 		try {
-			/* dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist ein generelles TODO in
-			 * allen Modulen. Zuerst immer dirOfJarPath ermitteln und dann alle Pfade mit dirOfJarPath +
-			 * File.separator + erweitern. */
+			/*
+			 * dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist
+			 * ein generelles TODO in allen Modulen. Zuerst immer dirOfJarPath
+			 * ermitteln und dann alle Pfade mit dirOfJarPath + File.separator +
+			 * erweitern.
+			 */
 			String path = new File( "" ).getAbsolutePath();
 			String locationOfJarPath = path;
 			dirOfJarPath = locationOfJarPath;
-			if ( locationOfJarPath.endsWith( ".jar" ) || locationOfJarPath.endsWith( ".exe" )
+			if ( locationOfJarPath.endsWith( ".jar" )
+					|| locationOfJarPath.endsWith( ".exe" )
 					|| locationOfJarPath.endsWith( "." ) ) {
 				File file = new File( locationOfJarPath );
 				dirOfJarPath = file.getParent();
@@ -146,7 +159,7 @@ public class ConfigController
 				labelComp.setText( "Komprimierungsalgorithmus" );
 				labelOther.setText( "Sonstiges" );
 				labelPi.setText( "Farbraum" );
-				labelLength.setText( "Pfadlänge" );
+				labelLength.setText( "Pfadlï¿½nge" );
 				labelName.setText( "SIP Name" );
 				labelPuid.setText( "PUID" );
 				labelOtherPdfa.setText( "Sonstiges" );
@@ -155,13 +168,14 @@ public class ConfigController
 				buttonConfigApply.setText( "anwenden" );
 				buttonConfigApplyStandard.setText( "Standard anwenden" );
 				buttonConfigCancel.setText( "verwerfen" );
-				buttonLength.setText( "ändern" );
-				buttonName.setText( "ändern" );
-				buttonPuid.setText( "ändern" );
+				buttonLength.setText( "ï¿½ndern" );
+				buttonName.setText( "ï¿½ndern" );
+				buttonPuid.setText( "ï¿½ndern" );
 				buttonWork.setText( "Arbeitsverzeichnis" );
 				buttonInput.setText( "Inputverzeichnis" );
-			} else if ( Util.stringInFileLine( "kostval-conf-FR.xsl", configFile ) ) {
-				labelBps.setText( "Bits par échantillon (par canal)" );
+			} else if ( Util.stringInFileLine( "kostval-conf-FR.xsl",
+					configFile ) ) {
+				labelBps.setText( "Bits par ï¿½chantillon (par canal)" );
 				labelComp.setText( "Algorithme de compression" );
 				labelOther.setText( "Divers" );
 				labelPi.setText( "Espace couleur" );
@@ -177,8 +191,8 @@ public class ConfigController
 				buttonLength.setText( "modifier" );
 				buttonName.setText( "modifier" );
 				buttonPuid.setText( "modifier" );
-				buttonWork.setText( "Répertoire de travail" );
-				buttonInput.setText( "Répertoire d'entrée" );
+				buttonWork.setText( "Rï¿½pertoire de travail" );
+				buttonInput.setText( "Rï¿½pertoire d'entrï¿½e" );
 			} else {
 				labelBps.setText( "Bits per sample (per channel)" );
 				labelComp.setText( "Compression algorithm" );
@@ -207,7 +221,8 @@ public class ConfigController
 		// checkPdfa, checkJpeg2000, checkJpeg, checkPng, checkTiff, checkSiard;
 		try {
 			byte[] encoded;
-			encoded = Files.readAllBytes( Paths.get( configFile.getAbsolutePath() ) );
+			encoded = Files
+					.readAllBytes( Paths.get( configFile.getAbsolutePath() ) );
 			config = new String( encoded, StandardCharsets.UTF_8 );
 			String noPdfa = "<pdfavalidation>no</pdfavalidation>";
 			String noPdftools = "<pdftools>no</pdftools>";
@@ -219,8 +234,11 @@ public class ConfigController
 			String noPdfa2a = "<pdfa2a></pdfa2a>";
 			String noPdfa2b = "<pdfa2b></pdfa2b>";
 			String noPdfa2u = "<pdfa2u></pdfa2u>";
-			String pdfaFont = "<pdfafont>strict</pdfafont>"; // tolerant oder strict-->
-			String pdfaFontTolerant = "<pdfafont>tolerant</pdfafont>"; // tolerant oder strict-->
+			String pdfaFont = "<pdfafont>strict</pdfafont>"; // tolerant oder
+																// strict-->
+			String pdfaFontTolerant = "<pdfafont>tolerant</pdfafont>"; // tolerant
+																		// oder
+																		// strict-->
 			String noPdfaJbig2 = "<jbig2allowed>no</jbig2allowed>";
 			String noJpeg2000 = "<jp2validation>no</jp2validation>";
 			String noJpeg = "<jpegvalidation>no</jpegvalidation>";
@@ -303,7 +321,8 @@ public class ConfigController
 				checkPdfa2u.setSelected( false );
 			}
 
-			if ( config.contains( pdfaFont ) || config.contains( pdfaFontTolerant ) ) {
+			if ( config.contains( pdfaFont )
+					|| config.contains( pdfaFontTolerant ) ) {
 				// checkFont.setSelected( true );
 				if ( config.contains( pdfaFontTolerant ) ) {
 					// checkFontTol.setSelected( true );
@@ -448,26 +467,31 @@ public class ConfigController
 			}
 
 			Document doc = null;
-			BufferedInputStream bis = new BufferedInputStream( new FileInputStream( configFile ) );
+			BufferedInputStream bis = new BufferedInputStream(
+					new FileInputStream( configFile ) );
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			doc = db.parse( bis );
 			doc.normalize();
-			String allowedformats = doc.getElementsByTagName( "allowedformats" ).item( 0 )
+			String allowedformats = doc.getElementsByTagName( "allowedformats" )
+					.item( 0 ).getTextContent();
+			String allowedlengthofpaths = doc
+					.getElementsByTagName( "allowedlengthofpaths" ).item( 0 )
 					.getTextContent();
-			String allowedlengthofpaths = doc.getElementsByTagName( "allowedlengthofpaths" ).item( 0 )
-					.getTextContent();
-			String allowedsipname = doc.getElementsByTagName( "allowedsipname" ).item( 0 )
-					.getTextContent();
+			String allowedsipname = doc.getElementsByTagName( "allowedsipname" )
+					.item( 0 ).getTextContent();
 			buttonLength.setText( allowedlengthofpaths );
 			buttonName.setText( allowedsipname );
 			buttonPuid.setText( allowedformats );
-			workString = doc.getElementsByTagName( "pathtoworkdir" ).item( 0 ).getTextContent();
+			workString = doc.getElementsByTagName( "pathtoworkdir" ).item( 0 )
+					.getTextContent();
 			labelWork.setText( workString );
-			inputString = doc.getElementsByTagName( "standardinputdir" ).item( 0 ).getTextContent();
+			inputString = doc.getElementsByTagName( "standardinputdir" )
+					.item( 0 ).getTextContent();
 			labelInput.setText( inputString );
 
-		} catch ( IOException | SAXException | ParserConfigurationException e1 ) {
+		} catch ( IOException | SAXException
+				| ParserConfigurationException e1 ) {
 			e1.printStackTrace();
 		}
 
@@ -483,8 +507,10 @@ public class ConfigController
 	public static void setLibraryPath( String path ) throws Exception
 	{
 		System.setProperty( "java.library.path", path );
-		// set sys_paths to null so that java.library.path will be reevalueted next time it is needed
-		final Field sysPathsField = ClassLoader.class.getDeclaredField( "sys_paths" );
+		// set sys_paths to null so that java.library.path will be reevalueted
+		// next time it is needed
+		final Field sysPathsField = ClassLoader.class
+				.getDeclaredField( "sys_paths" );
 		sysPathsField.setAccessible( true );
 		sysPathsField.set( null, null );
 	}
@@ -539,9 +565,9 @@ public class ConfigController
 		String lengthIntInit = stringLength;
 
 		dialog.setTitle( "KOST-Val - Configuration" );
-		String headerDeFrEn = "Geben sie die erlaubte maximale Anzahl Zeichen in Pfadlängen ein [179]:";
+		String headerDeFrEn = "Geben sie die erlaubte maximale Anzahl Zeichen in Pfadlï¿½ngen ein [179]:";
 		if ( locale.toString().startsWith( "fr" ) ) {
-			headerDeFrEn = "Entrez le nombre maximum de caractères autorisés dans la longueur du chemin [179]:";
+			headerDeFrEn = "Entrez le nombre maximum de caractï¿½res autorisï¿½s dans la longueur du chemin [179]:";
 		} else if ( locale.toString().startsWith( "en" ) ) {
 			headerDeFrEn = "Enter the allowed maximum number of characters in path lengths [179]:";
 		}
@@ -551,7 +577,8 @@ public class ConfigController
 		// Show the dialog and capture the result.
 		Optional<String> result = dialog.showAndWait();
 
-		// If the "Okay" button was clicked, the result will contain our String in the get() method
+		// If the "Okay" button was clicked, the result will contain our String
+		// in the get() method
 		String stringLengthNew = "";
 		if ( result.isPresent() ) {
 			try {
@@ -559,11 +586,12 @@ public class ConfigController
 				stringLength = stringLengthNew;
 				buttonLength.setText( stringLength );
 
-				String allowedlengthofpaths = "<allowedlengthofpaths>" + lengthIntInit
-						+ "</allowedlengthofpaths>";
-				String allowedlengthofpathsNew = "<allowedlengthofpaths>" + stringLengthNew
-						+ "</allowedlengthofpaths>";
-				Util.oldnewstring( allowedlengthofpaths, allowedlengthofpathsNew, configFile );
+				String allowedlengthofpaths = "<allowedlengthofpaths>"
+						+ lengthIntInit + "</allowedlengthofpaths>";
+				String allowedlengthofpathsNew = "<allowedlengthofpaths>"
+						+ stringLengthNew + "</allowedlengthofpaths>";
+				Util.oldnewstring( allowedlengthofpaths,
+						allowedlengthofpathsNew, configFile );
 				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} catch ( NumberFormatException | IOException eInt ) {
 				String message = eInt.getMessage();
@@ -588,7 +616,7 @@ public class ConfigController
 		dialog.setTitle( "KOST-Val - Configuration" );
 		String headerDeFrEn = "Geben Sie die Vorgaben zum Aufbau des SIP-Namens ein [ SIP_[1-2][0-9]{3}[0-1][0-9][0-3][0-9]_\\\\w{3} ]:";
 		if ( locale.toString().startsWith( "fr" ) ) {
-			headerDeFrEn = "Entrez les valeurs par défaut pour construire le nom du SIP [ SIP_[1-2][0-9]{3}[0-1][0-9][0-3][0-9]_\\\\w{3} ] :";
+			headerDeFrEn = "Entrez les valeurs par dï¿½faut pour construire le nom du SIP [ SIP_[1-2][0-9]{3}[0-1][0-9][0-3][0-9]_\\\\w{3} ] :";
 		} else if ( locale.toString().startsWith( "en" ) ) {
 			headerDeFrEn = "Enter the defaults to build the SIP name [SIP_[1-2][0-9]{3}[0-1][0-9][0-3][0-9]_\\\\w{3} ]:";
 		}
@@ -598,16 +626,20 @@ public class ConfigController
 		// Show the dialog and capture the result.
 		Optional<String> result = dialog.showAndWait();
 
-		// If the "Okay" button was clicked, the result will contain our String in the get() method
+		// If the "Okay" button was clicked, the result will contain our String
+		// in the get() method
 		String stringNameNew = "";
 		if ( result.isPresent() ) {
 			try {
 				stringNameNew = result.get();
 				stringName = stringNameNew;
 				buttonName.setText( stringName );
-				String allowedsipname = "<allowedsipname>" + nameIntInit + "</allowedsipname>";
-				String allowedsipnameNew = "<allowedsipname>" + stringNameNew + "</allowedsipname>";
-				Util.oldnewstring( allowedsipname, allowedsipnameNew, configFile );
+				String allowedsipname = "<allowedsipname>" + nameIntInit
+						+ "</allowedsipname>";
+				String allowedsipnameNew = "<allowedsipname>" + stringNameNew
+						+ "</allowedsipname>";
+				Util.oldnewstring( allowedsipname, allowedsipnameNew,
+						configFile );
 				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} catch ( NumberFormatException | IOException eInt ) {
 				String message = eInt.getMessage();
@@ -632,7 +664,7 @@ public class ConfigController
 		dialog.setTitle( "KOST-Val - Configuration" );
 		String headerDeFrEn = "Auflistung der erlaubten Dateiformate [TXT PDFA1 PDFA2 TIFF JP2 JPEG PNG WAVE MP3 MP4 MJ2 CSV SIARD WARC]:";
 		if ( locale.toString().startsWith( "fr" ) ) {
-			headerDeFrEn = "Liste des formats de fichiers autorisés [TXT PDFA1 PDFA2 TIFF JP2 JPEG PNG WAVE MP3 MP4 MJ2 CSV SIARD WARC] :";
+			headerDeFrEn = "Liste des formats de fichiers autorisï¿½s [TXT PDFA1 PDFA2 TIFF JP2 JPEG PNG WAVE MP3 MP4 MJ2 CSV SIARD WARC] :";
 		} else if ( locale.toString().startsWith( "en" ) ) {
 			headerDeFrEn = "List of allowed file formats [TXT PDFA1 PDFA2 TIFF JP2 JPEG PNG WAVE MP3 MP4 MJ2 CSV SIARD WARC]:";
 		}
@@ -642,16 +674,20 @@ public class ConfigController
 		// Show the dialog and capture the result.
 		Optional<String> result = dialog.showAndWait();
 
-		// If the "Okay" button was clicked, the result will contain our String in the get() method
+		// If the "Okay" button was clicked, the result will contain our String
+		// in the get() method
 		String stringPuidNew = "";
 		if ( result.isPresent() ) {
 			try {
 				stringPuidNew = result.get();
 				stringPuid = stringPuidNew;
 				buttonPuid.setText( stringPuid );
-				String allowedformats = "<allowedformats>" + puidIntInit + "</allowedformats>";
-				String allowedformatsNew = "<allowedformats>" + stringPuidNew + "</allowedformats>";
-				Util.oldnewstring( allowedformats, allowedformatsNew, configFile );
+				String allowedformats = "<allowedformats>" + puidIntInit
+						+ "</allowedformats>";
+				String allowedformatsNew = "<allowedformats>" + stringPuidNew
+						+ "</allowedformats>";
+				Util.oldnewstring( allowedformats, allowedformatsNew,
+						configFile );
 				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} catch ( NumberFormatException | IOException eInt ) {
 				String message = eInt.getMessage();
@@ -668,35 +704,40 @@ public class ConfigController
 	{
 		try {
 			Document doc = null;
-			BufferedInputStream bis = new BufferedInputStream( new FileInputStream( configFile ) );
+			BufferedInputStream bis = new BufferedInputStream(
+					new FileInputStream( configFile ) );
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			doc = db.parse( bis );
 			doc.normalize();
 			String workInit = "";
 			if ( !config.contains( "<pathtoworkdir></pathtoworkdir>" ) ) {
-				workInit = doc.getElementsByTagName( "pathtoworkdir" ).item( 0 ).getTextContent();
+				workInit = doc.getElementsByTagName( "pathtoworkdir" ).item( 0 )
+						.getTextContent();
 			}
 			bis.close();
 			doc = null;
-			String pathtoworkdir = "<pathtoworkdir>" + workInit + "</pathtoworkdir>";
+			String pathtoworkdir = "<pathtoworkdir>" + workInit
+					+ "</pathtoworkdir>";
 			DirectoryChooser folderChooser = new DirectoryChooser();
 			if ( locale.toString().startsWith( "fr" ) ) {
 				folderChooser.setTitle( "Choisissez le dossier" );
 			} else if ( locale.toString().startsWith( "en" ) ) {
 				folderChooser.setTitle( "Choose the folder" );
 			} else {
-				folderChooser.setTitle( "Wählen Sie den Ordner" );
+				folderChooser.setTitle( "Wï¿½hlen Sie den Ordner" );
 			}
 			File workFolder = folderChooser.showDialog( new Stage() );
 			if ( workFolder != null ) {
 				labelWork.setText( workFolder.getAbsolutePath() );
-				String pathtoworkdirNew = "<pathtoworkdir>" + workFolder.getAbsolutePath()
-						+ "</pathtoworkdir>";
-				Util.oldnewstring( pathtoworkdir, pathtoworkdirNew, configFile );
+				String pathtoworkdirNew = "<pathtoworkdir>"
+						+ workFolder.getAbsolutePath() + "</pathtoworkdir>";
+				Util.oldnewstring( pathtoworkdir, pathtoworkdirNew,
+						configFile );
 			}
 			engine.load( "file:///" + configFile.getAbsolutePath() );
-		} catch ( IOException | ParserConfigurationException | SAXException e1 ) {
+		} catch ( IOException | ParserConfigurationException
+				| SAXException e1 ) {
 			e1.printStackTrace();
 		}
 	}
@@ -707,42 +748,49 @@ public class ConfigController
 	{
 		try {
 			Document doc = null;
-			BufferedInputStream bis = new BufferedInputStream( new FileInputStream( configFile ) );
+			BufferedInputStream bis = new BufferedInputStream(
+					new FileInputStream( configFile ) );
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			doc = db.parse( bis );
 			doc.normalize();
 			String inputInit = "";
 			if ( !config.contains( "<standardinputdir></standardinputdir>" ) ) {
-				inputInit = doc.getElementsByTagName( "standardinputdir" ).item( 0 ).getTextContent();
+				inputInit = doc.getElementsByTagName( "standardinputdir" )
+						.item( 0 ).getTextContent();
 			}
 			bis.close();
 			doc = null;
-			String standardinputdir = "<standardinputdir>" + inputInit + "</standardinputdir>";
+			String standardinputdir = "<standardinputdir>" + inputInit
+					+ "</standardinputdir>";
 			DirectoryChooser folderChooser = new DirectoryChooser();
 			if ( locale.toString().startsWith( "fr" ) ) {
 				folderChooser.setTitle( "Choisissez le dossier" );
 			} else if ( locale.toString().startsWith( "en" ) ) {
 				folderChooser.setTitle( "Choose the folder" );
 			} else {
-				folderChooser.setTitle( "Wählen Sie den Ordner" );
+				folderChooser.setTitle( "Wï¿½hlen Sie den Ordner" );
 			}
 			File inputFolder = folderChooser.showDialog( new Stage() );
 			if ( inputFolder != null ) {
 				labelInput.setText( inputFolder.getAbsolutePath() );
-				String standardinputdirNew = "<standardinputdir>" + inputFolder.getAbsolutePath()
-						+ "</standardinputdir>";
-				Util.oldnewstring( standardinputdir, standardinputdirNew, configFile );
+				String standardinputdirNew = "<standardinputdir>"
+						+ inputFolder.getAbsolutePath() + "</standardinputdir>";
+				Util.oldnewstring( standardinputdir, standardinputdirNew,
+						configFile );
 			}
 			engine.load( "file:///" + configFile.getAbsolutePath() );
-		} catch ( IOException | ParserConfigurationException | SAXException e1 ) {
+		} catch ( IOException | ParserConfigurationException
+				| SAXException e1 ) {
 			e1.printStackTrace();
 		}
 	}
 
 	/* TODO --> CheckBox ================= */
 
-	/* checkSip0160 schaltet diese Validierung in der Konfiguration ein oder aus */
+	/*
+	 * checkSip0160 schaltet diese Validierung in der Konfiguration ein oder aus
+	 */
 	@FXML
 	void changeSip0160( ActionEvent event )
 	{
@@ -757,15 +805,17 @@ public class ConfigController
 				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
-				if ( !checkJpeg2000.isSelected() && !checkSiard.isSelected() && !checkPdfa.isSelected()
-						&& !checkTiff.isSelected() && !checkJpeg.isSelected() && !checkPng.isSelected() ) {
+				if ( !checkJpeg2000.isSelected() && !checkSiard.isSelected()
+						&& !checkPdfa.isSelected() && !checkTiff.isSelected()
+						&& !checkJpeg.isSelected() && !checkPng.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
-						minOne = "Au moins une variante doit être autorisée !";
+						minOne = "Au moins une variante doit ï¿½tre autorisï¿½e !";
 					} else if ( locale.toString().startsWith( "en" ) ) {
 						minOne = "At least one variant must be allowed!";
 					}
-					engine.loadContent( "<html><h2>" + minOne + "</h2></html>" );
+					engine.loadContent(
+							"<html><h2>" + minOne + "</h2></html>" );
 					checkSip0160.setSelected( true );
 				} else {
 					Util.oldnewstring( yes, no, configFile );
@@ -804,15 +854,18 @@ public class ConfigController
 				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
-				if ( !checkJpeg2000.isSelected() && !checkSiard.isSelected() && !checkJpeg.isSelected()
-						&& !checkPng.isSelected() && !checkTiff.isSelected() && !checkSip0160.isSelected() ) {
+				if ( !checkJpeg2000.isSelected() && !checkSiard.isSelected()
+						&& !checkJpeg.isSelected() && !checkPng.isSelected()
+						&& !checkTiff.isSelected()
+						&& !checkSip0160.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
-						minOne = "Au moins une variante doit être autorisée !";
+						minOne = "Au moins une variante doit ï¿½tre autorisï¿½e !";
 					} else if ( locale.toString().startsWith( "en" ) ) {
 						minOne = "At least one variant must be allowed!";
 					}
-					engine.loadContent( "<html><h2>" + minOne + "</h2></html>" );
+					engine.loadContent(
+							"<html><h2>" + minOne + "</h2></html>" );
 					checkPdfa.setSelected( true );
 				} else {
 					Util.oldnewstring( yes, no, configFile );
@@ -836,7 +889,10 @@ public class ConfigController
 		}
 	}
 
-	/* checkPdftools schaltet diese Validierung in der Konfiguration ein oder aus */
+	/*
+	 * checkPdftools schaltet diese Validierung in der Konfiguration ein oder
+	 * aus
+	 */
 	@FXML
 	void changePdftools( ActionEvent event )
 	{
@@ -854,11 +910,12 @@ public class ConfigController
 				if ( !checkCallas.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
-						minOne = "Au moins une variante doit être autorisée !";
+						minOne = "Au moins une variante doit ï¿½tre autorisï¿½e !";
 					} else if ( locale.toString().startsWith( "en" ) ) {
 						minOne = "At least one variant must be allowed!";
 					}
-					engine.loadContent( "<html><h2>" + minOne + "</h2></html>" );
+					engine.loadContent(
+							"<html><h2>" + minOne + "</h2></html>" );
 					checkPdftools.setSelected( true );
 				} else {
 					Util.oldnewstring( yes, no, configFile );
@@ -873,7 +930,10 @@ public class ConfigController
 		}
 	}
 
-	/* checkDetail schaltet diese Details von PDF Tools in der Konfiguration ein oder aus */
+	/*
+	 * checkDetail schaltet diese Details von PDF Tools in der Konfiguration ein
+	 * oder aus
+	 */
 	@FXML
 	void changeDetail( ActionEvent event )
 	{
@@ -907,11 +967,12 @@ public class ConfigController
 				if ( !checkPdftools.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
-						minOne = "Au moins une variante doit être autorisée !";
+						minOne = "Au moins une variante doit ï¿½tre autorisï¿½e !";
 					} else if ( locale.toString().startsWith( "en" ) ) {
 						minOne = "At least one variant must be allowed!";
 					}
-					engine.loadContent( "<html><h2>" + minOne + "</h2></html>" );
+					engine.loadContent(
+							"<html><h2>" + minOne + "</h2></html>" );
 					checkCallas.setSelected( true );
 				} else {
 					checkNentry.setDisable( true );
@@ -924,7 +985,10 @@ public class ConfigController
 		}
 	}
 
-	/* checkNentry schaltet diese Nentry bei Callas in der Konfiguration ein (E) oder aus (W) */
+	/*
+	 * checkNentry schaltet diese Nentry bei Callas in der Konfiguration ein (E)
+	 * oder aus (W)
+	 */
 	@FXML
 	void changeNentry( ActionEvent event )
 	{
@@ -938,9 +1002,11 @@ public class ConfigController
 				Util.oldnewstring( nkeyPt, " ", configFile );
 			} else {
 				Util.oldnewstring( yes, no, configFile );
-				if (!Util.stringInFileLine( nkeyPt, configFile )) {
-				Util.oldnewstring(ignorePt, nkeyPt+ignorePt, configFile );
-			}}
+				if ( !Util.stringInFileLine( nkeyPt, configFile ) ) {
+					Util.oldnewstring( ignorePt, nkeyPt + ignorePt,
+							configFile );
+				}
+			}
 		} catch ( IOException e ) {
 			e.printStackTrace();
 		}
@@ -959,15 +1025,17 @@ public class ConfigController
 				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
-				if ( !checkPdfa1b.isSelected() && !checkPdfa2a.isSelected() && !checkPdfa2b.isSelected()
+				if ( !checkPdfa1b.isSelected() && !checkPdfa2a.isSelected()
+						&& !checkPdfa2b.isSelected()
 						&& !checkPdfa2u.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
-						minOne = "Au moins une variante doit être autorisée !";
+						minOne = "Au moins une variante doit ï¿½tre autorisï¿½e !";
 					} else if ( locale.toString().startsWith( "en" ) ) {
 						minOne = "At least one variant must be allowed!";
 					}
-					engine.loadContent( "<html><h2>" + minOne + "</h2></html>" );
+					engine.loadContent(
+							"<html><h2>" + minOne + "</h2></html>" );
 					checkPdfa1a.setSelected( true );
 				} else {
 					Util.oldnewstring( yes, no, configFile );
@@ -990,15 +1058,17 @@ public class ConfigController
 				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
-				if ( !checkPdfa1a.isSelected() && !checkPdfa2a.isSelected() && !checkPdfa2b.isSelected()
+				if ( !checkPdfa1a.isSelected() && !checkPdfa2a.isSelected()
+						&& !checkPdfa2b.isSelected()
 						&& !checkPdfa2u.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
-						minOne = "Au moins une variante doit être autorisée !";
+						minOne = "Au moins une variante doit ï¿½tre autorisï¿½e !";
 					} else if ( locale.toString().startsWith( "en" ) ) {
 						minOne = "At least one variant must be allowed!";
 					}
-					engine.loadContent( "<html><h2>" + minOne + "</h2></html>" );
+					engine.loadContent(
+							"<html><h2>" + minOne + "</h2></html>" );
 					checkPdfa1b.setSelected( true );
 				} else {
 					Util.oldnewstring( yes, no, configFile );
@@ -1021,15 +1091,17 @@ public class ConfigController
 				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
-				if ( !checkPdfa1b.isSelected() && !checkPdfa1a.isSelected() && !checkPdfa2b.isSelected()
+				if ( !checkPdfa1b.isSelected() && !checkPdfa1a.isSelected()
+						&& !checkPdfa2b.isSelected()
 						&& !checkPdfa2u.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
-						minOne = "Au moins une variante doit être autorisée !";
+						minOne = "Au moins une variante doit ï¿½tre autorisï¿½e !";
 					} else if ( locale.toString().startsWith( "en" ) ) {
 						minOne = "At least one variant must be allowed!";
 					}
-					engine.loadContent( "<html><h2>" + minOne + "</h2></html>" );
+					engine.loadContent(
+							"<html><h2>" + minOne + "</h2></html>" );
 					checkPdfa2a.setSelected( true );
 				} else {
 					Util.oldnewstring( yes, no, configFile );
@@ -1052,15 +1124,17 @@ public class ConfigController
 				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
-				if ( !checkPdfa1b.isSelected() && !checkPdfa2a.isSelected() && !checkPdfa1a.isSelected()
+				if ( !checkPdfa1b.isSelected() && !checkPdfa2a.isSelected()
+						&& !checkPdfa1a.isSelected()
 						&& !checkPdfa2u.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
-						minOne = "Au moins une variante doit être autorisée !";
+						minOne = "Au moins une variante doit ï¿½tre autorisï¿½e !";
 					} else if ( locale.toString().startsWith( "en" ) ) {
 						minOne = "At least one variant must be allowed!";
 					}
-					engine.loadContent( "<html><h2>" + minOne + "</h2></html>" );
+					engine.loadContent(
+							"<html><h2>" + minOne + "</h2></html>" );
 					checkPdfa2b.setSelected( true );
 				} else {
 					Util.oldnewstring( yes, no, configFile );
@@ -1083,15 +1157,17 @@ public class ConfigController
 				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
-				if ( !checkPdfa1b.isSelected() && !checkPdfa2a.isSelected() && !checkPdfa2b.isSelected()
+				if ( !checkPdfa1b.isSelected() && !checkPdfa2a.isSelected()
+						&& !checkPdfa2b.isSelected()
 						&& !checkPdfa1a.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
-						minOne = "Au moins une variante doit être autorisée !";
+						minOne = "Au moins une variante doit ï¿½tre autorisï¿½e !";
 					} else if ( locale.toString().startsWith( "en" ) ) {
 						minOne = "At least one variant must be allowed!";
 					}
-					engine.loadContent( "<html><h2>" + minOne + "</h2></html>" );
+					engine.loadContent(
+							"<html><h2>" + minOne + "</h2></html>" );
 					checkPdfa2u.setSelected( true );
 				} else {
 					Util.oldnewstring( yes, no, configFile );
@@ -1103,7 +1179,10 @@ public class ConfigController
 		}
 	}
 
-	/* checkFont schaltet diese Font-Validierung in der Konfiguration ein oder aus */
+	/*
+	 * checkFont schaltet diese Font-Validierung in der Konfiguration ein oder
+	 * aus
+	 */
 	@FXML
 	void changeFont( ActionEvent event )
 	{
@@ -1148,7 +1227,9 @@ public class ConfigController
 		engine.load( "file:///" + configFile.getAbsolutePath() );
 	}
 
-	/* checkJbig2 schaltet diese Validierung in der Konfiguration ein oder aus */
+	/*
+	 * checkJbig2 schaltet diese Validierung in der Konfiguration ein oder aus
+	 */
 	@FXML
 	void changeJbig2( ActionEvent event )
 	{
@@ -1166,7 +1247,9 @@ public class ConfigController
 		engine.load( "file:///" + configFile.getAbsolutePath() );
 	}
 
-	/* checkSiard schaltet diese Validierung in der Konfiguration ein oder aus */
+	/*
+	 * checkSiard schaltet diese Validierung in der Konfiguration ein oder aus
+	 */
 	@FXML
 	void changeConfigSiard( ActionEvent event )
 	{
@@ -1181,15 +1264,18 @@ public class ConfigController
 			} else {
 
 				// abwaehlen nur moeglich wenn noch eines selected
-				if ( !checkJpeg2000.isSelected() && !checkJpeg.isSelected() && !checkPng.isSelected()
-						&& !checkPdfa.isSelected() && !checkTiff.isSelected() && !checkSip0160.isSelected() ) {
+				if ( !checkJpeg2000.isSelected() && !checkJpeg.isSelected()
+						&& !checkPng.isSelected() && !checkPdfa.isSelected()
+						&& !checkTiff.isSelected()
+						&& !checkSip0160.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
-						minOne = "Au moins une variante doit être autorisée !";
+						minOne = "Au moins une variante doit ï¿½tre autorisï¿½e !";
 					} else if ( locale.toString().startsWith( "en" ) ) {
 						minOne = "At least one variant must be allowed!";
 					}
-					engine.loadContent( "<html><h2>" + minOne + "</h2></html>" );
+					engine.loadContent(
+							"<html><h2>" + minOne + "</h2></html>" );
 					checkSiard.setSelected( true );
 				} else {
 					Util.oldnewstring( yes, no, configFile );
@@ -1218,11 +1304,12 @@ public class ConfigController
 				if ( !checkSiard21.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
-						minOne = "Au moins une variante doit être autorisée !";
+						minOne = "Au moins une variante doit ï¿½tre autorisï¿½e !";
 					} else if ( locale.toString().startsWith( "en" ) ) {
 						minOne = "At least one variant must be allowed!";
 					}
-					engine.loadContent( "<html><h2>" + minOne + "</h2></html>" );
+					engine.loadContent(
+							"<html><h2>" + minOne + "</h2></html>" );
 					checkSiard10.setSelected( true );
 				} else {
 					Util.oldnewstring( yes, no, configFile );
@@ -1249,11 +1336,12 @@ public class ConfigController
 				if ( !checkSiard10.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
-						minOne = "Au moins une variante doit être autorisée !";
+						minOne = "Au moins une variante doit ï¿½tre autorisï¿½e !";
 					} else if ( locale.toString().startsWith( "en" ) ) {
 						minOne = "At least one variant must be allowed!";
 					}
-					engine.loadContent( "<html><h2>" + minOne + "</h2></html>" );
+					engine.loadContent(
+							"<html><h2>" + minOne + "</h2></html>" );
 					checkSiard21.setSelected( true );
 				} else {
 					Util.oldnewstring( yes, no, configFile );
@@ -1265,7 +1353,10 @@ public class ConfigController
 		}
 	}
 
-	/* checkJpeg2000 schaltet diese Validierung in der Konfiguration ein oder aus */
+	/*
+	 * checkJpeg2000 schaltet diese Validierung in der Konfiguration ein oder
+	 * aus
+	 */
 	@FXML
 	void changeConfigJpeg2000( ActionEvent event )
 	{
@@ -1277,15 +1368,18 @@ public class ConfigController
 				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
-				if ( !checkJpeg.isSelected() && !checkPng.isSelected() && !checkSiard.isSelected()
-						&& !checkPdfa.isSelected() && !checkTiff.isSelected() && !checkSip0160.isSelected() ) {
+				if ( !checkJpeg.isSelected() && !checkPng.isSelected()
+						&& !checkSiard.isSelected() && !checkPdfa.isSelected()
+						&& !checkTiff.isSelected()
+						&& !checkSip0160.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
-						minOne = "Au moins une variante doit être autorisée !";
+						minOne = "Au moins une variante doit ï¿½tre autorisï¿½e !";
 					} else if ( locale.toString().startsWith( "en" ) ) {
 						minOne = "At least one variant must be allowed!";
 					}
-					engine.loadContent( "<html><h2>" + minOne + "</h2></html>" );
+					engine.loadContent(
+							"<html><h2>" + minOne + "</h2></html>" );
 					checkJpeg2000.setSelected( true );
 				} else {
 					Util.oldnewstring( yes, no, configFile );
@@ -1309,15 +1403,18 @@ public class ConfigController
 				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
-				if ( !checkJpeg2000.isSelected() && !checkPng.isSelected() && !checkSiard.isSelected()
-						&& !checkPdfa.isSelected() && !checkTiff.isSelected() && !checkSip0160.isSelected() ) {
+				if ( !checkJpeg2000.isSelected() && !checkPng.isSelected()
+						&& !checkSiard.isSelected() && !checkPdfa.isSelected()
+						&& !checkTiff.isSelected()
+						&& !checkSip0160.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
-						minOne = "Au moins une variante doit être autorisée !";
+						minOne = "Au moins une variante doit ï¿½tre autorisï¿½e !";
 					} else if ( locale.toString().startsWith( "en" ) ) {
 						minOne = "At least one variant must be allowed!";
 					}
-					engine.loadContent( "<html><h2>" + minOne + "</h2></html>" );
+					engine.loadContent(
+							"<html><h2>" + minOne + "</h2></html>" );
 					checkJpeg.setSelected( true );
 				} else {
 					Util.oldnewstring( yes, no, configFile );
@@ -1341,15 +1438,18 @@ public class ConfigController
 				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
-				if ( !checkJpeg.isSelected() && !checkJpeg2000.isSelected() && !checkSiard.isSelected()
-						&& !checkPdfa.isSelected() && !checkTiff.isSelected() && !checkSip0160.isSelected() ) {
+				if ( !checkJpeg.isSelected() && !checkJpeg2000.isSelected()
+						&& !checkSiard.isSelected() && !checkPdfa.isSelected()
+						&& !checkTiff.isSelected()
+						&& !checkSip0160.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
-						minOne = "Au moins une variante doit être autorisée !";
+						minOne = "Au moins une variante doit ï¿½tre autorisï¿½e !";
 					} else if ( locale.toString().startsWith( "en" ) ) {
 						minOne = "At least one variant must be allowed!";
 					}
-					engine.loadContent( "<html><h2>" + minOne + "</h2></html>" );
+					engine.loadContent(
+							"<html><h2>" + minOne + "</h2></html>" );
 					checkPng.setSelected( true );
 				} else {
 					Util.oldnewstring( yes, no, configFile );
@@ -1398,15 +1498,18 @@ public class ConfigController
 				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
-				if ( !checkJpeg2000.isSelected() && !checkSiard.isSelected() && !checkPdfa.isSelected()
-						&& !checkJpeg.isSelected() && !checkPng.isSelected() && !checkSip0160.isSelected() ) {
+				if ( !checkJpeg2000.isSelected() && !checkSiard.isSelected()
+						&& !checkPdfa.isSelected() && !checkJpeg.isSelected()
+						&& !checkPng.isSelected()
+						&& !checkSip0160.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
-						minOne = "Au moins une variante doit être autorisée !";
+						minOne = "Au moins une variante doit ï¿½tre autorisï¿½e !";
 					} else if ( locale.toString().startsWith( "en" ) ) {
 						minOne = "At least one variant must be allowed!";
 					}
-					engine.loadContent( "<html><h2>" + minOne + "</h2></html>" );
+					engine.loadContent(
+							"<html><h2>" + minOne + "</h2></html>" );
 					checkTiff.setSelected( true );
 				} else {
 					Util.oldnewstring( yes, no, configFile );
@@ -1455,16 +1558,18 @@ public class ConfigController
 				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
-				if ( !checkComp5.isSelected() && !checkComp2.isSelected() && !checkComp7.isSelected()
-						&& !checkComp3.isSelected() && !checkComp8.isSelected() && !checkComp4.isSelected()
+				if ( !checkComp5.isSelected() && !checkComp2.isSelected()
+						&& !checkComp7.isSelected() && !checkComp3.isSelected()
+						&& !checkComp8.isSelected() && !checkComp4.isSelected()
 						&& !checkComp32773.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
-						minOne = "Au moins une variante doit être autorisée !";
+						minOne = "Au moins une variante doit ï¿½tre autorisï¿½e !";
 					} else if ( locale.toString().startsWith( "en" ) ) {
 						minOne = "At least one variant must be allowed!";
 					}
-					engine.loadContent( "<html><h2>" + minOne + "</h2></html>" );
+					engine.loadContent(
+							"<html><h2>" + minOne + "</h2></html>" );
 					checkComp1.setSelected( true );
 				} else {
 					Util.oldnewstring( yes, no, configFile );
@@ -1487,16 +1592,18 @@ public class ConfigController
 				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
-				if ( !checkComp5.isSelected() && !checkComp1.isSelected() && !checkComp7.isSelected()
-						&& !checkComp3.isSelected() && !checkComp8.isSelected() && !checkComp4.isSelected()
+				if ( !checkComp5.isSelected() && !checkComp1.isSelected()
+						&& !checkComp7.isSelected() && !checkComp3.isSelected()
+						&& !checkComp8.isSelected() && !checkComp4.isSelected()
 						&& !checkComp32773.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
-						minOne = "Au moins une variante doit être autorisée !";
+						minOne = "Au moins une variante doit ï¿½tre autorisï¿½e !";
 					} else if ( locale.toString().startsWith( "en" ) ) {
 						minOne = "At least one variant must be allowed!";
 					}
-					engine.loadContent( "<html><h2>" + minOne + "</h2></html>" );
+					engine.loadContent(
+							"<html><h2>" + minOne + "</h2></html>" );
 					checkComp2.setSelected( true );
 				} else {
 					Util.oldnewstring( yes, no, configFile );
@@ -1519,16 +1626,18 @@ public class ConfigController
 				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
-				if ( !checkComp5.isSelected() && !checkComp2.isSelected() && !checkComp7.isSelected()
-						&& !checkComp1.isSelected() && !checkComp8.isSelected() && !checkComp4.isSelected()
+				if ( !checkComp5.isSelected() && !checkComp2.isSelected()
+						&& !checkComp7.isSelected() && !checkComp1.isSelected()
+						&& !checkComp8.isSelected() && !checkComp4.isSelected()
 						&& !checkComp32773.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
-						minOne = "Au moins une variante doit être autorisée !";
+						minOne = "Au moins une variante doit ï¿½tre autorisï¿½e !";
 					} else if ( locale.toString().startsWith( "en" ) ) {
 						minOne = "At least one variant must be allowed!";
 					}
-					engine.loadContent( "<html><h2>" + minOne + "</h2></html>" );
+					engine.loadContent(
+							"<html><h2>" + minOne + "</h2></html>" );
 					checkComp3.setSelected( true );
 				} else {
 					Util.oldnewstring( yes, no, configFile );
@@ -1551,16 +1660,18 @@ public class ConfigController
 				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
-				if ( !checkComp5.isSelected() && !checkComp2.isSelected() && !checkComp7.isSelected()
-						&& !checkComp3.isSelected() && !checkComp8.isSelected() && !checkComp1.isSelected()
+				if ( !checkComp5.isSelected() && !checkComp2.isSelected()
+						&& !checkComp7.isSelected() && !checkComp3.isSelected()
+						&& !checkComp8.isSelected() && !checkComp1.isSelected()
 						&& !checkComp32773.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
-						minOne = "Au moins une variante doit être autorisée !";
+						minOne = "Au moins une variante doit ï¿½tre autorisï¿½e !";
 					} else if ( locale.toString().startsWith( "en" ) ) {
 						minOne = "At least one variant must be allowed!";
 					}
-					engine.loadContent( "<html><h2>" + minOne + "</h2></html>" );
+					engine.loadContent(
+							"<html><h2>" + minOne + "</h2></html>" );
 					checkComp4.setSelected( true );
 				} else {
 					Util.oldnewstring( yes, no, configFile );
@@ -1583,16 +1694,18 @@ public class ConfigController
 				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
-				if ( !checkComp1.isSelected() && !checkComp2.isSelected() && !checkComp7.isSelected()
-						&& !checkComp3.isSelected() && !checkComp8.isSelected() && !checkComp4.isSelected()
+				if ( !checkComp1.isSelected() && !checkComp2.isSelected()
+						&& !checkComp7.isSelected() && !checkComp3.isSelected()
+						&& !checkComp8.isSelected() && !checkComp4.isSelected()
 						&& !checkComp32773.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
-						minOne = "Au moins une variante doit être autorisée !";
+						minOne = "Au moins une variante doit ï¿½tre autorisï¿½e !";
 					} else if ( locale.toString().startsWith( "en" ) ) {
 						minOne = "At least one variant must be allowed!";
 					}
-					engine.loadContent( "<html><h2>" + minOne + "</h2></html>" );
+					engine.loadContent(
+							"<html><h2>" + minOne + "</h2></html>" );
 					checkComp5.setSelected( true );
 				} else {
 					Util.oldnewstring( yes, no, configFile );
@@ -1615,16 +1728,18 @@ public class ConfigController
 				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
-				if ( !checkComp5.isSelected() && !checkComp2.isSelected() && !checkComp1.isSelected()
-						&& !checkComp3.isSelected() && !checkComp8.isSelected() && !checkComp4.isSelected()
+				if ( !checkComp5.isSelected() && !checkComp2.isSelected()
+						&& !checkComp1.isSelected() && !checkComp3.isSelected()
+						&& !checkComp8.isSelected() && !checkComp4.isSelected()
 						&& !checkComp32773.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
-						minOne = "Au moins une variante doit être autorisée !";
+						minOne = "Au moins une variante doit ï¿½tre autorisï¿½e !";
 					} else if ( locale.toString().startsWith( "en" ) ) {
 						minOne = "At least one variant must be allowed!";
 					}
-					engine.loadContent( "<html><h2>" + minOne + "</h2></html>" );
+					engine.loadContent(
+							"<html><h2>" + minOne + "</h2></html>" );
 					checkComp7.setSelected( true );
 				} else {
 					Util.oldnewstring( yes, no, configFile );
@@ -1647,16 +1762,18 @@ public class ConfigController
 				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
-				if ( !checkComp5.isSelected() && !checkComp2.isSelected() && !checkComp7.isSelected()
-						&& !checkComp3.isSelected() && !checkComp1.isSelected() && !checkComp4.isSelected()
+				if ( !checkComp5.isSelected() && !checkComp2.isSelected()
+						&& !checkComp7.isSelected() && !checkComp3.isSelected()
+						&& !checkComp1.isSelected() && !checkComp4.isSelected()
 						&& !checkComp32773.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
-						minOne = "Au moins une variante doit être autorisée !";
+						minOne = "Au moins une variante doit ï¿½tre autorisï¿½e !";
 					} else if ( locale.toString().startsWith( "en" ) ) {
 						minOne = "At least one variant must be allowed!";
 					}
-					engine.loadContent( "<html><h2>" + minOne + "</h2></html>" );
+					engine.loadContent(
+							"<html><h2>" + minOne + "</h2></html>" );
 					checkComp8.setSelected( true );
 				} else {
 					Util.oldnewstring( yes, no, configFile );
@@ -1679,16 +1796,18 @@ public class ConfigController
 				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
-				if ( !checkComp5.isSelected() && !checkComp2.isSelected() && !checkComp7.isSelected()
-						&& !checkComp3.isSelected() && !checkComp8.isSelected() && !checkComp4.isSelected()
+				if ( !checkComp5.isSelected() && !checkComp2.isSelected()
+						&& !checkComp7.isSelected() && !checkComp3.isSelected()
+						&& !checkComp8.isSelected() && !checkComp4.isSelected()
 						&& !checkComp1.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
-						minOne = "Au moins une variante doit être autorisée !";
+						minOne = "Au moins une variante doit ï¿½tre autorisï¿½e !";
 					} else if ( locale.toString().startsWith( "en" ) ) {
 						minOne = "At least one variant must be allowed!";
 					}
-					engine.loadContent( "<html><h2>" + minOne + "</h2></html>" );
+					engine.loadContent(
+							"<html><h2>" + minOne + "</h2></html>" );
 					checkComp32773.setSelected( true );
 				} else {
 					Util.oldnewstring( yes, no, configFile );
@@ -1712,16 +1831,18 @@ public class ConfigController
 				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
-				if ( !checkPi1.isSelected() && !checkPi2.isSelected() && !checkPi3.isSelected()
-						&& !checkPi4.isSelected() && !checkPi5.isSelected() && !checkPi6.isSelected()
+				if ( !checkPi1.isSelected() && !checkPi2.isSelected()
+						&& !checkPi3.isSelected() && !checkPi4.isSelected()
+						&& !checkPi5.isSelected() && !checkPi6.isSelected()
 						&& !checkPi8.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
-						minOne = "Au moins une variante doit être autorisée !";
+						minOne = "Au moins une variante doit ï¿½tre autorisï¿½e !";
 					} else if ( locale.toString().startsWith( "en" ) ) {
 						minOne = "At least one variant must be allowed!";
 					}
-					engine.loadContent( "<html><h2>" + minOne + "</h2></html>" );
+					engine.loadContent(
+							"<html><h2>" + minOne + "</h2></html>" );
 					checkPi0.setSelected( true );
 				} else {
 					Util.oldnewstring( yes, no, configFile );
@@ -1744,16 +1865,18 @@ public class ConfigController
 				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
-				if ( !checkPi0.isSelected() && !checkPi2.isSelected() && !checkPi3.isSelected()
-						&& !checkPi4.isSelected() && !checkPi5.isSelected() && !checkPi6.isSelected()
+				if ( !checkPi0.isSelected() && !checkPi2.isSelected()
+						&& !checkPi3.isSelected() && !checkPi4.isSelected()
+						&& !checkPi5.isSelected() && !checkPi6.isSelected()
 						&& !checkPi8.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
-						minOne = "Au moins une variante doit être autorisée !";
+						minOne = "Au moins une variante doit ï¿½tre autorisï¿½e !";
 					} else if ( locale.toString().startsWith( "en" ) ) {
 						minOne = "At least one variant must be allowed!";
 					}
-					engine.loadContent( "<html><h2>" + minOne + "</h2></html>" );
+					engine.loadContent(
+							"<html><h2>" + minOne + "</h2></html>" );
 					checkPi1.setSelected( true );
 				} else {
 					Util.oldnewstring( yes, no, configFile );
@@ -1776,16 +1899,18 @@ public class ConfigController
 				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
-				if ( !checkPi1.isSelected() && !checkPi0.isSelected() && !checkPi3.isSelected()
-						&& !checkPi4.isSelected() && !checkPi5.isSelected() && !checkPi6.isSelected()
+				if ( !checkPi1.isSelected() && !checkPi0.isSelected()
+						&& !checkPi3.isSelected() && !checkPi4.isSelected()
+						&& !checkPi5.isSelected() && !checkPi6.isSelected()
 						&& !checkPi8.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
-						minOne = "Au moins une variante doit être autorisée !";
+						minOne = "Au moins une variante doit ï¿½tre autorisï¿½e !";
 					} else if ( locale.toString().startsWith( "en" ) ) {
 						minOne = "At least one variant must be allowed!";
 					}
-					engine.loadContent( "<html><h2>" + minOne + "</h2></html>" );
+					engine.loadContent(
+							"<html><h2>" + minOne + "</h2></html>" );
 					checkPi2.setSelected( true );
 				} else {
 					Util.oldnewstring( yes, no, configFile );
@@ -1808,16 +1933,18 @@ public class ConfigController
 				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
-				if ( !checkPi1.isSelected() && !checkPi2.isSelected() && !checkPi0.isSelected()
-						&& !checkPi4.isSelected() && !checkPi5.isSelected() && !checkPi6.isSelected()
+				if ( !checkPi1.isSelected() && !checkPi2.isSelected()
+						&& !checkPi0.isSelected() && !checkPi4.isSelected()
+						&& !checkPi5.isSelected() && !checkPi6.isSelected()
 						&& !checkPi8.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
-						minOne = "Au moins une variante doit être autorisée !";
+						minOne = "Au moins une variante doit ï¿½tre autorisï¿½e !";
 					} else if ( locale.toString().startsWith( "en" ) ) {
 						minOne = "At least one variant must be allowed!";
 					}
-					engine.loadContent( "<html><h2>" + minOne + "</h2></html>" );
+					engine.loadContent(
+							"<html><h2>" + minOne + "</h2></html>" );
 					checkPi3.setSelected( true );
 				} else {
 					Util.oldnewstring( yes, no, configFile );
@@ -1840,16 +1967,18 @@ public class ConfigController
 				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
-				if ( !checkPi1.isSelected() && !checkPi2.isSelected() && !checkPi3.isSelected()
-						&& !checkPi0.isSelected() && !checkPi5.isSelected() && !checkPi6.isSelected()
+				if ( !checkPi1.isSelected() && !checkPi2.isSelected()
+						&& !checkPi3.isSelected() && !checkPi0.isSelected()
+						&& !checkPi5.isSelected() && !checkPi6.isSelected()
 						&& !checkPi8.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
-						minOne = "Au moins une variante doit être autorisée !";
+						minOne = "Au moins une variante doit ï¿½tre autorisï¿½e !";
 					} else if ( locale.toString().startsWith( "en" ) ) {
 						minOne = "At least one variant must be allowed!";
 					}
-					engine.loadContent( "<html><h2>" + minOne + "</h2></html>" );
+					engine.loadContent(
+							"<html><h2>" + minOne + "</h2></html>" );
 					checkPi4.setSelected( true );
 				} else {
 					Util.oldnewstring( yes, no, configFile );
@@ -1872,16 +2001,18 @@ public class ConfigController
 				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
-				if ( !checkPi1.isSelected() && !checkPi2.isSelected() && !checkPi3.isSelected()
-						&& !checkPi4.isSelected() && !checkPi0.isSelected() && !checkPi6.isSelected()
+				if ( !checkPi1.isSelected() && !checkPi2.isSelected()
+						&& !checkPi3.isSelected() && !checkPi4.isSelected()
+						&& !checkPi0.isSelected() && !checkPi6.isSelected()
 						&& !checkPi8.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
-						minOne = "Au moins une variante doit être autorisée !";
+						minOne = "Au moins une variante doit ï¿½tre autorisï¿½e !";
 					} else if ( locale.toString().startsWith( "en" ) ) {
 						minOne = "At least one variant must be allowed!";
 					}
-					engine.loadContent( "<html><h2>" + minOne + "</h2></html>" );
+					engine.loadContent(
+							"<html><h2>" + minOne + "</h2></html>" );
 					checkPi5.setSelected( true );
 				} else {
 					Util.oldnewstring( yes, no, configFile );
@@ -1904,16 +2035,18 @@ public class ConfigController
 				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
-				if ( !checkPi1.isSelected() && !checkPi2.isSelected() && !checkPi3.isSelected()
-						&& !checkPi4.isSelected() && !checkPi5.isSelected() && !checkPi0.isSelected()
+				if ( !checkPi1.isSelected() && !checkPi2.isSelected()
+						&& !checkPi3.isSelected() && !checkPi4.isSelected()
+						&& !checkPi5.isSelected() && !checkPi0.isSelected()
 						&& !checkPi8.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
-						minOne = "Au moins une variante doit être autorisée !";
+						minOne = "Au moins une variante doit ï¿½tre autorisï¿½e !";
 					} else if ( locale.toString().startsWith( "en" ) ) {
 						minOne = "At least one variant must be allowed!";
 					}
-					engine.loadContent( "<html><h2>" + minOne + "</h2></html>" );
+					engine.loadContent(
+							"<html><h2>" + minOne + "</h2></html>" );
 					checkPi6.setSelected( true );
 				} else {
 					Util.oldnewstring( yes, no, configFile );
@@ -1936,16 +2069,18 @@ public class ConfigController
 				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
-				if ( !checkPi1.isSelected() && !checkPi2.isSelected() && !checkPi3.isSelected()
-						&& !checkPi4.isSelected() && !checkPi5.isSelected() && !checkPi6.isSelected()
+				if ( !checkPi1.isSelected() && !checkPi2.isSelected()
+						&& !checkPi3.isSelected() && !checkPi4.isSelected()
+						&& !checkPi5.isSelected() && !checkPi6.isSelected()
 						&& !checkPi0.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
-						minOne = "Au moins une variante doit être autorisée !";
+						minOne = "Au moins une variante doit ï¿½tre autorisï¿½e !";
 					} else if ( locale.toString().startsWith( "en" ) ) {
 						minOne = "At least one variant must be allowed!";
 					}
-					engine.loadContent( "<html><h2>" + minOne + "</h2></html>" );
+					engine.loadContent(
+							"<html><h2>" + minOne + "</h2></html>" );
 					checkPi8.setSelected( true );
 				} else {
 					Util.oldnewstring( yes, no, configFile );
@@ -1957,7 +2092,9 @@ public class ConfigController
 		}
 	}
 
-	/* checkBps schaltet diese bitspersample in der Konfiguration ein oder aus */
+	/*
+	 * checkBps schaltet diese bitspersample in der Konfiguration ein oder aus
+	 */
 	@FXML
 	void changeBps1( ActionEvent event )
 	{
@@ -1969,15 +2106,17 @@ public class ConfigController
 				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
-				if ( !checkBps2.isSelected() && !checkBps4.isSelected() && !checkBps8.isSelected()
-						&& !checkBps16.isSelected() && !checkBps32.isSelected() ) {
+				if ( !checkBps2.isSelected() && !checkBps4.isSelected()
+						&& !checkBps8.isSelected() && !checkBps16.isSelected()
+						&& !checkBps32.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
-						minOne = "Au moins une variante doit être autorisée !";
+						minOne = "Au moins une variante doit ï¿½tre autorisï¿½e !";
 					} else if ( locale.toString().startsWith( "en" ) ) {
 						minOne = "At least one variant must be allowed!";
 					}
-					engine.loadContent( "<html><h2>" + minOne + "</h2></html>" );
+					engine.loadContent(
+							"<html><h2>" + minOne + "</h2></html>" );
 					checkBps1.setSelected( true );
 				} else {
 					Util.oldnewstring( yes, no, configFile );
@@ -2000,15 +2139,17 @@ public class ConfigController
 				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
-				if ( !checkBps1.isSelected() && !checkBps4.isSelected() && !checkBps8.isSelected()
-						&& !checkBps16.isSelected() && !checkBps32.isSelected() ) {
+				if ( !checkBps1.isSelected() && !checkBps4.isSelected()
+						&& !checkBps8.isSelected() && !checkBps16.isSelected()
+						&& !checkBps32.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
-						minOne = "Au moins une variante doit être autorisée !";
+						minOne = "Au moins une variante doit ï¿½tre autorisï¿½e !";
 					} else if ( locale.toString().startsWith( "en" ) ) {
 						minOne = "At least one variant must be allowed!";
 					}
-					engine.loadContent( "<html><h2>" + minOne + "</h2></html>" );
+					engine.loadContent(
+							"<html><h2>" + minOne + "</h2></html>" );
 					checkBps2.setSelected( true );
 				} else {
 					Util.oldnewstring( yes, no, configFile );
@@ -2031,15 +2172,17 @@ public class ConfigController
 				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
-				if ( !checkBps2.isSelected() && !checkBps1.isSelected() && !checkBps8.isSelected()
-						&& !checkBps16.isSelected() && !checkBps32.isSelected() ) {
+				if ( !checkBps2.isSelected() && !checkBps1.isSelected()
+						&& !checkBps8.isSelected() && !checkBps16.isSelected()
+						&& !checkBps32.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
-						minOne = "Au moins une variante doit être autorisée !";
+						minOne = "Au moins une variante doit ï¿½tre autorisï¿½e !";
 					} else if ( locale.toString().startsWith( "en" ) ) {
 						minOne = "At least one variant must be allowed!";
 					}
-					engine.loadContent( "<html><h2>" + minOne + "</h2></html>" );
+					engine.loadContent(
+							"<html><h2>" + minOne + "</h2></html>" );
 					checkBps4.setSelected( true );
 				} else {
 					Util.oldnewstring( yes, no, configFile );
@@ -2062,15 +2205,17 @@ public class ConfigController
 				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
-				if ( !checkBps2.isSelected() && !checkBps4.isSelected() && !checkBps1.isSelected()
-						&& !checkBps16.isSelected() && !checkBps32.isSelected() ) {
+				if ( !checkBps2.isSelected() && !checkBps4.isSelected()
+						&& !checkBps1.isSelected() && !checkBps16.isSelected()
+						&& !checkBps32.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
-						minOne = "Au moins une variante doit être autorisée !";
+						minOne = "Au moins une variante doit ï¿½tre autorisï¿½e !";
 					} else if ( locale.toString().startsWith( "en" ) ) {
 						minOne = "At least one variant must be allowed!";
 					}
-					engine.loadContent( "<html><h2>" + minOne + "</h2></html>" );
+					engine.loadContent(
+							"<html><h2>" + minOne + "</h2></html>" );
 					checkBps8.setSelected( true );
 				} else {
 					Util.oldnewstring( yes, no, configFile );
@@ -2093,15 +2238,17 @@ public class ConfigController
 				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
-				if ( !checkBps2.isSelected() && !checkBps4.isSelected() && !checkBps8.isSelected()
-						&& !checkBps1.isSelected() && !checkBps32.isSelected() ) {
+				if ( !checkBps2.isSelected() && !checkBps4.isSelected()
+						&& !checkBps8.isSelected() && !checkBps1.isSelected()
+						&& !checkBps32.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
-						minOne = "Au moins une variante doit être autorisée !";
+						minOne = "Au moins une variante doit ï¿½tre autorisï¿½e !";
 					} else if ( locale.toString().startsWith( "en" ) ) {
 						minOne = "At least one variant must be allowed!";
 					}
-					engine.loadContent( "<html><h2>" + minOne + "</h2></html>" );
+					engine.loadContent(
+							"<html><h2>" + minOne + "</h2></html>" );
 					checkBps16.setSelected( true );
 				} else {
 					Util.oldnewstring( yes, no, configFile );
@@ -2124,15 +2271,17 @@ public class ConfigController
 				engine.load( "file:///" + configFile.getAbsolutePath() );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
-				if ( !checkBps2.isSelected() && !checkBps4.isSelected() && !checkBps8.isSelected()
-						&& !checkBps16.isSelected() && !checkBps1.isSelected() ) {
+				if ( !checkBps2.isSelected() && !checkBps4.isSelected()
+						&& !checkBps8.isSelected() && !checkBps16.isSelected()
+						&& !checkBps1.isSelected() ) {
 					String minOne = "Mindestens eine Variante muss erlaubt sein!";
 					if ( locale.toString().startsWith( "fr" ) ) {
-						minOne = "Au moins une variante doit être autorisée !";
+						minOne = "Au moins une variante doit ï¿½tre autorisï¿½e !";
 					} else if ( locale.toString().startsWith( "en" ) ) {
 						minOne = "At least one variant must be allowed!";
 					}
-					engine.loadContent( "<html><h2>" + minOne + "</h2></html>" );
+					engine.loadContent(
+							"<html><h2>" + minOne + "</h2></html>" );
 					checkBps32.setSelected( true );
 				} else {
 					Util.oldnewstring( yes, no, configFile );
@@ -2144,7 +2293,9 @@ public class ConfigController
 		}
 	}
 
-	/* checkMultipage schaltet diese Multipage in der Konfiguration ein oder aus */
+	/*
+	 * checkMultipage schaltet diese Multipage in der Konfiguration ein oder aus
+	 */
 	@FXML
 	void changeMultipage( ActionEvent event )
 	{

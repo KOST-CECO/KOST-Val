@@ -25,7 +25,7 @@ public class Validation1fPrimaryDataException extends KOSTValException
 {
 
 	/** @author razm Daniel Ludin, Bedag AG @version 0.2.0 */
-	private static final long	serialVersionUID	= -4703263788956302792L;
+	private static final long serialVersionUID = -4703263788956302792L;
 
 	public Validation1fPrimaryDataException()
 	{

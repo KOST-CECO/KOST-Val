@@ -37,10 +37,12 @@ import ch.kostceco.tools.siardexcerpt.logging.MessageConstants;
 import ch.kostceco.tools.siardexcerpt.service.ConfigurationServiceExc;
 import ch.kostceco.tools.siardexcerpt.service.TextResourceServiceExc;
 
-/** Dies ist die Starter-Klasse, verantwortlich fuer das Initialisieren des Controllers, des
- * Loggings und das Parsen der Start-Parameter.
+/**
+ * Dies ist die Starter-Klasse, verantwortlich fuer das Initialisieren des
+ * Controllers, des Loggings und das Parsen der Start-Parameter.
  * 
- * @author Rc Claire Roethlisberger, KOST-CECO */
+ * @author Rc Claire Roethlisberger, KOST-CECO
+ */
 
 public class SIARDexcerpt implements MessageConstants
 {
@@ -53,7 +55,8 @@ public class SIARDexcerpt implements MessageConstants
 		return textResourceServiceExc;
 	}
 
-	public void setTextResourceServiceExc( TextResourceServiceExc textResourceServiceExc )
+	public void setTextResourceServiceExc(
+			TextResourceServiceExc textResourceServiceExc )
 	{
 		this.textResourceServiceExc = textResourceServiceExc;
 	}
@@ -63,17 +66,20 @@ public class SIARDexcerpt implements MessageConstants
 		return configurationServiceExc;
 	}
 
-	public void setConfigurationServiceExc( ConfigurationServiceExc configurationServiceExc )
+	public void setConfigurationServiceExc(
+			ConfigurationServiceExc configurationServiceExc )
 	{
 		this.configurationServiceExc = configurationServiceExc;
 	}
 
-	/** Die Eingabe besteht aus mind 3 Parameter: [0] Pfad zur SIARD-Datei oder Verzeichnis [1]
-	 * configfile [2] Modul
+	/**
+	 * Die Eingabe besteht aus mind 3 Parameter: [0] Pfad zur SIARD-Datei oder
+	 * Verzeichnis [1] configfile [2] Modul
 	 * 
 	 * uebersicht der Module: --init --search --extract sowie --finish
 	 * 
-	 * bei --search kommen danach noch die Suchtexte und bei --extract die Schluessel
+	 * bei --search kommen danach noch die Suchtexte und bei --extract die
+	 * Schluessel
 	 * 
 	 * @param args
 	 * @throws IOException
@@ -85,85 +91,97 @@ public class SIARDexcerpt implements MessageConstants
 		ApplicationContext context = new ClassPathXmlApplicationContext(
 				"classpath:config/applicationContext.xml" );
 
-		/** SIARDexcerpt: Aufbau des Tools
+		/**
+		 * SIARDexcerpt: Aufbau des Tools
 		 * 
-		 * 1) init: Config Kopieren und ggf SIARD-Datei ins Workverzeichnis entpacken, config bei Bedarf
-		 * ausfuellen
+		 * 1) init: Config Kopieren und ggf SIARD-Datei ins Workverzeichnis
+		 * entpacken, config bei Bedarf ausfuellen
 		 * 
-		 * 2) search: gemaess config die Tabelle mit Suchtext befragen und Ausgabe des Resultates
+		 * 2) search: gemaess config die Tabelle mit Suchtext befragen und
+		 * Ausgabe des Resultates
 		 * 
-		 * 3) extract: mit den Keys anhand der config einen Records herausziehen und anzeigen
+		 * 3) extract: mit den Keys anhand der config einen Records herausziehen
+		 * und anzeigen
 		 * 
-		 * 4) finish: Config-Kopie sowie Workverzeichnis loeschen */
+		 * 4) finish: Config-Kopie sowie Workverzeichnis loeschen
+		 */
 
-		/* TODO: siehe Bemerkung im applicationContext-services.xml bezueglich Injection in der
-		 * Superklasse aller Impl-Klassen ValidationModuleImpl validationModuleImpl =
-		 * (ValidationModuleImpl) context.getBean("validationmoduleimpl"); */
-		SIARDexcerpt siardexcerpt = (SIARDexcerpt) context.getBean( "siardexcerpt" );
+		/*
+		 * TODO: siehe Bemerkung im applicationContext-services.xml bezueglich
+		 * Injection in der Superklasse aller Impl-Klassen ValidationModuleImpl
+		 * validationModuleImpl = (ValidationModuleImpl)
+		 * context.getBean("validationmoduleimpl");
+		 */
+		SIARDexcerpt siardexcerpt = (SIARDexcerpt) context
+				.getBean( "siardexcerpt" );
 
 		Locale locale = Locale.getDefault();
 
-		if (!args[2].isEmpty()) {
-		if ( args[2].equalsIgnoreCase( "--de" ) ) {
-			locale = new Locale( "de" );
-		} else if ( args[2].equalsIgnoreCase( "--fr" ) ) {
-			locale = new Locale( "fr" );
-		} else if ( args[2].equalsIgnoreCase( "--en" ) ) {
-			locale = new Locale( "en" );
-		} else {
-			// ungueltige Eingabe Fehler wird ignoriert und default oder de wird angenommen
-			if ( locale.toString().startsWith( "fr" ) ) {
+		if ( !args[2].isEmpty() ) {
+			if ( args[2].equalsIgnoreCase( "--de" ) ) {
+				locale = new Locale( "de" );
+			} else if ( args[2].equalsIgnoreCase( "--fr" ) ) {
 				locale = new Locale( "fr" );
-			} else if ( locale.toString().startsWith( "en" ) ) {
+			} else if ( args[2].equalsIgnoreCase( "--en" ) ) {
 				locale = new Locale( "en" );
 			} else {
-				locale = new Locale( "de" );
+				// ungueltige Eingabe Fehler wird ignoriert und default oder de
+				// wird angenommen
+				if ( locale.toString().startsWith( "fr" ) ) {
+					locale = new Locale( "fr" );
+				} else if ( locale.toString().startsWith( "en" ) ) {
+					locale = new Locale( "en" );
+				} else {
+					locale = new Locale( "de" );
+				}
 			}
-		}
 		}
 		// Ist die Anzahl Parameter (mind 4) korrekt?
 		int argsLength = args.length;
 		if ( argsLength < 4 ) {
 			// Fehler zu wenige args
-      int i=0;
-      while(i<argsLength){
-          System.out.println(i);
-        	// args[i] auf locale kontrollieren
-    			if ( args[i].equalsIgnoreCase( "--de" ) ) {
-    				locale = new Locale( "de" );
-            System.out.println(locale);
-    			} else if ( args[i].equalsIgnoreCase( "--fr" ) ) {
-    				locale = new Locale( "fr" );
-            System.out.println(locale);
-   			} else if ( args[i].equalsIgnoreCase( "--en" ) ) {
-    				locale = new Locale( "en" );
-            System.out.println(locale);
-    			} else {
-    				// ungueltige Eingabe Fehler wird ignoriert und default oder de wird angenommen
-    				if ( locale.toString().startsWith( "fr" ) ) {
-    					locale = new Locale( "fr" );
-    				} else if ( locale.toString().startsWith( "en" ) ) {
-    					locale = new Locale( "en" );
-    				} else {
-    					locale = new Locale( "de" );
-    				}
-    			}
-         i++;
-      }
-      System.out.println("locale= "+locale);
-			
-			
+			int i = 0;
+			while ( i < argsLength ) {
+				System.out.println( i );
+				// args[i] auf locale kontrollieren
+				if ( args[i].equalsIgnoreCase( "--de" ) ) {
+					locale = new Locale( "de" );
+					System.out.println( locale );
+				} else if ( args[i].equalsIgnoreCase( "--fr" ) ) {
+					locale = new Locale( "fr" );
+					System.out.println( locale );
+				} else if ( args[i].equalsIgnoreCase( "--en" ) ) {
+					locale = new Locale( "en" );
+					System.out.println( locale );
+				} else {
+					// ungueltige Eingabe Fehler wird ignoriert und default oder
+					// de wird angenommen
+					if ( locale.toString().startsWith( "fr" ) ) {
+						locale = new Locale( "fr" );
+					} else if ( locale.toString().startsWith( "en" ) ) {
+						locale = new Locale( "en" );
+					} else {
+						locale = new Locale( "de" );
+					}
+				}
+				i++;
+			}
+			System.out.println( "locale= " + locale );
 
-			System.out.println(
-					siardexcerpt.getTextResourceServiceExc().getText( locale, EXC_ERROR_PARAMETER_USAGE ) );
+			System.out.println( siardexcerpt.getTextResourceServiceExc()
+					.getText( locale, EXC_ERROR_PARAMETER_USAGE ) );
 			System.exit( 1 );
 		}
 
 		String module = new String( args[3] );
 
-		/* arg 1 gibt den Pfad zur configdatei an. Da dieser in ConfigurationServiceImpl hartcodiert
-		 * ist, wird diese nach ".siardexcerpt/configuration/SIARDexcerpt.conf.xml" kopiert. */
-		String userSIARDexcerpt = System.getenv( "USERPROFILE" ) + File.separator + ".siardexcerpt";
+		/*
+		 * arg 1 gibt den Pfad zur configdatei an. Da dieser in
+		 * ConfigurationServiceImpl hartcodiert ist, wird diese nach
+		 * ".siardexcerpt/configuration/SIARDexcerpt.conf.xml" kopiert.
+		 */
+		String userSIARDexcerpt = System.getenv( "USERPROFILE" )
+				+ File.separator + ".siardexcerpt";
 		File userSIARDexcerptFile = new File( userSIARDexcerpt );
 		if ( !userSIARDexcerptFile.exists() ) {
 			userSIARDexcerptFile.mkdirs();
@@ -182,8 +200,8 @@ public class SIARDexcerpt implements MessageConstants
 		// die Anwendung muss mindestens unter Java 8 laufen
 		String javaRuntimeVersion = System.getProperty( "java.vm.version" );
 		if ( javaRuntimeVersion.compareTo( "1.8.0" ) < 0 ) {
-			System.out
-					.println( siardexcerpt.getTextResourceServiceExc().getText( locale, EXC_ERROR_WRONG_JRE ) );
+			System.out.println( siardexcerpt.getTextResourceServiceExc()
+					.getText( locale, EXC_ERROR_WRONG_JRE ) );
 			System.exit( 1 );
 		}
 

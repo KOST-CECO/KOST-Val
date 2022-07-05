@@ -34,10 +34,12 @@ import ch.kostceco.tools.siardexcerpt.service.ConfigurationServiceExc;
 import ch.kostceco.tools.siardexcerpt.service.TextResourceServiceExc;
 import ch.kostceco.tools.kosttools.util.Util;
 
-/** Dies ist die Starter-Klasse, verantwortlich fuer das Initialisieren des Controllers, des
- * Loggings und das Parsen der Start-Parameter.
+/**
+ * Dies ist die Starter-Klasse, verantwortlich fuer das Initialisieren des
+ * Controllers, des Loggings und das Parsen der Start-Parameter.
  * 
- * @author Rc Claire Roethlisberger, KOST-CECO */
+ * @author Rc Claire Roethlisberger, KOST-CECO
+ */
 
 public class ControllerExcFinish implements MessageConstants
 {
@@ -50,7 +52,8 @@ public class ControllerExcFinish implements MessageConstants
 		return textResourceServiceExc;
 	}
 
-	public void setTextResourceServiceExc( TextResourceServiceExc textResourceServiceExc )
+	public void setTextResourceServiceExc(
+			TextResourceServiceExc textResourceServiceExc )
 	{
 		this.textResourceServiceExc = textResourceServiceExc;
 	}
@@ -60,17 +63,20 @@ public class ControllerExcFinish implements MessageConstants
 		return configurationServiceExc;
 	}
 
-	public void setConfigurationServiceExc( ConfigurationServiceExc configurationServiceExc )
+	public void setConfigurationServiceExc(
+			ConfigurationServiceExc configurationServiceExc )
 	{
 		this.configurationServiceExc = configurationServiceExc;
 	}
 
-	/** Die Eingabe besteht aus mind 3 Parameter: [0] Pfad zur SIARD-Datei oder Verzeichnis [1]
-	 * configfile [2] Modul
+	/**
+	 * Die Eingabe besteht aus mind 3 Parameter: [0] Pfad zur SIARD-Datei oder
+	 * Verzeichnis [1] configfile [2] Modul
 	 * 
 	 * uebersicht der Module: --init --search --extract sowie --finish
 	 * 
-	 * bei --search kommen danach noch die Suchtexte und bei --extract die Schluessel
+	 * bei --search kommen danach noch die Suchtexte und bei --extract die
+	 * Schluessel
 	 * 
 	 * @param args
 	 * @throws IOException
@@ -83,20 +89,27 @@ public class ControllerExcFinish implements MessageConstants
 		ApplicationContext context = new ClassPathXmlApplicationContext(
 				"classpath:config/applicationContext.xml" );
 
-		/** SIARDexcerpt: Aufbau des Tools
+		/**
+		 * SIARDexcerpt: Aufbau des Tools
 		 * 
-		 * 1) init: Config Kopieren und ggf SIARD-Datei ins Workverzeichnis entpacken, config bei Bedarf
-		 * ausfuellen
+		 * 1) init: Config Kopieren und ggf SIARD-Datei ins Workverzeichnis
+		 * entpacken, config bei Bedarf ausfuellen
 		 * 
-		 * 2) search: gemaess config die Tabelle mit Suchtext befragen und Ausgabe des Resultates
+		 * 2) search: gemaess config die Tabelle mit Suchtext befragen und
+		 * Ausgabe des Resultates
 		 * 
-		 * 3) extract: mit den Keys anhand der config einen Records herausziehen und anzeigen
+		 * 3) extract: mit den Keys anhand der config einen Records herausziehen
+		 * und anzeigen
 		 * 
-		 * 4) finish: Config-Kopie sowie Workverzeichnis loeschen */
+		 * 4) finish: Config-Kopie sowie Workverzeichnis loeschen
+		 */
 
-		/* TODO: siehe Bemerkung im applicationContext-services.xml bezueglich Injection in der
-		 * Superklasse aller Impl-Klassen ValidationModuleImpl validationModuleImpl =
-		 * (ValidationModuleImpl) context.getBean("validationmoduleimpl"); */
+		/*
+		 * TODO: siehe Bemerkung im applicationContext-services.xml bezueglich
+		 * Injection in der Superklasse aller Impl-Klassen ValidationModuleImpl
+		 * validationModuleImpl = (ValidationModuleImpl)
+		 * context.getBean("validationmoduleimpl");
+		 */
 		ControllerExcFinish controllerExcFinish = (ControllerExcFinish) context
 				.getBean( "controllerExcFinish" );
 
@@ -109,7 +122,8 @@ public class ControllerExcFinish implements MessageConstants
 		} else if ( args[2].equalsIgnoreCase( "--en" ) ) {
 			locale = new Locale( "en" );
 		} else {
-			// ungueltige Eingabe Fehler wird ignoriert und default oder de wird angenommen
+			// ungueltige Eingabe Fehler wird ignoriert und default oder de wird
+			// angenommen
 			if ( locale.toString().startsWith( "fr" ) ) {
 				locale = new Locale( "fr" );
 			} else if ( locale.toString().startsWith( "en" ) ) {
@@ -121,14 +135,18 @@ public class ControllerExcFinish implements MessageConstants
 
 		// Ist die Anzahl Parameter (mind 4) korrekt?
 		if ( args.length < 4 ) {
-			System.out.println( controllerExcFinish.getTextResourceServiceExc().getText( locale,
-					EXC_ERROR_PARAMETER_USAGE ) );
+			System.out.println( controllerExcFinish.getTextResourceServiceExc()
+					.getText( locale, EXC_ERROR_PARAMETER_USAGE ) );
 			return false;
 		}
 
-		/* arg 1 gibt den Pfad zur configdatei an. Da dieser in ConfigurationServiceImpl hartcodiert
-		 * ist, wird diese nach ".siardexcerpt/configuration/SIARDexcerpt.conf.xml" kopiert. */
-		String userSIARDexcerpt = System.getenv( "USERPROFILE" ) + File.separator + ".siardexcerpt";
+		/*
+		 * arg 1 gibt den Pfad zur configdatei an. Da dieser in
+		 * ConfigurationServiceImpl hartcodiert ist, wird diese nach
+		 * ".siardexcerpt/configuration/SIARDexcerpt.conf.xml" kopiert.
+		 */
+		String userSIARDexcerpt = System.getenv( "USERPROFILE" )
+				+ File.separator + ".siardexcerpt";
 		File userSIARDexcerptFile = new File( userSIARDexcerpt );
 		if ( !userSIARDexcerptFile.exists() ) {
 			userSIARDexcerptFile.mkdirs();
@@ -139,29 +157,33 @@ public class ControllerExcFinish implements MessageConstants
 			config1.mkdirs();
 		}
 
-		File configFileHard = new File( config + File.separator + "SIARDexcerpt.conf.xml" );
+		File configFileHard = new File(
+				config + File.separator + "SIARDexcerpt.conf.xml" );
 
-		String pathToWorkDir = System.getenv( "USERPROFILE" ) + File.separator + ".siardexcerpt"
-				+ File.separator + "temp_SIARDexcerpt";
+		String pathToWorkDir = System.getenv( "USERPROFILE" ) + File.separator
+				+ ".siardexcerpt" + File.separator + "temp_SIARDexcerpt";
 		File tmpDir = new File( pathToWorkDir );
 
 		// die Anwendung muss mindestens unter Java 8 laufen
 		String javaRuntimeVersion = System.getProperty( "java.vm.version" );
 		if ( javaRuntimeVersion.compareTo( "1.8.0" ) < 0 ) {
-			System.out.println(
-					controllerExcFinish.getTextResourceServiceExc().getText( locale, EXC_ERROR_WRONG_JRE ) );
+			System.out.println( controllerExcFinish.getTextResourceServiceExc()
+					.getText( locale, EXC_ERROR_WRONG_JRE ) );
 			return false;
 		}
 
 		System.out.println( "" );
 
-		/** 4) finish: Config-Kopie sowie Workverzeichnis loeschen
+		/**
+		 * 4) finish: Config-Kopie sowie Workverzeichnis loeschen
 		 * 
-		 * TODO: Erledigt */
+		 * TODO: Erledigt
+		 */
 
 		System.out.println( "SIARDexcerpt: finish" );
 
-		// Loeschen des Arbeitsverzeichnisses und confiFileHard, falls eines angelegt wurde
+		// Loeschen des Arbeitsverzeichnisses und confiFileHard, falls eines
+		// angelegt wurde
 		if ( tmpDir.exists() ) {
 			Util.deleteDir( tmpDir );
 		}

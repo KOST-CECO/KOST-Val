@@ -29,17 +29,20 @@ import ch.kostceco.tools.kostval.logging.MessageConstants;
 import ch.kostceco.tools.kostval.service.TextResourceService;
 import ch.kostceco.tools.kostval.validation.modulejp2.ValidationAvalidationAModule;
 
-/** kostval -->
+/**
+ * kostval -->
  * 
- * Der Controller ruft die benoetigten Module zur Validierung der JPEG2000-Datei in der benoetigten
- * Reihenfolge auf.
+ * Der Controller ruft die benoetigten Module zur Validierung der JPEG2000-Datei
+ * in der benoetigten Reihenfolge auf.
  * 
- * Die Validierungs-Module werden mittels Spring-Dependency-Injection eingebunden. */
+ * Die Validierungs-Module werden mittels Spring-Dependency-Injection
+ * eingebunden.
+ */
 
 public class Controllerjp2 implements MessageConstants
 {
 
-	private TextResourceService						textResourceService;
+	private TextResourceService				textResourceService;
 
 	private ValidationAvalidationAModule	validationAvalidationAModule;
 
@@ -59,7 +62,8 @@ public class Controllerjp2 implements MessageConstants
 		return textResourceService;
 	}
 
-	public void setTextResourceService( TextResourceService textResourceService )
+	public void setTextResourceService(
+			TextResourceService textResourceService )
 	{
 		this.textResourceService = textResourceService;
 	}
@@ -71,21 +75,29 @@ public class Controllerjp2 implements MessageConstants
 
 		// Validation A
 		try {
-			if ( this.getValidationAvalidationAModule().validate( valDatei, directoryOfLogfile, configMap,
-					locale, logFile ) ) {
-				this.getValidationAvalidationAModule().getMessageService().print();
+			if ( this.getValidationAvalidationAModule().validate( valDatei,
+					directoryOfLogfile, configMap, locale, logFile ) ) {
+				this.getValidationAvalidationAModule().getMessageService()
+						.print();
 			} else {
-				this.getValidationAvalidationAModule().getMessageService().print();
+				this.getValidationAvalidationAModule().getMessageService()
+						.print();
 				return false;
 			}
 		} catch ( ValidationAjp2validationException e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_A_JP2 )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationAvalidationAModule().getMessageService().print();
 			return false;
 		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_A_JP2 )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 		return valid;

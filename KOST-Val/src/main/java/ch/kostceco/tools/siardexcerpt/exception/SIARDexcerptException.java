@@ -15,14 +15,16 @@
 
 package ch.kostceco.tools.siardexcerpt.exception;
 
-/** Superklasse aller Applikations-Exceptions
+/**
+ * Superklasse aller Applikations-Exceptions
  * 
- * @author Rc Claire Roethlisberger, KOST-CECO */
+ * @author Rc Claire Roethlisberger, KOST-CECO
+ */
 
 public class SIARDexcerptException extends Exception
 {
 
-	private static final long	serialVersionUID	= -8666753675661449719L;
+	private static final long serialVersionUID = -8666753675661449719L;
 
 	public SIARDexcerptException()
 	{

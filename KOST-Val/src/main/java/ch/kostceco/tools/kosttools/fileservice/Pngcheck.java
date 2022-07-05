@@ -26,30 +26,36 @@ import ch.kostceco.tools.kosttools.util.Util;
 
 public class Pngcheck
 {
-	private static String	exeDir								= "resources" + File.separator
-			+ "pngcheck-3.0.2-win32";
-	private static String	resourcesPngcheckExe	= exeDir + File.separator + "pngcheck.win32.exe";
+	private static String	exeDir					= "resources"
+			+ File.separator + "pngcheck-3.0.2-win32";
+	private static String	resourcesPngcheckExe	= exeDir + File.separator
+			+ "pngcheck.win32.exe";
 
-	/** fuehrt eine Validierung mit Pngcheck via cmd durch und speichert das Ergebnis in ein File
-	 * (Report). Gibt zurueck ob Report existiert oder nicht
+	/**
+	 * fuehrt eine Validierung mit Pngcheck via cmd durch und speichert das
+	 * Ergebnis in ein File (Report). Gibt zurueck ob Report existiert oder
+	 * nicht
 	 * 
 	 * @param pngFile
-	 *          png-Datei, welche validiert werden soll
+	 *            png-Datei, welche validiert werden soll
 	 * @param report
-	 *          Datei fuer den Report
+	 *            Datei fuer den Report
 	 * @param workDir
-	 *          Temporaeres Verzeichnis
+	 *            Temporaeres Verzeichnis
 	 * @param dirOfJarPath
-	 *          String mit dem Pfad von wo das Programm gestartet wurde
-	 * @return String ob Report existiert oder nicht ggf Exception */
-	public static String execPngcheck( File pngFile, File workDir, String dirOfJarPath )
-			throws InterruptedException
+	 *            String mit dem Pfad von wo das Programm gestartet wurde
+	 * @return String ob Report existiert oder nicht ggf Exception
+	 */
+	public static String execPngcheck( File pngFile, File workDir,
+			String dirOfJarPath ) throws InterruptedException
 	{
 		boolean out = true;
-		File exeFile = new File( dirOfJarPath + File.separator + resourcesPngcheckExe );
+		File exeFile = new File(
+				dirOfJarPath + File.separator + resourcesPngcheckExe );
 
 		// Pngcheck unterstuetzt nicht alle Zeichen
-		File pngFileNormalisiert = new File( workDir + File.separator + "PNG.png" );
+		File pngFileNormalisiert = new File(
+				workDir + File.separator + "PNG.png" );
 		try {
 			Util.copyFile( pngFile, pngFileNormalisiert );
 		} catch ( IOException e ) {
@@ -68,39 +74,49 @@ public class Pngcheck
 		Util.deleteFile( new File( workDir + File.separator + "PNG.png" ) );
 		// System.out.println("resultExec: "+ resultExec );
 
-		/* Folgender Output ist keiner sondern nur Info und kann mit OK ersetzt werden:
+		/*
+		 * Folgender Output ist keiner sondern nur Info und kann mit OK ersetzt
+		 * werden:
 		 * 
-		 * OK: C:\Users\X60014195\.kost-val_2x\temp_KOST-Val\PNG.png (DETAILS ...
+		 * OK: C:\Users\X60014195\.kost-val_2x\temp_KOST-Val\PNG.png (DETAILS
+		 * ...
 		 * 
-		 * Wenn OK zurueckgegeben wird konnte der PNGCHECK nicht korrekt gemacht werden */
+		 * Wenn OK zurueckgegeben wird konnte der PNGCHECK nicht korrekt gemacht
+		 * werden
+		 */
 		if ( resultExec.equals( "OK" ) ) {
 			resultExec = "FAIL Pngcheck";
 		} else if ( resultExec.startsWith( "OK: " ) ) {
 			resultExec = "OK";
 		} else {
 			// {Dateipfad} invalid IHDR image type (1) ERROR: {Dateipfad}
+			resultExec = resultExec.replace( "</Message><Message>ERROR: "
+					+ pngFileNormalisiert.getAbsolutePath(), "" );
+			resultExec = resultExec.replace(
+					pngFileNormalisiert.getAbsolutePath() + "  ", "" );
 			resultExec = resultExec
-					.replace( "</Message><Message>ERROR: " + pngFileNormalisiert.getAbsolutePath(), "" );
-			resultExec = resultExec.replace( pngFileNormalisiert.getAbsolutePath() + "  ", "" );
-			resultExec = resultExec.replace( pngFileNormalisiert.getAbsolutePath() + " ", "" );
+					.replace( pngFileNormalisiert.getAbsolutePath() + " ", "" );
 		}
 		// System.out.println("resultExec: "+ resultExec );
 		return resultExec;
 	}
 
-	/** fuehrt eine Kontrolle aller benoetigten Dateien von Pngcheck durch und gibt das Ergebnis als
-	 * boolean zurueck
+	/**
+	 * fuehrt eine Kontrolle aller benoetigten Dateien von Pngcheck durch und
+	 * gibt das Ergebnis als boolean zurueck
 	 * 
 	 * @param dirOfJarPath
-	 *          String mit dem Pfad von wo das Programm gestartet wurde
-	 * @return Boolean mit Kontrollergebnis */
+	 *            String mit dem Pfad von wo das Programm gestartet wurde
+	 * @return Boolean mit Kontrollergebnis
+	 */
 	public static String checkPngcheck( String dirOfJarPath )
 	{
 		String result = "";
 		boolean checkFiles = true;
 		// Pfad zum Programm existiert die Dateien?
 
-		String pngcheckExe = dirOfJarPath + File.separator + resourcesPngcheckExe;
+		String pngcheckExe = dirOfJarPath + File.separator
+				+ resourcesPngcheckExe;
 		File fpngcheckExe = new File( pngcheckExe );
 		if ( !fpngcheckExe.exists() ) {
 			if ( checkFiles ) {

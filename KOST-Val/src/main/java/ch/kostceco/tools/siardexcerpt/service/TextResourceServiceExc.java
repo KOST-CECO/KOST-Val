@@ -17,35 +17,41 @@ package ch.kostceco.tools.siardexcerpt.service;
 
 import java.util.Locale;
 
-/** Service Interface fuer Text Ressourcen.
+/**
+ * Service Interface fuer Text Ressourcen.
  * 
- * @author Rc Claire Roethlisberger, KOST-CECO */
+ * @author Rc Claire Roethlisberger, KOST-CECO
+ */
 public interface TextResourceServiceExc extends ServiceExc
 {
-	/** Ermitteln eines ResourceValues anhand eines Keys. Es wird die Locale aus dem UserContext
-	 * verwendet.
+	/**
+	 * Ermitteln eines ResourceValues anhand eines Keys. Es wird die Locale aus
+	 * dem UserContext verwendet.
 	 * 
-	 * Gleichzeitig wird ein MessageFormat an das Ergebnis angewendet und die Platzhalter aus der
-	 * Resource mit den Werten aus aValues ersetzt.
+	 * Gleichzeitig wird ein MessageFormat an das Ergebnis angewendet und die
+	 * Platzhalter aus der Resource mit den Werten aus aValues ersetzt.
 	 * 
 	 * @param aKey
-	 *          der Resourcenschluessel
+	 *            der Resourcenschluessel
 	 * @param values
-	 *          die Werte fuer die Platzhalter
-	 * @return das formatierte Ergebnis */
+	 *            die Werte fuer die Platzhalter
+	 * @return das formatierte Ergebnis
+	 */
 	String getText( String aKey, Object... values );
 
-	/** Ermitteln eines ResourceValues anhand eines Keys.
+	/**
+	 * Ermitteln eines ResourceValues anhand eines Keys.
 	 * 
-	 * Gleichzeitig wird ein MessageFormat an das Ergebnis angewendet und die Platzhalter aus der
-	 * Resource mit den Werten aus aValues ersetzt.
+	 * Gleichzeitig wird ein MessageFormat an das Ergebnis angewendet und die
+	 * Platzhalter aus der Resource mit den Werten aus aValues ersetzt.
 	 * 
 	 * @param locale
-	 *          zu verwendende Locale
+	 *            zu verwendende Locale
 	 * @param aKey
-	 *          der Resourcenschluessel
+	 *            der Resourcenschluessel
 	 * @param values
-	 *          die Werte fuer die Platzhalter
-	 * @return das formatierte Ergebnis */
+	 *            die Werte fuer die Platzhalter
+	 * @return das formatierte Ergebnis
+	 */
 	String getText( Locale locale, String aKey, Object... values );
 }

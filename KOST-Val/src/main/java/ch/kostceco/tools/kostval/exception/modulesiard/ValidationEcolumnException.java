@@ -25,7 +25,7 @@ public class ValidationEcolumnException extends KOSTValException
 {
 
 	/** @author ??? */
-	private static final long	serialVersionUID	= 5060094531057249403L; // tbd
+	private static final long serialVersionUID = 5060094531057249403L; // tbd
 
 	public ValidationEcolumnException()
 	{

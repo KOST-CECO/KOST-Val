@@ -25,7 +25,7 @@ public class Validation2dGeverFileIntegrityException extends KOSTValException
 {
 
 	/** @author razm Daniel Ludin, Bedag AG @version 0.2.0 */
-	private static final long	serialVersionUID	= 9091144601301961612L;
+	private static final long serialVersionUID = 9091144601301961612L;
 
 	public Validation2dGeverFileIntegrityException()
 	{

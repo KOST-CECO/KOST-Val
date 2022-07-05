@@ -27,16 +27,19 @@ import ch.kostceco.tools.kostval.exception.KOSTValException;
 import ch.kostceco.tools.kostval.service.MessageService;
 import ch.kostceco.tools.kostval.service.Service;
 
-/** Dies ist das Interface f�r alle Validierungs-Module und vereinigt alle Funktionalit�ten, die den
- * jeweiligen Modulen gemeinsam sind.
+/**
+ * Dies ist das Interface f�r alle Validierungs-Module und vereinigt alle
+ * Funktionalit�ten, die den jeweiligen Modulen gemeinsam sind.
  * 
- * @author Rc Claire Roethlisberger, KOST-CECO */
+ * @author Rc Claire Roethlisberger, KOST-CECO
+ */
 
 public interface ValidationModule extends Service
 {
 
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile ) throws KOSTValException;
+	public boolean validate( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile )
+			throws KOSTValException;
 
 	public MessageService getMessageService();
 }

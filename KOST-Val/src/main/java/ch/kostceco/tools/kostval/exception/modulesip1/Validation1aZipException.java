@@ -25,7 +25,7 @@ public class Validation1aZipException extends KOSTValException
 {
 
 	/** @author razm Daniel Ludin, Bedag AG @version 0.2.0 */
-	private static final long	serialVersionUID	= -8816841335398903517L;
+	private static final long serialVersionUID = -8816841335398903517L;
 
 	public Validation1aZipException( String message )
 	{

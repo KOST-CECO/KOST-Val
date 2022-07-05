@@ -25,7 +25,7 @@ public class Validation1dMetadataException extends KOSTValException
 {
 
 	/** @author razm Daniel Ludin, Bedag AG @version 0.2.0 */
-	private static final long	serialVersionUID	= -5732112035022102438L;
+	private static final long serialVersionUID = -5732112035022102438L;
 
 	public Validation1dMetadataException( String message )
 	{

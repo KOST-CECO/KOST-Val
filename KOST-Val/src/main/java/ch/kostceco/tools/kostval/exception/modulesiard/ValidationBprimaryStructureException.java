@@ -25,7 +25,7 @@ public class ValidationBprimaryStructureException extends KOSTValException
 {
 
 	/** @author Rc Claire Roethlisberger, KOST-CECO */
-	private static final long	serialVersionUID	= -5743334009406087977L;
+	private static final long serialVersionUID = -5743334009406087977L;
 
 	public ValidationBprimaryStructureException()
 	{

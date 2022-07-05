@@ -25,7 +25,7 @@ public class ValidationCheaderException extends KOSTValException
 {
 
 	/** @author Rc Claire Roethlisberger, KOST-CECO */
-	private static final long	serialVersionUID	= 6749701283008757910L; // tbd
+	private static final long serialVersionUID = 6749701283008757910L; // tbd
 
 	public ValidationCheaderException( String message )
 	{

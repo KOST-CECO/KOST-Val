@@ -44,26 +44,29 @@ import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationFmultipageVali
 import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationGtilesValidationModule;
 import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationHsizeValidationModule;
 
-/** Der Controller ruft die benötigten Module zur Validierung des TIFF-Archivs in der benötigten
- * Reihenfolge auf.
+/**
+ * Der Controller ruft die benï¿½tigten Module zur Validierung des TIFF-Archivs in
+ * der benï¿½tigten Reihenfolge auf.
  * 
- * Die Validierungs-Module werden mittels Spring-Dependency-Injection eingebunden. */
+ * Die Validierungs-Module werden mittels Spring-Dependency-Injection
+ * eingebunden.
+ */
 
 public class Controllertiff implements MessageConstants
 {
 
-	private boolean																		min	= false;
+	private boolean										min	= false;
 
-	private ValidationArecognitionModule							validationArecognitionModule;
-	private ValidationBjhoveValidationModule					validationBjhoveValidationModule;
+	private ValidationArecognitionModule				validationArecognitionModule;
+	private ValidationBjhoveValidationModule			validationBjhoveValidationModule;
 	private ValidationCcompressionValidationModule		validationCcompressionValidationModule;
-	private ValidationDphotointerValidationModule			validationDphotointerValidationModule;
+	private ValidationDphotointerValidationModule		validationDphotointerValidationModule;
 	private ValidationEbitspersampleValidationModule	validationEbitspersampleValidationModule;
-	private ValidationFmultipageValidationModule			validationFmultipageValidationModule;
-	private ValidationGtilesValidationModule					validationGtilesValidationModule;
-	private ValidationHsizeValidationModule						validationHsizeValidationModule;
+	private ValidationFmultipageValidationModule		validationFmultipageValidationModule;
+	private ValidationGtilesValidationModule			validationGtilesValidationModule;
+	private ValidationHsizeValidationModule				validationHsizeValidationModule;
 
-	private TextResourceService												textResourceService;
+	private TextResourceService							textResourceService;
 
 	public ValidationArecognitionModule getValidationArecognitionModule()
 	{
@@ -158,7 +161,8 @@ public class Controllertiff implements MessageConstants
 		return textResourceService;
 	}
 
-	public void setTextResourceService( TextResourceService textResourceService )
+	public void setTextResourceService(
+			TextResourceService textResourceService )
 	{
 		this.textResourceService = textResourceService;
 	}
@@ -169,24 +173,33 @@ public class Controllertiff implements MessageConstants
 		boolean valid = true;
 		// Validation Step A
 		try {
-			if ( this.getValidationArecognitionModule().validate( valDatei, directoryOfLogfile, configMap,
-					locale, logFile ) ) {
-				this.getValidationArecognitionModule().getMessageService().print();
+			if ( this.getValidationArecognitionModule().validate( valDatei,
+					directoryOfLogfile, configMap, locale, logFile ) ) {
+				this.getValidationArecognitionModule().getMessageService()
+						.print();
 			} else {
-				// Ein negatives Validierungsresultat in diesem Schritt fuehrt zum Abbruch der weiteren
+				// Ein negatives Validierungsresultat in diesem Schritt fuehrt
+				// zum Abbruch der weiteren
 				// Verarbeitung
-				this.getValidationArecognitionModule().getMessageService().print();
+				this.getValidationArecognitionModule().getMessageService()
+						.print();
 				return false;
 			}
 		} catch ( ValidationArecognitionException e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_TIFF )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_A_TIFF )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationArecognitionModule().getMessageService().print();
 			return false;
 
 		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_TIFF )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_A_TIFF )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 		return valid;
@@ -203,11 +216,13 @@ public class Controllertiff implements MessageConstants
 		boolean valid = true;
 		// Validation Step B
 		try {
-			if ( this.getValidationBjhoveValidationModule().validate( valDatei, directoryOfLogfile,
-					configMap, locale, logFile ) ) {
-				this.getValidationBjhoveValidationModule().getMessageService().print();
+			if ( this.getValidationBjhoveValidationModule().validate( valDatei,
+					directoryOfLogfile, configMap, locale, logFile ) ) {
+				this.getValidationBjhoveValidationModule().getMessageService()
+						.print();
 			} else {
-				this.getValidationBjhoveValidationModule().getMessageService().print();
+				this.getValidationBjhoveValidationModule().getMessageService()
+						.print();
 				if ( min ) {
 					return false;
 				} else {
@@ -215,23 +230,33 @@ public class Controllertiff implements MessageConstants
 				}
 			}
 		} catch ( ValidationBjhoveValidationException e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_TIFF )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
-			this.getValidationBjhoveValidationModule().getMessageService().print();
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_B_TIFF )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
+			this.getValidationBjhoveValidationModule().getMessageService()
+					.print();
 			return false;
 		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_TIFF )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_B_TIFF )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
 		// Validation Step C
 		try {
-			if ( this.getValidationCcompressionValidationModule().validate( valDatei, directoryOfLogfile,
-					configMap, locale, logFile ) ) {
-				this.getValidationCcompressionValidationModule().getMessageService().print();
+			if ( this.getValidationCcompressionValidationModule().validate(
+					valDatei, directoryOfLogfile, configMap, locale,
+					logFile ) ) {
+				this.getValidationCcompressionValidationModule()
+						.getMessageService().print();
 			} else {
-				this.getValidationCcompressionValidationModule().getMessageService().print();
+				this.getValidationCcompressionValidationModule()
+						.getMessageService().print();
 				if ( min ) {
 					return false;
 				} else {
@@ -239,23 +264,33 @@ public class Controllertiff implements MessageConstants
 				}
 			}
 		} catch ( ValidationCcompressionValidationException e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_TIFF )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
-			this.getValidationCcompressionValidationModule().getMessageService().print();
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_C_TIFF )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
+			this.getValidationCcompressionValidationModule().getMessageService()
+					.print();
 			return false;
 		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_TIFF )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_C_TIFF )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
 		// Validation Step D
 		try {
-			if ( this.getValidationDphotointerValidationModule().validate( valDatei, directoryOfLogfile,
-					configMap, locale, logFile ) ) {
-				this.getValidationDphotointerValidationModule().getMessageService().print();
+			if ( this.getValidationDphotointerValidationModule().validate(
+					valDatei, directoryOfLogfile, configMap, locale,
+					logFile ) ) {
+				this.getValidationDphotointerValidationModule()
+						.getMessageService().print();
 			} else {
-				this.getValidationDphotointerValidationModule().getMessageService().print();
+				this.getValidationDphotointerValidationModule()
+						.getMessageService().print();
 				if ( min ) {
 					return false;
 				} else {
@@ -263,23 +298,33 @@ public class Controllertiff implements MessageConstants
 				}
 			}
 		} catch ( ValidationDphotointerValidationException e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
-			this.getValidationDphotointerValidationModule().getMessageService().print();
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_D_TIFF )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
+			this.getValidationDphotointerValidationModule().getMessageService()
+					.print();
 			return false;
 		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_D_TIFF )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
 		// Validation Step E
 		try {
-			if ( this.getValidationEbitspersampleValidationModule().validate( valDatei,
-					directoryOfLogfile, configMap, locale, logFile ) ) {
-				this.getValidationEbitspersampleValidationModule().getMessageService().print();
+			if ( this.getValidationEbitspersampleValidationModule().validate(
+					valDatei, directoryOfLogfile, configMap, locale,
+					logFile ) ) {
+				this.getValidationEbitspersampleValidationModule()
+						.getMessageService().print();
 			} else {
-				this.getValidationEbitspersampleValidationModule().getMessageService().print();
+				this.getValidationEbitspersampleValidationModule()
+						.getMessageService().print();
 				if ( min ) {
 					return false;
 				} else {
@@ -287,23 +332,33 @@ public class Controllertiff implements MessageConstants
 				}
 			}
 		} catch ( ValidationEbitspersampleValidationException e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_TIFF )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
-			this.getValidationEbitspersampleValidationModule().getMessageService().print();
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_E_TIFF )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
+			this.getValidationEbitspersampleValidationModule()
+					.getMessageService().print();
 			return false;
 		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_TIFF )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_E_TIFF )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
 		// Validation Step F
 		try {
-			if ( this.getValidationFmultipageValidationModule().validate( valDatei, directoryOfLogfile,
-					configMap, locale, logFile ) ) {
-				this.getValidationFmultipageValidationModule().getMessageService().print();
+			if ( this.getValidationFmultipageValidationModule().validate(
+					valDatei, directoryOfLogfile, configMap, locale,
+					logFile ) ) {
+				this.getValidationFmultipageValidationModule()
+						.getMessageService().print();
 			} else {
-				this.getValidationFmultipageValidationModule().getMessageService().print();
+				this.getValidationFmultipageValidationModule()
+						.getMessageService().print();
 				if ( min ) {
 					return false;
 				} else {
@@ -311,23 +366,32 @@ public class Controllertiff implements MessageConstants
 				}
 			}
 		} catch ( ValidationFmultipageValidationException e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_TIFF )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
-			this.getValidationFmultipageValidationModule().getMessageService().print();
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_F_TIFF )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
+			this.getValidationFmultipageValidationModule().getMessageService()
+					.print();
 			return false;
 		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_TIFF )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_F_TIFF )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
 		// Validation Step G
 		try {
-			if ( this.getValidationGtilesValidationModule().validate( valDatei, directoryOfLogfile,
-					configMap, locale, logFile ) ) {
-				this.getValidationGtilesValidationModule().getMessageService().print();
+			if ( this.getValidationGtilesValidationModule().validate( valDatei,
+					directoryOfLogfile, configMap, locale, logFile ) ) {
+				this.getValidationGtilesValidationModule().getMessageService()
+						.print();
 			} else {
-				this.getValidationGtilesValidationModule().getMessageService().print();
+				this.getValidationGtilesValidationModule().getMessageService()
+						.print();
 				if ( min ) {
 					return false;
 				} else {
@@ -335,23 +399,32 @@ public class Controllertiff implements MessageConstants
 				}
 			}
 		} catch ( ValidationGtilesValidationException e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_TIFF )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
-			this.getValidationGtilesValidationModule().getMessageService().print();
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_G_TIFF )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
+			this.getValidationGtilesValidationModule().getMessageService()
+					.print();
 			return false;
 		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_TIFF )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_G_TIFF )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
 		// Validation Step H
 		try {
-			if ( this.getValidationHsizeValidationModule().validate( valDatei, directoryOfLogfile,
-					configMap, locale, logFile ) ) {
-				this.getValidationHsizeValidationModule().getMessageService().print();
+			if ( this.getValidationHsizeValidationModule().validate( valDatei,
+					directoryOfLogfile, configMap, locale, logFile ) ) {
+				this.getValidationHsizeValidationModule().getMessageService()
+						.print();
 			} else {
-				this.getValidationHsizeValidationModule().getMessageService().print();
+				this.getValidationHsizeValidationModule().getMessageService()
+						.print();
 				if ( min ) {
 					return false;
 				} else {
@@ -359,13 +432,20 @@ public class Controllertiff implements MessageConstants
 				}
 			}
 		} catch ( ValidationHsizeValidationException e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_TIFF )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
-			this.getValidationHsizeValidationModule().getMessageService().print();
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_H_TIFF )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
+			this.getValidationHsizeValidationModule().getMessageService()
+					.print();
 			return false;
 		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_TIFF )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_H_TIFF )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 		return valid;

@@ -25,7 +25,7 @@ public class Validation1bFolderStructureException extends KOSTValException
 {
 
 	/** @author razm Daniel Ludin, Bedag AG @version 0.2.0 */
-	private static final long	serialVersionUID	= -5743334009406087977L;
+	private static final long serialVersionUID = -5743334009406087977L;
 
 	public Validation1bFolderStructureException()
 	{

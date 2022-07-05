@@ -49,38 +49,42 @@ import ch.kostceco.tools.kostval.validation.modulesiard.ValidationIrecognitionMo
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationJsurplusFilesModule;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationWwarningModule;
 
-/** kostval -->
+/**
+ * kostval -->
  * 
- * Der Controller ruft die benoetigten Module zur Validierung der SIARD-Datei in der benoetigten
- * Reihenfolge auf.
+ * Der Controller ruft die benoetigten Module zur Validierung der SIARD-Datei in
+ * der benoetigten Reihenfolge auf.
  * 
- * Die Validierungs-Module werden mittels Spring-Dependency-Injection eingebunden. */
+ * Die Validierungs-Module werden mittels Spring-Dependency-Injection
+ * eingebunden.
+ */
 
 public class Controllersiard implements MessageConstants
 {
 
-	private boolean														min	= false;
+	private boolean								min	= false;
 
-	private TextResourceService								textResourceService;
+	private TextResourceService					textResourceService;
 
-	private ValidationAzipModule							validationAzipModule;
+	private ValidationAzipModule				validationAzipModule;
 	private ValidationBprimaryStructureModule	validationBprimaryStructureModule;
-	private ValidationCheaderModule						validationCheaderModule;
-	private ValidationDstructureModule				validationDstructureModule;
-	private ValidationEcolumnModule						validationEcolumnModule;
-	private ValidationFrowModule							validationFrowModule;
-	private ValidationGtableModule						validationGtableModule;
-	private ValidationHcontentModule					validationHcontentModule;
-	private ValidationIrecognitionModule			validationIrecognitionModule;
-	private ValidationJsurplusFilesModule			validationJsurplusFilesModule;
-	private ValidationWwarningModule					validationWwarningModule;
+	private ValidationCheaderModule				validationCheaderModule;
+	private ValidationDstructureModule			validationDstructureModule;
+	private ValidationEcolumnModule				validationEcolumnModule;
+	private ValidationFrowModule				validationFrowModule;
+	private ValidationGtableModule				validationGtableModule;
+	private ValidationHcontentModule			validationHcontentModule;
+	private ValidationIrecognitionModule		validationIrecognitionModule;
+	private ValidationJsurplusFilesModule		validationJsurplusFilesModule;
+	private ValidationWwarningModule			validationWwarningModule;
 
 	public ValidationAzipModule getValidationAzipModule()
 	{
 		return validationAzipModule;
 	}
 
-	public void setValidationAzipModule( ValidationAzipModule validationAzipModule )
+	public void setValidationAzipModule(
+			ValidationAzipModule validationAzipModule )
 	{
 		this.validationAzipModule = validationAzipModule;
 	}
@@ -101,7 +105,8 @@ public class Controllersiard implements MessageConstants
 		return validationCheaderModule;
 	}
 
-	public void setValidationCheaderModule( ValidationCheaderModule validationCheaderModule )
+	public void setValidationCheaderModule(
+			ValidationCheaderModule validationCheaderModule )
 	{
 		this.validationCheaderModule = validationCheaderModule;
 	}
@@ -111,25 +116,34 @@ public class Controllersiard implements MessageConstants
 		return validationDstructureModule;
 	}
 
-	public void setValidationDstructureModule( ValidationDstructureModule validationDstructureModule )
+	public void setValidationDstructureModule(
+			ValidationDstructureModule validationDstructureModule )
 	{
 		this.validationDstructureModule = validationDstructureModule;
 	}
 
-	/* public ValidationEcolumnModule getValidationEcolumnModule() { return validationEcolumnModule; }
-	 * public void setValidationEcolumnModule(ValidationEcolumnModule validationEcolumnModule) {
-	 * this.validationEcolumnModule = validationEcolumnModule; } */
+	/*
+	 * public ValidationEcolumnModule getValidationEcolumnModule() { return
+	 * validationEcolumnModule; } public void
+	 * setValidationEcolumnModule(ValidationEcolumnModule
+	 * validationEcolumnModule) { this.validationEcolumnModule =
+	 * validationEcolumnModule; }
+	 */
 
-	/* public ValidationFrowModule getValidationFrowModule() { return validationFrowModule; } public
-	 * void setValidationFrowModule(ValidationFrowModule validationFrowModule) {
-	 * this.validationFrowModule = validationFrowModule; } */
+	/*
+	 * public ValidationFrowModule getValidationFrowModule() { return
+	 * validationFrowModule; } public void
+	 * setValidationFrowModule(ValidationFrowModule validationFrowModule) {
+	 * this.validationFrowModule = validationFrowModule; }
+	 */
 
 	public ValidationGtableModule getValidationGtableModule()
 	{
 		return validationGtableModule;
 	}
 
-	public void setValidationGtableModule( ValidationGtableModule validationGtableModule )
+	public void setValidationGtableModule(
+			ValidationGtableModule validationGtableModule )
 	{
 		this.validationGtableModule = validationGtableModule;
 	}
@@ -139,7 +153,8 @@ public class Controllersiard implements MessageConstants
 		return validationHcontentModule;
 	}
 
-	public void setValidationHcontentModule( ValidationHcontentModule validationHcontentModule )
+	public void setValidationHcontentModule(
+			ValidationHcontentModule validationHcontentModule )
 	{
 		this.validationHcontentModule = validationHcontentModule;
 	}
@@ -166,21 +181,29 @@ public class Controllersiard implements MessageConstants
 		this.validationJsurplusFilesModule = validationJsurplusFilesModule;
 	}
 
-	/* public ValidationKchecksumModule getValidationKchecksumModule() { return
-	 * validationKchecksumModule; } public void setValidationKchecksumModule(ValidationKchecksumModule
-	 * validationKchecksumModule) { this.validationKchecksumModule = validationKchecksumModule; } */
+	/*
+	 * public ValidationKchecksumModule getValidationKchecksumModule() { return
+	 * validationKchecksumModule; } public void
+	 * setValidationKchecksumModule(ValidationKchecksumModule
+	 * validationKchecksumModule) { this.validationKchecksumModule =
+	 * validationKchecksumModule; }
+	 */
 
-	/* public ValidationLconstraintModule getValidationLconstraintModule() { return
-	 * validationLconstraintModule; } public void
-	 * setValidationLconstraintModule(ValidationLconstraintModule validationLconstraintModule) {
-	 * this.validationLconstraintModule = validationLconstraintModule; } */
+	/*
+	 * public ValidationLconstraintModule getValidationLconstraintModule() {
+	 * return validationLconstraintModule; } public void
+	 * setValidationLconstraintModule(ValidationLconstraintModule
+	 * validationLconstraintModule) { this.validationLconstraintModule =
+	 * validationLconstraintModule; }
+	 */
 
 	public ValidationWwarningModule getValidationWwarningModule()
 	{
 		return validationWwarningModule;
 	}
 
-	public void setValidationWwarningModule( ValidationWwarningModule validationWwarningModule )
+	public void setValidationWwarningModule(
+			ValidationWwarningModule validationWwarningModule )
 	{
 		this.validationWwarningModule = validationWwarningModule;
 	}
@@ -190,7 +213,8 @@ public class Controllersiard implements MessageConstants
 		return textResourceService;
 	}
 
-	public void setTextResourceService( TextResourceService textResourceService )
+	public void setTextResourceService(
+			TextResourceService textResourceService )
 	{
 		this.textResourceService = textResourceService;
 	}
@@ -202,89 +226,122 @@ public class Controllersiard implements MessageConstants
 
 		// Validation Step A (Lesbarkeit)
 		try {
-			if ( this.getValidationAzipModule().validate( valDatei, directoryOfLogfile, configMap, locale,
-					logFile ) ) {
+			if ( this.getValidationAzipModule().validate( valDatei,
+					directoryOfLogfile, configMap, locale, logFile ) ) {
 				this.getValidationAzipModule().getMessageService().print();
 			} else {
-				// Ein negatives Validierungsresultat in diesem Schritt fuehrt zum Abbruch der weiteren
+				// Ein negatives Validierungsresultat in diesem Schritt fuehrt
+				// zum Abbruch der weiteren
 				// Verarbeitung
 				this.getValidationAzipModule().getMessageService().print();
 				return false;
 			}
 		} catch ( ValidationAzipException e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_A_SIARD )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationAzipModule().getMessageService().print();
 			return false;
 		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_A_SIARD )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
 		// Validation Step B (primaere Verzeichnisstruktur)
 		try {
-			if ( this.getValidationBprimaryStructureModule().validate( valDatei, directoryOfLogfile,
-					configMap, locale, logFile ) ) {
-				this.getValidationBprimaryStructureModule().getMessageService().print();
+			if ( this.getValidationBprimaryStructureModule().validate( valDatei,
+					directoryOfLogfile, configMap, locale, logFile ) ) {
+				this.getValidationBprimaryStructureModule().getMessageService()
+						.print();
 			} else {
-				// Ein negatives Validierungsresultat in diesem Schritt fuehrt zum Abbruch der weiteren
+				// Ein negatives Validierungsresultat in diesem Schritt fuehrt
+				// zum Abbruch der weiteren
 				// Verarbeitung
-				this.getValidationBprimaryStructureModule().getMessageService().print();
+				this.getValidationBprimaryStructureModule().getMessageService()
+						.print();
 				return false;
 			}
 		} catch ( ValidationBprimaryStructureException e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_SIARD )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
-			this.getValidationBprimaryStructureModule().getMessageService().print();
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_B_SIARD )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
+			this.getValidationBprimaryStructureModule().getMessageService()
+					.print();
 			return false;
 		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_SIARD )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_B_SIARD )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
 		// Validation Step C (Header-Validierung)
 		try {
-			if ( this.getValidationCheaderModule().validate( valDatei, directoryOfLogfile, configMap,
-					locale, logFile ) ) {
+			if ( this.getValidationCheaderModule().validate( valDatei,
+					directoryOfLogfile, configMap, locale, logFile ) ) {
 				this.getValidationCheaderModule().getMessageService().print();
 			} else {
 				this.getValidationCheaderModule().getMessageService().print();
-				// Ein negatives Validierungsresultat in diesem Schritt fuehrt zum Abbruch der weiteren
+				// Ein negatives Validierungsresultat in diesem Schritt fuehrt
+				// zum Abbruch der weiteren
 				// Verarbeitung
 				return false;
 			}
 		} catch ( ValidationCheaderException e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_SIARD )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_C_SIARD )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationCheaderModule().getMessageService().print();
 			return false;
 		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_SIARD )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_C_SIARD )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
 		// Validation Step D (Struktur-Validierung)
 		try {
-			if ( this.getValidationDstructureModule().validate( valDatei, directoryOfLogfile, configMap,
-					locale, logFile ) ) {
-				this.getValidationDstructureModule().getMessageService().print();
+			if ( this.getValidationDstructureModule().validate( valDatei,
+					directoryOfLogfile, configMap, locale, logFile ) ) {
+				this.getValidationDstructureModule().getMessageService()
+						.print();
 			} else {
-				this.getValidationDstructureModule().getMessageService().print();
-				// Ein negatives Validierungsresultat in diesem Schritt fuehrt zum Abbruch der weiteren
+				this.getValidationDstructureModule().getMessageService()
+						.print();
+				// Ein negatives Validierungsresultat in diesem Schritt fuehrt
+				// zum Abbruch der weiteren
 				// Verarbeitung
 				return false;
 			}
 		} catch ( ValidationDstructureException e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_SIARD )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_D_SIARD )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationDstructureModule().getMessageService().print();
 			return false;
 		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_SIARD )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_D_SIARD )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
@@ -303,8 +360,8 @@ public class Controllersiard implements MessageConstants
 
 		// Validation Step E (Spalten-Validierung)
 		try {
-			if ( this.getValidationEcolumnModule().validate( valDatei, directoryOfLogfile, configMap,
-					locale, logFile ) ) {
+			if ( this.getValidationEcolumnModule().validate( valDatei,
+					directoryOfLogfile, configMap, locale, logFile ) ) {
 				this.getValidationEcolumnModule().getMessageService().print();
 			} else {
 				this.getValidationEcolumnModule().getMessageService().print();
@@ -315,17 +372,23 @@ public class Controllersiard implements MessageConstants
 				}
 			}
 		} catch ( ValidationEcolumnException e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_E_SIARD )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_SIARD )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_E_SIARD )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
 		try {
-			if ( this.getValidationFrowModule().validate( valDatei, directoryOfLogfile, configMap, locale,
-					logFile ) ) {
+			if ( this.getValidationFrowModule().validate( valDatei,
+					directoryOfLogfile, configMap, locale, logFile ) ) {
 				this.getValidationFrowModule().getMessageService().print();
 			} else {
 				this.getValidationFrowModule().getMessageService().print();
@@ -336,8 +399,11 @@ public class Controllersiard implements MessageConstants
 				}
 			}
 		} catch ( ValidationFrowException e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_SIARD )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_F_SIARD )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationFrowModule().getMessageService().print();
 			if ( min ) {
 				return false;
@@ -345,15 +411,18 @@ public class Controllersiard implements MessageConstants
 				valid = false;
 			}
 		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_SIARD )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_F_SIARD )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
 		// Validation Step G (Tabellen-Validierung)
 		try {
-			if ( this.getValidationGtableModule().validate( valDatei, directoryOfLogfile, configMap,
-					locale, logFile ) ) {
+			if ( this.getValidationGtableModule().validate( valDatei,
+					directoryOfLogfile, configMap, locale, logFile ) ) {
 				this.getValidationGtableModule().getMessageService().print();
 			} else {
 				this.getValidationGtableModule().getMessageService().print();
@@ -364,8 +433,11 @@ public class Controllersiard implements MessageConstants
 				}
 			}
 		} catch ( ValidationGtableException e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_SIARD )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_G_SIARD )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationGtableModule().getMessageService().print();
 			if ( min ) {
 				return false;
@@ -373,15 +445,18 @@ public class Controllersiard implements MessageConstants
 				valid = false;
 			}
 		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_SIARD )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_G_SIARD )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
 		// Validation Step H (Content-Validierung)
 		try {
-			if ( this.getValidationHcontentModule().validate( valDatei, directoryOfLogfile, configMap,
-					locale, logFile ) ) {
+			if ( this.getValidationHcontentModule().validate( valDatei,
+					directoryOfLogfile, configMap, locale, logFile ) ) {
 				this.getValidationHcontentModule().getMessageService().print();
 			} else {
 				this.getValidationHcontentModule().getMessageService().print();
@@ -392,8 +467,11 @@ public class Controllersiard implements MessageConstants
 				}
 			}
 		} catch ( ValidationHcontentException e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_H_SIARD )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationHcontentModule().getMessageService().print();
 			if ( min ) {
 				return false;
@@ -401,18 +479,23 @@ public class Controllersiard implements MessageConstants
 				valid = false;
 			}
 		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_H_SIARD )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
 		// Validation Step I (SIARD-Erkennung)
 		try {
-			if ( this.getValidationIrecognitionModule().validate( valDatei, directoryOfLogfile, configMap,
-					locale, logFile ) ) {
-				this.getValidationIrecognitionModule().getMessageService().print();
+			if ( this.getValidationIrecognitionModule().validate( valDatei,
+					directoryOfLogfile, configMap, locale, logFile ) ) {
+				this.getValidationIrecognitionModule().getMessageService()
+						.print();
 			} else {
-				this.getValidationIrecognitionModule().getMessageService().print();
+				this.getValidationIrecognitionModule().getMessageService()
+						.print();
 				if ( min ) {
 					return false;
 				} else {
@@ -420,8 +503,11 @@ public class Controllersiard implements MessageConstants
 				}
 			}
 		} catch ( ValidationIrecognitionException e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_I_SIARD )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_I_SIARD )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationIrecognitionModule().getMessageService().print();
 			if ( min ) {
 				return false;
@@ -429,18 +515,23 @@ public class Controllersiard implements MessageConstants
 				valid = false;
 			}
 		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_I_SIARD )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_I_SIARD )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
 		// Validation Step J (Zusaetzliche Primaerdateien)
 		try {
-			if ( this.getValidationJsurplusFilesModule().validate( valDatei, directoryOfLogfile,
-					configMap, locale, logFile ) ) {
-				this.getValidationJsurplusFilesModule().getMessageService().print();
+			if ( this.getValidationJsurplusFilesModule().validate( valDatei,
+					directoryOfLogfile, configMap, locale, logFile ) ) {
+				this.getValidationJsurplusFilesModule().getMessageService()
+						.print();
 			} else {
-				this.getValidationJsurplusFilesModule().getMessageService().print();
+				this.getValidationJsurplusFilesModule().getMessageService()
+						.print();
 				if ( min ) {
 					return false;
 				} else {
@@ -448,8 +539,11 @@ public class Controllersiard implements MessageConstants
 				}
 			}
 		} catch ( ValidationJsurplusFilesException e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_J_SIARD )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationJsurplusFilesModule().getMessageService().print();
 			if ( min ) {
 				return false;
@@ -457,15 +551,18 @@ public class Controllersiard implements MessageConstants
 				valid = false;
 			}
 		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_SIARD )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_J_SIARD )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
 		// Validation W (Warnungen)
 		try {
-			if ( this.getValidationWwarningModule().validate( valDatei, directoryOfLogfile, configMap,
-					locale, logFile ) ) {
+			if ( this.getValidationWwarningModule().validate( valDatei,
+					directoryOfLogfile, configMap, locale, logFile ) ) {
 				this.getValidationWwarningModule().getMessageService().print();
 			} else {
 				this.getValidationWwarningModule().getMessageService().print();
@@ -476,8 +573,11 @@ public class Controllersiard implements MessageConstants
 				}
 			}
 		} catch ( ValidationWwarningException e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_W_SIARD )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_W_SIARD )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidationWwarningModule().getMessageService().print();
 			if ( min ) {
 				return false;
@@ -485,8 +585,11 @@ public class Controllersiard implements MessageConstants
 				valid = false;
 			}
 		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_W_SIARD )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_W_SIARD )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
@@ -498,7 +601,8 @@ public class Controllersiard implements MessageConstants
 		return validationEcolumnModule;
 	}
 
-	public void setValidationEcolumnModule( ValidationEcolumnModule validationEcolumnModule )
+	public void setValidationEcolumnModule(
+			ValidationEcolumnModule validationEcolumnModule )
 	{
 		this.validationEcolumnModule = validationEcolumnModule;
 	}
@@ -509,9 +613,12 @@ public class Controllersiard implements MessageConstants
 		return validationFrowModule;
 	}
 
-	/** @param validationFrowModule
-	 *          the validationFrowModule to set */
-	public void setValidationFrowModule( ValidationFrowModule validationFrowModule )
+	/**
+	 * @param validationFrowModule
+	 *            the validationFrowModule to set
+	 */
+	public void setValidationFrowModule(
+			ValidationFrowModule validationFrowModule )
 	{
 		this.validationFrowModule = validationFrowModule;
 	}

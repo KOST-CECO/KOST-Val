@@ -56,29 +56,32 @@ import ch.kostceco.tools.kostval.validation.modulesip3.Validation3bUnspecifiedFo
 import ch.kostceco.tools.kostval.validation.modulesip3.Validation3cFormatValidationModule;
 import ch.kostceco.tools.kostval.validation.modulesip3.Validation3dPeriodModule;
 
-/** Der Controller ruft die benötigten Module zur Validierung des SIP-Archivs in der benötigten
- * Reihenfolge auf.
+/**
+ * Der Controller ruft die benï¿½tigten Module zur Validierung des SIP-Archivs in
+ * der benï¿½tigten Reihenfolge auf.
  * 
- * Die Validierungs-Module werden mittels Spring-Dependency-Injection eingebunden. */
+ * Die Validierungs-Module werden mittels Spring-Dependency-Injection
+ * eingebunden.
+ */
 
 public class Controllersip implements MessageConstants
 {
 
-	private Validation1bFolderStructureModule			validation1bFolderStructureModule;
+	private Validation1bFolderStructureModule		validation1bFolderStructureModule;
 
-	private Validation1cNamingModule							validation1cNamingModule;
+	private Validation1cNamingModule				validation1cNamingModule;
 
-	private Validation1dMetadataModule						validation1dMetadataModule;
+	private Validation1dMetadataModule				validation1dMetadataModule;
 
-	private Validation1eSipTypeModule							validation1eSipTypeModule;
+	private Validation1eSipTypeModule				validation1eSipTypeModule;
 
-	private Validation1fPrimaryDataModule					validation1fPrimaryDataModule;
+	private Validation1fPrimaryDataModule			validation1fPrimaryDataModule;
 
-	private Validation1gPackageSizeFilesModule					validation1gPackageSizeFilesModule;
+	private Validation1gPackageSizeFilesModule		validation1gPackageSizeFilesModule;
 
-	private Validation2aFileIntegrityModule				validation2aFileIntegrityModule;
+	private Validation2aFileIntegrityModule			validation2aFileIntegrityModule;
 
-	private Validation2cChecksumModule						validation2cChecksumModule;
+	private Validation2cChecksumModule				validation2cChecksumModule;
 
 	private Validation2dGeverFileIntegrityModule	validation2dGeverFileIntegrityModule;
 
@@ -88,9 +91,9 @@ public class Controllersip implements MessageConstants
 
 	private Validation3cFormatValidationModule		validation3cFormatValidationModule;
 
-	private Validation3dPeriodModule							validation3dPeriodModule;
+	private Validation3dPeriodModule				validation3dPeriodModule;
 
-	private TextResourceService										textResourceService;
+	private TextResourceService						textResourceService;
 
 	public Validation1bFolderStructureModule getValidation1bFolderStructureModule()
 	{
@@ -108,7 +111,8 @@ public class Controllersip implements MessageConstants
 		return validation1cNamingModule;
 	}
 
-	public void setValidation1cNamingModule( Validation1cNamingModule validation1cNamingModule )
+	public void setValidation1cNamingModule(
+			Validation1cNamingModule validation1cNamingModule )
 	{
 		this.validation1cNamingModule = validation1cNamingModule;
 	}
@@ -118,7 +122,8 @@ public class Controllersip implements MessageConstants
 		return validation1dMetadataModule;
 	}
 
-	public void setValidation1dMetadataModule( Validation1dMetadataModule validation1dMetadataModule )
+	public void setValidation1dMetadataModule(
+			Validation1dMetadataModule validation1dMetadataModule )
 	{
 		this.validation1dMetadataModule = validation1dMetadataModule;
 	}
@@ -128,7 +133,8 @@ public class Controllersip implements MessageConstants
 		return validation1eSipTypeModule;
 	}
 
-	public void setValidation1eSipTypeModule( Validation1eSipTypeModule validation1eSipTypeModule )
+	public void setValidation1eSipTypeModule(
+			Validation1eSipTypeModule validation1eSipTypeModule )
 	{
 		this.validation1eSipTypeModule = validation1eSipTypeModule;
 	}
@@ -171,7 +177,8 @@ public class Controllersip implements MessageConstants
 		return validation2cChecksumModule;
 	}
 
-	public void setValidation2cChecksumModule( Validation2cChecksumModule validation2cChecksumModule )
+	public void setValidation2cChecksumModule(
+			Validation2cChecksumModule validation2cChecksumModule )
 	{
 		this.validation2cChecksumModule = validation2cChecksumModule;
 	}
@@ -225,7 +232,8 @@ public class Controllersip implements MessageConstants
 		return validation3dPeriodModule;
 	}
 
-	public void setValidation3dPeriodModule( Validation3dPeriodModule validation3dPeriodModule )
+	public void setValidation3dPeriodModule(
+			Validation3dPeriodModule validation3dPeriodModule )
 	{
 		this.validation3dPeriodModule = validation3dPeriodModule;
 	}
@@ -235,7 +243,8 @@ public class Controllersip implements MessageConstants
 		return textResourceService;
 	}
 
-	public void setTextResourceService( TextResourceService textResourceService )
+	public void setTextResourceService(
+			TextResourceService textResourceService )
 	{
 		this.textResourceService = textResourceService;
 	}
@@ -245,71 +254,98 @@ public class Controllersip implements MessageConstants
 	{
 		boolean valid = true;
 
-		// Validation Step Aa (wurde vor der Formatvalidierung in KOSTVal.jar bereits durchgefuehrt)
+		// Validation Step Aa (wurde vor der Formatvalidierung in KOSTVal.jar
+		// bereits durchgefuehrt)
 
 		// Validation Step Ab
 		try {
-			if ( this.getValidation1bFolderStructureModule().validate( valDatei, directoryOfLogfile,
-					configMap, locale, logFile ) ) {
-				this.getValidation1bFolderStructureModule().getMessageService().print();
+			if ( this.getValidation1bFolderStructureModule().validate( valDatei,
+					directoryOfLogfile, configMap, locale, logFile ) ) {
+				this.getValidation1bFolderStructureModule().getMessageService()
+						.print();
 			} else {
-				// Ein negatives Validierungsresultat in diesem Schritt fuehrt zum Abbruch der weiteren
+				// Ein negatives Validierungsresultat in diesem Schritt fuehrt
+				// zum Abbruch der weiteren
 				// Verarbeitung
-				this.getValidation1bFolderStructureModule().getMessageService().print();
+				this.getValidation1bFolderStructureModule().getMessageService()
+						.print();
 				return false;
 			}
 		} catch ( Validation1bFolderStructureException e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ab_SIP )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
-			this.getValidation1bFolderStructureModule().getMessageService().print();
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_Ab_SIP )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
+			this.getValidation1bFolderStructureModule().getMessageService()
+					.print();
 			return false;
 		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ab_SIP )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_Ab_SIP )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
 		// Validation Step Ac
 		try {
-			if ( this.getValidation1cNamingModule().validate( valDatei, directoryOfLogfile, configMap,
-					locale, logFile ) ) {
+			if ( this.getValidation1cNamingModule().validate( valDatei,
+					directoryOfLogfile, configMap, locale, logFile ) ) {
 				this.getValidation1cNamingModule().getMessageService().print();
 			} else {
 				this.getValidation1cNamingModule().getMessageService().print();
-				// Ein negatives Validierungsresultat in diesem Schritt fuehrt zum Abbruch der weiteren
+				// Ein negatives Validierungsresultat in diesem Schritt fuehrt
+				// zum Abbruch der weiteren
 				// Verarbeitung
 				return false;
 			}
 		} catch ( Validation1cNamingException e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ac_SIP )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_Ac_SIP )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidation1cNamingModule().getMessageService().print();
 			return false;
 		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ac_SIP )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_Ac_SIP )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
 		// Validation Step Ad
 		try {
-			if ( this.getValidation1dMetadataModule().validate( valDatei, directoryOfLogfile, configMap,
-					locale, logFile ) ) {
-				this.getValidation1dMetadataModule().getMessageService().print();
+			if ( this.getValidation1dMetadataModule().validate( valDatei,
+					directoryOfLogfile, configMap, locale, logFile ) ) {
+				this.getValidation1dMetadataModule().getMessageService()
+						.print();
 			} else {
-				this.getValidation1dMetadataModule().getMessageService().print();
-				// Ein negatives Validierungsresultat in diesem Schritt fuehrt zum Abbruch der weiteren
+				this.getValidation1dMetadataModule().getMessageService()
+						.print();
+				// Ein negatives Validierungsresultat in diesem Schritt fuehrt
+				// zum Abbruch der weiteren
 				// Verarbeitung
 				return false;
 			}
 		} catch ( Validation1dMetadataException e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_Ad_SIP )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidation1dMetadataModule().getMessageService().print();
 			return false;
 		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_Ad_SIP )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
@@ -323,81 +359,114 @@ public class Controllersip implements MessageConstants
 		boolean valid = true;
 		// Validation Step Ae
 		try {
-			if ( this.getValidation1eSipTypeModule().validate( valDatei, directoryOfLogfile, configMap,
-					locale, logFile ) ) {
+			if ( this.getValidation1eSipTypeModule().validate( valDatei,
+					directoryOfLogfile, configMap, locale, logFile ) ) {
 				this.getValidation1eSipTypeModule().getMessageService().print();
 			} else {
 				this.getValidation1eSipTypeModule().getMessageService().print();
 				valid = false;
 			}
 		} catch ( Validation1eSipTypeException e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ae_SIP )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_Ae_SIP )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidation1eSipTypeModule().getMessageService().print();
 			valid = false;
 		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ae_SIP )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_Ae_SIP )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
 		// Validation Step Af
 		try {
-			if ( this.getValidation1fPrimaryDataModule().validate( valDatei, directoryOfLogfile,
-					configMap, locale, logFile ) ) {
-				this.getValidation1fPrimaryDataModule().getMessageService().print();
+			if ( this.getValidation1fPrimaryDataModule().validate( valDatei,
+					directoryOfLogfile, configMap, locale, logFile ) ) {
+				this.getValidation1fPrimaryDataModule().getMessageService()
+						.print();
 			} else {
-				this.getValidation1fPrimaryDataModule().getMessageService().print();
+				this.getValidation1fPrimaryDataModule().getMessageService()
+						.print();
 				valid = false;
 			}
 		} catch ( Validation1fPrimaryDataException e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Af_SIP )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_Af_SIP )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidation1fPrimaryDataModule().getMessageService().print();
 			valid = false;
 		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Af_SIP )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_Af_SIP )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
 		// Validation Step Ag
 		try {
-			if ( this.getValidation1gPackageSizeFilesModule().validate( valDatei, directoryOfLogfile,
-					configMap, locale, logFile ) ) {
-				this.getValidation1gPackageSizeFilesModule().getMessageService().print();
+			if ( this.getValidation1gPackageSizeFilesModule().validate(
+					valDatei, directoryOfLogfile, configMap, locale,
+					logFile ) ) {
+				this.getValidation1gPackageSizeFilesModule().getMessageService()
+						.print();
 			} else {
-				this.getValidation1gPackageSizeFilesModule().getMessageService().print();
+				this.getValidation1gPackageSizeFilesModule().getMessageService()
+						.print();
 				valid = false;
 			}
 		} catch ( Validation1gPackageSizeFilesException e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Af_SIP )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
-			this.getValidation1gPackageSizeFilesModule().getMessageService().print();
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_Af_SIP )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
+			this.getValidation1gPackageSizeFilesModule().getMessageService()
+					.print();
 			valid = false;
 		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Af_SIP )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_Af_SIP )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
 		// Validation Step Ba
 		try {
-			if ( this.getValidation2aFileIntegrityModule().validate( valDatei, directoryOfLogfile,
-					configMap, locale, logFile ) ) {
-				this.getValidation2aFileIntegrityModule().getMessageService().print();
+			if ( this.getValidation2aFileIntegrityModule().validate( valDatei,
+					directoryOfLogfile, configMap, locale, logFile ) ) {
+				this.getValidation2aFileIntegrityModule().getMessageService()
+						.print();
 			} else {
-				this.getValidation2aFileIntegrityModule().getMessageService().print();
+				this.getValidation2aFileIntegrityModule().getMessageService()
+						.print();
 				valid = false;
 			}
 		} catch ( Validation2aFileIntegrityException e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ba_SIP )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
-			this.getValidation2aFileIntegrityModule().getMessageService().print();
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_Ba_SIP )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
+			this.getValidation2aFileIntegrityModule().getMessageService()
+					.print();
 			valid = false;
 		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ba_SIP )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_Ba_SIP )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
@@ -405,121 +474,175 @@ public class Controllersip implements MessageConstants
 
 		// Validation Step Bc
 		try {
-			if ( this.getValidation2cChecksumModule().validate( valDatei, directoryOfLogfile, configMap,
-					locale, logFile ) ) {
-				this.getValidation2cChecksumModule().getMessageService().print();
+			if ( this.getValidation2cChecksumModule().validate( valDatei,
+					directoryOfLogfile, configMap, locale, logFile ) ) {
+				this.getValidation2cChecksumModule().getMessageService()
+						.print();
 			} else {
-				this.getValidation2cChecksumModule().getMessageService().print();
+				this.getValidation2cChecksumModule().getMessageService()
+						.print();
 				valid = false;
 			}
 		} catch ( Validation2cChecksumException e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bc_SIP )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_Bc_SIP )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidation2cChecksumModule().getMessageService().print();
 			valid = false;
 		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bc_SIP )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_Bc_SIP )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
 		// Validation Step Bd
 		try {
-			if ( this.getValidation2dGeverFileIntegrityModule().validate( valDatei, directoryOfLogfile,
-					configMap, locale, logFile ) ) {
-				this.getValidation2dGeverFileIntegrityModule().getMessageService().print();
+			if ( this.getValidation2dGeverFileIntegrityModule().validate(
+					valDatei, directoryOfLogfile, configMap, locale,
+					logFile ) ) {
+				this.getValidation2dGeverFileIntegrityModule()
+						.getMessageService().print();
 			} else {
-				this.getValidation2dGeverFileIntegrityModule().getMessageService().print();
+				this.getValidation2dGeverFileIntegrityModule()
+						.getMessageService().print();
 				valid = false;
 			}
 		} catch ( Validation2dGeverFileIntegrityException e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bd_SIP )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
-			this.getValidation2dGeverFileIntegrityModule().getMessageService().print();
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_Bd_SIP )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
+			this.getValidation2dGeverFileIntegrityModule().getMessageService()
+					.print();
 			valid = false;
 		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bd_SIP )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_Bd_SIP )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
 		// Validation Step Ca
 		try {
-			if ( this.getValidation3aFormatRecognitionModule().validate( valDatei, directoryOfLogfile,
-					configMap, locale, logFile ) ) {
-				this.getValidation3aFormatRecognitionModule().getMessageService().print();
+			if ( this.getValidation3aFormatRecognitionModule().validate(
+					valDatei, directoryOfLogfile, configMap, locale,
+					logFile ) ) {
+				this.getValidation3aFormatRecognitionModule()
+						.getMessageService().print();
 			} else {
-				this.getValidation3aFormatRecognitionModule().getMessageService().print();
+				this.getValidation3aFormatRecognitionModule()
+						.getMessageService().print();
 				valid = false;
 			}
 		} catch ( Validation3aFormatRecognitionException e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ca_SIP )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
-			this.getValidation3aFormatRecognitionModule().getMessageService().print();
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_Ca_SIP )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
+			this.getValidation3aFormatRecognitionModule().getMessageService()
+					.print();
 			valid = false;
 		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ca_SIP )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_Ca_SIP )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
 		// Validation Step Cb
 		try {
-			if ( this.getValidation3bUnspecifiedFormatModule().validate( valDatei, directoryOfLogfile,
-					configMap, locale, logFile ) ) {
-				this.getValidation3bUnspecifiedFormatModule().getMessageService().print();
+			if ( this.getValidation3bUnspecifiedFormatModule().validate(
+					valDatei, directoryOfLogfile, configMap, locale,
+					logFile ) ) {
+				this.getValidation3bUnspecifiedFormatModule()
+						.getMessageService().print();
 			} else {
 				valid = false;
-				this.getValidation3bUnspecifiedFormatModule().getMessageService().print();
+				this.getValidation3bUnspecifiedFormatModule()
+						.getMessageService().print();
 			}
 		} catch ( Validation3bUnspecifiedFormatException e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Cb_SIP )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
-			this.getValidation3bUnspecifiedFormatModule().getMessageService().print();
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_Cb_SIP )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
+			this.getValidation3bUnspecifiedFormatModule().getMessageService()
+					.print();
 			valid = false;
 		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Cb_SIP )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_Cb_SIP )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
 		// Validation Step 3c
 		try {
-			if ( this.getValidation3cFormatValidationModule().validate( valDatei, directoryOfLogfile,
-					configMap, locale, logFile ) ) {
-				this.getValidation3cFormatValidationModule().getMessageService().print();
+			if ( this.getValidation3cFormatValidationModule().validate(
+					valDatei, directoryOfLogfile, configMap, locale,
+					logFile ) ) {
+				this.getValidation3cFormatValidationModule().getMessageService()
+						.print();
 			} else {
-				this.getValidation3cFormatValidationModule().getMessageService().print();
+				this.getValidation3cFormatValidationModule().getMessageService()
+						.print();
 				valid = false;
 			}
 		} catch ( Validation3cFormatValidationException e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Cc_SIP )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
-			this.getValidation3cFormatValidationModule().getMessageService().print();
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_Cc_SIP )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
+			this.getValidation3cFormatValidationModule().getMessageService()
+					.print();
 			return false;
 		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Cc_SIP )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_Cc_SIP )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
 		// Validation Step 3d
 		try {
-			if ( this.getValidation3dPeriodModule().validate( valDatei, directoryOfLogfile, configMap,
-					locale, logFile ) ) {
+			if ( this.getValidation3dPeriodModule().validate( valDatei,
+					directoryOfLogfile, configMap, locale, logFile ) ) {
 				this.getValidation3dPeriodModule().getMessageService().print();
 			} else {
 				this.getValidation3dPeriodModule().getMessageService().print();
 				valid = false;
 			}
 		} catch ( Validation3dPeriodException e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Cd_SIP )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_Cd_SIP )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			this.getValidation3dPeriodModule().getMessageService().print();
 			return false;
 		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Cd_SIP )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_Cd_SIP )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 

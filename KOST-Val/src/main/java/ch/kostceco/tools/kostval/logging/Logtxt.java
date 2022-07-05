@@ -25,9 +25,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-/** Logging Klasse.
+/**
+ * Logging Klasse.
  * 
- * @author Rc Claire Roethlisberger, KOST-CECO */
+ * @author Rc Claire Roethlisberger, KOST-CECO
+ */
 public class Logtxt
 {
 
@@ -39,13 +41,13 @@ public class Logtxt
 				logFile.getParentFile().mkdirs();
 				logFile.createNewFile();
 			}
-			
 
-			PrintWriter out = new PrintWriter( new BufferedWriter( new FileWriter( logFile, true ) ) );
+			PrintWriter out = new PrintWriter(
+					new BufferedWriter( new FileWriter( logFile, true ) ) );
 			out.println( error );
 			out.close();
 		} catch ( IOException e ) {
-			 System.out.println( "Logtxt: " + e );
+			System.out.println( "Logtxt: " + e );
 		}
 	}
 

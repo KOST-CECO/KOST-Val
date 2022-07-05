@@ -39,13 +39,17 @@ public class GuiApplication extends Application
 			// festhalten von wo die Applikation (exe) gestartet wurde
 			String dirOfJarPath = "";
 
-			/* dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist ein generelles TODO in
-			 * allen Modulen. Zuerst immer dirOfJarPath ermitteln und dann alle Pfade mit dirOfJarPath +
-			 * File.separator + erweitern. */
+			/*
+			 * dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist
+			 * ein generelles TODO in allen Modulen. Zuerst immer dirOfJarPath
+			 * ermitteln und dann alle Pfade mit dirOfJarPath + File.separator +
+			 * erweitern.
+			 */
 			String path = new File( "" ).getAbsolutePath();
 			String locationOfJarPath = path;
 			dirOfJarPath = locationOfJarPath;
-			if ( locationOfJarPath.endsWith( ".jar" ) || locationOfJarPath.endsWith( ".exe" )
+			if ( locationOfJarPath.endsWith( ".jar" )
+					|| locationOfJarPath.endsWith( ".exe" )
 					|| locationOfJarPath.endsWith( "." ) ) {
 				File file = new File( locationOfJarPath );
 				dirOfJarPath = file.getParent();
@@ -55,10 +59,11 @@ public class GuiApplication extends Application
 			Parent root;
 			root = FXMLLoader.load( getClass().getResource( "GuiView.fxml" ) );
 			Scene scene = new Scene( root );
-			scene.getStylesheets().add( getClass().getResource( "application.css" ).toExternalForm() );
+			scene.getStylesheets().add( getClass()
+					.getResource( "application.css" ).toExternalForm() );
 			stage.setTitle( "KOST-Val" );
-			Image kostvalIcon = new Image(
-					"file:" + dirOfJarPath + File.separator + "doc" + File.separator + "valicon.png" );
+			Image kostvalIcon = new Image( "file:" + dirOfJarPath
+					+ File.separator + "doc" + File.separator + "valicon.png" );
 			// Image kostvalIcon = new Image( "file:valicon.png" );
 			stage.getIcons().add( kostvalIcon );
 			stage.setScene( scene );
@@ -68,8 +73,10 @@ public class GuiApplication extends Application
 		}
 	}
 
-	/** @param args
-	 *          the command line arguments */
+	/**
+	 * @param args
+	 *            the command line arguments
+	 */
 	public static void main( String[] args )
 	{
 		launch( args );

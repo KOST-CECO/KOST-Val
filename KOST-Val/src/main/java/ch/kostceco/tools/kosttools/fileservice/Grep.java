@@ -26,37 +26,43 @@ public class Grep
 {
 	private static String	exeDir		= "resources" + File.separator + "grep";
 	private static String	grepExe		= exeDir + File.separator + "grep.exe";
-	private static String	msys10dll	= exeDir + File.separator + "msys-1.0.dll";
+	private static String	msys10dll	= exeDir + File.separator
+			+ "msys-1.0.dll";
 
-	/** fuehrt eine Suche mit Grep via cmd durch und speichert das Ergebnis in ein File (Output). Gibt
-	 * zurueck ob Output existiert oder nicht
+	/**
+	 * fuehrt eine Suche mit Grep via cmd durch und speichert das Ergebnis in
+	 * ein File (Output). Gibt zurueck ob Output existiert oder nicht
 	 * 
 	 * @param insensitiveOption
-	 *          Option betreffend Gross- und Kleinschreibung
+	 *            Option betreffend Gross- und Kleinschreibung
 	 * @param searchString
-	 *          gesuchter Text
+	 *            gesuchter Text
 	 * @param fileToGrep
-	 *          Datei in welcher gesucht werden soll
+	 *            Datei in welcher gesucht werden soll
 	 * @param output
-	 *          Ausgabe des Resultates
+	 *            Ausgabe des Resultates
 	 * @param workDir
-	 *          Temporaeres Verzeichnis
+	 *            Temporaeres Verzeichnis
 	 * @param dirOfJarPath
-	 *          String mit dem Pfad von wo das Programm gestartet wurde
-	 * @return String ob Report existiert oder nicht ggf Exception */
-	public static String execGrep( String insensitiveOption, String searchString, File fileToGrep,
-			File output, File workDir, String dirOfJarPath ) throws InterruptedException
+	 *            String mit dem Pfad von wo das Programm gestartet wurde
+	 * @return String ob Report existiert oder nicht ggf Exception
+	 */
+	public static String execGrep( String insensitiveOption,
+			String searchString, File fileToGrep, File output, File workDir,
+			String dirOfJarPath ) throws InterruptedException
 	{
 		boolean out = true;
 		File fgrepExe = new File( dirOfJarPath + File.separator + grepExe );
-		// falls das File von einem vorhergehenden Durchlauf bereits existiert, loeschen wir es
+		// falls das File von einem vorhergehenden Durchlauf bereits existiert,
+		// loeschen wir es
 		if ( output.exists() ) {
 			output.delete();
 		}
 
 		// grep -E "REGEX-Suchbegriff" table13.xml >> output.txt
-		String command = "\"\"" + fgrepExe.getAbsolutePath() + "\" -E" + insensitiveOption + " \""
-				+ searchString + "\" \"" + fileToGrep.getAbsolutePath() + "\" >> \""
+		String command = "\"\"" + fgrepExe.getAbsolutePath() + "\" -E"
+				+ insensitiveOption + " \"" + searchString + "\" \""
+				+ fileToGrep.getAbsolutePath() + "\" >> \""
 				+ output.getAbsolutePath() + "\"\"";
 
 		// System.out.println( "command: " + command );
@@ -77,12 +83,14 @@ public class Grep
 		return resultExec;
 	}
 
-	/** fuehrt eine Kontrolle aller benoetigten Dateien von Exiftool durch und gibt das Ergebnis als
-	 * String zurueck
+	/**
+	 * fuehrt eine Kontrolle aller benoetigten Dateien von Exiftool durch und
+	 * gibt das Ergebnis als String zurueck
 	 * 
 	 * @param dirOfJarPath
-	 *          String mit dem Pfad von wo das Programm gestartet wurde
-	 * @return String mit Kontrollergebnis */
+	 *            String mit dem Pfad von wo das Programm gestartet wurde
+	 * @return String mit Kontrollergebnis
+	 */
 	public static String checkGrep( String dirOfJarPath )
 	{
 		String result = "";

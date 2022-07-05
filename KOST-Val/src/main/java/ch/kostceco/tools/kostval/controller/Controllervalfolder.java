@@ -38,16 +38,19 @@ import ch.kostceco.tools.kostval.logging.Logtxt;
 import ch.kostceco.tools.kostval.logging.MessageConstants;
 import ch.kostceco.tools.kostval.service.TextResourceService;
 
-/** kostval --> Controllervalfolder
+/**
+ * kostval --> Controllervalfolder
  * 
  * Der Controller ruft die benoetigten Module zur Validierung auf.
  * 
- * Die Validierungs-Module werden mittels Spring-Dependency-Injection eingebunden. */
+ * Die Validierungs-Module werden mittels Spring-Dependency-Injection
+ * eingebunden.
+ */
 
 public class Controllervalfolder implements MessageConstants
 {
 
-	private boolean											min			= false;
+	private boolean						min	= false;
 
 	private static TextResourceService	textResourceService;
 
@@ -57,14 +60,16 @@ public class Controllervalfolder implements MessageConstants
 	}
 
 	@SuppressWarnings("static-access")
-	public void setTextResourceService( TextResourceService textResourceService )
+	public void setTextResourceService(
+			TextResourceService textResourceService )
 	{
 		this.textResourceService = textResourceService;
 	}
 
-	public boolean valFolder( File valDatei, String logFileName, File directoryOfLogfile,
-			boolean verbose, String dirOfJarPath, Map<String, String> configMap,
-			ApplicationContext context, Locale locale, File logFile ) throws IOException
+	public boolean valFolder( File valDatei, String logFileName,
+			File directoryOfLogfile, boolean verbose, String dirOfJarPath,
+			Map<String, String> configMap, ApplicationContext context,
+			Locale locale, File logFile ) throws IOException
 	{
 		String onWork = configMap.get( "ShowProgressOnWork" );
 		if ( onWork.equals( "nomin" ) ) {
@@ -104,7 +109,8 @@ public class Controllervalfolder implements MessageConstants
 		String pngValidation = configMap.get( "pngValidation" );
 
 		String formatValOn = "";
-		// ermitteln welche Formate validiert werden koennen respektive eingeschaltet sind
+		// ermitteln welche Formate validiert werden koennen respektive
+		// eingeschaltet sind
 		if ( pdfaValidation.equals( "yes" ) ) {
 			formatValOn = "PDF/A";
 			if ( tiffValidation.equals( "yes" ) ) {
@@ -166,9 +172,12 @@ public class Controllervalfolder implements MessageConstants
 
 		if ( formatValOn.equals( "" ) ) {
 			// Formatvalidierung aber alle Formate ausgeschlossen
-			Logtxt.logtxt( logFile, getTextResourceService().getText( ERROR_IOE,
-					getTextResourceService().getText( locale, ERROR_NOFILEENDINGS ) ) );
-			System.out.println( getTextResourceService().getText( locale, ERROR_NOFILEENDINGS ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( ERROR_IOE,
+							getTextResourceService().getText( locale,
+									ERROR_NOFILEENDINGS ) ) );
+			System.out.println( getTextResourceService().getText( locale,
+					ERROR_NOFILEENDINGS ) );
 			// logFile bereinigung (& End und ggf 3c)
 			Util.valEnd3cAmp( "", logFile );
 			valFolder = false;
@@ -177,11 +186,14 @@ public class Controllervalfolder implements MessageConstants
 
 		try {
 			Map<String, File> fileUnsortedMap = Util.getFileMapFile( valDatei );
-			Map<String, File> fileMap = new TreeMap<String, File>( fileUnsortedMap );
+			Map<String, File> fileMap = new TreeMap<String, File>(
+					fileUnsortedMap );
 			int numberInFileMap = fileMap.size();
 			Set<String> fileMapKeys = fileMap.keySet();
-			for ( Iterator<String> iterator = fileMapKeys.iterator(); iterator.hasNext(); ) {
-				// configmap neu auslesen im bereich pdf, da veraenderungen moeglich sind
+			for ( Iterator<String> iterator = fileMapKeys.iterator(); iterator
+					.hasNext(); ) {
+				// configmap neu auslesen im bereich pdf, da veraenderungen
+				// moeglich sind
 				pdfaValidation = configMap.get( "pdfavalidation" );
 
 				String entryName = iterator.next();
@@ -189,174 +201,229 @@ public class Controllervalfolder implements MessageConstants
 				if ( !newFile.isDirectory() ) {
 					valDatei = newFile;
 					String valDateiName = valDatei.getName();
-					String valDateiExt = "." + FilenameUtils.getExtension( valDateiName ).toLowerCase();
+					String valDateiExt = "." + FilenameUtils
+							.getExtension( valDateiName ).toLowerCase();
 					count = count + 1;
 					countProgress = countProgress + 1;
 
-					if ( ((valDateiExt.equals( ".jp2" ))) && jp2Validation.equals( "yes" ) ) {
+					if ( ((valDateiExt.equals( ".jp2" )))
+							&& jp2Validation.equals( "yes" ) ) {
 						int countToValidated = numberInFileMap - countProgress;
-						System.out
-								.print( countToValidated + " " + "JP2:   " + valDatei.getAbsolutePath() + " " );
+						System.out.print( countToValidated + " " + "JP2:   "
+								+ valDatei.getAbsolutePath() + " " );
 
-						/* boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
-						 * dirOfJarPath, configMap, context ); */
+						/*
+						 * boolean valFile = valFile( valDatei, logFileName,
+						 * directoryOfLogfile, verbose, dirOfJarPath, configMap,
+						 * context );
+						 */
 						Controllervalfile controller1 = (Controllervalfile) context
 								.getBean( "controllervalfile" );
-						boolean valFile = controller1.valFile( valDatei, logFileName, directoryOfLogfile,
-								verbose, dirOfJarPath, configMap, context, locale,  logFile );
+						boolean valFile = controller1.valFile( valDatei,
+								logFileName, directoryOfLogfile, verbose,
+								dirOfJarPath, configMap, context, locale,
+								logFile );
 
-						// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
+						// Loeschen des Arbeitsverzeichnisses, falls eines
+						// angelegt wurde
 						if ( tmpDir.exists() ) {
 							Util.deleteDir( tmpDir );
 						}
 						if ( valFile ) {
 							jp2CountIo = jp2CountIo + 1;
-							// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
+							// Loeschen des Arbeitsverzeichnisses, falls eines
+							// angelegt wurde
 							if ( tmpDir.exists() ) {
 								Util.deleteDir( tmpDir );
 							}
 						} else {
 							jp2CountNio = jp2CountNio + 1;
-							// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
+							// Loeschen des Arbeitsverzeichnisses, falls eines
+							// angelegt wurde
 							if ( tmpDir.exists() ) {
 								Util.deleteDir( tmpDir );
 							}
 						}
-					} else if ( ((valDateiExt.equals( ".jpeg" ) || valDateiExt.equals( ".jpg" )
-							|| valDatei.getAbsolutePath().toLowerCase().endsWith( ".jpe" )))
+					} else if ( ((valDateiExt.equals( ".jpeg" )
+							|| valDateiExt.equals( ".jpg" )
+							|| valDatei.getAbsolutePath().toLowerCase()
+									.endsWith( ".jpe" )))
 							&& jpegValidation.equals( "yes" ) ) {
 						int countToValidated = numberInFileMap - countProgress;
-						System.out
-								.print( countToValidated + " " + "JPEG:  " + valDatei.getAbsolutePath() + " " );
+						System.out.print( countToValidated + " " + "JPEG:  "
+								+ valDatei.getAbsolutePath() + " " );
 
-						/* boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
-						 * dirOfJarPath, configMap, context ); */
+						/*
+						 * boolean valFile = valFile( valDatei, logFileName,
+						 * directoryOfLogfile, verbose, dirOfJarPath, configMap,
+						 * context );
+						 */
 						Controllervalfile controller1 = (Controllervalfile) context
 								.getBean( "controllervalfile" );
-						boolean valFile = controller1.valFile( valDatei, logFileName, directoryOfLogfile,
-								verbose, dirOfJarPath, configMap, context, locale,  logFile );
+						boolean valFile = controller1.valFile( valDatei,
+								logFileName, directoryOfLogfile, verbose,
+								dirOfJarPath, configMap, context, locale,
+								logFile );
 
-						// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
+						// Loeschen des Arbeitsverzeichnisses, falls eines
+						// angelegt wurde
 						if ( tmpDir.exists() ) {
 							Util.deleteDir( tmpDir );
 						}
 						if ( valFile ) {
 							jpegCountIo = jpegCountIo + 1;
-							// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
+							// Loeschen des Arbeitsverzeichnisses, falls eines
+							// angelegt wurde
 							if ( tmpDir.exists() ) {
 								Util.deleteDir( tmpDir );
 							}
 						} else {
 							jpegCountNio = jpegCountNio + 1;
-							// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
+							// Loeschen des Arbeitsverzeichnisses, falls eines
+							// angelegt wurde
 							if ( tmpDir.exists() ) {
 								Util.deleteDir( tmpDir );
 							}
 						}
-					} else if ( ((valDateiExt.equals( ".png" ))) && pngValidation.equals( "yes" ) ) {
+					} else if ( ((valDateiExt.equals( ".png" )))
+							&& pngValidation.equals( "yes" ) ) {
 						int countToValidated = numberInFileMap - countProgress;
-						System.out
-								.print( countToValidated + " " + "PNG:  " + valDatei.getAbsolutePath() + " " );
+						System.out.print( countToValidated + " " + "PNG:  "
+								+ valDatei.getAbsolutePath() + " " );
 
-						/* boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
-						 * dirOfJarPath, configMap, context ); */
+						/*
+						 * boolean valFile = valFile( valDatei, logFileName,
+						 * directoryOfLogfile, verbose, dirOfJarPath, configMap,
+						 * context );
+						 */
 						Controllervalfile controller1 = (Controllervalfile) context
 								.getBean( "controllervalfile" );
-						boolean valFile = controller1.valFile( valDatei, logFileName, directoryOfLogfile,
-								verbose, dirOfJarPath, configMap, context, locale,  logFile );
+						boolean valFile = controller1.valFile( valDatei,
+								logFileName, directoryOfLogfile, verbose,
+								dirOfJarPath, configMap, context, locale,
+								logFile );
 
-						// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
+						// Loeschen des Arbeitsverzeichnisses, falls eines
+						// angelegt wurde
 						if ( tmpDir.exists() ) {
 							Util.deleteDir( tmpDir );
 						}
 						if ( valFile ) {
 							pngCountIo = pngCountIo + 1;
-							// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
+							// Loeschen des Arbeitsverzeichnisses, falls eines
+							// angelegt wurde
 							if ( tmpDir.exists() ) {
 								Util.deleteDir( tmpDir );
 							}
 						} else {
 							pngCountNio = pngCountNio + 1;
-							// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
+							// Loeschen des Arbeitsverzeichnisses, falls eines
+							// angelegt wurde
 							if ( tmpDir.exists() ) {
 								Util.deleteDir( tmpDir );
 							}
 						}
 					} else if ( ((valDateiExt.equals( ".tiff" )
-							|| valDatei.getAbsolutePath().toLowerCase().endsWith( ".tif" )))
+							|| valDatei.getAbsolutePath().toLowerCase()
+									.endsWith( ".tif" )))
 							&& tiffValidation.equals( "yes" ) ) {
 						int countToValidated = numberInFileMap - countProgress;
-						System.out
-								.print( countToValidated + " " + "TIFF:  " + valDatei.getAbsolutePath() + " " );
+						System.out.print( countToValidated + " " + "TIFF:  "
+								+ valDatei.getAbsolutePath() + " " );
 
-						/* boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
-						 * dirOfJarPath, configMap, context ); */
+						/*
+						 * boolean valFile = valFile( valDatei, logFileName,
+						 * directoryOfLogfile, verbose, dirOfJarPath, configMap,
+						 * context );
+						 */
 						Controllervalfile controller1 = (Controllervalfile) context
 								.getBean( "controllervalfile" );
-						boolean valFile = controller1.valFile( valDatei, logFileName, directoryOfLogfile,
-								verbose, dirOfJarPath, configMap, context, locale,  logFile );
+						boolean valFile = controller1.valFile( valDatei,
+								logFileName, directoryOfLogfile, verbose,
+								dirOfJarPath, configMap, context, locale,
+								logFile );
 
-						// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
+						// Loeschen des Arbeitsverzeichnisses, falls eines
+						// angelegt wurde
 						if ( tmpDir.exists() ) {
 							Util.deleteDir( tmpDir );
 						}
 						if ( valFile ) {
 							tiffCountIo = tiffCountIo + 1;
-							// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
+							// Loeschen des Arbeitsverzeichnisses, falls eines
+							// angelegt wurde
 							if ( tmpDir.exists() ) {
 								Util.deleteDir( tmpDir );
 							}
 						} else {
 							tiffCountNio = tiffCountNio + 1;
-							// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
+							// Loeschen des Arbeitsverzeichnisses, falls eines
+							// angelegt wurde
 							if ( tmpDir.exists() ) {
 								Util.deleteDir( tmpDir );
 							}
 						}
-					} else if ( (valDateiExt.equals( ".siard" )) && siardValidation.equals( "yes" ) ) {
+					} else if ( (valDateiExt.equals( ".siard" ))
+							&& siardValidation.equals( "yes" ) ) {
 						int countToValidated = numberInFileMap - countProgress;
-						System.out
-								.print( countToValidated + " " + "SIARD: " + valDatei.getAbsolutePath() + " " );
+						System.out.print( countToValidated + " " + "SIARD: "
+								+ valDatei.getAbsolutePath() + " " );
 
-						/* boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
-						 * dirOfJarPath, configMap, context ); */
+						/*
+						 * boolean valFile = valFile( valDatei, logFileName,
+						 * directoryOfLogfile, verbose, dirOfJarPath, configMap,
+						 * context );
+						 */
 						Controllervalfile controller1 = (Controllervalfile) context
 								.getBean( "controllervalfile" );
-						boolean valFile = controller1.valFile( valDatei, logFileName, directoryOfLogfile,
-								verbose, dirOfJarPath, configMap, context, locale,  logFile );
+						boolean valFile = controller1.valFile( valDatei,
+								logFileName, directoryOfLogfile, verbose,
+								dirOfJarPath, configMap, context, locale,
+								logFile );
 
-						// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
+						// Loeschen des Arbeitsverzeichnisses, falls eines
+						// angelegt wurde
 						if ( tmpDir.exists() ) {
 							Util.deleteDir( tmpDir );
 						}
 						if ( valFile ) {
 							siardCountIo = siardCountIo + 1;
-							// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
+							// Loeschen des Arbeitsverzeichnisses, falls eines
+							// angelegt wurde
 							if ( tmpDir.exists() ) {
 								Util.deleteDir( tmpDir );
 							}
 						} else {
 							siardCountNio = siardCountNio + 1;
-							// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
+							// Loeschen des Arbeitsverzeichnisses, falls eines
+							// angelegt wurde
 							if ( tmpDir.exists() ) {
 								Util.deleteDir( tmpDir );
 							}
 						}
 
 					} else if ( ((valDateiExt.equals( ".pdf" )
-							|| valDatei.getAbsolutePath().toLowerCase().endsWith( ".pdfa" )))
+							|| valDatei.getAbsolutePath().toLowerCase()
+									.endsWith( ".pdfa" )))
 							&& pdfaValidation.equals( "yes" ) ) {
 						int countToValidated = numberInFileMap - countProgress;
-						System.out.print( countToValidated + " " + "PDFA:  " + valDatei.getAbsolutePath() );
+						System.out.print( countToValidated + " " + "PDFA:  "
+								+ valDatei.getAbsolutePath() );
 
-						/* boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
-						 * dirOfJarPath, configMap, context ); */
+						/*
+						 * boolean valFile = valFile( valDatei, logFileName,
+						 * directoryOfLogfile, verbose, dirOfJarPath, configMap,
+						 * context );
+						 */
 						Controllervalfile controller1 = (Controllervalfile) context
 								.getBean( "controllervalfile" );
-						boolean valFile = controller1.valFile( valDatei, logFileName, directoryOfLogfile,
-								verbose, dirOfJarPath, configMap, context, locale,  logFile );
+						boolean valFile = controller1.valFile( valDatei,
+								logFileName, directoryOfLogfile, verbose,
+								dirOfJarPath, configMap, context, locale,
+								logFile );
 
-						// Loeschen des Arbeitsverzeichnisses, falls eines angelegt wurde
+						// Loeschen des Arbeitsverzeichnisses, falls eines
+						// angelegt wurde
 						if ( tmpDir.exists() ) {
 							Util.deleteDir( tmpDir );
 						}
@@ -369,7 +436,8 @@ public class Controllervalfolder implements MessageConstants
 						countNio = countNio + 1;
 						if ( min ) {
 						} else {
-							countNioDetail = countNioDetail + "</Message></Info><Info><Message> - "
+							countNioDetail = countNioDetail
+									+ "</Message></Info><Info><Message> - "
 									+ valDatei.getAbsolutePath();
 						}
 						if ( countNioExtension == "" ) {
@@ -379,7 +447,8 @@ public class Controllervalfolder implements MessageConstants
 							if ( countNioExtension.contains( valDateiExt ) ) {
 								// Extension bereits erfasst
 							} else {
-								countNioExtension = countNioExtension + ", " + valDateiExt;
+								countNioExtension = countNioExtension + ", "
+										+ valDateiExt;
 							}
 						}
 					}
@@ -389,33 +458,42 @@ public class Controllervalfolder implements MessageConstants
 				}
 			}
 		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile, "<Error>"
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-							"Formatvalidation: " + e.getMessage() )
-					+ getTextResourceService().getText( locale, MESSAGE_XML_FORMAT2 )
-					+ getTextResourceService().getText( locale, MESSAGE_XML_LOGEND ) );
+			Logtxt.logtxt( logFile,
+					"<Error>"
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN,
+									"Formatvalidation: " + e.getMessage() )
+							+ getTextResourceService().getText( locale,
+									MESSAGE_XML_FORMAT2 )
+							+ getTextResourceService().getText( locale,
+									MESSAGE_XML_LOGEND ) );
 			System.out.println( "Exception: " + e.getMessage() );
 		} catch ( StackOverflowError eso ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, ERROR_XML_STACKOVERFLOWMAIN ) );
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
+					ERROR_XML_STACKOVERFLOWMAIN ) );
 			System.out.println( "Exception: " + "StackOverflowError" );
 		} catch ( OutOfMemoryError eoom ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, ERROR_XML_OUTOFMEMORYMAIN ) );
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
+					ERROR_XML_OUTOFMEMORYMAIN ) );
 			System.out.println( "Exception: " + "OutOfMemoryError" );
 		}
 
 		if ( countNio.equals( count ) ) {
 			// keine Dateien Validiert
-			Logtxt.logtxt( logFile, 
-					getTextResourceService().getText( locale, ERROR_INCORRECTFILEENDINGS, formatValOn ) );
-			System.out.println(
-					getTextResourceService().getText( locale, ERROR_INCORRECTFILEENDINGS, formatValOn ) );
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
+					ERROR_INCORRECTFILEENDINGS, formatValOn ) );
+			System.out.println( getTextResourceService().getText( locale,
+					ERROR_INCORRECTFILEENDINGS, formatValOn ) );
 		}
 
-		Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_FORMAT2 ) );
+		Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
+				MESSAGE_XML_FORMAT2 ) );
 
-		Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_LOGEND ) );
+		Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
+				MESSAGE_XML_LOGEND ) );
 
-		File callasNo = new File( directoryOfLogfile + File.separator + "_callas_NO.txt" );
+		File callasNo = new File(
+				directoryOfLogfile + File.separator + "_callas_NO.txt" );
 		if ( callasNo.exists() ) {
 			callasNo.delete();
 		}
@@ -426,42 +504,50 @@ public class Controllervalfolder implements MessageConstants
 		// logFile bereinigung (& End und ggf 3c)
 		Util.valEnd3cAmp( "", logFile );
 
-		countSummaryNio = pdfaCountNio + siardCountNio + tiffCountNio + jp2CountNio + jpegCountNio
-				+ pngCountNio;
-		countSummaryIo = pdfaCountIo + siardCountIo + tiffCountIo + jp2CountIo + jpegCountIo
-				+ pngCountIo;
+		countSummaryNio = pdfaCountNio + siardCountNio + tiffCountNio
+				+ jp2CountNio + jpegCountNio + pngCountNio;
+		countSummaryIo = pdfaCountIo + siardCountIo + tiffCountIo + jp2CountIo
+				+ jpegCountIo + pngCountIo;
 
-		/* Summary ueber Formatvaliderung herausgeben analog 3c.
+		/*
+		 * Summary ueber Formatvaliderung herausgeben analog 3c.
 		 * 
-		 * message.xml.summary.3c = <Message>Von den {0} Dateien sind {1} ({4}%) valid, {2} ({5}%)
-		 * invalid und {3} ({6}%) wurden nicht validiert.</Message></Error>
+		 * message.xml.summary.3c = <Message>Von den {0} Dateien sind {1} ({4}%)
+		 * valid, {2} ({5}%) invalid und {3} ({6}%) wurden nicht
+		 * validiert.</Message></Error>
 		 * 
 		 * countNio=3 count=0 countSummaryIo=1 countSummaryNio=2
 		 * 
-		 * diese meldung einfach noch mit info einfassen. */
+		 * diese meldung einfach noch mit info einfassen.
+		 */
 
 		float countSummaryIoP = 100 / (float) count * (float) countSummaryIo;
 		float countSummaryNioP = 100 / (float) count * (float) countSummaryNio;
 		float countNioP = 100 / (float) count * (float) countNio;
-		String summaryFormat = getTextResourceService().getText( locale, MESSAGE_XML_SUMMARY_FORMAT,
-				count, countSummaryIo, countSummaryNio, countNio, countSummaryIoP, countSummaryNioP,
+		String summaryFormat = getTextResourceService().getText( locale,
+				MESSAGE_XML_SUMMARY_FORMAT, count, countSummaryIo,
+				countSummaryNio, countNio, countSummaryIoP, countSummaryNioP,
 				countNioP );
 		String summary = "";
 		if ( countNio > 0 ) {
 			// mit Detail weil countNio > 0
-			summary = getTextResourceService().getText( locale, MESSAGE_XML_SUMMARYDETAIL, count,
-					countSummaryIo, countSummaryNio, countNio, countSummaryIoP, countSummaryNioP, countNioP,
-					countNioDetail, countNioExtension );
+			summary = getTextResourceService().getText( locale,
+					MESSAGE_XML_SUMMARYDETAIL, count, countSummaryIo,
+					countSummaryNio, countNio, countSummaryIoP,
+					countSummaryNioP, countNioP, countNioDetail,
+					countNioExtension );
 		} else {
 			// ohne Detail weil countNio == 0
-			summary = getTextResourceService().getText( locale, MESSAGE_XML_SUMMARY, count,
-					countSummaryIo, countSummaryNio, countNio, countSummaryIoP, countSummaryNioP, countNioP );
+			summary = getTextResourceService().getText( locale,
+					MESSAGE_XML_SUMMARY, count, countSummaryIo, countSummaryNio,
+					countNio, countSummaryIoP, countSummaryNioP, countNioP );
 		}
 		String newFormat = "<Format>" + summary;
 		Util.oldnewstring( "<Format>", newFormat, logFile );
 
-		System.out.println( getTextResourceService().getText( locale, MESSAGE_FORMATVALIDATION_DONE,
-				summaryFormat, logFile.getAbsolutePath() ) );
+		System.out.println( getTextResourceService().getText( locale,
+				MESSAGE_FORMATVALIDATION_DONE, summaryFormat,
+				logFile.getAbsolutePath() ) );
 
 		if ( countNio.equals( count ) ) {
 			// keine Dateien Validiert bestehendes Workverzeichnis ggf. loeschen
@@ -478,14 +564,17 @@ public class Controllervalfolder implements MessageConstants
 			}
 
 			File pathTemp = new File( directoryOfLogfile, "path.tmp" );
-			/* falls das File bereits existiert, z.B. von einem vorhergehenden Durchlauf, loeschen wir
-			 * es */
+			/*
+			 * falls das File bereits existiert, z.B. von einem vorhergehenden
+			 * Durchlauf, loeschen wir es
+			 */
 			if ( pathTemp.exists() ) {
 				pathTemp.delete();
 			}
 			if ( pathTemp.exists() ) {
 				// hat nicht funktioniert -> Inhalt leeren
-				List<String> oldtextList = Files.readAllLines( pathTemp.toPath(), StandardCharsets.UTF_8 );
+				List<String> oldtextList = Files.readAllLines(
+						pathTemp.toPath(), StandardCharsets.UTF_8 );
 				for ( int i = 0; i < oldtextList.size(); i++ ) {
 					String oldtext = (oldtextList.get( i ));
 					Util.oldnewstring( oldtext, "", pathTemp );

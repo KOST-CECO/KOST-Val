@@ -25,7 +25,7 @@ public class Validation1cNamingException extends KOSTValException
 {
 
 	/** @author razm Daniel Ludin, Bedag AG @version 0.2.0 */
-	private static final long	serialVersionUID	= -1222566139624342954L;
+	private static final long serialVersionUID = -1222566139624342954L;
 
 	public Validation1cNamingException()
 	{

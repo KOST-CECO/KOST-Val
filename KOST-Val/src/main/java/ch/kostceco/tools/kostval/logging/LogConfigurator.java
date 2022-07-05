@@ -37,7 +37,8 @@ public class LogConfigurator implements MessageConstants
 		return textResourceService;
 	}
 
-	public void setTextResourceService( TextResourceService textResourceService )
+	public void setTextResourceService(
+			TextResourceService textResourceService )
 	{
 		this.textResourceService = textResourceService;
 	}
@@ -45,18 +46,21 @@ public class LogConfigurator implements MessageConstants
 	public String configure( String directoryOfLogfile, String nameOfLogfile )
 	{
 
-		String logFileName = directoryOfLogfile + File.separator + nameOfLogfile + ".kost-val.log.xml";
+		String logFileName = directoryOfLogfile + File.separator + nameOfLogfile
+				+ ".kost-val.log.xml";
 		File logFile = new File( logFileName );
 
 		// MessageOnlyLayout layout = new MessageOnlyLayout();
 
 		try {
 
-			PrintWriter out = new PrintWriter( new BufferedWriter( new FileWriter( logFile, true ) ) );
+			PrintWriter out = new PrintWriter(
+					new BufferedWriter( new FileWriter( logFile, true ) ) );
 			out.close();
 
 		} catch ( IOException e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( ERROR_IOE, e + " (LogConfig)" ) );
+			Logtxt.logtxt( logFile, getTextResourceService().getText( ERROR_IOE,
+					e + " (LogConfig)" ) );
 		}
 
 		return logFileName;

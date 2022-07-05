@@ -27,20 +27,21 @@ import ch.kostceco.tools.kostval.service.TextResourceService;
 public abstract class ValidationModuleImpl
 {
 
-	protected final String			UNZIPDIRECTORY	= "unzipped";
-	protected final String			METADATA				= "metadata.xml";
-	protected final String			XSD_ARELDA			= "arelda_v3.13.2.xsd";
-	protected final String			XSD_METADATA		= "metadata.xsd";
+	protected final String		UNZIPDIRECTORY	= "unzipped";
+	protected final String		METADATA		= "metadata.xml";
+	protected final String		XSD_ARELDA		= "arelda_v3.13.2.xsd";
+	protected final String		XSD_METADATA	= "metadata.xsd";
 
 	private TextResourceService	textResourceService;
-	private MessageService			messageService;
+	private MessageService		messageService;
 
 	public TextResourceService getTextResourceService()
 	{
 		return textResourceService;
 	}
 
-	public void setTextResourceService( TextResourceService textResourceService )
+	public void setTextResourceService(
+			TextResourceService textResourceService )
 	{
 		this.textResourceService = textResourceService;
 	}

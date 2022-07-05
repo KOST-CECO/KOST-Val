@@ -36,6 +36,6 @@ public class Validation3bUnspecifiedFormatException extends KOSTValException
 		super( message );
 	}
 
-	private static final long	serialVersionUID	= 2762314526237098688L;
+	private static final long serialVersionUID = 2762314526237098688L;
 
 }

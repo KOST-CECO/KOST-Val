@@ -45,11 +45,14 @@ import ch.kostceco.tools.kostval.logging.Logtxt;
 import ch.kostceco.tools.kostval.logging.MessageConstants;
 import ch.kostceco.tools.kostval.service.TextResourceService;
 
-/** kostval --> Controllervalsip
+/**
+ * kostval --> Controllervalsip
  * 
  * Der Controller ruft die benoetigten Module zur Validierung auf.
  * 
- * Die Validierungs-Module werden mittels Spring-Dependency-Injection eingebunden. */
+ * Die Validierungs-Module werden mittels Spring-Dependency-Injection
+ * eingebunden.
+ */
 
 public class Controllervalsip implements MessageConstants
 {
@@ -62,14 +65,16 @@ public class Controllervalsip implements MessageConstants
 	}
 
 	@SuppressWarnings("static-access")
-	public void setTextResourceService( TextResourceService textResourceService )
+	public void setTextResourceService(
+			TextResourceService textResourceService )
 	{
 		this.textResourceService = textResourceService;
 	}
 
-	public boolean valSip( File valDatei, String logFileName, File directoryOfLogfile,
-			boolean verbose, String dirOfJarPath, Map<String, String> configMap,
-			ApplicationContext context, Locale locale, Boolean onlySip, File logFile ) throws IOException
+	public boolean valSip( File valDatei, String logFileName,
+			File directoryOfLogfile, boolean verbose, String dirOfJarPath,
+			Map<String, String> configMap, ApplicationContext context,
+			Locale locale, Boolean onlySip, File logFile ) throws IOException
 	{
 		// SIP-Validierung
 
@@ -86,12 +91,12 @@ public class Controllervalsip implements MessageConstants
 		}
 
 		// ggf alte SIP-Validierung-Versions-Notiz loeschen
-		File ECH160_1_2 = new File(
-				directoryOfLogfile.getAbsolutePath() + File.separator + "ECH160_1.2.txt" );
-		File ECH160_1_1 = new File(
-				directoryOfLogfile.getAbsolutePath() + File.separator + "ECH160_1.1.txt" );
-		File ECH160_1_0 = new File(
-				directoryOfLogfile.getAbsolutePath() + File.separator + "ECH160_1.0.txt" );
+		File ECH160_1_2 = new File( directoryOfLogfile.getAbsolutePath()
+				+ File.separator + "ECH160_1.2.txt" );
+		File ECH160_1_1 = new File( directoryOfLogfile.getAbsolutePath()
+				+ File.separator + "ECH160_1.1.txt" );
+		File ECH160_1_0 = new File( directoryOfLogfile.getAbsolutePath()
+				+ File.separator + "ECH160_1.0.txt" );
 		if ( ECH160_1_2.exists() ) {
 			Util.deleteFile( ECH160_1_2 );
 		} else if ( ECH160_1_1.exists() ) {
@@ -110,7 +115,8 @@ public class Controllervalsip implements MessageConstants
 
 		String formatValOn = "";
 		if ( !onlySip ) {
-			// ermitteln welche Formate validiert werden koennen respektive eingeschaltet sind
+			// ermitteln welche Formate validiert werden koennen respektive
+			// eingeschaltet sind
 			if ( pdfaValidation.equals( "yes" ) ) {
 				formatValOn = "PDF/A";
 				if ( tiffValidation.equals( "yes" ) ) {
@@ -170,7 +176,8 @@ public class Controllervalsip implements MessageConstants
 				formatValOn = "PNG";
 			}
 		}
-		Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_FORMAT1 ) );
+		Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
+				MESSAGE_XML_FORMAT1 ) );
 
 		// TODO Sip fuer Validierung vorbereiten
 		try {
@@ -181,9 +188,11 @@ public class Controllervalsip implements MessageConstants
 			String fileName3c = "3c_Invalide.txt";
 			File tmpDirZip = null;
 			String valDateiName = valDatei.getName();
-			String valDateiExt = "." + FilenameUtils.getExtension( valDateiName ).toLowerCase();
+			String valDateiExt = "."
+					+ FilenameUtils.getExtension( valDateiName ).toLowerCase();
 
-			// zuerst eine Formatvalidierung ueber den Content dies ist analog aufgebaut wie --format
+			// zuerst eine Formatvalidierung ueber den Content dies ist analog
+			// aufgebaut wie --format
 			String newFormat = "";
 			String countNioDetail = "";
 			String countNioExtension = "";
@@ -208,8 +217,8 @@ public class Controllervalsip implements MessageConstants
 			if ( !valDatei.isDirectory() ) {
 				Boolean zip = false;
 				// Eine ZIP Datei muss mit PK.. beginnen
-				if ( (valDateiExt.equals( ".zip" )
-						|| valDatei.getAbsolutePath().toLowerCase().endsWith( ".zip64" )) ) {
+				if ( (valDateiExt.equals( ".zip" ) || valDatei.getAbsolutePath()
+						.toLowerCase().endsWith( ".zip64" )) ) {
 					// System.out.println("ueberpruefe Magic number zip...");
 					if ( Magic.magicZip( valDatei ) ) {
 						// System.out.println(" -> es ist eine Zip-Datei");
@@ -220,38 +229,52 @@ public class Controllervalsip implements MessageConstants
 					}
 				}
 
-				// wenn die Datei kein Directory ist, muss sie mit zip oder zip64 enden
-				if ( (!(valDateiExt.equals( ".zip" )
-						|| valDatei.getAbsolutePath().toLowerCase().endsWith( ".zip64" ))) || zip == false ) {
-					// Abbruch! D.h. Sip message beginnen, Meldung und Beenden ab hier bis System.exit( 1 );
-					Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_FORMAT2 ) );
-					Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_SIP1 ) );
+				// wenn die Datei kein Directory ist, muss sie mit zip oder
+				// zip64 enden
+				if ( (!(valDateiExt.equals( ".zip" ) || valDatei
+						.getAbsolutePath().toLowerCase().endsWith( ".zip64" )))
+						|| zip == false ) {
+					// Abbruch! D.h. Sip message beginnen, Meldung und Beenden
+					// ab hier bis System.exit( 1 );
+					Logtxt.logtxt( logFile, getTextResourceService()
+							.getText( locale, MESSAGE_XML_FORMAT2 ) );
+					Logtxt.logtxt( logFile, getTextResourceService()
+							.getText( locale, MESSAGE_XML_SIP1 ) );
 					valDatei = originalSipFile;
+					Logtxt.logtxt( logFile, getTextResourceService()
+							.getText( locale, MESSAGE_XML_VALERGEBNIS ) );
 					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS ) );
-					Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_VALTYPE,
-							getTextResourceService().getText( locale, MESSAGE_SIPVALIDATION ) ) );
-					Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_VALFILE,
-							valDatei.getAbsolutePath() ) );
+							getTextResourceService().getText( locale,
+									MESSAGE_XML_VALTYPE,
+									getTextResourceService().getText( locale,
+											MESSAGE_SIPVALIDATION ) ) );
+					Logtxt.logtxt( logFile,
+							getTextResourceService().getText( locale,
+									MESSAGE_XML_VALFILE,
+									valDatei.getAbsolutePath() ) );
 					System.out.println( "" );
-					System.out.println( "SIP:   " + valDatei.getAbsolutePath() );
+					System.out
+							.println( "SIP:   " + valDatei.getAbsolutePath() );
 
 					// die eigentliche Fehlermeldung
-					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Aa_SIP )
-									+ getTextResourceService().getText( locale, ERROR_XML_AA_INCORRECTFILEENDING ) );
-					System.out.println(
-							getTextResourceService().getText( locale, ERROR_XML_AA_INCORRECTFILEENDING ) );
+					Logtxt.logtxt( logFile, getTextResourceService()
+							.getText( locale, MESSAGE_XML_MODUL_Aa_SIP )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_AA_INCORRECTFILEENDING ) );
+					System.out.println( getTextResourceService().getText(
+							locale, ERROR_XML_AA_INCORRECTFILEENDING ) );
 
 					// Fehler im Validierten SIP --> invalide & Abbruch
-					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_INVALID ) );
-					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) );
+					Logtxt.logtxt( logFile, getTextResourceService().getText(
+							locale, MESSAGE_XML_VALERGEBNIS_INVALID ) );
+					Logtxt.logtxt( logFile, getTextResourceService()
+							.getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) );
 					System.out.println( "Invalid" );
 					System.out.println( "" );
-					Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_SIP2 ) );
-					Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_LOGEND ) );
+					Logtxt.logtxt( logFile, getTextResourceService()
+							.getText( locale, MESSAGE_XML_SIP2 ) );
+					Logtxt.logtxt( logFile, getTextResourceService()
+							.getText( locale, MESSAGE_XML_LOGEND ) );
 
 					// logFile bereinigung (& End und ggf 3c)
 					Util.valEnd3cAmp( "", logFile );
@@ -269,38 +292,49 @@ public class Controllervalsip implements MessageConstants
 					int lastDotIdx = toplevelDir.lastIndexOf( "." );
 					toplevelDir = toplevelDir.substring( 0, lastDotIdx );
 					tmpDirZip = new File(
-							tmpDir.getAbsolutePath() + File.separator + "ZIP" + File.separator + toplevelDir );
+							tmpDir.getAbsolutePath() + File.separator + "ZIP"
+									+ File.separator + toplevelDir );
 					try {
 						FileInputStream fis = null;
 						ZipInputStream zipfile = null;
 						ZipEntry zEntry = null;
 						fis = new FileInputStream( valDatei );
-						zipfile = new ZipInputStream( new BufferedInputStream( fis ) );
+						zipfile = new ZipInputStream(
+								new BufferedInputStream( fis ) );
 						while ( (zEntry = zipfile.getNextEntry()) != null ) {
 							try {
 								if ( !zEntry.isDirectory() ) {
 									byte[] tmp = new byte[4 * 1024];
 									FileOutputStream fos = null;
-									String opFilePath = tmpDirZip + File.separator + zEntry.getName();
+									String opFilePath = tmpDirZip
+											+ File.separator + zEntry.getName();
 									File newFile = new File( opFilePath );
 									File parent = newFile.getParentFile();
 									if ( !parent.exists() ) {
 										parent.mkdirs();
 									}
-									// System.out.println( "Extracting file to " + newFile.getAbsolutePath() );
+									// System.out.println( "Extracting file to "
+									// + newFile.getAbsolutePath() );
 									fos = new FileOutputStream( opFilePath );
 									int size = 0;
-									while ( (size = zipfile.read( tmp )) != -1 ) {
+									while ( (size = zipfile
+											.read( tmp )) != -1 ) {
 										fos.write( tmp, 0, size );
 									}
 									fos.flush();
 									fos.close();
 								} else {
-									/* Scheibe den Ordner wenn noch nicht vorhanden an den richtigen Ort respektive in
-									 * den richtigen Ordner der ggf angelegt werden muss. Dies muss gemacht werden,
-									 * damit auch leere Ordner ins Work geschrieben werden. Diese werden danach im J
-									 * als Fehler angegeben */
-									File newFolder = new File( tmpDirZip, zEntry.getName() );
+									/*
+									 * Scheibe den Ordner wenn noch nicht
+									 * vorhanden an den richtigen Ort respektive
+									 * in den richtigen Ordner der ggf angelegt
+									 * werden muss. Dies muss gemacht werden,
+									 * damit auch leere Ordner ins Work
+									 * geschrieben werden. Diese werden danach
+									 * im J als Fehler angegeben
+									 */
+									File newFolder = new File( tmpDirZip,
+											zEntry.getName() );
 									if ( !newFolder.exists() ) {
 										File parent = newFolder.getParentFile();
 										if ( !parent.exists() ) {
@@ -320,39 +354,52 @@ public class Controllervalsip implements MessageConstants
 						try {
 							Zip64Archiver.unzip64( valDatei, tmpDirZip );
 						} catch ( Exception e1 ) {
-							// Abbruch! D.h. Sip message beginnen, Meldung und Beenden ab hier bis System.exit
-							Logtxt.logtxt( logFile,
-									getTextResourceService().getText( locale, MESSAGE_XML_FORMAT2 ) );
-							Logtxt.logtxt( logFile,
-									getTextResourceService().getText( locale, MESSAGE_XML_SIP1 ) );
+							// Abbruch! D.h. Sip message beginnen, Meldung und
+							// Beenden ab hier bis System.exit
+							Logtxt.logtxt( logFile, getTextResourceService()
+									.getText( locale, MESSAGE_XML_FORMAT2 ) );
+							Logtxt.logtxt( logFile, getTextResourceService()
+									.getText( locale, MESSAGE_XML_SIP1 ) );
 							valDatei = originalSipFile;
 							Logtxt.logtxt( logFile,
-									getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS ) );
-							Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_VALTYPE,
-									getTextResourceService().getText( locale, MESSAGE_SIPVALIDATION ) ) );
-							Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_VALFILE,
-									valDatei.getAbsolutePath() ) );
+									getTextResourceService().getText( locale,
+											MESSAGE_XML_VALERGEBNIS ) );
+							Logtxt.logtxt( logFile,
+									getTextResourceService().getText( locale,
+											MESSAGE_XML_VALTYPE,
+											getTextResourceService().getText(
+													locale,
+													MESSAGE_SIPVALIDATION ) ) );
+							Logtxt.logtxt( logFile,
+									getTextResourceService().getText( locale,
+											MESSAGE_XML_VALFILE,
+											valDatei.getAbsolutePath() ) );
 							System.out.println( "" );
-							System.out.println( "SIP:   " + valDatei.getAbsolutePath() );
+							System.out.println(
+									"SIP:   " + valDatei.getAbsolutePath() );
 
 							// die eigentliche Fehlermeldung
-							Logtxt.logtxt( logFile,
-									getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Aa_SIP )
-											+ getTextResourceService().getText( locale, ERROR_XML_AA_CANNOTEXTRACTZIP ) );
+							Logtxt.logtxt( logFile, getTextResourceService()
+									.getText( locale, MESSAGE_XML_MODUL_Aa_SIP )
+									+ getTextResourceService().getText( locale,
+											ERROR_XML_AA_CANNOTEXTRACTZIP ) );
 							System.out.println(
-									getTextResourceService().getText( locale, ERROR_XML_AA_CANNOTEXTRACTZIP ) );
+									getTextResourceService().getText( locale,
+											ERROR_XML_AA_CANNOTEXTRACTZIP ) );
 
 							// Fehler im Validierten SIP --> invalide & Abbruch
 							Logtxt.logtxt( logFile,
-									getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_INVALID ) );
+									getTextResourceService().getText( locale,
+											MESSAGE_XML_VALERGEBNIS_INVALID ) );
 							Logtxt.logtxt( logFile,
-									getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) );
+									getTextResourceService().getText( locale,
+											MESSAGE_XML_VALERGEBNIS_CLOSE ) );
 							System.out.println( "Invalid" );
 							System.out.println( "" );
-							Logtxt.logtxt( logFile,
-									getTextResourceService().getText( locale, MESSAGE_XML_SIP2 ) );
-							Logtxt.logtxt( logFile,
-									getTextResourceService().getText( locale, MESSAGE_XML_LOGEND ) );
+							Logtxt.logtxt( logFile, getTextResourceService()
+									.getText( locale, MESSAGE_XML_SIP2 ) );
+							Logtxt.logtxt( logFile, getTextResourceService()
+									.getText( locale, MESSAGE_XML_LOGEND ) );
 
 							// logFile bereinigung (& End und ggf 3c)
 							Util.valEnd3cAmp( "", logFile );
@@ -367,23 +414,26 @@ public class Controllervalsip implements MessageConstants
 					}
 					valDatei = tmpDirZip;
 
-					File toplevelfolder = new File(
-							valDatei.getAbsolutePath() + File.separator + valDatei.getName() );
+					File toplevelfolder = new File( valDatei.getAbsolutePath()
+							+ File.separator + valDatei.getName() );
 					if ( toplevelfolder.exists() ) {
 						valDatei = toplevelfolder;
 					}
 					unSipFile = valDatei;
 					valDateiName = valDatei.getName();
-					valDateiExt = "." + FilenameUtils.getExtension( valDateiName ).toLowerCase();
+					valDateiExt = "." + FilenameUtils
+							.getExtension( valDateiName ).toLowerCase();
 				}
 			} else {
 				// SIP ist ein Ordner valDatei bleibt unveraendert
 			}
 
 			// TODO Vorgaengige Formatvalidierung (Schritt 3c)
-			File sipSipContent = new File( valDatei.getAbsolutePath() + File.separator
-					+ valDatei.getName() + File.separator + "content" );
-			File sipContent = new File( valDatei.getAbsolutePath() + File.separator + "content" );
+			File sipSipContent = new File(
+					valDatei.getAbsolutePath() + File.separator
+							+ valDatei.getName() + File.separator + "content" );
+			File sipContent = new File(
+					valDatei.getAbsolutePath() + File.separator + "content" );
 			File valDateiContent = valDatei;
 			if ( sipSipContent.exists() ) {
 				valDateiContent = sipSipContent;
@@ -392,42 +442,59 @@ public class Controllervalsip implements MessageConstants
 			} else {
 				valDateiContent = valDatei;
 			}
-			Map<String, File> fileUnsortedMap = Util.getFileMapFile( valDateiContent );
-			Map<String, File> fileMap = new TreeMap<String, File>( fileUnsortedMap );
+			Map<String, File> fileUnsortedMap = Util
+					.getFileMapFile( valDateiContent );
+			Map<String, File> fileMap = new TreeMap<String, File>(
+					fileUnsortedMap );
 			int numberInFileMap = fileMap.size();
 			Set<String> fileMapKeys = fileMap.keySet();
 
-			for ( Iterator<String> iterator = fileMapKeys.iterator(); iterator.hasNext(); ) {
-				// configmap neu auslesen im bereich pdf, da veraenderungen moeglich sind
+			for ( Iterator<String> iterator = fileMapKeys.iterator(); iterator
+					.hasNext(); ) {
+				// configmap neu auslesen im bereich pdf, da veraenderungen
+				// moeglich sind
 				pdfaValidation = configMap.get( "pdfavalidation" );
 				String entryName = iterator.next();
 				File newFile = fileMap.get( entryName );
 
 				if ( !newFile.isDirectory()
-						&& newFile.getAbsolutePath().contains( File.separator + "content" + File.separator ) ) {
+						&& newFile.getAbsolutePath().contains( File.separator
+								+ "content" + File.separator ) ) {
 					valDatei = newFile;
 					valDateiName = valDatei.getName();
-					valDateiExt = "." + FilenameUtils.getExtension( valDateiName ).toLowerCase();
+					valDateiExt = "." + FilenameUtils
+							.getExtension( valDateiName ).toLowerCase();
 					count = count + 1;
 					countProgress = countProgress + 1;
 
-					/* String extension = valDatei.getName(); int lastIndexOf = extension.lastIndexOf( "." );
-					 * if ( lastIndexOf == -1 ) { // empty extension extension = "other"; } else { extension =
-					 * extension.substring( lastIndexOf ); } */
+					/*
+					 * String extension = valDatei.getName(); int lastIndexOf =
+					 * extension.lastIndexOf( "." ); if ( lastIndexOf == -1 ) {
+					 * // empty extension extension = "other"; } else {
+					 * extension = extension.substring( lastIndexOf ); }
+					 */
 
 					if ( onlySip ) {
 						// keine Formatvalidierung
-					} else if ( valDateiExt.equals( ".pdf" ) || valDateiExt.equals( ".pdfa" ) ) {
+					} else if ( valDateiExt.equals( ".pdf" )
+							|| valDateiExt.equals( ".pdfa" ) ) {
 						if ( pdfaValidation.equals( "yes" ) ) {
 							// Validierung durchfuehren
-							int countToValidated = numberInFileMap - countProgress;
-							System.out.print( countToValidated + " " + "PDFA:  " + valDatei.getAbsolutePath() );
-							/* boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
-							 * dirOfJarPath, configMap, context ); */
+							int countToValidated = numberInFileMap
+									- countProgress;
+							System.out.print( countToValidated + " " + "PDFA:  "
+									+ valDatei.getAbsolutePath() );
+							/*
+							 * boolean valFile = valFile( valDatei, logFileName,
+							 * directoryOfLogfile, verbose, dirOfJarPath,
+							 * configMap, context );
+							 */
 							Controllervalfile controller1 = (Controllervalfile) context
 									.getBean( "controllervalfile" );
-							boolean valFile = controller1.valFile( valDatei, logFileName, directoryOfLogfile,
-									verbose, dirOfJarPath, configMap, context, locale, logFile );
+							boolean valFile = controller1.valFile( valDatei,
+									logFileName, directoryOfLogfile, verbose,
+									dirOfJarPath, configMap, context, locale,
+									logFile );
 							if ( valFile ) {
 								pdfaCountIo = pdfaCountIo + 1;
 							} else {
@@ -435,31 +502,41 @@ public class Controllervalsip implements MessageConstants
 							}
 						} else {
 							countNio = countNio + 1;
-							countNioDetail = countNioDetail + "</Message></Info><Info><Message> - "
+							countNioDetail = countNioDetail
+									+ "</Message></Info><Info><Message> - "
 									+ valDatei.getAbsolutePath();
 							if ( countNioExtension == "" ) {
 								countNioExtension = valDateiExt;
 							} else {
 								// bereits Extensions vorhanden
-								if ( countNioExtension.contains( valDateiExt ) ) {
+								if ( countNioExtension
+										.contains( valDateiExt ) ) {
 									// Extension bereits erfasst
 								} else {
-									countNioExtension = countNioExtension + ", " + valDateiExt;
+									countNioExtension = countNioExtension + ", "
+											+ valDateiExt;
 								}
 							}
 						}
-					} else if ( valDateiExt.equals( ".tiff" ) || valDateiExt.equals( ".tif" ) ) {
+					} else if ( valDateiExt.equals( ".tiff" )
+							|| valDateiExt.equals( ".tif" ) ) {
 						if ( tiffValidation.equals( "yes" ) ) {
 							// Validierung durchfuehren
-							int countToValidated = numberInFileMap - countProgress;
-							System.out
-									.print( countToValidated + " " + "TIFF:  " + valDatei.getAbsolutePath() + " " );
-							/* boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
-							 * dirOfJarPath, configMap, context ); */
+							int countToValidated = numberInFileMap
+									- countProgress;
+							System.out.print( countToValidated + " " + "TIFF:  "
+									+ valDatei.getAbsolutePath() + " " );
+							/*
+							 * boolean valFile = valFile( valDatei, logFileName,
+							 * directoryOfLogfile, verbose, dirOfJarPath,
+							 * configMap, context );
+							 */
 							Controllervalfile controller1 = (Controllervalfile) context
 									.getBean( "controllervalfile" );
-							boolean valFile = controller1.valFile( valDatei, logFileName, directoryOfLogfile,
-									verbose, dirOfJarPath, configMap, context, locale, logFile );
+							boolean valFile = controller1.valFile( valDatei,
+									logFileName, directoryOfLogfile, verbose,
+									dirOfJarPath, configMap, context, locale,
+									logFile );
 							if ( valFile ) {
 								tiffCountIo = tiffCountIo + 1;
 							} else {
@@ -467,41 +544,53 @@ public class Controllervalsip implements MessageConstants
 							}
 						} else {
 							countNio = countNio + 1;
-							countNioDetail = countNioDetail + "</Message></Info><Info><Message> - "
+							countNioDetail = countNioDetail
+									+ "</Message></Info><Info><Message> - "
 									+ valDatei.getAbsolutePath();
 							if ( countNioExtension == "" ) {
 								countNioExtension = valDateiExt;
 							} else {
 								// bereits Extensions vorhanden
-								if ( countNioExtension.contains( valDateiExt ) ) {
+								if ( countNioExtension
+										.contains( valDateiExt ) ) {
 									// Extension bereits erfasst
 								} else {
-									countNioExtension = countNioExtension + ", " + valDateiExt;
+									countNioExtension = countNioExtension + ", "
+											+ valDateiExt;
 								}
 							}
 						}
 					} else if ( valDateiExt.equals( ".siard" ) ) {
 						if ( siardValidation.equals( "yes" ) ) {
 							// Validierung durchfuehren
-							int countToValidated = numberInFileMap - countProgress;
-							System.out
-									.print( countToValidated + " " + "SIARD: " + valDatei.getAbsolutePath() + " " );
+							int countToValidated = numberInFileMap
+									- countProgress;
+							System.out.print( countToValidated + " " + "SIARD: "
+									+ valDatei.getAbsolutePath() + " " );
 
-							// Arbeitsverzeichnis zum Entpacken des Archivs erstellen
-							String pathToWorkDirSiard = configMap.get( "PathToWorkDir" );
-							File tmpDirSiard = new File( pathToWorkDirSiard + File.separator + "SIARD" );
+							// Arbeitsverzeichnis zum Entpacken des Archivs
+							// erstellen
+							String pathToWorkDirSiard = configMap
+									.get( "PathToWorkDir" );
+							File tmpDirSiard = new File( pathToWorkDirSiard
+									+ File.separator + "SIARD" );
 							if ( tmpDirSiard.exists() ) {
 								Util.deleteDir( tmpDirSiard );
 							}
 							if ( !tmpDirSiard.exists() ) {
 								tmpDirSiard.mkdir();
 							}
-							/* boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
-							 * dirOfJarPath, configMap, context ); */
+							/*
+							 * boolean valFile = valFile( valDatei, logFileName,
+							 * directoryOfLogfile, verbose, dirOfJarPath,
+							 * configMap, context );
+							 */
 							Controllervalfile controller1 = (Controllervalfile) context
 									.getBean( "controllervalfile" );
-							boolean valFile = controller1.valFile( valDatei, logFileName, directoryOfLogfile,
-									verbose, dirOfJarPath, configMap, context, locale, logFile );
+							boolean valFile = controller1.valFile( valDatei,
+									logFileName, directoryOfLogfile, verbose,
+									dirOfJarPath, configMap, context, locale,
+									logFile );
 							if ( valFile ) {
 								siardCountIo = siardCountIo + 1;
 							} else {
@@ -509,31 +598,41 @@ public class Controllervalsip implements MessageConstants
 							}
 						} else {
 							countNio = countNio + 1;
-							countNioDetail = countNioDetail + "</Message></Info><Info><Message> - "
+							countNioDetail = countNioDetail
+									+ "</Message></Info><Info><Message> - "
 									+ valDatei.getAbsolutePath();
 							if ( countNioExtension == "" ) {
 								countNioExtension = valDateiExt;
 							} else {
 								// bereits Extensions vorhanden
-								if ( countNioExtension.contains( valDateiExt ) ) {
+								if ( countNioExtension
+										.contains( valDateiExt ) ) {
 									// Extension bereits erfasst
 								} else {
-									countNioExtension = countNioExtension + ", " + valDateiExt;
+									countNioExtension = countNioExtension + ", "
+											+ valDateiExt;
 								}
 							}
 						}
-					} else if ( valDateiExt.equals( ".jpe" ) || valDateiExt.equals( ".jpeg" )
+					} else if ( valDateiExt.equals( ".jpe" )
+							|| valDateiExt.equals( ".jpeg" )
 							|| valDateiExt.equals( ".jpg" ) ) {
 						if ( jpegValidation.equals( "yes" ) ) {
-							int countToValidated = numberInFileMap - countProgress;
-							System.out
-									.print( countToValidated + " " + "JPEG:  " + valDatei.getAbsolutePath() + " " );
-							/* boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
-							 * dirOfJarPath, configMap, context ); */
+							int countToValidated = numberInFileMap
+									- countProgress;
+							System.out.print( countToValidated + " " + "JPEG:  "
+									+ valDatei.getAbsolutePath() + " " );
+							/*
+							 * boolean valFile = valFile( valDatei, logFileName,
+							 * directoryOfLogfile, verbose, dirOfJarPath,
+							 * configMap, context );
+							 */
 							Controllervalfile controller1 = (Controllervalfile) context
 									.getBean( "controllervalfile" );
-							boolean valFile = controller1.valFile( valDatei, logFileName, directoryOfLogfile,
-									verbose, dirOfJarPath, configMap, context, locale, logFile );
+							boolean valFile = controller1.valFile( valDatei,
+									logFileName, directoryOfLogfile, verbose,
+									dirOfJarPath, configMap, context, locale,
+									logFile );
 							if ( valFile ) {
 								jpegCountIo = jpegCountIo + 1;
 							} else {
@@ -541,30 +640,39 @@ public class Controllervalsip implements MessageConstants
 							}
 						} else {
 							countNio = countNio + 1;
-							countNioDetail = countNioDetail + "</Message></Info><Info><Message> - "
+							countNioDetail = countNioDetail
+									+ "</Message></Info><Info><Message> - "
 									+ valDatei.getAbsolutePath();
 							if ( countNioExtension == "" ) {
 								countNioExtension = valDateiExt;
 							} else {
 								// bereits Extensions vorhanden
-								if ( countNioExtension.contains( valDateiExt ) ) {
+								if ( countNioExtension
+										.contains( valDateiExt ) ) {
 									// Extension bereits erfasst
 								} else {
-									countNioExtension = countNioExtension + ", " + valDateiExt;
+									countNioExtension = countNioExtension + ", "
+											+ valDateiExt;
 								}
 							}
 						}
 					} else if ( valDateiExt.equals( ".png" ) ) {
 						if ( pngValidation.equals( "yes" ) ) {
-							int countToValidated = numberInFileMap - countProgress;
-							System.out
-									.print( countToValidated + " " + "PNG:  " + valDatei.getAbsolutePath() + " " );
-							/* boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
-							 * dirOfJarPath, configMap, context ); */
+							int countToValidated = numberInFileMap
+									- countProgress;
+							System.out.print( countToValidated + " " + "PNG:  "
+									+ valDatei.getAbsolutePath() + " " );
+							/*
+							 * boolean valFile = valFile( valDatei, logFileName,
+							 * directoryOfLogfile, verbose, dirOfJarPath,
+							 * configMap, context );
+							 */
 							Controllervalfile controller1 = (Controllervalfile) context
 									.getBean( "controllervalfile" );
-							boolean valFile = controller1.valFile( valDatei, logFileName, directoryOfLogfile,
-									verbose, dirOfJarPath, configMap, context, locale, logFile );
+							boolean valFile = controller1.valFile( valDatei,
+									logFileName, directoryOfLogfile, verbose,
+									dirOfJarPath, configMap, context, locale,
+									logFile );
 							if ( valFile ) {
 								pngCountIo = pngCountIo + 1;
 							} else {
@@ -572,31 +680,40 @@ public class Controllervalsip implements MessageConstants
 							}
 						} else {
 							countNio = countNio + 1;
-							countNioDetail = countNioDetail + "</Message></Info><Info><Message> - "
+							countNioDetail = countNioDetail
+									+ "</Message></Info><Info><Message> - "
 									+ valDatei.getAbsolutePath();
 							if ( countNioExtension == "" ) {
 								countNioExtension = valDateiExt;
 							} else {
 								// bereits Extensions vorhanden
-								if ( countNioExtension.contains( valDateiExt ) ) {
+								if ( countNioExtension
+										.contains( valDateiExt ) ) {
 									// Extension bereits erfasst
 								} else {
-									countNioExtension = countNioExtension + ", " + valDateiExt;
+									countNioExtension = countNioExtension + ", "
+											+ valDateiExt;
 								}
 							}
 						}
 					} else if ( valDateiExt.equals( ".jp2" ) ) {
 						if ( jp2Validation.equals( "yes" ) ) {
 							// Validierung durchfuehren
-							int countToValidated = numberInFileMap - countProgress;
-							System.out
-									.print( countToValidated + " " + "JP2:   " + valDatei.getAbsolutePath() + " " );
-							/* boolean valFile = valFile( valDatei, logFileName, directoryOfLogfile, verbose,
-							 * dirOfJarPath, configMap, context ); */
+							int countToValidated = numberInFileMap
+									- countProgress;
+							System.out.print( countToValidated + " " + "JP2:   "
+									+ valDatei.getAbsolutePath() + " " );
+							/*
+							 * boolean valFile = valFile( valDatei, logFileName,
+							 * directoryOfLogfile, verbose, dirOfJarPath,
+							 * configMap, context );
+							 */
 							Controllervalfile controller1 = (Controllervalfile) context
 									.getBean( "controllervalfile" );
-							boolean valFile = controller1.valFile( valDatei, logFileName, directoryOfLogfile,
-									verbose, dirOfJarPath, configMap, context, locale, logFile );
+							boolean valFile = controller1.valFile( valDatei,
+									logFileName, directoryOfLogfile, verbose,
+									dirOfJarPath, configMap, context, locale,
+									logFile );
 							if ( valFile ) {
 								jp2CountIo = jp2CountIo + 1;
 							} else {
@@ -604,22 +721,26 @@ public class Controllervalsip implements MessageConstants
 							}
 						} else {
 							countNio = countNio + 1;
-							countNioDetail = countNioDetail + "</Message></Info><Info><Message> - "
+							countNioDetail = countNioDetail
+									+ "</Message></Info><Info><Message> - "
 									+ valDatei.getAbsolutePath();
 							if ( countNioExtension == "" ) {
 								countNioExtension = valDateiExt;
 							} else {
 								// bereits Extensions vorhanden
-								if ( countNioExtension.contains( valDateiExt ) ) {
+								if ( countNioExtension
+										.contains( valDateiExt ) ) {
 									// Extension bereits erfasst
 								} else {
-									countNioExtension = countNioExtension + ", " + valDateiExt;
+									countNioExtension = countNioExtension + ", "
+											+ valDateiExt;
 								}
 							}
 						}
 					} else {
 						countNio = countNio + 1;
-						countNioDetail = countNioDetail + "</Message></Info><Info><Message> - "
+						countNioDetail = countNioDetail
+								+ "</Message></Info><Info><Message> - "
 								+ valDatei.getAbsolutePath();
 						if ( countNioExtension == "" ) {
 							countNioExtension = valDateiExt;
@@ -628,7 +749,8 @@ public class Controllervalsip implements MessageConstants
 							if ( countNioExtension.contains( valDateiExt ) ) {
 								// Extension bereits erfasst
 							} else {
-								countNioExtension = countNioExtension + ", " + valDateiExt;
+								countNioExtension = countNioExtension + ", "
+										+ valDateiExt;
 							}
 						}
 					}
@@ -638,30 +760,38 @@ public class Controllervalsip implements MessageConstants
 				}
 			}
 
-			countSummaryNio = pdfaCountNio + siardCountNio + tiffCountNio + jp2CountNio + jpegCountNio
-					+ pngCountNio;
-			countSummaryIo = pdfaCountIo + siardCountIo + tiffCountIo + jp2CountIo + jpegCountIo
-					+ pngCountIo;
-			float countSummaryIoP = 100 / (float) count * (float) countSummaryIo;
-			float countSummaryNioP = 100 / (float) count * (float) countSummaryNio;
+			countSummaryNio = pdfaCountNio + siardCountNio + tiffCountNio
+					+ jp2CountNio + jpegCountNio + pngCountNio;
+			countSummaryIo = pdfaCountIo + siardCountIo + tiffCountIo
+					+ jp2CountIo + jpegCountIo + pngCountIo;
+			float countSummaryIoP = 100 / (float) count
+					* (float) countSummaryIo;
+			float countSummaryNioP = 100 / (float) count
+					* (float) countSummaryNio;
 			float countNioP = 100 / (float) count * (float) countNio;
-			String summary3c = getTextResourceService().getText( locale, MESSAGE_XML_SUMMARY_3C, count,
-					countSummaryIo, countSummaryNio, countNio, countSummaryIoP, countSummaryNioP, countNioP );
+			String summary3c = getTextResourceService().getText( locale,
+					MESSAGE_XML_SUMMARY_3C, count, countSummaryIo,
+					countSummaryNio, countNio, countSummaryIoP,
+					countSummaryNioP, countNioP );
 
 			String summary = "";
 			if ( countNio > 0 ) {
 				// mit Detail weil countNio > 0
-				summary = getTextResourceService().getText( locale, MESSAGE_XML_SUMMARYDETAIL, count,
-						countSummaryIo, countSummaryNio, countNio, countSummaryIoP, countSummaryNioP, countNioP,
-						countNioDetail, countNioExtension );
+				summary = getTextResourceService().getText( locale,
+						MESSAGE_XML_SUMMARYDETAIL, count, countSummaryIo,
+						countSummaryNio, countNio, countSummaryIoP,
+						countSummaryNioP, countNioP, countNioDetail,
+						countNioExtension );
 			} else {
 				// ohne Detail weil countNio == 0
 				if ( onlySip ) {
-					summary = getTextResourceService().getText( locale, MESSAGE_XML_SUMMARY_NO3C );
+					summary = getTextResourceService().getText( locale,
+							MESSAGE_XML_SUMMARY_NO3C );
 				} else {
-					summary = getTextResourceService().getText( locale, MESSAGE_XML_SUMMARY, count,
-							countSummaryIo, countSummaryNio, countNio, countSummaryIoP, countSummaryNioP,
-							countNioP );
+					summary = getTextResourceService().getText( locale,
+							MESSAGE_XML_SUMMARY, count, countSummaryIo,
+							countSummaryNio, countNio, countSummaryIoP,
+							countSummaryNioP, countNioP );
 				}
 			}
 
@@ -675,7 +805,8 @@ public class Controllervalsip implements MessageConstants
 				fileName3c = "3c_Invalide.txt";
 			}
 			// outputFile3c = new File( directoryOfLogfile + fileName3c );
-			outputFile3c = new File( pathToWorkDir + File.separator + fileName3c );
+			outputFile3c = new File(
+					pathToWorkDir + File.separator + fileName3c );
 			try {
 				if ( !outputFile3c.exists() ) {
 					if ( !tmpDir.exists() ) {
@@ -689,61 +820,74 @@ public class Controllervalsip implements MessageConstants
 
 			if ( countNio == count ) {
 				// keine Dateien Validiert
-				Logtxt.logtxt( logFile,
-						getTextResourceService().getText( locale, ERROR_INCORRECTFILEENDINGS, formatValOn ) );
-				System.out.println(
-						getTextResourceService().getText( locale, ERROR_INCORRECTFILEENDINGS, formatValOn ) );
+				Logtxt.logtxt( logFile, getTextResourceService().getText(
+						locale, ERROR_INCORRECTFILEENDINGS, formatValOn ) );
+				System.out.println( getTextResourceService().getText( locale,
+						ERROR_INCORRECTFILEENDINGS, formatValOn ) );
 			}
 
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_FORMAT2 ) );
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
+					MESSAGE_XML_FORMAT2 ) );
 
-			// TODO Start Normale SIP-Validierung mit auswertung Format-Val. im 3c
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_SIP1 ) );
+			// TODO Start Normale SIP-Validierung mit auswertung Format-Val. im
+			// 3c
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
+					MESSAGE_XML_SIP1 ) );
 			valDatei = unSipFile;
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS ) );
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_VALTYPE,
-					getTextResourceService().getText( locale, MESSAGE_SIPVALIDATION ) ) );
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_VALFILE,
-					originalSipFile.getAbsolutePath() ) );
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
+					MESSAGE_XML_VALERGEBNIS ) );
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
+					MESSAGE_XML_VALTYPE, getTextResourceService()
+							.getText( locale, MESSAGE_SIPVALIDATION ) ) );
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
+					MESSAGE_XML_VALFILE, originalSipFile.getAbsolutePath() ) );
 			System.out.println( "" );
 			System.out.println( "SIP:   " + valDatei.getAbsolutePath() );
 
-			Controllersip controller = (Controllersip) context.getBean( "controllersip" );
+			Controllersip controller = (Controllersip) context
+					.getBean( "controllersip" );
 			boolean okMandatory = false;
-			okMandatory = controller.executeMandatory( valDatei, directoryOfLogfile, configMap, locale,
-					logFile );
+			okMandatory = controller.executeMandatory( valDatei,
+					directoryOfLogfile, configMap, locale, logFile );
 			boolean ok = false;
 
-			/* die Validierungen 1a - 1d sind obligatorisch, wenn sie bestanden wurden, koennen die
-			 * restlichen Validierungen, welche nicht zum Abbruch der Applikation fuehren, ausgefuehrt
-			 * werden.
+			/*
+			 * die Validierungen 1a - 1d sind obligatorisch, wenn sie bestanden
+			 * wurden, koennen die restlichen Validierungen, welche nicht zum
+			 * Abbruch der Applikation fuehren, ausgefuehrt werden.
 			 * 
-			 * 1a wurde bereits getestet (vor der Formatvalidierung entsprechend faengt der Controller mit
-			 * 1b an */
+			 * 1a wurde bereits getestet (vor der Formatvalidierung entsprechend
+			 * faengt der Controller mit 1b an
+			 */
 			if ( okMandatory ) {
-				ok = controller.executeOptional( valDatei, directoryOfLogfile, configMap, locale, logFile );
+				ok = controller.executeOptional( valDatei, directoryOfLogfile,
+						configMap, locale, logFile );
 			}
 			// Formatvalidierung validFormat
 			ok = (ok && okMandatory && validFormat);
 
 			if ( ok ) {
 				// Validiertes SIP valide
-				Logtxt.logtxt( logFile,
-						getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_VALID ) );
-				Logtxt.logtxt( logFile,
-						getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) );
-				Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_SIP2 ) );
-				Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_LOGEND ) );
+				Logtxt.logtxt( logFile, getTextResourceService()
+						.getText( locale, MESSAGE_XML_VALERGEBNIS_VALID ) );
+				Logtxt.logtxt( logFile, getTextResourceService()
+						.getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) );
+				Logtxt.logtxt( logFile, getTextResourceService()
+						.getText( locale, MESSAGE_XML_SIP2 ) );
+				Logtxt.logtxt( logFile, getTextResourceService()
+						.getText( locale, MESSAGE_XML_LOGEND ) );
 				System.out.println( "Valid" );
 				System.out.println( "" );
 			} else {
 				// Fehler im Validierten SIP --> invalide
-				Logtxt.logtxt( logFile,
-						getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_INVALID ) );
-				Logtxt.logtxt( logFile,
-						getTextResourceService().getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) );
-				Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_SIP2 ) );
-				Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_LOGEND ) );
+				Logtxt.logtxt( logFile, getTextResourceService()
+						.getText( locale, MESSAGE_XML_VALERGEBNIS_INVALID ) );
+				Logtxt.logtxt( logFile, getTextResourceService()
+						.getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) );
+				Logtxt.logtxt( logFile, getTextResourceService()
+						.getText( locale, MESSAGE_XML_SIP2 ) );
+				Logtxt.logtxt( logFile, getTextResourceService()
+						.getText( locale, MESSAGE_XML_LOGEND ) );
 				System.out.println( "Invalid" );
 				System.out.println( "" );
 
@@ -781,27 +925,31 @@ public class Controllervalsip implements MessageConstants
 			}
 
 			File pathTemp = new File( directoryOfLogfile, "path.tmp" );
-			/* falls das File bereits existiert, z.B. von einem vorhergehenden Durchlauf, loeschen wir
-			 * es */
+			/*
+			 * falls das File bereits existiert, z.B. von einem vorhergehenden
+			 * Durchlauf, loeschen wir es
+			 */
 			if ( pathTemp.exists() ) {
 				pathTemp.delete();
 			}
 			if ( pathTemp.exists() ) {
 				// hat nicht funktioniert -> Inhalt leeren
-				List<String> oldtextList = Files.readAllLines( pathTemp.toPath(), StandardCharsets.UTF_8 );
+				List<String> oldtextList = Files.readAllLines(
+						pathTemp.toPath(), StandardCharsets.UTF_8 );
 				for ( int i = 0; i < oldtextList.size(); i++ ) {
 					String oldtext = (oldtextList.get( i ));
 					Util.oldnewstring( oldtext, "", pathTemp );
 				}
 			}
 
-			File callasNo = new File( directoryOfLogfile + File.separator + "_callas_NO.txt" );
+			File callasNo = new File(
+					directoryOfLogfile + File.separator + "_callas_NO.txt" );
 			if ( callasNo.exists() ) {
 				callasNo.delete();
 			}
 
-			System.out.println( getTextResourceService().getText( locale, MESSAGE_SIPVALIDATION_DONE,
-					logFile.getAbsolutePath() ) );
+			System.out.println( getTextResourceService().getText( locale,
+					MESSAGE_SIPVALIDATION_DONE, logFile.getAbsolutePath() ) );
 
 			if ( ok ) {
 				// bestehendes Workverzeichnis ggf. loeschen
@@ -821,10 +969,14 @@ public class Controllervalsip implements MessageConstants
 		} catch ( Exception e ) {
 			Logtxt.logtxt( logFile,
 					"<Error>"
-							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-									"SIP-ValidationException: " + e.getMessage() )
-							+ getTextResourceService().getText( locale, MESSAGE_XML_SIP2 )
-							+ getTextResourceService().getText( locale, MESSAGE_XML_LOGEND ) );
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN,
+									"SIP-ValidationException: "
+											+ e.getMessage() )
+							+ getTextResourceService().getText( locale,
+									MESSAGE_XML_SIP2 )
+							+ getTextResourceService().getText( locale,
+									MESSAGE_XML_LOGEND ) );
 			System.out.println( "Exception: " + e.getMessage() );
 			if ( tmpDir.exists() ) {
 				Util.deleteDir( tmpDir );
@@ -832,8 +984,8 @@ public class Controllervalsip implements MessageConstants
 			valSip = false;
 			return valSip;
 		} catch ( StackOverflowError eso ) {
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale, ERROR_XML_STACKOVERFLOWMAIN ) );
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
+					ERROR_XML_STACKOVERFLOWMAIN ) );
 			System.out.println( "Exception: " + "StackOverflowError" );
 			if ( tmpDir.exists() ) {
 				Util.deleteDir( tmpDir );
@@ -841,8 +993,8 @@ public class Controllervalsip implements MessageConstants
 			valSip = false;
 			return valSip;
 		} catch ( OutOfMemoryError eoom ) {
-			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale, ERROR_XML_OUTOFMEMORYMAIN ) );
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
+					ERROR_XML_OUTOFMEMORYMAIN ) );
 			System.out.println( "Exception: " + "OutOfMemoryError" );
 			if ( tmpDir.exists() ) {
 				Util.deleteDir( tmpDir );

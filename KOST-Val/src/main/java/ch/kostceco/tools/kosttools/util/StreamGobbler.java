@@ -27,7 +27,7 @@ public class StreamGobbler extends Thread
 {
 	InputStream	is;
 
-	String			type;
+	String		type;
 
 	public StreamGobbler( InputStream is, String type )
 	{

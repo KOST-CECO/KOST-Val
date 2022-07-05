@@ -24,69 +24,90 @@ import ch.kostceco.tools.kosttools.runtime.Cmd;
 
 public class Xmllint
 {
-	private static String	exeDir						= "resources" + File.separator + "xmllint";
-	private static String	pathToxmllintExe	= exeDir + File.separator + "xmllint.exe";
-	private static String	pathToxmllintDll1	= exeDir + File.separator + "iconv.dll";
-	private static String	pathToxmllintDll2	= exeDir + File.separator + "libxml2.dll";
-	private static String	pathToxmllintDll3	= exeDir + File.separator + "zlib1.dll";
+	private static String	exeDir				= "resources" + File.separator
+			+ "xmllint";
+	private static String	pathToxmllintExe	= exeDir + File.separator
+			+ "xmllint.exe";
+	private static String	pathToxmllintDll1	= exeDir + File.separator
+			+ "iconv.dll";
+	private static String	pathToxmllintDll2	= exeDir + File.separator
+			+ "libxml2.dll";
+	private static String	pathToxmllintDll3	= exeDir + File.separator
+			+ "zlib1.dll";
 
-	/** fuehrt eine Validierung mit xmllint via cmd durch und gibt das Ergebnis als String zurueck
+	/**
+	 * fuehrt eine Validierung mit xmllint via cmd durch und gibt das Ergebnis
+	 * als String zurueck
 	 * 
 	 * @param xmlFile
-	 *          XML-Datei, welche validiert werden soll
+	 *            XML-Datei, welche validiert werden soll
 	 * @param xsdFile
-	 *          XSD-Datei, gegen welche validiert werden soll
+	 *            XSD-Datei, gegen welche validiert werden soll
 	 * @param workDir
-	 *          Temporaeres Verzeichnis
+	 *            Temporaeres Verzeichnis
 	 * @param dirOfJarPath
-	 *          String mit dem Pfad von wo das Programm gestartet wurde
-	 * @return String mit Validierungsergebnis ("OK" oder den Fehler. */
-	public static String execXmllint( File xmlFile, File xsdFile, File workDir, String dirOfJarPath )
-			throws InterruptedException
+	 *            String mit dem Pfad von wo das Programm gestartet wurde
+	 * @return String mit Validierungsergebnis ("OK" oder den Fehler.
+	 */
+	public static String execXmllint( File xmlFile, File xsdFile, File workDir,
+			String dirOfJarPath ) throws InterruptedException
 	{
 		boolean out = false;
-		File exeFile = new File( dirOfJarPath + File.separator + pathToxmllintExe );
+		File exeFile = new File(
+				dirOfJarPath + File.separator + pathToxmllintExe );
 
 		String command = "\"\"" + exeFile.getAbsolutePath() + "\""
-				+ " --noout --stream --nowarning --schema " + "\"" + xsdFile.getAbsolutePath() + "\"" + " "
-				+ "\"" + xmlFile.getAbsolutePath() + "\"\"";
+				+ " --noout --stream --nowarning --schema " + "\""
+				+ xsdFile.getAbsolutePath() + "\"" + " " + "\""
+				+ xmlFile.getAbsolutePath() + "\"\"";
 
 		String resultExec = Cmd.execToString( command, out, workDir );
-		/* Folgender Error Output ist keiner sondern nur Info und kann mit OK ersetzt werden: ERROR:
-		 * C:\Users\X60014195\.kost-val_2x\temp_KOST-Val\SIARD\content\schema0\table4\table4.xml
-		 * validates */
+		/*
+		 * Folgender Error Output ist keiner sondern nur Info und kann mit OK
+		 * ersetzt werden: ERROR:
+		 * C:\Users\X60014195\.kost-val_2x\temp_KOST-Val\SIARD\content\schema0\
+		 * table4\table4.xml validates
+		 */
 		String ignor = "ERROR: " + xmlFile.getAbsolutePath() + " validates";
 		if ( resultExec.equals( ignor ) ) {
 			resultExec = "OK";
 		} else {
-			/* ERROR: Schemas validity error : Element
-			 * '{http://www.admin.ch/xmlns/siard/1.0/schema0/table2.xsd}row': This element is not
-			 * expected.</Message><Message>ERROR:
-			 * C:\Users\X60014195\.kost-val_2x\temp_KOST-Val\SIARD\content\schema0\table2\table2.xml fails
-			 * to validate */
-			String replaceInfo = "</Message><Message>ERROR: " + xmlFile.getAbsolutePath()
-					+ " fails to validate";
+			/*
+			 * ERROR: Schemas validity error : Element
+			 * '{http://www.admin.ch/xmlns/siard/1.0/schema0/table2.xsd}row':
+			 * This element is not expected.</Message><Message>ERROR:
+			 * C:\Users\X60014195\.kost-val_2x\temp_KOST-Val\SIARD\content\
+			 * schema0\table2\table2.xml fails to validate
+			 */
+			String replaceInfo = "</Message><Message>ERROR: "
+					+ xmlFile.getAbsolutePath() + " fails to validate";
 			resultExec = resultExec.replace( replaceInfo, "" );
 		}
 		return resultExec;
 	}
 
-	/** fuehrt eine Kontrolle aller benooetigten Dateien von xmllint durch und gibt das Ergebnis als
-	 * String zurueck
+	/**
+	 * fuehrt eine Kontrolle aller benooetigten Dateien von xmllint durch und
+	 * gibt das Ergebnis als String zurueck
 	 * 
 	 * @param dirOfJarPath
-	 *          String mit dem Pfad von wo das Programm gestartet wurde
-	 * @return String mit Validierungsergebnis ("OK" oder den Fehler. */
+	 *            String mit dem Pfad von wo das Programm gestartet wurde
+	 * @return String mit Validierungsergebnis ("OK" oder den Fehler.
+	 */
 	public static String checkXmllint( String dirOfJarPath )
 	{
 		String result = "";
 		boolean checkFiles = true;
 		// Pfad zum Programm existiert die Dateien?
 
-		File fpathToxmllintExe = new File( dirOfJarPath + File.separator + pathToxmllintExe );
-		File fpathToxmllintDll1 = new File( dirOfJarPath + File.separator + pathToxmllintDll1 );
-		File fpathToxmllintDll2 = new File( dirOfJarPath + File.separator + pathToxmllintDll2 );
-		File fpathToxmllintDll3 = new File( dirOfJarPath + File.separator + pathToxmllintDll3 );
+		File fpathToxmllintExe = new File(
+				dirOfJarPath + File.separator + pathToxmllintExe );
+		File fpathToxmllintDll1 = new File(
+				dirOfJarPath + File.separator + pathToxmllintDll1 );
+		File fpathToxmllintDll2 = new File(
+				dirOfJarPath + File.separator + pathToxmllintDll2 );
+		File fpathToxmllintDll3 = new File(
+				dirOfJarPath + File.separator + pathToxmllintDll3 );
 		if ( !fpathToxmllintExe.exists() ) {
 			if ( checkFiles ) {
 				// erste fehlende Datei

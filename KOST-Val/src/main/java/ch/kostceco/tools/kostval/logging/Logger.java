@@ -29,12 +29,15 @@ public class Logger
 	/** Apache Commons Log. */
 	private Log log;
 
-	/** Instanzierung eines benannten Loggers. Der Name des Loggers entspricht dem Namen der
-	 * uebergebenen Klasse. Sinn: Beim Einsatz der Apache Log4j API koennen ueber das Konfig File
-	 * Package oder Klassenfilter gesetzt werden.
+	/**
+	 * Instanzierung eines benannten Loggers. Der Name des Loggers entspricht
+	 * dem Namen der uebergebenen Klasse. Sinn: Beim Einsatz der Apache Log4j
+	 * API koennen ueber das Konfig File Package oder Klassenfilter gesetzt
+	 * werden.
 	 * 
 	 * @param clazz
-	 *          Class for which a log name will be derived. */
+	 *            Class for which a log name will be derived.
+	 */
 	public Logger( Class<?> clazz )
 	{
 
@@ -42,127 +45,165 @@ public class Logger
 		this.log = LogFactory.getLog( clazz );
 	}
 
-	/** Logt einen Fehler der die Stabilitaet des Programms beeinflusst.
+	/**
+	 * Logt einen Fehler der die Stabilitaet des Programms beeinflusst.
 	 * 
 	 * @param message
-	 *          Fehlermeldung. */
+	 *            Fehlermeldung.
+	 */
 	public void logFatal( String message )
 	{
 		this.log.fatal( message );
 
 	}
 
-	/** Logt einen Fehler der die Stabilitaet des Programms beeinflusst.
+	/**
+	 * Logt einen Fehler der die Stabilitaet des Programms beeinflusst.
 	 * 
 	 * @param message
-	 *          Fehlermeldung.
+	 *            Fehlermeldung.
 	 * @param t
-	 *          Ursache des Fehlers. */
+	 *            Ursache des Fehlers.
+	 */
 	public void logFatal( String message, Throwable t )
 	{
 		this.log.fatal( message, t );
 	}
 
-	/** Logt einen Fehler, der nicht automatisch behoben werden kann.
+	/**
+	 * Logt einen Fehler, der nicht automatisch behoben werden kann.
 	 * 
 	 * @param message
-	 *          Fehlermeldung. */
+	 *            Fehlermeldung.
+	 */
 	public void logError( String message )
 	{
 		this.log.error( message );
 	}
 
-	/** Logt einen Fehler, der nicht automatisch behoben werden kann.
+	/**
+	 * Logt einen Fehler, der nicht automatisch behoben werden kann.
 	 * 
 	 * @param message
-	 *          Fehlermeldung.
+	 *            Fehlermeldung.
 	 * @param t
-	 *          Ursache des Fehlers. */
+	 *            Ursache des Fehlers.
+	 */
 	public void logError( String message, Throwable t )
 	{
 		this.log.error( message, t );
 	}
 
-	/** Logt einen Fehler, der behoben oder uebergangen werden konnte.
+	/**
+	 * Logt einen Fehler, der behoben oder uebergangen werden konnte.
 	 * 
 	 * @param message
-	 *          Meldung. */
+	 *            Meldung.
+	 */
 	public void logWarning( String message )
 	{
 		this.log.warn( message );
 	}
 
-	/** Logt einen Fehler, der behoben oder uebergangen werden konnte.
+	/**
+	 * Logt einen Fehler, der behoben oder uebergangen werden konnte.
 	 * 
 	 * @param message
-	 *          Meldung.
+	 *            Meldung.
 	 * @param t
-	 *          Ursache des Warnung. */
+	 *            Ursache des Warnung.
+	 */
 	public void logWarning( String message, Throwable t )
 	{
 		this.log.warn( message, t );
 	}
 
-	/** Logt eine Information zum Programmablauf.
+	/**
+	 * Logt eine Information zum Programmablauf.
 	 * 
 	 * @param message
-	 *          Meldung. */
-	/* public void logInfo( String message ) { // this.log.info( message ); this.log.info( "" ); }
+	 *            Meldung.
+	 */
+	/*
+	 * public void logInfo( String message ) { // this.log.info( message );
+	 * this.log.info( "" ); }
 	 * 
 	 * /** Logt eine Information zum Programmablauf.
 	 * 
 	 * @param message Meldung.
 	 * 
-	 * @param t Ursache. */
-	/* public void logInfo( String message, Throwable t ) { // this.log.info( message, t );
-	 * this.log.info( "" ); }
+	 * @param t Ursache.
+	 */
+	/*
+	 * public void logInfo( String message, Throwable t ) { // this.log.info(
+	 * message, t ); this.log.info( "" ); }
 	 * 
 	 * /** Logt eine Information zum Nachvollziehen des Programmstatus.
 	 * 
-	 * @param message Meldung. */
-	/* public void logDebug( String message ) { this.log.debug( message ); }
+	 * @param message Meldung.
+	 */
+	/*
+	 * public void logDebug( String message ) { this.log.debug( message ); }
 	 * 
 	 * /** Logt eine Information zum Nachvollziehen des Programmstatus.
 	 * 
 	 * @param message Meldung.
 	 * 
-	 * @param t Ursache. */
-	/* public void logDebug( String message, Throwable t ) { this.log.debug( message, t ); } */
+	 * @param t Ursache.
+	 */
+	/*
+	 * public void logDebug( String message, Throwable t ) { this.log.debug(
+	 * message, t ); }
+	 */
 
-	/** Ist Logging auf Level Fatal aktiv?
+	/**
+	 * Ist Logging auf Level Fatal aktiv?
 	 * 
-	 * @return true, falls aktiv, ansonsten false. */
+	 * @return true, falls aktiv, ansonsten false.
+	 */
 	public boolean isFatalEnabled()
 	{
 		return this.log.isFatalEnabled();
 	}
 
-	/** Ist Logging auf Level Error aktiv?
+	/**
+	 * Ist Logging auf Level Error aktiv?
 	 * 
-	 * @return true, falls aktiv, ansonsten false. */
+	 * @return true, falls aktiv, ansonsten false.
+	 */
 	public boolean isErrorEnabled()
 	{
 		return this.log.isErrorEnabled();
 	}
 
-	/** Ist Logging auf Level Warn aktiv?
+	/**
+	 * Ist Logging auf Level Warn aktiv?
 	 * 
-	 * @return true, falls aktiv, ansonsten false. */
+	 * @return true, falls aktiv, ansonsten false.
+	 */
 	public boolean isWarnEnabled()
 	{
 		return this.log.isWarnEnabled();
 	}
 
-	/** Ist Logging auf Level Info aktiv?
+	/**
+	 * Ist Logging auf Level Info aktiv?
 	 * 
-	 * @return true, falls aktiv, ansonsten false. */
-	/* public boolean isInfoEnabled() { // return this.log.isInfoEnabled(); return true; }
+	 * @return true, falls aktiv, ansonsten false.
+	 */
+	/*
+	 * public boolean isInfoEnabled() { // return this.log.isInfoEnabled();
+	 * return true; }
 	 * 
 	 * /** Ist Logging auf Level Debug aktiv?
 	 * 
-	 * @return true, falls aktiv, ansonsten false. */
-	/* public boolean isDebugEnabled() { // return this.log.isDebugEnabled(); return true; } /** Ist
-	 * Logging auf Level Debug wird nicht mehr angeboten, da es als einziges noch log4j benoetigte und
-	 * es sicherheitsprobleme gibt respektive gab */
+	 * @return true, falls aktiv, ansonsten false.
+	 */
+	/*
+	 * public boolean isDebugEnabled() { // return this.log.isDebugEnabled();
+	 * return true; } /** Ist Logging auf Level Debug wird nicht mehr angeboten,
+	 * da es als einziges noch log4j benoetigte und es sicherheitsprobleme gibt
+	 * respektive gab
+	 */
 
 }

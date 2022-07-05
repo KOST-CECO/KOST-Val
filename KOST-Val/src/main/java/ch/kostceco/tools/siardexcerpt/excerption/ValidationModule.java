@@ -23,16 +23,19 @@ import ch.kostceco.tools.siardexcerpt.exception.SIARDexcerptException;
 import ch.kostceco.tools.siardexcerpt.service.MessageServiceExc;
 import ch.kostceco.tools.siardexcerpt.service.ServiceExc;
 
-/** Dies ist das Interface fuer alle Validierungs-Module und vereinigt alle Funktionalitaeten, die
- * den jeweiligen Modulen gemeinsam sind.
+/**
+ * Dies ist das Interface fuer alle Validierungs-Module und vereinigt alle
+ * Funktionalitaeten, die den jeweiligen Modulen gemeinsam sind.
  * 
- * @author Rc Claire Roethlisberger, KOST-CECO */
+ * @author Rc Claire Roethlisberger, KOST-CECO
+ */
 
 public interface ValidationModule extends ServiceExc
 {
 
-	public boolean validate( File siardDatei, File outFile, String excerptString,
-			Map<String, String> configMap, Locale locale ) throws SIARDexcerptException;
+	public boolean validate( File siardDatei, File outFile,
+			String excerptString, Map<String, String> configMap, Locale locale )
+			throws SIARDexcerptException;
 
 	public MessageServiceExc getMessageServiceExc();
 

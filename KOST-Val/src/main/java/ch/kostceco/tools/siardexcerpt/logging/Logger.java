@@ -25,11 +25,13 @@ public class Logger
 	/** Apache Commons Log. */
 	private Log log;
 
-	/** Instanzierung eines benannten Loggers. Der Name des Loggers entspricht dem Namen der
-	 * uebergebenen Klasse.
+	/**
+	 * Instanzierung eines benannten Loggers. Der Name des Loggers entspricht
+	 * dem Namen der uebergebenen Klasse.
 	 * 
 	 * @param clazz
-	 *          Class for which a log name will be derived. */
+	 *            Class for which a log name will be derived.
+	 */
 	public Logger( Class<?> clazz )
 	{
 
@@ -37,86 +39,104 @@ public class Logger
 		this.log = LogFactory.getLog( clazz );
 	}
 
-	/** Logt einen Fehler der die Stabilitaet des Programms beeinflusst.
+	/**
+	 * Logt einen Fehler der die Stabilitaet des Programms beeinflusst.
 	 * 
 	 * @param message
-	 *          Fehlermeldung. */
+	 *            Fehlermeldung.
+	 */
 	public void logFatal( String message )
 	{
 		this.log.fatal( message );
 
 	}
 
-	/** Logt einen Fehler der die Stabilitaet des Programms beeinflusst.
+	/**
+	 * Logt einen Fehler der die Stabilitaet des Programms beeinflusst.
 	 * 
 	 * @param message
-	 *          Fehlermeldung.
+	 *            Fehlermeldung.
 	 * @param t
-	 *          Ursache des Fehlers. */
+	 *            Ursache des Fehlers.
+	 */
 	public void logFatal( String message, Throwable t )
 	{
 		this.log.fatal( message, t );
 	}
 
-	/** Logt einen Fehler, der nicht automatisch behoben werden kann.
+	/**
+	 * Logt einen Fehler, der nicht automatisch behoben werden kann.
 	 * 
 	 * @param message
-	 *          Fehlermeldung. */
+	 *            Fehlermeldung.
+	 */
 	public void logError( String message )
 	{
 		this.log.error( message );
 	}
 
-	/** Logt einen Fehler, der nicht automatisch behoben werden kann.
+	/**
+	 * Logt einen Fehler, der nicht automatisch behoben werden kann.
 	 * 
 	 * @param message
-	 *          Fehlermeldung.
+	 *            Fehlermeldung.
 	 * @param t
-	 *          Ursache des Fehlers. */
+	 *            Ursache des Fehlers.
+	 */
 	public void logError( String message, Throwable t )
 	{
 		this.log.error( message, t );
 	}
 
-	/** Logt einen Fehler, der behoben oder uebergangen werden konnte.
+	/**
+	 * Logt einen Fehler, der behoben oder uebergangen werden konnte.
 	 * 
 	 * @param message
-	 *          Meldung. */
+	 *            Meldung.
+	 */
 	public void logWarning( String message )
 	{
 		this.log.warn( message );
 	}
 
-	/** Logt einen Fehler, der behoben oder uebergangen werden konnte.
+	/**
+	 * Logt einen Fehler, der behoben oder uebergangen werden konnte.
 	 * 
 	 * @param message
-	 *          Meldung.
+	 *            Meldung.
 	 * @param t
-	 *          Ursache des Warnung. */
+	 *            Ursache des Warnung.
+	 */
 	public void logWarning( String message, Throwable t )
 	{
 		this.log.warn( message, t );
 	}
 
-	/** Ist Logging auf Level Fatal aktiv?
+	/**
+	 * Ist Logging auf Level Fatal aktiv?
 	 * 
-	 * @return true, falls aktiv, ansonsten false. */
+	 * @return true, falls aktiv, ansonsten false.
+	 */
 	public boolean isFatalEnabled()
 	{
 		return this.log.isFatalEnabled();
 	}
 
-	/** Ist Logging auf Level Error aktiv?
+	/**
+	 * Ist Logging auf Level Error aktiv?
 	 * 
-	 * @return true, falls aktiv, ansonsten false. */
+	 * @return true, falls aktiv, ansonsten false.
+	 */
 	public boolean isErrorEnabled()
 	{
 		return this.log.isErrorEnabled();
 	}
 
-	/** Ist Logging auf Level Warn aktiv?
+	/**
+	 * Ist Logging auf Level Warn aktiv?
 	 * 
-	 * @return true, falls aktiv, ansonsten false. */
+	 * @return true, falls aktiv, ansonsten false.
+	 */
 	public boolean isWarnEnabled()
 	{
 		return this.log.isWarnEnabled();

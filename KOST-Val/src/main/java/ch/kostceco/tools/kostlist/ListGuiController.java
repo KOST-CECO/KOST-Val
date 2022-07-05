@@ -60,48 +60,57 @@ import javafx.stage.Stage;
 public class ListGuiController
 {
 	@FXML
-	private Button			buttonTestfilesFolder, buttonDel, buttonSkrip, buttonChart, buttonNext,
-			buttonFile, buttonFolder, buttonLicence, buttonOriginalSourceLicense, buttonDescription,
+	private Button		buttonTestfilesFolder, buttonDel, buttonSkrip,
+			buttonChart, buttonNext, buttonFile, buttonFolder, buttonLicence,
+			buttonOriginalSourceLicense, buttonDescription,
 			buttonModificationdescription;
 	// private Button buttonHelp, buttonSave,
 	// buttonPrint, buttonFinish;
 
 	/* @FXML private Button buttonChoice1, buttonChoice2, buttonExcerpt; */
 
-	/* ObservableList<String> langList = FXCollections.observableArrayList( "Deutsch", "Français",
-	 * "English" );
+	/*
+	 * ObservableList<String> langList = FXCollections.observableArrayList(
+	 * "Deutsch", "Franï¿½ais", "English" );
 	 * 
-	 * @FXML private ChoiceBox<String> lang; */
+	 * @FXML private ChoiceBox<String> lang;
+	 */
 
 	@FXML
-	private Label				labelTestfilesFolder, labelChoiceTestfilesFolder, labelFileFolder,
-			labelChoiceFileFolder, labelMd5sum, labelMd5, label, labelOriginalSourceLicense,
-			labelDescription, labelModificationdescription, labelExiftool, labelKOSTVal, labelJHOVE,
-			labelTxtExiftool, labelTxtKOSTVal, labelTxtJHOVE;
+	private Label		labelTestfilesFolder, labelChoiceTestfilesFolder,
+			labelFileFolder, labelChoiceFileFolder, labelMd5sum, labelMd5,
+			label, labelOriginalSourceLicense, labelDescription,
+			labelModificationdescription, labelExiftool, labelKOSTVal,
+			labelJHOVE, labelTxtExiftool, labelTxtKOSTVal, labelTxtJHOVE;
 
 	@FXML
-	private TextArea		console;
+	private TextArea	console;
 
 	private PrintStream	ps;
 
 	@FXML
-	private WebView			wbv;
+	private WebView		wbv;
 
-	private WebEngine		engine;
+	private WebEngine	engine;
 
-	private File				testfilesFolder, fileTodo, fileFolderTodo;
+	private File		testfilesFolder, fileTodo, fileFolderTodo;
 
-	/* private File configFile = new File( kostRanFolder.getAbsolutePath() + File.separator +
-	 * "configuration" + File.separator + "SIARDexcerpt.conf.xml" ); */
+	/*
+	 * private File configFile = new File( kostRanFolder.getAbsolutePath() +
+	 * File.separator + "configuration" + File.separator +
+	 * "SIARDexcerpt.conf.xml" );
+	 */
 
 	// private String dirOfJarPath;
 
-	private String			versionList	= "0.0.1";
-	/* TODO: version auch hier anpassen:
+	private String		versionList	= "0.0.1";
+	/*
+	 * TODO: version auch hier anpassen:
 	 * 
 	 * 2) Start-Bild (make_exe)
 	 * 
-	 * 3) launch_KOST-Ran_exe.xml --> VersionInfo */
+	 * 3) launch_KOST-Ran_exe.xml --> VersionInfo
+	 */
 
 	@FXML
 	private ScrollPane	scroll;
@@ -115,8 +124,9 @@ public class ListGuiController
 		String java6432 = System.getProperty( "sun.arch.data.model" );
 		String javaVersion = System.getProperty( "java.version" );
 		String javafxVersion = System.getProperty( "javafx.version" );
-		label.setText( "Copyright © KOST/CECO          KOST-List v" + versionList + "          JavaFX "
-				+ javafxVersion + "   &   Java-" + java6432 + " " + javaVersion + "." );
+		label.setText( "Copyright ï¿½ KOST/CECO          KOST-List v"
+				+ versionList + "          JavaFX " + javafxVersion
+				+ "   &   Java-" + java6432 + " " + javaVersion + "." );
 
 		// PrintStream in Konsole umleiten
 		ps = new PrintStream( new Console( console ) );
@@ -124,17 +134,24 @@ public class ListGuiController
 		System.setErr( ps );
 
 		// festhalten von wo die Applikation (exe) gestartet wurde
-		/* dirOfJarPath = ""; try { /* dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist
-		 * ein generelles TODO in allen Modulen. Zuerst immer dirOfJarPath ermitteln und dann alle Pfade
-		 * mit dirOfJarPath + File.separator + erweitern. */
-		/* String path = new File( "" ).getAbsolutePath(); String locationOfJarPath = path; dirOfJarPath
-		 * = locationOfJarPath; if ( locationOfJarPath.endsWith( ".jar" ) || locationOfJarPath.endsWith(
-		 * ".exe" ) || locationOfJarPath.endsWith( "." ) ) { File file = new File( locationOfJarPath );
-		 * dirOfJarPath = file.getParent(); } } catch ( Exception e1 ) { e1.printStackTrace(); } */
+		/*
+		 * dirOfJarPath = ""; try { /* dirOfJarPath damit auch absolute Pfade
+		 * kein Problem sind Dies ist ein generelles TODO in allen Modulen.
+		 * Zuerst immer dirOfJarPath ermitteln und dann alle Pfade mit
+		 * dirOfJarPath + File.separator + erweitern.
+		 */
+		/*
+		 * String path = new File( "" ).getAbsolutePath(); String
+		 * locationOfJarPath = path; dirOfJarPath = locationOfJarPath; if (
+		 * locationOfJarPath.endsWith( ".jar" ) || locationOfJarPath.endsWith(
+		 * ".exe" ) || locationOfJarPath.endsWith( "." ) ) { File file = new
+		 * File( locationOfJarPath ); dirOfJarPath = file.getParent(); } } catch
+		 * ( Exception e1 ) { e1.printStackTrace(); }
+		 */
 
 		labelTestfilesFolder.setText( "Verzeichnis der Testdaten" );
 		labelChoiceTestfilesFolder.setText( "(Pfad Testdaten)" );
-		labelFileFolder.setText( "Wähle" );
+		labelFileFolder.setText( "Wï¿½hle" );
 		labelChoiceFileFolder.setText( "(Pfad Datei / Ordner)" );
 		labelMd5.setText( "MD5" );
 		labelMd5sum.setText( "" );
@@ -153,8 +170,8 @@ public class ListGuiController
 		buttonFolder.setText( "Ordner" );
 		buttonFile.setText( "Datei" );
 		buttonLicence.setText( "Lizenz-Informationen" );
-		buttonDel.setText( "löschen" );
-		buttonSkrip.setText( "überspringen" );
+		buttonDel.setText( "lï¿½schen" );
+		buttonSkrip.setText( "ï¿½berspringen" );
 		buttonChart.setText( "beschreiben" );
 		buttonNext.setText( "weiter" );
 		buttonOriginalSourceLicense.setText( "(Bitte eingeben)" );
@@ -202,10 +219,11 @@ public class ListGuiController
 		String help1, help2, help3, help4, help5;
 		help1 = "<h2>Kurzanleitung</h2>";
 		help2 = "<hr>";
-		help3 = "<h4>1) Datei / Ordner auswählen</h4>";
+		help3 = "<h4>1) Datei / Ordner auswï¿½hlen</h4>";
 		help4 = "<h4>2) md5sum angeben</h4>";
 		help5 = "<h4>3) Metadata erstellen</h4>";
-		String initInstructions = "<html>" + help1 + help2 + help3 + help4 + help5 + "<br/></html>";
+		String initInstructions = "<html>" + help1 + help2 + help3 + help4
+				+ help5 + "<br/></html>";
 		engine.loadContent( initInstructions );
 
 		// context.close();
@@ -254,29 +272,37 @@ public class ListGuiController
 
 		licence1 = "<h2>Dieses Programm kommt mit ABSOLUT KEINER GARANTIE.</h2>";
 		licence2 = "<hr>";
-		licence3 = "<h4>Es handelt sich um freie Software, und Sie dürfen sie unter bestimmten Bedingungen gerne weitergeben;</h4>";
-		licence4 = "- siehe GPL-3.0_COPYING.txt für Einzelheiten. ";
-		// licence4 = "- siehe das Handbuch und GPL-3.0_COPYING.txt für Einzelheiten. ";
-		// licence5 = "- KOST-Ran verwendet unmodifizierte Komponenten anderer Hersteller, indem diese
+		licence3 = "<h4>Es handelt sich um freie Software, und Sie dï¿½rfen sie unter bestimmten Bedingungen gerne weitergeben;</h4>";
+		licence4 = "- siehe GPL-3.0_COPYING.txt fï¿½r Einzelheiten. ";
+		// licence4 = "- siehe das Handbuch und GPL-3.0_COPYING.txt fï¿½r
+		// Einzelheiten. ";
+		// licence5 = "- KOST-Ran verwendet unmodifizierte Komponenten anderer
+		// Hersteller, indem diese
 		// direkt in den Quellcode eingebettet werden.";
 		licence6 = "- Benutzer werden gebeten, sich an die Lizenzbedingungen dieser Komponenten zu halten.";
-		String text = "<html>" + licence1 + licence2 + licence3 + licence4 + "<br/>"
-				+ /* licence5 + "<br/>" + */ licence6 + "</html>";
+		String text = "<html>" + licence1 + licence2 + licence3 + licence4
+				+ "<br/>" + /* licence5 + "<br/>" + */ licence6 + "</html>";
 		engine.loadContent( text );
 	}
 
-	/* TODO Erledigt-Marker: Wenn chooseTestfilesFolder betaetigt wird, kann ein Ordner ausgewaehlt
-	 * werden */
+	/*
+	 * TODO Erledigt-Marker: Wenn chooseTestfilesFolder betaetigt wird, kann ein
+	 * Ordner ausgewaehlt werden
+	 */
 	@FXML
 	void chooseTestfilesFolder( ActionEvent e )
 	{
 		console.setText( " \n" );
-		/* if ( tempFile.exists() ) { Util.deleteDir( tempFile ); tempFile.mkdirs(); } */
+		/*
+		 * if ( tempFile.exists() ) { Util.deleteDir( tempFile );
+		 * tempFile.mkdirs(); }
+		 */
 		// bestehender Ordner auswaehlen
 		DirectoryChooser folderChooser = new DirectoryChooser();
 		if ( !labelChoiceTestfilesFolder.getText().isEmpty() ) {
 			// setInitialDirectory mit vorgaeniger Auswahl (Ordner)
-			File dirFileFolder = new File( labelChoiceTestfilesFolder.getText() );
+			File dirFileFolder = new File(
+					labelChoiceTestfilesFolder.getText() );
 			if ( dirFileFolder.isFile() ) {
 				dirFileFolder = dirFileFolder.getParentFile();
 			}
@@ -286,14 +312,17 @@ public class ListGuiController
 		}
 		labelChoiceTestfilesFolder.setText( "" );
 		// Set title
-		folderChooser.setTitle( "Wählen Sie den Ordner mit den Testdaten" );
+		folderChooser.setTitle( "Wï¿½hlen Sie den Ordner mit den Testdaten" );
 		testfilesFolder = folderChooser.showDialog( new Stage() );
 		labelChoiceTestfilesFolder.setText( testfilesFolder.getAbsolutePath() );
 
 		chooseFileTodo( testfilesFolder );
 	}
 
-	/* TODO Erledigt-Marker: chooseFileTodo definiert die naechste zu beschreibende Datei */
+	/*
+	 * TODO Erledigt-Marker: chooseFileTodo definiert die naechste zu
+	 * beschreibende Datei
+	 */
 	void chooseFileTodo( File testfilesFolder )
 	{
 		console.setText( " \n" );
@@ -337,8 +366,10 @@ public class ListGuiController
 		labelTxtJHOVE.setVisible( false );
 
 		try {
-			Map<String, File> fileUnsortedMap = Util.getFileMapFile( testfilesFolder );
-			Map<String, File> fileMap = new TreeMap<String, File>( fileUnsortedMap );
+			Map<String, File> fileUnsortedMap = Util
+					.getFileMapFile( testfilesFolder );
+			Map<String, File> fileMap = new TreeMap<String, File>(
+					fileUnsortedMap );
 			Set<String> fileMapKeys = fileMap.keySet();
 			Iterator<String> iter = fileMapKeys.iterator();
 			boolean oneFileTodo = false;
@@ -349,49 +380,65 @@ public class ListGuiController
 				File fileTodoXml;
 				File fileTodoTmp;
 				fileTodo = newFile;
-				fileTodoXml = new File( fileTodo.getParentFile().getAbsolutePath() + File.separator + "_"
-						+ fileTodo.getName() + "_.xml" );
-				fileTodoTmp = new File( fileTodo.getParentFile().getAbsolutePath() + File.separator + "_"
-						+ fileTodo.getName() + "_.tmp" );
+				fileTodoXml = new File(
+						fileTodo.getParentFile().getAbsolutePath()
+								+ File.separator + "_" + fileTodo.getName()
+								+ "_.xml" );
+				fileTodoTmp = new File(
+						fileTodo.getParentFile().getAbsolutePath()
+								+ File.separator + "_" + fileTodo.getName()
+								+ "_.tmp" );
 				String fileTodoName = fileTodo.getName();
 				if ( !newFile.isDirectory() ) {
 					// console.setText( fileTodoName+" \n" );
-					String fileTodoExt = "." + FilenameUtils.getExtension( fileTodoName ).toLowerCase();
+					String fileTodoExt = "." + FilenameUtils
+							.getExtension( fileTodoName ).toLowerCase();
 					if ( fileTodo != null ) {
 						if ( !fileTodoXml.exists() && !fileTodoTmp.exists() ) {
-							if ( fileTodoExt.equals( ".jpeg" ) || fileTodoExt.equals( ".jpg" )
+							if ( fileTodoExt.equals( ".jpeg" )
+									|| fileTodoExt.equals( ".jpg" )
 									|| fileTodoExt.equals( ".png" ) ) {
 								// Anzeige in WebView wenn image
-								String pathDetail = "file:/" + fileTodo.getAbsolutePath();
+								String pathDetail = "file:/"
+										+ fileTodo.getAbsolutePath();
 								pathDetail = pathDetail.replace( "\\\\", "/" );
 								pathDetail = pathDetail.replace( "\\", "/" );
 								String sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h4>1.<br>&nbsp;</h4></td><td><h4>Aktuelle Datei: <br>"
-										+ fileTodo.getAbsolutePath() + "</h4></td></tr>";
-								String sel2 = "<tr><td><h4>2.</h4></td><td><h4>Datei löschen, überspringen oder beschreiben</h4></td></tr>";
+										+ fileTodo.getAbsolutePath()
+										+ "</h4></td></tr>";
+								String sel2 = "<tr><td><h4>2.</h4></td><td><h4>Datei lï¿½schen, ï¿½berspringen oder beschreiben</h4></td></tr>";
 								String selDetail = "<br/>";
 								selDetail = "<table  width=\"100%\"><tr><td width=\"30px\"></td><td><img  src='"
 										+ pathDetail
 										+ "' width=\"100%\" style=\"border:1px solid gray\" ></td><td width=\"30px\"></td></tr></table>";
-								String text = "<html><body>" + sel1 + sel2 + selDetail + "</body></html>";
+								String text = "<html><body>" + sel1 + sel2
+										+ selDetail + "</body></html>";
 								engine.loadContent( text );
 								oneFileTodo = true;
 								break;
 							} else if ( fileTodoExt.equals( ".jp2" ) ) {
-							} else if ( fileTodoExt.equals( ".tiff" ) || fileTodoExt.equals( "tif" ) ) {
-								// Runtime.getRuntime().exec( "rundll32 url.dll,FileProtocolHandler " +
+							} else if ( fileTodoExt.equals( ".tiff" )
+									|| fileTodoExt.equals( "tif" ) ) {
+								// Runtime.getRuntime().exec( "rundll32
+								// url.dll,FileProtocolHandler " +
 								// fileTodo.getAbsolutePath() );
 							} else if ( fileTodoExt.equals( ".siard" ) ) {
-							} else if ( fileTodoExt.equals( ".pdf" ) || fileTodoExt.equals( ".pdfa" ) ) {
-								// Anzeige in eigenem Fenster, da nicht via WebView moeglich
+							} else if ( fileTodoExt.equals( ".pdf" )
+									|| fileTodoExt.equals( ".pdfa" ) ) {
+								// Anzeige in eigenem Fenster, da nicht via
+								// WebView moeglich
 								String sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h4>1.<br>&nbsp;</h4></td><td><h4>Aktuelle Datei: <br>"
-										+ fileTodo.getAbsolutePath() + "</h4></td></tr>";
-								String sel2 = "<tr><td><h4>2.</h4></td><td><h4>Datei löschen, überspringen oder beschreiben</h4></td></tr>";
+										+ fileTodo.getAbsolutePath()
+										+ "</h4></td></tr>";
+								String sel2 = "<tr><td><h4>2.</h4></td><td><h4>Datei lï¿½schen, ï¿½berspringen oder beschreiben</h4></td></tr>";
 								String selDetail = "<br/>";
-								selDetail = "<table  width=\"100%\"><tr><td width=\"30px\"></td><td><h4>(Datei wurde in seperatem Fenster geöffnet)</h4></td><td width=\"30px\"></td></tr></table>";
-								String text = "<html><body>" + sel1 + sel2 + selDetail + "</body></html>";
+								selDetail = "<table  width=\"100%\"><tr><td width=\"30px\"></td><td><h4>(Datei wurde in seperatem Fenster geï¿½ffnet)</h4></td><td width=\"30px\"></td></tr></table>";
+								String text = "<html><body>" + sel1 + sel2
+										+ selDetail + "</body></html>";
 								engine.loadContent( text );
-								Runtime.getRuntime()
-										.exec( "rundll32 url.dll,FileProtocolHandler " + fileTodo.getAbsolutePath() );
+								Runtime.getRuntime().exec(
+										"rundll32 url.dll,FileProtocolHandler "
+												+ fileTodo.getAbsolutePath() );
 								oneFileTodo = true;
 								break;
 							} else {
@@ -399,7 +446,8 @@ public class ListGuiController
 							}
 						} else {
 							String sel1 = "<table  width=\"100%\"><tr><td><h4>Jede Datei wurde beschrieben oder geloescht.</h4></td></tr>";
-							String text = "<html><body>" + sel1 + "</body></html>";
+							String text = "<html><body>" + sel1
+									+ "</body></html>";
 							engine.loadContent( text );
 							oneFileTodo = false;
 							buttonDel.setDisable( true );
@@ -443,49 +491,69 @@ public class ListGuiController
 					File fileTodoXml;
 					File fileTodoTmp;
 					fileTodo = newFile;
-					fileTodoXml = new File( fileTodo.getParentFile().getAbsolutePath() + File.separator + "_"
-							+ fileTodo.getName() + "_.xml" );
-					fileTodoTmp = new File( fileTodo.getParentFile().getAbsolutePath() + File.separator + "_"
-							+ fileTodo.getName() + "_.tmp" );
+					fileTodoXml = new File(
+							fileTodo.getParentFile().getAbsolutePath()
+									+ File.separator + "_" + fileTodo.getName()
+									+ "_.xml" );
+					fileTodoTmp = new File(
+							fileTodo.getParentFile().getAbsolutePath()
+									+ File.separator + "_" + fileTodo.getName()
+									+ "_.tmp" );
 					if ( !newFile.isDirectory() ) {
 						String fileTodoName = fileTodo.getName();
 						// console.setText( fileTodoName+" \n" );
-						String fileTodoExt = "." + FilenameUtils.getExtension( fileTodoName ).toLowerCase();
+						String fileTodoExt = "." + FilenameUtils
+								.getExtension( fileTodoName ).toLowerCase();
 						if ( fileTodo != null ) {
-							if ( !fileTodoXml.exists() && fileTodoTmp.exists() ) {
-								if ( fileTodoExt.equals( ".jpeg" ) || fileTodoExt.equals( ".jpg" )
+							if ( !fileTodoXml.exists()
+									&& fileTodoTmp.exists() ) {
+								if ( fileTodoExt.equals( ".jpeg" )
+										|| fileTodoExt.equals( ".jpg" )
 										|| fileTodoExt.equals( ".png" ) ) {
 									// Anzeige in WebView wenn image
-									String pathDetail = "file:/" + fileTodo.getAbsolutePath();
-									pathDetail = pathDetail.replace( "\\\\", "/" );
-									pathDetail = pathDetail.replace( "\\", "/" );
+									String pathDetail = "file:/"
+											+ fileTodo.getAbsolutePath();
+									pathDetail = pathDetail.replace( "\\\\",
+											"/" );
+									pathDetail = pathDetail.replace( "\\",
+											"/" );
 									String sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h4>1.<br>&nbsp;</h4></td><td><h4>Aktuelle Datei: <br>"
-											+ fileTodo.getAbsolutePath() + "</h4></td></tr>";
-									String sel2 = "<tr><td><h4>2.</h4></td><td><h4>Datei löschen oder beschreiben</h4></td></tr>";
+											+ fileTodo.getAbsolutePath()
+											+ "</h4></td></tr>";
+									String sel2 = "<tr><td><h4>2.</h4></td><td><h4>Datei lï¿½schen oder beschreiben</h4></td></tr>";
 									String selDetail = "<br/>";
 									selDetail = "<table  width=\"100%\"><tr><td width=\"30px\"></td><td><img  src='"
 											+ pathDetail
 											+ "' width=\"100%\" style=\"border:1px solid gray\" ></td><td width=\"30px\"></td></tr></table>";
-									String text = "<html><body>" + sel1 + sel2 + selDetail + "</body></html>";
+									String text = "<html><body>" + sel1 + sel2
+											+ selDetail + "</body></html>";
 									engine.loadContent( text );
 									oneFileTodo = true;
 									break;
 								} else if ( fileTodoExt.equals( ".jp2" ) ) {
-								} else if ( fileTodoExt.equals( ".tiff" ) || fileTodoExt.equals( "tif" ) ) {
-									// Runtime.getRuntime().exec( "rundll32 url.dll,FileProtocolHandler " +
+								} else if ( fileTodoExt.equals( ".tiff" )
+										|| fileTodoExt.equals( "tif" ) ) {
+									// Runtime.getRuntime().exec( "rundll32
+									// url.dll,FileProtocolHandler " +
 									// fileTodo.getAbsolutePath() );
 								} else if ( fileTodoExt.equals( ".siard" ) ) {
-								} else if ( fileTodoExt.equals( ".pdf" ) || fileTodoExt.equals( ".pdfa" ) ) {
-									// Anzeige in eigenem Fenster, da nicht via WebView moeglich
+								} else if ( fileTodoExt.equals( ".pdf" )
+										|| fileTodoExt.equals( ".pdfa" ) ) {
+									// Anzeige in eigenem Fenster, da nicht via
+									// WebView moeglich
 									String sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h4>1.<br>&nbsp;</h4></td><td><h4>Aktuelle Datei: <br>"
-											+ fileTodo.getAbsolutePath() + "</h4></td></tr>";
-									String sel2 = "<tr><td><h4>2.</h4></td><td><h4>Datei löschen, überspringen oder beschreiben</h4></td></tr>";
+											+ fileTodo.getAbsolutePath()
+											+ "</h4></td></tr>";
+									String sel2 = "<tr><td><h4>2.</h4></td><td><h4>Datei lï¿½schen, ï¿½berspringen oder beschreiben</h4></td></tr>";
 									String selDetail = "<br/>";
-									selDetail = "<table  width=\"100%\"><tr><td width=\"30px\"></td><td><h4>(Datei wurde in seperatem Fenster geöffnet)</h4></td><td width=\"30px\"></td></tr></table>";
-									String text = "<html><body>" + sel1 + sel2 + selDetail + "</body></html>";
+									selDetail = "<table  width=\"100%\"><tr><td width=\"30px\"></td><td><h4>(Datei wurde in seperatem Fenster geï¿½ffnet)</h4></td><td width=\"30px\"></td></tr></table>";
+									String text = "<html><body>" + sel1 + sel2
+											+ selDetail + "</body></html>";
 									engine.loadContent( text );
-									Runtime.getRuntime()
-											.exec( "rundll32 url.dll,FileProtocolHandler " + fileTodo.getAbsolutePath() );
+									Runtime.getRuntime().exec(
+											"rundll32 url.dll,FileProtocolHandler "
+													+ fileTodo
+															.getAbsolutePath() );
 									oneFileTodo = true;
 									break;
 								} else {
@@ -493,7 +561,8 @@ public class ListGuiController
 								}
 							} else {
 								String sel1 = "<table  width=\"100%\"><tr><td><h4>Jede Datei wurde beschrieben oder geloescht.</h4></td></tr>";
-								String text = "<html><body>" + sel1 + "</body></html>";
+								String text = "<html><body>" + sel1
+										+ "</body></html>";
 								engine.loadContent( text );
 								oneFileTodo = false;
 								buttonDel.setDisable( true );
@@ -542,14 +611,19 @@ public class ListGuiController
 		} catch ( Exception etff ) {
 			System.out.println( "Exception: " + etff.getMessage() );
 		} catch ( StackOverflowError eso ) {
-			System.out.println( "Exception: " + "StackOverflowError " + eso.getMessage() );
+			System.out.println(
+					"Exception: " + "StackOverflowError " + eso.getMessage() );
 		} catch ( OutOfMemoryError eoom ) {
-			System.out.println( "Exception: " + "OutOfMemoryError " + eoom.getMessage() );
+			System.out.println(
+					"Exception: " + "OutOfMemoryError " + eoom.getMessage() );
 		}
 
 	}
 
-	/* TODO Erledigt-Marker: Wenn doChart betaetigt wird, kann es beschrieben werden */
+	/*
+	 * TODO Erledigt-Marker: Wenn doChart betaetigt wird, kann es beschrieben
+	 * werden
+	 */
 	@FXML
 	void doChart( ActionEvent e )
 	{
@@ -592,53 +666,74 @@ public class ListGuiController
 		labelTxtKOSTVal.setVisible( true );
 		labelTxtJHOVE.setVisible( true );
 
-		/* <?xml version="1.0" encoding="ISO-8859-1"?> <KOST-List> <Name>TIFF_valid_gpl2.tif</Name>
-		 * <MD5>6e945e26be4019fc5ab472066a00c2bc</MD5> <OriginalSourceLicense></OriginalSourceLicense>
-		 * <Description></Description> <Modificationdescription></Modificationdescription>
-		 * <Exiftool></Exiftool> <KOST-Val></KOST-Val> <JHOVE></JHOVE> </KOST-List> */
+		/*
+		 * <?xml version="1.0" encoding="ISO-8859-1"?> <KOST-List>
+		 * <Name>TIFF_valid_gpl2.tif</Name>
+		 * <MD5>6e945e26be4019fc5ab472066a00c2bc</MD5>
+		 * <OriginalSourceLicense></OriginalSourceLicense>
+		 * <Description></Description>
+		 * <Modificationdescription></Modificationdescription>
+		 * <Exiftool></Exiftool> <KOST-Val></KOST-Val> <JHOVE></JHOVE>
+		 * </KOST-List>
+		 */
 		console.setText( " \n" );
 		console.appendText( fileTodo.getAbsolutePath() );
 		// bestehende Datei auswaehlen
 		try {
 			String fileName = fileTodo.getName();
-			File fileTodoTmp = new File( fileTodo.getParentFile().getAbsolutePath() + File.separator + "_"
-					+ fileTodo.getName() + "_.tmp" );
+			File fileTodoTmp = new File(
+					fileTodo.getParentFile().getAbsolutePath() + File.separator
+							+ "_" + fileTodo.getName() + "_.tmp" );
 			if ( fileTodoTmp.exists() ) {
 				Util.deleteFile( fileTodoTmp );
 			}
-			File fileTodoImport = new File( fileTodo.getParentFile().getAbsolutePath() + File.separator
-					+ "_" + fileTodo.getName() + "_.import" );
-			File outputFileTodo = new File( fileTodo.getParentFile().getAbsolutePath() + File.separator
-					+ "_" + fileTodo.getName() + "_.xml" );
+			File fileTodoImport = new File(
+					fileTodo.getParentFile().getAbsolutePath() + File.separator
+							+ "_" + fileTodo.getName() + "_.import" );
+			File outputFileTodo = new File(
+					fileTodo.getParentFile().getAbsolutePath() + File.separator
+							+ "_" + fileTodo.getName() + "_.xml" );
 			if ( !outputFileTodo.exists() ) {
 				outputFileTodo.createNewFile();
 				try (FileWriter fw = new FileWriter( outputFileTodo, true );
 						BufferedWriter bw = new BufferedWriter( fw );
 						PrintWriter out = new PrintWriter( bw )) {
-					/* <?xml version="1.0" encoding="ISO-8859-1"?> <KOST-List>
-					 * <Name>TIFF_valid_gpl2.tif</Name> <MD5>6e945e26be4019fc5ab472066a00c2bc</MD5>
-					 * <OriginalSourceLicense></OriginalSourceLicense> <Description></Description>
-					 * <Modificationdescription></Modificationdescription> <Exiftool></Exiftool>
-					 * <KOST-Val></KOST-Val> <JHOVE></JHOVE> </KOST-List> */
-					out.println( "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" );
+					/*
+					 * <?xml version="1.0" encoding="ISO-8859-1"?> <KOST-List>
+					 * <Name>TIFF_valid_gpl2.tif</Name>
+					 * <MD5>6e945e26be4019fc5ab472066a00c2bc</MD5>
+					 * <OriginalSourceLicense></OriginalSourceLicense>
+					 * <Description></Description>
+					 * <Modificationdescription></Modificationdescription>
+					 * <Exiftool></Exiftool> <KOST-Val></KOST-Val>
+					 * <JHOVE></JHOVE> </KOST-List>
+					 */
+					out.println(
+							"<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>" );
 					out.println( "<KOST-List>" );
 					out.println( "<Name>" + fileName + "</Name>" );
 
 					// <MD5>6e945e26be4019fc5ab472066a00c2bc</MD5>
 					try {
 						String filepath = fileTodo.getAbsolutePath();
-						MessageDigest messageDigest = MessageDigest.getInstance( "MD5" );
+						MessageDigest messageDigest = MessageDigest
+								.getInstance( "MD5" );
 
-						FileInputStream fileInput = new FileInputStream( filepath );
+						FileInputStream fileInput = new FileInputStream(
+								filepath );
 						byte[] dataBytes = new byte[1024];
 						int bytesRead = 0;
-						while ( (bytesRead = fileInput.read( dataBytes )) != -1 ) {
+						while ( (bytesRead = fileInput
+								.read( dataBytes )) != -1 ) {
 							messageDigest.update( dataBytes, 0, bytesRead );
 						}
 						byte[] digestBytes = messageDigest.digest();
 						StringBuffer sb = new StringBuffer( "" );
 						for ( int i = 0; i < digestBytes.length; i++ ) {
-							sb.append( Integer.toString( (digestBytes[i] & 0xff) + 0x100, 16 ).substring( 1 ) );
+							sb.append( Integer
+									.toString( (digestBytes[i] & 0xff) + 0x100,
+											16 )
+									.substring( 1 ) );
 						}
 						String md5 = sb.toString();
 						while ( md5.length() < 32 ) {
@@ -650,43 +745,61 @@ public class ListGuiController
 						System.out.println( "catch MD5: " + eMd5 );
 						eMd5.printStackTrace();
 					}
-					/* <OriginalSourceLicense></OriginalSourceLicense> <Description></Description>
-					 * <Modificationdescription></Modificationdescription> <Exiftool></Exiftool>
-					 * <KOST-Val></KOST-Val> <JHOVE></JHOVE> </KOST-List> */
+					/*
+					 * <OriginalSourceLicense></OriginalSourceLicense>
+					 * <Description></Description>
+					 * <Modificationdescription></Modificationdescription>
+					 * <Exiftool></Exiftool> <KOST-Val></KOST-Val>
+					 * <JHOVE></JHOVE> </KOST-List>
+					 */
 					if ( fileTodoImport.exists() ) {
 						Scanner scanner = new Scanner( fileTodoImport );
 						while ( scanner.hasNextLine() ) {
 							String line = scanner.nextLine();
 							if ( line.contains( "<OriginalSourceLicense>" ) ) {
 								out.println( line );
-								String folderOriginalSourceLicense = line.replaceFirst( "<OriginalSourceLicense>",
-										"" );
+								String folderOriginalSourceLicense = line
+										.replaceFirst(
+												"<OriginalSourceLicense>", "" );
 								folderOriginalSourceLicense = folderOriginalSourceLicense
-										.replaceFirst( "</OriginalSourceLicense>", "" );
-								buttonOriginalSourceLicense.setText( folderOriginalSourceLicense );
+										.replaceFirst(
+												"</OriginalSourceLicense>",
+												"" );
+								buttonOriginalSourceLicense
+										.setText( folderOriginalSourceLicense );
 							}
 							if ( line.contains( "<Description>" ) ) {
 								out.println( line );
-								String folderOriginalSourceLicense = line.replaceFirst( "<Description>", "" );
+								String folderOriginalSourceLicense = line
+										.replaceFirst( "<Description>", "" );
 								folderOriginalSourceLicense = folderOriginalSourceLicense
 										.replaceFirst( "</Description>", "" );
-								buttonDescription.setText( folderOriginalSourceLicense );
+								buttonDescription
+										.setText( folderOriginalSourceLicense );
 							}
-							if ( line.contains( "<Modificationdescription>" ) ) {
+							if ( line
+									.contains( "<Modificationdescription>" ) ) {
 								out.println( line );
-								String folderOriginalSourceLicense = line.replaceFirst( "<Modificationdescription>",
-										"" );
+								String folderOriginalSourceLicense = line
+										.replaceFirst(
+												"<Modificationdescription>",
+												"" );
 								folderOriginalSourceLicense = folderOriginalSourceLicense
-										.replaceFirst( "</Modificationdescription>", "" );
-								buttonModificationdescription.setText( folderOriginalSourceLicense );
+										.replaceFirst(
+												"</Modificationdescription>",
+												"" );
+								buttonModificationdescription
+										.setText( folderOriginalSourceLicense );
 							}
 						}
 						scanner.close();
 						Util.deleteFile( fileTodoImport );
 					} else {
-						out.println( "<OriginalSourceLicense></OriginalSourceLicense>" );
+						out.println(
+								"<OriginalSourceLicense></OriginalSourceLicense>" );
 						out.println( "<Description></Description>" );
-						out.println( "<Modificationdescription></Modificationdescription>" );
+						out.println(
+								"<Modificationdescription></Modificationdescription>" );
 					}
 					out.println( "<Exiftool></Exiftool>" );
 					out.println( "<KOST-Val></KOST-Val>" );
@@ -729,13 +842,16 @@ public class ListGuiController
 
 			try {
 				Document doc = null;
-				BufferedInputStream bis = new BufferedInputStream( new FileInputStream( outputFileTodo ) );
-				DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+				BufferedInputStream bis = new BufferedInputStream(
+						new FileInputStream( outputFileTodo ) );
+				DocumentBuilderFactory dbf = DocumentBuilderFactory
+						.newInstance();
 				DocumentBuilder db;
 				db = dbf.newDocumentBuilder();
 				doc = db.parse( bis );
 				doc.normalize();
-				labelMd5sum.setText( doc.getElementsByTagName( "MD5" ).item( 0 ).getTextContent() );
+				labelMd5sum.setText( doc.getElementsByTagName( "MD5" ).item( 0 )
+						.getTextContent() );
 			} catch ( ParserConfigurationException | SAXException eDoc ) {
 				eDoc.printStackTrace();
 			}
@@ -745,8 +861,10 @@ public class ListGuiController
 		}
 	}
 
-	/* TODO Erledigt-Marker: Wenn Aenderungen an txtOriginalSourceLicense gemacht wird, wird es
-	 * ausgeloest */
+	/*
+	 * TODO Erledigt-Marker: Wenn Aenderungen an txtOriginalSourceLicense
+	 * gemacht wird, wird es ausgeloest
+	 */
 	@FXML
 	void txtOriginalSourceLicense( ActionEvent event )
 	{
@@ -759,16 +877,18 @@ public class ListGuiController
 
 		// Set title & header text
 		dialog.setTitle( "KOST-List - OriginalSourceLicense" );
-		String headerDeFrEn = "Geben sie ggf. die Änderung ein:";
+		String headerDeFrEn = "Geben sie ggf. die ï¿½nderung ein:";
 		dialog.setHeaderText( headerDeFrEn );
 		dialog.setContentText( "" );
 
 		// Show the dialog and capture the result.
 		Optional<String> result = dialog.showAndWait();
 
-		// If the "Okay" button was clicked, the result will contain our String in the get() method
-		File outputFileTodo = new File( fileTodo.getParentFile().getAbsolutePath() + File.separator
-				+ "_" + fileTodo.getName() + "_.xml" );
+		// If the "Okay" button was clicked, the result will contain our String
+		// in the get() method
+		File outputFileTodo = new File(
+				fileTodo.getParentFile().getAbsolutePath() + File.separator
+						+ "_" + fileTodo.getName() + "_.xml" );
 		String stringNew = "";
 		String stringXml = "";
 
@@ -787,7 +907,8 @@ public class ListGuiController
 				stringNew = result.get();
 				stringButton = stringNew;
 				buttonOriginalSourceLicense.setText( stringButton );
-				String xmlNew = "<OriginalSourceLicense>" + stringNew + "</OriginalSourceLicense>";
+				String xmlNew = "<OriginalSourceLicense>" + stringNew
+						+ "</OriginalSourceLicense>";
 				Util.oldnewstring( stringXml, xmlNew, outputFileTodo );
 			} catch ( IOException eInt ) {
 				String message = eInt.getMessage();
@@ -798,7 +919,10 @@ public class ListGuiController
 		}
 	}
 
-	/* TODO Erledigt-Marker: Wenn Aenderungen an txtDescription gemacht wird, wird es ausgeloest */
+	/*
+	 * TODO Erledigt-Marker: Wenn Aenderungen an txtDescription gemacht wird,
+	 * wird es ausgeloest
+	 */
 	@FXML
 	void txtDescription( ActionEvent event )
 	{
@@ -811,16 +935,18 @@ public class ListGuiController
 
 		// Set title & header text
 		dialog.setTitle( "KOST-List - Description" );
-		String headerDeFrEn = "Geben sie ggf. die Änderung ein:";
+		String headerDeFrEn = "Geben sie ggf. die ï¿½nderung ein:";
 		dialog.setHeaderText( headerDeFrEn );
 		dialog.setContentText( "" );
 
 		// Show the dialog and capture the result.
 		Optional<String> result = dialog.showAndWait();
 
-		// If the "Okay" button was clicked, the result will contain our String in the get() method
-		File outputFileTodo = new File( fileTodo.getParentFile().getAbsolutePath() + File.separator
-				+ "_" + fileTodo.getName() + "_.xml" );
+		// If the "Okay" button was clicked, the result will contain our String
+		// in the get() method
+		File outputFileTodo = new File(
+				fileTodo.getParentFile().getAbsolutePath() + File.separator
+						+ "_" + fileTodo.getName() + "_.xml" );
 		String stringNew = "";
 		String stringXml = "";
 
@@ -850,8 +976,10 @@ public class ListGuiController
 		}
 	}
 
-	/* TODO Erledigt-Marker: Wenn Aenderungen an txtModificationdescription gemacht wird, wird es
-	 * ausgeloest */
+	/*
+	 * TODO Erledigt-Marker: Wenn Aenderungen an txtModificationdescription
+	 * gemacht wird, wird es ausgeloest
+	 */
 	@FXML
 	void txtModificationdescription( ActionEvent event )
 	{
@@ -864,16 +992,18 @@ public class ListGuiController
 
 		// Set title & header text
 		dialog.setTitle( "KOST-List - Modificationdescription" );
-		String headerDeFrEn = "Geben sie ggf. die Änderung ein:";
+		String headerDeFrEn = "Geben sie ggf. die ï¿½nderung ein:";
 		dialog.setHeaderText( headerDeFrEn );
 		dialog.setContentText( "" );
 
 		// Show the dialog and capture the result.
 		Optional<String> result = dialog.showAndWait();
 
-		// If the "Okay" button was clicked, the result will contain our String in the get() method
-		File outputFileTodo = new File( fileTodo.getParentFile().getAbsolutePath() + File.separator
-				+ "_" + fileTodo.getName() + "_.xml" );
+		// If the "Okay" button was clicked, the result will contain our String
+		// in the get() method
+		File outputFileTodo = new File(
+				fileTodo.getParentFile().getAbsolutePath() + File.separator
+						+ "_" + fileTodo.getName() + "_.xml" );
 		String stringNew = "";
 		String stringXml = "";
 
@@ -892,7 +1022,8 @@ public class ListGuiController
 				stringNew = result.get();
 				stringButton = stringNew;
 				buttonModificationdescription.setText( stringButton );
-				String xmlNew = "<Modificationdescription>" + stringNew + "</Modificationdescription>";
+				String xmlNew = "<Modificationdescription>" + stringNew
+						+ "</Modificationdescription>";
 				Util.oldnewstring( stringXml, xmlNew, outputFileTodo );
 			} catch ( IOException eInt ) {
 				String message = eInt.getMessage();
@@ -903,19 +1034,25 @@ public class ListGuiController
 		}
 	}
 
-	/* TODO Erledigt-Marker: Wenn doNext betaetigt wird, kann ein Ordner ausgewaehlt werden */
+	/*
+	 * TODO Erledigt-Marker: Wenn doNext betaetigt wird, kann ein Ordner
+	 * ausgewaehlt werden
+	 */
 	@FXML
 	void doNext( ActionEvent e )
 	{
 		chooseFileTodo( testfilesFolder );
 	}
 
-	/* TODO Erledigt-Marker: Wenn doSkrip betaetigt wird, kann ein Ordner ausgewaehlt werden */
+	/*
+	 * TODO Erledigt-Marker: Wenn doSkrip betaetigt wird, kann ein Ordner
+	 * ausgewaehlt werden
+	 */
 	@FXML
 	void doSkrip( ActionEvent e )
 	{
-		File fileTodoTmp = new File( fileTodo.getParentFile().getAbsolutePath() + File.separator + "_"
-				+ fileTodo.getName() + "_.tmp" );
+		File fileTodoTmp = new File( fileTodo.getParentFile().getAbsolutePath()
+				+ File.separator + "_" + fileTodo.getName() + "_.tmp" );
 		if ( !fileTodoTmp.exists() ) {
 			try {
 				fileTodoTmp.createNewFile();
@@ -927,17 +1064,21 @@ public class ListGuiController
 		chooseFileTodo( testfilesFolder );
 	}
 
-	/* TODO Erledigt-Marker: Wenn doDel betaetigt wird, kann ein Ordner ausgewaehlt werden */
+	/*
+	 * TODO Erledigt-Marker: Wenn doDel betaetigt wird, kann ein Ordner
+	 * ausgewaehlt werden
+	 */
 	@FXML
 	void doDel( ActionEvent e )
 	{
-		File fileTodoTmp = new File( fileTodo.getParentFile().getAbsolutePath() + File.separator + "_"
-				+ fileTodo.getName() + "_.tmp" );
+		File fileTodoTmp = new File( fileTodo.getParentFile().getAbsolutePath()
+				+ File.separator + "_" + fileTodo.getName() + "_.tmp" );
 		if ( fileTodoTmp.exists() ) {
 			Util.deleteFile( fileTodoTmp );
 		}
-		File outputFileTodo = new File( fileTodo.getParentFile().getAbsolutePath() + File.separator
-				+ "_" + fileTodo.getName() + "_.xml" );
+		File outputFileTodo = new File(
+				fileTodo.getParentFile().getAbsolutePath() + File.separator
+						+ "_" + fileTodo.getName() + "_.xml" );
 		if ( outputFileTodo.exists() ) {
 			Util.deleteFile( outputFileTodo );
 		}
@@ -947,12 +1088,18 @@ public class ListGuiController
 		chooseFileTodo( testfilesFolder );
 	}
 
-	/* TODO Erledigt-Marker: Wenn choseFile betaetigt wird, kann eine Datei ausgewaehlt werden */
+	/*
+	 * TODO Erledigt-Marker: Wenn choseFile betaetigt wird, kann eine Datei
+	 * ausgewaehlt werden
+	 */
 	@FXML
 	void chooseFile( ActionEvent e )
 	{
 		console.setText( " \n" );
-		/* if ( tempFile.exists() ) { Util.deleteDir( tempFile ); tempFile.mkdirs(); } */
+		/*
+		 * if ( tempFile.exists() ) { Util.deleteDir( tempFile );
+		 * tempFile.mkdirs(); }
+		 */
 		// bestehende Datei auswaehlen
 		FileChooser fileChooser = new FileChooser();
 		if ( !labelChoiceFileFolder.getText().isEmpty() ) {
@@ -970,20 +1117,29 @@ public class ListGuiController
 		}
 		labelChoiceFileFolder.setText( "" );
 		// Set extension filter
-		/* FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(
-		 * "SIARD files (*.siard)", "*.siard" ); fileChooser.getExtensionFilters().add( extFilter ); */
+		/*
+		 * FileChooser.ExtensionFilter extFilter = new
+		 * FileChooser.ExtensionFilter( "SIARD files (*.siard)", "*.siard" );
+		 * fileChooser.getExtensionFilters().add( extFilter );
+		 */
 		// Set title
-		fileChooser.setTitle( "Wählen Sie die Datei" );
+		fileChooser.setTitle( "Wï¿½hlen Sie die Datei" );
 		fileFolderTodo = fileChooser.showOpenDialog( new Stage() );
 		labelChoiceFileFolder.setText( fileFolderTodo.getAbsolutePath() );
 	}
 
-	/* TODO Erledigt-Marker: Wenn choseFolder betaetigt wird, kann ein Ordner ausgewaehlt werden */
+	/*
+	 * TODO Erledigt-Marker: Wenn choseFolder betaetigt wird, kann ein Ordner
+	 * ausgewaehlt werden
+	 */
 	@FXML
 	void chooseFolder( ActionEvent e )
 	{
 		console.setText( " \n" );
-		/* if ( tempFile.exists() ) { Util.deleteDir( tempFile ); tempFile.mkdirs(); } */
+		/*
+		 * if ( tempFile.exists() ) { Util.deleteDir( tempFile );
+		 * tempFile.mkdirs(); }
+		 */
 		// bestehender Ordner auswaehlen
 		DirectoryChooser folderChooser = new DirectoryChooser();
 		if ( !labelChoiceFileFolder.getText().isEmpty() ) {
@@ -1001,10 +1157,13 @@ public class ListGuiController
 		}
 		labelChoiceFileFolder.setText( "" );
 		// Set extension filter
-		/* FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(
-		 * "SIARD files (*.siard)", "*.siard" ); fileChooser.getExtensionFilters().add( extFilter ); */
+		/*
+		 * FileChooser.ExtensionFilter extFilter = new
+		 * FileChooser.ExtensionFilter( "SIARD files (*.siard)", "*.siard" );
+		 * fileChooser.getExtensionFilters().add( extFilter );
+		 */
 		// Set title
-		folderChooser.setTitle( "Wählen Sie den Ordner" );
+		folderChooser.setTitle( "Wï¿½hlen Sie den Ordner" );
 		fileFolderTodo = folderChooser.showDialog( new Stage() );
 		labelChoiceFileFolder.setText( fileFolderTodo.getAbsolutePath() );
 	}
@@ -1012,24 +1171,33 @@ public class ListGuiController
 	/* TODO --> ChoiceBox ================= */
 
 	// Mit changeLang wird die Sprache umgestellt
-	/* @FXML void changeLang( ActionEvent event ) { console.setText( " \n" ); String selLang =
-	 * lang.getValue(); if ( selLang.equals( "Français" ) ) { locale = new Locale( "fr" );
-	 * lang.setValue( "Français" ); labelSiard.setText( "Fichier SIARD" ); labelTable.setText(
-	 * "Tableau principale" ); labelList.setText( "Données de configuration" ); buttonSiard.setText(
-	 * "sélectionnez" ); buttonTable.setText( "sélectionnez" ); buttonList.setText( "sélectionnez" );
-	 * buttonHelp.setText( "Aide ?" ); buttonLicence.setText( "Informations sur la licence" );
-	 * buttonSave.setText( "sauvegarder" ); buttonPrint.setText( "imprimer" ); buttonFinish.setText(
-	 * "Effectuer l'échantillonnage" ); } else if ( selLang.equals( "English" ) ) { locale = new
-	 * Locale( "en" ); lang.setValue( "English" ); labelSiard.setText( "SIARD file" );
-	 * labelTable.setText( "Main table" ); labelList.setText( "Configuration data" );
-	 * buttonSiard.setText( "Select" ); buttonTable.setText( "select" ); buttonList.setText( "select"
-	 * ); buttonHelp.setText( "Help ?" ); buttonLicence.setText( "License information" );
-	 * buttonSave.setText( "save" ); buttonPrint.setText( "print" ); buttonFinish.setText(
-	 * "Perform sampling" ); } else { locale = new Locale( "de" ); lang.setValue( "Deutsch" );
-	 * labelSiard.setText( "SIARD-Datei" ); labelTable.setText( "Haupttabelle" ); labelList.setText(
-	 * "Konfigurationsdaten" ); buttonSiard.setText( "Auswählen" ); buttonTable.setText( "Auswählen"
-	 * ); buttonList.setText( "Auswählen" ); buttonHelp.setText( "Hilfe ?" ); buttonLicence.setText(
-	 * "Lizenz-Informationen" ); buttonSave.setText( "speichern" ); buttonPrint.setText( "drucken" );
-	 * buttonFinish.setText( "Sampling durchführen" ); } } */
+	/*
+	 * @FXML void changeLang( ActionEvent event ) { console.setText( " \n" );
+	 * String selLang = lang.getValue(); if ( selLang.equals( "Franï¿½ais" ) ) {
+	 * locale = new Locale( "fr" ); lang.setValue( "Franï¿½ais" );
+	 * labelSiard.setText( "Fichier SIARD" ); labelTable.setText(
+	 * "Tableau principale" ); labelList.setText( "Donnï¿½es de configuration" );
+	 * buttonSiard.setText( "sï¿½lectionnez" ); buttonTable.setText(
+	 * "sï¿½lectionnez" ); buttonList.setText( "sï¿½lectionnez" );
+	 * buttonHelp.setText( "Aide ?" ); buttonLicence.setText(
+	 * "Informations sur la licence" ); buttonSave.setText( "sauvegarder" );
+	 * buttonPrint.setText( "imprimer" ); buttonFinish.setText(
+	 * "Effectuer l'ï¿½chantillonnage" ); } else if ( selLang.equals( "English" )
+	 * ) { locale = new Locale( "en" ); lang.setValue( "English" );
+	 * labelSiard.setText( "SIARD file" ); labelTable.setText( "Main table" );
+	 * labelList.setText( "Configuration data" ); buttonSiard.setText( "Select"
+	 * ); buttonTable.setText( "select" ); buttonList.setText( "select" );
+	 * buttonHelp.setText( "Help ?" ); buttonLicence.setText(
+	 * "License information" ); buttonSave.setText( "save" );
+	 * buttonPrint.setText( "print" ); buttonFinish.setText( "Perform sampling"
+	 * ); } else { locale = new Locale( "de" ); lang.setValue( "Deutsch" );
+	 * labelSiard.setText( "SIARD-Datei" ); labelTable.setText( "Haupttabelle"
+	 * ); labelList.setText( "Konfigurationsdaten" ); buttonSiard.setText(
+	 * "Auswï¿½hlen" ); buttonTable.setText( "Auswï¿½hlen" ); buttonList.setText(
+	 * "Auswï¿½hlen" ); buttonHelp.setText( "Hilfe ?" ); buttonLicence.setText(
+	 * "Lizenz-Informationen" ); buttonSave.setText( "speichern" );
+	 * buttonPrint.setText( "drucken" ); buttonFinish.setText(
+	 * "Sampling durchfï¿½hren" ); } }
+	 */
 
 }

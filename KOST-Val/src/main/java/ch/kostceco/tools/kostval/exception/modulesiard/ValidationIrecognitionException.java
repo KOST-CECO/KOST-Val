@@ -25,7 +25,7 @@ public class ValidationIrecognitionException extends KOSTValException
 {
 
 	/** @author Rc Claire Roethlisberger, KOST-CECO */
-	private static final long	serialVersionUID	= 5060094531057249403L;
+	private static final long serialVersionUID = 5060094531057249403L;
 
 	public ValidationIrecognitionException()
 	{

@@ -18,10 +18,12 @@ package ch.kostceco.tools.siardexcerpt.service;
 import java.util.Locale;
 import java.util.Map;
 
-/** Service Interface für die Konfigurationsdatei.
+/**
+ * Service Interface für die Konfigurationsdatei.
  * 
- * @author Rc Claire Roethlisberger, KOST-CECO */
+ * @author Rc Claire Roethlisberger, KOST-CECO
+ */
 public interface ConfigurationServiceExc extends ServiceExc
 {
-	Map<String, String> configMap(Locale locale);
+	Map<String, String> configMap( Locale locale );
 }

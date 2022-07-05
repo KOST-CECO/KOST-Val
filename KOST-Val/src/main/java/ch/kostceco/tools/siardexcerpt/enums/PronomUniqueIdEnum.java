@@ -19,7 +19,7 @@ public enum PronomUniqueIdEnum implements BaseEnumItemEnum {
 
 	JHOVE(101), KOSTVAL(102);
 
-	private final long	id;
+	private final long id;
 
 	PronomUniqueIdEnum( long id )
 	{

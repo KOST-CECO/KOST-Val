@@ -25,7 +25,7 @@ public class Validation1eSipTypeException extends KOSTValException
 {
 
 	/** @author razm Daniel Ludin, Bedag AG @version 0.2.0 */
-	private static final long	serialVersionUID	= -6681985618731840810L;
+	private static final long serialVersionUID = -6681985618731840810L;
 
 	public Validation1eSipTypeException()
 	{

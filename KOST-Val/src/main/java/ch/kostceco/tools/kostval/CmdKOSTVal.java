@@ -31,10 +31,12 @@ import ch.kostceco.tools.kostval.controller.ControllerInit;
 import ch.kostceco.tools.kostval.logging.MessageConstants;
 import ch.kostceco.tools.kostval.service.TextResourceService;
 
-/** Dies ist die Starter-Klasse, verantwortlich für das Initialisieren des Controllers, des Loggings
- * und das Parsen der Start-Parameter.
+/**
+ * Dies ist die Starter-Klasse, verantwortlich fï¿½r das Initialisieren des
+ * Controllers, des Loggings und das Parsen der Start-Parameter.
  * 
- * @author Rc Claire Roethlisberger, KOST-CECO */
+ * @author Rc Claire Roethlisberger, KOST-CECO
+ */
 
 public class CmdKOSTVal implements MessageConstants
 {
@@ -46,20 +48,24 @@ public class CmdKOSTVal implements MessageConstants
 		return textResourceService;
 	}
 
-	public void setTextResourceService( TextResourceService textResourceService )
+	public void setTextResourceService(
+			TextResourceService textResourceService )
 	{
 		this.textResourceService = textResourceService;
 	}
 
-	/** Die Eingabe besteht aus 2 bis 4 Parameter:
+	/**
+	 * Die Eingabe besteht aus 2 bis 4 Parameter:
 	 * 
-	 * args[0] Validierungstyp "--sip" / "--format" / "--onlysip" (TODO "--hotfolder")
+	 * args[0] Validierungstyp "--sip" / "--format" / "--onlysip" (TODO
+	 * "--hotfolder")
 	 * 
 	 * args[1] Pfad zur Val-File
 	 * 
 	 * args[2] Sprache "--de" / "--fr" / "--en"
 	 * 
-	 * args[3] Logtyp "--xml" / "--min" (TODO nur valid oder invalid) / "--max" (= xml+verbose)
+	 * args[3] Logtyp "--xml" / "--min" (TODO nur valid oder invalid) / "--max"
+	 * (= xml+verbose)
 	 * 
 	 * 2 (--de) und 3 (--xml) sind beide optional (Standardwert)
 	 * 
@@ -79,7 +85,8 @@ public class CmdKOSTVal implements MessageConstants
 
 		// Ist die Anzahl Parameter (mind 2) korrekt?
 		if ( args.length < 2 ) {
-			System.out.println( cmdkostval.getTextResourceService().getText( ERROR_PARAMETER_USAGE ) );
+			System.out.println( cmdkostval.getTextResourceService()
+					.getText( ERROR_PARAMETER_USAGE ) );
 			context.close();
 			System.exit( 1 );
 		}
@@ -126,13 +133,15 @@ public class CmdKOSTVal implements MessageConstants
 				arg2 = "--" + localeSt;
 				arg3 = "--max";
 			} else {
-				System.out.println( cmdkostval.getTextResourceService().getText( ERROR_PARAMETER_USAGE ) );
+				System.out.println( cmdkostval.getTextResourceService()
+						.getText( ERROR_PARAMETER_USAGE ) );
 				context.close();
 				System.exit( 1 );
 			}
 			args = new String[] { arg0, arg1, arg2, arg3 };
 		} else if ( args.length == 4 ) {
-			if ( args[2].equalsIgnoreCase( "--xml" ) || args[2].equalsIgnoreCase( "--min" )
+			if ( args[2].equalsIgnoreCase( "--xml" )
+					|| args[2].equalsIgnoreCase( "--min" )
 					|| args[2].equalsIgnoreCase( "--max" ) ) {
 				// arg 2 und 3 vertauscht
 				arg2 = args[3];
@@ -144,17 +153,22 @@ public class CmdKOSTVal implements MessageConstants
 			args = new String[] { arg0, arg1, arg2, arg3 };
 		}
 
-		/* Kontrolle der wichtigsten Eigenschaften: Log-Verzeichnis, Arbeitsverzeichnis, Java, jhove
-		 * Configuration, Konfigurationsverzeichnis, path.tmp */
-		ControllerInit controllerInit = (ControllerInit) context.getBean( "controllerInit" );
+		/*
+		 * Kontrolle der wichtigsten Eigenschaften: Log-Verzeichnis,
+		 * Arbeitsverzeichnis, Java, jhove Configuration,
+		 * Konfigurationsverzeichnis, path.tmp
+		 */
+		ControllerInit controllerInit = (ControllerInit) context
+				.getBean( "controllerInit" );
 		boolean init;
 		try {
-			String path = new java.io.File(
-					KOSTVal.class.getProtectionDomain().getCodeSource().getLocation().getPath() )
+			String path = new java.io.File( KOSTVal.class.getProtectionDomain()
+					.getCodeSource().getLocation().getPath() )
 							.getAbsolutePath();
 			String locationOfJarPath = path;
 			String dirOfJarPath = locationOfJarPath;
-			if ( locationOfJarPath.endsWith( ".jar" ) || locationOfJarPath.endsWith( ".exe" )
+			if ( locationOfJarPath.endsWith( ".jar" )
+					|| locationOfJarPath.endsWith( ".exe" )
 					|| locationOfJarPath.endsWith( "." ) ) {
 				File file = new File( locationOfJarPath );
 				dirOfJarPath = file.getParent();
@@ -176,7 +190,8 @@ public class CmdKOSTVal implements MessageConstants
 			e.printStackTrace();
 		}
 
-		// System.out.println( "args: " + args[0] + " " + args[1] + " " + args[2] + " " + args[3] );
+		// System.out.println( "args: " + args[0] + " " + args[1] + " " +
+		// args[2] + " " + args[3] );
 		if ( KOSTVal.main( args, versionKostVal ) ) {
 			// Valid
 			// alle Validierten Dateien valide

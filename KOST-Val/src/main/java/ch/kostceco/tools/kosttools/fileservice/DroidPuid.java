@@ -31,9 +31,11 @@ public class DroidPuid
 
 	public static String getPuid( File file, String nameOfSignature )
 	{
-		/* kleiner Hack, weil die Droid libraries irgendwo ein System.out drin haben, welche den Output
-		 * stoeren Util.switchOffConsole() als Kommentar markieren wenn man die Fehlermeldung erhalten
-		 * moechte */
+		/*
+		 * kleiner Hack, weil die Droid libraries irgendwo ein System.out drin
+		 * haben, welche den Output stoeren Util.switchOffConsole() als
+		 * Kommentar markieren wenn man die Fehlermeldung erhalten moechte
+		 */
 		Util.switchOffConsole();
 		String puid = " ??? ";
 		try {
@@ -50,7 +52,8 @@ public class DroidPuid
 			}
 		} catch ( Exception e ) {
 			Util.switchOnConsole();
-			System.out.println( "Exception fileservice getPuid: " + e.getMessage() );
+			System.out.println(
+					"Exception fileservice getPuid: " + e.getMessage() );
 			return " ERROR ";
 		} finally {
 			Util.switchOnConsole();

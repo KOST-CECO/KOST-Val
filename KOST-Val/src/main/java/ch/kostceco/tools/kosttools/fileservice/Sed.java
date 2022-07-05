@@ -24,40 +24,50 @@ import ch.kostceco.tools.kosttools.runtime.Cmd;
 
 public class Sed
 {
-	private static String	exeDir				= "resources" + File.separator + "sed";
-	private static String	sedExe				= exeDir + File.separator + "sed.exe";
-	private static String	msys20dll			= exeDir + File.separator + "msys-2.0.dll";
-	private static String	msysgccs1dll	= exeDir + File.separator + "msys-gcc_s-1.dll";
-	private static String	msysiconv2dll	= exeDir + File.separator + "msys-iconv-2.dll";
-	private static String	msysintl8dll	= exeDir + File.separator + "msys-intl-8.dll";
+	private static String	exeDir			= "resources" + File.separator
+			+ "sed";
+	private static String	sedExe			= exeDir + File.separator
+			+ "sed.exe";
+	private static String	msys20dll		= exeDir + File.separator
+			+ "msys-2.0.dll";
+	private static String	msysgccs1dll	= exeDir + File.separator
+			+ "msys-gcc_s-1.dll";
+	private static String	msysiconv2dll	= exeDir + File.separator
+			+ "msys-iconv-2.dll";
+	private static String	msysintl8dll	= exeDir + File.separator
+			+ "msys-intl-8.dll";
 
-	/** fuehrt eine Veraenderung mit sed via cmd durch und speichert das Ergebnis in ein File
-	 * (output). Gibt zurueck ob Outpur existiert oder nicht
+	/**
+	 * fuehrt eine Veraenderung mit sed via cmd durch und speichert das Ergebnis
+	 * in ein File (output). Gibt zurueck ob Outpur existiert oder nicht
 	 * 
 	 * @param options
-	 *          Option wie sed angesprochen werden soll
+	 *            Option wie sed angesprochen werden soll
 	 * @param fileToSed
-	 *          Datei, welche veraendert werden soll
+	 *            Datei, welche veraendert werden soll
 	 * @param output
-	 *          Datei fuer den output
+	 *            Datei fuer den output
 	 * @param workDir
-	 *          Temporaeres Verzeichnis
+	 *            Temporaeres Verzeichnis
 	 * @param dirOfJarPath
-	 *          String mit dem Pfad von wo das Programm gestartet wurde
-	 * @return String ob Report existiert oder nicht ggf Exception */
-	public static String execSed( String options, File fileToSed, File output, File workDir,
-			String dirOfJarPath ) throws InterruptedException
+	 *            String mit dem Pfad von wo das Programm gestartet wurde
+	 * @return String ob Report existiert oder nicht ggf Exception
+	 */
+	public static String execSed( String options, File fileToSed, File output,
+			File workDir, String dirOfJarPath ) throws InterruptedException
 	{
 		boolean out = true;
 		File fsedExe = new File( dirOfJarPath + File.separator + sedExe );
-		// falls das File von einem vorhergehenden Durchlauf bereits existiert, loeschen wir es
+		// falls das File von einem vorhergehenden Durchlauf bereits existiert,
+		// loeschen wir es
 		if ( output.exists() ) {
 			output.delete();
 		}
 
 		// Sed-Befehl: pathToSedExe options fileToSed > output
-		String command = "\"\"" + fsedExe.getAbsolutePath() + "\" " + options + " \""
-				+ fileToSed.getAbsolutePath() + "\" > \"" + output.getAbsolutePath() + "\"\"";
+		String command = "\"\"" + fsedExe.getAbsolutePath() + "\" " + options
+				+ " \"" + fileToSed.getAbsolutePath() + "\" > \""
+				+ output.getAbsolutePath() + "\"\"";
 
 		// System.out.println( "command: " + command );
 
@@ -76,12 +86,14 @@ public class Sed
 		return resultExec;
 	}
 
-	/** fuehrt eine Kontrolle aller benoetigten Dateien von Exiftool durch und gibt das Ergebnis als
-	 * String zurueck
+	/**
+	 * fuehrt eine Kontrolle aller benoetigten Dateien von Exiftool durch und
+	 * gibt das Ergebnis als String zurueck
 	 * 
 	 * @param dirOfJarPath
-	 *          String mit dem Pfad von wo das Programm gestartet wurde
-	 * @return String mit Kontrollergebnis */
+	 *            String mit dem Pfad von wo das Programm gestartet wurde
+	 * @return String mit Kontrollergebnis
+	 */
 	public static String checkSed( String dirOfJarPath )
 	{
 		String result = "";
@@ -90,9 +102,12 @@ public class Sed
 
 		File fsedExe = new File( dirOfJarPath + File.separator + sedExe );
 		File fmsys20dll = new File( dirOfJarPath + File.separator + msys20dll );
-		File fmsysgccs1dll = new File( dirOfJarPath + File.separator + msysgccs1dll );
-		File fmsysiconv2dll = new File( dirOfJarPath + File.separator + msysiconv2dll );
-		File fmsysintl8dll = new File( dirOfJarPath + File.separator + msysintl8dll );
+		File fmsysgccs1dll = new File(
+				dirOfJarPath + File.separator + msysgccs1dll );
+		File fmsysiconv2dll = new File(
+				dirOfJarPath + File.separator + msysiconv2dll );
+		File fmsysintl8dll = new File(
+				dirOfJarPath + File.separator + msysintl8dll );
 
 		if ( !fsedExe.exists() ) {
 			if ( checkFiles ) {

@@ -27,16 +27,19 @@ import java.util.Map;
 import ch.kostceco.tools.kostval.logging.MessageConstants;
 import ch.kostceco.tools.kostval.service.TextResourceService;
 
-/** kostval --> Controllervalinit
+/**
+ * kostval --> Controllervalinit
  * 
  * Der Controller ruft die benoetigten Module zur Validierung auf.
  * 
- * Die Validierungs-Module werden mittels Spring-Dependency-Injection eingebunden. */
+ * Die Validierungs-Module werden mittels Spring-Dependency-Injection
+ * eingebunden.
+ */
 
 public class Controllervalinit implements MessageConstants
 {
 
-	private static TextResourceService	textResourceService;
+	private static TextResourceService textResourceService;
 
 	public static TextResourceService getTextResourceService()
 	{
@@ -44,20 +47,23 @@ public class Controllervalinit implements MessageConstants
 	}
 
 	@SuppressWarnings("static-access")
-	public void setTextResourceService( TextResourceService textResourceService )
+	public void setTextResourceService(
+			TextResourceService textResourceService )
 	{
 		this.textResourceService = textResourceService;
 	}
 
 	// TODO
-	public boolean valInit( String[] args, Map<String, String> configMap ) throws IOException
+	public boolean valInit( String[] args, Map<String, String> configMap )
+			throws IOException
 	{
 		boolean valInit = true;
 		Locale locale = Locale.getDefault();
 
 		// Ist die Anzahl Parameter (4) korrekt?
 		if ( args.length != 4 ) {
-			System.out.println( getTextResourceService().getText( locale, ERROR_PARAMETER_USAGE ) );
+			System.out.println( getTextResourceService().getText( locale,
+					ERROR_PARAMETER_USAGE ) );
 			valInit = false;
 			return valInit;
 		}
@@ -68,30 +74,39 @@ public class Controllervalinit implements MessageConstants
 		} else if ( args[2].equalsIgnoreCase( "--en" ) ) {
 			locale = new Locale( "en" );
 		} else {
-			System.out.println( getTextResourceService().getText( locale, ERROR_PARAMETER_USAGE ) );
+			System.out.println( getTextResourceService().getText( locale,
+					ERROR_PARAMETER_USAGE ) );
 			valInit = false;
 			return valInit;
 		}
-		if ( !args[0].equalsIgnoreCase( "--format" ) && !args[0].equalsIgnoreCase( "--sip" )&& !args[0].equalsIgnoreCase( "--onlysip" ) ) {
-			System.out.println( getTextResourceService().getText( locale, ERROR_PARAMETER_USAGE ) );
+		if ( !args[0].equalsIgnoreCase( "--format" )
+				&& !args[0].equalsIgnoreCase( "--sip" )
+				&& !args[0].equalsIgnoreCase( "--onlysip" ) ) {
+			System.out.println( getTextResourceService().getText( locale,
+					ERROR_PARAMETER_USAGE ) );
 			valInit = false;
 			return valInit;
 		}
 		File init0File = new File( args[1] );
 		if ( !init0File.exists() ) {
-			System.out
-					.println( getTextResourceService().getText( locale, ERROR_VALFILE_FILENOTEXISTING ) );
+			System.out.println( getTextResourceService().getText( locale,
+					ERROR_VALFILE_FILENOTEXISTING ) );
 			valInit = false;
 			return valInit;
 		}
-		if ( !args[3].equalsIgnoreCase( "--xml" ) && !args[3].equalsIgnoreCase( "--min" )
+		if ( !args[3].equalsIgnoreCase( "--xml" )
+				&& !args[3].equalsIgnoreCase( "--min" )
 				&& !args[3].equalsIgnoreCase( "--max" ) ) {
-			System.out.println( getTextResourceService().getText( locale, ERROR_PARAMETER_USAGE ) );
+			System.out.println( getTextResourceService().getText( locale,
+					ERROR_PARAMETER_USAGE ) );
 			valInit = false;
 			return valInit;
 		} else {
-			/* Angabe ob dargestellt werden soll, dass KOST-Val noch laeuft --xml (=no) zaehler
-			 * anzeigen --max (=yes) auch "Windrad" --min (=nomin) zaehler anzeigen */
+			/*
+			 * Angabe ob dargestellt werden soll, dass KOST-Val noch laeuft
+			 * --xml (=no) zaehler anzeigen --max (=yes) auch "Windrad" --min
+			 * (=nomin) zaehler anzeigen
+			 */
 			String showprogressonwork = "no";
 			if ( args[3].equalsIgnoreCase( "--max" ) ) {
 				showprogressonwork = "yes";

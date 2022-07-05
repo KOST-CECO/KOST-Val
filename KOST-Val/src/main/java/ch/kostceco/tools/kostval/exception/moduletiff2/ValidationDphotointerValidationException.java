@@ -25,7 +25,7 @@ public class ValidationDphotointerValidationException extends KOSTValException
 {
 
 	/** @author Rc Claire Roethlisberger, KOST-CECO */
-	private static final long	serialVersionUID	= -2554852466330221247L;
+	private static final long serialVersionUID = -2554852466330221247L;
 
 	public ValidationDphotointerValidationException()
 	{

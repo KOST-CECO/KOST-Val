@@ -26,7 +26,7 @@ public class ValidationApngvalidationException extends KOSTValException
 
 	/** @author Rc Claire Roethlisberger, KOST-CECO */
 
-	private static final long	serialVersionUID	= -8816841335398903517L;
+	private static final long serialVersionUID = -8816841335398903517L;
 
 	public ValidationApngvalidationException( String message )
 	{
