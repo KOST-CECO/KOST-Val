@@ -20,7 +20,6 @@ import java.io.File;
 import java.util.ArrayList;
 
 import ch.kostceco.tools.kosttools.util.Util;
-import ch.kostceco.tools.kostval.KOSTVal;
 import edu.harvard.hul.ois.jhove.App;
 import edu.harvard.hul.ois.jhove.JhoveBase;
 import edu.harvard.hul.ois.jhove.Module;
@@ -41,7 +40,7 @@ public class Jhove
 			int lastDotIdx = toplevelDir.lastIndexOf( "." );
 			toplevelDir = toplevelDir.substring( 0, lastDotIdx );
 
-			// Vorbereitungen: tiffFile an die JHove Applikation �bergeben
+			// Vorbereitungen: tiffFile an die JHove Applikation uebergeben
 
 			/*
 			 * dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist
@@ -52,10 +51,8 @@ public class Jhove
 			 * 
 			 * erweitern.
 			 */
-			String path = new java.io.File( KOSTVal.class.getProtectionDomain()
-					.getCodeSource().getLocation().getPath() )
-							.getAbsolutePath();
-			String locationOfJarPath = path;
+			File	pathFile = new File(ClassLoader.getSystemClassLoader().getResource(".").getPath());
+			String locationOfJarPath = pathFile.getAbsolutePath();
 			String dirOfJarPath = locationOfJarPath;
 			if ( locationOfJarPath.endsWith( ".jar" )
 					|| locationOfJarPath.endsWith( ".exe" )

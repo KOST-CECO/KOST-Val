@@ -62,22 +62,17 @@ public class Magic
 			char[] charArray2 = new char[] { 'P', 'K', c3, c4 };
 
 			if ( Arrays.equals( charArray1, charArray2 ) ) {
-				// hoechstwahrscheinlich ein ZIP da es mit 504B0304 respektive
-				// PK.. beginnt
-				// System.out.println("wahrscheinlich ein ZIP da es mit 504B0304
-				// respektive PK.. beginnt");
+				// hoechstwahrscheinlich ein ZIP
 				mnZip = true;
 			}
 			read.close();
 			fr.close();
-			// set to null
 			read = null;
 			fr = null;
 		} catch ( Exception e ) {
 			System.out.println( "Exception magic file zip: " + e.getMessage() );
 			read.close();
 			fr.close();
-			// set to null
 			read = null;
 			fr = null;
 		}
@@ -127,22 +122,17 @@ public class Magic
 			char[] charArray2 = new char[] { c1, c2, c3, c4 };
 
 			if ( Arrays.equals( charArray1, charArray2 ) ) {
-				// hoechstwahrscheinlich ein PDF da es mit 25504446 respektive
-				// %PDF beginnt
-				// System.out.println("wahrscheinlich ein PDF da es mit 25504446
-				// respektive %PDF beginnt");
+				// hoechstwahrscheinlich ein PDF
 				mnPdf = true;
 			}
 			read.close();
 			fr.close();
-			// set to null
 			read = null;
 			fr = null;
 		} catch ( Exception e ) {
 			System.out.println( "Exception magic file pdf: " + e.getMessage() );
 			read.close();
 			fr.close();
-			// set to null
 			read = null;
 			fr = null;
 		}
@@ -154,77 +144,70 @@ public class Magic
 
 		FileReader fr = null;
 		BufferedReader read = null;
-		boolean mnTiff = false;
+		boolean mn = false;
 
 		try {
-			/*
-			 * Eine TIFF Datei (.tiff / .tif / .tfx) muss entweder mit II*.
-			 * [49492A00] oder mit MM.* [4D4D002A] beginnen
-			 */
+			// Eine TIFF Datei (.tiff / .tif) muss entweder mit II*.
+			// [49492A00] oder mit MM.* [4D4D002A] beginnen
 			fr = new FileReader( file );
 			read = new BufferedReader( fr );
 
-			// Hex 49 in Char umwandeln
-			String str1 = "49";
-			int i1 = Integer.parseInt( str1, 16 );
-			char c1 = (char) i1;
-			// Hex 4D in Char umwandeln
-			String str2 = "4D";
-			int i2 = Integer.parseInt( str2, 16 );
-			char c2 = (char) i2;
-			// Hex 2A in Char umwandeln
-			String str3 = "2A";
-			int i3 = Integer.parseInt( str3, 16 );
-			char c3 = (char) i3;
-			// Hex 00 in Char umwandeln
-			String str4 = "00";
-			int i4 = Integer.parseInt( str4, 16 );
-			char c4 = (char) i4;
+			Boolean reco = false;
+			try (FileInputStream fis = new FileInputStream( file )) {
+				// i: A variable to hold a single byte of the file data
+				// cnt: A counter to print a new line every 16 bytes read.
+				// Read till the end of the file or break and save the byte in
+				// hexadecimal valueS.
+				int i = 0;
+				int cnt = 0;
+				StringBuilder sb = new StringBuilder();
+				String sb2str1 = "";
+				String sb2str2 = "";
+				String sb2str3 = "";
+				String sb2str4 = "";
+				String sb1234 = "";
+				while ( (i = fis.read()) != -1 ) {
+					// System.out.printf("%02X ", i);
+					sb.append( String.format( "%02X ", i ) );
+					if ( sb2str1 == "" ) {
+						sb2str1 = sb + "";
+					} else if ( sb2str2 == "" ) {
+						sb2str2 = sb + "";
+					} else if ( sb2str3 == "" ) {
+						sb2str3 = sb + "";
+					} else if ( sb2str4 == "" ) {
+						sb2str4 = sb + "";
+						sb1234 = sb + "";
+						break;
+					}
+					cnt++;
+					if ( cnt == 16 ) {
+						cnt = 0;
+					}
+				}
+				if ( sb1234.contains( "49 49 2A 00" )
+						|| sb1234.contains( "4D 4D 00 2A" ) ) {
+					reco = true;
+				}
+			}
 
-			// auslesen der ersten 4 Zeichen der Datei
-			int length;
-			int i;
-			char[] buffer = new char[4];
-			length = read.read( buffer );
-			for ( i = 0; i != length; i++ )
-				;
-
-			/*
-			 * die beiden charArrays (soll und ist) mit einander vergleichen IST
-			 * = c1c1c3c4 /c2c2c4c3
-			 */
-			char[] charArray1 = buffer;
-			char[] charArray2 = new char[] { c1, c1, c3, c4 };
-			char[] charArray3 = new char[] { c2, c2, c4, c3 };
-
-			if ( Arrays.equals( charArray1, charArray2 ) ) {
-				// hoechstwahrscheinlich ein TIFF da es mit 49492A00 respektive
-				// II*. beginnt
-				// System.out.println("wahrscheinlich ein TIFF da es mit
-				// 49492A00 respektive II*. beginnt");
-				mnTiff = true;
-			} else if ( Arrays.equals( charArray1, charArray3 ) ) {
-				// hoechstwahrscheinlich ein TIFF da es mit 4D4D002A respektive
-				// MM.* beginnt
-				// System.out.println("wahrscheinlich ein TIFF da es mit
-				// 4D4D002A respektive MM.* beginnt");
-				mnTiff = true;
+			if ( reco ) {
+				// hoechstwahrscheinlich ein TIFF
+				mn = true;
 			}
 			read.close();
 			fr.close();
-			// set to null
 			read = null;
 			fr = null;
 		} catch ( Exception e ) {
 			System.out
-					.println( "Exception magic file tiff: " + e.getMessage() );
+					.println( "Exception magic file warc: " + e.getMessage() );
 			read.close();
 			fr.close();
-			// set to null
 			read = null;
 			fr = null;
 		}
-		return mnTiff;
+		return mn;
 	}
 
 	public static boolean magicPng( File file ) throws IOException
@@ -235,28 +218,14 @@ public class Magic
 		boolean mnPng = false;
 
 		try {
-			// Eine JPEG Datei (.png) muss mit 89504E47 -> �PNG beginnen
+			// Eine PNG Datei (.png) muss mit 89504E47 -> ‰PNG beginnen
 			fr = new FileReader( file );
 			read = new BufferedReader( fr );
 
-			// die ersten 4 Zeichen einer PNG Datei
-
-			// 1 89
-			// 2 50
-			// 3 4e
-			// 4 47
-
-			// Open the file using FileInputStream
 			Boolean reco = false;
 			try (FileInputStream fis = new FileInputStream( file )) {
-				// A variable to hold a single byte of the file data
 				int i = 0;
-
-				// A counter to print a new line every 16 bytes read.
 				int cnt = 0;
-
-				// Read till the end of the file and print the byte in
-				// hexadecimal valueS.
 				StringBuilder sb = new StringBuilder();
 				String sb2str1 = "";
 				String sb2str2 = "";
@@ -288,26 +257,85 @@ public class Magic
 			}
 
 			if ( reco ) {
-				// hoechstwahrscheinlich ein PNG da es mit 89504E47 respektive
-				// �PNG beginnt
-				// System.out.println( "wahrscheinlich ein PNG da es mit
-				// 89504E47 respektive �PNG beginnt" );
+				// hoechstwahrscheinlich ein PNG
 				mnPng = true;
 			}
 			read.close();
 			fr.close();
-			// set to null
 			read = null;
 			fr = null;
 		} catch ( Exception e ) {
 			System.out.println( "Exception magic file png: " + e.getMessage() );
 			read.close();
 			fr.close();
-			// set to null
 			read = null;
 			fr = null;
 		}
 		return mnPng;
+	}
+
+	public static boolean magicXml( File file ) throws IOException
+	{
+		FileReader fr = null;
+		BufferedReader read = null;
+		boolean mn = false;
+
+		try {
+			// Eine XML Datei (.xml) muss mit 3C3F786D6C -> <?xml beginnen
+			fr = new FileReader( file );
+			read = new BufferedReader( fr );
+
+			Boolean reco = false;
+			try (FileInputStream fis = new FileInputStream( file )) {
+				int i = 0;
+				int cnt = 0;
+				StringBuilder sb = new StringBuilder();
+				String sb2str1 = "";
+				String sb2str2 = "";
+				String sb2str3 = "";
+				String sb2str4 = "";
+				String sb2str5 = "";
+				String sb12345 = "";
+				while ( (i = fis.read()) != -1 ) {
+					sb.append( String.format( "%02X ", i ) );
+					if ( sb2str1 == "" ) {
+						sb2str1 = sb + "";
+					} else if ( sb2str2 == "" ) {
+						sb2str2 = sb + "";
+					} else if ( sb2str3 == "" ) {
+						sb2str3 = sb + "";
+					} else if ( sb2str4 == "" ) {
+						sb2str4 = sb + "";
+					} else if ( sb2str5 == "" ) {
+						sb2str5 = sb + "";
+						sb12345 = sb + "";
+						break;
+					}
+					cnt++;
+					if ( cnt == 16 ) {
+						cnt = 0;
+					}
+				}
+				if ( sb12345.contains( "3C 3F 78 6D 6C" ) ) {
+					reco = true;
+				}
+			}
+			if ( reco ) {
+				// hoechstwahrscheinlich ein XML
+				mn = true;
+			}
+			read.close();
+			fr.close();
+			read = null;
+			fr = null;
+		} catch ( Exception e ) {
+			System.out.println( "Exception magic file xml: " + e.getMessage() );
+			read.close();
+			fr.close();
+			read = null;
+			fr = null;
+		}
+		return mn;
 	}
 
 	public static boolean magicJpeg( File file ) throws IOException
@@ -318,7 +346,7 @@ public class Magic
 		boolean mnJpeg = false;
 
 		try {
-			// Eine JPEG Datei (.jpg / .jpeg) muss mit FFD8FF -> ��� beginnen
+			// Eine JPEG Datei (.jpg / .jpeg) muss mit FFD8FF -> ÿØÿ beginnen
 			fr = new FileReader( file );
 			read = new BufferedReader( fr );
 
@@ -352,15 +380,11 @@ public class Magic
 			char[] charArray2 = new char[] { c1, c2, c1 };
 
 			if ( Arrays.equals( charArray1, charArray2 ) ) {
-				// hoechstwahrscheinlich ein JPEG da es mit FFD8FF respektive
-				// ��� beginnt
-				// System.out.println( "wahrscheinlich ein JPEG da es mit FFD8FF
-				// respektive ��� beginnt" );
+				// hoechstwahrscheinlich ein JPEG
 				mnJpeg = true;
 			}
 			read.close();
 			fr.close();
-			// set to null
 			read = null;
 			fr = null;
 		} catch ( Exception e ) {
@@ -368,7 +392,6 @@ public class Magic
 					.println( "Exception magic file jpeg: " + e.getMessage() );
 			read.close();
 			fr.close();
-			// set to null
 			read = null;
 			fr = null;
 		}
@@ -454,14 +477,12 @@ public class Magic
 			}
 			read.close();
 			fr.close();
-			// set to null
 			read = null;
 			fr = null;
 		} catch ( Exception e ) {
 			System.out.println( "Exception magic file jp2: " + e.getMessage() );
 			read.close();
 			fr.close();
-			// set to null
 			read = null;
 			fr = null;
 		}
@@ -583,7 +604,6 @@ public class Magic
 			}
 			read.close();
 			fr.close();
-			// set to null
 			read = null;
 			fr = null;
 		} catch ( Exception e ) {
@@ -591,11 +611,1291 @@ public class Magic
 					"Exception magic file jp2 part1: " + e.getMessage() );
 			read.close();
 			fr.close();
-			// set to null
 			read = null;
 			fr = null;
 		}
 		return mnJp2p1;
+	}
+
+	public static boolean magicJif( File file ) throws IOException
+	{
+		FileReader fr = null;
+		BufferedReader read = null;
+		boolean mn = false;
+
+		try {
+			// Eine JIF-Datei (.jif) muss mit 4A4946393961 -> JIF99a beginnen
+			fr = new FileReader( file );
+			read = new BufferedReader( fr );
+
+			Boolean reco = false;
+			try (FileInputStream fis = new FileInputStream( file )) {
+				int i = 0;
+				int cnt = 0;
+				StringBuilder sb = new StringBuilder();
+				String sb2str1 = "";
+				String sb2str2 = "";
+				String sb2str3 = "";
+				String sb2str4 = "";
+				String sb2str5 = "";
+				String sb2str6 = "";
+				String sb123456 = "";
+				while ( (i = fis.read()) != -1 ) {
+					sb.append( String.format( "%02X ", i ) );
+					if ( sb2str1 == "" ) {
+						sb2str1 = sb + "";
+					} else if ( sb2str2 == "" ) {
+						sb2str2 = sb + "";
+					} else if ( sb2str3 == "" ) {
+						sb2str3 = sb + "";
+					} else if ( sb2str4 == "" ) {
+						sb2str4 = sb + "";
+					} else if ( sb2str5 == "" ) {
+						sb2str5 = sb + "";
+					} else if ( sb2str6 == "" ) {
+						sb2str6 = sb + "";
+						sb123456 = sb + "";
+						break;
+					}
+					cnt++;
+					if ( cnt == 16 ) {
+						cnt = 0;
+					}
+				}
+				if ( sb123456.contains( "4A 49 46 39 39 61" ) ) {
+					reco = true;
+				}
+			}
+			if ( reco ) {
+				// hoechstwahrscheinlich ein JIF
+				mn = true;
+			}
+			read.close();
+			fr.close();
+			read = null;
+			fr = null;
+		} catch ( Exception e ) {
+			System.out.println( "Exception magic file Jif: " + e.getMessage() );
+			read.close();
+			fr.close();
+			read = null;
+			fr = null;
+		}
+		return mn;
+	}
+
+	public static boolean magicFlac( File file ) throws IOException
+	{
+		FileReader fr = null;
+		BufferedReader read = null;
+		boolean mn = false;
+
+		try {
+			// Eine FLAC-Datei (.flac) muss mit 664C6143 -> fLaC beginnen
+			fr = new FileReader( file );
+			read = new BufferedReader( fr );
+
+			Boolean reco = false;
+			try (FileInputStream fis = new FileInputStream( file )) {
+				int i = 0;
+				int cnt = 0;
+				StringBuilder sb = new StringBuilder();
+				String sb2str1 = "";
+				String sb2str2 = "";
+				String sb2str3 = "";
+				String sb2str4 = "";
+				String sb1234 = "";
+				while ( (i = fis.read()) != -1 ) {
+					sb.append( String.format( "%02X ", i ) );
+					if ( sb2str1 == "" ) {
+						sb2str1 = sb + "";
+					} else if ( sb2str2 == "" ) {
+						sb2str2 = sb + "";
+					} else if ( sb2str3 == "" ) {
+						sb2str3 = sb + "";
+					} else if ( sb2str4 == "" ) {
+						sb2str4 = sb + "";
+						sb1234 = sb + "";
+						break;
+					}
+					cnt++;
+					if ( cnt == 16 ) {
+						cnt = 0;
+					}
+				}
+				if ( sb1234.contains( "66 4C 61 43" ) ) {
+					reco = true;
+				}
+			}
+			if ( reco ) {
+				// hoechstwahrscheinlich ein FLAC
+				mn = true;
+			}
+			read.close();
+			fr.close();
+			read = null;
+			fr = null;
+		} catch ( Exception e ) {
+			System.out.println( "Exception magic file Jif: " + e.getMessage() );
+			read.close();
+			fr.close();
+			read = null;
+			fr = null;
+		}
+		return mn;
+	}
+
+	public static boolean magicWave( File file ) throws IOException
+	{
+		FileReader fr = null;
+		BufferedReader read = null;
+		boolean mn = false;
+
+		try {
+			// Eine WAVE-Datei (.wav) muss mit 52494646 -> RIFF beginnen
+			fr = new FileReader( file );
+			read = new BufferedReader( fr );
+
+			Boolean reco = false;
+			try (FileInputStream fis = new FileInputStream( file )) {
+				int i = 0;
+				int cnt = 0;
+				StringBuilder sb = new StringBuilder();
+				String sb2str1 = "";
+				String sb2str2 = "";
+				String sb2str3 = "";
+				String sb2str4 = "";
+				String sb1234 = "";
+				while ( (i = fis.read()) != -1 ) {
+					sb.append( String.format( "%02X ", i ) );
+					if ( sb2str1 == "" ) {
+						sb2str1 = sb + "";
+					} else if ( sb2str2 == "" ) {
+						sb2str2 = sb + "";
+					} else if ( sb2str3 == "" ) {
+						sb2str3 = sb + "";
+					} else if ( sb2str4 == "" ) {
+						sb2str4 = sb + "";
+						sb1234 = sb + "";
+						break;
+					}
+					cnt++;
+					if ( cnt == 16 ) {
+						cnt = 0;
+					}
+				}
+				if ( sb1234.contains( "52 49 46 46" ) ) {
+					reco = true;
+				}
+			}
+			if ( reco ) {
+				// hoechstwahrscheinlich ein WAVE
+				mn = true;
+			}
+			read.close();
+			fr.close();
+			read = null;
+			fr = null;
+		} catch ( Exception e ) {
+			System.out
+					.println( "Exception magic file Wave: " + e.getMessage() );
+			read.close();
+			fr.close();
+			read = null;
+			fr = null;
+		}
+		return mn;
+	}
+
+	public static boolean magicAlac( File file ) throws IOException
+	{
+		FileReader fr = null;
+		BufferedReader read = null;
+		boolean mn = false;
+
+		try {
+			// Eine ALAC-Datei (.m4a, mp4) muss mit {4}667479704D3441 -> ftypM4A
+			// beginnen
+			fr = new FileReader( file );
+			read = new BufferedReader( fr );
+
+			Boolean reco = false;
+			try (FileInputStream fis = new FileInputStream( file )) {
+				int i = 0;
+				int cnt = 0;
+				StringBuilder sb = new StringBuilder();
+				String sb2str1ig = "";
+				String sb2str2ig = "";
+				String sb2str3ig = "";
+				String sb2str4ig = "";
+				String sb2str1 = "";
+				String sb2str2 = "";
+				String sb2str3 = "";
+				String sb2str4 = "";
+				String sb2str5 = "";
+				String sb2str6 = "";
+				String sb2str7 = "";
+				String sb1234567 = "";
+				while ( (i = fis.read()) != -1 ) {
+					sb.append( String.format( "%02X ", i ) );
+					if ( sb2str1ig == "" ) {
+						sb2str1ig = sb + "";
+					} else if ( sb2str2ig == "" ) {
+						sb2str2ig = sb + "";
+					} else if ( sb2str3ig == "" ) {
+						sb2str3ig = sb + "";
+					} else if ( sb2str4ig == "" ) {
+						sb2str4ig = sb + "";
+						// Die erste 4 Zeichen ignorieren ; sb neu setzten
+						sb = new StringBuilder();
+					} else if ( sb2str1 == "" ) {
+						sb2str1 = sb + "";
+					} else if ( sb2str2 == "" ) {
+						sb2str2 = sb + "";
+					} else if ( sb2str3 == "" ) {
+						sb2str3 = sb + "";
+					} else if ( sb2str4 == "" ) {
+						sb2str4 = sb + "";
+					} else if ( sb2str5 == "" ) {
+						sb2str5 = sb + "";
+					} else if ( sb2str6 == "" ) {
+						sb2str6 = sb + "";
+					} else if ( sb2str7 == "" ) {
+						sb2str7 = sb + "";
+						sb1234567 = sb + "";
+						break;
+					}
+					cnt++;
+					if ( cnt == 16 ) {
+						cnt = 0;
+					}
+				}
+				if ( sb1234567.contains( "66 74 79 70 4D 34 41" ) ) {
+					reco = true;
+				}
+			}
+			if ( reco ) {
+				// hoechstwahrscheinlich ein ALAC
+				mn = true;
+			}
+			read.close();
+			fr.close();
+			read = null;
+			fr = null;
+		} catch ( Exception e ) {
+			System.out
+					.println( "Exception magic file Alac: " + e.getMessage() );
+			read.close();
+			fr.close();
+			read = null;
+			fr = null;
+		}
+		return mn;
+	}
+
+	public static boolean magicMp4( File file ) throws IOException
+	{
+		FileReader fr = null;
+		BufferedReader read = null;
+		boolean mn = false;
+
+		try {
+			// Eine MP4-Datei (.mp4, .mpg4, .m4v, .m4a, .f4v, .f4a) muss mit
+			// {4}66747970 -> {4}ftyp beginnen
+			fr = new FileReader( file );
+			read = new BufferedReader( fr );
+
+			Boolean reco = false;
+			try (FileInputStream fis = new FileInputStream( file )) {
+				int i = 0;
+				int cnt = 0;
+				StringBuilder sb = new StringBuilder();
+				String sb2str1ig = "";
+				String sb2str2ig = "";
+				String sb2str3ig = "";
+				String sb2str4ig = "";
+				String sb2str1 = "";
+				String sb2str2 = "";
+				String sb2str3 = "";
+				String sb2str4 = "";
+				String sb1234 = "";
+				while ( (i = fis.read()) != -1 ) {
+					sb.append( String.format( "%02X ", i ) );
+					if ( sb2str1ig == "" ) {
+						sb2str1ig = sb + "";
+					} else if ( sb2str2ig == "" ) {
+						sb2str2ig = sb + "";
+					} else if ( sb2str3ig == "" ) {
+						sb2str3ig = sb + "";
+					} else if ( sb2str4ig == "" ) {
+						sb2str4ig = sb + "";
+						// Die erste 4 Zeichen ignorieren ; sb neu setzten
+						sb = new StringBuilder();
+					} else if ( sb2str1 == "" ) {
+						sb2str1 = sb + "";
+					} else if ( sb2str2 == "" ) {
+						sb2str2 = sb + "";
+					} else if ( sb2str3 == "" ) {
+						sb2str3 = sb + "";
+					} else if ( sb2str4 == "" ) {
+						sb2str4 = sb + "";
+						sb1234 = sb + "";
+						break;
+					}
+					cnt++;
+					if ( cnt == 16 ) {
+						cnt = 0;
+					}
+				}
+				if ( sb1234.contains( "66 74 79 70" ) ) {
+					reco = true;
+				}
+			}
+			if ( reco ) {
+				// hoechstwahrscheinlich ein MP4
+				mn = true;
+			}
+			read.close();
+			fr.close();
+			read = null;
+			fr = null;
+		} catch ( Exception e ) {
+			System.out.println( "Exception magic file mp4: " + e.getMessage() );
+			read.close();
+			fr.close();
+			read = null;
+			fr = null;
+		}
+		return mn;
+	}
+
+	public static boolean magicProres( File file ) throws IOException
+	{
+		FileReader fr = null;
+		BufferedReader read = null;
+		boolean mn = false;
+
+		try {
+			// Eine PRORES-Datei (.mov) muss mit {4}66726565 -> free beginnen
+			fr = new FileReader( file );
+			read = new BufferedReader( fr );
+
+			Boolean reco = false;
+			try (FileInputStream fis = new FileInputStream( file )) {
+				int i = 0;
+				int cnt = 0;
+				StringBuilder sb = new StringBuilder();
+				String sb2str1ig = "";
+				String sb2str2ig = "";
+				String sb2str3ig = "";
+				String sb2str4ig = "";
+				String sb2str1 = "";
+				String sb2str2 = "";
+				String sb2str3 = "";
+				String sb2str4 = "";
+				String sb1234 = "";
+				while ( (i = fis.read()) != -1 ) {
+					sb.append( String.format( "%02X ", i ) );
+					if ( sb2str1ig == "" ) {
+						sb2str1ig = sb + "";
+					} else if ( sb2str2ig == "" ) {
+						sb2str2ig = sb + "";
+					} else if ( sb2str3ig == "" ) {
+						sb2str3ig = sb + "";
+					} else if ( sb2str4ig == "" ) {
+						sb2str4ig = sb + "";
+						// Die erste 4 Zeichen ignorieren ; sb neu setzten
+						sb = new StringBuilder();
+					} else if ( sb2str1 == "" ) {
+						sb2str1 = sb + "";
+					} else if ( sb2str2 == "" ) {
+						sb2str2 = sb + "";
+					} else if ( sb2str3 == "" ) {
+						sb2str3 = sb + "";
+					} else if ( sb2str4 == "" ) {
+						sb2str4 = sb + "";
+						sb1234 = sb + "";
+						break;
+					}
+					cnt++;
+					if ( cnt == 16 ) {
+						cnt = 0;
+					}
+				}
+				if ( sb1234.contains( "66 72 65 65" ) ) {
+					reco = true;
+				}
+			}
+			if ( reco ) {
+				// hoechstwahrscheinlich ein PRORES
+				mn = true;
+			}
+			read.close();
+			fr.close();
+			read = null;
+			fr = null;
+		} catch ( Exception e ) {
+			System.out.println(
+					"Exception magic file prores: " + e.getMessage() );
+			read.close();
+			fr.close();
+			read = null;
+			fr = null;
+		}
+		return mn;
+	}
+
+	public static boolean magicQtm( File file ) throws IOException
+	{
+		FileReader fr = null;
+		BufferedReader read = null;
+		boolean mn = false;
+
+		try {
+			// Eine QTM-Datei (.mov) muss mit {4}6D6F6F76 -> moov beginnen
+			fr = new FileReader( file );
+			read = new BufferedReader( fr );
+
+			Boolean reco = false;
+			try (FileInputStream fis = new FileInputStream( file )) {
+				int i = 0;
+				int cnt = 0;
+				StringBuilder sb = new StringBuilder();
+				String sb2str1ig = "";
+				String sb2str2ig = "";
+				String sb2str3ig = "";
+				String sb2str4ig = "";
+				String sb2str1 = "";
+				String sb2str2 = "";
+				String sb2str3 = "";
+				String sb2str4 = "";
+				String sb1234 = "";
+				while ( (i = fis.read()) != -1 ) {
+					sb.append( String.format( "%02X ", i ) );
+					if ( sb2str1ig == "" ) {
+						sb2str1ig = sb + "";
+					} else if ( sb2str2ig == "" ) {
+						sb2str2ig = sb + "";
+					} else if ( sb2str3ig == "" ) {
+						sb2str3ig = sb + "";
+					} else if ( sb2str4ig == "" ) {
+						sb2str4ig = sb + "";
+						// Die erste 4 Zeichen ignorieren ; sb neu setzten
+						sb = new StringBuilder();
+					} else if ( sb2str1 == "" ) {
+						sb2str1 = sb + "";
+					} else if ( sb2str2 == "" ) {
+						sb2str2 = sb + "";
+					} else if ( sb2str3 == "" ) {
+						sb2str3 = sb + "";
+					} else if ( sb2str4 == "" ) {
+						sb2str4 = sb + "";
+						sb1234 = sb + "";
+						break;
+					}
+					cnt++;
+					if ( cnt == 16 ) {
+						cnt = 0;
+					}
+				}
+				if ( sb1234.contains( "6D 6F 6F 76" ) ) {
+					reco = true;
+				}
+			}
+			if ( reco ) {
+				// hoechstwahrscheinlich ein QTM
+				mn = true;
+			}
+			read.close();
+			fr.close();
+			read = null;
+			fr = null;
+		} catch ( Exception e ) {
+			System.out.println( "Exception magic file qtm: " + e.getMessage() );
+			read.close();
+			fr.close();
+			read = null;
+			fr = null;
+		}
+		return mn;
+	}
+
+	public static boolean magicOgg( File file ) throws IOException
+	{
+		FileReader fr = null;
+		BufferedReader read = null;
+		boolean mn = false;
+
+		try {
+			// Eine OGG-Datei (.ogg) muss mit 4F6767530002 -> OggS.. beginnen
+			fr = new FileReader( file );
+			read = new BufferedReader( fr );
+
+			Boolean reco = false;
+			try (FileInputStream fis = new FileInputStream( file )) {
+				int i = 0;
+				int cnt = 0;
+				StringBuilder sb = new StringBuilder();
+				String sb2str1 = "";
+				String sb2str2 = "";
+				String sb2str3 = "";
+				String sb2str4 = "";
+				String sb2str5 = "";
+				String sb2str6 = "";
+				String sb123456 = "";
+				while ( (i = fis.read()) != -1 ) {
+					sb.append( String.format( "%02X ", i ) );
+					if ( sb2str1 == "" ) {
+						sb2str1 = sb + "";
+					} else if ( sb2str2 == "" ) {
+						sb2str2 = sb + "";
+					} else if ( sb2str3 == "" ) {
+						sb2str3 = sb + "";
+					} else if ( sb2str4 == "" ) {
+						sb2str4 = sb + "";
+					} else if ( sb2str5 == "" ) {
+						sb2str5 = sb + "";
+					} else if ( sb2str6 == "" ) {
+						sb2str6 = sb + "";
+						sb123456 = sb + "";
+						break;
+					}
+					cnt++;
+					if ( cnt == 16 ) {
+						cnt = 0;
+					}
+				}
+				if ( sb123456.contains( "4F 67 67 53 00 02" ) ) {
+					reco = true;
+				}
+			}
+			if ( reco ) {
+				// hoechstwahrscheinlich ein OGG
+				mn = true;
+			}
+			read.close();
+			fr.close();
+			read = null;
+			fr = null;
+		} catch ( Exception e ) {
+			System.out.println( "Exception magic file Ogg: " + e.getMessage() );
+			read.close();
+			fr.close();
+			read = null;
+			fr = null;
+		}
+		return mn;
+	}
+
+	public static boolean magicMp3( File file ) throws IOException
+	{
+		FileReader fr = null;
+		BufferedReader read = null;
+		boolean mn = false;
+
+		try {
+			// Eine MP3-Datei (.mp3) muss wiefolgt beginnen
+			// MP3 .mp3 ÿû FFFB
+			// MP3 .mp3 ÿó FFF3
+			// MP3 .mp3 ÿú FFFA
+			// MP3 .mp3 ÿò FFF2
+			// MP3 .mp3 ÿã FFE3
+			// MP3 .mp3 ID3 494433
+			fr = new FileReader( file );
+			read = new BufferedReader( fr );
+
+			Boolean reco = false;
+			try (FileInputStream fis = new FileInputStream( file )) {
+				int i = 0;
+				int cnt = 0;
+				StringBuilder sb = new StringBuilder();
+				String sb2str1 = "";
+				String sb2str2 = "";
+				String sb2str3 = "";
+				String sb12 = "";
+				String sb123 = "";
+				while ( (i = fis.read()) != -1 ) {
+					sb.append( String.format( "%02X ", i ) );
+					if ( sb2str1 == "" ) {
+						sb2str1 = sb + "";
+					} else if ( sb2str2 == "" ) {
+						sb2str2 = sb + "";
+						sb12 = sb + "";
+					} else if ( sb2str3 == "" ) {
+						sb2str3 = sb + "";
+						sb123 = sb + "";
+						break;
+					}
+					cnt++;
+					if ( cnt == 16 ) {
+						cnt = 0;
+					}
+				}
+				if ( sb123.contains( "49 44 33" ) || sb12.contains( "FF FB" )
+						|| sb12.contains( "FF F3" ) || sb12.contains( "FF FA" )
+						|| sb12.contains( "FF F2" )
+						|| sb12.contains( "FF E3" ) ) {
+					// MP3 .mp3 ÿû FFFB
+					// MP3 .mp3 ÿó FFF3
+					// MP3 .mp3 ÿú FFFA
+					// MP3 .mp3 ÿò FFF2
+					// MP3 .mp3 ÿã FFE3
+					// MP3 .mp3 ID3 494433
+					reco = true;
+				}
+			}
+			if ( reco ) {
+				// hoechstwahrscheinlich ein MP3
+				mn = true;
+			}
+			read.close();
+			fr.close();
+			read = null;
+			fr = null;
+		} catch ( Exception e ) {
+			System.out.println( "Exception magic file Mp3: " + e.getMessage() );
+			read.close();
+			fr.close();
+			read = null;
+			fr = null;
+		}
+		return mn;
+	}
+
+	public static boolean magicMp2( File file ) throws IOException
+	{
+		FileReader fr = null;
+		BufferedReader read = null;
+		boolean mn = false;
+
+		try {
+			// Eine MP2-Datei (.mp2, .mpw, .mpa) muss wiefolgt beginnen
+			// MP2 .mp2, .mpw, .mpa ID3 494433
+			// MP2 .mp2, .mpw, .mpa ÿõ FFF5
+			// MP2 .mp2, .mpw, .mpa ÿô FFF4
+			// MP2 .mp2, .mpw, .mpa ÿý FFFD
+			// MP2 .mp2, .mpw, .mpa ÿü FFFC
+
+			fr = new FileReader( file );
+			read = new BufferedReader( fr );
+
+			Boolean reco = false;
+			try (FileInputStream fis = new FileInputStream( file )) {
+				int i = 0;
+				int cnt = 0;
+				StringBuilder sb = new StringBuilder();
+				String sb2str1 = "";
+				String sb2str2 = "";
+				String sb2str3 = "";
+				String sb12 = "";
+				String sb123 = "";
+				while ( (i = fis.read()) != -1 ) {
+					sb.append( String.format( "%02X ", i ) );
+					if ( sb2str1 == "" ) {
+						sb2str1 = sb + "";
+					} else if ( sb2str2 == "" ) {
+						sb2str2 = sb + "";
+						sb12 = sb + "";
+					} else if ( sb2str3 == "" ) {
+						sb2str3 = sb + "";
+						sb123 = sb + "";
+						break;
+					}
+					cnt++;
+					if ( cnt == 16 ) {
+						cnt = 0;
+					}
+				}
+				if ( sb123.contains( "49 44 33" ) || sb12.contains( "FF F5" )
+						|| sb12.contains( "FF F4" ) || sb12.contains( "FF FD" )
+						|| sb12.contains( "FF FC" ) ) {
+					// MP2 .mp2, .mpw, .mpa ID3 494433
+					// MP2 .mp2, .mpw, .mpa ÿõ FFF5
+					// MP2 .mp2, .mpw, .mpa ÿô FFF4
+					// MP2 .mp2, .mpw, .mpa ÿý FFFD
+					// MP2 .mp2, .mpw, .mpa ÿü FFFC
+					reco = true;
+				}
+			}
+			if ( reco ) {
+				// hoechstwahrscheinlich ein MP2
+				mn = true;
+			}
+			read.close();
+			fr.close();
+			read = null;
+			fr = null;
+		} catch ( Exception e ) {
+			System.out.println( "Exception magic file Mp2: " + e.getMessage() );
+			read.close();
+			fr.close();
+			read = null;
+			fr = null;
+		}
+		return mn;
+	}
+
+	public static boolean magicMpeg2( File file ) throws IOException
+	{
+		FileReader fr = null;
+		BufferedReader read = null;
+		boolean mn = false;
+
+		try {
+			// Eine MPEG2 Datei (.mpg, .mpeg, .m2v) muss mit 000001B3 -> ...³
+			// beginnen
+			fr = new FileReader( file );
+			read = new BufferedReader( fr );
+
+			Boolean reco = false;
+			try (FileInputStream fis = new FileInputStream( file )) {
+				int i = 0;
+				int cnt = 0;
+				StringBuilder sb = new StringBuilder();
+				String sb2str1 = "";
+				String sb2str2 = "";
+				String sb2str3 = "";
+				String sb2str4 = "";
+				String sb1234 = "";
+				while ( (i = fis.read()) != -1 ) {
+					// System.out.printf("%02X ", i);
+					sb.append( String.format( "%02X ", i ) );
+					if ( sb2str1 == "" ) {
+						sb2str1 = sb + "";
+					} else if ( sb2str2 == "" ) {
+						sb2str2 = sb + "";
+					} else if ( sb2str3 == "" ) {
+						sb2str3 = sb + "";
+					} else if ( sb2str4 == "" ) {
+						sb2str4 = sb + "";
+						sb1234 = sb + "";
+						break;
+					}
+					cnt++;
+					if ( cnt == 16 ) {
+						cnt = 0;
+					}
+				}
+				if ( sb1234.contains( "00 00 01 B3" ) ) {
+					reco = true;
+				}
+			}
+
+			if ( reco ) {
+				// hoechstwahrscheinlich ein MPEG2
+				mn = true;
+			}
+			read.close();
+			fr.close();
+			read = null;
+			fr = null;
+		} catch ( Exception e ) {
+			System.out
+					.println( "Exception magic file mpeg2: " + e.getMessage() );
+			read.close();
+			fr.close();
+			read = null;
+			fr = null;
+		}
+		return mn;
+	}
+
+	public static boolean magicWarc( File file ) throws IOException
+	{
+		FileReader fr = null;
+		BufferedReader read = null;
+		boolean mn = false;
+
+		try {
+			// Eine WARC Datei (.warc) muss mit 57415243 -> WARC beginnen
+			fr = new FileReader( file );
+			read = new BufferedReader( fr );
+
+			Boolean reco = false;
+			try (FileInputStream fis = new FileInputStream( file )) {
+				int i = 0;
+				int cnt = 0;
+				StringBuilder sb = new StringBuilder();
+				String sb2str1 = "";
+				String sb2str2 = "";
+				String sb2str3 = "";
+				String sb2str4 = "";
+				String sb1234 = "";
+				while ( (i = fis.read()) != -1 ) {
+					// System.out.printf("%02X ", i);
+					sb.append( String.format( "%02X ", i ) );
+					if ( sb2str1 == "" ) {
+						sb2str1 = sb + "";
+					} else if ( sb2str2 == "" ) {
+						sb2str2 = sb + "";
+					} else if ( sb2str3 == "" ) {
+						sb2str3 = sb + "";
+					} else if ( sb2str4 == "" ) {
+						sb2str4 = sb + "";
+						sb1234 = sb + "";
+						break;
+					}
+					cnt++;
+					if ( cnt == 16 ) {
+						cnt = 0;
+					}
+				}
+				if ( sb1234.contains( "57 41 52 43" ) ) {
+					reco = true;
+				}
+			}
+
+			if ( reco ) {
+				// hoechstwahrscheinlich ein WARC
+				mn = true;
+			}
+			read.close();
+			fr.close();
+			read = null;
+			fr = null;
+		} catch ( Exception e ) {
+			System.out
+					.println( "Exception magic file warc: " + e.getMessage() );
+			read.close();
+			fr.close();
+			read = null;
+			fr = null;
+		}
+		return mn;
+	}
+
+	public static boolean magicArc( File file ) throws IOException
+	{
+		FileReader fr = null;
+		BufferedReader read = null;
+		boolean mn = false;
+
+		try {
+			// Eine ARC Datei (.arc) muss mit 66696C656465 -> filede beginnen
+			fr = new FileReader( file );
+			read = new BufferedReader( fr );
+
+			Boolean reco = false;
+			try (FileInputStream fis = new FileInputStream( file )) {
+				int i = 0;
+				int cnt = 0;
+				StringBuilder sb = new StringBuilder();
+				String sb2str1 = "";
+				String sb2str2 = "";
+				String sb2str3 = "";
+				String sb2str4 = "";
+				String sb2str5 = "";
+				String sb2str6 = "";
+				String sb123456 = "";
+				while ( (i = fis.read()) != -1 ) {
+					// System.out.printf("%02X ", i);
+					sb.append( String.format( "%02X ", i ) );
+					if ( sb2str1 == "" ) {
+						sb2str1 = sb + "";
+					} else if ( sb2str2 == "" ) {
+						sb2str2 = sb + "";
+					} else if ( sb2str3 == "" ) {
+						sb2str3 = sb + "";
+					} else if ( sb2str4 == "" ) {
+						sb2str4 = sb + "";
+					} else if ( sb2str5 == "" ) {
+						sb2str5 = sb + "";
+					} else if ( sb2str6 == "" ) {
+						sb2str6 = sb + "";
+						sb123456 = sb + "";
+						break;
+					}
+					cnt++;
+					if ( cnt == 16 ) {
+						cnt = 0;
+					}
+				}
+				if ( sb123456.contains( "66 69 6C 65 64 65" ) ) {
+					reco = true;
+				}
+			}
+
+			if ( reco ) {
+				// hoechstwahrscheinlich ein ARC
+				mn = true;
+			}
+			read.close();
+			fr.close();
+			read = null;
+			fr = null;
+		} catch ( Exception e ) {
+			System.out.println( "Exception magic file arc: " + e.getMessage() );
+			read.close();
+			fr.close();
+			read = null;
+			fr = null;
+		}
+		return mn;
+	}
+
+	public static boolean magicFreearc( File file ) throws IOException
+	{
+		FileReader fr = null;
+		BufferedReader read = null;
+		boolean mn = false;
+
+		try {
+			// Eine FREEARC Datei (.arc) muss mit 41724301 -> ArC. beginnen
+			fr = new FileReader( file );
+			read = new BufferedReader( fr );
+
+			Boolean reco = false;
+			try (FileInputStream fis = new FileInputStream( file )) {
+				int i = 0;
+				int cnt = 0;
+				StringBuilder sb = new StringBuilder();
+				String sb2str1 = "";
+				String sb2str2 = "";
+				String sb2str3 = "";
+				String sb2str4 = "";
+				String sb1234 = "";
+				while ( (i = fis.read()) != -1 ) {
+					// System.out.printf("%02X ", i);
+					sb.append( String.format( "%02X ", i ) );
+					if ( sb2str1 == "" ) {
+						sb2str1 = sb + "";
+					} else if ( sb2str2 == "" ) {
+						sb2str2 = sb + "";
+					} else if ( sb2str3 == "" ) {
+						sb2str3 = sb + "";
+					} else if ( sb2str4 == "" ) {
+						sb2str4 = sb + "";
+						sb1234 = sb + "";
+						break;
+					}
+					cnt++;
+					if ( cnt == 16 ) {
+						cnt = 0;
+					}
+				}
+				if ( sb1234.contains( "41 72 43 01" ) ) {
+					reco = true;
+				}
+			}
+
+			if ( reco ) {
+				// hoechstwahrscheinlich ein FREEARC
+				mn = true;
+			}
+			read.close();
+			fr.close();
+			read = null;
+			fr = null;
+		} catch ( Exception e ) {
+			System.out.println(
+					"Exception magic file freearc: " + e.getMessage() );
+			read.close();
+			fr.close();
+			read = null;
+			fr = null;
+		}
+		return mn;
+	}
+
+	public static boolean magicXls( File file ) throws IOException
+	{
+		FileReader fr = null;
+		BufferedReader read = null;
+		boolean mn = false;
+
+		try {
+			// Eine XLS Datei (.xls) muss mit 09040600 09020600 09000400 -> ....
+			// beginnen
+			fr = new FileReader( file );
+			read = new BufferedReader( fr );
+
+			Boolean reco = false;
+			try (FileInputStream fis = new FileInputStream( file )) {
+				int i = 0;
+				int cnt = 0;
+				StringBuilder sb = new StringBuilder();
+				String sb2str1 = "";
+				String sb2str2 = "";
+				String sb2str3 = "";
+				String sb2str4 = "";
+				String sb1234 = "";
+				while ( (i = fis.read()) != -1 ) {
+					// System.out.printf("%02X ", i);
+					sb.append( String.format( "%02X ", i ) );
+					if ( sb2str1 == "" ) {
+						sb2str1 = sb + "";
+					} else if ( sb2str2 == "" ) {
+						sb2str2 = sb + "";
+					} else if ( sb2str3 == "" ) {
+						sb2str3 = sb + "";
+					} else if ( sb2str4 == "" ) {
+						sb2str4 = sb + "";
+						sb1234 = sb + "";
+						break;
+					}
+					cnt++;
+					if ( cnt == 16 ) {
+						cnt = 0;
+					}
+				}
+				if ( sb1234.contains( "09 04 06 00" )
+						|| sb1234.contains( "09 02 06 00" )
+						|| sb1234.contains( "09 00 04 00" ) ) {
+					reco = true;
+				}
+			}
+
+			if ( reco ) {
+				// hoechstwahrscheinlich ein XLS
+				mn = true;
+			}
+			read.close();
+			fr.close();
+			read = null;
+			fr = null;
+		} catch ( Exception e ) {
+			System.out.println( "Exception magic file arc: " + e.getMessage() );
+			read.close();
+			fr.close();
+			read = null;
+			fr = null;
+		}
+		return mn;
+	}
+
+	public static boolean magicInterlis( File file ) throws IOException
+	{
+		FileReader fr = null;
+		BufferedReader read = null;
+		boolean mn = false;
+
+		try {
+			// Eine INTERLIS Datei (.ili, .itf, .xtf, .xml) muss wie folgt
+			// beginnen
+			// INTERLIS(8) TRANSFER(8) SCNT(4)
+			// "494E5445524C4953 5452414E53464552 53434E54"
+			// <?xml(5) <.?.x.m.l.(10)
+			// 3C3F786D6C 3C003F0078006D006C00
+			fr = new FileReader( file );
+			read = new BufferedReader( fr );
+
+			Boolean reco = false;
+			try (FileInputStream fis = new FileInputStream( file )) {
+				int i = 0;
+				int cnt = 0;
+				StringBuilder sb = new StringBuilder();
+				String sb2str1 = "";
+				String sb2str2 = "";
+				String sb2str3 = "";
+				String sb2str4 = "";
+				String sb2str5 = "";
+				String sb2str6 = "";
+				String sb2str7 = "";
+				String sb2str8 = "";
+				String sb2str9 = "";
+				String sb2str10 = "";
+				String sb1234 = "";
+				String sb12345 = "";
+				String sb12345678 = "";
+				String sb12345678910 = "";
+				while ( (i = fis.read()) != -1 ) {
+					sb.append( String.format( "%02X ", i ) );
+					if ( sb2str1 == "" ) {
+						sb2str1 = sb + "";
+					} else if ( sb2str2 == "" ) {
+						sb2str2 = sb + "";
+					} else if ( sb2str3 == "" ) {
+						sb2str3 = sb + "";
+					} else if ( sb2str4 == "" ) {
+						sb2str4 = sb + "";
+						sb1234 = sb + "";
+					} else if ( sb2str5 == "" ) {
+						sb2str5 = sb + "";
+						sb12345 = sb + "";
+					} else if ( sb2str6 == "" ) {
+						sb2str6 = sb + "";
+						sb12345 = sb + "";
+					} else if ( sb2str7 == "" ) {
+						sb2str7 = sb + "";
+					} else if ( sb2str8 == "" ) {
+						sb2str8 = sb + "";
+						sb12345678 = sb + "";
+					} else if ( sb2str9 == "" ) {
+						sb2str9 = sb + "";
+					} else if ( sb2str10 == "" ) {
+						sb2str10 = sb + "";
+						sb12345678910 = sb + "";
+						break;
+					}
+					cnt++;
+					if ( cnt == 16 ) {
+						cnt = 0;
+					}
+				}
+				if ( sb1234.contains( "53 43 4E 54" )
+						|| sb12345.contains( "3C 3F 78 6D 6C" )
+						|| sb12345678.contains( "49 4E 54 45 52 4C 49 53" )
+						|| sb12345678.contains( "54 52 41 4E 53 46 45 52" )
+						|| sb12345678910
+								.contains( "3C 00 3F 00 78 00 6D 00 6C 00" ) ) {
+					reco = true;
+					// INTERLIS(8) TRANSFER(8) SCNT(4)
+					// "494E5445524C4953 5452414E53464552 53434E54"
+					// <?xml(5) <.?.x.m.l.(10)
+					// 3C3F786D6C 3C003F0078006D006C00
+				}
+			}
+			if ( reco ) {
+				// hoechstwahrscheinlich ein INTERLIS
+				mn = true;
+			}
+			read.close();
+			fr.close();
+			read = null;
+			fr = null;
+		} catch ( Exception e ) {
+			System.out.println(
+					"Exception magic file interlis: " + e.getMessage() );
+			read.close();
+			fr.close();
+			read = null;
+			fr = null;
+		}
+		return mn;
+	}
+
+	public static boolean magicDwg( File file ) throws IOException
+	{
+		FileReader fr = null;
+		BufferedReader read = null;
+		boolean mn = false;
+
+		try {
+			// Eine DWG Datei (.dwg) muss wie folgt
+			// beginnen MC oder AC 4D43 oder 4143
+			fr = new FileReader( file );
+			read = new BufferedReader( fr );
+
+			Boolean reco = false;
+			try (FileInputStream fis = new FileInputStream( file )) {
+				int i = 0;
+				int cnt = 0;
+				StringBuilder sb = new StringBuilder();
+				String sb2str1 = "";
+				String sb2str2 = "";
+				String sb12 = "";
+				while ( (i = fis.read()) != -1 ) {
+					sb.append( String.format( "%02X ", i ) );
+					if ( sb2str1 == "" ) {
+						sb2str1 = sb + "";
+					} else if ( sb2str2 == "" ) {
+						sb2str2 = sb + "";
+						sb12 = sb + "";
+						break;
+					}
+					cnt++;
+					if ( cnt == 16 ) {
+						cnt = 0;
+					}
+				}
+				if ( sb12.contains( "4D 43" ) || sb12.contains( "41 43" ) ) {
+					reco = true;
+				}
+			}
+			if ( reco ) {
+				// hoechstwahrscheinlich ein DWG
+				mn = true;
+			}
+			read.close();
+			fr.close();
+			read = null;
+			fr = null;
+		} catch ( Exception e ) {
+			System.out.println( "Exception magic file ifc: " + e.getMessage() );
+			read.close();
+			fr.close();
+			read = null;
+			fr = null;
+		}
+		return mn;
+	}
+
+	public static boolean magicIfc( File file ) throws IOException
+	{
+		FileReader fr = null;
+		BufferedReader read = null;
+		boolean mn = false;
+
+		try {
+			// Eine IFC Datei (.ifc) muss wie folgt
+			// beginnen
+			// ISO-10303 49534F2D3130333033
+			fr = new FileReader( file );
+			read = new BufferedReader( fr );
+
+			Boolean reco = false;
+			try (FileInputStream fis = new FileInputStream( file )) {
+				int i = 0;
+				int cnt = 0;
+				StringBuilder sb = new StringBuilder();
+				String sb2str1 = "";
+				String sb2str2 = "";
+				String sb2str3 = "";
+				String sb2str4 = "";
+				String sb2str5 = "";
+				String sb2str6 = "";
+				String sb2str7 = "";
+				String sb2str8 = "";
+				String sb2str9 = "";
+				String sb123456789 = "";
+				while ( (i = fis.read()) != -1 ) {
+					sb.append( String.format( "%02X ", i ) );
+					if ( sb2str1 == "" ) {
+						sb2str1 = sb + "";
+					} else if ( sb2str2 == "" ) {
+						sb2str2 = sb + "";
+					} else if ( sb2str3 == "" ) {
+						sb2str3 = sb + "";
+					} else if ( sb2str4 == "" ) {
+						sb2str4 = sb + "";
+					} else if ( sb2str5 == "" ) {
+						sb2str5 = sb + "";
+					} else if ( sb2str6 == "" ) {
+						sb2str6 = sb + "";
+					} else if ( sb2str7 == "" ) {
+						sb2str7 = sb + "";
+					} else if ( sb2str8 == "" ) {
+						sb2str8 = sb + "";
+					} else if ( sb2str9 == "" ) {
+						sb2str9 = sb + "";
+						sb123456789 = sb + "";
+						break;
+					}
+					cnt++;
+					if ( cnt == 16 ) {
+						cnt = 0;
+					}
+				}
+				if ( sb123456789.contains( "49 53 4F 2D 31 30 33 30 33" ) ) {
+					reco = true;
+				}
+			}
+			if ( reco ) {
+				// hoechstwahrscheinlich ein IFC
+				mn = true;
+			}
+			read.close();
+			fr.close();
+			read = null;
+			fr = null;
+		} catch ( Exception e ) {
+			System.out.println( "Exception magic file ifc: " + e.getMessage() );
+			read.close();
+			fr.close();
+			read = null;
+			fr = null;
+		}
+		return mn;
 	}
 
 }

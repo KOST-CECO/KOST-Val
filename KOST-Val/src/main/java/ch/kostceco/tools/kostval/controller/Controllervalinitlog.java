@@ -1,5 +1,5 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
  * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
@@ -78,75 +78,162 @@ public class Controllervalinitlog implements MessageConstants
 		}
 
 		// Informationen holen, welche Formate validiert werden sollen
-		String pdfaValidation = configMap.get( "pdfavalidation" );
-		String siardValidation = configMap.get( "siardValidation" );
-		String tiffValidation = configMap.get( "tiffValidation" );
+		String pdfaValidation = configMap.get( "pdfaValidation" );
+		String txtValidation = configMap.get( "txtValidation" );
+		String pdfValidation = configMap.get( "pdfValidation" );
 		String jp2Validation = configMap.get( "jp2Validation" );
 		String jpegValidation = configMap.get( "jpegValidation" );
+		String tiffValidation = configMap.get( "tiffValidation" );
 		String pngValidation = configMap.get( "pngValidation" );
-
+		String flacValidation = configMap.get( "flacValidation" );
+		String waveValidation = configMap.get( "waveValidation" );
+		String mp3Validation = configMap.get( "mp3Validation" );
+		String ffv1Validation = configMap.get( "ffv1Validation" );
+		String mp4Validation = configMap.get( "mp4Validation" );
+		String mj2Validation = configMap.get( "mj2Validation" );
+		String xmlValidation = configMap.get( "xmlValidation" );
+		String siardValidation = configMap.get( "siardValidation" );
+		String csvValidation = configMap.get( "csvValidation" );
+		String xlsxValidation = configMap.get( "xlsxValidation" );
+		String odsValidation = configMap.get( "odsValidation" );
+		String otherformats = configMap.get( "otherformats" );
 		String version = "";
 
 		String formatValOn = "";
 		// ermitteln welche Formate validiert werden koennen respektive
 		// eingeschaltet sind
-		if ( pdfaValidation.equals( "yes" ) ) {
-			formatValOn = "PDF/A";
-			if ( tiffValidation.equals( "yes" ) ) {
+		if ( !pdfaValidation.equals( "no" ) ) {
+			if ( formatValOn.equals( "" ) ) {
+				formatValOn = "PDF/A";
+			} else {
+				formatValOn = formatValOn + ", PDF/A";
+			}
+		}
+		if ( !txtValidation.equals( "no" ) ) {
+			if ( formatValOn.equals( "" ) ) {
+				formatValOn = "TXT";
+			} else {
+				formatValOn = formatValOn + ", TXT";
+			}
+		}
+		if ( !pdfValidation.equals( "no" ) ) {
+			if ( formatValOn.equals( "" ) ) {
+				formatValOn = "PDF";
+			} else {
+				formatValOn = formatValOn + ", PDF";
+			}
+		}
+		if ( !jp2Validation.equals( "no" ) ) {
+			if ( formatValOn.equals( "" ) ) {
+				formatValOn = "JP2";
+			} else {
+				formatValOn = formatValOn + ", JP2";
+			}
+		}
+		if ( !jpegValidation.equals( "no" ) ) {
+			if ( formatValOn.equals( "" ) ) {
+				formatValOn = "JPEG";
+			} else {
+				formatValOn = formatValOn + ", JPEG";
+			}
+		}
+		if ( !tiffValidation.equals( "no" ) ) {
+			if ( formatValOn.equals( "" ) ) {
+				formatValOn = "TIFF";
+			} else {
 				formatValOn = formatValOn + ", TIFF";
 			}
-			if ( jp2Validation.equals( "yes" ) ) {
-				formatValOn = formatValOn + ", JP2";
+		}
+		if (! pngValidation.equals( "no" ) ) {
+			if ( formatValOn.equals( "" ) ) {
+				formatValOn = "PNG";
+			} else {
+				formatValOn = formatValOn + ", PNG";
 			}
-			if ( siardValidation.equals( "yes" ) ) {
+		}
+		if (! flacValidation.equals( "no" ) ) {
+			if ( formatValOn.equals( "" ) ) {
+				formatValOn = "FLAC";
+			} else {
+				formatValOn = formatValOn + ", FLAC";
+			}
+		}
+		if ( !waveValidation.equals( "no" ) ) {
+			if ( formatValOn.equals( "" ) ) {
+				formatValOn = "WAVE";
+			} else {
+				formatValOn = formatValOn + ", WAVE";
+			}
+		}
+		if ( !mp3Validation.equals( "no" ) ) {
+			if ( formatValOn.equals( "" ) ) {
+				formatValOn = "MP3";
+			} else {
+				formatValOn = formatValOn + ", MP3";
+			}
+		}
+		if (! ffv1Validation.equals( "no" ) ) {
+			if ( formatValOn.equals( "" ) ) {
+				formatValOn = "FFV1";
+			} else {
+				formatValOn = formatValOn + ", FFV1";
+			}
+		}
+		if ( !mp4Validation.equals( "no" ) ) {
+			if ( formatValOn.equals( "" ) ) {
+				formatValOn = "MP4";
+			} else {
+				formatValOn = formatValOn + ", MP4";
+			}
+		}
+		if ( !mj2Validation.equals( "no" ) ) {
+			if ( formatValOn.equals( "" ) ) {
+				formatValOn = "MJ2";
+			} else {
+				formatValOn = formatValOn + ", MJ2";
+			}
+		}
+		if ( !xmlValidation.equals( "no" ) ) {
+			if ( formatValOn.equals( "" ) ) {
+				formatValOn = "XML";
+			} else {
+				formatValOn = formatValOn + ", XML";
+			}
+		}
+		if ( !siardValidation.equals( "no" ) ) {
+			if ( formatValOn.equals( "" ) ) {
+				formatValOn = "SIARD";
+			} else {
 				formatValOn = formatValOn + ", SIARD";
 			}
-			if ( jpegValidation.equals( "yes" ) ) {
-				formatValOn = formatValOn + ", JPEG";
+		}
+		if (! csvValidation.equals( "no" ) ) {
+			if ( formatValOn.equals( "" ) ) {
+				formatValOn = "CSV";
+			} else {
+				formatValOn = formatValOn + ", CSV";
 			}
-			if ( pngValidation.equals( "yes" ) ) {
-				formatValOn = formatValOn + ", PNG";
+		}
+		if ( !xlsxValidation.equals( "no" ) ) {
+			if ( formatValOn.equals( "" ) ) {
+				formatValOn = "XLSX";
+			} else {
+				formatValOn = formatValOn + ", XLSX";
 			}
-		} else if ( tiffValidation.equals( "yes" ) ) {
-			formatValOn = "TIFF";
-			if ( jp2Validation.equals( "yes" ) ) {
-				formatValOn = formatValOn + ", JP2";
+		}
+		if ( !odsValidation.equals( "no" ) ) {
+			if ( formatValOn.equals( "" ) ) {
+				formatValOn = "ODS";
+			} else {
+				formatValOn = formatValOn + ", ODS";
 			}
-			if ( siardValidation.equals( "yes" ) ) {
-				formatValOn = formatValOn + ", SIARD";
+		}
+		if ( !otherformats.equals( "" ) ) {
+			if ( formatValOn.equals( "" ) ) {
+				formatValOn = otherformats;
+			} else {
+				formatValOn = formatValOn + ", "+otherformats;
 			}
-			if ( jpegValidation.equals( "yes" ) ) {
-				formatValOn = formatValOn + ", JPEG";
-			}
-			if ( pngValidation.equals( "yes" ) ) {
-				formatValOn = formatValOn + ", PNG";
-			}
-		} else if ( jp2Validation.equals( "yes" ) ) {
-			formatValOn = "JP2";
-			if ( siardValidation.equals( "yes" ) ) {
-				formatValOn = formatValOn + ", SIARD";
-			}
-			if ( jpegValidation.equals( "yes" ) ) {
-				formatValOn = formatValOn + ", JPEG";
-			}
-			if ( pngValidation.equals( "yes" ) ) {
-				formatValOn = formatValOn + ", PNG";
-			}
-		} else if ( siardValidation.equals( "yes" ) ) {
-			formatValOn = "SIARD";
-			if ( jpegValidation.equals( "yes" ) ) {
-				formatValOn = formatValOn + ", JPEG";
-			}
-			if ( pngValidation.equals( "yes" ) ) {
-				formatValOn = formatValOn + ", PNG";
-			}
-		} else if ( jpegValidation.equals( "yes" ) ) {
-			formatValOn = "JPEG";
-			if ( pngValidation.equals( "yes" ) ) {
-				formatValOn = formatValOn + ", PNG";
-			}
-		} else if ( pngValidation.equals( "yes" ) ) {
-			formatValOn = "PNG";
 		}
 
 		Logtxt.logtxt( logFile, getTextResourceService().getText( locale,

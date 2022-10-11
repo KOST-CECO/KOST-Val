@@ -1,5 +1,5 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
  * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
@@ -17,25 +17,20 @@
  * <http://www.gnu.org/licenses/>.
  * ============================================================================================== */
 
-package ch.kostceco.tools.kostval.exception.modulesip3;
+package ch.kostceco.tools.kostval.exception.modulexml;
 
 import ch.kostceco.tools.kostval.exception.KOSTValException;
 
-public class Validation3bUnspecifiedFormatException extends KOSTValException
+public class ValidationAxmlvalidationException extends KOSTValException
 {
 
-	/** @author razm Daniel Ludin, Bedag AG @version 0.2.0 */
+	/** @author Rc Claire Roethlisberger, KOST-CECO */
 
-	public Validation3bUnspecifiedFormatException()
-	{
-		super();
-	}
+	private static final long serialVersionUID = -8816841335398903517L;
 
-	public Validation3bUnspecifiedFormatException( String message )
+	public ValidationAxmlvalidationException( String message )
 	{
 		super( message );
 	}
-
-	private static final long serialVersionUID = 2762314526237098688L;
 
 }

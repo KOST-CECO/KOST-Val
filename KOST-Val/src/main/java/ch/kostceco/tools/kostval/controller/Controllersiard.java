@@ -1,5 +1,5 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
  * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
@@ -231,8 +231,7 @@ public class Controllersiard implements MessageConstants
 				this.getValidationAzipModule().getMessageService().print();
 			} else {
 				// Ein negatives Validierungsresultat in diesem Schritt fuehrt
-				// zum Abbruch der weiteren
-				// Verarbeitung
+				// zum Abbruch der weiteren Verarbeitung
 				this.getValidationAzipModule().getMessageService().print();
 				return false;
 			}
@@ -261,8 +260,7 @@ public class Controllersiard implements MessageConstants
 						.print();
 			} else {
 				// Ein negatives Validierungsresultat in diesem Schritt fuehrt
-				// zum Abbruch der weiteren
-				// Verarbeitung
+				// zum Abbruch der weiteren Verarbeitung
 				this.getValidationBprimaryStructureModule().getMessageService()
 						.print();
 				return false;
@@ -293,8 +291,7 @@ public class Controllersiard implements MessageConstants
 			} else {
 				this.getValidationCheaderModule().getMessageService().print();
 				// Ein negatives Validierungsresultat in diesem Schritt fuehrt
-				// zum Abbruch der weiteren
-				// Verarbeitung
+				// zum Abbruch der weiteren Verarbeitung
 				return false;
 			}
 		} catch ( ValidationCheaderException e ) {
@@ -324,8 +321,7 @@ public class Controllersiard implements MessageConstants
 				this.getValidationDstructureModule().getMessageService()
 						.print();
 				// Ein negatives Validierungsresultat in diesem Schritt fuehrt
-				// zum Abbruch der weiteren
-				// Verarbeitung
+				// zum Abbruch der weiteren Verarbeitung
 				return false;
 			}
 		} catch ( ValidationDstructureException e ) {

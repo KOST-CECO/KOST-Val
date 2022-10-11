@@ -1,5 +1,5 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
  * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
@@ -40,24 +40,30 @@ import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesip2.Validation2aFileIntegrityModule;
 import ch.kostceco.tools.kostval.logging.Logtxt;
 
-/** Validierungsschritt 2a: Sind alle referenzierten Dateien vorhanden? von allen datei nodes den
- * subnode name holen und diesen mit der Struktur vergleichen */
+/**
+ * Validierungsschritt 2a: Sind alle referenzierten Dateien vorhanden? von allen
+ * datei nodes den subnode name holen und diesen mit der Struktur vergleichen
+ */
 
 public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl
 		implements Validation2aFileIntegrityModule
 {
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile ) throws Validation2aFileIntegrityException
+	public boolean validate( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile )
+			throws Validation2aFileIntegrityException
 	{
 		boolean showOnWork = false;
 		int onWork = 410;
 		// Informationen zur Darstellung "onWork" holen
 		String onWorkConfig = configMap.get( "ShowProgressOnWork" );
-		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
-		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
-		 * ref="configurationService" /> */
+		/*
+		 * Nicht vergessen in
+		 * "src/main/resources/config/applicationContext-services.xml" beim
+		 * entsprechenden Modul die property anzugeben: <property
+		 * name="configurationService" ref="configurationService" />
+		 */
 		if ( onWorkConfig.equals( "yes" ) ) {
 			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
 			showOnWork = true;
@@ -71,39 +77,21 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl
 		try {
 			Map<String, File> fileMap = Util.getFileMap( valDatei, false );
 			Set<String> fileMapKeys = fileMap.keySet();
-			for ( Iterator<String> iterator = fileMapKeys.iterator(); iterator.hasNext(); ) {
+			for ( Iterator<String> iterator = fileMapKeys.iterator(); iterator
+					.hasNext(); ) {
 				String entryName = iterator.next();
 				// entryName: content/DOS_02/gpl2.pdf
 				filesInSip.put( entryName, entryName );
-				if ( showOnWork ) {
-					if ( onWork == 410 ) {
-						onWork = 2;
-						System.out.print( "2A-  " );
-						System.out.print( "\b\b\b\b\b" );
-					} else if ( onWork == 110 ) {
-						onWork = onWork + 1;
-						System.out.print( "2A\\  " );
-						System.out.print( "\b\b\b\b\b" );
-					} else if ( onWork == 210 ) {
-						onWork = onWork + 1;
-						System.out.print( "2A|  " );
-						System.out.print( "\b\b\b\b\b" );
-					} else if ( onWork == 310 ) {
-						onWork = onWork + 1;
-						System.out.print( "2A/  " );
-						System.out.print( "\b\b\b\b\b" );
-					} else {
-						onWork = onWork + 1;
-					}
-				}
 			}
 
 			try {
-				DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+				DocumentBuilderFactory dbf = DocumentBuilderFactory
+						.newInstance();
 				// dbf.setValidating(false);
 				DocumentBuilder db = dbf.newDocumentBuilder();
 				Document doc = db.parse( new FileInputStream(
-						new File( valDatei.getAbsolutePath() + "//header//metadata.xml" ) ) );
+						new File( valDatei.getAbsolutePath()
+								+ "//header//metadata.xml" ) ) );
 				doc.getDocumentElement().normalize();
 				NodeList nodeLst = doc.getElementsByTagName( "datei" );
 				NodeList nodeLstO = doc.getElementsByTagName( "ordner" );
@@ -139,39 +127,22 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl
 						if ( subNode.getNodeName().equals( "name" ) ) {
 							path = subNode.getTextContent();
 						}
-						if ( showOnWork ) {
-							if ( onWork == 410 ) {
-								onWork = 2;
-								System.out.print( "2A-  " );
-								System.out.print( "\b\b\b\b\b" );
-							} else if ( onWork == 110 ) {
-								onWork = onWork + 1;
-								System.out.print( "2A\\  " );
-								System.out.print( "\b\b\b\b\b" );
-							} else if ( onWork == 210 ) {
-								onWork = onWork + 1;
-								System.out.print( "2A|  " );
-								System.out.print( "\b\b\b\b\b" );
-							} else if ( onWork == 310 ) {
-								onWork = onWork + 1;
-								System.out.print( "2A/  " );
-								System.out.print( "\b\b\b\b\b" );
-							} else {
-								onWork = onWork + 1;
-							}
-						}
 					}
 
-					// selectNodeIterator ist zu Zeitintensiv bei grossen XML-Dateien mit getChildNodes()
-					// ersetzt
+					// selectNodeIterator ist zu Zeitintensiv bei grossen
+					// XML-Dateien mit getChildNodes() ersetzt
 
-					/* NodeIterator nl = XPathAPI.selectNodeIterator( dateiNode, "name" ); Node nameNode =
-					 * nl.nextNode(); String path = nameNode.getTextContent(); */
+					/*
+					 * NodeIterator nl = XPathAPI.selectNodeIterator( dateiNode,
+					 * "name" ); Node nameNode = nl.nextNode(); String path =
+					 * nameNode.getTextContent();
+					 */
 
 					boolean topReached = false;
 					while ( !topReached ) {
 						Node parentNode = dateiNode.getParentNode();
-						if ( parentNode.getNodeName().equals( "inhaltsverzeichnis" ) ) {
+						if ( parentNode.getNodeName()
+								.equals( "inhaltsverzeichnis" ) ) {
 							topReached = true;
 							break;
 						}
@@ -186,36 +157,16 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl
 								break;
 							}
 						}
-						if ( showOnWork ) {
-							if ( onWork == 410 ) {
-								onWork = 2;
-								System.out.print( "2A-  " );
-								System.out.print( "\b\b\b\b\b" );
-							} else if ( onWork == 110 ) {
-								onWork = onWork + 1;
-								System.out.print( "2A\\  " );
-								System.out.print( "\b\b\b\b\b" );
-							} else if ( onWork == 210 ) {
-								onWork = onWork + 1;
-								System.out.print( "2A|  " );
-								System.out.print( "\b\b\b\b\b" );
-							} else if ( onWork == 310 ) {
-								onWork = onWork + 1;
-								System.out.print( "2A/  " );
-								System.out.print( "\b\b\b\b\b" );
-							} else {
-								onWork = onWork + 1;
-							}
-						}
 					}
 					String name = path;
 
 					String removedEntry = filesInSip.remove( name );
 					if ( removedEntry == null ) {
 						// Test von 2A
-						Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
-								MESSAGE_XML_MODUL_Ba_SIP )
-								+ getTextResourceService().getText( locale, MESSAGE_XML_BA_FILEMISSING, name ) );
+						Logtxt.logtxt( logFile, getTextResourceService()
+								.getText( locale, MESSAGE_XML_MODUL_Ba_SIP )
+								+ getTextResourceService().getText( locale,
+										MESSAGE_XML_BA_FILEMISSING, name ) );
 						valid = false;
 					}
 					path = "";
@@ -235,52 +186,38 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl
 						}
 					}
 
-					// selectNodeIterator ist zu Zeitintensiv bei grossen XML-Dateien mit getChildNodes()
+					// selectNodeIterator ist zu Zeitintensiv bei grossen
+					// XML-Dateien mit getChildNodes()
 					// ersetzt
-					/* NodeIterator nlO = XPathAPI.selectNodeIterator( dateiNodeO, "name" ); Node nameNodeO =
-					 * nlO.nextNode(); String pathO = nameNodeO.getTextContent(); */
+					/*
+					 * NodeIterator nlO = XPathAPI.selectNodeIterator(
+					 * dateiNodeO, "name" ); Node nameNodeO = nlO.nextNode();
+					 * String pathO = nameNodeO.getTextContent();
+					 */
 
 					boolean topReachedO = false;
 
 					while ( !topReachedO ) {
 
 						Node parentNodeO = dateiNodeO.getParentNode();
-						if ( parentNodeO.getNodeName().equals( "inhaltsverzeichnis" ) ) {
+						if ( parentNodeO.getNodeName()
+								.equals( "inhaltsverzeichnis" ) ) {
 							topReachedO = true;
 							break;
 						}
 
 						NodeList childrenNodesO = parentNodeO.getChildNodes();
-						for ( int xO = 0; xO < childrenNodesO.getLength(); xO++ ) {
+						for ( int xO = 0; xO < childrenNodesO
+								.getLength(); xO++ ) {
 							Node childNodeO = childrenNodesO.item( xO );
 
 							if ( childNodeO.getNodeName().equals( "name" ) ) {
-								pathO = childNodeO.getTextContent() + "/" + pathO;
+								pathO = childNodeO.getTextContent() + "/"
+										+ pathO;
 								if ( dateiNodeO.getParentNode() != null ) {
 									dateiNodeO = dateiNodeO.getParentNode();
 								}
 								break;
-							}
-						}
-						if ( showOnWork ) {
-							if ( onWork == 410 ) {
-								onWork = 2;
-								System.out.print( "2A-  " );
-								System.out.print( "\b\b\b\b\b" );
-							} else if ( onWork == 110 ) {
-								onWork = onWork + 1;
-								System.out.print( "2A\\  " );
-								System.out.print( "\b\b\b\b\b" );
-							} else if ( onWork == 210 ) {
-								onWork = onWork + 1;
-								System.out.print( "2A|  " );
-								System.out.print( "\b\b\b\b\b" );
-							} else if ( onWork == 310 ) {
-								onWork = onWork + 1;
-								System.out.print( "2A/  " );
-								System.out.print( "\b\b\b\b\b" );
-							} else {
-								onWork = onWork + 1;
 							}
 						}
 					}
@@ -293,37 +230,44 @@ public class Validation2aFileIntegrityModuleImpl extends ValidationModuleImpl
 				}
 
 			} catch ( Exception e ) {
-				
-						Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ba_SIP )
-								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+				Logtxt.logtxt( logFile,
+						getTextResourceService().getText( locale,
+								MESSAGE_XML_MODUL_Ba_SIP )
+								+ getTextResourceService().getText( locale,
+										ERROR_XML_UNKNOWN, e.getMessage() ) );
 				valid = false;
 			}
 
 			Set<String> filesInSipKeys = filesInSip.keySet();
-			for ( Iterator<String> iterator = filesInSipKeys.iterator(); iterator.hasNext(); ) {
+			for ( Iterator<String> iterator = filesInSipKeys
+					.iterator(); iterator.hasNext(); ) {
 				String entryName = iterator.next();
 				if ( entryName.startsWith( "header" ) ) {
 					// header wird in 2c ignoriert
 				} else {
 					if ( entryName.endsWith( "/" ) ) {
-						
-								Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bb_SIP )
-										+ getTextResourceService().getText( locale, MESSAGE_XML_BB_FILEMISSINGO,
-												entryName ) );
+						Logtxt.logtxt( logFile, getTextResourceService()
+								.getText( locale, MESSAGE_XML_MODUL_Bb_SIP )
+								+ getTextResourceService().getText( locale,
+										MESSAGE_XML_BB_FILEMISSINGO,
+										entryName ) );
 					} else {
-						
-								Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bb_SIP )
-										+ getTextResourceService().getText( locale, MESSAGE_XML_BB_FILEMISSING,
-												entryName ) );
+						Logtxt.logtxt( logFile, getTextResourceService()
+								.getText( locale, MESSAGE_XML_MODUL_Bb_SIP )
+								+ getTextResourceService().getText( locale,
+										MESSAGE_XML_BB_FILEMISSING,
+										entryName ) );
 					}
 					valid = false;
 				}
 			}
 
 		} catch ( Exception e ) {
-			
-					Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ba_SIP )
-							+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_Ba_SIP )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 

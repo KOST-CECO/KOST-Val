@@ -1,5 +1,5 @@
 ﻿/* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
  * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
@@ -705,10 +705,10 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 								 * dass er in diesen hineinpasst. */
 								if ( !noDateValidation ) {
 									// "keine Angabe" auf Stufe Dok wird mit dem calWert vom Dossier gesetzt
-									if ( nodeVon.equals( "keine Angabe" ) ) {
+									if ( nodeVon.getTextContent().equals( "keine Angabe" ) ) {
 										calDokVon = calDossierVon;
 									}
-									if ( nodeBis.equals( "keine Angabe" ) ) {
+									if ( nodeBis.getTextContent().equals( "keine Angabe" ) ) {
 										calDokBis = calDossierBis;
 									}
 

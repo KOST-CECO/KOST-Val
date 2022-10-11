@@ -43,7 +43,7 @@ public class DroidPuid
 			droid = new Droid();
 
 			droid.readSignatureFile( nameOfSignature );
-
+			
 			IdentificationFile ifile = droid.identify( file.getAbsolutePath() );
 			for ( int x = 0; x < ifile.getNumHits(); x++ ) {
 				FileFormatHit ffh = ifile.getHit( x );

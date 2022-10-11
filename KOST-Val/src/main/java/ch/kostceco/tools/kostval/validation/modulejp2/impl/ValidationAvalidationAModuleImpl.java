@@ -32,14 +32,11 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import ch.kostceco.tools.kosttools.fileservice.DroidPuid;
 import ch.kostceco.tools.kosttools.fileservice.Jpylyzer;
-import ch.kostceco.tools.kosttools.fileservice.Magic;
-import ch.kostceco.tools.kostval.KOSTVal;
 import ch.kostceco.tools.kostval.exception.modulejp2.ValidationAjp2validationException;
+import ch.kostceco.tools.kostval.logging.Logtxt;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulejp2.ValidationAvalidationAModule;
-import ch.kostceco.tools.kostval.logging.Logtxt;
 
 /** Ist die vorliegende JP2-Datei eine valide JP2-Datei? JP2 Validierungs mit Jpylyzer.
  * 
@@ -67,121 +64,7 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 			workDir.mkdir();
 		}
 
-		// Start mit der Erkennung
-
-		// Eine JP2 Datei (.jp2) muss mit ....jP ..ï¿½.ftypjp2
-		// [0000000c6a5020200d0a870a] beginnen
-
-		/* Sicherstellen, dass es ein JP2 und kein JPX ist. Jpylyzer kann nur JP2 und gibt sonst keine
-		 * korrekte Fehlermeldung raus.
-		 * 
-		 * JP2-BOF: 00 00 00 0C 6A 50 20 20 0D 0A 87 0A {4} 66 74 79 70 6A 70 32
-		 * 
-		 * 1 2 3 4 5 6 7 8 9 10 11 12 17 18 19 20 21 22 23
-		 * 
-		 * JPX-BOF: 00 00 00 0C 6A 50 20 20 0D 0A 87 0A {4} 66 74 79 70 6A 70 78
-		 * 
-		 * JPM-BOF: 00 00 00 0C 6A 50 20 20 0D 0A 87 0A {4} 66 74 79 70 6A 70 6D */
-		if ( valDatei.isDirectory() ) {
-			if ( min ) {
-				return false;
-			} else {
-
-				Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
-						+ getTextResourceService().getText( locale, ERROR_XML_A_JP2_ISDIRECTORY ) );
-				return false;
-			}
-		} else if ( (valDatei.getAbsolutePath().toLowerCase().endsWith( ".jp2" )) ) {
-			try {
-				// System.out.println("ueberpruefe Magic number jp2...");
-				if ( Magic.magicJp2( valDatei ) ) {
-					/* hoechstwahrscheinlich ein JP2 da es mit 0000000c6a5020200d0a respektive ....jP ..ï¿½
-					 * beginnt */
-					// System.out.println("es ist ein JP2 oder JPX ");
-
-					// System.out.println("ueberpruefe Magic number jp2 part1...");
-					if ( Magic.magicJp2p1( valDatei ) ) {
-						// System.out.println(" -> es ist eine Jp2_Part1-Datei");
-						// System.out.print("es ist ein JP2 (JPEG2000 Part1)");
-					} else {
-						// System.out.print("es ist ein JPX (Part2) / JPM (Part6)");
-						if ( min ) {
-							return false;
-						} else {
-
-							Logtxt.logtxt( logFile,
-									getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
-											+ getTextResourceService().getText( locale, ERROR_XML_A_JP2_INCORRECTFILE,
-													"JPX/JPM" ) );
-							return false;
-						}
-					}
-
-				} else {
-					// System.out.println(" -> es ist KEINE Jp2-Datei");
-					if ( min ) {
-						return false;
-					} else {
-						// Droid-Erkennung, damit Details ausgegeben werden koennen
-						// existiert die SignatureFile am angebenen Ort?
-						String nameOfSignature = configMap.get( "PathToDroidSignatureFile" );
-						if ( !new File( nameOfSignature ).exists() ) {
-							if ( min ) {
-								return false;
-							} else {
-
-								Logtxt.logtxt( logFile,
-										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
-												+ getTextResourceService().getText( locale, MESSAGE_XML_CA_DROID ) );
-								return false;
-							}
-						}
-
-						// Ermittle die DROID-PUID der valDatei mit hilfe der nameOfSignature
-						String puid = (DroidPuid.getPuid( valDatei, nameOfSignature ));
-						if ( min ) {
-							return false;
-						} else if ( puid.equals( " ERROR " ) ) {
-							// Probleme bei der Initialisierung von DROID
-							Logtxt.logtxt( logFile,
-									getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
-											+ getTextResourceService().getText( locale,
-													ERROR_XML_CANNOT_INITIALIZE_DROID ) );
-							return false;
-						} else {
-							// Erkennungsergebnis ausgeben
-
-							Logtxt.logtxt( logFile,
-									getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
-											+ getTextResourceService().getText( locale, ERROR_XML_A_JP2_INCORRECTFILE,
-													puid ) );
-							return false;
-						}
-					}
-				}
-			} catch ( Exception e ) {
-				if ( min ) {
-					return false;
-				} else {
-
-					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_A_JP2_INCORRECTFILE ) );
-					return false;
-				}
-			}
-		} else {
-			// die Datei endet nicht mit jp2 -> Fehler
-			if ( min ) {
-				return false;
-			} else {
-
-				Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
-						+ getTextResourceService().getText( locale, ERROR_XML_A_JP2_INCORRECTFILEENDING ) );
-				return false;
-			}
-		}
-		// Ende der Erkennung
+		// Die Erkennung erfolgt bereits im Vorfeld
 
 		boolean isValid = false;
 
@@ -193,10 +76,8 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 		 * dirOfJarPath + File.separator +
 		 * 
 		 * erweitern. */
-		String path = new java.io.File(
-				KOSTVal.class.getProtectionDomain().getCodeSource().getLocation().getPath() )
-						.getAbsolutePath();
-		String locationOfJarPath = path;
+		File	pathFile = new File(ClassLoader.getSystemClassLoader().getResource(".").getPath());
+		String locationOfJarPath = pathFile.getAbsolutePath();
 		String dirOfJarPath = locationOfJarPath;
 		if ( locationOfJarPath.endsWith( ".jar" ) || locationOfJarPath.endsWith( ".exe" )
 				|| locationOfJarPath.endsWith( "." ) ) {
@@ -317,25 +198,25 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 				 * 
 				 * A Erkennung und Struktur
 				 * 
-				 * • A SignatureBox • A FileTypeBox • A JP2HeaderBox • A - ImageHeaderBox • A -
-				 * ColourSpecificationBox • A - BitsPerComponentBox • A - PaletteBox • A -
-				 * ComponentMappingBox • A - ChannelDefinitionBox • A - ResolutionBox
+				 * ï¿½ A SignatureBox ï¿½ A FileTypeBox ï¿½ A JP2HeaderBox ï¿½ A - ImageHeaderBox ï¿½ A -
+				 * ColourSpecificationBox ï¿½ A - BitsPerComponentBox ï¿½ A - PaletteBox ï¿½ A -
+				 * ComponentMappingBox ï¿½ A - ChannelDefinitionBox ï¿½ A - ResolutionBox
 				 * 
 				 * B Metadaten-Validierung
 				 * 
-				 * • B XmlBox • B UuidInfoBox • B UuidBox • B IntellectualProperty
+				 * ï¿½ B XmlBox ï¿½ B UuidInfoBox ï¿½ B UuidBox ï¿½ B IntellectualProperty
 				 * 
 				 * C Bild-Validierung
 				 * 
-				 * • C ContiguousCodestreamBox • C - Siz = {0} {0} in the CC • C - Coc = {0} {0} in the CC •
-				 * C - Rgn = {0} {0} in the CC • C - Qcd = {0} {0} in the CC • C - Qcc = {0} {0} in the CC •
-				 * C - Poc = {0} {0} in the CC • C - Crg = {0} {0} in the CC • C - Com = {0} {0} in the CC •
-				 * C - tile = {0} {0} in the CC • C - Soc = {0} {0} in the CC • C - Eoc = {0} {0} in the CC
-				 * • C - Cod = {0} {0} in the CC
+				 * ï¿½ C ContiguousCodestreamBox ï¿½ C - Siz = {0} {0} in the CC ï¿½ C - Coc = {0} {0} in the CC ï¿½
+				 * C - Rgn = {0} {0} in the CC ï¿½ C - Qcd = {0} {0} in the CC ï¿½ C - Qcc = {0} {0} in the CC ï¿½
+				 * C - Poc = {0} {0} in the CC ï¿½ C - Crg = {0} {0} in the CC ï¿½ C - Com = {0} {0} in the CC ï¿½
+				 * C - tile = {0} {0} in the CC ï¿½ C - Soc = {0} {0} in the CC ï¿½ C - Eoc = {0} {0} in the CC
+				 * ï¿½ C - Cod = {0} {0} in the CC
 				 * 
 				 * D Sonstige Validierung
 				 * 
-				 * • D ELSE nicht zugeordnet ({0}) */
+				 * ï¿½ D ELSE nicht zugeordnet ({0}) */
 				int isignatureBox = 0;
 				int ifileTypeBox = 0;
 				int ijp2HeaderBox = 0;
@@ -386,8 +267,8 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 								ijp2HeaderBox = ijp2HeaderBox + 1;
 								NodeList childrenII = textChild.getChildNodes();
 								for ( int j = 0; j < childrenII.getLength(); j++ ) {
-									/* • A - ImageHeaderBox • A - ColourSpecificationBox • A - BitsPerComponentBox • A
-									 * - PaletteBox • A - ComponentMappingBox • A - ChannelDefinitionBox • A -
+									/* ï¿½ A - ImageHeaderBox ï¿½ A - ColourSpecificationBox ï¿½ A - BitsPerComponentBox ï¿½ A
+									 * - PaletteBox ï¿½ A - ComponentMappingBox ï¿½ A - ChannelDefinitionBox ï¿½ A -
 									 * ResolutionBox */
 									Node textChildII = childrenII.item( j );
 									if ( textChildII.getNodeType() == Node.ELEMENT_NODE ) {
@@ -426,11 +307,11 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 								icontiguousCodestreamBox = icontiguousCodestreamBox + 1;
 								NodeList childrenIII = textChild.getChildNodes();
 								for ( int k = 0; k < childrenIII.getLength(); k++ ) {
-									/* • C - Siz = {0} {0} in the CC • C - Coc = {0} {0} in the CC • C - Rgn = {0} {0}
-									 * in the CC • C - Qcd = {0} {0} in the CC • C - Qcc = {0} {0} in the CC • C - Poc
-									 * = {0} {0} in the CC • C - Crg = {0} {0} in the CC • C - Com = {0} {0} in the CC
-									 * • C - tile = {0} {0} in the CC • C - Soc = {0} {0} in the CC • C - Eoc = {0}
-									 * {0} in the CC • C - Cod = {0} {0} in the CC */
+									/* ï¿½ C - Siz = {0} {0} in the CC ï¿½ C - Coc = {0} {0} in the CC ï¿½ C - Rgn = {0} {0}
+									 * in the CC ï¿½ C - Qcd = {0} {0} in the CC ï¿½ C - Qcc = {0} {0} in the CC ï¿½ C - Poc
+									 * = {0} {0} in the CC ï¿½ C - Crg = {0} {0} in the CC ï¿½ C - Com = {0} {0} in the CC
+									 * ï¿½ C - tile = {0} {0} in the CC ï¿½ C - Soc = {0} {0} in the CC ï¿½ C - Eoc = {0}
+									 * {0} in the CC ï¿½ C - Cod = {0} {0} in the CC */
 									Node textChildIII = childrenIII.item( k );
 									if ( textChildIII.getNodeType() == Node.ELEMENT_NODE ) {
 										if ( textChildIII.getNodeName().contains( "siz" )

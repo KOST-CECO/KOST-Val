@@ -1,5 +1,5 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
  * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
@@ -44,11 +44,10 @@ import org.jdom2.input.SAXBuilder;
 
 import ch.kostceco.tools.kosttools.fileservice.Sed;
 import ch.kostceco.tools.kosttools.util.Util;
-import ch.kostceco.tools.kostval.KOSTVal;
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationJsurplusFilesException;
+import ch.kostceco.tools.kostval.logging.Logtxt;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationJsurplusFilesModule;
-import ch.kostceco.tools.kostval.logging.Logtxt;
 
 /** Validierungsschritt J (zusaetzliche Primaerdateien) Enthaelt der content-Ordner Dateien oder
  * Ordner die nicht in metadata.xml oder in table[Zahl].xml beschrieben sind ? invalid -->
@@ -142,10 +141,8 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 			 * dirOfJarPath + File.separator +
 			 * 
 			 * erweitern. */
-			String path = new java.io.File(
-					KOSTVal.class.getProtectionDomain().getCodeSource().getLocation().getPath() )
-							.getAbsolutePath();
-			String locationOfJarPath = path;
+			File	pathFile = new File(ClassLoader.getSystemClassLoader().getResource(".").getPath());
+			String locationOfJarPath = pathFile.getAbsolutePath();
 			String dirOfJarPath = locationOfJarPath;
 			if ( locationOfJarPath.endsWith( ".jar" ) || locationOfJarPath.endsWith( ".exe" )
 					|| locationOfJarPath.endsWith( "." ) ) {

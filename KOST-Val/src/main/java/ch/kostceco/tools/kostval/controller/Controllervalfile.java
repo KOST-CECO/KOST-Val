@@ -1,5 +1,5 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
  * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
@@ -183,6 +183,37 @@ public class Controllervalfile implements MessageConstants
 					MESSAGE_XML_VALFILE, originalValName ) );
 			Controllerpng controller1 = (Controllerpng) context
 					.getBean( "controllerpng" );
+			boolean okMandatory = controller1.executeMandatory( valDatei,
+					directoryOfLogfile, configMap, locale, logFile );
+			valFile = okMandatory;
+
+			if ( okMandatory ) {
+				// Validierte Datei valide
+				Logtxt.logtxt( logFile, getTextResourceService()
+						.getText( locale, MESSAGE_XML_VALERGEBNIS_VALID ) );
+				Logtxt.logtxt( logFile, getTextResourceService()
+						.getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) );
+				System.out.println( " = Valid" );
+			} else {
+				// Fehler in Validierte Datei --> invalide
+				Logtxt.logtxt( logFile, getTextResourceService()
+						.getText( locale, MESSAGE_XML_VALERGEBNIS_INVALID ) );
+				Logtxt.logtxt( logFile, getTextResourceService()
+						.getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) );
+				System.out.println( " = Invalid" );
+			}
+
+		} else if ( (valDateiExt.equals( ".xml" )
+				|| valDateiExt.equals( ".xsd" )|| valDateiExt.equals( ".xsl" )) ) {
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
+					MESSAGE_XML_VALERGEBNIS ) );
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
+					MESSAGE_XML_VALTYPE, getTextResourceService()
+							.getText( locale, MESSAGE_XMLVALIDATION ) ) );
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
+					MESSAGE_XML_VALFILE, originalValName ) );
+			Controllerxml controller1 = (Controllerxml) context
+					.getBean( "controllerxml" );
 			boolean okMandatory = controller1.executeMandatory( valDatei,
 					directoryOfLogfile, configMap, locale, logFile );
 			valFile = okMandatory;

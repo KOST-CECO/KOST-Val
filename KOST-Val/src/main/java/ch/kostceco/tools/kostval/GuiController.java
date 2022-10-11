@@ -1,5 +1,5 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
  * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
@@ -82,7 +82,7 @@ public class GuiController
 			buttonShowConfig, buttonPrint, buttonSave;
 
 	ObservableList<String>		langList		= FXCollections
-			.observableArrayList( "Deutsch", "Fran�ais", "English" );
+			.observableArrayList( "Deutsch", "Français", "English" );
 	ObservableList<String>		logTypeList		= FXCollections
 			.observableArrayList( " --xml (default)", " --min (valid/invalid)",
 					" --max (verbose)" );
@@ -114,13 +114,13 @@ public class GuiController
 
 	private String				arg0, arg1, arg2, arg3 = "--xml", dirOfJarPath,
 			initInstructionsDe, initInstructionsFr, initInstructionsEn;
-	private String				versionKostVal	= "2.1.2.0";
+	private String				versionKostVal	= "2.1.3.0";
 	/*
 	 * TODO: versionKostVal auch hier anpassen:
 	 * 
 	 * 2) cmdKOSTVal.java
 	 *
-	 * 3) ConfigController
+	 * 3) ConfigController inkl SubControllers
 	 * 
 	 * 4) Konfigurationsdatei inkl 3x xsl
 	 * 
@@ -159,7 +159,7 @@ public class GuiController
 		String java6432 = System.getProperty( "sun.arch.data.model" );
 		String javaVersion = System.getProperty( "java.version" );
 		String javafxVersion = System.getProperty( "javafx.version" );
-		label.setText( "Copyright � KOST/CECO          KOST-Val v"
+		label.setText( "Copyright © KOST/CECO          KOST-Val v"
 				+ versionKostVal + "          JavaFX " + javafxVersion
 				+ "   &   Java-" + java6432 + " " + javaVersion + "." );
 
@@ -196,11 +196,11 @@ public class GuiController
 			if ( locale.toString().startsWith( "fr" ) ) {
 				locale = new Locale( "fr" );
 				arg2 = locale.toString();
-				lang.setValue( "Fran�ais" );
+				lang.setValue( "Français" );
 				buttonFormat.setText( "format uniquement" );
 				buttonSip.setText( "SIP incl. formats" );
 				buttonOnlySip.setText( "SIP uniquement" );
-				labelFileFolder.setText( "S�lectionnez" );
+				labelFileFolder.setText( "Sélectionnez" );
 				buttonFolder.setText( "dossier" );
 				buttonFile.setText( "fichier" );
 				buttonHelp.setText( "Aide ?" );
@@ -248,7 +248,7 @@ public class GuiController
 				buttonFormat.setText( "nur Formate" );
 				buttonSip.setText( "SIP inkl. Formate" );
 				buttonOnlySip.setText( "nur SIP" );
-				labelFileFolder.setText( "W�hle Datei / Ordner" );
+				labelFileFolder.setText( "Wähle Datei / Ordner" );
 				buttonFolder.setText( "Ordner" );
 				buttonFile.setText( "Datei" );
 				buttonHelp.setText( "Hilfe ?" );
@@ -341,10 +341,10 @@ public class GuiController
 
 		/* Kurzanleitung zum GUI anzeigen */
 		String help1, help2, help3, help4, help5;
-		help1 = " <h2>Br�ves instructions</h2> ";
+		help1 = " <h2>Brèves instructions</h2> ";
 		help2 = "<hr>";
-		help3 = "<h3>1. Pr�cisez / s�lectionnez le fichier ou le dossier � valider</h3>";
-		help4 = "<h3>2. Ajuster la configuration et le LogType si n�cessaire</h3>";
+		help3 = "<h3>1. Précisez / sélectionnez le fichier ou le dossier à valider</h3>";
+		help4 = "<h3>2. Ajuster la configuration et le LogType si nécessaire</h3>";
 		help5 = "<h3>3. Commencer la validation</h3>";
 		initInstructionsFr = "<html>" + help1 + help2 + help3 + help4 + help5
 				+ "<br/></html>";
@@ -355,7 +355,7 @@ public class GuiController
 		initInstructionsEn = "<html>" + help1 + help2 + help3 + help4 + help5
 				+ "<br/></html>";
 		help1 = "<h2>Kurzanleitung</h2>";
-		help3 = "<h3>1. Datei oder Ordner zur Validierung angeben / ausw�hlen</h3>";
+		help3 = "<h3>1. Datei oder Ordner zur Validierung angeben / auswählen</h3>";
 		help4 = "<h3>2. Ggf. Konfiguration und LogType anpassen</h3>";
 		help5 = "<h3>3. Validierung starten</h3>";
 		initInstructionsDe = "<html>" + help1 + help2 + help3 + help4 + help5
@@ -409,7 +409,7 @@ public class GuiController
 		console.setText( " \n" );
 		/*
 		 * Kurzanleitung 1. Datei oder Ordner zur Validierung angeben /
-		 * ausw�hlen 2. ggf. Konfiguration und LogType anpassen 3. Validierung
+		 * auswaehlen 2. ggf. Konfiguration und LogType anpassen 3. Validierung
 		 * starten
 		 */
 		try {
@@ -472,22 +472,22 @@ public class GuiController
 		if ( locale.toString().startsWith( "fr" ) ) {
 			licence1 = "<h2>Ce programme ne comporte ABSOLUMENT AUCUNE GARANTIE.</h2>";
 			licence2 = "<hr>";
-			licence3 = "<h4>Il s'agit d'un logiciel libre, et vous �tes invit�s � le redistribuer sous certaines conditions;</h4>";
-			licence4 = "- voir le manuel et GPL-3.0_COPYING.txt pour plus de d�tails";
-			licence5 = "- KOST-Val utilise des composants non modifi�s d'autres fabricants en les incorporant directement dans le code source.";
-			licence6 = "- Les utilisateurs de KOST-Val sont pri�s de respecter les conditions de licence de ces composants.";
+			licence3 = "<h4>Il s'agit d'un logiciel libre, et vous êtes invités à le redistribuer sous certaines conditions;</h4>";
+			licence4 = "- voir le manuel et GPL-3.0_COPYING.txt pour plus de détails";
+			licence5 = "- KOST-Val utilise des composants non modifiés d'autres fabricants en les incorporant directement dans le code source.";
+			licence6 = "- Les utilisateurs de KOST-Val sont priés de respecter les conditions de licence de ces composants.";
 		} else if ( locale.toString().startsWith( "en" ) ) {
 			licence1 = "<h2>This program comes with ABSOLUTELY NO WARRANTY.</h2>";
 			licence2 = "<hr>";
 			licence3 = "<h4>This is free software, and you are welcome to redistribute it under certain conditions;</h4>";
 			licence4 = "- see the manual and GPL-3.0_COPYING.txt for details. ";
 			licence5 = "- KOST-Val uses unmodified components of other manufacturers by embedding them directly into the source code.";
-			licence6 = "- Users of KOST-Val are requested to adhere to these components �terms of licence.";
+			licence6 = "- Users of KOST-Val are requested to adhere to these components terms of licence.";
 		} else {
 			licence1 = "<h2>Dieses Programm kommt mit ABSOLUT KEINER GARANTIE.</h2>";
 			licence2 = "<hr>";
-			licence3 = "<h4>Es handelt sich um freie Software, und Sie d�rfen sie unter bestimmten Bedingungen gerne weitergeben;</h4>";
-			licence4 = "- siehe das Handbuch und GPL-3.0_COPYING.txt f�r Einzelheiten. ";
+			licence3 = "<h4>Es handelt sich um freie Software, und Sie dürfen sie unter bestimmten Bedingungen gerne weitergeben;</h4>";
+			licence4 = "- siehe das Handbuch und GPL-3.0_COPYING.txt für Einzelheiten. ";
 			licence5 = "- KOST-Val verwendet unmodifizierte Komponenten anderer Hersteller, indem diese direkt in den Quellcode eingebettet werden.";
 			licence6 = "- Benutzer von KOST-Val werden gebeten, sich an die Lizenzbedingungen dieser Komponenten zu halten.";
 		}
@@ -504,13 +504,13 @@ public class GuiController
 		console.setText( " \n" );
 		Printer defaultprinter = Printer.getDefaultPrinter();
 		Printer printerToUse = defaultprinter;
-		String strHeaderText = "W�hlen Sie einen Drucker aus den verf�gbaren Druckern";
+		String strHeaderText = "Wählen Sie einen Drucker aus den verfügbaren Druckern";
 		String strTitle = "Druckerauswahl";
 		String strNoPrinter = "Kein Drucker. Es ist kein Drucker auf Ihrem System installiert.";
 		if ( locale.toString().startsWith( "fr" ) ) {
 			strHeaderText = "Choisissez une imprimante parmi les imprimantes disponibles";
 			strTitle = "Choix de l'imprimante";
-			strNoPrinter = "Pas d'imprimante. Aucune imprimante n'est install�e sur votre syst�me";
+			strNoPrinter = "Pas d'imprimante. Aucune imprimante n'est installée sur votre système";
 		} else if ( locale.toString().startsWith( "en" ) ) {
 			strHeaderText = "Choose a printer from available printers";
 			strTitle = "Printer Choice";
@@ -539,7 +539,7 @@ public class GuiController
 				job.getJobSettings();
 				/*
 				 * showPrintDialog nicht verwenden, da ansonsten nicht
-				 * zuverlaessig abgebrochen werden kann. Besser ist es �ber
+				 * zuverlaessig abgebrochen werden kann. Besser ist es ueber
 				 * einen ChoiceDialog den Drucker auszuwaehlen und wenn einer
 				 * ausgewaehlt wurde zu drucken!
 				 */
@@ -569,7 +569,7 @@ public class GuiController
 			String copy = "Kopiere ";
 			if ( locale.toString().startsWith( "fr" ) ) {
 				folderChooser.setTitle(
-						"Choisissez le dossier dans lequel le log doit �tre sauvegard�" );
+						"Choisissez le dossier dans lequel le log doit être sauvegardé" );
 				copy = "Copie ";
 			} else if ( locale.toString().startsWith( "en" ) ) {
 				folderChooser.setTitle(
@@ -577,7 +577,7 @@ public class GuiController
 				copy = "Copy ";
 			} else {
 				folderChooser.setTitle(
-						"W�hlen Sie den Ordner in welcher der Log gespeichert werden soll" );
+						"Wählen Sie den Ordner in welcher der Log gespeichert werden soll" );
 				copy = "Kopiere ";
 			}
 			File saveFolder = folderChooser.showDialog( new Stage() );
@@ -619,15 +619,15 @@ public class GuiController
 	void valFormat( ActionEvent e )
 	{
 		console.setText( " \n" );
-		String text = "<html><h2>Formatvalidierung wird durchgef�hrt. <br/><br/>Bitte warten ...</h2></html>";
+		String text = "<html><h2>Formatvalidierung wird durchgeführt. <br/><br/>Bitte warten ...</h2></html>";
 		if ( locale.toString().startsWith( "fr" ) ) {
-			text = "<html><h2>La validation du format est lanc�e. <br/><br/>Veuillez patienter ...</h2></html>";
+			text = "<html><h2>La validation du format est lancée. <br/><br/>Veuillez patienter ...</h2></html>";
 		} else if ( locale.toString().startsWith( "en" ) ) {
 			text = "<html><h2>Format validation is performed. <br/><br/>Please wait ...</h2></html>";
 		}
 		engine.loadContent( text );
 
-		// Keine Eingabe w�hrend der Validierung
+		// Keine Eingabe waehrend der Validierung
 		buttonHelp.setDisable( true );
 		buttonFolder.setDisable( true );
 		buttonFile.setDisable( true );
@@ -683,7 +683,7 @@ public class GuiController
 			@Override
 			public void handle( WorkerStateEvent t )
 			{
-				// Validierung beeindet Buttons freigeben
+				// Validierung beendet Buttons freigeben
 				buttonHelp.setDisable( false );
 				buttonFolder.setDisable( false );
 				buttonFile.setDisable( false );
@@ -730,7 +730,7 @@ public class GuiController
 			@Override
 			public void handle( WorkerStateEvent t )
 			{
-				// Validierung beeindet Buttons freigeben
+				// Validierung beendet Buttons freigeben
 				buttonHelp.setDisable( false );
 				buttonFolder.setDisable( false );
 				buttonFile.setDisable( false );
@@ -802,15 +802,15 @@ public class GuiController
 	void valSip( ActionEvent e )
 	{
 		console.setText( " \n" );
-		String text = "<html><h2>SIP-Validierung wird durchgef�hrt. <br/><br/>Bitte warten ...</h2></html>";
+		String text = "<html><h2>SIP-Validierung wird durchgeführt. <br/><br/>Bitte warten ...</h2></html>";
 		if ( locale.toString().startsWith( "fr" ) ) {
-			text = "<html><h2>La validation du SIP est lanc�e. <br/><br/>Veuillez patienter ...</h2></html>";
+			text = "<html><h2>La validation du SIP est lancée. <br/><br/>Veuillez patienter ...</h2></html>";
 		} else if ( locale.toString().startsWith( "en" ) ) {
 			text = "<html><h2>SIP validation is performed. <br/><br/>Please wait ...</h2></html>";
 		}
 		engine.loadContent( text );
 
-		// Keine Eingabe w�hrend der Validierung
+		// Keine Eingabe waehrend der Validierung
 		buttonHelp.setDisable( true );
 		buttonFolder.setDisable( true );
 		buttonFile.setDisable( true );
@@ -862,7 +862,7 @@ public class GuiController
 			@Override
 			public void handle( WorkerStateEvent t )
 			{
-				// Validierung beeindet Buttons freigeben
+				// Validierung beendet Buttons freigeben
 				buttonHelp.setDisable( false );
 				buttonFolder.setDisable( false );
 				buttonFile.setDisable( false );
@@ -907,7 +907,7 @@ public class GuiController
 			@Override
 			public void handle( WorkerStateEvent t )
 			{
-				// Validierung beeindet Buttons freigeben
+				// Validierung beendet Buttons freigeben
 				buttonHelp.setDisable( false );
 				buttonFolder.setDisable( false );
 				buttonFile.setDisable( false );
@@ -952,15 +952,15 @@ public class GuiController
 	void valOnlySip( ActionEvent e )
 	{
 		console.setText( " \n" );
-		String text = "<html><h2>Eine reine SIP-Validierung wird durchgef�hrt. <br/><br/>Bitte warten ...</h2></html>";
+		String text = "<html><h2>Eine reine SIP-Validierung wird durchgeführt. <br/><br/>Bitte warten ...</h2></html>";
 		if ( locale.toString().startsWith( "fr" ) ) {
-			text = "<html><h2>La validation du SIP pure est lanc�e. <br/><br/>Veuillez patienter ...</h2></html>";
+			text = "<html><h2>La validation du SIP pure est lancée. <br/><br/>Veuillez patienter ...</h2></html>";
 		} else if ( locale.toString().startsWith( "en" ) ) {
 			text = "<html><h2>A pure SIP validation is performed. <br/><br/>Please wait ...</h2></html>";
 		}
 		engine.loadContent( text );
 
-		// Keine Eingabe w�hrend der Validierung
+		// Keine Eingabe waehrend der Validierung
 		buttonHelp.setDisable( true );
 		buttonFolder.setDisable( true );
 		buttonFile.setDisable( true );
@@ -1013,7 +1013,7 @@ public class GuiController
 			@Override
 			public void handle( WorkerStateEvent t )
 			{
-				// Validierung beeindet Buttons freigeben
+				// Validierung beendet Buttons freigeben
 				buttonHelp.setDisable( false );
 				buttonFolder.setDisable( false );
 				buttonFile.setDisable( false );
@@ -1058,7 +1058,7 @@ public class GuiController
 			@Override
 			public void handle( WorkerStateEvent t )
 			{
-				// Validierung beeindet Buttons freigeben
+				// Validierung beendet Buttons freigeben
 				buttonHelp.setDisable( false );
 				buttonFolder.setDisable( false );
 				buttonFile.setDisable( false );
@@ -1139,7 +1139,7 @@ public class GuiController
 		} else if ( locale.toString().startsWith( "en" ) ) {
 			fileChooser.setTitle( "Choose the file" );
 		} else {
-			fileChooser.setTitle( "W�hlen Sie die Datei" );
+			fileChooser.setTitle( "Wählen Sie die Datei" );
 		}
 		File valFile = fileChooser.showOpenDialog( new Stage() );
 		if ( valFile != null ) {
@@ -1153,7 +1153,7 @@ public class GuiController
 			String fileFolderName = valFile.getName();
 			String fileFolderExt = "." + FilenameUtils
 					.getExtension( fileFolderName ).toLowerCase();
-			String sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Ausgew�hlte Datei: <br>"
+			String sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Ausgewählte Datei: <br>"
 					+ valFile.getAbsolutePath() + "</h3></td></tr>";
 			String sel2 = "<tr><td><h3>2.</h3></td><td><h3>Ggf. Konfiguration und LogType anpassen </h3></td></tr>";
 			String sel3 = "<tr><td><h3>3.</h3></td><td><h3>Validierung starten </h3></td></tr></table>";
@@ -1169,10 +1169,10 @@ public class GuiController
 				// TODO: hier laufend weitere Viewer einbauen
 			}
 			if ( locale.toString().startsWith( "fr" ) ) {
-				sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Fichier s�lectionn� : <br>"
+				sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Fichier sélectionné : <br>"
 						+ valFile.getAbsolutePath() + "</h3></td></tr>";
-				sel2 = "<tr><td><h3>2.</h3></td><td><h3>Ajuster la configuration et le LogType si n�cessaire </h3></td></tr>";
-				sel3 = "<tr><td><h3>3.</h3></td><td><h3>D�marrer la validation </h3></td></tr></table>";
+				sel2 = "<tr><td><h3>2.</h3></td><td><h3>Ajuster la configuration et le LogType si nécessaire </h3></td></tr>";
+				sel3 = "<tr><td><h3>3.</h3></td><td><h3>Démarrer la validation </h3></td></tr></table>";
 			} else if ( locale.toString().startsWith( "en" ) ) {
 				sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Selected file: <br>"
 						+ valFile.getAbsolutePath() + "</h3></td></tr>";
@@ -1185,29 +1185,17 @@ public class GuiController
 			// Format und Sip Validierung erst moeglich wenn fileFolder
 			// ausgefuellt
 			// und auch in der Config erlaubt
-			if ( Util.stringInFileLine( "<pdfavalidation>yes</",
+			if ( Util.stringInFileLine( "validation>&#x2713;</",
 					configFile ) ) {
 				buttonFormat.setDisable( false );
-			} else if ( Util.stringInFileLine( "<siardalidation>yes</",
-					configFile ) ) {
-				buttonFormat.setDisable( false );
-			} else if ( Util.stringInFileLine( "<jp2validation>yes</",
-					configFile ) ) {
-				buttonFormat.setDisable( false );
-			} else if ( Util.stringInFileLine( "<jpegvalidation>yes</",
-					configFile ) ) {
-				buttonFormat.setDisable( false );
-			} else if ( Util.stringInFileLine( "<pngvalidation>yes</",
-					configFile ) ) {
-				buttonFormat.setDisable( false );
-			} else if ( Util.stringInFileLine( "<tiffvalidation>yes</",
+			} else if ( Util.stringInFileLine( "validation>(&#x2713;)</",
 					configFile ) ) {
 				buttonFormat.setDisable( false );
 			} else {
 				buttonFormat.setDisable( true );
 			}
 			if ( valFile.getName().startsWith( "SIP" ) ) {
-				String configSip0160 = "<ech0160validation>no</ech0160validation>";
+				String configSip0160 = "<ech0160validation>&#x2717;</ech0160validation>";
 				if ( Util.stringInFileLine( configSip0160, configFile ) ) {
 					buttonSip.setDisable( true );
 					buttonOnlySip.setDisable( true );
@@ -1269,7 +1257,7 @@ public class GuiController
 		} else if ( locale.toString().startsWith( "en" ) ) {
 			folderChooser.setTitle( "Choose the folder" );
 		} else {
-			folderChooser.setTitle( "W�hlen Sie den Ordner" );
+			folderChooser.setTitle( "Wählen Sie den Ordner" );
 		}
 		File valFolder = folderChooser.showDialog( new Stage() );
 		if ( valFolder != null ) {
@@ -1278,29 +1266,17 @@ public class GuiController
 			// Format und Sip Validierung erst moeglich wenn fileFolder
 			// ausgefuellt
 			// und auch in der Config erlaubt
-			if ( Util.stringInFileLine( "<pdfavalidation>yes</",
+			if ( Util.stringInFileLine( "validation>&#x2713;</",
 					configFile ) ) {
 				buttonFormat.setDisable( false );
-			} else if ( Util.stringInFileLine( "<siardalidation>yes</",
-					configFile ) ) {
-				buttonFormat.setDisable( false );
-			} else if ( Util.stringInFileLine( "<jp2validation>yes</",
-					configFile ) ) {
-				buttonFormat.setDisable( false );
-			} else if ( Util.stringInFileLine( "<jpegvalidation>yes</",
-					configFile ) ) {
-				buttonFormat.setDisable( false );
-			} else if ( Util.stringInFileLine( "<pngvalidation>yes</",
-					configFile ) ) {
-				buttonFormat.setDisable( false );
-			} else if ( Util.stringInFileLine( "<tiffvalidation>yes</",
+			} else if ( Util.stringInFileLine( "validation>(&#x2713;)</",
 					configFile ) ) {
 				buttonFormat.setDisable( false );
 			} else {
 				buttonFormat.setDisable( true );
 			}
 			if ( valFolder.getName().startsWith( "SIP" ) ) {
-				String configSip0160 = "<ech0160validation>no</ech0160validation>";
+				String configSip0160 = "<ech0160validation>&#x2717;</ech0160validation>";
 				if ( Util.stringInFileLine( configSip0160, configFile ) ) {
 					buttonSip.setDisable( true );
 					buttonOnlySip.setDisable( true );
@@ -1316,17 +1292,17 @@ public class GuiController
 			int numberFile = fileMap.size();
 			String numberInFileMap = String.format( "%,d", numberFile );
 
-			String sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br><br>&nbsp;</h3></td><td><h3>Ausgew�hlter Ordner: <br>"
+			String sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br><br>&nbsp;</h3></td><td><h3>Ausgewählter Ordner: <br>"
 					+ valFolder.getAbsolutePath() + "<br>(" + numberInFileMap
 					+ " Dateien)</h3></td></tr>";
 			String sel2 = "<tr><td><h3>2.</h3></td><td><h3>Ggf. Konfiguration und LogType anpassen </h3></td></tr>";
 			String sel3 = "<tr><td><h3>3.</h3></td><td><h3>Validierung starten </h3></td></tr></table>";
 			if ( locale.toString().startsWith( "fr" ) ) {
-				sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br><br>&nbsp;</h3></td><td><h3>Dossier s�lectionn� : <br>"
+				sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br><br>&nbsp;</h3></td><td><h3>Dossier sélectionné : <br>"
 						+ valFolder.getAbsolutePath() + "<br>("
 						+ numberInFileMap + " fichier)</h3></td></tr>";
-				sel2 = "<tr><td><h3>2.</h3></td><td><h3>Ajuster la configuration et le LogType si n�cessaire </h3></td></tr>";
-				sel3 = "<tr><td><h3>3.</h3></td><td><h3>D�marrer la validation </h3></td></tr></table>";
+				sel2 = "<tr><td><h3>2.</h3></td><td><h3>Ajuster la configuration et le LogType si nécessaire </h3></td></tr>";
+				sel3 = "<tr><td><h3>3.</h3></td><td><h3>Démarrer la validation </h3></td></tr></table>";
 			} else if ( locale.toString().startsWith( "en" ) ) {
 				sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br><br>&nbsp;</h3></td><td><h3>Selected folder: <br>"
 						+ valFolder.getAbsolutePath() + "<br>("
@@ -1352,7 +1328,7 @@ public class GuiController
 		console.setText( " \n" );
 		String text = "<html><h2>Die Konfiguration wird in einem neuen Fenster bearbeitet. <br/><br/>Bitte warten ...</h2></html>";
 		if ( locale.toString().startsWith( "fr" ) ) {
-			text = "<html><h2>La configuration est �dit�e dans une nouvelle fen�tre. <br/><br/>Veuillez patienter ...</h2></html>";
+			text = "<html><h2>La configuration est éditée dans une nouvelle fenêtre. <br/><br/>Veuillez patienter ...</h2></html>";
 		} else if ( locale.toString().startsWith( "en" ) ) {
 			text = "<html><h2>The configuration is edited in a new window. <br/><br/>Please wait ...</h2></html>";
 		}
@@ -1418,29 +1394,17 @@ public class GuiController
 										// moeglich wenn fileFolder
 										// ausgefuellt
 			// und auch in der Config erlaubt
-			if ( Util.stringInFileLine( "<pdfavalidation>yes</",
+			if ( Util.stringInFileLine( "validation>&#x2713;</",
 					configFile ) ) {
 				buttonFormat.setDisable( false );
-			} else if ( Util.stringInFileLine( "<siardalidation>yes</",
-					configFile ) ) {
-				buttonFormat.setDisable( false );
-			} else if ( Util.stringInFileLine( "<jp2validation>yes</",
-					configFile ) ) {
-				buttonFormat.setDisable( false );
-			} else if ( Util.stringInFileLine( "<jpegvalidation>yes</",
-					configFile ) ) {
-				buttonFormat.setDisable( false );
-			} else if ( Util.stringInFileLine( "<pngvalidation>yes</",
-					configFile ) ) {
-				buttonFormat.setDisable( false );
-			} else if ( Util.stringInFileLine( "<tiffvalidation>yes</",
+			} else if ( Util.stringInFileLine( "validation>(&#x2713;)</",
 					configFile ) ) {
 				buttonFormat.setDisable( false );
 			} else {
 				buttonFormat.setDisable( true );
 			}
 			if ( valFileFolder.getName().startsWith( "SIP" ) ) {
-				String configSip0160 = "<ech0160validation>no</ech0160validation>";
+				String configSip0160 = "<ech0160validation>&#x2717;</ech0160validation>";
 				if ( Util.stringInFileLine( configSip0160, configFile ) ) {
 					buttonSip.setDisable( true );
 					buttonOnlySip.setDisable( true );
@@ -1474,7 +1438,7 @@ public class GuiController
 					String fileFolderName = valFileFolder.getName();
 					String fileFolderExt = "." + FilenameUtils
 							.getExtension( fileFolderName ).toLowerCase();
-					String sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Ausgew�hlte Datei: <br>"
+					String sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Ausgewählte Datei: <br>"
 							+ valFileFolder.getAbsolutePath()
 							+ "</h3></td></tr>";
 					String sel2 = "<tr><td><h3>2.</h3></td><td><h3>Ggf. Konfiguration und LogType anpassen </h3></td></tr>";
@@ -1491,11 +1455,11 @@ public class GuiController
 						// TODO: hier laufend weitere Viewer einbauen
 					}
 					if ( locale.toString().startsWith( "fr" ) ) {
-						sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Fichier s�lectionn� : <br>"
+						sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Fichier sélectionné : <br>"
 								+ valFileFolder.getAbsolutePath()
 								+ "</h3></td></tr>";
-						sel2 = "<tr><td><h3>2.</h3></td><td><h3>Ajuster la configuration et le LogType si n�cessaire </h3></td></tr>";
-						sel3 = "<tr><td><h3>3.</h3></td><td><h3>D�marrer la validation </h3></td></tr></table>";
+						sel2 = "<tr><td><h3>2.</h3></td><td><h3>Ajuster la configuration et le LogType si nécessaire </h3></td></tr>";
+						sel3 = "<tr><td><h3>3.</h3></td><td><h3>Démarrer la validation </h3></td></tr></table>";
 					} else if ( locale.toString().startsWith( "en" ) ) {
 						sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Selected file: <br>"
 								+ valFileFolder.getAbsolutePath()
@@ -1503,7 +1467,7 @@ public class GuiController
 						sel2 = "<tr><td><h3>2.</h3></td><td><h3>Adjust configuration and LogType if necessary </h3></td></tr>";
 						sel3 = "<tr><td><h3>3.</h3></td><td><h3>Start validation </h3></td></tr></table>";
 					} else {
-						sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Ausgew�hlte Datei: <br>"
+						sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Ausgewählte Datei: <br>"
 								+ valFileFolder.getAbsolutePath()
 								+ "</h3></td></tr>";
 						sel2 = "<tr><td><h3>2.</h3></td><td><h3>Ggf. Konfiguration und LogType anpassen </h3></td></tr>";
@@ -1516,7 +1480,7 @@ public class GuiController
 					// ausgefuellt
 					buttonFormat.setDisable( false );
 				} else {
-					String notexist = "Ung�ltiger Pfad! "
+					String notexist = "Ungültiger Pfad! "
 							+ valFileFolder.getAbsolutePath()
 							+ " existiert nicht.";
 					if ( locale.toString().startsWith( "fr" ) ) {
@@ -1539,17 +1503,17 @@ public class GuiController
 				int numberFile = fileMap.size();
 				String numberInFileMap = String.format( "%,d", numberFile );
 
-				String sel1Folder = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br><br>&nbsp;</h3></td><td><h3>Ausgew�hlter Ordner: <br>"
+				String sel1Folder = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br><br>&nbsp;</h3></td><td><h3>Ausgewählter Ordner: <br>"
 						+ valFileFolder.getAbsolutePath() + "<br>("
 						+ numberInFileMap + " Dateien)</h3></td></tr>";
 				String sel2Folder = "<tr><td><h3>2.</h3></td><td><h3>Ggf. Konfiguration und LogType anpassen </h3></td></tr>";
 				String sel3Folder = "<tr><td><h3>3.</h3></td><td><h3>Validierung starten </h3></td></tr></table>";
 				if ( locale.toString().startsWith( "fr" ) ) {
-					sel1Folder = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br><br>&nbsp;</h3></td><td><h3>Dossier s�lectionn� : <br>"
+					sel1Folder = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br><br>&nbsp;</h3></td><td><h3>Dossier sélectionné : <br>"
 							+ valFileFolder.getAbsolutePath() + "<br>("
 							+ numberInFileMap + " fichier)</h3></td></tr>";
-					sel2Folder = "<tr><td><h3>2.</h3></td><td><h3>Ajuster la configuration et le LogType si n�cessaire </h3></td></tr>";
-					sel3Folder = "<tr><td><h3>3.</h3></td><td><h3>D�marrer la validation </h3></td></tr></table>";
+					sel2Folder = "<tr><td><h3>2.</h3></td><td><h3>Ajuster la configuration et le LogType si nécessaire </h3></td></tr>";
+					sel3Folder = "<tr><td><h3>3.</h3></td><td><h3>Démarrer la validation </h3></td></tr></table>";
 				} else if ( locale.toString().startsWith( "en" ) ) {
 					sel1Folder = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br><br>&nbsp;</h3></td><td><h3>Selected folder: <br>"
 							+ valFileFolder.getAbsolutePath() + "<br>("
@@ -1561,7 +1525,7 @@ public class GuiController
 						+ sel3Folder + "</body></html>";
 				engine.loadContent( text );
 			} else {
-				String notexist = "Ung�ltiger Pfad! "
+				String notexist = "Ungültiger Pfad! "
 						+ valFileFolder.getAbsolutePath() + " existiert nicht.";
 				if ( locale.toString().startsWith( "fr" ) ) {
 					notexist = "Lien invalide ! "
@@ -1607,7 +1571,7 @@ public class GuiController
 				buttonFormat.setText( "nur Formate" );
 				buttonSip.setText( "SIP inkl. Formate" );
 				buttonOnlySip.setText( "nur SIP" );
-				labelFileFolder.setText( "W�hle Datei / Ordner" );
+				labelFileFolder.setText( "Wähle Datei / Ordner" );
 				buttonFolder.setText( "Ordner" );
 				buttonFile.setText( "Datei" );
 				buttonHelp.setText( "Hilfe ?" );
@@ -1651,7 +1615,7 @@ public class GuiController
 				buttonFormat.setText( "format uniquement" );
 				buttonSip.setText( "SIP incl. formats" );
 				buttonOnlySip.setText( "SIP uniquement" );
-				labelFileFolder.setText( "S�lectionnez" );
+				labelFileFolder.setText( "Sélectionnez" );
 				buttonFolder.setText( "dossier" );
 				buttonFile.setText( "fichier" );
 				buttonHelp.setText( "Aide ?" );

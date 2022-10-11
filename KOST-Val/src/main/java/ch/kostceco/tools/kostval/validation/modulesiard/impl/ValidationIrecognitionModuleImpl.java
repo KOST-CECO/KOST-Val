@@ -1,5 +1,5 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
  * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
@@ -118,10 +118,6 @@ public class ValidationIrecognitionModuleImpl extends ValidationModuleImpl
 										ioe.getMessage() + " (IOException)" ) );
 			}
 		}
-
-		/** Validierung ob die PUID richtig erkannt wird (z.B mit DROID) => Auf diese Validierung kann
-		 * verzichtet werden, da bereits vorgaengig geprueft wurde ob es ein unkomprimiertes ZIP mit dem
-		 * entsprechenden metadata.xml ist. */
 
 		return valid;
 	}

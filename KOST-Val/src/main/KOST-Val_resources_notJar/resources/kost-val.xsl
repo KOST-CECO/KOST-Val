@@ -233,9 +233,72 @@
 						<br />
 					</xsl:if>
 				</xsl:for-each>
+				<xsl:for-each select="KOSTValLog/Format/Validation">
+					<xsl:if test="Notaccepted">
+						<div>
+							<table width="100%">
+								<tr class="caption">
+									<td>
+										<xsl:value-of select="ValType" />
+										<xsl:value-of select="FormatVL" />
+										->
+										<xsl:value-of select="ValFile" />
+									</td>
+								</tr>
+							</table>
+							<table width="100%">
+								<xsl:for-each select="Error">
+									<tr class="captionm">
+										<td width="25%">
+											<xsl:value-of select="Modul" />
+										</td>
+										<td width="75%">
+											<xsl:for-each select="Message">
+												<xsl:value-of select="." />
+												<br />
+											</xsl:for-each>
+										</td>
+									</tr>
+								</xsl:for-each>
+							</table>
+						</div>
+						<br />
+					</xsl:if>
+				</xsl:for-each>
 				<h2>Valid:</h2>
 				<xsl:for-each select="KOSTValLog/Format/Validation">
 					<xsl:if test="Valid">
+						<div>
+							<table width="100%">
+								<tr class="captionio">
+									<td>
+										<xsl:value-of select="ValType" />
+										<xsl:value-of select="FormatVL" />
+										->
+										<xsl:value-of select="ValFile" />
+									</td>
+								</tr>
+							</table>
+							<table width="100%">
+								<xsl:for-each select="Error">
+									<tr class="captioniom">
+										<td width="25%">
+											<xsl:value-of select="Modul" />
+										</td>
+										<td width="75%">
+											<xsl:for-each select="Message">
+												<xsl:value-of select="." />
+												<br />
+											</xsl:for-each>
+										</td>
+									</tr>
+								</xsl:for-each>
+							</table>
+						</div>
+					</xsl:if>
+				</xsl:for-each>
+				<xsl:for-each select="KOSTValLog/Format/Validation">
+					<xsl:if test="Accepted">
 						<div>
 							<table width="100%">
 								<tr class="captionio">

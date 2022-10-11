@@ -1,21 +1,9 @@
 <?xml version="1.0" encoding="ISO-8859-1"?><?xml-stylesheet type="text/xsl" href="kostval-conf-DE.xsl"?>
-<configuration><!-- kostval.conf.xml_v2.1.2.0 -->
-	<jpeg>
-		<jpegvalidation>yes</jpegvalidation><!--no verwenden wenn jpeg nicht validiert werden soll, ansonsten yes -->
-	</jpeg>
-	<jp2>
-		<jp2validation>yes</jp2validation><!--no verwenden wenn jp2 nicht validiert werden soll, ansonsten yes -->
-	</jp2>
-	<png>
-		<pngvalidation>yes</pngvalidation><!--no verwenden wenn png nicht validiert werden soll, ansonsten yes -->
-	</png>
-	<siard>
-		<siardvalidation>yes</siardvalidation><!--no verwenden wenn siard nicht validiert werden soll, ansonsten yes -->
-		<siard10>1.0</siard10><!--1.0 / / no -->
-		<siard21>2.1</siard21><!--2.1 / / no -->
-	</siard>
+<configuration><!-- kostval.conf.xml_v2.1.3.0 -->
+<!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert / &#x2713; = akzeptiert und validieren -->
+<!-- TEXT -->
 	<pdfa>
-		<pdfavalidation>yes</pdfavalidation><!--no verwenden wenn pdfa nicht validiert werden soll, ansonsten yes -->
+		<pdfavalidation>&#x2713;</pdfavalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert / &#x2713; = akzeptiert und validieren -->
 		<!-- sind pdftools und callas beide auf no wird keine pdfa Validierung durchgefuehrt -->
 		<!-- sind pdftools und callas beide auf yes wird die duale pdfa Validierung durchgefuehrt -->
 		<pdftools>yes</pdftools><!--no wenn PDF Tools nicht verwendet werden soll, ansonsten yes -->
@@ -34,8 +22,21 @@
 		<pdfa2u>2U</pdfa2u><!--2U / / no -->
 		<jbig2allowed>yes</jbig2allowed><!--no verwenden wenn JBIG2 in pdfa nicht erlaubt werden sollen, ansonsten yes -->
 	</pdfa>
+	<txt>
+		<txtvalidation>(&#x2713;)</txtvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert -->
+	</txt>
+	<pdf>
+		<pdfvalidation>&#x2717;</pdfvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert -->
+	</pdf>
+<!-- BILD -->
+	<jp2>
+		<jp2validation>&#x2713;</jp2validation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert / &#x2713; = akzeptiert und validieren -->
+	</jp2>
+	<jpeg>
+		<jpegvalidation>&#x2713;</jpegvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert / &#x2713; = akzeptiert und validieren -->
+	</jpeg>
 	<tiff>
-		<tiffvalidation>yes</tiffvalidation><!--no verwenden wenn tiff nicht validiert werden soll, ansonsten yes -->
+		<tiffvalidation>&#x2713;</tiffvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert / &#x2713; = akzeptiert und validieren -->
 		<!--TIFF-Praezisierungen -->
 		<!--Wenn erlaubt "Text" einfuegen ansonsten "0" -->
 		<allowedcompression>
@@ -72,13 +73,57 @@
 			<allowedsize>no</allowedsize><!--no / yes -->
 		</allowedother>
 	</tiff>
+	<png>
+		<pngvalidation>&#x2713;</pngvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert / &#x2713; = akzeptiert und validieren -->
+	</png>
+<!-- AUDIO -->
+	<flac>
+		<flacvalidation>(&#x2713;)</flacvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert -->
+	</flac>
+	<wave>
+		<wavevalidation>(&#x2713;)</wavevalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert -->
+	</wave>
+	<mp3>
+		<mp3validation>(&#x2713;)</mp3validation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert -->
+	</mp3>
+<!-- VIDEO -->
+	<ffv1>
+		<ffv1validation>(&#x2713;)</ffv1validation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert -->
+	</ffv1>
+	<mp4>
+		<mp4validation>(&#x2713;)</mp4validation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert -->
+	</mp4>
+	<mj2>
+		<mj2validation>(&#x2713;)</mj2validation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert -->
+	</mj2>
+<!-- DATEN -->
+	<xml>
+		<xmlvalidation>&#x2713;</xmlvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert / &#x2713; = akzeptiert und validieren -->
+	</xml>
+	<siard>
+		<siardvalidation>&#x2713;</siardvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert / &#x2713; = akzeptiert und validieren -->
+		<siard10>1.0</siard10><!--1.0 / / no -->
+		<siard21>2.1</siard21><!--2.1 / / no -->
+	</siard>
+	<csv>
+		<csvvalidation>(&#x2713;)</csvvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert -->
+	</csv>
+	<xlsx>
+		<xlsxvalidation>(&#x2713;)</xlsxvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert -->
+	</xlsx>
+	<ods>
+		<odsvalidation>&#x2717;</odsvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert -->
+	</ods>
+<!-- SIP -->
 	<sip>
-		<ech0160validation>yes</ech0160validation><!--no verwenden wenn eCH-0160 nicht validiert werden soll, ansonsten yes -->
+		<ech0160validation>&#x2713;</ech0160validation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert / &#x2713; = akzeptiert und validieren -->
 		<allowedlengthofpaths>179</allowedlengthofpaths>
 		<allowedsipname>SIP_[1-2][0-9]{3}[0-1][0-9][0-3][0-9]_\w{3}</allowedsipname>
-		<allowedformats>TXT PDFA1 PDFA2 TIFF JP2 JPEG PNG WAVE FLAC MP3 MP4 MJ2 MPEG2 CSV SIARD WARC</allowedformats>
-		<!-- <allowedformats>SVG MPEG2 PRORES XML XSD XLS ARC HTML</allowedformats> -->
+		<allowedformats>TXT PDFA1 PDFA2 TIFF JP2 JPEG PNG WAVE FLAC MP3 MP4 MJ2 MPEG2 CSV SIARD WARC XML XSD</allowedformats>
+		<!-- <allowedformats>SVG MPEG2 PRORES XLS ARC HTML</allowedformats> -->
 	</sip>
+<!-- SONSTIGES -->
+	<otherformats>WARC HTML DWG</otherformats><!-- auch moeglich DOCX PPTX INTERLIS -->
 	<pathtoworkdir></pathtoworkdir><!--wenn leer wird "USERPROFILE/.kost-val_2x/temp_KOST-Val" verwendet -->
 	<standardinputdir></standardinputdir><!--wenn leer wird "Dieser PC" verwendet -->
 	<ignoreerror>

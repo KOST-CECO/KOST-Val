@@ -1,5 +1,5 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
  * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
@@ -26,16 +26,19 @@ import java.util.Map;
 import ch.kostceco.tools.kostval.exception.modulesip3.Validation3aFormatRecognitionException;
 import ch.kostceco.tools.kostval.validation.ValidationModule;
 
-/** Validierungsschritt 3a Mit DROID (und der file format registry PRONOM) oder ähnlichen Lösungen
- * eine Formaterkennung durchführen und die Formate mit der Liste erlaubter Dateiformate vergleichen
- * (Liste konfigurierbar). Die verwendete Lösung wird im Systemdesign bestimmt.
+/**
+ * Validierungsschritt 3a Formaterkennung durchfuehren und die Formate mit der
+ * Liste erlaubter Dateiformate vergleichen (Liste konfigurierbar).
  * 
- * @author razm Daniel Ludin, Bedag AG @version 0.2.0 */
+ * Validierungsschritt 3b Alle nicht spezifizierten Dateien mit entsprechenden
+ * Formatangaben auflisten.
+ */
 
 public interface Validation3aFormatRecognitionModule extends ValidationModule
 {
 
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile ) throws Validation3aFormatRecognitionException;
+	public boolean validate( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile )
+			throws Validation3aFormatRecognitionException;
 
 }

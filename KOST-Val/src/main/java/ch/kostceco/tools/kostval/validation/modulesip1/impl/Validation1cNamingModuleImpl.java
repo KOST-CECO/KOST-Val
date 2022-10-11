@@ -1,5 +1,5 @@
 ﻿/* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
  * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
@@ -34,7 +34,7 @@ import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesip1.Validation1cNamingModule;
 import ch.kostceco.tools.kostval.logging.Logtxt;
 
-/** Diverse Validierungen zu den Namen der Files und Ordner, erlaubte L�ngen, verwendete Zeichen
+/** Diverse Validierungen zu den Namen der Files und Ordner, erlaubte Laengen, verwendete Zeichen
  * usw. */
 public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 		implements Validation1cNamingModule
@@ -68,7 +68,6 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 		String fileName = valDatei.getName();
 
 		// I.) Validierung der Namen aller Dateien: sind die enthaltenen Zeichen alle erlaubt?
-
 		String patternStr = "[^!#\\$%\\(\\)\\+,\\-_\\.=@\\[\\]\\{\\}\\~a-zA-Z0-9 ]";
 		Pattern pattern = Pattern.compile( patternStr );
 
@@ -251,9 +250,9 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 			return false;
 		}
 
-		// V.) Im xsd Folder wiederum d�rfen sich nur eine Reihe *.xsd files sein
+		// V.) Im xsd Folder wiederum duerfen sich nur eine Reihe *.xsd files sein
 		// generiert eine Map mit den xsd-files und Ordnern, welche in header/xsd/ enthalten sein
-		// müssen
+		// muessen
 		Map<String, String> allowedXsdFiles = new HashMap<String, String>();
 
 		try {
@@ -306,7 +305,7 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 			}
 
 			if ( valid != false ) {
-				// Dieser Schritt wird nur durchgef�hrt, wenn die verwendete Version erlaubt ist
+				// Dieser Schritt wird nur durchgefuehrt, wenn die verwendete Version erlaubt ist
 
 				// Liste mit den File objects in xsd
 				File[] filesXsd2 = xsd.listFiles();
@@ -386,7 +385,7 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 			return false;
 		}
 
-		// VI.+ VII) L�nge der Pfade (< 180)
+		// VI.+ VII) Laenge der Pfade (< 180)
 		String maxPathLengthString = configMap.get( "MaximumPathLength" );
 		Integer maxPathLength = Integer.parseInt( maxPathLengthString );
 		try {

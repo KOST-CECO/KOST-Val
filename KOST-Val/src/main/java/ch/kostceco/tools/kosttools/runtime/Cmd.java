@@ -27,27 +27,21 @@ import java.io.InputStreamReader;
 public class Cmd
 {
 
-	/**
-	 * fuehrt eine cmd durch und gibt den Text der Konsole als String zurueck
+	/** fuehrt eine cmd durch und gibt den Text der Konsole als String zurueck
 	 * 
 	 * @param command
-	 *            String des Command, wie er in der Konsole eingegeben wird
+	 *          String des Command, wie er in der Konsole eingegeben wird
 	 * @param out
-	 *            bei true wird der OUTPUT auch in den String geschrieben. Bei
-	 *            False nur ERROR.
+	 *          bei true wird der OUTPUT auch in den String geschrieben. Bei False nur ERROR.
 	 * @param workDir
-	 *            Temporaeres Verzeichnis
-	 * @return String mit der Konsolenausgabe von ERROR und ggf OUTPUT
-	 */
-	public static String execToString( String command, boolean out,
-			File workDir ) throws InterruptedException
+	 *          Temporaeres Verzeichnis
+	 * @return String mit der Konsolenausgabe von ERROR und ggf OUTPUT */
+	public static String execToString( String command, boolean out, File workDir )
+			throws InterruptedException
 	{
-		/*
-		 * command = "\"\"" + exeFile.getAbsolutePath() + "\"" +
-		 * " --noout --stream --nowarning --schema " + "\"" +
-		 * xsdFile.getAbsolutePath() + "\"" + " " + "\"" +
-		 * xmlFile.getAbsolutePath() + "\"\"";
-		 */
+		/* command = "\"\"" + exeFile.getAbsolutePath() + "\"" +
+		 * " --noout --stream --nowarning --schema " + "\"" + xsdFile.getAbsolutePath() + "\"" + " " +
+		 * "\"" + xmlFile.getAbsolutePath() + "\"\""; */
 
 		// System.out.println( "executing command: " + command );
 		Process p = null;
@@ -64,8 +58,7 @@ public class Cmd
 			if ( out ) {
 				// System.out.println( "OUTPUT" );
 				InputStream stream = p.getInputStream();
-				BufferedReader in = new BufferedReader(
-						new InputStreamReader( stream ) );
+				BufferedReader in = new BufferedReader( new InputStreamReader( stream ) );
 				while ( (line = in.readLine()) != null ) {
 					// System.out.println(line);
 					if ( lineReturn.equals( "" ) ) {
@@ -74,8 +67,7 @@ public class Cmd
 						if ( lineReturn.contains( line ) ) {
 							// Fehler bereits festgehalten (dublikat)
 						} else {
-							lineReturn = lineReturn + "</Message><Message>"
-									+ line;
+							lineReturn = lineReturn + "</Message><Message>" + line;
 						}
 					}
 				}
@@ -83,8 +75,7 @@ public class Cmd
 			}
 			// System.out.println( "ERROR-OUTPUT" );
 			InputStream streamE = p.getErrorStream();
-			BufferedReader inE = new BufferedReader(
-					new InputStreamReader( streamE ) );
+			BufferedReader inE = new BufferedReader( new InputStreamReader( streamE ) );
 			while ( (lineE = inE.readLine()) != null ) {
 				// System.out.println(lineE);
 				if ( lineReturn.equals( "" ) ) {
@@ -93,8 +84,7 @@ public class Cmd
 					if ( lineReturn.contains( lineE ) ) {
 						// Fehler bereits festgehalten (dublikat)
 					} else {
-						lineReturn = lineReturn + "</Message><Message>ERROR: "
-								+ lineE;
+						lineReturn = lineReturn + "</Message><Message>ERROR: " + lineE;
 					}
 				}
 			}

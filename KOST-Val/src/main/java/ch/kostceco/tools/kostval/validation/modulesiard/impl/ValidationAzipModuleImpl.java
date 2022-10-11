@@ -1,5 +1,5 @@
 ﻿/* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
  * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
@@ -120,9 +120,10 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 		 * unterschiedliche Komprimierungen verwendet werden können und die erste Kopmprimierung nicht
 		 * das ganze Zip abbildet. */
 		FileReader fr89 = null;
+		BufferedReader read= null;
 		try {
 			fr89 = new FileReader( valDatei );
-			BufferedReader read = new BufferedReader( fr89 );
+			read = new BufferedReader( fr89 );
 
 			// Hex 00 in Char umwandeln
 			String str00 = "00";
@@ -186,11 +187,12 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 							// store element
 						} else {
 							// weder store noch def
+							read.close();
 							if ( min ) {
 								zf.close();
 								return false;
 							} else {
-
+								
 								Logtxt.logtxt( logFile,
 										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )
 												+ getTextResourceService().getText( locale, ERROR_XML_A_DEFLATED,
@@ -290,8 +292,6 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 				}
 			}
 			read.close();
-			// set to null
-			read = null;
 			fr89.close();
 		} catch ( Exception e ) {
 			if ( min ) {

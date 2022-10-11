@@ -2,7 +2,6 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -12,17 +11,18 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.web.WebView?>
 
-<StackPane maxHeight="820.0" maxWidth="1.7976931348623157E308" minHeight="750.0" minWidth="1200.0" prefHeight="820.0" xmlns="http://javafx.com/javafx/8.0.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.kostceco.tools.kostval.ConfigController">
+<StackPane maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="550.0" minWidth="1400.0" prefHeight="620.0" style="-fx-background-color: silver;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.kostceco.tools.kostval.ConfigController">
 	<children>
-		<GridPane maxHeight="1.7976931348623157E308" minHeight="730.0">
+		<GridPane maxHeight="1.7976931348623157E308" minHeight="530.0">
 			<columnConstraints>
 				<ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" />
-				<ColumnConstraints hgrow="SOMETIMES" maxWidth="170.0" minWidth="170.0" prefWidth="170.0" />
-				<ColumnConstraints hgrow="SOMETIMES" maxWidth="170.0" minWidth="170.0" prefWidth="170.0" />
-				<ColumnConstraints hgrow="SOMETIMES" maxWidth="170.0" minWidth="170.0" prefWidth="170.0" />
-				<ColumnConstraints hgrow="SOMETIMES" maxWidth="170.0" minWidth="170.0" prefWidth="170.0" />
+				<ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
+				<ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
+				<ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="170.0" />
 				<ColumnConstraints hgrow="SOMETIMES" maxWidth="20.0" minWidth="20.0" prefWidth="20.0" />
-				<ColumnConstraints hgrow="SOMETIMES" minWidth="300.0" />
+				<ColumnConstraints hgrow="SOMETIMES" />
 			</columnConstraints>
 			<rowConstraints>
 				<RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -34,24 +34,9 @@
 				<RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
 				<RowConstraints maxHeight="5.0" minHeight="5.0" prefHeight="5.0" vgrow="SOMETIMES" />
 				<RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-				<RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-				<RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-				<RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-				<RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-				<RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
 				<RowConstraints maxHeight="5.0" minHeight="5.0" prefHeight="5.0" vgrow="SOMETIMES" />
 				<RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-				<RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-				<RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-				<RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-				<RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-				<RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-				<RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-				<RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-				<RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
 				<RowConstraints maxHeight="5.0" minHeight="5.0" prefHeight="5.0" vgrow="SOMETIMES" />
-				<RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-				<RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
 				<RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
 				<RowConstraints maxHeight="5.0" minHeight="5.0" prefHeight="5.0" vgrow="SOMETIMES" />
 				<RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -59,116 +44,39 @@
 				<RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
 				<RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" vgrow="SOMETIMES" />
 				<RowConstraints maxHeight="20.0" minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
 			</rowConstraints>
 			<children>
-				<CheckBox fx:id="checkPdfa" mnemonicParsing="false" onAction="#changePdfa" selected="true" text="PDF/A" GridPane.rowIndex="8">
-					<font>
-						<Font name="System Bold" size="12.0" />
-					</font>
-				</CheckBox>
-				<CheckBox fx:id="checkPdftools" mnemonicParsing="false" onAction="#changePdftools" selected="true" text="PDF Tools" GridPane.columnIndex="1" GridPane.rowIndex="9" />
-				<CheckBox fx:id="checkDetail" mnemonicParsing="false" onAction="#changeDetail" selected="true" text="details" GridPane.columnIndex="1" GridPane.rowIndex="10">
-					<GridPane.margin>
-						<Insets left="20.0" />
-					</GridPane.margin>
-				</CheckBox>
-				<CheckBox fx:id="checkCallas" mnemonicParsing="false" onAction="#changeCallas" selected="true" text="Callas" GridPane.columnIndex="2" GridPane.rowIndex="9" />
-				<CheckBox fx:id="checkNentry" mnemonicParsing="false" onAction="#changeNentry" selected="true" text="N-Entry" GridPane.columnIndex="2" GridPane.rowIndex="10">
-					<GridPane.margin>
-						<Insets left="20.0" />
-					</GridPane.margin>
-				</CheckBox>
-				<CheckBox fx:id="checkPdfa1a" mnemonicParsing="false" onAction="#changePdfa1a" selected="true" text="PDF/A-1a" GridPane.columnIndex="3" GridPane.rowIndex="9" />
-				<CheckBox fx:id="checkPdfa2a" mnemonicParsing="false" onAction="#changePdfa2a" selected="true" text="PDF/A-2a" GridPane.columnIndex="3" GridPane.rowIndex="11" />
-				<CheckBox fx:id="checkPdfa1b" mnemonicParsing="false" onAction="#changePdfa1b" selected="true" text="PDF/A-1b" GridPane.columnIndex="3" GridPane.rowIndex="10" />
-				<CheckBox fx:id="checkPdfa2b" mnemonicParsing="false" onAction="#changePdfa2b" selected="true" text="PDF/A-2b" GridPane.columnIndex="3" GridPane.rowIndex="12" />
-				<CheckBox fx:id="checkPdfa2u" mnemonicParsing="false" onAction="#changePdfa2u" selected="true" text="PDF/A-2u" GridPane.columnIndex="3" GridPane.rowIndex="13" />
-				<CheckBox fx:id="checkFont" mnemonicParsing="false" onAction="#changeFont" selected="true" text="Font" GridPane.columnIndex="1" GridPane.rowIndex="11">
-					<GridPane.margin>
-						<Insets left="20.0" />
-					</GridPane.margin>
-				</CheckBox>
-				<CheckBox fx:id="checkJbig2" mnemonicParsing="false" onAction="#changeJbig2" selected="true" text="JBIG2" GridPane.columnIndex="4" GridPane.rowIndex="9" />
-				<CheckBox fx:id="checkFontTol" mnemonicParsing="false" onAction="#changeFontTol" selected="true" text="Tolerant" GridPane.columnIndex="1" GridPane.rowIndex="12">
-					<GridPane.margin>
-						<Insets left="40.0" />
-					</GridPane.margin>
-				</CheckBox>
-				<Line endX="590.0" stroke="WHITESMOKE" GridPane.columnSpan="4" GridPane.rowIndex="5" />
-				<Line endX="780.0" stroke="WHITESMOKE" GridPane.columnSpan="5" GridPane.rowIndex="7" />
-				<CheckBox fx:id="checkSiard" mnemonicParsing="false" onAction="#changeConfigSiard" selected="true" text="SIARD" GridPane.rowIndex="6">
-					<font>
-						<Font name="System Bold" size="12.0" />
-					</font>
-				</CheckBox>
-				<CheckBox fx:id="checkSiard10" mnemonicParsing="false" onAction="#changeSiard10" selected="true" text="SIARD-1.0 (eCH-0165 v1)" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="6" />
-				<CheckBox fx:id="checkSiard21" mnemonicParsing="false" onAction="#changeSiard21" selected="true" text="SIARD-2.1" GridPane.columnIndex="3" GridPane.rowIndex="6" />
-				<Line endX="590.0" stroke="WHITESMOKE" GridPane.columnSpan="4" GridPane.rowIndex="1">
+				<Line endX="480.0" stroke="WHITESMOKE" GridPane.columnSpan="4" GridPane.rowIndex="5" />
+				<Line endX="670.0" stroke="WHITESMOKE" GridPane.columnSpan="5" GridPane.rowIndex="7" />
+				<Line endX="480.0" stroke="WHITESMOKE" GridPane.columnSpan="4" GridPane.rowIndex="1">
 					<GridPane.margin>
 						<Insets />
 					</GridPane.margin>
 				</Line>
-				<CheckBox fx:id="checkJpeg2000" mnemonicParsing="false" onAction="#changeConfigJpeg2000" selected="true" text="JPEG2000" GridPane.rowIndex="2">
-					<font>
-						<Font name="System Bold" size="12.0" />
-					</font>
-				</CheckBox>
-				<Line endX="590.0" stroke="WHITESMOKE" GridPane.columnSpan="4" GridPane.rowIndex="3">
+				<Line endX="480.0" stroke="WHITESMOKE" GridPane.columnSpan="4" GridPane.rowIndex="3">
 					<GridPane.margin>
 						<Insets />
 					</GridPane.margin>
 				</Line>
-				<CheckBox fx:id="checkJpeg" mnemonicParsing="false" onAction="#changeConfigJpeg" selected="true" text="JPEG">
-					<font>
-						<Font name="System Bold" size="12.0" />
-					</font>
-				</CheckBox>
-				<Line endX="780.0" stroke="WHITESMOKE" GridPane.columnSpan="5" GridPane.rowIndex="14" />
-				<CheckBox fx:id="checkTiff" mnemonicParsing="false" onAction="#changeConfigTiff" selected="true" text="TIFF" GridPane.rowIndex="15">
-					<font>
-						<Font name="System Bold" size="12.0" />
-					</font>
-				</CheckBox>
-				<Label fx:id="labelComp" text="Komprimierungsalgorithmus" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="15" />
-				<Label fx:id="labelPi" text="Farbraum" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="15" />
-				<Label fx:id="labelBps" text="Bits per Sample (pro Kanal)" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="15" />
-				<Label fx:id="labelOther" text="Sonstiges" GridPane.columnIndex="4" GridPane.rowIndex="15" />
-				<CheckBox fx:id="checkComp1" mnemonicParsing="false" onAction="#changeComp1" selected="true" text="Uncompressed" GridPane.columnIndex="1" GridPane.rowIndex="16" />
-				<CheckBox fx:id="checkComp5" mnemonicParsing="false" onAction="#changeComp5" selected="true" text="LZW" GridPane.columnIndex="1" GridPane.rowIndex="20" />
-				<CheckBox fx:id="checkComp2" mnemonicParsing="false" onAction="#changeComp2" selected="true" text="CCITT 1D" GridPane.columnIndex="1" GridPane.rowIndex="17" />
-				<CheckBox fx:id="checkComp7" mnemonicParsing="false" onAction="#changeComp7" selected="true" text="JPEG" GridPane.columnIndex="1" GridPane.rowIndex="21" />
-				<CheckBox fx:id="checkComp3" mnemonicParsing="false" onAction="#changeComp3" selected="true" text="T4/Group 3 Fax" GridPane.columnIndex="1" GridPane.rowIndex="18" />
-				<CheckBox fx:id="checkComp8" mnemonicParsing="false" onAction="#changeComp8" selected="true" text="Deflate" GridPane.columnIndex="1" GridPane.rowIndex="22" />
-				<CheckBox fx:id="checkComp4" mnemonicParsing="false" onAction="#changeComp4" selected="true" text="T6/Group 4 Fax" GridPane.columnIndex="1" GridPane.rowIndex="19" />
-				<CheckBox fx:id="checkComp32773" mnemonicParsing="false" onAction="#changeComp32773" selected="true" text="PackBits" GridPane.columnIndex="1" GridPane.rowIndex="23" />
-				<CheckBox fx:id="checkPi0" mnemonicParsing="false" onAction="#changePi0" selected="true" text="WhiteIsZero" GridPane.columnIndex="2" GridPane.rowIndex="16" />
-				<CheckBox fx:id="checkPi4" mnemonicParsing="false" onAction="#changePi4" selected="true" text="transparency" GridPane.columnIndex="2" GridPane.rowIndex="20" />
-				<CheckBox fx:id="checkPi1" mnemonicParsing="false" onAction="#changePi1" selected="true" text="BlackIsZero" GridPane.columnIndex="2" GridPane.rowIndex="17" />
-				<CheckBox fx:id="checkPi5" mnemonicParsing="false" onAction="#changePi5" selected="true" text="CMYK" GridPane.columnIndex="2" GridPane.rowIndex="21" />
-				<CheckBox fx:id="checkPi2" mnemonicParsing="false" onAction="#changePi2" selected="true" text="RGB" GridPane.columnIndex="2" GridPane.rowIndex="18" />
-				<CheckBox fx:id="checkPi6" mnemonicParsing="false" onAction="#changePi6" selected="true" text="YCbCr" GridPane.columnIndex="2" GridPane.rowIndex="22" />
-				<CheckBox fx:id="checkPi3" mnemonicParsing="false" onAction="#changePi3" selected="true" text="RGB Palette" GridPane.columnIndex="2" GridPane.rowIndex="19" />
-				<CheckBox fx:id="checkPi8" mnemonicParsing="false" onAction="#changePi8" selected="true" text="CIE L*a*b*" GridPane.columnIndex="2" GridPane.rowIndex="23" />
-				<CheckBox fx:id="checkBps1" mnemonicParsing="false" onAction="#changeBps1" selected="true" text="Bps 1" GridPane.columnIndex="3" GridPane.rowIndex="16" />
-				<CheckBox fx:id="checkBps8" mnemonicParsing="false" onAction="#changeBps8" selected="true" text="Bps 8" GridPane.columnIndex="3" GridPane.rowIndex="19" />
-				<CheckBox fx:id="checkBps2" mnemonicParsing="false" onAction="#changeBps2" selected="true" text="Bps 2" GridPane.columnIndex="3" GridPane.rowIndex="17" />
-				<CheckBox fx:id="checkBps16" mnemonicParsing="false" onAction="#changeBps16" selected="true" text="Bps 16" GridPane.columnIndex="3" GridPane.rowIndex="20" />
-				<CheckBox fx:id="checkBps4" mnemonicParsing="false" onAction="#changeBps4" selected="true" text="Bps 4" GridPane.columnIndex="3" GridPane.rowIndex="18" />
-				<CheckBox fx:id="checkBps32" mnemonicParsing="false" onAction="#changeBps32" selected="true" text="Bps 32" GridPane.columnIndex="3" GridPane.rowIndex="21" />
-				<Line endX="780.0" stroke="WHITESMOKE" GridPane.columnSpan="5" GridPane.rowIndex="24" />
-				<CheckBox fx:id="checkMultipage" mnemonicParsing="false" onAction="#changeMultipage" selected="true" text="Multipage" GridPane.columnIndex="4" GridPane.rowIndex="16" />
-				<CheckBox fx:id="checkTiles" mnemonicParsing="false" onAction="#changeTiles" selected="true" text="Tiles" GridPane.columnIndex="4" GridPane.rowIndex="17" />
-				<CheckBox fx:id="checkSize" mnemonicParsing="false" onAction="#changeSize" selected="true" text="Size" GridPane.columnIndex="4" GridPane.rowIndex="18" />
-				<Line endX="780.0" stroke="WHITESMOKE" GridPane.columnSpan="5" GridPane.rowIndex="28" />
-				<CheckBox fx:id="checkSip0160" mnemonicParsing="false" onAction="#changeSip0160" selected="true" text="eCH-0160" GridPane.rowIndex="25">
-					<font>
-						<Font name="System Bold" size="12.0" />
-					</font>
-				</CheckBox>
-				<Label fx:id="labelLength" text="Pfadlänge" GridPane.columnIndex="1" GridPane.rowIndex="25" />
-				<Label fx:id="labelName" text="SIP Name" GridPane.columnIndex="1" GridPane.rowIndex="26" />
-				<Label fx:id="labelPuid" text="PUID" GridPane.columnIndex="1" GridPane.rowIndex="27" />
-				<Button fx:id="buttonConfigCancel" alignment="TOP_LEFT" maxHeight="26.0" maxWidth="170.0" minHeight="26.0" minWidth="170.0" mnemonicParsing="false" onAction="#configCancel" prefHeight="26.0" prefWidth="170.0" style="-fx-border-color: Red;" text="Verwerfen" GridPane.columnIndex="4">
+				<Line endX="670.0" stroke="WHITESMOKE" GridPane.columnSpan="5" GridPane.rowIndex="9" />
+				<Line endX="670.0" stroke="WHITESMOKE" GridPane.columnSpan="5" GridPane.rowIndex="11" />
+				<Line endX="670.0" stroke="WHITESMOKE" GridPane.columnSpan="5" GridPane.rowIndex="13" />
+				<Button fx:id="buttonConfigCancel" alignment="TOP_LEFT" maxHeight="26.0" maxWidth="170.0" minHeight="26.0" minWidth="170.0" mnemonicParsing="false" onAction="#configCancel" prefHeight="26.0" prefWidth="170.0" style="-fx-border-color: Red;" text="Verwerfen" GridPane.columnIndex="5">
 					<GridPane.margin>
 						<Insets />
 					</GridPane.margin>
@@ -176,51 +84,480 @@
 						<Insets />
 					</opaqueInsets>
 				</Button>
-				<Button fx:id="buttonConfigApply" alignment="TOP_LEFT" maxHeight="26.0" maxWidth="170.0" minHeight="26.0" minWidth="170.0" mnemonicParsing="false" onAction="#configApply" prefHeight="26.0" prefWidth="170.0" style="-fx-border-color: LimeGreen;" text="Anwenden" GridPane.columnIndex="4" GridPane.rowIndex="2">
+				<Button fx:id="buttonConfigApply" alignment="TOP_LEFT" maxHeight="26.0" maxWidth="170.0" minHeight="26.0" minWidth="170.0" mnemonicParsing="false" onAction="#configApply" prefHeight="26.0" prefWidth="170.0" style="-fx-border-color: LimeGreen;" text="Anwenden" GridPane.columnIndex="5" GridPane.rowIndex="2">
 					<GridPane.margin>
 						<Insets />
 					</GridPane.margin>
 				</Button>
-				<Button fx:id="buttonConfigApplyStandard" alignment="TOP_LEFT" layoutX="851.0" layoutY="47.0" maxHeight="26.0" maxWidth="170.0" minHeight="26.0" minWidth="170.0" mnemonicParsing="false" onAction="#configApplyStandard" prefHeight="26.0" prefWidth="170.0" style="-fx-border-color: LimeGreen;" text="Standard anwenden" GridPane.columnIndex="4" GridPane.rowIndex="4" />
-				<Line endX="780.0" stroke="WHITESMOKE" GridPane.columnSpan="5" GridPane.rowIndex="30" />
-				<Button fx:id="buttonWork" alignment="TOP_LEFT" maxHeight="26.0" minHeight="26.0" mnemonicParsing="false" onAction="#chooseWork" prefHeight="26.0" prefWidth="260.0" style="-fx-border-color: WhiteSmoke; -fx-background-color: WhiteSmoke;" text="Arbeitsverzeichnis" GridPane.columnSpan="2" GridPane.rowIndex="29">
+				<Button fx:id="buttonConfigApplyStandard" alignment="TOP_LEFT" layoutX="851.0" layoutY="47.0" maxHeight="26.0" maxWidth="170.0" minHeight="26.0" minWidth="170.0" mnemonicParsing="false" onAction="#configApplyStandard" prefHeight="26.0" prefWidth="170.0" style="-fx-border-color: LimeGreen;" text="Standard anwenden" GridPane.columnIndex="5" GridPane.rowIndex="4" />
+				<Line endX="670.0" stroke="WHITESMOKE" GridPane.columnSpan="5" GridPane.rowIndex="15" />
+				<Button fx:id="buttonWork" alignment="TOP_LEFT" maxHeight="26.0" minHeight="26.0" mnemonicParsing="false" onAction="#chooseWork" prefHeight="26.0" prefWidth="260.0" style="-fx-border-color: WhiteSmoke; -fx-background-color: WhiteSmoke;" text="Arbeitsverzeichnis" GridPane.columnSpan="2" GridPane.rowIndex="14">
 					<GridPane.margin>
 						<Insets right="10.0" />
 					</GridPane.margin>
 				</Button>
-				<Button fx:id="buttonInput" alignment="TOP_LEFT" maxHeight="26.0" minHeight="26.0" mnemonicParsing="false" onAction="#chooseInput" prefHeight="26.0" prefWidth="260.0" style="-fx-border-color: WhiteSmoke; -fx-background-color: WhiteSmoke;" text="Inputverzeichnis" GridPane.columnSpan="2" GridPane.rowIndex="31">
+				<Button fx:id="buttonInput" alignment="TOP_LEFT" maxHeight="26.0" minHeight="26.0" mnemonicParsing="false" onAction="#chooseInput" prefHeight="26.0" prefWidth="260.0" style="-fx-border-color: WhiteSmoke; -fx-background-color: WhiteSmoke;" text="Inputverzeichnis" GridPane.columnSpan="2" GridPane.rowIndex="16">
 					<GridPane.margin>
 						<Insets right="10.0" />
 					</GridPane.margin>
 				</Button>
-				<Label fx:id="labelWork" layoutX="131.0" layoutY="372.0" text="(work)" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.rowIndex="29" />
-				<Label fx:id="labelInput" layoutX="131.0" layoutY="467.0" text="(input)" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.rowIndex="31" />
-				<CheckBox fx:id="checkPng" layoutX="10.0" layoutY="15.0" mnemonicParsing="false" onAction="#changeConfigPng" selected="true" text="PNG" GridPane.rowIndex="4">
-					<font>
-						<Font name="System Bold" size="12.0" />
-					</font>
-				</CheckBox>
-
-				<Button fx:id="buttonName" alignment="TOP_LEFT" maxHeight="26.0" minHeight="26.0" mnemonicParsing="false" onAction="#changeName" prefHeight="26.0" style="-fx-background-color: WhiteSmoke; -fx-border-color: WhiteSmoke;" text="aendern" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.rowIndex="26" />
-				<Button fx:id="buttonPuid" alignment="TOP_LEFT" maxHeight="26.0" minHeight="26.0" mnemonicParsing="false" onAction="#changePuid" prefHeight="26.0" style="-fx-background-color: WhiteSmoke; -fx-border-color: WhiteSmoke;" text="aendern" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.rowIndex="27" />
-				<Button fx:id="buttonLength" alignment="TOP_LEFT" maxHeight="26.0" minHeight="26.0" mnemonicParsing="false" onAction="#changeLength" prefHeight="26.0" style="-fx-background-color: WhiteSmoke; -fx-border-color: WhiteSmoke;" text="aendern" GridPane.columnIndex="2" GridPane.columnSpan="3" GridPane.rowIndex="25">
-					<opaqueInsets>
-						<Insets />
-					</opaqueInsets>
-				</Button>
-				<Label fx:id="labelOtherPdfa" text="Sonstiges" GridPane.columnIndex="4" GridPane.rowIndex="8" />
-				<Label fx:id="labelVersion" text="Versionen" GridPane.columnIndex="3" GridPane.rowIndex="8" />
-				<Label fx:id="labelCallas" text="Callas" GridPane.columnIndex="2" GridPane.rowIndex="8" />
-				<Label fx:id="labelPdftools" text="PDF Tools" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-				<Label fx:id="labelEr" text=" └" textFill="WHITESMOKE" GridPane.columnIndex="1" GridPane.rowIndex="10" />
-				<Label fx:id="labelEr1" text=" └" textFill="WHITESMOKE" GridPane.columnIndex="1" GridPane.rowIndex="11" />
-				<Label fx:id="labelEr2" text=" └" textFill="WHITESMOKE" GridPane.columnIndex="2" GridPane.rowIndex="10" />
-				<Label fx:id="labelEr3" text=" └" textFill="WHITESMOKE" GridPane.columnIndex="1" GridPane.rowIndex="12">
+				<Label fx:id="labelWork" layoutX="131.0" layoutY="372.0" text="(work)" GridPane.columnIndex="2" GridPane.columnSpan="4" GridPane.rowIndex="14" />
+				<Label fx:id="labelInput" layoutX="131.0" layoutY="467.0" text="(input)" GridPane.columnIndex="2" GridPane.columnSpan="4" GridPane.rowIndex="16" />
+				<WebView fx:id="wbv" minHeight="-1.0" minWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="7" GridPane.rowSpan="34" />
+				<Label fx:id="labelConfig" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="670.0" text="Copyright © KOST/CECO" textAlignment="CENTER" textFill="WHITESMOKE" GridPane.columnSpan="6" GridPane.halignment="CENTER" GridPane.rowIndex="18" GridPane.valignment="CENTER" />
+            <Label fx:id="labelText" text="Text">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="labelImage" text="Bild" GridPane.rowIndex="2">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="labelData" text="Daten" GridPane.rowIndex="8">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="labelVideo" text="Video" GridPane.rowIndex="6">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="labelAudio" text="Audio" GridPane.rowIndex="4">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="labelPdf" text="PDF" GridPane.columnIndex="3">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <padding>
+                  <Insets left="25.0" />
+               </padding>
+            </Label>
+            <Button fx:id="buttonPdf" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#changePdf" prefHeight="20.0" prefWidth="20.0" style="-fx-border-color: WhiteSmoke; -fx-background-color: WhiteSmoke;" text="O" textAlignment="CENTER" textOverrun="CLIP" GridPane.columnIndex="3">
+               <font>
+                  <Font name="System Bold" size="11.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets bottom="-3.0" left="-3.0" right="-3.0" top="-3.0" />
+               </padding>
+            </Button>
+            <Label fx:id="labelXlsx" text="XLSX" GridPane.columnIndex="4" GridPane.rowIndex="8">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <padding>
+                  <Insets left="25.0" />
+               </padding>
+            </Label>
+            <Button fx:id="buttonTiffVal" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#changeTiffVal" prefHeight="20.0" prefWidth="20.0" style="-fx-border-color: silver; -fx-background-color: silver;" text="✱" textAlignment="RIGHT" textFill="WHITESMOKE" textOverrun="CLIP" GridPane.columnIndex="3" GridPane.rowIndex="2">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets bottom="-3.0" left="-3.0" right="-3.0" top="-3.0" />
+               </padding>
                <GridPane.margin>
-                  <Insets left="20.0" />
-               </GridPane.margin></Label>
-				<WebView fx:id="wbv" minHeight="-1.0" minWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" GridPane.columnIndex="6" GridPane.rowSpan="34" />
-				<Label fx:id="labelConfig" alignment="CENTER" contentDisplay="CENTER" maxHeight="20.0" maxWidth="780.0" minHeight="20.0" minWidth="780.0" prefHeight="20.0" prefWidth="780.0" text="Copyright © KOST/CECO" textAlignment="CENTER" textFill="WHITESMOKE" GridPane.columnSpan="5" GridPane.halignment="CENTER" GridPane.rowIndex="33" GridPane.valignment="CENTER" />
+                  <Insets left="47.0" />
+               </GridPane.margin>
+            </Button>
+            <Label fx:id="labelSip" text="SIP" GridPane.rowIndex="10">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="labelOther" text="Sonstige" GridPane.rowIndex="12">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="labelPdfa" text="PDF/A" GridPane.columnIndex="1">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <padding>
+                  <Insets left="25.0" />
+               </padding>
+            </Label>
+            <Button fx:id="buttonPdfa" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#changePdfa" prefHeight="20.0" prefWidth="20.0" style="-fx-border-color: WhiteSmoke; -fx-background-color: WhiteSmoke;" text="V" textAlignment="CENTER" textOverrun="CLIP" GridPane.columnIndex="1">
+               <font>
+                  <Font name="System Bold" size="11.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets bottom="-3.0" left="-3.0" right="-3.0" top="-3.0" />
+               </padding>
+            </Button>
+            <Button fx:id="buttonPdfaVal" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#changePdfaVal" prefHeight="20.0" prefWidth="20.0" style="-fx-border-color: silver; -fx-background-color: silver;" text="✱" textAlignment="RIGHT" textFill="WHITESMOKE" textOverrun="CLIP" GridPane.columnIndex="1">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets bottom="-3.0" left="-3.0" right="-3.0" top="-3.0" />
+               </padding>
+               <GridPane.margin>
+                  <Insets left="62.0" />
+               </GridPane.margin>
+            </Button>
+            <Button fx:id="buttonSiardVal" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#changeSiardVal" prefHeight="20.0" prefWidth="20.0" style="-fx-border-color: silver; -fx-background-color: silver;" text="✱" textAlignment="RIGHT" textFill="WHITESMOKE" textOverrun="CLIP" GridPane.columnIndex="2" GridPane.rowIndex="8">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets bottom="-3.0" left="-3.0" right="-3.0" top="-3.0" />
+               </padding>
+               <GridPane.margin>
+                  <Insets left="61.0" />
+               </GridPane.margin>
+            </Button>
+            <Label fx:id="labelJpeg" text="JPEG" GridPane.columnIndex="2" GridPane.rowIndex="2">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <padding>
+                  <Insets left="25.0" />
+               </padding>
+            </Label>
+            <Button fx:id="buttonJpeg" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#changeJpeg" prefHeight="20.0" prefWidth="20.0" style="-fx-border-color: WhiteSmoke; -fx-background-color: WhiteSmoke;" text="V" textAlignment="CENTER" textOverrun="CLIP" GridPane.columnIndex="2" GridPane.rowIndex="2">
+               <font>
+                  <Font name="System Bold" size="11.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets bottom="-3.0" left="-3.0" right="-3.0" top="-3.0" />
+               </padding>
+            </Button>
+            <Label fx:id="labelTxt" text="TXT" GridPane.columnIndex="2">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <padding>
+                  <Insets left="25.0" />
+               </padding>
+            </Label>
+            <Button fx:id="buttonTxt" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#changeTxt" prefHeight="20.0" prefWidth="20.0" style="-fx-border-color: WhiteSmoke; -fx-background-color: WhiteSmoke;" text="(v)" textAlignment="CENTER" textOverrun="CLIP" GridPane.columnIndex="2">
+               <font>
+                  <Font name="System Bold" size="11.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets bottom="-3.0" left="-3.0" right="-3.0" top="-3.0" />
+               </padding>
+            </Button>
+            <Label fx:id="labelXml" text="XML" GridPane.columnIndex="1" GridPane.rowIndex="8">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <padding>
+                  <Insets left="25.0" />
+               </padding>
+            </Label>
+            <Button fx:id="buttonXml" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#changeXml" prefHeight="20.0" prefWidth="20.0" style="-fx-border-color: WhiteSmoke; -fx-background-color: WhiteSmoke;" text="V" textAlignment="CENTER" textOverrun="CLIP" GridPane.columnIndex="1" GridPane.rowIndex="8">
+               <font>
+                  <Font name="System Bold" size="11.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets bottom="-3.0" left="-3.0" right="-3.0" top="-3.0" />
+               </padding>
+            </Button>
+            <Label fx:id="labelCsv" text="CSV" GridPane.columnIndex="3" GridPane.rowIndex="8">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <padding>
+                  <Insets left="25.0" />
+               </padding>
+            </Label>
+            <Label fx:id="labelOds" text="ODS" GridPane.columnIndex="5" GridPane.rowIndex="8">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <padding>
+                  <Insets left="25.0" />
+               </padding>
+            </Label>
+            <Label fx:id="labelMj2" text="MJ2" GridPane.columnIndex="3" GridPane.rowIndex="6">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <padding>
+                  <Insets left="25.0" />
+               </padding>
+            </Label>
+            <Label fx:id="labelMp4" text="MP4" GridPane.columnIndex="2" GridPane.rowIndex="6">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <padding>
+                  <Insets left="25.0" />
+               </padding>
+            </Label>
+            <Label fx:id="labelFfv1" text="FFV1" GridPane.columnIndex="1" GridPane.rowIndex="6">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <padding>
+                  <Insets left="25.0" />
+               </padding>
+            </Label>
+            <Label fx:id="labelMp3" text="MP3" GridPane.columnIndex="3" GridPane.rowIndex="4">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <padding>
+                  <Insets left="25.0" />
+               </padding>
+            </Label>
+            <Label fx:id="labelWave" text="WAVE" GridPane.columnIndex="2" GridPane.rowIndex="4">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <padding>
+                  <Insets left="25.0" />
+               </padding>
+            </Label>
+            <Label fx:id="labelFlac" text="FLAC" GridPane.columnIndex="1" GridPane.rowIndex="4">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <padding>
+                  <Insets left="25.0" />
+               </padding>
+            </Label>
+            <Button fx:id="buttonPuid" alignment="TOP_LEFT" maxHeight="26.0" minHeight="26.0" minWidth="90.0" mnemonicParsing="false" onAction="#changePuid" prefHeight="26.0" style="-fx-background-color: WhiteSmoke; -fx-border-color: WhiteSmoke;" text="aendern" GridPane.columnIndex="1" GridPane.columnSpan="5" GridPane.rowIndex="12" />
+            <Label fx:id="labelJpeg2000" text="JPEG2000" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <padding>
+                  <Insets left="25.0" />
+               </padding>
+            </Label>
+            <Button fx:id="buttonJpeg2000" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#changeJpeg2000" prefHeight="20.0" prefWidth="20.0" style="-fx-border-color: WhiteSmoke; -fx-background-color: WhiteSmoke;" text="V" textAlignment="CENTER" textOverrun="CLIP" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <font>
+                  <Font name="System Bold" size="11.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets bottom="-3.0" left="-3.0" right="-3.0" top="-3.0" />
+               </padding>
+            </Button>
+            <Label fx:id="labelTiff" text="TIFF" GridPane.columnIndex="3" GridPane.rowIndex="2">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <padding>
+                  <Insets left="25.0" />
+               </padding>
+            </Label>
+            <Button fx:id="buttonTiff" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#changeTiff" prefHeight="20.0" prefWidth="20.0" style="-fx-border-color: WhiteSmoke; -fx-background-color: WhiteSmoke;" text="V" textAlignment="CENTER" textOverrun="CLIP" GridPane.columnIndex="3" GridPane.rowIndex="2">
+               <font>
+                  <Font name="System Bold" size="11.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets bottom="-3.0" left="-3.0" right="-3.0" top="-3.0" />
+               </padding>
+            </Button>
+            <Label fx:id="labelPng" text="PNG" GridPane.columnIndex="4" GridPane.rowIndex="2">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <padding>
+                  <Insets left="25.0" />
+               </padding>
+            </Label>
+            <Button fx:id="buttonPng" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#changePng" prefHeight="20.0" prefWidth="20.0" style="-fx-border-color: WhiteSmoke; -fx-background-color: WhiteSmoke;" text="V" textAlignment="CENTER" textOverrun="CLIP" GridPane.columnIndex="4" GridPane.rowIndex="2">
+               <font>
+                  <Font name="System Bold" size="11.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets bottom="-3.0" left="-3.0" right="-3.0" top="-3.0" />
+               </padding>
+            </Button>
+            <Label fx:id="labelSiard" text="SIARD" GridPane.columnIndex="2" GridPane.rowIndex="8">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <padding>
+                  <Insets left="25.0" />
+               </padding>
+            </Label>
+            <Button fx:id="buttonSiard" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#changeSiard" prefHeight="20.0" prefWidth="20.0" style="-fx-border-color: WhiteSmoke; -fx-background-color: WhiteSmoke;" text="V" textAlignment="CENTER" textOverrun="CLIP" GridPane.columnIndex="2" GridPane.rowIndex="8">
+               <font>
+                  <Font name="System Bold" size="11.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets bottom="-3.0" left="-3.0" right="-3.0" top="-3.0" />
+               </padding>
+            </Button>
+            <Label fx:id="labelSip0160" text="eCH-0160" GridPane.columnIndex="1" GridPane.rowIndex="10">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <padding>
+                  <Insets left="25.0" />
+               </padding>
+            </Label>
+            <Button fx:id="buttonSip0160" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#changeSip0160" prefHeight="20.0" prefWidth="20.0" style="-fx-border-color: WhiteSmoke; -fx-background-color: WhiteSmoke;" text="V" textAlignment="CENTER" textOverrun="CLIP" GridPane.columnIndex="1" GridPane.rowIndex="10">
+               <font>
+                  <Font name="System Bold" size="11.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets bottom="-3.0" left="-3.0" right="-3.0" top="-3.0" />
+               </padding>
+            </Button>
+            <Button fx:id="buttonSipVal" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#changeSipVal" prefHeight="20.0" prefWidth="20.0" style="-fx-border-color: silver; -fx-background-color: silver;" text="✱" textAlignment="RIGHT" textFill="WHITESMOKE" textOverrun="CLIP" GridPane.columnIndex="1" GridPane.rowIndex="10">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets bottom="-3.0" left="-3.0" right="-3.0" top="-3.0" />
+               </padding>
+               <GridPane.margin>
+                  <Insets left="81.0" />
+               </GridPane.margin>
+            </Button>
+            <Button fx:id="buttonOds" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#changeOds" prefHeight="20.0" prefWidth="20.0" style="-fx-border-color: WhiteSmoke; -fx-background-color: WhiteSmoke;" text="V" textAlignment="CENTER" textOverrun="CLIP" GridPane.columnIndex="5" GridPane.rowIndex="8">
+               <font>
+                  <Font name="System Bold" size="11.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets bottom="-3.0" left="-3.0" right="-3.0" top="-3.0" />
+               </padding>
+            </Button>
+            <Button fx:id="buttonXlsx" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#changeXlsx" prefHeight="20.0" prefWidth="20.0" style="-fx-border-color: WhiteSmoke; -fx-background-color: WhiteSmoke;" text="V" textAlignment="CENTER" textOverrun="CLIP" GridPane.columnIndex="4" GridPane.rowIndex="8">
+               <font>
+                  <Font name="System Bold" size="11.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets bottom="-3.0" left="-3.0" right="-3.0" top="-3.0" />
+               </padding>
+            </Button>
+            <Button fx:id="buttonMj2" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#changeMj2" prefHeight="20.0" prefWidth="20.0" style="-fx-border-color: WhiteSmoke; -fx-background-color: WhiteSmoke;" text="V" textAlignment="CENTER" textOverrun="CLIP" GridPane.columnIndex="3" GridPane.rowIndex="6">
+               <font>
+                  <Font name="System Bold" size="11.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets bottom="-3.0" left="-3.0" right="-3.0" top="-3.0" />
+               </padding>
+            </Button>
+            <Button fx:id="buttonMp4" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#changeMp4" prefHeight="20.0" prefWidth="20.0" style="-fx-border-color: WhiteSmoke; -fx-background-color: WhiteSmoke;" text="V" textAlignment="CENTER" textOverrun="CLIP" GridPane.columnIndex="2" GridPane.rowIndex="6">
+               <font>
+                  <Font name="System Bold" size="11.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets bottom="-3.0" left="-3.0" right="-3.0" top="-3.0" />
+               </padding>
+            </Button>
+            <Button fx:id="buttonFfv1" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#changeFfv1" prefHeight="20.0" prefWidth="20.0" style="-fx-border-color: WhiteSmoke; -fx-background-color: WhiteSmoke;" text="V" textAlignment="CENTER" textOverrun="CLIP" GridPane.columnIndex="1" GridPane.rowIndex="6">
+               <font>
+                  <Font name="System Bold" size="11.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets bottom="-3.0" left="-3.0" right="-3.0" top="-3.0" />
+               </padding>
+            </Button>
+            <Button fx:id="buttonMp3" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#changeMp3" prefHeight="20.0" prefWidth="20.0" style="-fx-border-color: WhiteSmoke; -fx-background-color: WhiteSmoke;" text="V" textAlignment="CENTER" textOverrun="CLIP" GridPane.columnIndex="3" GridPane.rowIndex="4">
+               <font>
+                  <Font name="System Bold" size="11.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets bottom="-3.0" left="-3.0" right="-3.0" top="-3.0" />
+               </padding>
+            </Button>
+            <Button fx:id="buttonWave" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#changeWave" prefHeight="20.0" prefWidth="20.0" style="-fx-border-color: WhiteSmoke; -fx-background-color: WhiteSmoke;" text="V" textAlignment="CENTER" textOverrun="CLIP" GridPane.columnIndex="2" GridPane.rowIndex="4">
+               <font>
+                  <Font name="System Bold" size="11.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets bottom="-3.0" left="-3.0" right="-3.0" top="-3.0" />
+               </padding>
+            </Button>
+            <Button fx:id="buttonFlac" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#changeFlac" prefHeight="20.0" prefWidth="20.0" style="-fx-border-color: WhiteSmoke; -fx-background-color: WhiteSmoke;" text="V" textAlignment="CENTER" textOverrun="CLIP" GridPane.columnIndex="1" GridPane.rowIndex="4">
+               <font>
+                  <Font name="System Bold" size="11.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets bottom="-3.0" left="-3.0" right="-3.0" top="-3.0" />
+               </padding>
+            </Button>
+            <Button fx:id="buttonCsv" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#changeCsv" prefHeight="20.0" prefWidth="20.0" style="-fx-border-color: WhiteSmoke; -fx-background-color: WhiteSmoke;" text="V" textAlignment="CENTER" textOverrun="CLIP" GridPane.columnIndex="3" GridPane.rowIndex="8">
+               <font>
+                  <Font name="System Bold" size="11.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets bottom="-3.0" left="-3.0" right="-3.0" top="-3.0" />
+               </padding>
+            </Button>
 			</children>
 			<padding>
 				<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

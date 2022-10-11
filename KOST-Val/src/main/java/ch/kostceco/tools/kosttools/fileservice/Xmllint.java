@@ -87,6 +87,79 @@ public class Xmllint
 	}
 
 	/**
+	 * fuehrt eine Kontrolle mit xmllint via cmd durch und gibt das Ergebnis als
+	 * String zurueck
+	 * 
+	 * @param xmlFile
+	 *            XML-Datei, welche kontrolliert werden soll
+	 * @param workDir
+	 *            Temporaeres Verzeichnis
+	 * @param dirOfJarPath
+	 *            String mit dem Pfad von wo das Programm gestartet wurde
+	 * @return String mit Kontrollergebnis ("OK" oder den Fehler.
+	 */
+	public static String structXmllint( File xmlFile, File workDir,
+			String dirOfJarPath ) throws InterruptedException
+	{
+		boolean out = false;
+		File exeFile = new File(
+				dirOfJarPath + File.separator + pathToxmllintExe );
+
+		String command = "\"\"" + exeFile.getAbsolutePath() + "\""
+				+ " --noout --stream " + "\"" + xmlFile.getAbsolutePath()
+				+ "\"\"";
+
+		String resultStru = Cmd.execToString( command, out, workDir );
+		/*
+		 * C:\Program Files
+		 * (x86)\KOST-CECO\KOST-Tools\KOST-Val\resources\xmllint>xmllint.exe
+		 * --noout
+		 * C:\Users\clair\Downloads\SIP_20220328_KOST_eCH1.2Fxsd_1a-3d-IO\
+		 * content\DOS_04\shiporder.xml
+		 */
+		//System.out.println( resultStru );
+		String ignor = "";
+		if ( resultStru.equals( ignor ) ) {
+			resultStru = "OK";
+		} else {
+			/*
+			 * ERROR: file:///C%3A/Users/clair/Downloads/SIP_20220328_KOST_eCH1.
+			 * 2Fxsd_1a-3d-IO/content/DOS_04/shiporder1.xml:17: parser error :
+			 * Opening and ending tag mismatch: titel line 0 and
+			 * title</Message><Message>ERROR: <titel>Hide your
+			 * heart</title></Message><Message>ERROR: ^</Message><Message>ERROR:
+			 * C:\Users\clair\Downloads\SIP_20220328_KOST_eCH1.2Fxsd_1a-3d-IO\
+			 * content\DOS_04\shiporder1.xml : failed to parse
+			 */
+
+			String replaceInfo = "</Message><Message>ERROR: "
+					+ xmlFile.getAbsolutePath() + " : failed to parse";
+			resultStru = resultStru.replace( replaceInfo, "" );
+			String replacePath = xmlFile.getAbsolutePath() ;
+			replacePath = replacePath.replace ("\\","/");
+			replacePath = replacePath.replace (":/","%3A/");
+			replacePath = replacePath.replace (" ","%20");
+			// System.out.println( replacePath );
+			resultStru = resultStru.replace( replacePath, "" );
+			// System.out.println( resultStru );
+			resultStru = resultStru.replace( "file:///:", "Line " );
+			for ( int i = 0; i < 500; i++ ) {
+				resultStru = resultStru.replace( "\t", " " );
+				resultStru = resultStru.replace( "   ", " " );
+				resultStru = resultStru.replace( "  ", " " );
+			}
+			resultStru = resultStru.replace( "</Message><Message>ERROR: ^",
+					"" );
+			resultStru = resultStru.replace( "<", "[" );
+			resultStru = resultStru.replace( ">", "]" );
+			resultStru = resultStru.replace( "[Message]", "<Message>- " );
+			resultStru = resultStru.replace( "[/Message]", "</Message>" );
+			// System.out.println( resultStru );
+		}
+		return resultStru;
+	}
+
+	/**
 	 * fuehrt eine Kontrolle aller benooetigten Dateien von xmllint durch und
 	 * gibt das Ergebnis als String zurueck
 	 * 

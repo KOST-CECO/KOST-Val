@@ -1,5 +1,5 @@
 ﻿/* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
  * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
@@ -29,12 +29,10 @@ import java.io.Reader;
 import java.util.Locale;
 import java.util.Map;
 
-import ch.kostceco.tools.kosttools.fileservice.DroidPuid;
-import ch.kostceco.tools.kosttools.fileservice.Magic;
 import ch.kostceco.tools.kostval.exception.modulejpeg.ValidationAjpegvalidationException;
+import ch.kostceco.tools.kostval.logging.Logtxt;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulejpeg.ValidationAvalidationJpegModule;
-import ch.kostceco.tools.kostval.logging.Logtxt;
 import coderslagoon.badpeggy.scanner.ImageFormat;
 import coderslagoon.badpeggy.scanner.ImageScanner;
 import coderslagoon.badpeggy.scanner.ImageScanner.Callback;
@@ -61,86 +59,7 @@ public class ValidationAvalidationJpegModuleImpl extends ValidationModuleImpl
 			min = true;
 		}
 
-		// Start mit der Erkennung
-
-		// Eine JPEG Datei (.jpg / .jpeg) muss mit FFD8FF -> ÿØÿ beginnen
-		if ( valDatei.isDirectory() ) {
-			if ( min ) {
-				return false;
-			} else {
-
-				Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JPEG )
-						+ getTextResourceService().getText( locale, ERROR_XML_A_JPEG_ISDIRECTORY ) );
-				return false;
-			}
-		} else if ( (valDatei.getAbsolutePath().toLowerCase().endsWith( ".jpeg" )
-				|| valDatei.getAbsolutePath().toLowerCase().endsWith( ".jpg" )
-				|| valDatei.getAbsolutePath().toLowerCase().endsWith( ".jpe" )) ) {
-
-			try {
-				// System.out.println("ueberpruefe Magic number jpeg...");
-				if ( Magic.magicJpeg( valDatei ) ) {
-					// System.out.println(" -> es ist eine Jpeg-Datei");
-					/* hoechstwahrscheinlich ein JPEG da es mit FFD8FF respektive ÿØÿ beginnt */
-				} else {
-					// System.out.println(" -> es ist KEINE Jpeg-Datei");
-					if ( min ) {
-						return false;
-					} else {
-						// Droid-Erkennung, damit Details ausgegeben werden koennen
-						// existiert die SignatureFile am angebenen Ort?
-						String nameOfSignature = configMap.get( "PathToDroidSignatureFile" );
-						if ( !new File( nameOfSignature ).exists() ) {
-							if ( min ) {
-								return false;
-							} else {
-
-								Logtxt.logtxt( logFile,
-										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JPEG )
-												+ getTextResourceService().getText( locale, MESSAGE_XML_CA_DROID ) );
-								return false;
-							}
-						}
-
-						// Ermittle die DROID-PUID der valDatei mit hilfe der nameOfSignature
-						String puid = (DroidPuid.getPuid( valDatei, nameOfSignature ));
-						if ( min ) {
-							return false;
-						} else if ( puid.equals( " ERROR " ) ) {
-							// Probleme bei der Initialisierung von DROID
-							Logtxt.logtxt( logFile,
-									getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JPEG )
-											+ getTextResourceService().getText( locale,
-													ERROR_XML_CANNOT_INITIALIZE_DROID ) );
-							return false;
-						} else {
-							// Erkennungsergebnis ausgeben
-
-							Logtxt.logtxt( logFile,
-									getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JPEG )
-											+ getTextResourceService().getText( locale, ERROR_XML_A_JPEG_INCORRECTFILE,
-													puid ) );
-							return false;
-						}
-					}
-				}
-			} catch ( Exception e ) {
-
-				Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JPEG )
-						+ getTextResourceService().getText( locale, ERROR_XML_A_JPEG_INCORRECTFILE ) );
-				return false;
-			}
-		} else {
-			// die Datei endet nicht mit jpeg/jpg/jpe -> Fehler
-			if ( min ) {
-				return false;
-			} else {
-				Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JPEG )
-						+ getTextResourceService().getText( locale, ERROR_XML_A_JPEG_INCORRECTFILEENDING ) );
-				return false;
-			}
-		}
-		// Ende der Erkennung
+		// Die Erkennung erfolgt bereits im Vorfeld
 
 		boolean isValid = true;
 

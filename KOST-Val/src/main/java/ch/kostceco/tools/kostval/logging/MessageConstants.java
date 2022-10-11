@@ -1,5 +1,5 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
  * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
@@ -52,7 +52,7 @@ public interface MessageConstants
 	String	MESSAGE_XML_SUMMARY_NO3C						= "val.message.xml.summary.no3c";
 	String	MESSAGE_XML_SUMMARY_FORMAT						= "val.message.xml.summary.format";
 	String	MESSAGE_XML_SUMMARY								= "val.message.xml.summary";
-	String	MESSAGE_XML_SUMMARYDETAIL						= "val.message.xml.summarydetail";
+//	String	MESSAGE_XML_SUMMARYDETAIL						= "val.message.xml.summarydetail";
 	String	MESSAGE_XML_VALFILE								= "val.message.xml.valfile";
 	String	MESSAGE_XML_HEADER								= "val.message.xml.header";
 	String	MESSAGE_XML_START								= "val.message.xml.start";
@@ -67,9 +67,11 @@ public interface MessageConstants
 	String	MESSAGE_JP2VALIDATION							= "val.message.jp2validation";
 	String	MESSAGE_JPEGVALIDATION							= "val.message.jpegvalidation";
 	String	MESSAGE_PNGVALIDATION							= "val.message.pngvalidation";
+	String	MESSAGE_XMLVALIDATION							= "val.message.xmlvalidation";
 	String	MESSAGE_SIPVALIDATION							= "val.message.sipvalidation";
 	String	MESSAGE_XML_VALERGEBNIS							= "val.message.xml.valergebnis";
 	String	MESSAGE_XML_VALTYPE								= "val.message.xml.valtype";
+	String	MESSAGE_XML_AZTYPE								= "val.message.xml.aztype";
 	String	MESSAGE_XML_FORMAT1								= "val.message.xml.format1";
 	String	MESSAGE_XML_FORMAT2								= "val.message.xml.format2";
 	String	MESSAGE_XML_LOGEND								= "val.message.xml.logend";
@@ -77,6 +79,8 @@ public interface MessageConstants
 	String	MESSAGE_XML_SIP2								= "val.message.xml.sip2";
 	String	MESSAGE_XML_VALERGEBNIS_VALID					= "val.message.xml.valergebnis.valid";
 	String	MESSAGE_XML_VALERGEBNIS_INVALID					= "val.message.xml.valergebnis.invalid";
+	String	MESSAGE_XML_VALERGEBNIS_AZ						= "val.message.xml.valergebnis.az";
+	String	MESSAGE_XML_VALERGEBNIS_NOTAZ					= "val.message.xml.valergebnis.notaz";
 	String	MESSAGE_XML_VALERGEBNIS_CLOSE					= "val.message.xml.valergebnis.close";
 	String	MESSAGE_FORMATVALIDATION_DONE					= "val.message.formatvalidation.done";
 	String	MESSAGE_SIPVALIDATION_DONE						= "val.message.sipvalidation.done";
@@ -131,6 +135,10 @@ public interface MessageConstants
 	String	MESSAGE_XML_MODUL_E_PNG							= "val.message.xml.modul.e.png";
 	String	MESSAGE_XML_MODUL_F_PNG							= "val.message.xml.modul.f.png";
 
+	String	MESSAGE_XML_MODUL_A_XML							= "val.message.xml.modul.a.xml";
+	String	MESSAGE_XML_MODUL_B_XML							= "val.message.xml.modul.b.xml";
+	String	MESSAGE_XML_MODUL_C_XML							= "val.message.xml.modul.c.xml";
+
 	String	MESSAGE_XML_MODUL_Aa_SIP						= "val.message.xml.modul.aa.sip";
 	String	MESSAGE_XML_MODUL_Ab_SIP						= "val.message.xml.modul.ab.sip";
 	String	MESSAGE_XML_MODUL_Ac_SIP						= "val.message.xml.modul.ac.sip";
@@ -147,6 +155,10 @@ public interface MessageConstants
 	String	MESSAGE_XML_MODUL_Cc_SIP						= "val.message.xml.modul.cc.sip";
 	String	MESSAGE_XML_MODUL_Cd_SIP						= "val.message.xml.modul.cd.sip";
 
+	String	MESSAGE_XML_MODUL_A_AZ							= "val.message.xml.modul.a.az";
+	String	ERROR_XML_A_AZ_INCORRECTFILE					= "val.error.xml.a.az.incorrectfile";
+	String	ERROR_XML_A_NOTAZ								= "val.error.xml.a.notaz";
+
 	String	MESSAGE_XML_CONFIGURATION_ERROR_1				= "val.message.xml.configuration.error.1";
 	String	MESSAGE_XML_CONFIGURATION_ERROR_2				= "val.message.xml.configuration.error.2";
 	String	MESSAGE_XML_CONFIGURATION_ERROR_3				= "val.message.xml.configuration.error.3";
@@ -155,9 +167,6 @@ public interface MessageConstants
 	String	ABORTED											= "val.aborted";
 
 	String	MESSAGE_XML_LANGUAGE							= "val.message.xml.language";
-
-	String	MESSAGE_XML_CONFIGURATION_ERROR_NO_SIGNATURE	= "val.message.xml.configuration.error.no.signature";
-	String	ERROR_XML_CANNOT_INITIALIZE_DROID				= "val.error.xml.cannot.initialize.droid";
 
 	String	ERROR_XML_UNKNOWN								= "val.error.xml.unknown";
 	String	ERROR_XML_OUTOFMEMORYERROR						= "val.error.xml.outofmemoryerror";
@@ -390,6 +399,22 @@ public interface MessageConstants
 	String	ERROR_XML_AF_PNG_ERROR							= "val.error.xml.af.png.error";
 	String	ERROR_XML_AF_PNG_TRANSLATE						= "val.error.xml.af.png.translate";
 
+	// *************XML-Meldungen*************************************************************************
+	// Modul A Meldungen
+	String	ERROR_XML_A_XML_INCORRECTFILEENDING				= "val.error.xml.a.xml.incorrectfileending";
+	String	ERROR_XML_A_XML_INCORRECTFILE					= "val.error.xml.a.xml.incorrectfile";
+	String	ERROR_XML_A_XML_ISDIRECTORY						= "val.error.xml.a.xml.isdirectory";
+	String	ERROR_XML_A_XML_SERVICEFAILED					= "val.error.xml.a.xml.servicefailed";
+
+	// Modul B Meldungen
+	String	ERROR_XML_B_XML_XMLLINT_FAILSTR					= "val.error.xml.b.xml.xmllint.failstr";
+	String	ERROR_XML_BC_XML_ERROR							= "val.error.xml.bc.xml.error";
+
+	// Modul C Meldungen
+	String	ERROR_XML_C_XML_NOXSDFILE						= "val.error.xml.c.xml.noxsdfile";
+	String	ERROR_XML_C_XML_NOSCHEMA						= "val.error.xml.c.xml.noschema";
+	String	ERROR_XML_C_XML_XMLLINT_FAILVAL					= "val.error.xml.c.xml.xmllint.failval";
+
 	// *************SIP-Meldungen*************************************************************************
 	// Modul 1a Meldungen
 	String	ERROR_XML_AA_INCORRECTFILEENDING				= "val.error.xml.aa.incorrectfileending";
@@ -452,7 +477,6 @@ public interface MessageConstants
 
 	// Modul 3a Meldungen
 	String	MESSAGE_XML_CA_FILES							= "val.message.xml.ca.files";
-	String	MESSAGE_XML_CA_DROID							= "val.message.xml.ca.droid";
 
 	// Modul 3b Meldungen
 	String	MESSAGE_XML_CB_FORMAT							= "val.message.xml.cb.format";
