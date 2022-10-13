@@ -39,10 +39,10 @@
 	<classpathentry kind="lib" path="KOST-Val/lib/spring-test-5.3.19.RELEASE.jar"/>
 	<classpathentry kind="lib" path="KOST-Val/lib/spring-tx-5.3.19.RELEASE.jar"/>
 	<classpathentry kind="lib" path="KOST-Val/lib/tiff-hul-1.9.2.jar"/>
-	<classpathentry kind="lib" path="KOST-Val/lib/VALA-6.17.2.4.RELEASE.jar"/>
 	<classpathentry kind="lib" path="KOST-Val/lib/xercesImpl-2.7.1.jar"/>
 	<classpathentry kind="lib" path="KOST-Val/lib/xml-apis-2.7.1.jar"/>
 	<classpathentry kind="lib" path="KOST-Val/lib/zip64-1.0.jar"/>
 	<classpathentry kind="lib" path="KOST-Val/lib/zip64file-1.0.jar"/>
+	<classpathentry kind="lib" path="KOST-Val/lib/VALA-6.23.0.4.RELEASE.jar"/>
 	<classpathentry kind="output" path="KOST-Val/target/classes"/>
 </classpath>
