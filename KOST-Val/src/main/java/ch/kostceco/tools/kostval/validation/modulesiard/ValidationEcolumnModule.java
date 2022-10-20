@@ -30,16 +30,20 @@ import ch.kostceco.tools.kostval.exception.modulesiard.ValidationEcolumnExceptio
 import ch.kostceco.tools.kostval.validation.ValidationModule;
 import ch.kostceco.tools.kostval.validation.bean.ValidationContext;
 
-/** Validierungsschritt E (Spalten-Validierung) Wurden die Angaben aus metadata.xml korrekt in die
- * tableZ.xsd-Dateien übertragen? valid --> gleiche Spaltendefinitionen (Anzahl, Type, Nullable)
+/**
+ * Validierungsschritt E (Spalten-Validierung) Wurden die Angaben aus
+ * metadata.xml korrekt in die tableZ.xsd-Dateien ï¿½bertragen? valid --> gleiche
+ * Spaltendefinitionen (Anzahl, Type, Nullable)
  * 
- * @author Do Olivier Debenath */
+ * @author Do Olivier Debenath
+ */
 
 public interface ValidationEcolumnModule extends ValidationModule
 {
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile ) throws ValidationEcolumnException;
+	public boolean validate( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile )
+			throws ValidationEcolumnException;
 
-	public boolean prepareValidation( ValidationContext validationContext, File logFile )
-			throws IOException, JDOMException, Exception;
+	public boolean prepareValidation( ValidationContext validationContext,
+			File logFile ) throws IOException, JDOMException, Exception;
 }

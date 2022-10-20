@@ -84,7 +84,8 @@ public class ValidationAvalidationXmlModuleImpl extends ValidationModuleImpl
 		 * 
 		 * erweitern.
 		 */
-		File	pathFile = new File(ClassLoader.getSystemClassLoader().getResource(".").getPath());
+		File pathFile = new File( ClassLoader.getSystemClassLoader()
+				.getResource( "." ).getPath() );
 		String locationOfJarPath = pathFile.getAbsolutePath();
 		String dirOfJarPath = locationOfJarPath;
 		if ( locationOfJarPath.endsWith( ".jar" )
@@ -114,7 +115,7 @@ public class ValidationAvalidationXmlModuleImpl extends ValidationModuleImpl
 		// - Aufbau Kontrolle mit xmllint
 		try {
 			String resultStructure = Xmllint.structXmllint( valDatei, workDir,
-					dirOfJarPath );
+					dirOfJarPath, locale );
 			if ( !resultStructure.equals( "OK" ) ) {
 				// System.out.println( "Struktur NICHT korrekt: " +
 				// resultExec );
@@ -126,10 +127,12 @@ public class ValidationAvalidationXmlModuleImpl extends ValidationModuleImpl
 									MESSAGE_XML_MODUL_B_XML )
 									+ getTextResourceService().getText( locale,
 											ERROR_XML_B_XML_XMLLINT_FAILSTR ) );
-					Logtxt.logtxt( logFile, getTextResourceService()
-							.getText( locale, MESSAGE_XML_MODUL_B_XML )
-							+ getTextResourceService().getText( locale,
-									ERROR_XML_BC_XML_ERROR, resultStructure ) );
+					Logtxt.logtxt( logFile,
+							getTextResourceService().getText( locale,
+									MESSAGE_XML_MODUL_B_XML )
+									+ getTextResourceService().getText( locale,
+											MESSAGE_XML_SERVICEMESSAGE, "- ",
+											resultStructure ) );
 					return false;
 				}
 			} else {
@@ -138,10 +141,12 @@ public class ValidationAvalidationXmlModuleImpl extends ValidationModuleImpl
 			}
 
 		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
-					MESSAGE_XML_MODUL_C_XML )
-					+ getTextResourceService().getText( locale,
-							ERROR_XML_A_XML_SERVICEFAILED, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_C_XML )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_SERVICEFAILED_EXIT, "Xmllint",
+									e.getMessage() ) );
 			return false;
 		}
 
@@ -259,7 +264,7 @@ public class ValidationAvalidationXmlModuleImpl extends ValidationModuleImpl
 				// - Schemavalidierung xmllint
 				try {
 					String resultExec = Xmllint.execXmllint( valDatei, xsdDatei,
-							workDir, dirOfJarPath );
+							workDir, dirOfJarPath, locale );
 					if ( !resultExec.equals( "OK" ) ) {
 						// System.out.println( "Validierung NICHT bestanden: " +
 						// resultExec );
@@ -279,7 +284,8 @@ public class ValidationAvalidationXmlModuleImpl extends ValidationModuleImpl
 							Logtxt.logtxt( logFile, getTextResourceService()
 									.getText( locale, MESSAGE_XML_MODUL_C_XML )
 									+ getTextResourceService().getText( locale,
-											ERROR_XML_C_XML_XMLLINT_FAILVAL ) );
+											MESSAGE_XML_SERVICEINVALID,
+											"Xmllint", "" ) );
 							Logtxt.logtxt( logFile, getTextResourceService()
 									.getText( locale, MESSAGE_XML_MODUL_C_XML )
 									+ getTextResourceService().getText( locale,
@@ -288,7 +294,7 @@ public class ValidationAvalidationXmlModuleImpl extends ValidationModuleImpl
 							Logtxt.logtxt( logFile, getTextResourceService()
 									.getText( locale, MESSAGE_XML_MODUL_C_XML )
 									+ getTextResourceService().getText( locale,
-											ERROR_XML_BC_XML_ERROR,
+											MESSAGE_XML_SERVICEMESSAGE, "- ",
 											resultExec ) );
 						}
 					} else {
@@ -302,8 +308,8 @@ public class ValidationAvalidationXmlModuleImpl extends ValidationModuleImpl
 							getTextResourceService().getText( locale,
 									MESSAGE_XML_MODUL_C_XML )
 									+ getTextResourceService().getText( locale,
-											ERROR_XML_A_XML_SERVICEFAILED,
-											e.getMessage() ) );
+											ERROR_XML_SERVICEFAILED_EXIT,
+											"Xmllint", e.getMessage() ) );
 					return false;
 				}
 			}

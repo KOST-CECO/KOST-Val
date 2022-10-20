@@ -40,31 +40,38 @@ import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationGtableModule;
 import ch.kostceco.tools.kostval.logging.Logtxt;
 
-/** Validierungsschritt G (Tabellen-Validierung) prueft, ob Spaltennamen innerhalb der Tabelle(n)
- * resp. Tabellennamen innerhalb der Schema(s) und Schemanamen einmalig sind.
+/**
+ * Validierungsschritt G (Tabellen-Validierung) prueft, ob Spaltennamen
+ * innerhalb der Tabelle(n) resp. Tabellennamen innerhalb der Schema(s) und
+ * Schemanamen einmalig sind.
  * 
- * @author Sp Peter Schneider, Staatsarchiv Aargau */
+ * @author Sp Peter Schneider, Staatsarchiv Aargau
+ */
 
 public class ValidationGtableModuleImpl extends ValidationModuleImpl
 		implements ValidationGtableModule
 {
-	private boolean	min				= false;
+	private boolean	min			= false;
 
-	Boolean					version1	= false;
-	Boolean					version2	= false;
+	Boolean			version1	= false;
+	Boolean			version2	= false;
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile ) throws ValidationGtableException
+	public boolean validate( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile )
+			throws ValidationGtableException
 	{
 		boolean showOnWork = false;
 		int onWork = 410;
 		// Informationen zur Darstellung "onWork" holen
 		String onWorkConfig = configMap.get( "ShowProgressOnWork" );
-		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
-		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
-		 * ref="configurationService" /> */
+		/*
+		 * Nicht vergessen in
+		 * "src/main/resources/config/applicationContext-services.xml" beim
+		 * entsprechenden Modul die property anzugeben: <property
+		 * name="configurationService" ref="configurationService" />
+		 */
 		if ( onWorkConfig.equals( "yes" ) ) {
 			// Ausgabe Modul Ersichtlich das KOST-Val arbeitet
 			showOnWork = true;
@@ -76,15 +83,23 @@ public class ValidationGtableModuleImpl extends ValidationModuleImpl
 
 		boolean valid = true;
 		try {
-			/* Extract the metadata.xml from the temporare work folder and build a jdom document */
+			/*
+			 * Extract the metadata.xml from the temporare work folder and build
+			 * a jdom document
+			 */
 
 			String pathToWorkDir = configMap.get( "PathToWorkDir" );
 			pathToWorkDir = pathToWorkDir + File.separator + "SIARD";
-			/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
-			 * entsprechenden Modul die property anzugeben: <property name="configurationService"
-			 * ref="configurationService" /> */
-			File metadataXml = new File( new StringBuilder( pathToWorkDir ).append( File.separator )
-					.append( "header" ).append( File.separator ).append( "metadata.xml" ).toString() );
+			/*
+			 * Nicht vergessen in
+			 * "src/main/resources/config/applicationContext-services.xml" beim
+			 * entsprechenden Modul die property anzugeben: <property
+			 * name="configurationService" ref="configurationService" />
+			 */
+			File metadataXml = new File(
+					new StringBuilder( pathToWorkDir ).append( File.separator )
+							.append( "header" ).append( File.separator )
+							.append( "metadata.xml" ).toString() );
 
 			InputStream fin = new FileInputStream( metadataXml );
 			SAXBuilder builder = new SAXBuilder();
@@ -98,46 +113,60 @@ public class ValidationGtableModuleImpl extends ValidationModuleImpl
 			List listTables = new ArrayList();
 			List listColumns = new ArrayList();
 
-			/* read the document and for each schema and table entry verify existence in temporary
-			 * extracted structure */
+			/*
+			 * read the document and for each schema and table entry verify
+			 * existence in temporary extracted structure
+			 */
 			version1 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" )
-					.contains( "http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
+					.contains(
+							"http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
 			version2 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" )
-					.contains( "http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
-			Namespace ns = Namespace
-					.getNamespace( "http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
+					.contains(
+							"http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
+			Namespace ns = Namespace.getNamespace(
+					"http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
 			if ( version1 ) {
-				// ns = Namespace.getNamespace( "http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
+				// ns = Namespace.getNamespace(
+				// "http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
 			} else if ( version2 ) {
-				ns = Namespace.getNamespace( "http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
+				ns = Namespace.getNamespace(
+						"http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
 			}
 
 			// select schema elements and loop
-			List<Element> schemas = document.getRootElement().getChild( "schemas", ns )
-					.getChildren( "schema", ns );
+			List<Element> schemas = document.getRootElement()
+					.getChild( "schemas", ns ).getChildren( "schema", ns );
 			for ( Element schema : schemas ) {
 				String schemaName = schema.getChild( "name", ns ).getText();
 
-				String lsSch = (new StringBuilder().append( schemaName ).toString());
+				String lsSch = (new StringBuilder().append( schemaName )
+						.toString());
 				if ( schema.getChild( "tables", ns ) != null ) {
 
 					// select table elements and loop
-					List<Element> tables = schema.getChild( "tables", ns ).getChildren( "table", ns );
+					List<Element> tables = schema.getChild( "tables", ns )
+							.getChildren( "table", ns );
 					for ( Element table : tables ) {
-						String tableName = table.getChild( "name", ns ).getText();
+						String tableName = table.getChild( "name", ns )
+								.getText();
 
 						// Concatenate schema and table
-						String lsTab = (new StringBuilder().append( schemaName ).append( " / " )
-								.append( tableName ).toString());
+						String lsTab = (new StringBuilder().append( schemaName )
+								.append( " / " ).append( tableName )
+								.toString());
 
 						// select column elements and loop
-						List<Element> columns = table.getChild( "columns", ns ).getChildren( "column", ns );
+						List<Element> columns = table.getChild( "columns", ns )
+								.getChildren( "column", ns );
 						for ( Element column : columns ) {
-							String columnName = column.getChild( "name", ns ).getText();
+							String columnName = column.getChild( "name", ns )
+									.getText();
 
 							// Concatenate schema, table and column
-							String lsCol = (new StringBuilder().append( schemaName ).append( " / " )
-									.append( tableName ).append( " / " ).append( columnName ).toString());
+							String lsCol = (new StringBuilder()
+									.append( schemaName ).append( " / " )
+									.append( tableName ).append( " / " )
+									.append( columnName ).toString());
 							listColumns.add( lsCol );
 							// concatenating Strings
 						}
@@ -179,10 +208,11 @@ public class ValidationGtableModuleImpl extends ValidationModuleImpl
 						return false;
 					} else {
 
-						Logtxt.logtxt( logFile,
-								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_SIARD )
-										+ getTextResourceService().getText( locale, MESSAGE_XML_G_DUPLICATE_SCHEMA,
-												value ) );
+						Logtxt.logtxt( logFile, getTextResourceService()
+								.getText( locale, MESSAGE_XML_MODUL_G_SIARD )
+								+ getTextResourceService().getText( locale,
+										MESSAGE_XML_G_DUPLICATE_SCHEMA,
+										value ) );
 					}
 				}
 			HashSet hashTables = new HashSet(); // check for duplicate tables
@@ -193,10 +223,11 @@ public class ValidationGtableModuleImpl extends ValidationModuleImpl
 						return false;
 					} else {
 
-						Logtxt.logtxt( logFile,
-								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_SIARD )
-										+ getTextResourceService().getText( locale, MESSAGE_XML_G_DUPLICATE_TABLE,
-												value ) );
+						Logtxt.logtxt( logFile, getTextResourceService()
+								.getText( locale, MESSAGE_XML_MODUL_G_SIARD )
+								+ getTextResourceService().getText( locale,
+										MESSAGE_XML_G_DUPLICATE_TABLE,
+										value ) );
 					}
 				}
 			HashSet hashColumns = new HashSet(); // check for duplicate columns
@@ -207,10 +238,11 @@ public class ValidationGtableModuleImpl extends ValidationModuleImpl
 						return false;
 					} else {
 
-						Logtxt.logtxt( logFile,
-								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_SIARD )
-										+ getTextResourceService().getText( locale, MESSAGE_XML_G_DUPLICATE_COLUMN,
-												value ) );
+						Logtxt.logtxt( logFile, getTextResourceService()
+								.getText( locale, MESSAGE_XML_MODUL_G_SIARD )
+								+ getTextResourceService().getText( locale,
+										MESSAGE_XML_G_DUPLICATE_COLUMN,
+										value ) );
 					}
 				}
 
@@ -221,8 +253,10 @@ public class ValidationGtableModuleImpl extends ValidationModuleImpl
 			} else {
 
 				Logtxt.logtxt( logFile,
-						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_SIARD )
-								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+						getTextResourceService().getText( locale,
+								MESSAGE_XML_MODUL_G_SIARD )
+								+ getTextResourceService().getText( locale,
+										ERROR_XML_UNKNOWN,
 										ioe.getMessage() + " (IOException)" ) );
 			}
 		} catch ( JDOMException e ) {
@@ -232,8 +266,10 @@ public class ValidationGtableModuleImpl extends ValidationModuleImpl
 			} else {
 
 				Logtxt.logtxt( logFile,
-						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_SIARD )
-								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+						getTextResourceService().getText( locale,
+								MESSAGE_XML_MODUL_G_SIARD )
+								+ getTextResourceService().getText( locale,
+										ERROR_XML_UNKNOWN,
 										e.getMessage() + " (JDOMException)" ) );
 			}
 			return valid;

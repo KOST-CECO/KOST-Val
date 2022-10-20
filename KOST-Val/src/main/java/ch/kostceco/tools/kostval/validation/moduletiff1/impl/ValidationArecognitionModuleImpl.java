@@ -27,18 +27,22 @@ import ch.kostceco.tools.kostval.exception.moduletiff1.ValidationArecognitionExc
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.moduletiff1.ValidationArecognitionModule;
 
-/** Validierungsschritt A (Erkennung) Ist es eine TIFF-Datei? valid --> Extension: tiff / tif / tfx
- * valid --> beginnt mit II*. [49492A00] oder mit MM.* [4D4D002A] ==> Bei dem Modul A wird die
- * Validierung abgebrochen, sollte das Resulat invalid sein!
+/**
+ * Validierungsschritt A (Erkennung) Ist es eine TIFF-Datei? valid -->
+ * Extension: tiff / tif / tfx valid --> beginnt mit II*. [49492A00] oder mit
+ * MM.* [4D4D002A] ==> Bei dem Modul A wird die Validierung abgebrochen, sollte
+ * das Resulat invalid sein!
  * 
- * @author Rc Claire Roethlisberger, KOST-CECO */
+ * @author Rc Claire Roethlisberger, KOST-CECO
+ */
 public class ValidationArecognitionModuleImpl extends ValidationModuleImpl
 		implements ValidationArecognitionModule
 {
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile ) throws ValidationArecognitionException
+	public boolean validate( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile )
+			throws ValidationArecognitionException
 	{
 
 		// Die Erkennung erfolgt bereits im Vorfeld

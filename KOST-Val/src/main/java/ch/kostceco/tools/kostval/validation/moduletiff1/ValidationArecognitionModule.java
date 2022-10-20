@@ -26,15 +26,18 @@ import java.util.Map;
 import ch.kostceco.tools.kostval.exception.moduletiff1.ValidationArecognitionException;
 import ch.kostceco.tools.kostval.validation.ValidationModule;
 
-/** Validierungsschritt 1a Ist das TIFF eine korrekte, unkomprimierte ZIP / ZIP64 Datei (wenn
- * komprimiert, mit welchem Algorithmus)?
+/**
+ * Validierungsschritt 1a Ist das TIFF eine korrekte, unkomprimierte ZIP / ZIP64
+ * Datei (wenn komprimiert, mit welchem Algorithmus)?
  * 
- * @author Rc Claire Roethlisberger, KOST-CECO */
+ * @author Rc Claire Roethlisberger, KOST-CECO
+ */
 
 public interface ValidationArecognitionModule extends ValidationModule
 {
 
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile ) throws ValidationArecognitionException;
+	public boolean validate( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile )
+			throws ValidationArecognitionException;
 
 }

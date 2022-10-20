@@ -21,27 +21,34 @@ import java.util.ResourceBundle;
 
 import ch.kostceco.tools.siardexcerpt.service.TextResourceServiceExc;
 
-/** Dieser Service managt die Zugriffe auf die Resource Bundles.
+/**
+ * Dieser Service managt die Zugriffe auf die Resource Bundles.
  * 
- * @author Rc Claire Roethlisberger, KOST-CECO */
+ * @author Rc Claire Roethlisberger, KOST-CECO
+ */
 public class TextResourceServiceExcImpl implements TextResourceServiceExc
 {
-	// Per Default ist es dieser Name, kann jedoch auch mittels Dependency Injection ueberschrieben
+	// Per Default ist es dieser Name, kann jedoch auch mittels Dependency
+	// Injection ueberschrieben
 	// werden.
 	private String bundleBaseName = "messages";
 
-	/** Gibt den Wert des Attributs <code>bundleBaseName</code> zurueck.
+	/**
+	 * Gibt den Wert des Attributs <code>bundleBaseName</code> zurueck.
 	 * 
-	 * @return Wert des Attributs bundleBaseName. */
+	 * @return Wert des Attributs bundleBaseName.
+	 */
 	public String getBundleBaseName()
 	{
 		return bundleBaseName;
 	}
 
-	/** Setzt den Wert des Attributs <code>bundleBaseName</code>.
+	/**
+	 * Setzt den Wert des Attributs <code>bundleBaseName</code>.
 	 * 
 	 * @param bundleBaseName
-	 *          Wert fuer das Attribut bundleBaseName. */
+	 *            Wert fuer das Attribut bundleBaseName.
+	 */
 	public void setBundleBaseName( String bundleBaseName )
 	{
 		this.bundleBaseName = bundleBaseName;
@@ -61,7 +68,8 @@ public class TextResourceServiceExcImpl implements TextResourceServiceExc
 	public String getText( Locale locale, String aKey, Object... values )
 	{
 
-		String theValue = ResourceBundle.getBundle( this.bundleBaseName, locale ).getString( aKey );
+		String theValue = ResourceBundle
+				.getBundle( this.bundleBaseName, locale ).getString( aKey );
 		return MessageFormat.format( theValue, values );
 	}
 

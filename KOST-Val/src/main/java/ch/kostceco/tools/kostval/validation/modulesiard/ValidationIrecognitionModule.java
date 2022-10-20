@@ -26,15 +26,18 @@ import java.util.Map;
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationIrecognitionException;
 import ch.kostceco.tools.kostval.validation.ValidationModule;
 
-/** Validierungsschritt I (SIARD-Erkennung) Wird die SIARD-Datei als SIARD erkannt? valid -->
- * Extension = .siard
+/**
+ * Validierungsschritt I (SIARD-Erkennung) Wird die SIARD-Datei als SIARD
+ * erkannt? valid --> Extension = .siard
  * 
- * @author Rc Claire Roethlisberger, KOST-CECO */
+ * @author Rc Claire Roethlisberger, KOST-CECO
+ */
 
 public interface ValidationIrecognitionModule extends ValidationModule
 {
 
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile ) throws ValidationIrecognitionException;
+	public boolean validate( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile )
+			throws ValidationIrecognitionException;
 
 }

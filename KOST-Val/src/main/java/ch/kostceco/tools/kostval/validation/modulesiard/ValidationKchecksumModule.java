@@ -26,15 +26,19 @@ import java.util.Map;
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationKchecksumException;
 import ch.kostceco.tools.kostval.validation.ValidationModule;
 
-/** Validierungsschritt K (Prüfsummen-Validierung) Stimmt die Prüfsumme in (messageDigest) mit jener
- * über den Ordner content überein? valid --> Prüfalorithmus = MD5 oder Prüfalorithmus = SHA-1
+/**
+ * Validierungsschritt K (Prï¿½fsummen-Validierung) Stimmt die Prï¿½fsumme in
+ * (messageDigest) mit jener ï¿½ber den Ordner content ï¿½berein? valid -->
+ * Prï¿½falorithmus = MD5 oder Prï¿½falorithmus = SHA-1
  * 
- * @author ??? */
+ * @author ???
+ */
 
 public interface ValidationKchecksumModule extends ValidationModule
 {
 
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile ) throws ValidationKchecksumException;
+	public boolean validate( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile )
+			throws ValidationKchecksumException;
 
 }

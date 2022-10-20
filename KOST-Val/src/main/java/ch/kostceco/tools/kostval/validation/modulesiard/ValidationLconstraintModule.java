@@ -26,15 +26,18 @@ import java.util.Map;
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationLconstraintException;
 import ch.kostceco.tools.kostval.validation.ValidationModule;
 
-/** Validierungsschritt L (Constraint-Validierung) Sind die vorgegebenen Constraints valid? -->
- * Constraint-Verletzung als Fehler ausgeben
+/**
+ * Validierungsschritt L (Constraint-Validierung) Sind die vorgegebenen
+ * Constraints valid? --> Constraint-Verletzung als Fehler ausgeben
  * 
- * @author ??? */
+ * @author ???
+ */
 
 public interface ValidationLconstraintModule extends ValidationModule
 {
 
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile ) throws ValidationLconstraintException;
+	public boolean validate( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile )
+			throws ValidationLconstraintException;
 
 }

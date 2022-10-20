@@ -26,16 +26,19 @@ import java.util.Map;
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationJsurplusFilesException;
 import ch.kostceco.tools.kostval.validation.ValidationModule;
 
-/** Validierungsschritt J (Zusätzliche Primärdateien) Enthält der content-Ordner Dateien oder Ordner
- * die nicht in metadata.xml beschrieben sind ? invalid --> Zusätzliche Ordner oder Dateien im
- * content-Ordner
+/**
+ * Validierungsschritt J (Zusï¿½tzliche Primï¿½rdateien) Enthï¿½lt der content-Ordner
+ * Dateien oder Ordner die nicht in metadata.xml beschrieben sind ? invalid -->
+ * Zusï¿½tzliche Ordner oder Dateien im content-Ordner
  * 
- * @author Ec Christian Eugster */
+ * @author Ec Christian Eugster
+ */
 
 public interface ValidationJsurplusFilesModule extends ValidationModule
 {
 
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile ) throws ValidationJsurplusFilesException;
+	public boolean validate( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile )
+			throws ValidationJsurplusFilesException;
 
 }

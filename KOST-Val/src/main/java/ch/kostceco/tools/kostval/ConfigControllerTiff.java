@@ -110,7 +110,7 @@ public class ConfigControllerTiff
 				minOne = "Mindestens eine Variante muss erlaubt sein!";
 			} else if ( Util.stringInFileLine( "kostval-conf-FR.xsl",
 					configFile ) ) {
-				labelBps.setText( "Bits par �chantillon (par canal)" );
+				labelBps.setText( "Bits par échantillon (par canal)" );
 				labelComp.setText( "Algorithme de compression" );
 				labelOther.setText( "Divers" );
 				labelPi.setText( "Espace couleur" );

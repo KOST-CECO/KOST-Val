@@ -144,14 +144,14 @@ public class Controllervalinitlog implements MessageConstants
 				formatValOn = formatValOn + ", TIFF";
 			}
 		}
-		if (! pngValidation.equals( "no" ) ) {
+		if ( !pngValidation.equals( "no" ) ) {
 			if ( formatValOn.equals( "" ) ) {
 				formatValOn = "PNG";
 			} else {
 				formatValOn = formatValOn + ", PNG";
 			}
 		}
-		if (! flacValidation.equals( "no" ) ) {
+		if ( !flacValidation.equals( "no" ) ) {
 			if ( formatValOn.equals( "" ) ) {
 				formatValOn = "FLAC";
 			} else {
@@ -172,7 +172,7 @@ public class Controllervalinitlog implements MessageConstants
 				formatValOn = formatValOn + ", MP3";
 			}
 		}
-		if (! ffv1Validation.equals( "no" ) ) {
+		if ( !ffv1Validation.equals( "no" ) ) {
 			if ( formatValOn.equals( "" ) ) {
 				formatValOn = "FFV1";
 			} else {
@@ -207,7 +207,7 @@ public class Controllervalinitlog implements MessageConstants
 				formatValOn = formatValOn + ", SIARD";
 			}
 		}
-		if (! csvValidation.equals( "no" ) ) {
+		if ( !csvValidation.equals( "no" ) ) {
 			if ( formatValOn.equals( "" ) ) {
 				formatValOn = "CSV";
 			} else {
@@ -232,7 +232,7 @@ public class Controllervalinitlog implements MessageConstants
 			if ( formatValOn.equals( "" ) ) {
 				formatValOn = otherformats;
 			} else {
-				formatValOn = formatValOn + ", "+otherformats;
+				formatValOn = formatValOn + ", " + otherformats;
 			}
 		}
 

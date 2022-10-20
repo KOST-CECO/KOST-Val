@@ -26,16 +26,21 @@ import java.util.Map;
 import ch.kostceco.tools.kostval.exception.modulepng.ValidationApngvalidationException;
 import ch.kostceco.tools.kostval.validation.ValidationModule;
 
-/** Ist die vorliegende PNG-Datei eine valide PNG-Datei? PNG Validierungs mit pngcheck.
+/**
+ * Ist die vorliegende PNG-Datei eine valide PNG-Datei? PNG Validierungs mit
+ * pngcheck.
  * 
- * Zuerste erfolgt eine Erkennung, wenn diese io kommt die Validierung mit pngcheck.
+ * Zuerste erfolgt eine Erkennung, wenn diese io kommt die Validierung mit
+ * pngcheck.
  * 
- * @author Rc Claire Roethlisberger, KOST-CECO */
+ * @author Rc Claire Roethlisberger, KOST-CECO
+ */
 
 public interface ValidationAvalidationPngModule extends ValidationModule
 {
 
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile ) throws ValidationApngvalidationException;
+	public boolean validate( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile )
+			throws ValidationApngvalidationException;
 
 }

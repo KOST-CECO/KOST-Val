@@ -26,15 +26,18 @@ import java.util.Map;
 import ch.kostceco.tools.kostval.exception.modulesip1.Validation1eSipTypeException;
 import ch.kostceco.tools.kostval.validation.ValidationModule;
 
-/** Validierungsschritt 1e Der SIP Typ wird ermittelt und angezeigt (metadata.xml)//ablieferungstyp:
- * GEVER oder FILE
+/**
+ * Validierungsschritt 1e Der SIP Typ wird ermittelt und angezeigt
+ * (metadata.xml)//ablieferungstyp: GEVER oder FILE
  * 
- * @author razm Daniel Ludin, Bedag AG @version 0.2.0 */
+ * @author razm Daniel Ludin, Bedag AG @version 0.2.0
+ */
 
 public interface Validation1eSipTypeModule extends ValidationModule
 {
 
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile ) throws Validation1eSipTypeException;
+	public boolean validate( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile )
+			throws Validation1eSipTypeException;
 
 }

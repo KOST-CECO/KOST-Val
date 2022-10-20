@@ -26,14 +26,18 @@ import java.util.Map;
 import ch.kostceco.tools.kostval.exception.modulejp2.ValidationAjp2validationException;
 import ch.kostceco.tools.kostval.validation.ValidationModule;
 
-/** Ist die vorliegende JP2-Datei eine valide JP2-Datei? JP2 Validierungs mit Jpylyzer.
+/**
+ * Ist die vorliegende JP2-Datei eine valide JP2-Datei? JP2 Validierungs mit
+ * Jpylyzer.
  * 
- * @author Rc Claire Roethlisberger, KOST-CECO */
+ * @author Rc Claire Roethlisberger, KOST-CECO
+ */
 
 public interface ValidationAvalidationAModule extends ValidationModule
 {
 
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap, Locale locale, File logFile )
+	public boolean validate( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile )
 			throws ValidationAjp2validationException;
 
 }

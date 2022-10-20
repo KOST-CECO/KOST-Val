@@ -26,9 +26,9 @@ import org.jdom2.Element;
 public class SiardTable
 {
 
-	private String				tableName;
-	private Element				tableRootElement;
-	private Element				tableXSDRootElement;
+	private String			tableName;
+	private Element			tableRootElement;
+	private Element			tableXSDRootElement;
 	private List<Element>	metadataXMLElements;
 	private List<Element>	tableXSDElements;
 	private List<Element>	tableXMLElements;
@@ -79,8 +79,10 @@ public class SiardTable
 		return tableRootElement;
 	}
 
-	/** @param tableRootElement
-	 *          the tableRootElement to set */
+	/**
+	 * @param tableRootElement
+	 *            the tableRootElement to set
+	 */
 	public void setTableRootElement( Element tableRootElement )
 	{
 		this.tableRootElement = tableRootElement;
@@ -92,8 +94,10 @@ public class SiardTable
 		return tableXSDRootElement;
 	}
 
-	/** @param tableXSDRootElement
-	 *          the tableXSDRootElement to set */
+	/**
+	 * @param tableXSDRootElement
+	 *            the tableXSDRootElement to set
+	 */
 	public void setTableXSDRootElement( Element tableXSDRootElement )
 	{
 		this.tableXSDRootElement = tableXSDRootElement;

@@ -34,7 +34,7 @@
             <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" vgrow="SOMETIMES" />
  			</rowConstraints>
 			<children>
-            <Label fx:id="labelVal" text="Validierungseinstellungen SIARD" GridPane.columnSpan="2">
+            <Label fx:id="labelVal" text="Validierungseinstellungen SIP" GridPane.columnSpan="2">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
@@ -51,7 +51,7 @@
                   <Insets />
                </opaqueInsets>
             </Button>
-            <Button fx:id="buttonName" alignment="TOP_LEFT" maxHeight="26.0" minHeight="26.0" mnemonicParsing="false" onAction="#changeName" prefHeight="26.0" style="-fx-background-color: WhiteSmoke; -fx-border-color: WhiteSmoke;" text="aendern" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Button fx:id="buttonName" alignment="TOP_LEFT" maxHeight="26.0" minHeight="26.0" mnemonicParsing="false" onAction="#changeName" prefHeight="26.0" style="-fx-background-color: WhiteSmoke; -fx-border-color: WhiteSmoke;" text="aendern" GridPane.columnIndex="1" GridPane.columnSpan="4" GridPane.rowIndex="3" />
             <Label fx:id="labelName" text="SIP Name" GridPane.rowIndex="3" />
             <Label fx:id="labelLength" text="Pfadlänge" GridPane.rowIndex="2" />
 			</children>

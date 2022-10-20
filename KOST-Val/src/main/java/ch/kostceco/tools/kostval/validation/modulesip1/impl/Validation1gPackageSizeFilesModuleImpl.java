@@ -35,24 +35,30 @@ import ch.kostceco.tools.kostval.logging.Logtxt;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesip1.Validation1gPackageSizeFilesModule;
 
-/** Validierungsschritt 1g Es wir ein Fehler ausgegeben wenn ueber 1 Mio Dateien im Paket sind. Es
- * wird eine Warnung ausgegeben wenn das SIP ueber 8GB gross ist oder mehr als 5000 Dateien direkt
- * im Ordner sind. * */
+/**
+ * Validierungsschritt 1g Es wir ein Fehler ausgegeben wenn ueber 1 Mio Dateien
+ * im Paket sind. Es wird eine Warnung ausgegeben wenn das SIP ueber 8GB gross
+ * ist oder mehr als 5000 Dateien direkt im Ordner sind. *
+ */
 
 public class Validation1gPackageSizeFilesModuleImpl extends ValidationModuleImpl
 		implements Validation1gPackageSizeFilesModule
 {
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile ) throws Validation1gPackageSizeFilesException
+	public boolean validate( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile )
+			throws Validation1gPackageSizeFilesException
 	{
 		boolean isValid = true;
 		// Informationen zur Darstellung "onWork" holen
 		String onWorkConfig = configMap.get( "ShowProgressOnWork" );
-		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
-		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
-		 * ref="configurationService" /> */
+		/*
+		 * Nicht vergessen in
+		 * "src/main/resources/config/applicationContext-services.xml" beim
+		 * entsprechenden Modul die property anzugeben: <property
+		 * name="configurationService" ref="configurationService" />
+		 */
 		if ( onWorkConfig.equals( "yes" ) ) {
 			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
 			System.out.print( "1G   " );
@@ -60,11 +66,13 @@ public class Validation1gPackageSizeFilesModuleImpl extends ValidationModuleImpl
 		}
 
 		try {
-			/* S_5.1-1: Warnung 8GB gross
+			/*
+			 * S_5.1-1: Warnung 8GB gross
 			 * 
-			 * S_5.2-1: Fehler über 1 Mio Dateien im Paket
+			 * S_5.2-1: Fehler ï¿½ber 1 Mio Dateien im Paket
 			 * 
-			 * S_5.2-2: Warnung wenn mehr als 5000 Dateien direkt im Ordner */
+			 * S_5.2-2: Warnung wenn mehr als 5000 Dateien direkt im Ordner
+			 */
 			long size = 7900000000L;
 			long sizeK = 7900000000L;
 			long sizeM = 7900000000L;
@@ -74,48 +82,62 @@ public class Validation1gPackageSizeFilesModuleImpl extends ValidationModuleImpl
 			sizeM = sizeK / 1024;
 			sizeMint = (int) sizeM;
 			int warningSizeM = 8192;
-			// System.out.println( "sizeOfDirectory: " + size + "Byte = " + sizeK + "KB = " + sizeM + "MB"
+			// System.out.println( "sizeOfDirectory: " + size + "Byte = " +
+			// sizeK + "KB = " + sizeM + "MB"
 			// );
 			if ( sizeMint > warningSizeM ) {
 				// Warnung 8GB gross
-				// System.out.println( "Size more than 8192MB: " + sizeMint + "MB" );
+				// System.out.println( "Size more than 8192MB: " + sizeMint +
+				// "MB" );
 				// val.error.xml.ag.warningbigsip =
-				// Warnung: Das SIP ist {0}MB gross und koennte Probleme verursachen (Limite 8GB = 8192MB).
+				// Warnung: Das SIP ist {0}MB gross und koennte Probleme
+				// verursachen (Limite 8GB = 8192MB).
 				Logtxt.logtxt( logFile,
-						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ag_SIP )
-								+ getTextResourceService().getText( locale, ERROR_XML_AG_WARNINGBIGSIP,
+						getTextResourceService().getText( locale,
+								MESSAGE_XML_MODUL_Ag_SIP )
+								+ getTextResourceService().getText( locale,
+										ERROR_XML_AG_WARNINGBIGSIP,
 										String.valueOf( sizeMint ) ) );
 			}
 
 			int numFilesContent = 0;
 			Map<String, File> fileMapFile = Util.getFileMapFile( valDatei );
 			Set<String> fileMapKeys = fileMapFile.keySet();
-			for ( Iterator<String> iterator = fileMapKeys.iterator(); iterator.hasNext(); ) {
+			for ( Iterator<String> iterator = fileMapKeys.iterator(); iterator
+					.hasNext(); ) {
 				String entryName = iterator.next();
 				// entryName: content/DOS_02/gpl2.pdf
 				if ( entryName.startsWith( "content/" ) ) {
 					numFilesContent++;
-					// System.out.println("entryName "+numFilesContent+": "+entryName);
+					// System.out.println("entryName "+numFilesContent+":
+					// "+entryName);
 				}
 			}
 			if ( numFilesContent > 1000000 ) {
 				// Fehler ueber 1 Mio Dateien im Paket
-				System.out.println( "Files in content more than 1000000: " + numFilesContent );
+				System.out.println( "Files in content more than 1000000: "
+						+ numFilesContent );
 
 				// val.error.xml.ag.toomanyfilessip =
-				// <Message>Im /content befinden sich {0} Dateien. Maximal sind 1 Million Dateien im
+				// <Message>Im /content befinden sich {0} Dateien. Maximal sind
+				// 1 Million Dateien im
 				// SIP/content erlaubt.</Message></Error>
 				Logtxt.logtxt( logFile,
-						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ag_SIP )
-								+ getTextResourceService().getText( locale, ERROR_XML_AG_TOOMANYFILESSIP,
+						getTextResourceService().getText( locale,
+								MESSAGE_XML_MODUL_Ag_SIP )
+								+ getTextResourceService().getText( locale,
+										ERROR_XML_AG_TOOMANYFILESSIP,
 										String.valueOf( numFilesContent ) ) );
 				isValid = false;
 			}
 			if ( numFilesContent > 4999 ) {
-				// System.out.println( "Files in content more than 5000: " + numFilesContent );
-				File valDateiContent = new File( valDatei.getAbsolutePath() + File.separator + "content" );
+				// System.out.println( "Files in content more than 5000: " +
+				// numFilesContent );
+				File valDateiContent = new File( valDatei.getAbsolutePath()
+						+ File.separator + "content" );
 
-				Collection<File> files = FileUtils.listFilesAndDirs( valDateiContent, TrueFileFilter.TRUE,
+				Collection<File> files = FileUtils.listFilesAndDirs(
+						valDateiContent, TrueFileFilter.TRUE,
 						TrueFileFilter.TRUE );
 				// .listFiles(valDateiContent, null, true);
 				for ( File file2 : files ) {
@@ -124,29 +146,40 @@ public class Validation1gPackageSizeFilesModuleImpl extends ValidationModuleImpl
 						File entryDir = file2;
 						String entryNameDir = entryDir.getAbsolutePath();
 						// System.out.println( "entryDir : " + entryNameDir );
-						Collection<File> filesInFolder = FileUtils.listFiles( entryDir, TrueFileFilter.INSTANCE,
-								null );
+						Collection<File> filesInFolder = FileUtils.listFiles(
+								entryDir, TrueFileFilter.INSTANCE, null );
 						int numFilesDir = filesInFolder.size();
-						// System.out.println( "Files in " + entryNameDir + ": " + numFilesDir );
+						// System.out.println( "Files in " + entryNameDir + ": "
+						// + numFilesDir );
 						if ( numFilesDir > 5000 ) {
-							// Warnung wenn mehr als 5000 Dateien direkt im Ordner
-							// System.out.println( "Files in folder more than 5000: " + numFilesDir );
-							entryNameDir = entryNameDir.replace( valDatei.getAbsolutePath(), "" );
+							// Warnung wenn mehr als 5000 Dateien direkt im
+							// Ordner
+							// System.out.println( "Files in folder more than
+							// 5000: " + numFilesDir );
+							entryNameDir = entryNameDir
+									.replace( valDatei.getAbsolutePath(), "" );
 
 							// val.error.xml.ag.toomanyfilesfolder =
-							// <Message>Warnung: Im Ordner {0} befinden sich {1} Dateien. Ein einzelner Ordner
-							// sollte nicht mehr als 5000 Dateien enthalten.</Message></Error>
-							Logtxt.logtxt( logFile,
-									getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ag_SIP )
-											+ getTextResourceService().getText( locale, ERROR_XML_AG_TOOMANYFILESFOLDER,
-													entryNameDir, String.valueOf( numFilesDir ) ) );
+							// <Message>Warnung: Im Ordner {0} befinden sich {1}
+							// Dateien. Ein einzelner Ordner
+							// sollte nicht mehr als 5000 Dateien
+							// enthalten.</Message></Error>
+							Logtxt.logtxt( logFile, getTextResourceService()
+									.getText( locale, MESSAGE_XML_MODUL_Ag_SIP )
+									+ getTextResourceService().getText( locale,
+											ERROR_XML_AG_TOOMANYFILESFOLDER,
+											entryNameDir,
+											String.valueOf( numFilesDir ) ) );
 						}
 					}
 				}
 			}
 		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ag_SIP )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_Ag_SIP )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			isValid = false;
 		}
 		return isValid;

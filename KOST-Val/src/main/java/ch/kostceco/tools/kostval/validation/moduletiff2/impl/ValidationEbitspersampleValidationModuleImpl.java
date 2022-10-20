@@ -30,22 +30,25 @@ import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationEbitspersampleValidationModule;
 import ch.kostceco.tools.kostval.logging.Logtxt;
 
-/** Validierungsschritt E (BitsPerSample-Validierung) Ist die TIFF-Datei gem�ss Konfigurationsdatei
- * valid?
+/**
+ * Validierungsschritt E (BitsPerSample-Validierung) Ist die TIFF-Datei gem�ss
+ * Konfigurationsdatei valid?
  * 
- * @author Rc Claire Roethlisberger, KOST-CECO */
+ * @author Rc Claire Roethlisberger, KOST-CECO
+ */
 
-public class ValidationEbitspersampleValidationModuleImpl extends ValidationModuleImpl
-		implements ValidationEbitspersampleValidationModule
+public class ValidationEbitspersampleValidationModuleImpl extends
+		ValidationModuleImpl implements ValidationEbitspersampleValidationModule
 {
 
 	public static String	NEWLINE	= System.getProperty( "line.separator" );
 
-	private boolean				min			= false;
+	private boolean			min		= false;
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile ) throws ValidationEbitspersampleValidationException
+	public boolean validate( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile )
+			throws ValidationEbitspersampleValidationException
 	{
 		String onWork = configMap.get( "ShowProgressOnWork" );
 		if ( onWork.equals( "nomin" ) ) {
@@ -64,15 +67,21 @@ public class ValidationEbitspersampleValidationModuleImpl extends ValidationModu
 			// Report existiert nicht
 
 			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_TIFF )
-							+ getTextResourceService().getText( locale, MESSAGE_XML_MISSING_REPORT,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_E_TIFF )
+							+ getTextResourceService().getText( locale,
+									MESSAGE_XML_MISSING_REPORT,
 									exiftoolReport.getAbsolutePath(),
-									getTextResourceService().getText( locale, ABORTED ) ) );
+									getTextResourceService().getText( locale,
+											ABORTED ) ) );
 			return false;
 		} else {
-			/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
-			 * entsprechenden Modul die property anzugeben: <property name="configurationService"
-			 * ref="configurationService" /> */
+			/*
+			 * Nicht vergessen in
+			 * "src/main/resources/config/applicationContext-services.xml" beim
+			 * entsprechenden Modul die property anzugeben: <property
+			 * name="configurationService" ref="configurationService" />
+			 */
 
 			String bps1 = configMap.get( "AllowedBitspersample1" );
 			String bps2 = configMap.get( "AllowedBitspersample2" );
@@ -108,30 +117,55 @@ public class ValidationEbitspersampleValidationModuleImpl extends ValidationModu
 			String oldErrorLine5 = "";
 
 			try {
-				BufferedReader in = new BufferedReader( new FileReader( exiftoolReport ) );
+				BufferedReader in = new BufferedReader(
+						new FileReader( exiftoolReport ) );
 				String line;
 				while ( (line = in.readLine()) != null ) {
-					/* zu analysierende TIFF-IFD-Zeile die BitsPerSample-Zeile enth�lt einer dieser Freitexte
-					 * der BitsPerSampleart max ist 1, 2, 4, 8, 16, 32 erlaubt
+					/*
+					 * zu analysierende TIFF-IFD-Zeile die BitsPerSample-Zeile
+					 * enth�lt einer dieser Freitexte der BitsPerSampleart max
+					 * ist 1, 2, 4, 8, 16, 32 erlaubt
 					 * 
-					 * Varianten: BitsPerSample: 8 BitsPerSample: 8 8 8 BitsPerSample: 8, 8, 8 evtl noch
-					 * mehr */
-					if ( line.contains( "BitsPerSample: " ) && line.contains( "[EXIF:IFD" ) ) {
+					 * Varianten: BitsPerSample: 8 BitsPerSample: 8 8 8
+					 * BitsPerSample: 8, 8, 8 evtl noch mehr
+					 */
+					if ( line.contains( "BitsPerSample: " )
+							&& line.contains( "[EXIF:IFD" ) ) {
 						exiftoolio = 1;
-						if ( ((line.contains( "BitsPerSample: 1 " ) || (line.contains( "BitsPerSample: 1," ))
-								|| (line.endsWith( "BitsPerSample: 1" ))) && bps1.contains( "1" ))
-								|| ((line.contains( "BitsPerSample: 2 " ) || (line.contains( "BitsPerSample: 2," ))
-										|| (line.endsWith( "BitsPerSample: 2" ))) && bps2.contains( "2" ))
-								|| ((line.contains( "BitsPerSample: 4 " ) || (line.contains( "BitsPerSample: 4," ))
-										|| (line.endsWith( "BitsPerSample: 4" ))) && bps4.contains( "4" ))
-								|| ((line.contains( "BitsPerSample: 8 " ) || (line.contains( "BitsPerSample: 8," ))
-										|| (line.endsWith( "BitsPerSample: 8" ))) && bps8.contains( "8" ))
+						if ( ((line.contains( "BitsPerSample: 1 " )
+								|| (line.contains( "BitsPerSample: 1," ))
+								|| (line.endsWith( "BitsPerSample: 1" )))
+								&& bps1.contains( "1" ))
+								|| ((line.contains( "BitsPerSample: 2 " )
+										|| (line.contains(
+												"BitsPerSample: 2," ))
+										|| (line.endsWith(
+												"BitsPerSample: 2" )))
+										&& bps2.contains( "2" ))
+								|| ((line.contains( "BitsPerSample: 4 " )
+										|| (line.contains(
+												"BitsPerSample: 4," ))
+										|| (line.endsWith(
+												"BitsPerSample: 4" )))
+										&& bps4.contains( "4" ))
+								|| ((line.contains( "BitsPerSample: 8 " )
+										|| (line.contains(
+												"BitsPerSample: 8," ))
+										|| (line.endsWith(
+												"BitsPerSample: 8" )))
+										&& bps8.contains( "8" ))
 								|| ((line.contains( "BitsPerSample: 16 " )
-										|| (line.contains( "BitsPerSample: 16," ))
-										|| (line.endsWith( "BitsPerSample: 16" ))) && bps16.contains( "16" ))
+										|| (line.contains(
+												"BitsPerSample: 16," ))
+										|| (line.endsWith(
+												"BitsPerSample: 16" )))
+										&& bps16.contains( "16" ))
 								|| ((line.contains( "BitsPerSample: 32 " )
-										|| (line.contains( "BitsPerSample: 32," ))
-										|| (line.endsWith( "BitsPerSample: 32" ))) && bps32.contains( "32" )) ) {
+										|| (line.contains(
+												"BitsPerSample: 32," ))
+										|| (line.endsWith(
+												"BitsPerSample: 32" )))
+										&& bps32.contains( "32" )) ) {
 							// Valid
 						} else {
 							// Invalider Status
@@ -144,14 +178,20 @@ public class ValidationEbitspersampleValidationModuleImpl extends ValidationModu
 								}
 								return false;
 							} else {
-								if ( !line.equals( oldErrorLine1 ) && !line.equals( oldErrorLine2 )
-										&& !line.equals( oldErrorLine3 ) && !line.equals( oldErrorLine4 )
+								if ( !line.equals( oldErrorLine1 )
+										&& !line.equals( oldErrorLine2 )
+										&& !line.equals( oldErrorLine3 )
+										&& !line.equals( oldErrorLine4 )
 										&& !line.equals( oldErrorLine5 ) ) {
 									// neuer Fehler
 									Logtxt.logtxt( logFile,
-											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_TIFF )
-													+ getTextResourceService().getText( locale, MESSAGE_XML_CG_INVALID,
-															line ) );
+											getTextResourceService().getText(
+													locale,
+													MESSAGE_XML_MODUL_E_TIFF )
+													+ getTextResourceService()
+															.getText( locale,
+																	MESSAGE_XML_CG_INVALID,
+																	line ) );
 									if ( oldErrorLine1.equals( "" ) ) {
 										oldErrorLine1 = line;
 									} else if ( oldErrorLine2.equals( "" ) ) {
@@ -175,9 +215,10 @@ public class ValidationEbitspersampleValidationModuleImpl extends ValidationModu
 					} else {
 						line = "Default BitsPerSample 1";
 
-						Logtxt.logtxt( logFile,
-								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_TIFF )
-										+ getTextResourceService().getText( locale, MESSAGE_XML_CG_INVALID, line ) );
+						Logtxt.logtxt( logFile, getTextResourceService()
+								.getText( locale, MESSAGE_XML_MODUL_E_TIFF )
+								+ getTextResourceService().getText( locale,
+										MESSAGE_XML_CG_INVALID, line ) );
 					}
 				}
 				in.close();
@@ -190,9 +231,10 @@ public class ValidationEbitspersampleValidationModuleImpl extends ValidationModu
 					return false;
 				} else {
 
-					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_TIFF )
-									+ getTextResourceService().getText( locale, MESSAGE_XML_CG_CANNOTFINDETREPORT ) );
+					Logtxt.logtxt( logFile, getTextResourceService()
+							.getText( locale, MESSAGE_XML_MODUL_E_TIFF )
+							+ getTextResourceService().getText( locale,
+									MESSAGE_XML_CG_CANNOTFINDETREPORT ) );
 					return false;
 				}
 			}

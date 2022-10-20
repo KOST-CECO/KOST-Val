@@ -46,18 +46,18 @@ public class ConfigControllerSip
 {
 
 	@FXML
-	private Button		buttonConfigApply, buttonLength, buttonName;
+	private Button	buttonConfigApply, buttonLength, buttonName;
 
-	private File		configFile	= new File( System.getenv( "USERPROFILE" )
+	private File	configFile	= new File( System.getenv( "USERPROFILE" )
 			+ File.separator + ".kost-val_2x" + File.separator + "configuration"
 			+ File.separator + "kostval.conf.xml" );
 
-	private String		dirOfJarPath, stringName, stringLength;
+	private String	dirOfJarPath, stringName, stringLength;
 
-	private Locale		locale		= Locale.getDefault();
+	private Locale	locale		= Locale.getDefault();
 
 	@FXML
-	private Label		labelVal, labelMessage, labelConfig;
+	private Label	labelVal, labelMessage, labelConfig, labelLength, labelName;
 
 	@FXML
 	void initialize()
@@ -103,15 +103,21 @@ public class ConfigControllerSip
 		try {
 			if ( Util.stringInFileLine( "kostval-conf-DE.xsl", configFile ) ) {
 				labelVal.setText( "Validierungseinstellung: SIP" );
+				labelLength.setText( "Pfadlänge" );
+				labelName.setText( "SIP Name" );
 				buttonConfigApply.setText( "anwenden" );
 				locale = new Locale( "de" );
 			} else if ( Util.stringInFileLine( "kostval-conf-FR.xsl",
 					configFile ) ) {
 				labelVal.setText( "Paramètre de validation: SIP" );
+				labelLength.setText( "Longueur du chemin" );
+				labelName.setText( "Nom SIP" );
 				buttonConfigApply.setText( "appliquer" );
 				locale = new Locale( "fr" );
 			} else {
 				labelVal.setText( "Validation setting: SIP" );
+				labelLength.setText( "Path length" );
+				labelName.setText( "SIP name" );
 				buttonConfigApply.setText( "apply" );
 				locale = new Locale( "en" );
 			}

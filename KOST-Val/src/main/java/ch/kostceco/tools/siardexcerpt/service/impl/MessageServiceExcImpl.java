@@ -26,12 +26,15 @@ public class MessageServiceExcImpl implements MessageServiceExc
 {
 	/** @author Rc Claire Roethlisberger, KOST-CECO */
 
-	private static final Logger	LOGGER	= new Logger( MessageServiceExcImpl.class );
+	private static final Logger	LOGGER	= new Logger(
+			MessageServiceExcImpl.class );
 
-	List<String[]>							stack		= new LinkedList<String[]>();
+	List<String[]>				stack	= new LinkedList<String[]>();
 
-	/* @Override public void logDebug( String message ) { this.stack.add( new String[] {
-	 * MessageServiceExc.DEBUG, message } ); } */
+	/*
+	 * @Override public void logDebug( String message ) { this.stack.add( new
+	 * String[] { MessageServiceExc.DEBUG, message } ); }
+	 */
 
 	@Override
 	public void logError( String message )
@@ -45,8 +48,10 @@ public class MessageServiceExcImpl implements MessageServiceExc
 		this.stack.add( new String[] { MessageServiceExc.FATAL, message } );
 	}
 
-	/* @Override public void logInfo( String message ) { this.stack.add( new String[] {
-	 * MessageServiceExc.INFO, message } ); } */
+	/*
+	 * @Override public void logInfo( String message ) { this.stack.add( new
+	 * String[] { MessageServiceExc.INFO, message } ); }
+	 */
 
 	@Override
 	public void logWarning( String message )

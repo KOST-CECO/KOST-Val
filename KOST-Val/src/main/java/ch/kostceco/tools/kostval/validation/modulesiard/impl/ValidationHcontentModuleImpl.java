@@ -46,36 +46,43 @@ import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationHcontentModule;
 import ch.kostceco.tools.kostval.logging.Logtxt;
 
-/** Validierungsschritt H (Content-Validierung) Sind die XML-Dateien im content valid zu ihrer
- * Schema-Definition (XSD-Dateien)? valid --> tableZ.xml valid zu tableZ.xsd
+/**
+ * Validierungsschritt H (Content-Validierung) Sind die XML-Dateien im content
+ * valid zu ihrer Schema-Definition (XSD-Dateien)? valid --> tableZ.xml valid zu
+ * tableZ.xsd
  * 
  * @author Ec Christian Eugster
- * @author Rc Claire Roethlisberger, KOST-CECO */
+ * @author Rc Claire Roethlisberger, KOST-CECO
+ */
 
 @SuppressWarnings("deprecation")
 public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 		implements ValidationHcontentModule
 {
-	private boolean						min				= false;
+	private boolean				min			= false;
 
-	Boolean										version1	= false;
-	Boolean										version2	= false;
+	Boolean						version1	= false;
+	Boolean						version2	= false;
 
 	private static final int	UNBOUNDED	= -1;
 
-	private XMLReader					reader;
+	private XMLReader			reader;
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile ) throws ValidationHcontentException
+	public boolean validate( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile )
+			throws ValidationHcontentException
 	{
 		boolean showOnWork = false;
 		int onWork = 410;
 		// Informationen zur Darstellung "onWork" holen
 		String onWorkConfig = configMap.get( "ShowProgressOnWork" );
-		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
-		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
-		 * ref="configurationService" /> */
+		/*
+		 * Nicht vergessen in
+		 * "src/main/resources/config/applicationContext-services.xml" beim
+		 * entsprechenden Modul die property anzugeben: <property
+		 * name="configurationService" ref="configurationService" />
+		 */
 		if ( onWorkConfig.equals( "yes" ) ) {
 			// Ausgabe Modul Ersichtlich das KOST-Val arbeitet
 			showOnWork = true;
@@ -87,119 +94,199 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 
 		boolean valid = true;
 		try {
-			/* Extract the metadata.xml from the temporary work folder and build a jdom document */
+			/*
+			 * Extract the metadata.xml from the temporary work folder and build
+			 * a jdom document
+			 */
 			String pathToWorkDir = configMap.get( "PathToWorkDir" );
 			pathToWorkDir = pathToWorkDir + File.separator + "SIARD";
 			File workDir = new File( pathToWorkDir );
-			File metadataXml = new File( new StringBuilder( pathToWorkDir ).append( File.separator )
-					.append( "header" ).append( File.separator ).append( "metadata.xml" ).toString() );
+			File metadataXml = new File(
+					new StringBuilder( pathToWorkDir ).append( File.separator )
+							.append( "header" ).append( File.separator )
+							.append( "metadata.xml" ).toString() );
 			InputStream fin = new FileInputStream( metadataXml );
 			SAXBuilder builder = new SAXBuilder();
 			Document document = builder.build( fin );
 
-			/* read the document and for each schema and table entry verify existence in temporary
-			 * extracted structure */
+			/*
+			 * read the document and for each schema and table entry verify
+			 * existence in temporary extracted structure
+			 */
 			version1 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" )
-					.contains( "http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
+					.contains(
+							"http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
 			version2 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" )
-					.contains( "http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
-			Namespace ns = Namespace
-					.getNamespace( "http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
+					.contains(
+							"http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
+			Namespace ns = Namespace.getNamespace(
+					"http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
 			if ( version1 ) {
-				// ns = Namespace.getNamespace( "http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
+				// ns = Namespace.getNamespace(
+				// "http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
 			} else if ( version2 ) {
-				ns = Namespace.getNamespace( "http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
+				ns = Namespace.getNamespace(
+						"http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
 			}
 			// select schema elements and loop
-			List<Element> schemas = document.getRootElement().getChild( "schemas", ns )
-					.getChildren( "schema", ns );
+			List<Element> schemas = document.getRootElement()
+					.getChild( "schemas", ns ).getChildren( "schema", ns );
 			for ( Element schema : schemas ) {
 				Element schemaFolder = schema.getChild( "folder", ns );
-				File schemaPath = new File(
-						new StringBuilder( pathToWorkDir ).append( File.separator ).append( "content" )
-								.append( File.separator ).append( schemaFolder.getText() ).toString() );
+				File schemaPath = new File( new StringBuilder( pathToWorkDir )
+						.append( File.separator ).append( "content" )
+						.append( File.separator )
+						.append( schemaFolder.getText() ).toString() );
 				if ( schemaPath.isDirectory() ) {
 					if ( schema.getChild( "tables", ns ) != null ) {
 
-						Element[] tables = schema.getChild( "tables", ns ).getChildren( "table", ns )
+						Element[] tables = schema.getChild( "tables", ns )
+								.getChildren( "table", ns )
 								.toArray( new Element[0] );
 						for ( Element table : tables ) {
-							Element tableFolder = table.getChild( "folder", ns );
-							File tablePath = new File( new StringBuilder( schemaPath.getAbsolutePath() )
-									.append( File.separator ).append( tableFolder.getText() ).toString() );
+							Element tableFolder = table.getChild( "folder",
+									ns );
+							File tablePath = new File( new StringBuilder(
+									schemaPath.getAbsolutePath() )
+											.append( File.separator )
+											.append( tableFolder.getText() )
+											.toString() );
 							if ( tablePath.isDirectory() ) {
-								File tableXml = new File( new StringBuilder( tablePath.getAbsolutePath() )
-										.append( File.separator ).append( tableFolder.getText() + ".xml" ).toString() );
-								File tableXsd = new File( new StringBuilder( tablePath.getAbsolutePath() )
-										.append( File.separator ).append( tableFolder.getText() + ".xsd" ).toString() );
+								File tableXml = new File( new StringBuilder(
+										tablePath.getAbsolutePath() )
+												.append( File.separator )
+												.append( tableFolder.getText()
+														+ ".xml" )
+												.toString() );
+								File tableXsd = new File( new StringBuilder(
+										tablePath.getAbsolutePath() )
+												.append( File.separator )
+												.append( tableFolder.getText()
+														+ ".xsd" )
+												.toString() );
 								// hier erfolgt die Validerung
-								if ( verifyRowCount( tableXml, tableXsd, locale, logFile ) ) {
-									// valid = validate1( tableXml, tableXsd ) && valid;
+								if ( verifyRowCount( tableXml, tableXsd, locale,
+										logFile ) ) {
+									// valid = validate1( tableXml, tableXsd )
+									// && valid;
 
 									try {
-										/* dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist ein
-										 * generelles TODO in allen Modulen. Zuerst immer dirOfJarPath ermitteln und
-										 * dann alle Pfade mit
+										/*
+										 * dirOfJarPath damit auch absolute
+										 * Pfade kein Problem sind Dies ist ein
+										 * generelles TODO in allen Modulen.
+										 * Zuerst immer dirOfJarPath ermitteln
+										 * und dann alle Pfade mit
 										 * 
 										 * dirOfJarPath + File.separator +
 										 * 
-										 * erweitern. */
-										File	pathFile = new File(ClassLoader.getSystemClassLoader().getResource(".").getPath());
-										String locationOfJarPath = pathFile.getAbsolutePath();
+										 * erweitern.
+										 */
+										File pathFile = new File( ClassLoader
+												.getSystemClassLoader()
+												.getResource( "." ).getPath() );
+										String locationOfJarPath = pathFile
+												.getAbsolutePath();
 										String dirOfJarPath = locationOfJarPath;
-										if ( locationOfJarPath.endsWith( ".jar" )
-												|| locationOfJarPath.endsWith( ".exe" )
-												|| locationOfJarPath.endsWith( "." ) ) {
-											File file = new File( locationOfJarPath );
+										if ( locationOfJarPath
+												.endsWith( ".jar" )
+												|| locationOfJarPath
+														.endsWith( ".exe" )
+												|| locationOfJarPath
+														.endsWith( "." ) ) {
+											File file = new File(
+													locationOfJarPath );
 											dirOfJarPath = file.getParent();
 										}
 
-										// Pfad zum Programm existiert die Dateien?
-										String checkTool = Xmllint.checkXmllint( dirOfJarPath );
+										// Pfad zum Programm existiert die
+										// Dateien?
+										String checkTool = Xmllint
+												.checkXmllint( dirOfJarPath );
 										if ( !checkTool.equals( "OK" ) ) {
-											// mindestens eine Datei fehlt fuer die Validierung
+											// mindestens eine Datei fehlt fuer
+											// die Validierung
 											if ( min ) {
 												return false;
 											} else {
 												Logtxt.logtxt( logFile,
-														getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
-																+ getTextResourceService().getText( locale,
-																		MESSAGE_XML_MISSING_FILE, checkTool,
-																		getTextResourceService().getText( locale, ABORTED, "XML-" ) ) );
+														getTextResourceService()
+																.getText(
+																		locale,
+																		MESSAGE_XML_MODUL_H_SIARD )
+																+ getTextResourceService()
+																		.getText(
+																				locale,
+																				MESSAGE_XML_MISSING_FILE,
+																				checkTool,
+																				getTextResourceService()
+																						.getText(
+																								locale,
+																								ABORTED,
+																								"XML-" ) ) );
 												valid = false;
 											}
 										} else {
-											// System.out.println("Validierung mit xmllint: ");
+											// System.out.println("Validierung
+											// mit xmllint: ");
 											try {
-												String resultExec = Xmllint.execXmllint( tableXml, tableXsd, workDir,
-														dirOfJarPath );
-												if ( !resultExec.equals( "OK" ) ) {
-													// System.out.println("Validierung NICHT bestanden");
+												String resultExec = Xmllint
+														.execXmllint( tableXml,
+																tableXsd,
+																workDir,
+																dirOfJarPath,
+																locale );
+												if ( !resultExec
+														.equals( "OK" ) ) {
+													// System.out.println("Validierung
+													// NICHT bestanden");
 													if ( min ) {
 														return false;
 													} else {
 														valid = false;
-														String tableXmlShortString = tableXml.getAbsolutePath()
-																.replace( workDir.getAbsolutePath(), "" );
-														String tableXsdShortString = tableXsd.getAbsolutePath()
-																.replace( workDir.getAbsolutePath(), "" );
-														// val.message.xml.h.invalid.xml = <Message>{0} ist invalid zu
+														String tableXmlShortString = tableXml
+																.getAbsolutePath()
+																.replace(
+																		workDir.getAbsolutePath(),
+																		"" );
+														String tableXsdShortString = tableXsd
+																.getAbsolutePath()
+																.replace(
+																		workDir.getAbsolutePath(),
+																		"" );
+														// val.message.xml.h.invalid.xml
+														// = <Message>{0} ist
+														// invalid zu
 														// {1}</Message></Error>
-														// val.message.xml.h.invalid.error = <Message>{0}</Message></Error>
+														// val.message.xml.h.invalid.error
+														// =
+														// <Message>{0}</Message></Error>
 														Logtxt.logtxt( logFile,
-																getTextResourceService().getText( locale,
-																		MESSAGE_XML_MODUL_H_SIARD )
-																		+ getTextResourceService().getText( locale,
-																				MESSAGE_XML_H_INVALID_XML, tableXmlShortString,
-																				tableXsdShortString ) );
+																getTextResourceService()
+																		.getText(
+																				locale,
+																				MESSAGE_XML_MODUL_H_SIARD )
+																		+ getTextResourceService()
+																				.getText(
+																						locale,
+																						MESSAGE_XML_H_INVALID_XML,
+																						tableXmlShortString,
+																						tableXsdShortString ) );
 														Logtxt.logtxt( logFile,
-																getTextResourceService().getText( locale,
-																		MESSAGE_XML_MODUL_H_SIARD )
-																		+ getTextResourceService().getText( locale,
-																				MESSAGE_XML_H_INVALID_ERROR, resultExec ) );
+																getTextResourceService()
+																		.getText(
+																				locale,
+																				MESSAGE_XML_MODUL_H_SIARD )
+																		+ getTextResourceService()
+																				.getText(
+																						locale,
+																						MESSAGE_XML_SERVICEMESSAGE,
+																						resultExec,
+																						"" ) );
 													}
 												} else {
-													// System.out.println("Validierung bestanden");
+													// System.out.println("Validierung
+													// bestanden");
 												}
 											} catch ( InterruptedException e1 ) {
 												valid = false;
@@ -207,10 +294,16 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 													return false;
 												} else {
 													Logtxt.logtxt( logFile,
-															getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
-																	+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-																			e1.getMessage()
-																					+ " (InterruptedException Xmllint.execXmllint)" ) );
+															getTextResourceService()
+																	.getText(
+																			locale,
+																			MESSAGE_XML_MODUL_H_SIARD )
+																	+ getTextResourceService()
+																			.getText(
+																					locale,
+																					ERROR_XML_UNKNOWN,
+																					e1.getMessage()
+																							+ " (InterruptedException Xmllint.execXmllint)" ) );
 												}
 											}
 										}
@@ -276,8 +369,10 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 			} else {
 
 				Logtxt.logtxt( logFile,
-						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
-								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+						getTextResourceService().getText( locale,
+								MESSAGE_XML_MODUL_H_SIARD )
+								+ getTextResourceService().getText( locale,
+										ERROR_XML_UNKNOWN,
 										ioe.getMessage() + " (IOException)" ) );
 			}
 		} catch ( JDOMException e ) {
@@ -287,8 +382,10 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 			} else {
 
 				Logtxt.logtxt( logFile,
-						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
-								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+						getTextResourceService().getText( locale,
+								MESSAGE_XML_MODUL_H_SIARD )
+								+ getTextResourceService().getText( locale,
+										ERROR_XML_UNKNOWN,
 										e.getMessage() + " (JDOMException)" ) );
 			}
 		} catch ( SAXException e ) {
@@ -298,8 +395,10 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 			} else {
 
 				Logtxt.logtxt( logFile,
-						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
-								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+						getTextResourceService().getText( locale,
+								MESSAGE_XML_MODUL_H_SIARD )
+								+ getTextResourceService().getText( locale,
+										ERROR_XML_UNKNOWN,
 										e.getMessage() + " (SAXException)" ) );
 			}
 		}
@@ -314,21 +413,28 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 		public int	max	= 1;
 	}
 
-	/* Verify the number of rows in the table. If the xsd minOccurs = o and maxOccurs = unbounded the
-	 * validation of the numbers can't been executed. A Warning is given. */
-	private boolean verifyRowCount( File xmlFile, File schemaLocation, Locale locale, File logFile )
-			throws SAXException, IOException
+	/*
+	 * Verify the number of rows in the table. If the xsd minOccurs = o and
+	 * maxOccurs = unbounded the validation of the numbers can't been executed.
+	 * A Warning is given.
+	 */
+	private boolean verifyRowCount( File xmlFile, File schemaLocation,
+			Locale locale, File logFile ) throws SAXException, IOException
 	{
 		Range range = getRange( schemaLocation );
 		if ( range.min == 0 && range.max == UNBOUNDED ) {
-			/* die effektive Zahl in schemaLocation (Work) konnte im H nicht hereingeschrieben werden.
-			 * Eine Warnung wird herausgegeben */
+			/*
+			 * die effektive Zahl in schemaLocation (Work) konnte im H nicht
+			 * hereingeschrieben werden. Eine Warnung wird herausgegeben
+			 */
 			if ( min ) {
 			} else {
 
 				Logtxt.logtxt( logFile,
-						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_SIARD )
-								+ getTextResourceService().getText( locale, MESSAGE_XML_H_TABLE_NOT_VALIDATED1,
+						getTextResourceService().getText( locale,
+								MESSAGE_XML_MODUL_H_SIARD )
+								+ getTextResourceService().getText( locale,
+										MESSAGE_XML_H_TABLE_NOT_VALIDATED1,
 										schemaLocation.getName() ) );
 			}
 			return true;
@@ -343,8 +449,10 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 		RangeHandler rangeHandler = new RangeHandler();
 		try {
 			reader = XMLReaderFactory.createXMLReader();
-			reader.setFeature( "http://xml.org/sax/features/validation", false );
-			reader.setFeature( "http://apache.org/xml/features/validation/schema", false );
+			reader.setFeature( "http://xml.org/sax/features/validation",
+					false );
+			reader.setFeature(
+					"http://apache.org/xml/features/validation/schema", false );
 			reader.setContentHandler( rangeHandler );
 			reader.parse( new InputSource( new FileInputStream( xsdFile ) ) );
 		} catch ( BreakException e ) {
@@ -358,13 +466,15 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 		private Range range = new Range();
 
 		@Override
-		public void startElement( String uri, String localName, String qName, Attributes attributes )
-				throws SAXException
+		public void startElement( String uri, String localName, String qName,
+				Attributes attributes ) throws SAXException
 		{
 			if ( "row".equals( attributes.getValue( "name" ) ) ) {
 				if ( "rowType".equals( attributes.getValue( "type" ) ) ) {
-					this.range.min = getRange( attributes.getValue( "minOccurs" ) );
-					this.range.max = getRange( attributes.getValue( "maxOccurs" ) );
+					this.range.min = getRange(
+							attributes.getValue( "minOccurs" ) );
+					this.range.max = getRange(
+							attributes.getValue( "maxOccurs" ) );
 					throw new BreakException();
 				}
 			}

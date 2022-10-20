@@ -26,15 +26,18 @@ import java.util.Map;
 import ch.kostceco.tools.kostval.exception.modulesip1.Validation1dMetadataException;
 import ch.kostceco.tools.kostval.validation.ValidationModule;
 
-/** Validierungsschritt 1d Entspricht metadata.xml den Schemadateien in /header/xsd? Allfällige XML
- * Fehler werden angezeigt.
+/**
+ * Validierungsschritt 1d Entspricht metadata.xml den Schemadateien in
+ * /header/xsd? Allfï¿½llige XML Fehler werden angezeigt.
  * 
- * @author razm Daniel Ludin, Bedag AG @version 0.2.0 */
+ * @author razm Daniel Ludin, Bedag AG @version 0.2.0
+ */
 
 public interface Validation1dMetadataModule extends ValidationModule
 {
 
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile ) throws Validation1dMetadataException;
+	public boolean validate( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile )
+			throws Validation1dMetadataException;
 
 }

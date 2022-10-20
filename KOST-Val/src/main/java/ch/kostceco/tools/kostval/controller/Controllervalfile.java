@@ -204,7 +204,8 @@ public class Controllervalfile implements MessageConstants
 			}
 
 		} else if ( (valDateiExt.equals( ".xml" )
-				|| valDateiExt.equals( ".xsd" )|| valDateiExt.equals( ".xsl" )) ) {
+				|| valDateiExt.equals( ".xsd" )
+				|| valDateiExt.equals( ".xsl" )) ) {
 			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
 					MESSAGE_XML_VALERGEBNIS ) );
 			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,

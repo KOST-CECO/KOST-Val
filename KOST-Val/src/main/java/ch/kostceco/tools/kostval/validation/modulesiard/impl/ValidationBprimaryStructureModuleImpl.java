@@ -31,13 +31,16 @@ import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationBprimaryStructureModule;
 import ch.kostceco.tools.kostval.logging.Logtxt;
 
-/** Validierungsschritt B (primäre Verzeichnisstruktur) Besteht eine korrekte primäre
- * Verzeichnisstruktur? valid --> [Name].siard/header und [Name].siard/content invalid -->
- * [Name].siard/[Name]/header und [Name].siard/[Name]/content invalid --> Andere Ordner oder Dateien
- * im Toplevel-Ordner ==> Bei den Module A, B, C und D wird die Validierung abgebrochen, sollte das
- * Resulat invalid sein!
+/**
+ * Validierungsschritt B (primäre Verzeichnisstruktur) Besteht eine korrekte
+ * primäre Verzeichnisstruktur? valid --> [Name].siard/header und
+ * [Name].siard/content invalid --> [Name].siard/[Name]/header und
+ * [Name].siard/[Name]/content invalid --> Andere Ordner oder Dateien im
+ * Toplevel-Ordner ==> Bei den Module A, B, C und D wird die Validierung
+ * abgebrochen, sollte das Resulat invalid sein!
  * 
- * @author Rc Claire Roethlisberger, KOST-CECO */
+ * @author Rc Claire Roethlisberger, KOST-CECO
+ */
 
 public class ValidationBprimaryStructureModuleImpl extends ValidationModuleImpl
 		implements ValidationBprimaryStructureModule
@@ -46,8 +49,9 @@ public class ValidationBprimaryStructureModuleImpl extends ValidationModuleImpl
 	private boolean min = false;
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile ) throws ValidationBprimaryStructureException
+	public boolean validate( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile )
+			throws ValidationBprimaryStructureException
 	{
 		boolean showOnWork = false;
 		int onWork = 410;
@@ -74,8 +78,11 @@ public class ValidationBprimaryStructureModuleImpl extends ValidationModuleImpl
 			Enumeration<? extends ZipEntry> entries = zipfile.entries();
 			while ( entries.hasMoreElements() ) {
 				ZipEntry entry = entries.nextElement();
-				/* nur valid wenn es mit header oder content anfaengt dies schliesst auch
-				 * [Name].siard/[Name]/header und [Name].siard/[Name]/content mit ein */
+				/*
+				 * nur valid wenn es mit header oder content anfaengt dies
+				 * schliesst auch [Name].siard/[Name]/header und
+				 * [Name].siard/[Name]/content mit ein
+				 */
 				String name = entry.getName();
 				// System.out.println( "Entry: " + name );
 				if ( name.startsWith( "content/" ) ) {
@@ -92,11 +99,14 @@ public class ValidationBprimaryStructureModuleImpl extends ValidationModuleImpl
 							return false;
 						} else {
 
-							Logtxt.logtxt( logFile,
-									getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_SIARD )
-											+ getTextResourceService().getText( locale, MESSAGE_XML_B_NOTALLOWEDFILE,
-													name ) );
-							// SIARD enthaelt ein File, das sich nicht dort befinden duerfte: {0}
+							Logtxt.logtxt( logFile, getTextResourceService()
+									.getText( locale,
+											MESSAGE_XML_MODUL_B_SIARD )
+									+ getTextResourceService().getText( locale,
+											MESSAGE_XML_B_NOTALLOWEDFILE,
+											name ) );
+							// SIARD enthaelt ein File, das sich nicht dort
+							// befinden duerfte: {0}
 							return false;
 						}
 					}
@@ -131,8 +141,10 @@ public class ValidationBprimaryStructureModuleImpl extends ValidationModuleImpl
 				} else {
 
 					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_SIARD )
-									+ getTextResourceService().getText( locale, MESSAGE_XML_B_CONTENT ) );
+							getTextResourceService().getText( locale,
+									MESSAGE_XML_MODUL_B_SIARD )
+									+ getTextResourceService().getText( locale,
+											MESSAGE_XML_B_CONTENT ) );
 					// SIARD enthaelt kein content-Ordner
 					return false;
 				}
@@ -143,8 +155,10 @@ public class ValidationBprimaryStructureModuleImpl extends ValidationModuleImpl
 				} else {
 
 					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_SIARD )
-									+ getTextResourceService().getText( locale, MESSAGE_XML_B_HEADER ) );
+							getTextResourceService().getText( locale,
+									MESSAGE_XML_MODUL_B_SIARD )
+									+ getTextResourceService().getText( locale,
+											MESSAGE_XML_B_HEADER ) );
 					// SIARD enthaelt kein header-Ordner
 					return false;
 				}
@@ -155,8 +169,10 @@ public class ValidationBprimaryStructureModuleImpl extends ValidationModuleImpl
 			} else {
 
 				Logtxt.logtxt( logFile,
-						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_SIARD )
-								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+						getTextResourceService().getText( locale,
+								MESSAGE_XML_MODUL_B_SIARD )
+								+ getTextResourceService().getText( locale,
+										ERROR_XML_UNKNOWN, e.getMessage() ) );
 				return false;
 			}
 		}

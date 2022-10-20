@@ -26,15 +26,18 @@ import java.util.Map;
 import ch.kostceco.tools.kostval.exception.modulesip1.Validation1cNamingException;
 import ch.kostceco.tools.kostval.validation.ValidationModule;
 
-/** Validierungsschritt 1c Entsprechen die Verzeichnis- und Dateinamen den Einschränkungen in der
- * Spezifikation?
+/**
+ * Validierungsschritt 1c Entsprechen die Verzeichnis- und Dateinamen den
+ * Einschrï¿½nkungen in der Spezifikation?
  * 
- * @author razm Daniel Ludin, Bedag AG @version 0.2.0 */
+ * @author razm Daniel Ludin, Bedag AG @version 0.2.0
+ */
 
 public interface Validation1cNamingModule extends ValidationModule
 {
 
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile ) throws Validation1cNamingException;
+	public boolean validate( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile )
+			throws Validation1cNamingException;
 
 }

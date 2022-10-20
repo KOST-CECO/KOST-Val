@@ -26,15 +26,19 @@ import java.util.Map;
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationHcontentException;
 import ch.kostceco.tools.kostval.validation.ValidationModule;
 
-/** Validierungsschritt H (Content-Validierung) Sind die XML-Dateien im content valid zu ihrer
- * Schema-Definition (XSD-Dateien)? valid --> tableZ.xml valid zu tableZ.xsd
+/**
+ * Validierungsschritt H (Content-Validierung) Sind die XML-Dateien im content
+ * valid zu ihrer Schema-Definition (XSD-Dateien)? valid --> tableZ.xml valid zu
+ * tableZ.xsd
  * 
- * @author Ec Christian Eugster */
+ * @author Ec Christian Eugster
+ */
 
 public interface ValidationHcontentModule extends ValidationModule
 {
 
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile ) throws ValidationHcontentException;
+	public boolean validate( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile )
+			throws ValidationHcontentException;
 
 }

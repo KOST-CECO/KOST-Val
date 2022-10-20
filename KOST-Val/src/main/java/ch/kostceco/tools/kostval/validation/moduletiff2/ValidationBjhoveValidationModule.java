@@ -26,18 +26,22 @@ import java.util.Map;
 import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationBjhoveValidationException;
 import ch.kostceco.tools.kostval.validation.ValidationModule;
 
-/** Validierungsschritt 3c (einschaltbar) Formatvalidierung, mit JHOVE oder einer ähnlichen Lösung
- * sowie mit einem externem PDF/A-Validator (z.B. PDF/A Manager von PDFTRON) aller nach Dateiformat
- * ausgewählten Dateien in /content (konfigurierbare Liste von den zu validierenden Dateiformaten).
- * Referenzierung in Log-Datei zu den allfälligen zusätzlich generierten Logdateien der eingesetzten
- * Programme.
+/**
+ * Validierungsschritt 3c (einschaltbar) Formatvalidierung, mit JHOVE oder einer
+ * ï¿½hnlichen Lï¿½sung sowie mit einem externem PDF/A-Validator (z.B. PDF/A Manager
+ * von PDFTRON) aller nach Dateiformat ausgewï¿½hlten Dateien in /content
+ * (konfigurierbare Liste von den zu validierenden Dateiformaten).
+ * Referenzierung in Log-Datei zu den allfï¿½lligen zusï¿½tzlich generierten
+ * Logdateien der eingesetzten Programme.
  * 
- * @author Rc Claire Roethlisberger, KOST-CECO */
+ * @author Rc Claire Roethlisberger, KOST-CECO
+ */
 
 public interface ValidationBjhoveValidationModule extends ValidationModule
 {
 
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile ) throws ValidationBjhoveValidationException;
+	public boolean validate( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile )
+			throws ValidationBjhoveValidationException;
 
 }

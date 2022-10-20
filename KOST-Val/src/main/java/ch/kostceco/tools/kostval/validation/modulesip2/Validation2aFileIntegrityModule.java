@@ -26,13 +26,16 @@ import java.util.Map;
 import ch.kostceco.tools.kostval.exception.modulesip2.Validation2aFileIntegrityException;
 import ch.kostceco.tools.kostval.validation.ValidationModule;
 
-/** Validierungsschritt 2a: Sind alle referenzierten Dateien vorhanden? von allen datei nodes den
- * subnode name holen und diesen mit der Struktur vergleichen */
+/**
+ * Validierungsschritt 2a: Sind alle referenzierten Dateien vorhanden? von allen
+ * datei nodes den subnode name holen und diesen mit der Struktur vergleichen
+ */
 
 public interface Validation2aFileIntegrityModule extends ValidationModule
 {
 
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile ) throws Validation2aFileIntegrityException;
+	public boolean validate( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile )
+			throws Validation2aFileIntegrityException;
 
 }

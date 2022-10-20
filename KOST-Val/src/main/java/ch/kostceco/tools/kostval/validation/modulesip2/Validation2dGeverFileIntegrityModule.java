@@ -26,15 +26,18 @@ import java.util.Map;
 import ch.kostceco.tools.kostval.exception.modulesip2.Validation2dGeverFileIntegrityException;
 import ch.kostceco.tools.kostval.validation.ValidationModule;
 
-/** Validierungsschritt 2d Bei GEVER SIP prüfen, ob alle in (metadata.xml)
+/**
+ * Validierungsschritt 2d Bei GEVER SIP prï¿½fen, ob alle in (metadata.xml)
  * /paket/inhaltsverzeichnis/content referenzierten Dateien auch in
- * (metadata.xml)/paket/ablieferung/ordnungsystem verzeichnet sind. Allfällige Inkonsistenzen
- * auflisten. ( //dokument[@id] => //datei[@id] ). */
+ * (metadata.xml)/paket/ablieferung/ordnungsystem verzeichnet sind. Allfï¿½llige
+ * Inkonsistenzen auflisten. ( //dokument[@id] => //datei[@id] ).
+ */
 
 public interface Validation2dGeverFileIntegrityModule extends ValidationModule
 {
 
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile ) throws Validation2dGeverFileIntegrityException;
+	public boolean validate( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile )
+			throws Validation2dGeverFileIntegrityException;
 
 }

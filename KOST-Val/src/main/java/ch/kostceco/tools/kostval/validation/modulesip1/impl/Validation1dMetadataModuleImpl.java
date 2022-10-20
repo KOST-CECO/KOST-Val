@@ -189,7 +189,8 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 			 * 
 			 * erweitern.
 			 */
-			File	pathFile = new File(ClassLoader.getSystemClassLoader().getResource(".").getPath());
+			File pathFile = new File( ClassLoader.getSystemClassLoader()
+					.getResource( "." ).getPath() );
 			String locationOfJarPath = pathFile.getAbsolutePath();
 			String dirOfJarPath = locationOfJarPath;
 			if ( locationOfJarPath.endsWith( ".jar" )
@@ -338,7 +339,7 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 						// XML-SIP gegen XSD-SIP
 						String resultExecSS = Xmllint.execXmllint(
 								xmlToValidate, xsdToValidateEch160, workDir,
-								dirOfJarPath );
+								dirOfJarPath, locale );
 						if ( !resultExecSS.equals( "OK" ) ) {
 							// System.out.println("Validierung NICHT
 							// bestanden");
@@ -365,7 +366,7 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 							Logtxt.logtxt( logFile, getTextResourceService()
 									.getText( locale, MESSAGE_XML_MODUL_Ad_SIP )
 									+ getTextResourceService().getText( locale,
-											ERROR_XML_AD_INVALID_ERROR,
+											MESSAGE_XML_SERVICEMESSAGE, " - ",
 											resultExecSS ) );
 						} else {
 							// System.out.println("Validierung SS bestanden");
@@ -387,7 +388,7 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 							 */
 							String resultExecSI = Xmllint.execXmllint(
 									xmlToValidate, xsdIntern, workDir,
-									dirOfJarPath );
+									dirOfJarPath, locale );
 							if ( !resultExecSI.equals( "OK" ) ) {
 								// System.out.println("Validierung NICHT
 								// bestanden");
@@ -428,15 +429,15 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 												MESSAGE_XML_MODUL_Ad_SIP )
 										+ getTextResourceService().getText(
 												locale,
-												ERROR_XML_AD_INVALID_ERROR,
-												resultExecSI ) );
+												MESSAGE_XML_SERVICEMESSAGE,
+												" - ", resultExecSI ) );
 							} else {
 								// System.out.println("Validierung SI
 								// bestanden");
 								// XML-Intern gegen XSD-SIP
 								String resultExecIS = Xmllint.execXmllint(
 										xmlIntern, xsdToValidateEch160, workDir,
-										dirOfJarPath );
+										dirOfJarPath, locale );
 								if ( !resultExecIS.equals( "OK" ) ) {
 									// System.out.println("Validierung NICHT
 									// bestanden");
@@ -467,7 +468,8 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 													MESSAGE_XML_MODUL_Ad_SIP )
 													+ getTextResourceService()
 															.getText( locale,
-																	ERROR_XML_AD_INVALID_ERROR,
+																	MESSAGE_XML_SERVICEMESSAGE,
+																	" - ",
 																	resultExecIS ) );
 								} else {
 									// System.out.println("Validierung

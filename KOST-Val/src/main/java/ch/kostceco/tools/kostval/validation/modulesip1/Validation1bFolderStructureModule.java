@@ -26,15 +26,18 @@ import java.util.Map;
 import ch.kostceco.tools.kostval.exception.modulesip1.Validation1bFolderStructureException;
 import ch.kostceco.tools.kostval.validation.ValidationModule;
 
-/** Validierungsschritt 1b Besteht eine korrekte primäre Verzeichnisstruktur: /header/metadata.xml,
- * /header/xsd und /content?
+/**
+ * Validierungsschritt 1b Besteht eine korrekte primï¿½re Verzeichnisstruktur:
+ * /header/metadata.xml, /header/xsd und /content?
  * 
- * @author razm Daniel Ludin, Bedag AG @version 0.2.0 */
+ * @author razm Daniel Ludin, Bedag AG @version 0.2.0
+ */
 
 public interface Validation1bFolderStructureModule extends ValidationModule
 {
 
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile ) throws Validation1bFolderStructureException;
+	public boolean validate( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile )
+			throws Validation1bFolderStructureException;
 
 }

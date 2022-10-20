@@ -27,7 +27,8 @@ import ch.kostceco.tools.siardexcerpt.excerption.ValidationModule;
 public interface ExcerptAZipModule extends ValidationModule
 {
 
-	public boolean validate( File siardDatei, File outFile, String excerptString,
-			Map<String, String> configMap, Locale locale ) throws ExcerptAZipException;
+	public boolean validate( File siardDatei, File outFile,
+			String excerptString, Map<String, String> configMap, Locale locale )
+			throws ExcerptAZipException;
 
 }

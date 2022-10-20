@@ -61,7 +61,7 @@ public class Validation3aFormatRecognitionModuleImpl extends
 
 		boolean valid = true;
 
-		// TODO ermitteln welche Formate validiert werden koennen 
+		// TODO ermitteln welche Formate validiert werden koennen
 		// respektive eingeschaltet sind
 		String pdfaValidation = configMap.get( "pdfaValidation" );
 		String txtValidation = configMap.get( "txtValidation" );
@@ -218,11 +218,11 @@ public class Validation3aFormatRecognitionModuleImpl extends
 			}
 		}
 
-		//TODO 3a und 3b
+		// TODO 3a und 3b
 		Map<String, File> fileMap = Util.getFileMap( valDatei, true );
 		Set<String> fileMapKeys = fileMap.keySet();
-		String error3a="";
-		String error3b="";
+		String error3a = "";
+		String error3b = "";
 		for ( Iterator<String> iterator = fileMapKeys.iterator(); iterator
 				.hasNext(); ) {
 			String entryName = iterator.next();
@@ -249,7 +249,7 @@ public class Validation3aFormatRecognitionModuleImpl extends
 				if ( recFormat.contains( "UNKNOWN_" ) ) {
 					recFormat = recFormat.replace( "UNKNOWN_", "" );
 				}
-				String formatValOnCtr=formatValOn;
+				String formatValOnCtr = formatValOn;
 				if ( formatValOnCtr.contains( "PDF/A" ) ) {
 					formatValOnCtr = formatValOnCtr.replace( "PDF/A", "PDFA" );
 				}
@@ -259,22 +259,29 @@ public class Validation3aFormatRecognitionModuleImpl extends
 				// " "recFormat" " muss in formatValOn enthalten sein
 
 				if ( !formatValOnCtr.contains( recFormatSpace ) ) {
-					if (error3a.equals( "" )){
-						error3a=recFormat;
-					} else if (!error3a.contains( recFormat )) {
-						error3a=error3a+", "+recFormat;
+					if ( error3a.equals( "" ) ) {
+						error3a = recFormat;
+					} else if ( !error3a.contains( recFormat ) ) {
+						error3a = error3a + ", " + recFormat;
 					}
 
-					String contentPath=newFile.getAbsolutePath().replace( valDatei.getAbsolutePath()+"/", "" );
-					contentPath=newFile.getAbsolutePath().replace( valDatei.getAbsolutePath()+"\\", "" );
-					if (error3b.equals( "" )){
-						error3b=getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Cb_SIP )
-								+ getTextResourceService().getText( locale, MESSAGE_XML_CB_FORMAT, contentPath,
-										recFormat );
-					} else  {
-						error3b=error3b+" "+getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Cb_SIP )
-								+ getTextResourceService().getText( locale, MESSAGE_XML_CB_FORMAT, contentPath,
-										recFormat );
+					String contentPath = newFile.getAbsolutePath()
+							.replace( valDatei.getAbsolutePath() + "/", "" );
+					contentPath = newFile.getAbsolutePath()
+							.replace( valDatei.getAbsolutePath() + "\\", "" );
+					if ( error3b.equals( "" ) ) {
+						error3b = getTextResourceService().getText( locale,
+								MESSAGE_XML_MODUL_Cb_SIP )
+								+ getTextResourceService().getText( locale,
+										MESSAGE_XML_SERVICEMESSAGE, contentPath,
+										"(" + recFormat + ")" );
+					} else {
+						error3b = error3b + " "
+								+ getTextResourceService().getText( locale,
+										MESSAGE_XML_MODUL_Cb_SIP )
+								+ getTextResourceService().getText( locale,
+										MESSAGE_XML_SERVICEMESSAGE, contentPath,
+										"(" + recFormat + ")" );
 					}
 					valid = false;
 				}
@@ -301,13 +308,14 @@ public class Validation3aFormatRecognitionModuleImpl extends
 				}
 			}
 		}
-		if(!valid) {
+		if ( !valid ) {
 			// TODO Fehlermeldungen ausgeben
 			// Fehlermedung 3a ausgeben
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
-					MESSAGE_XML_MODUL_Ca_SIP )
-					+ getTextResourceService().getText( locale,
-							MESSAGE_XML_CA_FILES, error3a ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_Ca_SIP )
+							+ getTextResourceService().getText( locale,
+									MESSAGE_XML_CA_FILES, error3a ) );
 			// Fehlermedung 3b ausgeben
 			Logtxt.logtxt( logFile, error3b );
 		}

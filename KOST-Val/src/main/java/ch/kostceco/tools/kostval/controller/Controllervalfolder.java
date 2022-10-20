@@ -49,7 +49,7 @@ import ch.kostceco.tools.kostval.service.TextResourceService;
 public class Controllervalfolder implements MessageConstants
 {
 
-	private static TextResourceService	textResourceService;
+	private static TextResourceService textResourceService;
 
 	public static TextResourceService getTextResourceService()
 	{
@@ -95,27 +95,26 @@ public class Controllervalfolder implements MessageConstants
 
 					count = count + 1;
 					countProgress = countProgress + 1;
-					int countToValidated = numberInFileMap
-							- countProgress;
-					
-					// Kontrolle ob Datei akzeptiert ist und ob sie validiert werden soll
+					int countToValidated = numberInFileMap - countProgress;
+
+					// Kontrolle ob Datei akzeptiert ist und ob sie validiert
+					// werden soll
 					Controllervalfofile controller1 = (Controllervalfofile) context
 							.getBean( "controllervalfofile" );
 					String valFile = controller1.valFoFile( valDatei,
-							logFileName, directoryOfLogfile,
-							verbose, dirOfJarPath, configMap,
-							context, locale, logFile, countToValidated );
+							logFileName, directoryOfLogfile, verbose,
+							dirOfJarPath, configMap, context, locale, logFile,
+							countToValidated );
 					if ( valFile.equals( "countValid" ) ) {
 						countValid = countValid + 1;
-					} else if (valFile.equals( "countNotaz" )) {
+					} else if ( valFile.equals( "countNotaz" ) ) {
 						countNotaz = countNotaz + 1;
-					} else if (valFile.equals( "countInvalid" )) {
+					} else if ( valFile.equals( "countInvalid" ) ) {
 						countInvalid = countInvalid + 1;
 					} else {
-						// normalerweise kein Bedarf 
+						// normalerweise kein Bedarf
 						countProgress = countProgress + 1;
 					}
-
 
 				} else {
 					// Ordner. Count aktualisieren

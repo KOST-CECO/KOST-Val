@@ -17,6 +17,7 @@
 package ch.kostceco.tools.kosttools.fileservice;
 
 import java.io.File;
+import java.util.Locale;
 
 import ch.kostceco.tools.kosttools.runtime.Cmd;
 
@@ -50,7 +51,7 @@ public class Xmllint
 	 * @return String mit Validierungsergebnis ("OK" oder den Fehler.
 	 */
 	public static String execXmllint( File xmlFile, File xsdFile, File workDir,
-			String dirOfJarPath ) throws InterruptedException
+			String dirOfJarPath, Locale locale ) throws InterruptedException
 	{
 		boolean out = false;
 		File exeFile = new File(
@@ -82,6 +83,45 @@ public class Xmllint
 			String replaceInfo = "</Message><Message>ERROR: "
 					+ xmlFile.getAbsolutePath() + " fails to validate";
 			resultExec = resultExec.replace( replaceInfo, "" );
+			if ( locale.toString().startsWith( "fr" ) ) {
+				resultExec = resultExec.replace( "Schemas validity error :",
+						"Erreur de validite des schemas :" );
+				resultExec = resultExec.replace( "This element is not expected",
+						"Cet element n`est pas attendu" );
+				resultExec = resultExec.replace( "Expected is",
+						"L`element attendu est" );
+				resultExec = resultExec.replace( "fails to validate",
+						"ne parvient pas a etre valide" );
+				resultExec = resultExec.replace( "Missing child element(s).",
+						"Elements enfants manquants." );
+				resultExec = resultExec.replace( "The value has a length of",
+						"La valeur a une longueur de" );
+				resultExec = resultExec.replace(
+						"this underruns the allowed minimum length of",
+						"ce qui est inferieur a la longueur minimale autorisee de" );
+				resultExec = resultExec.replace(
+						"is not a valid value of the atomic type",
+						"n`est pas une valeur valide du type atomique" );
+			} else if ( locale.toString().startsWith( "de" ) ) {
+				resultExec = resultExec.replace( "Schemas validity error :",
+						"Fehler bei der Gueltigkeit des Schemas:" );
+				resultExec = resultExec.replace( "This element is not expected",
+						"Dieses Element wird nicht erwartet" );
+				resultExec = resultExec.replace( "Expected is",
+						"Erwartet wird" );
+				resultExec = resultExec.replace( "fails to validate",
+						"kann nicht validiert werden" );
+				resultExec = resultExec.replace( "Missing child element(s).",
+						"Fehlende untergeordnete Elemente." );
+				resultExec = resultExec.replace( "The value has a length of",
+						"Der Wert hat eine Laenge von" );
+				resultExec = resultExec.replace(
+						"this underruns the allowed minimum length of",
+						"und ueberschreitet damit die zulaessige Mindestlaenge von" );
+				resultExec = resultExec.replace(
+						"is not a valid value of the atomic type",
+						"ist kein gueltiger Wert des atomaren Typs" );
+			}
 		}
 		return resultExec;
 	}
@@ -99,7 +139,7 @@ public class Xmllint
 	 * @return String mit Kontrollergebnis ("OK" oder den Fehler.
 	 */
 	public static String structXmllint( File xmlFile, File workDir,
-			String dirOfJarPath ) throws InterruptedException
+			String dirOfJarPath, Locale locale ) throws InterruptedException
 	{
 		boolean out = false;
 		File exeFile = new File(
@@ -117,7 +157,7 @@ public class Xmllint
 		 * C:\Users\clair\Downloads\SIP_20220328_KOST_eCH1.2Fxsd_1a-3d-IO\
 		 * content\DOS_04\shiporder.xml
 		 */
-		//System.out.println( resultStru );
+		// System.out.println( resultStru );
 		String ignor = "";
 		if ( resultStru.equals( ignor ) ) {
 			resultStru = "OK";
@@ -135,10 +175,10 @@ public class Xmllint
 			String replaceInfo = "</Message><Message>ERROR: "
 					+ xmlFile.getAbsolutePath() + " : failed to parse";
 			resultStru = resultStru.replace( replaceInfo, "" );
-			String replacePath = xmlFile.getAbsolutePath() ;
-			replacePath = replacePath.replace ("\\","/");
-			replacePath = replacePath.replace (":/","%3A/");
-			replacePath = replacePath.replace (" ","%20");
+			String replacePath = xmlFile.getAbsolutePath();
+			replacePath = replacePath.replace( "\\", "/" );
+			replacePath = replacePath.replace( ":/", "%3A/" );
+			replacePath = replacePath.replace( " ", "%20" );
 			// System.out.println( replacePath );
 			resultStru = resultStru.replace( replacePath, "" );
 			// System.out.println( resultStru );
@@ -155,12 +195,28 @@ public class Xmllint
 			resultStru = resultStru.replace( "[Message]", "<Message>- " );
 			resultStru = resultStru.replace( "[/Message]", "</Message>" );
 			// System.out.println( resultStru );
+
+			if ( locale.toString().startsWith( "fr" ) ) {
+				resultStru = resultStru.replace( "parser error :",
+						"erreur d'analyse syntaxique :" );
+				resultStru = resultStru.replace(
+						"Opening and ending tag mismatch:",
+						"Mismatch des balises d'ouverture et de fin :" );
+				resultStru = resultStru.replace( " and ", " et " );
+			} else if ( locale.toString().startsWith( "de" ) ) {
+				resultStru = resultStru.replace( "parser error :",
+						"Parser-Fehler:" );
+				resultStru = resultStru.replace(
+						"Opening and ending tag mismatch:",
+						"Anfangs- und End-Tag stimmen nicht überein:" );
+				resultStru = resultStru.replace( " and ", " und " );
+			}
 		}
 		return resultStru;
 	}
 
 	/**
-	 * fuehrt eine Kontrolle aller benooetigten Dateien von xmllint durch und
+	 * fuehrt eine Kontrolle aller benoetigten Dateien von xmllint durch und
 	 * gibt das Ergebnis als String zurueck
 	 * 
 	 * @param dirOfJarPath

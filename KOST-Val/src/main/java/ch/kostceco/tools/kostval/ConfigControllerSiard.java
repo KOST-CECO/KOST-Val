@@ -34,7 +34,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
-public class ConfigControllerSiard 
+public class ConfigControllerSiard
 {
 
 	@FXML
@@ -51,7 +51,7 @@ public class ConfigControllerSiard
 			minOne = "Mindestens eine Variante muss erlaubt sein!";
 
 	@FXML
-	private Label		labelVersion, labelVal,			labelMessage, labelConfig;
+	private Label		labelVersion, labelVal, labelMessage, labelConfig;
 
 	@FXML
 	void initialize()
@@ -125,7 +125,7 @@ public class ConfigControllerSiard
 			String noSiard = "<siardvalidation>no</siardvalidation>";
 			String noSiard10 = "<siard10></siard10>";
 			String noSiard21 = "<siard21></siard21>";
-			
+
 			if ( config.contains( noSiard ) ) {
 				checkSiard10.setDisable( true );
 				checkSiard21.setDisable( true );
@@ -164,8 +164,7 @@ public class ConfigControllerSiard
 	/* TODO --> CheckBox ================= */
 
 	/*
-	 * checkSiard10 schaltet diese Validierung in der Konfiguration ein oder
-	 * aus
+	 * checkSiard10 schaltet diese Validierung in der Konfiguration ein oder aus
 	 */
 	@FXML
 	void changeSiard10( ActionEvent event )
@@ -189,10 +188,9 @@ public class ConfigControllerSiard
 			e.printStackTrace();
 		}
 	}
-	
+
 	/*
-	 * checkSiard21 schaltet diese Validierung in der Konfiguration ein oder
-	 * aus
+	 * checkSiard21 schaltet diese Validierung in der Konfiguration ein oder aus
 	 */
 	@FXML
 	void changeSiard21( ActionEvent event )

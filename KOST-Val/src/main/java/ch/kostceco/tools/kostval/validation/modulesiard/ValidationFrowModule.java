@@ -30,19 +30,22 @@ import ch.kostceco.tools.kostval.exception.modulesiard.ValidationFrowException;
 import ch.kostceco.tools.kostval.validation.ValidationModule;
 import ch.kostceco.tools.kostval.validation.bean.ValidationContext;
 
-/** Validierungsschritt F (Zeilen-Validierung) Wurden die Angaben aus metadata.xml korrekt in die
- * tableZ.xsd-Dateien übertragen? valid --> gleiche Zeilenzahl (rows in metadata.xml = max =
- * minOccurs in tableZ.xsd Ansonsten: Enthält tableZ.xml die gleiche Anzahl Zeilen wie in
- * metadata.xml definiert? valid --> gleiche Zeilenzahl (rows in metadata.xml = Anzahl row in
- * tableZ.xml
+/**
+ * Validierungsschritt F (Zeilen-Validierung) Wurden die Angaben aus
+ * metadata.xml korrekt in die tableZ.xsd-Dateien ï¿½bertragen? valid --> gleiche
+ * Zeilenzahl (rows in metadata.xml = max = minOccurs in tableZ.xsd Ansonsten:
+ * Enthï¿½lt tableZ.xml die gleiche Anzahl Zeilen wie in metadata.xml definiert?
+ * valid --> gleiche Zeilenzahl (rows in metadata.xml = Anzahl row in tableZ.xml
  * 
- * @author Do Olivier Debenath */
+ * @author Do Olivier Debenath
+ */
 
 public interface ValidationFrowModule extends ValidationModule
 {
 
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile ) throws ValidationFrowException;
+	public boolean validate( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile )
+			throws ValidationFrowException;
 
 	public boolean prepareValidation( ValidationContext validationContext )
 			throws IOException, JDOMException, Exception;

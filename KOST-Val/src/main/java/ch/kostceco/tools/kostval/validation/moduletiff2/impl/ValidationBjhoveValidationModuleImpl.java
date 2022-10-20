@@ -33,10 +33,12 @@ import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationBjhoveValidationModule;
 import ch.kostceco.tools.kostval.logging.Logtxt;
 
-/** Validierungsschritt B (Jhove-Validierung) Ist die TIFF-Datei gemaess Jhove valid? valid -->
- * Status: "Well-Formed and valid"
+/**
+ * Validierungsschritt B (Jhove-Validierung) Ist die TIFF-Datei gemaess Jhove
+ * valid? valid --> Status: "Well-Formed and valid"
  * 
- * @author Rc Claire Roethlisberger, KOST-CECO */
+ * @author Rc Claire Roethlisberger, KOST-CECO
+ */
 
 public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 		implements ValidationBjhoveValidationModule
@@ -44,11 +46,12 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 
 	public static String	NEWLINE	= System.getProperty( "line.separator" );
 
-	private boolean				min			= false;
+	private boolean			min		= false;
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile ) throws ValidationBjhoveValidationException
+	public boolean validate( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile )
+			throws ValidationBjhoveValidationException
 	{
 		String onWork = configMap.get( "ShowProgressOnWork" );
 		if ( onWork.equals( "nomin" ) ) {
@@ -58,9 +61,13 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 		boolean isValid = true;
 		// Informationen zum Jhove-Logverzeichnis holen
 		String pathToJhoveOutput2 = directoryOfLogfile.getAbsolutePath();
-		/* Jhove schreibt ins Work-Verzeichnis, damit danach eine Kopie ins Log-Verzeichnis abgelegt
-		 * werden kann, welche auch geloescht werden kann. */
-		File jhoveLog = new File( pathToJhoveOutput2, valDatei.getName() + ".jhove-log.txt" );
+		/*
+		 * Jhove schreibt ins Work-Verzeichnis, damit danach eine Kopie ins
+		 * Log-Verzeichnis abgelegt werden kann, welche auch geloescht werden
+		 * kann.
+		 */
+		File jhoveLog = new File( pathToJhoveOutput2,
+				valDatei.getName() + ".jhove-log.txt" );
 		String pathToWorkDir = configMap.get( "PathToWorkDir" );
 
 		String toplevelDir = valDatei.getName();
@@ -78,10 +85,10 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 					return false;
 				} else {
 
-					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_TIFF )
-									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-											"No Jhove report." ) );
+					Logtxt.logtxt( logFile, getTextResourceService()
+							.getText( locale, MESSAGE_XML_MODUL_B_TIFF )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, "No Jhove report." ) );
 					return false;
 				}
 			}
@@ -91,30 +98,40 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 				return false;
 			} else {
 
-				Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_TIFF )
-						+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, jhoveString ) );
+				Logtxt.logtxt( logFile,
+						getTextResourceService().getText( locale,
+								MESSAGE_XML_MODUL_B_TIFF )
+								+ getTextResourceService().getText( locale,
+										ERROR_XML_UNKNOWN, jhoveString ) );
 				return false;
 			}
 		}
 
 		// Report auswerten
 		try {
-			BufferedReader in = new BufferedReader( new FileReader( jhoveLog ) );
+			BufferedReader in = new BufferedReader(
+					new FileReader( jhoveLog ) );
 			String line;
-			Set<String> lines = new LinkedHashSet<String>( 100000 ); // evtl vergroessern
+			Set<String> lines = new LinkedHashSet<String>( 100000 ); // evtl
+																		// vergroessern
 			int counter = 0;
 			String status = "";
 			int statuscounter = 0;
 			int ignorcounter = 0;
 			while ( (line = in.readLine()) != null ) {
-				/* die Status-Zeile enthaelt diese Moeglichkeiten: Valider Status: "Well-Formed and valid"
-				 * Invalider Status: "Not well-formed" oder "Well-Formed, but not valid" moeglicherweise
-				 * existieren weitere Ausgabemoeglichkeiten */
+				/*
+				 * die Status-Zeile enthaelt diese Moeglichkeiten: Valider
+				 * Status: "Well-Formed and valid" Invalider Status:
+				 * "Not well-formed" oder "Well-Formed, but not valid"
+				 * moeglicherweise existieren weitere Ausgabemoeglichkeiten
+				 */
 				if ( line.contains( "Status:" ) ) {
 					if ( !line.contains( "Well-Formed and valid" ) ) {
 						status = line;
-						/* Status nur als Fehlermeldung ausgeben, wenn nicht alle ErrorMessages ignoriert werden
-						 * konnten */
+						/*
+						 * Status nur als Fehlermeldung ausgeben, wenn nicht
+						 * alle ErrorMessages ignoriert werden konnten
+						 */
 					}
 				}
 
@@ -136,21 +153,30 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 							} else {
 								isValid = false;
 
-								Logtxt.logtxt( logFile,
-										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_TIFF )
-												+ getTextResourceService().getText( locale, MESSAGE_XML_B_JHOVEINVALID,
-														status ) );
+								Logtxt.logtxt( logFile, getTextResourceService()
+										.getText( locale,
+												MESSAGE_XML_MODUL_B_TIFF )
+										+ getTextResourceService().getText(
+												locale,
+												MESSAGE_XML_SERVICEINVALID,
+												"Jhove", status ) );
 							}
 							statuscounter = 1; // Marker Status Ausgegeben
 						}
-						/* Linie mit der Fehlermeldung auch mitausgeben, falls diese neu ist.
+						/*
+						 * Linie mit der Fehlermeldung auch mitausgeben, falls
+						 * diese neu ist.
 						 * 
-						 * Korrupte TIFF-Dateien enthalten mehrere Zehntausen Mal den gleichen Eintrag
-						 * "  ErrorMessage: Unknown data type: Type = 0, Tag = 0" In einem Test wurde so die
-						 * Anzahl Errors von 65'060 auf 63 reduziert */
+						 * Korrupte TIFF-Dateien enthalten mehrere Zehntausen
+						 * Mal den gleichen Eintrag
+						 * "  ErrorMessage: Unknown data type: Type = 0, Tag = 0"
+						 * In einem Test wurde so die Anzahl Errors von 65'060
+						 * auf 63 reduziert
+						 */
 
 						if ( lines.contains( line ) ) {
-							// Diese Linie = Fehlermelung wurde bereits ausgegeben
+							// Diese Linie = Fehlermelung wurde bereits
+							// ausgegeben
 						} else {
 							if ( min ) {
 								in.close();
@@ -161,15 +187,25 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 								// max 10 Meldungen im Modul B
 								if ( counter < 11 ) {
 									Logtxt.logtxt( logFile,
-											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_TIFF )
-													+ getTextResourceService().getText( locale, MESSAGE_XML_B_JHOVEMESSAGE,
-															line ) );
+											getTextResourceService().getText(
+													locale,
+													MESSAGE_XML_MODUL_B_TIFF )
+													+ getTextResourceService()
+															.getText( locale,
+																	MESSAGE_XML_SERVICEMESSAGE,
+																	"- Jhove",
+																	line ) );
 									lines.add( line );
 								} else if ( counter == 11 ) {
 									Logtxt.logtxt( logFile,
-											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_TIFF )
-													+ getTextResourceService().getText( locale, MESSAGE_XML_B_JHOVEMESSAGE,
-															" ErrorMessage: . . ." ) );
+											getTextResourceService().getText(
+													locale,
+													MESSAGE_XML_MODUL_B_TIFF )
+													+ getTextResourceService()
+															.getText( locale,
+																	MESSAGE_XML_SERVICEMESSAGE,
+																	"- Jhove",
+																	" ErrorMessage: . . ." ) );
 									lines.add( line );
 								} else {
 									// Modul B Abbrechen. Spart viel Zeit.
@@ -181,19 +217,26 @@ public class ValidationBjhoveValidationModuleImpl extends ValidationModuleImpl
 					}
 				}
 			}
-			if ( (statuscounter == 0) && (ignorcounter == 0) && !status.equals( "" ) ) {
-				// Status noch nicht ausgegeben & keine Errors ignoriert & Invalider Status
+			if ( (statuscounter == 0) && (ignorcounter == 0)
+					&& !status.equals( "" ) ) {
+				// Status noch nicht ausgegeben & keine Errors ignoriert &
+				// Invalider Status
 				isValid = false;
 
-				Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_TIFF )
-						+ getTextResourceService().getText( locale, MESSAGE_XML_B_JHOVEINVALID, status ) );
+				Logtxt.logtxt( logFile, getTextResourceService()
+						.getText( locale, MESSAGE_XML_MODUL_B_TIFF )
+						+ getTextResourceService().getText( locale,
+								MESSAGE_XML_SERVICEINVALID, "Jhove", status ) );
 				statuscounter = 1; // Marker Status Ausgegeben
 			}
 			in.close();
 		} catch ( Exception e ) {
 
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_TIFF )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_B_TIFF )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 		// jhoveReport / temp wird in Controllervalfile geloescht */

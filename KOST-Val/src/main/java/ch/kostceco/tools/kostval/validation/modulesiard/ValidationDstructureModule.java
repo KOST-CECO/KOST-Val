@@ -26,17 +26,21 @@ import java.util.Map;
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationDstructureException;
 import ch.kostceco.tools.kostval.validation.ValidationModule;
 
-/** Validierungsschritt D (Struktur-Validierung) Stimmt die Struktur aus metadata.xml mit jender vom
- * content überein? valid --> gleiche Struktur (z.B. schema0/table3 --> schema0/table3/table3.xsd +
- * table3.xml) ==> Bei den Module A, B, C und D wird die Validierung abgebrochen, sollte das Resulat
- * invalid sein!
+/**
+ * Validierungsschritt D (Struktur-Validierung) Stimmt die Struktur aus
+ * metadata.xml mit jender vom content ï¿½berein? valid --> gleiche Struktur (z.B.
+ * schema0/table3 --> schema0/table3/table3.xsd + table3.xml) ==> Bei den Module
+ * A, B, C und D wird die Validierung abgebrochen, sollte das Resulat invalid
+ * sein!
  * 
- * @author Ec Christian Eugster */
+ * @author Ec Christian Eugster
+ */
 
 public interface ValidationDstructureModule extends ValidationModule
 {
 
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile ) throws ValidationDstructureException;
+	public boolean validate( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile )
+			throws ValidationDstructureException;
 
 }

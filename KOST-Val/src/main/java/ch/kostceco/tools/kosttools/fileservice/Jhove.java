@@ -51,7 +51,8 @@ public class Jhove
 			 * 
 			 * erweitern.
 			 */
-			File	pathFile = new File(ClassLoader.getSystemClassLoader().getResource(".").getPath());
+			File pathFile = new File( ClassLoader.getSystemClassLoader()
+					.getResource( "." ).getPath() );
 			String locationOfJarPath = pathFile.getAbsolutePath();
 			String dirOfJarPath = locationOfJarPath;
 			if ( locationOfJarPath.endsWith( ".jar" )

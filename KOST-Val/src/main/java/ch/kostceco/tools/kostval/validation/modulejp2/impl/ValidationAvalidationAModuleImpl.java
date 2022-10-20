@@ -38,11 +38,15 @@ import ch.kostceco.tools.kostval.logging.Logtxt;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulejp2.ValidationAvalidationAModule;
 
-/** Ist die vorliegende JP2-Datei eine valide JP2-Datei? JP2 Validierungs mit Jpylyzer.
+/**
+ * Ist die vorliegende JP2-Datei eine valide JP2-Datei? JP2 Validierungs mit
+ * Jpylyzer.
  * 
- * Zuerste erfolgt eine Erkennung, wenn diese io kommt die Validierung mit Jpylyzer.
+ * Zuerste erfolgt eine Erkennung, wenn diese io kommt die Validierung mit
+ * Jpylyzer.
  * 
- * @author Rc Claire Roethlisberger, KOST-CECO */
+ * @author Rc Claire Roethlisberger, KOST-CECO
+ */
 
 public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 		implements ValidationAvalidationAModule
@@ -51,8 +55,9 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 	private boolean min = false;
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile ) throws ValidationAjp2validationException
+	public boolean validate( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile )
+			throws ValidationAjp2validationException
 	{
 		String onWork = configMap.get( "ShowProgressOnWork" );
 		if ( onWork.equals( "nomin" ) ) {
@@ -70,16 +75,21 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 
 		// TODO: Erledigt - Initialisierung Jpylyzer -> existiert Jpylyzer?
 
-		/* dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist ein generelles TODO in
-		 * allen Modulen. Zuerst immer dirOfJarPath ermitteln und dann alle Pfade mit
+		/*
+		 * dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist ein
+		 * generelles TODO in allen Modulen. Zuerst immer dirOfJarPath ermitteln
+		 * und dann alle Pfade mit
 		 * 
 		 * dirOfJarPath + File.separator +
 		 * 
-		 * erweitern. */
-		File	pathFile = new File(ClassLoader.getSystemClassLoader().getResource(".").getPath());
+		 * erweitern.
+		 */
+		File pathFile = new File( ClassLoader.getSystemClassLoader()
+				.getResource( "." ).getPath() );
 		String locationOfJarPath = pathFile.getAbsolutePath();
 		String dirOfJarPath = locationOfJarPath;
-		if ( locationOfJarPath.endsWith( ".jar" ) || locationOfJarPath.endsWith( ".exe" )
+		if ( locationOfJarPath.endsWith( ".jar" )
+				|| locationOfJarPath.endsWith( ".exe" )
 				|| locationOfJarPath.endsWith( "." ) ) {
 			File file = new File( locationOfJarPath );
 			dirOfJarPath = file.getParent();
@@ -93,9 +103,12 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 			} else {
 
 				Logtxt.logtxt( logFile,
-						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
-								+ getTextResourceService().getText( locale, MESSAGE_XML_MISSING_FILE, checkTool,
-										getTextResourceService().getText( locale, ABORTED ) ) );
+						getTextResourceService().getText( locale,
+								MESSAGE_XML_MODUL_A_JP2 )
+								+ getTextResourceService().getText( locale,
+										MESSAGE_XML_MISSING_FILE, checkTool,
+										getTextResourceService()
+												.getText( locale, ABORTED ) ) );
 			}
 		}
 
@@ -103,13 +116,16 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 			Document doc = null;
 
 			try {
-				// jpylyzer-Befehl: pathToJpylyzerExe valDatei > valDatei.jpylyzer-log.xml
+				// jpylyzer-Befehl: pathToJpylyzerExe valDatei >
+				// valDatei.jpylyzer-log.xml
 				String outputPath = directoryOfLogfile.getAbsolutePath();
-				String outputName = File.separator + valDatei.getName() + ".jpylyzer-log.xml";
+				String outputName = File.separator + valDatei.getName()
+						+ ".jpylyzer-log.xml";
 				String pathToJpylyzerReport = outputPath + outputName;
 				File output = new File( pathToJpylyzerReport );
 
-				String resultExec = Jpylyzer.execJpylyzer( valDatei, output, workDir, dirOfJarPath );
+				String resultExec = Jpylyzer.execJpylyzer( valDatei, output,
+						workDir, dirOfJarPath );
 				if ( !resultExec.equals( "OK" ) ) {
 					// Exception oder Report existiert nicht
 					if ( min ) {
@@ -118,19 +134,22 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 						if ( resultExec.equals( "NoReport" ) ) {
 							// Report existiert nicht
 
-							Logtxt.logtxt( logFile,
-									getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
-											+ getTextResourceService().getText( locale, MESSAGE_XML_MISSING_REPORT,
-													output.getAbsolutePath(),
-													getTextResourceService().getText( locale, ABORTED ) ) );
+							Logtxt.logtxt( logFile, getTextResourceService()
+									.getText( locale, MESSAGE_XML_MODUL_A_JP2 )
+									+ getTextResourceService().getText( locale,
+											MESSAGE_XML_MISSING_REPORT,
+											output.getAbsolutePath(),
+											getTextResourceService().getText(
+													locale, ABORTED ) ) );
 							return false;
 						} else {
 							// Exception
 
-							Logtxt.logtxt( logFile,
-									getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
-											+ getTextResourceService().getText( locale, ERROR_XML_A_JP2_SERVICEFAILED,
-													resultExec ) );
+							Logtxt.logtxt( logFile, getTextResourceService()
+									.getText( locale, MESSAGE_XML_MODUL_A_JP2 )
+									+ getTextResourceService().getText( locale,
+											ERROR_XML_SERVICEFAILED_EXIT,
+											"Jpylyzer", resultExec ) );
 							return false;
 						}
 					}
@@ -141,7 +160,8 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 
 				BufferedInputStream bis = new BufferedInputStream(
 						new FileInputStream( pathToJpylyzerReport ) );
-				DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+				DocumentBuilderFactory dbf = DocumentBuilderFactory
+						.newInstance();
 				DocumentBuilder db = dbf.newDocumentBuilder();
 				doc = db.parse( bis );
 				doc.normalize();
@@ -149,7 +169,8 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 				NodeList nodeLstI = doc.getElementsByTagName( "isValid" );
 				// <isValid format="jp2">True</isValid>
 
-				// Node isValidJP2 enthaelt im TextNode das Resultat TextNode ist ein ChildNode
+				// Node isValidJP2 enthaelt im TextNode das Resultat TextNode
+				// ist ein ChildNode
 				for ( int s = 0; s < nodeLstI.getLength(); s++ ) {
 					Node resultNode = nodeLstI.item( s );
 					StringBuffer buf = new StringBuffer();
@@ -173,9 +194,11 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 							return false;
 						} else {
 
-							Logtxt.logtxt( logFile,
-									getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
-											+ getTextResourceService().getText( locale, ERROR_XML_A_JP2_JPYLYZER_FAIL ) );
+							Logtxt.logtxt( logFile, getTextResourceService()
+									.getText( locale, MESSAGE_XML_MODUL_A_JP2 )
+									+ getTextResourceService().getText( locale,
+											MESSAGE_XML_SERVICEINVALID,
+											"Jpylyzer", "" ) );
 							isValid = false;
 						}
 					}
@@ -184,8 +207,11 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 
 			} catch ( Exception e ) {
 
-				Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
-						+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+				Logtxt.logtxt( logFile,
+						getTextResourceService().getText( locale,
+								MESSAGE_XML_MODUL_A_JP2 )
+								+ getTextResourceService().getText( locale,
+										ERROR_XML_UNKNOWN, e.getMessage() ) );
 				return false;
 			}
 			// TODO: Erledigt: Fehler Auswertung
@@ -193,30 +219,38 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 			if ( !isValid ) {
 				// Invalide JP2-Datei
 
-				/* neu werden die Fehler zusammengefasst, damit nicht bei jeder neuen Version das Mapping
-				 * der Pruefschritte zu den Fehlern komplett neu erstellt werden muss.
+				/*
+				 * neu werden die Fehler zusammengefasst, damit nicht bei jeder
+				 * neuen Version das Mapping der Pruefschritte zu den Fehlern
+				 * komplett neu erstellt werden muss.
 				 * 
 				 * A Erkennung und Struktur
 				 * 
-				 * � A SignatureBox � A FileTypeBox � A JP2HeaderBox � A - ImageHeaderBox � A -
-				 * ColourSpecificationBox � A - BitsPerComponentBox � A - PaletteBox � A -
-				 * ComponentMappingBox � A - ChannelDefinitionBox � A - ResolutionBox
+				 * � A SignatureBox � A FileTypeBox � A JP2HeaderBox � A -
+				 * ImageHeaderBox � A - ColourSpecificationBox � A -
+				 * BitsPerComponentBox � A - PaletteBox � A -
+				 * ComponentMappingBox � A - ChannelDefinitionBox � A -
+				 * ResolutionBox
 				 * 
 				 * B Metadaten-Validierung
 				 * 
-				 * � B XmlBox � B UuidInfoBox � B UuidBox � B IntellectualProperty
+				 * � B XmlBox � B UuidInfoBox � B UuidBox � B
+				 * IntellectualProperty
 				 * 
 				 * C Bild-Validierung
 				 * 
-				 * � C ContiguousCodestreamBox � C - Siz = {0} {0} in the CC � C - Coc = {0} {0} in the CC �
-				 * C - Rgn = {0} {0} in the CC � C - Qcd = {0} {0} in the CC � C - Qcc = {0} {0} in the CC �
-				 * C - Poc = {0} {0} in the CC � C - Crg = {0} {0} in the CC � C - Com = {0} {0} in the CC �
-				 * C - tile = {0} {0} in the CC � C - Soc = {0} {0} in the CC � C - Eoc = {0} {0} in the CC
-				 * � C - Cod = {0} {0} in the CC
+				 * � C ContiguousCodestreamBox � C - Siz = {0} {0} in the CC � C
+				 * - Coc = {0} {0} in the CC � C - Rgn = {0} {0} in the CC � C -
+				 * Qcd = {0} {0} in the CC � C - Qcc = {0} {0} in the CC � C -
+				 * Poc = {0} {0} in the CC � C - Crg = {0} {0} in the CC � C -
+				 * Com = {0} {0} in the CC � C - tile = {0} {0} in the CC � C -
+				 * Soc = {0} {0} in the CC � C - Eoc = {0} {0} in the CC � C -
+				 * Cod = {0} {0} in the CC
 				 * 
 				 * D Sonstige Validierung
 				 * 
-				 * � D ELSE nicht zugeordnet ({0}) */
+				 * � D ELSE nicht zugeordnet ({0})
+				 */
 				int isignatureBox = 0;
 				int ifileTypeBox = 0;
 				int ijp2HeaderBox = 0;
@@ -259,112 +293,192 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 					for ( int i = 0; i < children.getLength(); i++ ) {
 						Node textChild = children.item( i );
 						if ( textChild.getNodeType() == Node.ELEMENT_NODE ) {
-							if ( textChild.getNodeName().equals( "signatureBox" ) ) {
+							if ( textChild.getNodeName()
+									.equals( "signatureBox" ) ) {
 								isignatureBox = isignatureBox + 1;
-							} else if ( textChild.getNodeName().equals( "fileTypeBox" ) ) {
+							} else if ( textChild.getNodeName()
+									.equals( "fileTypeBox" ) ) {
 								ifileTypeBox = ifileTypeBox + 1;
-							} else if ( textChild.getNodeName().equals( "jp2HeaderBox" ) ) {
+							} else if ( textChild.getNodeName()
+									.equals( "jp2HeaderBox" ) ) {
 								ijp2HeaderBox = ijp2HeaderBox + 1;
 								NodeList childrenII = textChild.getChildNodes();
-								for ( int j = 0; j < childrenII.getLength(); j++ ) {
-									/* � A - ImageHeaderBox � A - ColourSpecificationBox � A - BitsPerComponentBox � A
-									 * - PaletteBox � A - ComponentMappingBox � A - ChannelDefinitionBox � A -
-									 * ResolutionBox */
+								for ( int j = 0; j < childrenII
+										.getLength(); j++ ) {
+									/*
+									 * � A - ImageHeaderBox � A -
+									 * ColourSpecificationBox � A -
+									 * BitsPerComponentBox � A - PaletteBox � A
+									 * - ComponentMappingBox � A -
+									 * ChannelDefinitionBox � A - ResolutionBox
+									 */
 									Node textChildII = childrenII.item( j );
-									if ( textChildII.getNodeType() == Node.ELEMENT_NODE ) {
-										if ( textChildII.getNodeName().contains( "mageHeaderBox" ) ) {
-											iimageHeaderBox = iimageHeaderBox + 1;
-										} else if ( textChildII.getNodeName().contains( "olourSpecificationBox" ) ) {
-											icolourSpecificationBox = icolourSpecificationBox + 1;
-										} else if ( textChildII.getNodeName().contains( "itsPerComponentBox" ) ) {
-											ibitsPerComponentBox = ibitsPerComponentBox + 1;
-										} else if ( textChildII.getNodeName().contains( "aletteBox" ) ) {
+									if ( textChildII
+											.getNodeType() == Node.ELEMENT_NODE ) {
+										if ( textChildII.getNodeName()
+												.contains( "mageHeaderBox" ) ) {
+											iimageHeaderBox = iimageHeaderBox
+													+ 1;
+										} else if ( textChildII.getNodeName()
+												.contains(
+														"olourSpecificationBox" ) ) {
+											icolourSpecificationBox = icolourSpecificationBox
+													+ 1;
+										} else if ( textChildII.getNodeName()
+												.contains(
+														"itsPerComponentBox" ) ) {
+											ibitsPerComponentBox = ibitsPerComponentBox
+													+ 1;
+										} else if ( textChildII.getNodeName()
+												.contains( "aletteBox" ) ) {
 											ipaletteBox = ipaletteBox + 1;
-										} else if ( textChildII.getNodeName().contains( "omponentMappingBox" ) ) {
-											icomponentMappingBox = icomponentMappingBox + 1;
-										} else if ( textChildII.getNodeName().contains( "hannelDefinitionBox" ) ) {
-											ichannelDefinitionBox = ichannelDefinitionBox + 1;
-										} else if ( textChildII.getNodeName().contains( "esolutionBox" ) ) {
+										} else if ( textChildII.getNodeName()
+												.contains(
+														"omponentMappingBox" ) ) {
+											icomponentMappingBox = icomponentMappingBox
+													+ 1;
+										} else if ( textChildII.getNodeName()
+												.contains(
+														"hannelDefinitionBox" ) ) {
+											ichannelDefinitionBox = ichannelDefinitionBox
+													+ 1;
+										} else if ( textChildII.getNodeName()
+												.contains( "esolutionBox" ) ) {
 											iresolutionBox = iresolutionBox + 1;
 										} else {
 											iunknown = iunknown + 1;
-											sunknown = sunknown + " " + textChildII.getNodeName();
+											sunknown = sunknown + " "
+													+ textChildII.getNodeName();
 										}
 									}
 									continue;
 								}
 
-							} else if ( textChild.getNodeName().contains( "mlBox" ) ) {
+							} else if ( textChild.getNodeName()
+									.contains( "mlBox" ) ) {
 								ixmlBox = ixmlBox + 1;
-							} else if ( textChild.getNodeName().contains( "uidBox" ) ) {
+							} else if ( textChild.getNodeName()
+									.contains( "uidBox" ) ) {
 								iuuidBox = iuuidBox + 1;
-							} else if ( textChild.getNodeName().contains( "uidInfoBox" ) ) {
+							} else if ( textChild.getNodeName()
+									.contains( "uidInfoBox" ) ) {
 								iuuidInfoBox = iuuidInfoBox + 1;
-							} else if ( textChild.getNodeName().contains( "ntellectualProperty" ) ) {
-								iintellectualProperty = iintellectualProperty + 1;
+							} else if ( textChild.getNodeName()
+									.contains( "ntellectualProperty" ) ) {
+								iintellectualProperty = iintellectualProperty
+										+ 1;
 
-							} else if ( textChild.getNodeName().equals( "contiguousCodestreamBox" ) ) {
-								icontiguousCodestreamBox = icontiguousCodestreamBox + 1;
-								NodeList childrenIII = textChild.getChildNodes();
-								for ( int k = 0; k < childrenIII.getLength(); k++ ) {
-									/* � C - Siz = {0} {0} in the CC � C - Coc = {0} {0} in the CC � C - Rgn = {0} {0}
-									 * in the CC � C - Qcd = {0} {0} in the CC � C - Qcc = {0} {0} in the CC � C - Poc
-									 * = {0} {0} in the CC � C - Crg = {0} {0} in the CC � C - Com = {0} {0} in the CC
-									 * � C - tile = {0} {0} in the CC � C - Soc = {0} {0} in the CC � C - Eoc = {0}
-									 * {0} in the CC � C - Cod = {0} {0} in the CC */
+							} else if ( textChild.getNodeName()
+									.equals( "contiguousCodestreamBox" ) ) {
+								icontiguousCodestreamBox = icontiguousCodestreamBox
+										+ 1;
+								NodeList childrenIII = textChild
+										.getChildNodes();
+								for ( int k = 0; k < childrenIII
+										.getLength(); k++ ) {
+									/*
+									 * � C - Siz = {0} {0} in the CC � C - Coc =
+									 * {0} {0} in the CC � C - Rgn = {0} {0} in
+									 * the CC � C - Qcd = {0} {0} in the CC � C
+									 * - Qcc = {0} {0} in the CC � C - Poc = {0}
+									 * {0} in the CC � C - Crg = {0} {0} in the
+									 * CC � C - Com = {0} {0} in the CC � C -
+									 * tile = {0} {0} in the CC � C - Soc = {0}
+									 * {0} in the CC � C - Eoc = {0} {0} in the
+									 * CC � C - Cod = {0} {0} in the CC
+									 */
 									Node textChildIII = childrenIII.item( k );
-									if ( textChildIII.getNodeType() == Node.ELEMENT_NODE ) {
-										if ( textChildIII.getNodeName().contains( "siz" )
-												|| textChildIII.getNodeName().contains( "SIZ" )
-												|| textChildIII.getNodeName().contains( "Siz" ) ) {
+									if ( textChildIII
+											.getNodeType() == Node.ELEMENT_NODE ) {
+										if ( textChildIII.getNodeName()
+												.contains( "siz" )
+												|| textChildIII.getNodeName()
+														.contains( "SIZ" )
+												|| textChildIII.getNodeName()
+														.contains( "Siz" ) ) {
 											isiz = isiz + 1;
-										} else if ( textChildIII.getNodeName().contains( "coc" )
-												|| textChildIII.getNodeName().contains( "COC" )
-												|| textChildIII.getNodeName().contains( "Coc" ) ) {
+										} else if ( textChildIII.getNodeName()
+												.contains( "coc" )
+												|| textChildIII.getNodeName()
+														.contains( "COC" )
+												|| textChildIII.getNodeName()
+														.contains( "Coc" ) ) {
 											icoc = icoc + 1;
-										} else if ( textChildIII.getNodeName().contains( "rgn" )
-												|| textChildIII.getNodeName().contains( "RGN" )
-												|| textChildIII.getNodeName().contains( "Rgn" ) ) {
+										} else if ( textChildIII.getNodeName()
+												.contains( "rgn" )
+												|| textChildIII.getNodeName()
+														.contains( "RGN" )
+												|| textChildIII.getNodeName()
+														.contains( "Rgn" ) ) {
 											irgn = irgn + 1;
-										} else if ( textChildIII.getNodeName().contains( "qcd" )
-												|| textChildIII.getNodeName().contains( "QCD" )
-												|| textChildIII.getNodeName().contains( "Qcd" ) ) {
+										} else if ( textChildIII.getNodeName()
+												.contains( "qcd" )
+												|| textChildIII.getNodeName()
+														.contains( "QCD" )
+												|| textChildIII.getNodeName()
+														.contains( "Qcd" ) ) {
 											iqcd = iqcd + 1;
-										} else if ( textChildIII.getNodeName().contains( "qcc" )
-												|| textChildIII.getNodeName().contains( "QCC" )
-												|| textChildIII.getNodeName().contains( "Qcc" ) ) {
+										} else if ( textChildIII.getNodeName()
+												.contains( "qcc" )
+												|| textChildIII.getNodeName()
+														.contains( "QCC" )
+												|| textChildIII.getNodeName()
+														.contains( "Qcc" ) ) {
 											iqcc = iqcc + 1;
-										} else if ( textChildIII.getNodeName().contains( "poc" )
-												|| textChildIII.getNodeName().contains( "POC" )
-												|| textChildIII.getNodeName().contains( "Poc" ) ) {
+										} else if ( textChildIII.getNodeName()
+												.contains( "poc" )
+												|| textChildIII.getNodeName()
+														.contains( "POC" )
+												|| textChildIII.getNodeName()
+														.contains( "Poc" ) ) {
 											ipoc = ipoc + 1;
-										} else if ( textChildIII.getNodeName().contains( "crg" )
-												|| textChildIII.getNodeName().contains( "CRG" )
-												|| textChildIII.getNodeName().contains( "Crg" ) ) {
+										} else if ( textChildIII.getNodeName()
+												.contains( "crg" )
+												|| textChildIII.getNodeName()
+														.contains( "CRG" )
+												|| textChildIII.getNodeName()
+														.contains( "Crg" ) ) {
 											icrg = icrg + 1;
-										} else if ( textChildIII.getNodeName().contains( "com" )
-												|| textChildIII.getNodeName().contains( "COM" )
-												|| textChildIII.getNodeName().contains( "Com" ) ) {
+										} else if ( textChildIII.getNodeName()
+												.contains( "com" )
+												|| textChildIII.getNodeName()
+														.contains( "COM" )
+												|| textChildIII.getNodeName()
+														.contains( "Com" ) ) {
 											icom = icom + 1;
-										} else if ( textChildIII.getNodeName().contains( "tile" )
-												|| textChildIII.getNodeName().contains( "TILE" )
-												|| textChildIII.getNodeName().contains( "Tile" ) ) {
+										} else if ( textChildIII.getNodeName()
+												.contains( "tile" )
+												|| textChildIII.getNodeName()
+														.contains( "TILE" )
+												|| textChildIII.getNodeName()
+														.contains( "Tile" ) ) {
 											itile = itile + 1;
-										} else if ( textChildIII.getNodeName().contains( "soc" )
-												|| textChildIII.getNodeName().contains( "SOC" )
-												|| textChildIII.getNodeName().contains( "Soc" ) ) {
+										} else if ( textChildIII.getNodeName()
+												.contains( "soc" )
+												|| textChildIII.getNodeName()
+														.contains( "SOC" )
+												|| textChildIII.getNodeName()
+														.contains( "Soc" ) ) {
 											isoc = isoc + 1;
-										} else if ( textChildIII.getNodeName().contains( "eoc" )
-												|| textChildIII.getNodeName().contains( "EOC" )
-												|| textChildIII.getNodeName().contains( "Eoc" ) ) {
+										} else if ( textChildIII.getNodeName()
+												.contains( "eoc" )
+												|| textChildIII.getNodeName()
+														.contains( "EOC" )
+												|| textChildIII.getNodeName()
+														.contains( "Eoc" ) ) {
 											ieoc = ieoc + 1;
-										} else if ( textChildIII.getNodeName().contains( "cod" )
-												|| textChildIII.getNodeName().contains( "COD" )
-												|| textChildIII.getNodeName().contains( "Cod" ) ) {
+										} else if ( textChildIII.getNodeName()
+												.contains( "cod" )
+												|| textChildIII.getNodeName()
+														.contains( "COD" )
+												|| textChildIII.getNodeName()
+														.contains( "Cod" ) ) {
 											icod = icod + 1;
 										} else {
 											iunknown = iunknown + 1;
-											sunknown = sunknown + " " + textChildIII.getNodeName();
+											sunknown = sunknown + " "
+													+ textChildIII
+															.getNodeName();
 										}
 									}
 									continue;
@@ -372,7 +486,8 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 
 							} else {
 								iunknown = iunknown + 1;
-								sunknown = sunknown + " " + textChild.getNodeName();
+								sunknown = sunknown + " "
+										+ textChild.getNodeName();
 							}
 
 						}
@@ -384,181 +499,239 @@ public class ValidationAvalidationAModuleImpl extends ValidationModuleImpl
 				if ( isignatureBox >= 1 ) {
 
 					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_A_JP2_SIGNATURE ) );
+							getTextResourceService().getText( locale,
+									MESSAGE_XML_MODUL_A_JP2 )
+									+ getTextResourceService().getText( locale,
+											ERROR_XML_A_JP2_SIGNATURE ) );
 				}
 				if ( ifileTypeBox >= 1 ) {
 
 					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_A_JP2_FILETYPE ) );
+							getTextResourceService().getText( locale,
+									MESSAGE_XML_MODUL_A_JP2 )
+									+ getTextResourceService().getText( locale,
+											ERROR_XML_A_JP2_FILETYPE ) );
 				}
 				if ( ijp2HeaderBox >= 1 ) {
 
 					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_A_JP2_HEADER ) );
+							getTextResourceService().getText( locale,
+									MESSAGE_XML_MODUL_A_JP2 )
+									+ getTextResourceService().getText( locale,
+											ERROR_XML_A_JP2_HEADER ) );
 				}
 				if ( iimageHeaderBox >= 1 ) {
 
 					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_A_JP2_IMAGE ) );
+							getTextResourceService().getText( locale,
+									MESSAGE_XML_MODUL_A_JP2 )
+									+ getTextResourceService().getText( locale,
+											ERROR_XML_A_JP2_IMAGE ) );
 				}
 				if ( icolourSpecificationBox >= 1 ) {
 
 					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_A_JP2_COLOUR ) );
+							getTextResourceService().getText( locale,
+									MESSAGE_XML_MODUL_A_JP2 )
+									+ getTextResourceService().getText( locale,
+											ERROR_XML_A_JP2_COLOUR ) );
 				}
 				if ( ibitsPerComponentBox >= 1 ) {
 
 					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_A_JP2_BITSPC ) );
+							getTextResourceService().getText( locale,
+									MESSAGE_XML_MODUL_A_JP2 )
+									+ getTextResourceService().getText( locale,
+											ERROR_XML_A_JP2_BITSPC ) );
 				}
 				if ( ipaletteBox >= 1 ) {
 
 					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_A_JP2_PALETTE ) );
+							getTextResourceService().getText( locale,
+									MESSAGE_XML_MODUL_A_JP2 )
+									+ getTextResourceService().getText( locale,
+											ERROR_XML_A_JP2_PALETTE ) );
 				}
 				if ( icomponentMappingBox >= 1 ) {
 
 					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_A_JP2_MAPPING ) );
+							getTextResourceService().getText( locale,
+									MESSAGE_XML_MODUL_A_JP2 )
+									+ getTextResourceService().getText( locale,
+											ERROR_XML_A_JP2_MAPPING ) );
 				}
 				if ( ichannelDefinitionBox >= 1 ) {
 
 					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_A_JP2_CHANNEL ) );
+							getTextResourceService().getText( locale,
+									MESSAGE_XML_MODUL_A_JP2 )
+									+ getTextResourceService().getText( locale,
+											ERROR_XML_A_JP2_CHANNEL ) );
 				}
 				if ( iresolutionBox >= 1 ) {
 
 					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_A_JP2_RESOLUTION ) );
+							getTextResourceService().getText( locale,
+									MESSAGE_XML_MODUL_A_JP2 )
+									+ getTextResourceService().getText( locale,
+											ERROR_XML_A_JP2_RESOLUTION ) );
 				}
 
 				if ( ixmlBox >= 1 ) {
 
 					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_B_JP2_XML ) );
+							getTextResourceService().getText( locale,
+									MESSAGE_XML_MODUL_B_JP2 )
+									+ getTextResourceService().getText( locale,
+											ERROR_XML_B_JP2_XML ) );
 				}
 				if ( iuuidInfoBox >= 1 ) {
 
 					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_B_JP2_UUIDINFO ) );
+							getTextResourceService().getText( locale,
+									MESSAGE_XML_MODUL_B_JP2 )
+									+ getTextResourceService().getText( locale,
+											ERROR_XML_B_JP2_UUIDINFO ) );
 				}
 				if ( iuuidBox >= 1 ) {
 
 					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_B_JP2_UUID ) );
+							getTextResourceService().getText( locale,
+									MESSAGE_XML_MODUL_B_JP2 )
+									+ getTextResourceService().getText( locale,
+											ERROR_XML_B_JP2_UUID ) );
 				}
 				if ( iintellectualProperty >= 1 ) {
 
 					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_B_JP2_INTELLECTUAL ) );
+							getTextResourceService().getText( locale,
+									MESSAGE_XML_MODUL_B_JP2 )
+									+ getTextResourceService().getText( locale,
+											ERROR_XML_B_JP2_INTELLECTUAL ) );
 				}
 
 				if ( icontiguousCodestreamBox >= 1 ) {
 
 					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_C_JP2_CODEBOX ) );
+							getTextResourceService().getText( locale,
+									MESSAGE_XML_MODUL_C_JP2 )
+									+ getTextResourceService().getText( locale,
+											ERROR_XML_C_JP2_CODEBOX ) );
 				}
 				if ( isiz >= 1 ) {
 
 					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_C_JP2_SIZ ) );
+							getTextResourceService().getText( locale,
+									MESSAGE_XML_MODUL_C_JP2 )
+									+ getTextResourceService().getText( locale,
+											ERROR_XML_C_JP2_SIZ ) );
 				}
 				if ( icoc >= 1 ) {
 
 					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_C_JP2_COC ) );
+							getTextResourceService().getText( locale,
+									MESSAGE_XML_MODUL_C_JP2 )
+									+ getTextResourceService().getText( locale,
+											ERROR_XML_C_JP2_COC ) );
 				}
 				if ( irgn >= 1 ) {
 
 					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_C_JP2_RGN ) );
+							getTextResourceService().getText( locale,
+									MESSAGE_XML_MODUL_C_JP2 )
+									+ getTextResourceService().getText( locale,
+											ERROR_XML_C_JP2_RGN ) );
 				}
 				if ( iqcd >= 1 ) {
 
 					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_C_JP2_QCD ) );
+							getTextResourceService().getText( locale,
+									MESSAGE_XML_MODUL_C_JP2 )
+									+ getTextResourceService().getText( locale,
+											ERROR_XML_C_JP2_QCD ) );
 				}
 				if ( iqcc >= 1 ) {
 
 					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_C_JP2_QCC ) );
+							getTextResourceService().getText( locale,
+									MESSAGE_XML_MODUL_C_JP2 )
+									+ getTextResourceService().getText( locale,
+											ERROR_XML_C_JP2_QCC ) );
 				}
 				if ( ipoc >= 1 ) {
 
 					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_C_JP2_POC ) );
+							getTextResourceService().getText( locale,
+									MESSAGE_XML_MODUL_C_JP2 )
+									+ getTextResourceService().getText( locale,
+											ERROR_XML_C_JP2_POC ) );
 				}
 				if ( icrg >= 1 ) {
 
 					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_C_JP2_CRG ) );
+							getTextResourceService().getText( locale,
+									MESSAGE_XML_MODUL_C_JP2 )
+									+ getTextResourceService().getText( locale,
+											ERROR_XML_C_JP2_CRG ) );
 				}
 				if ( icom >= 1 ) {
 
 					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_C_JP2_COM ) );
+							getTextResourceService().getText( locale,
+									MESSAGE_XML_MODUL_C_JP2 )
+									+ getTextResourceService().getText( locale,
+											ERROR_XML_C_JP2_COM ) );
 				}
 				if ( itile >= 1 ) {
 
 					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_C_JP2_TILE ) );
+							getTextResourceService().getText( locale,
+									MESSAGE_XML_MODUL_C_JP2 )
+									+ getTextResourceService().getText( locale,
+											ERROR_XML_C_JP2_TILE ) );
 				}
 				if ( isoc >= 1 ) {
 
 					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_C_JP2_SOC ) );
+							getTextResourceService().getText( locale,
+									MESSAGE_XML_MODUL_C_JP2 )
+									+ getTextResourceService().getText( locale,
+											ERROR_XML_C_JP2_SOC ) );
 				}
 				if ( ieoc >= 1 ) {
 
 					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_C_JP2_EOC ) );
+							getTextResourceService().getText( locale,
+									MESSAGE_XML_MODUL_C_JP2 )
+									+ getTextResourceService().getText( locale,
+											ERROR_XML_C_JP2_EOC ) );
 				}
 				if ( icod >= 1 ) {
 
 					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_C_JP2_COD ) );
+							getTextResourceService().getText( locale,
+									MESSAGE_XML_MODUL_C_JP2 )
+									+ getTextResourceService().getText( locale,
+											ERROR_XML_C_JP2_COD ) );
 				}
 
 				if ( iunknown >= 1 ) {
 
-					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_JP2 )
-									+ getTextResourceService().getText( locale, ERROR_XML_D_JP2_UNKNOWN, sunknown ) );
+					Logtxt.logtxt( logFile, getTextResourceService()
+							.getText( locale, MESSAGE_XML_MODUL_D_JP2 )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_D_JP2_UNKNOWN, sunknown ) );
 				}
 			}
 			doc = null;
 
 		} catch ( Exception e ) {
 
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_JP2 )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_A_JP2 )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 		}
 		return isValid;
 	}

@@ -45,8 +45,8 @@ import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationGtilesValidati
 import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationHsizeValidationModule;
 
 /**
- * Der Controller ruft die benoetigten Module zur Validierung des TIFF-Archivs in
- * der benoetigten Reihenfolge auf.
+ * Der Controller ruft die benoetigten Module zur Validierung des TIFF-Archivs
+ * in der benoetigten Reihenfolge auf.
  * 
  * Die Validierungs-Module werden mittels Spring-Dependency-Injection
  * eingebunden.

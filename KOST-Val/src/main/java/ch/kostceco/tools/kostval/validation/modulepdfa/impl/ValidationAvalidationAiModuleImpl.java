@@ -1825,7 +1825,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					 * 
 					 * erweitern.
 					 */
-					File	pathFile = new File(ClassLoader.getSystemClassLoader().getResource(".").getPath());
+					File pathFile = new File( ClassLoader.getSystemClassLoader()
+							.getResource( "." ).getPath() );
 					String locationOfJarPath = pathFile.getAbsolutePath();
 					String dirOfJarPath = locationOfJarPath;
 					String folderCallas = "callas_pdfaPilotServer_Win_9-1-326_cli-a";
@@ -2289,8 +2290,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 							Logtxt.logtxt( logFile, getTextResourceService()
 									.getText( locale, MESSAGE_XML_MODUL_A_PDFA )
 									+ getTextResourceService().getText( locale,
-											ERROR_XML_A_CALLAS_SERVICEFAILED,
-											callasReturnCode ) );
+											ERROR_XML_SERVICEFAILED,
+											"pdfaPilot", callasReturnCode ) );
 						}
 
 						// aus dem Output die Fehler holen

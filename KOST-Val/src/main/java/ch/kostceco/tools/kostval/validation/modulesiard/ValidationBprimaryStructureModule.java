@@ -26,18 +26,22 @@ import java.util.Map;
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationBprimaryStructureException;
 import ch.kostceco.tools.kostval.validation.ValidationModule;
 
-/** Validierungsschritt B (primäre Verzeichnisstruktur) Besteht eine korrekte primäre
- * Verzeichnisstruktur? valid --> [Name].siard/header und [Name].siard/content invalid -->
- * [Name].siard/[Name]/header und [Name].siard/[Name]/content invalid --> Andere Ordner oder Dateien
- * sind im Toplevel-Ordner ==> Bei den Module A, B, C und D wird die Validierung abgebrochen, sollte
- * das Resulat invalid sein!
+/**
+ * Validierungsschritt B (primï¿½re Verzeichnisstruktur) Besteht eine korrekte
+ * primï¿½re Verzeichnisstruktur? valid --> [Name].siard/header und
+ * [Name].siard/content invalid --> [Name].siard/[Name]/header und
+ * [Name].siard/[Name]/content invalid --> Andere Ordner oder Dateien sind im
+ * Toplevel-Ordner ==> Bei den Module A, B, C und D wird die Validierung
+ * abgebrochen, sollte das Resulat invalid sein!
  * 
- * @author Rc Claire Roethlisberger, KOST-CECO */
+ * @author Rc Claire Roethlisberger, KOST-CECO
+ */
 
 public interface ValidationBprimaryStructureModule extends ValidationModule
 {
 
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile ) throws ValidationBprimaryStructureException;
+	public boolean validate( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile )
+			throws ValidationBprimaryStructureException;
 
 }

@@ -137,7 +137,8 @@ public class KOSTVal implements MessageConstants
 		 * ermitteln und dann alle Pfade mit dirOfJarPath + File.separator +
 		 * erweitern.
 		 */
-		File	pathFile = new File(ClassLoader.getSystemClassLoader().getResource(".").getPath());
+		File pathFile = new File( ClassLoader.getSystemClassLoader()
+				.getResource( "." ).getPath() );
 		String locationOfJarPath = pathFile.getAbsolutePath();
 		String dirOfJarPath = locationOfJarPath;
 		if ( locationOfJarPath.endsWith( ".jar" )

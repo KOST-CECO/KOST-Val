@@ -26,17 +26,21 @@ import java.util.Map;
 import ch.kostceco.tools.kostval.exception.modulesip3.Validation3dPeriodException;
 import ch.kostceco.tools.kostval.validation.ValidationModule;
 
-/** Validierungsschritt 3d (einschaltbar) Zeitraum-Validierung. Ältestes und Jüngstes Datum in einer
- * Ordnungssystem Einheit (Dossier, Rubrik) müssen ohne Überlappung nach oben aggregierbar sein,
- * Lehrräume sind aber erlaubt. Dies bedeutet, dass die Dokumente im Zeitraum des Dossiers sein
- * müssen, diese wiederum in der Rubrik und entsprechend auch im SIP.
+/**
+ * Validierungsschritt 3d (einschaltbar) Zeitraum-Validierung. ï¿½ltestes und
+ * Jï¿½ngstes Datum in einer Ordnungssystem Einheit (Dossier, Rubrik) mï¿½ssen ohne
+ * ï¿½berlappung nach oben aggregierbar sein, Lehrrï¿½ume sind aber erlaubt. Dies
+ * bedeutet, dass die Dokumente im Zeitraum des Dossiers sein mï¿½ssen, diese
+ * wiederum in der Rubrik und entsprechend auch im SIP.
  * 
- * @author razm Daniel Ludin, Bedag AG @version 0.2.0 */
+ * @author razm Daniel Ludin, Bedag AG @version 0.2.0
+ */
 
 public interface Validation3dPeriodModule extends ValidationModule
 {
 
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile ) throws Validation3dPeriodException;
+	public boolean validate( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile )
+			throws Validation3dPeriodException;
 
 }

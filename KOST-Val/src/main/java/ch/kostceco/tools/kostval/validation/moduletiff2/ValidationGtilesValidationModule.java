@@ -26,14 +26,18 @@ import java.util.Map;
 import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationGtilesValidationException;
 import ch.kostceco.tools.kostval.validation.ValidationModule;
 
-/** Validierungsschritt G (Kacheln-Validierung) Ist die TIFF-Datei gemäss Konfigurationsdatei valid?
+/**
+ * Validierungsschritt G (Kacheln-Validierung) Ist die TIFF-Datei gemï¿½ss
+ * Konfigurationsdatei valid?
  * 
- * @author Rc Claire Roethlisberger, KOST-CECO */
+ * @author Rc Claire Roethlisberger, KOST-CECO
+ */
 
 public interface ValidationGtilesValidationModule extends ValidationModule
 {
 
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile ) throws ValidationGtilesValidationException;
+	public boolean validate( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile )
+			throws ValidationGtilesValidationException;
 
 }

@@ -26,15 +26,18 @@ import java.util.Map;
 import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationDphotointerValidationException;
 import ch.kostceco.tools.kostval.validation.ValidationModule;
 
-/** Validierungsschritt D (Farbraum-Validierung) Ist die TIFF-Datei gemäss Konfigurationsdatei
- * valid?
+/**
+ * Validierungsschritt D (Farbraum-Validierung) Ist die TIFF-Datei gemï¿½ss
+ * Konfigurationsdatei valid?
  * 
- * @author Rc Claire Roethlisberger, KOST-CECO */
+ * @author Rc Claire Roethlisberger, KOST-CECO
+ */
 
 public interface ValidationDphotointerValidationModule extends ValidationModule
 {
 
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile ) throws ValidationDphotointerValidationException;
+	public boolean validate( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile )
+			throws ValidationDphotointerValidationException;
 
 }

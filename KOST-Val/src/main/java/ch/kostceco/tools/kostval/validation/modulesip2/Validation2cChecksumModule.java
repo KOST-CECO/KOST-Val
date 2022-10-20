@@ -26,14 +26,18 @@ import java.util.Map;
 import ch.kostceco.tools.kostval.exception.modulesip2.Validation2cChecksumException;
 import ch.kostceco.tools.kostval.validation.ValidationModule;
 
-/** Validierungsschritt 2c: Stimmen die Prüfsummen der Dateien mit Prüfsumme überein? metadata.xml:
- * pruefsumme, pruefalgorithmus und name pro Datei auslesen pfad ermitteln, länge der summe
- * kontrollieren datei: Summe berechnen und vergleichen */
+/**
+ * Validierungsschritt 2c: Stimmen die Prï¿½fsummen der Dateien mit Prï¿½fsumme
+ * ï¿½berein? metadata.xml: pruefsumme, pruefalgorithmus und name pro Datei
+ * auslesen pfad ermitteln, lï¿½nge der summe kontrollieren datei: Summe berechnen
+ * und vergleichen
+ */
 
 public interface Validation2cChecksumModule extends ValidationModule
 {
 
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile ) throws Validation2cChecksumException;
+	public boolean validate( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile )
+			throws Validation2cChecksumException;
 
 }

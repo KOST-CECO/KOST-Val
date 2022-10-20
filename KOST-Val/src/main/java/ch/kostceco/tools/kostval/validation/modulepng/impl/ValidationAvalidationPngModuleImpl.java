@@ -78,7 +78,8 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl
 		 * 
 		 * erweitern.
 		 */
-		File	pathFile = new File(ClassLoader.getSystemClassLoader().getResource(".").getPath());
+		File pathFile = new File( ClassLoader.getSystemClassLoader()
+				.getResource( "." ).getPath() );
 		String locationOfJarPath = pathFile.getAbsolutePath();
 		String dirOfJarPath = locationOfJarPath;
 		if ( locationOfJarPath.endsWith( ".jar" )
@@ -118,7 +119,8 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl
 							getTextResourceService().getText( locale,
 									MESSAGE_XML_MODUL_A_PNG )
 									+ getTextResourceService().getText( locale,
-											ERROR_XML_A_PNG_PNGCHECK_FAIL ) );
+											MESSAGE_XML_SERVICEINVALID,
+											"pngcheck", "" ) );
 					// Linie mit der Fehlermeldung
 					String errorMsgOrig = resultExec;
 
@@ -467,8 +469,9 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl
 					}
 
 					// System.out.println(modul+" "+msg);
-					Logtxt.logtxt( logFile, modul + getTextResourceService()
-							.getText( locale, ERROR_XML_AF_PNG_ERROR, msg ) );
+					Logtxt.logtxt( logFile,
+							modul + getTextResourceService().getText( locale,
+									MESSAGE_XML_SERVICEMESSAGE, msg, "" ) );
 					isValid = false;
 				}
 			} else {
