@@ -41,10 +41,10 @@ import ch.kostceco.tools.kostval.validation.modulesip1.Validation1fPrimaryDataMo
 import ch.kostceco.tools.kostval.logging.Logtxt;
 
 /**
- * Diese Validierung gibt true (OK) zur�ck, wenn keine Primärdateien im
+ * Diese Validierung gibt true (OK) zurueck, wenn keine Primärdateien im
  * Verzeichnis content vorhanden sind, der Ablieferungstyp aber GEVER ist. Sind
  * keine Primärdateien im Verzeichnis content vorhanden, der Ablieferungstyp ist
- * jedoch FILE, ist dies ein Fehler und gibt false zur�ck.
+ * jedoch FILE, ist dies ein Fehler und gibt false zurueck.
  */
 public class Validation1fPrimaryDataModuleImpl extends ValidationModuleImpl
 		implements Validation1fPrimaryDataModule
@@ -52,7 +52,7 @@ public class Validation1fPrimaryDataModuleImpl extends ValidationModuleImpl
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile )
+			Map<String, String> configMap, Locale locale, File logFile, String dirOfJarPath )
 			throws Validation1fPrimaryDataException
 	{
 		boolean showOnWork = false;

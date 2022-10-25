@@ -47,7 +47,8 @@ public class ValidationEbitspersampleValidationModuleImpl extends
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile )
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath )
 			throws ValidationEbitspersampleValidationException
 	{
 		String onWork = configMap.get( "ShowProgressOnWork" );

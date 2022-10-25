@@ -27,8 +27,8 @@ import ch.kostceco.tools.kostval.exception.modulesip2.Validation2cChecksumExcept
 import ch.kostceco.tools.kostval.validation.ValidationModule;
 
 /**
- * Validierungsschritt 2c: Stimmen die Pr�fsummen der Dateien mit Pr�fsumme
- * �berein? metadata.xml: pruefsumme, pruefalgorithmus und name pro Datei
+ * Validierungsschritt 2c: Stimmen die Pruefsummen der Dateien mit Pruefsumme
+ * ueberein? metadata.xml: pruefsumme, pruefalgorithmus und name pro Datei
  * auslesen pfad ermitteln, l�nge der summe kontrollieren datei: Summe berechnen
  * und vergleichen
  */
@@ -37,7 +37,7 @@ public interface Validation2cChecksumModule extends ValidationModule
 {
 
 	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile )
-			throws Validation2cChecksumException;
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath ) throws Validation2cChecksumException;
 
 }

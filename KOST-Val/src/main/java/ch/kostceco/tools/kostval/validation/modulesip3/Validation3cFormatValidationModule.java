@@ -28,10 +28,10 @@ import ch.kostceco.tools.kostval.validation.ValidationModule;
 
 /**
  * Validierungsschritt 3c (einschaltbar) Formatvalidierung, mit JHOVE oder einer
- * �hnlichen L�sung sowie mit einem externem PDF/A-Validator (z.B. PDF/A Manager
- * von PDFTRON) aller nach Dateiformat ausgew�hlten Dateien in /content
+ * aehnlichen Loesung sowie mit einem externem PDF/A-Validator (z.B. PDF/A
+ * Manager von PDFTRON) aller nach Dateiformat ausgewaehlten Dateien in /content
  * (konfigurierbare Liste von den zu validierenden Dateiformaten).
- * Referenzierung in Log-Datei zu den allf�lligen zus�tzlich generierten
+ * Referenzierung in Log-Datei zu den allfaelligen zusaetzlich generierten
  * Logdateien der eingesetzten Programme.
  * 
  * @author razm Daniel Ludin, Bedag AG @version 0.2.0
@@ -41,7 +41,7 @@ public interface Validation3cFormatValidationModule extends ValidationModule
 {
 
 	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile )
-			throws Validation3cFormatValidationException;
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath ) throws Validation3cFormatValidationException;
 
 }

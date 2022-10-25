@@ -27,9 +27,9 @@ import ch.kostceco.tools.kostval.exception.modulesiard.ValidationGtableException
 import ch.kostceco.tools.kostval.validation.ValidationModule;
 
 /**
- * Validierungsschritt G (Tabellen-Validierung) pr�ft, ob Spaltennamen innerhalb
- * der Tabelle(n) resp. Tabellennamen innerhalb der Schema(s) und Schemanamen
- * einmalig sind.
+ * Validierungsschritt G (Tabellen-Validierung) prueft, ob Spaltennamen
+ * innerhalb der Tabelle(n) resp. Tabellennamen innerhalb der Schema(s) und
+ * Schemanamen einmalig sind.
  * 
  * @author Sp Peter Schneider, Staatsarchiv Aargau
  */
@@ -38,7 +38,7 @@ public interface ValidationGtableModule extends ValidationModule
 {
 
 	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile )
-			throws ValidationGtableException;
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath ) throws ValidationGtableException;
 
 }

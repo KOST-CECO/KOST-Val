@@ -57,8 +57,8 @@ public class ValidationAvalidationXmlModuleImpl extends ValidationModuleImpl
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile )
-			throws ValidationAxmlvalidationException
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath ) throws ValidationAxmlvalidationException
 	{
 		String onWork = configMap.get( "ShowProgressOnWork" );
 		if ( onWork.equals( "nomin" ) ) {
@@ -74,26 +74,6 @@ public class ValidationAvalidationXmlModuleImpl extends ValidationModuleImpl
 
 		// TODO: Erledigt: check xmllint
 		// - Initialisierung xmllint -> existiert xmllint?
-
-		/*
-		 * dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist ein
-		 * generelles TODO in allen Modulen. Zuerst immer dirOfJarPath ermitteln
-		 * und dann alle Pfade mit
-		 * 
-		 * dirOfJarPath + File.separator +
-		 * 
-		 * erweitern.
-		 */
-		File pathFile = new File( ClassLoader.getSystemClassLoader()
-				.getResource( "." ).getPath() );
-		String locationOfJarPath = pathFile.getAbsolutePath();
-		String dirOfJarPath = locationOfJarPath;
-		if ( locationOfJarPath.endsWith( ".jar" )
-				|| locationOfJarPath.endsWith( ".exe" )
-				|| locationOfJarPath.endsWith( "." ) ) {
-			File file = new File( locationOfJarPath );
-			dirOfJarPath = file.getParent();
-		}
 
 		// Pfad zum Programm existiert die Dateien?
 		String checkTool = Xmllint.checkXmllint( dirOfJarPath );

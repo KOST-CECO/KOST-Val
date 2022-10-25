@@ -231,7 +231,8 @@ public class Controllersip implements MessageConstants
 	}
 
 	public boolean executeMandatory( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile )
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath )
 	{
 		boolean valid = true;
 
@@ -241,7 +242,8 @@ public class Controllersip implements MessageConstants
 		// Validation Step Ab
 		try {
 			if ( this.getValidation1bFolderStructureModule().validate( valDatei,
-					directoryOfLogfile, configMap, locale, logFile ) ) {
+					directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath ) ) {
 				this.getValidation1bFolderStructureModule().getMessageService()
 						.print();
 			} else {
@@ -272,7 +274,8 @@ public class Controllersip implements MessageConstants
 		// Validation Step Ac
 		try {
 			if ( this.getValidation1cNamingModule().validate( valDatei,
-					directoryOfLogfile, configMap, locale, logFile ) ) {
+					directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath ) ) {
 				this.getValidation1cNamingModule().getMessageService().print();
 			} else {
 				this.getValidation1cNamingModule().getMessageService().print();
@@ -300,7 +303,8 @@ public class Controllersip implements MessageConstants
 		// Validation Step Ad
 		try {
 			if ( this.getValidation1dMetadataModule().validate( valDatei,
-					directoryOfLogfile, configMap, locale, logFile ) ) {
+					directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath ) ) {
 				this.getValidation1dMetadataModule().getMessageService()
 						.print();
 			} else {
@@ -332,13 +336,15 @@ public class Controllersip implements MessageConstants
 	}
 
 	public boolean executeOptional( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile )
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath )
 	{
 		boolean valid = true;
 		// Validation Step Ae
 		try {
 			if ( this.getValidation1eSipTypeModule().validate( valDatei,
-					directoryOfLogfile, configMap, locale, logFile ) ) {
+					directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath ) ) {
 				this.getValidation1eSipTypeModule().getMessageService().print();
 			} else {
 				this.getValidation1eSipTypeModule().getMessageService().print();
@@ -364,7 +370,8 @@ public class Controllersip implements MessageConstants
 		// Validation Step Af
 		try {
 			if ( this.getValidation1fPrimaryDataModule().validate( valDatei,
-					directoryOfLogfile, configMap, locale, logFile ) ) {
+					directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath ) ) {
 				this.getValidation1fPrimaryDataModule().getMessageService()
 						.print();
 			} else {
@@ -392,8 +399,8 @@ public class Controllersip implements MessageConstants
 		// Validation Step Ag
 		try {
 			if ( this.getValidation1gPackageSizeFilesModule().validate(
-					valDatei, directoryOfLogfile, configMap, locale,
-					logFile ) ) {
+					valDatei, directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath ) ) {
 				this.getValidation1gPackageSizeFilesModule().getMessageService()
 						.print();
 			} else {
@@ -422,7 +429,8 @@ public class Controllersip implements MessageConstants
 		// Validation Step Ba
 		try {
 			if ( this.getValidation2aFileIntegrityModule().validate( valDatei,
-					directoryOfLogfile, configMap, locale, logFile ) ) {
+					directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath ) ) {
 				this.getValidation2aFileIntegrityModule().getMessageService()
 						.print();
 			} else {
@@ -453,7 +461,8 @@ public class Controllersip implements MessageConstants
 		// Validation Step Bc
 		try {
 			if ( this.getValidation2cChecksumModule().validate( valDatei,
-					directoryOfLogfile, configMap, locale, logFile ) ) {
+					directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath ) ) {
 				this.getValidation2cChecksumModule().getMessageService()
 						.print();
 			} else {
@@ -481,8 +490,8 @@ public class Controllersip implements MessageConstants
 		// Validation Step Bd
 		try {
 			if ( this.getValidation2dGeverFileIntegrityModule().validate(
-					valDatei, directoryOfLogfile, configMap, locale,
-					logFile ) ) {
+					valDatei, directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath ) ) {
 				this.getValidation2dGeverFileIntegrityModule()
 						.getMessageService().print();
 			} else {
@@ -511,8 +520,8 @@ public class Controllersip implements MessageConstants
 		// Validation Step Ca & Cb
 		try {
 			if ( this.getValidation3aFormatRecognitionModule().validate(
-					valDatei, directoryOfLogfile, configMap, locale,
-					logFile ) ) {
+					valDatei, directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath ) ) {
 				this.getValidation3aFormatRecognitionModule()
 						.getMessageService().print();
 			} else {
@@ -541,8 +550,8 @@ public class Controllersip implements MessageConstants
 		// Validation Step 3c
 		try {
 			if ( this.getValidation3cFormatValidationModule().validate(
-					valDatei, directoryOfLogfile, configMap, locale,
-					logFile ) ) {
+					valDatei, directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath ) ) {
 				this.getValidation3cFormatValidationModule().getMessageService()
 						.print();
 			} else {
@@ -571,7 +580,8 @@ public class Controllersip implements MessageConstants
 		// Validation Step 3d
 		try {
 			if ( this.getValidation3dPeriodModule().validate( valDatei,
-					directoryOfLogfile, configMap, locale, logFile ) ) {
+					directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath ) ) {
 				this.getValidation3dPeriodModule().getMessageService().print();
 			} else {
 				this.getValidation3dPeriodModule().getMessageService().print();

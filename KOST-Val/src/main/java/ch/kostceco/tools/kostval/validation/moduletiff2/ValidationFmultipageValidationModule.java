@@ -27,7 +27,7 @@ import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationFmultipageValid
 import ch.kostceco.tools.kostval.validation.ValidationModule;
 
 /**
- * Validierungsschritt F (Multipage-Validierung) Ist die TIFF-Datei gem�ss
+ * Validierungsschritt F (Multipage-Validierung) Ist die TIFF-Datei gemaess
  * Konfigurationsdatei valid?
  * 
  * @author Rc Claire Roethlisberger, KOST-CECO
@@ -37,7 +37,8 @@ public interface ValidationFmultipageValidationModule extends ValidationModule
 {
 
 	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile )
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath )
 			throws ValidationFmultipageValidationException;
 
 }

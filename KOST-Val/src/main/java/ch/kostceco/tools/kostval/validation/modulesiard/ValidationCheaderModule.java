@@ -40,7 +40,7 @@ public interface ValidationCheaderModule extends ValidationModule
 {
 
 	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile )
-			throws ValidationCheaderException;
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath ) throws ValidationCheaderException;
 
 }

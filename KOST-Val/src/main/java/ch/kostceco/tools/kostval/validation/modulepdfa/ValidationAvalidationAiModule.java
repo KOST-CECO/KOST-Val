@@ -31,13 +31,13 @@ import ch.kostceco.tools.kostval.validation.ValidationModule;
  * PDFTron und oder PDF-Tools.
  * 
  * Folgendes ist Konfigurierbar: Hauptvalidator sowie ob eine duale Validierung
- * durchgef�hrt werden soll oder nicht. Bei der dualen Validierung m�ssen beide
- * Validatoren die Datei als invalide betrachten, damit diese als invalid gilt.
- * Bei Uneinigkeit gilt diese als valid.
+ * durchgefuehrt werden soll oder nicht. Bei der dualen Validierung muessen
+ * beide Validatoren die Datei als invalide betrachten, damit diese als invalid
+ * gilt. Bei Uneinigkeit gilt diese als valid.
  * 
  * Es wird falls vorhanden die Vollversion von PDF-Tools verwendet. KOST-Val
- * muss nicht angepasst werden und verwendet automatisch den internen Schl�ssel,
- * sollte keine Vollversion existieren.
+ * muss nicht angepasst werden und verwendet automatisch den internen
+ * Schluessel, sollte keine Vollversion existieren.
  * 
  * Zuerste erfolgt eine Erkennung, wenn diese io kommt die Validierung mit
  * PDFTron und oder PDF-Tools. Die Fehler werden den Einzelnen Gruppen (Modulen)
@@ -50,7 +50,7 @@ public interface ValidationAvalidationAiModule extends ValidationModule
 {
 
 	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile )
-			throws ValidationApdfvalidationException;
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath ) throws ValidationApdfvalidationException;
 
 }

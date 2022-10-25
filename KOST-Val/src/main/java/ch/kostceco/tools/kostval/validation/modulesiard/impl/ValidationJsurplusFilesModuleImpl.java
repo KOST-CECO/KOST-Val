@@ -72,8 +72,8 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile )
-			throws ValidationJsurplusFilesException
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath ) throws ValidationJsurplusFilesException
 	{
 		filesInSiardUnsorted.clear();
 		filesInSiard.clear();
@@ -142,26 +142,6 @@ public class ValidationJsurplusFilesModuleImpl extends ValidationModuleImpl
 			}
 
 			filesInSiard = new TreeMap<String, String>( filesInSiardUnsorted );
-
-			/*
-			 * dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist
-			 * ein generelles TODO in allen Modulen. Zuerst immer dirOfJarPath
-			 * ermitteln und dann alle Pfade mit
-			 * 
-			 * dirOfJarPath + File.separator +
-			 * 
-			 * erweitern.
-			 */
-			File pathFile = new File( ClassLoader.getSystemClassLoader()
-					.getResource( "." ).getPath() );
-			String locationOfJarPath = pathFile.getAbsolutePath();
-			String dirOfJarPath = locationOfJarPath;
-			if ( locationOfJarPath.endsWith( ".jar" )
-					|| locationOfJarPath.endsWith( ".exe" )
-					|| locationOfJarPath.endsWith( "." ) ) {
-				File file = new File( locationOfJarPath );
-				dirOfJarPath = file.getParent();
-			}
 
 			// Pfad zum Programm existiert die Dateien?
 			String checkTool = Sed.checkSed( dirOfJarPath );

@@ -78,8 +78,8 @@ public class ValidationFrowModuleImpl extends ValidationModuleImpl
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile )
-			throws ValidationFrowException
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath ) throws ValidationFrowException
 	{
 		boolean showOnWork = false;
 		int onWork = 410;

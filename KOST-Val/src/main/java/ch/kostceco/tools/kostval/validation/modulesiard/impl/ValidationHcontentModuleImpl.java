@@ -70,8 +70,8 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile )
-			throws ValidationHcontentException
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath ) throws ValidationHcontentException
 	{
 		boolean showOnWork = false;
 		int onWork = 410;
@@ -171,34 +171,6 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 									// && valid;
 
 									try {
-										/*
-										 * dirOfJarPath damit auch absolute
-										 * Pfade kein Problem sind Dies ist ein
-										 * generelles TODO in allen Modulen.
-										 * Zuerst immer dirOfJarPath ermitteln
-										 * und dann alle Pfade mit
-										 * 
-										 * dirOfJarPath + File.separator +
-										 * 
-										 * erweitern.
-										 */
-										File pathFile = new File( ClassLoader
-												.getSystemClassLoader()
-												.getResource( "." ).getPath() );
-										String locationOfJarPath = pathFile
-												.getAbsolutePath();
-										String dirOfJarPath = locationOfJarPath;
-										if ( locationOfJarPath
-												.endsWith( ".jar" )
-												|| locationOfJarPath
-														.endsWith( ".exe" )
-												|| locationOfJarPath
-														.endsWith( "." ) ) {
-											File file = new File(
-													locationOfJarPath );
-											dirOfJarPath = file.getParent();
-										}
-
 										// Pfad zum Programm existiert die
 										// Dateien?
 										String checkTool = Xmllint

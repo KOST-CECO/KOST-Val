@@ -158,19 +158,12 @@ public class ConfigController
 		try {
 			/*
 			 * dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist
-			 * ein generelles TODO in allen Modulen. Zuerst immer dirOfJarPath
-			 * ermitteln und dann alle Pfade mit dirOfJarPath + File.separator +
-			 * erweitern.
+			 * eine generelle Aufgabe in allen Modulen. Zuerst immer
+			 * dirOfJarPath ermitteln und dann alle Pfade mit dirOfJarPath +
+			 * File.separator + erweitern.
 			 */
 			String path = new File( "" ).getAbsolutePath();
-			String locationOfJarPath = path;
-			dirOfJarPath = locationOfJarPath;
-			if ( locationOfJarPath.endsWith( ".jar" )
-					|| locationOfJarPath.endsWith( ".exe" )
-					|| locationOfJarPath.endsWith( "." ) ) {
-				File file = new File( locationOfJarPath );
-				dirOfJarPath = file.getParent();
-			}
+			dirOfJarPath = path;
 			setLibraryPath( dirOfJarPath );
 		} catch ( Exception e1 ) {
 			e1.printStackTrace();

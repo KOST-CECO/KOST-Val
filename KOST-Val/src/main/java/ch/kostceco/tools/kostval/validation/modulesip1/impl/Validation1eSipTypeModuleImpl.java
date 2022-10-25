@@ -47,8 +47,8 @@ public class Validation1eSipTypeModuleImpl extends ValidationModuleImpl
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile )
-			throws Validation1eSipTypeException
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath ) throws Validation1eSipTypeException
 	{
 		// Informationen zur Darstellung "onWork" holen
 		String onWork = configMap.get( "ShowProgressOnWork" );

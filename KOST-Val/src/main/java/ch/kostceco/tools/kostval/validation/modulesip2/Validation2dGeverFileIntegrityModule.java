@@ -27,9 +27,9 @@ import ch.kostceco.tools.kostval.exception.modulesip2.Validation2dGeverFileInteg
 import ch.kostceco.tools.kostval.validation.ValidationModule;
 
 /**
- * Validierungsschritt 2d Bei GEVER SIP pr�fen, ob alle in (metadata.xml)
+ * Validierungsschritt 2d Bei GEVER SIP pruefen, ob alle in (metadata.xml)
  * /paket/inhaltsverzeichnis/content referenzierten Dateien auch in
- * (metadata.xml)/paket/ablieferung/ordnungsystem verzeichnet sind. Allf�llige
+ * (metadata.xml)/paket/ablieferung/ordnungsystem verzeichnet sind. Allfaellige
  * Inkonsistenzen auflisten. ( //dokument[@id] => //datei[@id] ).
  */
 
@@ -37,7 +37,8 @@ public interface Validation2dGeverFileIntegrityModule extends ValidationModule
 {
 
 	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile )
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath )
 			throws Validation2dGeverFileIntegrityException;
 
 }

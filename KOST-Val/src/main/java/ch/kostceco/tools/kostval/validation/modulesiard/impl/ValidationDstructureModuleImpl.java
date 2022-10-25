@@ -56,8 +56,8 @@ public class ValidationDstructureModuleImpl extends ValidationModuleImpl
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile )
-			throws ValidationDstructureException
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath ) throws ValidationDstructureException
 	{
 		boolean showOnWork = false;
 		int onWork = 410;

@@ -101,8 +101,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile )
-			throws ValidationApdfvalidationException
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath ) throws ValidationApdfvalidationException
 	{
 		String onWork = configMap.get( "ShowProgressOnWork" );
 		if ( onWork.equals( "nomin" ) ) {
@@ -1816,19 +1816,6 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 				try {
 					// Initialisierung callas -> existiert pdfaPilot in den
 					// resources?
-					/*
-					 * dirOfJarPath damit auch absolute Pfade kein Problem sind
-					 * Dies ist ein generelles to do in allen Modulen. Zuerst
-					 * immer dirOfJarPath ermitteln und dann alle Pfade mit
-					 * 
-					 * dirOfJarPath + File.separator +
-					 * 
-					 * erweitern.
-					 */
-					File pathFile = new File( ClassLoader.getSystemClassLoader()
-							.getResource( "." ).getPath() );
-					String locationOfJarPath = pathFile.getAbsolutePath();
-					String dirOfJarPath = locationOfJarPath;
 					String folderCallas = "callas_pdfaPilotServer_Win_9-1-326_cli-a";
 					/*
 					 * Update von Callas: callas_pdfaPilotServer_Win_...-Version
@@ -1836,12 +1823,6 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					 * alle Dateine vom Ordner cli ersetzen aber lizenz.txt und
 					 * N-Entry.kfpx muessen die alten bleiben
 					 */
-					if ( locationOfJarPath.endsWith( ".jar" )
-							|| locationOfJarPath.endsWith( ".exe" )
-							|| locationOfJarPath.endsWith( "." ) ) {
-						File file = new File( locationOfJarPath );
-						dirOfJarPath = file.getParent();
-					}
 
 					File fpdfapilotExe = new File( dirOfJarPath + File.separator
 							+ "resources" + File.separator + folderCallas

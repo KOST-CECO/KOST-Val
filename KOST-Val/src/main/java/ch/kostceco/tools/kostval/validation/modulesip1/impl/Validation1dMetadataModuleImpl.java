@@ -54,8 +54,8 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 	final int				BUFFER	= 2048;
 
 	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile )
-			throws Validation1dMetadataException
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath ) throws Validation1dMetadataException
 	{
 		String pathToWorkDir = configMap.get( "PathToWorkDir" );
 		File pathToWorkDirFile = new File(
@@ -179,26 +179,6 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 			File xsdToValidateEch160 = new File(
 					pathToWorkDirFile.getAbsolutePath() + File.separator + "xsd"
 							+ File.separator + "arelda.xsd" );
-
-			/*
-			 * dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist
-			 * ein generelles TODO in allen Modulen. Zuerst immer dirOfJarPath
-			 * ermitteln und dann alle Pfade mit
-			 * 
-			 * dirOfJarPath + File.separator +
-			 * 
-			 * erweitern.
-			 */
-			File pathFile = new File( ClassLoader.getSystemClassLoader()
-					.getResource( "." ).getPath() );
-			String locationOfJarPath = pathFile.getAbsolutePath();
-			String dirOfJarPath = locationOfJarPath;
-			if ( locationOfJarPath.endsWith( ".jar" )
-					|| locationOfJarPath.endsWith( ".exe" )
-					|| locationOfJarPath.endsWith( "." ) ) {
-				File file = new File( locationOfJarPath );
-				dirOfJarPath = file.getParent();
-			}
 
 			File xsd10 = new File( dirOfJarPath + File.separator + "resources"
 					+ File.separator + "header_1d" + File.separator

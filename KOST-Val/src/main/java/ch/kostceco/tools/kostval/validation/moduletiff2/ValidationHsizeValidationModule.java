@@ -27,7 +27,7 @@ import ch.kostceco.tools.kostval.exception.moduletiff2.ValidationHsizeValidation
 import ch.kostceco.tools.kostval.validation.ValidationModule;
 
 /**
- * Validierungsschritt H (Groessen-Validierung) Ist die TIFF-Datei gem�ss
+ * Validierungsschritt H (Groessen-Validierung) Ist die TIFF-Datei gemaess
  * Konfigurationsdatei valid?
  * 
  * @author Rc Claire Roethlisberger, KOST-CECO
@@ -37,7 +37,7 @@ public interface ValidationHsizeValidationModule extends ValidationModule
 {
 
 	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile )
-			throws ValidationHsizeValidationException;
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath ) throws ValidationHsizeValidationException;
 
 }

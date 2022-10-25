@@ -59,8 +59,8 @@ public class ValidationGtableModuleImpl extends ValidationModuleImpl
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile )
-			throws ValidationGtableException
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath ) throws ValidationGtableException
 	{
 		boolean showOnWork = false;
 		int onWork = 410;

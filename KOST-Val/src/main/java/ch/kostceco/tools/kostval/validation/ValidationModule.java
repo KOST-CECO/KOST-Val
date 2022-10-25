@@ -38,8 +38,8 @@ public interface ValidationModule extends Service
 {
 
 	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile )
-			throws KOSTValException;
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath ) throws KOSTValException;
 
 	public MessageService getMessageService();
 }

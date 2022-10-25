@@ -48,8 +48,8 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile )
-			throws ValidationApngvalidationException
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath ) throws ValidationApngvalidationException
 	{
 		String onWork = configMap.get( "ShowProgressOnWork" );
 		if ( onWork.equals( "nomin" ) ) {
@@ -68,26 +68,6 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl
 		// TODO: Erledigt: PNG Validierung
 
 		// - Initialisierung pngcheck -> existiert pngcheck?
-
-		/*
-		 * dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist ein
-		 * generelles TODO in allen Modulen. Zuerst immer dirOfJarPath ermitteln
-		 * und dann alle Pfade mit
-		 * 
-		 * dirOfJarPath + File.separator +
-		 * 
-		 * erweitern.
-		 */
-		File pathFile = new File( ClassLoader.getSystemClassLoader()
-				.getResource( "." ).getPath() );
-		String locationOfJarPath = pathFile.getAbsolutePath();
-		String dirOfJarPath = locationOfJarPath;
-		if ( locationOfJarPath.endsWith( ".jar" )
-				|| locationOfJarPath.endsWith( ".exe" )
-				|| locationOfJarPath.endsWith( "." ) ) {
-			File file = new File( locationOfJarPath );
-			dirOfJarPath = file.getParent();
-		}
 
 		// Pfad zum Programm existiert die Dateien?
 		String checkTool = Pngcheck.checkPngcheck( dirOfJarPath );

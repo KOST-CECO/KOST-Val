@@ -69,8 +69,8 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl
 	@SuppressWarnings("resource")
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile )
-			throws ValidationCheaderException
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath ) throws ValidationCheaderException
 	{
 		boolean showOnWork = false;
 		int onWork = 410;
@@ -407,16 +407,6 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl
 					concatenatedOutputs = null;
 
 					// Variante Xmllint
-					File pathFile = new File( ClassLoader.getSystemClassLoader()
-							.getResource( "." ).getPath() );
-					String locationOfJarPath = pathFile.getAbsolutePath();
-					String dirOfJarPath = locationOfJarPath;
-					if ( locationOfJarPath.endsWith( ".jar" )
-							|| locationOfJarPath.endsWith( ".exe" )
-							|| locationOfJarPath.endsWith( "." ) ) {
-						File file = new File( locationOfJarPath );
-						dirOfJarPath = file.getParent();
-					}
 					File workDir = new File( pathToWorkDir );
 					if ( !workDir.exists() ) {
 						workDir.mkdir();

@@ -137,16 +137,12 @@ public class KOSTVal implements MessageConstants
 		 * ermitteln und dann alle Pfade mit dirOfJarPath + File.separator +
 		 * erweitern.
 		 */
-		File pathFile = new File( ClassLoader.getSystemClassLoader()
+		File pathJarFile20 = new File( ClassLoader.getSystemClassLoader()
 				.getResource( "." ).getPath() );
-		String locationOfJarPath = pathFile.getAbsolutePath();
-		String dirOfJarPath = locationOfJarPath;
-		if ( locationOfJarPath.endsWith( ".jar" )
-				|| locationOfJarPath.endsWith( ".exe" )
-				|| locationOfJarPath.endsWith( "." ) ) {
-			File file = new File( locationOfJarPath );
-			dirOfJarPath = file.getParent();
-		}
+		/* wennn im Pfad ein Leerschlag ist, muss er noch normalisiert werden */
+		String dirOfJarPath = pathJarFile20.getAbsolutePath();
+		dirOfJarPath = dirOfJarPath.replaceAll( "%20", " " );
+		pathJarFile20 = new File( dirOfJarPath );
 
 		Locale locale = Locale.getDefault();
 

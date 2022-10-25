@@ -27,9 +27,9 @@ import ch.kostceco.tools.kostval.exception.modulesiard.ValidationJsurplusFilesEx
 import ch.kostceco.tools.kostval.validation.ValidationModule;
 
 /**
- * Validierungsschritt J (Zus�tzliche Prim�rdateien) Enth�lt der content-Ordner
- * Dateien oder Ordner die nicht in metadata.xml beschrieben sind ? invalid -->
- * Zus�tzliche Ordner oder Dateien im content-Ordner
+ * Validierungsschritt J (Zusaetzliche Primaerdateien) Enthaelt der
+ * content-Ordner Dateien oder Ordner die nicht in metadata.xml beschrieben sind
+ * ? invalid --> Zusaetzliche Ordner oder Dateien im content-Ordner
  * 
  * @author Ec Christian Eugster
  */
@@ -38,7 +38,7 @@ public interface ValidationJsurplusFilesModule extends ValidationModule
 {
 
 	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile )
-			throws ValidationJsurplusFilesException;
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath ) throws ValidationJsurplusFilesException;
 
 }

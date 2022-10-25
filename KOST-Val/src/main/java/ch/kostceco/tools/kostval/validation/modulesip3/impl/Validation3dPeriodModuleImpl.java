@@ -58,8 +58,8 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile )
-			throws Validation3dPeriodException
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath ) throws Validation3dPeriodException
 	{
 		boolean showOnWork = false;
 		int onWork = 410;

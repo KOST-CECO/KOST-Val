@@ -27,8 +27,8 @@ import ch.kostceco.tools.kostval.exception.modulesiard.ValidationBprimaryStructu
 import ch.kostceco.tools.kostval.validation.ValidationModule;
 
 /**
- * Validierungsschritt B (prim�re Verzeichnisstruktur) Besteht eine korrekte
- * prim�re Verzeichnisstruktur? valid --> [Name].siard/header und
+ * Validierungsschritt B (primaere Verzeichnisstruktur) Besteht eine korrekte
+ * primaere Verzeichnisstruktur? valid --> [Name].siard/header und
  * [Name].siard/content invalid --> [Name].siard/[Name]/header und
  * [Name].siard/[Name]/content invalid --> Andere Ordner oder Dateien sind im
  * Toplevel-Ordner ==> Bei den Module A, B, C und D wird die Validierung
@@ -41,7 +41,7 @@ public interface ValidationBprimaryStructureModule extends ValidationModule
 {
 
 	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile )
-			throws ValidationBprimaryStructureException;
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath ) throws ValidationBprimaryStructureException;
 
 }

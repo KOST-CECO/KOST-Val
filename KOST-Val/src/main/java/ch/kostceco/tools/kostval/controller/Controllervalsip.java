@@ -482,7 +482,8 @@ public class Controllervalsip implements MessageConstants
 					.getBean( "controllersip" );
 			boolean okMandatory = false;
 			okMandatory = controller.executeMandatory( valDatei,
-					directoryOfLogfile, configMap, locale, logFile );
+					directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath );
 			boolean ok = false;
 
 			/*
@@ -495,7 +496,7 @@ public class Controllervalsip implements MessageConstants
 			 */
 			if ( okMandatory ) {
 				ok = controller.executeOptional( valDatei, directoryOfLogfile,
-						configMap, locale, logFile );
+						configMap, locale, logFile, dirOfJarPath );
 			}
 			// Formatvalidierung validFormat
 			ok = (ok && okMandatory && validFormat);

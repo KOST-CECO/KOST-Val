@@ -27,9 +27,9 @@ import ch.kostceco.tools.kostval.exception.modulesiard.ValidationKchecksumExcept
 import ch.kostceco.tools.kostval.validation.ValidationModule;
 
 /**
- * Validierungsschritt K (Pr�fsummen-Validierung) Stimmt die Pr�fsumme in
- * (messageDigest) mit jener �ber den Ordner content �berein? valid -->
- * Pr�falorithmus = MD5 oder Pr�falorithmus = SHA-1
+ * Validierungsschritt K (Pruefsummen-Validierung) Stimmt die Pruefsumme in
+ * (messageDigest) mit jener ueber den Ordner content ueberein? valid -->
+ * Pruefalorithmus = MD5 oder Pruefalorithmus = SHA-1
  * 
  * @author ???
  */
@@ -38,7 +38,7 @@ public interface ValidationKchecksumModule extends ValidationModule
 {
 
 	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile )
-			throws ValidationKchecksumException;
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath ) throws ValidationKchecksumException;
 
 }

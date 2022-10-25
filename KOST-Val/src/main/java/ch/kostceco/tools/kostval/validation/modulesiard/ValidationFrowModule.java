@@ -32,9 +32,9 @@ import ch.kostceco.tools.kostval.validation.bean.ValidationContext;
 
 /**
  * Validierungsschritt F (Zeilen-Validierung) Wurden die Angaben aus
- * metadata.xml korrekt in die tableZ.xsd-Dateien �bertragen? valid --> gleiche
+ * metadata.xml korrekt in die tableZ.xsd-Dateien uebertragen? valid --> gleiche
  * Zeilenzahl (rows in metadata.xml = max = minOccurs in tableZ.xsd Ansonsten:
- * Enth�lt tableZ.xml die gleiche Anzahl Zeilen wie in metadata.xml definiert?
+ * Enthaelt tableZ.xml die gleiche Anzahl Zeilen wie in metadata.xml definiert?
  * valid --> gleiche Zeilenzahl (rows in metadata.xml = Anzahl row in tableZ.xml
  * 
  * @author Do Olivier Debenath
@@ -44,8 +44,8 @@ public interface ValidationFrowModule extends ValidationModule
 {
 
 	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile )
-			throws ValidationFrowException;
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath ) throws ValidationFrowException;
 
 	public boolean prepareValidation( ValidationContext validationContext )
 			throws IOException, JDOMException, Exception;

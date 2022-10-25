@@ -27,10 +27,10 @@ import ch.kostceco.tools.kostval.exception.modulesip3.Validation3dPeriodExceptio
 import ch.kostceco.tools.kostval.validation.ValidationModule;
 
 /**
- * Validierungsschritt 3d (einschaltbar) Zeitraum-Validierung. �ltestes und
+ * Validierungsschritt 3d (einschaltbar) Zeitraum-Validierung. aeltestes und
  * J�ngstes Datum in einer Ordnungssystem Einheit (Dossier, Rubrik) m�ssen ohne
- * �berlappung nach oben aggregierbar sein, Lehrr�ume sind aber erlaubt. Dies
- * bedeutet, dass die Dokumente im Zeitraum des Dossiers sein m�ssen, diese
+ * ueberlappung nach oben aggregierbar sein, Lehrraeume sind aber erlaubt. Dies
+ * bedeutet, dass die Dokumente im Zeitraum des Dossiers sein muessen, diese
  * wiederum in der Rubrik und entsprechend auch im SIP.
  * 
  * @author razm Daniel Ludin, Bedag AG @version 0.2.0
@@ -40,7 +40,7 @@ public interface Validation3dPeriodModule extends ValidationModule
 {
 
 	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile )
-			throws Validation3dPeriodException;
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath ) throws Validation3dPeriodException;
 
 }

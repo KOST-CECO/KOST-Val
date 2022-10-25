@@ -48,7 +48,8 @@ public class ValidationCcompressionValidationModuleImpl extends
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile )
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath )
 			throws ValidationCcompressionValidationException
 	{
 		String onWork = configMap.get( "ShowProgressOnWork" );
@@ -121,26 +122,6 @@ public class ValidationCcompressionValidationModuleImpl extends
 		 * TODO: Exiftool starten. Anschliessend auswerten! Auf jhove wird
 		 * verzichtet
 		 */
-
-		/*
-		 * dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist ein
-		 * generelles TODO in allen Modulen. Zuerst immer dirOfJarPath ermitteln
-		 * und dann alle Pfade mit
-		 * 
-		 * dirOfJarPath + File.separator +
-		 * 
-		 * erweitern.
-		 */
-		File pathFile = new File( ClassLoader.getSystemClassLoader()
-				.getResource( "." ).getPath() );
-		String locationOfJarPath = pathFile.getAbsolutePath();
-		String dirOfJarPath = locationOfJarPath;
-		if ( locationOfJarPath.endsWith( ".jar" )
-				|| locationOfJarPath.endsWith( ".exe" )
-				|| locationOfJarPath.endsWith( "." ) ) {
-			File file = new File( locationOfJarPath );
-			dirOfJarPath = file.getParent();
-		}
 
 		// Pfad zum Programm existiert die Dateien?
 		String checkTool = Exiftool.checkExiftool( dirOfJarPath );
