@@ -101,7 +101,6 @@ public class Controllervalfofile implements MessageConstants
 				String valDateiName = valDatei.getName();
 				String valDateiExt = "." + FilenameUtils
 						.getExtension( valDateiName ).toLowerCase();
-				String extUpperCase = valDateiExt.toUpperCase();
 				// Formaterkennung der Datei
 				String recFormat = "new";
 				recFormat = Recognition.formatRec( valDatei );
@@ -126,17 +125,17 @@ public class Controllervalfofile implements MessageConstants
 
 					String formatUK = recFormat.replace( "UNKNOWN_", "" );
 
-					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale,
-									MESSAGE_XML_VALERGEBNIS )
-									+ getTextResourceService().getText( locale,
-											MESSAGE_XML_AZTYPE, formatUK )
-									+ getTextResourceService().getText( locale,
-											MESSAGE_XML_VALFILE,
-											valDatei.getAbsolutePath() ) );
 					if ( otherformats.contains( formatUK ) ) {
 						// nur akzeptiert -> KEINE Validierung,
 						// nur Erkennung
+						Logtxt.logtxt( logFile,
+								getTextResourceService().getText( locale,
+										MESSAGE_XML_VALERGEBNIS )
+										+ getTextResourceService().getText( locale,
+												MESSAGE_XML_AZTYPE, formatUK )
+										+ getTextResourceService().getText( locale,
+												MESSAGE_XML_VALFILE,
+												valDatei.getAbsolutePath() ) );
 						Logtxt.logtxt( logFile, getTextResourceService()
 								.getText( locale, MESSAGE_XML_VALERGEBNIS_AZ )
 								+ getTextResourceService().getText( locale,
@@ -145,11 +144,19 @@ public class Controllervalfofile implements MessageConstants
 						return "countValid"; // countValid = countValid + 1;
 					} else {
 						// NICHT akzeptiert -> invalid
+						Logtxt.logtxt( logFile,
+								getTextResourceService().getText( locale,
+										MESSAGE_XML_VALERGEBNIS )
+										+ getTextResourceService().getText( locale,
+												MESSAGE_XML_AZTYPE, "???" )
+										+ getTextResourceService().getText( locale,
+												MESSAGE_XML_VALFILE,
+												valDatei.getAbsolutePath() ) );
 						if ( !min ) {
 							Logtxt.logtxt( logFile, getTextResourceService()
 									.getText( locale, MESSAGE_XML_MODUL_A_AZ )
 									+ getTextResourceService().getText( locale,
-											ERROR_XML_A_NOTAZ ) );
+											ERROR_XML_A_NOTAZ, "" ) );
 						}
 						Logtxt.logtxt( logFile, getTextResourceService()
 								.getText( locale,
@@ -179,12 +186,12 @@ public class Controllervalfofile implements MessageConstants
 								getTextResourceService().getText( locale,
 										MESSAGE_XML_MODUL_A_AZ )
 										+ getTextResourceService().getText(
-												locale, ERROR_XML_A_NOTAZ ) );
+												locale, ERROR_XML_A_NOTAZ, "" ) );
 						Logtxt.logtxt( logFile, getTextResourceService()
 								.getText( locale, MESSAGE_XML_MODUL_A_AZ )
 								+ getTextResourceService().getText( locale,
 										ERROR_XML_A_AZ_INCORRECTFILE,
-										extUpperCase, formatEXT ) );
+										"`"+valDateiExt.toLowerCase()+"`", formatEXT ) );
 
 					}
 					Logtxt.logtxt( logFile,
@@ -775,7 +782,7 @@ public class Controllervalfofile implements MessageConstants
 								getTextResourceService().getText( locale,
 										MESSAGE_XML_MODUL_A_AZ )
 										+ getTextResourceService().getText(
-												locale, ERROR_XML_A_NOTAZ ) );
+												locale, ERROR_XML_A_NOTAZ, " "+recFormat ) );
 					}
 					Logtxt.logtxt( logFile,
 							getTextResourceService().getText( locale,

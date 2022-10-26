@@ -272,27 +272,6 @@ public class GuiController
 
 		engine = wbv.getEngine();
 
-		/*
-		 * Bild mit einer Kurzanleitung zum GUI anzeigen
-		 * 
-		 * in Tabelle damit links
-		 */
-		String pathImage = "file:/" + dirOfJarPath + File.separator + "doc"
-				+ File.separator + "hilfe.jpg";
-		if ( locale.toString().startsWith( "fr" ) ) {
-			pathImage = "file:/" + dirOfJarPath + File.separator + "doc"
-					+ File.separator + "aide.jpg";
-		} else if ( locale.toString().startsWith( "en" ) ) {
-			pathImage = "file:/" + dirOfJarPath + File.separator + "doc"
-					+ File.separator + "help.jpg";
-		}
-		pathImage = pathImage.replace( "\\\\", "/" );
-		pathImage = pathImage.replace( "\\", "/" );
-		String helpImg = "<table  width=\"100%\"><tr><td><img  src='"
-				+ pathImage + "'></td></tr></table>";
-		String textImg = "<html><body>" + helpImg + "</body></html>";
-		engine.loadContent( textImg );
-
 		// Format und Sip Validierung erst moeglich wenn fileFolder ausgefuellt
 		buttonSip.setDisable( true );
 		buttonOnlySip.setDisable( true );

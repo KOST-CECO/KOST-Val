@@ -243,13 +243,6 @@ public class ControllerInit implements MessageConstants
 				Util.copyFile( xslFrInit, xslFr );
 			}
 		}
-		File kadInit = new File( directoryOfConfigfileInit + File.separator
-				+ "KaD_SignatureFile_V72.xml" );
-		File kadFile = new File( directoryOfConfigfile + File.separator
-				+ "KaD_SignatureFile_V72.xml" );
-		if ( !kadFile.exists() ) {
-			Util.copyFile( kadInit, kadFile );
-		}
 
 		/*
 		 * Initialisierung TIFF-Modul B (JHove-Validierung) existiert
