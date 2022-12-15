@@ -207,6 +207,39 @@ public class Util
 			while ( (line = reader.readLine()) != null ) {
 				if ( line.contains( string ) ) {
 					stringInFile = true;
+					break;
+				}
+			}
+			reader.close();
+		} catch ( IOException ioe ) {
+			ioe.printStackTrace();
+		}
+		return stringInFile;
+	}
+
+	/**
+	 * Kontrolliert ob String 1-5 existiert in file
+	 * 
+	 * Solche Sachen duerfen nicht in einer Schleife gemacht werden, da diese
+	 * sehr Zeitintensiv sind!
+	 * 
+	 * @return true wenn einer der Strings im File vorhanden @throws IOException
+	 */
+	public static boolean string15InFile( String string1, String string2,
+			String string3, String string4, String string5, File file )
+			throws IOException
+	{
+		boolean stringInFile = false;
+		try {
+			BufferedReader reader = new BufferedReader(
+					new FileReader( file ) );
+			String line = "";
+			while ( (line = reader.readLine()) != null ) {
+				if ( line.contains( string1 ) || line.contains( string2 )
+						|| line.contains( string3 ) || line.contains( string4 )
+						|| line.contains( string5 ) ) {
+					stringInFile = true;
+					break;
 				}
 			}
 			reader.close();

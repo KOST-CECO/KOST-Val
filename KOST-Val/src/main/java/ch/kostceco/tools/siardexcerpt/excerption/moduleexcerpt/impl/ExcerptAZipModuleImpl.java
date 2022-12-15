@@ -32,14 +32,16 @@ import ch.kostceco.tools.siardexcerpt.excerption.moduleexcerpt.ExcerptAZipModule
 import ch.kostceco.tools.kosttools.util.Util;
 
 /** SIARD-Datei entpacken */
-public class ExcerptAZipModuleImpl extends ValidationModuleImpl implements ExcerptAZipModule
+public class ExcerptAZipModuleImpl extends ValidationModuleImpl
+		implements ExcerptAZipModule
 {
 
 	public static String NEWLINE = System.getProperty( "line.separator" );
 
 	@Override
-	public boolean validate( File siardDatei, File siardDateiNew, String noString,
-			Map<String, String> configMap, Locale locale ) throws ExcerptAZipException
+	public boolean validate( File siardDatei, File siardDateiNew,
+			String noString, Map<String, String> configMap, Locale locale )
+			throws ExcerptAZipException
 	{
 
 		boolean result = true;
@@ -49,9 +51,12 @@ public class ExcerptAZipModuleImpl extends ValidationModuleImpl implements Excer
 		toplevelDir = toplevelDir.substring( 0, lastDotIdx );
 
 		try {
-			/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
-			 * entsprechenden Modul die property anzugeben: <property name="configurationService"
-			 * ref="configurationService" /> */
+			/*
+			 * Nicht vergessen in
+			 * "src/main/resources/config/applicationContext-services.xml" beim
+			 * entsprechenden Modul die property anzugeben: <property
+			 * name="configurationService" ref="configurationService" />
+			 */
 			// Arbeitsverzeichnis zum Entpacken des Archivs erstellen
 			if ( siardDateiNew.exists() ) {
 				Util.deleteDir( siardDateiNew );
@@ -69,7 +74,8 @@ public class ExcerptAZipModuleImpl extends ValidationModuleImpl implements Excer
 				ZipEntry entry = (ZipEntry) entries.nextElement();
 				String entryName = entry.getName();
 				File destFile = new File( siardDateiNew, entryName );
-				// System.out.println( entryName + " - " + destFile.getAbsolutePath() );
+				// System.out.println( entryName + " - " +
+				// destFile.getAbsolutePath() );
 
 				// erstelle den Ueberordner
 				File destinationParent = destFile.getParentFile();
@@ -84,7 +90,8 @@ public class ExcerptAZipModuleImpl extends ValidationModuleImpl implements Excer
 
 					// schreibe die aktuelle Datei an den geuenschten Ort
 					FileOutputStream fos = new FileOutputStream( destFile );
-					BufferedOutputStream dest = new BufferedOutputStream( fos, BUFFER );
+					BufferedOutputStream dest = new BufferedOutputStream( fos,
+							BUFFER );
 					while ( (currentByte = is.read( data, 0, BUFFER )) != -1 ) {
 						dest.write( data, 0, currentByte );
 					}
@@ -98,9 +105,10 @@ public class ExcerptAZipModuleImpl extends ValidationModuleImpl implements Excer
 			}
 			zipfile.close();
 		} catch ( Exception e ) {
-			System.out.println( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_A ) );
-			System.out.println(
-					getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN, e.getMessage() ) );
+			System.out.println( getTextResourceServiceExc().getText( locale,
+					EXC_MESSAGE_XML_MODUL_A ) );
+			System.out.println( getTextResourceServiceExc().getText( locale,
+					EXC_ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 		return result;

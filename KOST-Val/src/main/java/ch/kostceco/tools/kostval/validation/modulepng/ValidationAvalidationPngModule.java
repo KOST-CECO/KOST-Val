@@ -1,5 +1,5 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
  * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
@@ -26,16 +26,21 @@ import java.util.Map;
 import ch.kostceco.tools.kostval.exception.modulepng.ValidationApngvalidationException;
 import ch.kostceco.tools.kostval.validation.ValidationModule;
 
-/** Ist die vorliegende PNG-Datei eine valide PNG-Datei? PNG Validierungs mit pngcheck.
+/**
+ * Ist die vorliegende PNG-Datei eine valide PNG-Datei? PNG Validierungs mit
+ * pngcheck.
  * 
- * Zuerste erfolgt eine Erkennung, wenn diese io kommt die Validierung mit pngcheck.
+ * Zuerste erfolgt eine Erkennung, wenn diese io kommt die Validierung mit
+ * pngcheck.
  * 
- * @author Rc Claire Roethlisberger, KOST-CECO */
+ * @author Rc Claire Roethlisberger, KOST-CECO
+ */
 
 public interface ValidationAvalidationPngModule extends ValidationModule
 {
 
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile ) throws ValidationApngvalidationException;
+	public boolean validate( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath ) throws ValidationApngvalidationException;
 
 }

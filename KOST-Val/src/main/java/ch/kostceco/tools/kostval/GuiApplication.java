@@ -1,5 +1,5 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
  * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
@@ -41,19 +41,19 @@ public class GuiApplication extends Application
 
 			/*
 			 * dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist
-			 * ein generelles TODO in allen Modulen. Zuerst immer dirOfJarPath
-			 * ermitteln und dann alle Pfade mit dirOfJarPath + File.separator +
-			 * erweitern.
+			 * eine generelle Aufgabe in allen Modulen. Zuerst immer
+			 * dirOfJarPath ermitteln und dann alle Pfade mit dirOfJarPath +
+			 * File.separator + erweitern.
 			 */
-			String path = new File( "" ).getAbsolutePath();
-			String locationOfJarPath = path;
-			dirOfJarPath = locationOfJarPath;
-			if ( locationOfJarPath.endsWith( ".jar" )
-					|| locationOfJarPath.endsWith( ".exe" )
-					|| locationOfJarPath.endsWith( "." ) ) {
-				File file = new File( locationOfJarPath );
-				dirOfJarPath = file.getParent();
-			}
+			File pathJarFile20 = new File( ClassLoader.getSystemClassLoader()
+					.getResource( "." ).getPath() );
+			/*
+			 * wennn im Pfad ein Leerschlag ist, muss er noch normalisiert
+			 * werden
+			 */
+			dirOfJarPath = pathJarFile20.getAbsolutePath();
+			dirOfJarPath = dirOfJarPath.replaceAll( "%20", " " );
+			pathJarFile20 = new File( dirOfJarPath );
 
 			// Read file fxml and draw interface.
 			Parent root;

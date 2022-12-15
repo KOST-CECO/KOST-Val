@@ -1,5 +1,5 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
  * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
@@ -36,14 +36,18 @@ public class Validation3cFormatValidationModuleImpl extends ValidationModuleImpl
 	public static String NEWLINE = System.getProperty( "line.separator" );
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile ) throws Validation3cFormatValidationException
+	public boolean validate( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath ) throws Validation3cFormatValidationException
 	{
 		// Informationen zur Darstellung "onWork" holen
 		String onWork = configMap.get( "ShowProgressOnWork" );
-		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
-		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
-		 * ref="configurationService" /> */
+		/*
+		 * Nicht vergessen in
+		 * "src/main/resources/config/applicationContext-services.xml" beim
+		 * entsprechenden Modul die property anzugeben: <property
+		 * name="configurationService" ref="configurationService" />
+		 */
 		if ( onWork.equals( "yes" ) ) {
 			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
 			System.out.print( "3C   " );
@@ -53,17 +57,22 @@ public class Validation3cFormatValidationModuleImpl extends ValidationModuleImpl
 		boolean isValid = true;
 		// Informationen zum Arbeitsverzeichnis holen
 		String pathToWorkDir = configMap.get( "PathToWorkDir" );
-		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
-		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
-		 * ref="configurationService" /> */
+		/*
+		 * Nicht vergessen in
+		 * "src/main/resources/config/applicationContext-services.xml" beim
+		 * entsprechenden Modul die property anzugeben: <property
+		 * name="configurationService" ref="configurationService" />
+		 */
 
 		// Die Formatvalidierung des Contents erfolgte vor 1a
 
 		String fileName3cIo = "3c_Valide.txt";
 		String fileName3cNio = "3c_Invalide.txt";
 
-		File outputFile3cIo = new File( pathToWorkDir + File.separator + fileName3cIo );
-		File outputFile3cNio = new File( pathToWorkDir + File.separator + fileName3cNio );
+		File outputFile3cIo = new File(
+				pathToWorkDir + File.separator + fileName3cIo );
+		File outputFile3cNio = new File(
+				pathToWorkDir + File.separator + fileName3cNio );
 		if ( outputFile3cIo.exists() ) {
 			// 3c valid
 			Util.deleteDir( outputFile3cIo );
@@ -72,9 +81,11 @@ public class Validation3cFormatValidationModuleImpl extends ValidationModuleImpl
 			Util.deleteDir( outputFile3cNio );
 			isValid = false;
 
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Cc_SIP )
-					+ getTextResourceService().getText( locale, MESSAGE_XML_CC_INVALID ) );
-
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_Cc_SIP )
+							+ getTextResourceService().getText( locale,
+									MESSAGE_XML_SERVICEMESSAGE, "3c", "" ) );
 		}
 		return isValid;
 

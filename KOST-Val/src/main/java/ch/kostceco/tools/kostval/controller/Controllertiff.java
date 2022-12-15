@@ -1,5 +1,5 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
  * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
@@ -45,8 +45,8 @@ import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationGtilesValidati
 import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationHsizeValidationModule;
 
 /**
- * Der Controller ruft die ben�tigten Module zur Validierung des TIFF-Archivs in
- * der ben�tigten Reihenfolge auf.
+ * Der Controller ruft die benoetigten Module zur Validierung des TIFF-Archivs
+ * in der benoetigten Reihenfolge auf.
  * 
  * Die Validierungs-Module werden mittels Spring-Dependency-Injection
  * eingebunden.
@@ -168,19 +168,20 @@ public class Controllertiff implements MessageConstants
 	}
 
 	public boolean executeMandatory( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile )
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath )
 	{
 		boolean valid = true;
 		// Validation Step A
 		try {
 			if ( this.getValidationArecognitionModule().validate( valDatei,
-					directoryOfLogfile, configMap, locale, logFile ) ) {
+					directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath ) ) {
 				this.getValidationArecognitionModule().getMessageService()
 						.print();
 			} else {
 				// Ein negatives Validierungsresultat in diesem Schritt fuehrt
-				// zum Abbruch der weiteren
-				// Verarbeitung
+				// zum Abbruch der weiteren Verarbeitung
 				this.getValidationArecognitionModule().getMessageService()
 						.print();
 				return false;
@@ -206,7 +207,8 @@ public class Controllertiff implements MessageConstants
 	}
 
 	public boolean executeOptional( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile )
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath )
 	{
 		String onWork = configMap.get( "ShowProgressOnWork" );
 		if ( onWork.equals( "nomin" ) ) {
@@ -217,7 +219,8 @@ public class Controllertiff implements MessageConstants
 		// Validation Step B
 		try {
 			if ( this.getValidationBjhoveValidationModule().validate( valDatei,
-					directoryOfLogfile, configMap, locale, logFile ) ) {
+					directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath ) ) {
 				this.getValidationBjhoveValidationModule().getMessageService()
 						.print();
 			} else {
@@ -250,8 +253,8 @@ public class Controllertiff implements MessageConstants
 		// Validation Step C
 		try {
 			if ( this.getValidationCcompressionValidationModule().validate(
-					valDatei, directoryOfLogfile, configMap, locale,
-					logFile ) ) {
+					valDatei, directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath ) ) {
 				this.getValidationCcompressionValidationModule()
 						.getMessageService().print();
 			} else {
@@ -284,8 +287,8 @@ public class Controllertiff implements MessageConstants
 		// Validation Step D
 		try {
 			if ( this.getValidationDphotointerValidationModule().validate(
-					valDatei, directoryOfLogfile, configMap, locale,
-					logFile ) ) {
+					valDatei, directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath ) ) {
 				this.getValidationDphotointerValidationModule()
 						.getMessageService().print();
 			} else {
@@ -318,8 +321,8 @@ public class Controllertiff implements MessageConstants
 		// Validation Step E
 		try {
 			if ( this.getValidationEbitspersampleValidationModule().validate(
-					valDatei, directoryOfLogfile, configMap, locale,
-					logFile ) ) {
+					valDatei, directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath ) ) {
 				this.getValidationEbitspersampleValidationModule()
 						.getMessageService().print();
 			} else {
@@ -352,8 +355,8 @@ public class Controllertiff implements MessageConstants
 		// Validation Step F
 		try {
 			if ( this.getValidationFmultipageValidationModule().validate(
-					valDatei, directoryOfLogfile, configMap, locale,
-					logFile ) ) {
+					valDatei, directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath ) ) {
 				this.getValidationFmultipageValidationModule()
 						.getMessageService().print();
 			} else {
@@ -386,7 +389,8 @@ public class Controllertiff implements MessageConstants
 		// Validation Step G
 		try {
 			if ( this.getValidationGtilesValidationModule().validate( valDatei,
-					directoryOfLogfile, configMap, locale, logFile ) ) {
+					directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath ) ) {
 				this.getValidationGtilesValidationModule().getMessageService()
 						.print();
 			} else {
@@ -419,7 +423,8 @@ public class Controllertiff implements MessageConstants
 		// Validation Step H
 		try {
 			if ( this.getValidationHsizeValidationModule().validate( valDatei,
-					directoryOfLogfile, configMap, locale, logFile ) ) {
+					directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath ) ) {
 				this.getValidationHsizeValidationModule().getMessageService()
 						.print();
 			} else {

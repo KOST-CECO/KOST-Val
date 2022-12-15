@@ -22,12 +22,16 @@ import java.util.Map;
 import ch.kostceco.tools.siardexcerpt.exception.moduleexcerpt.ExcerptCGrepException;
 import ch.kostceco.tools.siardexcerpt.excerption.ValidationModule;
 
-/** 3) extract: mit den Keys anhand der config einen Records herausziehen und anzeigen */
+/**
+ * 3) extract: mit den Keys anhand der config einen Records herausziehen und
+ * anzeigen
+ */
 
 public interface ExcerptCGrepModule extends ValidationModule
 {
 
-	public boolean validate( File siardDatei, File outFile, String excerptString,
-			Map<String, String> configMap, Locale locale ) throws ExcerptCGrepException;
+	public boolean validate( File siardDatei, File outFile,
+			String excerptString, Map<String, String> configMap, Locale locale )
+			throws ExcerptCGrepException;
 
 }

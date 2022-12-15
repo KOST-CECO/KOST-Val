@@ -1,5 +1,5 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
  * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
@@ -69,14 +69,16 @@ public class Controllerjp2 implements MessageConstants
 	}
 
 	public boolean executeMandatory( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile )
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath )
 	{
 		boolean valid = true;
 
 		// Validation A
 		try {
 			if ( this.getValidationAvalidationAModule().validate( valDatei,
-					directoryOfLogfile, configMap, locale, logFile ) ) {
+					directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath ) ) {
 				this.getValidationAvalidationAModule().getMessageService()
 						.print();
 			} else {

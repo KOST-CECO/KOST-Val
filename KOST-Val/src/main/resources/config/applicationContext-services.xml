@@ -152,6 +152,12 @@
 		<property name="messageService" ref="messageService" />
 	</bean>
 
+	<bean id="validationAvalidationXmlModule"
+		class="ch.kostceco.tools.kostval.validation.modulexml.impl.ValidationAvalidationXmlModuleImpl">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="messageService" ref="messageService" />
+	</bean>
+
 	<bean id="validation1bFolderStructureModule"
 		class="ch.kostceco.tools.kostval.validation.modulesip1.impl.Validation1bFolderStructureModuleImpl">
 		<property name="textResourceService" ref="textResourceService" />
@@ -202,11 +208,11 @@
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="messageService" ref="messageService" />
 	</bean>
-	<bean id="validation3bUnspecifiedFormatModule"
+<!--	<bean id="validation3bUnspecifiedFormatModule"
 		class="ch.kostceco.tools.kostval.validation.modulesip3.impl.Validation3bUnspecifiedFormatModuleImpl">
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="messageService" ref="messageService" />
-	</bean>
+	</bean> -->
 	<bean id="validation3cFormatValidationModule"
 		class="ch.kostceco.tools.kostval.validation.modulesip3.impl.Validation3cFormatValidationModuleImpl">
 		<property name="textResourceService" ref="textResourceService" />
@@ -248,6 +254,10 @@
 	</bean>
 
 	<bean id="controllervalfolder" class="ch.kostceco.tools.kostval.controller.Controllervalfolder">
+		<property name="textResourceService" ref="textResourceService" />
+	</bean>
+
+	<bean id="controllervalfofile" class="ch.kostceco.tools.kostval.controller.Controllervalfofile">
 		<property name="textResourceService" ref="textResourceService" />
 	</bean>
 
@@ -304,6 +314,11 @@
 		<property name="validationAvalidationPngModule" ref="validationAvalidationPngModule" />
 	</bean>
 
+	<bean id="controllerxml" class="ch.kostceco.tools.kostval.controller.Controllerxml">
+		<property name="textResourceService" ref="textResourceService" />
+		<property name="validationAvalidationXmlModule" ref="validationAvalidationXmlModule" />
+	</bean>
+
 	<bean id="controllersip" class="ch.kostceco.tools.kostval.controller.Controllersip">
 		<property name="textResourceService" ref="textResourceService" />
 		<property name="validation1bFolderStructureModule" ref="validation1bFolderStructureModule" />
@@ -316,7 +331,7 @@
 		<property name="validation2cChecksumModule" ref="validation2cChecksumModule" />
 		<property name="validation2dGeverFileIntegrityModule" ref="validation2dGeverFileIntegrityModule" />
 		<property name="validation3aFormatRecognitionModule" ref="validation3aFormatRecognitionModule" />
-		<property name="validation3bUnspecifiedFormatModule" ref="validation3bUnspecifiedFormatModule" />
+	<!--	<property name="validation3bUnspecifiedFormatModule" ref="validation3bUnspecifiedFormatModule" /> -->
 		<property name="validation3cFormatValidationModule" ref="validation3cFormatValidationModule" />
 		<property name="validation3dPeriodModule" ref="validation3dPeriodModule" />
 	</bean>

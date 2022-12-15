@@ -22,12 +22,16 @@ import java.util.Map;
 import ch.kostceco.tools.siardexcerpt.exception.moduleexcerpt.ExcerptBSearchException;
 import ch.kostceco.tools.siardexcerpt.excerption.ValidationModule;
 
-/** 2) search: gemäss config die Tabelle mit Suchtext befragen und Ausgabe des Resultates */
+/**
+ * 2) search: gemäss config die Tabelle mit Suchtext befragen und Ausgabe des
+ * Resultates
+ */
 
 public interface ExcerptBSearchModule extends ValidationModule
 {
 
-	public boolean validate( File siardDatei, File outFile, String excerptString,
-			Map<String, String> configMap, Locale locale ) throws ExcerptBSearchException;
+	public boolean validate( File siardDatei, File outFile,
+			String excerptString, Map<String, String> configMap, Locale locale )
+			throws ExcerptBSearchException;
 
 }

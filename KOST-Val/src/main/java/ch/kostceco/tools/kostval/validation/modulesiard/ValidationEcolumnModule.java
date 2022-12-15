@@ -1,5 +1,5 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
  * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
@@ -30,16 +30,20 @@ import ch.kostceco.tools.kostval.exception.modulesiard.ValidationEcolumnExceptio
 import ch.kostceco.tools.kostval.validation.ValidationModule;
 import ch.kostceco.tools.kostval.validation.bean.ValidationContext;
 
-/** Validierungsschritt E (Spalten-Validierung) Wurden die Angaben aus metadata.xml korrekt in die
- * tableZ.xsd-Dateien übertragen? valid --> gleiche Spaltendefinitionen (Anzahl, Type, Nullable)
+/**
+ * Validierungsschritt E (Spalten-Validierung) Wurden die Angaben aus
+ * metadata.xml korrekt in die tableZ.xsd-Dateien uebertragen? valid --> gleiche
+ * Spaltendefinitionen (Anzahl, Type, Nullable)
  * 
- * @author Do Olivier Debenath */
+ * @author Do Olivier Debenath
+ */
 
 public interface ValidationEcolumnModule extends ValidationModule
 {
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile ) throws ValidationEcolumnException;
+	public boolean validate( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath ) throws ValidationEcolumnException;
 
-	public boolean prepareValidation( ValidationContext validationContext, File logFile )
-			throws IOException, JDOMException, Exception;
+	public boolean prepareValidation( ValidationContext validationContext,
+			File logFile ) throws IOException, JDOMException, Exception;
 }

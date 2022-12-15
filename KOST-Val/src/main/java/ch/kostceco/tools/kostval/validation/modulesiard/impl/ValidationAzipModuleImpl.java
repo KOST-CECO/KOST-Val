@@ -1,5 +1,5 @@
 ﻿/* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
  * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
@@ -21,38 +21,42 @@ package ch.kostceco.tools.kostval.validation.modulesiard.impl;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.util.Enumeration;
-import java.util.Map;
 import java.io.FileReader;
 import java.util.Arrays;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
-import ch.enterag.utils.zip.Zip64File;
 import ch.enterag.utils.zip.FileEntry;
-import ch.kostceco.tools.kosttools.fileservice.Magic;
+import ch.enterag.utils.zip.Zip64File;
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationAzipException;
+import ch.kostceco.tools.kostval.logging.Logtxt;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationAzipModule;
-import ch.kostceco.tools.kostval.logging.Logtxt;
 
-/** Validierungsschritt A (Lesbarkeit) Kann die SIARD-Datei gelesen werden? valid --> lesbare und
- * nicht passwortgeschuetzte ZIP-Datei oder ZIP64-Datei valid --> unkomprimierte ZIP64-Datei oder
- * unkomprimierte ZIP-Datei, seit dem Addendum auch Deflate-Komprimierung erlaubt ==> Bei den Module
- * A, B, C und D wird die Validierung abgebrochen, sollte das Resulat invalid sein!
+/**
+ * Validierungsschritt A (Lesbarkeit) Kann die SIARD-Datei gelesen werden? valid
+ * --> lesbare und nicht passwortgeschuetzte ZIP-Datei oder ZIP64-Datei valid
+ * --> unkomprimierte ZIP64-Datei oder unkomprimierte ZIP-Datei, seit dem
+ * Addendum auch Deflate-Komprimierung erlaubt ==> Bei den Module A, B, C und D
+ * wird die Validierung abgebrochen, sollte das Resulat invalid sein!
  * 
- * @author Rc Claire Roethlisberger, KOST-CECO */
+ * @author Rc Claire Roethlisberger, KOST-CECO
+ */
 
-public class ValidationAzipModuleImpl extends ValidationModuleImpl implements ValidationAzipModule
+public class ValidationAzipModuleImpl extends ValidationModuleImpl
+		implements ValidationAzipModule
 {
 
 	private boolean min = false;
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile ) throws ValidationAzipException
+	public boolean validate( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath ) throws ValidationAzipException
 	{
 		// Informationen zur Darstellung "onWork" holen
 		String onWork = configMap.get( "ShowProgressOnWork" );
@@ -64,65 +68,25 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 			min = true;
 		}
 
-		boolean valid = false;
 		boolean validC = false;
-		/* boolean store = false; boolean def = false; boolean defX = false; boolean defN = false; */
-
-		// die Datei darf kein Directory sein
-		if ( valDatei.isDirectory() ) {
-			if ( min ) {
-				return false;
-			} else {
-
-				Logtxt.logtxt( logFile,
-						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )
-								+ getTextResourceService().getText( locale, ERROR_XML_A_NOFILE ) );
-				// Die zu validierende SIARD-Datei ist ein Ordner und keine ZIP-Datei.
-				return false;
-			}
-		}
-
-		// Die Datei muss mit PK.. beginnen
-		try {
-			// System.out.println("ueberpruefe Magic number zip...");
-			if ( Magic.magicZip( valDatei ) ) {
-				// System.out.println(" -> es ist eine Zip-Datei");
-				valid = true;
-			} else {
-				// System.out.println(" -> es ist KEINE Zip-Datei");
-				valid = false;
-				if ( min ) {
-					return false;
-				} else {
-					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )
-									+ getTextResourceService().getText( locale,
-											ERROR_XML_A_INCORRECTFILEENDING_SIARD ) );
-					// Die SIARD-Datei ist kein ZIP.
-					return false;
-				}
-			}
-		} catch ( Exception e ) {
-			if ( min ) {
-				return false;
-			} else {
-
-				Logtxt.logtxt( logFile,
-						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )
-								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
-				return false;
-			}
-		}
+		/*
+		 * boolean store = false; boolean def = false; boolean defX = false;
+		 * boolean defN = false;
+		 */
 
 		// Die byte 8 und 9 müssen 00 00 STORE / 08 00 DEFLATE sein
 
-		/* Dies ergibt jedoch nur ein Indix darauf, wie die Dateien gezipt sind. Dies weil in einem Zip
-		 * unterschiedliche Komprimierungen verwendet werden können und die erste Kopmprimierung nicht
-		 * das ganze Zip abbildet. */
+		/*
+		 * Dies ergibt jedoch nur ein Indix darauf, wie die Dateien gezipt sind.
+		 * Dies weil in einem Zip unterschiedliche Komprimierungen verwendet
+		 * werden können und die erste Kopmprimierung nicht das ganze Zip
+		 * abbildet.
+		 */
 		FileReader fr89 = null;
+		BufferedReader read = null;
 		try {
 			fr89 = new FileReader( valDatei );
-			BufferedReader read = new BufferedReader( fr89 );
+			read = new BufferedReader( fr89 );
 
 			// Hex 00 in Char umwandeln
 			String str00 = "00";
@@ -178,7 +142,8 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 					while ( entries.hasMoreElements() ) {
 						ZipEntry zEntry = entries.nextElement();
 						compressed = zEntry.getMethod();
-						// Compression method for uncompressed entries = STORED = 0
+						// Compression method for uncompressed entries = STORED
+						// = 0
 						// Compression method for deflate compression = 8
 						if ( compressed == 8 ) {
 							// def: DEFLATE
@@ -186,15 +151,18 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 							// store element
 						} else {
 							// weder store noch def
+							read.close();
 							if ( min ) {
 								zf.close();
 								return false;
 							} else {
 
-								Logtxt.logtxt( logFile,
-										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )
-												+ getTextResourceService().getText( locale, ERROR_XML_A_DEFLATED,
-														compressed ) );
+								Logtxt.logtxt( logFile, getTextResourceService()
+										.getText( locale,
+												MESSAGE_XML_MODUL_A_SIARD )
+										+ getTextResourceService().getText(
+												locale, ERROR_XML_A_DEFLATED,
+												compressed ) );
 								zf.close();
 								return false;
 							}
@@ -213,10 +181,11 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 						return false;
 					} else {
 
-						Logtxt.logtxt( logFile,
-								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )
-										+ getTextResourceService().getText( locale, ERROR_XML_A_INCORRECTZIP,
-												e.getMessage() ) );
+						Logtxt.logtxt( logFile, getTextResourceService()
+								.getText( locale, MESSAGE_XML_MODUL_A_SIARD )
+								+ getTextResourceService().getText( locale,
+										ERROR_XML_A_INCORRECTZIP,
+										e.getMessage() ) );
 						return false;
 					}
 				}
@@ -225,11 +194,13 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 				try {
 					Integer compressed = 0;
 					zfe = new Zip64File( valDatei );
-					// auslesen der Komprimierungsmethode aus allen FileEntries der zip(64)-Datei
+					// auslesen der Komprimierungsmethode aus allen FileEntries
+					// der zip(64)-Datei
 					List<FileEntry> fileEntryList = zfe.getListFileEntries();
 					for ( FileEntry fileEntry : fileEntryList ) {
 						compressed = fileEntry.getMethod();
-						// Compression method for uncompressed entries = STORED = 0
+						// Compression method for uncompressed entries = STORED
+						// = 0
 						// Compression method for deflate compression = 8
 						if ( compressed == 8 ) {
 							// def: DEFLATE
@@ -245,10 +216,12 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 								return false;
 							} else {
 
-								Logtxt.logtxt( logFile,
-										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )
-												+ getTextResourceService().getText( locale, ERROR_XML_A_DEFLATED,
-														compressed ) );
+								Logtxt.logtxt( logFile, getTextResourceService()
+										.getText( locale,
+												MESSAGE_XML_MODUL_A_SIARD )
+										+ getTextResourceService().getText(
+												locale, ERROR_XML_A_DEFLATED,
+												compressed ) );
 								return false;
 							}
 						}
@@ -266,10 +239,11 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 						return false;
 					} else {
 
-						Logtxt.logtxt( logFile,
-								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )
-										+ getTextResourceService().getText( locale, ERROR_XML_A_INCORRECTZIP,
-												ee.getMessage() ) );
+						Logtxt.logtxt( logFile, getTextResourceService()
+								.getText( locale, MESSAGE_XML_MODUL_A_SIARD )
+								+ getTextResourceService().getText( locale,
+										ERROR_XML_A_INCORRECTZIP,
+										ee.getMessage() ) );
 						return false;
 					}
 				}
@@ -284,14 +258,14 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 				} else {
 
 					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )
-									+ getTextResourceService().getText( locale, ERROR_XML_A_DEFLATED, dec8 ) );
+							getTextResourceService().getText( locale,
+									MESSAGE_XML_MODUL_A_SIARD )
+									+ getTextResourceService().getText( locale,
+											ERROR_XML_A_DEFLATED, dec8 ) );
 					return false;
 				}
 			}
 			read.close();
-			// set to null
-			read = null;
 			fr89.close();
 		} catch ( Exception e ) {
 			if ( min ) {
@@ -299,11 +273,13 @@ public class ValidationAzipModuleImpl extends ValidationModuleImpl implements Va
 			} else {
 
 				Logtxt.logtxt( logFile,
-						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_SIARD )
-								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+						getTextResourceService().getText( locale,
+								MESSAGE_XML_MODUL_A_SIARD )
+								+ getTextResourceService().getText( locale,
+										ERROR_XML_UNKNOWN, e.getMessage() ) );
 				return false;
 			}
 		}
-		return (valid);
+		return (validC);
 	}
 }

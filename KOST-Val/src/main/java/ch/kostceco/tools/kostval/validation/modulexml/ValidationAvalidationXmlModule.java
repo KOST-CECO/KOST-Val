@@ -1,5 +1,5 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
  * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
@@ -17,23 +17,30 @@
  * <http://www.gnu.org/licenses/>.
  * ============================================================================================== */
 
-package ch.kostceco.tools.kostval.enums;
+package ch.kostceco.tools.kostval.validation.modulexml;
 
-public enum PronomUniqueIdEnum implements BaseEnumItemEnum {
+import java.io.File;
+import java.util.Locale;
+import java.util.Map;
 
-	JHOVE(101), KOSTVAL(102);
+import ch.kostceco.tools.kostval.exception.modulexml.ValidationAxmlvalidationException;
+import ch.kostceco.tools.kostval.validation.ValidationModule;
 
-	private final long id;
+/**
+ * Ist die vorliegende XML-Datei eine valide XML-Datei? XML Validierungs mit
+ * xmllint.
+ * 
+ * Zuerste erfolgt eine Erkennung, wenn diese io kommt die Validierung mit
+ * xmllint, sofern lokal das Schema vorhanden ist.
+ * 
+ * @author Rc Claire Roethlisberger, KOST-CECO
+ */
 
-	PronomUniqueIdEnum( long id )
-	{
-		this.id = id;
-	}
+public interface ValidationAvalidationXmlModule extends ValidationModule
+{
 
-	@Override
-	public Long getId()
-	{
-		return id;
-	}
+	public boolean validate( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath ) throws ValidationAxmlvalidationException;
 
 }

@@ -1,5 +1,5 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
  * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
@@ -26,17 +26,21 @@ import java.util.Map;
 import ch.kostceco.tools.kostval.exception.modulesip3.Validation3dPeriodException;
 import ch.kostceco.tools.kostval.validation.ValidationModule;
 
-/** Validierungsschritt 3d (einschaltbar) Zeitraum-Validierung. Ältestes und Jüngstes Datum in einer
- * Ordnungssystem Einheit (Dossier, Rubrik) müssen ohne Überlappung nach oben aggregierbar sein,
- * Lehrräume sind aber erlaubt. Dies bedeutet, dass die Dokumente im Zeitraum des Dossiers sein
- * müssen, diese wiederum in der Rubrik und entsprechend auch im SIP.
+/**
+ * Validierungsschritt 3d (einschaltbar) Zeitraum-Validierung. aeltestes und
+ * Jï¿½ngstes Datum in einer Ordnungssystem Einheit (Dossier, Rubrik) mï¿½ssen ohne
+ * ueberlappung nach oben aggregierbar sein, Lehrraeume sind aber erlaubt. Dies
+ * bedeutet, dass die Dokumente im Zeitraum des Dossiers sein muessen, diese
+ * wiederum in der Rubrik und entsprechend auch im SIP.
  * 
- * @author razm Daniel Ludin, Bedag AG @version 0.2.0 */
+ * @author razm Daniel Ludin, Bedag AG @version 0.2.0
+ */
 
 public interface Validation3dPeriodModule extends ValidationModule
 {
 
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile ) throws Validation3dPeriodException;
+	public boolean validate( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath ) throws Validation3dPeriodException;
 
 }

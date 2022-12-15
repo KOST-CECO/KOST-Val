@@ -1,5 +1,5 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
  * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
@@ -43,26 +43,32 @@ import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesip2.Validation2dGeverFileIntegrityModule;
 import ch.kostceco.tools.kostval.logging.Logtxt;
 
-/** Validierungsschritt 2d Bei GEVER und Files SIP pruefen, ob alle in (metadata.xml)
- * /paket/inhaltsverzeichnis/content referenzierten Dateien auch in
- * (metadata.xml)/paket/ablieferung/ordnungsystem verzeichnet sind. Allfaellige Inkonsistenzen
- * auflisten. ( //dokument[@id] => //datei[@id] ). */
+/**
+ * Validierungsschritt 2d Bei GEVER und Files SIP pruefen, ob alle in
+ * (metadata.xml) /paket/inhaltsverzeichnis/content referenzierten Dateien auch
+ * in (metadata.xml)/paket/ablieferung/ordnungsystem verzeichnet sind.
+ * Allfaellige Inkonsistenzen auflisten. ( //dokument[@id] => //datei[@id] ).
+ */
 
-public class Validation2dGeverFileIntegrityModuleImpl extends ValidationModuleImpl
-		implements Validation2dGeverFileIntegrityModule
+public class Validation2dGeverFileIntegrityModuleImpl extends
+		ValidationModuleImpl implements Validation2dGeverFileIntegrityModule
 {
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile ) throws Validation2dGeverFileIntegrityException
+	public boolean validate( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath ) throws Validation2dGeverFileIntegrityException
 	{
 		boolean showOnWork = false;
 		int onWork = 410;
 		// Informationen zur Darstellung "onWork" holen
 		String onWorkConfig = configMap.get( "ShowProgressOnWork" );
-		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
-		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
-		 * ref="configurationService" /> */
+		/*
+		 * Nicht vergessen in
+		 * "src/main/resources/config/applicationContext-services.xml" beim
+		 * entsprechenden Modul die property anzugeben: <property
+		 * name="configurationService" ref="configurationService" />
+		 */
 		if ( onWorkConfig.equals( "yes" ) ) {
 			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
 			showOnWork = true;
@@ -82,8 +88,8 @@ public class Validation2dGeverFileIntegrityModuleImpl extends ValidationModuleIm
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			// dbf.setValidating(false);
 			DocumentBuilder db = dbf.newDocumentBuilder();
-			Document doc = db.parse( new FileInputStream(
-					new File( valDatei.getAbsolutePath() + "//header//metadata.xml" ) ) );
+			Document doc = db.parse( new FileInputStream( new File(
+					valDatei.getAbsolutePath() + "//header//metadata.xml" ) ) );
 			doc.getDocumentElement().normalize();
 
 			// Pruefung auch fuer FILE-SIP nicht nur GEVER-SIP
@@ -98,11 +104,14 @@ public class Validation2dGeverFileIntegrityModuleImpl extends ValidationModuleIm
 				Element fstElement = (Element) fstNode;
 				Node parentNode = fstElement.getParentNode();
 				Element parentElement = (Element) parentNode;
-				NodeList titelList = parentElement.getElementsByTagName( "titel" );
+				NodeList titelList = parentElement
+						.getElementsByTagName( "titel" );
 
 				Node titelNode = titelList.item( 0 );
-				dateiRefOrdnungssystem.put( fstNode.getTextContent(), titelNode.getTextContent() );
-				dateiRef.put( fstNode.getTextContent(), titelNode.getTextContent() );
+				dateiRefOrdnungssystem.put( fstNode.getTextContent(),
+						titelNode.getTextContent() );
+				dateiRef.put( fstNode.getTextContent(),
+						titelNode.getTextContent() );
 				if ( showOnWork ) {
 					if ( onWork == 410 ) {
 						onWork = 2;
@@ -127,32 +136,39 @@ public class Validation2dGeverFileIntegrityModuleImpl extends ValidationModuleIm
 			}
 
 			// alle datei ids aus header/content holen
-			NodeList nameNodes = (NodeList) xpath.evaluate( "//ordner/name", doc,
-					XPathConstants.NODESET );
+			NodeList nameNodes = (NodeList) xpath.evaluate( "//ordner/name",
+					doc, XPathConstants.NODESET );
 			for ( int s = 0; s < nameNodes.getLength(); s++ ) {
 				Node dateiNode = nameNodes.item( s );
 				if ( dateiNode.getTextContent().equals( "content" ) ) {
 					Element dateiElement = (Element) dateiNode;
-					Element parentElement = (Element) dateiElement.getParentNode();
+					Element parentElement = (Element) dateiElement
+							.getParentNode();
 
-					NodeList dateiNodes = parentElement.getElementsByTagName( "datei" );
+					NodeList dateiNodes = parentElement
+							.getElementsByTagName( "datei" );
 					for ( int x = 0; x < dateiNodes.getLength(); x++ ) {
 						Node dateiNode2 = dateiNodes.item( x );
-						Node id = dateiNode2.getAttributes().getNamedItem( "id" );
+						Node id = dateiNode2.getAttributes()
+								.getNamedItem( "id" );
 
 						Element dateiElement2 = (Element) dateiNode2;
-						NodeList nameList = dateiElement2.getElementsByTagName( "name" );
+						NodeList nameList = dateiElement2
+								.getElementsByTagName( "name" );
 						Node titelNode = nameList.item( 0 );
 
 						Node dateiParentNode = dateiElement2.getParentNode();
 						Element dateiParentElement = (Element) dateiParentNode;
-						NodeList nameNodes2 = dateiParentElement.getElementsByTagName( "name" );
+						NodeList nameNodes2 = dateiParentElement
+								.getElementsByTagName( "name" );
 						Node contentName = nameNodes2.item( 0 );
 
 						dateiRefContent.put( id.getNodeValue(),
-								"content/" + contentName.getTextContent() + "/" + titelNode.getTextContent() );
+								"content/" + contentName.getTextContent() + "/"
+										+ titelNode.getTextContent() );
 						dateiRef.put( id.getNodeValue(),
-								"content/" + contentName.getTextContent() + "/" + titelNode.getTextContent() );
+								"content/" + contentName.getTextContent() + "/"
+										+ titelNode.getTextContent() );
 					}
 				}
 				if ( showOnWork ) {
@@ -180,16 +196,18 @@ public class Validation2dGeverFileIntegrityModuleImpl extends ValidationModuleIm
 
 			Set<String> keysContent = dateiRefContent.keySet();
 			boolean titlePrinted = false;
-			for ( Iterator<String> iterator = keysContent.iterator(); iterator.hasNext(); ) {
+			for ( Iterator<String> iterator = keysContent.iterator(); iterator
+					.hasNext(); ) {
 				String keyContent = iterator.next();
 				String deleted = dateiRefOrdnungssystem.remove( keyContent );
 				if ( deleted == null ) {
 					if ( !titlePrinted ) {
 
-						Logtxt.logtxt( logFile,
-								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bd_SIP )
-										+ getTextResourceService().getText( locale, MESSAGE_XML_BD_MISSINGINABLIEFERUNG,
-												keyContent ) );
+						Logtxt.logtxt( logFile, getTextResourceService()
+								.getText( locale, MESSAGE_XML_MODUL_Bd_SIP )
+								+ getTextResourceService().getText( locale,
+										MESSAGE_XML_BD_MISSINGINABLIEFERUNG,
+										keyContent ) );
 						titlePrinted = true;
 					}
 					valid = false;
@@ -218,15 +236,20 @@ public class Validation2dGeverFileIntegrityModuleImpl extends ValidationModuleIm
 			}
 
 			Set<String> keysRefOrd = dateiRefOrdnungssystem.keySet();
-			for ( Iterator<String> iterator = keysRefOrd.iterator(); iterator.hasNext(); ) {
+			for ( Iterator<String> iterator = keysRefOrd.iterator(); iterator
+					.hasNext(); ) {
 				String keyOrd = iterator.next();
-				/* Die folgende DateiRef vorhanden in metadata/paket/ablieferung/ordnungssystem, aber nicht
-				 * in metadata/paket/inhaltsverzeichnis/content */
+				/*
+				 * Die folgende DateiRef vorhanden in
+				 * metadata/paket/ablieferung/ordnungssystem, aber nicht in
+				 * metadata/paket/inhaltsverzeichnis/content
+				 */
 
-				Logtxt.logtxt( logFile,
-						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bd_SIP )
-								+ getTextResourceService().getText( locale,
-										MESSAGE_XML_BD_MISSINGININHALTSVERZEICHNIS, keyOrd ) );
+				Logtxt.logtxt( logFile, getTextResourceService()
+						.getText( locale, MESSAGE_XML_MODUL_Bd_SIP )
+						+ getTextResourceService().getText( locale,
+								MESSAGE_XML_BD_MISSINGININHALTSVERZEICHNIS,
+								keyOrd ) );
 				valid = false;
 				if ( showOnWork ) {
 					if ( onWork == 410 ) {
@@ -270,7 +293,8 @@ public class Validation2dGeverFileIntegrityModuleImpl extends ValidationModuleIm
 				mapRef.put( id.getNodeValue(), "mappe" );
 			}
 
-			// Kontrolle ob IDs von information und repraesentation in dateiRef existieren
+			// Kontrolle ob IDs von information und repraesentation in dateiRef
+			// existieren
 			// System.out.println( "2g Attribute der dateiRef auslesen..." );
 
 			for ( int i = 0, len = nodeLstDateiRef.getLength(); i < len; i++ ) {
@@ -278,9 +302,12 @@ public class Validation2dGeverFileIntegrityModuleImpl extends ValidationModuleIm
 				if ( elm.hasAttribute( "information" ) ) {
 					String info = elm.getAttribute( "information" );
 					// System.out.println( "information: " + info );
-					if ( dateiRef.containsKey( info ) || dokRef.containsKey( info )
-							|| dosRef.containsKey( info ) || mapRef.containsKey( info ) ) {
-						// System.out.println( "information vorhanden (Key): " + info );
+					if ( dateiRef.containsKey( info )
+							|| dokRef.containsKey( info )
+							|| dosRef.containsKey( info )
+							|| mapRef.containsKey( info ) ) {
+						// System.out.println( "information vorhanden (Key): " +
+						// info );
 					} else {
 						// System.out.println( "information trennen: " + info );
 						// mehrere IDs werden mit Leerschlag getrennt.
@@ -288,15 +315,22 @@ public class Validation2dGeverFileIntegrityModuleImpl extends ValidationModuleIm
 						for ( int j = 0, lenJ = parts.length; j < lenJ; j++ ) {
 							String infoPart = parts[j];
 
-							if ( dateiRef.containsKey( infoPart ) || dokRef.containsKey( infoPart )
-									|| dosRef.containsKey( infoPart ) || mapRef.containsKey( infoPart ) ) {
-								// System.out.println( "information (part) vorhanden (Key): " + infoPart );
+							if ( dateiRef.containsKey( infoPart )
+									|| dokRef.containsKey( infoPart )
+									|| dosRef.containsKey( infoPart )
+									|| mapRef.containsKey( infoPart ) ) {
+								// System.out.println( "information (part)
+								// vorhanden (Key): " + infoPart );
 							} else {
-								// System.out.println( "information fehlt: " + infoPart );
-								Logtxt.logtxt( logFile,
-										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bd_SIP )
-												+ getTextResourceService().getText( locale,
-														MESSAGE_XML_BD_WARNINGMISSINGINFOID, infoPart ) );
+								// System.out.println( "information fehlt: " +
+								// infoPart );
+								Logtxt.logtxt( logFile, getTextResourceService()
+										.getText( locale,
+												MESSAGE_XML_MODUL_Bd_SIP )
+										+ getTextResourceService().getText(
+												locale,
+												MESSAGE_XML_BD_WARNINGMISSINGINFOID,
+												infoPart ) );
 							}
 						}
 					}
@@ -304,25 +338,36 @@ public class Validation2dGeverFileIntegrityModuleImpl extends ValidationModuleIm
 				if ( elm.hasAttribute( "repraesentation" ) ) {
 					String rep = elm.getAttribute( "repraesentation" );
 					// System.out.println( "repraesentation: " + rep );
-					if ( dateiRef.containsKey( rep ) || dokRef.containsKey( rep ) || dosRef.containsKey( rep )
+					if ( dateiRef.containsKey( rep )
+							|| dokRef.containsKey( rep )
+							|| dosRef.containsKey( rep )
 							|| mapRef.containsKey( rep ) ) {
-						// System.out.println( "repraesentation vorhanden (Key): " + rep );
+						// System.out.println( "repraesentation vorhanden (Key):
+						// " + rep );
 					} else {
-						// System.out.println( "repraesentation trennen: " + rep );
+						// System.out.println( "repraesentation trennen: " + rep
+						// );
 						// mehrere IDs werden mit Leerschlag getrennt.
 						String[] parts = rep.split( " " );
 						for ( int j = 0, lenJ = parts.length; j < lenJ; j++ ) {
 							String repPart = parts[j];
 
-							if ( dateiRef.containsKey( repPart ) || dokRef.containsKey( repPart )
-									|| dosRef.containsKey( repPart ) || mapRef.containsKey( repPart ) ) {
-								// System.out.println( "repraesentation (part) vorhanden (Key): " + repPart );
+							if ( dateiRef.containsKey( repPart )
+									|| dokRef.containsKey( repPart )
+									|| dosRef.containsKey( repPart )
+									|| mapRef.containsKey( repPart ) ) {
+								// System.out.println( "repraesentation (part)
+								// vorhanden (Key): " + repPart );
 							} else {
-								// System.out.println( "repraesentation fehlt: " + repPart );
-								Logtxt.logtxt( logFile,
-										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bd_SIP )
-												+ getTextResourceService().getText( locale,
-														MESSAGE_XML_BD_WARNINGMISSINGREPID, repPart ) );
+								// System.out.println( "repraesentation fehlt: "
+								// + repPart );
+								Logtxt.logtxt( logFile, getTextResourceService()
+										.getText( locale,
+												MESSAGE_XML_MODUL_Bd_SIP )
+										+ getTextResourceService().getText(
+												locale,
+												MESSAGE_XML_BD_WARNINGMISSINGREPID,
+												repPart ) );
 							}
 						}
 					}
@@ -337,8 +382,11 @@ public class Validation2dGeverFileIntegrityModuleImpl extends ValidationModuleIm
 
 		} catch ( Exception e ) {
 
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Bd_SIP )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_Bd_SIP )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 		return valid;

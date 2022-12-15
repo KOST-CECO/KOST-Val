@@ -1,5 +1,5 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
  * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
@@ -106,7 +106,8 @@ public class Controllervalfile implements MessageConstants
 			Controllerjp2 controller1 = (Controllerjp2) context
 					.getBean( "controllerjp2" );
 			boolean okMandatory = controller1.executeMandatory( valDatei,
-					directoryOfLogfile, configMap, locale, logFile );
+					directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath );
 			valFile = okMandatory;
 
 			if ( okMandatory ) {
@@ -154,7 +155,8 @@ public class Controllervalfile implements MessageConstants
 			Controllerjpeg controller1 = (Controllerjpeg) context
 					.getBean( "controllerjpeg" );
 			boolean okMandatory = controller1.executeMandatory( valDatei,
-					directoryOfLogfile, configMap, locale, logFile );
+					directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath );
 			valFile = okMandatory;
 
 			if ( okMandatory ) {
@@ -184,7 +186,41 @@ public class Controllervalfile implements MessageConstants
 			Controllerpng controller1 = (Controllerpng) context
 					.getBean( "controllerpng" );
 			boolean okMandatory = controller1.executeMandatory( valDatei,
-					directoryOfLogfile, configMap, locale, logFile );
+					directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath );
+			valFile = okMandatory;
+
+			if ( okMandatory ) {
+				// Validierte Datei valide
+				Logtxt.logtxt( logFile, getTextResourceService()
+						.getText( locale, MESSAGE_XML_VALERGEBNIS_VALID ) );
+				Logtxt.logtxt( logFile, getTextResourceService()
+						.getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) );
+				System.out.println( " = Valid" );
+			} else {
+				// Fehler in Validierte Datei --> invalide
+				Logtxt.logtxt( logFile, getTextResourceService()
+						.getText( locale, MESSAGE_XML_VALERGEBNIS_INVALID ) );
+				Logtxt.logtxt( logFile, getTextResourceService()
+						.getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) );
+				System.out.println( " = Invalid" );
+			}
+
+		} else if ( (valDateiExt.equals( ".xml" )
+				|| valDateiExt.equals( ".xsd" )
+				|| valDateiExt.equals( ".xsl" )) ) {
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
+					MESSAGE_XML_VALERGEBNIS ) );
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
+					MESSAGE_XML_VALTYPE, getTextResourceService()
+							.getText( locale, MESSAGE_XMLVALIDATION ) ) );
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
+					MESSAGE_XML_VALFILE, originalValName ) );
+			Controllerxml controller1 = (Controllerxml) context
+					.getBean( "controllerxml" );
+			boolean okMandatory = controller1.executeMandatory( valDatei,
+					directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath );
 			valFile = okMandatory;
 
 			if ( okMandatory ) {
@@ -215,7 +251,8 @@ public class Controllervalfile implements MessageConstants
 			Controllertiff controller1 = (Controllertiff) context
 					.getBean( "controllertiff" );
 			boolean okMandatory = controller1.executeMandatory( valDatei,
-					directoryOfLogfile, configMap, locale, logFile );
+					directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath );
 			boolean ok = false;
 
 			/*
@@ -225,7 +262,7 @@ public class Controllervalfile implements MessageConstants
 			 */
 			if ( okMandatory ) {
 				ok = controller1.executeOptional( valDatei, directoryOfLogfile,
-						configMap, locale, logFile );
+						configMap, locale, logFile, dirOfJarPath );
 			}
 
 			ok = (ok && okMandatory);
@@ -280,7 +317,8 @@ public class Controllervalfile implements MessageConstants
 			Controllersiard controller2 = (Controllersiard) context
 					.getBean( "controllersiard" );
 			boolean okMandatory = controller2.executeMandatory( valDatei,
-					directoryOfLogfile, configMap, locale, logFile );
+					directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath );
 			boolean ok = false;
 
 			/*
@@ -290,7 +328,7 @@ public class Controllervalfile implements MessageConstants
 			 */
 			if ( okMandatory ) {
 				ok = controller2.executeOptional( valDatei, directoryOfLogfile,
-						configMap, locale, logFile );
+						configMap, locale, logFile, dirOfJarPath );
 				// Ausfuehren der optionalen Schritte
 			}
 
@@ -326,7 +364,8 @@ public class Controllervalfile implements MessageConstants
 					.getBean( "controllerpdfa" );
 
 			boolean okMandatory = controller3.executeMandatory( valDatei,
-					directoryOfLogfile, configMap, locale, logFile );
+					directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath );
 			boolean ok = false;
 
 			/*
@@ -337,7 +376,7 @@ public class Controllervalfile implements MessageConstants
 
 			if ( okMandatory ) {
 				ok = controller3.executeOptional( valDatei, directoryOfLogfile,
-						configMap, locale, logFile );
+						configMap, locale, logFile, dirOfJarPath );
 				// Ausfuehren der validierung und optionalen Bildvalidierung
 			}
 

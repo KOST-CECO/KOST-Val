@@ -1,5 +1,5 @@
 ﻿/* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
  * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
@@ -28,20 +28,27 @@ import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesip1.Validation1bFolderStructureModule;
 import ch.kostceco.tools.kostval.logging.Logtxt;
 
-/** Besteht eine korrekte primäre Verzeichnisstruktur: /header/metadata.xml /header/xsd /content */
+/**
+ * Besteht eine korrekte primäre Verzeichnisstruktur: /header/metadata.xml
+ * /header/xsd /content
+ */
 public class Validation1bFolderStructureModuleImpl extends ValidationModuleImpl
 		implements Validation1bFolderStructureModule
 {
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile ) throws Validation1bFolderStructureException
+	public boolean validate( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath ) throws Validation1bFolderStructureException
 	{
 		// Informationen zur Darstellung "onWork" holen
 		String onWork = configMap.get( "ShowProgressOnWork" );
-		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
-		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
-		 * ref="configurationService" /> */
+		/*
+		 * Nicht vergessen in
+		 * "src/main/resources/config/applicationContext-services.xml" beim
+		 * entsprechenden Modul die property anzugeben: <property
+		 * name="configurationService" ref="configurationService" />
+		 */
 		if ( onWork.equals( "yes" ) ) {
 			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
 			System.out.print( "1B   " );
@@ -49,36 +56,50 @@ public class Validation1bFolderStructureModuleImpl extends ValidationModuleImpl
 		}
 
 		boolean isValid = true;
-		File content = new File( valDatei.getAbsolutePath() + File.separator + "content" );
-		File header = new File( valDatei.getAbsolutePath() + File.separator + "header" );
-		File xsd = new File(
-				valDatei.getAbsolutePath() + File.separator + "header" + File.separator + "xsd" );
-		File metadata = new File(
-				valDatei.getAbsolutePath() + File.separator + "header" + File.separator + "metadata.xml" );
+		File content = new File(
+				valDatei.getAbsolutePath() + File.separator + "content" );
+		File header = new File(
+				valDatei.getAbsolutePath() + File.separator + "header" );
+		File xsd = new File( valDatei.getAbsolutePath() + File.separator
+				+ "header" + File.separator + "xsd" );
+		File metadata = new File( valDatei.getAbsolutePath() + File.separator
+				+ "header" + File.separator + "metadata.xml" );
 
 		if ( !content.exists() ) {
 			isValid = false;
 
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ab_SIP )
-					+ getTextResourceService().getText( locale, ERROR_XML_AB_CONTENT ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_Ab_SIP )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_AB_CONTENT ) );
 		}
 		if ( !header.exists() ) {
 			isValid = false;
 
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ab_SIP )
-					+ getTextResourceService().getText( locale, ERROR_XML_AB_HEADER ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_Ab_SIP )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_AB_HEADER ) );
 		} else {
 			if ( !xsd.exists() ) {
 				isValid = false;
 
-				Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ab_SIP )
-						+ getTextResourceService().getText( locale, ERROR_XML_AB_XSD ) );
+				Logtxt.logtxt( logFile,
+						getTextResourceService().getText( locale,
+								MESSAGE_XML_MODUL_Ab_SIP )
+								+ getTextResourceService().getText( locale,
+										ERROR_XML_AB_XSD ) );
 			}
 			if ( !metadata.exists() ) {
 				isValid = false;
 
-				Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ab_SIP )
-						+ getTextResourceService().getText( locale, ERROR_XML_AB_METADATA ) );
+				Logtxt.logtxt( logFile,
+						getTextResourceService().getText( locale,
+								MESSAGE_XML_MODUL_Ab_SIP )
+								+ getTextResourceService().getText( locale,
+										ERROR_XML_AB_METADATA ) );
 			}
 		}
 		return isValid;

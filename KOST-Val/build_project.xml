@@ -30,15 +30,7 @@
 		<pathelement location="lib/zip64-1.0.jar" />
 		<pathelement location="lib/jhove-apps-1.24.1.jar" />
 		<pathelement location="lib/tiff-hul-1.9.2.jar" />
-		<pathelement location="lib/droid-core-5.0.3.jar" />
-		<pathelement location="lib/droid-export-5.0.3.jar" />
-		<pathelement location="lib/droid-export-interfaces-5.0.3.jar" />
-		<pathelement location="lib/droid-help-5.0.3.jar" />
-		<pathelement location="lib/droid-interfaces-5.0.3.jar" />
-		<pathelement location="lib/droid-report-5.0.3.jar" />
-		<pathelement location="lib/droid-report-interfaces-5.0.3.jar" />
-		<pathelement location="lib/droid-results-5.0.3.jar" />
-		<pathelement location="lib/VALA-6.17.2.4.RELEASE.jar" />
+		<pathelement location="lib/VALA-6.23.0.4.RELEASE.jar" />
 		<pathelement location="lib/badpeggy-2.0.jar" />
 	</path>
 	<target name="init">

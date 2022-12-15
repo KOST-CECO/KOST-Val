@@ -1,5 +1,5 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
  * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
@@ -84,14 +84,16 @@ public class Controllerpdfa implements MessageConstants
 	}
 
 	public boolean executeMandatory( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile )
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath )
 	{
 		boolean valid = true;
 
 		// Initialisation PDF-Tools
 		try {
 			if ( this.getValidationAinitialisationModule().validate( valDatei,
-					directoryOfLogfile, configMap, locale, logFile ) ) {
+					directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath ) ) {
 				this.getValidationAinitialisationModule().getMessageService()
 						.print();
 			} else {
@@ -120,7 +122,8 @@ public class Controllerpdfa implements MessageConstants
 	}
 
 	public boolean executeOptional( File valDatei, File directoryOfLogfile,
-			Map<String, String> configMap, Locale locale, File logFile )
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath )
 	{
 		String onWork = configMap.get( "ShowProgressOnWork" );
 		if ( onWork.equals( "nomin" ) ) {
@@ -132,7 +135,8 @@ public class Controllerpdfa implements MessageConstants
 		// Validation A - I
 		try {
 			if ( this.getValidationAvalidationAiModule().validate( valDatei,
-					directoryOfLogfile, configMap, locale, logFile ) ) {
+					directoryOfLogfile, configMap, locale, logFile,
+					dirOfJarPath ) ) {
 				this.getValidationAvalidationAiModule().getMessageService()
 						.print();
 			} else {

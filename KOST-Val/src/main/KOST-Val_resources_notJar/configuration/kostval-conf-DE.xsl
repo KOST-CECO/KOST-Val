@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-	<xsl:template match="/"><!-- kostval.conf.xml_v2.1.2.0 -->
+	<xsl:template match="/"><!-- kostval.conf.xml_v2.1.3.0 -->
 		<html>
 			<head>
 				<style>
@@ -23,148 +23,270 @@
 					tr.captionio {background-color: #afeeaf; font-weight:bold }
 					tr.captioniom {background-color: #ccffcc }
 					tr.captioninfo {background-color: #b2b2c5 }
-					tr.captioninfom {background-color: #e7e7ed }
+					tr.captioninfow {background-color: #ffffff }
+					.captioninfor {color: #ff0000 }
+					.captioninfog {color: #0cc10c }
+					.captioninfoo {color: #ffa500 }
+					tr.captioninfom {font-size: 9pt; background-color: #e7e7ed }
 				</style>
 			</head>
 			<body>
-				<p class="logow">
-					<span class="logol">.</span>
-					<span class="logo">KOST-</span>
-					<span class="logov">V</span>
-					<span class="logo">al</span>
-					<span class="logol">.</span>
-					<span class="logox"> - </span>
-					<span class="logoff">Konfiguration</span>
-				</p>
 				<table >
-					<tr  class="captioninfo">
-						<td>Angabe, ob eine JPEG-Validierung stattfinden soll [yes]:</td>
+					<tr  class="captioninfow">
 						<td>
-							<xsl:value-of select="configuration/jpeg/jpegvalidation" />
+							<span class="logol">.</span>
+							<span class="logo">KOST-</span>
+							<span class="logov">V</span>
+							<span class="logo">al</span>
+							<span class="logol">&#160;</span>
+							<span class="logox">&#160; &#160; &#160;</span>
+							<span class="logoff">Konfiguration</span>
+						</td>
+						<td>Legende:</td>
+					</tr>
+					<tr  class="captioninfow">
+						<td>&#160;</td>
+						<td class="captioninfow">
+							<span class="captioninfog">&#x2713;</span>
+							<span>&#160;&#160;&#160;&#160;= akzeptiert und validieren</span>
+					</td>
+					</tr>
+					<tr  class="captioninfow">
+						<td>&#160;</td>
+						<td>
+							<span class="captioninfoo">(&#x2713;)</span>
+							<span>&#160;= akzeptiert</span>
+						</td>
+					</tr>
+					<tr  class="captioninfow">
+						<td>&#160;</td>
+						<td>
+							<span class="captioninfor">&#x2717;</span>
+							<span>&#160;&#160;&#160;&#160;= nicht akzeptiert</span>
+						</td>
+					</tr>
+					<tr  class="captioninfow">
+						<td>&#160;&#160;&#160;</td>
+					</tr>
+					
+<!-- TEXT -->
+					<tr  class="captioninfo">
+						<td>PDF/A: Akzeptanz und Validierung [&#x2713;]</td>
+						<td>
+							<xsl:value-of select="configuration/pdfa/pdfavalidation" />
+						</td>
+					</tr>
+					<tr  class="captioninfom">
+						<td>PDF/A-Validierung mit PDF Tools [yes]:</td>
+						<td>
+							<xsl:value-of select="configuration/pdfa/pdftools" />
+						</td>
+					</tr>
+					<tr  class="captioninfom">
+						<td>- PDF Tools auch detaillierte Fehler in Englisch [yes]:</td>
+						<td>
+							<xsl:value-of select="configuration/pdfa/detail" />
+						</td>
+					</tr>
+					<tr  class="captioninfom">
+						<td>- Validierung (Durchsuch- und Extrahierbarkeit) [tolerant]:</td>
+						<td>
+							<xsl:value-of select="configuration/pdfa/pdfafont" />
+						</td>
+					</tr>
+					<tr  class="captioninfom">
+						<td>PDF/A-Validierung mit callas [yes]:</td>
+						<td>
+							<xsl:value-of select="configuration/pdfa/callas" />
+						</td>
+					</tr>
+					<tr  class="captioninfom">
+						<td>- Fehler (E) / Warnung (W), wenn der N-Eintrag nicht übereinstimmt [W]:</td>
+						<td>
+							<xsl:value-of select="configuration/pdfa/nentry" />
+						</td>
+					</tr>
+					<tr  class="captioninfom">
+						<td>Erlaubte PDF/A Versionen [1A, 1B, 2A, 2B, 2U]:</td>
+						<td>
+							<xsl:value-of select="configuration/pdfa/pdfa1a" />&#160; <xsl:value-of select="configuration/pdfa/pdfa1b" />&#160; <xsl:value-of select="configuration/pdfa/pdfa2a" />&#160;<xsl:value-of select="configuration/pdfa/pdfa2b" />&#160; <xsl:value-of select="configuration/pdfa/pdfa2u" />
+						</td>
+					</tr>
+					<tr  class="captioninfom">
+						<td>JBIG2-Komprimierung erlaubt [yes]:</td>
+						<td>
+							<xsl:value-of select="configuration/pdfa/jbig2allowed" />
+						</td>
+					</tr>
+					
+					<tr  class="captioninfo">
+						<td>TXT: Akzeptanz [(&#x2713;)]</td>
+						<td>
+							<xsl:value-of select="configuration/txt/txtvalidation" />
 						</td>
 					</tr>
 
 					<tr  class="captioninfo">
-						<td>Angabe, ob eine JP2-Validierung stattfinden soll [yes]:</td>
+						<td>PDF: Akzeptanz [&#x2717;]</td>
+						<td>
+							<xsl:value-of select="configuration/pdf/pdfvalidation" />
+						</td>
+					</tr>
+					
+<!-- BILD -->
+					<tr  class="captioninfo">
+						<td>JPEG2000: Akzeptanz und Validierung [&#x2713;]</td>
 						<td>
 							<xsl:value-of select="configuration/jp2/jp2validation" />
 						</td>
 					</tr>
 
 					<tr  class="captioninfo">
-						<td>Angabe, ob eine PNG-Validierung stattfinden soll [yes]:</td>
+						<td>JPEG: Akzeptanz und Validierung [&#x2713;]</td>
 						<td>
-							<xsl:value-of select="configuration/png/pngvalidation" />
+							<xsl:value-of select="configuration/jpeg/jpegvalidation" />
 						</td>
 					</tr>
 
 					<tr  class="captioninfo">
-						<td>Angabe, ob eine SIARD-Validierung stattfinden soll [yes]:</td>
-						<td>
-							<xsl:value-of select="configuration/siard/siardvalidation" />
-						</td>
-					</tr>
-					<tr  class="captioninfom">
-						<td>Angabe, welche SIARD Versionen erlaubt sind [1.0, 2.1]:</td>
-						<td>
-							<xsl:value-of select="configuration/siard/siard10" />&#160; <xsl:value-of select="configuration/siard/siard21" />
-						</td>
-					</tr>
-
-					<tr  class="captioninfo">
-						<td>Angaben zur PDF/A-Validierung [yes]:</td>
-						<td>
-							<xsl:value-of select="configuration/pdfa/pdfavalidation" />
-						</td>
-					</tr>
-					<tr  class="captioninfom">
-						<td>Angabe, ob eine PDF/A-Validierung mit PDF Tools stattfinden soll [yes]:</td>
-						<td>
-							<xsl:value-of select="configuration/pdfa/pdftools" />
-						</td>
-					</tr>
-					<tr  class="captioninfom">
-						<td>Angabe, ob seitens PDF Tools auch detaillierte Fehler in Englisch ausgegeben werden sollen [yes]:</td>
-						<td>
-							<xsl:value-of select="configuration/pdfa/detail" />
-						</td>
-					</tr>
-					<tr  class="captioninfom">
-						<td>Angabe, ob eine Schrift-Validierung (Durchsuch- und Extrahierbarkeit) stattfinden soll [tolerant]:</td>
-						<td>
-							<xsl:value-of select="configuration/pdfa/pdfafont" />
-						</td>
-					</tr>
-					<tr  class="captioninfom">
-						<td>Angabe, ob eine PDF/A-Validierung mit callas stattfinden soll [yes]:</td>
-						<td>
-							<xsl:value-of select="configuration/pdfa/callas" />
-						</td>
-					</tr>
-					<tr  class="captioninfom">
-						<td>Angabe, ob seitens callas ein Fehler (E) oder eine Warnung (W) ausgegeben werden soll, wenn der N-Eintrag nicht übereinstimmt [W]:</td>
-						<td>
-							<xsl:value-of select="configuration/pdfa/nentry" />
-						</td>
-					</tr>
-					<tr  class="captioninfom">
-						<td>Angabe, welche PDF/A Versionen erlaubt sind [1A, 1B, 2A, 2B, 2U]:</td>
-						<td>
-							<xsl:value-of select="configuration/pdfa/pdfa1a" />&#160; <xsl:value-of select="configuration/pdfa/pdfa1b" />&#160; <xsl:value-of select="configuration/pdfa/pdfa2a" />&#160;<xsl:value-of select="configuration/pdfa/pdfa2b" />&#160; <xsl:value-of select="configuration/pdfa/pdfa2u" />
-						</td>
-					</tr>
-					<tr  class="captioninfom">
-						<td>Angabe, ob die JBIG2-Komprimierung erlaubt ist [yes]:</td>
-						<td>
-							<xsl:value-of select="configuration/pdfa/jbig2allowed" />
-						</td>
-					</tr>
-
-					<tr  class="captioninfo">
-						<td>Angabe, ob eine TIFF-Validierung stattfinden soll [yes]:</td>
+						<td>TIFF: Akzeptanz und Validierung [&#x2713;]</td>
 						<td>
 							<xsl:value-of select="configuration/tiff/tiffvalidation" />
 						</td>
 					</tr>
 					<tr  class="captioninfom">
-						<td>Angabe, der erlaubten Komprimierungsalgorithmen [Uncompressed, CCITT 1D, T4/Group 3 Fax, T6/Group 4 Fax, LZW, PackBits]:</td>
+						<td>Erlaubten Komprimierungsalgorithmen [Uncompressed, CCITT 1D, T4/Group 3 Fax, T6/Group 4 Fax, LZW, PackBits]:</td>
 						<td>
 							<xsl:value-of select="configuration/tiff/allowedcompression" />
 						</td>
 					</tr>
 					<tr  class="captioninfom">
-						<td>Angabe, der erlaubten Farbräume [WhiteIsZero, BlackIsZero, RGB, RGB Palette]:</td>
+						<td>Erlaubten Farbräume [WhiteIsZero, BlackIsZero, RGB, RGB Palette]:</td>
 						<td>
 							<xsl:value-of select="configuration/tiff/allowedphotointer" />
 						</td>
 					</tr>
 					<tr  class="captioninfom">
-						<td>Angabe, der erlaubten Bits per Sample [1, 4, 8, 16]:</td>
+						<td>Erlaubten Bits per Sample [1, 4, 8, 16]:</td>
 						<td>
 							<xsl:value-of select="configuration/tiff/allowedbitspersample" />
 						</td>
 					</tr>
 					<tr  class="captioninfom">
-						<td>Angabe, ob Multipage-TIFFs erlaubt sind oder nicht [yes]:</td>
+						<td>Multipage-TIFFs erlaubt [yes]:</td>
 						<td>
 							<xsl:value-of select="configuration/tiff/allowedother/allowedmultipage" />
 						</td>
 					</tr>
 					<tr  class="captioninfom">
-						<td>Angabe, ob der Aufbau in Kacheln erlaubt ist oder nicht [no]:</td>
+						<td>Aufbau in Kacheln erlaubt [no]:</td>
 						<td>
 							<xsl:value-of select="configuration/tiff/allowedother/allowedtiles" />
 						</td>
 					</tr>
 					<tr  class="captioninfom">
-						<td>Angabe, ob Dateigrössen von 1000MB (~1GB) und grösser erlaubt sind oder nicht [no]:</td>
+						<td>Dateigrössen von 1000MB (~1GB) und grösser erlaubt [no]:</td>
 						<td>
 							<xsl:value-of select="configuration/tiff/allowedother/allowedsize" />
 						</td>
 					</tr>
 
 					<tr  class="captioninfo">
-						<td>Angaben zur SIP-Validierung [yes]:</td>
+						<td>PNG: Akzeptanz und Validierung [&#x2713;]</td>
+						<td>
+							<xsl:value-of select="configuration/png/pngvalidation" />
+						</td>
+					</tr>
+
+<!-- AUDIO -->
+					<tr  class="captioninfo">
+						<td>FLAC: Akzeptanz [(&#x2713;)]</td>
+						<td>
+							<xsl:value-of select="configuration/flac/flacvalidation" />
+						</td>
+					</tr>
+
+					<tr  class="captioninfo">
+						<td>WAVE: Akzeptanz [(&#x2713;)]</td>
+						<td>
+							<xsl:value-of select="configuration/wave/wavevalidation" />
+						</td>
+					</tr>
+
+					<tr  class="captioninfo">
+						<td>MP3: Akzeptanz [(&#x2713;)]</td>
+						<td>
+							<xsl:value-of select="configuration/mp3/mp3validation" />
+						</td>
+					</tr>
+
+<!-- VIDEO -->
+					<tr  class="captioninfo">
+						<td>FFV1: Akzeptanz [(&#x2713;)]</td>
+						<td>
+							<xsl:value-of select="configuration/ffv1/ffv1validation" />
+						</td>
+					</tr>
+
+					<tr  class="captioninfo">
+						<td>MP4: Akzeptanz [(&#x2713;)]</td>
+						<td>
+							<xsl:value-of select="configuration/mp4/mp4validation" />
+						</td>
+					</tr>
+
+					<tr  class="captioninfo">
+						<td>MJ2: Akzeptanz [(&#x2713;)]</td>
+						<td>
+							<xsl:value-of select="configuration/mj2/mj2validation" />
+						</td>
+					</tr>
+
+<!-- DATEN -->
+					<tr  class="captioninfo">
+						<td>XML: Akzeptanz und Validierung [&#x2713;]</td>
+						<td>
+							<xsl:value-of select="configuration/xml/xmlvalidation" />
+						</td>
+					</tr>
+
+					<tr  class="captioninfo">
+						<td>SIARD: Akzeptanz und Validierung [&#x2713;]</td>
+						<td>
+							<xsl:value-of select="configuration/siard/siardvalidation" />
+						</td>
+					</tr>
+					<tr  class="captioninfom">
+						<td>Erlaubte SIARD Versionen [1.0, 2.1]:</td>
+						<td>
+							<xsl:value-of select="configuration/siard/siard10" />&#160; <xsl:value-of select="configuration/siard/siard21" />
+						</td>
+					</tr>
+
+					<tr  class="captioninfo">
+						<td>CSV: Akzeptanz [(&#x2713;)]</td>
+						<td>
+							<xsl:value-of select="configuration/csv/csvvalidation" />
+						</td>
+					</tr>
+
+					<tr  class="captioninfo">
+						<td>XLSX: Akzeptanz [(&#x2713;)]</td>
+						<td>
+							<xsl:value-of select="configuration/xlsx/xlsxvalidation" />
+						</td>
+					</tr>
+
+					<tr  class="captioninfo">
+						<td>ODS: Akzeptanz [&#x2717;]</td>
+						<td>
+							<xsl:value-of select="configuration/ods/odsvalidation" />
+						</td>
+					</tr>
+
+<!-- SIP -->
+					<tr  class="captioninfo">
+						<td>SIP: Validierung [&#x2713;]:</td>
 						<td>
 							<xsl:value-of select="configuration/sip/ech0160validation" />
 						</td>
@@ -176,24 +298,26 @@
 						</td>
 					</tr>
 					<tr  class="captioninfom">
-						<td>Vorgaben zum Aufbau des SIP-Namens [SIP_[1-2][0-9]{3}[0-1][0-9][0-3][0-9]_\\w{3}]:</td>
+						<td>Vorgaben zum Aufbau des SIP-Namens [SIP_[1-2][0-9]{3}[0-1][0-9][0-3][0-9]_\w{3}]:</td>
 						<td>
 							<xsl:value-of select="configuration/sip/allowedsipname" />
 						</td>
 					</tr>
-					<tr  class="captioninfom">
-						<td>Auflistung der erlaubten Dateiformate [TXT, PDFA1, PDFA2, TIFF, JP2, JPEG, PNG, WAVE, MP3, MP4, MJ2, CSV, SIARD, WARC]:</td>
+
+<!-- SONSTIGES -->
+					<tr  class="captioninfo">
+						<td>Weitere akzeptierte Dateiformate [WARC, HTML, DWG]:</td>
 						<td>
-							<xsl:value-of select="configuration/sip/allowedformats" />
+							<xsl:value-of select="configuration/otherformats" />
 						</td>
 					</tr>
-					<tr  class="captioninfom">
+					<tr  class="captioninfo">
 						<td>Arbeitsverzeichnis []:</td>
 						<td>
 							<xsl:value-of select="configuration/pathtoworkdir" />
 						</td>
 					</tr>
-					<tr  class="captioninfom">
+					<tr  class="captioninfo">
 						<td>Inputverzeichnis []:</td>
 						<td>
 							<xsl:value-of select="configuration/standardinputdir" />

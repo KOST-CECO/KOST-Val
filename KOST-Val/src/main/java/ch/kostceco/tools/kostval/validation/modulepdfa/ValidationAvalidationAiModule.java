@@ -1,5 +1,5 @@
 ﻿/* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
  * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
@@ -26,25 +26,31 @@ import java.util.Map;
 import ch.kostceco.tools.kostval.exception.modulepdfa.ValidationApdfvalidationException;
 import ch.kostceco.tools.kostval.validation.ValidationModule;
 
-/** Ist die vorliegende PDF-Datei eine valide PDFA-Datei? PDFA Validierungs mit PDFTron und oder
- * PDF-Tools.
+/**
+ * Ist die vorliegende PDF-Datei eine valide PDFA-Datei? PDFA Validierungs mit
+ * PDFTron und oder PDF-Tools.
  * 
- * Folgendes ist Konfigurierbar: Hauptvalidator sowie ob eine duale Validierung durchgef�hrt werden
- * soll oder nicht. Bei der dualen Validierung m�ssen beide Validatoren die Datei als invalide
- * betrachten, damit diese als invalid gilt. Bei Uneinigkeit gilt diese als valid.
+ * Folgendes ist Konfigurierbar: Hauptvalidator sowie ob eine duale Validierung
+ * durchgefuehrt werden soll oder nicht. Bei der dualen Validierung muessen
+ * beide Validatoren die Datei als invalide betrachten, damit diese als invalid
+ * gilt. Bei Uneinigkeit gilt diese als valid.
  * 
- * Es wird falls vorhanden die Vollversion von PDF-Tools verwendet. KOST-Val muss nicht angepasst
- * werden und verwendet automatisch den internen Schl�ssel, sollte keine Vollversion existieren.
+ * Es wird falls vorhanden die Vollversion von PDF-Tools verwendet. KOST-Val
+ * muss nicht angepasst werden und verwendet automatisch den internen
+ * Schluessel, sollte keine Vollversion existieren.
  * 
- * Zuerste erfolgt eine Erkennung, wenn diese io kommt die Validierung mit PDFTron und oder
- * PDF-Tools. Die Fehler werden den Einzelnen Gruppen (Modulen) zugeordnet
+ * Zuerste erfolgt eine Erkennung, wenn diese io kommt die Validierung mit
+ * PDFTron und oder PDF-Tools. Die Fehler werden den Einzelnen Gruppen (Modulen)
+ * zugeordnet
  * 
- * @author Rc Claire Roethlisberger, KOST-CECO */
+ * @author Rc Claire Roethlisberger, KOST-CECO
+ */
 
 public interface ValidationAvalidationAiModule extends ValidationModule
 {
 
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile ) throws ValidationApdfvalidationException;
+	public boolean validate( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath ) throws ValidationApdfvalidationException;
 
 }

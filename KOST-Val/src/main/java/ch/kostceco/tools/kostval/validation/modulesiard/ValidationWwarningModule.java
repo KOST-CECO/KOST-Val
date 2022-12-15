@@ -1,5 +1,5 @@
 ﻿/* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
  * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
@@ -30,18 +30,22 @@ import ch.kostceco.tools.kostval.exception.modulesiard.ValidationWwarningExcepti
 import ch.kostceco.tools.kostval.validation.ValidationModule;
 import ch.kostceco.tools.kostval.validation.bean.ValidationContext;
 
-/** Validierungsschritt W (Warnungen) Wurden dataOwner und dataOriginTimespan ausgefüllt und nicht
- * auf (...) belassen? <dataOwner>(...)</dataOwner> <dataOriginTimespan>(...)</dataOriginTimespan>
+/**
+ * Validierungsschritt W (Warnungen) Wurden dataOwner und dataOriginTimespan
+ * ausgefüllt und nicht auf (...) belassen? <dataOwner>(...)</dataOwner>
+ * <dataOriginTimespan>(...)</dataOriginTimespan>
  * 
  * nur Messeage ausgeben aber immer valid
  * 
- * @author Rc Claire Roethlisberger, KOST-CECO */
+ * @author Rc Claire Roethlisberger, KOST-CECO
+ */
 
 public interface ValidationWwarningModule extends ValidationModule
 {
 
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile ) throws ValidationWwarningException;
+	public boolean validate( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath ) throws ValidationWwarningException;
 
 	public boolean prepareValidation( ValidationContext validationContext )
 			throws IOException, JDOMException, Exception;

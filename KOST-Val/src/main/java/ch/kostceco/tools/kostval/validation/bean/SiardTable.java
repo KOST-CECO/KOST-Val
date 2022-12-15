@@ -1,5 +1,5 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
  * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
@@ -26,9 +26,9 @@ import org.jdom2.Element;
 public class SiardTable
 {
 
-	private String				tableName;
-	private Element				tableRootElement;
-	private Element				tableXSDRootElement;
+	private String			tableName;
+	private Element			tableRootElement;
+	private Element			tableXSDRootElement;
 	private List<Element>	metadataXMLElements;
 	private List<Element>	tableXSDElements;
 	private List<Element>	tableXMLElements;
@@ -79,8 +79,10 @@ public class SiardTable
 		return tableRootElement;
 	}
 
-	/** @param tableRootElement
-	 *          the tableRootElement to set */
+	/**
+	 * @param tableRootElement
+	 *            the tableRootElement to set
+	 */
 	public void setTableRootElement( Element tableRootElement )
 	{
 		this.tableRootElement = tableRootElement;
@@ -92,8 +94,10 @@ public class SiardTable
 		return tableXSDRootElement;
 	}
 
-	/** @param tableXSDRootElement
-	 *          the tableXSDRootElement to set */
+	/**
+	 * @param tableXSDRootElement
+	 *            the tableXSDRootElement to set
+	 */
 	public void setTableXSDRootElement( Element tableXSDRootElement )
 	{
 		this.tableXSDRootElement = tableXSDRootElement;

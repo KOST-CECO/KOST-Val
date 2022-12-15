@@ -1,5 +1,5 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
  * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
@@ -37,7 +37,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.w3c.dom.Element;
 
 import ch.kostceco.tools.kosttools.util.Util;
-import ch.kostceco.tools.kostval.controller.Controllervalfile;
+import ch.kostceco.tools.kostval.controller.Controllervalfofile;
 import ch.kostceco.tools.kostval.controller.Controllervalfolder;
 import ch.kostceco.tools.kostval.controller.Controllervalinit;
 import ch.kostceco.tools.kostval.controller.Controllervalinitlog;
@@ -137,16 +137,12 @@ public class KOSTVal implements MessageConstants
 		 * ermitteln und dann alle Pfade mit dirOfJarPath + File.separator +
 		 * erweitern.
 		 */
-		String path = new java.io.File( KOSTVal.class.getProtectionDomain()
-				.getCodeSource().getLocation().getPath() ).getAbsolutePath();
-		String locationOfJarPath = path;
-		String dirOfJarPath = locationOfJarPath;
-		if ( locationOfJarPath.endsWith( ".jar" )
-				|| locationOfJarPath.endsWith( ".exe" )
-				|| locationOfJarPath.endsWith( "." ) ) {
-			File file = new File( locationOfJarPath );
-			dirOfJarPath = file.getParent();
-		}
+		File pathJarFile20 = new File( ClassLoader.getSystemClassLoader()
+				.getResource( "." ).getPath() );
+		/* wennn im Pfad ein Leerschlag ist, muss er noch normalisiert werden */
+		String dirOfJarPath = pathJarFile20.getAbsolutePath();
+		dirOfJarPath = dirOfJarPath.replaceAll( "%20", " " );
+		pathJarFile20 = new File( dirOfJarPath );
 
 		Locale locale = Locale.getDefault();
 
@@ -182,14 +178,6 @@ public class KOSTVal implements MessageConstants
 		}
 		String pathToLogfile = configMap.get( "PathToLogfile" );
 		File directoryOfLogfile = new File( pathToLogfile );
-
-		if ( args[2].equalsIgnoreCase( "--de" ) ) {
-			locale = new Locale( "de" );
-		} else if ( args[2].equalsIgnoreCase( "--fr" ) ) {
-			locale = new Locale( "fr" );
-		} else if ( args[2].equalsIgnoreCase( "--en" ) ) {
-			locale = new Locale( "en" );
-		}
 
 		File logDatei = null;
 		logDatei = valDatei;
@@ -276,17 +264,18 @@ public class KOSTVal implements MessageConstants
 			// TODO: Formatvalidierung an einer Datei --> erledigt --> nur
 			// Marker
 			if ( !valDatei.isDirectory() ) {
-				System.out.print( valDatei.getAbsolutePath() + " " );
+				// System.out.print( valDatei.getAbsolutePath() + " " );
 				/*
 				 * boolean valFile = valFile( valDatei, logFileName,
 				 * directoryOfLogfile, verbose, dirOfJarPath, configMap, context
 				 * );
 				 */
-				Controllervalfile controller1 = (Controllervalfile) context
-						.getBean( "controllervalfile" );
-				boolean valFile = controller1.valFile( valDatei, logFileName,
+				int countToValidated = 0;
+				Controllervalfofile controller1 = (Controllervalfofile) context
+						.getBean( "controllervalfofile" );
+				String valFile = controller1.valFoFile( valDatei, logFileName,
 						directoryOfLogfile, verbose, dirOfJarPath, configMap,
-						context, locale, logFile );
+						context, locale, logFile, countToValidated );
 
 				Logtxt.logtxt( logFile, kostval.getTextResourceService()
 						.getText( locale, MESSAGE_XML_FORMAT2 ) );
@@ -312,16 +301,17 @@ public class KOSTVal implements MessageConstants
 					Util.deleteFile( pathTemp );
 				}
 
-				if ( valFile ) {
+				if ( valFile.equals( "countValid" ) ) {
 					// Validierte Datei valide
 					mainBoolean = true;
 					return mainBoolean;
 				} else {
-					// Fehler in Validierte Datei --> invalide
+					// Fehler in Validierte Datei -->
+					// Datei nicht akzeptiert
 					mainBoolean = false;
 					return mainBoolean;
-
 				}
+
 			} else {
 				// TODO: Formatvalidierung ueber ein Ordner --> erledigt --> nur
 				// Marker
@@ -360,7 +350,8 @@ public class KOSTVal implements MessageConstants
 			if ( args[0].equalsIgnoreCase( "--onlysip" ) ) {
 				onlySip = true;
 			}
-			if ( configMap.get( "ech0160validation" ).equals( "no" ) ) {
+			String ech0160validation = configMap.get( "ech0160validation" );
+			if ( ech0160validation.equals( "no" ) ) {
 				// SIP-Validierung in der Konfiguration ausgeschaltet.
 				System.out.println( kostval.getTextResourceService()
 						.getText( locale, ERROR_XML_CONIG_SIP ) );

@@ -20,7 +20,7 @@ import ch.kostceco.tools.siardexcerpt.exception.SIARDexcerptException;
 public class ExcerptCGrepException extends SIARDexcerptException
 {
 
-	private static final long	serialVersionUID	= -1222566139624342954L;
+	private static final long serialVersionUID = -1222566139624342954L;
 
 	public ExcerptCGrepException()
 	{

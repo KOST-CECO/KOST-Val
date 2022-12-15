@@ -1,5 +1,5 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
  * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
@@ -30,12 +30,15 @@ public class MessageServiceImpl implements MessageService
 {
 	/** @author Rc Claire Roethlisberger, KOST-CECO */
 
-	private static final Logger	LOGGER	= new Logger( MessageServiceImpl.class );
+	private static final Logger	LOGGER	= new Logger(
+			MessageServiceImpl.class );
 
-	List<String[]>							stack		= new LinkedList<String[]>();
+	List<String[]>				stack	= new LinkedList<String[]>();
 
-	/* @Override public void logDebug( String message ) { this.stack.add( new String[] {
-	 * MessageService.DEBUG, message } ); } */
+	/*
+	 * @Override public void logDebug( String message ) { this.stack.add( new
+	 * String[] { MessageService.DEBUG, message } ); }
+	 */
 
 	@Override
 	public void logError( String message )
@@ -49,8 +52,10 @@ public class MessageServiceImpl implements MessageService
 		this.stack.add( new String[] { MessageService.FATAL, message } );
 	}
 
-	/* @Override public void logInfo( String message ) { this.stack.add( new String[] {
-	 * MessageService.INFO, message } ); } */
+	/*
+	 * @Override public void logInfo( String message ) { this.stack.add( new
+	 * String[] { MessageService.INFO, message } ); }
+	 */
 
 	@Override
 	public void logWarning( String message )

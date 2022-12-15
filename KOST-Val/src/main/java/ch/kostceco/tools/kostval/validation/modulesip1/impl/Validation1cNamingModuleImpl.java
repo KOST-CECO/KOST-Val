@@ -1,5 +1,5 @@
 ﻿/* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
  * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
@@ -34,23 +34,29 @@ import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesip1.Validation1cNamingModule;
 import ch.kostceco.tools.kostval.logging.Logtxt;
 
-/** Diverse Validierungen zu den Namen der Files und Ordner, erlaubte L�ngen, verwendete Zeichen
- * usw. */
+/**
+ * Diverse Validierungen zu den Namen der Files und Ordner, erlaubte Laengen,
+ * verwendete Zeichen usw.
+ */
 public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 		implements Validation1cNamingModule
 {
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile ) throws Validation1cNamingException
+	public boolean validate( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath ) throws Validation1cNamingException
 	{
 		boolean showOnWork = false;
 		int onWork = 410;
 		// Informationen zur Darstellung "onWork" holen
 		String onWorkConfig = configMap.get( "ShowProgressOnWork" );
-		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
-		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
-		 * ref="configurationService" /> */
+		/*
+		 * Nicht vergessen in
+		 * "src/main/resources/config/applicationContext-services.xml" beim
+		 * entsprechenden Modul die property anzugeben: <property
+		 * name="configurationService" ref="configurationService" />
+		 */
 		if ( onWorkConfig.equals( "yes" ) ) {
 			// Ausgabe SIP-Modul Ersichtlich das KOST-Val arbeitet
 			showOnWork = true;
@@ -67,8 +73,8 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 
 		String fileName = valDatei.getName();
 
-		// I.) Validierung der Namen aller Dateien: sind die enthaltenen Zeichen alle erlaubt?
-
+		// I.) Validierung der Namen aller Dateien: sind die enthaltenen Zeichen
+		// alle erlaubt?
 		String patternStr = "[^!#\\$%\\(\\)\\+,\\-_\\.=@\\[\\]\\{\\}\\~a-zA-Z0-9 ]";
 		Pattern pattern = Pattern.compile( patternStr );
 
@@ -86,15 +92,18 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 				if ( matchFoundI ) {
 
 					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ac_SIP )
-									+ getTextResourceService().getText( locale, MESSAGE_XML_AC_INVALIDCHARACTERS,
+							getTextResourceService().getText( locale,
+									MESSAGE_XML_MODUL_Ac_SIP )
+									+ getTextResourceService().getText( locale,
+											MESSAGE_XML_AC_INVALIDCHARACTERS,
 											entryNameI, matcherI.group( i ) ) );
 					charIo = false;
 				}
 			}
 			Map<String, File> fileMap = Util.getFileMap( valDatei, true );
 			Set<String> fileMapKeys = fileMap.keySet();
-			for ( Iterator<String> iterator = fileMapKeys.iterator(); iterator.hasNext(); ) {
+			for ( Iterator<String> iterator = fileMapKeys.iterator(); iterator
+					.hasNext(); ) {
 				String entryName = iterator.next();
 				// entryName: content/DOS_02/gpl2.pdf name: gpl2.pdf
 				File newFile = fileMap.get( entryName );
@@ -109,10 +118,11 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 					boolean matchFound = matcher.find();
 					if ( matchFound ) {
 
-						Logtxt.logtxt( logFile,
-								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ac_SIP )
-										+ getTextResourceService().getText( locale, MESSAGE_XML_AC_INVALIDCHARACTERS,
-												element, matcher.group( i ) ) );
+						Logtxt.logtxt( logFile, getTextResourceService()
+								.getText( locale, MESSAGE_XML_MODUL_Ac_SIP )
+								+ getTextResourceService().getText( locale,
+										MESSAGE_XML_AC_INVALIDCHARACTERS,
+										element, matcher.group( i ) ) );
 						charIo = false;
 					}
 				}
@@ -140,8 +150,11 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 			}
 		} catch ( Exception e ) {
 
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ac_SIP )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_Ac_SIP )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 		}
 
 		// II.) Validierung des Formats des Dateinamen
@@ -152,12 +165,15 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 		boolean matchFound = matcher.find();
 		if ( !matchFound ) {
 
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ac_SIP )
-					+ getTextResourceService().getText( locale, MESSAGE_XML_AC_INVALIDFILENAME, patternStr ) );
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
+					MESSAGE_XML_MODUL_Ac_SIP )
+					+ getTextResourceService().getText( locale,
+							MESSAGE_XML_AC_INVALIDFILENAME, patternStr ) );
 			sipIo = false;
 		}
 
-		// III.) Validierung der beiden Second-Level-Ordner im Toplevel-Ordner, es müssen genau header/
+		// III.) Validierung der beiden Second-Level-Ordner im Toplevel-Ordner,
+		// es müssen genau header/
 		// und content/ vorhanden sein und nichts anderes.
 		try {
 			File dir = valDatei;
@@ -169,10 +185,10 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 				// toplevel ordner nur content oder header ist erlaubt
 				if ( !(name.equals( "content" ) || name.equals( "header" )) ) {
 
-					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ac_SIP )
-									+ getTextResourceService().getText( locale, MESSAGE_XML_AC_NOTALLOWEDFILE,
-											name ) );
+					Logtxt.logtxt( logFile, getTextResourceService()
+							.getText( locale, MESSAGE_XML_MODUL_Ac_SIP )
+							+ getTextResourceService().getText( locale,
+									MESSAGE_XML_AC_NOTALLOWEDFILE, name ) );
 					tlIo = false;
 				}
 				if ( showOnWork ) {
@@ -199,26 +215,34 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 			}
 		} catch ( Exception e ) {
 
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ac_SIP )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_Ac_SIP )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
-		// IV.) Validierung des header-Ordner, es müssen genau xsd/ und metadata.xml vorhanden sein und
+		// IV.) Validierung des header-Ordner, es müssen genau xsd/ und
+		// metadata.xml vorhanden sein und
 		// nichts anderes.
 		try {
-			File dir = new File( valDatei.getAbsolutePath() + File.separator + "header" );
+			File dir = new File(
+					valDatei.getAbsolutePath() + File.separator + "header" );
 			// Liste mit den File objects
 			File[] files = dir.listFiles();
 
 			for ( File file : files ) {
 				String name = file.getName();
 				// header ordner nur metadata.xml oder xsd ist erlaubt
-				if ( !(name.equals( "metadata.xml" ) || name.equals( "xsd" )) ) {
+				if ( !(name.equals( "metadata.xml" )
+						|| name.equals( "xsd" )) ) {
 
 					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ac_SIP )
-									+ getTextResourceService().getText( locale, MESSAGE_XML_AC_NOTALLOWEDFILE,
+							getTextResourceService().getText( locale,
+									MESSAGE_XML_MODUL_Ac_SIP )
+									+ getTextResourceService().getText( locale,
+											MESSAGE_XML_AC_NOTALLOWEDFILE,
 											"header/" + name ) );
 					tlIo = false;
 				}
@@ -246,19 +270,24 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 			}
 		} catch ( Exception e ) {
 
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ac_SIP )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_Ac_SIP )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 			return false;
 		}
 
-		// V.) Im xsd Folder wiederum d�rfen sich nur eine Reihe *.xsd files sein
-		// generiert eine Map mit den xsd-files und Ordnern, welche in header/xsd/ enthalten sein
-		// müssen
+		// V.) Im xsd Folder wiederum duerfen sich nur eine Reihe *.xsd files
+		// sein
+		// generiert eine Map mit den xsd-files und Ordnern, welche in
+		// header/xsd/ enthalten sein
+		// muessen
 		Map<String, String> allowedXsdFiles = new HashMap<String, String>();
 
 		try {
-			File xsd = new File(
-					valDatei.getAbsolutePath() + File.separator + "header" + File.separator + "xsd" );
+			File xsd = new File( valDatei.getAbsolutePath() + File.separator
+					+ "header" + File.separator + "xsd" );
 			// Liste mit den File objects in xsd
 			File[] filesXsd = xsd.listFiles();
 
@@ -268,16 +297,20 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 				if ( name.startsWith( "arel" ) ) {
 					// dann handelt es sich um eCH-160_v1 oder eCH-160_v1.1
 					allowedXsdFiles.put( "ablieferung.xsd", "ablieferung.xsd" );
-					allowedXsdFiles.put( "archivischeNotiz.xsd", "archivischeNotiz.xsd" );
-					allowedXsdFiles.put( "archivischerVorgang.xsd", "archivischerVorgang.xsd" );
+					allowedXsdFiles.put( "archivischeNotiz.xsd",
+							"archivischeNotiz.xsd" );
+					allowedXsdFiles.put( "archivischerVorgang.xsd",
+							"archivischerVorgang.xsd" );
 					allowedXsdFiles.put( "arelda.xsd", "arelda.xsd" );
 					allowedXsdFiles.put( "base.xsd", "base.xsd" );
 					allowedXsdFiles.put( "datei.xsd", "datei.xsd" );
 					allowedXsdFiles.put( "dokument.xsd", "dokument.xsd" );
 					allowedXsdFiles.put( "dossier.xsd", "dossier.xsd" );
 					allowedXsdFiles.put( "ordner.xsd", "ordner.xsd" );
-					allowedXsdFiles.put( "ordnungssystem.xsd", "ordnungssystem.xsd" );
-					allowedXsdFiles.put( "ordnungssystemposition.xsd", "ordnungssystemposition.xsd" );
+					allowedXsdFiles.put( "ordnungssystem.xsd",
+							"ordnungssystem.xsd" );
+					allowedXsdFiles.put( "ordnungssystemposition.xsd",
+							"ordnungssystemposition.xsd" );
 					allowedXsdFiles.put( "paket.xsd", "paket.xsd" );
 					allowedXsdFiles.put( "provenienz.xsd", "provenienz.xsd" );
 					allowedXsdFiles.put( "zusatzDaten.xsd", "zusatzDaten.xsd" );
@@ -306,7 +339,8 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 			}
 
 			if ( valid != false ) {
-				// Dieser Schritt wird nur durchgef�hrt, wenn die verwendete Version erlaubt ist
+				// Dieser Schritt wird nur durchgefuehrt, wenn die verwendete
+				// Version erlaubt ist
 
 				// Liste mit den File objects in xsd
 				File[] filesXsd2 = xsd.listFiles();
@@ -317,10 +351,11 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 					String removedEntry = allowedXsdFiles.remove( name );
 					if ( removedEntry == null ) {
 
-						Logtxt.logtxt( logFile,
-								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ac_SIP )
-										+ getTextResourceService().getText( locale, MESSAGE_XML_AC_NOTALLOWEDFILE,
-												"header/xsd/" + name ) );
+						Logtxt.logtxt( logFile, getTextResourceService()
+								.getText( locale, MESSAGE_XML_MODUL_Ac_SIP )
+								+ getTextResourceService().getText( locale,
+										MESSAGE_XML_AC_NOTALLOWEDFILE,
+										"header/xsd/" + name ) );
 						valid = false;
 					}
 					if ( showOnWork ) {
@@ -347,12 +382,15 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 				}
 
 				Set<String> keys = allowedXsdFiles.keySet();
-				for ( Iterator<String> iterator = keys.iterator(); iterator.hasNext(); ) {
+				for ( Iterator<String> iterator = keys.iterator(); iterator
+						.hasNext(); ) {
 					String string = iterator.next();
 
 					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ac_SIP )
-									+ getTextResourceService().getText( locale, MESSAGE_XML_AC_MISSINGFILE,
+							getTextResourceService().getText( locale,
+									MESSAGE_XML_MODUL_Ac_SIP )
+									+ getTextResourceService().getText( locale,
+											MESSAGE_XML_AC_MISSINGFILE,
 											"header/xsd/" + string ) );
 					valid = false;
 					if ( showOnWork ) {
@@ -380,19 +418,23 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 			}
 		} catch ( Exception e ) {
 
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ac_SIP )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_Ac_SIP )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 
 			return false;
 		}
 
-		// VI.+ VII) L�nge der Pfade (< 180)
+		// VI.+ VII) Laenge der Pfade (< 180)
 		String maxPathLengthString = configMap.get( "MaximumPathLength" );
 		Integer maxPathLength = Integer.parseInt( maxPathLengthString );
 		try {
 			Map<String, File> fileMap = Util.getFileMap( valDatei, true );
 			Set<String> fileMapKeys = fileMap.keySet();
-			for ( Iterator<String> iterator = fileMapKeys.iterator(); iterator.hasNext(); ) {
+			for ( Iterator<String> iterator = fileMapKeys.iterator(); iterator
+					.hasNext(); ) {
 				String entryName = iterator.next();
 				// entryName: content/DOS_02/gpl2.pdf name:
 				// SIP_20110310_KOST_1a-3d-IO/content/DOS_02/gpl2.pdf
@@ -400,9 +442,10 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 
 				if ( name.length() > maxPathLength.intValue() ) {
 
-					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ac_SIP )
-									+ getTextResourceService().getText( locale, MESSAGE_XML_AC_PATHTOOLONG, name ) );
+					Logtxt.logtxt( logFile, getTextResourceService()
+							.getText( locale, MESSAGE_XML_MODUL_Ac_SIP )
+							+ getTextResourceService().getText( locale,
+									MESSAGE_XML_AC_PATHTOOLONG, name ) );
 					lengthIo = false;
 				}
 
@@ -430,15 +473,18 @@ public class Validation1cNamingModuleImpl extends ValidationModuleImpl
 			}
 		} catch ( Exception e ) {
 
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_Ac_SIP )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+			Logtxt.logtxt( logFile,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_Ac_SIP )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN, e.getMessage() ) );
 
 			return false;
 
 		}
 
-		if ( charIo == false || sipIo == false || tlIo == false || xsdIo == false || valid == false
-				|| lengthIo == false ) {
+		if ( charIo == false || sipIo == false || tlIo == false
+				|| xsdIo == false || valid == false || lengthIo == false ) {
 			return false;
 		} else {
 			return true;

@@ -1,5 +1,5 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
  * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
@@ -19,7 +19,7 @@
 
 package ch.kostceco.tools.kostval.validation.bean;
 
-import java.io.File; 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
@@ -33,30 +33,30 @@ import ch.kostceco.tools.kostval.service.ConfigurationService;
 public class ValidationContext
 {
 	/* Validation parameters */
-	private boolean								verboseMode;
+	private boolean					verboseMode;
 	private ConfigurationService	configurationService;
 	/* Validation context related properties */
-	private Properties						validationProperties;
+	private Properties				validationProperties;
 	/* Content of the SIARD package */
-	private File									siardArchive;
+	private File					siardArchive;
 	private HashMap<String, File>	siardFiles;
-	private File									metadataXML;
-	private Document							metadataXMLDocument;
-	private String								contentPath;
-	private String								headerPath;
+	private File					metadataXML;
+	private Document				metadataXMLDocument;
+	private String					contentPath;
+	private String					headerPath;
 	/* SIARD XML processing related properties */
-	private List<Element>					xmlElements;
-	private List<Element>					xsdElements;
-	private List<String>					xmlElementsSequence;
-	private List<String>					xsdElementsSequence;
-	private List<SiardTable>			siardTables;
-	private SiardTable						siardTable;
+	private List<Element>			xmlElements;
+	private List<Element>			xsdElements;
+	private List<String>			xmlElementsSequence;
+	private List<String>			xsdElementsSequence;
+	private List<SiardTable>		siardTables;
+	private SiardTable				siardTable;
 	/* General XML related properties for JDOM Access */
-	private String								namespaceURI;
-	private String								xmlPrefix;
-	private String								xsdPrefix;
-	private Namespace							xmlNamespace;
-	private Namespace							xsdNamespace;
+	private String					namespaceURI;
+	private String					xmlPrefix;
+	private String					xsdPrefix;
+	private Namespace				xmlNamespace;
+	private Namespace				xsdNamespace;
 
 	/** @return the verboseMode */
 	public boolean isVerboseMode()
@@ -64,8 +64,10 @@ public class ValidationContext
 		return verboseMode;
 	}
 
-	/** @param verboseMode
-	 *          the verboseMode to set */
+	/**
+	 * @param verboseMode
+	 *            the verboseMode to set
+	 */
 	public void setVerboseMode( boolean verboseMode )
 	{
 		this.verboseMode = verboseMode;
@@ -77,8 +79,10 @@ public class ValidationContext
 		return validationProperties;
 	}
 
-	/** @param validationProperties
-	 *          the validationProperties to set */
+	/**
+	 * @param validationProperties
+	 *            the validationProperties to set
+	 */
 	public void setValidationProperties( Properties validationProperties )
 	{
 		this.validationProperties = validationProperties;
@@ -90,8 +94,10 @@ public class ValidationContext
 		return siardFiles;
 	}
 
-	/** @param siardFiles
-	 *          the siardFiles to set */
+	/**
+	 * @param siardFiles
+	 *            the siardFiles to set
+	 */
 	public void setSiardFiles( HashMap<String, File> siardFiles )
 	{
 		this.siardFiles = siardFiles;
@@ -103,8 +109,10 @@ public class ValidationContext
 		return metadataXML;
 	}
 
-	/** @param metadataXML
-	 *          the metadataXML to set */
+	/**
+	 * @param metadataXML
+	 *            the metadataXML to set
+	 */
 	public void setMetadataXML( File metadataXML )
 	{
 		this.metadataXML = metadataXML;
@@ -116,8 +124,10 @@ public class ValidationContext
 		return metadataXMLDocument;
 	}
 
-	/** @param metadataXMLDocument
-	 *          the metadataXMLDocument to set */
+	/**
+	 * @param metadataXMLDocument
+	 *            the metadataXMLDocument to set
+	 */
 	public void setMetadataXMLDocument( Document metadataXMLDocument )
 	{
 		this.metadataXMLDocument = metadataXMLDocument;
@@ -129,8 +139,10 @@ public class ValidationContext
 		return contentPath;
 	}
 
-	/** @param contentPath
-	 *          the contentPath to set */
+	/**
+	 * @param contentPath
+	 *            the contentPath to set
+	 */
 	public void setContentPath( String contentPath )
 	{
 		this.contentPath = contentPath;
@@ -142,8 +154,10 @@ public class ValidationContext
 		return headerPath;
 	}
 
-	/** @param headerPath
-	 *          the headerPath to set */
+	/**
+	 * @param headerPath
+	 *            the headerPath to set
+	 */
 	public void setHeaderPath( String headerPath )
 	{
 		this.headerPath = headerPath;
@@ -155,8 +169,10 @@ public class ValidationContext
 		return xmlElements;
 	}
 
-	/** @param xmlElements
-	 *          the xmlElements to set */
+	/**
+	 * @param xmlElements
+	 *            the xmlElements to set
+	 */
 	public void setXmlElements( List<Element> xmlElements )
 	{
 		this.xmlElements = xmlElements;
@@ -168,8 +184,10 @@ public class ValidationContext
 		return xsdElements;
 	}
 
-	/** @param xsdElements
-	 *          the xsdElements to set */
+	/**
+	 * @param xsdElements
+	 *            the xsdElements to set
+	 */
 	public void setXsdElements( List<Element> xsdElements )
 	{
 		this.xsdElements = xsdElements;
@@ -181,8 +199,10 @@ public class ValidationContext
 		return xmlElementsSequence;
 	}
 
-	/** @param xmlElementsSequence
-	 *          the xmlElementsSequence to set */
+	/**
+	 * @param xmlElementsSequence
+	 *            the xmlElementsSequence to set
+	 */
 	public void setXmlElementsSequence( List<String> xmlElementsSequence )
 	{
 		this.xmlElementsSequence = xmlElementsSequence;
@@ -194,8 +214,10 @@ public class ValidationContext
 		return xsdElementsSequence;
 	}
 
-	/** @param xsdElementsSequence
-	 *          the xsdElementsSequence to set */
+	/**
+	 * @param xsdElementsSequence
+	 *            the xsdElementsSequence to set
+	 */
 	public void setXsdElementsSequence( List<String> xsdElementsSequence )
 	{
 		this.xsdElementsSequence = xsdElementsSequence;
@@ -207,8 +229,10 @@ public class ValidationContext
 		return siardTables;
 	}
 
-	/** @param siardTables
-	 *          the siardTables to set */
+	/**
+	 * @param siardTables
+	 *            the siardTables to set
+	 */
 	public void setSiardTables( List<SiardTable> siardTables )
 	{
 		this.siardTables = siardTables;
@@ -220,8 +244,10 @@ public class ValidationContext
 		return siardTable;
 	}
 
-	/** @param siardTable
-	 *          the siardTable to set */
+	/**
+	 * @param siardTable
+	 *            the siardTable to set
+	 */
 	public void setSiardTable( SiardTable siardTable )
 	{
 		this.siardTable = siardTable;
@@ -233,8 +259,10 @@ public class ValidationContext
 		return namespaceURI;
 	}
 
-	/** @param namespaceURI
-	 *          the namespaceURI to set */
+	/**
+	 * @param namespaceURI
+	 *            the namespaceURI to set
+	 */
 	public void setNamespaceURI( String namespaceURI )
 	{
 		this.namespaceURI = namespaceURI;
@@ -246,8 +274,10 @@ public class ValidationContext
 		return xmlPrefix;
 	}
 
-	/** @param xmlPrefix
-	 *          the xmlPrefix to set */
+	/**
+	 * @param xmlPrefix
+	 *            the xmlPrefix to set
+	 */
 	public void setXmlPrefix( String xmlPrefix )
 	{
 		this.xmlPrefix = xmlPrefix;
@@ -259,8 +289,10 @@ public class ValidationContext
 		return xsdPrefix;
 	}
 
-	/** @param xsdPrefix
-	 *          the xsdPrefix to set */
+	/**
+	 * @param xsdPrefix
+	 *            the xsdPrefix to set
+	 */
 	public void setXsdPrefix( String xsdPrefix )
 	{
 		this.xsdPrefix = xsdPrefix;
@@ -272,8 +304,10 @@ public class ValidationContext
 		return xmlNamespace;
 	}
 
-	/** @param xmlNamespace
-	 *          the xmlNamespace to set */
+	/**
+	 * @param xmlNamespace
+	 *            the xmlNamespace to set
+	 */
 	public void setXmlNamespace( Namespace xmlNamespace )
 	{
 		this.xmlNamespace = xmlNamespace;
@@ -285,8 +319,10 @@ public class ValidationContext
 		return xsdNamespace;
 	}
 
-	/** @param xsdNamespace
-	 *          the xsdNamespace to set */
+	/**
+	 * @param xsdNamespace
+	 *            the xsdNamespace to set
+	 */
 	public void setXsdNamespace( Namespace xsdNamespace )
 	{
 		this.xsdNamespace = xsdNamespace;
@@ -298,8 +334,10 @@ public class ValidationContext
 		return siardArchive;
 	}
 
-	/** @param siardArchive
-	 *          the siardArchive to set */
+	/**
+	 * @param siardArchive
+	 *            the siardArchive to set
+	 */
 	public void setSiardArchive( File siardArchive )
 	{
 		this.siardArchive = siardArchive;
@@ -311,9 +349,12 @@ public class ValidationContext
 		return configurationService;
 	}
 
-	/** @param configurationService
-	 *          the configurationService to set */
-	public void setConfigurationService( ConfigurationService configurationService )
+	/**
+	 * @param configurationService
+	 *            the configurationService to set
+	 */
+	public void setConfigurationService(
+			ConfigurationService configurationService )
 	{
 		this.configurationService = configurationService;
 	}

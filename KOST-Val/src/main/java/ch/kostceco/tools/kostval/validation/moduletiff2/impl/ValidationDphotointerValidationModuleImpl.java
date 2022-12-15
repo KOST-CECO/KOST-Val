@@ -1,5 +1,5 @@
 ﻿/* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
  * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
@@ -30,22 +30,26 @@ import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationDphotointerValidationModule;
 import ch.kostceco.tools.kostval.logging.Logtxt;
 
-/** Validierungsschritt D (Farbraum-Validierung) Ist die TIFF-Datei gemäss Konfigurationsdatei
- * valid?
+/**
+ * Validierungsschritt D (Farbraum-Validierung) Ist die TIFF-Datei gemäss
+ * Konfigurationsdatei valid?
  * 
- * @author Rc Claire Roethlisberger, KOST-CECO */
+ * @author Rc Claire Roethlisberger, KOST-CECO
+ */
 
-public class ValidationDphotointerValidationModuleImpl extends ValidationModuleImpl
-		implements ValidationDphotointerValidationModule
+public class ValidationDphotointerValidationModuleImpl extends
+		ValidationModuleImpl implements ValidationDphotointerValidationModule
 {
 
 	public static String	NEWLINE	= System.getProperty( "line.separator" );
 
-	private boolean				min			= false;
+	private boolean			min		= false;
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile ) throws ValidationDphotointerValidationException
+	public boolean validate( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath )
+			throws ValidationDphotointerValidationException
 	{
 		String onWork = configMap.get( "ShowProgressOnWork" );
 		if ( onWork.equals( "nomin" ) ) {
@@ -64,15 +68,21 @@ public class ValidationDphotointerValidationModuleImpl extends ValidationModuleI
 			// Report existiert nicht
 
 			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF )
-							+ getTextResourceService().getText( locale, MESSAGE_XML_MISSING_REPORT,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_D_TIFF )
+							+ getTextResourceService().getText( locale,
+									MESSAGE_XML_MISSING_REPORT,
 									exiftoolReport.getAbsolutePath(),
-									getTextResourceService().getText( locale, ABORTED ) ) );
+									getTextResourceService().getText( locale,
+											ABORTED ) ) );
 			return false;
 		} else {
-			/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
-			 * entsprechenden Modul die property anzugeben: <property name="configurationService"
-			 * ref="configurationService" /> */
+			/*
+			 * Nicht vergessen in
+			 * "src/main/resources/config/applicationContext-services.xml" beim
+			 * entsprechenden Modul die property anzugeben: <property
+			 * name="configurationService" ref="configurationService" />
+			 */
 
 			String pi0 = configMap.get( "AllowedPhotointer0" );
 			String pi1 = configMap.get( "AllowedPhotointer1" );
@@ -116,20 +126,31 @@ public class ValidationDphotointerValidationModuleImpl extends ValidationModuleI
 			String oldErrorLine5 = "";
 
 			try {
-				BufferedReader in = new BufferedReader( new FileReader( exiftoolReport ) );
+				BufferedReader in = new BufferedReader(
+						new FileReader( exiftoolReport ) );
 				String line;
 				while ( (line = in.readLine()) != null ) {
-					// die PhotometricInterpretation-Zeile enthält einer dieser Freitexte der Farbraumart
-					if ( line.contains( "PhotometricInterpretation: " ) && line.contains( "[EXIF:IFD" ) ) {
+					// die PhotometricInterpretation-Zeile enthält einer dieser
+					// Freitexte der Farbraumart
+					if ( line.contains( "PhotometricInterpretation: " )
+							&& line.contains( "[EXIF:IFD" ) ) {
 						exiftoolio = 1;
-						if ( line.contains( "PhotometricInterpretation: " + pi0 )
-								|| line.contains( "PhotometricInterpretation: " + pi1 )
-								|| line.contains( "PhotometricInterpretation: " + pi2 )
-								|| line.contains( "PhotometricInterpretation: " + pi3 )
-								|| line.contains( "PhotometricInterpretation: " + pi4 )
-								|| line.contains( "PhotometricInterpretation: " + pi5 )
-								|| line.contains( "PhotometricInterpretation: " + pi6 )
-								|| line.contains( "PhotometricInterpretation: " + pi8 ) ) {
+						if ( line
+								.contains( "PhotometricInterpretation: " + pi0 )
+								|| line.contains(
+										"PhotometricInterpretation: " + pi1 )
+								|| line.contains(
+										"PhotometricInterpretation: " + pi2 )
+								|| line.contains(
+										"PhotometricInterpretation: " + pi3 )
+								|| line.contains(
+										"PhotometricInterpretation: " + pi4 )
+								|| line.contains(
+										"PhotometricInterpretation: " + pi5 )
+								|| line.contains(
+										"PhotometricInterpretation: " + pi6 )
+								|| line.contains( "PhotometricInterpretation: "
+										+ pi8 ) ) {
 							// Valider Status
 						} else {
 							// Invalider Status
@@ -142,14 +163,20 @@ public class ValidationDphotointerValidationModuleImpl extends ValidationModuleI
 								}
 								return false;
 							} else {
-								if ( !line.equals( oldErrorLine1 ) && !line.equals( oldErrorLine2 )
-										&& !line.equals( oldErrorLine3 ) && !line.equals( oldErrorLine4 )
+								if ( !line.equals( oldErrorLine1 )
+										&& !line.equals( oldErrorLine2 )
+										&& !line.equals( oldErrorLine3 )
+										&& !line.equals( oldErrorLine4 )
 										&& !line.equals( oldErrorLine5 ) ) {
 									// neuer Fehler
 									Logtxt.logtxt( logFile,
-											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF )
-													+ getTextResourceService().getText( locale, MESSAGE_XML_CG_INVALID,
-															line ) );
+											getTextResourceService().getText(
+													locale,
+													MESSAGE_XML_MODUL_D_TIFF )
+													+ getTextResourceService()
+															.getText( locale,
+																	MESSAGE_XML_CG_INVALID,
+																	line ) );
 									if ( oldErrorLine1.equals( "" ) ) {
 										oldErrorLine1 = line;
 									} else if ( oldErrorLine2.equals( "" ) ) {
@@ -164,9 +191,13 @@ public class ValidationDphotointerValidationModuleImpl extends ValidationModuleI
 								}
 							}
 						}
-						/* die PlanarConfiguration-Zeile muss Chunkey sein, da ansonsten nicht Baseline. Planar
-						 * wird kaum unterstützt */
-						if ( line.contains( "PlanarConfiguration: " ) && line.contains( "[EXIF:IFD" ) ) {
+						/*
+						 * die PlanarConfiguration-Zeile muss Chunkey sein, da
+						 * ansonsten nicht Baseline. Planar wird kaum
+						 * unterstützt
+						 */
+						if ( line.contains( "PlanarConfiguration: " )
+								&& line.contains( "[EXIF:IFD" ) ) {
 							exiftoolio = 1;
 							if ( line.contains( "Chunky" ) ) {
 								// Valider Status
@@ -182,9 +213,13 @@ public class ValidationDphotointerValidationModuleImpl extends ValidationModuleI
 									return false;
 								} else {
 									Logtxt.logtxt( logFile,
-											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF )
-													+ getTextResourceService().getText( locale, MESSAGE_XML_CG_INVALID,
-															line ) );
+											getTextResourceService().getText(
+													locale,
+													MESSAGE_XML_MODUL_D_TIFF )
+													+ getTextResourceService()
+															.getText( locale,
+																	MESSAGE_XML_CG_INVALID,
+																	line ) );
 								}
 							}
 						}
@@ -202,9 +237,10 @@ public class ValidationDphotointerValidationModuleImpl extends ValidationModuleI
 						return false;
 					} else {
 
-						Logtxt.logtxt( logFile,
-								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF )
-										+ getTextResourceService().getText( locale, MESSAGE_XML_CG_ETNIO, "D" ) );
+						Logtxt.logtxt( logFile, getTextResourceService()
+								.getText( locale, MESSAGE_XML_MODUL_D_TIFF )
+								+ getTextResourceService().getText( locale,
+										MESSAGE_XML_CG_ETNIO, "D" ) );
 					}
 				}
 				in.close();
@@ -217,9 +253,10 @@ public class ValidationDphotointerValidationModuleImpl extends ValidationModuleI
 					return false;
 				} else {
 
-					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_TIFF )
-									+ getTextResourceService().getText( locale, MESSAGE_XML_CG_CANNOTFINDETREPORT ) );
+					Logtxt.logtxt( logFile, getTextResourceService()
+							.getText( locale, MESSAGE_XML_MODUL_D_TIFF )
+							+ getTextResourceService().getText( locale,
+									MESSAGE_XML_CG_CANNOTFINDETREPORT ) );
 					return false;
 				}
 			}

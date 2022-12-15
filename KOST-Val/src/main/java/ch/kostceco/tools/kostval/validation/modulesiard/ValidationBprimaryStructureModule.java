@@ -1,5 +1,5 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
  * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
@@ -26,18 +26,22 @@ import java.util.Map;
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationBprimaryStructureException;
 import ch.kostceco.tools.kostval.validation.ValidationModule;
 
-/** Validierungsschritt B (primäre Verzeichnisstruktur) Besteht eine korrekte primäre
- * Verzeichnisstruktur? valid --> [Name].siard/header und [Name].siard/content invalid -->
- * [Name].siard/[Name]/header und [Name].siard/[Name]/content invalid --> Andere Ordner oder Dateien
- * sind im Toplevel-Ordner ==> Bei den Module A, B, C und D wird die Validierung abgebrochen, sollte
- * das Resulat invalid sein!
+/**
+ * Validierungsschritt B (primaere Verzeichnisstruktur) Besteht eine korrekte
+ * primaere Verzeichnisstruktur? valid --> [Name].siard/header und
+ * [Name].siard/content invalid --> [Name].siard/[Name]/header und
+ * [Name].siard/[Name]/content invalid --> Andere Ordner oder Dateien sind im
+ * Toplevel-Ordner ==> Bei den Module A, B, C und D wird die Validierung
+ * abgebrochen, sollte das Resulat invalid sein!
  * 
- * @author Rc Claire Roethlisberger, KOST-CECO */
+ * @author Rc Claire Roethlisberger, KOST-CECO
+ */
 
 public interface ValidationBprimaryStructureModule extends ValidationModule
 {
 
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile ) throws ValidationBprimaryStructureException;
+	public boolean validate( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath ) throws ValidationBprimaryStructureException;
 
 }

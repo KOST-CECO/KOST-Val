@@ -1,5 +1,5 @@
 ﻿/* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
  * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
@@ -30,9 +30,12 @@ import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.moduletiff2.ValidationGtilesValidationModule;
 import ch.kostceco.tools.kostval.logging.Logtxt;
 
-/** Validierungsschritt G (Kacheln-Validierung) Ist die TIFF-Datei gem�ss Konfigurationsdatei valid?
+/**
+ * Validierungsschritt G (Kacheln-Validierung) Ist die TIFF-Datei gem�ss
+ * Konfigurationsdatei valid?
  * 
- * @author Rc Claire Roethlisberger, KOST-CECO */
+ * @author Rc Claire Roethlisberger, KOST-CECO
+ */
 
 public class ValidationGtilesValidationModuleImpl extends ValidationModuleImpl
 		implements ValidationGtilesValidationModule
@@ -40,11 +43,12 @@ public class ValidationGtilesValidationModuleImpl extends ValidationModuleImpl
 
 	public static String	NEWLINE	= System.getProperty( "line.separator" );
 
-	private boolean				min			= false;
+	private boolean			min		= false;
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile ) throws ValidationGtilesValidationException
+	public boolean validate( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath ) throws ValidationGtilesValidationException
 	{
 		String onWork = configMap.get( "ShowProgressOnWork" );
 		if ( onWork.equals( "nomin" ) ) {
@@ -63,15 +67,21 @@ public class ValidationGtilesValidationModuleImpl extends ValidationModuleImpl
 			// Report existiert nicht
 
 			Logtxt.logtxt( logFile,
-					getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_TIFF )
-							+ getTextResourceService().getText( locale, MESSAGE_XML_MISSING_REPORT,
+					getTextResourceService().getText( locale,
+							MESSAGE_XML_MODUL_G_TIFF )
+							+ getTextResourceService().getText( locale,
+									MESSAGE_XML_MISSING_REPORT,
 									exiftoolReport.getAbsolutePath(),
-									getTextResourceService().getText( locale, ABORTED ) ) );
+									getTextResourceService().getText( locale,
+											ABORTED ) ) );
 			return false;
 		} else {
-			/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
-			 * entsprechenden Modul die property anzugeben: <property name="configurationService"
-			 * ref="configurationService" /> */
+			/*
+			 * Nicht vergessen in
+			 * "src/main/resources/config/applicationContext-services.xml" beim
+			 * entsprechenden Modul die property anzugeben: <property
+			 * name="configurationService" ref="configurationService" />
+			 */
 
 			String tiles = configMap.get( "AllowedTiles" );
 
@@ -86,16 +96,24 @@ public class ValidationGtilesValidationModuleImpl extends ValidationModuleImpl
 				// Valider Status (Kacheln sind erlaubt)
 			} else {
 				try {
-					BufferedReader in = new BufferedReader( new FileReader( exiftoolReport ) );
+					BufferedReader in = new BufferedReader(
+							new FileReader( exiftoolReport ) );
 					String line;
 					while ( (line = in.readLine()) != null ) {
-						/* zu analysierende TIFF-IFD-Zeile die StripOffsets- oder TileOffsets-Zeile gibt
-						 * Auskunft ueber die Aufteilungsart
+						/*
+						 * zu analysierende TIFF-IFD-Zeile die StripOffsets-
+						 * oder TileOffsets-Zeile gibt Auskunft ueber die
+						 * Aufteilungsart
 						 * 
-						 * -StripByteCounts -RowsPerStrip -FileSize -TileWidth -TileLength -TileDepth */
-						if ( (line.contains( "StripByteCounts: " ) && line.contains( "[EXIF:IFD" ))
-								|| (line.contains( "RowsPerStrip: " ) && line.contains( "[EXIF:IFD" ))
-								|| (line.contains( "Tile" ) && line.contains( "[EXIF:IFD" )) ) {
+						 * -StripByteCounts -RowsPerStrip -FileSize -TileWidth
+						 * -TileLength -TileDepth
+						 */
+						if ( (line.contains( "StripByteCounts: " )
+								&& line.contains( "[EXIF:IFD" ))
+								|| (line.contains( "RowsPerStrip: " )
+										&& line.contains( "[EXIF:IFD" ))
+								|| (line.contains( "Tile" )
+										&& line.contains( "[EXIF:IFD" )) ) {
 							exiftoolio = 1;
 							if ( line.contains( "Tile" ) ) {
 								// Invalider Status (Kacheln sind nicht erlaubt)
@@ -108,23 +126,34 @@ public class ValidationGtilesValidationModuleImpl extends ValidationModuleImpl
 									}
 									return false;
 								} else {
-									if ( !line.equals( oldErrorLine1 ) && !line.equals( oldErrorLine2 )
-											&& !line.equals( oldErrorLine3 ) && !line.equals( oldErrorLine4 )
+									if ( !line.equals( oldErrorLine1 )
+											&& !line.equals( oldErrorLine2 )
+											&& !line.equals( oldErrorLine3 )
+											&& !line.equals( oldErrorLine4 )
 											&& !line.equals( oldErrorLine5 ) ) {
 										// neuer Fehler
 										Logtxt.logtxt( logFile,
-												getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_TIFF )
-														+ getTextResourceService().getText( locale, MESSAGE_XML_CG_INVALID,
-																line ) );
+												getTextResourceService()
+														.getText( locale,
+																MESSAGE_XML_MODUL_G_TIFF )
+														+ getTextResourceService()
+																.getText(
+																		locale,
+																		MESSAGE_XML_CG_INVALID,
+																		line ) );
 										if ( oldErrorLine1.equals( "" ) ) {
 											oldErrorLine1 = line;
-										} else if ( oldErrorLine2.equals( "" ) ) {
+										} else if ( oldErrorLine2
+												.equals( "" ) ) {
 											oldErrorLine2 = line;
-										} else if ( oldErrorLine3.equals( "" ) ) {
+										} else if ( oldErrorLine3
+												.equals( "" ) ) {
 											oldErrorLine3 = line;
-										} else if ( oldErrorLine4.equals( "" ) ) {
+										} else if ( oldErrorLine4
+												.equals( "" ) ) {
 											oldErrorLine4 = line;
-										} else if ( oldErrorLine5.equals( "" ) ) {
+										} else if ( oldErrorLine5
+												.equals( "" ) ) {
 											oldErrorLine5 = line;
 										}
 									}
@@ -144,9 +173,10 @@ public class ValidationGtilesValidationModuleImpl extends ValidationModuleImpl
 							return false;
 						} else {
 
-							Logtxt.logtxt( logFile,
-									getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_TIFF )
-											+ getTextResourceService().getText( locale, MESSAGE_XML_CG_ETNIO, "G" ) );
+							Logtxt.logtxt( logFile, getTextResourceService()
+									.getText( locale, MESSAGE_XML_MODUL_G_TIFF )
+									+ getTextResourceService().getText( locale,
+											MESSAGE_XML_CG_ETNIO, "G" ) );
 						}
 					}
 					in.close();
@@ -158,10 +188,10 @@ public class ValidationGtilesValidationModuleImpl extends ValidationModuleImpl
 						}
 						return false;
 					} else {
-						Logtxt.logtxt( logFile,
-								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_TIFF )
-										+ getTextResourceService().getText( locale,
-												MESSAGE_XML_CG_CANNOTFINDETREPORT ) );
+						Logtxt.logtxt( logFile, getTextResourceService()
+								.getText( locale, MESSAGE_XML_MODUL_G_TIFF )
+								+ getTextResourceService().getText( locale,
+										MESSAGE_XML_CG_CANNOTFINDETREPORT ) );
 						return false;
 					}
 				}

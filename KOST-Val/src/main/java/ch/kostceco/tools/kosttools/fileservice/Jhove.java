@@ -20,7 +20,6 @@ import java.io.File;
 import java.util.ArrayList;
 
 import ch.kostceco.tools.kosttools.util.Util;
-import ch.kostceco.tools.kostval.KOSTVal;
 import edu.harvard.hul.ois.jhove.App;
 import edu.harvard.hul.ois.jhove.JhoveBase;
 import edu.harvard.hul.ois.jhove.Module;
@@ -41,28 +40,23 @@ public class Jhove
 			int lastDotIdx = toplevelDir.lastIndexOf( "." );
 			toplevelDir = toplevelDir.substring( 0, lastDotIdx );
 
-			// Vorbereitungen: tiffFile an die JHove Applikation �bergeben
+			// Vorbereitungen: tiffFile an die JHove Applikation uebergeben
 
 			/*
 			 * dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist
-			 * ein generelles TODO in allen Modulen. Zuerst immer dirOfJarPath
-			 * ermitteln und dann alle Pfade mit
-			 * 
-			 * dirOfJarPath + File.separator +
-			 * 
-			 * erweitern.
+			 * eine generelle Aufgabe in allen Modulen. Zuerst immer
+			 * dirOfJarPath ermitteln und dann alle Pfade mit dirOfJarPath +
+			 * File.separator + erweitern.
 			 */
-			String path = new java.io.File( KOSTVal.class.getProtectionDomain()
-					.getCodeSource().getLocation().getPath() )
-							.getAbsolutePath();
-			String locationOfJarPath = path;
-			String dirOfJarPath = locationOfJarPath;
-			if ( locationOfJarPath.endsWith( ".jar" )
-					|| locationOfJarPath.endsWith( ".exe" )
-					|| locationOfJarPath.endsWith( "." ) ) {
-				File file = new File( locationOfJarPath );
-				dirOfJarPath = file.getParent();
-			}
+			File pathJarFile20 = new File( ClassLoader.getSystemClassLoader()
+					.getResource( "." ).getPath() );
+			/*
+			 * wennn im Pfad ein Leerschlag ist, muss er noch normalisiert
+			 * werden
+			 */
+			String dirOfJarPath = pathJarFile20.getAbsolutePath();
+			dirOfJarPath = dirOfJarPath.replaceAll( "%20", " " );
+			pathJarFile20 = new File( dirOfJarPath );
 
 			/*
 			 * Jhove schreibt ins Work-Verzeichnis, damit danach eine Kopie ins

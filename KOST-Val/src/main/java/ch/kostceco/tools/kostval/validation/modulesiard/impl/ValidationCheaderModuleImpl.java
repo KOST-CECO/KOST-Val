@@ -1,5 +1,5 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
  * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
@@ -43,18 +43,20 @@ import org.xml.sax.SAXException;
 
 import ch.kostceco.tools.kosttools.fileservice.Xmllint;
 import ch.kostceco.tools.kosttools.util.Util;
-import ch.kostceco.tools.kostval.KOSTVal;
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationCheaderException;
+import ch.kostceco.tools.kostval.logging.Logtxt;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationCheaderModule;
-import ch.kostceco.tools.kostval.logging.Logtxt;
 
-/** Validierungsschritt C (Header-Validierung) Ist der header-Ordner valid? valid --> metadata.xml
- * valid zu metadata.xsd und beides vorhanden Bemerkung --> zusaetzliche Ordner oder Dateien wie
- * z.B. metadata.xls sind im header-Ordner erlaubt ==> Bei den Module A, B, C und D wird die
- * Validierung abgebrochen, sollte das Resulat invalid sein!
+/**
+ * Validierungsschritt C (Header-Validierung) Ist der header-Ordner valid? valid
+ * --> metadata.xml valid zu metadata.xsd und beides vorhanden Bemerkung -->
+ * zusaetzliche Ordner oder Dateien wie z.B. metadata.xls sind im header-Ordner
+ * erlaubt ==> Bei den Module A, B, C und D wird die Validierung abgebrochen,
+ * sollte das Resulat invalid sein!
  * 
- * @author Rc Claire Roethlisberger, KOST-CECO */
+ * @author Rc Claire Roethlisberger, KOST-CECO
+ */
 
 public class ValidationCheaderModuleImpl extends ValidationModuleImpl
 		implements ValidationCheaderModule
@@ -62,12 +64,13 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl
 
 	public static String	NEWLINE	= System.getProperty( "line.separator" );
 
-	private boolean				min			= false;
+	private boolean			min		= false;
 
 	@SuppressWarnings("resource")
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile ) throws ValidationCheaderException
+	public boolean validate( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath ) throws ValidationCheaderException
 	{
 		boolean showOnWork = false;
 		int onWork = 410;
@@ -140,8 +143,10 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl
 				} else {
 
 					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_SIARD )
-									+ getTextResourceService().getText( locale, MESSAGE_XML_C_NOMETADATAFOUND ) );
+							getTextResourceService().getText( locale,
+									MESSAGE_XML_MODUL_C_SIARD )
+									+ getTextResourceService().getText( locale,
+											MESSAGE_XML_C_NOMETADATAFOUND ) );
 					return false;
 				}
 			}
@@ -152,8 +157,10 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl
 				} else {
 
 					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_SIARD )
-									+ getTextResourceService().getText( locale, MESSAGE_XML_C_NOMETADATAXSD ) );
+							getTextResourceService().getText( locale,
+									MESSAGE_XML_MODUL_C_SIARD )
+									+ getTextResourceService().getText( locale,
+											MESSAGE_XML_C_NOMETADATAXSD ) );
 					return false;
 				}
 			}
@@ -163,8 +170,10 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl
 			} else {
 
 				Logtxt.logtxt( logFile,
-						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_SIARD )
-								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+						getTextResourceService().getText( locale,
+								MESSAGE_XML_MODUL_C_SIARD )
+								+ getTextResourceService().getText( locale,
+										ERROR_XML_UNKNOWN,
 										e.getMessage() + " xml und xsd" ) );
 				return false;
 			}
@@ -178,9 +187,12 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl
 		toplevelDir = toplevelDir.substring( 0, lastDotIdx );
 
 		try {
-			/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
-			 * entsprechenden Modul die property anzugeben: <property name="configurationService"
-			 * ref="configurationService" /> */
+			/*
+			 * Nicht vergessen in
+			 * "src/main/resources/config/applicationContext-services.xml" beim
+			 * entsprechenden Modul die property anzugeben: <property
+			 * name="configurationService" ref="configurationService" />
+			 */
 			// Arbeitsverzeichnis zum Entpacken des Archivs erstellen
 			String pathToWorkDir = configMap.get( "PathToWorkDir" );
 			File tmpDir = new File( pathToWorkDir + File.separator + "SIARD" );
@@ -191,11 +203,15 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl
 				tmpDir.mkdir();
 			}
 
-			/* Das metadata.xml und sein xsd muessen in das Filesystem extrahiert werden, weil bei bei
-			 * Verwendung eines Inputstreams bei der Validierung ein Problem mit den xs:include Statements
-			 * besteht, die includes koennen so nicht aufgeloest werden. Es werden hier jedoch nicht nur
-			 * diese Files extrahiert, sondern gleich die ganze Zip-Datei, weil auch spaetere
-			 * Validierungen nur mit den extrahierten Files arbeiten koennen. */
+			/*
+			 * Das metadata.xml und sein xsd muessen in das Filesystem
+			 * extrahiert werden, weil bei bei Verwendung eines Inputstreams bei
+			 * der Validierung ein Problem mit den xs:include Statements
+			 * besteht, die includes koennen so nicht aufgeloest werden. Es
+			 * werden hier jedoch nicht nur diese Files extrahiert, sondern
+			 * gleich die ganze Zip-Datei, weil auch spaetere Validierungen nur
+			 * mit den extrahierten Files arbeiten koennen.
+			 */
 			int BUFFER = 2048;
 			ZipFile zipfile = new ZipFile( valDatei.getAbsolutePath() );
 			Enumeration<? extends ZipEntry> entries = zipfile.entries();
@@ -227,7 +243,8 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl
 
 					// schreibe die aktuelle Datei an den gewuenschten Ort
 					FileOutputStream fos = new FileOutputStream( destFile );
-					BufferedOutputStream dest = new BufferedOutputStream( fos, BUFFER );
+					BufferedOutputStream dest = new BufferedOutputStream( fos,
+							BUFFER );
 					while ( (currentByte = is.read( data, 0, BUFFER )) != -1 ) {
 						dest.write( data, 0, currentByte );
 					}
@@ -269,45 +286,53 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl
 			// Thread.sleep( 100 );
 			// Ausgabe der SIARD-Version
 			String pathToWorkDir2 = pathToWorkDir + File.separator + "SIARD";
-			File metadataXml = new File( new StringBuilder( pathToWorkDir2 ).append( File.separator )
-					.append( "header" ).append( File.separator ).append( "metadata.xml" ).toString() );
-			Boolean version1 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" )
-					.contains( "http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
-			Boolean version2 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" )
-					.contains( "http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
+			File metadataXml = new File(
+					new StringBuilder( pathToWorkDir2 ).append( File.separator )
+							.append( "header" ).append( File.separator )
+							.append( "metadata.xml" ).toString() );
+			Boolean version1 = FileUtils
+					.readFileToString( metadataXml, "ISO-8859-1" ).contains(
+							"http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
+			Boolean version2 = FileUtils
+					.readFileToString( metadataXml, "ISO-8859-1" ).contains(
+							"http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
 			if ( version1 ) {
 				if ( siard10 ) {
-					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale, MESSAGE_FORMATVALIDATION_VL, "v1.0" ) );
+					Logtxt.logtxt( logFile, getTextResourceService().getText(
+							locale, MESSAGE_FORMATVALIDATION_VL, "v1.0" ) );
 				} else {
 					if ( min ) {
 						return false;
 					} else {
 
-						Logtxt.logtxt( logFile,
-								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_SIARD )
-										+ getTextResourceService().getText( locale, MESSAGE_XML_C_INVALID_VERSION,
-												"1.0" ) );
+						Logtxt.logtxt( logFile, getTextResourceService()
+								.getText( locale, MESSAGE_XML_MODUL_C_SIARD )
+								+ getTextResourceService().getText( locale,
+										MESSAGE_XML_C_INVALID_VERSION,
+										"1.0" ) );
 						return false;
 					}
 				}
 			} else if ( version2 ) {
 				if ( siard21 ) {
-					File versionDir = new File( pathToWorkDir2 + File.separator + "header" + File.separator
-							+ "siardversion" + File.separator + "2.1" );
+					File versionDir = new File( pathToWorkDir2 + File.separator
+							+ "header" + File.separator + "siardversion"
+							+ File.separator + "2.1" );
 					if ( versionDir.exists() ) {
 						Logtxt.logtxt( logFile,
-								getTextResourceService().getText( locale, MESSAGE_FORMATVALIDATION_VL, "v2.1" ) );
+								getTextResourceService().getText( locale,
+										MESSAGE_FORMATVALIDATION_VL, "v2.1" ) );
 					}
 				} else {
 					if ( min ) {
 						return false;
 					} else {
 
-						Logtxt.logtxt( logFile,
-								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_SIARD )
-										+ getTextResourceService().getText( locale, MESSAGE_XML_C_INVALID_VERSION,
-												"2.1" ) );
+						Logtxt.logtxt( logFile, getTextResourceService()
+								.getText( locale, MESSAGE_XML_MODUL_C_SIARD )
+								+ getTextResourceService().getText( locale,
+										MESSAGE_XML_C_INVALID_VERSION,
+										"2.1" ) );
 						return false;
 					}
 				}
@@ -317,22 +342,28 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl
 				// der andere Fall wurde bereits oben abgefangen
 				try {
 
-					DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+					DocumentBuilderFactory dbf = DocumentBuilderFactory
+							.newInstance();
 					// dbf.setValidating(false);
 					DocumentBuilder db = dbf.newDocumentBuilder();
-					Document doc = db.parse( new FileInputStream( xmlToValidate ) );
+					Document doc = db
+							.parse( new FileInputStream( xmlToValidate ) );
 					doc.getDocumentElement().normalize();
 
-					BufferedReader in = new BufferedReader( new FileReader( xmlToValidate ) );
+					BufferedReader in = new BufferedReader(
+							new FileReader( xmlToValidate ) );
 					StringBuffer concatenatedOutputs = new StringBuffer();
 					String line;
 					while ( (line = in.readLine()) != null ) {
 
 						concatenatedOutputs.append( line );
 						concatenatedOutputs.append( NEWLINE );
-						/* Kontrollieren, dass kein Namespace verwendet wurde wie z.B. v4:
+						/*
+						 * Kontrollieren, dass kein Namespace verwendet wurde
+						 * wie z.B. v4:
 						 * 
-						 * <dbname> */
+						 * <dbname>
+						 */
 						if ( line.contains( "dbname>" ) ) {
 							if ( !line.contains( "<dbname>" ) ) {
 								// Invalider Status
@@ -343,12 +374,19 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl
 									int ns = line.indexOf( ":" ) + 1;
 									int end = line.indexOf( ">" );
 									String lineNode = line.substring( ns, end );
-									String lineNodeNS = line.substring( start, end );
-									// System.out.println( lineNode + " " + lineNodeNS );
+									String lineNodeNS = line.substring( start,
+											end );
+									// System.out.println( lineNode + " " +
+									// lineNodeNS );
 									Logtxt.logtxt( logFile,
-											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_SIARD )
-													+ getTextResourceService().getText( locale,
-															MESSAGE_XML_C_METADATA_NSFOUND, lineNode, lineNodeNS ) );
+											getTextResourceService().getText(
+													locale,
+													MESSAGE_XML_MODUL_C_SIARD )
+													+ getTextResourceService()
+															.getText( locale,
+																	MESSAGE_XML_C_METADATA_NSFOUND,
+																	lineNode,
+																	lineNodeNS ) );
 									in.close();
 									// set to null
 									in = null;
@@ -369,16 +407,6 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl
 					concatenatedOutputs = null;
 
 					// Variante Xmllint
-					String path = new java.io.File(
-							KOSTVal.class.getProtectionDomain().getCodeSource().getLocation().getPath() )
-									.getAbsolutePath();
-					String locationOfJarPath = path;
-					String dirOfJarPath = locationOfJarPath;
-					if ( locationOfJarPath.endsWith( ".jar" ) || locationOfJarPath.endsWith( ".exe" )
-							|| locationOfJarPath.endsWith( "." ) ) {
-						File file = new File( locationOfJarPath );
-						dirOfJarPath = file.getParent();
-					}
 					File workDir = new File( pathToWorkDir );
 					if ( !workDir.exists() ) {
 						workDir.mkdir();
@@ -390,38 +418,59 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl
 						if ( min ) {
 							return false;
 						} else {
-							Logtxt.logtxt( logFile,
-									getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_SIARD )
-											+ getTextResourceService().getText( locale, MESSAGE_XML_MISSING_FILE,
-													checkTool, getTextResourceService().getText( locale, ABORTED ) ) );
+							Logtxt.logtxt( logFile, getTextResourceService()
+									.getText( locale,
+											MESSAGE_XML_MODUL_C_SIARD )
+									+ getTextResourceService().getText( locale,
+											MESSAGE_XML_MISSING_FILE, checkTool,
+											getTextResourceService().getText(
+													locale, ABORTED ) ) );
 							result = false;
 						}
 					} else {
 						// System.out.println("Validierung mit xmllint: ");
 						try {
-							String resultExec = Xmllint.execXmllint( xmlToValidate, xsdToValidate, workDir,
-									dirOfJarPath );
+							String resultExec = Xmllint.execXmllint(
+									xmlToValidate, xsdToValidate, workDir,
+									dirOfJarPath, locale );
 							if ( !resultExec.equals( "OK" ) ) {
-								// System.out.println("Validierung NICHT bestanden");
+								// System.out.println("Validierung NICHT
+								// bestanden");
 								if ( min ) {
 									return false;
 								} else {
 									result = false;
-									String tableXmlShortString = xmlToValidate.getAbsolutePath()
-											.replace( workDir.getAbsolutePath(), "" );
-									String tableXsdShortString = xsdToValidate.getAbsolutePath()
-											.replace( workDir.getAbsolutePath(), "" );
-									// val.message.xml.h.invalid.xml = <Message>{0} ist invalid zu
+									String tableXmlShortString = xmlToValidate
+											.getAbsolutePath()
+											.replace( workDir.getAbsolutePath(),
+													"" );
+									String tableXsdShortString = xsdToValidate
+											.getAbsolutePath()
+											.replace( workDir.getAbsolutePath(),
+													"" );
+									// val.message.xml.h.invalid.xml =
+									// <Message>{0} ist invalid zu
 									// {1}</Message></Error>
-									// val.message.xml.h.invalid.error = <Message>{0}</Message></Error>
+									// val.message.xml.h.invalid.error =
+									// <Message>{0}</Message></Error>
 									Logtxt.logtxt( logFile,
-											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_SIARD )
-													+ getTextResourceService().getText( locale, MESSAGE_XML_H_INVALID_XML,
-															tableXmlShortString, tableXsdShortString ) );
+											getTextResourceService().getText(
+													locale,
+													MESSAGE_XML_MODUL_C_SIARD )
+													+ getTextResourceService()
+															.getText( locale,
+																	MESSAGE_XML_H_INVALID_XML,
+																	tableXmlShortString,
+																	tableXsdShortString ) );
 									Logtxt.logtxt( logFile,
-											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_SIARD )
-													+ getTextResourceService().getText( locale, MESSAGE_XML_H_INVALID_ERROR,
-															resultExec ) );
+											getTextResourceService().getText(
+													locale,
+													MESSAGE_XML_MODUL_C_SIARD )
+													+ getTextResourceService()
+															.getText( locale,
+																	MESSAGE_XML_SERVICEMESSAGE,
+																	resultExec,
+																	"" ) );
 								}
 							} else {
 								// System.out.println("Validierung bestanden");
@@ -431,10 +480,13 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl
 							if ( min ) {
 								return false;
 							} else {
-								Logtxt.logtxt( logFile,
-										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_SIARD )
-												+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-														e1.getMessage() + " (InterruptedException Xmllint.execXmllint)" ) );
+								Logtxt.logtxt( logFile, getTextResourceService()
+										.getText( locale,
+												MESSAGE_XML_MODUL_C_SIARD )
+										+ getTextResourceService().getText(
+												locale, ERROR_XML_UNKNOWN,
+												e1.getMessage()
+														+ " (InterruptedException Xmllint.execXmllint)" ) );
 							}
 						}
 					}
@@ -443,10 +495,11 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl
 						return false;
 					} else {
 
-						Logtxt.logtxt( logFile,
-								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_SIARD )
-										+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-												ioe.getMessage() + " (IOException)" ) );
+						Logtxt.logtxt( logFile, getTextResourceService()
+								.getText( locale, MESSAGE_XML_MODUL_C_SIARD )
+								+ getTextResourceService().getText( locale,
+										ERROR_XML_UNKNOWN,
+										ioe.getMessage() + " (IOException)" ) );
 						result = false;
 					}
 				} catch ( SAXException e ) {
@@ -454,10 +507,11 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl
 						return false;
 					} else {
 
-						Logtxt.logtxt( logFile,
-								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_SIARD )
-										+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-												e.getMessage() + " (SAXException)" ) );
+						Logtxt.logtxt( logFile, getTextResourceService()
+								.getText( locale, MESSAGE_XML_MODUL_C_SIARD )
+								+ getTextResourceService().getText( locale,
+										ERROR_XML_UNKNOWN,
+										e.getMessage() + " (SAXException)" ) );
 						result = false;
 					}
 				} catch ( ParserConfigurationException e ) {
@@ -465,10 +519,11 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl
 						return false;
 					} else {
 
-						Logtxt.logtxt( logFile,
-								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_SIARD )
-										+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-												e.getMessage() + " (ParserConfigurationException)" ) );
+						Logtxt.logtxt( logFile, getTextResourceService()
+								.getText( locale, MESSAGE_XML_MODUL_C_SIARD )
+								+ getTextResourceService().getText( locale,
+										ERROR_XML_UNKNOWN, e.getMessage()
+												+ " (ParserConfigurationException)" ) );
 						result = false;
 					}
 				}
@@ -483,8 +538,10 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl
 			} else {
 
 				Logtxt.logtxt( logFile,
-						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_SIARD )
-								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+						getTextResourceService().getText( locale,
+								MESSAGE_XML_MODUL_C_SIARD )
+								+ getTextResourceService().getText( locale,
+										ERROR_XML_UNKNOWN, e.getMessage() ) );
 				return false;
 			}
 		}

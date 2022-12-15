@@ -38,7 +38,7 @@ import ch.kostceco.tools.siardexcerpt.service.TextResourceServiceExc;
 public class ConfigurationServiceExcImpl implements ConfigurationServiceExc
 {
 
-	Map<String, String>							configMap	= null;
+	Map<String, String>				configMap	= null;
 	private TextResourceServiceExc	textResourceServiceExc;
 
 	public TextResourceServiceExc getTextResourceServiceExc()
@@ -46,7 +46,8 @@ public class ConfigurationServiceExcImpl implements ConfigurationServiceExc
 		return textResourceServiceExc;
 	}
 
-	public void setTextResourceServiceExc( TextResourceServiceExc textResourceServiceExc )
+	public void setTextResourceServiceExc(
+			TextResourceServiceExc textResourceServiceExc )
 	{
 		this.textResourceServiceExc = textResourceServiceExc;
 	}
@@ -54,13 +55,16 @@ public class ConfigurationServiceExcImpl implements ConfigurationServiceExc
 	public Map<String, String> configMap( Locale locale )
 	{
 		try {
-			File directoryOfConfigfile = new File( System.getenv( "USERPROFILE" ) + File.separator
-					+ ".siardexcerpt" + File.separator + "configuration" );
-			File configFile = new File(
-					directoryOfConfigfile + File.separator + "siardexcerpt.conf.xml" );
+			File directoryOfConfigfile = new File(
+					System.getenv( "USERPROFILE" ) + File.separator
+							+ ".siardexcerpt" + File.separator
+							+ "configuration" );
+			File configFile = new File( directoryOfConfigfile + File.separator
+					+ "siardexcerpt.conf.xml" );
 			Document doc = null;
 
-			BufferedInputStream bis = new BufferedInputStream( new FileInputStream( configFile ) );
+			BufferedInputStream bis = new BufferedInputStream(
+					new FileInputStream( configFile ) );
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			doc = db.parse( bis );
@@ -69,19 +73,25 @@ public class ConfigurationServiceExcImpl implements ConfigurationServiceExc
 			Map<String, String> configMap = new HashMap<String, String>();
 			// ------------------------ Allgemeines ------------------------
 
-			/** Gibt den Pfad des Arbeitsverzeichnisses zurueck. =
-			 * USERPROFILE/.siardexcerpt/temp_SIARDexcerpt **/
-			String pathtoworkdir = System.getenv( "USERPROFILE" ) + File.separator + ".siardexcerpt"
-					+ File.separator + "temp_SIARDexcerpt";
+			/**
+			 * Gibt den Pfad des Arbeitsverzeichnisses zurueck. =
+			 * USERPROFILE/.siardexcerpt/temp_SIARDexcerpt
+			 **/
+			String pathtoworkdir = System.getenv( "USERPROFILE" )
+					+ File.separator + ".siardexcerpt" + File.separator
+					+ "temp_SIARDexcerpt";
 			File dir = new File( pathtoworkdir );
 			if ( !dir.exists() ) {
 				dir.mkdirs();
 			}
 			configMap.put( "PathToWorkDir", pathtoworkdir );
 
-			/** Gibt den Pfad des Output-verzeichnisses zurueck. = USERPROFILE/.siardexcerpt/Output **/
-			String logs = System.getenv( "USERPROFILE" ) + File.separator + ".siardexcerpt"
-					+ File.separator + "Output";
+			/**
+			 * Gibt den Pfad des Output-verzeichnisses zurueck. =
+			 * USERPROFILE/.siardexcerpt/Output
+			 **/
+			String logs = System.getenv( "USERPROFILE" ) + File.separator
+					+ ".siardexcerpt" + File.separator + "Output";
 			File dir1 = new File( logs );
 			if ( !dir1.exists() ) {
 				dir1.mkdirs();
@@ -106,7 +116,8 @@ public class ConfigurationServiceExcImpl implements ConfigurationServiceExc
 
 			try {
 				/** Gibt den Pfad des XSL zurueck. **/
-				String pathToXSL = doc.getElementsByTagName( "pathtoxsl" ).item( 0 ).getTextContent();
+				String pathToXSL = doc.getElementsByTagName( "pathtoxsl" )
+						.item( 0 ).getTextContent();
 				configMap.put( "PathToXSL", pathToXSL );
 			} catch ( NullPointerException e ) {
 				configMap.put( "PathToXSL", "(..)" );
@@ -114,25 +125,32 @@ public class ConfigurationServiceExcImpl implements ConfigurationServiceExc
 
 			try {
 				/** Gibt den Pfad des XSL search zurueck. **/
-				String pathToXSLsearch = doc.getElementsByTagName( "pathtoxslsearch" ).item( 0 )
+				String pathToXSLsearch = doc
+						.getElementsByTagName( "pathtoxslsearch" ).item( 0 )
 						.getTextContent();
 				configMap.put( "PathToXSLsearch", pathToXSLsearch );
 			} catch ( NullPointerException e ) {
-				configMap.put( "PathToXSLsearch", "resources" + File.separator + "SIARDexcerptSearch.xsl" );
+				configMap.put( "PathToXSLsearch", "resources" + File.separator
+						+ "SIARDexcerptSearch.xsl" );
 			}
 
 			try {
 				/** Gibt den Namen des Archivs zurueck. **/
-				String archive = doc.getElementsByTagName( "archive" ).item( 0 ).getTextContent();
+				String archive = doc.getElementsByTagName( "archive" ).item( 0 )
+						.getTextContent();
 				configMap.put( "Archive", archive );
 			} catch ( NullPointerException e ) {
 				configMap.put( "Archive", "Archiv" );
 			}
 
 			try {
-				/** Gibt an ob die Suche case sensitive (Gross- und Kleinschreibung werden beruecksichtigt)
-				 * oder insensitive (Gross- und Kleinschreibung werden ignoriert) sein soll. */
-				String insensitive = doc.getElementsByTagName( "insensitive" ).item( 0 ).getTextContent();
+				/**
+				 * Gibt an ob die Suche case sensitive (Gross- und
+				 * Kleinschreibung werden beruecksichtigt) oder insensitive
+				 * (Gross- und Kleinschreibung werden ignoriert) sein soll.
+				 */
+				String insensitive = doc.getElementsByTagName( "insensitive" )
+						.item( 0 ).getTextContent();
 				configMap.put( "Insensitive", insensitive );
 			} catch ( NullPointerException e ) {
 				configMap.put( "Insensitive", "yes" );
@@ -140,7 +158,8 @@ public class ConfigurationServiceExcImpl implements ConfigurationServiceExc
 
 			try {
 				/** Gibt an ob sed verwendet werden soll oder nicht. */
-				String sed = doc.getElementsByTagName( "sed" ).item( 0 ).getTextContent();
+				String sed = doc.getElementsByTagName( "sed" ).item( 0 )
+						.getTextContent();
 				configMap.put( "Sed", sed );
 			} catch ( NullPointerException e ) {
 				configMap.put( "Sed", "no" );
@@ -149,7 +168,8 @@ public class ConfigurationServiceExcImpl implements ConfigurationServiceExc
 			// ------------------------ Extraktion ------------------------
 			try {
 				/** Gibt den Namen des Archivs zurueck. **/
-				mfolder = doc.getElementsByTagName( "mfolder" ).item( 0 ).getTextContent();
+				mfolder = doc.getElementsByTagName( "mfolder" ).item( 0 )
+						.getTextContent();
 				configMap.put( "MaintableFolder", mfolder );
 			} catch ( NullPointerException e ) {
 				configMap.put( "MaintableFolder", "(..)" );
@@ -157,7 +177,8 @@ public class ConfigurationServiceExcImpl implements ConfigurationServiceExc
 
 			try {
 				/** Gibt den Namen der Haupttabelle zurueck. */
-				mname = doc.getElementsByTagName( "mname" ).item( 0 ).getTextContent();
+				mname = doc.getElementsByTagName( "mname" ).item( 0 )
+						.getTextContent();
 				configMap.put( "MaintableName", mname );
 			} catch ( NullPointerException e ) {
 				configMap.put( "MaintableName", "(..)" );
@@ -165,23 +186,30 @@ public class ConfigurationServiceExcImpl implements ConfigurationServiceExc
 
 			try {
 				/** Gibt den Titel der Suche zurueck. */
-				mtitle = doc.getElementsByTagName( "mtitle" ).item( 0 ).getTextContent();
+				mtitle = doc.getElementsByTagName( "mtitle" ).item( 0 )
+						.getTextContent();
 				configMap.put( "SearchtableTitle", mtitle );
 			} catch ( NullPointerException e ) {
 				configMap.put( "SearchtableTitle", "(..)" );
 			}
 
 			try {
-				/** Gibt den Namen des Primärschluessel der Haupttabelle zurueck. */
-				mpkname = doc.getElementsByTagName( "mpkname" ).item( 0 ).getTextContent();
+				/**
+				 * Gibt den Namen des Primärschluessel der Haupttabelle zurueck.
+				 */
+				mpkname = doc.getElementsByTagName( "mpkname" ).item( 0 )
+						.getTextContent();
 				configMap.put( "MaintablePrimarykeyName", mpkname );
 			} catch ( NullPointerException e ) {
 				configMap.put( "MaintablePrimarykeyName", "(..)" );
 			}
 
 			try {
-				/** Gibt die Zelle des Primärschluessel der Haupttabelle zurueck. */
-				mpkcell = doc.getElementsByTagName( "mpkcell" ).item( 0 ).getTextContent();
+				/**
+				 * Gibt die Zelle des Primärschluessel der Haupttabelle zurueck.
+				 */
+				mpkcell = doc.getElementsByTagName( "mpkcell" ).item( 0 )
+						.getTextContent();
 				configMap.put( "MaintablePrimarykeyCell", mpkcell );
 			} catch ( NullPointerException e ) {
 				configMap.put( "MaintablePrimarykeyCell", "(..)" );
@@ -189,7 +217,8 @@ public class ConfigurationServiceExcImpl implements ConfigurationServiceExc
 
 			try {
 				/** Gibt den SchemaNamen des Archivs zurueck. **/
-				mschemaname = doc.getElementsByTagName( "mschemaname" ).item( 0 ).getTextContent();
+				mschemaname = doc.getElementsByTagName( "mschemaname" )
+						.item( 0 ).getTextContent();
 				configMap.put( "MschemaName", mschemaname );
 			} catch ( NullPointerException e ) {
 				configMap.put( "MschemaName", "(..)" );
@@ -197,7 +226,8 @@ public class ConfigurationServiceExcImpl implements ConfigurationServiceExc
 
 			try {
 				/** Gibt den SchemaNamen der Haupttabelle zurueck. */
-				mschemafolder = doc.getElementsByTagName( "mschemafolder" ).item( 0 ).getTextContent();
+				mschemafolder = doc.getElementsByTagName( "mschemafolder" )
+						.item( 0 ).getTextContent();
 				configMap.put( "MschemaFolder", mschemafolder );
 			} catch ( NullPointerException e ) {
 				configMap.put( "MschemaFolder", "(..)" );
@@ -206,61 +236,74 @@ public class ConfigurationServiceExcImpl implements ConfigurationServiceExc
 			for ( int i = 1; i < 12; i++ ) {
 				try {
 					/** Namen den Namen der Suchzelle zurueck. */
-					mcIname = doc.getElementsByTagName( "mc" + i + "name" ).item( 0 ).getTextContent();
+					mcIname = doc.getElementsByTagName( "mc" + i + "name" )
+							.item( 0 ).getTextContent();
 					configMap.put( "CellName" + i, mcIname );
 				} catch ( NullPointerException e ) {
 					configMap.put( "CellName" + i, "(..)" );
 				}
 				try {
 					/** Gibt die Nummer der Suchzelle zurueck. */
-					mcInumber = doc.getElementsByTagName( "mc" + i + "number" ).item( 0 ).getTextContent();
+					mcInumber = doc.getElementsByTagName( "mc" + i + "number" )
+							.item( 0 ).getTextContent();
 					configMap.put( "CellNumber" + i, mcInumber );
 				} catch ( NullPointerException e ) {
 					configMap.put( "CellNumber" + i, "(..)" );
 				}
 			}
 
-			// ------------------------ Subtable st1 - st20 ------------------------
+			// ------------------------ Subtable st1 - st20
+			// ------------------------
 			for ( int j = 1; j < 21; j++ ) {
 				try {
 					/** Namen des Schluessel zurueck. */
-					stJkeyname = doc.getElementsByTagName( "st" + j + "keyname" ).item( 0 ).getTextContent();
+					stJkeyname = doc
+							.getElementsByTagName( "st" + j + "keyname" )
+							.item( 0 ).getTextContent();
 					configMap.put( "st" + j + "Keyname", stJkeyname );
 				} catch ( NullPointerException e ) {
 					configMap.put( "st" + j + "Keyname", "(..)" );
 				}
 				try {
 					/** Gibt den Ordner der Subtabelle zurueck. */
-					stJfolder = doc.getElementsByTagName( "st" + j + "folder" ).item( 0 ).getTextContent();
+					stJfolder = doc.getElementsByTagName( "st" + j + "folder" )
+							.item( 0 ).getTextContent();
 					configMap.put( "st" + j + "Folder", stJfolder );
 				} catch ( NullPointerException e ) {
 					configMap.put( "st" + j + "Folder", "(..)" );
 				}
 				try {
 					/** Gibt den Namen der Subtabelle zurueck. */
-					stJname = doc.getElementsByTagName( "st" + j + "name" ).item( 0 ).getTextContent();
+					stJname = doc.getElementsByTagName( "st" + j + "name" )
+							.item( 0 ).getTextContent();
 					configMap.put( "st" + j + "Name", stJname );
 				} catch ( NullPointerException e ) {
 					configMap.put( "st" + j + "Name", "(..)" );
 				}
 				try {
-					/** Gibt die Zelle des Fremdschluessel der Subtabelle zurueck. */
-					stJfkcell = doc.getElementsByTagName( "st" + j + "fkcell" ).item( 0 ).getTextContent();
+					/**
+					 * Gibt die Zelle des Fremdschluessel der Subtabelle
+					 * zurueck.
+					 */
+					stJfkcell = doc.getElementsByTagName( "st" + j + "fkcell" )
+							.item( 0 ).getTextContent();
 					configMap.put( "st" + j + "Fkcell", stJfkcell );
 				} catch ( NullPointerException e ) {
 					configMap.put( "st" + j + "Fkcell", "(..)" );
 				}
 				try {
 					/** Gibt den Namen der Subtabelle zurueck. */
-					stJschemafolder = doc.getElementsByTagName( "st" + j + "schemafolder" ).item( 0 )
-							.getTextContent();
+					stJschemafolder = doc
+							.getElementsByTagName( "st" + j + "schemafolder" )
+							.item( 0 ).getTextContent();
 					configMap.put( "st" + j + "SchemaFolder", stJschemafolder );
 				} catch ( NullPointerException e ) {
 					configMap.put( "st" + j + "SchemaFolder", "(..)" );
 				}
 				try {
-					stJschemaname = doc.getElementsByTagName( "st" + j + "schemaname" ).item( 0 )
-							.getTextContent();
+					stJschemaname = doc
+							.getElementsByTagName( "st" + j + "schemaname" )
+							.item( 0 ).getTextContent();
 					configMap.put( "st" + j + "SchemaName", stJschemaname );
 				} catch ( NullPointerException e ) {
 					configMap.put( "st" + j + "SchemaName", "(..)" );
@@ -272,27 +315,31 @@ public class ConfigurationServiceExcImpl implements ConfigurationServiceExc
 			return configMap;
 
 		} catch ( FileNotFoundException e ) {
-			System.out.println( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_A ) );
-			System.out.println(
-					getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN, e.getMessage() ) );
+			System.out.println( getTextResourceServiceExc().getText( locale,
+					EXC_MESSAGE_XML_MODUL_A ) );
+			System.out.println( getTextResourceServiceExc().getText( locale,
+					EXC_ERROR_XML_UNKNOWN, e.getMessage() ) );
 			System.exit( 1 );
 		} catch ( ParserConfigurationException e ) {
 			String error = e.getMessage() + " (ParserConfigurationException)";
-			System.out.println( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_A ) );
-			System.out
-					.println( getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN, error ) );
+			System.out.println( getTextResourceServiceExc().getText( locale,
+					EXC_MESSAGE_XML_MODUL_A ) );
+			System.out.println( getTextResourceServiceExc().getText( locale,
+					EXC_ERROR_XML_UNKNOWN, error ) );
 			System.exit( 1 );
 		} catch ( SAXException e ) {
 			String error = e.getMessage() + " (SAXException)";
-			System.out.println( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_A ) );
-			System.out
-					.println( getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN, error ) );
+			System.out.println( getTextResourceServiceExc().getText( locale,
+					EXC_MESSAGE_XML_MODUL_A ) );
+			System.out.println( getTextResourceServiceExc().getText( locale,
+					EXC_ERROR_XML_UNKNOWN, error ) );
 			System.exit( 1 );
 		} catch ( IOException e ) {
 			String error = e.getMessage() + " (IOException)";
-			System.out.println( getTextResourceServiceExc().getText( locale, EXC_MESSAGE_XML_MODUL_A ) );
-			System.out
-					.println( getTextResourceServiceExc().getText( locale, EXC_ERROR_XML_UNKNOWN, error ) );
+			System.out.println( getTextResourceServiceExc().getText( locale,
+					EXC_MESSAGE_XML_MODUL_A ) );
+			System.out.println( getTextResourceServiceExc().getText( locale,
+					EXC_ERROR_XML_UNKNOWN, error ) );
 			System.exit( 1 );
 		}
 		return configMap;

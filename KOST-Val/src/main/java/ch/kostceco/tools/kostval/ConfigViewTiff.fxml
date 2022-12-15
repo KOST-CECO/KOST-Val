@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+
+<StackPane maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="860.0" prefHeight="400.0" style="-fx-background-color: silver;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.kostceco.tools.kostval.ConfigControllerTiff">
+	<children>
+		<GridPane minHeight="410.0">
+			<columnConstraints>
+				<ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="170.0" />
+				<ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="170.0" />
+				<ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="170.0" />
+				<ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="170.0" />
+				<ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="160.0" />
+			</columnConstraints>
+			<rowConstraints>
+				<RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" vgrow="SOMETIMES" />
+				<RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="5.0" vgrow="SOMETIMES" />
+				<RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+				<RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+				<RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+				<RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+				<RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+				<RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+				<RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+				<RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+				<RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+				<RowConstraints maxHeight="1.7976931348623157E308" minHeight="-Infinity" prefHeight="5.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" vgrow="SOMETIMES" />
+ 			</rowConstraints>
+			<children>
+            <Label fx:id="labelImage" text="Validierungseinstellungen TIFF" GridPane.columnSpan="2">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+				<Button fx:id="buttonConfigApply" alignment="TOP_LEFT" maxHeight="26.0" maxWidth="160.0" minHeight="26.0" minWidth="-Infinity" mnemonicParsing="false" onAction="#configApply" prefHeight="26.0" prefWidth="160.0" style="-fx-border-color: LimeGreen;" text="Anwenden" GridPane.columnIndex="4">
+					<GridPane.margin>
+						<Insets />
+					</GridPane.margin>
+				</Button>
+				<Label fx:id="labelComp" text="Komprimierungsalgorithmus" GridPane.columnSpan="2" GridPane.rowIndex="2" />
+				<Label fx:id="labelPi" text="Farbraum" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2" />
+				<Label fx:id="labelBps" text="Bits per Sample (pro Kanal)" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="2" />
+				<Label fx:id="labelOther" text="Sonstiges" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+				<CheckBox fx:id="checkComp1" mnemonicParsing="false" onAction="#changeComp1" selected="true" text="Uncompressed" GridPane.rowIndex="3" />
+				<CheckBox fx:id="checkComp5" mnemonicParsing="false" onAction="#changeComp5" selected="true" text="LZW" GridPane.rowIndex="7" />
+				<CheckBox fx:id="checkComp2" mnemonicParsing="false" onAction="#changeComp2" selected="true" text="CCITT 1D" GridPane.rowIndex="4" />
+				<CheckBox fx:id="checkComp7" mnemonicParsing="false" onAction="#changeComp7" selected="true" text="JPEG" GridPane.rowIndex="8" />
+				<CheckBox fx:id="checkComp3" mnemonicParsing="false" onAction="#changeComp3" selected="true" text="T4/Group 3 Fax" GridPane.rowIndex="5" />
+				<CheckBox fx:id="checkComp8" mnemonicParsing="false" onAction="#changeComp8" selected="true" text="Deflate" GridPane.rowIndex="9" />
+				<CheckBox fx:id="checkComp4" mnemonicParsing="false" onAction="#changeComp4" selected="true" text="T6/Group 4 Fax" GridPane.rowIndex="6" />
+				<CheckBox fx:id="checkComp32773" mnemonicParsing="false" onAction="#changeComp32773" selected="true" text="PackBits" GridPane.rowIndex="10" />
+				<CheckBox fx:id="checkPi0" mnemonicParsing="false" onAction="#changePi0" selected="true" text="WhiteIsZero" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+				<CheckBox fx:id="checkPi4" mnemonicParsing="false" onAction="#changePi4" selected="true" text="transparency" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+				<CheckBox fx:id="checkPi1" mnemonicParsing="false" onAction="#changePi1" selected="true" text="BlackIsZero" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+				<CheckBox fx:id="checkPi5" mnemonicParsing="false" onAction="#changePi5" selected="true" text="CMYK" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+				<CheckBox fx:id="checkPi2" mnemonicParsing="false" onAction="#changePi2" selected="true" text="RGB" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+				<CheckBox fx:id="checkPi6" mnemonicParsing="false" onAction="#changePi6" selected="true" text="YCbCr" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+				<CheckBox fx:id="checkPi3" mnemonicParsing="false" onAction="#changePi3" selected="true" text="RGB Palette" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+				<CheckBox fx:id="checkPi8" mnemonicParsing="false" onAction="#changePi8" selected="true" text="CIE L*a*b*" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+				<CheckBox fx:id="checkBps1" mnemonicParsing="false" onAction="#changeBps1" selected="true" text="Bps 1" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+				<CheckBox fx:id="checkBps8" mnemonicParsing="false" onAction="#changeBps8" selected="true" text="Bps 8" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+				<CheckBox fx:id="checkBps2" mnemonicParsing="false" onAction="#changeBps2" selected="true" text="Bps 2" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+				<CheckBox fx:id="checkBps16" mnemonicParsing="false" onAction="#changeBps16" selected="true" text="Bps 16" GridPane.columnIndex="2" GridPane.rowIndex="7" />
+				<CheckBox fx:id="checkBps4" mnemonicParsing="false" onAction="#changeBps4" selected="true" text="Bps 4" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+				<CheckBox fx:id="checkBps32" mnemonicParsing="false" onAction="#changeBps32" selected="true" text="Bps 32" GridPane.columnIndex="2" GridPane.rowIndex="8" />
+				<CheckBox fx:id="checkMultipage" mnemonicParsing="false" onAction="#changeMultipage" selected="true" text="Multipage" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+				<CheckBox fx:id="checkTiles" mnemonicParsing="false" onAction="#changeTiles" selected="true" text="Tiles" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+				<CheckBox fx:id="checkSize" mnemonicParsing="false" onAction="#changeSize" selected="true" text="Size" GridPane.columnIndex="3" GridPane.rowIndex="5" />
+				<Label fx:id="labelConfig" alignment="CENTER" contentDisplay="CENTER" maxHeight="20.0" maxWidth="780.0" minHeight="20.0" minWidth="780.0" prefHeight="20.0" prefWidth="780.0" text="Copyright © KOST/CECO" textAlignment="CENTER" textFill="WHITESMOKE" GridPane.columnSpan="5" GridPane.halignment="CENTER" GridPane.rowIndex="13" GridPane.valignment="CENTER" />
+            <Label fx:id="labelMessage" text="Meldung Validierungseinstellungen TIFF" textFill="RED" GridPane.columnSpan="5" GridPane.rowIndex="11" />
+			</children>
+			<padding>
+				<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+			</padding>
+		</GridPane>
+	</children>
+</StackPane>

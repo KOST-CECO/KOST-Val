@@ -1,5 +1,5 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
  * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
@@ -41,13 +41,16 @@ import ch.kostceco.tools.kostval.validation.bean.ValidationContext;
 import ch.kostceco.tools.kostval.validation.modulesiard.ValidationWwarningModule;
 import ch.kostceco.tools.kostval.logging.Logtxt;
 
-/** Validierungsschritt W (Warnungen) Wurden dataOwner und dataOriginTimespan ausgefuellt und nicht
- * auf (...) belassen? <dataOwner>(...)</dataOwner> <dataOriginTimespan>(...)</dataOriginTimespan>
- * ab 1.8 auch <dbname>(...)</dbname> plus dito fuer unspecified
+/**
+ * Validierungsschritt W (Warnungen) Wurden dataOwner und dataOriginTimespan
+ * ausgefuellt und nicht auf (...) belassen? <dataOwner>(...)</dataOwner>
+ * <dataOriginTimespan>(...)</dataOriginTimespan> ab 1.8 auch
+ * <dbname>(...)</dbname> plus dito fuer unspecified
  * 
  * nur Messeage ausgeben aber immer valid
  * 
- * @author Rc Claire Roethlisberger, KOST-CECO */
+ * @author Rc Claire Roethlisberger, KOST-CECO
+ */
 
 public class ValidationWwarningModuleImpl extends ValidationModuleImpl
 		implements ValidationWwarningModule
@@ -57,14 +60,18 @@ public class ValidationWwarningModuleImpl extends ValidationModuleImpl
 	private boolean min = false;
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile ) throws ValidationWwarningException
+	public boolean validate( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath ) throws ValidationWwarningException
 	{
 		// Informationen zur Darstellung "onWork" holen
 		String onWork = configMap.get( "ShowProgressOnWork" );
-		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
-		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
-		 * ref="configurationService" /> */
+		/*
+		 * Nicht vergessen in
+		 * "src/main/resources/config/applicationContext-services.xml" beim
+		 * entsprechenden Modul die property anzugeben: <property
+		 * name="configurationService" ref="configurationService" />
+		 */
 		if ( onWork.equals( "yes" ) ) {
 			// Ausgabe Modul Ersichtlich das KOST-Val arbeitet
 			System.out.print( "W    " );
@@ -79,8 +86,10 @@ public class ValidationWwarningModuleImpl extends ValidationModuleImpl
 
 			String pathToWorkDir = configMap.get( "PathToWorkDir" );
 			pathToWorkDir = pathToWorkDir + File.separator + "SIARD";
-			File metadataXml = new File( new StringBuilder( pathToWorkDir ).append( File.separator )
-					.append( "header" ).append( File.separator ).append( "metadata.xml" ).toString() );
+			File metadataXml = new File(
+					new StringBuilder( pathToWorkDir ).append( File.separator )
+							.append( "header" ).append( File.separator )
+							.append( "metadata.xml" ).toString() );
 
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = dbf.newDocumentBuilder();
@@ -93,42 +102,53 @@ public class ValidationWwarningModuleImpl extends ValidationModuleImpl
 			Element elementDataOriginTimespan = null;
 			Element elementDbName = null;
 
-			elementDataOwner = (Element) xpath.evaluate( "/siardArchive/dataOwner", doc,
+			elementDataOwner = (Element) xpath.evaluate(
+					"/siardArchive/dataOwner", doc, XPathConstants.NODE );
+
+			elementDataOriginTimespan = (Element) xpath.evaluate(
+					"/siardArchive/dataOriginTimespan", doc,
 					XPathConstants.NODE );
 
-			elementDataOriginTimespan = (Element) xpath.evaluate( "/siardArchive/dataOriginTimespan", doc,
-					XPathConstants.NODE );
-
-			elementDbName = (Element) xpath.evaluate( "/siardArchive/dbname", doc, XPathConstants.NODE );
+			elementDbName = (Element) xpath.evaluate( "/siardArchive/dbname",
+					doc, XPathConstants.NODE );
 
 			if ( elementDataOwner != null ) {
 				String dataOwnerValue = elementDataOwner.getTextContent();
-				if ( dataOwnerValue.equals( "(...)" ) || dataOwnerValue.equals( "unspecified" ) ) {
-					/* Der Initialwert wurde nicht veraendert respektive ausgefuellt, entsprechend wird eine
-					 * Warnung ausgegeben */
+				if ( dataOwnerValue.equals( "(...)" )
+						|| dataOwnerValue.equals( "unspecified" ) ) {
+					/*
+					 * Der Initialwert wurde nicht veraendert respektive
+					 * ausgefuellt, entsprechend wird eine Warnung ausgegeben
+					 */
 					if ( min ) {
 					} else {
 
-						Logtxt.logtxt( logFile,
-								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_W_SIARD )
-										+ getTextResourceService().getText( locale, MESSAGE_XML_W_WARNING_INITVALUE,
-												"dataOwner", dataOwnerValue ) );
+						Logtxt.logtxt( logFile, getTextResourceService()
+								.getText( locale, MESSAGE_XML_MODUL_W_SIARD )
+								+ getTextResourceService().getText( locale,
+										MESSAGE_XML_W_WARNING_INITVALUE,
+										"dataOwner", dataOwnerValue ) );
 					}
 				}
 			}
 
 			if ( elementDataOriginTimespan != null ) {
-				String dataOriginTimespanValue = elementDataOriginTimespan.getTextContent();
+				String dataOriginTimespanValue = elementDataOriginTimespan
+						.getTextContent();
 				if ( dataOriginTimespanValue.equals( "(...)" ) ) {
-					/* Der Initialwert wurde nicht veraendert respektive ausgefuellt, entsprechend wird eine
-					 * Warnung ausgegeben */
+					/*
+					 * Der Initialwert wurde nicht veraendert respektive
+					 * ausgefuellt, entsprechend wird eine Warnung ausgegeben
+					 */
 					if ( min ) {
 					} else {
 
-						Logtxt.logtxt( logFile,
-								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_W_SIARD )
-										+ getTextResourceService().getText( locale, MESSAGE_XML_W_WARNING_INITVALUE,
-												"dataOriginTimespan", dataOriginTimespanValue ) );
+						Logtxt.logtxt( logFile, getTextResourceService()
+								.getText( locale, MESSAGE_XML_MODUL_W_SIARD )
+								+ getTextResourceService().getText( locale,
+										MESSAGE_XML_W_WARNING_INITVALUE,
+										"dataOriginTimespan",
+										dataOriginTimespanValue ) );
 					}
 				}
 			}
@@ -136,15 +156,18 @@ public class ValidationWwarningModuleImpl extends ValidationModuleImpl
 			if ( elementDbName != null ) {
 				String dataDbNameValue = elementDbName.getTextContent();
 				if ( dataDbNameValue.equals( "(...)" ) ) {
-					/* Der Initialwert wurde nicht veraendert respektive ausgefuellt, entsprechend wird eine
-					 * Warnung ausgegeben */
+					/*
+					 * Der Initialwert wurde nicht veraendert respektive
+					 * ausgefuellt, entsprechend wird eine Warnung ausgegeben
+					 */
 					if ( min ) {
 					} else {
 
-						Logtxt.logtxt( logFile,
-								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_W_SIARD )
-										+ getTextResourceService().getText( locale, MESSAGE_XML_W_WARNING_INITVALUE,
-												"dbname", dataDbNameValue ) );
+						Logtxt.logtxt( logFile, getTextResourceService()
+								.getText( locale, MESSAGE_XML_MODUL_W_SIARD )
+								+ getTextResourceService().getText( locale,
+										MESSAGE_XML_W_WARNING_INITVALUE,
+										"dbname", dataDbNameValue ) );
 					}
 				}
 			}
@@ -154,8 +177,10 @@ public class ValidationWwarningModuleImpl extends ValidationModuleImpl
 			} else {
 
 				Logtxt.logtxt( logFile,
-						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_W_SIARD )
-								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() ) );
+						getTextResourceService().getText( locale,
+								MESSAGE_XML_MODUL_W_SIARD )
+								+ getTextResourceService().getText( locale,
+										ERROR_XML_UNKNOWN, e.getMessage() ) );
 			}
 			return true;
 		}

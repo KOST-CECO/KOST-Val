@@ -1,5 +1,5 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
  * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
@@ -25,27 +25,34 @@ import java.util.ResourceBundle;
 
 import ch.kostceco.tools.kostval.service.TextResourceService;
 
-/** Dieser Service managt die Zugriffe auf die Resource Bundles.
+/**
+ * Dieser Service managt die Zugriffe auf die Resource Bundles.
  * 
- * @author Rc Claire Roethlisberger, KOST-CECO */
+ * @author Rc Claire Roethlisberger, KOST-CECO
+ */
 public class TextResourceServiceImpl implements TextResourceService
 {
-	// Per Default ist es dieser Name, kann jedoch auch mittels Dependency Injection überschrieben
+	// Per Default ist es dieser Name, kann jedoch auch mittels Dependency
+	// Injection ï¿½berschrieben
 	// werden.
-	private String	bundleBaseName	= "messages";
+	private String bundleBaseName = "messages";
 
-	/** Gibt den Wert des Attributs <code>bundleBaseName</code> zurück.
+	/**
+	 * Gibt den Wert des Attributs <code>bundleBaseName</code> zurï¿½ck.
 	 * 
-	 * @return Wert des Attributs bundleBaseName. */
+	 * @return Wert des Attributs bundleBaseName.
+	 */
 	public String getBundleBaseName()
 	{
 		return bundleBaseName;
 	}
 
-	/** Setzt den Wert des Attributs <code>bundleBaseName</code>.
+	/**
+	 * Setzt den Wert des Attributs <code>bundleBaseName</code>.
 	 * 
 	 * @param bundleBaseName
-	 *          Wert für das Attribut bundleBaseName. */
+	 *            Wert fï¿½r das Attribut bundleBaseName.
+	 */
 	public void setBundleBaseName( String bundleBaseName )
 	{
 		this.bundleBaseName = bundleBaseName;
@@ -65,7 +72,8 @@ public class TextResourceServiceImpl implements TextResourceService
 	public String getText( Locale locale, String aKey, Object... values )
 	{
 
-		String theValue = ResourceBundle.getBundle( this.bundleBaseName, locale ).getString( aKey );
+		String theValue = ResourceBundle
+				.getBundle( this.bundleBaseName, locale ).getString( aKey );
 		return MessageFormat.format( theValue, values );
 	}
 

@@ -1,5 +1,5 @@
 ﻿/* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
  * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
@@ -26,17 +26,21 @@ import java.util.Map;
 import ch.kostceco.tools.kostval.exception.modulesiard.ValidationAzipException;
 import ch.kostceco.tools.kostval.validation.ValidationModule;
 
-/** Validierungsschritt A (Lesbarkeit) Kann die SIARD-Datei gelesen werden? valid --> lesbare und
- * nicht passwortgeschützte ZIP-Datei oder ZIP64-Datei valid --> unkomprimierte ZIP64-Datei oder
- * unkomprimierte ZIP-Datei ==> Bei den Module A, B, C und D wird die Validierung abgebrochen,
- * sollte das Resulat invalid sein!
+/**
+ * Validierungsschritt A (Lesbarkeit) Kann die SIARD-Datei gelesen werden? valid
+ * --> lesbare und nicht passwortgeschützte ZIP-Datei oder ZIP64-Datei valid -->
+ * unkomprimierte ZIP64-Datei oder unkomprimierte ZIP-Datei ==> Bei den Module
+ * A, B, C und D wird die Validierung abgebrochen, sollte das Resulat invalid
+ * sein!
  * 
- * @author Rc Claire Roethlisberger, KOST-CECO */
+ * @author Rc Claire Roethlisberger, KOST-CECO
+ */
 
 public interface ValidationAzipModule extends ValidationModule
 {
 
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile ) throws ValidationAzipException;
+	public boolean validate( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath ) throws ValidationAzipException;
 
 }

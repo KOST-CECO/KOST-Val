@@ -1,5 +1,5 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
  * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
@@ -62,32 +62,34 @@ import com.pdftools.Stream;
 import com.pdftools.pdfvalidator.PdfError;
 import com.pdftools.pdfvalidator.PdfValidatorAPI;
 
-import ch.kostceco.tools.kosttools.fileservice.DroidPuid;
-import ch.kostceco.tools.kosttools.fileservice.Magic;
 import ch.kostceco.tools.kosttools.util.Util;
 import ch.kostceco.tools.kosttools.util.UtilCallas;
 import ch.kostceco.tools.kosttools.util.UtilCharacter;
-import ch.kostceco.tools.kostval.KOSTVal;
 import ch.kostceco.tools.kostval.exception.modulepdfa.ValidationApdfvalidationException;
+import ch.kostceco.tools.kostval.logging.Logtxt;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulepdfa.ValidationAvalidationAiModule;
-import ch.kostceco.tools.kostval.logging.Logtxt;
 
-/** Ist die vorliegende PDF-Datei eine valide PDFA-Datei? PDFA Validierungs mit callas und oder
- * PDF-Tools.
+/**
+ * Ist die vorliegende PDF-Datei eine valide PDFA-Datei? PDFA Validierungs mit
+ * callas und oder PDF-Tools.
  * 
- * Folgendes ist Konfigurierbar: welche Validatoren verwendet werden sollen. Sollen beide verwendet
- * werden wird die Duale Validierung durchgefuehrt. Bei der dualen Validierung muessen beide
- * Validatoren die Datei als invalide betrachten, damit diese als invalid gilt. Bei Uneinigkeit gilt
- * diese als valid.
+ * Folgendes ist Konfigurierbar: welche Validatoren verwendet werden sollen.
+ * Sollen beide verwendet werden wird die Duale Validierung durchgefuehrt. Bei
+ * der dualen Validierung muessen beide Validatoren die Datei als invalide
+ * betrachten, damit diese als invalid gilt. Bei Uneinigkeit gilt diese als
+ * valid.
  * 
- * Es wird falls vorhanden die Vollversion von PDF-Tools verwendet. KOST-Val muss nicht angepasst
- * werden und verwendet automatisch den internen Schluessel, sollte keine Vollversion existieren.
+ * Es wird falls vorhanden die Vollversion von PDF-Tools verwendet. KOST-Val
+ * muss nicht angepasst werden und verwendet automatisch den internen
+ * Schluessel, sollte keine Vollversion existieren.
  * 
- * Zuerste erfolgt eine Erkennung, wenn diese io kommt die Validierung mit PDF Tools und oder
- * callas. Die Fehler werden den Einzelnen Gruppen (Modulen) zugeordnet
+ * Zuerste erfolgt eine Erkennung, wenn diese io kommt die Validierung mit PDF
+ * Tools und oder callas. Die Fehler werden den Einzelnen Gruppen (Modulen)
+ * zugeordnet
  * 
- * @author Rc Claire Roethlisberger, KOST-CECO */
+ * @author Rc Claire Roethlisberger, KOST-CECO
+ */
 
 public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 		implements ValidationAvalidationAiModule
@@ -95,11 +97,12 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 
 	public static String	NEWLINE	= System.getProperty( "line.separator" );
 
-	private boolean				min			= false;
+	private boolean			min		= false;
 
 	@Override
-	public boolean validate( File valDatei, File directoryOfLogfile, Map<String, String> configMap,
-			Locale locale, File logFile ) throws ValidationApdfvalidationException
+	public boolean validate( File valDatei, File directoryOfLogfile,
+			Map<String, String> configMap, Locale locale, File logFile,
+			String dirOfJarPath ) throws ValidationApdfvalidationException
 	{
 		String onWork = configMap.get( "ShowProgressOnWork" );
 		if ( onWork.equals( "nomin" ) ) {
@@ -126,27 +129,36 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 
 		String pathToLogDir = configMap.get( "PathToLogfile" );
 		String pathToWorkDir = pathToLogDir;
-		/* Beim schreiben ins Workverzeichnis trat ab und zu ein fehler auf. entsprechend wird es jetzt
-		 * ins logverzeichnis geschrieben */
+		/*
+		 * Beim schreiben ins Workverzeichnis trat ab und zu ein fehler auf.
+		 * entsprechend wird es jetzt ins logverzeichnis geschrieben
+		 */
 
-		File callasNo = new File( pathToWorkDir + File.separator + "_callas_NO.txt" );
+		File callasNo = new File(
+				pathToWorkDir + File.separator + "_callas_NO.txt" );
 
-		String pathToPdfapilotOutput = pathToLogDir + File.separator + "callasTEMP.txt";
+		String pathToPdfapilotOutput = pathToLogDir + File.separator
+				+ "callasTEMP.txt";
 		File report = new File( pathToPdfapilotOutput );
-		String pathToPdfapilotOutputReport = pathToLogDir + File.separator + "callasTEMPreport.txt";
+		String pathToPdfapilotOutputReport = pathToLogDir + File.separator
+				+ "callasTEMPreport.txt";
 		File reportOriginal = new File( pathToPdfapilotOutputReport );
 
-		// falls das File bereits existiert, z.B. von einemvorhergehenden Durchlauf, loeschen wir es
+		// falls das File bereits existiert, z.B. von einemvorhergehenden
+		// Durchlauf, loeschen wir es
 		if ( report.exists() ) {
 			report.delete();
 		}
 
-		/* Neu soll die Validierung mit PDFTron konfigurier bar sein Moegliche Werte 1A, 1B und no sowie
-		 * 2A, 2B, 2U und no Da Archive beide Versionen erlauben koennen sind es 2 config eintraege Es
-		 * gibt mehre Moeglichkeiten das PDF in der gewuenschten Version zu testen - Unterscheidung
-		 * anhand DROID --> braucht viel Zeit auch mit KaD_Signaturefile - Unterscheidung anhand
-		 * PDF/A-Eintrag wie Droid aber selber programmiert --> ist viel schneller */
-		if ( pdfa2a.equals( "2A" ) || pdfa2b.equals( "2B" ) || pdfa2u.equals( "2U" ) ) {
+		/*
+		 * Neu soll die Validierung mit PDFTron konfigurier bar sein Moegliche
+		 * Werte 1A, 1B und no sowie 2A, 2B, 2U und no Da Archive beide
+		 * Versionen erlauben koennen sind es 2 config eintraege Es gibt mehre
+		 * Moeglichkeiten das PDF in der gewuenschten Version zu testen -
+		 * Unterscheidung anhand PDF/A-Eintrag
+		 */
+		if ( pdfa2a.equals( "2A" ) || pdfa2b.equals( "2B" )
+				|| pdfa2u.equals( "2U" ) ) {
 			// gueltiger Konfigurationseintrag und V2 erlaubt
 			pdfaVer2 = 2;
 		} else {
@@ -169,8 +181,11 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 				return false;
 			} else {
 
-				Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-						+ getTextResourceService().getText( locale, ERROR_XML_A_PDFA_NOCONFIG ) );
+				Logtxt.logtxt( logFile,
+						getTextResourceService().getText( locale,
+								MESSAGE_XML_MODUL_A_PDFA )
+								+ getTextResourceService().getText( locale,
+										ERROR_XML_A_PDFA_NOCONFIG ) );
 				valid = false;
 				return false;
 			}
@@ -181,33 +196,40 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 		try {
 			// Level je nach File auswaehlen
 			int pdfaVer = 0;
-			BufferedReader in = new BufferedReader( new FileReader( valDatei ) );
+			BufferedReader in = new BufferedReader(
+					new FileReader( valDatei ) );
 			String line;
 			while ( (line = in.readLine()) != null ) {
-				// haeufige Partangaben: pdfaid:part>1< pdfaid:part='1' pdfaid:part="1"
+				// haeufige Partangaben: pdfaid:part>1< pdfaid:part='1'
+				// pdfaid:part="1"
 
 				// <pdfaid:part>2</pdfaid:part>
 				// <pdfaid:conformance>U</pdfaid:conformance>
 
 				if ( line.contains( "pdfaid:part" ) ) {
 					// pdfaid:part
-					if ( line.contains( "pdfaid:part>1<" ) || line.contains( "pdfaid:part='1'" )
+					if ( line.contains( "pdfaid:part>1<" )
+							|| line.contains( "pdfaid:part='1'" )
 							|| line.contains( "pdfaid:part=\"1\"" ) ) {
 						pdfaVer = 1;
-					} else if ( line.contains( "pdfaid:part>2<" ) || line.contains( "pdfaid:part='2'" )
+					} else if ( line.contains( "pdfaid:part>2<" )
+							|| line.contains( "pdfaid:part='2'" )
 							|| line.contains( "pdfaid:part=\"2\"" ) ) {
 						pdfaVer = 2;
-					} else if ( line.contains( "pdfaid:part" ) && line.contains( "1" ) ) {
+					} else if ( line.contains( "pdfaid:part" )
+							&& line.contains( "1" ) ) {
 						// PDFA-Version = 1
 						pdfaVer = 1;
-					} else if ( line.contains( "pdfaid:part" ) && line.contains( "2" ) ) {
+					} else if ( line.contains( "pdfaid:part" )
+							&& line.contains( "2" ) ) {
 						// PDFA-Version = 2
 						pdfaVer = 2;
 					}
 				}
 				if ( line.contains( "pdfaid:conformance" ) ) {
 					// pdfaid:part
-					if ( line.contains( "pdfaid:conformance>A<" ) || line.contains( "pdfaid:conformance='A'" )
+					if ( line.contains( "pdfaid:conformance>A<" )
+							|| line.contains( "pdfaid:conformance='A'" )
 							|| line.contains( "pdfaid:conformance=\"A\"" )
 							|| line.contains( "pdfaid:conformance>a<" )
 							|| line.contains( "pdfaid:conformance='a'" )
@@ -325,100 +347,18 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 			} else {
 
 				Logtxt.logtxt( logFile,
-						getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-								+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+						getTextResourceService().getText( locale,
+								MESSAGE_XML_MODUL_A_PDFA )
+								+ getTextResourceService().getText( locale,
+										ERROR_XML_UNKNOWN,
 										"Version " + e.getMessage() ) );
 			}
 		}
 
-		Logtxt.logtxt( logFile,
-				getTextResourceService().getText( locale, MESSAGE_FORMATVALIDATION_VL, level ) );
+		Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
+				MESSAGE_FORMATVALIDATION_VL, level ) );
 
-		// Start mit der Erkennung
-
-		// Eine PDF Datei (.pdf / .pdfa) muss mit %PDF [25504446] beginnen
-		if ( valDatei.isDirectory() ) {
-			if ( min ) {
-				return false;
-			} else {
-
-				Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-						+ getTextResourceService().getText( locale, ERROR_XML_A_PDFA_ISDIRECTORY ) );
-				return false;
-			}
-		} else if ( (valDatei.getAbsolutePath().toLowerCase().endsWith( ".pdf" )
-				|| valDatei.getAbsolutePath().toLowerCase().endsWith( ".pdfa" )) ) {
-
-			try {
-				// System.out.println("ueberpruefe Magic number pdf...");
-				if ( Magic.magicPdf( valDatei ) ) {
-					// System.out.println(" -> es ist eine Pdf-Datei");
-					// hoechstwahrscheinlich ein PDF da es mit 25504446 respektive %PDF beginnt
-					valid = true;
-				} else {
-					// System.out.println(" -> es ist KEINE Pdf-Datei");
-					if ( min ) {
-						return false;
-					} else {
-						// Droid-Erkennung, damit Details ausgegeben werden koennen
-						// existiert die SignatureFile am angebenen Ort?
-						String nameOfSignature = configMap.get( "PathToDroidSignatureFile" );
-						if ( !new File( nameOfSignature ).exists() ) {
-							if ( min ) {
-								return false;
-							} else {
-
-								Logtxt.logtxt( logFile,
-										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-												+ getTextResourceService().getText( locale, MESSAGE_XML_CA_DROID ) );
-								return false;
-							}
-						}
-
-						// Ermittle die DROID-PUID der valDatei mit hilfe der nameOfSignature
-						String puid = (DroidPuid.getPuid( valDatei, nameOfSignature ));
-						if ( min ) {
-							return false;
-						} else if ( puid.equals( " ERROR " ) ) {
-							// Probleme bei der Initialisierung von DROID
-							Logtxt.logtxt( logFile,
-									getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-											+ getTextResourceService().getText( locale,
-													ERROR_XML_CANNOT_INITIALIZE_DROID ) );
-							return false;
-						} else {
-							// Erkennungsergebnis ausgeben
-
-							Logtxt.logtxt( logFile,
-									getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-											+ getTextResourceService().getText( locale, ERROR_XML_A_PDFA_INCORRECTFILE,
-													puid ) );
-							return false;
-						}
-					}
-				}
-			} catch ( Exception e ) {
-				if ( min ) {
-					return false;
-				} else {
-
-					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-									+ getTextResourceService().getText( locale, ERROR_XML_A_PDFA_INCORRECTFILE ) );
-					return false;
-				}
-			}
-		} else {
-			// die Datei endet nicht mit pdf oder pdfa -> Fehler
-			if ( min ) {
-				return false;
-			} else {
-				Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-						+ getTextResourceService().getText( locale, ERROR_XML_A_PDFA_INCORRECTFILEENDING ) );
-				return false;
-			}
-		}
-		// Ende der Erkennung
+		// Die Erkennung erfolgt bereits im Vorfeld
 
 		boolean isValid = false;
 		boolean isValidJ = true;
@@ -447,15 +387,21 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 		String callasConfig = configMap.get( "callas" );
 		String pdftoolsConfig = configMap.get( "pdftools" );
 
-		/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
-		 * entsprechenden Modul die property anzugeben: <property name="configurationService"
-		 * ref="configurationService" /> */
+		/*
+		 * Nicht vergessen in
+		 * "src/main/resources/config/applicationContext-services.xml" beim
+		 * entsprechenden Modul die property anzugeben: <property
+		 * name="configurationService" ref="configurationService" />
+		 */
 
 		if ( callasConfig.contentEquals( "yes" ) ) {
 			// callas Validierung gewuenscht
 			if ( callasNo.exists() ) {
-				/* Callas wurde in einem frueheren durchgang getestet und es funktioniert bei dem Benutzer
-				 * nicht korrekt. Entsprechend ist die Validierung mit callas nicht moeglich */
+				/*
+				 * Callas wurde in einem frueheren durchgang getestet und es
+				 * funktioniert bei dem Benutzer nicht korrekt. Entsprechend ist
+				 * die Validierung mit callas nicht moeglich
+				 */
 				callas = false;
 			} else {
 				callas = true;
@@ -473,48 +419,59 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 
 		try {
 
-			/* TODO: Erledigt Start mit PDFTools
+			/*
+			 * TODO: Erledigt Start mit PDFTools
 			 * 
-			 * Wenn pdftools eingeschaltet ist, wird immer zuerst pdftools genommen, da dieser in KOST-Val
-			 * schneller ist als callas */
+			 * Wenn pdftools eingeschaltet ist, wird immer zuerst pdftools
+			 * genommen, da dieser in KOST-Val schneller ist als callas
+			 */
 			if ( pdftools ) {
 				docPdf = new PdfValidatorAPI();
 
 				try {
-					if ( docPdf.open( valDatei.getAbsolutePath(), "", NativeLibrary.COMPLIANCE.ePDFUnk ) ) {
+					if ( docPdf.open( valDatei.getAbsolutePath(), "",
+							NativeLibrary.COMPLIANCE.ePDFUnk ) ) {
 						// PDF Konnte geoeffnet werden
 						docPdf.setStopOnError( true );
 						docPdf.setReportingLevel( 1 );
-						if ( docPdf.getErrorCode() == NativeLibrary.ERRORCODE.PDF_E_PASSWORD ) {
+						if ( docPdf
+								.getErrorCode() == NativeLibrary.ERRORCODE.PDF_E_PASSWORD ) {
 							if ( min ) {
 								return false;
 							} else {
-								Logtxt.logtxt( logFile,
-										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-												+ getTextResourceService().getText( locale,
-														ERROR_XML_A_PDFTOOLS_ENCRYPTED ) );
+								Logtxt.logtxt( logFile, getTextResourceService()
+										.getText( locale,
+												MESSAGE_XML_MODUL_A_PDFA )
+										+ getTextResourceService().getText(
+												locale,
+												ERROR_XML_A_PDFTOOLS_ENCRYPTED ) );
 								return false;
 							}
 						}
 					} else {
-						if ( docPdf.getErrorCode() == NativeLibrary.ERRORCODE.PDF_E_PASSWORD ) {
+						if ( docPdf
+								.getErrorCode() == NativeLibrary.ERRORCODE.PDF_E_PASSWORD ) {
 							if ( min ) {
 								return false;
 							} else {
-								Logtxt.logtxt( logFile,
-										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-												+ getTextResourceService().getText( locale,
-														ERROR_XML_A_PDFTOOLS_ENCRYPTED ) );
+								Logtxt.logtxt( logFile, getTextResourceService()
+										.getText( locale,
+												MESSAGE_XML_MODUL_A_PDFA )
+										+ getTextResourceService().getText(
+												locale,
+												ERROR_XML_A_PDFTOOLS_ENCRYPTED ) );
 								return false;
 							}
 						} else {
 							if ( min ) {
 								return false;
 							} else {
-								Logtxt.logtxt( logFile,
-										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-												+ getTextResourceService().getText( locale,
-														ERROR_XML_A_PDFTOOLS_DAMAGED ) );
+								Logtxt.logtxt( logFile, getTextResourceService()
+										.getText( locale,
+												MESSAGE_XML_MODUL_A_PDFA )
+										+ getTextResourceService().getText(
+												locale,
+												ERROR_XML_A_PDFTOOLS_DAMAGED ) );
 								return false;
 							}
 						}
@@ -528,31 +485,40 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					}
 					docPdf.setReportingLevel( 2 );
 
-					/* ePDFA1a 5122 ePDFA1b 5121 ePDFA2a 5891 ePDFA2b 5889 ePDFA2u 5890 */
+					/*
+					 * ePDFA1a 5122 ePDFA1b 5121 ePDFA2a 5891 ePDFA2b 5889
+					 * ePDFA2u 5890
+					 */
 					if ( level.contentEquals( "1A" ) ) {
-						if ( docPdf.open( valDatei.getAbsolutePath(), "", 5122 ) ) {
+						if ( docPdf.open( valDatei.getAbsolutePath(), "",
+								5122 ) ) {
 							docPdf.validate();
 						}
 					} else if ( level.contentEquals( "1B" ) ) {
-						if ( docPdf.open( valDatei.getAbsolutePath(), "", 5121 ) ) {
+						if ( docPdf.open( valDatei.getAbsolutePath(), "",
+								5121 ) ) {
 							docPdf.validate();
 						}
 					} else if ( level.contentEquals( "2A" ) ) {
-						if ( docPdf.open( valDatei.getAbsolutePath(), "", 5891 ) ) {
+						if ( docPdf.open( valDatei.getAbsolutePath(), "",
+								5891 ) ) {
 							docPdf.validate();
 						}
 					} else if ( level.contentEquals( "2B" ) ) {
-						if ( docPdf.open( valDatei.getAbsolutePath(), "", 5889 ) ) {
+						if ( docPdf.open( valDatei.getAbsolutePath(), "",
+								5889 ) ) {
 							docPdf.validate();
 						}
 					} else if ( level.contentEquals( "2U" ) ) {
-						if ( docPdf.open( valDatei.getAbsolutePath(), "", 5890 ) ) {
+						if ( docPdf.open( valDatei.getAbsolutePath(), "",
+								5890 ) ) {
 							docPdf.validate();
 						}
 					} else {
 						// Validierung nach 2b
 						level = "2B";
-						if ( docPdf.open( valDatei.getAbsolutePath(), "", 5889 ) ) {
+						if ( docPdf.open( valDatei.getAbsolutePath(), "",
+								5889 ) ) {
 							docPdf.validate();
 						}
 					}
@@ -573,8 +539,11 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 
 					// Error Category
 					iCategory = docPdf.getCategories();
-					/* die Zahl kann auch eine Summe von Kategorien sein z.B. 6144=2048+4096 ->
-					 * getCategoryText gibt nur die erste Kategorie heraus (z.B. 2048) */
+					/*
+					 * die Zahl kann auch eine Summe von Kategorien sein z.B.
+					 * 6144=2048+4096 -> getCategoryText gibt nur die erste
+					 * Kategorie heraus (z.B. 2048)
+					 */
 
 					if ( success == 0 && iCategory == 0 ) {
 						// valide
@@ -582,24 +551,35 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					}
 
 					String fontYesNo = configMap.get( "pdfafont" );
-					if ( fontYesNo.equalsIgnoreCase( "yes" ) || fontYesNo.equalsIgnoreCase( "tolerant" )
-							|| fontYesNo.equalsIgnoreCase( "strict" ) || fontYesNo.equalsIgnoreCase( "only" ) ) {
-						/* WriteFontValidationXML Method: Boolean WriteFontValidationXML(Stream outputStream)
-						 * Write font validation information in XML format to a stream. This method must be
-						 * called after Validate and before Close. For more information on the structure of the
-						 * resulting XML, see the XML schema ValidatorFontInformation.xsd and the stylesheet
-						 * ValidatorFontInformation.xsl in the documentation directory. Parameter: outputStream
-						 * [Stream] The stream the font validation information is written to. Returns: True The
-						 * font information has been written successfully. False Otherwise. */
-						String pathToFontOutput = pathToLogDir + File.separator + valDatei.getName()
-								+ "_FontValidation.xml";
+					if ( fontYesNo.equalsIgnoreCase( "yes" )
+							|| fontYesNo.equalsIgnoreCase( "tolerant" )
+							|| fontYesNo.equalsIgnoreCase( "strict" )
+							|| fontYesNo.equalsIgnoreCase( "only" ) ) {
+						/*
+						 * WriteFontValidationXML Method: Boolean
+						 * WriteFontValidationXML(Stream outputStream) Write
+						 * font validation information in XML format to a
+						 * stream. This method must be called after Validate and
+						 * before Close. For more information on the structure
+						 * of the resulting XML, see the XML schema
+						 * ValidatorFontInformation.xsd and the stylesheet
+						 * ValidatorFontInformation.xsl in the documentation
+						 * directory. Parameter: outputStream [Stream] The
+						 * stream the font validation information is written to.
+						 * Returns: True The font information has been written
+						 * successfully. False Otherwise.
+						 */
+						String pathToFontOutput = pathToLogDir + File.separator
+								+ valDatei.getName() + "_FontValidation.xml";
 						File fontReport = new File( pathToFontOutput );
 						if ( fontReport.exists() ) {
 							fontReport.delete();
 						}
-						String pathToFontOutputError = pathToLogDir + File.separator + valDatei.getName()
+						String pathToFontOutputError = pathToLogDir
+								+ File.separator + valDatei.getName()
 								+ "_FontValidation_Error.xml";
-						File fontReportError = new File( pathToFontOutputError );
+						File fontReportError = new File(
+								pathToFontOutputError );
 						if ( fontReportError.exists() ) {
 							fontReportError.delete();
 						}
@@ -609,16 +589,19 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 						Stream xmlStream = fs;
 						if ( !docPdf.writeFontValidationXML( xmlStream ) ) {
 							// throw new
-							// Exception(String.format("Failed to write font validation information: %s",
+							// Exception(String.format("Failed to write font
+							// validation information: %s",
 							// docPdf.getErrorMessage()));
-							System.out.println( String.format( "Failed to write font validation information: %s",
+							System.out.println( String.format(
+									"Failed to write font validation information: %s",
 									docPdf.getErrorMessage() ) );
 						}
 						fs.close();
 						// set to null
 						fs = null;
 
-						// TODO erledigt: Start der Font-Auswertung betreffend unbekannt und undefiniert
+						// TODO erledigt: Start der Font-Auswertung betreffend
+						// unbekannt und undefiniert
 						try {
 							FileChannel inputChannel = null;
 							FileChannel outputChannel = null;
@@ -629,7 +612,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 								inputChannel = fis.getChannel();
 								fos = new FileOutputStream( fontReportError );
 								outputChannel = fos.getChannel();
-								outputChannel.transferFrom( inputChannel, 0, inputChannel.size() );
+								outputChannel.transferFrom( inputChannel, 0,
+										inputChannel.size() );
 							} finally {
 								inputChannel.close();
 								outputChannel.close();
@@ -644,10 +628,12 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 							fos = null;
 						} catch ( Exception e ) {
 
-							Logtxt.logtxt( logFile,
-									getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-											+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-													"Exec PDF Tools FileChannel: " + e.getMessage() ) );
+							Logtxt.logtxt( logFile, getTextResourceService()
+									.getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+									+ getTextResourceService().getText( locale,
+											ERROR_XML_UNKNOWN,
+											"Exec PDF Tools FileChannel: "
+													+ e.getMessage() ) );
 							return false;
 						}
 
@@ -656,7 +642,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 
 						BufferedInputStream bis = new BufferedInputStream(
 								new FileInputStream( fontReportError ) );
-						DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+						DocumentBuilderFactory dbf = DocumentBuilderFactory
+								.newInstance();
 						DocumentBuilder db = dbf.newDocumentBuilder();
 						doc = db.parse( bis );
 						doc.normalize();
@@ -667,47 +654,72 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 						// <characterUndefined>122</characterUndefined>
 						// <characterUndefinedPercentage>100</characterUndefinedPercentage>
 
-						String elementCount = doc.getElementsByTagName( "characterCount" ).item( 0 )
-								.getTextContent();
+						String elementCount = doc
+								.getElementsByTagName( "characterCount" )
+								.item( 0 ).getTextContent();
 						int count = Integer.valueOf( elementCount );
-						String elementUnknown = doc.getElementsByTagName( "characterUnknown" ).item( 0 )
-								.getTextContent();
+						String elementUnknown = doc
+								.getElementsByTagName( "characterUnknown" )
+								.item( 0 ).getTextContent();
 						// int unknown=Integer.valueOf( elementUnknown );
-						String elementUnknownP = doc.getElementsByTagName( "characterUnknownPercentage" )
+						String elementUnknownP = doc
+								.getElementsByTagName(
+										"characterUnknownPercentage" )
 								.item( 0 ).getTextContent();
-						double unknownPdouble = Double.valueOf( elementUnknownP );
-						String elementUndefined = doc.getElementsByTagName( "characterUndefined" ).item( 0 )
-								.getTextContent();
+						double unknownPdouble = Double
+								.valueOf( elementUnknownP );
+						String elementUndefined = doc
+								.getElementsByTagName( "characterUndefined" )
+								.item( 0 ).getTextContent();
 						// int undefined=Integer.valueOf( elementUndefined );
-						String elementUndefinedP = doc.getElementsByTagName( "characterUndefinedPercentage" )
+						String elementUndefinedP = doc
+								.getElementsByTagName(
+										"characterUndefinedPercentage" )
 								.item( 0 ).getTextContent();
-						double undefinedPdouble = Double.valueOf( elementUndefinedP );
-						double elementTolerance = unknownPdouble + undefinedPdouble;
-						String docInfo = nodeToString( doc.getElementsByTagName( "docInfo" ).item( 0 ) );
-						String docInfoCharacterCount = docInfo + "<characterCount>" + elementCount
+						double undefinedPdouble = Double
+								.valueOf( elementUndefinedP );
+						double elementTolerance = unknownPdouble
+								+ undefinedPdouble;
+						String docInfo = nodeToString( doc
+								.getElementsByTagName( "docInfo" ).item( 0 ) );
+						String docInfoCharacterCount = docInfo
+								+ "<characterCount>" + elementCount
 								+ "</characterCount>";
-						docInfoCharacterCount = docInfoCharacterCount.replaceAll( "\n  ", "" );
-						docInfoCharacterCount = docInfoCharacterCount.replaceAll( "\n ", "" );
-						docInfoCharacterCount = docInfoCharacterCount.replaceAll( "\n", "" );
-						docInfoCharacterCount = docInfoCharacterCount.replaceAll( "\n  ", "" );
-						docInfoCharacterCount = docInfoCharacterCount.replaceAll( "\n ", "" );
-						docInfoCharacterCount = docInfoCharacterCount.replaceAll( "\n", "" );
+						docInfoCharacterCount = docInfoCharacterCount
+								.replaceAll( "\n  ", "" );
+						docInfoCharacterCount = docInfoCharacterCount
+								.replaceAll( "\n ", "" );
+						docInfoCharacterCount = docInfoCharacterCount
+								.replaceAll( "\n", "" );
+						docInfoCharacterCount = docInfoCharacterCount
+								.replaceAll( "\n  ", "" );
+						docInfoCharacterCount = docInfoCharacterCount
+								.replaceAll( "\n ", "" );
+						docInfoCharacterCount = docInfoCharacterCount
+								.replaceAll( "\n", "" );
 
-						if ( elementUnknown.equals( "0" ) && elementUndefined.equals( "0" ) ) {
+						if ( elementUnknown.equals( "0" )
+								&& elementUndefined.equals( "0" ) ) {
 							if ( fontYesNo.equalsIgnoreCase( "only" ) ) {
 								// Modul K bestanden
 
-								/* Bei only wird in Log_Modul_K.txt die Dateien, hereingeschrieben, welche die
-								 * Strikte Validierung nicht bestanden haben. Dies ist hier nicht der Fall.
-								 * Entsprechend wird mit return true die Validierung beendet */
+								/*
+								 * Bei only wird in Log_Modul_K.txt die Dateien,
+								 * hereingeschrieben, welche die Strikte
+								 * Validierung nicht bestanden haben. Dies ist
+								 * hier nicht der Fall. Entsprechend wird mit
+								 * return true die Validierung beendet
+								 */
 								return valid;
 							} else {
 								// Modul K bestanden
 
-								// <docInfo> und <characterCount> auf eine Zeile ausgeben
+								// <docInfo> und <characterCount> auf eine Zeile
+								// ausgeben
 								if ( min ) {
 								} else {
-									Logtxt.logtxt( logFile, docInfoCharacterCount );
+									Logtxt.logtxt( logFile,
+											docInfoCharacterCount );
 								}
 							}
 						} else {
@@ -716,185 +728,345 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 								if ( fontYesNo.equalsIgnoreCase( "only" ) ) {
 									// only=strict -> Modul K nicht bestanden
 
-									/* Bei only wird in Log_Modul_K.txt die Dateien, hereingeschrieben, welche die
-									 * Strikte Validierung nicht bestanden haben. Danach wird mit return false die
-									 * Validierung beendet */
-									String modulKFilePath = directoryOfLogfile.getAbsolutePath() + File.separator
+									/*
+									 * Bei only wird in Log_Modul_K.txt die
+									 * Dateien, hereingeschrieben, welche die
+									 * Strikte Validierung nicht bestanden
+									 * haben. Danach wird mit return false die
+									 * Validierung beendet
+									 */
+									String modulKFilePath = directoryOfLogfile
+											.getAbsolutePath() + File.separator
 											+ "Log_Modul_K.txt";
-									String line = valDatei.getAbsolutePath() + " ";
-									Files.write( Paths.get( modulKFilePath ), line.getBytes(),
+									String line = valDatei.getAbsolutePath()
+											+ " ";
+									Files.write( Paths.get( modulKFilePath ),
+											line.getBytes(),
 											StandardOpenOption.APPEND );
 									return false;
-								} else if ( fontYesNo.equalsIgnoreCase( "tolerant" ) ) {
-									/* Ausnahmen ermitteln und abfangen bei tolerant:
+								} else if ( fontYesNo
+										.equalsIgnoreCase( "tolerant" ) ) {
+									/*
+									 * Ausnahmen ermitteln und abfangen bei
+									 * tolerant:
 									 * 
 									 * A) max 5 Zeichen
 									 * 
-									 * B) Undefinierte Zeichen ignorieren wenn Maengel<=20%
+									 * B) Undefinierte Zeichen ignorieren wenn
+									 * Maengel<=20%
 									 * 
-									 * C) Bekannte Abstaende und Aufzaehlungszeichen ignorieren
+									 * C) Bekannte Abstaende und
+									 * Aufzaehlungszeichen ignorieren
 									 * 
 									 * D) Symbol-Schriften ignorieren
 									 * 
-									 * E) Wenn am Schluss nur noch max 4 Zeichen bemaengelt werden */
+									 * E) Wenn am Schluss nur noch max 4 Zeichen
+									 * bemaengelt werden
+									 */
 									if ( count <= 5 ) {
-										/* => A) max 5 Zeichen
+										/*
+										 * => A) max 5 Zeichen
 										 * 
-										 * -> Modul K bestanden, keine Auswertung noetig
+										 * -> Modul K bestanden, keine
+										 * Auswertung noetig
 										 * 
-										 * <docInfo> und <characterCount> auf eine Zeile ausgeben */
+										 * <docInfo> und <characterCount> auf
+										 * eine Zeile ausgeben
+										 */
 										if ( min ) {
 										} else {
-											Logtxt.logtxt( logFile, docInfoCharacterCount );
+											Logtxt.logtxt( logFile,
+													docInfoCharacterCount );
 										}
 									} else {
 										double tolerance = 20.000;
 										fontErrorIgnor = "I";
 										if ( tolerance > elementTolerance ) {
-											// elementTolerance = unknownPdouble + undefinedPdouble;
-											// toleranzschwelle nicht ueberschritten
-											// undefiniertes kann bei tolerant ignoriert werden
+											// elementTolerance = unknownPdouble
+											// + undefinedPdouble;
+											// toleranzschwelle nicht
+											// ueberschritten
+											// undefiniertes kann bei tolerant
+											// ignoriert werden
 											ignorUndefinied = true;
 										} else {
-											// toleranzschwelle ueberschritten -> Modul K nicht bestanden
+											// toleranzschwelle ueberschritten
+											// -> Modul K nicht bestanden
 											ignorUndefinied = false;
 											fontErrorIgnor = "E";
 										}
 
-										if ( elementUnknown.equals( "0" ) && ignorUndefinied ) {
-											/* => B) Undefinierte Zeichen ignorieren wenn Maengel<=20%
+										if ( elementUnknown.equals( "0" )
+												&& ignorUndefinied ) {
+											/*
+											 * => B) Undefinierte Zeichen
+											 * ignorieren wenn Maengel<=20%
 											 * 
-											 * -> Modul K bestanden, keine Auswertung noetig da nur undefiniertes
+											 * -> Modul K bestanden, keine
+											 * Auswertung noetig da nur
+											 * undefiniertes
 											 * 
-											 * <docInfo> und <characterCount> auf eine Zeile ausgeben */
+											 * <docInfo> und <characterCount>
+											 * auf eine Zeile ausgeben
+											 */
 											if ( min ) {
 											} else {
-												Logtxt.logtxt( logFile, docInfoCharacterCount );
+												Logtxt.logtxt( logFile,
+														docInfoCharacterCount );
 											}
 										} else {
 											// weiter auswerten
-											NodeList nodeCharacterLst = doc.getElementsByTagName( "character" );
+											NodeList nodeCharacterLst = doc
+													.getElementsByTagName(
+															"character" );
 											Set<Node> targetNode = new HashSet<Node>();
 
-											for ( int s = 0; s < nodeCharacterLst.getLength(); s++ ) {
-												// unnoetige character aus log loeschen
+											for ( int s = 0; s < nodeCharacterLst
+													.getLength(); s++ ) {
+												// unnoetige character aus log
+												// loeschen
 												boolean charUndef = false;
 												boolean unicode = false;
-												Node charNode = nodeCharacterLst.item( s );
+												Node charNode = nodeCharacterLst
+														.item( s );
 
-												if ( charNode.hasAttributes() ) {
-													NamedNodeMap attrs = charNode.getAttributes();
-													for ( int i = 0; i < attrs.getLength(); i++ ) {
-														Attr attribute = (Attr) attrs.item( i );
-														String attName = attribute.getName();
-														String attNameValue = attribute.getName() + " = "
-																+ attribute.getValue();
+												if ( charNode
+														.hasAttributes() ) {
+													NamedNodeMap attrs = charNode
+															.getAttributes();
+													for ( int i = 0; i < attrs
+															.getLength(); i++ ) {
+														Attr attribute = (Attr) attrs
+																.item( i );
+														String attName = attribute
+																.getName();
+														String attNameValue = attribute
+																.getName()
+																+ " = "
+																+ attribute
+																		.getValue();
 
-														/* -> cid = 60 -> glyphId = 60 -> unicode = U+FFFD -> unicodeUndefined =
-														 * true */
-														if ( attName.equalsIgnoreCase( "unicode" ) ) {
+														/*
+														 * -> cid = 60 ->
+														 * glyphId = 60 ->
+														 * unicode = U+FFFD ->
+														 * unicodeUndefined =
+														 * true
+														 */
+														if ( attName
+																.equalsIgnoreCase(
+																		"unicode" ) ) {
 															unicode = true;
 														}
-														if ( attNameValue.equalsIgnoreCase( "unicodeUndefined = true" ) ) {
+														if ( attNameValue
+																.equalsIgnoreCase(
+																		"unicodeUndefined = true" ) ) {
 															charUndef = true;
 														}
 													}
 													if ( !unicode ) {
-														// unicode nicht bekannt -> node weiteranalysieren
+														// unicode nicht bekannt
+														// -> node
+														// weiteranalysieren
 
-														/* wenn I = tolerant analysieren ob es ein bekanntes Abstand- oder
-														 * Aufzaehlungszeichen ist.
+														/*
+														 * wenn I = tolerant
+														 * analysieren ob es ein
+														 * bekanntes Abstand-
+														 * oder
+														 * Aufzaehlungszeichen
+														 * ist.
 														 * 
-														 * ist es ein solches bekanntes Zeichen das Zeichen ignorieren ansonsten
-														 * belassen */
-														if ( fontErrorIgnor.equalsIgnoreCase( "I" ) ) {
-															String characterTextContent = charNode.getTextContent();
-															characterTextContent = characterTextContent.replaceAll( "\n", "" );
+														 * ist es ein solches
+														 * bekanntes Zeichen das
+														 * Zeichen ignorieren
+														 * ansonsten belassen
+														 */
+														if ( fontErrorIgnor
+																.equalsIgnoreCase(
+																		"I" ) ) {
+															String characterTextContent = charNode
+																	.getTextContent();
+															characterTextContent = characterTextContent
+																	.replaceAll(
+																			"\n",
+																			"" );
 															boolean ignoreCharacter = UtilCharacter
-																	.ignoreCharacter( characterTextContent );
+																	.ignoreCharacter(
+																			characterTextContent );
 
 															if ( ignoreCharacter ) {
-																// => C) Bekannte Abstaende und Aufzaehlungszeichen ignorieren
+																// => C)
+																// Bekannte
+																// Abstaende und
+																// Aufzaehlungszeichen
+																// ignorieren
 
-																/* Node zum leschen vormerken, da er ein bekanntes
-																 * Aufzaehlungszeichen oder Abstand ist */
-																targetNode.add( charNode );
+																/*
+																 * Node zum
+																 * leschen
+																 * vormerken, da
+																 * er ein
+																 * bekanntes
+																 * Aufzaehlungszeichen
+																 * oder Abstand
+																 * ist
+																 */
+																targetNode.add(
+																		charNode );
 															}
 														}
 													} else if ( charUndef ) {
-														// System.out.println( " unicode nicht definiert ");
+														// System.out.println( "
+														// unicode nicht
+														// definiert ");
 
-														// wenn I ignorieren und sonst belassen
-														if ( fontErrorIgnor.equalsIgnoreCase( "I" ) ) {
-															// => B) Undefinierte Zeichen ignorieren wenn Maengel<=20%
+														// wenn I ignorieren und
+														// sonst belassen
+														if ( fontErrorIgnor
+																.equalsIgnoreCase(
+																		"I" ) ) {
+															// => B)
+															// Undefinierte
+															// Zeichen
+															// ignorieren wenn
+															// Maengel<=20%
 
-															// Node zum loeschen vormerken, da er ignoriert werden kann (I)
-															targetNode.add( charNode );
+															// Node zum loeschen
+															// vormerken, da er
+															// ignoriert werden
+															// kann (I)
+															targetNode.add(
+																	charNode );
 														}
 													} else {
-														// unicode bekannt -> dieser node kann geloescht werden
+														// unicode bekannt ->
+														// dieser node kann
+														// geloescht werden
 
-														// Node zum loeschen vormerken
-														targetNode.add( charNode );
+														// Node zum loeschen
+														// vormerken
+														targetNode.add(
+																charNode );
 													}
 												}
 											}
 
 											for ( Node e : targetNode ) {
-												e.getParentNode().removeChild( e );
+												e.getParentNode()
+														.removeChild( e );
 											}
 
 											// write the content into xml file
-											TransformerFactory transformerFactory = TransformerFactory.newInstance();
-											Transformer transformer = transformerFactory.newTransformer();
-											DOMSource source = new DOMSource( doc );
-											StreamResult result = new StreamResult( fontReportError );
+											TransformerFactory transformerFactory = TransformerFactory
+													.newInstance();
+											Transformer transformer = transformerFactory
+													.newTransformer();
+											DOMSource source = new DOMSource(
+													doc );
+											StreamResult result = new StreamResult(
+													fontReportError );
 											// Output to console for testing
-											// result = new StreamResult( System.out );
+											// result = new StreamResult(
+											// System.out );
 
-											transformer.transform( source, result );
+											transformer.transform( source,
+													result );
 
 											// Fonts ohne character loeschen
 											BufferedInputStream bisError = new BufferedInputStream(
-													new FileInputStream( fontReportError ) );
-											DocumentBuilderFactory dbfError = DocumentBuilderFactory.newInstance();
-											DocumentBuilder dbError = dbfError.newDocumentBuilder();
-											docError = dbError.parse( bisError );
+													new FileInputStream(
+															fontReportError ) );
+											DocumentBuilderFactory dbfError = DocumentBuilderFactory
+													.newInstance();
+											DocumentBuilder dbError = dbfError
+													.newDocumentBuilder();
+											docError = dbError
+													.parse( bisError );
 											docError.normalize();
 
-											NodeList nodeFontLst = docError.getElementsByTagName( "font" );
+											NodeList nodeFontLst = docError
+													.getElementsByTagName(
+															"font" );
 											Set<Node> targetNodeFont = new HashSet<Node>();
 
-											for ( int s = 0; s < nodeFontLst.getLength(); s++ ) {
-												Node fontNode = nodeFontLst.item( s );
+											for ( int s = 0; s < nodeFontLst
+													.getLength(); s++ ) {
+												Node fontNode = nodeFontLst
+														.item( s );
 
-												NodeList nodeFontCharLst = fontNode.getChildNodes();
-												if ( nodeFontCharLst.getLength() <= 1 ) {
-													// Leeren Font durch B) und C) oder unicode-Zeichen
+												NodeList nodeFontCharLst = fontNode
+														.getChildNodes();
+												if ( nodeFontCharLst
+														.getLength() <= 1 ) {
+													// Leeren Font durch B) und
+													// C) oder unicode-Zeichen
 
-													// font Node zum leschen vormerken
-													targetNodeFont.add( fontNode );
-												} else if ( fontNode.hasAttributes()
-														&& fontErrorIgnor.equalsIgnoreCase( "I" ) ) {
-													NamedNodeMap attrs = fontNode.getAttributes();
-													for ( int i = 0; i < attrs.getLength(); i++ ) {
-														Attr attribute = (Attr) attrs.item( i );
-														String attName = attribute.getName();
-														String attValue = attribute.getValue();
+													// font Node zum leschen
+													// vormerken
+													targetNodeFont
+															.add( fontNode );
+												} else if ( fontNode
+														.hasAttributes()
+														&& fontErrorIgnor
+																.equalsIgnoreCase(
+																		"I" ) ) {
+													NamedNodeMap attrs = fontNode
+															.getAttributes();
+													for ( int i = 0; i < attrs
+															.getLength(); i++ ) {
+														Attr attribute = (Attr) attrs
+																.item( i );
+														String attName = attribute
+																.getName();
+														String attValue = attribute
+																.getValue();
 
-														/* <font fontfile="TrueType" fullname="Symbol" name="Symbol"
-														 * objectNo="161" type="Type0 (CIDFontType2)"> */
-														if ( attName.equalsIgnoreCase( "name" ) ) {
-															if ( attValue.contains( "Symbol" ) || attValue.contains( "Webdings" )
-																	|| attValue.contains( "Wingdings" ) || attValue.contains( "Math" )
-																	|| attValue.contains( "symbol" )
-																	|| attValue.contains( "webdings" )
-																	|| attValue.contains( "wingdings" )
-																	|| attValue.contains( "math" ) ) {
-																// => D) Symbol-Schriften ignorieren
+														/*
+														 * <font
+														 * fontfile="TrueType"
+														 * fullname="Symbol"
+														 * name="Symbol"
+														 * objectNo="161"
+														 * type="Type0 (CIDFontType2)"
+														 * >
+														 */
+														if ( attName
+																.equalsIgnoreCase(
+																		"name" ) ) {
+															if ( attValue
+																	.contains(
+																			"Symbol" )
+																	|| attValue
+																			.contains(
+																					"Webdings" )
+																	|| attValue
+																			.contains(
+																					"Wingdings" )
+																	|| attValue
+																			.contains(
+																					"Math" )
+																	|| attValue
+																			.contains(
+																					"symbol" )
+																	|| attValue
+																			.contains(
+																					"webdings" )
+																	|| attValue
+																			.contains(
+																					"wingdings" )
+																	|| attValue
+																			.contains(
+																					"math" ) ) {
+																// => D)
+																// Symbol-Schriften
+																// ignorieren
 
-																// font Node zum leschen vormerken
-																targetNodeFont.add( fontNode );
+																// font Node zum
+																// leschen
+																// vormerken
+																targetNodeFont
+																		.add( fontNode );
 															}
 														}
 													}
@@ -902,86 +1074,160 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 											}
 
 											for ( Node f : targetNodeFont ) {
-												f.getParentNode().removeChild( f );
+												f.getParentNode()
+														.removeChild( f );
 											}
-											docError.getDocumentElement().normalize();
-											XPathExpression xpath = XPathFactory.newInstance().newXPath()
-													.compile( "//text()[normalize-space(.) = '']" );
-											NodeList blankTextNodes = (NodeList) xpath.evaluate( docError,
-													XPathConstants.NODESET );
+											docError.getDocumentElement()
+													.normalize();
+											XPathExpression xpath = XPathFactory
+													.newInstance().newXPath()
+													.compile(
+															"//text()[normalize-space(.) = '']" );
+											NodeList blankTextNodes = (NodeList) xpath
+													.evaluate( docError,
+															XPathConstants.NODESET );
 
-											for ( int i = 0; i < blankTextNodes.getLength(); i++ ) {
-												blankTextNodes.item( i ).getParentNode()
-														.removeChild( blankTextNodes.item( i ) );
+											for ( int i = 0; i < blankTextNodes
+													.getLength(); i++ ) {
+												blankTextNodes.item( i )
+														.getParentNode()
+														.removeChild(
+																blankTextNodes
+																		.item( i ) );
 											}
 
 											// Ende Bereinigung
 
-											/* Nach der Bereinigung ermitteln wieviele unbekannt und undefiniert sind und
-											 * ob es ein Fehler ist oder nicht
+											/*
+											 * Nach der Bereinigung ermitteln
+											 * wieviele unbekannt und
+											 * undefiniert sind und ob es ein
+											 * Fehler ist oder nicht
 											 * 
-											 * unbekannt unknown = count - undefined
+											 * unbekannt unknown = count -
+											 * undefined
 											 * 
-											 * undefiniert undefined = (unicodeUndefined = true) */
+											 * undefiniert undefined =
+											 * (unicodeUndefined = true)
+											 */
 											int undefinedE = 0;
 
-											NodeList nodeCharacterLstError = docError.getElementsByTagName( "character" );
+											NodeList nodeCharacterLstError = docError
+													.getElementsByTagName(
+															"character" );
 
-											for ( int s = 0; s < nodeCharacterLstError.getLength(); s++ ) {
-												Node charNode = nodeCharacterLstError.item( s );
+											for ( int s = 0; s < nodeCharacterLstError
+													.getLength(); s++ ) {
+												Node charNode = nodeCharacterLstError
+														.item( s );
 
-												if ( charNode.hasAttributes() ) {
-													NamedNodeMap attrs = charNode.getAttributes();
-													for ( int i = 0; i < attrs.getLength(); i++ ) {
-														Attr attribute = (Attr) attrs.item( i );
-														String attNameValue = attribute.getName() + " = "
-																+ attribute.getValue();
-														if ( attNameValue.equalsIgnoreCase( "unicodeUndefined = true" ) ) {
-															if ( fontErrorIgnor.equalsIgnoreCase( "E" ) ) {
-																undefinedE = undefinedE + 1;
+												if ( charNode
+														.hasAttributes() ) {
+													NamedNodeMap attrs = charNode
+															.getAttributes();
+													for ( int i = 0; i < attrs
+															.getLength(); i++ ) {
+														Attr attribute = (Attr) attrs
+																.item( i );
+														String attNameValue = attribute
+																.getName()
+																+ " = "
+																+ attribute
+																		.getValue();
+														if ( attNameValue
+																.equalsIgnoreCase(
+																		"unicodeUndefined = true" ) ) {
+															if ( fontErrorIgnor
+																	.equalsIgnoreCase(
+																			"E" ) ) {
+																undefinedE = undefinedE
+																		+ 1;
 															}
 														}
 													}
 												}
 											}
-											int unknownW = nodeCharacterLstError.getLength();
-											float unknownPdoubleW = 100 / (float) count * (float) unknownW;
+											int unknownW = nodeCharacterLstError
+													.getLength();
+											float unknownPdoubleW = 100
+													/ (float) count
+													* (float) unknownW;
 
 											if ( unknownW <= 4 ) {
-												/* => E) Wenn am Schluss nur noch max 4 Zeichen bemaengelt werden
+												/*
+												 * => E) Wenn am Schluss nur
+												 * noch max 4 Zeichen bemaengelt
+												 * werden
 												 * 
-												 * -> Modul K bestanden, keine Auswertung noetig */
+												 * -> Modul K bestanden, keine
+												 * Auswertung noetig
+												 */
 												isValidFont = true;
 												errorK = "";
 											} else {
 												// Fehler im Modul K
-												if ( fontErrorIgnor.equalsIgnoreCase( "I" ) ) {
+												if ( fontErrorIgnor
+														.equalsIgnoreCase(
+																"I" ) ) {
 													isValidFont = false;
 													errorK = errorK
-															+ getTextResourceService().getText( locale, MESSAGE_XML_MODUL_K_PDFA )
-															+ getTextResourceService().getText( locale, ERROR_XML_K_OVERVIEW2,
-																	count, unknownW, unknownPdoubleW );
+															+ getTextResourceService()
+																	.getText(
+																			locale,
+																			MESSAGE_XML_MODUL_K_PDFA )
+															+ getTextResourceService()
+																	.getText(
+																			locale,
+																			ERROR_XML_K_OVERVIEW2,
+																			count,
+																			unknownW,
+																			unknownPdoubleW );
 												} else {
 													isValidFont = false;
 													errorK = errorK
-															+ getTextResourceService().getText( locale, MESSAGE_XML_MODUL_K_PDFA )
-															+ getTextResourceService().getText( locale, ERROR_XML_K_OVERVIEW,
-																	elementCount, elementUnknown, elementUnknownP, elementUndefined,
-																	elementUndefinedP );
+															+ getTextResourceService()
+																	.getText(
+																			locale,
+																			MESSAGE_XML_MODUL_K_PDFA )
+															+ getTextResourceService()
+																	.getText(
+																			locale,
+																			ERROR_XML_K_OVERVIEW,
+																			elementCount,
+																			elementUnknown,
+																			elementUnknownP,
+																			elementUndefined,
+																			elementUndefinedP );
 												}
 											}
 											if ( !isValidFont ) {
-												Node nodeInfo = docError.getElementsByTagName( "docInfo" ).item( 0 );
-												String stringInfo = nodeToString( nodeInfo );
-												Node nodeFonts = docError.getElementsByTagName( "fonts" ).item( 0 );
-												String stringFonts = nodeToString( nodeFonts );
-												errorK = errorK + getTextResourceService().getText( locale,
-														ERROR_XML_K_DETAIL, stringInfo, stringFonts );
+												Node nodeInfo = docError
+														.getElementsByTagName(
+																"docInfo" )
+														.item( 0 );
+												String stringInfo = nodeToString(
+														nodeInfo );
+												Node nodeFonts = docError
+														.getElementsByTagName(
+																"fonts" )
+														.item( 0 );
+												String stringFonts = nodeToString(
+														nodeFonts );
+												errorK = errorK
+														+ getTextResourceService()
+																.getText(
+																		locale,
+																		ERROR_XML_K_DETAIL,
+																		stringInfo,
+																		stringFonts );
 											} else {
-												// <docInfo> und <characterCount> auf eine Zeile ausgeben
+												// <docInfo> und
+												// <characterCount> auf eine
+												// Zeile ausgeben
 												if ( min ) {
 												} else {
-													Logtxt.logtxt( logFile, docInfoCharacterCount );
+													Logtxt.logtxt( logFile,
+															docInfoCharacterCount );
 												}
 											}
 											bisError.close();
@@ -993,38 +1239,57 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 									}
 								} else {
 									/* strict: Fehler ausgeben */
-									NodeList nodeCharacterLst = doc.getElementsByTagName( "character" );
+									NodeList nodeCharacterLst = doc
+											.getElementsByTagName(
+													"character" );
 									Set<Node> targetNode = new HashSet<Node>();
 
-									for ( int s = 0; s < nodeCharacterLst.getLength(); s++ ) {
+									for ( int s = 0; s < nodeCharacterLst
+											.getLength(); s++ ) {
 										// unnoetige character aus log loeschen
 										boolean charUndef = false;
 										boolean unicode = false;
-										Node charNode = nodeCharacterLst.item( s );
+										Node charNode = nodeCharacterLst
+												.item( s );
 
 										if ( charNode.hasAttributes() ) {
-											NamedNodeMap attrs = charNode.getAttributes();
-											for ( int i = 0; i < attrs.getLength(); i++ ) {
-												Attr attribute = (Attr) attrs.item( i );
-												String attName = attribute.getName();
-												String attNameValue = attribute.getName() + " = " + attribute.getValue();
+											NamedNodeMap attrs = charNode
+													.getAttributes();
+											for ( int i = 0; i < attrs
+													.getLength(); i++ ) {
+												Attr attribute = (Attr) attrs
+														.item( i );
+												String attName = attribute
+														.getName();
+												String attNameValue = attribute
+														.getName() + " = "
+														+ attribute.getValue();
 
-												/* -> cid = 60 -> glyphId = 60 -> unicode = U+FFFD -> unicodeUndefined =
-												 * true */
-												if ( attName.equalsIgnoreCase( "unicode" ) ) {
+												/*
+												 * -> cid = 60 -> glyphId = 60
+												 * -> unicode = U+FFFD ->
+												 * unicodeUndefined = true
+												 */
+												if ( attName.equalsIgnoreCase(
+														"unicode" ) ) {
 													unicode = true;
 												}
-												if ( attNameValue.equalsIgnoreCase( "unicodeUndefined = true" ) ) {
+												if ( attNameValue
+														.equalsIgnoreCase(
+																"unicodeUndefined = true" ) ) {
 													charUndef = true;
 												}
 											}
 											if ( !unicode ) {
-												// unicode nicht bekannt -> node behalten da strict
+												// unicode nicht bekannt -> node
+												// behalten da strict
 
 											} else if ( charUndef ) {
-												// unicode nicht definiert -> node behalten da strict
+												// unicode nicht definiert ->
+												// node behalten da strict
 											} else {
-												// unicode bekannt -> dieser node kann geloescht werden
+												// unicode bekannt -> dieser
+												// node kann geloescht werden
 
 												// Node zum leschen vormerken
 												targetNode.add( charNode );
@@ -1037,10 +1302,13 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 									}
 
 									// write the content into xml file
-									TransformerFactory transformerFactory = TransformerFactory.newInstance();
-									Transformer transformer = transformerFactory.newTransformer();
+									TransformerFactory transformerFactory = TransformerFactory
+											.newInstance();
+									Transformer transformer = transformerFactory
+											.newTransformer();
 									DOMSource source = new DOMSource( doc );
-									StreamResult result = new StreamResult( fontReportError );
+									StreamResult result = new StreamResult(
+											fontReportError );
 									// Output to console for testing
 									// result = new StreamResult( System.out );
 
@@ -1048,21 +1316,29 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 
 									// Fonts ohne character loeschen
 									BufferedInputStream bisError = new BufferedInputStream(
-											new FileInputStream( fontReportError ) );
-									DocumentBuilderFactory dbfError = DocumentBuilderFactory.newInstance();
-									DocumentBuilder dbError = dbfError.newDocumentBuilder();
+											new FileInputStream(
+													fontReportError ) );
+									DocumentBuilderFactory dbfError = DocumentBuilderFactory
+											.newInstance();
+									DocumentBuilder dbError = dbfError
+											.newDocumentBuilder();
 									docError = dbError.parse( bisError );
 									docError.normalize();
 
-									NodeList nodeFontLst = docError.getElementsByTagName( "font" );
+									NodeList nodeFontLst = docError
+											.getElementsByTagName( "font" );
 									Set<Node> targetNodeFont = new HashSet<Node>();
 
-									for ( int s = 0; s < nodeFontLst.getLength(); s++ ) {
+									for ( int s = 0; s < nodeFontLst
+											.getLength(); s++ ) {
 										Node fontNode = nodeFontLst.item( s );
 
-										NodeList nodeFontCharLst = fontNode.getChildNodes();
-										if ( nodeFontCharLst.getLength() <= 1 ) {
-											// Leeren Font durch B) und C) oder unicode-Zeichen
+										NodeList nodeFontCharLst = fontNode
+												.getChildNodes();
+										if ( nodeFontCharLst
+												.getLength() <= 1 ) {
+											// Leeren Font durch B) und C) oder
+											// unicode-Zeichen
 
 											// font Node zum leschen vormerken
 											targetNodeFont.add( fontNode );
@@ -1073,65 +1349,109 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 										f.getParentNode().removeChild( f );
 									}
 									docError.getDocumentElement().normalize();
-									XPathExpression xpath = XPathFactory.newInstance().newXPath()
-											.compile( "//text()[normalize-space(.) = '']" );
-									NodeList blankTextNodes = (NodeList) xpath.evaluate( docError,
-											XPathConstants.NODESET );
+									XPathExpression xpath = XPathFactory
+											.newInstance().newXPath().compile(
+													"//text()[normalize-space(.) = '']" );
+									NodeList blankTextNodes = (NodeList) xpath
+											.evaluate( docError,
+													XPathConstants.NODESET );
 
-									for ( int i = 0; i < blankTextNodes.getLength(); i++ ) {
+									for ( int i = 0; i < blankTextNodes
+											.getLength(); i++ ) {
 										blankTextNodes.item( i ).getParentNode()
-												.removeChild( blankTextNodes.item( i ) );
+												.removeChild( blankTextNodes
+														.item( i ) );
 									}
 
 									// Ende Bereinigung
 
-									/* Nach der Bereinigung ermitteln wieviele unbekannt und undefiniert sind
+									/*
+									 * Nach der Bereinigung ermitteln wieviele
+									 * unbekannt und undefiniert sind
 									 * 
 									 * unbekannt unknown = count - undefined
 									 * 
-									 * undefiniert undefined = (unicodeUndefined = true) */
+									 * undefiniert undefined = (unicodeUndefined
+									 * = true)
+									 */
 									int undefinedE = 0;
 
-									NodeList nodeCharacterLstError = docError.getElementsByTagName( "character" );
+									NodeList nodeCharacterLstError = docError
+											.getElementsByTagName(
+													"character" );
 
-									for ( int s = 0; s < nodeCharacterLstError.getLength(); s++ ) {
-										Node charNode = nodeCharacterLstError.item( s );
+									for ( int s = 0; s < nodeCharacterLstError
+											.getLength(); s++ ) {
+										Node charNode = nodeCharacterLstError
+												.item( s );
 
 										if ( charNode.hasAttributes() ) {
-											NamedNodeMap attrs = charNode.getAttributes();
-											for ( int i = 0; i < attrs.getLength(); i++ ) {
-												Attr attribute = (Attr) attrs.item( i );
-												String attNameValue = attribute.getName() + " = " + attribute.getValue();
-												if ( attNameValue.equalsIgnoreCase( "unicodeUndefined = true" ) ) {
-													if ( fontErrorIgnor.equalsIgnoreCase( "E" ) ) {
-														undefinedE = undefinedE + 1;
+											NamedNodeMap attrs = charNode
+													.getAttributes();
+											for ( int i = 0; i < attrs
+													.getLength(); i++ ) {
+												Attr attribute = (Attr) attrs
+														.item( i );
+												String attNameValue = attribute
+														.getName() + " = "
+														+ attribute.getValue();
+												if ( attNameValue
+														.equalsIgnoreCase(
+																"unicodeUndefined = true" ) ) {
+													if ( fontErrorIgnor
+															.equalsIgnoreCase(
+																	"E" ) ) {
+														undefinedE = undefinedE
+																+ 1;
 													}
 												}
 											}
 										}
 									}
 
-									if ( !elementUnknown.equals( "0" ) || !elementUndefined.equals( "0" ) ) {
+									if ( !elementUnknown.equals( "0" )
+											|| !elementUndefined
+													.equals( "0" ) ) {
 										isValidFont = false;
 										errorK = errorK
-												+ getTextResourceService().getText( locale, MESSAGE_XML_MODUL_K_PDFA )
-												+ getTextResourceService().getText( locale, ERROR_XML_K_OVERVIEW,
-														elementCount, elementUnknown, elementUnknownP, elementUndefined,
-														elementUndefinedP );
+												+ getTextResourceService()
+														.getText( locale,
+																MESSAGE_XML_MODUL_K_PDFA )
+												+ getTextResourceService()
+														.getText( locale,
+																ERROR_XML_K_OVERVIEW,
+																elementCount,
+																elementUnknown,
+																elementUnknownP,
+																elementUndefined,
+																elementUndefinedP );
 									}
 
 									if ( !isValidFont ) {
-										Node nodeInfo = docError.getElementsByTagName( "docInfo" ).item( 0 );
-										String stringInfo = nodeToString( nodeInfo );
-										Node nodeFonts = docError.getElementsByTagName( "fonts" ).item( 0 );
-										String stringFonts = nodeToString( nodeFonts );
-										errorK = errorK + getTextResourceService().getText( locale, ERROR_XML_K_DETAIL,
-												stringInfo, stringFonts );
+										Node nodeInfo = docError
+												.getElementsByTagName(
+														"docInfo" )
+												.item( 0 );
+										String stringInfo = nodeToString(
+												nodeInfo );
+										Node nodeFonts = docError
+												.getElementsByTagName( "fonts" )
+												.item( 0 );
+										String stringFonts = nodeToString(
+												nodeFonts );
+										errorK = errorK
+												+ getTextResourceService()
+														.getText( locale,
+																ERROR_XML_K_DETAIL,
+																stringInfo,
+																stringFonts );
 									} else {
-										// <docInfo> und <characterCount> auf eine Zeile ausgeben
+										// <docInfo> und <characterCount> auf
+										// eine Zeile ausgeben
 										if ( min ) {
 										} else {
-											Logtxt.logtxt( logFile, docInfoCharacterCount );
+											Logtxt.logtxt( logFile,
+													docInfoCharacterCount );
 										}
 									}
 									bisError.close();
@@ -1143,10 +1463,13 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 								}
 							} catch ( Exception e ) {
 
-								Logtxt.logtxt( logFile,
-										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-												+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-														"Exec PDF Tools Font: " + e.getMessage() ) );
+								Logtxt.logtxt( logFile, getTextResourceService()
+										.getText( locale,
+												MESSAGE_XML_MODUL_A_PDFA )
+										+ getTextResourceService().getText(
+												locale, ERROR_XML_UNKNOWN,
+												"Exec PDF Tools Font: "
+														+ e.getMessage() ) );
 								return false;
 							}
 						}
@@ -1157,22 +1480,25 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 						docError = null;
 						if ( fontReportError.exists() ) {
 							// Kann noch nicht geloescht werden, da noch aktiv
-							// fontReportError wird in Controllervalfile geloescht (je nach verbose)
+							// fontReportError wird in Controllervalfile
+							// geloescht (je nach verbose)
 						}
 					} else {
 						isValidFont = true;
 					}
 				} catch ( Exception e ) {
 
-					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-											"Exec PDF Tools: " + e.getMessage() ) );
+					Logtxt.logtxt( logFile, getTextResourceService()
+							.getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN,
+									"Exec PDF Tools: " + e.getMessage() ) );
 					return false;
 				}
 				if ( !isValid ) {
 
-					// Ermittlung Detail-Fehlermeldungen von pdftools (entspricht -rd)
+					// Ermittlung Detail-Fehlermeldungen von pdftools
+					// (entspricht -rd)
 					PdfError err = docPdf.getFirstError();
 					boolean rd = false;
 					String detailConfig = configMap.get( "detail" );
@@ -1184,166 +1510,284 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 						for ( ; err != null; err = docPdf.getNextError() ) {
 							// Ermittlung der einzelnen Error Code und Message
 							int errorCode = err.getErrorCode();
-							String errorCode0x = String.format( "0x%08X", errorCode );
+							String errorCode0x = String.format( "0x%08X",
+									errorCode );
 							String errorMsg = err.getMessage();
 
-							// aus errorMsg < und > entfernen --> Probleme mit XML
+							// aus errorMsg < und > entfernen --> Probleme mit
+							// XML
 							errorMsg = errorMsg.replace( "<", "'" );
 							errorMsg = errorMsg.replace( ">", "'" );
 
 							// Ausgabe
-							String errorMsgCode0xText = errorMsg + " [PDF Tools: " + errorCode0x + "]";
+							String errorMsgCode0xText = errorMsg
+									+ " [PDF Tools: " + errorCode0x + "]";
 							String errorMsgCode0x = " - " + errorMsgCode0xText;
 							// System.out.println(errorMsgCode0x);
 
-							/* TODO zu ignorierende Werte ignorieren und dann kontrollieren ob noch invalid
-							 * (weitere Fehler existieren)
+							/*
+							 * TODO zu ignorierende Werte ignorieren und dann
+							 * kontrollieren ob noch invalid (weitere Fehler
+							 * existieren)
 							 * 
-							 * zB - The value of the key N is 4 but must be 3. [PDF Tools: 0x80410607] */
+							 * zB - The value of the key N is 4 but must be 3.
+							 * [PDF Tools: 0x80410607]
+							 */
 							String detailIgnore = configMap.get( "ignore" );
 
 							if ( detailIgnore.contains( errorMsgCode0xText ) ) {
-								// Fehler wird ignoriert. Entsprechend wird kein Detail geschrieben.
+								// Fehler wird ignoriert. Entsprechend wird kein
+								// Detail geschrieben.
 							} else {
-								// Fehler wird nicht ignoriert und dem Modul zugeordnet
-								if ( errorMsgCode0x.toLowerCase().contains( "graphic" )
-										|| errorMsgCode0x.toLowerCase().contains( "image" )
-										|| errorMsgCode0x.toLowerCase().contains( "interpolate" )
-										|| errorMsgCode0x.toLowerCase().contains( "icc" )
-										|| errorMsgCode0x.toLowerCase().contains( "color" )
-										|| errorMsgCode0x.toLowerCase().contains( "colour" )
-										|| errorMsgCode0x.toLowerCase().contains( "rgb" )
-										|| errorMsgCode0x.toLowerCase().contains( "rvb" )
-										|| errorMsgCode0x.toLowerCase().contains( "cmyk" )
-										|| errorMsgCode0x.toLowerCase().contains( "cmjn" )
-										|| errorMsgCode0x.toLowerCase().contains( "outputintent" )
-										|| errorMsgCode0x.toLowerCase().contains( "jpeg2000" )
-										|| errorMsgCode0x.toLowerCase().contains( "devicegray" )
-										|| errorMsgCode0x.toLowerCase().contains( "key 'tr'." )
-										|| errorMsgCode0x.toLowerCase().contains( "tr2" ) ) {
-									if ( pdftoolsC.toLowerCase().contains( errorMsgCode0x.toLowerCase() ) ) {
-										// Fehlermeldung bereits erfasst -> keine Aktion
+								// Fehler wird nicht ignoriert und dem Modul
+								// zugeordnet
+								if ( errorMsgCode0x.toLowerCase()
+										.contains( "graphic" )
+										|| errorMsgCode0x.toLowerCase()
+												.contains( "image" )
+										|| errorMsgCode0x.toLowerCase()
+												.contains( "interpolate" )
+										|| errorMsgCode0x.toLowerCase()
+												.contains( "icc" )
+										|| errorMsgCode0x.toLowerCase()
+												.contains( "color" )
+										|| errorMsgCode0x.toLowerCase()
+												.contains( "colour" )
+										|| errorMsgCode0x.toLowerCase()
+												.contains( "rgb" )
+										|| errorMsgCode0x.toLowerCase()
+												.contains( "rvb" )
+										|| errorMsgCode0x.toLowerCase()
+												.contains( "cmyk" )
+										|| errorMsgCode0x.toLowerCase()
+												.contains( "cmjn" )
+										|| errorMsgCode0x.toLowerCase()
+												.contains( "outputintent" )
+										|| errorMsgCode0x.toLowerCase()
+												.contains( "jpeg2000" )
+										|| errorMsgCode0x.toLowerCase()
+												.contains( "devicegray" )
+										|| errorMsgCode0x.toLowerCase()
+												.contains( "key 'tr'." )
+										|| errorMsgCode0x.toLowerCase()
+												.contains( "tr2" ) ) {
+									if ( pdftoolsC.toLowerCase().contains(
+											errorMsgCode0x.toLowerCase() ) ) {
+										// Fehlermeldung bereits erfasst ->
+										// keine Aktion
 									} else {
 										pdftoolsC = pdftoolsC
-												+ getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_PDFA )
-												+ "<Message>" + errorMsgCode0x + "</Message></Error>";
+												+ getTextResourceService()
+														.getText( locale,
+																MESSAGE_XML_MODUL_C_PDFA )
+												+ "<Message>" + errorMsgCode0x
+												+ "</Message></Error>";
 									}
 
-								} else if ( errorMsgCode0x.toLowerCase().contains( "police" )
-										|| errorMsgCode0x.toLowerCase().contains( "font" )
-										|| errorMsgCode0x.toLowerCase().contains( "gly" )
-										|| errorMsgCode0x.toLowerCase().contains( "truetype" )
-										|| errorMsgCode0x.toLowerCase().contains( "unicode" )
-										|| errorMsgCode0x.toLowerCase().contains( "cid" )
-										|| errorMsgCode0x.toLowerCase().contains( "encoding" )
-										|| errorMsgCode0x.toLowerCase().contains( "charset" ) ) {
-									if ( pdftoolsD.toLowerCase().contains( errorMsgCode0x.toLowerCase() ) ) {
-										// Fehlermeldung bereits erfasst -> keine Aktion
+								} else if ( errorMsgCode0x.toLowerCase()
+										.contains( "police" )
+										|| errorMsgCode0x.toLowerCase()
+												.contains( "font" )
+										|| errorMsgCode0x.toLowerCase()
+												.contains( "gly" )
+										|| errorMsgCode0x.toLowerCase()
+												.contains( "truetype" )
+										|| errorMsgCode0x.toLowerCase()
+												.contains( "unicode" )
+										|| errorMsgCode0x.toLowerCase()
+												.contains( "cid" )
+										|| errorMsgCode0x.toLowerCase()
+												.contains( "encoding" )
+										|| errorMsgCode0x.toLowerCase()
+												.contains( "charset" ) ) {
+									if ( pdftoolsD.toLowerCase().contains(
+											errorMsgCode0x.toLowerCase() ) ) {
+										// Fehlermeldung bereits erfasst ->
+										// keine Aktion
 									} else {
 										pdftoolsD = pdftoolsD
-												+ getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_PDFA )
-												+ "<Message>" + errorMsgCode0x + "</Message></Error>";
+												+ getTextResourceService()
+														.getText( locale,
+																MESSAGE_XML_MODUL_D_PDFA )
+												+ "<Message>" + errorMsgCode0x
+												+ "</Message></Error>";
 									}
 
-								} else if ( errorMsgCode0x.toLowerCase().contains( "disponibi" )
-										|| errorMsgCode0x.toLowerCase().contains( "accessibi" )
-										|| errorMsgCode0x.toLowerCase().contains( "markinfo" )
-										|| errorMsgCode0x.toLowerCase().contains( "structree" )
-										|| errorMsgCode0x.toLowerCase().contains( "structure tree root" )
-										|| errorMsgCode0x.toLowerCase().contains( " cross reference " )
+								} else if ( errorMsgCode0x.toLowerCase()
+										.contains( "disponibi" )
 										|| errorMsgCode0x.toLowerCase()
-												.contains( " but must be a standard type. [PDF Tools: 0x00418607]" )
-										|| errorMsgCode0x.toLowerCase().contains( "strukturbaum" ) ) {
-									if ( pdftoolsI.toLowerCase().contains( errorMsgCode0x.toLowerCase() ) ) {
-										// Fehlermeldung bereits erfasst -> keine Aktion
+												.contains( "accessibi" )
+										|| errorMsgCode0x.toLowerCase()
+												.contains( "markinfo" )
+										|| errorMsgCode0x.toLowerCase()
+												.contains( "structree" )
+										|| errorMsgCode0x.toLowerCase()
+												.contains(
+														"structure tree root" )
+										|| errorMsgCode0x.toLowerCase()
+												.contains( " cross reference " )
+										|| errorMsgCode0x.toLowerCase()
+												.contains(
+														" but must be a standard type. [PDF Tools: 0x00418607]" )
+										|| errorMsgCode0x.toLowerCase()
+												.contains( "strukturbaum" ) ) {
+									if ( pdftoolsI.toLowerCase().contains(
+											errorMsgCode0x.toLowerCase() ) ) {
+										// Fehlermeldung bereits erfasst ->
+										// keine Aktion
 									} else {
 										pdftoolsI = pdftoolsI
-												+ getTextResourceService().getText( locale, MESSAGE_XML_MODUL_I_PDFA )
-												+ "<Message>" + errorMsgCode0x + "</Message></Error>";
+												+ getTextResourceService()
+														.getText( locale,
+																MESSAGE_XML_MODUL_I_PDFA )
+												+ "<Message>" + errorMsgCode0x
+												+ "</Message></Error>";
 									}
 
-								} else if ( errorMsgCode0x.toLowerCase().contains( "structure" )
-										|| errorMsgCode0x.toLowerCase().contains( " ocproperties" )
-										|| errorMsgCode0x.toLowerCase().contains( " lzw" )
-										|| errorMsgCode0x.toLowerCase().contains( " structelem" )
-										|| errorMsgCode0x.toLowerCase().contains( " eol" ) ) {
-									if ( pdftoolsB.toLowerCase().contains( errorMsgCode0x.toLowerCase() ) ) {
-										// Fehlermeldung bereits erfasst -> keine Aktion
+								} else if ( errorMsgCode0x.toLowerCase()
+										.contains( "structure" )
+										|| errorMsgCode0x.toLowerCase()
+												.contains( " ocproperties" )
+										|| errorMsgCode0x.toLowerCase()
+												.contains( " lzw" )
+										|| errorMsgCode0x.toLowerCase()
+												.contains( " structelem" )
+										|| errorMsgCode0x.toLowerCase()
+												.contains( " eol" ) ) {
+									if ( pdftoolsB.toLowerCase().contains(
+											errorMsgCode0x.toLowerCase() ) ) {
+										// Fehlermeldung bereits erfasst ->
+										// keine Aktion
 									} else {
 										pdftoolsB = pdftoolsB
-												+ getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_PDFA )
-												+ "<Message>" + errorMsgCode0x + "</Message></Error>";
+												+ getTextResourceService()
+														.getText( locale,
+																MESSAGE_XML_MODUL_B_PDFA )
+												+ "<Message>" + errorMsgCode0x
+												+ "</Message></Error>";
 									}
 
-								} else if ( errorMsgCode0x.toLowerCase().contains( "metad" )
-										|| errorMsgCode0x.toLowerCase().contains( "xmp" )
-										|| errorMsgCode0x.toLowerCase().contains( "xml" )
-										|| errorMsgCode0x.toLowerCase().contains( "key 'filter'." )
-										|| errorMsgCode0x.toLowerCase().contains( "schema description for namespace" )
+								} else if ( errorMsgCode0x.toLowerCase()
+										.contains( "metad" )
 										|| errorMsgCode0x.toLowerCase()
-												.contains( "multiple occurrences of property 'pdf:" )
-										|| errorMsgCode0x.toLowerCase().contains( "is not defined in schema" ) ) {
-									if ( pdftoolsH.toLowerCase().contains( errorMsgCode0x.toLowerCase() ) ) {
-										// Fehlermeldung bereits erfasst -> keine Aktion
+												.contains( "xmp" )
+										|| errorMsgCode0x.toLowerCase()
+												.contains( "xml" )
+										|| errorMsgCode0x.toLowerCase()
+												.contains( "key 'filter'." )
+										|| errorMsgCode0x.toLowerCase()
+												.contains(
+														"schema description for namespace" )
+										|| errorMsgCode0x.toLowerCase()
+												.contains(
+														"multiple occurrences of property 'pdf:" )
+										|| errorMsgCode0x.toLowerCase()
+												.contains(
+														"is not defined in schema" ) ) {
+									if ( pdftoolsH.toLowerCase().contains(
+											errorMsgCode0x.toLowerCase() ) ) {
+										// Fehlermeldung bereits erfasst ->
+										// keine Aktion
 									} else {
 										pdftoolsH = pdftoolsH
-												+ getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_PDFA )
-												+ "<Message>" + errorMsgCode0x + "</Message></Error>";
+												+ getTextResourceService()
+														.getText( locale,
+																MESSAGE_XML_MODUL_H_PDFA )
+												+ "<Message>" + errorMsgCode0x
+												+ "</Message></Error>";
 									}
 
-								} else if ( errorMsgCode0x.toLowerCase().contains( "transparen" ) ) {
-									if ( pdftoolsE.toLowerCase().contains( errorMsgCode0x.toLowerCase() ) ) {
-										// Fehlermeldung bereits erfasst -> keine Aktion
+								} else if ( errorMsgCode0x.toLowerCase()
+										.contains( "transparen" ) ) {
+									if ( pdftoolsE.toLowerCase().contains(
+											errorMsgCode0x.toLowerCase() ) ) {
+										// Fehlermeldung bereits erfasst ->
+										// keine Aktion
 									} else {
 										pdftoolsE = pdftoolsE
-												+ getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_PDFA )
-												+ "<Message>" + errorMsgCode0x + "</Message></Error>";
+												+ getTextResourceService()
+														.getText( locale,
+																MESSAGE_XML_MODUL_E_PDFA )
+												+ "<Message>" + errorMsgCode0x
+												+ "</Message></Error>";
 									}
 
-								} else if ( errorMsgCode0x.toLowerCase().contains( "action" )
-										|| errorMsgCode0x.toLowerCase().contains( "aa" )
-										|| errorMsgCode0x.toLowerCase().contains( "key 'a'" )
-										|| errorMsgCode0x.toLowerCase().contains( "javascript" ) ) {
-									if ( pdftoolsG.toLowerCase().contains( errorMsgCode0x.toLowerCase() ) ) {
-										// Fehlermeldung bereits erfasst -> keine Aktion
+								} else if ( errorMsgCode0x.toLowerCase()
+										.contains( "action" )
+										|| errorMsgCode0x.toLowerCase()
+												.contains( "aa" )
+										|| errorMsgCode0x.toLowerCase()
+												.contains( "key 'a'" )
+										|| errorMsgCode0x.toLowerCase()
+												.contains( "javascript" ) ) {
+									if ( pdftoolsG.toLowerCase().contains(
+											errorMsgCode0x.toLowerCase() ) ) {
+										// Fehlermeldung bereits erfasst ->
+										// keine Aktion
 									} else {
 										pdftoolsG = pdftoolsG
-												+ getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_PDFA )
-												+ "<Message>" + errorMsgCode0x + "</Message></Error>";
+												+ getTextResourceService()
+														.getText( locale,
+																MESSAGE_XML_MODUL_G_PDFA )
+												+ "<Message>" + errorMsgCode0x
+												+ "</Message></Error>";
 									}
 
-								} else if ( errorMsgCode0x.toLowerCase().contains( "annotation" )
-										|| errorMsgCode0x.toLowerCase().contains( "embedd" )
-										|| errorMsgCode0x.toLowerCase().contains( "comment" )
-										|| errorMsgCode0x.toLowerCase().contains( "structure" )
-										|| errorMsgCode0x.toLowerCase().contains( "print" )
-										|| errorMsgCode0x.toLowerCase().contains( "incorpor" )
-										|| errorMsgCode0x.toLowerCase().contains( "key f " )
-										|| errorMsgCode0x.toLowerCase().contains( "appearance" ) ) {
-									if ( pdftoolsF.toLowerCase().contains( errorMsgCode0x.toLowerCase() ) ) {
-										// Fehlermeldung bereits erfasst -> keine Aktion
+								} else if ( errorMsgCode0x.toLowerCase()
+										.contains( "annotation" )
+										|| errorMsgCode0x.toLowerCase()
+												.contains( "embedd" )
+										|| errorMsgCode0x.toLowerCase()
+												.contains( "comment" )
+										|| errorMsgCode0x.toLowerCase()
+												.contains( "structure" )
+										|| errorMsgCode0x.toLowerCase()
+												.contains( "print" )
+										|| errorMsgCode0x.toLowerCase()
+												.contains( "incorpor" )
+										|| errorMsgCode0x.toLowerCase()
+												.contains( "key f " )
+										|| errorMsgCode0x.toLowerCase()
+												.contains( "appearance" ) ) {
+									if ( pdftoolsF.toLowerCase().contains(
+											errorMsgCode0x.toLowerCase() ) ) {
+										// Fehlermeldung bereits erfasst ->
+										// keine Aktion
 									} else {
 										pdftoolsF = pdftoolsF
-												+ getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_PDFA )
-												+ "<Message>" + errorMsgCode0x + "</Message></Error>";
+												+ getTextResourceService()
+														.getText( locale,
+																MESSAGE_XML_MODUL_F_PDFA )
+												+ "<Message>" + errorMsgCode0x
+												+ "</Message></Error>";
 									}
 
 								} else {
-									if ( pdftoolsA.toLowerCase().contains( errorMsgCode0x.toLowerCase() ) ) {
-										// Fehlermeldung bereits erfasst -> keine Aktion
+									if ( pdftoolsA.toLowerCase().contains(
+											errorMsgCode0x.toLowerCase() ) ) {
+										// Fehlermeldung bereits erfasst ->
+										// keine Aktion
 									} else {
 										pdftoolsA = pdftoolsA
-												+ getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-												+ "<Message>" + errorMsgCode0x + "</Message></Error>";
+												+ getTextResourceService()
+														.getText( locale,
+																MESSAGE_XML_MODUL_A_PDFA )
+												+ "<Message>" + errorMsgCode0x
+												+ "</Message></Error>";
 									}
 								}
 							}
 						}
 
 						// Kontrolle ob details noch existieren
-						if ( pdftoolsA.equals( "" ) && pdftoolsB.equals( "" ) && pdftoolsC.equals( "" )
-								&& pdftoolsD.equals( "" ) && pdftoolsE.equals( "" ) && pdftoolsF.equals( "" )
-								&& pdftoolsG.equals( "" ) && pdftoolsH.equals( "" ) && pdftoolsI.equals( "" ) ) {
+						if ( pdftoolsA.equals( "" ) && pdftoolsB.equals( "" )
+								&& pdftoolsC.equals( "" )
+								&& pdftoolsD.equals( "" )
+								&& pdftoolsE.equals( "" )
+								&& pdftoolsF.equals( "" )
+								&& pdftoolsG.equals( "" )
+								&& pdftoolsH.equals( "" )
+								&& pdftoolsI.equals( "" ) ) {
 							isValid = true;
 						}
 					}
@@ -1357,9 +1801,12 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 			if ( callas && !isValid ) {
 				// Validierung mit callas
 
-				/* Nicht vergessen in "src/main/resources/config/applicationContext-services.xml" beim
-				 * entsprechenden Modul die property anzugeben: <property name="configurationService"
-				 * ref="configurationService" /> */
+				/*
+				 * Nicht vergessen in
+				 * "src/main/resources/config/applicationContext-services.xml"
+				 * beim entsprechenden Modul die property anzugeben: <property
+				 * name="configurationService" ref="configurationService" />
+				 */
 				String nEntry = configMap.get( "nentry" );
 				boolean bNentryError = true;
 				if ( nEntry.equalsIgnoreCase( "W" ) ) {
@@ -1367,55 +1814,50 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 				}
 
 				try {
-					// Initialisierung callas -> existiert pdfaPilot in den resources?
-					/* dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist ein generelles to do
-					 * in allen Modulen. Zuerst immer dirOfJarPath ermitteln und dann alle Pfade mit
-					 * 
-					 * dirOfJarPath + File.separator +
-					 * 
-					 * erweitern. */
-					String path = new java.io.File(
-							KOSTVal.class.getProtectionDomain().getCodeSource().getLocation().getPath() )
-									.getAbsolutePath();
-					String locationOfJarPath = path;
-					String dirOfJarPath = locationOfJarPath;
+					// Initialisierung callas -> existiert pdfaPilot in den
+					// resources?
 					String folderCallas = "callas_pdfaPilotServer_Win_9-1-326_cli-a";
-					/* Update von Callas: callas_pdfaPilotServer_Win_...-Version herunterladen, insallieren,
-					 * odner im Workbench umbenennen alle Dateine vom Ordner cli ersetzen aber lizenz.txt und
-					 * N-Entry.kfpx muessen die alten bleiben */
-					if ( locationOfJarPath.endsWith( ".jar" ) || locationOfJarPath.endsWith( ".exe" )
-							|| locationOfJarPath.endsWith( "." ) ) {
-						File file = new File( locationOfJarPath );
-						dirOfJarPath = file.getParent();
-					}
+					/*
+					 * Update von Callas: callas_pdfaPilotServer_Win_...-Version
+					 * herunterladen, insallieren, odner im Workbench umbenennen
+					 * alle Dateine vom Ordner cli ersetzen aber lizenz.txt und
+					 * N-Entry.kfpx muessen die alten bleiben
+					 */
 
-					File fpdfapilotExe = new File( dirOfJarPath + File.separator + "resources"
-							+ File.separator + folderCallas + File.separator + "pdfaPilot.exe" );
+					File fpdfapilotExe = new File( dirOfJarPath + File.separator
+							+ "resources" + File.separator + folderCallas
+							+ File.separator + "pdfaPilot.exe" );
 					if ( !fpdfapilotExe.exists() ) {
 						// Keine callas Validierung moeglich
 
-						/* Testen der Installation und System anhand
-						 * 3-Heights(TM)_PDFA_Validator_API_LICENSE.pdf -> invalid */
+						/*
+						 * Testen der Installation und System anhand
+						 * 3-Heights(TM)_PDFA_Validator_API_LICENSE.pdf ->
+						 * invalid
+						 */
 						if ( pdftools ) {
 							callas = false;
 
-							Logtxt.logtxt( logFile,
-									getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-											+ getTextResourceService().getText( locale, ERROR_XML_CALLAS_MISSING2,
-													fpdfapilotExe.getAbsolutePath() ) );
+							Logtxt.logtxt( logFile, getTextResourceService()
+									.getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+									+ getTextResourceService().getText( locale,
+											ERROR_XML_CALLAS_MISSING2,
+											fpdfapilotExe.getAbsolutePath() ) );
 							isValid = false;
 						} else {
 
-							Logtxt.logtxt( logFile,
-									getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-											+ getTextResourceService().getText( locale, ERROR_XML_CALLAS_MISSING,
-													fpdfapilotExe.getAbsolutePath() ) );
+							Logtxt.logtxt( logFile, getTextResourceService()
+									.getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+									+ getTextResourceService().getText( locale,
+											ERROR_XML_CALLAS_MISSING,
+											fpdfapilotExe.getAbsolutePath() ) );
 							return false;
 						}
 					}
 					String pdfapilotExe = fpdfapilotExe.getAbsolutePath();
 
-					/* Aufbau command:
+					/*
+					 * Aufbau command:
 					 * 
 					 * 1) pdfapilotExe: Pfad zum Programm pdfapilot
 					 * 
@@ -1425,16 +1867,20 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					 * 
 					 * 4) valPath: Pfad zur Datei
 					 * 
-					 * 5) reportPath: Pfad zum Report */
+					 * 5) reportPath: Pfad zum Report
+					 */
 
 					String levelCallas = level.toLowerCase();
 
-					String profile = dirOfJarPath + File.separator + "resources" + File.separator
-							+ folderCallas + File.separator + "N-Entry.kfpx";
-					String analye = "-a --noprogress --nohits --level=" + levelCallas + " --profile=\""
-							+ profile + "\"";
-					String langConfig = getTextResourceService().getText( locale, MESSAGE_XML_LANGUAGE );
-					String lang = "-l=" + getTextResourceService().getText( locale, MESSAGE_XML_LANGUAGE );
+					String profile = dirOfJarPath + File.separator + "resources"
+							+ File.separator + folderCallas + File.separator
+							+ "N-Entry.kfpx";
+					String analye = "-a --noprogress --nohits --level="
+							+ levelCallas + " --profile=\"" + profile + "\"";
+					String langConfig = getTextResourceService()
+							.getText( locale, MESSAGE_XML_LANGUAGE );
+					String lang = "-l=" + getTextResourceService()
+							.getText( locale, MESSAGE_XML_LANGUAGE );
 					String valPath = valDatei.getAbsolutePath();
 					String reportPath = report.getAbsolutePath();
 
@@ -1443,31 +1889,44 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 							report.delete();
 						}
 
-						/* callas separat ausfuehren und Ergebnis in isValid zurueckgeben */
-						callasReturnCode = UtilCallas.execCallas( pdfapilotExe, analye, lang, valPath,
-								reportPath );
+						/*
+						 * callas separat ausfuehren und Ergebnis in isValid
+						 * zurueckgeben
+						 */
+						callasReturnCode = UtilCallas.execCallas( pdfapilotExe,
+								analye, lang, valPath, reportPath );
 
 						Util.copyFile( report, reportOriginal );
 
 						if ( callasReturnCode == 0 ) {
-							/* 0 PDF is valid PDF/A-file additional checks wihtout problems
+							/*
+							 * 0 PDF is valid PDF/A-file additional checks
+							 * wihtout problems
 							 * 
-							 * 1 PDF is valid PDF/A-file but additional checks with problems severity info
+							 * 1 PDF is valid PDF/A-file but additional checks
+							 * with problems severity info
 							 * 
-							 * 2 PDF is valid PDF/A-file but additional checks with problems severity warning
+							 * 2 PDF is valid PDF/A-file but additional checks
+							 * with problems severity warning
 							 * 
-							 * 3 PDF is valid PDF/A-file but additional checks with problems severity error -->
-							 * N-Eintrag
+							 * 3 PDF is valid PDF/A-file but additional checks
+							 * with problems severity error --> N-Eintrag
 							 * 
-							 * 4 PDF is not a valid PDF/A-file */
+							 * 4 PDF is not a valid PDF/A-file
+							 */
 
-							String valPathTest = dirOfJarPath + File.separator + "license" + File.separator
+							String valPathTest = dirOfJarPath + File.separator
+									+ "license" + File.separator
 									+ "other_License" + File.separator
 									+ "3-Heights(TM)_PDFA_Validator_API_LICENSE.pdf";
 
-							/* Testen der Installation und System anhand
-							 * 3-Heights(TM)_PDFA_Validator_API_LICENSE.pdf -> invalid */
-							callasReturnCodeTest = UtilCallas.execCallas( pdfapilotExe, analye, lang, valPathTest,
+							/*
+							 * Testen der Installation und System anhand
+							 * 3-Heights(TM)_PDFA_Validator_API_LICENSE.pdf ->
+							 * invalid
+							 */
+							callasReturnCodeTest = UtilCallas.execCallas(
+									pdfapilotExe, analye, lang, valPathTest,
 									reportPath );
 
 							// report des Testdurchlaufes loeschen
@@ -1475,12 +1934,15 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 								report.delete();
 							}
 
-							if ( callasReturnCodeTest == 0 || callasReturnCodeTest == 1
-									|| callasReturnCodeTest == 2 || callasReturnCodeTest == 3 ) {
+							if ( callasReturnCodeTest == 0
+									|| callasReturnCodeTest == 1
+									|| callasReturnCodeTest == 2
+									|| callasReturnCodeTest == 3 ) {
 								// Keine callas Validierung moeglich
 								configMap.put( "callas", "no" );
 
-								// -callas_NO -Fileanlegen, damit in J nicht validiert wird
+								// -callas_NO -Fileanlegen, damit in J nicht
+								// validiert wird
 								if ( !callasNo.exists() ) {
 									try {
 										callasNo.createNewFile();
@@ -1492,30 +1954,47 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 								if ( pdftools ) {
 									callas = false;
 									Logtxt.logtxt( logFile,
-											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-													+ getTextResourceService().getText( locale, ERROR_XML_CALLAS_FATAL2,
-															fpdfapilotExe.getAbsolutePath() ) );
+											getTextResourceService().getText(
+													locale,
+													MESSAGE_XML_MODUL_A_PDFA )
+													+ getTextResourceService()
+															.getText( locale,
+																	ERROR_XML_CALLAS_FATAL2,
+																	fpdfapilotExe
+																			.getAbsolutePath() ) );
 									isValid = false;
 								} else {
 									Logtxt.logtxt( logFile,
-											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-													+ getTextResourceService().getText( locale, ERROR_XML_CALLAS_FATAL,
-															fpdfapilotExe.getAbsolutePath() ) );
+											getTextResourceService().getText(
+													locale,
+													MESSAGE_XML_MODUL_A_PDFA )
+													+ getTextResourceService()
+															.getText( locale,
+																	ERROR_XML_CALLAS_FATAL,
+																	fpdfapilotExe
+																			.getAbsolutePath() ) );
 									return false;
 								}
 							}
 							isValid = true;
 						} else if ( callasReturnCode > 3 ) {
 							isValid = false;
-						} else if ( callasReturnCode == 1 || callasReturnCode == 2 || callasReturnCode == 3 ) {
+						} else if ( callasReturnCode == 1
+								|| callasReturnCode == 2
+								|| callasReturnCode == 3 ) {
 							// Zusatzpruefung nicht bestanden
-							String valPathTest = dirOfJarPath + File.separator + "license" + File.separator
+							String valPathTest = dirOfJarPath + File.separator
+									+ "license" + File.separator
 									+ "other_License" + File.separator
 									+ "3-Heights(TM)_PDFA_Validator_API_LICENSE.pdf";
 
-							/* Testen der Installation und System anhand
-							 * 3-Heights(TM)_PDFA_Validator_API_LICENSE.pdf -> invalid */
-							callasReturnCodeTest = UtilCallas.execCallas( pdfapilotExe, analye, lang, valPathTest,
+							/*
+							 * Testen der Installation und System anhand
+							 * 3-Heights(TM)_PDFA_Validator_API_LICENSE.pdf ->
+							 * invalid
+							 */
+							callasReturnCodeTest = UtilCallas.execCallas(
+									pdfapilotExe, analye, lang, valPathTest,
 									reportPath );
 
 							// report des Testdurchlaufes loeschen
@@ -1523,11 +2002,14 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 								report.delete();
 							}
 
-							if ( callasReturnCodeTest == 0 || callasReturnCodeTest == 1
-									|| callasReturnCodeTest == 2 || callasReturnCodeTest == 3 ) {
+							if ( callasReturnCodeTest == 0
+									|| callasReturnCodeTest == 1
+									|| callasReturnCodeTest == 2
+									|| callasReturnCodeTest == 3 ) {
 								// Keine callas Validierung moeglich
 
-								// -callas_NO -Fileanlegen, damit in J nicht validiert wird
+								// -callas_NO -Fileanlegen, damit in J nicht
+								// validiert wird
 								if ( !callasNo.exists() ) {
 									try {
 										callasNo.createNewFile();
@@ -1539,15 +2021,25 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 								if ( pdftools ) {
 									callas = false;
 									Logtxt.logtxt( logFile,
-											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-													+ getTextResourceService().getText( locale, ERROR_XML_CALLAS_FATAL2,
-															fpdfapilotExe.getAbsolutePath() ) );
+											getTextResourceService().getText(
+													locale,
+													MESSAGE_XML_MODUL_A_PDFA )
+													+ getTextResourceService()
+															.getText( locale,
+																	ERROR_XML_CALLAS_FATAL2,
+																	fpdfapilotExe
+																			.getAbsolutePath() ) );
 									isValid = false;
 								} else {
 									Logtxt.logtxt( logFile,
-											getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-													+ getTextResourceService().getText( locale, ERROR_XML_CALLAS_FATAL,
-															fpdfapilotExe.getAbsolutePath() ) );
+											getTextResourceService().getText(
+													locale,
+													MESSAGE_XML_MODUL_A_PDFA )
+													+ getTextResourceService()
+															.getText( locale,
+																	ERROR_XML_CALLAS_FATAL,
+																	fpdfapilotExe
+																			.getAbsolutePath() ) );
 									return false;
 								}
 							}
@@ -1556,22 +2048,29 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 								// Zusatzpruefung nicht bestanden = Error
 								isValid = false;
 							} else {
-								/* Zusatzpruefung nicht bestanden = Warnung aber valide
+								/*
+								 * Zusatzpruefung nicht bestanden = Warnung aber
+								 * valide
 								 * 
-								 * Warnung jetzt ausgeben */
+								 * Warnung jetzt ausgeben
+								 */
 								String warning = "";
 								isValid = true;
 								if ( langConfig.equalsIgnoreCase( "de" ) ) {
 									warning = "Warnung: Komponentenanzahl im N-Eintrag des PDF/A Output Intent stimmt nicht mit ICC-Profil ueberein. [callas] ";
-								} else if ( langConfig.equalsIgnoreCase( "fr" ) ) {
+								} else if ( langConfig
+										.equalsIgnoreCase( "fr" ) ) {
 									warning = "Avertissement: Le nombre de composants dans l'entree N des conditions de sortie PDF/A ne correspond pas au profil ICC. [callas] ";
 								} else {
 									warning = "Warning: Number of components in PDF/A OutputIntent N entry does not match ICC profile. [callas] ";
 								}
 
 								Logtxt.logtxt( logFile,
-										getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_PDFA )
-												+ "<Message>" + warning + "</Message></Error>" );
+										getTextResourceService().getText(
+												locale,
+												MESSAGE_XML_MODUL_C_PDFA )
+												+ "<Message>" + warning
+												+ "</Message></Error>" );
 							}
 						} else {
 							isValid = false;
@@ -1582,10 +2081,11 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					}
 				} catch ( Exception e ) {
 
-					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-									+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-											"Exec pdfaPilot: " + e.getMessage() ) );
+					Logtxt.logtxt( logFile, getTextResourceService()
+							.getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+							+ getTextResourceService().getText( locale,
+									ERROR_XML_UNKNOWN,
+									"Exec pdfaPilot: " + e.getMessage() ) );
 					return false;
 				}
 			}
@@ -1596,7 +2096,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 				// JBIG2 erlaubt kein Fehler moeglich und auch kein Test noetig
 			} else {
 				try {
-					BufferedReader in = new BufferedReader( new FileReader( valDatei ) );
+					BufferedReader in = new BufferedReader(
+							new FileReader( valDatei ) );
 					String line;
 					while ( (line = in.readLine()) != null ) {
 						line = line.toLowerCase();
@@ -1618,10 +2119,11 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					if ( min ) {
 					} else {
 
-						Logtxt.logtxt( logFile,
-								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-										+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
-												" Modul J " + e.getMessage() ) );
+						Logtxt.logtxt( logFile, getTextResourceService()
+								.getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+								+ getTextResourceService().getText( locale,
+										ERROR_XML_UNKNOWN,
+										" Modul J " + e.getMessage() ) );
 					}
 				}
 			}
@@ -1766,10 +2268,11 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					if ( callas ) {
 						if ( callasServiceFailed ) {
 
-							Logtxt.logtxt( logFile,
-									getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-											+ getTextResourceService().getText( locale, ERROR_XML_A_CALLAS_SERVICEFAILED,
-													callasReturnCode ) );
+							Logtxt.logtxt( logFile, getTextResourceService()
+									.getText( locale, MESSAGE_XML_MODUL_A_PDFA )
+									+ getTextResourceService().getText( locale,
+											ERROR_XML_SERVICEFAILED,
+											"pdfaPilot", callasReturnCode ) );
 						}
 
 						// aus dem Output die Fehler holen
@@ -1777,19 +2280,26 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 
 						try {
 							BufferedReader br = new BufferedReader(
-									new InputStreamReader( new FileInputStream( reportOriginal ) ) );
+									new InputStreamReader( new FileInputStream(
+											reportOriginal ) ) );
 
-							/* Datei Zeile fuer Zeile lesen und ermitteln ob "Error" darin enthalten ist
+							/*
+							 * Datei Zeile fuer Zeile lesen und ermitteln ob
+							 * "Error" darin enthalten ist
 							 * 
-							 * Errors 1013 CharSet incomplete for Type 1 font Errors 9 OpenType font used Errors
-							 * 790 Transparency used (transparency group)
+							 * Errors 1013 CharSet incomplete for Type 1 font
+							 * Errors 9 OpenType font used Errors 790
+							 * Transparency used (transparency group)
 							 * 
-							 * Error: The document structure is corrupt. */
-							for ( String line = br.readLine(); line != null; line = br.readLine() ) {
+							 * Error: The document structure is corrupt.
+							 */
+							for ( String line = br
+									.readLine(); line != null; line = br
+											.readLine() ) {
 								int index = 0;
 
 								line = line.replace( "ÃŸ", "ss" );
-								line = line.replace( "ß", "ss" );
+								line = line.replace( "ï¿½", "ss" );
 
 								line = line.replace( "Ã„", "Ae" );
 								line = line.replace( "â€˜", "'" );
@@ -1817,41 +2327,45 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 								line = line.replace( "Ãº", "u" );
 								line = line.replace( "Ã»", "u" );
 								line = line.replace( "Ã¼", "ue" );
-								line = line.replace( "Ã", "a" );
+								line = line.replace( "ï¿½", "a" );
 
-								line = line.replace( "Ä", "Ae" );
-								line = line.replace( "‘˜", "'" );
-								line = line.replace( "’", "'" );
-								line = line.replace( "Ò", "O" );
-								line = line.replace( "Ó", "O" );
-								line = line.replace( "Ô", "O" );
-								line = line.replace( "Ö", "Oe" );
-								line = line.replace( "œ", "oe" );
-								line = line.replace( "Ü", "Ue" );
-								line = line.replace( "á", "a" );
-								line = line.replace( "â", "a" );
-								line = line.replace( "ä", "ae" );
-								line = line.replace( "ç", "c" );
-								line = line.replace( "è", "e" );
-								line = line.replace( "é", "e" );
-								line = line.replace( "ê", "e" );
-								line = line.replace( "ë", "e" );
-								line = line.replace( "ì", "i" );
-								line = line.replace( "í", "i" );
-								line = line.replace( "î", "i" );
-								line = line.replace( "ï", "i" );
-								line = line.replace( "ö", "oe" );
-								line = line.replace( "ù", "u" );
-								line = line.replace( "ú", "u" );
-								line = line.replace( "û", "u" );
-								line = line.replace( "ü", "ue" );
-								line = line.replace( "à", "a" );
-								line = line.replace( "a€™", "'" );
+								line = line.replace( "ï¿½", "Ae" );
+								line = line.replace( "ï¿½ï¿½", "'" );
+								line = line.replace( "ï¿½", "'" );
+								line = line.replace( "ï¿½", "O" );
+								line = line.replace( "ï¿½", "O" );
+								line = line.replace( "ï¿½", "O" );
+								line = line.replace( "ï¿½", "Oe" );
+								line = line.replace( "ï¿½", "oe" );
+								line = line.replace( "ï¿½", "Ue" );
+								line = line.replace( "ï¿½", "a" );
+								line = line.replace( "ï¿½", "a" );
+								line = line.replace( "ï¿½", "ae" );
+								line = line.replace( "ï¿½", "c" );
+								line = line.replace( "ï¿½", "e" );
+								line = line.replace( "ï¿½", "e" );
+								line = line.replace( "ï¿½", "e" );
+								line = line.replace( "ï¿½", "e" );
+								line = line.replace( "ï¿½", "i" );
+								line = line.replace( "ï¿½", "i" );
+								line = line.replace( "ï¿½", "i" );
+								line = line.replace( "ï¿½", "i" );
+								line = line.replace( "ï¿½", "oe" );
+								line = line.replace( "ï¿½", "u" );
+								line = line.replace( "ï¿½", "u" );
+								line = line.replace( "ï¿½", "u" );
+								line = line.replace( "ï¿½", "ue" );
+								line = line.replace( "ï¿½", "a" );
+								line = line.replace( "aï¿½ï¿½", "'" );
 
-								/* Die Linien (Fehlermeldung von Callas) anhand von Woerter den Modulen zuordnen
+								/*
+								 * Die Linien (Fehlermeldung von Callas) anhand
+								 * von Woerter den Modulen zuordnen
 								 * 
-								 * A) Allgemeines B) Struktur C) Grafiken D) Schrift E) transparen F) annotation G)
-								 * aktion H) metadata I) Zugaenglichkeit */
+								 * A) Allgemeines B) Struktur C) Grafiken D)
+								 * Schrift E) transparen F) annotation G) aktion
+								 * H) metadata I) Zugaenglichkeit
+								 */
 
 								if ( line.startsWith( "Errors" ) ) {
 									// Errors plus Zahl entfernen aus Linie
@@ -1863,162 +2377,273 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 													"Number of components in PDF/A OutputIntent N entry does not match ICC profile" ) ) {
 										// als zusatz im Log kennzeichnen
 										line = line + " [callas] ";
-									} else if ( line.contains( "Le nombre de composants dans l'entr" )
+									} else if ( line.contains(
+											"Le nombre de composants dans l'entr" )
 											&& line.contains(
 													"N des conditions de sortie PDF/A ne correspond pas au profil ICC" ) ) {
 										// als zusatz im Log kennzeichnen
-										// enthaelt " l'entree‚ N " entsprechend alles neu...
+										// enthaelt " l'entreeï¿½ N " entsprechend
+										// alles neu...
 										line = "Le nombre de composants dans l'entree N des conditions de sortie PDF/A ne correspond pas au profil ICC [callas] ";
 									} else {
 										line = line + " [callas] ";
 									}
 
-									if ( line.toLowerCase().contains( "schrift" )
-											|| line.toLowerCase().contains( "police" )
-											|| line.toLowerCase().contains( "font" )
-											|| line.toLowerCase().contains( "gly" )
-											|| line.toLowerCase().contains( "truetype" )
-											|| line.toLowerCase().contains( "unicode" )
-											|| line.toLowerCase().contains( "cid" )
-											|| line.toLowerCase().contains( "charset" ) ) {
-										if ( callasD.toLowerCase().contains( line.toLowerCase() ) ) {
-											// Fehlermeldung bereits erfasst -> keine Aktion
+									if ( line.toLowerCase()
+											.contains( "schrift" )
+											|| line.toLowerCase()
+													.contains( "police" )
+											|| line.toLowerCase()
+													.contains( "font" )
+											|| line.toLowerCase()
+													.contains( "gly" )
+											|| line.toLowerCase()
+													.contains( "truetype" )
+											|| line.toLowerCase()
+													.contains( "unicode" )
+											|| line.toLowerCase()
+													.contains( "cid" )
+											|| line.toLowerCase()
+													.contains( "charset" ) ) {
+										if ( callasD.toLowerCase().contains(
+												line.toLowerCase() ) ) {
+											// Fehlermeldung bereits erfasst ->
+											// keine Aktion
 										} else {
 											callasD = callasD
-													+ getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_PDFA )
-													+ "<Message>" + line + "</Message></Error>";
+													+ getTextResourceService()
+															.getText( locale,
+																	MESSAGE_XML_MODUL_D_PDFA )
+													+ "<Message>" + line
+													+ "</Message></Error>";
 										}
 
-									} else if ( line.toLowerCase().contains( "grafiken" )
-											|| line.toLowerCase().contains( "graphique" )
-											|| line.toLowerCase().contains( "graphic" )
-											|| line.toLowerCase().contains( "image" )
-											|| line.toLowerCase().contains( "bild" )
-											|| line.toLowerCase().contains( "icc" )
-											|| line.toLowerCase().contains( "color" )
-											|| line.toLowerCase().contains( "couleur" )
-											|| line.toLowerCase().contains( "farb" )
-											|| line.toLowerCase().contains( "rgb" )
-											|| line.toLowerCase().contains( "rvb" )
-											|| line.toLowerCase().contains( "cmyk" )
-											|| line.toLowerCase().contains( "cmjn" )
-											|| line.toLowerCase().contains( "outputintent" )
-											|| line.toLowerCase().contains( "jpeg2000" )
-											|| line.toLowerCase().contains( "devicegray" )
-											|| line.toLowerCase().contains( "tr2" ) ) {
-										if ( callasC.toLowerCase().contains( line.toLowerCase() ) ) {
-											// Fehlermeldung bereits erfasst -> keine Aktion
+									} else if ( line.toLowerCase()
+											.contains( "grafiken" )
+											|| line.toLowerCase()
+													.contains( "graphique" )
+											|| line.toLowerCase()
+													.contains( "graphic" )
+											|| line.toLowerCase()
+													.contains( "image" )
+											|| line.toLowerCase()
+													.contains( "bild" )
+											|| line.toLowerCase()
+													.contains( "icc" )
+											|| line.toLowerCase()
+													.contains( "color" )
+											|| line.toLowerCase()
+													.contains( "couleur" )
+											|| line.toLowerCase()
+													.contains( "farb" )
+											|| line.toLowerCase()
+													.contains( "rgb" )
+											|| line.toLowerCase()
+													.contains( "rvb" )
+											|| line.toLowerCase()
+													.contains( "cmyk" )
+											|| line.toLowerCase()
+													.contains( "cmjn" )
+											|| line.toLowerCase()
+													.contains( "outputintent" )
+											|| line.toLowerCase()
+													.contains( "jpeg2000" )
+											|| line.toLowerCase()
+													.contains( "devicegray" )
+											|| line.toLowerCase()
+													.contains( "tr2" ) ) {
+										if ( callasC.toLowerCase().contains(
+												line.toLowerCase() ) ) {
+											// Fehlermeldung bereits erfasst ->
+											// keine Aktion
 										} else {
 											callasC = callasC
-													+ getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_PDFA )
-													+ "<Message>" + line + "</Message></Error>";
+													+ getTextResourceService()
+															.getText( locale,
+																	MESSAGE_XML_MODUL_C_PDFA )
+													+ "<Message>" + line
+													+ "</Message></Error>";
 										}
 
-									} else if ( line.toLowerCase().contains( "zugaenglich" )
-											|| line.toLowerCase().contains( "disponibi" )
-											|| line.toLowerCase().contains( "accessibi" )
-											|| line.toLowerCase().contains( "markinfo" )
-											|| line.toLowerCase().contains( "structree" )
-											|| line.toLowerCase().contains( "structure tree root" )
-											|| line.toLowerCase().contains( "strukturbaum" ) ) {
-										if ( callasI.toLowerCase().contains( line.toLowerCase() ) ) {
-											// Fehlermeldung bereits erfasst -> keine Aktion
+									} else if ( line.toLowerCase()
+											.contains( "zugaenglich" )
+											|| line.toLowerCase()
+													.contains( "disponibi" )
+											|| line.toLowerCase()
+													.contains( "accessibi" )
+											|| line.toLowerCase()
+													.contains( "markinfo" )
+											|| line.toLowerCase()
+													.contains( "structree" )
+											|| line.toLowerCase().contains(
+													"structure tree root" )
+											|| line.toLowerCase().contains(
+													"strukturbaum" ) ) {
+										if ( callasI.toLowerCase().contains(
+												line.toLowerCase() ) ) {
+											// Fehlermeldung bereits erfasst ->
+											// keine Aktion
 										} else {
 											callasI = callasI
-													+ getTextResourceService().getText( locale, MESSAGE_XML_MODUL_I_PDFA )
-													+ "<Message>" + line + "</Message></Error>";
+													+ getTextResourceService()
+															.getText( locale,
+																	MESSAGE_XML_MODUL_I_PDFA )
+													+ "<Message>" + line
+													+ "</Message></Error>";
 										}
 
-									} else if ( line.toLowerCase().contains( "struktur" )
-											|| line.toLowerCase().contains( "ebenen" )
-											|| line.toLowerCase().contains( "structure" )
-											|| line.toLowerCase().contains( "lzw" )
-											|| line.toLowerCase().contains( " eol" ) ) {
-										if ( callasB.toLowerCase().contains( line.toLowerCase() ) ) {
-											// Fehlermeldung bereits erfasst -> keine Aktion
+									} else if ( line.toLowerCase()
+											.contains( "struktur" )
+											|| line.toLowerCase()
+													.contains( "ebenen" )
+											|| line.toLowerCase()
+													.contains( "structure" )
+											|| line.toLowerCase()
+													.contains( "lzw" )
+											|| line.toLowerCase()
+													.contains( " eol" ) ) {
+										if ( callasB.toLowerCase().contains(
+												line.toLowerCase() ) ) {
+											// Fehlermeldung bereits erfasst ->
+											// keine Aktion
 										} else {
 											callasB = callasB
-													+ getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_PDFA )
-													+ "<Message>" + line + "</Message></Error>";
+													+ getTextResourceService()
+															.getText( locale,
+																	MESSAGE_XML_MODUL_B_PDFA )
+													+ "<Message>" + line
+													+ "</Message></Error>";
 										}
 
-									} else if ( line.toLowerCase().contains( "metad" )
-											|| line.toLowerCase().contains( "xmp" ) ) {
-										if ( callasH.toLowerCase().contains( line.toLowerCase() ) ) {
-											// Fehlermeldung bereits erfasst -> keine Aktion
+									} else if ( line.toLowerCase()
+											.contains( "metad" )
+											|| line.toLowerCase()
+													.contains( "xmp" ) ) {
+										if ( callasH.toLowerCase().contains(
+												line.toLowerCase() ) ) {
+											// Fehlermeldung bereits erfasst ->
+											// keine Aktion
 										} else {
 											callasH = callasH
-													+ getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_PDFA )
-													+ "<Message>" + line + "</Message></Error>";
+													+ getTextResourceService()
+															.getText( locale,
+																	MESSAGE_XML_MODUL_H_PDFA )
+													+ "<Message>" + line
+													+ "</Message></Error>";
 										}
 
-									} else if ( line.toLowerCase().contains( "transparen" ) ) {
-										if ( callasE.toLowerCase().contains( line.toLowerCase() ) ) {
-											// Fehlermeldung bereits erfasst -> keine Aktion
+									} else if ( line.toLowerCase()
+											.contains( "transparen" ) ) {
+										if ( callasE.toLowerCase().contains(
+												line.toLowerCase() ) ) {
+											// Fehlermeldung bereits erfasst ->
+											// keine Aktion
 										} else {
 											callasE = callasE
-													+ getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_PDFA )
-													+ "<Message>" + line + "</Message></Error>";
+													+ getTextResourceService()
+															.getText( locale,
+																	MESSAGE_XML_MODUL_E_PDFA )
+													+ "<Message>" + line
+													+ "</Message></Error>";
 										}
 
-									} else if ( line.toLowerCase().contains( "aktion" )
-											|| line.toLowerCase().contains( "action" )
-											|| line.toLowerCase().contains( "aa" )
-											|| line.toLowerCase().contains( "javascript" ) ) {
-										if ( callasG.toLowerCase().contains( line.toLowerCase() ) ) {
-											// Fehlermeldung bereits erfasst -> keine Aktion
+									} else if ( line.toLowerCase()
+											.contains( "aktion" )
+											|| line.toLowerCase()
+													.contains( "action" )
+											|| line.toLowerCase()
+													.contains( "aa" )
+											|| line.toLowerCase().contains(
+													"javascript" ) ) {
+										if ( callasG.toLowerCase().contains(
+												line.toLowerCase() ) ) {
+											// Fehlermeldung bereits erfasst ->
+											// keine Aktion
 										} else {
 											callasG = callasG
-													+ getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_PDFA )
-													+ "<Message>" + line + "</Message></Error>";
+													+ getTextResourceService()
+															.getText( locale,
+																	MESSAGE_XML_MODUL_G_PDFA )
+													+ "<Message>" + line
+													+ "</Message></Error>";
 										}
 
-									} else if ( line.toLowerCase().contains( "annotation" )
-											|| line.toLowerCase().contains( "embedd" )
-											|| line.toLowerCase().contains( "komment" )
-											|| line.toLowerCase().contains( "comment" )
-											|| line.toLowerCase().contains( "structure" )
-											|| line.toLowerCase().contains( "drucke" )
-											|| line.toLowerCase().contains( "print" )
-											|| line.toLowerCase().contains( "imprim" )
-											|| line.toLowerCase().contains( "eingebette" )
-											|| line.toLowerCase().contains( "incorpor" ) ) {
-										if ( callasF.toLowerCase().contains( line.toLowerCase() ) ) {
-											// Fehlermeldung bereits erfasst -> keine Aktion
+									} else if ( line.toLowerCase()
+											.contains( "annotation" )
+											|| line.toLowerCase()
+													.contains( "embedd" )
+											|| line.toLowerCase()
+													.contains( "komment" )
+											|| line.toLowerCase()
+													.contains( "comment" )
+											|| line.toLowerCase()
+													.contains( "structure" )
+											|| line.toLowerCase()
+													.contains( "drucke" )
+											|| line.toLowerCase()
+													.contains( "print" )
+											|| line.toLowerCase()
+													.contains( "imprim" )
+											|| line.toLowerCase()
+													.contains( "eingebette" )
+											|| line.toLowerCase()
+													.contains( "incorpor" ) ) {
+										if ( callasF.toLowerCase().contains(
+												line.toLowerCase() ) ) {
+											// Fehlermeldung bereits erfasst ->
+											// keine Aktion
 										} else {
 											callasF = callasF
-													+ getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_PDFA )
-													+ "<Message>" + line + "</Message></Error>";
+													+ getTextResourceService()
+															.getText( locale,
+																	MESSAGE_XML_MODUL_F_PDFA )
+													+ "<Message>" + line
+													+ "</Message></Error>";
 										}
 
 									} else {
-										if ( callasA.toLowerCase().contains( line.toLowerCase() ) ) {
-											// Fehlermeldung bereits erfasst -> keine Aktion
+										if ( callasA.toLowerCase().contains(
+												line.toLowerCase() ) ) {
+											// Fehlermeldung bereits erfasst ->
+											// keine Aktion
 										} else {
 											callasA = callasA
-													+ getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-													+ "<Message>" + line + "</Message></Error>";
+													+ getTextResourceService()
+															.getText( locale,
+																	MESSAGE_XML_MODUL_A_PDFA )
+													+ "<Message>" + line
+													+ "</Message></Error>";
 										}
 									}
 								} else if ( line.startsWith( "Error:" ) ) {
 									line = line.substring( 7 );
 									line = line + " [callas] ";
-									if ( callasA.toLowerCase().contains( line.toLowerCase() ) ) {
-										// Fehlermeldung bereits erfasst -> keine Aktion
+									if ( callasA.toLowerCase()
+											.contains( line.toLowerCase() ) ) {
+										// Fehlermeldung bereits erfasst ->
+										// keine Aktion
 									} else {
 										callasA = callasA
-												+ getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-												+ "<Message>" + line + "</Message></Error>";
+												+ getTextResourceService()
+														.getText( locale,
+																MESSAGE_XML_MODUL_A_PDFA )
+												+ "<Message>" + line
+												+ "</Message></Error>";
 									}
 								} else if ( line.startsWith( "Error" ) ) {
 									line = line.substring( 11 );
 									line = line + " [callas] ";
-									if ( callasA.toLowerCase().contains( line.toLowerCase() ) ) {
-										// Fehlermeldung bereits erfasst -> keine Aktion
+									if ( callasA.toLowerCase()
+											.contains( line.toLowerCase() ) ) {
+										// Fehlermeldung bereits erfasst ->
+										// keine Aktion
 									} else {
 										callasA = callasA
-												+ getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-												+ "<Message>" + line + "</Message></Error>";
+												+ getTextResourceService()
+														.getText( locale,
+																MESSAGE_XML_MODUL_A_PDFA )
+												+ "<Message>" + line
+												+ "</Message></Error>";
 									}
 								}
 							}
@@ -2029,15 +2654,19 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 						} catch ( FileNotFoundException e ) {
 
 							Logtxt.logtxt( logFile,
-									getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-											+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+									getTextResourceService().getText( locale,
+											MESSAGE_XML_MODUL_A_PDFA )
+											+ getTextResourceService().getText(
+													locale, ERROR_XML_UNKNOWN,
 													"FileNotFoundException" ) );
 							return false;
 						} catch ( Exception e ) {
 
 							Logtxt.logtxt( logFile,
-									getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-											+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN,
+									getTextResourceService().getText( locale,
+											MESSAGE_XML_MODUL_A_PDFA )
+											+ getTextResourceService().getText(
+													locale, ERROR_XML_UNKNOWN,
 													(e.getMessage() + " 1") ) ); //
 							return false;
 						}
@@ -2049,15 +2678,19 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					if ( exponent1 ) {
 
 						Logtxt.logtxt( logFile,
-								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-										+ getTextResourceService().getText( locale, ERROR_XML_AI_1,
+								getTextResourceService().getText( locale,
+										MESSAGE_XML_MODUL_A_PDFA )
+										+ getTextResourceService().getText(
+												locale, ERROR_XML_AI_1,
 												"PDF Tools: iCategory_1" ) );
 					}
 					if ( exponent2 ) {
 
 						Logtxt.logtxt( logFile,
-								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-										+ getTextResourceService().getText( locale, ERROR_XML_AI_2,
+								getTextResourceService().getText( locale,
+										MESSAGE_XML_MODUL_A_PDFA )
+										+ getTextResourceService().getText(
+												locale, ERROR_XML_AI_2,
 												"PDF Tools: iCategory_2" ) );
 						return false;
 					}
@@ -2070,22 +2703,28 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					if ( exponent0 ) {
 
 						Logtxt.logtxt( logFile,
-								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_PDFA )
-										+ getTextResourceService().getText( locale, ERROR_XML_AI_0,
+								getTextResourceService().getText( locale,
+										MESSAGE_XML_MODUL_B_PDFA )
+										+ getTextResourceService().getText(
+												locale, ERROR_XML_AI_0,
 												"PDF Tools: iCategory_0" ) );
 					}
 					if ( exponent7 ) {
 
 						Logtxt.logtxt( logFile,
-								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_PDFA )
-										+ getTextResourceService().getText( locale, ERROR_XML_AI_7,
+								getTextResourceService().getText( locale,
+										MESSAGE_XML_MODUL_B_PDFA )
+										+ getTextResourceService().getText(
+												locale, ERROR_XML_AI_7,
 												"PDF Tools: iCategory_7" ) );
 					}
 					if ( exponent18 ) {
 
 						Logtxt.logtxt( logFile,
-								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_B_PDFA )
-										+ getTextResourceService().getText( locale, ERROR_XML_AI_18,
+								getTextResourceService().getText( locale,
+										MESSAGE_XML_MODUL_B_PDFA )
+										+ getTextResourceService().getText(
+												locale, ERROR_XML_AI_18,
 												"PDF Tools: iCategory_18" ) );
 					}
 					Logtxt.logtxt( logFile, pdftoolsB );
@@ -2097,29 +2736,37 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					if ( exponent3 ) {
 
 						Logtxt.logtxt( logFile,
-								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_PDFA )
-										+ getTextResourceService().getText( locale, ERROR_XML_AI_3,
+								getTextResourceService().getText( locale,
+										MESSAGE_XML_MODUL_C_PDFA )
+										+ getTextResourceService().getText(
+												locale, ERROR_XML_AI_3,
 												"PDF Tools: iCategory_3" ) );
 					}
 					if ( exponent4 ) {
 
 						Logtxt.logtxt( logFile,
-								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_PDFA )
-										+ getTextResourceService().getText( locale, ERROR_XML_AI_4,
+								getTextResourceService().getText( locale,
+										MESSAGE_XML_MODUL_C_PDFA )
+										+ getTextResourceService().getText(
+												locale, ERROR_XML_AI_4,
 												"PDF Tools: iCategory_4" ) );
 					}
 					if ( exponent5 ) {
 
 						Logtxt.logtxt( logFile,
-								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_PDFA )
-										+ getTextResourceService().getText( locale, ERROR_XML_AI_5,
+								getTextResourceService().getText( locale,
+										MESSAGE_XML_MODUL_C_PDFA )
+										+ getTextResourceService().getText(
+												locale, ERROR_XML_AI_5,
 												"PDF Tools: iCategory_5" ) );
 					}
 					if ( exponent6 ) {
 
 						Logtxt.logtxt( logFile,
-								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_C_PDFA )
-										+ getTextResourceService().getText( locale, ERROR_XML_AI_6,
+								getTextResourceService().getText( locale,
+										MESSAGE_XML_MODUL_C_PDFA )
+										+ getTextResourceService().getText(
+												locale, ERROR_XML_AI_6,
 												"PDF Tools: iCategory_6" ) );
 					}
 					Logtxt.logtxt( logFile, pdftoolsC );
@@ -2131,15 +2778,19 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					if ( exponent8 ) {
 
 						Logtxt.logtxt( logFile,
-								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_PDFA )
-										+ getTextResourceService().getText( locale, ERROR_XML_AI_8,
+								getTextResourceService().getText( locale,
+										MESSAGE_XML_MODUL_D_PDFA )
+										+ getTextResourceService().getText(
+												locale, ERROR_XML_AI_8,
 												"PDF Tools: iCategory_8" ) );
 					}
 					if ( exponent9 ) {
 
 						Logtxt.logtxt( logFile,
-								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_D_PDFA )
-										+ getTextResourceService().getText( locale, ERROR_XML_AI_9,
+								getTextResourceService().getText( locale,
+										MESSAGE_XML_MODUL_D_PDFA )
+										+ getTextResourceService().getText(
+												locale, ERROR_XML_AI_9,
 												"PDF Tools: iCategory_9" ) );
 					}
 					Logtxt.logtxt( logFile, pdftoolsD );
@@ -2151,8 +2802,10 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					if ( exponent10 ) {
 
 						Logtxt.logtxt( logFile,
-								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_E_PDFA )
-										+ getTextResourceService().getText( locale, ERROR_XML_AI_10,
+								getTextResourceService().getText( locale,
+										MESSAGE_XML_MODUL_E_PDFA )
+										+ getTextResourceService().getText(
+												locale, ERROR_XML_AI_10,
 												"PDF Tools: iCategory_10" ) );
 					}
 					Logtxt.logtxt( logFile, pdftoolsE );
@@ -2164,29 +2817,37 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					if ( exponent11 ) {
 
 						Logtxt.logtxt( logFile,
-								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_PDFA )
-										+ getTextResourceService().getText( locale, ERROR_XML_AI_11,
+								getTextResourceService().getText( locale,
+										MESSAGE_XML_MODUL_F_PDFA )
+										+ getTextResourceService().getText(
+												locale, ERROR_XML_AI_11,
 												"PDF Tools: iCategory_11" ) );
 					}
 					if ( exponent12 ) {
 
 						Logtxt.logtxt( logFile,
-								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_PDFA )
-										+ getTextResourceService().getText( locale, ERROR_XML_AI_12,
+								getTextResourceService().getText( locale,
+										MESSAGE_XML_MODUL_F_PDFA )
+										+ getTextResourceService().getText(
+												locale, ERROR_XML_AI_12,
 												"PDF Tools: iCategory_12" ) );
 					}
 					if ( exponent13 ) {
 
 						Logtxt.logtxt( logFile,
-								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_PDFA )
-										+ getTextResourceService().getText( locale, ERROR_XML_AI_13,
+								getTextResourceService().getText( locale,
+										MESSAGE_XML_MODUL_F_PDFA )
+										+ getTextResourceService().getText(
+												locale, ERROR_XML_AI_13,
 												"PDF Tools: iCategory_13" ) );
 					}
 					if ( exponent14 ) {
 
 						Logtxt.logtxt( logFile,
-								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_F_PDFA )
-										+ getTextResourceService().getText( locale, ERROR_XML_AI_14,
+								getTextResourceService().getText( locale,
+										MESSAGE_XML_MODUL_F_PDFA )
+										+ getTextResourceService().getText(
+												locale, ERROR_XML_AI_14,
 												"PDF Tools: iCategory_14" ) );
 					}
 					Logtxt.logtxt( logFile, pdftoolsF );
@@ -2198,8 +2859,10 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					if ( exponent15 ) {
 
 						Logtxt.logtxt( logFile,
-								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_G_PDFA )
-										+ getTextResourceService().getText( locale, ERROR_XML_AI_15,
+								getTextResourceService().getText( locale,
+										MESSAGE_XML_MODUL_G_PDFA )
+										+ getTextResourceService().getText(
+												locale, ERROR_XML_AI_15,
 												"PDF Tools: iCategory_15" ) );
 					}
 					Logtxt.logtxt( logFile, pdftoolsG );
@@ -2211,8 +2874,10 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					if ( exponent16 ) {
 
 						Logtxt.logtxt( logFile,
-								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_H_PDFA )
-										+ getTextResourceService().getText( locale, ERROR_XML_AI_16,
+								getTextResourceService().getText( locale,
+										MESSAGE_XML_MODUL_H_PDFA )
+										+ getTextResourceService().getText(
+												locale, ERROR_XML_AI_16,
 												"PDF Tools: iCategory_16" ) );
 					}
 					Logtxt.logtxt( logFile, pdftoolsH );
@@ -2224,8 +2889,10 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					if ( exponent17 ) {
 
 						Logtxt.logtxt( logFile,
-								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_I_PDFA )
-										+ getTextResourceService().getText( locale, ERROR_XML_AI_17,
+								getTextResourceService().getText( locale,
+										MESSAGE_XML_MODUL_I_PDFA )
+										+ getTextResourceService().getText(
+												locale, ERROR_XML_AI_17,
 												"PDF Tools: iCategory_17" ) );
 					}
 					Logtxt.logtxt( logFile, pdftoolsI );
@@ -2234,8 +2901,10 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					if ( !isValidJ ) {
 
 						Logtxt.logtxt( logFile,
-								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
-										+ getTextResourceService().getText( locale, ERROR_XML_J_JBIG2 ) );
+								getTextResourceService().getText( locale,
+										MESSAGE_XML_MODUL_J_PDFA )
+										+ getTextResourceService().getText(
+												locale, ERROR_XML_J_JBIG2 ) );
 					}
 
 					/** Modul K **/
@@ -2257,8 +2926,10 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					if ( !isValidJ ) {
 
 						Logtxt.logtxt( logFile,
-								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
-										+ getTextResourceService().getText( locale, ERROR_XML_J_JBIG2 ) );
+								getTextResourceService().getText( locale,
+										MESSAGE_XML_MODUL_J_PDFA )
+										+ getTextResourceService().getText(
+												locale, ERROR_XML_J_JBIG2 ) );
 					}
 
 					/** Modul K **/
@@ -2281,8 +2952,10 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					} else {
 
 						Logtxt.logtxt( logFile,
-								getTextResourceService().getText( locale, MESSAGE_XML_MODUL_J_PDFA )
-										+ getTextResourceService().getText( locale, ERROR_XML_J_JBIG2 ) );
+								getTextResourceService().getText( locale,
+										MESSAGE_XML_MODUL_J_PDFA )
+										+ getTextResourceService().getText(
+												locale, ERROR_XML_J_JBIG2 ) );
 					}
 				}
 
@@ -2292,8 +2965,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					docPdf.destroyObject();
 					docPdf = null;
 					PdfValidatorAPI.terminate();
-					File internLicenseFile = new File(
-							directoryOfLogfile + File.separator + ".useKOSTValLicense.txt" );
+					File internLicenseFile = new File( directoryOfLogfile
+							+ File.separator + ".useKOSTValLicense.txt" );
 					if ( internLicenseFile.exists() ) {
 						// interne Lizenz verwendet. Lizenz ueberschreiben
 						internLicenseFile.delete();
@@ -2321,8 +2994,10 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 				reportOriginal.delete();
 			}
 		} catch ( Exception e ) {
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale, MESSAGE_XML_MODUL_A_PDFA )
-					+ getTextResourceService().getText( locale, ERROR_XML_UNKNOWN, e.getMessage() + " _" ) );
+			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
+					MESSAGE_XML_MODUL_A_PDFA )
+					+ getTextResourceService().getText( locale,
+							ERROR_XML_UNKNOWN, e.getMessage() + " _" ) );
 		}
 		try {
 			PdfValidatorAPI.terminate();
@@ -2330,8 +3005,8 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 			// Destroy the object and set to null
 			docPdf.destroyObject();
 			docPdf = null;
-			File internLicenseFile = new File(
-					directoryOfLogfile + File.separator + ".useKOSTValLicense.txt" );
+			File internLicenseFile = new File( directoryOfLogfile
+					+ File.separator + ".useKOSTValLicense.txt" );
 			if ( internLicenseFile.exists() ) {
 				// interne Lizenz verwendet. Lizenz ueberschreiben
 				internLicenseFile.delete();

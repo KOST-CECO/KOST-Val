@@ -1,5 +1,5 @@
 /* == KOST-Val ==================================================================================
- * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG-Files and
+ * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
  * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
@@ -32,7 +32,7 @@ import ch.kostceco.tools.kostval.logging.MessageConstants;
 import ch.kostceco.tools.kostval.service.TextResourceService;
 
 /**
- * Dies ist die Starter-Klasse, verantwortlich f�r das Initialisieren des
+ * Dies ist die Starter-Klasse, verantwortlich fuer das Initialisieren des
  * Controllers, des Loggings und das Parsen der Start-Parameter.
  * 
  * @author Rc Claire Roethlisberger, KOST-CECO
@@ -64,8 +64,7 @@ public class CmdKOSTVal implements MessageConstants
 	 * 
 	 * args[2] Sprache "--de" / "--fr" / "--en"
 	 * 
-	 * args[3] Logtyp "--xml" / "--min" (TODO nur valid oder invalid) / "--max"
-	 * (= xml+verbose)
+	 * args[3] Logtyp "--xml" / "--min" / "--max" (= xml+verbose)
 	 * 
 	 * 2 (--de) und 3 (--xml) sind beide optional (Standardwert)
 	 * 
@@ -106,7 +105,7 @@ public class CmdKOSTVal implements MessageConstants
 		String arg2 = "";
 		String arg3 = "";
 
-		String versionKostVal = "2.1.2.0";
+		String versionKostVal = "2.1.3.0";
 
 		// Standardwerte bei fehlenden Parameter eingeben
 		if ( args.length == 2 ) {
@@ -114,29 +113,27 @@ public class CmdKOSTVal implements MessageConstants
 			arg3 = "--xml";
 			args = new String[] { arg0, arg1, arg2, arg3 };
 		} else if ( args.length == 3 ) {
-			if ( args[2].equalsIgnoreCase( "--de" ) ) {
+			if ( args[2].contains( "de" ) ) {
 				arg2 = "--de";
 				arg3 = "--xml";
-			} else if ( args[2].equalsIgnoreCase( "--fr" ) ) {
+			} else if ( args[2].contains( "fr" ) ) {
 				arg2 = "--fr";
 				arg3 = "--xml";
-			} else if ( args[2].equalsIgnoreCase( "--en" ) ) {
+			} else if ( args[2].contains( "en" ) ) {
 				arg2 = "--en";
 				arg3 = "--xml";
-			} else if ( args[2].equalsIgnoreCase( "--xml" ) ) {
+			} else if ( args[2].contains( "xml" ) ) {
 				arg2 = "--" + localeSt;
 				arg3 = "--xml";
-			} else if ( args[2].equalsIgnoreCase( "--min" ) ) {
+			} else if ( args[2].contains( "min" ) ) {
 				arg2 = "--" + localeSt;
 				arg3 = "--min";
-			} else if ( args[2].equalsIgnoreCase( "--max" ) ) {
+			} else if ( args[2].contains( "max" ) ) {
 				arg2 = "--" + localeSt;
 				arg3 = "--max";
 			} else {
-				System.out.println( cmdkostval.getTextResourceService()
-						.getText( ERROR_PARAMETER_USAGE ) );
-				context.close();
-				System.exit( 1 );
+				arg2 = "--" + localeSt;
+				arg3 = "--xml";
 			}
 			args = new String[] { arg0, arg1, arg2, arg3 };
 		} else if ( args.length == 4 ) {
@@ -154,6 +151,45 @@ public class CmdKOSTVal implements MessageConstants
 		}
 
 		/*
+		 * Die Eingabe sollte jetzt aus diesen 4 Parameter bestehen:
+		 * 
+		 * args[0] Validierungstyp "--sip" / "--format" / "--onlysip"
+		 * 
+		 * args[1] Pfad zur Val-File
+		 * 
+		 * args[2] Sprache "--de" / "--fr" / "--en"
+		 * 
+		 * args[3] Logtyp "--xml" / "--min" / "--max" (= xml+verbose)
+		 * 
+		 */
+		Boolean booArgs = true;
+		Boolean booArg0 = false;
+		Boolean booArg2 = false;
+		Boolean booArg3 = false;
+		if ( args[0].equals( "--sip" ) || args[0].equals( "--format" )
+				|| args[0].equals( "--onlysip" ) ) {
+			booArg0 = true;
+		}
+		if ( args[2].equals( "--de" ) || args[2].equals( "--fr" )
+				|| args[2].equals( "--en" ) ) {
+			booArg2 = true;
+		}
+		if ( args[3].equals( "--xml" ) || args[3].equals( "--min" )
+				|| args[3].equals( "--max" ) ) {
+			booArg3 = true;
+		}
+		if ( booArg0 && booArg2 && booArg3 ) {
+			booArgs = true;
+		}
+
+		if ( !booArgs ) {
+			System.out.println( cmdkostval.getTextResourceService()
+					.getText( ERROR_PARAMETER_USAGE ) );
+			context.close();
+			System.exit( 1 );
+		}
+
+		/*
 		 * Kontrolle der wichtigsten Eigenschaften: Log-Verzeichnis,
 		 * Arbeitsverzeichnis, Java, jhove Configuration,
 		 * Konfigurationsverzeichnis, path.tmp
@@ -162,17 +198,21 @@ public class CmdKOSTVal implements MessageConstants
 				.getBean( "controllerInit" );
 		boolean init;
 		try {
-			String path = new java.io.File( KOSTVal.class.getProtectionDomain()
-					.getCodeSource().getLocation().getPath() )
-							.getAbsolutePath();
-			String locationOfJarPath = path;
-			String dirOfJarPath = locationOfJarPath;
-			if ( locationOfJarPath.endsWith( ".jar" )
-					|| locationOfJarPath.endsWith( ".exe" )
-					|| locationOfJarPath.endsWith( "." ) ) {
-				File file = new File( locationOfJarPath );
-				dirOfJarPath = file.getParent();
-			}
+			/*
+			 * dirOfJarPath damit auch absolute Pfade kein Problem sind Dies ist
+			 * eine generelle Aufgabe in allen Modulen. Zuerst immer
+			 * dirOfJarPath ermitteln und dann alle Pfade mit dirOfJarPath +
+			 * File.separator + erweitern.
+			 */
+			File pathJarFile20 = new File( ClassLoader.getSystemClassLoader()
+					.getResource( "." ).getPath() );
+			/*
+			 * wennn im Pfad ein Leerschlag ist, muss er noch normalisiert
+			 * werden
+			 */
+			String dirOfJarPath = pathJarFile20.getAbsolutePath();
+			dirOfJarPath = dirOfJarPath.replaceAll( "%20", " " );
+			pathJarFile20 = new File( dirOfJarPath );
 			init = controllerInit.init( locale, dirOfJarPath, versionKostVal );
 			if ( !init ) {
 				// Fehler: es wird abgebrochen
