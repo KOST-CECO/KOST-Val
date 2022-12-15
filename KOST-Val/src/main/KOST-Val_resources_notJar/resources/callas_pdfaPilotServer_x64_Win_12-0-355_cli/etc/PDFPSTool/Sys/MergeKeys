@@ -1,0 +1,56 @@
+%!PS-Adobe-3.0 Resource-File
+%%BeginResource: file (Sys/MergeKeys)
+%%Title: (Sys/MergeKeys)
+%%Version: 3010.01
+%%Copyright: ------------------------------------------------------------
+%%Copyright: Copyright 1990-1998 Adobe Systems Incorporated.
+%%Copyright: All rights reserved.
+%%Copyright:
+%%Copyright: Patents Pending
+%%Copyright:
+%%Copyright: NOTICE: All information contained herein is the property
+%%Copyright: of Adobe Systems Incorporated. Many of the intellectual
+%%Copyright: and technical concepts contained herein are proprietary
+%%Copyright: to Adobe, are protected as trade secrets, and are made
+%%Copyright: available only to Adobe licensees for their internal use.
+%%Copyright: Any reproduction or dissemination of this software is
+%%Copyright: strictly forbidden unless prior written permission is
+%%Copyright: obtained from Adobe.
+%%Copyright:
+%%Copyright: PostScript and Display PostScript are trademarks of
+%%Copyright: Adobe Systems Incorporated which may be registered in
+%%Copyright: certain jurisdictions.
+%%Copyright: ------------------------------------------------------------
+%%EndComments
+{userdict/svobj save put{1183615869 internaldict/accesson get true exch exec
+userdict/PGFKeysSupp 1000 dict put userdict/tstr 128 string put userdict/d
+(Sys/PGFKeys.xxxxxxxx)serialnumber 16 2 index 12 8 getinterval cvrs pop
+PrependRoot dup length string copy put d status{pop pop pop pop d run
+PGFKeysSupp begin $PGFKeys{def}forall end d(temp/OPGFKeys.xxxxxxxx)
+serialnumber 16 2 index 14 8 getinterval cvrs pop PrependRoot dup length
+string copy dup{deletefile}stopped{pop}if renamefile}if userdict/s
+(temp/PGFKeys.xxxxxxxx)serialnumber 16 2 index 13 8 getinterval cvrs pop
+PrependRoot dup length string copy put s status{pop pop pop pop s run
+PGFKeysSupp begin $PGFKeys{def}forall end s(temp/APGFKeys.xxxxxxxx)
+serialnumber 16 2 index 14 8 getinterval cvrs pop PrependRoot dup length
+string copy dup{deletefile}stopped{pop}if renamefile}if userdict/s
+(Sys/PGFKeysL2.xxxxxxxx)serialnumber 16 2 index 14 8 getinterval cvrs pop
+PrependRoot dup length string copy put s status{pop pop pop pop s run
+PGFKeysSupp begin $PGFKeys{def}forall end s(temp/OPGFKeysL2.xxxxxxxx)
+serialnumber 16 2 index 16 8 getinterval cvrs pop PrependRoot dup length
+string copy dup{deletefile}stopped{pop}if renamefile}if userdict/f d(w)file
+put f(%!PS-Adobe-2.0
+)writestring f(%%Title: )writestring f d 4 16 getinterval writestring f(
+
+)writestring f PGFKeysSupp length tstr cvs writestring f( dict begin
+)writestring PGFKeysSupp{f(/)writestring exch tstr cvs f exch writestring f
+(
+<)writestring f exch writehexstring f(>
+readonly def
+)writestring}forall f(currentdict
+)writestring f(end
+)writestring f(userdict exch /$PGFKeys exch put
+)writestring f closefile}stopped{(*** Unable to merge font keys ***
+)print flush}if userdict/svobj get restore}exec
+%%EndResource
+%%EOF

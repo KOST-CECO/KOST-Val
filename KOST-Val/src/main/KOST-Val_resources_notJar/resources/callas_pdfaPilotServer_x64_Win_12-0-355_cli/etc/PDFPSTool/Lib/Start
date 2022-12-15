@@ -1,0 +1,136 @@
+%!PS-Adobe-3.0 Resource-File
+%%BeginResource: file (Lib/Start)
+%%Title: (Lib/Start)
+%%Version: 3010.01
+%%Copyright: ------------------------------------------------------------
+%%Copyright: Copyright 1990-1998 Adobe Systems Incorporated.
+%%Copyright: All rights reserved.
+%%Copyright:
+%%Copyright: Patents Pending
+%%Copyright:
+%%Copyright: NOTICE: All information contained herein is the property
+%%Copyright: of Adobe Systems Incorporated. Many of the intellectual
+%%Copyright: and technical concepts contained herein are proprietary
+%%Copyright: to Adobe, are protected as trade secrets, and are made
+%%Copyright: available only to Adobe licensees for their internal use.
+%%Copyright: Any reproduction or dissemination of this software is
+%%Copyright: strictly forbidden unless prior written permission is
+%%Copyright: obtained from Adobe.
+%%Copyright:
+%%Copyright: PostScript and Display PostScript are trademarks of
+%%Copyright: Adobe Systems Incorporated which may be registered in
+%%Copyright: certain jurisdictions.
+%%Copyright: ------------------------------------------------------------
+%%EndComments
+userdict/cid_runBootup userdict/cid_extensions known{userdict/cid_runBootup
+known{userdict/cid_runBootup get null eq}{true}ifelse}{null}ifelse put
+cid_runBootup true eq{userdict begin/lib_extensions 100 dict def/lib_level2
+systemdict/languagelevel known def lib_level2{lib_extensions begin
+/lib_findresource/findresource load def/lib_defineresource/defineresource load
+def end}if end lib_level2{currentpacking currentglobal false setpacking false
+setglobal}if lib_extensions begin/lib_SetPSFSE{/lib_fontResourceDir systemdict
+/currentsystemparams known{currentsystemparams/FontResourceDir known}{false}
+ifelse{currentsystemparams/FontResourceDir get}{(fonts/)}ifelse def
+/lib_resourceDir systemdict/currentsystemparams known{currentsystemparams
+/GenericResourceDir known}{false}ifelse{currentsystemparams/GenericResourceDir
+get}{(Resource/)}ifelse def/lib_pathSep systemdict/currentsystemparams known{
+currentsystemparams/GenericResourcePathSep known}{false}ifelse{
+currentsystemparams/GenericResourcePathSep get}{(/)}ifelse def/lib_isPSFSE
+lib_resourceDir(%genericresource%)ne def/lib_nonResourceDir lib_isPSFSE{
+lib_resourceDir(Resource/)dup lib_pathSep 8 exch putinterval search{exch pop
+exch pop}{pop()}ifelse}{(%genericresource%)}ifelse def}bind def/lib_vmState 10
+dict def/lib_vmDepth 0 def/lib_packingState 10 dict def/lib_packingDepth 0 def
+/lib_sstr1 256 string def/lib_sstr2 256 string def/lib_strIncrement 128 def
+/lib_buildOCFCompatible true def/lib_forceBuildCompatible false def
+/lib_processingCF false def lib_SetPSFSE/lib_classChange 12 dict dup begin
+/CIDFont null def/CMap null def/CompatibleFont null def/CompatibleCIDFont null
+def/FixCIDInitProcSet null def/FixCMapCategory null def/ProcSet null def
+/charstrings(Charstring)def/encodings(Encoding)def/fsupp(FSupp)def/pgfonts
+(PGFont)def/pgfsupp(PGFSupp)def end def/lib_nativeMode lib_level2{/CIDInitN
+/ProcSet systemdict/resourcestatus get exec{pop 0 eq}{false}ifelse}{false}
+ifelse def/pureNativeMode lib_nativeMode def/lib_cidFS lib_nativeMode{
+/CIDInitN/ProcSet findresource/cid_AvailableFeatures 2 copy known{get exec
+/CIDFS known}{pop pop false}ifelse}{false}ifelse def
+% disable %cid% stodev %
+ /lib_cidFS false def 
+lib_cidFS{1 dict dup
+/CIDFS true put/CIDInitN/ProcSet findresource/cid_SetRequestedFeatures get
+exec}if/lib_fontDepth 0 def/lib_buildCompatibleVM lib_nativeMode not def
+/lib_cmapCDepth 0 def/lib_fixCMapCategoryCDepth 0 def/lib_cidfontCDepth 0 def
+lib_level2{true setpacking}if/lib_hasResourceStatusBug false def
+/lib_vmSaveState{lib_level2{lib_vmState lib_vmDepth currentglobal put
+/lib_vmDepth lib_vmDepth 1 add def setglobal}{pop}ifelse}bind def
+/lib_vmRestoreState{lib_level2{lib_vmDepth 0 gt{/lib_vmDepth lib_vmDepth 1 sub
+def lib_vmState lib_vmDepth get setglobal}if}if}bind def/lib_packingSaveState{
+lib_level2{lib_packingState lib_packingDepth currentpacking put
+/lib_packingDepth lib_packingDepth 1 add def setpacking}{pop}ifelse}bind def
+/lib_packingRestoreState{lib_level2{lib_packingDepth 0 gt{/lib_packingDepth
+lib_packingDepth 1 sub def lib_packingState lib_packingDepth get setpacking}if
+}if}bind def/lib_SaveVMInstances{lib_level2{false lib_vmSaveState
+/lib_categoryDictLocal 0 dict def/lib_category exch def mark{(*){
+/lib_instanceName exch def lib_instanceName lib_category resourcestatus{pop
+dup 0 eq exch 1 eq or{lib_categoryDictLocal lib_instanceName dup lib_category
+findresource put}{lib_hasResourceStatusBug lib_hasResourceForAllBug or{exit}{
+stop}ifelse}ifelse}if}lib_sstr1 lib_category resourceforall}stopped{
+cleartomark}stopped pop true setglobal/lib_categoryDictGlobal 0 dict def mark{
+(*){/lib_instanceName exch def lib_instanceName lib_category resourcestatus{
+pop dup 0 eq exch 1 eq or{lib_categoryDictLocal lib_instanceName 2 copy known{
+get lib_instanceName lib_category findresource ne}{pop pop true}ifelse{
+lib_categoryDictGlobal lib_instanceName dup lib_category findresource put}if}{
+lib_hasResourceStatusBug lib_hasResourceForAllBug or{exit}{stop}ifelse}ifelse}
+if}lib_sstr1 lib_category resourceforall}stopped{cleartomark}stopped pop
+lib_vmRestoreState}{pop}ifelse}bind def/lib_RestoreVMInstances{lib_level2{true
+lib_vmSaveState/lib_category exch def lib_categoryDictGlobal{lib_category
+defineresource pop}forall lib_categoryDictLocal{dup gcheck setglobal
+lib_category defineresource pop}forall currentdict dup/lib_categoryDictLocal
+undef/lib_categoryDictGlobal undef lib_vmRestoreState}{pop}ifelse}bind def
+/lib_ClearToNamedMark{true 2 1 count 3 sub{dup 1 add index mark eq{dup 2 add
+count 1 sub 1 index gt{index 3 index eq{exch pop exch pop{pop}repeat false
+exit}{pop}ifelse}{pop pop exit}ifelse}{pop}ifelse}for{/lib_ClearToNamedMark
+errordict/unmatchedmark get exec stop}if}bind def/lib_Strcpy{currentdict 2
+index 2 copy known{get type/dicttype ne}{pop pop true}ifelse{1 index 4
+lib_level2{currentglobal currentdict gcheck setglobal exch dict exch setglobal
+}{dict}ifelse def}if 1 index load begin/lib_strUsed 0 def/lib_strIncrement
+lib_strIncrement def currentdict/lib_strMaximum known not{/lib_strMaximum -1
+def/lib_strText null def}if end lib_Strcat}bind def/lib_Strcat{dup type
+/nametype eq{lib_sstr1 cvs}if 1 index load begin dup length lib_strUsed add
+dup lib_strMaximum gt{dup lib_strIncrement idiv 1 add lib_strIncrement mul dup
+lib_level2{currentglobal currentdict gcheck setglobal exch string exch
+setglobal lib_strText currentdict/lib_strText undef}{string lib_strText}ifelse
+dup null ne{1 index copy}if pop/lib_strText exch def/lib_strMaximum exch def}
+if exch lib_strText exch lib_strUsed exch putinterval/lib_strUsed exch def end
+}bind def/lib_Strget{load begin lib_strText 0 lib_strUsed getinterval end}bind
+def/lib_ResourceDeviceName{/Category findresource begin lib_sstr1
+ResourceFileName end dup/lib_dstr1(%*%)lib_Strcpy exch lib_Strcat lib_Strget()
+exch true exch{exch{exch pop false}{pop false}ifelse}lib_sstr2 cid_extensions
+/systemdict get/filenameforall get exec pop exch search{exch pop exch pop}if}
+bind def/lib_StrReplace{3 index search{3 index exch lib_Strcat exch pop 3
+index lib_Strcat pop lib_StrReplace}{lib_Strcat lib_Strget exch pop exch pop}
+ifelse}bind def/lib_PrependRoot{count 1 lt{/lib_PrependRoot errordict
+/stackunderflow get exec stop}if dup type/stringtype ne{/lib_PrependRoot
+errordict/typecheck get exec stop}if(/)lib_pathSep ne{(/)exch lib_pathSep exch
+/lib_dstr3()lib_Strcpy exch lib_StrReplace}if dup lib_pathSep search{dup
+(fonts)eq{pop pop exch pop/lib_dstr1 lib_fontResourceDir lib_Strcpy exch
+lib_Strcat lib_Strget}{lib_classChange 1 index known{lib_classChange 1 index
+get null eq{pop pop pop/lib_dstr1 lib_resourceDir lib_Strcpy exch lib_Strcat
+lib_Strget}{lib_isPSFSE{pop pop pop/lib_dstr1 lib_nonResourceDir lib_Strcpy
+exch lib_Strcat lib_Strget}{lib_classChange exch get/lib_dstr1
+lib_nonResourceDir lib_Strcpy exch lib_Strcat exch lib_Strcat exch lib_Strcat
+lib_Strget exch pop}ifelse}ifelse}{pop pop pop/lib_dstr1 lib_nonResourceDir
+lib_Strcpy exch lib_Strcat lib_Strget}ifelse}ifelse}{pop/lib_dstr1
+lib_nonResourceDir lib_Strcpy exch lib_Strcat lib_Strget}ifelse}bind def
+/lib_AppendName{/lib_dstr2 exch lib_Strcpy 1 index lib_Strcat lib_Strget}bind
+def/lib_EvalBuildCompatible{lib_nativeMode{/CIDParams/ProcSet resourcestatus{
+pop pop/CIDParams/ProcSet findresource/BuildCompatibleOCF 2 copy known{pop
+begin BuildCompatibleOCF end}{pop pop pop pop false}ifelse}{pop pop false}
+ifelse}{pop pop true}ifelse}bind def/lib_CMapType/CMap def
+/lib_FixCMapCategoryType/FixCMapCategory def/lib_CIDFontType/CIDFont def
+lib_nativeMode{/lib_ToggleNativeMode{currentglobal true setglobal
+pureNativeMode dup not/pureNativeMode exch def{/CIDInitC}{/CIDInitN}ifelse
+/ProcSet findresource/CIDInit exch/ProcSet defineresource pop setglobal}bind
+def}if end userdict begin/PrependRoot{lib_extensions begin lib_PrependRoot end
+}bind def/AppendName{lib_extensions begin lib_AppendName end}bind def end}if
+cid_runBootup true eq{userdict begin/cid_PrependRoot{//PrependRoot exec}bind
+def end lib_level2{setglobal setpacking}if}if
+%%EndResource
+%%EOF

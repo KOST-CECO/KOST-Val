@@ -1,0 +1,196 @@
+@charset "UTF-8";
+
+/*------------------------------------------------------------------
+  General
+  ----------------------------------------------------------------*/
+
+@page {
+	size: 210mm 279.4mm;
+}
+
+@font-face {
+    font-family: 'FreeUniversal';
+    src: url('../fonts/freeuniversal-regular.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'FreeUniversal';
+    src: url('../fonts/freeuniversal-bold.ttf');
+    font-weight: bold;
+    font-style: normal;
+}
+
+body {
+	background-color: transparent;
+	font-family: FreeUniversal;
+    font-weight: normal;
+	font-size: 12pt;
+	margin: 0; padding: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+div {
+  margin: 0;
+  padding: 0;
+}
+
+p {
+	color: -cchip-cmyk(0.0,0.0,0.0,1.0);
+}
+
+h1 {
+	font-family: FreeUniversal;
+}
+
+b {
+    font-weight: bold;
+}
+
+#construction_information {
+	margin: 2cm 1.5cm;
+}
+
+#construction_information h1 {
+	border-bottom: 1px solid -cchip-cmyk(0.0,0.0,0.0,0.5);
+}
+
+.ci_detail {
+	clear: both;
+}
+
+.ci_detail_key {
+	float: left;
+	width: 4cm;
+	padding: 0; margin: 1mm;
+}
+
+.ci_detail_value {
+	float: left;
+    font-weight: bold;
+    padding: 0; margin: 1mm;
+}
+
+.ci_preview {
+	margin-top: 20mm;
+}
+
+.ci_preview h2 {
+	margin-bottom: 2mm;
+}
+
+#ci_preview_image {
+	max-width:100%;
+	height: auto;
+	max-height: 8cm;
+}
+
+.ci_tiles {
+	margin-top: 20mm;
+}
+
+.ci_tiles h2 {
+	margin-bottom: 2mm;
+}
+
+#ci_tiles_image {
+	max-width:100%;
+	height: auto;
+	max-height: 8cm;
+	opacity: .2;
+}
+
+.ci_tiles_container {
+	position: relative;
+}
+
+.ci_tile_mockup {
+	border: 1px solid -cchip-cmyk(0.0,0.0,0.0,0.5);
+	position: absolute;
+}
+
+.ci_tile_mockup p {
+	color: -cchip-cmyk(0.0,0.0,0.0,0.7);
+	font-size: 30px;
+	text-align: center;
+	margin: 0; padding: 0;
+}
+
+#tile_container {
+	
+}
+
+#tile_image {
+	position: absolute;
+	left: 30mm;
+	top: 30mm;
+}
+
+.trim_mark_horizontal {
+	position: absolute;
+	width: 5mm;
+	height: 1mm;
+	border-top: 1mm solid -cchip-cmyk('All', 1.0,1.0,1.0,1.0);
+}
+
+.trim_mark_vertical {
+	position: absolute;
+	height: 5mm;
+	width: 1mm;
+	border-left: 1mm solid -cchip-cmyk('All', 1.0,1.0,1.0,1.0);
+}
+
+.overlay_mark_horizontal {
+	position: absolute;
+	width: 10mm;
+	height: 1mm;
+	border-top: 1mm solid -cchip-cmyk('All', 0.5,0.5,0.5,0.5);
+}
+
+.overlay_mark_vertical {
+	position: absolute;
+	height: 10mm;
+	width: 1mm;
+	border-left: 1mm solid -cchip-cmyk('All', 0.5,0.5,0.5,0.5);
+}
+
+.overlay_sequence_number {
+	position: absolute;
+	border-radius: 3mm;
+	background-color: -cchip-cmyk( 0, 0, 0, 0);
+    -cchip-overprint: 0;
+}
+
+.overlay_sequence_number p {
+	color: -cchip-cmyk('All', 1.0,1.0,1.0,1.0);
+	padding: 1.5mm 4mm; 
+	margin: 0;
+	font-size: 20pt;
+    font-weight: bold;
+}
+
+.gutter_information {
+	position: absolute;
+}
+
+.gutter_information p {
+	float: left;
+	margin: 0; padding: 0;
+	margin-right: 15mm;
+	font-size: 12pt;
+    font-weight: bold;
+}
+
+
+
+
+
+
+
+
+
+

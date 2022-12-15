@@ -1,0 +1,62 @@
+%!PS-Adobe-3.0 Resource-CMap
+%%DocumentNeededResources: ProcSet (CIDInit)
+%%IncludeResource: ProcSet (CIDInit)
+%%BeginResource: CMap (ZAPFDINGBATS)
+%%Title: (ZAPFDINGBATS 0)
+%%EndComments
+
+/CIDInit /ProcSet findresource begin
+
+12 dict begin
+
+begincmap
+
+/CMapName /ZAPFDINGBATS def
+/CMapType 2 def
+
+1 begincodespacerange
+<20> <fe>
+endcodespacerange
+
+18 beginbfchar
+<20> <0020>
+<25> <260E>
+<2a> <261B>
+<2b> <261E>
+<48> <2605>
+<6c> <25CF>
+<6d> <274D>
+<6e> <25A0>
+<73> <25B2>
+<74> <25BC>
+<75> <25C6>
+<76> <2756>
+<77> <25D7>
+<a8> <2663>
+<a9> <2666>
+<aa> <2665>
+<ab> <2660>
+<d5> <2192>
+endbfchar
+
+12 beginbfrange
+<21> <24> <2701>
+<26> <29> <2706>
+<2c> <47> <270C>
+<49> <6b> <2729>
+<6f> <72> <274F>
+<78> <7e> <2758>
+<a1> <a7> <2761>
+<ac> <b5> <2460>
+<b6> <d4> <2776>
+<d6> <d7> <2194>
+<d8> <ef> <2798>
+<f1> <fe> <27B1>
+endbfrange
+endcmap
+CMapName currentdict /CMap defineresource pop
+end
+end
+
+%%EndResource
+%%EOF

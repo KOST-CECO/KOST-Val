@@ -1,0 +1,50 @@
+/*====================SPOTCOLORS====================*/
+
+.spot-color-no-spot {
+    display: flex;
+    align-items: center;
+}
+
+.spot-color-no-spot img {
+    width: 5mm;
+    height: 5mm;
+    margin-right: 1mm;
+}
+
+.spot-color-no-spot span {
+    font-size: large;
+}
+
+.spot-color-list {}
+
+.spot-color-container {
+    width: 50%;
+    display: inline-block;
+    margin-bottom: 3.5mm;
+}
+
+.spot-color-flex {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+/* .spot-color-container:not(:last-child):not(:nth-last-child(2)) {
+    margin-bottom: 15px;
+} */
+
+.spot-color-container .color-round {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAAXNSR0IArs4c6QAAACVJREFUKFNjPHPmzH8GNGBiYsKILsY4FBSiOxrEx+ZuDN8NQoUA4Tsk+lAiyOwAAAAASUVORK5CYII=);
+}
+
+.spot-color-container .spot-color-data {
+    display: flex;
+    flex-direction: column;
+    word-break: break-all;
+    overflow: hidden;
+    margin-left: 4mm;
+}

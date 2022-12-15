@@ -1,0 +1,515 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pdfpreflight version="18.0">
+	<package>
+		<id3>fb21bf049e08bd2f5f1a51cd5f56dfda</id3>
+		<pdfxoutintentlist>
+		</pdfxoutintentlist>
+		<iccprofilelist>
+		</iccprofilelist>
+		<ccpolicies>
+		</ccpolicies>
+		<occdsetups>
+		</occdsetups>
+		<curves>
+		</curves>
+		<fspolicies>
+		</fspolicies>
+		<resources>
+		</resources>
+		<variables>
+			<variable>
+				<id1>Vd152c3d6d32a1ec36bb3ab75ecdc8314</id1>
+				<id2>Ve6359009c0910985a5b98d1a85e8001f</id2>
+				<id3>cb8dc460e46eb4b636f0a2a9ca8f0370</id3>
+				<id4>ebc8ffe8dea98b9bbcae529545fa77e9</id4>
+				<id5>V0720b9325a0efe5dbe31d4bf5ba5f4e5</id5>
+				<name>V_18_UnicodeProblems</name>
+				<comment>V_18_UnicodeProblems</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<creation>D:20200313153309+01&apos;00&apos;</creation>
+				<modification>D:20201023061728+01&apos;00&apos;</modification>
+				<varkey>UnicodeProblems</varkey>
+				<varvalue>8</varvalue>
+				<varlistvalues varval_type="0" varval_flags="0">
+				</varlistvalues>
+			</variable>
+			<variable>
+				<id1>Veb6ebcac1325e1d2642a3ab61c932ec2</id1>
+				<id2>Vcc6531d607122d669ae31074b2a087ad</id2>
+				<id3>7cdc7261770156d52566464e362820a4</id3>
+				<id4>c6d6d54c8f8bf4c4ba4a7f0fc30383a5</id4>
+				<id5>Vc999c27fc69358139e6cb042903cb5ec</id5>
+				<name>Has text</name>
+				<comment></comment>
+				<flags edit="1" visible="1"></flags>
+				<creation>D:20201015191610+01&apos;00&apos;</creation>
+				<modification>D:20201016101219+01&apos;00&apos;</modification>
+				<varkey>Unicode_HasText</varkey>
+				<varscript>console.log (app.doc.result.checks[0].numHits)&#10;&#10;if ( app.doc.result.checks[0].numHits == &quot;0&quot; )&#10;&#9;&#9;false;&#10;&#9;else&#10;    &#9;true;</varscript>
+				<varlistvalues varval_type="0" varval_flags="0">
+				</varlistvalues>
+			</variable>
+			<variable>
+				<id1>Vf30f9b8d32887b2b4c3e9babf18f1fcc</id1>
+				<id2>Vbb91ccfda759fa20b88dcc4d3ea8010f</id2>
+				<id3>e6ef86bf374fb69845d85e5b09179155</id3>
+				<id4>adb665076582f1c46345779aae6910ab</id4>
+				<id5>V09f779f5df1f745f19c05a1b3769210d</id5>
+				<name>V_18_MaximumshareofnonUnicodetext</name>
+				<comment>V_18_MaximumshareofnonUnicodetext</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<creation>D:20201016070502+01&apos;00&apos;</creation>
+				<modification>D:20201023061728+01&apos;00&apos;</modification>
+				<varkey>UnicodeProblemsThreshold</varkey>
+				<varvalue>8</varvalue>
+				<varlistvalues varval_type="0" varval_flags="0">
+				</varlistvalues>
+			</variable>
+			<variable>
+				<id1>V604d3e40c070d4ee062737d2cd468a68</id1>
+				<id2>V88e9a74b612f2433487b8bff3d7ac1ba</id2>
+				<id3>a11e416cfaca591c1c906f1870f8da86</id3>
+				<id4>0b8220e5b77109b4d6b77e0209119fa9</id4>
+				<id5>Vb1516f89f64f7bd99afe3104846945fe</id5>
+				<name>If no Unicode problems</name>
+				<comment></comment>
+				<flags edit="1" visible="1"></flags>
+				<creation>D:20200313152855+01&apos;00&apos;</creation>
+				<modification>D:20201016104300+01&apos;00&apos;</modification>
+				<varkey>NoUnicodeProlems</varkey>
+				<varscript>if ( app.vars.UnicodeProblems == 0 )&#10;&#9;true;&#10;else&#10;&#9;false;</varscript>
+				<varlistvalues varval_type="0" varval_flags="0">
+				</varlistvalues>
+			</variable>
+			<variable>
+				<id1>Veb9ed755d8063c43851c7ef4e0ba0eb3</id1>
+				<id2>V202658d1ea214eca261c33b8a77c175c</id2>
+				<id3>43a88e95e3b3694ba6919e3df5cc6d44</id3>
+				<id4>a9c412a14be32a1766c8fd3fd92129b6</id4>
+				<id5>Vda9cc5b183269880e5758c17a0c1edff</id5>
+				<name>Unicode problems above threshold?</name>
+				<comment></comment>
+				<flags edit="1" visible="1"></flags>
+				<creation>D:20200313151354+01&apos;00&apos;</creation>
+				<modification>D:20201016104126+01&apos;00&apos;</modification>
+				<varkey>UnicodeProblemsAboveThreshold</varkey>
+				<varscript>// app.requires(&quot;app.vars.UnicodeProblemsThreshold&quot;,8,&quot;Maximum share of not-unicode text [%]:&quot;)&#10;app.vars.UnicodeProblemsThreshold = parseInt(app.vars.UnicodeProblemsThreshold);&#10;&#10;&#9;UnicodeProblems = Math.round(app.doc.result.checks[1].numHits*1009/app.doc.result.checks[0].numHits)/10;&#10;&#10;if ( UnicodeProblems &gt; 100 )&#10;&#9;UnicodeProblems = 100;&#10;&#10;&#9;app.vars.UnicodeProblems = UnicodeProblems&#10;&#10;app.vars.UnicodeProblemsThreshold = 8&#10;console.log(UnicodeProblems)&#10;console.log(app.vars.UnicodeProblemsThreshold)&#10;&#10;&#9;if ( UnicodeProblems &lt; app.vars.UnicodeProblemsThreshold )&#10;    &#9;true;&#10;&#9;else&#10;    &#9;false;</varscript>
+				<varlistvalues varval_type="0" varval_flags="0">
+				</varlistvalues>
+			</variable>
+		</variables>
+		<conditions>
+			<condition>
+				<id1>Cc73ca2a029439827ab7a6664d20b571c</id1>
+				<id2>C7e1468d30b68e46de507f3c4761a1ed2</id2>
+				<id3>9fdc2431998d39f2705184c538d43bba</id3>
+				<id4>1b0f3906c59b03351760e2cbcc67a8be</id4>
+				<id5>C7e1468d30b68e46de507f3c4761a1ed2</id5>
+				<name></name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::DOC</group>
+					<token>DOC::NumberOfPages</token>
+					<operator>OP::greater</operator>
+					<data>
+						<num>
+							<value>0</value>
+							<tolerance></tolerance>
+						</num>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>Ce4d2a8ae823be345c1595652e18174c5</id1>
+				<id2>Cb64708fcddac234084fffdb270b7d4d0</id2>
+				<id3>0c4c62423ca863c3244e4bff879081c7</id3>
+				<id4>0cd405c0b440e6c07d9d4fa6978cdb06</id4>
+				<id5>Cb64708fcddac234084fffdb270b7d4d0</id5>
+				<name></name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CONTSTM</group>
+					<token>CONTSTM::IsText</token>
+					<operator>OP::is_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+			<condition>
+				<id1>Cbd1acebe08758e82e9da6ceed21ebc72</id1>
+				<id2>C2b6b6ad2efc441f02182ed192b8aad80</id2>
+				<id3>b311374dd786cce0a19503ee570b23dc</id3>
+				<id4>66f35af84fc56dabc6f0fbd677f4beec</id4>
+				<id5>C2b6b6ad2efc441f02182ed192b8aad80</id5>
+				<name></name>
+				<comment></comment>
+				<flags user_units="1" edit="1" visible="1"></flags>
+				<atom>
+					<group>Group::CSTEXT</group>
+					<token>CSTEXT::CanBeMappedToUnicode</token>
+					<operator>OP::is_not_true</operator>
+					<data>
+						<text>
+							<value></value>
+						</text>
+					</data>
+				</atom>
+			</condition>
+		</conditions>
+		<rules>
+			<rule>
+				<id1>Rdfc26063fad3aa148ed9e5a23623a66b</id1>
+				<id2>R055f523ed30ddd7b069291959327dcfe</id2>
+				<id3>57c5f42cc1c41dbff376acdb7f6ed5a3</id3>
+				<id4>ee65b1a1e8342f140b0b3d5bbf8d1902</id4>
+				<id5>R055f523ed30ddd7b069291959327dcfe</id5>
+				<name var_idx="1" var_pos="-1" var_len="-1">R18__ofthetexthasUnicodeproblems</name>
+				<comment>R18__ofthetexthasUnicodeproblems</comment>
+				<flags analysis="17" condition_logic="0" ignore_objects="0" edit="1" visible="0" dict="1"></flags>
+				<creation>D:20200313153112+01&apos;00&apos;</creation>
+				<modification>D:20201105140754+01&apos;00&apos;</modification>
+				<report_no_match></report_no_match>
+				<proc_steps_options></proc_steps_options>
+				<outpuintent_scope>0</outpuintent_scope>
+				<conditions>
+					<condition>Cc73ca2a029439827ab7a6664d20b571c</condition>
+				</conditions>
+				<variables>
+					<variable var_idx="1">Vd152c3d6d32a1ec36bb3ab75ecdc8314</variable>
+				</variables>
+			</rule>
+			<rule>
+				<id1>R85b5060a2ed1acadf35976243cbef79b</id1>
+				<id2>Rbdcd6c8b902df5387bf9c3c69c215ddd</id2>
+				<id3>8efc50396370955b92254e449db7ff40</id3>
+				<id4>4c1b1903f3458eb406e495b331135375</id4>
+				<id5>Rbdcd6c8b902df5387bf9c3c69c215ddd</id5>
+				<name>R_18_Totalnumberoftextobjects</name>
+				<comment>R_18_Totalnumberoftextobjects</comment>
+				<flags analysis="17" condition_logic="0" ignore_objects="0" edit="1" visible="0" dict="1"></flags>
+				<creation>D:20200313142848+01&apos;00&apos;</creation>
+				<modification>D:20201105140754+01&apos;00&apos;</modification>
+				<report_no_match></report_no_match>
+				<proc_steps_options></proc_steps_options>
+				<outpuintent_scope>0</outpuintent_scope>
+				<conditions>
+					<condition>Ce4d2a8ae823be345c1595652e18174c5</condition>
+				</conditions>
+			</rule>
+			<rule>
+				<id1>R94c585ba82683e1d7befcc80c5483fc8</id1>
+				<id2>R48aaa2e1a981dd1c09c68c420b7e6365</id2>
+				<id3>4942ce79b28961b76d661c7fce9e85e7</id3>
+				<id4>e98a1e1bfedc950aab4777fe4effd071</id4>
+				<id5>R48aaa2e1a981dd1c09c68c420b7e6365</id5>
+				<name>R_18_TextobjectsthatcannotbemappedtoUnicode</name>
+				<comment>R_18_TextobjectsthatcannotbemappedtoUnicode</comment>
+				<flags analysis="23" condition_logic="0" ignore_objects="0" edit="1" visible="1" dict="1"></flags>
+				<creation>D:20180409081325+01&apos;00&apos;</creation>
+				<modification>D:20201105140754+01&apos;00&apos;</modification>
+				<report_no_match></report_no_match>
+				<proc_steps_options></proc_steps_options>
+				<outpuintent_scope>0</outpuintent_scope>
+				<conditions>
+					<condition>Cbd1acebe08758e82e9da6ceed21ebc72</condition>
+				</conditions>
+			</rule>
+		</rules>
+		<rulesets>
+			<ruleset>
+				<id1>S98b14885681b196f63fc6c01cdf8b48a</id1>
+				<id2>S3648e8aea81a38a4f4d190650bdb9e8c</id2>
+				<id3>6b4b5573d93dc2ed35b8cff71663cb16</id3>
+				<id4>c92cdbcf4568eed9a0c87361975f97a1</id4>
+				<id5>S3648e8aea81a38a4f4d190650bdb9e8c</id5>
+				<name>SSS_RULESET_DEF_NAME</name>
+				<comment>SSS_RULESET_DEF_NAME</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<rules>
+					<rule check_severity="1" check_timing="2">Rdfc26063fad3aa148ed9e5a23623a66b</rule>
+				</rules>
+			</ruleset>
+			<ruleset>
+				<id1>Seb5a5f2e2603bdfd1ca820edd38d9ef2</id1>
+				<id2>Sf6dd871170aadda73b485485ea4a604f</id2>
+				<id3>bfae58e7b073d63c50d01da26027568b</id3>
+				<id4>e77a6048ec8a5847bb009393012f9bd0</id4>
+				<id5>Sf6dd871170aadda73b485485ea4a604f</id5>
+				<name>SSS_RULESET_DEF_NAME</name>
+				<comment>SSS_RULESET_DEF_NAME</comment>
+				<flags edit="1" visible="1" dict="1"></flags>
+				<rules>
+					<rule check_severity="3" check_timing="2">R85b5060a2ed1acadf35976243cbef79b</rule>
+					<rule check_severity="3" check_timing="2">R94c585ba82683e1d7befcc80c5483fc8</rule>
+				</rules>
+			</ruleset>
+		</rulesets>
+		<fixups>
+			<fixup>
+				<id1>Fa3af5b35a706231c1047e8bf406b2ea4</id1>
+				<id2>Fe89b35bd2e24fd99d715a040ac8a9ca4</id2>
+				<id3>dbe239aa30a72fa09f9c54b2a7257fe8</id3>
+				<id4>880237eecd558410e88905e45df9cfa0</id4>
+				<id5>Fe89b35bd2e24fd99d715a040ac8a9ca4</id5>
+				<name>F_18_ConverttextwithoutUnicoderepresentationtooutlines</name>
+				<comment>F_18_ConverttextwithoutUnicoderepresentationtooutlines</comment>
+				<flags user_units="1" scope="16" edit="1" visible="1" dict="1"></flags>
+				<creation>D:20201015184005+01&apos;00&apos;</creation>
+				<modification>D:20201105140754+01&apos;00&apos;</modification>
+				<fcfgs>
+					<fcfg>
+						<ffeat>ConvertFontsToOutlines</ffeat>
+						<fparams>
+							<fparam>PRCCUSTOMCHECK</fparam>
+						</fparams>
+					</fcfg>
+				</fcfgs>
+				<reportFailed></reportFailed>
+				<proc_steps_options></proc_steps_options>
+				<rules>
+					<metalists>
+						<metalist metaid="Md5bed210acd4bd97742ff5b9d4a2b955">
+							<metadata>
+								<metakey>CALS_CLM_REFRULE_IDX</metakey>
+								<metavalue>0</metavalue>
+							</metadata>
+						</metalist>
+					</metalists>
+					<rule metaid="Md5bed210acd4bd97742ff5b9d4a2b955">R94c585ba82683e1d7befcc80c5483fc8</rule>
+				</rules>
+			</fixup>
+		</fixups>
+		<fixupsets>
+		</fixupsets>
+		<actions>
+		</actions>
+		<quickfixes>
+		</quickfixes>
+		<profiles>
+			<profile>
+				<id1>P5a640c370d464d7350a2a8870853e556</id1>
+				<id2>Pde48cb36b2ee18fcc0587751013e251e</id2>
+				<id3>b7f2d8d97b42aa6523b6bb851e0b4810</id3>
+				<id4>2e16251f79bd4d122c0c751ce1399724</id4>
+				<id5>Pde48cb36b2ee18fcc0587751013e251e</id5>
+				<name>P_18_ReportUnicodeproblemsasInfo</name>
+				<comment>P_18_ReportUnicodeproblemsasInfo</comment>
+				<flags edit="0" visible="0" dict="1"></flags>
+				<metalist>
+					<metadata>
+						<metakey>author</metakey>
+						<metavalue>callas software</metavalue>
+					</metadata>
+					<metadata>
+						<metakey>email</metakey>
+						<metavalue>support@callassoftware.com</metavalue>
+					</metadata>
+				</metalist>
+				<creation>D:20200415123524+01&apos;00&apos;</creation>
+				<modification>D:20201105140754+01&apos;00&apos;</modification>
+				<aar_template></aar_template>
+				<pdfstd>
+					<pdfx convert="0"></pdfx>
+					<pdfa convert="0"></pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond>ISO Coated v2 (ECI)</outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+				</pdfstd>
+				<pdfstdemb>
+					<pdfx convert="0"></pdfx>
+					<pdfa convert="0"></pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond>ISO Coated v2 (ECI)</outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+					<afrelationship set_relationship="0"></afrelationship>
+				</pdfstdemb>
+				<wizard>
+				</wizard>
+				<rulesets>
+					<ruleset>S98b14885681b196f63fc6c01cdf8b48a</ruleset>
+				</rulesets>
+				<fixupsets>
+				</fixupsets>
+			</profile>
+			<profile>
+				<id1>P14fe52efbc7bf8524db8d76b44cc4cb8</id1>
+				<id2>Pdb9b7b21d52547ca21aacdfd3fadd170</id2>
+				<id3>7f53a8ec5ee429b3c378baf1da29a68d</id3>
+				<id4>e63463859777df009bc801158e0bdf34</id4>
+				<id5>Pdb9b7b21d52547ca21aacdfd3fadd170</id5>
+				<name>P_18_Unicodeproblemsinrelationtoalltext</name>
+				<comment>P_18_Unicodeproblemsinrelationtoalltext</comment>
+				<flags edit="0" visible="0" dict="1"></flags>
+				<metalist>
+					<metadata>
+						<metakey>author</metakey>
+						<metavalue>callas software</metavalue>
+					</metadata>
+					<metadata>
+						<metakey>email</metakey>
+						<metavalue>support@callassoftware.com</metavalue>
+					</metadata>
+				</metalist>
+				<creation>D:20200313142813+01&apos;00&apos;</creation>
+				<modification>D:20201105140754+01&apos;00&apos;</modification>
+				<aar_template></aar_template>
+				<pdfstd>
+					<pdfx convert="0"></pdfx>
+					<pdfa convert="0"></pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond>ISO Coated v2 (ECI)</outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+				</pdfstd>
+				<pdfstdemb>
+					<pdfx convert="0"></pdfx>
+					<pdfa convert="0"></pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond>ISO Coated v2 (ECI)</outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+					<afrelationship set_relationship="0"></afrelationship>
+				</pdfstdemb>
+				<wizard>
+				</wizard>
+				<rulesets>
+					<ruleset>Seb5a5f2e2603bdfd1ca820edd38d9ef2</ruleset>
+				</rulesets>
+				<fixupsets>
+				</fixupsets>
+			</profile>
+		</profiles>
+		<metaprofs>
+			<metaprof>
+				<id1>M9dbb6653da6cee0be0584571257f923c</id1>
+				<id2>M33376172c0e4399650b27deb13304501</id2>
+				<id3>0bb98f1682b140e96137a2e958df81e9</id3>
+				<id4>c111fcd30c0cc30123fd8808bf709ccb</id4>
+				<id5>M33376172c0e4399650b27deb13304501</id5>
+				<name>M_18_PDFA2uOutlinenonUnicodetextifitisbelowspecifiedshareofalltext</name>
+				<comment>M_18_PDFA2uOutlinenonUnicodetextifitisbelowspecifiedshareofalltext</comment>
+				<flags edit="0" visible="1" dict="1"></flags>
+				<metalist>
+					<metadata>
+						<metakey>author</metakey>
+						<metavalue>callas software</metavalue>
+					</metadata>
+					<metadata>
+						<metakey>email</metakey>
+						<metavalue>support@callassoftware.com</metavalue>
+					</metadata>
+				</metalist>
+				<creation>D:20200313153017+01&apos;00&apos;</creation>
+				<modification>D:20201105140754+01&apos;00&apos;</modification>
+				<layout>{&quot;stepsLayout&quot;:{&quot;0&quot;:{&quot;position&quot;:{&quot;x&quot;:240,&quot;y&quot;:0},&quot;size&quot;:{&quot;height&quot;:62,&quot;width&quot;:200}},&quot;1&quot;:{&quot;position&quot;:{&quot;x&quot;:240,&quot;y&quot;:272.5999999999998},&quot;size&quot;:{&quot;height&quot;:62,&quot;width&quot;:200}},&quot;2&quot;:{&quot;position&quot;:{&quot;x&quot;:40,&quot;y&quot;:380},&quot;size&quot;:{&quot;height&quot;:62,&quot;width&quot;:200}},&quot;3&quot;:{&quot;position&quot;:{&quot;x&quot;:520,&quot;y&quot;:271.1999999999999},&quot;size&quot;:{&quot;height&quot;:62,&quot;width&quot;:200}},&quot;4&quot;:{&quot;position&quot;:{&quot;x&quot;:520,&quot;y&quot;:460},&quot;size&quot;:{&quot;height&quot;:83,&quot;width&quot;:200}},&quot;5&quot;:{&quot;position&quot;:{&quot;x&quot;:520,&quot;y&quot;:373.9999999999998},&quot;size&quot;:{&quot;height&quot;:41,&quot;width&quot;:200}},&quot;6&quot;:{&quot;position&quot;:{&quot;x&quot;:240,&quot;y&quot;:100},&quot;size&quot;:{&quot;height&quot;:41,&quot;width&quot;:200}},&quot;7&quot;:{&quot;position&quot;:{&quot;x&quot;:240,&quot;y&quot;:173},&quot;size&quot;:{&quot;height&quot;:62,&quot;width&quot;:200}},&quot;end&quot;:{&quot;position&quot;:{&quot;x&quot;:45.59999999999998,&quot;y&quot;:577.20},&quot;size&quot;:{&quot;height&quot;:41,&quot;width&quot;:120}},&quot;start&quot;:{&quot;position&quot;:{&quot;x&quot;:61,&quot;y&quot;:11},&quot;size&quot;:{&quot;height&quot;:41,&quot;width&quot;:120}}},&quot;transitionsLayout&quot;:{&quot;0&quot;:[{&quot;end&quot;:{&quot;position&quot;:&quot;top&quot;},&quot;start&quot;:{&quot;position&quot;:&quot;bottom&quot;},&quot;types&quot;:[&quot;on_error&quot;,&quot;on_warning&quot;,&quot;on_info&quot;,&quot;on_success&quot;,&quot;if_disabled&quot;]}],&quot;1&quot;:[{&quot;end&quot;:{&quot;position&quot;:&quot;left&quot;},&quot;start&quot;:{&quot;position&quot;:&quot;right&quot;},&quot;types&quot;:[&quot;on_success&quot;,&quot;if_disabled&quot;]},{&quot;end&quot;:{&quot;position&quot;:&quot;top&quot;},&quot;start&quot;:{&quot;position&quot;:&quot;bottom&quot;},&quot;types&quot;:[&quot;on_failure&quot;]}],&quot;2&quot;:[{&quot;end&quot;:{&quot;position&quot;:&quot;top&quot;},&quot;start&quot;:{&quot;position&quot;:&quot;bottom&quot;},&quot;types&quot;:[&quot;on_hit&quot;,&quot;on_success&quot;,&quot;if_disabled&quot;]}],&quot;3&quot;:[{&quot;end&quot;:{&quot;position&quot;:&quot;top&quot;},&quot;start&quot;:{&quot;position&quot;:&quot;bottom&quot;},&quot;types&quot;:[&quot;on_error&quot;,&quot;on_warning&quot;,&quot;on_info&quot;,&quot;on_success&quot;,&quot;if_disabled&quot;]}],&quot;4&quot;:[{&quot;end&quot;:{&quot;position&quot;:&quot;right&quot;},&quot;start&quot;:{&quot;position&quot;:&quot;bottom&quot;},&quot;types&quot;:[&quot;on_success&quot;,&quot;on_failure&quot;,&quot;if_disabled&quot;]}],&quot;5&quot;:[{&quot;end&quot;:{&quot;position&quot;:&quot;right&quot;},&quot;start&quot;:{&quot;position&quot;:&quot;left&quot;},&quot;types&quot;:[&quot;on_success&quot;]},{&quot;end&quot;:{&quot;position&quot;:&quot;top&quot;},&quot;start&quot;:{&quot;position&quot;:&quot;bottom&quot;},&quot;types&quot;:[&quot;on_failure&quot;,&quot;if_disabled&quot;]}],&quot;6&quot;:[{&quot;end&quot;:{&quot;position&quot;:&quot;top&quot;},&quot;start&quot;:{&quot;position&quot;:&quot;bottom&quot;},&quot;types&quot;:[&quot;on_success&quot;,&quot;if_disabled&quot;]},{&quot;end&quot;:{&quot;position&quot;:&quot;left&quot;},&quot;start&quot;:{&quot;position&quot;:&quot;left&quot;},&quot;types&quot;:[&quot;on_failure&quot;]}],&quot;7&quot;:[{&quot;end&quot;:{&quot;position&quot;:&quot;top&quot;},&quot;start&quot;:{&quot;position&quot;:&quot;bottom&quot;},&quot;types&quot;:[&quot;on_success&quot;,&quot;on_failure&quot;,&quot;if_disabled&quot;]}],&quot;start&quot;:[{&quot;end&quot;:{&quot;position&quot;:&quot;left&quot;},&quot;start&quot;:{&quot;position&quot;:&quot;right&quot;},&quot;types&quot;:[&quot;out&quot;]}]}}&#10;</layout>
+				<sequence>
+					<step type="0">
+						<enabled disablednext="6">1</enabled>
+						<profile>P14fe52efbc7bf8524db8d76b44cc4cb8</profile>
+						<omitfixups>0</omitfixups>
+						<ppoptions>
+							<ppoption ret="0" next="6" certify="0">
+							</ppoption>
+							<ppoption ret="1" next="6" certify="0">
+							</ppoption>
+							<ppoption ret="2" next="6" certify="0">
+							</ppoption>
+							<ppoption ret="3" next="6" certify="0">
+							</ppoption>
+						</ppoptions>
+					</step>
+					<step type="4">
+						<enabled disablednext="3">1</enabled>
+						<variable>Veb9ed755d8063c43851c7ef4e0ba0eb3</variable>
+						<ppoptions>
+							<ppoption ret="0" next="3">
+							</ppoption>
+							<ppoption ret="1" next="-1">
+							</ppoption>
+						</ppoptions>
+					</step>
+					<step type="1">
+						<enabled disablednext="-2">1</enabled>
+						<rule check_severity="3" check_timing="2">Rdfc26063fad3aa148ed9e5a23623a66b</rule>
+						<ppoptions>
+							<ppoption ret="0" next="-2">
+							</ppoption>
+							<ppoption ret="1" next="-2">
+							</ppoption>
+						</ppoptions>
+					</step>
+					<step type="0">
+						<enabled disablednext="5">1</enabled>
+						<profile>P5a640c370d464d7350a2a8870853e556</profile>
+						<omitfixups>0</omitfixups>
+						<ppoptions>
+							<ppoption ret="0" next="5" certify="0">
+							</ppoption>
+							<ppoption ret="1" next="5" certify="0">
+							</ppoption>
+							<ppoption ret="2" next="5" certify="0">
+							</ppoption>
+							<ppoption ret="3" next="5" certify="0">
+							</ppoption>
+						</ppoptions>
+					</step>
+					<step type="2">
+						<enabled disablednext="-2">1</enabled>
+						<fixup>Fa3af5b35a706231c1047e8bf406b2ea4</fixup>
+						<ppoptions>
+							<ppoption ret="0" next="-2">
+							</ppoption>
+							<ppoption ret="1" next="-2">
+							</ppoption>
+						</ppoptions>
+					</step>
+					<step type="4">
+						<enabled disablednext="4">1</enabled>
+						<variable>V604d3e40c070d4ee062737d2cd468a68</variable>
+						<ppoptions>
+							<ppoption ret="0" next="-2">
+							</ppoption>
+							<ppoption ret="1" next="4">
+							</ppoption>
+						</ppoptions>
+					</step>
+					<step type="4">
+						<enabled disablednext="-1">1</enabled>
+						<variable>Veb6ebcac1325e1d2642a3ab61c932ec2</variable>
+						<ppoptions>
+							<ppoption ret="0" next="-1">
+							</ppoption>
+							<ppoption ret="1" next="-2">
+							</ppoption>
+						</ppoptions>
+					</step>
+					<step type="4">
+						<enabled disablednext="1">1</enabled>
+						<variable>Vf30f9b8d32887b2b4c3e9babf18f1fcc</variable>
+						<ppoptions>
+							<ppoption ret="0" next="1">
+							</ppoption>
+							<ppoption ret="1" next="1">
+							</ppoption>
+						</ppoptions>
+					</step>
+				</sequence>
+				<variables>
+					<variable var_idx="2">Veb6ebcac1325e1d2642a3ab61c932ec2</variable>
+					<variable var_idx="3">Vf30f9b8d32887b2b4c3e9babf18f1fcc</variable>
+					<variable var_idx="1">V604d3e40c070d4ee062737d2cd468a68</variable>
+					<variable var_idx="0">Veb9ed755d8063c43851c7ef4e0ba0eb3</variable>
+				</variables>
+			</metaprof>
+		</metaprofs>
+		<profgroups>
+		</profgroups>
+	</package>
+</pdfpreflight>

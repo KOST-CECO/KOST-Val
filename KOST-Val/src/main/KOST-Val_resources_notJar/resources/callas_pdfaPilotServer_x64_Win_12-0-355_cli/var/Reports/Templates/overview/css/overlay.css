@@ -1,0 +1,39 @@
+@page {
+    /* reset margin to normal size to place the header at the top of the document */
+    margin: 0 10mm;
+}
+
+* {
+    font-family: OpenSans;
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    height: 24mm;
+}
+
+.header {
+    height: inherit;
+    display: flex;
+    flex-direction: column;
+}
+
+.header .logo-container {
+    height: inherit;
+    display: flex;
+    align-items: center;
+}
+
+.header .logo {
+    padding: 3mm 0;
+    height: 20mm;
+    object-fit: contain;
+}
+
+.header .logo:last-child {
+    margin-left: auto;
+}
+
+.header .info {
+}

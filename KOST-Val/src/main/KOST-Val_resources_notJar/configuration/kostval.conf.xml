@@ -87,15 +87,12 @@
 		<mp3validation>(&#x2713;)</mp3validation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert -->
 	</mp3>
 <!-- VIDEO -->
-	<ffv1>
-		<ffv1validation>(&#x2713;)</ffv1validation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert -->
-	</ffv1>
+	<mkv>
+		<mkvvalidation>(&#x2713;)</mkvvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert -->
+	</mkv>
 	<mp4>
 		<mp4validation>(&#x2713;)</mp4validation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert -->
 	</mp4>
-	<mj2>
-		<mj2validation>(&#x2713;)</mj2validation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert -->
-	</mj2>
 <!-- DATEN -->
 	<xml>
 		<xmlvalidation>&#x2713;</xmlvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert / &#x2713; = akzeptiert und validieren -->

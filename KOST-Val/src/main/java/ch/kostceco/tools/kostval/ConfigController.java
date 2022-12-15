@@ -101,10 +101,10 @@ public class ConfigController
 	private Button		buttonFlac, buttonWave, buttonMp3;
 
 	@FXML
-	private Label		labelVideo, labelFfv1, labelMp4, labelMj2;
+	private Label		labelVideo, labelFfv1, labelMp4;
 
 	@FXML
-	private Button		buttonFfv1, buttonMp4, buttonMj2;
+	private Button		buttonFfv1, buttonMp4;
 
 	@FXML
 	private Label		labelData, labelXml, labelSiard, labelCsv, labelXlsx,
@@ -248,9 +248,8 @@ public class ConfigController
 			String noWave = "<wavevalidation>&#x2717;</wavevalidation>";
 			String noMp3 = "<mp3validation>&#x2717;</mp3validation>";
 
-			String noFfv1 = "<ffv1validation>&#x2717;</ffv1validation>";
+			String noFfv1 = "<mkvvalidation>&#x2717;</mkvvalidation>";
 			String noMp4 = "<mp4validation>&#x2717;</mp4validation>";
-			String noMj2 = "<mj2validation>&#x2717;</mj2validation>";
 
 			String noXml = "<xmlvalidation>&#x2717;</xmlvalidation>";
 			String yesXml = "<xmlvalidation>&#x2713;</xmlvalidation>";
@@ -399,15 +398,6 @@ public class ConfigController
 			} else {
 				buttonMp4.setText( "(✓)" );
 				buttonMp4.setStyle(
-						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
-			}
-			if ( config.contains( noMj2 ) ) {
-				buttonMj2.setText( "✗" );
-				buttonMj2.setStyle(
-						"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
-			} else {
-				buttonMj2.setText( "(✓)" );
-				buttonMj2.setStyle(
 						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
 			}
 
@@ -1025,8 +1015,8 @@ public class ConfigController
 	@FXML
 	void changeFfv1( ActionEvent event )
 	{
-		String az = "<ffv1validation>(&#x2713;)</ffv1validation>";
-		String no = "<ffv1validation>&#x2717;</ffv1validation>";
+		String az = "<mkvvalidation>(&#x2713;)</mkvvalidation>";
+		String no = "<mkvvalidation>&#x2717;</mkvvalidation>";
 		try {
 			String optButton = buttonFfv1.getText();
 			if ( optButton.equals( "✗" ) ) {
@@ -1066,33 +1056,6 @@ public class ConfigController
 				Util.oldnewstring( az, no, configFile );
 				buttonMp4.setText( "✗" );
 				buttonMp4.setStyle(
-						"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
-				engine.load( "file:///" + configFile.getAbsolutePath() );
-				// TODO Check etwas angewaehlt
-			}
-		} catch ( IOException e ) {
-			e.printStackTrace();
-		}
-	}
-
-	/* changeMj2 schaltet zwischen x (v) herum */
-	@FXML
-	void changeMj2( ActionEvent event )
-	{
-		String az = "<mj2validation>(&#x2713;)</mj2validation>";
-		String no = "<mj2validation>&#x2717;</mj2validation>";
-		try {
-			String optButton = buttonMj2.getText();
-			if ( optButton.equals( "✗" ) ) {
-				Util.oldnewstring( no, az, configFile );
-				buttonMj2.setText( "(✓)" );
-				buttonMj2.setStyle(
-						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
-				engine.load( "file:///" + configFile.getAbsolutePath() );
-			} else {
-				Util.oldnewstring( az, no, configFile );
-				buttonMj2.setText( "✗" );
-				buttonMj2.setStyle(
 						"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
 				engine.load( "file:///" + configFile.getAbsolutePath() );
 				// TODO Check etwas angewaehlt

@@ -936,6 +936,68 @@ public class Magic
 		return mn;
 	}
 
+	public static boolean magicMkv( File file ) throws IOException
+	{
+		FileReader fr = null;
+		BufferedReader read = null;
+		boolean mn = false;
+
+		try {
+			// Eine MKV-Datei (.mkv) muss mit
+			// 1A45DFA3 -> .Eß£ beginnen
+			fr = new FileReader( file );
+			read = new BufferedReader( fr );
+
+			Boolean reco = false;
+			try (FileInputStream fis = new FileInputStream( file )) {
+				int i = 0;
+				int cnt = 0;
+				StringBuilder sb = new StringBuilder();
+				String sb2str1 = "";
+				String sb2str2 = "";
+				String sb2str3 = "";
+				String sb2str4 = "";
+				String sb1234 = "";
+				while ( (i = fis.read()) != -1 ) {
+					sb.append( String.format( "%02X ", i ) );
+					if ( sb2str1 == "" ) {
+						sb2str1 = sb + "";
+					} else if ( sb2str2 == "" ) {
+						sb2str2 = sb + "";
+					} else if ( sb2str3 == "" ) {
+						sb2str3 = sb + "";
+					} else if ( sb2str4 == "" ) {
+						sb2str4 = sb + "";
+						sb1234 = sb + "";
+						break;
+					}
+					cnt++;
+					if ( cnt == 16 ) {
+						cnt = 0;
+					}
+				}
+				if ( sb1234.contains( "1A 45 DF A3" ) ) {
+					reco = true;
+				}
+			}
+			if ( reco ) {
+				// hoechstwahrscheinlich ein MKV
+				mn = true;
+			}
+			read.close();
+			fr.close();
+			read = null;
+			fr = null;
+		} catch ( Exception e ) {
+			System.out.println( "Exception magic file mkv: " + e.getMessage() );
+			read.close();
+			fr.close();
+			read = null;
+			fr = null;
+		}
+		return mn;
+	}
+	
 	public static boolean magicProres( File file ) throws IOException
 	{
 		FileReader fr = null;

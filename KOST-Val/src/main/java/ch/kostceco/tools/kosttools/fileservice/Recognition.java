@@ -191,6 +191,20 @@ public class Recognition
 						return "XLS_ext";
 					}
 				}
+			} else if ( sb2str1.contains( "1A" ) ) {
+				// TODO B) Die moeglichen BOF kontrollieren (beginnt mit 1A)
+				if ( Magic.magicMkv( checkFile ) ) {
+					// Eine MKV-Datei muss mit.Eß£ [1A45DFA3] beginnen
+					// D) passende Extension kontrollieren (keine SiF)
+					// Eine MKV-Datei muss die extension .mkv haben
+					if ( checkFileExt.equals( ".mkv" ) ) {
+						// eindeutig als MKV-Datei erkannt
+						return "MKV";
+					} else {
+						// als MKV-Datei erkannt aber falsche Extension
+						return "MKV_ext";
+					}
+				}
 			} else if ( sb2str1.contains( "25" ) ) {
 				// TODO B) Die moeglichen BOF kontrollieren (beginnt mit 25)
 				if ( Magic.magicPdf( checkFile ) ) {

@@ -164,12 +164,12 @@ public class Controllervalfolder implements MessageConstants
 		float countInvalidP = 100 / (float) count * (float) countInvalid;
 		float countNotazP = 100 / (float) count * (float) countNotaz;
 		String summaryFormat = getTextResourceService().getText( locale,
-				MESSAGE_XML_SUMMARY_FORMAT, count, countValid, countInvalid,
-				countNotaz, countValidP, countInvalidP, countNotazP );
+				MESSAGE_XML_SUMMARY_FORMAT, count.toString(), countValid.toString(), countInvalid.toString(),
+				countNotaz.toString(), countValidP, countInvalidP, countNotazP );
 
 		String summary = "";
 		summary = getTextResourceService().getText( locale, MESSAGE_XML_SUMMARY,
-				count, countValid, countInvalid, countNotaz, countValidP,
+				count.toString(), countValid.toString(), countInvalid.toString(), countNotaz.toString(), countValidP,
 				countInvalidP, countNotazP );
 
 		String newFormat = "<Format>" + summary;

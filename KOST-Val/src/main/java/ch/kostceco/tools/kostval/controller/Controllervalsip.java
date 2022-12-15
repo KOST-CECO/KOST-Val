@@ -432,8 +432,8 @@ public class Controllervalsip implements MessageConstants
 						MESSAGE_XML_SUMMARY_NO3C );
 			} else {
 				summary = getTextResourceService().getText( locale,
-						MESSAGE_XML_SUMMARY, count, countValid, countInvalid,
-						countNotaz, countValidP, countInvalidP, countNotazP );
+						MESSAGE_XML_SUMMARY, count.toString(), countValid.toString(), countInvalid.toString(),
+						countNotaz.toString(), countValidP, countInvalidP, countNotazP );
 			}
 
 			if ( count.equals( countValid ) || onlySip ) {

@@ -109,7 +109,6 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 			min = true;
 		}
 
-		boolean valid = false;
 		int iCategory = 999999999;
 		String errorK = "";
 		// Create object
@@ -180,13 +179,11 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 			if ( min ) {
 				return false;
 			} else {
-
 				Logtxt.logtxt( logFile,
 						getTextResourceService().getText( locale,
 								MESSAGE_XML_MODUL_A_PDFA )
 								+ getTextResourceService().getText( locale,
 										ERROR_XML_A_PDFA_NOCONFIG ) );
-				valid = false;
 				return false;
 			}
 		}
@@ -528,12 +525,9 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					int success = 0;
 
 					if ( err != null ) {
-						if ( min ) {
-							return false;
-						} else {
-							for ( ; err != null; err = docPdf.getNextError() ) {
-								success = success + 1;
-							}
+						// auch bei min durchfuehren!
+						for ( ; err != null; err = docPdf.getNextError() ) {
+							success = success + 1;
 						}
 					}
 
@@ -710,7 +704,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 								 * hier nicht der Fall. Entsprechend wird mit
 								 * return true die Validierung beendet
 								 */
-								return valid;
+								return false;
 							} else {
 								// Modul K bestanden
 
@@ -1816,7 +1810,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 				try {
 					// Initialisierung callas -> existiert pdfaPilot in den
 					// resources?
-					String folderCallas = "callas_pdfaPilotServer_Win_9-1-326_cli-a";
+					String folderCallas = "callas_pdfaPilotServer_x64_Win_12-0-355_cli";
 					/*
 					 * Update von Callas: callas_pdfaPilotServer_Win_...-Version
 					 * herunterladen, insallieren, odner im Workbench umbenennen
@@ -2118,7 +2112,6 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 				} catch ( Throwable e ) {
 					if ( min ) {
 					} else {
-
 						Logtxt.logtxt( logFile, getTextResourceService()
 								.getText( locale, MESSAGE_XML_MODUL_A_PDFA )
 								+ getTextResourceService().getText( locale,
@@ -2131,6 +2124,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 			// TODO: Erledigt: Fehler Auswertung
 			if ( !isValid ) {
 				if ( min ) {
+					System.out.println( "2147 Fehlerauswertung" );
 					return false;
 				} else {
 					boolean exponent0 = false;

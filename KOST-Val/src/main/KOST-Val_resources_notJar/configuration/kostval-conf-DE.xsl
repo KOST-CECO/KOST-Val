@@ -222,23 +222,16 @@
 
 <!-- VIDEO -->
 					<tr  class="captioninfo">
-						<td>FFV1: Akzeptanz [(&#x2713;)]</td>
+						<td>MKV (FFV1-FLAC): Akzeptanz [(&#x2713;)]</td>
 						<td>
-							<xsl:value-of select="configuration/ffv1/ffv1validation" />
+							<xsl:value-of select="configuration/mkv/mkvvalidation" />
 						</td>
 					</tr>
 
 					<tr  class="captioninfo">
-						<td>MP4: Akzeptanz [(&#x2713;)]</td>
+						<td>MP4 (AVC-MP3): Akzeptanz [(&#x2713;)]</td>
 						<td>
 							<xsl:value-of select="configuration/mp4/mp4validation" />
-						</td>
-					</tr>
-
-					<tr  class="captioninfo">
-						<td>MJ2: Akzeptanz [(&#x2713;)]</td>
-						<td>
-							<xsl:value-of select="configuration/mj2/mj2validation" />
 						</td>
 					</tr>
 

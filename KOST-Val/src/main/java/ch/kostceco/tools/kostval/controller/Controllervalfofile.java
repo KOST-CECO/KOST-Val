@@ -86,9 +86,8 @@ public class Controllervalfofile implements MessageConstants
 		String flacValidation = configMap.get( "flacValidation" );
 		String waveValidation = configMap.get( "waveValidation" );
 		String mp3Validation = configMap.get( "mp3Validation" );
-		String ffv1Validation = configMap.get( "ffv1Validation" );
+		String mkvValidation = configMap.get( "mkvValidation" );
 		String mp4Validation = configMap.get( "mp4Validation" );
-		String mj2Validation = configMap.get( "mj2Validation" );
 		String xmlValidation = configMap.get( "xmlValidation" );
 		String siardValidation = configMap.get( "siardValidation" );
 		String csvValidation = configMap.get( "csvValidation" );
@@ -518,10 +517,10 @@ public class Controllervalfofile implements MessageConstants
 						}
 
 						// TODO Video
-					} else if ( recFormat.equals( "FFV1" ) ) {
-						intro = countToValidated + " " + "FFV1:  "
+					} else if ( recFormat.equals( "MKV" ) ) {
+						intro = countToValidated + "  " + "MKV:  "
 								+ valDatei.getAbsolutePath() + " ";
-						if ( ffv1Validation.equals( "yes" ) ) {
+						if ( mkvValidation.equals( "yes" ) ) {
 							// akzeptiert und soll validiert werden
 							// Aktuell nicht moeglich, kein Validator dafuer
 						} else {
@@ -529,11 +528,11 @@ public class Controllervalfofile implements MessageConstants
 							Logtxt.logtxt( logFile, getTextResourceService()
 									.getText( locale, MESSAGE_XML_VALERGEBNIS )
 									+ getTextResourceService().getText( locale,
-											MESSAGE_XML_AZTYPE, "FFV1" )
+											MESSAGE_XML_AZTYPE, "MKV" )
 									+ getTextResourceService().getText( locale,
 											MESSAGE_XML_VALFILE,
 											valDatei.getAbsolutePath() ) );
-							if ( ffv1Validation.equals( "az" ) ) {
+							if ( mkvValidation.equals( "az" ) ) {
 								// nur akzeptiert -> KEINE Validierung, nur
 								// Erkennung
 								recMsg = "AZ";
@@ -566,32 +565,6 @@ public class Controllervalfofile implements MessageConstants
 								recMsg = "notAZ";
 							}
 						}
-					} else if ( recFormat.equals( "MJ2" ) ) {
-						intro = countToValidated + " " + "MJ2:   "
-								+ valDatei.getAbsolutePath() + " ";
-						if ( mj2Validation.equals( "yes" ) ) {
-							// akzeptiert und soll validiert werden
-							// Aktuell nicht moeglich, kein Validator dafuer
-						} else {
-							// akzeptiert oder nicht
-							Logtxt.logtxt( logFile, getTextResourceService()
-									.getText( locale, MESSAGE_XML_VALERGEBNIS )
-									+ getTextResourceService().getText( locale,
-											MESSAGE_XML_AZTYPE, "MJ2" )
-									+ getTextResourceService().getText( locale,
-											MESSAGE_XML_VALFILE,
-											valDatei.getAbsolutePath() ) );
-							if ( mj2Validation.equals( "az" ) ) {
-								// nur akzeptiert -> KEINE Validierung, nur
-								// Erkennung
-								recMsg = "AZ";
-							} else {
-								// NICHT akzeptiert -> invalid
-								recMsg = "notAZ";
-							}
-						}
-
-						// TODO Data
 					} else if ( recFormat.equals( "XML" ) ) {
 						intro = countToValidated + " " + "XML:   "
 								+ valDatei.getAbsolutePath() + " ";

@@ -1,0 +1,33 @@
+/*====================SEPERATIONS====================*/
+
+.seperation-process h2,
+.seperation-spot h2 {
+    font-size: large;
+}
+
+.seperation-page-container {
+    page-break-inside: avoid;
+}
+
+.seperation-page-container .header {
+    margin-bottom: 2mm;
+}
+
+.seperation-image-box {
+    display: inline-block;
+    page-break-inside: avoid;
+    margin: 0 5mm;
+    width: 35mm;
+}
+
+.seperation-image-container {
+    margin-top: 1.5mm;
+    width: inherit;
+    height: 65mm;
+}
+
+.seperation-image-container img {
+    border: 3px lightgrey solid;
+    max-width: 100%;
+    max-height: 100%;
+}

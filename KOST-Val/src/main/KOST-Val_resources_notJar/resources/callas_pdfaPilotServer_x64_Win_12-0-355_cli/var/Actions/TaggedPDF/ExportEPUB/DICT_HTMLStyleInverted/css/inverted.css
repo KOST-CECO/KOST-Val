@@ -1,0 +1,68 @@
+@import url(all.css);
+@import url(predefined.css);
+
+.inverted
+{
+    border-bottom:                      2px #960 solid;
+    opacity:                            1;
+
+    animation-duration:                 0s;
+    -webkit-animation-duration:         0s;
+}
+
+.inverted:hover
+{
+    border-bottom:                      2px #960 solid;   
+
+    animation-duration:                 0s;
+    -webkit-animation-duration:         0s;
+}
+
+*
+{
+    background-color:                   #000;
+    color:                              #fff;
+}
+
+body
+{
+    font-family:                        Helvetica, Arial, sans serif;
+}
+
+._p,
+._h1, ._h2, ._h3, ._h4, ._h5, ._h6,
+ul,
+ol,
+.alt_from_image
+{
+    color:                              #fff;
+}
+
+th
+{
+    background-color:                   #bbb;
+    border:                             1px #444 dashed;
+
+}
+
+.pgh_content
+{
+    max-width:                          35em;
+    margin:                             3em 0 0 0;
+    padding:                            0 30% 0 30%;
+    
+    letter-spacing:                     2px;
+    text-align:                         left;
+    word-spacing:                       0.75em;
+    
+    /* wraps long lines (e.g. long URLs) */
+    
+    white-space:                        pre;
+    white-space:                        pre-wrap;
+    white-space:                        pre-line;
+    white-space:                        -pre-wrap;
+    white-space:                        -o-pre-wrap;
+    white-space:                        -moz-pre-wrap;
+    white-space:                        -hp-pre-wrap;
+    word-wrap:                          break-word;
+}

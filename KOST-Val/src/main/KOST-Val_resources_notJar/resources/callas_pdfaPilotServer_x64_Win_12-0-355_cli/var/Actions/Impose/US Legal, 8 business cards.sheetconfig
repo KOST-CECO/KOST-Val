@@ -1,0 +1,92 @@
+#===================================
+# File: DICT_Legal8businesscards.scheetconfig
+
+#===================================
+# Sheet 8,27' x 11,7'
+
+#===================================
+#  +-----+ +-----+
+#  |  1  | |  2  |
+#  +-----+ +-----+
+#  |  3  | |  4  |
+#  +-----+ +-----+
+#  |  5  | |  6  |
+#  +-----+ +-----+
+#  |  7  | |  8  |
+#  +-----+ +-----+
+
+#===================================
+# NAME - Name of a sheet config
+#===================================
+
+NAME	DICT_Legal8businesscards
+
+#===================================
+# FILTERS - Filtering for Imposition UI
+#
+# PAGESIZE_FILTER: supported page sizes for placed PDFs
+#
+# Keywords: ANY       : Accept any orientation
+#
+# Width
+# Height
+# Tolerance (Width)
+# Tolerance (Height)
+# Ignore orientation ( ANY, YES = true )
+
+PAGESIZE_FILTER	3,7'	2,6'	2mm	2mm	ANY
+
+#===================================
+# SHEET - List of sheets, if none is present a sheet PDF file must be available: "DICT_Legal8businesscards.sheetconfig.pdf"
+# MediaBox left
+# MediaBox bottom
+# MediaBox width
+# MediaBox height
+# optional:
+# CropBox left
+# CropBox bottom
+# CropBox width
+# CropBox height
+
+SHEET	0'	0'	8,27'	11,7'
+
+#===================================
+# SLOT - List of slots for sheet configuration
+# name
+# eSlotNo
+# eSheetNo
+# eTrimBoxLeft
+# eTrimBoxBottom
+# eTrimBoxWidth
+# eTrimBoxHeight
+# eBleedOffsetLeft
+# eBleedOffsetBottom
+# eBleedOffsetRight
+# eBleedOffsetTop
+# eScaleX: -1: fit to slot
+# eScaleY: -1: fit to slot 
+# eRotation
+# ePlacement
+# eBindingMargin
+# eCropMarkStyleLeftBottom
+# eCropMarkStyleRightBottom
+# eCropMarkStyleRightTop
+# eCropMarkStyleLeftTop
+#===================================
+
+SLOT	L_1	1	1	0,425'	0,375'	3,7'	2,6'	3mm	3mm	3mm	3mm	100	100	0	CC	N	LB	RB	RT	LT
+SLOT	R_1	2	1	4,375'	0,375'	3,7'	2,6'	3mm	3mm	3mm	3mm	100	100	0	CC	N	LB	RB	RT	LT
+SLOT	L_2	3	1	0,425'	3,225'	3,7'	2,6'	3mm	3mm	3mm	3mm	100	100	0	CC	N	LB	RB	RT	LT
+SLOT	R_2	4	1	4,375'	3,225'	3,7'	2,6'	3mm	3mm	3mm	3mm	100	100	0	CC	N	LB	RB	RT	LT
+SLOT	L_3	5	1	0,425'	6,075'	3,7'	2,6'	3mm	3mm	3mm	3mm	100	100	0	CC	N	LB	RB	RT	LT
+SLOT	R_3	6	1	4,375'	6,075'	3,7'	2,6'	3mm	3mm	3mm	3mm	100	100	0	CC	N	LB	RB	RT	LT
+SLOT	L_4	7	1	0,425'	8,925'	3,7'	2,6'	3mm	3mm	3mm	3mm	100	100	0	CC	N	LB	RB	RT	LT
+SLOT	R_4	8	1	4,375'	8,925'	3,7'	2,6'	3mm	3mm	3mm	3mm	100	100	0	CC	N	LB	RB	RT	LT
+SLOT	T_1	101	1	0,425'	0,075'	11'	0,2'	0mm	0mm	0mm	0mm	100	100	0	LB	N	N	N	N	N
+
+#===================================
+
+TotalPagesMultipleOf	8
+
+#===================================
+#EOF

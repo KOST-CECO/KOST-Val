@@ -80,7 +80,8 @@ public class CmdKOSTVal implements MessageConstants
 		CmdKOSTVal cmdkostval = (CmdKOSTVal) context.getBean( "cmdkostval" );
 		Util.switchOnConsole();
 
-		System.out.println( "KOST-Val" );
+		String versionKostVal = "2.1.3.0";
+		System.out.println( "KOST-Val " + versionKostVal );
 
 		// Ist die Anzahl Parameter (mind 2) korrekt?
 		if ( args.length < 2 ) {
@@ -104,8 +105,6 @@ public class CmdKOSTVal implements MessageConstants
 		String arg1 = args[1];
 		String arg2 = "";
 		String arg3 = "";
-
-		String versionKostVal = "2.1.3.0";
 
 		// Standardwerte bei fehlenden Parameter eingeben
 		if ( args.length == 2 ) {

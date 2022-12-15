@@ -73,9 +73,8 @@ public class Validation3aFormatRecognitionModuleImpl extends
 		String flacValidation = configMap.get( "flacValidation" );
 		String waveValidation = configMap.get( "waveValidation" );
 		String mp3Validation = configMap.get( "mp3Validation" );
-		String ffv1Validation = configMap.get( "ffv1Validation" );
+		String mkvValidation = configMap.get( "mkvValidation" );
 		String mp4Validation = configMap.get( "mp4Validation" );
-		String mj2Validation = configMap.get( "mj2Validation" );
 		String xmlValidation = configMap.get( "xmlValidation" );
 		String siardValidation = configMap.get( "siardValidation" );
 		String csvValidation = configMap.get( "csvValidation" );
@@ -154,7 +153,7 @@ public class Validation3aFormatRecognitionModuleImpl extends
 				formatValOn = formatValOn + " MP3 ";
 			}
 		}
-		if ( !ffv1Validation.equals( "no" ) ) {
+		if ( !mkvValidation.equals( "no" ) ) {
 			if ( formatValOn.equals( "" ) ) {
 				formatValOn = " FFV1 ";
 			} else {
@@ -166,13 +165,6 @@ public class Validation3aFormatRecognitionModuleImpl extends
 				formatValOn = " MP4 ";
 			} else {
 				formatValOn = formatValOn + " MP4 ";
-			}
-		}
-		if ( !mj2Validation.equals( "no" ) ) {
-			if ( formatValOn.equals( "" ) ) {
-				formatValOn = " MJ2 ";
-			} else {
-				formatValOn = formatValOn + " MJ2 ";
 			}
 		}
 		if ( !xmlValidation.equals( "no" ) ) {

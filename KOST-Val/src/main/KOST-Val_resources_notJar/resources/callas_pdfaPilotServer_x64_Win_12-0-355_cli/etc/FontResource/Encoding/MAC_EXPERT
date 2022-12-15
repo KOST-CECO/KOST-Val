@@ -1,0 +1,140 @@
+%!PS-Adobe-3.0 Resource-CMap
+%%DocumentNeededResources: ProcSet (CIDInit)
+%%IncludeResource: ProcSet (CIDInit)
+%%BeginResource: CMap (MAC_EXPERT)
+%%Title: (MAC_EXPERT 0)
+%%EndComments
+
+/CIDInit /ProcSet findresource begin
+
+12 dict begin
+
+begincmap
+
+/CMapName /MAC_EXPERT def
+/CMapType 2 def
+
+1 begincodespacerange
+<20> <fb>
+endcodespacerange
+
+93 beginbfchar
+<20> <0020>
+<21> <F721>
+<22> <F6F8>
+<23> <F7A2>
+<24> <F724>
+<25> <F6E4>
+<26> <F726>
+<27> <F7B4>
+<2a> <2025>
+<2b> <2024>
+<2f> <2044>
+<3d> <F6DE>
+<3f> <F73F>
+<44> <F7F0>
+<5b> <208D>
+<5d> <208E>
+<5e> <F6F6>
+<5f> <F6E5>
+<7b> <20A1>
+<7e> <F6FE>
+<81> <F6E9>
+<82> <F6E0>
+<87> <F7E1>
+<88> <F7E0>
+<89> <F7E2>
+<8a> <F7E4>
+<8b> <F7E3>
+<8c> <F7E5>
+<8d> <F7E7>
+<8e> <F7E9>
+<8f> <F7E8>
+<92> <F7ED>
+<93> <F7EC>
+<96> <F7F1>
+<97> <F7F3>
+<98> <F7F2>
+<99> <F7F4>
+<9a> <F7F6>
+<9b> <F7F5>
+<9c> <F7FA>
+<9d> <F7F9>
+<a1> <2078>
+<a2> <2084>
+<a3> <2083>
+<a4> <2086>
+<a5> <2088>
+<a6> <2087>
+<a7> <F6FD>
+<a9> <F6DF>
+<aa> <2082>
+<ac> <F7A8>
+<ae> <F6F5>
+<af> <F6F0>
+<b0> <2085>
+<b2> <F6E1>
+<b3> <F6E7>
+<b4> <F7FD>
+<b6> <F6E3>
+<b9> <F7FE>
+<bb> <2089>
+<bc> <2080>
+<bd> <F6FF>
+<be> <F7E6>
+<bf> <F7F8>
+<c0> <F7BF>
+<c1> <2081>
+<c2> <F6F9>
+<c9> <F7B8>
+<cf> <F6FA>
+<d0> <2012>
+<d1> <F6E6>
+<d6> <F7A1>
+<d8> <F7FF>
+<da> <00B9>
+<e1> <2079>
+<e2> <2070>
+<e4> <F6EC>
+<e5> <F6F1>
+<e6> <F6F3>
+<e9> <F6ED>
+<ea> <F6F2>
+<eb> <F6EB>
+<f1> <F6EE>
+<f2> <F6FB>
+<f3> <F6F4>
+<f4> <F7AF>
+<f5> <F6EA>
+<f6> <207F>
+<f7> <F6EF>
+<f8> <F6E2>
+<f9> <F6E8>
+<fa> <F6F7>
+<fb> <F6FC>
+endbfchar
+
+15 beginbfrange
+<28> <29> <207D>
+<2c> <2e> <002C>
+<30> <39> <F730>
+<3a> <3b> <003A>
+<47> <49> <00BC>
+<4a> <4d> <215B>
+<4e> <4f> <2153>
+<56> <5a> <FB00>
+<60> <7a> <F760>
+<7c> <7d> <F6DC>
+<90> <91> <F7EA>
+<94> <95> <F7EE>
+<9e> <9f> <F7FB>
+<db> <dc> <00B2>
+<dd> <e0> <2074>
+endbfrange
+endcmap
+CMapName currentdict /CMap defineresource pop
+end
+end
+
+%%EndResource
+%%EOF

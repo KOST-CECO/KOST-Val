@@ -566,16 +566,16 @@ public class ConfigurationServiceImpl implements ConfigurationService
 
 			// TODO Video
 
-			// Gibt an ob ffv1 akzeptiert werden soll
+			// Gibt an ob mkv akzeptiert werden soll
 			/* durch die Sonderzeichen muss es anders ausgelesen werden */
-			String azFfv1 = "<ffv1validation>(&#x2713;)</ffv1validation>";
-			String ffv1validation = "no";
-			if ( config.contains( azFfv1 ) ) {
-				ffv1validation = "az";
+			String azMkv = "<mkvvalidation>(&#x2713;)</mkvvalidation>";
+			String mkvvalidation = "no";
+			if ( config.contains( azMkv ) ) {
+				mkvvalidation = "az";
 			} else {
-				ffv1validation = "no";
+				mkvvalidation = "no";
 			}
-			configMap.put( "ffv1Validation", ffv1validation );
+			configMap.put( "mkvValidation", mkvvalidation );
 
 			// Gibt an ob mp4 akzeptiert werden soll
 			/* durch die Sonderzeichen muss es anders ausgelesen werden */
@@ -587,17 +587,6 @@ public class ConfigurationServiceImpl implements ConfigurationService
 				mp4validation = "no";
 			}
 			configMap.put( "mp4Validation", mp4validation );
-
-			// Gibt an ob mj2 akzeptiert werden soll
-			/* durch die Sonderzeichen muss es anders ausgelesen werden */
-			String azMj2 = "<mj2validation>(&#x2713;)</mj2validation>";
-			String mj2validation = "no";
-			if ( config.contains( azMj2 ) ) {
-				mj2validation = "az";
-			} else {
-				mj2validation = "no";
-			}
-			configMap.put( "mj2Validation", mj2validation );
 
 			// TODO Daten
 

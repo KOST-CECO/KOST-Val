@@ -1,0 +1,153 @@
+%!PS-Adobe-3.0 Resource-File
+%%BeginResource: file (FS/PGFSetup)
+%%Title: (FS/PGFSetup)
+%%Version: 3010.01
+%%Copyright: ------------------------------------------------------------
+%%Copyright: Copyright 1990-1998 Adobe Systems Incorporated.
+%%Copyright: All rights reserved.
+%%Copyright:
+%%Copyright: Patents Pending
+%%Copyright:
+%%Copyright: NOTICE: All information contained herein is the property
+%%Copyright: of Adobe Systems Incorporated. Many of the intellectual
+%%Copyright: and technical concepts contained herein are proprietary
+%%Copyright: to Adobe, are protected as trade secrets, and are made
+%%Copyright: available only to Adobe licensees for their internal use.
+%%Copyright: Any reproduction or dissemination of this software is
+%%Copyright: strictly forbidden unless prior written permission is
+%%Copyright: obtained from Adobe.
+%%Copyright:
+%%Copyright: PostScript and Display PostScript are trademarks of
+%%Copyright: Adobe Systems Incorporated which may be registered in
+%%Copyright: certain jurisdictions.
+%%Copyright: ------------------------------------------------------------
+%%EndComments
+save 100 dict begin/svobj exch def/var0 1 string def/var1 null def/var2 null
+def/var3(
+)def/var4 3 array def/var5 3 array def/var6 null def/var7 5 string def/var8 4
+string def/var9 null def/subr0{/var2 exch store/var9 exch store 3 array
+usertime dup 256 mod 3 1 roll 256 idiv dup 256 mod 4 1 roll 256 idiv 4 1 roll
+astore/var5 exch store/var1 false store{1 217 113 var4 astore pop 0 1 3{var5
+aload 4 1 roll dup 109 mul dup 256 mod 6 1 roll 256 idiv 2 index 109 mul add 1
+index 206 mul add dup 256 mod 7 1 roll 256 idiv exch 16325 mul add exch 206
+mul add exch 109 mul add 65536 mod 4 2 roll 191 add 256 idiv 88 add add exch
+3462 add 256 mul add exch pop 4194303 and dup var5 exch dup 256 mod 3 1 roll
+256 idiv dup 256 mod 4 1 roll 256 idiv 4 1 roll astore pop 255 and var4 1 get
+xor 255 and dup/var6 exch store var4 aload 5 1 roll 4 -1 roll add dup 109 mul
+191 add dup 256 mod 6 1 roll 256 idiv 2 index 109 mul add 1 index 206 mul add
+88 add dup 256 mod 7 1 roll 256 idiv exch 16325 mul add exch 206 mul add exch
+109 mul add 3462 add 65536 mod 4 1 roll astore pop dup var8 exch var6 put 0 eq
+{var6 32 eq var6 9 eq or var6 10 eq or var6 13 eq or{exit}if}if/var1 var6 48
+lt var6 57 gt or var6 65 lt var6 70 gt or and var6 97 lt var6 102 gt or and
+var1 or store}executeonly for var1{exit}if}executeonly loop/var1 0 store var2
+0 eq{var9 type/filetype eq{0 1 3{var8 exch get var9 exch write}for}{0 1 3{var9
+exch dup var8 exch get put}for/var6 4 store}ifelse}{var9 type/filetype eq{0 1
+3{var8 exch get var9 exch var1 var2 ge{1 index var3 writestring/var1 0 store}
+if var0 exch 0 exch put var0 writehexstring/var1 var1 2 add store}for}{0 1 3{
+var8 1 index get 16 var9 4 -1 roll 2 mul 2 getinterval cvrs pop}for/var6 8
+store}ifelse}ifelse var4 aload pop var7 3 3 -1 roll put var7 2 3 -1 roll put
+var7 1 2 index 256 mod put var7 0 3 -1 roll 256 idiv put}bind executeonly def
+/subr1{var7 0 get 256 mul var7 1 get add var7 2 get var7 3 get var4 astore dup
+1 get 3 -1 roll var2 0 eq{var9 type/filetype eq{{xor 255 and dup var9 exch
+write exch aload 5 1 roll 4 -1 roll add dup 109 mul 191 add dup 256 mod 6 1
+roll 256 idiv 2 index 109 mul add 1 index 206 mul add 88 add dup 256 mod 7 1
+roll 256 idiv exch 16325 mul add exch 206 mul add exch 109 mul add 3462 add
+65536 mod 4 1 roll astore dup 1 get}executeonly forall}{{xor 255 and var9 var6
+2 index put/var6 var6 1 add store exch aload 5 1 roll 4 -1 roll add dup 109
+mul 191 add dup 256 mod 6 1 roll 256 idiv 2 index 109 mul add 1 index 206 mul
+add 88 add dup 256 mod 7 1 roll 256 idiv exch 16325 mul add exch 206 mul add
+exch 109 mul add 3462 add 65536 mod 4 1 roll astore dup 1 get}executeonly
+forall}ifelse}{var9 type/filetype eq{{xor 255 and dup var9 exch var1 var2 ge{
+var9 var3 writestring/var1 0 store}if var0 exch 0 exch put var0 writehexstring
+/var1 var1 2 add store exch aload 5 1 roll 4 -1 roll add dup 109 mul 191 add
+dup 256 mod 6 1 roll 256 idiv 2 index 109 mul add 1 index 206 mul add 88 add
+dup 256 mod 7 1 roll 256 idiv exch 16325 mul add exch 206 mul add exch 109 mul
+add 3462 add 65536 mod 4 1 roll astore dup 1 get}executeonly forall}{{xor 255
+and dup 16 var9 var6 2 getinterval cvrs pop/var6 var6 2 add store exch aload 5
+1 roll 4 -1 roll add dup 109 mul 191 add dup 256 mod 6 1 roll 256 idiv 2 index
+109 mul add 1 index 206 mul add 88 add dup 256 mod 7 1 roll 256 idiv exch
+16325 mul add exch 206 mul add exch 109 mul add 3462 add 65536 mod 4 1 roll
+astore dup 1 get}executeonly forall}ifelse}ifelse pop aload pop var7 3 3 -1
+roll put var7 2 3 -1 roll put var7 1 2 index 256 mod put var7 0 3 -1 roll 256
+idiv put}bind executeonly def/subr2{var9 type/filetype eq{var2 0 ne var1 var2
+ge and{var9 var3 writestring}if}{var9 0 var6 getinterval}ifelse}bind
+executeonly def/tstr 50 string def/encon false def/strconcat{/rstr exch def
+/bstr exch def/astr exch def astr rstr cvs length dup rstr exch rstr length 1
+index sub getinterval bstr exch cvs length add rstr exch 0 exch getinterval}
+bind executeonly def/prnt{encon{subr1}{ofile type/filetype eq{ofile exch
+writestring}{buffer1 exch ofile exch dup length ofile add/ofile exch store
+putinterval}ifelse}ifelse}bind executeonly def/cr{prnt(
+)prnt}executeonly def/objectprint{obpdict begin typeprint end}bind executeonly
+def/obpdict 30 dict def obpdict begin/str1 1 string def/bcount 0 def/stind
+true def/=string 128 string def/typeprint{dup type exec stind{( )prnt}if}bind
+def/cvsprint{=string cvs prnt}bind def/nulltype{(null)prnt}bind def
+/integertype{cvsprint}bind def/realtype{cvsprint}bind def/booleantype{cvsprint
+}bind def/fonttype{pop/stind stind not def}bind def/operatortype{cvsprint}bind
+def/nametype{dup xcheck not{(/)prnt}if cvsprint}bind def/stringtype{stind{
+/bcount 0 def dup{dup 40 eq{pop/bcount bcount 1 add def}{41 eq{/bcount bcount
+1 sub def bcount 0 lt{exit}if}if}ifelse}forall dup(\()prnt{dup 40 eq 1 index
+41 eq or bcount 0 ne and 1 index 92 eq or{(\\)prnt}if str1 exch 0 exch put
+str1 prnt}forall(\))prnt wcheck not{( readonly)prnt}if}{{str1 exch 0 exch put
+str1 prnt}forall}ifelse}bind def/generalarray{dup dup xcheck{({)prnt{typeprint
+}forall(})prnt wcheck not{( readonly)prnt}if}{([)prnt{typeprint}forall(])prnt
+wcheck not{( readonly)prnt}if}ifelse}bind def/arraytype{generalarray}bind def
+/packedarraytype{generalarray}bind def/dicttype{dup length objectprint
+(dict begin)cr dup{exch objectprint objectprint(def)cr}forall(currentdict end)
+prnt dup rcheck{wcheck not{( readonly)prnt}if}{pop( noaccess)prnt}ifelse}bind
+def end/writefontinfo{(/FontInfo )prnt fid length objectprint( dict dup begin)
+cr fid{exch objectprint objectprint(def)cr}forall(end readonly def)cr}bind
+executeonly def/writeprotectioncode{(userdict /$PGFKeys known not)cr
+({ 1183615869 internaldict /superexec get)cr
+(  { {\(Sys/PGFKeys\) PrependRoot run})cr(    exch exec)cr(  } stopped)cr
+(  { currentfile closefile pop)cr(    errordict /invalidfont get exec stop)cr
+(  } if)cr(} executeonly if)cr(save mark)cr
+({ errordict dup begin {pop {stop} def} forall end)cr
+(  systemdict /serialnumber known not {stop} if)cr(  $PGFKeys /)prnt curpgf
+/PrimogenitalFontName get tstr cvs prnt( known not {stop} if)cr(  $PGFKeys /)
+prnt curpgf/PrimogenitalFontName get tstr cvs prnt( get)cr(  eexec)cr
+(  1183615869 internaldict /superexec get {aload} exch exec)cr
+(} executeonly stopped)cr({ true })cr({ pop)cr(  dup )prnt dup/PGFontID known{
+dup/PGFontID get}{dup/DesignID get}ifelse tstr cvs prnt
+( ne {470179988 ne} executeonly {pop false} ifelse exch)cr
+(  serialnumber ne or exch buildtime ne or exch product ne or} executeonly)cr
+(ifelse)cr(counttomark 2 add 1 roll cleartomark)cr(restore)cr
+({ currentfile closefile pop)cr(  errordict /invalidfont get exec stop)cr
+(} if)cr}bind executeonly def/writeprivinfo{curpgf/Private get
+writeprotectioncode(dup /Private )prnt dup length objectprint( dict dup begin)
+cr(/-| {string currentfile exch readstring pop} executeonly def)cr
+(/|- {noaccess def} executeonly def)cr(/| {noaccess put} executeonly def)cr{
+exch{dup/Subrs eq{objectprint/subrnum 0 def dup length objectprint(array)cr{
+( dup )prnt subrnum objectprint dup length objectprint(-| )prnt prnt( |)cr
+/subrnum subrnum 1 add def}forall( |-)cr exit}if dup/-| eq{pop pop exit}if dup
+/|- eq{pop pop exit}if dup/| eq{pop pop exit}if objectprint objectprint(def)cr
+exit}loop}forall(end noaccess put)cr}bind executeonly def currentdict end
+userdict begin/CPGFDict exch def/SetupPGFont{{//CPGFDict begin{(pgfonts/)
+length dup 2 index length exch sub getinterval/pgfname exch def/curpgf pgfname
+cvn findpgfont def curpgf/FontInfo known{curpgf/FontInfo get}{null}ifelse/fid
+exch def curpgf/Private known not{exit}if curpgf/Private get{/password get
+5839 ne}executeonly//systemdict/internaldict get 1183615869 exch exec
+/superexec get exec{exit}if pgfname cvn(pgfonts/)AppendName PrependRoot exch
+pop/ofile exch(w)file def/encon false def
+(%!PS-Adobe-2.0 AdobePrimogenitalFont)cr(%%Title: )prnt pgfname prnt fid null
+ne{fid/version known{( )prnt fid/version get}{()}ifelse}{()}ifelse cr
+(% Copyright \(c\) 1984, '85, '86, '87, '88 Adobe Systems Incorporated.)cr
+(% All Rights Reserved.)cr()cr curpgf length objectprint(dict begin)cr
+(/PrimogenitalFontName )prnt pgfname cvn objectprint(def)cr curpgf{1 index
+/Private ne 2 index/FontInfo ne and 2 index/PrimogenitalFontName ne and 2
+index/CharStringsArray ne and 2 index/CharOffsetsDict ne and{exch objectprint
+objectprint(def)cr}{pop pop}ifelse}forall fid null ne{writefontinfo}if
+(currentdict end)cr(currentfile eexec)cr/encon true def ofile 64 subr0{
+writeprivinfo}executeonly//systemdict/internaldict get 1183615869 exch exec
+/superexec get exec(dup /CharOffsetsDict \(pgfsupp/)prnt pgfname prnt
+(_COD\) PrependRoot)cr(    dup length string copy readonly put)cr
+(dup /CharStringsArray \(pgfsupp/)prnt pgfname prnt(_CSA\) PrependRoot)cr
+(    dup length string copy readonly put)cr
+(PGFontDirectory exch dup /PrimogenitalFontName get exch put)cr
+(currentfile closefile)cr subr2/encon false def(%%EndAdobePrimogenitalFont)cr
+ofile closefile(installed
+)print exit}loop end}stopped{clear countdictstack 2 sub{end}repeat//CPGFDict
+/svobj get restore stop}if}bind executeonly def(pgfonts/*){{dup print( ... )
+print flush SetupPGFont exit}loop}64 string filenameforall end CPGFDict/svobj
+get restore
+%%EndResource
+%%EOF

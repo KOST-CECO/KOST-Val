@@ -1,0 +1,283 @@
+%!PS-Adobe-3.0 Resource-ProcSet
+%%BeginResource: ProcSet AdobeTypeComposer
+%%Title: (ProcSet/AdobeTypeComposer)
+%%Version: 3010.01
+%%Copyright: ------------------------------------------------------------
+%%Copyright: Copyright 1990-1996 Adobe Systems Incorporated.
+%%Copyright: All rights reserved.
+%%Copyright:
+%%Copyright: Patents Pending
+%%Copyright:
+%%Copyright: NOTICE: All information contained herein is the property
+%%Copyright: of Adobe Systems Incorporated. Many of the intellectual
+%%Copyright: and technical concepts contained herein are proprietary
+%%Copyright: to Adobe, are protected as trade secrets, and are made
+%%Copyright: available only to Adobe licensees for their internal use.
+%%Copyright: Any reproduction or dissemination of this software is
+%%Copyright: strictly forbidden unless prior written permission is
+%%Copyright: obtained from Adobe.
+%%Copyright:
+%%Copyright: PostScript and Display PostScript are trademarks of
+%%Copyright: Adobe Systems Incorporated which may be registered in
+%%Copyright: certain jurisdictions.
+%%Copyright: ------------------------------------------------------------
+%%EndComments
+cid_extensions begin 3010.01 systemdict/languagelevel known{false setglobal}if
+systemdict/setpacking known dup{currentpacking exch true setpacking 3 -1 roll}
+{exch}ifelse/AdobeTypeComposer/languagelevel where{pop languagelevel 2 ge}{
+false}ifelse{userdict/AdobeTypeComposer known{/AdobeTypeComposer/ProcSet
+findresource dup/$ATC_version known{dup/$ATC_version get 3 index gt{pop true}{
+false}ifelse}{pop true}ifelse}{true}ifelse}{userdict/AdobeTypeComposer 2 copy
+known{get dup/$ATC_version known{dup/$ATC_version get 3 index gt{pop true}{
+false}ifelse}{pop true}ifelse}{pop pop true}ifelse}ifelse dup{46 dict dup/bdf{
+$ATCvar/dodef get{bind def}{pop pop}ifelse}bind put dup/$ATCvar 104 dict put
+exch}if exch begin dup $ATCvar/dodef 3 -1 roll put dup{/$ATCPGFont 18 dict def
+}if{$ATCPGFont begin/c 0 def/fd 0 def/cn 0 def/co 0 def/pf 0 def/pd 0 def/po1
+0 def/po2 0 def/pl 0 def/tn 0 def/tch( )def/invlfont{/BuildChar errordict
+/invalidfont get exec stop}bind def/cdp 0 def/ispcdp 0 def systemdict/rectfill
+known{/dct1{0 setcachelimit}bind def}{/dct1{}def}ifelse/cpf 0 def/copypf{cpf
+not{/cpf true def/pf pf/$ATCFontCopy get def}if}bind def/BuildChar{
+//$ATCPGFont begin/c exch def/fd exch def fd/CharTransArray 2 copy known{get c
+get dup null ne{concat}{pop}ifelse}{pop pop}ifelse/cn fd/Encoding get c get
+def fd/CharStrings get dup cn known{cn}{/.notdef}ifelse get dup xcheck{
+//systemdict begin fd begin c exch exec end end}{/co exch fd/CharOffsets get
+exch 6 mul 6 getinterval def/po1 co 1 get def/po2 co 2 get 8 bitshift co 3 get
+add def/pl co 4 get 8 bitshift co 5 get add def/pf co 0 get fd/PGFArray get
+exch get dup type/dicttype ne{pl 1 le{findfont}{findpgfont}ifelse}if def pl 1
+le{save/cpf false def pf/PaintType known{pf/PaintType get fd/PaintType get ne{
+copypf pf/PaintType fd/PaintType get put}if pf/PaintType get 2 eq fd
+/StrokeWidth known and{copypf pf/StrokeWidth fd/StrokeWidth get put}if}if
+/rootfont where{pop rootfont/WMode known{rootfont/WMode get}{0}ifelse dup pf
+/WMode known{pf/WMode get}{0}ifelse ne{copypf pf/WMode 3 -1 roll put}{pop}
+ifelse}if pf po2 255 and pl 1 eq{copypf fd/CharNameArray get exch get pf
+/Encoding get exch 0 exch put 0}if cpf{/pf/$ATCAnonBF pf definefont def}if pf
+/CDevProc known{pf maxlength 1 sub dict begin pf{1 index/CDevProc eq 2 index
+/FID eq or{pop pop}{def}ifelse}forall currentdict end/$ATCAnonBF2 exch
+definefont}{pf}ifelse setfont/cdp systemdict/setcachedevice2 known{fd/CDevProc
+known{fd/CDevProc get/ispcdp false def}{pf/CDevProc known{pf/CDevProc get
+/ispcdp true def}{null}ifelse}ifelse}{null}ifelse def dct1 tch exch 0 exch put
+tch stringwidth fd/FontBBox get aload pop/cdp load null ne{5 index 5 index 0 0
+ispcdp{pf/Encoding get tch 0 get get}{cn}ifelse/cdp load exec setcachedevice2}
+{setcachedevice}ifelse 0 0 moveto tch show/pf exch def restore}{fd c fd
+/$ATCOldBuildChar get exec}ifelse}ifelse end}bind executeonly def end/var
+$ATCvar def $ATCvar begin/maxnmlen 64 def/maxrtlen 10 def/route maxrtlen
+string def/stroute null def/zeroroute route length string def/cnstr(@  )def
+/tstr 128 string def/cfnsuff 1 def/S6 6 string def/S6Z 6 string def/S1 1
+string def/T1 1 string def/R1 1 string def/bboxarray 4 array def/opgfa 64
+array def/pgfa 64 array def/curoute maxrtlen string def/hexchars
+(0123456789ABCDEF)def/nocopykeys 6 dict dup begin/FID null def/UniqueID null
+def/CurMID null def/MIDVector null def/XUID null def end def/rc 0 def/tm null
+def/cna 256 array def/cnacnt 0 def/idmx matrix def/chnamelist 256 array def
+/oldcdp{pop}def/altcdp{pop}def end}if/atc_prnt{dup type/stringtype ne{=string
+cvs}if dup length 6 mul/tx exch def/ty 10 def currentpoint/toy exch def/tox
+exch def 1 setgray newpath tox toy 2 sub moveto 0 ty rlineto tx 0 rlineto 0 ty
+neg rlineto closepath fill tox toy moveto 0 setgray show}bdf/atc_nl{
+currentpoint exch pop atc_lmargin exch moveto 0 -10 rmoveto}bdf/atc_prerror{
+$ATCvar begin/atc_lmargin 72 def/atc_rmargin 72 def/atc_font/Courier findfont
+10 scalefont def{1 eq{
+(%%[ Error: invalidfont; OffendingCommand: findfont ]%%
+               )print flush vmstatus pop pop 0 ne{grestoreall}if initgraphics
+atc_font setfont atc_lmargin 720 moveto(The rearranged font, )atc_prnt
+atc_prnt(,)atc_prnt atc_nl
+(could not be printed because the following font components)atc_prnt atc_nl
+(have not been downloaded to this PostScript device:)atc_prnt/atc_lmargin 90
+def atc_nl atc_nl counttomark dup 65 gt{pop 65}if{atc_prnt atc_nl}repeat
+cleartomark systemdict/showpage get exec exit}if}loop end}bdf/min{2 copy gt{
+exch}if pop}bdf/max{2 copy lt{exch}if pop}bdf/eqfm{2 copy eq{pop pop true}{
+/eqm true def{2 copy type/arraytype ne exch type/arraytype ne or{/eqm false
+def exit}if 0 1 5{3 copy get exch 3 -1 roll get ne{/eqm false def exit}if}for
+exit}loop pop pop eqm}ifelse}bdf/CopyFont{1 index maxlength add dict begin{
+nocopykeys 2 index known{pop pop}{def}ifelse}forall currentdict end}bdf
+/makeusedbf{dup/FontType get 0 ne 1 index/$ATCFontCopy known not and{dup
+/FontMatrix get dup 3 1 roll matrix invertmatrix makefont 2 CopyFont dup begin
+2 CopyFont dup/Encoding get wcheck not{dup dup/Encoding get dup length array
+copy/Encoding exch put}if/$ATCFontCopy exch def/$ATCOrigMatrix exch def
+currentdict end/$ATCAnonBF exch definefont}if}bdf/raiseerr{op errordict 3 -1
+roll get exec}bdf/crname{dup -4 bitshift hexchars exch get cnstr exch 1 exch
+put 15 and hexchars exch get cnstr exch 2 exch put cnstr cvn}bdf/getpgfno{
+pgfalen 1 sub -1 0{opgfa 1 index get 2 index eq{exch pop exit}if pop}for}bdf
+/addpgf{getpgfno dup type/integertype ne{dup opgfa pgfalen 3 -1 roll put dup
+type/dicttype eq{dup/FontType known{makeusedbf}if}if pgfa pgfalen 3 -1 roll
+put pgfalen/pgfalen pgfalen 1 add def}if}bdf/makealist{aload pop/nch exch def
+/amodnum exch def/alist exch def dup null ne{routedict 2 index 3 -1 roll put}{
+pop}ifelse}bdf/newfontname{/cfnsuff 1 store{dup tstr cvs length dup maxnmlen 5
+sub gt{pop maxnmlen 5 sub}if tstr 1 index 46 put tstr 1 index 1 add 109 put 2
+add tstr length 1 index sub tstr 2 index 3 -1 roll getinterval dup 0 46 put
+cfnsuff exch cvs length add tstr 0 3 -1 roll getinterval/cfnsuff cfnsuff 1 add
+store cvn dup FontDirectory exch known not{exit}if pop}loop exch pop}bdf
+/buildcf{1 CopyFont begin/FontName SPtr 0 eq{nfn}{FontName newfontname}ifelse
+def currentdict end dup/Encoding get length array dup length 1 add array 0
+/SPtr SPtr 1 add def 0 1 4 index length 1 sub{dup curoute SPtr 2 mul 2 copy 2
+sub 4 index -8 bitshift put 1 sub 3 -1 roll 255 and put/crt curoute 0 SPtr 2
+mul getinterval cvn def 4 index/Encoding get 1 index get 5 index/FDepVector
+get exch get routedict crt known{routedict crt get dup null eq{pop buildcf}{
+exch pop}ifelse}if 4 2 roll 3 copy 3 -1 roll put dup 1 add 5 -2 roll pop 3 -1
+roll 4 index 3 1 roll put}for/SPtr SPtr 1 sub def 0 exch getinterval 2 index
+/FDepVector 3 -1 roll put 1 index/Encoding 3 -1 roll put dup/FontName get exch
+definefont}bdf/ssgetchar{i sstr length ge{/bchar 0 def}{/bchar sstr i get def
+/i i 1 add def}ifelse}bdf/fmaperr{{(%%[ Error: unsupported FMapType; )print
+curfont/FMapType get tstr cvs print( ]%%
+         )print flush stop}}bdf/fmapprocs[fmaperr fmaperr{/gifno bchar def
+route SPtr gifno put ssgetchar/range 256 def}fmaperr{/gifno bchar -7 bitshift
+def route SPtr 1 sub gifno put/bchar bchar 127 and def/range 128 def}{/gifno
+bchar 1 bitshift ssgetchar bchar -7 bitshift or def route SPtr 1 sub gifno -8
+bitshift put route SPtr gifno 255 and put/bchar bchar 127 and def/range 128
+def}{curfont/SubsVector get dup 0 get 0 eq{/range 256 def -1 bchar 3 -1 roll{2
+copy lt{/range exch def exit}if/range range 2 index sub def sub exch 1 add
+exch}forall/bchar exch def/gifno exch def route SPtr gifno put}{/v exch def/n
+v 0 get def bchar 256 n{8 bitshift exch ssgetchar 8 bitshift bchar add exch}
+repeat/range exch def/gifno 0 def 1 n 1 add v length 1 index sub 1 sub{v 1
+index get exch 1 1 index n add{v exch get exch 8 bitshift add}for 2 copy lt{
+/range exch def exit}if/range range 2 index sub def sub/gifno gifno 1 add def}
+for/bchar exch def route SPtr 1 sub gifno -8 bitshift put route SPtr gifno 255
+and put}ifelse}fmaperr fmaperr]bdf/compcharandfont{/codenum exch def invalsstr
+{sstr codenum n2s}if/SPtr 1 def/bchar sstr 0 get def/i 1 def{fmapprocs curfont
+/FMapType get get exec/SPtr SPtr 2 add def/curfont curfont dup/FDepVector get
+exch/Encoding get gifno get get def curfont/FMapType known not{/SPtr SPtr 1
+sub def lastrange dup 0 get null eq{route length string SPtr null 0 0 6 -1
+roll astore}if route 1 index 0 get copy SPtr curfont codenum bchar sub dup
+/rangestart exch def range 6 -1 roll astore pop exit}if}loop}bdf/wrongfont{
+(%%[ Error: invalid component font; )print curfont/FontName known{curfont
+/FontName get tstr cvs print}if( ]%%
+      )print flush stop}bdf/findcharandfont{/lastrange exch def/curfont exch
+def lastrange 0 get null eq{curfont/FontType get 0 eq{compcharandfont}{sstr
+length 2 ge{wrongfont}if/bchar exch def/SPtr 0 def/rangestart 0 def/range 256
+def}ifelse}{lastrange aload pop/range exch def/rangestart exch def 3 index
+rangestart sub dup 0 lt exch range ge or{pop pop pop compcharandfont}{/curfont
+exch def/SPtr exch def route copy pop rangestart sub/bchar exch def}ifelse}
+ifelse}bdf/linktoactdict{route 0 SPtr getinterval dup stroute eq{pop actdict
+stroute}{/stroute exch SPtr string copy def routedict stroute 2 copy curfont
+put SPtr 2 sub -2 2{0 exch getinterval 2 copy known{exit}if null put routedict
+stroute}for pop pop actdict stroute 2 copy known not{2 copy[null null 0 range]
+put}if}ifelse get}bdf/initaddmod{/mlist alist def/dchar 0 def/dcharend 0 def}
+bdf/getaddmod{dchar dcharend ge{mlist null eq{exit}if mlist aload pop exch
+/spgf exch def spgf/$ATCFontCopy known{spgf/$ATCOrigMatrix get}{spgf
+/FontMatrix get}ifelse ofont/FontMatrix get 2 index null eq{2 copy eqfm{pop
+pop idmx}{matrix invertmatrix dup concatmatrix}ifelse exch pop}{3 -1 roll exch
+matrix invertmatrix dup concatmatrix dup concatmatrix}ifelse dup idmx eqfm{pop
+/hastm false def}{/hastm true def/tm exch def cta null eq{/cta 256 array def}
+if}ifelse dup type/arraytype eq{dup/chnl exch def 0 get/schn exch def/schar 0
+def/spgfix spgf addpgf def{S6Z S6 copy dup 0 spgfix put dup 5 1 put 3 schn
+addcna put}}{/schar exch def/chnl null def spgf/PGFArray known ofont/PGFArray
+known and{/spgfa spgf/PGFArray get def/sco spgf/CharOffsets get def/scs spgf
+/CharStrings get def/senc spgf/Encoding get def spgf/CharNameArray known{{S6 0
+spgfa sco scs senc schar get get 6 mul 6 getinterval S6 copy 0 get get addpgf
+put S6 dup 4 get 0 eq exch 5 get 1 eq and{S6 3 spgf/CharNameArray get S6 3 get
+get addcna put}if}}{{S6 0 spgfa sco scs senc schar get get 6 mul 6 getinterval
+S6 copy 0 get get addpgf put}}ifelse}{/spgfix spgf addpgf def{S6Z S6 copy 0
+spgfix put S6 3 schar put}}ifelse}ifelse/addchproc exch def/dcharend exch def
+/dchar exch def/mlist exch def}{/schar schar 1 add def/dchar dchar 1 add def
+chnl null ne{/schn chnl schar get def}if}ifelse}bdf/getdchar{dchar dcharend ge
+{mlist null eq{exit}if mlist aload pop pop pop pop/dcharend exch def/dchar
+exch def/mlist exch def}{/dchar dchar 1 add def}ifelse}bdf/makeanonfont{
+//$ATCvar/Anonymous known not{/Anonymous 15 dict dup begin/CharOffsets 6
+string def/CharStrings 1 dict dup begin/.notdef 0 def end def/Encoding NDF
+/Encoding get def/PGFArray[NDF]def/PaintType 0 def/FontMatrix[.001 0 0 .001 0
+0]readonly def/CDevProc{pop pop pop pop 0 exch -1000 exch 2 div 880}def
+/FontType 4 def/Private 0 dict def/FontName/Anonymous def end def}if Anonymous
+}bdf/addcna{cnacnt 256 ge{/endrearrangedfont errordict/limitcheck get exec
+stop}if cna cnacnt 3 -1 roll put cnacnt/cnacnt cnacnt 1 add def}bdf/makefbb{0
+1 pgfalen 1 sub{opgfa exch get dup type/dicttype eq{dup/FontBBox known{
+/FontBBox get 2 copy 0 get exch 0 get min 2 index 0 3 -1 roll put 2 copy 1 get
+exch 1 get min 2 index 1 3 -1 roll put 2 copy 2 get exch 2 get max 2 index 2 3
+-1 roll put 2 copy 3 get exch 3 get max 2 index 3 3 -1 roll put}if}if pop}for
+cvx readonly}bdf/makenewfont{/ofont exch def ofont/CDevProc known{$ATCvar
+/oldcdp ofont/CDevProc get put}{$ATCvar/oldcdp{pop}put}ifelse/pgfalen 0 def
+ofont NDF eq{/ofont makeanonfont def}if ofont/PGFArray 2 copy known{get/oldco
+ofont/CharOffsets get def/oldcs ofont/CharStrings get def}{pop pop[ofont dup
+addpgf pop]}ifelse/oldpgfa exch def/finalenc ofont/Encoding get 256 array copy
+def/cnacnt 0 def/ocna null def chnamelist dup 0 1 255{null put dup}for pop pop
+ofont/PGFArray known{/pgfalen oldpgfa opgfa copy length def opgfa pgfa copy
+pop/oldnumchar oldco length 6 idiv def/ndfinx oldcs/.notdef get def/finalcs
+oldcs dup length amodnum add dict begin{def}forall currentdict end def/finalco
+finalcs maxlength 6 mul string def oldco finalco copy pop oldco ndfinx 6 mul 6
+getinterval S6 copy pop initaddmod mark oldnumchar 1 oldnumchar amodnum add 1
+add{getdchar finalenc dchar dup crname dup finalcs exch 6 -1 roll put put
+chnamelist dchar dup crname put}for cleartomark/finalcs finalcs readonly def
+ofont/CharNameArray known{/ocna ofont/CharNameArray get def}if}{initaddmod{
+getdchar finalenc dchar dup crname put chnamelist dchar dup crname put}loop
+/finalcs 1 finalenc{/.notdef ne{1 add}if}forall dict dup begin/.notdef 0 def 1
+finalenc{dup/.notdef ne{1 index def 1 add}{pop}ifelse}forall pop end readonly
+def/finalco 0 finalcs{exch pop dup 2 index gt{exch}if pop}forall 1 add 6 mul
+string def S6Z S6 copy pop 0 6 finalco length 6 sub{finalco exch S6
+putinterval}for S6 0 oldpgfa 0 get getpgfno put finalenc 0 1 255{2 copy get
+dup/.notdef ne{finalco finalcs 3 -1 roll get 6 mul S6 dup 3 6 -1 roll put
+putinterval}{pop pop}ifelse}for pop}ifelse/cta null def initaddmod{getaddmod
+hastm{cta dchar tm put}if/addchproc load exec finalco finalcs finalenc dchar
+get get 6 mul S6 putinterval}loop ocna null ne{0 1 255{finalcs finalenc 3 -1
+roll get get dup oldnumchar lt{6 mul finalco exch 6 getinterval dup dup 4 get
+0 eq exch 5 get 1 eq and{3 2 copy get ocna exch get addcna put 0}if}if pop}for
+}if ofont 11 CopyFont begin ofont/$ATCOldBuildChar known not{ofont/BuildChar
+known{/$ATCOldBuildChar/BuildChar load def}if/BuildChar $ATCPGFont/BuildChar
+get def}if/PGFArray pgfa 0 pgfalen getinterval dup length array copy def
+/CharOffsets finalco readonly def/CharStrings finalcs readonly def/Encoding
+finalenc readonly def mark alist aload pop pop exch pop exch pop exch pop exch
+pop dup/CDevProc known{$ATCvar exch/altcdp exch/CDevProc get put}{pop $ATCvar
+/altcdp{pop}put}ifelse cleartomark/CDevProc[false $ATCvar/chnamelist get 0
+exch{dup null ne{exch 1 add}{pop}ifelse}forall array astore{2 index eq{pop
+true exit}if}/forall load[$ATCvar/altcdp get/exec load]cvx[$ATCvar/oldcdp get
+/exec load]cvx/ifelse load]cvx def cta null ne{true 0 1 nch 1 sub{cta exch get
+tm eqfm not{pop false exit}if}for{/FontMatrix tm FontMatrix 6 array
+concatmatrix def}{/CharTransArray cta readonly def}ifelse}if cnacnt 0 gt{
+/CharNameArray cna 0 cnacnt getinterval cnacnt array copy def}if/FontType 4
+def/FontName 1 index length 0 eq{nfn}{ofont/FontName 2 copy known{get}{pop pop
+/Anonymous}ifelse newfontname}ifelse def/FontBBox ofont/FontBBox known{ofont
+/FontBBox get 4 array copy}{[0 0 0 0]}ifelse makefbb def currentdict end/fd
+exch def fd/FontName get fd definefont}bdf/countfd{1 add exch dup/FDepVector
+known{/FDepVector get{exch countfd}forall}{pop}ifelse}bdf/endrearrangedfont{
+actdict{makealist routedict 1 index get alist null ne{makenewfont}if routedict
+3 1 roll put}forall/SPtr 0 def tfd/FontType get 0 eq{tfd buildcf pop}{tfd 0
+CopyFont begin/FontName nfn def nfn currentdict end definefont pop}ifelse end
+lib_extensions begin lib_fontDepth 0 gt{/lib_fontDepth lib_fontDepth 1 sub def
+lib_nativeMode lib_fontDepth 0 eq and{lib_ToggleNativeMode
+/lib_buildCompatibleVM false def/lib_CMapType/CMap def/lib_FixCMapCategoryType
+/FixCMapCategory def/lib_CIDFontType/CIDFont def}if}if end}bdf
+/beginrearrangedfont{lib_extensions begin lib_nativeMode lib_fontDepth 0 eq
+and{lib_ToggleNativeMode/lib_buildCompatibleVM true def/lib_CMapType/CMapC def
+/lib_FixCMapCategoryType/FixCMapCategoryC def/lib_CIDFontType/CIDFontC def}if
+/lib_fontDepth lib_fontDepth 1 add def end dup{mark exch{findfont}stopped
+cleartomark}forall $ATCvar begin exch/nfn exch def/NDF/NotDefFont findfont def
+/uf exch def/misscount 0 def 0 1 uf length 1 sub{uf exch 2 copy get findfont
+dup/FontName known{3 copy/FontName get 3 1 roll get ne 1 index/FontName get
+/Courier eq and{3 copy pop get 64 string dup dup 4 2 roll cvs length misscount
+0 eq{mark 7 1 roll}if 4 index 0 eq{( \(template font\))}{( \(component font\))
+}ifelse putinterval 4 1 roll/misscount misscount 1 add def}if}if makeusedbf
+put}for misscount 0 gt{nfn 64 string cvs 1 atc_prerror stop}if uf 0 get/tfd
+exch def tfd 0 countfd dup/routedict exch dict def/actdict exch dict def
+/stroute null def/srcrange 5 array def/userange 5 array def/tma uf length
+array def}bdf/usefont{dup uf exch get/fd exch def userange 0 null put/tm tma 3
+-1 roll get def}bdf/beginusematrix{/op/beginusematrix def dup type/integertype
+ne{/typecheck raiseerr}if dup dup 1 lt exch uf length ge or{/rangecheck
+raiseerr}if}bdf/endusematrix{/op/endusematrix def dup type/arraytype ne{
+/typecheck raiseerr}if dup length 6 ne{/rangecheck raiseerr}if 0 1 5{1 index
+exch get type dup/integertype ne exch/realtype ne and{/typecheck raiseerr}if}
+for tma 3 1 roll put}bdf/n2s{1 index length 1 sub -1 0{3 copy exch 255 and put
+pop -8 bitshift}for pop pop}bdf/code2ns{/ts exch def dup type/integertype eq{
+dup ts ts 0 4 -1 roll put}{dup length 2 eq{dup dup 0 get 8 bitshift exch 1 get
+add exch}{/i 0 def 0 1 2 index length 1 sub{1 index exch get i 8 bitshift add
+/i exch def}for i exch}ifelse}ifelse}bdf/beginbfrange{/rc exch def}bdf
+/endbfrange{rc{3 1 roll T1 code2ns pop/nsrchi exch def R1 code2ns/ssrclo exch
+def/nsrclo exch def/invalsstr false def dup type/arraytype eq{fd/FontType get
+0 eq{/endbfrange errordict/invalidfont get exec stop}if/sstr ssrclo def{
+/chcount nsrchi nsrclo sub 1 add nsrclo tfd srcrange findcharandfont range min
+def linktoactdict dup 2 2 copy get chcount add put 1 2 copy get[exch bchar dup
+chcount add 1 sub 6 index fd tm]put nsrclo chcount add nsrchi gt{exit}if
+/nsrclo nsrclo chcount add def/invalsstr true def chcount 1 index length
+chcount sub getinterval}loop pop}{S1 code2ns{2 copy/sstr exch def fd userange
+findcharandfont/schar bchar def/bfont curfont def/chcount nsrchi nsrclo sub 1
+add range min/sstr ssrclo def nsrclo tfd srcrange findcharandfont range min
+def linktoactdict dup 2 2 copy get chcount add put 1 2 copy get[exch bchar dup
+chcount add 1 sub schar bfont tm]put nsrclo chcount add nsrchi gt{exit}if
+/nsrclo nsrclo chcount add def/invalsstr true def exch chcount add exch}loop
+pop pop}ifelse}repeat}bdf/beginbfchar{/rc exch def}bdf/endbfchar{rc{/invalsstr
+false def dup type/nametype eq{fd/FontType get 0 eq{/endbfchar errordict
+/invalidfont get exec stop}if[exch]/schar exch def/bfont fd def R1 code2ns}{S1
+code2ns 3 -1 roll R1 code2ns 4 2 roll/sstr exch def fd userange
+findcharandfont/schar bchar def/bfont curfont def}ifelse/sstr exch def tfd
+srcrange findcharandfont linktoactdict dup 2 2 copy get 1 add put 1 2 copy get
+[exch bchar dup schar bfont tm]put}repeat}bdf $ATCvar/dodef get{/$ATC_version
+2 index def}if $ATCvar/dodef get{currentdict/defineresource where{pop true}{
+false}ifelse{2 copy userdict 3 1 roll put/ProcSet defineresource pop}{userdict
+3 1 roll put}ifelse}{pop}ifelse pop{setpacking}if end end
+%%EndResource end
+%%EOF

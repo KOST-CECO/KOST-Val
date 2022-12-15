@@ -1,0 +1,62 @@
+%!PS-Adobe-3.0 Resource-File
+%%BeginResource: file (Sys/Start)
+%%Title: (Sys/Start)
+%%Version: 3010.01
+%%Copyright: ------------------------------------------------------------
+%%Copyright: Copyright 1990-1998 Adobe Systems Incorporated.
+%%Copyright: All rights reserved.
+%%Copyright:
+%%Copyright: Patents Pending
+%%Copyright:
+%%Copyright: NOTICE: All information contained herein is the property
+%%Copyright: of Adobe Systems Incorporated. Many of the intellectual
+%%Copyright: and technical concepts contained herein are proprietary
+%%Copyright: to Adobe, are protected as trade secrets, and are made
+%%Copyright: available only to Adobe licensees for their internal use.
+%%Copyright: Any reproduction or dissemination of this software is
+%%Copyright: strictly forbidden unless prior written permission is
+%%Copyright: obtained from Adobe.
+%%Copyright:
+%%Copyright: PostScript and Display PostScript are trademarks of
+%%Copyright: Adobe Systems Incorporated which may be registered in
+%%Copyright: certain jurisdictions.
+%%Copyright: ------------------------------------------------------------
+%%EndComments
+%ADOBeginCustomStartup
+systemdict/languagelevel known not systemdict/product known and{systemdict
+/product get(LaserWriter II NTX)eq{(%cartridge1%Sys/Start)dup{status}stopped{
+pop pop}{{pop pop pop pop run}{pop}ifelse}ifelse}if}if
+%%BeginResource: file (CID Support Library)
+%%Version: 3010.01
+countdictstack array dictstack 0 get dup/userdict get dup begin currentdict
+/cid_extensions known not{/cid_extensions 100 dict def}if cid_extensions begin
+/userdict exch def dup/globaldict known{dup/globaldict get/globaldict exch def
+}if/systemdict exch def end end cid_extensions begin 1183615869 internaldict
+/accesson 2 copy known{get true exch exec}{pop pop}ifelse systemdict
+/currentsystemparams known{currentsystemparams/GenericResourceDir known{
+currentsystemparams/GenericResourceDir get true}{false}ifelse}{false}ifelse{
+dup(%genericresource%)eq{pop(%genericresource%Lib/Start)}{(Resource)search{
+exch pop exch pop dup length dup 9 add string dup 0 4 index putinterval dup 2
+index(Lib/Start)putinterval exch pop exch pop}{(Lib/Start)}ifelse}ifelse}{
+(Lib/Start)}ifelse systemdict/currentsystemparams known{currentsystemparams
+/GenericResourcePathSep 2 copy known{get dup(/)eq{pop}{1 index(/)search{pop 0
+3 index putinterval pop pop}{pop pop}ifelse}ifelse}{pop pop}ifelse}if dup
+status{pop pop pop pop run}{pop}ifelse lib_extensions begin true
+lib_packingSaveState end(CID/Start)PrependRoot dup status{pop pop pop pop run}
+{pop}ifelse lib_extensions begin lib_packingRestoreState end/cid_PreLoad
+/ProcSet resourcestatus{pop pop/cid_PreLoad/ProcSet findresource dup
+/cid_PreLoadResources known{/cid_PreLoadResources get exec}{pop}ifelse}if
+%ADOIgnore vmstatus pop pop 0 eq{(MMFInit) status {{(MMFInit) run} stopped}if clear}if
+(MM/Start)PrependRoot dup status{pop pop pop pop run}{pop}ifelse[(FS/Level1)
+(FS/Level2)(FS/KeyMaker_Std)(FS/MergeKeys)(FS/MergeKeys2)(Sys/MergeKeys)
+(Sys/MergeKeys2)(Sys/PGFKeys)(Sys/PGFInit)(Sys/PGFInit2)(Sys/OCFInit)
+(Sys/OCFInit2)]dup length 2 mul 4 add dict begin{dup false def PrependRoot
+false def}forall(temp/PGFKeys.xxxxxxxx)serialnumber 16 2 index 13 8
+getinterval cvrs pop PrependRoot false def/cid_run/run load def/run{dup 0 exch
+known not{0/cid_run get exec}if}dup 1 currentdict put dup 5 get 0 currentdict
+put bind def userdict begin currentdict end currentdict end end begin begin
+%%EndResource
+(Usr/Start)PrependRoot dup status{pop pop pop pop run}{pop}ifelse
+%ADOEndCustomStartup
+%%EndResource
+%%EOF

@@ -33,7 +33,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.commons.io.FilenameUtils;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.w3c.dom.Document;
@@ -1122,73 +1121,89 @@ public class GuiController
 		}
 		File valFile = fileChooser.showOpenDialog( new Stage() );
 		if ( valFile != null ) {
+			/*
+			 * Minianleitung in engine anzeigen falls dann datei doch nicht
+			 * angezeigt werden kann...
+			 */
+			String sel = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Ausgewählte Datei: <br>"
+					+ valFile.getAbsolutePath()
+					+ "</h3></td></tr> <tr><td><h3>2.</h3></td><td><h3>Ggf. Konfiguration und LogType anpassen </h3></td></tr> <tr><td><h3>3.</h3></td><td><h3>Validierung starten </h3></td></tr></table>";
+			if ( locale.toString().startsWith( "fr" ) ) {
+				sel = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Fichier sélectionné : <br>"
+						+ valFile.getAbsolutePath()
+						+ "</h3></td></tr> <tr><td><h3>2.</h3></td><td><h3>Ajuster la configuration et le LogType si nécessaire </h3></td></tr> <tr><td><h3>3.</h3></td><td><h3>Démarrer la validation </h3></td></tr></table>";
+			} else if ( locale.toString().startsWith( "en" ) ) {
+				sel = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Selected file: <br>"
+						+ valFile.getAbsolutePath()
+						+ "</h3></td></tr> <tr><td><h3>2.</h3></td><td><h3>Adjust configuration and LogType if necessary </h3></td></tr> <tr><td><h3>3.</h3></td><td><h3>Start validation </h3></td></tr></table>";
+			} else {
+				sel = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Ausgewählte Datei: <br>"
+						+ valFile.getAbsolutePath()
+						+ "</h3></td></tr> <tr><td><h3>2.</h3></td><td><h3>Ggf. Konfiguration und LogType anpassen </h3></td></tr> <tr><td><h3>3.</h3></td><td><h3>Validierung starten </h3></td></tr></table>";
+			}
+			String text = "<html><body>" + sel + "</body></html>";
+			engine.loadContent( text );
+
 			fileFolder.clear();
 			fileFolder.setText( valFile.getAbsolutePath() );
-			// Anzeige in WebView wenn image
-			String pathDetail = "file:/" + valFile.getAbsolutePath();
-			pathDetail = pathDetail.replace( "\\\\", "/" );
-			pathDetail = pathDetail.replace( "\\", "/" );
 
-			String fileFolderName = valFile.getName();
-			String fileFolderExt = "." + FilenameUtils
-					.getExtension( fileFolderName ).toLowerCase();
-			String sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Ausgewählte Datei: <br>"
-					+ valFile.getAbsolutePath() + "</h3></td></tr>";
-			String sel2 = "<tr><td><h3>2.</h3></td><td><h3>Ggf. Konfiguration und LogType anpassen </h3></td></tr>";
-			String sel3 = "<tr><td><h3>3.</h3></td><td><h3>Validierung starten </h3></td></tr></table>";
-			String selDetail = "<br/>";
-			if ( fileFolderExt.equals( ".jpeg" )
-					|| fileFolderExt.equals( ".jpg" )
-					|| fileFolderExt.equals( ".png" )
-					|| fileFolderExt.equals( ".svg" ) ) {
-				selDetail = "<table  width=\"100%\"><tr><td width=\"25%\"></td><td><img  src='"
-						+ pathDetail
-						+ "' width=\"300\" style=\"border:1px solid gray\" ></td><td width=\"25%\"></td></tr></table>";
+			// Format und Sip Validierung erst moeglich wenn file ausgefuellt
+			buttonFormat.setDisable( false );
+			buttonPrint.setDisable( true );
+			buttonSave.setDisable( true );
+			String fileName = valFile.getName().toLowerCase();
+			if ( fileName.endsWith( ".txt" ) || fileName.endsWith( ".jpeg" )
+					|| fileName.endsWith( ".jpg" )
+					|| fileName.endsWith( ".svg" )
+					|| fileName.endsWith( ".png" )
+					|| fileName.endsWith( ".xml" ) ) {
+				/*
+				 * Die xml mit oder ohne Stylesheet wird in der ganzen engine
+				 * angezeigt. Entsprechend wird die Mini-Anleitung in die
+				 * console geschrieben.
+				 */
+				console.setText( " \n" );
+				engine.load( "file:///" + valFile.getAbsolutePath() );
+				if ( locale.toString().startsWith( "fr" ) ) {
+					console.setText( "1. Fichier selectionne : "
+							+ valFile.getAbsolutePath()
+							+ "\n2. Ajuster la configuration et le LogType si necessaire \n3. Demarrer la validation " );
+				} else if ( locale.toString().startsWith( "en" ) ) {
+					console.setText( "1. Selected file: "
+							+ valFile.getAbsolutePath()
+							+ "\n2. Adjust configuration and LogType if necessary \n3. Start validation " );
+				} else {
+					console.setText( "1. Ausgewaehlte Datei: "
+							+ valFile.getAbsolutePath()
+							+ "\n2. Ggf. Konfiguration und LogType anpassen \n3. Validierung starten " );
+				}
+				if ( valFile.getName().toLowerCase()
+						.endsWith( ".kost-val.log.xml" ) ) {
+					buttonPrint.setDisable( false );
+					buttonSave.setDisable( false );
+					buttonFormat.setDisable( true );
+				}
+
 			} else {
-				// TODO: hier laufend weitere Viewer einbauen
-			}
-			if ( locale.toString().startsWith( "fr" ) ) {
-				sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Fichier sélectionné : <br>"
-						+ valFile.getAbsolutePath() + "</h3></td></tr>";
-				sel2 = "<tr><td><h3>2.</h3></td><td><h3>Ajuster la configuration et le LogType si nécessaire </h3></td></tr>";
-				sel3 = "<tr><td><h3>3.</h3></td><td><h3>Démarrer la validation </h3></td></tr></table>";
-			} else if ( locale.toString().startsWith( "en" ) ) {
-				sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Selected file: <br>"
-						+ valFile.getAbsolutePath() + "</h3></td></tr>";
-				sel2 = "<tr><td><h3>2.</h3></td><td><h3>Adjust configuration and LogType if necessary </h3></td></tr>";
-				sel3 = "<tr><td><h3>3.</h3></td><td><h3>Start validation </h3></td></tr></table>";
-			}
-			String text = "<html><body>" + sel1 + sel2 + sel3 + selDetail
-					+ "</body></html>";
-			engine.loadContent( text );
-			// Format und Sip Validierung erst moeglich wenn fileFolder
-			// ausgefuellt
-			// und auch in der Config erlaubt
-			if ( Util.stringInFileLine( "validation>&#x2713;</",
-					configFile ) ) {
-				buttonFormat.setDisable( false );
-			} else if ( Util.stringInFileLine( "validation>(&#x2713;)</",
-					configFile ) ) {
-				buttonFormat.setDisable( false );
-			} else {
-				buttonFormat.setDisable( true );
-			}
-			if ( valFile.getName().startsWith( "SIP" ) ) {
-				String configSip0160 = "<ech0160validation>&#x2717;</ech0160validation>";
-				if ( Util.stringInFileLine( configSip0160, configFile ) ) {
+				String pathDetail = "file:/" + valFile.getAbsolutePath();
+				pathDetail = pathDetail.replace( "\\\\", "/" );
+				pathDetail = pathDetail.replace( "\\", "/" );
+
+				if ( valFile.getName().startsWith( "SIP" ) ) {
+					String configSip0160 = "<ech0160validation>&#x2717;</ech0160validation>";
+					if ( Util.stringInFileLine( configSip0160, configFile ) ) {
+						buttonSip.setDisable( true );
+						buttonOnlySip.setDisable( true );
+					} else {
+						buttonSip.setDisable( false );
+						buttonOnlySip.setDisable( false );
+					}
+				} else {
 					buttonSip.setDisable( true );
 					buttonOnlySip.setDisable( true );
-				} else {
-					buttonSip.setDisable( false );
-					buttonOnlySip.setDisable( false );
 				}
-			} else {
-				buttonSip.setDisable( true );
-				buttonOnlySip.setDisable( true );
 			}
 		}
-		buttonPrint.setDisable( true );
-		buttonSave.setDisable( true );
 	}
 
 	/* Wenn choseFoder betaetigt wird, kann ein Ordner ausgewaehlt werden */
@@ -1402,62 +1417,79 @@ public class GuiController
 			buttonOnlySip.setDisable( true );
 			buttonFormat.setDisable( true );
 		}
+
+		buttonPrint.setDisable( true );
+		buttonSave.setDisable( true );
+
 		// Anzeige in WebView wenn image
 		if ( valFileFolder.isFile() ) {
 			if ( valFileFolder.exists() ) {
 				if ( valFileFolder != null ) {
+					/*
+					 * Minianleitung in engine anzeigen falls dann datei doch
+					 * nicht angezeigt werden kann...
+					 */
+					String sel = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Ausgewählte Datei: <br>"
+							+ valFileFolder.getAbsolutePath()
+							+ "</h3></td></tr> <tr><td><h3>2.</h3></td><td><h3>Ggf. Konfiguration und LogType anpassen </h3></td></tr> <tr><td><h3>3.</h3></td><td><h3>Validierung starten </h3></td></tr></table>";
+					if ( locale.toString().startsWith( "fr" ) ) {
+						sel = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Fichier sélectionné : <br>"
+								+ valFileFolder.getAbsolutePath()
+								+ "</h3></td></tr> <tr><td><h3>2.</h3></td><td><h3>Ajuster la configuration et le LogType si nécessaire </h3></td></tr> <tr><td><h3>3.</h3></td><td><h3>Démarrer la validation </h3></td></tr></table>";
+					} else if ( locale.toString().startsWith( "en" ) ) {
+						sel = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Selected file: <br>"
+								+ valFileFolder.getAbsolutePath()
+								+ "</h3></td></tr> <tr><td><h3>2.</h3></td><td><h3>Adjust configuration and LogType if necessary </h3></td></tr> <tr><td><h3>3.</h3></td><td><h3>Start validation </h3></td></tr></table>";
+					} else {
+						sel = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Ausgewählte Datei: <br>"
+								+ valFileFolder.getAbsolutePath()
+								+ "</h3></td></tr> <tr><td><h3>2.</h3></td><td><h3>Ggf. Konfiguration und LogType anpassen </h3></td></tr> <tr><td><h3>3.</h3></td><td><h3>Validierung starten </h3></td></tr></table>";
+					}
+					String text = "<html><body>" + sel + "</body></html>";
+					engine.loadContent( text );
+
 					fileFolder.clear();
 					fileFolder.setText( valFileFolder.getAbsolutePath() );
-					// Anzeige in WebView wenn image
-					String pathDetail = "file:/"
-							+ valFileFolder.getAbsolutePath();
-					pathDetail = pathDetail.replace( "\\\\", "/" );
-					pathDetail = pathDetail.replace( "\\", "/" );
 
-					String fileFolderName = valFileFolder.getName();
-					String fileFolderExt = "." + FilenameUtils
-							.getExtension( fileFolderName ).toLowerCase();
-					String sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Ausgewählte Datei: <br>"
-							+ valFileFolder.getAbsolutePath()
-							+ "</h3></td></tr>";
-					String sel2 = "<tr><td><h3>2.</h3></td><td><h3>Ggf. Konfiguration und LogType anpassen </h3></td></tr>";
-					String sel3 = "<tr><td><h3>3.</h3></td><td><h3>Validierung starten </h3></td></tr></table>";
-					String selDetail = "<br/>";
-					if ( fileFolderExt.equals( ".jpeg" )
-							|| fileFolderExt.equals( ".jpg" )
-							|| fileFolderExt.equals( ".png" )
-							|| fileFolderExt.equals( ".svg" ) ) {
-						selDetail = "<table  width=\"100%\"><tr><td width=\"25%\"></td><td><img  src='"
-								+ pathDetail
-								+ "' width=\"300\" style=\"border:1px solid gray\" ></td><td width=\"25%\"></td></tr></table>";
-					} else {
-						// TODO: hier laufend weitere Viewer einbauen
-					}
-					if ( locale.toString().startsWith( "fr" ) ) {
-						sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Fichier sélectionné : <br>"
-								+ valFileFolder.getAbsolutePath()
-								+ "</h3></td></tr>";
-						sel2 = "<tr><td><h3>2.</h3></td><td><h3>Ajuster la configuration et le LogType si nécessaire </h3></td></tr>";
-						sel3 = "<tr><td><h3>3.</h3></td><td><h3>Démarrer la validation </h3></td></tr></table>";
-					} else if ( locale.toString().startsWith( "en" ) ) {
-						sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Selected file: <br>"
-								+ valFileFolder.getAbsolutePath()
-								+ "</h3></td></tr>";
-						sel2 = "<tr><td><h3>2.</h3></td><td><h3>Adjust configuration and LogType if necessary </h3></td></tr>";
-						sel3 = "<tr><td><h3>3.</h3></td><td><h3>Start validation </h3></td></tr></table>";
-					} else {
-						sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Ausgewählte Datei: <br>"
-								+ valFileFolder.getAbsolutePath()
-								+ "</h3></td></tr>";
-						sel2 = "<tr><td><h3>2.</h3></td><td><h3>Ggf. Konfiguration und LogType anpassen </h3></td></tr>";
-						sel3 = "<tr><td><h3>3.</h3></td><td><h3>Validierung starten </h3></td></tr></table>";
-					}
-					String text = "<html><body>" + sel1 + sel2 + sel3
-							+ selDetail + "</body></html>";
-					engine.loadContent( text );
 					// Format und Sip Validierung erst moeglich wenn fileFolder
 					// ausgefuellt
 					buttonFormat.setDisable( false );
+					String fileName = valFileFolder.getName().toLowerCase();
+					if ( fileName.endsWith( ".txt" )
+							|| fileName.endsWith( ".jpeg" )
+							|| fileName.endsWith( ".jpg" )
+							|| fileName.endsWith( ".svg" )
+							|| fileName.endsWith( ".png" )
+							|| fileName.endsWith( ".xml" ) ) {
+						console.setText( " \n" );
+						engine.load(
+								"file:///" + valFileFolder.getAbsolutePath() );
+						if ( locale.toString().startsWith( "fr" ) ) {
+							console.setText( "1. Fichier selectionne : "
+									+ valFileFolder.getAbsolutePath()
+									+ "\n2. Ajuster la configuration et le LogType si necessaire \n3. Demarrer la validation " );
+						} else if ( locale.toString().startsWith( "en" ) ) {
+							console.setText( "1. Selected file: "
+									+ valFileFolder.getAbsolutePath()
+									+ "\n2. Adjust configuration and LogType if necessary \n3. Start validation " );
+						} else {
+							console.setText( "1. Ausgewaehlte Datei: "
+									+ valFileFolder.getAbsolutePath()
+									+ "\n2. Ggf. Konfiguration und LogType anpassen \n3. Validierung starten " );
+						}
+						if ( valFileFolder.getName().toLowerCase()
+								.endsWith( ".kost-val.log.xml" ) ) {
+							buttonPrint.setDisable( false );
+							buttonSave.setDisable( false );
+							buttonFormat.setDisable( true );
+						}
+
+					} else {
+						String pathDetail = "file:/"
+								+ valFileFolder.getAbsolutePath();
+						pathDetail = pathDetail.replace( "\\\\", "/" );
+						pathDetail = pathDetail.replace( "\\", "/" );
+					}
 				} else {
 					String notexist = "Ungültiger Pfad! "
 							+ valFileFolder.getAbsolutePath()
@@ -1518,8 +1550,6 @@ public class GuiController
 				engine.loadContent( "<html><h2>" + notexist + "</h2></html>" );
 			}
 		}
-		buttonPrint.setDisable( true );
-		buttonSave.setDisable( true );
 	}
 
 	/* TODO --> ChoiceBox ================= */
