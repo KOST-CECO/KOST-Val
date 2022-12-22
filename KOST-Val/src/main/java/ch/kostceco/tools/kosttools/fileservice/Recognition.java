@@ -519,6 +519,24 @@ public class Recognition
 							// im File haben
 							return "XLSX";
 						}
+					} else if ( checkFileExt.equals( ".docx" ) ) {
+						if ( Util.stringInFile( "document.xml.rels",
+								checkFile ) ) {
+							// C) fuer DOCX auf SiF weiterkontrollieren
+							// Eine DOCX-Datei muss den String
+							// "document.xml.rels"
+							// im File haben
+							return "DOCX";
+						}
+					} else if ( checkFileExt.equals( ".pptx" ) ) {
+						if ( Util.stringInFile( "slide1.xml.rels",
+								checkFile ) ) {
+							// C) fuer PPTX auf SiF weiterkontrollieren
+							// Eine PPTX-Datei muss den String
+							// "slide1.xml.rels"
+							// im File haben
+							return "PPTX";
+						}
 					} else if ( checkFileExt.equals( ".ods" ) ) {
 						if ( Util.stringInFile( "opendocument.spreadsheet",
 								checkFile ) ) {
@@ -778,6 +796,11 @@ public class Recognition
 						return "QTM_ext";
 					}
 				}
+			} else if ( Magic.magicDicom( checkFile ) ) {
+				// Eine Dicom-Datei (keine Dateiendung noetig) muss mit
+				// {128}4449434D beginnen !!! Offset 128 !!!
+				// hat auf keine SiF oder Dateiendung
+				return "DICOM";
 			}
 
 			// TODO: Kein passendes BOF; ggf. Format ohne BOF
@@ -797,6 +820,9 @@ public class Recognition
 			} else if ( checkFileExt.equals( ".ai" ) ) {
 				// Eine AI-Datei muss die extension .ai haben
 				return "AI";
+			} else if ( checkFileName.equals( "Thumbs.db" ) ) {
+				// Eine Thumbs.db-Datei
+				return "Thumbs.db";
 			} else {
 				// System.out.println("kein bekannte Archivformat erkannt " +
 				// checkFileExt );

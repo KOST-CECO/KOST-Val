@@ -997,7 +997,7 @@ public class Magic
 		}
 		return mn;
 	}
-	
+
 	public static boolean magicProres( File file ) throws IOException
 	{
 		FileReader fr = null;
@@ -1919,6 +1919,75 @@ public class Magic
 			fr = null;
 		} catch ( Exception e ) {
 			System.out.println( "Exception magic file ifc: " + e.getMessage() );
+			read.close();
+			fr.close();
+			read = null;
+			fr = null;
+		}
+		return mn;
+	}
+
+	public static boolean magicDicom( File file ) throws IOException
+	{
+		FileReader fr = null;
+		BufferedReader read = null;
+		boolean mn = false;
+
+		try {
+			// Eine Dicom-Datei (keine Dateiendung noetig) muss mit
+			// {128}4449434D
+			// -> DICM beginnen
+			fr = new FileReader( file );
+			read = new BufferedReader( fr );
+
+			Boolean reco = false;
+			try (FileInputStream fis = new FileInputStream( file )) {
+				int i = 0;
+				int cnt = 0;
+				StringBuilder sb = new StringBuilder();
+				int counterIgn = 0;
+				String sb2str1 = "";
+				String sb2str2 = "";
+				String sb2str3 = "";
+				String sb2str4 = "";
+				String sb1234 = "";
+				while ( (i = fis.read()) != -1 ) {
+					sb.append( String.format( "%02X ", i ) );
+					if ( counterIgn < 128 ) {
+						counterIgn = counterIgn + 1;
+						// Die erste 128 Zeichen ignorieren ; sb neu setzten
+						sb = new StringBuilder();
+					} else if ( sb2str1 == "" ) {
+						sb2str1 = sb + "";
+					} else if ( sb2str2 == "" ) {
+						sb2str2 = sb + "";
+					} else if ( sb2str3 == "" ) {
+						sb2str3 = sb + "";
+					} else if ( sb2str4 == "" ) {
+						sb2str4 = sb + "";
+						sb1234 = sb + "";
+						break;
+					}
+					cnt++;
+					if ( cnt == 16 ) {
+						cnt = 0;
+					}
+				}
+				if ( sb1234.contains( "44 49 43 4D" ) ) {
+					reco = true;
+				}
+			}
+			if ( reco ) {
+				// hoechstwahrscheinlich ein Dicom
+				mn = true;
+			}
+			read.close();
+			fr.close();
+			read = null;
+			fr = null;
+		} catch ( Exception e ) {
+			System.out
+					.println( "Exception magic file dicom: " + e.getMessage() );
 			read.close();
 			fr.close();
 			read = null;
