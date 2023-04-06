@@ -246,6 +246,15 @@ public class ConfigurationServiceImpl implements ConfigurationService
 					.getTextContent();
 			configMap.put( "pdfafont", pdfafont );
 
+			/*
+			 * checkWarning3to2 validiert wenn eingeschaltet PDF/A-3 nach
+			 * PDF/A-2 und ignoriert den Fehler betreffend der Version und gibt
+			 * stattdessten eine Warnung aus.
+			 */
+			String warning3to2 = doc.getElementsByTagName( "warning3to2" )
+					.item( 0 ).getTextContent();
+			configMap.put( "warning3to2", warning3to2 );
+
 			// Gibt an ob JBIG2 erlaubt ist oder nicht
 			String jbig2allowed = doc.getElementsByTagName( "jbig2allowed" )
 					.item( 0 ).getTextContent();

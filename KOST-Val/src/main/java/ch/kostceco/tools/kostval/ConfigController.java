@@ -121,7 +121,7 @@ public class ConfigController
 	private Button		buttonSip0160, buttonSipVal;
 
 	@FXML
-	private Label		labelOther, labelWork, labelInput, labelConfig;
+	private Label		labelOther, labelWork, labelInput, labelHint, labelConfig;
 
 	@FXML
 	private Button		buttonPuid, buttonWork, buttonInput;
@@ -142,7 +142,7 @@ public class ConfigController
 		String javaVersion = System.getProperty( "java.version" );
 		String javafxVersion = System.getProperty( "javafx.version" );
 		labelConfig.setText(
-				"Copyright © KOST/CECO          KOST-Val v2.1.3.0          JavaFX "
+				"Copyright © KOST/CECO          KOST-Val v2.1.4.0          JavaFX "
 						+ javafxVersion + "   &   Java-" + java6432 + " "
 						+ javaVersion + "." );
 
@@ -185,6 +185,7 @@ public class ConfigController
 				labelOther.setText( "Sonstige" );
 				buttonWork.setText( "Arbeitsverzeichnis" );
 				buttonInput.setText( "Inputverzeichnis" );
+				labelHint.setText( "Hinweis: * öffnet die jeweilige Detailkonfiguration" ); 
 				minOne = "Mindestens eine Variante muss erlaubt sein!";
 			} else if ( Util.stringInFileLine( "kostval-conf-FR.xsl",
 					configFile ) ) {
@@ -201,6 +202,7 @@ public class ConfigController
 				labelOther.setText( "Autres" );
 				buttonWork.setText( "Répertoire de travail" );
 				buttonInput.setText( "Répertoire d'entrée" );
+				labelHint.setText( "Remarque : * ouvre la configuration détaillée correspondante" ); 
 				minOne = "Au moins une variante doit etre autorisee !";
 			} else {
 				locale = new Locale( "en" );
@@ -216,6 +218,7 @@ public class ConfigController
 				labelOther.setText( "Other" );
 				buttonWork.setText( "Working directory" );
 				buttonInput.setText( "Input directory" );
+				labelHint.setText( "Note: * opens the respective detailed configuration" ); 
 				minOne = "At least one variant must be allowed!";
 			}
 		} catch ( Exception e ) {

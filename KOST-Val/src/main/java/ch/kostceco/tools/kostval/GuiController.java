@@ -113,7 +113,7 @@ public class GuiController
 
 	private String				arg0, arg1, arg2, arg3 = "--xml", dirOfJarPath,
 			initInstructionsDe, initInstructionsFr, initInstructionsEn;
-	private String				versionKostVal	= "2.1.3.0";
+	private String				versionKostVal	= "2.1.4.0";
 	/*
 	 * TODO: versionKostVal auch hier anpassen:
 	 * 
@@ -123,9 +123,9 @@ public class GuiController
 	 * 
 	 * 4) Konfigurationsdatei inkl 3x xsl
 	 * 
-	 * 5) Start-Bild (make_exe)
+	 * 5) Start-Bild (make_exe) //TODO
 	 * 
-	 * 6) launch_KOST-Val_exe.xml --> VersionInfo
+	 * 6) launch_KOST-Val_exe.xml --> VersionInfo //TODO
 	 */
 
 	private Locale				locale			= Locale.getDefault();

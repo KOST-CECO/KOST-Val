@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-	<xsl:template match="/"><!-- kostval.conf.xml_v2.1.3.0 -->
+	<xsl:template match="/"><!-- kostval.conf.xml_v2.1.4.0 -->
 		<html>
 			<head>
 				<style>
@@ -110,6 +110,12 @@
 						<td>Erlaubte PDF/A Versionen [1A, 1B, 2A, 2B, 2U]:</td>
 						<td>
 							<xsl:value-of select="configuration/pdfa/pdfa1a" />&#160; <xsl:value-of select="configuration/pdfa/pdfa1b" />&#160; <xsl:value-of select="configuration/pdfa/pdfa2a" />&#160;<xsl:value-of select="configuration/pdfa/pdfa2b" />&#160; <xsl:value-of select="configuration/pdfa/pdfa2u" />
+						</td>
+					</tr>
+					<tr  class="captioninfom">
+						<td>PDF/A-3 nach PDF/A-2 validieren und Warnung anstelle eines Fehlers ausgeben [yes]:</td>
+						<td>
+							<xsl:value-of select="configuration/pdfa/warning3to2" />
 						</td>
 					</tr>
 					<tr  class="captioninfom">

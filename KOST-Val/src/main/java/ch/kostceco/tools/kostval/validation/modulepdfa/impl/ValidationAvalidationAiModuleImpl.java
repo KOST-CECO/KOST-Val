@@ -120,6 +120,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 		String pdfa2a = configMap.get( "pdfa2a" );
 		String pdfa2b = configMap.get( "pdfa2b" );
 		String pdfa2u = configMap.get( "pdfa2u" );
+		String warning3to2 = configMap.get( "warning3to2" );
 
 		Integer pdfaVer1 = 0;
 		Integer pdfaVer2 = 0;
@@ -132,6 +133,12 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 		 * Beim schreiben ins Workverzeichnis trat ab und zu ein fehler auf.
 		 * entsprechend wird es jetzt ins logverzeichnis geschrieben
 		 */
+
+		String pdf3warning = getTextResourceService().getText( locale,
+				MESSAGE_XML_MODUL_A_PDFA )
+				+ getTextResourceService().getText( locale,
+						WARNING_XML_A_PDFA3 );
+		Boolean warning3to2done = false;
 
 		File callasNo = new File(
 				pathToWorkDir + File.separator + "_callas_NO.txt" );
@@ -148,13 +155,12 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 		if ( report.exists() ) {
 			report.delete();
 		}
-
 		/*
-		 * Neu soll die Validierung mit PDFTron konfigurier bar sein Moegliche
-		 * Werte 1A, 1B und no sowie 2A, 2B, 2U und no Da Archive beide
-		 * Versionen erlauben koennen sind es 2 config eintraege Es gibt mehre
-		 * Moeglichkeiten das PDF in der gewuenschten Version zu testen -
-		 * Unterscheidung anhand PDF/A-Eintrag
+		 * Neu soll die Validierung konfigurier bar sein Moegliche Werte 1A, 1B
+		 * und no sowie 2A, 2B, 2U und no Da Archive beide Versionen erlauben
+		 * koennen sind es 2 config eintraege Es gibt mehre Moeglichkeiten das
+		 * PDF in der gewuenschten Version zu testen - Unterscheidung anhand
+		 * PDF/A-Eintrag
 		 */
 		if ( pdfa2a.equals( "2A" ) || pdfa2b.equals( "2B" )
 				|| pdfa2u.equals( "2U" ) ) {
@@ -213,6 +219,18 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 							|| line.contains( "pdfaid:part='2'" )
 							|| line.contains( "pdfaid:part=\"2\"" ) ) {
 						pdfaVer = 2;
+					} else if ( line.contains( "pdfaid:part>3<" )
+							|| line.contains( "pdfaid:part='3'" )
+							|| line.contains( "pdfaid:part=\"3\"" ) ) {
+						// 3 wird nie akzeptier, Validierung gegen 2
+						pdfaVer = 2;
+						if ( warning3to2.equalsIgnoreCase( "yes" ) ) {
+							// Fehler betreffend Version 3 statt 2 wird
+							// ignoriert.
+							// Es wird eine Warnung ausgegeben.
+							Logtxt.logtxt( logFile, pdf3warning );
+							warning3to2done = true;
+						}
 					} else if ( line.contains( "pdfaid:part" )
 							&& line.contains( "1" ) ) {
 						// PDFA-Version = 1
@@ -358,6 +376,17 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 		// Die Erkennung erfolgt bereits im Vorfeld
 
 		boolean isValid = false;
+		boolean isValidPdftools = true;
+		boolean isValidCallas = false;
+		boolean isValidCa = true;
+		boolean isValidCb = true;
+		boolean isValidCc = true;
+		boolean isValidCd = true;
+		boolean isValidCe = true;
+		boolean isValidCf = true;
+		boolean isValidCg = true;
+		boolean isValidCh = true;
+		boolean isValidCi = true;
 		boolean isValidJ = true;
 		boolean isValidFont = true;
 		boolean ignorUndefinied = false;
@@ -1526,10 +1555,30 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 							 * 
 							 * zB - The value of the key N is 4 but must be 3.
 							 * [PDF Tools: 0x80410607]
+							 * 
+							 * Wenn warning3to2 = yes wird die
+							 * Versionsfehlermeldung durch einen Warnung
+							 * ersetzt.
+							 * 
+							 * The XMP property 'pdfaid:part' has the invalid
+							 * value '3'. Required is '2'. [PDF Tools:
+							 * 0x8341052E]
 							 */
 							String detailIgnore = configMap.get( "ignore" );
+							String detailWarning3to2 = "The XMP property 'pdfaid:part' has the invalid value '3'. Required is '2'. [PDF Tools: 0x8341052E]";
 
-							if ( detailIgnore.contains( errorMsgCode0xText ) ) {
+							if ( warning3to2.equalsIgnoreCase( "yes" )
+									&& errorMsgCode0xText
+											.contains( detailWarning3to2 ) ) {
+								// Fehler wird ignoriert. Es wird ggf eine
+								// Warnung ausgegeben.
+								if ( !warning3to2done ) {
+									// Fehler wurde noch nicht ausgegeben.
+									Logtxt.logtxt( logFile, pdf3warning );
+									warning3to2done = true;
+								}
+							} else if ( detailIgnore
+									.contains( errorMsgCode0xText ) ) {
 								// Fehler wird ignoriert. Entsprechend wird kein
 								// Detail geschrieben.
 							} else {
@@ -1790,6 +1839,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 				// ohne pdftools auch keine Font validierung
 				isValidFont = true;
 			}
+			isValidPdftools = isValid;
 
 			// TODO: Validierung mit callas
 			if ( callas && !isValid ) {
@@ -2124,7 +2174,6 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 			// TODO: Erledigt: Fehler Auswertung
 			if ( !isValid ) {
 				if ( min ) {
-					System.out.println( "2147 Fehlerauswertung" );
 					return false;
 				} else {
 					boolean exponent0 = false;
@@ -2361,11 +2410,11 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 								 * H) metadata I) Zugaenglichkeit
 								 */
 
-								if ( line.startsWith( "Errors" ) ) {
-									// Errors plus Zahl entfernen aus Linie
-									index = line.indexOf( "\t", 7 );
+								if ( line.startsWith( "Error" ) ) {
+									// Error plus Zahl entfernen aus Linie
+									index = line.indexOf( "\t", 8 );
 									line = line.substring( index );
-									if ( line.contains(
+								if ( line.contains(
 											"Komponentenanzahl im N-Eintrag des PDF/A Output Intent stimmt nicht mit ICC-Profil ueberein" )
 											|| line.contains(
 													"Number of components in PDF/A OutputIntent N entry does not match ICC profile" ) ) {
@@ -2383,7 +2432,27 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 										line = line + " [callas] ";
 									}
 
-									if ( line.toLowerCase()
+									String callasAwarningDE = "Ungueltige PDF/A-Versionsnummer (muss \"2\" sein) [callas] ";
+									String callasAwarningFR = "Numero de version PDF/A incorrect (doit etre 2) [callas] ";
+									String callasAwarningEN = "Incorrect PDF/A version number (must be 2) [callas] ";
+									if ( warning3to2.equalsIgnoreCase( "yes" )
+											&& (line.contains(
+													callasAwarningDE )
+													|| line.contains(
+															callasAwarningFR )
+													|| line.contains(
+															callasAwarningEN )) ) {
+										// Fehler wird ignoriert. Es wird ggf
+										// eine
+										// Warnung ausgegeben.
+										if ( !warning3to2done ) {
+											// Fehler wurde noch nicht
+											// ausgegeben.
+											Logtxt.logtxt( logFile,
+													pdf3warning );
+											warning3to2done = true;
+										}
+									} else if ( line.toLowerCase()
 											.contains( "schrift" )
 											|| line.toLowerCase()
 													.contains( "police" )
@@ -2399,6 +2468,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 													.contains( "cid" )
 											|| line.toLowerCase()
 													.contains( "charset" ) ) {
+										isValidCd = false;
 										if ( callasD.toLowerCase().contains(
 												line.toLowerCase() ) ) {
 											// Fehlermeldung bereits erfasst ->
@@ -2446,6 +2516,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 													.contains( "devicegray" )
 											|| line.toLowerCase()
 													.contains( "tr2" ) ) {
+										isValidCc = false;
 										if ( callasC.toLowerCase().contains(
 												line.toLowerCase() ) ) {
 											// Fehlermeldung bereits erfasst ->
@@ -2473,6 +2544,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 													"structure tree root" )
 											|| line.toLowerCase().contains(
 													"strukturbaum" ) ) {
+										isValidCi = false;
 										if ( callasI.toLowerCase().contains(
 												line.toLowerCase() ) ) {
 											// Fehlermeldung bereits erfasst ->
@@ -2496,6 +2568,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 													.contains( "lzw" )
 											|| line.toLowerCase()
 													.contains( " eol" ) ) {
+										isValidCb = false;
 										if ( callasB.toLowerCase().contains(
 												line.toLowerCase() ) ) {
 											// Fehlermeldung bereits erfasst ->
@@ -2513,6 +2586,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 											.contains( "metad" )
 											|| line.toLowerCase()
 													.contains( "xmp" ) ) {
+										isValidCh = false;
 										if ( callasH.toLowerCase().contains(
 												line.toLowerCase() ) ) {
 											// Fehlermeldung bereits erfasst ->
@@ -2528,6 +2602,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 
 									} else if ( line.toLowerCase()
 											.contains( "transparen" ) ) {
+										isValidCe = false;
 										if ( callasE.toLowerCase().contains(
 												line.toLowerCase() ) ) {
 											// Fehlermeldung bereits erfasst ->
@@ -2549,6 +2624,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 													.contains( "aa" )
 											|| line.toLowerCase().contains(
 													"javascript" ) ) {
+										isValidCg = false;
 										if ( callasG.toLowerCase().contains(
 												line.toLowerCase() ) ) {
 											// Fehlermeldung bereits erfasst ->
@@ -2582,6 +2658,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 													.contains( "eingebette" )
 											|| line.toLowerCase()
 													.contains( "incorpor" ) ) {
+										isValidCf = false;
 										if ( callasF.toLowerCase().contains(
 												line.toLowerCase() ) ) {
 											// Fehlermeldung bereits erfasst ->
@@ -2596,6 +2673,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 										}
 
 									} else {
+										isValidCa = false;
 										if ( callasA.toLowerCase().contains(
 												line.toLowerCase() ) ) {
 											// Fehlermeldung bereits erfasst ->
@@ -3014,6 +3092,57 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 			}
 		} catch ( Exception ed3 ) {
 		}
+
+		/*
+		 * durch die diversen nacharbeiten (Warnung anstelle Fehler) muss
+		 * kontrolliert werden ob es valide mit Warnungen oder Invalide ist.
+		 */
+
+		if ( callas && isValidCa && isValidCb && isValidCc && isValidCd
+				&& isValidCe && isValidCf && isValidCg && isValidCh
+				&& isValidCi ) {
+			isValidCallas = true;
+		}
+
+		if ( pdftools ) {
+			// pdftools eingeschaltet
+			if ( isValidPdftools ) {
+				// Validierung mit pdftools bestanden
+				isValid = true;
+			} else {
+				// Validierung mit pdftools nicht bestanden
+				if ( callas ) {
+					// callas eingeschaltet (dual)
+					if ( isValidCallas ) {
+						// Validierung mit callas bestanden
+						isValid = true;
+					} else {
+						// Validierung mit pdftools&callas nicht bestanden
+						isValid = false;
+					}
+				} else {
+					// Keine Validierung mit Callas; bleibt invalid
+					isValid = false;
+				}
+			}
+		} else {
+			// pdftools nicht eingeschaltet
+			if ( callas ) {
+				// callas eingeschaltet (simple)
+				if ( isValidCallas ) {
+					// Validierung mit callas bestanden
+					isValid = true;
+				} else {
+					// Validierung mit callas nicht bestanden
+					isValid = false;
+				}
+			} else {
+				// Keine Validierung
+				// Fehler bereits aufgefangen
+				isValid = false;
+			}
+		}
+
 		return isValid;
 	}
 

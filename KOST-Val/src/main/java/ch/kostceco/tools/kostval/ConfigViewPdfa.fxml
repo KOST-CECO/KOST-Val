@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="860.0" prefHeight="350.0" style="-fx-background-color: silver;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.kostceco.tools.kostval.ConfigControllerPdfa">
+<StackPane maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="860.0" prefHeight="380.0" style="-fx-background-color: silver;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ch.kostceco.tools.kostval.ConfigControllerPdfa">
 	<children>
 		<GridPane minHeight="330.0">
 			<columnConstraints>
@@ -29,6 +29,7 @@
 				<RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
 				<RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
 				<RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
 				<RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
 				<RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="1.7976931348623157E308" minHeight="-Infinity" prefHeight="5.0" vgrow="SOMETIMES" />
@@ -45,12 +46,17 @@
 						<Insets />
 					</GridPane.margin>
 				</Button>
-				<Label fx:id="labelConfig" alignment="CENTER" contentDisplay="CENTER" maxHeight="20.0" maxWidth="780.0" minHeight="20.0" minWidth="780.0" prefHeight="20.0" prefWidth="780.0" text="Copyright © KOST/CECO" textAlignment="CENTER" textFill="WHITESMOKE" GridPane.columnSpan="5" GridPane.halignment="CENTER" GridPane.rowIndex="11" GridPane.valignment="CENTER" />
-            <Label fx:id="labelMessage" text="Meldung Validierungseinstellungen" textFill="RED" GridPane.columnSpan="5" GridPane.rowIndex="9" />
+				<Label fx:id="labelConfig" alignment="CENTER" contentDisplay="CENTER" maxHeight="20.0" maxWidth="780.0" minHeight="20.0" minWidth="780.0" prefHeight="20.0" prefWidth="780.0" text="Copyright © KOST/CECO" textAlignment="CENTER" textFill="WHITESMOKE" GridPane.columnSpan="5" GridPane.halignment="CENTER" GridPane.rowIndex="12" GridPane.valignment="CENTER" />
+            <Label fx:id="labelMessage" text="Meldung Validierungseinstellungen" textFill="RED" GridPane.columnSpan="5" GridPane.rowIndex="10" />
             <CheckBox fx:id="checkPdftools" mnemonicParsing="false" onAction="#changePdftools" selected="true" text="PDF Tools" GridPane.rowIndex="3" />
             <CheckBox fx:id="checkDetail" mnemonicParsing="false" onAction="#changeDetail" selected="true" text="details" GridPane.rowIndex="4">
                <GridPane.margin>
                   <Insets left="24.0" />
+               </GridPane.margin>
+            </CheckBox>
+            <CheckBox fx:id="checkWarning3to2" mnemonicParsing="false" onAction="#changeWarning3to2" selected="true" text="(PDF/A-3 ~ PDF/A-2)" GridPane.columnIndex="2" GridPane.rowIndex="8">
+               <GridPane.margin>
+                  <Insets />
                </GridPane.margin>
             </CheckBox>
             <CheckBox fx:id="checkCallas" mnemonicParsing="false" onAction="#changeCallas" selected="true" text="Callas" GridPane.columnIndex="1" GridPane.rowIndex="3" />

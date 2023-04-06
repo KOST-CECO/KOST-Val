@@ -263,6 +263,7 @@ public interface MessageConstants
 	String	ERROR_XML_A_PDFTOOLS_LICENSE				= "val.error.xml.a.pdftools.license";
 	String	ERROR_XML_A_PDFTOOLS_ENCRYPTED				= "val.error.xml.a.pdftools.encrypted";
 	String	ERROR_XML_A_PDFTOOLS_DAMAGED				= "val.error.xml.a.pdftools.damaged";
+	String	WARNING_XML_A_PDFA3							= "val.warning.xml.a.pdfa3";
 
 	String	ERROR_XML_AI_0								= "val.error.xml.ai.0";
 	String	ERROR_XML_AI_1								= "val.error.xml.ai.1";
