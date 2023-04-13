@@ -322,6 +322,12 @@
 							<xsl:value-of select="configuration/standardinputdir" />
 						</td>
 					</tr>
+					<tr  class="captioninfo">
+						<td>Calculate and output hash value of files. Empty means no calculation and output []:</td>
+						<td>
+							<xsl:value-of select="configuration/hash" />
+						</td>
+					</tr> 
 				</table>
 			</body>
 		</html>

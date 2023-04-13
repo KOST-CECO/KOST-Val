@@ -676,6 +676,15 @@ public class ConfigurationServiceImpl implements ConfigurationService
 					.item( 0 ).getTextContent();
 			configMap.put( "otherformats", otherformats );
 
+			// hash
+			/* Hashwert von Dateien berechnen und ausgeben. Leer bedeutet keine Berechnung und Ausgabe []
+			 * 
+			 * [] MD5, SHA-1, SHA-256, SHA-512
+			 * */
+			String hash = doc.getElementsByTagName( "hash" )
+					.item( 0 ).getTextContent();
+			configMap.put( "hash", hash );
+
 			// TODO SIP
 
 			// Gibt an ob eCH-0160 validiert werden soll

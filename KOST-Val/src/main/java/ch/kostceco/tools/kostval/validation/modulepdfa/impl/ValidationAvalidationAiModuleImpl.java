@@ -370,8 +370,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 			}
 		}
 
-		Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
-				MESSAGE_FORMATVALIDATION_VL, level ) );
+		Logtxt.logtxt( logFile, "<FormatVL>-" + level + "</FormatVL>" );
 
 		// Die Erkennung erfolgt bereits im Vorfeld
 
@@ -2414,7 +2413,7 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 									// Error plus Zahl entfernen aus Linie
 									index = line.indexOf( "\t", 8 );
 									line = line.substring( index );
-								if ( line.contains(
+									if ( line.contains(
 											"Komponentenanzahl im N-Eintrag des PDF/A Output Intent stimmt nicht mit ICC-Profil ueberein" )
 											|| line.contains(
 													"Number of components in PDF/A OutputIntent N entry does not match ICC profile" ) ) {
@@ -3141,6 +3140,9 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 				// Fehler bereits aufgefangen
 				isValid = false;
 			}
+		}
+		if ( !isValidFont || !isValidJ ) {
+			isValid = false;
 		}
 
 		return isValid;

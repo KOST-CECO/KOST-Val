@@ -298,8 +298,7 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl
 							"http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
 			if ( version1 ) {
 				if ( siard10 ) {
-					Logtxt.logtxt( logFile, getTextResourceService().getText(
-							locale, MESSAGE_FORMATVALIDATION_VL, "v1.0" ) );
+					Logtxt.logtxt( logFile, "<FormatVL>-v1.0</FormatVL>" );
 				} else {
 					if ( min ) {
 						return false;
@@ -319,9 +318,7 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl
 							+ "header" + File.separator + "siardversion"
 							+ File.separator + "2.1" );
 					if ( versionDir.exists() ) {
-						Logtxt.logtxt( logFile,
-								getTextResourceService().getText( locale,
-										MESSAGE_FORMATVALIDATION_VL, "v2.1" ) );
+						Logtxt.logtxt( logFile, "<FormatVL>-v2.1</FormatVL>" );
 					}
 				} else {
 					if ( min ) {

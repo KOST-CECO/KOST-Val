@@ -322,6 +322,12 @@
 							<xsl:value-of select="configuration/standardinputdir" />
 						</td>
 					</tr>
+					<tr  class="captioninfo">
+						<td>Hashwert von Dateien berechnen und ausgeben. Leer bedeutet keine Berechnung und Ausgabe []:</td>
+						<td>
+							<xsl:value-of select="configuration/hash" />
+						</td>
+					</tr> 
 				</table>
 			</body>
 		</html>

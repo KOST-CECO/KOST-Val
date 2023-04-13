@@ -322,6 +322,12 @@
 							<xsl:value-of select="configuration/standardinputdir" />
 						</td>
 					</tr>
+					<tr  class="captioninfo">
+						<td>Calculer et afficher la valeur de hachage des fichiers. Vide signifie pas de calcul ni de sortie [] :</td>
+						<td>
+							<xsl:value-of select="configuration/hash" />
+						</td>
+					</tr> 
 				</table>
 			</body>
 		</html>

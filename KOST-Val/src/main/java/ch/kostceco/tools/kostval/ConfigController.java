@@ -38,11 +38,14 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import ch.kostceco.tools.kosttools.util.Util;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
@@ -56,80 +59,86 @@ import javafx.stage.Stage;
 public class ConfigController
 {
 
-	private File		configFileBackup	= new File(
+	private File				configFileBackup	= new File(
 			System.getenv( "USERPROFILE" ) + File.separator + ".kost-val_2x"
 					+ File.separator + "configuration" + File.separator
 					+ "BACKUP.kostval.conf.xml" );
 
-	private File		configFileStandard	= new File(
+	private File				configFileStandard	= new File(
 			System.getenv( "USERPROFILE" ) + File.separator + ".kost-val_2x"
 					+ File.separator + "configuration" + File.separator
 					+ "STANDARD.kostval.conf.xml" );
 
-	private File		configFile			= new File(
+	private File				configFile			= new File(
 			System.getenv( "USERPROFILE" ) + File.separator + ".kost-val_2x"
 					+ File.separator + "configuration" + File.separator
 					+ "kostval.conf.xml" );
 
-	private String		dirOfJarPath, inputString, workString, config,
+	private String				dirOfJarPath, inputString, workString, config,
 			stringPuid, minOne = "Mindestens eine Variante muss erlaubt sein!";;
 
-	private Locale		locale				= Locale.getDefault();
+	private Locale				locale				= Locale.getDefault();
 
 	@FXML
-	private Button		buttonConfigApply, buttonConfigApplyStandard,
+	private Button				buttonConfigApply, buttonConfigApplyStandard,
 			buttonConfigCancel;
 
 	@FXML
-	private Label		labelText, labelPdfa, labelTxt, labelPdf;
+	private Label				labelText, labelPdfa, labelTxt, labelPdf;
 
 	@FXML
-	private Button		buttonPdfa, buttonPdfaVal, buttonTxt, buttonPdf;
+	private Button				buttonPdfa, buttonPdfaVal, buttonTxt, buttonPdf;
 
 	@FXML
-	private Label		labelImage, labelJpeg2000, labelJpeg, labelTiff,
+	private Label				labelImage, labelJpeg2000, labelJpeg, labelTiff,
 			labelPng;
 
 	@FXML
-	private Button		buttonJpeg2000, buttonJpeg, buttonTiff, buttonTiffVal,
-			buttonPng;
+	private Button				buttonJpeg2000, buttonJpeg, buttonTiff,
+			buttonTiffVal, buttonPng;
 
 	@FXML
-	private Label		labelAudio, labelFlac, labelWave, labelMp3;
+	private Label				labelAudio, labelFlac, labelWave, labelMp3;
 
 	@FXML
-	private Button		buttonFlac, buttonWave, buttonMp3;
+	private Button				buttonFlac, buttonWave, buttonMp3;
 
 	@FXML
-	private Label		labelVideo, labelFfv1, labelMp4;
+	private Label				labelVideo, labelFfv1, labelMp4;
 
 	@FXML
-	private Button		buttonFfv1, buttonMp4;
+	private Button				buttonFfv1, buttonMp4;
 
 	@FXML
-	private Label		labelData, labelXml, labelSiard, labelCsv, labelXlsx,
-			labelOds;
+	private Label				labelData, labelXml, labelSiard, labelCsv,
+			labelXlsx, labelOds;
 
 	@FXML
-	private Button		buttonXml, buttonSiard, buttonSiardVal, buttonCsv,
-			buttonXlsx, buttonOds;
+	private Button				buttonXml, buttonSiard, buttonSiardVal,
+			buttonCsv, buttonXlsx, buttonOds;
 
 	@FXML
-	private Label		labelSip, labelEch0160;
+	private Label				labelSip, labelEch0160;
 
 	@FXML
-	private Button		buttonSip0160, buttonSipVal;
+	private Button				buttonSip0160, buttonSipVal;
 
 	@FXML
-	private Label		labelOther, labelWork, labelInput, labelHint, labelConfig;
+	private Label				labelOther, labelWork, labelInput, labelHint,
+			labelConfig;
 
 	@FXML
-	private Button		buttonPuid, buttonWork, buttonInput;
+	private Button				buttonPuid, buttonWork, buttonInput;
+
+	ObservableList<String>		hashAlgoList		= FXCollections
+			.observableArrayList( "MD5", "SHA-1", "SHA-256", "SHA-512", "" );
+	@FXML
+	private ChoiceBox<String>	hashAlgo;
 
 	@FXML
-	private WebView		wbv;
+	private WebView				wbv;
 
-	private WebEngine	engine;
+	private WebEngine			engine;
 
 	@FXML
 	void initialize()
@@ -169,6 +178,26 @@ public class ConfigController
 			e1.printStackTrace();
 		}
 
+		hashAlgo.getItems().addAll( hashAlgoList );
+		try {
+			Document doc = null;
+			BufferedInputStream bis = new BufferedInputStream(
+					new FileInputStream( configFile ) );
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+			DocumentBuilder db = dbf.newDocumentBuilder();
+			doc = db.parse( bis );
+			doc.normalize();
+			String hashAlgoInit = "";
+			hashAlgoInit = doc.getElementsByTagName( "hash" ).item( 0 )
+					.getTextContent();
+			bis.close();
+			doc = null;
+			hashAlgo.setValue( hashAlgoInit );
+		} catch ( IOException | ParserConfigurationException
+				| SAXException e1 ) {
+			e1.printStackTrace();
+		}
+
 		// Sprache anhand configFile (HauptGui) setzten
 		try {
 			if ( Util.stringInFileLine( "kostval-conf-DE.xsl", configFile ) ) {
@@ -185,7 +214,8 @@ public class ConfigController
 				labelOther.setText( "Sonstige" );
 				buttonWork.setText( "Arbeitsverzeichnis" );
 				buttonInput.setText( "Inputverzeichnis" );
-				labelHint.setText( "Hinweis: * öffnet die jeweilige Detailkonfiguration" ); 
+				labelHint.setText(
+						"Hinweis: * öffnet die jeweilige Detailkonfiguration" );
 				minOne = "Mindestens eine Variante muss erlaubt sein!";
 			} else if ( Util.stringInFileLine( "kostval-conf-FR.xsl",
 					configFile ) ) {
@@ -202,7 +232,8 @@ public class ConfigController
 				labelOther.setText( "Autres" );
 				buttonWork.setText( "Répertoire de travail" );
 				buttonInput.setText( "Répertoire d'entrée" );
-				labelHint.setText( "Remarque : * ouvre la configuration détaillée correspondante" ); 
+				labelHint.setText(
+						"Remarque : * ouvre la configuration détaillée correspondante" );
 				minOne = "Au moins une variante doit etre autorisee !";
 			} else {
 				locale = new Locale( "en" );
@@ -218,7 +249,8 @@ public class ConfigController
 				labelOther.setText( "Other" );
 				buttonWork.setText( "Working directory" );
 				buttonInput.setText( "Input directory" );
-				labelHint.setText( "Note: * opens the respective detailed configuration" ); 
+				labelHint.setText(
+						"Note: * opens the respective detailed configuration" );
 				minOne = "At least one variant must be allowed!";
 			}
 		} catch ( Exception e ) {
@@ -1502,6 +1534,47 @@ public class ConfigController
 				| SAXException e1 ) {
 			e1.printStackTrace();
 		}
+	}
+	/* TODO --> ChoiceBox ================= */
+
+	// Mit changeHashAlgo wird die Hash-Auswahl umgestellt
+	@FXML
+	void changeHashAlgo( ActionEvent event )
+	{
+		try {
+			Document doc = null;
+			BufferedInputStream bis = new BufferedInputStream(
+					new FileInputStream( configFile ) );
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+			DocumentBuilder db = dbf.newDocumentBuilder();
+			doc = db.parse( bis );
+			doc.normalize();
+			String hashAlgoInit = "";
+			hashAlgoInit = doc.getElementsByTagName( "hash" ).item( 0 )
+					.getTextContent();
+			bis.close();
+			doc = null;
+			String hashAlgoOld = "<hash>" + hashAlgoInit + "</hash>";
+			String selHashType = hashAlgo.getValue();
+			String hashAlgoNew = "<hash></hash>";
+			if ( selHashType.equals( "MD5" ) || selHashType.equals( "SHA-1" )
+					|| selHashType.equals( "SHA-256" )
+					|| selHashType.equals( "SHA-512" ) ) {
+				hashAlgoNew = "<hash>" + selHashType + "</hash>";
+				hashAlgo.setValue( selHashType );
+			} else {
+				hashAlgoNew = "<hash></hash>";
+				hashAlgo.setValue( "" );
+			}
+			Util.oldnewstring( hashAlgoOld, hashAlgoNew, configFile );
+
+			engine = wbv.getEngine();
+			engine.load( "file:///" + configFile.getAbsolutePath() );
+		} catch ( IOException | ParserConfigurationException
+				| SAXException e1 ) {
+			e1.printStackTrace();
+		}
+
 	}
 
 }

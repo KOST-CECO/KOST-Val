@@ -124,6 +124,7 @@
 	<otherformats>WARC HTML DWG</otherformats><!-- auch moeglich DOCX PPTX INTERLIS -->
 	<pathtoworkdir></pathtoworkdir><!--wenn leer wird "USERPROFILE/.kost-val_2x/temp_KOST-Val" verwendet -->
 	<standardinputdir></standardinputdir><!--wenn leer wird "Dieser PC" verwendet -->
+	<hash></hash><!--wenn leer wird kein Hashwert berechnet und ausgegeben -->
 	<ignoreerror>
 		<!-- Zu ignorierende Fehlermeldungen. Aktuell nur details von pdftools unterstuetzt -->
 		<ignore>The document does not conform to the requested standard. [PDF Tools: 0x83410612]

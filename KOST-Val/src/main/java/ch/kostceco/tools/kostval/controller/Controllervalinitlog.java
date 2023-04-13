@@ -96,7 +96,6 @@ public class Controllervalinitlog implements MessageConstants
 		String xlsxValidation = configMap.get( "xlsxValidation" );
 		String odsValidation = configMap.get( "odsValidation" );
 		String otherformats = configMap.get( "otherformats" );
-		String version = "";
 
 		String formatValOn = "";
 		// ermitteln welche Formate validiert werden koennen respektive
@@ -230,20 +229,18 @@ public class Controllervalinitlog implements MessageConstants
 
 		Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
 				MESSAGE_XML_HEADER ) );
-		Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
-				MESSAGE_XML_START, ausgabeStart ) );
+		Logtxt.logtxt( logFile, "<Infos><Start>" + ausgabeStart + "</Start>" );
+		Logtxt.logtxt( logFile, "<End></End>" );
 		Logtxt.logtxt( logFile,
-				getTextResourceService().getText( locale, MESSAGE_XML_END ) );
-		Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
-				MESSAGE_XML_FORMATON, formatValOn, version ) );
+				"<FormatValOn>" + formatValOn + "</FormatValOn>" );
 		Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
 				MESSAGE_XML_INFO, versionKostVal ) );
 		String config = "";
 		for ( String key : configMap.keySet() ) {
 			config = config + key + " " + configMap.get( key ) + "; ";
 		}
-		Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
-				MESSAGE_XML_CONFIG, config ) );
+		Logtxt.logtxt( logFile,
+				"<configuration>" + config + "</configuration>" );
 
 		if ( args[0].equals( "--format" ) && formatValOn.equals( "" ) ) {
 			// Formatvalidierung aber alle Formate ausgeschlossen

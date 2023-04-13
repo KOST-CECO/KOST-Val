@@ -258,8 +258,7 @@ public class KOSTVal implements MessageConstants
 		}
 
 		if ( args[0].equalsIgnoreCase( "--format" ) ) {
-			Logtxt.logtxt( logFile, kostval.getTextResourceService()
-					.getText( locale, MESSAGE_XML_FORMAT1 ) );
+			Logtxt.logtxt( logFile, "<Format>" );
 
 			// TODO: Formatvalidierung an einer Datei --> erledigt --> nur
 			// Marker
@@ -277,8 +276,7 @@ public class KOSTVal implements MessageConstants
 						directoryOfLogfile, verbose, dirOfJarPath, configMap,
 						context, locale, logFile, countToValidated );
 
-				Logtxt.logtxt( logFile, kostval.getTextResourceService()
-						.getText( locale, MESSAGE_XML_FORMAT2 ) );
+				Logtxt.logtxt( logFile, "</Format>" );
 
 				// Loeschen des Arbeitsverzeichnisses, falls eines angelegt
 				// wurde
@@ -286,8 +284,7 @@ public class KOSTVal implements MessageConstants
 					Util.deleteDir( tmpDir );
 				}
 
-				Logtxt.logtxt( logFile, kostval.getTextResourceService()
-						.getText( locale, MESSAGE_XML_LOGEND ) );
+				Logtxt.logtxt( logFile, "</KOSTValLog>" );
 				// logFile bereinigung (& End und ggf 3c)
 				Util.valEnd3cAmp( "", logFile );
 
@@ -354,49 +351,23 @@ public class KOSTVal implements MessageConstants
 			if ( ech0160validation.equals( "no" ) ) {
 				// SIP-Validierung in der Konfiguration ausgeschaltet.
 				System.out.println( kostval.getTextResourceService()
-						.getText( locale, ERROR_XML_CONIG_SIP ) );
-
+						.getText( locale, ERROR_CONFIG_SIP ) );
+				// = SIP-Validierung in der Konfiguration ausgeschaltet.
+				Logtxt.logtxt( logFile, "<Sip><Validation>" );
 				Logtxt.logtxt( logFile, kostval.getTextResourceService()
-						.getText( locale, MESSAGE_XML_SIP1 ) ); // =
-				// <Sip>
+						.getText( locale, MESSAGE_XML_VALTYPE, "SIP" ) );
+				// = <ValType>Validierung: {0}</ValType>
+				Logtxt.logtxt( logFile, "<ValFile>" + valDatei.getAbsolutePath()
+						+ "</ValFile>" );
 				Logtxt.logtxt( logFile, kostval.getTextResourceService()
-						.getText( locale, MESSAGE_XML_VALERGEBNIS ) ); // =
-																		// <Validation>
+						.getText( locale, MESSAGE_XML_MODUL_Aa_SIP ) );
+				// = <Error><Modul>1A) Lesbarkeit</Modul>
+				Logtxt.logtxt( logFile, kostval.getTextResourceService()
+						.getText( locale, ERROR_XML_CONFIG_SIP ) );
+				// = <Message>SIP-Validierung in der Konfiguration
+				// ausgeschaltet.</Message></Error>
 				Logtxt.logtxt( logFile,
-						kostval.getTextResourceService().getText( locale,
-								MESSAGE_XML_VALTYPE,
-								kostval.getTextResourceService().getText(
-										locale, MESSAGE_SIPVALIDATION ) ) ); // =
-																				// <ValType>{0}</ValType>
-				Logtxt.logtxt( logFile,
-						kostval.getTextResourceService().getText( locale,
-								MESSAGE_XML_VALFILE,
-								valDatei.getAbsolutePath() ) ); // =
-																// <ValFile>{0}</ValFile>
-				Logtxt.logtxt( logFile, kostval.getTextResourceService()
-						.getText( locale, MESSAGE_XML_MODUL_Aa_SIP ) ); // =
-																		// <Error><Modul>1A)
-																		// Lesbarkeit</Modul>
-				Logtxt.logtxt( logFile,
-						"<Message>"
-								+ kostval.getTextResourceService()
-										.getText( locale, ERROR_XML_CONIG_SIP )
-								+ "</Message></Error>" ); // <Message>SIP-Validierung
-															// in der
-															// Konfiguration
-															// ausgeschaltet.</Message></Error>
-				Logtxt.logtxt( logFile, kostval.getTextResourceService()
-						.getText( locale, MESSAGE_XML_VALERGEBNIS_INVALID ) ); // =
-																				// <Invalid>invalid</Invalid>
-				Logtxt.logtxt( logFile, kostval.getTextResourceService()
-						.getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) ); // =
-																				// </Validation>
-				Logtxt.logtxt( logFile, kostval.getTextResourceService()
-						.getText( locale, MESSAGE_XML_SIP2 ) ); // =
-				// </Sip>
-				Logtxt.logtxt( logFile, kostval.getTextResourceService()
-						.getText( locale, MESSAGE_XML_LOGEND ) ); // =
-				// </KOSTValLog>
+						"<Invalid>invalid</Invalid></Validation></Sip></KOSTValLog>" );
 
 				// ggf. Fehlermeldung 3c ergaenzen Util.val3c(summary3c, logFile
 				// );

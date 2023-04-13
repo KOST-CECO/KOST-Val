@@ -105,8 +105,7 @@ public class Controllervalsip implements MessageConstants
 			Util.deleteFile( ECH160_1_0 );
 		}
 
-		Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
-				MESSAGE_XML_FORMAT1 ) );
+		Logtxt.logtxt( logFile, "</Format>" );
 
 		// TODO Sip fuer Validierung vorbereiten
 		try {
@@ -151,22 +150,12 @@ public class Controllervalsip implements MessageConstants
 						|| zip == false ) {
 					// Abbruch! D.h. Sip message beginnen, Meldung und Beenden
 					// ab hier bis System.exit( 1 );
-					Logtxt.logtxt( logFile, getTextResourceService()
-							.getText( locale, MESSAGE_XML_FORMAT2 ) );
-					Logtxt.logtxt( logFile, getTextResourceService()
-							.getText( locale, MESSAGE_XML_SIP1 ) );
+					Logtxt.logtxt( logFile, "</Format><Sip><Validation>" );
 					valDatei = originalSipFile;
 					Logtxt.logtxt( logFile, getTextResourceService()
-							.getText( locale, MESSAGE_XML_VALERGEBNIS ) );
-					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale,
-									MESSAGE_XML_VALTYPE,
-									getTextResourceService().getText( locale,
-											MESSAGE_SIPVALIDATION ) ) );
-					Logtxt.logtxt( logFile,
-							getTextResourceService().getText( locale,
-									MESSAGE_XML_VALFILE,
-									valDatei.getAbsolutePath() ) );
+							.getText( locale, MESSAGE_XML_VALTYPE, "SIP" ) );
+					Logtxt.logtxt( logFile, "<ValFile>"
+							+ valDatei.getAbsolutePath() + "</ValFile>" );
 					System.out.println( "" );
 					System.out
 							.println( "SIP:   " + valDatei.getAbsolutePath() );
@@ -180,16 +169,11 @@ public class Controllervalsip implements MessageConstants
 							locale, ERROR_XML_AA_INCORRECTFILEENDING ) );
 
 					// Fehler im Validierten SIP --> invalide & Abbruch
-					Logtxt.logtxt( logFile, getTextResourceService().getText(
-							locale, MESSAGE_XML_VALERGEBNIS_INVALID ) );
-					Logtxt.logtxt( logFile, getTextResourceService()
-							.getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) );
+					Logtxt.logtxt( logFile,
+							"<Invalid>invalid</Invalid></Validation>" );
 					System.out.println( "Invalid" );
 					System.out.println( "" );
-					Logtxt.logtxt( logFile, getTextResourceService()
-							.getText( locale, MESSAGE_XML_SIP2 ) );
-					Logtxt.logtxt( logFile, getTextResourceService()
-							.getText( locale, MESSAGE_XML_LOGEND ) );
+					Logtxt.logtxt( logFile, "</Sip></KOSTValLog>" );
 
 					// logFile bereinigung (& End und ggf 3c)
 					Util.valEnd3cAmp( "", logFile );
@@ -271,24 +255,15 @@ public class Controllervalsip implements MessageConstants
 						} catch ( Exception e1 ) {
 							// Abbruch! D.h. Sip message beginnen, Meldung und
 							// Beenden ab hier bis System.exit
-							Logtxt.logtxt( logFile, getTextResourceService()
-									.getText( locale, MESSAGE_XML_FORMAT2 ) );
-							Logtxt.logtxt( logFile, getTextResourceService()
-									.getText( locale, MESSAGE_XML_SIP1 ) );
+							Logtxt.logtxt( logFile,
+									"</Format><Sip><Validation>" );
 							valDatei = originalSipFile;
 							Logtxt.logtxt( logFile,
 									getTextResourceService().getText( locale,
-											MESSAGE_XML_VALERGEBNIS ) );
+											MESSAGE_XML_VALTYPE, "SIP" ) );
 							Logtxt.logtxt( logFile,
-									getTextResourceService().getText( locale,
-											MESSAGE_XML_VALTYPE,
-											getTextResourceService().getText(
-													locale,
-													MESSAGE_SIPVALIDATION ) ) );
-							Logtxt.logtxt( logFile,
-									getTextResourceService().getText( locale,
-											MESSAGE_XML_VALFILE,
-											valDatei.getAbsolutePath() ) );
+									"<ValFile>" + valDatei.getAbsolutePath()
+											+ "</ValFile>" );
 							System.out.println( "" );
 							System.out.println(
 									"SIP:   " + valDatei.getAbsolutePath() );
@@ -304,17 +279,10 @@ public class Controllervalsip implements MessageConstants
 
 							// Fehler im Validierten SIP --> invalide & Abbruch
 							Logtxt.logtxt( logFile,
-									getTextResourceService().getText( locale,
-											MESSAGE_XML_VALERGEBNIS_INVALID ) );
-							Logtxt.logtxt( logFile,
-									getTextResourceService().getText( locale,
-											MESSAGE_XML_VALERGEBNIS_CLOSE ) );
+									"<Invalid>invalid</Invalid></Validation>" );
 							System.out.println( "Invalid" );
 							System.out.println( "" );
-							Logtxt.logtxt( logFile, getTextResourceService()
-									.getText( locale, MESSAGE_XML_SIP2 ) );
-							Logtxt.logtxt( logFile, getTextResourceService()
-									.getText( locale, MESSAGE_XML_LOGEND ) );
+							Logtxt.logtxt( logFile, "</Sip></KOSTValLog>" );
 
 							// logFile bereinigung (& End und ggf 3c)
 							Util.valEnd3cAmp( "", logFile );
@@ -432,8 +400,10 @@ public class Controllervalsip implements MessageConstants
 						MESSAGE_XML_SUMMARY_NO3C );
 			} else {
 				summary = getTextResourceService().getText( locale,
-						MESSAGE_XML_SUMMARY, count.toString(), countValid.toString(), countInvalid.toString(),
-						countNotaz.toString(), countValidP, countInvalidP, countNotazP );
+						MESSAGE_XML_SUMMARY, count.toString(),
+						countValid.toString(), countInvalid.toString(),
+						countNotaz.toString(), countValidP, countInvalidP,
+						countNotazP );
 			}
 
 			if ( count.equals( countValid ) || onlySip ) {
@@ -460,21 +430,16 @@ public class Controllervalsip implements MessageConstants
 				e.printStackTrace();
 			}
 
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
-					MESSAGE_XML_FORMAT2 ) );
+			Logtxt.logtxt( logFile, "</Format>" );
 
 			// TODO Start Normale SIP-Validierung mit auswertung Format-Val. im
 			// 3c
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
-					MESSAGE_XML_SIP1 ) );
+			Logtxt.logtxt( logFile, "<Sip><Validation>" );
 			valDatei = unSipFile;
 			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
-					MESSAGE_XML_VALERGEBNIS ) );
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
-					MESSAGE_XML_VALTYPE, getTextResourceService()
-							.getText( locale, MESSAGE_SIPVALIDATION ) ) );
-			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
-					MESSAGE_XML_VALFILE, originalSipFile.getAbsolutePath() ) );
+					MESSAGE_XML_VALTYPE, "SIP" ) );
+			Logtxt.logtxt( logFile, "<ValFile>"
+					+ originalSipFile.getAbsolutePath() + "</ValFile>" );
 			System.out.println( "" );
 			System.out.println( "SIP:   " + valDatei.getAbsolutePath() );
 
@@ -503,26 +468,14 @@ public class Controllervalsip implements MessageConstants
 
 			if ( ok ) {
 				// Validiertes SIP valide
-				Logtxt.logtxt( logFile, getTextResourceService()
-						.getText( locale, MESSAGE_XML_VALERGEBNIS_VALID ) );
-				Logtxt.logtxt( logFile, getTextResourceService()
-						.getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) );
-				Logtxt.logtxt( logFile, getTextResourceService()
-						.getText( locale, MESSAGE_XML_SIP2 ) );
-				Logtxt.logtxt( logFile, getTextResourceService()
-						.getText( locale, MESSAGE_XML_LOGEND ) );
+				Logtxt.logtxt( logFile,
+						"<Valid>valid</Valid></Validation></Sip></KOSTValLog>" );
 				System.out.println( "Valid" );
 				System.out.println( "" );
 			} else {
 				// Fehler im Validierten SIP --> invalide
-				Logtxt.logtxt( logFile, getTextResourceService()
-						.getText( locale, MESSAGE_XML_VALERGEBNIS_INVALID ) );
-				Logtxt.logtxt( logFile, getTextResourceService()
-						.getText( locale, MESSAGE_XML_VALERGEBNIS_CLOSE ) );
-				Logtxt.logtxt( logFile, getTextResourceService()
-						.getText( locale, MESSAGE_XML_SIP2 ) );
-				Logtxt.logtxt( logFile, getTextResourceService()
-						.getText( locale, MESSAGE_XML_LOGEND ) );
+				Logtxt.logtxt( logFile,
+						"<Invalid>invalid</Invalid></Validation></Sip></KOSTValLog>" );
 				System.out.println( "Invalid" );
 				System.out.println( "" );
 
@@ -608,10 +561,7 @@ public class Controllervalsip implements MessageConstants
 									ERROR_XML_UNKNOWN,
 									"SIP-ValidationException: "
 											+ e.getMessage() )
-							+ getTextResourceService().getText( locale,
-									MESSAGE_XML_SIP2 )
-							+ getTextResourceService().getText( locale,
-									MESSAGE_XML_LOGEND ) );
+							+ "</Sip></KOSTValLog>" );
 			System.out.println( "Exception: " + e.getMessage() );
 			if ( tmpDir.exists() ) {
 				Util.deleteDir( tmpDir );

@@ -52,35 +52,11 @@ public interface MessageConstants
 	String	MESSAGE_XML_SUMMARY_NO3C					= "val.message.xml.summary.no3c";
 	String	MESSAGE_XML_SUMMARY_FORMAT					= "val.message.xml.summary.format";
 	String	MESSAGE_XML_SUMMARY							= "val.message.xml.summary";
-	String	MESSAGE_XML_VALFILE							= "val.message.xml.valfile";
+	
 	String	MESSAGE_XML_HEADER							= "val.message.xml.header";
-	String	MESSAGE_XML_START							= "val.message.xml.start";
-	String	MESSAGE_XML_END								= "val.message.xml.end";
-	String	MESSAGE_XML_FORMATON						= "val.message.xml.formaton";
 	String	MESSAGE_XML_INFO							= "val.message.xml.info";
-	String	MESSAGE_XML_CONFIG							= "val.message.xml.config";
-	String	MESSAGE_TIFFVALIDATION						= "val.message.tiffvalidation";
-	String	MESSAGE_SIARDVALIDATION						= "val.message.siardvalidation";
-	String	MESSAGE_PDFAVALIDATION						= "val.message.pdfavalidation";
-	String	MESSAGE_FORMATVALIDATION_VL					= "val.message.formatvalidation.vl";
-	String	MESSAGE_JP2VALIDATION						= "val.message.jp2validation";
-	String	MESSAGE_JPEGVALIDATION						= "val.message.jpegvalidation";
-	String	MESSAGE_PNGVALIDATION						= "val.message.pngvalidation";
-	String	MESSAGE_XMLVALIDATION						= "val.message.xmlvalidation";
-	String	MESSAGE_SIPVALIDATION						= "val.message.sipvalidation";
-	String	MESSAGE_XML_VALERGEBNIS						= "val.message.xml.valergebnis";
 	String	MESSAGE_XML_VALTYPE							= "val.message.xml.valtype";
 	String	MESSAGE_XML_AZTYPE							= "val.message.xml.aztype";
-	String	MESSAGE_XML_FORMAT1							= "val.message.xml.format1";
-	String	MESSAGE_XML_FORMAT2							= "val.message.xml.format2";
-	String	MESSAGE_XML_LOGEND							= "val.message.xml.logend";
-	String	MESSAGE_XML_SIP1							= "val.message.xml.sip1";
-	String	MESSAGE_XML_SIP2							= "val.message.xml.sip2";
-	String	MESSAGE_XML_VALERGEBNIS_VALID				= "val.message.xml.valergebnis.valid";
-	String	MESSAGE_XML_VALERGEBNIS_INVALID				= "val.message.xml.valergebnis.invalid";
-	String	MESSAGE_XML_VALERGEBNIS_AZ					= "val.message.xml.valergebnis.az";
-	String	MESSAGE_XML_VALERGEBNIS_NOTAZ				= "val.message.xml.valergebnis.notaz";
-	String	MESSAGE_XML_VALERGEBNIS_CLOSE				= "val.message.xml.valergebnis.close";
 	String	MESSAGE_FORMATVALIDATION_DONE				= "val.message.formatvalidation.done";
 	String	MESSAGE_SIPVALIDATION_DONE					= "val.message.sipvalidation.done";
 
@@ -389,7 +365,8 @@ public interface MessageConstants
 	// Modul 1a Meldungen
 	String	ERROR_XML_AA_INCORRECTFILEENDING			= "val.error.xml.aa.incorrectfileending";
 	String	ERROR_XML_AA_CANNOTEXTRACTZIP				= "val.error.xml.aa.cannotextractzip";
-	String	ERROR_XML_CONIG_SIP							= "val.error.xml.config.sip";
+	String	ERROR_XML_CONFIG_SIP						= "val.error.xml.config.sip";
+	String	ERROR_CONFIG_SIP							= "val.error.config.sip";
 
 	// Modul 1b Meldungen
 	String	ERROR_XML_AB_CONTENT						= "val.error.xml.ab.content";
