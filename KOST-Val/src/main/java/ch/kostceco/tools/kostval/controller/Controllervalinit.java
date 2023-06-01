@@ -71,6 +71,8 @@ public class Controllervalinit implements MessageConstants
 			locale = new Locale( "de" );
 		} else if ( args[2].equalsIgnoreCase( "--fr" ) ) {
 			locale = new Locale( "fr" );
+		} else if ( args[2].equalsIgnoreCase( "--it" ) ) {
+			locale = new Locale( "it" );
 		} else if ( args[2].equalsIgnoreCase( "--en" ) ) {
 			locale = new Locale( "en" );
 		} else {

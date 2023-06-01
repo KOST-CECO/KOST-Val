@@ -36,9 +36,9 @@ public interface TextResourceService extends Service
 	 * Platzhalter aus der Resource mit den Werten aus aValues ersetzt.
 	 * 
 	 * @param aKey
-	 *            der Resourcenschl�ssel
+	 *            der Resourcenschluessel
 	 * @param values
-	 *            die Werte f�r die Platzhalter
+	 *            die Werte fuer die Platzhalter
 	 * @return das formatierte Ergebnis
 	 */
 	String getText( String aKey, Object... values );
@@ -52,9 +52,9 @@ public interface TextResourceService extends Service
 	 * @param locale
 	 *            zu verwendende Locale
 	 * @param aKey
-	 *            der Resourcenschl�ssel
+	 *            der Resourcenschluessel
 	 * @param values
-	 *            die Werte f�r die Platzhalter
+	 *            die Werte fuer die Platzhalter
 	 * @return das formatierte Ergebnis
 	 */
 	String getText( Locale locale, String aKey, Object... values );

@@ -110,6 +110,15 @@ public class ConfigControllerTiff
 				labelImage.setText( "Paramètre de validation: TIFF" );
 				buttonConfigApply.setText( "appliquer" );
 				minOne = "Au moins une variante doit etre autorisee !";
+			} else if ( Util.stringInFileLine( "kostval-conf-IT.xsl",
+					configFile ) ) {
+				labelBps.setText( "Bit per campione (per canale)" );
+				labelComp.setText( "Algoritmo di compressione" );
+				labelOther.setText( "Diversi" );
+				labelPi.setText( "Spazio colore" );
+				labelImage.setText( "Parametro di validazione: TIFF" );
+				buttonConfigApply.setText( "applicare" );
+				minOne = "Deve essere ammessa almeno una variante!";
 			} else {
 				labelBps.setText( "Bits per sample (per channel)" );
 				labelComp.setText( "Compression algorithm" );

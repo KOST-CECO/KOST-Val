@@ -91,7 +91,7 @@ public class KOSTVal implements MessageConstants
 	 * 
 	 * args[1] Pfad zur Val-File
 	 * 
-	 * args[2] Sprache "--de" / "--fr" / "--en"
+	 * args[2] Sprache "--de" / "--fr" / "--it" / "--en"
 	 * 
 	 * args[3] Logtyp "--xml" / "--min" (TODO nur valid oder invalid) / "--max"
 	 * (= xml+verbose)
@@ -150,6 +150,8 @@ public class KOSTVal implements MessageConstants
 			locale = new Locale( "de" );
 		} else if ( args[2].equalsIgnoreCase( "--fr" ) ) {
 			locale = new Locale( "fr" );
+		} else if ( args[2].equalsIgnoreCase( "--it" ) ) {
+			locale = new Locale( "it" );
 		} else if ( args[2].equalsIgnoreCase( "--en" ) ) {
 			locale = new Locale( "en" );
 		} else {

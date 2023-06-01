@@ -99,6 +99,12 @@ public class ConfigControllerSiard
 				labelVal.setText( "Paramètre de validation: SIARD" );
 				buttonConfigApply.setText( "appliquer" );
 				minOne = "Au moins une variante doit etre autorisee !";
+			} else if ( Util.stringInFileLine( "kostval-conf-IT.xsl",
+					configFile ) ) {
+				labelVersion.setText( "Versioni" );
+				labelVal.setText( "Parametro di validazione: SIARD" );
+				buttonConfigApply.setText( "applicare" );
+				minOne = "Deve essere ammessa almeno una variante!";
 			} else {
 				labelVersion.setText( "Versions" );
 				labelVal.setText( "Validation setting: SIARD" );

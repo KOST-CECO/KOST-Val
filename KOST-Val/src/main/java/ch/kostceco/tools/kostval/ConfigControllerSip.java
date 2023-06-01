@@ -107,6 +107,13 @@ public class ConfigControllerSip
 				labelName.setText( "Nom SIP" );
 				buttonConfigApply.setText( "appliquer" );
 				locale = new Locale( "fr" );
+			} else if ( Util.stringInFileLine( "kostval-conf-IT.xsl",
+					configFile ) ) {
+				labelVal.setText( "Parametro di validazione: SIP" );
+				labelLength.setText( "Lunghezza percorso" );
+				labelName.setText( "Nome SIP" );
+				buttonConfigApply.setText( "applicare" );
+				locale = new Locale( "it" );
 			} else {
 				labelVal.setText( "Validation setting: SIP" );
 				labelLength.setText( "Path length" );
@@ -174,13 +181,15 @@ public class ConfigControllerSip
 		String lengthIntInit = stringLength;
 
 		dialog.setTitle( "KOST-Val - Configuration - SIP" );
-		String headerDeFrEn = "Geben sie die erlaubte maximale Anzahl Zeichen in Pfadlängen ein [179]:";
+		String headerDeFrItEn = "Geben sie die erlaubte maximale Anzahl Zeichen in Pfadlängen ein [179]:";
 		if ( locale.toString().startsWith( "fr" ) ) {
-			headerDeFrEn = "Entrez le nombre maximum de caractères autorisés dans la longueur du chemin [179]:";
+			headerDeFrItEn = "Entrez le nombre maximum de caractères autorisés dans la longueur du chemin [179]:";
+		} else if ( locale.toString().startsWith( "it" ) ) {
+				headerDeFrItEn = "Inserire il numero massimo di caratteri consentiti nella lunghezza del percorso [179]:";
 		} else if ( locale.toString().startsWith( "en" ) ) {
-			headerDeFrEn = "Enter the allowed maximum number of characters in path lengths [179]:";
+			headerDeFrItEn = "Enter the allowed maximum number of characters in path lengths [179]:";
 		}
-		dialog.setHeaderText( headerDeFrEn );
+		dialog.setHeaderText( headerDeFrItEn );
 		dialog.setContentText( "" );
 
 		// Show the dialog and capture the result.
@@ -224,13 +233,15 @@ public class ConfigControllerSip
 		String nameIntInit = stringName;
 
 		dialog.setTitle( "KOST-Val - Configuration - SIP" );
-		String headerDeFrEn = "Geben Sie die Vorgaben zum Aufbau des SIP-Namens ein [ SIP_[1-2][0-9]{3}[0-1][0-9][0-3][0-9]_\\w{3} ]:";
+		String headerDeFrItEn = "Geben Sie die Vorgaben zum Aufbau des SIP-Namens ein [ SIP_[1-2][0-9]{3}[0-1][0-9][0-3][0-9]_\\w{3} ]:";
 		if ( locale.toString().startsWith( "fr" ) ) {
-			headerDeFrEn = "Entrez les valeurs par défaut pour construire le nom du SIP [ SIP_[1-2][0-9]{3}[0-1][0-9][0-3][0-9]_\\w{3} ] :";
+			headerDeFrItEn = "Entrez les valeurs par défaut pour construire le nom du SIP [ SIP_[1-2][0-9]{3}[0-1][0-9][0-3][0-9]_\\w{3} ] :";
+		} else if ( locale.toString().startsWith( "it" ) ) {
+			headerDeFrItEn = "Inserire i valori predefiniti per costruire il nome SIP [ SIP_[1-2][0-9]{3}[0-1][0-9][0-3][0-9]_\\w{3} ] :";
 		} else if ( locale.toString().startsWith( "en" ) ) {
-			headerDeFrEn = "Enter the defaults to build the SIP name [SIP_[1-2][0-9]{3}[0-1][0-9][0-3][0-9]_\\w{3} ]:";
+			headerDeFrItEn = "Enter the defaults to build the SIP name [SIP_[1-2][0-9]{3}[0-1][0-9][0-3][0-9]_\\w{3} ]:";
 		}
-		dialog.setHeaderText( headerDeFrEn );
+		dialog.setHeaderText( headerDeFrItEn );
 		dialog.setContentText( "" );
 
 		// Show the dialog and capture the result.

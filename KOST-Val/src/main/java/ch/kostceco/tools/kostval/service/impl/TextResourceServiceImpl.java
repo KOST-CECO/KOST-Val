@@ -33,12 +33,12 @@ import ch.kostceco.tools.kostval.service.TextResourceService;
 public class TextResourceServiceImpl implements TextResourceService
 {
 	// Per Default ist es dieser Name, kann jedoch auch mittels Dependency
-	// Injection �berschrieben
+	// Injection ueberschrieben
 	// werden.
 	private String bundleBaseName = "messages";
 
 	/**
-	 * Gibt den Wert des Attributs <code>bundleBaseName</code> zur�ck.
+	 * Gibt den Wert des Attributs <code>bundleBaseName</code> zurueck.
 	 * 
 	 * @return Wert des Attributs bundleBaseName.
 	 */
@@ -51,7 +51,7 @@ public class TextResourceServiceImpl implements TextResourceService
 	 * Setzt den Wert des Attributs <code>bundleBaseName</code>.
 	 * 
 	 * @param bundleBaseName
-	 *            Wert f�r das Attribut bundleBaseName.
+	 *            Wert fuer das Attribut bundleBaseName.
 	 */
 	public void setBundleBaseName( String bundleBaseName )
 	{

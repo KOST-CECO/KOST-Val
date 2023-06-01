@@ -54,7 +54,7 @@
                   <Insets left="24.0" />
                </GridPane.margin>
             </CheckBox>
-            <CheckBox fx:id="checkWarning3to2" mnemonicParsing="false" onAction="#changeWarning3to2" selected="true" text="(PDF/A-3 ~ PDF/A-2)" GridPane.columnIndex="2" GridPane.rowIndex="8">
+            <CheckBox fx:id="checkWarning3to2" mnemonicParsing="false" onAction="#changeWarning3to2" selected="true" text="(PDF/A-3 ≈ PDF/A-2)" GridPane.columnIndex="2" GridPane.rowIndex="8">
                <GridPane.margin>
                   <Insets />
                </GridPane.margin>

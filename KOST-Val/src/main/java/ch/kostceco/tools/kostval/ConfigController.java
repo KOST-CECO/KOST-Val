@@ -235,6 +235,24 @@ public class ConfigController
 				labelHint.setText(
 						"Remarque : * ouvre la configuration détaillée correspondante" );
 				minOne = "Au moins une variante doit etre autorisee !";
+			} else if ( Util.stringInFileLine( "kostval-conf-IT.xsl",
+					configFile ) ) {
+				locale = new Locale( "it" );
+				buttonConfigApply.setText( "applica" );
+				buttonConfigApplyStandard.setText( "applica standard" );
+				buttonConfigCancel.setText( "annulla" );
+				labelText.setText( "Testo" );
+				labelImage.setText( "Immagine" );
+				labelAudio.setText( "Audio" );
+				labelVideo.setText( "Video" );
+				labelData.setText( "Dati" );
+				labelSip.setText( "SIP" );
+				labelOther.setText( "Altro" );
+				buttonWork.setText( "Directory di lavoro" );
+				buttonInput.setText( "Directory di input" );
+				labelHint.setText(
+						"Nota : * apre la configurazione dettagliata corrispondente" );
+				minOne = "Deve essere consentita almeno una variante!";
 			} else {
 				locale = new Locale( "en" );
 				buttonConfigApply.setText( "apply" );
@@ -1412,13 +1430,15 @@ public class ConfigController
 		String puidIntInit = stringPuid;
 
 		dialog.setTitle( "KOST-Val - Configuration" );
-		String headerDeFrEn = "Auflistung der weiteren akzeptierten Dateiformate [WARC HTML DWG]:";
+		String headerDeFrItEn = "Auflistung der weiteren akzeptierten Dateiformate [WARC HTML DWG]:";
 		if ( locale.toString().startsWith( "fr" ) ) {
-			headerDeFrEn = "Liste des autres formats de fichiers acceptés [WARC HTML DWG] :";
+			headerDeFrItEn = "Liste des autres formats de fichiers acceptés [WARC HTML DWG] :";
+		} else if ( locale.toString().startsWith( "it" ) ) {
+			headerDeFrItEn = "Elenco degli altri formati di file accettati [WARC HTML DWG]:";
 		} else if ( locale.toString().startsWith( "en" ) ) {
-			headerDeFrEn = "List of other accepted file formats [WARC HTML DWG]:";
+			headerDeFrItEn = "List of other accepted file formats [WARC HTML DWG]:";
 		}
-		dialog.setHeaderText( headerDeFrEn );
+		dialog.setHeaderText( headerDeFrItEn );
 		dialog.setContentText( "" );
 
 		// Show the dialog and capture the result.
@@ -1472,6 +1492,8 @@ public class ConfigController
 			DirectoryChooser folderChooser = new DirectoryChooser();
 			if ( locale.toString().startsWith( "fr" ) ) {
 				folderChooser.setTitle( "Choisissez le dossier" );
+			} else if ( locale.toString().startsWith( "it" ) ) {
+				folderChooser.setTitle( "Scegliere la cartella" );
 			} else if ( locale.toString().startsWith( "en" ) ) {
 				folderChooser.setTitle( "Choose the folder" );
 			} else {
@@ -1516,6 +1538,8 @@ public class ConfigController
 			DirectoryChooser folderChooser = new DirectoryChooser();
 			if ( locale.toString().startsWith( "fr" ) ) {
 				folderChooser.setTitle( "Choisissez le dossier" );
+			} else if ( locale.toString().startsWith( "it" ) ) {
+				folderChooser.setTitle( "Scegliere la cartella" );
 			} else if ( locale.toString().startsWith( "en" ) ) {
 				folderChooser.setTitle( "Choose the folder" );
 			} else {

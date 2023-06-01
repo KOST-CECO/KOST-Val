@@ -62,7 +62,7 @@ public class CmdKOSTVal implements MessageConstants
 	 * 
 	 * args[1] Pfad zur Val-File
 	 * 
-	 * args[2] Sprache "--de" / "--fr" / "--en"
+	 * args[2] Sprache "--de" / "--fr" / "--it" / "--en"
 	 * 
 	 * args[3] Logtyp "--xml" / "--min" / "--max" (= xml+verbose)
 	 * 
@@ -95,6 +95,8 @@ public class CmdKOSTVal implements MessageConstants
 		String localeSt = "de";
 		if ( locale.toString().startsWith( "fr" ) ) {
 			localeSt = "fr";
+		} else if ( locale.toString().startsWith( "it" ) ) {
+			localeSt = "it";
 		} else if ( locale.toString().startsWith( "en" ) ) {
 			localeSt = "en";
 		} else {
@@ -117,6 +119,9 @@ public class CmdKOSTVal implements MessageConstants
 				arg3 = "--xml";
 			} else if ( args[2].contains( "fr" ) ) {
 				arg2 = "--fr";
+				arg3 = "--xml";
+			} else if ( args[2].contains( "it" ) ) {
+				arg2 = "--it";
 				arg3 = "--xml";
 			} else if ( args[2].contains( "en" ) ) {
 				arg2 = "--en";
@@ -156,7 +161,7 @@ public class CmdKOSTVal implements MessageConstants
 		 * 
 		 * args[1] Pfad zur Val-File
 		 * 
-		 * args[2] Sprache "--de" / "--fr" / "--en"
+		 * args[2] Sprache "--de" / "--fr" / "--it" / "--en"
 		 * 
 		 * args[3] Logtyp "--xml" / "--min" / "--max" (= xml+verbose)
 		 * 
@@ -169,7 +174,7 @@ public class CmdKOSTVal implements MessageConstants
 				|| args[0].equals( "--onlysip" ) ) {
 			booArg0 = true;
 		}
-		if ( args[2].equals( "--de" ) || args[2].equals( "--fr" )
+		if ( args[2].equals( "--de" ) || args[2].equals( "--fr" ) || args[2].equals( "--it" )
 				|| args[2].equals( "--en" ) ) {
 			booArg2 = true;
 		}
@@ -218,6 +223,8 @@ public class CmdKOSTVal implements MessageConstants
 				String text = "Ein Fehler ist aufgetreten. Siehe Konsole.";
 				if ( locale.toString().startsWith( "fr" ) ) {
 					text = "Une erreur s`est produite. Voir Console.";
+				} else if ( locale.toString().startsWith( "it" ) ) {
+					text = "Si e verificato un errore. Vedere la console.";
 				} else if ( locale.toString().startsWith( "en" ) ) {
 					text = "An error has occurred. See Console.";
 				}

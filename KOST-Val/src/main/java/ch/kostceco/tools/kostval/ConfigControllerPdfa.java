@@ -106,6 +106,13 @@ public class ConfigControllerPdfa
 				labelVal.setText( "Paramètre de validation: PDF/A" );
 				buttonConfigApply.setText( "appliquer" );
 				minOne = "Au moins une variante doit etre autorisee !";
+			} else if ( Util.stringInFileLine( "kostval-conf-IT.xsl",
+					configFile ) ) {
+				labelOtherPdfa.setText( "Varie" );
+				labelVersion.setText( "Versioni" );
+				labelVal.setText( "Parametro di validazione: PDF/A" );
+				buttonConfigApply.setText( "applicare" );
+				minOne = "Deve essere ammessa almeno una variante!";
 			} else {
 				labelOtherPdfa.setText( "Other" );
 				labelVersion.setText( "Versions" );
