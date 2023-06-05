@@ -25,9 +25,9 @@ import ch.kostceco.tools.kosttools.runtime.Cmd;
 public class Exiftool
 {
 	private static String	exeDir		= "resources" + File.separator
-			+ "ExifTool-10.15";
+			+ "ExifTool-12.62";
 	private static String	identifyPl	= exeDir + File.separator
-			+ "exiftool.pl";
+			+ "exiftool";
 	private static String	perl		= exeDir + File.separator + "Perl"
 			+ File.separator + "bin" + File.separator + "perl.exe";
 

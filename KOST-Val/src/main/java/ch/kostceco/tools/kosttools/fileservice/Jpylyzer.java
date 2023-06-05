@@ -25,7 +25,7 @@ import ch.kostceco.tools.kosttools.runtime.Cmd;
 public class Jpylyzer
 {
 	private static String	exeDir					= "resources"
-			+ File.separator + "jpylyzer_2.0.0_win32";
+			+ File.separator + "jpylyzer_2.1.0_win64";
 	private static String	resourcesJpylyzerExe	= exeDir + File.separator
 			+ "jpylyzer.exe";
 

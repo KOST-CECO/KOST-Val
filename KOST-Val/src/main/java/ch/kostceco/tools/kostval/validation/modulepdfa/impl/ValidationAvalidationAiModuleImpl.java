@@ -1859,10 +1859,10 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 				try {
 					// Initialisierung callas -> existiert pdfaPilot in den
 					// resources?
-					String folderCallas = "callas_pdfaPilotServer_x64_Win_12-0-355_cli";
+					String folderCallas = "callas_pdfaPilotServer_x64_Win_12-2-366_cli";
 					/*
 					 * Update von Callas: callas_pdfaPilotServer_Win_...-Version
-					 * herunterladen, insallieren, odner im Workbench umbenennen
+					 * herunterladen, installieren, odner im Workbench umbenennen
 					 * alle Dateine vom Ordner cli ersetzen aber lizenz.txt und
 					 * N-Entry.kfpx muessen die alten bleiben
 					 */

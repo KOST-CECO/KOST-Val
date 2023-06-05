@@ -27,9 +27,9 @@ import ch.kostceco.tools.kosttools.util.Util;
 public class Pngcheck
 {
 	private static String	exeDir					= "resources"
-			+ File.separator + "pngcheck-3.0.2-win32";
+			+ File.separator + "pngcheck-3.0.3-win";
 	private static String	resourcesPngcheckExe	= exeDir + File.separator
-			+ "pngcheck.win32.exe";
+			+ "pngcheck.win64.exe";
 
 	/**
 	 * fuehrt eine Validierung mit Pngcheck via cmd durch und speichert das
