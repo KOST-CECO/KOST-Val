@@ -10,19 +10,14 @@
 	<classpathentry kind="lib" path="KOST-Val/lib/badpeggy-2.0.jar" sourcepath="KOST-Val/external-sources/badpeggy-2.0-sources.jar"/>
 	<classpathentry kind="lib" path="KOST-Val/lib/commons-io-2.13.0.jar" sourcepath="KOST-Val/external-sources/commons-io-2.13.0-sources.jar"/>
 	<classpathentry kind="lib" path="KOST-Val/lib/commons-logging-1.2.jar"/>
-	<classpathentry kind="lib" path="KOST-Val/lib/jdom-2.0.0.jar"/>
+	<classpathentry kind="lib" path="KOST-Val/lib/jdom-2.0.6.1.jar" sourcepath="KOST-Val/external-sources/jdom-2.0.6.1-sources.jar"/>
 	<classpathentry kind="lib" path="KOST-Val/lib/jhove-apps-1.28.0.jar"/>
-	<classpathentry kind="lib" path="KOST-Val/lib/junit-4.12.jar"/>
-	<classpathentry kind="lib" path="KOST-Val/lib/spring-aop-5.3.19.RELEASE.jar"/>
-	<classpathentry kind="lib" path="KOST-Val/lib/spring-beans-5.3.19.RELEASE.jar"/>
-	<classpathentry kind="lib" path="KOST-Val/lib/spring-context-5.3.19.RELEASE.jar"/>
-	<classpathentry kind="lib" path="KOST-Val/lib/spring-core-5.3.19.RELEASE.jar"/>
-	<classpathentry kind="lib" path="KOST-Val/lib/spring-expression-5.3.19.RELEASE.jar"/>
-	<classpathentry kind="lib" path="KOST-Val/lib/spring-jcl-5.3.19.RELEASE.jar"/>
-	<classpathentry kind="lib" path="KOST-Val/lib/spring-jdbc-5.3.19.RELEASE.jar"/>
-	<classpathentry kind="lib" path="KOST-Val/lib/spring-orm-5.3.19.RELEASE.jar"/>
-	<classpathentry kind="lib" path="KOST-Val/lib/spring-test-5.3.19.RELEASE.jar"/>
-	<classpathentry kind="lib" path="KOST-Val/lib/spring-tx-5.3.19.RELEASE.jar"/>
+	<classpathentry kind="lib" path="KOST-Val/lib/spring-context-5.3.27.jar"/>
+	<classpathentry kind="lib" path="KOST-Val/lib/spring-beans-5.3.27.jar"/>
+	<classpathentry kind="lib" path="KOST-Val/lib/spring-core-5.3.27.jar"/>
+	<classpathentry kind="lib" path="KOST-Val/lib/spring-aop-5.3.27.jar"/>
+	<classpathentry kind="lib" path="KOST-Val/lib/spring-expression-5.3.27.jar"/>
+	<classpathentry kind="lib" path="KOST-Val/lib/spring-jcl-5.3.27.jar"/>
 	<classpathentry kind="lib" path="KOST-Val/lib/tiff-hul-1.9.4.jar"/>
 	<classpathentry kind="lib" path="KOST-Val/lib/xercesImpl-2.12.2.jar"/>
 	<classpathentry kind="lib" path="KOST-Val/lib/zip64-1.0.jar" sourcepath="KOST-Val/external-sources/zip64-sources.jar"/>

@@ -37,7 +37,6 @@ import ch.kostceco.tools.kostval.exception.modulexml.ValidationAxmlvalidationExc
 import ch.kostceco.tools.kostval.logging.Logtxt;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulexml.ValidationAvalidationXmlModule;
-import coderslagoon.badpeggy.scanner.ImageScanner.Callback;
 
 /**
  * Ist die vorliegende XML-Datei eine valide XML-Datei? XML Validierungs mit
@@ -50,7 +49,7 @@ import coderslagoon.badpeggy.scanner.ImageScanner.Callback;
  */
 
 public class ValidationAvalidationXmlModuleImpl extends ValidationModuleImpl
-		implements ValidationAvalidationXmlModule, Callback
+		implements ValidationAvalidationXmlModule
 {
 
 	private boolean min = false;
@@ -297,12 +296,5 @@ public class ValidationAvalidationXmlModuleImpl extends ValidationModuleImpl
 		// TODO: Erledigt: Fehler Auswertung
 
 		return isValid;
-	}
-
-	@Override
-	public boolean onProgress( float percent )
-	{
-		// Muss auf return true sein, da ansonsten BadPeggy nicht funktioniert
-		return true;
 	}
 }

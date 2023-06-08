@@ -28,7 +28,6 @@ import ch.kostceco.tools.kostval.exception.modulepng.ValidationApngvalidationExc
 import ch.kostceco.tools.kostval.logging.Logtxt;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulepng.ValidationAvalidationPngModule;
-import coderslagoon.badpeggy.scanner.ImageScanner.Callback;
 
 /**
  * Ist die vorliegende PNG-Datei eine valide PNG-Datei? PNG Validierungs mit
@@ -41,7 +40,7 @@ import coderslagoon.badpeggy.scanner.ImageScanner.Callback;
  */
 
 public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl
-		implements ValidationAvalidationPngModule, Callback
+		implements ValidationAvalidationPngModule
 {
 
 	private boolean min = false;
@@ -470,12 +469,5 @@ public class ValidationAvalidationPngModuleImpl extends ValidationModuleImpl
 		// TODO: Erledigt: Fehler Auswertung
 
 		return isValid;
-	}
-
-	@Override
-	public boolean onProgress( float percent )
-	{
-		// Muss auf return true sein, da ansonsten BadPeggy nicht funktioniert
-		return true;
 	}
 }
