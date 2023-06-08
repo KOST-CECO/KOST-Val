@@ -124,7 +124,7 @@ public class ConfigController
 	private Button				buttonSip0160, buttonSipVal;
 
 	@FXML
-	private Label				labelOther, labelWork, labelInput, labelHint,
+	private Label				labelOther, labelWork, labelInput, labelHint, labelHint1,
 			labelConfig;
 
 	@FXML
@@ -214,8 +214,10 @@ public class ConfigController
 				labelOther.setText( "Sonstige" );
 				buttonWork.setText( "Arbeitsverzeichnis" );
 				buttonInput.setText( "Inputverzeichnis" );
+				labelHint1.setText(
+						"Hinweis:" );
 				labelHint.setText(
-						"Hinweis: * öffnet die jeweilige Detailkonfiguration" );
+						"öffnet die jeweilige Detailkonfiguration" );
 				minOne = "Mindestens eine Variante muss erlaubt sein!";
 			} else if ( Util.stringInFileLine( "kostval-conf-FR.xsl",
 					configFile ) ) {
@@ -232,8 +234,10 @@ public class ConfigController
 				labelOther.setText( "Autres" );
 				buttonWork.setText( "Répertoire de travail" );
 				buttonInput.setText( "Répertoire d'entrée" );
+				labelHint1.setText(
+						"Remarque :" );
 				labelHint.setText(
-						"Remarque : * ouvre la configuration détaillée correspondante" );
+						"ouvre la configuration détaillée correspondante" );
 				minOne = "Au moins une variante doit etre autorisee !";
 			} else if ( Util.stringInFileLine( "kostval-conf-IT.xsl",
 					configFile ) ) {
@@ -250,8 +254,10 @@ public class ConfigController
 				labelOther.setText( "Altro" );
 				buttonWork.setText( "Directory di lavoro" );
 				buttonInput.setText( "Directory di input" );
+				labelHint1.setText(
+						"Nota:" );
 				labelHint.setText(
-						"Nota : * apre la configurazione dettagliata corrispondente" );
+						"apre la configurazione dettagliata corrispondente" );
 				minOne = "Deve essere consentita almeno una variante!";
 			} else {
 				locale = new Locale( "en" );
@@ -267,8 +273,10 @@ public class ConfigController
 				labelOther.setText( "Other" );
 				buttonWork.setText( "Working directory" );
 				buttonInput.setText( "Input directory" );
+				labelHint1.setText(
+						"Note:" );
 				labelHint.setText(
-						"Note: * opens the respective detailed configuration" );
+						"opens the respective detailed configuration" );
 				minOne = "At least one variant must be allowed!";
 			}
 		} catch ( Exception e ) {

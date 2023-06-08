@@ -261,7 +261,11 @@ public class Controllervalinitlog implements MessageConstants
 				+ File.separator + "kost-val.xsl" );
 		File xslCopy = new File( directoryOfLogfile.getAbsolutePath()
 				+ File.separator + "kost-val.xsl" );
+		String xslLog="<!-- kost-val.xsl_v"+versionKostVal+" -->";
+		Boolean oldXslLog=!Util.stringInFile( xslLog, xslCopy );
 		if ( !xslCopy.exists() ) {
+			Util.copyFile( xslOrig, xslCopy );
+		} else if (oldXslLog ){
 			Util.copyFile( xslOrig, xslCopy );
 		}
 

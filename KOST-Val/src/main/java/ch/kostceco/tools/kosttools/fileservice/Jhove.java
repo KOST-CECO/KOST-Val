@@ -80,8 +80,8 @@ public class Jhove
 			// Jhove direkt ansprechen via dispatch
 			try {
 				String NAME = new String( "Jhove" );
-				String RELEASE = new String( "1.9.2" ); // vom Modul
-				int[] DATE = new int[] { 2019, 12, 10 }; // vom Modul yyyy, mm,
+				String RELEASE = new String( "1.9.4" ); // vom Modul
+				int[] DATE = new int[] { 2023, 03, 16 }; // vom Modul yyyy, mm,
 															// dd
 				String USAGE = new String( "no usage" );
 				String RIGHTS = new String( "LGPL v2.1" );
@@ -115,14 +115,14 @@ public class Jhove
 					je.dispatch( app, module, null, handler, outputFile,
 							dirFileOrUri );
 					/*
-					 * TODO: beim Ausf�hren von je.dispatch gibt es in seltenen
-					 * F�llen einen Fehler:
+					 * TODO: beim Ausfuehren von je.dispatch gibt es in seltenen
+					 * Fuellen einen Fehler:
 					 * 
 					 * [Fatal Error] :174:20: Content is not allowed in trailing
 					 * section.
 					 * 
 					 * Der Log wird aber korrekt erstellt und der Error kann
-					 * auch nicht unterdr�ckt werden
+					 * auch nicht unterdrueckt werden
 					 */
 					Util.switchOnConsole();
 				} catch ( Exception e ) {
@@ -134,7 +134,7 @@ public class Jhove
 					}
 				}
 
-				// umkopieren, damit es gel�scht werden kann
+				// umkopieren, damit es geloescht werden kann
 				File afile = jhoveReportJTmp;
 				File bfile = tiffReport;
 				Util.copyFile( afile, bfile );

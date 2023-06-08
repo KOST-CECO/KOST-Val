@@ -124,9 +124,11 @@ public class GuiController
 	 * 
 	 * 4) Konfigurationsdatei inkl 3x xsl
 	 * 
-	 * 5) Start-Bild (make_exe)
+	 * 5) xsl der Logdatei
 	 * 
-	 * 6) launch_KOST-Val_exe.xml --> VersionInfo 
+	 * 6) Start-Bild (make_exe)
+	 * 
+	 * 7) launch_KOST-Val_exe.xml --> VersionInfo 
 	 */
 
 	private Locale				locale			= Locale.getDefault();
