@@ -108,11 +108,11 @@ public class ConfigControllerPdfa
 				minOne = "Au moins une variante doit etre autorisee !";
 			} else if ( Util.stringInFileLine( "kostval-conf-IT.xsl",
 					configFile ) ) {
-				labelOtherPdfa.setText( "Varie" );
+				labelOtherPdfa.setText( "Altro" );
 				labelVersion.setText( "Versioni" );
 				labelVal.setText( "Parametro di validazione: PDF/A" );
-				buttonConfigApply.setText( "applicare" );
-				minOne = "Deve essere ammessa almeno una variante!";
+				buttonConfigApply.setText( "Applica" );
+				minOne = "Almeno una variante deve essere consentita!";
 			} else {
 				labelOtherPdfa.setText( "Other" );
 				labelVersion.setText( "Versions" );

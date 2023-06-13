@@ -103,8 +103,8 @@ public class ConfigControllerSiard
 					configFile ) ) {
 				labelVersion.setText( "Versioni" );
 				labelVal.setText( "Parametro di validazione: SIARD" );
-				buttonConfigApply.setText( "applicare" );
-				minOne = "Deve essere ammessa almeno una variante!";
+				buttonConfigApply.setText( "Applica" );
+				minOne = "Almeno una variante deve essere consentita!";
 			} else {
 				labelVersion.setText( "Versions" );
 				labelVal.setText( "Validation setting: SIARD" );

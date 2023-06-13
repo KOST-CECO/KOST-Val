@@ -117,8 +117,8 @@ public class ConfigControllerTiff
 				labelOther.setText( "Diversi" );
 				labelPi.setText( "Spazio colore" );
 				labelImage.setText( "Parametro di validazione: TIFF" );
-				buttonConfigApply.setText( "applicare" );
-				minOne = "Deve essere ammessa almeno una variante!";
+				buttonConfigApply.setText( "Applica" );
+				minOne = "Almeno una variante deve essere consentita!";
 			} else {
 				labelBps.setText( "Bits per sample (per channel)" );
 				labelComp.setText( "Compression algorithm" );

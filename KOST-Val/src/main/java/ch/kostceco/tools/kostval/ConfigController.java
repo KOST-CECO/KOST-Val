@@ -202,9 +202,9 @@ public class ConfigController
 		try {
 			if ( Util.stringInFileLine( "kostval-conf-DE.xsl", configFile ) ) {
 				locale = new Locale( "de" );
-				buttonConfigApply.setText( "anwenden" );
+				buttonConfigApply.setText( "Anwenden" );
 				buttonConfigApplyStandard.setText( "Standard anwenden" );
-				buttonConfigCancel.setText( "verwerfen" );
+				buttonConfigCancel.setText( "Verwerfen" );
 				labelText.setText( "Text" );
 				labelImage.setText( "Bild" );
 				labelAudio.setText( "Audio" );
@@ -222,9 +222,9 @@ public class ConfigController
 			} else if ( Util.stringInFileLine( "kostval-conf-FR.xsl",
 					configFile ) ) {
 				locale = new Locale( "fr" );
-				buttonConfigApply.setText( "appliquer" );
-				buttonConfigApplyStandard.setText( "appliquer le standard" );
-				buttonConfigCancel.setText( "annuler" );
+				buttonConfigApply.setText( "Appliquer" );
+				buttonConfigApplyStandard.setText( "Appliquer le standard" );
+				buttonConfigCancel.setText( "Annuler" );
 				labelText.setText( "Texte" );
 				labelImage.setText( "Image" );
 				labelAudio.setText( "Audio" );
@@ -242,9 +242,9 @@ public class ConfigController
 			} else if ( Util.stringInFileLine( "kostval-conf-IT.xsl",
 					configFile ) ) {
 				locale = new Locale( "it" );
-				buttonConfigApply.setText( "applica" );
-				buttonConfigApplyStandard.setText( "applica standard" );
-				buttonConfigCancel.setText( "annulla" );
+				buttonConfigApply.setText( "Applica" );
+				buttonConfigApplyStandard.setText( "Applica predefinito" );
+				buttonConfigCancel.setText( "Scartare" );
 				labelText.setText( "Testo" );
 				labelImage.setText( "Immagine" );
 				labelAudio.setText( "Audio" );
@@ -253,17 +253,17 @@ public class ConfigController
 				labelSip.setText( "SIP" );
 				labelOther.setText( "Altro" );
 				buttonWork.setText( "Directory di lavoro" );
-				buttonInput.setText( "Directory di input" );
+				buttonInput.setText( "Directory di ingresso" );
 				labelHint1.setText(
 						"Nota:" );
 				labelHint.setText(
 						"apre la configurazione dettagliata corrispondente" );
-				minOne = "Deve essere consentita almeno una variante!";
+				minOne = "Almeno una variante deve essere consentita!";
 			} else {
 				locale = new Locale( "en" );
-				buttonConfigApply.setText( "apply" );
-				buttonConfigApplyStandard.setText( "apply Standard" );
-				buttonConfigCancel.setText( "cancel" );
+				buttonConfigApply.setText( "Apply" );
+				buttonConfigApplyStandard.setText( "Apply Standard" );
+				buttonConfigCancel.setText( "Cancel" );
 				labelText.setText( "Text" );
 				labelImage.setText( "Image" );
 				labelAudio.setText( "Audio" );
@@ -1501,7 +1501,7 @@ public class ConfigController
 			if ( locale.toString().startsWith( "fr" ) ) {
 				folderChooser.setTitle( "Choisissez le dossier" );
 			} else if ( locale.toString().startsWith( "it" ) ) {
-				folderChooser.setTitle( "Scegliere la cartella" );
+				folderChooser.setTitle( "Selezionare la directory" );
 			} else if ( locale.toString().startsWith( "en" ) ) {
 				folderChooser.setTitle( "Choose the folder" );
 			} else {
@@ -1547,7 +1547,7 @@ public class ConfigController
 			if ( locale.toString().startsWith( "fr" ) ) {
 				folderChooser.setTitle( "Choisissez le dossier" );
 			} else if ( locale.toString().startsWith( "it" ) ) {
-				folderChooser.setTitle( "Scegliere la cartella" );
+				folderChooser.setTitle( "Selezionare la directory" );
 			} else if ( locale.toString().startsWith( "en" ) ) {
 				folderChooser.setTitle( "Choose the folder" );
 			} else {

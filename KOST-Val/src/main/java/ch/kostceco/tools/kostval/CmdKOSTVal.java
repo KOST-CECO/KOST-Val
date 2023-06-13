@@ -224,7 +224,7 @@ public class CmdKOSTVal implements MessageConstants
 				if ( locale.toString().startsWith( "fr" ) ) {
 					text = "Une erreur s`est produite. Voir Console.";
 				} else if ( locale.toString().startsWith( "it" ) ) {
-					text = "Si e verificato un errore. Vedere la console.";
+					text = "Si è verificato un errore. Vedere la console.";
 				} else if ( locale.toString().startsWith( "en" ) ) {
 					text = "An error has occurred. See Console.";
 				}

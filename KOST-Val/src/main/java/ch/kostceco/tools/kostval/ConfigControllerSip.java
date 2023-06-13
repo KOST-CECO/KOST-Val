@@ -112,7 +112,7 @@ public class ConfigControllerSip
 				labelVal.setText( "Parametro di validazione: SIP" );
 				labelLength.setText( "Lunghezza percorso" );
 				labelName.setText( "Nome SIP" );
-				buttonConfigApply.setText( "applicare" );
+				buttonConfigApply.setText( "Applica" );
 				locale = new Locale( "it" );
 			} else {
 				labelVal.setText( "Validation setting: SIP" );
