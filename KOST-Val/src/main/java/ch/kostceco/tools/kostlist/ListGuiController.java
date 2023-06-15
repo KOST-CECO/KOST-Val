@@ -1,6 +1,6 @@
 /* == KOST-Ran ==================================================================================
  * The KOST-Ran application is used for excerpt a random sample with metadata from a SIARD-File.
- * Copyright (C) 2021-2022 Claire Roethlisberger (KOST-CECO)
+ * Copyright (C) Claire Roethlisberger (KOST-CECO)
  * -----------------------------------------------------------------------------------------------
  * KOST-Ran is a development of the KOST-CECO. All rights rest with the KOST-CECO. This application
  * is free software: you can redistribute it and/or modify it under the terms of the GNU General

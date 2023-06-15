@@ -1,5 +1,5 @@
 /* == KOST-Tools ================================================================================
- * KOST-Tools. Copyright (C) KOST-CECO. 2012-2022
+ * KOST-Tools. Copyright (C) KOST-CECO.
  * -----------------------------------------------------------------------------------------------
  * KOST-Tools is a development of the KOST-CECO. All rights rest with the KOST-CECO. This
  * application is free software: you can redistribute it and/or modify it under the terms of the GNU
@@ -1988,6 +1988,145 @@ public class Magic
 		} catch ( Exception e ) {
 			System.out
 					.println( "Exception magic file dicom: " + e.getMessage() );
+			read.close();
+			fr.close();
+			read = null;
+			fr = null;
+		}
+		return mn;
+	}
+
+	public static boolean magicMsOffice( File file ) throws IOException
+	{
+		FileReader fr = null;
+		BufferedReader read = null;
+		boolean mn = false;
+
+		try {
+			// Eine MS Office Datei 97-2003 (.doc .xls .ppt .msi .msg) muss wie
+			// folgt beginnen
+			// D0 CF 11 E0 A1 B1 1A E1
+			fr = new FileReader( file );
+			read = new BufferedReader( fr );
+
+			Boolean reco = false;
+			try (FileInputStream fis = new FileInputStream( file )) {
+				int i = 0;
+				int cnt = 0;
+				StringBuilder sb = new StringBuilder();
+				String sb2str1 = "";
+				String sb2str2 = "";
+				String sb2str3 = "";
+				String sb2str4 = "";
+				String sb2str5 = "";
+				String sb2str6 = "";
+				String sb2str7 = "";
+				String sb2str8 = "";
+				String sb12345678 = "";
+				while ( (i = fis.read()) != -1 ) {
+					sb.append( String.format( "%02X ", i ) );
+					if ( sb2str1 == "" ) {
+						sb2str1 = sb + "";
+					} else if ( sb2str2 == "" ) {
+						sb2str2 = sb + "";
+					} else if ( sb2str3 == "" ) {
+						sb2str3 = sb + "";
+					} else if ( sb2str4 == "" ) {
+						sb2str4 = sb + "";
+					} else if ( sb2str5 == "" ) {
+						sb2str5 = sb + "";
+					} else if ( sb2str6 == "" ) {
+						sb2str6 = sb + "";
+					} else if ( sb2str7 == "" ) {
+						sb2str7 = sb + "";
+					} else if ( sb2str8 == "" ) {
+						sb2str8 = sb + "";
+						sb12345678 = sb + "";
+						break;
+					}
+					cnt++;
+					if ( cnt == 16 ) {
+						cnt = 0;
+					}
+				}
+				if ( sb12345678.contains( "D0 CF 11 E0 A1 B1 1A E1" ) ) {
+					reco = true;
+				}
+			}
+			if ( reco ) {
+				// hoechstwahrscheinlich ein  MS Office Datei 97-2003 (.doc .xls .ppt .msi .msg)
+				mn = true;
+			}
+			read.close();
+			fr.close();
+			read = null;
+			fr = null;
+		} catch ( Exception e ) {
+			System.out.println( "Exception magic file MsOffice: " + e.getMessage() );
+			read.close();
+			fr.close();
+			read = null;
+			fr = null;
+		}
+		return mn;
+	}
+
+	public static boolean magicRtf( File file ) throws IOException
+	{
+		FileReader fr = null;
+		BufferedReader read = null;
+		boolean mn = false;
+
+		try {
+			// Eine RTF Datei (.rtf) muss mit 7B5C727466 -> {\rtf beginnen
+			fr = new FileReader( file );
+			read = new BufferedReader( fr );
+
+			Boolean reco = false;
+			try (FileInputStream fis = new FileInputStream( file )) {
+				int i = 0;
+				int cnt = 0;
+				StringBuilder sb = new StringBuilder();
+				String sb2str1 = "";
+				String sb2str2 = "";
+				String sb2str3 = "";
+				String sb2str4 = "";
+				String sb2str5 = "";
+				String sb12345 = "";
+				while ( (i = fis.read()) != -1 ) {
+					sb.append( String.format( "%02X ", i ) );
+					if ( sb2str1 == "" ) {
+						sb2str1 = sb + "";
+					} else if ( sb2str2 == "" ) {
+						sb2str2 = sb + "";
+					} else if ( sb2str3 == "" ) {
+						sb2str3 = sb + "";
+					} else if ( sb2str4 == "" ) {
+						sb2str4 = sb + "";
+					} else if ( sb2str5 == "" ) {
+						sb2str5 = sb + "";
+						sb12345 = sb + "";
+						break;
+					}
+					cnt++;
+					if ( cnt == 16 ) {
+						cnt = 0;
+					}
+				}
+				if ( sb12345.contains( "7B 5C 72 74 66" ) ) {
+					reco = true;
+				}
+			}
+			if ( reco ) {
+				// hoechstwahrscheinlich ein RTF
+				mn = true;
+			}
+			read.close();
+			fr.close();
+			read = null;
+			fr = null;
+		} catch ( Exception e ) {
+			System.out.println( "Exception magic file rtf: " + e.getMessage() );
 			read.close();
 			fr.close();
 			read = null;

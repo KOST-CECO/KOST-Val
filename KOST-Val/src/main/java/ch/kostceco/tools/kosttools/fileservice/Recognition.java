@@ -1,5 +1,5 @@
 /* == KOST-Tools ================================================================================
- * KOST-Tools. Copyright (C) KOST-CECO. 2012-2022
+ * KOST-Tools. Copyright (C) KOST-CECO.
  * -----------------------------------------------------------------------------------------------
  * KOST-Tools is a development of the KOST-CECO. All rights rest with the KOST-CECO. This
  * application is free software: you can redistribute it and/or modify it under the terms of the GNU
@@ -654,6 +654,21 @@ public class Recognition
 						return "ARC_ext";
 					}
 				}
+			} else if ( sb2str1.contains( "7B" ) ) {
+				// TODO B) Die moeglichen BOF kontrollieren (beginnt mit 7B)
+
+				if ( Magic.magicRtf( checkFile ) ) {
+					// Eine RTF Datei (.rtf) muss mit {\rtf [7B5C727466] beginnen
+					// D) passende Extension kontrollieren (keine SiF)
+					// Eine RTF-Datei muss die extension .rtf haben
+					if ( checkFileExt.equals( ".rtf" ) ) {
+						// eindeutig als RTF-Datei erkannt
+						return "RTF";
+					} else {
+						// als RTF-Datei erkannt aber falsche Extension
+						return "RTF_ext";
+					}
+				}
 			} else if ( sb2str1.contains( "89" ) ) {
 				// TODO B) Die moeglichen BOF kontrollieren (beginnt mit 89)
 
@@ -667,6 +682,33 @@ public class Recognition
 					} else {
 						// als PNG-Datei erkannt aber falsche Extension
 						return "PNG_ext";
+					}
+				}
+			} else if ( sb2str1.contains( "D0" ) ) {
+				// TODO B) Die moeglichen BOF kontrollieren (beginnt mit D0)
+				if ( Magic.magicMsOffice( checkFile ) ) {
+					// Eine MS Office Datei 97-2003 muss mit [D0CF11E0A1B11AE1] beginnen
+
+					// (.doc .xls .ppt .msi .msg) 
+					// SiF nicht möglich wegen NUL [00] 
+					if ( checkFileExt.equals( ".doc" ) ) {
+						// eindeutig als DOC-Datei erkannt
+						return "DOC";
+					} else if ( checkFileExt.equals( ".xls" ) ) {
+						// eindeutig als XLS-Datei erkannt
+						return "XLS";
+					} else if ( checkFileExt.equals( ".ppt" ) ) {
+						// eindeutig als ppt-Datei erkannt
+						return "PPT";
+					} else if ( checkFileExt.equals( ".msi" ) ) {
+						// eindeutig als MSI-Datei erkannt
+						return "MSI";
+					} else if ( checkFileExt.equals( ".msg" ) ) {
+						// eindeutig als MSG-Datei erkannt
+						return "MSG";
+					} else {
+						// andere MS Office 97-2003 Datei
+						return "MsOffice";
 					}
 				}
 			} else if ( sb2str1.contains( "FF" ) ) {

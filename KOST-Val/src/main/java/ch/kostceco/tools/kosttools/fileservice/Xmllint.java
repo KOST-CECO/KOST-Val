@@ -1,5 +1,5 @@
 /* == KOST-Tools ================================================================================
- * KOST-Tools. Copyright (C) KOST-CECO. 2012-2022
+ * KOST-Tools. Copyright (C) KOST-CECO.
  * -----------------------------------------------------------------------------------------------
  * KOST-Tools is a development of the KOST-CECO. All rights rest with the KOST-CECO. This
  * application is free software: you can redistribute it and/or modify it under the terms of the GNU
@@ -117,10 +117,29 @@ public class Xmllint
 						"Der Wert hat eine Laenge von" );
 				resultExec = resultExec.replace(
 						"this underruns the allowed minimum length of",
-						"und ueberschreitet damit die zulaessige Mindestlaenge von" );
+						"und unterschreitet damit die zulaessige Mindestlaenge von" );
 				resultExec = resultExec.replace(
 						"is not a valid value of the atomic type",
 						"ist kein gueltiger Wert des atomaren Typs" );
+			} else if ( locale.toString().startsWith( "it" ) ) {
+				resultExec = resultExec.replace( "Schemas validity error :",
+						"Errore nella validita dello schema:" );
+				resultExec = resultExec.replace( "This element is not expected",
+						"Questo elemento non e previsto" );
+				resultExec = resultExec.replace( "Expected is",
+						"Previsto" );
+				resultExec = resultExec.replace( "fails to validate",
+						"non puo essere validato" );
+				resultExec = resultExec.replace( "Missing child element(s).",
+						"Elementi subordinati mancanti." );
+				resultExec = resultExec.replace( "The value has a length of",
+						"Il valore ha una lunghezza di" );
+				resultExec = resultExec.replace(
+						"this underruns the allowed minimum length of",
+						"e quindi e al di sotto della lunghezza minima consentita di" );
+				resultExec = resultExec.replace(
+						"is not a valid value of the atomic type",
+						"non e un valore valido del tipo atomico" );
 			}
 		}
 		return resultExec;

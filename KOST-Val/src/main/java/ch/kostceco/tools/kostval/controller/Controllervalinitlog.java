@@ -1,6 +1,6 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
- * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
+ * Submission Information Package (SIP). Copyright (C) Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
@@ -98,132 +98,236 @@ public class Controllervalinitlog implements MessageConstants
 		String otherformats = configMap.get( "otherformats" );
 
 		String formatValOn = "";
+		String formatRecOn = "";
 		// ermitteln welche Formate validiert werden koennen respektive
-		// eingeschaltet sind
-		if ( !pdfaValidation.equals( "no" ) ) {
+		// eingeschaltet sind "yes"; "az"; "no";
+		if ( pdfaValidation.equals( "yes" ) ) {
 			if ( formatValOn.equals( "" ) ) {
 				formatValOn = "PDF/A";
 			} else {
 				formatValOn = formatValOn + ", PDF/A";
 			}
+		} else if ( pdfaValidation.equals( "az" ) ) {
+			if ( formatRecOn.equals( "" ) ) {
+				formatRecOn = "PDF/A";
+			} else {
+				formatRecOn = formatRecOn + ", PDF/A";
+			}
 		}
-		if ( !txtValidation.equals( "no" ) ) {
+		if ( txtValidation.equals( "yes" ) ) {
 			if ( formatValOn.equals( "" ) ) {
 				formatValOn = "TXT";
 			} else {
 				formatValOn = formatValOn + ", TXT";
 			}
+		} else if ( txtValidation.equals( "az" ) ) {
+			if ( formatRecOn.equals( "" ) ) {
+				formatRecOn = "TXT";
+			} else {
+				formatRecOn = formatRecOn + ", TXT";
+			}
 		}
-		if ( !pdfValidation.equals( "no" ) ) {
+		if ( pdfValidation.equals( "yes" ) ) {
 			if ( formatValOn.equals( "" ) ) {
 				formatValOn = "PDF";
 			} else {
 				formatValOn = formatValOn + ", PDF";
 			}
+		} else if ( pdfValidation.equals( "az" ) ) {
+			if ( formatRecOn.equals( "" ) ) {
+				formatRecOn = "PDF";
+			} else {
+				formatRecOn = formatRecOn + ", PDF";
+			}
 		}
-		if ( !jp2Validation.equals( "no" ) ) {
+		if ( jp2Validation.equals( "yes" ) ) {
 			if ( formatValOn.equals( "" ) ) {
 				formatValOn = "JP2";
 			} else {
 				formatValOn = formatValOn + ", JP2";
 			}
+		} else if ( jp2Validation.equals( "az" ) ) {
+			if ( formatRecOn.equals( "" ) ) {
+				formatRecOn = "JP2";
+			} else {
+				formatRecOn = formatRecOn + ", JP2";
+			}
 		}
-		if ( !jpegValidation.equals( "no" ) ) {
+		if ( jpegValidation.equals( "yes" ) ) {
 			if ( formatValOn.equals( "" ) ) {
 				formatValOn = "JPEG";
 			} else {
 				formatValOn = formatValOn + ", JPEG";
 			}
+		} else if ( jpegValidation.equals( "az" ) ) {
+			if ( formatRecOn.equals( "" ) ) {
+				formatRecOn = "JPEG";
+			} else {
+				formatRecOn = formatRecOn + ", JPEG";
+			}
 		}
-		if ( !tiffValidation.equals( "no" ) ) {
+		if ( tiffValidation.equals( "yes" ) ) {
 			if ( formatValOn.equals( "" ) ) {
 				formatValOn = "TIFF";
 			} else {
 				formatValOn = formatValOn + ", TIFF";
 			}
+		} else if ( tiffValidation.equals( "az" ) ) {
+			if ( formatRecOn.equals( "" ) ) {
+				formatRecOn = "TIFF";
+			} else {
+				formatRecOn = formatRecOn + ", TIFF";
+			}
 		}
-		if ( !pngValidation.equals( "no" ) ) {
+		if ( pngValidation.equals( "yes" ) ) {
 			if ( formatValOn.equals( "" ) ) {
 				formatValOn = "PNG";
 			} else {
 				formatValOn = formatValOn + ", PNG";
 			}
+		} else if ( pngValidation.equals( "az" ) ) {
+			if ( formatRecOn.equals( "" ) ) {
+				formatRecOn = "PNG";
+			} else {
+				formatRecOn = formatRecOn + ", PNG";
+			}
 		}
-		if ( !flacValidation.equals( "no" ) ) {
+		if ( flacValidation.equals( "yes" ) ) {
 			if ( formatValOn.equals( "" ) ) {
 				formatValOn = "FLAC";
 			} else {
 				formatValOn = formatValOn + ", FLAC";
 			}
+		} else if ( flacValidation.equals( "az" ) ) {
+			if ( formatRecOn.equals( "" ) ) {
+				formatRecOn = "FLAC";
+			} else {
+				formatRecOn = formatRecOn + ", FLAC";
+			}
 		}
-		if ( !waveValidation.equals( "no" ) ) {
+		if ( waveValidation.equals( "yes" ) ) {
 			if ( formatValOn.equals( "" ) ) {
 				formatValOn = "WAVE";
 			} else {
 				formatValOn = formatValOn + ", WAVE";
 			}
+		} else if ( waveValidation.equals( "az" ) ) {
+			if ( formatRecOn.equals( "" ) ) {
+				formatRecOn = "WAVE";
+			} else {
+				formatRecOn = formatRecOn + ", WAVE";
+			}
 		}
-		if ( !mp3Validation.equals( "no" ) ) {
+		if ( mp3Validation.equals( "yes" ) ) {
 			if ( formatValOn.equals( "" ) ) {
 				formatValOn = "MP3";
 			} else {
 				formatValOn = formatValOn + ", MP3";
 			}
+		} else if ( mp3Validation.equals( "az" ) ) {
+			if ( formatRecOn.equals( "" ) ) {
+				formatRecOn = "MP3";
+			} else {
+				formatRecOn = formatRecOn + ", MP3";
+			}
 		}
-		if ( !mkvValidation.equals( "no" ) ) {
+		if ( mkvValidation.equals( "yes" ) ) {
 			if ( formatValOn.equals( "" ) ) {
 				formatValOn = "MKV";
 			} else {
 				formatValOn = formatValOn + ", MKV";
 			}
+		} else if ( mkvValidation.equals( "az" ) ) {
+			if ( formatRecOn.equals( "" ) ) {
+				formatRecOn = "MKV";
+			} else {
+				formatRecOn = formatRecOn + ", MKV";
+			}
 		}
-		if ( !mp4Validation.equals( "no" ) ) {
+		if ( mp4Validation.equals( "yes" ) ) {
 			if ( formatValOn.equals( "" ) ) {
 				formatValOn = "MP4";
 			} else {
 				formatValOn = formatValOn + ", MP4";
 			}
+		} else if ( mp4Validation.equals( "az" ) ) {
+			if ( formatRecOn.equals( "" ) ) {
+				formatRecOn = "MP4";
+			} else {
+				formatRecOn = formatRecOn + ", MP4";
+			}
 		}
-		if ( !xmlValidation.equals( "no" ) ) {
+		if ( xmlValidation.equals( "yes" ) ) {
 			if ( formatValOn.equals( "" ) ) {
 				formatValOn = "XML";
 			} else {
 				formatValOn = formatValOn + ", XML";
 			}
+		} else if ( xmlValidation.equals( "az" ) ) {
+			if ( formatRecOn.equals( "" ) ) {
+				formatRecOn = "XML";
+			} else {
+				formatRecOn = formatRecOn + ", XML";
+			}
 		}
-		if ( !siardValidation.equals( "no" ) ) {
+		if ( siardValidation.equals( "yes" ) ) {
 			if ( formatValOn.equals( "" ) ) {
 				formatValOn = "SIARD";
 			} else {
 				formatValOn = formatValOn + ", SIARD";
 			}
+		} else if ( siardValidation.equals( "az" ) ) {
+			if ( formatRecOn.equals( "" ) ) {
+				formatRecOn = "SIARD";
+			} else {
+				formatRecOn = formatRecOn + ", SIARD";
+			}
 		}
-		if ( !csvValidation.equals( "no" ) ) {
+		if ( csvValidation.equals( "yes" ) ) {
 			if ( formatValOn.equals( "" ) ) {
 				formatValOn = "CSV";
 			} else {
 				formatValOn = formatValOn + ", CSV";
 			}
+		} else if ( csvValidation.equals( "az" ) ) {
+			if ( formatRecOn.equals( "" ) ) {
+				formatRecOn = "CSV";
+			} else {
+				formatRecOn = formatRecOn + ", CSV";
+			}
 		}
-		if ( !xlsxValidation.equals( "no" ) ) {
+		if ( xlsxValidation.equals( "yes" ) ) {
 			if ( formatValOn.equals( "" ) ) {
 				formatValOn = "XLSX";
 			} else {
 				formatValOn = formatValOn + ", XLSX";
 			}
+		} else if ( xlsxValidation.equals( "az" ) ) {
+			if ( formatRecOn.equals( "" ) ) {
+				formatRecOn = "XLSX";
+			} else {
+				formatRecOn = formatRecOn + ", XLSX";
+			}
 		}
-		if ( !odsValidation.equals( "no" ) ) {
+		if ( odsValidation.equals( "yes" ) ) {
 			if ( formatValOn.equals( "" ) ) {
 				formatValOn = "ODS";
 			} else {
 				formatValOn = formatValOn + ", ODS";
 			}
+		} else if ( odsValidation.equals( "az" ) ) {
+			if ( formatRecOn.equals( "" ) ) {
+				formatRecOn = "ODS";
+			} else {
+				formatRecOn = formatRecOn + ", ODS";
+			}
 		}
 		if ( !otherformats.equals( "" ) ) {
-			if ( formatValOn.equals( "" ) ) {
-				formatValOn = otherformats;
+			otherformats = otherformats.replace( " ", ", " );
+			if ( formatRecOn.equals( "" ) ) {
+				formatRecOn = otherformats;
 			} else {
-				formatValOn = formatValOn + ", " + otherformats;
+				formatRecOn = formatRecOn + ", " + otherformats;
 			}
 		}
 
@@ -231,8 +335,16 @@ public class Controllervalinitlog implements MessageConstants
 				MESSAGE_XML_HEADER ) );
 		Logtxt.logtxt( logFile, "<Infos><Start>" + ausgabeStart + "</Start>" );
 		Logtxt.logtxt( logFile, "<End></End>" );
-		Logtxt.logtxt( logFile,
-				"<FormatValOn>" + formatValOn + "</FormatValOn>" );
+		String val=getTextResourceService().getText( locale,
+				MESSAGE_XML_VALTYPE, formatValOn );
+		String rec=getTextResourceService().getText( locale,
+				MESSAGE_XML_AZTYPE, formatRecOn );
+		// val.message.xml.valtype = <ValType>Validierung: {0}</ValType>
+		// val.message.xml.aztype = <ValType>Erkennung: {0}</ValType>
+		formatValOn = val.replace( "ValType", "FormatValOn" );
+		formatRecOn = rec.replace( "ValType", "FormatRecOn" );
+		Logtxt.logtxt( logFile,				 formatValOn );
+		Logtxt.logtxt( logFile,				 formatRecOn );
 		Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
 				MESSAGE_XML_INFO, versionKostVal ) );
 		String config = "";

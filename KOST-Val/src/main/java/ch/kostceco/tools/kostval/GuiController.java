@@ -1,6 +1,6 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
- * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
+ * Submission Information Package (SIP). Copyright (C) Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
@@ -81,7 +81,8 @@ public class GuiController
 			buttonShowConfig, buttonPrint, buttonSave;
 
 	ObservableList<String>		langList		= FXCollections
-			.observableArrayList( "Deutsch", "Français",  "Italiano", "English" );
+			.observableArrayList( "Deutsch", "Français", "Italiano",
+					"English" );
 	ObservableList<String>		logTypeList		= FXCollections
 			.observableArrayList( " --xml (default)", " --min (valid/invalid)",
 					" --max (verbose)" );
@@ -128,7 +129,14 @@ public class GuiController
 	 * 
 	 * 6) Start-Bild (make_exe)
 	 * 
-	 * 7) launch_KOST-Val_exe.xml --> VersionInfo 
+	 * 7) launch_KOST-Val_exe.xml --> VersionInfo
+	 */
+
+	/*
+	 * TODO: Jahreszahl in allen val.message.xml.info anpassen
+	 * 
+	 * val.message.xml.info = <Info>KOST-Val v{0}, Copyright (C) 2012-2023
+	 * Claire Roethlisberger ...
 	 */
 
 	private Locale				locale			= Locale.getDefault();
@@ -233,7 +241,7 @@ public class GuiController
 				buttonFile.setText( "File" );
 				buttonHelp.setText( "Aiuto?" );
 				buttonLicence.setText( "Informazioni sulla licenza" );
-				buttonChange.setText( "Personalizza" );
+				buttonChange.setText( "Adattare" );
 				buttonShowConfig.setText( "Visualizza" );
 				labelStart.setText( "Avvia validazione" );
 				labelConfig.setText( "Configurazione" );
@@ -1396,7 +1404,7 @@ public class GuiController
 			} else if ( locale.toString().startsWith( "it" ) ) {
 				sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br><br>&nbsp;</h3></td><td><h3>Directory selezionata: <br>"
 						+ valFolder.getAbsolutePath() + "<br>("
-						+ numberInFileMap + " file)</h3></td></tr>";  		
+						+ numberInFileMap + " file)</h3></td></tr>";
 				sel2 = "<tr><td><h3>2.</h3></td><td><h3>Regolare la configurazione e il LogType, se necessario </h3></td></tr>";
 				sel3 = "<tr><td><h3>3.</h3></td><td><h3>Avviare la validazione </h3></td></tr></table>";
 			} else if ( locale.toString().startsWith( "en" ) ) {
@@ -1618,7 +1626,7 @@ public class GuiController
 					} else if ( locale.toString().startsWith( "it" ) ) {
 						notexist = "Percorso non valido! "
 								+ valFileFolder.getAbsolutePath()
-								+ " non esiste.";				
+								+ " non esiste.";
 					}
 					engine.loadContent(
 							"<html><h2>" + notexist + "</h2></html>" );
@@ -1671,8 +1679,7 @@ public class GuiController
 							+ " doesn't exist.";
 				} else if ( locale.toString().startsWith( "it" ) ) {
 					notexist = "Percorso non valido! "
-							+ valFileFolder.getAbsolutePath()
-							+ " non esiste.";
+							+ valFileFolder.getAbsolutePath() + " non esiste.";
 				}
 				engine.loadContent( "<html><h2>" + notexist + "</h2></html>" );
 			}
@@ -1760,7 +1767,7 @@ public class GuiController
 				buttonFile.setText( "File" );
 				buttonHelp.setText( "Aiuto?" );
 				buttonLicence.setText( "Informazioni sulla licenza" );
-				buttonChange.setText( "Personalizza" );
+				buttonChange.setText( "Adattare" );
 				buttonShowConfig.setText( "Visualizza" );
 				labelStart.setText( "Avvia validazione" );
 				labelConfig.setText( "Configurazione" );

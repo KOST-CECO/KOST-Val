@@ -123,11 +123,12 @@
 						</div>
 					</xsl:if>
 				</xsl:for-each>
-				<h1>
-					Format (
+				<h2>
 					<xsl:value-of select="KOSTValLog/Infos/FormatValOn"/>
-					):
-				</h1>
+				</h2>
+				<h3>
+					<xsl:value-of select="KOSTValLog/Infos/FormatRecOn"/>
+				</h3>
 				<xsl:for-each select="KOSTValLog/Format/Infos">
 					<div>
 						<table width="100%">
