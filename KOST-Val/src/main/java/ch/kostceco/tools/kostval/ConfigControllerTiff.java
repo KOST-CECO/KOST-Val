@@ -56,7 +56,7 @@ public class ConfigControllerTiff
 
 	@FXML
 	private Label		labelBps, labelComp, labelOther, labelPi, labelImage,
-			labelTiff, labelMessage, labelConfig;
+			labelMessage, labelConfig;
 
 	@FXML
 	void initialize()

@@ -54,9 +54,8 @@ public class ConfigControllerPdfa
 			minOne = "Mindestens eine Variante muss erlaubt sein!";
 
 	@FXML
-	private Label		labelOtherPdfa, labelVersion, labelCallas,
-			labelPdftools, labelEr, labelEr1, labelEr2, labelEr3, labelVal,
-			labelMessage, labelConfig;
+	private Label		labelOtherPdfa, labelVersion, labelVal, labelMessage,
+			labelConfig;
 
 	@FXML
 	void initialize()

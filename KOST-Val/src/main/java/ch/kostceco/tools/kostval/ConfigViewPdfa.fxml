@@ -83,12 +83,12 @@
             </CheckBox>
             <Label fx:id="labelOtherPdfa" text="Sonstiges" GridPane.columnIndex="3" GridPane.rowIndex="2" />
             <Label fx:id="labelVersion" text="Versionen" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-            <Label fx:id="labelCallas" text="Callas" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Label fx:id="labelPdftools" text="PDF Tools" GridPane.rowIndex="2" />
+            <Label text="Callas" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Label text="PDF Tools" GridPane.rowIndex="2" />
             <Label fx:id="labelEr" text=" └" textFill="WHITESMOKE" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <Label fx:id="labelEr1" text=" └" textFill="WHITESMOKE" GridPane.rowIndex="4" />
-            <Label fx:id="labelEr2" text=" └" textFill="WHITESMOKE" GridPane.rowIndex="5" />
-            <Label fx:id="labelEr3" text=" └" textFill="WHITESMOKE" GridPane.rowIndex="6">
+            <Label text=" └" textFill="WHITESMOKE" GridPane.rowIndex="4" />
+            <Label text=" └" textFill="WHITESMOKE" GridPane.rowIndex="5" />
+            <Label text=" └" textFill="WHITESMOKE" GridPane.rowIndex="6">
                <GridPane.margin>
                   <Insets left="24.0" />
                </GridPane.margin>

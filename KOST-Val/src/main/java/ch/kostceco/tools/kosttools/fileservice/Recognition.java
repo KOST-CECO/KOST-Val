@@ -669,6 +669,13 @@ public class Recognition
 						return "RTF_ext";
 					}
 				}
+				if ( checkFileExt.equals( ".json" )&& Util.stringInFile( "}",
+						checkFile ) ) {
+					// Eine JSON Datei (.json) muss mit { [7B] beginnen
+					// und enthaelt auch }
+					// eindeutig als JSON-Datei erkannt (keine SiF)
+					return "JSON";
+				}
 			} else if ( sb2str1.contains( "89" ) ) {
 				// TODO B) Die moeglichen BOF kontrollieren (beginnt mit 89)
 

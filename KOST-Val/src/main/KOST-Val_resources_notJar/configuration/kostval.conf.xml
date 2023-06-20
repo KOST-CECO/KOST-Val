@@ -96,8 +96,11 @@
 	</mp4>
 <!-- DATEN -->
 	<xml>
-		<xmlvalidation>&#x2713;</xmlvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert / &#x2713; = akzeptiert und validieren -->
+		<xmlvalidation>(&#x2713;)</xmlvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert / &#x2713; = akzeptiert und validieren -->
 	</xml>
+	<json>
+		<jsonvalidation>(&#x2713;)</jsonvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert -->
+	</json>
 	<siard>
 		<siardvalidation>&#x2713;</siardvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert / &#x2713; = akzeptiert und validieren -->
 		<siard10>1.0</siard10><!--1.0 / / no -->
@@ -117,11 +120,28 @@
 		<ech0160validation>&#x2713;</ech0160validation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert / &#x2713; = akzeptiert und validieren -->
 		<allowedlengthofpaths>179</allowedlengthofpaths>
 		<allowedsipname>SIP_[1-2][0-9]{3}[0-1][0-9][0-3][0-9]_\w{3}</allowedsipname>
-		<allowedformats>TXT PDFA1 PDFA2 TIFF JP2 JPEG PNG WAVE FLAC MP3 MP4 MJ2 MPEG2 CSV SIARD WARC XML XSD</allowedformats>
-		<!-- <allowedformats>SVG MPEG2 PRORES XLS ARC HTML</allowedformats> -->
+		<warningolddok>no</warningolddok> <!-- no = Fehler / yes = Warnung -->
 	</sip>
 <!-- SONSTIGES -->
-	<otherformats>WARC HTML DWG</otherformats><!-- auch moeglich DOCX PPTX INTERLIS -->
+	<otherformats><!--&#x2717; / Leer = nicht akzeptiert / (&#x2713;) / Bezeichnung = akzeptiert -->
+		<docxvalidation></docxvalidation>";
+		<pptxvalidation></pptxvalidation>";
+		<rtfvalidation></rtfvalidation>";
+		<jpxvalidation></jpxvalidation>";
+		<jpmvalidation></jpmvalidation>";
+		<svgvalidation></svgvalidation>";
+		<oggvalidation></oggvalidation>";
+		<mpeg2validation></mpeg2validation>";
+		<htmlvalidation>HTML </htmlvalidation>";
+		<warcvalidation>WARC </warcvalidation>";
+		<arcvalidation></arcvalidation>";
+		<dwgvalidation>DWG </dwgvalidation>";
+		<ifcvalidation></ifcvalidation>";
+		<dxfvalidation></dxfvalidation>";
+		<interlisvalidation></interlisvalidation>";
+		<dicomvalidation></dicomvalidation>";
+		<msgvalidation></msgvalidation>";
+	</otherformats>
 	<pathtoworkdir></pathtoworkdir><!--wenn leer wird "USERPROFILE/.kost-val_2x/temp_KOST-Val" verwendet -->
 	<standardinputdir></standardinputdir><!--wenn leer wird "Dieser PC" verwendet -->
 	<hash></hash><!--wenn leer wird kein Hashwert berechnet und ausgegeben -->

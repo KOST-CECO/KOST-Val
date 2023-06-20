@@ -24,6 +24,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Locale;
 import java.util.Optional;
 
@@ -38,6 +41,7 @@ import ch.kostceco.tools.kosttools.util.Util;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
 import javafx.stage.Stage;
@@ -47,6 +51,9 @@ public class ConfigControllerSip
 
 	@FXML
 	private Button	buttonConfigApply, buttonLength, buttonName;
+	
+	@FXML
+	private CheckBox	checkWarningOldDok;
 
 	private File	configFile	= new File( System.getenv( "USERPROFILE" )
 			+ File.separator + ".kost-val_2x" + File.separator + "configuration"
@@ -98,6 +105,7 @@ public class ConfigControllerSip
 				labelVal.setText( "Validierungseinstellung: SIP" );
 				labelLength.setText( "Pfadlänge" );
 				labelName.setText( "SIP Name" );
+				checkWarningOldDok.setText( "Nur Warnung bei alten Dokumenten (Entstehungszeitraum)" );
 				buttonConfigApply.setText( "anwenden" );
 				locale = new Locale( "de" );
 			} else if ( Util.stringInFileLine( "kostval-conf-FR.xsl",
@@ -105,6 +113,7 @@ public class ConfigControllerSip
 				labelVal.setText( "Paramètre de validation: SIP" );
 				labelLength.setText( "Longueur du chemin" );
 				labelName.setText( "Nom SIP" );
+				checkWarningOldDok.setText( "Avertissement uniquement pour les anciens documents (Entstehungszeitraum)" );
 				buttonConfigApply.setText( "appliquer" );
 				locale = new Locale( "fr" );
 			} else if ( Util.stringInFileLine( "kostval-conf-IT.xsl",
@@ -112,12 +121,14 @@ public class ConfigControllerSip
 				labelVal.setText( "Parametro di validazione: SIP" );
 				labelLength.setText( "Lunghezza percorso" );
 				labelName.setText( "Nome SIP" );
+				checkWarningOldDok.setText( "Avviso solo per i vecchi documenti (Entstehungszeitraum)" );
 				buttonConfigApply.setText( "Applica" );
 				locale = new Locale( "it" );
 			} else {
 				labelVal.setText( "Validation setting: SIP" );
 				labelLength.setText( "Path length" );
 				labelName.setText( "SIP name" );
+				checkWarningOldDok.setText( "Only warning for old documents (Entstehungszeitraum)" );
 				buttonConfigApply.setText( "apply" );
 				locale = new Locale( "en" );
 			}
@@ -141,6 +152,17 @@ public class ConfigControllerSip
 					.item( 0 ).getTextContent();
 			buttonLength.setText( allowedlengthofpaths );
 			buttonName.setText( allowedsipname );
+			
+
+			byte[] encoded;
+			encoded = Files
+					.readAllBytes( Paths.get( configFile.getAbsolutePath() ) );
+			String config = new String( encoded, StandardCharsets.UTF_8 );
+			String noWarningOldDok = "<warningolddok>no</warningolddok>";
+			if ( config.contains( noWarningOldDok ) ) {
+				checkWarningOldDok.setSelected( false );
+			}
+
 
 		} catch ( IOException | ParserConfigurationException
 				| SAXException e1 ) {
@@ -268,6 +290,26 @@ public class ConfigControllerSip
 			}
 		} else {
 			// Keine Aktion
+		}
+	}
+
+	/*
+	 * checkWarningOldDok schaltet diese Warnung anstelle Fehler in der Konfiguration ein oder aus
+	 */
+	@FXML
+	void changeWarningOldDok( ActionEvent event )
+	{
+		labelMessage.setText( "" );
+		String yes = "<warningolddok>yes</warningolddok>";
+		String no = "<warningolddok>no</warningolddok>";
+		try {
+			if ( checkWarningOldDok.isSelected() ) {
+				Util.oldnewstring( no, yes, configFile );
+			} else {
+				Util.oldnewstring( yes, no, configFile );
+			}
+		} catch ( IOException e ) {
+			e.printStackTrace();
 		}
 	}
 

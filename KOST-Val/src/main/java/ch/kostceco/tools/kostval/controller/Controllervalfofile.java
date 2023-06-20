@@ -91,6 +91,7 @@ public class Controllervalfofile implements MessageConstants
 		String mkvValidation = configMap.get( "mkvValidation" );
 		String mp4Validation = configMap.get( "mp4Validation" );
 		String xmlValidation = configMap.get( "xmlValidation" );
+		String jsonValidation = configMap.get( "jsonValidation" );
 		String siardValidation = configMap.get( "siardValidation" );
 		String csvValidation = configMap.get( "csvValidation" );
 		String xlsxValidation = configMap.get( "xlsxValidation" );
@@ -561,6 +562,27 @@ public class Controllervalfofile implements MessageConstants
 											MESSAGE_XML_AZTYPE, "XML" )
 									+ valDateiXml );
 							if ( xmlValidation.equals( "az" ) ) {
+								// nur akzeptiert -> KEINE Validierung, nur
+								// Erkennung
+								recMsg = "AZ";
+							} else {
+								// NICHT akzeptiert -> invalid
+								recMsg = "notAZ";
+							}
+						}
+					} else if ( recFormat.equals( "JSON" ) ) {
+						intro = countToValidated + " " + "JSON:   "
+								+ valDatei.getAbsolutePath() + " ";
+						if ( jsonValidation.equals( "yes" ) ) {
+							// akzeptiert und soll validiert werden
+							// Aktuell nicht moeglich, kein Validator dafuer
+						} else {
+							// akzeptiert oder nicht
+							Logtxt.logtxt( logFile, "<Validation>" + hash
+									+ getTextResourceService().getText( locale,
+											MESSAGE_XML_AZTYPE, "JSON" )
+									+ valDateiXml );
+							if ( jsonValidation.equals( "az" ) ) {
 								// nur akzeptiert -> KEINE Validierung, nur
 								// Erkennung
 								recMsg = "AZ";

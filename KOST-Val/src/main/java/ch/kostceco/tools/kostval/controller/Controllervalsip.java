@@ -105,7 +105,7 @@ public class Controllervalsip implements MessageConstants
 			Util.deleteFile( ECH160_1_0 );
 		}
 
-		Logtxt.logtxt( logFile, "</Format>" );
+		Logtxt.logtxt( logFile, "<Format>" );
 
 		// TODO Sip fuer Validierung vorbereiten
 		try {

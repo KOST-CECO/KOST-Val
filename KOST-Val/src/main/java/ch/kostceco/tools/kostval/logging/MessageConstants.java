@@ -435,6 +435,7 @@ public interface MessageConstants
 	String	ERROR_XML_CD_INVALID_DOSSIER_RANGE_CA		= "val.error.xml.cd.invalid.dossier.range.ca";
 	String	ERROR_XML_CD_INVALID_DOSSIER_RANGE_CA_ABL	= "val.error.xml.cd.invalid.dossier.range.ca.abl";
 	String	ERROR_XML_CD_INVALID_DOKUMENT_RANGE_CA		= "val.error.xml.cd.invalid.dokument.range.ca";
+	String	ERROR_XML_CD_WARNING_DOKUMENT_RANGE_CA		= "val.error.xml.cd.warning.dokument.range.ca";
 	String	ERROR_XML_CD_UNPARSEABLE_DATE				= "val.error.xml.cd.unparseable.date";
 	String	ERROR_XML_CD_WARNING_ANMERKUNG_CA			= "val.error.xml.cd.warning.anmerkung.ca";
 }

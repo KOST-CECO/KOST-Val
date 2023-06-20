@@ -613,6 +613,17 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			}
 			configMap.put( "xmlValidation", xmlvalidation );
 
+			// Gibt an ob json akzeptiert werden soll
+			/* durch die Sonderzeichen muss es anders ausgelesen werden */
+			String azJson = "<jsonvalidation>(&#x2713;)</jsonvalidation>";
+			String jsonvalidation = "no";
+			if ( config.contains( azJson ) ) {
+				jsonvalidation = "az";
+			} else {
+				jsonvalidation = "no";
+			}
+			configMap.put( "jsonValidation", jsonvalidation );
+
 			// Gibt an ob siard validiert werden soll
 			/* durch die Sonderzeichen muss es anders ausgelesen werden */
 			String yesSiard = "<siardvalidation>&#x2713;</siardvalidation>";
@@ -674,15 +685,19 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			// Gibt eine Liste mit den PUIDs aus, welche auch akzeptiert sind.
 			String otherformats = doc.getElementsByTagName( "otherformats" )
 					.item( 0 ).getTextContent();
+			otherformats = otherformats.replace( "\";", "" );
+			otherformats = otherformats.replace( ";", "" );
 			configMap.put( "otherformats", otherformats );
 
 			// hash
-			/* Hashwert von Dateien berechnen und ausgeben. Leer bedeutet keine Berechnung und Ausgabe []
+			/*
+			 * Hashwert von Dateien berechnen und ausgeben. Leer bedeutet keine
+			 * Berechnung und Ausgabe []
 			 * 
 			 * [] MD5, SHA-1, SHA-256, SHA-512
-			 * */
-			String hash = doc.getElementsByTagName( "hash" )
-					.item( 0 ).getTextContent();
+			 */
+			String hash = doc.getElementsByTagName( "hash" ).item( 0 )
+					.getTextContent();
 			configMap.put( "hash", hash );
 
 			// TODO SIP
@@ -700,8 +715,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 
 			// Gibt eine Liste mit den PUIDs aus, welche im SIP vorkommen
 			// duerfen.
-			String allowedformats = doc.getElementsByTagName( "allowedformats" )
-					.item( 0 ).getTextContent();
+			String allowedformats = "";
 			configMap.put( "allowedformats", allowedformats );
 
 			// Gibt die Maximal erlaubte Laenge eines Pfades in der SIP-Datei
@@ -715,6 +729,11 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String allowedsipname = doc.getElementsByTagName( "allowedsipname" )
 					.item( 0 ).getTextContent();
 			configMap.put( "AllowedSipName", allowedsipname );
+
+			// Gibt an ob aeltere Dokumente nur eine Warnung ergeben sollen
+			String warningolddok = doc.getElementsByTagName( "warningolddok" )
+					.item( 0 ).getTextContent();
+			configMap.put( "WarningOldDok", warningolddok );
 
 			// System.out.println("Value is b : " + (map.get("key") == b));
 			bis.close();

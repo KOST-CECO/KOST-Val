@@ -91,6 +91,7 @@ public class Controllervalinitlog implements MessageConstants
 		String mkvValidation = configMap.get( "mkvValidation" );
 		String mp4Validation = configMap.get( "mp4Validation" );
 		String xmlValidation = configMap.get( "xmlValidation" );
+		String jsonValidation = configMap.get( "jsonValidation" );
 		String siardValidation = configMap.get( "siardValidation" );
 		String csvValidation = configMap.get( "csvValidation" );
 		String xlsxValidation = configMap.get( "xlsxValidation" );
@@ -268,6 +269,19 @@ public class Controllervalinitlog implements MessageConstants
 				formatRecOn = "XML";
 			} else {
 				formatRecOn = formatRecOn + ", XML";
+			}
+		}
+		if ( jsonValidation.equals( "yes" ) ) {
+			if ( formatValOn.equals( "" ) ) {
+				formatValOn = "JSON";
+			} else {
+				formatValOn = formatValOn + ", JSON";
+			}
+		} else if ( jsonValidation.equals( "az" ) ) {
+			if ( formatRecOn.equals( "" ) ) {
+				formatRecOn = "JSON";
+			} else {
+				formatRecOn = formatRecOn + ", JSON";
 			}
 		}
 		if ( siardValidation.equals( "yes" ) ) {

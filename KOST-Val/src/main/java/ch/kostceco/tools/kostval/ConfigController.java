@@ -28,7 +28,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Locale;
-import java.util.Optional;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -47,7 +46,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.scene.web.WebEngine;
@@ -75,7 +73,7 @@ public class ConfigController
 					+ "kostval.conf.xml" );
 
 	private String				dirOfJarPath, inputString, workString, config,
-			stringPuid, minOne = "Mindestens eine Variante muss erlaubt sein!";;
+			stringPuid, minOne = "Mindestens eine Variante muss erlaubt sein!";
 
 	private Locale				locale				= Locale.getDefault();
 
@@ -110,12 +108,12 @@ public class ConfigController
 	private Button				buttonFfv1, buttonMp4;
 
 	@FXML
-	private Label				labelData, labelXml, labelSiard, labelCsv,
-			labelXlsx, labelOds;
+	private Label				labelData, labelXml, labelJson, labelSiard,
+			labelCsv, labelXlsx, labelOds;
 
 	@FXML
-	private Button				buttonXml, buttonSiard, buttonSiardVal,
-			buttonCsv, buttonXlsx, buttonOds;
+	private Button				buttonXml, buttonJson, buttonSiard,
+			buttonSiardVal, buttonCsv, buttonXlsx, buttonOds;
 
 	@FXML
 	private Label				labelSip, labelEch0160;
@@ -124,8 +122,8 @@ public class ConfigController
 	private Button				buttonSip0160, buttonSipVal;
 
 	@FXML
-	private Label				labelOther, labelWork, labelInput, labelHint, labelHint1,
-			labelConfig;
+	private Label				labelOther, labelWork, labelInput, labelHint,
+			labelHint1, labelConfig;
 
 	@FXML
 	private Button				buttonPuid, buttonWork, buttonInput;
@@ -214,11 +212,10 @@ public class ConfigController
 				labelOther.setText( "Sonstige" );
 				buttonWork.setText( "Arbeitsverzeichnis" );
 				buttonInput.setText( "Inputverzeichnis" );
-				labelHint1.setText(
-						"Hinweis:" );
-				labelHint.setText(
-						"öffnet die jeweilige Detailkonfiguration" );
+				labelHint1.setText( "Hinweis:" );
+				labelHint.setText( "öffnet die jeweilige Detailkonfiguration" );
 				minOne = "Mindestens eine Variante muss erlaubt sein!";
+				stringPuid = "weitere akzeptierte Dateiformate...";
 			} else if ( Util.stringInFileLine( "kostval-conf-FR.xsl",
 					configFile ) ) {
 				locale = new Locale( "fr" );
@@ -234,11 +231,11 @@ public class ConfigController
 				labelOther.setText( "Autres" );
 				buttonWork.setText( "Répertoire de travail" );
 				buttonInput.setText( "Répertoire d'entrée" );
-				labelHint1.setText(
-						"Remarque :" );
+				labelHint1.setText( "Remarque :" );
 				labelHint.setText(
 						"ouvre la configuration détaillée correspondante" );
 				minOne = "Au moins une variante doit etre autorisee !";
+				stringPuid = "autres formats de fichiers acceptés...";
 			} else if ( Util.stringInFileLine( "kostval-conf-IT.xsl",
 					configFile ) ) {
 				locale = new Locale( "it" );
@@ -254,11 +251,11 @@ public class ConfigController
 				labelOther.setText( "Altro" );
 				buttonWork.setText( "Directory di lavoro" );
 				buttonInput.setText( "Directory di ingresso" );
-				labelHint1.setText(
-						"Nota:" );
+				labelHint1.setText( "Nota:" );
 				labelHint.setText(
 						"apre la configurazione dettagliata corrispondente" );
 				minOne = "Almeno una variante deve essere consentita!";
+				stringPuid = "altri formati di file accettati...";
 			} else {
 				locale = new Locale( "en" );
 				buttonConfigApply.setText( "Apply" );
@@ -273,12 +270,13 @@ public class ConfigController
 				labelOther.setText( "Other" );
 				buttonWork.setText( "Working directory" );
 				buttonInput.setText( "Input directory" );
-				labelHint1.setText(
-						"Note:" );
+				labelHint1.setText( "Note:" );
 				labelHint.setText(
 						"opens the respective detailed configuration" );
 				minOne = "At least one variant must be allowed!";
+				stringPuid = "other accepted file formats...";
 			}
+			buttonPuid.setText( stringPuid );
 		} catch ( Exception e ) {
 			e.printStackTrace();
 		}
@@ -314,6 +312,7 @@ public class ConfigController
 
 			String noXml = "<xmlvalidation>&#x2717;</xmlvalidation>";
 			String yesXml = "<xmlvalidation>&#x2713;</xmlvalidation>";
+			String noJson = "<jsonvalidation>&#x2717;</jsonvalidation>";
 			String noSiard = "<siardvalidation>&#x2717;</siardvalidation>";
 			String yesSiard = "<siardvalidation>&#x2713;</siardvalidation>";
 			String noCsv = "<csvvalidation>&#x2717;</csvvalidation>";
@@ -475,6 +474,15 @@ public class ConfigController
 				buttonXml.setStyle(
 						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
 			}
+			if ( config.contains( noJson ) ) {
+				buttonJson.setText( "✗" );
+				buttonJson.setStyle(
+						"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
+			} else {
+				buttonJson.setText( "(✓)" );
+				buttonJson.setStyle(
+						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
+			}
 			if ( config.contains( noSiard ) ) {
 				buttonSiardVal.setDisable( true );
 				buttonSiard.setText( "✗" );
@@ -541,8 +549,10 @@ public class ConfigController
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			doc = db.parse( bis );
 			doc.normalize();
-			stringPuid = doc.getElementsByTagName( "otherformats" ).item( 0 )
-					.getTextContent();
+			/*
+			 * stringPuid = doc.getElementsByTagName( "otherformats" ).item( 0 )
+			 * .getTextContent();
+			 */
 			buttonPuid.setText( stringPuid );
 			workString = doc.getElementsByTagName( "pathtoworkdir" ).item( 0 )
 					.getTextContent();
@@ -1220,6 +1230,33 @@ public class ConfigController
 		}
 	}
 
+	/* changeJson schaltet zwischen x (v) herum */
+	@FXML
+	void changeJson( ActionEvent event )
+	{
+		String az = "<jsonvalidation>(&#x2713;)</jsonvalidation>";
+		String no = "<jsonvalidation>&#x2717;</jsonvalidation>";
+		try {
+			String optButton = buttonJson.getText();
+			if ( optButton.equals( "✗" ) ) {
+				Util.oldnewstring( no, az, configFile );
+				buttonJson.setText( "(✓)" );
+				buttonJson.setStyle(
+						"-fx-text-fill: Orange; -fx-background-color: WhiteSmoke" );
+				engine.load( "file:///" + configFile.getAbsolutePath() );
+			} else {
+				Util.oldnewstring( az, no, configFile );
+				buttonJson.setText( "✗" );
+				buttonJson.setStyle(
+						"-fx-text-fill: Red; -fx-background-color: WhiteSmoke" );
+				engine.load( "file:///" + configFile.getAbsolutePath() );
+				// TODO Check etwas angewaehlt
+			}
+		} catch ( IOException e ) {
+			e.printStackTrace();
+		}
+	}
+
 	/* Mit changeSiardVal wird die Pdfa-Haupteinstellung umgestellt */
 	@FXML
 	void changeSiardVal( ActionEvent eventSiard )
@@ -1426,56 +1463,79 @@ public class ConfigController
 
 	/* TODO --> Other ================= */
 
-	/* Wenn Aenderungen an changePuid gemacht wird, wird es ausgeloest */
+	// Mit changePuid werden zusaetzliche Formate angezeigt
 	@FXML
-	void changePuid( ActionEvent event )
+	void changePuid( ActionEvent eventPdfa )
 	{
-		stringPuid = buttonPuid.getText();
-		// create a TextInputDialog mit der Texteingabe der Puid
-		TextInputDialog dialog = new TextInputDialog( stringPuid );
+		try {
+			StackPane otherLayout = new StackPane();
 
-		// Set title & header text
-		String puidIntInit = stringPuid;
+			otherLayout = FXMLLoader
+					.load( getClass().getResource( "ConfigViewOther.fxml" ) );
+			Scene otherScene = new Scene( otherLayout );
+			otherScene.getStylesheets().add( getClass()
+					.getResource( "application.css" ).toExternalForm() );
 
-		dialog.setTitle( "KOST-Val - Configuration" );
-		String headerDeFrItEn = "Auflistung der weiteren akzeptierten Dateiformate [WARC HTML DWG]:";
-		if ( locale.toString().startsWith( "fr" ) ) {
-			headerDeFrItEn = "Liste des autres formats de fichiers acceptés [WARC HTML DWG] :";
-		} else if ( locale.toString().startsWith( "it" ) ) {
-			headerDeFrItEn = "Elenco degli altri formati di file accettati [WARC HTML DWG]:";
-		} else if ( locale.toString().startsWith( "en" ) ) {
-			headerDeFrItEn = "List of other accepted file formats [WARC HTML DWG]:";
-		}
-		dialog.setHeaderText( headerDeFrItEn );
-		dialog.setContentText( "" );
+			// New window (Stage)
+			Stage otherStage = new Stage();
 
-		// Show the dialog and capture the result.
-		Optional<String> result = dialog.showAndWait();
-
-		// If the "Okay" button was clicked, the result will contain our String
-		// in the get() method
-		String stringPuidNew = "";
-		if ( result.isPresent() ) {
-			try {
-				stringPuidNew = result.get();
-				stringPuid = stringPuidNew;
-				buttonPuid.setText( stringPuid );
-				String allowedformats = "<otherformats>" + puidIntInit
-						+ "</otherformats>";
-				String allowedformatsNew = "<otherformats>" + stringPuidNew
-						+ "</otherformats>";
-				Util.oldnewstring( allowedformats, allowedformatsNew,
-						configFile );
+			otherStage.setTitle(
+					"KOST-Val   -   Configuration   -   Other Formats" );
+			Image kostvalIcon = new Image( "file:" + dirOfJarPath
+					+ File.separator + "doc" + File.separator + "valicon.png" );
+			// Image kostvalIcon = new Image( "file:valicon.png" );
+			otherStage.initModality( Modality.APPLICATION_MODAL );
+			otherStage.getIcons().add( kostvalIcon );
+			otherStage.setScene( otherScene );
+			otherStage.setOnCloseRequest( event -> {
+				// hier engeben was beim schliessen gemacht werden soll
 				engine.load( "file:///" + configFile.getAbsolutePath() );
-			} catch ( NumberFormatException | IOException eInt ) {
-				String message = eInt.getMessage();
-				engine.loadContent( message );
-			}
-		} else {
-			// Keine Aktion
+				buttonPuid.setText( stringPuid );
+			} );
+			otherStage.show();
+			otherStage.setOnHiding( event -> {
+				// hier engeben was beim schliessen gemacht werden soll
+				engine.load( "file:///" + configFile.getAbsolutePath() );
+				buttonPuid.setText( stringPuid );
+			} );
+		} catch ( IOException e1 ) {
+			e1.printStackTrace();
 		}
 	}
 
+	/* Wenn Aenderungen an changePuid gemacht wird, wird es ausgeloest */
+	/*
+	 * @FXML void changePuidOld( ActionEvent event ) { stringPuid =
+	 * buttonPuid.getText(); // create a TextInputDialog mit der Texteingabe der
+	 * Puid TextInputDialog dialog = new TextInputDialog( stringPuid );
+	 * 
+	 * // Set title & header text String puidIntInit = stringPuid;
+	 * 
+	 * dialog.setTitle( "KOST-Val - Configuration" ); String headerDeFrItEn =
+	 * "Auflistung der weiteren akzeptierten Dateiformate [WARC HTML DWG]:"; if
+	 * ( locale.toString().startsWith( "fr" ) ) { headerDeFrItEn =
+	 * "Liste des autres formats de fichiers acceptés [WARC HTML DWG] :"; } else
+	 * if ( locale.toString().startsWith( "it" ) ) { headerDeFrItEn =
+	 * "Elenco degli altri formati di file accettati [WARC HTML DWG]:"; } else
+	 * if ( locale.toString().startsWith( "en" ) ) { headerDeFrItEn =
+	 * "List of other accepted file formats [WARC HTML DWG]:"; }
+	 * dialog.setHeaderText( headerDeFrItEn ); dialog.setContentText( "" );
+	 * 
+	 * // Show the dialog and capture the result. Optional<String> result =
+	 * dialog.showAndWait();
+	 * 
+	 * // If the "Okay" button was clicked, the result will contain our String
+	 * // in the get() method String stringPuidNew = ""; if ( result.isPresent()
+	 * ) { try { stringPuidNew = result.get(); stringPuid = stringPuidNew;
+	 * buttonPuid.setText( stringPuid ); String allowedformats =
+	 * "<otherformats>" + puidIntInit + "</otherformats>"; String
+	 * allowedformatsNew = "<otherformats>" + stringPuidNew + "</otherformats>";
+	 * Util.oldnewstring( allowedformats, allowedformatsNew, configFile );
+	 * engine.load( "file:///" + configFile.getAbsolutePath() ); } catch (
+	 * NumberFormatException | IOException eInt ) { String message =
+	 * eInt.getMessage(); engine.loadContent( message ); } } else { // Keine
+	 * Aktion } }
+	 */
 	/* Wenn chooseWork betaetigt wird, kann ein Ordner ausgewaehlt werden */
 	@FXML
 	void chooseWork( ActionEvent e )

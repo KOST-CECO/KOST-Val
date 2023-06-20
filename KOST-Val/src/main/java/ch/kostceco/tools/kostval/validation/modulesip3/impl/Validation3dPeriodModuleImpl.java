@@ -941,10 +941,15 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 									 * nach DossierBis liegt dann liegt der
 									 * Dossierzeitraum nicht innerhalb des
 									 * Ablieferungszeitraums -> Fehler
+									 * 
+									 * Neu: Teilweise werden alte Dokumente
+									 * (z.B. Beilagen) in neuere Dossier gelegt
+									 * (z.B. Sitzungen). Diese sollen je nach
+									 * Konfiguration keinen Fehler, sondern nur
+									 * eine Warnung ausgegeben werden.
 									 */
-									if ( (calDokVon.before( calDossierVon )
-											|| calDokBis
-													.after( calDossierBis )) ) {
+									if ( (calDokBis.after( calDossierBis )) ) {
+										// immer ein Fehler
 
 										/*
 										 * Zusammenstellung der parameter die
@@ -988,6 +993,73 @@ public class Validation3dPeriodModuleImpl extends ValidationModuleImpl
 
 										// 3d wird auf invalid gesetzt
 										valid = false;
+									} else if ( (calDokVon
+											.before( calDossierVon )) ) {
+										// Fehler oder Warnung je nach Konfig
+
+										/*
+										 * Zusammenstellung der parameter die
+										 * für den logreport gebraucht werden
+										 * (die reellen Daten)
+										 */
+
+										String[] params = new String[9];
+										params[0] = dokumentId;
+										params[1] = nodeCaVon == null ? ""
+												: "ca. ";
+										params[2] = nodeVon.getTextContent();
+										params[3] = nodeCaBis == null ? ""
+												: "ca. ";
+										params[4] = nodeBis.getTextContent();
+										params[5] = (circaDossierVonNode != null
+												&& circaDossierVonNode
+														.getTextContent()
+														.equals( "true" ))
+																? "ca. "
+																: "";
+										params[6] = dateDossierVon;
+										params[7] = (circaDossierBisNode != null
+												&& circaDossierBisNode
+														.getTextContent()
+														.equals( "true" ))
+																? "ca. "
+																: "";
+										params[8] = dateDossierBis;
+
+										// Konfiguration auslesen
+										String onWarningOldDok = configMap
+												.get( "WarningOldDok" );
+										if ( onWarningOldDok.equals( "yes" ) ) {
+											// Warnung anstelle Fehler
+											// Log-Ausgabe mit den
+											// entsprechenden
+											// Werte
+											Logtxt.logtxt( logFile,
+													getTextResourceService()
+															.getText( locale,
+																	MESSAGE_XML_MODUL_Cd_SIP )
+															+ getTextResourceService()
+																	.getText(
+																			ERROR_XML_CD_WARNING_DOKUMENT_RANGE_CA,
+																			(Object[]) params ) );
+
+										} else {
+											// Fehler
+											// Log-Ausgabe mit den
+											// entsprechenden
+											// Werte
+											Logtxt.logtxt( logFile,
+													getTextResourceService()
+															.getText( locale,
+																	MESSAGE_XML_MODUL_Cd_SIP )
+															+ getTextResourceService()
+																	.getText(
+																			ERROR_XML_CD_INVALID_DOKUMENT_RANGE_CA,
+																			(Object[]) params ) );
+
+											// 3d wird auf invalid gesetzt
+											valid = false;
+										}
 									}
 								}
 

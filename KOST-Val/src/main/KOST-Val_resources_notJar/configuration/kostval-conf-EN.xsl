@@ -250,6 +250,13 @@
 					</tr>
 
 					<tr  class="captioninfo">
+						<td>JSON: Acceptance [(&#x2713;)]</td>
+						<td>
+							<xsl:value-of select="configuration/json/jsonvalidation" />
+						</td>
+					</tr>
+
+					<tr  class="captioninfo">
 						<td>SIARD: Acceptance and validation [&#x2713;]</td>
 						<td>
 							<xsl:value-of select="configuration/siard/siardvalidation" />
@@ -302,12 +309,34 @@
 							<xsl:value-of select="configuration/sip/allowedsipname" />
 						</td>
 					</tr>
+					<tr  class="captioninfom">
+						<td>Only warning for old documents (Entstehungszeitraum) [no]:</td>
+						<td>
+							<xsl:value-of select="configuration/sip/warningolddok" />
+						</td>
+					</tr>
 
 <!-- SONSTIGES -->
 					<tr  class="captioninfo">
 						<td>Other accepted file formats [WARC, HTML, DWG]:</td>
 						<td>
-							<xsl:value-of select="configuration/otherformats" />
+							<xsl:value-of select="configuration/otherformats/docxvalidation" />
+							<xsl:value-of select="configuration/otherformats/pptxvalidation" />
+							<xsl:value-of select="configuration/otherformats/rtfvalidation" />
+							<xsl:value-of select="configuration/otherformats/jpxvalidation" />
+							<xsl:value-of select="configuration/otherformats/jpmvalidation" />
+							<xsl:value-of select="configuration/otherformats/svgvalidation" />
+							<xsl:value-of select="configuration/otherformats/oggvalidation" />
+							<xsl:value-of select="configuration/otherformats/mpeg2validation" />
+							<xsl:value-of select="configuration/otherformats/htmlvalidation" />
+							<xsl:value-of select="configuration/otherformats/warcvalidation" />
+							<xsl:value-of select="configuration/otherformats/arcvalidation" />
+							<xsl:value-of select="configuration/otherformats/dwgvalidation" />
+							<xsl:value-of select="configuration/otherformats/ifcvalidation" />
+							<xsl:value-of select="configuration/otherformats/dxfvalidation" />
+							<xsl:value-of select="configuration/otherformats/interlisvalidation" />
+							<xsl:value-of select="configuration/otherformats/dicomvalidation" />
+							<xsl:value-of select="configuration/otherformats/msgvalidation" />
 						</td>
 					</tr>
 					<tr  class="captioninfo">
