@@ -17,8 +17,10 @@
 package ch.kostceco.tools.kosttools.fileservice;
 
 import java.io.File;
+import java.io.IOException;
 
 import ch.kostceco.tools.kosttools.runtime.Cmd;
+import ch.kostceco.tools.kosttools.util.Util;
 
 /** @author Rc Claire Roethlisberger, KOST-CECO */
 
@@ -26,8 +28,7 @@ public class Exiftool
 {
 	private static String	exeDir		= "resources" + File.separator
 			+ "ExifTool-12.62";
-	private static String	identifyPl	= exeDir + File.separator
-			+ "exiftool";
+	private static String	identifyPl	= exeDir + File.separator + "exiftool";
 	private static String	perl		= exeDir + File.separator + "Perl"
 			+ File.separator + "bin" + File.separator + "perl.exe";
 
@@ -62,16 +63,29 @@ public class Exiftool
 			report.delete();
 		}
 
+		// Exiftool unterstuetzt nicht alle Zeichen resp Doppelleerschlag
+		File tiffFileNormalisiert = new File(
+				workDir + File.separator + "TIFF.tiff" );
+		try {
+			Util.copyFile( tiffFile, tiffFileNormalisiert );
+		} catch ( IOException e ) {
+			// Normalisierung fehlgeschlagen es wird ohne versucht
+			tiffFileNormalisiert = tiffFile;
+		}
+		if ( !tiffFileNormalisiert.exists() ) {
+			tiffFileNormalisiert = tiffFile;
+		}
+
 		// Exiftool-Befehl: pathToPerl pathToExiftoolExe options tiffFile >>
 		// report
 		String command = "\"\"" + fPerl.getAbsolutePath() + "\" \""
 				+ fIdentifyPl.getAbsolutePath() + "\" " + options + " \""
-				+ tiffFile.getAbsolutePath() + "\" >>\""
+				+ tiffFileNormalisiert.getAbsolutePath() + "\" >>\""
 				+ report.getAbsolutePath() + "\"\"";
 
 		// System.out.println( "command: " + command );
 
-		String resultExec = Cmd.execToString( command, out, workDir );
+		String resultExec = Cmd.execToStringSplit( command, out, workDir );
 
 		// Exiftool gibt keine Info raus, die replaced oder ignoriert werden
 		// muss

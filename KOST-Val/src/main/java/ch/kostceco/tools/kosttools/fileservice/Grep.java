@@ -67,7 +67,7 @@ public class Grep
 
 		// System.out.println( "command: " + command );
 
-		String resultExec = Cmd.execToString( command, out, workDir );
+		String resultExec = Cmd.execToStringSplit( command, out, workDir );
 		// System.out.println( "resultExec: " + resultExec );
 
 		// Grep gibt keine Info raus, die replaced oder ignoriert werden muss

@@ -17,9 +17,11 @@
 package ch.kostceco.tools.kosttools.fileservice;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Locale;
 
 import ch.kostceco.tools.kosttools.runtime.Cmd;
+import ch.kostceco.tools.kosttools.util.Util;
 
 /** @author Rc Claire Roethlisberger, KOST-CECO */
 
@@ -57,19 +59,38 @@ public class Xmllint
 		File exeFile = new File(
 				dirOfJarPath + File.separator + pathToxmllintExe );
 
+		// xmllint unterstuetzt nicht alle Zeichen resp Doppelleerschlag
+		File xmlFileNormalisiert = new File(
+				workDir + File.separator + "XML.xml" );
+		File xsdFileNormalisiert = new File(
+				workDir + File.separator + xsdFile.getName() );
+		try {
+			Util.copyFile( xmlFile, xmlFileNormalisiert );
+			Util.copyFile( xsdFile, xsdFileNormalisiert );
+		} catch ( IOException e ) {
+			// Normalisierung fehlgeschlagen es wird ohne versucht
+			xmlFileNormalisiert = xmlFile;
+			xsdFileNormalisiert = xsdFile;
+		}
+		if ( !xmlFileNormalisiert.exists() ) {
+			xmlFileNormalisiert = xmlFile;
+			xsdFileNormalisiert = xsdFile;
+		}
+
 		String command = "\"\"" + exeFile.getAbsolutePath() + "\""
 				+ " --noout --stream --nowarning --schema " + "\""
-				+ xsdFile.getAbsolutePath() + "\"" + " " + "\""
-				+ xmlFile.getAbsolutePath() + "\"\"";
+				+ xsdFileNormalisiert.getAbsolutePath() + "\"" + " " + "\""
+				+ xmlFileNormalisiert.getAbsolutePath() + "\"\"";
 
-		String resultExec = Cmd.execToString( command, out, workDir );
+		String resultExec = Cmd.execToStringSplit( command, out, workDir );
 		/*
 		 * Folgender Error Output ist keiner sondern nur Info und kann mit OK
 		 * ersetzt werden: ERROR:
 		 * C:\Users\X60014195\.kost-val_2x\temp_KOST-Val\SIARD\content\schema0\
 		 * table4\table4.xml validates
 		 */
-		String ignor = "ERROR: " + xmlFile.getAbsolutePath() + " validates";
+		String ignor = "ERROR: " + xmlFileNormalisiert.getAbsolutePath()
+				+ " validates";
 		if ( resultExec.equals( ignor ) ) {
 			resultExec = "OK";
 		} else {
@@ -81,7 +102,8 @@ public class Xmllint
 			 * schema0\table2\table2.xml fails to validate
 			 */
 			String replaceInfo = "</Message><Message>ERROR: "
-					+ xmlFile.getAbsolutePath() + " fails to validate";
+					+ xmlFileNormalisiert.getAbsolutePath()
+					+ " fails to validate";
 			resultExec = resultExec.replace( replaceInfo, "" );
 			if ( locale.toString().startsWith( "fr" ) ) {
 				resultExec = resultExec.replace( "Schemas validity error :",
@@ -126,8 +148,7 @@ public class Xmllint
 						"Errore nella validita dello schema:" );
 				resultExec = resultExec.replace( "This element is not expected",
 						"Questo elemento non e previsto" );
-				resultExec = resultExec.replace( "Expected is",
-						"Previsto" );
+				resultExec = resultExec.replace( "Expected is", "Previsto" );
 				resultExec = resultExec.replace( "fails to validate",
 						"non puo essere validato" );
 				resultExec = resultExec.replace( "Missing child element(s).",
@@ -164,11 +185,24 @@ public class Xmllint
 		File exeFile = new File(
 				dirOfJarPath + File.separator + pathToxmllintExe );
 
-		String command = "\"\"" + exeFile.getAbsolutePath() + "\""
-				+ " --noout --stream " + "\"" + xmlFile.getAbsolutePath()
-				+ "\"\"";
+		// xmllint unterstuetzt nicht alle Zeichen resp Doppelleerschlag
+		File xmlFileNormalisiert = new File(
+				workDir + File.separator + "XML.xml" );
+		try {
+			Util.copyFile( xmlFile, xmlFileNormalisiert );
+		} catch ( IOException e ) {
+			// Normalisierung fehlgeschlagen es wird ohne versucht
+			xmlFileNormalisiert = xmlFile;
+		}
+		if ( !xmlFileNormalisiert.exists() ) {
+			xmlFileNormalisiert = xmlFile;
+		}
 
-		String resultStru = Cmd.execToString( command, out, workDir );
+		String command = "\"\"" + exeFile.getAbsolutePath() + "\""
+				+ " --noout --stream " + "\""
+				+ xmlFileNormalisiert.getAbsolutePath() + "\"\"";
+
+		String resultStru = Cmd.execToStringSplit( command, out, workDir );
 		/*
 		 * C:\Program Files
 		 * (x86)\KOST-CECO\KOST-Tools\KOST-Val\resources\xmllint>xmllint.exe
@@ -192,9 +226,10 @@ public class Xmllint
 			 */
 
 			String replaceInfo = "</Message><Message>ERROR: "
-					+ xmlFile.getAbsolutePath() + " : failed to parse";
+					+ xmlFileNormalisiert.getAbsolutePath()
+					+ " : failed to parse";
 			resultStru = resultStru.replace( replaceInfo, "" );
-			String replacePath = xmlFile.getAbsolutePath();
+			String replacePath = xmlFileNormalisiert.getAbsolutePath();
 			replacePath = replacePath.replace( "\\", "/" );
 			replacePath = replacePath.replace( ":/", "%3A/" );
 			replacePath = replacePath.replace( " ", "%20" );

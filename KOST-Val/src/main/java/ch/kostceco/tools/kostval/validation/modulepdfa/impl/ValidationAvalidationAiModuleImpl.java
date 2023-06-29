@@ -1862,9 +1862,9 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 					String folderCallas = "callas_pdfaPilotServer_x64_Win_12-2-366_cli";
 					/*
 					 * Update von Callas: callas_pdfaPilotServer_Win_...-Version
-					 * herunterladen, installieren, odner im Workbench umbenennen
-					 * alle Dateine vom Ordner cli ersetzen aber lizenz.txt und
-					 * N-Entry.kfpx muessen die alten bleiben
+					 * herunterladen, installieren, odner im Workbench
+					 * umbenennen alle Dateine vom Ordner cli ersetzen aber
+					 * lizenz.txt und N-Entry.kfpx muessen die alten bleiben
 					 */
 
 					File fpdfapilotExe = new File( dirOfJarPath + File.separator
@@ -1924,7 +1924,26 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 							.getText( locale, MESSAGE_XML_LANGUAGE );
 					String lang = "-l=" + getTextResourceService()
 							.getText( locale, MESSAGE_XML_LANGUAGE );
-					String valPath = valDatei.getAbsolutePath();
+
+					// Callas unterstuetzt nicht Doppelleerschlag
+					String pathToWorkDirD = configMap.get( "PathToWorkDir" );
+					File workDir = new File( pathToWorkDirD );
+					if ( !workDir.exists() ) {
+						workDir.mkdir();
+					}
+					File valDateiNormalisiert = new File(
+							workDir + File.separator + "callas.pdf" );
+					try {
+						Util.copyFile( valDatei, valDateiNormalisiert );
+					} catch ( IOException e ) {
+						// Normalisierung fehlgeschlagen es wird ohne versucht
+						valDateiNormalisiert = valDatei;
+					}
+					if ( !valDateiNormalisiert.exists() ) {
+						valDateiNormalisiert = valDatei;
+					}
+					
+					String valPath = valDateiNormalisiert.getAbsolutePath();
 					String reportPath = report.getAbsolutePath();
 
 					if ( callas ) {
@@ -2433,12 +2452,15 @@ public class ValidationAvalidationAiModuleImpl extends ValidationModuleImpl
 
 									String callasAwarningDE = "Ungueltige PDF/A-Versionsnummer (muss \"2\" sein) [callas] ";
 									String callasAwarningFR = "Numero de version PDF/A incorrect (doit etre 2) [callas] ";
+									String callasAwarningIT = "Numero di versione PDF/A scorretto (deve essere 2) [callas] ";
 									String callasAwarningEN = "Incorrect PDF/A version number (must be 2) [callas] ";
 									if ( warning3to2.equalsIgnoreCase( "yes" )
 											&& (line.contains(
 													callasAwarningDE )
 													|| line.contains(
 															callasAwarningFR )
+													|| line.contains(
+															callasAwarningIT )
 													|| line.contains(
 															callasAwarningEN )) ) {
 										// Fehler wird ignoriert. Es wird ggf

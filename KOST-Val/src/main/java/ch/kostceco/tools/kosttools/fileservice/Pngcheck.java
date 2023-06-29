@@ -70,7 +70,7 @@ public class Pngcheck
 		String command = "\"\"" + exeFile.getAbsolutePath() + "\" \""
 				+ pngFileNormalisiert.getAbsolutePath() + "\"";
 
-		String resultExec = Cmd.execToString( command, out, workDir );
+		String resultExec = Cmd.execToStringSplit( command, out, workDir );
 		Util.deleteFile( new File( workDir + File.separator + "PNG.png" ) );
 		// System.out.println("resultExec: "+ resultExec );
 
