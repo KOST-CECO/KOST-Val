@@ -317,7 +317,7 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 					// System.out.println("Validierung mit xmllint: ");
 					try {
 						// XML-SIP gegen XSD-SIP
-						String resultExecSS = Xmllint.execXmllint(
+						String resultExecSS = Xmllint.execXmllintSip(
 								xmlToValidate, xsdToValidateEch160, workDir,
 								dirOfJarPath, locale );
 						if ( !resultExecSS.equals( "OK" ) ) {
@@ -366,7 +366,7 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 							 * '0'; this underruns the allowed minimum length of
 							 * '1'.
 							 */
-							String resultExecSI = Xmllint.execXmllint(
+							String resultExecSI = Xmllint.execXmllintSip(
 									xmlToValidate, xsdIntern, workDir,
 									dirOfJarPath, locale );
 							if ( !resultExecSI.equals( "OK" ) ) {
@@ -415,7 +415,7 @@ public class Validation1dMetadataModuleImpl extends ValidationModuleImpl
 								// System.out.println("Validierung SI
 								// bestanden");
 								// XML-Intern gegen XSD-SIP
-								String resultExecIS = Xmllint.execXmllint(
+								String resultExecIS = Xmllint.execXmllintSip(
 										xmlIntern, xsdToValidateEch160, workDir,
 										dirOfJarPath, locale );
 								if ( !resultExecIS.equals( "OK" ) ) {

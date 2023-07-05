@@ -39,8 +39,8 @@ public class Xmllint
 			+ "zlib1.dll";
 
 	/**
-	 * fuehrt eine Validierung mit xmllint via cmd durch und gibt das Ergebnis
-	 * als String zurueck
+	 * fuehrt eine Normalisierte Validierung mit xmllint via cmd durch und gibt
+	 * das Ergebnis als String zurueck
 	 * 
 	 * @param xmlFile
 	 *            XML-Datei, welche validiert werden soll
@@ -104,6 +104,115 @@ public class Xmllint
 			String replaceInfo = "</Message><Message>ERROR: "
 					+ xmlFileNormalisiert.getAbsolutePath()
 					+ " fails to validate";
+			resultExec = resultExec.replace( replaceInfo, "" );
+			if ( locale.toString().startsWith( "fr" ) ) {
+				resultExec = resultExec.replace( "Schemas validity error :",
+						"Erreur de validite des schemas :" );
+				resultExec = resultExec.replace( "This element is not expected",
+						"Cet element n`est pas attendu" );
+				resultExec = resultExec.replace( "Expected is",
+						"L`element attendu est" );
+				resultExec = resultExec.replace( "fails to validate",
+						"ne parvient pas a etre valide" );
+				resultExec = resultExec.replace( "Missing child element(s).",
+						"Elements enfants manquants." );
+				resultExec = resultExec.replace( "The value has a length of",
+						"La valeur a une longueur de" );
+				resultExec = resultExec.replace(
+						"this underruns the allowed minimum length of",
+						"ce qui est inferieur a la longueur minimale autorisee de" );
+				resultExec = resultExec.replace(
+						"is not a valid value of the atomic type",
+						"n`est pas une valeur valide du type atomique" );
+			} else if ( locale.toString().startsWith( "de" ) ) {
+				resultExec = resultExec.replace( "Schemas validity error :",
+						"Fehler bei der Gueltigkeit des Schemas:" );
+				resultExec = resultExec.replace( "This element is not expected",
+						"Dieses Element wird nicht erwartet" );
+				resultExec = resultExec.replace( "Expected is",
+						"Erwartet wird" );
+				resultExec = resultExec.replace( "fails to validate",
+						"kann nicht validiert werden" );
+				resultExec = resultExec.replace( "Missing child element(s).",
+						"Fehlende untergeordnete Elemente." );
+				resultExec = resultExec.replace( "The value has a length of",
+						"Der Wert hat eine Laenge von" );
+				resultExec = resultExec.replace(
+						"this underruns the allowed minimum length of",
+						"und unterschreitet damit die zulaessige Mindestlaenge von" );
+				resultExec = resultExec.replace(
+						"is not a valid value of the atomic type",
+						"ist kein gueltiger Wert des atomaren Typs" );
+			} else if ( locale.toString().startsWith( "it" ) ) {
+				resultExec = resultExec.replace( "Schemas validity error :",
+						"Errore nella validita dello schema:" );
+				resultExec = resultExec.replace( "This element is not expected",
+						"Questo elemento non e previsto" );
+				resultExec = resultExec.replace( "Expected is", "Previsto" );
+				resultExec = resultExec.replace( "fails to validate",
+						"non puo essere validato" );
+				resultExec = resultExec.replace( "Missing child element(s).",
+						"Elementi subordinati mancanti." );
+				resultExec = resultExec.replace( "The value has a length of",
+						"Il valore ha una lunghezza di" );
+				resultExec = resultExec.replace(
+						"this underruns the allowed minimum length of",
+						"e quindi e al di sotto della lunghezza minima consentita di" );
+				resultExec = resultExec.replace(
+						"is not a valid value of the atomic type",
+						"non e un valore valido del tipo atomico" );
+			}
+		}
+		return resultExec;
+	}
+
+	/**
+	 * fuehrt eine Validierung mit xmllint via cmd durch und gibt das Ergebnis
+	 * als String zurueck (Keine Normalisierung bei SIP)
+	 * 
+	 * @param xmlFile
+	 *            XML-Datei, welche validiert werden soll
+	 * @param xsdFile
+	 *            XSD-Datei, gegen welche validiert werden soll
+	 * @param workDir
+	 *            Temporaeres Verzeichnis
+	 * @param dirOfJarPath
+	 *            String mit dem Pfad von wo das Programm gestartet wurde
+	 * @return String mit Validierungsergebnis ("OK" oder den Fehler.
+	 */
+	public static String execXmllintSip( File xmlFile, File xsdFile,
+			File workDir, String dirOfJarPath, Locale locale )
+			throws InterruptedException
+	{
+		boolean out = false;
+		File exeFile = new File(
+				dirOfJarPath + File.separator + pathToxmllintExe );
+
+		String command = "\"\"" + exeFile.getAbsolutePath() + "\""
+				+ " --noout --stream --nowarning --schema " + "\""
+				+ xsdFile.getAbsolutePath() + "\"" + " " + "\""
+				+ xmlFile.getAbsolutePath() + "\"\"";
+
+		String resultExec = Cmd.execToString( command, out, workDir );
+		/*
+		 * Folgender Error Output ist keiner sondern nur Info und kann mit OK
+		 * ersetzt werden: ERROR:
+		 * C:\Users\X60014195\.kost-val_2x\temp_KOST-Val\SIARD\content\schema0\
+		 * table4\table4.xml validates
+		 */
+		String ignor = "ERROR: " + xmlFile.getAbsolutePath() + " validates";
+		if ( resultExec.equals( ignor ) ) {
+			resultExec = "OK";
+		} else {
+			/*
+			 * ERROR: Schemas validity error : Element
+			 * '{http://www.admin.ch/xmlns/siard/1.0/schema0/table2.xsd}row':
+			 * This element is not expected.</Message><Message>ERROR:
+			 * C:\Users\X60014195\.kost-val_2x\temp_KOST-Val\SIARD\content\
+			 * schema0\table2\table2.xml fails to validate
+			 */
+			String replaceInfo = "</Message><Message>ERROR: "
+					+ xmlFile.getAbsolutePath() + " fails to validate";
 			resultExec = resultExec.replace( replaceInfo, "" );
 			if ( locale.toString().startsWith( "fr" ) ) {
 				resultExec = resultExec.replace( "Schemas validity error :",

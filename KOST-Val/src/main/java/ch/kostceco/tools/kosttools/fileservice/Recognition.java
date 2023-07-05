@@ -669,13 +669,6 @@ public class Recognition
 						return "RTF_ext";
 					}
 				}
-				if ( checkFileExt.equals( ".json" )&& Util.stringInFile( "}",
-						checkFile ) ) {
-					// Eine JSON Datei (.json) muss mit { [7B] beginnen
-					// und enthaelt auch }
-					// eindeutig als JSON-Datei erkannt (keine SiF)
-					return "JSON";
-				}
 			} else if ( sb2str1.contains( "89" ) ) {
 				// TODO B) Die moeglichen BOF kontrollieren (beginnt mit 89)
 
@@ -872,6 +865,20 @@ public class Recognition
 			} else if ( checkFileName.equals( "Thumbs.db" ) ) {
 				// Eine Thumbs.db-Datei
 				return "Thumbs.db";
+			}	else if ( checkFileExt.equals( ".json" )&& Util.stringInFile( "{",
+					checkFile )&& Util.stringInFile( "}",
+					checkFile ) ) {
+				// Eine JSON Datei (.json) beginnt in der Regel mit { (7B) 
+				// und enthaelt auch } alternativ [ (5B) respektive ]
+				// als JSON-Datei erkannt (keine SiF)
+				return "JSON";
+			}	else if ( checkFileExt.equals( ".json" )&& Util.stringInFile( "[",
+						checkFile )&& Util.stringInFile( "]",
+						checkFile ) ) {
+					// Eine JSON Datei (.json) beginnt in der Regel mit { (7B) 
+					// und enthaelt auch } alternativ [ (5B) respektive ]
+					// als JSON-Datei erkannt (keine SiF)
+					return "JSON";
 			} else {
 				// System.out.println("kein bekannte Archivformat erkannt " +
 				// checkFileExt );

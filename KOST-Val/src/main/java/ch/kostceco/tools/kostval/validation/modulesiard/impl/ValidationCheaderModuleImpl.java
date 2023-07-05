@@ -87,6 +87,7 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl
 
 		boolean siard10 = false;
 		boolean siard21 = false;
+		boolean siard22 = false;
 		String siard10St = configMap.get( "siard10" );
 		if ( siard10St.equals( "1.0" ) ) {
 			siard10 = true;
@@ -94,6 +95,10 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl
 		String siard21St = configMap.get( "siard21" );
 		if ( siard21St.equals( "2.1" ) ) {
 			siard21 = true;
+		}
+		String siard22St = configMap.get( "siard22" );
+		if ( siard22St.equals( "2.2" ) ) {
+			siard22 = true;
 		}
 
 		boolean result = true;
@@ -296,6 +301,12 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl
 			Boolean version2 = FileUtils
 					.readFileToString( metadataXml, "ISO-8859-1" ).contains(
 							"http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
+			Boolean version21 = FileUtils
+					.readFileToString( metadataXml, "ISO-8859-1" )
+					.contains( "version=\"2.1\"" );
+			Boolean version22 = FileUtils
+					.readFileToString( metadataXml, "ISO-8859-1" )
+					.contains( "version=\"2.2\"" );
 			if ( version1 ) {
 				if ( siard10 ) {
 					Logtxt.logtxt( logFile, "<FormatVL>-v1.0</FormatVL>" );
@@ -313,23 +324,36 @@ public class ValidationCheaderModuleImpl extends ValidationModuleImpl
 					}
 				}
 			} else if ( version2 ) {
-				if ( siard21 ) {
-					File versionDir = new File( pathToWorkDir2 + File.separator
-							+ "header" + File.separator + "siardversion"
-							+ File.separator + "2.1" );
-					if ( versionDir.exists() ) {
-						Logtxt.logtxt( logFile, "<FormatVL>-v2.1</FormatVL>" );
-					}
+				if ( version21 && siard21 ) {
+					Logtxt.logtxt( logFile, "<FormatVL>-v2.1</FormatVL>" );
+				} else if ( version22 && siard22 ) {
+					Logtxt.logtxt( logFile, "<FormatVL>-v2.2</FormatVL>" );
 				} else {
 					if ( min ) {
 						return false;
 					} else {
-
-						Logtxt.logtxt( logFile, getTextResourceService()
-								.getText( locale, MESSAGE_XML_MODUL_C_SIARD )
-								+ getTextResourceService().getText( locale,
-										MESSAGE_XML_C_INVALID_VERSION,
-										"2.1" ) );
+						if ( !siard21 && version21 ) {
+							Logtxt.logtxt( logFile, getTextResourceService()
+									.getText( locale,
+											MESSAGE_XML_MODUL_C_SIARD )
+									+ getTextResourceService().getText( locale,
+											MESSAGE_XML_C_INVALID_VERSION,
+											"2.1" ) );
+						} else if ( !siard22 && version22 ) {
+							Logtxt.logtxt( logFile, getTextResourceService()
+									.getText( locale,
+											MESSAGE_XML_MODUL_C_SIARD )
+									+ getTextResourceService().getText( locale,
+											MESSAGE_XML_C_INVALID_VERSION,
+											"2.2" ) );
+						} else {
+							Logtxt.logtxt( logFile, getTextResourceService()
+									.getText( locale,
+											MESSAGE_XML_MODUL_C_SIARD )
+									+ getTextResourceService().getText( locale,
+											MESSAGE_XML_C_INVALID_VERSION,
+											"2.x" ) );
+						}
 						return false;
 					}
 				}

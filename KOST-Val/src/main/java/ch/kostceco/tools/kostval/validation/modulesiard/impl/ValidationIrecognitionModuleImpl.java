@@ -42,8 +42,10 @@ public class ValidationIrecognitionModuleImpl extends ValidationModuleImpl
 {
 	private boolean	min			= false;
 
-	Boolean			version1	= false;
-	Boolean			version2	= false;
+	Boolean			version10	= false;
+	Boolean			version2x	= false;
+	Boolean			version21	= false;
+	Boolean			version22	= false;
 
 	@Override
 	public boolean validate( File valDatei, File directoryOfLogfile,
@@ -91,37 +93,56 @@ public class ValidationIrecognitionModuleImpl extends ValidationModuleImpl
 				}
 			}
 
-			version1 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" )
+			version10 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" )
 					.contains(
 							"http://www.bar.admin.ch/xmlns/siard/1.0/metadata.xsd" );
-			version2 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" )
+			version2x = FileUtils.readFileToString( metadataXml, "ISO-8859-1" )
 					.contains(
 							"http://www.bar.admin.ch/xmlns/siard/2/metadata.xsd" );
-			if ( version1 ) {
+			version21 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" )
+					.contains( "version=\"2.1\"" );
+			version22 = FileUtils.readFileToString( metadataXml, "ISO-8859-1" )
+					.contains( "version=\"2.2\"" );
+			if ( version10 ) {
 				// keine zusaetzliche kontrolle
-			} else if ( version2 ) {
-				File version21 = new File( new StringBuilder( pathToWorkDir )
-						.append( File.separator ).append( "header" )
-						.append( File.separator ).append( "siardversion" )
-						.append( File.separator ).append( "2.1" ).toString() );
-
+			} else if ( version2x ) {
 				/*
 				 * bestehendes Workverzeichnis Abbruch wenn nicht leer, da am
 				 * Schluss das Workverzeichnis geloescht wird und entsprechend
 				 * bestehende Dateien geloescht werden koennen
 				 */
-				if ( !version21.exists() ) {
+
+				File versionDir21 = new File( pathToWorkDir + File.separator
+						+ "header" + File.separator + "siardversion"
+						+ File.separator + "2.1" );
+
+				File versionDir22 = new File( pathToWorkDir + File.separator
+						+ "header" + File.separator + "siardversion"
+						+ File.separator + "2.2" );
+				if ( version21 && !versionDir21.exists() ) {
 					valid = false;
 					if ( min ) {
 						return false;
 					} else {
-
 						Logtxt.logtxt( logFile, getTextResourceService()
 								.getText( locale, MESSAGE_XML_MODUL_I_SIARD )
 								+ getTextResourceService().getText( locale,
 										MESSAGE_XML_I_SIARDVERSION, "2.1",
-										version21.getAbsolutePath() ) );
+										versionDir21.getAbsolutePath() ) );
 					}
+				} else if ( version22 && !versionDir22.exists() ) {
+					valid = false;
+					if ( min ) {
+						return false;
+					} else {
+						Logtxt.logtxt( logFile, getTextResourceService()
+								.getText( locale, MESSAGE_XML_MODUL_I_SIARD )
+								+ getTextResourceService().getText( locale,
+										MESSAGE_XML_I_SIARDVERSION, "2.2",
+										versionDir22.getAbsolutePath() ) );
+					}
+				} else {
+					valid = true;
 				}
 			}
 		} catch ( java.io.IOException ioe ) {

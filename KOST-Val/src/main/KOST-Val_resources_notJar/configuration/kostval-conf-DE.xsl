@@ -243,7 +243,7 @@
 
 <!-- DATEN -->
 					<tr  class="captioninfo">
-						<td>XML: Akzeptanz und Validierung [&#x2713;]</td>
+						<td>XML: Akzeptanz und Validierung [(&#x2713;)]</td>
 						<td>
 							<xsl:value-of select="configuration/xml/xmlvalidation" />
 						</td>
@@ -263,9 +263,9 @@
 						</td>
 					</tr>
 					<tr  class="captioninfom">
-						<td>Erlaubte SIARD Versionen [1.0, 2.1]:</td>
+						<td>Erlaubte SIARD Versionen [1.0, 2.1, 2.2]:</td>
 						<td>
-							<xsl:value-of select="configuration/siard/siard10" />&#160; <xsl:value-of select="configuration/siard/siard21" />
+							<xsl:value-of select="configuration/siard/siard10" />&#160; <xsl:value-of select="configuration/siard/siard21" />&#160; <xsl:value-of select="configuration/siard/siard22" />
 						</td>
 					</tr>
 

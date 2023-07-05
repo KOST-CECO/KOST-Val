@@ -38,7 +38,7 @@ public class ConfigControllerSiard
 {
 
 	@FXML
-	private CheckBox	checkSiard10, checkSiard21;
+	private CheckBox	checkSiard10, checkSiard21, checkSiard22;
 
 	@FXML
 	private Button		buttonConfigApply;
@@ -124,16 +124,21 @@ public class ConfigControllerSiard
 			String noSiard = "<siardvalidation>no</siardvalidation>";
 			String noSiard10 = "<siard10></siard10>";
 			String noSiard21 = "<siard21></siard21>";
+			String noSiard22 = "<siard22></siard22>";
 
 			if ( config.contains( noSiard ) ) {
 				checkSiard10.setDisable( true );
 				checkSiard21.setDisable( true );
+				checkSiard22.setDisable( true );
 			}
 			if ( config.contains( noSiard10 ) ) {
 				checkSiard10.setSelected( false );
 			}
 			if ( config.contains( noSiard21 ) ) {
 				checkSiard21.setSelected( false );
+			}
+			if ( config.contains( noSiard22 ) ) {
+				checkSiard22.setSelected( false );
 			}
 		} catch ( IOException e1 ) {
 			e1.printStackTrace();
@@ -176,7 +181,8 @@ public class ConfigControllerSiard
 				Util.oldnewstring( no, yes, configFile );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
-				if ( !checkSiard21.isSelected() ) {
+				if ( !checkSiard21.isSelected()
+						&& !checkSiard22.isSelected() ) {
 					labelMessage.setText( minOne );
 					checkSiard10.setSelected( true );
 				} else {
@@ -202,9 +208,37 @@ public class ConfigControllerSiard
 				Util.oldnewstring( no, yes, configFile );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
-				if ( !checkSiard10.isSelected() ) {
+				if ( !checkSiard10.isSelected()
+						&& !checkSiard22.isSelected() ) {
 					labelMessage.setText( minOne );
 					checkSiard21.setSelected( true );
+				} else {
+					Util.oldnewstring( yes, no, configFile );
+				}
+			}
+		} catch ( IOException e ) {
+			e.printStackTrace();
+		}
+	}
+
+	/*
+	 * checkSiard22 schaltet diese Validierung in der Konfiguration ein oder aus
+	 */
+	@FXML
+	void changeSiard22( ActionEvent event )
+	{
+		labelMessage.setText( "" );
+		String yes = "<siard22>2.2</siard22>";
+		String no = "<siard22></siard22>";
+		try {
+			if ( checkSiard22.isSelected() ) {
+				Util.oldnewstring( no, yes, configFile );
+			} else {
+				// abwaehlen nur moeglich wenn noch eines selected
+				if ( !checkSiard10.isSelected()
+						&& !checkSiard21.isSelected() ) {
+					labelMessage.setText( minOne );
+					checkSiard22.setSelected( true );
 				} else {
 					Util.oldnewstring( yes, no, configFile );
 				}

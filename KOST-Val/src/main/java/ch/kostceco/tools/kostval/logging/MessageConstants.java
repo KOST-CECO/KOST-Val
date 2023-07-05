@@ -51,7 +51,7 @@ public interface MessageConstants
 	String	MESSAGE_XML_SUMMARY_NO3C					= "val.message.xml.summary.no3c";
 	String	MESSAGE_XML_SUMMARY_FORMAT					= "val.message.xml.summary.format";
 	String	MESSAGE_XML_SUMMARY							= "val.message.xml.summary";
-	
+
 	String	MESSAGE_XML_HEADER							= "val.message.xml.header";
 	String	MESSAGE_XML_INFO							= "val.message.xml.info";
 	String	MESSAGE_XML_VALTYPE							= "val.message.xml.valtype";
@@ -215,6 +215,7 @@ public interface MessageConstants
 	String	MESSAGE_XML_H_INVALID_FOLDER				= "val.message.xml.h.invalid.folder";
 	String	MESSAGE_XML_H_INVALID_XML					= "val.message.xml.h.invalid.xml";
 	String	MESSAGE_XML_H_TABLE_NOT_VALIDATED1			= "val.message.xml.h.table.not.validated1";
+	String	MESSAGE_XML_H_COUNT_ERRORS					= "val.message.xml.h.count.errors";
 
 	// Modul I Meldungen
 	String	MESSAGE_XML_I_NOTALLOWEDEXT					= "val.message.xml.i.notallowedext";

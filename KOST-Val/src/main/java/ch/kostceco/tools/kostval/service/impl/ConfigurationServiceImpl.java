@@ -648,6 +648,11 @@ public class ConfigurationServiceImpl implements ConfigurationService
 					.getTextContent();
 			configMap.put( "siard21", siard21 );
 
+			// Gibt an ob siard 2.2 validiert werden soll
+			String siard22 = doc.getElementsByTagName( "siard22" ).item( 0 )
+					.getTextContent();
+			configMap.put( "siard22", siard22 );
+
 			// Gibt an ob csv akzeptiert werden soll
 			/* durch die Sonderzeichen muss es anders ausgelesen werden */
 			String azCsv = "<csvvalidation>(&#x2713;)</csvvalidation>";

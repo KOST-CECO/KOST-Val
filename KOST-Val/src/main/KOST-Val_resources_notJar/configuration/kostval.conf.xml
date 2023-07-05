@@ -105,6 +105,7 @@
 		<siardvalidation>&#x2713;</siardvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert / &#x2713; = akzeptiert und validieren -->
 		<siard10>1.0</siard10><!--1.0 / / no -->
 		<siard21>2.1</siard21><!--2.1 / / no -->
+		<siard22>2.2</siard22><!--2.2 / / no -->
 	</siard>
 	<csv>
 		<csvvalidation>(&#x2713;)</csvvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert -->
