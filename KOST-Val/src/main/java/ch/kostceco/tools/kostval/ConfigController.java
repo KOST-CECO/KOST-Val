@@ -239,8 +239,8 @@ public class ConfigController
 			} else if ( Util.stringInFileLine( "kostval-conf-IT.xsl",
 					configFile ) ) {
 				locale = new Locale( "it" );
-				buttonConfigApply.setText( "Applica" );
-				buttonConfigApplyStandard.setText( "Applica predefinito" );
+				buttonConfigApply.setText( "Applicare" );
+				buttonConfigApplyStandard.setText( "Applicare predefinito" );
 				buttonConfigCancel.setText( "Scartare" );
 				labelText.setText( "Testo" );
 				labelImage.setText( "Immagine" );

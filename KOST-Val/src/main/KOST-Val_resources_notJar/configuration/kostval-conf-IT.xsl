@@ -40,7 +40,7 @@
 							<span class="logo">al</span>
 							<span class="logol">&#160;</span>
 							<span class="logox">&#160; &#160; &#160;</span>
-							<span class="logoff">Konfigurazione</span>
+							<span class="logoff">Configurazione</span>
 						</td>
 						<td>Legenda:</td>
 					</tr>
@@ -48,7 +48,7 @@
 						<td>&#160;</td>
 						<td class="captioninfow">
 							<span class="captioninfog">&#x2713;</span>
-							<span>&#160;&#160;&#160;&#160;= accettato e validato</span>
+							<span>&#160;&#160;&#160;&#160;= accettato e convalidato</span>
 					</td>
 					</tr>
 					<tr  class="captioninfow">
@@ -71,13 +71,13 @@
 					
 <!-- TEXT -->
 					<tr  class="captioninfo">
-						<td>PDF/A: Accettazione e validazione [&#x2713;]</td>
+						<td>PDF/A: Accettazione e convalida [&#x2713;]</td>
 						<td>
 							<xsl:value-of select="configuration/pdfa/pdfavalidation" />
 						</td>
 					</tr>
 					<tr  class="captioninfom">
-						<td>Validazione PDF/A con PDF Tools [yes]:</td>
+						<td>Convalida PDF/A con PDF Tools [yes]:</td>
 						<td>
 							<xsl:value-of select="configuration/pdfa/pdftools" />
 						</td>
@@ -89,13 +89,13 @@
 						</td>
 					</tr>
 					<tr  class="captioninfom">
-						<td>- Validazione (ricercabilità ed estraibilità) [tolerant]:</td>
+						<td>- Convalida (ricercabilità ed estraibilità) [tolerant]:</td>
 						<td>
 							<xsl:value-of select="configuration/pdfa/pdfafont" />
 						</td>
 					</tr>
 					<tr  class="captioninfom">
-						<td>Validazione PDF/A con callas [yes]:</td>
+						<td>Convalida PDF/A con callas [yes]:</td>
 						<td>
 							<xsl:value-of select="configuration/pdfa/callas" />
 						</td>
@@ -113,7 +113,7 @@
 						</td>
 					</tr>
 					<tr  class="captioninfom">
-						<td>Validazione di PDF/A-3 in PDF/A-2 ed emissione di un avviso invece di un errore [yes]:</td>
+						<td>Convalida di PDF/A-3 in PDF/A-2 ed emissione di un avviso invece di un errore [yes]:</td>
 						<td>
 							<xsl:value-of select="configuration/pdfa/warning3to2" />
 						</td>
@@ -141,21 +141,21 @@
 					
 <!-- BILD -->
 					<tr  class="captioninfo">
-						<td>JPEG2000: Accettazione e validazione [&#x2713;]</td>
+						<td>JPEG2000: Accettazione e convalida [&#x2713;]</td>
 						<td>
 							<xsl:value-of select="configuration/jp2/jp2validation" />
 						</td>
 					</tr>
 
 					<tr  class="captioninfo">
-						<td>JPEG: Accettazione e validazione [&#x2713;]</td>
+						<td>JPEG: Accettazione e convalida [&#x2713;]</td>
 						<td>
 							<xsl:value-of select="configuration/jpeg/jpegvalidation" />
 						</td>
 					</tr>
 
 					<tr  class="captioninfo">
-						<td>TIFF: Accettazione e validazione [&#x2713;]</td>
+						<td>TIFF: Accettazione e convalida [&#x2713;]</td>
 						<td>
 							<xsl:value-of select="configuration/tiff/tiffvalidation" />
 						</td>
@@ -185,7 +185,7 @@
 						</td>
 					</tr>
 					<tr  class="captioninfom">
-						<td>È consentita la piastrellatura [no]:</td>
+						<td>È consentita la struttura a piastrelle (tile) [no]:</td>
 						<td>
 							<xsl:value-of select="configuration/tiff/allowedother/allowedtiles" />
 						</td>
@@ -198,7 +198,7 @@
 					</tr>
 
 					<tr  class="captioninfo">
-						<td>PNG: Accettazione e validazione [&#x2713;]</td>
+						<td>PNG: Accettazione e convalida [&#x2713;]</td>
 						<td>
 							<xsl:value-of select="configuration/png/pngvalidation" />
 						</td>
@@ -243,7 +243,7 @@
 
 <!-- DATEN -->
 					<tr  class="captioninfo">
-						<td>XML: Accettazione e validazione [(&#x2713;)]</td>
+						<td>XML: Accettazione e convalida [(&#x2713;)]</td>
 						<td>
 							<xsl:value-of select="configuration/xml/xmlvalidation" />
 						</td>
@@ -257,7 +257,7 @@
 					</tr>
 
 					<tr  class="captioninfo">
-						<td>SIARD: Accettazione e validazione [&#x2713;]</td>
+						<td>SIARD: Accettazione e convalida [&#x2713;]</td>
 						<td>
 							<xsl:value-of select="configuration/siard/siardvalidation" />
 						</td>

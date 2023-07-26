@@ -116,8 +116,8 @@ public class ConfigControllerTiff
 				labelComp.setText( "Algoritmo di compressione" );
 				labelOther.setText( "Diversi" );
 				labelPi.setText( "Spazio colore" );
-				labelImage.setText( "Parametro di validazione: TIFF" );
-				buttonConfigApply.setText( "Applica" );
+				labelImage.setText( "Parametro di convalida: TIFF" );
+				buttonConfigApply.setText( "Applicare" );
 				minOne = "Almeno una variante deve essere consentita!";
 			} else {
 				labelBps.setText( "Bits per sample (per channel)" );

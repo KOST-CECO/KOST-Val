@@ -112,7 +112,7 @@ public class ConfigControllerOther
 			} else if ( Util.stringInFileLine( "kostval-conf-IT.xsl",
 					configFile ) ) {
 				labelOther.setText( "Impostazioni di altri formati" );
-				buttonConfigApply.setText( "Applica" );
+				buttonConfigApply.setText( "Applicare" );
 				labelText.setText( "Testo" );
 				labelImage.setText( "Immagine" );
 				labelAudioVideo.setText( "Audio/Video" );

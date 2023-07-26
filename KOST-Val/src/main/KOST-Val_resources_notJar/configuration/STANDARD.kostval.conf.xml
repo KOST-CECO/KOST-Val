@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="ISO-8859-1"?><?xml-stylesheet type="text/xsl" href="kostval-conf-DE.xsl"?>
+<configuration><!-- kostval.conf.xml_v2.1.4.0 -->
+<!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert / &#x2713; = akzeptiert und validieren -->
+<!-- TEXT -->
+	<pdfa>
+		<pdfavalidation>&#x2713;</pdfavalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert / &#x2713; = akzeptiert und validieren -->
+		<!-- sind pdftools und callas beide auf no wird keine pdfa Validierung durchgefuehrt -->
+		<!-- sind pdftools und callas beide auf yes wird die duale pdfa Validierung durchgefuehrt -->
+		<pdftools>yes</pdftools><!--no wenn PDF Tools nicht verwendet werden soll, ansonsten yes -->
+		<!-- Detailreport: Soll seitens pdftools auch Details in Englisch (yes) oder nur Kategorien (no) ausgegeben werden  -->
+		<detail>yes</detail><!--no verwenden wenn nur Kategorien ansonsten yes fuer detailierte Fehlermeldung -->
+		<pdfafont>tolerant</pdfafont><!--no verwenden wenn die Schriften in pdfa nicht validiert werden sollen, ansonsten tolerant oder strict-->
+		<callas>yes</callas><!--no wenn callas nicht verwendet werden soll, ansonsten yes -->
+		<!-- N-Eintrag: Soll seitens callas ein Fehler (E) oder eine Warnung (W) ausgegeben werden  -->
+		<nentry>W</nentry><!--W verwenden wenn Warnung ansonsten E fuer Fehler -->
+		<!--Angeben welche Conformancelevel mindestens erreicht werden muss -->
+		<!--no verwenden wenn diese Version nicht erlaubt ist -->
+		<pdfa1a>1A</pdfa1a><!--1A / / no -->
+		<pdfa1b>1B</pdfa1b><!--1B / / no -->
+		<pdfa2a>2A</pdfa2a><!--2A / / no -->
+		<pdfa2b>2B</pdfa2b><!--2B / / no -->
+		<pdfa2u>2U</pdfa2u><!--2U / / no -->
+		<warning3to2>yes</warning3to2><!-- validiert wenn eingeschaltet PDF/A-3 nach PDF/A-2 und ignoriert den Fehler betreffend der Version und gibt stattdessten eine Warnung aus. -->	
+		<jbig2allowed>yes</jbig2allowed><!--no verwenden wenn JBIG2 in pdfa nicht erlaubt werden sollen, ansonsten yes -->
+	</pdfa>
+	<txt>
+		<txtvalidation>(&#x2713;)</txtvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert -->
+	</txt>
+	<pdf>
+		<pdfvalidation>&#x2717;</pdfvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert -->
+	</pdf>
+<!-- BILD -->
+	<jp2>
+		<jp2validation>&#x2713;</jp2validation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert / &#x2713; = akzeptiert und validieren -->
+	</jp2>
+	<jpeg>
+		<jpegvalidation>&#x2713;</jpegvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert / &#x2713; = akzeptiert und validieren -->
+	</jpeg>
+	<tiff>
+		<tiffvalidation>&#x2713;</tiffvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert / &#x2713; = akzeptiert und validieren -->
+		<!--TIFF-Praezisierungen -->
+		<!--Wenn erlaubt "Text" einfuegen ansonsten "0" -->
+		<allowedcompression>
+			<allowedcompression1>Uncompressed</allowedcompression1><!--0 / / Uncompressed -->
+			<allowedcompression2>CCITT 1D</allowedcompression2><!--0 / / CCITT 1D -->
+			<allowedcompression3>T4/Group 3 Fax</allowedcompression3><!--0 / / T4/Group 3 Fax -->
+			<allowedcompression4>T6/Group 4 Fax</allowedcompression4><!--0 / / T6/Group 4 Fax -->
+			<allowedcompression5>LZW</allowedcompression5><!--0 / / LZW -->
+			<allowedcompression7></allowedcompression7><!--0 / / JPEG -->
+			<allowedcompression8></allowedcompression8><!--0 / / Deflate -->
+			<allowedcompression32773>PackBits</allowedcompression32773><!--0 / / PackBits -->
+		</allowedcompression>
+		<allowedphotointer>
+			<allowedphotointer0>WhiteIsZero</allowedphotointer0><!--0 / / WhiteIsZero -->
+			<allowedphotointer1>BlackIsZero</allowedphotointer1><!--0 / / BlackIsZero -->
+			<allowedphotointer2>RGB</allowedphotointer2><!--0 / / RGB -->
+			<allowedphotointer3>RGB Palette</allowedphotointer3><!--0 / / RGB Palette -->
+			<allowedphotointer4></allowedphotointer4><!--0 / / transparency mask -->
+			<allowedphotointer5></allowedphotointer5><!--0 / / CMYK -->
+			<allowedphotointer6></allowedphotointer6><!--0 / / YCbCr -->
+			<allowedphotointer8></allowedphotointer8><!--0 / / CIE L*a*b* -->
+		</allowedphotointer>
+		<allowedbitspersample>
+			<allowedbitspersample1>1</allowedbitspersample1><!--0 / / 1 -->
+			<allowedbitspersample2></allowedbitspersample2><!--0 / / 2 -->
+			<allowedbitspersample4>4</allowedbitspersample4><!--0 / / 4 -->
+			<allowedbitspersample8>8</allowedbitspersample8><!--0 / / 8 -->
+			<allowedbitspersample16>16</allowedbitspersample16><!--0 / / 16 -->
+			<allowedbitspersample32></allowedbitspersample32><!--0 / / 32 -->
+		</allowedbitspersample>
+		<allowedother>
+			<allowedmultipage>yes</allowedmultipage><!--no / yes -->
+			<allowedtiles>no</allowedtiles><!--no / yes -->
+			<allowedsize>no</allowedsize><!--no / yes -->
+		</allowedother>
+	</tiff>
+	<png>
+		<pngvalidation>&#x2713;</pngvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert / &#x2713; = akzeptiert und validieren -->
+	</png>
+<!-- AUDIO -->
+	<flac>
+		<flacvalidation>(&#x2713;)</flacvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert -->
+	</flac>
+	<wave>
+		<wavevalidation>(&#x2713;)</wavevalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert -->
+	</wave>
+	<mp3>
+		<mp3validation>(&#x2713;)</mp3validation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert -->
+	</mp3>
+<!-- VIDEO -->
+	<mkv>
+		<mkvvalidation>(&#x2713;)</mkvvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert -->
+	</mkv>
+	<mp4>
+		<mp4validation>(&#x2713;)</mp4validation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert -->
+	</mp4>
+<!-- DATEN -->
+	<xml>
+		<xmlvalidation>(&#x2713;)</xmlvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert / &#x2713; = akzeptiert und validieren -->
+	</xml>
+	<json>
+		<jsonvalidation>(&#x2713;)</jsonvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert -->
+	</json>
+	<siard>
+		<siardvalidation>&#x2713;</siardvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert / &#x2713; = akzeptiert und validieren -->
+		<siard10>1.0</siard10><!--1.0 / / no -->
+		<siard21>2.1</siard21><!--2.1 / / no -->
+		<siard22>2.2</siard22><!--2.2 / / no -->
+	</siard>
+	<csv>
+		<csvvalidation>(&#x2713;)</csvvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert -->
+	</csv>
+	<xlsx>
+		<xlsxvalidation>(&#x2713;)</xlsxvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert -->
+	</xlsx>
+	<ods>
+		<odsvalidation>&#x2717;</odsvalidation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert -->
+	</ods>
+<!-- SIP -->
+	<sip>
+		<ech0160validation>&#x2713;</ech0160validation><!--&#x2717; = nicht akzeptiert / (&#x2713;) = akzeptiert / &#x2713; = akzeptiert und validieren -->
+		<allowedlengthofpaths>179</allowedlengthofpaths>
+		<allowedsipname>SIP_[1-2][0-9]{3}[0-1][0-9][0-3][0-9]_\w{3}</allowedsipname>
+		<warningolddok>no</warningolddok> <!-- no = Fehler / yes = Warnung -->
+	</sip>
+<!-- SONSTIGES -->
+	<otherformats><!--&#x2717; / Leer = nicht akzeptiert / (&#x2713;) / Bezeichnung = akzeptiert -->
+		<docxvalidation></docxvalidation>";
+		<pptxvalidation></pptxvalidation>";
+		<rtfvalidation></rtfvalidation>";
+		<jpxvalidation></jpxvalidation>";
+		<jpmvalidation></jpmvalidation>";
+		<svgvalidation></svgvalidation>";
+		<oggvalidation></oggvalidation>";
+		<mpeg2validation></mpeg2validation>";
+		<htmlvalidation>HTML </htmlvalidation>";
+		<warcvalidation>WARC </warcvalidation>";
+		<arcvalidation></arcvalidation>";
+		<dwgvalidation>DWG </dwgvalidation>";
+		<ifcvalidation></ifcvalidation>";
+		<dxfvalidation></dxfvalidation>";
+		<interlisvalidation></interlisvalidation>";
+		<dicomvalidation></dicomvalidation>";
+		<msgvalidation></msgvalidation>";
+	</otherformats>
+	<pathtoworkdir></pathtoworkdir><!--wenn leer wird "USERPROFILE/.kost-val_2x/temp_KOST-Val" verwendet -->
+	<standardinputdir></standardinputdir><!--wenn leer wird "Dieser PC" verwendet -->
+	<hash></hash><!--wenn leer wird kein Hashwert berechnet und ausgegeben -->
+	<ignoreerror>
+		<!-- Zu ignorierende Fehlermeldungen. Aktuell nur details von pdftools unterstuetzt -->
+		<ignore>The document does not conform to the requested standard. [PDF Tools: 0x83410612]
+			The value of the key N is 4 but must be 3. [PDF Tools: 0x80410607]</ignore>
+	</ignoreerror>
+</configuration>

@@ -243,7 +243,7 @@ public class GuiController
 				buttonLicence.setText( "Informazioni sulla licenza" );
 				buttonChange.setText( "Adattare" );
 				buttonShowConfig.setText( "Visualizza" );
-				labelStart.setText( "Avvia validazione" );
+				labelStart.setText( "Avvia convalida" );
 				labelConfig.setText( "Configurazione" );
 				buttonSave.setText( "Salva" );
 				buttonPrint.setText( "Stampa" );
@@ -378,9 +378,9 @@ public class GuiController
 		initInstructionsEn = "<html>" + help1 + help2 + help3 + help4 + help5
 				+ "<br/></html>";
 		help1 = "<h2>Istruzioni brevi</h2>";
-		help3 = "<h3>1. specificare/selezionare il file o la directory per la validazione</h3>";
+		help3 = "<h3>1. Specificare/selezionare il file o la directory per la convalida</h3>";
 		help4 = "<h3>2. Regolare la configurazione e il LogType, se necessario</h3>";
-		help5 = "<h3>3. Avviare la validazione.</h3>";
+		help5 = "<h3>3. Avviare la convalida.</h3>";
 		initInstructionsIt = "<html>" + help1 + help2 + help3 + help4 + help5
 				+ "<br/></html>";
 		help1 = "<h2>Kurzanleitung</h2>";
@@ -513,12 +513,12 @@ public class GuiController
 			licence5 = "- KOST-Val utilise des composants non modifiés d'autres fabricants en les incorporant directement dans le code source.";
 			licence6 = "- Les utilisateurs de KOST-Val sont priés de respecter les conditions de licence de ces composants.";
 		} else if ( locale.toString().startsWith( "it" ) ) {
-			licence1 = "<h2>Questo programma non viene fornito con ASSOLUTAMENTE NESSUNA GARANZIA.</h2>";
+			licence1 = "<h2>Questo programma viene fornito SENZA ALCUNA GARANZIA.</h2>";
 			licence2 = "<hr>";
-			licence3 = "<h4>Questo è software libero, e siete invitati a ridistribuirlo a determinate condizioni;</h4>";
+			licence3 = "<h4>Questo è un software libero, e potete ridistribuirlo a determinate condizioni;</h4>";
 			licence4 = "- vedere il manuale e GPL-3.0_COPYING.txt per i dettagli.";
 			licence5 = "- KOST-Val utilizza componenti di terze parti non modificati incorporandoli direttamente nel codice sorgente.";
-			licence6 = "- Gli utenti di KOST-Val sono invitati a rispettare i termini di licenza di questi componenti.";
+			licence6 = "- Gli utenti di KOST-Val sono invitati a rispettare i termini di licenza di queste componenti.";
 		} else if ( locale.toString().startsWith( "en" ) ) {
 			licence1 = "<h2>This program comes with ABSOLUTELY NO WARRANTY.</h2>";
 			licence2 = "<hr>";
@@ -676,7 +676,7 @@ public class GuiController
 		} else if ( locale.toString().startsWith( "en" ) ) {
 			text = "<html><h2>Format validation is performed. <br/><br/>Please wait ...</h2></html>";
 		} else if ( locale.toString().startsWith( "it" ) ) {
-			text = "<html><h2>La validazione del formato è in corso.  <br/><br/>Attendere ...</h2></html>";
+			text = "<html><h2>La convalida del formato è in corso.  <br/><br/>Attendere ...</h2></html>";
 		}
 		engine.loadContent( text );
 
@@ -865,7 +865,7 @@ public class GuiController
 		} else if ( locale.toString().startsWith( "en" ) ) {
 			text = "<html><h2>SIP validation is performed. <br/><br/>Please wait ...</h2></html>";
 		} else if ( locale.toString().startsWith( "it" ) ) {
-			text = "<html><h2>La validazione del SIP è in corso.<br/><br/>Attendere ...</h2></html>";
+			text = "<html><h2>La convalida del SIP è in corso.<br/><br/>Attendere ...</h2></html>";
 		}
 		engine.loadContent( text );
 
@@ -1021,7 +1021,7 @@ public class GuiController
 		} else if ( locale.toString().startsWith( "en" ) ) {
 			text = "<html><h2>A pure SIP validation is performed. <br/><br/>Please wait ...</h2></html>";
 		} else if ( locale.toString().startsWith( "it" ) ) {
-			text = "<html><h2>È in corso la validazione del solo SIP. <br/><br/>Attendere ...</h2></html>";
+			text = "<html><h2>È in corso la convalida del solo SIP. <br/><br/>Attendere ...</h2></html>";
 		}
 		engine.loadContent( text );
 
@@ -1232,7 +1232,7 @@ public class GuiController
 			} else if ( locale.toString().startsWith( "it" ) ) {
 				sel = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>File selezionato: <br>"
 						+ valFile.getAbsolutePath()
-						+ "</h3></td></tr> <tr><td><h3>2.</h3></td><td><h3>Regolare la configurazione e il LogType, se necessario </h3></td></tr> <tr><td><h3>3.</h3></td><td><h3>Avviare la validazione  </h3></td></tr></table>";
+						+ "</h3></td></tr> <tr><td><h3>2.</h3></td><td><h3>Regolare la configurazione e il LogType, se necessario </h3></td></tr> <tr><td><h3>3.</h3></td><td><h3>Avviare la convalida  </h3></td></tr></table>";
 			} else {
 				sel = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Ausgewählte Datei: <br>"
 						+ valFile.getAbsolutePath()
@@ -1272,7 +1272,7 @@ public class GuiController
 				} else if ( locale.toString().startsWith( "it" ) ) {
 					console.setText( "1. File selezionato: "
 							+ valFile.getAbsolutePath()
-							+ "\n2. Regolare la configurazione e il LogType, se necessario \n3. Avviare la validazione " );
+							+ "\n2. Regolare la configurazione e il LogType, se necessario \n3. Avviare la convalida " );
 				} else {
 					console.setText( "1. Ausgewaehlte Datei: "
 							+ valFile.getAbsolutePath()
@@ -1406,7 +1406,7 @@ public class GuiController
 						+ valFolder.getAbsolutePath() + "<br>("
 						+ numberInFileMap + " file)</h3></td></tr>";
 				sel2 = "<tr><td><h3>2.</h3></td><td><h3>Regolare la configurazione e il LogType, se necessario </h3></td></tr>";
-				sel3 = "<tr><td><h3>3.</h3></td><td><h3>Avviare la validazione </h3></td></tr></table>";
+				sel3 = "<tr><td><h3>3.</h3></td><td><h3>Avviare la convalida </h3></td></tr></table>";
 			} else if ( locale.toString().startsWith( "en" ) ) {
 				sel1 = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br><br>&nbsp;</h3></td><td><h3>Selected folder: <br>"
 						+ valFolder.getAbsolutePath() + "<br>("
@@ -1555,7 +1555,7 @@ public class GuiController
 					} else if ( locale.toString().startsWith( "it" ) ) {
 						sel = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>File selezionato: <br>"
 								+ valFileFolder.getAbsolutePath()
-								+ "</h3></td></tr> <tr><td><h3>2.</h3></td><td><h3>Regolare la configurazione e il LogType, se necessario </h3></td></tr> <tr><td><h3>3.</h3></td><td><h3>Avviare la validazione  </h3></td></tr></table>";
+								+ "</h3></td></tr> <tr><td><h3>2.</h3></td><td><h3>Regolare la configurazione e il LogType, se necessario </h3></td></tr> <tr><td><h3>3.</h3></td><td><h3>Avviare la convalida  </h3></td></tr></table>";
 					} else {
 						sel = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br>&nbsp;</h3></td><td><h3>Ausgewählte Datei: <br>"
 								+ valFileFolder.getAbsolutePath()
@@ -1591,7 +1591,7 @@ public class GuiController
 						} else if ( locale.toString().startsWith( "it" ) ) {
 							console.setText( "1. File selezionato: "
 									+ valFileFolder.getAbsolutePath()
-									+ "\n2. Regolare la configurazione e il LogType, se necessario \n3. Avviare la validazione " );
+									+ "\n2. Regolare la configurazione e il LogType, se necessario \n3. Avviare la convalida " );
 						} else {
 							console.setText( "1. Ausgewaehlte Datei: "
 									+ valFileFolder.getAbsolutePath()
@@ -1655,7 +1655,7 @@ public class GuiController
 							+ valFileFolder.getAbsolutePath() + "<br>("
 							+ numberInFileMap + " file)</h3></td></tr>";
 					sel2Folder = "<tr><td><h3>2.</h3></td><td><h3>Regolare la configurazione e il LogType, se necessario </h3></td></tr>";
-					sel3Folder = "<tr><td><h3>3.</h3></td><td><h3>Avviare la validazione </h3></td></tr></table>";
+					sel3Folder = "<tr><td><h3>3.</h3></td><td><h3>Avviare la convalida </h3></td></tr></table>";
 				} else if ( locale.toString().startsWith( "en" ) ) {
 					sel1Folder = "<table  width=\"100%\"><tr><td width=\"30px\"><h3>1.<br><br>&nbsp;</h3></td><td><h3>Selected folder: <br>"
 							+ valFileFolder.getAbsolutePath() + "<br>("
@@ -1769,7 +1769,7 @@ public class GuiController
 				buttonLicence.setText( "Informazioni sulla licenza" );
 				buttonChange.setText( "Adattare" );
 				buttonShowConfig.setText( "Visualizza" );
-				labelStart.setText( "Avvia validazione" );
+				labelStart.setText( "Avvia convalida" );
 				labelConfig.setText( "Configurazione" );
 				buttonSave.setText( "Salva" );
 				buttonPrint.setText( "Stampa" );

@@ -109,8 +109,8 @@ public class ConfigControllerPdfa
 					configFile ) ) {
 				labelOtherPdfa.setText( "Altro" );
 				labelVersion.setText( "Versioni" );
-				labelVal.setText( "Parametro di validazione: PDF/A" );
-				buttonConfigApply.setText( "Applica" );
+				labelVal.setText( "Parametro di convalida: PDF/A" );
+				buttonConfigApply.setText( "Applicare" );
 				minOne = "Almeno una variante deve essere consentita!";
 			} else {
 				labelOtherPdfa.setText( "Other" );

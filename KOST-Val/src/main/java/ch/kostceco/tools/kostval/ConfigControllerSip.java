@@ -118,11 +118,11 @@ public class ConfigControllerSip
 				locale = new Locale( "fr" );
 			} else if ( Util.stringInFileLine( "kostval-conf-IT.xsl",
 					configFile ) ) {
-				labelVal.setText( "Parametro di validazione: SIP" );
+				labelVal.setText( "Parametro di convalida: SIP" );
 				labelLength.setText( "Lunghezza percorso" );
 				labelName.setText( "Nome SIP" );
 				checkWarningOldDok.setText( "Avviso solo per i vecchi documenti (Entstehungszeitraum)" );
-				buttonConfigApply.setText( "Applica" );
+				buttonConfigApply.setText( "Applicare" );
 				locale = new Locale( "it" );
 			} else {
 				labelVal.setText( "Validation setting: SIP" );
