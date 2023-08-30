@@ -1,5 +1,5 @@
 /* == KOST-Tools ================================================================================
- * KOST-Tools. Copyright (C) KOST-CECO. 2012-2022
+ * KOST-Tools. Copyright (C) KOST-CECO.
  * -----------------------------------------------------------------------------------------------
  * KOST-Tools is a development of the KOST-CECO. All rights rest with the KOST-CECO. This
  * application is free software: you can redistribute it and/or modify it under the terms of the GNU
@@ -67,7 +67,7 @@ public class Grep
 
 		// System.out.println( "command: " + command );
 
-		String resultExec = Cmd.execToString( command, out, workDir );
+		String resultExec = Cmd.execToStringSplit( command, out, workDir );
 		// System.out.println( "resultExec: " + resultExec );
 
 		// Grep gibt keine Info raus, die replaced oder ignoriert werden muss

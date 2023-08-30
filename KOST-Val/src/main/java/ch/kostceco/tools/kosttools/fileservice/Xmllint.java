@@ -1,5 +1,5 @@
 /* == KOST-Tools ================================================================================
- * KOST-Tools. Copyright (C) KOST-CECO. 2012-2022
+ * KOST-Tools. Copyright (C) KOST-CECO.
  * -----------------------------------------------------------------------------------------------
  * KOST-Tools is a development of the KOST-CECO. All rights rest with the KOST-CECO. This
  * application is free software: you can redistribute it and/or modify it under the terms of the GNU
@@ -17,9 +17,11 @@
 package ch.kostceco.tools.kosttools.fileservice;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Locale;
 
 import ch.kostceco.tools.kosttools.runtime.Cmd;
+import ch.kostceco.tools.kosttools.util.Util;
 
 /** @author Rc Claire Roethlisberger, KOST-CECO */
 
@@ -37,8 +39,8 @@ public class Xmllint
 			+ "zlib1.dll";
 
 	/**
-	 * fuehrt eine Validierung mit xmllint via cmd durch und gibt das Ergebnis
-	 * als String zurueck
+	 * fuehrt eine Normalisierte Validierung mit xmllint via cmd durch und gibt
+	 * das Ergebnis als String zurueck
 	 * 
 	 * @param xmlFile
 	 *            XML-Datei, welche validiert werden soll
@@ -52,6 +54,135 @@ public class Xmllint
 	 */
 	public static String execXmllint( File xmlFile, File xsdFile, File workDir,
 			String dirOfJarPath, Locale locale ) throws InterruptedException
+	{
+		boolean out = false;
+		File exeFile = new File(
+				dirOfJarPath + File.separator + pathToxmllintExe );
+
+		// xmllint unterstuetzt nicht alle Zeichen resp Doppelleerschlag
+		File xmlFileNormalisiert = new File(
+				workDir + File.separator + "XML.xml" );
+		File xsdFileNormalisiert = new File(
+				workDir + File.separator + xsdFile.getName() );
+		try {
+			Util.copyFile( xmlFile, xmlFileNormalisiert );
+			Util.copyFile( xsdFile, xsdFileNormalisiert );
+		} catch ( IOException e ) {
+			// Normalisierung fehlgeschlagen es wird ohne versucht
+			xmlFileNormalisiert = xmlFile;
+			xsdFileNormalisiert = xsdFile;
+		}
+		if ( !xmlFileNormalisiert.exists() ) {
+			xmlFileNormalisiert = xmlFile;
+			xsdFileNormalisiert = xsdFile;
+		}
+
+		String command = "\"\"" + exeFile.getAbsolutePath() + "\""
+				+ " --noout --stream --nowarning --schema " + "\""
+				+ xsdFileNormalisiert.getAbsolutePath() + "\"" + " " + "\""
+				+ xmlFileNormalisiert.getAbsolutePath() + "\"\"";
+
+		String resultExec = Cmd.execToStringSplit( command, out, workDir );
+		/*
+		 * Folgender Error Output ist keiner sondern nur Info und kann mit OK
+		 * ersetzt werden: ERROR:
+		 * C:\Users\X60014195\.kost-val_2x\temp_KOST-Val\SIARD\content\schema0\
+		 * table4\table4.xml validates
+		 */
+		String ignor = "ERROR: " + xmlFileNormalisiert.getAbsolutePath()
+				+ " validates";
+		if ( resultExec.equals( ignor ) ) {
+			resultExec = "OK";
+		} else {
+			/*
+			 * ERROR: Schemas validity error : Element
+			 * '{http://www.admin.ch/xmlns/siard/1.0/schema0/table2.xsd}row':
+			 * This element is not expected.</Message><Message>ERROR:
+			 * C:\Users\X60014195\.kost-val_2x\temp_KOST-Val\SIARD\content\
+			 * schema0\table2\table2.xml fails to validate
+			 */
+			String replaceInfo = "</Message><Message>ERROR: "
+					+ xmlFileNormalisiert.getAbsolutePath()
+					+ " fails to validate";
+			resultExec = resultExec.replace( replaceInfo, "" );
+			if ( locale.toString().startsWith( "fr" ) ) {
+				resultExec = resultExec.replace( "Schemas validity error :",
+						"Erreur de validite des schemas :" );
+				resultExec = resultExec.replace( "This element is not expected",
+						"Cet element n`est pas attendu" );
+				resultExec = resultExec.replace( "Expected is",
+						"L`element attendu est" );
+				resultExec = resultExec.replace( "fails to validate",
+						"ne parvient pas a etre valide" );
+				resultExec = resultExec.replace( "Missing child element(s).",
+						"Elements enfants manquants." );
+				resultExec = resultExec.replace( "The value has a length of",
+						"La valeur a une longueur de" );
+				resultExec = resultExec.replace(
+						"this underruns the allowed minimum length of",
+						"ce qui est inferieur a la longueur minimale autorisee de" );
+				resultExec = resultExec.replace(
+						"is not a valid value of the atomic type",
+						"n`est pas une valeur valide du type atomique" );
+			} else if ( locale.toString().startsWith( "de" ) ) {
+				resultExec = resultExec.replace( "Schemas validity error :",
+						"Fehler bei der Gueltigkeit des Schemas:" );
+				resultExec = resultExec.replace( "This element is not expected",
+						"Dieses Element wird nicht erwartet" );
+				resultExec = resultExec.replace( "Expected is",
+						"Erwartet wird" );
+				resultExec = resultExec.replace( "fails to validate",
+						"kann nicht validiert werden" );
+				resultExec = resultExec.replace( "Missing child element(s).",
+						"Fehlende untergeordnete Elemente." );
+				resultExec = resultExec.replace( "The value has a length of",
+						"Der Wert hat eine Laenge von" );
+				resultExec = resultExec.replace(
+						"this underruns the allowed minimum length of",
+						"und unterschreitet damit die zulaessige Mindestlaenge von" );
+				resultExec = resultExec.replace(
+						"is not a valid value of the atomic type",
+						"ist kein gueltiger Wert des atomaren Typs" );
+			} else if ( locale.toString().startsWith( "it" ) ) {
+				resultExec = resultExec.replace( "Schemas validity error :",
+						"Errore nella validita dello schema:" );
+				resultExec = resultExec.replace( "This element is not expected",
+						"Questo elemento non e previsto" );
+				resultExec = resultExec.replace( "Expected is", "Previsto" );
+				resultExec = resultExec.replace( "fails to validate",
+						"non puo essere validato" );
+				resultExec = resultExec.replace( "Missing child element(s).",
+						"Elementi subordinati mancanti." );
+				resultExec = resultExec.replace( "The value has a length of",
+						"Il valore ha una lunghezza di" );
+				resultExec = resultExec.replace(
+						"this underruns the allowed minimum length of",
+						"e quindi e al di sotto della lunghezza minima consentita di" );
+				resultExec = resultExec.replace(
+						"is not a valid value of the atomic type",
+						"non e un valore valido del tipo atomico" );
+			}
+		}
+		return resultExec;
+	}
+
+	/**
+	 * fuehrt eine Validierung mit xmllint via cmd durch und gibt das Ergebnis
+	 * als String zurueck (Keine Normalisierung bei SIP)
+	 * 
+	 * @param xmlFile
+	 *            XML-Datei, welche validiert werden soll
+	 * @param xsdFile
+	 *            XSD-Datei, gegen welche validiert werden soll
+	 * @param workDir
+	 *            Temporaeres Verzeichnis
+	 * @param dirOfJarPath
+	 *            String mit dem Pfad von wo das Programm gestartet wurde
+	 * @return String mit Validierungsergebnis ("OK" oder den Fehler.
+	 */
+	public static String execXmllintSip( File xmlFile, File xsdFile,
+			File workDir, String dirOfJarPath, Locale locale )
+			throws InterruptedException
 	{
 		boolean out = false;
 		File exeFile = new File(
@@ -117,10 +248,28 @@ public class Xmllint
 						"Der Wert hat eine Laenge von" );
 				resultExec = resultExec.replace(
 						"this underruns the allowed minimum length of",
-						"und ueberschreitet damit die zulaessige Mindestlaenge von" );
+						"und unterschreitet damit die zulaessige Mindestlaenge von" );
 				resultExec = resultExec.replace(
 						"is not a valid value of the atomic type",
 						"ist kein gueltiger Wert des atomaren Typs" );
+			} else if ( locale.toString().startsWith( "it" ) ) {
+				resultExec = resultExec.replace( "Schemas validity error :",
+						"Errore nella validita dello schema:" );
+				resultExec = resultExec.replace( "This element is not expected",
+						"Questo elemento non e previsto" );
+				resultExec = resultExec.replace( "Expected is", "Previsto" );
+				resultExec = resultExec.replace( "fails to validate",
+						"non puo essere validato" );
+				resultExec = resultExec.replace( "Missing child element(s).",
+						"Elementi subordinati mancanti." );
+				resultExec = resultExec.replace( "The value has a length of",
+						"Il valore ha una lunghezza di" );
+				resultExec = resultExec.replace(
+						"this underruns the allowed minimum length of",
+						"e quindi e al di sotto della lunghezza minima consentita di" );
+				resultExec = resultExec.replace(
+						"is not a valid value of the atomic type",
+						"non e un valore valido del tipo atomico" );
 			}
 		}
 		return resultExec;
@@ -145,11 +294,24 @@ public class Xmllint
 		File exeFile = new File(
 				dirOfJarPath + File.separator + pathToxmllintExe );
 
-		String command = "\"\"" + exeFile.getAbsolutePath() + "\""
-				+ " --noout --stream " + "\"" + xmlFile.getAbsolutePath()
-				+ "\"\"";
+		// xmllint unterstuetzt nicht alle Zeichen resp Doppelleerschlag
+		File xmlFileNormalisiert = new File(
+				workDir + File.separator + "XML.xml" );
+		try {
+			Util.copyFile( xmlFile, xmlFileNormalisiert );
+		} catch ( IOException e ) {
+			// Normalisierung fehlgeschlagen es wird ohne versucht
+			xmlFileNormalisiert = xmlFile;
+		}
+		if ( !xmlFileNormalisiert.exists() ) {
+			xmlFileNormalisiert = xmlFile;
+		}
 
-		String resultStru = Cmd.execToString( command, out, workDir );
+		String command = "\"\"" + exeFile.getAbsolutePath() + "\""
+				+ " --noout --stream " + "\""
+				+ xmlFileNormalisiert.getAbsolutePath() + "\"\"";
+
+		String resultStru = Cmd.execToStringSplit( command, out, workDir );
 		/*
 		 * C:\Program Files
 		 * (x86)\KOST-CECO\KOST-Tools\KOST-Val\resources\xmllint>xmllint.exe
@@ -173,9 +335,10 @@ public class Xmllint
 			 */
 
 			String replaceInfo = "</Message><Message>ERROR: "
-					+ xmlFile.getAbsolutePath() + " : failed to parse";
+					+ xmlFileNormalisiert.getAbsolutePath()
+					+ " : failed to parse";
 			resultStru = resultStru.replace( replaceInfo, "" );
-			String replacePath = xmlFile.getAbsolutePath();
+			String replacePath = xmlFileNormalisiert.getAbsolutePath();
 			replacePath = replacePath.replace( "\\", "/" );
 			replacePath = replacePath.replace( ":/", "%3A/" );
 			replacePath = replacePath.replace( " ", "%20" );

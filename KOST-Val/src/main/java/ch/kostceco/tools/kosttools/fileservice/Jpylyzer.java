@@ -1,5 +1,5 @@
 /* == KOST-Tools ================================================================================
- * KOST-Tools. Copyright (C) KOST-CECO. 2012-2022
+ * KOST-Tools. Copyright (C) KOST-CECO.
  * -----------------------------------------------------------------------------------------------
  * KOST-Tools is a development of the KOST-CECO. All rights rest with the KOST-CECO. This
  * application is free software: you can redistribute it and/or modify it under the terms of the GNU
@@ -17,15 +17,17 @@
 package ch.kostceco.tools.kosttools.fileservice;
 
 import java.io.File;
+import java.io.IOException;
 
 import ch.kostceco.tools.kosttools.runtime.Cmd;
+import ch.kostceco.tools.kosttools.util.Util;
 
 /** @author Rc Claire Roethlisberger, KOST-CECO */
 
 public class Jpylyzer
 {
 	private static String	exeDir					= "resources"
-			+ File.separator + "jpylyzer_2.0.0_win32";
+			+ File.separator + "jpylyzer_2.1.0_win64";
 	private static String	resourcesJpylyzerExe	= exeDir + File.separator
 			+ "jpylyzer.exe";
 
@@ -56,12 +58,25 @@ public class Jpylyzer
 			report.delete();
 		}
 
+		// jpylyzer unterstuetzt nicht alle Zeichen resp Doppelleerschlag
+		File jp2FileNormalisiert = new File(
+				workDir + File.separator + "JP2.jp2" );
+		try {
+			Util.copyFile( jp2File, jp2FileNormalisiert );
+		} catch ( IOException e ) {
+			// Normalisierung fehlgeschlagen es wird ohne versucht
+			jp2FileNormalisiert = jp2File;
+		}
+		if ( !jp2FileNormalisiert.exists() ) {
+			jp2FileNormalisiert = jp2File;
+		}
+
 		// jpylyzer-Befehl: pathToJpylyzerExe jp2File > report
 		String command = "\"\"" + exeFile.getAbsolutePath() + "\" \""
-				+ jp2File.getAbsolutePath() + "\" > \""
+				+ jp2FileNormalisiert.getAbsolutePath() + "\" > \""
 				+ report.getAbsolutePath() + "\"\"";
 
-		String resultExec = Cmd.execToString( command, out, workDir );
+		String resultExec = Cmd.execToStringSplit( command, out, workDir );
 
 		// System.out.println( "resultExec: " + resultExec );
 		/*

@@ -1,0 +1,47 @@
+NAME	DICT_8pagescutandstackduplex
+SLOT_FILTER	*	1-4	*
+SLOT_FILTER	*	101	*
+PAGES_PER_SHEET	4
+#===================================
+#Runlist
+Set	RunListTerminationMode	1
+Set	CropMarkLength	"2,0mm"
+Set	CropMarkWidth	"0,04mm"
+Set	ShinglingOffset	"0,0mm"
+Set	TextSize	"12pt"
+Set	TextFont	"Helvetica"
+Set	SheetCount	1
+Set	PagesPerSheet	4
+Set	PrintedSides	2
+# Fill up missing pages to PagesPerSheet
+Set	c	var('LastPage')%(var('PagesPerSheet')*var('PrintedSides'))
+If	VAR('c') > 0
+	Set	LastPage	var('LastPage')+((var('PagesPerSheet')*var('PrintedSides'))-var('c'))
+Else
+EndIf
+AppendPages
+Set	c1	var('LastPage')/var('PagesPerSheet')
+Set	LastPage	var('c1')
+Loop
+NewSheet
+PlaceText	Slot_101	datetime("YYYY-MM-DD, hh:mm") & " - Plate " & var('CurrentSheet') & ", Sheet: " & var('SheetCount') & "F - File: " & filename(docpath())
+PositionPage	FirstPage	Slot_4
+Set	MidPage	var('FirstPage')+var('c1')
+PositionPage	MidPage	Slot_3
+Set	MidPage	var('MidPage')+var('c1')
+PositionPage	MidPage	Slot_2
+Set	MidPage	var('MidPage')+var('c1')
+PositionPage	MidPage	Slot_1
+Set	FirstPage	var('FirstPage')+1
+NewSheet
+PlaceText	Slot_101	datetime("YYYY-MM-DD, hh:mm") & " - Plate " & var('CurrentSheet') & ", Sheet: " & var('SheetCount') & "B - File: " & filename(docpath())
+PositionPage	FirstPage	Slot_3
+Set	MidPage	var('FirstPage')+var('c1')
+PositionPage	MidPage	Slot_4
+Set	MidPage	var('MidPage')+var('c1')
+PositionPage	MidPage	Slot_1
+Set	MidPage	var('MidPage')+var('c1')
+PositionPage	MidPage	Slot_2
+Set	FirstPage	var('FirstPage')+1
+Set	SheetCount	var('SheetCount')+1
+#EOF

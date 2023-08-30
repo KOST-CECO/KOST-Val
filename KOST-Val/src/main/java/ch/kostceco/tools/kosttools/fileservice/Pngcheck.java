@@ -1,5 +1,5 @@
 /* == KOST-Tools ================================================================================
- * KOST-Tools. Copyright (C) KOST-CECO. 2012-2022
+ * KOST-Tools. Copyright (C) KOST-CECO.
  * -----------------------------------------------------------------------------------------------
  * KOST-Tools is a development of the KOST-CECO. All rights rest with the KOST-CECO. This
  * application is free software: you can redistribute it and/or modify it under the terms of the GNU
@@ -27,9 +27,9 @@ import ch.kostceco.tools.kosttools.util.Util;
 public class Pngcheck
 {
 	private static String	exeDir					= "resources"
-			+ File.separator + "pngcheck-3.0.2-win32";
+			+ File.separator + "pngcheck-3.0.3-win";
 	private static String	resourcesPngcheckExe	= exeDir + File.separator
-			+ "pngcheck.win32.exe";
+			+ "pngcheck.win64.exe";
 
 	/**
 	 * fuehrt eine Validierung mit Pngcheck via cmd durch und speichert das
@@ -70,7 +70,7 @@ public class Pngcheck
 		String command = "\"\"" + exeFile.getAbsolutePath() + "\" \""
 				+ pngFileNormalisiert.getAbsolutePath() + "\"";
 
-		String resultExec = Cmd.execToString( command, out, workDir );
+		String resultExec = Cmd.execToStringSplit( command, out, workDir );
 		Util.deleteFile( new File( workDir + File.separator + "PNG.png" ) );
 		// System.out.println("resultExec: "+ resultExec );
 

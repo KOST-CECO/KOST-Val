@@ -1,6 +1,6 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
- * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
+ * Submission Information Package (SIP). Copyright (C) Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
@@ -33,12 +33,12 @@ import ch.kostceco.tools.kostval.service.TextResourceService;
 public class TextResourceServiceImpl implements TextResourceService
 {
 	// Per Default ist es dieser Name, kann jedoch auch mittels Dependency
-	// Injection �berschrieben
+	// Injection ueberschrieben
 	// werden.
 	private String bundleBaseName = "messages";
 
 	/**
-	 * Gibt den Wert des Attributs <code>bundleBaseName</code> zur�ck.
+	 * Gibt den Wert des Attributs <code>bundleBaseName</code> zurueck.
 	 * 
 	 * @return Wert des Attributs bundleBaseName.
 	 */
@@ -51,7 +51,7 @@ public class TextResourceServiceImpl implements TextResourceService
 	 * Setzt den Wert des Attributs <code>bundleBaseName</code>.
 	 * 
 	 * @param bundleBaseName
-	 *            Wert f�r das Attribut bundleBaseName.
+	 *            Wert fuer das Attribut bundleBaseName.
 	 */
 	public void setBundleBaseName( String bundleBaseName )
 	{

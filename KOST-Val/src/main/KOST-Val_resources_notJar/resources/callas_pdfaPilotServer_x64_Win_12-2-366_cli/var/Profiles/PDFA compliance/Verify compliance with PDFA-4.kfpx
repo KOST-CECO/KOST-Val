@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pdfpreflight version="18.0">
+	<package>
+		<id3>22c02348a0e4ce3a3e0dbe548fac90e0</id3>
+		<pdfxoutintentlist>
+		</pdfxoutintentlist>
+		<iccprofilelist>
+		</iccprofilelist>
+		<ccpolicies>
+		</ccpolicies>
+		<occdsetups>
+		</occdsetups>
+		<curves>
+		</curves>
+		<fspolicies>
+		</fspolicies>
+		<resources>
+		</resources>
+		<variables>
+		</variables>
+		<conditions>
+		</conditions>
+		<rules>
+		</rules>
+		<rulesets>
+		</rulesets>
+		<fixups>
+		</fixups>
+		<fixupsets>
+		</fixupsets>
+		<actions>
+		</actions>
+		<quickfixes>
+		</quickfixes>
+		<profiles>
+			<profile>
+				<id1>Pb496bbf342922949f3735568551eceab</id1>
+				<id2>P2fe9dcd8a577050719b5fb9b77ec83ee</id2>
+				<id3>78dd765092e555751d2f02cfc1b2309e</id3>
+				<id4>8ae6acb5ec31b99460d46d09a79a6df4</id4>
+				<id5>P2fe9dcd8a577050719b5fb9b77ec83ee</id5>
+				<name>P_18_VerifycompliancewithPDFA4</name>
+				<comment>P_18_VerifycompliancewithPDFA4</comment>
+				<flags edit="0" visible="1" dict="1"></flags>
+				<metalist>
+					<metadata>
+						<metakey>author</metakey>
+						<metavalue>callas software</metavalue>
+					</metadata>
+					<metadata>
+						<metakey>email</metakey>
+						<metavalue>support@callassoftware.com</metavalue>
+					</metadata>
+				</metalist>
+				<creation>D:20201015120244+01&apos;00&apos;</creation>
+				<modification>D:20201023080623+01&apos;00&apos;</modification>
+				<aar_template></aar_template>
+				<pdfstd>
+					<pdfx convert="0"></pdfx>
+					<pdfa convert="0"></pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond>Coated GRACoL 2013</outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+				</pdfstd>
+				<pdfstdemb>
+					<pdfx convert="0"></pdfx>
+					<pdfa convert="0"></pdfa>
+					<pdfe convert="0"></pdfe>
+					<outcond>Coated GRACoL 2013</outcond>
+					<trapped>0</trapped>
+					<oioptions>0</oioptions>
+					<afrelationship set_relationship="0"></afrelationship>
+				</pdfstdemb>
+				<wizard>
+					<check name="PRCWzDocu_SyntaxChecks" check_severity="0">
+					</check>
+					<check name="PRCWzXComp_PDFDocumentA" check_severity="0">
+						<data name="PDFA1a2005">0</data>
+						<data name="PDFA1b2005">0</data>
+						<data name="PDFA2a">0</data>
+						<data name="PDFA2b">0</data>
+						<data name="PDFA2u">0</data>
+						<data name="PDFA3ZFeRD">0</data>
+						<data name="PDFA3a">0</data>
+						<data name="PDFA3b">0</data>
+						<data name="PDFA3u">0</data>
+						<data name="PDFA4">1</data>
+						<data name="PDFA4e">0</data>
+						<data name="PDFA4f">0</data>
+					</check>
+					<check name="PRCWzXCompEmb_PDFDocumentA" check_severity="0">
+						<data name="PDFA1a2005">1</data>
+						<data name="PDFA1b2005">1</data>
+						<data name="PDFA2a">1</data>
+						<data name="PDFA2b">1</data>
+						<data name="PDFA2u">1</data>
+						<data name="PDFA3ZFeRD">0</data>
+						<data name="PDFA3a">0</data>
+						<data name="PDFA3b">0</data>
+						<data name="PDFA3u">0</data>
+						<data name="PDFA4">1</data>
+						<data name="PDFA4e">0</data>
+						<data name="PDFA4f">0</data>
+					</check>
+				</wizard>
+				<rulesets>
+				</rulesets>
+				<fixupsets>
+				</fixupsets>
+			</profile>
+		</profiles>
+		<metaprofs>
+		</metaprofs>
+		<profgroups>
+		</profgroups>
+	</package>
+</pdfpreflight>

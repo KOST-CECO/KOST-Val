@@ -1,6 +1,6 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
- * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
+ * Submission Information Package (SIP). Copyright (C) Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
@@ -127,10 +127,7 @@ public class Controllervalfolder implements MessageConstants
 							+ getTextResourceService().getText( locale,
 									ERROR_XML_UNKNOWN,
 									"Formatvalidation: " + e.getMessage() )
-							+ getTextResourceService().getText( locale,
-									MESSAGE_XML_FORMAT2 )
-							+ getTextResourceService().getText( locale,
-									MESSAGE_XML_LOGEND ) );
+							+ "</Format></KOSTValLog>" );
 			System.out.println( "Exception: " + e.getMessage() );
 		} catch ( StackOverflowError eso ) {
 			Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
@@ -142,11 +139,7 @@ public class Controllervalfolder implements MessageConstants
 			System.out.println( "Exception: " + "OutOfMemoryError" );
 		}
 
-		Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
-				MESSAGE_XML_FORMAT2 ) );
-
-		Logtxt.logtxt( logFile, getTextResourceService().getText( locale,
-				MESSAGE_XML_LOGEND ) );
+		Logtxt.logtxt( logFile, "</Format></KOSTValLog>" );
 
 		File callasNo = new File(
 				directoryOfLogfile + File.separator + "_callas_NO.txt" );
@@ -164,12 +157,15 @@ public class Controllervalfolder implements MessageConstants
 		float countInvalidP = 100 / (float) count * (float) countInvalid;
 		float countNotazP = 100 / (float) count * (float) countNotaz;
 		String summaryFormat = getTextResourceService().getText( locale,
-				MESSAGE_XML_SUMMARY_FORMAT, count, countValid, countInvalid,
-				countNotaz, countValidP, countInvalidP, countNotazP );
+				MESSAGE_XML_SUMMARY_FORMAT, count.toString(),
+				countValid.toString(), countInvalid.toString(),
+				countNotaz.toString(), countValidP, countInvalidP,
+				countNotazP );
 
 		String summary = "";
 		summary = getTextResourceService().getText( locale, MESSAGE_XML_SUMMARY,
-				count, countValid, countInvalid, countNotaz, countValidP,
+				count.toString(), countValid.toString(),
+				countInvalid.toString(), countNotaz.toString(), countValidP,
 				countInvalidP, countNotazP );
 
 		String newFormat = "<Format>" + summary;

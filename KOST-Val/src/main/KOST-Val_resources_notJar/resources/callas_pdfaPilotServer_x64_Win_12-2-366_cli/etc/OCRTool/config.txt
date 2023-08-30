@@ -1,0 +1,2 @@
+tessedit_create_pdf 1
+textonly_pdf 1

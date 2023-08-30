@@ -1,0 +1,88 @@
+%!PS-Adobe-3.0 Resource-ColorRendering
+%%Title: Color rendering for color monitor
+% (1.8 gamma, D65 white point, Apple phosphors)
+
+% Copyright (c) 1992-1993 Adobe Systems Incorporated.
+% All rights reserved.
+
+% Patents Pending
+
+% NOTICE:  All information contained herein is the property of
+% Adobe Systems Incorporated.  Many of the intellectual and
+% technical concepts contained herein are proprietary to Adobe,
+% are protected as trade secrets, and are made available only to
+% Adobe licensees for their internal use.  Any reproduction or
+% dissemination of this software is strictly forbidden unless
+% prior written permission is obtained from Adobe.
+
+% PostScript and Display PostScript are registered trademarks of
+% Adobe Systems Incorporated.
+
+
+%%BeginResource: colorrendering AppleMonitor
+<<
+  /ColorRenderingType 1
+
+  /MatrixLMN [
+    3.194603753446588988 -1.271960574795106885 0.04085858421157851611
+    -1.584962791662960657 2.243552326783238893 -0.2670152093680746473
+    -0.414456698983070947 -0.03177963654271747903 1.127746370636717713
+  ]
+
+  /EncodeLMN [
+    {
+      dup 0.0 ge {
+        1.0 1.8 div exp
+      } {
+        neg 1.0 1.8 div exp neg
+      } ifelse
+    } bind
+    {
+      dup 0.0 ge {
+        1.0 1.8 div exp
+      } {
+        neg 1.0 1.8 div exp neg
+      } ifelse
+    } bind
+    {
+      dup 0.0 ge {
+        1.0 1.8 div exp
+      } {
+        neg 1.0 1.8 div exp neg
+      } ifelse
+    } bind
+  ]
+
+  /WhitePoint [ 0.9505 1 1.0890 ]
+
+  /MatrixPQR [
+    0.40024 -0.22630 0.0
+    0.70760 1.16532 0.0
+    -0.08081 0.04570 0.91822
+  ]
+
+  /RangePQR [
+    -0.125 1.375
+    -0.125 1.375
+    -0.125 1.375
+  ]
+
+  /TransformPQR [
+    {
+      4 index 3 get div 2 index 3 get mul 4 {
+        exch pop
+      } repeat
+    } bind
+    {
+      4 index 4 get div 2 index 4 get mul 4 {
+        exch pop
+      } repeat
+    } bind
+    {
+      4 index 5 get div 2 index 5 get mul 4 {
+        exch pop
+      } repeat
+    } bind ]
+
+>> /AppleMonitor exch /ColorRendering defineresource pop
+%%EndResource

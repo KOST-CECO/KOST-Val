@@ -1,5 +1,5 @@
 /* == KOST-Tools ================================================================================
- * KOST-Tools. Copyright (C) KOST-CECO. 2012-2022
+ * KOST-Tools. Copyright (C) KOST-CECO.
  * -----------------------------------------------------------------------------------------------
  * KOST-Tools is a development of the KOST-CECO. All rights rest with the KOST-CECO. This
  * application is free software: you can redistribute it and/or modify it under the terms of the GNU
@@ -189,6 +189,20 @@ public class Recognition
 					} else {
 						// als XLS-Datei erkannt aber falsche Extension
 						return "XLS_ext";
+					}
+				}
+			} else if ( sb2str1.contains( "1A" ) ) {
+				// TODO B) Die moeglichen BOF kontrollieren (beginnt mit 1A)
+				if ( Magic.magicMkv( checkFile ) ) {
+					// Eine MKV-Datei muss mit.Eß£ [1A45DFA3] beginnen
+					// D) passende Extension kontrollieren (keine SiF)
+					// Eine MKV-Datei muss die extension .mkv haben
+					if ( checkFileExt.equals( ".mkv" ) ) {
+						// eindeutig als MKV-Datei erkannt
+						return "MKV";
+					} else {
+						// als MKV-Datei erkannt aber falsche Extension
+						return "MKV_ext";
 					}
 				}
 			} else if ( sb2str1.contains( "25" ) ) {
@@ -443,21 +457,18 @@ public class Recognition
 					}
 				} else {
 					// keine passende BOF gefunden ggf. Format mit nur einem Hex
-					if ( Util.stringInFile( "multipart", checkFile ) ) {
+					if ( Util.stringInFile( "multipart", checkFile )
+							&& (checkFileExt.equals( ".mht" )
+									|| checkFileExt.equals( ".mhtml" )) ) {
 						// C) fuer MHT auf SiF weiterkontrollieren
 						// Eine MHT-Datei muss den String "multipart" im File
 						// haben
 						// MHT .mht, .mhtml M 4D multipart
 						// D) passende Extension kontrollieren
 						// Eine MHT-Datei muss die extension .mht, .mhtml haben
-						if ( checkFileExt.equals( ".mht" )
-								|| checkFileExt.equals( ".mhtml" ) ) {
-							// eindeutig als MHT-Datei erkannt
-							return "MHT";
-						} else {
-							// als MHT-Datei erkannt aber falsche Extension
-							return "MHT_ext";
-						}
+						// Da es zuviele Multipart gibt, besser nichts erkennen
+						// wenn Extension nicht passt
+						return "MHT";
 					}
 				}
 			} else if ( sb2str1.contains( "4F" ) ) {
@@ -504,6 +515,24 @@ public class Recognition
 							// "workbook.xml.rels"
 							// im File haben
 							return "XLSX";
+						}
+					} else if ( checkFileExt.equals( ".docx" ) ) {
+						if ( Util.stringInFile( "document.xml.rels",
+								checkFile ) ) {
+							// C) fuer DOCX auf SiF weiterkontrollieren
+							// Eine DOCX-Datei muss den String
+							// "document.xml.rels"
+							// im File haben
+							return "DOCX";
+						}
+					} else if ( checkFileExt.equals( ".pptx" ) ) {
+						if ( Util.stringInFile( "slide1.xml.rels",
+								checkFile ) ) {
+							// C) fuer PPTX auf SiF weiterkontrollieren
+							// Eine PPTX-Datei muss den String
+							// "slide1.xml.rels"
+							// im File haben
+							return "PPTX";
 						}
 					} else if ( checkFileExt.equals( ".ods" ) ) {
 						if ( Util.stringInFile( "opendocument.spreadsheet",
@@ -622,6 +651,22 @@ public class Recognition
 						return "ARC_ext";
 					}
 				}
+			} else if ( sb2str1.contains( "7B" ) ) {
+				// TODO B) Die moeglichen BOF kontrollieren (beginnt mit 7B)
+
+				if ( Magic.magicRtf( checkFile ) ) {
+					// Eine RTF Datei (.rtf) muss mit {\rtf [7B5C727466]
+					// beginnen
+					// D) passende Extension kontrollieren (keine SiF)
+					// Eine RTF-Datei muss die extension .rtf haben
+					if ( checkFileExt.equals( ".rtf" ) ) {
+						// eindeutig als RTF-Datei erkannt
+						return "RTF";
+					} else {
+						// als RTF-Datei erkannt aber falsche Extension
+						return "RTF_ext";
+					}
+				}
 			} else if ( sb2str1.contains( "89" ) ) {
 				// TODO B) Die moeglichen BOF kontrollieren (beginnt mit 89)
 
@@ -635,6 +680,34 @@ public class Recognition
 					} else {
 						// als PNG-Datei erkannt aber falsche Extension
 						return "PNG_ext";
+					}
+				}
+			} else if ( sb2str1.contains( "D0" ) ) {
+				// TODO B) Die moeglichen BOF kontrollieren (beginnt mit D0)
+				if ( Magic.magicMsOffice( checkFile ) ) {
+					// Eine MS Office Datei 97-2003 muss mit [D0CF11E0A1B11AE1]
+					// beginnen
+
+					// (.doc .xls .ppt .msi .msg)
+					// SiF nicht möglich wegen NUL [00]
+					if ( checkFileExt.equals( ".doc" ) ) {
+						// eindeutig als DOC-Datei erkannt
+						return "DOC";
+					} else if ( checkFileExt.equals( ".xls" ) ) {
+						// eindeutig als XLS-Datei erkannt
+						return "XLS";
+					} else if ( checkFileExt.equals( ".ppt" ) ) {
+						// eindeutig als ppt-Datei erkannt
+						return "PPT";
+					} else if ( checkFileExt.equals( ".msi" ) ) {
+						// eindeutig als MSI-Datei erkannt
+						return "MSI";
+					} else if ( checkFileExt.equals( ".msg" ) ) {
+						// eindeutig als MSG-Datei erkannt
+						return "MSG";
+					} else {
+						// andere MS Office 97-2003 Datei
+						return "MsOffice";
 					}
 				}
 			} else if ( sb2str1.contains( "FF" ) ) {
@@ -764,6 +837,11 @@ public class Recognition
 						return "QTM_ext";
 					}
 				}
+			} else if ( Magic.magicDicom( checkFile ) ) {
+				// Eine Dicom-Datei (keine Dateiendung noetig) muss mit
+				// {128}4449434D beginnen !!! Offset 128 !!!
+				// hat auf keine SiF oder Dateiendung
+				return "DICOM";
 			}
 
 			// TODO: Kein passendes BOF; ggf. Format ohne BOF
@@ -783,6 +861,23 @@ public class Recognition
 			} else if ( checkFileExt.equals( ".ai" ) ) {
 				// Eine AI-Datei muss die extension .ai haben
 				return "AI";
+			} else if ( checkFileName.equals( "Thumbs.db" ) ) {
+				// Eine Thumbs.db-Datei
+				return "Thumbs.db";
+			} else if ( checkFileExt.equals( ".json" )
+					&& Util.stringInFile( "{", checkFile )
+					&& Util.stringInFile( "}", checkFile ) ) {
+				// Eine JSON Datei (.json) beginnt in der Regel mit { (7B)
+				// und enthaelt auch } alternativ [ (5B) respektive ]
+				// als JSON-Datei erkannt (keine SiF)
+				return "JSON";
+			} else if ( checkFileExt.equals( ".json" )
+					&& Util.stringInFile( "[", checkFile )
+					&& Util.stringInFile( "]", checkFile ) ) {
+				// Eine JSON Datei (.json) beginnt in der Regel mit { (7B)
+				// und enthaelt auch } alternativ [ (5B) respektive ]
+				// als JSON-Datei erkannt (keine SiF)
+				return "JSON";
 			} else {
 				// System.out.println("kein bekannte Archivformat erkannt " +
 				// checkFileExt );

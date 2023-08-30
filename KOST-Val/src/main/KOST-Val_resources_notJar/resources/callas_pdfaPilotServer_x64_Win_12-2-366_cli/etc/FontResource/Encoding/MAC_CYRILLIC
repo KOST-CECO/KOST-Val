@@ -1,0 +1,96 @@
+%!PS-Adobe-3.0 Resource-CMap
+%%DocumentNeededResources: ProcSet (CIDInit)
+%%IncludeResource: ProcSet (CIDInit)
+%%BeginResource: CMap (MAC_CYRILLIC)
+%%Title: (MAC_CYRILLIC 0)
+%%EndComments
+
+/CIDInit /ProcSet findresource begin
+
+12 dict begin
+
+begincmap
+
+/CMapName /MAC_CYRILLIC def
+/CMapType 2 def
+
+1 begincodespacerange
+  <20> <FF>
+endcodespacerange
+
+57 beginbfchar
+  <A0> <2020>
+  <A1> <00B0>
+  <A2> <0490>
+  <A3> <00A3>
+  <A4> <00A7>
+  <A5> <2022>
+  <A6> <00B6>
+  <A7> <0406>
+  <A8> <00AE>
+  <A9> <00A9>
+  <AA> <2122>
+  <AB> <0402>
+  <AC> <0452>
+  <AD> <2260>
+  <AE> <0403>
+  <AF> <0453>
+  <B0> <221E>
+  <B1> <00B1>
+  <B4> <0456>
+  <B5> <00B5>
+  <B6> <0491>
+  <B7> <0408>
+  <B8> <0404>
+  <B9> <0454>
+  <BA> <0407>
+  <BB> <0457>
+  <BC> <0409>
+  <BD> <0459>
+  <BE> <040A>
+  <BF> <045A>
+  <C0> <0458>
+  <C1> <0405>
+  <C2> <00AC>
+  <C3> <221A>
+  <C4> <0192>
+  <C5> <2248>
+  <C6> <2206>
+  <C7> <00AB>
+  <C8> <00BB>
+  <C9> <2026>
+  <CA> <00A0>
+  <CB> <040B>
+  <CC> <045B>
+  <CD> <040C>
+  <CE> <045C>
+  <CF> <0455>
+  <D6> <00F7>
+  <D7> <201E>
+  <D8> <040E>
+  <D9> <045E>
+  <DA> <040F>
+  <DB> <045F>
+  <DC> <2116>
+  <DD> <0401>
+  <DE> <0451>
+  <DF> <044F>
+  <FF> <20AC>
+endbfchar
+
+7 beginbfrange
+  <20> <7E> <0020>
+  <80> <9F> <0410>
+  <B2> <B3> <2264>
+  <D0> <D1> <2013>
+  <D2> <D3> <201C>
+  <D4> <D5> <2018>
+  <E0> <FE> <0430>
+endbfrange
+endcmap
+CMapName currentdict /CMap defineresource pop
+end
+end
+
+%%EndResource
+%%EOF

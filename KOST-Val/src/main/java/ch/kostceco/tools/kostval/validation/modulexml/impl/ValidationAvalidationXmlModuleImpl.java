@@ -1,6 +1,6 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
- * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
+ * Submission Information Package (SIP). Copyright (C) Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
@@ -37,7 +37,6 @@ import ch.kostceco.tools.kostval.exception.modulexml.ValidationAxmlvalidationExc
 import ch.kostceco.tools.kostval.logging.Logtxt;
 import ch.kostceco.tools.kostval.validation.ValidationModuleImpl;
 import ch.kostceco.tools.kostval.validation.modulexml.ValidationAvalidationXmlModule;
-import coderslagoon.badpeggy.scanner.ImageScanner.Callback;
 
 /**
  * Ist die vorliegende XML-Datei eine valide XML-Datei? XML Validierungs mit
@@ -50,7 +49,7 @@ import coderslagoon.badpeggy.scanner.ImageScanner.Callback;
  */
 
 public class ValidationAvalidationXmlModuleImpl extends ValidationModuleImpl
-		implements ValidationAvalidationXmlModule, Callback
+		implements ValidationAvalidationXmlModule
 {
 
 	private boolean min = false;
@@ -297,12 +296,5 @@ public class ValidationAvalidationXmlModuleImpl extends ValidationModuleImpl
 		// TODO: Erledigt: Fehler Auswertung
 
 		return isValid;
-	}
-
-	@Override
-	public boolean onProgress( float percent )
-	{
-		// Muss auf return true sein, da ansonsten BadPeggy nicht funktioniert
-		return true;
 	}
 }

@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
-<xsl:stylesheet version="1.0"
-	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-	<xsl:template match="/">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+	<xsl:template match="/"><!-- kost-val.xsl_v2.1.4.0 -->
 		<html>
 			<head>
 				<style>
@@ -40,17 +39,17 @@
 						<table width="100%">
 							<tr class="captioninfo">
 								<td>
-									<xsl:value-of select="Warning" />
+									<xsl:value-of select="Warning"/>
 								</td>
 							</tr>
 							<tr class="captioninfom">
 								<td>
-									<xsl:value-of select="Message" />
+									<xsl:value-of select="Message"/>
 								</td>
 							</tr>
 						</table>
 					</div>
-					<br />
+					<br/>
 				</xsl:for-each>
 				<xsl:for-each select="KOSTValLog/IoExeption">
 					<h1>Error:</h1>
@@ -58,12 +57,12 @@
 						<table width="100%">
 							<tr class="caption">
 								<td>
-									<xsl:value-of select="Error" />
+									<xsl:value-of select="Error"/>
 								</td>
 							</tr>
 						</table>
 					</div>
-					<br />
+					<br/>
 				</xsl:for-each>
 				<xsl:for-each select="KOSTValLog/Sip/Validation">
 					<xsl:if test="Invalid">
@@ -73,9 +72,9 @@
 							<table width="100%">
 								<tr class="caption">
 									<td>
-										<xsl:value-of select="ValType" />
+										<xsl:value-of select="ValType"/>
 										->
-										<xsl:value-of select="ValFile" />
+										<xsl:value-of select="ValFile"/>
 									</td>
 								</tr>
 							</table>
@@ -83,17 +82,17 @@
 								<xsl:for-each select="Error">
 									<tr class="captionm">
 										<td width="25%">
-											<xsl:value-of select="Modul" />
+											<xsl:value-of select="Modul"/>
 										</td>
 										<td width="75%">
-											<xsl:value-of select="Message" />
+											<xsl:value-of select="Message"/>
 										</td>
 									</tr>
 								</xsl:for-each>
 							</table>
 						</div>
 					</xsl:if>
-					<br />
+					<br/>
 				</xsl:for-each>
 				<xsl:for-each select="KOSTValLog/Sip/Validation">
 					<xsl:if test="Valid">
@@ -103,9 +102,9 @@
 							<table width="100%">
 								<tr class="captionio">
 									<td>
-										<xsl:value-of select="ValType" />
+										<xsl:value-of select="ValType"/>
 										->
-										<xsl:value-of select="ValFile" />
+										<xsl:value-of select="ValFile"/>
 									</td>
 								</tr>
 							</table>
@@ -113,10 +112,10 @@
 								<xsl:for-each select="Error">
 									<tr class="captioniom">
 										<td width="25%">
-											<xsl:value-of select="Modul" />
+											<xsl:value-of select="Modul"/>
 										</td>
 										<td width="75%">
-											<xsl:value-of select="Message" />
+											<xsl:value-of select="Message"/>
 										</td>
 									</tr>
 								</xsl:for-each>
@@ -124,17 +123,18 @@
 						</div>
 					</xsl:if>
 				</xsl:for-each>
-				<h1>
-					Format (
-					<xsl:value-of select="KOSTValLog/Infos/FormatValOn" />
-					):
-				</h1>
+				<h2>
+					<xsl:value-of select="KOSTValLog/Infos/FormatValOn"/>
+				</h2>
+				<h3>
+					<xsl:value-of select="KOSTValLog/Infos/FormatRecOn"/>
+				</h3>
 				<xsl:for-each select="KOSTValLog/Format/Infos">
 					<div>
 						<table width="100%">
 							<tr class="captioninfo">
 								<td>
-									<xsl:value-of select="Summary" />
+									<xsl:value-of select="Summary"/>
 								</td>
 							</tr>
 						</table>
@@ -142,13 +142,13 @@
 							<xsl:for-each select="Info">
 								<tr class="captioninfom">
 									<td>
-										<xsl:value-of select="Message" />
+										<xsl:value-of select="Message"/>
 									</td>
 								</tr>
 							</xsl:for-each>
 						</table>
 					</div>
-					<br />
+					<br/>
 				</xsl:for-each>
 				<h2>Invalid:</h2>
 				<xsl:for-each select="KOSTValLog/Format/Validation">
@@ -157,32 +157,72 @@
 							<table width="100%">
 								<tr class="caption">
 									<td>
-										<xsl:value-of select="ValType" />
-										<xsl:value-of select="FormatVL" />
-										->
-										<xsl:value-of select="ValFile" />
+										<xsl:value-of select="ValType"/>
+										<xsl:value-of select="FormatVL"/>
+										-> 
+										<xsl:value-of select="ValFile"/>
 									</td>
 								</tr>
 							</table>
 							<table width="100%">
+								<xsl:if test="md5">
+									<tr class="captionm">
+										<td width="25%">
+											Info: MD5 
+										</td>
+										<td width="75%">
+											<xsl:value-of select="md5"/>
+										</td>
+									</tr>
+								</xsl:if>
+								<xsl:if test="sha1">
+									<tr class="captionm">
+										<td width="25%">
+											Info: SHA-1
+										</td>
+										<td width="75%">
+											<xsl:value-of select="sha1"/>
+										</td>
+									</tr>
+								</xsl:if>
+								<xsl:if test="sha256">
+									<tr class="captionm">
+										<td width="25%">
+											Info: SHA-256 
+										</td>
+										<td width="75%">
+											<xsl:value-of select="sha256"/>
+										</td>
+									</tr>
+								</xsl:if>
+								<xsl:if test="sha512">
+									<tr class="captionm">
+										<td width="25%">
+											Info: SHA-512 
+										</td>
+										<td width="75%">
+											<xsl:value-of select="sha512"/>
+										</td>
+									</tr>
+								</xsl:if>
 								<xsl:for-each select="Error">
 									<tr class="captionm">
 										<td width="25%">
-											<xsl:value-of select="Modul" />
+											<xsl:value-of select="Modul"/>
 										</td>
 										<td width="75%">
 											<xsl:for-each select="Message">
-												<xsl:value-of select="." />
-												<br />
+												<xsl:value-of select="."/>
+												<br/>
 											</xsl:for-each>
 											<xsl:if test="MessageFont">
 												<table width="100%">
 													<tr class="captionm">
 														<td width="100%">
 															<strong>Producer: <xsl:value-of select="MessageFont/docInfo/producer"/>
-															</strong>	
-															<xsl:for-each select="MessageFont/fonts/font" >
-																<br />
+															</strong>
+															<xsl:for-each select="MessageFont/fonts/font">
+																<br/>
 																<txt>
 																	<strong>Font: <xsl:value-of select="@name"/>
 																	</strong>
@@ -197,7 +237,7 @@
 																		<xsl:value-of select="@fontfile"/>
 																	</xsl:if>
 																</txt>
-																<br />
+																<br/>
 																<txt>
 																	<xsl:for-each select="character">
 																		<xsl:choose>
@@ -211,7 +251,7 @@
 																			<xsl:when test="@unicode">
 																			</xsl:when>
 																			<xsl:otherwise>
-																				<img height="30"  border="1px">
+																				<img height="30" border="1px">
 																					<xsl:attribute name="src">
 																						<xsl:value-of select="."/>
 																					</xsl:attribute>
@@ -230,7 +270,7 @@
 								</xsl:for-each>
 							</table>
 						</div>
-						<br />
+						<br/>
 					</xsl:if>
 				</xsl:for-each>
 				<xsl:for-each select="KOSTValLog/Format/Validation">
@@ -239,30 +279,70 @@
 							<table width="100%">
 								<tr class="caption">
 									<td>
-										<xsl:value-of select="ValType" />
-										<xsl:value-of select="FormatVL" />
+										<xsl:value-of select="ValType"/>
+										<xsl:value-of select="FormatVL"/>
 										->
-										<xsl:value-of select="ValFile" />
+										<xsl:value-of select="ValFile"/>
 									</td>
 								</tr>
 							</table>
 							<table width="100%">
+								<xsl:if test="md5">
+									<tr class="captionm">
+										<td width="25%">
+											Info: MD5 
+										</td>
+										<td width="75%">
+											<xsl:value-of select="md5"/>
+										</td>
+									</tr>
+								</xsl:if>
+								<xsl:if test="sha1">
+									<tr class="captionm">
+										<td width="25%">
+											Info: SHA-1
+										</td>
+										<td width="75%">
+											<xsl:value-of select="sha1"/>
+										</td>
+									</tr>
+								</xsl:if>
+								<xsl:if test="sha256">
+									<tr class="captionm">
+										<td width="25%">
+											Info: SHA-256 
+										</td>
+										<td width="75%">
+											<xsl:value-of select="sha256"/>
+										</td>
+									</tr>
+								</xsl:if>
+								<xsl:if test="sha512">
+									<tr class="captionm">
+										<td width="25%">
+											Info: SHA-512 
+										</td>
+										<td width="75%">
+											<xsl:value-of select="sha512"/>
+										</td>
+									</tr>
+								</xsl:if>
 								<xsl:for-each select="Error">
 									<tr class="captionm">
 										<td width="25%">
-											<xsl:value-of select="Modul" />
+											<xsl:value-of select="Modul"/>
 										</td>
 										<td width="75%">
 											<xsl:for-each select="Message">
-												<xsl:value-of select="." />
-												<br />
+												<xsl:value-of select="."/>
+												<br/>
 											</xsl:for-each>
 										</td>
 									</tr>
 								</xsl:for-each>
 							</table>
 						</div>
-						<br />
+						<br/>
 					</xsl:if>
 				</xsl:for-each>
 				<h2>Valid:</h2>
@@ -272,23 +352,63 @@
 							<table width="100%">
 								<tr class="captionio">
 									<td>
-										<xsl:value-of select="ValType" />
-										<xsl:value-of select="FormatVL" />
+										<xsl:value-of select="ValType"/>
+										<xsl:value-of select="FormatVL"/>
 										->
-										<xsl:value-of select="ValFile" />
+										<xsl:value-of select="ValFile"/>
 									</td>
 								</tr>
 							</table>
 							<table width="100%">
+								<xsl:if test="md5">
+									<tr class="captioniom">
+										<td width="25%">
+											Info: MD5 
+										</td>
+										<td width="75%">
+											<xsl:value-of select="md5"/>
+										</td>
+									</tr>
+								</xsl:if>
+								<xsl:if test="sha1">
+									<tr class="captioniom">
+										<td width="25%">
+											Info: SHA-1
+										</td>
+										<td width="75%">
+											<xsl:value-of select="sha1"/>
+										</td>
+									</tr>
+								</xsl:if>
+								<xsl:if test="sha256">
+									<tr class="captioniom">
+										<td width="25%">
+											Info: SHA-256 
+										</td>
+										<td width="75%">
+											<xsl:value-of select="sha256"/>
+										</td>
+									</tr>
+								</xsl:if>
+								<xsl:if test="sha512">
+									<tr class="captioniom">
+										<td width="25%">
+											Info: SHA-512 
+										</td>
+										<td width="75%">
+											<xsl:value-of select="sha512"/>
+										</td>
+									</tr>
+								</xsl:if>
 								<xsl:for-each select="Error">
 									<tr class="captioniom">
 										<td width="25%">
-											<xsl:value-of select="Modul" />
+											<xsl:value-of select="Modul"/>
 										</td>
 										<td width="75%">
 											<xsl:for-each select="Message">
-												<xsl:value-of select="." />
-												<br />
+												<xsl:value-of select="."/>
+												<br/>
 											</xsl:for-each>
 										</td>
 									</tr>
@@ -303,23 +423,63 @@
 							<table width="100%">
 								<tr class="captionio">
 									<td>
-										<xsl:value-of select="ValType" />
-										<xsl:value-of select="FormatVL" />
+										<xsl:value-of select="ValType"/>
+										<xsl:value-of select="FormatVL"/>
 										->
-										<xsl:value-of select="ValFile" />
+										<xsl:value-of select="ValFile"/>
 									</td>
 								</tr>
 							</table>
 							<table width="100%">
+								<xsl:if test="md5">
+									<tr class="captioniom">
+										<td width="25%">
+											Info: MD5 
+										</td>
+										<td width="75%">
+											<xsl:value-of select="md5"/>
+										</td>
+									</tr>
+								</xsl:if>
+								<xsl:if test="sha1">
+									<tr class="captioniom">
+										<td width="25%">
+											Info: SHA-1
+										</td>
+										<td width="75%">
+											<xsl:value-of select="sha1"/>
+										</td>
+									</tr>
+								</xsl:if>
+								<xsl:if test="sha256">
+									<tr class="captioniom">
+										<td width="25%">
+											Info: SHA-256 
+										</td>
+										<td width="75%">
+											<xsl:value-of select="sha256"/>
+										</td>
+									</tr>
+								</xsl:if>
+								<xsl:if test="sha512">
+									<tr class="captioniom">
+										<td width="25%">
+											Info: SHA-512 
+										</td>
+										<td width="75%">
+											<xsl:value-of select="sha512"/>
+										</td>
+									</tr>
+								</xsl:if>
 								<xsl:for-each select="Error">
 									<tr class="captioniom">
 										<td width="25%">
-											<xsl:value-of select="Modul" />
+											<xsl:value-of select="Modul"/>
 										</td>
 										<td width="75%">
 											<xsl:for-each select="Message">
-												<xsl:value-of select="." />
-												<br />
+												<xsl:value-of select="."/>
+												<br/>
 											</xsl:for-each>
 										</td>
 									</tr>
@@ -328,15 +488,15 @@
 						</div>
 					</xsl:if>
 				</xsl:for-each>
-				<br />
-				<hr noshade="noshade" size="1" />
+				<br/>
+				<hr noshade="noshade" size="1"/>
 				<h3>
-					<xsl:value-of select="KOSTValLog/Infos/Start" />
+					<xsl:value-of select="KOSTValLog/Infos/Start"/>
 					-
-					<xsl:value-of select="KOSTValLog/Infos/End" />
+					<xsl:value-of select="KOSTValLog/Infos/End"/>
 				</h3>
 				<p class="footer">
-					<xsl:value-of select="KOSTValLog/Infos/Info" />
+					<xsl:value-of select="KOSTValLog/Infos/Info"/>
 				</p>
 			</body>
 		</html>

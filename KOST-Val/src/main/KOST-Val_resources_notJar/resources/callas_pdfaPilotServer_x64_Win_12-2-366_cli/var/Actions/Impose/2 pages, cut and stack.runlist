@@ -1,0 +1,31 @@
+NAME	DICT_2pagescutandstack
+SLOT_FILTER	*	1-2	*
+SLOT_FILTER	*	101	*
+PAGES_PER_SHEET	2
+#===================================
+#Runlist
+Set	CropMarkLength	"2,0mm"
+Set	CropMarkWidth	"0,04mm"
+Set	CropMarkGap	"2,0mm"
+Set	TextSize	"12pt"
+Set	TextFont	"Helvetica"
+Set	PagesPerSheet	2
+Set	PrintedSides	1
+# Fill up missing pages to PagesPerSheet
+Set	c	var('LastPage')%(var('PagesPerSheet')*var('PrintedSides'))
+If	VAR('c') > 0
+	Set	LastPage	var('LastPage')+((var('PagesPerSheet')*var('PrintedSides'))-var('c'))
+Else
+EndIf
+AppendPages
+Set	LastPage	var('LastPage')/2
+Set	MidPage	var('LastPage')+1
+Loop
+NewSheet
+PlaceText	Slot_101	datetime("YYYY-MM-DD, hh:mm") & " - Plate " & var('CurrentSheet') & " - File: " & filename(docpath())
+PositionPage	MidPage	Slot_2
+Set	MidPage	var('MidPage')+1
+PositionPage	FirstPage	Slot_1
+Set	FirstPage	var('FirstPage')+1
+#===================================
+#EOF

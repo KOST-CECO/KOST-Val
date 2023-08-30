@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-	<xsl:template match="/"><!-- kostval.conf.xml_v2.1.3.0 -->
+	<xsl:template match="/"><!-- kostval.conf.xml_v2.1.4.0 -->
 		<html>
 			<head>
 				<style>
@@ -110,6 +110,12 @@
 						<td>Erlaubte PDF/A Versionen [1A, 1B, 2A, 2B, 2U]:</td>
 						<td>
 							<xsl:value-of select="configuration/pdfa/pdfa1a" />&#160; <xsl:value-of select="configuration/pdfa/pdfa1b" />&#160; <xsl:value-of select="configuration/pdfa/pdfa2a" />&#160;<xsl:value-of select="configuration/pdfa/pdfa2b" />&#160; <xsl:value-of select="configuration/pdfa/pdfa2u" />
+						</td>
+					</tr>
+					<tr  class="captioninfom">
+						<td>PDF/A-3 nach PDF/A-2 validieren und Warnung anstelle eines Fehlers ausgeben [yes]:</td>
+						<td>
+							<xsl:value-of select="configuration/pdfa/warning3to2" />
 						</td>
 					</tr>
 					<tr  class="captioninfom">
@@ -222,31 +228,31 @@
 
 <!-- VIDEO -->
 					<tr  class="captioninfo">
-						<td>FFV1: Akzeptanz [(&#x2713;)]</td>
+						<td>MKV (FFV1-FLAC): Akzeptanz [(&#x2713;)]</td>
 						<td>
-							<xsl:value-of select="configuration/ffv1/ffv1validation" />
+							<xsl:value-of select="configuration/mkv/mkvvalidation" />
 						</td>
 					</tr>
 
 					<tr  class="captioninfo">
-						<td>MP4: Akzeptanz [(&#x2713;)]</td>
+						<td>MP4 (AVC-MP3): Akzeptanz [(&#x2713;)]</td>
 						<td>
 							<xsl:value-of select="configuration/mp4/mp4validation" />
 						</td>
 					</tr>
 
+<!-- DATEN -->
 					<tr  class="captioninfo">
-						<td>MJ2: Akzeptanz [(&#x2713;)]</td>
+						<td>XML: Akzeptanz und Validierung [(&#x2713;)]</td>
 						<td>
-							<xsl:value-of select="configuration/mj2/mj2validation" />
+							<xsl:value-of select="configuration/xml/xmlvalidation" />
 						</td>
 					</tr>
 
-<!-- DATEN -->
 					<tr  class="captioninfo">
-						<td>XML: Akzeptanz und Validierung [&#x2713;]</td>
+						<td>JSON: Akzeptanz [(&#x2713;)]</td>
 						<td>
-							<xsl:value-of select="configuration/xml/xmlvalidation" />
+							<xsl:value-of select="configuration/json/jsonvalidation" />
 						</td>
 					</tr>
 
@@ -257,9 +263,9 @@
 						</td>
 					</tr>
 					<tr  class="captioninfom">
-						<td>Erlaubte SIARD Versionen [1.0, 2.1]:</td>
+						<td>Erlaubte SIARD Versionen [1.0, 2.1, 2.2]:</td>
 						<td>
-							<xsl:value-of select="configuration/siard/siard10" />&#160; <xsl:value-of select="configuration/siard/siard21" />
+							<xsl:value-of select="configuration/siard/siard10" />&#160; <xsl:value-of select="configuration/siard/siard21" />&#160; <xsl:value-of select="configuration/siard/siard22" />
 						</td>
 					</tr>
 
@@ -303,12 +309,34 @@
 							<xsl:value-of select="configuration/sip/allowedsipname" />
 						</td>
 					</tr>
+					<tr  class="captioninfom">
+						<td>Nur Warnung bei alten Dokumenten (Entstehungszeitraum) [no]:</td>
+						<td>
+							<xsl:value-of select="configuration/sip/warningolddok" />
+						</td>
+					</tr>
 
 <!-- SONSTIGES -->
 					<tr  class="captioninfo">
 						<td>Weitere akzeptierte Dateiformate [WARC, HTML, DWG]:</td>
 						<td>
-							<xsl:value-of select="configuration/otherformats" />
+							<xsl:value-of select="configuration/otherformats/docxvalidation" />
+							<xsl:value-of select="configuration/otherformats/pptxvalidation" />
+							<xsl:value-of select="configuration/otherformats/rtfvalidation" />
+							<xsl:value-of select="configuration/otherformats/jpxvalidation" />
+							<xsl:value-of select="configuration/otherformats/jpmvalidation" />
+							<xsl:value-of select="configuration/otherformats/svgvalidation" />
+							<xsl:value-of select="configuration/otherformats/oggvalidation" />
+							<xsl:value-of select="configuration/otherformats/mpeg2validation" />
+							<xsl:value-of select="configuration/otherformats/htmlvalidation" />
+							<xsl:value-of select="configuration/otherformats/warcvalidation" />
+							<xsl:value-of select="configuration/otherformats/arcvalidation" />
+							<xsl:value-of select="configuration/otherformats/dwgvalidation" />
+							<xsl:value-of select="configuration/otherformats/ifcvalidation" />
+							<xsl:value-of select="configuration/otherformats/dxfvalidation" />
+							<xsl:value-of select="configuration/otherformats/interlisvalidation" />
+							<xsl:value-of select="configuration/otherformats/dicomvalidation" />
+							<xsl:value-of select="configuration/otherformats/msgvalidation" />
 						</td>
 					</tr>
 					<tr  class="captioninfo">
@@ -323,6 +351,12 @@
 							<xsl:value-of select="configuration/standardinputdir" />
 						</td>
 					</tr>
+					<tr  class="captioninfo">
+						<td>Hashwert von Dateien berechnen und ausgeben. Leer bedeutet keine Berechnung und Ausgabe []:</td>
+						<td>
+							<xsl:value-of select="configuration/hash" />
+						</td>
+					</tr> 
 				</table>
 			</body>
 		</html>

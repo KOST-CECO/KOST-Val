@@ -1,0 +1,40 @@
+NAME	DICT_12x184pagesStatementheadtoheaddoublesidedrotated
+SHEET	0'	0'	18'	12'
+SHEET	0'	0'	18'	12'
+PAGESIZE_FILTER	8,5'	5,5'	2mm	2mm	ANY
+
+
+#===================================
+# SLOT - List of slots for sheet configuration
+# name
+# eSlotNo
+# eSheetNo
+# eTrimBoxLeft
+# eTrimBoxBottom
+# eTrimBoxWidth
+# eTrimBoxHeight
+# eBleedOffsetLeft
+# eBleedOffsetBottom
+# eBleedOffsetRight
+# eBleedOffsetTop
+# eScaleX: -1: fit to slot
+# eScaleY: -1: fit to slot 
+# eRotation
+# ePlacement
+# eBindingMargin
+# eCropMarkStyleLeftBottom
+# eCropMarkStyleRightBottom
+# eCropMarkStyleRightTop
+# eCropMarkStyleLeftTop
+#===================================
+SLOT		2	1	0,625'	0,375'	8,5'	5,5'	9pt	9pt	0mm	9pt	100	100	0	RT	R	LB	B	N	L
+SLOT		1	1	9,125'	0,375'	8,5'	5,5'	0mm	9pt	9pt	9pt	100	100	0	LT	L	B	RB	R	N
+SLOT		4	1	0,625'	6,125'	8,5'	5,5'	9pt	9pt	0mm	9pt	100	100	180	RB	R	L	N	T	LT
+SLOT		3	1	9,125'	6,125'	8,5'	5,5'	0mm	9pt	9pt	9pt	100	100	180	LB	L	N	R	RT	T
+SLOT		1	2	0,375'	0,375'	8,5'	5,5'	9pt	9pt	0mm	9pt	100	100	0	RT	R	LB	B	N	L
+SLOT		2	2	8,875'	0,375'	8,5'	5,5'	0mm	9pt	9pt	9pt	100	100	0	LT	L	B	RB	R	N
+SLOT		3	2	0,625'	6,125'	8,5'	5,5'	9pt	9pt	0mm	9pt	100	100	180	RB	R	L	N	T	LT
+SLOT		4	2	8,875'	6,125'	8,5'	5,5'	0mm	9pt	9pt	9pt	100	100	180	LB	L	N	R	RT	T
+SLOT		101	1	0,325'	0,375'	0,2'	11'	0'	0'	0'	0'	100	100	90	RB	N	N	N	N	N
+SLOT		101	2	0,325'	0,375'	0,2'	11'	0'	0'	0'	0'	100	100	90	RB	N	N	N	N	N
+

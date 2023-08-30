@@ -1,0 +1,426 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+	<title>pdfaPilot Report</title>
+	<meta http-equiv="Content-Type" content="text/html"; charset="utf-8"/>
+    <style type="text/css" media="all">
+/*----------------------------------------------------------------------------------------*/
+/* General */
+/*----------------------------------------------------------------------------------------*/
+
+
+body {
+	alignment: left;
+	background-color: #ffffff;
+	color: #000000;
+	font-family: Arial,Tahoma,sans-serif;
+	font-size: 10pt;
+	margin: 0px;
+	padding: 0px;
+	text-align: left;
+}
+
+
+a:link, a:visited, a:active {
+	color: #000000;
+}
+
+img {
+	border: 0px;
+}
+
+.b {
+	font-weight:bold;
+}
+
+
+
+
+/*----------------------------------------------------------------------------------------*/
+/* Report blocks */
+/*----------------------------------------------------------------------------------------*/
+
+
+#block_head {
+  	width:425px;
+}
+
+.block_head_text {
+	font-size:14pt;
+	font-weight:bold;
+}
+
+#block_content {
+	padding-top:10px;
+}
+
+#block_space  {
+	margin-top:15px;
+}
+
+#block_space_pagebottom  {
+	margin-top:1000px;
+}
+
+
+/* Block pdfaPilot Report */
+
+#block_pdfapilotReport_content {
+	font-size:8pt;
+	height:230px;
+ 	width:340px;
+ 	overflow:auto;
+}
+
+#block_pdfapilotReport_content_result, #block_pdfapilotReport_content_result_PDF, #block_pdfapilotReport_content_result_PDFA, #block_pdfapilotReport_content_result_PDFA_notval {
+	font-size:11pt;
+	font-weight:bold;
+}
+
+#block_pdfapilotReport_content_result_PDF {
+	color:#cc0000;
+	font-size:11pt;
+	font-weight:bold;
+}
+
+#block_pdfapilotReport_content_result_PDFA {
+	color:#00aa00;
+	font-size:11pt;
+	font-weight:bold;
+}
+
+
+/* Block Fixups */
+
+.block_fixups_content {
+	font-size:11pt;
+	font-weight:bold;
+}
+
+
+/* Block Problems */
+
+#block_problems_content {
+	font-size:11pt;
+	font-weight:bold;
+}
+
+.block_problems_description {
+	font-size:8pt;
+	width:360px;
+}
+
+.block_problems_problemsdescription {
+	font-size:10pt;
+/* 	width:360px;*/
+ 	padding-bottom:6px;
+	margin-left:13px;
+}
+
+.block_problems_problemsdescription a:hover {
+	color:#CC0000;
+}
+
+.block_problems_description_details {
+	font-size:8pt;
+ 	padding-bottom:3px;
+}
+
+
+
+/*----------------------------------------------------------------------------------------*/
+/* Open and Close functionality */
+/*----------------------------------------------------------------------------------------*/
+
+
+li.treeMenu_closed {
+}
+
+ul li.treeMenu_opened {
+}
+
+ul li.treeMenu_opened_js {
+}
+
+ul li.treeMenu_closed ul {
+	display:none;
+}
+
+.listparent {
+	cursor:pointer;
+}
+    </style>
+    <style type="text/css" media="print">
+/* Removes the white space at the bottom of the page for print output */
+
+#block_space_pagebottom  {
+	margin-top:0px;
+}
+    </style>
+    <script type="text/javascript">
+	<!--
+/*	Add event handler and css classes to list entries to close the menu item at start
+	menu:   reference of the list
+	data:   string contains numbers of opened menu items
+	force:  force open menu items
+*/
+function treeMenu_init( menu, data, force)
+{
+	var array = new Array( 0);
+	if( null != data && "" != data) {
+		array = data.match( /\d+/g);
+	}
+	if( null == menu) {
+		return;
+	}
+	var items = menu.getElementsByTagName( "li");
+	for( var i = 0; i < items.length; ++i) {
+		if( !treeMenu_contains( treeMenu_getClasses( items[ i]), "treeMenu_opened")
+		 && items[ i].getElementsByTagName( "ul").length
+		  + items[ i].getElementsByTagName( "ol").length > 0)
+		{
+			var classes = treeMenu_getClasses( items[ i]);
+			if( array.length > 0 && i == array[ 0]) {
+				classes.push( "treeMenu_opened")
+			} else {
+				classes.push( "treeMenu_closed")
+				if( force) {
+					treeMenu_toggle( classes);
+				}
+			}
+			items[ i].className = classes.join( " ");
+		}
+		if( array.length > 0 && i == array[ 0]) {
+			array.shift();
+		}
+	}
+	items = menu.getElementsByTagName( "div");
+	for( var i = 0; i < items.length; ++i) {
+		if( items[ i].className == "treeMenu_clickable") {
+            items[ i].onclick = treeMenu_handleClick;
+		}
+	}
+}
+
+/*	Perform click events on menu items (open and close items)
+	event:  the event object
+*/
+function treeMenu_handleClick( event)
+{
+	if( event == null) { // IE workaround for missing DOM support
+		event = window.event;
+		event.currentTarget = event.srcElement;
+		while(( "div" != event.currentTarget.nodeName.toLowerCase()) || ("treeMenu_clickable" != event.currentTarget.className)) {
+			event.currentTarget = event.currentTarget.parentNode;
+		}
+		event.cancelBubble = true;
+	} else {
+		event.stopPropagation();
+	}
+	node = event.currentTarget.parentNode;
+	var array = treeMenu_getClasses( node);
+	treeMenu_toggle( array);
+	node.className = array.join( " ");
+}
+
+/*	Toggle menu items (open and close items)
+	array:  the array
+*/
+function treeMenu_toggle( array)
+{
+	for( var i = 0; i < array.length; ++i) {
+		if( "treeMenu_closed" == array[ i]) {
+			array[ i] = "treeMenu_opened";
+		} else if( "treeMenu_opened" == array[ i]) {
+			array[ i] = "treeMenu_closed"
+		} else if( "treeMenu_opened_js" == array[ i]) {
+			array[ i] = "treeMenu_opened"
+		}
+	}
+}
+
+/*	return all assigned classes of a HTML element
+	element:  HTML element
+	return:   assigned classes
+*/
+function treeMenu_getClasses( element)
+{
+	if( element.className) {
+		return element.className.match( /[^ \t\n\r]+/g);
+	} else {
+		return new Array( 0);
+	}
+}
+
+/*	validate existence of special element in an array
+	array:    the array
+	element:  the element
+	return:   true, if element found
+*/
+function treeMenu_contains( array, element)
+{
+	for( var i = 0; i < array.length; ++i) {
+		if( element == array[ i]) {
+			return true;
+		}
+	}
+	return false;
+}
+
+/*	return list of numbers of all opened menu items as string
+	menu:    reference of the list
+	return:  the string
+*/
+function treeMenu_store( menu)
+{
+	var result = new Array();
+	if( null == menu) {
+		return result.join( " ");
+	}
+	var items = menu.getElementsByTagName( "li");
+	for( var i = 0; i < items.length; ++i) {
+		if( treeMenu_contains( treeMenu_getClasses( items[ i]), "treeMenu_opened")) {
+			result.push( i);
+		}
+	}
+	return result.join( " ");
+}
+	-->
+	</script>
+</head>
+<body scroll="auto" onunload="window.name = escape(
+treeMenu_store(document.getElementById('fixups')) + ',' +
+treeMenu_store(document.getElementById('problems')) + ',' +
+treeMenu_store(document.getElementById('000')) + ',' +
+treeMenu_store(document.getElementById('010')) + ',' +
+treeMenu_store(document.getElementById('020')) + ',' +
+treeMenu_store(document.getElementById('030')) + ',' +
+treeMenu_store(document.getElementById('033')) + ',' +
+treeMenu_store(document.getElementById('035')) + ',' +
+treeMenu_store(document.getElementById('040')) + ',' +
+treeMenu_store(document.getElementById('050')) + ',' +
+treeMenu_store(document.getElementById('060')) + ',' +
+treeMenu_store(document.getElementById('070')) + ',' +
+treeMenu_store(document.getElementById('080')) + ',' +
+treeMenu_store(document.getElementById('090')) + ',' +
+treeMenu_store(document.getElementById('100')) + ',' +
+treeMenu_store(document.getElementById('105')) + ',' +
+treeMenu_store(document.getElementById('110')) + ',' +
+treeMenu_store(document.getElementById('120')) + ',' +
+treeMenu_store(document.getElementById('130')) + ',' +
+treeMenu_store(document.getElementById('140')) + ',' +
+treeMenu_store(document.getElementById('150')) + ',' +
+treeMenu_store(document.getElementById('160')) + ',' +
+treeMenu_store(document.getElementById('170')) + ',' +
+treeMenu_store(document.getElementById('180')) + ',' +
+treeMenu_store(document.getElementById('190')) + ',' +
+treeMenu_store(document.getElementById('200')) + ',' +
+treeMenu_store(document.getElementById('210')) + ',' +
+treeMenu_store(document.getElementById('220')) + ',' +
+treeMenu_store(document.getElementById('230')) + ',' +
+treeMenu_store(document.getElementById('240')) + ',' +
+treeMenu_store(document.getElementById('250')) + ',' +
+treeMenu_store(document.getElementById('260')) + ',' +
+treeMenu_store(document.getElementById('270')) + ',' +
+treeMenu_store(document.getElementById('275')) + ',' +
+treeMenu_store(document.getElementById('280')) + ',' +
+treeMenu_store(document.getElementById('290')) + ',' +
+treeMenu_store(document.getElementById('300')))	 ">
+
+	<div id=block_pdfapilotReport>
+
+		<table cellspacing=0 cellpadding=0 border=0 style="background:#9999cc;width:410;margin-bottom:3px;">
+			<tr>
+				<td width=20 height=50 align=center>
+				</td>
+				<td width=390 align=left>
+					<span class=block_head_text>
+						@NO_TRANSLATION(Dict_REPORT_PDFA_Report_HeadReport)
+					</span>
+				</td>
+			</tr>
+		</table>
+
+		<table cellspacing=0 cellpadding=0 border=0 style="background:#dddddd;" id=block_content>
+			<tr>
+				<td width=20 height=240 align=center valign=top>
+				</td>
+				<td width=390 align=left valign=top>
+					<div id=block_pdfapilotReport_content>
+						<div id=block_pdfapilotReport_content_result_@(VAR_PDFAdocstatus) style="padding-top:3px;padding-bottom:9px;">
+							@(VAR_PDFAresultstatus)<br>
+							@(VAR_PDFAoriginPDFFile)
+						</div>
+						@NO_TRANSLATION(Dict_REPORT_PDFA_InfoField_FileInfo_Title)<br>
+						@NO_TRANSLATION(Dict_REPORT_PDFA_InfoField_FileInfo_Author)<br>
+						@NO_TRANSLATION(Dict_REPORT_PDFA_InfoField_FileInfo_PagesOfPDF)<br>
+						@NO_TRANSLATION(Dict_REPORT_PDFA_InfoField_FileInfo_Filesize)<br>
+						@NO_TRANSLATION(Dict_REPORT_PDFA_InfoField_FileInfo_Origin)<br>
+						@NO_TRANSLATION(Dict_REPORT_PDFA_InfoField_FileInfo_CreatedWith)<br>
+						@NO_TRANSLATION(Dict_REPORT_PDFA_InfoField_FileInfo_LastChange)<br><br>
+						@(VAR_PDFAshowadditionalChecks)<br>
+						@NO_TRANSLATION(Dict_REPORT_PDFA_Report_ReportCreationDate)<br>
+						@NO_TRANSLATION(Dict_REPORT_PDFA_Report_Version)
+					</div>
+				</td>
+			</tr>
+		</table>
+
+
+	</div>
+
+	<div id=block_space></div>
+
+@(VAR_PDFAreportcorrections)
+
+	<div id=block_space></div>
+
+@(VAR_PDFAreportproblems)
+
+	<div id=block_space_pagebottom></div>
+
+	<script type="text/javascript">
+	<!--
+		var forceOpen = @(VAR_PDFAreportforceopen);
+		treeMenu_init(document.getElementById('fixups'), unescape(window.name).split(',')[0], forceOpen);
+		treeMenu_init(document.getElementById('problems'), unescape(window.name).split(',')[1], forceOpen);
+		treeMenu_init(document.getElementById('000'), unescape(window.name).split(',')[2], forceOpen);
+		treeMenu_init(document.getElementById('010'), unescape(window.name).split(',')[3], forceOpen);
+		treeMenu_init(document.getElementById('020'), unescape(window.name).split(',')[4], forceOpen);
+		treeMenu_init(document.getElementById('030'), unescape(window.name).split(',')[5], forceOpen);
+		treeMenu_init(document.getElementById('033'), unescape(window.name).split(',')[6], forceOpen);
+		treeMenu_init(document.getElementById('035'), unescape(window.name).split(',')[7], forceOpen);
+		treeMenu_init(document.getElementById('040'), unescape(window.name).split(',')[8], forceOpen);
+		treeMenu_init(document.getElementById('050'), unescape(window.name).split(',')[9], forceOpen);
+		treeMenu_init(document.getElementById('060'), unescape(window.name).split(',')[10], forceOpen);
+		treeMenu_init(document.getElementById('070'), unescape(window.name).split(',')[11], forceOpen);
+		treeMenu_init(document.getElementById('080'), unescape(window.name).split(',')[12], forceOpen);
+		treeMenu_init(document.getElementById('090'), unescape(window.name).split(',')[13], forceOpen);
+		treeMenu_init(document.getElementById('100'), unescape(window.name).split(',')[14], forceOpen);
+		treeMenu_init(document.getElementById('105'), unescape(window.name).split(',')[15], forceOpen);
+		treeMenu_init(document.getElementById('110'), unescape(window.name).split(',')[16], forceOpen);
+		treeMenu_init(document.getElementById('120'), unescape(window.name).split(',')[17], forceOpen);
+		treeMenu_init(document.getElementById('130'), unescape(window.name).split(',')[18], forceOpen);
+		treeMenu_init(document.getElementById('140'), unescape(window.name).split(',')[19], forceOpen);
+		treeMenu_init(document.getElementById('150'), unescape(window.name).split(',')[20], forceOpen);
+		treeMenu_init(document.getElementById('160'), unescape(window.name).split(',')[21], forceOpen);
+		treeMenu_init(document.getElementById('170'), unescape(window.name).split(',')[22], forceOpen);
+		treeMenu_init(document.getElementById('180'), unescape(window.name).split(',')[23], forceOpen);
+		treeMenu_init(document.getElementById('190'), unescape(window.name).split(',')[24], forceOpen);
+		treeMenu_init(document.getElementById('200'), unescape(window.name).split(',')[25], forceOpen);
+		treeMenu_init(document.getElementById('210'), unescape(window.name).split(',')[26], forceOpen);
+		treeMenu_init(document.getElementById('220'), unescape(window.name).split(',')[27], forceOpen);
+		treeMenu_init(document.getElementById('230'), unescape(window.name).split(',')[28], forceOpen);
+		treeMenu_init(document.getElementById('240'), unescape(window.name).split(',')[29], forceOpen);
+		treeMenu_init(document.getElementById('250'), unescape(window.name).split(',')[30], forceOpen);
+		treeMenu_init(document.getElementById('260'), unescape(window.name).split(',')[31], forceOpen);
+		treeMenu_init(document.getElementById('270'), unescape(window.name).split(',')[31], forceOpen);
+		treeMenu_init(document.getElementById('275'), unescape(window.name).split(',')[32], forceOpen);
+		treeMenu_init(document.getElementById('280'), unescape(window.name).split(',')[33], forceOpen);
+		treeMenu_init(document.getElementById('290'), unescape(window.name).split(',')[34], forceOpen);
+		treeMenu_init(document.getElementById('300'), unescape(window.name).split(',')[35], forceOpen);
+	-->
+	</script>
+
+</body>
+</html>

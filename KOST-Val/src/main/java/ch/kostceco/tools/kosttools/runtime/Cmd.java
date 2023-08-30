@@ -1,5 +1,5 @@
 /* == KOST-Tools ================================================================================
- * KOST-Tools. Copyright (C) KOST-CECO. 2012-2022
+ * KOST-Tools. Copyright (C) KOST-CECO.
  * -----------------------------------------------------------------------------------------------
  * KOST-Tools is a development of the KOST-CECO. All rights rest with the KOST-CECO. This
  * application is free software: you can redistribute it and/or modify it under the terms of the GNU
@@ -53,6 +53,80 @@ public class Cmd
 		Process p = null;
 		try {
 			p = Runtime.getRuntime().exec( "cmd /c " + command, null, workDir );
+			// sed funktioniert nicht mit .split(" ")
+
+		} catch ( IOException ex ) {
+			System.out.println( "IOException exec P: " + ex );
+		}
+		String line = "";
+		String lineE = "";
+		String lineReturn = line;
+		try {
+			if ( out ) {
+				// System.out.println( "OUTPUT" );
+				InputStream stream = p.getInputStream();
+				BufferedReader in = new BufferedReader(
+						new InputStreamReader( stream ) );
+				while ( (line = in.readLine()) != null ) {
+					// System.out.println(line);
+					if ( lineReturn.equals( "" ) ) {
+						lineReturn = line;
+					} else {
+						if ( lineReturn.contains( line ) ) {
+							// Fehler bereits festgehalten (dublikat)
+						} else {
+							lineReturn = lineReturn + "</Message><Message>"
+									+ line;
+						}
+					}
+				}
+				in.close();
+			}
+			// System.out.println( "ERROR-OUTPUT" );
+			InputStream streamE = p.getErrorStream();
+			BufferedReader inE = new BufferedReader(
+					new InputStreamReader( streamE ) );
+			while ( (lineE = inE.readLine()) != null ) {
+				// System.out.println(lineE);
+				if ( lineReturn.equals( "" ) ) {
+					lineReturn = "ERROR: " + lineE;
+				} else {
+					if ( lineReturn.contains( lineE ) ) {
+						// Fehler bereits festgehalten (dublikat)
+					} else {
+						lineReturn = lineReturn + "</Message><Message>ERROR: "
+								+ lineE;
+					}
+				}
+			}
+			inE.close();
+		} catch ( IOException ex ) {
+			System.out.println( "IOException exec Out Err: " + ex );
+		}
+		if ( lineReturn.equals( "" ) ) {
+			lineReturn = "OK";
+		}
+		// System.out.println("return String exec: "+lineReturn);
+		return lineReturn;
+	}
+
+	public static String execToStringSplit( String command, boolean out,
+			File workDir ) throws InterruptedException
+	{
+		/*
+		 * command = "\"\"" + exeFile.getAbsolutePath() + "\"" +
+		 * " --noout --stream --nowarning --schema " + "\"" +
+		 * xsdFile.getAbsolutePath() + "\"" + " " + "\"" +
+		 * xmlFile.getAbsolutePath() + "\"\"";
+		 */
+
+		// System.out.println( "executing command: " + command );
+		Process p = null;
+		try {
+			p = Runtime.getRuntime().exec( ("cmd /c " + command).split( " " ),
+					null, workDir );
+			// .split(" ") ist notwendig wenn in einem Pfad ein Doppelleerschlag
+			// vorhanden ist!
 
 		} catch ( IOException ex ) {
 			System.out.println( "IOException exec P: " + ex );

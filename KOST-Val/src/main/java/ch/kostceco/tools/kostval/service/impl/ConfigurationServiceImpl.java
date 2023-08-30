@@ -1,6 +1,6 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
- * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
+ * Submission Information Package (SIP). Copyright (C) Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
@@ -245,6 +245,15 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String pdfafont = doc.getElementsByTagName( "pdfafont" ).item( 0 )
 					.getTextContent();
 			configMap.put( "pdfafont", pdfafont );
+
+			/*
+			 * checkWarning3to2 validiert wenn eingeschaltet PDF/A-3 nach
+			 * PDF/A-2 und ignoriert den Fehler betreffend der Version und gibt
+			 * stattdessten eine Warnung aus.
+			 */
+			String warning3to2 = doc.getElementsByTagName( "warning3to2" )
+					.item( 0 ).getTextContent();
+			configMap.put( "warning3to2", warning3to2 );
 
 			// Gibt an ob JBIG2 erlaubt ist oder nicht
 			String jbig2allowed = doc.getElementsByTagName( "jbig2allowed" )
@@ -566,16 +575,16 @@ public class ConfigurationServiceImpl implements ConfigurationService
 
 			// TODO Video
 
-			// Gibt an ob ffv1 akzeptiert werden soll
+			// Gibt an ob mkv akzeptiert werden soll
 			/* durch die Sonderzeichen muss es anders ausgelesen werden */
-			String azFfv1 = "<ffv1validation>(&#x2713;)</ffv1validation>";
-			String ffv1validation = "no";
-			if ( config.contains( azFfv1 ) ) {
-				ffv1validation = "az";
+			String azMkv = "<mkvvalidation>(&#x2713;)</mkvvalidation>";
+			String mkvvalidation = "no";
+			if ( config.contains( azMkv ) ) {
+				mkvvalidation = "az";
 			} else {
-				ffv1validation = "no";
+				mkvvalidation = "no";
 			}
-			configMap.put( "ffv1Validation", ffv1validation );
+			configMap.put( "mkvValidation", mkvvalidation );
 
 			// Gibt an ob mp4 akzeptiert werden soll
 			/* durch die Sonderzeichen muss es anders ausgelesen werden */
@@ -587,17 +596,6 @@ public class ConfigurationServiceImpl implements ConfigurationService
 				mp4validation = "no";
 			}
 			configMap.put( "mp4Validation", mp4validation );
-
-			// Gibt an ob mj2 akzeptiert werden soll
-			/* durch die Sonderzeichen muss es anders ausgelesen werden */
-			String azMj2 = "<mj2validation>(&#x2713;)</mj2validation>";
-			String mj2validation = "no";
-			if ( config.contains( azMj2 ) ) {
-				mj2validation = "az";
-			} else {
-				mj2validation = "no";
-			}
-			configMap.put( "mj2Validation", mj2validation );
 
 			// TODO Daten
 
@@ -614,6 +612,17 @@ public class ConfigurationServiceImpl implements ConfigurationService
 				xmlvalidation = "no";
 			}
 			configMap.put( "xmlValidation", xmlvalidation );
+
+			// Gibt an ob json akzeptiert werden soll
+			/* durch die Sonderzeichen muss es anders ausgelesen werden */
+			String azJson = "<jsonvalidation>(&#x2713;)</jsonvalidation>";
+			String jsonvalidation = "no";
+			if ( config.contains( azJson ) ) {
+				jsonvalidation = "az";
+			} else {
+				jsonvalidation = "no";
+			}
+			configMap.put( "jsonValidation", jsonvalidation );
 
 			// Gibt an ob siard validiert werden soll
 			/* durch die Sonderzeichen muss es anders ausgelesen werden */
@@ -638,6 +647,11 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String siard21 = doc.getElementsByTagName( "siard21" ).item( 0 )
 					.getTextContent();
 			configMap.put( "siard21", siard21 );
+
+			// Gibt an ob siard 2.2 validiert werden soll
+			String siard22 = doc.getElementsByTagName( "siard22" ).item( 0 )
+					.getTextContent();
+			configMap.put( "siard22", siard22 );
 
 			// Gibt an ob csv akzeptiert werden soll
 			/* durch die Sonderzeichen muss es anders ausgelesen werden */
@@ -676,7 +690,20 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			// Gibt eine Liste mit den PUIDs aus, welche auch akzeptiert sind.
 			String otherformats = doc.getElementsByTagName( "otherformats" )
 					.item( 0 ).getTextContent();
+			otherformats = otherformats.replace( "\";", "" );
+			otherformats = otherformats.replace( ";", "" );
 			configMap.put( "otherformats", otherformats );
+
+			// hash
+			/*
+			 * Hashwert von Dateien berechnen und ausgeben. Leer bedeutet keine
+			 * Berechnung und Ausgabe []
+			 * 
+			 * [] MD5, SHA-1, SHA-256, SHA-512
+			 */
+			String hash = doc.getElementsByTagName( "hash" ).item( 0 )
+					.getTextContent();
+			configMap.put( "hash", hash );
 
 			// TODO SIP
 
@@ -693,8 +720,7 @@ public class ConfigurationServiceImpl implements ConfigurationService
 
 			// Gibt eine Liste mit den PUIDs aus, welche im SIP vorkommen
 			// duerfen.
-			String allowedformats = doc.getElementsByTagName( "allowedformats" )
-					.item( 0 ).getTextContent();
+			String allowedformats = "";
 			configMap.put( "allowedformats", allowedformats );
 
 			// Gibt die Maximal erlaubte Laenge eines Pfades in der SIP-Datei
@@ -708,6 +734,11 @@ public class ConfigurationServiceImpl implements ConfigurationService
 			String allowedsipname = doc.getElementsByTagName( "allowedsipname" )
 					.item( 0 ).getTextContent();
 			configMap.put( "AllowedSipName", allowedsipname );
+
+			// Gibt an ob aeltere Dokumente nur eine Warnung ergeben sollen
+			String warningolddok = doc.getElementsByTagName( "warningolddok" )
+					.item( 0 ).getTextContent();
+			configMap.put( "WarningOldDok", warningolddok );
 
 			// System.out.println("Value is b : " + (map.get("key") == b));
 			bis.close();

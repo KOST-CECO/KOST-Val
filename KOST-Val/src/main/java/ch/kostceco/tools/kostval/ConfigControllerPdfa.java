@@ -1,6 +1,6 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
- * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
+ * Submission Information Package (SIP). Copyright (C) Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
@@ -40,7 +40,8 @@ public class ConfigControllerPdfa
 	@FXML
 	private CheckBox	checkPdfa, checkPdftools, checkCallas, checkPdfa1a,
 			checkPdfa2a, checkFont, checkJbig2, checkDetail, checkNentry,
-			checkPdfa1b, checkPdfa2b, checkFontTol, checkPdfa2u;
+			checkPdfa1b, checkPdfa2b, checkFontTol, checkPdfa2u,
+			checkWarning3to2;
 
 	@FXML
 	private Button		buttonConfigApply;
@@ -53,9 +54,8 @@ public class ConfigControllerPdfa
 			minOne = "Mindestens eine Variante muss erlaubt sein!";
 
 	@FXML
-	private Label		labelOtherPdfa, labelVersion, labelCallas,
-			labelPdftools, labelEr, labelEr1, labelEr2, labelEr3, labelVal,
-			labelMessage, labelConfig;
+	private Label		labelOtherPdfa, labelVersion, labelVal, labelMessage,
+			labelConfig;
 
 	@FXML
 	void initialize()
@@ -68,7 +68,7 @@ public class ConfigControllerPdfa
 		String javaVersion = System.getProperty( "java.version" );
 		String javafxVersion = System.getProperty( "javafx.version" );
 		labelConfig.setText(
-				"Copyright © KOST/CECO          KOST-Val v2.1.3.0          JavaFX "
+				"Copyright © KOST/CECO          KOST-Val v2.1.4.0          JavaFX "
 						+ javafxVersion + "   &   Java-" + java6432 + " "
 						+ javaVersion + "." );
 
@@ -105,6 +105,13 @@ public class ConfigControllerPdfa
 				labelVal.setText( "Paramètre de validation: PDF/A" );
 				buttonConfigApply.setText( "appliquer" );
 				minOne = "Au moins une variante doit etre autorisee !";
+			} else if ( Util.stringInFileLine( "kostval-conf-IT.xsl",
+					configFile ) ) {
+				labelOtherPdfa.setText( "Altro" );
+				labelVersion.setText( "Versioni" );
+				labelVal.setText( "Parametro di convalida: PDF/A" );
+				buttonConfigApply.setText( "Applicare" );
+				minOne = "Almeno una variante deve essere consentita!";
 			} else {
 				labelOtherPdfa.setText( "Other" );
 				labelVersion.setText( "Versions" );
@@ -131,6 +138,7 @@ public class ConfigControllerPdfa
 			String noPdfa2a = "<pdfa2a></pdfa2a>";
 			String noPdfa2b = "<pdfa2b></pdfa2b>";
 			String noPdfa2u = "<pdfa2u></pdfa2u>";
+			String noWarning3to2 = "<warning3to2>no</warning3to2>";
 			String pdfaFont = "<pdfafont>strict</pdfafont>"; // tolerant oder
 																// strict-->
 			String pdfaFontTolerant = "<pdfafont>tolerant</pdfafont>"; // tolerant
@@ -146,6 +154,13 @@ public class ConfigControllerPdfa
 			}
 			if ( config.contains( noDetail ) ) {
 				checkDetail.setSelected( false );
+			}
+			if ( config.contains( noWarning3to2 ) ) {
+				checkWarning3to2.setSelected( false );
+			}
+			if ( config.contains( noPdfa2a ) && config.contains( noPdfa2u )
+					&& config.contains( noPdfa2b ) ) {
+				checkWarning3to2.setDisable( true );
 			}
 			if ( config.contains( noCallas ) ) {
 				checkCallas.setSelected( false );
@@ -381,6 +396,7 @@ public class ConfigControllerPdfa
 		try {
 			if ( checkPdfa2a.isSelected() ) {
 				Util.oldnewstring( no, yes, configFile );
+				checkWarning3to2.setDisable( false );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
 				if ( !checkPdfa1b.isSelected() && !checkPdfa1a.isSelected()
@@ -390,6 +406,12 @@ public class ConfigControllerPdfa
 					checkPdfa2a.setSelected( true );
 				} else {
 					Util.oldnewstring( yes, no, configFile );
+					if ( checkPdfa2u.isSelected()
+							|| checkPdfa2b.isSelected() ) {
+						checkWarning3to2.setDisable( false );
+					} else {
+						checkWarning3to2.setDisable( true );
+					}
 				}
 			}
 		} catch ( IOException e ) {
@@ -406,6 +428,7 @@ public class ConfigControllerPdfa
 		try {
 			if ( checkPdfa2b.isSelected() ) {
 				Util.oldnewstring( no, yes, configFile );
+				checkWarning3to2.setDisable( false );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
 				if ( !checkPdfa1b.isSelected() && !checkPdfa2a.isSelected()
@@ -415,6 +438,12 @@ public class ConfigControllerPdfa
 					checkPdfa2b.setSelected( true );
 				} else {
 					Util.oldnewstring( yes, no, configFile );
+					if ( checkPdfa2a.isSelected()
+							|| checkPdfa2u.isSelected() ) {
+						checkWarning3to2.setDisable( false );
+					} else {
+						checkWarning3to2.setDisable( true );
+					}
 				}
 			}
 		} catch ( IOException e ) {
@@ -431,6 +460,7 @@ public class ConfigControllerPdfa
 		try {
 			if ( checkPdfa2u.isSelected() ) {
 				Util.oldnewstring( no, yes, configFile );
+				checkWarning3to2.setDisable( false );
 			} else {
 				// abwaehlen nur moeglich wenn noch eines selected
 				if ( !checkPdfa1b.isSelected() && !checkPdfa2a.isSelected()
@@ -440,7 +470,35 @@ public class ConfigControllerPdfa
 					checkPdfa2u.setSelected( true );
 				} else {
 					Util.oldnewstring( yes, no, configFile );
+					if ( checkPdfa2a.isSelected()
+							|| checkPdfa2b.isSelected() ) {
+						checkWarning3to2.setDisable( false );
+					} else {
+						checkWarning3to2.setDisable( true );
+					}
 				}
+			}
+		} catch ( IOException e ) {
+			e.printStackTrace();
+		}
+	}
+
+	/*
+	 * checkWarning3to2 validiert wenn eingeschaltet PDF/A-3 nach PDF/A-2 und
+	 * ignoriert den Fehler betreffend der Version und gibt stattdessten eine
+	 * Warnung aus.
+	 */
+	@FXML
+	void changeWarning3to2( ActionEvent event )
+	{
+		labelMessage.setText( "" );
+		String yes = "<warning3to2>yes</warning3to2>";
+		String no = "<warning3to2>no</warning3to2>";
+		try {
+			if ( checkWarning3to2.isSelected() ) {
+				Util.oldnewstring( no, yes, configFile );
+			} else {
+				Util.oldnewstring( yes, no, configFile );
 			}
 		} catch ( IOException e ) {
 			e.printStackTrace();

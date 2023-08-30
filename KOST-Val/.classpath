@@ -10,26 +10,21 @@
 	<classpathentry kind="con" path="org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JavaFX14"/>
 	<classpathentry kind="lib" path="lib/zip64file-1.0.jar" sourcepath="external-sources/Zip64File-sources.jar"/>
-	<classpathentry kind="lib" path="lib/jdom-2.0.0.jar"/>
+	<classpathentry kind="lib" path="lib/jdom-2.0.6.1.jar" sourcepath="KOST-Val/external-sources/jdom-2.0.6.1-sources.jar"/>
 	<classpathentry kind="lib" path="lib/zip64-1.0.jar" sourcepath="external-sources/zip64-sources.jar"/>
 	<classpathentry kind="lib" path="lib/badpeggy-2.0.jar" sourcepath="external-sources/badpeggy-2.0-sources.jar"/>
 	<classpathentry kind="lib" path="lib/commons-logging-1.2.jar"/>
-	<classpathentry kind="lib" path="lib/commons-io-2.6.jar" sourcepath="external-sources/commons-io-2.6-sources.jar"/>
-	<classpathentry kind="lib" path="lib/junit-4.12.jar"/>
-	<classpathentry kind="lib" path="lib/xercesImpl-2.7.1.jar" sourcepath="external-sources/xercesImpl-2.7.1-sources.jar"/>
+	<classpathentry kind="lib" path="lib/commons-io-2.13.1.jar" sourcepath="external-sources/commons-io-2.13.0-sources.jar"/>
+	<classpathentry kind="lib" path="lib/xercesImpl-2.12.2.jar"/>
 	<classpathentry kind="lib" path="lib/xml-apis-2.7.1.jar"/>
-	<classpathentry kind="lib" path="lib/VALA-6.23.0.4.RELEASE.jar"/>
-	<classpathentry kind="lib" path="lib/jhove-apps-1.24.1.jar"/>
-	<classpathentry kind="lib" path="lib/tiff-hul-1.9.2.jar"/>
-	<classpathentry kind="lib" path="lib/spring-aop-5.3.19.RELEASE.jar"/>
-	<classpathentry kind="lib" path="lib/spring-beans-5.3.19.RELEASE.jar"/>
-	<classpathentry kind="lib" path="lib/spring-context-5.3.19.RELEASE.jar"/>
-	<classpathentry kind="lib" path="lib/spring-core-5.3.19.RELEASE.jar"/>
-	<classpathentry kind="lib" path="lib/spring-expression-5.3.19.RELEASE.jar"/>
-	<classpathentry kind="lib" path="lib/spring-jcl-5.3.19.RELEASE.jar"/>
-	<classpathentry kind="lib" path="lib/spring-jdbc-5.3.19.RELEASE.jar"/>
-	<classpathentry kind="lib" path="lib/spring-orm-5.3.19.RELEASE.jar"/>
-	<classpathentry kind="lib" path="lib/spring-test-5.3.19.RELEASE.jar"/>
-	<classpathentry kind="lib" path="lib/spring-tx-5.3.19.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/VALA-6.26.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/jhove-apps-1.28.0.jar"/>
+	<classpathentry kind="lib" path="lib/tiff-hul-1.9.4.jar"/>
+	<classpathentry kind="lib" path="lib/spring-context-5.3.27.jar"/>
+	<classpathentry kind="lib" path="lib/spring-beans-5.3.27.jar"/>
+	<classpathentry kind="lib" path="lib/spring-core-5.3.27.jar"/>
+	<classpathentry kind="lib" path="lib/spring-aop-5.3.27.jar"/>
+	<classpathentry kind="lib" path="lib/spring-expression-5.3.27.jar"/>
+	<classpathentry kind="lib" path="lib/spring-jcl-5.3.27.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

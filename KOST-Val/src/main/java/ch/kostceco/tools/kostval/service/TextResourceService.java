@@ -1,6 +1,6 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
- * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
+ * Submission Information Package (SIP). Copyright (C) Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
@@ -36,9 +36,9 @@ public interface TextResourceService extends Service
 	 * Platzhalter aus der Resource mit den Werten aus aValues ersetzt.
 	 * 
 	 * @param aKey
-	 *            der Resourcenschl�ssel
+	 *            der Resourcenschluessel
 	 * @param values
-	 *            die Werte f�r die Platzhalter
+	 *            die Werte fuer die Platzhalter
 	 * @return das formatierte Ergebnis
 	 */
 	String getText( String aKey, Object... values );
@@ -52,9 +52,9 @@ public interface TextResourceService extends Service
 	 * @param locale
 	 *            zu verwendende Locale
 	 * @param aKey
-	 *            der Resourcenschl�ssel
+	 *            der Resourcenschluessel
 	 * @param values
-	 *            die Werte f�r die Platzhalter
+	 *            die Werte fuer die Platzhalter
 	 * @return das formatierte Ergebnis
 	 */
 	String getText( Locale locale, String aKey, Object... values );

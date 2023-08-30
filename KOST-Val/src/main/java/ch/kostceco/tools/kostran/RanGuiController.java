@@ -1,6 +1,6 @@
 /* == KOST-Ran ==================================================================================
  * The KOST-Ran application is used for excerpt a random sample with metadata from a SIARD-File.
- * Copyright (C) 2021-2022 Claire Roethlisberger (KOST-CECO)
+ * Copyright (C) Claire Roethlisberger (KOST-CECO)
  * -----------------------------------------------------------------------------------------------
  * KOST-Ran is a development of the KOST-CECO. All rights rest with the KOST-CECO. This application
  * is free software: you can redistribute it and/or modify it under the terms of the GNU General
@@ -1893,7 +1893,7 @@ public class RanGuiController
 								 * type="text/xsl"
 								 * href="kost-ran.xsl"?><table><Infos><Start>08.
 								 * 04.2021</Start><Info>KOST-Ran v0.0.1,
-								 * Copyright (C) 2021-2022 Claire Roethlisberger
+								 * Copyright (C) Claire Roethlisberger
 								 * (KOST-CECO). This program comes with
 								 * ABSOLUTELY NO WARRANTY. This is free
 								 * software, and you are welcome to redistribute
@@ -1914,13 +1914,13 @@ public class RanGuiController
 										+ ausgabeStart
 										+ "</Start><Info>KOST-Ran v"
 										+ versionKostRan
-										+ ", Copyright (C) 2021-2022 Claire Roethlisberger (KOST-CECO). This program comes with ABSOLUTELY NO WARRANTY. This is free software, and you are welcome to redistribute it under certain conditions; see GPL-3.0_COPYING.txt for details</Info></Infos>";
+										+ ", Copyright (C) Claire Roethlisberger (KOST-CECO). This program comes with ABSOLUTELY NO WARRANTY. This is free software, and you are welcome to redistribute it under certain conditions; see GPL-3.0_COPYING.txt for details</Info></Infos>";
 								/*
 								 * String header =
 								 * "<?xml version=\"1.0\" encoding=\"utf-8\"?><?xml-stylesheet type=\"text/xsl\" href=\"kost-ran.xsl\"?><table><Infos><Start>"
 								 * + ausgabeStart + "</Start><Info>KOST-Ran v" +
 								 * versionKostRan +
-								 * ", Copyright (C) 2021-2022 Claire Roethlisberger (KOST-CECO). This program comes with ABSOLUTELY NO WARRANTY. This is free software, and you are welcome to redistribute it under certain conditions; see GPL-3.0_COPYING.txt for details</Info></Infos>"
+								 * ", Copyright (C) Claire Roethlisberger (KOST-CECO). This program comes with ABSOLUTELY NO WARRANTY. This is free software, and you are welcome to redistribute it under certain conditions; see GPL-3.0_COPYING.txt for details</Info></Infos>"
 								 * ;
 								 */
 								// System.out.print( counter+" " );

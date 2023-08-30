@@ -1,0 +1,304 @@
+%!PS-Adobe-3.0 Resource-ProcSet
+%%Title: Convenient procedures to aid in debugging in PostScript programs.
+%%Copyright: (C) 1990-1993 Adobe Systems Incorporated. All rights reserved
+%
+% This file may be freely copied and redistributed as long as:
+%   1) This entire notice continues to be included in the file, 
+%   2) If the file has been modified in any way, a notice of such
+%      modification is conspicuously indicated.
+%
+% PostScript, Display PostScript, and Adobe are registered trademarks of
+% Adobe Systems Incorporated.
+% 
+% ************************************************************************
+% THE INFORMATION BELOW IS FURNISHED AS IS, IS SUBJECT TO CHANGE WITHOUT
+% NOTICE, AND SHOULD NOT BE CONSTRUED AS A COMMITMENT BY ADOBE SYSTEMS
+% INCORPORATED. ADOBE SYSTEMS INCORPORATED ASSUMES NO RESPONSIBILITY OR 
+% LIABILITY FOR ANY ERRORS OR INACCURACIES, MAKES NO WARRANTY OF ANY 
+% KIND (EXPRESS, IMPLIED OR STATUTORY) WITH RESPECT TO THIS INFORMATION, 
+% AND EXPRESSLY DISCLAIMS ANY AND ALL WARRANTIES OF MERCHANTABILITY, 
+% FITNESS FOR PARTICULAR PURPOSES AND NONINFINGEMENT OF THIRD PARTY RIGHTS.
+% ************************************************************************
+%
+%
+
+%%BeginResource: procset Debug 1 1
+%
+% This ProcSet supplies a number of useful procedures for tracing the
+% behavior of PostScript language programs. Initialize the ProcSet as follows:
+%	/Debug /ProcSet findresource /initialize get exec
+%
+% This pushes the ProcSet dictionary onto the dictionary stack and then
+% pushes userdict back onto the dictionary stack so that it is on top as
+% always.
+%
+% Terminate the use of the ProcSet as follows:
+%	/Debug /ProcSet findresource /finalize get exec
+%
+
+% Example for operator tracing. Re-define the original, use the tracing
+% procedures and bind the procedure to get the original operator definition.
+%
+%	/moveto
+%	{
+%	  (moveto) 2 @@operator
+%	  moveto
+%	} bind def
+%
+
+currentglobal
+true setglobal
+
+/Debug <<
+
+  /initialize {
+    /Debug /ProcSet findresource //begin
+    userdict //begin
+    (Debugging operations loaded.) = flush
+  } bind
+
+  /finalize {
+    //end
+    //end
+  } bind
+
+  /variables <<
+    /trace true
+  >>
+
+  /@@skip	% int @@skip -- Skip specified number PostScript comments
+  {
+    {
+      {
+        currentfile read {
+          8#045 eq {
+            exit
+          } if
+        } {
+          (Premature end of file--percent) = flush
+          exit
+        } ifelse
+      } loop
+      {
+        currentfile read {
+          dup 8#015 eq exch 8#012 eq or {
+            exit
+          } if
+        } {
+          (Premature end of file--newline) = flush
+          exit
+        } ifelse
+      } loop
+    } repeat
+  } bind
+
+  /@@skiptomarker	% string @@skiptomaker -- discard input up to string
+  {
+    currentfile exch 0 exch /SubFileDecode filter flushfile
+  } bind
+
+
+  /@@value	% string name @@value -- print current value of variable
+  {
+    count 2 lt {
+      /@@value errordict /stackunderflow get exec
+    } if
+
+    exch dup type /stringtype ne {
+      /@@value errordict /typecheck get exec
+    } if
+
+    print (: ) print {
+      load exec
+    } stopped {
+      (Not defined!) =
+    } {
+      ==
+    } ifelse
+
+    flush
+  } bind
+
+  /@@dict {
+    count 2 lt {
+      /@@dict errordict /stackunderflow get exec
+    } if
+
+    1 index type /stringtype ne {
+      /@@dict errordict /typecheck get exec
+    } if
+
+    (<<) = {
+      exch 128 string cvs print ( ) print ==
+    } forall
+    (>> ) print =
+    flush
+  } bind
+
+  /@@matrix	% string @@matrix -- print string and current matrix
+  {
+    count 1 lt {
+      /@@matrix errordict /stackunderflow get exec
+    } if
+
+    dup type /stringtype ne {
+      /@@matrix errordict /typecheck get exec
+    } if
+
+    matrix exch /currentmatrix @@value
+  } bind
+
+  /@@stack	% string @@stack -- print string and current stack
+  {
+    count 1 lt {
+      /@@stack errordict /stackunderflow get exec
+    } if
+
+    dup type /stringtype ne {
+      /@@stack errordict /typecheck get exec
+    } if
+
+    print (:) = pstack flush
+  } bind
+
+  /@@printvalue	% any @@printvalue -- print value like == without newline
+  {
+    /== load 0 get begin
+      mark
+      {
+        exch
+        /cp 0 def
+        /supplws true def
+        typeexec	% Level 2
+        ( ) print
+      } stopped {
+        cleartomark
+        //end
+        systemdict /$error get /command /@@printvalue put
+        stop
+      } if
+      cleartomark
+    end
+  } bind
+
+  /@@operator	% namestring argcount @@operator -- print operator arguments
+  {
+    count 2 lt {
+      /@@operator errordict /stackunderflow get exec
+    } if
+
+    -1 1 {
+      index
+      @@printvalue
+    } for
+
+    = flush
+  } bind
+
+  /@@coordinate {
+    exch =string cvs print
+    ( ) print
+    =string cvs print
+    ( ) print
+  } bind
+
+  /@@path	% string @@path -- print the current path
+  {
+    =
+    {
+      @@coordinate (moveto) =
+    } {
+      @@coordinate (lineto) =
+    } {
+      6 -2 roll @@coordinate 4 -2 roll @@coordinate @@coordinate (curveto) =
+    } {
+      (closepath) =
+    } pathforall
+    flush
+  } bind
+
+  /@@pagecorners	% @@pagecorners -- Map corners of user space to device space
+  {
+    3 dict begin
+      /w	% /w
+      currentpagedevice dup /PageSize get aload pop	% /w dict W H
+      /h exch	% /w dict W /h H
+      /r	% /w dict W /h H /r
+      5 -1 roll /HWResolution get 0 get	% /w W /h H /r R
+      def
+      def
+      def
+
+      [ [ 0 0 (Lower left ) ] [ 0 h (Upper left ) ] [ w 0 (Lower right) ] [ w h (Upper right) ] ] {
+        aload pop print
+        2 copy (: [ ) print @@coordinate (] -> [ ) print
+        transform r div exch r div exch @@coordinate (]) =
+      } forall
+      flush
+    end
+  } bind
+
+  /@@trace	% string @@trace -- print string only if @@$trace true
+  {
+    /Debug /ProcSet findresource /variables get /trace get {
+      (Trace: ) print = flush
+    } {
+      pop
+    } ifelse
+  } bind
+
+  /@@listfiles	% string @@listfiles -- pass string to filenameforall
+  {
+    //== 256 string filenameforall
+  } bind
+
+  /@@checkkanji	% @@checkkanji -- checks accessibility of Kanji fonts
+  {
+    save
+    1 dict dup begin
+      (*-*-H) {
+        <</n 0>> begin
+          dup {
+            45 eq {
+              /n n 1 add def
+            } if
+          } forall
+          n 2 eq
+        end
+	{
+          true def
+	}{
+	  pop
+	} ifelse
+      } 256 string /Font resourceforall
+    end
+    {
+      pop
+      dup =string cvs print ( ... ) print flush
+      mark
+      nulldevice
+      exch dup findfont
+      dup /FontName get 3 -1 roll ne {
+        (missing.)
+      } {
+        24 scalefont setfont {
+	  newpath
+	  0 0 moveto
+          <3441> false charpath
+        } stopped {
+          (access denied.)
+        } {
+          (ok.)
+        } ifelse
+      } ifelse
+      = flush
+      cleartomark
+      newpath
+    } forall
+    restore
+  } bind
+
+>> /ProcSet defineresource pop
+
+setglobal
+%%EndResource

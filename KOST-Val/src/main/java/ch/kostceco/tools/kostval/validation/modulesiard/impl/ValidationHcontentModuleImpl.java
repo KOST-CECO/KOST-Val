@@ -1,6 +1,6 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
- * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
+ * Submission Information Package (SIP). Copyright (C) Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
@@ -33,6 +33,7 @@ import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.Namespace;
 import org.jdom2.input.SAXBuilder;
+import org.springframework.util.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -233,28 +234,64 @@ public class ValidationHcontentModuleImpl extends ValidationModuleImpl
 														// val.message.xml.h.invalid.error
 														// =
 														// <Message>{0}</Message></Error>
-														Logtxt.logtxt( logFile,
-																getTextResourceService()
-																		.getText(
-																				locale,
-																				MESSAGE_XML_MODUL_H_SIARD )
+														if ( onWorkConfig
+																.equals( "yes" ) ) {
+															// --max es werden
+															// alle Fehler
+															// ausgegeben
+															Logtxt.logtxt(
+																	logFile,
+																	getTextResourceService()
+																			.getText(
+																					locale,
+																					MESSAGE_XML_MODUL_H_SIARD )
+																			+ getTextResourceService()
+																					.getText(
+																							locale,
+																							MESSAGE_XML_H_INVALID_XML,
+																							tableXmlShortString,
+																							tableXsdShortString
+																									+ ".</Message><Message>"
+																									+ resultExec ) );
+														} else {
+															// es wird nur der
+															// erste Fehler
+															// ausgegeben mit
+															// einem Zaehler
+															String searchString = "</Message><Message>";
+															int count = StringUtils
+																	.countOccurrencesOf(
+																			resultExec,
+																			searchString );
+															String resultExecFirst = resultExec;
+															if ( count < 1 ) {
+																resultExecFirst = resultExec;
+															} else {
+																String[] resultExecArray = StringUtils
+																		.split( resultExec,
+																				searchString );
+																resultExecFirst = resultExecArray[0]
 																		+ getTextResourceService()
 																				.getText(
 																						locale,
-																						MESSAGE_XML_H_INVALID_XML,
-																						tableXmlShortString,
-																						tableXsdShortString ) );
-														Logtxt.logtxt( logFile,
-																getTextResourceService()
-																		.getText(
-																				locale,
-																				MESSAGE_XML_MODUL_H_SIARD )
-																		+ getTextResourceService()
-																				.getText(
-																						locale,
-																						MESSAGE_XML_SERVICEMESSAGE,
-																						resultExec,
-																						"" ) );
+																						MESSAGE_XML_H_COUNT_ERRORS,
+																						count );
+															}
+															Logtxt.logtxt(
+																	logFile,
+																	getTextResourceService()
+																			.getText(
+																					locale,
+																					MESSAGE_XML_MODUL_H_SIARD )
+																			+ getTextResourceService()
+																					.getText(
+																							locale,
+																							MESSAGE_XML_H_INVALID_XML,
+																							tableXmlShortString,
+																							tableXsdShortString
+																									+ ".</Message><Message>- "
+																									+ resultExecFirst ) );
+														}
 													}
 												} else {
 													// System.out.println("Validierung

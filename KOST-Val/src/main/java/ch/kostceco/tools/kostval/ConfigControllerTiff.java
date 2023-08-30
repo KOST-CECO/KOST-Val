@@ -1,6 +1,6 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
- * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
+ * Submission Information Package (SIP). Copyright (C) Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
@@ -56,7 +56,7 @@ public class ConfigControllerTiff
 
 	@FXML
 	private Label		labelBps, labelComp, labelOther, labelPi, labelImage,
-			labelTiff, labelMessage, labelConfig;
+			labelMessage, labelConfig;
 
 	@FXML
 	void initialize()
@@ -69,7 +69,7 @@ public class ConfigControllerTiff
 		String javaVersion = System.getProperty( "java.version" );
 		String javafxVersion = System.getProperty( "javafx.version" );
 		labelConfig.setText(
-				"Copyright © KOST/CECO          KOST-Val v2.1.3.0          JavaFX "
+				"Copyright © KOST/CECO          KOST-Val v2.1.4.0          JavaFX "
 						+ javafxVersion + "   &   Java-" + java6432 + " "
 						+ javaVersion + "." );
 
@@ -110,6 +110,15 @@ public class ConfigControllerTiff
 				labelImage.setText( "Paramètre de validation: TIFF" );
 				buttonConfigApply.setText( "appliquer" );
 				minOne = "Au moins une variante doit etre autorisee !";
+			} else if ( Util.stringInFileLine( "kostval-conf-IT.xsl",
+					configFile ) ) {
+				labelBps.setText( "Bit per campione (per canale)" );
+				labelComp.setText( "Algoritmo di compressione" );
+				labelOther.setText( "Diversi" );
+				labelPi.setText( "Spazio colore" );
+				labelImage.setText( "Parametro di convalida: TIFF" );
+				buttonConfigApply.setText( "Applicare" );
+				minOne = "Almeno una variante deve essere consentita!";
 			} else {
 				labelBps.setText( "Bits per sample (per channel)" );
 				labelComp.setText( "Compression algorithm" );

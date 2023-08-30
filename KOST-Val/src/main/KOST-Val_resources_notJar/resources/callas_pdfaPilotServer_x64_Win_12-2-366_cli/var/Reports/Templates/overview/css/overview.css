@@ -1,0 +1,173 @@
+/*====================HEADINGS====================*/
+
+.underline-header-container {
+    position: relative;
+    margin: 4mm 0 3mm 0;
+}
+
+.underline-header-container:first-child {
+    margin: 0 0 3mm 0;
+}
+
+.underline-header-container h1 {
+    margin: 0;
+    text-transform: uppercase;
+    color: var(--main-color);
+    font-size: x-large;
+}
+
+.underline-header-container h1::after {
+    content: '';
+    position: absolute;
+    height: 1px;
+    width: 100%;
+    left: 0;
+    bottom: -4px;
+    background-color: var(--main-color);
+}
+
+.step-header-container {
+    margin: 4mm 0 2mm 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.step-header-container img {
+    height: 5.5mm;
+    margin-right: 2.5mm;
+}
+
+.step-header-container h2 {
+    margin: 0;
+    font-size: large;
+    color: var(--secondary-color);
+}
+
+.hit-fix-header-container,
+.no-details-header-container {
+    page-break-inside: avoid;
+    margin: 2mm 0 1mm 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.hit-fix-header-container img,
+.no-details-header-container img {
+    height: 5mm;
+    margin-right: 2.5mm;
+}
+
+.hit-fix-header-container h3,
+.no-details-header-container h3 {
+    margin: 0;
+    font-size: medium;
+}
+
+
+/*====================INFOBOX====================*/
+
+.infobox {
+    margin-bottom: 8mm;
+}
+
+.overview {
+    margin: 4mm;
+    margin-top: 2mm;
+    display: flex;
+    flex-direction: row;
+}
+
+.overview-preview {
+    margin-right: 4mm;
+}
+
+.overview-preview img {
+    border: 3px lightgrey solid;
+    max-width: 50mm;
+    max-height: 60mm;
+}
+
+.overview-details {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.overview-details-text {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 4mm;
+}
+
+.overview-details-text span {
+    word-break: break-all;
+    word-wrap: break-word;
+}
+
+.overview-details-hits {
+    display: flex;
+    flex-direction: row;
+}
+
+.overview-details-table {
+    border-spacing: 3mm 1mm;
+    margin-left: -3mm;
+}
+
+/* .overview-details-table tr {
+    padding: 2.5mm 0;
+}
+
+.overview-details-table td {
+    padding-right: 3mm;
+} */
+
+.overview-details-table .center {
+    text-align: center;
+}
+
+.overview-details-table th img,
+.overview-result-ok {
+    width: 12mm;
+    height: 12mm;
+}
+
+
+/*====================PAGE-CONTAINER====================*/
+
+.details {
+    margin: 8mm 0;
+}
+
+.document-info-container {
+    margin: 8mm 0;
+}
+
+.document-info-container ul {
+    margin: 0;
+    padding: 0;
+    padding-left: 8mm;
+    list-style-type: none;
+}
+
+
+/*====================PROCESSSTEP====================*/
+
+.processstep {
+    margin-top: 3mm;
+}
+
+.processstep ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    margin-left: 7.7mm;
+}
+
+.details-fixups,
+.details-hits,
+.no-details-header-container {
+    padding-left: 8mm;
+}

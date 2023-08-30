@@ -1,6 +1,6 @@
 /* == KOST-Val ==================================================================================
  * The KOST-Val application is used for validate TIFF, SIARD, PDF/A, JP2, JPEG, PNG, XML-Files and
- * Submission Information Package (SIP). Copyright (C) 2012-2022 Claire Roethlisberger (KOST-CECO),
+ * Submission Information Package (SIP). Copyright (C) Claire Roethlisberger (KOST-CECO),
  * Christian Eugster, Olivier Debenath, Peter Schneider (Staatsarchiv Aargau), Markus Hahn
  * (coderslagoon), Daniel Ludin (BEDAG AG)
  * -----------------------------------------------------------------------------------------------
@@ -24,6 +24,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Locale;
 import java.util.Optional;
 
@@ -38,6 +41,7 @@ import ch.kostceco.tools.kosttools.util.Util;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
 import javafx.stage.Stage;
@@ -47,6 +51,9 @@ public class ConfigControllerSip
 
 	@FXML
 	private Button	buttonConfigApply, buttonLength, buttonName;
+	
+	@FXML
+	private CheckBox	checkWarningOldDok;
 
 	private File	configFile	= new File( System.getenv( "USERPROFILE" )
 			+ File.separator + ".kost-val_2x" + File.separator + "configuration"
@@ -70,7 +77,7 @@ public class ConfigControllerSip
 		String javaVersion = System.getProperty( "java.version" );
 		String javafxVersion = System.getProperty( "javafx.version" );
 		labelConfig.setText(
-				"Copyright © KOST/CECO          KOST-Val v2.1.3.0          JavaFX "
+				"Copyright © KOST/CECO          KOST-Val v2.1.4.0          JavaFX "
 						+ javafxVersion + "   &   Java-" + java6432 + " "
 						+ javaVersion + "." );
 
@@ -98,6 +105,7 @@ public class ConfigControllerSip
 				labelVal.setText( "Validierungseinstellung: SIP" );
 				labelLength.setText( "Pfadlänge" );
 				labelName.setText( "SIP Name" );
+				checkWarningOldDok.setText( "Nur Warnung bei alten Dokumenten (Entstehungszeitraum)" );
 				buttonConfigApply.setText( "anwenden" );
 				locale = new Locale( "de" );
 			} else if ( Util.stringInFileLine( "kostval-conf-FR.xsl",
@@ -105,12 +113,22 @@ public class ConfigControllerSip
 				labelVal.setText( "Paramètre de validation: SIP" );
 				labelLength.setText( "Longueur du chemin" );
 				labelName.setText( "Nom SIP" );
+				checkWarningOldDok.setText( "Avertissement uniquement pour les anciens documents (Entstehungszeitraum)" );
 				buttonConfigApply.setText( "appliquer" );
 				locale = new Locale( "fr" );
+			} else if ( Util.stringInFileLine( "kostval-conf-IT.xsl",
+					configFile ) ) {
+				labelVal.setText( "Parametro di convalida: SIP" );
+				labelLength.setText( "Lunghezza percorso" );
+				labelName.setText( "Nome SIP" );
+				checkWarningOldDok.setText( "Avviso solo per i vecchi documenti (Entstehungszeitraum)" );
+				buttonConfigApply.setText( "Applicare" );
+				locale = new Locale( "it" );
 			} else {
 				labelVal.setText( "Validation setting: SIP" );
 				labelLength.setText( "Path length" );
 				labelName.setText( "SIP name" );
+				checkWarningOldDok.setText( "Only warning for old documents (Entstehungszeitraum)" );
 				buttonConfigApply.setText( "apply" );
 				locale = new Locale( "en" );
 			}
@@ -134,6 +152,17 @@ public class ConfigControllerSip
 					.item( 0 ).getTextContent();
 			buttonLength.setText( allowedlengthofpaths );
 			buttonName.setText( allowedsipname );
+			
+
+			byte[] encoded;
+			encoded = Files
+					.readAllBytes( Paths.get( configFile.getAbsolutePath() ) );
+			String config = new String( encoded, StandardCharsets.UTF_8 );
+			String noWarningOldDok = "<warningolddok>no</warningolddok>";
+			if ( config.contains( noWarningOldDok ) ) {
+				checkWarningOldDok.setSelected( false );
+			}
+
 
 		} catch ( IOException | ParserConfigurationException
 				| SAXException e1 ) {
@@ -174,13 +203,15 @@ public class ConfigControllerSip
 		String lengthIntInit = stringLength;
 
 		dialog.setTitle( "KOST-Val - Configuration - SIP" );
-		String headerDeFrEn = "Geben sie die erlaubte maximale Anzahl Zeichen in Pfadlängen ein [179]:";
+		String headerDeFrItEn = "Geben sie die erlaubte maximale Anzahl Zeichen in Pfadlängen ein [179]:";
 		if ( locale.toString().startsWith( "fr" ) ) {
-			headerDeFrEn = "Entrez le nombre maximum de caractères autorisés dans la longueur du chemin [179]:";
+			headerDeFrItEn = "Entrez le nombre maximum de caractères autorisés dans la longueur du chemin [179]:";
+		} else if ( locale.toString().startsWith( "it" ) ) {
+				headerDeFrItEn = "Inserire il numero massimo di caratteri consentiti nella lunghezza del percorso [179]:";
 		} else if ( locale.toString().startsWith( "en" ) ) {
-			headerDeFrEn = "Enter the allowed maximum number of characters in path lengths [179]:";
+			headerDeFrItEn = "Enter the allowed maximum number of characters in path lengths [179]:";
 		}
-		dialog.setHeaderText( headerDeFrEn );
+		dialog.setHeaderText( headerDeFrItEn );
 		dialog.setContentText( "" );
 
 		// Show the dialog and capture the result.
@@ -224,13 +255,15 @@ public class ConfigControllerSip
 		String nameIntInit = stringName;
 
 		dialog.setTitle( "KOST-Val - Configuration - SIP" );
-		String headerDeFrEn = "Geben Sie die Vorgaben zum Aufbau des SIP-Namens ein [ SIP_[1-2][0-9]{3}[0-1][0-9][0-3][0-9]_\\w{3} ]:";
+		String headerDeFrItEn = "Geben Sie die Vorgaben zum Aufbau des SIP-Namens ein [ SIP_[1-2][0-9]{3}[0-1][0-9][0-3][0-9]_\\w{3} ]:";
 		if ( locale.toString().startsWith( "fr" ) ) {
-			headerDeFrEn = "Entrez les valeurs par défaut pour construire le nom du SIP [ SIP_[1-2][0-9]{3}[0-1][0-9][0-3][0-9]_\\w{3} ] :";
+			headerDeFrItEn = "Entrez les valeurs par défaut pour construire le nom du SIP [ SIP_[1-2][0-9]{3}[0-1][0-9][0-3][0-9]_\\w{3} ] :";
+		} else if ( locale.toString().startsWith( "it" ) ) {
+			headerDeFrItEn = "Inserire i valori predefiniti per costruire il nome SIP [ SIP_[1-2][0-9]{3}[0-1][0-9][0-3][0-9]_\\w{3} ] :";
 		} else if ( locale.toString().startsWith( "en" ) ) {
-			headerDeFrEn = "Enter the defaults to build the SIP name [SIP_[1-2][0-9]{3}[0-1][0-9][0-3][0-9]_\\w{3} ]:";
+			headerDeFrItEn = "Enter the defaults to build the SIP name [SIP_[1-2][0-9]{3}[0-1][0-9][0-3][0-9]_\\w{3} ]:";
 		}
-		dialog.setHeaderText( headerDeFrEn );
+		dialog.setHeaderText( headerDeFrItEn );
 		dialog.setContentText( "" );
 
 		// Show the dialog and capture the result.
@@ -257,6 +290,26 @@ public class ConfigControllerSip
 			}
 		} else {
 			// Keine Aktion
+		}
+	}
+
+	/*
+	 * checkWarningOldDok schaltet diese Warnung anstelle Fehler in der Konfiguration ein oder aus
+	 */
+	@FXML
+	void changeWarningOldDok( ActionEvent event )
+	{
+		labelMessage.setText( "" );
+		String yes = "<warningolddok>yes</warningolddok>";
+		String no = "<warningolddok>no</warningolddok>";
+		try {
+			if ( checkWarningOldDok.isSelected() ) {
+				Util.oldnewstring( no, yes, configFile );
+			} else {
+				Util.oldnewstring( yes, no, configFile );
+			}
+		} catch ( IOException e ) {
+			e.printStackTrace();
 		}
 	}
 
