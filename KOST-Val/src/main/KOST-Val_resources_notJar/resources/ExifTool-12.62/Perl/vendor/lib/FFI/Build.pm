@@ -3,6 +3,8 @@ package FFI::Build;
 use strict;
 use warnings;
 use 5.008004;
+use FFI::Build::Plugin;
+use FFI::Build::PluginData qw( plugin_data );
 use FFI::Build::File::Library;
 use Carp ();
 use File::Glob ();
@@ -12,8 +14,33 @@ use Capture::Tiny ();
 use File::Path ();
 
 # ABSTRACT: Build shared libraries for use with FFI
-our $VERSION = '1.34'; # VERSION
+our $VERSION = '2.08'; # VERSION
 
+# Platypus-Man,
+# Platypus-Man,
+# Friendly Neighborhood Platypus-Man
+# Is He Strong?
+# Listen Bud
+# He's got Proportional Strength of a Platypus
+# Hey Man!
+# There Goes The Platypus-Man
+
+
+{
+  my $plugins = FFI::Build::Plugin->new;
+  # PLUGIN: require
+  # ARGS: NONE
+  $plugins->call('build-require');
+  sub _plugins { $plugins ||= FFI::Build::Plugin->new };
+}
+
+sub import
+{
+  my @caller = caller;
+  # PLUGIN: import
+  # ARGS: @caller, \@args
+  _plugins->call('build-import', \@caller, \@_);
+}
 
 sub _native_name
 {
@@ -26,6 +53,10 @@ sub new
   my($class, $name, %args) = @_;
 
   Carp::croak "name is required" unless defined $name;
+
+  # PLUGIN: new-pre
+  # ARGS: $name, \%args
+  _plugins->call('build-new-pre', $name, \%args);
 
   my $self = bless {
     source   => [],
@@ -41,6 +72,8 @@ sub new
   my $buildname = $self->{buildname} = $args{buildname} || '_build';
   my $verbose   = $self->{verbose}   = $args{verbose}   || 0;
   my $export    = $self->{export}    = $args{export}    || [];
+
+  $self->{verbose} = $verbose = 2 if $ENV{V};
 
   if(defined $args{cflags})
   {
@@ -76,6 +109,10 @@ sub new
   }
 
   $self->source(ref $args{source} ? @{ $args{source} } : ($args{source})) if $args{source};
+
+  # PLUGIN: new-post
+  # ARGS: $self
+  _plugins->call('build-new-post', $self);
 
   $self;
 }
@@ -195,12 +232,20 @@ sub build
 {
   my($self) = @_;
 
+  # PLUGIN: build
+  # ARGS: $self
+  _plugins->call('build-build', $self);
+
   my @objects;
 
   my $ld = $self->platform->ld;
 
   foreach my $source ($self->source)
   {
+    # PLUGIN: build-item
+    # ARGS: $self, $source
+    _plugins->call('build-build-item', $self, $source);
+
     if($source->can('build_all'))
     {
       my $count = scalar $self->source;
@@ -250,6 +295,10 @@ sub build
     $self->platform->flag_library_output($self->file->path),
   );
 
+  # PLUGIN: build-link
+  # ARGS: $self, \@cmd
+  _plugins->call('build-build-link', $self, \@cmd);
+
   my($out, $exit) = Capture::Tiny::capture_merged(sub {
     $self->platform->run(@cmd);
   });
@@ -268,6 +317,10 @@ sub build
     print "LD @{[ $self->file->path ]}\n";
   }
 
+  # PLUGIN: link-postlink
+  # ARGS: $self, \@cmd
+  _plugins->call('build-build-postlink', $self);
+
   $self->file;
 }
 
@@ -276,13 +329,24 @@ sub clean
 {
   my($self) = @_;
   my $dll = $self->file->path;
-  unlink $dll if -f $dll;
+  if(-f $dll)
+  {
+    # PLUGIN: clean
+    # ARGS: $self, $path
+    _plugins->call('build-clean', $self, $dll);
+    unlink $dll;
+  }
   foreach my $source ($self->source)
   {
     my $dir = File::Spec->catdir($source->dirname, $self->buildname);
     if(-d $dir)
     {
-      unlink $_ for File::Glob::bsd_glob("$dir/*");
+      foreach my $path (File::Glob::bsd_glob("$dir/*"))
+      {
+        _plugins->call('build-clean', $self, $path);
+        unlink $path;
+      }
+      _plugins->call('build-clean', $self, $dir);
       rmdir $dir;
     }
   }
@@ -302,11 +366,11 @@ FFI::Build - Build shared libraries for use with FFI
 
 =head1 VERSION
 
-version 1.34
+version 2.08
 
 =head1 SYNOPSIS
 
- use FFI::Platypus;
+ use FFI::Platypus 2.00;
  use FFI::Build;
  
  my $build = FFI::Build->new(
@@ -317,7 +381,7 @@ version 1.34
  # $lib is an instance of FFI::Build::File::Library
  my $lib = $build->build;
  
- my $ffi = FFI::Platypus->new( api => 1 );
+ my $ffi = FFI::Platypus->new( api => 2 );
  # The filename will be platform dependant, but something like libfrooble.so or frooble.dll
  $ffi->lib($lib->path);
  
@@ -414,6 +478,9 @@ Output the operation (compile, link, etc) and the file, but nothing else
 Output the complete commands run verbatim.
 
 =back
+
+If the environment variable C<V> is set to a true value then the verbosity will be set to C<2> regardless
+of what is passed in.
 
 =back
 
@@ -537,7 +604,7 @@ Damyan Ivanov
 
 Ilya Pavlov (Ilya33)
 
-Petr Pisar (ppisar)
+Petr Písař (ppisar)
 
 Mohammad S Anwar (MANWAR)
 
@@ -547,9 +614,17 @@ Meredith (merrilymeredith, MHOWARD)
 
 Diab Jerius (DJERIUS)
 
+Eric Brine (IKEGAMI)
+
+szTheory
+
+José Joaquín Atria (JJATRIA)
+
+Pete Houston (openstrike, HOUSTON)
+
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2015,2016,2017,2018,2019,2020 by Graham Ollis.
+This software is copyright (c) 2015-2022 by Graham Ollis.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

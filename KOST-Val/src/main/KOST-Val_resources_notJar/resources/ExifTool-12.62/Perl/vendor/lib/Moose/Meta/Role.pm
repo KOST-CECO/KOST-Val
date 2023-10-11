@@ -1,5 +1,5 @@
 package Moose::Meta::Role;
-our $VERSION = '2.2014';
+our $VERSION = '2.2203';
 
 use strict;
 use warnings;
@@ -753,7 +753,7 @@ Moose::Meta::Role - The Moose Role metaclass
 
 =head1 VERSION
 
-version 2.2014
+version 2.2203
 
 =head1 DESCRIPTION
 
@@ -883,7 +883,7 @@ L<Moose::Meta::Role::Method>.
 =head3 $metarole->find_method_by_name($name)
 
 These methods are all identical to the methods of the same name in
-L<Class::MOP::Package>
+L<Class::MOP::Class>
 
 =head2 Attributes
 

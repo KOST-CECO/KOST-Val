@@ -19,12 +19,12 @@
 
 =head1 NAME
 
-DateTime::Locale::yi_001 - Locale data examples for the Yiddish World (yi-001) locale
+DateTime::Locale::yi_001 - Locale data examples for the Yiddish world (yi-001) locale
 
 =head1 DESCRIPTION
 
 This pod file contains examples of the locale data available for the
-Yiddish World locale.
+Yiddish world locale.
 
 =head2 Days
 
@@ -416,6 +416,12 @@ Yiddish World locale.
    2008-02-05T18:30:30 = 5טן פֿעברואַר 2008 CE
    1995-12-22T09:05:02 = 22טן דעצעמבער 1995 CE
   -0010-09-15T04:44:23 = 15טן סעפּטעמבער -10 BCE
+
+=head3 GyMd (GGGGG y-MM-dd)
+
+   2008-02-05T18:30:30 = CE 2008-02-05
+   1995-12-22T09:05:02 = CE 1995-12-22
+  -0010-09-15T04:44:23 = BCE -10-09-15
 
 =head3 H (HH)
 

@@ -7,14 +7,27 @@ use Alien::Build::Plugin;
 use File::Temp qw( tempdir );
 use Path::Tiny qw( path );
 use File::Which qw( which );
-use Capture::Tiny qw( capture );
+use Capture::Tiny qw( capture capture_merged );
 use File::chdir;
+use List::Util qw( pairmap );
 
 # ABSTRACT: Plugin for fetching files using wget
-our $VERSION = '2.38'; # VERSION
+our $VERSION = '2.80'; # VERSION
 
 
-has wget_command => sub { defined $ENV{WGET} ? which($ENV{WGET}) : which('wget') };
+sub _wget
+{
+  my $wget = defined $ENV{WGET} ? which($ENV{WGET}) : which('wget');
+  return undef unless defined $wget;
+  my $output = capture_merged { system $wget, '--help' };
+
+  # The wget that BusyBox implements does not follow that same interface
+  # as GNU wget and may not check ssl certs which is not good.
+  return undef if $output =~ /BusyBox/;
+  return $wget;
+}
+
+has wget_command => sub { _wget() };
 has ssl => 0;
 
 # when bootstrapping we have to specify this plugin as a prereq
@@ -31,7 +44,7 @@ sub init
 
   $meta->register_hook(
     fetch => sub {
-      my($build, $url) = @_;
+      my($build, $url, %options) = @_;
       $url ||= $meta->prop->{start_url};
 
       my($scheme) = $url =~ /^([a-z0-9]+):/i;
@@ -40,10 +53,32 @@ sub init
       {
         local $CWD = tempdir( CLEANUP => 1 );
 
+        my @headers;
+        if(my $headers = $options{http_headers})
+        {
+          if(ref $headers eq 'ARRAY')
+          {
+            my @copy = @$headers;
+            my %headers;
+            while(@copy)
+            {
+              my $key = shift @copy;
+              my $value = shift @copy;
+              push @{ $headers{$key} }, $value;
+            }
+            @headers = pairmap { "--header=$a: @{[ join ', ', @$b ]}" } %headers;
+          }
+          else
+          {
+            $build->log("Fetch for $url with http_headers that is not an array reference");
+          }
+        }
+
         my($stdout, $stderr) = $self->_execute(
           $build,
           $self->wget_command,
           '-k', '--content-disposition', '-S',
+          @headers,
           $url,
         );
 
@@ -54,9 +89,10 @@ sub init
         if($type eq 'text/html')
         {
           return {
-            type    => 'html',
-            base    => $url,
-            content => scalar $path->slurp,
+            type     => 'html',
+            base     => $url,
+            content  => scalar $path->slurp,
+            protocol => $scheme,
           };
         }
         else
@@ -65,6 +101,7 @@ sub init
             type     => 'file',
             filename => $path->basename,
             path     => $path->absolute->stringify,
+            protocol => $scheme,
           };
         }
       }
@@ -107,7 +144,7 @@ Alien::Build::Plugin::Fetch::Wget - Plugin for fetching files using wget
 
 =head1 VERSION
 
-version 2.38
+version 2.80
 
 =head1 SYNOPSIS
 
@@ -191,7 +228,7 @@ Juan Julián Merelo Guervós (JJ)
 
 Joel Berger (JBERGER)
 
-Petr Pisar (ppisar)
+Petr Písař (ppisar)
 
 Lance Wicks (LANCEW)
 
@@ -209,9 +246,13 @@ Paul Evans (leonerd, PEVANS)
 
 Håkon Hægland (hakonhagland, HAKONH)
 
+nick nauwelaerts (INPHOBIA)
+
+Florian Weimer
+
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011-2020 by Graham Ollis.
+This software is copyright (c) 2011-2022 by Graham Ollis.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

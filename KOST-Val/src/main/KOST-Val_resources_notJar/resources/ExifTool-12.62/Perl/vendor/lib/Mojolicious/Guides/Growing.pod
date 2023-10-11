@@ -8,7 +8,8 @@ Mojolicious::Guides::Growing - Growing Mojolicious applications
 =head1 OVERVIEW
 
 This document explains the process of starting a L<Mojolicious::Lite> prototype from scratch and growing it into a
-well-structured L<Mojolicious> application.
+well-structured L<Mojolicious> application. The final result of this guide is also available as an
+L<example application|https://github.com/mojolicious/mojo/tree/main/examples/login>.
 
 =head1 CONCEPTS
 
@@ -71,13 +72,13 @@ and all session state is kept client-side.
   |         | <-    200 OK        <- |            |
   +---------+                        +------------+
 
-While HTTP methods such as C<PUT>, C<GET> and C<DELETE> are not directly part of REST they go very well with it and are
+While HTTP methods such as C<PUT>, C<GET> and C<DELETE> are not directly part of REST they go well with it and are
 commonly used to manipulate I<resources>.
 
 =head2 Sessions
 
 HTTP was designed as a stateless protocol, web servers don't know anything about previous requests, which makes
-user-friendly login systems very tricky. Sessions solve this problem by allowing web applications to keep stateful
+user-friendly login systems tricky. Sessions solve this problem by allowing web applications to keep stateful
 information across several HTTP requests.
 
   GET /login?user=sebastian&pass=s3cret HTTP/1.1
@@ -97,13 +98,13 @@ information across several HTTP requests.
   Content-Length: 16
   Hello again sebastian.
 
-Traditionally all session data was stored on the server-side and only session ids were exchanged between browser and
+Traditionally all session data was stored on the server-side and only session IDs were exchanged between browser and
 web server in the form of cookies.
 
-  Set-Cookie: session=hmac-sha1(base64(json($session)))
+  Set-Cookie: session=hmac-sha256(base64(json($session)))
 
 In L<Mojolicious> however we are taking this concept one step further by storing everything JSON serialized and Base64
-encoded in HMAC-SHA1 signed cookies, which is more compatible with the REST philosophy and reduces infrastructure
+encoded in HMAC-SHA256 signed cookies, which is more compatible with the REST philosophy and reduces infrastructure
 requirements.
 
 =head2 Test-Driven Development
@@ -128,26 +129,28 @@ why L<Mojolicious::Lite> applications don't need more than a single file.
 Full L<Mojolicious> applications on the other hand are much closer to a well organized CPAN distribution to maximize
 maintainability.
 
-  myapp                      # Application directory
-  |- script                  # Script directory
-  |  +- my_app               # Application script
-  |- lib                     # Library directory
-  |  |- MyApp.pm             # Application class
-  |  +- MyApp                # Application namespace
-  |     +- Controller        # Controller namespace
-  |        +- Example.pm     # Controller class
-  |- my_app.yml              # Configuration file
-  |- t                       # Test directory
-  |  +- basic.t              # Random test
-  |- log                     # Log directory
-  |  +- development.log      # Development mode log file
-  |- public                  # Static file directory (served automatically)
-  |  +- index.html           # Static HTML file
-  +- templates               # Template directory
-     |- layouts              # Template directory for layouts
-     |  +- default.html.ep   # Layout template
-     +- example              # Template directory for "Example" controller
-        +- welcome.html.ep   # Template for "welcome" action
+  myapp                            # Application directory
+  |- script                        # Script directory
+  |  +- my_app                     # Application script
+  |- lib                           # Library directory
+  |  |- MyApp.pm                   # Application class
+  |  +- MyApp                      # Application namespace
+  |     +- Controller              # Controller namespace
+  |        +- Example.pm           # Controller class
+  |- my_app.yml                    # Configuration file
+  |- t                             # Test directory
+  |  +- basic.t                    # Random test
+  |- log                           # Log directory
+  |  +- development.log            # Development mode log file
+  |- public                        # Static file directory (served automatically)
+  |   |-- assets                   # Static assets created by bundlers
+  |   |   `-- *generated assets*
+  |   +- index.html                # Static HTML file
+  +- templates                     # Template directory
+     |- layouts                    # Template directory for layouts
+     |  +- default.html.ep         # Layout template
+     +- example                    # Template directory for "Example" controller
+        +- welcome.html.ep         # Template for "welcome" action
 
 Both application skeletons can be automatically generated with the commands
 L<Mojolicious::Command::Author::generate::lite_app> and L<Mojolicious::Command::Author::generate::app>.
@@ -229,14 +232,14 @@ HTTP response like this being sent back to the browser.
 
 =head2 Model
 
-In L<Mojolicious> we consider web applications simple frontends for existing business logic, that means L<Mojolicious>
-is by design entirely I<model> layer agnostic and you just use whatever Perl modules you like most.
+In L<Mojolicious> we consider web applications simple frontends for existing business logic. That means L<Mojolicious>
+is by design entirely I<model> layer agnostic, and you just use whatever Perl modules you like most.
 
   $ mkdir -p lib/MyApp/Model
   $ touch lib/MyApp/Model/Users.pm
   $ chmod 644 lib/MyApp/Model/Users.pm
 
-Our login manager will simply use a plain old Perl module abstracting away all logic related to matching usernames and
+Our login manager will use a plain old Perl module abstracting away all logic related to matching usernames and
 passwords. The name C<MyApp::Model::Users> is an arbitrary choice, and is simply used to make the separation of
 concerns more visible.
 
@@ -254,7 +257,7 @@ concerns more visible.
     sebastian => 'secr3t'
   };
 
-  sub new { bless {}, shift }
+  sub new ($class) { bless {}, $class }
 
   sub check ($self, $user, $pass) {
 
@@ -300,13 +303,13 @@ route placeholders, all at once.
 
 =head2 Testing
 
-In L<Mojolicious> we take testing very serious and try to make it a pleasant experience.
+In L<Mojolicious> we take testing very seriously and try to make it a pleasant experience.
 
   $ mkdir t
   $ touch t/login.t
   $ chmod 644 t/login.t
 
-L<Test::Mojo> is a scriptable HTTP user agent designed specifically for testing, with many fun state of the art
+L<Test::Mojo> is a scriptable HTTP user agent designed specifically for testing, with many fun state-of-the-art
 features such as CSS selectors based on L<Mojo::DOM>.
 
   use Test::More;
@@ -378,7 +381,7 @@ L<Mojolicious/"secrets">.
 
   $app->secrets(['Mojolicious rocks']);
 
-This passphrase is used by the HMAC-SHA1 algorithm to make signed cookies tamper resistant and can be changed at any
+This passphrase is used by the HMAC-SHA256 algorithm to make signed cookies tamper resistant and can be changed at any
 time to invalidate all existing sessions.
 
   $c->session(user => 'sebastian');
@@ -401,7 +404,7 @@ L<Mojolicious::Plugin::DefaultHelpers/"flash">.
   $c->flash(message => 'Everything is fine.');
   $c->redirect_to('goodbye');
 
-Just remember that all session data gets serialized with L<Mojo::JSON> and stored in HMAC-SHA1 signed cookies, which
+Just remember that all session data gets serialized with L<Mojo::JSON> and stored in HMAC-SHA256 signed cookies, which
 usually have a C<4096> byte (4KiB) limit, depending on browser.
 
 =head2 Final prototype
@@ -706,30 +709,33 @@ allowing us to start the application from outside its home directory.
 
 Full L<Mojolicious> applications are a little easier to test, so C<t/login.t> can be simplified.
 
+  use Mojo::Base -strict;
+
   use Test::More;
   use Test::Mojo;
 
-  # Load application class
   my $t = Test::Mojo->new('MyApp');
   $t->ua->max_redirects(1);
 
-  $t->get_ok('/')
-    ->status_is(200)
-    ->element_exists('form input[name="user"]')
-    ->element_exists('form input[name="pass"]')
-    ->element_exists('form input[type="submit"]');
+  subtest 'Test login workflow' => sub {
+    $t->get_ok('/')
+      ->status_is(200)
+      ->element_exists('form input[name="user"]')
+      ->element_exists('form input[name="pass"]')
+      ->element_exists('form input[type="submit"]');
 
-  $t->post_ok('/' => form => {user => 'sebastian', pass => 'secr3t'})
-    ->status_is(200)
-    ->text_like('html body' => qr/Welcome sebastian/);
+    $t->post_ok('/' => form => {user => 'sebastian', pass => 'secr3t'})
+      ->status_is(200)
+      ->text_like('html body' => qr/Welcome sebastian/);
 
-  $t->get_ok('/protected')->status_is(200)->text_like('a' => qr/Logout/);
+    $t->get_ok('/protected')->status_is(200)->text_like('a' => qr/Logout/);
 
-  $t->get_ok('/logout')
-    ->status_is(200)
-    ->element_exists('form input[name="user"]')
-    ->element_exists('form input[name="pass"]')
-    ->element_exists('form input[type="submit"]');
+    $t->get_ok('/logout')
+      ->status_is(200)
+      ->element_exists('form input[name="user"]')
+      ->element_exists('form input[name="pass"]')
+      ->element_exists('form input[type="submit"]');
+  };
 
   done_testing();
 
@@ -765,7 +771,7 @@ authors.
 =head1 SUPPORT
 
 If you have any questions the documentation might not yet answer, don't hesitate to ask in the
-L<Forum|https://forum.mojolicious.org> or the official IRC channel C<#mojo> on C<chat.freenode.net>
-(L<chat now!|https://webchat.freenode.net/#mojo>).
+L<Forum|https://forum.mojolicious.org>, on L<Matrix|https://matrix.to/#/#mojo:matrix.org>, or
+L<IRC|https://web.libera.chat/#mojo>.
 
 =cut

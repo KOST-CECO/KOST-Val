@@ -108,18 +108,18 @@ Dutch Netherlands locale.
 
 =head3 Abbreviated (format)
 
-  jan.
-  feb.
-  mrt.
-  apr.
+  jan
+  feb
+  mrt
+  apr
   mei
-  jun.
-  jul.
-  aug.
-  sep.
-  okt.
-  nov.
-  dec.
+  jun
+  jul
+  aug
+  sep
+  okt
+  nov
+  dec
 
 =head3 Narrow (format)
 
@@ -154,18 +154,18 @@ Dutch Netherlands locale.
 
 =head3 Abbreviated (stand-alone)
 
-  jan.
-  feb.
-  mrt.
-  apr.
+  jan
+  feb
+  mrt
+  apr
   mei
-  jun.
-  jul.
-  aug.
-  sep.
-  okt.
-  nov.
-  dec.
+  jun
+  jul
+  aug
+  sep
+  okt
+  nov
+  dec
 
 =head3 Narrow (stand-alone)
 
@@ -260,9 +260,9 @@ Dutch Netherlands locale.
 
 =head3 Medium
 
-   2008-02-05T18:30:30 = 5 feb. 2008
-   1995-12-22T09:05:02 = 22 dec. 1995
-  -0010-09-15T04:44:23 = 15 sep. -10
+   2008-02-05T18:30:30 = 5 feb 2008
+   1995-12-22T09:05:02 = 22 dec 1995
+  -0010-09-15T04:44:23 = 15 sep -10
 
 =head3 Short
 
@@ -302,21 +302,21 @@ Dutch Netherlands locale.
 
 =head3 Full
 
-   2008-02-05T18:30:30 = dinsdag 5 februari 2008 om 18:30:30 UTC
-   1995-12-22T09:05:02 = vrijdag 22 december 1995 om 09:05:02 UTC
-  -0010-09-15T04:44:23 = zaterdag 15 september -10 om 04:44:23 UTC
+   2008-02-05T18:30:30 = dinsdag 5 februari 2008 18:30:30 UTC
+   1995-12-22T09:05:02 = vrijdag 22 december 1995 09:05:02 UTC
+  -0010-09-15T04:44:23 = zaterdag 15 september -10 04:44:23 UTC
 
 =head3 Long
 
-   2008-02-05T18:30:30 = 5 februari 2008 om 18:30:30 UTC
-   1995-12-22T09:05:02 = 22 december 1995 om 09:05:02 UTC
-  -0010-09-15T04:44:23 = 15 september -10 om 04:44:23 UTC
+   2008-02-05T18:30:30 = 5 februari 2008 18:30:30 UTC
+   1995-12-22T09:05:02 = 22 december 1995 09:05:02 UTC
+  -0010-09-15T04:44:23 = 15 september -10 04:44:23 UTC
 
 =head3 Medium
 
-   2008-02-05T18:30:30 = 5 feb. 2008 18:30:30
-   1995-12-22T09:05:02 = 22 dec. 1995 09:05:02
-  -0010-09-15T04:44:23 = 15 sep. -10 04:44:23
+   2008-02-05T18:30:30 = 5 feb 2008 18:30:30
+   1995-12-22T09:05:02 = 22 dec 1995 09:05:02
+  -0010-09-15T04:44:23 = 15 sep -10 04:44:23
 
 =head3 Short
 
@@ -401,21 +401,27 @@ Dutch Netherlands locale.
 
 =head3 GyMMM (MMM y G)
 
-   2008-02-05T18:30:30 = feb. 2008 n.Chr.
-   1995-12-22T09:05:02 = dec. 1995 n.Chr.
-  -0010-09-15T04:44:23 = sep. -10 v.Chr.
+   2008-02-05T18:30:30 = feb 2008 n.Chr.
+   1995-12-22T09:05:02 = dec 1995 n.Chr.
+  -0010-09-15T04:44:23 = sep -10 v.Chr.
 
 =head3 GyMMMEd (E d MMM y G)
 
-   2008-02-05T18:30:30 = di 5 feb. 2008 n.Chr.
-   1995-12-22T09:05:02 = vr 22 dec. 1995 n.Chr.
-  -0010-09-15T04:44:23 = za 15 sep. -10 v.Chr.
+   2008-02-05T18:30:30 = di 5 feb 2008 n.Chr.
+   1995-12-22T09:05:02 = vr 22 dec 1995 n.Chr.
+  -0010-09-15T04:44:23 = za 15 sep -10 v.Chr.
 
 =head3 GyMMMd (d MMM y G)
 
-   2008-02-05T18:30:30 = 5 feb. 2008 n.Chr.
-   1995-12-22T09:05:02 = 22 dec. 1995 n.Chr.
-  -0010-09-15T04:44:23 = 15 sep. -10 v.Chr.
+   2008-02-05T18:30:30 = 5 feb 2008 n.Chr.
+   1995-12-22T09:05:02 = 22 dec 1995 n.Chr.
+  -0010-09-15T04:44:23 = 15 sep -10 v.Chr.
+
+=head3 GyMd (d/M/y GGGGG)
+
+   2008-02-05T18:30:30 = 5/2/2008 n.C.
+   1995-12-22T09:05:02 = 22/12/1995 n.C.
+  -0010-09-15T04:44:23 = 15/9/-10 v.C.
 
 =head3 H (HH)
 
@@ -461,15 +467,15 @@ Dutch Netherlands locale.
 
 =head3 MMM (LLL)
 
-   2008-02-05T18:30:30 = feb.
-   1995-12-22T09:05:02 = dec.
-  -0010-09-15T04:44:23 = sep.
+   2008-02-05T18:30:30 = feb
+   1995-12-22T09:05:02 = dec
+  -0010-09-15T04:44:23 = sep
 
 =head3 MMMEd (E d MMM)
 
-   2008-02-05T18:30:30 = di 5 feb.
-   1995-12-22T09:05:02 = vr 22 dec.
-  -0010-09-15T04:44:23 = za 15 sep.
+   2008-02-05T18:30:30 = di 5 feb
+   1995-12-22T09:05:02 = vr 22 dec
+  -0010-09-15T04:44:23 = za 15 sep
 
 =head3 MMMMW-count-one ('week' W 'van' MMMM)
 
@@ -491,9 +497,9 @@ Dutch Netherlands locale.
 
 =head3 MMMd (d MMM)
 
-   2008-02-05T18:30:30 = 5 feb.
-   1995-12-22T09:05:02 = 22 dec.
-  -0010-09-15T04:44:23 = 15 sep.
+   2008-02-05T18:30:30 = 5 feb
+   1995-12-22T09:05:02 = 22 dec
+  -0010-09-15T04:44:23 = 15 sep
 
 =head3 Md (d-M)
 
@@ -563,15 +569,15 @@ Dutch Netherlands locale.
 
 =head3 yMMM (MMM y)
 
-   2008-02-05T18:30:30 = feb. 2008
-   1995-12-22T09:05:02 = dec. 1995
-  -0010-09-15T04:44:23 = sep. -10
+   2008-02-05T18:30:30 = feb 2008
+   1995-12-22T09:05:02 = dec 1995
+  -0010-09-15T04:44:23 = sep -10
 
 =head3 yMMMEd (E d MMM y)
 
-   2008-02-05T18:30:30 = di 5 feb. 2008
-   1995-12-22T09:05:02 = vr 22 dec. 1995
-  -0010-09-15T04:44:23 = za 15 sep. -10
+   2008-02-05T18:30:30 = di 5 feb 2008
+   1995-12-22T09:05:02 = vr 22 dec 1995
+  -0010-09-15T04:44:23 = za 15 sep -10
 
 =head3 yMMMM (MMMM y)
 
@@ -581,9 +587,9 @@ Dutch Netherlands locale.
 
 =head3 yMMMd (d MMM y)
 
-   2008-02-05T18:30:30 = 5 feb. 2008
-   1995-12-22T09:05:02 = 22 dec. 1995
-  -0010-09-15T04:44:23 = 15 sep. -10
+   2008-02-05T18:30:30 = 5 feb 2008
+   1995-12-22T09:05:02 = 22 dec 1995
+  -0010-09-15T04:44:23 = 15 sep -10
 
 =head3 yMd (d-M-y)
 
@@ -630,9 +636,9 @@ Yes
 
 =head3 %c (%a %d %b %Y %T %Z) - date time format
 
-   2008-02-05T18:30:30 = di 05 feb. 2008 18:30:30 UTC
-   1995-12-22T09:05:02 = vr 22 dec. 1995 09:05:02 UTC
-  -0010-09-15T04:44:23 = za 15 sep. -10 04:44:23 UTC
+   2008-02-05T18:30:30 = di 05 feb 2008 18:30:30 UTC
+   1995-12-22T09:05:02 = vr 22 dec 1995 09:05:02 UTC
+  -0010-09-15T04:44:23 = za 15 sep -10 04:44:23 UTC
 
 =head3 %x (%d-%m-%y) - date format
 

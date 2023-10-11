@@ -1,8 +1,10 @@
-use strict;
+use v5.12.0;
 use warnings;
-package Email::Simple::Creator;
+package Email::Simple::Creator 2.218;
 # ABSTRACT: private helper for building Email::Simple objects
-$Email::Simple::Creator::VERSION = '2.216';
+
+use Carp ();
+
 sub _crlf {
   "\x0d\x0a";
 }
@@ -16,7 +18,10 @@ our @CARP_NOT = qw(Email::Simple Email::MIME);
 
 sub _add_to_header {
   my ($class, $header, $key, $value) = @_;
-  $value = '' unless defined $value;
+  $value //= '';
+
+  Carp::carp "Header name '$key' with wide characters" if $key =~ /[^\x00-\xFF]/;
+  Carp::carp "Value '$value' for '$key' header with wide characters" if $value =~ /[^\x00-\xFF]/;
 
   if ($value =~ s/[\x0a\x0b\x0c\x0d\x85\x{2028}\x{2029}]+/ /g) {
     Carp::carp("replaced vertical whitespace in $key header with space; this will become fatal in a future version");
@@ -44,7 +49,17 @@ Email::Simple::Creator - private helper for building Email::Simple objects
 
 =head1 VERSION
 
-version 2.216
+version 2.218
+
+=head1 PERL VERSION
+
+This library should run on perls released even a long time ago.  It should work
+on any version of perl released in the last five years.
+
+Although it may work on older versions of perl, no guarantee is made that the
+minimum required version will not be increased.  The version may be increased
+for any reason, and there is no promise that patches will be accepted to lower
+the minimum required perl.
 
 =head1 AUTHORS
 
@@ -60,7 +75,7 @@ Casey West
 
 =item *
 
-Ricardo SIGNES
+Ricardo SIGNES <cpan@semiotic.systems>
 
 =back
 

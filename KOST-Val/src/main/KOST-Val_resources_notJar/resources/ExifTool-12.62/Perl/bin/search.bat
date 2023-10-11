@@ -1,31 +1,18 @@
 @rem = '--*-Perl-*--
-@echo off
-if "%OS%" == "Windows_NT" goto WinNT
-IF EXIST "%~dp0perl.exe" (
-"%~dp0perl.exe" -x -S "%0" %1 %2 %3 %4 %5 %6 %7 %8 %9
-) ELSE IF EXIST "%~dp0..\..\bin\perl.exe" (
-"%~dp0..\..\bin\perl.exe" -x -S "%0" %1 %2 %3 %4 %5 %6 %7 %8 %9
-) ELSE (
-perl -x -S "%0" %1 %2 %3 %4 %5 %6 %7 %8 %9
-)
-
-goto endofperl
+@set "ErrorLevel="
+@if "%OS%" == "Windows_NT" @goto WinNT
+@perl -x -S "%0" %1 %2 %3 %4 %5 %6 %7 %8 %9
+@set ErrorLevel=%ErrorLevel%
+@goto endofperl
 :WinNT
-IF EXIST "%~dp0perl.exe" (
-"%~dp0perl.exe" -x -S %0 %*
-) ELSE IF EXIST "%~dp0..\..\bin\perl.exe" (
-"%~dp0..\..\bin\perl.exe" -x -S %0 %*
-) ELSE (
-perl -x -S %0 %*
-)
-
-if NOT "%COMSPEC%" == "%SystemRoot%\system32\cmd.exe" goto endofperl
-if %errorlevel% == 9009 echo You do not have Perl in your PATH.
-if errorlevel 1 goto script_failed_so_exit_with_non_zero_val 2>nul
-goto endofperl
+@perl -x -S %0 %*
+@set ErrorLevel=%ErrorLevel%
+@if NOT "%COMSPEC%" == "%SystemRoot%\system32\cmd.exe" @goto endofperl
+@if %ErrorLevel% == 9009 @echo You do not have Perl in your PATH.
+@goto endofperl
 @rem ';
 #!/usr/local/bin/perl -w
-#line 29
+#line 30
 'di';
 'ig00';
 ##############################################################################
@@ -1891,6 +1878,6 @@ http://www.wg.omron.co.jp/cgi-bin/j-e/jfriedl.html
 
 .SH "LATEST SOURCE"
 See http://www.wg.omron.co.jp/~jfriedl/perl/index.html
-
 __END__
 :endofperl
+@set "ErrorLevel=" & @goto _undefined_label_ 2>NUL || @"%COMSPEC%" /d/c @exit %ErrorLevel%

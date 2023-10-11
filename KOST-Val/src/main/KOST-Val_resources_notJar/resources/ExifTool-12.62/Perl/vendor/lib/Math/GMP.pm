@@ -33,9 +33,9 @@ use Carp;
 use vars qw(@ISA @EXPORT @EXPORT_OK $AUTOLOAD);
 
 use overload (
-	'""'  =>   sub { stringify($_[0]) },
-	'0+'  =>   sub { $_[0] >= 0 ? uintify($_[0]) : intify($_[0]) },
-	'bool' =>  sub { $_[0] != 0 },
+	'""'  =>   \&op_stringify,
+	'0+'  =>   \&op_numify,
+	'bool' =>  \&op_bool,
 
 	'<=>' =>   \&op_spaceship,
 	'=='  =>   \&op_eq,
@@ -65,7 +65,7 @@ require AutoLoader;
 # names by default without a very good reason. Use EXPORT_OK instead.
 # Do not simply export all your public functions/methods/constants.
 
-our $VERSION = '2.20';
+our $VERSION = '2.25';
 
 
 bootstrap Math::GMP $VERSION;
@@ -118,7 +118,7 @@ Math::GMP - High speed arbitrary size integer math
 
 =head1 VERSION
 
-version 2.20
+version 2.25
 
 =head1 SYNOPSIS
 
@@ -205,6 +205,17 @@ be represented in the base specified by the second parameter.
   print $val;
 
 Calculates the factorial of $x and returns the result.
+
+=head2 $n->bnok($k)
+
+  $x = Math::GMP->new(5);
+  my $val = $x->bnok(2);      # 1*2*3*4*5/(1*2)/(1*2*3) = 10
+  print $val;
+
+Calculates the binomial coefficient of $n over $k and returns the result.
+Equals to $n!/($k!*($n-$k)!).
+
+( Added in version 2.23 .)
 
 =head2 my $val = $x->band($y, $swap)
 
@@ -431,6 +442,18 @@ modifying $x).
 Returns a Math::GMP object containing $x shifted by $shift bits
 (where $shift is a plain integer).
 
+=head2 my $multiplied = $x->bmulf($float)
+
+  my $x = Math::GMP->new(3)->bpow(100);
+  my $ret = $x->bmulf(1.5);
+
+  # $ret is now Math::GMP of floor(3^101 / 2)
+
+Returns a Math::GMP object representing $x multiplied by the floating point
+value $float (with the result truncated towards zero).
+
+( Added in version 2.23 .)
+
 =head2 my $ret = $base->powm_gmp($exp, $mod);
 
     my $base = Math::GMP->new(157);
@@ -500,6 +523,10 @@ For internal use. B<Do not use directly>.
 
 For internal use. B<Do not use directly>.
 
+=head2 op_bool
+
+For internal use. B<Do not use directly>.
+
 =head2 op_div
 
 For internal use. B<Do not use directly>.
@@ -516,11 +543,19 @@ For internal use. B<Do not use directly>.
 
 For internal use. B<Do not use directly>.
 
+=head2 op_numify
+
+For internal use. B<Do not use directly>.
+
 =head2 op_pow
 
 For internal use. B<Do not use directly>.
 
 =head2 op_spaceship
+
+For internal use. B<Do not use directly>.
+
+=head2 op_stringify
 
 For internal use. B<Do not use directly>.
 
@@ -535,6 +570,31 @@ For internal use. B<Do not use directly>.
 =head2 uintify
 
 For internal use. B<Do not use directly>.
+
+=head1 DIVISION BY ZERO
+
+Whereas perl normally catches division by zero to provide a standard
+perl-level error message, C<libgmp> does not; the result is usually
+a SIGFPE (floating point exception) giving a core dump if you ever
+attempt to divide a C<Math::GMP> object by anything that evaluates
+to zero. This can make it hard to diagnose where the error has occurred
+in your perl code.
+
+As of perl-5.36.0, SIGFPE is delivered in a way that can be caught
+by a C<%SIG> handler. So you can get a stack trace with code like:
+
+  use Carp;  # load it up front
+  local $SIG{FPE} = sub { confess(@_) };
+
+Before perl-5.36.0 this approach won't work: you'll need to use
+L<POSIX/sigaction> instead:
+
+  use Carp;
+  use POSIX qw{ sigaction SIGFPE };
+  sigaction(SIGFPE, POSIX::SigAction->new(sub { confess(@_) }));
+
+In either case, you should not attempt to return from the signal
+handler, since the signal will just be thrown again.
 
 =head1 BUGS
 
@@ -570,11 +630,18 @@ implementation.
 See L<Math::BigInt> and L<Math::BigInt::GMP> or
 L<Math::BigInt::Pari> or L<Math::BigInt::BitVect>.
 
+See L<Math::GMPz>, L<Math::GMPq>, and friends
+( L<https://metacpan.org/search?q=math%3A%3Agmp> ) for bindings of
+other parts of GMP / MPFR / etc.
+
 =head1 AUTHOR
 
 Chip Turner <chip@redhat.com>, based on the old Math::BigInt by Mark Biggar
 and Ilya Zakharevich.  Further extensive work provided by Tels
 <tels@bloodgate.com>.
+
+Shlomi Fish ( L<https://www.shlomifish.org/> ) has done some maintenance work
+while putting his changes under CC0.
 
 =head1 AUTHOR
 

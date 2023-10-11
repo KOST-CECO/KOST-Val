@@ -136,40 +136,29 @@ However, L<Import::Into> will probably provide you with a better
 approach which doesn't just work with Exporter::Tiny, but B<all>
 exporters.
 
-=head2 Lexical subs
+=head2 Lexical subs on Perl 5.37.2 and above
 
 Often you want to make use of an exported function, but don't want
 it to "pollute" your namespace.
 
-There is this L<Sub::Exporter::Lexical> thing that was designed as a
-plugin for L<Sub::Exporter>, but Exporter::Tiny's API is close enough
-that it will work. Do you remember that global options hash? Just
-use that to tell Exporter::Tiny to use an alternative sub installer.
+On newer versions of Perl, Exporter::Tiny can use C<export_lexically>
+from L<builtin> to give you lexical versions of exports.
 
    {
-      use Sub::Exporter::Lexical lexical_installer => { -as => "lex" };
-      use MyUtils { installer => lex }, "frobnicate";
+      use MyUtils -lexical, "frobnicate";
       
       frobnicate(...);  # ok
    }
    
    frobnicate(...);  # not ok
 
-Another way to do lexical functions is to import a function into a
-scalar variable:
+This functionality should be considered B<EXPERIMENTAL> until
+C<export_lexically> is included in a stable release of Perl.
 
-   my $func;
-   use MyUtils "frobnicate" => { -as => \$func };
-   
-   $func->(...);
+=head2 Lexical subs on Perl older than 5.37.2
 
-You can even provide a hashref to put all imported functions into as
-part of that global options hash I mentioned earlier.
-
-   my %funcs;
-   use MyUtils { into => \%funcs }, "frobnicate";
-   
-   $funcs{frobnicate}->(...);
+If you install L<Lexical::Var>, then lexical imports should work on versions
+of Perl as old as 5.12.
 
 =head2 Unimporting
 
@@ -231,6 +220,8 @@ is issued.
 
 =head1 SEE ALSO
 
+L<https://exportertiny.github.io/>.
+
 L<Exporter::Shiny>,
 L<Exporter::Tiny>.
 
@@ -240,7 +231,7 @@ Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
 
 =head1 COPYRIGHT AND LICENCE
 
-This software is copyright (c) 2013-2014, 2017 by Toby Inkster.
+This software is copyright (c) 2013-2014, 2017, 2022-2023 by Toby Inkster.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

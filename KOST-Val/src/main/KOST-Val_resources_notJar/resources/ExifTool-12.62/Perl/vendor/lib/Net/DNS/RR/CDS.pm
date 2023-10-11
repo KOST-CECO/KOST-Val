@@ -2,7 +2,7 @@ package Net::DNS::RR::CDS;
 
 use strict;
 use warnings;
-our $VERSION = (qw$Id: CDS.pm 1814 2020-10-14 21:49:16Z willem $)[2];
+our $VERSION = (qw$Id: CDS.pm 1909 2023-03-23 11:36:16Z willem $)[2];
 
 use base qw(Net::DNS::RR::DS);
 
@@ -20,21 +20,15 @@ sub algorithm {
 	my ( $self, $arg ) = @_;
 	return $self->SUPER::algorithm($arg) if $arg;
 	return $self->SUPER::algorithm() unless defined $arg;
-	@{$self}{qw(keytag algorithm digtype)} = ( 0, 0, 0 );
+	@{$self}{qw(keytag algorithm digtype digestbin)} = ( 0, 0, 0, chr(0) );
 	return;
 }
 
 
 sub digtype {
 	my ( $self, $arg ) = @_;
-	return $self->SUPER::digtype( $arg ? $arg : () );
-}
-
-
-sub digest {
-	my $self = shift;
-	return $self->SUPER::digest(@_) unless defined( $_[0] ) && length( $_[0] ) < 2;
-	return $self->SUPER::digestbin( $_[0] ? '' : chr(0) );
+	return $self->SUPER::digtype($arg) if $arg;
+	return $self->SUPER::digtype();
 }
 
 
@@ -80,7 +74,7 @@ Package template (c)2009,2012 O.M.Kolkman and R.W.Franks.
 
 Permission to use, copy, modify, and distribute this software and its
 documentation for any purpose and without fee is hereby granted, provided
-that the above copyright notice appear in all copies and that both that
+that the original copyright notices appear in all copies and that both
 copyright notice and this permission notice appear in supporting
 documentation, and that the name of the author not be used in advertising
 or publicity pertaining to distribution of the software without specific
@@ -97,6 +91,8 @@ DEALINGS IN THE SOFTWARE.
 
 =head1 SEE ALSO
 
-L<perl>, L<Net::DNS>, L<Net::DNS::RR>, L<Net::DNS::RR::DS>, RFC7344, RFC8078(erratum 5049)
+L<perl> L<Net::DNS> L<Net::DNS::RR>
+L<Net::DNS::RR::DS>
+L<RFC7344|https://tools.ietf.org/html/rfc7344>
 
 =cut

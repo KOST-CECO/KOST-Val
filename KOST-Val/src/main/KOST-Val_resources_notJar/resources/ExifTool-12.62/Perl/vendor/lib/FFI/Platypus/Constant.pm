@@ -7,11 +7,11 @@ use constant 1.32 ();
 use FFI::Platypus;
 
 # ABSTRACT: Define constants in C space for Perl
-our $VERSION = '1.34'; # VERSION
+our $VERSION = '2.08'; # VERSION
 
 
 {
-  my $ffi = FFI::Platypus->new( api => 1 );
+  my $ffi = FFI::Platypus->new( api => 2 );
   $ffi->bundle;
 
   $ffi->type( 'opaque'                => 'ffi_platypus_constant_t' );
@@ -66,7 +66,7 @@ FFI::Platypus::Constant - Define constants in C space for Perl
 
 =head1 VERSION
 
-version 1.34
+version 2.08
 
 =head1 SYNOPSIS
 
@@ -87,11 +87,11 @@ C<lib/Foo.pm>:
  
  use strict;
  use warnings;
- use FFI::Platypus;
- use base qw( Exporter );
+ use FFI::Platypus 2.00;
+ use Exporter qw( import );
  
- my $ffi = FFI::Platypus->new;
- # sets constatns Foo::FOO and ABC::DEF from C
+ my $ffi = FFI::Platypus->new( api => 2 );
+ # sets constants Foo::FOO and ABC::DEF from C
  $ffi->bundle;
  
  1;
@@ -181,10 +181,10 @@ Your Perl code doesn't have to do anything when calling bundle:
  
  use strict;
  use warnings;
- use FFI::Platypus;
+ use FFI::Platypus 2.00;
  
  {
-   my $ffi = FFI::Platypus->new( api => 1 );
+   my $ffi = FFI::Platypus->new( api => 2 );
    $ffi->bundle;
  }
  
@@ -216,7 +216,7 @@ Damyan Ivanov
 
 Ilya Pavlov (Ilya33)
 
-Petr Pisar (ppisar)
+Petr Písař (ppisar)
 
 Mohammad S Anwar (MANWAR)
 
@@ -226,9 +226,17 @@ Meredith (merrilymeredith, MHOWARD)
 
 Diab Jerius (DJERIUS)
 
+Eric Brine (IKEGAMI)
+
+szTheory
+
+José Joaquín Atria (JJATRIA)
+
+Pete Houston (openstrike, HOUSTON)
+
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2015,2016,2017,2018,2019,2020 by Graham Ollis.
+This software is copyright (c) 2015-2022 by Graham Ollis.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

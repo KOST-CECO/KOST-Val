@@ -2,9 +2,9 @@ package Test2::V0;
 use strict;
 use warnings;
 
-use Importer;
+use Test2::Util::Importer;
 
-our $VERSION = '0.000139';
+our $VERSION = '0.000155';
 
 use Carp qw/croak/;
 
@@ -32,7 +32,7 @@ use Test2::Tools::Compare qw{
     in_set not_in_set check_set
     item field call call_list call_hash prop check all_items all_keys all_vals all_values
     etc end filter_items
-    T F D DF E DNE FDNE U
+    T F D DF E DNE FDNE U L
     event fail_events
     exact_ref
 };
@@ -43,7 +43,7 @@ use Test2::Tools::Warnings qw{
 
 use Test2::Tools::ClassicCompare qw/cmp_ok/;
 
-use Importer 'Test2::Tools::Subtest' => (
+use Test2::Util::Importer 'Test2::Tools::Subtest' => (
     subtest_buffered => { -as => 'subtest' },
 );
 
@@ -53,6 +53,7 @@ use Test2::Tools::Exports   qw/imported_ok not_imported_ok/;
 use Test2::Tools::Ref       qw/ref_ok ref_is ref_is_not/;
 use Test2::Tools::Mock      qw/mock mocked/;
 use Test2::Tools::Exception qw/try_ok dies lives/;
+use Test2::Tools::Refcount  qw/is_refcount is_oneref refcount/;
 
 our @EXPORT = qw{
     ok pass fail diag note todo skip
@@ -82,9 +83,11 @@ our @EXPORT = qw{
     in_set not_in_set check_set
     item field call call_list call_hash prop check all_items all_keys all_vals all_values
     etc end filter_items
-    T F D DF E DNE FDNE U
+    T F D DF E DNE FDNE U L
     event fail_events
     exact_ref
+
+    is_refcount is_oneref refcount
 };
 
 my $SRAND;
@@ -127,7 +130,7 @@ sub import {
 
     croak "Unknown option(s): " . join(', ', sort keys %options) if keys %options;
 
-    Importer->import_into($class, $caller, @exports);
+    Test2::Util::Importer->import_into($class, $caller, @exports);
 }
 
 1;
@@ -197,7 +200,7 @@ The following are both identical:
 
     use Test2::V0 ':DEFAULT', '!ok', ok => {-as => 'my_ok'};
 
-This bundle uses L<Importer> for exporting, as such you can use any arguments
+This bundle uses L<Test2::Util::Importer> for exporting, as such you can use any arguments
 it accepts.
 
 Explanation:
@@ -435,9 +438,15 @@ See L<Test2::Tools::Compare>.
 
 =item $check = DF()
 
+=item $check = E()
+
 =item $check = DNE()
 
 =item $check = FDNE()
+
+=item $check = U()
+
+=item $check = L()
 
 =item $check = exact_ref($ref)
 
@@ -522,6 +531,18 @@ See L<Test2::Tools::Ref>.
 =item ref_is($got, $want)
 
 =item ref_is_not($got, $do_not_want)
+
+=back
+
+See L<Test2::Tools::Refcount>.
+
+=over 4
+
+=item is_refcount($ref, $count, $description)
+
+=item is_oneref($ref, $description)
+
+=item $count = refcount($ref)
 
 =back
 

@@ -5,9 +5,9 @@ use Carp qw(croak);
 use Mojo::IOLoop;
 use Mojo::Transaction::WebSocket;
 use Mojo::URL;
-use Mojo::Util qw(term_escape);
+use Mojo::Util      qw(term_escape);
 use Mojo::WebSocket qw(server_handshake);
-use Scalar::Util qw(weaken);
+use Scalar::Util    qw(weaken);
 
 use constant DEBUG => $ENV{MOJO_SERVER_DEBUG} || 0;
 
@@ -20,8 +20,8 @@ has listen             => sub { [split /,/, $ENV{MOJO_LISTEN} || 'http://*:3000'
 has max_requests       => 100;
 
 sub DESTROY {
-  return if Mojo::Util::_global_destruction();
   my $self = shift;
+  return if ${^GLOBAL_PHASE} eq 'DESTRUCT';
   my $loop = $self->ioloop;
   $loop->remove($_) for keys %{$self->{connections} // {}}, @{$self->acceptors};
 }
@@ -91,7 +91,7 @@ sub _build_tx {
       my $tx = shift;
 
       my $req = $tx->req;
-      if (my $error = $req->error) { $self->_debug($id, $error->{message}) }
+      if (my $error = $req->error) { $self->_trace($id, $error->{message}) }
 
       # WebSocket
       if ($req->is_handshake) {
@@ -121,7 +121,7 @@ sub _close {
   delete $self->{connections}{$id};
 }
 
-sub _debug { $_[0]->app->log->debug($_[2]) if $_[0]{connections}{$_[1]}{tx} }
+sub _trace { $_[0]->app->log->trace($_[2]) if $_[0]{connections}{$_[1]}{tx} }
 
 sub _finish {
   my ($self, $id) = @_;
@@ -177,12 +177,15 @@ sub _listen {
     if ((my $host = $url->host) ne '*') { $options->{address} = $host }
     if (my $port = $url->port) { $options->{port} = $port }
   }
-  $options->{"tls_$_"} = $query->param($_) for qw(ca ciphers version);
+
+  $options->{tls_ca} = $query->param('ca');
   /^(.*)_(cert|key)$/ and $options->{"tls_$2"}{$1} = $query->param($_) for @{$query->names};
-  if (my $cert = $query->param('cert')) { $options->{'tls_cert'}{''} = $cert }
-  if (my $key  = $query->param('key'))  { $options->{'tls_key'}{''}  = $key }
-  my $verify = $query->param('verify');
-  $options->{tls_verify} = hex $verify if defined $verify;
+  if (my $cert = $query->param('cert')) { $options->{tls_cert}{''} = $cert }
+  if (my $key  = $query->param('key'))  { $options->{tls_key}{''}  = $key }
+  my ($ciphers, $verify, $version) = ($query->param('ciphers'), $query->param('verify'), $query->param('version'));
+  $options->{tls_options}{SSL_cipher_list} = $ciphers    if defined $ciphers;
+  $options->{tls_options}{SSL_verify_mode} = hex $verify if defined $verify;
+  $options->{tls_options}{SSL_version}     = $version    if defined $version;
   my $tls = $options->{tls} = $proto eq 'https';
 
   weaken $self;
@@ -191,22 +194,25 @@ sub _listen {
       my ($loop, $stream, $id) = @_;
 
       $self->{connections}{$id} = {tls => $tls};
-      warn "-- Accept $id (@{[$stream->handle->peerhost]})\n" if DEBUG;
+      warn "-- Accept $id (@{[_peer($stream->handle)]})\n" if DEBUG;
       $stream->timeout($self->inactivity_timeout);
 
       $stream->on(close   => sub { $self && $self->_close($id) });
       $stream->on(error   => sub { $self && $self->app->log->error(pop) && $self->_close($id) });
       $stream->on(read    => sub { $self->_read($id => pop) });
-      $stream->on(timeout => sub { $self->_debug($id, 'Inactivity timeout') });
+      $stream->on(timeout => sub { $self->_trace($id, 'Inactivity timeout (see FAQ for more)') });
     }
   );
 
   return if $self->silent;
   $self->app->log->info(qq{Listening at "$url"});
   $query->pairs([]);
-  $url->host('127.0.0.1') if $url->host eq '*';
+  $url->host('127.0.0.1')        if $url->host eq '*';
+  $url->port($self->ports->[-1]) if !$options->{path} && !$url->port;
   say 'Web application available at ', $options->{path} // $url;
 }
+
+sub _peer { $_[0]->isa('IO::Socket::UNIX') ? $_[0]->peerpath : $_[0]->peerhost }
 
 sub _read {
   my ($self, $id, $chunk) = @_;

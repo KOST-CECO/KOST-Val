@@ -3,10 +3,9 @@ package DBD::SQLite;
 use 5.006;
 use strict;
 use DBI   1.57 ();
-use DynaLoader ();
+use XSLoader ();
 
-our $VERSION = '1.66';
-our @ISA     = 'DynaLoader';
+our $VERSION = '1.72';
 
 # sqlite_version cache (set in the XS bootstrap)
 our ($sqlite_version, $sqlite_version_number);
@@ -14,7 +13,7 @@ our ($sqlite_version, $sqlite_version_number);
 # not sure if we still need these...
 our ($err, $errstr);
 
-__PACKAGE__->bootstrap($VERSION);
+XSLoader::load('DBD::SQLite', $VERSION);
 
 # New or old API?
 use constant NEWAPI => ($DBI::VERSION >= 1.608);
@@ -62,6 +61,8 @@ sub driver {
         DBD::SQLite::db->install_method('sqlite_limit');
         DBD::SQLite::db->install_method('sqlite_db_config');
         DBD::SQLite::db->install_method('sqlite_get_autocommit');
+        DBD::SQLite::db->install_method('sqlite_txn_state');
+        DBD::SQLite::db->install_method('sqlite_error_offset');
 
         $methods_are_installed++;
     }
@@ -1073,7 +1074,7 @@ are limited by the typeless nature of the SQLite database.
 =head1 SQLITE VERSION
 
 DBD::SQLite is usually compiled with a bundled SQLite library
-(SQLite version S<3.32.3> as of this release) for consistency.
+(SQLite version S<3.39.4> as of this release) for consistency.
 However, a different version of SQLite may sometimes be used for
 some reasons like security, or some new experimental features.
 
@@ -1622,32 +1623,72 @@ Your sweet spot probably lies somewhere in between.
 Returns the version of the SQLite library which B<DBD::SQLite> is using,
 e.g., "3.26.0". Can only be read.
 
-=item sqlite_unicode
+=item sqlite_string_mode
 
-If set to a true value, B<DBD::SQLite> will turn the UTF-8 flag on for all
-text strings coming out of the database (this feature is currently disabled
-for perl < 5.8.5). For more details on the UTF-8 flag see
-L<perlunicode>. The default is for the UTF-8 flag to be turned off.
+SQLite strings are simple arrays of bytes, but Perl strings can store any
+arbitrary Unicode code point. Thus, DBD::SQLite has to adopt some method
+of translating between those two models. This parameter defines that
+translation.
 
-Also note that due to some bizarreness in SQLite's type system (see
+Accepted values are the following constants:
+
+=over
+
+=item * DBD_SQLITE_STRING_MODE_BYTES: All strings are assumed to
+represent bytes. A Perl string that contains any code point above 255
+will trigger an exception. This is appropriate for Latin-1 strings,
+binary data, pre-encoded UTF-8 strings, etc.
+
+=item * DBD_SQLITE_STRING_MODE_UNICODE_FALLBACK: All Perl strings are encoded
+to UTF-8 before being given to SQLite. Perl will B<try> to decode SQLite
+strings as UTF-8 when giving them to Perl. Should any such string not be
+valid UTF-8, a warning is thrown, and the string is left undecoded.
+
+This is appropriate for strings that are decoded to characters via,
+e.g., L<Encode/decode>.
+
+Also note that, due to some bizarreness in SQLite's type system (see
 L<https://www.sqlite.org/datatype3.html>), if you want to retain
-blob-style behavior for B<some> columns under C<< $dbh->{sqlite_unicode} = 1
->> (say, to store images in the database), you have to state so
+blob-style behavior for B<some> columns under DBD_SQLITE_STRING_MODE_UNICODE_FALLBACK
+(say, to store images in the database), you have to state so
 explicitly using the 3-argument form of L<DBI/bind_param> when doing
 updates:
 
   use DBI qw(:sql_types);
-  $dbh->{sqlite_unicode} = 1;
+  use DBD::SQLite::Constants ':dbd_sqlite_string_mode';
+  $dbh->{sqlite_string_mode} = DBD_SQLITE_STRING_MODE_UNICODE_FALLBACK;
   my $sth = $dbh->prepare("INSERT INTO mytable (blobcolumn) VALUES (?)");
-  
+
   # Binary_data will be stored as is.
   $sth->bind_param(1, $binary_data, SQL_BLOB);
 
 Defining the column type as C<BLOB> in the DDL is B<not> sufficient.
 
-This attribute was originally named as C<unicode>, and renamed to
-C<sqlite_unicode> for integrity since version 1.26_06. Old C<unicode>
-attribute is still accessible but will be deprecated in the near future.
+=item * DBD_SQLITE_STRING_MODE_UNICODE_STRICT: Like
+DBD_SQLITE_STRING_MODE_UNICODE_FALLBACK but usually throws an exception
+rather than a warning if SQLite sends invalid UTF-8. (In Perl callbacks
+from SQLite we still warn instead.)
+
+=item * DBD_SQLITE_STRING_MODE_UNICODE_NAIVE: Like
+DBD_SQLITE_STRING_MODE_UNICODE_FALLBACK but uses a "naÃ¯ve" UTF-8 decoding
+method that forgoes validation. This is marginally faster than a validated
+decode, but it can also B<corrupt> B<Perl> B<itself!>
+
+=item * DBD_SQLITE_STRING_MODE_PV (default, but B<DO> B<NOT> B<USE>): Like
+DBD_SQLITE_STRING_MODE_BYTES, but when translating Perl strings to SQLite
+the Perl string's internal byte buffer is given to SQLite. B<This> B<is>
+B<bad>, but it's been the default for many years, and changing that would
+break existing applications.
+
+=back
+
+=item C<sqlite_unicode> or C<unicode> (deprecated)
+
+If truthy, equivalent to setting C<sqlite_string_mode> to
+DBD_SQLITE_STRING_MODE_UNICODE_NAIVE; if falsy, equivalent to
+DBD_SQLITE_STRING_MODE_PV.
+
+Prefer C<sqlite_string_mode> in all new code.
 
 =item sqlite_allow_multiple_statements
 
@@ -2257,12 +2298,20 @@ Calling this method with a true value enables loading (external)
 SQLite3 extensions. After the call, you can load extensions like this:
 
   $dbh->sqlite_enable_load_extension(1);
-  $sth = $dbh->prepare("select load_extension('libsqlitefunctions.so')")
+  $sth = $dbh->prepare("select load_extension('libmemvfs.so')")
   or die "Cannot prepare: " . $dbh->errstr();
 
 =head2 $dbh->sqlite_load_extension( $file, $proc )
 
-Loading an extension by a select statement (with the "load_extension" SQLite3 function like above) has some limitations. If you need to, say, create other functions from an extension, use this method. $file (a path to the extension) is mandatory, and $proc (an entry point name) is optional. You need to call C<sqlite_enable_load_extension> before calling C<sqlite_load_extension>.
+Loading an extension by a select statement (with the "load_extension" SQLite3 function like above) has some limitations. If the extension you want to use creates other functions that are not native to SQLite, use this method instead. $file (a path to the extension) is mandatory, and $proc (an entry point name) is optional. You need to call C<sqlite_enable_load_extension> before calling C<sqlite_load_extension>:
+
+  $dbh->sqlite_enable_load_extension(1);
+  $dbh->sqlite_load_extension('libsqlitefunctions.so')
+  or die "Cannot load extension: " . $dbh->errstr();
+
+If the extension uses SQLite mutex functions like C<sqlite3_mutex_enter>, then
+the extension should be compiled with the same C<SQLITE_THREADSAFE> compile-time
+setting as this module, see C<DBD::SQLite::compile_options()>.
 
 =head2 $dbh->sqlite_trace( $code_ref )
 
@@ -2374,6 +2423,20 @@ SQLITE_LIMIT_VARIABLE_NUMBER, etc) can be imported from DBD::SQLite::Constants.
 Returns true if the internal SQLite connection is in an autocommit mode.
 This does not always return the same value as C<< $dbh->{AutoCommit} >>.
 This returns false if you explicitly issue a C<<BEGIN>> statement.
+
+=head2 $dbh->sqlite_txn_state()
+
+Returns the internal transaction status of SQLite (not of DBI).
+Return values (SQLITE_TXN_NONE, SQLITE_TXN_READ, SQLITE_TXN_WRITE)
+can be imported from DBD::SQLite::Constants. You may pass an optional
+schema name (usually "main"). If SQLite does not support this function,
+or if you pass a wrong schema name, -1 is returned.
+
+=head2 $dbh->sqlite_error_offset()
+
+Returns the byte offset of the start of a problematic input SQL token
+or -1 if the most recent error does not reference a specific token in
+the input SQL (or DBD::SQLite is built with an older version of SQLite).
 
 =head1 DRIVER FUNCTIONS
 
@@ -2537,18 +2600,17 @@ or
 
 =head2 Unicode handling
 
-If the attribute C<< $dbh->{sqlite_unicode} >> is set, strings coming from
-the database and passed to the collation function will be properly
-tagged with the utf8 flag; but this only works if the
-C<sqlite_unicode> attribute is set B<before> the first call to
-a perl collation sequence . The recommended way to activate unicode
-is to set the parameter at connection time :
+Depending on the C<< $dbh->{sqlite_string_mode} >> value, strings coming
+from the database and passed to the collation function may be decoded as
+UTF-8. This only works, though, if the C<sqlite_string_mode> attribute is
+set B<before> the first call to a perl collation sequence. The recommended
+way to activate unicode is to set C<sqlite_string_mode> at connection time:
 
   my $dbh = DBI->connect(
       "dbi:SQLite:dbname=foo", "", "",
       {
-          RaiseError     => 1,
-          sqlite_unicode => 1,
+          RaiseError         => 1,
+          sqlite_string_mode => DBD_SQLITE_STRING_MODE_UNICODE_STRICT,
       }
   );
 
@@ -2570,7 +2632,7 @@ characters :
   use DBD::SQLite;
   $DBD::SQLite::COLLATION{no_accents} = sub {
     my ( $a, $b ) = map lc, @_;
-    tr[àâáäåãçðèêéëìîíïñòôóöõøùûúüý]
+    tr[Ã Ã¢Ã¡Ã¤Ã¥Ã£Ã§Ã°Ã¨ÃªÃ©Ã«Ã¬Ã®Ã­Ã¯Ã±Ã²Ã´Ã³Ã¶ÃµÃ¸Ã¹Ã»ÃºÃ¼Ã½]
       [aaaaaacdeeeeiiiinoooooouuuuy] for $a, $b;
     $a cmp $b;
   };

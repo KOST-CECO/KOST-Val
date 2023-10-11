@@ -123,9 +123,8 @@ easy to do.
    use Exporter::Shiny qw( frobnicate );
    
    sub _generate_frobnicate {
-      my $me     = shift;
-      my $caller = caller;
-      my ($name, $args) = @_;
+      my ( $me, $name, $args, $globals ) = @_;
+      my $caller = $globals->{into};
       
       return sub {
           ...;  # your code here
@@ -137,7 +136,8 @@ easy to do.
 The parameter C<< $me >> here is a string containing the package name
 which is being imported from; C<< $caller >> is the destination package;
 C<< $name >> is the name of the sub (in this case "frobnicate"); and
-C<< $args >> is a hashref of custom arguments for this function.
+C<< $args >> is a custom argument for this function. (By convention,
+C<< $args >> is normally a hashref.)
 
    # The hashref { foo => 42 } is $args above.
    #
@@ -165,10 +165,12 @@ The example in the synopsis could have been written as:
 What Exporter::Shiny does is mostly just to set C<< @EXPORT_OK >> for
 you and set up inheritance from the base class (Exporter::Tiny).
 
-Exporter::Shiny also sets C<< $INC{'MyUtils.pm} >> for you, which in
+Exporter::Shiny also sets C<< $INC{'MyUtils.pm'} >> for you, which in
 usually makes little difference, but is useful in some edge cases.
 
 =head1 SEE ALSO
+
+L<https://exportertiny.github.io/>.
 
 L<Exporter::Shiny>,
 L<Exporter::Tiny>.
@@ -182,7 +184,7 @@ Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
 
 =head1 COPYRIGHT AND LICENCE
 
-This software is copyright (c) 2013-2014, 2017 by Toby Inkster.
+This software is copyright (c) 2013-2014, 2017, 2022-2023 by Toby Inkster.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

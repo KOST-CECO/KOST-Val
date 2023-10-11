@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use namespace::autoclean;
 
-our $VERSION = '2.46';
+our $VERSION = '2.60';
 
 use DateTime::Duration;
 use DateTime::TimeZone::OlsonDB;
@@ -58,6 +58,20 @@ sub new {
 sub offset_from_utc { $_[0]->{offset_from_utc} || 0 }
 sub offset_from_std { $_[0]->{offset_from_std} || 0 }
 sub total_offset    { $_[0]->offset_from_utc + $_[0]->offset_from_std }
+
+sub offset_from_utc_as_hm {
+    my $offset = $_[0]->offset_from_utc;
+    my $h      = int( $offset / 3600 );
+    my $m      = ( $offset % 3600 ) / 60;
+    return sprintf( '%02d:%02d', $h, $m );
+}
+
+sub offset_from_std_as_hm {
+    my $offset = $_[0]->offset_from_std;
+    my $h      = int( $offset / 3600 );
+    my $m      = ( $offset % 3600 ) / 60;
+    return sprintf( '%02d:%02d', $h, $m );
+}
 
 sub rules      { @{ $_[0]->{rules} } }
 sub first_rule { $_[0]->{first_rule} }
@@ -375,7 +389,7 @@ sub _first_rule {
         print ' Next rule starts:  ', $next_dt->datetime, "\n"
             if $next_dt && $DateTime::TimeZone::OlsonDB::DEBUG;
 
-        print ' No next rule\n\n'
+        print " No next rule\n\n"
             if !$next_dt && $DateTime::TimeZone::OlsonDB::DEBUG;
         ## use critic
 
@@ -410,7 +424,7 @@ sub _first_no_dst_rule {
     my $self = shift;
 
     return first { !$_->offset_from_std }
-    sort { $a->min_year <=> $b->min_year } $self->rules;
+        sort { $a->min_year <=> $b->min_year } $self->rules;
 }
 
 1;

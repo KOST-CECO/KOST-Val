@@ -294,6 +294,9 @@ becomes M.)
 
    1;
 
+=for apidoc filter_add
+=for apidoc filter_read
+
 All Perl source filters are implemented as Perl classes and have the
 same basic structure as the example above.
 
@@ -321,7 +324,7 @@ parameter (C<$ref> in this case) and installs it in the source stream.
 Finally, there is the code that actually does the filtering. For this
 type of Perl source filter, all the filtering is done in a method
 called C<filter()>. (It is also possible to write a Perl source filter
-using a closure. See the C<Filter::Util::Call> manual page for more
+using a closure. See the L<Filter::Util::Call> manual page for more
 details.) It's called every time the Perl parser needs another line of
 source to process. The C<filter()> method, in turn, reads lines from
 the source stream using the C<filter_read()> function.

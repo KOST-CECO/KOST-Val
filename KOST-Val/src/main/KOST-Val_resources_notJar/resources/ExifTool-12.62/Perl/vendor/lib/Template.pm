@@ -10,7 +10,7 @@
 #   Andy Wardley   <abw@wardley.org>
 #
 # COPYRIGHT
-#   Copyright (C) 1996-2020 Andy Wardley.  All Rights Reserved.
+#   Copyright (C) 1996-2022 Andy Wardley.  All Rights Reserved.
 #
 #   This module is free software; you can redistribute it and/or
 #   modify it under the same terms as Perl itself.
@@ -32,7 +32,7 @@ use File::Basename;
 use File::Path;
 use Scalar::Util qw(blessed);
 
-our $VERSION = '3.009';
+our $VERSION = '3.101';
 our $ERROR   = '';
 our $DEBUG   = 0;
 our $BINMODE = 0 unless defined $BINMODE;
@@ -192,6 +192,9 @@ sub _output {
         elsif (open(FP, '>', $where)) {
             # binmode option can be 1 or a specific layer, e.g. :utf8
             my $bm = $options->{ binmode  };
+            if (not(defined $bm)) {
+              $bm = $BINMODE;
+            }
             if ($bm && $bm eq 1) {
                 binmode FP;
             }
@@ -299,10 +302,26 @@ folded into a hash array by the constructor.
 =head2 process($template, \%vars, $output, %options)
 
 The C<process()> method is called to process a template. The first parameter
-indicates the input template as one of: a filename relative to
-C<INCLUDE_PATH>, if defined; a reference to a text string containing the
-template text; or a file handle reference (e.g. C<IO::Handle> or sub-class) or
-C<GLOB> (e.g. C<\*STDIN>), from which the template can be read. A reference to
+indicates the input template as one of:
+
+=over 4
+
+=item *
+
+a filename relative to C<INCLUDE_PATH>, if defined
+
+=item *
+
+a reference to a text string containing the template text
+
+=item *
+
+a file handle reference (e.g. C<IO::Handle> or sub-class) or C<GLOB>
+(e.g. C<\*STDIN>), from which the template can be read.
+
+=back
+
+A reference to
 a hash array may be passed as the second parameter, containing definitions of
 template variables.
 
@@ -328,13 +347,34 @@ template variables.
 By default, the processed template output is printed to C<STDOUT>. The
 C<process()> method then returns C<1> to indicate success. A third parameter
 may be passed to the C<process()> method to specify a different output location.
-This value may be one of: a plain string indicating a filename which will be
-opened (relative to C<OUTPUT_PATH>, if defined) and the output written to; a file
-GLOB opened ready for output; a reference to a scalar (e.g. a text string) to
-which output/error is appended; a reference to a subroutine which is called,
-passing the output as a parameter; or any object reference which implements a
-C<print()> method (e.g. C<IO::Handle>, C<Apache::Request>, etc.) which will be called,
-passing the generated output as a parameter.
+This value may be one of:
+
+=over 4
+
+=item *
+
+a plain string indicating a filename which will be opened (relative to
+C<OUTPUT_PATH>, if defined) and the output written to
+
+=item *
+
+a file GLOB opened ready for output
+
+=item *
+
+a reference to a scalar (e.g. a text string) to which output/error is appended
+
+=item *
+
+a reference to a subroutine which is called, passing the output as a parameter
+
+=item *
+
+any object reference which implements a C<print()> method (e.g. C<IO::Handle>,
+C<Apache::Request>, etc.) which will be called, passing the generated output
+as a parameter.
+
+=back
 
 Examples:
 
@@ -915,11 +955,32 @@ Andy Wardley E<lt>abw@wardley.orgE<gt> L<http://wardley.org/>
 
 =head1 VERSION
 
-Template Toolkit version 3.009, released on July 13 2020.
+Template Toolkit version 3.100, released on July 13 2020.
+
+=head1 SUPPORT
+
+The Template Toolkit mailing list provides a forum for discussing
+issues relating to the use and abuse of the Template Toolkit.  There
+are a number of knowledgeable and helpful individuals who frequent the
+list (including the author) who can often offer help or suggestions.
+Please respect their time and patience by checking the documentation
+and/or mailing list archives before asking questions that may already
+have been answered.
+
+To subscribe to the mailing list, send an email to:
+
+    template-toolkit+subscribe@groups.io
+
+You can also use the web interface:
+
+    https://groups.io/g/template-toolkit
+
+For information about commercial support and consultancy for the Template
+Toolkit, please contact the author.
 
 =head1 COPYRIGHT
 
-Copyright (C) 1996-2020 Andy Wardley.  All Rights Reserved.
+Copyright (C) 1996-2022 Andy Wardley.  All Rights Reserved.
 
 This module is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself.

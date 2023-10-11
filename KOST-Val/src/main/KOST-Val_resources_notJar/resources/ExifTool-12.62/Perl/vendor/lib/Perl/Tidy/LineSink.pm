@@ -8,7 +8,7 @@
 package Perl::Tidy::LineSink;
 use strict;
 use warnings;
-our $VERSION = '20210111';
+our $VERSION = '20230701';
 
 sub AUTOLOAD {
 
@@ -41,46 +41,24 @@ sub new {
     my ( $class, @args ) = @_;
 
     my %defaults = (
-        output_file              => undef,
-        line_separator           => undef,
-        rOpts                    => undef,
-        rpending_logfile_message => undef,
-        is_encoded_data          => undef,
+        output_file     => undef,
+        line_separator  => undef,
+        is_encoded_data => undef,
     );
     my %args = ( %defaults, @args );
 
-    my $output_file              = $args{output_file};
-    my $line_separator           = $args{line_separator};
-    my $rOpts                    = $args{rOpts};
-    my $rpending_logfile_message = $args{rpending_logfile_message};
-    my $is_encoded_data          = $args{is_encoded_data};
+    my $output_file     = $args{output_file};
+    my $line_separator  = $args{line_separator};
+    my $is_encoded_data = $args{is_encoded_data};
 
     my $fh = undef;
 
     my $output_file_open = 0;
 
-    if ( $rOpts->{'format'} eq 'tidy' ) {
-        ( $fh, $output_file ) =
-          Perl::Tidy::streamhandle( $output_file, 'w', $is_encoded_data );
-        unless ($fh) { Perl::Tidy::Die("Cannot write to output stream\n"); }
-        $output_file_open = 1;
-    }
-
-    # in order to check output syntax when standard output is used,
-    # or when it is an object, we have to make a copy of the file
-    if ( $output_file eq '-' || ref $output_file ) {
-        if ( $rOpts->{'check-syntax'} ) {
-
-            # Turning off syntax check when standard output is used.
-            # The reason is that temporary files cause problems on
-            # on many systems.
-            $rOpts->{'check-syntax'} = 0;
-            ${$rpending_logfile_message} .= <<EOM;
-Note: --syntax check will be skipped because standard output is used
-EOM
-
-        }
-    }
+    ( $fh, $output_file ) =
+      Perl::Tidy::streamhandle( $output_file, 'w', $is_encoded_data );
+    unless ($fh) { Perl::Tidy::Die("Cannot write to output stream\n"); }
+    $output_file_open = 1;
 
     return bless {
         _fh               => $fh,
@@ -91,14 +69,22 @@ EOM
     }, $class;
 }
 
+sub set_line_separator {
+    my ( $self, $val ) = @_;
+    $self->{_line_separator} = $val;
+    return;
+}
+
 sub write_line {
 
     my ( $self, $line ) = @_;
     my $fh = $self->{_fh};
 
-    my $output_file_open = $self->{_output_file_open};
-    chomp $line;
-    $line .= $self->{_line_separator};
+    my $line_separator = $self->{_line_separator};
+    if ( defined($line_separator) ) {
+        chomp $line;
+        $line .= $line_separator;
+    }
 
     $fh->print($line) if ( $self->{_output_file_open} );
 

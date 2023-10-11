@@ -3,7 +3,7 @@ package Specio::Constraint::AnyCan;
 use strict;
 use warnings;
 
-our $VERSION = '0.46';
+our $VERSION = '0.48';
 
 use List::Util 1.33 ();
 use Role::Tiny::With;
@@ -81,7 +81,7 @@ Specio::Constraint::AnyCan - A class for constraints which require a class name 
 
 =head1 VERSION
 
-version 0.46
+version 0.48
 
 =head1 SYNOPSIS
 
@@ -110,8 +110,7 @@ This class overrides the C<message_generator> default if none is provided.
 
 Finally, this class requires an additional parameter, C<methods>. This must be
 an array reference of method names which the constraint requires. You can also
-pass a single string and it will be converted to an array reference
-internally.
+pass a single string and it will be converted to an array reference internally.
 
 =head2 $any_can->methods
 
@@ -126,8 +125,6 @@ L<Specio::Constraint::Role::Interface>, and L<Specio::Role::Inlinable> roles.
 
 Bugs may be submitted at L<https://github.com/houseabsolute/Specio/issues>.
 
-I am also usually active on IRC as 'autarch' on C<irc://irc.perl.org>.
-
 =head1 SOURCE
 
 The source code repository for Specio can be found at L<https://github.com/houseabsolute/Specio>.
@@ -138,7 +135,7 @@ Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2012 - 2020 by Dave Rolsky.
+This software is Copyright (c) 2012 - 2022 by Dave Rolsky.
 
 This is free software, licensed under:
 

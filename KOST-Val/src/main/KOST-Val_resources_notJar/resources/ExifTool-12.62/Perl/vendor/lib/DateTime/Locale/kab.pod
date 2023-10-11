@@ -275,54 +275,54 @@ Kabyle locale.
 
 =head3 Full
 
-   2008-02-05T18:30:30 = 6:30:30 n tmeddit UTC
-   1995-12-22T09:05:02 = 9:05:02 n tufat UTC
-  -0010-09-15T04:44:23 = 4:44:23 n tufat UTC
+   2008-02-05T18:30:30 = 6:30:30 n tmeddit UTC
+   1995-12-22T09:05:02 = 9:05:02 n tufat UTC
+  -0010-09-15T04:44:23 = 4:44:23 n tufat UTC
 
 =head3 Long
 
-   2008-02-05T18:30:30 = 6:30:30 n tmeddit UTC
-   1995-12-22T09:05:02 = 9:05:02 n tufat UTC
-  -0010-09-15T04:44:23 = 4:44:23 n tufat UTC
+   2008-02-05T18:30:30 = 6:30:30 n tmeddit UTC
+   1995-12-22T09:05:02 = 9:05:02 n tufat UTC
+  -0010-09-15T04:44:23 = 4:44:23 n tufat UTC
 
 =head3 Medium
 
-   2008-02-05T18:30:30 = 6:30:30 n tmeddit
-   1995-12-22T09:05:02 = 9:05:02 n tufat
-  -0010-09-15T04:44:23 = 4:44:23 n tufat
+   2008-02-05T18:30:30 = 6:30:30 n tmeddit
+   1995-12-22T09:05:02 = 9:05:02 n tufat
+  -0010-09-15T04:44:23 = 4:44:23 n tufat
 
 =head3 Short
 
-   2008-02-05T18:30:30 = 6:30 n tmeddit
-   1995-12-22T09:05:02 = 9:05 n tufat
-  -0010-09-15T04:44:23 = 4:44 n tufat
+   2008-02-05T18:30:30 = 6:30 n tmeddit
+   1995-12-22T09:05:02 = 9:05 n tufat
+  -0010-09-15T04:44:23 = 4:44 n tufat
 
 
 =head2 Datetime Formats
 
 =head3 Full
 
-   2008-02-05T18:30:30 = Kraḍass 5 Fuṛar 2008 6:30:30 n tmeddit UTC
-   1995-12-22T09:05:02 = Sḍisass 22 Duǧembeṛ 1995 9:05:02 n tufat UTC
-  -0010-09-15T04:44:23 = Sayass 15 Ctembeṛ -10 4:44:23 n tufat UTC
+   2008-02-05T18:30:30 = Kraḍass 5 Fuṛar 2008 6:30:30 n tmeddit UTC
+   1995-12-22T09:05:02 = Sḍisass 22 Duǧembeṛ 1995 9:05:02 n tufat UTC
+  -0010-09-15T04:44:23 = Sayass 15 Ctembeṛ -10 4:44:23 n tufat UTC
 
 =head3 Long
 
-   2008-02-05T18:30:30 = 5 Fuṛar 2008 6:30:30 n tmeddit UTC
-   1995-12-22T09:05:02 = 22 Duǧembeṛ 1995 9:05:02 n tufat UTC
-  -0010-09-15T04:44:23 = 15 Ctembeṛ -10 4:44:23 n tufat UTC
+   2008-02-05T18:30:30 = 5 Fuṛar 2008 6:30:30 n tmeddit UTC
+   1995-12-22T09:05:02 = 22 Duǧembeṛ 1995 9:05:02 n tufat UTC
+  -0010-09-15T04:44:23 = 15 Ctembeṛ -10 4:44:23 n tufat UTC
 
 =head3 Medium
 
-   2008-02-05T18:30:30 = 5 Fur, 2008 6:30:30 n tmeddit
-   1995-12-22T09:05:02 = 22 Duǧ, 1995 9:05:02 n tufat
-  -0010-09-15T04:44:23 = 15 Cte, -10 4:44:23 n tufat
+   2008-02-05T18:30:30 = 5 Fur, 2008 6:30:30 n tmeddit
+   1995-12-22T09:05:02 = 22 Duǧ, 1995 9:05:02 n tufat
+  -0010-09-15T04:44:23 = 15 Cte, -10 4:44:23 n tufat
 
 =head3 Short
 
-   2008-02-05T18:30:30 = 5/2/2008 6:30 n tmeddit
-   1995-12-22T09:05:02 = 22/12/1995 9:05 n tufat
-  -0010-09-15T04:44:23 = 15/9/-10 4:44 n tufat
+   2008-02-05T18:30:30 = 5/2/2008 6:30 n tmeddit
+   1995-12-22T09:05:02 = 22/12/1995 9:05 n tufat
+  -0010-09-15T04:44:23 = 15/9/-10 4:44 n tufat
 
 
 =head2 Available Formats
@@ -383,15 +383,15 @@ Kabyle locale.
 
 =head3 Ehm (E h:mm a)
 
-   2008-02-05T18:30:30 = Kraḍ 6:30 n tmeddit
-   1995-12-22T09:05:02 = Sḍis 9:05 n tufat
-  -0010-09-15T04:44:23 = Say 4:44 n tufat
+   2008-02-05T18:30:30 = Kraḍ 6:30 n tmeddit
+   1995-12-22T09:05:02 = Sḍis 9:05 n tufat
+  -0010-09-15T04:44:23 = Say 4:44 n tufat
 
 =head3 Ehms (E h:mm:ss a)
 
-   2008-02-05T18:30:30 = Kraḍ 6:30:30 n tmeddit
-   1995-12-22T09:05:02 = Sḍis 9:05:02 n tufat
-  -0010-09-15T04:44:23 = Say 4:44:23 n tufat
+   2008-02-05T18:30:30 = Kraḍ 6:30:30 n tmeddit
+   1995-12-22T09:05:02 = Sḍis 9:05:02 n tufat
+  -0010-09-15T04:44:23 = Say 4:44:23 n tufat
 
 =head3 Gy (G y)
 
@@ -416,6 +416,12 @@ Kabyle locale.
    2008-02-05T18:30:30 = sld. T.Ɛ 2008 Fur 5
    1995-12-22T09:05:02 = sld. T.Ɛ 1995 Duǧ 22
   -0010-09-15T04:44:23 = snd. T.Ɛ -10 Cte 15
+
+=head3 GyMd (GGGGG y-MM-dd)
+
+   2008-02-05T18:30:30 = sld. T.Ɛ 2008-02-05
+   1995-12-22T09:05:02 = sld. T.Ɛ 1995-12-22
+  -0010-09-15T04:44:23 = snd. T.Ɛ -10-09-15
 
 =head3 H (HH)
 
@@ -521,33 +527,33 @@ Kabyle locale.
 
 =head3 h (h a)
 
-   2008-02-05T18:30:30 = 6 n tmeddit
-   1995-12-22T09:05:02 = 9 n tufat
-  -0010-09-15T04:44:23 = 4 n tufat
+   2008-02-05T18:30:30 = 6 n tmeddit
+   1995-12-22T09:05:02 = 9 n tufat
+  -0010-09-15T04:44:23 = 4 n tufat
 
 =head3 hm (h:mm a)
 
-   2008-02-05T18:30:30 = 6:30 n tmeddit
-   1995-12-22T09:05:02 = 9:05 n tufat
-  -0010-09-15T04:44:23 = 4:44 n tufat
+   2008-02-05T18:30:30 = 6:30 n tmeddit
+   1995-12-22T09:05:02 = 9:05 n tufat
+  -0010-09-15T04:44:23 = 4:44 n tufat
 
 =head3 hms (h:mm:ss a)
 
-   2008-02-05T18:30:30 = 6:30:30 n tmeddit
-   1995-12-22T09:05:02 = 9:05:02 n tufat
-  -0010-09-15T04:44:23 = 4:44:23 n tufat
+   2008-02-05T18:30:30 = 6:30:30 n tmeddit
+   1995-12-22T09:05:02 = 9:05:02 n tufat
+  -0010-09-15T04:44:23 = 4:44:23 n tufat
 
 =head3 hmsv (h:mm:ss a v)
 
-   2008-02-05T18:30:30 = 6:30:30 n tmeddit UTC
-   1995-12-22T09:05:02 = 9:05:02 n tufat UTC
-  -0010-09-15T04:44:23 = 4:44:23 n tufat UTC
+   2008-02-05T18:30:30 = 6:30:30 n tmeddit UTC
+   1995-12-22T09:05:02 = 9:05:02 n tufat UTC
+  -0010-09-15T04:44:23 = 4:44:23 n tufat UTC
 
 =head3 hmv (h:mm a v)
 
-   2008-02-05T18:30:30 = 6:30 n tmeddit UTC
-   1995-12-22T09:05:02 = 9:05 n tufat UTC
-  -0010-09-15T04:44:23 = 4:44 n tufat UTC
+   2008-02-05T18:30:30 = 6:30 n tmeddit UTC
+   1995-12-22T09:05:02 = 9:05 n tufat UTC
+  -0010-09-15T04:44:23 = 4:44 n tufat UTC
 
 =head3 ms (m:ss)
 

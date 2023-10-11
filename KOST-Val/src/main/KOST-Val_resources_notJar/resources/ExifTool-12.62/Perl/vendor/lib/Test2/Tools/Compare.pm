@@ -2,13 +2,14 @@ package Test2::Tools::Compare;
 use strict;
 use warnings;
 
-our $VERSION = '0.000139';
+our $VERSION = '0.000155';
 
 use Carp qw/croak/;
 use Scalar::Util qw/reftype/;
 
 use Test2::API qw/context/;
 use Test2::Util::Ref qw/rtype/;
+use Test2::Util qw/pkg_to_file/;
 
 use Test2::Compare qw{
     compare
@@ -71,11 +72,32 @@ our @EXPORT_OK = qw{
     in_set not_in_set check_set
     item field call call_list call_hash prop check all_items all_keys all_vals all_values
     etc end filter_items
-    T F D DF DNE FDNE E U
+    T F D DF E DNE FDNE U L
     event fail_events
     exact_ref
 };
 use base 'Exporter';
+
+my $_autodump = sub {
+    my ($ctx, $got) = @_;
+
+    my $module = $ENV{'T2_AUTO_DUMP'} or return;
+    $module = 'Data::Dumper' if $module eq '1';
+
+    my $file = pkg_to_file($module);
+    eval { require $file };
+
+    if (not $module->can('Dump')) {
+        require Data::Dumper;
+        $module = 'Data::Dumper';
+    }
+
+    my $deparse = $Data::Dumper::Deparse;
+    $deparse = !!$ENV{'T2_AUTO_DEPARSE'} if exists $ENV{'T2_AUTO_DEPARSE'};
+    local $Data::Dumper::Deparse = $deparse;
+
+    $ctx->diag($module->Dump([$got], ['GOT']));
+};
 
 sub is($$;$@) {
     my ($got, $exp, $name, @diag) = @_;
@@ -108,12 +130,13 @@ sub is($$;$@) {
                 "The old behavior was a bug.",
                 "The new behavior is to default to end().",
                 "This test will soon start to fail with the following diagnostics:",
-                $delta->diag,
+                $delta->diag->as_string,
                 "",
             );
         }
         else {
             $ctx->fail($name, $delta->diag, @diag);
+            $ctx->$_autodump($got);
         }
     }
     else {
@@ -135,6 +158,7 @@ sub isnt($$;$@) {
     }
     else {
         $ctx->ok(0, $name, ["Comparison matched (it should not).", @diag]);
+        $ctx->$_autodump($got);
     }
 
     $ctx->release;
@@ -149,6 +173,7 @@ sub like($$;$@) {
 
     if ($delta) {
         $ctx->fail($name, $delta->diag, @diag);
+        $ctx->$_autodump($got);
     }
     else {
         $ctx->ok(1, $name);
@@ -169,6 +194,7 @@ sub unlike($$;$@) {
     }
     else {
         $ctx->ok(0, $name, ["Comparison matched (it should not).", @diag]);
+        $ctx->$_autodump($got);
     }
 
     $ctx->release;
@@ -240,7 +266,12 @@ sub F() {
 sub FDNE() {
     my @caller = caller;
     Test2::Compare::Custom->new(
-        code => sub { defined $_ && ( ref $_ || $_ ) ? 0 : 1 }, name => 'FALSE', operator => 'FALSE() || !exists',
+        code => sub {
+            my %p = @_;
+            return 1 unless $p{exists};
+            return $p{got} ? 0 : 1;
+        },
+        name => 'FALSE', operator => 'FALSE() || !exists',
         file => $caller[1],
         lines => [$caller[2]],
     );
@@ -249,7 +280,21 @@ sub FDNE() {
 sub T() {
     my @caller = caller;
     Test2::Compare::Custom->new(
-        code => sub { defined $_ && ( ref $_ || $_ ) ? 1 : 0 }, name => 'TRUE', operator => 'TRUE()',
+        code => sub {
+            my %p = @_;
+            return 0 unless $p{exists};
+            return $p{got} ? 1 : 0;
+        },
+        name => 'TRUE', operator => 'TRUE()',
+        file => $caller[1],
+        lines => [$caller[2]],
+    );
+}
+
+sub L() {
+    my @caller = caller;
+    Test2::Compare::Custom->new(
+        code => sub { defined $_ && length $_ ? 1 : 0 }, name => 'LENGTH', operator => 'DEFINED() && LENGTH()',
         file => $caller[1],
         lines => [$caller[2]],
     );
@@ -709,7 +754,7 @@ the field.
         in_set not_in_set check_set
         item field call call_list call_hash prop check all_items all_keys all_vals all_values
         etc end filter_items
-        T F D DNE FDNE E
+        T F D DF E DNE FDNE U L
         event fail_events
         exact_ref
     };
@@ -833,6 +878,13 @@ Opposite of C<like()>. Does all the same checks, but passes when there is a
 mismatch.
 
 =back
+
+The C<is()>, C<isnt()>, C<like()>, and C<unlike()> functions can be made
+to dump C<$got> using L<Data::Dumper> when tests fail by setting the
+C<T2_AUTO_DUMP> environment variable to "1". (Alternatively, C<T2_AUTO_DUMP>
+can be set to the name of a Perl module providing a compatible C<Dump()>
+method.) The C<T2_AUTO_DEPARSE> environment variable can be used to
+enable Data::Dumper's deparsing of coderefs.
 
 =head2 QUICK CHECKS
 
@@ -974,6 +1026,22 @@ These will fail:
 
 This is a combination of C<F()> and C<DNE()>. This will pass for a false value,
 or a nonexistent value.
+
+=item $check = L()
+
+This is to verify that the value in the C<$got> structure is defined and
+has length.  Any value other than C<undef> or the empty string will pass
+(including references).
+
+These will pass:
+
+    is('foo', L(), 'value is defined and has length');
+    is([],    L(), 'value is defined and has length');
+
+These will fail:
+
+    is(undef, L(), 'value is defined and has length');
+    is('',    L(), 'value is defined and has length');
 
 =back
 

@@ -2,7 +2,7 @@ package Mojo::DynamicMethods;
 use Mojo::Base -strict;
 
 use Hash::Util::FieldHash qw(fieldhash);
-use Mojo::Util qw(monkey_patch);
+use Mojo::Util            qw(monkey_patch);
 
 sub import {
   my ($flag, $caller) = ($_[1] // '', caller);
@@ -39,7 +39,7 @@ sub register {
   $dyn_methods{$object}{$name} = $code;
 }
 
-1;
+"Ph'nglui mglw'nafh Cthulhu R'lyeh wgah'nagl fhtagn";
 
 =encoding utf8
 
@@ -90,7 +90,7 @@ C<$dyn_methods> is the same thing you pass as C<$ref> to L</"register">.
     };
   }
 
-Note that this module is B<EXPERIMENTAL> and might change without warning!
+Note that this module will summon B<Cthulhu>, use it at your own risk!
 
 =head1 FUNCTIONS
 

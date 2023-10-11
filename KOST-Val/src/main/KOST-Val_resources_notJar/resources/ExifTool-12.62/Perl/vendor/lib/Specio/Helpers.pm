@@ -7,7 +7,7 @@ use Carp qw( croak );
 use Exporter 'import';
 use overload ();
 
-our $VERSION = '0.46';
+our $VERSION = '0.48';
 
 use Scalar::Util qw( blessed );
 
@@ -24,7 +24,14 @@ sub install_t_sub {
     my $types  = shift;
 
     # XXX - check to see if their t() is something else entirely?
-    return if $caller->can('t');
+    {
+        ## no critic (TestingAndDebugging::ProhibitNoStrict)
+        no strict 'refs';
+
+        # We used to check ->can('t') but that was wrong, since it would
+        # return if a parent class had a t() sub.
+        return if *{ $caller . '::t' }{CODE};
+    }
 
     my $t = sub {
         my $name = shift;
@@ -124,7 +131,7 @@ Specio::Helpers - Helper subs for the Specio distro
 
 =head1 VERSION
 
-version 0.46
+version 0.48
 
 =head1 DESCRIPTION
 
@@ -136,8 +143,6 @@ There's nothing public here.
 
 Bugs may be submitted at L<https://github.com/houseabsolute/Specio/issues>.
 
-I am also usually active on IRC as 'autarch' on C<irc://irc.perl.org>.
-
 =head1 SOURCE
 
 The source code repository for Specio can be found at L<https://github.com/houseabsolute/Specio>.
@@ -148,7 +153,7 @@ Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2012 - 2020 by Dave Rolsky.
+This software is Copyright (c) 2012 - 2022 by Dave Rolsky.
 
 This is free software, licensed under:
 

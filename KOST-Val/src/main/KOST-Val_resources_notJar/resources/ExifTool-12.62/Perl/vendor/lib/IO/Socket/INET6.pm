@@ -43,7 +43,7 @@ use Carp;
 use Errno;
 
 @ISA = qw(IO::Socket);
-$VERSION = "2.72";
+$VERSION = "2.73";
 #Purpose: allow protocol independent protocol and original interface.
 
 my $EINVAL = exists(&Errno::EINVAL) ? Errno::EINVAL() : 1;
@@ -417,11 +417,19 @@ __END__
 
 =head1 NAME
 
-IO::Socket::INET6 - Object interface for AF_INET/AF_INET6 domain sockets
+IO::Socket::INET6 - [ DEPRECATED!! ] Object interface for AF_INET/AF_INET6 domain sockets
 
 =head1 SYNOPSIS
 
     use IO::Socket::INET6;
+
+=head1 WARNING
+
+B<WARNING!! IO-Socket-INET6 is deprecated.>
+
+IO-Socket-INET6 was now succeeded by Paul
+Evans' L<IO::Socket::IP> . Please
+convert old code from IO-Socket-INET6 to IO-Socket-IP.
 
 =head1 DESCRIPTION
 

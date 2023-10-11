@@ -383,13 +383,13 @@ Ngomba Cameroon locale.
 
 =head3 Ehm (E h:mm a)
 
-   2008-02-05T18:30:30 = Ápta Mɔ́ndi 6:30 ŋka mbɔ́t nji
+   2008-02-05T18:30:30 = Ápta Mɔ́ndi 6:30 ŋka mbɔ́t nji
    1995-12-22T09:05:02 = Fɛlâyɛdɛ 9:05 mbaꞌmbaꞌ
   -0010-09-15T04:44:23 = Sásidɛ 4:44 mbaꞌmbaꞌ
 
 =head3 Ehms (E h:mm:ss a)
 
-   2008-02-05T18:30:30 = Ápta Mɔ́ndi 6:30:30 ŋka mbɔ́t nji
+   2008-02-05T18:30:30 = Ápta Mɔ́ndi 6:30:30 ŋka mbɔ́t nji
    1995-12-22T09:05:02 = Fɛlâyɛdɛ 9:05:02 mbaꞌmbaꞌ
   -0010-09-15T04:44:23 = Sásidɛ 4:44:23 mbaꞌmbaꞌ
 
@@ -416,6 +416,12 @@ Ngomba Cameroon locale.
    2008-02-05T18:30:30 = CE 2008 Pɛsaŋ Pɛ́pá 5
    1995-12-22T09:05:02 = CE 1995 Pɛsaŋ Ntsɔ̌ppá 22
   -0010-09-15T04:44:23 = BCE -10 Pɛsaŋ Pɛ́nɛ́pfúꞋú 15
+
+=head3 GyMd (GGGGG y-MM-dd)
+
+   2008-02-05T18:30:30 = CE 2008-02-05
+   1995-12-22T09:05:02 = CE 1995-12-22
+  -0010-09-15T04:44:23 = BCE -10-09-15
 
 =head3 H (HH)
 
@@ -503,31 +509,31 @@ Ngomba Cameroon locale.
 
 =head3 h (h a)
 
-   2008-02-05T18:30:30 = 6 ŋka mbɔ́t nji
+   2008-02-05T18:30:30 = 6 ŋka mbɔ́t nji
    1995-12-22T09:05:02 = 9 mbaꞌmbaꞌ
   -0010-09-15T04:44:23 = 4 mbaꞌmbaꞌ
 
 =head3 hm (h:mm a)
 
-   2008-02-05T18:30:30 = 6:30 ŋka mbɔ́t nji
+   2008-02-05T18:30:30 = 6:30 ŋka mbɔ́t nji
    1995-12-22T09:05:02 = 9:05 mbaꞌmbaꞌ
   -0010-09-15T04:44:23 = 4:44 mbaꞌmbaꞌ
 
 =head3 hms (h:mm:ss a)
 
-   2008-02-05T18:30:30 = 6:30:30 ŋka mbɔ́t nji
+   2008-02-05T18:30:30 = 6:30:30 ŋka mbɔ́t nji
    1995-12-22T09:05:02 = 9:05:02 mbaꞌmbaꞌ
   -0010-09-15T04:44:23 = 4:44:23 mbaꞌmbaꞌ
 
 =head3 hmsv (h:mm:ss a v)
 
-   2008-02-05T18:30:30 = 6:30:30 ŋka mbɔ́t nji UTC
+   2008-02-05T18:30:30 = 6:30:30 ŋka mbɔ́t nji UTC
    1995-12-22T09:05:02 = 9:05:02 mbaꞌmbaꞌ UTC
   -0010-09-15T04:44:23 = 4:44:23 mbaꞌmbaꞌ UTC
 
 =head3 hmv (h:mm a v)
 
-   2008-02-05T18:30:30 = 6:30 ŋka mbɔ́t nji UTC
+   2008-02-05T18:30:30 = 6:30 ŋka mbɔ́t nji UTC
    1995-12-22T09:05:02 = 9:05 mbaꞌmbaꞌ UTC
   -0010-09-15T04:44:23 = 4:44 mbaꞌmbaꞌ UTC
 

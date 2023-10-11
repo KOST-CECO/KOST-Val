@@ -2,7 +2,7 @@ package Net::DNS::RR::TSIG;
 
 use strict;
 use warnings;
-our $VERSION = (qw$Id: TSIG.pm 1814 2020-10-14 21:49:16Z willem $)[2];
+our $VERSION = (qw$Id: TSIG.pm 1909 2023-03-23 11:36:16Z willem $)[2];
 
 use base qw(Net::DNS::RR);
 
@@ -30,47 +30,12 @@ eval { require Digest::MD5 };
 eval { require Digest::SHA };
 eval { require MIME::Base64 };
 
-{
-	# source: http://www.iana.org/assignments/tsig-algorithm-names
-	my @algbyname = (
-		'HMAC-MD5.SIG-ALG.REG.INT' => 157,		# numbers are from ISC BIND keygen
-		'HMAC-SHA1'		   => 161,		# and not blessed by IANA
-		'HMAC-SHA224'		   => 162,
-		'HMAC-SHA256'		   => 163,
-		'HMAC-SHA384'		   => 164,
-		'HMAC-SHA512'		   => 165,
-		);
-
-	my @algalias = (
-		'HMAC-MD5' => 157,
-		'HMAC-SHA' => 161,
-		);
-
-	my %algbyval = reverse @algbyname;
-
-	my @algrehash = map { /^\d/ ? ($_) x 3 : uc($_) } @algbyname, @algalias;
-	foreach (@algrehash) { s/[\W_]//g; }			# strip non-alphanumerics
-	my %algbyname = @algrehash;				# work around broken cperl
-
-	sub _algbyname {
-		my $key = uc shift;				# synthetic key
-		$key =~ s/[\W_]//g;				# strip non-alphanumerics
-		return $algbyname{$key};
-	}
-
-	sub _algbyval {
-		my $value = shift;
-		return $algbyval{$value};
-	}
-}
-
 
 sub _decode_rdata {			## decode rdata from wire-format octet string
-	my $self = shift;
-	my ( $data, $offset ) = @_;
+	my ( $self, $data, $offset ) = @_;
 
 	my $limit = $offset + $self->{rdlength};
-	( $self->{algorithm}, $offset ) = Net::DNS::DomainName->decode(@_);
+	( $self->{algorithm}, $offset ) = Net::DNS::DomainName->decode( $data, $offset );
 
 	# Design decision: Use 32 bits, which will work until the end of time()!
 	@{$self}{qw(time_signed fudge)} = unpack "\@$offset xxN n", $$data;
@@ -88,7 +53,7 @@ sub _decode_rdata {			## decode rdata from wire-format octet string
 	$offset += $other_size + 2;
 
 	croak('misplaced or corrupt TSIG') unless $limit == length $$data;
-	my $raw = substr $$data, 0, $self->{offset};
+	my $raw = substr $$data, 0, $self->{offset}++;
 	$self->{rawref} = \$raw;
 	return;
 }
@@ -97,13 +62,14 @@ sub _decode_rdata {			## decode rdata from wire-format octet string
 sub _encode_rdata {			## encode rdata as wire-format octet string
 	my $self = shift;
 
+	my $offset = shift;
+	my $undef  = shift;
+	my $packet = shift;
 	my $macbin = $self->macbin;
 	unless ($macbin) {
-		my ( $offset, undef, $packet ) = @_;
-
+		$self->original_id( $packet->header->id );
 		my $sigdata = $self->sig_data($packet);		# form data to be signed
 		$macbin = $self->macbin( $self->_mac_function($sigdata) );
-		$self->original_id( $packet->header->id );
 	}
 
 	my $rdata = $self->{algorithm}->canonical;
@@ -141,18 +107,16 @@ sub _size {				## estimate encoded size
 }
 
 
-sub encode {				## overide RR method
-	my $self = shift;
-
+sub encode {				## override RR method
+	my ( $self, @argument ) = @_;
 	my $kname = $self->{owner}->encode();			# uncompressed key name
-	my $rdata = eval { $self->_encode_rdata(@_) } || '';
+	my $rdata = eval { $self->_encode_rdata(@argument) } || '';
 	return pack 'a* n2 N n a*', $kname, TSIG, ANY, 0, length $rdata, $rdata;
 }
 
 
-sub string {				## overide RR method
-	my $self = shift;
-
+sub string {				## override RR method
+	my $self	= shift;
 	my $owner	= $self->{owner}->string;
 	my $type	= $self->type;
 	my $algorithm	= $self->algorithm;
@@ -178,9 +142,9 @@ sub algorithm { return &_algorithm; }
 
 
 sub key {
-	my $self = shift;
-	return MIME::Base64::encode( $self->keybin(), "" ) unless scalar @_;
-	return $self->keybin( MIME::Base64::decode( join "", @_ ) );
+	my ( $self, @argument ) = @_;
+	return MIME::Base64::encode( $self->keybin(), "" ) unless scalar @argument;
+	return $self->keybin( MIME::Base64::decode( join "", @argument ) );
 }
 
 
@@ -188,86 +152,82 @@ sub keybin { return &_keybin; }
 
 
 sub time_signed {
-	my $self = shift;
-
-	$self->{time_signed} = 0 + shift if scalar @_;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{time_signed} = 0 + $_ }
 	return $self->{time_signed} ? $self->{time_signed} : ( $self->{time_signed} = time() );
 }
 
 
 sub fudge {
-	my $self = shift;
-
-	$self->{fudge} = 0 + shift if scalar @_;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{fudge} = 0 + $_ }
 	return $self->{fudge} || 0;
 }
 
 
 sub mac {
-	my $self = shift;
-	return MIME::Base64::encode( $self->macbin(), "" ) unless scalar @_;
-	return $self->macbin( MIME::Base64::decode( join "", @_ ) );
+	my ( $self, @value ) = @_;
+	return MIME::Base64::encode( $self->macbin(), "" ) unless scalar @value;
+	return $self->macbin( MIME::Base64::decode( join "", @value ) );
 }
 
 
 sub macbin {
-	my $self = shift;
-
-	$self->{macbin} = shift if scalar @_;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{macbin} = $_ }
 	return $self->{macbin} || "";
 }
 
 
 sub prior_mac {
-	my $self = shift;
-	return MIME::Base64::encode( $self->prior_macbin(), "" ) unless scalar @_;
-	return $self->prior_macbin( MIME::Base64::decode( join "", @_ ) );
+	my ( $self, @value ) = @_;
+	return MIME::Base64::encode( $self->prior_macbin(), "" ) unless scalar @value;
+	return $self->prior_macbin( MIME::Base64::decode( join "", @value ) );
 }
 
 
 sub prior_macbin {
-	my $self = shift;
-
-	$self->{prior_macbin} = shift if scalar @_;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{prior_macbin} = $_ }
 	return $self->{prior_macbin} || "";
 }
 
 
 sub request_mac {
-	my $self = shift;
-	return MIME::Base64::encode( $self->request_macbin(), "" ) unless scalar @_;
-	return $self->request_macbin( MIME::Base64::decode( join "", @_ ) );
+	my ( $self, @value ) = @_;
+	return MIME::Base64::encode( $self->request_macbin(), "" ) unless scalar @value;
+	return $self->request_macbin( MIME::Base64::decode( join "", @value ) );
 }
 
 
 sub request_macbin {
-	my $self = shift;
-
-	$self->{request_macbin} = shift if scalar @_;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{request_macbin} = $_ }
 	return $self->{request_macbin} || "";
 }
 
 
 sub original_id {
-	my $self = shift;
-
-	$self->{original_id} = 0 + shift if scalar @_;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{original_id} = 0 + $_ }
 	return $self->{original_id} || 0;
 }
 
 
 sub error {
-	my $self = shift;
-	$self->{error} = rcodebyname(shift) if scalar @_;
-	return rcodebyval( $self->{error} );
+	my ( $self, @value ) = @_;
+	for (@value) {
+		my $error = $self->{error} = rcodebyname($_);
+		$self->other( time() ) if $error == 18;
+	}
+	return rcodebyval( $self->{error} || '' );
 }
 
 
 sub other {
-	my $self = shift;
-	$self->{other} = shift if scalar @_;
-	my $time = $self->{error} == 18 ? pack 'xxN', time() : '';
-	return $self->{other} ? $self->{other} : ( $self->{other} = $time );
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{other} = $_ ? pack( 'xxN', $_ ) : '' }
+	return $self->{other} ? unpack( 'N', $self->{other} ) : '';
 }
 
 
@@ -275,9 +235,8 @@ sub other_data { return &other; }				# uncoverable pod
 
 
 sub sig_function {
-	my $self = shift;
-
-	$self->{sig_function} = shift if scalar @_;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{sig_function} = $_ }
 	return $self->{sig_function};
 }
 
@@ -335,8 +294,7 @@ sub sig_data {
 
 
 sub create {
-	my $class = shift;
-	my $karg  = shift;
+	my ( $class, $karg, @argument ) = @_;
 	croak 'argument undefined' unless defined $karg;
 
 	if ( ref($karg) ) {
@@ -348,7 +306,7 @@ sub create {
 				type	       => 'TSIG',
 				algorithm      => $sigrr->algorithm,
 				request_macbin => $sigrr->macbin,
-				@_
+				@argument
 				);
 
 		} elsif ( ref($karg) eq __PACKAGE__ ) {
@@ -362,21 +320,11 @@ sub create {
 				type	  => 'TSIG',
 				algorithm => $karg->algorithm,
 				key	  => $karg->key,
-				@_
+				@argument
 				);
 		}
 
-		croak "Usage:	$class->create( \$keyfile, \@options )";
-
-	} elsif ( scalar(@_) == 1 ) {
-		$class->_deprecate('create( $keyname, $key )'); # ( keyname, key )
-		return Net::DNS::RR->new(
-			name => $karg,
-			type => 'TSIG',
-			key  => shift
-			);
-
-	} else {
+	} elsif ( ( scalar(@argument) % 2 ) == 0 ) {
 		require File::Spec;				# ( keyfile, options )
 		require Net::DNS::ZoneFile;
 		my ($keypath) = SYMLINK ? grep( {$_} readlink($karg), $karg ) : $karg;
@@ -385,20 +333,20 @@ sub create {
 		my ( $keyname, $keytag ) = ( $1, $2 );
 
 		my $keyfile = Net::DNS::ZoneFile->new($karg);
-		my ( $algorithm, $secret, $x );
+		my ( $algorithm, $secret );
 		while ( $keyfile->_getline ) {
 			/^key "([^"]+)"/     and $keyname   = $1;    # BIND tsig key
 			/algorithm ([^;]+);/ and $algorithm = $1;
 			/secret "([^"]+)";/  and $secret    = $1;
 
-			/^Algorithm:/ and ( $x, $algorithm ) = split;	 # BIND dnssec private key
-			/^Key:/	      and ( $x, $secret )    = split;
+			/^Algorithm:/ and ( undef, $algorithm ) = split;    # BIND dnssec private key
+			/^Key:/	      and ( undef, $secret )	= split;
 
 			next unless /\bIN\s+KEY\b/;		# BIND dnssec public key
 			my $keyrr = Net::DNS::RR->new($_);
 			carp "$karg  does not appear to be a BIND dnssec public key"
-					unless $keytag and ( $keytag == $keyrr->keytag );
-			return $class->create( $keyrr, @_ );
+					unless $keyrr->keytag == ( $keytag || 0 );
+			return $class->create( $keyrr, @argument );
 		}
 
 		foreach ( $keyname, $algorithm, $secret ) {
@@ -410,41 +358,44 @@ sub create {
 			type	  => 'TSIG',
 			algorithm => $algorithm,
 			key	  => $secret,
-			@_
+			@argument
 			);
 	}
+
+	croak "Usage:	$class->create( \$keyfile, \@options )";
 }
 
 
 sub verify {
-	my $self = shift;
-	my $data = shift;
+	my ( $self, $data, @link ) = @_;
+	my $fail = undef;
 
-	if ( scalar @_ ) {
-		my $arg = shift;
+	if ( scalar @link ) {
 
-		unless ( ref($arg) ) {
-			$self->error(16);			# BADSIG (multi-packet)
-			return;
+		my $link = shift @link;
+		unless ( ref($link) ) {
+			$self->error('BADSIG');			# (multi-packet)
+			return $fail;
 		}
 
 		my $signerkey = lc( join '+', $self->name, $self->algorithm );
-		if ( $arg->isa('Net::DNS::Packet') ) {
-			my $request = $arg->sigrr;		# request TSIG
+		if ( $link->isa('Net::DNS::Packet') ) {
+			my $request = $link->sigrr;		# request TSIG
 			my $rqstkey = lc( join '+', $request->name, $request->algorithm );
-			$self->error(17) unless $signerkey eq $rqstkey;			     # BADKEY
+			$self->error('BADKEY') unless $signerkey eq $rqstkey;
 			$self->request_macbin( $request->macbin );
 
-		} elsif ( $arg->isa(__PACKAGE__) ) {
-			my $priorkey = lc( join '+', $arg->name, $arg->algorithm );
-			$self->error(17) unless $signerkey eq $priorkey;		     # BADKEY
-			$self->prior_macbin( $arg->macbin );
+		} elsif ( $link->isa(__PACKAGE__) ) {
+			my $priorkey = lc( join '+', $link->name, $link->algorithm );
+			$self->error('BADKEY') unless $signerkey eq $priorkey;
+			$self->prior_macbin( $link->macbin );
 
 		} else {
 			croak 'Usage: $tsig->verify( $reply, $query )';
 		}
 	}
-	return if $self->{error};
+
+	return $fail if $self->{error};
 
 	my $sigdata = $self->sig_data($data);			# form data to be verified
 	my $tsigmac = $self->_mac_function($sigdata);
@@ -452,21 +403,60 @@ sub verify {
 
 	my $macbin = $self->macbin;
 	my $maclen = length $macbin;
+	$self->error('BADSIG') if $macbin ne substr $tsigmac, 0, $maclen;
+
 	my $minlen = length($tsigmac) >> 1;			# per RFC4635, 3.1
-	$self->error(16) if $macbin ne substr $tsigmac, 0, $maclen;			     # BADSIG
-	$self->error(22) if $maclen < $minlen or $maclen < 10 or $maclen > length $tsigmac;  # BADTRUNC
-	$self->error(18) if abs( time() - $self->time_signed ) > $self->fudge;		     # BADTIME
+	$self->error('BADTRUNC') if $maclen < $minlen or $maclen > length $tsigmac;
+	$self->error('BADTRUNC') if $maclen < 10;
 
-	return $self->{error} ? undef : $tsig;
+	my $time_signed = $self->time_signed;
+	if ( abs( time() - $time_signed ) > $self->fudge ) {
+		$self->error('BADTIME');
+		$self->other($time_signed);
+	}
+
+	return $self->{error} ? $fail : $tsig;
 }
 
-sub vrfyerrstr {
-	my $self = shift;
-	return $self->error;
-}
+sub vrfyerrstr { return shift->error; }
 
 
 ########################################
+
+{
+	# source: http://www.iana.org/assignments/tsig-algorithm-names
+	my @algbyname = (
+		'HMAC-MD5.SIG-ALG.REG.INT' => 157,		# numbers are from ISC BIND keygen
+		'HMAC-SHA1'		   => 161,		# and not blessed by IANA
+		'HMAC-SHA224'		   => 162,
+		'HMAC-SHA256'		   => 163,
+		'HMAC-SHA384'		   => 164,
+		'HMAC-SHA512'		   => 165,
+		);
+
+	my @algalias = (
+		'HMAC-MD5' => 157,
+		'HMAC-SHA' => 161,
+		);
+
+	my %algbyval = reverse @algbyname;
+
+	my @algrehash = map { /^\d/ ? ($_) x 3 : uc($_) } @algbyname, @algalias;
+	foreach (@algrehash) { s/[\W_]//g; }			# strip non-alphanumerics
+	my %algbyname = @algrehash;				# work around broken cperl
+
+	sub _algbyname {
+		my $key = uc shift;				# synthetic key
+		$key =~ s/[\W_]//g;				# strip non-alphanumerics
+		return $algbyname{$key};
+	}
+
+	sub _algbyval {
+		my $value = shift;
+		return $algbyval{$value};
+	}
+}
+
 
 {
 	my %digest = (
@@ -514,10 +504,10 @@ sub vrfyerrstr {
 
 
 	sub _keybin {			## install key in key table
-		my $self = shift;
-		croak 'Unauthorised access to TSIG key material denied' unless scalar @_;
+		my ( $self, @argument ) = @_;
+		croak 'access to TSIG key material denied' unless scalar @argument;
 		my $keyref  = $keytable{$self->{owner}->canonical} ||= {};
-		my $private = shift;				# closure keeps private key private
+		my $private = shift @argument;			# closure keeps private key private
 		$keyref->{key} = sub {
 			my $function = $keyref->{digest};
 			return &$function( $private, @_ );
@@ -527,14 +517,13 @@ sub vrfyerrstr {
 
 
 	sub _mac_function {		## apply keyed hash function to argument
-		my $self = shift;
-
+		my ( $self, @argument ) = @_;
 		my $owner = $self->{owner}->canonical;
 		$self->algorithm( $self->algorithm ) unless $keytable{$owner}{digest};
 		my $keyref = $keytable{$owner};
 		$keyref->{digest} = $self->sig_function unless $keyref->{digest};
 		my $function = $keyref->{key};
-		return &$function(@_);
+		return &$function(@argument);
 	}
 }
 
@@ -547,6 +536,8 @@ sub _chain {
 	$self->{link} = undef;
 	return bless {%$self, link => $self}, ref($self);
 }
+
+########################################
 
 
 1;
@@ -668,7 +659,7 @@ The message ID from the header of the original packet.
      $rcode = $tsig->error;
 
 Returns the RCODE covering TSIG processing.  Common values are
-NOERROR, BADSIG, BADKEY, and BADTIME.  See RFC2845-bis for details.
+NOERROR, BADSIG, BADKEY, and BADTIME.  See RFC8945 for details.
 
 
 =head2 other
@@ -699,7 +690,7 @@ The default signing function is HMAC-MD5.
 
      $sigdata = $tsig->sig_data($packet);
 
-Returns the packet packed according to RFC2845-bis in a form for signing. This
+Returns the packet packed according to RFC8945 in a form for signing. This
 is only needed if you want to supply an external signing function, such as is
 needed for TSIG-GSS.
 
@@ -773,7 +764,7 @@ added by Dick Franks.
 
 =head1 BUGS
 
-A 32-bit representation of time is used, contrary to RFC2845 which
+A 32-bit representation of time is used, contrary to RFC8945 which
 demands 48 bits.  This design decision will need to be reviewed
 before the code stops working on 7 February 2106.
 
@@ -795,7 +786,7 @@ Package template (c)2009,2012 O.M.Kolkman and R.W.Franks.
 
 Permission to use, copy, modify, and distribute this software and its
 documentation for any purpose and without fee is hereby granted, provided
-that the above copyright notice appear in all copies and that both that
+that the original copyright notices appear in all copies and that both
 copyright notice and this permission notice appear in supporting
 documentation, and that the name of the author not be used in advertising
 or publicity pertaining to distribution of the software without specific
@@ -812,7 +803,8 @@ DEALINGS IN THE SOFTWARE.
 
 =head1 SEE ALSO
 
-L<perl>, L<Net::DNS>, L<Net::DNS::RR>, RFC2845-bis, RFC4635
+L<perl> L<Net::DNS> L<Net::DNS::RR>
+L<RFC8945|https://tools.ietf.org/html/rfc8945>
 
 L<TSIG Algorithm Names|http://www.iana.org/assignments/tsig-algorithm-names>
 

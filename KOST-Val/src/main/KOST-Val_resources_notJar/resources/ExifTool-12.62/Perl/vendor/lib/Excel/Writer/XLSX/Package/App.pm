@@ -6,7 +6,7 @@ package Excel::Writer::XLSX::Package::App;
 #
 # Used in conjunction with Excel::Writer::XLSX
 #
-# Copyright 2000-2020, John McNamara, jmcnamara@cpan.org
+# Copyright 2000-2023, John McNamara, jmcnamara@cpan.org
 #
 # Documentation after __END__
 #
@@ -20,7 +20,7 @@ use Carp;
 use Excel::Writer::XLSX::Package::XMLwriter;
 
 our @ISA     = qw(Excel::Writer::XLSX::Package::XMLwriter);
-our $VERSION = '1.07';
+our $VERSION = '1.11';
 
 
 ###############################################################################
@@ -45,6 +45,7 @@ sub new {
     $self->{_part_names}    = [];
     $self->{_heading_pairs} = [];
     $self->{_properties}    = {};
+    $self->{_doc_security}  = 0;
 
     bless $self, $class;
 
@@ -196,9 +197,8 @@ sub _write_application {
 sub _write_doc_security {
 
     my $self = shift;
-    my $data = 0;
 
-    $self->xml_data_element( 'DocSecurity', $data );
+    $self->xml_data_element( 'DocSecurity', $self->{_doc_security} );
 }
 
 
@@ -439,7 +439,7 @@ John McNamara jmcnamara@cpan.org
 
 =head1 COPYRIGHT
 
-(c) MM-MMXX, John McNamara.
+(c) MM-MMXXIII, John McNamara.
 
 All Rights Reserved. This module is free software. It may be used, redistributed and/or modified under the same terms as Perl itself.
 

@@ -7,7 +7,7 @@ package Excel::Writer::XLSX::Workbook;
 #
 # Used in conjunction with Excel::Writer::XLSX
 #
-# Copyright 2000-2020, John McNamara, jmcnamara@cpan.org
+# Copyright 2000-2023, John McNamara, jmcnamara@cpan.org
 #
 # Documentation after __END__
 #
@@ -34,7 +34,7 @@ use Excel::Writer::XLSX::Package::XMLwriter;
 use Excel::Writer::XLSX::Utility qw(xl_cell_to_rowcol xl_rowcol_to_cell);
 
 our @ISA     = qw(Excel::Writer::XLSX::Package::XMLwriter);
-our $VERSION = '1.07';
+our $VERSION = '1.11';
 
 
 ###############################################################################
@@ -81,7 +81,7 @@ sub new {
     $self->{_dxf_format_indices} = {};
     $self->{_palette}            = [];
     $self->{_font_count}         = 0;
-    $self->{_num_format_count}   = 0;
+    $self->{_num_formats}        = [];
     $self->{_defined_names}      = [];
     $self->{_named_ranges}       = [];
     $self->{_custom_colors}      = [];
@@ -99,6 +99,8 @@ sub new {
     $self->{_excel2003_style}    = 0;
     $self->{_max_url_length}     = 2079;
     $self->{_has_comments}       = 0;
+    $self->{_read_only}          = 0;
+    $self->{_has_metadata}       = 0;
 
     $self->{_default_format_properties} = {};
 
@@ -213,6 +215,9 @@ sub _assemble_xml_file {
 
     # Write the XLSX file version.
     $self->_write_file_version();
+
+    # Write the fileSharing element.
+    $self->_write_file_sharing();
 
     # Write the workbook properties.
     $self->_write_workbook_pr();
@@ -1045,6 +1050,20 @@ sub set_vba_name {
 
 ###############################################################################
 #
+# read_only_recommended()
+#
+# Set the Excel "Read-only recommended" save option.
+#
+sub read_only_recommended {
+
+    my $self = shift;
+
+    $self->{_read_only} = 2;
+}
+
+
+###############################################################################
+#
 # set_calc_mode()
 #
 # Set the Excel caclcuation mode for the workbook.
@@ -1067,6 +1086,7 @@ sub set_calc_mode {
 
     $self->{_calc_id} = $calc_id if defined $calc_id;
 }
+
 
 
 ###############################################################################
@@ -1140,6 +1160,9 @@ sub _store_workbook {
     # Prepare the worksheet tables.
     $self->_prepare_tables();
 
+    # Prepare the metadata file links.
+    $self->_prepare_metadata();
+
     # Package the workbook.
     $packager->_add_workbook( $self );
     $packager->_set_package_dir( $tempdir );
@@ -1189,8 +1212,13 @@ sub _store_workbook {
 
     # Store the xlsx component files with the temp dir name removed.
     for my $filename ( @xlsx_files ) {
-        my $short_name = $filename;
-        $short_name =~ s{^\Q$tempdir\E/?}{};
+        # Standardise the Windows paths.
+        (my $short_name = $filename) =~ s{\\}{/}g;
+        (my $prefix = $tempdir)      =~ s{\\}{/}g;
+
+        # Get the zip subfile name without the tempdir path.
+        $short_name =~ s{^\Q$prefix\E/?}{};
+
         my $member = $zip->addFile( $filename, $short_name );
 
         # Set the file member datetime to 1980-01-01 00:00:00 like Excel so
@@ -1393,7 +1421,8 @@ sub _prepare_num_formats {
 
     my $self = shift;
 
-    my %num_formats;
+    my @num_formats = ();
+    my %unique_num_formats;
     my $index            = 164;
     my $num_format_count = 0;
 
@@ -1408,7 +1437,7 @@ sub _prepare_num_formats {
         if ( $num_format =~ m/^\d+$/ && $num_format !~ m/^0+\d/ ) {
 
             # Number format '0' is indexed as 1 in Excel.
-            if ($num_format == 0) {
+            if ( $num_format == 0 ) {
                 $num_format = 1;
             }
 
@@ -1416,33 +1445,34 @@ sub _prepare_num_formats {
             $format->{_num_format_index} = $num_format;
             next;
         }
-        elsif ( $num_format  eq 'General' ) {
+        elsif ( $num_format eq 'General' ) {
+
             # The 'General' format has an number format index of 0.
             $format->{_num_format_index} = 0;
             next;
         }
 
-
-        if ( exists( $num_formats{$num_format} ) ) {
+        if ( exists( $unique_num_formats{$num_format} ) ) {
 
             # Number format has already been used.
-            $format->{_num_format_index} = $num_formats{$num_format};
+            $format->{_num_format_index} = $unique_num_formats{$num_format};
         }
         else {
-
             # Add a new number format.
-            $num_formats{$num_format} = $index;
+            $unique_num_formats{$num_format} = $index;
             $format->{_num_format_index} = $index;
             $index++;
 
-            # Only increase font count for XF formats (not for DXF formats).
+            # Only store/increase number format count for XF formats (not for
+            # DXF formats).
             if ( $format->{_xf_index} ) {
+                push @num_formats, $num_format;
                 $num_format_count++;
             }
         }
     }
 
-    $self->{_num_format_count} = $num_format_count;
+    $self->{_num_formats} = \@num_formats;
 }
 
 
@@ -1765,6 +1795,7 @@ sub _prepare_drawings {
     my $ref_id           = 0;
     my %image_ids        = ();
     my %header_image_ids = ();
+    my %background_ids   = ();
 
     for my $sheet ( @{ $self->{_worksheets} } ) {
 
@@ -1774,6 +1805,7 @@ sub _prepare_drawings {
 
         my $header_image_count = scalar @{ $sheet->{_header_images} };
         my $footer_image_count = scalar @{ $sheet->{_footer_images} };
+        my $has_background     = $sheet->{_background_image};
         my $has_drawing        = 0;
 
 
@@ -1782,7 +1814,8 @@ sub _prepare_drawings {
             && !$image_count
             && !$shape_count
             && !$header_image_count
-            && !$footer_image_count )
+            && !$footer_image_count
+            && !$has_background )
         {
             next;
         }
@@ -1791,6 +1824,26 @@ sub _prepare_drawings {
         if ( $chart_count || $image_count || $shape_count ) {
             $drawing_id++;
             $has_drawing = 1;
+        }
+
+        # Prepare the background images.
+        if ( $has_background ) {
+
+            my $filename = $sheet->{_background_image};
+
+            my ( $type, $width, $height, $name, $x_dpi, $y_dpi, $md5 ) =
+              $self->_get_image_properties( $filename );
+
+            if ( exists $background_ids{$md5} ) {
+                $ref_id = $background_ids{$md5};
+            }
+            else {
+                $ref_id = ++$image_ref_id;
+                $background_ids{$md5} = $ref_id;
+                push @{ $self->{_images} }, [ $filename, $type ];
+            }
+
+            $sheet->_prepare_background($ref_id, $type);
         }
 
         # Prepare the worksheet images.
@@ -1980,6 +2033,24 @@ sub _prepare_tables {
         $sheet->_prepare_tables( $table_id + 1, $seen );
 
         $table_id += $table_count;
+    }
+}
+
+
+###############################################################################
+#
+# _prepare_metadata()
+#
+# Set the metadata rel link.
+#
+sub _prepare_metadata {
+
+    my $self = shift;
+
+    for my $sheet ( @{ $self->{_worksheets} } ) {
+        if ($sheet->{_has_dynamic_arrays}) {
+            $self->{_has_metadata} = 1;
+        }
     }
 }
 
@@ -2218,7 +2289,6 @@ sub _get_image_properties {
     my $size = length $data;
     my $md5  = md5_hex($data);
 
-
     if ( unpack( 'x A3', $data ) eq 'PNG' ) {
 
         # Test for PNGs.
@@ -2234,6 +2304,14 @@ sub _get_image_properties {
           $self->_process_jpg( $data, $filename );
 
         $self->{_image_types}->{jpeg} = 1;
+    }
+    elsif ( unpack( 'A4', $data ) eq 'GIF8' ) {
+
+        # Test for GIFs.
+        ( $type, $width, $height, $x_dpi, $y_dpi ) =
+          $self->_process_gif( $data, $filename );
+
+        $self->{_image_types}->{gif} = 1;
     }
     elsif ( unpack( 'A2', $data ) eq 'BM' ) {
 
@@ -2436,6 +2514,34 @@ sub _process_jpg {
 
 ###############################################################################
 #
+# _process_gif()
+#
+# Extract width and height information from a GIF file.
+#
+sub _process_gif {
+
+    my $self     = shift;
+    my $data     = $_[0];
+    my $filename = $_[1];
+
+    my $type   = 'gif';
+    my $x_dpi  = 96;
+    my $y_dpi  = 96;
+
+    my $width  = unpack "v", substr $data, 6, 2;
+    my $height = unpack "v", substr $data, 8, 2;
+    print join ", ", ( $type, $width, $height, $x_dpi, $y_dpi, "\n" );
+
+    if ( not defined $height ) {
+        croak "$filename: no size data found in gif image.\n";
+    }
+
+    return ( $type, $width, $height, $x_dpi, $y_dpi );
+}
+
+
+###############################################################################
+#
 # _get_sheet_index()
 #
 # Convert a sheet name to its index. Return undef otherwise.
@@ -2542,6 +2648,24 @@ sub _write_file_version {
     }
 
     $self->xml_empty_tag( 'fileVersion', @attributes );
+}
+
+
+##############################################################################
+#
+# _write_file_sharing()
+#
+# Write the <fileSharing> element.
+#
+sub _write_file_sharing {
+
+    my $self = shift;
+
+    return if !$self->{_read_only};
+
+    my @attributes = ( 'readOnlyRecommended' => 1, );
+
+    $self->xml_empty_tag( 'fileSharing', @attributes );
 }
 
 
@@ -2826,6 +2950,6 @@ John McNamara jmcnamara@cpan.org
 
 =head1 COPYRIGHT
 
-(c) MM-MMXX, John McNamara.
+(c) MM-MMXXIII, John McNamara.
 
 All Rights Reserved. This module is free software. It may be used, redistributed and/or modified under the same terms as Perl itself.

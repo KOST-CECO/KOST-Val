@@ -1,6 +1,6 @@
-package Email::Sender::Failure::Multi;
+package Email::Sender::Failure::Multi 2.600;
 # ABSTRACT: an aggregate of multiple failures
-$Email::Sender::Failure::Multi::VERSION = '1.300035';
+
 use Moo;
 extends 'Email::Sender::Failure';
 
@@ -84,12 +84,22 @@ Email::Sender::Failure::Multi - an aggregate of multiple failures
 
 =head1 VERSION
 
-version 1.300035
+version 2.600
 
 =head1 DESCRIPTION
 
 A multiple failure report is raised when more than one failure is encountered
 when sending a single message, or when mixed states were encountered.
+
+=head1 PERL VERSION
+
+This library should run on perls released even a long time ago.  It should work
+on any version of perl released in the last five years.
+
+Although it may work on older versions of perl, no guarantee is made that the
+minimum required version will not be increased.  The version may be increased
+for any reason, and there is no promise that patches will be accepted to lower
+the minimum required perl.
 
 =head1 ATTRIBUTES
 
@@ -107,11 +117,11 @@ its contained failures are failures of that type.
 
 =head1 AUTHOR
 
-Ricardo Signes <rjbs@semiotic.systems>
+Ricardo Signes <cpan@semiotic.systems>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2020 by Ricardo Signes.
+This software is copyright (c) 2022 by Ricardo Signes.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

@@ -2724,29 +2724,15 @@ The official web site for Berkeley DB is F<http://www.oracle.com/technology/prod
 
 =head1 COPYRIGHT
 
-Copyright (c) 1997-2020 Paul Marquess. All rights reserved. This program
+Copyright (c) 1997-2022 Paul Marquess. All rights reserved. This program
 is free software; you can redistribute it and/or modify it under the
 same terms as Perl itself.
 
 Although B<BerkeleyDB> is covered by the Perl license, the library it
 makes use of, namely Berkeley DB, is not. Berkeley DB has its own
-copyright and its own license. Please take the time to read it.
-
-Here are few words taken from the Berkeley DB FAQ (at
-F<http://www.oracle.com/technology/products/berkeley-db/db/index.html>) regarding the license:
-
-    Do I have to license DB to use it in Perl scripts?
-
-    No. The Berkeley DB license requires that software that uses
-    Berkeley DB be freely redistributable. In the case of Perl, that
-    software is Perl, and not your scripts. Any Perl scripts that you
-    write are your property, including scripts that make use of Berkeley
-    DB. Neither the Perl license nor the Berkeley DB license
-    place any restriction on what you may do with them.
-
-If you are in any doubt about the license situation, contact either the
-Berkeley DB authors or the author of BerkeleyDB.
-See L<"AUTHOR"> for details.
+copyright and its own license.
+See L<AGPL|https://www.oracle.com/downloads/licenses/berkeleydb-oslicense.html> for more details.
+Please take the time to read the Berkeley DB license and decide how it impacts your use of this Perl module.
 
 
 =head1 AUTHOR

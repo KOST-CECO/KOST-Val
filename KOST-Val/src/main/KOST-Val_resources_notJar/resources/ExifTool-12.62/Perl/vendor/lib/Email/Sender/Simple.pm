@@ -1,6 +1,6 @@
-package Email::Sender::Simple;
+package Email::Sender::Simple 2.600;
 # ABSTRACT: the simple interface for sending mail with Sender
-$Email::Sender::Simple::VERSION = '1.300035';
+
 use Moo;
 with 'Email::Sender::Role::CommonSending';
 
@@ -19,7 +19,7 @@ use Sub::Exporter -setup => {
   },
 };
 
-use Email::Address;
+use Email::Address::XS;
 use Email::Sender::Transport;
 use Email::Sender::Util;
 use Try::Tiny;
@@ -143,10 +143,9 @@ sub _get_to_from {
   my $to = $arg->{to};
   unless (@$to) {
     my @to_addrs =
-      map  { $_->address               }
-      grep { defined                   }
-      map  { Email::Address->parse($_) }
-      map  { $email->get_header($_)    }
+      map  { $_->address                   }
+      map  { Email::Address::XS->parse($_) }
+      map  { $email->get_header($_)        }
       qw(to cc);
     $to = \@to_addrs;
   }
@@ -154,10 +153,9 @@ sub _get_to_from {
   my $from = $arg->{from};
   unless (defined $from) {
     ($from) =
-      map  { $_->address               }
-      grep { defined                   }
-      map  { Email::Address->parse($_) }
-      map  { $email->get_header($_)    }
+      map  { $_->address                   }
+      map  { Email::Address::XS->parse($_) }
+      map  { $email->get_header($_)        }
       qw(from);
   }
 
@@ -179,7 +177,17 @@ Email::Sender::Simple - the simple interface for sending mail with Sender
 
 =head1 VERSION
 
-version 1.300035
+version 2.600
+
+=head1 PERL VERSION
+
+This library should run on perls released even a long time ago.  It should work
+on any version of perl released in the last five years.
+
+Although it may work on older versions of perl, no guarantee is made that the
+minimum required version will not be increased.  The version may be increased
+for any reason, and there is no promise that patches will be accepted to lower
+the minimum required perl.
 
 =head1 SEE INSTEAD
 
@@ -188,11 +196,11 @@ L<Email::Sender::Manual::QuickStart>.
 
 =head1 AUTHOR
 
-Ricardo Signes <rjbs@semiotic.systems>
+Ricardo Signes <cpan@semiotic.systems>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2020 by Ricardo Signes.
+This software is copyright (c) 2022 by Ricardo Signes.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

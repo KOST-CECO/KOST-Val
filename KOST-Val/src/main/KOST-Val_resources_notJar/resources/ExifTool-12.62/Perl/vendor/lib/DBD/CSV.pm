@@ -15,8 +15,8 @@ require DynaLoader;
 require DBD::File;
 require IO::File;
 
-our @f_SHORT = qw( file dir dir_search ext lock lockfile schema encoding );
-our @c_SHORT = qw( class eof
+our @f_SHORT = qw( class file dir dir_search ext lock lockfile schema encoding );
+our @c_SHORT = qw( eof
 	eol sep_char quote_char escape_char binary decode_utf8 auto_diag
 	diag_verbose blank_is_undef empty_is_undef allow_whitespace
 	allow_loose_quotes allow_loose_escapes allow_unquoted_escape
@@ -31,7 +31,7 @@ use vars qw( @ISA $VERSION $ATTRIBUTION $drh $err $errstr $sqlstate );
 
 @ISA =   qw( DBD::File );
 
-$VERSION     = "0.57";
+$VERSION     = "0.60";
 $ATTRIBUTION = "DBD::CSV $DBD::CSV::VERSION by H.Merijn Brand";
 
 $err      = 0;		# holds error code   for DBI::err
@@ -943,6 +943,10 @@ Please be aware that C<Text::CSV> does not care about any edge case as
 C<Text::CSV_XS> does and that C<Text::CSV> is probably about 100 times
 slower than C<Text::CSV_XS>.
 
+In order to use the specified class other than C<Text::CSV_XS>, it needs
+to be loaded before use.  C<DBD::CSV> does not C<require>/C<use> the
+specified class itself.
+
 =back
 
 =head2 Text::CSV_XS specific attributes
@@ -1337,7 +1341,7 @@ Previous maintainer was Jeff Zucker
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2009-2020 by H.Merijn Brand
+Copyright (C) 2009-2023 by H.Merijn Brand
 Copyright (C) 2004-2009 by Jeff Zucker
 Copyright (C) 1998-2004 by Jochen Wiedmann
 

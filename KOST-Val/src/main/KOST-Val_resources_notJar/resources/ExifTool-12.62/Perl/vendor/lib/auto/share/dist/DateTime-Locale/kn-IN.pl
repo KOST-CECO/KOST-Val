@@ -19,6 +19,7 @@
     GyMMM => "G y MMM",
     GyMMMEd => "G y MMM d, E",
     GyMMMd => "G y MMM d",
+    GyMd => "GGGGG y-MM-dd",
     H => "HH",
     Hm => "HH:mm",
     Hms => "HH:mm:ss",
@@ -145,7 +146,7 @@
     "\N{U+0cae}\N{U+0cc7}",
     "\N{U+0c9c}\N{U+0cc2}\N{U+0ca8}\N{U+0ccd}",
     "\N{U+0c9c}\N{U+0cc1}\N{U+0cb2}\N{U+0cc8}",
-    "\N{U+0c86}\N{U+0c97}",
+    "\N{U+0c86}\N{U+0c97}\N{U+0cb8}\N{U+0ccd}\N{U+0c9f}\N{U+0ccd}",
     "\N{U+0cb8}\N{U+0cc6}\N{U+0caa}\N{U+0ccd}\N{U+0c9f}\N{U+0cc6}\N{U+0c82}",
     "\N{U+0c85}\N{U+0c95}\N{U+0ccd}\N{U+0c9f}\N{U+0ccb}",
     "\N{U+0ca8}\N{U+0cb5}\N{U+0cc6}\N{U+0c82}",
@@ -270,5 +271,5 @@
   time_format_medium => "hh:mm:ss a",
   time_format_short => "hh:mm a",
   variant => undef,
-  version => 38,
+  version => 43,
 }

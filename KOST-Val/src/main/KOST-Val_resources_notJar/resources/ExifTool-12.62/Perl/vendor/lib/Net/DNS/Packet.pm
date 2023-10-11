@@ -3,7 +3,7 @@ package Net::DNS::Packet;
 use strict;
 use warnings;
 
-our $VERSION = (qw$Id: Packet.pm 1818 2020-10-18 15:24:42Z willem $)[2];
+our $VERSION = (qw$Id: Packet.pm 1925 2023-05-31 11:58:59Z willem $)[2];
 
 
 =head1 NAME
@@ -58,8 +58,8 @@ If called with an empty argument list, new() creates an empty packet.
 =cut
 
 sub new {
-	return &decode if ref $_[1];
-	my $class = shift;
+	my ( $class, @arg ) = @_;
+	return &decode if ref $arg[0];
 
 	my $self = bless {
 		status	   => 0,
@@ -69,7 +69,7 @@ sub new {
 		additional => [],
 		}, $class;
 
-	$self->{question} = [Net::DNS::Question->new(@_)] if scalar @_;
+	$self->{question} = [Net::DNS::Question->new(@arg)] if scalar @arg;
 
 	return $self;
 }
@@ -115,12 +115,12 @@ sub decode {
 	my $self;
 	eval {
 		local $SIG{__DIE__};
-		die 'corrupt wire-format data' if length($$data) < HEADER_LENGTH;
+		my $length = length $$data;
+		die 'corrupt wire-format data' if $length < HEADER_LENGTH;
 
 		# header section
 		my ( $id, $status, @count ) = unpack 'n6', $$data;
 		my ( $qd, $an, $ns, $ar ) = @count;
-		my $length = length $$data;
 
 		$self = bless {
 			id	   => $id,
@@ -138,23 +138,23 @@ sub decode {
 		my $record;
 		$offset = HEADER_LENGTH;
 		while ( $qd-- ) {
-			( $record, $offset ) = decode Net::DNS::Question( $data, $offset, $hash );
+			( $record, $offset ) = Net::DNS::Question->decode( $data, $offset, $hash );
 			CORE::push( @{$self->{question}}, $record );
 		}
 
 		# RR sections
 		while ( $an-- ) {
-			( $record, $offset ) = decode Net::DNS::RR( $data, $offset, $hash );
+			( $record, $offset ) = Net::DNS::RR->decode( $data, $offset, $hash );
 			CORE::push( @{$self->{answer}}, $record );
 		}
 
 		while ( $ns-- ) {
-			( $record, $offset ) = decode Net::DNS::RR( $data, $offset, $hash );
+			( $record, $offset ) = Net::DNS::RR->decode( $data, $offset, $hash );
 			CORE::push( @{$self->{authority}}, $record );
 		}
 
 		while ( $ar-- ) {
-			( $record, $offset ) = decode Net::DNS::RR( $data, $offset, $hash );
+			( $record, $offset ) = Net::DNS::RR->decode( $data, $offset, $hash );
 			CORE::push( @{$self->{additional}}, $record );
 		}
 
@@ -173,7 +173,7 @@ sub decode {
 	if ($debug) {
 		local $@ = $@;
 		print $@ if $@;
-		$self->print if $self;
+		eval { $self->print };
 	}
 
 	return wantarray ? ( $self, $offset ) : $self;
@@ -267,8 +267,7 @@ response to an EDNS query.
 =cut
 
 sub reply {
-	my $query  = shift;
-	my $UDPmax = shift;
+	my ( $query, @UDPmax ) = @_;
 	my $qheadr = $query->header;
 	croak 'erroneous qr flag in query packet' if $qheadr->qr;
 
@@ -289,7 +288,7 @@ sub reply {
 
 	my $edns = $reply->edns();
 	CORE::push( @{$reply->{additional}}, $edns );
-	$edns->size($UDPmax);
+	$edns->udpsize(@UDPmax);
 	return $reply;
 }
 
@@ -398,21 +397,25 @@ sub string {
 	my $self = shift;
 
 	my $header = $self->header;
+	my $opcode = $header->opcode;
 	my $server = $self->{replyfrom};
 	my $length = $self->{replysize};
 	my $origin = $server ? ";; Response received from $server ($length octets)\n" : "";
 	my @record = ( "$origin;; HEADER SECTION", $header->string );
 
-	if ( $self->{dso} ) {
+	if ( $opcode eq 'DSO' ) {
 		CORE::push( @record, ";; DSO SECTION" );
 		foreach ( @{$self->{dso}} ) {
 			my ( $t, $v ) = @$_;
-			CORE::push( @record, pack 'a* A18 a*', ";;\t", dsotypebyval($t), unpack( 'H*', $v ) );
+			CORE::push( @record, sprintf( ";;\t%s\t%s", dsotypebyval($t), unpack( 'H*', $v ) ) );
 		}
 		return join "\n", @record, "\n";
 	}
 
-	my @section  = $header->opcode eq 'UPDATE' ? qw(ZONE PREREQUISITE UPDATE) : qw(QUESTION ANSWER AUTHORITY);
+	my $edns = $self->edns;
+	CORE::push( @record, $edns->string ) if $edns->_specified;
+
+	my @section  = $opcode eq 'UPDATE' ? qw(ZONE PREREQUISITE UPDATE) : qw(QUESTION ANSWER AUTHORITY);
 	my @question = $self->question;
 	my $qdcount  = scalar @question;
 	my $qds	     = $qdcount != 1 ? 's' : '';
@@ -431,7 +434,9 @@ sub string {
 	my @additional = $self->additional;
 	my $arcount    = scalar @additional;
 	my $ars	       = $arcount != 1 ? 's' : '';
-	CORE::push( @record, "\n;; ADDITIONAL SECTION ($arcount record$ars)", map { $_->string } @additional );
+	my $EDNSmarker = join ' ', qq[;; {\t"EDNS-VERSION":], $edns->version, qq[}\n];
+	CORE::push( @record, "\n;; ADDITIONAL SECTION ($arcount record$ars)" );
+	CORE::push( @record, map { ( $_ eq $edns ) ? $EDNSmarker : $_->string } @additional );
 
 	return join "\n", @record, "\n";
 }
@@ -447,9 +452,8 @@ This method will return undef for user-created packets.
 =cut
 
 sub from {
-	my $self = shift;
-
-	$self->{replyfrom} = shift if scalar @_;
+	my ( $self, @argument ) = @_;
+	for (@argument) { $self->{replyfrom} = $_ }
 	return $self->{replyfrom};
 }
 
@@ -491,9 +495,9 @@ Section names may be abbreviated to the first three characters.
 =cut
 
 sub push {
-	my $self = shift;
-	my $list = $self->_section(shift);
-	return CORE::push( @$list, grep { ref($_) } @_ );
+	my ( $self, $section, @rr ) = @_;
+	my $list = $self->_section($section);
+	return CORE::push( @$list, @rr );
 }
 
 
@@ -516,12 +520,10 @@ Section names may be abbreviated to the first three characters.
 =cut
 
 sub unique_push {
-	my $self = shift;
-	my $list = $self->_section(shift);
-	my @rr	 = grep { ref($_) } @_;
+	my ( $self, $section, @rr ) = @_;
+	my $list = $self->_section($section);
 
 	my %unique = map { ( bless( {%$_, ttl => 0}, ref $_ )->canonical => $_ ) } @rr, @$list;
-
 	return scalar( @$list = values %unique );
 }
 
@@ -564,7 +566,7 @@ sub _section {				## returns array reference for section
     $query = Net::DNS::Packet->new( 'www.example.com', 'A' );
 
     $query->sign_tsig(
-		'Khmac-sha512.example.+165+01018.private',
+		$keyfile,
 		fudge => 60
 		);
 
@@ -598,12 +600,6 @@ specified key.
     $query->sign_tsig( $tsig );
 
 
-The historical simplified syntax is still available, but additional
-options can not be specified.
-
-    $packet->sign_tsig( $key_name, $key );
-
-
 The response to an inbound request is signed by presenting the request
 in place of the key parameter.
 
@@ -628,12 +624,11 @@ does not support the suppressed signature scheme described in RFC2845.
 =cut
 
 sub sign_tsig {
-	my $self = shift;
-
+	my ( $self, @argument ) = @_;
 	return eval {
 		local $SIG{__DIE__};
 		require Net::DNS::RR::TSIG;
-		my $tsig = Net::DNS::RR::TSIG->create(@_);
+		my $tsig = Net::DNS::RR::TSIG->create(@argument);
 		$self->push( 'additional' => $tsig );
 		return $tsig;
 	} || return croak "$@\nTSIG: unable to sign packet";
@@ -661,16 +656,13 @@ on the final packet in the absence of more specific information.
 =cut
 
 sub verify {
-	my $self = shift;
-
+	my ( $self, @argument ) = @_;
 	my $sig = $self->sigrr;
-	return $sig ? $sig->verify( $self, @_ ) : shift;
+	return $sig ? $sig->verify( $self, @argument ) : shift @argument;
 }
 
 sub verifyerr {
-	my $self = shift;
-
-	my $sig = $self->sigrr;
+	my $sig = shift->sigrr;
 	return $sig ? $sig->vrfyerrstr : 'not signed';
 }
 
@@ -734,8 +726,9 @@ sub sigrr {
 
 	my ($sig) = reverse $self->additional;
 	return unless $sig;
-	return $sig if $sig->type eq 'TSIG';
-	return $sig if $sig->type eq 'SIG';
+	for ( $sig->type ) {
+		return $sig if /TSIG|SIG/;
+	}
 	return;
 }
 
@@ -837,10 +830,12 @@ sub truncate {
 ########################################
 
 sub dump {				## print internal data structure
-	require Data::Dumper;					# uncoverable pod
+	my @data = @_;						# uncoverable pod
+	require Data::Dumper;
 	local $Data::Dumper::Maxdepth = $Data::Dumper::Maxdepth || 3;
 	local $Data::Dumper::Sortkeys = $Data::Dumper::Sortkeys || 1;
-	print Data::Dumper::Dumper(@_);
+	local $Data::Dumper::Useqq    = $Data::Dumper::Useqq	|| 1;
+	print Data::Dumper::Dumper(@data);
 	return;
 }
 
@@ -866,7 +861,7 @@ All rights reserved.
 
 Permission to use, copy, modify, and distribute this software and its
 documentation for any purpose and without fee is hereby granted, provided
-that the above copyright notice appear in all copies and that both that
+that the original copyright notices appear in all copies and that both
 copyright notice and this permission notice appear in supporting
 documentation, and that the name of the author not be used in advertising
 or publicity pertaining to distribution of the software without specific
@@ -883,9 +878,11 @@ DEALINGS IN THE SOFTWARE.
 
 =head1 SEE ALSO
 
-L<perl>, L<Net::DNS>, L<Net::DNS::Update>, L<Net::DNS::Header>,
-L<Net::DNS::Question>, L<Net::DNS::RR>, L<Net::DNS::RR::TSIG>,
-RFC1035 Section 4.1, RFC2136 Section 2, RFC2845
+L<perl> L<Net::DNS> L<Net::DNS::Update> L<Net::DNS::Header>
+L<Net::DNS::Question> L<Net::DNS::RR> L<Net::DNS::RR::TSIG>
+L<RFC1035(4.1)|https://tools.ietf.org/html/rfc1035>
+L<RFC2136(2)|https://tools.ietf.org/html/rfc2136>
+L<RFC8945|https://tools.ietf.org/html/rfc8945>
 
 =cut
 

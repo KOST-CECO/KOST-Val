@@ -1,7 +1,6 @@
 do { my $x = {
   'abi' => {
-    'default_abi' => '2',
-    'gnuw64' => '2',
+    'default_abi' => '1',
     'win64' => '1'
   },
   'header' => {
@@ -28,9 +27,10 @@ do { my $x = {
   'probe' => {
     'abi' => 1,
     'alloca' => 1,
-    'complex' => 1,
-    'longdouble' => 1,
-    'recordvalue' => 1,
+    'complex' => 0,
+    'longdouble' => 0,
+    'recordvalue' => 0,
+    'strnlen' => 1,
     'variadic' => 1
   },
   'type' => {
@@ -109,6 +109,11 @@ do { my $x = {
       'align' => '1',
       'sign' => 'signed',
       'size' => '1'
+    },
+    'intmax_t' => {
+      'align' => '8',
+      'sign' => 'signed',
+      'size' => '8'
     },
     'intptr_t' => {
       'align' => '8',
@@ -221,6 +226,11 @@ do { my $x = {
       'align' => '1',
       'sign' => 'unsigned',
       'size' => '1'
+    },
+    'uintmax_t' => {
+      'align' => '8',
+      'sign' => 'unsigned',
+      'size' => '8'
     },
     'uintptr_t' => {
       'align' => '8',

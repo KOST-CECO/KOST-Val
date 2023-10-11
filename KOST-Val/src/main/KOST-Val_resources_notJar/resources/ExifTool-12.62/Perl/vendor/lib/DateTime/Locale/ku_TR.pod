@@ -19,12 +19,12 @@
 
 =head1 NAME
 
-DateTime::Locale::ku_TR - Locale data examples for the Kurdish Turkey (ku-TR) locale
+DateTime::Locale::ku_TR - Locale data examples for the Kurdish Türkiye (ku-TR) locale
 
 =head1 DESCRIPTION
 
 This pod file contains examples of the locale data available for the
-Kurdish Turkey locale.
+Kurdish Türkiye locale.
 
 =head2 Days
 
@@ -416,6 +416,12 @@ Kurdish Turkey locale.
    2008-02-05T18:30:30 = PZ 2008 reş 5
    1995-12-22T09:05:02 = PZ 1995 ber 22
   -0010-09-15T04:44:23 = BZ -10 rez 15
+
+=head3 GyMd (GGGGG y-MM-dd)
+
+   2008-02-05T18:30:30 = PZ 2008-02-05
+   1995-12-22T09:05:02 = PZ 1995-12-22
+  -0010-09-15T04:44:23 = BZ -10-09-15
 
 =head3 H (HH)
 

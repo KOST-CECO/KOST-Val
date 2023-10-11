@@ -1,5 +1,5 @@
 package File::Slurper;
-$File::Slurper::VERSION = '0.012';
+$File::Slurper::VERSION = '0.014';
 use strict;
 use warnings;
 
@@ -56,7 +56,7 @@ sub read_text {
 
 	local $PerlIO::encoding::fallback = STOP_AT_PARTIAL | FB_CROAK;
 	open my $fh, "<$layer", $filename or croak "Couldn't open $filename: $!";
-	return do { local $/; <$fh> };
+	return scalar do { local $/; <$fh> };
 }
 
 sub write_text {
@@ -86,6 +86,7 @@ sub read_lines {
 
 	local $PerlIO::encoding::fallback = STOP_AT_PARTIAL | FB_CROAK;
 	open my $fh, "<$layer", $filename or croak "Couldn't open $filename: $!";
+	local $/ = "\n";
 	return <$fh> if $skip_chomp;
 	my @buf = <$fh>;
 	close $fh;
@@ -115,7 +116,7 @@ File::Slurper - A simple, sane and efficient module to slurp a file
 
 =head1 VERSION
 
-version 0.012
+version 0.014
 
 =head1 SYNOPSIS
 
@@ -138,7 +139,7 @@ Reads file C<$filename> into a scalar without any decoding or transformation.
 
 =head2 read_lines($filename, $encoding, $crlf, $skip_chomp)
 
-Reads file C<$filename> into a list/array line-by-line, after decoding from C<$encoding>, optional crlf translation and chomping.
+Reads file C<$filename> into a list/array line-by-line, after decoding from C<$encoding>, optional crlf translation and chomping. It will always use newline as separator.
 
 =head2 write_text($filename, $content, $encoding, $crlf)
 

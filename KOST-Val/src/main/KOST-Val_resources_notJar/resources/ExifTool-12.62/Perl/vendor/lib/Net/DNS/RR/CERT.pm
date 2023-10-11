@@ -2,7 +2,7 @@ package Net::DNS::RR::CERT;
 
 use strict;
 use warnings;
-our $VERSION = (qw$Id: CERT.pm 1814 2020-10-14 21:49:16Z willem $)[2];
+our $VERSION = (qw$Id: CERT.pm 1896 2023-01-30 12:59:25Z willem $)[2];
 
 use base qw(Net::DNS::RR);
 
@@ -18,7 +18,6 @@ use integer;
 use Carp;
 use MIME::Base64;
 
-
 my %certtype = (
 	PKIX	=> 1,						# X.509 as per PKIX
 	SPKI	=> 2,						# SPKI certificate
@@ -33,9 +32,96 @@ my %certtype = (
 	);
 
 
-#
-# source: http://www.iana.org/assignments/dns-sec-alg-numbers
-#
+sub _decode_rdata {			## decode rdata from wire-format octet string
+	my ( $self, $data, $offset ) = @_;
+
+	@{$self}{qw(certtype keytag algorithm)} = unpack "\@$offset n2 C", $$data;
+	$self->{certbin} = substr $$data, $offset + 5, $self->{rdlength} - 5;
+	return;
+}
+
+
+sub _encode_rdata {			## encode rdata as wire-format octet string
+	my $self = shift;
+
+	return pack "n2 C a*", $self->certtype, $self->keytag, $self->algorithm, $self->{certbin};
+}
+
+
+sub _format_rdata {			## format rdata portion of RR string.
+	my $self = shift;
+
+	my @param = ( $self->certtype, $self->keytag, $self->algorithm );
+	my @rdata = ( @param, split /\s+/, encode_base64( $self->{certbin} ) );
+	return @rdata;
+}
+
+
+sub _parse_rdata {			## populate RR from rdata in argument list
+	my ( $self, @argument ) = @_;
+
+	foreach (qw(certtype keytag algorithm)) {
+		$self->$_( shift @argument );
+	}
+	$self->cert(@argument);
+	return;
+}
+
+
+sub certtype {
+	my ( $self, @value ) = @_;
+
+	return $self->{certtype} unless scalar @value;
+
+	my $certtype = shift @value;
+	return $self->{certtype} = $certtype unless $certtype =~ /\D/;
+
+	my $typenum = $certtype{$certtype};
+	$typenum || croak qq[unknown certtype $certtype];
+	return $self->{certtype} = $typenum;
+}
+
+
+sub keytag {
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{keytag} = 0 + $_ }
+	return $self->{keytag} || 0;
+}
+
+
+sub algorithm {
+	my ( $self, $arg ) = @_;
+
+	return $self->{algorithm} unless defined $arg;
+	return _algbyval( $self->{algorithm} ) if uc($arg) eq 'MNEMONIC';
+	return $self->{algorithm} = _algbyname($arg);
+}
+
+
+sub certificate { return &certbin; }
+
+
+sub certbin {
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{certbin} = $_ }
+	return $self->{certbin} || "";
+}
+
+
+sub cert {
+	my ( $self, @value ) = @_;
+	return MIME::Base64::encode( $self->certbin(), "" ) unless scalar @value;
+	return $self->certbin( MIME::Base64::decode( join "", @value ) );
+}
+
+
+sub format { return &certtype; }				# uncoverable pod
+
+sub tag { return &keytag; }					# uncoverable pod
+
+
+########################################
+
 {
 	my @algbyname = (
 		'DELETE'	     => 0,			# [RFC4034][RFC4398][RFC8078]
@@ -74,7 +160,7 @@ my %certtype = (
 		$key =~ s/[\W_]//g;				# strip non-alphanumerics
 		my $val = $algbyname{$key};
 		return $val if defined $val;
-		return $key =~ /^\d/ ? $arg : croak qq[unknown algorithm "$arg"];
+		return $key =~ /^\d/ ? $arg : croak qq[unknown algorithm $arg];
 	}
 
 	sub _algbyval {
@@ -83,96 +169,7 @@ my %certtype = (
 	}
 }
 
-
-sub _decode_rdata {			## decode rdata from wire-format octet string
-	my $self = shift;
-	my ( $data, $offset ) = @_;
-
-	@{$self}{qw(certtype keytag algorithm)} = unpack "\@$offset n2 C", $$data;
-	$self->{certbin} = substr $$data, $offset + 5, $self->{rdlength} - 5;
-	return;
-}
-
-
-sub _encode_rdata {			## encode rdata as wire-format octet string
-	my $self = shift;
-
-	return pack "n2 C a*", $self->certtype, $self->keytag, $self->algorithm, $self->{certbin};
-}
-
-
-sub _format_rdata {			## format rdata portion of RR string.
-	my $self = shift;
-
-	my @param = ( $self->certtype, $self->keytag, $self->algorithm );
-	my @rdata = ( @param, split /\s+/, encode_base64( $self->{certbin} ) );
-	return @rdata;
-}
-
-
-sub _parse_rdata {			## populate RR from rdata in argument list
-	my $self = shift;
-
-	$self->certtype(shift);
-	$self->keytag(shift);
-	$self->algorithm(shift);
-	$self->cert(@_);
-	return;
-}
-
-
-sub certtype {
-	my $self = shift;
-
-	return $self->{certtype} unless scalar @_;
-
-	my $certtype = shift || 0;
-	return $self->{certtype} = $certtype unless $certtype =~ /\D/;
-
-	my $typenum = $certtype{$certtype};
-	$typenum || croak qq[unknown certtype "$certtype"];
-	return $self->{certtype} = $typenum;
-}
-
-
-sub keytag {
-	my $self = shift;
-
-	$self->{keytag} = 0 + shift if scalar @_;
-	return $self->{keytag} || 0;
-}
-
-
-sub algorithm {
-	my ( $self, $arg ) = @_;
-
-	return $self->{algorithm} unless defined $arg;
-	return _algbyval( $self->{algorithm} ) if uc($arg) eq 'MNEMONIC';
-	return $self->{algorithm} = _algbyname($arg);
-}
-
-
-sub certificate { return &certbin; }
-
-
-sub certbin {
-	my $self = shift;
-
-	$self->{certbin} = shift if scalar @_;
-	return $self->{certbin} || "";
-}
-
-
-sub cert {
-	my $self = shift;
-	return MIME::Base64::encode( $self->certbin(), "" ) unless scalar @_;
-	return $self->certbin( MIME::Base64::decode( join "", @_ ) );
-}
-
-
-sub format { return &certtype; }				# uncoverable pod
-
-sub tag { return &keytag; }					# uncoverable pod
+########################################
 
 
 1;
@@ -247,7 +244,7 @@ Package template (c)2009,2012 O.M.Kolkman and R.W.Franks.
 
 Permission to use, copy, modify, and distribute this software and its
 documentation for any purpose and without fee is hereby granted, provided
-that the above copyright notice appear in all copies and that both that
+that the original copyright notices appear in all copies and that both
 copyright notice and this permission notice appear in supporting
 documentation, and that the name of the author not be used in advertising
 or publicity pertaining to distribution of the software without specific
@@ -264,6 +261,9 @@ DEALINGS IN THE SOFTWARE.
 
 =head1 SEE ALSO
 
-L<perl>, L<Net::DNS>, L<Net::DNS::RR>, RFC4398
+L<perl> L<Net::DNS> L<Net::DNS::RR>
+L<RFC4398|https://tools.ietf.org/html/rfc4398>
+
+L<Algorithm Numbers|http://www.iana.org/assignments/dns-sec-alg-numbers>
 
 =cut

@@ -131,12 +131,19 @@ share {
   # off there.  Turn it on elsewhere as it saves a copy.
   meta->prop->{out_of_source} = $^O eq 'MSWin32' ? 0 : 1;
 
-  plugin Download => (
-    url     => 'http://xmlsoft.org/sources/',
-    version => qr/^libxml2-sources-([\d\.]+)\.tar\.gz$/,
+  plugin 'Download::GitLab' => (
+    gitlab_host     => 'https://gitlab.gnome.org',
+    gitlab_user     => 'GNOME',
+    gitlab_project  => 'libxml2',
+    type            => 'link',
+    format          => 'tar.xz',
+    version_from    => 'tag_name',
+    convert_version => sub {
+      my $version = shift;
+      $version =~ s/^v//;
+      $version;
+    },
   );
-
-  plugin Extract => 'tar.gz';
 
   if($^O eq 'MSWin32' && $Config{ccname} eq 'cl')
   {

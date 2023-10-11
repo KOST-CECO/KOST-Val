@@ -2,7 +2,7 @@ package Crypt::PK::Ed25519;
 
 use strict;
 use warnings;
-our $VERSION = '0.069';
+our $VERSION = '0.078';
 
 require Exporter; our @ISA = qw(Exporter); ### use Exporter 5.57 'import';
 our %EXPORT_TAGS = ( all => [qw( )] );
@@ -64,19 +64,19 @@ sub import_key {
   croak "FATAL: invalid key data" unless $data;
 
   if ($data =~ /-----BEGIN PUBLIC KEY-----(.*?)-----END/sg) {
-    $data = pem_to_der($data, $password);
+    $data = pem_to_der($data, $password) or croak "FATAL: PEM/key decode failed";
     return $self->_import($data);
   }
   elsif ($data =~ /-----BEGIN PRIVATE KEY-----(.*?)-----END/sg) {
-    $data = pem_to_der($data, $password);
+    $data = pem_to_der($data, $password) or croak "FATAL: PEM/key decode failed";
     return $self->_import_pkcs8($data, $password);
   }
   elsif ($data =~ /-----BEGIN ENCRYPTED PRIVATE KEY-----(.*?)-----END/sg) {
-    $data = pem_to_der($data, $password);
+    $data = pem_to_der($data, $password) or croak "FATAL: PEM/key decode failed";
     return $self->_import_pkcs8($data, $password);
   }
   elsif ($data =~ /-----BEGIN ED25519 PRIVATE KEY-----(.*?)-----END/sg) {
-    $data = pem_to_der($data, $password);
+    $data = pem_to_der($data, $password) or croak "FATAL: PEM/key decode failed";
     return $self->_import_pkcs8($data, $password);
   }
   elsif ($data =~ /^\s*(\{.*?\})\s*$/s) { # JSON
@@ -87,7 +87,7 @@ sub import_key {
     }
   }
   elsif ($data =~ /-----BEGIN CERTIFICATE-----(.*?)-----END CERTIFICATE-----/sg) {
-    $data = pem_to_der($data);
+    $data = pem_to_der($data) or croak "FATAL: PEM/cert decode failed";
     return $self->_import_x509($data);
   }
   elsif ($data =~ /-----BEGIN OPENSSH PRIVATE KEY-----(.*?)-----END/sg) {
@@ -97,7 +97,7 @@ sub import_key {
     croak "FATAL: OPENSSH PRIVATE KEY not supported";
   }
   elsif ($data =~ /---- BEGIN SSH2 PUBLIC KEY ----(.*?)---- END SSH2 PUBLIC KEY ----/sg) {
-    $data = pem_to_der($data);
+    $data = pem_to_der($data) or croak "FATAL: PEM/key decode failed";
     my ($typ, $pubkey) = Crypt::PK::_ssh_parse($data);
     return $self->_import_raw($pubkey, 0) if $typ eq 'ssh-ed25519' && length($pubkey) == 32;
   }
@@ -319,7 +319,7 @@ See L<https://tools.ietf.org/html/rfc8037>
   "d":"RcEJum_STotn0j77a5LZnNRX4hNxcsDXSf4rWgwULa0",
  }
 
-B<BEWARE:> For JWK support you need to have L<JSON::PP>, L<JSON::XS> or L<Cpanel::JSON::XS> module.
+B<BEWARE:> For JWK support you need to have L<JSON> module installed.
 
 =item * Ed25519 public keys in JSON Web Key (JWK) format
 
@@ -329,7 +329,7 @@ B<BEWARE:> For JWK support you need to have L<JSON::PP>, L<JSON::XS> or L<Cpanel
   "x":"oF0a6lgwrJplzfs4RmDUl-NpfEa0Gc8s7IXei9JFRZ0",
  }
 
-B<BEWARE:> For JWK support you need to have L<JSON::PP>, L<JSON::XS> or L<Cpanel::JSON::XS> module.
+B<BEWARE:> For JWK support you need to have L<JSON> module installed.
 
 =back
 
@@ -382,7 +382,7 @@ Also exports public/private keys as a perl HASH with JWK structure.
  #or
  my $jwk_hash = $pk->export_key_jwk('public', 1);
 
-B<BEWARE:> For JWK support you need to have L<JSON::PP>, L<JSON::XS> or L<Cpanel::JSON::XS> module.
+B<BEWARE:> For JWK support you need to have L<JSON> module installed.
 
 =head2 export_key_raw
 

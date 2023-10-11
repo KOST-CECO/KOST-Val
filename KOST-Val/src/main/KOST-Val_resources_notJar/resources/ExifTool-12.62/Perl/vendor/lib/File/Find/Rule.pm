@@ -8,7 +8,7 @@ use Number::Compare;
 use Carp qw/croak/;
 use File::Find (); # we're only wrapping for now
 
-our $VERSION = '0.34';
+our $VERSION = '0.34_01';
 
 # we'd just inherit from Exporter, but I want the colon
 sub import {
@@ -599,6 +599,8 @@ sub in {
     for my $path (@_) {
         # $topdir is used for relative and maxdepth
         $topdir = $path;
+        $topdir =~ s{\\}{/}g
+          if $^O eq q{MSWin32} and $File::Find::VERSION ge 1.41;
         # slice off the trailing slash if there is one (the
         # maxdepth/mindepth code is fussy)
         $topdir =~ s{/?$}{}

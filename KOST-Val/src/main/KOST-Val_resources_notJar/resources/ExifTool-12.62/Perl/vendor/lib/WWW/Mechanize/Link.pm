@@ -3,7 +3,7 @@ package WWW::Mechanize::Link;
 use strict;
 use warnings;
 
-our $VERSION = '2.03';
+our $VERSION = '2.17';
 
 #ABSTRACT: Link object for WWW::Mechanize
 
@@ -16,22 +16,22 @@ sub new {
     # The order of the first four must stay as they are for
     # compatibility with older code.
     if ( ref $_[0] eq 'HASH' ) {
-        $self = [ @{$_[0]}{ qw( url text name tag base attrs ) } ];
+        $self = [ @{ $_[0] }{qw( url text name tag base attrs )} ];
     }
     else {
-        $self = [ @_ ];
+        $self = [@_];
     }
 
     return bless $self, $class;
 }
 
 
-sub url   { return ($_[0])->[0]; }
-sub text  { return ($_[0])->[1]; }
-sub name  { return ($_[0])->[2]; }
-sub tag   { return ($_[0])->[3]; }
-sub base  { return ($_[0])->[4]; }
-sub attrs { return ($_[0])->[5]; }
+sub url   { return ( $_[0] )->[0]; }
+sub text  { return ( $_[0] )->[1]; }
+sub name  { return ( $_[0] )->[2]; }
+sub tag   { return ( $_[0] )->[3]; }
+sub base  { return ( $_[0] )->[4]; }
+sub attrs { return ( $_[0] )->[5]; }
 
 
 sub URI {
@@ -65,7 +65,7 @@ WWW::Mechanize::Link - Link object for WWW::Mechanize
 
 =head1 VERSION
 
-version 2.03
+version 2.17
 
 =head1 SYNOPSIS
 

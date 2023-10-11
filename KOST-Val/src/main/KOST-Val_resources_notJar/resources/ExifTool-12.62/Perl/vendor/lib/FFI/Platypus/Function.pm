@@ -6,7 +6,7 @@ use 5.008004;
 use FFI::Platypus;
 
 # ABSTRACT: An FFI function object
-our $VERSION = '1.34'; # VERSION
+our $VERSION = '2.08'; # VERSION
 
 
 use overload '&{}' => sub {
@@ -19,7 +19,7 @@ use overload '&{}' => sub {
 
 package FFI::Platypus::Function::Function;
 
-use base qw( FFI::Platypus::Function );
+use parent qw( FFI::Platypus::Function );
 
 sub attach
 {
@@ -55,7 +55,7 @@ sub sub_ref
 
 package FFI::Platypus::Function::Wrapper;
 
-use base qw( FFI::Platypus::Function );
+use parent qw( FFI::Platypus::Function );
 
 sub new
 {
@@ -127,14 +127,14 @@ FFI::Platypus::Function - An FFI function object
 
 =head1 VERSION
 
-version 1.34
+version 2.08
 
 =head1 SYNOPSIS
 
- use FFI::Platypus;
+ use FFI::Platypus 2.00;
  
  # call directly
- my $ffi = FFI::Platypus->new( api => 1 );
+ my $ffi = FFI::Platypus->new( api => 2 );
  my $f = $ffi->function(puts => ['string'] => 'int');
  $f->call("hello there");
  
@@ -199,7 +199,7 @@ Damyan Ivanov
 
 Ilya Pavlov (Ilya33)
 
-Petr Pisar (ppisar)
+Petr Písař (ppisar)
 
 Mohammad S Anwar (MANWAR)
 
@@ -209,9 +209,17 @@ Meredith (merrilymeredith, MHOWARD)
 
 Diab Jerius (DJERIUS)
 
+Eric Brine (IKEGAMI)
+
+szTheory
+
+José Joaquín Atria (JJATRIA)
+
+Pete Houston (openstrike, HOUSTON)
+
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2015,2016,2017,2018,2019,2020 by Graham Ollis.
+This software is copyright (c) 2015-2022 by Graham Ollis.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

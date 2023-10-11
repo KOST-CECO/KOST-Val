@@ -1,4 +1,4 @@
-# $Id: Search.pm 84 2020-05-31 06:29:34Z stro $
+# $Id: Search.pm 85 2022-10-29 05:44:36Z stro $
 
 package CPAN::SQLite::DBI::Search;
 
@@ -6,7 +6,7 @@ use strict;
 use warnings;
 
 BEGIN {
-  our $VERSION = '0.219';
+  our $VERSION = '0.220';
   $CPAN::SQLite::DBI::Search::info::VERSION  = $VERSION;
   $CPAN::SQLite::DBI::Search::mods::VERSION  = $VERSION;
   $CPAN::SQLite::DBI::Search::dists::VERSION = $VERSION;
@@ -255,7 +255,7 @@ CPAN::SQLite::DBI::Search - DBI information for searching the CPAN::SQLite datab
 
 =head1 VERSION
 
-version 0.219
+version 0.220
 
 =head1 DESCRIPTION
 

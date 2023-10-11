@@ -4,9 +4,9 @@ use strict;
 use warnings;
 
 our $VERSION;
-$VERSION = '1.29';
-$VERSION = eval { $VERSION };
-our $SVNVERSION = (qw$Id: DNS.pm 1826 2020-11-18 13:18:18Z willem $)[2];
+$VERSION = '1.39';
+$VERSION = eval {$VERSION};
+our $SVNVERSION = (qw$Id: DNS.pm 1929 2023-06-01 11:40:49Z willem $)[2];
 
 
 =head1 NAME
@@ -23,8 +23,8 @@ Net::DNS is a collection of Perl modules that act as a Domain Name System
 (DNS) resolver. It allows the programmer to perform DNS queries that are
 beyond the capabilities of "gethostbyname" and "gethostbyaddr".
 
-The programmer should be familiar with the structure of a DNS packet.
-See RFC 1035 or DNS and BIND (Albitz & Liu) for details.
+The programmer should be familiar with the structure of a DNS packet
+and the zone file presentation format described in RFC1035.
 
 =cut
 
@@ -56,10 +56,10 @@ sub version { return $VERSION; }
 #	@rr = rr($res, 'example.com' ... );
 #
 sub rr {
-	my ($arg1) = @_;
-	my $res = ref($arg1) ? shift : Net::DNS::Resolver->new();
+	my @arg = @_;
+	my $res = ( ref( $arg[0] ) ? shift @arg : Net::DNS::Resolver->new() );
 
-	my $reply = $res->query(@_);
+	my $reply = $res->query(@arg);
 	my @list  = $reply ? $reply->answer : ();
 	return @list;
 }
@@ -73,9 +73,9 @@ sub rr {
 #	@mx = mx($res, 'example.com');
 #
 sub mx {
-	my ($arg1) = @_;
-	my @res = ( ref($arg1) ? shift : () );
-	my ( $name, @class ) = @_;
+	my @arg = @_;
+	my @res = ( ref( $arg[0] ) ? shift @arg : () );
+	my ( $name, @class ) = @arg;
 
 	# This construct is best read backwards.
 	#
@@ -98,9 +98,10 @@ sub mx {
 #    @prioritysorted = rrsort( "SRV", "priority", @rr_array );
 #
 sub rrsort {
-	my $rrtype = uc shift;
-	my ( $attribute, @rr ) = @_;	## NB: attribute is optional
-	( @rr, $attribute ) = @_ if ref($attribute) =~ /^Net::DNS::RR/;
+	my @arg	   = @_;
+	my $rrtype = uc shift @arg;
+	my ( $attribute, @rr ) = @arg;	## NB: attribute is optional
+	( @rr, $attribute ) = @arg if ref($attribute) =~ /^Net::DNS::RR/;
 
 	my @extracted = grep { $_->type eq $rrtype } @rr;
 	return @extracted unless scalar @extracted;
@@ -111,7 +112,7 @@ sub rrsort {
 
 
 #
-# Auxilliary functions to support policy-driven zone serial numbering.
+# Auxiliary functions to support policy-driven zone serial numbering.
 #
 #	$successor = $soa->serial(SEQUENTIAL);
 #	$successor = $soa->serial(UNIXTIME);
@@ -129,18 +130,20 @@ sub YYYYMMDDxx {
 
 
 #
-# Auxilliary functions to support dynamic update.
+# Auxiliary functions to support dynamic update.
 #
 
 sub yxrrset {
-	my $rr = Net::DNS::RR->new(@_);
+	my @arg = @_;
+	my $rr	= Net::DNS::RR->new(@arg);
 	$rr->ttl(0);
 	$rr->class('ANY') unless $rr->rdata;
 	return $rr;
 }
 
 sub nxrrset {
-	my $rr = Net::DNS::RR->new(@_);
+	my @arg = @_;
+	my $rr	= Net::DNS::RR->new(@arg);
 	return Net::DNS::RR->new(
 		name  => $rr->name,
 		type  => $rr->type,
@@ -149,8 +152,9 @@ sub nxrrset {
 }
 
 sub yxdomain {
-	my ( $domain, @etc ) = map {split} @_;
-	my $rr = Net::DNS::RR->new( scalar(@etc) ? @_ : ( name => $domain ) );
+	my @arg = @_;
+	my ( $domain, @etc ) = map {split} @arg;
+	my $rr = Net::DNS::RR->new( scalar(@etc) ? @arg : ( name => $domain ) );
 	return Net::DNS::RR->new(
 		name  => $rr->name,
 		type  => 'ANY',
@@ -159,8 +163,9 @@ sub yxdomain {
 }
 
 sub nxdomain {
-	my ( $domain, @etc ) = map {split} @_;
-	my $rr = Net::DNS::RR->new( scalar(@etc) ? @_ : ( name => $domain ) );
+	my @arg = @_;
+	my ( $domain, @etc ) = map {split} @arg;
+	my $rr = Net::DNS::RR->new( scalar(@etc) ? @arg : ( name => $domain ) );
 	return Net::DNS::RR->new(
 		name  => $rr->name,
 		type  => 'ANY',
@@ -169,14 +174,16 @@ sub nxdomain {
 }
 
 sub rr_add {
-	my $rr = Net::DNS::RR->new(@_);
+	my @arg = @_;
+	my $rr	= Net::DNS::RR->new(@arg);
 	$rr->{ttl} = 86400 unless defined $rr->{ttl};
 	return $rr;
 }
 
 sub rr_del {
-	my ( $domain, @etc ) = map {split} @_;
-	my $rr = Net::DNS::RR->new( scalar(@etc) ? @_ : ( name => $domain, type => 'ANY' ) );
+	my @arg = @_;
+	my ( $domain, @etc ) = map {split} @arg;
+	my $rr = Net::DNS::RR->new( scalar(@etc) ? @arg : ( name => $domain, type => 'ANY' ) );
 	$rr->class( $rr->rdata ? 'NONE' : 'ANY' );
 	$rr->ttl(0);
 	return $rr;
@@ -251,7 +258,7 @@ The type of an RR object must be checked before calling any methods.
 
 =head1 METHODS
 
-Net::DNS exports methods and auxilliary functions to support
+Net::DNS exports methods and auxiliary functions to support
 DNS updates, zone serial number management, and simple DNS queries.
 
 =head2 version
@@ -305,7 +312,7 @@ This method does not look up address records; it resolves MX only.
 
 =head1 Dynamic DNS Update Support
 
-The Net::DNS module provides auxilliary functions which support
+The Net::DNS module provides auxiliary functions which support
 dynamic DNS update requests.
 
     $update = Net::DNS::Update->new( 'example.com' );
@@ -413,7 +420,7 @@ be created.
 
 =head1 Zone Serial Number Management
 
-The Net::DNS module provides auxilliary functions which support
+The Net::DNS module provides auxiliary functions which support
 policy-driven zone serial numbering regimes.
 
     $soa->serial(SEQUENTIAL);
@@ -437,7 +444,7 @@ elapsed since the previous update is less than one second.
 
     $successor = $soa->serial( YYYYMMDDxx );
 
-The 32 bit value returned by the auxilliary C<YYYYMMDDxx()> function
+The 32 bit value returned by the auxiliary C<YYYYMMDDxx()> function
 will be used as the base for the date-coded zone serial number.
 Serial number increments must be limited to 100 per day for the
 date information to remain useful.
@@ -619,7 +626,7 @@ All rights reserved.
 
 Permission to use, copy, modify, and distribute this software and its
 documentation for any purpose and without fee is hereby granted, provided
-that the above copyright notice appear in all copies and that both that
+that the original copyright notices appear in all copies and that both
 copyright notice and this permission notice appear in supporting
 documentation, and that the name of the author not be used in advertising
 or publicity pertaining to distribution of the software without specific
@@ -647,10 +654,9 @@ Net::DNS was created in 1997 by Michael Fuhr.
 
 =head1 SEE ALSO
 
-L<perl>, L<Net::DNS::Resolver>, L<Net::DNS::Question>, L<Net::DNS::RR>,
-L<Net::DNS::Packet>, L<Net::DNS::Update>,
-RFC1035, L<http://www.net-dns.org/>,
-I<DNS and BIND> by Paul Albitz & Cricket Liu
+L<perl> L<Net::DNS::Resolver> L<Net::DNS::Question> L<Net::DNS::RR>
+L<Net::DNS::Packet> L<Net::DNS::Update>
+L<RFC1035|https://tools.ietf.org/html/rfc1035>
 
 =cut
 

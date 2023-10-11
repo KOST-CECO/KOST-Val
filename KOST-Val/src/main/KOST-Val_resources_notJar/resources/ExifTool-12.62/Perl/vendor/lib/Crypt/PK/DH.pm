@@ -2,7 +2,7 @@ package Crypt::PK::DH;
 
 use strict;
 use warnings;
-our $VERSION = '0.069';
+our $VERSION = '0.078';
 
 require Exporter; our @ISA = qw(Exporter); ### use Exporter 5.57 'import';
 our %EXPORT_TAGS = ( all => [qw( dh_shared_secret )] );
@@ -227,7 +227,9 @@ sub generate_key {
   }
   elsif (ref $param eq 'SCALAR') {
     my $data = $$param;
-    $data = pem_to_der($data) if $data =~ /-----BEGIN DH PARAMETERS-----\s*(.+)\s*-----END DH PARAMETERS-----/s;
+    if ($data =~ /-----BEGIN DH PARAMETERS-----\s*(.+)\s*-----END DH PARAMETERS-----/s) {
+      $data = pem_to_der($data) or croak "FATAL: PEM/params decode failed";
+    }
     return $self->_generate_key_dhparam($data);
   }
   elsif (ref $param eq 'HASH') {

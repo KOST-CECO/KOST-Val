@@ -383,13 +383,13 @@ Tasawaq Niger locale.
 
 =head3 Ehm (E h:mm a)
 
-   2008-02-05T18:30:30 = Ata 6:30 Zaarikay b
+   2008-02-05T18:30:30 = Ata 6:30 Zaarikay b
    1995-12-22T09:05:02 = Alz 9:05 Subbaahi
   -0010-09-15T04:44:23 = Asi 4:44 Subbaahi
 
 =head3 Ehms (E h:mm:ss a)
 
-   2008-02-05T18:30:30 = Ata 6:30:30 Zaarikay b
+   2008-02-05T18:30:30 = Ata 6:30:30 Zaarikay b
    1995-12-22T09:05:02 = Alz 9:05:02 Subbaahi
   -0010-09-15T04:44:23 = Asi 4:44:23 Subbaahi
 
@@ -416,6 +416,12 @@ Tasawaq Niger locale.
    2008-02-05T18:30:30 = IZ 2008 Fee 5
    1995-12-22T09:05:02 = IZ 1995 Dee 22
   -0010-09-15T04:44:23 = IJ -10 Sek 15
+
+=head3 GyMd (GGGGG y-MM-dd)
+
+   2008-02-05T18:30:30 = IZ 2008-02-05
+   1995-12-22T09:05:02 = IZ 1995-12-22
+  -0010-09-15T04:44:23 = IJ -10-09-15
 
 =head3 H (HH)
 
@@ -503,31 +509,31 @@ Tasawaq Niger locale.
 
 =head3 h (h a)
 
-   2008-02-05T18:30:30 = 6 Zaarikay b
+   2008-02-05T18:30:30 = 6 Zaarikay b
    1995-12-22T09:05:02 = 9 Subbaahi
   -0010-09-15T04:44:23 = 4 Subbaahi
 
-=head3 hm (h:mm a)
+=head3 hm (h:mm a)
 
-   2008-02-05T18:30:30 = 6:30 Zaarikay b
-   1995-12-22T09:05:02 = 9:05 Subbaahi
-  -0010-09-15T04:44:23 = 4:44 Subbaahi
+   2008-02-05T18:30:30 = 6:30 Zaarikay b
+   1995-12-22T09:05:02 = 9:05 Subbaahi
+  -0010-09-15T04:44:23 = 4:44 Subbaahi
 
-=head3 hms (h:mm:ss a)
+=head3 hms (h:mm:ss a)
 
-   2008-02-05T18:30:30 = 6:30:30 Zaarikay b
-   1995-12-22T09:05:02 = 9:05:02 Subbaahi
-  -0010-09-15T04:44:23 = 4:44:23 Subbaahi
+   2008-02-05T18:30:30 = 6:30:30 Zaarikay b
+   1995-12-22T09:05:02 = 9:05:02 Subbaahi
+  -0010-09-15T04:44:23 = 4:44:23 Subbaahi
 
 =head3 hmsv (h:mm:ss a v)
 
-   2008-02-05T18:30:30 = 6:30:30 Zaarikay b UTC
+   2008-02-05T18:30:30 = 6:30:30 Zaarikay b UTC
    1995-12-22T09:05:02 = 9:05:02 Subbaahi UTC
   -0010-09-15T04:44:23 = 4:44:23 Subbaahi UTC
 
 =head3 hmv (h:mm a v)
 
-   2008-02-05T18:30:30 = 6:30 Zaarikay b UTC
+   2008-02-05T18:30:30 = 6:30 Zaarikay b UTC
    1995-12-22T09:05:02 = 9:05 Subbaahi UTC
   -0010-09-15T04:44:23 = 4:44 Subbaahi UTC
 

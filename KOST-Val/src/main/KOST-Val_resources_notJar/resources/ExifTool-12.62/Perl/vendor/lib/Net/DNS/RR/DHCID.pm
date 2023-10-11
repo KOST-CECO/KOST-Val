@@ -2,7 +2,7 @@ package Net::DNS::RR::DHCID;
 
 use strict;
 use warnings;
-our $VERSION = (qw$Id: DHCID.pm 1814 2020-10-14 21:49:16Z willem $)[2];
+our $VERSION = (qw$Id: DHCID.pm 1896 2023-01-30 12:59:25Z willem $)[2];
 
 use base qw(Net::DNS::RR);
 
@@ -19,8 +19,7 @@ use MIME::Base64;
 
 
 sub _decode_rdata {			## decode rdata from wire-format octet string
-	my $self = shift;
-	my ( $data, $offset ) = @_;
+	my ( $self, $data, $offset ) = @_;
 
 	my $size = $self->{rdlength} - 3;
 	@{$self}{qw(identifiertype digesttype digest)} = unpack "\@$offset nC a$size", $$data;
@@ -44,9 +43,9 @@ sub _format_rdata {			## format rdata portion of RR string.
 
 
 sub _parse_rdata {			## populate RR from rdata in argument list
-	my $self = shift;
+	my ( $self, @argument ) = @_;
 
-	my $data = MIME::Base64::decode( join "", @_ );
+	my $data = MIME::Base64::decode( join "", @argument );
 	my $size = length($data) - 3;
 	@{$self}{qw(identifiertype digesttype digest)} = unpack "n C a$size", $data;
 	return;
@@ -73,25 +72,22 @@ sub _parse_rdata {			## populate RR from rdata in argument list
 
 
 sub identifiertype {
-	my $self = shift;
-
-	$self->{identifiertype} = 0 + shift if scalar @_;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{identifiertype} = 0 + $_ }
 	return $self->{identifiertype} || 0;
 }
 
 
 sub digesttype {
-	my $self = shift;
-
-	$self->{digesttype} = 0 + shift if scalar @_;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{digesttype} = 0 + $_ }
 	return $self->{digesttype} || 0;
 }
 
 
 sub digest {
-	my $self = shift;
-
-	$self->{digest} = shift if scalar @_;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{digest} = $_ }
 	return $self->{digest} || "";
 }
 
@@ -165,7 +161,7 @@ Package template (c)2009,2012 O.M.Kolkman and R.W.Franks.
 
 Permission to use, copy, modify, and distribute this software and its
 documentation for any purpose and without fee is hereby granted, provided
-that the above copyright notice appear in all copies and that both that
+that the original copyright notices appear in all copies and that both
 copyright notice and this permission notice appear in supporting
 documentation, and that the name of the author not be used in advertising
 or publicity pertaining to distribution of the software without specific
@@ -182,6 +178,7 @@ DEALINGS IN THE SOFTWARE.
 
 =head1 SEE ALSO
 
-L<perl>, L<Net::DNS>, L<Net::DNS::RR>, RFC4701
+L<perl> L<Net::DNS> L<Net::DNS::RR>
+L<RFC4701|https://tools.ietf.org/html/rfc4701>
 
 =cut

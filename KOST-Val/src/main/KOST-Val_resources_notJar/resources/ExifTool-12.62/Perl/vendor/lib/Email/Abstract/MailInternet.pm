@@ -1,7 +1,7 @@
 use strict;
 package Email::Abstract::MailInternet;
 # ABSTRACT: Email::Abstract wrapper for Mail::Internet
-$Email::Abstract::MailInternet::VERSION = '3.008';
+$Email::Abstract::MailInternet::VERSION = '3.009';
 use Email::Abstract::Plugin;
 BEGIN { @Email::Abstract::MailInternet::ISA = 'Email::Abstract::Plugin' };
 
@@ -79,12 +79,22 @@ Email::Abstract::MailInternet - Email::Abstract wrapper for Mail::Internet
 
 =head1 VERSION
 
-version 3.008
+version 3.009
 
 =head1 DESCRIPTION
 
 This module wraps the Mail::Internet mail handling library with an
 abstract interface, to be used with L<Email::Abstract>
+
+=head1 PERL VERSION SUPPORT
+
+This module has a long-term perl support period.  That means it will not
+require a version of perl released fewer than five years ago.
+
+Although it may work on older versions of perl, no guarantee is made that the
+minimum required version will not be increased.  The version may be increased
+for any reason, and there is no promise that patches will be accepted to lower
+the minimum required perl.
 
 =head1 SEE ALSO
 
@@ -96,7 +106,7 @@ L<Email::Abstract>, L<Mail::Internet>.
 
 =item *
 
-Ricardo SIGNES <rjbs@cpan.org>
+Ricardo SIGNES <rjbs@semiotic.systems>
 
 =item *
 

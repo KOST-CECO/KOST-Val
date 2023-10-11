@@ -7,7 +7,7 @@ use Carp qw( croak );
 require FFI::Platypus;
 
 # ABSTRACT: Defining types for FFI::Platypus
-our $VERSION = '1.34'; # VERSION
+our $VERSION = '2.08'; # VERSION
 
 # The TypeParser and Type classes are used internally ONLY and
 # are not to be exposed to the user.  External users should
@@ -58,19 +58,19 @@ FFI::Platypus::Type - Defining types for FFI::Platypus
 
 =head1 VERSION
 
-version 1.34
+version 2.08
 
 =head1 SYNOPSIS
 
 OO Interface:
 
- use FFI::Platypus;
- my $ffi = FFI::Platypus->new( api => 1 );
+ use FFI::Platypus 2.00;
+ my $ffi = FFI::Platypus->new( api => 2 );
  $ffi->type('int' => 'my_int');
 
 =head1 DESCRIPTION
 
-B<Note>: This document assumes that you are using C<api =E<gt> 1>,
+B<Note>: This document assumes that you are using C<api =E<gt> 2>,
 which you should be using for all new code.
 
 This document describes how to define types using L<FFI::Platypus>.
@@ -78,8 +78,8 @@ Types may be "defined" ahead of time, or simply used when defining or
 attaching functions.
 
  # Example of defining types
- use FFI::Platypus;
- my $ffi = FFI::Platypus->new( api => 1 );
+ use FFI::Platypus 2.00;
+ my $ffi = FFI::Platypus->new( api => 2 );
  $ffi->type('int');
  $ffi->type('string');
  
@@ -134,8 +134,8 @@ second argument to the L<FFI::Platypus#type> method can be used to
 define a type alias that can later be used by function declaration
 and attachment.
 
- use FFI::Platypus;
- my $ffi = FFI::Platypus->new( api => 1 );
+ use FFI::Platypus 2.00;
+ my $ffi = FFI::Platypus->new( api => 2 );
  $ffi->type('int'    => 'myint');
  $ffi->type('string' => 'mystring');
  my $f = $ffi->function( puts => ['mystring'] => 'myint' );
@@ -254,13 +254,13 @@ may depend on the platform.
 Somewhat confusingly, C<char> is an integer type!  This is really an
 alias for either C<sint8_t> or C<uint8_t> depending on your platform.
 If you want to pass a character (not integer) in to a C function that
-takes a character you want to use the perl L<ord|perlfunc#ord> function.
+takes a character you want to use the perl L<ord|perlfunc/ord> function.
 Here is an example that uses the standard libc C<isalpha>, C<isdigit>
 type functions:
 
- use FFI::Platypus;
+ use FFI::Platypus 2.00;
  
- my $ffi = FFI::Platypus->new;
+ my $ffi = FFI::Platypus->new( api => 2 );
  $ffi->lib(undef);
  $ffi->type('int' => 'character');
  
@@ -299,14 +299,14 @@ things like C<wchar_t>, C<off_t>, C<wint_t>. You can use this script to
 list all the integer types that L<FFI::Platypus> knows about, plus how
 they are implemented.
 
- use FFI::Platypus;
+ use FFI::Platypus 2.00;
  
- my $ffi = FFI::Platypus->new;
+ my $ffi = FFI::Platypus->new( api => 2 );
  
- foreach my $type_name (sort FFI::Platypus->types)
+ foreach my $type_name (sort $ffi->types)
  {
    my $meta = $ffi->type_meta($type_name);
-   next unless $meta->{element_type} eq 'int';
+   next unless defined $meta->{element_type} && $meta->{element_type} eq 'int';
    printf "%20s %s\n", $type_name, $meta->{ffi_type};
  }
 
@@ -482,6 +482,32 @@ As a special case, when you pass C<undef> into a function that takes an
 opaque type it will be translated into C<NULL> for C.  When a C function
 returns a NULL pointer, it will be translated back to C<undef>.
 
+For functions that take a pointer to a void pointer (that is a C<void **>),
+you can use a pointer to an opaque type.  Consider the C code:
+
+ struct archive_entry;
+ int archive_read_next_header(struct archive *, struvct archive_entry **);
+
+Once again the internals of C<archive_entry> are not provided.  Perl code:
+
+ $ffi->type('opaque' => 'archive_entry');
+ $ffi->attach(archive_read_next_header => [ 'archive', 'archive_entry*' ] => 'int');
+
+Now we can call this function
+
+ my $archive = archive_read_new();
+ ...  # additional prep for $active is required
+ while(1) {
+   my $entry;
+   archive_read_next_header($archive, \$entry);
+   last unless defined $entry;
+   # can now use $entry for other archive_entry_ methods.
+ }
+
+The way C<archive_read_next_header> works, it will return a pointer to the next
+C<archive_entry> object until it gets to the end, when it will return a pointer
+to C<NULL> which will be represented in Perl by a C<undef>.
+
 There are a number of useful utility functions for dealing with opaque
 types in the L<FFI::Platypus::Memory> module.
 
@@ -506,14 +532,31 @@ in the main Platypus documentation using libarchive and unix open:
 
 =head2 Strings
 
-From the CPU's perspective, strings are just pointers.  From Perl and
-C's perspective, those pointers point to a series of characters.  For C
-they are null terminates ("\0").  L<FFI::Platypus> handles the details
-where they differ.  Basically when you see C<char *> or C<const char *>
-used in a C header file you can expect to be able to use the C<string>
-type.
-
+ # used when you need a char * or const char *
  $ffi->attach( puts => [ 'string' ] => 'int' );
+
+The C<string> type is a series of bytes that usually represent a
+series of characters.  They will be NULL terminated for C and passed
+in as a pointer.  This will typically work for APIs that take ASCII
+or UTF-8 strings which are common in Unix environments.
+
+(Note if you need to handle the native "wide" string for example
+if you need to talk UTF-16 on Windows see L<FFI::Platypus::Type::WideString>).
+
+(Note if you need to pass in a fixed length string by value (not as
+a pointer) then you can do so using L<FFI::Platypus::Record>).
+
+(Note that languages like L<Go|FFI::Platypus::Lang::Go> and L<Rust|FFI::Platypus::Lang::Rust> do not use NULL terminated strings
+and need their own string types; see the appropriate language plugins for details)
+
+ # can also be used when you need a void * or const void *
+ $ffi->attach( write => ['int', 'string', 'size_t' ] => 'ssizet' );
+
+The C<string> type can also be used to pass in the start of a buffer
+of arbitrary bytes stored in a Perl scalar.  Because a C<string> is
+passed just as a pointer you will typically need to also pass the
+length of the buffer as a separate argument.  This is necessary because
+buffers could potentially have a NULL in them.
 
 The pointer passed into C (or other language) is to the content of the
 actual scalar, which means it can modify the content of a scalar.
@@ -628,6 +671,44 @@ and return an opaque pointer to the string using a cast.
  });
  print_message($get_message);
 
+Another type of string that you may run into with some APIs is the
+so called "wide" string.  In your C code if you see C<wchar_t*>
+or C<const wchar_t*> or if in Win32 API code you see C<LPWSTR>
+or C<LPCWSTR>.  Most commonly you will see these types when working
+with the Win32 API, but you may see them in Unix as well.  These
+types are intended for dealing with Unicode, but they do not use
+the same UTF-8 format used by Perl internally, so they need to be
+converted.  You can do this manually by allocating the memory
+and using the L<Encode> module, but the easier way is to use
+either L<FFI::Platypus::Type::WideString> or
+L<FFI::Platypus::Lang::Win32>, which handle the memory allocation
+and conversion for you.
+
+String types can be defined to have a fixed length using a trailing
+parenthetical like so C<string(10)>.  For arguments this has little
+practical effect since the strings are passed as pointers anyway,
+but does impact return values.  If a function that returns a C<string(10)>
+type returns a string that is not NULL terminated, only the first ten bytes
+will be returned in the result.
+
+Internally fixed length strings are implemented the same as
+classless record types (that is to say C<string(10)> is identically
+internally to C<record(10)*>).
+
+For the 1.00 Platypus API, the C<string(10)> type was specified as
+a pointer (that is C<string(10)*>).  This was a mistake, but you
+can still use the latter as an alias for the correct form in the
+2.00 API.
+
+=head2 Pointers and Arrays of Strings
+
+As of the 1.00 Platypus API, you can specify pointers to strings
+(C<string*>) and arrays of strings (C<string[10]>).  Since strings
+themselves are passed as pointers, this means these types are
+passed in as pointers to pointers.  If the pointer to the string
+is changed then when the function returns the scalar or array
+will be updated as well.
+
 =head2 Pointer / References
 
 In C you can pass a pointer to a variable to a function in order
@@ -656,8 +737,8 @@ code.
  }
  
  # foo.pl
- use FFI::Platypus;
- my $ffi = FFI::Platypus->new( api => 1 );
+ use FFI::Platypus 2.00;
+ my $ffi = FFI::Platypus->new( api => 2 );
  $ffi->lib('libfoo.so'); # change to reflect the dynamic lib
                          # that contains foo.c
  $ffi->type('int*' => 'int_p');
@@ -675,14 +756,11 @@ Older versions of Platypus did not support pointers to strings or records.
 Records are structured data of a fixed length.  In C they are called
 C<struct>s.
 
-The Platypus native way of working with structured data is via the C<record>
-type. There is also L<FFI::C> which has some overlapping functionality.
-Briefly, L<FFI::C> supports C<union> and arrays of structured types, but
-not passing structured data by-value, while the C<record> type doesn't
-support C<union> or arrays of structured data, but does support passing
-structured data by-value.  The remainder of this section will discuss
-the native Platypus C<record> type, but you should remember that for
-some applications L<FFI::C> might be more appropriate.
+For most C structured data, as long as you do not need to a record
+by value, L<FFI::C> is the better choice.  Briefly, L<FFI::C> supports
+C<struct>, C<union>, and arrays of C<struct> and C<unions>.  L<FFI::C>
+does not support passing by value.  The reminder of this section will
+discuss only the C<record> type.
 
 To declare a record type, use C<record>:
 
@@ -692,8 +770,9 @@ The easiest way to mange records with Platypus is by using
 L<FFI::Platypus::Record> to define a record layout for a record class.
 Here is a brief example:
 
- package My::UnixTime;
+ package Unix::TimeStruct;
  
+ use FFI::Platypus 2.00;
  use FFI::Platypus::Record;
  
  record_layout_1(qw(
@@ -710,10 +789,10 @@ Here is a brief example:
      string tm_zone
  ));
  
- my $ffi = FFI::Platypus->new( api => 1 );
+ my $ffi = FFI::Platypus->new( api => 2 );
  $ffi->lib(undef);
- # define a record class My::UnixTime and alias it to "tm"
- $ffi->type("record(My::UnixTime)*" => 'tm');
+ # define a record class Unix::TimeStruct and alias it to "tm"
+ $ffi->type("record(Unix::TimeStruct)*" => 'tm');
  
  # attach the C localtime function as a constructor
  $ffi->attach( localtime => ['time_t*'] => 'tm', sub {
@@ -724,8 +803,8 @@ Here is a brief example:
  
  package main;
  
- # now we can actually use our My::UnixTime class
- my $time = My::UnixTime->localtime;
+ # now we can actually use our Unix::TimeStruct class
+ my $time = Unix::TimeStruct->localtime;
  printf "time is %d:%d:%d %s\n",
    $time->tm_hour,
    $time->tm_min,
@@ -748,7 +827,7 @@ then smushes them back together to get the original C<time_t> (an
 integer).
 
  use Convert::Binary::C;
- use FFI::Platypus;
+ use FFI::Platypus 2.00;
  use Data::Dumper qw( Dumper );
  
  my $c = Convert::Binary::C->new;
@@ -782,7 +861,7 @@ integer).
  
  # create the Platypus instance and create the appropriate
  # types and functions
- my $ffi = FFI::Platypus->new( api => 1 );
+ my $ffi = FFI::Platypus->new( api => 2 );
  $ffi->lib(undef);
  $ffi->type("record($tm_size)*" => 'tm');
  $ffi->attach( [ localtime => 'my_localtime' ] => ['time_t*'] => 'tm'     );
@@ -823,95 +902,6 @@ class.  Basically:
 The only thing that your class MUST provide is either a
 C<ffi_record_size> or C<_ffi_record_size> class method that returns the
 size of the record in bytes.
-
-Here is a longer practical example, once again using the tm struct:
-
- package My::UnixTime;
- 
- use FFI::Platypus;
- use FFI::TinyCC;
- use FFI::TinyCC::Inline 'tcc_eval';
- 
- # store the source of the tm struct
- # for repeated use later
- my $tm_source = <<ENDTM;
-   struct tm {
-     int tm_sec;
-     int tm_min;
-     int tm_hour;
-     int tm_mday;
-     int tm_mon;
-     int tm_year;
-     int tm_wday;
-     int tm_yday;
-     int tm_isdst;
-     long int tm_gmtoff;
-     const char *tm_zone;
-   };
- ENDTM
- 
- # calculate the size of the tm struct
- # this time using Tiny CC
- my $tm_size = tcc_eval qq{
-   $tm_source
-   int main()
-   {
-     return sizeof(struct tm);
-   }
- };
- 
- # To use My::UnixTime as a record class, we need to
- # specify a size for the record, a function called
- # either ffi_record_size or _ffi_record_size should
- # return the size in bytes.  This function has to
- # be defined before you try to define it as a type.
- sub _ffi_record_size { $tm_size };
- 
- my $ffi = FFI::Platypus->new( api => 1 );
- $ffi->lib(undef);
- # define a record class My::UnixTime and alias it
- # to "tm"
- $ffi->type("record(My::UnixTime)*" => 'tm');
- 
- # attach the C localtime function as a constructor
- $ffi->attach( [ localtime => '_new' ] => ['time_t*'] => 'tm' );
- 
- # the constructor needs to be wrapped in a Perl sub,
- # because localtime is expecting the time_t (if provided)
- # to come in as the first argument, not the second.
- # We could also acomplish something similar using
- # custom types.
- sub new { _new(\($_[1] || time)) }
- 
- # for each attribute that we are interested in, create
- # get and set accessors.  We just make accessors for
- # hour, minute and second, but we could make them for
- # all the fields if we needed.
- foreach my $attr (qw( hour min sec ))
- {
-   my $tcc = FFI::TinyCC->new;
-   $tcc->compile_string(qq{
-     $tm_source
-     int
-     get_$attr (struct tm *tm)
-     {
-       return tm->tm_$attr;
-     }
-     void
-     set_$attr (struct tm *tm, int value)
-     {
-       tm->tm_$attr = value;
-     }
-   });
-   $ffi->attach( [ $tcc->get_symbol("get_$attr") => "get_$attr" ] => [ 'tm' ] => 'int' );
-   $ffi->attach( [ $tcc->get_symbol("set_$attr") => "set_$attr" ] => [ 'tm' ] => 'int' );
- }
- 
- package main;
- 
- # now we can actually use our My::UnixTime class
- my $time = My::UnixTime->new;
- printf "time is %d:%d:%d\n", $time->get_hour, $time->get_min, $time->get_sec;
 
 Contrast a record type which is stored as a scalar string of bytes in
 Perl to an opaque pointer which is stored as an integer in Perl.  Both
@@ -973,6 +963,18 @@ record, and finally freeing the original pointer.
  my $foo = $ffi->cast( 'opaque' => 'foo_t*', $foo_ptr );
  free $foo_ptr;
 
+You can pass records into a closure, but care needs to be taken.
+Records passed into a closure are read-only inside the closure,
+including C<string rw> members.  Although you can pass a "pointer"
+to a record into a closure, because of limitations of the
+implementation you actually have a copy, so all records passed
+into closures are passed by-value.
+
+Note that a record that does not have a class (classless) and is
+defined instead using a length is internally identical to fixed
+strings.  That is to say C<string(10)> and C<record(10)*> are
+identical.
+
 =head2 Fixed length arrays
 
 Fixed length arrays of native types and strings are supported by
@@ -982,9 +984,9 @@ when it returns to Perl space.  An example of using this is the
 Unix C<pipe> command which returns a list of two file descriptors
 as an array.
 
- use FFI::Platypus;
+ use FFI::Platypus 2.00;
  
- my $ffi = FFI::Platypus->new( api => 1 );
+ my $ffi = FFI::Platypus->new( api => 2 );
  $ffi->lib(undef);
  $ffi->attach([pipe=>'mypipe'] => ['int[2]'] => 'int');
  
@@ -1025,9 +1027,9 @@ example the C code:
 
 Can be called from Perl like this:
 
- use FFI::Platypus;
+ use FFI::Platypus 2.00;
  
- my $ffi = FFI::Platypus->new( api => 1 )
+ my $ffi = FFI::Platypus->new( api => 2 );
  $ffi->lib('./var_array.so');
  
  $ffi->attach( sum => [ 'int[]', 'int' ] => 'int' );
@@ -1048,16 +1050,19 @@ A closure (sometimes called a "callback", we use the C<libffi>
 terminology) is a Perl subroutine that can be called from C.  In order
 to be called from C it needs to be passed to a C function.  To define
 the closure type you need to provide a list of argument types and a
-return type.  As of this writing only native types and strings are
-supported as closure argument types and only native types are supported
-as closure return types.  Here is an example, with C code:
+return type.  Currently only native types (integers, floating point
+values, opaque), strings and records (by-value; you can pass a pointer
+to a record, but due to limitations of the record implementation this
+is actually a copy) are supported as closure argument types, and only
+native types and records (by-value; pointer records and records with
+string pointers cannot be returned from a closure) are supported as
+closure return types.  Inside the closure any records passed in are
+read-only.
 
-[ version 0.54 ]
+We plan to add other types, though they can be converted using the Platypus
+C<cast> or C<attach_cast> methods.
 
-EXPERIMENTAL: As of version 0.54, the record type (see L<FFI::Platypus::Record>)
-is also experimentally supported as a closure argument type.  One
-caveat is that  the record member type string_rw is NOT supported
-and probably never will be.
+Here is an example, with C code:
 
  /*
   * closure.c - on Linux compile with: gcc closure.c -shared -o closure.so -fPIC
@@ -1083,9 +1088,9 @@ and probably never will be.
 
 And the Perl code:
 
- use FFI::Platypus;
+ use FFI::Platypus 2.00;
  
- my $ffi = FFI::Platypus->new( api => 1 );
+ my $ffi = FFI::Platypus->new( api => 2 );
  $ffi->lib('./closure.so');
  $ffi->type('(int)->int' => 'closure_t');
  
@@ -1103,9 +1108,9 @@ And the Perl code:
 If you have a pointer to a function in the form of an C<opaque> type,
 you can pass this in place of a closure type:
 
- use FFI::Platypus;
+ use FFI::Platypus 2.00;
  
- my $ffi = FFI::Platypus->new( api => 1 );
+ my $ffi = FFI::Platypus->new( api => 2 );
  $ffi->lib('./closure.so');
  $ffi->type('(int)->int' => 'closure_t');
  
@@ -1186,8 +1191,8 @@ constants in your Perl module, like this:
 
  package Foo;
  
- use FFI::Platypus;
- use base qw( Exporter );
+ use FFI::Platypus 2.00;
+ use Exporter qw( import );
  
  our @EXPORT_OK = qw( FOO_STATIC FOO_DYNAMIC FOO_OTHER foo get_foo );
  
@@ -1195,7 +1200,7 @@ constants in your Perl module, like this:
  use constant FOO_DYNAMIC => 2;
  use constant FOO_OTHER   => 3;
  
- my $ffi = FFI::Platypus->new( api => 1 );
+ my $ffi = FFI::Platypus->new( api => 2 );
  $ffi->attach(foo     => ['int'] => 'void');
  $ffi->attach(get_foo => []      => 'int');
 
@@ -1210,7 +1215,7 @@ function, like this:
 
  package Foo;
  
- use FFI::Platypus;
+ use FFI::Platypus 2.00;
  
  our @EXPORT_OK = qw( foo get_foo );
  
@@ -1221,7 +1226,7 @@ function, like this:
  );
  my %foo_types_reverse = reverse %foo_types;
  
- my $ffi = FFI::Platypus->new( api => 1 );
+ my $ffi = FFI::Platypus->new( api => 2 );
  $ffi->custom_type(foo_t => {
    native_type    => 'int',
    native_to_perl => sub {
@@ -1263,10 +1268,10 @@ interface like this:
 
  package Foo;
  
- use FFI::Platypus;
+ use FFI::Platypus 2.00;
  use FFI::Platypus::API qw( arguments_get_string );
  
- my $ffi = FFI::Platypus->new( api => 1 );
+ my $ffi = FFI::Platypus->new( api => 2 );
  $ffi->custom_type(foo_t => {
    native_type    => 'opaque',
    native_to_perl => sub {
@@ -1364,7 +1369,7 @@ Damyan Ivanov
 
 Ilya Pavlov (Ilya33)
 
-Petr Pisar (ppisar)
+Petr Písař (ppisar)
 
 Mohammad S Anwar (MANWAR)
 
@@ -1374,9 +1379,17 @@ Meredith (merrilymeredith, MHOWARD)
 
 Diab Jerius (DJERIUS)
 
+Eric Brine (IKEGAMI)
+
+szTheory
+
+José Joaquín Atria (JJATRIA)
+
+Pete Houston (openstrike, HOUSTON)
+
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2015,2016,2017,2018,2019,2020 by Graham Ollis.
+This software is copyright (c) 2015-2022 by Graham Ollis.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

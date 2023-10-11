@@ -6,20 +6,20 @@ package WWW::Mechanize;
 use strict;
 use warnings;
 
-our $VERSION = '2.03';
+our $VERSION = '2.17';
 
-use Tie::RefHash;
-use HTTP::Request 1.30;
-use LWP::UserAgent 6.45;
-use HTML::Form 1.00;
-use HTML::TokeParser;
-use Scalar::Util qw(tainted);
+use Tie::RefHash       ();
+use HTTP::Request 1.30 ();
+use HTML::Form 1.00    ();
+use HTML::TokeParser   ();
+use Scalar::Util       qw( tainted );
 
 use base 'LWP::UserAgent';
 
 our $HAS_ZLIB;
+
 BEGIN {
-    $HAS_ZLIB = eval 'use Compress::Zlib (); 1;';
+    $HAS_ZLIB = eval { require Compress::Zlib; 1; };
 }
 
 
@@ -27,27 +27,27 @@ sub new {
     my $class = shift;
 
     my %parent_params = (
-        agent       => "WWW-Mechanize/$VERSION",
-        cookie_jar  => {},
+        agent      => "WWW-Mechanize/$VERSION",
+        cookie_jar => {},
     );
 
     my %mech_params = (
-        autocheck       => ($class eq 'WWW::Mechanize' ? 1 : 0),
+        autocheck       => ( $class eq 'WWW::Mechanize' ? 1 : 0 ),
         onwarn          => \&WWW::Mechanize::_warn,
         onerror         => \&WWW::Mechanize::_die,
         quiet           => 0,
-        stack_depth     => 8675309,     # Arbitrarily humongous stack
+        stack_depth     => 8675309,    # Arbitrarily humongous stack
         headers         => {},
         noproxy         => 0,
-        strict_forms    => 0,           # pass-through to HTML::Form
-        verbose_forms   => 0,           # pass-through to HTML::Form
+        strict_forms    => 0,          # pass-through to HTML::Form
+        verbose_forms   => 0,          # pass-through to HTML::Form
         marked_sections => 1,
     );
 
     my %passed_params = @_;
 
     # Keep the mech-specific params before creating the object.
-    while ( my($key,$value) = each %passed_params ) {
+    while ( my ( $key, $value ) = each %passed_params ) {
         if ( exists $mech_params{$key} ) {
             $mech_params{$key} = $value;
         }
@@ -56,7 +56,7 @@ sub new {
         }
     }
 
-    my $self = $class->SUPER::new( %parent_params );
+    my $self = $class->SUPER::new(%parent_params);
     bless $self, $class;
 
     # Use the mech params now that we have a mech object.
@@ -69,7 +69,7 @@ sub new {
     # libwww-perl 5.800 (and before, I assume) has a problem where
     # $ua->{proxy} can be undef and clone() doesn't handle it.
     $self->{proxy} = {} unless defined $self->{proxy};
-    push( @{$self->requests_redirectable}, 'POST' );
+    push( @{ $self->requests_redirectable }, 'POST' );
 
     $self->_reset_page();
 
@@ -81,42 +81,43 @@ sub _agent { "WWW-Mechanize/$VERSION" }
 
 
 my %known_agents = (
-    'Windows IE 6'      => 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)',
-    'Windows Mozilla'   => 'Mozilla/5.0 (Windows; U; Windows NT 5.0; en-US; rv:1.4b) Gecko/20030516 Mozilla Firebird/0.6',
-    'Mac Safari'        => 'Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en-us) AppleWebKit/85 (KHTML, like Gecko) Safari/85',
-    'Mac Mozilla'       => 'Mozilla/5.0 (Macintosh; U; PPC Mac OS X Mach-O; en-US; rv:1.4a) Gecko/20030401',
-    'Linux Mozilla'     => 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.4) Gecko/20030624',
-    'Linux Konqueror'   => 'Mozilla/5.0 (compatible; Konqueror/3; Linux)',
+    'Windows IE 6'    => 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)',
+    'Windows Mozilla' =>
+        'Mozilla/5.0 (Windows; U; Windows NT 5.0; en-US; rv:1.4b) Gecko/20030516 Mozilla Firebird/0.6',
+    'Mac Safari' =>
+        'Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en-us) AppleWebKit/85 (KHTML, like Gecko) Safari/85',
+    'Mac Mozilla' =>
+        'Mozilla/5.0 (Macintosh; U; PPC Mac OS X Mach-O; en-US; rv:1.4a) Gecko/20030401',
+    'Linux Mozilla' =>
+        'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.4) Gecko/20030624',
+    'Linux Konqueror' => 'Mozilla/5.0 (compatible; Konqueror/3; Linux)',
 );
 
 sub agent_alias {
-    my $self = shift;
+    my $self  = shift;
     my $alias = shift;
 
     if ( defined $known_agents{$alias} ) {
         return $self->agent( $known_agents{$alias} );
     }
     else {
-        $self->warn( qq{Unknown agent alias "$alias"} );
+        $self->warn(qq{Unknown agent alias "$alias"});
         return $self->agent();
     }
 }
 
 
 sub known_agent_aliases {
-    return sort keys %known_agents;
+    my @aliases = sort keys %known_agents;
+    return @aliases;
 }
 
 
 sub get {
     my $self = shift;
-    my $uri = shift;
+    my $uri  = shift;
 
-    $uri = $uri->url if ref($uri) eq 'WWW::Mechanize::Link';
-
-    $uri = $self->base
-            ? URI->new_abs( $uri, $self->base )
-            : URI->new( $uri );
+    $uri = $self->_uri_with_base($uri);
 
     # It appears we are returning a super-class method,
     # but it in turn calls the request() method here in Mechanize
@@ -126,13 +127,9 @@ sub get {
 
 sub post {
     my $self = shift;
-    my $uri = shift;
+    my $uri  = shift;
 
-    $uri = $uri->url if ref($uri) eq 'WWW::Mechanize::Link';
-
-    $uri = $self->base
-            ? URI->new_abs( $uri, $self->base )
-            : URI->new( $uri );
+    $uri = $self->_uri_with_base($uri);
 
     # It appears we are returning a super-class method,
     # but it in turn calls the request() method here in Mechanize
@@ -142,26 +139,59 @@ sub post {
 
 sub put {
     my $self = shift;
-    my $uri = shift;
+    my $uri  = shift;
 
-    $uri = $uri->url if ref($uri) eq 'WWW::Mechanize::Link';
-
-    $uri = $self->base
-            ? URI->new_abs( $uri, $self->base )
-            : URI->new( $uri );
+    $uri = $self->_uri_with_base($uri);
 
     # It appears we are returning a super-class method,
     # but it in turn calls the request() method here in Mechanize
     return $self->_SUPER_put( $uri->as_string, @_ );
 }
 
-
 # Added until LWP::UserAgent has it.
 sub _SUPER_put {
     require HTTP::Request::Common;
-    my($self, @parameters) = @_;
-    my @suff = $self->_process_colonic_headers(\@parameters,1);
-    return $self->request( HTTP::Request::Common::PUT( @parameters ), @suff );
+    my ( $self, @parameters ) = @_;
+    my @suff = $self->_process_colonic_headers( \@parameters, 1 );
+    return $self->request( HTTP::Request::Common::PUT(@parameters), @suff );
+}
+
+
+sub head {
+    my $self = shift;
+    my $uri  = shift;
+
+    $uri = $self->_uri_with_base($uri);
+
+    # It appears we are returning a super-class method,
+    # but it in turn calls the request() method here in Mechanize
+    return $self->SUPER::head( $uri->as_string, @_ );
+}
+
+
+sub delete {
+    my $self = shift;
+    my $uri  = shift;
+
+    $uri = $self->_uri_with_base($uri);
+
+    # It appears we are returning a super-class method,
+    # but it in turn calls the request() method here in Mechanize
+    return $self->SUPER::delete( $uri->as_string, @_ );
+}
+
+sub _uri_with_base {
+    my $self = shift;
+    my $uri  = shift;
+
+    $uri = $uri->url if ref($uri) eq 'WWW::Mechanize::Link';
+
+    $uri
+        = $self->base
+        ? URI->new_abs( $uri, $self->base )
+        : URI->new($uri);
+
+    return $uri;
 }
 
 
@@ -196,7 +226,7 @@ sub back {
     my $stack = $self->{page_stack};
     return unless $stack && @{$stack};
 
-    my $popped = pop @{$self->{page_stack}};
+    my $popped = pop @{ $self->{page_stack} };
     my $req    = $popped->{req};
     my $res    = $popped->{res};
 
@@ -236,14 +266,14 @@ sub history {
 
     return undef unless $self->{req} && $self->{res};
 
-    if ($n == 0) {
-      return { req => $self->{req}, res => $self->{res} };
+    if ( $n == 0 ) {
+        return { req => $self->{req}, res => $self->{res} };
     }
 
     my $stack = $self->{page_stack};
     return undef unless $stack && @$stack >= $n;
 
-    return { req => $stack->[-$n]{req}, res => $stack->[-$n]{res} };
+    return { req => $stack->[ -$n ]{req}, res => $stack->[ -$n ]{res} };
 }
 
 
@@ -254,22 +284,23 @@ sub success {
 }
 
 
-
 sub uri {
     my $self = shift;
     return $self->response ? $self->response->request->uri : undef;
 }
 
-sub res {           my $self = shift; return $self->{res}; }
-sub response {      my $self = shift; return $self->{res}; }
-sub status {        my $self = shift; return $self->{status}; }
-sub ct {            my $self = shift; return $self->{ct}; }
-sub content_type {  my $self = shift; return $self->{ct}; }
-sub base {          my $self = shift; return $self->{base}; }
+sub res          { my $self = shift; return $self->{res}; }
+sub response     { my $self = shift; return $self->{res}; }
+sub status       { my $self = shift; return $self->{status}; }
+sub ct           { my $self = shift; return $self->{ct}; }
+sub content_type { my $self = shift; return $self->{ct}; }
+sub base         { my $self = shift; return $self->{base}; }
+
 sub is_html {
     my $self = shift;
-    return defined $self->ct &&
-        ($self->ct eq 'text/html' || $self->ct eq 'application/xhtml+xml');
+    return defined $self->ct
+        && ( $self->ct eq 'text/html'
+        || $self->ct eq 'application/xhtml+xml' );
 }
 
 
@@ -281,7 +312,7 @@ sub title {
     if ( not defined $self->{title} ) {
         require HTML::HeadParser;
         my $p = HTML::HeadParser->new;
-        $p->parse($self->content);
+        $p->parse( $self->content );
         $self->{title} = $p->header('Title');
     }
     return $self->{title};
@@ -296,23 +327,23 @@ sub redirects {
 
 
 sub content {
-    my $self = shift;
+    my $self   = shift;
     my %params = @_;
 
     my $content = $self->{content};
-    if (delete $params{raw}) {
+    if ( delete $params{raw} ) {
         $content = $self->response()->content();
     }
-    elsif (delete $params{decoded_by_headers}) {
-        $content = $self->response()->decoded_content(charset => 'none');
+    elsif ( delete $params{decoded_by_headers} ) {
+        $content = $self->response()->decoded_content( charset => 'none' );
     }
-    elsif (my $charset = delete $params{charset}) {
-        $content = $self->response()->decoded_content(charset => $charset);
+    elsif ( my $charset = delete $params{charset} ) {
+        $content = $self->response()->decoded_content( charset => $charset );
     }
     elsif ( $self->is_html ) {
         if ( exists $params{base_href} ) {
-            my $base_href = (delete $params{base_href}) || $self->base;
-            $content=~s/<head>/<head>\n<base href="$base_href">/i;
+            my $base_href = ( delete $params{base_href} ) || $self->base;
+            $content =~ s/<head>/<head>\n<base href="$base_href">/i;
         }
 
         if ( my $format = delete $params{format} ) {
@@ -320,11 +351,11 @@ sub content {
                 $content = $self->text;
             }
             else {
-                $self->die( qq{Unknown "format" parameter "$format"} );
+                $self->die(qq{Unknown "format" parameter "$format"});
             }
         }
 
-        $self->_check_unhandled_params( %params );
+        $self->_check_unhandled_params(%params);
     }
 
     return $content;
@@ -343,7 +374,7 @@ sub text {
         my $tree = HTML::TreeBuilder->new();
         $tree->parse( $self->content );
         $tree->eof();
-        $tree->elementify(); # just for safety
+        $tree->elementify();    # just for safety
         $self->{text} = $tree->as_text();
     }
 
@@ -351,11 +382,11 @@ sub text {
 }
 
 sub _check_unhandled_params {
-    my $self  = shift;
+    my $self   = shift;
     my %params = @_;
 
     for my $cmd ( sort keys %params ) {
-        $self->die( qq{Unknown named argument "$cmd"} );
+        $self->die(qq{Unknown named argument "$cmd"});
     }
 }
 
@@ -365,28 +396,28 @@ sub links {
 
     $self->_extract_links() unless $self->{links};
 
-    return @{$self->{links}} if wantarray;
+    return @{ $self->{links} } if wantarray;
     return $self->{links};
 }
 
 
 sub follow_link {
     my $self = shift;
-    $self->die( qq{Needs to get key-value pairs of parameters.} ) if @_ % 2;
-    my %params = ( n=>1, @_ );
+    $self->die(qq{Needs to get key-value pairs of parameters.}) if @_ % 2;
+    my %params = ( n => 1, @_ );
 
     if ( $params{n} eq 'all' ) {
         delete $params{n};
-        $self->warn( q{follow_link(n=>"all") is not valid} );
+        $self->warn(q{follow_link(n=>"all") is not valid});
     }
 
     my $link = $self->find_link(%params);
-    if ( $link ) {
+    if ($link) {
         return $self->get( $link->url );
     }
 
     if ( $self->{autocheck} ) {
-        $self->die( 'Link not found' );
+        $self->die('Link not found');
     }
 
     return;
@@ -394,20 +425,23 @@ sub follow_link {
 
 
 sub find_link {
-    my $self = shift;
-    my %params = ( n=>1, @_ );
+    my $self   = shift;
+    my %params = ( n => 1, @_ );
 
     my $wantall = ( $params{n} eq 'all' );
 
-    $self->_clean_keys( \%params, qr/^(n|(text|url|url_abs|name|tag|id|class|rel)(_regex)?)$/ );
+    $self->_clean_keys(
+        \%params,
+        qr/^(n|(text|url|url_abs|name|tag|id|class|rel)(_regex)?)$/
+    );
 
     my @links = $self->links or return;
 
     my $nmatches = 0;
     my @matches;
-    for my $link ( @links ) {
-        if ( _match_any_link_params($link,\%params) ) {
-            if ( $wantall ) {
+    for my $link (@links) {
+        if ( _match_any_link_params( $link, \%params ) ) {
+            if ($wantall) {
                 push( @matches, $link );
             }
             else {
@@ -415,43 +449,68 @@ sub find_link {
                 return $link if $nmatches >= $params{n};
             }
         }
-    } # for @links
+    }    # for @links
 
-    if ( $wantall ) {
+    if ($wantall) {
         return @matches if wantarray;
         return \@matches;
     }
 
     return;
-} # find_link
+}    # find_link
 
 # Used by find_links to check for matches
 # The logic is such that ALL param criteria that are given must match
 sub _match_any_link_params {
     my $link = shift;
-    my $p = shift;
+    my $p    = shift;
 
     # No conditions, anything matches
     return 1 unless keys %$p;
 
-    return if defined $p->{url}           && !($link->url eq $p->{url} );
-    return if defined $p->{url_regex}     && !($link->url =~ $p->{url_regex} );
-    return if defined $p->{url_abs}       && !($link->url_abs eq $p->{url_abs} );
-    return if defined $p->{url_abs_regex} && !($link->url_abs =~ $p->{url_abs_regex} );
-    return if defined $p->{text}          && !(defined($link->text) && $link->text eq $p->{text} );
-    return if defined $p->{text_regex}    && !(defined($link->text) && $link->text =~ $p->{text_regex} );
-    return if defined $p->{name}          && !(defined($link->name) && $link->name eq $p->{name} );
-    return if defined $p->{name_regex}    && !(defined($link->name) && $link->name =~ $p->{name_regex} );
-    return if defined $p->{tag}           && !($link->tag && $link->tag eq $p->{tag} );
-    return if defined $p->{tag_regex}     && !($link->tag && $link->tag =~ $p->{tag_regex} );
+    return if defined $p->{url}       && !( $link->url eq $p->{url} );
+    return if defined $p->{url_regex} && !( $link->url =~ $p->{url_regex} );
+    return if defined $p->{url_abs}   && !( $link->url_abs eq $p->{url_abs} );
+    return
+        if defined $p->{url_abs_regex}
+        && !( $link->url_abs =~ $p->{url_abs_regex} );
+    return
+        if defined $p->{text}
+        && !( defined( $link->text ) && $link->text eq $p->{text} );
+    return
+        if defined $p->{text_regex}
+        && !( defined( $link->text ) && $link->text =~ $p->{text_regex} );
+    return
+        if defined $p->{name}
+        && !( defined( $link->name ) && $link->name eq $p->{name} );
+    return
+        if defined $p->{name_regex}
+        && !( defined( $link->name ) && $link->name =~ $p->{name_regex} );
+    return if defined $p->{tag} && !( $link->tag && $link->tag eq $p->{tag} );
+    return
+        if defined $p->{tag_regex}
+        && !( $link->tag && $link->tag =~ $p->{tag_regex} );
 
-    return if defined $p->{id}            && !($link->attrs->{id} && $link->attrs->{id} eq $p->{id} );
-    return if defined $p->{id_regex}      && !($link->attrs->{id} && $link->attrs->{id} =~ $p->{id_regex} );
-    return if defined $p->{class}         && !($link->attrs->{class} && $link->attrs->{class} eq $p->{class} );
-    return if defined $p->{class_regex}   && !($link->attrs->{class} && $link->attrs->{class} =~ $p->{class_regex} );
+    return
+        if defined $p->{id}
+        && !( $link->attrs->{id} && $link->attrs->{id} eq $p->{id} );
+    return
+        if defined $p->{id_regex}
+        && !( $link->attrs->{id} && $link->attrs->{id} =~ $p->{id_regex} );
+    return
+        if defined $p->{class}
+        && !( $link->attrs->{class} && $link->attrs->{class} eq $p->{class} );
+    return
+        if defined $p->{class_regex}
+        && !( $link->attrs->{class}
+        && $link->attrs->{class} =~ $p->{class_regex} );
 
-    return if defined $p->{rel}         && !($link->attrs->{rel} && $link->attrs->{rel} eq $p->{rel} );
-    return if defined $p->{rel_regex}   && !($link->attrs->{rel} && $link->attrs->{rel} =~ $p->{rel_regex} );
+    return
+        if defined $p->{rel}
+        && !( $link->attrs->{rel} && $link->attrs->{rel} eq $p->{rel} );
+    return
+        if defined $p->{rel_regex}
+        && !( $link->attrs->{rel} && $link->attrs->{rel} =~ $p->{rel_regex} );
 
     # Success: everything that was defined passed.
     return 1;
@@ -460,14 +519,14 @@ sub _match_any_link_params {
 
 # Cleans the %params parameter for the find_link and find_image methods.
 sub _clean_keys {
-    my $self = shift;
-    my $params = shift;
+    my $self       = shift;
+    my $params     = shift;
     my $rx_keyname = shift;
 
     for my $key ( keys %$params ) {
         my $val = $params->{$key};
         if ( $key !~ qr/$rx_keyname/ ) {
-            $self->warn( qq{Unknown link-finding parameter "$key"} );
+            $self->warn(qq{Unknown link-finding parameter "$key"});
             delete $params->{$key};
             next;
         }
@@ -475,55 +534,57 @@ sub _clean_keys {
         my $key_regex = ( $key =~ /_regex$/ );
         my $val_regex = ( ref($val) eq 'Regexp' );
 
-        if ( $key_regex ) {
+        if ($key_regex) {
             if ( !$val_regex ) {
-                $self->warn( qq{$val passed as $key is not a regex} );
+                $self->warn(qq{$val passed as $key is not a regex});
                 delete $params->{$key};
                 next;
             }
         }
         else {
-            if ( $val_regex ) {
-                $self->warn( qq{$val passed as '$key' is a regex} );
+            if ($val_regex) {
+                $self->warn(qq{$val passed as '$key' is a regex});
                 delete $params->{$key};
                 next;
             }
             if ( $val =~ /^\s|\s$/ ) {
-                $self->warn( qq{'$val' is space-padded and cannot succeed} );
+                $self->warn(qq{'$val' is space-padded and cannot succeed});
                 delete $params->{$key};
                 next;
             }
         }
-    } # for keys %params
+    }    # for keys %params
 
     return;
-} # _clean_keys()
-
+}    # _clean_keys()
 
 
 sub find_all_links {
     my $self = shift;
-    return $self->find_link( @_, n=>'all' );
+    return $self->find_link( @_, n => 'all' );
 }
 
 
 sub find_all_inputs {
-    my $self = shift;
+    my $self     = shift;
     my %criteria = @_;
 
     my $form = $self->current_form() or return;
 
     my @found;
-    foreach my $input ( $form->inputs ) { # check every pattern for a match on the current hash
+    foreach my $input ( $form->inputs )
+    {    # check every pattern for a match on the current hash
         my $matched = 1;
-        foreach my $criterion ( sort keys %criteria ) { # Sort so we're deterministic
-            my $field = $criterion;
+        foreach my $criterion ( sort keys %criteria )
+        {    # Sort so we're deterministic
+            my $field    = $criterion;
             my $is_regex = ( $field =~ s/(?:_regex)$// );
-            my $what = $input->{$field};
-            $matched = defined($what) && (
+            my $what     = $input->{$field};
+            $matched = defined($what)
+                && (
                 $is_regex
-                    ? ( $what =~ $criteria{$criterion} )
-                    : ( $what eq $criteria{$criterion} )
+                ? ( $what =~ $criteria{$criterion} )
+                : ( $what eq $criteria{$criterion} )
                 );
             last if !$matched;
         }
@@ -540,32 +601,34 @@ sub find_all_submits {
 }
 
 
-
 sub images {
     my $self = shift;
 
     $self->_extract_images() unless $self->{images};
 
-    return @{$self->{images}} if wantarray;
+    return @{ $self->{images} } if wantarray;
     return $self->{images};
 }
 
 
 sub find_image {
-    my $self = shift;
-    my %params = ( n=>1, @_ );
+    my $self   = shift;
+    my %params = ( n => 1, @_ );
 
     my $wantall = ( $params{n} eq 'all' );
 
-    $self->_clean_keys( \%params, qr/^(?:n|(?:alt|url|url_abs|tag|id|class)(?:_regex)?)$/ );
+    $self->_clean_keys(
+        \%params,
+        qr/^(?:n|(?:alt|url|url_abs|tag|id|class)(?:_regex)?)$/
+    );
 
     my @images = $self->images or return;
 
     my $nmatches = 0;
     my @matches;
-    for my $image ( @images ) {
-        if ( _match_any_image_params($image,\%params) ) {
-            if ( $wantall ) {
+    for my $image (@images) {
+        if ( _match_any_image_params( $image, \%params ) ) {
+            if ($wantall) {
                 push( @matches, $image );
             }
             else {
@@ -573,9 +636,9 @@ sub find_image {
                 return $image if $nmatches >= $params{n};
             }
         }
-    } # for @images
+    }    # for @images
 
-    if ( $wantall ) {
+    if ($wantall) {
         return @matches if wantarray;
         return \@matches;
     }
@@ -587,33 +650,65 @@ sub find_image {
 # The logic is such that ALL param criteria that are given must match
 sub _match_any_image_params {
     my $image = shift;
-    my $p = shift;
+    my $p     = shift;
 
     # No conditions, anything matches
     return 1 unless keys %$p;
 
-    return if defined $p->{url}           && !(defined($image->url) && $image->url eq $p->{url} );
-    return if defined $p->{url_regex}     && !(defined($image->url) && $image->url =~ $p->{url_regex} );
-    return if defined $p->{url_abs}       && !(defined($image->url_abs) && $image->url_abs eq $p->{url_abs} );
-    return if defined $p->{url_abs_regex} && !(defined($image->url_abs) && $image->url_abs =~ $p->{url_abs_regex} );
-    return if defined $p->{alt}           && !(defined($image->alt) && $image->alt eq $p->{alt} );
-    return if defined $p->{alt_regex}     && !(defined($image->alt) && $image->alt =~ $p->{alt_regex} );
-    return if defined $p->{tag}           && !($image->tag && $image->tag eq $p->{tag} );
-    return if defined $p->{tag_regex}     && !($image->tag && $image->tag =~ $p->{tag_regex} );
-    return if defined $p->{id}            && !($image->attrs && $image->attrs->{id} && $image->attrs->{id} eq $p->{id} );
-    return if defined $p->{id_regex}      && !($image->attrs && $image->attrs->{id} && $image->attrs->{id} =~ $p->{id_regex} );
-    return if defined $p->{class}         && !($image->attrs && $image->attrs->{class} && $image->attrs->{class} eq $p->{class} );
-    return if defined $p->{class_regex}   && !($image->attrs && $image->attrs->{class} && $image->attrs->{class} =~ $p->{class_regex} );
+    return
+        if defined $p->{url}
+        && !( defined( $image->url ) && $image->url eq $p->{url} );
+    return
+        if defined $p->{url_regex}
+        && !( defined( $image->url ) && $image->url =~ $p->{url_regex} );
+    return
+        if defined $p->{url_abs}
+        && !( defined( $image->url_abs )
+        && $image->url_abs eq $p->{url_abs} );
+    return
+        if defined $p->{url_abs_regex}
+        && !( defined( $image->url_abs )
+        && $image->url_abs =~ $p->{url_abs_regex} );
+    return
+        if defined $p->{alt}
+        && !( defined( $image->alt ) && $image->alt eq $p->{alt} );
+    return
+        if defined $p->{alt_regex}
+        && !( defined( $image->alt ) && $image->alt =~ $p->{alt_regex} );
+    return
+        if defined $p->{tag} && !( $image->tag && $image->tag eq $p->{tag} );
+    return
+        if defined $p->{tag_regex}
+        && !( $image->tag && $image->tag =~ $p->{tag_regex} );
+    return
+        if defined $p->{id}
+        && !( $image->attrs
+        && $image->attrs->{id}
+        && $image->attrs->{id} eq $p->{id} );
+    return
+        if defined $p->{id_regex}
+        && !( $image->attrs
+        && $image->attrs->{id}
+        && $image->attrs->{id} =~ $p->{id_regex} );
+    return
+        if defined $p->{class}
+        && !( $image->attrs
+        && $image->attrs->{class}
+        && $image->attrs->{class} eq $p->{class} );
+    return
+        if defined $p->{class_regex}
+        && !( $image->attrs
+        && $image->attrs->{class}
+        && $image->attrs->{class} =~ $p->{class_regex} );
 
     # Success: everything that was defined passed.
     return 1;
 }
 
 
-
 sub find_all_images {
     my $self = shift;
-    return $self->find_image( @_, n=>'all' );
+    return $self->find_image( @_, n => 'all' );
 }
 
 
@@ -622,7 +717,7 @@ sub forms {
 
     $self->_extract_forms() unless $self->{forms};
 
-    return @{$self->{forms}} if wantarray;
+    return @{ $self->{forms} } if wantarray;
     return $self->{forms};
 }
 
@@ -638,42 +733,64 @@ sub current_form {
 
 
 sub form_number {
-    my ($self, $form) = @_;
+    my ( $self, $form ) = @_;
+
     # XXX Should we die if no $form is defined? Same question for form_name()
 
     my $forms = $self->forms;
-    if ( $forms->[$form-1] ) {
-        $self->{current_form} = $forms->[$form-1];
+    if ( $forms->[ $form - 1 ] ) {
+        $self->{current_form} = $forms->[ $form - 1 ];
         return wantarray
-          ? ($self->{current_form}, $form)
-          : $self->{current_form};
+            ? ( $self->{current_form}, $form )
+            : $self->{current_form};
     }
 
     return wantarray ? () : undef;
 }
 
 
+sub form_action {
+    my ( $self, $action ) = @_;
+
+    my $temp;
+    my @matches
+        = grep { defined( $temp = $_->action ) and ( $temp =~ m/$action/msx ) }
+        $self->forms;
+
+    my $nmatches = @matches;
+    if ( $nmatches > 0 ) {
+        if ( $nmatches > 1 ) {
+            $self->warn(
+                "There are $nmatches forms with action matching $action. The first one was used."
+            );
+        }
+        return $self->{current_form} = $matches[0];
+    }
+
+    return;
+}
+
+
 sub form_name {
-    my ($self, $form) = @_;
-    return $self->form_with( name => $form );
+    my ( $self, $name, $args ) = @_;
+    return $self->form_with( name => $name, $args || () );
 }
 
 
 sub form_id {
-    my ($self, $formid) = @_;
-    defined( my $form = $self->form_with( id => $formid ) )
-      or $self->warn(qq{ There is no form with ID "$formid"});
+    my ( $self, $formid, $args ) = @_;
+    defined( my $form = $self->form_with( id => $formid, $args || () ) )
+        or $self->warn(qq{ There is no form with ID "$formid"});
     return $form;
 }
 
 
-
 sub all_forms_with_fields {
-    my ($self, @fields) = @_;
-    die 'no fields provided' unless scalar @fields;
+    my ( $self, @fields ) = @_;
+    $self->die('no fields provided') unless scalar @fields;
 
     my @matches;
-    FORMS: for my $form (@{ $self->forms }) {
+FORMS: for my $form ( @{ $self->forms } ) {
         my @fields_in_form = $form->param();
         for my $field (@fields) {
             next FORMS unless grep { $_ eq $field } @fields_in_form;
@@ -684,47 +801,73 @@ sub all_forms_with_fields {
 }
 
 
-
 sub form_with_fields {
-    my ($self, @fields) = @_;
-    die 'no fields provided' unless scalar @fields;
+    my ( $self, @fields ) = @_;
+    $self->die('no fields provided') unless scalar @fields;
+
+    my $nth;
+    if ( @fields > 1 && ref $fields[-1] eq 'HASH' ) {
+        $nth = ( pop @fields )->{n};
+    }
 
     my @matches = $self->all_forms_with_fields(@fields);
+    if ($nth) {
+        @matches = ( @matches >= $nth ) ? ( $matches[ $nth - 1 ] ) : ();
+    }
     my $nmatches = @matches;
     if ( $nmatches > 0 ) {
         if ( $nmatches > 1 ) {
-            $self->warn( "There are $nmatches forms with the named fields.  The first one was used." )
+            $self->warn(
+                "There are $nmatches forms with the named fields.  The first one was used."
+            );
         }
         return $self->{current_form} = $matches[0];
     }
     else {
-        $self->warn( qq{There is no form with the requested fields} );
+        $self->warn(
+            $nth
+            ? qq{There is no match \#$nth form with the requested fields}
+            : qq{There is no form with the requested fields}
+        );
         return undef;
     }
 }
 
 
-
 sub all_forms_with {
     my ( $self, %spec ) = @_;
 
-    my @forms = $self->forms;
+    my $action = delete $spec{action};
+    my @forms  = grep { !$action || $_->action eq $action } $self->forms;
     foreach my $attr ( keys %spec ) {
-        @forms = grep _equal( $spec{$attr}, $_->attr($attr) ), @forms or return;
+        @forms = grep _equal( $spec{$attr}, $_->attr($attr) ), @forms
+            or return;
     }
     return @forms;
 }
 
 
 sub form_with {
-    my ( $self, %spec ) = @_;
+    my ( $self, @args ) = @_;
 
     return if not $self->forms;
+
+    # Determine if we should return the nth instance
+    my $nth;
+    if ( @args % 2 && ref $args[-1] eq 'HASH' ) {
+        $nth = ( pop @args )->{n};
+    }
+
+    my %spec = @args;
+
     my @forms = $self->all_forms_with(%spec);
+    if ($nth) {
+        @forms = ( @forms >= $nth ) ? $forms[ $nth - 1 ] : ();
+    }
     if ( @forms > 1 ) {    # Warn if several forms matched.
-        # For ->form_with( method => 'POST', action => '', id => undef ) we get:
-        # >>There are 2 forms with empty action and no id and method "POST".
-        # The first one was used.<<
+         # For ->form_with( method => 'POST', action => '', id => undef ) we get:
+         # >>There are 2 forms with empty action and no id and method "POST".
+         # The first one was used.<<
 
         $self->warn(
             'There are ' . @forms . ' forms ' . (
@@ -732,21 +875,22 @@ sub form_with {
                 ? 'with ' . join(
                     ' and ',    # "with ... and ... and ..."
                     map {
-                        unless ( defined $spec{$_} ) {    # case $attr => undef
+                        unless ( defined $spec{$_} ) {   # case $attr => undef
                             qq{no $_};
                         }
-                        elsif ( $spec{$_} eq '' ) {       # case $attr=> ''
+                        elsif ( $spec{$_} eq q{} ) {     # case $attr=> ''
                             qq{empty $_};
                         }
-                        else {                            # case $attr => $value
+                        else {    # case $attr => $value
                             qq{$_ "$spec{$_}"};
                         }
-                      }                # case $attr => undef
-                      sort keys %spec  # sort keys to get deterministic messages
-                  )
-                : ''
-              )
-              . '.  The first one was used.'
+                        }    # case $attr => undef
+                        sort
+                        keys %spec   # sort keys to get deterministic messages
+                    )
+                : q{}
+                )
+                . '.  The first one was used.'
         );
     }
 
@@ -762,56 +906,65 @@ sub _equal {
 }
 
 
-
 sub field {
-    my ($self, $name, $value, $number) = @_;
+    my ( $self, $name, $value, $number ) = @_;
     $number ||= 1;
 
     my $form = $self->current_form();
-    if ($number > 1) {
-        $form->find_input($name, undef, $number)->value($value);
+    if ( $number > 1 ) {
+        $form->find_input( $name, undef, $number )->value($value);
     }
     else {
         if ( ref($value) eq 'ARRAY' ) {
-            $form->param($name, $value);
+            my $input = $form->find_input($name);
+
+            if ( $input->type eq 'file' ) {
+                $input->file( shift @$value );
+                $input->filename( shift @$value );
+                $input->headers(@$value);
+            }
+            else {
+                $form->param( $name, $value );
+            }
         }
         else {
-            $form->value($name => $value);
+            $form->value( $name => $value );
         }
     }
 }
 
 
 sub select {
-    my ($self, $name, $value) = @_;
+    my ( $self, $name, $value ) = @_;
 
     my $form = $self->current_form();
 
     my $input = $form->find_input($name);
-    if (!$input) {
-        $self->warn( qq{Input "$name" not found} );
+    if ( !$input ) {
+        $self->warn(qq{Input "$name" not found});
         return;
     }
 
-    if ($input->type ne 'option') {
-        $self->warn( qq{Input "$name" is not type "select"} );
+    if ( $input->type ne 'option' ) {
+        $self->warn(qq{Input "$name" is not type "select"});
         return;
     }
 
     # For $mech->select($name, {n => 3}) or $mech->select($name, {n => [2,4]}),
     # transform the 'n' number(s) into value(s) and put it in $value.
-    if (ref($value) eq 'HASH') {
-        for (keys %$value) {
+    if ( ref($value) eq 'HASH' ) {
+        for ( keys %$value ) {
             $self->warn(qq{Unknown select value parameter "$_"})
-              unless $_ eq 'n';
+                unless $_ eq 'n';
         }
 
-        if (defined($value->{n})) {
-            my @inputs = $form->find_input($name, 'option');
+        if ( defined( $value->{n} ) ) {
+            my @inputs = $form->find_input( $name, 'option' );
             my @values = ();
+
             # distinguish between multiple and non-multiple selects
             # (see INPUTS section of `perldoc HTML::Form`)
-            if (@inputs == 1) {
+            if ( @inputs == 1 ) {
                 @values = $inputs[0]->possible_values();
             }
             else {
@@ -822,21 +975,23 @@ sub select {
             }
 
             my $n = $value->{n};
-            if (ref($n) eq 'ARRAY') {
+            if ( ref($n) eq 'ARRAY' ) {
                 $value = [];
                 for (@$n) {
                     unless (/^\d+$/) {
-                        $self->warn(qq{"n" value "$_" is not a positive integer});
+                        $self->warn(
+                            qq{"n" value "$_" is not a positive integer});
                         return;
                     }
-                    push @$value, $values[$_ - 1];  # might be undef
+                    push @$value, $values[ $_ - 1 ];    # might be undef
                 }
             }
-            elsif (!ref($n) && $n =~ /^\d+$/) {
-                $value = $values[$n - 1];           # might be undef
+            elsif ( !ref($n) && $n =~ /^\d+$/ ) {
+                $value = $values[ $n - 1 ];             # might be undef
             }
             else {
-                $self->warn('"n" value is not a positive integer or an array ref');
+                $self->warn(
+                    '"n" value is not a positive integer or an array ref');
                 return;
             }
         }
@@ -844,107 +999,149 @@ sub select {
             $self->warn('Hash value is invalid');
             return;
         }
-    } # hashref
+    }    # hashref
 
-    if (ref($value) eq 'ARRAY') {
-        $form->param($name, $value);
+    if ( ref($value) eq 'ARRAY' ) {
+        $form->param( $name, $value );
         return 1;
     }
 
-    $form->value($name => $value);
+    $form->value( $name => $value );
     return 1;
 }
 
 
 sub set_fields {
-    my $self = shift;
+    my $self   = shift;
     my %fields = @_;
 
-    my $form = $self->current_form or $self->die( 'No form defined' );
+    my $form = $self->current_form or $self->die('No form defined');
 
-    while ( my ( $field, $value ) = each %fields ) {
+FIELD:
+    for my $field ( keys %fields ) {
+        my $value  = $fields{$field};
+        my $number = 1;
+
         if ( ref $value eq 'ARRAY' ) {
-            $form->find_input( $field, undef,
-                         $value->[1])->value($value->[0] );
+            my $input = $form->find_input($field) or next FIELD;
+
+            # Honor &submit_form's documentation, that says that a
+            # "file" input's value can be in the form of
+            # "[[$filepath, $filename], 1]".
+            if (
+                $input->type ne 'file'
+                || ( $input->type eq 'file' && ref( $value->[0] ) eq 'ARRAY' )
+            ) {
+                ( $value, $number ) = ( $value->[0], $value->[1] );
+            }
         }
         else {
-            $form->value($field => $value);
+            if ( ref $value eq 'SCALAR' ) {
+                my $input = $form->find_input($field);
+
+                if ( not defined int $$value ) {
+                    warn
+                        "Only references to integers are supported. Using 0.";
+                    $$value = 0;
+                }
+
+                my @possible_values = $input->possible_values;
+                if ( $#possible_values < $$value ) {
+                    warn
+                        "Not enough options for $field to select index $$value";
+                    next FIELD;
+                }
+                $value = $possible_values[$$value];
+            }
         }
-    } # while
-} # set_fields()
+        $self->field( $field, $value, $number );
+    }
+}
 
 
 sub set_visible {
     my $self = shift;
 
-    my $form = $self->current_form;
+    my $form   = $self->current_form;
     my @inputs = $form->inputs;
 
     my $num_set = 0;
-    for my $value ( @_ ) {
+    for my $value (@_) {
+
         # Handle type/value pairs an arrayref
         if ( ref $value eq 'ARRAY' ) {
             my ( $type, $value ) = @$value;
             while ( my $input = shift @inputs ) {
                 next if $input->type eq 'hidden';
                 if ( $input->type eq $type ) {
-                    $input->value( $value );
+                    $input->value($value);
                     $num_set++;
                     last;
                 }
-            } # while
+            }    # while
         }
+
         # by default, it's a value
         else {
             while ( my $input = shift @inputs ) {
                 next if $input->type eq 'hidden';
-                $input->value( $value );
+                $input->value($value);
                 $num_set++;
                 last;
-            } # while
+            }    # while
         }
-    } # for
+    }    # for
 
     return $num_set;
-} # set_visible()
+}    # set_visible()
 
 
 sub tick {
-    my $self = shift;
-    my $name = shift;
+    my $self  = shift;
+    my $name  = shift;
     my $value = shift;
-    my $set = @_ ? shift : 1;  # default to 1 if not passed
+    my $set   = @_ ? shift : 1;    # default to 1 if not passed
 
     # loop though all the inputs
     my $index = 1;
-    while ( my $input = $self->current_form->find_input( $name, 'checkbox', $index ) ) {
+    while ( my $input
+        = $self->current_form->find_input( $name, 'checkbox', $index ) ) {
+
+        # Sometimes the HTML is malformed and there is no value for the check
+        # box, so we just return if the value passed is an empty string
+        # (and the form input is found)
+        if ( $value eq q{} ) {
+            $input->value( $set ? $value : undef );
+            return;
+        }
+
         # Can't guarantee that the first element will be undef and the second
         # element will be the right name
-        foreach my $val ($input->possible_values()) {
+        foreach my $val ( $input->possible_values() ) {
             next unless defined $val;
-            if ($val eq $value) {
-                $input->value($set ? $value : undef);
+            if ( $val eq $value ) {
+                $input->value( $set ? $value : undef );
                 return;
             }
         }
 
         # move onto the next input
         $index++;
-    } # while
+    }    # while
 
     # got this far?  Didn't find anything
-    $self->die( qq{No checkbox "$name" for value "$value" in form} );
-} # tick()
+    $self->die(qq{No checkbox "$name" for value "$value" in form});
+}    # tick()
 
 
 sub untick {
-    shift->tick(shift,shift,undef);
+    shift->tick( shift, shift, undef );
 }
 
 
 sub value {
-    my $self = shift;
-    my $name = shift;
+    my $self   = shift;
+    my $name   = shift;
     my $number = shift || 1;
 
     my $form = $self->current_form;
@@ -952,16 +1149,16 @@ sub value {
         return $form->find_input( $name, undef, $number )->value();
     }
     else {
-        return $form->value( $name );
+        return $form->value($name);
     }
-} # value
+}    # value
 
 
 sub click {
-    my ($self, $button, $x, $y) = @_;
-    for ($x, $y) { $_ = 1 unless defined; }
-    my $request = $self->current_form->click($button, $x, $y);
-    return $self->request( $request );
+    my ( $self, $button, $x, $y ) = @_;
+    for ( $x, $y ) { $_ = 1 unless defined; }
+    my $request = $self->current_form->click( $button, $x, $y );
+    return $self->request($request);
 }
 
 
@@ -971,7 +1168,7 @@ sub click_button {
 
     for ( keys %args ) {
         if ( !/^(number|name|value|id|input|x|y)$/ ) {
-            $self->warn( qq{Unknown click_button parameter "$_"} );
+            $self->warn(qq{Unknown click_button parameter "$_"});
         }
     }
 
@@ -986,26 +1183,31 @@ sub click_button {
     my @present_exclusive_options = @exclusive_options{ keys %args };
 
     if ( scalar @present_exclusive_options > 1 ) {
-        $self->die( 'click_button: More than one button selector has been used' );
+        $self->die(
+            'click_button: More than one button selector has been used');
     }
 
-    for ($args{x}, $args{y}) {
+    for ( $args{x}, $args{y} ) {
         $_ = 1 unless defined;
     }
 
-    my $form = $self->current_form or $self->die( 'click_button: No form has been selected' );
+    my $form = $self->current_form
+        or $self->die('click_button: No form has been selected');
 
     my $request;
     if ( $args{name} ) {
         $request = $form->click( $args{name}, $args{x}, $args{y} );
     }
+
     # 0 is a valid id in HTML5
     elsif ( defined $args{id} ) {
+
         # HTML::Form expects ids to be prefixed with '#'
-        my $input = $form->find_input('#' . $args{id});
+        my $input = $form->find_input( '#' . $args{id} );
         $request = $input->click( $form, $args{x}, $args{y} );
     }
     elsif ( $args{number} ) {
+
         # changing this 'submit' to qw/submit button image/ will probably break people's code
         my $input = $form->find_input( undef, 'submit', $args{number} );
         $request = $input->click( $form, $args{x}, $args{y} );
@@ -1014,16 +1216,17 @@ sub click_button {
         $request = $args{input}->click( $form, $args{x}, $args{y} );
     }
     elsif ( $args{value} ) {
-        my @inputs = map { $form->find_input(undef, $_) } qw/submit button image/;
-        foreach  my $input ( @inputs ) {
-            if ( $input->value && ($args{value} eq $input->value) ) {
+        my @inputs
+            = map { $form->find_input( undef, $_ ) } qw/submit button image/;
+        foreach my $input (@inputs) {
+            if ( $input->value && ( $args{value} eq $input->value ) ) {
                 $request = $input->click( $form, $args{x}, $args{y} );
                 last;
             }
-        } # foreach
-    } # $args{value}
+        }    # foreach
+    }    # $args{value}
 
-    return $self->request( $request );
+    return $self->request($request);
 }
 
 
@@ -1031,22 +1234,24 @@ sub submit {
     my $self = shift;
 
     my $request = $self->current_form->make_request;
-    return $self->request( $request );
+    return $self->request($request);
 }
 
 
 sub submit_form {
-    my( $self, %args ) = @_;
+    my ( $self, %args ) = @_;
 
     for ( keys %args ) {
-        if ( !/^(form_(number|name|fields|id)|(with_)?fields|button|x|y|strict_forms)$/ ) {
-            $self->die( qq{Unknown submit_form parameter "$_"} );
+        if (
+            !/^(form_(number|name|fields|id)|(with_)?fields|button|x|y|strict_forms)$/
+        ) {
+            $self->die(qq{Unknown submit_form parameter "$_"});
         }
     }
 
     my $fields;
     for (qw/with_fields fields/) {
-        if ($args{$_}) {
+        if ( $args{$_} ) {
             if ( ref $args{$_} eq 'HASH' ) {
                 $fields = $args{$_};
             }
@@ -1059,15 +1264,14 @@ sub submit_form {
 
     my @filtered_sets;
     if ( $args{with_fields} ) {
-        $fields || die q{must submit some 'fields' with with_fields};
-        my @got = $self->all_forms_with_fields(keys %{$fields});
+        my @got = $self->all_forms_with_fields( keys %{$fields} );
         $self->die("There is no form with the requested fields") if not @got;
         push @filtered_sets, \@got;
     }
     if ( my $form_number = $args{form_number} ) {
-        my $got = $self->form_number( $form_number );
+        my $got = $self->form_number($form_number);
         $self->die("There is no form numbered $form_number") if not $got;
-        push @filtered_sets, [ $got ];
+        push @filtered_sets, [$got];
     }
     if ( my $form_name = $args{form_name} ) {
         my @got = $self->all_forms_with( name => $form_name );
@@ -1080,7 +1284,8 @@ sub submit_form {
         push @filtered_sets, \@got;
     }
 
-    if (not @filtered_sets) {
+    if ( not @filtered_sets ) {
+
         # No form selector was used.
         # Maybe a form was set separately, or we'll default to the first form.
     }
@@ -1089,34 +1294,37 @@ sub submit_form {
         # Assume that each filtered set only has a given form object once.
         # So we can count occurrences.
         #
-        tie my %c, 'Tie::RefHash' or die;
+        tie my %c, Tie::RefHash::
+            or $self->die('Cannot determine a form to use');
         foreach (@filtered_sets) {
             foreach (@$_) {
                 ++$c{$_};
             }
         }
         my $expected_count = scalar @filtered_sets;
-        my @matched = grep { $c{$_} == $expected_count } keys %c;
-        if (not @matched) {
+        my @matched        = grep { $c{$_} == $expected_count } keys %c;
+        if ( not @matched ) {
             $self->die('There is no form that satisfies all the criteria');
         }
-        if (@matched > 1) {
+        if ( @matched > 1 ) {
             $self->die('More than one form satisfies all the criteria');
         }
         $self->{current_form} = $matched[0];
     }
 
-    if (defined($args{strict_forms})) {
+    if ( defined( $args{strict_forms} ) ) {
+
         # Strict argument has been passed, set the flag as appropriate
         # this must be done prior to attempting to set the fields
-        $self->current_form->strict($args{strict_forms});
+        $self->current_form->strict( $args{strict_forms} );
     }
 
     $self->set_fields( %{$fields} ) if $fields;
 
     my $response;
     if ( $args{button} ) {
-        $response = $self->click( $args{button}, $args{x} || 0, $args{y} || 0 );
+        $response
+            = $self->click( $args{button}, $args{x} || 0, $args{y} || 0 );
     }
     else {
         $response = $self->submit();
@@ -1127,11 +1335,11 @@ sub submit_form {
 
 
 sub add_header {
-    my $self = shift;
+    my $self   = shift;
     my $npairs = 0;
 
-    while ( @_ ) {
-        my $key = shift;
+    while (@_) {
+        my $key   = shift;
         my $value = shift;
         ++$npairs;
 
@@ -1145,7 +1353,7 @@ sub add_header {
 sub delete_header {
     my $self = shift;
 
-    while ( @_ ) {
+    while (@_) {
         my $key = shift;
 
         delete $self->{headers}{$key};
@@ -1153,7 +1361,6 @@ sub delete_header {
 
     return;
 }
-
 
 
 sub quiet {
@@ -1165,6 +1372,15 @@ sub quiet {
 }
 
 
+sub autocheck {
+    my $self = shift;
+
+    $self->{autocheck} = $_[0] if @_;
+
+    return $self->{autocheck};
+}
+
+
 sub stack_depth {
     my $self = shift;
     $self->{stack_depth} = shift if @_;
@@ -1173,40 +1389,44 @@ sub stack_depth {
 
 
 sub save_content {
-    my $self = shift;
+    my $self     = shift;
     my $filename = shift;
-    my %opts = @_;
-    if (delete $opts{binary}) {
-        $opts{binmode} = ':raw';
+    my %opts     = @_;
+    if ( delete $opts{binary} ) {
+        $opts{binmode}            = ':raw';
         $opts{decoded_by_headers} = 1;
     }
 
-    open( my $fh, '>', $filename ) or $self->die( "Unable to create $filename: $!" );
-    if ((my $binmode = delete($opts{binmode}) || '') || ($self->content_type() !~ m{^text/})) {
-        if (length($binmode) && (substr($binmode, 0, 1) eq ':')) {
+    open( my $fh, '>', $filename )
+        or $self->die("Unable to create $filename: $!");
+    if (   ( my $binmode = delete( $opts{binmode} ) || q{} )
+        || ( $self->content_type() !~ m{^text/} ) ) {
+        if ( length($binmode) && ( substr( $binmode, 0, 1 ) eq ':' ) ) {
             binmode $fh, $binmode;
         }
         else {
             binmode $fh;
         }
     }
-    print {$fh} $self->content(%opts) or $self->die( "Unable to write to $filename: $!" );
-    close $fh or $self->die( "Unable to close $filename: $!" );
+    print {$fh} $self->content(%opts)
+        or $self->die("Unable to write to $filename: $!");
+    close $fh or $self->die("Unable to close $filename: $!");
 
     return;
 }
 
 
-
 sub _get_fh_default_stdout {
     my $self = shift;
-    my $p = shift || '';
+    my $p    = shift || q{};
     if ( !$p ) {
         return \*STDOUT;
-    } elsif ( !ref($p) ) {
-        open my $fh, '>', $p or $self->die( "Unable to write to $p: $!" );;
+    }
+    elsif ( !ref($p) ) {
+        open my $fh, '>', $p or $self->die("Unable to write to $p: $!");
         return $fh;
-    } else {
+    }
+    else {
         return $p;
     }
 }
@@ -1221,15 +1441,14 @@ sub dump_headers {
 }
 
 
-
 sub dump_links {
-    my $self = shift;
-    my $fh = shift || \*STDOUT;
+    my $self     = shift;
+    my $fh       = shift || \*STDOUT;
     my $absolute = shift;
 
     for my $link ( $self->links ) {
         my $url = $absolute ? $link->url_abs : $link->url;
-        $url = '' if not defined $url;
+        $url = q{} if not defined $url;
         print {$fh} $url, "\n";
     }
     return;
@@ -1237,13 +1456,13 @@ sub dump_links {
 
 
 sub dump_images {
-    my $self = shift;
-    my $fh = shift || \*STDOUT;
+    my $self     = shift;
+    my $fh       = shift || \*STDOUT;
     my $absolute = shift;
 
     for my $image ( $self->images ) {
         my $url = $absolute ? $image->url_abs : $image->url;
-        $url = '' if not defined $url;
+        $url = q{} if not defined $url;
         print {$fh} $url, "\n";
     }
     return;
@@ -1252,7 +1471,7 @@ sub dump_images {
 
 sub dump_forms {
     my $self = shift;
-    my $fh = shift || \*STDOUT;
+    my $fh   = shift || \*STDOUT;
 
     for my $form ( $self->forms ) {
         print {$fh} $form->dump, "\n";
@@ -1262,8 +1481,8 @@ sub dump_forms {
 
 
 sub dump_text {
-    my $self = shift;
-    my $fh = shift || \*STDOUT;
+    my $self     = shift;
+    my $fh       = shift || \*STDOUT;
     my $absolute = shift;
 
     print {$fh} $self->text, "\n";
@@ -1272,26 +1491,24 @@ sub dump_text {
 }
 
 
-
 sub clone {
     my $self  = shift;
     my $clone = $self->SUPER::clone();
 
     $clone->cookie_jar( $self->cookie_jar );
-    $clone->{headers} = { %{$self->{headers}} };
+    $clone->{headers} = { %{ $self->{headers} } };
 
     return $clone;
 }
 
 
-
 sub redirect_ok {
-    my $self = shift;
+    my $self                = shift;
     my $prospective_request = shift;
-    my $response = shift;
+    my $response            = shift;
 
     my $ok = $self->SUPER::redirect_ok( $prospective_request, $response );
-    if ( $ok ) {
+    if ($ok) {
         $self->{redirected_uri} = $prospective_request->uri;
     }
 
@@ -1299,21 +1516,23 @@ sub redirect_ok {
 }
 
 
-
 sub request {
-    my $self = shift;
+    my $self    = shift;
     my $request = shift;
 
-    _die( '->request was called without a request parameter' )
+    $self->die('->request was called without a request parameter')
         unless $request;
 
-    $request = $self->_modify_request( $request );
+    $request = $self->_modify_request($request);
 
     if ( $request->method eq 'GET' || $request->method eq 'POST' ) {
         $self->_push_page_stack();
     }
 
-    return $self->_update_page($request, $self->_make_request( $request, @_ ));
+    return $self->_update_page(
+        $request,
+        $self->_make_request( $request, @_ )
+    );
 }
 
 
@@ -1322,7 +1541,7 @@ sub update_html {
     my $html = shift;
 
     $self->_reset_page;
-    $self->{ct} = 'text/html';
+    $self->{ct}      = 'text/html';
     $self->{content} = $html;
 
     return;
@@ -1334,12 +1553,12 @@ sub credentials {
 
     # The latest LWP::UserAgent also supports 2 arguments,
     # in which case the first is host:port
-    if (@_ == 4 || (@_ == 2 && $_[0] =~ /:\d+$/)) {
+    if ( @_ == 4 || ( @_ == 2 && $_[0] =~ /:\d+$/ ) ) {
         return $self->SUPER::credentials(@_);
     }
 
     @_ == 2
-        or $self->die( 'Invalid # of args for overridden credentials()' );
+        or $self->die('Invalid # of args for overridden credentials()');
 
     return @$self{qw( __username __password )} = @_;
 }
@@ -1360,25 +1579,28 @@ sub clear_credentials {
 
 
 sub _update_page {
-    my ($self, $request, $res) = @_;
+    my ( $self, $request, $res ) = @_;
 
-    $self->{req} = $request;
+    $self->{req}            = $request;
     $self->{redirected_uri} = $request->uri->as_string;
 
     $self->{res} = $res;
 
-    $self->{status}  = $res->code;
-    $self->{base}    = $res->base;
-    $self->{ct}      = $res->content_type || '';
+    $self->{status} = $res->code;
+    $self->{base}   = $res->base;
+    $self->{ct}     = $res->content_type || q{};
 
     if ( $res->is_success ) {
-        $self->{uri} = $self->{redirected_uri};
+        $self->{uri}      = $self->{redirected_uri};
         $self->{last_uri} = $self->{uri};
     }
 
     if ( $res->is_error ) {
         if ( $self->{autocheck} ) {
-            $self->die( 'Error ', $request->method, 'ing ', $request->uri, ': ', $res->message );
+            $self->die(
+                'Error ', $request->method, 'ing ', $request->uri,
+                ': ',     $res->message
+            );
         }
     }
 
@@ -1387,11 +1609,11 @@ sub _update_page {
     # Try to decode the content. Undef will be returned if there's nothing to decompress.
     # See docs in HTTP::Message for details. Do we need to expose the options there?
     my $content = $res->decoded_content();
-    $content = $res->content if (not defined $content);
+    $content = $res->content if ( not defined $content );
 
     $content .= _taintedness();
 
-    if ($self->is_html) {
+    if ( $self->is_html ) {
         $self->update_html($content);
     }
     else {
@@ -1399,7 +1621,7 @@ sub _update_page {
     }
 
     return $res;
-} # _update_page
+}    # _update_page
 
 our $_taintbrush;
 
@@ -1412,12 +1634,12 @@ sub _taintedness {
     # tainted, unless somebody has untainted them, so this
     # will almost always work on the first try.
     # (Unless, of course, taint checking has been turned off!)
-    $_taintbrush = substr("$0$^X", 0, 0);
-    return $_taintbrush if tainted( $_taintbrush );
+    $_taintbrush = substr( "$0$^X", 0, 0 );
+    return $_taintbrush if tainted($_taintbrush);
 
     # Let's try again. Maybe somebody cleaned those.
-    $_taintbrush = substr(join('', grep { defined } @ARGV, %ENV), 0, 0);
-    return $_taintbrush if tainted( $_taintbrush );
+    $_taintbrush = substr( join( q{}, grep { defined } @ARGV, %ENV ), 0, 0 );
+    return $_taintbrush if tainted($_taintbrush);
 
     # If those don't work, go try to open some file from some unsafe
     # source and get data from them.  That data is tainted.
@@ -1427,48 +1649,47 @@ sub _taintedness {
             my $data;
             if ( defined sysread $fh, $data, 1 ) {
                 $_taintbrush = substr( $data, 0, 0 );
-                last if tainted( $_taintbrush );
+                last if tainted($_taintbrush);
             }
         }
     }
 
     # Sanity check
-    die "Our taintbrush should have zero length!" if length $_taintbrush;
+    die("Our taintbrush should have zero length!") if length $_taintbrush;
 
     return $_taintbrush;
 }
 
 
-
 sub _modify_request {
     my $self = shift;
-    my $req = shift;
+    my $req  = shift;
 
     # add correct Accept-Encoding header to restore compliance with
     # http://www.freesoft.org/CIE/RFC/2068/158.htm
     # http://use.perl.org/~rhesa/journal/25952
-    if (not $req->header( 'Accept-Encoding' ) ) {
+    if ( not $req->header('Accept-Encoding') ) {
+
         # "identity" means "please! unencoded content only!"
         $req->header( 'Accept-Encoding', $HAS_ZLIB ? 'gzip' : 'identity' );
     }
 
     my $last = $self->{last_uri};
-    if ( $last ) {
+    if ($last) {
         $last = $last->as_string if ref($last);
         $req->header( Referer => $last );
     }
-    while ( my($key,$value) = each %{$self->{headers}} ) {
+    while ( my ( $key, $value ) = each %{ $self->{headers} } ) {
         if ( defined $value ) {
             $req->header( $key => $value );
         }
         else {
-            $req->remove_header( $key );
+            $req->remove_header($key);
         }
     }
 
     return $req;
 }
-
 
 
 sub _make_request {
@@ -1501,12 +1722,13 @@ my %link_tags = (
 );
 
 sub _new_parser {
-    my $self = shift;
+    my $self        = shift;
     my $content_ref = shift;
 
     my $parser = HTML::TokeParser->new($content_ref);
-    $parser->marked_sections( $self->{marked_sections});
-    $parser->xml_mode( $$content_ref=~/^\s*<\?xml/ ); # NOT GENERALLY RELIABLE
+    $parser->marked_sections( $self->{marked_sections} );
+    $parser->xml_mode( $$content_ref =~ /^\s*<\?xml/ )
+        ;    # NOT GENERALLY RELIABLE
 
     return $parser;
 }
@@ -1514,19 +1736,17 @@ sub _new_parser {
 sub _extract_links {
     my $self = shift;
 
-
     $self->{links} = [];
     if ( defined $self->{content} ) {
-        my $parser = $self->_new_parser(\$self->{content});
+        my $parser = $self->_new_parser( \$self->{content} );
         while ( my $token = $parser->get_tag( keys %link_tags ) ) {
             my $link = $self->_link_from_token( $token, $parser );
-            push( @{$self->{links}}, $link ) if $link;
-        } # while
+            push( @{ $self->{links} }, $link ) if $link;
+        }    # while
     }
 
     return;
 }
-
 
 my %image_tags = (
     img   => 'src',
@@ -1539,27 +1759,36 @@ sub _extract_images {
     $self->{images} = [];
 
     if ( defined $self->{content} ) {
-        if ($self->content_type eq 'text/css') {
-            push( @{$self->{images}}, $self->_images_from_css($self->{content}) );
+        if ( $self->content_type eq 'text/css' ) {
+            push(
+                @{ $self->{images} },
+                $self->_images_from_css( $self->{content} )
+            );
         }
         else {
-            my $parser = $self->_new_parser(\$self->{content});
+            my $parser = $self->_new_parser( \$self->{content} );
             while ( my $token = $parser->get_tag() ) {
-                my ($tag_name, $attrs) = @{$token};
+                my ( $tag_name, $attrs ) = @{$token};
                 next if $tag_name =~ m{^/};
 
-                if ($image_tags{$tag_name}) {
+                if ( $image_tags{$tag_name} ) {
                     my $image = $self->_image_from_token( $token, $parser );
-                    push( @{$self->{images}}, $image ) if $image;
+                    push( @{ $self->{images} }, $image ) if $image;
                 }
-                elsif ($tag_name eq 'style') {
-                    push( @{$self->{images}}, $self->_images_from_css($parser->get_text) );
+                elsif ( $tag_name eq 'style' ) {
+                    push(
+                        @{ $self->{images} },
+                        $self->_images_from_css( $parser->get_text )
+                    );
                 }
 
-                if ($attrs->{style}) {
-                    push( @{$self->{images}}, $self->_images_from_css($attrs->{style}) );
+                if ( $attrs->{style} ) {
+                    push(
+                        @{ $self->{images} },
+                        $self->_images_from_css( $attrs->{style} )
+                    );
                 }
-            } # while
+            }    # while
         }
     }
 
@@ -1567,11 +1796,11 @@ sub _extract_images {
 }
 
 sub _image_from_token {
-    my $self = shift;
-    my $token = shift;
+    my $self   = shift;
+    my $token  = shift;
     my $parser = shift;
 
-    my $tag = $token->[0];
+    my $tag   = $token->[0];
     my $attrs = $token->[1];
 
     if ( $tag eq 'input' ) {
@@ -1580,17 +1809,18 @@ sub _image_from_token {
     }
 
     require WWW::Mechanize::Image;
-    return
-        WWW::Mechanize::Image->new({
-            tag     => $tag,
-            base    => $self->base,
-            url     => $attrs->{src},
-            name    => $attrs->{name},
-            height  => $attrs->{height},
-            width   => $attrs->{width},
-            alt     => $attrs->{alt},
-            attrs   => $attrs,
-        });
+    return WWW::Mechanize::Image->new(
+        {
+            tag    => $tag,
+            base   => $self->base,
+            url    => $attrs->{src},
+            name   => $attrs->{name},
+            height => $attrs->{height},
+            width  => $attrs->{width},
+            alt    => $attrs->{alt},
+            attrs  => $attrs,
+        }
+    );
 }
 
 my $STYLE_URL_REGEXP = qr{
@@ -1617,20 +1847,22 @@ sub _images_from_css {
     my $css  = shift;
 
     my @images;
-    while ($css =~ m/$STYLE_URL_REGEXP/g) {
+    while ( $css =~ m/$STYLE_URL_REGEXP/g ) {
         my $url = $3;
         require WWW::Mechanize::Image;
         push(
             @images,
-            WWW::Mechanize::Image->new({
-                tag     => 'css',
-                base    => $self->base,
-                url     => $url,
-                name    => undef,
-                height  => undef,
-                width   => undef,
-                alt     => undef,
-            })
+            WWW::Mechanize::Image->new(
+                {
+                    tag    => 'css',
+                    base   => $self->base,
+                    url    => $url,
+                    name   => undef,
+                    height => undef,
+                    width  => undef,
+                    alt    => undef,
+                }
+            )
         );
     }
 
@@ -1638,28 +1870,30 @@ sub _images_from_css {
 }
 
 sub _link_from_token {
-    my $self = shift;
-    my $token = shift;
+    my $self   = shift;
+    my $token  = shift;
     my $parser = shift;
 
-    my $tag = $token->[0];
+    my $tag   = $token->[0];
     my $attrs = $token->[1];
-    my $url = $attrs->{$link_tags{$tag}};
+    my $url   = $attrs->{ $link_tags{$tag} };
 
     my $text;
     my $name;
     if ( $tag eq 'a' ) {
         $text = $parser->get_trimmed_text("/$tag");
-        $text = '' unless defined $text;
+        $text = q{} unless defined $text;
 
         my $onClick = $attrs->{onclick};
-        if ( $onClick && ($onClick =~ /^window\.open\(\s*'([^']+)'/) ) {
+        if ( $onClick && ( $onClick =~ /^window\.open\(\s*'([^']+)'/ ) ) {
             $url = $1;
         }
-        elsif( $url && $url =~ /^javascript\:\s*(?:void\(\s*)?window\.open\(\s*'([^']+)'/s ){
+        elsif ($url
+            && $url
+            =~ /^javascript\:\s*(?:void\(\s*)?window\.open\(\s*'([^']+)'/s ) {
             $url = $1;
         }
-    } # a
+    }    # a
 
     # Of the tags we extract from, only 'AREA' has an alt tag
     # The rest should have a 'name' attribute.
@@ -1668,9 +1902,10 @@ sub _link_from_token {
     $name = $attrs->{name};
 
     if ( $tag eq 'meta' ) {
-        my $equiv = $attrs->{'http-equiv'};
+        my $equiv   = $attrs->{'http-equiv'};
         my $content = $attrs->{'content'};
-        return unless $equiv && (lc $equiv eq 'refresh') && defined $content;
+        return
+            unless $equiv && ( lc $equiv eq 'refresh' ) && defined $content;
 
         if ( $content =~ /^\d+\s*;\s*url\s*=\s*(\S+)/i ) {
             $url = $1;
@@ -1679,22 +1914,23 @@ sub _link_from_token {
         else {
             undef $url;
         }
-    } # meta
+    }    # meta
 
-    return unless defined $url;   # probably just a name link or <AREA NOHREF...>
+    return
+        unless defined $url;   # probably just a name link or <AREA NOHREF...>
 
     require WWW::Mechanize::Link;
-    return
-        WWW::Mechanize::Link->new({
-            url  => $url,
-            text => $text,
-            name => $name,
-            tag  => $tag,
-            base => $self->base,
+    return WWW::Mechanize::Link->new(
+        {
+            url   => $url,
+            text  => $text,
+            name  => $name,
+            tag   => $tag,
+            base  => $self->base,
             attrs => $attrs,
-        });
-} # _link_from_token
-
+        }
+    );
+}    # _link_from_token
 
 sub _extract_forms {
     my $self = shift;
@@ -1706,11 +1942,11 @@ sub _extract_forms {
         verbose => $self->{verbose_forms},
     );
     $self->{forms} = \@forms;
-    for my $form ( @forms ) {
-        for my $input ($form->inputs) {
-             if ($input->type eq 'file') {
-                 $input->value( undef );
-             }
+    for my $form (@forms) {
+        for my $input ( $form->inputs ) {
+            if ( $input->type eq 'file' ) {
+                $input->value(undef);
+            }
         }
     }
 
@@ -1756,20 +1992,19 @@ sub die {
     return $handler->(@_);
 }
 
-
 # NOT an object method!
 sub _warn {
     require Carp;
-    return &Carp::carp; ## no critic
+    return &Carp::carp;    ## no critic
 }
 
 # NOT an object method!
 sub _die {
     require Carp;
-    return &Carp::croak; ## no critic
+    return &Carp::croak;    ## no critic
 }
 
-1; # End of module
+1;                          # End of module
 
 __END__
 
@@ -1783,7 +2018,7 @@ WWW::Mechanize - Handy web browsing in a Perl object
 
 =head1 VERSION
 
-version 2.03
+version 2.17
 
 =head1 SYNOPSIS
 
@@ -1873,7 +2108,8 @@ traverse.
     $mech->back();
 
 If you want finer control over your page fetching, you can use
-these methods. C<follow_link> and C<submit_form> are just high
+these methods. C<L<< follow_link()|/"$mech->follow_link(...)" >>>
+and C<L<< submit_form()|/"$mech->submit_form( ... )" >>> are just high
 level wrappers around them.
 
     $mech->find_link( n => $number );
@@ -1950,11 +2186,12 @@ are errors, not warnings.
 The default value is ON, unless it's being subclassed, in which
 case it is OFF.  This means that standalone L<WWW::Mechanize> instances
 have autocheck turned on, which is protective for the vast majority
-of Mech users who don't bother checking the return value of get()
-and post() and can't figure why their code fails. However, if
-L<WWW::Mechanize> is subclassed, such as for L<Test::WWW::Mechanize>
-or L<Test::WWW::Mechanize::Catalyst>, this may not be an appropriate
-default, so it's off.
+of Mech users who don't bother checking the return value of
+C<L<< get()|/"$mech->get( $uri )" >>>
+and C<L<< post()|/"$mech->post( $uri, content => $content )" >>> and can't
+figure why their code fails. However, if L<WWW::Mechanize> is subclassed, such
+as for L<Test::WWW::Mechanize> or L<Test::WWW::Mechanize::Catalyst>, this may
+not be an appropriate default, so it's off.
 
 =item * C<< noproxy => [0|1] >>
 
@@ -2010,7 +2247,7 @@ strict and verbose mode for form handling, which is done with L<HTML::Form>.
 Globally sets the HTML::Form strict flag which causes form submission to
 croak if any of the passed fields don't exist in the form, and/or a value
 doesn't exist in a select element. This can still be disabled in individual
-calls to C<L<< submit_form()|"$mech->submit_form( ... )" >>>.
+calls to C<L<< submit_form()|/"$mech->submit_form( ... )" >>>.
 
 Default is off.
 
@@ -2039,7 +2276,7 @@ L<LWP::UserAgent>.)
 =head2 $mech->agent_alias( $alias )
 
 Sets the user agent string to the expanded version from a table of actual user strings.
-I<$alias> can be one of the following:
+C<$alias> can be one of the following:
 
 =over 4
 
@@ -2065,7 +2302,9 @@ sets your User-Agent to
 
     Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)
 
-The list of valid aliases can be returned from C<known_agent_aliases()>.  The current list is:
+The list of valid aliases can be returned from
+C<L<< known_agent_aliases()|/"$mech->known_agent_aliases()" >>>.
+The current list is:
 
 =over
 
@@ -2083,16 +2322,21 @@ The list of valid aliases can be returned from C<known_agent_aliases()>.  The cu
 
 =back
 
-=head2 known_agent_aliases()
+=head2 $mech->known_agent_aliases()
 
 Returns a list of all the agent aliases that Mech knows about.
+This can also be called as a package or class method.
+
+    @aliases = WWW::Mechanize::known_agent_aliases();
+    @aliases = WWW::Mechanize->known_agent_aliases();
+    @aliases = $mech->known_agent_aliases();
 
 =head1 PAGE-FETCHING METHODS
 
 =head2 $mech->get( $uri )
 
 Given a URL/URI, fetches it.  Returns an L<HTTP::Response> object.
-I<$uri> can be a well-formed URL string, a L<URI> object, or a
+C<$uri> can be a well-formed URL string, a L<URI> object, or a
 L<WWW::Mechanize::Link> object.
 
 The results are stored internally in the agent object, but you don't
@@ -2102,25 +2346,64 @@ internals is deprecated and subject to change in the future.
 C<get()> is a well-behaved overloaded version of the method in
 L<LWP::UserAgent>.  This lets you do things like
 
-    $mech->get( $uri, ':content_file' => $tempfile );
+    $mech->get( $uri, ':content_file' => $filename );
 
 and you can rest assured that the params will get filtered down
-appropriately.
+appropriately. See L<LWP::UserAgent/get> for more details.
+
+B<NOTE:> The file in C<:content_file> will contain the raw content of
+the response. If the response content is encoded (e.g. gzip encoded),
+the file will be encoded as well. Use $mech->save_content if you need
+the decoded content.
 
 B<NOTE:> Because C<:content_file> causes the page contents to be
 stored in a file instead of the response object, some Mech functions
 that expect it to be there won't work as expected. Use with caution.
 
+Here is a non-complete list of methods that do not work as expected with
+C<:content_file>:
+C< L<< forms()|/"$mech->forms()" >> >,
+C< L<< current_form()|/"$mech->current_form()" >> >,
+C< L<< links()|/"$mech->links()" >> >,
+C< L<< title()|/"$mech->title()" >> >,
+C< L<< content(...)|/"$mech->content(...)" >> >,
+C< L<< text()|/"$mech->text()" >> >,
+all L<< content-handling methods|/"CONTENT-HANDLING METHODS" >>,
+all L<< link methods|/"LINK METHODS" >>,
+all L<< image methods|/"IMAGE METHODS" >>,
+all L<< form methods|/"FORM METHODS" >>,
+all L<< field methods|/"FIELD METHODS" >>,
+C< L<< save_content(...)|/"$mech->save_content( $filename, %opts )" >> >,
+C< L<< dump_links(...)|/"$mech->dump_links( [[$fh], $absolute] )" >> >,
+C< L<< dump_images(...)|/"$mech->dump_images( [[$fh], $absolute] )" >> >,
+C< L<< dump_forms(...)|/"$mech->dump_forms( [$fh] )" >> >,
+C< L<< dump_text(...)|/"$mech->dump_text( [$fh] )" >> >
+
 =head2 $mech->post( $uri, content => $content )
 
-POSTs I<$content> to $uri.  Returns an L<HTTP::Response> object.
-I<$uri> can be a well-formed URI string, a L<URI> object, or a
+POSTs C<$content> to C<$uri>.  Returns an L<HTTP::Response> object.
+C<$uri> can be a well-formed URI string, a L<URI> object, or a
 L<WWW::Mechanize::Link> object.
 
 =head2 $mech->put( $uri, content => $content )
 
-PUTs I<$content> to $uri.  Returns an L<HTTP::Response> object.
-I<$uri> can be a well-formed URI string, a L<URI> object, or a
+PUTs C<$content> to C<$uri>.  Returns an L<HTTP::Response> object.
+C<$uri> can be a well-formed URI string, a L<URI> object, or a
+L<WWW::Mechanize::Link> object.
+
+    my $res = $mech->put( $uri );
+    my $res = $mech->put( $uri , $field_name => $value, ... );
+
+=head2 $mech->head ($uri )
+
+Performs a HEAD request to C<$uri>. Returns an L<HTTP::Response> object.
+C<$uri> can be a well-formed URI string, a L<URI> object, or a
+L<WWW::Mechanize::Link> object.
+
+=head2 $mech->delete ($uri )
+
+Performs a DELETE request to C<$uri>. Returns an L<HTTP::Response> object.
+C<$uri> can be a well-formed URI string, a L<URI> object, or a
 L<WWW::Mechanize::Link> object.
 
 =head2 $mech->reload()
@@ -2152,7 +2435,7 @@ include the most recently made request.
 
 This returns the I<n>th item in history.  The 0th item is the most recent
 request and response, which would be acted on by methods like
-C<L<< find_link()|"$mech->find_link( ... )" >>>.
+C<L<< find_link()|/"$mech->find_link( ... )" >>>.
 The 1st item is the state you'd return to if you called
 C<L<< back()|/$mech->back() >>>.
 
@@ -2181,7 +2464,7 @@ to the URI itself.
 
 Return the current response as an L<HTTP::Response> object.
 
-Synonym for C<< $mech->response() >>
+Synonym for C<< $mech->response() >>.
 
 =head2 $mech->status()
 
@@ -2221,7 +2504,7 @@ HTTP headers.
 =head2 $mech->title()
 
 Returns the contents of the C<< <TITLE> >> tag, as parsed by
-L<HTML::HeadParser>.  Returns undef if the content is not HTML.
+L<HTML::HeadParser>.  Returns C<undef> if the content is not HTML.
 
 =head2 $mech->redirects()
 
@@ -2239,17 +2522,17 @@ Note that you can also use L<< is_redirect|HTTP::Response/$r->is_redirect >> to 
 Returns the content that the mech uses internally for the last page
 fetched. Ordinarily this is the same as
 C<< $mech->response()->decoded_content() >>,
-but this may differ for HTML documents if L<< update_html|/$mech->update_html( $html ) >> is
+but this may differ for HTML documents if C<L<< update_html|/"$mech->update_html( $html )" >>> is
 overloaded (in which case the value passed to the base-class
 implementation of same will be returned), and/or extra named arguments
-are passed to I<content()>:
+are passed to C<content()>:
 
 =over 2
 
 =item I<< $mech->content( format => 'text' ) >>
 
 Returns a text-only version of the page, with all HTML markup
-stripped. This feature requires I<HTML::TreeBuilder> version 5 or higher
+stripped. This feature requires L<HTML::TreeBuilder> version 5 or higher
 to be installed, or a fatal error will be thrown. This works only if
 the contents are HTML.
 
@@ -2257,7 +2540,7 @@ the contents are HTML.
 
 Returns the HTML document, modified to contain a
 C<< <base href="$base_href"> >> mark-up in the header.
-I<$base_href> is C<< $mech->base() >> if not specified. This is
+C<$base_href> is C<< $mech->base() >> if not specified. This is
 handy to pass the HTML to e.g. L<HTML::Display>. This works only if
 the contents are HTML.
 
@@ -2299,13 +2582,13 @@ repeatedly.
 =head2 $mech->links()
 
 Lists all the links on the current page.  Each link is a
-WWW::Mechanize::Link object. In list context, returns a list of all
+L<WWW::Mechanize::Link> object. In list context, returns a list of all
 links.  In scalar context, returns an array reference of all links.
 
 =head2 $mech->follow_link(...)
 
 Follows a specified link on the page.  You specify the match to be
-found using the same params that C<L<< find_link()|"$mech->find_link( ... )" >>> uses.
+found using the same params that C<L<< find_link()|/"$mech->find_link( ... )" >>> uses.
 
 Here some examples:
 
@@ -2347,12 +2630,13 @@ C<undef>.  If C<autocheck> is enabled an exception will be thrown instead.
 
 Finds a link in the currently fetched page. It returns a
 L<WWW::Mechanize::Link> object which describes the link.  (You'll
-probably be most interested in the C<url()> property.)  If it fails
-to find a link it returns undef.
+probably be most interested in the
+C<L<< url()|WWW::Mechanize::Link/"$link->url()" >>> property.)
+If it fails to find a link it returns C<undef>.
 
 You can take the URL part and pass it to the C<get()> method.  If
-that's your plan, you might as well use the C<follow_link()> method
-directly, since it does the C<get()> for you automatically.
+that's your plan, you might as well use the C<L<< follow_link()|/"$mech->follow_link(...)" >>>
+method directly, since it does the C<get()> for you automatically.
 
 Note that C<< <FRAME SRC="..."> >> tags are parsed out of the HTML and
 treated as links so this method works with them.
@@ -2433,7 +2717,8 @@ text of "News" and with "cnn.com" in the URL, use:
     $mech->find_link( text => 'News', url_regex => qr/cnn\.com/ );
 
 The return value is a reference to an array containing a
-L<WWW::Mechanize::Link> object for every link in C<< $self->content >>.
+L<WWW::Mechanize::Link> object for every link in
+C<L<< $self->content|/"$mech->content(...)" >>>.
 
 The links come from the following:
 
@@ -2457,7 +2742,7 @@ The links come from the following:
 
 Returns all the links on the current page that match the criteria.  The
 method for specifying link criteria is the same as in
-C<L<< find_link()|"$mech->find_link( ... )" >>>.
+C<L<< find_link()|/"$mech->find_link( ... )" >>>.
 Each of the links returned is a L<WWW::Mechanize::Link> object.
 
 In list context, C<find_all_links()> returns a list of the links.
@@ -2468,7 +2753,7 @@ page.
 
 =head2 $mech->find_all_inputs( ... criteria ... )
 
-find_all_inputs() returns an array of all the input controls in the
+C<find_all_inputs()> returns an array of all the input controls in the
 current form whose properties match all of the regexes passed in.
 The controls returned are all descended from HTML::Form::Input.
 See L<HTML::Form/INPUTS> for details.
@@ -2495,7 +2780,8 @@ You may use a regex or a literal string:
 
 =head2 $mech->find_all_submits( ... criteria ... )
 
-C<find_all_submits()> does the same thing as C<find_all_inputs()>
+C<find_all_submits()> does the same thing as
+C<L<< find_all_inputs()|/"$mech->find_all_inputs( ... criteria ... )" >>>
 except that it only returns controls that are submit controls,
 ignoring other types of input controls like text and checkboxes.
 
@@ -2504,14 +2790,14 @@ ignoring other types of input controls like text and checkboxes.
 =head2 $mech->images
 
 Lists all the images on the current page.  Each image is a
-WWW::Mechanize::Image object. In list context, returns a list of all
+L<WWW::Mechanize::Image> object. In list context, returns a list of all
 images.  In scalar context, returns an array reference of all images.
 
 =head2 $mech->find_image()
 
 Finds an image in the current page. It returns a
 L<WWW::Mechanize::Image> object which describes the image.  If it fails
-to find an image it returns undef.
+to find an image it returns C<undef>.
 
 You can select which image to find by passing in one or more of these
 key/value pairs:
@@ -2605,13 +2891,14 @@ ALT text of "News" and with "cnn.com" in the URL, use:
     $mech->find_image( image => 'News', url_regex => qr/cnn\.com/ );
 
 The return value is a reference to an array containing a
-L<WWW::Mechanize::Image> object for every image in C<< $self->content >>.
+L<WWW::Mechanize::Image> object for every image in
+C<L<< $mech->content|/"$mech->content(...)" >>>.
 
 =head2 $mech->find_all_images( ... )
 
 Returns all the images on the current page that match the criteria.  The
 method for specifying image criteria is the same as in
-C<L<< find_image()|"$mech->find_image()" >>>.
+C<L<< find_image()|/"$mech->find_image()" >>>.
 Each of the images returned is a L<WWW::Mechanize::Image> object.
 
 In list context, C<find_all_images()> returns a list of the images.
@@ -2634,43 +2921,80 @@ context, returns an array reference of all forms.
 =head2 $mech->form_number($number)
 
 Selects the I<number>th form on the page as the target for subsequent
-calls to C<L<< field()|"$mech->field( $name, $value, $number )" >>>
-and C<L<< click()|"$mech->click( $button [, $x, $y] )" >>>.
+calls to C<L<< field()|/"$mech->field( $name, $value, $number )" >>>
+and C<L<< click()|/"$mech->click( $button [, $x, $y] )" >>>.
 Also returns the form that was selected.
 
 If it is found, the form is returned as an L<HTML::Form> object and set internally
 for later use with Mech's form methods such as
-C<L<< field()|"$mech->field( $name, $value, $number )" >>> and
-C<L<< click()|"$mech->click( $button [, $x, $y] )" >>>.
+C<L<< field()|/"$mech->field( $name, $value, $number )" >>> and
+C<L<< click()|/"$mech->click( $button [, $x, $y] )" >>>.
 When called in a list context, the number of the found form is also returned as
 a second value.
 
-Emits a warning and returns undef if no form is found.
+Emits a warning and returns C<undef> if no form is found.
 
 The first form is number 1, not zero.
 
-=head2 $mech->form_name( $name )
+=head2 $mech->form_action( $action )
 
-Selects a form by name.  If there is more than one form on the page
-with that name, then the first one is used, and a warning is
-generated.
+Selects a form by action, using a regex containing C<$action>.
+If there is more than one form on the page matching that action,
+then the first one is used, and a warning is generated.
 
 If it is found, the form is returned as an L<HTML::Form> object and
 set internally for later use with Mech's form methods such as
-C<L<< field()|"$mech->field( $name, $value, $number )" >>> and
-C<L<< click()|"$mech->click( $button [, $x, $y] )" >>>.
+C<L<< field()|/"$mech->field( $name, $value, $number )" >>> and
+C<L<< click()|/"$mech->click( $button [, $x, $y] )" >>>.
 
-Returns undef if no form is found.
+Returns C<undef> if no form is found.
 
-=head2 $mech->form_id( $name )
+=head2 $mech->form_name( $name [, \%args ] )
 
-Selects a form by ID.  If there is more than one form on the page
+Selects a form by name.
+
+By default, the first form that has this name will be returned.
+
+    my $form = $mech->form_name("order_form");
+
+If you want the second, third or nth match, pass an optional arguments hash
+reference as the final parameter with a key C<n> to pick which instance you
+want. The numbering starts at 1.
+
+    my $third_product_form = $mech->form_name("buy_now", { n => 3 });
+
+If the C<n> parameter is not passed, and there is more than one form on the page
+with that name, then the first one is used, and a warning is generated.
+
+If it is found, the form is returned as an L<HTML::Form> object and
+set internally for later use with Mech's form methods such as
+C<L<< field()|/"$mech->field( $name, $value, $number )" >>> and
+C<L<< click()|/"$mech->click( $button [, $x, $y] )" >>>.
+
+Returns C<undef> if no form is found.
+
+=head2 $mech->form_id( $id [, \%args ] )
+
+Selects a form by ID.
+
+By default, the first form that has this ID will be returned.
+
+    my $form = $mech->form_id("order_form");
+
+Although the HTML specification requires the ID to be unique within a page,
+some pages might not adhere to that. If you want the second, third or nth match,
+pass an optional arguments hash reference as the final parameter with a
+key C<n> to pick which instance you want. The numbering starts at 1.
+
+    my $third_product_form = $mech->form_id("buy_now", { n => 3 });
+
+If the C<n> parameter is not passed, and there is more than one form on the page
 with that ID, then the first one is used, and a warning is generated.
 
 If it is found, the form is returned as an L<HTML::Form> object and
 set internally for later use with Mech's form methods such as
-C<L<< field()|"$mech->field( $name, $value, $number )" >>> and
-C<L<< click()|"$mech->click( $button [, $x, $y] )" >>>.
+C<L<< field()|/"$mech->field( $name, $value, $number )" >>> and
+C<L<< click()|/"$mech->click( $button [, $x, $y] )" >>>.
 
 If no form is found it returns C<undef>.  This will also trigger a warning,
 unless C<quiet> is enabled.
@@ -2679,18 +3003,28 @@ unless C<quiet> is enabled.
 
 Selects a form by passing in a list of field names it must contain.  All matching forms (perhaps none) are returned as a list of L<HTML::Form> objects.
 
-=head2 $mech->form_with_fields( @fields )
+=head2 $mech->form_with_fields( @fields, [ \%args ] )
 
-Selects a form by passing in a list of field names it must contain.  If there
-is more than one form on the page with that matches, then the first one is used,
-and a warning is generated.
+Selects a form by passing in a list of field names it must contain. By default,
+the first form that matches all of these field names will be returned.
+
+    my $form = $mech->form_with_fields( qw/sku quantity add_to_cart/ );
+
+If you want the second, third or nth match, pass an optional arguments hash
+reference as the final parameter with a key C<n> to pick which instance you
+want. The numbering starts at 1.
+
+    my $form = $mech->form_with_fields( 'sky', 'qty', { n => 2 } );
+
+If the C<n> parameter is not passed, and there is more than one form on the page
+with that ID, then the first one is used, and a warning is generated.
 
 If it is found, the form is returned as an L<HTML::Form> object and set internally
 for later used with Mech's form methods such as
-C<L<< field()|"$mech->field( $name, $value, $number )" >>> and
-C<L<< click()|"$mech->click( $button [, $x, $y] )" >>>.
+C<L<< field()|/"$mech->field( $name, $value, $number )" >>> and
+C<L<< click()|/"$mech->click( $button [, $x, $y] )" >>>.
 
-Returns undef and emits a warning if no form is found.
+Returns C<undef> and emits a warning if no form is found.
 
 Note that this functionality requires libwww-perl 5.69 or higher.
 
@@ -2698,28 +3032,37 @@ Note that this functionality requires libwww-perl 5.69 or higher.
 
 Searches for forms with arbitrary attribute/value pairs within the E<lt>formE<gt>
 tag.
-(Currently does not work for attribute C<action> due to implementation details
-of L<HTML::Form>.)
 When given more than one pair, all criteria must match.
 Using C<undef> as value means that the attribute in question must not be present.
 
 All matching forms (perhaps none) are returned as a list of L<HTML::Form> objects.
 
-=head2 $mech->form_with( $attr1 => $value1, $attr2 => $value2, ... )
+=head2 $mech->form_with( $attr1 => $value1, $attr2 => $value2, ..., [ \%args ] )
 
 Searches for forms with arbitrary attribute/value pairs within the E<lt>formE<gt>
 tag.
-(Currently does not work for attribute C<action> due to implementation details
-of L<HTML::Form>.)
 When given more than one pair, all criteria must match.
 Using C<undef> as value means that the attribute in question must not be present.
 
+By default, the first form that matches all criteria will be returned.
+
+    my $form = $mech->form_with( name => 'order_form', method => 'POST' );
+
+If you want the second, third or nth match, pass an optional arguments hash
+reference as the final parameter with a key C<n> to pick which instance you
+want. The numbering starts at 1.
+
+    my $form = $mech->form_with( method => 'POST', { n => 4 } );
+
+If the C<n> parameter is not passed, and there is more than one form on the page
+matching these criteria, then the first one is used, and a warning is generated.
+
 If it is found, the form is returned as an L<HTML::Form> object and set internally
 for later used with Mech's form methods such as
-C<L<< field()|"$mech->field( $name, $value, $number )" >>> and
-C<L<< click()|"$mech->click( $button [, $x, $y] )" >>>.
+C<L<< field()|/"$mech->field( $name, $value, $number )" >>> and
+C<L<< click()|/"$mech->click( $button [, $x, $y] )" >>>.
 
-Returns undef if no form is found.
+Returns C<undef> if no form is found.
 
 =head1 FIELD METHODS
 
@@ -2729,37 +3072,102 @@ These methods allow you to set the values of fields in a given form.
 
 =head2 $mech->field( $name, \@values, $number )
 
+=head2 $mech->field( $name, \@file_upload_values, $number )
+
 Given the name of a field, set its value to the value specified.
 This applies to the current form (as set by the
-C<L<< form_name()|"$mech->form_name( $name )" >>> or
-C<L<< form_number()|"$mech->form_number($number)" >>>
+C<L<< form_name()|/"$mech->form_name( $name [, \%args ] )" >>> or
+C<L<< form_number()|/"$mech->form_number($number)" >>>
 method or defaulting to the first form on the page).
 
-The optional I<$number> parameter is used to distinguish between two fields
+If the field is of type "file", its value should be an arrayref. Example:
+
+    $mech->field( $file_input, ['/tmp/file.txt'] );
+
+Value examples for "file" inputs, followed by explanation of what each
+index mean:
+
+    # 0: filepath      1: filename    3: headers
+    ['/tmp/file.txt']
+    ['/tmp/file.txt', 'filename.txt']
+    ['/tmp/file.txt', 'filename.txt', @headers]
+    ['/tmp/file.txt', 'filename.txt', Content => 'some content']
+    [undef,           'filename.txt', Content => 'content here']
+
+Index 0 is the I<filepath> that will be read from disk. Index 1 is the
+filename which will be used in the HTTP request body; if not given,
+filepath (index 0) is used instead. If C<< Content => 'content here' >> is
+used as shown, then I<filepath> will be ignored.
+
+The optional C<$number> parameter is used to distinguish between two fields
 with the same name.  The fields are numbered from 1.
 
-=head2 $mech->select($name, $value)
+=head2 $mech->select($name, $new_or_additional_single_value)
 
-=head2 $mech->select($name, \@values)
+=head2 $mech->select($name, \%new_single_value_by_number)
+
+=head2 $mech->select($name, \@new_list_of_values)
+
+=head2 $mech->select($name, \%new_list_of_values_by_number)
 
 Given the name of a C<select> field, set its value to the value
-specified.  If the field is not C<< <select multiple> >> and the
-C<$value> is an array, only the B<first> value will be set.  [Note:
-the documentation previously claimed that only the last value would
-be set, but this was incorrect.]  Passing C<$value> as a hash with
-an C<n> key selects an item by number (e.g.
-C<< {n => 3} >> or C<< {n => [2,4]} >>).
+specified.
+
+    # select 'foo'
+    $mech->select($name, 'foo');
+
+If the field is not C<< <select multiple> >> and the
+C<$value> is an array reference, only the B<first> value will be set.  [Note:
+until version 1.05_03 the documentation claimed that only the last value would
+be set, but this was incorrect.]
+
+    # select 'bar'
+    $mech->select($name, ['bar', 'ignored', 'ignored']);
+
+Passing C<$value> as a hash reference with an C<n> key selects an item by number.
+
+    # select the third value
+    $mech->select($name, {n => 3});
+
 The numbering starts at 1.  This applies to the current form.
 
 If you have a field with C<< <select multiple> >> and you pass a single
 C<$value>, then C<$value> will be added to the list of fields selected,
-without clearing the others.  However, if you pass an array reference,
-then all previously selected values will be cleared.
+without clearing the others.
+
+    # add 'bar' to the list of selected values
+    $mech->select($name, 'bar');
+
+However, if you pass an array reference, then all previously selected values
+will be cleared and replaced with all values inside the array reference.
+
+    # replace the selection with 'foo' and 'bar'
+    $mech->select($name, ['foo', 'bar']);
+
+This also works when selecting by numbers, in which case the value of the C<n>
+key will be an array reference of value numbers you want to replace the
+selection with.
+
+    # replace the selection with the 2nd and 4th element
+    $mech->select($name, {n => [2, 4]});
+
+To add multiple additional values to the list of selected fields without
+clearing, call C<select> in the simple C<$value> form with each single value
+in a loop.
+
+    # add all values in the array to the selection
+    $mech->select($name, $_) for @additional_values;
 
 Returns true on successfully setting the value. On failure, returns
 false and calls C<< $self->warn() >> with an error message.
 
 =head2 $mech->set_fields( $name => $value ... )
+
+=head2 $mech->set_fields( $name => \@value_and_instance_number )
+
+=head2 $mech->set_fields( $name => \$value_instance_number )
+
+=head2 $mech->set_fields( $name => \@file_upload )
 
 This method sets multiple fields of the current form. It takes a list
 of field name and value pairs. If there is more than one field with
@@ -2767,10 +3175,32 @@ the same name, the first one found is set. If you want to select which
 of the duplicate field to set, use a value which is an anonymous array
 which has the field value and its number as the 2 elements.
 
-        # set the second foo field
+        # set the second $name field to 'foo'
         $mech->set_fields( $name => [ 'foo', 2 ] );
 
+The value of a field of type "file" should be an arrayref as described
+in C<L<< field()|$mech->field( $name, $value, $number ) >>>. Examples:
+
+        $mech->set_fields( $file_field => ['/tmp/file.txt'] );
+        $mech->set_fields( $file_field => ['/tmp/file.txt', 'filename.txt'] );
+
+The value for a "file" input can also be an arrayref containing an
+arrayref and a number, as documented in
+C<L<< submit_form()|$mech->submit_form( ... ) >>>.
+The number will be used to find the field in the form. Example:
+
+        $mech->set_fields( $file_field => [['/tmp/file.txt'], 1] );
+
 The fields are numbered from 1.
+
+For fields that have a predefined set of values, you may also provide a
+reference to an integer, if you don't know the options for the field, but you
+know you just want (e.g.) the first one.
+
+        # select the first value in the $name select box
+        $mech->set_fields( $name => \0 );
+        # select the last value in the $name select box
+        $mech->set_fields( $name => \-1 );
 
 This applies to the current form.
 
@@ -2814,9 +3244,17 @@ C<set_visible> returns the number of values set.
 =head2 $mech->tick( $name, $value [, $set] )
 
 "Ticks" the first checkbox that has both the name and value associated
-with it on the current form.  Dies if there is no named check box for
-that value.  Passing in a false value as the third optional argument
-will cause the checkbox to be unticked.
+with it on the current form.  If there is no value to the input, just
+pass an empty string as the value.  Dies if there is no named checkbox
+for the value given, if a value is given.  Passing in a false value
+as the third optional argument will cause the checkbox to be unticked.
+The third value does not need to be set if you wish to merely tick the
+box.
+
+    $mech->tick('extra', 'cheese');
+    $mech->tick('extra', 'mushrooms');
+
+    $mech->tick('no_value', ''); # <input type="checkbox" name="no_value">
 
 =head2 $mech->untick($name, $value)
 
@@ -2828,7 +3266,7 @@ C<tick($name,$value,undef)>
 Given the name of a field, return its value. This applies to the current
 form.
 
-The optional I<$number> parameter is used to distinguish between two fields
+The optional C<$number> parameter is used to distinguish between two fields
 with the same name.  The fields are numbered from 1.
 
 If the field is of type file (file upload field), the value is always
@@ -2876,7 +3314,7 @@ Clicks the button with the value I<value> in the current form.
 
 =item * C<< input => $inputobject >>
 
-Clicks on the button referenced by $inputobject, an instance of
+Clicks on the button referenced by C<$inputobject>, an instance of
 L<HTML::Form::SubmitInput> obtained e.g. from
 
     $mech->current_form()->find_input( undef, 'submit' )
@@ -2922,8 +3360,9 @@ and data setting in one operation. It selects the first form that contains all
 fields mentioned in C<\%fields>.  This is nice because you don't need to know
 the name or number of the form to do this.
 
-(calls C<L<< form_with_fields()|"$mech->form_with_fields( @fields )" >>> and
-       C<L<< set_fields()|"$mech->set_fields( $name => $value ... )" >>>).
+(calls
+C<L<< form_with_fields()|/"$mech->form_with_fields( @fields, [ \%args ] )" >>>
+and C<L<< set_fields()|/"$mech->set_fields( $name => $value ... )" >>>).
 
 If you choose C<with_fields>, the C<fields> option will be ignored. The
 C<form_number>, C<form_name> and C<form_id> options will still be used.  An
@@ -2933,26 +3372,26 @@ criteria.
 =item * C<< form_number => n >>
 
 Selects the I<n>th form (calls
-C<L<< form_number()|"$mech->form_number($number)" >>>.  If this param is not
+C<L<< form_number()|/"$mech->form_number($number)" >>>.  If this param is not
 specified, the currently-selected form is used.
 
 =item * C<< form_name => name >>
 
 Selects the form named I<name> (calls
-C<L<< form_name()|"$mech->form_name( $name )" >>>)
+C<L<< form_name()|/"$mech->form_name( $name [, \%args ] )" >>>)
 
 =item * C<< form_id => ID >>
 
 Selects the form with ID I<ID> (calls
-C<L<< form_id()|"$mech->form_id( $name )" >>>)
+C<L<< form_id()|/"$mech->form_name( $name [, \%args ] )" >>>)
 
 =item * C<< button => button >>
 
-Clicks on button I<button> (calls C<L<< click()|"$mech->click( $button [, $x, $y] )" >>>)
+Clicks on button I<button> (calls C<L<< click()|/"$mech->click( $button [, $x, $y] )" >>>)
 
 =item * C<< x => x, y => y >>
 
-Sets the x or y values for C<L<< click()|"$mech->click( $button [, $x, $y] )" >>>
+Sets the x or y values for C<L<< click()|/"$mech->click( $button [, $x, $y] )" >>>
 
 =item * C<< strict_forms => bool >>
 
@@ -2968,7 +3407,7 @@ by passing C<< strict_forms => 0 >> here.
 
 If no form is selected, the first form found is used.
 
-If I<button> is not passed, then the C<L<< submit()|"$mech->submit()" >>>
+If I<button> is not passed, then the C<L<< submit()|/"$mech->submit()" >>>
 method is used instead.
 
 If you want to submit a file and get its content from a scalar rather
@@ -3022,20 +3461,32 @@ Allows you to suppress warnings to the screen.
     $mech->quiet(1); # turns off warnings
     $mech->quiet();  # returns the current quietness status
 
+=head2 $mech->autocheck(true/false)
+
+Allows you to enable and disable autochecking.
+
+Autocheck checks each request made to see if it was successful. This saves you
+the trouble of manually checking yourself. Any errors found are errors, not
+warnings. Please see C<L<< new|/"new()" >>> for more details.
+
+    $mech->autocheck(1); # turns on automatic request checking (the default)
+    $mech->autocheck(0); # turns off automatic request checking
+    $mech->autocheck();  # returns the current autocheck status
+
 =head2 $mech->stack_depth( $max_depth )
 
 Get or set the page stack depth. Use this if you're doing a lot of page
 scraping and running out of memory.
 
-A value of 0 means "no history at all."  By default, the max stack depth
+A value of C<0> means "no history at all."  By default, the max stack depth
 is humongously large, effectively keeping all history.
 
 =head2 $mech->save_content( $filename, %opts )
 
-Dumps the contents of C<< $mech->content >> into I<$filename>.
-I<$filename> will be overwritten.  Dies if there are any errors.
+Dumps the contents of C<L<< $mech->content|/"$mech->content(...)" >>> into C<$filename>.
+C<$filename> will be overwritten.  Dies if there are any errors.
 
-If the content type does not begin with "text/", then the content
+If the content type does not begin with C<"text/">, then the content
 is saved in binary mode (i.e. C<binmode()> is set on the output
 filehandle).
 
@@ -3055,7 +3506,7 @@ This I<should> be the safest way to save contents verbatim.
 
 =item I<< $mech->save_content( $filename, binmode => $binmode ) >>
 
-Filehandle is set to binary mode. If C<$binmode> begins with ':', it is
+Filehandle is set to binary mode. If C<$binmode> begins with C<':'>, it is
 passed as a parameter to C<binmode>:
 
     binmode $fh, $binmode;
@@ -3066,7 +3517,7 @@ otherwise the filehandle is set to binary mode if C<$binmode> is true:
 
 =item I<all other arguments>
 
-are passed as-is to C<< $mech->content(%opts) >>. In particular,
+are passed as-is to C<L<< $mech->content(%opts)|/"$mech->content(...)" >>>. In particular,
 C<decoded_by_headers> might come handy if you want to revert the effect
 of line compression performed by the web server but without further
 interpreting the contents (e.g. decoding it according to the charset).
@@ -3076,33 +3527,33 @@ interpreting the contents (e.g. decoding it according to the charset).
 =head2 $mech->dump_headers( [$fh] )
 
 Prints a dump of the HTTP response headers for the most recent
-response.  If I<$fh> is not specified or is undef, it dumps to
+response.  If C<$fh> is not specified or is C<undef>, it dumps to
 STDOUT.
 
-Unlike the rest of the dump_* methods, $fh can be a scalar. It
+Unlike the rest of the C<dump_*> methods, C<$fh> can be a scalar. It
 will be used as a file name.
 
 =head2 $mech->dump_links( [[$fh], $absolute] )
 
-Prints a dump of the links on the current page to I<$fh>.  If I<$fh>
-is not specified or is undef, it dumps to STDOUT.
+Prints a dump of the links on the current page to C<$fh>.  If C<$fh>
+is not specified or is C<undef>, it dumps to STDOUT.
 
-If I<$absolute> is true, links displayed are absolute, not relative.
+If C<$absolute> is true, links displayed are absolute, not relative.
 
 =head2 $mech->dump_images( [[$fh], $absolute] )
 
-Prints a dump of the images on the current page to I<$fh>.  If I<$fh>
-is not specified or is undef, it dumps to STDOUT.
+Prints a dump of the images on the current page to C<$fh>.  If C<$fh>
+is not specified or is C<undef>, it dumps to STDOUT.
 
-If I<$absolute> is true, links displayed are absolute, not relative.
+If C<$absolute> is true, links displayed are absolute, not relative.
 
 The output will include empty lines for images that have no C<src> attribute
-and therefore no C<<->url>>.
+and therefore no URL.
 
 =head2 $mech->dump_forms( [$fh] )
 
-Prints a dump of the forms on the current page to I<$fh>.  If I<$fh>
-is not specified or is undef, it dumps to STDOUT. Running the following:
+Prints a dump of the forms on the current page to C<$fh>.  If C<$fh>
+is not specified or is C<undef>, it dumps to STDOUT. Running the following:
 
     my $mech = WWW::Mechanize->new();
     $mech->get("https://www.google.com/");
@@ -3123,8 +3574,8 @@ will print:
 
 =head2 $mech->dump_text( [$fh] )
 
-Prints a dump of the text on the current page to I<$fh>.  If I<$fh>
-is not specified or is undef, it dumps to STDOUT.
+Prints a dump of the text on the current page to C<$fh>.  If C<$fh>
+is not specified or is C<undef>, it dumps to STDOUT.
 
 =head1 OVERRIDDEN LWP::UserAgent METHODS
 
@@ -3167,7 +3618,7 @@ update it so the links come out correctly:
 This method is also used internally by the mech itself to update its
 own HTML content when loading a page. This means that if you would
 like to I<systematically> perform the above HTML substitution, you
-would overload I<update_html> in a subclass thusly:
+would overload C<update_html> in a subclass thusly:
 
    package MyMech;
    use base 'WWW::Mechanize';
@@ -3180,11 +3631,12 @@ would overload I<update_html> in a subclass thusly:
 
 If you do this, then the mech will use the tidied-up HTML instead of
 the original both when parsing for its own needs, and for returning to
-you through C<L<< content()|"$mech->content(...)" >>>.
+you through C<L<< content()|/"$mech->content(...)" >>>.
 
 Overloading this method is also the recommended way of implementing
 extra validation steps (e.g. link checkers) for every HTML page
-received.  L</warn> and L</die> would then come in handy to signal
+received.  C<L<< warn|/"warn( @messages )" >>> and
+C<L<< warn|/"warn( @messages )" >>> would then come in handy to signal
 validation errors.
 
 =head2 $mech->credentials( $username, $password )
@@ -3244,10 +3696,10 @@ know about them.
 
 =head2 $mech->_update_page($request, $response)
 
-Updates all internal variables in $mech as if $request was just
+Updates all internal variables in C<$mech> as if C<$request> was just
 performed, and returns $response. The page stack is B<not> altered by
 this method, it is up to caller (e.g.
-C<L<< request|"$mech->request( $request [, $arg [, $size]])" >>>)
+C<L<< request|/"$mech->request( $request [, $arg [, $size]])" >>>)
 to do that.
 
 =head2 $mech->_modify_request( $req )
@@ -3323,8 +3775,8 @@ L<Mozilla::PublicSuffix> is installed.
 
 =item protocols_allowed
 
-This option is inherited directly from L<LWP::UserAgent>.  It allows you to
-whitelist the protocols you're willing to allow.
+This option is inherited directly from L<LWP::UserAgent>.  It may be used to
+allow arbitrary protocols.
 
     my $agent = WWW::Mechanize->new(
         protocols_allowed => [ 'http', 'https' ]
@@ -3335,8 +3787,8 @@ C<file:///etc/passwd>
 
 =item protocols_forbidden
 
-This option is also inherited directly from L<LWP::UserAgent>.  It allows you to
-blacklist the protocols you're unwilling to allow.
+This option is also inherited directly from L<LWP::UserAgent>.  It may be used
+to deny arbitrary protocols.
 
     my $agent = WWW::Mechanize->new(
         protocols_forbidden => [ 'file', 'mailto', 'ssh', ]
@@ -3460,7 +3912,7 @@ listings.
 Randal Schwartz's article on scraping Yahoo News for images.  It's
 already out of date: He manually walks the list of links hunting
 for matches, which wouldn't have been necessary if the
-C<L<< find_link()|"$mech->find_link( ... )" >>> method existed at press time.
+C<L<< find_link()|/"$mech->find_link( ... )" >>> method existed at press time.
 
 =item * L<http://www.perladvent.org/2002/16th/>
 
@@ -3490,8 +3942,6 @@ Acts as a proxy for web interaction, and then generates WWW::Mechanize scripts.
 Just like Mech, but using Microsoft Internet Explorer to do the work.
 
 =item * L<WWW::Bugzilla>
-
-=item * L<WWW::CheckSite>
 
 =item * L<WWW::Google::Groups>
 

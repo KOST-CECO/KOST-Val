@@ -3,14 +3,14 @@ package FFI::Platypus::DL;
 use strict;
 use warnings;
 use 5.008004;
-use base qw( Exporter );
+use Exporter qw( import );
 
 require FFI::Platypus;
 our @EXPORT = qw( dlopen dlerror dlsym dlclose );
 push @EXPORT, grep /RTLD_/, keys %FFI::Platypus::DL::;
 
 # ABSTRACT: Slightly non-portable interface to libdl
-our $VERSION = '1.34'; # VERSION
+our $VERSION = '2.08'; # VERSION
 
 
 1;
@@ -27,16 +27,16 @@ FFI::Platypus::DL - Slightly non-portable interface to libdl
 
 =head1 VERSION
 
-version 1.34
+version 2.08
 
 =head1 SYNOPSIS
 
- use FFI::Platypus;
+ use FFI::Platypus 2.00;
  use FFI::Platypus::DL;
  
  my $handle = dlopen("./libfoo.so", RTLD_PLATYPUS_DEFAULT);
  my $address = dlsym($handle, "my_function_named_foo");
- my $ffi = FFI::Platypus->new( api => 1 );
+ my $ffi = FFI::Platypus->new( api => 2 );
  $ffi->function($address => [] => 'void')->call;
  dlclose($handle);
 
@@ -201,7 +201,7 @@ Damyan Ivanov
 
 Ilya Pavlov (Ilya33)
 
-Petr Pisar (ppisar)
+Petr Písař (ppisar)
 
 Mohammad S Anwar (MANWAR)
 
@@ -211,9 +211,17 @@ Meredith (merrilymeredith, MHOWARD)
 
 Diab Jerius (DJERIUS)
 
+Eric Brine (IKEGAMI)
+
+szTheory
+
+José Joaquín Atria (JJATRIA)
+
+Pete Houston (openstrike, HOUSTON)
+
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2015,2016,2017,2018,2019,2020 by Graham Ollis.
+This software is copyright (c) 2015-2022 by Graham Ollis.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

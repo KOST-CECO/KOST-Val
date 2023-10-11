@@ -19,6 +19,7 @@
     GyMMM => "G y MMM",
     GyMMMEd => "G y MMM d, E",
     GyMMMd => "G y MMM d",
+    GyMd => "GGGGG y-MM-dd",
     H => "HH",
     Hm => "HH:mm",
     Hms => "HH:mm:ss",
@@ -116,15 +117,15 @@
   ],
   era_abbreviated => [
     "\N{U+0915}\N{U+094d}\N{U+0930}\N{U+093f}\N{U+0938}\N{U+094d}\N{U+0924}\N{U+092a}\N{U+0942}\N{U+0930}\N{U+094d}\N{U+0935}",
-    "\N{U+0915}\N{U+094d}\N{U+0930}\N{U+093f}\N{U+0938}\N{U+094d}\N{U+0924}\N{U+0936}\N{U+0916}\N{U+093e}",
+    "\N{U+0915}\N{U+094d}\N{U+0930}\N{U+093f}.\N{U+0936}.",
   ],
   era_narrow => [
     "\N{U+0915}\N{U+094d}\N{U+0930}\N{U+093f}\N{U+0938}\N{U+094d}\N{U+0924}\N{U+092a}\N{U+0942}\N{U+0930}\N{U+094d}\N{U+0935}",
-    "\N{U+0915}\N{U+094d}\N{U+0930}\N{U+093f}\N{U+0938}\N{U+094d}\N{U+0924}\N{U+0936}\N{U+0916}\N{U+093e}",
+    "\N{U+0915}\N{U+094d}\N{U+0930}\N{U+093f}.\N{U+0936}.",
   ],
   era_wide => [
     "\N{U+0915}\N{U+094d}\N{U+0930}\N{U+093f}\N{U+0938}\N{U+094d}\N{U+0924}\N{U+092a}\N{U+0942}\N{U+0930}\N{U+094d}\N{U+0935}",
-    "\N{U+0915}\N{U+094d}\N{U+0930}\N{U+093f}\N{U+0938}\N{U+094d}\N{U+0924}\N{U+0936}\N{U+0916}\N{U+093e}",
+    "\N{U+0915}\N{U+094d}\N{U+0930}\N{U+093f}\N{U+0938}\N{U+094d}\N{U+0924}\N{U+0936}\N{U+0915}",
   ],
   first_day_of_week => 1,
   glibc_date_1_format => "%a %b %e %H:%M:%S %Z %Y",
@@ -266,5 +267,5 @@
   time_format_medium => "h:mm:ss a",
   time_format_short => "h:mm a",
   variant => undef,
-  version => 38,
+  version => 43,
 }

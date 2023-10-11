@@ -1,27 +1,28 @@
 package Mojo::Util;
 use Mojo::Base -strict;
 
-use Carp qw(carp croak);
-use Data::Dumper ();
-use Digest::MD5 qw(md5 md5_hex);
-use Digest::SHA qw(hmac_sha1_hex sha1 sha1_hex);
-use Encode qw(find_encoding);
-use Exporter qw(import);
+use Carp           qw(carp croak);
+use Data::Dumper   ();
+use Digest::MD5    qw(md5 md5_hex);
+use Digest::SHA    qw(hmac_sha1_hex sha1 sha1_hex);
+use Encode         qw(find_encoding);
+use Exporter       qw(import);
 use File::Basename qw(dirname);
-use Getopt::Long qw(GetOptionsFromArray);
+use Getopt::Long   qw(GetOptionsFromArray);
 use IO::Compress::Gzip;
 use IO::Poll qw(POLLIN POLLPRI);
 use IO::Uncompress::Gunzip;
-use List::Util qw(min);
-use MIME::Base64 qw(decode_base64 encode_base64);
-use Pod::Usage qw(pod2usage);
-use Sub::Util qw(set_subname);
-use Symbol qw(delete_package);
+use List::Util         qw(min);
+use MIME::Base64       qw(decode_base64 encode_base64);
+use Pod::Usage         qw(pod2usage);
+use Socket             qw(inet_pton AF_INET6 AF_INET);
+use Sub::Util          qw(set_subname);
+use Symbol             qw(delete_package);
 use Time::HiRes        ();
 use Unicode::Normalize ();
 
 # Check for monotonic clock support
-use constant MONOTONIC => eval { !!Time::HiRes::clock_gettime(Time::HiRes::CLOCK_MONOTONIC()) };
+use constant MONOTONIC => !!eval { Time::HiRes::clock_gettime(Time::HiRes::CLOCK_MONOTONIC()) };
 
 # Punycode bootstring parameters
 use constant {
@@ -56,6 +57,10 @@ my %XML = ('&' => '&amp;', '<' => '&lt;', '>' => '&gt;', '"' => '&quot;', '\'' =
 # "Sun, 06 Nov 1994 08:49:37 GMT" and "Sunday, 06-Nov-94 08:49:37 GMT"
 my $EXPIRES_RE = qr/(\w+\W+\d+\W+\w+\W+\d+\W+\d+:\d+:\d+\W*\w+)/;
 
+# Header key/value pairs
+my $QUOTED_VALUE_RE   = qr/\G=\s*("(?:\\\\|\\"|[^"])*")/;
+my $UNQUOTED_VALUE_RE = qr/\G=\s*([^;, ]*)/;
+
 # HTML entities
 my $ENTITY_RE = qr/&(?:\#((?:[0-9]{1,7}|x[0-9a-fA-F]{1,6}));|(\w+[;=]?))/;
 
@@ -64,10 +69,10 @@ my (%ENCODING, %PATTERN);
 
 our @EXPORT_OK = (
   qw(b64_decode b64_encode camelize class_to_file class_to_path decamelize decode deprecated dumper encode),
-  qw(extract_usage getopt gunzip gzip hmac_sha1_sum html_attr_unescape html_unescape humanize_bytes md5_bytes md5_sum),
-  qw(monkey_patch punycode_decode punycode_encode quote scope_guard secure_compare sha1_bytes sha1_sum slugify),
-  qw(split_cookie_header split_header steady_time tablify term_escape trim unindent unquote url_escape url_unescape),
-  qw(xml_escape xor_encode)
+  qw(extract_usage getopt gunzip gzip header_params hmac_sha1_sum html_attr_unescape html_unescape humanize_bytes),
+  qw(md5_bytes md5_sum monkey_patch network_contains punycode_decode punycode_encode quote scope_guard secure_compare),
+  qw(sha1_bytes sha1_sum slugify split_cookie_header split_header steady_time tablify term_escape trim unindent),
+  qw(unquote url_escape url_unescape xml_escape xor_encode)
 );
 
 # Aliases
@@ -161,6 +166,23 @@ sub gzip {
   return $compressed;
 }
 
+sub header_params {
+  my $value = shift;
+
+  my $params = {};
+  while ($value =~ /\G[;\s]*([^=;, ]+)\s*/gc) {
+    my $name = $1;
+
+    # Quoted value
+    if ($value =~ /$QUOTED_VALUE_RE/gco) { $params->{$name} //= unquote($1) }
+
+    # Unquoted value
+    elsif ($value =~ /$UNQUOTED_VALUE_RE/gco) { $params->{$name} //= $1 }
+  }
+
+  return ($params, substr($value, pos($value) // 0));
+}
+
 sub html_attr_unescape { _html(shift, 1) }
 sub html_unescape      { _html(shift, 0) }
 
@@ -181,6 +203,27 @@ sub monkey_patch {
   no strict 'refs';
   no warnings 'redefine';
   *{"${class}::$_"} = set_subname("${class}::$_", $patch{$_}) for keys %patch;
+}
+
+sub network_contains {
+  my ($cidr, $addr) = @_;
+  return undef unless length $cidr && length $addr;
+
+  # Parse inputs
+  my ($net, $mask) = split m!/!, $cidr, 2;
+  my $v6 = $net =~ /:/;
+  return undef if $v6 xor $addr =~ /:/;
+
+  # Convert addresses to binary
+  return undef unless $net  = inet_pton($v6 ? AF_INET6 : AF_INET, $net);
+  return undef unless $addr = inet_pton($v6 ? AF_INET6 : AF_INET, $addr);
+  my $length = $v6 ? 128 : 32;
+
+  # Apply mask if given
+  $addr &= pack "B$length", '1' x $mask if defined $mask;
+
+  # Compare
+  return 0 == unpack "B$length", ($net ^ $addr);
 }
 
 # Direct translation of RFC 3492
@@ -416,9 +459,6 @@ sub _entity {
   return '&' . reverse $rest;
 }
 
-# Supported on Perl 5.14+
-sub _global_destruction { defined ${^GLOBAL_PHASE} && ${^GLOBAL_PHASE} eq 'DESTRUCT' }
-
 sub _header {
   my ($str, $cookie) = @_;
 
@@ -431,10 +471,10 @@ sub _header {
     if ($expires && $str =~ /\G=\s*$EXPIRES_RE/gco) { $part[-1] = $1 }
 
     # Quoted value
-    elsif ($str =~ /\G=\s*("(?:\\\\|\\"|[^"])*")/gc) { $part[-1] = unquote $1 }
+    elsif ($str =~ /$QUOTED_VALUE_RE/gco) { $part[-1] = unquote $1 }
 
     # Unquoted value
-    elsif ($str =~ /\G=\s*([^;, ]*)/gc) { $part[-1] = $1 }
+    elsif ($str =~ /$UNQUOTED_VALUE_RE/gco) { $part[-1] = $1 }
 
     # Separator
     next unless $str =~ /\G[;\s]*,\s*/gc;
@@ -673,6 +713,13 @@ Uncompress bytes with L<IO::Compress::Gunzip>.
 
 Compress bytes with L<IO::Compress::Gzip>.
 
+=head2 header_params
+
+  my ($params, $remainder) = header_params 'one=foo; two="bar", three=baz';
+
+Extract HTTP header field parameters until the first comma according to L<RFC 5987|http://tools.ietf.org/html/rfc5987>.
+Note that this function is B<EXPERIMENTAL> and might change without warning!
+
 =head2 hmac_sha1_sum
 
   my $checksum = hmac_sha1_sum $bytes, 'passw0rd';
@@ -757,6 +804,23 @@ Punycode decode string as described in L<RFC 3492|https://tools.ietf.org/html/rf
 
   # "bücher"
   punycode_decode 'bcher-kva';
+
+=head2 network_contains
+
+  my $bool = network_contains $network, $address;
+
+Check that a given address is contained within a network in CIDR form. If the network is a single address, the
+addresses must be equivalent.
+
+  # True
+  network_contains('10.0.0.0/8', '10.10.10.10');
+  network_contains('10.10.10.10', '10.10.10.10');
+  network_contains('fc00::/7', 'fc::c0:ff:ee');
+
+  # False
+  network_contains('10.0.0.0/29', '10.10.10.10');
+  network_contains('10.10.10.12', '10.10.10.10');
+  network_contains('fc00::/7', '::1');
 
 =head2 punycode_encode
 

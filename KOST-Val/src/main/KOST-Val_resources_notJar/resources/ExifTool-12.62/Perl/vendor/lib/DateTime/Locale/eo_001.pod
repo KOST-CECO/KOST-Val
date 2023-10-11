@@ -19,12 +19,12 @@
 
 =head1 NAME
 
-DateTime::Locale::eo_001 - Locale data examples for the Esperanto World (eo-001) locale
+DateTime::Locale::eo_001 - Locale data examples for the Esperanto world (eo-001) locale
 
 =head1 DESCRIPTION
 
 This pod file contains examples of the locale data available for the
-Esperanto World locale.
+Esperanto world locale.
 
 =head2 Days
 
@@ -416,6 +416,12 @@ Esperanto World locale.
    2008-02-05T18:30:30 = pK 2008 feb 5
    1995-12-22T09:05:02 = pK 1995 dec 22
   -0010-09-15T04:44:23 = aK -10 sep 15
+
+=head3 GyMd (GGGGG y-MM-dd)
+
+   2008-02-05T18:30:30 = pK 2008-02-05
+   1995-12-22T09:05:02 = pK 1995-12-22
+  -0010-09-15T04:44:23 = aK -10-09-15
 
 =head3 H (HH)
 

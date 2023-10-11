@@ -2,8 +2,9 @@ package Test2::Tools::Exception;
 use strict;
 use warnings;
 
-our $VERSION = '0.000139';
+our $VERSION = '0.000155';
 
+use Carp qw/carp/;
 use Test2::API qw/context/;
 
 our @EXPORT = qw/dies lives try_ok/;
@@ -11,6 +12,9 @@ use base 'Exporter';
 
 sub dies(&) {
     my $code = shift;
+
+    defined wantarray or carp "Useless use of dies() in void context";
+
     local ($@, $!, $?);
     my $ok = eval { $code->(); 1 };
     my $err = $@;
@@ -28,6 +32,8 @@ sub dies(&) {
 
 sub lives(&) {
     my $code = shift;
+
+    defined wantarray or carp "Useless use of lives() in void context";
 
     my $err;
     {

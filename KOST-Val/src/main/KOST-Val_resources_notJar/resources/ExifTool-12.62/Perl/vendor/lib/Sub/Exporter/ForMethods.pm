@@ -1,13 +1,13 @@
 use strict;
 use warnings;
-package Sub::Exporter::ForMethods;
+package Sub::Exporter::ForMethods 0.100055;
 # ABSTRACT: helper routines for using Sub::Exporter to build methods
-$Sub::Exporter::ForMethods::VERSION = '0.100052';
-use Scalar::Util 'blessed';
-use Sub::Name ();
+
+use Scalar::Util ();
+use Sub::Util ();
 
 use Sub::Exporter 0.978 -setup => {
-  exports => [ qw(method_installer) ],
+  exports => [ qw(method_installer method_goto_installer) ],
 };
 
 #pod =head1 SYNOPSIS
@@ -87,8 +87,24 @@ use Sub::Exporter 0.978 -setup => {
 #pod =cut
 
 sub method_installer {
+  _generic_method_installer(
+    sub { my $code = shift; sub { $code->(@_) } },
+    @_,
+  );
+}
+
+sub method_goto_installer {
+  _generic_method_installer(
+    sub { my $code = shift; sub { goto &$code } },
+    @_,
+  );
+}
+
+sub _generic_method_installer {
+  my $generator = shift;
+
   my ($mxi_arg) = @_;
-  my $rebless = $mxi_arg->{rebless};
+  my $rebless   = $mxi_arg->{rebless};
 
   sub {
     my ($arg, $to_export) = @_;
@@ -99,12 +115,12 @@ sub method_installer {
       my ($as, $code) = @$to_export[ $i, $i+1 ];
 
       next if ref $as;
-      my $sub = sub { $code->(@_) };
-      if ($rebless and defined (my $code_pkg = blessed $code)) {
+      my $sub = $generator->($code);
+      if ($rebless and defined (my $code_pkg = Scalar::Util::blessed($code))) {
         bless $sub, $code_pkg;
       }
 
-      $to_export->[ $i + 1 ] = Sub::Name::subname(
+      $to_export->[ $i + 1 ] = Sub::Util::set_subname(
         join(q{::}, $into, $as),
         $sub,
       );
@@ -128,7 +144,7 @@ Sub::Exporter::ForMethods - helper routines for using Sub::Exporter to build met
 
 =head1 VERSION
 
-version 0.100052
+version 0.100055
 
 =head1 SYNOPSIS
 
@@ -185,6 +201,16 @@ After MyLibrary is compiled, C<namespace::autoclean> will remove C<tan> and
 C<trunc> as foreign contaminants, but will leave C<read_file> in place.  It
 will also remove C<method_installer>, an added win.
 
+=head1 PERL VERSION
+
+This library should run on perls released even a long time ago.  It should work
+on any version of perl released in the last five years.
+
+Although it may work on older versions of perl, no guarantee is made that the
+minimum required version will not be increased.  The version may be increased
+for any reason, and there is no promise that patches will be accepted to lower
+the minimum required perl.
+
 =head1 EXPORTS
 
 Sub::Exporter::ForMethods offers only one routine for export, and it may also
@@ -206,11 +232,17 @@ package.
 
 =head1 AUTHOR
 
-Ricardo Signes <rjbs@cpan.org>
+Ricardo Signes <cpan@semiotic.systems>
+
+=head1 CONTRIBUTOR
+
+=for stopwords Ricardo Signes
+
+Ricardo Signes <rjbs@semiotic.systems>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2015 by Ricardo Signes.
+This software is copyright (c) 2022 by Ricardo Signes.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

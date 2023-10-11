@@ -2,7 +2,7 @@ package Test2::Tools::Spec;
 use strict;
 use warnings;
 
-our $VERSION = '0.000139';
+our $VERSION = '0.000155';
 
 use Carp qw/croak/;
 use Test2::Workflow qw/parse_args build current_build root_build init_root build_stack/;
@@ -13,7 +13,7 @@ use Test2::Workflow::Runner();
 use Test2::Workflow::Task::Action();
 use Test2::Workflow::Task::Group();
 use Test2::Tools::Mock();
-use Importer();
+use Test2::Util::Importer();
 
 use vars qw/@EXPORT @EXPORT_OK/;
 push @EXPORT => qw{describe cases};
@@ -106,7 +106,7 @@ sub import {
         );
     }
 
-    Importer->import_into($class, $caller[0], @import);
+    Test2::Util::Importer->import_into($class, $caller[0], @import);
 }
 
 {

@@ -2,11 +2,11 @@ package Test2::Util::Table;
 use strict;
 use warnings;
 
-our $VERSION = '0.000139';
+our $VERSION = '0.000155';
 
 use base 'Term::Table';
 
-use Importer Importer => 'import';
+use Test2::Util::Importer 'Test2::Util::Importer' => 'import';
 our @EXPORT_OK  = qw/table/;
 our %EXPORT_GEN = (
     '&term_size' => sub {

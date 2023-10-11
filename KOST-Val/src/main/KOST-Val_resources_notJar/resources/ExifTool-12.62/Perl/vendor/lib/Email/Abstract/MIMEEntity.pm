@@ -1,14 +1,14 @@
 use strict;
 package Email::Abstract::MIMEEntity;
 # ABSTRACT: Email::Abstract wrapper for MIME::Entity
-$Email::Abstract::MIMEEntity::VERSION = '3.008';
+$Email::Abstract::MIMEEntity::VERSION = '3.009';
 use Email::Abstract::Plugin;
 BEGIN { @Email::Abstract::MIMEEntity::ISA = 'Email::Abstract::MailInternet' };
 
 my $is_avail;
 sub is_available {
   return $is_avail if defined $is_avail;
-  eval { require MIME::Entity; MIME::Entity->VERSION(5.501); 1 };
+  eval { require MIME::Entity; MIME::Entity->VERSION(5.508); 1 };
   return $is_avail = $@ ? 0 : 1;
 }
 
@@ -61,12 +61,22 @@ Email::Abstract::MIMEEntity - Email::Abstract wrapper for MIME::Entity
 
 =head1 VERSION
 
-version 3.008
+version 3.009
 
 =head1 DESCRIPTION
 
 This module wraps the MIME::Entity mail handling library with an
 abstract interface, to be used with L<Email::Abstract>
+
+=head1 PERL VERSION SUPPORT
+
+This module has a long-term perl support period.  That means it will not
+require a version of perl released fewer than five years ago.
+
+Although it may work on older versions of perl, no guarantee is made that the
+minimum required version will not be increased.  The version may be increased
+for any reason, and there is no promise that patches will be accepted to lower
+the minimum required perl.
 
 =head1 SEE ALSO
 
@@ -78,7 +88,7 @@ L<Email::Abstract>, L<MIME::Entity>.
 
 =item *
 
-Ricardo SIGNES <rjbs@cpan.org>
+Ricardo SIGNES <rjbs@semiotic.systems>
 
 =item *
 

@@ -3,7 +3,7 @@ package Net::DNS::Update;
 use strict;
 use warnings;
 
-our $VERSION = (qw$Id: Update.pm 1814 2020-10-14 21:49:16Z willem $)[2];
+our $VERSION = (qw$Id: Update.pm 1895 2023-01-16 13:38:08Z willem $)[2];
 
 
 =head1 NAME
@@ -93,15 +93,11 @@ Section names may be abbreviated to the first three characters.
 =cut
 
 sub push {
-	my $self = shift;
-	my $list = $self->_section(shift);
-	my @arg	 = grep { ref($_) } @_;
-
+	my ( $self, $section, @rr ) = @_;
 	my ($zone) = $self->zone;
 	my $zclass = $zone->zclass;
-	my @rr = grep { $_->class( $_->class =~ /ANY|NONE/ ? () : $zclass ) } @arg;
-
-	return CORE::push( @$list, @rr );
+	for (@rr) { $_->class( $_->class =~ /ANY|NONE/ ? () : $zclass ) }
+	return $self->SUPER::push( $section, @rr );
 }
 
 
@@ -124,17 +120,11 @@ Section names may be abbreviated to the first three characters.
 =cut
 
 sub unique_push {
-	my $self = shift;
-	my $list = $self->_section(shift);
-	my @arg	 = grep { ref($_) } @_;
-
+	my ( $self, $section, @rr ) = @_;
 	my ($zone) = $self->zone;
 	my $zclass = $zone->zclass;
-	my @rr = grep { $_->class( $_->class =~ /ANY|NONE/ ? () : $zclass ) } @arg;
-
-	my %unique = map { ( bless( {%$_, ttl => 0}, ref $_ )->canonical => $_ ) } ( @rr, @$list );
-
-	return scalar( @$list = values %unique );
+	for (@rr) { $_->class( $_->class =~ /ANY|NONE/ ? () : $zclass ) }
+	return $self->SUPER::unique_push( $section, @rr );
 }
 
 
@@ -257,7 +247,7 @@ All rights reserved.
 
 Permission to use, copy, modify, and distribute this software and its
 documentation for any purpose and without fee is hereby granted, provided
-that the above copyright notice appear in all copies and that both that
+that the original copyright notices appear in all copies and that both
 copyright notice and this permission notice appear in supporting
 documentation, and that the name of the author not be used in advertising
 or publicity pertaining to distribution of the software without specific
@@ -274,8 +264,10 @@ DEALINGS IN THE SOFTWARE.
 
 =head1 SEE ALSO
 
-L<perl>, L<Net::DNS>, L<Net::DNS::Packet>, L<Net::DNS::Header>,
-L<Net::DNS::RR>, L<Net::DNS::Resolver>, RFC 2136, RFC 2845
+L<perl> L<Net::DNS> L<Net::DNS::Packet> L<Net::DNS::Header>
+L<Net::DNS::RR> L<Net::DNS::Resolver>
+L<RFC2136|https://tools.ietf.org/html/rfc2136>
+L<RFC8945|https://tools.ietf.org/html/rfc8945>
 
 =cut
 

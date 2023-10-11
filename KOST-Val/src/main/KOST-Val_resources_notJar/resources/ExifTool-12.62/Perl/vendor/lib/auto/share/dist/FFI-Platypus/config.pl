@@ -1,7 +1,6 @@
 do { my $x = {
   'abi' => {
-    'default_abi' => '2',
-    'gnuw64' => '2',
+    'default_abi' => '1',
     'win64' => '1'
   },
   'align' => {
@@ -30,9 +29,7 @@ do { my $x = {
     'alloca' => 1,
     'bigendian' => 0,
     'bigendian64' => 0,
-    'complex' => 1,
-    'longdouble' => 1,
-    'recordvalue' => 1,
+    'strnlen' => 1,
     'variadic' => 1
   },
   'test-key' => 'test-value',
@@ -51,6 +48,7 @@ do { my $x = {
     'int32_t' => 'sint32',
     'int64_t' => 'sint64',
     'int8_t' => 'sint8',
+    'intmax_t' => 'sint64',
     'intptr_t' => 'sint64',
     'long' => 'sint32',
     'long double' => 'longdouble',
@@ -75,6 +73,7 @@ do { my $x = {
     'uint32_t' => 'uint32',
     'uint64_t' => 'uint64',
     'uint8_t' => 'uint8',
+    'uintmax_t' => 'uint64',
     'uintptr_t' => 'uint64',
     'ulong' => 'uint32',
     'unsigned char' => 'uint8',

@@ -14,7 +14,7 @@ Alien::Build::Plugin::Build - Build Alien::Build plugins
 
 =head1 VERSION
 
-version 2.38
+version 2.80
 
 =head1 SYNOPSIS
 
@@ -37,7 +37,31 @@ downloaded and extracted.
 
 =item L<Alien::Build::Plugin::Build::Autoconf>
 
+For dealing with packages that are configured using autotools,
+or an autotools-like C<configure> script.
+
+=item L<Alien::Build::Plugin::Build::CMake>
+
+For dealing with packages that are configured and built using CMake.
+
+=item L<Alien::Build::Plugin::Build::Copy>
+
+For dealing with packages that do not require any build, and can just
+be copied into their final location.
+
 =item L<Alien::Build::Plugin::Build::MSYS>
+
+For dealing with packages that require MSYS on Windows in order to
+build.  This plugin is typically a no-op on other platforms.
+
+=item L<Alien::Build::Plugin::Build::Make>
+
+For dealing with packages that require Make to build.  Several
+flavors of Make are supported, including GNU Make and BSD Make.
+
+=item L<Alien::Build::Plugin::Build::SearchDep>
+
+Add other L<Alien>s as dependencies.
 
 =back
 
@@ -87,7 +111,7 @@ Juan Julián Merelo Guervós (JJ)
 
 Joel Berger (JBERGER)
 
-Petr Pisar (ppisar)
+Petr Písař (ppisar)
 
 Lance Wicks (LANCEW)
 
@@ -105,9 +129,13 @@ Paul Evans (leonerd, PEVANS)
 
 Håkon Hægland (hakonhagland, HAKONH)
 
+nick nauwelaerts (INPHOBIA)
+
+Florian Weimer
+
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011-2020 by Graham Ollis.
+This software is copyright (c) 2011-2022 by Graham Ollis.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

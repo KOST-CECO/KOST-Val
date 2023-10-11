@@ -2,7 +2,7 @@ package Net::DNS::RR::GPOS;
 
 use strict;
 use warnings;
-our $VERSION = (qw$Id: GPOS.pm 1814 2020-10-14 21:49:16Z willem $)[2];
+our $VERSION = (qw$Id: GPOS.pm 1910 2023-03-30 19:16:30Z willem $)[2];
 
 use base qw(Net::DNS::RR);
 
@@ -20,13 +20,14 @@ use Net::DNS::Text;
 
 
 sub _decode_rdata {			## decode rdata from wire-format octet string
-	my $self = shift;
-	my ( $data, $offset ) = @_;
+	my ( $self, $data, $offset ) = @_;
 
 	my $limit = $offset + $self->{rdlength};
-	( $self->{latitude},  $offset ) = Net::DNS::Text->decode( $data, $offset ) if $offset < $limit;
-	( $self->{longitude}, $offset ) = Net::DNS::Text->decode( $data, $offset ) if $offset < $limit;
-	( $self->{altitude},  $offset ) = Net::DNS::Text->decode( $data, $offset ) if $offset < $limit;
+	for (qw(latitude longitude altitude)) {
+		my $text;
+		( $text, $offset ) = Net::DNS::Text->decode( $data, $offset );
+		$self->$_( $text->value );
+	}
 	croak('corrupt GPOS data') unless $offset == $limit;	# more or less FUBAR
 	return;
 }
@@ -35,26 +36,23 @@ sub _decode_rdata {			## decode rdata from wire-format octet string
 sub _encode_rdata {			## encode rdata as wire-format octet string
 	my $self = shift;
 
-	return '' unless defined $self->{altitude};
-	return join '', map { $self->{$_}->encode } qw(latitude longitude altitude);
+	return join '', map { Net::DNS::Text->new($_)->encode } @{$self}{qw(latitude longitude altitude)};
 }
 
 
 sub _format_rdata {			## format rdata portion of RR string.
 	my $self = shift;
 
-	return '' unless defined $self->{altitude};
-	return join ' ', map { $self->{$_}->string } qw(latitude longitude altitude);
+	return map { Net::DNS::Text->new($_)->string } @{$self}{qw(latitude longitude altitude)};
 }
 
 
 sub _parse_rdata {			## populate RR from rdata in argument list
-	my $self = shift;
+	my ( $self, @argument ) = @_;
 
-	$self->latitude(shift);
-	$self->longitude(shift);
-	$self->altitude(shift);
-	die 'too many arguments for GPOS' if scalar @_;
+	$self->latitude( shift @argument );
+	$self->longitude( shift @argument );
+	$self->altitude(@argument);
 	return;
 }
 
@@ -68,36 +66,34 @@ sub _defaults {				## specify RR attribute default values
 
 
 sub latitude {
-	my $self = shift;
-	$self->{latitude} = _fp2text(shift) if scalar @_;
-	return defined(wantarray) ? _text2fp( $self->{latitude} ) : undef;
+	my ( $self, @value ) = @_;
+	for (@value) { return $self->{latitude} = _fp($_) }
+	return $self->{latitude};
 }
 
 
 sub longitude {
-	my $self = shift;
-	$self->{longitude} = _fp2text(shift) if scalar @_;
-	return defined(wantarray) ? _text2fp( $self->{longitude} ) : undef;
+	my ( $self, @value ) = @_;
+	for (@value) { return $self->{longitude} = _fp($_) }
+	return $self->{longitude};
 }
 
 
 sub altitude {
-	my $self = shift;
-	$self->{altitude} = _fp2text(shift) if scalar @_;
-	return defined(wantarray) ? _text2fp( $self->{altitude} ) : undef;
+	my ( $self, @value ) = @_;
+	for (@value) { return $self->{altitude} = _fp($_) }
+	return $self->{altitude};
 }
 
 
 ########################################
 
-sub _fp2text {
-	return Net::DNS::Text->new( sprintf( '%1.10g', shift ) );
+sub _fp {
+	no integer;
+	return sprintf( '%1.10g', 0.0 + shift );
 }
 
-sub _text2fp {
-	no integer;
-	return ( 0.0 + shift->value );
-}
+########################################
 
 
 1;
@@ -158,7 +154,7 @@ Package template (c)2009,2012 O.M.Kolkman and R.W.Franks.
 
 Permission to use, copy, modify, and distribute this software and its
 documentation for any purpose and without fee is hereby granted, provided
-that the above copyright notice appear in all copies and that both that
+that the original copyright notices appear in all copies and that both
 copyright notice and this permission notice appear in supporting
 documentation, and that the name of the author not be used in advertising
 or publicity pertaining to distribution of the software without specific
@@ -175,6 +171,7 @@ DEALINGS IN THE SOFTWARE.
 
 =head1 SEE ALSO
 
-L<perl>, L<Net::DNS>, L<Net::DNS::RR>, RFC1712
+L<perl> L<Net::DNS> L<Net::DNS::RR>
+L<RFC1712|https://tools.ietf.org/html/rfc1712>
 
 =cut

@@ -1,8 +1,8 @@
-use strict;
+use v5.12.0;
 use warnings;
-package Email::Stuffer;
+package Email::Stuffer 0.020;
 # ABSTRACT: A more casual approach to creating and sending Email:: emails
-$Email::Stuffer::VERSION = '0.018';
+
 use Scalar::Util qw(blessed);
 
 #pod =head1 SYNOPSIS
@@ -163,8 +163,6 @@ use Scalar::Util qw(blessed);
 #pod
 #pod =cut
 
-use 5.005;
-use strict;
 use Carp                   qw(croak);
 use File::Basename         ();
 use Params::Util 1.05      qw(_INSTANCE _INSTANCEDOES);
@@ -271,10 +269,12 @@ sub parts {
 #####################################################################
 # Header Methods
 
-#pod =method header $header => $value
+#pod =method header
 #pod
-#pod Sets a named header in the email. Multiple calls with the same $header
-#pod will overwrite previous calls $value.
+#pod   $stuffer->header($header_name = $value)
+#pod
+#pod This method sets a named header in the email. Multiple calls with the same
+#pod C<$header_name> will overwrite previous calls C<$value>.
 #pod
 #pod =cut
 
@@ -285,9 +285,11 @@ sub header {
   return $self;
 }
 
-#pod =method to @addresses
+#pod =method to
 #pod
-#pod Sets the To: header in the email
+#pod   $stuffer->to(@addresses)
+#pod
+#pod This method sets the To header in the email.
 #pod
 #pod =cut
 
@@ -313,9 +315,12 @@ sub to {
   return $self;
 }
 
-#pod =method from $address
+#pod =method from
 #pod
-#pod Sets the From: header in the email
+#pod   $stuffer->from($address)
+#pod
+#pod
+#pod This method sets the From header in the email.
 #pod
 #pod =cut
 
@@ -327,9 +332,11 @@ sub from {
   return $self;
 }
 
-#pod =method reply_to $address
+#pod =method reply_to
 #pod
-#pod Sets the Reply-To: header in the email
+#pod   $stuffer->reply_to($address)
+#pod
+#pod This method sets the Reply-To header in the email.
 #pod
 #pod =cut
 
@@ -341,9 +348,11 @@ sub reply_to {
   return $self;
 }
 
-#pod =method cc @addresses
+#pod =method cc
 #pod
-#pod Sets the Cc: header in the email
+#pod   $stuffer->cc(@addresses)
+#pod
+#pod This method sets the Cc header in the email.
 #pod
 #pod =cut
 
@@ -354,9 +363,11 @@ sub cc {
   return $self;
 }
 
-#pod =method bcc @addresses
+#pod =method bcc
 #pod
-#pod Sets the Bcc: header in the email
+#pod   $stuffer->bcc(@addresses)
+#pod
+#pod This method sets the Bcc header in the email.
 #pod
 #pod =cut
 
@@ -367,9 +378,11 @@ sub bcc {
   return $self;
 }
 
-#pod =method subject $text
+#pod =method subject
 #pod
-#pod Sets the Subject: header in the email
+#pod   $stuffer->subject($text)
+#pod
+#pod This method sets the Subject header in the email.
 #pod
 #pod =cut
 
@@ -383,7 +396,9 @@ sub subject {
 #####################################################################
 # Body and Attachments
 
-#pod =method text_body $body [, $attribute => $value, ... ]
+#pod =method text_body
+#pod
+#pod   $stuffer->text_body($body, %attributes);
 #pod
 #pod Sets the text body of the email. Appropriate headers are set for you.
 #pod You may override MIME attributes as needed. See the C<attributes>
@@ -422,7 +437,9 @@ sub text_body {
   $self;
 }
 
-#pod =method html_body $body [, $header => $value, ... ]
+#pod =method html_body
+#pod
+#pod   $stuffer->html_body($body, %attributes);
 #pod
 #pod Sets the HTML body of the email. Appropriate headers are set for you.
 #pod You may override MIME attributes as needed. See the C<attributes>
@@ -453,7 +470,9 @@ sub html_body {
   $self;
 }
 
-#pod =method attach $contents [, $attribute => $value, ... ]
+#pod =method attach
+#pod
+#pod   $stuffer->attach($contents, %attributes)
 #pod
 #pod Adds an attachment to the email. The first argument is the file contents
 #pod followed by (as for text_body and html_body) the list of headers to use.
@@ -531,12 +550,16 @@ sub attach {
   $self;
 }
 
-#pod =method attach_file $file [, $attribute => $value, ... ]
+#pod =method attach_file
+#pod
+#pod   $stuffer->attach_file($file, %attributes)
 #pod
 #pod Attachs a file that already exists on the filesystem to the email.
 #pod C<attach_file> will attempt to auto-detect the MIME type, and use the
 #pod file's current name when attaching. See the C<attributes> parameter to
 #pod L<Email::MIME/create> for the headers you can set.
+#pod
+#pod C<$file> can be a filename or an IO::All::File object.
 #pod
 #pod =cut
 
@@ -630,7 +653,9 @@ sub transport {
 
 #pod =method email
 #pod
-#pod Creates and returns the full L<Email::MIME> object for the email.
+#pod   my $email_mime = $stuffer->email;
+#pod
+#pod This method creates and returns the full L<Email::MIME> object for the email.
 #pod
 #pod =cut
 
@@ -690,8 +715,10 @@ sub _transfer_headers {
 
 #pod =method as_string
 #pod
-#pod Returns the string form of the email. Identical to (and uses behind the
-#pod scenes) Email::MIME-E<gt>as_string.
+#pod   my $email_document = $stuffer->as_string;
+#pod
+#pod Returns the string form of the email.  Identical to (and uses behind the
+#pod scenes) C<< Email::MIME->as_string >>.
 #pod
 #pod =cut
 
@@ -790,7 +817,7 @@ Email::Stuffer - A more casual approach to creating and sending Email:: emails
 
 =head1 VERSION
 
-version 0.018
+version 0.020
 
 =head1 SYNOPSIS
 
@@ -908,6 +935,16 @@ generate some stuff, and email it to somewhere, as conveniently as
 possible. DWIM, but do it as thinly as possible and use the solid
 Email:: modules underneath.
 
+=head1 PERL VERSION
+
+This library should run on perls released even a long time ago.  It should work
+on any version of perl released in the last five years.
+
+Although it may work on older versions of perl, no guarantee is made that the
+minimum required version will not be increased.  The version may be increased
+for any reason, and there is no promise that patches will be accepted to lower
+the minimum required perl.
+
 =head1 METHODS
 
 As you can see from the synopsis, all methods that B<modify> the
@@ -977,36 +1014,52 @@ For backwards compatibility, this method can also be called as B[headers].
 
 Returns, as a list, the L<Email::MIME> parts for the Email
 
-=head2 header $header => $value
+=head2 header
 
-Sets a named header in the email. Multiple calls with the same $header
-will overwrite previous calls $value.
+  $stuffer->header($header_name = $value)
 
-=head2 to @addresses
+This method sets a named header in the email. Multiple calls with the same
+C<$header_name> will overwrite previous calls C<$value>.
 
-Sets the To: header in the email
+=head2 to
 
-=head2 from $address
+  $stuffer->to(@addresses)
 
-Sets the From: header in the email
+This method sets the To header in the email.
 
-=head2 reply_to $address
+=head2 from
 
-Sets the Reply-To: header in the email
+  $stuffer->from($address)
 
-=head2 cc @addresses
+This method sets the From header in the email.
 
-Sets the Cc: header in the email
+=head2 reply_to
 
-=head2 bcc @addresses
+  $stuffer->reply_to($address)
 
-Sets the Bcc: header in the email
+This method sets the Reply-To header in the email.
 
-=head2 subject $text
+=head2 cc
 
-Sets the Subject: header in the email
+  $stuffer->cc(@addresses)
 
-=head2 text_body $body [, $attribute => $value, ... ]
+This method sets the Cc header in the email.
+
+=head2 bcc
+
+  $stuffer->bcc(@addresses)
+
+This method sets the Bcc header in the email.
+
+=head2 subject
+
+  $stuffer->subject($text)
+
+This method sets the Subject header in the email.
+
+=head2 text_body
+
+  $stuffer->text_body($body, %attributes);
 
 Sets the text body of the email. Appropriate headers are set for you.
 You may override MIME attributes as needed. See the C<attributes>
@@ -1022,7 +1075,9 @@ flowed format automatically anymore and so text body is really plain
 text.  If you want to use old behavior of "advanced" flowed formatting,
 set flowed format manually by: C<< text_body($body, format => 'flowed') >>.
 
-=head2 html_body $body [, $header => $value, ... ]
+=head2 html_body
+
+  $stuffer->html_body($body, %attributes);
 
 Sets the HTML body of the email. Appropriate headers are set for you.
 You may override MIME attributes as needed. See the C<attributes>
@@ -1030,7 +1085,9 @@ parameter to L<Email::MIME/create> for the headers you can set.
 
 If C<$body> is undefined, this method will do nothing.
 
-=head2 attach $contents [, $attribute => $value, ... ]
+=head2 attach
+
+  $stuffer->attach($contents, %attributes)
 
 Adds an attachment to the email. The first argument is the file contents
 followed by (as for text_body and html_body) the list of headers to use.
@@ -1039,12 +1096,16 @@ to provide them anyway to be sure. Encoding is Base64 by default. See
 the C<attributes> parameter to L<Email::MIME/create> for the headers you
 can set.
 
-=head2 attach_file $file [, $attribute => $value, ... ]
+=head2 attach_file
+
+  $stuffer->attach_file($file, %attributes)
 
 Attachs a file that already exists on the filesystem to the email.
 C<attach_file> will attempt to auto-detect the MIME type, and use the
 file's current name when attaching. See the C<attributes> parameter to
 L<Email::MIME/create> for the headers you can set.
+
+C<$file> can be a filename or an IO::All::File object.
 
 =head2 transport
 
@@ -1066,12 +1127,16 @@ an L<Email::Sender::Transport> object) and it will be used as is.
 
 =head2 email
 
-Creates and returns the full L<Email::MIME> object for the email.
+  my $email_mime = $stuffer->email;
+
+This method creates and returns the full L<Email::MIME> object for the email.
 
 =head2 as_string
 
-Returns the string form of the email. Identical to (and uses behind the
-scenes) Email::MIME-E<gt>as_string.
+  my $email_document = $stuffer->as_string;
+
+Returns the string form of the email.  Identical to (and uses behind the
+scenes) C<< Email::MIME->as_string >>.
 
 =head2 send
 
@@ -1163,13 +1228,13 @@ Adam Kennedy <adamk@cpan.org>
 
 =item *
 
-Ricardo SIGNES <rjbs@cpan.org>
+Ricardo SIGNES <cpan@semiotic.systems>
 
 =back
 
 =head1 CONTRIBUTORS
 
-=for stopwords Aaron W. Swenson adam adamk@cpan.org adam@phase-n.com Alastair Douglas Aristotle Pagaltzis Arthur Axel 'fREW' Schmidt Chase Whitener CosmicNet Dan Book John Napiorkowski Josh Stompro Kevin Tew Kieren Diment Kris Matthews Lee Johnson Manni Heumann Pali Ricardo Signes Ross Attrill Russell Jenkins Shawn Sorichetti Steve Dondley tokuhirom
+=for stopwords Aaron W. Swenson adam adamk@cpan.org adam@phase-n.com Alastair Douglas Aristotle Pagaltzis Chase Whitener CosmicNet Dan Book fREW Schmidt John Napiorkowski Josh Stompro Kevin Tew Kieren Diment Kris Matthews Lee Johnson Manni Heumann Pali Ricardo Signes Ross Attrill Russell Jenkins Shawn Sorichetti Steve Dondley tokuhirom
 
 =over 4
 
@@ -1199,10 +1264,6 @@ Aristotle Pagaltzis <pagaltzis@gmx.de>
 
 =item *
 
-Arthur Axel 'fREW' Schmidt <frioux@gmail.com>
-
-=item *
-
 Chase Whitener <chase.whitener@infotechfl.com>
 
 =item *
@@ -1212,6 +1273,10 @@ CosmicNet <webmaster@cosmicperl.com>
 =item *
 
 Dan Book <grinnz@gmail.com>
+
+=item *
+
+fREW Schmidt <frioux@gmail.com>
 
 =item *
 
@@ -1228,10 +1293,6 @@ Kevin Tew <tewk@tan.tewk.com>
 =item *
 
 Kieren Diment <kd@fenchurch.local>
-
-=item *
-
-Kris Matthews <krismatth@icloud.com>
 
 =item *
 

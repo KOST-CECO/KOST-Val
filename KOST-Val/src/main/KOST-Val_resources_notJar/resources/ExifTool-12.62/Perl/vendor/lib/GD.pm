@@ -16,7 +16,7 @@ use GD::Polygon;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $AUTOLOAD);
 
-$VERSION = '2.73';
+$VERSION = '2.78';
 our $XS_VERSION = $VERSION;
 $VERSION = eval $VERSION;
 
@@ -128,7 +128,7 @@ GD.pm - Interface to Gd Graphics Library
     use GD;
 
     # create a new image
-    $im = new GD::Image(100,100);
+    $im = GD::Image->new(100,100);
 
     # allocate some colors
     $white = $im->colorAllocate(255,255,255);
@@ -199,7 +199,7 @@ A Simple Example:
 	use GD;
 
 	# create a new image
-	$im = new GD::Image(100,100);
+	$im = GD::Image->new(100,100);
 
 	# allocate some colors
 	$white = $im->colorAllocate(255,255,255);
@@ -234,7 +234,8 @@ Notes:
 To create a new, empty image, send a new() message to GD::Image, passing
 it the width and height of the image you want to create.  An image
 object will be returned.  Other class methods allow you to initialize
-an image from a preexisting JPG, PNG, GD, GD2 or XBM file.
+an image from a preexisting JPG, PNG, GD, GD2, XBM or other supported
+image files.
 
 =item 2.
 Next you will ordinarily add colors to the image's color table.
@@ -255,16 +256,18 @@ The polygon can then be passed to an image for rendering.
 
 =item 5.
 When you're done drawing, you can convert the image into PNG format by
-sending it a png() message.  It will return a (potentially large)
-scalar value containing the binary data for the image.  Ordinarily you
-will print it out at this point or write it to a file.  To ensure
-portability to platforms that differentiate between text and binary
-files, be sure to call C<binmode()> on the file you are writing
-the image to.
+sending it a png() message (or any other supported image format).  It
+will return a (potentially large) scalar value containing the binary
+data for the image.  Ordinarily you will print it out at this point or
+write it to a file.  To ensure portability to platforms that
+differentiate between text and binary files, be sure to call
+C<binmode()> on the file you are writing the image to.
 
 =back
 
 =head1 Object Constructors: Creating Images
+
+See L<GD::Image> for the current list of supported Image formats.
 
 The following class methods allow you to create new GD::Image objects.
 
@@ -282,7 +285,7 @@ The new() method is the main constructor for the GD::Image class.
 Called with two integer arguments, it creates a new blank image of the
 specified width and height. For example:
 
-	$myImage = new GD::Image(100,100) || die;
+	$myImage = GD::Image->new(100,100) || die;
 
 This will create an image that is 100 x 100 pixels wide.  If you don't
 specify the dimensions, a default of 64 x 64 will be chosen.
@@ -297,8 +300,9 @@ compatibility with older versions of libgd.
 Alternatively, you may create a GD::Image object based on an existing
 image by providing an open filehandle, a filename, or the image data
 itself.  The image formats automatically recognized and accepted are:
-PNG, JPEG, XPM and GD2.  Other formats, including WBMP, and GD
-version 1, cannot be recognized automatically at this time.
+GIF, PNG, JPEG, XBM, XPM, BMP, GD2, TIFF, WEBP, HEIF or AVIF. Other formats,
+including WBMP, and GD version 1, cannot be recognized automatically
+at this time.
 
 If something goes wrong (e.g. insufficient memory), this call will
 return undef.
@@ -352,11 +356,11 @@ and read the PNG information from it.
   Example1:
 
   open (PNG,"barnswallow.png") || die;
-  $myImage = newFromPng GD::Image(\*PNG) || die;
+  $myImage = GD::Image->newFromPng(\*PNG) || die;
   close PNG;
 
   Example2:
-  $myImage = newFromPng GD::Image('barnswallow.png');
+  $myImage = GD::Image->newFromPng('barnswallow.png');
 
 To get information about the size and color usage of the information,
 you can call the image query methods described below. Images created
@@ -397,27 +401,41 @@ This works in exactly the same way as C<newFromPng>, but reads the
 contents of an X Bitmap (black & white) file:
 
 	open (XBM,"coredump.xbm") || die;
-	$myImage = newFromXbm GD::Image(\*XBM) || die;
+	$myImage = GD::Image->newFromXbm(\*XBM) || die;
 	close XBM;
 
 There is no newFromXbmData() function, because there is no
 corresponding function in the gd library.
 
-=item B<$image = GD::Image-E<gt>newFromWBMP($file, [$truecolor])>
+=item B<$image = GD::Image-E<gt>newFromWBMP($file)>
 
 This works in exactly the same way as C<newFromPng>, but reads the
-contents of an Windows BMP Bitmap file:
+contents of a Wireless Application Protocol Bitmap (WBMP) file:
 
-	open (BMP,"coredump.bmp") || die;
-	$myImage = newFromWBMP GD::Image(\*BMP) || die;
-	close BMP;
+	open (WBMP,"coredump.wbmp") || die;
+	$myImage = GD::Image->newFromWBMP(\*WBMP) || die;
+	close WBMP;
 
 There is no newFromWBMPData() function, because there is no
+corresponding function in the gd library.
+
+=item B<$image = GD::Image-E<gt>newFromBmp($file)>
+
+This works in exactly the same way as C<newFromPng>, but reads the
+contents of a Windows Bitmap (BMP) file:
+
+	open (BMP,"coredump.bmp") || die;
+	$myImage = GD::Image->newFromBmp(\*BMP) || die;
+	close BMP;
+
+There is no newFromBmpData() function, because there is no
 corresponding function in the gd library.
 
 =item B<$image = GD::Image-E<gt>newFromGd($file)>
 
 =item B<$image = GD::Image-E<gt>newFromGdData($data)>
+
+NOTE: GD and GD2 support was dropped witn libgd 2.3.2.
 
 These methods initialize a GD::Image from a Gd file, filehandle, or
 data.  Gd is Tom Boutell's disk-based storage format, intended for the
@@ -425,12 +443,14 @@ rare case when you need to read and write the image to disk quickly.
 It's not intended for regular use, because, unlike PNG or JPEG, no
 image compression is performed and these files can become B<BIG>.
 
-	$myImage = newFromGd GD::Image("godzilla.gd") || die;
+	$myImage = GD::Image->newFromGd("godzilla.gd") || die;
 	close GDF;
 
 =item B<$image = GD::Image-E<gt>newFromGd2($file)>
 
 =item B<$image = GD::Image-E<gt>newFromGd2Data($data)>
+
+NOTE: GD and GD2 support was dropped witn libgd 2.3.2.
 
 This works in exactly the same way as C<newFromGd()> and
 newFromGdData, but use the new compressed GD2 image format.
@@ -456,7 +476,7 @@ is unlike the other newFrom() functions because it does not take a
 filehandle.  This difference comes from an inconsistency in the
 underlying gd library.
 
-	$myImage = newFromXpm GD::Image('earth.xpm') || die;
+	$myImage = GD::Image->newFromXpm('earth.xpm') || die;
 
 This function is only available if libgd was compiled with XPM
 support.  
@@ -483,9 +503,12 @@ following extensions are supported:
     .jpg, .jpeg
     .tiff, .tif
     .webp
+    .heic, .heix
+    .avif
     .xpm
 
 Filenames are parsed case-insensitively.
+.avifs is not yet suppurted upstream in libavif.
 
 =back
 
@@ -605,11 +628,43 @@ pipe it to a display program, or write it to a file.  Example:
 Same as gd(), except that it returns the data in compressed GD2
 format.
 
+=item B<$bmpdata = $image-E<gt>bmp([$compression])>
+
+This returns the image data in BMP format, which is a Windows Bitmap.
+If compression is set to 1, it will use RLE compression on the pixel
+data; otherwise, setting it to 0 (the default) will leave the BMP 
+pixel data uncompressed.
+
 =item B<$wbmpdata = $image-E<gt>wbmp([$foreground])>
 
 This returns the image data in WBMP format, which is a black-and-white
 image format.  Provide the index of the color to become the foreground
 color.  All other pixels will be considered background.
+
+=item B<$tiffdata = $image-E<gt>tiff()>
+
+This returns the image data in TIFF format.
+
+=item B<$webpdata = $image-E<gt>webp([$quality])>
+
+This returns the image data in WEBP format, with the optional quality argument.
+The default is 80, also chosen by the value -1.
+A quality value of >= 101 is considered Lossless.
+
+=item B<$webpdata = $image-E<gt>heif([$quality])>
+
+This returns the truecolor image data in HEIF format, with the
+optional quality and speed arguments.
+If truecolor is not set, this fails.
+The default quality is 80, also chosen by the value -1.
+A quality value of 200 is considered Lossless.
+
+=item B<$webpdata = $image-E<gt>avif([$quality,$speed])>
+
+This returns the truecolor image data in AVIF format, with the
+AVif encoder and 444 chroma, and the optional quality argument.
+If truecolor is not set, this fails.
+The default compression quality 1-100 is -1, the default speed 0-10 is 6.
 
 =item B<$success = $image-E<gt>_file($filename)>
 
@@ -625,6 +680,9 @@ use sane defaults:
   C<gdImageGd2>	chunk size = 0, compression is enabled.
   C<gdImageJpeg>	quality = -1 (i.e. the reasonable default)
   C<gdImageWBMP>	foreground is the darkest available color
+  C<gdImageWEBP>	quality default
+  C<gdImageHEIF>	quality default, codes = HEVC, chroma = 444
+  C<gdImageAVIF>	quality default, speed = 6
 
 Everything else is called with the two-argument function and so will
 use the default values.
@@ -804,7 +862,7 @@ current index of the transparent color, or -1 if none.
 Example:
 
 	open(PNG,"test.png");
-	$im = newFromPng GD::Image(PNG);
+	$im = GD::Image->newFromPng(PNG);
 	$white = $im->colorClosest(255,255,255); # find white
 	$im->transparent($white);
 	binmode STDOUT;
@@ -837,7 +895,7 @@ non-colored parts don't overwrite other parts of your image.
 Example:
 
 	# Create a brush at an angle
-	$diagonal_brush = new GD::Image(5,5);
+	$diagonal_brush = GD::Image->new(5,5);
 	$white = $diagonal_brush->colorAllocate(255,255,255);
 	$black = $diagonal_brush->colorAllocate(0,0,0);
 	$diagonal_brush->transparent($white);
@@ -1011,7 +1069,7 @@ with a pattern.
 Example:
 
 	# read in a fill pattern and set it
-	$tile = newFromPng GD::Image('happyface.png');
+	$tile = GD::Image->newFromPng('happyface.png');
 	$myImage->setTile($tile); 
 
 	# draw the rectangle, filling it with the pattern
@@ -1027,7 +1085,7 @@ colors gdBrushed, gdStyled and gdStyledBrushed can be specified.
 
 Example:
 
-	$poly = new GD::Polygon;
+	$poly = GD::Polygon->new;
 	$poly->addPt(50,0);
 	$poly->addPt(99,99);
 	$poly->addPt(0,99);
@@ -1045,7 +1103,7 @@ You need libgd 2.0.33 or higher to use this feature.
 
 Example:
 
-	$poly = new GD::Polygon;
+	$poly = GD::Polygon->new;
 	$poly->addPt(50,0);
 	$poly->addPt(99,99);
 	$poly->addPt(0,99);
@@ -1060,7 +1118,7 @@ with a pattern.
 Example:
 
 	# make a polygon
-	$poly = new GD::Polygon;
+	$poly = GD::Polygon->new;
 	$poly->addPt(50,0);
 	$poly->addPt(99,99);
 	$poly->addPt(0,99);
@@ -1180,9 +1238,9 @@ destination regions must not overlap or strange things will happen.
 
 Example:
 
-	$myImage = new GD::Image(100,100);
+	$myImage = GD::Image->new(100,100);
 	... various drawing stuff ...
-	$srcImage = new GD::Image(50,50);
+	$srcImage = GD::Image->new(50,50);
 	... more drawing stuff ...
 	# copy a 25x25 pixel region from $srcImage to
 	# the rectangle starting at (10,10) in $myImage
@@ -1196,7 +1254,7 @@ palette and other nonessential details.
 
 Example:
 
-	$myImage = new GD::Image(100,100);
+	$myImage = GD::Image->new(100,100);
 	... various drawing stuff ...
         $copy = $myImage->clone;
 
@@ -1213,9 +1271,9 @@ solid rectangle.
 
 Example:
 
-	$myImage = new GD::Image(100,100);
+	$myImage = GD::Image->new(100,100);
 	... various drawing stuff ...
-	$redImage = new GD::Image(50,50);
+	$redImage = GD::Image->new(50,50);
 	... more drawing stuff ...
 	# copy a 25x25 pixel region from $srcImage to
 	# the rectangle starting at (10,10) in $myImage, merging 50%
@@ -1241,9 +1299,9 @@ image to accommodate the size requirements.
 
 Example:
 
-	$myImage = new GD::Image(100,100);
+	$myImage = GD::Image->new(100,100);
 	... various drawing stuff ...
-	$srcImage = new GD::Image(50,50);
+	$srcImage = GD::Image->new(50,50);
 	... more drawing stuff ...
 	# copy a 25x25 pixel region from $srcImage to
 	# a larger rectangle starting at (10,10) in $myImage
@@ -1264,7 +1322,7 @@ image is a palette image.
 B<				$srcX,$srcY,$width,$height,$angle)>
 
 Like copyResized() but the $angle argument specifies an arbitrary
-amount to rotate the image clockwise (in degrees).  In addition, $dstX
+amount to rotate the image counter clockwise (in degrees).  In addition, $dstX
 and $dstY species the B<center> of the destination image, and not the
 top left corner.
 
@@ -1825,7 +1883,7 @@ Quickdraw library).  Also see L<GD::Polyline>.
 
 Create an empty polygon with no vertices.
 
-	$poly = new GD::Polygon;
+	$poly = GD::Polygon->new;
 
 =item B<$poly-E<gt>addPt($x,$y)>
 
@@ -1914,19 +1972,35 @@ box as the source rectangle.
 	# Make the polygon really tall
 	$poly->map($poly->bounds,0,0,50,200);
 
-=item B<$poly-E<gt>scale($sx,$sy)>
+=item B<$poly-E<gt>scale($sx,$sy, [$tx,$ty])>
 
 Scale each vertex of the polygon by the X and Y factors indicated by
 sx and sy.  For example scale(2,2) will make the polygon twice as
 large.  For best results, move the center of the polygon to position
 (0,0) before you scale, then move it back to its previous position.
+Accepts an optional offset vector.
 
-=item B<$poly-E<gt>transform($sx,$rx,$sy,$ry,$tx,$ty)>
+=item B<$poly-E<gt>transform($sx,$rx,$ry,$sy, $tx,$ty)>
 
-Run each vertex of the polygon through a transformation matrix, where
-sx and sy are the X and Y scaling factors, rx and ry are the X and Y
-rotation factors, and tx and ty are X and Y offsets.  See the Adobe
-PostScript Reference, page 154 for a full explanation, or experiment.
+Run each vertex of the polygon through a 2D affine transformation
+matrix, where sx and sy are the X and Y scaling factors, rx and ry are
+the X and Y rotation factors, and tx and ty are X and Y offsets.  See
+the Adobe PostScript Reference, page 154 for a full explanation, or
+experiment.
+
+libgd:
+
+    The transformation matrix is created using 6 numbers:
+    matrix[0] == xx
+    matrix[1] == yx
+    matrix[2] == xy
+    matrix[3] == xy (probably meaning yy here)
+    matrix[4] == x0
+    matrix[5] == y0
+    where the transformation of a given point (x,y) is given by:
+
+    x_new = xx * x + xy * y + x0;
+    y_new = yx * x + yy * y + y0;
 
 =back
 

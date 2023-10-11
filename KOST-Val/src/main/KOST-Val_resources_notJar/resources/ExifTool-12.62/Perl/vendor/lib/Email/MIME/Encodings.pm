@@ -1,9 +1,6 @@
 use strict;
 use warnings;
-package Email::MIME::Encodings;
-{
-  $Email::MIME::Encodings::VERSION = '1.315';
-}
+package Email::MIME::Encodings 1.317;
 # ABSTRACT: A unified interface to MIME encoding and decoding
 
 use MIME::Base64 3.05;
@@ -34,7 +31,7 @@ sub codec {
     }
 
     # RFC2822 requires all email lines to end in CRLF. The Quoted-Printable
-    # RFC requires CRLF to not be encoded, when representing newlins.  We will
+    # RFC requires CRLF to not be encoded, when representing newlines.  We will
     # assume, in this code, that QP is being used for plain text and not binary
     # data.  This may, someday, be wrong -- but if you are using QP to encode
     # binary data, you are already doing something bizarre.
@@ -65,9 +62,29 @@ sub encode { return codec("encode", @_) }
 
 1;
 
+#pod =head1 SYNOPSIS
+#pod
+#pod   use Email::MIME::Encodings;
+#pod   my $encoded = Email::MIME::Encodings::encode(base64 => $body);
+#pod   my $decoded = Email::MIME::Encodings::decode(base64 => $encoded);
+#pod
+#pod If a third argument is given, it is the encoding to which to fall back.  If no
+#pod valid codec can be found (considering both the first and third arguments) then
+#pod an exception is raised.
+#pod
+#pod =head1 DESCRIPTION
+#pod
+#pod This module simply wraps C<MIME::Base64> and C<MIME::QuotedPrint>
+#pod so that you can throw the contents of a C<Content-Transfer-Encoding>
+#pod header at some text and have the right thing happen.
+#pod
+#pod C<MIME::Base64>, C<MIME::QuotedPrint>, C<Email::MIME>.
+
 __END__
 
 =pod
+
+=encoding UTF-8
 
 =head1 NAME
 
@@ -75,7 +92,7 @@ Email::MIME::Encodings - A unified interface to MIME encoding and decoding
 
 =head1 VERSION
 
-version 1.315
+version 1.317
 
 =head1 SYNOPSIS
 
@@ -95,6 +112,16 @@ header at some text and have the right thing happen.
 
 C<MIME::Base64>, C<MIME::QuotedPrint>, C<Email::MIME>.
 
+=head1 PERL VERSION
+
+This library should run on perls released even a long time ago.  It should work
+on any version of perl released in the last five years.
+
+Although it may work on older versions of perl, no guarantee is made that the
+minimum required version will not be increased.  The version may be increased
+for any reason, and there is no promise that patches will be accepted to lower
+the minimum required perl.
+
 =head1 AUTHORS
 
 =over 4
@@ -109,7 +136,23 @@ Casey West <casey@geeknest.com>
 
 =item *
 
-Ricardo SIGNES <rjbs@cpan.org>
+Ricardo SIGNES <cpan@semiotic.systems>
+
+=back
+
+=head1 CONTRIBUTORS
+
+=for stopwords David Steinbrunner Ricardo Signes
+
+=over 4
+
+=item *
+
+David Steinbrunner <dsteinbrunner@pobox.com>
+
+=item *
+
+Ricardo Signes <rjbs@semiotic.systems>
 
 =back
 

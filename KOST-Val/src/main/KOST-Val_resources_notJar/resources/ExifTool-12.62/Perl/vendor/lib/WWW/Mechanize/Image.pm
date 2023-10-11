@@ -3,39 +3,41 @@ package WWW::Mechanize::Image;
 use strict;
 use warnings;
 
-our $VERSION = '2.03';
+our $VERSION = '2.17';
 
 #ABSTRACT: Image object for WWW::Mechanize
 
 
 sub new {
-    my $class = shift;
+    my $class  = shift;
     my $params = shift || {};
 
     my $self = bless {}, $class;
 
-    for my $param ( qw( url base tag height width alt name attrs ) ) {
+    for my $param (qw( url base tag height width alt name attrs )) {
+
         # Check for what we passed in, not whether it's defined
         $self->{$param} = $params->{$param} if exists $params->{$param};
     }
 
     # url and tag are always required
-    for ( qw( url tag ) ) {
-        exists $self->{$_} or die "WWW::Mechanize::Image->new must have a $_ argument";
+    for (qw( url tag )) {
+        exists $self->{$_}
+            or die "WWW::Mechanize::Image->new must have a $_ argument";
     }
 
     return $self;
 }
 
 
-sub url     { return ($_[0])->{url}; }
-sub base    { return ($_[0])->{base}; }
-sub name    { return ($_[0])->{name}; }
-sub tag     { return ($_[0])->{tag}; }
-sub height  { return ($_[0])->{height}; }
-sub width   { return ($_[0])->{width}; }
-sub alt     { return ($_[0])->{alt}; }
-sub attrs   { return ($_[0])->{attrs}; }
+sub url    { return ( $_[0] )->{url}; }
+sub base   { return ( $_[0] )->{base}; }
+sub name   { return ( $_[0] )->{name}; }
+sub tag    { return ( $_[0] )->{tag}; }
+sub height { return ( $_[0] )->{height}; }
+sub width  { return ( $_[0] )->{width}; }
+sub alt    { return ( $_[0] )->{alt}; }
+sub attrs  { return ( $_[0] )->{attrs}; }
 
 
 sub URI {
@@ -69,7 +71,7 @@ WWW::Mechanize::Image - Image object for WWW::Mechanize
 
 =head1 VERSION
 
-version 2.03
+version 2.17
 
 =head1 SYNOPSIS
 

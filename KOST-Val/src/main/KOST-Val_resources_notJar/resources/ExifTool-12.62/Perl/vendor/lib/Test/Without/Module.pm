@@ -3,7 +3,7 @@ use strict;
 use Carp qw( croak );
 
 use vars qw( $VERSION );
-$VERSION = '0.20';
+$VERSION = '0.21';
 
 use vars qw(%forbidden);
 
@@ -84,20 +84,16 @@ Test::Without::Module - Test fallback behaviour in absence of modules
 
 =head1 SYNOPSIS
 
-=for example begin
+    use Test::Without::Module qw( My::Module );
 
-  use Test::Without::Module qw( My::Module );
+    # Now, loading of My::Module fails :
+    eval { require My::Module; };
+    warn $@ if $@;
 
-  # Now, loading of My::Module fails :
-  eval { require My::Module; };
-  warn $@ if $@;
-
-  # Now it works again
-  eval q{ no Test::Without::Module qw( My::Module ) };
-  eval { require My::Module; };
-  print "Found My::Module" unless $@;
-
-=for example end
+    # Now it works again
+    eval q{ no Test::Without::Module qw( My::Module ) };
+    eval { require My::Module; };
+    print "Found My::Module" unless $@;
 
 =head1 DESCRIPTION
 

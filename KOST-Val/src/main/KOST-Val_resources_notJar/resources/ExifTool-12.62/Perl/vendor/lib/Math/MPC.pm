@@ -2,26 +2,37 @@
     use strict;
     use warnings;
     use Math::MPFR;
+    use Math::MPC::Constant;
 
     use constant  MPC_RNDNN => 0;
     use constant  MPC_RNDZN => 1;
     use constant  MPC_RNDUN => 2;
     use constant  MPC_RNDDN => 3;
+    use constant  MPC_RNDAN => 4;
 
     use constant  MPC_RNDNZ => 16;
     use constant  MPC_RNDZZ => 17;
     use constant  MPC_RNDUZ => 18;
     use constant  MPC_RNDDZ => 19;
+    use constant  MPC_RNDAZ => 20;
 
     use constant  MPC_RNDNU => 32;
     use constant  MPC_RNDZU => 33;
     use constant  MPC_RNDUU => 34;
     use constant  MPC_RNDDU => 35;
+    use constant  MPC_RNDAU => 36;
 
     use constant  MPC_RNDND => 48;
     use constant  MPC_RNDZD => 49;
     use constant  MPC_RNDUD => 50;
     use constant  MPC_RNDDD => 51;
+    use constant  MPC_RNDAD => 52;
+
+    use constant  MPC_RNDNA => 64;
+    use constant  MPC_RNDZA => 65;
+    use constant  MPC_RNDUA => 66;
+    use constant  MPC_RNDDA => 67;
+    use constant  MPC_RNDAA => 68;
 
     use constant  _UOK_T   => 1;
     use constant  _IOK_T   => 2;
@@ -33,6 +44,13 @@
     use constant  _MATH_GMPz_T   => 8;
     use constant  _MATH_GMP_T    => 9;
     use constant  _MATH_MPC_T    => 10;
+
+    use constant MPC_PV_NV_BUG => Math::MPC::Constant::_has_pv_nv_bug();
+    use constant MPC_HEADER_V  => Math::MPC::Constant::_mpc_header_version();
+    use constant MPC_HEADER_V_STR => Math::MPC::Constant::_mpc_header_version_str();
+
+    # Inspired by https://github.com/Perl/perl5/issues/19550, which affects only perl-5.35.10:
+    use constant ISSUE_19550    => Math::MPC::Constant::_issue_19550();
 
     use subs qw(MPC_VERSION MPC_VERSION_MAJOR MPC_VERSION_MINOR
                 MPC_VERSION_PATCHLEVEL MPC_VERSION_STRING
@@ -67,9 +85,12 @@
     *import = \&Exporter::import;
     require DynaLoader;
 
-    @Math::MPC::EXPORT_OK = qw(
+    my @tagged = qw(
+MPC_PV_NV_BUG MPC_HEADER_V MPC_HEADER_V_STR
 MPC_RNDNN MPC_RNDND MPC_RNDNU MPC_RNDNZ MPC_RNDDN MPC_RNDUN MPC_RNDZN MPC_RNDDD
 MPC_RNDDU MPC_RNDDZ MPC_RNDZD MPC_RNDUD MPC_RNDUU MPC_RNDUZ MPC_RNDZU MPC_RNDZZ
+MPC_RNDNA MPC_RNDAN MPC_RNDAZ MPC_RNDZA MPC_RNDAD MPC_RNDDA MPC_RNDUA MPC_RNDAU
+MPC_RNDAA
 MPC_VERSION_MAJOR MPC_VERSION_MINOR MPC_VERSION_PATCHLEVEL MPC_VERSION_STRING
 MPC_VERSION MPC_VERSION_NUM Rmpc_get_version
 Rmpc_set_default_rounding_mode Rmpc_get_default_rounding_mode
@@ -124,71 +145,42 @@ Rmpc_real Rmpc_imag Rmpc_arg Rmpc_proj
 Rmpc_pow Rmpc_pow_d Rmpc_pow_ld Rmpc_pow_si Rmpc_pow_ui Rmpc_pow_z Rmpc_pow_fr Rmpc_rootofunity
 Rmpc_set_nan Rmpc_swap
 Rmpc_mul_sj Rmpc_mul_ld Rmpc_mul_d Rmpc_div_sj Rmpc_sj_div Rmpc_div_ld Rmpc_ld_div Rmpc_div_d Rmpc_d_div
+Rmpc_agm Rmpc_eta_fund in_fund_dom
+Rmpcb_split Rmpcr_split_mpfr
 );
 
-    our $VERSION = '1.12';
+my @radius = ();
+my @ball = ();
+if(MPC_HEADER_V >= 66304) {
+@radius = qw(
+  Rmpcr_init  Rmpcr_init_nobless  Rmpcr_clear
+  Rmpcr_inf_p  Rmpcr_zero_p  Rmpcr_lt_half_p  Rmpcr_cmp  Rmpcr_set_inf
+  Rmpcr_set_zero  Rmpcr_set_one  Rmpcr_set  Rmpcr_set_ui64_2si64  Rmpcr_set_str_2str
+  Rmpcr_max Rmpcr_add  Rmpcr_sub  Rmpcr_mul  Rmpcr_div
+  Rmpcr_get_exp Rmpcr_get_exp_mpfr
+  Rmpcr_mul_2ui  Rmpcr_div_2ui  Rmpcr_sqr  Rmpcr_sqrt  Rmpcr_sub_rnd
+  Rmpcr_c_abs_rnd  Rmpcr_add_rounding_error
+  Rmpcr_split
+  Rmpcr_print      Rmpcr_say      Rmpcr_out_str
+  Rmpcr_print_win  Rmpcr_say_win  Rmpcr_out_str_win
+          );
+
+@ball = qw (
+Rmpcb_init Rmpcb_init_nobless Rmpcb_clear
+Rmpcb_get_prec Rmpcb_set Rmpcb_set_c Rmpcb_set_ui_ui Rmpcb_neg
+Rmpcb_add Rmpcb_mul Rmpcb_sqr Rmpcb_pow_ui Rmpcb_sqrt
+Rmpcb_div Rmpcb_div_2ui Rmpcb_set_inf
+Rmpcb_can_round Rmpcb_round Rmpcb_retrieve
+         );
+}
+
+    @Math::MPC::EXPORT_OK = (@tagged, @radius, @ball);
+    our $VERSION = '1.31';
     #$VERSION = eval $VERSION;
 
     Math::MPC->DynaLoader::bootstrap($VERSION);
 
-    %Math::MPC::EXPORT_TAGS =(mpc => [qw(
-MPC_RNDNN MPC_RNDND MPC_RNDNU MPC_RNDNZ MPC_RNDDN MPC_RNDUN MPC_RNDZN MPC_RNDDD
-MPC_RNDDU MPC_RNDDZ MPC_RNDZD MPC_RNDUD MPC_RNDUU MPC_RNDUZ MPC_RNDZU MPC_RNDZZ
-MPC_VERSION_MAJOR MPC_VERSION_MINOR MPC_VERSION_PATCHLEVEL MPC_VERSION_STRING
-MPC_VERSION MPC_VERSION_NUM Rmpc_get_version
-Rmpc_set_default_rounding_mode Rmpc_get_default_rounding_mode
-Rmpc_set_prec Rmpc_set_default_prec Rmpc_get_default_prec
-Rmpc_set_default_prec2 Rmpc_get_default_prec2
-Rmpc_set_re_prec Rmpc_set_im_prec
-Rmpc_get_prec Rmpc_get_prec2 Rmpc_get_re_prec Rmpc_get_im_prec
-Rmpc_get_dc Rmpc_get_ldc
-Rmpc_get_DC Rmpc_get_LDC Rmpc_get_F128C
-RMPC_RE RMPC_IM RMPC_INEX_RE RMPC_INEX_IM
-Rmpc_clear Rmpc_clear_ptr Rmpc_clear_mpc
-Rmpc_deref4 Rmpc_get_str
-Rmpc_init2 Rmpc_init3
-Rmpc_init2_nobless Rmpc_init3_nobless
-Rmpc_strtoc Rmpc_set_str
-Rmpc_set Rmpc_set_ui Rmpc_set_si Rmpc_set_d Rmpc_set_uj Rmpc_set_sj Rmpc_set_ld
-Rmpc_set_z Rmpc_set_q Rmpc_set_f Rmpc_set_fr
-Rmpc_set_z_z Rmpc_set_q_q Rmpc_set_f_f
-Rmpc_set_ui_ui Rmpc_set_ui_si Rmpc_set_ui_d Rmpc_set_ui_uj Rmpc_set_ui_sj Rmpc_set_ui_ld Rmpc_set_ui_fr
-Rmpc_set_si_ui Rmpc_set_si_si Rmpc_set_si_d Rmpc_set_si_uj Rmpc_set_si_sj Rmpc_set_si_ld Rmpc_set_si_fr
-Rmpc_set_d_ui Rmpc_set_d_si Rmpc_set_d_d Rmpc_set_d_uj Rmpc_set_d_sj Rmpc_set_d_ld Rmpc_set_d_fr
-Rmpc_set_uj_ui Rmpc_set_uj_si Rmpc_set_uj_d Rmpc_set_uj_uj Rmpc_set_uj_sj Rmpc_set_uj_ld Rmpc_set_uj_ld Rmpc_set_uj_fr
-Rmpc_set_sj_ui Rmpc_set_sj_si Rmpc_set_sj_d Rmpc_set_sj_uj Rmpc_set_sj_sj Rmpc_set_sj_ld Rmpc_set_sj_fr
-Rmpc_set_ld_ui Rmpc_set_ld_si Rmpc_set_ld_uj Rmpc_set_ld_d Rmpc_set_ld_sj Rmpc_set_ld_ld Rmpc_set_ld_fr
-Rmpc_set_fr_ui Rmpc_set_fr_si Rmpc_set_fr_d Rmpc_set_fr_uj Rmpc_set_fr_sj Rmpc_set_fr_ld Rmpc_set_fr_fr
-
-Rmpc_set_f_ui Rmpc_set_q_ui Rmpc_set_z_ui Rmpc_set_ui_f Rmpc_set_ui_q Rmpc_set_ui_z
-Rmpc_set_f_si Rmpc_set_q_si Rmpc_set_z_si Rmpc_set_si_f Rmpc_set_si_q Rmpc_set_si_z
-Rmpc_set_f_d Rmpc_set_q_d Rmpc_set_z_d Rmpc_set_d_f Rmpc_set_d_q Rmpc_set_d_z
-Rmpc_set_f_uj Rmpc_set_q_uj Rmpc_set_z_uj Rmpc_set_uj_f Rmpc_set_uj_q Rmpc_set_uj_z
-Rmpc_set_f_sj Rmpc_set_q_sj Rmpc_set_z_sj Rmpc_set_sj_f Rmpc_set_sj_q Rmpc_set_sj_z
-Rmpc_set_f_ld Rmpc_set_q_ld Rmpc_set_z_ld Rmpc_set_ld_f Rmpc_set_ld_q Rmpc_set_ld_z
-Rmpc_set_f_q Rmpc_set_q_f Rmpc_set_f_z Rmpc_set_z_f Rmpc_set_z_q Rmpc_set_q_z
-Rmpc_set_f_fr Rmpc_set_q_fr Rmpc_set_z_fr Rmpc_set_fr_f Rmpc_set_fr_q Rmpc_set_fr_z
-
-Rmpc_set_dc Rmpc_set_ldc Rmpc_set_NV Rmpc_set_NV_NV
-Rmpc_set_DC Rmpc_set_LDC Rmpc_set_F128C
-Rmpc_fma Rmpc_dot Rmpc_sum
-Rmpc_add Rmpc_add_ui Rmpc_add_fr
-Rmpc_sub Rmpc_sub_ui Rmpc_ui_sub Rmpc_ui_ui_sub
-Rmpc_mul Rmpc_mul_ui Rmpc_mul_si Rmpc_mul_fr Rmpc_mul_i Rmpc_sqr Rmpc_mul_2exp
-Rmpc_mul_2si Rmpc_mul_2ui
-Rmpc_div Rmpc_div_ui Rmpc_ui_div Rmpc_div_fr Rmpc_sqrt Rmpc_div_2exp
-Rmpc_div_2si Rmpc_div_2ui
-Rmpc_neg Rmpc_abs Rmpc_conj Rmpc_norm Rmpc_exp Rmpc_log Rmpc_log10
-Rmpc_cmp Rmpc_cmp_si Rmpc_cmp_si_si Rmpc_cmp_abs
-Rmpc_out_str Rmpc_inp_str c_string r_string i_string
-TRmpc_out_str TRmpc_inp_str
-Rmpc_sin Rmpc_cos Rmpc_sin_cos Rmpc_tan Rmpc_sinh Rmpc_cosh Rmpc_tanh
-Rmpc_asin Rmpc_acos Rmpc_atan Rmpc_asinh Rmpc_acosh Rmpc_atanh
-Rmpc_real Rmpc_imag Rmpc_arg Rmpc_proj
-Rmpc_pow Rmpc_pow_d Rmpc_pow_ld Rmpc_pow_si Rmpc_pow_ui Rmpc_pow_z Rmpc_pow_fr Rmpc_rootofunity
-Rmpc_set_nan Rmpc_swap
-Rmpc_mul_sj Rmpc_mul_ld Rmpc_mul_d Rmpc_div_sj Rmpc_sj_div Rmpc_div_ld Rmpc_ld_div Rmpc_div_d Rmpc_d_div
-)]);
+    %Math::MPC::EXPORT_TAGS =(mpc => [@tagged, @radius, @ball]);
 
 $Math::MPC::NOK_POK = 0; # Set to 1 to allow warnings in new() and overloaded operations when
                           # a scalar that has set both NOK (NV) and POK (PV) flags is encountered
@@ -220,6 +212,67 @@ else   {$Math::MPC::no_complex_c_q = 0 }
 # were renamed to mpc_mul_2ui and mpc_div_2ui.
 *Rmpc_mul_2exp = \&Rmpc_mul_2ui;
 *Rmpc_div_2exp = \&Rmpc_div_2ui;
+
+if(MPC_HEADER_V >= 66304) { # mpc library is at least version 1.3.0
+
+  require Math::MPC::Radius;
+  require Math::MPC::Ball;
+
+  *Rmpcr_init = \&Math::MPC::Radius::Rmpcr_init;
+  *Rmpcr_init_nobless = \&Math::MPC::Radius::Rmpcr_init_nobless;
+  *Rmpcr_clear = \&Math::MPC::Radius::Rmpcr_clear;
+  *Rmpcr_inf_p = \&Math::MPC::Radius::Rmpcr_inf_p;
+  *Rmpcr_zero_p = \&Math::MPC::Radius::Rmpcr_zero_p;
+  *Rmpcr_lt_half_p = \&Math::MPC::Radius::Rmpcr_lt_half_p;
+  *Rmpcr_cmp = \&Math::MPC::Radius::Rmpcr_cmp;
+  *Rmpcr_set_inf = \&Math::MPC::Radius::Rmpcr_set_inf;
+  *Rmpcr_set_zero = \&Math::MPC::Radius::Rmpcr_set_zero;
+  *Rmpcr_set_one = \&Math::MPC::Radius::Rmpcr_set_one;
+  *Rmpcr_set = \&Math::MPC::Radius::Rmpcr_set;
+  *Rmpcr_set_ui64_2si64 = \&Math::MPC::Radius::Rmpcr_set_ui64_2si64;
+  *Rmpcr_set_str_2str = \&Math::MPC::Radius::Rmpcr_set_str_2str;
+  *Rmpcr_max = \&Math::MPC::Radius::Rmpcr_max;
+  *Rmpcr_get_exp = \&Math::MPC::Radius::Rmpcr_get_exp;
+  *Rmpcr_get_exp_mpfr = \&Math::MPC::Radius::Rmpcr_get_exp_mpfr;
+  *Rmpcr_split = \&Math::MPC::Radius::Rmpcr_split;
+  *Rmpcr_out_str     = \&Math::MPC::Radius::Rmpcr_out_str;
+  *Rmpcr_out_str_win = \&Math::MPC::Radius::Rmpcr_out_str_win; # For MS Windows only
+  *Rmpcr_print       = \&Math::MPC::Radius::Rmpcr_print;
+  *Rmpcr_print_win   = \&Math::MPC::Radius::Rmpcr_print_win;   # For MS Windows only
+  *Rmpcr_say         = \&Math::MPC::Radius::Rmpcr_say;
+  *Rmpcr_say_win     = \&Math::MPC::Radius::Rmpcr_say_win;     # For MS Windows only
+  *Rmpcr_add = \&Math::MPC::Radius::Rmpcr_add;
+  *Rmpcr_sub = \&Math::MPC::Radius::Rmpcr_sub;
+  *Rmpcr_mul = \&Math::MPC::Radius::Rmpcr_mul;
+  *Rmpcr_div = \&Math::MPC::Radius::Rmpcr_div;
+  *Rmpcr_mul_2ui = \&Math::MPC::Radius::Rmpcr_mul_2ui;
+  *Rmpcr_div_2ui = \&Math::MPC::Radius::Rmpcr_div_2ui;
+  *Rmpcr_sqr = \&Math::MPC::Radius::Rmpcr_sqr;
+  *Rmpcr_sqrt = \&Math::MPC::Radius::Rmpcr_sqrt;
+  *Rmpcr_sub_rnd = \&Math::MPC::Radius::Rmpcr_sub_rnd;
+  *Rmpcr_c_abs_rnd = \&Math::MPC::Radius::Rmpcr_c_abs_rnd;
+  *Rmpcr_add_rounding_error = \&Math::MPC::Radius::Rmpcr_add_rounding_error;
+
+  *Rmpcb_init = \&Math::MPC::Ball::Rmpcb_init;
+  *Rmpcb_init_nobless = \&Math::MPC::Ball::Rmpcb_init_nobless;
+  *Rmpcb_clear = \&Math::MPC::Ball::Rmpcb_clear;
+  *Rmpcb_get_prec = \&Math::MPC::Ball::Rmpcb_get_prec;
+  *Rmpcb_set = \&Math::MPC::Ball::Rmpcb_set;
+  *Rmpcb_set_inf = \&Math::MPC::Ball::Rmpcb_set_inf;
+  *Rmpcb_set_c = \&Math::MPC::Ball::Rmpcb_set_c;
+  *Rmpcb_set_ui_ui = \&Math::MPC::Ball::Rmpcb_set_ui_ui;
+  *Rmpcb_neg = \&Math::MPC::Ball::Rmpcb_neg;
+  *Rmpcb_add = \&Math::MPC::Ball::Rmpcb_add;
+  *Rmpcb_mul = \&Math::MPC::Ball::Rmpcb_mul;
+  *Rmpcb_sqr = \&Math::MPC::Ball::Rmpcb_sqr;
+  *Rmpcb_pow_ui = \&Math::MPC::Ball::Rmpcb_pow_ui;
+  *Rmpcb_sqrt = \&Math::MPC::Ball::Rmpcb_sqrt;
+  *Rmpcb_div = \&Math::MPC::Ball::Rmpcb_div;
+  *Rmpcb_div_2ui = \&Math::MPC::Ball::Rmpcb_div_2ui;
+  *Rmpcb_can_round = \&Math::MPC::Ball::Rmpcb_can_round;
+  *Rmpcb_round = \&Math::MPC::Ball::Rmpcb_round;
+  *Rmpcb_retrieve = \&Math::MPC::Ball::Rmpcb_retrieve;
+}
 
 sub dl_load_flags {0} # Prevent DynaLoader from complaining and croaking
 
@@ -403,6 +456,43 @@ sub Rmpc_out_str {
       return _Rmpc_out_strPS($_[0], $_[1], $_[2], $_[3], $_[4], $_[5], $_[6]);
     }
     die "Wrong number of arguments supplied to Rmpc_out_str()";
+}
+
+sub Rmpcb_split {
+  if(MPC_HEADER_V >= 66304) { # mpc library is at least version 1.3.0
+    my($re, $im, $mpc, $mpcr) = (Math::MPFR->new(), Math::MPFR->new(),
+                                 Math::MPC->new(), Rmpcr_init());
+    my $mpcb = shift;
+    Rmpcb_retrieve($mpc, $mpcr, $mpcb);
+    RMPC_RE($re, $mpc);
+    RMPC_IM($im, $mpc);
+    return($re, $im, $mpcr);
+  }
+  else {
+    die "Rmpcb_split function not implemented - needs mpc-1.3.0 but we have only mpc-", MPC_HEADER_V_STR, "\n";
+  }
+}
+
+sub Rmpcr_split_mpfr {
+  if(MPC_HEADER_V >= 66304) { # mpc library is at least version 1.3.0
+    my $r = shift; # mpcr_t object
+    if(Rmpcr_zero_p($r)) {
+      my $ret = Math::MPFR::Rmpfr_init2(64);
+      Math::MPFR::Rmpfr_set_zero($ret, 0);
+      return $ret;
+    }
+    if(Rmpcr_inf_p($r)) {
+      return "Inf";
+    }
+
+    my $m = Math::MPC::Radius::_get_radius_mantissa($r); # $m is a Math::MPFR object.
+    my $e = Math::MPC::Radius::_get_radius_exponent($r); # $e is a Math::MPFR object.
+
+    return($m, $e);
+  }
+  else {
+    die "Rmpcr_split_mpfr function not implemented - needs mpc-1.3.0 but we have only mpc-", MPC_HEADER_V_STR, "\n";
+  }
 }
 
 sub MPC_VERSION            () {return _MPC_VERSION()}

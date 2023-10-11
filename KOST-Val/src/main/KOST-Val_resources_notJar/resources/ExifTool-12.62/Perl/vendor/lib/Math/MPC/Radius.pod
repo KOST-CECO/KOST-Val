@@ -1,0 +1,217 @@
+=pod
+
+=head1 DESCRIPTION
+
+   This module defines the "radius" type and functions, for use
+   in Ball arithmetic. (See the Math::MPC::Ball documentation for
+   information on Ball arithmetic.)
+   It needs the mpc-1.3.0 library, or later.
+
+   If building against mpc-1.2.x (or earlier) this module will be
+   effectively ignored. There are no actions that need to be taken.
+
+   The following documentation is essentially a copy of the official
+   mpc documentation. The Rmpcr_* functions are generally functions
+   that simply wrap the mpc library's matching mpcr_* function.
+   However, there are some Rmpcr_* functions (eg Rmpcr_split) that
+   are functions "in their own right", without any "mpcr_*"
+   counterpart.
+
+   The radius type (mpcr_t) is defined by
+   struct {
+      int64_t mant;
+      int64_t exp;
+   }
+   It can contain the special values infinity or zero, or floating
+   point numbers encoded as mant * (2 ** exp) for a positive mant and an
+   arbitrary (usually negative) exponent exp.  Normalised finite radii
+   use 31 bits for the mantissa  - ie (2 ** 30) <= mant <= (2 ** 30) - 1.
+   The special values infinity and 0 are encoded through the sign of
+   m, but should be tested for and set using the dedicated functions.
+
+   Unless indicated otherwise, the following functions assume radius
+   arguments to be normalised, they return normalised results, and they
+   round their results up, not necessarily to the smallest representable
+   number, although reasonable effort is made to get a tight upper bound:
+   They only guarantee that their outputs are an upper bound on the true
+   results.  (There may be a trade-off between tightness of the result
+   and speed of computation.  For instance, when a 32-bit mantissa is
+   normalised, an even mantissa should be divided by 2, an odd mantissa
+   should be divided by 2 and 1 should be added, and then in both cases
+   the exponent must be increased by 1.  It might be more efficient to
+   add 1 all the time instead of testing the last bit of the mantissa.)
+
+=head1 FUNCTIONS
+
+   In this documentation:
+    Arguments "$op" and "$rop" denote Math::MPC::Radius (mpcr_ptr)
+    object, with "$op" being an argument, and "$rop" being the
+    object that receives the value, returned by the function.
+    "$fh" is a specified stream - eg stdout or sderr or a filehandle.
+    "$ui64" is a perl integer scalar that will be cast to uint64_t.
+    "$si64" is a perl integer scalar that will be cast to 'int64_t'.
+    "$i" is a perl integer type containing a 'signed int' value.
+    "$si" is a perl integer type containing a 'signed long int' value.
+    "$ui" is a perl integer type containing an 'unsigned long int' value.
+    "$iv" is a perl signed scalar IV.
+    "$uv" is a perl unsigned scalar UV.
+    "$str" is a string - ie a perl scalar PV.
+
+   $rop = Rmpcr_init();
+   $rop = Rmpcr_init_nobless();
+    Create a Math::MPC::Radius object with a value of zero.
+    Creating the object using the "nobless" variant results in an object
+    that has not been blessed into the Math::MPC::Radius package. This is
+    generally NOT what is wanted as it puts the burden of freeing
+    allocated memory onto the user by calling Rmpcr_clear($rop) at the
+    appropriate time.
+
+   Rmpcr_clear($rop);
+    Free the memory associated with $rop.
+    Use this only if $rop was initialized using Rmpcr_init_nobless().
+    If $rop was initialized with Rmpcr_init(), then perl will free the
+    memory as soon as is appropriate.
+
+   $i = Rmpcr_inf_p ($op);
+   $i = Rmpcr_zero_p ($op);
+    Test whether $op is infinity or zero, respectively, and return a
+    boolean.
+
+   $i = Rmpcr_lt_half_p ($op);
+    Return 'true' if $op <  1/2, and 'false' otherwise.
+
+   $i = Rmpcr_cmp ($op1, $op2);
+    Return +1, 0 or -1 depending on whether $op1 is larger than, equal to
+    or less than $op2, with the natural total order on the compactified
+    non-negative real axis letting 0 be smaller and letting infinity be
+    larger than any finite real number.
+
+   Rmpcr_set_inf ($rop);
+   Rmpcr_set_zero ($rop);
+   Rmpcr_set_one ($rop);
+   Rmpcr_set ($rop, $op);
+   Rmpcr_set_ui64_2si64 ($rop, $ui64, $si64);
+    Set $rop to infinity, zero, 1, $op or $ui64 * (2 ** $si64),
+    respectively.
+
+   Rmpcr_set_str_2str ($rop, $str1, $str2);
+    A replacement for Rmpcr_set_ui64_2si64 on perls whose IV size < 8.
+    The 64-bit values can be represented as Decimal integer strings,
+    with $rop being set to $str1 * (2 ** $str2).
+
+   Rmpcr_max ($rop, $op1, $op2);
+    Set $rop to the maximum of $op1 and $op2.
+
+   $iv = Rmpcr_get_exp ($op);
+    Assuming that $op is neither infinity nor 0, return its exponent
+    $iv, such that $op == m * (2 ** $iv), with 1/2 <= m < 1.
+    This function's behaviour is undefined when $op is either Inf or 0.
+    If perl's ivsize is less than 8 bytes and the returned value will
+    overflow the IV, then the function croaks with a message
+    recommending that Rmpcr_get_exp_mpfr (below) be used instead.
+
+   $mpfr = Rmpcr_get_exp_mpfr($op); # $mpfr is a 64-bit precision
+                                    # Math::MPFR object.
+    As for Rmpcr_get_exp (above), except that it returns the 64-bit
+    integer value as a 64-bit precision Math::MPFR object. This avoids
+    the problem of having 64-bit values overflow the 4-byte IV.
+
+   @parts = Rmpcr_split($op);
+    If $op is zero, @parts is a one-element array, containing the UV 0.
+    If $op is Inf, @parts is a one-element array, containing the string
+    "Inf".
+    Otherwise, @parts is a two-element array. The first element is a UV
+    holding the value of the mantissa of $op, and the second element is
+    an IV holding the value of the exponent of $op.
+    $op then represents the "radius" value $parts[0] * (2 ** $parts[1]).
+    This function will croak if perl's ivsize is 4 and the value of the
+    mantissa or the exponent overflows the 4-byte IV. In such a case,
+    the message recommends using Rmpcr_split_mpfr (below) instead.
+
+   @parts = Rmpcr_split_mpfr($op);
+    NOTE: Provided for the benefit of those perls whose ivsize is 4, but
+          can be used with all perls, irrespective of their IVSIZE.
+    The same as Rmpcr_split except that, where Rmpcr_split returns an IV
+    or UV, Rmpcr_split_mpfr returns the same value in the form of a
+    Math::MPFR object with 64-bit precision. This avoids the problem of
+    having 64-bit values overflow the 4-byte IV or UV.
+
+   Rmpcr_out_str ($fh, $op);
+   Rmpcr_print($op);
+   Rmpcr_say($op);
+    Rmpcr_out_str outputs $op on $fh, which may be 'stdout'.
+    Rmpcr_print and Rmpcr_say print to 'stdout', with Rmpcr_say adding
+    a newline - as with perl's say() function.
+    Caveat: These functions so far serve mainly for debugging purposes.
+            Their output format changed after the release of mpc-1.3.1,
+            and might yet might change again in the future.
+
+
+   Rmpcr_out_str_win($fh, $op); # Available on MS Windows only
+   Rmpcr_print_win($op);        # Available on MS Windows only
+   Rmpcr_say_win($op);          # Available on MS Windows only
+    If the MPC library is at a version later than 1.3.1 then these
+    functions serve no useful purpose, and produce the same output
+    as Rpmcr_out_str, Rmpcr_print and Rmpcr_say.
+    Otherwise, they are the same as Rpmcr_out_str, Rmpcr_print and
+    Rmpcr_say, except that they temporarily activate codepage 65001.
+    Without this, on MS Windows the functions will present the
+    plus-or-minus and infinity symbols in a garbled form if the output
+    is being sent to STDOUT or STDERR.
+    If Rmpcr_out_str is sending the output to a file, then it should
+    work just fine on MS Windows.
+
+   Rmpcr_add ($rop, $op1, $op2);
+   Rmpcr_sub ($rop, $op1, $op2);
+   Rmpcr_mul ($rop, $op1, $op2);
+   Rmpcr_div ($rop, $op1, $op2);
+   Rmpcr_mul_2ui ($rop, $op, $ui);
+   Rmpcr_div_2ui ($rop, $op, $ui);
+   Rmpcr_sqr ($rop, $op);
+   Rmpcr_sqrt ($rop, $op);
+    Set rop to the sum, difference, product or quotient of $op1 and $op2,
+    or to $op * (2 ** $ui) or to $p / (2 ** $ui), or to the square or the
+    square root of $op.  If any of the arguments is infinity, or if a
+    difference is negative, the result is infinity.
+
+   Rmpcr_sub_rnd ($rop, $op1, $op2, $round); # $round is a Math::MPFR
+                                             # rounding value
+    Set $op to the difference of $op1 and $op2, rounded according to
+    $round, which can be one of 'MPFR_RNDU' or 'MPFR_RNDD'.  If one of
+    the arguments is infinity or the difference is negative, the result
+    is infinity.  Calling the function with 'MPFR_RNDU' is equivalent to
+    calling 'Rmpcr_sub'.
+    This is one out of several functions taking a rounding parameter.
+    Rounding down may be useful to obtain an upper bound when dividing
+    by the result.
+
+   Rmpcr_c_abs_rnd ($rop, $mpc, $round); # $mpc is a Math::MPC object.
+                                      # $round is a Math::MPFR rounding
+                                      # value
+    Set $rop to the absolute value of the complex number $mpc, rounded
+    in the direction $round, which may be one of 'MPFR_RNDU' or
+    'MPFR_RNDD'.
+
+   Rmpcr_add_rounding_error ($rop, $uv, $round); # $round is a Math::MPFR
+                                                 # rounding value
+    Set $rop to $rop + ((1 + $rop) * (2 ** - $uv)) if $round equals
+   'MPFR_RNDN', else to $rop + ((1 + $rop) * (2 ** (1- $uv))) . The idea is
+    that if a (potentially not representable) centre of an ideal complex
+    ball of radius $rop is rounded to a representable complex number at
+    precision $uv, this shifts the centre by up to 1/2 ulp (for rounding to
+    nearest) or 1ulp (for directed rounding of at least one of the real
+    or imaginary parts), which increases the radius accordingly.  So this
+    function is typically called internally at the end of each operation
+    with complex balls to account for the error made by rounding the centre.
+
+=head1 LICENSE
+
+    This program is free software; you may redistribute it and/or
+    modify it under the same terms as Perl itself.
+    Copyright 2022 Sisyphus
+
+=head1 AUTHOR
+
+    Sisyphus <sisyphus at(@) cpan dot (.) org>
+
+=cut

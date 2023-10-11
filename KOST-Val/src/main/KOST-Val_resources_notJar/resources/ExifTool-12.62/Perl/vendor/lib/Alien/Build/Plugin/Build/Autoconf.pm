@@ -9,7 +9,7 @@ use Path::Tiny ();
 use File::Temp ();
 
 # ABSTRACT: Autoconf plugin for Alien::Build
-our $VERSION = '2.38'; # VERSION
+our $VERSION = '2.80'; # VERSION
 
 
 has with_pic       => 1;
@@ -190,7 +190,7 @@ Alien::Build::Plugin::Build::Autoconf - Autoconf plugin for Alien::Build
 
 =head1 VERSION
 
-version 2.38
+version 2.80
 
 =head1 SYNOPSIS
 
@@ -216,6 +216,12 @@ based on autoconf packages.
 
 This plugin supports out-of-source builds (known in autoconf terms as "VPATH" builds) via
 the meta property C<out_of_source>.
+
+B<NOTE>: by itself, this plugin is only intended for use on packages that include a
+C<configure> script.  For packages that expect you to use Autotools to generate a
+configure script before building, you can use L<Alien::Autotools> to generate the
+C<configure> script and use this plugin to run it.  For more details see the
+documentation for L<Alien::Autotools>.
 
 =head1 PROPERTIES
 
@@ -253,11 +259,23 @@ Some reasonable default flags will be provided.
 
 =over 4
 
+=item C<SITE_CONFIG>
+
+For a share install, this plugin needs to alter the behavior of autotools using C<site.config>.
+It does this by generating a C<site.config> file on the fly, and setting the C<SITE_CONFIG>
+environment variable.  In the event that you already have your own C<SITE_CONFIG> set, that
+file will be sourced from the generated one, so your local defaults should still be honored,
+unless it is one that needs to be changed for a share install.
+
+In particular, the C<lib> directory must be overridden, because on some platforms dynamic libraries
+will otherwise be placed in directories that L<Alien::Build> doesn't normally look in.  Since
+the alienized package will be installed in a share directory, and not a system directory,
+that should be fine.
+
 =item C<ALIEN_BUILD_SITE_CONFIG>
 
-This plugin needs to alter the behavior of autotools via the C<site.config> file and so sets
-and possibly overrides any existing C<SITE_CONFIG>.  Normally that is what you want but you
-can also insert your own C<site.config> in addition by using this environment variable.
+If defined, this file will be also be sourced in the generated C<site.config>.  This allows
+you to have local defaults for alien share installs only.
 
 =back
 
@@ -311,7 +329,7 @@ Juan Julián Merelo Guervós (JJ)
 
 Joel Berger (JBERGER)
 
-Petr Pisar (ppisar)
+Petr Písař (ppisar)
 
 Lance Wicks (LANCEW)
 
@@ -329,9 +347,13 @@ Paul Evans (leonerd, PEVANS)
 
 Håkon Hægland (hakonhagland, HAKONH)
 
+nick nauwelaerts (INPHOBIA)
+
+Florian Weimer
+
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011-2020 by Graham Ollis.
+This software is copyright (c) 2011-2022 by Graham Ollis.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

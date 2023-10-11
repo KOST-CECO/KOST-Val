@@ -2,7 +2,7 @@ package Net::DNS::RR::NID;
 
 use strict;
 use warnings;
-our $VERSION = (qw$Id: NID.pm 1814 2020-10-14 21:49:16Z willem $)[2];
+our $VERSION = (qw$Id: NID.pm 1896 2023-01-30 12:59:25Z willem $)[2];
 
 use base qw(Net::DNS::RR);
 
@@ -17,8 +17,7 @@ use integer;
 
 
 sub _decode_rdata {			## decode rdata from wire-format octet string
-	my $self = shift;
-	my ( $data, $offset ) = @_;
+	my ( $self, $data, $offset ) = @_;
 
 	@{$self}{qw(preference nodeid)} = unpack "\@$offset n a8", $$data;
 	return;
@@ -40,28 +39,23 @@ sub _format_rdata {			## format rdata portion of RR string.
 
 
 sub _parse_rdata {			## populate RR from rdata in argument list
-	my $self = shift;
+	my ( $self, @argument ) = @_;
 
-	$self->preference(shift);
-	$self->nodeid(shift);
+	for (qw(preference nodeid)) { $self->$_( shift @argument ) }
 	return;
 }
 
 
 sub preference {
-	my $self = shift;
-
-	$self->{preference} = 0 + shift if scalar @_;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{preference} = 0 + $_ }
 	return $self->{preference} || 0;
 }
 
 
 sub nodeid {
-	my $self = shift;
-	my $idnt = shift;
-
+	my ( $self, $idnt ) = @_;
 	$self->{nodeid} = pack 'n4', map { hex($_) } split /:/, $idnt if defined $idnt;
-
 	return $self->{nodeid} ? sprintf( '%0.4x:%0.4x:%0.4x:%0.4x', unpack 'n4', $self->{nodeid} ) : undef;
 }
 
@@ -141,7 +135,7 @@ Package template (c)2009,2012 O.M.Kolkman and R.W.Franks.
 
 Permission to use, copy, modify, and distribute this software and its
 documentation for any purpose and without fee is hereby granted, provided
-that the above copyright notice appear in all copies and that both that
+that the original copyright notices appear in all copies and that both
 copyright notice and this permission notice appear in supporting
 documentation, and that the name of the author not be used in advertising
 or publicity pertaining to distribution of the software without specific
@@ -158,6 +152,7 @@ DEALINGS IN THE SOFTWARE.
 
 =head1 SEE ALSO
 
-L<perl>, L<Net::DNS>, L<Net::DNS::RR>, RFC6742
+L<perl> L<Net::DNS> L<Net::DNS::RR>
+L<RFC6742|https://tools.ietf.org/html/rfc6742>
 
 =cut

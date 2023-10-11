@@ -1,0 +1,233 @@
+=pod
+
+=encoding utf-8
+
+=head1 NAME
+
+Type::Tiny::Manual - an overview of Type::Tiny
+
+=head1 SYNOPSIS
+
+L<Type::Tiny> is a small L<Perl|http://www.perl.org/> class for writing
+type constraints, inspired by L<Moose>'s type constraint API and
+L<MooseX::Types>. It has only one non-core dependency (and even that is
+simply a module that was previously distributed as part of Type::Tiny
+but has since been spun off), and can be used with L<Moose>, L<Mouse>,
+or L<Moo> (or none of the above).
+
+Type::Tiny is used by over 800 Perl distributions on the CPAN (Comprehensive
+Perl Archive Network) and can be considered a stable and mature framework for
+efficiently and reliably enforcing data types.
+
+Type::Tiny is bundled with L<Type::Library> a framework for organizing type
+constraints into collections. Also bundled is L<Types::Standard>, a
+Moose-inspired library of useful type constraints. L<Type::Params> is also
+provided, to allow very fast checking and coercion of function and method
+parameters.
+
+The following example gives you an idea of some of the features of these
+modules. If you don't understand it all, that's fine; that's what the rest
+of the manual is for. Although the example uses Moo, the C<use Moo> could
+be changed to C<use Moose> or C<use Mouse> and it would still work.
+
+ use v5.12;
+ use strict;
+ use warnings;
+ 
+ package Horse {
+   use Moo;
+   use Types::Standard qw( Str Int Enum ArrayRef InstanceOf );
+   use Type::Params qw( signature );
+   use namespace::autoclean;
+   
+   has name => (
+     is       => 'ro',
+     isa      => Str,
+     required => 1,
+   );
+   has gender => (
+     is       => 'ro',
+     isa      => Enum[qw( f m )],
+   );
+   has age => (
+     is       => 'rw',
+     isa      => Int->where( '$_ >= 0' ),
+   );
+   has children => (
+     is       => 'ro',
+     isa      => ArrayRef[ InstanceOf['Horse'] ],
+     default  => sub { return [] },
+   );
+   
+   sub add_child {
+     state $check = signature(
+       method     => Object,
+       positional => [ InstanceOf['Horse'] ]
+     );
+     
+     my ( $self, $child ) = $check->(@_);   # unpack @_
+     push @{ $self->children }, $child;
+     
+     return $self;
+   }
+ }
+ 
+ package main;
+ 
+ my $boldruler = Horse->new(
+   name    => "Bold Ruler",
+   gender  => 'm',
+   age     => 16,
+ );
+ 
+ my $secretariat = Horse->new(
+   name    => "Secretariat",
+   gender  => 'm',
+   age     => 0,
+ );
+ 
+ $boldruler->add_child( $secretariat );
+ 
+ use Types::Standard qw( is_Object assert_Object );
+ 
+ # is_Object will return a boolean
+ #
+ if ( is_Object($boldruler) ) {
+   say $boldruler->name;
+ }
+ 
+ # assert_Object will return $secretariat or die
+ #
+ say assert_Object( $secretariat )->name;
+
+=head1 MANUAL
+
+Even if you are using Type::Tiny with other object-oriented programming
+toolkits (such as Moose or Mouse), you should start with the Moo sections
+of the manual. Most of the information is directly transferrable and the
+Moose and Mouse sections of the manual list the minor differences between
+using Type::Tiny with Moo and with them.
+
+In general, this manual assumes you use Perl 5.12 or above and may use
+examples that do not work on older versions of Perl. Type::Tiny does work
+on earlier versions of Perl, but not all the examples and features in
+the manual will run without adjustment. (For instance, you may need to
+replace C<state> variables with lexical variables, avoid the
+C<< package NAME { BLOCK } >> syntax, etc.)
+
+=over
+
+=item * L<Type::Tiny::Manual::Installation>
+
+How to install Type::Tiny. If Type::Tiny is already installed, you can
+skip this. 
+
+=item * L<Type::Tiny::Manual::UsingWithMoo>
+
+Basic use of Type::Tiny with Moo, including attribute type constraints,
+parameterized type constraints, coercions, and method parameter checking.
+
+=item * L<Type::Tiny::Manual::UsingWithMoo2>
+
+Advanced use of Type::Tiny with Moo, including unions and intersections,
+C<stringifies_to>, C<numifies_to>, C<with_attribute_values>, and C<where>.
+
+=item * L<Type::Tiny::Manual::UsingWithMoo3>
+
+There's more than one way to do it! Alternative ways of using Type::Tiny,
+including type registries, exported functions, and C<dwim_type>.
+
+=item * L<Type::Tiny::Manual::Libraries>
+
+Defining your own type libraries, including extending existing libraries,
+defining new types, adding coercions, defining parameterizable types,
+and the declarative style.
+
+=item * L<Type::Tiny::Manual::UsingWithMoose>
+
+How to use Type::Tiny with Moose, including the advantages of Type::Tiny
+over built-in type constraints, and Moose-specific features.
+
+=item * L<Type::Tiny::Manual::UsingWithMouse>
+
+How to use Type::Tiny with Mouse, including the advantages of Type::Tiny
+over built-in type constraints, and Mouse-specific features.
+
+=item * L<Type::Tiny::Manual::UsingWithMite>
+
+How to use Type::Tiny with Mite, including how to write an entire Perl
+project using clean Moose-like code and no non-core dependencies.
+(Not even dependencies on Mite or Type::Tiny!)
+
+=item * L<Type::Tiny::Manual::UsingWithClassTiny>
+
+Including how to Type::Tiny in your object's C<BUILD> method, and
+third-party shims between Type::Tiny and Class::Tiny.
+
+=item * L<Type::Tiny::Manual::UsingWithOther>
+
+Using Type::Tiny with Class::InsideOut, Params::Check, and Object::Accessor.
+
+=item * L<Type::Tiny::Manual::UsingWithTestMore>
+
+Type::Tiny for test suites.
+
+=item * L<Type::Tiny::Manual::Params>
+
+Advanced information on Type::Params, and using Type::Tiny with other
+signature modules like Function::Parameters and Kavorka.
+
+=item * L<Type::Tiny::Manual::NonOO>
+
+Type::Tiny in non-object-oriented code.
+
+=item * L<Type::Tiny::Manual::Optimization>
+
+Squeeze the most out of your CPU.
+
+=item * L<Type::Tiny::Manual::Coercions>
+
+Advanced information on coercions.
+
+=item * L<Type::Tiny::Manual::AllTypes>
+
+An alphabetical list of all type constraints bundled with Type::Tiny.
+
+=item * L<Type::Tiny::Manual::Policies>
+
+Policies related to Type::Tiny development.
+
+=item * L<Type::Tiny::Manual::Contributing>
+
+Contributing to Type::Tiny development.
+
+=back
+
+=head1 BUGS
+
+Please report any bugs to
+L<https://github.com/tobyink/p5-type-tiny/issues>.
+
+=head1 SEE ALSO
+
+L<The Type::Tiny homepage|https://typetiny.toby.ink/>.
+
+=head1 AUTHOR
+
+Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
+
+=head1 COPYRIGHT AND LICENCE
+
+This software is copyright (c) 2013-2014, 2017-2023 by Toby Inkster.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=head1 DISCLAIMER OF WARRANTIES
+
+THIS PACKAGE IS PROVIDED "AS IS" AND WITHOUT ANY EXPRESS OR IMPLIED
+WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES OF
+MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+
+=cut
+

@@ -1,7 +1,7 @@
 {
   am_pm_abbreviated => [
-    "\N{U+0e01}\N{U+0e48}\N{U+0e2d}\N{U+0e19}\N{U+0e40}\N{U+0e17}\N{U+0e35}\N{U+0e48}\N{U+0e22}\N{U+0e07}",
-    "\N{U+0e2b}\N{U+0e25}\N{U+0e31}\N{U+0e07}\N{U+0e40}\N{U+0e17}\N{U+0e35}\N{U+0e48}\N{U+0e22}\N{U+0e07}",
+    "AM",
+    "PM",
   ],
   available_formats => {
     Bh => "h B",
@@ -20,6 +20,7 @@
     GyMMMEEEEd => "EEEE\N{U+0e17}\N{U+0e35}\N{U+0e48} d MMM G y",
     GyMMMEd => "E d MMM G y",
     GyMMMd => "d MMM G y",
+    GyMd => "d/M/GGGGG y",
     H => "HH",
     Hm => "HH:mm \N{U+0e19}.",
     Hms => "HH:mm:ss",
@@ -50,10 +51,10 @@
     yMMM => "MMM y",
     yMMMEEEEd => "EEEE\N{U+0e17}\N{U+0e35}\N{U+0e48} d MMM y",
     yMMMEd => "E d MMM y",
-    yMMMM => "MMMM G y",
-    yMMMMEEEEd => "EEEE\N{U+0e17}\N{U+0e35}\N{U+0e48} d MMMM G y",
-    yMMMMEd => "E d MMMM G y",
-    yMMMMd => "d MMMM G y",
+    yMMMM => "MMMM y",
+    yMMMMEEEEd => "EEEE\N{U+0e17}\N{U+0e35}\N{U+0e48} d MMMM y",
+    yMMMMEd => "E d MMMM y",
+    yMMMMd => "d MMMM y",
     yMMMd => "d MMM y",
     yMd => "d/M/y",
     yQQQ => "QQQ y",
@@ -275,5 +276,5 @@
   time_format_medium => "HH:mm:ss",
   time_format_short => "HH:mm",
   variant => undef,
-  version => 38,
+  version => 43,
 }

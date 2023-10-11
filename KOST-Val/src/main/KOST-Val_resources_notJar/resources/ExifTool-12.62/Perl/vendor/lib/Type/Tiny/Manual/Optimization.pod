@@ -1,0 +1,329 @@
+=pod
+
+=encoding utf-8
+
+=head1 NAME
+
+Type::Tiny::Manual::Optimization - squeeze the most out of your CPU
+
+=head1 MANUAL
+
+Type::Tiny is written with efficiency in mind, but there are techniques
+you can use to get the best performance out of it.
+
+=head2 XS
+
+The simplest thing you can do to increase performance of many of
+the built-in type constraints is to install L<Type::Tiny::XS>, a
+set of ultra-fast type constraint checks implemented in C.
+
+L<Type::Tiny> will attempt to load L<Type::Tiny::XS> and use its
+type checks. If L<Type::Tiny::XS> is not available, it will then
+try to use L<Mouse> I<< if it is already loaded >>, but Type::Tiny
+won't attempt to load Mouse for you.
+
+Certain type constraints can also be accelerated if you have
+L<Ref::Util::XS> installed.
+
+=head3 Types that can be accelerated by Type::Tiny::XS
+
+The following simple type constraints from L<Types::Standard> will
+be accelerated by Type::Tiny::XS: B<Any>, B<ArrayRef>, B<Bool>,
+B<ClassName>, B<CodeRef>, B<Defined>, B<FileHandle>, B<GlobRef>,
+B<HashRef>, B<Int>, B<Item>, B<Object>, B<Map>, B<Ref>, B<ScalarRef>,
+B<Str>, B<Tuple>, B<Undef>, and B<Value>. (Note that B<Num> and
+B<RegexpRef> are I<not> on that list.)
+
+The parameterized form of B<Ref> cannot be accelerated.
+
+The parameterized forms of B<ArrayRef>, B<HashRef>, and B<Map> can be
+accelerated only if their parameters are.
+
+The parameterized form of B<Tuple> can be accelerated if its
+parameters are, it has no B<Optional> components, and it does not use
+B<Slurpy>.
+
+Certain type constraints may benefit partially from Type::Tiny::XS.
+For example, B<RoleName> inherits from B<ClassName>, so part of the
+type check will be conducted by Type::Tiny::XS.
+
+The parameterized B<InstanceOf>, B<HasMethods>, and B<Enum> type
+constraints will be accelerated. So will L<Type::Tiny::Class>,
+L<Type::Tiny::Duck>, and L<Type::Tiny::Enum> objects.
+
+The B<PositiveInt> and B<PositiveOrZeroInt> type constraints from
+L<Types::Common::Numeric> will be accelerated, as will the
+B<NonEmptyStr> type constraint from L<Types::Common::String>.
+
+The B<StringLike>, B<CodeLike>, B<HashLike>, and B<ArrayLike> types
+from L<Types::TypeTiny> will be accelerated, including the parameterized
+versions of B<HashLike> and B<ArrayLike>.
+
+L<Type::Tiny::Union> and L<Type::Tiny::Intersection> will also be
+accelerated if their constituent type constraints are.
+
+=head3 Types that can be accelerated by Mouse
+
+The following simple type constraints from L<Types::Standard> will
+be accelerated by Type::Tiny::XS: B<Any>, B<ArrayRef>, B<Bool>,
+B<ClassName>, B<CodeRef>, B<Defined>, B<FileHandle>, B<GlobRef>,
+B<HashRef>, B<Ref>, B<ScalarRef>, B<Str>, B<Undef>, and B<Value>.
+(Note that B<Item>, B<Num>, B<Int>, B<Object>, and B<RegexpRef>
+are I<not> on that list.)
+
+The parameterized form of B<Ref> cannot be accelerated.
+
+The parameterized forms of B<ArrayRef> and B<HashRef> can be
+accelerated only if their parameters are.
+
+Certain type constraints may benefit partially from Mouse. For
+example, B<RoleName> inherits from B<ClassName>, so part of the
+type check will be conducted by Mouse.
+
+The parameterized B<InstanceOf> and B<HasMethods> type constraints
+will be accelerated. So will L<Type::Tiny::Class> and
+L<Type::Tiny::Duck> objects.
+
+=head2 Inlining Type Constraints
+
+In the case of a type constraint like this:
+
+ my $type = Int->where( sub { $_ >= 0 } );
+
+Type::Tiny will need to call one sub to verify a value meets the B<Int>
+type constraint, and your coderef to check that the value is above zero.
+
+Sub calls in Perl are relatively expensive in terms of memory and CPU
+usage, so it would be good if it could be done all in one sub call.
+
+The B<Int> type constraint knows how to create a string of Perl code
+that checks an integer. It's something like the following. (It's actually
+more complicated, but this is close enough as an example.)
+
+ $_ =~ /^-?[0-9]+$/
+
+If you provide your check as a string instead of a coderef, like this:
+
+ my $type = Int->where( q{ $_ >= 0 } );
+
+Then Type::Tiny will be able to combine them into one string:
+
+ ( $_ =~ /^-?[0-9]+$/ ) && ( $_ >= 0 )
+
+So Type::Tiny will be able to check values in one sub call. Providing
+constraints as strings is a really simple and easy way of optimizing
+type checks.
+
+But it can be made even more efficient. Type::Tiny needs to localize
+C<< $_ >> and copy the value into it for the above check. If you're
+checking B<< ArrayRef[$type] >> this will be done for each element of
+the array. Things could be made more efficient if Type::Tiny were able
+to directly check:
+
+ ( $arrayref->[$i] =~ /^-?[0-9]+$/ ) && ( $arrayref->[$i] >= 0 )
+
+This can be done by providing an inlining sub. The sub is given a
+variable name and can use that in the string of code it generates.
+
+ my $type = Type::Tiny->new(
+   parent  => Int,
+   inlined => sub {
+     my ( $self, $varname ) = @_;
+     return sprintf(
+       '(%s) && ( %s >= 0 )',
+       $self->parent->inline_check( $varname ),
+       $varname,
+     );
+   }
+ );
+
+Because it's pretty common to want to call your parent's inline check and
+C<< && >> your own string with it, Type::Tiny provides a shortcut for this.
+Just return a list of strings to smush together with C<< && >>, and if the
+first one is C<undef>, Type::Tiny will fill in the blank with the parent
+type check.
+
+ my $type = Type::Tiny->new(
+   parent  => Int,
+   inlined => sub {
+     my ( $self, $varname ) = @_;
+     return (
+       undef,
+       sprintf( '%s >= 0', $varname ),
+     );
+   }
+ );
+
+There is one further optimization which can be applied to this particular
+case. You'll note that we're checking the string matches C<< /^-?[0-9+]$/ >>
+and then checking it's greater than or equal to zero. But a non-negative
+integer won't ever start with a minus sign, so we could inline the check to
+something like:
+
+ $_ =~ /^[0-9]+$/
+
+While an inlined check I<can> call its parent type check, it is not required
+to.
+
+ my $type = Type::Tiny->new(
+   parent  => Int,
+   inlined => sub {
+     my ( $self, $varname ) = @_;
+     return sprintf( '%s =~ /^[0-9]+$/', $varname );
+   }
+ );
+
+If you opt not to call the parent type check, then you need to ensure your
+own check is at least as rigorous.
+
+=head2 Inlining Coercions
+
+Moo is the only object-oriented programming toolkit that fully supports
+coercions being inlined, but even for Moose and Mouse, providing coercions
+as strings can help Type::Tiny optimize its coercion features.
+
+For Moo, if you want your coercion to be inlinable, all the types you're
+coercing from and to need to be inlinable, plus the coercion needs to be
+given as a string of Perl code.
+
+=head2 Common Sense
+
+The B<< HashRef[ArrayRef] >> type constraint can probably be checked
+faster than B<< HashRef[ArrayRef[Num]] >>. If you find yourself using
+very complex and slow type constraints, you should consider switching
+to simpler and faster ones. (Though this means you have to place a
+little more trust in your caller to not supply you with bad data.)
+
+(A counter-intuitive exception to this: even though B<Int> is more
+restrictive than B<Num>, in most circumstances B<Int> checks will run
+faster.)
+
+=head2 Devel::StrictMode
+
+One possibility is to use strict type checks when you're running your
+release tests, and faster, more permissive type checks at other times.
+L<Devel::StrictMode> can make this easier.
+
+This provides a C<STRICT> constant that indicates whether your code is
+operating in "strict mode" based on certain environment variables.
+
+=head3 Attributes
+
+ use Types::Standard qw( ArrayRef Num );
+ use Devel::StrictMode qw( STRICT );
+ 
+ has numbers => (
+   is      => 'ro',
+   isa     => STRICT ? ArrayRef[Num] : ArrayRef,
+   default => sub { [] },
+ );
+
+It is inadvisible to do this on attributes that have coercions because
+it can lead to inconsistent and unpredictable behaviour.
+
+=head3 Type::Params
+
+Very efficient way which avoids compiling the signature at all if
+C<STRICT> is false:
+
+ use Types::Standard qw( Num Object );
+ use Type::Params qw( signature );
+ use Devel::StrictMode qw( STRICT );
+ 
+ sub add_number {
+   state $check;
+   STRICT and $check //= signature(
+     method     => 1,
+     positional => [ Num ],
+   );
+   
+   my ( $self, $num ) = STRICT ? &$check : @_;
+   
+   push @{ $self->numbers }, $num;
+   return $self;
+ }
+
+Again, you need to be careful to ensure consistent behaviour if you're
+using coercions, defaults, slurpies, etc.
+
+Less efficient way, but more declarative and smart enough to just disable
+checks which are safe(ish) to disable, while coercions, defaults, and
+slurpies will continue to work:
+
+ use Types::Standard qw( Num Object );
+ use Type::Params qw( signature );
+ use Devel::StrictMode qw( STRICT );
+ 
+ sub add_number {
+   state $check = signature(
+     strictness => STRICT,
+     method     => 1,
+     positional => [ Num ],
+   );
+   
+   my ( $self, $num ) = &$check;
+   
+   push @{ $self->numbers }, $num;
+   return $self;
+ }
+
+=head3 Ad-Hoc Type Checks
+
+ ...;
+ my $x = get_some_number();
+ assert_Int($x) if STRICT;
+ return $x + 1;
+ ...;
+
+=head2 The Slash Operator
+
+Type::Tiny has some of the same logic as Devel::StrictMode built in.
+In particular, it overloads the slash (division) operator so that
+B<< TypeA/TypeB >> evaluates to B<TypeB> normally, but to B<TypeA>
+in strict mode.
+
+An example using this feature:
+
+ use Types::Standard -types;
+ 
+ has numbers => (
+   is      => 'ro',
+   isa     => ArrayRef[ Num / Any ],
+   default => sub { [] },
+ );
+
+In strict mode, this attribute would check that its value is an arrayref
+of numbers (which may be slow if it contains a lot of numbers). Normally
+though, it will just check that the value is an arrayref.
+
+=head1 NEXT STEPS
+
+Here's your next step:
+
+=over
+
+=item * L<Type::Tiny::Manual::Coercions>
+
+Advanced information on coercions.
+
+=back
+
+=head1 AUTHOR
+
+Toby Inkster E<lt>tobyink@cpan.orgE<gt>.
+
+=head1 COPYRIGHT AND LICENCE
+
+This software is copyright (c) 2013-2014, 2017-2023 by Toby Inkster.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=head1 DISCLAIMER OF WARRANTIES
+
+THIS PACKAGE IS PROVIDED "AS IS" AND WITHOUT ANY EXPRESS OR IMPLIED
+WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES OF
+MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+
+=cut
+

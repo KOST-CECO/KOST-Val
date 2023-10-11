@@ -1,7 +1,7 @@
 {
   am_pm_abbreviated => [
     "Subbaahi",
-    "Zaarikay b",
+    "Zaarikay\N{U+202f}b",
   ],
   available_formats => {
     Bh => "h B",
@@ -19,6 +19,7 @@
     GyMMM => "G y MMM",
     GyMMMEd => "G y MMM d, E",
     GyMMMd => "G y MMM d",
+    GyMd => "GGGGG y-MM-dd",
     H => "HH",
     Hm => "HH:mm",
     Hms => "HH:mm:ss",
@@ -34,8 +35,8 @@
     Md => "d/M",
     d => "d",
     h => "h a",
-    hm => "h:mm a",
-    hms => "h:mm:ss a",
+    hm => "h:mm\N{U+202f}a",
+    hms => "h:mm:ss\N{U+202f}a",
     hmsv => "h:mm:ss a v",
     hmv => "h:mm a v",
     ms => "m:ss",
@@ -266,5 +267,5 @@
   time_format_medium => "HH:mm:ss",
   time_format_short => "HH:mm",
   variant => undef,
-  version => 38,
+  version => 43,
 }

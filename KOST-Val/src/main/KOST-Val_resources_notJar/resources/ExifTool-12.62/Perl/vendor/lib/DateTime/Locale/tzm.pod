@@ -383,15 +383,15 @@ Central Atlas Tamazight locale.
 
 =head3 Ehm (E h:mm a)
 
-   2008-02-05T18:30:30 = Asn 6:30 Ḍeffir aza
-   1995-12-22T09:05:02 = Asm 9:05 Zdat azal
-  -0010-09-15T04:44:23 = Asḍ 4:44 Zdat azal
+   2008-02-05T18:30:30 = Asn 6:30 Ḍeffir aza
+   1995-12-22T09:05:02 = Asm 9:05 Zdat azal
+  -0010-09-15T04:44:23 = Asḍ 4:44 Zdat azal
 
 =head3 Ehms (E h:mm:ss a)
 
-   2008-02-05T18:30:30 = Asn 6:30:30 Ḍeffir aza
-   1995-12-22T09:05:02 = Asm 9:05:02 Zdat azal
-  -0010-09-15T04:44:23 = Asḍ 4:44:23 Zdat azal
+   2008-02-05T18:30:30 = Asn 6:30:30 Ḍeffir aza
+   1995-12-22T09:05:02 = Asm 9:05:02 Zdat azal
+  -0010-09-15T04:44:23 = Asḍ 4:44:23 Zdat azal
 
 =head3 Gy (G y)
 
@@ -416,6 +416,12 @@ Central Atlas Tamazight locale.
    2008-02-05T18:30:30 = ḌƐ 2008 Yeb 5
    1995-12-22T09:05:02 = ḌƐ 1995 Duj 22
   -0010-09-15T04:44:23 = ZƐ -10 Cut 15
+
+=head3 GyMd (GGGGG y-MM-dd)
+
+   2008-02-05T18:30:30 = ḌƐ 2008-02-05
+   1995-12-22T09:05:02 = ḌƐ 1995-12-22
+  -0010-09-15T04:44:23 = ZƐ -10-09-15
 
 =head3 H (HH)
 
@@ -509,33 +515,33 @@ Central Atlas Tamazight locale.
 
 =head3 h (h a)
 
-   2008-02-05T18:30:30 = 6 Ḍeffir aza
-   1995-12-22T09:05:02 = 9 Zdat azal
-  -0010-09-15T04:44:23 = 4 Zdat azal
+   2008-02-05T18:30:30 = 6 Ḍeffir aza
+   1995-12-22T09:05:02 = 9 Zdat azal
+  -0010-09-15T04:44:23 = 4 Zdat azal
 
-=head3 hm (h:mm a)
+=head3 hm (h:mm a)
 
-   2008-02-05T18:30:30 = 6:30 Ḍeffir aza
-   1995-12-22T09:05:02 = 9:05 Zdat azal
-  -0010-09-15T04:44:23 = 4:44 Zdat azal
+   2008-02-05T18:30:30 = 6:30 Ḍeffir aza
+   1995-12-22T09:05:02 = 9:05 Zdat azal
+  -0010-09-15T04:44:23 = 4:44 Zdat azal
 
 =head3 hms (h:mm:ss a)
 
-   2008-02-05T18:30:30 = 6:30:30 Ḍeffir aza
-   1995-12-22T09:05:02 = 9:05:02 Zdat azal
-  -0010-09-15T04:44:23 = 4:44:23 Zdat azal
+   2008-02-05T18:30:30 = 6:30:30 Ḍeffir aza
+   1995-12-22T09:05:02 = 9:05:02 Zdat azal
+  -0010-09-15T04:44:23 = 4:44:23 Zdat azal
 
 =head3 hmsv (h:mm:ss a v)
 
-   2008-02-05T18:30:30 = 6:30:30 Ḍeffir aza UTC
-   1995-12-22T09:05:02 = 9:05:02 Zdat azal UTC
-  -0010-09-15T04:44:23 = 4:44:23 Zdat azal UTC
+   2008-02-05T18:30:30 = 6:30:30 Ḍeffir aza UTC
+   1995-12-22T09:05:02 = 9:05:02 Zdat azal UTC
+  -0010-09-15T04:44:23 = 4:44:23 Zdat azal UTC
 
 =head3 hmv (h:mm a v)
 
-   2008-02-05T18:30:30 = 6:30 Ḍeffir aza UTC
-   1995-12-22T09:05:02 = 9:05 Zdat azal UTC
-  -0010-09-15T04:44:23 = 4:44 Zdat azal UTC
+   2008-02-05T18:30:30 = 6:30 Ḍeffir aza UTC
+   1995-12-22T09:05:02 = 9:05 Zdat azal UTC
+  -0010-09-15T04:44:23 = 4:44 Zdat azal UTC
 
 =head3 ms (mm:ss)
 

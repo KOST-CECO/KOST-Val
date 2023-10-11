@@ -2,7 +2,7 @@ package Net::DNS::RR::CSYNC;
 
 use strict;
 use warnings;
-our $VERSION = (qw$Id: CSYNC.pm 1814 2020-10-14 21:49:16Z willem $)[2];
+our $VERSION = (qw$Id: CSYNC.pm 1910 2023-03-30 19:16:30Z willem $)[2];
 
 use base qw(Net::DNS::RR);
 
@@ -19,8 +19,7 @@ use Net::DNS::RR::NSEC;
 
 
 sub _decode_rdata {			## decode rdata from wire-format octet string
-	my $self = shift;
-	my ( $data, $offset ) = @_;
+	my ( $self, $data, $offset ) = @_;
 
 	my $limit = $offset + $self->{rdlength};
 	@{$self}{qw(soaserial flags)} = unpack "\@$offset Nn", $$data;
@@ -46,52 +45,50 @@ sub _format_rdata {			## format rdata portion of RR string.
 
 
 sub _parse_rdata {			## populate RR from rdata in argument list
-	my $self = shift;
+	my ( $self, @argument ) = @_;
 
-	$self->soaserial(shift);
-	$self->flags(shift);
-	$self->typelist(@_);
+	$self->soaserial( shift @argument );
+	$self->flags( shift @argument );
+	$self->typelist(@argument);
 	return;
 }
 
 
 sub soaserial {
-	my $self = shift;
-
-	$self->{soaserial} = 0 + shift if scalar @_;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{soaserial} = 0 + $_ }
 	return $self->{soaserial} || 0;
 }
 
 
 sub flags {
-	my $self = shift;
-
-	$self->{flags} = 0 + shift if scalar @_;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{flags} = 0 + $_ }
 	return $self->{flags} || 0;
 }
 
 
 sub immediate {
-	my $self = shift;
-	if ( scalar @_ ) {
-		for ( $self->{flags} ) {
-			$_ = 0x0001 | ( $_ || 0 );
-			$_ ^= 0x0001 unless shift;
+	my ( $self, @value ) = @_;
+	for ( $self->{flags} |= 0 ) {
+		if ( scalar @value ) {
+			$_ |= 0x0001;
+			$_ ^= 0x0001 unless shift @value;
 		}
 	}
-	return 0x0001 & ( $self->{flags} || 0 );
+	return $self->{flags} & 0x0001;
 }
 
 
 sub soaminimum {
-	my $self = shift;
-	if ( scalar @_ ) {
-		for ( $self->{flags} ) {
-			$_ = 0x0002 | ( $_ || 0 );
-			$_ ^= 0x0002 unless shift;
+	my ( $self, @value ) = @_;
+	for ( $self->{flags} |= 0 ) {
+		if ( scalar @value ) {
+			$_ |= 0x0002;
+			$_ ^= 0x0002 unless shift @value;
 		}
 	}
-	return 0x0002 & ( $self->{flags} || 0 );
+	return $self->{flags} & 0x0002;
 }
 
 
@@ -196,7 +193,7 @@ Package template (c)2009,2012 O.M.Kolkman and R.W.Franks.
 
 Permission to use, copy, modify, and distribute this software and its
 documentation for any purpose and without fee is hereby granted, provided
-that the above copyright notice appear in all copies and that both that
+that the original copyright notices appear in all copies and that both
 copyright notice and this permission notice appear in supporting
 documentation, and that the name of the author not be used in advertising
 or publicity pertaining to distribution of the software without specific
@@ -213,6 +210,7 @@ DEALINGS IN THE SOFTWARE.
 
 =head1 SEE ALSO
 
-L<perl>, L<Net::DNS>, L<Net::DNS::RR>, RFC7477
+L<perl> L<Net::DNS> L<Net::DNS::RR>
+L<RFC7477|https://tools.ietf.org/html/rfc7477>
 
 =cut

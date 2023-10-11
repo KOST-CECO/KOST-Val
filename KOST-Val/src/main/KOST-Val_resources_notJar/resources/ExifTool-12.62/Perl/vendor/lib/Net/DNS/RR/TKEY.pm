@@ -2,7 +2,7 @@ package Net::DNS::RR::TKEY;
 
 use strict;
 use warnings;
-our $VERSION = (qw$Id: TKEY.pm 1814 2020-10-14 21:49:16Z willem $)[2];
+our $VERSION = (qw$Id: TKEY.pm 1908 2023-03-15 07:28:50Z willem $)[2];
 
 use base qw(Net::DNS::RR);
 
@@ -21,16 +21,15 @@ use Net::DNS::Parameters qw(:class :type);
 use Net::DNS::DomainName;
 
 use constant ANY  => classbyname qw(ANY);
-use constant TKEY => typebyname qw(TKEY);
+use constant TKEY => typebyname	 qw(TKEY);
 
 
 sub _decode_rdata {			## decode rdata from wire-format octet string
-	my $self = shift;
-	my ( $data, $offset ) = @_;
+	my ( $self, $data, $offset ) = @_;
 
 	my $limit = $offset + $self->{rdlength};
 
-	( $self->{algorithm}, $offset ) = Net::DNS::DomainName->decode(@_);
+	( $self->{algorithm}, $offset ) = Net::DNS::DomainName->decode( $data, $offset );
 
 	@{$self}{qw(inception expiration mode error)} = unpack "\@$offset N2n2", $$data;
 	$offset += 12;
@@ -65,11 +64,11 @@ sub _encode_rdata {			## encode rdata as wire-format octet string
 }
 
 
-sub class {				## overide RR method
+sub class {				## override RR method
 	return 'ANY';
 }
 
-sub encode {				## overide RR method
+sub encode {				## override RR method
 	my $self = shift;
 
 	my $owner = $self->{owner}->encode();
@@ -79,57 +78,50 @@ sub encode {				## overide RR method
 
 
 sub algorithm {
-	my $self = shift;
-
-	$self->{algorithm} = Net::DNS::DomainName->new(shift) if scalar @_;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{algorithm} = Net::DNS::DomainName->new($_) }
 	return $self->{algorithm} ? $self->{algorithm}->name : undef;
 }
 
 
 sub inception {
-	my $self = shift;
-
-	$self->{inception} = 0 + shift if scalar @_;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{inception} = 0 + $_ }
 	return $self->{inception} || 0;
 }
 
 
 sub expiration {
-	my $self = shift;
-
-	$self->{expiration} = 0 + shift if scalar @_;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{expiration} = 0 + $_ }
 	return $self->{expiration} || 0;
 }
 
 
 sub mode {
-	my $self = shift;
-
-	$self->{mode} = 0 + shift if scalar @_;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{mode} = 0 + $_ }
 	return $self->{mode} || 0;
 }
 
 
 sub error {
-	my $self = shift;
-
-	$self->{error} = 0 + shift if scalar @_;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{error} = 0 + $_ }
 	return $self->{error} || 0;
 }
 
 
 sub key {
-	my $self = shift;
-
-	$self->{key} = shift if scalar @_;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{key} = $_ }
 	return $self->{key} || "";
 }
 
 
 sub other {
-	my $self = shift;
-
-	$self->{other} = shift if scalar @_;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{other} = $_ }
 	return $self->{other} || "";
 }
 
@@ -230,7 +222,7 @@ Package template (c)2009,2012 O.M.Kolkman and R.W.Franks.
 
 Permission to use, copy, modify, and distribute this software and its
 documentation for any purpose and without fee is hereby granted, provided
-that the above copyright notice appear in all copies and that both that
+that the original copyright notices appear in all copies and that both
 copyright notice and this permission notice appear in supporting
 documentation, and that the name of the author not be used in advertising
 or publicity pertaining to distribution of the software without specific
@@ -247,6 +239,7 @@ DEALINGS IN THE SOFTWARE.
 
 =head1 SEE ALSO
 
-L<perl>, L<Net::DNS>, L<Net::DNS::RR>, RFC2930
+L<perl> L<Net::DNS> L<Net::DNS::RR>
+L<RFC2930|https://tools.ietf.org/html/rfc2930>
 
 =cut

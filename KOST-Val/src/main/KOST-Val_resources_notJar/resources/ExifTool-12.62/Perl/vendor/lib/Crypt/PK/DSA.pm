@@ -2,7 +2,7 @@ package Crypt::PK::DSA;
 
 use strict;
 use warnings;
-our $VERSION = '0.069';
+our $VERSION = '0.078';
 
 require Exporter; our @ISA = qw(Exporter); ### use Exporter 5.57 'import';
 our %EXPORT_TAGS = ( all => [qw( dsa_encrypt dsa_decrypt dsa_sign_message dsa_verify_message dsa_sign_hash dsa_verify_hash )] );
@@ -36,7 +36,9 @@ sub generate_key {
   }
   elsif (@_ == 1 && ref $_[0] eq 'SCALAR') {
     my $data = ${$_[0]};
-    $data = pem_to_der($data) if $data =~ /-----BEGIN DSA PARAMETERS-----\s*(.+)\s*-----END DSA PARAMETERS-----/s;
+    if ($data =~ /-----BEGIN DSA PARAMETERS-----\s*(.+)\s*-----END DSA PARAMETERS-----/s) {
+      $data = pem_to_der($data) or croak "FATAL: PEM/params decode failed";
+    }
     return $self->_generate_key_dsaparam($data);
   }
   croak "FATAL: DSA generate_key - invalid args";
@@ -76,11 +78,11 @@ sub import_key {
   croak "FATAL: invalid key data" unless $data;
 
   if ($data =~ /-----BEGIN (DSA PRIVATE|DSA PUBLIC|PRIVATE|PUBLIC) KEY-----(.*?)-----END/sg) {
-    $data = pem_to_der($data, $password);
+    $data = pem_to_der($data, $password) or croak "FATAL: PEM/key decode failed";
     return $self->_import($data);
   }
   elsif ($data =~ /---- BEGIN SSH2 PUBLIC KEY ----(.*?)---- END SSH2 PUBLIC KEY ----/sg) {
-    $data = pem_to_der($data);
+    $data = pem_to_der($data) or croak "FATAL: PEM/key decode failed";
     my ($typ, $p, $q, $g, $y) = Crypt::PK::_ssh_parse($data);
     return $self->_import_hex(unpack('H*',$p), unpack('H*',$q), unpack('H*',$g), undef, unpack('H*',$y)) if $typ && $p && $q && $g && $y && $typ eq 'ssh-dss';
   }

@@ -4,10 +4,11 @@ use strict;
 use warnings;
 use 5.008004;
 use Carp qw( croak );
-use base qw( FFI::Platypus::TypeParser );
+use parent qw( FFI::Platypus::TypeParser );
+use constant _version => 1;
 
 # ABSTRACT: FFI Type Parser Version One
-our $VERSION = '1.34'; # VERSION
+our $VERSION = '2.08'; # VERSION
 
 
 our @CARP_NOT = qw( FFI::Platypus FFI::Platypus::TypeParser );
@@ -57,18 +58,18 @@ use constant type_regex =>
                                                                                                                                                                   #
     (?:                                                                                                                                                           #
                                                                                                                                                                   #
-      \( ([^)]*) \) -> (.*)                                                                                                                                       # closure  $1 argument types, $2 return type
+      \( ([^)]*) \) -> (.*)                                                                                                                                       # closure,           argument types $1, return type $2
       |                                                                                                                                                           #
-      (?: string | record ) \s* \( \s* ([0-9]+) \s* \)                                                              (?: \s* (\*) | )                              # fixed record, fixed string $3, ponter $4
+      ( string | record ) \s* \( \s* ([0-9]+) \s* \)                                                                (?: \s* (\*) | )                              # fixed record   $3, fixed string   $4, ponter $5
       |                                                                                                                                                           #
-      record                \s* \( (  \s* (?: [A-Za-z_] [A-Za-z_0-9]* :: )* [A-Za-z_] [A-Za-z_0-9]* ) \s* \)        (?: \s* (\*) | )                              # record class $5, pointer $6
+      record                \s* \( (  \s* (?: [A-Za-z_] [A-Za-z_0-9]* :: )* [A-Za-z_] [A-Za-z_0-9]* ) \s* \)        (?: \s* (\*) | )                              # record class   $6, pointer $7
       |                                                                                                                                                           #
-      ( (?: [A-Za-z_] [A-Za-z_0-9]* \s+ )* [A-Za-z_] [A-Za-z_0-9]* )         \s*                                                                                  # unit type name $7
+      ( (?: [A-Za-z_] [A-Za-z_0-9]* \s+ )* [A-Za-z_] [A-Za-z_0-9]* )         \s*                                                                                  # unit type name $8
                                                                                                                                                                   #
-              (?:  (\*)  |   \[ ([0-9]*) \]  |  )                                                                                                                 # pointer $8,       array $9
+              (?:  (\*)  |   \[ ([0-9]*) \]  |  )                                                                                                                 # pointer $9,        array $10
       |                                                                                                                                                           #
-      object                \s* \( \s* ( (?: [A-Za-z_] [A-Za-z_0-9]* :: )* [A-Za-z_] [A-Za-z_0-9]* )                                                              # object class $10
-                                   (?: \s*,\s* ( (?: [A-Za-z_] [A-Za-z_0-9]* \s+ )* [A-Za-z_] [A-Za-z_0-9]* ) )?                                                  #        type $11
+      object                \s* \( \s* ( (?: [A-Za-z_] [A-Za-z_0-9]* :: )* [A-Za-z_] [A-Za-z_0-9]* )                                                              # object class  $11
+                                   (?: \s*,\s* ( (?: [A-Za-z_] [A-Za-z_0-9]* \s+ )* [A-Za-z_] [A-Za-z_0-9]* ) )?                                                  #        type   $12
                                    \s*                                                                            \)                                              #
     )                                                                                                                                                             #
                                                                                                                                                                   #
@@ -90,24 +91,25 @@ sub parse
   {
     my $rt = $2;
     return $self->types->{$name} = $self->create_type_closure(
+      $self->abi,
       $self->parse($rt, $opt),
       map { $self->parse($_, $opt) } map { my $t = $_; $t =~ s/^\s+//; $t =~ s/\s+$//; $t } split /,/, $at,
     );
   }
 
-  if(defined (my $size = $3))  # fixed record / fixed string
+  if(defined (my $size = $4))  # fixed record / fixed string
   {
     croak "fixed record / fixed string size must be larger than 0"
       unless $size > 0;
 
-    if(my $pointer = $4)
+    if(my $pointer = $5)
     {
       return $self->types->{$name} = $self->create_type_record(
         0,
         $size,
       );
     }
-    elsif($opt->{member})
+    elsif($opt->{member} || ($3 eq 'string' && $self->_version > 1))
     {
       return $self->types->{"$name *"} = $self->create_type_record(
         0,
@@ -116,14 +118,21 @@ sub parse
     }
     else
     {
-      croak "fixed string / classless record not allowed as value type";
+      if($self->_version > 1)
+      {
+        croak "classless record not allowed as value type";
+      }
+      else
+      {
+        croak "fixed string / classless record not allowed as value type";
+      }
     }
   }
 
-  if(defined (my $class = $5))  # class record
+  if(defined (my $class = $6))  # class record
   {
     my $size_method = $class->can('ffi_record_size') || $class->can('_ffi_record_size') || croak "$class has no ffi_record_size or _ffi_record_size method";
-    if(my $pointer = $6)
+    if(my $pointer = $7)
     {
       return $self->types->{$name} = $self->create_type_record(
         0,
@@ -137,22 +146,22 @@ sub parse
         1,
         $class->$size_method,
         $class,
-        $class->_ffi_meta->ffi_type,
+        $class->_ffi_meta->ptr,
       );
     }
   }
 
-  if(defined (my $unit_name = $7))  # basic type
+  if(defined (my $unit_name = $8))  # basic type
   {
     if($self->global_types->{basic}->{$unit_name})
     {
-      if(my $pointer = $8)
+      if(my $pointer = $9)
       {
         croak "void pointer not allowed" if $unit_name eq 'void';
         return $self->types->{$name} = $self->global_types->{ptr}->{$unit_name};
       }
 
-      if(defined (my $size = $9))  # array
+      if(defined (my $size = $10))  # array
       {
         croak "void array not allowed" if $unit_name eq 'void';
         if($size ne '')
@@ -178,11 +187,11 @@ sub parse
 
     if(my $map_name = $self->type_map->{$unit_name})
     {
-      if(my $pointer = $8)
+      if(my $pointer = $9)
       {
         return $self->types->{$name} = $self->parse("$map_name *", $opt);
       }
-      if(defined (my $size = $9))
+      if(defined (my $size = $10))
       {
         if($size ne '')
         {
@@ -198,7 +207,7 @@ sub parse
       return $self->types->{$name} = $self->parse("$map_name", $opt);
     }
 
-    if(my $pointer = $8)
+    if(my $pointer = $9)
     {
       my $unit_type = $self->parse($unit_name, $opt);
 
@@ -223,7 +232,7 @@ sub parse
       }
     }
 
-    if(defined (my $size = $9))
+    if(defined (my $size = $10))
     {
       my $unit_type = $self->parse($unit_name, $opt);
       my $basic_name = $self->global_types->{rev}->{$unit_type->type_code};
@@ -257,9 +266,9 @@ sub parse
     return $self->types->{$name} || croak "unknown type: $unit_name";
   }
 
-  if(defined (my $class = $10)) # object type
+  if(defined (my $class = $11)) # object type
   {
-    my $basic_name = $11 || 'opaque';
+    my $basic_name = $12 || 'opaque';
     my $basic_type = $self->parse($basic_name);
     if($basic_type->is_object_ok)
     {
@@ -291,11 +300,11 @@ FFI::Platypus::TypeParser::Version1 - FFI Type Parser Version One
 
 =head1 VERSION
 
-version 1.34
+version 2.08
 
 =head1 SYNOPSIS
 
- use FFI::Platypus;
+ use FFI::Platypus 1.00;
  my $ffi = FFI::Platypus->new( api => 1 );
  $ffi->type('record(Foo::Bar)' => 'foo_bar_t');
  $ffi->type('record(Foo::Bar)*' => 'foo_bar_ptr');
@@ -351,7 +360,7 @@ Damyan Ivanov
 
 Ilya Pavlov (Ilya33)
 
-Petr Pisar (ppisar)
+Petr Písař (ppisar)
 
 Mohammad S Anwar (MANWAR)
 
@@ -361,9 +370,17 @@ Meredith (merrilymeredith, MHOWARD)
 
 Diab Jerius (DJERIUS)
 
+Eric Brine (IKEGAMI)
+
+szTheory
+
+José Joaquín Atria (JJATRIA)
+
+Pete Houston (openstrike, HOUSTON)
+
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2015,2016,2017,2018,2019,2020 by Graham Ollis.
+This software is copyright (c) 2015-2022 by Graham Ollis.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

@@ -1,10 +1,10 @@
-package Package::Stash; # git description: v0.38-23-gce01289
+package Package::Stash; # git description: v0.39-2-ga9a8cce
 use strict;
 use warnings;
 use 5.008001;
 # ABSTRACT: Routines for manipulating stashes
 
-our $VERSION = '0.39';
+our $VERSION = '0.40';
 our $IMPLEMENTATION;
 
 use Module::Implementation 0.06;
@@ -44,7 +44,7 @@ Package::Stash - Routines for manipulating stashes
 
 =head1 VERSION
 
-version 0.39
+version 0.40
 
 =head1 SYNOPSIS
 
@@ -205,6 +205,21 @@ variables:
   # No problem, modifying a copy, not the original
   $Some::Namespace::name .= " world";
 
+=head1 BUGS / CAVEATS
+
+=over 4
+
+=item * Prior to perl 5.10, scalar slots are only considered to exist if they are defined
+
+This is due to a shortcoming within perl itself. See
+L<perlref/Making References> point 7 for more information.
+
+=item * GLOB and FORMAT variables are not (yet) accessible through this module.
+
+=item * Also, see the BUGS section for the specific backends (L<Package::Stash::XS> and L<Package::Stash::PP>)
+
+=back
+
 =head1 SEE ALSO
 
 =over 4
@@ -220,20 +235,7 @@ This module is a factoring out of code that used to live here
 Based on code from L<Class::MOP::Package>, by Stevan Little and the Moose
 Cabal.
 
-=head1 BUGS / CAVEATS
-
-=over 4
-
-=item * Prior to perl 5.10, scalar slots are only considered to exist if they are defined
-
-This is due to a shortcoming within perl itself. See
-L<perlref/Making References> point 7 for more information.
-
-=item * GLOB and FORMAT variables are not (yet) accessible through this module.
-
-=item * Also, see the BUGS section for the specific backends (L<Package::Stash::XS> and L<Package::Stash::PP>)
-
-=back
+=head1 SUPPORT
 
 Bugs may be submitted through L<the RT bug tracker|https://rt.cpan.org/Public/Dist/Display.html?Name=Package-Stash>
 (or L<bug-Package-Stash@rt.cpan.org|mailto:bug-Package-Stash@rt.cpan.org>).
@@ -254,7 +256,7 @@ Jesse Luehrs <doy@tozt.net>
 
 =head1 CONTRIBUTORS
 
-=for stopwords Karen Etheridge Carlos Lima Dave Rolsky Justin Hunter Christian Walde Kent Fredric Niko Tyni Renee Tim Bunce
+=for stopwords Karen Etheridge Carlos Lima Christian Walde Dave Rolsky Justin Hunter Kent Fredric Niko Tyni Renee Tim Bunce
 
 =over 4
 
@@ -268,15 +270,15 @@ Carlos Lima <carlos@multi>
 
 =item *
 
+Christian Walde <walde.christian@googlemail.com>
+
+=item *
+
 Dave Rolsky <autarch@urth.org>
 
 =item *
 
 Justin Hunter <justin.d.hunter@gmail.com>
-
-=item *
-
-Christian Walde <walde.christian@googlemail.com>
 
 =item *
 
@@ -298,7 +300,7 @@ Tim Bunce <Tim.Bunce@pobox.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2020 by Jesse Luehrs.
+This software is copyright (c) 2022 by Jesse Luehrs.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

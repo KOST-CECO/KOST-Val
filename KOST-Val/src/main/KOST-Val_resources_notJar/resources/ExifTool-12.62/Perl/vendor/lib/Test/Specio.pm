@@ -3,7 +3,7 @@ package Test::Specio;
 use strict;
 use warnings;
 
-our $VERSION = '0.46';
+our $VERSION = '0.48';
 
 use IO::File;
 use Scalar::Util qw( blessed looks_like_number openhandle );
@@ -107,8 +107,8 @@ our $STR_OVERLOAD_CLASS_NAME = _T::StrOverload->new('_T::StrOverload');
     package _T::NumOverload;
 
     use overload
-        '0+' => sub { ${ $_[0] } },
-        '+'  => sub { ${ $_[0] } + $_[1] },
+        '0+'     => sub { ${ $_[0] } },
+        '+'      => sub { ${ $_[0] } + $_[1] },
         fallback => 0;
 
     sub new {
@@ -589,7 +589,7 @@ sub builtins_tests {
                     -1.23456e-10
                     -1e+10
                     1E10
-                    ),
+                ),
             ],
             reject => [
                 $BOOL_OVERLOAD_TRUE,
@@ -639,7 +639,7 @@ sub builtins_tests {
                     -1e10
                     -1e+10
                     1E20
-                    ),
+                ),
             ],
             reject => [
                 $BOOL_OVERLOAD_TRUE,
@@ -684,7 +684,7 @@ sub builtins_tests {
                     -1.23456e10
                     -1.23456e-10
                     -1.23456e+10
-                    ),
+                ),
             ],
         },
         Str => {
@@ -1298,7 +1298,7 @@ Test::Specio - Test helpers for Specio
 
 =head1 VERSION
 
-version 0.46
+version 0.48
 
 =head1 SYNOPSIS
 
@@ -1324,12 +1324,12 @@ This module provides the following exports:
 
 This subroutine accepts two arguments. The first should be a Specio type
 object. The second is hashref which can contain the keys C<accept> and
-C<reject>. Each key should contain an arrayref of values which the type
-accepts or rejects.
+C<reject>. Each key should contain an arrayref of values which the type accepts
+or rejects.
 
-The third argument is optional. This is a sub reference which will be called
-to generate a description of the value being tested. This defaults to calling
-this package's C<describe> sub, but you can provide your own.
+The third argument is optional. This is a sub reference which will be called to
+generate a description of the value being tested. This defaults to calling this
+package's C<describe> sub, but you can provide your own.
 
 =head2 describe($value)
 
@@ -1515,10 +1515,9 @@ To create a glob you can pass around for tests, use this code:
       *SOME_GLOB;
   };
 
-The C<_T::GlobOverload> package is defined when you load C<Test::Specio> so
-you can create your own glob overloading objects. Such objects cannot be
-exported because the glob they return does not transfer across packages
-properly.
+The C<_T::GlobOverload> package is defined when you load C<Test::Specio> so you
+can create your own glob overloading objects. Such objects cannot be exported
+because the glob they return does not transfer across packages properly.
 
 You can create such a variable like this:
 
@@ -1536,8 +1535,6 @@ this:
 
 Bugs may be submitted at L<https://github.com/houseabsolute/Specio/issues>.
 
-I am also usually active on IRC as 'autarch' on C<irc://irc.perl.org>.
-
 =head1 SOURCE
 
 The source code repository for Specio can be found at L<https://github.com/houseabsolute/Specio>.
@@ -1548,7 +1545,7 @@ Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2012 - 2020 by Dave Rolsky.
+This software is Copyright (c) 2012 - 2022 by Dave Rolsky.
 
 This is free software, licensed under:
 

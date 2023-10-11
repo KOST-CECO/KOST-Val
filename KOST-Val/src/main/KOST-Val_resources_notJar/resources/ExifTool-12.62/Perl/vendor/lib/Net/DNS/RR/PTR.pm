@@ -2,7 +2,7 @@ package Net::DNS::RR::PTR;
 
 use strict;
 use warnings;
-our $VERSION = (qw$Id: PTR.pm 1814 2020-10-14 21:49:16Z willem $)[2];
+our $VERSION = (qw$Id: PTR.pm 1896 2023-01-30 12:59:25Z willem $)[2];
 
 use base qw(Net::DNS::RR);
 
@@ -19,18 +19,18 @@ use Net::DNS::DomainName;
 
 
 sub _decode_rdata {			## decode rdata from wire-format octet string
-	my $self = shift;
+	my ( $self, @argument ) = @_;
 
-	$self->{ptrdname} = Net::DNS::DomainName1035->decode(@_);
+	$self->{ptrdname} = Net::DNS::DomainName1035->decode(@argument);
 	return;
 }
 
 
 sub _encode_rdata {			## encode rdata as wire-format octet string
-	my $self = shift;
+	my ( $self, @argument ) = @_;
 
 	my $ptrdname = $self->{ptrdname};
-	return $ptrdname->encode(@_);
+	return $ptrdname->encode(@argument);
 }
 
 
@@ -43,17 +43,16 @@ sub _format_rdata {			## format rdata portion of RR string.
 
 
 sub _parse_rdata {			## populate RR from rdata in argument list
-	my $self = shift;
+	my ( $self, @argument ) = @_;
 
-	$self->ptrdname(shift);
+	$self->ptrdname(@argument);
 	return;
 }
 
 
 sub ptrdname {
-	my $self = shift;
-
-	$self->{ptrdname} = Net::DNS::DomainName1035->new(shift) if scalar @_;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{ptrdname} = Net::DNS::DomainName1035->new($_) }
 	return $self->{ptrdname} ? $self->{ptrdname}->name : undef;
 }
 
@@ -103,7 +102,7 @@ Package template (c)2009,2012 O.M.Kolkman and R.W.Franks.
 
 Permission to use, copy, modify, and distribute this software and its
 documentation for any purpose and without fee is hereby granted, provided
-that the above copyright notice appear in all copies and that both that
+that the original copyright notices appear in all copies and that both
 copyright notice and this permission notice appear in supporting
 documentation, and that the name of the author not be used in advertising
 or publicity pertaining to distribution of the software without specific
@@ -120,6 +119,7 @@ DEALINGS IN THE SOFTWARE.
 
 =head1 SEE ALSO
 
-L<perl>, L<Net::DNS>, L<Net::DNS::RR>, RFC1035 Section 3.3.12
+L<perl> L<Net::DNS> L<Net::DNS::RR>
+L<RFC1035(3.3.12)|https://tools.ietf.org/html/rfc1035>
 
 =cut

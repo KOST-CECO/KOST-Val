@@ -275,54 +275,54 @@ Nama Namibia locale.
 
 =head3 Full
 
-   2008-02-05T18:30:30 = 6:30:30 ǃuias UTC
-   1995-12-22T09:05:02 = 9:05:02 ǁgoagas UTC
-  -0010-09-15T04:44:23 = 4:44:23 ǁgoagas UTC
+   2008-02-05T18:30:30 = 6:30:30 ǃuias UTC
+   1995-12-22T09:05:02 = 9:05:02 ǁgoagas UTC
+  -0010-09-15T04:44:23 = 4:44:23 ǁgoagas UTC
 
 =head3 Long
 
-   2008-02-05T18:30:30 = 6:30:30 ǃuias UTC
-   1995-12-22T09:05:02 = 9:05:02 ǁgoagas UTC
-  -0010-09-15T04:44:23 = 4:44:23 ǁgoagas UTC
+   2008-02-05T18:30:30 = 6:30:30 ǃuias UTC
+   1995-12-22T09:05:02 = 9:05:02 ǁgoagas UTC
+  -0010-09-15T04:44:23 = 4:44:23 ǁgoagas UTC
 
 =head3 Medium
 
-   2008-02-05T18:30:30 = 6:30:30 ǃuias
-   1995-12-22T09:05:02 = 9:05:02 ǁgoagas
-  -0010-09-15T04:44:23 = 4:44:23 ǁgoagas
+   2008-02-05T18:30:30 = 6:30:30 ǃuias
+   1995-12-22T09:05:02 = 9:05:02 ǁgoagas
+  -0010-09-15T04:44:23 = 4:44:23 ǁgoagas
 
 =head3 Short
 
-   2008-02-05T18:30:30 = 6:30 ǃuias
-   1995-12-22T09:05:02 = 9:05 ǁgoagas
-  -0010-09-15T04:44:23 = 4:44 ǁgoagas
+   2008-02-05T18:30:30 = 6:30 ǃuias
+   1995-12-22T09:05:02 = 9:05 ǁgoagas
+  -0010-09-15T04:44:23 = 4:44 ǁgoagas
 
 
 =head2 Datetime Formats
 
 =head3 Full
 
-   2008-02-05T18:30:30 = Denstaxtsees, 5 ǃKhanǀgôab 2008 6:30:30 ǃuias UTC
-   1995-12-22T09:05:02 = Fraitaxtsees, 22 Hôasoreǁkhâb 1995 9:05:02 ǁgoagas UTC
-  -0010-09-15T04:44:23 = Satertaxtsees, 15 Taraǀkhuumûǁkhâb -10 4:44:23 ǁgoagas UTC
+   2008-02-05T18:30:30 = Denstaxtsees, 5 ǃKhanǀgôab 2008 6:30:30 ǃuias UTC
+   1995-12-22T09:05:02 = Fraitaxtsees, 22 Hôasoreǁkhâb 1995 9:05:02 ǁgoagas UTC
+  -0010-09-15T04:44:23 = Satertaxtsees, 15 Taraǀkhuumûǁkhâb -10 4:44:23 ǁgoagas UTC
 
 =head3 Long
 
-   2008-02-05T18:30:30 = 5 ǃKhanǀgôab 2008 6:30:30 ǃuias UTC
-   1995-12-22T09:05:02 = 22 Hôasoreǁkhâb 1995 9:05:02 ǁgoagas UTC
-  -0010-09-15T04:44:23 = 15 Taraǀkhuumûǁkhâb -10 4:44:23 ǁgoagas UTC
+   2008-02-05T18:30:30 = 5 ǃKhanǀgôab 2008 6:30:30 ǃuias UTC
+   1995-12-22T09:05:02 = 22 Hôasoreǁkhâb 1995 9:05:02 ǁgoagas UTC
+  -0010-09-15T04:44:23 = 15 Taraǀkhuumûǁkhâb -10 4:44:23 ǁgoagas UTC
 
 =head3 Medium
 
-   2008-02-05T18:30:30 = 5 Feb 2008 6:30:30 ǃuias
-   1995-12-22T09:05:02 = 22 Dec 1995 9:05:02 ǁgoagas
-  -0010-09-15T04:44:23 = 15 Sep -10 4:44:23 ǁgoagas
+   2008-02-05T18:30:30 = 5 Feb 2008 6:30:30 ǃuias
+   1995-12-22T09:05:02 = 22 Dec 1995 9:05:02 ǁgoagas
+  -0010-09-15T04:44:23 = 15 Sep -10 4:44:23 ǁgoagas
 
 =head3 Short
 
-   2008-02-05T18:30:30 = 05/02/2008 6:30 ǃuias
-   1995-12-22T09:05:02 = 22/12/1995 9:05 ǁgoagas
-  -0010-09-15T04:44:23 = 15/09/-10 4:44 ǁgoagas
+   2008-02-05T18:30:30 = 05/02/2008 6:30 ǃuias
+   1995-12-22T09:05:02 = 22/12/1995 9:05 ǁgoagas
+  -0010-09-15T04:44:23 = 15/09/-10 4:44 ǁgoagas
 
 
 =head2 Available Formats
@@ -416,6 +416,12 @@ Nama Namibia locale.
    2008-02-05T18:30:30 = AD 2008 Feb 5
    1995-12-22T09:05:02 = AD 1995 Dec 22
   -0010-09-15T04:44:23 = BC -10 Sep 15
+
+=head3 GyMd (GGGGG y-MM-dd)
+
+   2008-02-05T18:30:30 = AD 2008-02-05
+   1995-12-22T09:05:02 = AD 1995-12-22
+  -0010-09-15T04:44:23 = BC -10-09-15
 
 =head3 H (HH)
 
@@ -513,11 +519,11 @@ Nama Namibia locale.
    1995-12-22T09:05:02 = 9 ǁgoagas
   -0010-09-15T04:44:23 = 4 ǁgoagas
 
-=head3 hm (h:mm a)
+=head3 hm (h:mm a)
 
-   2008-02-05T18:30:30 = 6:30 ǃuias
-   1995-12-22T09:05:02 = 9:05 ǁgoagas
-  -0010-09-15T04:44:23 = 4:44 ǁgoagas
+   2008-02-05T18:30:30 = 6:30 ǃuias
+   1995-12-22T09:05:02 = 9:05 ǁgoagas
+  -0010-09-15T04:44:23 = 4:44 ǁgoagas
 
 =head3 hms (h:mm:ss a)
 

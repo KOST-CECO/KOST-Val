@@ -36,7 +36,7 @@ Objects of C<MIME::Type> store the information on one such type.
 =item overload: B<string comparison>
 
 When a MIME::Type object is compared to either a string or another
-MIME::TYpe, the L<equals()|MIME::Type/"Knowledge"> method is called.  Comparison is smart,
+MIME::Type, the L<equals()|MIME::Type/"Knowledge"> method is called.  Comparison is smart,
 which means that it extends common string comparison with some
 features which are defined in the related RFCs.
 
@@ -225,12 +225,12 @@ specified with the C<type> option flag.
 
 =head1 SEE ALSO
 
-This module is part of MIME-Types distribution version 2.18,
-built on December 09, 2020. Website: F<http://perl.overmeer.net/CPAN/>
+This module is part of MIME-Types distribution version 2.24,
+built on December 28, 2022. Website: F<http://perl.overmeer.net/CPAN/>
 
 =head1 LICENSE
 
-Copyrights 1999-2020 by [Mark Overmeer <markov@cpan.org>]. For other contributors see ChangeLog.
+Copyrights 1999-2022 by [Mark Overmeer <markov@cpan.org>]. For other contributors see ChangeLog.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
