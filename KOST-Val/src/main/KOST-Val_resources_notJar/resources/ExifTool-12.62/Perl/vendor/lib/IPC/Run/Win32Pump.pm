@@ -27,10 +27,11 @@ It parses a bunch of command line parameters from IPC::Run::Win32IO.
 =cut
 
 use strict;
+use warnings;
 use vars qw{$VERSION};
 
 BEGIN {
-    $VERSION = '20200505.0';
+    $VERSION = '20220807.0';
 }
 
 use Win32API::File qw(

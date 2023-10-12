@@ -4,7 +4,7 @@ use warnings;
 
 use Config qw/%Config/;
 
-our $VERSION = '0.015';
+our $VERSION = '0.016';
 
 use Importer Importer => 'import';
 our @EXPORT_OK = qw/term_size USE_GCS USE_TERM_READKEY USE_TERM_SIZE_ANY uni_length/;
@@ -13,7 +13,7 @@ sub DEFAULT_SIZE() { 80 }
 
 my $IO;
 BEGIN {
-    open($IO, '>&', STDOUT) or die "Could not clone STDOUT";
+    open($IO, '>&', *STDOUT) or die "Could not clone STDOUT";
 }
 
 sub try(&) {

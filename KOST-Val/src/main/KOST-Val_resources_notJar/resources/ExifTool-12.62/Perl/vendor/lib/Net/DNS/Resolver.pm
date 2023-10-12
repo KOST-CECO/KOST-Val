@@ -3,7 +3,7 @@ package Net::DNS::Resolver;
 use strict;
 use warnings;
 
-our $VERSION = (qw$Id: Resolver.pm 1818 2020-10-18 15:24:42Z willem $)[2];
+our $VERSION = (qw$Id: Resolver.pm 1895 2023-01-16 13:38:08Z willem $)[2];
 
 
 =head1 NAME
@@ -254,7 +254,7 @@ the reason for failure may be determined using C<errorstring()>.
 Here is an example that uses a timeout and TSIG verification:
 
     $resolver->tcp_timeout( 10 );
-    $resolver->tsig( 'Khmac-sha1.example.+161+24053.private' );
+    $resolver->tsig( $keyfile );
     @zone = $resolver->axfr( 'example.com' );
 
     foreach $rr (@zone) {
@@ -274,7 +274,7 @@ returned to the caller.
 Here is the example above, implemented using an iterator:
 
     $resolver->tcp_timeout( 10 );
-    $resolver->tsig( 'Khmac-sha1.example.+161+24053.private' );
+    $resolver->tsig( $keyfile );
     $iterator = $resolver->axfr( 'example.com' );
 
     while ( $rr = $iterator->() ) {
@@ -602,17 +602,13 @@ The default value is false.
 
 =head2 tsig
 
-    $resolver->tsig( $tsig );
+    $resolver->tsig( $keyfile );
 
-    $resolver->tsig( 'Khmac-sha1.example.+161+24053.private' );
-
-    $resolver->tsig( 'Khmac-sha1.example.+161+24053.key' );
-
-    $resolver->tsig( 'Khmac-sha1.example.+161+24053.key',
+    $resolver->tsig( $keyfile,
 		fudge => 60
 		);
 
-    $resolver->tsig( $key_name, $key );
+    $resolver->tsig( $tsig_rr );
 
     $resolver->tsig( undef );
 
@@ -736,7 +732,7 @@ All rights reserved.
 
 Permission to use, copy, modify, and distribute this software and its
 documentation for any purpose and without fee is hereby granted, provided
-that the above copyright notice appear in all copies and that both that
+that the original copyright notices appear in all copies and that both
 copyright notice and this permission notice appear in supporting
 documentation, and that the name of the author not be used in advertising
 or publicity pertaining to distribution of the software without specific
@@ -753,9 +749,11 @@ DEALINGS IN THE SOFTWARE.
 
 =head1 SEE ALSO
 
-L<perl>, L<Net::DNS>, L<Net::DNS::Packet>, L<Net::DNS::Update>,
-L<Net::DNS::Header>, L<Net::DNS::Question>, L<Net::DNS::RR>,
-L<resolver(5)>, RFC 1034, RFC 1035
+L<perl> L<Net::DNS> L<Net::DNS::Packet> L<Net::DNS::Update>
+L<Net::DNS::Header> L<Net::DNS::Question> L<Net::DNS::RR>
+L<resolver(5)>
+L<RFC1034|https://tools.ietf.org/html/rfc1034>
+L<RFC1035|https://tools.ietf.org/html/rfc1035>
 
 =cut
 

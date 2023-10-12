@@ -1,5 +1,5 @@
 package File::Remove;
-$File::Remove::VERSION = '1.60';
+$File::Remove::VERSION = '1.61';
 use 5.008;
 use strict;
 use warnings;
@@ -329,7 +329,7 @@ File::Remove - Remove files and directories
 
 =head1 VERSION
 
-version 1.60
+version 1.61
 
 =head1 SYNOPSIS
 

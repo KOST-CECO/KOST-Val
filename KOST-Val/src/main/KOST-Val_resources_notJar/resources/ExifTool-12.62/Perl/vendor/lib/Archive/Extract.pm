@@ -48,7 +48,7 @@ use vars qw[$VERSION $PREFER_BIN $PROGRAMS $WARN $DEBUG
             $_ALLOW_BIN $_ALLOW_PURE_PERL $_ALLOW_TAR_ITER
          ];
 
-$VERSION            = '0.86';
+$VERSION            = '0.88';
 $PREFER_BIN         = 0;
 $WARN               = 1;
 $DEBUG              = 0;
@@ -188,6 +188,21 @@ my $Mapping = {  # binary program           # pure perl module
                     }
     }
 
+sub type_for {
+    local $_ = shift;
+    return /.+?\.(?:tar\.gz|tgz)$/i         ? TGZ   :
+           /.+?\.gz$/i                      ? GZ    :
+           /.+?\.tar$/i                     ? TAR   :
+           /.+?\.(zip|jar|ear|war|par)$/i   ? ZIP   :
+           /.+?\.(?:tbz2?|tar\.bz2?)$/i     ? TBZ   :
+           /.+?\.bz2$/i                     ? BZ2   :
+           /.+?\.Z$/                        ? Z     :
+           /.+?\.lzma$/                     ? LZMA  :
+           /.+?\.(?:txz|tar\.xz)$/i         ? TXZ   :
+           /.+?\.xz$/                       ? XZ    :
+           '';
+}
+
 =head1 METHODS
 
 =head2 $ae = Archive::Extract->new(archive => '/path/to/archive',[type => TYPE])
@@ -195,7 +210,7 @@ my $Mapping = {  # binary program           # pure perl module
 Creates a new C<Archive::Extract> object based on the archive file you
 passed it. Automatically determines the type of archive based on the
 extension, but you can override that by explicitly providing the
-C<type> argument.
+C<type> argument, potentially by calling C<type_for()>.
 
 Valid values for C<type> are:
 
@@ -272,21 +287,7 @@ Returns a C<Archive::Extract> object on success, or false on failure.
         my $ar = $parsed->{archive} = File::Spec->rel2abs( $parsed->{archive} );
 
         ### figure out the type, if it wasn't already specified ###
-        unless ( $parsed->{type} ) {
-            $parsed->{type} =
-                $ar =~ /.+?\.(?:tar\.gz|tgz)$/i         ? TGZ   :
-                $ar =~ /.+?\.gz$/i                      ? GZ    :
-                $ar =~ /.+?\.tar$/i                     ? TAR   :
-                $ar =~ /.+?\.(zip|jar|ear|war|par)$/i   ? ZIP   :
-                $ar =~ /.+?\.(?:tbz2?|tar\.bz2?)$/i     ? TBZ   :
-                $ar =~ /.+?\.bz2$/i                     ? BZ2   :
-                $ar =~ /.+?\.Z$/                        ? Z     :
-                $ar =~ /.+?\.lzma$/                     ? LZMA  :
-                $ar =~ /.+?\.(?:txz|tar\.xz)$/i         ? TXZ   :
-                $ar =~ /.+?\.xz$/                       ? XZ    :
-                '';
-
-        }
+        $parsed->{type} ||= type_for $ar;
 
         bless $parsed, $class;
 
@@ -1618,6 +1619,22 @@ sub _no_buffer_content {
 1;
 
 =pod
+
+=head1 UTILITY FUNCTION
+
+=head2 type_for($archive)
+
+Given an archive file name, it determins the type by parsing the file
+name extension. Used by C<new()> when the C<type> parameter is not passed.
+Also useful when the archive file does not include a suffix but the file
+name is otherwise known, such as when a file is uploaded to a web server
+and stored with a temporary name that differs from the original name, and
+you want to use the same detection pattern as Archive::Extract. Example:
+
+  my $ae = Archive::Extract->new(
+      archive => '/tmp/02af6s',
+      type    => Archive::Extract::type_for('archive.zip'),
+  );
 
 =head1 HOW IT WORKS
 

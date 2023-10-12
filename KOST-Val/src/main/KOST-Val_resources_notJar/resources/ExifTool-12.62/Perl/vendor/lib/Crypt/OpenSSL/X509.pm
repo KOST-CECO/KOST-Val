@@ -1,11 +1,14 @@
 package Crypt::OpenSSL::X509;
 
+use warnings;
 use strict;
 
 use Exporter;
 use base qw(Exporter);
 
-our $VERSION = '1.902';
+use Convert::ASN1;
+
+our $VERSION = '1.915';
 
 our @EXPORT_OK = qw(
   FORMAT_UNDEF FORMAT_ASN1 FORMAT_TEXT FORMAT_PEM
@@ -82,6 +85,104 @@ sub Crypt::OpenSSL::X509::is_selfsigned {
   return $x509->subject eq $x509->issuer;
 }
 
+sub Crypt::OpenSSL::X509::subjectaltname {
+  my $x509 = shift;
+
+  my $SUBJECT_ALT_NAME_OID = '2.5.29.17';
+  my $ext;
+  eval {
+    # extensions_by_oid croaks of no extensions found
+    # we don't care we will return an empty array
+    $ext = $x509->extensions_by_oid();
+  };
+
+  # Determine whether the SubjectAltName exist
+  if (! defined ${$ext}{$SUBJECT_ALT_NAME_OID}) {
+    # Simply return a reference to an empty array if it does not exist
+    my @tmp = ();
+    return \@tmp;
+  }
+
+  my $pdu = ${$ext}{$SUBJECT_ALT_NAME_OID}->value();
+
+  # remove leading '#' from the value returned
+  $pdu =~ s/^#//g;
+
+  my $bin_data = join '', pack 'H*', $pdu;
+  my $asn = Convert::ASN1->new();
+
+  my $ok = $asn->prepare(q<
+    AnotherName ::= SEQUENCE {
+      type    OBJECT IDENTIFIER,
+      value      [0] EXPLICIT ANY } --DEFINED BY type-id }
+
+    EDIPartyName ::= SEQUENCE {
+      nameAssigner            [0]     DirectoryString OPTIONAL,
+      partyName               [1]     DirectoryString }
+
+   --  Directory string type --
+
+    DirectoryString ::= CHOICE {
+      teletexString		TeletexString,  --(SIZE (1..MAX)),
+      printableString		PrintableString,  --(SIZE (1..MAX)),
+      bmpString		BMPString,  --(SIZE (1..MAX)),
+      universalString		UniversalString,  --(SIZE (1..MAX)),
+      utf8String		UTF8String,  --(SIZE (1..MAX)),
+      ia5String		IA5String  --added for EmailAddress
+	}
+
+    AttributeType ::= OBJECT IDENTIFIER
+
+    AttributeValue ::= DirectoryString  --ANY
+
+    AttributeTypeAndValue ::= SEQUENCE {
+      type			AttributeType,
+      value			AttributeValue
+	}
+
+    -- naming data types --
+
+    Name ::= CHOICE { -- only one possibility for now
+      rdnSequence		RDNSequence
+	}
+
+    RDNSequence ::= SEQUENCE OF RelativeDistinguishedName
+
+    DistinguishedName ::= RDNSequence
+
+    RelativeDistinguishedName ::=
+	SET OF AttributeTypeAndValue  --SET SIZE (1 .. MAX) OF
+
+    SubjectAltName ::= GeneralNames
+
+    GeneralNames ::= SEQUENCE OF GeneralName
+
+    GeneralName ::= CHOICE {
+      rfc822Name                      [1]     IA5String,
+      dNSName                         [2]     IA5String,
+      x400Address                     [3]     ANY, --ORAddress,
+      directoryName                   [4]     Name,
+      ediPartyName                    [5]     EDIPartyName,
+      uniformResourceIdentifier       [6]     IA5String,
+      iPAddress                       [7]     OCTET STRING,
+      registeredID                    [8]     OBJECT IDENTIFIER
+    }
+
+  >);
+  die '*** Could not prepare definition: '.$asn->error()
+      if !$ok;
+
+  # This is an important bit - if you don't do the find the decode
+  # will randomly fail/succeed.  This is required to work
+  my $asn_node = $asn->find('SubjectAltName')
+      or die $asn->error;
+
+  my $san = $asn_node->decode($bin_data)
+      or die 'Unable to decode SubjectAltName: '.$asn_node->error;
+
+  return $san;
+}
+
 use XSLoader;
 XSLoader::load 'Crypt::OpenSSL::X509', $VERSION;
 
@@ -92,6 +193,10 @@ END {
 1;
 
 __END__
+
+=pod
+
+=encoding UTF-8
 
 =head1 NAME
 
@@ -216,7 +321,7 @@ C<notAfter> time as a string.
 
 =item email
 
-Email address as a string.
+Email addresses as string, if multiple addresses found, they are separated by a space (' ').
 
 =item version
 
@@ -304,6 +409,20 @@ Return a hash of Extensions indexed by OID or name.
 =item has_extension_oid ( OID )
 
 Return true if the certificate has the extension specified by C<OID>.
+
+=item subjectaltname ( )
+
+Uses Convert::ASN1 to extract the Subject Alternative Names from the X509 object.
+subjectaltname ( ) returns an array of "rfc822Name"s
+
+    [
+        {
+            'rfc822Name' => 'altuser@mpi-sws.org'
+        },
+        {
+            'rfc822Name' => 'user@mpi-sws.org'
+        },
+    ]
 
 =back
 
@@ -409,33 +528,121 @@ Return true if the Name_Entry value is of the specified type. The value of C<ASN
 
 =back
 
-=head1 SEE ALSO
+=head1 ISSUE REPORTING
 
-OpenSSL(1), Crypt::OpenSSL::RSA, Crypt::OpenSSL::Bignum
-
-=head1 AUTHOR
-
-Dan Sully
-
-=head1 CONTRIBUTORS
+Please report any bugs or feature requests using B<GitHub>.
 
 =over
 
-=item * Neil Bowers, release 1.8.13
+=item * L<GitHub Issues|https://github.com/dsully/perl-crypt-openssl-x509/issues>
 
-=item * kmx, release 1.8.9
+=back
+
+=head1 SEE ALSO
+
+=over
+
+=item * L<OpenSSL website|https://www.openssl.org/>
+
+=item * L<Crypt::OpenSSL::RSA|https://metacpan.org/pod/Crypt::OpenSSL::RSA>
+
+=item * L<Crypt::OpenSSL::Bignum|https://metacpan.org/pod/Crypt::OpenSSL::Bignum>
+
+=item * L<Crypt::OpenSSL::Guess|https://metacpan.org/pod/Crypt::OpenSSL::Guess>
+
+=back
+
+=head1 AUTHOR
+
+=over
+
+=item * Dan Sully, original author
+
+=item * Jonas Brømsø, current maintainer
+
+=item * Please see the L</ACKNOWLEDGEMENTS> section for a list of contributors.
+
+=back
+
+=head1 ACKNOWLEDGEMENTS
+
+In alphabetical order.
+
+=over
+
+=item * @eserte
+
+=item * @kmx
+
+=item * @stphnlyd
+
+=item * Ashley Hindmarsh @bestscarper
+
+=item * Bernhard M. Wiedemann @bmwiedemann
+
+=item * Brad Davidson @brandond
+
+=item * Daniel Kahn Gillmor
+
+=item * Daniel Risacher
+
+=item * David O'Callaghan
+
+=item * David Steinbrunner @dsteinbrunner
+
+=item * dsteinwand
+
+=item * Florian Schlichting @fschlich
+
+=item * IKEDA Soji @ikedas
+
+=item * James Hunt @jhunt
+
+=item * James Rouzier @jrouzierinverse
+
+=item * Johanna @0xxon
+
+=item * Jonas Brømsø @jonasbn
+
+=item * Louise Doran
+
+=item * Michael McClimon @mmcclimon
+
+=item * Michal Josef Špaček @michal-josef-spacek
+
+=item * Neil Bowers @neilb
+
+=item * Nicholas Harteau
+
+=item * Otmar Lendl
+
+=item * Patrick C. @errror
+
+=item * Patrick Cernko
+
+=item * Petr Pisar @ppisar
+
+=item * pi-rho
+
+=item * Salvador Fandiño @salva
 
 =item * Sebastian Andrzej Siewior
 
-=item * David O'Callaghan, E<lt>david.ocallaghan@cs.tcd.ieE<gt>
+=item * Sho Nakatani @laysakura
 
-=item * Daniel Kahn Gillmor E<lt>dkg@fifthhorseman.netE<gt>
+=item * Shoichi Kaji @skaji
+
+=item * Timothy Legge @timlegge 
+
+=item * Todd Rinaldo @toddr
+
+=item * Uli Scholler
 
 =back
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 2004-2019 by Dan Sully
+Copyright 2004-2022 by Dan Sully
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.

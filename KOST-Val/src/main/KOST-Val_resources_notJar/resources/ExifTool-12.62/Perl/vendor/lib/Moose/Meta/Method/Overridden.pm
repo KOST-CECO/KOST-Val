@@ -1,5 +1,5 @@
 package Moose::Meta::Method::Overridden;
-our $VERSION = '2.2014';
+our $VERSION = '2.2203';
 
 use strict;
 use warnings;
@@ -65,7 +65,7 @@ Moose::Meta::Method::Overridden - A Moose Method metaclass for overridden method
 
 =head1 VERSION
 
-version 2.2014
+version 2.2203
 
 =head1 DESCRIPTION
 

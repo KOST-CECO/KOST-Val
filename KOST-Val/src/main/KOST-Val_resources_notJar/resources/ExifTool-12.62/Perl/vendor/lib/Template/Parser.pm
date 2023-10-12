@@ -12,7 +12,7 @@
 #   Andy Wardley <abw@wardley.org>
 #
 # COPYRIGHT
-#   Copyright (C) 1996-2007 Andy Wardley.  All Rights Reserved.
+#   Copyright (C) 1996-2022 Andy Wardley.  All Rights Reserved.
 #
 #   This module is free software; you can redistribute it and/or
 #   modify it under the same terms as Perl itself.
@@ -46,7 +46,7 @@ use constant ACCEPT   => 1;
 use constant ERROR    => 2;
 use constant ABORT    => 3;
 
-our $VERSION = '3.009';
+our $VERSION = '3.100';
 our $DEBUG   = 0 unless defined $DEBUG;
 our $ERROR   = '';
 
@@ -283,8 +283,9 @@ sub text_splitter {
             (?:
               (?:
               ^$out           # outline tag at start of line
-              (.*?)           # $2 - content of that line
-              (?:\n|$)        # end of that line or file
+              (.*?            # $2 - content of that line
+                (?:\n|$)      # end of that line or file
+              )
               )
               |
               (?:
@@ -416,11 +417,11 @@ sub split_text {
             else {
 
                 if(s/^($CHOMP_FLAGS)?(\s*)//so && $2) {
-                  my $chomped = $2;
-                  my $linecount = ($chomped =~ tr/\n//); # newlines in chomped whitespace
-                  $linecount ||= 0;
-                  $prelines += $linecount;
-                  $dirlines -= $linecount;
+                    my $chomped = $2;
+                    my $linecount = ($chomped =~ tr/\n//); # newlines in chomped whitespace
+                    $linecount ||= 0;
+                    $prelines += $linecount;
+                    $dirlines -= $linecount;
                 }
                 # PRE_CHOMP: process whitespace before tag
                 $chomp = $1 ? $1 : $prechomp;
@@ -1029,32 +1030,6 @@ sub _parse_error {
     return $self->error("line $line: $msg");
 }
 
-
-#------------------------------------------------------------------------
-# _dump()
-#
-# Debug method returns a string representing the internal state of the
-# object.
-#------------------------------------------------------------------------
-
-sub _dump {
-    my $self = shift;
-    my $output = "[Template::Parser] {\n";
-    my $format = "    %-16s => %s\n";
-    my $key;
-
-    foreach $key (qw( START_TAG END_TAG TAG_STYLE ANYCASE INTERPOLATE
-                      PRE_CHOMP POST_CHOMP V1DOLLAR )) {
-        my $val = $self->{ $key };
-        $val = '<undef>' unless defined $val;
-        $output .= sprintf($format, $key, $val);
-    }
-
-    $output .= '}';
-    return $output;
-}
-
-
 1;
 
 __END__
@@ -1206,7 +1181,7 @@ Andy Wardley E<lt>abw@wardley.orgE<gt> L<http://wardley.org/>
 
 =head1 COPYRIGHT
 
-Copyright (C) 1996-2007 Andy Wardley.  All Rights Reserved.
+Copyright (C) 1996-2022 Andy Wardley.  All Rights Reserved.
 
 This module is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself.

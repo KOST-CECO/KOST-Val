@@ -492,6 +492,8 @@ channel mask is an integer value, if the C<i-th> least significant bit
 is set the C<i-th> channel is modifiable.  eg. a channel mask of 0x5
 means only channels 0 and 2 are writable.
 
+Channel masks are deprecated.
+
 =item setmask()
 
   $mask = $img->getmask();
@@ -503,6 +505,8 @@ means only channels 0 and 2 are writable.
 
 C<setmask()> is used to set the channel mask of the image.  See
 L</getmask()> for details.
+
+Channel masks are deprecated.
 
 =back
 
@@ -870,6 +874,9 @@ or by code:
 
   my $index = $img->addtag(code=>$code, value=>$value);
 
+Setting tags by C<code> is deprecated.  If you have a use for this
+please open an issue.
+
 =item deltag()
 
 You can remove tags with the deltag() method, either by index:
@@ -885,6 +892,9 @@ or by code:
   $img->deltag(code=>$code);
 
 In each case deltag() returns the number of tags deleted.
+
+Setting or deleting tags by C<code> is deprecated.  If you have a use
+for this please open an issue.
 
 =item settag()
 

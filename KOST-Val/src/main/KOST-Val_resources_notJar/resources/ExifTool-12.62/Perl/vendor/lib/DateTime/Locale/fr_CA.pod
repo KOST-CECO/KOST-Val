@@ -302,15 +302,15 @@ French Canada locale.
 
 =head3 Full
 
-   2008-02-05T18:30:30 = mardi 5 février 2008 à 18 h 30 min 30 s UTC
-   1995-12-22T09:05:02 = vendredi 22 décembre 1995 à 09 h 05 min 02 s UTC
-  -0010-09-15T04:44:23 = samedi 15 septembre -10 à 04 h 44 min 23 s UTC
+   2008-02-05T18:30:30 = mardi 5 février 2008, 18 h 30 min 30 s UTC
+   1995-12-22T09:05:02 = vendredi 22 décembre 1995, 09 h 05 min 02 s UTC
+  -0010-09-15T04:44:23 = samedi 15 septembre -10, 04 h 44 min 23 s UTC
 
 =head3 Long
 
-   2008-02-05T18:30:30 = 5 février 2008 à 18 h 30 min 30 s UTC
-   1995-12-22T09:05:02 = 22 décembre 1995 à 09 h 05 min 02 s UTC
-  -0010-09-15T04:44:23 = 15 septembre -10 à 04 h 44 min 23 s UTC
+   2008-02-05T18:30:30 = 5 février 2008, 18 h 30 min 30 s UTC
+   1995-12-22T09:05:02 = 22 décembre 1995, 09 h 05 min 02 s UTC
+  -0010-09-15T04:44:23 = 15 septembre -10, 04 h 44 min 23 s UTC
 
 =head3 Medium
 
@@ -381,11 +381,11 @@ French Canada locale.
    1995-12-22T09:05:02 = ven. 22
   -0010-09-15T04:44:23 = sam. 15
 
-=head3 Ehm (E h 'h' mm a)
+=head3 Ehm (E h 'h' mm a)
 
-   2008-02-05T18:30:30 = mar. 6 h 30 p.m.
-   1995-12-22T09:05:02 = ven. 9 h 05 a.m.
-  -0010-09-15T04:44:23 = sam. 4 h 44 a.m.
+   2008-02-05T18:30:30 = mar. 6 h 30 p.m.
+   1995-12-22T09:05:02 = ven. 9 h 05 a.m.
+  -0010-09-15T04:44:23 = sam. 4 h 44 a.m.
 
 =head3 Ehms (E h 'h' mm 'min' ss 's' a)
 
@@ -416,6 +416,12 @@ French Canada locale.
    2008-02-05T18:30:30 = 5 févr. 2008 ap. J.-C.
    1995-12-22T09:05:02 = 22 déc. 1995 ap. J.-C.
   -0010-09-15T04:44:23 = 15 sept. -10 av. J.-C.
+
+=head3 GyMd (y-MM-dd GGGGG)
+
+   2008-02-05T18:30:30 = 2008-02-05 ap. J.-C.
+   1995-12-22T09:05:02 = 1995-12-22 ap. J.-C.
+  -0010-09-15T04:44:23 = -10-09-15 av. J.-C.
 
 =head3 H (HH 'h')
 
@@ -525,11 +531,11 @@ French Canada locale.
    1995-12-22T09:05:02 = 9 h a.m.
   -0010-09-15T04:44:23 = 4 h a.m.
 
-=head3 hm (h 'h' mm a)
+=head3 hm (h 'h' mm a)
 
-   2008-02-05T18:30:30 = 6 h 30 p.m.
-   1995-12-22T09:05:02 = 9 h 05 a.m.
-  -0010-09-15T04:44:23 = 4 h 44 a.m.
+   2008-02-05T18:30:30 = 6 h 30 p.m.
+   1995-12-22T09:05:02 = 9 h 05 a.m.
+  -0010-09-15T04:44:23 = 4 h 44 a.m.
 
 =head3 hms (h 'h' mm 'min' ss 's' a)
 
@@ -543,11 +549,11 @@ French Canada locale.
    1995-12-22T09:05:02 = 9 h 05 min 02 s a.m. UTC
   -0010-09-15T04:44:23 = 4 h 44 min 23 s a.m. UTC
 
-=head3 hmv (h 'h' mm a v)
+=head3 hmv (h 'h' mm a v)
 
-   2008-02-05T18:30:30 = 6 h 30 p.m. UTC
-   1995-12-22T09:05:02 = 9 h 05 a.m. UTC
-  -0010-09-15T04:44:23 = 4 h 44 a.m. UTC
+   2008-02-05T18:30:30 = 6 h 30 p.m. UTC
+   1995-12-22T09:05:02 = 9 h 05 a.m. UTC
+  -0010-09-15T04:44:23 = 4 h 44 a.m. UTC
 
 =head3 ms (mm 'min' ss 's')
 

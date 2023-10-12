@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use namespace::autoclean;
 
-our $VERSION = '2.46';
+our $VERSION = '2.60';
 
 use DateTime::TimeZone::OlsonDB;
 
@@ -38,6 +38,13 @@ sub name            { $_[0]->{name} }
 sub offset_from_std { $_[0]->{offset_from_std} }
 sub letter          { $_[0]->{letter} }
 sub min_year        { $_[0]->{from} }
+
+sub offset_from_std_as_hm {
+    my $offset = $_[0]->offset_from_std;
+    my $h      = int( $offset / 3600 );
+    my $m      = ( $offset % 3600 ) / 60;
+    return sprintf( '%02d:%02d', $h, $m );
+}
 
 sub max_year {
           $_[0]->{to} eq 'only' ? $_[0]->min_year

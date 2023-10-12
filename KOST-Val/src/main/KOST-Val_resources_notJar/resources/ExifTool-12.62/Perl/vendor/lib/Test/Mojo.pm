@@ -21,7 +21,7 @@ has [qw(message success tx)];
 has ua => sub { Mojo::UserAgent->new(insecure => 1)->ioloop(Mojo::IOLoop->singleton) };
 
 # Silent or loud tests
-$ENV{MOJO_LOG_LEVEL} ||= $ENV{HARNESS_IS_VERBOSE} ? 'debug' : 'fatal';
+$ENV{MOJO_LOG_LEVEL} ||= $ENV{HARNESS_IS_VERBOSE} ? 'trace' : 'fatal';
 
 sub app {
   my ($self, $app) = @_;
@@ -250,10 +250,10 @@ sub new {
 
   return $self unless my $app = shift;
 
-  my @args = @_ ? {config => {config_override => 1, %{shift()}}} : ();
-  return $self->app(Mojo::Server->new->build_app($app, @args)) unless ref $app;
-  $app = Mojo::Server->new->load_app($app)                     unless $app->isa('Mojolicious');
-  return $self->app(@args ? $app->config($args[0]{config}) : $app);
+  my @cfg = @_ ? {config => {config_override => 1, %{shift()}}} : ();
+  return $self->app(Mojo::Server->new->build_app($app, @cfg)) unless ref $app;
+  return $self->app(
+    $app->isa('Mojolicious') ? @cfg ? $app->config($cfg[0]{config}) : $app : Mojo::Server->new->load_app($app, @cfg));
 }
 
 sub options_ok { shift->_build_ok(OPTIONS => @_) }
@@ -333,7 +333,7 @@ sub websocket_ok {
 
 sub _attr {
   my ($self, $selector, $attr) = @_;
-  return '' unless my $e = $self->tx->res->dom->at($selector);
+  return undef unless my $e = $self->tx->res->dom->at($selector);
   return $e->attr($attr) // '';
 }
 
@@ -404,7 +404,7 @@ sub _request_ok {
 }
 
 sub _text {
-  return '' unless my $e = shift->tx->res->dom->at(shift);
+  return undef unless my $e = shift->tx->res->dom->at(shift);
   return $e->text;
 }
 
@@ -457,7 +457,7 @@ L<Mojolicious> applications. Just run your tests with L<prove>.
   $ prove -l -v
   $ prove -l -v t/foo.t
 
-If it is not already defined, the C<MOJO_LOG_LEVEL> environment variable will be set to C<debug> or C<fatal>, depending
+If it is not already defined, the C<MOJO_LOG_LEVEL> environment variable will be set to C<trace> or C<fatal>, depending
 on the value of the C<HARNESS_IS_VERBOSE> environment variable. And to make it esier to test HTTPS/WSS web services
 L<Mojo::UserAgent/"insecure"> will be activated by default for L</"ua">.
 

@@ -1,5 +1,6 @@
 package Digest::HMAC_MD5;
-$VERSION="1.01";
+our $VERSION = '1.04'; # VERSION
+our $AUTHORITY = 'cpan:ARODLAND'; # AUTHORITY
 
 use strict;
 use Digest::MD5  qw(md5);
@@ -64,7 +65,11 @@ This module provide HMAC-MD5 hashing.
 
 L<Digest::HMAC>, L<Digest::MD5>, L<Digest::HMAC_SHA1>
 
-=head1 AUTHOR
+=head1 MAINTAINER
+
+Andrew Rodland <arodland@cpan.org>
+
+=head1 ORIGINAL AUTHOR
 
 Gisle Aas <gisle@aas.no>
 

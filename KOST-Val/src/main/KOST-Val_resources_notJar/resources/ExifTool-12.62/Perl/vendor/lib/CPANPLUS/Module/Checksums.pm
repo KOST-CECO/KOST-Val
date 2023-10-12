@@ -15,7 +15,7 @@ use Module::Load::Conditional   qw[can_load];
 $Params::Check::VERBOSE = 1;
 
 @ISA = qw[ CPANPLUS::Module::Signature ];
-$VERSION = "0.9910";
+$VERSION = "0.9914";
 
 =head1 NAME
 
@@ -87,6 +87,18 @@ sub _validate_checksum {
 
     my $href = $self->_parse_checksums_file( file => $file ) or (
         error(loc(q[Could not parse '%1' file], CHECKSUMS)), return );
+
+    my $cpan_path = $href->{ $self->package }->{'cpan_path'};
+
+    if ( defined $cpan_path ) {
+        my $chk_pth = join '/', 'authors/id', $cpan_path;
+        if ( $chk_pth ne $self->path ) {
+            error(loc(  "Archive checksum path for '%1': " .
+                        "should be '%2', but it says it is '%3'. Abandoning.",
+                        $self->package, $self->path, $chk_pth));
+            return $self->status->checksum_ok(0);
+        }
+    }
 
     my $size = $href->{ $self->package }->{'size'};
 

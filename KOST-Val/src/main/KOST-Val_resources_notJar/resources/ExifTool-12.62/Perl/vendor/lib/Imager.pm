@@ -2,11 +2,12 @@ package Imager;
 use 5.006;
 
 use strict;
-use IO::File;
 use Scalar::Util;
 use Imager::Color;
+use Imager::Color::Float;
 use Imager::Font;
-use Config;
+use Imager::TrimColorList;
+use if $] >= 5.014, "warnings::register" => qw(tagcodes channelmask);
 
 our $ERRSTR;
 
@@ -148,7 +149,7 @@ BEGIN {
   if ($ex_version < 5.57) {
     our @ISA = qw(Exporter);
   }
-  $VERSION = '1.012';
+  $VERSION = '1.019';
   require XSLoader;
   XSLoader::load(Imager => $VERSION);
 }
@@ -911,6 +912,87 @@ sub crop {
   return $dst;
 }
 
+my $empty_trim_colors = Imager::TrimColorList->new();
+
+sub _trim_rect {
+  my ($self, $name, %hsh) = @_;
+
+  $self->_valid_image($name)
+    or return;
+
+  my $auto = delete $hsh{auto};
+  my $colors = delete $hsh{colors} || $empty_trim_colors;
+  my $alpha = delete $hsh{alpha} || 0;
+  my $tolerance = delete $hsh{tolerance};
+  defined $tolerance or $tolerance = 0.01;
+
+  if (keys %hsh) {
+    $self->_set_error("$name: unexpected arguments:".join(", ", sort keys %hsh));
+    return;
+  }
+
+  if ($auto) {
+    if ($colors != $empty_trim_colors) {
+      $self->_set_error("$name: only one of auto and colors can be supplied");
+      return;
+    }
+    if ($tolerance < 0) {
+      $self->_set_error("$name: tolerance must be non-negative");
+      return;
+    }
+
+    $colors = Imager::TrimColorList->auto
+      (
+       auto => $auto,
+       tolerance => $tolerance,
+       name => $name,
+       image => $self,
+      );
+    unless ($colors) {
+      $self->_set_error(Imager->errstr);
+      return;
+    }
+  }
+
+  unless (ref $colors) {
+    $self->_set_error("$name: colors must be an arrayref or an Imager::TrimColorList object");
+    return;
+  }
+  unless (UNIVERSAL::isa($colors, "Imager::TrimColorList")) {
+    unless (Scalar::Util::reftype($colors) eq "ARRAY") {
+      $self->_set_error("$name: colors must be an arrayref or an Imager::TrimColorList object");
+      return;
+    }
+    $colors = Imager::TrimColorList->new(@$colors);
+  }
+
+  return i_trim_rect($self->{IMG}, $alpha, $colors);
+}
+
+sub trim_rect {
+  my ($self, %hsh) = @_;
+
+  return $self->_trim_rect("trim_rect", %hsh);
+}
+
+sub trim {
+  my ($self, %hsh) = @_;
+
+  my ($left, $top, $right, $bottom) = $self->_trim_rect("trim", %hsh)
+    or return;
+
+  if ($left == $self->getwidth) {
+    # the whole image would be trimmed, but we don't support zero
+    # width or height images.
+    return $self->crop(width => 1, height => 1);
+  }
+  else {
+    my ($w, $h) = i_img_info($self->{IMG});
+    return $self->crop(left => $left, right => $w - $right,
+                       top => $top,   bottom => $h - $bottom);
+  }
+}
+
 sub _sametype {
   my ($self, %opts) = @_;
 
@@ -1339,6 +1421,8 @@ sub addtag {
     }
   }
   elsif ($opts{code}) {
+    warnings::warnif("Imager::tagcodes", "addtag: code parameter is deprecated")
+        if $] >= 5.014;
     if (defined $opts{value}) {
       if ($opts{value} =~ /^\d+$/) {
         # add as a number
@@ -1376,6 +1460,8 @@ sub deltag {
     return i_tags_delbyname($self->{IMG}, $opts{name});
   }
   elsif (defined $opts{code}) {
+    warnings::warnif("Imager::tagcodes", "deltag: code parameter is deprecated")
+        if $] >= 5.014;
     return i_tags_delbycode($self->{IMG}, $opts{code});
   }
   else {
@@ -1395,8 +1481,26 @@ sub settag {
     return $self->addtag(name=>$opts{name}, value=>$opts{value});
   }
   elsif (defined $opts{code}) {
-    $self->deltag(code=>$opts{code});
-    return $self->addtag(code=>$opts{code}, value=>$opts{value});
+    warnings::warnif("Imager::tagcodes", "settag: code parameter is deprecated")
+        if $] >= 5.014;
+    i_tags_delbycode($self->{IMG}, $opts{code});
+    if (defined $opts{value}) {
+      if ($opts{value} =~ /^\d+$/) {
+        # add as a number
+        return i_tags_addn($self->{IMG}, $opts{code}, 0, $opts{value});
+      }
+      else {
+        return i_tags_add($self->{IMG}, $opts{code}, 0, $opts{value}, 0);
+      }
+    }
+    elsif (defined $opts{data}) {
+      # force addition as a string
+      return i_tags_add($self->{IMG}, $opts{code}, 0, $opts{data}, 0);
+    }
+    else {
+      $self->{ERRSTR} = "No value supplied";
+      return undef;
+    }
   }
   else {
     return undef;
@@ -1421,8 +1525,8 @@ sub _get_reader_io {
     return Imager::IO->new_fh($input->{fh});
   }
   elsif ($input->{file}) {
-    my $file = IO::File->new($input->{file}, "r");
-    unless ($file) {
+    my $file;
+    unless (open $file, "<", $input->{file}) {
       $self->_set_error("Could not open $input->{file}: $!");
       return;
     }
@@ -1475,8 +1579,8 @@ sub _get_writer_io {
     $io = Imager::IO->new_fh($input->{fh});
   }
   elsif ($input->{file}) {
-    my $fh = new IO::File($input->{file},"w+");
-    unless ($fh) { 
+    my $fh;
+    unless (open $fh, "+>", $input->{file}) { 
       $self->_set_error("Could not open file $input->{file}: $!");
       return;
     }
@@ -3942,6 +4046,26 @@ sub difference {
   return $result;
 }
 
+sub rgb_difference {
+  my ($self, %opts) = @_;
+
+  $self->_valid_image("rgb_difference")
+    or return;
+
+  defined $opts{other}
+    or return $self->_set_error("No 'other' parameter supplied");
+  unless ($opts{other}->_valid_image("rgb_difference")) {
+    $self->_set_error($opts{other}->errstr . " (other image)");
+    return;
+  }
+
+  my $result = Imager->new;
+  $result->{IMG} = i_rgbdiff_image($self->{IMG}, $opts{other}{IMG})
+    or return $self->_set_error($self->_error_as_msg());
+
+  return $result;
+}
+
 # destructive border - image is shrunk by one pixel all around
 
 sub border {
@@ -4031,6 +4155,9 @@ sub getmask {
 sub setmask {
   my $self = shift;
   my %opts = @_;
+
+  warnings::warnif("Imager::channelmask", "setmask: image channel masks are deprecated")
+      if $] >= 5.014;
 
   $self->_valid_image("setmask")
     or return;
@@ -4270,7 +4397,7 @@ sub _set_error {
 
 # Default guess for the type of an image from extension
 
-my @simple_types = qw(png tga gif raw ico cur xpm mng jng ilbm pcx psd eps webp xwd xpm dng ras);
+my @simple_types = qw(png tga gif raw ico cur xpm mng jng ilbm pcx psd eps webp xwd xpm dng ras qoi jxl);
 
 my %ext_types =
   (
@@ -4291,6 +4418,8 @@ my %ext_types =
    fit => "fits",
    fits => "fits",
    rle => "utah",
+   avifs => "avif", # AVIF image sequence
+   avif => "avif",
   );
 
 sub def_guess_type {
@@ -4299,8 +4428,15 @@ sub def_guess_type {
   my ($ext) = $name =~ /\.([^.]+)$/
     or return;
 
-  my $type = $ext_types{$ext}
-    or return;
+  my $type = $ext_types{$ext};
+  unless ($type) {
+    $type = $ext_types{lc $ext};
+  }
+
+  if (!defined $type && $ext =~ /\A[a-zA-Z0-9_]{2,}\z/) {
+    # maybe a reasonable assumption
+    $type = lc $ext;
+  }
 
   return $type;
 }
@@ -4391,8 +4527,8 @@ sub Inline {
   # Inline added a new argument at the beginning
   my $lang = $_[-1];
 
-  $lang eq 'C'
-    or die "Only C language supported";
+  $lang eq 'C' || $lang eq 'CPP'
+    or die "Only C or C++ (CPP) language supported";
 
   require Imager::ExtUtils;
   return Imager::ExtUtils->inline_config;
@@ -4910,7 +5046,7 @@ is_bilevel() - L<Imager::ImageTypes/is_bilevel()> - returns whether
 image write functions should write the image in their bilevel (blank
 and white, no gray levels) format
 
-is_logging() L<Imager::ImageTypes/is_logging()> - test if the debug
+is_logging() - L<Imager::ImageTypes/is_logging()> - test if the debug
 log is active.
 
 line() - L<Imager::Draw/line()> - draw an interval
@@ -4980,6 +5116,9 @@ register_reader() - L<Imager::Files/register_reader()>
 
 register_writer() - L<Imager::Files/register_writer()>
 
+rgb_difference() - L<Imager::Filters/rgb_difference()> - produce a difference
+images from two input images.
+
 rotate() - L<Imager::Transformations/rotate()>
 
 rubthrough() - L<Imager::Transformations/rubthrough()> - draw an image
@@ -5024,6 +5163,12 @@ double per sample image.
 transform() - L<Imager::Engines/"transform()">
 
 transform2() - L<Imager::Engines/"transform2()">
+
+trim() - L<Imager::Transformations/trim()> - return a cropped image
+based on border transparency or border colors.
+
+trim_rect() - L<Imager::Transformations/trim_rect()> - return how much
+trim() would remove.
 
 type() -  L<Imager::ImageTypes/type()> - type of image (direct vs paletted)
 
@@ -5070,7 +5215,7 @@ contrast - L<< Imager::Filters/C<contrast> >>, L<< Imager::Filters/C<autolevels>
 
 convolution - L<< Imager::Filters/C<conv> >>
 
-cropping - L<Imager::Transformations/crop()>
+cropping - L<Imager::Transformations/crop()>, L<Imager::Transformations/trim()>
 
 CUR files - L<Imager::Files/"ICO (Microsoft Windows Icon) and CUR (Microsoft Windows Cursor)">
 

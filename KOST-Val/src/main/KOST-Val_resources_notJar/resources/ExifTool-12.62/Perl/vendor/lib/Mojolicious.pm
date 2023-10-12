@@ -8,6 +8,7 @@ use Mojo::Exception;
 use Mojo::Home;
 use Mojo::Loader;
 use Mojo::Log;
+use Mojo::Server;
 use Mojo::Util;
 use Mojo::UserAgent;
 use Mojolicious::Commands;
@@ -23,23 +24,15 @@ use Scalar::Util ();
 
 has commands         => sub { Mojolicious::Commands->new(app => shift) };
 has controller_class => 'Mojolicious::Controller';
+has exception_format => 'html';
 has home             => sub { Mojo::Home->new->detect(ref shift) };
 has log              => sub {
   my $self = shift;
 
-  my $mode = $self->mode;
-  my $log  = Mojo::Log->new;
-
-  # DEPRECATED!
-  my $home = $self->home;
-  if (-d $home->child('log') && -w _) {
-    $log->path($home->child('log', "$mode.log"));
-    Mojo::Util::deprecated(qq{Logging to "log/$mode.log" is DEPRECATED});
-  }
-
   # Reduced log output outside of development mode
+  my $log = Mojo::Log->new;
   return $log->level($ENV{MOJO_LOG_LEVEL}) if $ENV{MOJO_LOG_LEVEL};
-  return $mode eq 'development' ? $log : $log->level('info');
+  return $self->mode eq 'development' ? $log : $log->level('info');
 };
 has 'max_request_size';
 has mode               => sub { $ENV{MOJO_MODE} || $ENV{PLACK_ENV} || 'development' };
@@ -52,7 +45,7 @@ has secrets            => sub {
   my $self = shift;
 
   # Warn developers about insecure default
-  $self->log->debug('Your secret passphrase needs to be changed');
+  $self->log->trace('Your secret passphrase needs to be changed (see FAQ for more)');
 
   # Default to moniker
   return [$self->moniker];
@@ -63,8 +56,8 @@ has types     => sub { Mojolicious::Types->new };
 has ua        => sub { Mojo::UserAgent->new };
 has validator => sub { Mojolicious::Validator->new };
 
-our $CODENAME = 'Supervillain';
-our $VERSION  = '8.71';
+our $CODENAME = 'Waffle';
+our $VERSION  = '9.33';
 
 sub BUILD_DYNAMIC {
   my ($class, $method, $dyn_methods) = @_;
@@ -113,13 +106,15 @@ sub dispatch {
 
   my $plugins = $self->plugins->emit_hook(before_dispatch => $c);
 
+  my $stash = $c->stash;
+  return if $stash->{'mojo.rendered'};
+
   # Try to find a static file
   my $tx = $c->tx;
   $self->static->dispatch($c) and $plugins->emit_hook(after_static => $c) unless $tx->res->code;
 
   # Start timer (ignore static files)
-  my $stash = $c->stash;
-  $c->helpers->log->debug(sub {
+  $c->helpers->log->trace(sub {
     my $req    = $c->req;
     my $method = $req->method;
     my $path   = $req->url->path->to_abs_string;
@@ -129,8 +124,7 @@ sub dispatch {
 
   # Routes
   $plugins->emit_hook(before_routes => $c);
-  $c->helpers->reply->not_found
-    unless $tx->res->code || $self->routes->dispatch($c) || $tx->res->code || $c->stash->{'mojo.rendered'};
+  $c->helpers->reply->not_found unless $tx->res->code || $self->routes->dispatch($c) || $tx->res->code;
 }
 
 sub handler {
@@ -147,7 +141,8 @@ sub handler {
   $self->plugins->emit_chain(around_dispatch => $c);
 
   # Delayed response
-  $c->helpers->log->debug('Nothing has been rendered, expecting delayed response') unless $c->stash->{'mojo.rendered'};
+  $c->helpers->log->trace('Nothing has been rendered, expecting delayed response (see FAQ for more)')
+    unless $c->stash->{'mojo.rendered'};
 }
 
 sub helper { shift->renderer->add_helper(@_) }
@@ -155,7 +150,7 @@ sub helper { shift->renderer->add_helper(@_) }
 sub hook { shift->plugins->on(@_) }
 
 sub new {
-  my $self = shift->SUPER::new(@_);
+  my $self = shift->SUPER::new((ref $_[0] ? %{shift()} : @_), @Mojo::Server::ARGS_OVERRIDE);
 
   my $home = $self->home;
   push @{$self->renderer->paths}, $home->child('templates')->to_string;
@@ -164,11 +159,6 @@ sub new {
   # Default to controller and application namespace
   my $controller = "@{[ref $self]}::Controller";
   my $r          = $self->preload_namespaces([$controller])->routes->namespaces([$controller, ref $self]);
-
-  # Hide controller attributes/methods
-  $r->hide(qw(app continue cookie every_cookie every_param every_signed_cookie finish helpers match on param render));
-  $r->hide(qw(render_later render_maybe render_to_string rendered req res send session signed_cookie stash tx url_for));
-  $r->hide(qw(write write_chunk));
 
   $self->plugin($_) for qw(HeaderCondition DefaultHelpers TagHelpers EPLRenderer EPRenderer);
 
@@ -256,8 +246,7 @@ L<Mojolicious> will emit the following hooks in the listed order.
 
 =head2 before_command
 
-Emitted right before the application runs a command through the command line interface. Note that this hook is
-B<EXPERIMENTAL> and might change without warning!
+Emitted right before the application runs a command through the command line interface.
 
   $app->hook(before_command => sub ($command, $args) {...});
 
@@ -267,7 +256,7 @@ command object and the command arguments)
 =head2 before_server_start
 
 Emitted right before the application server is started, for web servers that support it, which includes all the
-built-in ones (except for L<Mojo::Server::CGI>).
+built-in ones.
 
   $app->hook(before_server_start => sub ($server, $app) {...});
 
@@ -393,6 +382,13 @@ Command line interface for your application, defaults to a L<Mojolicious::Comman
 Class to be used for the default controller, defaults to L<Mojolicious::Controller>. Note that this class needs to have
 already been loaded before the first request arrives.
 
+=head2 exception_format
+
+  my $format = $app->exception_format;
+  $app       = $app->exception_format('txt');
+
+Format for HTTP exceptions (C<html>, C<json>, or C<txt>), defaults to C<html>.
+
 =head2 home
 
   my $home = $app->home;
@@ -409,7 +405,7 @@ The home directory of your application, defaults to a L<Mojo::Home> object which
   $app    = $app->log(Mojo::Log->new);
 
 The logging layer of your application, defaults to a L<Mojo::Log> object. The level will default to either the
-C<MOJO_LOG_LEVEL> environment variable, C<debug> if the L</mode> is C<development>, or C<info> otherwise. All messages
+C<MOJO_LOG_LEVEL> environment variable, C<trace> if the L</mode> is C<development>, or C<info> otherwise. All messages
 will be written to C<STDERR> by default.
 
   # Log debug message
@@ -455,10 +451,9 @@ a plugin.
 =head2 preload_namespaces
 
   my $namespaces = $app->preload_namespaces;
-  $app           = $app->preload_namespaces(['MyApp:Controller']);
+  $app           = $app->preload_namespaces(['MyApp::Controller']);
 
-Namespaces to preload classes from during application startup. Note that this attribute is B<EXPERIMENTAL> and might
-change without warning!
+Namespaces to preload classes from during application startup.
 
 =head2 renderer
 
@@ -737,8 +732,7 @@ subclass.
 
   $app->warmup;
 
-Preload classes from L</"preload_namespaces"> for future use. Note that this method is B<EXPERIMENTAL> and might change
-without warning!
+Preload classes from L</"preload_namespaces"> for future use.
 
 =head1 HELPERS
 
@@ -759,7 +753,7 @@ The L<Mojolicious> distribution includes a few files with different licenses tha
 
 =head2 Mojolicious Artwork
 
-  Copyright (C) 2010-2021, Sebastian Riedel.
+  Copyright (C) 2010-2023, Sebastian Riedel.
 
 Licensed under the CC-SA License, Version 4.0 L<http://creativecommons.org/licenses/by-sa/4.0>.
 
@@ -782,14 +776,11 @@ Licensed under the BSD License, L<https://github.com/highlightjs/highlight.js/bl
 
 Licensed under the MIT License, L<http://creativecommons.org/licenses/MIT>.
 
-=head2 Font Awesome
-
-Licensed under the CC-BY License, Version 4.0 L<https://creativecommons.org/licenses/by/4.0/> and SIL OFL, Version 1.1
-L<https://opensource.org/licenses/OFL-1.1>.
-
 =head1 CODE NAMES
 
 Every major release of L<Mojolicious> has a code name, these are the ones that have been used in the past.
+
+9.0, C<Waffle> (U+1F9C7)
 
 8.0, C<Supervillain> (U+1F9B9)
 
@@ -836,6 +827,8 @@ Current voting members of the core team in alphabetical order:
 
 =over 2
 
+CandyAngel, C<candyangel@mojolicious.org>
+
 Christopher Rasch-Olsen Raa, C<christopher@mojolicious.org>
 
 Dan Book, C<grinnz@mojolicious.org>
@@ -853,8 +846,6 @@ The following members of the core team are currently on hiatus:
 =over 2
 
 Abhijit Menon-Sen, C<ams@cpan.org>
-
-CandyAngel, C<candyangel@mojolicious.org>
 
 Glen Hinkle, C<tempire@cpan.org>
 
@@ -901,6 +892,8 @@ Andrey Khozov
 Andrey Kuzmin
 
 Andy Grundman
+
+Andy Lester
 
 Aristotle Pagaltzis
 
@@ -986,6 +979,8 @@ Graham Barr
 
 Graham Knop
 
+Heiko Jansen
+
 Henry Tang
 
 Hideki Yamamura
@@ -1035,6 +1030,8 @@ Lars Balker Rasmussen
 Lee Johnson
 
 Leon Brocard
+
+Lukas Mai
 
 Magnus Holm
 
@@ -1105,6 +1102,8 @@ Quentin Carbonneaux
 Rafal Pocztarski
 
 Randal Schwartz
+
+Rawley Fowler
 
 Richard Elberger
 
@@ -1198,7 +1197,7 @@ Zoffix Znet
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2008-2021, Sebastian Riedel and others.
+Copyright (C) 2008-2023, Sebastian Riedel and others.
 
 This program is free software, you can redistribute it and/or modify it under the terms of the Artistic License version
 2.0.

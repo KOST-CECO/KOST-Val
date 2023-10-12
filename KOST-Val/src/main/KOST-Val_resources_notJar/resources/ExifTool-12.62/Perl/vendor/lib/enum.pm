@@ -1,12 +1,11 @@
 package enum;
-
+$enum::VERSION = '1.12';
 use 5.006;
 use strict;
 use warnings;
 no strict 'refs';  # Let's just make this very clear right off
 
 use Carp;
-our $VERSION = '1.11';
 
 my $Ident = '[^\W_0-9]\w*';
 
@@ -242,7 +241,7 @@ functions like flock() and sysopen() use.  These are also very useful for your
 own code as they allow you to efficiently store many true/false options within
 a single integer.
 
-    use enum qw(BITMASK: MY_ FOO BAR CAT DOG);
+    use enum qw(BITMASK:MY_ FOO BAR CAT DOG);
 
     my $foo = 0;
     $foo |= MY_FOO;

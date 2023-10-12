@@ -13,7 +13,7 @@ Moose::Cookbook::Meta::WhyMeta - Welcome to the meta world (Why Go Meta?)
 
 =head1 VERSION
 
-version 2.2014
+version 2.2203
 
 =head1 SUMMARY
 

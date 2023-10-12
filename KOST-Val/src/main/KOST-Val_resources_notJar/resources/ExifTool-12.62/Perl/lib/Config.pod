@@ -582,6 +582,13 @@ This variable is used internally by Configure to determine the
 full pathname (if any) of the comm program.  After Configure runs,
 the value is reset to a plain C<comm> and is not useful.
 
+=item C<compiler_warning>
+
+From F<compiler_warning.U>:
+
+This variable holds the command to check if the file specified as a
+parameter contains a compiler warning
+
 =item C<compress>
 
 From F<Loc.U>:
@@ -864,6 +871,14 @@ From F<atoll.U>:
 
 This variable conditionally defines the C<HAS_ATOLL> symbol, which
 indicates to the C program that the atoll() routine is available.
+
+=item C<d_attribute_always_inline>
+
+From F<d_attribut.U>:
+
+This variable conditionally defines C<HASATTRIBUTE_ALWAYS_INLINE>,
+which indicates that the C compiler can know that certain
+functions should always be inlined.
 
 =item C<d_attribute_deprecated>
 
@@ -1588,6 +1603,22 @@ From F<d_fegetround.U>:
 This variable conditionally defines C<HAS_FEGETROUND> if fegetround() is
 available to get the floating point rounding mode.
 
+=item C<d_ffs>
+
+From F<d_ffs.U>:
+
+This variable conditionally defines the C<HAS_FFS> symbol, which
+indicates to the C program that the ffs() routine is available
+to find the first bit which is set in its integer argument.
+
+=item C<d_ffsl>
+
+From F<d_ffs.U>:
+
+This variable conditionally defines the C<HAS_FFSL> symbol, which
+indicates to the C program that the ffsl() routine is available
+to find the first bit which is set in its long integer argument.
+
 =item C<d_fgetpos>
 
 From F<d_fgetpos.U>:
@@ -1875,6 +1906,14 @@ From F<d_getcwd.U>:
 This variable conditionally defines the C<HAS_GETCWD> symbol, which
 indicates to the C program that the getcwd() routine is available
 to get the current working directory.
+
+=item C<d_getenv_preserves_other_thread>
+
+From F<d_getenv_thread.U>:
+
+This variable conditionally defines the C<GETENV_PRESERVES_OTHER_THREAD>
+symbol, which indicates to the C program that the getenv() system call
+does not zap the static buffer in a different thread.
 
 =item C<d_getespwnam>
 
@@ -2753,7 +2792,7 @@ From F<d_longdbl.U>:
 This variable conditionally defines C<LONG_DOUBLE_STYLE_IEEE_EXTENDED>
 if the long double is the 80-bit C<IEEE> 754 extended precision.
 Note that despite the C<extended> this is less than the C<std>,
-since thisis an extension of the double precision.
+since this is an extension of the double precision.
 
 =item C<d_long_double_style_ieee_std>
 
@@ -2854,13 +2893,20 @@ From F<d_malloc_size.U>:
 This symbol, if defined, indicates that the malloc_size
 routine is available for use.
 
+=item C<d_malloc_usable_size>
+
+From F<d_malloc_size.U>:
+
+This symbol, if defined, indicates that the malloc_usable_size
+routine is available for use.
+
 =item C<d_mblen>
 
 From F<d_mblen.U>:
 
 This variable conditionally defines the C<HAS_MBLEN> symbol, which
 indicates to the C program that the mblen() routine is available
-to find the number of bytes in a multibye character.
+to find the number of bytes in a multibyte character.
 
 =item C<d_mbrlen>
 
@@ -2900,7 +2946,7 @@ From F<d_memmem.U>:
 
 This variable conditionally defines the C<HAS_MEMMEM> symbol, which
 indicates to the C program that the memmem() routine is available
-to return a pointer to the start of the first occurance of a
+to return a pointer to the start of the first occurrence of a
 substring in a memory area (or C<NULL> if not found).
 
 =item C<d_memrchr>
@@ -3190,6 +3236,22 @@ From F<d_nl_langinfo.U>:
 
 This variable conditionally defines the C<HAS_NL_LANGINFO> symbol, which
 indicates to the C program that the nl_langinfo() routine is available.
+
+=item C<d_nl_langinfo_l>
+
+From F<d_nl_langinfo_l.U>:
+
+This variable contains the eventual value of the
+C<HAS_NL_LANGINFO_L> symbol, which indicates if the
+nl_langinfo_l() function exists.
+
+=item C<d_non_int_bitfields>
+
+From F<d_bitfield.U>:
+
+This variable conditionally defines C<HAS_NON_INT_BITFIELDS>
+which indicates that the C compiler accepts struct bitfields of sizes
+that aren't C<int> or C<unsigned int>
 
 =item C<d_nv_preserves_uv>
 
@@ -4222,6 +4284,13 @@ This variable conditionally defines the C<HAS_SOCKADDR_SA_LEN> symbol,
 which indicates that a struct sockaddr structure has the sa_len
 member.
 
+=item C<d_sockaddr_storage>
+
+From F<d_socket.U>:
+
+This variable conditionally defines the C<HAS_SOCKADDR_STORAGE> symbol,
+which indicates the availability of a struct sockaddr_storage.
+
 =item C<d_sockatmark>
 
 From F<d_sockatmark.U>:
@@ -4537,6 +4606,13 @@ From F<d_strxfrm.U>:
 This variable conditionally defines C<HAS_STRXFRM> if strxfrm() is
 available to transform strings.
 
+=item C<d_strxfrm_l>
+
+From F<d_strxfrm_l.U>:
+
+This variable conditionally defines C<HAS_STRXFRM_L> if strxfrm_l() is
+available to transform strings.
+
 =item C<d_suidsafe>
 
 From F<d_dosuid.U>:
@@ -4636,6 +4712,13 @@ From F<d_tgamma.U>:
 This variable conditionally defines the C<HAS_TGAMMA> symbol, which
 indicates to the C program that the tgamma() routine is available
 for the gamma function.  See also d_lgamma.
+
+=item C<d_thread_local>
+
+From F<d_thread_local.U>:
+
+This variable conditionally defines the C<PERL_THREAD_LOCAL> symbol. In
+turn that gives a linkage specification for thread-local storage.
 
 =item C<d_thread_safe_nl_langinfo_l>
 
@@ -4908,6 +4991,14 @@ From F<d_waitpid.U>:
 
 This variable conditionally defines C<HAS_WAITPID> if waitpid() is
 available to wait for child process.
+
+=item C<d_wcrtomb>
+
+From F<d_wcrtomb.U>:
+
+This variable conditionally defines the C<HAS_WCRTOMB> symbol if the
+wcrtomb() routine is available to be used to convert a wide character
+into a multi-byte character.
 
 =item C<d_wcscmp>
 
@@ -6433,8 +6524,8 @@ that indicates whether a C program may include <wctype.h>.
 
 From F<d_newlocale.U>:
 
-This symbol, if defined, indicates to the C program that it should
-include <xlocale.h> to get uselocale() and its friends
+This symbol, if defined, indicates to the C program that the
+header F<xlocale.h> is available.  See also xlocale_needed.
 
 =item C<ignore_versioned_solibs>
 
@@ -7763,6 +7854,13 @@ Values greater than 50 represent potentially unstable
 development subversions.
 This value is manually set in F<patchlevel.h>
 
+=item C<perl_thread_local>
+
+From F<d_thread_local.U>:
+
+This variable gives the value for the C<PERL_THREAD_LOCAL> symbol (when
+defined), which gives a linkage specification for thread-local storage.
+
 =item C<PERL_VERSION>
 
 From F<Oldsyms.U>:
@@ -8720,6 +8818,19 @@ long or int.  It is used by functions that return a count
 of bytes or an error condition.  It must be a signed type.
 We will pick a type such that sizeof(SSize_t) == sizeof(Size_t).
 
+=item C<st_dev_sign>
+
+From F<st_dev_def.U>:
+
+This variable contains the signedness of struct stat's st_dev.
+1 for unsigned, -1 for signed.
+
+=item C<st_dev_size>
+
+From F<st_dev_def.U>:
+
+This variable contains the size of struct stat's st_dev in bytes.
+
 =item C<st_ino_sign>
 
 From F<st_ino_def.U>:
@@ -9135,14 +9246,6 @@ This variable defines Uquad_t to be something like unsigned long,
 unsigned int, unsigned long long, uint64_t, or whatever type is
 used for 64-bit integers.
 
-=item C<use5005threads>
-
-From F<usethreads.U>:
-
-This variable conditionally defines the USE_5005THREADS symbol,
-and indicates that Perl should be built to use the 5.005-based
-threading implementation. Only valid up to 5.8.x.
-
 =item C<use64bitall>
 
 From F<use64bits.U>:
@@ -9180,6 +9283,14 @@ From F<Cross.U>:
 
 This variable conditionally defines the C<USE_CROSS_COMPILE> symbol,
 and indicates that Perl has been cross-compiled.
+
+=item C<usedefaultstrict>
+
+From F<usedefaultstrict.U>:
+
+This setting provides a mechanism for perl developers to enable
+strict by default. These defaults do not apply when perl is run
+via -e or -E.
 
 =item C<usedevel>
 
@@ -9696,6 +9807,13 @@ From F<libpth.U>:
 This variable holds extra path (space-separated) used to find
 libraries on this platform, for example C<CPU>-specific libraries
 (on multi-C<CPU> platforms) may be listed here.
+
+=item C<xlocale_needed>
+
+From F<d_newlocale.U>:
+
+This symbol, if defined, indicates that the C program should
+include <xlocale.h> to get newlocale() and its friends.
 
 =back
 

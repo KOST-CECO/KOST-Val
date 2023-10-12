@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-use ExtUtils::Constant qw(WriteConstants); 
+use ExtUtils::Constant qw(WriteConstants);
 
 use constant DEFINE => 'define' ;
 use constant STRING => 'string' ;
@@ -1177,7 +1177,7 @@ sub enum_Macro
     my $str = shift ;
     my ($major, $minor, $patch) = split /\./, $str ;
 
-    my $macro = 
+    my $macro =
     "#if (DB_VERSION_MAJOR > $major) || \\\n" .
     "    (DB_VERSION_MAJOR == $major && DB_VERSION_MINOR > $minor) || \\\n" .
     "    (DB_VERSION_MAJOR == $major && DB_VERSION_MINOR == $minor && \\\n" .
@@ -1232,12 +1232,12 @@ sub OutputPM
         if ( /^\s*$START_re/ )
         {
             # skip to the end marker.
-            while (<IN>) 
+            while (<IN>)
                 { last OUTER if /^\s*$END_re/ }
         }
         print OUT ;
     }
-    
+
     print OUT "$START\n";
     foreach my $key (sort keys %constants)
     {
@@ -1245,7 +1245,7 @@ sub OutputPM
 	print OUT "\t$key\n";
     }
     print OUT "\t$END\n";
-    
+
     while (<IN>)
     {
         print OUT ;

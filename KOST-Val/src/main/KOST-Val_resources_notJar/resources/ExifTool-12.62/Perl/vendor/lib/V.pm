@@ -1,10 +1,8 @@
 package V;
 use strict;
 
-# $Id: V.pm 1126 2007-11-07 00:10:02Z abeltje $
-
 use vars qw( $VERSION $NO_EXIT );
-$VERSION  = '0.13';
+$VERSION  = '0.16';
 
 $NO_EXIT ||= 0; # prevent import() from exit()ing and fall of the edge
 
@@ -23,20 +21,92 @@ or if you want more than one
 Can now also be used as a light-weight module for getting versions of
 modules without loading them:
 
-    BEGIN { $V::NO_EXIT = 1 }
     require V;
-
     printf "%s has version '%s'\n", "V", V::get_version( "V" );
+
+If you want all available files/versions from C<@INC>:
+
+    require V;
+    my @all_V = V::Module::Info->all_installed("V");
+    printf "%s:\n", $all_V[0]->name;
+    printf "\t%-50s - %s\n", $_->file, $_->version
+        for @all_V;
+
+Each element in that array isa C<V::Module::Info> object with 3 attributes and a method:
+
+=over
+
+=item I<attribute> B<name>
+
+The package name.
+
+=item I<attribute> B<file>
+
+Full filename with directory.
+
+=item I<attribute> B<dir>
+
+The base directory (from C<@INC>) where the package-file was found.
+
+=item I<method> B<version>
+
+This method will look through the file to see if it can find a version
+assignment in the file and uses that determine the version. As of version
+0.13_01, all versions found are passed through the L<version> module.
+
+=back
 
 =head1 DESCRIPTION
 
-This module uses stolen code from L<Module::Info> to find the location 
+This module uses stolen code from L<Module::Info> to find the location
 and version of the specified module(s). It prints them and exit()s.
 
 It defines C<import()> and is based on an idea from Michael Schwern
 on the perl5-porters list. See the discussion:
 
-  http://www.xray.mpe.mpg.de/mailing-lists/perl5-porters/2002-01/msg00760.html
+  https://www.nntp.perl.org/group/perl.perl5.porters/2002/01/msg51007.html
+
+=head2 V::get_version($pkg)
+
+Returns the version of the first available file for this package as found by
+following C<@INC>.
+
+=head3 Arguments
+
+=over
+
+=item 1. $pkg
+
+The name of the package for which one wants to know the version.
+
+=back
+
+=head3 Response
+
+This C<V::get_version()> returns the version of the file that was first found
+for this package by following C<@INC> or C<undef> if no file was found.
+
+=begin implementation
+
+=head2 report_pkg
+
+This sub prints the results for a package.
+
+=head3 Arguments
+
+=over
+
+=item 1. $pkg
+
+The name of the package that was probed for versions
+
+=item 2. @versions
+
+An array of Module-objects with full path and version.
+
+=back
+
+=end implementation
 
 =head1 AUTHOR
 
@@ -68,7 +138,7 @@ sub report_pkg($@) {
 sub import {
     shift;
     @_ or push @_, 'V';
- 
+
    for my $pkg ( @_ ) {
         my @modules = V::Module::Info->all_installed( $pkg );
         report_pkg $pkg, @modules;
@@ -113,7 +183,7 @@ sub all_installed {
 
     @inc = @INC unless @inc;
     my $file = File::Spec->catfile(split m/::/, $name) . '.pm';
-    
+
     my @modules = ();
     foreach my $dir (@inc) {
         # Skip the new code ref in @INC feature.
@@ -127,7 +197,7 @@ sub all_installed {
             push @modules, $module;
         }
     }
-              
+
     return @modules;
 }
 
@@ -137,35 +207,49 @@ sub version {
 
     my $parsefile = $self->file;
 
-    local *MOD;
-    open(MOD, $parsefile) or die $!;
+    open(my $mod, '<', $parsefile) or die "open($parsefile): $!";
 
     my $inpod = 0;
     my $result;
     local $_;
-    while (<MOD>) {
+    while (<$mod>) {
         $inpod = /^=(?!cut)/ ? 1 : /^=cut/ ? 0 : $inpod;
         next if $inpod || /^\s*#/;
 
         chomp;
-        next unless m/([\$*])(([\w\:\']*)\bVERSION)\b.*\=/;
-        { local($1, $2); ($_ = $_) = m/(.*)/; } # untaint
-        my $eval = qq{
-            package V::Module::Info::_version;
-            no strict;
+        my $eval;
+        if (m/([\$*])(([\w\:\']*)\bVERSION)\b.*\=/) {
+            { local($1, $2); ($_ = $_) = m/(.*)/; } # untaint
+            $eval = qq{
+                package V::Module::Info::_version;
+                no strict;
 
-            local $1$2;
-            \$$2=undef; do {
-                $_
-            }; \$$2
-        };
-        local $^W = 0;
-        $result = eval($eval);
-        warn "Could not eval '$eval' in $parsefile: $@" if $@;
-        $result = "undef" unless defined $result;
-        last;
+                local $1$2;
+                \$$2=undef; do {
+                    $_
+                }; \$$2
+            };
+        }
+        # perl 5.12.0+
+        elsif (m/^\s* package \s+ [^\s]+ \s+ ([^;\{]+) [;\{]/x) {
+            $eval = qq{
+                package V::Module::Info::_version $1;
+                V::Module::Info::_version->VERSION;;
+            };
+        }
+        if (defined($eval)) {
+            local $^W = 0;
+            $result = eval($eval);
+            warn "Could not eval '$eval' in $parsefile: $@" if $@;
+            $result = "undef" unless defined $result;
+
+            # use the version modulue to deal with v-strings
+            require version;
+            $result = version->parse($result);
+            last;
+        }
     }
-    close MOD;
+    close($mod);
     return $result;
 }
 

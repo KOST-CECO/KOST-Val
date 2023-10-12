@@ -4,6 +4,11 @@
 #ifndef IMAGER_IMCONFIG_H
 #define IMAGER_IMCONFIG_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 /*
   Logging system
 */
@@ -30,5 +35,10 @@ Compiler supports the GCC __attribute__((format...)) syntax.
 */
 typedef long long i_dim_format_t;
 #define i_DF "I64d"
+#define IMAGER_STATIC_INLINE static __inline__
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

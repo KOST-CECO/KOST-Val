@@ -275,54 +275,54 @@ Bemba locale.
 
 =head3 Full
 
-   2008-02-05T18:30:30 = 6:30:30 akasuba UTC
-   1995-12-22T09:05:02 = 9:05:02 uluchelo UTC
-  -0010-09-15T04:44:23 = 4:44:23 uluchelo UTC
+   2008-02-05T18:30:30 = 6:30:30 akasuba UTC
+   1995-12-22T09:05:02 = 9:05:02 uluchelo UTC
+  -0010-09-15T04:44:23 = 4:44:23 uluchelo UTC
 
 =head3 Long
 
-   2008-02-05T18:30:30 = 6:30:30 akasuba UTC
-   1995-12-22T09:05:02 = 9:05:02 uluchelo UTC
-  -0010-09-15T04:44:23 = 4:44:23 uluchelo UTC
+   2008-02-05T18:30:30 = 6:30:30 akasuba UTC
+   1995-12-22T09:05:02 = 9:05:02 uluchelo UTC
+  -0010-09-15T04:44:23 = 4:44:23 uluchelo UTC
 
 =head3 Medium
 
-   2008-02-05T18:30:30 = 6:30:30 akasuba
-   1995-12-22T09:05:02 = 9:05:02 uluchelo
-  -0010-09-15T04:44:23 = 4:44:23 uluchelo
+   2008-02-05T18:30:30 = 6:30:30 akasuba
+   1995-12-22T09:05:02 = 9:05:02 uluchelo
+  -0010-09-15T04:44:23 = 4:44:23 uluchelo
 
 =head3 Short
 
-   2008-02-05T18:30:30 = 6:30 akasuba
-   1995-12-22T09:05:02 = 9:05 uluchelo
-  -0010-09-15T04:44:23 = 4:44 uluchelo
+   2008-02-05T18:30:30 = 6:30 akasuba
+   1995-12-22T09:05:02 = 9:05 uluchelo
+  -0010-09-15T04:44:23 = 4:44 uluchelo
 
 
 =head2 Datetime Formats
 
 =head3 Full
 
-   2008-02-05T18:30:30 = Palichibuli, 5 Februari 2008 6:30:30 akasuba UTC
-   1995-12-22T09:05:02 = Palichisano, 22 Disemba 1995 9:05:02 uluchelo UTC
-  -0010-09-15T04:44:23 = Pachibelushi, 15 Septemba -10 4:44:23 uluchelo UTC
+   2008-02-05T18:30:30 = Palichibuli, 5 Februari 2008 6:30:30 akasuba UTC
+   1995-12-22T09:05:02 = Palichisano, 22 Disemba 1995 9:05:02 uluchelo UTC
+  -0010-09-15T04:44:23 = Pachibelushi, 15 Septemba -10 4:44:23 uluchelo UTC
 
 =head3 Long
 
-   2008-02-05T18:30:30 = 5 Februari 2008 6:30:30 akasuba UTC
-   1995-12-22T09:05:02 = 22 Disemba 1995 9:05:02 uluchelo UTC
-  -0010-09-15T04:44:23 = 15 Septemba -10 4:44:23 uluchelo UTC
+   2008-02-05T18:30:30 = 5 Februari 2008 6:30:30 akasuba UTC
+   1995-12-22T09:05:02 = 22 Disemba 1995 9:05:02 uluchelo UTC
+  -0010-09-15T04:44:23 = 15 Septemba -10 4:44:23 uluchelo UTC
 
 =head3 Medium
 
-   2008-02-05T18:30:30 = 5 Feb 2008 6:30:30 akasuba
-   1995-12-22T09:05:02 = 22 Dis 1995 9:05:02 uluchelo
-  -0010-09-15T04:44:23 = 15 Sep -10 4:44:23 uluchelo
+   2008-02-05T18:30:30 = 5 Feb 2008 6:30:30 akasuba
+   1995-12-22T09:05:02 = 22 Dis 1995 9:05:02 uluchelo
+  -0010-09-15T04:44:23 = 15 Sep -10 4:44:23 uluchelo
 
 =head3 Short
 
-   2008-02-05T18:30:30 = 05/02/2008 6:30 akasuba
-   1995-12-22T09:05:02 = 22/12/1995 9:05 uluchelo
-  -0010-09-15T04:44:23 = 15/09/-10 4:44 uluchelo
+   2008-02-05T18:30:30 = 05/02/2008 6:30 akasuba
+   1995-12-22T09:05:02 = 22/12/1995 9:05 uluchelo
+  -0010-09-15T04:44:23 = 15/09/-10 4:44 uluchelo
 
 
 =head2 Available Formats
@@ -416,6 +416,12 @@ Bemba locale.
    2008-02-05T18:30:30 = AD 2008 Feb 5
    1995-12-22T09:05:02 = AD 1995 Dis 22
   -0010-09-15T04:44:23 = BC -10 Sep 15
+
+=head3 GyMd (GGGGG y-MM-dd)
+
+   2008-02-05T18:30:30 = AD 2008-02-05
+   1995-12-22T09:05:02 = AD 1995-12-22
+  -0010-09-15T04:44:23 = BC -10-09-15
 
 =head3 H (HH)
 
@@ -513,11 +519,11 @@ Bemba locale.
    1995-12-22T09:05:02 = 9 uluchelo
   -0010-09-15T04:44:23 = 4 uluchelo
 
-=head3 hm (h:mm a)
+=head3 hm (h:mm a)
 
-   2008-02-05T18:30:30 = 6:30 akasuba
-   1995-12-22T09:05:02 = 9:05 uluchelo
-  -0010-09-15T04:44:23 = 4:44 uluchelo
+   2008-02-05T18:30:30 = 6:30 akasuba
+   1995-12-22T09:05:02 = 9:05 uluchelo
+  -0010-09-15T04:44:23 = 4:44 uluchelo
 
 =head3 hms (h:mm:ss a)
 

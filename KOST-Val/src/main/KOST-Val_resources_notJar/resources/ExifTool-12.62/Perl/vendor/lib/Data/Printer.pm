@@ -1,1856 +1,868 @@
 package Data::Printer;
 use strict;
 use warnings;
-use Term::ANSIColor qw(color colored);
-use Scalar::Util;
-use Sort::Naturally;
-use Carp qw(croak);
-use Clone::PP qw(clone);
-use Package::Stash;
-use if $] >= 5.010, 'Hash::Util::FieldHash' => qw(fieldhash);
-use if $] < 5.010, 'Hash::Util::FieldHash::Compat' => qw(fieldhash);
-use File::Spec;
-use File::HomeDir ();
-use Fcntl;
-# This causes strangeness wrt UNIVERSAL on Perl 5.8 with some versions of version.pm.
-# Instead, we now require version in the VSTRING() method.
-# use version 0.77 ();
+use Data::Printer::Object;
+use Data::Printer::Common;
+use Data::Printer::Config;
 
-our $VERSION = '0.40';
+our $VERSION = '1.001000';
+$VERSION = eval $VERSION;
 
-BEGIN {
-    if ($^O =~ /Win32/i) {
-        require Win32::Console::ANSI;
-        Win32::Console::ANSI->import;
-    }
-}
-
-# defaults
-my $properties = {
-    'name'           => 'var',
-    'indent'         => 4,
-    'index'          => 1,
-    'max_depth'      => 0,
-    'multiline'      => 1,
-    'sort_keys'      => 1,
-    'deparse'        => 0,
-    'hash_separator' => '   ',
-    'align_hash'     => 1,
-    'separator'      => ',',
-    'end_separator'  => 0,
-    'show_tied'      => 1,
-    'show_tainted'   => 1,
-    'show_unicode'   => 0,
-    'show_weak'      => 1,
-    'show_readonly'  => 0,
-    'show_lvalue'    => 1,
-    'print_escapes'  => 0,
-    'escape_chars'   => 'none',
-    'quote_keys'     => 'auto',
-    'scalar_quotes'  => '"',
-    'use_prototypes' => 1,
-    'output'         => 'stderr',
-    'return_value'   => 'pass',       # also 'dump' or 'void'
-    'colored'        => 'auto',       # also 0 or 1
-    'caller_info'    => 0,
-    'caller_message' => 'Printing in line __LINE__ of __FILENAME__:',
-    'class_method'   => '_data_printer', # use a specific dump method, if available
-    'color'          => {
-        'array'       => 'bright_white',
-        'number'      => 'bright_blue',
-        'string'      => 'bright_yellow',
-        'class'       => 'bright_green',
-        'method'      => 'bright_green',
-        'undef'       => 'bright_red',
-        'hash'        => 'magenta',
-        'regex'       => 'yellow',
-        'code'        => 'green',
-        'glob'        => 'bright_cyan',
-        'vstring'     => 'bright_blue',
-        'lvalue'      => 'bright_white',
-        'format'      => 'bright_cyan',
-        'repeated'    => 'white on_red',
-        'caller_info' => 'bright_cyan',
-        'weak'        => 'cyan',
-        'tainted'     => 'red',
-        'unicode'     => 'bright_yellow',
-        'escaped'     => 'bright_red',
-        'unknown'     => 'bright_yellow on_blue',
-    },
-    'class' => {
-        inherited    => 'none',   # also 'all', 'public' or 'private'
-        universal    => 1,
-        parents      => 1,
-        linear_isa   => 'auto',
-        expand       => 1,        # how many levels to expand. 0 for none, 'all' for all
-        internals    => 1,
-        export       => 1,
-        sort_methods => 1,
-        show_methods => 'all',    # also 'none', 'public', 'private'
-        show_reftype => 0,
-        _depth       => 0,        # used internally
-    },
-    'filters' => {
-        # The IO ref type isn't supported as you can't actually create one,
-        # any handle you make is automatically blessed into an IO::* object,
-        # and those are separately handled.
-        SCALAR  => [ \&SCALAR   ],
-        ARRAY   => [ \&ARRAY    ],
-        HASH    => [ \&HASH     ],
-        REF     => [ \&REF      ],
-        CODE    => [ \&CODE     ],
-        GLOB    => [ \&GLOB     ],
-        VSTRING => [ \&VSTRING  ],
-        LVALUE  => [ \&LVALUE   ],
-        FORMAT  => [ \&FORMAT   ],
-        Regexp  => [ \&Regexp   ],
-        -unknown=> [ \&_unknown ],
-        -class  => [ \&_class   ],
-    },
-
-    _output          => *STDERR,     # used internally
-    _current_indent  => 0,           # used internally
-    _linebreak       => "\n",        # used internally
-    _seen            => {},          # used internally
-    _seen_override   => {},          # used internally
-    _depth           => 0,           # used internally
-    _tie             => 0,           # used internally
-};
-
+my $rc_arguments;
+my %arguments_for;
 
 sub import {
     my $class = shift;
+
+    _initialize();
+
     my $args;
-    if (scalar @_) {
+    if (@_ > 0) {
         $args = @_ == 1 ? shift : {@_};
-        croak 'Data::Printer can receive either a hash or a hash reference.'
-            unless ref $args and ref $args eq 'HASH';
+        Data::Printer::Common::_warn(
+            undef,
+            'Data::Printer can receive either a hash or a hash reference'
+        ) unless ref $args eq 'HASH';
+        $args = Data::Printer::Config::_expand_profile($args)
+            if exists $args->{profile};
     }
 
-    # the RC file overrides the defaults,
-    # (and we load it only once)
-    unless( exists $properties->{_initialized} ) {
-        _load_rc_file($args);
-        $properties->{_initialized} = 1;
-    }
-
-    # and 'use' arguments override the RC file
-    if ($args) {
-        $properties = _merge( $args );
-    }
-
-    my $exported = ($properties->{use_prototypes} ? \&p : \&p_without_prototypes );
-    my $imported = $properties->{alias} || 'p';
+    # every time you load it, we override the version from *your* caller
     my $caller = caller;
-    no strict 'refs';
-    *{"$caller\::$imported"} = $exported;
-    *{"$caller\::np"} = \&np;
+    $arguments_for{$caller} = $args;
+
+    my $use_prototypes = _find_option('use_prototypes', $args, $caller, 1);
+    my $exported = ($use_prototypes ? \&p : \&_p_without_prototypes);
+
+    my $imported = _find_option('alias', $args, $caller, 'p');
+
+    { no strict 'refs';
+        *{"$caller\::$imported"} = $exported;
+        *{"$caller\::np"}        = \&np;
+    }
+}
+
+sub _initialize {
+    # potential race but worst case is we read it twice :)
+    { no warnings 'redefine'; *_initialize = sub {} }
+
+    my $rc_filename = Data::Printer::Config::_get_first_rc_file_available();
+    $rc_arguments = Data::Printer::Config::load_rc_file($rc_filename);
+
+    if (
+           exists $rc_arguments->{'_'}{live_update}
+        && defined $rc_arguments->{'_'}{live_update}
+        && $rc_arguments->{'_'}{live_update} =~ /\A\d+\z/
+        && $rc_arguments->{'_'}{live_update} > 0) {
+        my $now = time;
+        my $last_mod = (stat $rc_filename)[9];
+        {
+            no warnings 'redefine';
+            *_initialize = sub {
+                if (time - $now > $rc_arguments->{'_'}{live_update}) {
+                    my $new_last_mod = (stat $rc_filename)[9];
+                    if (defined $new_last_mod && $new_last_mod > $last_mod) {
+                        $now = time;
+                        $last_mod = $new_last_mod;
+                        $rc_arguments = Data::Printer::Config::load_rc_file($rc_filename);
+                        if (!exists $rc_arguments->{'_'}{live_update} || !$rc_arguments->{'_'}{live_update}) {
+                            *_initialize = sub {};
+                        }
+                    }
+                }
+            };
+        }
+    }
+}
+
+sub np (\[@$%&];%) {
+    my (undef, %properties) = @_;
+
+    _initialize();
+
+    my $caller = caller;
+    my $args_to_use = _fetch_args_with($caller, \%properties);
+    return '' if $args_to_use->{quiet};
+    my $printer = Data::Printer::Object->new($args_to_use);
+
+    # force color level 0 on 'auto' colors:
+    if ($printer->colored eq 'auto') {
+        $printer->{_output_color_level} = 0;
+    }
+
+    my $ref = ref $_[0];
+    if ($ref eq 'ARRAY' || $ref eq 'HASH' || ($ref eq 'REF' && ref ${$_[0]} eq 'REF')) {
+        $printer->{_refcount_base}++;
+    }
+    my $output = $printer->parse($_[0]);
+    if ($printer->caller_message_position eq 'after') {
+        $output .= $printer->_write_label;
+    }
+    else {
+        $output = $printer->_write_label . $output;
+    }
+    return $output;
 }
 
 
 sub p (\[@$%&];%) {
-    return _print_and_return( $_[0], _data_printer(!!defined wantarray, @_) );
+    my (undef, %properties) = @_;
+
+    _initialize();
+
+    my $caller = caller;
+    my $args_to_use = _fetch_args_with($caller, \%properties);
+    return if $args_to_use->{quiet};
+    my $printer = Data::Printer::Object->new($args_to_use);
+    my $want_value = defined wantarray;
+    if ($printer->colored eq 'auto' && $printer->return_value eq 'dump' && $want_value) {
+        $printer->{_output_color_level} = 0;
+    }
+
+    my $ref = ref $_[0];
+    if ($ref eq 'ARRAY' || $ref eq 'HASH' || ($ref eq 'REF' && ref ${$_[0]} eq 'REF')) {
+        $printer->{_refcount_base}++;
+    }
+    my $output = $printer->parse($_[0]);
+    if ($printer->caller_message_position eq 'after') {
+        $output .= $printer->_write_label;
+    }
+    else {
+        $output = $printer->_write_label . $output;
+    }
+
+    return _handle_output($printer, $output, $want_value, $_[0]);
 }
 
-sub np (\[@$%&];%) {
-    my ($dump, $p) = _data_printer(1, @_);
-    return $dump;
-}
-
-# This is a p() clone without prototypes.
-# Just like regular Data::Dumper, this version
-# expects a reference as its first argument.
-# We make a single exception for when we only
-# get one argument, in which case we ref it
+# This is a p() clone without prototypes. Just like regular Data::Dumper,
+# this version expects a reference as its first argument. We make a single
+# exception for when we only get one argument, in which case we ref it
 # for the user and keep going.
-sub p_without_prototypes  {
-    my $item = shift;
+sub _p_without_prototypes  {
+    my (undef, %properties) = @_;
 
-    if (!ref $item && @_ == 0) {
-        my $item_value = $item;
+    my $item;
+    if (!ref $_[0] && @_ == 1) {
+        my $item_value = $_[0];
         $item = \$item_value;
     }
 
-    return _print_and_return( $item, _data_printer(!!defined wantarray, $item, @_) );
+    _initialize();
+
+    my $caller = caller;
+    my $args_to_use = _fetch_args_with($caller, \%properties);
+    return if $args_to_use->{quiet};
+    my $printer = Data::Printer::Object->new($args_to_use);
+
+    my $want_value = defined wantarray;
+    if ($printer->colored eq 'auto' && $printer->return_value eq 'dump' && $want_value) {
+        $printer->{_output_color_level} = 0;
+    }
+
+    my $ref = ref( defined $item ? $item : $_[0] );
+    if ($ref eq 'ARRAY' || $ref eq 'HASH' || ($ref eq 'REF'
+        && ref(defined $item ? $item : ${$_[0]}) eq 'REF')) {
+        $printer->{_refcount_base}++;
+    }
+    my $output = $printer->parse((defined $item ? $item : $_[0]));
+    if ($printer->caller_message_position eq 'after') {
+        $output .= $printer->_write_label;
+    }
+    else {
+        $output = $printer->_write_label . $output;
+    }
+
+    return _handle_output($printer, $output, $want_value, $_[0]);
 }
 
-sub _print_and_return {
-    my ($item, $dump, $p) = @_;
 
-    if ( $p->{return_value} eq 'pass' ) {
-        print { $p->{_output} } $dump . $/;
+sub _handle_output {
+    my ($printer, $output, $wantarray, $data) = @_;
 
-        my $ref = ref $item;
-        if ($ref eq 'ARRAY') {
-            return @{ $item };
+    if ($printer->return_value eq 'pass') {
+        print { $printer->{output_handle} } $output . "\n";
+        require Scalar::Util;
+        my $ref = Scalar::Util::blessed($data);
+        return $data if defined $ref;
+        $ref = Scalar::Util::reftype($data);
+        if (!$ref) {
+            return $data;
+        }
+        elsif ($ref eq 'ARRAY') {
+            return @$data;
         }
         elsif ($ref eq 'HASH') {
-            return %{ $item };
+            return %$data;
         }
-        elsif ( grep { $ref eq $_ } qw(REF SCALAR CODE Regexp GLOB VSTRING) ) {
-            return $$item;
+        elsif ( grep { $ref eq $_ } qw(REF SCALAR VSTRING) ) {
+            return $$data;
         }
         else {
-            return $item;
+            return $data;
         }
     }
-    elsif ( $p->{return_value} eq 'void' ) {
-        print { $p->{_output} } $dump . $/;
+    elsif ($printer->return_value eq 'void' || !$wantarray) {
+        print { $printer->{output_handle} } $output . "\n";
         return;
     }
     else {
-        print { $p->{_output} } $dump . $/ unless defined wantarray;
-        return $dump;
+        return $output;
     }
 }
 
-sub _data_printer {
-    my $wantarray = shift;
+sub _fetch_args_with {
+    my ($caller, $run_properties) = @_;
 
-    croak 'When calling p() without prototypes, please pass arguments as references'
-        unless ref $_[0];
-    my ($item, %local_properties) = @_;
-    local %ENV = %ENV;
-    my $p = _merge(\%local_properties);
-
-    unless ($p->{multiline}) {
-        $p->{'_linebreak'} = ' ';
-        $p->{'indent'}     = 0;
-        $p->{'index'}      = 0;
-    }
-
-    # We disable colors if colored is set to false.
-    # If set to "auto", we disable colors if the user
-    # set ANSI_COLORS_DISABLED or if we're either
-    # returning the value (instead of printing) or
-    # being piped to another command.
-    if ( !$p->{colored}
-          or ($p->{colored} eq 'auto'
-              and (exists $ENV{ANSI_COLORS_DISABLED}
-                   or $wantarray
-                   or not -t $p->{_output}
-                  )
-          )
-    ) {
-        $ENV{ANSI_COLORS_DISABLED} = 1;
-    }
-    else {
-        delete $ENV{ANSI_COLORS_DISABLED};
-    }
-
-    my $out = color('reset');
-
-    if ( $p->{caller_info} and $p->{_depth} == 0 ) {
-        $out .= _get_info_message($p);
-    }
-
-    $out .= _p( $item, $p );
-    return ($out, $p);
-}
-
-
-sub _p {
-    my ($item, $p) = @_;
-    my $ref = (defined $p->{_reftype} ? $p->{_reftype} : ref $item);
-    my $tie;
-
-    my $string = '';
-
-    # Object's unique ID, avoiding circular structures
-    my $id = _object_id( $item );
-    if ( exists $p->{_seen}->{$id} ) {
-        if ( not defined $p->{_reftype} ) {
-            return colored($p->{_seen}->{$id}, $p->{color}->{repeated});
-        }
-    }
-    # some filters don't want us to show their repeated refs
-    elsif( !exists $p->{_seen_override}{$ref} ) {
-        $p->{_seen}->{$id} = $p->{name};
-    }
-
-    delete $p->{_reftype}; # abort override
-
-    # globs don't play nice
-    $ref = 'GLOB' if "$item" =~ /GLOB\([^()]+\)$/;
-
-
-    # filter item (if user set a filter for it)
-    my $found;
-    if ( exists $p->{filters}->{$ref} ) {
-        foreach my $filter ( @{ $p->{filters}->{$ref} } ) {
-            if ( defined (my $result = $filter->($item, $p)) ) {
-                $string .= $result;
-                $found = 1;
-                last;
-            }
-        }
-    }
-
-    if (not $found and Scalar::Util::blessed($item) ) {
-        # let '-class' filters have a go
-        foreach my $filter ( @{ $p->{filters}->{'-class'} } ) {
-            if ( defined (my $result = $filter->($item, $p)) ) {
-                $string .= $result;
-                $found = 1;
-                last;
-            }
-        }
-    }
-
-    if ( not $found ) {
-        # if it's not a class and not a known core type, we must be in
-        # a future perl with some type we're unaware of
-        foreach my $filter ( @{ $p->{filters}->{'-unknown'} } ) {
-            if ( defined (my $result = $filter->($item, $p)) ) {
-                $string .= $result;
-                last;
-            }
-        }
-    }
-
-    if ($p->{show_tied} and $p->{_tie} ) {
-        $string .= ' (tied to ' . $p->{_tie} . ')';
-        $p->{_tie} = '';
-    }
-
-    return $string;
-}
-
-
-
-######################################
-## Default filters
-######################################
-
-sub SCALAR {
-    my ($item, $p) = @_;
-    my $string = '';
-
-    if (not defined $$item) {
-        $string .= colored('undef', $p->{color}->{'undef'});
-    }
-    elsif (_is_number($$item)) {
-        $string .= colored($$item, $p->{color}->{'number'});
-    }
-    else {
-        my $val = _escape_chars($$item, $p->{color}{string}, $p);
-
-        $string .= $p->{scalar_quotes} . colored($val, $p->{color}->{'string'}) . $p->{scalar_quotes};
-    }
-
-    $string .= ' ' . colored('(TAINTED)', $p->{color}->{'tainted'})
-        if $p->{show_tainted} and Scalar::Util::tainted($$item);
-
-    $string .= ' ' . colored('(U)', $p->{color}->{'unicode'})
-        if $p->{show_unicode} and utf8::is_utf8($$item);
-
-    $p->{_tie} = ref tied $$item;
-
-    if ($p->{show_readonly} and &Internals::SvREADONLY( $item )) {
-        $string .= ' (read-only)';
-    }
-
-    return $string;
-}
-
-sub _is_number {
-    my ($maybe_a_number) = @_;
-
-    # Scalar values that start from zero is strings, but not numbers.
-    # You can write `my $foo = 0123`, but then `$foo` will be 83,
-    # (numbers starting with zero is octal integers)
-    return '' if $maybe_a_number =~ /^-?0[0-9]/;
-
-    my $is_number = $maybe_a_number =~ m/
-        ^
-        -?          # number can start with minus, but can't start with plus
-                    # is scalar starts with plus it is not number
-
-        [0-9]+      # then there should be some numbers
-
-        ( \. [0-9]+ )?      # there can be decimal part, which is optional
-
-        ( e [+-] [0-9]+ )?  # then there can be optional exponential notation part
-        \z
-    /x;
-
-    return $is_number;
-}
-
-sub _escape_chars {
-    my ($str, $orig_color, $p) = @_;
-
-    $orig_color   = color( $orig_color );
-    my $esc_color = color( $p->{color}{escaped} );
-
-    # if we're escaping everything then we don't need to keep swapping
-    # colors in and out, and we need to return right away because
-    # we no longer need to print_escapes
-    if ($p->{escape_chars} eq 'all') {
-        return $esc_color
-               . join('', map { sprintf '\x{%02x}', ord $_ } split //, $str)
-               . $orig_color
-    }
-
-    $str =~ s/\e/$esc_color\\e$orig_color/g if $p->{print_escapes};
-
-    if ($p->{escape_chars} eq 'nonascii') {
-        $str =~ s{([^\x{00}-\x{7f}]+)}{
-          $esc_color
-          . (join '', map { sprintf '\x{%02x}', ord $_ } split //, $1)
-          . $orig_color
-        }ge;
-    } elsif ($p->{escape_chars} eq 'nonlatin1') {
-        $str =~ s{([^\x{00}-\x{ff}]+)}{
-          $esc_color
-          . (join '', map { sprintf '\x{%02x}', ord $_ } split //, $1) . $orig_color
-        }ge;
-    }
-
-    if ($p->{print_escapes}) {
-        my %escaped = (
-            "\n" => '\n',
-            "\r" => '\r',
-            "\t" => '\t',
-            "\f" => '\f',
-            "\b" => '\b',
-            "\a" => '\a',
+    my $args_to_use = {};
+    if (keys %$rc_arguments) {
+        $args_to_use = Data::Printer::Config::_merge_options(
+            $args_to_use, $rc_arguments->{'_'}
         );
-        foreach my $k ( keys %escaped ) {
-            $str =~ s/$k/$esc_color$escaped{$k}$orig_color/g;
+        if (exists $rc_arguments->{$caller}) {
+            $args_to_use = Data::Printer::Config::_merge_options(
+                $args_to_use, $rc_arguments->{$caller}
+            );
         }
     }
-    # always escape the null character
-    $str =~ s/\0/$esc_color\\0$orig_color/g;
-
-    return $str;
+    if ($arguments_for{$caller}) {
+        $args_to_use = Data::Printer::Config::_merge_options(
+            $args_to_use, $arguments_for{$caller}
+        );
+    }
+    if (keys %$run_properties) {
+        $run_properties = Data::Printer::Config::_expand_profile($run_properties)
+            if exists $run_properties->{profile};
+        $args_to_use = Data::Printer::Config::_merge_options(
+            $args_to_use, $run_properties
+        );
+    }
+    return $args_to_use;
 }
 
 
-sub ARRAY {
-    my ($item, $p) = @_;
-    my $string = '';
-    $p->{_depth}++;
+sub _find_option {
+    my ($key, $args, $caller, $default) = @_;
 
-    if ( $p->{max_depth} and $p->{_depth} > $p->{max_depth} ) {
-        $string .= '[ ... ]';
+    my $value;
+    if (exists $args->{$key}) {
+        $value =  $args->{$key};
     }
-    elsif (not @$item) {
-        $string .= '[]';
-    }
-    else {
-        $string .= "[$p->{_linebreak}";
-        $p->{_current_indent} += $p->{indent};
-
-        foreach my $i (0 .. $#{$item} ) {
-            $p->{name} .= "[$i]";
-
-            my $array_elem = $item->[$i];
-            $string .= (' ' x $p->{_current_indent});
-            if ($p->{'index'}) {
-                $string .= colored(
-                             sprintf("%-*s", 3 + length($#{$item}), "[$i]"),
-                             $p->{color}->{'array'}
-                       );
-            }
-
-            my $ref = ref $array_elem;
-
-            # scalar references should be re-referenced
-            # to gain a '\' sign in front of them
-            if (!$ref or $ref eq 'SCALAR') {
-                $string .= _p( \$array_elem, $p );
-            }
-            else {
-                $string .= _p( $array_elem, $p );
-            }
-            $string .= ' ' . colored('(weak)', $p->{color}->{'weak'})
-                if $ref and Scalar::Util::isweak($item->[$i]) and $p->{show_weak};
-
-            $string .= $p->{separator}
-              if $i < $#{$item} || $p->{end_separator};
-
-            $string .= $p->{_linebreak};
-
-            my $size = 2 + length($i); # [10], [100], etc
-            substr $p->{name}, -$size, $size, '';
-        }
-        $p->{_current_indent} -= $p->{indent};
-        $string .= (' ' x $p->{_current_indent}) . "]";
-    }
-
-    $p->{_tie} = ref tied @$item;
-    $p->{_depth}--;
-
-    return $string;
-}
-
-
-sub REF {
-    my ($item, $p) = @_;
-    my $string = '';
-
-    # look-ahead, add a '\' only if it's not an object
-    if (my $ref_ahead = ref $$item ) {
-        $string .= '\\ ' if grep { $_ eq $ref_ahead }
-            qw(SCALAR CODE Regexp ARRAY HASH GLOB REF);
-    }
-    $string .= _p($$item, $p);
-
-    $string .= ' ' . colored('(weak)', $p->{color}->{'weak'})
-        if Scalar::Util::isweak($$item) and $p->{show_weak};
-
-    return $string;
-}
-
-
-sub CODE {
-    my ($item, $p) = @_;
-    my $string = '';
-
-    my $code = 'sub { ... }';
-    if ($p->{deparse}) {
-        $code = _deparse( $item, $p );
-    }
-    $string .= colored($code, $p->{color}->{'code'});
-    return $string;
-}
-
-
-sub HASH {
-    my ($item, $p) = @_;
-    my $string = '';
-
-    $p->{_depth}++;
-
-    if ( $p->{max_depth} and $p->{_depth} > $p->{max_depth} ) {
-        $string .= '{ ... }';
-    }
-    elsif (not keys %$item) {
-        $string .= '{}';
-    }
-    else {
-        $string .= "{$p->{_linebreak}";
-        $p->{_current_indent} += $p->{indent};
-
-        my $total_keys  = scalar keys %$item;
-        my $len         = 0;
-        my $multiline   = $p->{multiline};
-        my $hash_color  = $p->{color}{hash};
-        my $quote_keys  = $p->{quote_keys};
-
-        my @keys = ();
-
-        # first pass, preparing keys to display (and getting largest key size)
-        foreach my $key ($p->{sort_keys} ? nsort keys %$item : keys %$item ) {
-            my $new_key = _escape_chars($key, $hash_color, $p);
-            my $colored = colored( $new_key, $hash_color );
-
-            # wrap in uncolored single quotes if there's
-            # any space or escaped characters
-            if ( $quote_keys
-                  and (
-                        $quote_keys ne 'auto'
-                        or (
-                             $key eq q()
-                             or $new_key ne $key
-                             or $new_key =~ /\s|\n|\t|\r/
-                        )
-                  )
-            ) {
-                $colored = qq['$colored'];
-            }
-
-            push @keys, {
-                raw     => $key,
-                colored => $colored,
-            };
-
-            # length of the largest key is used for indenting
-            if ($multiline and $p->{align_hash}) {
-                my $l = length $colored;
-                $len = $l if $l > $len;
-            }
-        }
-
-        # second pass, traversing and rendering
-        foreach my $key (@keys) {
-            my $raw_key     = $key->{raw};
-            my $colored_key = $key->{colored};
-            my $element     = $item->{$raw_key};
-            $p->{name}     .= "{$raw_key}";
-
-            $string .= (' ' x $p->{_current_indent})
-                     . sprintf("%-*s", $len, $colored_key)
-                     . $p->{hash_separator}
-                     ;
-
-            my $ref = ref $element;
-            # scalar references should be re-referenced
-            # to gain a '\' sign in front of them
-            if (!$ref or $ref eq 'SCALAR') {
-                $string .= _p( \$element, $p );
-            }
-            else {
-                $string .= _p( $element, $p );
-            }
-
-            $string .= ' ' . colored('(weak)', $p->{color}->{'weak'})
-                if $ref
-                  and $p->{show_weak}
-                  and Scalar::Util::isweak($item->{$raw_key});
-
-            $string .= $p->{separator}
-              if --$total_keys > 0 || $p->{end_separator};
-
-            $string .= $p->{_linebreak};
-
-            my $size = 2 + length($raw_key); # {foo}, {z}, etc
-            substr $p->{name}, -$size, $size, '';
-        }
-        $p->{_current_indent} -= $p->{indent};
-        $string .= (' ' x $p->{_current_indent}) . "}";
-    }
-
-    $p->{_tie} = ref tied %$item;
-    $p->{_depth}--;
-
-    return $string;
-}
-
-
-sub Regexp {
-    my ($item, $p) = @_;
-    my $string = '';
-
-    my $val = "$item";
-    # a regex to parse a regex. Talk about full circle :)
-    # note: we are not validating anything, just grabbing modifiers
-    if ($val =~ m/\(\?\^?([uladxismpogce]*)(?:\-[uladxismpogce]+)?:(.*)\)/s) {
-        my ($modifiers, $val) = ($1, $2);
-        $string .= colored($val, $p->{color}->{'regex'});
-        if ($modifiers) {
-            $string .= "  (modifiers: $modifiers)";
-        }
-    }
-    else {
-        croak "Unrecognized regex $val. Please submit a bug report for Data::Printer.";
-    }
-    return $string;
-}
-
-sub VSTRING {
-    my ($item, $p) = @_;
-    eval { require version };
-    my $string = '';
-    # This will raise an error if we have version < 0.77;
-    $string .= colored(version->declare($$item)->normal, $p->{color}->{'vstring'});
-    return $string;
-}
-
-sub FORMAT {
-    my ($item, $p) = @_;
-    my $string = '';
-    $string .= colored('FORMAT', $p->{color}->{'format'});
-    return $string;
-}
-
-sub LVALUE {
-    my ($item, $p) = @_;
-    my $string = SCALAR( $item, $p );
-    $string .= colored( ' (LVALUE)', $p->{color}{lvalue} )
-        if $p->{show_lvalue};
-
-    return $string;
-}
-
-sub GLOB {
-    my ($item, $p) = @_;
-    my $string = '';
-
-    $string .= colored("$$item", $p->{color}->{'glob'});
-
-    my $extra = '';
-
-    # unfortunately, some systems (like Win32) do not
-    # implement some of these flags (maybe not even
-    # fcntl() itself, so we must wrap it.
-    my $flags;
-    eval { no warnings qw( unopened closed ); $flags = fcntl($$item, F_GETFL, 0) };
-    if ($flags) {
-        $extra .= ($flags & O_WRONLY) ? 'write-only'
-                : ($flags & O_RDWR)   ? 'read/write'
-                : 'read-only'
-                ;
-
-        # How to avoid croaking when the system
-        # doesn't implement one of those, without skipping
-        # the whole thing? Maybe there's a better way.
-        # Solaris, for example, doesn't have O_ASYNC :(
-        my %flags = ();
-        eval { $flags{'append'}      = O_APPEND   };
-        eval { $flags{'async'}       = O_ASYNC    }; # leont says this is the only one I should care for.
-        eval { $flags{'create'}      = O_CREAT    };
-        eval { $flags{'truncate'}    = O_TRUNC    };
-        eval { $flags{'nonblocking'} = O_NONBLOCK };
-
-        if (my @flags = grep { $flags & $flags{$_} } keys %flags) {
-            $extra .= ", flags: @flags";
-        }
-        $extra .= ', ';
-    }
-    my @layers = ();
-    eval { @layers = PerlIO::get_layers $$item }; # TODO: try PerlIO::Layers::get_layers (leont)
-    unless ($@) {
-        $extra .= "layers: @layers";
-    }
-    $string .= "  ($extra)" if $extra;
-
-    $p->{_tie} = ref tied *$$item;
-    return $string;
-}
-
-
-sub _unknown {
-    my($item, $p) = @_;
-    my $ref = ref $item;
-
-    my $string = '';
-    $string = colored($ref, $p->{color}->{'unknown'});
-    return $string;
-}
-
-sub _class {
-    my ($item, $p) = @_;
-    my $ref = ref $item;
-
-    # if the user specified a method to use instead, we do that
-    if ( $p->{class_method} and my $method = $item->can($p->{class_method}) ) {
-        return $method->($item, $p) if ref $method eq 'CODE';
-    }
-
-    my $string = '';
-    $p->{class}{_depth}++;
-
-    $string .= colored($ref, $p->{color}->{'class'});
-
-    if ( $p->{class}{show_reftype} ) {
-        $string .= ' (' . colored(
-            Scalar::Util::reftype($item),
-            $p->{color}->{'class'}
-        ) . ')';
-    }
-
-    if ($p->{class}{expand} eq 'all'
-        or $p->{class}{expand} >= $p->{class}{_depth}
+    elsif (
+          exists $rc_arguments->{$caller}
+       && exists $rc_arguments->{$caller}{$key}
     ) {
-        $string .= "  {$p->{_linebreak}";
-        $p->{_current_indent} += $p->{indent};
-
-        if ($] >= 5.010) {
-            require mro;
-        } else {
-            require MRO::Compat;
-        }
-
-        # Package::Stash dies on blessed XS
-        eval {
-            my $stash = Package::Stash->new($ref);
-
-            if ( my @superclasses = @{$stash->get_symbol('@ISA')||[]} ) {
-                if ($p->{class}{parents}) {
-                    $string .= (' ' x $p->{_current_indent})
-                            . 'Parents       '
-                            . join(', ', map { colored($_, $p->{color}->{'class'}) }
-                                         @superclasses
-                            ) . $p->{_linebreak};
-                }
-
-                if ( $p->{class}{linear_isa} and
-                      (
-                        ($p->{class}{linear_isa} eq 'auto' and @superclasses > 1)
-                        or
-                        ($p->{class}{linear_isa} ne 'auto')
-                      )
-                ) {
-                    $string .= (' ' x $p->{_current_indent})
-                            . 'Linear @ISA   '
-                            . join(', ', map { colored( $_, $p->{color}->{'class'}) }
-                                      @{mro::get_linear_isa($ref)}
-                            ) . $p->{_linebreak};
-                }
-            }
-        };
-        if ($@) {
-            warn "*** WARNING *** Could not get superclasses for $ref: $@"
-                unless $@ =~ / is not a module name at /;
-        }
-
-        $string .= _show_methods($ref, $p)
-            if $p->{class}{show_methods} and $p->{class}{show_methods} ne 'none';
-
-        if ( $p->{'class'}->{'internals'} ) {
-            $string .= (' ' x $p->{_current_indent})
-                    . 'internals: ';
-
-            local $p->{_reftype} = Scalar::Util::reftype $item;
-            $string .= _p($item, $p);
-            $string .= $p->{_linebreak};
-        }
-
-        $p->{_current_indent} -= $p->{indent};
-        $string .= (' ' x $p->{_current_indent}) . "}";
+        $value = $rc_arguments->{$caller}{$key};
     }
-    $p->{class}{_depth}--;
-
-    return $string;
-}
-
-
-
-######################################
-## Auxiliary (internal) subs
-######################################
-
-# All glory to Vincent Pit for coming up with this implementation,
-# to Goro Fuji for Hash::FieldHash, and of course to Michael Schwern
-# and his "Object::ID", whose code is copied almost verbatim below.
-{
-    fieldhash my %IDs;
-
-    my $Last_ID = "a";
-    sub _object_id {
-        my $self = shift;
-
-        # This is 15% faster than ||=
-        return $IDs{$self} if exists $IDs{$self};
-        return $IDs{$self} = ++$Last_ID;
-    }
-}
-
-
-sub _show_methods {
-    my ($ref, $p) = @_;
-
-    my $string = '';
-    my $methods = {
-        public => [],
-        private => [],
-    };
-    my $inherited = $p->{class}{inherited} || 'none';
-
-    require B;
-
-    my $methods_of = sub {
-        my ($name) = @_;
-        map {
-            my $m;
-            if ($_
-                and $m = B::svref_2object($_)
-                and $m->isa('B::CV')
-                and not $m->GV->isa('B::Special')
-            ) {
-                [ $m->GV->STASH->NAME, $m->GV->NAME ]
-            } else {
-                ()
-            }
-        } values %{Package::Stash->new($name)->get_all_symbols('CODE')}
-    };
-
-    my %seen_method_name;
-
-    # Package::Stash dies on blessed XS
-    my @all_methods = ();
-    eval {
-        @all_methods = map $methods_of->($_),
-                           @{mro::get_linear_isa($ref)},
-                           $p->{class}{universal} ? 'UNIVERSAL' : ()
-    };
-    if ($@) {
-        warn "*** WARNING *** Could not get all_methods for $ref: $@"
-           unless $@ =~ / is not a module name at /;
-    }
-
-METHOD:
-    foreach my $method (@all_methods) {
-        my ($package_string, $method_string) = @$method;
-
-        next METHOD if $seen_method_name{$method_string}++;
-
-        my $type = substr($method_string, 0, 1) eq '_' ? 'private' : 'public';
-
-        if ($package_string ne $ref) {
-            next METHOD unless $inherited ne 'none'
-                           and ($inherited eq 'all' or $type eq $inherited);
-            $method_string .= ' (' . $package_string . ')';
-        }
-
-        push @{ $methods->{$type} }, $method_string;
-    }
-
-    # render our string doing a natural sort by method name
-    my $show_methods = $p->{class}{show_methods};
-    foreach my $type (qw(public private)) {
-        next unless $show_methods eq 'all'
-                 or $show_methods eq $type;
-
-        my @list = ($p->{class}{sort_methods} ? nsort @{$methods->{$type}} : @{$methods->{$type}});
-
-        $string .= (' ' x $p->{_current_indent})
-                 . "$type methods (" . scalar @list . ')'
-                 . (@list ? ' : ' : '')
-                 . join(', ', map { colored($_, $p->{color}->{method}) }
-                              @list
-                   ) . $p->{_linebreak};
-    }
-
-    return $string;
-}
-
-sub _deparse {
-    my ($item, $p) = @_;
-    require B::Deparse;
-    my $i = $p->{indent};
-    my $deparseopts = ["-sCi${i}v'Useless const omitted'"];
-
-    my $sub = 'sub ' . B::Deparse->new($deparseopts)->coderef2text($item);
-    my $pad = "\n" . (' ' x ($p->{_current_indent} + $i));
-    $sub    =~ s/\n/$pad/gse;
-    return $sub;
-}
-
-sub _get_info_message {
-    my $p = shift;
-    my @caller = caller 2;
-
-    my $message = $p->{caller_message};
-
-    $message =~ s/\b__PACKAGE__\b/$caller[0]/g;
-    $message =~ s/\b__FILENAME__\b/$caller[1]/g;
-    $message =~ s/\b__LINE__\b/$caller[2]/g;
-
-    return colored($message, $p->{color}{caller_info}) . $p->{_linebreak};
-}
-
-
-sub _merge {
-    my $p = shift;
-    my $clone = clone $properties;
-
-    if ($p) {
-        foreach my $key (keys %$p) {
-            if ($key eq 'as') {
-                $clone->{caller_info} = 1;
-                $clone->{caller_message} = $p->{$key};
-            }
-            elsif ($key eq 'color' or $key eq 'colour') {
-                my $color = $p->{$key};
-                if ( not ref $color or ref $color ne 'HASH' ) {
-                    Carp::carp q['color' should be a HASH reference. Did you mean 'colored'?];
-                    $clone->{color} = {};
-                }
-                else {
-                    foreach my $target ( keys %$color ) {
-                        $clone->{color}->{$target} = $p->{$key}->{$target};
-                    }
-                }
-            }
-            elsif ($key eq 'class') {
-                foreach my $item ( keys %{$p->{class}} ) {
-                    $clone->{class}->{$item} = $p->{class}->{$item};
-                }
-            }
-            elsif ($key eq 'filters') {
-                my $val = $p->{$key};
-
-                foreach my $item (keys %$val) {
-                    my $filters = $val->{$item};
-
-                    # EXPERIMENTAL: filters in modules
-                    if ($item eq '-external') {
-                        my @external = ( ref($filters) ? @$filters : ($filters) );
-
-                        foreach my $class ( @external ) {
-                            my $module = "Data::Printer::Filter::$class";
-                            eval "use $module";
-                            if ($@) {
-                                warn "Error loading filter '$module': $@";
-                            }
-                            else {
-                                my %from_module = %{$module->_filter_list};
-                                my %extras      = %{$module->_extra_options};
-
-                                foreach my $k (keys %from_module) {
-                                    unshift @{ $clone->{filters}->{$k} }, @{ $from_module{$k} };
-                                    $clone->{_seen_override}{$k} = 1
-                                        if $extras{$k}{show_repeated};
-                                }
-                            }
-                        }
-                    }
-                    else {
-                        my @filter_list = ( ref $filters eq 'CODE' ? ( $filters ) : @$filters );
-                        unshift @{ $clone->{filters}->{$item} }, @filter_list;
-                    }
-                }
-            }
-            elsif ($key eq 'output') {
-                my $out = $p->{output};
-                my $ref = ref $out;
-
-                $clone->{output} = $out;
-
-                my %output_target = (
-                     stdout => *STDOUT,
-                     stderr => *STDERR,
-                );
-
-                my $error;
-                if (!$ref and exists $output_target{ lc $out }) {
-                    $clone->{_output} = $output_target{ lc $out };
-                }
-                elsif ( ( $ref and $ref eq 'GLOB')
-                     or (!$ref and \$out =~ /GLOB\([^()]+\)$/)
-                ) {
-                    $clone->{_output} = $out;
-                }
-                elsif ( !$ref or $ref eq 'SCALAR' ) {
-                    if( open my $fh, '>>', $out ) {
-                        $clone->{_output} = $fh;
-                    }
-                    else {
-                        $error = 1;
-                    }
-                }
-                else {
-                    $error = 1;
-                }
-
-                if ($error) {
-                    Carp::carp 'Error opening custom output handle.';
-                    $clone->{_output} = $output_target{ 'stderr' };
-                }
-            }
-            else {
-                $clone->{$key} = $p->{$key};
-            }
-        }
-    }
-
-    return $clone;
-}
-
-
-sub _load_rc_file {
-    my $args = shift || {};
-
-    my $file = exists $args->{rc_file}    ? $args->{rc_file}
-             : exists $ENV{DATAPRINTERRC} ? $ENV{DATAPRINTERRC}
-             : File::Spec->catfile(File::HomeDir->my_home,'.dataprinter');
-
-    return unless -e $file;
-
-    my $mode = (stat $file )[2];
-    if ($^O !~ /Win32/i && ($mode & 0020 || $mode & 0002) ) {
-        warn "*** WARNING *** rc file '$file' must NOT be writeable to other users. Skipping.\n";
-        return;
-    }
-
-    if ( -l $file || (!-f _) || -p _ || -S _ || -b _ || -c _ ) {
-        warn "*** WARNING *** rc file '$file' doesn't look like a plain file. Skipping.\n";
-        return;
-    }
-
-    unless (-o $file) {
-        warn "*** WARNING *** rc file '$file' must be owned by your (effective) user. Skipping.\n";
-        return;
-    }
-
-    if ( open my $fh, '<', $file ) {
-        my $rc_data;
-        { local $/; $rc_data = <$fh> }
-        close $fh;
-
-        if( ${^TAINT} != 0 ) {
-            if ( $args->{allow_tainted} ) {
-                warn "*** WARNING *** Reading tainted file '$file' due to user override.\n";
-                $rc_data =~ /(.+)/s; # very bad idea - god help you
-                $rc_data = $1;
-            }
-            else {
-                warn "*** WARNING *** taint mode on: skipping rc file '$file'.\n";
-                return;
-            }
-        }
-
-        my $config = eval $rc_data;
-        if ( $@ ) {
-            warn "*** WARNING *** Error loading $file: $@\n";
-        }
-        elsif (!ref $config or ref $config ne 'HASH') {
-            warn "*** WARNING *** Error loading $file: config file must return a hash reference\n";
-        }
-        else {
-            $properties = _merge( $config );
-        }
+    elsif (exists $rc_arguments->{'_'}{$key}) {
+        $value = $rc_arguments->{'_'}{$key};
     }
     else {
-        warn "*** WARNING *** error opening '$file': $!\n";
+        $value = $default;
     }
+    return $value;
 }
 
 
-1;
+'Marielle, presente.';
 __END__
 
 =encoding utf8
 
 =head1 NAME
 
-Data::Printer - colored pretty-print of Perl data structures and objects
+Data::Printer - colored & full-featured pretty print of Perl data structures and objects
 
 =head1 SYNOPSIS
 
-Want to see what's inside a variable in a complete, colored
-and human-friendly way?
+Want to see what's inside a variable in a complete, colored and human-friendly way?
 
-  use Data::Printer;   # or just "use DDP" for short
+    use DDP;  # same as 'use Data::Printer'
 
-  p @array;            # no need to pass references
+    p $some_var;
+    p $some_var, as => "This label will be printed too!";
 
-Code above might output something like this (with colors!):
+    # no need to use '\' before arrays or hashes!
+    p @array;
+    p %hash;
 
-   [
-       [0] "a",
-       [1] "b",
-       [2] undef,
-       [3] "c",
-   ]
+    # printing anonymous array references:
+    p [ $one, $two, $three ]->@*;    # perl 5.24 or later!
+    p @{[ $one, $two, $three ]};     # same, older perls
+    &p( [ $one, $two, $three ] );    # same, older perls
 
-You can also inspect objects:
+    # printing anonymous hash references:
+    p { foo => $foo, bar => $bar }->%*;   # perl 5.24 or later!
+    p %{{ foo => $foo, bar => $bar }};    # same, older perls
+    &p( { foo => $foo, bar => $bar } );   # same, older perls
 
-    my $obj = SomeClass->new;
 
-    p($obj);
+The snippets above will print the contents of the chosen variables to STDERR
+on your terminal, with colors and a few extra features to help you debug
+your code.
 
-Which might give you something like:
+If you wish to grab the output and handle it yourself, call C<np()>:
 
-  \ SomeClass  {
-      Parents       Moose::Object
-      Linear @ISA   SomeClass, Moose::Object
-      public methods (3) : bar, foo, meta
-      private methods (0)
-      internals: {
-         _something => 42,
-      }
-  }
+    my $dump = np $var;
 
-Data::Printer is fully customizable. If you want to change how things
-are displayed, or even its standard behavior. Take a look at the
-L<< available customizations|/"CUSTOMIZATION" >>. Once you figure out
-your own preferences, create a
-L<< configuration file|/"CONFIGURATION FILE (RUN CONTROL)" >> for
-yourself and Data::Printer will automatically use it!
+    die "this is what happened: " . np %data;
 
-B<< That's about it! Feel free to stop reading now and start dumping
-your data structures! For more information, including feature set,
-how to create filters, and general tips, just keep reading :) >>
+The C<np()> function is the same as C<p()> but will return the string
+containing the dump. By default it has no colors, but you can change that
+easily too.
 
-Oh, if you are just experimenting and/or don't want to use a
-configuration file, you can set all options during initialization,
-including coloring, indentation and filters!
 
-  use Data::Printer {
-      color => {
-         'regex' => 'blue',
-         'hash'  => 'yellow',
-      },
-      filters => {
-         'DateTime' => sub { $_[0]->ymd },
-         'SCALAR'   => sub { "oh noes, I found a scalar! $_[0]" },
-      },
-  };
+That's pretty much it :)
 
-The first C<{}> block is just syntax sugar, you can safely omit it
-if it makes things easier to read:
+=for html <img alt="samples of Data::Printer output for several kinds of data and objects" src="https://raw.githubusercontent.com/garu/Data-Printer/master/examples/ddp.gif" />
 
-  use DDP colored => 1;
-
-  use Data::Printer  deparse => 1, sort_keys => 0;
-
+Data::Printer is L<fully customizable|/Properties Quick Reference>, even
+on a per-module basis! Once you figure out your own preferences, create a
+L<< .dataprinter configuration file|/The .dataprinter configuration file >>
+for yourself (or one for each project) and Data::Printer will automatically
+use it!
 
 =head1 FEATURES
 
-Here's what Data::Printer has to offer to Perl developers, out of the box:
+Here's what Data::Printer offers Perl developers, out of the box:
 
 =over 4
 
-=item * Very sane defaults (I hope!)
-
-=item * Highly customizable (in case you disagree with me :)
-
-=item * Colored output by default
-
-=item * Human-friendly output, with array index and custom separators
-
-=item * Full object dumps including methods, inheritance and internals
-
-=item * Exposes extra information such as tainted data and weak references
-
-=item * Ability to easily create filters for objects and regular structures
-
-=item * Ability to load settings from a C<.dataprinter> file so you don't have to write anything other than "use DDP;" in your code!
+=item * Variable dumps designed for I<< easy parsing by the human brain >>,
+not a machine.
 
 =back
-
-=head1 RATIONALE
-
-Data::Dumper is a fantastic tool, meant to stringify data structures
-in a way they are suitable for being C<eval>'ed back in.
-
-The thing is, a lot of people keep using it (and similar ones,
-like Data::Dump) to print data structures and objects on screen
-for inspection and debugging, and while you B<can> use those
-modules for that, it doesn't mean you B<should>.
-
-This is where Data::Printer comes in. It is meant to do one thing
-and one thing only:
-
-I<< display Perl variables and objects on screen, properly
-formatted >> (to be inspected by a human)
-
-If you want to serialize/store/restore Perl data structures,
-this module will NOT help you. Try L<Storable>, L<Data::Dumper>,
-L<JSON>, or whatever. CPAN is full of such solutions!
-
-=head1 THE p() FUNCTION
-
-Once you load Data::Printer, the C<p()> function will be imported
-into your namespace and available to you. It will pretty-print
-into STDERR (or any other output target) whatever variable you pass to it.
-
-=head2 Changing output targets
-
-By default, C<p()> will be set to use STDERR. As of version 0.27, you
-can set up the 'output' property so Data::Printer outputs to
-several different places:
 
 =over 4
 
-=item * C<< output => 'stderr' >> - Standard error. Same as *STDERR
-
-=item * C<< output => 'stdout' >> - Standard output. Same as *STDOUT
-
-=item * C<< output => $filename >> - Appends to filename.
-
-=item * C<< output => $file_handle >> - Appends to opened handle
-
-=item * C<< output => \$scalar >> - Appends to that variable's content
+=item * B<< Highly customizable >>, from indentation size to depth level.
+You can even rename the exported C<p()> function!
 
 =back
-
-=head2 Return Value
-
-As of version 0.36, Data::Printer's return value defaults to "pass-through",
-meaning it will dump the variable to STDERR (or wherever you set the output
-to) and will return the variable itself.
-
-If for whatever reason you want to mangle with the output string
-instead of printing it, you can either use the (also exported) C<np()>
-function which always returns the string to be printed:
-
-    use DDP;
-
-    # move to a string
-    my $string = np @some_array;
-
-    # send as a warning
-    warn np($some_string);
-
-    # output to STDOUT instead of STDERR
-    print np(%some_hash);
-
-
-or change the return value to 'dump' and ask for p()'s return value instead:
-value:
-
-  use DDP return_value => 'dump';
-
-  # move to a string
-  my $string = p @some_array;
-
-  # output to STDOUT instead of STDERR;
-  print p(%some_hash);
-
-Note that, in this case, Data::Printer will not colorize the
-returned string unless you explicitly set the C<colored> option to 1:
-
-  print p(%some_hash, colored => 1); # now with colors!
-
-You can - and should - of course, set this during you "C<use>" call:
-
-  use Data::Printer colored => 1;
-  print p( %some_hash );  # will be colored
-
-Or by adding the setting to your C<.dataprinter> file.
-
-As most of Data::Printer, the return value is also configurable. You
-do this by setting the C<return_value> option. There are three options
-available:
 
 =over 4
 
-=item * C<'dump'>
-
-    p %var;               # prints the dump to STDERR (void context)
-    my $string = p %var;  # returns the dump *without* printing
-
-=item * C<'void'>:
-
-    p %var;               # prints the dump to STDERR, never returns.
-    my $string = p %var;  # $string is undef. Data still printed in STDERR
-
-
-=item * C<'pass'> (default as of 0.36):
-
-    p %var;               # prints the dump to STDERR, returns %var
-    my %copy = p %var;    # %copy = %var. Data still printed in STDERR
+=item * B<< Beautiful (and customizable) colors >> to highlight variable dumps
+and make issues stand-out quickly on your console. Comes bundled with
+L<several themes|Data::Printer::Theme> for you to pick that work on light
+and dark terminal backgrounds, and you can create your own as well.
 
 =back
 
-=head1 COLORS AND COLORIZATION
+=over 4
 
-Below are all the available colorizations and their default values.
-Note that both spellings ('color' and 'colour') will work.
+=item * B<< L<Filters|/Filters> for specific data structures and objects >> to make
+debugging much, much easier. Includes filters for many popular classes
+from CPAN like JSON::*, URI, HTTP::*, LWP, Digest::*, DBI and DBIx::Class.
+printing what really matters to developers debugging code. It also lets you
+create your own custom filters easily.
 
-   use Data::Printer {
-     color => {
-        array       => 'bright_white',  # array index numbers
-        number      => 'bright_blue',   # numbers
-        string      => 'bright_yellow', # strings
-        class       => 'bright_green',  # class names
-        method      => 'bright_green',  # method names
-        undef       => 'bright_red',    # the 'undef' value
-        hash        => 'magenta',       # hash keys
-        regex       => 'yellow',        # regular expressions
-        code        => 'green',         # code references
-        glob        => 'bright_cyan',   # globs (usually file handles)
-        vstring     => 'bright_blue',   # version strings (v5.16.0, etc)
-        repeated    => 'white on_red',  # references to seen values
-        caller_info => 'bright_cyan',   # details on what's being printed
-        weak        => 'cyan',          # weak references
-        tainted     => 'red',           # tainted content
-        escaped     => 'bright_red',    # escaped characters (\t, \n, etc)
+=back
 
-        # potential new Perl datatypes, unknown to Data::Printer
-        unknown     => 'bright_yellow on_blue',
-     },
-   };
+=over 4
 
-Don't fancy colors? Disable them with:
+=item * Lets you B<< inspect information that's otherwise difficult to find/debug >>
+in Perl 5, like circular references, reference counting (refcount),
+weak/read-only information, overloaded operators, tainted data, ties,
+dual vars, even estimated data size - all to help you spot issues with your
+data like leaks without having to know a lot about internal data structures
+or install hardcore tools like Devel::Peek and Devel::Gladiator.
 
-  use Data::Printer colored => 0;
+=back
 
-By default, 'colored' is set to C<"auto">, which means Data::Printer
-will colorize only when not being used to return the dump string,
-nor when the output (default: STDERR) is being piped. If you're not
-seeing colors, try forcing it with:
+=over 4
 
-  use Data::Printer colored => 1;
+=item * keep your custom settings on a
+L<< .dataprinter|/The .dataprinter configuration file >> file that allows
+B<< different options per module >> being analyzed! You may also create a
+custom L<profile|Data::Printer::Profile> class with your preferences and
+filters and upload it to CPAN.
 
-Also worth noticing that Data::Printer I<will> honor the
-C<ANSI_COLORS_DISABLED> environment variable unless you force a
-colored output by setting 'colored' to 1.
+=back
 
-Remember to put your preferred settings in the C<.dataprinter> file
-so you never have to type them at all!
+=over 4
 
+=item * B<< output to many different targets >> like files, variables or open
+handles (defaults to STDERR). You can send your dumps to the screen
+or anywhere else, and customize this setting on a per-project or even
+per-module basis, like print everything from Some::Module to a debug.log
+file with extra info, and everything else to STDERR.
 
-=head1 ALIASING
+=back
 
-Data::Printer provides the nice, short, C<p()> function to dump your
-data structures and objects. In case you rather use a more explicit
-name, already have a C<p()> function (why?) in your code and want
-to avoid clashing, or are just used to other function names for that
-purpose, you can easily rename it:
+=over 4
 
-  use Data::Printer alias => 'Dumper';
+=item * B<< Easy to learn, easy to master >>. Seriously, the synopsis above
+and the customization section below cover about 90% of all use cases.
 
-  Dumper( %foo );
+=back
+
+=over 4
+
+=item * Works on B<< Perl 5.8 and later >>. Because you can't control where
+you debug, we try our best to be compatible with all versions of Perl 5.
+
+=back
+
+=over 4
+
+=item * Best of all? All that with B<< No non-core dependencies >>,
+Zero. Nada. So don't worry about adding extra weight to your project, as
+Data::Printer can be easily added/removed.
+
+=back
+
+=head1 DESCRIPTION
+
+The ever-popular Data::Dumper is a fantastic tool, meant to stringify
+data structures in a way they are suitable for being "eval"'ed back in.
+The thing is, a lot of people keep using it (and similar ones, like
+Data::Dump) to print data structures and objects on screen for inspection
+and debugging, and while you I<can> use those modules for that, it doesn't
+mean you I<should>.
+
+This is where Data::Printer comes in. It is meant to do one thing and one
+thing only:
+
+I<< format Perl variables and objects to be inspected by a human >>
+
+If you want to serialize/store/restore Perl data structures, this module
+will NOT help you. Try Storable, Data::Dumper, JSON, or whatever. CPAN is
+full of such solutions!
+
+Whenever you type C<use Data::Printer> or C<use DDP>, we export two functions
+to your namespace:
+
+=head2 p()
+
+This function pretty-prints the contents of whatever variable to STDERR
+(by default), and will use colors by default if your terminal supports it.
+
+    p @some_array;
+    p %some_hash;
+    p $scalar_or_ref;
+
+Note that anonymous structures will only work if you postderef them:
+
+    p [$foo, $bar, $baz]->@*;
+
+you may also deref it manually:
+
+    p %{{ foo => $foo }};
+
+or prefix C<p()> with C<&>:
+
+    &p( [$foo, $bar, $baz] );    # & (note mandatory parenthesis)
+
+You can pass custom options that will work only on that particular call:
+
+    p @var, as => "some label", colorized => 0;
+    p %var, show_memsize => 1;
+
+By default, C<p()> prints to STDERR and returns the same variable being
+dumped. This lets you quickly wrap variables with C<p()> without worrying
+about changing return values. It means that if you change this:
+
+    sub foo { my $x = shift + 13; $x }
+
+to this:
+
+    sub foo { my $x = shift + 13; p($x) }
+
+The function will still return C<$x> after printing the contents. This form
+of handling data even allows method chaining, so if you want to inspect what's
+going on in the middle of this:
+
+    $object->foo->bar->baz;
+
+You can just add C<DDP::p> anywhere:
+
+    $object->foo->DDP::p->bar->baz; # what happens to $object after ->foo?
+
+Check out the L<customization quick reference|/Properties Quick Reference>
+section below for all available options, including changing the return type,
+output target and a lot more.
+
+=head2 np()
+
+The C<np()> function behaves exactly like C<p()> except it always returns
+the string containing the dump (thus ignoring any setting regarding dump
+mode or destination), and contains no colors by default. In fact, the only
+way to force a colored C<np()> is to pass C<< colored => 1 >> as an argument
+to each call. It is meant to provide an easy way to fetch the dump and send
+it to some unsupported target, or appended to some other text (like part of
+a log message).
 
 
 =head1 CUSTOMIZATION
 
-I tried to provide sane defaults for Data::Printer, so you'll never have
-to worry about anything other than typing C<< "p( $var )" >> in your code.
-That said, and besides coloring and filtering, there are several other
-customization options available, as shown below (with default values):
+There are 3 possible ways to customize Data::Printer:
 
-  use Data::Printer {
-      name           => 'var',   # name to display on cyclic references
-      indent         => 4,       # how many spaces in each indent
-      hash_separator => '   ',   # what separates keys from values
-      align_hash     => 1,       # align values in hash
-      colored        => 'auto',  # colorize output (1 for always, 0 for never)
-      index          => 1,       # display array indices
-      multiline      => 1,       # display in multiple lines (see note below)
-      max_depth      => 0,       # how deep to traverse the data (0 for all)
-      sort_keys      => 1,       # sort hash keys
-      deparse        => 0,       # use B::Deparse to expand (expose) subroutines
-      show_tied      => 1,       # expose tied variables
-      show_tainted   => 1,       # expose tainted variables
-      show_unicode   => 0,       # show unicode flag if it exists
-      show_weak      => 1,       # expose weak references
-      show_readonly  => 0,       # expose scalar variables marked as read-only
-      show_lvalue    => 1,       # expose lvalue types
-      print_escapes  => 0,       # print non-printable chars as "\n", "\t", etc.
-      escape_chars   => 'none',  # escape chars into \x{...} form.  Values are
-                                 # "none", "nonascii", "nonlatin1", "all"
-      quote_keys     => 'auto',  # quote hash keys (1 for always, 0 for never).
-                                 # 'auto' will quote when key is empty/space-only.
-      scalar_quotes  => '"',     # the quote symbols to enclose scalar values
-      separator      => ',',     # uses ',' to separate array/hash elements
-      end_separator  => 0,       # prints the separator after last element in array/hash.
-                                 # the default is 0 that means not to print
+1. B<[RECOMMENDED]> Creating a C<.dataprinter> file either on your home
+directory or your project's base directory, or both,  or wherever you set
+the C<DATAPRINTERRC> environment variable to.
 
-      caller_info    => 0,       # include information on what's being printed
-      use_prototypes => 1,       # allow p(%foo), but prevent anonymous data
-      return_value   => 'dump',  # what should p() return? See 'Return Value' above.
-      output         => 'stderr',# where to print the output. See
-                                 # 'Changing output targets' above.
+2. Setting custom properties on module load. This will override any
+setting from your config file on the namespace (package/module) it was called:
 
-      class_method   => '_data_printer', # make classes aware of Data::Printer
-                                         # and able to dump themselves.
+    use DDP max_depth => 2, deparse => 1;
 
-      class => {
-          internals  => 1,       # show internal data structures of classes
+3. Setting custom properties on the actual call to C<p()> or C<np()>. This
+overrides all other settings:
 
-          inherited  => 'none',  # show inherited methods,
-                                 # can also be 'all', 'private', or 'public'.
+    p $var, show_tainted => 1, indent => 2;
 
-          universal  => 1,       # include UNIVERSAL methods in inheritance list
 
-          parents    => 1,       # show parents, if there are any
-          linear_isa => 'auto',  # show the entire @ISA, linearized, whenever
-                                 # the object has more than one parent. Can
-                                 # also be set to 1 (always show) or 0 (never).
+=head2 The .dataprinter configuration file
 
-          expand     => 1,       # how deep to traverse the object (in case
-                                 # it contains other objects). Defaults to
-                                 # 1, meaning expand only itself. Can be any
-                                 # number, 0 for no class expansion, and 'all'
-                                 # to expand everything.
+The most powerful way to customize Data::Printer is to have a C<.dataprinter>
+file in your home directory or your project's root directory. The format
+is super simple and can be understood in the example below:
 
-          sort_methods => 1,     # sort public and private methods
+    # global settings (note that only full line comments are accepted)
+    max_depth       = 1
+    theme           = Monokai
+    class.stringify = 0
 
-          show_methods => 'all'  # method list. Also 'none', 'public', 'private'
-      },
-  };
+    # use quotes if you want spaces to be significant:
+    hash_separator  = " => "
 
-Note: setting C<multiline> to C<0> will also set C<index> and C<indent> to C<0>.
+    # You can set rules that apply only to a specific
+    # caller module (in this case, MyApp::Some::Module):
+    [MyApp::Some::Module]
+    max_depth    = 2
+    class.expand = 0
+    escape_chars = nonlatin1
 
-=head1 FILTERS
+    [MyApp::Other::Module]
+    multiline = 0
+    output    = /var/log/myapp/debug.data
 
-Data::Printer offers you the ability to use filters to override
-any kind of data display. The filters are placed on a hash,
-where keys are the types - or class names - and values
-are anonymous subs that receive two arguments: the item itself
-as first parameter, and the properties hashref (in case your
-filter wants to read from it). This lets you quickly override
-the way Data::Printer handles and displays data types and, in
-particular, objects.
+    # use 'quiet' to silence all output from p() and np()
+    # called from the specified package.
+    [MyApp::Yet::Another]
+    quiet = 1
 
-  use Data::Printer filters => {
-            'DateTime'      => sub { $_[0]->ymd },
-            'HTTP::Request' => sub { $_[0]->uri },
-  };
+Note that if you set custom properties as arguments to C<p()> or C<np()>, you
+should group suboptions as a hashref. So while the C<.dataprinter> file has
+"C<< class.expand = 0 >>" and "C<< class.inherited = none >>", the equivalent
+code is "C<< class => { expand => 0, inherited => 'none' } >>".
 
-Perl types are named as C<ref> calls them: I<SCALAR>, I<ARRAY>,
-I<HASH>, I<REF>, I<CODE>, I<Regexp> and I<GLOB>. As for objects,
-just use the class' name, as shown above.
+=head3 live updating your .dataprinter without restarts
 
-As of version 0.13, you may also use the '-class' filter, which
-will be called for all non-perl types (objects).
+Data::Printer 1.1 introduces a new 'live_update' flag that can be set to a
+positive integer to enable live updates. When this mode is on, Data::Printer
+will check if the C<.dataprinter> file has been updated and, if so, it will
+reload it. This way you can toggle features on and off and control output
+verbosity directly from your C<.dataprinter> file without needing to change
+or restart running code.
 
-Your filters are supposed to return a defined value (usually, the
-string you want to print). If you don't, Data::Printer will
-let the next filter of that same type have a go, or just fallback
-to the defaults. You can also use an array reference to pass more
-than one filter for the same type or class.
+=head2 Properties Quick Reference
 
-B<Note>: If you plan on calling C<p()> from I<within> an inline
-filter, please make sure you are passing only REFERENCES as
-arguments. See L</CAVEATS> below.
+Below are (almost) all available properties and their (hopefully sane)
+default values. See L<Data::Printer::Object> for further information on
+each of them:
 
-You may also like to specify standalone filter modules. Please
-see L<Data::Printer::Filter> for further information on a more
-powerful filter interface for Data::Printer, including useful
-filters that are shipped as part of this distribution.
+    # scalar options
+    show_tainted      = 1
+    show_unicode      = 1
+    show_lvalue       = 1
+    print_escapes     = 0
+    scalar_quotes     = "
+    escape_chars      = none
+    string_max        = 4096
+    string_preserve   = begin
+    string_overflow   = '(...skipping __SKIPPED__ chars...)'
+    unicode_charnames = 0
 
-=head1 MAKING YOUR CLASSES DDP-AWARE (WITHOUT ADDING ANY DEPS)
+    # array options
+    array_max      = 100
+    array_preserve = begin
+    array_overflow = '(...skipping __SKIPPED__ items...)'
+    index          = 1
 
-Whenever printing the contents of a class, Data::Printer first
-checks to see if that class implements a sub called '_data_printer'
-(or whatever you set the "class_method" option to in your settings,
-see L</CUSTOMIZATION> below).
+    # hash options
+    hash_max       = 100
+    hash_preserve  = begin
+    hash_overflow  = '(...skipping __SKIPPED__ keys...)'
+    hash_separator = '   '
+    align_hash     = 1
+    sort_keys      = 1
+    quote_keys     = auto
 
-If a sub with that exact name is available in the target object,
-Data::Printer will use it to get the string to print instead of
-making a regular class dump.
+    # general options
+    name           = var
+    return_value   = pass
+    output         = stderr
+    use_prototypes = 1
+    indent         = 4
+    show_readonly  = 1
+    show_tied      = 1
+    show_dualvar   = lax
+    show_weak      = 1
+    show_refcount  = 0
+    show_memsize   = 0
+    memsize_unit   = auto
+    separator      = ,
+    end_separator  = 0
+    caller_info    = 0
+    caller_message = 'Printing in line __LINE__ of __FILENAME__'
+    max_depth      = 0
+    deparse        = 0
+    alias          = p
+    warnings       = 1
+
+    # colorization (see Colors & Themes below)
+    colored = auto
+    theme   = Material
+
+    # object output
+    class_method             = _data_printer
+    class.parents            = 1
+    class.linear_isa         = auto
+    class.universal          = 1
+    class.expand             = 1
+    class.stringify          = 1
+    class.show_reftype       = 0
+    class.show_overloads     = 1
+    class.show_methods       = all
+    class.sort_methods       = 1
+    class.inherited          = none
+    class.format_inheritance = string
+    class.parent_filters     = 1
+    class.internals          = 1
+
+
+=head3 Settings' shortcuts
+
+=over 4
+
+=item * B<as> - prints a string before the dump. So:
+
+    p $some_var, as => 'here!';
+
+is a shortcut to:
+
+    p $some_var, caller_info => 1, caller_message => 'here!';
+
+=item * B<multiline> - lets you create shorter dumps. By setting it to 0,
+we use a single space as linebreak and disable the array index. Setting it
+to 1 (the default) goes back to using "\n" as linebreak and restore whatever
+array index you had originally.
+
+=item * B<fulldump> - when set to 1, disables all max string/hash/array
+values. Use this to generate complete (full) dumps of all your content,
+which is trimmed by default.
+
+=item * B<quiet> - when set to 1, disables all data parsing and returns as
+quickly as possible. Use this to disable all output from C<p()> and C<np()>
+inside a particular package, either from the 'use' call or from .dataprinter.
+(introduced in version 1.1)
+
+=back
+
+
+=head2 Colors & Themes
+
+Data::Printer lets you set custom colors for pretty much every part of the
+content being printed. For example, if you want numbers to be shown in
+bright green, just put C<< colors.number = #00ff00 >> on your configuration
+file.
+
+See L<Data::Printer::Theme> for the full list of labels, ways to represent
+and customize colors, and even how to group them in your own custom theme.
+
+The colorization is set by the C<colored> property. It can be set to 0
+(never colorize), 1 (always colorize) or 'auto' (the default), which will
+colorize C<p()> only when there is no C<ANSI_COLORS_DISABLED> environment
+variable, the output is going to the terminal (STDOUT or STDERR) and your
+terminal actually supports colors.
+
+
+=head2 Profiles
+
+You may bundle your settings and filters into a profile module.
+It works like a configuration file but gives you the power and flexibility
+to use Perl code to find out what to print and how to print. It also lets
+you use CPAN to store your preferred settings and install them into your
+projects just like a regular dependency.
+
+    use DDP profile => 'ProfileName';
+
+See L<Data::Printer::Profile> for all the ways to load a profile, a list
+of available profiles and how to make one yourself.
+
+
+=head2 Filters
+
+Data::Printer works by passing your variable to a different set of filters,
+depending on whether it's a scalar, a hash, an array, an object, etc. It
+comes bundled with filters for all native data types (always enabled, but
+overwritable), including a generic object filter that pretty-prints regular
+and Moo(se) objects and is even aware of Role::Tiny.
+
+Data::Printer also comes with filter bundles that can be quickly activated
+to make it easier to debug L<binary data|Data::Printer::Filter::ContentType>
+and many popular CPAN modules that handle
+L<date and time|Data::Printer::Filter::DateTime>,
+L<databases|Data::Printer::Filter::DB> (yes, even DBIx::Class),
+L<message digests|Data::Printer::Filter::Digest> like MD5 and SHA1, and
+L<JSON and Web|Data::Printer::Filter::Web> content like HTTP requests and
+responses.
+
+So much so we recommend everyone to activate all bundled filters by putting
+the following line on your C<.dataprinter> file:
+
+    filters = ContentType, DateTime, DB, Digest, Web
+
+Creating your custom filters is very easy, and
+you're encouraged to upload them to CPAN. There are many options available
+under the C<< Data::Printer::Filter::* >> namespace. Check
+L<Data::Printer::Filter> for more information!
+
+
+=head2 Making your classes DDP-aware (without adding any dependencies!)
+
+The default object filter will first check if the class implements a sub
+called 'C<_data_printer()>' (or whatever you set the "class_method" option
+to in your settings). If so, Data::Printer will use it to get the string to
+print instead of making a regular class dump.
 
 This means you could have the following in one of your classes:
 
   sub _data_printer {
-      my ($self, $properties) = @_;
+      my ($self, $ddp) = @_;
       return 'Hey, no peeking! But foo contains ' . $self->foo;
   }
 
-Notice you don't have to depend on Data::Printer at all, just
-write your sub and it will use that to pretty-print your objects.
+Notice that B<< you can do this without adding Data::Printer as a dependency >>
+to your project! Just write your sub and it will be called with the object to
+be printed and a C<$ddp> object ready for you. See
+L<< Data::Printer::Object|Data::Printer::Object/"Methods and Accessors for Filter Writers" >>
+for how to use it to pretty-print your data.
 
-If you want to use colors and filter helpers, and still not
-add Data::Printer to your dependencies, remember you can import
-them during runtime:
+Finally, if your object implements string overload or provides a method called
+"to_string", "as_string" or "stringify", Data::Printer will use it. To disable
+this behaviour, set C<< class.stringify = 0 >> on your C<.dataprinter>
+file, or call p() with C<< class => { stringify => 0 } >>.
 
-  sub _data_printer {
-      require Data::Printer::Filter;
-      Data::Printer::Filter->import;
+Loading a filter for that particular class will of course override these settings.
 
-      # now we have 'indent', outdent', 'linebreak', 'p' and 'colored'
-      my ($self, $properties) = @_;
-      ...
-  }
-
-Having a filter for that particular class will of course override
-this setting.
-
-
-=head1 CONFIGURATION FILE (RUN CONTROL)
-
-Data::Printer tries to let you easily customize as much as possible
-regarding the visualization of your data structures and objects.
-But we don't want you to keep repeating yourself every time you
-want to use it!
-
-To avoid this, you can simply create a file called C<.dataprinter> in
-your home directory (usually C</home/username> in Linux), and put
-your configuration hash reference in there.
-
-This way, instead of doing something like:
-
-   use Data::Printer {
-     colour => {
-        array => 'bright_blue',
-     },
-     filters => {
-         'Catalyst::Request' => sub {
-             my $req = shift;
-             return "Cookies: " . p($req->cookies)
-         },
-     },
-   };
-
-You can create a .dataprinter file that looks like this:
-
-   {
-     colour => {
-        array => 'bright_blue',
-     },
-     filters => {
-         'Catalyst::Request' => sub {
-             my $req = shift;
-             return "Cookies: " . p($req->cookies)
-         },
-     },
-   };
-
-Note that all we did was remove the "use Data::Printer" bit when
-writing the C<.dataprinter> file. From then on all you have to do
-while debugging scripts is:
-
-  use Data::Printer;
-
-and it will load your custom settings every time :)
-
-=head2 Loading RC files in custom locations
-
-If your RC file is somewhere other than C<.dataprinter> in your home
-dir, you can load whichever file you want via the C<'rc_file'> parameter:
-
-  use Data::Printer rc_file => '/path/to/my/rcfile.conf';
-
-You can even set this to undef or to a non-existing file to disable your
-RC file at will.
-
-The RC file location can also be specified with the C<DATAPRINTERRC>
-environment variable. Using C<rc_file> in code will override the environment
-variable.
-
-=head2 RC File Security
-
-The C<.dataprinter> RC file is nothing but a Perl hash that
-gets C<eval>'d back into the code. This means that whatever
-is in your RC file B<WILL BE INTERPRETED BY PERL AT RUNTIME>.
-This can be quite worrying if you're not the one in control
-of the RC file.
-
-For this reason, Data::Printer takes extra precaution before
-loading the file:
-
-=over 4
-
-=item * The file has to be in your home directory unless you
-specifically point elsewhere via the 'C<rc_file>' property or
-the DATAPRINTERRC environment variable;
-
-=item * The file B<must> be a plain file, never a symbolic
-link, named pipe or socket;
-
-=item * The file B<must> be owned by you (i.e. the effective
-user id that ran the script using Data::Printer);
-
-=item * The file B<must> be read-only for everyone but your user.
-This usually means permissions C<0644>, C<0640> or C<0600> in
-Unix-like systems. B<THIS IS NOT CHECKED IN WIN32>;
-
-=item * The file will B<NOT> be loaded in Taint mode, unless
-you specifically load Data::Printer with the 'allow_tainted'
-option set to true. And even if you do that, Data::Printer
-will still issue a warning before loading the file. But
-seriously, don't do that.
-
-=back
-
-Failure to comply with the security rules above will result in
-the RC file not being loaded (likely with a warning on what went
-wrong).
-
-
-=head1 THE "DDP" PACKAGE ALIAS
-
-You're likely to add/remove Data::Printer from source code being
-developed and debugged all the time, and typing it might feel too
-long. Because of this, the 'DDP' package is provided as a shorter
-alias to Data::Printer:
-
-   use DDP;
-   p %some_var;
-
-=head1 CALLER INFORMATION
-
-If you set caller_info to a true value, Data::Printer will prepend
-every call with an informational message. For example:
-
-  use Data::Printer caller_info => 1;
-
-  my $var = 42;
-  p $var;
-
-will output something like:
-
-  Printing in line 4 of myapp.pl:
-  42
-
-The default message is C<< 'Printing in line __LINE__ of __FILENAME__:' >>.
-The special strings C<__LINE__>, C<__FILENAME__> and C<__PACKAGE__> will
-be interpolated into their according value so you can customize them at will:
-
-  use Data::Printer
-    caller_info => 1,
-    caller_message => "Okay, __PACKAGE__, let's dance!"
-    color => {
-        caller_info => 'bright_red',
-    };
-
-As shown above, you may also set a color for "caller_info" in your color
-hash. Default is cyan.
-
-
-=head1 EXPERIMENTAL FEATURES
-
-The following are volatile parts of the API which are subject to
-change at any given version. Use them at your own risk.
-
-=head2 Local Configuration (experimental!)
-
-You can override global configurations by writing them as the second
-parameter for p(). For example:
-
-  p( %var, color => { hash => 'green' } );
-
-
-=head2 Filter classes
-
-As of Data::Printer 0.11, you can create complex filters as a separate
-module. Those can even be uploaded to CPAN and used by other people!
-See L<Data::Printer::Filter> for further information.
 
 =head1 CAVEATS
 
 You can't pass more than one variable at a time.
 
-   p($foo, $bar); # wrong
-   p($foo);       # right
-   p($bar);       # right
+   p $foo, $bar;       # wrong
+   p $foo; p $bar;     # right
 
 You can't use it in variable declarations (it will most likely not do what
 you want):
 
-    p my @array = qw(a b c d);         # wrong
-    my @array = qw(a b c d); p @array; # right
+    p my @array = qw(a b c d);          # wrong
+    my @array = qw(a b c d); p @array;  # right
 
-The default mode is to use prototypes, in which you are supposed to pass
-variables, not anonymous structures:
+If you pass a nonexistant key/index to DDP using prototypes, they
+will trigger autovivification:
 
-   p( { foo => 'bar' } ); # wrong
+    use DDP;
+    my %foo;
+    p $foo{bar}; # undef, but will create the 'bar' key (with undef)
 
-   p %somehash;        # right
-   p $hash_ref;        # also right
+    my @x;
+    p $x[5]; # undef, but will initialize the array with 5 elements (all undef)
 
-To pass anonymous structures, set "use_prototypes" option to 0. But
-remember you'll have to pass your variables as references:
+Slices (both array and hash) must be coerced into actual arrays (or hashes)
+to properly shown. So if you want to print a slice, instead of doing something
+like this:
 
-   use Data::Printer use_prototypes => 0;
+    p @somevar[1..10]; # WRONG! DON'T DO THIS!
 
-   p( { foo => 'bar' } ); # was wrong, now is right.
+try one of those:
 
-   p( %foo  ); # was right, but fails without prototypes
-   p( \%foo ); # do this instead
+    my @x = @somevar[1..10]; p @x;   # works!
+    p [ @somevar[1..0] ]->@*;        # also works!
+    p @{[@somevar[1..0]]};           # this works too!!
 
-If you are using inline filters, and calling p() (or whatever name you
-aliased it to) from inside those filters, you B<must> pass the arguments
-to C<p()> as a reference:
+Finally, as mentioned before, you cannot pass anonymous references on the
+default mode of C<< use_prototypes = 1 >>:
 
-  use Data::Printer {
-      filters => {
-          ARRAY => sub {
-              my $listref = shift;
-              my $string = '';
-              foreach my $item (@$listref) {
-                  $string .= p( \$item );      # p( $item ) will not work!
-              }
-              return $string;
-          },
-      },
-  };
+    p { foo => 1 };       # wrong!
+    p %{{ foo => 1 }};    # right
+    p { foo => 1 }->%*;   # right on perl 5.24+
+    &p( { foo => 1 } );   # right, but requires the parenthesis
+    sub pp { p @_ };      # wrapping it also lets you use anonymous data.
 
-This happens because your filter function is compiled I<before> Data::Printer
-itself loads, so the filter does not see the function prototype. As a way
-to avoid unpleasant surprises, if you forget to pass a reference, Data::Printer
-will generate an exception for you with the following message:
+    use DDP use_prototypes => 0;
+    p { foo => 1 };   # works, but now p(@foo) will fail, you must always pass a ref,
+                      # e.g. p(\@foo)
 
-    'When calling p() without prototypes, please pass arguments as references'
+=head1 BACKWARDS INCOMPATIBLE CHANGES
 
-Another way to avoid this is to use the much more complete L<Data::Printer::Filter>
-interface for standalone filters.
+While we make a genuine effort not to break anything on new releases,
+sometimes we do. To make things easier for people migrating their
+code, we have aggregated here a list of all incompatible changes since ever:
 
-=head1 EXTRA TIPS
+=over 4
 
-=head2 Circumventing prototypes
+=item * 1.00 - some defaults changed!
+Because we added a bunch of new features (including color themes), you may
+notice some difference on the default output of Data::Printer. Hopefully it's
+for the best.
 
-The C<p()> function uses prototypes by default, allowing you to say:
+=item * 1.00 - new C<.dataprinter> file format.
+I<< This should only affect you if you have a C<.dataprinter> file. >>
+The change was required to avoid calling C<eval> on potentially tainted/unknown
+code. It also provided a much cleaner interface.
 
-  p %var;
+=item * 1.00 - new way of creating external filters.
+I<< This only affects you if you write or use external filters. >>
+Previously, the sub in your C<filters> call would get the reference to be
+parsed and a properties hash. The properties hash has been replaced with a
+L<Data::Printer::Object> instance, providing much more power and flexibility.
+Because of that, the filter call does not export C<p()>/C<np()> anymore,
+replaced by methods in Data::Printer::Object.
 
-instead of always having to pass references, like:
+=item * 1.00 - new way to call filters.
+I<< This affects you if you load your own inline filters >>.
+The fix is quick and Data::Printer will generate a warning explaining how
+to do it. Basically, C<< filters => { ... } >> became
+C<< filters => [{ ... }] >> and you must replace C<< -external => [1,2] >>
+with C<< filters => [1, 2] >>, or C<< filters => [1, 2, {...}] >> if you
+also have inline filters. This allowed us much more power and flexibility
+with filters, and hopefully also makes things clearer.
 
-  p \%var;
+=item * 0.36 - C<p()>'s default return value changed from 'dump' to 'pass'.
+This was a very important change to ensure chained calls and to prevent
+weird side-effects when C<p()> is the last statement in a sub.
+L<< Read the full discussion|https://github.com/garu/Data-Printer/issues/16 >>.
 
-There are cases, however, where you may want to pass anonymous
-structures, like:
+=back
 
-  p { foo => $bar };   # this blows up, don't use
+Any undocumented change was probably unintended. If you bump into one,
+please file an issue on Github!
 
-and because of prototypes, you can't. If this is your case, just
-set "use_prototypes" option to 0. Note, with this option,
-you B<will> have to pass your variables as references:
-
-  use Data::Printer use_prototypes => 0;
-
-   p { foo => 'bar' }; # doesn't blow up anymore, works just fine.
-
-   p %var;  # but now this blows up...
-   p \%var; # ...so do this instead
-
-   p [ $foo, $bar, \@baz ]; # this way you can even pass
-                            # several variables at once
-
-Versions prior to 0.17 don't have the "use_prototypes" option. If
-you're stuck in an older version you can write C<&p()> instead of C<p()>
-to circumvent prototypes and pass elements (including anonymous variables)
-as B<REFERENCES>. This notation, however, requires enclosing parentheses:
-
-  &p( { foo => $bar } );        # this is ok, use at will
-  &p( \"DEBUGGING THIS BIT" );  # this works too
-
-Or you could just create a very simple wrapper function:
-
-  sub pp { p @_ };
-
-And use it just as you use C<p()>.
-
-=head2 Minding the return value of p()
-
-I<< (contributed by Matt S. Trout (mst)) >>
-
-There is a reason why explicit return statements are recommended unless
-you know what you're doing. By default, Data::Printer's return value
-depends on how it was called. When not in void context, it returns the
-serialized form of the dump.
-
-It's tempting to trust your own p() calls with that approach, but if
-this is your I<last> statement in a function, you should keep in mind
-your debugging code will behave differently depending on how your
-function was called!
-
-To prevent that, set the C<return_value> property to either 'void'
-or 'pass'. You won't be able to retrieve the dumped string but, hey,
-who does that anyway :)
-
-Assuming you have set the pass-through ('pass') property in your
-C<.dataprinter> file, another stunningly useful thing you can do with it
-is change code that says:
-
-   return $obj->foo;
-
-with:
-
-   use DDP;
-
-   return p $obj->foo;
-
-You can even add it to chained calls if you wish to see the dump of
-a particular state, changing this:
-
-   $obj->foo->bar->baz;
-
-to:
-
-   $obj->foo->DDP::p->bar->baz
-
-And things will "Just Work".
-
+=head1 TIPS & TRICKS
 
 =head2 Using p() in some/all of your loaded modules
 
 I<< (contributed by Matt S. Trout (mst)) >>
 
-While debugging your software, you may want to use Data::Printer in
-some or all loaded modules and not bother having to load it in
-each and every one of them. To do this, in any module loaded by
-C<myapp.pl>, simply write:
+While debugging your software, you may want to use Data::Printer in some or
+all loaded modules and not bother having to load it in each and every one of
+them. To do this, in any module loaded by C<myapp.pl>, simply write:
 
-  ::p( @myvar );  # note the '::' in front of p()
+  ::p @myvar;  # note the '::' in front of p()
 
 Then call your program like:
 
   perl -MDDP myapp.pl
 
-This also has the great advantage that if you leave one p() call
-in by accident, it will fail without the -M, making it easier to spot :)
+This also has the advantage that if you leave one p() call in by accident,
+it will trigger a compile-time failure without the -M, making it easier to
+spot :)
 
-If you really want to have p() imported into your loaded
-modules, use the next tip instead.
+If you really want to have p() imported into your loaded modules, use the
+next tip instead.
 
 =head2 Adding p() to all your loaded modules
 
@@ -1902,7 +914,7 @@ Now Data::Printer's C<p()> command will be used instead of the debugger's!
 See L<perldebug> for more information on how to use the perl debugger, and
 L<DB::Pluggable> for extra functionality and other plugins.
 
-If you can't or don't wish to use DB::Pluggable, or simply want to keep
+If you can't or don't want to use DB::Pluggable, or simply want to keep
 the debugger's C<p()> function and add an extended version using
 Data::Printer (let's call it C<px()> for instance), you can add these
 lines to your C<.perldb> file instead:
@@ -1920,7 +932,7 @@ to be dumped using Data::Printer.
 =head2 Using Data::Printer in a perl shell (REPL)
 
 Some people really enjoy using a REPL shell to quickly try Perl code. One
-of the most famous ones out there is L<Devel::REPL>. If you use it, now
+of the most popular ones out there is L<Devel::REPL>. If you use it, now
 you can also see its output with Data::Printer!
 
 Just install L<Devel::REPL::Plugin::DataPrinter> and add the following
@@ -1939,7 +951,7 @@ To turn Data::Printer's output into HTML, you can do something like:
   use HTML::FromANSI;
   use Data::Printer;
 
-  my $html_output = ansi2html( p($object, colored => 1) );
+  my $html_output = ansi2html( np($object, colored => 1) );
 
 In the example above, the C<$html_output> variable contains the
 HTML escaped output of C<p($object)>, so you can print it for
@@ -1966,25 +978,26 @@ The module allows several customization options, even letting you load it as a
 complete drop-in replacement for Template::Plugin::Dumper so you don't even have
 to change your previous templates!
 
+=head2 Migrating from Data::Dumper to Data::Printer
+
+If you are porting your code to use Data::Printer instead of
+Data::Dumper, you could replace:
+
+  use Data::Dumper;
+
+with something like:
+
+  use Data::Printer;
+  sub Dumper { np @_, colored => 1 }
+
+this sub will accept multiple variables just like Data::Dumper.
+
 =head2 Unified interface for Data::Printer and other debug formatters
 
 I<< (contributed by Kevin McGrath (catlgrep)) >>
 
-If you are porting your code to use Data::Printer instead of
-Data::Dumper or similar, you can just replace:
-
-  use Data::Dumper;
-
-with:
-
-  use Data::Printer alias => 'Dumper';
-  # use Data::Dumper;
-
-making sure to provide Data::Printer with the proper alias for the
-previous dumping function.
-
-If, however, you want a really unified approach where you can easily
-flip between debugging outputs, use L<Any::Renderer> and its plugins,
+If you want a really unified approach to easily flip between debugging
+outputs, use L<Any::Renderer> and its plugins,
 like L<Any::Renderer::Data::Printer>.
 
 =head2 Printing stack traces with arguments expanded using Data::Printer
@@ -2016,10 +1029,10 @@ data structures too!
 
    # Print a stack trace every time the name is changed,
    # except when reading from the database.
-   dip -e 'before { print longmess(p $_->{args}[1]) if $_->{args}[1] }
-     call "MyObj::name" & !cflow("MyObj::read")' myapp.pl
+   dip -e 'before { print longmess(np $_->{args}[1], colored => 1)
+   if $_->{args}[1] } call "MyObj::name" & !cflow("MyObj::read")' myapp.pl
 
-You can check you L<dip>'s own documentation for more information and options.
+You can check L<dip>'s own documentation for more information and options.
 
 =head2 Sample output for color fine-tuning
 
@@ -2028,239 +1041,80 @@ I<< (contributed by Yanick Champoux (yanick)) >>
 The "examples/try_me.pl" file included in this distribution has a sample
 dump with a complex data structure to let you quickly test color schemes.
 
-=head2 creating fiddling filters
+=head1 VERSIONING AND UPDATES
 
-I<< (contributed by dirk) >>
-
-Sometimes, you may want to take advantage of Data::Printer's original dump,
-but add/change some of the original data to enhance your debugging ability.
-Say, for example, you have an C<HTTP::Response> object you want to print
-but the content is encoded. The basic approach, of course, would be to
-just dump the decoded content:
-
-  use DDP filter {
-    'HTTP::Response' => sub { p( \shift->decoded_content, %{shift} );
-  };
-
-But what if you want to see the rest of the original object? Dumping it
-would be a no-go, because you would just recurse forever in your own filter.
-
-Never fear! When you create a filter in Data::Printer, you're not replacing
-the original one, you're just stacking yours on top of it. To forward your data
-to the original filter, all you have to do is return an undefined value. This
-means you can rewrite your C<HTTP::Response> filter like so, if you want:
-
-  use DDP filters => {
-    'HTTP::Response' => sub {
-      my ($res, $p) = @_;
-
-      # been here before? Switch to original handler
-      return if exists $res->{decoded_content};
-
-      # first timer? Come on in!
-      my $clone = $res->clone;
-      $clone->{decoded_content} = $clone->decoded_content;
-      return p($clone, %$p);
-    }
-  };
-
-And voilà! Your fiddling filter now works like a charm :)
-
-=head1 BUGS
-
-If you find any, please file a bug report.
-
-
-=head1 SEE ALSO
-
-L<Data::Dumper>
-
-L<Data::Dump>
-
-L<Data::Dumper::Concise>
-
-L<Data::Dump::Streamer>
-
-L<Data::PrettyPrintObjects>
-
-L<Data::TreeDumper>
-
-
-=head1 AUTHOR
-
-Breno G. de Oliveira C<< <garu at cpan.org> >>
+As of 1.0.0 this module complies with C<Major.Minor.Revision> versioning
+scheme (SemVer), meaning backwards incompatible changes will trigger a new
+major number, new features without any breaking changes trigger a new minor
+number, and simple patches trigger a revision number.
 
 =head1 CONTRIBUTORS
 
-Many thanks to everyone that helped design and develop this module
-with patches, bug reports, wishlists, comments and tests. They are
-(alphabetically):
-
-=over 4
-
-=item * Adam Rosenstein
-
-=item * Allan Whiteford
-
-=item * Andreas König
-
-=item * Andy Bach
-
-=item * Árpád Szász
-
-=item * Athanasios Douitsis (aduitsis)
-
-=item * Baldur Kristinsson
-
-=item * brian d foy
-
-=item * Chad Granum (exodist)
-
-=item * Chris Prather (perigrin)
-
-=item * Dave Mitchell
-
-=item * David D Lowe (Flimm)
-
-=item * David Golden (xdg)
-
-=item * David Precious (bigpresh)
-
-=item * David Raab
-
-=item * Damien Krotkine (dams)
-
-=item * Denis Howe
-
-=item * Dotan Dimet
-
-=item * Eden Cardim (edenc)
-
-=item * Elliot Shank (elliotjs)
-
-=item * Fernando Corrêa (SmokeMachine)
-
-=item * Fitz Elliott
-
-=item * Frew Schmidt (frew)
-
-=item * Ivan Bessarabov (bessarabv)
-
-=item * J Mash
-
-=item * Jay Allen (jayallen)
-
-=item * Jesse Luehrs (doy)
-
-=item * Jim Keenan (jkeenan)
-
-=item * Joel Berger (jberger)
-
-=item * John S. Anderson (genehack)
-
-=item * Kartik Thakore (kthakore)
-
-=item * Kevin Dawson (bowtie)
-
-=item * Kevin McGrath (catlgrep)
-
-=item * Kip Hampton (ubu)
-
-=item * Marcel Grünauer (hanekomu)
-
-=item * Marco Masetti (grubert65)
-
-=item * Mark Fowler (Trelane)
-
-=item * Matt S. Trout (mst)
-
-=item * Maxim Vuets
-
-=item * Michael Conrad
-
-=item * Mike Doherty (doherty)
-
-=item * Nuba Princigalli (nuba)
-
-=item * Olaf Alders (oalders)
-
-=item * Paul Evans (LeoNerd)
-
-=item * Pedro Melo (melo)
-
-=item * Przemysław Wesołek (jest)
-
-=item * Rebecca Turner (iarna)
-
-=item * Renato Cron (renatoCRON)
-
-=item * Ricardo Signes (rjbs)
-
-=item * Rob Hoelz (hoelzro)
-
-=item * sawyer
-
-=item * Sebastian Willing (Sewi)
-
-=item * Sergey Aleynikov (randir)
-
-=item * Stanislaw Pusep (syp)
-
-=item * Stephen Thirlwall (sdt)
-
-=item * sugyan
-
-=item * Tatsuhiko Miyagawa (miyagawa)
-
-=item * Thomas Sibley (tsibley)
-
-=item * Tim Heaney (oylenshpeegul)
-
-=item * Torsten Raudssus (Getty)
-
-=item * Tokuhiro Matsuno (tokuhirom)
-
-=item * vividsnow
-
-=item * Wesley Dal`Col (blabos)
-
-=item * Yanick Champoux (yanick)
-
-=item * Zefram
-
-=back
+Many thanks to everyone who helped design and develop this module with
+patches, bug reports, wishlists, comments and tests. They are (alphabetically):
+
+Adam Rosenstein, Alexandr Ciornii (chorny), Alexander Hartmaier (abraxxa),
+Allan Whiteford, Anatoly (Snelius30), Andreas König (andk), Andy Bach,
+Anthony DeRobertis, Árpád Szász, Athanasios Douitsis (aduitsis),
+Baldur Kristinsson, Benct Philip Jonsson (bpj), brian d foy,
+Chad Granum (exodist), Chris Prather (perigrin), Curtis Poe (Ovid),
+David D Lowe (Flimm), David E. Condon (hhg7), David Golden (xdg),
+David Precious (bigpresh), David Raab, David E. Wheeler (theory),
+Damien Krotkine (dams), Denis Howe, dirk, Dotan Dimet, Eden Cardim (edenc),
+Elliot Shank (elliotjs), Eugen Konkov (KES777), Fernando Corrêa (SmokeMachine),
+Fitz Elliott, Florian (fschlich), Frew Schmidt (frew), GianniGi,
+Graham Knop (haarg), Graham Todd, Gregory J. Oschwald, grr, Håkon Hægland,
+Iaroslav O. Kosmina (darviarush), Ivan Bessarabov (bessarabv), J Mash,
+James E. Keenan (jkeenan), Jarrod Funnell (Timbus), Jay Allen (jayallen),
+Jay Hannah (jhannah), jcop, Jesse Luehrs (doy), Joel Berger (jberger),
+John S. Anderson (genehack), Karen Etheridge (ether),
+Kartik Thakore (kthakore), Kevin Dawson (bowtie), Kevin McGrath (catlgrep),
+Kip Hampton (ubu), Londran, Marcel Grünauer (hanekomu),
+Marco Masetti (grubert65), Mark Fowler (Trelane), Martin J. Evans,
+Matt S. Trout (mst), Maxim Vuets, Michael Conrad, Mike Doherty (doherty),
+Nicolas R (atoomic),  Nigel Metheringham (nigelm), Nuba Princigalli (nuba),
+Olaf Alders (oalders), Paul Evans (LeoNerd), Pedro Melo (melo),
+Philippe Bruhat (BooK), Przemysław Wesołek (jest), Rebecca Turner (iarna),
+Renato Cron (renatoCRON), Ricardo Signes (rjbs), Rob Hoelz (hoelzro),
+Salve J. Nilsen (sjn), sawyer, Sebastian Willing (Sewi),
+Sébastien Feugère (smonff), Sergey Aleynikov (randir), Slaven Rezić,
+Stanislaw Pusep (syp), Stephen Thirlwall (sdt), sugyan, Tai Paul,
+Tatsuhiko Miyagawa (miyagawa), Thomas Sibley (tsibley),
+Tim Heaney (oylenshpeegul), Toby Inkster (tobyink), Torsten Raudssus (Getty),
+Tokuhiro Matsuno (tokuhirom), trapd00r, Tsai Chung-Kuan,
+Veesh Goldman (rabbiveesh), vividsnow, Wesley Dal`Col (blabos), y,
+Yanick Champoux (yanick).
 
 If I missed your name, please drop me a line!
 
-
 =head1 LICENSE AND COPYRIGHT
 
-Copyright 2011-2017 Breno G. de Oliveira C<< <garu at cpan.org> >>. All rights reserved.
+Copyright (C) 2011-2021 Breno G. de Oliveira
 
-This module is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself. See L<perlartistic>.
+This program is free software; you can redistribute it and/or modify it
+under the terms of either: the GNU General Public License as published
+by the Free Software Foundation; or the Artistic License.
 
-
+See L<http://dev.perl.org/licenses/> for more information.
 
 =head1 DISCLAIMER OF WARRANTY
 
-BECAUSE THIS SOFTWARE IS LICENSED FREE OF CHARGE, THERE IS NO WARRANTY
-FOR THE SOFTWARE, TO THE EXTENT PERMITTED BY APPLICABLE LAW. EXCEPT WHEN
+BECAUSE THIS SOFTWARE IS LICENSED FREE OF CHARGE, THERE IS NO WARRANTY FOR
+THE SOFTWARE, TO THE EXTENT PERMITTED BY APPLICABLE LAW. EXCEPT WHEN
 OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER PARTIES
 PROVIDE THE SOFTWARE "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER
 EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. THE
-ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE SOFTWARE IS WITH
-YOU. SHOULD THE SOFTWARE PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL
-NECESSARY SERVICING, REPAIR, OR CORRECTION.
+ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE SOFTWARE IS WITH YOU.
+SHOULD THE SOFTWARE PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL NECESSARY
+SERVICING, REPAIR, OR CORRECTION.
 
-IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING
-WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MAY MODIFY AND/OR
-REDISTRIBUTE THE SOFTWARE AS PERMITTED BY THE ABOVE LICENCE, BE
-LIABLE TO YOU FOR DAMAGES, INCLUDING ANY GENERAL, SPECIAL, INCIDENTAL,
-OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE USE OR INABILITY TO USE
-THE SOFTWARE (INCLUDING BUT NOT LIMITED TO LOSS OF DATA OR DATA BEING
-RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD PARTIES OR A
-FAILURE OF THE SOFTWARE TO OPERATE WITH ANY OTHER SOFTWARE), EVEN IF
-SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF
-SUCH DAMAGES.
+IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING WILL
+ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MAY MODIFY AND/OR
+REDISTRIBUTE THE SOFTWARE AS PERMITTED BY THE ABOVE LICENCE, BE LIABLE TO
+YOU FOR DAMAGES, INCLUDING ANY GENERAL, SPECIAL, INCIDENTAL, OR
+CONSEQUENTIAL DAMAGES ARISING OUT OF THE USE OR INABILITY TO USE THE
+SOFTWARE (INCLUDING BUT NOT LIMITED TO LOSS OF DATA OR DATA BEING RENDERED
+INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD PARTIES OR A FAILURE OF THE
+SOFTWARE TO OPERATE WITH ANY OTHER SOFTWARE), EVEN IF SUCH HOLDER OR OTHER
+PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.

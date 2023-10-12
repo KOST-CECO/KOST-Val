@@ -282,7 +282,7 @@ use warnings;
 
 use Sub::Uplevel 0.12;
 
-our $VERSION = '0.36';
+our $VERSION = '0.37';
 
 require Exporter;
 
@@ -352,15 +352,18 @@ sub warnings_exist (&$;$) {
                           _to_array_if_necessary( shift() || [] );
     my $testname    = shift;
     my @got_warning = ();
+    my $exp_idx = 0;
     local $SIG{__WARN__} = sub {
         my ($called_from) = caller(0);  # to find out Carping methods
         my $wrn_text=shift;
         my $wrn_rec=_canonical_got_warning($called_from, $wrn_text);
-        foreach my $wrn (@exp_warning) {
-          if (_cmp_got_to_exp_warning_like($wrn_rec,$wrn)) {
-            push @got_warning, $wrn_rec;
-            return;
-          }
+        if (
+          $exp_idx < @exp_warning and
+          _cmp_got_to_exp_warning_like($wrn_rec,$exp_warning[$exp_idx])
+        ) {
+          push @got_warning, $wrn_rec;
+          $exp_idx++;
+          return;
         }
         warn $wrn_text;
     };

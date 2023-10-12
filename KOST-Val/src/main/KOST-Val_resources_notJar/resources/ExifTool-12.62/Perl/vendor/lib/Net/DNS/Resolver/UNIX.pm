@@ -2,7 +2,7 @@ package Net::DNS::Resolver::UNIX;
 
 use strict;
 use warnings;
-our $VERSION = (qw$Id: UNIX.pm 1811 2020-10-05 08:24:23Z willem $)[2];
+our $VERSION = (qw$Id: UNIX.pm 1856 2021-12-02 14:36:25Z willem $)[2];
 
 
 =head1 NAME
@@ -22,7 +22,7 @@ my @dotpath = grep {defined} $ENV{HOME}, '.';
 my @dotfile = grep { -f $_ && -o _ } map {"$_/$dotfile"} @dotpath;
 
 
-local $ENV{PATH} = '/bin:/usr/bin';
+local $ENV{PATH} = join ':', grep {$_} qw(/bin /usr/bin), $ENV{PATH};
 my $uname = eval {`uname -n 2>/dev/null`} || '';
 chomp $uname;
 my ( $host, @domain ) = split /\./, $uname, 2;
@@ -68,7 +68,7 @@ All rights reserved.
 
 Permission to use, copy, modify, and distribute this software and its
 documentation for any purpose and without fee is hereby granted, provided
-that the above copyright notice appear in all copies and that both that
+that the original copyright notices appear in all copies and that both
 copyright notice and this permission notice appear in supporting
 documentation, and that the name of the author not be used in advertising
 or publicity pertaining to distribution of the software without specific

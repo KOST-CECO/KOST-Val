@@ -4,7 +4,7 @@ use strict;
 require Exporter;
 use vars qw/$VERSION @ISA @EXPORT @EXPORT_OK $DEBUG/;
 
-$VERSION    = '0.51';
+$VERSION    = '0.52';
 @ISA        = 'Exporter';
 @EXPORT     = qw/
   blib_to_par

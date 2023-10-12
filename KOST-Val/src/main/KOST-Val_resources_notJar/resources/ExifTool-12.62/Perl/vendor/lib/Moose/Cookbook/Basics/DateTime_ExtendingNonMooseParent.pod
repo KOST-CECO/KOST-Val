@@ -13,7 +13,7 @@ Moose::Cookbook::Basics::DateTime_ExtendingNonMooseParent - Extending a non-Moos
 
 =head1 VERSION
 
-version 2.2014
+version 2.2203
 
 =head1 SYNOPSIS
 
@@ -52,7 +52,7 @@ something funkier, you should check out L<MooseX::NonMoose::InsideOut> and L<Moo
 The meat of this recipe is contained in L<MooseX::NonMoose>, which does all
 the grunt work for you.
 
-=for testing-SETUP use Test::Requires {
+=for testing-SETUP use Test::Needs {
     'DateTime'                  => '0',
     'DateTime::Calendar::Mayan' => '0',
     'MooseX::NonMoose'          => '0.25',

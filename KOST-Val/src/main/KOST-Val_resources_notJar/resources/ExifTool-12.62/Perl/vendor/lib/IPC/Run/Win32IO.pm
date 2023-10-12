@@ -24,6 +24,7 @@ A specialized IO class used on Win32.
 =cut
 
 use strict;
+use warnings;
 use Carp;
 use IO::Handle;
 use Socket;
@@ -32,7 +33,7 @@ require POSIX;
 use vars qw{$VERSION};
 
 BEGIN {
-    $VERSION = '20200505.0';
+    $VERSION = '20220807.0';
 }
 
 use Socket qw( IPPROTO_TCP TCP_NODELAY );
@@ -357,8 +358,11 @@ sub _spawn_pumper {
     #   close SAVEOUT            or croak "$! closing SAVEOUT";       #### ADD
     #   close SAVEERR            or croak "$! closing SAVEERR";       #### ADD
 
-    close $stdin  or croak "$! closing pumper's stdin in parent";
-    close $stdout or croak "$! closing pumper's stdout in parent";
+    # In case of a sleep right here, need the IPC::Run::_close() treatment.
+    IPC::Run::_close fileno($stdin);
+    close $stdin;
+    IPC::Run::_close fileno($stdout);
+    close $stdout;
 
     # Don't close $debug_fd, we need it, as do other pumpers.
 

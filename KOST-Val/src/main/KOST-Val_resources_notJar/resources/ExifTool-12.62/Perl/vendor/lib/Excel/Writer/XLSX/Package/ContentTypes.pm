@@ -7,7 +7,7 @@ package Excel::Writer::XLSX::Package::ContentTypes;
 #
 # Used in conjunction with Excel::Writer::XLSX
 #
-# Copyright 2000-2020, John McNamara, jmcnamara@cpan.org
+# Copyright 2000-2023, John McNamara, jmcnamara@cpan.org
 #
 # Documentation after __END__
 #
@@ -21,7 +21,7 @@ use Carp;
 use Excel::Writer::XLSX::Package::XMLwriter;
 
 our @ISA     = qw(Excel::Writer::XLSX::Package::XMLwriter);
-our $VERSION = '1.07';
+our $VERSION = '1.11';
 
 
 ###############################################################################
@@ -334,6 +334,22 @@ sub _add_custom_properties {
 
 ###############################################################################
 #
+# _add_metadata()
+#
+# Add the metadata file to the ContentTypes overrides.
+#
+sub _add_metadata {
+
+    my $self   = shift;
+    my $custom = "/xl/metadata.xml";
+
+    $self->_add_override( $custom,
+        $app_document . 'spreadsheetml.sheetMetadata+xml' );
+}
+
+
+###############################################################################
+#
 # Internal methods.
 #
 ###############################################################################
@@ -472,7 +488,7 @@ John McNamara jmcnamara@cpan.org
 
 =head1 COPYRIGHT
 
-(c) MM-MMXX, John McNamara.
+(c) MM-MMXXIII, John McNamara.
 
 All Rights Reserved. This module is free software. It may be used, redistributed and/or modified under the same terms as Perl itself.
 

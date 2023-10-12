@@ -14,7 +14,7 @@ Alien::Build::Manual::FAQ - Frequently Asked Questions about Alien::Build
 
 =head1 VERSION
 
-version 2.38
+version 2.80
 
 =head1 SYNOPSIS
 
@@ -68,6 +68,43 @@ If you need to provide custom flags to configure, you can do that too:
 
 If your package requires GNU Make, use C<%{gmake}> instead of C<%{make}>.
 
+=head3 autoconf without configure script
+
+A number of Open Source projects are using autotools, but do not provide the
+C<configure> script.  When alienizing these types of packages you have a
+few choices:
+
+=over 4
+
+=item build configure using autotools
+
+The Alien L<Alien::Autotools> is designed to provide autotools for building
+such packages from source.  The advantage is that this is how the upstream
+developers intend on having their package built.  The downside is that it
+is also adds more prereqs to your Alien.  The silver lining is that if you
+require this Alien in the C<share> block (as you should), then these prereqs
+will only be pulled in during a share install when they are needed.
+
+Please see the L<Alien::Autotools> documentation for specifics on how it
+can be used in your L<alienfile>.
+
+=item patch the package locally before build
+
+You can use the L<alienfile/patch> directive to patch the alienized package
+locally before building.  This can sometimes be challenging because Autotools
+uses timestamps in order to decide what needs to be rebuilt, and patching
+can sometimes confuse it into thinking more needs to be rebuilt than what
+actually does.
+
+=item build configure and tarball
+
+You can also build the configure script during development of your alien,
+generate the tarball and provide it somewhere like GitHub and use that
+as the source instead of the original source.  This should usually be
+a last resort if the other two methods prove too difficult.
+
+=back
+
 =head3 autoconf-like
 
 If you see an error like this:
@@ -102,7 +139,7 @@ MSYS plugin and use a command sequence to do the build like this:
 =head3 CMake
 
 There is an alien L<Alien::cmake3> that provides C<cmake> 3.x or better (It is preferred to the
-older L<Alien::CMake>).  Though it is recommended that you use the C<cmake> 
+older L<Alien::CMake>).  Though it is recommended that you use the C<cmake>
 (L<Alien::Build::Plugin::Build::CMake>) plugin instead of using L<Alien::cmake3>.
 
  use alienfile;
@@ -129,7 +166,7 @@ Windows (C<nmake> and C<dmake>) are not widely supported by most open source pro
 (Thankfully recent perls and EUMM support GNU Make on windows now).
 
 You can use the C<make> plugin (L<Alien::Build::Plugin::Build::Make>) to tell the
-L<Alien::Build> system know which make the project that you are alienizing requires.
+L<Alien::Build> system which make the project that you are alienizing requires.
 
  plugin 'Build::Make' => 'umake';
  # umake makes %{make} either GNU Make or BSD Make on Unix and GNU Make on Windows.
@@ -147,7 +184,7 @@ will be pulled in on platforms that do not already have it.
  plugin 'Build::Make' => 'gmake';
  ...
 
-=head2 How do I probe for a package that uses pkg-config
+=head2 How do I probe for a package that uses pkg-config?
 
 Use the C<pkg-config> plugin (L<Alien::Build::Plugin::PkgConfig::Negotiate>):
 
@@ -166,7 +203,7 @@ fields, which have the same meaning as the C<pkg-config> command line interface:
 
  use alienfile;
  
- plugin 'PkgConfig', pkg_name => foo, atleast_version => '1.2.3';
+ plugin 'PkgConfig', pkg_name => 'foo', atleast_version => '1.2.3';
 
 or
 
@@ -174,7 +211,25 @@ or
  
  plugin 'PkgConfig', pkg_name => foo, exact_version => '1.2.3';
 
-=head2 How to create an Alien module for a packages that do not support pkg-config?
+=head2 How do I probe for a package that uses multiple .pc files?
+
+Each of the C<PkgConfig> plugins will take an array reference instead of a string:
+
+ use alienfile;
+ 
+ plugin 'PkgConfig' => ( pkg_name => [ 'foo', 'bar', 'baz' ] );
+
+The first C<pkg_name> given will be used by default once your alien is installed.
+To get the configuration for C<foo> and C<bar> you can use the
+L<Alien::Base alt method|Alien::Base/alt>:
+
+ use Alien::libfoo;
+ 
+ $cflags = Alien::libfoo->cflags;               # compiler flags for 'foo'
+ $cflags = Alien::libfoo->alt('bar')->cflags ;  # compiler flags for 'bar'
+ $cflags = Alien::libfoo->alt('baz')->cflags ;  # compiler flags for 'baz'
+
+=head2 How to create an Alien module for packages that do not support pkg-config?
 
 =head3 Packages that provide a configuration script
 
@@ -191,7 +246,7 @@ Something like this:
  
    build [
      '%{make} PREFIX=%{.runtime.prefix}',
-     '%{amek} install PREFIX=%{.runtime.prefix}',
+     '%{make} install PREFIX=%{.runtime.prefix}',
    ];
  };
  
@@ -204,7 +259,7 @@ Something like this:
 =head3 Packages that require a compile test
 
 Some packages just expect you do know that C<-lfoo> will work.  For those you can use
-the C<cbuilder> plugin (L<Alien::Build::Plugin::Probe::CBuilder>.
+the C<cbuilder> plugin (L<Alien::Build::Plugin::Probe::CBuilder>).
 
  use alienfile;
  plugin 'Probe::CBuilder' => (
@@ -286,7 +341,7 @@ is complete.  You can do this with the L<alienfile> C<after> directive:
 
  use alienfile;
  
- plugin 'PlgConfig' => 'libfoo';
+ plugin 'PkgConfig' => 'libfoo';
  
  share {
    ...
@@ -302,7 +357,7 @@ appropriately.
 
  use alienfile;
  
- plugin 'PlgConfig' => 'libfoo';
+ plugin 'PkgConfig' => 'libfoo';
  
  share {
    ...
@@ -318,22 +373,22 @@ appropriately.
 
 The error looks something like this:
 
- t/acme_alien_dontpanic2.t ....... 1/? 
+ t/acme_alien_dontpanic2.t ....... 1/?
  # Failed test 'xs'
  # at t/acme_alien_dontpanic2.t line 13.
  #   XSLoader failed
- #     Can't load '/home/cip/.cpanm/work/1581635869.456/Acme-Alien-DontPanic2-2.0401/_alien/tmp/test-alien-lyiQNX/auto/Test/Alien/XS/ Mod0/Mod0.so' for module Test::Alien::XS::Mod0: libdontpanic.so.0: cannot open shared object file: No such file or directory at /opt /perl/5.30.1/lib/5.30.1/x86_64-linux/DynaLoader.pm line 193.
+ #     Can't load '/home/cip/.cpanm/work/1581635869.456/Acme-Alien-DontPanic2-2.0401/_alien/tmp/test-alien-lyiQNX/auto/Test/Alien/XS/Mod0/Mod0.so' for module Test::Alien::XS::Mod0: libdontpanic.so.0: cannot open shared object file: No such file or directory at /opt/perl/5.30.1/lib/5.30.1/x86_64-linux/DynaLoader.pm line 193.
  #  at /home/cip/perl5/lib/perl5/Test/Alien.pm line 414.
  # Compilation failed in require at /home/cip/perl5/lib/perl5/Test/Alien.pm line 414.
  # BEGIN failed--compilation aborted at /home/cip/perl5/lib/perl5/Test/Alien.pm line 414.
  t/acme_alien_dontpanic2.t ....... Dubious, test returned 1 (wstat 256, 0x100)
- Failed 1/6 subtests 
- t/acme_alien_dontpanic2__ffi.t .. ok   
+ Failed 1/6 subtests
+ t/acme_alien_dontpanic2__ffi.t .. ok
 
 This error happened at test time for the Alien, but depending on your environment and Alien it might
 happen later and the actual diagnostic wording might vary.
 
-This is usually because your XS or Alien tries to use dynamic libraries instead of dynamic libraries.
+This is usually because your XS or Alien tries to use dynamic libraries instead of static ones.
 Please consult the section about dynamic vs. static libraries in L<Alien::Build::Manual::AlienAuthor>.
 The TL;DR is that L<Alien::Build::Plugin::Gather::IsolateDynamic> might help.
 If you are the Alien author and the package you are alienizing doesn't have a static option you can
@@ -373,6 +428,17 @@ and L<Alien::Build::Plugin::Fetch::HTTPTiny> will make sure that the appropriate
 to your prerequisites for you if you specify a C<https> URL.  Some websites allow an initial request
 from C<http> but then redirect to C<https>.  If you can it is better to specify C<https>, if you
 cannot, then you can instead use the C<ssl> property on either of those two plugins.
+
+=head2 Does not detect system package even though it is installed
+
+This could just be because the alien requires a more recent package that what is provided by your
+operating system.
+
+It could also be because you do not have the development package installed.  Many Linux vendors
+in particular separate packages into runtime and development pages.  On RPM based systems these
+development packages usually have C<-devel> suffix (example runtime: C<libffi> and development:
+C<libffi-devel>).  On Debian based systems these development packages usually have a C<-dev>
+suffix (example runtime: C<libffi> and development: C<libffi-dev>).
 
 =head2 Network fetch is turned off
 
@@ -463,16 +529,22 @@ L<https://groups.google.com/forum/#!forum/perl5-alien>
 
 =item Open a support ticket
 
-If you have an issue with L<Alie::Build> itself, then please open a support ticket on the project's GitHub issue 
+If you have an issue with L<Alien::Build> itself, then please open a support ticket on the project's GitHub issue
 tracker.
 
-L<https://github.com/plicease/Alien-Build/issues>
+L<https://github.com/PerlAlien/Alien-Build/issues>
 
 =back
 
 =head1 SEE ALSO
 
-L<Alien::Build>, L<Alien::Build::MM>, L<Alien::Build::Plugin>, L<alienfile>
+=over 4
+
+=item L<Alien::Build::Manual>
+
+Other L<Alien::Build> manuals.
+
+=back
 
 =head1 AUTHOR
 
@@ -516,7 +588,7 @@ Juan Julián Merelo Guervós (JJ)
 
 Joel Berger (JBERGER)
 
-Petr Pisar (ppisar)
+Petr Písař (ppisar)
 
 Lance Wicks (LANCEW)
 
@@ -534,9 +606,13 @@ Paul Evans (leonerd, PEVANS)
 
 Håkon Hægland (hakonhagland, HAKONH)
 
+nick nauwelaerts (INPHOBIA)
+
+Florian Weimer
+
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011-2020 by Graham Ollis.
+This software is copyright (c) 2011-2022 by Graham Ollis.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

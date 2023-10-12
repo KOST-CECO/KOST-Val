@@ -3,7 +3,7 @@ package Specio::PartialDump;
 use strict;
 use warnings;
 
-our $VERSION = '0.46';
+our $VERSION = '0.48';
 
 use Scalar::Util qw( looks_like_number reftype blessed );
 
@@ -50,7 +50,7 @@ sub _dump_as_pairs {
     my $truncated;
     if ( defined $MaxElements and ( @what / 2 ) > $MaxElements ) {
         $truncated = 1;
-        @what = splice( @what, 0, $MaxElements * 2 );
+        @what      = splice( @what, 0, $MaxElements * 2 );
     }
 
     return join(
@@ -78,7 +78,7 @@ sub _dump_as_list {
     my $truncated;
     if ( @what > $MaxElements ) {
         $truncated = 1;
-        @what = splice( @what, 0, $MaxElements );
+        @what      = splice( @what, 0, $MaxElements );
     }
 
     return join(
@@ -104,7 +104,7 @@ sub _format {
             : _format_string( $depth, $value )
         )
         )
-        : _format_undef( $depth, $value ),
+        : _format_undef( $depth, $value ),;
 }
 
 sub _format_key {
@@ -213,7 +213,7 @@ Specio::PartialDump - A partially rear-ended copy of Devel::PartialDump without 
 
 =head1 VERSION
 
-version 0.46
+version 0.48
 
 =head1 SYNOPSIS
 
@@ -240,8 +240,6 @@ stringified in a sane way.
 =head1 SUPPORT
 
 Bugs may be submitted at L<https://github.com/houseabsolute/Specio/issues>.
-
-I am also usually active on IRC as 'autarch' on C<irc://irc.perl.org>.
 
 =head1 SOURCE
 

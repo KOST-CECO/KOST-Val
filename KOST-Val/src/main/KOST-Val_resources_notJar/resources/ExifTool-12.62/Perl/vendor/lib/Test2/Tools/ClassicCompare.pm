@@ -2,7 +2,7 @@ package Test2::Tools::ClassicCompare;
 use strict;
 use warnings;
 
-our $VERSION = '0.000139';
+our $VERSION = '0.000155';
 
 our @EXPORT = qw/is is_deeply isnt like unlike cmp_ok/;
 use base 'Exporter';
@@ -168,7 +168,7 @@ sub is_deeply($$;$@) {
                 "The exising behavior is to default to etc() when inside is_deeply().",
                 "The new behavior is to default to end().",
                 "This test will soon start to fail with the following diagnostics:",
-                $delta->diag,
+                $delta->diag->as_string,
                 "",
             );
         }

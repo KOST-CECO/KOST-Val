@@ -5,7 +5,7 @@ use warnings;
 use base qw( Alien::Base );
 
 # ABSTRACT: Install the C libxml2 library on your system
-our $VERSION = '0.17'; # VERSION
+our $VERSION = '0.19'; # VERSION
 
 
 
@@ -24,7 +24,7 @@ Alien::Libxml2 - Install the C libxml2 library on your system
 
 =head1 VERSION
 
-version 0.17
+version 0.19
 
 =head1 SYNOPSIS
 
@@ -112,7 +112,7 @@ Shlomi Fish (shlomif)
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2013 by Graham Ollis.
+This software is copyright (c) 2013-2022 by Graham Ollis.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

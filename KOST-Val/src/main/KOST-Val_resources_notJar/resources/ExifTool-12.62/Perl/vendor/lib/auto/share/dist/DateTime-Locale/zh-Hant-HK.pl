@@ -19,6 +19,7 @@
     GyMMM => "Gy\N{U+5e74}M\N{U+6708}",
     GyMMMEd => "Gy\N{U+5e74}M\N{U+6708}d\N{U+65e5}E",
     GyMMMd => "Gy\N{U+5e74}M\N{U+6708}d\N{U+65e5}",
+    GyMd => "G y/M/d",
     H => "H\N{U+6642}",
     Hm => "HH:mm",
     Hms => "HH:mm:ss",
@@ -42,6 +43,7 @@
     ms => "mm:ss",
     y => "y\N{U+5e74}",
     yM => "M/y",
+    yMEEEEd => "y\N{U+5e74}M\N{U+6708}d\N{U+65e5} EEEE",
     yMEd => "d/M/y\N{U+ff08}E\N{U+ff09}",
     yMM => "MM/y",
     yMMM => "y\N{U+5e74}M\N{U+6708}",
@@ -268,5 +270,5 @@
   time_format_medium => "ah:mm:ss",
   time_format_short => "ah:mm",
   variant => undef,
-  version => 38,
+  version => 43,
 }

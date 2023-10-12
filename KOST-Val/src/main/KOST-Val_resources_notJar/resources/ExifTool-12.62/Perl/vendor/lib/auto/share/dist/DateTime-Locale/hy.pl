@@ -18,7 +18,8 @@
     Gy => "G y \N{U+0569}.",
     GyMMM => "G y \N{U+0569}. MMM",
     GyMMMEd => "G y \N{U+0569}. MMM d, E",
-    GyMMMd => "d MMM, y \N{U+0569}.",
+    GyMMMd => "G y \N{U+0569}\N{U+2024} MMM d",
+    GyMd => "dd.MM.y GGGGG",
     H => "H",
     Hm => "H:mm",
     Hms => "H:mm:ss",
@@ -268,5 +269,5 @@
   time_format_medium => "HH:mm:ss",
   time_format_short => "HH:mm",
   variant => undef,
-  version => 38,
+  version => 43,
 }

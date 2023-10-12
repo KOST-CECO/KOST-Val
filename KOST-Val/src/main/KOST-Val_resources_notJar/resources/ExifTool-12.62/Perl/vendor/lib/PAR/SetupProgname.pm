@@ -4,7 +4,7 @@ $PAR::SetupProgname::VERSION = '1.002';
 use 5.006;
 use strict;
 use warnings;
-use Config ();
+use Config;
 
 =head1 NAME
 
@@ -40,15 +40,15 @@ sub set_progname {
         if (open my $fh, $Progname) {
             return if -s $fh;
         }
-        if (-s "$Progname$Config::Config{_exe}") {
-            $Progname .= $Config::Config{_exe};
+        if (-s "$Progname$Config{_exe}") {
+            $Progname .= $Config{_exe};
             return;
         }
     }
 
-    foreach my $dir (split /\Q$Config::Config{path_sep}\E/, $ENV{PATH}) {
+    foreach my $dir (split /\Q$Config{path_sep}\E/, $ENV{PATH}) {
         next if exists $ENV{PAR_TEMP} and $dir eq $ENV{PAR_TEMP};
-        my $name = File::Spec->catfile($dir, "$Progname$Config::Config{_exe}");
+        my $name = File::Spec->catfile($dir, "$Progname$Config{_exe}");
         if (-s $name) { $Progname = $name; last }
         $name = File::Spec->catfile($dir, "$Progname");
         if (-s $name) { $Progname = $name; last }

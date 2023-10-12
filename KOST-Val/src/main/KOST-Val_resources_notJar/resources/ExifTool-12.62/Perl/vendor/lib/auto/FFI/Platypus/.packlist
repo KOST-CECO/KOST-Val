@@ -6,6 +6,8 @@ C:\strawberry\perl\vendor\lib\FFI\Build\File\Library.pm
 C:\strawberry\perl\vendor\lib\FFI\Build\File\Object.pm
 C:\strawberry\perl\vendor\lib\FFI\Build\MM.pm
 C:\strawberry\perl\vendor\lib\FFI\Build\Platform.pm
+C:\strawberry\perl\vendor\lib\FFI\Build\Plugin.pm
+C:\strawberry\perl\vendor\lib\FFI\Build\PluginData.pm
 C:\strawberry\perl\vendor\lib\FFI\Platypus.pm
 C:\strawberry\perl\vendor\lib\FFI\Platypus\API.pm
 C:\strawberry\perl\vendor\lib\FFI\Platypus\Buffer.pm
@@ -29,9 +31,11 @@ C:\strawberry\perl\vendor\lib\FFI\Platypus\Type.pm
 C:\strawberry\perl\vendor\lib\FFI\Platypus\TypeParser.pm
 C:\strawberry\perl\vendor\lib\FFI\Platypus\TypeParser\Version0.pm
 C:\strawberry\perl\vendor\lib\FFI\Platypus\TypeParser\Version1.pm
+C:\strawberry\perl\vendor\lib\FFI\Platypus\TypeParser\Version2.pm
 C:\strawberry\perl\vendor\lib\FFI\Platypus\Type\PointerSizeBuffer.pm
 C:\strawberry\perl\vendor\lib\FFI\Platypus\Type\StringArray.pm
 C:\strawberry\perl\vendor\lib\FFI\Platypus\Type\StringPointer.pm
+C:\strawberry\perl\vendor\lib\FFI\Platypus\Type\WideString.pm
 C:\strawberry\perl\vendor\lib\FFI\Probe.pm
 C:\strawberry\perl\vendor\lib\FFI\Probe\Runner.pm
 C:\strawberry\perl\vendor\lib\FFI\Probe\Runner\Builder.pm

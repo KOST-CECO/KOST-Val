@@ -381,17 +381,17 @@ Lithuanian locale.
    1995-12-22T09:05:02 = 22, pn
   -0010-09-15T04:44:23 = 15, št
 
-=head3 Ehm (hh:mm a, E)
+=head3 Ehm (hh:mm a, E)
 
-   2008-02-05T18:30:30 = 06:30 popiet, an
-   1995-12-22T09:05:02 = 09:05 priešpiet, pn
-  -0010-09-15T04:44:23 = 04:44 priešpiet, št
+   2008-02-05T18:30:30 = 06:30 popiet, an
+   1995-12-22T09:05:02 = 09:05 priešpiet, pn
+  -0010-09-15T04:44:23 = 04:44 priešpiet, št
 
-=head3 Ehms (hh:mm:ss a, E)
+=head3 Ehms (hh:mm:ss a, E)
 
-   2008-02-05T18:30:30 = 06:30:30 popiet, an
-   1995-12-22T09:05:02 = 09:05:02 priešpiet, pn
-  -0010-09-15T04:44:23 = 04:44:23 priešpiet, št
+   2008-02-05T18:30:30 = 06:30:30 popiet, an
+   1995-12-22T09:05:02 = 09:05:02 priešpiet, pn
+  -0010-09-15T04:44:23 = 04:44:23 priešpiet, št
 
 =head3 Gy (y 'm'. G)
 
@@ -430,6 +430,12 @@ Lithuanian locale.
   -0010-09-15T04:44:23 = -10 m. pr. Kr. rugsėjo 15 d.
 
 =head3 GyMMMd (y-MM-dd G)
+
+   2008-02-05T18:30:30 = 2008-02-05 po Kr.
+   1995-12-22T09:05:02 = 1995-12-22 po Kr.
+  -0010-09-15T04:44:23 = -10-09-15 pr. Kr.
+
+=head3 GyMd (y-MM-dd G)
 
    2008-02-05T18:30:30 = 2008-02-05 po Kr.
    1995-12-22T09:05:02 = 1995-12-22 po Kr.
@@ -555,35 +561,35 @@ Lithuanian locale.
    1995-12-22T09:05:02 = 22
   -0010-09-15T04:44:23 = 15
 
-=head3 h (hh a)
+=head3 h (hh a)
 
-   2008-02-05T18:30:30 = 06 popiet
-   1995-12-22T09:05:02 = 09 priešpiet
-  -0010-09-15T04:44:23 = 04 priešpiet
+   2008-02-05T18:30:30 = 06 popiet
+   1995-12-22T09:05:02 = 09 priešpiet
+  -0010-09-15T04:44:23 = 04 priešpiet
 
-=head3 hm (hh:mm a)
+=head3 hm (hh:mm a)
 
-   2008-02-05T18:30:30 = 06:30 popiet
-   1995-12-22T09:05:02 = 09:05 priešpiet
-  -0010-09-15T04:44:23 = 04:44 priešpiet
+   2008-02-05T18:30:30 = 06:30 popiet
+   1995-12-22T09:05:02 = 09:05 priešpiet
+  -0010-09-15T04:44:23 = 04:44 priešpiet
 
-=head3 hms (hh:mm:ss a)
+=head3 hms (hh:mm:ss a)
 
-   2008-02-05T18:30:30 = 06:30:30 popiet
-   1995-12-22T09:05:02 = 09:05:02 priešpiet
-  -0010-09-15T04:44:23 = 04:44:23 priešpiet
+   2008-02-05T18:30:30 = 06:30:30 popiet
+   1995-12-22T09:05:02 = 09:05:02 priešpiet
+  -0010-09-15T04:44:23 = 04:44:23 priešpiet
 
-=head3 hmsv (hh:mm:ss a; v)
+=head3 hmsv (hh:mm:ss a; v)
 
-   2008-02-05T18:30:30 = 06:30:30 popiet; UTC
-   1995-12-22T09:05:02 = 09:05:02 priešpiet; UTC
-  -0010-09-15T04:44:23 = 04:44:23 priešpiet; UTC
+   2008-02-05T18:30:30 = 06:30:30 popiet; UTC
+   1995-12-22T09:05:02 = 09:05:02 priešpiet; UTC
+  -0010-09-15T04:44:23 = 04:44:23 priešpiet; UTC
 
-=head3 hmv (hh:mm a; v)
+=head3 hmv (hh:mm a; v)
 
-   2008-02-05T18:30:30 = 06:30 popiet; UTC
-   1995-12-22T09:05:02 = 09:05 priešpiet; UTC
-  -0010-09-15T04:44:23 = 04:44 priešpiet; UTC
+   2008-02-05T18:30:30 = 06:30 popiet; UTC
+   1995-12-22T09:05:02 = 09:05 priešpiet; UTC
+  -0010-09-15T04:44:23 = 04:44 priešpiet; UTC
 
 =head3 ms (mm:ss)
 

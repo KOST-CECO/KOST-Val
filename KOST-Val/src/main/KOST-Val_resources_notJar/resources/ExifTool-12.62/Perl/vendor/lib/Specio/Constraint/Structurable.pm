@@ -3,7 +3,7 @@ package Specio::Constraint::Structurable;
 use strict;
 use warnings;
 
-our $VERSION = '0.46';
+our $VERSION = '0.48';
 
 use Carp qw( confess );
 use Role::Tiny::With;
@@ -143,7 +143,7 @@ Specio::Constraint::Structurable - A class which represents structurable constra
 
 =head1 VERSION
 
-version 0.46
+version 0.48
 
 =head1 SYNOPSIS
 
@@ -175,11 +175,11 @@ This is a subroutine that takes the values passed to C<of> and returns a hash
 of named arguments. These arguments will then be passed into the
 C<structured_constraint_generator> or C<structured_inline_generator>.
 
-This should also do argument checking to make sure that the argument passed
-are valid. For example, the C<Tuple> type turns the arrayref passed to C<of>
-into a hash, along the way checking that the caller did not do things like
-interleave optional and required elements or mix optional and slurpy together
-in the definition.
+This should also do argument checking to make sure that the argument passed are
+valid. For example, the C<Tuple> type turns the arrayref passed to C<of> into a
+hash, along the way checking that the caller did not do things like interleave
+optional and required elements or mix optional and slurpy together in the
+definition.
 
 This parameter is required.
 
@@ -224,8 +224,7 @@ L<Specio::Library::Structured::*> code may be helpful.
 This parameter is mutually exclusive with the
 C<structured_constraint_generator> parameter.
 
-This parameter or the C<structured_constraint_generator> parameter is
-required.
+This parameter or the C<structured_constraint_generator> parameter is required.
 
 =back
 
@@ -234,16 +233,14 @@ required.
 This method takes two arguments. The C<of> argument should be an object which
 does the L<Specio::Constraint::Role::Interface> role, and is required.
 
-The other argument, C<declared_at>, is optional. If it is not given, then a
-new L<Specio::DeclaredAt> object is creating using a call stack depth of 1.
+The other argument, C<declared_at>, is optional. If it is not given, then a new
+L<Specio::DeclaredAt> object is creating using a call stack depth of 1.
 
 This method returns a new L<Specio::Constraint::Structured> object.
 
 =head1 SUPPORT
 
 Bugs may be submitted at L<https://github.com/houseabsolute/Specio/issues>.
-
-I am also usually active on IRC as 'autarch' on C<irc://irc.perl.org>.
 
 =head1 SOURCE
 
@@ -255,7 +252,7 @@ Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2012 - 2020 by Dave Rolsky.
+This software is Copyright (c) 2012 - 2022 by Dave Rolsky.
 
 This is free software, licensed under:
 

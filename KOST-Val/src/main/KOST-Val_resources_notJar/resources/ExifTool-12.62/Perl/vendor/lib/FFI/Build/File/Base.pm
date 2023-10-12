@@ -7,10 +7,11 @@ use Carp ();
 use FFI::Temp;
 use File::Basename ();
 use FFI::Build::Platform;
+use FFI::Build::PluginData;
 use overload '""' => sub { $_[0]->path }, bool => sub { 1 }, fallback => 1;
 
 # ABSTRACT: Base class for File::Build files
-our $VERSION = '1.34'; # VERSION
+our $VERSION = '2.08'; # VERSION
 
 
 sub new
@@ -158,14 +159,14 @@ FFI::Build::File::Base - Base class for File::Build files
 
 =head1 VERSION
 
-version 1.34
+version 2.08
 
 =head1 SYNOPSIS
 
 Create your own file class
 
  package FFI::Build::File::Foo;
- use base qw( FFI::Build::File::Base );
+ use parent qw( FFI::Build::File::Base );
  use constant default_suffix => '.foo';
  use constant default_encoding => ':utf8';
 
@@ -180,7 +181,7 @@ Use it:
 
 =head1 DESCRIPTION
 
-This class is the base class for other L<FFI::Build::File> classes.
+This class is the base class for other C<FFI::Build::File::*> classes.
 
 =head1 CONSTRUCTOR
 
@@ -337,7 +338,7 @@ Damyan Ivanov
 
 Ilya Pavlov (Ilya33)
 
-Petr Pisar (ppisar)
+Petr Písař (ppisar)
 
 Mohammad S Anwar (MANWAR)
 
@@ -347,9 +348,17 @@ Meredith (merrilymeredith, MHOWARD)
 
 Diab Jerius (DJERIUS)
 
+Eric Brine (IKEGAMI)
+
+szTheory
+
+José Joaquín Atria (JJATRIA)
+
+Pete Houston (openstrike, HOUSTON)
+
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2015,2016,2017,2018,2019,2020 by Graham Ollis.
+This software is copyright (c) 2015-2022 by Graham Ollis.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

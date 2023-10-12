@@ -67,11 +67,12 @@ Both of those are untested.
 ## it can be suppressed by "use IPC::Run ();".
 
 use strict;
+use warnings;
 use Exporter;
 use vars qw{$VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS};
 
 BEGIN {
-    $VERSION = '20200505.0';
+    $VERSION = '20220807.0';
     @ISA     = qw( Exporter );
     @EXPORT  = qw(
       _debug
@@ -236,7 +237,9 @@ sub _debug {
       " ",
       join(
          "",
-         defined $IPC::Run::cur_self ? "#$IPC::Run::cur_self->{ID}" : (),
+         defined $IPC::Run::cur_self && defined $IPC::Run::cur_self->{ID}
+         ? "#$IPC::Run::cur_self->{ID}"
+         : (),
          "($$)",
       ),
       defined $debug_name && length $debug_name ? $debug_name        : (),

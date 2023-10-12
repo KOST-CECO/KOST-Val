@@ -19,12 +19,12 @@
 
 =head1 NAME
 
-DateTime::Locale::tr_TR - Locale data examples for the Turkish Turkey (tr-TR) locale
+DateTime::Locale::tr_TR - Locale data examples for the Turkish Türkiye (tr-TR) locale
 
 =head1 DESCRIPTION
 
 This pod file contains examples of the locale data available for the
-Turkish Turkey locale.
+Turkish Türkiye locale.
 
 =head2 Days
 
@@ -381,17 +381,17 @@ Turkish Turkey locale.
    1995-12-22T09:05:02 = 22 Cum
   -0010-09-15T04:44:23 = 15 Cmt
 
-=head3 Ehm (E a h:mm)
+=head3 Ehm (E a h:mm)
 
-   2008-02-05T18:30:30 = Sal ÖS 6:30
-   1995-12-22T09:05:02 = Cum ÖÖ 9:05
-  -0010-09-15T04:44:23 = Cmt ÖÖ 4:44
+   2008-02-05T18:30:30 = Sal ÖS 6:30
+   1995-12-22T09:05:02 = Cum ÖÖ 9:05
+  -0010-09-15T04:44:23 = Cmt ÖÖ 4:44
 
-=head3 Ehms (E a h:mm:ss)
+=head3 Ehms (E a h:mm:ss)
 
-   2008-02-05T18:30:30 = Sal ÖS 6:30:30
-   1995-12-22T09:05:02 = Cum ÖÖ 9:05:02
-  -0010-09-15T04:44:23 = Cmt ÖÖ 4:44:23
+   2008-02-05T18:30:30 = Sal ÖS 6:30:30
+   1995-12-22T09:05:02 = Cum ÖÖ 9:05:02
+  -0010-09-15T04:44:23 = Cmt ÖÖ 4:44:23
 
 =head3 Gy (G y)
 
@@ -416,6 +416,12 @@ Turkish Turkey locale.
    2008-02-05T18:30:30 = MS 5 Şub 2008
    1995-12-22T09:05:02 = MS 22 Ara 1995
   -0010-09-15T04:44:23 = MÖ 15 Eyl -10
+
+=head3 GyMd (d/M/y GGGGG)
+
+   2008-02-05T18:30:30 = 5/2/2008 MS
+   1995-12-22T09:05:02 = 22/12/1995 MS
+  -0010-09-15T04:44:23 = 15/9/-10 MÖ
 
 =head3 H (HH)
 
@@ -513,35 +519,35 @@ Turkish Turkey locale.
    1995-12-22T09:05:02 = 22
   -0010-09-15T04:44:23 = 15
 
-=head3 h (a h)
+=head3 h (a h)
 
-   2008-02-05T18:30:30 = ÖS 6
-   1995-12-22T09:05:02 = ÖÖ 9
-  -0010-09-15T04:44:23 = ÖÖ 4
+   2008-02-05T18:30:30 = ÖS 6
+   1995-12-22T09:05:02 = ÖÖ 9
+  -0010-09-15T04:44:23 = ÖÖ 4
 
-=head3 hm (a h:mm)
+=head3 hm (a h:mm)
 
-   2008-02-05T18:30:30 = ÖS 6:30
-   1995-12-22T09:05:02 = ÖÖ 9:05
-  -0010-09-15T04:44:23 = ÖÖ 4:44
+   2008-02-05T18:30:30 = ÖS 6:30
+   1995-12-22T09:05:02 = ÖÖ 9:05
+  -0010-09-15T04:44:23 = ÖÖ 4:44
 
-=head3 hms (a h:mm:ss)
+=head3 hms (a h:mm:ss)
 
-   2008-02-05T18:30:30 = ÖS 6:30:30
-   1995-12-22T09:05:02 = ÖÖ 9:05:02
-  -0010-09-15T04:44:23 = ÖÖ 4:44:23
+   2008-02-05T18:30:30 = ÖS 6:30:30
+   1995-12-22T09:05:02 = ÖÖ 9:05:02
+  -0010-09-15T04:44:23 = ÖÖ 4:44:23
 
-=head3 hmsv (a h:mm:ss v)
+=head3 hmsv (a h:mm:ss v)
 
-   2008-02-05T18:30:30 = ÖS 6:30:30 UTC
-   1995-12-22T09:05:02 = ÖÖ 9:05:02 UTC
-  -0010-09-15T04:44:23 = ÖÖ 4:44:23 UTC
+   2008-02-05T18:30:30 = ÖS 6:30:30 UTC
+   1995-12-22T09:05:02 = ÖÖ 9:05:02 UTC
+  -0010-09-15T04:44:23 = ÖÖ 4:44:23 UTC
 
-=head3 hmv (a h:mm v)
+=head3 hmv (a h:mm v)
 
-   2008-02-05T18:30:30 = ÖS 6:30 UTC
-   1995-12-22T09:05:02 = ÖÖ 9:05 UTC
-  -0010-09-15T04:44:23 = ÖÖ 4:44 UTC
+   2008-02-05T18:30:30 = ÖS 6:30 UTC
+   1995-12-22T09:05:02 = ÖÖ 9:05 UTC
+  -0010-09-15T04:44:23 = ÖÖ 4:44 UTC
 
 =head3 mmss (mm:ss)
 

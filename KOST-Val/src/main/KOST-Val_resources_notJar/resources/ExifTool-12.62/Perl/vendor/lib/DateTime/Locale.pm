@@ -6,7 +6,7 @@ use strict;
 use warnings;
 use namespace::autoclean;
 
-our $VERSION = '1.31';
+our $VERSION = '1.39';
 
 use DateTime::Locale::Data;
 use DateTime::Locale::FromData;
@@ -184,8 +184,8 @@ my %DateTimeLanguageAliases = (
 );
 
 my %POSIXAliases = (
-    C     => 'en-US-POSIX',
-    POSIX => 'en-US-POSIX',
+    C     => 'en-US',
+    POSIX => 'en-US',
 );
 
 {
@@ -380,7 +380,7 @@ DateTime::Locale - Localization support for DateTime.pm
 
 =head1 VERSION
 
-version 1.31
+version 1.39
 
 =head1 SYNOPSIS
 
@@ -402,7 +402,7 @@ also provides some functions for getting information on all the available
 locales.
 
 If you want to know what methods are available for locale objects, then please
-read the C<DateTime::Locale::FromData> documentation.
+read the L<DateTime::Locale::FromData> documentation.
 
 =head1 USAGE
 
@@ -411,11 +411,11 @@ This module provides the following class methods:
 =head2 DateTime::Locale->load( $locale_code | $locale_name )
 
 Returns the locale object for the specified locale code or name - see the
-C<DateTime::Locale::Catalog> documentation for the list of available codes and
+L<DateTime::Locale::Catalog> documentation for the list of available codes and
 names. The name provided may be either the English or native name.
 
-If the requested locale is not found, a fallback search takes place to
-find a suitable replacement.
+If the requested locale is not found, a fallback search takes place to find a
+suitable replacement.
 
 The fallback search order is:
 
@@ -442,8 +442,8 @@ Eg. For the locale code C<es-Latn-XX> the fallback search would be:
 
 If no suitable replacement is found, then an exception is thrown.
 
-The loaded locale is cached, so that B<locale objects may be
-singletons>. Calling C<< DateTime::Locale->register_from_data >>, C<<
+The loaded locale is cached, so that B<locale objects may be singletons>.
+Calling C<< DateTime::Locale->register_from_data >>, C<<
 DateTime::Locale->add_aliases >>, or C<< DateTime::Locale->remove_alias >>
 clears the cache.
 
@@ -452,8 +452,8 @@ clears the cache.
   my @codes = DateTime::Locale->codes;
   my $codes = DateTime::Locale->codes;
 
-Returns an unsorted list of the available locale codes, or an array reference if
-called in a scalar context. This list does not include aliases.
+Returns an unsorted list of the available locale codes, or an array reference
+if called in a scalar context. This list does not include aliases.
 
 =head2 DateTime::Locale->names
 
@@ -469,14 +469,14 @@ reference if called in a scalar context.
   my $names = DateTime::Locale->native_names;
 
 Returns an unsorted list of the available locale names in their native
-language, or an array reference if called in a scalar context. All native
-names use UTF-8 as appropriate.
+language, or an array reference if called in a scalar context. All native names
+use UTF-8 as appropriate.
 
 =head2 DateTime::Locale->register_from_data( $locale_data )
 
 This method allows you to register a custom locale. The data for the locale is
-specified as a hash (or hashref) where the keys match the method names given
-in C<DateTime::Locale::FromData>.
+specified as a hash (or hashref) where the keys match the method names given in
+L<DateTime::Locale::FromData>.
 
 If you just want to make some small changes on top of an existing locale you
 can get that locale's data by calling C<< $locale->locale_data >>.
@@ -503,8 +503,8 @@ methods provided by L<DateTime::Locale::FromData>, except for the following:
 
 =item The C<*_code> methods
 
-While you should provide a C<code> key, the other methods like
-C<language_code> and C<script_code> are determined by parsing the code.
+While you should provide a C<code> key, the other methods like C<language_code>
+and C<script_code> are determined by parsing the code.
 
 =item All C<id> returning methods
 
@@ -553,7 +553,7 @@ contain errors in some locales.
 
 When reporting errors in data, please check the primary data sources first,
 then where necessary report errors directly to the primary source via the CLDR
-bug report system. See http://unicode.org/cldr/filing_bug_reports.html for
+bug report system. See L<http://unicode.org/cldr/filing_bug_reports.html> for
 details.
 
 Once these errors have been confirmed, please forward the error report and
@@ -566,11 +566,7 @@ to extract the CLDR data.
 
 =head1 SEE ALSO
 
-L<DateTime::Locale::Base>
-
 datetime@perl.org mailing list
-
-http://datetime.perl.org/
 
 =head1 SUPPORT
 
@@ -578,8 +574,6 @@ Bugs may be submitted at L<https://github.com/houseabsolute/DateTime-Locale/issu
 
 There is a mailing list available for users of this distribution,
 L<mailto:datetime@perl.org>.
-
-I am also usually active on IRC as 'autarch' on C<irc://irc.perl.org>.
 
 =head1 SOURCE
 
@@ -600,7 +594,7 @@ software much more, unless I get so many donations that I can consider working
 on free software full time (let's all have a chuckle at that together).
 
 To donate, log into PayPal and send money to autarch@urth.org, or use the
-button at L<https://www.urth.org/fs-donation.html>.
+button at L<https://houseabsolute.com/foss-donations/>.
 
 =head1 AUTHOR
 
@@ -608,13 +602,17 @@ Dave Rolsky <autarch@urth.org>
 
 =head1 CONTRIBUTORS
 
-=for stopwords Alexander Pankoff Karen Etheridge Mohammad S Anwar Ryley Breiddal Sergey Leschenko yasu47b
+=for stopwords Alexander Pankoff James Raspass Karen Etheridge Mohammad S Anwar Ryley Breiddal Sergey Leschenko yasu47b
 
 =over 4
 
 =item *
 
 Alexander Pankoff <ccntrq@screenri.de>
+
+=item *
+
+James Raspass <jraspass@gmail.com>
 
 =item *
 
@@ -640,7 +638,7 @@ yasu47b <nakayamayasuhiro1986@gmail.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2003 - 2020 by Dave Rolsky.
+This software is copyright (c) 2003 - 2023 by Dave Rolsky.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

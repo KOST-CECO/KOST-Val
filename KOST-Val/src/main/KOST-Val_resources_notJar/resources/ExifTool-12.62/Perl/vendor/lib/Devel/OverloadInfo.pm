@@ -1,5 +1,5 @@
 package Devel::OverloadInfo;
-$Devel::OverloadInfo::VERSION = '0.005';
+$Devel::OverloadInfo::VERSION = '0.007';
 # ABSTRACT: introspect overloaded operators
 
 #pod =head1 DESCRIPTION
@@ -15,9 +15,32 @@ use strict;
 use warnings;
 use overload ();
 use Scalar::Util qw(blessed);
-use Sub::Identify qw(sub_fullname);
 use Package::Stash 0.14;
 use MRO::Compat;
+
+BEGIN {
+    if (eval { require Sub::Util } && defined &Sub::Util::subname) {
+        *subname = \&Sub::Util::subname;
+    }
+    else {
+        require B;
+        *subname = sub {
+            my ($coderef) = @_;
+            die 'Not a subroutine reference'
+                unless ref $coderef;
+            my $cv = B::svref_2object($coderef);
+            die 'Not a subroutine reference'
+                unless $cv->isa('B::CV');
+            my $gv = $cv->GV;
+            return undef
+                if $gv->isa('B::SPECIAL');
+            my $stash = $gv->STASH;
+            my $package = $stash->isa('B::SPECIAL') ? '__ANON__' : $stash->NAME;
+            return $package . '::' . $gv->NAME;
+        };
+    }
+}
+
 
 use Exporter 5.57 qw(import);
 our @EXPORT_OK = qw(overload_info overload_op_info is_overloaded);
@@ -85,8 +108,7 @@ sub is_overloaded {
 #pod
 #pod =item code_name
 #pod
-#pod The name of the function implementing the overloaded operator, as
-#pod returned by C<sub_fullname> in L<Sub::Identify>.
+#pod The fully qualified name of the function implementing the overloaded operator.
 #pod
 #pod =item method_name (optional)
 #pod
@@ -135,7 +157,7 @@ sub overload_op_info {
     } else {
         $info->{code} = $func;
     }
-    $info->{code_name} = sub_fullname($info->{code})
+    $info->{code_name} = subname($info->{code})
         if exists $info->{code};
 
     return $info;
@@ -189,7 +211,7 @@ Devel::OverloadInfo - introspect overloaded operators
 
 =head1 VERSION
 
-version 0.005
+version 0.007
 
 =head1 DESCRIPTION
 
@@ -238,8 +260,7 @@ A reference to the function implementing the overloaded operator.
 
 =item code_name
 
-The name of the function implementing the overloaded operator, as
-returned by C<sub_fullname> in L<Sub::Identify>.
+The fully qualified name of the function implementing the overloaded operator.
 
 =item method_name (optional)
 

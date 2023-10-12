@@ -48,7 +48,7 @@ sub load {
     $args->{ -ConfigFile } = $file;
 
     require Config::General;
-    Config::General->VERSION( '2.47' );
+    Config::General->VERSION( '2.48' );
 
     $args->{ -ForceArray } = 1 unless exists $args->{ -ForceArray };
 
@@ -64,7 +64,7 @@ Specifies that this module requires L<Config::General> in order to work.
 
 =cut
 
-sub requires_all_of { [ 'Config::General' => '2.47' ] }
+sub requires_all_of { [ 'Config::General' => '2.48' ] }
 
 =head1 AUTHOR
 

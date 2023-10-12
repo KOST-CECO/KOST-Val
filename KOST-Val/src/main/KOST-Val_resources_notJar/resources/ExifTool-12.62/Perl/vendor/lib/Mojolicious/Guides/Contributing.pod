@@ -9,6 +9,17 @@ Mojolicious::Guides::Contributing - Contributing to Mojolicious
 
 There are many ways to contribute to L<Mojolicious>, this guide will show you a few of them.
 
+=head1 PERL FOUNDATION BOYCOTT
+
+Due to a lack of transparency and accountability of and by the board, we are B<boycotting> The Perl Foundation. Recent
+events regarding the Community Affairs Team have unfortunately shown that it does not represent values such as
+B<openness> and B<inclusion> to the same extent we do anymore. The Mojolicious Project and its core team will therefore
+be withdrawing from Foundation involvement and Foundation-run activities, and we ask you to cease personal donations to
+the Foundation until it has been reformed.
+
+Members of the Mojolicious community are encouraged to politely, but firmly, advocate for the same values in a way that
+they see fit, while not violating the Mojolicious L<Code of Conduct|/"CODE OF CONDUCT">.
+
 =head1 REPORTING BUGS
 
 We use the L<GitHub issue tracker|https://github.com/mojolicious/mojo/issues>,  so you'll need to create a (free)
@@ -70,8 +81,8 @@ relevant documentation.
 
 While the L<Mojolicious> distribution covers a wide range of features, we are rather conservative when it comes to
 adding new ones. So if your contribution is not a simple bug fix, it is B<strongly recommended> that you discuss it in
-advance in the L<Forum|https://forum.mojolicious.org> or the official IRC channel C<#mojo> on C<chat.freenode.net>
-(L<chat now!|https://webchat.freenode.net/#mojo>), to avoid unnecessary work and to increase its chances of getting
+advance in the L<Forum|https://forum.mojolicious.org> or the official IRC channel C<#mojo> on C<irc.libera.chat>
+(L<chat now!|https://web.libera.chat/#mojo>), to avoid unnecessary work and to increase its chances of getting
 accepted.
 
 The following mission statement and rules are the foundation of all L<Mojo> and L<Mojolicious> development. Please make
@@ -132,11 +143,11 @@ sentences is a good rule of thumb)
 
 Everything should be ordered alphabetically if possible, or at least be consistent if not.
 
-The master source code repository should always be kept in a stable state, use feature branches for actual development.
+The main source code repository should always be kept in a stable state, use feature branches for actual development.
 
 Code has to be run through L<Perl::Tidy> with the included
-L<.perltidyrc|https://github.com/mojolicious/mojo/blob/master/.perltidyrc>, and everything should look like it was
-written by a single person.
+L<.perltidyrc|https://github.com/mojolicious/mojo/blob/main/.perltidyrc>, and everything should look like it was written
+by a single person.
 
 Functions and methods should be as short as possible, no spaghetti code.
 
@@ -258,7 +269,7 @@ authors.
 =head1 SUPPORT
 
 If you have any questions the documentation might not yet answer, don't hesitate to ask in the
-L<Forum|https://forum.mojolicious.org> or the official IRC channel C<#mojo> on C<chat.freenode.net>
-(L<chat now!|https://webchat.freenode.net/#mojo>).
+L<Forum|https://forum.mojolicious.org>, on L<Matrix|https://matrix.to/#/#mojo:matrix.org>, or
+L<IRC|https://web.libera.chat/#mojo>.
 
 =cut

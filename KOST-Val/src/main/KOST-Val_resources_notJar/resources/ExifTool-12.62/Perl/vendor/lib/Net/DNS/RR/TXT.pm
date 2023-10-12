@@ -2,7 +2,7 @@ package Net::DNS::RR::TXT;
 
 use strict;
 use warnings;
-our $VERSION = (qw$Id: TXT.pm 1814 2020-10-14 21:49:16Z willem $)[2];
+our $VERSION = (qw$Id: TXT.pm 1911 2023-04-17 12:30:59Z willem $)[2];
 
 use base qw(Net::DNS::RR);
 
@@ -22,8 +22,7 @@ use Net::DNS::Text;
 
 
 sub _decode_rdata {			## decode rdata from wire-format octet string
-	my $self = shift;
-	my ( $data, $offset ) = @_;
+	my ( $self, $data, $offset ) = @_;
 
 	my $limit = $offset + $self->{rdlength};
 	my $text;
@@ -50,22 +49,22 @@ sub _format_rdata {			## format rdata portion of RR string.
 	my $self = shift;
 
 	my $txtdata = $self->{txtdata};
-	return ( map { $_->string } @$txtdata );
+	return ( map { $_->unicode } @$txtdata );
 }
 
 
 sub _parse_rdata {			## populate RR from rdata in argument list
-	my $self = shift;
+	my ( $self, @argument ) = @_;
 
-	$self->{txtdata} = [map { Net::DNS::Text->new($_) } @_];
+	$self->{txtdata} = [map { Net::DNS::Text->new($_) } @argument];
 	return;
 }
 
 
 sub txtdata {
-	my $self = shift;
+	my ( $self, @value ) = @_;
 
-	$self->{txtdata} = [map { Net::DNS::Text->new($_) } @_] if scalar @_;
+	$self->{txtdata} = [map { Net::DNS::Text->new($_) } @value] if scalar @value;
 
 	my $txtdata = $self->{txtdata} || [];
 
@@ -75,7 +74,7 @@ sub txtdata {
 }
 
 
-sub char_str_list { return (&txtdata); }			# uncoverable pod
+sub char_str_list { return my @txt = &txtdata }			# uncoverable pod
 
 
 1;
@@ -85,20 +84,20 @@ __END__
 =head1 SYNOPSIS
 
     use Net::DNS;
-    $rr = Net::DNS::RR->new( 'name TXT  txtdata ...' );
+    $rr = Net::DNS::RR->new( 'name TXT	txtdata ...' );
 
     $rr = Net::DNS::RR->new( name    => 'name',
-			    type    => 'TXT',
-			    txtdata => 'single text string'
-			    );
+			     type    => 'TXT',
+			     txtdata => 'single text string'
+			     );
 
     $rr = Net::DNS::RR->new( name    => 'name',
-			    type    => 'TXT',
-			    txtdata => [ 'multiple', 'strings', ... ]
-			    );
+			     type    => 'TXT',
+			     txtdata => [ 'multiple', 'strings', ... ]
+			     );
 
     use utf8;
-    $rr = Net::DNS::RR->new( 'jp TXT    古池や　蛙飛込む　水の音' );
+    $rr = Net::DNS::RR->new( 'jp TXT	古池や　蛙飛込む　水の音' );
 
 =head1 DESCRIPTION
 
@@ -141,7 +140,7 @@ Package template (c)2009,2012 O.M.Kolkman and R.W.Franks.
 
 Permission to use, copy, modify, and distribute this software and its
 documentation for any purpose and without fee is hereby granted, provided
-that the above copyright notice appear in all copies and that both that
+that the original copyright notices appear in all copies and that both
 copyright notice and this permission notice appear in supporting
 documentation, and that the name of the author not be used in advertising
 or publicity pertaining to distribution of the software without specific
@@ -158,6 +157,8 @@ DEALINGS IN THE SOFTWARE.
 
 =head1 SEE ALSO
 
-L<perl>, L<Net::DNS>, L<Net::DNS::RR>, RFC1035 Section 3.3.14, RFC3629
+L<perl> L<Net::DNS> L<Net::DNS::RR>
+L<RFC1035(3.3.14)|https://tools.ietf.org/html/rfc1035>
+L<RFC3629|https://tools.ietf.org/html/rfc3629>
 
 =cut

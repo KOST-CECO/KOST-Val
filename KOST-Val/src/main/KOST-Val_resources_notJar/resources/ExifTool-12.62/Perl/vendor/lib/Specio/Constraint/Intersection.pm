@@ -3,7 +3,7 @@ package Specio::Constraint::Intersection;
 use strict;
 use warnings;
 
-our $VERSION = '0.46';
+our $VERSION = '0.48';
 
 use List::Util qw( all );
 use Role::Tiny::With;
@@ -133,7 +133,7 @@ Specio::Constraint::Intersection - A class for intersection constraints
 
 =head1 VERSION
 
-version 0.46
+version 0.48
 
 =head1 SYNOPSIS
 
@@ -141,8 +141,8 @@ version 0.46
 
 =head1 DESCRIPTION
 
-This is a specialized type constraint class for intersections, which will
-allow a value which matches each one of several distinct types.
+This is a specialized type constraint class for intersections, which will allow
+a value which matches each one of several distinct types.
 
 =for Pod::Coverage parent
 
@@ -175,8 +175,6 @@ L<Specio::Role::Inlinable> roles.
 
 Bugs may be submitted at L<https://github.com/houseabsolute/Specio/issues>.
 
-I am also usually active on IRC as 'autarch' on C<irc://irc.perl.org>.
-
 =head1 SOURCE
 
 The source code repository for Specio can be found at L<https://github.com/houseabsolute/Specio>.
@@ -187,7 +185,7 @@ Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2012 - 2020 by Dave Rolsky.
+This software is Copyright (c) 2012 - 2022 by Dave Rolsky.
 
 This is free software, licensed under:
 

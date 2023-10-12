@@ -3,7 +3,7 @@ package Specio::Library::Structured::Tuple;
 use strict;
 use warnings;
 
-our $VERSION = '0.46';
+our $VERSION = '0.48';
 
 use Carp qw( confess );
 use List::Util ();
@@ -21,7 +21,7 @@ sub _inline {
 }
 
 sub _parameterization_args_builder {
-    my $self = shift;
+    shift;
     my $args = shift;
 
     my $saw_slurpy;
@@ -96,7 +96,7 @@ sub _name_builder {
 }
 
 sub _structured_inline_generator {
-    my $self = shift;
+    shift;
     my $val  = shift;
     my %args = @_;
 
@@ -182,7 +182,7 @@ Specio::Library::Structured::Tuple - Guts of Tuple structured type
 
 =head1 VERSION
 
-version 0.46
+version 0.48
 
 =head1 DESCRIPTION
 
@@ -194,8 +194,6 @@ There are no user facing parts here.
 
 Bugs may be submitted at L<https://github.com/houseabsolute/Specio/issues>.
 
-I am also usually active on IRC as 'autarch' on C<irc://irc.perl.org>.
-
 =head1 SOURCE
 
 The source code repository for Specio can be found at L<https://github.com/houseabsolute/Specio>.
@@ -206,7 +204,7 @@ Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2012 - 2020 by Dave Rolsky.
+This software is Copyright (c) 2012 - 2022 by Dave Rolsky.
 
 This is free software, licensed under:
 

@@ -7,13 +7,12 @@ use Path::Tiny ();
 use Carp ();
 use File::chdir;
 use JSON::PP ();
-use Env qw( @PATH );
-use Env qw( @PKG_CONFIG_PATH );
+use Env qw( @PATH @PKG_CONFIG_PATH );
 use Config ();
 use Alien::Build::Log;
 
 # ABSTRACT: Build external dependencies for use in CPAN
-our $VERSION = '2.38'; # VERSION
+our $VERSION = '2.80'; # VERSION
 
 
 sub _path { goto \&Path::Tiny::path }
@@ -35,6 +34,9 @@ sub new
     pkg_config_path => [],
     aclocal_path => [],
   }, $class;
+
+  # force computing this as soon as possible
+  $self->download_rule;
 
   $self->meta->filename(
     $args{filename} || do {
@@ -253,6 +255,24 @@ sub install_type
 {
   my($self) = @_;
   $self->{runtime_prop}->{install_type} ||= $self->probe;
+}
+
+
+sub download_rule
+{
+  my($self) = @_;
+
+  $self->install_prop->{download_rule} ||= do {
+    my $dr = $ENV{ALIEN_DOWNLOAD_RULE};
+    $dr = 'warn' unless defined $dr;
+    $dr = 'warn' if $dr eq 'default';
+    unless($dr =~ /^(warn|digest|encrypt|digest_or_encrypt|digest_and_encrypt)$/)
+    {
+      $self->log("unknown ALIEN_DOWNLOAD_RULE \"$dr\", using \"warn\" instead");
+      $dr = 'warn';
+    }
+    $dr;
+  };
 }
 
 
@@ -532,6 +552,8 @@ sub download
             my($archive) = $list[0];
             if(-d $archive)
             {
+              # TODO: this is probably a bug that we don't set
+              # download or compelte properties?
               $self->log("single dir, assuming directory");
             }
             else
@@ -557,6 +579,12 @@ sub download
       'download',
     );
 
+    # experimental and undocumented for now
+    if($self->meta->has_hook('check_download'))
+    {
+      $self->meta->call_hook(check_download => $self);
+    }
+
     return $self if $valid;
   }
   else
@@ -564,7 +592,15 @@ sub download
     # This will call the default download hook
     # defined in Core::Download since the recipe
     # does not provide a download hook
-    return $self->_call_hook('download');
+    my $ret = $self->_call_hook('download');
+
+    # experimental and undocumented for now
+    if($self->meta->has_hook('check_download'))
+    {
+      $self->meta->call_hook(check_download => $self);
+    }
+
+    return $self;
   }
 
   die "download failed";
@@ -573,22 +609,124 @@ sub download
 
 sub fetch
 {
-  my($self, $url) = @_;
-  $self->_call_hook( 'fetch' => $url );
+  my $self = shift;
+  my $url = $_[0] || $self->meta_prop->{start_url};
+
+  my $secure = 0;
+
+  if(defined $url && ($url =~ /^(https|file):/ || $url !~ /:/))
+  {
+    # considered secure when either https or a local file
+    $secure = 1;
+  }
+  elsif(!defined $url)
+  {
+    $self->log("warning: undefined url in fetch");
+  }
+  else
+  {
+    $self->log("warning: attempting to fetch a non-TLS or bundled URL: @{[ $url ]}");
+  }
+
+  die "insecure fetch is not allowed" if $self->download_rule =~ /^(encrypt|digest_and_encrypt)$/ && !$secure;
+
+  my $file = $self->_call_hook( 'fetch' => @_ );
+
+  $secure = 0;
+
+  if(ref($file) ne 'HASH')
+  {
+    $self->log("warning: fetch returned non-hash reference");
+  }
+  elsif(!defined $file->{protocol})
+  {
+    $self->log("warning: fetch did not return a protocol");
+  }
+  elsif($file->{protocol} !~ /^(https|file)$/)
+  {
+    $self->log("warning: fetch did not use a secure protocol: @{[ $file->{protocol} ]}");
+  }
+  else
+  {
+    $secure = 1;
+  }
+
+  die "insecure fetch is not allowed" if $self->download_rule =~ /^(encrypt|digest_and_encrypt)$/ && !$secure;
+
+  $file;
+}
+
+
+sub check_digest
+{
+  my($self, $file) = @_;
+
+  return '' unless $self->meta_prop->{check_digest};
+
+  unless(ref($file) eq 'HASH')
+  {
+    my $path = Path::Tiny->new($file);
+    $file = {
+      type     => 'file',
+      filename => $path->basename,
+      path     => "$path",
+      tmp      => 0,
+    };
+  }
+
+  my $path = $file->{path};
+  if(defined $path)
+  {
+    # there is technically a race condition here
+    die "Missing file in digest check: @{[ $file->{filename} ]}" unless -f $path;
+    die "Unreadable file in digest check: @{[ $file->{filename} ]}" unless -r $path;
+  }
+  else
+  {
+    die "File is wrong type" unless defined $file->{type} && $file->{type} eq 'file';
+    die "File has no filename" unless defined $file->{filename};
+    die "@{[ $file->{filename} ]} has no content" unless defined $file->{content};
+  }
+
+  my $filename = $file->{filename};
+  my $signature = $self->meta_prop->{digest}->{$filename} || $self->meta_prop->{digest}->{'*'};
+
+  die "No digest for $filename" unless defined $signature && ref $signature eq 'ARRAY';
+
+  my($algo, $expected) = @$signature;
+
+  if($self->meta->call_hook( check_digest => $self, $file, $algo, $expected ))
+  {
+    # record the verification here so that we can check in the extract step that the signature
+    # was checked.
+    $self->install_prop->{download_detail}->{$path}->{digest} = [$algo, $expected] if defined $path; return 1;
+  }
+  else
+  {
+    die "No plugin provides digest algorithm for $algo";
+  }
 }
 
 
 sub decode
 {
   my($self, $res) = @_;
-  $self->_call_hook( decode => $res );
+  my $res2 = $self->_call_hook( decode => $res );
+  $res2->{protocol} = $res->{protocol}
+    if !defined $res2->{protocol}
+    &&  defined $res->{protocol};
+  return $res2;
 }
 
 
 sub prefer
 {
   my($self, $res) = @_;
-  $self->_call_hook( prefer => $res );
+  my $res2 = $self->_call_hook( prefer => $res );
+  $res2->{protocol} = $res->{protocol}
+    if !defined $res2->{protocol}
+    &&  defined $res->{protocol};
+  return $res2;
 }
 
 
@@ -601,6 +739,75 @@ sub extract
   unless(defined $archive)
   {
     die "tried to call extract before download";
+  }
+
+  {
+    my $checked_digest  = 0;
+    my $encrypted_fetch = 0;
+    my $detail = $self->install_prop->{download_detail}->{$archive};
+    if(defined $detail)
+    {
+      if(defined $detail->{digest})
+      {
+        my($algo, $expected) = @{ $detail->{digest} };
+        my $file = {
+          type     => 'file',
+          filename => Path::Tiny->new($archive)->basename,
+          path     => $archive,
+          tmp      => 0,
+        };
+        $checked_digest = $self->meta->call_hook( check_digest => $self, $file, $algo, $expected )
+      }
+      if(!defined $detail->{protocol})
+      {
+        $self->log("warning: extract did not receive protocol details for $archive") unless $checked_digest;
+      }
+      elsif($detail->{protocol} !~ /^(https|file)$/)
+      {
+        $self->log("warning: extracting from a file that was fetched via insecure protocol @{[ $detail->{protocol} ]}") unless $checked_digest ;
+      }
+      else
+      {
+        $encrypted_fetch = 1;
+      }
+    }
+    else
+    {
+      $self->log("warning: extract received no download details for $archive");
+    }
+
+    if($self->download_rule eq 'digest')
+    {
+      die "required digest missing for $archive" unless $checked_digest;
+    }
+    elsif($self->download_rule eq 'encrypt')
+    {
+      die "file was fetched insecurely for $archive" unless $encrypted_fetch;
+    }
+    elsif($self->download_rule eq 'digest_or_encrypt')
+    {
+      die "file was fetched insecurely and required digest missing for $archive" unless $checked_digest || $encrypted_fetch;
+    }
+    elsif($self->download_rule eq 'digest_and_encrypt')
+    {
+      die "file was fetched insecurely and required digest missing for $archive" unless $checked_digest || $encrypted_fetch;
+      die "required digest missing for $archive" unless $checked_digest;
+      die "file was fetched insecurely for $archive" unless $encrypted_fetch;
+    }
+    elsif($self->download_rule eq 'warn')
+    {
+      unless($checked_digest || $encrypted_fetch)
+      {
+        $self->log("!!! NOTICE OF FUTURE CHANGE IN BEHAVIOR !!!");
+        $self->log("a future version of Alien::Build will die here by default with this exception: file was fetched insecurely and required digest missing for $archive");
+        $self->log("!!! NOTICE OF FUTURE CHANGE IN BEHAVIOR !!!");
+      }
+    }
+    else
+    {
+      die "internal error, unknown download rule: @{[ $self->download_rule ]}";
+    }
+
   }
 
   my $nick_name = 'build';
@@ -689,7 +896,7 @@ sub build
       {
         foreach my $key (keys %env_meta)
         {
-          $env_meta{$key} = $self->meta->interpolator->interpolate($env_meta{$key});
+          $env_meta{$key} = $self->meta->interpolator->interpolate($env_meta{$key}, $self);
         }
       }
 
@@ -996,6 +1203,7 @@ sub around_hook
   }
 }
 
+
 sub after_hook
 {
   my($self, $name, $code) = @_;
@@ -1008,6 +1216,7 @@ sub after_hook
     }
   );
 }
+
 
 sub before_hook
 {
@@ -1150,7 +1359,6 @@ package Alien::Build::TempDir;
 # redundant).  Happily both are private classes, and either are able to
 # rename, if a good name can be thought of.
 
-use Path::Tiny qw( path );
 use overload '""' => sub { shift->as_string }, bool => sub { 1 }, fallback => 1;
 use File::Temp qw( tempdir );
 
@@ -1158,9 +1366,9 @@ sub new
 {
   my($class, $build, $name) = @_;
   my $root = $build->install_prop->{root};
-  path($root)->mkpath unless -d $root;
+  Path::Tiny->new($root)->mkpath unless -d $root;
   bless {
-    dir => path(tempdir( "${name}_XXXX", DIR => $root)),
+    dir => Path::Tiny->new(tempdir( "${name}_XXXX", DIR => $root)),
   }, $class;
 }
 
@@ -1192,7 +1400,7 @@ Alien::Build - Build external dependencies for use in CPAN
 
 =head1 VERSION
 
-version 2.38
+version 2.80
 
 =head1 SYNOPSIS
 
@@ -1241,6 +1449,13 @@ If you have a common question that has already been answered, like
 
 This is for the brave souls who want to write plugins that will work with
 L<Alien::Build> + L<alienfile>.
+
+=item L<Alien::Build::Manual::Security>
+
+If you are concerned that L<Alien>s might be downloading tarballs off
+the internet, then this is the place for you.  This will discuss some
+of the risks of downloading (really any) software off the internet
+and will give you some tools to remediate these risks.
 
 =back
 
@@ -1347,12 +1562,22 @@ that the library or tool contains architecture dependent files and so should
 be stored in an architecture dependent location.  If not specified by your
 L<alienfile> then it will be set to true.
 
+=item check_digest
+
+True if cryptographic digest should be checked when files are fetched
+or downloaded.  This is set by
+L<Digest negotiator plugin|Alien::Build::Plugin::Digest::Negotiate>.
+
 =item destdir
 
-Use the C<DESTDIR> environment variable to stage your install before
-copying the files into C<blib>.  This is the preferred method of
-installing libraries because it improves reliability.  This technique
-is supported by C<autoconf> and others.
+Some plugins (L<Alien::Build::Plugin::Build::Autoconf> for example) support
+installing via C<DESTDIR>.  They will set this property to true if they
+plan on doing such an install.  This helps L<Alien::Build> find the staged
+install files and how to locate them.
+
+If available, C<DESTDIR> is used to stage install files in a sub directory before
+copying the files into C<blib>.  This is generally preferred method
+if available.
 
 =item destdir_filter
 
@@ -1362,6 +1587,30 @@ into the stage directory.  If not defined, then all files will be copied.
 =item destdir_ffi_filter
 
 Same as C<destdir_filter> except applies to C<build_ffi> instead of C<build>.
+
+=item digest
+
+This properties contains the cryptographic digests (if any) that should
+be used when verifying any fetched and downloaded files.  It is a hash
+reference where the key is the filename and the value is an array
+reference containing a pair of values, the first being the algorithm
+('SHA256' is recommended) and the second is the actual digest.  The
+special filename C<*> may be specified to indicate that any downloaded
+file should match that digest.  If there are both real filenames and
+the C<*> placeholder, the real filenames will be used for filenames
+that match and any other files will use the placeholder.  Example:
+
+ $build->meta_prop->{digest} = {
+   'foo-1.00.tar.gz' => [ SHA256 => '9feac593aa49a44eb837de52513a57736457f1ea70078346c60f0bfc5f24f2c1' ],
+   'foo-1.01.tar.gz' => [ SHA256 => '6bbde6a7f10ae5924cf74afc26ff5b7bc4b4f9dfd85c6b534c51bd254697b9e7' ],
+   '*'               => [ SHA256 => '33a20aae3df6ecfbe812b48082926d55391be4a57d858d35753ab1334b9fddb3' ],
+ };
+
+Cryptographic signatures will only be checked
+if the L<check_digest meta property|/check_digest> is set and if the
+L<Digest negotiator plugin|Alien::Build::Plugin::Digest::Negotiate> is loaded.
+(The Digest negotiator can be used directly, but is also loaded automatically
+if you use the L<digest directive|alienfile/digest> is used by the L<alienfile>).
 
 =item env
 
@@ -1386,7 +1635,7 @@ Hash reference.  Contains information about the platform beyond just C<$^O>.
 
 =over 4
 
-=item compiler_type
+=item platform.compiler_type
 
 Refers to the type of flags that the compiler accepts.  May be expanded in the
 future, but for now, will be one of:
@@ -1406,7 +1655,7 @@ Virtually everything else, including gcc on windows.
 The main difference is that with Visual C++ C<-LIBPATH> should be used instead
 of C<-L>, and static libraries should have the C<.LIB> suffix instead of C<.a>.
 
-=item system_type
+=item platform.system_type
 
 C<$^O> is frequently good enough to make platform specific logic in your
 L<alienfile>, this handles the case when $^O can cover platforms that provide
@@ -1433,6 +1682,55 @@ but others may be added in the future.
 
 Note that C<cygwin> and C<msys> are considered C<unix> even though they run
 on windows!
+
+=item platform.cpu.count
+
+Contains a non-negative integer of available (possibly virtual) CPUs on the
+system. This can be used by build plugins to build in parallel. The environment
+variable C<ALIEN_CPU_COUNT> can be set to override the CPU count.
+
+=item platform.cpu.arch.name
+
+Contains a normalized name for the architecture of the current Perl. This can
+be used by fetch plugins to determine which binary packages to download.
+The value may be one of the following, but this list will be expanded as
+needed.
+
+=over 4
+
+=item C<armel>
+
+32-bit ARM soft-float
+
+=item C<armhf>
+
+32-bit ARM hard-float
+
+=item C<aarch64>
+
+64-bit ARM
+
+=item C<ppc>
+
+32-bit PowerPC (big-endian)
+
+=item C<ppc64>
+
+64-bit PowerPC (big-endian)
+
+=item C<x86>
+
+32-bit Intel (i386, i486, i686)
+
+=item C<x86_64>
+
+64-bit Intel (AMD64)
+
+=item C<unknown>
+
+Unable to detect architecture. Please report this if needed.
+
+=back
 
 =back
 
@@ -1474,16 +1772,43 @@ based module.
 The prefix as understood by autoconf.  This is only different on Windows
 Where MSYS is used and paths like C<C:/foo> are  represented as C</C/foo>
 which are understood by the MSYS tools, but not by Perl.  You should
-only use this if you are using L<Alien::Build::Plugin::Autoconf> in
-your L<alienfile>.
+only use this if you are using L<Alien::Build::Plugin::Build::Autoconf> in
+your L<alienfile>.  This is set during before the
+L<build hook|Alien::Build::Manual::PluginAuthor/"build hook"> is run.
 
 =item download
 
 The location of the downloaded archive (tar.gz, or similar) or directory.
+This will be undefined until the archive is actually downloaded.
+
+=item download_detail
+
+This property contains optional details about a downloaded file.  This
+property is populated by L<Alien::Build> core.  This property is a
+hash reference.  The key is the path to the file that has been downloaded
+and the value is a hash reference with additional detail.  All fields
+are optional.
+
+=over 4
+
+=item download_detail.digest
+
+This, if available, with the cryptographic signature that was successfully
+matched against the downloaded file.  It is an array reference with a
+pair of values, the algorithm (typically something like C<SHA256>) and
+the digest.
+
+=item download_detail.protocol
+
+This, if available, will be the URL protocol used to fetch the downloaded
+file.
+
+=back
 
 =item env
 
-Environment variables to override during the build stage.
+Environment variables to override during the build stage.  Plugins are
+free to set additional overrides using this hash.
 
 =item extract
 
@@ -1494,18 +1819,24 @@ and thus this property may change.
 
 =item old
 
+[deprecated]
+
 Hash containing information on a previously installed Alien of the same
 name, if available.  This may be useful in cases where you want to
 reuse the previous install if it is still sufficient.
 
 =over 4
 
-=item prefix
+=item old.prefix
+
+[deprecated]
 
 The prefix for the previous install.  Versions prior to 1.42 unfortunately
 had this in typo form of C<preifx>.
 
-=item runtime
+=item old.runtime
+
+[deprecated]
 
 The runtime properties from the previous install.
 
@@ -1513,7 +1844,12 @@ The runtime properties from the previous install.
 
 =item patch
 
-Directory with patches.
+Directory with patches, if available.  This will be C<undef> if there
+are no patches.  When initially installing an alien this will usually
+be a sibling of the C<alienfile>, a directory called C<patch>.  Once
+installed this will be in the share directory called C<_alien/patch>.
+The former is useful for rebuilding an alienized package using
+L<af>.
 
 =item prefix
 
@@ -1580,21 +1916,25 @@ The version of L<Alien::Build> used to install the library or tool.
 
 Alternate configurations.  If the alienized package has multiple
 libraries this could be used to store the different compiler or
-linker flags for each library.
+linker flags for each library.  Typically this will be set by a
+plugin in the gather stage (for either share or system installs).
 
 =item cflags
 
-The compiler flags
+The compiler flags.  This is typically set by a plugin in the
+gather stage (for either share or system installs).
 
 =item cflags_static
 
-The static compiler flags
+The static compiler flags.  This is typically set by a plugin in the
+gather stage (for either share or system installs).
 
 =item command
 
 The command name for tools where the name my differ from platform to
 platform.  For example, the GNU version of make is usually C<make> in
-Linux and C<gmake> on FreeBSD.
+Linux and C<gmake> on FreeBSD.  This is typically set by a plugin in the
+gather stage (for either share or system installs).
 
 =item ffi_name
 
@@ -1602,7 +1942,8 @@ The name DLL or shared object "name" to use when searching for dynamic
 libraries at runtime.  This is passed into L<FFI::CheckLib>, so if
 your library is something like C<libarchive.so> or C<archive.dll> you
 would set this to C<archive>.  This may be a string or an array of
-strings.
+strings.  This is typically set by a plugin in the gather stage
+(for either share or system installs).
 
 =item ffi_checklib
 
@@ -1610,14 +1951,14 @@ This property contains two sub properties:
 
 =over 4
 
-=item share
+=item ffi_checklib.share
 
  $build->runtime_prop->{ffi_checklib}->{share} = [ ... ];
 
 Array of additional L<FFI::CheckLib> flags to pass in to C<find_lib>
 for a C<share> install.
 
-=item system
+=item ffi_checklib.system
 
 Array of additional L<FFI::CheckLib> flags to pass in to C<find_lib>
 for a C<system> install.
@@ -1629,9 +1970,22 @@ flag:
 
 =back
 
+This is typically set by a plugin in the gather stage
+(for either share or system installs).
+
+=item inline_auto_include
+
+[version 2.53]
+
+This property is an array reference of C code that will be passed into
+L<Inline::C> to make sure that appropriate headers are automatically
+included.  See L<Inline::C/auto_include> for details.
+
 =item install_type
 
-The install type.  Is one of:
+The install type.  This is set by AB core after the
+L<probe hook|Alien::Build::Manual::PluginAuthor/"probe hook"> is
+executed.  Is one of:
 
 =over 4
 
@@ -1651,11 +2005,13 @@ and built.
 
 =item libs
 
-The library flags
+The library flags.  This is typically set by a plugin in the
+gather stage (for either share or system installs).
 
 =item libs_static
 
-The static library flags
+The static library flags.  This is typically set by a plugin in the
+gather stage (for either share or system installs).
 
 =item perl_module_version
 
@@ -1669,7 +2025,8 @@ The final install root.  This is usually they share directory.
 
 =item version
 
-The version of the library or tool
+The version of the library or tool.  This is typically set by a plugin in the
+gather stage (for either share or system installs).
 
 =back
 
@@ -1739,6 +2096,46 @@ Except that it will be created if it does not already exist.
 This will return the install type.  (See the like named install property
 above for details).  This method will call C<probe> if it has not already
 been called.
+
+=head2 download_rule
+
+ my $rule = $build->download_rule;
+
+This returns install rule as a string.  This is determined by the environment
+and should be one of:
+
+=over 4
+
+=item C<warn>
+
+Warn only if fetching via non secure source (secure sources include C<https>,
+and bundled files, may include other encrypted protocols in the future).
+
+=item C<digest>
+
+Require that any downloaded source package have a cryptographic signature in
+the L<alienfile> and that signature matches what was downloaded.
+
+=item C<encrypt>
+
+Require that any downloaded source package is fetched via secure source.
+
+=item C<digest_or_encrypt>
+
+Require that any downloaded source package is B<either> fetched via a secure source
+B<or> has a cryptographic signature in the L<alienfile> and that signature matches
+what was downloaded.
+
+=item C<digest_and_encrypt>
+
+Require that any downloaded source package is B<both> fetched via a secure source
+B<and> has a cryptographic signature in the L<alienfile> and that signature matches
+what was downloaded.
+
+=back
+
+The current default is C<warn>, but in the near future this will be upgraded to
+C<digest_or_encrypt>.
 
 =head2 set_prefix
 
@@ -1814,17 +2211,68 @@ Under a C<system> install this does not do anything.
 =head2 fetch
 
  my $res = $build->fetch;
- my $res = $build->fetch($url);
+ my $res = $build->fetch($url, %options);
 
 Fetch a resource using the fetch hook.  Returns the same hash structure
-described below in the hook documentation.
+described below in the
+L<fetch hook|Alien::Build::Manual::PluginAuthor/"fetch hook"> documentation.
+
+[version 2.39]
+
+As of L<Alien::Build> 2.39, these options are supported:
+
+=over 4
+
+=item http_headers
+
+ my $res = $build->fetch($url, http_headers => [ $key1 => $value1, $key2 => $value 2, ... ]);
+
+Set the HTTP request headers on all outgoing HTTP requests.  Note that not all
+protocols or fetch plugins support setting request headers, but the ones that
+do not I<should> issue a warning if you try to set request headers and they
+are not supported.
+
+=back
+
+=head2 check_digest
+
+[experimental]
+
+ my $bool = $build->check_digest($path);
+
+Checks any cryptographic signatures for the given file.  The
+file is specified by C<$path> which may be one of:
+
+=over 4
+
+=item string
+
+Containing the path to the file to be checked.
+
+=item L<Path::Tiny>
+
+Containing the path to the file to be checked.
+
+=item C<HASH>
+
+A Hash reference containing information about a file.  See
+the L<fetch hook|Alien::Build::Manual::PluginAuthor/"fetch hook"> for details
+on the format.
+
+=back
+
+Returns true if the cryptographic signature matches, false if cryptographic
+signatures are disabled.  Will throw an exception if the signature does not
+match, or if no plugin provides the correct algorithm for checking the
+signature.
 
 =head2 decode
 
  my $decoded_res = $build->decode($res);
 
 Decode the HTML or file listing returned by C<fetch>.  Returns the same
-hash structure described below in the hook documentation.
+hash structure described below in the
+L<decode hook|Alien::Build::Manual::PluginAuthor/"decode hook"> documentation.
 
 =head2 prefer
 
@@ -1832,7 +2280,8 @@ hash structure described below in the hook documentation.
 
 Filter and sort candidates.  The preferred candidate will be returned first in the list.
 The worst candidate will be returned last.  Returns the same hash structure described
-below in the hook documentation.
+below in the
+L<prefer hook|Alien::Build::Manual::PluginAuthor/"prefer hook"> documentation.
 
 =head2 extract
 
@@ -1859,7 +2308,9 @@ recipe.  If there is a C<gather_share> that will be executed last.
 
 =item system
 
-The C<gather_system> hook will be executed.
+The
+L<gather_system hook|Alien::Build::Manual::PluginAuthor/"gather_system hook">
+will be executed.
 
 =back
 
@@ -1961,8 +2412,8 @@ register its own hook with that name.
 
 =head2 around_hook
 
- $build->meta->around_hook($hook, $code);
- Alien::Build->meta->around_hook($name, $code);
+ $build->meta->around_hook($hook_name, $code);
+ Alien::Build->meta->around_hook($hook_name, $code);
 
 Wrap the given hook with a code reference.  This is similar to a L<Moose>
 method modifier, except that it wraps around the given hook instead of
@@ -1986,6 +2437,26 @@ a method.  For example, this will add a probe system requirement:
    },
  );
 
+=head2 after_hook
+
+ $build->meta->after_hook($hook_name, sub {
+   my(@args) = @_;
+   ...
+ });
+
+Execute the given code reference after the hook.  The original
+arguments are passed into the code reference.
+
+=head2 before_hook
+
+ $build->meta->before_hook($hook_name, sub {
+   my(@args) = @_;
+   ...
+ });
+
+Execute the given code reference before the hook.  The original
+arguments are passed into the code reference.
+
 =head2 apply_plugin
 
  Alien::Build->meta->apply_plugin($name);
@@ -1998,6 +2469,36 @@ Apply the given plugin with the given arguments.
 L<Alien::Build> responds to these environment variables:
 
 =over 4
+
+=item ALIEN_BUILD_LOG
+
+The default log class used.  See L<Alien::Build::Log> and L<Alien::Build::Log::Default>.
+
+=item ALIEN_BUILD_PKG_CONFIG
+
+Override the logic in L<Alien::Build::Plugin::PkgConfig::Negotiate> which
+chooses the best C<pkg-config> plugin.
+
+=item ALIEN_BUILD_POSTLOAD
+
+semicolon separated list of plugins to automatically load after parsing
+your L<alienfile>.
+
+=item ALIEN_BUILD_PRELOAD
+
+semicolon separated list of plugins to automatically load before parsing
+your L<alienfile>.
+
+=item ALIEN_BUILD_RC
+
+Perl source file which can override some global defaults for L<Alien::Build>,
+by, for example, setting preload and postload plugins.
+
+=item ALIEN_DOWNLOAD_RULE
+
+This value determines the rules by which types of downloads are allowed.  The legal
+values listed under L</download_rule>, plus C<default> which will be the default for
+the current version of L<Alien::Build>.  For this version that default is C<warn>.
 
 =item ALIEN_INSTALL_NETWORK
 
@@ -2028,30 +2529,6 @@ user is aware that L<Alien> modules may be installed and have indicated consent.
 The actual implementation of this, by its nature would have to be in the consuming
 CPAN module.
 
-=item ALIEN_BUILD_LOG
-
-The default log class used.  See L<Alien::Build::Log> and L<Alien::Build::Log::Default>.
-
-=item ALIEN_BUILD_RC
-
-Perl source file which can override some global defaults for L<Alien::Build>,
-by, for example, setting preload and postload plugins.
-
-=item ALIEN_BUILD_PKG_CONFIG
-
-Override the logic in L<Alien::Build::Plugin::PkgConfig::Negotiate> which
-chooses the best C<pkg-config> plugin.
-
-=item ALIEN_BUILD_PRELOAD
-
-semicolon separated list of plugins to automatically load before parsing
-your L<alienfile>.
-
-=item ALIEN_BUILD_POSTLOAD
-
-semicolon separated list of plugins to automatically load after parsing
-your L<alienfile>.
-
 =item DESTDIR
 
 This environment variable will be manipulated during a destdir install.
@@ -2064,16 +2541,16 @@ when using the command line plugin: L<Alien::Build::Plugin::PkgConfig::CommandLi
 =item ftp_proxy, all_proxy
 
 If these environment variables are set, it may influence the Download negotiation
-plugin L<Alien::Build::Plugin::Downaload::Negotiate>.  Other proxy variables may
+plugin L<Alien::Build::Plugin::Download::Negotiate>.  Other proxy variables may
 be used by some Fetch plugins, if they support it.
 
 =back
 
 =head1 SUPPORT
 
-The intent of the C<Alien-Build> team is to support as best as possible
-all Perls from 5.8.4 to the latest production version.  So long as they
-are also supported by the Perl toolchain.
+The intent of the C<Alien-Build> team is to support the same versions of
+Perl that are supported by the Perl toolchain.  As of this writing that
+means 5.16 and better.
 
 Please feel encouraged to report issues that you encounter to the
 project GitHub Issue tracker:
@@ -2178,7 +2655,7 @@ Juan Julián Merelo Guervós (JJ)
 
 Joel Berger (JBERGER)
 
-Petr Pisar (ppisar)
+Petr Písař (ppisar)
 
 Lance Wicks (LANCEW)
 
@@ -2196,9 +2673,13 @@ Paul Evans (leonerd, PEVANS)
 
 Håkon Hægland (hakonhagland, HAKONH)
 
+nick nauwelaerts (INPHOBIA)
+
+Florian Weimer
+
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011-2020 by Graham Ollis.
+This software is copyright (c) 2011-2022 by Graham Ollis.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

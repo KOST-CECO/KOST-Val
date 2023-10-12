@@ -1,7 +1,8 @@
 package Moo;
+use strict;
+use warnings;
+no warnings 'once';
 
-use Moo::_strictures;
-use Moo::_mro;
 use Moo::_Utils qw(
   _check_tracked
   _getglob
@@ -9,6 +10,7 @@ use Moo::_Utils qw(
   _install_coderef
   _install_modifier
   _install_tracked
+  _linear_isa
   _load_module
   _set_loaded
   _unimport_coderefs
@@ -24,7 +26,7 @@ BEGIN {
   );
 }
 
-our $VERSION = '2.004004';
+our $VERSION = '2.005005';
 $VERSION =~ tr/_//d;
 
 require Moo::sification;
@@ -148,8 +150,7 @@ sub _set_superclasses {
       croak "Can't extend role '$superclass'";
     }
   }
-  # Can't do *{...} = \@_ or 5.10.0's mro.pm stops seeing @ISA
-  @{*{_getglob("${target}::ISA")}{ARRAY}} = @_;
+  @{*{_getglob("${target}::ISA")}} = @_;
   if (my $old = delete $Moo::MAKERS{$target}{constructor}) {
     $old->assert_constructor;
     delete _getstash($target)->{new};
@@ -178,7 +179,7 @@ sub _accessor_maker_for {
     my $maker_class = do {
       no strict 'refs';
       if (my $m = do {
-        my @isa = @{mro::get_linear_isa($target)};
+        my @isa = @{_linear_isa($target)};
         shift @isa;
         if (my ($parent_new) = grep +(defined &{$_.'::new'}), @isa) {
           $MAKERS{$parent_new} && $MAKERS{$parent_new}{accessor};
@@ -224,7 +225,7 @@ sub _constructor_maker_for {
     );
 
     my $con;
-    my @isa = @{mro::get_linear_isa($target)};
+    my @isa = @{_linear_isa($target)};
     shift @isa;
     no strict 'refs';
     if (my ($parent_new) = grep +(defined &{$_.'::new'}), @isa) {
@@ -377,11 +378,11 @@ time precludes using L<Moose> and L<Mouse>:
 
 =over 2
 
-=item a command line or CGI script where fast startup is essential
+=item * A command line or CGI script where fast startup is essential
 
-=item code designed to be deployed as a single file via L<App::FatPacker>
+=item * code designed to be deployed as a single file via L<App::FatPacker>
 
-=item a CPAN module that may be used by others in the above situations
+=item * A CPAN module that may be used by others in the above situations
 
 =back
 

@@ -417,6 +417,12 @@ Teso Kenya locale.
    1995-12-22T09:05:02 = BK 1995 Poo 22
   -0010-09-15T04:44:23 = KK -10 Sok 15
 
+=head3 GyMd (GGGGG y-MM-dd)
+
+   2008-02-05T18:30:30 = BK 2008-02-05
+   1995-12-22T09:05:02 = BK 1995-12-22
+  -0010-09-15T04:44:23 = KK -10-09-15
+
 =head3 H (HH)
 
    2008-02-05T18:30:30 = 18
@@ -513,11 +519,11 @@ Teso Kenya locale.
    1995-12-22T09:05:02 = 9 Taparachu
   -0010-09-15T04:44:23 = 4 Taparachu
 
-=head3 hm (h:mm a)
+=head3 hm (h:mm a)
 
-   2008-02-05T18:30:30 = 6:30 Ebongi
-   1995-12-22T09:05:02 = 9:05 Taparachu
-  -0010-09-15T04:44:23 = 4:44 Taparachu
+   2008-02-05T18:30:30 = 6:30 Ebongi
+   1995-12-22T09:05:02 = 9:05 Taparachu
+  -0010-09-15T04:44:23 = 4:44 Taparachu
 
 =head3 hms (h:mm:ss a)
 

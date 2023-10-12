@@ -1,6 +1,6 @@
 package Math::BigInt::GMP;
 
-use 5.006002;
+use 5.008;
 use strict;
 use warnings;
 
@@ -8,7 +8,7 @@ use Math::BigInt::Lib 1.999801;
 
 our @ISA = qw< Math::BigInt::Lib >;
 
-our $VERSION = '1.6007';
+our $VERSION = '1.6012';
 
 use XSLoader;
 XSLoader::load "Math::BigInt::GMP", $VERSION;
@@ -77,18 +77,24 @@ also reduces the memory footprint.
 
 Math::BigInt::GMP inherits from Math::BigInt::Lib.
 
+=head1 STATIC FUNCTIONS
+
+=head2 $str = gmp_version();
+
+Returns the underlying GMP library's version as a string, e.g., C<6.2.1>.
+
 =head1 BUGS
 
 Please report any bugs or feature requests to
 C<bug-math-bigint-gmp at rt.cpan.org>, or through the web interface at
 L<https://rt.cpan.org/Ticket/Create.html?Queue=Math-BigInt-GMP>
-(requires login).
-We will be notified, and then you'll automatically be notified of progress on
-your bug as I make changes.
+(requires login). We will be notified, and then you'll automatically be
+notified of progress on your bug as I make changes.
 
 =head1 SUPPORT
 
-You can find documentation for this module with the perldoc command.
+After installing, you can find documentation for this module with the perldoc
+command.
 
     perldoc Math::BigInt::GMP
 
@@ -96,43 +102,25 @@ You can also look for information at:
 
 =over 4
 
-=item * RT: CPAN's request tracker
+=item GitHub
+
+L<https://github.com/pjacklam/p5-Math-BigInt-GMP>
+
+=item RT: CPAN's request tracker
 
 L<https://rt.cpan.org/Dist/Display.html?Name=Math-BigInt-GMP>
 
-=item * AnnoCPAN: Annotated CPAN documentation
+=item MetaCPAN
 
-L<http://annocpan.org/dist/Math-BigInt-GMP>
+L<https://metacpan.org/release/Math-BigInt-GMP>
 
-=item * CPAN Ratings
-
-L<http://cpanratings.perl.org/dist/Math-BigInt-GMP>
-
-=item * Search CPAN
-
-L<http://search.cpan.org/dist/Math-BigInt-GMP/>
-
-=item * CPAN Testers Matrix
+=item CPAN Testers Matrix
 
 L<http://matrix.cpantesters.org/?dist=Math-BigInt-GMP>
 
-=item * The Bignum mailing list
+=item CPAN Ratings
 
-=over 4
-
-=item * Post to mailing list
-
-C<bignum at lists.scsys.co.uk>
-
-=item * View mailing list
-
-L<http://lists.scsys.co.uk/pipermail/bignum/>
-
-=item * Subscribe/Unsubscribe
-
-L<http://lists.scsys.co.uk/cgi-bin/mailman/listinfo/bignum>
-
-=back
+L<https://cpanratings.perl.org/dist/Math-BigInt-GMP>
 
 =back
 
@@ -141,12 +129,16 @@ L<http://lists.scsys.co.uk/cgi-bin/mailman/listinfo/bignum>
 This program is free software; you may redistribute it and/or modify it under
 the same terms as Perl itself.
 
-=head1 AUTHOR
+=head1 AUTHORS
 
 Tels E<lt>http://bloodgate.com/E<gt> in 2001-2007.
 
 Thanks to Chip Turner (CHIPT on CPAN) for providing Math::GMP, which was
 inspiring my work.
+
+Maintained by Peter John Acklam E<lt>pjacklam@gmail.comE<gt> 2010-2021.
+
+gmp_version() provided by FGasper on GitHub.
 
 =head1 SEE ALSO
 

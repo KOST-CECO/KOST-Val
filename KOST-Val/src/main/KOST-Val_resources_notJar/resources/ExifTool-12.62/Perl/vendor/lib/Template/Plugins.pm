@@ -3,21 +3,18 @@
 # Template::Plugins
 #
 # DESCRIPTION
-#   Plugin provider which handles the loading of plugin modules and 
+#   Plugin provider which handles the loading of plugin modules and
 #   instantiation of plugin objects.
 #
 # AUTHORS
 #   Andy Wardley <abw@wardley.org>
 #
 # COPYRIGHT
-#   Copyright (C) 1996-2006 Andy Wardley.  All Rights Reserved.
+#   Copyright (C) 1996-2022 Andy Wardley.  All Rights Reserved.
 #   Copyright (C) 1998-2000 Canon Research Centre Europe Ltd.
 #
 #   This module is free software; you can redistribute it and/or
 #   modify it under the same terms as Perl itself.
-#
-# REVISION
-#   $Id$
 #
 #============================================================================
 
@@ -28,7 +25,7 @@ use warnings;
 use base 'Template::Base';
 use Template::Constants;
 
-our $VERSION = '3.009';
+our $VERSION = '3.100';
 our $DEBUG   = 0 unless defined $DEBUG;
 our $PLUGIN_BASE = 'Template::Plugin';
 our $STD_PLUGINS = {
@@ -79,7 +76,7 @@ our $STD_PLUGINS = {
 # $factory->new(...), equivalent to MyClass->new(...) .  Where
 # $factory is a prototype object, the new() method is called as an
 # object method, $myobject->new(...).  This latter approach allows
-# plugins to act as Singletons, cache shared data, etc.  
+# plugins to act as Singletons, cache shared data, etc.
 #
 # Returns a reference to a plugin, (undef, STATUS_DECLINE) to decline
 # the request or ($error, STATUS_ERROR) on error.
@@ -89,16 +86,16 @@ sub fetch {
     my ($self, $name, $args, $context) = @_;
     my ($factory, $plugin, $error);
 
-    $self->debug("fetch($name, ", 
+    $self->debug("fetch($name, ",
                  defined $args ? ('[ ', join(', ', @$args), ' ]') : '<no args>', ', ',
-                 defined $context ? $context : '<no context>', 
+                 defined $context ? $context : '<no context>',
                  ')') if $self->{ DEBUG };
 
     # NOTE:
     # the $context ref gets passed as the first parameter to all regular
     # plugins, but not to those loaded via LOAD_PERL;  to hack around
     # this until we have a better implementation, we pass the $args
-    # reference to _load() and let it unshift the first args in the 
+    # reference to _load() and let it unshift the first args in the
     # LOAD_PERL case
 
     $args ||= [ ];
@@ -122,10 +119,10 @@ sub fetch {
         }
     };
     if ($error = $@) {
-#	chomp $error;
-        return $self->{ TOLERANT } 
-	       ? (undef,  Template::Constants::STATUS_DECLINED)
-	       : ($error, Template::Constants::STATUS_ERROR);
+    # chomp $error;
+    return $self->{ TOLERANT }
+           ? (undef,  Template::Constants::STATUS_DECLINED)
+           : ($error, Template::Constants::STATUS_ERROR);
     }
 
     return $plugin;
@@ -145,7 +142,7 @@ sub fetch {
 
 sub _init {
     my ($self, $params) = @_;
-    my ($pbase, $plugins, $factory) = 
+    my ($pbase, $plugins, $factory) =
         @$params{ qw( PLUGIN_BASE PLUGINS PLUGIN_FACTORY ) };
 
     $plugins ||= { };
@@ -153,7 +150,7 @@ sub _init {
     # update PLUGIN_BASE to an array ref if necessary
     $pbase = [ ] unless defined $pbase;
     $pbase = [ $pbase ] unless ref($pbase) eq 'ARRAY';
-    
+
     # add default plugin base (Template::Plugin) if set
     push(@$pbase, $PLUGIN_BASE) if $PLUGIN_BASE;
 
@@ -173,7 +170,7 @@ sub _init {
 #------------------------------------------------------------------------
 # _load($name, $context)
 #
-# Private method which attempts to load a plugin module and determine the 
+# Private method which attempts to load a plugin module and determine the
 # correct factory name or object by calling the load() class method in
 # the loaded module.
 #------------------------------------------------------------------------
@@ -195,22 +192,22 @@ sub _load {
     else {
         # try each of the PLUGIN_BASE values to build module name
         ($module = $name) =~ s/\./::/g;
-        
+
         foreach $base (@{ $self->{ PLUGIN_BASE } }) {
             $pkg = $base . '::' . $module;
             ($file = $pkg) =~ s|::|/|g;
-            
+
             $self->debug("loading $file.pm (PLUGIN_BASE)")
                 if $self->{ DEBUG };
-            
+
             $ok = eval { require "$file.pm" };
             last unless $@;
-            
-            $error .= "$@\n" 
+
+            $error .= "$@\n"
                 unless ($@ =~ /^Can\'t locate $file\.pm/);
         }
     }
-    
+
     if ($ok) {
         $self->debug("calling $pkg->load()") if $self->{ DEBUG };
 
@@ -239,54 +236,20 @@ sub _load {
             $error   = '';
         }
     }
-    
+
     if ($factory) {
         $self->debug("$name => $factory") if $self->{ DEBUG };
         return $factory;
     }
     elsif ($error) {
-        return $self->{ TOLERANT } 
-	    ? (undef,  Template::Constants::STATUS_DECLINED) 
+        return $self->{ TOLERANT }
+            ? (undef,  Template::Constants::STATUS_DECLINED)
             : ($error, Template::Constants::STATUS_ERROR);
     }
     else {
         return (undef, Template::Constants::STATUS_DECLINED);
     }
 }
-
-
-#------------------------------------------------------------------------
-# _dump()
-# 
-# Debug method which constructs and returns text representing the current
-# state of the object.
-#------------------------------------------------------------------------
-
-sub _dump {
-    my $self = shift;
-    my $output = "[Template::Plugins] {\n";
-    my $format = "    %-16s => %s\n";
-    my $key;
-
-    foreach $key (qw( TOLERANT LOAD_PERL )) {
-        $output .= sprintf($format, $key, $self->{ $key });
-    }
-
-    local $" = ', ';
-    my $fkeys = join(", ", keys %{$self->{ FACTORY }});
-    my $plugins = $self->{ PLUGINS };
-    $plugins = join('', map { 
-        sprintf("    $format", $_, $plugins->{ $_ });
-    } keys %$plugins);
-    $plugins = "{\n$plugins    }";
-    
-    $output .= sprintf($format, 'PLUGIN_BASE', "[ @{ $self->{ PLUGIN_BASE } } ]");
-    $output .= sprintf($format, 'PLUGINS', $plugins);
-    $output .= sprintf($format, 'FACTORY', $fkeys);
-    $output .= '}';
-    return $output;
-}
-
 
 1;
 
@@ -299,9 +262,9 @@ Template::Plugins - Plugin provider module
 =head1 SYNOPSIS
 
     use Template::Plugins;
-    
+
     $plugin_provider = Template::Plugins->new(\%options);
-    
+
     ($plugin, $error) = $plugin_provider->fetch($name, @args);
 
 =head1 DESCRIPTION
@@ -311,11 +274,11 @@ to load and instantiate Template Toolkit plugin modules.
 
 =head1 METHODS
 
-=head2 new(\%params) 
+=head2 new(\%params)
 
 Constructor method which instantiates and returns a reference to a
 C<Template::Plugins> object.  A reference to a hash array of configuration
-items may be passed as a parameter.  These are described below.  
+items may be passed as a parameter.  These are described below.
 
 Note that the L<Template> front-end module creates a C<Template::Plugins>
 provider, passing all configuration items.  Thus, the examples shown
@@ -342,7 +305,7 @@ as well as the more explicit form of:
         LOAD_PERL   => 1,
         ...
     });
-    
+
     $ttengine = Template->new({
         LOAD_PLUGINS => [ $plugprov ],
     });
@@ -364,8 +327,8 @@ returned as declines.
 =head1 CONFIGURATION OPTIONS
 
 The following list summarises the configuration options that can be provided
-to the C<Template::Plugins> L<new()> constructor.  Please consult 
-L<Template::Manual::Config> for further details and examples of each 
+to the C<Template::Plugins> L<new()> constructor.  Please consult
+L<Template::Manual::Config> for further details and examples of each
 configuration option in use.
 
 =head2 PLUGINS
@@ -378,8 +341,8 @@ a reference to a hash array that maps plugin names to Perl module names.
             cgi => 'MyOrg::Template::Plugin::CGI',
             foo => 'MyOrg::Template::Plugin::Foo',
             bar => 'MyOrg::Template::Plugin::Bar',
-        },  
-    }); 
+        },
+    });
 
 =head2 PLUGIN_BASE
 
@@ -410,10 +373,10 @@ L<PLUGINS|Template::Manual::Config#PLUGINS> or
 L<PLUGIN_BASE|Template::Manual::Config#PLUGIN_BASE> approaches then,
 if the L<LOAD_PERL|Template::Manual::Config#LOAD_PERL> is set, the
 provider will make a final attempt to load the module without prepending any
-prefix to the module path. 
+prefix to the module path.
 
 Unlike regular plugins, modules loaded using L<LOAD_PERL|Template::Manual::Config#LOAD_PERL>
-do not receive a L<Template::Context> reference as the first argument to the 
+do not receive a L<Template::Context> reference as the first argument to the
 C<new()> constructor method.
 
 =head2 TOLERANT
@@ -429,14 +392,14 @@ debugging messages for the C<Template::Plugins> module by setting it to
 include the C<DEBUG_PLUGINS> value.
 
     use Template::Constants qw( :debug );
-    
+
     my $template = Template->new({
         DEBUG => DEBUG_FILTERS | DEBUG_PLUGINS,
     });
 
 =head1 TEMPLATE TOOLKIT PLUGINS
 
-Please see L<Template::Manual::Plugins> For a complete list of all the plugin 
+Please see L<Template::Manual::Plugins> For a complete list of all the plugin
 modules distributed with the Template Toolkit.
 
 =head1 AUTHOR
@@ -445,7 +408,7 @@ Andy Wardley E<lt>abw@wardley.orgE<gt> L<http://wardley.org/>
 
 =head1 COPYRIGHT
 
-Copyright (C) 1996-2007 Andy Wardley.  All Rights Reserved.
+Copyright (C) 1996-2022 Andy Wardley.  All Rights Reserved.
 
 This module is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself.

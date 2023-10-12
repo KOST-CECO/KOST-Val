@@ -132,7 +132,7 @@
   glibc_datetime_format => "%a %b %e %H:%M:%S %Y",
   glibc_time_12_format => "%I:%M:%S %p",
   glibc_time_format => "%H:%M:%S",
-  language => "Root",
+  language => undef,
   month_format_abbreviated => [
     "M01",
     "M02",
@@ -217,9 +217,9 @@
     "M11",
     "M12",
   ],
-  name => "Root",
-  native_language => "root",
-  native_name => "root",
+  name => "",
+  native_language => undef,
+  native_name => "",
   native_script => undef,
   native_territory => undef,
   native_variant => undef,
@@ -266,5 +266,5 @@
   time_format_medium => "HH:mm:ss",
   time_format_short => "HH:mm",
   variant => undef,
-  version => 38,
+  version => 39,
 }

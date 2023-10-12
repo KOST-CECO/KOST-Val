@@ -50,13 +50,13 @@ Spanish Peru locale.
 
 =head3 Narrow (format)
 
-  l
-  m
-  m
-  j
-  v
-  s
-  d
+  L
+  M
+  M
+  J
+  V
+  S
+  D
 
 
 =head3 Wide (stand-alone)
@@ -71,13 +71,13 @@ Spanish Peru locale.
 
 =head3 Abbreviated (stand-alone)
 
-  lun.
-  mar.
-  mié.
-  jue.
-  vie.
-  sáb.
-  dom.
+  lun
+  mar
+  mié
+  jue
+  vie
+  sáb
+  dom
 
 =head3 Narrow (stand-alone)
 
@@ -236,13 +236,13 @@ Spanish Peru locale.
 
 =head3 Abbreviated (format)
 
-  a. C.
-  d. C.
+  a.C.
+  d.C.
 
 =head3 Narrow (format)
 
-  a. C.
-  d. C.
+  a.C.
+  d.C.
 
 =head2 Date Formats
 
@@ -302,15 +302,15 @@ Spanish Peru locale.
 
 =head3 Full
 
-   2008-02-05T18:30:30 = martes, 5 de febrero de 2008 a las 18:30:30 UTC
-   1995-12-22T09:05:02 = viernes, 22 de diciembre de 1995 a las 09:05:02 UTC
-  -0010-09-15T04:44:23 = sábado, 15 de setiembre de -10 a las 04:44:23 UTC
+   2008-02-05T18:30:30 = martes, 5 de febrero de 2008, 18:30:30 UTC
+   1995-12-22T09:05:02 = viernes, 22 de diciembre de 1995, 09:05:02 UTC
+  -0010-09-15T04:44:23 = sábado, 15 de setiembre de -10, 04:44:23 UTC
 
 =head3 Long
 
-   2008-02-05T18:30:30 = 5 de febrero de 2008 a las 18:30:30 UTC
-   1995-12-22T09:05:02 = 22 de diciembre de 1995 a las 09:05:02 UTC
-  -0010-09-15T04:44:23 = 15 de setiembre de -10 a las 04:44:23 UTC
+   2008-02-05T18:30:30 = 5 de febrero de 2008, 18:30:30 UTC
+   1995-12-22T09:05:02 = 22 de diciembre de 1995, 09:05:02 UTC
+  -0010-09-15T04:44:23 = 15 de setiembre de -10, 04:44:23 UTC
 
 =head3 Medium
 
@@ -320,9 +320,9 @@ Spanish Peru locale.
 
 =head3 Short
 
-   2008-02-05T18:30:30 = 5/02/08 18:30
-   1995-12-22T09:05:02 = 22/12/95 09:05
-  -0010-09-15T04:44:23 = 15/09/-10 04:44
+   2008-02-05T18:30:30 = 5/02/08, 18:30
+   1995-12-22T09:05:02 = 22/12/95, 09:05
+  -0010-09-15T04:44:23 = 15/09/-10, 04:44
 
 
 =head2 Available Formats
@@ -347,9 +347,9 @@ Spanish Peru locale.
 
 =head3 E (ccc)
 
-   2008-02-05T18:30:30 = mar.
-   1995-12-22T09:05:02 = vie.
-  -0010-09-15T04:44:23 = sáb.
+   2008-02-05T18:30:30 = mar
+   1995-12-22T09:05:02 = vie
+  -0010-09-15T04:44:23 = sáb
 
 =head3 EBhm (E h:mm B)
 
@@ -381,59 +381,65 @@ Spanish Peru locale.
    1995-12-22T09:05:02 = vie 22
   -0010-09-15T04:44:23 = sáb 15
 
-=head3 Ehm (E, h:mm a)
+=head3 Ehm (E, h:mm a)
 
-   2008-02-05T18:30:30 = mar, 6:30 p. m.
-   1995-12-22T09:05:02 = vie, 9:05 a. m.
-  -0010-09-15T04:44:23 = sáb, 4:44 a. m.
+   2008-02-05T18:30:30 = mar, 6:30 p. m.
+   1995-12-22T09:05:02 = vie, 9:05 a. m.
+  -0010-09-15T04:44:23 = sáb, 4:44 a. m.
 
-=head3 Ehms (E, h:mm:ss a)
+=head3 Ehms (E, h:mm:ss a)
 
-   2008-02-05T18:30:30 = mar, 6:30:30 p. m.
-   1995-12-22T09:05:02 = vie, 9:05:02 a. m.
-  -0010-09-15T04:44:23 = sáb, 4:44:23 a. m.
+   2008-02-05T18:30:30 = mar, 6:30:30 p. m.
+   1995-12-22T09:05:02 = vie, 9:05:02 a. m.
+  -0010-09-15T04:44:23 = sáb, 4:44:23 a. m.
 
 =head3 Gy (y G)
 
-   2008-02-05T18:30:30 = 2008 d. C.
-   1995-12-22T09:05:02 = 1995 d. C.
-  -0010-09-15T04:44:23 = -10 a. C.
+   2008-02-05T18:30:30 = 2008 d.C.
+   1995-12-22T09:05:02 = 1995 d.C.
+  -0010-09-15T04:44:23 = -10 a.C.
 
 =head3 GyMMM (MMM y G)
 
-   2008-02-05T18:30:30 = feb. 2008 d. C.
-   1995-12-22T09:05:02 = dic. 1995 d. C.
-  -0010-09-15T04:44:23 = set. -10 a. C.
+   2008-02-05T18:30:30 = feb. 2008 d.C.
+   1995-12-22T09:05:02 = dic. 1995 d.C.
+  -0010-09-15T04:44:23 = set. -10 a.C.
 
 =head3 GyMMMEd (E, d MMM y G)
 
-   2008-02-05T18:30:30 = mar, 5 feb. 2008 d. C.
-   1995-12-22T09:05:02 = vie, 22 dic. 1995 d. C.
-  -0010-09-15T04:44:23 = sáb, 15 set. -10 a. C.
+   2008-02-05T18:30:30 = mar, 5 feb. 2008 d.C.
+   1995-12-22T09:05:02 = vie, 22 dic. 1995 d.C.
+  -0010-09-15T04:44:23 = sáb, 15 set. -10 a.C.
 
 =head3 GyMMMM (MMMM 'de' y G)
 
-   2008-02-05T18:30:30 = febrero de 2008 d. C.
-   1995-12-22T09:05:02 = diciembre de 1995 d. C.
-  -0010-09-15T04:44:23 = setiembre de -10 a. C.
+   2008-02-05T18:30:30 = febrero de 2008 d.C.
+   1995-12-22T09:05:02 = diciembre de 1995 d.C.
+  -0010-09-15T04:44:23 = setiembre de -10 a.C.
 
 =head3 GyMMMMEd (E, d 'de' MMMM 'de' y G)
 
-   2008-02-05T18:30:30 = mar, 5 de febrero de 2008 d. C.
-   1995-12-22T09:05:02 = vie, 22 de diciembre de 1995 d. C.
-  -0010-09-15T04:44:23 = sáb, 15 de setiembre de -10 a. C.
+   2008-02-05T18:30:30 = mar, 5 de febrero de 2008 d.C.
+   1995-12-22T09:05:02 = vie, 22 de diciembre de 1995 d.C.
+  -0010-09-15T04:44:23 = sáb, 15 de setiembre de -10 a.C.
 
 =head3 GyMMMMd (d 'de' MMMM 'de' y G)
 
-   2008-02-05T18:30:30 = 5 de febrero de 2008 d. C.
-   1995-12-22T09:05:02 = 22 de diciembre de 1995 d. C.
-  -0010-09-15T04:44:23 = 15 de setiembre de -10 a. C.
+   2008-02-05T18:30:30 = 5 de febrero de 2008 d.C.
+   1995-12-22T09:05:02 = 22 de diciembre de 1995 d.C.
+  -0010-09-15T04:44:23 = 15 de setiembre de -10 a.C.
 
 =head3 GyMMMd (d 'de' MMM 'de' y G)
 
-   2008-02-05T18:30:30 = 5 de feb. de 2008 d. C.
-   1995-12-22T09:05:02 = 22 de dic. de 1995 d. C.
-  -0010-09-15T04:44:23 = 15 de set. de -10 a. C.
+   2008-02-05T18:30:30 = 5 de feb. de 2008 d.C.
+   1995-12-22T09:05:02 = 22 de dic. de 1995 d.C.
+  -0010-09-15T04:44:23 = 15 de set. de -10 a.C.
+
+=head3 GyMd (d/M/y GGGGG)
+
+   2008-02-05T18:30:30 = 5/2/2008 d.C.
+   1995-12-22T09:05:02 = 22/12/1995 d.C.
+  -0010-09-15T04:44:23 = 15/9/-10 a.C.
 
 =head3 H (HH)
 
@@ -453,23 +459,23 @@ Spanish Peru locale.
    1995-12-22T09:05:02 = 09:05:02
   -0010-09-15T04:44:23 = 04:44:23
 
-=head3 Hmsv (H:mm:ss v)
+=head3 Hmsv (HH:mm:ss v)
 
    2008-02-05T18:30:30 = 18:30:30 UTC
-   1995-12-22T09:05:02 = 9:05:02 UTC
-  -0010-09-15T04:44:23 = 4:44:23 UTC
+   1995-12-22T09:05:02 = 09:05:02 UTC
+  -0010-09-15T04:44:23 = 04:44:23 UTC
 
-=head3 Hmsvvvv (H:mm:ss (vvvv))
+=head3 Hmsvvvv (HH:mm:ss vvvv)
 
-   2008-02-05T18:30:30 = 18:30:30 (UTC)
-   1995-12-22T09:05:02 = 9:05:02 (UTC)
-  -0010-09-15T04:44:23 = 4:44:23 (UTC)
+   2008-02-05T18:30:30 = 18:30:30 UTC
+   1995-12-22T09:05:02 = 09:05:02 UTC
+  -0010-09-15T04:44:23 = 04:44:23 UTC
 
-=head3 Hmv (H:mm v)
+=head3 Hmv (HH:mm v)
 
    2008-02-05T18:30:30 = 18:30 UTC
-   1995-12-22T09:05:02 = 9:05 UTC
-  -0010-09-15T04:44:23 = 4:44 UTC
+   1995-12-22T09:05:02 = 09:05 UTC
+  -0010-09-15T04:44:23 = 04:44 UTC
 
 =head3 M (L)
 
@@ -555,41 +561,41 @@ Spanish Peru locale.
    1995-12-22T09:05:02 = 22
   -0010-09-15T04:44:23 = 15
 
-=head3 h (h a)
+=head3 h (h a)
 
-   2008-02-05T18:30:30 = 6 p. m.
-   1995-12-22T09:05:02 = 9 a. m.
-  -0010-09-15T04:44:23 = 4 a. m.
+   2008-02-05T18:30:30 = 6 p. m.
+   1995-12-22T09:05:02 = 9 a. m.
+  -0010-09-15T04:44:23 = 4 a. m.
 
-=head3 hm (h:mm a)
+=head3 hm (h:mm a)
 
-   2008-02-05T18:30:30 = 6:30 p. m.
-   1995-12-22T09:05:02 = 9:05 a. m.
-  -0010-09-15T04:44:23 = 4:44 a. m.
+   2008-02-05T18:30:30 = 6:30 p. m.
+   1995-12-22T09:05:02 = 9:05 a. m.
+  -0010-09-15T04:44:23 = 4:44 a. m.
 
-=head3 hms (h:mm:ss a)
+=head3 hms (h:mm:ss a)
 
-   2008-02-05T18:30:30 = 6:30:30 p. m.
-   1995-12-22T09:05:02 = 9:05:02 a. m.
-  -0010-09-15T04:44:23 = 4:44:23 a. m.
+   2008-02-05T18:30:30 = 6:30:30 p. m.
+   1995-12-22T09:05:02 = 9:05:02 a. m.
+  -0010-09-15T04:44:23 = 4:44:23 a. m.
 
-=head3 hmsv (h:mm:ss a v)
+=head3 hmsv (h:mm:ss a v)
 
-   2008-02-05T18:30:30 = 6:30:30 p. m. UTC
-   1995-12-22T09:05:02 = 9:05:02 a. m. UTC
-  -0010-09-15T04:44:23 = 4:44:23 a. m. UTC
+   2008-02-05T18:30:30 = 6:30:30 p. m. UTC
+   1995-12-22T09:05:02 = 9:05:02 a. m. UTC
+  -0010-09-15T04:44:23 = 4:44:23 a. m. UTC
 
-=head3 hmsvvvv (h:mm:ss a (vvvv))
+=head3 hmsvvvv (h:mm:ss a (vvvv))
 
-   2008-02-05T18:30:30 = 6:30:30 p. m. (UTC)
-   1995-12-22T09:05:02 = 9:05:02 a. m. (UTC)
-  -0010-09-15T04:44:23 = 4:44:23 a. m. (UTC)
+   2008-02-05T18:30:30 = 6:30:30 p. m. (UTC)
+   1995-12-22T09:05:02 = 9:05:02 a. m. (UTC)
+  -0010-09-15T04:44:23 = 4:44:23 a. m. (UTC)
 
-=head3 hmv (h:mm a v)
+=head3 hmv (h:mm a v)
 
-   2008-02-05T18:30:30 = 6:30 p. m. UTC
-   1995-12-22T09:05:02 = 9:05 a. m. UTC
-  -0010-09-15T04:44:23 = 4:44 a. m. UTC
+   2008-02-05T18:30:30 = 6:30 p. m. UTC
+   1995-12-22T09:05:02 = 9:05 a. m. UTC
+  -0010-09-15T04:44:23 = 4:44 a. m. UTC
 
 =head3 ms (mm:ss)
 
@@ -621,17 +627,17 @@ Spanish Peru locale.
    1995-12-22T09:05:02 = 12/1995
   -0010-09-15T04:44:23 = 9/-10
 
-=head3 yMMM (MMM 'de' y)
+=head3 yMMM (MMM y)
 
-   2008-02-05T18:30:30 = feb. de 2008
-   1995-12-22T09:05:02 = dic. de 1995
-  -0010-09-15T04:44:23 = set. de -10
+   2008-02-05T18:30:30 = feb. 2008
+   1995-12-22T09:05:02 = dic. 1995
+  -0010-09-15T04:44:23 = set. -10
 
-=head3 yMMMEd (E, d 'de' MMM 'de' y)
+=head3 yMMMEd (E, d MMM y)
 
-   2008-02-05T18:30:30 = mar, 5 de feb. de 2008
-   1995-12-22T09:05:02 = vie, 22 de dic. de 1995
-  -0010-09-15T04:44:23 = sáb, 15 de set. de -10
+   2008-02-05T18:30:30 = mar, 5 feb. 2008
+   1995-12-22T09:05:02 = vie, 22 dic. 1995
+  -0010-09-15T04:44:23 = sáb, 15 set. -10
 
 =head3 yMMMM (MMMM 'de' y)
 
@@ -651,11 +657,11 @@ Spanish Peru locale.
    1995-12-22T09:05:02 = 22 de diciembre de 1995
   -0010-09-15T04:44:23 = 15 de setiembre de -10
 
-=head3 yMMMd (d 'de' MMM 'de' y)
+=head3 yMMMd (d MMM y)
 
-   2008-02-05T18:30:30 = 5 de feb. de 2008
-   1995-12-22T09:05:02 = 22 de dic. de 1995
-  -0010-09-15T04:44:23 = 15 de set. de -10
+   2008-02-05T18:30:30 = 5 feb. 2008
+   1995-12-22T09:05:02 = 22 dic. 1995
+  -0010-09-15T04:44:23 = 15 set. -10
 
 =head3 yMd (d/M/y)
 

@@ -3,6 +3,7 @@ use strict;
 use warnings;
 use File::Spec;
 use File::Basename qw(dirname);
+use ExtUtils::Packlist;
 use Getopt::Long qw(GetOptions :config bundling);
 use Config;
 use YAML ();
@@ -13,7 +14,7 @@ use Term::ANSIColor qw(colored);
 use Cwd ();
 use JSON::PP qw(decode_json);
 
-our $VERSION = "0.30";
+our $VERSION = "0.33";
 
 my $perl_version     = version->new($])->numify;
 my $depended_on_by   = 'http://deps.cpantesters.org/depended-on-by.pl?dist=';
@@ -72,7 +73,7 @@ sub uninstall {
         $self->puts("--> Working on $module") unless $self->{quiet};
         my ($packlist, $dist, $vname) = $self->find_packlist($module);
 
-        $packlist = File::Spec->catfile($packlist);
+        $packlist = File::Spec->canonpath($packlist);
         if ($self->is_core_module($module, $packlist)) {
             $self->puts(colored ['red'], "! $module is a core module!! Can't be uninstalled.");
             $self->puts unless $self->{quiet};
@@ -115,7 +116,7 @@ sub uninstall_from_packlist {
     my ($self, $packlist) = @_;
 
     my $inc = {
-        map { File::Spec->catfile($_) => 1 } @{$self->{inc}}
+        map { File::Spec->canonpath($_) => 1 } @{$self->{inc}}
     };
 
     my $failed;
@@ -143,7 +144,7 @@ sub rm_empty_dir_from_file {
     my ($self, $file, $inc) = @_;
     my $dir = dirname $file;
     return unless -d $dir;
-    return if $inc->{+File::Spec->catfile($dir)};
+    return if $inc->{+File::Spec->canonpath($dir)};
 
     my $failed;
     if ($self->is_empty_dir($dir)) {
@@ -293,8 +294,8 @@ sub fixup_packlist {
     my ($self, $packlist) = @_;
     my @target_list;
     my $is_local_lib = $self->is_local_lib($packlist);
-    open my $in, "<", $packlist or die "$packlist: $!";
-    while (defined (my $file = <$in>)) {
+    my $plist = ExtUtils::Packlist->new($packlist);
+    while (my $file = each %$plist) {
         if ($is_local_lib) {
             next unless $self->is_local_lib($file);
         }
@@ -303,14 +304,26 @@ sub fixup_packlist {
     return @target_list;
 }
 
+# NOTE only use this for comparing paths
+sub _canon_path_compare {
+    my ($self, $path) = @_;
+    $path = Cwd::realpath($path);
+    if( $^O eq 'MSWin32' ) {
+        require Win32;
+        $path = Win32::GetLongPathName($path);
+    }
+
+    return $path;
+}
+
 sub is_local_lib {
     my ($self, $file) = @_;
     return unless $self->{local_lib};
 
-    my $local_lib_base = quotemeta File::Spec->catfile(Cwd::realpath($self->{local_lib}));
-    $file = File::Spec->catfile($file);
+    my $local_lib_base = quotemeta $self->_canon_path_compare($self->{local_lib});
+    $file = $self->_canon_path_compare($file);
 
-    return $file =~ /^$local_lib_base/ ? 1 : 0;
+    return $file =~ /^$local_lib_base(?:\/|\z)/ ? 1 : 0;
 }
 
 sub vname_for {
@@ -336,6 +349,7 @@ sub setup_local_lib {
 
     local $SIG{__WARN__} = sub { }; # catch 'Attempting to write ...'
     $self->{inc} = [
+        grep { defined }
         map { Cwd::realpath($_) }
             @{$self->build_active_perl5lib($self->{local_lib}, $self->{self_contained})}
     ];
@@ -347,7 +361,7 @@ sub build_active_perl5lib {
     my $perl5libs = [
         $self->install_base_arch_path($path),
         $self->install_base_perl_path($path),
-        $interpolate && $ENV{PERL5LIB} ? $ENV{PERL5LIB} : (),
+        $interpolate && $ENV{PERL5LIB} ? split(/\Q$Config{path_sep}\E/, $ENV{PERL5LIB}) : (),
     ];
     return $perl5libs;
 }

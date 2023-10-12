@@ -7,7 +7,7 @@ use Alien::Build::Plugin;
 use Carp ();
 
 # ABSTRACT: Probe system and determine library or tool properties using PkgConfig::LibPkgConf
-our $VERSION = '2.38'; # VERSION
+our $VERSION = '2.80'; # VERSION
 
 
 has '+pkg_name' => sub {
@@ -174,7 +174,7 @@ Alien::Build::Plugin::PkgConfig::LibPkgConf - Probe system and determine library
 
 =head1 VERSION
 
-version 2.38
+version 2.80
 
 =head1 SYNOPSIS
 
@@ -201,7 +201,10 @@ it in core.  If it is spun off it will get its own distribution some time in the
 =head2 pkg_name
 
 The package name.  If this is a list reference then .pc files with all those package
-names must be present.
+names must be present.  The first name will be the primary and used by default once
+installed.  For the subsequent C<.pc> files you can use the
+L<Alien::Base alt method|Alien::Base/alt> to retrieve the alternate configurations
+once the L<Alien> is installed.
 
 =head2 atleast_version
 
@@ -273,7 +276,7 @@ Juan Julián Merelo Guervós (JJ)
 
 Joel Berger (JBERGER)
 
-Petr Pisar (ppisar)
+Petr Písař (ppisar)
 
 Lance Wicks (LANCEW)
 
@@ -291,9 +294,13 @@ Paul Evans (leonerd, PEVANS)
 
 Håkon Hægland (hakonhagland, HAKONH)
 
+nick nauwelaerts (INPHOBIA)
+
+Florian Weimer
+
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011-2020 by Graham Ollis.
+This software is copyright (c) 2011-2022 by Graham Ollis.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

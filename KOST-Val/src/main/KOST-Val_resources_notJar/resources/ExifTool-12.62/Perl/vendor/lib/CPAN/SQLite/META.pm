@@ -1,9 +1,9 @@
-# $Id: META.pm 84 2020-05-31 06:29:34Z stro $
+# $Id: META.pm 85 2022-10-29 05:44:36Z stro $
 
 package CPAN::SQLite::META;
 use strict;
 use warnings;
-our $VERSION = '0.219';
+our $VERSION = '0.220';
 
 use English qw/-no_match_vars/;
 
@@ -390,7 +390,7 @@ CPAN::SQLite::META - helper module for CPAN.pm integration
 
 =head1 VERSION
 
-version 0.219
+version 0.220
 
 =head1 DESCRIPTION
 

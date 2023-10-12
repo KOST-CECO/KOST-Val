@@ -7,7 +7,7 @@ MIME::Types - Definition of MIME types
 =head1 INHERITANCE
 
  MIME::Types
-   is a Exporter
+   is an Exporter
 
 =head1 SYNOPSIS
 
@@ -254,12 +254,12 @@ missing, please contact the maintainer for inclusion.
 
 =head1 SEE ALSO
 
-This module is part of MIME-Types distribution version 2.18,
-built on December 09, 2020. Website: F<http://perl.overmeer.net/CPAN/>
+This module is part of MIME-Types distribution version 2.24,
+built on December 28, 2022. Website: F<http://perl.overmeer.net/CPAN/>
 
 =head1 LICENSE
 
-Copyrights 1999-2020 by [Mark Overmeer <markov@cpan.org>]. For other contributors see ChangeLog.
+Copyrights 1999-2022 by [Mark Overmeer <markov@cpan.org>]. For other contributors see ChangeLog.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

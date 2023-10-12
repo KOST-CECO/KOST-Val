@@ -13,7 +13,7 @@ WWW::Mechanize::FAQ - Frequently Asked Questions about WWW::Mechanize
 
 =head1 VERSION
 
-version 2.03
+version 2.17
 
 =head1 How to get help with WWW::Mechanize
 
@@ -98,8 +98,9 @@ can be used to add the headers that you need.
 
 =head2 Which modules work like Mechanize and have JavaScript support?
 
-In no particular order: L<Gtk2::WebKit::Mechanize>, L<Win32::IE::Mechanize>,
-L<WWW::Mechanize::Firefox>, L<WWW::Scripter>, L<WWW::Selenium>
+In no particular order: L<Gtk2::WebKit::Mechanize>,
+L<WWW::Mechanize::Firefox>, L<WWW::Mechanize::Chrome>, L<WWW::Scripter>,
+L<WWW::Selenium>
 
 =head1 How do I do X?
 
@@ -178,8 +179,8 @@ them with
 =head2 How do I get a list of HTTP headers and their values?
 
 All L<HTTP::Headers> methods work on a L<HTTP::Response> object which is
-returned by the I<get()>, I<reload()>, I<response()/res()>, I<click()>,
-I<submit_form()>, and I<request()> methods.
+returned by the C<get()>, C<reload()>, C<response()/res()>, C<click()>,
+C<submit_form()>, and C<request()> methods.
 
     my $mech = WWW::Mechanize->new( autocheck => 1 );
     $mech->get( 'http://my.site.com' );
@@ -323,6 +324,14 @@ the HTML to a file, and run F<mech-dump> on the file.
 =head2 Why don't https:// URLs work?
 
 You need either L<IO::Socket::SSL> or L<Crypt::SSLeay> installed.
+
+=head2 Why don't file:// URLs to files with a question mark in the name work?
+
+If you have a local file named C<how-are-you?>, the URL for that file is
+C<file:how-are-you%3f>. That's because L<URI::file> is required to be
+url-encoded, just like any URL pointing to somewhere on the internet has to be
+if it contains reserved characters such as C<?>, C</> or C<@>. This is specified
+in RFC 3986. See L<URI::Escape> for a full list of reserved characters.
 
 =head2 Why do I get "Input 'fieldname' is readonly"?
 

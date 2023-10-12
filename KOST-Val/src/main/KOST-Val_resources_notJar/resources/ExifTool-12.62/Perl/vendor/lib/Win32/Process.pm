@@ -4,7 +4,7 @@ require Exporter;
 require DynaLoader;
 @ISA = qw(Exporter DynaLoader);
 
-$VERSION = '0.16';
+$VERSION = '0.17';
 
 # Items to export into callers namespace by default. Note: do not export
 # names by default without a very good reason. Use EXPORT_OK instead.
@@ -73,6 +73,8 @@ Win32::Process - Create and manipulate processes.
     use Win32::Process;
     use Win32;
 
+    my $ProcessObj;
+
     sub ErrorReport{
 	print Win32::FormatMessage( Win32::GetLastError() );
     }
@@ -104,13 +106,32 @@ Creates a new process.
     Args:
 
 	$obj		container for process object
-	$appname	full path name of executable module
-	$cmdline	command line args
+	$appname	full path name of executable module (can be 'undef')
+	$cmdline	command line args (can be 'undef')
 	$iflags		flag: inherit calling processes handles or not
 	$cflags		flags for creation (see exported vars below)
 	$curdir		working dir of new process
 
 Returns non-zero on success, 0 on failure.
+
+$appname can be 'undef' to allow $cmdline to specify the command without
+an absolute path; $ENV{PATH} will be searched to find the executable. eg:
+
+    Win32::Process::Create($ProcessObj,
+                           undef,
+                          "netstat -an",      # finds "netstat.exe" from $ENV{PATH}
+                          0,
+                          NORMAL_PRIORITY_CLASS,
+                          ".");
+
+See Microsoft's CreateProcess() docs for details. For instance, only .exe's will
+be searched; if you are trying to run a .com or .bat, you'll have to specify the
+extension, eg:
+
+    Win32::Process::Create($ProcessObj,
+                           undef,
+                          "tree.com /A /F",
+                          [..]
 
 =item Win32::Process::Open($obj,$pid,$iflags)
 
@@ -168,6 +189,16 @@ by explicit request.
 
 Wait for the process to die.  $timeout should be specified in milliseconds.
 To wait forever, specify the constant C<INFINITE>.
+
+Returns a false value if the process is still alive by the time timeout
+expires:
+
+    if ( $process->Wait(1) ) {
+        print "Process is done\n";
+    }
+    else {
+        print "Process is still running\n";
+    }
 
 =item $ProcessObj->GetProcessID()
 

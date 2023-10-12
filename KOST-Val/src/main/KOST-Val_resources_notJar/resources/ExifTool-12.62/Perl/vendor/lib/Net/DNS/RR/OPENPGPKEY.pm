@@ -2,7 +2,7 @@ package Net::DNS::RR::OPENPGPKEY;
 
 use strict;
 use warnings;
-our $VERSION = (qw$Id: OPENPGPKEY.pm 1814 2020-10-14 21:49:16Z willem $)[2];
+our $VERSION = (qw$Id: OPENPGPKEY.pm 1896 2023-01-30 12:59:25Z willem $)[2];
 
 use base qw(Net::DNS::RR);
 
@@ -19,8 +19,7 @@ use MIME::Base64;
 
 
 sub _decode_rdata {			## decode rdata from wire-format octet string
-	my $self = shift;
-	my ( $data, $offset ) = @_;
+	my ( $self, $data, $offset ) = @_;
 
 	my $length = $self->{rdlength};
 	$self->keybin( substr $$data, $offset, $length );
@@ -44,24 +43,23 @@ sub _format_rdata {			## format rdata portion of RR string.
 
 
 sub _parse_rdata {			## populate RR from rdata in argument list
-	my $self = shift;
+	my ( $self, @argument ) = @_;
 
-	$self->key(@_);
+	$self->key(@argument);
 	return;
 }
 
 
 sub key {
-	my $self = shift;
-	return MIME::Base64::encode( $self->keybin(), "" ) unless scalar @_;
-	return $self->keybin( MIME::Base64::decode( join "", @_ ) );
+	my ( $self, @value ) = @_;
+	return MIME::Base64::encode( $self->keybin(), "" ) unless scalar @value;
+	return $self->keybin( MIME::Base64::decode( join "", @value ) );
 }
 
 
 sub keybin {
-	my $self = shift;
-
-	$self->{keybin} = shift if scalar @_;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{keybin} = $_ }
 	return $self->{keybin} || "";
 }
 
@@ -118,7 +116,7 @@ Package template (c)2009,2012 O.M.Kolkman and R.W.Franks.
 
 Permission to use, copy, modify, and distribute this software and its
 documentation for any purpose and without fee is hereby granted, provided
-that the above copyright notice appear in all copies and that both that
+that the original copyright notices appear in all copies and that both
 copyright notice and this permission notice appear in supporting
 documentation, and that the name of the author not be used in advertising
 or publicity pertaining to distribution of the software without specific
@@ -135,6 +133,7 @@ DEALINGS IN THE SOFTWARE.
 
 =head1 SEE ALSO
 
-L<perl>, L<Net::DNS>, L<Net::DNS::RR>, RFC7929
+L<perl> L<Net::DNS> L<Net::DNS::RR>
+L<RFC7929|https://tools.ietf.org/html/rfc7929>
 
 =cut

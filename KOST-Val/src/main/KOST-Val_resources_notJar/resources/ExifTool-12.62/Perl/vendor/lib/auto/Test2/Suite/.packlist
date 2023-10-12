@@ -93,12 +93,15 @@ C:\strawberry\perl\vendor\lib\Test2\Tools\GenTemp.pm
 C:\strawberry\perl\vendor\lib\Test2\Tools\Grab.pm
 C:\strawberry\perl\vendor\lib\Test2\Tools\Mock.pm
 C:\strawberry\perl\vendor\lib\Test2\Tools\Ref.pm
+C:\strawberry\perl\vendor\lib\Test2\Tools\Refcount.pm
 C:\strawberry\perl\vendor\lib\Test2\Tools\Spec.pm
 C:\strawberry\perl\vendor\lib\Test2\Tools\Subtest.pm
 C:\strawberry\perl\vendor\lib\Test2\Tools\Target.pm
 C:\strawberry\perl\vendor\lib\Test2\Tools\Tester.pm
 C:\strawberry\perl\vendor\lib\Test2\Tools\Warnings.pm
 C:\strawberry\perl\vendor\lib\Test2\Util\Grabber.pm
+C:\strawberry\perl\vendor\lib\Test2\Util\Guard.pm
+C:\strawberry\perl\vendor\lib\Test2\Util\Importer.pm
 C:\strawberry\perl\vendor\lib\Test2\Util\Ref.pm
 C:\strawberry\perl\vendor\lib\Test2\Util\Stash.pm
 C:\strawberry\perl\vendor\lib\Test2\Util\Sub.pm

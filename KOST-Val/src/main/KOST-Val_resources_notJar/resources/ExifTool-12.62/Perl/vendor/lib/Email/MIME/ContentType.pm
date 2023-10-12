@@ -1,12 +1,15 @@
-use strict;
+use v5.12.0;
 use warnings;
-package Email::MIME::ContentType;
+package Email::MIME::ContentType 1.028;
 # ABSTRACT: Parse and build a MIME Content-Type or Content-Disposition Header
-$Email::MIME::ContentType::VERSION = '1.026';
+
 use Carp;
 use Encode 2.87 qw(encode find_mime_encoding);
 use Exporter 5.57 'import';
 use Text::Unidecode;
+
+# If set, generate both foo*0=x and foo=x versions. -- rjbs, 2022-08-24
+our $PRE_2231_FORM = 1;
 
 our @EXPORT = qw(parse_content_type parse_content_disposition build_content_type build_content_disposition);
 
@@ -92,7 +95,7 @@ sub parse_content_type {
   my $ct = shift;
 
   # If the header isn't there or is empty, give default answer.
-  return parse_content_type($ct_default) unless defined $ct and length $ct;
+  return parse_content_type($ct_default) unless length $ct;
 
   _unfold_lines($ct);
   _clean_comments($ct);
@@ -135,7 +138,7 @@ my $cd_default = 'attachment';
 sub parse_content_disposition {
   my $cd = shift;
 
-  return parse_content_disposition($cd_default) unless defined $cd and length $cd;
+  return parse_content_disposition($cd_default) unless length $cd;
 
   _unfold_lines($cd);
   _clean_comments($cd);
@@ -290,7 +293,9 @@ sub _build_attributes {
       }
     }
 
-    $ret .= "; $key=$ascii_value";
+    if (! @continuous_value || $PRE_2231_FORM) {
+      $ret .= "; $key=$ascii_value";
+    }
   }
 
   substr($ret, 0, 2, '') if length $ret;
@@ -487,9 +492,13 @@ sub _extract_attribute_value { # EXPECTS AND MODIFIES $_
 #pod Content-Type header.  Non-ASCII attributes are encoded to UTF-8 according to
 #pod Character Set section of RFC 2231.  Attribute which has more then 78 ASCII
 #pod characters is split into more attributes accorrding to Parameter Continuations
-#pod of RFC 2231.  For compatibility reasons with clients which do not support
-#pod RFC 2231, output string contains also truncated ASCII version of any too long or
-#pod non-ASCII attribute.  Encoding to ASCII is done via Text::Unidecode module.
+#pod of RFC 2231.
+#pod
+#pod For compatibility reasons with clients which do not support RFC 2231, output
+#pod string contains also truncated ASCII version of any too long or non-ASCII
+#pod attribute.  Encoding to ASCII is done via Text::Unidecode module.  This
+#pod behavior can cause confusion by 2231-compatible MIME implementations, and can
+#pod be disabled by setting C<$Email::MIME::ContentType::STRICT> to true.
 #pod
 #pod =func build_content_disposition
 #pod
@@ -529,7 +538,7 @@ Email::MIME::ContentType - Parse and build a MIME Content-Type or Content-Dispos
 
 =head1 VERSION
 
-version 1.026
+version 1.028
 
 =head1 SYNOPSIS
 
@@ -588,6 +597,16 @@ version 1.026
   my $cd_new = build_content_disposition($data);
   # attachment; filename=genome.jpeg; modification-date="Wed, 12 Feb 1997 16:29:51 -0500"
 
+=head1 PERL VERSION
+
+This library should run on perls released even a long time ago.  It should work
+on any version of perl released in the last five years.
+
+Although it may work on older versions of perl, no guarantee is made that the
+minimum required version will not be increased.  The version may be increased
+for any reason, and there is no promise that patches will be accepted to lower
+the minimum required perl.
+
 =head1 FUNCTIONS
 
 =head2 parse_content_type
@@ -622,9 +641,13 @@ optionally also a hash of C<attributes>.  It returns a string representing
 Content-Type header.  Non-ASCII attributes are encoded to UTF-8 according to
 Character Set section of RFC 2231.  Attribute which has more then 78 ASCII
 characters is split into more attributes accorrding to Parameter Continuations
-of RFC 2231.  For compatibility reasons with clients which do not support
-RFC 2231, output string contains also truncated ASCII version of any too long or
-non-ASCII attribute.  Encoding to ASCII is done via Text::Unidecode module.
+of RFC 2231.
+
+For compatibility reasons with clients which do not support RFC 2231, output
+string contains also truncated ASCII version of any too long or non-ASCII
+attribute.  Encoding to ASCII is done via Text::Unidecode module.  This
+behavior can cause confusion by 2231-compatible MIME implementations, and can
+be disabled by setting C<$Email::MIME::ContentType::STRICT> to true.
 
 =head2 build_content_disposition
 
@@ -664,7 +687,7 @@ Casey West <casey@geeknest.com>
 
 =item *
 
-Ricardo SIGNES <rjbs@cpan.org>
+Ricardo Signes <cpan@semiotic.systems>
 
 =back
 

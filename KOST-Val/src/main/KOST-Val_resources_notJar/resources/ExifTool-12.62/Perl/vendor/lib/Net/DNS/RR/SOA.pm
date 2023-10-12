@@ -2,7 +2,7 @@ package Net::DNS::RR::SOA;
 
 use strict;
 use warnings;
-our $VERSION = (qw$Id: SOA.pm 1819 2020-10-19 08:07:24Z willem $)[2];
+our $VERSION = (qw$Id: SOA.pm 1896 2023-01-30 12:59:25Z willem $)[2];
 
 use base qw(Net::DNS::RR);
 
@@ -20,10 +20,10 @@ use Net::DNS::Mailbox;
 
 
 sub _decode_rdata {			## decode rdata from wire-format octet string
-	my $self = shift;
-	my ( $data, $offset, @opaque ) = @_;
+	my ( $self, @argument ) = @_;
+	my ( $data, $offset, @opaque ) = @argument;
 
-	( $self->{mname}, $offset ) = Net::DNS::DomainName1035->decode(@_);
+	( $self->{mname}, $offset ) = Net::DNS::DomainName1035->decode(@argument);
 	( $self->{rname}, $offset ) = Net::DNS::Mailbox1035->decode( $data, $offset, @opaque );
 	@{$self}{qw(serial refresh retry expire minimum)} = unpack "\@$offset N5", $$data;
 	return;
@@ -31,11 +31,11 @@ sub _decode_rdata {			## decode rdata from wire-format octet string
 
 
 sub _encode_rdata {			## encode rdata as wire-format octet string
-	my $self = shift;
-	my ( $offset, @opaque ) = @_;
+	my ( $self,   @argument ) = @_;
+	my ( $offset, @opaque )	  = @argument;
 
 	my $rname = $self->{rname};
-	my $rdata = $self->{mname}->encode(@_);
+	my $rdata = $self->{mname}->encode(@argument);
 	$rdata .= $rname->encode( $offset + length($rdata), @opaque );
 	$rdata .= pack 'N5', $self->serial, @{$self}{qw(refresh retry expire minimum)};
 	return $rdata;
@@ -58,13 +58,12 @@ sub _format_rdata {			## format rdata portion of RR string.
 
 
 sub _parse_rdata {			## populate RR from rdata in argument list
-	my $self = shift;
+	my ( $self, @argument ) = @_;
 
-	$self->mname(shift);
-	$self->rname(shift);
-	$self->serial(shift);
+	for (qw(mname rname serial)) { $self->$_( shift @argument ) }
 	for (qw(refresh retry expire minimum)) {
-		$self->$_( Net::DNS::RR::ttl( {}, shift ) ) if scalar @_;
+		last unless scalar @argument;
+		$self->$_( Net::DNS::RR::ttl( {}, shift @argument ) );
 	}
 	return;
 }
@@ -80,27 +79,25 @@ sub _defaults {				## specify RR attribute default values
 
 
 sub mname {
-	my $self = shift;
-
-	$self->{mname} = Net::DNS::DomainName1035->new(shift) if scalar @_;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{mname} = Net::DNS::DomainName1035->new($_) }
 	return $self->{mname} ? $self->{mname}->name : undef;
 }
 
 
 sub rname {
-	my $self = shift;
-
-	$self->{rname} = Net::DNS::Mailbox1035->new(shift) if scalar @_;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{rname} = Net::DNS::Mailbox1035->new($_) }
 	return $self->{rname} ? $self->{rname}->address : undef;
 }
 
 
 sub serial {
-	my $self = shift;
+	my ( $self, @value ) = @_;
 
-	return $self->{serial} || 0 unless scalar @_;		# current/default value
+	return $self->{serial} || 0 unless scalar @value;	# current/default value
 
-	my $value = shift;					# replace if in sequence
+	my $value = shift @value;				# replace if in sequence
 	return $self->{serial} = ( $value & 0xFFFFFFFF ) if _ordered( $self->{serial}, $value );
 
 	# unwise to assume 64-bit arithmetic, or that 32-bit integer overflow goes unpunished
@@ -112,33 +109,29 @@ sub serial {
 
 
 sub refresh {
-	my $self = shift;
-
-	$self->{refresh} = 0 + shift if scalar @_;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{refresh} = 0 + $_ }
 	return $self->{refresh} || 0;
 }
 
 
 sub retry {
-	my $self = shift;
-
-	$self->{retry} = 0 + shift if scalar @_;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{retry} = 0 + $_ }
 	return $self->{retry} || 0;
 }
 
 
 sub expire {
-	my $self = shift;
-
-	$self->{expire} = 0 + shift if scalar @_;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{expire} = 0 + $_ }
 	return $self->{expire} || 0;
 }
 
 
 sub minimum {
-	my $self = shift;
-
-	$self->{minimum} = 0 + shift if scalar @_;
+	my ( $self, @value ) = @_;
+	for (@value) { $self->{minimum} = 0 + $_ }
 	return $self->{minimum} || 0;
 }
 
@@ -146,13 +139,13 @@ sub minimum {
 ########################################
 
 sub _ordered() {			## irreflexive 32-bit partial ordering
-	use integer;
 	my ( $n1, $n2 ) = @_;
 
 	return 0 unless defined $n2;				# ( any, undef )
 	return 1 unless defined $n1;				# ( undef, any )
 
 	# unwise to assume 64-bit arithmetic, or that 32-bit integer overflow goes unpunished
+	use integer;
 	if ( $n2 < 0 ) {					# fold, leaving $n2 non-negative
 		$n1 = ( $n1 & 0xFFFFFFFF ) ^ 0x80000000;	# -2**31 <= $n1 < 2**32
 		$n2 = ( $n2 & 0x7FFFFFFF );			#  0	 <= $n2 < 2**31
@@ -160,6 +153,8 @@ sub _ordered() {			## irreflexive 32-bit partial ordering
 
 	return $n1 < $n2 ? ( $n1 > ( $n2 - 0x80000000 ) ) : ( $n2 < ( $n1 - 0x80000000 ) );
 }
+
+########################################
 
 
 1;
@@ -255,14 +250,14 @@ widely used zone serial numbering policies.
     $successor = $soa->serial( SEQUENTIAL );
 
 The existing serial number is incremented modulo 2**32 because the
-value returned by the auxilliary SEQUENTIAL() function can never
+value returned by the auxiliary SEQUENTIAL() function can never
 satisfy the serial number ordering constraint.
 
 =head2 Date Encoded
 
     $successor = $soa->serial( YYYYMMDDxx );
 
-The 32 bit value returned by the auxilliary YYYYMMDDxx() function will
+The 32 bit value returned by the auxiliary YYYYMMDDxx() function will
 be used if it satisfies the ordering constraint, otherwise the serial
 number will be incremented as above.
 
@@ -273,7 +268,7 @@ information to remain useful.
 
     $successor = $soa->serial( UNIXTIME );
 
-The 32 bit value returned by the auxilliary UNIXTIME() function will
+The 32 bit value returned by the auxiliary UNIXTIME() function will
 used if it satisfies the ordering constraint, otherwise the existing
 serial number will be incremented as above.
 
@@ -295,7 +290,7 @@ Package template (c)2009,2012 O.M.Kolkman and R.W.Franks.
 
 Permission to use, copy, modify, and distribute this software and its
 documentation for any purpose and without fee is hereby granted, provided
-that the above copyright notice appear in all copies and that both that
+that the original copyright notices appear in all copies and that both
 copyright notice and this permission notice appear in supporting
 documentation, and that the name of the author not be used in advertising
 or publicity pertaining to distribution of the software without specific
@@ -312,6 +307,8 @@ DEALINGS IN THE SOFTWARE.
 
 =head1 SEE ALSO
 
-L<perl>, L<Net::DNS>, L<Net::DNS::RR>, RFC1035 Section 3.3.13, RFC1982
+L<perl> L<Net::DNS> L<Net::DNS::RR>
+L<RFC1035(3.3.13)|https://tools.ietf.org/html/rfc1035>
+L<RFC1982|https://tools.ietf.org/html/rfc1982>
 
 =cut

@@ -1,7 +1,7 @@
-package Email::MIME::Kit;
+package Email::MIME::Kit 3.000007;
 # ABSTRACT: build messages from templates
-$Email::MIME::Kit::VERSION = '3.000006';
-require 5.008;
+
+use v5.20.0;
 use Moose 0.65; # maybe_type
 use Moose::Util::TypeConstraints;
 
@@ -226,7 +226,7 @@ sub assemble {
   # do so via localization. -- rjbs, 2009-01-20
   my $copied_stash = { %{ $stash || {} } };
 
-  my $email = $self->assembler->assemble($copied_stash);   
+  my $email = $self->assembler->assemble($copied_stash);
 
   my $header = $email->header('Message-ID');
   $email->header_set('Message-ID' => $self->_generate_content_id->in_brackets)
@@ -297,7 +297,7 @@ Email::MIME::Kit - build messages from templates
 
 =head1 VERSION
 
-version 3.000006
+version 3.000007
 
 =head1 SYNOPSIS
 
@@ -369,6 +369,16 @@ here is Template-Toolkit.
 The message would be assembled and returned as an Email::MIME object, just as
 easily as suggested in the L</SYNOPSIS> above.
 
+=head1 PERL VERSION
+
+This library should run on perls released even a long time ago.  It should work
+on any version of perl released in the last five years.
+
+Although it may work on older versions of perl, no guarantee is made that the
+minimum required version will not be increased.  The version may be increased
+for any reason, and there is no promise that patches will be accepted to lower
+the minimum required perl.
+
 =head1 ENCODING ISSUES
 
 In general, "it should all just work" ... starting in version v3.
@@ -415,7 +425,7 @@ Ricardo Signes <rjbs@cpan.org>
 
 =head1 CONTRIBUTORS
 
-=for stopwords Charlie Garrison fREW Schmidt hdp Kaitlyn Parkhurst
+=for stopwords Charlie Garrison fREW Schmidt hdp Kaitlyn Parkhurst Ricardo Signes
 
 =over 4
 
@@ -435,11 +445,19 @@ hdp <hdp@1bcdbe44-fcfd-0310-b51b-975661d93aa0>
 
 Kaitlyn Parkhurst <symkat@symkat.com>
 
+=item *
+
+Ricardo Signes <cpan@semiotic.systems>
+
+=item *
+
+Ricardo Signes <rjbs@semiotic.systems>
+
 =back
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2018 by Ricardo Signes.
+This software is copyright (c) 2023 by Ricardo Signes.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

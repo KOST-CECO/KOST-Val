@@ -6,7 +6,7 @@ use strict;
 use warnings;
 use namespace::autoclean;
 
-our $VERSION = '2.46';
+our $VERSION = '2.60';
 
 # Note that while we make use of DateTime::Duration in this module if we
 # actually try to load it here all hell breaks loose with circular
@@ -620,7 +620,7 @@ DateTime::TimeZone - Time zone object base class and factory
 
 =head1 VERSION
 
-version 2.46
+version 2.60
 
 =head1 SYNOPSIS
 
@@ -634,14 +634,13 @@ version 2.46
 
 =head1 DESCRIPTION
 
-This class is the base class for all time zone objects.  A time zone
-is represented internally as a set of observances, each of which
-describes the offset from GMT for a given time period.
+This class is the base class for all time zone objects.  A time zone is
+represented internally as a set of observances, each of which describes the
+offset from GMT for a given time period.
 
-Note that without the L<DateTime> module, this module does not do
-much.  It's primary interface is through a L<DateTime> object, and
-most users will not need to directly use C<DateTime::TimeZone>
-methods.
+Note that without the L<DateTime> module, this module does not do much.  It's
+primary interface is through a L<DateTime> object, and most users will not need
+to directly use C<DateTime::TimeZone> methods.
 
 =head2 Special Case Platforms
 
@@ -658,21 +657,20 @@ This class has the following methods:
 
 =head2 DateTime::TimeZone->new( name => $tz_name )
 
-Given a valid time zone name, this method returns a new time zone
-blessed into the appropriate subclass.  Subclasses are named for the
-given time zone, so that the time zone "America/Chicago" is the
+Given a valid time zone name, this method returns a new time zone blessed into
+the appropriate subclass.  Subclasses are named for the given time zone, so
+that the time zone "America/Chicago" is the
 DateTime::TimeZone::America::Chicago class.
 
-If the name given is a "link" name in the Olson database, the object
-created may have a different name.  For example, there is a link from
-the old "EST5EDT" name to "America/New_York".
+If the name given is a "link" name in the Olson database, the object created
+may have a different name.  For example, there is a link from the old "EST5EDT"
+name to "America/New_York".
 
-When loading a time zone from the Olson database, the constructor
-checks the version of the loaded class to make sure it matches the
-version of the current DateTime::TimeZone installation. If they do not
-match it will issue a warning. This is useful because time zone names
-may fall out of use, but you may have an old module file installed for
-that time zone.
+When loading a time zone from the Olson database, the constructor checks the
+version of the loaded class to make sure it matches the version of the current
+DateTime::TimeZone installation. If they do not match it will issue a warning.
+This is useful because time zone names may fall out of use, but you may have an
+old module file installed for that time zone.
 
 There are also several special values that can be given as names.
 
@@ -683,20 +681,19 @@ need to specify that a given event happens at the same I<local> time,
 regardless of where it occurs. See L<RFC
 2445|https://www.ietf.org/rfc/rfc2445.txt> for more details.
 
-If the "name" parameter is "UTC", then a C<DateTime::TimeZone::UTC>
-object is returned.
+If the "name" parameter is "UTC", then a C<DateTime::TimeZone::UTC> object is
+returned.
 
 If the "name" is an offset string, it is converted to a number, and a
 C<DateTime::TimeZone::OffsetOnly> object is returned.
 
 =head3 The "local" time zone
 
-If the "name" parameter is "local", then the module attempts to
-determine the local time zone for the system.
+If the "name" parameter is "local", then the module attempts to determine the
+local time zone for the system.
 
-The method for finding the local zone varies by operating system. See
-the appropriate module for details of how we check for the local time
-zone.
+The method for finding the local zone varies by operating system. See the
+appropriate module for details of how we check for the local time zone.
 
 =over 4
 
@@ -717,8 +714,8 @@ exception will always stringify to something containing the text C<"Cannot
 determine local time zone">.
 
 If you are writing code for users to run on systems you do not control, you
-should try to account for the possibility that this exception may be
-thrown. Falling back to UTC might be a reasonable alternative.
+should try to account for the possibility that this exception may be thrown.
+Falling back to UTC might be a reasonable alternative.
 
 When writing tests for your modules that might be run on others' systems, you
 are strongly encouraged to either not use C<local> when creating L<DateTime>
@@ -727,18 +724,18 @@ per-OS classes check this environment variable.
 
 =head2 $tz->offset_for_datetime( $dt )
 
-Given a C<DateTime> object, this method returns the offset in seconds
-for the given datetime.  This takes into account historical time zone
-information, as well as Daylight Saving Time.  The offset is
-determined by looking at the object's UTC Rata Die days and seconds.
+Given a C<DateTime> object, this method returns the offset in seconds for the
+given datetime.  This takes into account historical time zone information, as
+well as Daylight Saving Time.  The offset is determined by looking at the
+object's UTC Rata Die days and seconds.
 
 =head2 $tz->offset_for_local_datetime( $dt )
 
-Given a C<DateTime> object, this method returns the offset in seconds
-for the given datetime.  Unlike the previous method, this method uses
-the local time's Rata Die days and seconds.  This should only be done
-when the corresponding UTC time is not yet known, because local times
-can be ambiguous due to Daylight Saving Time rules.
+Given a C<DateTime> object, this method returns the offset in seconds for the
+given datetime.  Unlike the previous method, this method uses the local time's
+Rata Die days and seconds.  This should only be done when the corresponding UTC
+time is not yet known, because local times can be ambiguous due to Daylight
+Saving Time rules.
 
 =head2 $tz->is_dst_for_datetime( $dt )
 
@@ -751,15 +748,14 @@ Returns the name of the time zone.
 
 =head2 $tz->short_name_for_datetime( $dt )
 
-Given a C<DateTime> object, this method returns the "short name" for
-the current observance and rule this datetime is in.  These are names
-like "EST", "GMT", etc.
+Given a C<DateTime> object, this method returns the "short name" for the
+current observance and rule this datetime is in.  These are names like "EST",
+"GMT", etc.
 
-It is B<strongly> recommended that you do not rely on these names for
-anything other than display.  These names are not official, and many
-of them are simply the invention of the Olson database maintainers.
-Moreover, these names are not unique.  For example, there is an "EST"
-at both -0500 and +1000/+1100.
+It is B<strongly> recommended that you do not rely on these names for anything
+other than display.  These names are not official, and many of them are simply
+the invention of the Olson database maintainers. Moreover, these names are not
+unique.  For example, there is an "EST" at both -0500 and +1000/+1100.
 
 =head2 $tz->is_floating
 
@@ -768,111 +764,106 @@ time zone, as defined by L<RFC 2445|https://www.ietf.org/rfc/rfc2445.txt>.
 
 =head2 $tz->is_utc
 
-Indicates whether or not this object represents the UTC (GMT) time
-zone.
+Indicates whether or not this object represents the UTC (GMT) time zone.
 
 =head2 $tz->has_dst_changes
 
-Indicates whether or not this zone has I<ever> had a change to and
-from DST, either in the past or future.
+Indicates whether or not this zone has I<ever> had a change to and from DST,
+either in the past or future.
 
 =head2 $tz->is_olson
 
-Returns true if the time zone is a named time zone from the Olson
-database.
+Returns true if the time zone is a named time zone from the Olson database.
 
 =head2 $tz->category
 
-Returns the part of the time zone name before the first slash.  For
-example, the "America/Chicago" time zone would return "America".
+Returns the part of the time zone name before the first slash.  For example,
+the "America/Chicago" time zone would return "America".
 
 =head2 DateTime::TimeZone->is_valid_name($name)
 
-Given a string, this method returns a boolean value indicating whether
-or not the string is a valid time zone name.  If you are using
+Given a string, this method returns a boolean value indicating whether or not
+the string is a valid time zone name.  If you are using
 C<DateTime::TimeZone::Alias>, any aliases you've created will be valid.
 
 =head2 DateTime::TimeZone->all_names
 
-This returns a pre-sorted list of all the time zone names.  This list
-does not include link names.  In scalar context, it returns an array
-reference, while in list context it returns an array.
+This returns a pre-sorted list of all the time zone names.  This list does not
+include link names.  In scalar context, it returns an array reference, while in
+list context it returns an array.
 
 =head2 DateTime::TimeZone->categories
 
-This returns a list of all time zone categories.  In scalar context,
-it returns an array reference, while in list context it returns an
-array.
+This returns a list of all time zone categories.  In scalar context, it returns
+an array reference, while in list context it returns an array.
 
 =head2 DateTime::TimeZone->links
 
-This returns a hash of all time zone links, where the keys are the
-old, deprecated names, and the values are the new names.  In scalar
-context, it returns a hash reference, while in list context it returns
-a hash.
+This returns a hash of all time zone links, where the keys are the old,
+deprecated names, and the values are the new names.  In scalar context, it
+returns a hash reference, while in list context it returns a hash.
 
 =head2 DateTime::TimeZone->names_in_category( $category )
 
-Given a valid category, this method returns a list of the names in
-that category, without the category portion.  So the list for the
-"America" category would include the strings "Chicago",
-"Kentucky/Monticello", and "New_York". In scalar context, it returns
-an array reference, while in list context it returns an array.
+Given a valid category, this method returns a list of the names in that
+category, without the category portion.  So the list for the "America" category
+would include the strings "Chicago", "Kentucky/Monticello", and "New_York". In
+scalar context, it returns an array reference, while in list context it returns
+an array.
 
 =head2 DateTime::TimeZone->countries()
 
-Returns a sorted list of all the valid country codes (in lower-case)
-which can be passed to C<names_in_country()>. In scalar context, it
-returns an array reference, while in list context it returns an array.
+Returns a sorted list of all the valid country codes (in lower-case) which can
+be passed to C<names_in_country()>. In scalar context, it returns an array
+reference, while in list context it returns an array.
 
 If you need to convert country codes to names or vice versa you can use
-C<Locale::Country> to do so. Note that one of the codes returned is "uk",
-which is an alias for the country code "gb", and is not a valid ISO country
-code.
+C<Locale::Country> to do so. Note that one of the codes returned is "uk", which
+is an alias for the country code "gb", and is not a valid ISO country code.
 
 =head2 DateTime::TimeZone->names_in_country( $country_code )
 
-Given a two-letter ISO3166 country code, this method returns a list of
-time zones used in that country. The country code may be of any
-case. In scalar context, it returns an array reference, while in list
-context it returns an array.
+Given a two-letter ISO3166 country code, this method returns a list of time
+zones used in that country. The country code may be of any case. In scalar
+context, it returns an array reference, while in list context it returns an
+array.
 
-This list is returned in an order vaguely based on geography and
-population. In general, the least used zones come last, but there are not
-guarantees of a specific order from one release to the next. This order is
-probably the best option for presenting zones names to end users.
+This list is returned in an order vaguely based on geography and population. In
+general, the least used zones come last, but there are not guarantees of a
+specific order from one release to the next. This order is probably the best
+option for presenting zones names to end users.
 
 =head2 DateTime::TimeZone->offset_as_seconds( $offset )
 
-Given an offset as a string, this returns the number of seconds
-represented by the offset as a positive or negative number.  Returns
-C<undef> if $offset is not in the range C<-99:59:59> to C<+99:59:59>.
+Given an offset as a string, this returns the number of seconds represented by
+the offset as a positive or negative number.  Returns C<undef> if $offset is
+not in the range C<-99:59:59> to C<+99:59:59>.
 
 The offset is expected to match either
 C</^([\+\-])?(\d\d?):(\d\d)(?::(\d\d))?$/> or
-C</^([\+\-])?(\d\d)(\d\d)(\d\d)?$/>.  If it doesn't match either of
-these, C<undef> will be returned.
+C</^([\+\-])?(\d\d)(\d\d)(\d\d)?$/>.  If it doesn't match either of these,
+C<undef> will be returned.
 
-This means that if you want to specify hours as a single digit, then
-each element of the offset must be separated by a colon (:).
+This means that if you want to specify hours as a single digit, then each
+element of the offset must be separated by a colon (:).
 
 =head2 DateTime::TimeZone->offset_as_string( $offset, $sep )
 
-Given an offset as a number, this returns the offset as a string.
-Returns C<undef> if $offset is not in the range C<-359999> to C<359999>.
+Given an offset as a number, this returns the offset as a string. Returns
+C<undef> if $offset is not in the range C<-359999> to C<359999>.
 
 You can also provide an optional separator which will go between the hours,
 minutes, and seconds (if applicable) portions of the offset.
 
 =head2 Storable Hooks
 
-This module provides freeze and thaw hooks for C<Storable> so that the
-huge data structures for Olson time zones are not actually stored in
-the serialized structure.
+This module provides freeze and thaw hooks for C<Storable> so that the huge
+data structures for Olson time zones are not actually stored in the serialized
+structure.
 
-If you subclass C<DateTime::TimeZone>, you will inherit its hooks,
-which may not work for your module, so please test the interaction of
-your module with Storable.
+If you subclass C<DateTime::TimeZone>, you will inherit its hooks, which may
+not work for your module, so please test the interaction of your module with
+Storable.
 
 =head1 LOADING TIME ZONES IN A PRE-FORKING SYSTEM
 
@@ -883,33 +874,23 @@ each child will waste memory that could otherwise be shared.
 
 =head1 CREDITS
 
-This module was inspired by Jesse Vincent's work on
-Date::ICal::Timezone, and written with much help from the
-datetime@perl.org list.
+This module was inspired by Jesse Vincent's work on Date::ICal::Timezone, and
+written with much help from the datetime@perl.org list.
 
 =head1 SEE ALSO
 
 datetime@perl.org mailing list
 
-http://datetime.perl.org/
-
-The tools directory of the DateTime::TimeZone distribution includes
-two scripts that may be of interest to some people.  They are
-parse_olson and tests_from_zdump.  Please run them with the --help
-flag to see what they can be used for.
+The tools directory of the DateTime::TimeZone distribution includes two scripts
+that may be of interest to some people.  They are parse_olson and
+tests_from_zdump.  Please run them with the --help flag to see what they can be
+used for.
 
 =head1 SUPPORT
 
-Support for this module is provided via the datetime@perl.org email list. See
-http://datetime.perl.org/wiki/datetime/page/Mailing_List for details.
-
-Please submit bugs to the CPAN RT system at
-http://rt.cpan.org/NoAuth/ReportBug.html?Queue=datetime%3A%3Atimezone
-or via email at bug-datetime-timezone@rt.cpan.org.
+Support for this module is provided via the datetime@perl.org email list.
 
 Bugs may be submitted at L<https://github.com/houseabsolute/DateTime-TimeZone/issues>.
-
-I am also usually active on IRC as 'autarch' on C<irc://irc.perl.org>.
 
 =head1 SOURCE
 
@@ -930,7 +911,7 @@ software much more, unless I get so many donations that I can consider working
 on free software full time (let's all have a chuckle at that together).
 
 To donate, log into PayPal and send money to autarch@urth.org, or use the
-button at L<https://www.urth.org/fs-donation.html>.
+button at L<https://houseabsolute.com/foss-donations/>.
 
 =head1 AUTHOR
 
@@ -1018,7 +999,7 @@ Tom Wyant <wyant@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2020 by Dave Rolsky.
+This software is copyright (c) 2023 by Dave Rolsky.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

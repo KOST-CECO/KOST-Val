@@ -4,6 +4,10 @@
 #include <stddef.h>
 #include "imconfig.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define MAXCHANNELS 4
 
 /*
@@ -173,8 +177,8 @@ typedef enum {
 } i_img_bits_t;
 
 typedef struct {
-  char *name; /* name of a given tag, might be NULL */
-  int code; /* number of a given tag, -1 if it has no meaning */
+  char *name; /* name of a given tag */
+  int code; /* number of a given tag, deprecated */
   char *data; /* value of a given tag if it's not an int, may be NULL */
   int size; /* size of the data */
   int idata; /* value of a given tag if data is NULL */
@@ -267,7 +271,7 @@ for paletted images.
 
 =item *
 
-C<virtual> - if zero then this image is-self contained.  If non-zero
+C<isvirtual> - if zero then this image is-self contained.  If non-zero
 then this image could be an interface to some other implementation.
 
 =item *
@@ -345,9 +349,9 @@ struct i_img_ {
   unsigned int ch_mask;
   i_img_bits_t bits;
   i_img_type_t type;
-  int virtual; /* image might not keep any data, must use functions */
+  int isvirtual; /* image might not keep any data, must use functions */
   unsigned char *idata; /* renamed to force inspection of existing code */
-                        /* can be NULL if virtual is non-zero */
+                        /* can be NULL if isvirtual is non-zero */
   i_img_tags tags;
 
   void *ext_data;
@@ -1079,6 +1083,14 @@ typedef struct {
 
 typedef struct i_render_tag i_render;
 
+/* trim colors for im_trim()/im_trim_dim() */
+
+typedef struct {
+  int is_float;
+  i_color c1, c2;
+  i_fcolor cf1, cf2;
+} i_trim_colors_t;
+
 /*
 =item i_color_model_t
 =category Data Types
@@ -1187,6 +1199,10 @@ Casts two C<i_img_dim> values for use with the i_DF (or i_DFp) format.
 #define i_DFc(x) ((i_dim_format_t)(x))
 #define i_DFcp(x, y) i_DFc(x), i_DFc(y)
 #define i_DFp "%" i_DF ", %" i_DF
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 

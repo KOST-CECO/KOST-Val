@@ -1,3 +1,5 @@
+use 5.008;
+
 package Test::Output;
 
 use warnings;
@@ -73,7 +75,7 @@ Test::Output - Utilities to test STDOUT and STDERR messages.
 
 =cut
 
-our $VERSION = '1.031';
+our $VERSION = '1.034';
 
 =head1 SYNOPSIS
 
@@ -485,7 +487,7 @@ functions. For example:
 is functionally equivalent to
 
   stdout_is(sub {print "foo";},'foo')
-    && stderr_is(sub {print STDERR "bar";'bar');
+    && stderr_is(sub {print STDERR "bar";},'bar');
 
 except that C<$coderef> is only executed once.
 
@@ -507,8 +509,8 @@ combination of C<stdout_isnt()> and C<stderr_isnt()>.
 
 is functionally equivalent to
 
-  stdout_is(sub {print "foo";},'bar')
-    && stderr_is(sub {print STDERR "bar";'foo');
+  stdout_isnt(sub {print "foo";},'bar')
+    && stderr_isnt(sub {print STDERR "bar";},'foo');
 
 As with C<output_is()>, setting either C<$expected_stdout> or C<$expected_stderr> to
 C<undef> ignores the output to that facility.
@@ -899,7 +901,7 @@ Shawn Sorichetti, C<< <ssoriche@cpan.org> >>
 
 This module is in Github:
 
-	http://github.com/briandfoy/test-output/tree/master
+	http://github.com/briandfoy/test-output
 
 =head1 BUGS
 
@@ -922,10 +924,9 @@ Thanks to Michael G Schwern for the solution to combining C<STDOUT> and C<STDERR
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2005-2013 Shawn Sorichetti, All Rights Reserved.
+Copyright 2005-2021 Shawn Sorichetti, All Rights Reserved.
 
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
+This module is licensed under the Artistic License 2.0.
 
 =cut
 

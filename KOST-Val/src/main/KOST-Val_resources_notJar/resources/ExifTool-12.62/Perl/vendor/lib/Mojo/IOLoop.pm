@@ -5,12 +5,11 @@ use Mojo::Base 'Mojo::EventEmitter';
 #             used. Like the death ray."
 use Carp qw(croak);
 use Mojo::IOLoop::Client;
-use Mojo::IOLoop::Delay;
 use Mojo::IOLoop::Server;
 use Mojo::IOLoop::Stream;
 use Mojo::IOLoop::Subprocess;
 use Mojo::Reactor::Poll;
-use Mojo::Util qw(md5_sum steady_time);
+use Mojo::Util   qw(md5_sum steady_time);
 use Scalar::Util qw(blessed weaken);
 
 use constant DEBUG => $ENV{MOJO_IOLOOP_DEBUG} || 0;
@@ -63,11 +62,6 @@ sub client {
   $client->connect(@_);
 
   return $id;
-}
-
-sub delay {
-  my $delay = Mojo::IOLoop::Delay->new->ioloop(_instance(shift));
-  return @_ ? $delay->steps(@_) : $delay;
 }
 
 sub is_running { _instance(shift)->reactor->is_running }
@@ -239,7 +233,7 @@ Mojo::IOLoop - Minimalistic event loop
   use Mojo::IOLoop;
 
   # Listen on port 3000
-  Mojo::IOLoop->server({port => 3000} => sub ($loop, $stream) {
+  Mojo::IOLoop->server({port => 3000} => sub ($loop, $stream, $id) {
     $stream->on(read => sub ($stream, $bytes) {
       # Process input chunk
       say $bytes;
@@ -371,62 +365,6 @@ Get L<Mojo::IOLoop::Server> object for id or turn object into an acceptor.
 
 Open a TCP/IP or UNIX domain socket connection with L<Mojo::IOLoop::Client> and create a stream object (usually
 L<Mojo::IOLoop::Stream>), takes the same arguments as L<Mojo::IOLoop::Client/"connect">.
-
-=head2 delay
-
-  my $delay = Mojo::IOLoop->delay;
-  my $delay = $loop->delay;
-  my $delay = $loop->delay(sub {...});
-  my $delay = $loop->delay(sub {...}, sub {...});
-
-Build L<Mojo::IOLoop::Delay> object to use as a promise and/or for flow-control. Callbacks will be passed along to
-L<Mojo::IOLoop::Delay/"steps">.
-
-  # Wrap continuation-passing style APIs with promises
-  my $ua = Mojo::UserAgent->new;
-  sub get {
-    my $promise = Mojo::IOLoop->delay;
-    $ua->get(@_ => sub ($ua, $tx) {
-      my $err = $tx->error;
-      if   (!$err || $err->{code}) { $promise->resolve($tx) }
-      else                         { $promise->reject($err->{message}) }
-    });
-    return $promise;
-  }
-  my $mojo = get('https://mojolicious.org');
-  my $cpan = get('https://metacpan.org');
-  Mojo::Promise->race($mojo, $cpan)->then(sub ($tx) { say $tx->req->url })->wait;
-
-  # Synchronize multiple non-blocking operations
-  my $delay = Mojo::IOLoop->delay(sub { say 'BOOM!' });
-  for my $i (1 .. 10) {
-    my $end = $delay->begin;
-    Mojo::IOLoop->timer($i => sub {
-      say 10 - $i;
-      $end->();
-    });
-  }
-  $delay->wait;
-
-  # Sequentialize multiple non-blocking operations
-  Mojo::IOLoop->delay(
-
-    # First step (simple timer)
-    sub ($delay) {
-      Mojo::IOLoop->timer(2 => $delay->begin);
-      say 'Second step in 2 seconds.';
-    },
-
-    # Second step (concurrent timers)
-    sub ($delay) {
-      Mojo::IOLoop->timer(1 => $delay->begin);
-      Mojo::IOLoop->timer(3 => $delay->begin);
-      say 'Third step in 3 seconds.';
-    },
-
-    # Third step (the end)
-    sub { say 'And done after 5 seconds total.' }
-  )->wait;
 
 =head2 is_running
 

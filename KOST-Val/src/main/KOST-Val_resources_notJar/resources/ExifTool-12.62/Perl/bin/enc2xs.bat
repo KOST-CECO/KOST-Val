@@ -1,31 +1,18 @@
 @rem = '--*-Perl-*--
-@echo off
-if "%OS%" == "Windows_NT" goto WinNT
-IF EXIST "%~dp0perl.exe" (
-"%~dp0perl.exe" -x -S "%0" %1 %2 %3 %4 %5 %6 %7 %8 %9
-) ELSE IF EXIST "%~dp0..\..\bin\perl.exe" (
-"%~dp0..\..\bin\perl.exe" -x -S "%0" %1 %2 %3 %4 %5 %6 %7 %8 %9
-) ELSE (
-perl -x -S "%0" %1 %2 %3 %4 %5 %6 %7 %8 %9
-)
-
-goto endofperl
+@set "ErrorLevel="
+@if "%OS%" == "Windows_NT" @goto WinNT
+@perl -x -S "%0" %1 %2 %3 %4 %5 %6 %7 %8 %9
+@set ErrorLevel=%ErrorLevel%
+@goto endofperl
 :WinNT
-IF EXIST "%~dp0perl.exe" (
-"%~dp0perl.exe" -x -S %0 %*
-) ELSE IF EXIST "%~dp0..\..\bin\perl.exe" (
-"%~dp0..\..\bin\perl.exe" -x -S %0 %*
-) ELSE (
-perl -x -S %0 %*
-)
-
-if NOT "%COMSPEC%" == "%SystemRoot%\system32\cmd.exe" goto endofperl
-if %errorlevel% == 9009 echo You do not have Perl in your PATH.
-if errorlevel 1 goto script_failed_so_exit_with_non_zero_val 2>nul
-goto endofperl
+@perl -x -S %0 %*
+@set ErrorLevel=%ErrorLevel%
+@if NOT "%COMSPEC%" == "%SystemRoot%\system32\cmd.exe" @goto endofperl
+@if %ErrorLevel% == 9009 @echo You do not have Perl in your PATH.
+@goto endofperl
 @rem ';
 #!./perl
-#line 29
+#line 30
 BEGIN {
     # @INC poking  no longer needed w/ new MakeMaker and Makefile.PL's
     # with $ENV{PERL_CORE} set
@@ -38,7 +25,7 @@ use warnings;
 use Getopt::Std;
 use Config;
 my @orig_ARGV = @ARGV;
-our $VERSION  = do { my @r = (q$Revision: 2.23 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
+our $VERSION  = do { my @r = (q$Revision: 2.24 $ =~ /\d+/g); sprintf "%d."."%02d" x $#r, @r };
 
 # These may get re-ordered.
 # RAW is a do_now as inserted by &enter
@@ -276,7 +263,12 @@ if ($cname =~ /\.(c|xs)$/i) # VMS may have upcased filenames with DECC$ARGV_PARS
 END
   }
 
-  if ($cname =~ /(\w+)\.xs$/)
+  if ($cname =~ /\.c$/i && $Config{ccname} eq "gcc")
+   {
+    print C qq(#pragma GCC diagnostic ignored "-Wc++-compat"\n);
+   }
+
+  if ($cname =~ /\.xs$/i)
    {
     print C "#define PERL_NO_GET_CONTEXT\n";
     print C "#include <EXTERN.h>\n";
@@ -286,15 +278,15 @@ END
   print C "#include \"encode.h\"\n\n";
 
  }
-elsif ($cname =~ /\.enc$/)
+elsif ($cname =~ /\.enc$/i)
  {
   $doEnc = 1;
  }
-elsif ($cname =~ /\.ucm$/)
+elsif ($cname =~ /\.ucm$/i)
  {
   $doUcm = 1;
  }
-elsif ($cname =~ /\.pet$/)
+elsif ($cname =~ /\.pet$/i)
  {
   $doPet = 1;
  }
@@ -1501,6 +1493,6 @@ Yes, 5 minutes is faster than 15. Above is for CP936 in CN. Only difference is
 how %seen is storing things its seen. So it is pathalogically bad on a 16M
 RAM machine, but it's going to help even on modern machines.
 Swapping is bad, m'kay :-)
-
 __END__
 :endofperl
+@set "ErrorLevel=" & @goto _undefined_label_ 2>NUL || @"%COMSPEC%" /d/c @exit %ErrorLevel%

@@ -7,7 +7,11 @@
 package Perl::Tidy::Debugger;
 use strict;
 use warnings;
-our $VERSION = '20210111';
+use English qw( -no_match_vars );
+our $VERSION = '20230701';
+
+use constant EMPTY_STRING => q{};
+use constant SPACE        => q{ };
 
 sub new {
 
@@ -19,7 +23,7 @@ sub new {
         _fh                => undef,
         _is_encoded_data   => $is_encoded_data,
     }, $class;
-}
+} ## end sub new
 
 sub really_open_debug_file {
 
@@ -29,19 +33,18 @@ sub really_open_debug_file {
     my ( $fh, $filename ) =
       Perl::Tidy::streamhandle( $debug_file, 'w', $is_encoded_data );
     if ( !$fh ) {
-        Perl::Tidy::Warn("can't open $debug_file: $!\n");
+        Perl::Tidy::Warn("can't open $debug_file: $ERRNO\n");
     }
     $self->{_debug_file_opened} = 1;
     $self->{_fh}                = $fh;
     $fh->print(
         "Use -dump-token-types (-dtt) to get a list of token type codes\n");
     return;
-}
+} ## end sub really_open_debug_file
 
 sub close_debug_file {
 
     my $self = shift;
-    my $fh   = $self->{_fh};
     if ( $self->{_debug_file_opened} ) {
         if ( !eval { $self->{_fh}->close(); 1 } ) {
 
@@ -49,7 +52,7 @@ sub close_debug_file {
         }
     }
     return;
-}
+} ## end sub close_debug_file
 
 sub write_debug_entry {
 
@@ -63,8 +66,6 @@ sub write_debug_entry {
     my $rtoken_type = $line_of_tokens->{_rtoken_type};
     my $rtokens     = $line_of_tokens->{_rtokens};
     my $rlevels     = $line_of_tokens->{_rlevels};
-    my $rslevels    = $line_of_tokens->{_rslevels};
-    my $rblock_type = $line_of_tokens->{_rblock_type};
 
     my $input_line_number = $line_of_tokens->{_line_number};
     my $line_type         = $line_of_tokens->{_line_type};
@@ -73,15 +74,13 @@ sub write_debug_entry {
 
     my $token_str              = "$input_line_number: ";
     my $reconstructed_original = "$input_line_number: ";
-    my $block_str              = "$input_line_number: ";
 
-    my $pattern   = "";
+    my $pattern   = EMPTY_STRING;
     my @next_char = ( '"', '"' );
     my $i_next    = 0;
     unless ( $self->{_debug_file_opened} ) { $self->really_open_debug_file() }
     my $fh = $self->{_fh};
 
-    # FIXME: could convert to use of token_array instead
     foreach my $j ( 0 .. @{$rtoken_type} - 1 ) {
 
         # testing patterns
@@ -92,14 +91,13 @@ sub write_debug_entry {
             $pattern .= $rtoken_type->[$j];
         }
         $reconstructed_original .= $rtokens->[$j];
-        $block_str              .= "($rblock_type->[$j])";
         $num = length( $rtokens->[$j] );
         my $type_str = $rtoken_type->[$j];
 
         # be sure there are no blank tokens (shouldn't happen)
         # This can only happen if a programming error has been made
         # because all valid tokens are non-blank
-        if ( $type_str eq ' ' ) {
+        if ( $type_str eq SPACE ) {
             $fh->print("BLANK TOKEN on the next line\n");
             $type_str = $next_char[$i_next];
             $i_next   = 1 - $i_next;
@@ -118,5 +116,5 @@ sub write_debug_entry {
     $fh->print("$token_str\n");
 
     return;
-}
+} ## end sub write_debug_entry
 1;

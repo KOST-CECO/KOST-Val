@@ -7,9 +7,10 @@ use Alien::Build::Plugin;
 use File::chdir;
 use File::Temp ();
 use Capture::Tiny qw( capture_merged capture );
+use Alien::Util qw( version_cmp );
 
 # ABSTRACT: Probe for system libraries by guessing with ExtUtils::CBuilder
-our $VERSION = '2.38'; # VERSION
+our $VERSION = '2.80'; # VERSION
 
 
 has options => sub { {} };
@@ -25,6 +26,9 @@ has program => 'int main(int argc, char *argv[]) { return 0; }';
 
 
 has version => undef;
+
+
+has 'atleast_version' => undef;
 
 
 has aliens => [];
@@ -96,7 +100,7 @@ sub init
       {
         $build->log("compile failed: $error");
         $build->log("compile failed: $out1");
-        die $@;
+        die $error;
       }
 
       my($out2, $exe) = capture_merged { eval {
@@ -110,7 +114,7 @@ sub init
       {
         $build->log("link failed: $error");
         $build->log("link failed: $out2");
-        die $@;
+        die $error;
       }
 
       my($out, $err, $ret) = capture { system($^O eq 'MSWin32' ? $exe : "./$exe") };
@@ -130,6 +134,13 @@ sub init
       if(defined $self->version)
       {
         my($version) = $out =~ $self->version;
+        if (defined $self->atleast_version)
+        {
+          if(version_cmp ($version, $self->atleast_version) < 0)
+          {
+            die "CBuilder probe found version $version, but at least @{[ $self->atleast_version ]} is required.";
+          }
+        }
         $build->hook_prop->{version} = $version;
         $build->install_prop->{plugin_probe_cbuilder_gather}->{$self->instance_id}->{version} = $version;
       }
@@ -167,7 +178,7 @@ Alien::Build::Plugin::Probe::CBuilder - Probe for system libraries by guessing w
 
 =head1 VERSION
 
-version 2.38
+version 2.80
 
 =head1 SYNOPSIS
 
@@ -214,6 +225,10 @@ The program to use in the test.
 
 This is a regular expression to parse the version out of the output from the
 test program.
+
+=head2 atleast_version
+
+The minimum required version as provided by the system.
 
 =head2 aliens
 
@@ -269,7 +284,7 @@ Juan Julián Merelo Guervós (JJ)
 
 Joel Berger (JBERGER)
 
-Petr Pisar (ppisar)
+Petr Písař (ppisar)
 
 Lance Wicks (LANCEW)
 
@@ -287,9 +302,13 @@ Paul Evans (leonerd, PEVANS)
 
 Håkon Hægland (hakonhagland, HAKONH)
 
+nick nauwelaerts (INPHOBIA)
+
+Florian Weimer
+
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011-2020 by Graham Ollis.
+This software is copyright (c) 2011-2022 by Graham Ollis.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

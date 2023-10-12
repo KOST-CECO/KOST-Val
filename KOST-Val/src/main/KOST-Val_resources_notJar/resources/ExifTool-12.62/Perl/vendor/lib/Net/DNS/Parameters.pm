@@ -3,13 +3,13 @@ package Net::DNS::Parameters;
 ################################################
 ##
 ##	Domain Name System (DNS) Parameters
-##	(last updated 2020-10-26)
+##	(last updated 2023-04-28)
 ##
 ################################################
 
 use strict;
 use warnings;
-our $VERSION = (qw$Id: Parameters.pm 1823 2020-11-16 16:29:45Z willem $)[2];
+our $VERSION = (qw$Id: Parameters.pm 1921 2023-05-08 18:39:59Z willem $)[2];
 
 use integer;
 use Carp;
@@ -71,35 +71,35 @@ my @typebyname = (
 	X25	   => 19,					# RFC1183
 	ISDN	   => 20,					# RFC1183
 	RT	   => 21,					# RFC1183
-	NSAP	   => 22,					# RFC1706
-	'NSAP-PTR' => 23,					# RFC1348 RFC1637 RFC1706
-	SIG	   => 24,					# RFC4034 RFC3755 RFC2535 RFC2536 RFC2537 RFC2931 RFC3110 RFC3008
-	KEY	   => 25,					# RFC4034 RFC3755 RFC2535 RFC2536 RFC2537 RFC2539 RFC3008 RFC3110
+	NSAP	   => 22,					# RFC1706 https://datatracker.ietf.org/doc/status-change-int-tlds-to-historic
+	'NSAP-PTR' => 23,					# RFC1706 https://datatracker.ietf.org/doc/status-change-int-tlds-to-historic
+	SIG	   => 24,					# RFC2536 RFC2931 RFC3110 RFC4034
+	KEY	   => 25,					# RFC2536 RFC2539 RFC3110 RFC4034
 	PX	   => 26,					# RFC2163
 	GPOS	   => 27,					# RFC1712
 	AAAA	   => 28,					# RFC3596
 	LOC	   => 29,					# RFC1876
-	NXT	   => 30,					# RFC3755 RFC2535
+	NXT	   => 30,					# RFC2535 RFC3755
 	EID	   => 31,					# http://ana-3.lcs.mit.edu/~jnc/nimrod/dns.txt
 	NIMLOC	   => 32,					# http://ana-3.lcs.mit.edu/~jnc/nimrod/dns.txt
 	SRV	   => 33,					# RFC2782
 	ATMA	   => 34,					# http://www.broadband-forum.org/ftp/pub/approved-specs/af-dans-0152.000.pdf
-	NAPTR	   => 35,					# RFC2915 RFC2168 RFC3403
+	NAPTR	   => 35,					# RFC3403
 	KX	   => 36,					# RFC2230
 	CERT	   => 37,					# RFC4398
-	A6	   => 38,					# RFC3226 RFC2874 RFC6563
+	A6	   => 38,					# RFC2874 RFC3226 RFC6563
 	DNAME	   => 39,					# RFC6672
-	SINK	   => 40,					# http://tools.ietf.org/html/draft-eastlake-kitchen-sink
-	OPT	   => 41,					# RFC6891 RFC3225
+	SINK	   => 40,					# draft-eastlake-kitchen-sink
+	OPT	   => 41,					# RFC3225 RFC6891
 	APL	   => 42,					# RFC3123
-	DS	   => 43,					# RFC4034 RFC3658
+	DS	   => 43,					# RFC4034
 	SSHFP	   => 44,					# RFC4255
 	IPSECKEY   => 45,					# RFC4025
-	RRSIG	   => 46,					# RFC4034 RFC3755
-	NSEC	   => 47,					# RFC4034 RFC3755
-	DNSKEY	   => 48,					# RFC4034 RFC3755
+	RRSIG	   => 46,					# RFC4034
+	NSEC	   => 47,					# RFC4034 RFC9077
+	DNSKEY	   => 48,					# RFC4034
 	DHCID	   => 49,					# RFC4701
-	NSEC3	   => 50,					# RFC5155
+	NSEC3	   => 50,					# RFC5155 RFC9077
 	NSEC3PARAM => 51,					# RFC5155
 	TLSA	   => 52,					# RFC6698
 	SMIMEA	   => 53,					# RFC8162
@@ -111,9 +111,9 @@ my @typebyname = (
 	CDNSKEY	   => 60,					# RFC7344
 	OPENPGPKEY => 61,					# RFC7929
 	CSYNC	   => 62,					# RFC7477
-	ZONEMD	   => 63,					# draft-wessels-dns-zone-digest
-	SVCB	   => 64,					# draft-ietf-dnsop-svcb-https-00
-	HTTPS	   => 65,					# draft-ietf-dnsop-svcb-https-00
+	ZONEMD	   => 63,					# RFC8976
+	SVCB	   => 64,					# RFC-ietf-dnsop-svcb-https-12
+	HTTPS	   => 65,					# RFC-ietf-dnsop-svcb-https-12
 	SPF	   => 99,					# RFC7208
 	UINFO	   => 100,					# IANA-Reserved
 	UID	   => 101,					# IANA-Reserved
@@ -126,7 +126,7 @@ my @typebyname = (
 	EUI48	   => 108,					# RFC7043
 	EUI64	   => 109,					# RFC7043
 	TKEY	   => 249,					# RFC2930
-	TSIG	   => 250,					# RFC-ietf-dnsop-rfc2845bis-09
+	TSIG	   => 250,					# RFC8945
 	IXFR	   => 251,					# RFC1995
 	AXFR	   => 252,					# RFC1035 RFC5936
 	MAILB	   => 253,					# RFC1035
@@ -171,17 +171,17 @@ my @rcodebyname = (
 	YXRRSET	  => 7,						# RFC2136
 	NXRRSET	  => 8,						# RFC2136
 	NOTAUTH	  => 9,						# RFC2136
-	NOTAUTH	  => 9,						# RFC-ietf-dnsop-rfc2845bis-09
+	NOTAUTH	  => 9,						# RFC8945
 	NOTZONE	  => 10,					# RFC2136
 	DSOTYPENI => 11,					# RFC8490
 	BADVERS	  => 16,					# RFC6891
-	BADSIG	  => 16,					# RFC-ietf-dnsop-rfc2845bis-09
-	BADKEY	  => 17,					# RFC-ietf-dnsop-rfc2845bis-09
-	BADTIME	  => 18,					# RFC-ietf-dnsop-rfc2845bis-09
+	BADSIG	  => 16,					# RFC8945
+	BADKEY	  => 17,					# RFC8945
+	BADTIME	  => 18,					# RFC8945
 	BADMODE	  => 19,					# RFC2930
 	BADNAME	  => 20,					# RFC2930
 	BADALG	  => 21,					# RFC2930
-	BADTRUNC  => 22,					# RFC-ietf-dnsop-rfc2845bis-09
+	BADTRUNC  => 22,					# RFC8945
 	BADCOOKIE => 23,					# RFC7873
 	);
 our %rcodebyval = reverse( BADSIG => 16, @rcodebyname );
@@ -207,7 +207,8 @@ my @ednsoptionbyname = (
 	'EXTENDED-ERROR' => 15,					# RFC8914
 	'CLIENT-TAG'	 => 16,					# draft-bellis-dnsop-edns-tags
 	'SERVER-TAG'	 => 17,					# draft-bellis-dnsop-edns-tags
-	DEVICEID	 => 26946,				# https://docs.umbrella.com/developer/networkdevices-api/identifying-dns-traffic2
+	'UMBRELLA-IDENT' => 20292,				# https://developer.cisco.com/docs/cloud-security/#!integrating-network-devic
+	DEVICEID	 => 26946,				# https://developer.cisco.com/docs/cloud-security/#!network-devices-getting-s
 	);
 our %ednsoptionbyval = reverse @ednsoptionbyname;
 push @ednsoptionbyname, map { /^\d/ ? $_ : lc($_) } @ednsoptionbyname;
@@ -250,6 +251,42 @@ push @dsotypebyname, map { /^\d/ ? $_ : lc($_) } @dsotypebyname;
 our %dsotypebyname = @dsotypebyname;
 
 
+# Registry: Extended DNS Error Codes
+my @dnserrorbyval = (
+	0  => 'Other Error',					# RFC8914
+	1  => 'Unsupported DNSKEY Algorithm',			# RFC8914
+	2  => 'Unsupported DS Digest Type',			# RFC8914
+	3  => 'Stale Answer',					# RFC8914 RFC8767
+	4  => 'Forged Answer',					# RFC8914
+	5  => 'DNSSEC Indeterminate',				# RFC8914
+	6  => 'DNSSEC Bogus',					# RFC8914
+	7  => 'Signature Expired',				# RFC8914
+	8  => 'Signature Not Yet Valid',			# RFC8914
+	9  => 'DNSKEY Missing',					# RFC8914
+	10 => 'RRSIGs Missing',					# RFC8914
+	11 => 'No Zone Key Bit Set',				# RFC8914
+	12 => 'NSEC Missing',					# RFC8914
+	13 => 'Cached Error',					# RFC8914
+	14 => 'Not Ready',					# RFC8914
+	15 => 'Blocked',					# RFC8914
+	16 => 'Censored',					# RFC8914
+	17 => 'Filtered',					# RFC8914
+	18 => 'Prohibited',					# RFC8914
+	19 => 'Stale NXDomain Answer',				# RFC8914
+	20 => 'Not Authoritative',				# RFC8914
+	21 => 'Not Supported',					# RFC8914
+	22 => 'No Reachable Authority',				# RFC8914
+	23 => 'Network Error',					# RFC8914
+	24 => 'Invalid Data',					# RFC8914
+	25 => 'Signature Expired before Valid',			# https://github.com/NLnetLabs/unbound/pull/604#discussion_r802678343
+	26 => 'Too Early',					# RFC9250
+	27 => 'Unsupported NSEC3 Iterations Value',		# RFC9276
+	28 => 'Unable to conform to policy',			# draft-homburg-dnsop-codcp-00
+	29 => 'Synthesized',					# https://github.com/PowerDNS/pdns/pull/12334
+	);
+our %dnserrorbyval = @dnserrorbyval;
+
+
 ########
 
 # The following functions are wrappers around similarly named hashes.
@@ -260,18 +297,18 @@ sub classbyname {
 	return $classbyname{$name} || $classbyname{uc $name} || return do {
 		croak qq[unknown class "$name"] unless $name =~ m/^(CLASS)?(\d+)/i;
 		my $val = 0 + $2;
-		croak qq[classbyname("$name") out of range] if $val > 0xffff;
+		croak qq[classbyname("$name") out of range] if $val > 0x7fff;
 		return $val;
 	}
 }
 
 sub classbyval {
-	my $val = shift;
+	my $arg = shift;
 
-	return $classbyval{$val} || return do {
-		$val += 0;
-		croak qq[classbyval($val) out of range] if $val > 0xffff;
-		return "CLASS$val";
+	return $classbyval{$arg} || return do {
+		my $val = ( $arg += 0 ) & 0x7fff;		# MSB used by mDNS
+		croak qq[classbyval($arg) out of range] if $arg > 0xffff;
+		return $classbyval{$arg} = $classbyval{$val} || "CLASS$val";
 	}
 }
 
@@ -359,48 +396,41 @@ sub dsotypebyval {
 }
 
 
-sub register {				## register( 'TOY', 1234 )	(NOT part of published API)
-	my ( $mnemonic, $rrtype ) = @_;				# uncoverable pod
-	$rrtype = rand(255) + 65280 unless $rrtype;
-	croak qq["$mnemonic" is a CLASS identifier] if defined $classbyname{$mnemonic = uc($mnemonic)};
-	for ( typebyval( $rrtype = int $rrtype ) ) {
-		return $rrtype if /^$mnemonic$/;		# duplicate registration
-		croak qq["$mnemonic" conflicts with TYPE$rrtype ($_)] unless /^TYPE\d+$/;
-		my $known = $typebyname{$mnemonic};
-		croak qq["$mnemonic" conflicts with TYPE$known] if $known;
-	}
-	$typebyval{$rrtype} = $mnemonic;
-	return $typebyname{$mnemonic} = $rrtype;
-}
-
-
 use constant EXTLANG => defined eval { require Net::DNS::Extlang };
 
-our $DNSEXTLANG = EXTLANG ? eval { Net::DNS::Extlang->new()->domain } : undef;
-
 sub _typespec {
-	eval {				## draft-levine-dnsextlang
-		<<'END' } if EXTLANG && $DNSEXTLANG;
-	my ($node) = @_;
+	my $generate = defined wantarray;
+	return EXTLANG ? eval <<'END' : '';	## no critic
+	my ($node) = @_;		## draft-levine-dnsextlang
+	my $instance = Net::DNS::Extlang->new();
+	my $basename = $instance->domain || return '';
 
 	require Net::DNS::Resolver;
-	my $resolver = Net::DNS::Resolver->new() || return;
-	my $response = $resolver->send( "$node.$DNSEXTLANG", 'TXT' ) || return;
+	my $resolver = Net::DNS::Resolver->new();
+	my $response = $resolver->send( "$node.$basename", 'TXT' ) || return '';
 
 	foreach my $txt ( grep { $_->type eq 'TXT' } $response->answer ) {
 		my @stanza = $txt->txtdata;
 		my ( $tag, $identifier, @attribute ) = @stanza;
 		next unless defined($tag) && $tag =~ /^RRTYPE=\d+$/;
-		register( $1, $2 ) if $identifier =~ /^(\w+):(\d+)\W*/;
-		return unless defined wantarray;
+		if ( $identifier =~ /^(\w+):(\d+)\W*/ ) {
+			my ( $mnemonic, $rrtype ) = ( uc($1), $2 );
+			croak qq["$mnemonic" is a CLASS identifier] if $classbyname{$mnemonic};
+			for ( typebyval($rrtype) ) {
+				next if /^$mnemonic$/i;		# duplicate registration
+				croak qq["$mnemonic" conflicts with TYPE$rrtype ($_)] unless /^TYPE\d+$/;
+				my $known = $typebyname{$mnemonic};
+				croak qq["$mnemonic" conflicts with TYPE$known] if $known;
+				$typebyval{$rrtype} = $mnemonic;
+				$typebyname{$mnemonic} = $rrtype;
+			}
+		}
+		return unless $generate;
 
-		my $extobj = Net::DNS::Extlang->new();
-		my $recipe = $extobj->xlstorerecord( $identifier, @attribute );
-		my @source = split /\n/, $extobj->compilerr($recipe);
-		return sub { defined( $_ = shift @source ) };
+		my $recipe = $instance->xlstorerecord( $identifier, @attribute );
+		return $instance->compilerr($recipe);
 	}
 END
-	return;
 }
 
 
@@ -453,7 +483,7 @@ All rights reserved.
 
 Permission to use, copy, modify, and distribute this software and its
 documentation for any purpose and without fee is hereby granted, provided
-that the above copyright notice appear in all copies and that both that
+that the original copyright notices appear in all copies and that both
 copyright notice and this permission notice appear in supporting
 documentation, and that the name of the author not be used in advertising
 or publicity pertaining to distribution of the software without specific

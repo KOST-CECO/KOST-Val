@@ -8,7 +8,7 @@ package Win32;
     require DynaLoader;
 
     @ISA = qw|Exporter DynaLoader|;
-    $VERSION = '0.54';
+    $VERSION = '0.59';
     $XS_VERSION = $VERSION;
     $VERSION = eval $VERSION;
 
@@ -306,6 +306,8 @@ sub PRODUCT_EDUCATION_N                      () { 0x7A } # Windows 10 Education 
 
 sub PRODUCT_UNLICENSED                       () { 0xABCDABCD } # product has not been activated and is no longer in the grace period
 
+sub PROCESSOR_ARCHITECTURE_ARM64   ()   { 12 }     # ARM64
+sub PROCESSOR_ARCHITECTURE_ARM     ()   { 5 }      # ARM
 sub PROCESSOR_ARCHITECTURE_AMD64   ()   { 9 }      # x64 (AMD or Intel)
 sub PROCESSOR_ARCHITECTURE_IA64    ()   { 6 }      # Intel Itanium Processor Family (IPF)
 sub PROCESSOR_ARCHITECTURE_INTEL   ()   { 0 }      # x86
@@ -319,6 +321,14 @@ sub _GetProcessorArchitecture {
 	2200 => PROCESSOR_ARCHITECTURE_IA64,
 	8664 => PROCESSOR_ARCHITECTURE_AMD64,
     }->{Win32::GetChipName()};
+
+    if (!defined($arch)) {
+        $arch = {
+            5 => PROCESSOR_ARCHITECTURE_ARM,
+            12 => PROCESSOR_ARCHITECTURE_ARM64,
+        }->{Win32::GetChipArch()};
+    }
+
     return defined($arch) ? $arch : PROCESSOR_ARCHITECTURE_UNKNOWN;
 }
 
@@ -713,6 +723,27 @@ sub _GetOSName {
     return ("Win$os", $desc);
 }
 
+sub IsSymlinkCreationAllowed {
+    my(undef, $major, $minor, $build) = GetOSVersion();
+
+    # Vista was the first Windows version with symlink support
+    return !!0 if $major < 6;
+
+    # Since Windows 10 1703, enabling the developer mode allows to create
+    # symlinks regardless of process privileges
+    if ($major > 10 || ($major == 10 && ($minor > 0 || $build > 15063))) {
+        return !!1 if IsDeveloperModeEnabled();
+    }
+
+    my $privs = GetProcessPrivileges();
+
+    return !!0 unless $privs;
+
+    # It doesn't matter if the permission is enabled or not, it just has to
+    # exist. CreateSymbolicLink() will automatically enable it when needed.
+    return exists $privs->{SeCreateSymbolicLinkPrivilege};
+}
+
 # "no warnings 'redefine';" doesn't work for 5.8.7 and earlier
 local $^W = 0;
 bootstrap Win32;
@@ -869,10 +900,17 @@ $ENV{PROCESSOR_ARCHITECTURE}.  This might not work on Win9X.
 
 =item Win32::GetChipName()
 
-Returns the processor type: 386, 486 or 586 for x86 processors, 8664
-for the x64 processor and 2200 for the Itanium.  Since it returns the
-native processor type it will return a 64-bit processor type even when
-called from a 32-bit Perl running on 64-bit Windows.
+Returns the processor type: 386, 486 or 586 for x86 processors, 8664 for the x64
+processor and 2200 for the Itanium. For arm/arm64 processor, the value is marked
+as "Reserved" (not specified, but usually 0) in Microsoft documentation, so it's
+better to use GetChipArch(). Since it returns the native processor type it will
+return a 64-bit processor type even when called from a 32-bit Perl running on
+64-bit Windows.
+
+=item Win32::GetChipArch()
+
+Returns the processor architecture: 0 for x86 processors, 5 for arm, 6 for
+Itanium, 9 for x64 and 12 for arm64, and 0xFFFF for unknown architecture.
 
 =item Win32::GetConsoleCP()
 
@@ -1233,6 +1271,25 @@ information about what you can do with this address has been lost in
 the mist of time.  Use the Win32::API module instead of this deprecated
 function.
 
+=item Win32::GetProcessPrivileges([PID])
+
+Returns a reference to a hash holding the information about the privileges
+held by the specified process. The keys are privilege names, and the values
+are booleans indicating whether a given privilege is currently enabled or not.
+
+If the optional PID parameter is omitted, the function queries the current
+process.
+
+Example return value:
+
+    {
+        SeTimeZonePrivilege => 0,
+        SeShutdownPrivilege => 0,
+        SeUndockPrivilege => 0,
+        SeIncreaseWorkingSetPrivilege => 0,
+        SeChangeNotifyPrivilege => 1
+    }
+
 =item Win32::GetProductInfo(OSMAJOR, OSMINOR, SPMAJOR, SPMINOR)
 
 Retrieves the product type for the operating system on the local
@@ -1265,11 +1322,52 @@ of hex digits with surrounding braces.  For example:
 
     {09531CF1-D0C7-4860-840C-1C8C8735E2AD}
 
+=item Win32::HttpGetFile(URL, FILENAME [, IGNORE_CERT_ERRORS])
+
+Uses the WinHttp library to download the file specified by the URL
+parameter to the local file specified by FILENAME. The optional third
+parameter, if true, indicates that certficate errors are to be ignored
+for https connections; please use with caution in a safe environment,
+such as when testing locally using a self-signed certificate.
+
+Only http and https protocols are supported.  Authentication is not
+supported.  The function is not available when building with gcc prior to
+4.8.0 because the WinHttp library is not available.
+
+In scalar context returns a boolean success or failure, and in list
+context also returns, in addition to the boolean status, a second
+value containing message text related to the status.
+
+If the call fails, C<Win32::GetLastError()> will return a numeric
+error code, which may be a system error, a WinHttp error, or a
+user-defined error composed of 1e9 plus the HTTP status code.
+
+Scalar context example:
+
+    print Win32::GetLastError()
+        unless Win32::HttpGetFile('http://example.com/somefile.tar.gz',
+                                  '.\file.tgz');
+
+List context example:
+
+    my ($ok, $msg) = Win32::HttpGetFile('http://example.com/somefile.tar.gz',
+                                        '.\file.tgz');
+    if ($ok) {
+        print "Success!: $msg\n";
+    }
+    else {
+        print "Failure!: $msg\n";
+        my $err = Win32::GetLastError();
+        if ($err > 1e9) {
+            printf "HTTP status: %d\n", ($err - 1e9);
+        }
+    }
+
 =item Win32::InitiateSystemShutdown
 
 (MACHINE, MESSAGE, TIMEOUT, FORCECLOSE, REBOOT)
 
-Shutsdown the specified MACHINE, notifying users with the
+Shuts down the specified MACHINE, notifying users with the
 supplied MESSAGE, within the specified TIMEOUT interval.  Forces
 closing of all documents without prompting the user if FORCECLOSE is
 true, and reboots the machine if REBOOT is true.  This function works
@@ -1284,6 +1382,17 @@ On Windows Vista it will only return non-zero if the process is
 actually running with elevated privileges.  Returns C<undef>
 and prints a warning if an error occurred.  This function always
 returns 1 on Win9X.
+
+=item Win32::IsDeveloperModeEnabled()
+
+Returns true if the developer mode is currently enabled. It always returns
+false on Windows versions older than Windows 10.
+
+=item Win32::IsSymlinkCreationAllowed()
+
+Returns true if the current process is allowed to create symbolic links. This
+function is a convenience wrapper around Win32::GetProcessPrivileges() and
+Win32::IsDeveloperModeEnabled().
 
 =item Win32::IsWinNT()
 
